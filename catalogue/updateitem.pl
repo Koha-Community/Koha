@@ -26,7 +26,6 @@ use C4::Biblio;
 use C4::Items;
 use C4::Output;
 use C4::Circulation;
-use C4::Accounts;
 use C4::Reserves;
 
 my $cgi= new CGI;
@@ -75,6 +74,6 @@ if (defined $itemnotes) { # i.e., itemnotes parameter passed from form
 
 ModItem($item_changes, $biblionumber, $itemnumber);
 
-C4::Accounts::chargelostitem($itemnumber) if ($itemlost==1) ;
+LostItem($itemnumber, 'MARK RETURNED', 'CHARGE FEE') if $itemlost;
 
 print $cgi->redirect("moredetail.pl?biblionumber=$biblionumber&itemnumber=$itemnumber#item$itemnumber");

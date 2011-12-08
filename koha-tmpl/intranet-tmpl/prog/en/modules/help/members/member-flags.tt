@@ -1,23 +1,22 @@
 [% INCLUDE 'help-top.inc' %]   
 
-<h1>Setting Patron Permissions</h1>
+<h1>Patron Permissions</h1>
 
-<p>Patron permissions are used to define the rights of staff members when in the intranet/staff client.</p>
-	<ul>
-		<li>To alter patron permissions, click on Patrons on the main menu at the top of the screen.</li>
-		<li>Search or browse for the patron you'd like to edit</li>
-		<li>Click on the patron's name from the results</li>
-		<li>Click the 'More' button on the top right of the patron profile and choose 'Set Permissions'</li>
-		<li>Choose the permissions you'd like this patron to have</li>
-		<li>You can pick as many permissions as you'd like for each staff member
-		<ul>
-			<li><span style="background-color: #ffe599">TIP: If a staff member is set to 'superlibrarian' they have access to all functions and do not need any other permissions checked</span></li>
-		</ul></li>
-	</ul>
+<p>Patron Permissions are used to allow staff members access to the staff client.</p>
 
-<h3>Patron Permissions Defined</h3>
+<p style="color: #990000">Important: In order for a staff member to log into the staff interface they must have (at the very least) 'catalogue' permissions which allow them to view the staff interface.</p>
 
-<p>Depending on the permission certain menu items will be removed from the menus in Koha, preventing users from accessing them.</p>
+<h2>6.1. Setting Patron Permissions</h2>
+
+<p>To set patron permissions, you must first have a patron of the 'Staff' type open</p>
+
+<ul>
+	<li>On the patron record click More and choose Set Permissions to alter patron permissions</li>
+	<li>You will be presented with a list of preferences, some of which can be expanded by clicking the plus sign to the left of the section title.</li>
+</ul>
+
+<h2>Patron Permissions Defined</h2>
+
 <ul>
 	<li>superlibrarian
 <ul>
@@ -27,7 +26,7 @@
 	<li>circulate
 <ul>
 	<li>Ability to check (issue) books out and in and access the 'Circulation' page in the staff client</li>
-	<li>This section can be expanded (Learn more below)</li>
+	<li>This section can be expanded</li>
 </ul>
 </li>
 	<li>catalogue
@@ -54,7 +53,7 @@
 	<li>reserveforothers
 <ul>
 	<li>Ability to place holds on books for patrons via the staff interface</li>
-	<li>This section can be expanded (Learn more below)</li>
+	<li>This section can be expanded</li>
 </ul>
 </li>
 	<li>borrow
@@ -65,7 +64,7 @@
 	<li>editcatalogue
 <ul>
 	<li>Ability to catalog items (add and edit bibliographic and holdings data)</li>
-	<li>This section can be expanded (Learn more below)</li>
+	<li>This section can be expanded</li>
 </ul>
 </li>
 	<li>updatecharges
@@ -76,7 +75,7 @@
 	<li>acquisition
 <ul>
 	<li>Provides access to the acquisitions and patron purchase suggestion modules</li>
-	<li>This section can be expanded (Learn more below)</li>
+	<li>This section can be expanded</li>
 </ul>
 </li>
 	<li>management
@@ -87,7 +86,7 @@
 	<li>tools
 <ul>
 	<li>Access to all items in the Tools section of the staff client</li>
-	<li>This section can be expanded (Learn more below)</li>
+	<li>This section can be expanded</li>
 </ul>
 </li>
 	<li>editauthorities
@@ -98,14 +97,14 @@
 	<li>serials
 <ul>
 	<li>Allows access to the serials module</li>
-	<li>This section can be expanded (Learn more below)</li>
+	<li>This section can be expanded</li>
 </ul>
 </li>
 	<li>reports
 <ul>
 	<li>Allow access to the Reports module (ability to create, edit and run all reports)</li>
 	<li>Reports found on the Circulation page are not controlled by this permission</li>
-	<li>This section can be expanded (Learn more below)</li>
+	<li>This section can be expanded</li>
 </ul>
 </li>
 	<li>staffaccess
@@ -114,8 +113,11 @@
 </ul>
 </li>
 </ul>
+
 <h3>Granular Circulate Permissions</h3>
+
 <p>If the staff member has 'circulate' permissions they have the ability to perform all of these actions. If you would like to control circulation permissions on a more granular level choose from these options:</p>
+
 <ul>
 	<li>circulate_remaining_permissions
 <ul>
@@ -128,8 +130,11 @@
 </ul>
 </li>
 </ul>
+
 <h3>Granular Holds Permissions</h3>
+
 <p>If the staff member has 'reserveforothers' permissions they have the ability to perform all of these actions. If you would like to control holds permissions on a more granular level choose from these options:</p>
+
 <ul>
 	<li>modify_holds_priority
 <ul>
@@ -142,8 +147,11 @@
 </ul>
 </li>
 </ul>
+
 <h3>Granular Cataloging Permissions</h3>
+
 <p>If the staff member has 'editcatalogue' permissions they have the ability to perform all of these actions. If you would like to control cataloging permissions on a more granular level choose from these options:</p>
+
 <ul>
 	<li>edit_catalogue
 <ul>
@@ -161,8 +169,11 @@
 </ul>
 </li>
 </ul>
+
 <h3>Granular Acquisitions Permissions</h3>
+
 <p>If the staff member has 'acquisition' permissions they have the ability to perform all of these actions. If you would like to control acquisitions permissions on a more granular level choose from these options:</p>
+
 <ul>
 	<li>budget_add_del
 <ul>
@@ -215,8 +226,11 @@
 </ul>
 </li>
 </ul>
+
 <h3>Granular Serials Permissions</h3>
+
 <p>If the staff member has 'serials' permissions they have the ability to perform all of these actions. If you would like to control serials permissions on a more granular level choose from these options:</p>
+
 <ul>
 	<li>check_expiration
 <ul>
@@ -259,8 +273,11 @@
 </ul>
 </li>
 </ul>
+
 <h3>Granular Tools Permissions</h3>
+
 <p>If the staff member has 'tools' permissions they have the ability to access and use all items under the Tools menu. If you would like to control which tools staff members have access to on a more granular level choose from these options:</p>
+
 <ul>
 	<li>batch_upload_patron_images
 <ul>
@@ -353,8 +370,11 @@
 </ul>
 </li>
 </ul>
+
 <h3>Granular Reports Permissions</h3>
+
 <p>If the staff member has 'reports' permissions they have the ability to perform all of these actions. If you would like to control reports permissions on a more granular level choose from these options:</p>
+
 <ul>
 	<li>create_reports
 <ul>
@@ -367,4 +387,7 @@
 </ul>
 </li>
 </ul>
+
+<p><strong>See the full documentation for Patron Permissions in the <a href="http://manual.koha-community.org/3.6/en/patronpermissions.html">manual</a> (online).</strong></p>
+
 [% INCLUDE 'help-bottom.inc' %]

@@ -10,18 +10,18 @@
 	<div id="yui-main">
 
 	<div class="yui-b">
-		[% IF ( opacuserlogin ) %]
-	    [% IF ( loggedinusername ) %]
-			<div class="yui-g">
-			<div>
-			[% ELSE %]
-		<div class="yui-ge">
-		<div class="yui-u first">
+     [% IF ( opacuserlogin ) %]
+	 [% IF ( loggedinusername ) %]
+	     <div id="loggedin" class="yui-g">
+	     <div>
+	 [% ELSE %]
+	     <div id="notloggedin" class="yui-ge">
+	     <div class="yui-u first">
+         [% END %]
+     [% ELSE %]
+         <div id="notloggedin" class="yui-g">
+	 <div>
     [% END %]
-	[% ELSE %]
-		<div class="yui-g">
-		<div>
-	[% END %]
 	
 	[% IF ( koha_news_count ) %]
 <div id="news" class="container">

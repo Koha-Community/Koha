@@ -19,6 +19,7 @@
 
 use strict;
 use C4::Output;
+use C4::Templates;
 use C4::Auth;
 use CGI;
 use warnings;
@@ -41,7 +42,7 @@ my $error;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "help/edithelp.tmpl",
+        template_name   => "help/edithelp.tt",
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,
@@ -63,29 +64,30 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 sub _get_filepath ($;$) {
     my $referer = shift;
-    $referer =~ /.*koha\/(.+)\.pl.*/;
-    my $from   = "help/$1.tmpl";
+    $referer =~ /koha\/(.*)\.pl/;
+    my $from = "help/$1.tt";
     my $htdocs = C4::Context->config('intrahtdocs');
-    my ($theme, $lang) = themelanguage( $htdocs, $from, "intranet", $input );
+    my ($theme, $lang) = C4::Templates::themelanguage( $htdocs, $from, "intranet", $input );
 	$debug and print STDERR "help filepath: $htdocs/$theme/$lang/modules/$from";
 	return "$htdocs/$theme/$lang/modules/$from";
 }
 
-if ( $type eq 'addnew' ) {
-    $type = 'create';
-}
-elsif ( $type eq 'create' || $type eq 'save' ) {
+$type = 'create' if $type eq 'addnew';
+if ( $type eq 'create' || $type eq 'save' ) {
 	my $file = _get_filepath($referer);
-	unless (open (OUTFILE, ">$file")) {$error = "Cannot write file: '$file'";} else {
-        #open (OUTFILE, ">$file") or die "Cannot write file: '$file'";	# unlikely death, since we just checked
+    open my $fh, ">", $file;
+    if ( $fh ) {
         # file is open write to it
-        print OUTFILE "<!-- TMPL_INCLUDE NAME=\"help-top.inc\" -->\n";
-		print OUTFILE ($type eq 'create') ? "<div class=\"main\">\n$help\n</div>" : $help;
-        print OUTFILE "\n<!-- TMPL_INCLUDE NAME=\"help-bottom.inc\" -->\n";
-        close OUTFILE;
+        print $fh
+            " [% INCLUDE 'help-top.inc' %]\n",
+		    $type eq 'create' ? "<div class=\"main\">\n$help\n</div>" : $help,
+            "\n[% INCLUDE 'help-bottom.inc' %]\n";
+        close $fh;
 		print $input->redirect("/cgi-bin/koha/help.pl?url=$oldreferer");
     }
-    
+    else {
+        $error = "Cannot write file: '$file'";
+    }
 }
 elsif ( $type eq 'modify' ) {
     # open file load data, kill include calls, pass data to the template
@@ -95,14 +97,12 @@ elsif ( $type eq 'modify' ) {
 	} else {
 		(-w $file) or $error = 
 			"WARNING: You will not be able save, because your webserver cannot write to '$file'. Contact your admin about help file permissions.";
-    	open (INFILE, $file) or die "Cannot read file '$file'";		# unlikely death, since we just checked
+    	open (my $fh, '<', $file) or die "Cannot read file '$file'";		# unlikely death, since we just checked
 		my $help = '';
-		while ( my $inp = <INFILE> ) {
-			unless ( $inp =~ /TMPL\_INCLUDE/ ) {
-				$help .= $inp;
-			}
+        while ( <$fh> ) {
+            $help .= /\[% INCLUDE .* %\](.*)$/ ? $1 : $_;
 		}
-		close INFILE;
+		close $fh;
     	$template->param( 'help' => $help );
 		$type = 'save';
 	}

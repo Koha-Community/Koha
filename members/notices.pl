@@ -27,6 +27,7 @@ use CGI;
 use C4::Members;
 use C4::Branch;
 use C4::Letters;
+use C4::Members::Attributes qw(GetBorrowerAttributes);
 
 use C4::Dates qw/format_date/;
 my $input=new CGI;
@@ -53,10 +54,20 @@ $template->param( picture => 1 ) if $picture;
 my $queued_messages = C4::Letters::GetQueuedMessages({borrowernumber => $borrowernumber});
 $template->param( %{$borrower} );
 
+if (C4::Context->preference('ExtendedPatronAttributes')) {
+    my $attributes = GetBorrowerAttributes($borrowernumber);
+    $template->param(
+        ExtendedPatronAttributes => 1,
+        extendedattributes => $attributes
+    );
+}
+
 $template->param(
 			QUEUED_MESSAGES 	=> $queued_messages,
 			borrowernumber 		=> $borrowernumber,
-			sentnotices 		=> 1
-		);
+			sentnotices 		=> 1,
+                        branchname              => GetBranchName($borrower->{'branchcode'}),
+                        categoryname            => $borrower->{'description'},
+);
 output_html_with_http_headers $input, $cookie, $template->output;
 

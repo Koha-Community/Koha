@@ -28,7 +28,7 @@ script to place reserves/requests
 
 use strict;
 use warnings;
-use C4::Branch; # GetBranches get_branchinfos_of
+use C4::Branch;
 use CGI;
 use List::MoreUtils qw/uniq/;
 use Date::Calc qw/Date_to_Days/;
@@ -112,26 +112,24 @@ if ( $action eq 'move' ) {
 }
 
 if ($findborrower) {
-    my ( $count, $borrowers ) =
-      SearchMember($findborrower, 'cardnumber', 'web' );
+    my $borrowers = Search($findborrower, 'cardnumber');
 
-    my @borrowers = @$borrowers;
-
-    if ( !@borrowers ) {
+    if ($borrowers && @$borrowers) {
+        if ( @$borrowers == 1 ) {
+            $borrowernumber_hold = $borrowers->[0]->{'borrowernumber'};
+        }
+        else {
+            $borrowerslist = $borrowers;
+        }
+    } else {
         $messageborrower = "'$findborrower'";
-    }
-    elsif ( @borrowers == 1 ) {
-        $borrowernumber_hold = $borrowers[0]->{'borrowernumber'};
-    }
-    else {
-        $borrowerslist = \@borrowers;
     }
 }
 
 # If we have the borrowernumber because we've performed an action, then we
 # don't want to try to place another reserve.
 if ($borrowernumber_hold && !$action) {
-    my $borrowerinfo = GetMemberDetails( $borrowernumber_hold );
+    my $borrowerinfo = GetMember( borrowernumber => $borrowernumber_hold );
     my $diffbranch;
     my @getreservloop;
     my $count_reserv = 0;
@@ -219,8 +217,8 @@ if ($borrowerslist) {
     );
 }
 
-# FIXME launch another time GetMemberDetails perhaps until
-my $borrowerinfo = GetMemberDetails( $borrowernumber_hold );
+# FIXME launch another time GetMember perhaps until
+my $borrowerinfo = GetMember( borrowernumber => $borrowernumber_hold );
 
 my @biblionumbers = ();
 my $biblionumbers = $input->param('biblionumbers');
@@ -230,6 +228,7 @@ if ($multihold) {
     push @biblionumbers, $input->param('biblionumber');
 }
 
+my $itemdata_enumchron = 0;
 my @biblioloop = ();
 foreach my $biblionumber (@biblionumbers) {
 
@@ -291,7 +290,13 @@ foreach my $biblionumber (@biblionumbers) {
     if (my $items = get_itemnumbers_of($biblionumber)->{$biblionumber}){
         @itemnumbers  = @$items;
     }
-    else {
+	my @hostitems = get_hostitemnumbers_of($biblionumber);
+	if (@hostitems){
+		$template->param('hostitemsflag' => 1);
+		push(@itemnumbers, @hostitems);
+	}
+
+    if (!@itemnumbers) {
         $template->param('noitems' => 1);
         $biblioloopiter{noitems} = 1;
     }
@@ -324,6 +329,9 @@ foreach my $biblionumber (@biblionumbers) {
 
         $biblioitem->{description} =
           $itemtypes->{ $biblioitem->{itemtype} }{description};
+	if($biblioitem->{biblioitemnumber} ne $biblionumber){
+		$biblioitem->{hostitemsflag}=1;
+	}
         $biblioloopiter{description} = $biblioitem->{description};
         $biblioloopiter{itypename} = $biblioitem->{description};
         $biblioloopiter{imageurl} =
@@ -347,6 +355,11 @@ foreach my $biblionumber (@biblionumbers) {
                   $branches->{ $item->{holdingbranch} }{branchname};
             }
 
+		if($item->{biblionumber} ne $biblionumber){
+			$item->{hostitemsflag}=1;
+		        $item->{hosttitle} = GetBiblioData($item->{biblionumber})->{title};
+		}
+		
             #   add information
             $item->{itemcallnumber} = $item->{itemcallnumber};
 
@@ -360,7 +373,7 @@ foreach my $biblionumber (@biblionumbers) {
 
             # checking reserve
             my ($reservedate,$reservedfor,$expectedAt) = GetReservesFromItemnumber($itemnumber);
-            my $ItemBorrowerReserveInfo = GetMemberDetails( $reservedfor, 0);
+            my $ItemBorrowerReserveInfo = GetMember( borrowernumber => $reservedfor );
 
             if ( defined $reservedate ) {
                 $item->{backgroundcolor} = 'reserved';
@@ -433,20 +446,22 @@ foreach my $biblionumber (@biblionumbers) {
                      $borrowerinfo->{'branchcode'} ne $item->{'homebranch'} ) ) {
                 $policy_holdallowed = 0;
             }
-
-            if (IsAvailableForItemLevelRequest($itemnumber) and
-            	not $item->{cantreserve} and
-            	CanItemBeReserved($borrowerinfo->{borrowernumber}, $itemnumber) ) {
-                if ( $policy_holdallowed ) {
-                    $item->{available} = 1;
-                    $num_available++;
-                }
-            } elsif (C4::Context->preference( 'AllowHoldPolicyOverride' ) ) {
-                    $item->{override} = 1;
-                    $num_override++;
+            
+            if (
+                   $policy_holdallowed
+                && !$item->{cantreserve}
+                && IsAvailableForItemLevelRequest($itemnumber)
+                && CanItemBeReserved(
+                    $borrowerinfo->{borrowernumber}, $itemnumber
+                )
+              )
+            {
+                $item->{available} = 1;
+                $num_available++;
             }
-            # If AllowHoldPolicyOverride is set, it should override EVERY restriction, not just branch item rules
-            if (C4::Context->preference( 'AllowHoldPolicyOverride' ) && !$item->{available} ) {
+            elsif ( C4::Context->preference('AllowHoldPolicyOverride') ) {
+
+# If AllowHoldPolicyOverride is set, it should override EVERY restriction, not just branch item rules
                 $item->{override} = 1;
                 $num_override++;
             }
@@ -459,6 +474,12 @@ foreach my $biblionumber (@biblionumbers) {
             while (my $wait_hashref = $sth2->fetchrow_hashref) {
                 $item->{waitingdate} = format_date($wait_hashref->{waitingdate});
             }
+
+            # Show serial enumeration when needed
+            if ($item->{enumchron}) {
+                $itemdata_enumchron = 1;
+            }
+
             push @{ $biblioitem->{itemloop} }, $item;
         }
 
@@ -521,7 +542,7 @@ foreach my $biblionumber (@biblionumbers) {
         }
 
         #     get borrowers reserve info
-        my $reserveborrowerinfo = GetMemberDetails( $res->{'borrowernumber'}, 0);
+        my $reserveborrowerinfo = GetMember( borrowernumber => $res->{'borrowernumber'} );
         if (C4::Context->preference('HidePatronName')){
 	    $reserve{'hidename'} = 1;
 	    $reserve{'cardnumber'} = $reserveborrowerinfo->{'cardnumber'};
@@ -564,6 +585,7 @@ foreach my $biblionumber (@biblionumbers) {
     $template->param(
                      optionloop        => \@optionloop,
                      bibitemloop       => \@bibitemloop,
+                     itemdata_enumchron => $itemdata_enumchron,
                      date              => $date,
                      biblionumber      => $biblionumber,
                      findborrower      => $findborrower,

@@ -28,12 +28,12 @@ use C4::Output;
 use CGI;
 use C4::Acquisition;
 use C4::Budgets;
-
 use C4::Bookseller qw( GetBookSellerFromId);
 use C4::Dates qw/format_date/;
 use C4::Debug;
-
+use C4::Biblio;
 use C4::Members qw/GetMember/;  #needed for permissions checking for changing basketgroup of a basket
+use C4::Items;
 =head1 NAME
 
 basket.pl
@@ -197,7 +197,7 @@ if ( $op eq 'delete_confirm' ) {
 #if the basket is closed,and the user has the permission to edit basketgroups, display a list of basketgroups
     my $basketgroups;
     my $member = GetMember(borrowernumber => $loggedinuser);
-    if ($basket->{closedate} && haspermission({ flagsrequired   => { acquisition => 'group_manage'} })) {
+    if ($basket->{closedate} && haspermission({ acquisition => 'group_manage'} )) {
         $basketgroups = GetBasketgroups($basket->{booksellerid});
         for my $bg ( @{$basketgroups} ) {
             if ($basket->{basketgroupid} && $basket->{basketgroupid} == $bg->{id}){
@@ -227,11 +227,13 @@ if ( $op eq 'delete_confirm' ) {
     my @results = GetOrders( $basketno );
     
 	my $gist = $bookseller->{gstrate} // C4::Context->preference("gist") // 0;
+	$gist = 0 if $gist == 0.0000;
 	my $discount = $bookseller->{'discount'} / 100;
     my $total_rrp;      # RRP Total, its value will be assigned to $total_rrp_gsti or $total_rrp_gste depending of $bookseller->{'listincgst'}
 	my $total_rrp_gsti; # RRP Total, GST included
 	my $total_rrp_gste; # RRP Total, GST excluded
 	my $gist_rrp;
+	my $total_rrp_est;
 	
     my $qty_total;
     my @books_loop;
@@ -253,16 +255,42 @@ if ( $op eq 'delete_confirm' ) {
 
         $total_rrp += $qty * $order->{'rrp'};
         my $line_total = $qty * $order->{'ecost'};
+        $total_rrp_est += $qty * $order->{'ecost'};
 		# FIXME: what about the "actual cost" field?
         $qty_total += $qty;
         my %line = %{ $order };
-
-        $line{order_received} = ( $qty == $order->{'quantityreceived'} );
-        $line{basketno}       = $basketno;
-        $line{budget_name}    = $budget->{budget_name};
-        $line{rrp}            = sprintf( "%.2f", $line{'rrp'} );
-        $line{ecost}          = sprintf( "%.2f", $line{'ecost'} );
-        $line{line_total}     = sprintf( "%.2f", $line_total );
+        my $biblionumber = $order->{'biblionumber'};
+        my $countbiblio = CountBiblioInOrders($biblionumber);
+        my $ordernumber = $order->{'ordernumber'};
+        my @subscriptions = GetSubscriptionsId ($biblionumber);
+        my $itemcount = GetItemsCount($biblionumber);
+        my $holds  = GetHolds ($biblionumber);
+        my @items = GetItemnumbersFromOrder( $ordernumber );
+        my $itemholds;
+        foreach my $item (@items){
+            my $nb = GetItemHolds($biblionumber, $item);
+            if ($nb){
+                $itemholds += $nb;
+            }
+        }
+        # if the biblio is not in other orders and if there is no items elsewhere and no subscriptions and no holds we can then show the link "Delete order and Biblio" see bug 5680
+        $line{can_del_bib}          = 1 if $countbiblio <= 1 && $itemcount == scalar @items && !(@subscriptions) && !($holds);
+        $line{items}                = ($itemcount) - (scalar @items);
+        $line{left_item}            = 1 if $line{items} >= 1;
+        $line{left_biblio}          = 1 if $countbiblio > 1;
+        $line{biblios}              = $countbiblio - 1;
+        $line{left_subscription}    = 1 if scalar @subscriptions >= 1;
+        $line{subscriptions}        = scalar @subscriptions;
+        $line{left_holds}           = 1 if $holds >= 1;
+        $line{left_holds_on_order}  = 1 if $line{left_holds}==1 && ($line{items} == 0 || $itemholds );
+        $line{holds}                = $holds;
+        $line{holds_on_order}       = $itemholds?$itemholds:$holds if $line{left_holds_on_order};
+        $line{order_received}       = ( $qty == $order->{'quantityreceived'} );
+        $line{basketno}             = $basketno;
+        $line{budget_name}          = $budget->{budget_name};
+        $line{rrp}                  = sprintf( "%.2f", $line{'rrp'} );
+        $line{ecost}                = sprintf( "%.2f", $line{'ecost'} );
+        $line{line_total}           = sprintf( "%.2f", $line_total );
         if ($line{uncertainprice}) {
             $template->param( uncertainprices => 1 );
             $line{rrp} .= ' (Uncertain)';
@@ -278,19 +306,28 @@ if ( $op eq 'delete_confirm' ) {
         push @books_loop, \%line;
     }
 
-	if ($bookseller->{'listincgst'}) {                        # if prices already includes GST
-		$total_rrp_gsti = $total_rrp;                         # we know $total_rrp_gsti
-		$total_rrp_gste = $total_rrp_gsti / ($gist + 1);      # and can reverse compute other values
-		$gist_rrp       = $total_rrp_gsti - $total_rrp_gste;  #
-	} else {                                                  # if prices does not include GST
-		$total_rrp_gste = $total_rrp;                         # then we use the common way to compute other values
-		$gist_rrp = $total_rrp_gste * $gist;                  #
-		$total_rrp_gsti = $total_rrp_gste + $gist_rrp;        #
-	}
-	# These vars are estimated totals and GST, taking in account the booksellet discount
-	my $total_est_gsti = $total_rrp_gsti - ($total_rrp_gsti * $discount);
-	my $gist_est       = $gist_rrp       - ($gist_rrp * $discount);
-	my $total_est_gste = $total_rrp_gste - ($total_rrp_gste * $discount);
+my $total_est_gste;
+    my $total_est_gsti;
+    my $gist_est;
+    if ($gist){                                                    # if we have GST
+       if ( $bookseller->{'listincgst'} ) {                        # if prices already includes GST
+           $total_rrp_gsti = $total_rrp;                           # we know $total_rrp_gsti
+           $total_rrp_gste = $total_rrp_gsti / ( $gist + 1 );      # and can reverse compute other values
+           $gist_rrp       = $total_rrp_gsti - $total_rrp_gste;    #
+           $total_est_gste = $total_rrp_gste - ( $total_rrp_gste * $discount );
+           $total_est_gsti = $total_rrp_est;
+        } else {                                                    # if prices does not include GST
+           $total_rrp_gste = $total_rrp;                           # then we use the common way to compute other values
+           $gist_rrp       = $total_rrp_gste * $gist;              #
+           $total_rrp_gsti = $total_rrp_gste + $gist_rrp;          #
+           $total_est_gste = $total_rrp_est;
+           $total_est_gsti = $total_rrp_gsti - ( $total_rrp_gsti * $discount );
+       }
+       $gist_est = $gist_rrp - ( $gist_rrp * $discount );
+    } else {
+    $total_rrp_gsti = $total_rrp;
+    $total_est_gsti = $total_rrp_est;
+}
 
     my $contract = &GetContract($basket->{contractnumber});
     my @orders = GetOrders($basketno);

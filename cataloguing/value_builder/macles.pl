@@ -117,60 +117,81 @@ my ($input) = @_;
       }
 #        use Data::Dumper;warn "BIGLOOP IN".Dumper(@BIGLOOP);
     }
-    foreach my $num (sort keys %numbers){
-      my @tmpcolhdr = @{$numbers{$num}->{'col_hdr'}} if ($numbers{$num}->{'col_hdr'});
-      my @tmprowhdr = @{$numbers{$num}->{"row_hdr"}} if ($numbers{$num}->{'row_hdr'});
-      my @lines;
-      my @lists;
-      my %BIGLOOPcell;
-      foreach my $row (@tmprowhdr){
-        my $tmprowvalue=$row->{rowvalue};
-        my $rowcode=$1 if $tmprowvalue=~/[0-9]([0-9])\./;
-        my @cells;
-        if (scalar(@tmpcolhdr)>0){
-        #cas du tableau bidim
-          foreach my $col (@tmpcolhdr){
-            my $tmpcolvalue=$col->{colvalue};
-            my $colcode=$1 if $tmpcolvalue=~/[0-9]\.([0-9])/;
-            my %cell;
-            $cell{celvalue}=$num.$rowcode.$colcode;
-            $cell{rowvalue}=$tmprowvalue;
-            $cell{colvalue}=$tmpcolvalue;
-            if ($numbers{$num}->{$num.$rowcode.$colcode}){
-              foreach (@{$numbers{$num}->{$num.$rowcode.$colcode}}){
-                push @{$cell{libs}},{'lib'=>$_};
-              }
-            }else {
-              push @{$cell{libs}},{'lib'=>$num.$rowcode.$colcode};
+    foreach my $num ( sort keys %numbers ) {
+        my @tmpcolhdr;
+        my @tmprowhdr;
+        @tmpcolhdr = @{ $numbers{$num}->{'col_hdr'} }
+          if ( $numbers{$num}->{'col_hdr'} );
+        @tmprowhdr = @{ $numbers{$num}->{"row_hdr"} }
+          if ( $numbers{$num}->{'row_hdr'} );
+        my @lines;
+        my @lists;
+        my %BIGLOOPcell;
+        foreach my $row (@tmprowhdr) {
+            my $tmprowvalue = $row->{rowvalue};
+            my $rowcode;
+            $rowcode = $1 if $tmprowvalue =~ /[0-9]([0-9])\./;
+            my @cells;
+            if ( scalar(@tmpcolhdr) > 0 ) {
+
+                #cas du tableau bidim
+                foreach my $col (@tmpcolhdr) {
+                    my $tmpcolvalue = $col->{colvalue};
+                    my $colcode;
+                    $colcode = $1 if $tmpcolvalue =~ /[0-9]\.([0-9])/;
+                    my %cell;
+                    $cell{celvalue} = $num . $rowcode . $colcode;
+                    $cell{rowvalue} = $tmprowvalue;
+                    $cell{colvalue} = $tmpcolvalue;
+                    if ( $numbers{$num}->{ $num . $rowcode . $colcode } ) {
+
+                        foreach (
+                            @{ $numbers{$num}->{ $num . $rowcode . $colcode } }
+                          )
+                        {
+                            push @{ $cell{libs} }, { 'lib' => $_ };
+                        }
+                    }
+                    else {
+                        push @{ $cell{libs} },
+                          { 'lib' => $num . $rowcode . $colcode };
+                    }
+                    push @cells, \%cell;
+                }
+                if ( $numbers{$num}->{ $num . $rowcode } ) {
+                    my @tmpliblist = @{ $numbers{$num}->{ $num . $rowcode } };
+                    push @lists,
+                      { 'lib' => $row->{rowlib}, 'liblist' => \@tmpliblist };
+                }
             }
-            push @cells,\%cell;
-          }
-          if ($numbers{$num}->{$num.$rowcode}){
-            my @tmpliblist=@{$numbers{$num}->{$num.$rowcode}};
-            push @lists,{'lib'=>$row->{rowlib},'liblist'=>\@tmpliblist};
-          }
-        } else {
-        #Cas de la liste simple
-          foreach my $key (sort keys %{$numbers{$num}}){
-            my %cell;
-            if ($key=~/$num$rowcode[0-9]/){
-              $cell{celvalue}=$key;
-              foreach my $lib (@{$numbers{$num}->{$key}}){
-                push @{$cell{'libs'}},{'lib'=>$lib};
-              }
-              push @cells,\%cell;
+            else {
+
+                #Cas de la liste simple
+                foreach my $key ( sort keys %{ $numbers{$num} } ) {
+                    my %cell;
+                    if ( $key =~ /$num$rowcode[0-9]/ ) {
+                        $cell{celvalue} = $key;
+                        foreach my $lib ( @{ $numbers{$num}->{$key} } ) {
+                            push @{ $cell{'libs'} }, { 'lib' => $lib };
+                        }
+                        push @cells, \%cell;
+                    }
+                }
             }
-          }
+            push @lines,
+              {
+                'cells'    => \@cells,
+                'rowvalue' => $row->{rowvalue},
+                'rowlib'   => $row->{rowlib}
+              };
         }
-        push @lines,{'cells'=>\@cells,'rowvalue'=>$row->{rowvalue},'rowlib'=>$row->{rowlib}};
-      }
-      $BIGLOOPcell{'Lists'}=\@lists if (scalar(@lists)>0);
-      $BIGLOOPcell{'lines'}=\@lines if (scalar(@lines)>0);
-      $BIGLOOPcell{'col_hdr'}=\@tmpcolhdr if (scalar(@tmpcolhdr)>0);
-      $BIGLOOPcell{'Table'}=$numbers{$num}->{'Table'};
-      $BIGLOOPcell{'hdr_tab'}=$numbers{$num}->{'hdr_tab'};
-      $BIGLOOPcell{'number'}=$num;
-      push @BIGLOOP,\%BIGLOOPcell;
+        $BIGLOOPcell{'Lists'}   = \@lists     if ( scalar(@lists) > 0 );
+        $BIGLOOPcell{'lines'}   = \@lines     if ( scalar(@lines) > 0 );
+        $BIGLOOPcell{'col_hdr'} = \@tmpcolhdr if ( scalar(@tmpcolhdr) > 0 );
+        $BIGLOOPcell{'Table'}   = $numbers{$num}->{'Table'};
+        $BIGLOOPcell{'hdr_tab'} = $numbers{$num}->{'hdr_tab'};
+        $BIGLOOPcell{'number'}  = $num;
+        push @BIGLOOP, \%BIGLOOPcell;
     }
 #     warn "BIGLOOP OUT".Dumper(@BIGLOOP);
     my ($template, $loggedinuser, $cookie)

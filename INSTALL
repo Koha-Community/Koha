@@ -10,7 +10,7 @@ more about the Koha project at http://koha-community.org.
 INSTALLATION
 ============
 
-You need to have a server running Perl 5.8.8 or later, MySQL 5, Zebra
+You need to have a server running Perl 5.10 or later, MySQL 5, Zebra
 2.0.22 or greater and a webserver (preferably Apache2) before installing
 Koha.
 
@@ -73,7 +73,7 @@ use the following:
  ./koha_perl_deps.pl -u -m # to identify new Perl dependencies
 
 Install any missing modules
-IMPORTANT: Koha 3.4.x uses Template::Toolkit, this must be installed
+IMPORTANT: Koha 3.4.0 and greater uses Template::Toolkit, this must be installed
 before the webinstaller can run
 
 On debian/ubuntu
@@ -88,9 +88,10 @@ Use the packaged version or install from CPAN
  make test
  sudo make upgrade
 
-Koha 3.4.x no longer stores items in biblio records so as part of the
-upgrade you will need to do the following two steps, they can take a
-long time (several hours) to complete for large databases
+Koha 3.4.x or later  no longer stores items in biblio records.
+If you are upgrading from an older version ou will need to do the 
+following two steps, they can take a long time (several hours) to
+complete for large databases
 
  misc/maintenance/remove_items_from_biblioitems.pl --run
  misc/migration_tools/rebuild_zebra.pl -b -r
@@ -143,7 +144,7 @@ http://dir.gmane.org/gmane.education.libraries.koha.devel
 IF THIS IS A RELEASED VERSION: please see the support pages at
 http://www.koha-community.org/
 
-Released versions usually have three-digit numbers, like 3.02.00,
+Released versions usually have three-digit numbers, like 3.06.00,
 while other version number styles are usually snapshots or previews.
 
 

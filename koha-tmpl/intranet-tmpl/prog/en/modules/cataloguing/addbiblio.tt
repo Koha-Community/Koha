@@ -78,9 +78,9 @@ function PopupZ3950() {
 }
 
 function PopupMARCFieldDoc(field, blocknumber) {
-    [% IF ( MARC21 ) %]
+    [% IF ( marcflavour == 'MARC21' ) %]
         _MARC21FieldDoc(field);
-    [% ELSE %]
+    [% ELSIF ( marcflavour == 'UNIMARC' ) %]
         _UNIMARCFieldDoc(field, blocknumber);
     [% END %]
 }
@@ -238,7 +238,7 @@ function AreMandatoriesNotOk(){
  * check if z3950 mandatories are set or not
  */
 function GetZ3950Terms(){
- var strQuery="&frameworkcode="+document.forms['f'].frameworkcode.value;
+ var strQuery="&frameworkcode="+document.forms['f'].Frameworks.value;
     var mandatories = new Array();
     var mandatories_label = new Array();
     [% FOREACH BIG_LOO IN BIG_LOOP %][% FOREACH innerloo IN BIG_LOO.innerloop %][% FOREACH subfield_loo IN innerloo.subfield_loop %][% IF ( subfield_loo.z3950_mandatory ) %]mandatories.push("[% subfield_loo.id %]");
@@ -254,9 +254,9 @@ function GetZ3950Terms(){
 }
 
 function Changefwk(FwkList) {
-	var fwk = FwkList.options[FwkList.selectedIndex].value;
-	window.location = "/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% biblionumberdata %]&op=[% op %]&breedingid=[% breedingid %]&mode=[% popup %]&frameworkcode="+fwk;
-
+    var f = document.f;
+    f.op.value = "";
+    f.submit();
 }
 
 // returns the subfieldcode based upon subfieldid writing
@@ -664,10 +664,10 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
         <div id="yui-main">
         <div class="yui-g">
 
-
-
 <h1>[% IF ( biblionumber ) %]Editing <em>[% title |html %]</em> (Record Number [% biblionumber %])</h1>[% ELSE %]Add MARC Record</h1>[% END %]
+[% IF marcflavour != 'NORMARC' %]
 <div><input type="checkbox" name="marcDocsSelect" id="marcDocsSelect" checked="true" /> Show MARC tag documentation links<br/></div>
+[% END %]
 
 [% UNLESS ( number ) %]
     <!-- show duplicate warning on tab 0 only -->
@@ -776,7 +776,7 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
 			<li id="savebutton"><input id="addbiblio" type="submit" value="Save" /></li>
 			<li id="z3950searchc"><input type="button" id="z3950search" value="Z39.50 Search" onclick="PopupZ3950(); return false;" /></li>
 			<li id="changeframework"><label for="Frameworks">Change framework: </label>
-			<select name="Frameworks" id="Frameworks" onchange="Changefwk(this);">
+			<select name="frameworkcode" id="Frameworks" onchange="Changefwk(this);">
 			                <option value="Default">Default</option>
 							[% FOREACH frameworkcodeloo IN frameworkcodeloop %]
                                 [% IF ( frameworkcodeloo.selected ) %]
@@ -825,8 +825,9 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
             	[% IF advancedMARCEditor %]
 		<a href="#" tabindex="1" class="tagnum" title="[% innerloo.tag_lib %] - Click to Expand this Tag" onclick="ExpandField('tag_[% innerloo.tag %]_[% innerloo.index %][% innerloo.random %]'); return false;">[% innerloo.tag %]</a>
 		[% ELSE %]
-                        <span class="tagnum" title="[% innerloo.tag_lib %]">[% innerloo.tag %]<a class="marcdocs"
-                 onclick="PopupMARCFieldDoc('[% innerloo.tag %]', [% BIG_LOO.number %]); return false;">&nbsp;?</a></span>
+                 <span class="tagnum" title="[% innerloo.tag_lib %]">[% innerloo.tag %]
+                 [% IF marcflavour != 'NORMARC' %]<a class="marcdocs" onclick="PopupMARCFieldDoc('[% innerloo.tag %]', [% BIG_LOO.number %]); return false;">&nbsp;?</a>[% END %]
+                 </span>
 		[% END %]
                 [% IF ( innerloo.fixedfield ) %]
 	                <input tabindex="1" class="indicator flat" type="text" style="display:none;" name="tag_[% innerloo.tag %]_indicator1_[% innerloo.index %][% innerloo.random %]" size="1" maxlength="1" value="[% innerloo.indicator1 %]" />

@@ -1,5 +1,11 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Patrons &rsaquo; [% IF ( unknowuser ) %]Patron does not exist[% ELSE %]Patron Details for [% firstname %] [% surname %] ([% cardnumber %])[% END %]</title>
+<title>Koha &rsaquo; Patrons &rsaquo;
+[% IF ( unknowuser ) %]
+    Patron does not exist
+[% ELSE %]
+    Patron Details for [% INCLUDE 'patron-title.inc' %]
+[% END %]
+</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
@@ -119,7 +125,7 @@ function validate1(date) {
 <div id="breadcrumbs">
          <a href="/cgi-bin/koha/mainpage.pl">Home</a>
 &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>
-&rsaquo; [% IF ( unknowuser ) %]Patron does not exist[% ELSE %]Patron Details for [% firstname %] [% surname %] ([% cardnumber %])[% END %]
+&rsaquo; [% IF ( unknowuser ) %]Patron does not exist[% ELSE %]Patron Details for [% INCLUDE 'patron-title.inc' %][% END %]
 </div>
 
 <div id="doc3" class="yui-t1">
@@ -158,12 +164,11 @@ function validate1(date) {
 
     [% IF ( flagged ) %]
     <ul>
-        [% IF ( debarred ) %]
-            <li>Patron is restricted
+        [% IF ( userdebarred ) %]
+            <li>Patron is restricted[% IF ( userdebarreddate ) %] until [% userdebarreddate%] [% IF (debarredcomment ) %]([% debarredcomment %])[% END %][% END %]
             <form class="inline compact" action="/cgi-bin/koha/members/setdebar.pl" method="post">
                 <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
-                <input type="hidden" name="status" value="0" />
-                <input type="submit" value="Lift Restriction" />
+                <input type="submit" value="Lift Debarment" />
             </form>
             </li>
         [% END %]
@@ -285,12 +290,12 @@ function validate1(date) {
         <th>Type</th>
         <th>Value</th>
     </tr>
-    [% FOREACH patron_attribute IN patron_attributes %]
+    [% FOREACH extendedattribute IN extendedattributes %]
     <tr>
-        <td>[% patron_attribute.code %] ([% patron_attribute.description %])</td>
-        <td>[% patron_attribute.value %]
-            [% IF ( patron_attribute.value_description ) %]
-                ([% patron_attribute.value_description %])
+        <td>[% extendedattribute.code %] ([% extendedattribute.description %])</td>
+        <td>[% extendedattribute.value %]
+            [% IF ( extendedattribute.value_description ) %]
+                ([% extendedattribute.value_description %])
             [% END %]
         </td>
     </tr>
@@ -566,7 +571,7 @@ function validate1(date) {
         <td>[% relissueloo.itemcallnumber %]</td>
         <td>[% relissueloo.charge %]</td>
         <td>[% relissueloo.replacementprice %]</td>
-	    <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% relissueloo.borrowernumber %]">[% relissueloo.borrowername %] ([% relissueloo.cardnumber %])</a></td>
+	    <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% relissueloo.borrowernumber %]">[% relissueloo.firstname %] [% relissueloo.surname %] ([% relissueloo.cardnumber %])</a></td>
         </tr>
   [% END %]
         </tbody>

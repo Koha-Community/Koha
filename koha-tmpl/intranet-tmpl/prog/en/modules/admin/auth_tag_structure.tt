@@ -208,24 +208,9 @@ return false;
     <input type="text" name="searchfield" value="[% searchfield %]" />
     <input type="submit" value="OK" class="submit" />
 </form><br />
-<span id="pagertable_authtagstructure" class="pager">
-	<form class="formpager">&nbsp;<strong>page(s)</strong>&nbsp;:
-		<img src="[% interface %]/prog/img/first.png" class="first"/>
-		<img src="[% interface %]/prog/img/prev.png" class="prev"/>
-		<input type="text" size="5" class="pagedisplay"/>
-		<img src="[% interface %]/prog/img/next.png" class="next"/>
-		<img src="[% interface %]/prog/img/last.png" class="last"/>
-		, entries/page : 
-		<select class="pagesize">
-        	<option value="10">10</option>
-			<option selected="selected" value="20">20</option>
-			<option value="30">30</option>
-			<option value="40">40</option>
-			<option value="50">50</option>
-			<option value="100">100</option>
-		</select>
-</form>
-</span>
+<div id="pagertable_authtagstructure">
+[% INCLUDE 'table-pager.inc' perpage='20' %]
+</div>
 <table id="table_authtagstructure">
     <thead>
         <th>Tag</th>

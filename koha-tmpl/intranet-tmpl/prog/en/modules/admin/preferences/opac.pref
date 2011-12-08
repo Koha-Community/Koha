@@ -86,6 +86,20 @@ OPAC:
                   no: "Don't show"
             - the name of the patron that has an item checked out on item detail pages on the OPAC.
         -
+            - pref: OpacKohaUrl
+              default: 0
+              choices:
+                  yes: Show
+                  no: "Don't show"
+            - "'Powered by Koha' text on OPAC footer."
+        -
+            - pref: OpacShowRecentComments
+              default: 0
+              choices:
+                  yes: Show
+                  no: "Don't show"
+            - a link to recent comments in the OPAC masthead.
+        -
             - pref: OpacHighlightedWords
               choices:
                   yes: Highlight
@@ -140,6 +154,11 @@ OPAC:
         -
             - "Show the following HTML on the left hand column of the main page and patron account on the OPAC (generally navigation links):"
             - pref: OpacNav
+              type: textarea
+              class: code
+        -
+            - "Show the following HTML on the left hand column of the main page and patron account on the OPAC, after OpacNav, and before patron account links if available:"
+            - pref: OpacNavBottom
               type: textarea
               class: code
         -

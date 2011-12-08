@@ -140,44 +140,6 @@ my ($template, $loggedinuser, $cookie)
                  debug => 1,
 });
 
-my $action = $input->param('action');
-my $ordernumber = $input->param('ordernumber');
-my $biblionumber = $input->param('biblionumber');
-
-# If canceling an order
-if ($action eq "cancelorder") {
-
-    my $error_delitem;
-    my $error_delbiblio;
-
-    # We delete the order
-    DelOrder($biblionumber, $ordernumber);
-
-    # We delete all the items related to this order
-    my @itemnumbers = GetItemnumbersFromOrder($ordernumber);
-    foreach (@itemnumbers) {
-	my $delcheck = DelItemCheck(C4::Context->dbh, $biblionumber, $_);
-	# (should always success, as no issue should exist on item on order)
-	if ($delcheck != 1) { $error_delitem = 1; }
-    }
-
-    # We get the number of remaining items
-    my $itemcount = GetItemsCount($biblionumber);
-    
-    # If there are no items left,
-    if ($itemcount eq 0) {
-	# We delete the record
-	$error_delbiblio = DelBiblio($biblionumber);	
-    }
-
-    if ($error_delitem || $error_delbiblio) {
-	if ($error_delitem)   { $template->param(error_delitem => 1); }
-	if ($error_delbiblio) { $template->param(error_delbiblio => 1); }
-    } else {
-	$template->param(success_delorder => 1);
-    }
-}
-
 # If receiving error, report the error (coming from finishrecieve.pl(sic)).
 if( scalar(@rcv_err) ) {
 	my $cnt=0;
@@ -237,6 +199,7 @@ my @loop_orders = ();
 for (my $i = 0 ; $i < $countpendings ; $i++) {
     my %line;
     %line = %{$pendingorders->[$i]};
+   
     $line{quantity}+=0;
     $line{quantityreceived}+=0;
     $line{unitprice}+=0;
@@ -252,6 +215,36 @@ for (my $i = 0 ; $i < $countpendings ; $i++) {
     $line{total} = $total;
     $line{supplierid} = $supplierid;
     $ordergrandtotal += $line{ecost} * $line{quantity};
+    
+    my $biblionumber = $line{'biblionumber'};
+    my $countbiblio = CountBiblioInOrders($biblionumber);
+    my $ordernumber = $line{'ordernumber'};
+    my @subscriptions = GetSubscriptionsId ($biblionumber);
+    my $itemcount = GetItemsCount($biblionumber);
+    my $holds  = GetHolds ($biblionumber);
+    my @items = GetItemnumbersFromOrder( $ordernumber );
+    my $itemholds;
+    foreach my $item (@items){
+        my $nb = GetItemHolds($biblionumber, $item);
+        if ($nb){
+            $itemholds += $nb;
+        }
+    }
+    
+    # if the biblio is not in other orders and if there is no items elsewhere and no subscriptions and no holds we can then show the link "Delete order and Biblio" see bug 5680
+    $line{can_del_bib}          = 1 if $countbiblio <= 1 && $itemcount == scalar @items && !(@subscriptions) && !($holds);
+    $line{items}                = ($itemcount) - (scalar @items);
+    $line{left_item}            = 1 if $line{items} >= 1;
+    $line{left_biblio}          = 1 if $countbiblio > 1;
+    $line{biblios}              = $countbiblio - 1;
+    $line{left_subscription}    = 1 if scalar @subscriptions >= 1;
+    $line{subscriptions}        = scalar @subscriptions;
+    $line{left_holds}           = 1 if $holds >= 1;
+    $line{left_holds_on_order}  = 1 if $line{left_holds}==1 && ($line{items} == 0 || $itemholds );
+    $line{holds}                = $holds;
+    $line{holds_on_order}       = $itemholds?$itemholds:$holds if $line{left_holds_on_order};
+    
+    
     push @loop_orders, \%line if ($i >= $startfrom and $i < $startfrom + $resultsperpage);
 }
 $freight = $totalfreight unless $freight;

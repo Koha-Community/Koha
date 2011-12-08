@@ -51,8 +51,8 @@ if ( $reregistration eq 'y' ) {
 	# re-reregistration function to automatic calcul of date expiry
 	$dateexpiry = ExtendMemberSubscriptionTo( $borrowernumber );
 } else {
-	my $sth=$dbh->prepare("Update borrowers set debarred = ? where borrowernumber = ?");
-	$sth->execute($status,$borrowernumber);	
+    my $sth = $dbh->prepare("UPDATE borrowers SET debarred = ?, debarredcomment = '' WHERE borrowernumber = ?");
+    $sth->execute( $status, $borrowernumber );
 	$sth->finish;
 	}
 

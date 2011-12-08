@@ -190,6 +190,7 @@ my $user          = $input->remote_user;
 # create if $quantity>=0 and $existing='no'
 # modify if $quantity>=0 and $existing='yes'
 # delete if $quantity has been set to 0 by the librarian
+# delete biblio if delbiblio has been set to 1 by the librarian
 my $bibitemnum;
 if ( $orderinfo->{quantity} ne '0' ) {
     #TODO:check to see if biblio exists
@@ -211,7 +212,7 @@ if ( $orderinfo->{quantity} ne '0' ) {
         my ($biblionumber,$bibitemnum) = AddBiblio($record,'');
         # change suggestion status if applicable
         if ($$orderinfo{suggestionid}) {
-            ModSuggestion( {suggestionid=>$$orderinfo{suggestionid}, status=>'ORDERED', biblionumber=>$biblionumber} );
+            ModSuggestion( {suggestionid=>$$orderinfo{suggestionid}, STATUS=>'ORDERED', biblionumber=>$biblionumber} );
         }
 		$orderinfo->{biblioitemnumber}=$bibitemnum;
 		$orderinfo->{biblionumber}=$biblionumber;
@@ -271,6 +272,9 @@ if ( $orderinfo->{quantity} ne '0' ) {
 else { # qty=0, delete the line
     my $biblionumber = $input->param('biblionumber');
     DelOrder( $biblionumber, $$orderinfo{ordernumber} );
+    if ($orderinfo->{delbiblio} == 1){
+     DelBiblio($biblionumber);
+    }
 }
 my $basketno=$$orderinfo{basketno};
 my $booksellerid=$$orderinfo{booksellerid};

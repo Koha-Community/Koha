@@ -1,0 +1,67 @@
+<article xmlns='http://docbook.org/ns/docbook'>
+<title>koha-rebuild-zebra</title>
+<info>
+<productname>Koha</productname> is the first free software library automation package.
+<author>
+  <orgname>The Koha Communnity</orgname>
+  <uri>http://koha-community.org/</uri>
+</author>
+</info>
+
+<refentry xml:id="koha-rebuild-zebra">
+
+  <refmeta>
+    <refentrytitle>koha-rebuild-zebra</refentrytitle>
+    <manvolnum>8</manvolnum>
+  </refmeta>
+
+  <refnamediv>
+    <refname>koha-rebuild-zebra</refname>
+    <refpurpose>Rebuild the Zebra database for a Koha instance.</refpurpose>
+    <refclass>UNIX/Linux</refclass>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <cmdsynopsis>
+      <command>koha-rebuild-zebra</command> <arg><option>-u</option>|<option>--usmarc</option></arg> <arg><option>-f</option>|<option>--full</option></arg> <arg><option>...</option></arg> <arg choice="req" rep="repeat"><replaceable>instancename</replaceable></arg>
+    </cmdsynopsis>
+  </refsynopsisdiv>
+  
+  <refsect1><title>Options</title>
+  <variablelist> 
+    <varlistentry>
+      <term><option>-u, --usmarc</option></term>
+      <listitem>
+        <para>Runs the process as USMARC rather than the default of MARCXML.</para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term><option>-f, --full</option></term>
+      <listitem>
+        <para>Does a reindex of the whole collection.</para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term><option>-...</option></term>
+      <listitem>
+        <para>Anything else is passed directly to rebuild_zebra. This is useful in particular for -v.</para>
+      </listitem>
+    </varlistentry>
+  </variablelist>
+  </refsect1>
+
+  <refsect1><title>Description</title>
+  <para>Rebuild the Zebra database for a Koha instance.</para>
+  </refsect1>
+  
+  <refsect1><title>See also</title>
+  <simplelist type="inline">
+    <member><command>koha-restart-zebra(8)</command></member>
+    <member><command>koha-start-zebra(8)</command></member>
+    <member><command>koha-stop-zebra(8)</command></member>
+  </simplelist>
+  </refsect1>
+  
+</refentry>
+
+</article>

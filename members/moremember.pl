@@ -49,9 +49,11 @@ use C4::Letters;
 use C4::Biblio;
 use C4::Reserves;
 use C4::Branch; # GetBranchName
+use C4::Overdues qw/CheckBorrowerDebarred/;
 use C4::Form::MessagingPreferences;
 use C4::NewsChannels; #get slip news
 use List::MoreUtils qw/uniq/;
+use C4::Members::Attributes qw(GetBorrowerAttributes);
 
 #use Smart::Comments;
 #use Data::Dumper;
@@ -131,9 +133,6 @@ my $category_type = $data->{'category_type'};
 
 ### $category_type
 
-# in template <TMPL_IF name="I"> => instutitional (A for Adult& C for children) 
-$template->param( $data->{'categorycode'} => 1 ); 
-
 $debug and printf STDERR "dates (enrolled,expiry,birthdate) raw: (%s, %s, %s)\n", map {$data->{$_}} qw(dateenrolled dateexpiry dateofbirth);
 foreach (qw(dateenrolled dateexpiry dateofbirth)) {
 		my $userdate = $data->{$_};
@@ -148,8 +147,17 @@ foreach (qw(dateenrolled dateexpiry dateofbirth)) {
 }
 $data->{'IS_ADULT'} = ( $data->{'categorycode'} ne 'I' );
 
-for (qw(debarred gonenoaddress lost borrowernotes)) {
+for (qw(gonenoaddress lost borrowernotes)) {
 	 $data->{$_} and $template->param(flagged => 1) and last;
+}
+
+my $debar = CheckBorrowerDebarred($borrowernumber);
+if ($debar) {
+    $template->param( 'userdebarred' => 1, 'flagged' => 1 );
+    if ( $debar ne "9999-12-31" ) {
+        $template->param( 'userdebarreddate' => C4::Dates::format_date($debar) );
+        $template->param( 'debarredcomment'  => $data->{debarredcomment} );
+    }
 }
 
 $data->{'ethnicity'} = fixEthnicity( $data->{'ethnicity'} );
@@ -259,10 +267,6 @@ sub build_issue_data {
     my $localissue;
 
     for ( my $i = 0 ; $i < $issuecount ; $i++ ) {
-        # Getting borrower details
-        my $memberdetails = GetMemberDetails($issue->[$i]{'borrowernumber'});
-        $issue->[$i]{'borrowername'} = $memberdetails->{'firstname'} . " " . $memberdetails->{'surname'};
-        $issue->[$i]{'cardnumber'} = $memberdetails->{'cardnumber'};
         my $datedue = $issue->[$i]{'date_due'};
         my $issuedate = $issue->[$i]{'issuedate'};
         $issue->[$i]{'date_due'}  = C4::Dates->new($issue->[$i]{'date_due'}, 'iso')->output('syspref');
@@ -306,7 +310,7 @@ sub build_issue_data {
 
         #find the charge for an item
         my ( $charge, $itemtype ) =
-          GetIssuingCharges( $issue->[$i]{'itemnumber'}, $borrowernumber );
+          GetIssuingCharges( $issue->[$i]{'itemnumber'}, $issue->[$i]{'borrowernumber'} );
 
         my $itemtypeinfo = getitemtypeinfo($itemtype);
         $row{'itemtype_description'} = $itemtypeinfo->{description};
@@ -314,7 +318,7 @@ sub build_issue_data {
 
         $row{'charge'} = sprintf( "%.2f", $charge );
 
-        my ( $renewokay,$renewerror ) = CanBookBeRenewed( $borrowernumber, $issue->[$i]{'itemnumber'}, $override_limit );
+        my ( $renewokay,$renewerror ) = CanBookBeRenewed( $issue->[$i]{'borrowernumber'}, $issue->[$i]{'itemnumber'}, $override_limit );
         $row{'norenew'} = !$renewokay;
         $row{'can_confirm'} = ( !$renewokay && $renewerror ne 'on_reserve' );
         $row{"norenew_reason_$renewerror"} = 1 if $renewerror;
@@ -428,8 +432,11 @@ my $branch=C4::Context->userenv->{'branch'};
 $template->param(%$data);
 
 if (C4::Context->preference('ExtendedPatronAttributes')) {
-    $template->param(ExtendedPatronAttributes => 1);
-    $template->param(patron_attributes => C4::Members::Attributes::GetBorrowerAttributes($borrowernumber));
+    my $attributes = GetBorrowerAttributes($borrowernumber);
+    $template->param(
+        ExtendedPatronAttributes => 1,
+        extendedattributes => $attributes
+    );
     my @types = C4::Members::AttributeTypes::GetAttributeTypes();
     if (scalar(@types) == 0) {
         $template->param(no_patron_attribute_types => 1);
@@ -443,6 +450,8 @@ if (C4::Context->preference('EnhancedMessagingPreferences')) {
     $template->param(SMSnumber     => defined $data->{'smsalertnumber'} ? $data->{'smsalertnumber'} : $data->{'mobile'});
 }
 
+# in template <TMPL_IF name="I"> => instutitional (A for Adult, C for children) 
+$template->param( $data->{'categorycode'} => 1 ); 
 $template->param(
     detailview => 1,
     AllowRenewalLimitOverride => C4::Context->preference("AllowRenewalLimitOverride"),
@@ -450,6 +459,7 @@ $template->param(
     CANDELETEUSER    => $candeleteuser,
     roaddetails     => $roaddetails,
     borrowernumber  => $borrowernumber,
+    othernames      => $data->{'othernames'},
     categoryname    => $data->{'description'},
     reregistration  => $reregistration,
     branch          => $branch,

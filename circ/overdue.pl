@@ -247,6 +247,7 @@ if ($noreport) {
         borrowers.phone,
         borrowers.email,
         issues.itemnumber,
+        issues.issuedate,
         items.barcode,
         biblio.title,
         biblio.author,
@@ -265,7 +266,13 @@ if ($noreport) {
     $strsth.=" AND date_due               < '" . $todaysdate     . "' " unless ($showall);
     $strsth.=" AND (borrowers.firstname like '".$bornamefilter."%' or borrowers.surname like '".$bornamefilter."%' or borrowers.cardnumber like '".$bornamefilter."%')" if($bornamefilter) ;
     $strsth.=" AND borrowers.categorycode = '" . $borcatfilter   . "' " if $borcatfilter;
-    $strsth.=" AND biblioitems.itemtype   = '" . $itemtypefilter . "' " if $itemtypefilter;
+    if( $itemtypefilter ){
+        if( C4::Context->preference('item-level_itypes') ){
+            $strsth.=" AND items.itype   = '" . $itemtypefilter . "' ";
+        } else {
+            $strsth.=" AND biblioitems.itemtype   = '" . $itemtypefilter . "' ";
+        }
+    }
     $strsth.=" AND borrowers.flags        = '" . $borflagsfilter . "' " if $borflagsfilter;
     $strsth.=" AND borrowers.branchcode   = '" . $branchfilter   . "' " if $branchfilter;
     $strsth.=" AND date_due < '" . $datedueto . "' "  if $datedueto;
@@ -306,6 +313,7 @@ if ($noreport) {
             borrowernumber         => $data->{borrowernumber},
             barcode                => $data->{barcode},
             itemnum                => $data->{itemnumber},
+            issuedate              => format_date($data->{issuedate}),
             borrowertitle          => $data->{borrowertitle},
             name                   => $data->{borrower},
             streetnumber           => $data->{streetnumber},                   
@@ -392,7 +400,8 @@ sub build_csv {
     my @lines = ();
 
     # build header ...
-    my @keys = grep { $_ ne 'patron_attr_value_loop' } sort keys %{ $overdues->[0] };
+    my @keys = qw /duedate title author borrowertitle name phone barcode email address address2 zipcode city country
+                branchcode itemcallnumber biblionumber borrowernumber itemnum issuedate replacementprice streetnumber streettype/;
     my $csv = Text::CSV_XS->new();
     $csv->combine(@keys);
     push @lines, $csv->string();

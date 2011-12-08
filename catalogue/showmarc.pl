@@ -2,8 +2,6 @@
 
 # Koha library project  www.koha-community.org
 
-# Licensed under the GPL
-
 # Copyright 2007 Liblime
 # Parts copyright 2010 BibLibre
 #
@@ -26,9 +24,11 @@ use strict;
 #use warnings; FIXME - Bug 2505
 
 use open OUT=>":encoding(UTF-8)", ':std';
+
 # standard or CPAN modules used
 use CGI qw(:standard);
 use DBI;
+use Encode;
 
 # Koha modules used
 use C4::Context;
@@ -64,29 +64,31 @@ if($importid) {
 		$xmlrecord = $record->as_xml();
 	} 
 }
-		
+
 if($view eq 'card') {
-$xmlrecord = GetXmlBiblio($biblionumber) unless $xmlrecord;
+    my $themelang = '/' . C4::Context->preference("opacthemes") .  '/' . C4::Templates::_current_language();
+    $xmlrecord = GetXmlBiblio($biblionumber) unless $xmlrecord;
+    my $xslfile =
+      C4::Context->config('intrahtdocs') . $themelang . "/xslt/compact.xsl";
+    my $parser       = XML::LibXML->new();
+    my $xslt         = XML::LibXSLT->new();
+    my $source       = $parser->parse_string($xmlrecord);
+    my $style_doc    = $parser->parse_file($xslfile);
+    my $stylesheet   = $xslt->parse_stylesheet($style_doc);
+    my $results      = $stylesheet->transform($source);
+    my $newxmlrecord = $stylesheet->output_string($results);
+    $newxmlrecord = Encode::decode_utf8($newxmlrecord)
+      unless utf8::is_utf8($newxmlrecord)
+    ;    #decode only if not in perl internal format
+    print $input->header( -charset => 'UTF-8' ), $newxmlrecord;
+}
+else {
+    $record =GetMarcBiblio($biblionumber) unless $record;
 
-my $xslfile = C4::Context->config('intrahtdocs')."/prog/en/xslt/compact.xsl";
-my $parser = XML::LibXML->new();
-my $xslt = XML::LibXSLT->new();
-my $source = $parser->parse_string($xmlrecord);
-my $style_doc = $parser->parse_file($xslfile);
-my $stylesheet = $xslt->parse_stylesheet($style_doc);
-my $results = $stylesheet->transform($source);
-my $newxmlrecord = $stylesheet->output_string($results);
-#warn $newxmlrecord;
-print "Content-type: text/html\n\n";
-utf8::encode($newxmlrecord);
-print $newxmlrecord;
+    my $formatted = $record->as_formatted;
+    $template->param( MARC_FORMATTED => $formatted );
 
-} else {
-
-$record =GetMarcBiblio($biblionumber) unless $record; 
-
-my $formatted = $record->as_formatted;
-$template->param( MARC_FORMATTED => $formatted );
-
-output_html_with_http_headers $input, $cookie, $template->output;
+    my $output= $template->output;
+    $output=Encode::decode_utf8($output) unless utf8::is_utf8($output);
+    output_html_with_http_headers $input, $cookie, $output;
 }

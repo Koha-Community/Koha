@@ -41,12 +41,15 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 my $op = $cgi->param('op') || 'none';
-my @label_ids = $cgi->param('label_id') if $cgi->param('label_id');   # this will handle individual label printing
-my @batch_ids = $cgi->param('batch_id') if $cgi->param('batch_id');
+my @label_ids;
+@label_ids = $cgi->param('label_id') if $cgi->param('label_id');   # this will handle individual label printing
+my @batch_ids;
+@batch_ids = $cgi->param('batch_id') if $cgi->param('batch_id');
 my $layout_id = $cgi->param('layout_id') || undef;
 my $template_id = $cgi->param('template_id') || undef;
 my $start_label = $cgi->param('start_label') || 1;
-my @item_numbers = $cgi->param('item_number') if $cgi->param('item_number');
+my @item_numbers;
+@item_numbers = $cgi->param('item_number') if $cgi->param('item_number');
 my $output_format = $cgi->param('output_format') || 'pdf';
 my $referer = $cgi->param('referer') || undef;
 
@@ -109,9 +112,9 @@ elsif ($op eq 'none') {
     # setup select menus for selecting layout and template for this run...
     $referer = $ENV{'HTTP_REFERER'};
     $referer =~ s/^.*?:\/\/.*?(\/.*)$/$1/m;
-    @batch_ids = grep{$_ = {batch_id => $_}} @batch_ids;
-    @label_ids = grep{$_ = {label_id => $_}} @label_ids;
-    @item_numbers = grep{$_ = {item_number => $_}} @item_numbers;
+    @batch_ids = map{{batch_id => $_}} @batch_ids;
+    @label_ids = map{{label_id => $_}} @label_ids;
+    @item_numbers = map{{item_number => $_}} @item_numbers;
     $templates = get_all_templates(field_list => 'template_id, template_code', filter => 'creator = "Labels"');
     $layouts = get_all_layouts(field_list => 'layout_id, layout_name', filter => 'creator = "Labels"');
     $output_formats = get_output_formats();

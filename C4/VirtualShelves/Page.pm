@@ -209,7 +209,7 @@ sub shelfpage ($$$$$) {
                     my $record = GetMarcBiblio($biblionumber);
                     $this_item->{XSLTBloc} =
                         XSLTParse4Display($biblionumber, $record, 'Results', 'opac')
-                            if C4::Context->preference("OPACXSLTResultsDisplay");
+                            if C4::Context->preference("OPACXSLTResultsDisplay") && $type eq 'opac';
 
                     # the virtualshelfcontents table does not store these columns nor are they retrieved from the items
                     # and itemtypes tables, so I'm commenting them out for now to quiet the log -crn
@@ -217,7 +217,7 @@ sub shelfpage ($$$$$) {
                     #$this_item->{'description'} = $itemtypes->{ $this_item->{itemtype} }->{'description'};
                     $this_item->{'dateadded'} = format_date( $this_item->{'dateadded'} );
                     $this_item->{'imageurl'}  = getitemtypeinfo( $this_item->{'itemtype'} )->{'imageurl'};
-                    $this_item->{'coins'}     = GetCOinSBiblio( $this_item->{'biblionumber'} );
+                    $this_item->{'coins'}     = GetCOinSBiblio( $record );
                     $this_item->{'subtitle'} = GetRecordValue('subtitle', $record, GetFrameworkCode($this_item->{'biblionumber'}));
                     $this_item->{'normalized_upc'}  = GetNormalizedUPC(       $record,$marcflavour);
                     $this_item->{'normalized_ean'}  = GetNormalizedEAN(       $record,$marcflavour);

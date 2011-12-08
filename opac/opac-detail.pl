@@ -23,7 +23,7 @@ use strict;
 use warnings;
 
 use CGI;
-use C4::Auth;
+use C4::Auth qw(:DEFAULT get_session);
 use C4::Branch;
 use C4::Koha;
 use C4::Serials;    #uses getsubscriptionfrom biblionumber
@@ -66,6 +66,288 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 
 my $biblionumber = $query->param('biblionumber') || $query->param('bib');
 
+# We look for the busc param to build the simple paging from the search
+my $session = get_session($query->cookie("CGISESSID"));
+my %paging = (previous => {}, next => {});
+if ($session->param('busc')) {
+    use C4::Search;
+
+    # Rebuild the string to store on session
+    sub rebuildBuscParam
+    {
+        my $arrParamsBusc = shift;
+
+        my $pasarParams = '';
+        my $j = 0;
+        for (keys %$arrParamsBusc) {
+            if ($_ =~ /^(?:query|listBiblios|newlistBiblios|query_type|simple_query|total|offset|offsetSearch|next|previous|count|expand|scan)/) {
+                if (defined($arrParamsBusc->{$_})) {
+                    $pasarParams .= '&amp;' if ($j);
+                    $pasarParams .= $_ . '=' . $arrParamsBusc->{$_};
+                    $j++;
+                }
+            } else {
+                for my $value (@{$arrParamsBusc->{$_}}) {
+                    $pasarParams .= '&amp;' if ($j);
+                    $pasarParams .= $_ . '=' . $value;
+                    $j++;
+                }
+            }
+        }
+        return $pasarParams;
+    }#rebuildBuscParam
+
+    # Search given the current values from the busc param
+    sub searchAgain
+    {
+        my ($arrParamsBusc, $offset, $results_per_page) = @_;
+
+        my $expanded_facet = $arrParamsBusc->{'expand'};
+        my $branches = GetBranches();
+        my @servers;
+        @servers = @{$arrParamsBusc->{'server'}} if $arrParamsBusc->{'server'};
+        @servers = ("biblioserver") unless (@servers);
+        my $default_sort_by = C4::Context->preference('OPACdefaultSortField')."_".C4::Context->preference('OPACdefaultSortOrder') if (C4::Context->preference('OPACdefaultSortField') && C4::Context->preference('OPACdefaultSortOrder'));
+        my @sort_by = @{$arrParamsBusc->{'sort_by'}} if $arrParamsBusc->{'sort_by'};
+        $sort_by[0] = $default_sort_by if !$sort_by[0] && defined($default_sort_by);
+        my ($error, $results_hashref, $facets);
+        eval {
+            ($error, $results_hashref, $facets) = getRecords($arrParamsBusc->{'query'},$arrParamsBusc->{'simple_query'},\@sort_by,\@servers,$results_per_page,$offset,$expanded_facet,$branches,$arrParamsBusc->{'query_type'},$arrParamsBusc->{'scan'});
+        };
+        my $hits;
+        my @newresults;
+        for (my $i=0;$i<@servers;$i++) {
+            my $server = $servers[$i];
+            $hits = $results_hashref->{$server}->{"hits"};
+            @newresults = searchResults('opac', '', $hits, $results_per_page, $offset, $arrParamsBusc->{'scan'}, @{$results_hashref->{$server}->{"RECORDS"}},, C4::Context->preference('hidelostitems'));
+        }
+        return \@newresults;
+    }#searchAgain
+
+    # Build the current list of biblionumbers in this search
+    sub buildListBiblios
+    {
+        my ($newresultsRef, $results_per_page) = @_;
+
+        my $listBiblios = '';
+        my $j = 0;
+        foreach (@$newresultsRef) {
+            my $bibnum = ($_->{biblionumber})?$_->{biblionumber}:0;
+            $listBiblios .= $bibnum . ',';
+            $j++;
+            last if ($j == $results_per_page);
+        }
+        chop $listBiblios if ($listBiblios =~ /,$/);
+        return $listBiblios;
+    }#buildListBiblios
+
+    my $busc = $session->param("busc");
+    my @arrBusc = split(/\&(?:amp;)?/, $busc);
+    my ($key, $value);
+    my %arrParamsBusc = ();
+    for (@arrBusc) {
+        ($key, $value) = split(/=/, $_, 2);
+        if ($key =~ /^(?:query|listBiblios|newlistBiblios|query_type|simple_query|next|previous|total|offset|offsetSearch|count|expand|scan)/) {
+            $arrParamsBusc{$key} = $value;
+        } else {
+            unless (exists($arrParamsBusc{$key})) {
+                $arrParamsBusc{$key} = [];
+            }
+            push @{$arrParamsBusc{$key}}, $value;
+        }
+    }
+    my $searchAgain = 0;
+    my $count = C4::Context->preference('OPACnumSearchResults') || 20;
+    my $results_per_page = ($arrParamsBusc{'count'} && $arrParamsBusc{'count'} =~ /^[0-9]+?/)?$arrParamsBusc{'count'}:$count;
+    $arrParamsBusc{'count'} = $results_per_page;
+    my $offset = ($arrParamsBusc{'offset'} && $arrParamsBusc{'offset'} =~ /^[0-9]+?/)?$arrParamsBusc{'offset'}:0;
+    # The value OPACnumSearchResults has changed and the search has to be rebuild
+    if ($count != $results_per_page) {
+        if (exists($arrParamsBusc{'listBiblios'}) && $arrParamsBusc{'listBiblios'} =~ /^[0-9]+(?:,[0-9]+)*$/) {
+            my $indexBiblio = 0;
+            my @arrBibliosAux = split(',', $arrParamsBusc{'listBiblios'});
+            for (@arrBibliosAux) {
+                last if ($_ == $biblionumber);
+                $indexBiblio++;
+            }
+            $indexBiblio += $offset;
+            $offset = int($indexBiblio / $count) * $count;
+            $arrParamsBusc{'offset'} = $offset;
+        }
+        $arrParamsBusc{'count'} = $count;
+        $results_per_page = $count;
+        my $newresultsRef = searchAgain(\%arrParamsBusc, $offset, $results_per_page);
+        $arrParamsBusc{'listBiblios'} = buildListBiblios($newresultsRef, $results_per_page);
+        delete $arrParamsBusc{'previous'} if (exists($arrParamsBusc{'previous'}));
+        delete $arrParamsBusc{'next'} if (exists($arrParamsBusc{'next'}));
+        delete $arrParamsBusc{'offsetSearch'} if (exists($arrParamsBusc{'offsetSearch'}));
+        delete $arrParamsBusc{'newlistBiblios'} if (exists($arrParamsBusc{'newlistBiblios'}));
+        my $newbusc = rebuildBuscParam(\%arrParamsBusc);
+        $session->param("busc" => $newbusc);
+        @arrBusc = split(/\&(?:amp;)?/, $newbusc);
+    } else {
+        my $modifyListBiblios = 0;
+        # We come from a previous click
+        if (exists($arrParamsBusc{'previous'})) {
+            $modifyListBiblios = 1 if ($biblionumber == $arrParamsBusc{'previous'});
+            delete $arrParamsBusc{'previous'};
+        } elsif (exists($arrParamsBusc{'next'})) { # We come from a next click
+            $modifyListBiblios = 2 if ($biblionumber == $arrParamsBusc{'next'});
+            delete $arrParamsBusc{'next'};
+        }
+        if ($modifyListBiblios) {
+            if (exists($arrParamsBusc{'newlistBiblios'})) {
+                my $listBibliosAux = $arrParamsBusc{'listBiblios'};
+                $arrParamsBusc{'listBiblios'} = $arrParamsBusc{'newlistBiblios'};
+                my @arrAux = split(',', $listBibliosAux);
+                $arrParamsBusc{'newlistBiblios'} = $listBibliosAux;
+                if ($modifyListBiblios == 1) {
+                    $arrParamsBusc{'next'} = $arrAux[0];
+                    $paging{'next'}->{biblionumber} = $arrAux[0];
+                }else {
+                    $arrParamsBusc{'previous'} = $arrAux[$#arrAux];
+                    $paging{'previous'}->{biblionumber} = $arrAux[$#arrAux];
+                }
+            } else {
+                delete $arrParamsBusc{'listBiblios'};
+            }
+            my $offsetAux = $arrParamsBusc{'offset'};
+            $arrParamsBusc{'offset'} = $arrParamsBusc{'offsetSearch'};
+            $arrParamsBusc{'offsetSearch'} = $offsetAux;
+            $offset = $arrParamsBusc{'offset'};
+            my $newbusc = rebuildBuscParam(\%arrParamsBusc);
+            $session->param("busc" => $newbusc);
+            @arrBusc = split(/\&(?:amp;)?/, $newbusc);
+        }
+    }
+    my $buscParam = '';
+    my $j = 0;
+    # Rebuild the query for the button "back to results"
+    for (@arrBusc) {
+        unless ($_ =~ /^(?:query|listBiblios|newlistBiblios|query_type|simple_query|next|previous|total|count|offsetSearch)/) {
+            $buscParam .= '&amp;' unless ($j == 0);
+            $buscParam .= $_;
+            $j++;
+        }
+    }
+    $template->param('busc' => $buscParam);
+    my $offsetSearch;
+    my @arrBiblios;
+    # We are inside the list of biblios and we don't have to search
+    if (exists($arrParamsBusc{'listBiblios'}) && $arrParamsBusc{'listBiblios'} =~ /^[0-9]+(?:,[0-9]+)*$/) {
+        @arrBiblios = split(',', $arrParamsBusc{'listBiblios'});
+        if (@arrBiblios) {
+            # We are at the first item of the list
+            if ($arrBiblios[0] == $biblionumber) {
+                if (@arrBiblios > 1) {
+                    for (my $j = 1; $j < @arrBiblios; $j++) {
+                        next unless ($arrBiblios[$j]);
+                        $paging{'next'}->{biblionumber} = $arrBiblios[$j];
+                        last;
+                    }
+                }
+                # search again if we are not at the first searching list
+                if ($offset && !$arrParamsBusc{'previous'}) {
+                    $searchAgain = 1;
+                    $offsetSearch = $offset - $results_per_page;
+                }
+            # we are at the last item of the list
+            } elsif ($arrBiblios[$#arrBiblios] == $biblionumber) {
+                for (my $j = $#arrBiblios - 1; $j >= 0; $j--) {
+                    next unless ($arrBiblios[$j]);
+                    $paging{'previous'}->{biblionumber} = $arrBiblios[$j];
+                    last;
+                }
+                if (!$offset) {
+                    # search again if we are at the first list and there is more results
+                    $searchAgain = 1 if (!$arrParamsBusc{'next'} && $arrParamsBusc{'total'} != @arrBiblios);
+                } else {
+                    # search again if we aren't at the first list and there is more results
+                    $searchAgain = 1 if (!$arrParamsBusc{'next'} && $arrParamsBusc{'total'} > ($offset + @arrBiblios));
+                }
+                $offsetSearch = $offset + $results_per_page if ($searchAgain);
+            } else {
+                for (my $j = 1; $j < $#arrBiblios; $j++) {
+                    if ($arrBiblios[$j] == $biblionumber) {
+                        for (my $z = $j - 1; $z >= 0; $z--) {
+                            next unless ($arrBiblios[$z]);
+                            $paging{'previous'}->{biblionumber} = $arrBiblios[$z];
+                            last;
+                        }
+                        for (my $z = $j + 1; $z < @arrBiblios; $z++) {
+                            next unless ($arrBiblios[$z]);
+                            $paging{'next'}->{biblionumber} = $arrBiblios[$z];
+                            last;
+                        }
+                        last;
+                    }
+                }
+            }
+        }
+        $offsetSearch = 0 if (defined($offsetSearch) && $offsetSearch < 0);
+    }
+    if ($searchAgain) {
+        my $newresultsRef = searchAgain(\%arrParamsBusc, $offsetSearch, $results_per_page);
+        my @newresults = @$newresultsRef;
+        # build the new listBiblios
+        my $listBiblios = buildListBiblios(\@newresults, $results_per_page);
+        unless (exists($arrParamsBusc{'listBiblios'})) {
+            $arrParamsBusc{'listBiblios'} = $listBiblios;
+            @arrBiblios = split(',', $arrParamsBusc{'listBiblios'});
+        } else {
+            $arrParamsBusc{'newlistBiblios'} = $listBiblios;
+        }
+        # From the new list we build again the next and previous result
+        if (@arrBiblios) {
+            if ($arrBiblios[0] == $biblionumber) {
+                for (my $j = $#newresults; $j >= 0; $j--) {
+                    next unless ($newresults[$j]);
+                    $paging{'previous'}->{biblionumber} = $newresults[$j]->{biblionumber};
+                    $arrParamsBusc{'previous'} = $paging{'previous'}->{biblionumber};
+                    $arrParamsBusc{'offsetSearch'} = $offsetSearch;
+                   last;
+                }
+            } elsif ($arrBiblios[$#arrBiblios] == $biblionumber) {
+                for (my $j = 0; $j < @newresults; $j++) {
+                    next unless ($newresults[$j]);
+                    $paging{'next'}->{biblionumber} = $newresults[$j]->{biblionumber};
+                    $arrParamsBusc{'next'} = $paging{'next'}->{biblionumber};
+                    $arrParamsBusc{'offsetSearch'} = $offsetSearch;
+                    last;
+                }
+            }
+        }
+        # build new busc param
+        my $newbusc = rebuildBuscParam(\%arrParamsBusc);
+        $session->param("busc" => $newbusc);
+    }
+    my ($previous, $next, $dataBiblioPaging);
+    # Previous biblio
+    if ($paging{'previous'}->{biblionumber}) {
+        $previous = 'opac-detail.pl?biblionumber=' . $paging{'previous'}->{biblionumber};
+        $dataBiblioPaging = GetBiblioData($paging{'previous'}->{biblionumber});
+        $template->param('previousTitle' => $dataBiblioPaging->{'title'}) if ($dataBiblioPaging);
+    }
+    # Next biblio
+    if ($paging{'next'}->{biblionumber}) {
+        $next = 'opac-detail.pl?biblionumber=' . $paging{'next'}->{biblionumber};
+        $dataBiblioPaging = GetBiblioData($paging{'next'}->{biblionumber});
+        $template->param('nextTitle' => $dataBiblioPaging->{'title'}) if ($dataBiblioPaging);
+    }
+    $template->param('previous' => $previous, 'next' => $next);
+    # Partial list of biblio results
+    my @listResults;
+    for (my $j = 0; $j < @arrBiblios; $j++) {
+        next unless ($arrBiblios[$j]);
+        $dataBiblioPaging = GetBiblioData($arrBiblios[$j]) if ($arrBiblios[$j] != $biblionumber);
+        push @listResults, {index => $j + 1 + $offset, biblionumber => $arrBiblios[$j], title => ($arrBiblios[$j] == $biblionumber)?'':$dataBiblioPaging->{title}, author => ($arrBiblios[$j] != $biblionumber && $dataBiblioPaging->{author})?$dataBiblioPaging->{author}:'', url => ($arrBiblios[$j] == $biblionumber)?'':'opac-detail.pl?biblionumber=' . $arrBiblios[$j]};
+    }
+    $template->param('listResults' => \@listResults) if (@listResults);
+    $template->param('indexPag' => 1 + $offset, 'totalPag' => $arrParamsBusc{'total'}, 'indexPagEnd' => scalar(@arrBiblios) + $offset);
+}
+
+
+
 $template->param( 'AllowOnShelfHolds' => C4::Context->preference('AllowOnShelfHolds') );
 $template->param( 'ItemsIssued' => CountItemsIssued( $biblionumber ) );
 
@@ -86,6 +368,27 @@ if (C4::Context->preference("OPACXSLTDetailsDisplay") ) {
 $template->param('OPACShowCheckoutName' => C4::Context->preference("OPACShowCheckoutName") ); 
 # change back when ive fixed request.pl
 my @all_items = GetItemsInfo( $biblionumber );
+
+# adding items linked via host biblios
+my $marcflavour  = C4::Context->preference("marcflavour");
+
+my $analyticfield = '773';
+if ($marcflavour eq 'MARC21' || $marcflavour eq 'NORMARC'){
+    $analyticfield = '773';
+} elsif ($marcflavour eq 'UNIMARC') {
+    $analyticfield = '461';
+}
+foreach my $hostfield ( $record->field($analyticfield)) {
+    my $hostbiblionumber = $hostfield->subfield("0");
+    my $linkeditemnumber = $hostfield->subfield("9");
+    my @hostitemInfos = GetItemsInfo($hostbiblionumber);
+    foreach my $hostitemInfo (@hostitemInfos){
+        if ($hostitemInfo->{itemnumber} eq $linkeditemnumber){
+            push(@all_items, $hostitemInfo);
+        }
+    }
+}
+
 my @items;
 
 # Getting items to be hidden
@@ -217,13 +520,13 @@ for my $itm (@items) {
 
 ## get notes and subjects from MARC record
 my $dbh              = C4::Context->dbh;
-my $marcflavour      = C4::Context->preference("marcflavour");
 my $marcnotesarray   = GetMarcNotes   ($record,$marcflavour);
 my $marcisbnsarray   = GetMarcISBN    ($record,$marcflavour);
 my $marcauthorsarray = GetMarcAuthors ($record,$marcflavour);
 my $marcsubjctsarray = GetMarcSubjects($record,$marcflavour);
 my $marcseriesarray  = GetMarcSeries  ($record,$marcflavour);
 my $marcurlsarray    = GetMarcUrls    ($record,$marcflavour);
+my $marchostsarray  = GetMarcHosts($record,$marcflavour);
 my $subtitle         = GetRecordValue('subtitle', $record, GetFrameworkCode($biblionumber));
 
     $template->param(
@@ -232,6 +535,7 @@ my $subtitle         = GetRecordValue('subtitle', $record, GetFrameworkCode($bib
                      MARCAUTHORS             => $marcauthorsarray,
                      MARCSERIES              => $marcseriesarray,
                      MARCURLS                => $marcurlsarray,
+		     MARCHOSTS               => $marchostsarray,
                      norequests              => $norequests,
                      RequestOnOpac           => C4::Context->preference("RequestOnOpac"),
                      itemdata_ccode          => $itemfields{ccode},
@@ -295,13 +599,18 @@ $template->param(
 
 # COinS format FIXME: for books Only
 $template->param(
-    ocoins => GetCOinSBiblio($biblionumber),
+    ocoins => GetCOinSBiblio($record),
 );
 
 my $libravatar_enabled = 0;
-eval 'use Libravatar::URL';
-if (!$@ and C4::Context->preference('ShowReviewer') and C4::Context->preference('ShowReviewerPhoto')) {
-    $libravatar_enabled = 1;
+if ( C4::Context->preference('ShowReviewer') and C4::Context->preference('ShowReviewerPhoto')) {
+    eval {
+        require Libravatar::URL;
+        Libravatar::URL->import();
+    };
+    if (!$@ ) {
+        $libravatar_enabled = 1;
+    }
 }
 
 my $reviews = getreviews( $biblionumber, 1 );
@@ -492,6 +801,14 @@ $template->param(LibraryThingForLibrariesID =>
 C4::Context->preference('LibraryThingForLibrariesID') ); 
 $template->param(LibraryThingForLibrariesTabbedView =>
 C4::Context->preference('LibraryThingForLibrariesTabbedView') );
+} 
+
+# Novelist Select
+if( C4::Context->preference('NovelistSelectEnabled') ) 
+{ 
+$template->param(NovelistSelectProfile => C4::Context->preference('NovelistSelectProfile') ); 
+$template->param(NovelistSelectPassword => C4::Context->preference('NovelistSelectPassword') ); 
+$template->param(NovelistSelectView => C4::Context->preference('NovelistSelectView') ); 
 } 
 
 

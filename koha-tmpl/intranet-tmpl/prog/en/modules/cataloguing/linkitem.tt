@@ -1,0 +1,57 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Link to host item</title>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'cat-search.inc' %]
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/cataloging/addbooks.pl">Cataloging</a>  &rsaquo; Link a host item to <i>[% bibliotitle |html %]</i></div>
+<div id="doc3" class="yui-t2">
+
+[% IF ( error ) %]
+    <div class="dialog alert">
+	[% IF ( errornomodbiblio ) %]ERROR: Unable to modify the bibliographic record.[% END %]
+	[% IF ( errornohostbiblionumber ) %]ERROR: Unable to get the biblio number of host item.[% END %]
+	[% IF ( errornohostitemnumber ) %]ERROR: Unable to get the item number from this barcode.[% END %]
+    </div>
+    <form action="/cgi-bin/koha/catalogue/MARCdetail.pl" method="post">
+	<input type="submit" value="OK" />
+	<input type="hidden" name="biblionumber" value="[% biblionumber %]" />
+    </form>
+[% ELSE %]
+    [% IF ( success ) %]
+	<div class="dialog">The item has successfully been linked to <i>[% bibliotitle |html %]</i>.</div>    
+	<form action="/cgi-bin/koha/catalogue/MARCdetail.pl" method="post">
+	    <input type="submit" value="OK" />
+	    <input type="hidden" name="biblionumber" value="[% biblionumber %]" />
+	</form>
+    [% ELSE %]
+	[% IF ( missingparameter ) %]
+	<form method="post" action="/cgi-bin/koha/cataloguing/linkitem.pl">
+	    [% IF ( missingbiblionumber ) %]
+	    <fieldset id="biblionumber_fieldset">
+		<label for="biblionumber_fieldset">Select the biblionumber to link the item to</label>
+		    <div class="hint">Enter biblionumber:</div>
+		    <input type="text" name="biblionumber" id="biblionumber" class="focus" size="14" /> 
+	    </fieldset>
+	    [% ELSE %]
+	    <input type="hidden" name="biblionumber" id="biblionumber" value="[% biblionumber %]" />
+	    [% END %]
+
+    	    [% IF ( missingbarcode ) %]
+	    <fieldset id="barcode_fieldset">
+		<label for="barcode_fieldset">Select the host item to link[% IF ( bibliotitle ) %] to <i>[% bibliotitle |html %]</i>[% END %]</label>
+		    <div class="hint">Enter item barcode:</div>
+		    <input type="text" name="barcode" id="barcode" class="barcode focus" size="14" /> 
+	    </fieldset>
+	    [% ELSE %]
+	    <input type="hidden" name="barcode" id="barcode" value="[% barcode %]" />
+	    [% END %]
+
+	    <input type="submit" value="Select" />
+
+	</form>
+	[% END %]
+    [% END %]
+[% END %]
+[% INCLUDE 'intranet-bottom.inc' %]

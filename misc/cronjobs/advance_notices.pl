@@ -349,11 +349,11 @@ sub parse_letter {
     }
     if ( $params->{'itemnumber'} ) {
         C4::Letters::parseletter( $params->{'letter'}, 'issues', $params->{'itemnumber'} );
+        C4::Letters::parseletter( $params->{'letter'}, 'items', $params->{'itemnumber'} );
     }
     if ( $params->{'biblionumber'} ) {
         C4::Letters::parseletter( $params->{'letter'}, 'biblio',      $params->{'biblionumber'} );
         C4::Letters::parseletter( $params->{'letter'}, 'biblioitems', $params->{'biblionumber'} );
-        C4::Letters::parseletter( $params->{'letter'}, 'items', $params->{'biblionumber'} );
     }
 
     return $params->{'letter'};

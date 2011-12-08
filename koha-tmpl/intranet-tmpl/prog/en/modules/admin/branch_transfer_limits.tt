@@ -5,6 +5,7 @@
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.pager.js"></script>
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
 <script type="text/javascript">
+//<![CDATA[
 	$(document).ready(function(){
 		$("#CheckAll").click(function(){ $("#transferlimit_tabs").checkCheckboxes();});
 		$("#UncheckAll").click(function(){ $("#transferlimit_tabs").unCheckCheckboxes();});
@@ -49,8 +50,12 @@
 			$("#"+tid).unCheckCheckboxes();
 			return false;
 		});
-
+		$(".sorted").tablesorter({
+			sortList: [[0,0]],
+			headers: { 1: { sorter: false}}
+		}).tablesorterPager({container: $(".pager"),positionFixed: false,size: 10});
 	});
+//]]>
 </script>
 <style type="text/css">td { text-align: center; }</style>
 </head>
@@ -96,32 +101,11 @@
 	<div id="[% codes_loo.code %]set">
 		<h4>Policy for [% codes_loo.limit_phrase %]: [% codes_loo.code %]</h4>
 	<p><a id="CheckAll[% codes_loo.code %]table" class="checkall" href="#">Check All</a> | <a id="UncheckAll[% codes_loo.code %]table" class="uncheckall" href="#">Uncheck All</a></p>
-	<script type="text/javascript" id="js">$(document).ready(function() {
-	$("#[% codes_loo.code %]table").tablesorter({
-		sortList: [[0,0]],
-		headers: { 1: { sorter: false}}
-	}).tablesorterPager({container: $("#pager[% codes_loo.code %]table"),positionFixed: false,size: 10});
-}); </script>
 	
 	<div id="pager[% codes_loo.code %]table" class="pager">
-	<p class="formpager">&nbsp;<strong>page(s)</strong>&nbsp;:
-		<img src="[% interface %]/[% theme %]/img/first.png" class="first"/>
-		<img src="[% interface %]/[% theme %]/img/prev.png" class="prev"/>
-		<input type="text" size="5" class="pagedisplay"/>
-		<img src="[% interface %]/[% theme %]/img/next.png" class="next"/>
-		<img src="[% interface %]/[% theme %]/img/last.png" class="last"/>
-		, entries/page : 
-		<select class="pagesize">
-        	<option selected="selected" value="10">10</option>
-			<option value="20">20</option>
-			<option value="30">30</option>
-			<option value="40">40</option>
-			<option value="50">50</option>
-			<option value="100">100</option>
-		</select>
-	</p>
-</div>
-		<table id="[% codes_loo.code %]table">
+	[% INCLUDE 'table-pager.inc' perpage='20' %]
+	</div>
+		<table id="[% codes_loo.code %]table" class="sorted">
 			<thead>
 				<tr>
 				    <th>Library</th>

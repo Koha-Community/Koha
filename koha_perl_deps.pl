@@ -39,10 +39,11 @@ push @pm, 'missing_pm' if $missing || $all;
 push @pm, 'upgrade_pm' if $upgrade || $all;
 push @pm, 'current_pm' if $installed || $all;
 
-print color 'bold white' if $color;
+print color 'bold blue' if $color;
 print"
-Module Name                                 Current Version                       Required Version         Module Required
---------------------------------------------------------------------------------------------------------------------------
+                                              Installed         Required          Module is
+Module Name                                   Version           Version            Required
+--------------------------------------------------------------------------------------------
 ";
 
 my $count = 0;
@@ -60,17 +61,17 @@ foreach my $type (@pm) {
             my $current_version = ($color ? $_->{$pm}->{'cur_ver'} :
                                    $type eq 'missing_pm' || $type eq 'upgrade_pm' ? $_->{$pm}->{'cur_ver'}." *" : $_->{$pm}->{'cur_ver'});
 format =
-@<<<<<<<<<<<<<<<<<<<<<<<<<                  @<<<<<<<<<<                           @<<<<<<<<<<              @<<<<<
-$pm,                                        $current_version,                     $_->{$pm}->{'min_ver'},  $required
+@<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< @<<<<<<<<<<<<<<<< @<<<<<<<<<<<<<<<<       @<<<<<
+$pm,                                          $current_version, $_->{$pm}->{'min_ver'},  $required
 .
 write;
         }
     }
 }
-print color 'bold white' if $color;
+print color 'bold blue' if $color;
 my $footer = "
---------------------------------------------------------------------------------------------------------------------------
-Total modules reported: $count                                                     ";
+--------------------------------------------------------------------------------------------
+Total modules reported: $count                      ";
 
 if ($color) {
     $footer .= "\n\n";
@@ -80,6 +81,7 @@ else {
 }
 
 print $footer;
+print color 'reset' if $color;
 
 1;
 

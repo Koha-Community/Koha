@@ -28,6 +28,7 @@ use strict;
 #use warnings; FIXME - Bug 2505
 use CGI;
 use C4::Context;
+use C4::Members;
 use C4::Auth qw/check_cookie_auth/;
 
 my $input   = new CGI;
@@ -41,22 +42,11 @@ if ($auth_status ne "ok") {
     exit 0;
 }
 
-my $dbh = C4::Context->dbh;
-my $sql = qq(SELECT surname, firstname, cardnumber, address, city, zipcode, country 
-             FROM borrowers 
-             WHERE surname LIKE ?
-             OR firstname LIKE ?
-             OR cardnumber LIKE ?
-             ORDER BY surname, firstname);
-my $sth = $dbh->prepare( $sql );
-$sth->execute("$query%", "$query%", "$query%");
-
-while ( my $rec = $sth->fetchrow_hashref ) {
-    print $rec->{surname} . ", " . $rec->{firstname} . "\t" .
-          $rec->{cardnumber} . "\t" .
-          $rec->{address} . "\t" .
-          $rec->{city} . "\t" .
-          $rec->{zip} . "\t" .
-          $rec->{country} .
-          "\n";
-}
+print map $_->{surname} . ", " . $_->{firstname} . "\t" .
+          $_->{cardnumber} . "\t" .
+          $_->{address} . "\t" .
+          $_->{city} . "\t" .
+          $_->{zipcode} . "\t" .
+          $_->{country} .
+          "\n",
+          @{ Search($query, [qw(surname firstname cardnumber)], [10], [qw(surname firstname cardnumber address city zipcode country)]) };

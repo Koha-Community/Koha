@@ -10,6 +10,7 @@ use IPC::Cmd;
 
 use C4::Context;
 use C4::Output;
+use C4::Templates;
 use C4::Languages qw(getAllLanguages getTranslatedLanguages);
 use C4::Installer;
 
@@ -22,7 +23,7 @@ my ( $template, $loggedinuser, $cookie );
 my $all_languages = getAllLanguages();
 
 if ( defined($language) ) {
-    setlanguagecookie( $query, $language, "install.pl?step=1" );
+    C4::Templates::setlanguagecookie( $query, $language, "install.pl?step=1" );
 }
 ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
@@ -228,6 +229,7 @@ elsif ( $step && $step == 3 ) {
         # Framework Selection is achieved through checking boxes.
         my $langchoice = $query->param('fwklanguage');
         $langchoice = $query->cookie('KohaOpacLanguage') unless ($langchoice);
+	$langchoice =~ s/[^a-zA-Z_-]*//g;
         my $marcflavour = $query->param('marcflavour');
         if ($marcflavour){
             $installer->set_marcflavour_syspref($marcflavour);
@@ -265,6 +267,7 @@ elsif ( $step && $step == 3 ) {
         # Marcflavour Selection is achieved through radiobuttons.
         my $langchoice = $query->param('fwklanguage');
         $langchoice = $query->cookie('KohaOpacLanguage') unless ($langchoice);
+	$langchoice =~ s/[^a-zA-Z_-]*//g;
         my $dir =
           C4::Context->config('intranetdir') . "/installer/data/$info{dbms}/$langchoice/marcflavour";
         unless (opendir( MYDIR, $dir )) {

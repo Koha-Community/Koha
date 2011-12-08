@@ -66,9 +66,14 @@ if($format eq "rss"){
 }
 
 my $libravatar_enabled = 0;
-eval 'use Libravatar::URL';
-if (!$@ and C4::Context->preference('ShowReviewer') and C4::Context->preference('ShowReviewerPhoto')) {
-    $libravatar_enabled = 1;
+if ( C4::Context->preference('ShowReviewer') and C4::Context->preference('ShowReviewerPhoto')) {
+    eval {
+        require Libravatar::URL;
+        Libravatar::URL->import();
+    };
+    if ( !$@ ) {
+        $libravatar_enabled = 1;
+    }
 }
 
 my $reviews = getallreviews(1,$offset,$results_per_page);

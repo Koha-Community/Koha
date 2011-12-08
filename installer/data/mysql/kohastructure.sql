@@ -232,7 +232,8 @@ CREATE TABLE `borrowers` ( -- this table includes information about your patrons
   `dateexpiry` date default NULL, -- date the patron/borrower's card is set to expire (YYYY-MM-DD)
   `gonenoaddress` tinyint(1) default NULL, -- set to 1 for yes and 0 for no, flag to note that library marked this patron/borrower as having an unconfirmed address
   `lost` tinyint(1) default NULL, -- set to 1 for yes and 0 for no, flag to note that library marked this patron/borrower as having lost their card
-  `debarred` tinyint(1) default NULL, -- set to 1 for yes and 0 for no, flag to note that library marked this patron/borrower as being restricted
+  `debarred` date default NULL, -- until this date the patron can only check-in (no loans, no holds, etc.), is a fine based on days instead of money (YYY-MM-DD)
+  `debarredcomment` VARCHAR(255) DEFAULT NULL, -- comment on the stop of the patron
   `contactname` mediumtext, -- used for children and profesionals to include surname or last name of guarentor or organization name
   `contactfirstname` text, -- used for children to include first name of guarentor
   `contacttitle` text, -- used for children to include title (Mr., Mrs., etc) of guarentor
@@ -244,7 +245,7 @@ CREATE TABLE `borrowers` ( -- this table includes information about your patrons
   `sex` varchar(1) default NULL, -- patron/borrower's gender
   `password` varchar(30) default NULL, -- patron/borrower's encrypted password
   `flags` int(11) default NULL, -- will include a number associated with the staff member's permissions
-  `userid` varchar(30) default NULL, -- patron/borrower's opac and/or staff client log in
+  `userid` varchar(75) default NULL, -- patron/borrower's opac and/or staff client log in
   `opacnote` mediumtext, -- a note on the patron/borrower's account that is visible in the OPAC and staff client
   `contactnote` varchar(255) default NULL, -- a note related to the patron/borrower's alternate address
   `sort1` varchar(80) default NULL, -- a field that can be used for any information unique to the library
@@ -284,6 +285,7 @@ CREATE TABLE `borrower_attribute_types` ( -- definitions for custom patron field
   `password_allowed` tinyint(1) NOT NULL default 0, -- defines if it is possible to associate a password with this custom field (1 for yes, 0 for no)
   `staff_searchable` tinyint(1) NOT NULL default 0, -- defines if this field is searchable via the patron search in the staff client (1 for yes, 0 for no)
   `authorised_value_category` varchar(10) default NULL, -- foreign key from authorised_values that links this custom field to an authorized value category
+  `display_checkout` tinyint(1) NOT NULL default 0,-- defines if this field displays in checkout screens
   PRIMARY KEY  (`code`),
   KEY `auth_val_cat_idx` (`authorised_value_category`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -692,7 +694,8 @@ CREATE TABLE `deletedborrowers` ( -- stores data related to the patrons/borrower
   `dateexpiry` date default NULL, -- date the patron/borrower's card is set to expire (YYYY-MM-DD)
   `gonenoaddress` tinyint(1) default NULL, -- set to 1 for yes and 0 for no, flag to note that library marked this patron/borrower as having an unconfirmed address
   `lost` tinyint(1) default NULL, -- set to 1 for yes and 0 for no, flag to note that library marked this patron/borrower as having lost their card
-  `debarred` tinyint(1) default NULL, -- set to 1 for yes and 0 for no, flag to note that library marked this patron/borrower as being restricted
+  `debarred` date default NULL, -- until this date the patron can only check-in (no loans, no holds, etc.), is a fine based on days instead of money (YYY-MM-DD)
+  `debarredcomment` VARCHAR(255) DEFAULT NULL, -- comment on the stop of patron
   `contactname` mediumtext, -- used for children and profesionals to include surname or last name of guarentor or organization name
   `contactfirstname` text, -- used for children to include first name of guarentor
   `contacttitle` text, -- used for children to include title (Mr., Mrs., etc) of guarentor
@@ -1307,6 +1310,17 @@ CREATE TABLE `matchchecks` (
   REFERENCES `matchpoints` (`matchpoint_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `matcher_matchchecks_ifbk_3` FOREIGN KEY (`target_matchpoint_id`)
   REFERENCES `matchpoints` (`matchpoint_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Table structure for table `need_merge_authorities`
+--
+
+DROP TABLE IF EXISTS `need_merge_authorities`;
+CREATE TABLE `need_merge_authorities` (
+  `id` int NOT NULL auto_increment PRIMARY KEY,
+  `authid` bigint NOT NULL,
+  `done` tinyint DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --

@@ -103,7 +103,7 @@ InstallAuth - Authenticates Koha users for Install process
     authenticated page.
 
     More information on the C<gettemplate> sub can be found in the
-    Output.pm module.
+    Templates.pm module.
 
 =cut
 
@@ -117,7 +117,7 @@ sub get_template_and_user {
     $tmplbase=~ s/\.tmpl$/.tt/;
     my $filename = "$path/modules/" . $tmplbase;
     my $interface = 'intranet';
-    my $template = C4::Templates->new( $interface, $filename, $tmplbase);
+    my $template = C4::Templates->new( $interface, $filename, $tmplbase, $query);
     
     my ( $user, $cookie, $sessionID, $flags ) = checkauth(
         $in->{'query'},
@@ -158,18 +158,14 @@ sub get_template_and_user {
 }
 
 sub _get_template_language {
-  #verify if opac language exists in staff (bug 5660)
-  #conditions are 1) dir exists and 2) enabled in prefs
-  my ($opaclang)= @_;
-  return 'en' unless $opaclang;
-  my $path= C4::Context->config('intrahtdocs')."/prog/$opaclang";
-  my $pref= ','.C4::Context->preference('language').',';
-  if(-d $path) {
-    if($pref =~ /,$opaclang,/ ) {
-      return $opaclang;
-    }
-  }
-  return 'en';
+
+    #verify if opac language exists in staff (bug 5660)
+    #conditions are 1) dir exists and 2) enabled in prefs
+    my ($opaclang) = @_;
+    return 'en' unless $opaclang;
+    $opaclang =~ s/[^a-zA-Z_-]*//g;
+    my $path = C4::Context->config('intrahtdocs') . "/prog/$opaclang";
+    -d $path ? $opaclang : 'en';
 }
 
 =item checkauth
@@ -371,7 +367,7 @@ sub checkauth {
     my $filename = "$path/modules/$template_name";
     $filename =~ s/\.tmpl$/.tt/;
     my $interface = 'intranet';
-    my $template = C4::Templates->new( $interface, $filename);
+    my $template = C4::Templates->new( $interface, $filename, '', $query);
     $template->param(
         INPUTS => \@inputs,
 

@@ -28,12 +28,12 @@ BEGIN {
     eval { require "$FindBin::Bin/../kohalib.pl" };
 }
 
-use CGI; # NOT a CGI script, this is just to keep C4::Output::gettemplate happy
+use CGI; # NOT a CGI script, this is just to keep C4::Templates::gettemplate happy
 use C4::Context;
 use C4::Dates;
 use C4::Debug;
 use C4::Letters;
-use C4::Output;
+use C4::Templates;
 use File::Spec;
 use Getopt::Long;
 
@@ -70,7 +70,7 @@ exit unless( @messages );
 
 open OUTPUT, '>', File::Spec->catdir( $output_directory, "holdnotices-" . $today->output( 'iso' ) . ".html" );
 
-my $template = C4::Output::gettemplate( 'batch/print-notices.tmpl', 'intranet', new CGI );
+my $template = C4::Templates::gettemplate( 'batch/print-notices.tmpl', 'intranet', new CGI );
 my $stylesheet_contents = '';
 
 if ($stylesheet) {

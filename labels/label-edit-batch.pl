@@ -56,12 +56,15 @@ my $display_columns = [ {_label_number  => {label => 'Label Number', link_field 
                         {select         => {label => 'Select', value => '_label_id'}},
                       ];
 my $op = $cgi->param('op') || 'edit';
+my @label_ids;
+my @item_numbers;
+my $barcode;
 my $batch_id = $cgi->param('element_id') || $cgi->param('batch_id') || undef;
-my @label_ids = $cgi->param('label_id') if $cgi->param('label_id');
-my @item_numbers = $cgi->param('item_number') if $cgi->param('item_number');
-my $barcode = $cgi->param('barcode') if $cgi->param('barcode');
+@label_ids = $cgi->param('label_id') if $cgi->param('label_id');
+@item_numbers = $cgi->param('item_number') if $cgi->param('item_number');
+$barcode = $cgi->param('barcode') if $cgi->param('barcode');
 
-my $branch_code = get_branch_code_from_name($template->{VARS}->{'LoginBranchname'});
+my $branch_code = C4::Context->userenv->{'branch'};
 
 if ($op eq 'remove') {
     $batch = C4::Labels::Batch->retrieve(batch_id => $batch_id);

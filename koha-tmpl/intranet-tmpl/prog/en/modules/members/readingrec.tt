@@ -1,5 +1,5 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Circulation History for [% firstname %] [% surname %]</title>
+<title>Circulation History for [% INCLUDE 'patron-title.inc' %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.pager.js"></script>
@@ -11,9 +11,10 @@
 		type: 'text'
 	});
 	$.tablesorter.defaults.widgets = ['zebra'];
-	$("#table_readingrec").tablesorter({
+	$("#table_readingrec").tablesorter({[% IF ( dateformat_metric ) %]
+		dateFormat: 'uk',[% END %]
 		sortList: [[8,1]],
-		headers: { 1: { sorter: 'articles' }}
+		headers: { 1: { sorter: 'articles' }, 9: { sorter: 'shortDate'} }
 	}).tablesorterPager({container: $("#pagertable_readingrec"),positionFixed: false,size: 20});
 }); </script>
 </head>
@@ -21,7 +22,7 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'patron-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>  &rsaquo; Circulation History for [% firstname %] [% surname %]</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>  &rsaquo; Circulation History for [% INCLUDE 'patron-title.inc' %]</div>
 
 <div id="doc3" class="yui-t2">
    
@@ -30,26 +31,12 @@
 	<div class="yui-b">
 [% INCLUDE 'circ-toolbar.inc' %]
 <h1>Circulation History</h1>
+[% IF ( loop_reading ) %]
 <form action="/cgi-bin/koha/members/readingrec.pl" method="get"><input type="hidden" name="borrowernumber" id="borrowernumber" value="[% borrowernumber %]" /></form>
 
-<span id="pagertable_readingrec" class="pager">
-	<form class="formpager">&nbsp;<strong>page(s)</strong>&nbsp;:
-		<img src="[% interface %]/prog/img/first.png" class="first"/>
-		<img src="[% interface %]/prog/img/prev.png" class="prev"/>
-		<input type="text" size="5" class="pagedisplay"/>
-		<img src="[% interface %]/prog/img/next.png" class="next"/>
-		<img src="[% interface %]/prog/img/last.png" class="last"/>
-		, entries/page :
-		<select class="pagesize">
-			<option value="10">10</option>
-			<option selected="selected" value="20">20</option>
-			<option value="30">30</option>
-			<option value="40">40</option>
-			<option value="50">50</option>
-			<option value="100">100</option>
-		</select>
-	</form>
-</span>
+<div id="pagertable_readingrec">
+[% INCLUDE 'table-pager.inc' perpage='20' %]
+</div>
 <table id="table_readingrec">
 <thead>
     <th>Date</th>
@@ -93,7 +80,9 @@
 </tr>
 [% END %]
 </table>
-
+[% ELSE %]
+<div class="dialog message">This patron has no circulation history.</div>
+[% END %]
 </div>
 </div>
 

@@ -243,6 +243,10 @@ if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
             for my $col (keys %borrower) {
                 # use values from extant patron unless our csv file includes this column or we provided a default.
                 # FIXME : You cannot update a field with a  perl-evaluated false value using the defaults.
+
+                # The password is always encrypted, skip it!
+                next if $col eq 'password';
+
                 unless(exists($csvkeycol{$col}) || $defaults{$col}) {
                     $borrower{$col} = $member->{$col} if($member->{$col}) ;
                 }

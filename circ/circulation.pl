@@ -30,11 +30,13 @@ use C4::Dates qw/format_date/;
 use C4::Branch; # GetBranches
 use C4::Koha;   # GetPrinter
 use C4::Circulation;
+use C4::Overdues qw/CheckBorrowerDebarred/;
 use C4::Members;
 use C4::Biblio;
 use C4::Reserves;
 use C4::Context;
 use CGI::Session;
+use C4::Members::Attributes qw(GetBorrowerAttributes);
 
 use Date::Calc qw(
   Today
@@ -186,7 +188,7 @@ if ( $print eq 'yes' && $borrowernumber ne '' ) {
 my $borrowerslist;
 my $message;
 if ($findborrower) {
-    my ($count, $borrowers) = SearchMember($findborrower, 'cardnumber', 'web');
+    my $borrowers = Search($findborrower, 'cardnumber');
     my @borrowers = @$borrowers;
     if (C4::Context->preference("AddPatronLists")) {
         $template->param(
@@ -259,6 +261,16 @@ if ($borrowernumber) {
         issuecount   => $issue,
         finetotal    => $fines
     );
+
+    my $debar = CheckBorrowerDebarred($borrowernumber);
+    if ($debar) {
+        $template->param( 'userdebarred'    => 1 );
+        $template->param( 'debarredcomment' => $borrower->{debarredcomment} );
+        if ( $debar ne "9999-12-31" ) {
+            $template->param( 'userdebarreddate' => C4::Dates::format_date($debar) );
+        }
+    }
+
 }
 
 #
@@ -418,19 +430,15 @@ sub build_issue_data {
     foreach my $it ( @$issueslist ) {
         my $itemtypeinfo = getitemtypeinfo( (C4::Context->preference('item-level_itypes')) ? $it->{'itype'} : $it->{'itemtype'} );
 
-        # Getting borrower details
-        my $memberdetails = GetMemberDetails($it->{'borrowernumber'});
-        $it->{'borrowername'} = $memberdetails->{'firstname'} . " " . $memberdetails->{'surname'};
-        $it->{'cardnumber'} = $memberdetails->{'cardnumber'};
         # set itemtype per item-level_itype syspref - FIXME this is an ugly hack
         $it->{'itemtype'} = ( C4::Context->preference( 'item-level_itypes' ) ) ? $it->{'itype'} : $it->{'itemtype'};
 
         ($it->{'charge'}, $it->{'itemtype_charge'}) = GetIssuingCharges(
-            $it->{'itemnumber'}, $borrower->{'borrowernumber'}
+            $it->{'itemnumber'}, $it->{'borrowernumber'}
         );
         $it->{'charge'} = sprintf("%.2f", $it->{'charge'});
         my ($can_renew, $can_renew_error) = CanBookBeRenewed( 
-            $borrower->{'borrowernumber'},$it->{'itemnumber'}
+            $it->{'borrowernumber'},$it->{'itemnumber'}
         );
         $it->{"renew_error_${can_renew_error}"} = 1 if defined $can_renew_error;
         my ( $restype, $reserves ) = CheckReserves( $it->{'itemnumber'} );
@@ -632,9 +640,17 @@ my (undef, $roadttype_hashref) = &GetRoadTypes();
 my $address = $borrower->{'streetnumber'}.' '.$roadttype_hashref->{$borrower->{'streettype'}}.' '.$borrower->{'address'};
 
 my $fast_cataloging = 0;
-    if (defined getframeworkinfo('FA')) {
+if (defined getframeworkinfo('FA')) {
     $fast_cataloging = 1 
-    }
+}
+
+if (C4::Context->preference('ExtendedPatronAttributes')) {
+    my $attributes = GetBorrowerAttributes($borrowernumber);
+    $template->param(
+        ExtendedPatronAttributes => 1,
+        extendedattributes => $attributes
+    );
+}
 
 $template->param(
     lib_messages_loop => $lib_messages_loop,
@@ -649,6 +665,8 @@ $template->param(
     printername       => $printer,
     firstname         => $borrower->{'firstname'},
     surname           => $borrower->{'surname'},
+    showname          => $borrower->{'showname'},
+    category_type     => $borrower->{'category_type'},
     dateexpiry        => format_date($newexpiry),
     expiry            => format_date($borrower->{'dateexpiry'}),
     categorycode      => $borrower->{'categorycode'},
@@ -664,6 +682,7 @@ $template->param(
     country           => $borrower->{'country'},
     phone             => $borrower->{'phone'} || $borrower->{'mobile'},
     cardnumber        => $borrower->{'cardnumber'},
+    othernames        => $borrower->{'othernames'},
     amountold         => $amountold,
     barcode           => $barcode,
     stickyduedate     => $stickyduedate,

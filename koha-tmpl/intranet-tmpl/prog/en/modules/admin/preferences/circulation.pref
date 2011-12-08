@@ -7,6 +7,7 @@ Circulation:
                   yes: Try
                   no: "Don't try"
             - to guess the patron being entered while typing a patron search on the circulation screen.
+            - Only returns the first 10 results at a time.
         -
             - pref: itemBarcodeInputFilter
               choices:
@@ -84,6 +85,12 @@ Circulation:
                   yes: Show
                   no: "Don't show"
             - a button to clear the current patron from the screen on the circulation screen.
+        -            
+            - pref: RecordLocalUseOnReturn
+              choices:
+                  yes: Record
+                  no: "Don't record"
+            - local use when an unissued item is checked in.
     Checkout Policy:
         -
             - pref: AllowNotForLoanOverride

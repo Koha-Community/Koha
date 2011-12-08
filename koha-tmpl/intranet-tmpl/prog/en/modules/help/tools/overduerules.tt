@@ -1,22 +1,23 @@
 [% INCLUDE 'help-top.inc' %]
 
-<h1>Overdue 'Notice/Status Triggers'</h1>
-
-<p>This tool lets you define triggers for overdue notices. You can send a borrower up to three reminder emails (depending on your library workflow)</p>
+<h1>Overdue Notice/Status Triggers</h1>
 
 <p>In order to send the overdue notices that you defined using the Notices tool, you need to first set the triggers to have these messages.</p>
 
-<p>In order to have overdue notices sent to your patrons, you need to set that patron category to require overdue notices.</p>
+<p style="color: #990000;">Important: In order to have overdue notices sent to your patrons, you need to set that patron category to require overdue notices.</p>
 
 <p>The Overdue Notice/Status Triggers tool gives the librarian the power to send up to three notices to each patron type notifying them of overdue items</p>
 
-<ul><li>Delay is the number of days after an issue is due before an action is triggered.</li>
-<ul><li style="color:#990000;"><strong>Important: These rules should not be used for Advanced Notices.  Advanced Notices should be set using the Enhanched Messaging Preferences on the Patron Profile.</strong></li>
-<li style="color:#990000;"><strong>Important: If you want Koha to trigger an action (send a letter or restrict a member), a delay value is required.</strong></li></ul>
-<li>To send additional notices, click on the tabs for 'Second' and 'Third' notice</li>
-<li>If you would like to prevent a patron from checking items out because of their overdue items, check the 'Restrict' box, this will put a notice on the patron's record at checkout informing the librarian that the patron cannot check out due to overdue items.</li></ul>
-
-<p>If the numbers you've entered in a give row beneath the 'delay' columns are logically inconsistent, Koha will give you an alert, and explain the inconsistency.</p>
+<ul>
+	<li>Delay is the number of days after an issue is due before an action is triggered.
+<ul>
+	<li style="color: #990000;">Important: If you want Koha to trigger an action (send a letter or restrict member), a delay value is required.</li>
+</ul>
+</li>
+	<li>To send additional notices, click on the tabs for 'Second' and 'Third' notice</li>
+	<li>If you would like to prevent a patron from checking items out because of their overdue items, check the 'Restrict' box, this will put a notice on the patron's record at checkout informing the librarian that the patron cannot check out due to overdue items.</li>
+	<li>See a Sample Overdue Notice</li>
+</ul>
 
 <h3>Sample Overdue Notice</h3>
 
@@ -39,6 +40,8 @@
 <p>06/27/2008 Eating fractions / 502326000022 McMillan, Bruce.</p>
 
 <p>Sincerely, Library Staff</p>
+
+<p><strong>See the full documentation for the the Overdue Notice/Status Triggers in the <a href="http://manual.koha-community.org/3.6/en/noticetriggers.html">manual</a> (online).</strong></p>
 
 [% INCLUDE 'help-bottom.inc' %]
 

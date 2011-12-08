@@ -32,6 +32,7 @@ use CGI;
 use C4::Members;
 use C4::Branch;
 use C4::Accounts;
+use C4::Members::Attributes qw(GetBorrowerAttributes);
 
 my $input=new CGI;
 
@@ -94,15 +95,24 @@ $template->param( adultborrower => 1 ) if ( $data->{'category_type'} eq 'A' );
 my ($picture, $dberror) = GetPatronImage($data->{'cardnumber'});
 $template->param( picture => 1 ) if $picture;
 
+if (C4::Context->preference('ExtendedPatronAttributes')) {
+    my $attributes = GetBorrowerAttributes($borrowernumber);
+    $template->param(
+        ExtendedPatronAttributes => 1,
+        extendedattributes => $attributes
+    );
+}
+
 $template->param(
     finesview           => 1,
     firstname           => $data->{'firstname'},
     surname             => $data->{'surname'},
+    othernames          => $data->{'othernames'},
     borrowernumber      => $borrowernumber,
     cardnumber          => $data->{'cardnumber'},
     categorycode        => $data->{'categorycode'},
     category_type       => $data->{'category_type'},
-    categoryname		 => $data->{'description'},
+    categoryname		=> $data->{'description'},
     address             => $data->{'address'},
     address2            => $data->{'address2'},
     city                => $data->{'city'},
@@ -117,6 +127,7 @@ $template->param(
     totalcredit         => $totalcredit,
     is_child            => ($data->{'category_type'} eq 'C'),
     reverse_col         => $reverse_col,
-    accounts            => $accts );
+    accounts            => $accts,
+);
 
 output_html_with_http_headers $input, $cookie, $template->output;

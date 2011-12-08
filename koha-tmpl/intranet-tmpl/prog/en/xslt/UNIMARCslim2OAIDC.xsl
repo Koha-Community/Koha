@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE stylesheet [<!ENTITY nbsp "&#160;" >]>
+
 <xsl:stylesheet version="1.0" 
   xmlns:marc="http://www.loc.gov/MARC21/slim" 
   xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" 

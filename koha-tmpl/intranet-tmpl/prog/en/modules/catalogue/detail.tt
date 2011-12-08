@@ -114,7 +114,7 @@ function verify_images() {
         [% IF ( MARCAUTHORS ) %]
             <li><strong>Additional Authors:</strong><ul>
             [% FOREACH MARCAUTHOR IN MARCAUTHORS %]
-                <li>[% FOREACH MARCAUTHOR_SUBFIELDS_LOO IN MARCAUTHOR.MARCAUTHOR_SUBFIELDS_LOOP %][% MARCAUTHOR_SUBFIELDS_LOO.separator %]<a title="&#8225;[% MARCAUTHOR_SUBFIELDS_LOO.code %] [% MARCAUTHOR_SUBFIELDS_LOO.value |url %]" href="/cgi-bin/koha/catalogue/search.pl?q=[% FOREACH link_loo IN MARCAUTHOR_SUBFIELDS_LOO.link_loop %][% link_loo.operator |url %][% link_loo.limit %]:[% link_loo.link |url %][% END %]">[% MARCAUTHOR_SUBFIELDS_LOO.value %]</a>[% END %]</li>
+                <li>[% FOREACH MARCAUTHOR_SUBFIELDS_LOO IN MARCAUTHOR.MARCAUTHOR_SUBFIELDS_LOOP %][% MARCAUTHOR_SUBFIELDS_LOO.separator %]<a title="‡[% MARCAUTHOR_SUBFIELDS_LOO.code %] [% MARCAUTHOR_SUBFIELDS_LOO.value |url %]" href="/cgi-bin/koha/catalogue/search.pl?q=[% FOREACH link_loo IN MARCAUTHOR_SUBFIELDS_LOO.link_loop %][% link_loo.operator |url %][% link_loo.limit %]:[% link_loo.link |url %][% END %]">[% MARCAUTHOR_SUBFIELDS_LOO.value %]</a>[% END %]</li>
                 [% END %]
 
         </ul>
@@ -183,7 +183,7 @@ function verify_images() {
             <li><strong>Subjects:</strong> 
             <ul>
                 [% FOREACH MARCSUBJCT IN MARCSUBJCTS %]
-                <li>[% FOREACH MARCSUBJECT_SUBFIELDS_LOO IN MARCSUBJCT.MARCSUBJECT_SUBFIELDS_LOOP %] [% MARCSUBJECT_SUBFIELDS_LOO.separator %] <a title="&#8225;[% MARCSUBJECT_SUBFIELDS_LOO.code %] [% MARCSUBJECT_SUBFIELDS_LOO.value %]" href="/cgi-bin/koha/catalogue/search.pl?q=[% FOREACH link_loo IN MARCSUBJECT_SUBFIELDS_LOO.link_loop %][% link_loo.operator |url %][% link_loo.limit %]:[% link_loo.link |url %][% END %]">[% MARCSUBJECT_SUBFIELDS_LOO.value |html %]</a>[% END %]</li>
+                <li>[% FOREACH MARCSUBJECT_SUBFIELDS_LOO IN MARCSUBJCT.MARCSUBJECT_SUBFIELDS_LOOP %] [% MARCSUBJECT_SUBFIELDS_LOO.separator %] <a title="‡[% MARCSUBJECT_SUBFIELDS_LOO.code %] [% MARCSUBJECT_SUBFIELDS_LOO.value %]" href="/cgi-bin/koha/catalogue/search.pl?q=[% FOREACH link_loo IN MARCSUBJECT_SUBFIELDS_LOO.link_loop %][% link_loo.operator |url %][% link_loo.limit %]:[% link_loo.link |url %][% END %]">[% MARCSUBJECT_SUBFIELDS_LOO.value |html %]</a>[% END %]</li>
                 [% END %]
                 </ul>
             </li>
@@ -248,6 +248,9 @@ function verify_images() {
                 [% IF ( itemdata_copynumber ) %]<th>Copy No.</th>[% END %]
                 [% IF ( itemdata_itemnotes ) %]<th>Public notes</th>[% END %]
 		[% IF ( SpineLabelShowPrintOnBibDetails ) %]<th>Spine Label</th>[% END %]
+		[% IF ( hostrecords ) %]<th>Host Records</th>[% END %]
+		[% IF ( analyze ) %]<th>Used in</th>[% END %]
+		[% IF ( analyze ) %]<th></th>[% END %]
             </tr>
             [% FOREACH itemloo IN itemloop %]
                 <tr>
@@ -328,7 +331,7 @@ function verify_images() {
                     [% IF ( itemloo.waitingdate ) %]
                         Waiting
                     [% ELSE %]
-                        On hold
+                        Item-level hold
                     [% END %]
                     [% IF ( canreservefromotherbranches ) %]for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% itemloo.ReservedForBorrowernumber %]">
 		        [% IF ( hidepatronname ) %]
@@ -338,12 +341,12 @@ function verify_images() {
 			[% END %]
 		    </a>[% END %]
                     [% IF ( itemloo.waitingdate ) %]
-                        at[% ELSE %]expected at
+                        at[% ELSE %]for delivery at
                     [% END %]   [% itemloo.ExpectedAtLibrary %]
-                    since
-                    [% IF ( itemloo.waitingdate ) %][% itemloo.waitingdate %]
+                    [% IF ( itemloo.waitingdate ) %]
+                        since [% itemloo.waitingdate %]
                     [% ELSE %]
-                        [% IF ( itemloo.reservedate ) %][% itemloo.reservedate %][% END %]
+                        [% IF ( itemloo.reservedate ) %](placed [% itemloo.reservedate %])[% END %]
                     [% END %]
                 [% END %]
                 [% UNLESS ( itemloo.itemnotforloan ) %][% UNLESS ( itemloo.onloan ) %][% UNLESS ( itemloo.itemlost ) %][% UNLESS ( itemloo.wthdrawn ) %][% UNLESS ( itemloo.damaged ) %][% UNLESS ( itemloo.transfertwhen ) %][% UNLESS ( itemloo.reservedate ) %]
@@ -360,8 +363,8 @@ function verify_images() {
 						[% IF ( itemloo.enumchron ) %]
 						[% itemloo.enumchron %][% IF ( itemloo.serialseq ) %] -- [% END %]
 						[% END %]
-					[% END %]
 					[% itemloo.serialseq %][% IF ( itemloo.publisheddate ) %] ([% itemloo.publisheddate %])[% END %]
+					[% END %]
 				</td>[% END %]
 				[% IF ( itemdata_uri ) %]
 					<td class="uri"><a href="[% itemloo.uri %]">[% itemloo.uri %]</a></td>
@@ -373,6 +376,17 @@ function verify_images() {
 		[% IF ( SpineLabelShowPrintOnBibDetails ) %]
 			<td><a href="/cgi-bin/koha/labels/spinelabel-print.pl?barcode=[% itemloo.barcode %]" >Print Label</a></td>
 		[% END %]
+                [% IF ( hostrecords ) %]
+                      <td>[% IF ( itemloo.hostbiblionumber) %]<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% itemloo.hostbiblionumber %]" >[% itemloo.hosttitle %]</a>[% END %]</td>
+                [% END %]
+                [% IF ( analyze ) %]<td>
+			[% IF ( itemloo.countanalytics ) %]
+                      		<a href="/cgi-bin/koha/catalogue/search.pl?idx=hi&q=[% itemloo.itemnumber %]">[% itemloo.countanalytics %] analytics</a>
+			[% END %]</td>
+		[% END %]
+                [% IF ( analyze ) %]
+                        <td><a href="/cgi-bin/koha/cataloguing/addbiblio.pl?hostbiblionumber=[% itemloo.biblionumber %]&hostitemnumber=[% itemloo.itemnumber %]">Create Analytics</a></td>
+                [% END %]
 
                 </tr>
             [% END %]

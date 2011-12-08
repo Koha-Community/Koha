@@ -89,3 +89,7 @@ function checkEnter(e){ //e is event object passed from function invocation
 		return true;
 	}
 }
+
+function clearHoldFor(){
+	$.cookie("holdfor",null, { path: "/", expires: 0 });
+}

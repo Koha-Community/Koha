@@ -107,7 +107,7 @@ var NO_OL_JACKET = _("No cover image available");
 	});
 	//]]>
 </script>[% END %]
-<link rel="unapi-server" type="application/xml" title="unAPI" href="[% OPACBaseurl %]/cgi-bin/koha/unapi" />
+<link rel="unapi-server" type="application/xml" title="unAPI" href="[% OPACBaseURL %]/cgi-bin/koha/unapi" />
 [% IF ( GoogleIndicTransliteration ) %]
         <script type="text/javascript" src="http://www.google.com/jsapi"></script>
         <script type="text/javascript" language="javascript" src="[% themelang %]/js/googleindictransliteration.js"></script>

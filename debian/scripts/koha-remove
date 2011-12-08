@@ -31,17 +31,27 @@ FLUSH PRIVILEGES;
 eof
     
     koha-stop-zebra $name
-    rm "/etc/apache2/sites-available/$name"
-    rm "/etc/koha/sites/$name/koha-conf.xml"
-    rm "/etc/koha/sites/$name/zebra-biblios.cfg"
-    rm "/etc/koha/sites/$name/zebra-authorities.cfg"
-    rm "/etc/koha/sites/$name/zebra-authorities-dom.cfg"
-    rm "/etc/koha/sites/$name/zebra.passwd"
-    rmdir "/etc/koha/sites/$name"
-    rm -r "/var/lock/koha/$name"
-    rm -r "/var/log/koha/$name"
-    rm -r "/var/run/koha/$name"
-    deluser --quiet "$name-koha"
+    [ -f "/etc/apache2/sites-available/$name" ]  && \
+        rm "/etc/apache2/sites-available/$name"
+    [ -f "/etc/koha/sites/$name/koha-conf.xml" ] && \
+        rm "/etc/koha/sites/$name/koha-conf.xml"
+    [ -f "/etc/koha/sites/$name/zebra-biblios.cfg" ] && \
+        rm "/etc/koha/sites/$name/zebra-biblios.cfg"
+    [ -f "/etc/koha/sites/$name/zebra-authorities.cfg" ] && \
+        rm "/etc/koha/sites/$name/zebra-authorities.cfg"
+    [ -f "/etc/koha/sites/$name/zebra-authorities-dom.cfg" ] && \
+        rm "/etc/koha/sites/$name/zebra-authorities-dom.cfg"
+    [ -f "/etc/koha/sites/$name/zebra.passwd" ] && \
+        rm "/etc/koha/sites/$name/zebra.passwd"
+    [ -d "/etc/koha/sites/$name" ] && \
+        rmdir "/etc/koha/sites/$name"
+    [ -d "/var/lock/koha/$name" ] && \
+        rm -r "/var/lock/koha/$name"
+    [ -d "/var/log/koha/$name" ] && \
+        rm -r "/var/log/koha/$name"
+    [ -d "/var/run/koha/$name" ] && \
+        rm -r "/var/run/koha/$name"
+    getent passwd "$name-koha" > /dev/null && deluser --quiet "$name-koha"
     a2dissite "$name"
 done
 

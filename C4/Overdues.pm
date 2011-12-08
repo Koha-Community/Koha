@@ -79,7 +79,6 @@ BEGIN {
 	# subs to move to Members.pm
 	push @EXPORT, qw(
         &CheckBorrowerDebarred
-        &UpdateBorrowerDebarred
 	);
 	# subs to move to Biblio.pm
 	push @EXPORT, qw(
@@ -165,8 +164,37 @@ Returns a count and a list of overdueitems for a given borrowernumber
 
 sub checkoverdues {
     my $borrowernumber = shift or return;
+    # don't select biblioitems.marc or biblioitems.marcxml... too slow on large systems
     my $sth = C4::Context->dbh->prepare(
-        "SELECT * FROM issues
+        "SELECT biblio.*, items.*, issues.*,
+                biblioitems.volume,
+                biblioitems.number,
+                biblioitems.itemtype,
+                biblioitems.isbn,
+                biblioitems.issn,
+                biblioitems.publicationyear,
+                biblioitems.publishercode,
+                biblioitems.volumedate,
+                biblioitems.volumedesc,
+                biblioitems.collectiontitle,
+                biblioitems.collectionissn,
+                biblioitems.collectionvolume,
+                biblioitems.editionstatement,
+                biblioitems.editionresponsibility,
+                biblioitems.illus,
+                biblioitems.pages,
+                biblioitems.notes,
+                biblioitems.size,
+                biblioitems.place,
+                biblioitems.lccn,
+                biblioitems.url,
+                biblioitems.cn_source,
+                biblioitems.cn_class,
+                biblioitems.cn_item,
+                biblioitems.cn_suffix,
+                biblioitems.cn_sort,
+                biblioitems.totalissues
+         FROM issues
          LEFT JOIN items       ON issues.itemnumber      = items.itemnumber
          LEFT JOIN biblio      ON items.biblionumber     = biblio.biblionumber
          LEFT JOIN biblioitems ON items.biblioitemnumber = biblioitems.biblioitemnumber
@@ -1048,35 +1076,14 @@ sub CheckBorrowerDebarred {
         SELECT debarred
         FROM borrowers
         WHERE borrowernumber=?
+        AND debarred > NOW()
     |;
     my $sth = $dbh->prepare($query);
     $sth->execute($borrowernumber);
-    my ($debarredstatus) = $sth->fetchrow;
-    return ( $debarredstatus eq '1' ? 1 : 0 );
+    my $debarredstatus = $sth->fetchrow;
+    return $debarredstatus;
 }
 
-=head2 UpdateBorrowerDebarred
-
-    ($borrowerstatut) = &UpdateBorrowerDebarred($borrowernumber);
-
-update status of borrowers in borrowers table (field debarred)
-
-C<$borrowernumber> borrower number
-
-=cut
-
-sub UpdateBorrowerDebarred{
-    my($borrowernumber) = @_;
-    my $dbh = C4::Context->dbh;
-        my $query=qq|UPDATE borrowers
-             SET debarred='1'
-                     WHERE borrowernumber=?
-            |;
-    my $sth=$dbh->prepare($query);
-        $sth->execute($borrowernumber);
-        $sth->finish;
-        return 1;
-}
 
 =head2 CheckExistantNotifyid
 

@@ -7,7 +7,7 @@ use strict;
 use warnings;
 use C4::Auth;
 use CGI;
-use Test::More tests => 8;
+use Test::More tests => 10;
 
 BEGIN {
         use_ok('C4::BackgroundJob');
@@ -34,3 +34,7 @@ ok ($background->status);
 $background->size("56");
 is ($background->size, "56", "testing size");
 
+$background->finish("finished");
+is ($background->status,'completed', "testing finished");
+
+ok ($background->results); # Will return undef unless finished

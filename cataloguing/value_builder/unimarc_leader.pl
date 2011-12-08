@@ -66,6 +66,13 @@ function Clic$function_name(i) {
     return ( $function_name, $res );
 }
 
+sub wrapper {
+    my ($char) = @_;
+    return "space" if $char eq " ";
+    return "pipe" if $char eq "|";
+    return $char;
+}
+
 sub plugin {
     my ($input) = @_;
     my $index   = $input->param('index');
@@ -83,13 +90,13 @@ sub plugin {
         }
     );
     $result = "     nam         3       " unless $result;
-    my $f5  = substr( $result, 5,  1 );
-    my $f6  = substr( $result, 6,  1 );
-    my $f7  = substr( $result, 7,  1 );
-    my $f8  = substr( $result, 8,  1 );
+    my $f5  = substr( $result, 5,  1 ); $f5  = wrapper( $f5 ) if $f5;
+    my $f6  = substr( $result, 6,  1 ); $f6  = wrapper( $f6 ) if $f6;
+    my $f7  = substr( $result, 7,  1 ); $f7  = wrapper( $f7 ) if $f7;
+    my $f8  = substr( $result, 8,  1 ); $f8  = wrapper( $f8 ) if $f8;
     my $f9  = substr( $result, 9,  1 );
-    my $f17 = substr( $result, 17, 1 );
-    my $f18 = substr( $result, 18, 1 );
+    my $f17 = substr( $result, 17, 1 ); $f17 = wrapper( $f17 ) if $f17;
+    my $f18 = substr( $result, 18, 1 ); $f18 = wrapper( $f18 ) if $f18;
     my $f19 = substr( $result, 19, 1 );
 
     $template->param(

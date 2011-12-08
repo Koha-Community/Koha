@@ -28,18 +28,16 @@ use CGI;
 my $query = new CGI;
 
 # find the script that called the online help using the CGI referer()
-our $refer = $query->referer();
+our $refer = $query->param('url');
+$refer = $query->referer()  if !$refer || $refer eq 'undefined';
 
 $refer =~ /koha\/(.*)\.pl/;
-my $from = "modules/help/$1.tt";
+my $file = $1;
+$file =~ s/[^a-zA-Z0-9_\-\/]*//g;
+my $from = "help/$file.tt";
 
-my $htdocs = C4::Context->config('intrahtdocs');
-my ( $theme, $lang ) = themelanguage( $htdocs, $from, "intranet", $query );
-unless ( -e "$htdocs/$theme/$lang/$from" ) {
-    $from = "modules/help/nohelp.tt";
-    ( $theme, $lang ) = themelanguage( $htdocs, $from, "intranet", $query );
-}
-my $template = C4::Templates->new('intranet', "$htdocs/$theme/$lang/$from");
+my $template = C4::Templates::gettemplate($from, 'intranet', $query);
+$template->param( referer => $refer );
 
 output_html_with_http_headers $query, "", $template->output;
 

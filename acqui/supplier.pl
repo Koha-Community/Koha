@@ -93,6 +93,7 @@ if ( $op eq 'display' ) {
         address3      => $supplier->{'address3'},
         address4      => $supplier->{'address4'},
         phone         => $supplier->{'phone'},
+        accountnumber => $supplier->{'accountnumber'},
         fax           => $supplier->{'fax'},
         url           => $supplier->{'url'},
         contact       => $supplier->{'contact'},
@@ -122,12 +123,22 @@ if ( $op eq 'display' ) {
 } else {
     my @currencies = GetCurrencies();
     my $loop_currency;
+    my $active_currency = GetCurrency();
+    my $active_listprice = $supplier->{'listprice'};
+    my $active_invoiceprice = $supplier->{'invoiceprice'};
+    if (!$supplier->{listprice}) {
+        $active_listprice =  $active_currency->{currency};
+    }
+    if (!$supplier->{invoiceprice}) {
+        $active_invoiceprice =  $active_currency->{currency};
+    }
     for (@currencies) {
         push @{$loop_currency},
-          { currency     => $_->{currency},
-            listprice    => ( $_->{currency} eq $supplier->{listprice} ),
-            invoiceprice => ( $_->{currency} eq $supplier->{invoiceprice} ),
-          };
+            { 
+            currency     => $_->{currency},
+            listprice    => ( $_->{currency} eq $active_listprice ),
+            invoiceprice => ( $_->{currency} eq $active_invoiceprice ),
+            };
     }
 
     my $default_gst_rate = (C4::Context->preference('gist') * 100) || '0.0';
@@ -142,6 +153,7 @@ if ( $op eq 'display' ) {
         address3     => $supplier->{'address3'},
         address4     => $supplier->{'address4'},
         phone        => $supplier->{'phone'},
+        accountnumber=> $supplier->{'accountnumber'},
         fax          => $supplier->{'fax'},
         url          => $supplier->{'url'},
         contact      => $supplier->{'contact'},

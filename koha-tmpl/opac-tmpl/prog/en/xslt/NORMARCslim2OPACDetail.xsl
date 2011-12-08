@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE stylesheet [<!ENTITY nbsp "&#160;" >]>
+
 <!-- $Id: MARC21slim2DC.xsl,v 1.1 2003/01/06 08:20:27 adam Exp $ -->
 <xsl:stylesheet version="1.0"
   xmlns:marc="http://www.loc.gov/MARC21/slim"
@@ -419,7 +422,7 @@
         </span>
                 <xsl:variable name="f780">
                     <xsl:call-template name="subfieldSelect">
-                        <xsl:with-param name="codes">at</xsl:with-param>
+                        <xsl:with-param name="codes">a_t</xsl:with-param>
                     </xsl:call-template>
                 </xsl:variable>
              <a><xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=<xsl:value-of select="translate($f780, '()', '')"/></xsl:attribute>
@@ -469,7 +472,7 @@
         </span>
                    <xsl:variable name="f785">
                     <xsl:call-template name="subfieldSelect">
-                        <xsl:with-param name="codes">at</xsl:with-param>
+                        <xsl:with-param name="codes">a_t</xsl:with-param>
                     </xsl:call-template>
                 </xsl:variable>
 

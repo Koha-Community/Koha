@@ -49,17 +49,9 @@ $member =~ s/,//g;   #remove any commas from search string
 $member =~ s/\*/%/g;
 
 if ($member || $category) {
-    my ($count,$results) = 0,0;
-
-    if(length($member) == 1)
-    {
-        ($count,$results) = SearchMember($member,$orderby,"simple");
-    }
-    else
-    {
-        ($count,$results) = SearchMember($member,$orderby,"advanced",$category);
-    }
-
+    my $results = $category ? Search({''=>$member, category_type=>$category}, $orderby)
+                            : Search($member, $orderby);
+    my $count = $results ? @$results : 0;
 
     my @resultsdata = ();
     my $to = ($count>($startfrom * $resultsperpage)?$startfrom * $resultsperpage:$count);

@@ -43,9 +43,6 @@ BEGIN {
 				);
 }
 
-my $tablename;
-my $hash;
-
 =head1 NAME
 
 C4::SQLHelper - Perl Module containing convenience functions for SQL Handling
@@ -85,6 +82,21 @@ $filtercolums is an array ref on field names : is used to limit expansion of res
 
 $searchtype is string Can be "start_with" or "exact" 
 
+This query builder is very limited, it should be replaced with DBIx::Class
+or similar  very soon
+Meanwhile adding support for special key '' in case of a data_hashref to
+support filters of type
+
+  ( f1 = a OR f2 = a ) AND fx = b AND fy = c
+
+Call for the query above is:
+
+  SearchInTable($tablename, {'' => a, fx => b, fy => c}, $orderby, $limit,
+                $columns_out, [f1, f2], 'exact');
+
+NOTE: Current implementation may remove parts of the iinput hashrefs. If that is a problem
+a copy needs to be created in _filter_fields() below
+
 =cut
 
 sub SearchInTable{
@@ -101,7 +113,7 @@ sub SearchInTable{
 	if ($keys){
 		my @criteria=grep{defined($_) && $_ !~/^\W$/ }@$keys;
 		if (@criteria) { 
-			$sql.= do { local $"=') AND ('; 
+			$sql.= do { local $"=') OR ('; 
 					qq{ WHERE (@criteria) } 
 				   }; 
 		} 
@@ -109,8 +121,12 @@ sub SearchInTable{
     if ($orderby){ 
 		#Order by desc by default
 		my @orders;
-		foreach my $order (@$orderby){
-			push @orders,map{ "$_".($order->{$_}? " DESC " : "") } keys %$order; 
+		foreach my $order ( ref($orderby) ? @$orderby : $orderby ){
+            if (ref $order) {
+			    push @orders,map{ "$_".($order->{$_}? " DESC " : "") } keys %$order; 
+            } else {
+			    push @orders,$order; 
+            }
 		}
 		$sql.= do { local $"=', '; 
 				qq{ ORDER BY @orders} 
@@ -287,13 +303,21 @@ sub _filter_fields{
     my @keys; 
 	my @values;
 	if (ref($filter_input) eq "HASH"){
-		my ($keys, $values) = _filter_hash($tablename,$filter_input, $searchtype);
+		my ($keys, $values);
+        if (my $special = delete $filter_input->{''}) { # XXX destroyes '' key
+		    ($keys, $values) = _filter_fields($tablename,$special, $searchtype,$filtercolumns);
+        }
+		my ($hkeys, $hvalues) = _filter_hash($tablename,$filter_input, $searchtype);
+		if ($hkeys){
+            push @$keys, @$hkeys;
+            push @$values, @$hvalues;
+        }
 		if ($keys){
-		my $stringkey="(".join (") AND (",@$keys).")";
-		return [$stringkey],$values;
+		    my $stringkey="(".join (") AND (",@$keys).")";
+		    return [$stringkey],$values;
 		}
 		else {
-		return ();
+		    return ();
 		}
 	} elsif (ref($filter_input) eq "ARRAY"){
 		foreach my $element_data (@$filter_input){
@@ -334,7 +358,9 @@ sub _filter_hash{
     my $elements=join "|",@columns_filtered;
 	foreach my $field (grep {/\b($elements)\b/} keys %$filter_input){
 		## supposed to be a hash of simple values, hashes of arrays could be implemented
-		$filter_input->{$field}=format_date_in_iso($filter_input->{$field}) if ($columns->{$field}{Type}=~/date/ && $filter_input->{$field} !~C4::Dates->regexp("iso"));
+		$filter_input->{$field}=format_date_in_iso($filter_input->{$field})
+          if $columns->{$field}{Type}=~/date/ &&
+             $filter_input->{$field} !~C4::Dates->regexp("iso");
 		my ($tmpkeys, $localvalues)=_Process_Operands($filter_input->{$field},"$tablename.$field",$searchtype,$columns);
 		if (@$tmpkeys){
 			push @values, @$localvalues;
@@ -352,7 +378,11 @@ sub _filter_hash{
 sub _filter_string{
 	my ($tablename,$filter_input, $searchtype,$filtercolumns)=@_;
 	return () unless($filter_input);
-	my @operands=split / /,$filter_input;
+	my @operands=split /\s+/,$filter_input;
+
+    # An act of desperation
+    $searchtype = 'contain' if @operands > 1 && $searchtype =~ /start_with/o;
+
 	my @columns_filtered= _filter_columns($tablename,$searchtype,$filtercolumns);
 	my $columns= _get_columns($tablename);
 	my (@values,@keys);
@@ -381,8 +411,12 @@ sub _Process_Operands{
 	my @values;
 	my @tmpkeys;
 	my @localkeys;
-	push @tmpkeys, " $field = ? ";
-	push @values, $operand;
+
+    $operand = [$operand] unless ref $operand eq 'ARRAY';
+    foreach (@$operand) {
+	    push @tmpkeys, " $field = ? ";
+	    push @values, $_;
+    }
 	#By default, exact search
 	if (!$searchtype ||$searchtype eq "exact"){
 		return \@tmpkeys,\@values;
@@ -394,16 +428,22 @@ sub _Process_Operands{
 	if ($columns->{$col_field}->{Type}=~/varchar|text/i){
 		my @localvaluesextended;
 		if ($searchtype eq "contain"){
-			push @tmpkeys,(" $field LIKE ? ");
-			push @localvaluesextended,("\%$operand\%") ;
+            foreach (@$operand) {
+			    push @tmpkeys,(" $field LIKE ? ");
+			    push @localvaluesextended,("\%$_\%") ;
+            }
 		}
 		if ($searchtype eq "field_start_with"){
-			push @tmpkeys,("$field LIKE ?");
-			push @localvaluesextended, ("$operand\%") ;
+            foreach (@$operand) {
+			    push @tmpkeys,("$field LIKE ?");
+			    push @localvaluesextended, ("$_\%") ;
+            }
 		}
 		if ($searchtype eq "start_with"){
-			push @tmpkeys,("$field LIKE ?","$field LIKE ?");
-			push @localvaluesextended, ("$operand\%", " $operand\%") ;
+            foreach (@$operand) {
+			    push @tmpkeys,("$field LIKE ?","$field LIKE ?");
+			    push @localvaluesextended, ("$_\%", " $_\%") ;
+            }
 		}
 		push @values,@localvaluesextended;
 	}

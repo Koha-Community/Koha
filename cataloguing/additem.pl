@@ -206,28 +206,33 @@ sub generate_subfield_form {
                   }
             }
 
-            $subfield_data{marc_value} =CGI::scrolling_list(      # FIXME: factor out scrolling_list
-                  -name     => "field_value",
-                  -values   => \@authorised_values,
-                  -default  => $value,
-                  -labels   => \%authorised_lib,
-                  -override => 1,
-                  -size     => 1,
-                  -multiple => 0,
-                  -tabindex => 1,
-                  -id       => "tag_".$tag."_subfield_".$subfieldtag."_".$index_subfield,
-                  -class    => "input_marceditor",
-            );
+            if ($subfieldlib->{'hidden'}) {
+                $subfield_data{marc_value} = qq(<input type="hidden" $attributes /> $authorised_lib{$value});
+            }
+            else {
+                $subfield_data{marc_value} =CGI::scrolling_list(      # FIXME: factor out scrolling_list
+                    -name     => "field_value",
+                    -values   => \@authorised_values,
+                    -default  => $value,
+                    -labels   => \%authorised_lib,
+                    -override => 1,
+                    -size     => 1,
+                    -multiple => 0,
+                    -tabindex => 1,
+                    -id       => "tag_".$tag."_subfield_".$subfieldtag."_".$index_subfield,
+                    -class    => "input_marceditor",
+                );
+            }
 
-            # it's a thesaurus / authority field
         }
+            # it's a thesaurus / authority field
         elsif ( $subfieldlib->{authtypecode} ) {
                 $subfield_data{marc_value} = "<input type=\"text\" $attributes />
                     <a href=\"#\" class=\"buttonDot\"
                         onclick=\"Dopop('/cgi-bin/koha/authorities/auth_finder.pl?authtypecode=".$subfieldlib->{authtypecode}."&index=$subfield_data{id}','$subfield_data{id}'); return false;\" title=\"Tag Editor\">...</a>
             ";
-            # it's a plugin field
         }
+            # it's a plugin field
         elsif ( $subfieldlib->{value_builder} ) {
                 # opening plugin
                 my $plugin = C4::Context->intranetdir . "/cataloguing/value_builder/" . $subfieldlib->{'value_builder'};
@@ -276,6 +281,8 @@ my $error        = $input->param('error');
 my $biblionumber = $input->param('biblionumber');
 my $itemnumber   = $input->param('itemnumber');
 my $op           = $input->param('op');
+my $hostitemnumber = $input->param('hostitemnumber');
+my $marcflavour  = C4::Context->preference("marcflavour");
 
 my $frameworkcode = &GetFrameworkCode($biblionumber);
 
@@ -498,10 +505,24 @@ if ($op eq "additem") {
     if ($exist_itemnumber && $exist_itemnumber != $itemnumber) {
         push @errors,"barcode_not_unique";
     } else {
-        my ($oldbiblionumber,$oldbibnum,$oldbibitemnum) = ModItemFromMarc($itemtosave,$biblionumber,$itemnumber);
+        ModItemFromMarc($itemtosave,$biblionumber,$itemnumber);
         $itemnumber="";
     }
     $nextop="additem";
+} elsif ($op eq "delinkitem"){
+    my $analyticfield = '773';
+	if ($marcflavour  eq 'MARC21' || $marcflavour eq 'NORMARC'){
+        $analyticfield = '773';
+    } elsif ($marcflavour eq 'UNIMARC') {
+        $analyticfield = '461';
+    }
+    foreach my $field ($record->field($analyticfield)){
+        if ($field->subfield('9') eq $hostitemnumber){
+            $record->delete_field($field);
+            last;
+        }
+    }
+	my $modbibresult = ModBiblio($record, $biblionumber,'');
 }
 
 #
@@ -512,6 +533,8 @@ if ($op eq "additem") {
 # now, build existiing item list
 my $temp = GetMarcBiblio( $biblionumber );
 #my @fields = $record->fields();
+
+
 my %witness; #---- stores the list of subfields used at least once, with the "meaning" of the code
 my @big_array;
 #---- finds where items.itemnumber is stored
@@ -519,6 +542,29 @@ my (  $itemtagfield,   $itemtagsubfield) = &GetMarcFromKohaField("items.itemnumb
 my ($branchtagfield, $branchtagsubfield) = &GetMarcFromKohaField("items.homebranch", $frameworkcode);
 C4::Biblio::EmbedItemsInMarcBiblio($temp, $biblionumber);
 my @fields = $temp->fields();
+
+
+my @hostitemnumbers;
+my $analyticfield = '773';
+if ($marcflavour  eq 'MARC21' || $marcflavour eq 'NORMARC') {
+    $analyticfield = '773';
+} elsif ($marcflavour eq 'UNIMARC') {
+    $analyticfield = '461';
+}
+foreach my $hostfield ($temp->field($analyticfield)){
+    if ($hostfield->subfield('0')){
+        my $hostrecord = GetMarcBiblio($hostfield->subfield('0'), 1);
+        my ($itemfield, undef) = GetMarcFromKohaField( 'items.itemnumber', GetFrameworkCode($hostfield->subfield('0')) );
+        foreach my $hostitem ($hostrecord->field($itemfield)){
+            if ($hostitem->subfield('9') eq $hostfield->subfield('9')){
+                push (@fields, $hostitem);
+                push (@hostitemnumbers, $hostfield->subfield('9'));
+            }
+        }
+    }
+}
+
+
 
 foreach my $field (@fields) {
     next if ( $field->tag() < 10 );
@@ -550,6 +596,19 @@ foreach my $field (@fields) {
             }
         }
         $this_row{itemnumber} = $subfieldvalue if ($field->tag() eq $itemtagfield && $subfieldcode eq $itemtagsubfield);
+	foreach my $hostitemnumber (@hostitemnumbers){
+		if ($this_row{itemnumber} eq $hostitemnumber){
+			$this_row{hostitemflag} = 1;
+			$this_row{hostbiblionumber}= GetBiblionumberFromItemnumber($hostitemnumber);
+			last;
+		}
+	}
+
+#	my $countanalytics=GetAnalyticsCount($this_row{itemnumber});
+#        if ($countanalytics > 0){
+#                $this_row{countanalytics} = $countanalytics;
+#        }
+
     }
     if (%this_row) {
         push(@big_array, \%this_row);
@@ -570,6 +629,9 @@ for my $row ( @big_array ) {
     $row_data{itemnumber} = $row->{itemnumber};
     #reporting this_row values
     $row_data{'nomod'} = $row->{'nomod'};
+    $row_data{'hostitemflag'} = $row->{'hostitemflag'};
+    $row_data{'hostbiblionumber'} = $row->{'hostbiblionumber'};
+#	$row_data{'countanalytics'} = $row->{'countanalytics'};
     push(@item_value_loop,\%row_data);
 }
 foreach my $subfield_code (sort keys(%witness)) {
@@ -608,6 +670,8 @@ if($itemrecord){
             next if subfield_is_koha_internal_p($subfieldtag);
             next if ($tagslib->{$tag}->{$subfieldtag}->{'tab'} ne "10");
 
+            $subfieldlib->{hidden} = 1
+              if $tagslib->{$tag}->{$subfieldtag}->{authorised_value} eq 'LOST';
             my $subfield_data = generate_subfield_form($tag, $subfieldtag, $value, $tagslib, $subfieldlib, $branches, $today_iso, $biblionumber, $temp, \@loop_data, $i);        
 
             push @fields, "$tag$subfieldtag";

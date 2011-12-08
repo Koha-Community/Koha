@@ -3,6 +3,7 @@ package C4::Reserves;
 # Copyright 2000-2002 Katipo Communications
 #           2006 SAN Ouest Provence
 #           2007-2010 BibLibre Paul POULAIN
+#           2011 Catalyst IT
 #
 # This file is part of Koha.
 #
@@ -26,7 +27,6 @@ use C4::Context;
 use C4::Biblio;
 use C4::Members;
 use C4::Items;
-use C4::Search;
 use C4::Circulation;
 use C4::Accounts;
 
@@ -86,7 +86,7 @@ This modules provides somes functions to deal with reservations.
 BEGIN {
     # set the version for version checking
     $VERSION = 3.01;
-	require Exporter;
+    require Exporter;
     @ISA = qw(Exporter);
     @EXPORT = qw(
         &AddReserve
@@ -121,6 +121,7 @@ BEGIN {
         &AlterPriority
         &ToggleLowestPriority
     );
+    @EXPORT_OK = qw( MergeHolds );
 }    
 
 =head2 AddReserve
@@ -382,9 +383,15 @@ sub GetReservesFromBorrowernumber {
 sub CanBookBeReserved{
     my ($borrowernumber, $biblionumber) = @_;
 
-    my @items = GetItemsInfo($biblionumber);
+    my @items = get_itemnumbers_of($biblionumber);
+    #get items linked via host records
+    my @hostitems = get_hostitemnumbers_of($biblionumber);
+    if (@hostitems){
+	push (@items,@hostitems);
+    }
+
     foreach my $item (@items){
-        return 1 if CanItemBeReserved($borrowernumber, $item->{itemnumber});
+        return 1 if CanItemBeReserved($borrowernumber, $item);
     }
     return 0;
 }
@@ -819,7 +826,7 @@ sub CheckReserves {
             } else {
                 # See if this item is more important than what we've got so far
                 if ( $res->{'priority'} && $res->{'priority'} < $priority ) {
-                    my $borrowerinfo=C4::Members::GetMemberDetails($res->{'borrowernumber'});
+                    my $borrowerinfo=C4::Members::GetMember(borrowernumber => $res->{'borrowernumber'});
                     my $iteminfo=C4::Items::GetItem($itemnumber);
                     my $branch=C4::Circulation::_GetCircControlBranch($iteminfo,$borrowerinfo);
                     my $branchitemrule = C4::Circulation::GetBranchItemRule($branch,$iteminfo->{'itype'});
@@ -1808,6 +1815,51 @@ sub _ShiftPriorityByDateAndPriority {
 
     return $new_priority;  # so the caller knows what priority they wind up receiving
 }
+
+=head2 MergeHolds
+
+  MergeHolds($dbh,$to_biblio, $from_biblio);
+
+This shifts the holds from C<$from_biblio> to C<$to_biblio> and reorders them by the date they were placed
+
+=cut
+
+sub MergeHolds {
+    my ( $dbh, $to_biblio, $from_biblio ) = @_;
+    my $sth = $dbh->prepare(
+        "SELECT count(*) as reservenumber FROM reserves WHERE biblionumber = ?"
+    );
+    $sth->execute($from_biblio);
+    if ( my $data = $sth->fetchrow_hashref() ) {
+
+        # holds exist on old record, if not we don't need to do anything
+        $sth = $dbh->prepare(
+            "UPDATE reserves SET biblionumber = ? WHERE biblionumber = ?");
+        $sth->execute( $to_biblio, $from_biblio );
+
+        # Reorder by date
+        # don't reorder those already waiting
+
+        $sth = $dbh->prepare(
+"SELECT * FROM reserves WHERE biblionumber = ? AND (found <> ? AND found <> ? OR found is NULL) ORDER BY reservedate ASC"
+        );
+        my $upd_sth = $dbh->prepare(
+"UPDATE reserves SET priority = ? WHERE biblionumber = ? AND borrowernumber = ?
+        AND reservedate = ? AND constrainttype = ? AND (itemnumber = ? or itemnumber is NULL) "
+        );
+        $sth->execute( $to_biblio, 'W', 'T' );
+        my $priority = 1;
+        while ( my $reserve = $sth->fetchrow_hashref() ) {
+            $upd_sth->execute(
+                $priority,                    $to_biblio,
+                $reserve->{'borrowernumber'}, $reserve->{'reservedate'},
+                $reserve->{'constrainttype'}, $reserve->{'itemnumber'}
+            );
+            $priority++;
+        }
+    }
+}
+
 
 =head1 AUTHOR
 

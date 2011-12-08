@@ -23,7 +23,6 @@ use warnings;
 require Exporter;
 use Class::Factory::Util;
 use C4::Context;
-use C4::Koha;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 

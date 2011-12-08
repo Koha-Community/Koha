@@ -35,14 +35,21 @@ sub find_translation ($) {
     my($s) = @_;
     my $key = $s;
     if ($s =~ /\S/s) {
-    $key = TmplTokenizer::string_canon($key);
-    $key = TmplTokenizer::charset_convert($key, $charset_in, $charset_out);
-    $key = TmplTokenizer::quote_po($key);
+      $key = TmplTokenizer::string_canon($key);
+      $key = TmplTokenizer::charset_convert($key, $charset_in, $charset_out);
+      $key = TmplTokenizer::quote_po($key);
     }
-    return defined $href->{$key}
-        && !$href->{$key}->fuzzy
-        && length Locale::PO->dequote($href->{$key}->msgstr)?
-       Locale::PO->dequote($href->{$key}->msgstr): $s;
+    if (defined $href->{$key} && !$href->{$key}->fuzzy && length Locale::PO->dequote($href->{$key}->msgstr)){
+	if ($s =~ /^(\s+)/){
+	    return $1 . Locale::PO->dequote($href->{$key}->msgstr);
+	}
+	else {
+	    return Locale::PO->dequote($href->{$key}->msgstr);
+	}
+    }
+    else {
+	return $s;
+    }
 }
 
 sub text_replace_tag ($$) {

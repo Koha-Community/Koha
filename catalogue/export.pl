@@ -1,5 +1,4 @@
 #!/usr/bin/perl
-use HTML::Template::Pro;
 use strict;
 #use warnings; FIXME - Bug 2505
 

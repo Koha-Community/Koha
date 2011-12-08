@@ -1,6 +1,5 @@
 #!/usr/bin/perl
 
-
 # Database Updater
 # This script checks for required updates to the database.
 
@@ -4439,13 +4438,145 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion($DBversion);
 }
 
+
 $DBversion = "3.05.00.011";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OPACResultsSidebar','','Define HTML to be included on the search results page, underneath the facets sidebar','70|10','Textarea')");
     print "Upgrade to $DBversion done (add OPACResultsSidebar syspref (enh 6165))\n";
     SetVersion($DBversion);
 }
+    
+$DBversion = "3.05.00.012";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('RecordLocalUseOnReturn',0,'If ON, statistically record returns of unissued items as local use, instead of return',NULL,'YesNo')");
+    print "Upgrade to $DBversion done (add RecordLocalUseOnReturn syspref (enh 6403))\n";
+    SetVersion($DBversion);
+}
 
+$DBversion = "3.05.00.013";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do(qq|INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('OpacKohaUrl','0',"Show 'Powered by Koha' text on OPAC footer.",NULL,NULL)|);
+    print "Upgrade to $DBversion done (Add syspref 'OpacKohaUrl')\n";
+    SetVersion($DBversion);
+}
+
+$DBversion = "3.05.00.014";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("ALTER TABLE `borrowers` MODIFY `userid` VARCHAR(75)");
+    print "Modified userid column length into 75 in borrowers\n";
+    SetVersion($DBversion);
+}
+
+$DBversion = "3.05.00.015";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('NovelistSelectEnabled',0,'Enable Novelist Select content.  Requires Novelist Profile and Password',NULL,'YesNo')");
+    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('NovelistSelectProfile',NULL,'Novelist Select user Password',NULL,'free')");
+    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('NovelistSelectPassword',NULL,'Enable Novelist user Profile',NULL,'free')");
+    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('NovelistSelectView','tab','Where to display Novelist Select content','tab|above|below|right','Choice')");
+    print "Upgrade to $DBversion done (Add support for EBSCO's NoveList Select (enh 6902))\n";
+    SetVersion($DBversion);
+}
+
+$DBversion = '3.05.00.016';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('EasyAnalyticalRecords','0','If on, display in the catalogue screens tools to easily setup analytical record relationships','','YesNo');");
+    print "Upgrade to $DBversion done (Add EasyAnalyticalRecords syspref)\n";
+    SetVersion ($DBversion);
+}
+
+$DBversion = '3.05.00.017';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    if (C4::Context->preference("marcflavour") eq 'MARC21' ||
+        C4::Context->preference("marcflavour") eq 'NORMARC'){
+        $dbh->do("INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `kohafield`, `tab`, `authorised_value` , `authtypecode`, `value_builder`, `isurl`, `hidden`, `frameworkcode`, `seealso`, `link`, `defaultvalue`) VALUES ('773', '0', 'Host Biblionumber', 'Host Biblionumber', 0, 0, NULL, 7, NULL, NULL, '', NULL, -6, '', '', '', NULL)");
+        $dbh->do("INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `kohafield`, `tab`, `authorised_value` , `authtypecode`, `value_builder`, `isurl`, `hidden`, `frameworkcode`, `seealso`, `link`, `defaultvalue`) VALUES ('773', '9', 'Host Itemnumber', 'Host Itemnumber', 0, 0, NULL, 7, NULL, NULL, '', NULL, -6, '', '', '', NULL)");
+        print "Upgrade to $DBversion done (Add 773 subfield 9 and 0 to default framework)\n";
+        SetVersion ($DBversion);
+    } elsif (C4::Context->preference("marcflavour") eq 'UNIMARC'){
+        $dbh->do("INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `kohafield`, `tab`, `authorised_value` , `authtypecode`, `value_builder`, `isurl`, `hidden`, `frameworkcode`, `seealso`, `link`, `defaultvalue`) VALUES ('461', '9', 'Host Itemnumber', 'Host Itemnumber', 0, 0, NULL, 7, NULL, NULL, '', NULL, -6, '', '', '', NULL)");
+        print "Upgrade to $DBversion done (Add 461 subfield 9 to default framework)\n";
+        SetVersion ($DBversion);
+    }
+		
+}
+
+$DBversion = "3.05.00.018";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OpacNavBottom','','Links after OpacNav links','70|10','Textarea')");
+    print "Upgrade to $DBversion done (add OpacNavBottom syspref (enh 6825): if appropriate, you can split OpacNav into OpacNav and OpacNavBottom)\n";
+    SetVersion($DBversion);
+}
+
+$DBversion = "3.05.00.019";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("UPDATE itemtypes SET imageurl = 'vokal/Book.png' WHERE imageurl = 'vokal/BOOK.png'");
+    $dbh->do("UPDATE itemtypes SET imageurl = 'vokal/Book-32px.png' WHERE imageurl = 'vokal/BOOK-32px.png'");
+    $dbh->do("UPDATE authorised_values SET imageurl = 'vokal/Book.png' WHERE imageurl = 'vokal/BOOK.png'");
+    $dbh->do("UPDATE authorised_values SET imageurl = 'vokal/Book-32px.png' WHERE imageurl = 'vokal/BOOK-32px.png'");
+    print "Upgrade to $DBversion done (remove duplicate VOKAL Book icons, bug 6862)\n";
+    SetVersion($DBversion);
+}
+
+$DBversion = "3.05.00.020";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES ('AcqViewBaskets','user','user|branch|all','Define which baskets a user is allowed to view: his own only, any within his branch or all','Choice')");
+    print "Upgrade to $DBversion done (Add syspref AcqViewBaskets)\n";
+    SetVersion($DBversion);
+}
+
+$DBversion = "3.05.00.021";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("ALTER TABLE borrower_attribute_types ADD COLUMN display_checkout TINYINT(1) NOT NULL DEFAULT '0';");
+    print "Upgrade to $DBversion done (Added a display_checkout field in borrower_attribute_types table)\n"; 
+    SetVersion($DBversion);
+}
+
+$DBversion = "3.05.00.022"; 
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("CREATE TABLE need_merge_authorities (id int NOT NULL auto_increment PRIMARY KEY, authid bigint NOT NULL, done tinyint DEFAULT 0) ENGINE=InnoDB DEFAULT CHARSET=utf8");
+    print "Upgrade to $DBversion done (6094: Fixing ModAuthority problems, add a need_merge_authorities table)\n";
+    SetVersion($DBversion);
+}
+
+$DBversion = "3.05.00.023";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('OpacShowRecentComments',0,'If ON a link to recent comments will appear in the OPAC masthead',NULL,'YesNo');");
+    print "Upgrade to $DBversion done (Add syspref OpacShowRecentComments. When the preference is turned on a link to recent comments will appear in the OPAC masthead. )\n";
+    SetVersion($DBversion);
+}
+
+$DBversion = "3.06.00.000";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    print "Upgrade to $DBversion done Koha 3.6.0 release \n";
+    SetVersion ($DBversion);
+}
+
+$DBversion = "3.06.00.001";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    my $borrowers = $dbh->selectcol_arrayref( "SELECT borrowernumber from borrowers where debarred <>0;", { Columns => [1] } );
+    $dbh->do("ALTER TABLE borrowers MODIFY debarred DATE DEFAULT NULL;");
+    $dbh->do( "UPDATE borrowers set debarred='9999-12-31' where borrowernumber IN (" . join( ",", @$borrowers ) . ");" ) if ($borrowers and scalar(@$borrowers)>0);
+    $dbh->do("ALTER TABLE borrowers ADD COLUMN debarredcomment VARCHAR(255) DEFAULT NULL AFTER debarred;");
+    $dbh->do("ALTER TABLE deletedborrowers MODIFY debarred DATE DEFAULT NULL;");
+    $dbh->do("ALTER TABLE deletedborrowers ADD COLUMN debarredcomment VARCHAR(255) DEFAULT NULL AFTER debarred;");
+    print "Upgrade done (Change borrowers.debarred into Date )\n";
+
+    SetVersion($DBversion);
+}
+
+$DBversion = "3.06.00.002";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do("UPDATE borrowers SET debarred=NULL WHERE debarred='0000-00-00';");
+    print "Setting NULL to debarred where 0000-00-00 is stored (bug 7272)";
+    SetVersion($DBversion);
+}
+
+$DBversion = "3.06.02.001";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do(" UPDATE `message_attributes` SET message_name='Item_Due' WHERE message_name='Item_DUE'");
+    print "Updating message_name in message_attributes";
+    SetVersion($DBversion);
+}
 
 =head1 FUNCTIONS
 

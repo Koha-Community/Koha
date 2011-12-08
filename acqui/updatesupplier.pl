@@ -80,6 +80,7 @@ $data{'address2'}=$addresses[1];
 $data{'address3'}=$addresses[2];
 $data{'address4'}=$addresses[3];
 $data{'phone'}=$input->param('company_phone');
+$data{'accountnumber'}=$input->param('accountnumber');
 $data{'fax'}=$input->param('company_fax');
 $data{'url'}=$input->param('website');
 $data{'contact'}=$input->param('company_contact_name');

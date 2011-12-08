@@ -1,4 +1,5 @@
 <?xml version='1.0'?>
+<!DOCTYPE stylesheet [<!ENTITY nbsp "&#160;" >]>
 <xsl:stylesheet version="1.0" xmlns:marc="http://www.loc.gov/MARC21/slim" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 <!-- 8/19/04: ntra added "marc:" prefix to datafield element -->
 	<xsl:template name="datafield">

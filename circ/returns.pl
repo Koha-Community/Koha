@@ -423,6 +423,9 @@ foreach my $code ( keys %$messages ) {
         $err{notissued} = 1;
         $err{msg} = $branches->{ $messages->{'IsPermanent'} }->{'branchname'};
     }
+    elsif ( $code eq 'LocalUse' ) {
+        $err{localuse} = 1;
+    }
     elsif ( $code eq 'WasLost' ) {
         $err{waslost} = 1;
     }
@@ -456,7 +459,12 @@ foreach my $code ( keys %$messages ) {
     }
     elsif ( $code eq 'Wrongbranch' ) {
     }
-
+    elsif ( $code eq 'Debarred' ) {
+        $err{debarred}            = format_date( $messages->{'Debarred'} );
+        $err{debarcardnumber}     = $borrower->{cardnumber};
+        $err{debarborrowernumber} = $borrower->{borrowernumber};
+        $err{debarname}           = "$borrower->{firstname} $borrower->{surname}";
+    }
     else {
         die "Unknown error code $code";    # note we need all the (empty) elsif's above, or we die.
         # This forces the issue of staying in sync w/ Circulation.pm

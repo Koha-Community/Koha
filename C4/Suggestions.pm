@@ -113,7 +113,7 @@ sub SearchSuggestion  {
     LEFT JOIN borrowers AS U2 ON managedby=U2.borrowernumber
     LEFT JOIN branches AS B2 ON B2.branchcode=U2.branchcode
     LEFT JOIN categories AS C2 ON C2.categorycode = U2.categorycode
-    WHERE STATUS NOT IN ('CLAIMED')
+    WHERE 1=1
     } , map {
         if ( my $s = $suggestion->{$_} ) {
         push @sql_params,'%'.$s.'%'; 

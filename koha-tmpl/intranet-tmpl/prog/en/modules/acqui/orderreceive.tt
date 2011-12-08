@@ -45,8 +45,8 @@
         [% FOREACH item IN items %]
         <div id="outeritemblock">
         <div id="itemblock">
-            <ol>[% FOREACH iteminformatio IN item.iteminformation %]<li>
-                <div class="subfield_line" style="[% iteminformatio.hidden %];" id="subfield[% iteminformatio.serialid %][% iteminformatio.countitems %][% iteminformatio.subfield %][% iteminformatio.random %]">
+            <ol>[% FOREACH iteminformatio IN item.iteminformation %]<li style="[% iteminformatio.hidden %];">
+                <div class="subfield_line" id="subfield[% iteminformatio.serialid %][% iteminformatio.countitems %][% iteminformatio.subfield %][% iteminformatio.random %]">
                                 
                     <label>[% iteminformatio.subfield %] - [% IF ( iteminformatio.mandatory ) %]<b>[% END %][% iteminformatio.marc_lib %][% IF ( iteminformatio.mandatory ) %] *</b>[% END %]</label>
                     [% iteminformatio.marc_value %]
@@ -62,8 +62,8 @@
                 </div></li>
             [% END %]
             </ol>
-            <a style="cursor: pointer; color: grey; font-size: 180%;" onclick="cloneItemBlock('itemblock[% item.itemBlockIndex %]')">+</a>
-            <a style="display:none; cursor: pointer; color: grey; font-size: 180%;" onclick="deleteItemBlock('itemblock[% item.itemBlockIndex %]')">-</a>
+            <a class="addItem" onclick="cloneItemBlock('itemblock[% item.itemBlockIndex %]')">Add</a>
+            <a class="delItem" style="display:none;" onclick="deleteItemBlock('itemblock[% item.itemBlockIndex %]')">Delete</a>
         </div><!-- /iteminformation -->
         </div>
         

@@ -91,7 +91,7 @@
 
 [% ELSE %]
 
-<h2>[% nnoverdue %] Item[% IF ( noverdue_is_plural ) %]s[% END %]
+<h2>[% nnoverdue %] [% IF ( noverdue_is_plural ) %]Items[% ELSE %]Item[% END %]
 	 Overdue as of [% todaysdate %][% IF ( isfiltered ) %] (filtered)[% END %]</h2>
 
 <p>
@@ -268,7 +268,8 @@
 </li>
 </ol>
    <fieldset class="action">
-      <input type="submit" name="op" value="Apply Filter" class="submit" />
+      <input type="submit" value="Apply Filter" class="submit" />
+      <input type="hidden" name="op" value="apply filter" />
    </fieldset>
    </fieldset>
   </form>

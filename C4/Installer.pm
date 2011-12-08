@@ -529,8 +529,10 @@ sub load_sql {
         # report the import a failure although it really succeded -fbcit
     }
 #   errors thrown while loading installer data should be logged
-    warn "C4::Installer::load_sql returned the following errors while attempting to load $filename:\n";
-    warn $error;
+    if($error) {
+      warn "C4::Installer::load_sql returned the following errors while attempting to load $filename:\n";
+      warn "$error";
+    }
     return $error;
 }
 

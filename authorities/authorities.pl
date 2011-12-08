@@ -581,8 +581,7 @@ if ($op eq "add") {
     # build indicator hash.
     my @ind_tag = $input->param('ind_tag');
     my @indicator = $input->param('indicator');
-    my @params = $input->param();
-    my $record = TransformHtmlToMarc(\@params,$input);
+    my $record = TransformHtmlToMarc($input);
     if  (C4::Context->preference("marcflavour") eq "UNIMARC"){
         unless ($record->field('100')){
         use POSIX qw(strftime);

@@ -14,7 +14,7 @@
         <td><label for="f2">Type of Publication Date: Publication Dates 1 and 2</label></td>
         <td>
             <select name="f2" id="f2" size="1">
-            [% IF ( f2 ) %]
+            [% IF ( f2space ) %]
                 <option value=" " selected="selected">Non required value</option>
             [% ELSE %]
                 <option value=" ">Non required value</option>
@@ -494,7 +494,7 @@ languages and obsolete typography)
         <td>
             <select name="f13" id="f13" size="1">
             
-            [% IF ( f13 ) %]
+            [% IF ( f13dblspace ) %]
                     <option value="  " selected="selected">non required value</option>
             [% ELSE %]
                     <option value="  ">non required value</option>
@@ -578,10 +578,10 @@ languages and obsolete typography)</option>
     <td><label for="f15">Script of Title</label></td>
     <td>
     <select name="f15" id="f15" size="1">
-            [% IF ( f15 ) %]
-                    <option value=" " selected="selected">Non required value</option>
+            [% IF ( f15dblspace ) %]
+                    <option value="  " selected="selected">Non required value</option>
             [% ELSE %]
-                    <option value=" ">Non required value</option>
+                    <option value="  ">Non required value</option>
             [% END %]
             
             [% IF ( f15ba ) %]

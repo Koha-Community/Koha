@@ -66,14 +66,9 @@ my @resultsdata;
 my $background = 0;
 
 if ($member ne ''){
-	if(length($member) == 1)
-	{
-		($count,$results)=SearchMember($member,$orderby,"simple",$search_category);
-	}
-	else
-	{
-		($count,$results)=SearchMember($member,$orderby,"advanced",$search_category);
-	}
+    $results = Search({''=>$member, category_type=>$search_category},$orderby);
+    $count = $results ? @$results : 0;
+
 	for (my $i=0; $i < $count; $i++){
 	#find out stats
 	my ($od,$issue,$fines)=GetMemberIssuesAndFines($results->[$i]{'borrowerid'});

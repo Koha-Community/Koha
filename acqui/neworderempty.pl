@@ -333,6 +333,9 @@ if (C4::Context->preference('AcqCreateItem') eq 'ordering' && !$ordernumber) {
 my @itemtypes;
 @itemtypes = C4::ItemType->all unless C4::Context->preference('item-level_itypes');
 
+# Find the items.barcode subfield for barcode validations
+my (undef, $barcode_subfield) = GetMarcFromKohaField('items.barcode', '');
+
 # fill template
 $template->param(
     close        => $close,
@@ -383,8 +386,10 @@ $template->param(
     listprice        => sprintf("%.2f", $data->{'listprice'}||$data->{'price'}||$listprice),
     total            => sprintf("%.2f", ($data->{'ecost'}||0)*($data->{'quantity'}||0) ),
     ecost            => $data->{'ecost'},
+    unitprice        => sprintf("%.2f", $data->{'unitprice'}),
     notes            => $data->{'notes'},
     publishercode    => $data->{'publishercode'},
+    barcode_subfield => $barcode_subfield,
     
     import_batch_id  => $import_batch_id,
 

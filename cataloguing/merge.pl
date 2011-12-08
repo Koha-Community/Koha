@@ -2,6 +2,7 @@
 
 
 # Copyright 2009 BibLibre
+# Parts Copyright Catalyst IT 2011
 #
 # This file is part of Koha.
 #
@@ -26,6 +27,7 @@ use C4::Auth;
 use C4::Items;
 use C4::Biblio;
 use C4::Serials;
+use C4::Reserves qw/MergeHolds/;
 
 my $input = new CGI;
 my @biblionumber = $input->param('biblionumber');
@@ -48,12 +50,11 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 #------------------------
 if ($merge) {
 
-    my @params = $input->param();
     my $dbh = C4::Context->dbh;
     my $sth;
 
     # Creating a new record from the html code
-    my $record       = TransformHtmlToMarc( \@params , $input );
+    my $record       = TransformHtmlToMarc( $input );
     my $tobiblio     =  $input->param('biblio1');
     my $frombiblio   =  $input->param('biblio2');
 
@@ -101,6 +102,8 @@ if ($merge) {
 
     # Deleting the other record
     if (scalar(@errors) == 0) {
+	# Move holds
+	MergeHolds($dbh,$tobiblio,$frombiblio);
 	my $error = DelBiblio($frombiblio);
 	push @errors, $error if ($error); 
     }
@@ -252,3 +255,4 @@ sub createKey(){
 }
 
 
+    

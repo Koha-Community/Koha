@@ -6,62 +6,146 @@
 use strict;
 use warnings;
 
-use Test::More tests => 15;
+use Test::More tests => 20;
+use Data::Dumper;
 
 BEGIN {
         use_ok('C4::Members');
 }
 
 
+my $CARDNUMBER   = 'TESTCARD01';
+my $FIRSTNAME    = 'Marie';
+my $SURNAME      = 'Mcknight';
+my $CATEGORYCODE = 'S';
+my $BRANCHCODE   = 's';
+
+my $CHANGED_FIRSTNAME = "Marry Ann";
+my $EMAIL             = "Marie\@email.com";
+my $ETHNICITY         = "German";
+my $PHONE             = "555-12123";
+
+# XXX should be randomised and checked against the database
+my $IMPOSSIBLE_CARDNUMBER = "XYZZZ999";
+
+my $INDEPENDENT_BRANCHES_PREF = 'IndependantBranches';
+
+# XXX make a non-commit transaction and rollback rather than insert/delete
+
+#my ($usernum, $userid, $usercnum, $userfirstname, $usersurname, $userbranch, $branchname, $userflags, $emailaddress, $branchprinter)= @_;
+my @USERENV = (
+    1,
+    'test',
+    'MASTERTEST',
+    'Test',
+    'Test',
+    't',
+    'Test',
+    0,
+);
+my $BRANCH_IDX = 4;
+
+C4::Context->_new_userenv ('DUMMY_SESSION_ID');
+C4::Context->set_userenv ( @USERENV );
+
+my $userenv = C4::Context->userenv
+  or BAIL_OUT("No userenv");
+
 # Make a borrower for testing
-my $data = { cardnumber => 'TESTCARD01',
-    firstname => 'Marie',
-    surname => 'Mcknight',
-    categorycode => 'S',
-    branchcode => 's'
-    };
+my %data = (
+    cardnumber => $CARDNUMBER,
+    firstname =>  $FIRSTNAME,
+    surname => $SURNAME,
+    categorycode => $CATEGORYCODE,
+    branchcode => $BRANCHCODE,
+);
 
-my $addmem=AddMember(%$data);
+my $addmem=AddMember(%data);
+ok($addmem, "AddMember()");
 
+my $member=GetMemberDetails("",$CARDNUMBER)
+  or BAIL_OUT("Cannot read member with card $CARDNUMBER");
 
-my $member=GetMemberDetails("","TESTCARD01");
-is ($member->{firstname}, "Marie", "Got member");
+ok ( $member->{firstname}    eq $FIRSTNAME    &&
+     $member->{surname}      eq $SURNAME      &&
+     $member->{categorycode} eq $CATEGORYCODE &&
+     $member->{branchcode}   eq $BRANCHCODE
+     , "Got member")
+  or diag("Mismatching member details: ".Dumper(\%data, $member));
 
-$member->{firstname}="Claire";
+$member->{firstname} = $CHANGED_FIRSTNAME;
+$member->{email}     = $EMAIL;
+$member->{ethnicity} = $ETHNICITY;
+$member->{phone}     = $PHONE;
 ModMember(%$member);
-my $changedmember=GetMemberDetails("","TESTCARD01");
-is ($changedmember->{firstname}, "Claire", "Member Changed");
+my $changedmember=GetMemberDetails("",$CARDNUMBER);
+ok ( $changedmember->{firstname} eq $CHANGED_FIRSTNAME &&
+     $changedmember->{email}     eq $EMAIL             &&
+     $changedmember->{ethnicity} eq $ETHNICITY         &&
+     $changedmember->{phone}     eq $PHONE
+     , "Member Changed")
+  or diag("Mismatching member details: ".Dumper($member, $changedmember));
 
-$member->{firstname}="Marie";
-ModMember(%$member);
-$changedmember=GetMemberDetails("","TESTCARD01");
-is ($changedmember->{firstname}, "Marie", "Member Returned");
+C4::Context->set_preference( $INDEPENDENT_BRANCHES_PREF, '0' );
+C4::Context->clear_syspref_cache();
 
-$member->{email}="Marie\@email.com";
-ModMember(%$member);
-$changedmember=GetMemberDetails("","TESTCARD01");
-is ($changedmember->{email}, "Marie\@email.com", "Email Set works");
+my $results = Search($CARDNUMBER);
+ok (@$results == 1, "Search cardnumber returned only one result")
+  or diag("Multiple members with Card $CARDNUMBER: ".Dumper($results));
+ok (_find_member($results), "Search cardnumber")
+  or diag("Card $CARDNUMBER not found in the resultset: ".Dumper($results));
 
-$member->{ethnicity}="German";
-ModMember(%$member);
-$changedmember=GetMemberDetails("","TESTCARD01");
-is ($changedmember->{ethnicity}, "German", "Ethnicity Works");
+my @searchstring=($SURNAME);
+$results = Search(\@searchstring);
+ok (_find_member($results), "Search (arrayref)")
+  or diag("Card $CARDNUMBER not found in the resultset: ".Dumper($results));
 
-my @searchstring=("Mcknight");
-my ($results) = Search(\@searchstring,undef,undef,undef,["surname"]);
-is ($results->[0]->{surname}, "Mcknight", "Surname Search works");
+$results = Search(\@searchstring,undef,undef,undef,["surname"]);
+ok (_find_member($results), "Surname Search (arrayref)")
+  or diag("Card $CARDNUMBER not found in the resultset: ".Dumper($results));
 
-$member->{phone}="555-12123";
-ModMember(%$member);
+$results = Search("$CHANGED_FIRSTNAME $SURNAME", "surname");
+ok (_find_member($results), "Full name  Search (string)")
+  or diag("Card $CARDNUMBER not found in the resultset: ".Dumper($results));
 
-@searchstring=("555-12123");
-($results) = Search(\@searchstring,undef,undef,undef,["phone"]);
-is ($results->[0]->{phone}, "555-12123", "phone Search works");
+@searchstring=($PHONE);
+$results = Search(\@searchstring,undef,undef,undef,["phone"]);
+ok (_find_member($results), "Phone Search (arrayref)")
+  or diag("Card $CARDNUMBER not found in the resultset: ".Dumper($results));
 
-my $checkcardnum=C4::Members::checkcardnumber("TESTCARD01", "");
+$results = Search($PHONE,undef,undef,undef,["phone"]);
+ok (_find_member($results), "Phone Search (string)")
+  or diag("Card $CARDNUMBER not found in the resultset: ".Dumper($results));
+
+C4::Context->set_preference( $INDEPENDENT_BRANCHES_PREF, '1' );
+C4::Context->clear_syspref_cache();
+
+$results = Search("$CHANGED_FIRSTNAME $SURNAME", "surname");
+ok (!_find_member($results), "Full name  Search (string) for independent branches, different branch")
+  or diag("Card $CARDNUMBER found in the resultset for independent branches: ".Dumper(C4::Context->preference($INDEPENDENT_BRANCHES_PREF), $results));
+
+@searchstring=($SURNAME);
+$results = Search(\@searchstring);
+ok (!_find_member($results), "Search (arrayref) for independent branches, different branch")
+  or diag("Card $CARDNUMBER found in the resultset for independent branches: ".Dumper(C4::Context->preference($INDEPENDENT_BRANCHES_PREF), $results));
+
+$USERENV[$BRANCH_IDX] = $BRANCHCODE;
+C4::Context->set_userenv ( @USERENV );
+
+$results = Search("$CHANGED_FIRSTNAME $SURNAME", "surname");
+ok (_find_member($results), "Full name  Search (string) for independent branches, same branch")
+  or diag("Card $CARDNUMBER not found in the resultset for independent branches: ".Dumper(C4::Context->preference($INDEPENDENT_BRANCHES_PREF), $results));
+
+@searchstring=($SURNAME);
+$results = Search(\@searchstring);
+ok (_find_member($results), "Search (arrayref) for independent branches, same branch")
+  or diag("Card $CARDNUMBER not found in the resultset for independent branches: ".Dumper(C4::Context->preference($INDEPENDENT_BRANCHES_PREF), $results));
+
+
+my $checkcardnum=C4::Members::checkcardnumber($CARDNUMBER, "");
 is ($checkcardnum, "1", "Card No. in use");
 
-$checkcardnum=C4::Members::checkcardnumber("67", "");
+$checkcardnum=C4::Members::checkcardnumber($IMPOSSIBLE_CARDNUMBER, "");
 is ($checkcardnum, "0", "Card No. not used");
 
 my $age=GetAge("1992-08-14", "2011-01-19");
@@ -70,14 +154,17 @@ is ($age, "18", "Age correct");
 $age=GetAge("2011-01-19", "1992-01-19");
 is ($age, "-19", "Birthday In the Future");
 
-my $sortdet=C4::Members::GetSortDetails("lost", "3");
-is ($sortdet, "Lost and Paid For", "lost and paid works");
-
-my $sortdet2=C4::Members::GetSortDetails("loc", "child");
-is ($sortdet2, "Children's Area", "Child area works");
-
-my $sortdet3=C4::Members::GetSortDetails("withdrawn", "1");
-is ($sortdet3, "Withdrawn", "Withdrawn works");
-
 # clean up 
 DelMember($member->{borrowernumber});
+$results = Search($CARDNUMBER,undef,undef,undef,["cardnumber"]);
+ok (!_find_member($results), "Delete member")
+  or diag("Card $CARDNUMBER found for the deleted member in the resultset: ".Dumper($results));
+
+
+exit;
+
+sub _find_member {
+    my ($resultset) = @_;
+    my $found = $resultset && grep( { $_->{cardnumber} && $_->{cardnumber} eq $CARDNUMBER } @$resultset );
+    return $found;
+}

@@ -237,12 +237,13 @@ sub read_config_file {		# Pass argument naming config file to read
 # 
 sub db_scheme2dbi {
     my $name = shift;
-
+    # for instance, we support only mysql, so don't care checking
+    return "mysql";
     for ($name) {
 # FIXME - Should have other databases. 
-        if (/mysql/i) { return("mysql"); }
+        if (/mysql/) { return("mysql"); }
         if (/Postgres|Pg|PostgresSQL/) { return("Pg"); }
-        if (/oracle/i) { return("Oracle"); }
+        if (/oracle/) { return("Oracle"); }
     }
     return undef;         # Just in case
 }
@@ -462,7 +463,7 @@ my %sysprefs;
 
 sub preference {
     my $self = shift;
-    my $var  = shift;                          # The system preference to return
+    my $var  = lc(shift);                          # The system preference to return
 
     if (exists $sysprefs{$var}) {
         return $sysprefs{$var};
@@ -690,7 +691,7 @@ sub _new_dbh
     my $db_passwd = $context->config("pass");
     # MJR added or die here, as we can't work without dbh
     my $dbh= DBI->connect("DBI:$db_driver:dbname=$db_name;host=$db_host;port=$db_port",
-	$db_user, $db_passwd) or die $DBI::errstr;
+    $db_user, $db_passwd, {'RaiseError' => $ENV{DEBUG}?1:0 }) or die $DBI::errstr;
 	my $tz = $ENV{TZ};
     if ( $db_driver eq 'mysql' ) { 
         # Koha 3.0 is utf-8, so force utf8 communication between mySQL and koha, whatever the mysql default config.

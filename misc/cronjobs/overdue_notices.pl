@@ -330,6 +330,7 @@ our $csv;       # the Text::CSV_XS object
 our $csv_fh;    # the filehandle to the CSV file.
 if ( defined $csvfilename ) {
     my $sep_char = C4::Context->preference('delimiter') || ',';
+    $sep_char = "\t" if ($sep_char eq 'tabulation');
     $csv = Text::CSV_XS->new( { binary => 1 , sep_char => $sep_char } );
     if ( $csvfilename eq '' ) {
         $csv_fh = *STDOUT;
@@ -473,7 +474,7 @@ END_SQL
                 if ( $overdue_rules->{"debarred$i"} ) {
     
                     #action taken is debarring
-                    C4::Members::DebarMember($borrowernumber);
+                    C4::Members::DebarMember($borrowernumber, '9999-12-31');
                     $verbose and warn "debarring $borrowernumber $firstname $lastname\n";
                 }
                 my @params = ($listall ? ( $borrowernumber , 1 , $MAX ) : ( $borrowernumber, $mindays, $maxdays ));
@@ -504,7 +505,8 @@ END_SQL
                         items           => \@items,
                         substitute      => {    # this appears to be a hack to overcome incomplete features in this code.
                                             bib             => $branch_details->{'branchname'}, # maybe 'bib' is a typo for 'lib<rary>'?
-                                            'items.content' => $titles
+                                            'items.content' => $titles,
+                                            'count'         => $itemcount,
                                            }
                     }
                 );

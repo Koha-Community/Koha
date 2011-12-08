@@ -10,10 +10,10 @@
 		<td><label for="f1">Specific Material Designation</label></td>
 		<td>
 			<select name="f1" id="f1" size="1">
-			[% IF ( f1pipe ) %]
-            	           <option value="|" selected="selected">|- Filling character</option>
+			[% IF ( f1dblpipe ) %]
+            	           <option value="||" selected="selected">||- Filling characters</option>
                         [% ELSE %]
-                            <option value="|">|- Filling character</option>
+                            <option value="||">||- Filling characters</option>
                         [% END %]
             
 			[% IF ( f1aa ) %]
@@ -220,13 +220,13 @@
 		<td><label for="f2">Material 1</label></td>
 		<td>
 			<select name="f2" id="f2" size="1">
-			[% IF ( f2pipe ) %]
-                            <option value="|" selected="selected">|- Filling character</option>
+			[% IF ( f2dblpipe ) %]
+                            <option value="||" selected="selected">||- Filling characters</option>
                         [% ELSE %]
-                            <option value="|">|- Filling character</option>
+                            <option value="||">||- Filling characters</option>
                         [% END %]
             
-			[% IF ( f2 ) %]
+			[% IF ( f2dblspace ) %]
 				<option value="  " selected="selected">non required value</option>
 			[% ELSE %]
 				<option value="  ">non required value</option>
@@ -399,13 +399,13 @@
 		<td><label for="f3">Material 2</label></td>
 		<td>
 			<select name="f3" id="f3" size="1">
-			[% IF ( f3pipe ) %]
-                            <option value="|" selected="selected">|- Filling character</option>
+			[% IF ( f3dblpipe ) %]
+                            <option value="||" selected="selected">||- Filling characters</option>
                         [% ELSE %]
-                            <option value="|">|- Filling character</option>
+                            <option value="||">||- Filling characters</option>
                         [% END %]
             
-			[% IF ( f3 ) %]
+			[% IF ( f3dblspace ) %]
 				<option value="  " selected="selected">non required value</option>
 			[% ELSE %]
 				<option value="  ">non required value</option>
@@ -579,12 +579,12 @@
 		<td><label for="f4">Material 3</label></td>
 		<td>
 			<select name="f4" id="f4" size="1">
-			[% IF ( f4pipe ) %]
-                            <option value="|" selected="selected">|- Filling character</option>
+			[% IF ( f4dblpipe ) %]
+                            <option value="||" selected="selected">||- Filling characters</option>
                         [% ELSE %]
-                            <option value="|">|- Filling character</option>
+                            <option value="||">||- Filling characters</option>
                         [% END %]
-                        [% IF ( f4 ) %]
+                        [% IF ( f4dblspace ) %]
                                 <option value="  " selected="selected">non required value</option>
                         [% ELSE %]
                                 <option value="  ">non required value</option>

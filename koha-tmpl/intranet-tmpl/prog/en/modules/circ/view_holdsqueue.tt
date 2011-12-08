@@ -7,6 +7,16 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
+<script type="text/javascript" src="[% ( themelang ) %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+<script type="text/javascript">//<![CDATA[
+$(document).ready(function() {
+        $("#holdst").tablesorter({
+                sortList: [[6,0]],
+        });
+});
+//]]>
+</script>
+
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a>
 &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a>
 &rsaquo; <a href="/cgi-bin/koha/circ/view_holdsqueue.pl">Holds Queue</a>

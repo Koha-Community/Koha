@@ -24,7 +24,6 @@ use strict;
 use C4::Context;
 use C4::Stats;
 use C4::Reserves;
-use C4::Koha;
 use C4::Biblio;
 use C4::Items;
 use C4::Members;
@@ -43,6 +42,7 @@ use Date::Calc qw(
   Date_to_Days
   Day_of_Week
   Add_Delta_Days	
+  check_date
 );
 use POSIX qw(strftime);
 use C4::Branch; # GetBranches
@@ -59,8 +59,9 @@ BEGIN {
 
 	# FIXME subs that should probably be elsewhere
 	push @EXPORT, qw(
-		&FixOverduesOnReturn
 		&barcodedecode
+        &LostItem
+        &ReturnLostItem
 	);
 
 	# subs to deal with issuing a book
@@ -72,7 +73,6 @@ BEGIN {
 		&GetRenewCount
 		&GetItemIssue
 		&GetItemIssues
-		&GetBorrowerIssues
 		&GetIssuingCharges
 		&GetIssuingRule
         &GetBranchBorrowerCircRule
@@ -578,7 +578,7 @@ C<$issuingimpossible> and C<$needsconfirmation> are some hashref.
 
 =over 4
 
-=item C<$borrower> hash with borrower informations (from GetMemberDetails)
+=item C<$borrower> hash with borrower informations (from GetMember or GetMemberDetails)
 
 =item C<$barcode> is the bar code of the book being issued.
 
@@ -858,7 +858,7 @@ sub CanBookBeIssued {
     elsif ($issue->{borrowernumber}) {
 
         # issued to someone else
-        my $currborinfo =    C4::Members::GetMemberDetails( $issue->{borrowernumber} );
+        my $currborinfo =    C4::Members::GetMember( borrowernumber => $issue->{borrowernumber} );
 
 #        warn "=>.$currborinfo->{'firstname'} $currborinfo->{'surname'} ($currborinfo->{'cardnumber'})";
         $needsconfirmation{ISSUED_TO_ANOTHER} = 1;
@@ -872,7 +872,7 @@ sub CanBookBeIssued {
     my ( $restype, $res ) = C4::Reserves::CheckReserves( $item->{'itemnumber'} );
     if ($restype) {
 		my $resbor = $res->{'borrowernumber'};
-		my ( $resborrower ) = C4::Members::GetMemberDetails( $resbor, 0 );
+		my ( $resborrower ) = C4::Members::GetMember( borrowernumber => $resbor );
 		my $branches  = GetBranches();
 		my $branchname = $branches->{ $res->{'branchcode'} }->{'branchname'};
         if ( $resbor ne $borrower->{'borrowernumber'} && $restype eq "Waiting" )
@@ -909,7 +909,7 @@ Issue a book. Does no check, they are done in CanBookBeIssued. If we reach this 
 
 =over 4
 
-=item C<$borrower> is a hash with borrower informations (from GetMemberDetails).
+=item C<$borrower> is a hash with borrower informations (from GetMember or GetMemberDetails).
 
 =item C<$barcode> is the barcode of the item being issued.
 
@@ -1515,7 +1515,8 @@ sub AddReturn {
     my $biblio;
     my $doreturn       = 1;
     my $validTransfert = 0;
-    
+    my $stat_type = 'return';    
+
     # get information on item
     my $itemnumber = GetItemnumberFromBarcode( $barcode );
     unless ($itemnumber) {
@@ -1532,6 +1533,11 @@ sub AddReturn {
         # even though item is not on loan, it may still be transferred;  therefore, get current branch info
         $doreturn = 0;
         # No issue, no borrowernumber.  ONLY if $doreturn, *might* you have a $borrower later.
+        # Record this as a local use, instead of a return, if the RecordLocalUseOnReturn is on
+        if (C4::Context->preference("RecordLocalUseOnReturn")) {
+           $messages->{'LocalUse'} = 1;
+           $stat_type = 'localuse';
+        }
     }
 
     my $item = GetItem($itemnumber) or die "GetItem($itemnumber) failed";
@@ -1626,6 +1632,10 @@ sub AddReturn {
     if ($borrowernumber) {
         my $fix = _FixOverduesOnReturn($borrowernumber, $item->{itemnumber}, $exemptfine, $dropbox);
         defined($fix) or warn "_FixOverduesOnReturn($borrowernumber, $item->{itemnumber}...) failed!";  # zero is OK, check defined
+        
+        # fix fine days
+        my $debardate = _FixFineDaysOnReturn( $borrower, $item, $issue->{date_due} );
+        $messages->{'Debarred'} = $debardate if ($debardate);
     }
 
     # find reserves.....
@@ -1639,7 +1649,7 @@ sub AddReturn {
     # update stats?
     # Record the fact that this book was returned.
     UpdateStats(
-        $branch, 'return', '0', '',
+        $branch, $stat_type, '0', '',
         $item->{'itemnumber'},
         $biblio->{'itemtype'},
         $borrowernumber
@@ -1747,6 +1757,61 @@ sub MarkIssueReturned {
                                   WHERE borrowernumber = ?
                                   AND itemnumber = ?");
     $sth_del->execute($borrowernumber, $itemnumber);
+}
+
+=head2 _FixFineDaysOnReturn
+
+    &_FixFineDaysOnReturn($borrower, $item, $datedue);
+
+C<$borrower> borrower hashref
+
+C<$item> item hashref
+
+C<$datedue> date due
+
+Internal function, called only by AddReturn that calculate and update the user fine days, and debars him
+
+=cut
+
+sub _FixFineDaysOnReturn {
+    my ( $borrower, $item, $datedue ) = @_;
+
+    if ($datedue) {
+        $datedue = C4::Dates->new( $datedue, "iso" );
+    } else {
+        return;
+    }
+
+    my $branchcode = _GetCircControlBranch( $item, $borrower );
+    my $calendar = C4::Calendar->new( branchcode => $branchcode );
+    my $today = C4::Dates->new();
+
+    my $deltadays = $calendar->daysBetween( $datedue, C4::Dates->new() );
+
+    my $circcontrol = C4::Context::preference('CircControl');
+    my $issuingrule = GetIssuingRule( $borrower->{categorycode}, $item->{itype}, $branchcode );
+    my $finedays    = $issuingrule->{finedays};
+
+    # exit if no finedays defined
+    return unless $finedays;
+    my $grace = $issuingrule->{firstremind};
+
+    if ( $deltadays - $grace > 0 ) {
+        my @newdate = Add_Delta_Days( Today(), $deltadays * $finedays );
+        my $isonewdate = join( '-', @newdate );
+        my ( $deby, $debm, $debd ) = split( /-/, $borrower->{debarred} );
+        if ( check_date( $deby, $debm, $debd ) ) {
+            my @olddate = split( /-/, $borrower->{debarred} );
+
+            if ( Delta_Days( @olddate, @newdate ) > 0 ) {
+                C4::Members::DebarMember( $borrower->{borrowernumber}, $isonewdate );
+                return $isonewdate;
+            }
+        } else {
+            C4::Members::DebarMember( $borrower->{borrowernumber}, $isonewdate );
+            return $isonewdate;
+        }
+    }
 }
 
 =head2 _FixOverduesOnReturn
@@ -2255,7 +2320,7 @@ sub AddRenewal {
     # based on the value of the RenewalPeriodBase syspref.
     unless ($datedue) {
 
-        my $borrower = C4::Members::GetMemberDetails( $borrowernumber, 0 ) or return undef;
+        my $borrower = C4::Members::GetMember( borrowernumber => $borrowernumber ) or return undef;
         my $itemtype = (C4::Context->preference('item-level_itypes')) ? $biblio->{'itype'} : $biblio->{'itemtype'};
 
         $datedue = (C4::Context->preference('RenewalPeriodBase') eq 'date_due') ?
@@ -2309,7 +2374,7 @@ sub GetRenewCount {
     my $renewsallowed = 0;
     my $renewsleft    = 0;
 
-    my $borrower = C4::Members::GetMemberDetails($bornum);
+    my $borrower = C4::Members::GetMember( borrowernumber => $bornum);
     my $item     = GetItem($itemno); 
 
     # Look in the issues table for this item, lent to this borrower,
@@ -2943,8 +3008,44 @@ sub DeleteBranchTransferLimits {
    $sth->execute();
 }
 
+sub ReturnLostItem{
+    my ( $borrowernumber, $itemnum ) = @_;
 
-  1;
+    MarkIssueReturned( $borrowernumber, $itemnum );
+    my $borrower = C4::Members::GetMember( 'borrowernumber'=>$borrowernumber );
+    my @datearr = localtime(time);
+    my $date = ( 1900 + $datearr[5] ) . "-" . ( $datearr[4] + 1 ) . "-" . $datearr[3];
+    my $bor = "$borrower->{'firstname'} $borrower->{'surname'} $borrower->{'cardnumber'}";
+    ModItem({ paidfor =>  "Paid for by $bor $date" }, undef, $itemnum);
+}
+
+
+sub LostItem{
+    my ($itemnumber, $mark_returned, $charge_fee) = @_;
+
+    my $dbh = C4::Context->dbh();
+    my $sth=$dbh->prepare("SELECT issues.*,items.*,biblio.title 
+                           FROM issues 
+                           JOIN items USING (itemnumber) 
+                           JOIN biblio USING (biblionumber)
+                           WHERE issues.itemnumber=?");
+    $sth->execute($itemnumber);
+    my $issues=$sth->fetchrow_hashref();
+    $sth->finish;
+
+    # if a borrower lost the item, add a replacement cost to the their record
+    if ( my $borrowernumber = $issues->{borrowernumber} ){
+
+        C4::Accounts::chargelostitem($borrowernumber, $itemnumber, $issues->{'replacementprice'}, "Lost Item $issues->{'title'} $issues->{'barcode'}")
+          if $charge_fee;
+        #FIXME : Should probably have a way to distinguish this from an item that really was returned.
+        #warn " $issues->{'borrowernumber'}  /  $itemnumber ";
+        MarkIssueReturned($borrowernumber,$itemnumber) if $mark_returned;
+    }
+}
+
+
+1;
 
 __END__
 

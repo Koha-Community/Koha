@@ -77,13 +77,14 @@ if ( $email ) {
 
     # retrieve biblios from shelf
     foreach my $biblio (@$items) {
-        my $biblionumber = $biblio->{biblionumber};
-
+        my $biblionumber     = $biblio->{biblionumber};
+        my $fw               = GetFrameworkCode($biblionumber);
         my $dat              = GetBiblioData($biblionumber);
         my $record           = GetMarcBiblio($biblionumber);
         my $marcnotesarray   = GetMarcNotes( $record, $marcflavour );
         my $marcauthorsarray = GetMarcAuthors( $record, $marcflavour );
         my $marcsubjctsarray = GetMarcSubjects( $record, $marcflavour );
+        my $subtitle         = GetRecordValue('subtitle', $record, $fw);
 
         my @items = GetItemsInfo( $biblionumber );
 
@@ -92,11 +93,16 @@ if ( $email ) {
         $dat->{MARCAUTHORS}    = $marcauthorsarray;
         $dat->{'biblionumber'} = $biblionumber;
         $dat->{ITEM_RESULTS}   = \@items;
+        $dat->{subtitle}       = $subtitle;
 
         $iso2709 .= $record->as_usmarc();
 
         push( @results, $dat );
     }
+
+  if (C4::Context->preference('OPACBaseURL')){
+        $template2->param( OPACBaseURL => C4::Context->preference('OPACBaseURL') );
+  }
 
     $template2->param(
         BIBLIO_RESULTS => \@results,

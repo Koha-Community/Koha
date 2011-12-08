@@ -51,22 +51,22 @@ td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
 		// window.alert(_('AJAX approved tag: ') + tag);
 	};
 	var failure_approve = function(tag){
-		window.alert(_('AJAX failed to approve tag: ') + tag);
+		window.alert(_("AJAX failed to approve tag: ") + tag);
 	};
 	var success_reject  = function(tag){
 		// window.alert(_('AJAX rejected tag: ') + tag);
 	};
 	var failure_reject  = function(tag){
-		window.alert(_('AJAX failed to reject tag: ') + tag);
+		window.alert(_("AJAX failed to reject tag: ") + tag);
 	};
 	var success_test    = function(tag){
-		$('#verdict').html(tag + _(' is permitted!'));
+		$('#verdict').html(tag + _(" is permitted!"));
 	};
 	var failure_test    = function(tag){
-		$('#verdict').html(tag + _(' is prohibited!'));
+		$('#verdict').html(tag + _(" is prohibited!"));
 	};
 	var indeterminate_test = function(tag){
-		$('#verdict').html(tag + _(' is neither permitted nor prohibited!'));
+		$('#verdict').html(tag + _(" is neither permitted nor prohibited!"));
 	};
 
 	var success_test_call = function() {

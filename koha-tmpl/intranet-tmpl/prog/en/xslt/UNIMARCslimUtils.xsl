@@ -135,6 +135,14 @@
 		</xsl:if>
 	</xsl:template>
 
+	<xsl:template name="chopSpecialCharacters">
+        <xsl:param name="title" />
+        <xsl:variable name="ntitle"
+             select="translate($title, '&#x0098;&#x009C;&#xC29C;&#xC29B;&#xC298;&#xC288;&#xC289;','')"/>
+        <xsl:value-of select="$ntitle" />
+    </xsl:template>
+
+
 	<xsl:template name="chopPunctuation">
 		<xsl:param name="chopString"/>
 		<xsl:variable name="length" select="string-length($chopString)"/>

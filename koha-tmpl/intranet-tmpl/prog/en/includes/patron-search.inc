@@ -106,9 +106,19 @@ YAHOO.util.Event.onContentReady("header_search", function() {
 				<input type="submit" name="op" id="opac-submit" value="Submit" class="submit" />
 		</form>
 	</div>[% END %]
+    [% IF ( CAN_user_circulate ) %]
+    <div id="checkin_search" class="residentsearch" style="display:none;">
+    <p class="tip">Scan a barcode to check in:</p>
+    <form method="post" action="/cgi-bin/koha/circ/returns.pl" autocomplete="off">
+    <input name="barcode" id="ret_barcode" size="40" accesskey="r" />
+    <input value="Submit" class="submit" type="submit" />
+    </form>
+    </div>
+    [% END %]
 			<ul>
 			<li><a href="/cgi-bin/koha/members/members-home.pl#patron_search">Search Patrons</a></li>
 			[% IF ( CAN_user_circulate ) %]<li><a href="/cgi-bin/koha/circ/circulation.pl#circ_search">Check Out</a></li>[% END %]
+    [% IF ( CAN_user_circulate ) %]<li><a href="/cgi-bin/koha/circ/returns.pl#checkin_search">Check In</a></li>[% END %]
 			[% IF ( CAN_user_catalogue ) %]<li><a href="/cgi-bin/koha/catalogue/search.pl#catalog_search">Search the Catalog</a></li>[% END %]
 			</ul>
 </div>

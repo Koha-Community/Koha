@@ -73,7 +73,7 @@ my $display_columns = { layout =>   [  # db column       => {col label          
 };
 
 my $errstr = ($cgi->param('error') ? $cgi->param('error') : '');
-my $branch_code = ($card_element eq 'batch' ? get_branch_code_from_name($template->{VARS}->{'LoginBranchname'}) : '');
+my $branch_code = ($card_element eq 'batch' ? C4::Context->userenv->{'branch'} : '');
 
 if ($op eq 'delete') {
     my $err = 0;

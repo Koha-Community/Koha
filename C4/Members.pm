@@ -25,7 +25,7 @@ use strict;
 use C4::Context;
 use C4::Dates qw(format_date_in_iso);
 use Digest::MD5 qw(md5_base64);
-use Date::Calc qw/Today Add_Delta_YM/;
+use Date::Calc qw/Today Add_Delta_YM check_date Date_to_Days/;
 use C4::Log; # logaction
 use C4::Overdues;
 use C4::Reserves;
@@ -44,7 +44,6 @@ BEGIN {
 	#Get data
 	push @EXPORT, qw(
 		&Search
-		&SearchMember 
 		&GetMemberDetails
         &GetMemberRelatives
 		&GetMember
@@ -141,178 +140,139 @@ This module contains routines for adding, modifying and deleting members/patrons
 
 =head1 FUNCTIONS
 
-=head2 SearchMember
-
-  ($count, $borrowers) = &SearchMember($searchstring, $type, 
-                     $category_type, $filter, $showallbranches);
-
-Looks up patrons (borrowers) by name.
-
-BUGFIX 499: C<$type> is now used to determine type of search.
-if $type is "simple", search is performed on the first letter of the
-surname only.
-
-$category_type is used to get a specified type of user. 
-(mainly adults when creating a child.)
-
-C<$searchstring> is a space-separated list of search terms. Each term
-must match the beginning a borrower's surname, first name, or other
-name.
-
-C<$filter> is assumed to be a list of elements to filter results on
-
-C<$showallbranches> is used in IndependantBranches Context to display all branches results.
-
-C<&SearchMember> returns a two-element list. C<$borrowers> is a
-reference-to-array; each element is a reference-to-hash, whose keys
-are the fields of the C<borrowers> table in the Koha database.
-C<$count> is the number of elements in C<$borrowers>.
-
-=cut
-
-#'
-#used by member enquiries from the intranet
-sub SearchMember {
-    my ($searchstring, $orderby, $type,$category_type,$filter,$showallbranches ) = @_;
-    my $dbh   = C4::Context->dbh;
-    my $query = "";
-    my $count;
-    my @data;
-    my @bind = ();
-    
-    # this is used by circulation everytime a new borrowers cardnumber is scanned
-    # so we can check an exact match first, if that works return, otherwise do the rest
-    $query = "SELECT * FROM borrowers
-        LEFT JOIN categories ON borrowers.categorycode=categories.categorycode
-        ";
-    my $sth = $dbh->prepare("$query WHERE cardnumber = ?");
-    $sth->execute($searchstring);
-    my $data = $sth->fetchall_arrayref({});
-    if (@$data){
-        return ( scalar(@$data), $data );
-    }
-
-    if ( $type eq "simple" )    # simple search for one letter only
-    {
-        $query .= ($category_type ? " AND category_type = ".$dbh->quote($category_type) : ""); 
-        $query .= " WHERE (surname LIKE ? OR cardnumber like ?) ";
-        if (C4::Context->preference("IndependantBranches") && !$showallbranches){
-          if (C4::Context->userenv && C4::Context->userenv->{flags} % 2 !=1 && C4::Context->userenv->{'branch'}){
-            $query.=" AND borrowers.branchcode =".$dbh->quote(C4::Context->userenv->{'branch'}) unless (C4::Context->userenv->{'branch'} eq "insecure");
-          }
-        }
-        $query.=" ORDER BY $orderby";
-        @bind = ("$searchstring%","$searchstring");
-    }
-    else    # advanced search looking in surname, firstname and othernames
-    {
-        @data  = split( ' ', $searchstring );
-        $count = @data;
-        $query .= " WHERE ";
-        if (C4::Context->preference("IndependantBranches") && !$showallbranches){
-          if (C4::Context->userenv && C4::Context->userenv->{flags} % 2 !=1 && C4::Context->userenv->{'branch'}){
-            $query.=" borrowers.branchcode =".$dbh->quote(C4::Context->userenv->{'branch'})." AND " unless (C4::Context->userenv->{'branch'} eq "insecure");
-          }      
-        }     
-        $query.="((surname LIKE ? OR (surname LIKE ? AND surname REGEXP ?)
-                OR firstname  LIKE ? OR (firstname LIKE ? AND firstname REGEXP ?)
-                OR othernames LIKE ? OR (othernames LIKE ? AND othernames REGEXP ?))
-        " .
-        ($category_type?" AND category_type = ".$dbh->quote($category_type):"");
-        my $regex = '[[:punct:][:space:]]'.$data[0];
-        @bind = (
-            "$data[0]%", "%$data[0]%", $regex, 
-            "$data[0]%", "%$data[0]%", $regex, 
-            "$data[0]%", "%$data[0]%", $regex 
-        );
-        for ( my $i = 1 ; $i < $count ; $i++ ) {
-            $query = $query . " AND (" . " surname LIKE ? OR (surname LIKE ? AND surname REGEXP ?)
-                OR firstname  LIKE ? OR (firstname LIKE ? AND firstname REGEXP ?)
-                OR othernames LIKE ? OR (othernames LIKE ? AND othernames REGEXP ?))";
-            $regex = '[[:punct:][:space:]]'.$data[$i];
-            push( @bind,
-              "$data[$i]%", "%$data[$i]%", $regex,
-              "$data[$i]%", "%$data[$i]%", $regex,
-              "$data[$i]%", "%$data[$i]%", $regex
-            );
-
-
-            # FIXME - .= <<EOT;
-        }
-        $query = $query . ") OR cardnumber LIKE ? ";
-        push( @bind, $searchstring );
-        $query .= "order by $orderby";
-
-        # FIXME - .= <<EOT;
-    }
-
-    $sth = $dbh->prepare($query);
-
-    $debug and print STDERR "Q $orderby : $query\n";
-    $sth->execute(@bind);
-    my @results;
-    $data = $sth->fetchall_arrayref({});
-
-    return ( scalar(@$data), $data );
-}
-
 =head2 Search
 
   $borrowers_result_array_ref = &Search($filter,$orderby, $limit, 
                        $columns_out, $search_on_fields,$searchtype);
 
-Looks up patrons (borrowers) on filter.
+Looks up patrons (borrowers) on filter. A wrapper for SearchInTable('borrowers').
 
-BUGFIX 499: C<$type> is now used to determine type of search.
-if $type is "simple", search is performed on the first letter of the
-surname only.
+For C<$filter>, C<$orderby>, C<$limit>, C<&columns_out>, C<&search_on_fields> and C<&searchtype>
+refer to C4::SQLHelper:SearchInTable().
 
-$category_type is used to get a specified type of user. 
-(mainly adults when creating a child.)
+Special C<$filter> key '' is effectively expanded to search on surname firstname othernamescw
+and cardnumber unless C<&search_on_fields> is defined
 
-C<$filter> can be
-   - a space-separated list of search terms. Implicit AND is done on them
-   - a hash ref containing fieldnames associated with queried value
-   - an array ref combining the two previous elements Implicit OR is done between each array element
+Examples:
 
+  $borrowers = Search('abcd', 'cardnumber');
 
-C<$orderby> is an arrayref of hashref. Contains the name of the field and 0 or 1 depending if order is ascending or descending
-
-C<$limit> is there to allow limiting number of results returned
-
-C<&columns_out> is an array ref to the fieldnames you want to see in the result list
-
-C<&search_on_fields> is an array ref to the fieldnames you want to limit search on when you are using string search
-
-C<&searchtype> is a string telling the type of search you want todo : start_with, exact or contains are allowed
+  $borrowers = Search({''=>'abcd', category_type=>'I'}, 'surname');
 
 =cut
 
+sub _express_member_find {
+    my ($filter) = @_;
+
+    # this is used by circulation everytime a new borrowers cardnumber is scanned
+    # so we can check an exact match first, if that works return, otherwise do the rest
+    my $dbh   = C4::Context->dbh;
+    my $query = "SELECT borrowernumber FROM borrowers WHERE cardnumber = ?";
+    if ( my $borrowernumber = $dbh->selectrow_array($query, undef, $filter) ) {
+        return( {"borrowernumber"=>$borrowernumber} );
+    }
+
+    my ($search_on_fields, $searchtype);
+    if ( length($filter) == 1 ) {
+        $search_on_fields = [ qw(surname) ];
+        $searchtype = 'start_with';
+    } else {
+        $search_on_fields = [ qw(surname firstname othernames cardnumber) ];
+        $searchtype = 'contain';
+    }
+
+    return (undef, $search_on_fields, $searchtype);
+}
+
 sub Search {
     my ( $filter, $orderby, $limit, $columns_out, $search_on_fields, $searchtype ) = @_;
-    my @filters;
-    my %filtersmatching_record;
-    my @finalfilter;
-    if ( ref($filter) eq "ARRAY" ) {
-        push @filters, @$filter;
-    } else {
-        push @filters, $filter;
+
+    my $search_string;
+    my $found_borrower;
+
+    if ( my $fr = ref $filter ) {
+        if ( $fr eq "HASH" ) {
+            if ( my $search_string = $filter->{''} ) {
+                my ($member_filter, $member_search_on_fields, $member_searchtype) = _express_member_find($search_string);
+                if ($member_filter) {
+                    $filter = $member_filter;
+                    $found_borrower = 1;
+                } else {
+                    $search_on_fields ||= $member_search_on_fields;
+                    $searchtype ||= $member_searchtype;
+                }
+            }
+        }
+        else {
+            $search_string = $filter;
+        }
     }
-    if ( C4::Context->preference('ExtendedPatronAttributes') ) {
-        my $matching_records = C4::Members::Attributes::SearchIdMatchingAttribute($filter);
+    else {
+        $search_string = $filter;
+        my ($member_filter, $member_search_on_fields, $member_searchtype) = _express_member_find($search_string);
+        if ($member_filter) {
+            $filter = $member_filter;
+            $found_borrower = 1;
+        } else {
+            $search_on_fields ||= $member_search_on_fields;
+            $searchtype ||= $member_searchtype;
+        }
+    }
+
+    if ( !$found_borrower && C4::Context->preference('ExtendedPatronAttributes') && $search_string ) {
+        my $matching_records = C4::Members::Attributes::SearchIdMatchingAttribute($search_string);
         if(scalar(@$matching_records)>0) {
-			foreach my $matching_record (@$matching_records) {
-				$filtersmatching_record{$$matching_record[0]}=1;
-			}
-			foreach my $k (keys(%filtersmatching_record)) {
-				push @filters, {"borrowernumber"=>$k};
-			}
+            if ( my $fr = ref $filter ) {
+                if ( $fr eq "HASH" ) {
+                    my %f = %$filter;
+                    $filter = [ $filter ];
+                    delete $f{''};
+                    push @$filter, { %f, "borrowernumber"=>$$matching_records };
+                }
+                else {
+                    push @$filter, {"borrowernumber"=>$matching_records};
+                }
+            }
+            else {
+                $filter = [ $filter ];
+                push @$filter, {"borrowernumber"=>$matching_records};
+            }
 		}
     }
+
+    # $showallbranches was not used at the time SearchMember() was mainstreamed into Search().
+    # Mentioning for the reference
+
+    if ( C4::Context->preference("IndependantBranches") ) { # && !$showallbranches){
+        if ( my $userenv = C4::Context->userenv ) {
+            my $branch =  $userenv->{'branch'};
+            if ( ($userenv->{flags} % 2 !=1) &&
+                 $branch && $branch ne "insecure" ){
+
+                if (my $fr = ref $filter) {
+                    if ( $fr eq "HASH" ) {
+                        $filter->{branchcode} = $branch;
+                    }
+                    else {
+                        foreach (@$filter) {
+                            $_ = { '' => $_ } unless ref $_;
+                            $_->{branchcode} = $branch;
+                        }
+                    }
+                }
+                else {
+                    $filter = { '' => $filter, branchcode => $branch };
+                }
+            }      
+        }
+    }
+
+    if ($found_borrower) {
+        $searchtype = "exact";
+    }
     $searchtype ||= "start_with";
-	push @finalfilter, \@filters;
-	my $data = SearchInTable( "borrowers", \@finalfilter, $orderby, $limit, $columns_out, $search_on_fields, $searchtype );
-    return ($data);
+
+	return SearchInTable( "borrowers", $filter, $orderby, $limit, $columns_out, $search_on_fields, $searchtype );
 }
 
 =head2 GetMemberDetails
@@ -353,11 +313,11 @@ sub GetMemberDetails {
     my $query;
     my $sth;
     if ($borrowernumber) {
-        $sth = $dbh->prepare("SELECT borrowers.*,category_type,categories.description,reservefee FROM borrowers LEFT JOIN categories ON borrowers.categorycode=categories.categorycode WHERE  borrowernumber=?");
+        $sth = $dbh->prepare("SELECT borrowers.*,category_type,categories.description,reservefee,enrolmentperiod FROM borrowers LEFT JOIN categories ON borrowers.categorycode=categories.categorycode WHERE  borrowernumber=?");
         $sth->execute($borrowernumber);
     }
     elsif ($cardnumber) {
-        $sth = $dbh->prepare("SELECT borrowers.*,category_type,categories.description,reservefee FROM borrowers LEFT JOIN categories ON borrowers.categorycode=categories.categorycode WHERE cardnumber=?");
+        $sth = $dbh->prepare("SELECT borrowers.*,category_type,categories.description,reservefee,enrolmentperiod FROM borrowers LEFT JOIN categories ON borrowers.categorycode=categories.categorycode WHERE cardnumber=?");
         $sth->execute($cardnumber);
     }
     else {
@@ -380,14 +340,16 @@ sub GetMemberDetails {
     $borrower->{'flags'}     = $flags;
     $borrower->{'authflags'} = $accessflagshash;
 
-    # find out how long the membership lasts
-    $sth =
-      $dbh->prepare(
-        "select enrolmentperiod from categories where categorycode = ?");
-    $sth->execute( $borrower->{'categorycode'} );
-    my $enrolment = $sth->fetchrow;
-    $borrower->{'enrolmentperiod'} = $enrolment;
-    
+    # For the purposes of making templates easier, we'll define a
+    # 'showname' which is the alternate form the user's first name if 
+    # 'other name' is defined.
+    if ($borrower->{category_type} eq 'I') {
+        $borrower->{'showname'} = $borrower->{'othernames'};
+        $borrower->{'showname'} .= " $borrower->{'firstname'}" if $borrower->{'firstname'};
+    } else {
+        $borrower->{'showname'} = $borrower->{'firstname'};
+    }
+
     return ($borrower);    #, $flags, $accessflagshash);
 }
 
@@ -489,13 +451,15 @@ sub patronflags {
         $flaginfo{'noissues'} = 1;
         $flags{'LOST'}        = \%flaginfo;
     }
-    if (   $patroninformation->{'debarred'}
-        && $patroninformation->{'debarred'} == 1 )
-    {
-        my %flaginfo;
-        $flaginfo{'message'}  = 'Borrower is Debarred.';
-        $flaginfo{'noissues'} = 1;
-        $flags{'DBARRED'}     = \%flaginfo;
+    if ( $patroninformation->{'debarred'} && check_date( split( /-/, $patroninformation->{'debarred'} ) ) ) {
+        if ( Date_to_Days(Date::Calc::Today) < Date_to_Days( split( /-/, $patroninformation->{'debarred'} ) ) ) {
+            my %flaginfo;
+            $flaginfo{'debarredcomment'} = $patroninformation->{'debarredcomment'};
+            $flaginfo{'message'}         = $patroninformation->{'debarredcomment'};
+            $flaginfo{'noissues'}        = 1;
+            $flaginfo{'dateend'}         = $patroninformation->{'debarred'};
+            $flags{'DBARRED'}           = \%flaginfo;
+        }
     }
     if (   $patroninformation->{'borrowernotes'}
         && $patroninformation->{'borrowernotes'} )
@@ -661,39 +625,12 @@ sub IsMemberBlocked {
     my $borrowernumber = shift;
     my $dbh            = C4::Context->dbh;
 
-    # does patron have current fine days?
-	my $strsth=qq{
-            SELECT
-            ADDDATE(returndate, finedays * DATEDIFF(returndate,date_due) ) AS blockingdate,
-            DATEDIFF(ADDDATE(returndate, finedays * DATEDIFF(returndate,date_due)),NOW()) AS blockedcount
-            FROM old_issues
-	};
-    if(C4::Context->preference("item-level_itypes")){
-        $strsth.=
-		qq{ LEFT JOIN items ON (items.itemnumber=old_issues.itemnumber)
-            LEFT JOIN issuingrules ON (issuingrules.itemtype=items.itype)}
-    }else{
-        $strsth .= 
-		qq{ LEFT JOIN items ON (items.itemnumber=old_issues.itemnumber)
-            LEFT JOIN biblioitems ON (biblioitems.biblioitemnumber=items.biblioitemnumber)
-            LEFT JOIN issuingrules ON (issuingrules.itemtype=biblioitems.itemtype) };
-    }
-	$strsth.=
-        qq{ WHERE finedays IS NOT NULL
-            AND  date_due < returndate
-            AND borrowernumber = ?
-            ORDER BY blockingdate DESC, blockedcount DESC
-            LIMIT 1};
-	my $sth=$dbh->prepare($strsth);
-    $sth->execute($borrowernumber);
-    my $row = $sth->fetchrow_hashref;
-    my $blockeddate  = $row->{'blockeddate'};
-    my $blockedcount = $row->{'blockedcount'};
+    my $blockeddate = CheckBorrowerDebarred($borrowernumber);
 
-    return (1, $blockedcount) if $blockedcount > 0;
+    return ( 1, $blockeddate ) if $blockeddate;
 
     # if he have late issues
-    $sth = $dbh->prepare(
+    my $sth = $dbh->prepare(
         "SELECT COUNT(*) as latedocs
          FROM issues
          WHERE borrowernumber = ?
@@ -702,9 +639,9 @@ sub IsMemberBlocked {
     $sth->execute($borrowernumber);
     my $latedocs = $sth->fetchrow_hashref->{'latedocs'};
 
-    return (-1, $latedocs) if $latedocs > 0;
+    return ( -1, $latedocs ) if $latedocs > 0;
 
-    return (0, 0);
+    return ( 0, 0 );
 }
 
 =head2 GetMemberIssuesAndFines
@@ -1043,7 +980,7 @@ sub GetPendingIssues {
     # Borrowers part of the query
     my $bquery = '';
     for (my $i = 0; $i < @borrowernumbers; $i++) {
-        $bquery .= ' borrowernumber = ?';
+        $bquery .= ' issues.borrowernumber = ?';
         if ($i < $#borrowernumbers ) {
             $bquery .= ' OR';
         }
@@ -1070,6 +1007,9 @@ sub GetPendingIssues {
            biblioitems.volumedesc,
            biblioitems.lccn,
            biblioitems.url,
+           borrowers.firstname,
+           borrowers.surname,
+           borrowers.cardnumber,
            issues.timestamp AS timestamp,
            issues.renewals  AS renewals,
            issues.borrowernumber AS borrowernumber,
@@ -1078,6 +1018,7 @@ sub GetPendingIssues {
     LEFT JOIN items       ON items.itemnumber       =      issues.itemnumber
     LEFT JOIN biblio      ON items.biblionumber     =      biblio.biblionumber
     LEFT JOIN biblioitems ON items.biblioitemnumber = biblioitems.biblioitemnumber
+    LEFT JOIN borrowers ON issues.borrowernumber = borrowers.borrowernumber
     WHERE
       $bquery
     ORDER BY issues.issuedate"
@@ -1200,11 +1141,9 @@ sub GetMemberAccountRecords {
 
 =head2 GetBorNotifyAcctRecord
 
-  ($count, $acctlines, $total) = &GetBorNotifyAcctRecord($params,$notifyid);
+  ($total, $acctlines, $count) = &GetBorNotifyAcctRecord($params,$notifyid);
 
 Looks up accounting data for the patron with the given borrowernumber per file number.
-
-(FIXME - I'm not at all sure what this is about.)
 
 C<&GetBorNotifyAcctRecord> returns a three-element array. C<$acctlines> is a
 reference-to-array, where each element is a reference-to-hash; the
@@ -1227,7 +1166,6 @@ sub GetBorNotifyAcctRecord {
                     AND amountoutstanding != '0' 
                 ORDER BY notify_id,accounttype
                 ");
-#                    AND (accounttype='FU' OR accounttype='N' OR accounttype='M'OR accounttype='A'OR accounttype='F'OR accounttype='L' OR accounttype='IP' OR accounttype='CH' OR accounttype='RE' OR accounttype='RL')
 
     $sth->execute( $borrowernumber, $notifyid );
     my $total = 0;
@@ -1765,6 +1703,7 @@ EOF
         # insert fee in patron debts
         manualinvoice($borrower->{'borrowernumber'}, '', '', 'A', $enrolmentfee);
     }
+     logaction("MEMBERS", "RENEW", $borrower->{'borrowernumber'}, "Membership renewed")if C4::Context->preference("BorrowersLog");
     return $date if ($sth);
     return 0;
 }
@@ -2114,7 +2053,7 @@ sub GetBorrowersNamesAndLatestIssue {
 
 =head2 DebarMember
 
-  my $success = DebarMember( $borrowernumber );
+my $success = DebarMember( $borrowernumber, $todate );
 
 marks a Member as debarred, and therefore unable to checkout any more
 items.
@@ -2126,13 +2065,16 @@ true on success, false on failure
 
 sub DebarMember {
     my $borrowernumber = shift;
+    my $todate         = shift;
 
     return unless defined $borrowernumber;
     return unless $borrowernumber =~ /^\d+$/;
 
-    return ModMember( borrowernumber => $borrowernumber,
-                      debarred       => 1 );
-    
+    return ModMember(
+        borrowernumber => $borrowernumber,
+        debarred       => $todate
+    );
+
 }
 
 =head2 ModPrivacy

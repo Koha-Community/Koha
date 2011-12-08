@@ -2,133 +2,88 @@
 
 <h1>Add A New Serial Subscription</h1>
 
-<p>Before you can set up a new subscription, you will need to have set up:</p>
-	<ul>
-		<li>a Vendor in Acquisitions who supplies the subscription</li>
-		<li>a Biblio with no items to which you can add the subscription to.</li>
-	</ul>	.  
-<h2>How do I set up a new subscription?</h2>
-<p>There are two sections to this form:</p>
+<p>Subscriptions can be added by clicking the 'New' button on any bibliographic record or by visiting the Serials module and clicking 'New Subscription'</p>
 
-<h3>1 ) General informations (subscription details)</h3>
-<h4>Step 1: Search for a Supplier</h4>
+<p>If you are entering a new subscription from the Serials module you will be presented with a blank form (if creating new from a bibliographic record the form will include the bib info).</p>
 
-<p>If you want to claim any issues then you need to elect a supplier at this point.</p>
-<h4>Step 2: Search for Biblio</h4>
-
-<p>It should find the item that was just set up in Acquisitions. Note If you have not yet set this up in Acquisitions, click Create Biblio. It will take you back to Acquisitions Order Form.</p>
-<h4>Step 3: Fill out other details in the Subscription Information box.</h4>
-<p>You have to choose whether you will create an item record when receiving the issue. Be careful, default choice is DO NO CREATE</p>
-<p>Other details include the Location, Call Number, Home branch for the Serial and any notes.</p>
-<p>Grace period : number of days before a late issue has status from expected to late automatically set and the next expected issue is generated.</p>
-<p>Select the Patron Alert: you will need to choose a Notice that can be sent to patrons when a new issue arrives. To edit this notice, go to Tools &gt; Notices.</p>
-<p>Number of issues to display : in opac in Subscription (normal view), in staff in normal view</p>
-
-<h3>2) Serials planning</h3>
-<p>This is a critical component of managing serials. In order to make the system predict the next issue the user must fill out each of these fields. Once completed it will populate the Numbering Calculation box below.</p>
-
-<p>Manual history : check this box if you want to fill receive history information manually in subscription summary</p>
-
-<h4>Step 1: First Issue publication date</h4>
-<p>Displays a calendar &ndash; choose the expected date of arrival in the library. It is the publication date of the first issue you will receive with Koha. It is not necessarily the publication date of the first issue of your collection.</p>
-<h4>Step 2: Frequency</h4>
-
-<p>Use the drop down list to select the main frequency patterns.</p>
-<h4>Step 3: Numbering Pattern</h4>
-
-<p>Drop down list of the main numbering patterns:</p>
 <ul>
-		<li>Number</li>
-		<li>Volume, Number, Issue</li>
-		<li>Volume, Number</li>
-		<li>Volume, Issue</li>
-		<li>Number, Issue</li>
-		<li>Seasonal only</li>
-		<li>Year/Number<li>
-		<li>None of the above</li>
-	</ul>
-<p>Depending on your choice, a box appears to enter more information on numbering :</p>
+	<li>'Librarian' field will show the logged in librarian's username</li>
+	<li>'Vendor' can be found by either searching vendors entered via the Acquisitions module or entering the vendor ID number
 <ul>
-		<li>Starting with : the volume, number, season... of the first issue to arrive</li>
-		<li>Issues expected (only for Number pattern) : total number of issues expected</li>
-		<li>Rollover at : the number of issues received before the numbering returns to beginning ; set empty for no rollover</li>
+	<li>Vendor information is not required</li>
+	<li>In order to claim missing and late issues you need to enter vendor information</li>
 </ul>
-	<p>Example for "Rollover at" for "Volume, Number" pattern </p>
+</li>
+	<li>'Biblio' is the MARC record you'd like to link this subscription to
 <ul>
-		<li>Volume : starting with : 45, no rollover : volume increases continuously</li>
-		<li>Number : starting with 1, rollover at 12 : when 12 issues are received, Number returns to 1</li>
+	<li>This can be done by searching for an existing record by clicking on the 'Search for Biblio' link below the boxes or by entering the bib number for a record in the first box. Only if you search with the field between the parenthesis.</li>
+</ul>
+</li>
+	<li>Next you can choose whether a new item is created when receiving an issue</li>
+	<li>'Location' is for the shelving location</li>
+	<li>'Call Number' is for your item's call number prefix</li>
+	<li>'Library' is the branch that owns this subscription.
+<ul>
+	<li>If more than one library subscribes to this serial you will need to create a subscription for each library</li>
+	<li>This can be done easily by using the 'Edit as New (Duplicate)' option found on the subscription information page and changing only the 'Library' field</li>
+</ul>
+</li>
+	<li>The 'Grace Period' is the number of days before an issue is automatically moved from 'expected' status to 'waiting' and how many days before an issue is automatically moved from 'waiting' status to 'late'</li>
+	<li>Use the 'Public Note' for any notes you would like to appear in the OPAC for the patrons</li>
+	<li>'Nonpublic Note' should be used for notes that are only visible to the librarians via the staff client</li>
+	<li>To set up a routing list for serials, choose 'Routing List' from the 'Patron notification' field.
+<ul>
+	<li>For this option to appear you need to make sure that you have a Routing List notice set up in the Notices Tool</li>
+	<li>Learn more about Routing Lists later in this manual</li>
+</ul>
+</li>
+	<li>The Staff and OPAC Display options allow you to control how many issues appear by default on bibliographic records in the Staff Client and the OPAC
+<ul>
+	<li>If no values are entered in these fields, they will use the OPACSerialIssueDisplayCount and StaffSerialIssueDisplayCount system preference values</li>
+</ul>
+</li>
+	<li>In 'First issue publication date' you want to enter the date of the issue you have in your hand, the date from which the prediction pattern will start</li>
+	<li>There are several pre-defined options for the 'Frequency' of publication
+<ul>
+	<li>Without periodicy: some very specific (usually high level science journals) don't have a true periodicity. When you subscribe to the title, you subscribe for 6 issues, which can arrive in 1 year... or 2... There is no regularity or known schedule.</li>
+	<li>Unknown select this if none of the other choices are relevant</li>
+	<li>Irregular: The journal is not "regular" but has a periodicity. You know that it comes out on January, then in October and December, it is irregular, but you know when it's going to arrive.</li>
+	<li>2/day: Twice daily</li>
+	<li>1/day: Daily</li>
+	<li>3/week: Three times a week</li>
+	<li>1/week: Weekly</li>
+	<li>1/ 2 weeks: Twice monthly (fortnightly)</li>
+	<li>1/ 3 weeks: Tri-weekly</li>
+	<li>1/month: Monthly</li>
+	<li>1/ 2 months (6/year): Bi-monthly</li>
+	<li>1/ 3 months (1/quarter): Quarterly</li>
+	<li>1/quarter (seasonal) : Quarterly related to seasons (ie. Summer, Autumn, Winter, Spring)</li>
+	<li>2/year: Half yearly</li>
+	<li>1/year: Annual</li>
+	<li>1/ 2 years: Bi-annual</li>
+</ul>
+</li>
+	<li>Checking the 'Manual history' box will allow you to enter serials outside the prediction pattern.</li>
+	<li>'Numbering pattern' will help you determine how the numbers are printed for each issue
+<ul>
+	<li>Start with the numbering on the issue you have in hand, the numbering that matches the date you entered in the 'First issue publication' field</li>
+	<li>If you have chosen any 'Numbering Format' other than 'Number' in the 'Rollover at' field, enter the last issue number before the volume number changes
+<ul>
+	<li>If you chose the 'Number' Numbering Format you will see 'issues expected' in which you will enter the total number of issues you expect to receive.</li>
+</ul>
+</li>
+	<li>You can choose to create your own numbering pattern by choosing 'None of the above' and clicking the 'Show/Hide Advanced Pattern' button at the bottom of the form</li>
+</ul>
+</li>
+	<li>'Subscription start date' is the date at which the subscription begins. This is used for setting up renewal alerts</li>
+	<li>'Subscription length' is the number of issues or months in the subscription. This is also used for setting up renewal alerts</li>
+	<li>'Subscription end date' should only be entered for subscriptions that have ended (if you're entering in a backlog of serials)</li>
+	<li>The 'Numbering formula' is editable to match the way you'd like your numbering to print on the item record and subscription information pages</li>
 </ul>
 
+<p>Click 'Save Subscription' to save the information you have entered.</p>
 
-<p>If you choose &ldquo;none of the above&rdquo; this will bring up a Numbering Calculation formula at the bottom of the screen.</p>
-
-
-<h4>Step 4: Fill out the Subscription length box</h4>
-<p>Indicate the expected length of time that this serial will be subscribed to.</p>
-
-<p> You have to indicate the subscription start date. It may be different from the First issue publication date entered above.<p>
-<p> Example : for periodicity 1/3 months, you may have subscription start date 2009-01-01 and First issue publication date 2009-03-15<p>
-
-<p>Subscription length : this sets up the expiry date in the system and also sets up an Alert a month before expected expiry.</p>
-<p>Subscription end date : calculated from subscription start date and length. But you can add / modify subscription end date, for instance if subscription stops before the expiry planned date</p>
-
-<h4>Step 5: Numbering formula</h4>
-
-<p>If a choice has been made in the Numbering Pattern section then the Numbering Calculation will automatically be filled out and presented in this section. It is possible to modify text in it, but don't modify {X}, {Y}, {Z}. However, if the Numbering Pattern is &ldquo;None of the above&rdquo; then a formula will be presented and the user must fill this out.</p>
-<p>The &quot;numbering formula&quot; can be filled with any text and/or numbers. Three special tokens {X}, {Y} and {Z} can be used to define the calculation formula. This allows you to define patterns not possible with the Numbering Pattern drop downs.</p>
-<p>Example : Number {X}, {Y} quarter, {Z}, where {Z} means year</p>
-
-<p>See below Advanced pattern</p>
-
-<h3>3) Test prediction pattern</h3>
-<p>Choosing Test prediction pattern allows you to see exceptions found by the system (e.g Item arrives monthly but only 10 issues in the year). Set the rollover to the max number of issues expected in the year. </p>
-<p> When irregularities are detected, you can choose date(s) when you won't receive an issue. (use Shift + click, or CTRL + click to select several dates)</p>
-
-
-<h3>4) Add Subscription</h3>
-
-<p>Once that is filled out then you see the completed details page. If there is a mistake you can go back and Edit the details.</p>
-<p>Next step - Receive issues (see online help on Receive Issues page)</p>
-
-<h2>Advanced Pattern : how does planning work</h2>
-
-
-	<ul>
-		<li>Add  : how much add to number or volume..., (usually =1)</li>
-		<li>once every : every x received issues (ex : 12 for a volume number that increases every 12 issues ; 1 for number increasing for each issue)</li>
-		<li>When more than :  value after which the number returns to a certain value A ;  set 9999999 for continuous numbering</li>
-		<li>inner counter : number of issues that Koha must take into account to calculate when value changes. If you begin with first issue of the year write nothing or 0</li>
-		<li>Set back to  : A</li>
-		<li>Begins with : initial value of number, volume, ...</li>
-	</ul>
-	<p>Example : monthly subscription, start date april 2009, lenght 12 months, first publication date <b>april 2009</b>, numbering formula vol {X} no {Y} year {Z}</p>
-	<p>numbering for {X}</p>
-<ul>
-		<li>Add  : 1</li>
-		<li>once every : 12</li>
-		<li>When more than : 9999999 (value increases continuously)</li>
-		<li>Set back to  : </li>
-		<li>inner counter : 3 (you must take into account the three first months of the year, otherwise volume value will increase after 12 received issues from april 2009, e.g. in april 2010 instead of january 2010)</li>
-		<li>Begins with : 45</li>
-	</ul>
-	<p>numbering for {Y}</p>
-<ul>
-		<li>Add  : 1</li>
-		<li>once every : 1</li>
-		<li>When more than : 12 (the number after no 12 will be no 1)</li>
-		<li>Set back to  : 1</li>
-		<li>inner counter : 3 </li>
-		<li>Begins with : 4</li>
-</ul>
-	<p>numbering for {Z}</p>
-	<ul>
-		<li>Add  : 1</li>
-		<li>once every : 12</li>
-		<li>When more than : 99999999</li>
-		<li>Set back to  : </li>
-		<li>inner counter : 3 (you must take into account the three first months of the year, otherwise year will change after 12 received issues from april 2009, e.g. in april instead of january 2010)</li>
-		<li>Begins with : 2009</li>
-</ul>
+<p><strong>See the full documentation for Adding a Subscription in the <a href="http://manual.koha-community.org/3.6/en/serials.html#newsubscription">manual</a> (online).</strong></p>
 
 [% INCLUDE 'help-bottom.inc' %]
 

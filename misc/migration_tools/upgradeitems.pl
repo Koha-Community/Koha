@@ -13,6 +13,8 @@ if (C4::Context->preference("marcflavour") ne "UNIMARC") {
     exit;
 }
 my $rqbiblios=$dbh->prepare("SELECT biblionumber from biblioitems");
+my $rqitemnumber=$dbh->prepare("SELECT itemnumber, biblionumber from items where itemnumber = ? and biblionumber = ?");
+
 $rqbiblios->execute;
 $|=1;
 while (my ($biblionumber)= $rqbiblios->fetchrow_array){
@@ -21,10 +23,27 @@ while (my ($biblionumber)= $rqbiblios->fetchrow_array){
         my $marcitem=MARC::Record->new();
         $marcitem->encoding('UTF-8');
         $marcitem->append_fields($itemfield);    
-        eval{ModItemFromMarc($marcitem,$biblionumber,$itemfield->subfield('9'));};
+
+	
+	my $itemnum;
+	my @itemnumbers = $itemfield->subfield('9');
+        foreach my $itemnumber ( @itemnumbers ){
+		$rqitemnumber->execute($itemnumber, $biblionumber);
+		if( my $row = $rqitemnumber->fetchrow_hashref ){
+			$itemnum = $row->{itemnumber};
+		}
+        }
+
+        eval{
+		if($itemnum){
+			ModItemFromMarc($marcitem,$biblionumber,$itemnum)
+		}else{
+			die("$biblionumber");
+		}
+        };
         print "\r$biblionumber";
        if ($@){
-            warn "$biblionumber : $@";
+            warn "Problem with : $biblionumber : $@";
             warn $record->as_formatted;
        }    
     }  

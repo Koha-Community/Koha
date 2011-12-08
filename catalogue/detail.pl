@@ -41,9 +41,12 @@ use C4::XSLT;
 # use Smart::Comments;
 
 my $query = CGI->new();
+
+my $analyze = $query->param('analyze');
+
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
-        template_name   => "catalogue/detail.tmpl",
+    template_name   =>  'catalogue/detail.tmpl',
         query           => $query,
         type            => "intranet",
         authnotrequired => 0,
@@ -105,6 +108,7 @@ my $marcauthorsarray = GetMarcAuthors( $record, $marcflavour );
 my $marcsubjctsarray = GetMarcSubjects( $record, $marcflavour );
 my $marcseriesarray  = GetMarcSeries($record,$marcflavour);
 my $marcurlsarray    = GetMarcUrls    ($record,$marcflavour);
+my $marchostsarray  = GetMarcHosts($record,$marcflavour);
 my $subtitle         = GetRecordValue('subtitle', $record, $fw);
 
 # Get Branches, Itemtypes and Locations
@@ -117,6 +121,16 @@ my @items;
 for my $itm (@all_items) {
     push @items, $itm unless ( $itm->{itemlost} && GetHideLostItemsPreference($borrowernumber) && !$showallitems);
 }
+
+# flag indicating existence of at least one item linked via a host record
+my $hostrecords;
+# adding items linked via host biblios
+my @hostitems = GetHostItemsInfo($record);
+if (@hostitems){
+	$hostrecords =1;
+	push (@items,@hostitems);
+}
+
 my $dat = &GetBiblioData($biblionumber);
 
 # get count of holds
@@ -148,9 +162,9 @@ if ( defined $dat->{'itemtype'} ) {
     $dat->{imageurl} = getitemtypeimagelocation( 'intranet', $itemtypes->{ $dat->{itemtype} }{imageurl} );
 }
 
-$dat->{'count'} = scalar @all_items;
-$dat->{'showncount'} = scalar @items;
-$dat->{'hiddencount'} = scalar @all_items - scalar @items;
+$dat->{'count'} = scalar @all_items + @hostitems;
+$dat->{'showncount'} = scalar @items + @hostitems;
+$dat->{'hiddencount'} = scalar @all_items + @hostitems - scalar @items;
 
 my $shelflocations = GetKohaAuthorisedValues('items.location', $fw);
 my $collections    = GetKohaAuthorisedValues('items.ccode'   , $fw);
@@ -158,6 +172,8 @@ my (@itemloop, %itemfields);
 my $norequests = 1;
 my $authvalcode_items_itemlost = GetAuthValCode('items.itemlost',$fw);
 my $authvalcode_items_damaged  = GetAuthValCode('items.damaged', $fw);
+
+my $analytics_flag;
 foreach my $item (@items) {
 
     $item->{homebranch}        = GetBranchName($item->{homebranch});
@@ -223,6 +239,19 @@ foreach my $item (@items) {
         $item->{waitingdate} = format_date($wait_hashref->{waitingdate});
     }
 
+    # item has a host number if its biblio number does not match the current bib
+    if ($item->{biblionumber} ne $biblionumber){
+        $item->{hostbiblionumber} = $item->{biblionumber};
+	$item->{hosttitle} = GetBiblioData($item->{biblionumber})->{title};
+    }
+	
+	#count if item is used in analytical bibliorecords
+	my $countanalytics= GetAnalyticsCount($item->{itemnumber});
+	if ($countanalytics > 0){
+		$analytics_flag=1;
+		$item->{countanalytics} = $countanalytics;
+	}
+
     push @itemloop, $item;
 }
 
@@ -234,6 +263,7 @@ $template->param(
 	MARCSERIES  => $marcseriesarray,
 	MARCURLS => $marcurlsarray,
     MARCISBNS => $marcisbnsarray,
+	MARCHOSTS => $marchostsarray,
 	subtitle    => $subtitle,
 	itemdata_ccode      => $itemfields{ccode},
 	itemdata_enumchron  => $itemfields{enumchron},
@@ -243,6 +273,8 @@ $template->param(
     itemdata_itemnotes  => $itemfields{itemnotes},
 	z3950_search_params	=> C4::Search::z3950_search_args($dat),
     holdcount           => $holdcount,
+        hostrecords         => $hostrecords,
+	analytics_flag	=> $analytics_flag,
 	C4::Search::enabled_staff_search_views,
 );
 
@@ -284,7 +316,7 @@ foreach ( keys %{$dat} ) {
 $template->param(
     itemloop        => \@itemloop,
     biblionumber        => $biblionumber,
-    detailview => 1,
+    ($analyze? 'analyze':'detailview') =>1,
     subscriptions       => \@subs,
     subscriptionsnumber => $subscriptionsnumber,
     subscriptiontitle   => $dat->{title},

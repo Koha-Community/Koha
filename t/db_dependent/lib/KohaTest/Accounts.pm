@@ -15,7 +15,6 @@ sub methods : Test( 1 ) {
     my @methods = qw( recordpayment
                       makepayment
                       getnextacctno
-                      returnlost
                       manualinvoice
                       fixcredit
                       refund

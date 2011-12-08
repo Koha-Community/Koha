@@ -94,7 +94,7 @@ sub CanBookBeReserved {
     if ( $borrower->{lost} eq 1 ) {
         $out = undef;
     }
-    if ( $borrower->{debarred} eq 1 ) {
+    if ( $borrower->{debarred} ) {
         $out = undef;
     }
     my @reserves = GetReservesFromBorrowernumber( $borrower->{'borrowernumber'} );

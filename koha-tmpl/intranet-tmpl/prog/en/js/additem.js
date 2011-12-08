@@ -17,9 +17,10 @@ function cloneItemBlock(index) {
     var CloneButtonPlus;
     var CloneButtonMinus;
   //  try{
-        CloneButtonPlus = clone.getElementsByTagName('a')[0];
+        var jclone = $(clone);
+        CloneButtonPlus = $("a.addItem", jclone).get(0);
         CloneButtonPlus.setAttribute('onclick',"cloneItemBlock('" + index + random + "')");
-    CloneButtonMinus = clone.getElementsByTagName('a')[1];
+    CloneButtonMinus = $("a.delItem", jclone).get(0);
     CloneButtonMinus.setAttribute('onclick',"deleteItemBlock('" + index + random + "')");
     CloneButtonMinus.setAttribute('style',"display:inline");
     // change itemids of the clone

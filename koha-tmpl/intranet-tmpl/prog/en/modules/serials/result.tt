@@ -5,9 +5,7 @@
 //<![CDATA[
 function GetIt(bibno,title)
 {
-    title = title.replace(/\?/,"\?");
-    title = title.replace(/"/,"\"");
-    title = title.replace(/'/,"\'");
+    title = title.parents('tr').find('.title').text();
     opener.document.f.biblionumber.value = bibno;
     opener.document.f.title.value = title;
     window.close();
@@ -33,7 +31,7 @@ function GetIt(bibno,title)
     </tr>
     [% FOREACH resultsloo IN resultsloop %]
         <tr>
-            <td>[% resultsloo.title |html %] [% resultsloo.subtitle |html %]
+            <td class="title">[% resultsloo.title |html %] [% resultsloo.subtitle |html %]
             </td>
             <td>
                 [% resultsloo.author |html %]
@@ -44,7 +42,7 @@ function GetIt(bibno,title)
             <td>
                 [% resultsloo.publicationyear |html %]
             </td>
-			<td><a href="#" onclick="GetIt('[% resultsloo.biblionumber %]','[% resultsloo.title |url %]');" title="Choose this record">Choose</a></td>
+			<td><a href="#" onclick="GetIt('[% resultsloo.biblionumber %]',$(this));" title="Choose this record">Choose</a></td>
         </tr>
     [% END %]
     </table>

@@ -5,6 +5,7 @@
         <div id="changelanguage" class="ft">
         <ul id="i18nMenu" class="footermenu">
         [% FOREACH languages_loo IN languages_loop %]
+	    <div class="lang">
             [% IF ( languages_loo.group_enabled ) %]
             [% IF ( languages_loo.plural ) %]
             <li class="more"><a class="sublangs" id="show[% languages_loo.rfc4646_subtag %]" href="#">[% languages_loo.native_description %] ([% languages_loo.rfc4646_subtag %])</a><div id="sub[% languages_loo.rfc4646_subtag %]">
@@ -31,6 +32,7 @@
 		[% END %]
             [% END %]
             [% END %]
+            </div>
         [% END %]
         </ul>
         </div>

@@ -131,6 +131,17 @@ if ( $op eq 'insert' || $op eq 'modify' || $op eq 'save' || $op eq 'duplicate' )
             $newdata{$key} =~ s/\"/&quot;/g unless $key eq 'borrowernotes' or $key eq 'opacnote';
         }
     }
+
+    ## Manipulate debarred
+    if ( $newdata{debarred} ) {
+        $newdata{debarred} = $newdata{datedebarred} ? $newdata{datedebarred} : "9999-12-31";
+    } elsif ( exists( $newdata{debarred} ) && !( $newdata{debarred} ) ) {
+        undef( $newdata{debarred} );
+        undef( $newdata{debarredcomment} );
+    } elsif ( exists( $newdata{debarredcomment} ) && $newdata{debarredcomment} eq "" ) {
+        undef( $newdata{debarredcomment} );
+    }
+    
     my $dateobject = C4::Dates->new();
     my $syspref = $dateobject->regexp();		# same syspref format for all 3 dates
     my $iso     = $dateobject->regexp('iso');	#
@@ -515,8 +526,7 @@ while (@relationships) {
 }
 
 my %flags = ( 'gonenoaddress' => ['gonenoaddress' ],
-        'lost'          => ['lost'],
-        'debarred'      => ['debarred']);
+        'lost'          => ['lost']);
 
  
 my @flagdata;
@@ -637,7 +647,10 @@ if (C4::Context->preference('uppercasesurnames')) {
 	$data{'surname'}    =uc($data{'surname'}    );
 	$data{'contactname'}=uc($data{'contactname'});
 }
-foreach (qw(dateenrolled dateexpiry dateofbirth)) {
+
+$data{debarred} = C4::Overdues::CheckBorrowerDebarred($borrowernumber);
+$data{datedebarred} = $data{debarred} if ( $data{debarred} ne "9999-12-31" );
+foreach (qw(dateenrolled dateexpiry dateofbirth datedebarred)) {
 	$data{$_} = format_date($data{$_});	# back to syspref for display
 	$template->param( $_ => $data{$_});
 }

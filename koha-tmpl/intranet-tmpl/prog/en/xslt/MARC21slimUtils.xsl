@@ -1,4 +1,5 @@
 <?xml version='1.0'?>
+<!DOCTYPE stylesheet [<!ENTITY nbsp "&#160;" >]>
 <xsl:stylesheet version="1.0" xmlns:marc="http://www.loc.gov/MARC21/slim" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	<xsl:template name="datafield">
 		<xsl:param name="tag"/>
@@ -101,7 +102,7 @@
             - displays every field on a separate line (to switch between rtl and ltr)
          * Pitfalls:
            (!) output might be empty
-    -->
+    --> 
     <xsl:template name="m880Select">
          <xsl:param name="basetags"/> <!-- e.g.  100,700,110,710 -->
         <xsl:param name="codes"/> <!-- e.g. abc  -->
@@ -109,23 +110,24 @@
         <xsl:param name="label"/> <!-- e.g.  Edition -->
         <xsl:param name="bibno"/>
         <xsl:param name="index"/> <!-- e.g.  au -->
+        <xsl:param name="UseAuthoritiesForTracings"/>
 
         <xsl:for-each select="marc:datafield[@tag=880]">
             <xsl:variable name="code6" select="marc:subfield[@code=6]"/>
             <xsl:if test="contains(string($basetags), substring($code6,1,3))">
                 <span>
-                    <xsl:if test="boolean($class)">
-                        <xsl:attribute name="class"><xsl:value-of select="$class"/></xsl:attribute>
-                    </xsl:if>
                     <xsl:choose>
-                        <!-- display right-to-left tags floating right of their left-to-right counterparts -->
-                        <xsl:when test="substring($code6,string-length($code6)-1,2) ='/r'">
-                            <xsl:attribute name="style">display:block; text-align:right; float:right; width:50%; padding-left:20px</xsl:attribute>
-                            <xsl:attribute name="dir">rtl</xsl:attribute>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:attribute name="style">display:block; </xsl:attribute>
-                        </xsl:otherwise>
+                    <xsl:when test="boolean($class) and substring($code6,string-length($code6)-1,2) ='/r'">
+                        <xsl:attribute name="class"><xsl:value-of select="$class"/> m880</xsl:attribute>
+                        <xsl:attribute name="dir">rtl</xsl:attribute>
+                    </xsl:when>
+                     <xsl:when test="boolean($class)">
+                        <xsl:attribute name="class"><xsl:value-of select="$class"/></xsl:attribute>
+                        <xsl:attribute name="style">display:block; </xsl:attribute>
+                    </xsl:when>    
+                     <xsl:when test="substring($code6,string-length($code6)-1,2) ='/r'">
+                        <xsl:attribute name="class"><xsl:value-of select="$class"/> m880</xsl:attribute>
+                    </xsl:when>                                    
                     </xsl:choose>
                     <xsl:if test="boolean($label)">
                         <span class="label">

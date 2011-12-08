@@ -68,7 +68,7 @@ function CheckAttributeTypeForm(f) {
     <div class="yui-b">
 
 [% IF ( WARNING_extended_attributes_off ) %]
-<div class="dialog message">Because the 'ExtendedPatronAttributes` system preference is currently not enabled, extended patron attributes cannot be given to patron records.  Go <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=ExtendedPatronAttributes">here</a> if you wish to enable this feature.</div>
+<div class="dialog message">Because the 'ExtendedPatronAttributes` system preference is currently not enabled, extended patron attributes cannot be given to patron records.  Go <a href="/cgi-bin/koha/admin/preferences.pl?op=search&amp;searchfield=ExtendedPatronAttributes">here</a> if you wish to enable this feature.</div>
 [% END %]
 
 [% IF ( attribute_type_form ) %]
@@ -158,6 +158,15 @@ function CheckAttributeTypeForm(f) {
           [% END %]
             <span>Check to make this attribute staff_searchable in the staff patron search.</span>
        </li>
+       <li><label for="display_checkout">Display in check-out: </label>
+            [% IF display_checkout_checked %]
+                <input type="checkbox" id="display_checkout" name="display_checkout" checked="checked" />
+	    [% ELSE %]
+	        <input type="checkbox" id="display_checkout" name="display_checkout" />
+	    [% END %]
+            <span>Check to show this attribute in patron check-out.</span>
+       </li>
+
         <li><label for="authorised_value_category">Authorized value category: </label>
             <select name="authorised_value_category" id="authorised_value_category">
                 <option value=""></option>

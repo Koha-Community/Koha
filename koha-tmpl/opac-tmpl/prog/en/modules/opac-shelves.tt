@@ -70,7 +70,7 @@ $(function() {
   $("a.print").show();
 
     [% IF ( opacuserlogin ) %][% IF ( RequestOnOpac ) %]$("#placehold").html("<a href=\"#\" class=\"hold tag_hides\">"+_('Place Hold')+"<\/a>");
-      $("a.hold").click(function(){
+      $("#toolbar a.hold").click(function(){
          holdSelections();
          return false;
       });[% END %][% END %]
@@ -600,9 +600,8 @@ $(function() {
       </div>
       [% IF ( OpacNav||loggedinusername ) %]
         <div class="yui-b">
-          <div is="leftmenus" class="container">
-            [% INCLUDE 'navigation.inc' %]
-            [% INCLUDE 'usermenu.inc' %]
+          <div id="leftmenus" class="container">
+            [% INCLUDE 'navigation.inc' IsPatronPage=1 %]
           </div>
         </div>
       [% END %]

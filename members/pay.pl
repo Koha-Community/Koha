@@ -39,6 +39,7 @@ use C4::Stats;
 use C4::Koha;
 use C4::Overdues;
 use C4::Branch;
+use C4::Members::Attributes qw(GetBorrowerAttributes);
 
 my $input = CGI->new;
 
@@ -231,6 +232,13 @@ sub borrower_add_additional_fields {
     my ( $picture, $dberror ) = GetPatronImage( $b_ref->{cardnumber} );
     if ($picture) {
         $b_ref->{has_picture} = 1;
+    }
+
+    if (C4::Context->preference('ExtendedPatronAttributes')) {
+        $b_ref->{extendedattributes} = GetBorrowerAttributes($borrowernumber);
+        $template->param(
+            ExtendedPatronAttributes => 1,
+        );
     }
 
     $b_ref->{branchname} = GetBranchName( $b_ref->{branchcode} );

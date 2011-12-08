@@ -25,6 +25,7 @@ use C4::Auth;
 use C4::Output;
 use C4::Biblio;
 use C4::Items;
+use C4::Circulation;
 use C4::Context;
 use C4::Koha; # XXX subfield_is_koha_internal_p
 use C4::Branch; # XXX subfield_is_koha_internal_p
@@ -135,6 +136,7 @@ if ($op eq "action") {
 	my (  $itemtagfield,   $itemtagsubfield) = &GetMarcFromKohaField("items.itemnumber", "");
 	if ($values_to_modify){
 	    my $xml = TransformHtmlToXml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag, 'ITEM');
+        utf8::encode($xml);
 	    $marcitem = MARC::Record::new_from_xml($xml, 'UTF-8');
         }
         if ($values_to_blank){
@@ -173,7 +175,11 @@ if ($op eq "action") {
 		    if ($values_to_modify || $values_to_blank) {
 			my $localmarcitem = Item2Marc($itemdata);
 			UpdateMarcWith( $marcitem, $localmarcitem );
-			eval{ my ( $oldbiblionumber, $oldbibnum, $oldbibitemnum ) = ModItemFromMarc( $localmarcitem, $itemdata->{biblionumber}, $itemnumber ) };
+			eval{
+                if ( my $item = ModItemFromMarc( $localmarcitem, $itemdata->{biblionumber}, $itemnumber ) ) {
+                    LostItem($itemnumber, 'MARK RETURNED', 'CHARGE FEE') if $item->{itemlost};
+                }
+            };
 		    }
 		}
 		$i++;

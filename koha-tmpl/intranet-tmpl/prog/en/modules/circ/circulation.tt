@@ -1,15 +1,11 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Circulation
-[% IF ( borrowernumber ) %]
-&rsaquo; Checking out to [% surname %], [% firstname %]
-([% cardnumber %])
-[% END %]</title>
+<title>Koha &rsaquo; Circulation [% IF ( borrowernumber ) %] &rsaquo; Checking out to [% INCLUDE 'patron-title.inc' %] [% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% IF ( UseTablesortForCirc ) %]<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>[% END %]
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
 <script type="text/javascript">
 //<![CDATA[
-[% IF ( borrowernumber ) %]if($.cookie("holdfor") != [% borrowernumber %]){ $.cookie("holdfor",null, { path: "/", expires: 0 }); }[% END %]
+[% IF ( borrowernumber ) %]if($.cookie("holdfor") != [% borrowernumber %]){ $.cookie("holdfor",null, { path: "/", expires: 0 }); }[% ELSE %]$.cookie("holdfor",null, { path: "/", expires: 0 });[% END %]
 [% IF ( UseTablesortForCirc ) %]$.tablesorter.addParser({
     id: 'articles',
     is: function(s) {return false;  },
@@ -166,9 +162,13 @@ function refocus(calendar) {
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'circ-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a> &rsaquo;[% IF ( borrowernumber ) %] <a href="/cgi-bin/koha/circ/circulation.pl">Checkouts</a> &rsaquo; [% firstname %] [% surname %][% ELSE %] <strong>Checkouts</strong>[% END %]</div>
-
-
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a> &rsaquo;
+[% IF ( borrowernumber ) %]
+    <a href="/cgi-bin/koha/circ/circulation.pl">Checkouts</a> &rsaquo; [% INCLUDE 'patron-title.inc' %]
+[% ELSE %]
+    <strong>Checkouts</strong>
+[% END %]
+</div>
 [% IF ( CGIselectborrower ) %]
 <div id="doc" class="yui-t7">
 
@@ -456,7 +456,8 @@ No patron matched <span class="ex">[% message %]</span>
         <span id="clearscreen"><a href="/cgi-bin/koha/circ/circulation.pl" title="Clear screen">x</a></span>
     [% END %]
 
-    <label for="barcode">Checking out to [% firstname %] [% surname %] ([% cardnumber %]) </label>
+    <label for="barcode">Checking out to [% INCLUDE 'patron-title.inc' %]</label>
+
 	<div class="hint">Enter item barcode:</div>
 
     [% IF ( NEEDSCONFIRMATION ) %]
@@ -523,7 +524,7 @@ No patron matched <span class="ex">[% message %]</span>
 
     [% IF ( flagged ) %]
 		[% IF ( noissues ) %]
-		 <h4>Checking out to [% firstname %] [% surname %] ([% cardnumber %])</h4>
+		<h4>Checking out to [% INCLUDE 'patron-title.inc' %]</h4>
         <div id="circmessages" class="circmessage warning">
 		[% ELSE %]
         <div id="circmessages" class="circmessage attention">
@@ -562,16 +563,23 @@ No patron matched <span class="ex">[% message %]</span>
 			<li class="blocker"><span class="circ-hlt">Lost: </span>Patron's card is lost</li>
 			[% END %]
 
-            [% IF ( dbarred ) %]<li class="blocker">
-               <span class="circ-hlt"> Restricted:</span> Patron's account is restricted <a href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% borrowernumber %]&amp;cardnumber=[% cardnumber %]&amp;destination=circ&amp;status=0">Lift restriction</a>
-</li>[% END %]
+            [% IF ( userdebarred ) %]
+               <li class="blocker">
+               <span class="circ-hlt"> Restricted:</span> Patron's account is restricted [% IF (userdebarreddate ) %] until [% userdebarreddate %] [% END %] [% IF (debarredcomment ) %]([% debarredcomment %])[% END %]
+               <form class="inline compact" action="/cgi-bin/koha/members/setstatus.pl" method="post">
+	                <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
+	                <input type="hidden" name="destination" value="circ" />
+	                <input type="hidden" name="cardnumber" value="[% cardnumber %]" />
+	                <input type="submit" value="Lift Debarment" />
+               </form>
+			</li>[% END %]
 
         	[% IF ( odues ) %]<li>[% IF ( nonreturns ) %]<span class="circ-hlt">Overdues:</span> Patron has <span class="circ-hlt">ITEMS OVERDUE</span>. See highlighted items <a href="#checkouts">below</a>[% END %]</li>
             [% END %]
 
         	[% IF ( charges ) %]
 			    <li>
-            <span class="circ-hlt">Fines:</span> Patron has  <a href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% borrowernumber %]">Outstanding fines[% IF ( chargesamount ) %] of [% chargesamount %][% END %]</a>.
+            <span class="circ-hlt">Fees &amp; Charges:</span> Patron has  <a href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% borrowernumber %]">Outstanding fees &amp; charges[% IF ( chargesamount ) %] of [% chargesamount %][% END %]</a>.
                 [% IF ( charges_is_blocker ) %]
                     Checkouts are <span class="circ-hlt">BLOCKED</span> because fine balance is <span class="circ-hlt">OVER THE LIMIT</span>.
                 [% END %]
@@ -632,7 +640,10 @@ No patron matched <span class="ex">[% message %]</span>
 				</li>
 			[% END %]
 			[% FOREACH bor_messages_loo IN bor_messages_loop %]
-				<li><span class="">[% bor_messages_loo.message_date_formatted %] [% bor_messages_loo.branchcode %] <i>"[% bor_messages_loo.message %]"</i></span> [% IF ( bor_messages_loo.can_delete ) %]<a href="/cgi-bin/koha/circ/del_message.pl?message_id=[% bor_messages_loo.message_id %]&amp;borrowernumber=[% bor_messages_loo.borrowernumber %]">[Delete]</a>[% END %]</li>
+				<li><span class="">[% bor_messages_loo.message_date_formatted %] [% bor_messages_loo.branchcode %] <i>"[% bor_messages_loo.message %]"</i></span> [% IF ( bor_messages_loo.can_delete ) %]<a href="/cgi-bin/koha/circ/del_message.pl?message_id=[% bor_messages_loo.message_id %]&amp;borrowernumber=[% bor_messages_loo.borrowernumber %]">[Delete]</a>
+                [% ELSIF ( all_messages_del ) %]
+                    <a href="/cgi-bin/koha/circ/del_message.pl?message_id=[% bor_messages_loo.message_id %]&amp;borrowernumber=[% bor_messages_loo.borrowernumber %]">[Delete]</a>
+                [% END %]</li>
 			[% END %]
 
 		</ul>
@@ -701,7 +712,7 @@ No patron matched <span class="ex">[% message %]</span>
         <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% todayissue.biblionumber %]&amp;type=intra"><strong>[% todayissue.title |html %]</strong></a>[% IF ( todayissue.author ) %], by [% todayissue.author %][% END %][% IF ( todayissue.itemnotes ) %]- <span class="circ-hlt">[% todayissue.itemnotes %]</span>[% END %] <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% todayissue.biblionumber %]&amp;itemnumber=[% todayissue.itemnumber %]#item[% todayissue.itemnumber %]">[% todayissue.barcode %]</a></td>
         <td>[% UNLESS ( noItemTypeImages ) %] [% IF ( todayissue.itemtype_image ) %]<img src="[% todayissue.itemtype_image %]" alt="" />[% END %][% END %][% todayissue.itemtype %]</td>
         <td>[% todayissue.checkoutdate %]</td>
-        [% IF ( todayissue.multiple_borrowers ) %]<td>[% todayissue.borrowername %]</td>[% END %]
+        [% IF ( todayissue.multiple_borrowers ) %]<td>[% todayissue.firstname %] [% todayissue.surname %]</td>[% END %]
         <td>[% todayissue.issuingbranchname %]</td>
         <td>[% todayissue.itemcallnumber %]</td>
             <td>[% todayissue.charge %]</td>
@@ -776,7 +787,7 @@ No patron matched <span class="ex">[% message %]</span>
             [% previssue.itemtype %]
         </td>
         <td>[% previssue.displaydate %]</td>
-        [% IF ( previssue.multiple_borrowers ) %]<td>[% previssue.borrowername %]</td>[% END %]
+        [% IF ( previssue.multiple_borrowers ) %]<td>[% previssue.firstname %] [% previssue.surname %]</td>[% END %]
         <td>[% previssue.issuingbranchname %]</td>
         <td>[% previssue.itemcallnumber %]</td>
         <td>[% previssue.charge %]</td>
@@ -885,7 +896,7 @@ No patron matched <span class="ex">[% message %]</span>
         <td>[% relissue.issuingbranchname %]</td>
         <td>[% relissue.itemcallnumber %]</td>
         <td>[% relissue.charge %]</td>
-        <td>[% relissue.replacementprice %]</td><td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% relissue.borrowernumber %]">[% relissue.borrowername %] ([% relissue.cardnumber %])</a></td>
+        <td>[% relissue.replacementprice %]</td><td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% relissue.borrowernumber %]">[% relissue.firstname %] [% relissue.surname %] ([% relissue.cardnumber %])</a></td>
      </tr>
     [% END %] <!-- /loop relissues -->
     <!-- /if relissues -->[% END %]
@@ -905,10 +916,10 @@ No patron matched <span class="ex">[% message %]</span>
         <td>[% relprevissue.displaydate %]</td>
         <td>[% relprevissue.issuingbranchname %]</td>
         <td>[% relprevissue.itemcallnumber %]</td>
-	[% IF ( relprevissue.multiple_borrowers ) %]<td>[% relprevissue.borrowername %]</td>[% END %]
+	[% IF ( relprevissue.multiple_borrowers ) %]<td>[% relprevissue.firstname %] [% relprevissue.surname %]</td>[% END %]
         <td>[% relprevissue.charge %]</td>
         <td>[% relprevissue.replacementprice %]</td>
-        <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% relprevissue.borrowernumber %]">[% relprevissue.borrowername %] ([% relprevissue.cardnumber %])</a></td>
+        <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% relprevissue.borrowernumber %]">[% relprevissue.firstname %] [% relprevissue.surname %] ([% relprevissue.cardnumber %])</a></td>
 
     </tr>
     <!-- /loop relprevissue -->[% END %]

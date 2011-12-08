@@ -118,6 +118,7 @@ sub new {
     $self->{'opac_display'} = 0;
     $self->{'password_allowed'} = 0;
     $self->{'staff_searchable'} = 0;
+    $self->{'display_checkout'} = 0;
     $self->{'authorised_value_category'} = '';
 
     bless $self, $class;
@@ -152,6 +153,7 @@ sub fetch {
     $self->{'opac_display'}              = $row->{'opac_display'};
     $self->{'password_allowed'}          = $row->{'password_allowed'};
     $self->{'staff_searchable'}          = $row->{'staff_searchable'};
+    $self->{'display_checkout'}          = $row->{'display_checkout'};
     $self->{'authorised_value_category'} = $row->{'authorised_value_category'};
 
     bless $self, $class;
@@ -182,14 +184,15 @@ sub store {
                                          opac_display = ?,
                                          password_allowed = ?,
                                          staff_searchable = ?,
-                                         authorised_value_category = ?
+                                         authorised_value_category = ?,
+                                         display_checkout = ?
                                      WHERE code = ?");
     } else {
         $sth = $dbh->prepare_cached("INSERT INTO borrower_attribute_types 
                                         (description, repeatable, unique_id, opac_display, password_allowed,
-                                         staff_searchable, authorised_value_category, code)
+                                         staff_searchable, authorised_value_category, display_checkout, code)
                                         VALUES (?, ?, ?, ?, ?,
-                                                ?, ?, ?)");
+                                                ?, ?, ?, ?)");
     }
     $sth->bind_param(1, $self->{'description'});
     $sth->bind_param(2, $self->{'repeatable'});
@@ -198,7 +201,8 @@ sub store {
     $sth->bind_param(5, $self->{'password_allowed'});
     $sth->bind_param(6, $self->{'staff_searchable'});
     $sth->bind_param(7, $self->{'authorised_value_category'});
-    $sth->bind_param(8, $self->{'code'});
+    $sth->bind_param(8, $self->{'display_checkout'});
+    $sth->bind_param(9, $self->{'code'});
     $sth->execute;
 
 }
@@ -302,6 +306,25 @@ is interpreted as a Perl boolean.
 sub staff_searchable {
     my $self = shift;
     @_ ? $self->{'staff_searchable'} = ((shift) ? 1 : 0) : $self->{'staff_searchable'};
+}
+
+=head2 display_checkout
+
+=over 4
+
+my $display_checkout = $attr_type->display_checkout();
+$attr_type->display_checkout($display_checkout);
+
+=back
+
+Accessor.  The C<$display_checkout> argument
+is interpreted as a Perl boolean.
+
+=cut
+
+sub display_checkout {
+    my $self = shift;
+    @_ ? $self->{'display_checkout'} = ((shift) ? 1 : 0) : $self->{'display_checkout'};
 }
 
 =head2 authorised_value_category

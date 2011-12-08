@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 
 # Copyright 2010 BibLibre
+# Copyright 2011 MJ Ray and software.coop
 #
 # This file is part of Koha.
 #
@@ -73,14 +74,17 @@ if ($src eq 'circ') {   # if we were called from circulation, use the circulatio
     my $data = GetMember('borrowernumber'=>$borrowernumber);
     my ($picture, $dberror) = GetPatronImage($data->{'cardnumber'});
     $template->param( picture => 1 ) if $picture;
+    
     $template->param(   menu            => 1,
                         title           => $data->{'title'},
                         initials        => $data->{'initials'},
                         surname         => $data->{'surname'},
+                        othernames      => $data->{'othernames'},
                         borrowernumber  => $borrowernumber,
                         firstname       => $data->{'firstname'},
                         cardnumber      => $data->{'cardnumber'},
                         categorycode    => $data->{'categorycode'},
+                        category_type   => $data->{'category_type'},
                         categoryname	=> $data->{'description'},
                         address         => $data->{'address'},
                         address2        => $data->{'address2'},
@@ -105,7 +109,10 @@ $template->param(
 if ($do_it) {
 
     my @data;
-    my $results = GetLogs($datefrom,$dateto,$user,\@modules,\@action,$object,$info);
+    my ($results,$modules,$action);
+    if ($action[0] ne '') { $action = \@action; } # match All means no limit
+    if ($modules[0] ne '') { $modules = \@modules; } # match All means no limit
+    $results = GetLogs($datefrom,$dateto,$user,$modules,$action,$object,$info);
     @data=@$results;
     my $total = scalar @data;
     foreach my $result (@data){

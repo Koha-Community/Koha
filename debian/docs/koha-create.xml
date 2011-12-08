@@ -24,7 +24,7 @@
   <refsynopsisdiv>
     <cmdsynopsis>
       <command>koha-create</command>
-      <arg><option>--create-db</option>|<option>--request-db</option>|<option>--populate-db</option></arg>
+      <arg choice="req"><option>--create-db</option>|<option>--request-db</option>|<option>--populate-db</option></arg>
       <arg><option>--marcflavor</option> marc21|normarc|unimarc</arg>
       <arg><option>--zebralang</option> en|nb|fr</arg>
       <arg><option>--defaultsql</option> /path/to/some.sql</arg>
@@ -181,7 +181,7 @@
   
     <para>To create a new Koha instance:</para>
 
-    <para><command>koha-create hslibrary</command></para>
+    <para><command>koha-create --create-db hslibrary</command></para>
 
     <para>The public catalog is now at <uri>http://hslibrary/</uri> and the librarian interface at <uri>http://hslibrary:8080/</uri>.</para>
 

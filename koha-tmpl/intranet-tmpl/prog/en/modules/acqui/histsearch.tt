@@ -21,6 +21,7 @@
 		<ol>
 		<li><label for="title">Title: </label> <input type="text" name="title" id="title" value="[% title %]" /></li>
 		<li><label for="author">Author: </label> <input type="text" name="author" id="author" value="[% author %]" /></li>
+		<li><label for="isbn">ISBN: </label> <input type="isbn" name="isbn" id="isbn" value="[% isbn %]" /></li>
 		<li><label for="name">Vendor: </label> <input type="text" name="name" id="name" value="[% name %]" /></li>
 		<li><label for="basket">Basket: </label> <input type="text" name="basket" id="basket" value="[% basket %]" /></li>
 		<li><label for="booksellerinvoicenumber ">Bookseller Invoice No: </label> <input type="text" name="booksellerinvoicenumber" id="booksellerinvoicenumber" value="[% booksellerinvoicenumber %]" /></li>
@@ -83,7 +84,7 @@
 					    [% END %]
 					</td>
 					<td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% suggestions_loo.biblionumber %]">[% suggestions_loo.title |html %]</a>
-                        <br />[% suggestions_loo.author %]</td>
+                        <br />[% suggestions_loo.author %] <br /> [% suggestions_loo.isbn %]</td>
 					<td><a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=[% suggestions_loo.id %]">[% suggestions_loo.name %]</a></td>
 					<td>[% suggestions_loo.creationdate %]</td>
 					<td>[% suggestions_loo.datereceived %]</td>

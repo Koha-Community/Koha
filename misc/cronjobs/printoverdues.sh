@@ -27,20 +27,24 @@ then
 fi
 if [[ -n $2 && -f $2 ]]
 then
-    set $optpisa "--css $2";
+    optpisa="--css $2";
 fi
 if [[ -n $3 ]]
 then
-    set $optprinter "-h $3";
+    optprinter="-h $3";
 fi
 if [[ -n $4 ]]
 then
-    set $optprinter "$optprinter -d $4";
+    optprinter="$optprinter -d $4";
 fi
 for i in $1/*.html
 do
-    xhtml2pdf $optpisa  $i
+    xhtml2pdf $optpisa  $i;
 done
-lp $optprinter  $1/*.pdf
-tar cvfz $directory`date "+%Y%m%d"`.tar.gz  $directory
-rm -rf $directory
+
+if [[ -n $optprinter ]]
+then
+    lp $optprinter  $1/*.pdf;
+fi
+
+tar cvfz $directory`date "+%Y%m%d"`.tar.gz  $directory;

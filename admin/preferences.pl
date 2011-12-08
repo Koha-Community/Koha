@@ -28,6 +28,7 @@ use C4::Languages qw(getTranslatedLanguages);
 use C4::ClassSource;
 use C4::Log;
 use C4::Output;
+use C4::Templates;
 use C4::Budgets qw(GetCurrency);
 use File::Spec;
 use IO::File;
@@ -41,7 +42,7 @@ our $lang;
 sub GetTab {
     my ( $input, $tab ) = @_;
 
-    my $tab_template = C4::Output::gettemplate( 'admin/preferences/' . $tab . '.pref', 'intranet', $input );
+    my $tab_template = C4::Templates::gettemplate( 'admin/preferences/' . $tab . '.pref', 'intranet', $input );
 
     my $active_currency = GetCurrency();
     my $local_currency;
@@ -174,7 +175,7 @@ sub TransformPrefsToHTML {
 sub _get_pref_files {
     my ( $input, $open_files ) = @_;
 
-    my ( $htdocs, $theme, $lang, undef ) = C4::Output::_get_template_file( 'admin/preferences/admin.pref', 'intranet', $input );
+    my ( $htdocs, $theme, $lang, undef ) = C4::Templates::_get_template_file( 'admin/preferences/admin.pref', 'intranet', $input );
 
     my %results;
 

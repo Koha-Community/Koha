@@ -29,7 +29,7 @@ find({
     wanted => sub {
         my $file = $_;
 
-        return if $file =~ /\.(ico|jpg|gif|ogg|pdf|png|psd|swf|zip)$/;
+        return if $file =~ /\.(ico|jpg|gif|ogg|pdf|png|psd|swf|zip|.*\~)$/;
         return unless -f $file;
 
         my @name_parts = File::Spec->splitpath($file);
@@ -49,8 +49,7 @@ find({
         }
         close $fh;
         if ($marker_found) {
-            fail("$file has no merge conflict markers");
-            diag("marker found in line $line");
+            fail("$file contains merge conflict markers in line $line");
         } else {
             pass("$file has no merge conflict markers");
         }

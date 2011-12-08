@@ -1,7 +1,25 @@
 #!/usr/bin/perl
 
+# This file is part of Koha.
+#
+# Copyright (C) 2007 LibLime
+# Parts Copyright BSZ 2011
+#
+# Koha is free software; you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 2 of the License, or (at your option) any later
+# version.
+#
+# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program; if not, write to the Free Software Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
 use strict;
-#use warnings; FIXME - Bug 2505
+use warnings;
 BEGIN {
     # find Koha's Perl modules
     # test carefully before changing this
@@ -17,6 +35,7 @@ use Getopt::Long;
 $| = 1;
 
 # command-line parameters
+my $encoding = "";
 my $match_bibs = 0;
 my $add_items = 0;
 my $input_file = "";
@@ -25,13 +44,18 @@ my $want_help = 0;
 my $no_replace ;
 
 my $result = GetOptions(
+    'encoding:s'    => \$encoding,
     'file:s'        => \$input_file,
-    'match-bibs:s'    => \$match_bibs,
+    'match-bibs:s'  => \$match_bibs,
     'add-items'     => \$add_items,
     'no-replace'    => \$no_replace,
     'comment:s'     => \$batch_comment,
     'h|help'        => \$want_help
 );
+
+if ($encoding eq "") {
+    $encoding = "utf8";
+}
 
 if (not $result or $input_file eq "" or $want_help) {
     print_usage();
@@ -67,11 +91,9 @@ sub process_batch {
     }
     close IN;
 
-    my $marc_flavor = C4::Context->preference('marcflavour');
-
     print "... staging MARC records -- please wait\n";
     my ($batch_id, $num_valid, $num_items, @import_errors) = 
-        BatchStageMarcRecords($marc_flavor, $marc_records, $input_file, $batch_comment, '', $add_items, 0,
+        BatchStageMarcRecords($encoding, $marc_records, $input_file, $batch_comment, '', $add_items, 0,
                               100, \&print_progress_and_commit);
     print "... finished staging MARC records\n";
 
@@ -141,6 +163,9 @@ records into the main Koha database.
 
 Parameters:
     --file <file_name>      name of input MARC bib file
+    --encoding <encoding>   encoding of MARC records, default is utf8.
+                            Other possible options are: MARC-8,
+                            ISO_5426, ISO_6937, ISO_8859-1, EUC-KR
     --match-bibs <match_id> use this option to match bibs
                             in the file with bibs already in 
                             the database for future overlay.

@@ -27,8 +27,11 @@
 use strict;
 use warnings;
 
+use open OUT=>':utf8', ':std';
+
 # standard or CPAN modules used
 use CGI;
+use Encode;
 
 # Koha modules used
 use C4::Context;
@@ -59,18 +62,19 @@ if ($importid) {
 	$record = MARC::Record->new_from_usmarc($marc) ;
  	if($view eq 'card') {
 		$xmlrecord = $record->as_xml();
-	} 
+	}
 }
-
 
 if ($view eq 'card' || $view eq 'html') {
     $xmlrecord = GetXmlBiblio($biblionumber) unless $xmlrecord;
     my $xslfile;
+    my $themelang = '/' . C4::Context->preference("opacthemes") .  '/' . C4::Templates::_current_language();
+
     if ($view eq 'card'){
-	$xslfile = C4::Context->config('opachtdocs')."/prog/en/xslt/compact.xsl";
+        $xslfile = C4::Context->config('opachtdocs').$themelang."/xslt/compact.xsl";
     }
     else { # must be html
-	$xslfile = C4::Context->config('opachtdocs')."/prog/en/xslt/MARC21slim2OPACMARCdetail.xsl";	
+        $xslfile = C4::Context->config('opachtdocs').$themelang."/xslt/MARC21slim2OPACMARCdetail.xsl";
     }
     my $parser = XML::LibXML->new();
     my $xslt   = XML::LibXSLT->new();
@@ -79,8 +83,8 @@ if ($view eq 'card' || $view eq 'html') {
     my $stylesheet = $xslt->parse_stylesheet($style_doc);
     my $results = $stylesheet->transform($source);
     my $newxmlrecord = $stylesheet->output_string($results);
-    print $input->header(), $newxmlrecord;
-    exit;
+    $newxmlrecord = Encode::decode_utf8($newxmlrecord) unless utf8::is_utf8($newxmlrecord);
+    print $input->header(-charset => 'UTF-8'), $newxmlrecord;
 } else {
     $record =GetMarcBiblio($biblionumber) unless $record; 
     $template->param( MARC_FORMATTED => $record->as_formatted );

@@ -456,7 +456,6 @@ sub get_bidi {
 
 sub accept_language {
     # referenced http://search.cpan.org/src/CGILMORE/I18N-AcceptLanguage-1.04/lib/I18N/AcceptLanguage.pm
-    # FIXME: since this is only used in Output.pm as of Jan 8 2008, maybe it should be IN Output.pm
     my ($clientPreferences,$supportedLanguages) = @_;
     my @languages = ();
     if ($clientPreferences) {

@@ -720,10 +720,7 @@ sub GetPendingOrders {
         LEFT JOIN biblioitems ON biblioitems.biblionumber=biblio.biblionumber
         WHERE booksellerid=?
             AND (quantity > quantityreceived OR quantityreceived is NULL)
-            AND datecancellationprinted IS NULL
-            AND (to_days(now())-to_days(closedate) < 180 OR closedate IS NULL)
-    ";
-    ## FIXME  Why 180 days ???
+            AND datecancellationprinted IS NULL";
     my @query_params = ( $supplierid );
     my $userenv = C4::Context->userenv;
     if ( C4::Context->preference("IndependantBranches") ) {
@@ -1221,6 +1218,11 @@ sub DelOrder {
     my $sth = $dbh->prepare($query);
     $sth->execute( $bibnum, $ordernumber );
     $sth->finish;
+    my @itemnumbers = GetItemnumbersFromOrder( $ordernumber );
+    foreach my $itemnumber (@itemnumbers){
+    	C4::Items::DelItem( $dbh, $bibnum, $itemnumber );
+    }
+    
 }
 
 =head2 FUNCTIONS ABOUT PARCELS
@@ -1530,6 +1532,7 @@ sub GetHistory {
     my %params = @_;
     my $title = $params{title};
     my $author = $params{author};
+    my $isbn   = $params{isbn};
     my $name = $params{name};
     my $from_placed_on = $params{from_placed_on};
     my $to_placed_on = $params{to_placed_on};
@@ -1546,6 +1549,7 @@ sub GetHistory {
         SELECT
             biblio.title,
             biblio.author,
+	    biblioitems.isbn,
             aqorders.basketno,
     aqbasket.basketname,
     aqbasket.basketgroupid,
@@ -1564,6 +1568,7 @@ sub GetHistory {
         LEFT JOIN aqbasket ON aqorders.basketno=aqbasket.basketno
     LEFT JOIN aqbasketgroups ON aqbasket.basketgroupid=aqbasketgroups.id
         LEFT JOIN aqbooksellers ON aqbasket.booksellerid=aqbooksellers.id
+	LEFT JOIN biblioitems ON biblioitems.biblionumber=aqorders.biblionumber
         LEFT JOIN biblio ON biblio.biblionumber=aqorders.biblionumber";
 
     $query .= " LEFT JOIN borrowers ON aqbasket.authorisedby=borrowers.borrowernumber"
@@ -1573,28 +1578,33 @@ sub GetHistory {
 
     my @query_params  = ();
 
-    if ( defined $title ) {
+    if ( $title ) {
         $query .= " AND biblio.title LIKE ? ";
         $title =~ s/\s+/%/g;
         push @query_params, "%$title%";
     }
 
-    if ( defined $author ) {
+    if ( $author ) {
         $query .= " AND biblio.author LIKE ? ";
         push @query_params, "%$author%";
     }
 
-    if ( defined $name ) {
+    if ( $isbn ) {
+        $query .= " AND biblioitems.isbn LIKE ? ";
+        push @query_params, "%$isbn%";
+    }
+
+    if ( $name ) {
         $query .= " AND aqbooksellers.name LIKE ? ";
         push @query_params, "%$name%";
     }
 
-    if ( defined $from_placed_on ) {
+    if ( $from_placed_on ) {
         $query .= " AND creationdate >= ? ";
         push @query_params, $from_placed_on;
     }
 
-    if ( defined $to_placed_on ) {
+    if ( $to_placed_on ) {
         $query .= " AND creationdate <= ? ";
         push @query_params, $to_placed_on;
     }

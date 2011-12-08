@@ -2,14 +2,14 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 <channel>
      <title><![CDATA[[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha Online[% END %] Catalog Recent Comments]]></title>
-     <link>[% OPACBaseurl %]/cgi-bin/koha/opac-showreviews.pl&amp;format=rss2</link>
+     <link>[% OPACBaseURL %]/cgi-bin/koha/opac-showreviews.pl&amp;format=rss2</link>
      <description><![CDATA[ The most recent comments from [% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha Online[% END %] Catalog. Comments can be made by logged in users and are moderated by library staff.]]></description>
-     <atom:link href="[% OPACBaseurl %]/cgi-bin/koha/opac-showreviews.pl&amp;format=rss2" rel="self" type="application/rss+xml" />
+     <atom:link href="[% OPACBaseURL %]/cgi-bin/koha/opac-showreviews.pl&amp;format=rss2" rel="self" type="application/rss+xml" />
      <lastBuildDate>[% timestamp %]</lastBuildDate>
 	 [% FOREACH review IN reviews %]
      <item>
        <title>New comment on [% review.title |html %] [% FOREACH subtitl IN review.subtitle %], [% subtitl.subfield |html %][% END %]</title>
-       <link>[% review.OPACBaseurl %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% review.biblionumber %]#comments</link>
+       <link>[% OPACBaseURL %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% review.biblionumber %]#comments</link>
        <description><![CDATA[
 [% IF ( OPACAmazonEnabled ) %][% IF ( OPACAmazonCoverImages ) %][% IF ( review.normalized_isbn ) %]<img src="http://images.amazon.com/images/P/[% review.normalized_isbn %].01.TZZZZZZZ.jpg" alt="" />[% END %][% END %][% END %]
 
@@ -28,7 +28,7 @@
                         [% IF ( review.isbn ) %] [% review.isbn |html %][% END %] </p>
 <p>[% review.firstname %] [% review.surname %] commented on [% review.datereviewed %]: [% review.review |html %]</p>
 						]]></description>
-       <guid>[% review.OPACBaseurl %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% review.biblionumber %]&amp;reviewid=[% review.reviewid %]</guid>
+       <guid>[% OPACBaseURL %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% review.biblionumber %]&amp;reviewid=[% review.reviewid %]</guid>
        <pubDate>[% review.timestamp %]</pubDate>
      </item>
 	 [% END %]

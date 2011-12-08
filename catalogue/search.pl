@@ -369,7 +369,7 @@ if (   C4::Context->preference('defaultSortField')
 @sort_by = split("\0",$params->{'sort_by'}) if $params->{'sort_by'};
 $sort_by[0] = $default_sort_by unless $sort_by[0];
 foreach my $sort (@sort_by) {
-    $template->param($sort => 1);
+    $template->param($sort => 1) if $sort;
 }
 $template->param('sort_by' => $sort_by[0]);
 
@@ -471,7 +471,7 @@ my ( $error,$query,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit
 my @results;
 
 ## I. BUILD THE QUERY
-my $lang = C4::Output::getlanguagecookie($cgi);
+my $lang = C4::Templates::getlanguagecookie($cgi);
 ( $error,$query,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit_desc,$stopwords_removed,$query_type) = buildQuery(\@operators,\@operands,\@indexes,\@limits,\@sort_by,$scan,$lang);
 
 ## parse the query_cgi string and put it into a form suitable for <input>s

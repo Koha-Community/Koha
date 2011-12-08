@@ -70,11 +70,11 @@ sub new {
     $self->{interface} = {
         opac => {
             dir    => $context->config('opachtdocs') . '/prog',
-            suffix => '-i-opac-t-prog-v-3002000.po',
+            suffix => '-i-opac-t-prog-v-3006000.po',
         },
         intranet => {
             dir    => $context->config('intrahtdocs') . '/prog',
-            suffix => '-i-staff-t-prog-v-3002000.po',
+            suffix => '-i-staff-t-prog-v-3006000.po',
         }
     };
 
@@ -367,9 +367,9 @@ sub install {
 sub get_all_langs {
     my $self = shift;
     opendir( my $dh, $self->{path_po} );
-    my @files = grep { $_ =~ /-i-opac-t-prog-v-3002000.po$/ }
+    my @files = grep { $_ =~ /-i-opac-t-prog-v-3006000.po$/ }
         readdir $dh;
-    @files = map { $_ =~ s/-i-opac-t-prog-v-3002000.po$//; $_ } @files;
+    @files = map { $_ =~ s/-i-opac-t-prog-v-3006000.po$//; $_ } @files;
 }
 
 

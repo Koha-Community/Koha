@@ -27,7 +27,7 @@ use C4::Biblio;
 use C4::Items;
 use C4::Branch;
 use C4::Acquisition;
-use C4::Output;             # contains gettemplate
+use C4::Output;
 use C4::Auth;
 use C4::Serials;
 use C4::Dates qw/format_date/;
@@ -97,6 +97,18 @@ for my $itm (@all_items) {
                                ($itemnumber != $itm->{itemnumber}));
 }
 
+my $record=GetMarcBiblio($biblionumber);
+
+my $hostrecords;
+# adding items linked via host biblios
+my @hostitems = GetHostItemsInfo($record);
+if (@hostitems){
+        $hostrecords =1;
+        push (@items,@hostitems);
+}
+
+
+
 my $totalcount=@all_items;
 my $showncount=@items;
 my $hiddencount = $totalcount - $showncount;
@@ -116,15 +128,23 @@ foreach my $item (@items){
     $item->{'collection'}              = $ccodes->{ $item->{ccode} } if ($ccodes);
     $item->{'itype'}                   = $itemtypes->{ $item->{'itype'} }->{'description'};
     $item->{'replacementprice'}        = sprintf( "%.2f", $item->{'replacementprice'} );
-    $item->{'datelastborrowed'}        = format_date( $item->{'datelastborrowed'} );
-    $item->{'dateaccessioned'}         = format_date( $item->{'dateaccessioned'} );
-    $item->{'datelastseen'}            = format_date( $item->{'datelastseen'} );
+    $item->{$_}                        = format_date( $item->{$_} ) foreach qw/datelastborrowed dateaccessioned datelastseen lastreneweddate/;
     $item->{'copyvol'}                 = $item->{'copynumber'};
 
-    my $order = GetOrderFromItemnumber( $item->{'itemnumber'} );
+
+    # item has a host number if its biblio number does not match the current bib
+    if ($item->{biblionumber} ne $biblionumber){
+        $item->{hostbiblionumber} = $item->{biblionumber};
+        $item->{hosttitle} = GetBiblioData($item->{biblionumber})->{title};
+    }
+
+    my $order  = GetOrderFromItemnumber( $item->{'itemnumber'} );
+    my $basket = GetBasket( $order->{'basketno'} );
+    $item->{'booksellerid'}            = $basket->{'booksellerid'};
     $item->{'ordernumber'}             = $order->{'ordernumber'};
     $item->{'basketno'}                = $order->{'basketno'};
     $item->{'booksellerinvoicenumber'} = $order->{'booksellerinvoicenumber'};
+    $item->{'datereceived'}            = $order->{'datereceived'};
 
     if ($item->{notforloantext} or $item->{itemlost} or $item->{damaged} or $item->{wthdrawn}) {
         $item->{status_advisory} = 1;

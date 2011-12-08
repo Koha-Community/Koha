@@ -1,64 +1,23 @@
 [% INCLUDE 'help-top.inc' %]
 
-<h1>Reports Dictionary Help</h1>
+<h1>Reports Dictionary</h1>
 
-The dictionary provides a way that you can define custom criteria for reporting by combining existing criteria.
+<p>The report dictionary is a way to pre-define common filters you'd like to apply to your reports. This is a good way to add in filters that the report wizard doesn't include by default. To add a new definition, or filter, click 'New Definition' on the Reports Dictionary page and follow the 4 step process.</p>
 
-<h2>Adding A New Definition</h2>
+<p>Step 1: Name the definition and provide a description if necessary</p>
 
-<p><strong>Step 1: Name</strong></p>
+<p>Step 2: Choose the module that the will be queried.</p>
 
-<p>At this step you will need to fill out the following details:</p>
+<p>Step 3: Choose columns to query from the tables presented.</p>
 
-<ul>
-<li>Definition Name: Short name that is used for display and selection</li>
-<li>Definition Description: Used within the dictionary only to provide further detail about the definition</li>
-</ul>
+<p>Step 4: Choose the value(s) from the field(s). These will be automatically populated with options available in your database.</p>
 
-<p><strong>Step 2: Area</strong></p>
+<p>Confirm your selections to save the definition.</p>
 
-<p>Now you will need to select the area that you are binding the definition to. </p>
+<p>Your definitions will all appear on the Reports Dictionary page</p>
 
-<p style="color: #990000">IMPORTANT: Definitions can only be bound to one area.</p>
+<p>Then when generating reports on the module you created the value for you will see an option to limit by the definition at the bottom of the usual filters.</p>
 
-<p style="background-color: #ffe599">TIP: If you wish to use a similar definition in say, Circulation and Patrons, you will need to create two definitions - one for each area</p>
+<p><strong>See the full documentation for the Reports Dictionary in the <a href="http://manual.koha-community.org/3.6/en/reportdic.html">manual</a> (online).</strong></p>
 
-<p><strong>Step 3: Columns</strong></p>
-
-<p>Now select the criteria that you wish to use to build your definition. </p>
-
-<ul>
-<li>Click on the database column name and then press the 'add' button.</li>
-<li>Once you have selected all your desired columns, press Next.</li>
-</ul>
-
-<p style="background-color: #ffe599">TIP: Definitions can be deleted easily, and if you are still learning the structure of the Koha data, it may take a little while to sort out which fields you require. Some trial and error may be required</p>
-
-<p><strong>Step 4: Values</strong></p>
-
-<p>Now you need to select the values for each column that will make up your new criteria. There are different ways to define the values, based on the type of data in the column you have selected</p>
-
-<ul>
-<li>Search String Matches For free text fields in that database, enter a string/phrase for the criteria to match on</li>
-<li>Date For date fields you can either select:</li>
-<ol><li>Date Range: enter values in both date fields</li>
-     <li>All Data Before A Given Date: enter a value in the XXX field only</li>
-     <li>All Data After A Given Date: enter a value in the XXX field only</li>
-</ol>
-<li>Select From Database Value For data that is given an authorized value in the Koha database, you the drop down list to select one value</li>
-</ul>
-
-<p><strong>Step 5: Confirmation</strong></p>
-
-<p>You will be presented with a confirmation once you have finished step 4</p>
-
-<p>Click 'Save'</p>
-
-<h2>Using A Definition</h2>
-
-<p>Once you have created your new definition and it shows on in the Dictionary, you can use the definition for reporting.</p>
-
-<ul>
-<li>When you go to create a new report, the criteria for the area you are reporting on will automatically show as limits in the Guided Reports wizard</li>
-</ul>
 [% INCLUDE 'help-bottom.inc' %]

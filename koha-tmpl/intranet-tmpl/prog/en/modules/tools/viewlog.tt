@@ -59,11 +59,11 @@
 								<label for="action">Action:</label>
 								<select name="action" id="action">
 									<option value ="">All</option>
-									<option value ="add">Add</option>
-									<option value ="del">Delete</option>
-									<option value ="mod">Modify</option>
-									<option value="issue">Checkout</option>
-									<option value="return">Return</option>
+									<option value ="ADD">Add</option>
+									<option value ="DELETE">Delete</option>
+									<option value ="MODIFY">Modify</option>
+									<option value="ISSUE">Checkout</option>
+									<option value="RETURN">Return</option>
 								</select>
 							</li>
 							<li>
@@ -133,82 +133,7 @@
 						<input type="submit" value="Submit" />
 						<input type="hidden" name="do_it" value="1" />
 					</fieldset>
-					[% IF ( do_it ) %]
-						[% IF ( total ) %]
-							<h4>[% total %] lines found.</h4>
-							<table>
-								<tr>
-									<th>Date</th>
-									<th>Librarian</th>
-									<th>Module</th>
-									<th>Action</th>
-									<th>Object</th>
-									<th>Info</th>
-								</tr>
-								[% FOREACH loopro IN looprow %]
-									[% UNLESS ( loop.odd ) %]<tr class="highlight">[% ELSE %]<tr>[% END %]
-										<td>[% loopro.timestamp %]</td>
-										<td>
-											<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% loopro.user %]" title="display detail for this librarian."> [% loopro.user %] </a>
-										</td>
-										<td>[% loopro.module %]</td>
-										<td>[% loopro.action %]</td>
-										<td>
-											[% IF ( module == 'MEMBERS' ) %]
-												<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% loopro.object %]" title="Display member details."> member [% loopro.object %] </a>
-											[% ELSE %]
-												[% IF ( module == 'CIRCULATION' ) %]
-													<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% loopro.object %]" title="Display member details.">
-														[% IF ( loopro.object ) %]
-															member [% loopro.object %]
-														[% END %]
-													</a>
-												[% ELSE %]
-													[% IF ( module == 'CATALOGUING' ) %]
-														[% IF ( info == 'item' ) %]
-															<a href="/cgi-bin/koha/catalogue/moredetail.pl?item=[% loopro.object %]&amp;biblionumber=[% loopro.biblionumber %]&amp;bi=[% loopro.biblioitemnumber %]#item[% loopro.object %]">Item [% loopro.object %]</a>
-														[% ELSE %]
-															<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% loopro.object %]" title="Display detail for this biblio">biblio [% loopro.object %]</a>
-														[% END %]
-													[% ELSE %]
-														[% IF ( module == 'SERIAL' ) %]
-															<a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% loopro.object %]"> [% loopro.object %] </a>
-														[% ELSE %]
-															[% IF ( module == 'AUTHORITIES' ) %]
-																<a href="/cgi-bin/koha/authorities/detail.pl?authid=[% loopro.object %]" title="Display detail for this authority">auth [% loopro.object %]</a>
-															[% ELSE %]
-																[% loopro.object %]
-															[% END %]
-														[% END %]
-													[% END %]
-												[% END %]
-											[% END %]
-										</td>
-										<td>
-											[% IF ( loopro.CIRCULATION ) %]
-												<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% loopro.info %]" title="Display detail for this biblio">biblio [% loopro.info |html %]</a>
-											[% ELSE %]
-												[% loopro.info |html %]
-											[% END %]
-										</td>
-									</tr>
-								[% END %]
-							</table>
-						[% ELSE %]
-							<div class="dialog alert">
-								No log found
-								[% IF ( CATALOGUING ) %]
-									for <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% object %]">Bibliographic Record [% object %]</a>
-								[% END %]
-								[% IF ( MEMBERS ) %]
-									for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% object %]">[% firstname %] [% surname %] ([% cardnumber %])</a>
-								[% END %]
-								.
-							</div>
-						[% END %]
-					[% END %]
-
-				</form>
+			</form>
                 [% END %]
                 [% IF ( do_it ) %]
                     [% IF ( total ) %]
@@ -223,6 +148,7 @@
                                 <th>Info</th>
                             </tr>
                             [% FOREACH loopro IN looprow %]
+                                [% UNLESS ( loop.odd ) %]<tr class="highlight">[% ELSE %]<tr>[% END %]
                                 <tr>
                                     <td>[% loopro.timestamp %]</td>
                                     <td>
@@ -239,7 +165,11 @@
                                             <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% loopro.object %]" title="Display member details."> member [% loopro.object %] </a>
                                         [% ELSE %]
                                             [% IF ( module == 'CIRCULATION' ) %]
-                                            <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% loopro.object %]" title="Display member details."> member [% loopro.object %] </a>
+                                            <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% loopro.object %]" title="Display member details.">
+                                                [% IF ( loopro.object ) %]
+                                                    member [% loopro.object %]
+                                                [% END %]
+                                            </a>
                                             [% ELSE %]
                                                 [% IF ( module == 'CATALOGUING' ) %]
                                                     [% IF ( info == 'item' ) %]
@@ -251,7 +181,11 @@
                                                     [% IF ( module == 'SERIAL' ) %]
                                                         <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% loopro.object %]"> [% loopro.object %] </a>
                                                     [% ELSE %]
-                                                        [% loopro.object %]
+                                                        [% IF ( module == 'AUTHORITIES' ) %]
+                                                            <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% loopro.object %]" title="Display detail for this authority">auth [% loopro.object %]</a>
+                                                        [% ELSE %]
+                                                            [% loopro.object %]
+                                                        [% END %]
                                                     [% END %]
                                                 [% END %]
                                             [% END %]
@@ -274,7 +208,7 @@
                                 for <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% object %]">Bibliographic Record [% object %]</a>
                             [% END %]
                             [% IF ( MEMBERS ) %]
-                                for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% object %]">[% firstname %] [% surname %] ([% cardnumber %])</a>
+                                for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% object %]">[% INCLUDE 'patron-title.inc' %]</a>
                             [% END %]
                             .
                         </div>

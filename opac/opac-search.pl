@@ -272,6 +272,21 @@ my $params = $cgi->Vars;
 my $tag;
 $tag = $params->{tag} if $params->{tag};
 
+
+# String with params with the search criteria for the paging in opac-detail
+my $pasarParams = '';
+my $j = 0;
+for (keys %$params) {
+    my @pasarParam = split("\0", $params->{$_});
+    for my $paramValue(@pasarParam) {
+        $pasarParams .= '&amp;' if ($j > 0);
+        $pasarParams .= $_ . '=' . $paramValue;
+        $j++;
+    }
+}
+#
+
+
 # Params that can have more than one value
 # sort by is used to sort the query
 # in theory can have more than one but generally there's just one
@@ -373,7 +388,7 @@ my ($error,$query,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit_
 my @results;
 
 ## I. BUILD THE QUERY
-my $lang = C4::Output::getlanguagecookie($cgi);
+my $lang = C4::Templates::getlanguagecookie($cgi);
 ( $error,$query,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit_desc,$stopwords_removed,$query_type) = buildQuery(\@operators,\@operands,\@indexes,\@limits,\@sort_by, 0, $lang);
 
 sub _input_cgi_parse ($) { 
@@ -434,6 +449,10 @@ elsif (C4::Context->preference('NoZebra')) {
         ($error, $results_hashref, $facets) = C4::Search::pazGetRecords($query,$simple_query,\@sort_by,\@servers,$results_per_page,$offset,$expanded_facet,$branches,$query_type,$scan);
     };
 } else {
+    $pasarParams .= '&amp;query=' . $query;
+    $pasarParams .= '&amp;count=' . $results_per_page;
+    $pasarParams .= '&amp;simple_query=' . $simple_query;
+    $pasarParams .= '&amp;query_type=' . $query_type if ($query_type);
     eval {
         ($error, $results_hashref, $facets) = getRecords($query,$simple_query,\@sort_by,\@servers,$results_per_page,$offset,$expanded_facet,$branches,$query_type,$scan);
     };
@@ -487,7 +506,8 @@ for (my $i=0;$i<@servers;$i++) {
 		}
                 if (C4::Context->preference('COinSinOPACResults')) {
 		    foreach (@newresults) {
-		      $_->{coins} = GetCOinSBiblio($_->{'biblionumber'});
+                      my $record = GetMarcBiblio($_->{'biblionumber'});
+		      $_->{coins} = GetCOinSBiblio($record);
 		    }
                 }
       
@@ -555,6 +575,24 @@ for (my $i=0;$i<@servers;$i++) {
             exit;
         }
         if ($hits) {
+            if (!C4::Context->preference('NoZebra') && !$build_grouped_results) {
+                # We build the encrypted list of first OPACnumSearchResults biblios to pass with the search criteria for paging on opac-detail
+                $pasarParams .= '&amp;listBiblios=';
+                my $j = 0;
+                foreach (@newresults) {
+                    my $bibnum = ($_->{biblionumber})?$_->{biblionumber}:0;
+                    $pasarParams .= $bibnum . ',';
+                    $j++;
+                    last if ($j == $results_per_page);
+                }
+                chop $pasarParams if ($pasarParams =~ /,$/);
+                $pasarParams .= '&amp;total=' . int($total) if ($pasarParams !~ /total=(?:[0-9]+)?/);
+                if ($pasarParams) {
+                    my $session = get_session($cgi->cookie("CGISESSID"));
+                    $session->param('busc' => $pasarParams);
+                }
+                #
+            }
             $template->param(total => $hits);
             my $limit_cgi_not_availablity = $limit_cgi;
             $limit_cgi_not_availablity =~ s/&limit=available//g if defined $limit_cgi_not_availablity;

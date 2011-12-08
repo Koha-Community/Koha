@@ -65,9 +65,9 @@
                 [% loggedinusername %]
             </span>
             [% IF ( intranetbookbag ) %]
-            (<a href="/cgi-bin/koha/mainpage.pl?logout.x=1" onclick="delBasket(true);">Log Out</a>) |
+            (<a href="/cgi-bin/koha/mainpage.pl?logout.x=1" onclick="clearHoldFor(); delBasket('main', true);">Log Out</a>) |
             [% ELSE %]
-            (<a href="/cgi-bin/koha/mainpage.pl?logout.x=1">Log Out</a>) |
+            (<a href="/cgi-bin/koha/mainpage.pl?logout.x=1" onclick="clearHoldFor();">Log Out</a>) |
             [% END %]
         [% ELSE %]
             You are not logged in |

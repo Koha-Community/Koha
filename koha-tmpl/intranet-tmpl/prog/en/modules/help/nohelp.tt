@@ -1,11 +1,13 @@
 [% INCLUDE 'help-top.inc' %]
 	
-	<h1>Online Help</h1>
-	<p>Sorry, there is no help available for this topic</p>
+<h1>Online Help</h1>
+
+<p>Sorry, there is no help available for this topic, please refer to the <a href="http://manual.koha-community.org/3.6/en/">Koha 3.6 manual</a> (online).</p>
+
 <form action="/cgi-bin/koha/edithelp.pl" method="post">
-<input type="hidden" name="referer" value="[% referer %]" />
-<input type="hidden" name="type" value="addnew" />
-<input type="submit" name="submit" class="submit" value="Add help" />
+	<input type="hidden" name="referer" value="[% referer %]" />
+	<input type="hidden" name="type" value="addnew" />
+	<input type="submit" name="submit" class="submit" value="Add help" />
 </form>
 	
 [% INCLUDE 'help-bottom.inc' %]

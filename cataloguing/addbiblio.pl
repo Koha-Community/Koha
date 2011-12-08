@@ -349,6 +349,10 @@ sub create_input {
            $value eq '' &&
            !$tdef->{$subfield}->{mandatory} &&
            !$tdef->{mandatory};
+    # expand all subfields of 773 if there is a host item provided in the input
+    $subfield_data{visibility} ="" if ($tag eq 773 and $cgi->param('hostitemnumber'));
+
+
     # it's an authorised field
     if ( $tagslib->{$tag}->{$subfield}->{authorised_value} ) {
         $subfield_data{marc_value} =
@@ -696,7 +700,7 @@ sub build_tabs ($$$$$) {
                            # always include in the form regardless of the hidden setting - bug 2206
                     next
                       if ( $tagslib->{$tag}->{$subfield}->{tab} ne $tabloop );
-                    push(
+			push(
                         @subfields_data,
                         &create_input(
                             $tag, $subfield, '', $index_tag, $tabloop, $record,
@@ -834,6 +838,8 @@ my $mode          = $input->param('mode');
 my $frameworkcode = $input->param('frameworkcode');
 my $redirect      = $input->param('redirect');
 my $dbh           = C4::Context->dbh;
+my $hostbiblionumber = $input->param('hostbiblionumber');
+my $hostitemnumber = $input->param('hostitemnumber');
 
     
 my $userflags = 'edit_catalogue';
@@ -904,6 +910,14 @@ if (($biblionumber) && !($breedingid)){
 if ($breedingid) {
     ( $record, $encoding ) = MARCfindbreeding( $breedingid ) ;
 }
+#populate hostfield if hostbiblionumber is available
+if ($hostbiblionumber){
+	my $marcflavour = C4::Context->preference("marcflavour");
+	$record=MARC::Record->new();
+	$record->leader('');
+        my $field = PrepHostMarcField($hostbiblionumber, $hostitemnumber,$marcflavour);
+	$record->append_fields($field);
+}
 
 $is_a_modif = 0;
     
@@ -931,7 +945,7 @@ if ( $op eq "addbiblio" ) {
     );
     # getting html input
     my @params = $input->param();
-    $record = TransformHtmlToMarc( \@params , $input );
+    $record = TransformHtmlToMarc( $input );
     # check for a duplicate
     my ( $duplicatebiblionumber, $duplicatetitle );
     if ( !$is_a_modif ) {
@@ -1037,14 +1051,16 @@ elsif ( $op eq "delete" ) {
         $biblionumber = "";
     }
 
+    if ( $record ne -1 ) {
 #FIXME: it's kind of silly to go from MARC::Record to MARC::File::XML and then back again just to fix the encoding
-    eval {
-        my $uxml = $record->as_xml;
-        MARC::Record::default_record_format("UNIMARC")
-          if ( C4::Context->preference("marcflavour") eq "UNIMARC" );
-        my $urecord = MARC::Record::new_from_xml( $uxml, 'UTF-8' );
-        $record = $urecord;
-    };
+        eval {
+            my $uxml = $record->as_xml;
+            MARC::Record::default_record_format("UNIMARC")
+            if ( C4::Context->preference("marcflavour") eq "UNIMARC" );
+            my $urecord = MARC::Record::new_from_xml( $uxml, 'UTF-8' );
+            $record = $urecord;
+        };
+    }
     build_tabs( $template, $record, $dbh, $encoding,$input );
     $template->param(
         biblionumber             => $biblionumber,
@@ -1053,20 +1069,18 @@ elsif ( $op eq "delete" ) {
         biblioitemnumtagfield    => $biblioitemnumtagfield,
         biblioitemnumtagsubfield => $biblioitemnumtagsubfield,
         biblioitemnumber         => $biblioitemnumber,
+	hostbiblionumber	=> $hostbiblionumber,
+	hostitemnumber		=> $hostitemnumber
     );
 }
 
 $template->param( title => $record->title() ) if ( $record ne "-1" );
-if (C4::Context->preference("marcflavour") eq "MARC21"){
-    $template->param(MARC21 => 1);
-}
-
-
 $template->param(
     popup => $mode,
     frameworkcode => $frameworkcode,
     itemtype => $frameworkcode,
-    borrowernumber => $loggedinuser
+    borrowernumber => $loggedinuser, 
+    marcflavour => C4::Context->preference("marcflavour"),
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

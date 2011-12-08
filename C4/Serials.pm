@@ -588,7 +588,7 @@ sub GetSubscriptions {
             $tmpstring =~ s/^AND //;
             push @sqlstrings, $tmpstring;
         }
-        $sqlwhere .= ( $sqlwhere ? " AND " : " WHERE " ) . "(" . join( ") OR (", @sqlstrings ) . ")";
+        $sqlwhere .= ( $sqlwhere ? " AND " : " WHERE " ) . "((" . join( ") OR (", @sqlstrings ) . "))";
     }
     if ($issn) {
         my @sqlstrings;
@@ -601,7 +601,7 @@ sub GetSubscriptions {
             $tmpstring =~ s/^OR //;
             push @sqlstrings, $tmpstring;
         }
-        $sqlwhere .= ( $sqlwhere ? " AND " : " WHERE " ) . "(" . join( ") OR (", @sqlstrings ) . ")";
+        $sqlwhere .= ( $sqlwhere ? " AND " : " WHERE " ) . "((" . join( ") OR (", @sqlstrings ) . "))";
     }
     $sql .= "$sqlwhere ORDER BY title";
     $debug and warn "GetSubscriptions query: $sql params : ", join( " ", @bind_params );
@@ -2154,7 +2154,7 @@ sub abouttoexpire {
             @res=Date::Calc::Today;
         }
         my @endofsubscriptiondate=split(/-/,$expirationdate);
-        my @per_list = (0, 7, 7, 14, 21, 31, 62, 93, 93, 190, 365, 730, 0, 0, 0, 0);
+        my @per_list = (0, 7, 7, 14, 21, 31, 62, 93, 93, 190, 365, 730, 0, 124, 0, 0);
         my @datebeforeend;
         @datebeforeend = Add_Delta_Days(  $endofsubscriptiondate[0],$endofsubscriptiondate[1],$endofsubscriptiondate[2],
             - (3 * $per_list[$per])) if (@endofsubscriptiondate && $endofsubscriptiondate[0]*$endofsubscriptiondate[1]*$endofsubscriptiondate[2]);
@@ -2316,6 +2316,15 @@ sub GetNextDate(@) {
                 }
             }
             @resultdate = Add_Delta_YMD( $year, $month, $day, 0, 3, 0 );
+        }
+        if ( $subscription->{periodicity} == 13 ) {
+            for ( my $i = 0 ; $i < @irreg ; $i++ ) {
+                if ( $irreg[$i] == ( ( $tmpmonth != 8 ) ? ( $tmpmonth + 4 ) % 12 : 12 ) ) {
+                    ( $year, $month, $day ) = Add_Delta_YMD( $year, $month, $day, 0, 4, 0 );
+                    $tmpmonth = ( ( $tmpmonth != 8 ) ? ( $tmpmonth + 4 ) % 12 : 12 );
+                }
+            }
+            @resultdate = Add_Delta_YMD( $year, $month, $day, 0, 4, 0 );
         }
         if ( $subscription->{periodicity} == 9 ) {
             for ( my $i = 0 ; $i < @irreg ; $i++ ) {

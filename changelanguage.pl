@@ -18,7 +18,7 @@
 use strict;
 use warnings;
 
-use C4::Output qw(setlanguagecookie);
+use C4::Templates;
 use CGI;
 
 my $query    = new CGI;
@@ -26,4 +26,4 @@ my $language = $query->param('language');
 my $url      = $query->referer();
 
 #warn "Language : $query // $language // $url";
-setlanguagecookie( $query, $language, $url );
+C4::Templates::setlanguagecookie( $query, $language, $url );

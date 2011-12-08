@@ -78,6 +78,7 @@ BEGIN {
       &GetMarcBiblio
       &GetMarcAuthors
       &GetMarcSeries
+      &GetMarcHosts
       GetMarcUrls
       &GetUsedMarcStructure
       &GetXmlBiblio
@@ -90,8 +91,12 @@ BEGIN {
       &GetMarcFromKohaField
       &GetFrameworkCode
       &TransformKohaToMarc
+      &PrepHostMarcField
 
       &CountItemsIssued
+      &CountBiblioInOrders
+      &GetSubscriptionsId
+      &GetHolds
     );
 
     # To modify something
@@ -384,7 +389,7 @@ sub ModBiblioframework {
 
 =head2 DelBiblio
 
-  my $error = &DelBiblio($dbh,$biblionumber);
+  my $error = &DelBiblio($biblionumber);
 
 Exported function (core API) for deleting a biblio in koha.
 Deletes biblio record from Zebra and Koha tables (biblio,biblioitems,items)
@@ -1070,9 +1075,9 @@ sub GetMarcBiblio {
         if ($@) { warn " problem with :$biblionumber : $@ \n$marcxml"; }
         return unless $record;
 
+        C4::Biblio::_koha_marc_update_bib_ids($record, '', $biblionumber, $biblionumber);
 	C4::Biblio::EmbedItemsInMarcBiblio($record, $biblionumber) if ($embeditems);
 
-        #      $record = MARC::Record::new_from_usmarc( $marc) if $marc;
         return $record;
     } else {
         return undef;
@@ -1099,20 +1104,17 @@ sub GetXmlBiblio {
 
 =head2 GetCOinSBiblio
 
-  my $coins = GetCOinSBiblio($biblionumber);
+  my $coins = GetCOinSBiblio($record);
 
-Returns the COinS(a span) which can be included in a biblio record
+Returns the COinS (a span) which can be included in a biblio record
 
 =cut
 
 sub GetCOinSBiblio {
-    my ($biblionumber) = @_;
-    my $record = GetMarcBiblio($biblionumber);
+    my $record = shift;
 
     # get the coin format
     if ( ! $record ) {
-	# can't get a valid MARC::Record object, bail out at this point
-	warn "We called GetMarcBiblio with a biblionumber that doesn't exist biblionumber=$biblionumber";
 	return;
     }
     my $pos7 = substr $record->leader(), 7, 1;
@@ -1217,7 +1219,8 @@ sub GetCOinSBiblio {
         $subtitle = $record->subfield( '245', 'b' ) || '';
         $title .= $subtitle;
         if ($titletype eq 'a') {
-            $pubyear   = substr $record->field('008')->data(), 7, 4;
+            $pubyear   = $record->field('008') || '';
+            $pubyear   = substr($pubyear->data(), 7, 4) if $pubyear;
             $isbn      = $record->subfield( '773', 'z' ) || '';
             $issn      = $record->subfield( '773', 'x' ) || '';
             if ($mtx eq 'journal') {
@@ -1760,6 +1763,48 @@ sub GetMarcSeries {
     return $marcseriessarray;
 }    #end getMARCseriess
 
+=head2 GetMarcHosts
+
+  $marchostsarray = GetMarcHosts($record,$marcflavour);
+
+Get all host records (773s MARC21, 461 UNIMARC) from the MARC record and returns them in an array.
+
+=cut
+
+sub GetMarcHosts {
+    my ( $record, $marcflavour ) = @_;
+    my ( $tag,$title_subf,$bibnumber_subf,$itemnumber_subf);
+    $marcflavour ||="MARC21";
+    if ( $marcflavour eq "MARC21" || $marcflavour eq "NORMARC" ) {
+        $tag = "773";
+        $title_subf = "t";
+        $bibnumber_subf ="0";
+        $itemnumber_subf='9';
+    }
+    elsif ($marcflavour eq "UNIMARC") {
+        $tag = "461";
+        $title_subf = "t";
+        $bibnumber_subf ="0";
+        $itemnumber_subf='9';
+    };
+
+    my @marchosts;
+
+    foreach my $field ( $record->field($tag)) {
+
+        my @fields_loop;
+
+        my $hostbiblionumber = $field->subfield("$bibnumber_subf");
+        my $hosttitle = $field->subfield($title_subf);
+        my $hostitemnumber=$field->subfield($itemnumber_subf);
+        push @fields_loop, { hostbiblionumber => $hostbiblionumber, hosttitle => $hosttitle, hostitemnumber => $hostitemnumber};
+        push @marchosts, { MARCHOSTS_FIELDS_LOOP => \@fields_loop };
+
+        }
+    my $marchostsarray = \@marchosts;
+    return $marchostsarray;
+}
+
 =head2 GetFrameworkCode
 
   $frameworkcode = GetFrameworkCode( $biblionumber )
@@ -1796,6 +1841,86 @@ sub TransformKohaToMarc {
     }
     return $record;
 }
+
+=head2 PrepHostMarcField
+
+    $hostfield = PrepHostMarcField ( $hostbiblionumber,$hostitemnumber,$marcflavour )
+
+This function returns a host field populated with data from the host record, the field can then be added to an analytical record
+
+=cut
+
+sub PrepHostMarcField {
+    my ($hostbiblionumber,$hostitemnumber, $marcflavour) = @_;
+    $marcflavour ||="MARC21";
+    
+    my $hostrecord = GetMarcBiblio($hostbiblionumber);
+	my $item = C4::Items::GetItem($hostitemnumber);
+	
+	my $hostmarcfield;
+    if ( $marcflavour eq "MARC21" || $marcflavour eq "NORMARC" ) {
+	
+        #main entry
+        my $mainentry;
+        if ($hostrecord->subfield('100','a')){
+            $mainentry = $hostrecord->subfield('100','a');
+        } elsif ($hostrecord->subfield('110','a')){
+            $mainentry = $hostrecord->subfield('110','a');
+        } else {
+            $mainentry = $hostrecord->subfield('111','a');
+        }
+	
+        # qualification info
+        my $qualinfo;
+        if (my $field260 = $hostrecord->field('260')){
+            $qualinfo =  $field260->as_string( 'abc' );
+        }
+	
+
+    	#other fields
+        my $ed = $hostrecord->subfield('250','a');
+        my $barcode = $item->{'barcode'};
+        my $title = $hostrecord->subfield('245','a');
+
+        # record control number, 001 with 003 and prefix
+        my $recctrlno;
+        if ($hostrecord->field('001')){
+            $recctrlno = $hostrecord->field('001')->data();
+            if ($hostrecord->field('003')){
+                $recctrlno = '('.$hostrecord->field('003')->data().')'.$recctrlno;
+            }
+        }
+
+        # issn/isbn
+        my $issn = $hostrecord->subfield('022','a');
+        my $isbn = $hostrecord->subfield('020','a');
+
+
+        $hostmarcfield = MARC::Field->new(
+                773, '0', '',
+                '0' => $hostbiblionumber,
+                '9' => $hostitemnumber,
+                'a' => $mainentry,
+                'b' => $ed,
+                'd' => $qualinfo,
+                'o' => $barcode,
+                't' => $title,
+                'w' => $recctrlno,
+                'x' => $issn,
+                'z' => $isbn
+                );
+    } elsif ($marcflavour eq "UNIMARC") {
+        $hostmarcfield = MARC::Field->new(
+            461, '', '',
+            '0' => $hostbiblionumber,
+            't' => $hostrecord->subfield('200','a'), 
+            '9' => $hostitemnumber
+        );	
+    };
+
+    return $hostmarcfield;
+}
+
 
 =head2 TransformKohaToMarcOneField
 
@@ -1989,8 +2114,8 @@ sub _default_ind_to_space {
 
 =head2 TransformHtmlToMarc
 
-    L<$record> = TransformHtmlToMarc(L<$params>,L<$cgi>)
-    L<$params> is a ref to an array as below:
+    L<$record> = TransformHtmlToMarc(L<$cgi>)
+    L<$cgi> is the CGI object which containts the values for subfields
     {
         'tag_010_indicator1_531951' ,
         'tag_010_indicator2_531951' ,
@@ -2007,14 +2132,14 @@ sub _default_ind_to_space {
         'tag_200_code_f_873510_110730' ,
         'tag_200_subfield_f_873510_110730' ,
     }
-    L<$cgi> is the CGI object which containts the value.
     L<$record> is the MARC::Record object.
 
 =cut
 
 sub TransformHtmlToMarc {
-    my $params = shift;
     my $cgi    = shift;
+
+    my @params = $cgi->param();
 
     # explicitly turn on the UTF-8 flag for all
     # 'tag_' parameters to avoid incorrect character
@@ -2035,8 +2160,8 @@ sub TransformHtmlToMarc {
     my $record = MARC::Record->new();
     my $i      = 0;
     my @fields;
-    while ( $params->[$i] ) {    # browse all CGI params
-        my $param    = $params->[$i];
+    while ( $params[$i] ) {    # browse all CGI params
+        my $param    = $params[$i];
         my $newfield = 0;
 
         # if we are on biblionumber, store it in the MARC::Record (it may not be in the edited fields)
@@ -2052,7 +2177,7 @@ sub TransformHtmlToMarc {
             my $tag = $1;
 
             my $ind1 = _default_ind_to_space( substr( $cgi->param($param), 0, 1 ) );
-            my $ind2 = _default_ind_to_space( substr( $cgi->param( $params->[ $i + 1 ] ), 0, 1 ) );
+            my $ind2 = _default_ind_to_space( substr( $cgi->param( $params[ $i + 1 ] ), 0, 1 ) );
             $newfield = 0;
             my $j = $i + 2;
 
@@ -2062,27 +2187,27 @@ sub TransformHtmlToMarc {
                     # Force a fake leader even if not provided to avoid crashing
                     # during decoding MARC record containing UTF-8 characters
                     $record->leader(
-                        length( $cgi->param($params->[$j+1]) ) == 24
-                        ? $cgi->param( $params->[ $j + 1 ] )
+                        length( $cgi->param($params[$j+1]) ) == 24
+                        ? $cgi->param( $params[ $j + 1 ] )
                         : '     nam a22        4500'
 			)
                     ;
                     # between 001 and 009 (included)
-                } elsif ( $cgi->param( $params->[ $j + 1 ] ) ne '' ) {
-                    $newfield = MARC::Field->new( $tag, $cgi->param( $params->[ $j + 1 ] ), );
+                } elsif ( $cgi->param( $params[ $j + 1 ] ) ne '' ) {
+                    $newfield = MARC::Field->new( $tag, $cgi->param( $params[ $j + 1 ] ), );
                 }
 
                 # > 009, deal with subfields
             } else {
-                while ( defined $params->[$j] && $params->[$j] =~ /_code_/ ) {    # browse all it's subfield
-                    my $inner_param = $params->[$j];
+                while ( defined $params[$j] && $params[$j] =~ /_code_/ ) {    # browse all it's subfield
+                    my $inner_param = $params[$j];
                     if ($newfield) {
-                        if ( $cgi->param( $params->[ $j + 1 ] ) ne '' ) {         # only if there is a value (code => value)
-                            $newfield->add_subfields( $cgi->param($inner_param) => $cgi->param( $params->[ $j + 1 ] ) );
+                        if ( $cgi->param( $params[ $j + 1 ] ) ne '' ) {         # only if there is a value (code => value)
+                            $newfield->add_subfields( $cgi->param($inner_param) => $cgi->param( $params[ $j + 1 ] ) );
                         }
                     } else {
-                        if ( $cgi->param( $params->[ $j + 1 ] ) ne '' ) {         # creating only if there is a value (code => value)
-                            $newfield = MARC::Field->new( $tag, $ind1, $ind2, $cgi->param($inner_param) => $cgi->param( $params->[ $j + 1 ] ), );
+                        if ( $cgi->param( $params[ $j + 1 ] ) ne '' ) {         # creating only if there is a value (code => value)
+                            $newfield = MARC::Field->new( $tag, $ind1, $ind2, $cgi->param($inner_param) => $cgi->param( $params[ $j + 1 ] ), );
                         }
                     }
                     $j += 2;
@@ -2730,7 +2855,7 @@ sub EmbedItemsInMarcBiblio {
         my $item_marc = C4::Items::GetMarcItem($biblionumber, $itemnumber);
         push @item_fields, $item_marc->field($itemtag);
     }
-    $marc->insert_fields_ordered(@item_fields);
+    $marc->append_fields(@item_fields);
 }
 
 =head1 INTERNAL FUNCTIONS
@@ -3394,9 +3519,12 @@ sub _koha_delete_biblio {
         $bkup_sth->finish;
 
         # delete the biblio
-        my $del_sth = $dbh->prepare("DELETE FROM biblio WHERE biblionumber=?");
-        $del_sth->execute($biblionumber);
-        $del_sth->finish;
+        my $sth2 = $dbh->prepare("DELETE FROM biblio WHERE biblionumber=?");
+        $sth2->execute($biblionumber);
+        # update the timestamp (Bugzilla 7146)
+        $sth2= $dbh->prepare("UPDATE deletedbiblio SET timestamp=NOW() WHERE biblionumber=?");
+        $sth2->execute($biblionumber);
+        $sth2->finish;
     }
     $sth->finish;
     return undef;
@@ -3440,9 +3568,12 @@ sub _koha_delete_biblioitems {
         $bkup_sth->finish;
 
         # delete the biblioitem
-        my $del_sth = $dbh->prepare("DELETE FROM biblioitems WHERE biblioitemnumber=?");
-        $del_sth->execute($biblioitemnumber);
-        $del_sth->finish;
+        my $sth2 = $dbh->prepare("DELETE FROM biblioitems WHERE biblioitemnumber=?");
+        $sth2->execute($biblioitemnumber);
+        # update the timestamp (Bugzilla 7146)
+        $sth2= $dbh->prepare("UPDATE deletedbiblioitems SET timestamp=NOW() WHERE biblioitemnumber=?");
+        $sth2->execute($biblioitemnumber);
+        $sth2->finish;
     }
     $sth->finish;
     return undef;
@@ -3680,6 +3811,76 @@ sub get_biblio_authorised_values {
     # warn ( Data::Dumper->Dump( [ $authorised_values ], [ 'authorised_values' ] ) );
     return $authorised_values;
 }
+
+=head2 CountBiblioInOrders
+
+=over 4
+$count = &CountBiblioInOrders( $biblionumber);
+
+=back
+
+This function return count of biblios in orders with $biblionumber 
+
+=cut
+
+sub CountBiblioInOrders {
+ my ($biblionumber) = @_;
+    my $dbh            = C4::Context->dbh;
+    my $query          = "SELECT count(*)
+          FROM  aqorders 
+          WHERE biblionumber=? AND (datecancellationprinted IS NULL OR datecancellationprinted='0000-00-00')";
+    my $sth = $dbh->prepare($query);
+    $sth->execute($biblionumber);
+    my $count = $sth->fetchrow;
+    return ($count);
+}
+
+=head2 GetSubscriptionsId
+
+=over 4
+$subscriptions = &GetSubscriptionsId($biblionumber);
+
+=back
+
+This function return an array of subscriptionid with $biblionumber
+
+=cut
+
+sub GetSubscriptionsId {
+ my ($biblionumber) = @_;
+    my $dbh            = C4::Context->dbh;
+    my $query          = "SELECT subscriptionid
+          FROM  subscription
+          WHERE biblionumber=?";
+    my $sth = $dbh->prepare($query);
+    $sth->execute($biblionumber);
+    my @subscriptions = $sth->fetchrow_array;
+    return (@subscriptions);
+}
+
+=head2 GetHolds
+
+=over 4
+$holds = &GetHolds($biblionumber);
+
+=back
+
+This function return the count of holds with $biblionumber
+
+=cut
+
+sub GetHolds {
+ my ($biblionumber) = @_;
+    my $dbh            = C4::Context->dbh;
+    my $query          = "SELECT count(*)
+          FROM  reserves
+          WHERE biblionumber=?";
+    my $sth = $dbh->prepare($query);
+    $sth->execute($biblionumber);
+    my $holds = $sth->fetchrow;
+    return ($holds);
+}
+
 
 1;
 
