@@ -904,6 +904,17 @@
             </xsl:for-each>
 	</span>
     </xsl:if>
+    <xsl:if test="marc:datafield[@tag=242]">
+	<span class="results_summary">
+    <span class="label">Title translated: </span>
+            <xsl:for-each select="marc:datafield[@tag=242]">
+                    <xsl:call-template name="subfieldSelect">
+                        <xsl:with-param name="codes">abh</xsl:with-param>
+                    </xsl:call-template>
+                    <xsl:choose><xsl:when test="position()=last()"><xsl:text>.</xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
+            </xsl:for-each>
+	</span>
+    </xsl:if>
     <xsl:if test="marc:datafield[@tag=856]">
          <span class="results_summary">
 			   <span class="label">Online Access: </span>
