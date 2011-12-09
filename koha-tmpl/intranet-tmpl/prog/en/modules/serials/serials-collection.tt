@@ -71,7 +71,7 @@ $(document).ready(function() {
 
 [% IF ( subscriptions ) %]
 <table>
-[% IF ( onesubscription ) %]
+[% IF ( subscriptions.size == 1 ) %]
 <caption> Subscription Summary</caption>
 [% ELSE %]
 <caption> Subscription Summaries</caption>
@@ -161,9 +161,8 @@ $(document).ready(function() {
       </tr>
 [% END %]
 [% IF ( subscr ) %]
-[% UNLESS ( onesubscription ) %]
-<tr ><td colspan="7">  <a href="serials-collection.pl?biblionumber=[% biblionumber %]">See any subscription attached to this biblio</a></td>
-</tr>[% END %]
+<tr ><td colspan="8">  <a href="serials-collection.pl?biblionumber=[% biblionumber %]">See any subscription attached to this biblio</a></td>
+</tr>
 [% END %]
 </table>
 [% END %]
@@ -183,7 +182,7 @@ $(document).ready(function() {
 <div id="subscription-year-[% year.year %]">
         <table style="width:400px;">
 	  <tr>
-[% UNLESS ( year.onesubscription ) %]
+[% IF ( subscriptions.size > 1 ) %]
                 <th># Subs</th>
 [% END %]
                 <th>Date published
@@ -205,7 +204,7 @@ $(document).ready(function() {
             </tr>
       [% FOREACH serial IN year.serials %]
     [% UNLESS ( loop.odd ) %]<tr class="highlight">[% ELSE %]<tr>[% END %]
-[% UNLESS ( serial.onesubscription ) %]
+[% IF ( subscriptions.size > 1 ) %]
                  <td><a href="serials-collection.pl?subscriptionid=[% serial.subscriptionid %]">[% serial.subscriptionid %]</a></td>
 [% END %]
                 <td>
