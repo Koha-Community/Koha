@@ -17,8 +17,8 @@
 # with Koha; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-#use strict;
-#use warnings; FIXME - Bug 2505
+use strict;
+use warnings;
 use C4::Context;
 
 =head1 plugin_parameters
@@ -53,12 +53,12 @@ sub plugin_javascript {
 
 	my $branchcode = C4::Context->userenv->{'branch'};
 
-	$query = "SELECT MAX(CAST(SUBSTRING_INDEX(stocknumber,'_',-1) AS SIGNED))+1 FROM items WHERE homebranch = ? AND stocknumber LIKE ?";
+	my $query = "SELECT MAX(CAST(SUBSTRING_INDEX(stocknumber,'_',-1) AS SIGNED))+1 FROM items WHERE homebranch = ? AND stocknumber LIKE ?";
 	my $sth=$dbh->prepare($query);
 
 	$sth->execute($branchcode,$branchcode."_%");
 	my ($nextnum) = $sth->fetchrow;
-	my $nextnum = $branchcode.'_'.$nextnum;
+	$nextnum = $branchcode.'_'.$nextnum;
 
     my $scr = <<END_OF_JS;
 if (\$('#' + id).val() == '' || force) {
