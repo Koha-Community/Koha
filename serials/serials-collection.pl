@@ -147,7 +147,6 @@ foreach (@$location) {
 
 chop $subscriptionidlist;
 $template->param(
-          onesubscription => (scalar(@$subscriptiondescs)==1),
           subscriptionidlist => $subscriptionidlist,
           biblionumber => $biblionumber,
           subscriptions => $subscriptiondescs,
