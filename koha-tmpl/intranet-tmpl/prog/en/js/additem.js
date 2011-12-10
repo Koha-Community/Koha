@@ -6,7 +6,7 @@ function deleteItemBlock(index) {
 }
 function cloneItemBlock(index) {    
     var original = document.getElementById(index); //original <div>
-    var clone = original.cloneNode(true);
+    var clone = clone_with_selected(original)
     var random = Math.floor(Math.random()*100000); // get a random itemid.
     // set the attribute for the new 'div' subfields
     clone.setAttribute('id',index + random);//set another id.
@@ -54,6 +54,19 @@ function check_additem() {
 	// duplicates within the form.  
 	return success;
 }
+
+function clone_with_selected (node) {
+	   var origin = node.getElementsByTagName("select");
+	   var tmp = node.cloneNode(true)
+	   var selectelem = tmp.getElementsByTagName("select");
+	   for (var i=0; i<origin.length; i++) {
+	       selectelem[i].selectedIndex = origin[i].selectedIndex;
+	   }
+	   origin = null;
+	   selectelem = null;
+	   return tmp;
+	}
+
 $(document).ready(function(){
 	$(".cloneItemBlock").click(function(){
 		var clonedRow = $(this).parent().parent().clone(true);
