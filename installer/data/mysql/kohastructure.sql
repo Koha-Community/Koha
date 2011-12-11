@@ -1393,7 +1393,7 @@ CREATE TABLE `old_reserves` ( -- this table holds all holds/reserves that have b
   `cancellationdate` date default NULL, -- the date this hold was cancelled
   `reservenotes` mediumtext, -- notes related to this hold
   `priority` smallint(6) default NULL, -- where in the queue the patron sits
-  `found` varchar(1) default NULL, -- a one letter code defining what the the status is of the hold is after it has been confirmed
+  `found` varchar(1) default NULL, -- a one letter code defining what the status is of the hold is after it has been confirmed
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- the date and time this hold was last updated
   `itemnumber` int(11) default NULL, -- foreign key from the items table defining the specific item the patron has placed on hold or the item this hold was filled with
   `waitingdate` date default NULL, -- the date the item was marked as waiting for the patron at the library
@@ -1568,7 +1568,7 @@ CREATE TABLE `reserves` ( -- information related to holds/reserves in Koha
   `cancellationdate` date default NULL, -- the date this hold was cancelled
   `reservenotes` mediumtext, -- notes related to this hold
   `priority` smallint(6) default NULL, -- where in the queue the patron sits
-  `found` varchar(1) default NULL, -- a one letter code defining what the the status is of the hold is after it has been confirmed
+  `found` varchar(1) default NULL, -- a one letter code defining what the status is of the hold is after it has been confirmed
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- the date and time this hold was last updated
   `itemnumber` int(11) default NULL, -- foreign key from the items table defining the specific item the patron has placed on hold or the item this hold was filled with
   `waitingdate` date default NULL, -- the date the item was marked as waiting for the patron at the library

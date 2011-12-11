@@ -128,7 +128,7 @@ YAHOO.namespace = function() {
  * @param  {String}  cat  The log category for the message.  Default
  *                        categories are "info", "warn", "error", time".
  *                        Custom categories can be used as well. (opt)
- * @param  {String}  src  The source of the the message (opt)
+ * @param  {String}  src  The source of the message (opt)
  * @return {Boolean}      True if the log operation was successful.
  */
 YAHOO.log = function(msg, cat, src) {
@@ -1618,7 +1618,7 @@ YAHOO.util.Get = function() {
         TIMEOUT: 2000,
         
         /**
-         * Called by the the helper for detecting script load in Safari
+         * Called by the helper for detecting script load in Safari
          * @method _finalize
          * @param id {string} the transaction id
          * @private
@@ -2462,7 +2462,7 @@ YAHOO.register("get", YAHOO.util.Get, {version: "2.8.0r4", build: "2449"});
         this.comboBase = YUI.info.comboBase;
 
         /**
-         * If configured, YUI will use the the combo handler on the
+         * If configured, YUI will use the combo handler on the
          * Yahoo! CDN to pontentially reduce the number of http requests
          * required.
          * @property combine

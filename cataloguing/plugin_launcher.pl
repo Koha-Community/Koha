@@ -27,7 +27,7 @@ use C4::Output;
 my $input = new CGI;
 my $plugin_name="cataloguing/value_builder/".$input->param("plugin_name");
 
-# opening plugin. Just check wether we are on a developper computer on a production one
+# opening plugin. Just check whether we are on a developer computer on a production one
 # (the cgidir differs)
 my $cgidir = C4::Context->intranetdir ."/cgi-bin";
 my $vbdir = "$cgidir/cataloguing/value_builder";

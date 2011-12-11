@@ -234,7 +234,7 @@ while (my ($bibid) = $sth->fetchrow) {
                     }
                 }
                 if ($#x >4) {
-                    # too many $x, not handled, warn the developper that tries to migrate
+                    # too many $x, not handled, warn the developer that tries to migrate
                     print "warning there is ".$#x.'$x values';
                 }
             }

@@ -273,7 +273,7 @@ sub _BIB {
 
 sub _BAR {
     my $self = shift;
-    my $barcode_llx = $self->{'llx'} + $self->{'left_text_margin'};     # this places the bottom left of the barcode the left text margin distance to right of the the left edge of the label ($llx)
+    my $barcode_llx = $self->{'llx'} + $self->{'left_text_margin'};     # this places the bottom left of the barcode the left text margin distance to right of the left edge of the label ($llx)
     my $barcode_lly = $self->{'lly'} + $self->{'top_text_margin'};      # this places the bottom left of the barcode the top text margin distance above the bottom of the label ($lly)
     my $barcode_width = 0.8 * $self->{'width'};                         # this scales the barcode width to 80% of the label width
     my $barcode_y_scale_factor = 0.01 * $self->{'height'};              # this scales the barcode height to 10% of the label height
@@ -282,7 +282,7 @@ sub _BAR {
 
 sub _BIBBAR {
     my $self = shift;
-    my $barcode_llx = $self->{'llx'} + $self->{'left_text_margin'};     # this places the bottom left of the barcode the left text margin distance to right of the the left edge of the label ($self->{'llx'})
+    my $barcode_llx = $self->{'llx'} + $self->{'left_text_margin'};     # this places the bottom left of the barcode the left text margin distance to right of the left edge of the label ($self->{'llx'})
     my $barcode_lly = $self->{'lly'} + $self->{'top_text_margin'};      # this places the bottom left of the barcode the top text margin distance above the bottom of the label ($lly)
     my $barcode_width = 0.8 * $self->{'width'};                         # this scales the barcode width to 80% of the label width
     my $barcode_y_scale_factor = 0.01 * $self->{'height'};              # this scales the barcode height to 10% of the label height
@@ -294,7 +294,7 @@ sub _BIBBAR {
 
 sub _BARBIB {
     my $self = shift;
-    my $barcode_llx = $self->{'llx'} + $self->{'left_text_margin'};                             # this places the bottom left of the barcode the left text margin distance to right of the the left edge of the label ($self->{'llx'})
+    my $barcode_llx = $self->{'llx'} + $self->{'left_text_margin'};                             # this places the bottom left of the barcode the left text margin distance to right of the left edge of the label ($self->{'llx'})
     my $barcode_lly = ($self->{'lly'} + $self->{'height'}) - $self->{'top_text_margin'};        # this places the bottom left of the barcode the top text margin distance below the top of the label ($self->{'lly'})
     my $barcode_width = 0.8 * $self->{'width'};                                                 # this scales the barcode width to 80% of the label width
     my $barcode_y_scale_factor = 0.01 * $self->{'height'};                                      # this scales the barcode height to 10% of the label height

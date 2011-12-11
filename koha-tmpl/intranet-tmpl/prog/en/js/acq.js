@@ -76,14 +76,14 @@ DDApp = {
         if (uls[i].className == "draglist" || uls[i].className == "draglist_alt") {
             ddtarget = YAHOO.util.DragDropMgr.getDDById(uls[i].id);
 // The yahoo drag and drop is written (broken or not) in such a way, that if an element is subscribed as a target multiple times,
-// it has to be unlinked multiple times, so we need to test wether it is allready a target, otherwise we'll have a problem when closing the group
+// it has to be unlinked multiple times, so we need to test whether it is allready a target, otherwise we'll have a problem when closing the group
             if( ! ddtarget ) {
                 new YAHOO.util.DDTarget(uls[i].id);
             }
             var children = uls[i].getElementsByTagName('li');
             for( j=0; j<children.length; j=j+1) {
 // The yahoo drag and drop is (broken or not) in such a way, that if an element is subscribed as a target multiple times,
-// it has to be unlinked multiple times, so we need to test wether it is allready a target, otherwise we'll have a problem when closing the group
+// it has to be unlinked multiple times, so we need to test whether it is allready a target, otherwise we'll have a problem when closing the group
                 ddtarget = YAHOO.util.DragDropMgr.getDDById(children[j].id);
                 if( ! ddtarget ) {
                     new DDList(children[j].id);
