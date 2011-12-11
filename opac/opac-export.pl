@@ -67,6 +67,10 @@ elsif ($format =~ /utf8/) {
     C4::Charset::SetUTF8Flag($marc,1);
     $marc = $marc->as_usmarc();
 }
+elsif ($format =~ /marcstd/) {
+    C4::Charset::SetUTF8Flag($marc,1);
+    ($error,$marc) = marc2marc($marc, 'marcstd', C4::Context->preference('marcflavour'));
+}
 else {
     $error= "Format $format is not supported.";
 }

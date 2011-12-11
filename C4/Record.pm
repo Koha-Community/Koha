@@ -77,7 +77,32 @@ Returns an ISO-2709 scalar
 
 sub marc2marc {
 	my ($marc,$to_flavour,$from_flavour,$encoding) = @_;
-	my $error = "Feature not yet implemented\n";
+	my $error;
+    if ($to_flavour =~ m/marcstd/) {
+        my $marc_record_obj;
+        if ($marc =~ /^MARC::Record/) { # it's already a MARC::Record object
+            $marc_record_obj = $marc;
+        } else { # it's not a MARC::Record object, make it one
+            eval { $marc_record_obj = MARC::Record->new_from_usmarc($marc) }; # handle exceptions
+
+# conversion to MARC::Record object failed, populate $error
+                if ($@) { $error .="\nCreation of MARC::Record object failed: ".$MARC::File::ERROR };
+        }
+        unless ($error) {
+            my @privatefields;
+            foreach my $field ($marc_record_obj->fields()) {
+                if ($field->tag() =~ m/9/ && ($field->tag() != '490' || C4::Context->preference("marcflavour") eq 'UNIMARC')) {
+                    push @privatefields, $field;
+                } elsif (! ($field->is_control_field())) {
+                    $field->delete_subfield(code => '9') if ($field->subfield('9'));
+                }
+            }
+            $marc_record_obj->delete_field($_) for @privatefields;
+            $marc = $marc_record_obj->as_usmarc();
+        }
+    } else {
+        $error = "Feature not yet implemented\n";
+    }
 	return ($error,$marc);
 }
 

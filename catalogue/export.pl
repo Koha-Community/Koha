@@ -23,6 +23,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
 
 my $op=$query->param("op");
 my $format=$query->param("format");
+my $error = '';
 if ($op eq "export") {
 	my $biblionumber = $query->param("bib");
 		if ($biblionumber){
@@ -40,7 +41,6 @@ if ($op eq "export") {
 				$marc = marc2modsxml($marc);
 			}
 			elsif ($format =~ /dc/) {
-				my $error;
 				($error,$marc) = marc2dcxml($marc,1);
 				$format = "dublin-core.xml";
 			}
@@ -52,6 +52,10 @@ if ($op eq "export") {
 				C4::Charset::SetUTF8Flag($marc, 1);
 				$marc = $marc->as_usmarc();
 			}
+            elsif ($format =~ /marcstd/) {
+                C4::Charset::SetUTF8Flag($marc,1);
+                ($error, $marc) = marc2marc($marc, 'marcstd', C4::Context->preference('marcflavour'));
+            }
 			print $query->header(
 				-type => 'application/octet-stream',
                 -attachment=>"bib-$biblionumber.$format");
