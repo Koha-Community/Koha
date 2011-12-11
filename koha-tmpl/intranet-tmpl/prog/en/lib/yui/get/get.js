@@ -549,7 +549,7 @@ YAHOO.util.Get = function() {
         TIMEOUT: 2000,
         
         /**
-         * Called by the the helper for detecting script load in Safari
+         * Called by the helper for detecting script load in Safari
          * @method _finalize
          * @param id {string} the transaction id
          * @private

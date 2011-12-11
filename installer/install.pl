@@ -330,7 +330,7 @@ elsif ( $step && $step == 3 ) {
     }
     else {
         #
-        # check wether it's a 1st install or an update
+        # check whether it's a 1st install or an update
         #
         #Check if there are enough tables.
         # Paul has cleaned up tables so reduced the count

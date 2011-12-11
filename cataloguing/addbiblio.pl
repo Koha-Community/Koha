@@ -414,7 +414,7 @@ sub create_input {
     }
     elsif ( $tagslib->{$tag}->{$subfield}->{'value_builder'} ) {
 
-        # opening plugin. Just check wether we are on a developper computer on a production one
+        # opening plugin. Just check whether we are on a developer computer on a production one
         # (the cgidir differs)
         my $cgidir = C4::Context->intranetdir . "/cgi-bin/cataloguing/value_builder";
         unless ( opendir( DIR, "$cgidir" ) ) {

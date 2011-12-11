@@ -398,7 +398,7 @@ sub marcrecord2csv {
     # Getting the marcfields as an array
     my @marcfieldsarray = split('\|', $marcfieldslist);
 
-   # Separating the marcfields from the the user-supplied headers
+   # Separating the marcfields from the user-supplied headers
     my @marcfields;
     foreach (@marcfieldsarray) {
         my @result = split('=', $_);

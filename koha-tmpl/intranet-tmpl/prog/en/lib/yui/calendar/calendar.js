@@ -2436,7 +2436,7 @@ Calendar.prototype = {
         * </p>
         * <p>
         * This property can also be set to an object literal containing configuration properties for the CalendarNavigator UI.
-        * The configuration object expects the the following case-sensitive properties, with the "strings" property being a nested object.
+        * The configuration object expects the following case-sensitive properties, with the "strings" property being a nested object.
         * Any properties which are not provided will use the default values (defined in the CalendarNavigator class).
         * </p>
         * <dl>
