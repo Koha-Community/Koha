@@ -122,7 +122,8 @@ function confirm_items_deletion() {
 			{ text: _("Dublin Core (XML)"), url: "/cgi-bin/koha/catalogue/export.pl?format=dc&op=export&bib=[% biblionumber %]" },
 			{ text: _("MARCXML"), url: "/cgi-bin/koha/catalogue/export.pl?format=marcxml&op=export&bib=[% biblionumber %]" },
 			{ text: _("MARC (non-Unicode/MARC-8)"), url: "/cgi-bin/koha/catalogue/export.pl?format=marc8&op=export&bib=[% biblionumber %]" },
-			{ text: _("MARC (Unicode/UTF-8)"), url: "/cgi-bin/koha/catalogue/export.pl?format=utf8&op=export&bib=[% biblionumber %]" }
+            { text: _("MARC (Unicode/UTF-8)"), url: "/cgi-bin/koha/catalogue/export.pl?format=utf8&op=export&bib=[% biblionumber %]" },
+            { text: _("MARC (Unicode/UTF-8, Standard)"), url: "/cgi-bin/koha/catalogue/export.pl?format=marcstd&op=export&bib=[% biblionumber %]" }
 		];
 
 	    new YAHOO.widget.Button({
