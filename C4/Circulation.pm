@@ -1365,12 +1365,16 @@ sub GetBranchBorrowerCircRule {
 Retrieves circulation rule attributes that apply to the given
 branch and item type, regardless of patron category.
 
-The return value is a hashref containing the following key:
+The return value is a hashref containing the following keys:
 
 holdallowed => Hold policy for this branch and itemtype. Possible values:
   0: No holds allowed.
   1: Holds allowed only by patrons that have the same homebranch as the item.
   2: Holds allowed from any patron.
+
+returnbranch => branch to which to return item.  Possible values:
+  noreturn: do not return, let item remain where checked in (floating collections)
+  homebranch: return to item's home branch
 
 This searches branchitemrules in the following order:
 
@@ -1379,7 +1383,7 @@ This searches branchitemrules in the following order:
   * branchcode '*', same itemtype
   * branchcode and itemtype '*'
 
-Neither C<$branchcode> nor C<$categorycode> should be '*'.
+Neither C<$branchcode> nor C<$itemtype> should be '*'.
 
 =cut
 
@@ -1389,33 +1393,36 @@ sub GetBranchItemRule {
     my $result = {};
 
     my @attempts = (
-        ['SELECT holdallowed
+        ['SELECT holdallowed, returnbranch
             FROM branch_item_rules
             WHERE branchcode = ?
               AND itemtype = ?', $branchcode, $itemtype],
-        ['SELECT holdallowed
+        ['SELECT holdallowed, returnbranch
             FROM default_branch_circ_rules
             WHERE branchcode = ?', $branchcode],
-        ['SELECT holdallowed
+        ['SELECT holdallowed, returnbranch
             FROM default_branch_item_rules
             WHERE itemtype = ?', $itemtype],
-        ['SELECT holdallowed
+        ['SELECT holdallowed, returnbranch
             FROM default_circ_rules'],
     );
 
     foreach my $attempt (@attempts) {
         my ($query, @bind_params) = @{$attempt};
+        my $search_result = $dbh->selectrow_hashref ( $query , {}, @bind_params );
 
         # Since branch/category and branch/itemtype use the same per-branch
         # defaults tables, we have to check that the key we want is set, not
         # just that a row was returned
-        return $result if ( defined( $result->{'holdallowed'} = $dbh->selectrow_array( $query, {}, @bind_params ) ) );
+        $result->{'holdallowed'}  = $search_result->{'holdallowed'}  unless ( defined $result->{'holdallowed'} );
+        $result->{'returnbranch'} = $search_result->{'returnbranch'} unless ( defined $result->{'returnbranch'} );
     }
     
     # built-in default circulation rule
-    return {
-        holdallowed => 2,
-    };
+    $result->{'holdallowed'} = 2 unless ( defined $result->{'holdallowed'} );
+    $result->{'returnbranch'} = 'homebranch' unless ( defined $result->{'returnbranch'} );
+
+    return $result;
 }
 
 =head2 AddReturn
@@ -1532,9 +1539,10 @@ sub AddReturn {
     my $item = GetItem($itemnumber) or die "GetItem($itemnumber) failed";
         # full item data, but no borrowernumber or checkout info (no issue)
         # we know GetItem should work because GetItemnumberFromBarcode worked
-    my $hbr      = C4::Context->preference("HomeOrHoldingBranchReturn") || "homebranch";
-    $hbr = $item->{$hbr} || '';
-        # item must be from items table -- issues table has branchcode and issuingbranch, not homebranch nor holdingbranch
+    my $hbr      = GetBranchItemRule($item->{'homebranch'}, $item->{'itype'})->{'returnbranch'} || "homebranch";
+        # get the proper branch to which to return the item
+    $hbr = $item->{$hbr} || $branch ;
+        # if $hbr was "noreturn" or any other non-item table value, then it should 'float' (i.e. stay at this branch)
 
     my $borrowernumber = $borrower->{'borrowernumber'} || undef;    # we don't know if we had a borrower or not
 

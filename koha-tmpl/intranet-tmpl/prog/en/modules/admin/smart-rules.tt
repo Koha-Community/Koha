@@ -192,6 +192,7 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
                     <th>&nbsp;</th>
                     <th>Total Current Checkouts Allowed</th>
                     <th>Hold Policy</th>
+                    <th>Return Policy</th>
                     <th>&nbsp;</th>
                     <th>&nbsp;</th>
                 </tr>
@@ -220,6 +221,31 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
                             <option value="0">
                             [% END %]
                                 No Holds Allowed
+                            </option>
+                        </select>
+                    </td>
+                    <td>
+                        <select name="returnbranch">
+                            [% IF ( default_returnbranch == 'homebranch' ) %]
+                            <option value="homebranch" selected="selected">
+                            [% ELSE %]
+                            <option value="homebranch">
+                            [% END %]
+                                Item Returns Home
+                            </option>
+                            [% IF ( default_returnbranch == 'holdingbranch' ) %]
+                            <option value="holdingbranch" selected="selected">
+                            [% ELSE %]
+                            <option value="holdingbranch">
+                            [% END %]
+                                Item Returns to Issuing Branch
+                            </option>
+                            [% IF ( default_returnbranch == 'noreturn' ) %]
+                            <option value="noreturn" selected="selected">
+                            [% ELSE %]
+                            <option value="noreturn">
+                            [% END %]
+                                Item Floats
                             </option>
                         </select>
                     </td>
@@ -316,6 +342,7 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
                 <tr>
                     <th>Item Type</th>
                     <th>Hold Policy</th>
+                    <th>Return Policy</th>
                     <th>&nbsp;</th>
                 </tr>
                 [% FOREACH branch_item_rule_loo IN branch_item_rule_loop %]
@@ -338,6 +365,16 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
                                 No Holds Allowed
                             [% END %]
                         </td>
+                        <td>[% IF ( branch_item_rule_loo.returnbranch == 'homebranch' ) %]
+                                Item Returns Home
+                            [% ELSIF ( branch_item_rule_loo.returnbranch == 'holdingbranch' ) %]
+                                Item Returns to Issuing Branch
+                            [% ELSIF ( branch_item_rule_loo.returnbranch == 'noreturn' ) %]
+                                Item Floats
+                            [% ELSE %]
+                                Error - unknown option
+                            [% END %]
+                        </td>
                         <td>
                             <a class="button" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete-branch-item&amp;itemtype=[% branch_item_rule_loo.itemtype %]&amp;branch=[% current_branch %]">Delete</a>
                         </td>
@@ -356,6 +393,13 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
                             <option value="2">From Any Library</option>
                             <option value="1">From Home Library</option>
                             <option value="0">No Holds Allowed</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select name="returnbranch">
+                            <option value="homebranch">Item Returns Home</option>
+                            <option value="holdingbranch">Item Returns to Issuing Branch</option>
+                            <option value="noreturn">Item Floats</option>
                         </select>
                     </td>
                     <td><input type="submit" value="Add" class="submit" /></td>
