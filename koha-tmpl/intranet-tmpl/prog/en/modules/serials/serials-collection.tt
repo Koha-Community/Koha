@@ -161,8 +161,10 @@ $(document).ready(function() {
       </tr>
 [% END %]
 [% IF ( subscr ) %]
+[% IF ( subscriptioncount > 1 ) %]
 <tr ><td colspan="8">  <a href="serials-collection.pl?biblionumber=[% biblionumber %]">See any subscription attached to this biblio</a></td>
 </tr>
+[% END %]
 [% END %]
 </table>
 [% END %]
