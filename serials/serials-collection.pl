@@ -93,6 +93,7 @@ if($op eq 'gennext' && @subscriptionid){
     print $query->redirect('/cgi-bin/koha/serials/serials-collection.pl?subscriptionid='.$subscriptionid);
 }
 
+my $subscriptioncount;
 my ($location, $callnumber);
 if (@subscriptionid){
    my @subscriptioninformation=();
@@ -123,6 +124,7 @@ if (@subscriptionid){
     @subscriptioninformation=(@$tmpsubscription,@subscriptioninformation);
   }
   $subscriptions=PrepareSerialsData(\@subscriptioninformation);
+  $subscriptioncount = CountSubscriptionFromBiblionumber($subscriptiondescs->[0]{'biblionumber'});
 } else {
   $subscriptiondescs = GetSubscriptionsFromBiblionumber($biblionumber) ;
   my $subscriptioninformation = GetFullSubscriptionsFromBiblionumber($biblionumber);
@@ -157,6 +159,7 @@ $template->param(
           suggestion => C4::Context->preference("suggestion"),
           virtualshelves => C4::Context->preference("virtualshelves"),
           subscr=>$query->param('subscriptionid'),
+          subscriptioncount => $subscriptioncount,
     location	       => $locationlib,
     callnumber	       => $callnumber,
           );
