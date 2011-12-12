@@ -410,6 +410,7 @@ my %config_defaults = (
   'AUTH_INDEX_MODE'   => 'dom',
   'ZEBRA_MARC_FORMAT' => 'marc21',
   'ZEBRA_LANGUAGE'    => 'en',
+  'ZEBRA_TOKENIZER'   => 'chr',
   'ZEBRA_USER'        => 'kohauser',
   'ZEBRA_PASS'        => 'zebrastripes',
   'ZEBRA_SRU_HOST'    => 'localhost',
@@ -461,6 +462,7 @@ my %valid_config_values = (
   'AUTH_INDEX_MODE' => { 'grs1' => 1, 'dom' => 1 },
   'ZEBRA_MARC_FORMAT' => { 'marc21' => 1, 'normarc' => 1, 'unimarc' => 1 }, # FIXME should generate from contents of distributation
   'ZEBRA_LANGUAGE'    => { 'en' => 1, 'fr' => 1, 'nb' => 1 }, # FIXME should generate from contents of distribution
+  'ZEBRA_TOKENIZER' => { chr => 1, icu => 1 },
   'RUN_DATABASE_TESTS' => { 'yes' => 1, 'no' => 1 },
   'USE_MEMCACHED'      => { 'yes' => 1, 'no' => 1 },
 );
@@ -487,11 +489,12 @@ my $pl_files = {
       'rewrite-config.PL' => [
          'blib/KOHA_CONF_DIR/koha-conf.xml',
          'blib/KOHA_CONF_DIR/koha-httpd.conf',
+         'blib/ZEBRA_CONF_DIR/etc/default.idx',
          'blib/MISC_DIR/koha-install-log'
          ],
 	  'fix-perl-path.PL' => [	# this script ensures the correct shebang line for the platform installed on...
 		 'blib'
-		 ]
+		 ],
 };
 
 if ($config{'INSTALL_ZEBRA'} eq "yes") {
@@ -527,6 +530,10 @@ if ($config{'INSTALL_MODE'} ne "dev") {
         'blib/SCRIPT_NONDEV_DIR/kohalib.pl'
     );
 }
+
+$config{ZEBRA_TOKENIZER_STMT} = $config{ZEBRA_TOKENIZER} eq 'icu'
+    ? 'icuchain words-icu.xml'
+    : 'charmap word-phrase-utf.chr';
 
 my %test_suite_override_dirs = (
     KOHA_CONF_DIR  => ['etc'],
@@ -918,8 +925,8 @@ Since you've chosen to use Zebra with Koha,
 you must specify the primary MARC format of the
 records to be indexed by Zebra.
 
-Koha provides Zebra configuration files for MARC 21
-and UNIMARC.
+Koha provides Zebra configuration files for MARC21,
+NORMARC and UNIMARC.
 
 MARC format for Zebra indexing);
         $msg .= _add_valid_values_disp('ZEBRA_MARC_FORMAT', $valid_values);
@@ -945,6 +952,15 @@ dom  - uses the DOM XML filter; offers improved
 Authorities indexing mode);
         $msg .= _add_valid_values_disp('AUTH_INDEX_MODE', $valid_values);
         $config{'AUTH_INDEX_MODE'} = _get_value('AUTH_INDEX_MODE', $msg, $defaults->{'AUTH_INDEX_MODE'}, $valid_values, $install_log_values);
+
+        $msg = q(
+Zebra has two methods to perform records tokenization
+and characters normalization: CHR and ICU. ICU is
+recommended for catalogs containing non-Latin
+characters.);
+
+        $msg .= _add_valid_values_disp('ZEBRA_TOKENIZER', $valid_values);
+        $config{'ZEBRA_TOKENIZER'} = _get_value('ZEBRA_TOKENIZER', $msg, $defaults->{'ZEBRA_TOKENIZER'}, $valid_values, $install_log_values);
 
         $msg = q(
 Please specify Zebra database user);

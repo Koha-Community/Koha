@@ -1,0 +1,12 @@
+<icu_chain locale="">
+  <transliterate rule="\'>\ "/>
+  <transliterate rule="[:Number:] { '-' > '' "/>
+  <transform rule="[:Control:] Any-Remove"/>
+  <tokenize rule="l"/>
+  <transform rule="[[:WhiteSpace:][:Punctuation:]] Remove"/>
+  <transform rule="NFD"/>
+  <transform rule="[:Nonspacing Mark:] Remove"/>
+  <transform rule="NFC"/>
+  <display/>
+  <casemap rule="l"/>
+</icu_chain>
