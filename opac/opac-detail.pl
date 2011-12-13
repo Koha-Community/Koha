@@ -45,6 +45,7 @@ use C4::Charset;
 use MARC::Record;
 use MARC::Field;
 use List::MoreUtils qw/any none/;
+use C4::Images;
 
 BEGIN {
 	if (C4::Context->preference('BakerTaylorEnabled')) {
@@ -690,6 +691,11 @@ if (scalar(@serialcollections) > 0) {
 	serialcollections => \@serialcollections);
 }
 
+# Local cover Images stuff
+if (C4::Context->preference("OPACLocalCoverImages")){
+		$template->param(OPACLocalCoverImages => 1);
+}
+
 # Amazon.com Stuff
 if ( C4::Context->preference("OPACAmazonEnabled") ) {
     $template->param( AmazonTld => get_amazon_tld() );
@@ -914,5 +920,10 @@ my $defaulttab =
     @serialcollections > 0 
         ? 'serialcollection' : 'subscription';
 $template->param('defaulttab' => $defaulttab);
+
+if (C4::Context->preference('OPACLocalCoverImages') == 1) {
+    my @images = ListImagesForBiblio($biblionumber);
+    $template->{VARS}->{localimages} = \@images;
+}
 
 output_html_with_http_headers $query, $cookie, $template->output;

@@ -66,7 +66,7 @@ my ($template, $loggedinuser, $cookie)
 my $filetype            = $input->param('filetype');
 my $biblionumber        = $input->param('biblionumber');
 my $uploadfilename      = $input->param('uploadfile');
-my $replace             = $input->param('replace');
+my $replace             = !C4::Context->preference("AllowMultipleCovers") || $input->param('replace');
 my $op                  = $input->param('op');
 my %cookies             = parse CGI::Cookie($cookie);
 my $sessionID           = $cookies{'CGISESSID'}->value;
@@ -77,6 +77,7 @@ $template->{VARS}->{'filetype'} = $filetype;
 $template->{VARS}->{'biblionumber'} = $biblionumber;
 
 my $total = 0;
+
 
 if ($fileID) {
     my $uploaded_file = C4::UploadedFile->fetch($sessionID, $fileID);

@@ -1,0 +1,108 @@
+#!/usr/bin/perl
+#
+# based on patronimage.pl
+#
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 2 of the License, or (at your option) any later
+# version.
+#
+# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with Koha; if not, write to the Free Software Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+#
+#
+#
+
+use strict;
+use warnings;
+
+use CGI; #qw(:standard escapeHTML);
+use C4::Context;
+use C4::Images;
+
+$|=1;
+
+my $DEBUG = 1;
+my $data = new CGI;
+my $imagenumber;
+
+=head1 NAME
+
+image.pl - Script for retrieving and formatting local cover images for display
+
+=head1 SYNOPSIS
+
+<img src="image.pl?imagenumber=X" />
+<img src="image.pl?biblionumber=X" />
+<img src="image.pl?imagenumber=X&thumbnail=1" />
+<img src="image.pl?biblionumber=X&thumbnail=1" />
+
+=head1 DESCRIPTION
+
+This script, when called from within HTML and passed a valid imagenumber or
+biblionumber, will retrieve the image data associated with that biblionumber
+if one exists, format it in proper HTML format and pass it back to be displayed.
+If the parameter thumbnail has been provided, a thumbnail will be returned
+rather than the full-size image. When a biblionumber is provided rather than an
+imagenumber, a random image is selected.
+
+=cut
+
+if (defined $data->param('imagenumber')) {
+    $imagenumber = $data->param('imagenumber');
+} elsif (defined $data->param('biblionumber')) {
+    my @imagenumbers = ListImagesForBiblio($data->param('biblionumber'));
+    if (@imagenumbers) {
+        $imagenumber = $imagenumbers[0];
+    } else {
+        warn "No images for this biblio" if $DEBUG;
+        error();
+    }
+} else {
+    $imagenumber = shift;
+}
+
+if ($imagenumber) {
+    warn "imagenumber passed in: $imagenumber" if $DEBUG;
+    my $imagedata = RetrieveImage($imagenumber);
+
+    error() unless $imagedata;
+
+    if ($imagedata) {
+        my $image;
+        if ($data->param('thumbnail')) {
+            $image = $imagedata->{'thumbnail'};
+        } else {
+            $image = $imagedata->{'imagefile'};
+        }
+        print $data->header (-type => $imagedata->{'mimetype'}, -'Cache-Control' => 'no-store', -expires => 'now', -Content_Length => length ($image)), $image;
+        exit;
+    } else {
+        warn "No image exists for $imagenumber" if $DEBUG;
+        error();
+    }
+} else {
+    error();
+}
+
+error();
+
+sub error {
+    print $data->header ( -status=> '404', -expires => 'now' );
+    exit;
+}
+
+=head1 AUTHOR
+
+Chris Nighswonger cnighswonger <at> foundations <dot> edu
+
+modified for local cover images by Koustubha Kale kmkale <at> anantcorp <dot> com
+
+=cut

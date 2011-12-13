@@ -1,0 +1,43 @@
+[% INCLUDE 'doc-head-open.inc' %]
+[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha Online[% END %] Catalog &rsaquo; Images for: [% biblio.title |html %]
+[% INCLUDE 'doc-head-close.inc' %]
+<script type="text/JavaScript" language="JavaScript">
+//<![CDATA[
+
+$(document).ready(function(){
+    showCover($('.thumbnail').attr('id'));
+});
+
+function showCover(img) {
+    $('.thumbnail').attr('class', 'thumbnail');
+    $('#largeCoverImg').attr('src', '/cgi-bin/koha/catalogue/image.pl?imagenumber=' + img);
+    $('#' + img + '.thumbnail').attr('class', 'thumbnail selected');
+}
+//]]>
+</script>
+<style type="text/css">
+img.thumbnail {
+    border-style: solid;
+    border-width: 3px;
+    border-color: white;
+}
+
+img.selected {
+    border-color: black;
+}
+</style>
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+<body id="imageviewer">
+<div id="largeCover"><img id="largeCoverImg" alt="Large view" /></div>
+[% IF LocalCoverImages == 1 %]
+[% FOREACH img IN images %]
+[% IF img %]
+<a href='#' onclick='showCover([% img %])'><img class='thumbnail' id='[% img %]' src='/cgi-bin/koha/catalogue/image.pl?imagenumber=[% img %]&thumbnail=1' alt='Image'/></a>
+[% END %]
+[% END %]
+[% biblio.title %] [% biblio.author %]
+[% ELSE %]
+Unfortunately, images are not enabled for this catalog at this time.
+[% END %]
+</body>
+</html>

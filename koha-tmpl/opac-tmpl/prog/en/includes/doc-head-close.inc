@@ -98,6 +98,15 @@ var NO_OL_JACKET = _("No cover image available");
 </script>
 [% END %]
 
+[% IF OPACLocalCoverImages %]
+<script type="text/javascript" language="javascript" src="[% themelang %]/js/localcovers.js"></script>
+<script type="text/javascript" language="javascript">
+//<![CDATA[
+var NO_LOCAL_JACKET = _("No cover image available");
+//]]>
+</script>
+[% END %]
+
 [% IF ( BakerTaylorEnabled ) %]<script type="text/javascript" language="javascript" src="[% themelang %]/js/bakertaylorimages.js"></script>
 <script type="text/javascript" language="javascript">
 	//<![CDATA[

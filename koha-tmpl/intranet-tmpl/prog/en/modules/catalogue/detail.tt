@@ -233,6 +233,7 @@ function verify_images() {
 [% IF ( subscriptionsnumber ) %]<li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber %]#subscriptions">Subscriptions</a></li>[% END %]
 [% IF ( FRBRizeEditions ) %][% IF ( XISBNS ) %]<li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber %]#editions">Editions</a></li>[% END %][% END %]
 [% IF ( AmazonSimilarItems ) %]<li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber %]#related">Related Titles</a></li>[% END %]
+[% IF ( LocalCoverImages ) %]<li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber %]#images">Images</a></li>[% END %]
  </ul>
 
 <div id="holdings">
@@ -523,6 +524,17 @@ function verify_images() {
 </ul>
 </div>
 [% END %][% END %]
+
+[% IF ( LocalCoverImages ) %]
+<div id="images">
+<div>Click on an image to view it in the image viewer</div>
+[% FOREACH image IN localimages %]
+[% IF image %]
+<span class="localimage"><a href="/cgi-bin/koha/catalogue/imageviewer.pl?biblionumber=[% biblionumber %]&imagenumber=[% image %]"><img alt="img" src="/cgi-bin/koha/catalogue/image.pl?thumbnail=1&imagenumber=[% image %]" /></a></span>
+[% END %]
+[% END %]
+</div>
+[% END %]
 
 </div><!-- /bibliodetails -->
 

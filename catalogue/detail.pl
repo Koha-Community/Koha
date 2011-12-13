@@ -37,6 +37,7 @@ use C4::External::Amazon;
 use C4::Search;		# enabled_staff_search_views
 use C4::VirtualShelves;
 use C4::XSLT;
+use C4::Images;
 
 # use Smart::Comments;
 
@@ -382,6 +383,11 @@ if ( C4::Context->preference("AmazonEnabled") == 1 ) {
         #$template->param( AMAZON_CUSTOMER_REVIEWS  => $customer_reviews       );
         $template->param( AMAZON_EDITORIAL_REVIEWS => $editorial_reviews      );
     }
+}
+
+if ( C4::Context->preference("LocalCoverImages") == 1 ) {
+    my @images = ListImagesForBiblio($biblionumber);
+    $template->{VARS}->{localimages} = \@images;
 }
 
 # Get OPAC URL

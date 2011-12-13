@@ -39,6 +39,9 @@
 	[% IF OpenLibraryCovers %]
 	KOHA.OpenLibrary.GetCoverFromIsbn();
 	[% END %]
+	[% IF OPACLocalCoverImages %]
+	KOHA.LocalCover.GetCoverFromBibnumber(true);
+	[% END %]
         [% IF ( NovelistSelectProfile ) %]
         novSelect.loadContentForISBN('[% normalized_isbn %]','[% NovelistSelectProfile %]', '[% NovelistSelectPassword %]', function(d){});
         [% END %]
@@ -224,6 +227,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
     <div id="catalogue_detail_biblio">
 
     <div id="bookcover">
+    [% IF ( OPACLocalCoverImages ) %]<div style="block" title="[% biblionumber |url %]" class="[% biblionumber %]" id="local-thumbnail-preview"></div>[% END %]
     [% IF ( OPACAmazonEnabled ) %][% IF ( OPACAmazonCoverImages ) %][% IF ( OPACurlOpenInNewWindow ) %]<a href="http://www.amazon[% AmazonTld %]/gp/reader/[% normalized_isbn %]/ref=sib_dp_pt/002-7879865-0184864#reader-link" target="_blank"><img border="0" src="http://images.amazon.com/images/P/[% normalized_isbn %].01.MZZZZZZZ.jpg" alt="Cover Image" /></a>[% ELSE %]<a href="http://www.amazon[% AmazonTld %]/gp/reader/[% normalized_isbn %]/ref=sib_dp_pt/002-7879865-0184864#reader-link"><img border="0" src="http://images.amazon.com/images/P/[% normalized_isbn %].01.MZZZZZZZ.jpg" alt="Cover Image" /></a>[% END %][% END %][% END %]
 
     [% IF ( SyndeticsEnabled ) %][% IF ( SyndeticsCoverImages ) %][% IF ( content_identifier_exists ) %][% IF ( using_https ) %]
@@ -543,6 +547,8 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 		[% ELSE %]<li>[% END %]
 		<a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]#serialcollection">Serial Collection</a></li>
     [% END %]
+
+    [% IF ( OPACLocalCoverImages ) %]<li><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]#images">Images</a></li>[% END %]
 </ul>
 
 [% IF ( serialcollection ) %]
@@ -980,6 +986,18 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 </div>
 <!-- /Amazon Reviews -->
 [% END %]
+[% END %]
+
+
+[% IF ( OPACLocalCoverImages ) %]
+<div id="images">
+<div>Click on an image to view it in the image viewer</div>
+[% FOREACH image IN localimages %]
+[% IF image %]
+<span class="localimage"><a href="/cgi-bin/koha/opac-imageviewer.pl?biblionumber=[% biblionumber %]&imagenumber=[% image %]"><img alt="img" src="/cgi-bin/koha/opac-image.pl?thumbnail=1&imagenumber=[% image %]" /></a></span>
+[% END %]
+[% END %]
+</div>
 [% END %]
 
 
