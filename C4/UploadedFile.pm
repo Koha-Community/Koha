@@ -159,6 +159,24 @@ sub name {
     }
 }
 
+=head2 filename
+
+  my $filename = $uploaded_file->filename();
+
+Accessor method for the name by which the file is to be known.
+
+=cut
+
+sub filename {
+    my $self = shift;
+    if (@_) {
+        $self->{'tmp_file_name'} = shift;
+        $self->_serialize();
+    } else {
+        return $self->{'tmp_file_name'};
+    }
+}
+
 =head2 max_size
 
   my $max_size = $uploaded_file->max_size();

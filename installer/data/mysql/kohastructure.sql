@@ -2670,6 +2670,21 @@ CREATE TABLE `fieldmapping` ( -- koha to keyword mapping
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Table structure for table `bibliocoverimage`
+--
+
+DROP TABLE IF EXISTS `bibliocoverimage`;
+
+CREATE TABLE `bibliocoverimage` (
+ `imagenumber` int(11) NOT NULL AUTO_INCREMENT,
+ `biblionumber` int(11) NOT NULL,
+ `mimetype` varchar(15) NOT NULL,
+ `imagefile` mediumblob NOT NULL,
+ `thumbnail` mediumblob NOT NULL,
+ PRIMARY KEY (`imagenumber`),
+ CONSTRAINT `bibliocoverimage_fk1` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
 
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

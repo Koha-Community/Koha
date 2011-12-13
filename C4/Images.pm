@@ -1,0 +1,155 @@
+package C4::Images;
+use strict;
+use warnings;
+use 5.010;
+
+use C4::Context;
+use GD;
+
+use vars qw($debug $VERSION @ISA @EXPORT);
+
+BEGIN {
+	# set the version for version checking
+	$VERSION = 3.03;
+	require Exporter;
+	@ISA    = qw(Exporter);
+	@EXPORT = qw(
+        &PutImage
+        &RetrieveImage
+        &ListImagesForBiblio
+        &DelImage
+    );
+	$debug = $ENV{KOHA_DEBUG} || $ENV{DEBUG} || 0;
+}
+
+=head2 PutImage
+
+    PutImage($biblionumber, $srcimage, $replace);
+
+Stores binary image data and thumbnail in database, optionally replacing existing images for the given biblio.
+
+=cut
+
+sub PutImage {
+    my ($biblionumber, $srcimage, $replace) = @_;
+
+    return -1 unless defined($srcimage);
+
+    if ($replace) {
+        foreach (ListImagesForBiblio($biblionumber)) {
+            DelImage($_);
+        }
+    }
+
+    my $dbh = C4::Context->dbh;
+    my $query = "INSERT INTO biblioimages (biblionumber, mimetype, imagefile, thumbnail) VALUES (?,?,?,?);";
+    my $sth = $dbh->prepare($query);
+
+    my $mimetype = 'image/png';	# GD autodetects three basic image formats: PNG, JPEG, XPM; we will convert all to PNG which is lossless...
+# Check the pixel size of the image we are about to import...
+    my $thumbnail = _scale_image($srcimage, 140, 200);    # MAX pixel dims are 140 X 200 for thumbnail...
+    my $fullsize = _scale_image($srcimage, 600, 800);   # MAX pixel dims are 600 X 800 for full-size image...
+    $debug and warn "thumbnail is " . length($thumbnail) . " bytes.";
+
+    $sth->execute($biblionumber,$mimetype,$fullsize->png(),$thumbnail->png());
+    my $dberror = $sth->errstr;
+    warn "Error returned inserting $biblionumber.$mimetype." if $sth->errstr;
+    undef $thumbnail;
+    undef $fullsize;
+    return $dberror;
+}
+
+=head2 RetrieveImage
+    my ($imagedata, $error) = RetrieveImage($imagenumber);
+
+Retrieves the specified image.
+
+=cut
+
+sub RetrieveImage {
+    my ($imagenumber) = @_;
+
+    my $dbh = C4::Context->dbh;
+    my $query = 'SELECT mimetype, imagefile, thumbnail FROM biblioimages WHERE imagenumber = ?';
+    my $sth = $dbh->prepare($query);
+    $sth->execute($imagenumber);
+    my $imagedata = $sth->fetchrow_hashref;
+    if ($sth->err) {
+        warn "Database error!";
+        return undef;
+    } else {
+        return $imagedata;
+    }
+}
+
+=head2 ListImagesForBiblio
+    my (@images) = ListImagesForBiblio($biblionumber);
+
+Gets a list of all images associated with a particular biblio.
+
+=cut
+
+
+sub ListImagesForBiblio {
+    my ($biblionumber) = @_;
+
+    my @imagenumbers;
+    my $dbh = C4::Context->dbh;
+    my $query = 'SELECT imagenumber FROM biblioimages WHERE biblionumber = ?';
+    my $sth = $dbh->prepare($query);
+    $sth->execute($biblionumber);
+    warn "Database error!" if $sth->errstr;
+    if (!$sth->errstr && $sth->rows > 0) {
+        while (my $row = $sth->fetchrow_hashref) {
+            push @imagenumbers, $row->{'imagenumber'};
+        }
+        return @imagenumbers;
+    } else {
+        return undef;
+    }
+}
+
+=head2 DelImage
+
+    my ($dberror) = DelImage($imagenumber);
+
+Removes the image with the supplied imagenumber.
+
+=cut
+
+sub DelImage {
+    my ($imagenumber) = @_;
+    warn "Imagenumber passed to DelImage is $imagenumber" if $debug;
+    my $dbh = C4::Context->dbh;
+    my $query = "DELETE FROM biblioimages WHERE imagenumber = ?;";
+    my $sth = $dbh->prepare($query);
+    $sth->execute($imagenumber);
+    my $dberror = $sth->errstr;
+    warn "Database error!" if $sth->errstr;
+    return $dberror;
+}
+
+sub _scale_image {
+    my ($image, $maxwidth, $maxheight) = @_;
+    my ($width, $height) = $image->getBounds();
+    $debug and warn "image is $width pix X $height pix.";
+    if ($width > $maxwidth || $height > $maxheight) {
+#        $debug and warn "$filename exceeds the maximum pixel dimensions of $maxwidth X $maxheight. Resizing...";
+        my $percent_reduce;    # Percent we will reduce the image dimensions by...
+            if ($width > $maxwidth) {
+                $percent_reduce = sprintf("%.5f",($maxwidth/$width));    # If the width is oversize, scale based on width overage...
+            } else {
+                $percent_reduce = sprintf("%.5f",($maxheight/$height));    # otherwise scale based on height overage.
+            }
+        my $width_reduce = sprintf("%.0f", ($width * $percent_reduce));
+        my $height_reduce = sprintf("%.0f", ($height * $percent_reduce));
+        $debug and warn "Reducing image by " . ($percent_reduce * 100) . "\% or to $width_reduce pix X $height_reduce pix";
+        my $newimage = GD::Image->new($width_reduce, $height_reduce, 1); #'1' creates true color image...
+        $newimage->copyResampled($image,0,0,0,0,$width_reduce,$height_reduce,$width,$height);
+        return $newimage;
+    } else {
+        return $image;
+    }
+}
+
+1;

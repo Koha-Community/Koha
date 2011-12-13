@@ -1,0 +1,130 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Tools &rsaquo; Upload Images</title>
+[% INCLUDE 'doc-head-close.inc' %]
+[% INCLUDE 'file-upload.inc' %]
+[% INCLUDE 'background-job.inc' %]
+<style type="text/css">
+	#uploadpanel,#fileuploadstatus,#fileuploadfailed,#jobpanel,#jobstatus,#jobfailed { display : none; }
+	#fileuploadstatus,#jobstatus { margin:.4em; }
+	#fileuploadprogress,#jobprogress{ width:150px;height:10px;border:1px solid #666;background:url('/intranet-tmpl/prog/img/progress.png') -300px 0px no-repeat; }</style>
+<script type="text/javascript">
+//<![CDATA[
+$(document).ready(function(){
+	$("#processfile").hide();
+	$("#zipfile").click(function(){
+		$("#bibnum").hide();
+	});
+	$("#image").click(function(){
+		$("#bibnum").show();
+	});
+});
+function CheckForm(f) {
+    if ($("#fileToUpload").value == '') {
+        alert(_('Please upload a file first.'));
+    } else {
+        return submitBackgroundJob(f);
+    }
+    return false;
+}
+
+//]]>
+</script>
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'cat-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; [% IF ( uploadimage ) %]<a href="/cgi-bin/koha/tools/upload-cover-image.pl">Upload Local Cover Image</a> &rsaquo; Upload Results[% ELSE %]Upload Local Cover Image[% END %]</div>
+
+<div id="doc3" class="yui-t2">
+
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
+
+<h1>Upload Local Cover Image</h1>
+[% IF ( uploadimage ) %]
+<p>Image upload results :</p>
+<ul>
+	<li>[% total %]  images found</li>
+    [% IF ( error ) %]
+    <div class="dialog alert">
+    [% IF ( error == 'UZIPFAIL' ) %]<p><b>Failed to unzip archive.<br />Please ensure you are uploading a valid zip file and try again.</b></p>
+    [% ELSIF ( error == 'OPNLINK' ) %]<p><b>Cannot open folder index (idlink.txt or datalink.txt) to read.<br />Please verify that it exists.</b></p>
+    [% ELSIF ( error == 'OPNIMG' ) %]<p><b>Cannot process file as an image.<br />Please ensure you only upload GIF, JPEG, PNG, or XPM images.</b></p>
+    [% ELSIF ( error == 'DELERR' ) %]<p><b>Unrecognized or missing field delimiter.<br />Please verify that you are using either a single quote or a tab.</b></p>
+    [% ELSIF ( error == 'DBERR' ) %]<p><b>Unable to save image to database.</b></p>
+    [% ELSE %]<p><b>An unknown error has occurred.<br />Please review the error log for more details.</b></p>[% END %]
+    </div>
+    </li>
+    [% END %]
+    <li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber %]">View final record</a></li>
+	<li><a href="/cgi-bin/koha/tools/tools-home.pl">Back</a></li>
+</ul>
+<hr />
+[% END %]
+<ul>
+	<li>Select an image file or ZIP file to upload. The tool will accept images in GIF, JPEG, PNG, and XPM formats.</li>
+</ul>
+<form method="post" action="[% SCRIPT_NAME %]" id="uploadfile" enctype="multipart/form-data">
+<fieldset class="rows" id="uploadform">
+<legend>Upload images</legend>
+<ol>
+	<li>
+        <div id="fileuploadform">
+		<label for="fileToUpload">Select the file to upload: </label>
+		<input type="file" id="fileToUpload" name="fileToUpload" />
+        </div>	</li>
+</ol>
+  <fieldset class="action"><button class="submit" onclick="return ajaxFileUpload();">Upload file</button></fieldset>
+</fieldset>
+
+        <div id="uploadpanel"><div id="fileuploadstatus">Upload progress: <div id="fileuploadprogress"></div> <span id="fileuploadpercent">0</span>%</div>
+        <div id="fileuploadfailed"></div></div>
+</form>
+
+    <form method="post" id="processfile" action="[% SCRIPT_NAME %]" enctype="multipart/form-data">
+<fieldset class="rows">
+        <input type="hidden" name="uploadedfileid" id="uploadedfileid" value="" />
+        <input type="hidden" name="runinbackground" id="runinbackground" value="" />
+        <input type="hidden" name="completedJobID" id="completedJobID" value="" />
+	</fieldset>
+  <fieldset class="rows">
+    <legend>File type</legend>
+    <ol>
+      <li class="radio">
+        <input type="radio" id="zipfile" name="filetype" value="zip" [% IF (filetype != 'image' ) %]checked="checked"[% END %] />
+        <label for="zipfile">ZIP file</label>
+      </li>
+      <li class="radio">
+        <input type="radio" id="image" name="filetype" value="image" [% IF (filetype == 'image' ) %]checked="checked"[% END %] />
+        <label for="imagefile">Image file</label>
+      </li>
+      <li class="radio">
+        [% IF ( filetype == 'image' ) %]<span id="bibnum">[% ELSE %]<span id="bibnum" style="display: none">[% END %]<label for="biblionumber">Enter cover biblionumber: </label><input type="text" id="biblionumber" name="biblionumber" value="[% biblionumber %]" size="15" /></span>
+      </li>
+    </ol>
+  </fieldset>
+  <fieldset class="rows">
+    <legend>Options</legend>
+    <ol>
+      <li class="checkbox">
+        <input type="checkbox" id="replace" name="replace" [% IF AllowMultipleCovers == 0 %]checked="checked" disabled="disabled"[% END %] />
+        <label for="replace">Replace existing covers</label>
+      </li>
+    </ol>
+  </fieldset>
+  <fieldset class="action"><input type="submit" value="Process images" /></fieldset>
+
+       <div id="jobpanel"><div id="jobstatus">Job progress: <div id="jobprogress"></div> <span id="jobprogresspercent">0</span>%</div>
+     <div id="jobfailed"></div></div>
+
+</form>
+
+</div>
+</div>
+<div class="yui-b">
+[% INCLUDE 'tools-menu.inc' %]
+</div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

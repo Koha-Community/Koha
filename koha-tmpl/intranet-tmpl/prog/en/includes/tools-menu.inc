@@ -70,6 +70,9 @@
     [% IF ( CAN_user_tools_manage_staged_marc ) %]
 	<li><a href="/cgi-bin/koha/tools/manage-marc-import.pl">Staged MARC management</a></li>
     [% END %]
+    [% IF ( CAN_user_tools_upload_local_cover_images ) %]
+	<li><a href="/cgi-bin/koha/tools/upload-cover-image.pl">Upload Local Cover Image</a></li>
+    [% END %]
 </ul>
 <h5>Additional Tools</h5>
 <ul>

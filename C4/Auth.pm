@@ -389,7 +389,9 @@ sub get_template_and_user {
             virtualshelves              => C4::Context->preference("virtualshelves"),
             StaffSerialIssueDisplayCount => C4::Context->preference("StaffSerialIssueDisplayCount"),
             NoZebra                     => C4::Context->preference('NoZebra'),
-		EasyAnalyticalRecords => C4::Context->preference('EasyAnalyticalRecords'),
+            EasyAnalyticalRecords       => C4::Context->preference('EasyAnalyticalRecords'),
+            LocalCoverImages            => C4::Context->preference('LocalCoverImages'),
+            AllowMultipleCovers         => C4::Context->preference('AllowMultipleCovers'),
         );
     }
     else {
@@ -494,6 +496,7 @@ sub get_template_and_user {
             SyndeticsAwards              => C4::Context->preference("SyndeticsAwards"),
             SyndeticsSeries              => C4::Context->preference("SyndeticsSeries"),
             SyndeticsCoverImageSize      => C4::Context->preference("SyndeticsCoverImageSize"),
+            OPACLocalCoverImages         => C4::Context->preference("OPACLocalCoverImages"),
         );
 
         $template->param(OpacPublic => '1') if ($user || C4::Context->preference("OpacPublic"));
