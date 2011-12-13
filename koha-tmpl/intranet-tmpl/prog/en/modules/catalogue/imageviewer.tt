@@ -1,11 +1,12 @@
 [% INCLUDE 'doc-head-open.inc' %]
-[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha Online[% END %] Catalog &rsaquo; Images for: [% biblio.title |html %]
+<title>Koha &rsaquo; Catalog &rsaquo; Details for [% biblio.title |html %] [% FOREACH subtitl IN subtitle %] [% subtitl.subfield %][% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<script type="text/JavaScript" language="JavaScript">
+[% IF ( LocalCoverImages == 1 ) %]
+<script type="text/JavaScript">
 //<![CDATA[
 
 $(document).ready(function(){
-    showCover($('.thumbnail').attr('id'));
+    showCover([% imagenumber %]);
 });
 
 function showCover(img) {
@@ -16,28 +17,87 @@ function showCover(img) {
 //]]>
 </script>
 <style type="text/css">
+#largeCoverImg {
+	border : 1px solid #CCCCCC;
+	display : block;
+	margin : auto;
+	padding : 1em;
+}
+#thumbnails {
+	text-align : center;
+}
+#thumbnails a img {
+	border : 1px solid #0000CC;
+}
 img.thumbnail {
-    border-style: solid;
-    border-width: 3px;
-    border-color: white;
+	display : block;
+    float : none;
+    margin: 0 5px 5px 0;
+    padding : .5em;
 }
 
-img.selected {
+#thumbnails a img.selected {
     border-color: black;
+    cursor : default;
+    opacity:0.4;
+	filter:alpha(opacity=40); /* For IE8 and earlier */
 }
-</style>
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
-<body id="imageviewer">
-<div id="largeCover"><img id="largeCoverImg" alt="Large view" /></div>
-[% IF LocalCoverImages == 1 %]
-[% FOREACH img IN images %]
-[% IF img %]
-<a href='#' onclick='showCover([% img %])'><img class='thumbnail' id='[% img %]' src='/cgi-bin/koha/catalogue/image.pl?imagenumber=[% img %]&thumbnail=1' alt='Image'/></a>
-[% END %]
-[% END %]
-[% biblio.title %] [% biblio.author %]
+</style>[% END %]
+</head>
+
+<body>
+
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'cat-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>  &rsaquo; Images for <i>[% biblio.title |html %]  [% FOREACH subtitl IN subtitle %] [% subtitl.subfield %][% END %]</i></div>
+
+<div id="doc3" class="yui-t1">
+
+<div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
+	<div class="yui-ge">
+
+[% INCLUDE 'cat-toolbar.inc' %]
+
+<h3>Images for <i>[% biblio.title |html %]</i></h3>
+<h4>[% biblio.author %]</h4>
+
+[% IF ( LocalCoverImages == 1 ) %]
+	[% IF ( images.size > 0 ) %]
+		<div class="yui-u first">
+		<div id="largeCover">
+			<img id="largeCoverImg" alt="" src="/cgi-bin/koha/catalogue/image.pl?imagenumber=[% imagenumber %]" />
+		</div></div>
+
+		<div class="yui-u"><div id="thumbnails">
+
+			[% FOREACH img IN images %]
+				[% IF img %]
+				<a href="/cgi-bin/koha/catalogue/imageviewer.pl?biblionumber=[% biblionumber %]&amp;imagenumber=[% img %]" onclick="showCover([% img %]); return false;">
+					[% IF ( imagenumber == img ) %]
+						<img class="thumbnail selected" id="[% img %]" src="/cgi-bin/koha/catalogue/image.pl?imagenumber=[% img %]&amp;thumbnail=1" alt="Thumbnail" />
+					[% ELSE %]
+						<img class="thumbnail" id="[% img %]" src="/cgi-bin/koha/catalogue/image.pl?imagenumber=[% img %]&amp;thumbnail=1" alt="Thumbnail" />
+					[% END %]
+				</a>
+				[% END %]
+			[% END %]
+		</div></div>
+
+	[% ELSE %]
+		<div class="dialog message">There are no images for this record.</div>
+	[% END %]
 [% ELSE %]
-Unfortunately, images are not enabled for this catalog at this time.
+	<div class="dialog message">Local images have not been enabled by your system administrator.</div>
 [% END %]
-</body>
-</html>
+
+</div>
+</div>
+</div>
+<div class="yui-b">
+[% INCLUDE 'biblio-view-menu.inc' %]
+</div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

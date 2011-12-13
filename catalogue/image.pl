@@ -29,7 +29,7 @@ use C4::Images;
 
 $|=1;
 
-my $DEBUG = 1;
+my $DEBUG = 0;
 my $data = new CGI;
 my $imagenumber;
 
