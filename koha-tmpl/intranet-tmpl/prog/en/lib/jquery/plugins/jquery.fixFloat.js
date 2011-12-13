@@ -26,7 +26,6 @@
       tbh.width(tbh.width());
       tbh.css({'position':'absolute'});
     }
-      tbh.css({'z-index':1000});
 
     if(options.enabled){
       $(window).scroll(function(){
@@ -48,7 +47,8 @@
         if(fixMe){
           var cssObj = {
             'position' : 'fixed',
-            'top' : '0px'
+            'top' : '0px',
+            'z-index' : '1000'
           }
           tbh.css(cssObj);
           tbh.addClass("floating");
@@ -56,7 +56,8 @@
         if(repositionMe){
           var cssObj = {
             'position' : 'absolute',
-            'top' : originalOffset
+            'top' : originalOffset,
+            'z-index' : '1'
           }
           tbh.css(cssObj);
           tbh.removeClass("floating");
