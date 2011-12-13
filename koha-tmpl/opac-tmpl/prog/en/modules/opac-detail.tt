@@ -991,10 +991,10 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 
 [% IF ( OPACLocalCoverImages ) %]
 <div id="images">
-<div>Click on an image to view it in the image viewer</div>
+<p>Click on an image to view it in the image viewer</p>
 [% FOREACH image IN localimages %]
 [% IF image %]
-<span class="localimage"><a href="/cgi-bin/koha/opac-imageviewer.pl?biblionumber=[% biblionumber %]&imagenumber=[% image %]"><img alt="img" src="/cgi-bin/koha/opac-image.pl?thumbnail=1&imagenumber=[% image %]" /></a></span>
+<a class="localimage" href="/cgi-bin/koha/opac-imageviewer.pl?biblionumber=[% biblionumber %]&amp;imagenumber=[% image %]"><img alt="" src="/cgi-bin/koha/opac-image.pl?thumbnail=1&amp;imagenumber=[% image %]" /></a>
 [% END %]
 [% END %]
 </div>

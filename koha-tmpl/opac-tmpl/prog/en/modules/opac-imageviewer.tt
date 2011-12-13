@@ -1,11 +1,12 @@
 [% INCLUDE 'doc-head-open.inc' %]
 [% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha Online[% END %] Catalog &rsaquo; Images for: [% biblio.title |html %]
 [% INCLUDE 'doc-head-close.inc' %]
-<script type="text/JavaScript" language="JavaScript">
+<script type="text/javascript">
 //<![CDATA[
 
 $(document).ready(function(){
-    showCover($('.thumbnail').attr('id'));
+	$("#largeCoverImg").attr("src","/opac-tmpl/prog/images/loading.gif");
+    showCover([% imagenumber %]);
 });
 
 function showCover(img) {
@@ -16,28 +17,75 @@ function showCover(img) {
 //]]>
 </script>
 <style type="text/css">
+#largeCoverImg {
+	border : 1px solid #CCCCCC;
+	display : block;
+	margin : auto;
+	padding : 1em;
+}
+#thumbnails {
+	text-align : center;
+}
+#thumbnails a img {
+	border : 2px solid #8EB3E7;
+}
 img.thumbnail {
-    border-style: solid;
-    border-width: 3px;
-    border-color: white;
+	display : block;
+    float : none;
+    padding : .5em;
 }
 
-img.selected {
+#thumbnails a img.selected {
     border-color: black;
+    cursor : default;
+    opacity:0.4;
+	filter:alpha(opacity=40); /* For IE8 and earlier */
 }
 </style>
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+</head>
 <body id="opac-imageviewer">
-<div id="largeCover"><img id="largeCoverImg" alt="Large view" /></div>
-[% IF OPACLocalCoverImages == 1 %]
-[% FOREACH img IN images %]
-[% IF img %]
-<a href='#' onclick='showCover([% img %])'><img class='thumbnail' id='[% img %]' src='/cgi-bin/koha/opac-image.pl?imagenumber=[% img %]&thumbnail=1' alt='Image'/></a>
-[% END %]
-[% END %]
-[% biblio.title %] [% biblio.author %]
+[% IF ( OpacNav ) %]<div id="doc3" class="yui-t1">[% ELSE %]<div id="doc3" class="yui-t7">[% END %]
+   <div id="bd">
+[% INCLUDE 'masthead.inc' %]
+	<div id="yui-main">
+	<div class="yui-b">
+	<div class="yui-ge">
+	<div class="container">
+	<h1 class="title">Images for 				[% IF ( BiblioDefaultViewmarc ) %]<a class="title" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=[% biblionumber |url %]" title="View details for this title">
+                                [% ELSE %]
+                                [% IF ( BiblioDefaultViewisbd ) %]<a class="title" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=[% biblionumber |url %]" title="View details for this title">
+                                [% ELSE %]<a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber |url %]" title="View details for this title">
+                                [% END %]
+                                [% END %][% biblio.title %]</a> [% biblio.author %]</h1>
+	<div class="yui-u first">
+
+		<div id="largeCover"><img id="largeCoverImg" alt="" src="/cgi-bin/koha/opac-image.pl?imagenumber=[% imagenumber %]" /></div></div>
+
+	[% IF OPACLocalCoverImages == 1 %]
+	<div class="yui-u"><div id="thumbnails">
+			[% FOREACH img IN images %]
+				[% IF img %]
+				<a href="/cgi-bin/koha/opac-imageviewer.pl?biblionumber=[% biblionumber %]&amp;imagenumber=[% img %]" onclick="showCover([% img %]); return false;">
+				[% IF ( imagenumber == img ) %]<img class="thumbnail selected" id="[% img %]" src="/cgi-bin/koha/opac-image.pl?imagenumber=[% img %]&amp;thumbnail=1" alt="Thumbnail"/>
+				[% ELSE %]
+				<img class="thumbnail" id="[% img %]" src="/cgi-bin/koha/opac-image.pl?imagenumber=[% img %]&amp;thumbnail=1" alt="Thumbnail"/>
+				[% END %]
+				</a>
+				[% END %]
+			[% END %]
+		</div></div>
+	</div>
 [% ELSE %]
 Unfortunately, images are not enabled for this catalog at this time.
 [% END %]
-</body>
-</html>
+
+</div>
+</div>
+</div>
+[% IF ( OpacNav ) %]
+<div class="yui-b"><div id="leftmenus" class="container">
+[% INCLUDE 'navigation.inc' %]
+</div></div>
+[% END %]
+</div>
+[% INCLUDE 'opac-bottom.inc' %]

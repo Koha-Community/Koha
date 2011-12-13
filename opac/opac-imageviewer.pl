@@ -38,12 +38,15 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 );
 
 my $biblionumber = $query->param('biblionumber') || $query->param('bib');
+my $imagenumber = $query->param('imagenumber');
 my ($count, $biblio) = GetBiblio($biblionumber);
 
 if (C4::Context->preference("OPACLocalCoverImages")) {
     my @images = ListImagesForBiblio($biblionumber);
     $template->{VARS}->{'OPACLocalCoverImages'} = 1;
     $template->{VARS}->{'images'} = \@images;
+    $template->{VARS}->{'biblionumber'} = $biblionumber;
+    $template->{VARS}->{'imagenumber'} = $images[0] || '';
 }
 
 $template->{VARS}->{'biblio'} = $biblio;
