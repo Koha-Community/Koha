@@ -44,7 +44,7 @@ onclick: {fn:function(){popup([% subscriptionid %])}}
 	        label: _("Edit"),
 	        name: "editmenubutton",
 	        menu: editmenu,
-	        container: "editmenuc",
+	        container: "editmenuc"
 			
 	    });
 		[% END %]
