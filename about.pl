@@ -113,14 +113,14 @@ $template->param( table => $table );
 
 #get file location
 my $dir = C4::Context->config('intranetdir');
-open( FILE, "$dir" . "/docs/history.txt" );
+open( my $file, "<", "$dir" . "/docs/history.txt" );
 my $i = 0;
 
 my @rows2 = ();
 my $row2  = [];
 
-my @lines = <FILE>;
-close(FILE);
+my @lines = <$file>;
+close($file);
 
 shift @lines; #remove header row
 
