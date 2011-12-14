@@ -776,7 +776,7 @@ sub _parseSQLLine
                     my $stmt = SQL::Statement->new($line, $parser);
                     my $where = $stmt->where();
                     if ($where && $where->op() eq '=' && $line =~ /^\s*DELETE/) {
-                        $line =~ s/frameworkcode='.+?'/frameworkcode='$frameworkcode';/ unless ($_ =~ /frameworkcode='$frameworkcode'/);
+                        $line =~ s/frameworkcode='.*?'/frameworkcode='$frameworkcode';/ unless ($_ =~ /frameworkcode='$frameworkcode'/);
                     } else {
                         my @arrFields;
                         my @arrValues;
@@ -817,7 +817,7 @@ sub _parseSQLLine
             if ($error) {
                 $line .= ';' unless ($line =~ /;$/);
                 if ($line =~ /^\s*DELETE/) {
-                    $line =~ s/frameworkcode='.+?'/frameworkcode='$frameworkcode'/ unless ($_ =~ /frameworkcode='$frameworkcode'/);
+                    $line =~ s/frameworkcode='.*?'/frameworkcode='$frameworkcode'/ unless ($_ =~ /frameworkcode='$frameworkcode'/);
                 } elsif ($line =~ /^\s*INSERT\s+INTO\s+(.*?)\s+\((.*?frameworkcode.*?)\)\s+VALUES\s+\((.+)\)\s*;\s*$/) {
                     my $table = $1;
                     my $fields = $2;
