@@ -467,21 +467,8 @@ sub create_input {
                     value=\"$value\" \/>
             ";
     }
-    elsif ( $tagslib->{$tag}->{$subfield}->{'hidden'} ) {
-        $subfield_data{marc_value} =
-            "<input type=\"text\"
-                    id=\"".$subfield_data{id}."\"
-                    name=\"".$subfield_data{id}."\"
-                    class=\"input_marceditor\"
-                    tabindex=\"1\"
-                    size=\"67\"
-                    maxlength=\"$max_length\"
-                    value=\"$value\"
-            \/>";
-
-        # it's a standard field
-    }
     else {
+        # it's a standard field
         if (
             length($value) > 100
             or
