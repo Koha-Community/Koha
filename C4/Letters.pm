@@ -836,8 +836,8 @@ sub _send_message_by_email ($;$$$) {
     if ( my $bcc = C4::Context->preference('OverdueNoticeBcc') ) {
        $sendmail_params{ Bcc } = $bcc;
     }
-    
 
+    _update_message_to_address($message->{'message_id'},$to_address) unless $message->{to_address}; #if initial message address was empty, coming here means that a to address was found and queue should be updated
     if ( sendmail( %sendmail_params ) ) {
         _set_message_status( { message_id => $message->{'message_id'},
                 status     => 'sent' } );
@@ -861,6 +861,12 @@ sub _send_message_by_sms ($) {
     _set_message_status( { message_id => $message->{'message_id'},
                            status     => ($success ? 'sent' : 'failed') } );
     return $success;
+}
+
+sub _update_message_to_address {
+    my ($id, $to)= @_;
+    my $dbh = C4::Context->dbh();
+    $dbh->do('UPDATE message_queue SET to_address=? WHERE message_id=?',undef,($to,$id));
 }
 
 sub _set_message_status ($) {
