@@ -548,7 +548,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 		<a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]#serialcollection">Serial Collection</a></li>
     [% END %]
 
-    [% IF ( OPACLocalCoverImages ) %]<li><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]#images">Images</a></li>[% END %]
+    [% IF ( OPACLocalCoverImages ) %][% IF ( localimages ) %]<li><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]#images">Images</a></li>[% END %][% END %]
 </ul>
 
 [% IF ( serialcollection ) %]

@@ -233,7 +233,7 @@ function verify_images() {
 [% IF ( subscriptionsnumber ) %]<li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber %]#subscriptions">Subscriptions</a></li>[% END %]
 [% IF ( FRBRizeEditions ) %][% IF ( XISBNS ) %]<li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber %]#editions">Editions</a></li>[% END %][% END %]
 [% IF ( AmazonSimilarItems ) %]<li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber %]#related">Related Titles</a></li>[% END %]
-[% IF ( LocalCoverImages ) %]<li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber %]#images">Images</a></li>[% END %]
+[% IF ( LocalCoverImages ) %][% IF ( localimages || CAN_user_tools_upload_local_cover_images ) %]<li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber %]#images">Images</a></li>[% END %][% END %]
  </ul>
 
 <div id="holdings">
@@ -527,10 +527,16 @@ function verify_images() {
 
 [% IF ( LocalCoverImages ) %]
 <div id="images">
+[% IF ( localimages ) %]
 <div>Click on an image to view it in the image viewer</div>
 [% FOREACH image IN localimages %]
 [% IF image %]
 <span class="localimage"><a href="/cgi-bin/koha/catalogue/imageviewer.pl?biblionumber=[% biblionumber %]&imagenumber=[% image %]"><img alt="img" src="/cgi-bin/koha/catalogue/image.pl?thumbnail=1&imagenumber=[% image %]" /></a></span>
+[% END %]
+[% END %]
+[% ELSE %]
+[% IF ( CAN_user_tools_upload_local_cover_images ) %]
+<p>No images have been uploaded for this bibliographic record yet. Please <a href='/cgi-bin/koha/tools/upload-cover-image.pl?biblionumber=[% biblionumber %]&filetype=image'>upload</a> one.</p>
 [% END %]
 [% END %]
 </div>

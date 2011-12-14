@@ -46,7 +46,7 @@ if (C4::Context->preference("OPACLocalCoverImages")) {
     $template->{VARS}->{'OPACLocalCoverImages'} = 1;
     $template->{VARS}->{'images'} = \@images;
     $template->{VARS}->{'biblionumber'} = $biblionumber;
-    $template->{VARS}->{'imagenumber'} = $images[0] || '';
+    $template->{VARS}->{'imagenumber'} = $imagenumber || $images[0] || '';
 }
 
 $template->{VARS}->{'biblio'} = $biblio;
