@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 12;
+use Test::More tests => 13;
 
 BEGIN { use_ok( 'C4::Boolean', qw( true_p ) ); }
 
