@@ -138,37 +138,29 @@
 			[% FOREACH pubshelvesloo IN pubshelvesloop %]
 			<li class="yuimenuitem"><a href="/cgi-bin/koha/opac-shelves.pl?viewshelf=[% pubshelvesloo.shelfnumber %]&amp;sortfield=[% pubshelvesloo.sortfield %]">[% pubshelvesloo.shelfname |html %]</a></li>
 			[% END %]
+			<li class="yuimenuitem"><a class="yuimenuitemlabel" href="/cgi-bin/koha/opac-shelves.pl?display=publicshelves">[View All]</a></li>
 			</ul>   
 		[% ELSE %]
 			No Public Lists
 		[% END %]
-		[% IF ( pubtotal ) %]
-			<ul class="second-of-type">
-            <li class="yuimenuitem"><a class="yuimenuitemlabel" href="/cgi-bin/koha/opac-shelves.pl?display=publicshelves">View all [% pubtotal %] public lists</a></li>
-			</ul>
-		[% END %]
   [% IF ( opacuserlogin ) %]
-    [% IF ( loggedinusername ) %]
-<h4>Your Lists</h4>
+	<h4>Your Lists</h4>
+	[% IF ( loggedinusername ) %]
 		[% IF ( barshelves ) %]
 			<ul class="first-of-type">
 			[% FOREACH barshelvesloo IN barshelvesloop %]
 			<li class="yuimenuitem"><a href="/cgi-bin/koha/opac-shelves.pl?viewshelf=[% barshelvesloo.shelfnumber %]&amp;sortfield=[% barshelvesloo.sortfield %]">[% barshelvesloo.shelfname |html %]</a></li>
 			[% END %]
+			<li class="yuimenuitem"><a class="yuimenuitemlabel" href="/cgi-bin/koha/opac-shelves.pl?display=privateshelves">[View All]</a></li>
 			</ul>   
 		[% ELSE %]
-			No Private Lists
+			<ul class="first-of-type">
+			<li>No Private Lists</li>
+			<li class="yuimenuitem"><a class="yuimenuitemlabel" href="/cgi-bin/koha/opac-shelves.pl?display=privateshelves">[New List]</a></li></ul>
 		[% END %]
-		[% IF ( bartotal ) %]
-			<ul class="second-of-type">
-            <li class="yuimenuitem"><a class="yuimenuitemlabel" href="/cgi-bin/koha/opac-shelves.pl?display=privateshelves">View all [% bartotal %] of your private lists</a></li>
-			</ul>
-		[% END %]
-		<ul class="second-of-type">
-        <li class="yuimenuitem"><a class="yuimenuitemlabel" href="/cgi-bin/koha/opac-shelves.pl">Manage Lists</a></li>
-        </ul>
-    [% ELSE %]<ul class="first-of-type"><li><a href="/cgi-bin/koha/opac-user.pl">Log in to Create Your Own Lists</a></li></ul>
-    [% END %]
+	[% ELSE %]
+		<ul class="first-of-type"><li><a href="/cgi-bin/koha/opac-user.pl">Log in to Create Your Own Lists</a></li></ul>
+	[% END %]
   [% END %]
 	  </div>
 </div><!-- /listmenu /virtualshelves -->

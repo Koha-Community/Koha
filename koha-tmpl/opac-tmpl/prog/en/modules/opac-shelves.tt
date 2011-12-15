@@ -131,7 +131,7 @@ $(function() {
             });
         [% END %]
         [% END %][% END %][% END %]
-  [% IF ( loggedinusername && manageshelf ) %]
+  [% IF ( loggedinusername && allowremovingitems ) %]
   $("#myform").submit(function(){
     var checkedBoxes = $(".checkboxed input:checkbox:checked");
     if ($(checkedBoxes).size()) {
@@ -210,6 +210,15 @@ $(function() {
                     [% IF ( paramsloo.unrecognized ) %]
                       <div class="dialog message">ERROR: List number [% paramsloo.unrecognized %] unrecognized.</div>
                     [% END %]
+                    [% IF ( paramsloo.modifyfailure) %]
+                      <div class="dialog message">ERROR: Shelf could not be renamed to [% paramsloo.modifyfailure %]. This name may not be unique for this type of list. Please check.</div>
+                    [% END %]
+                    [% IF ( paramsloo.nothingdeleted) %]
+                      <div class="dialog message">Warning: You could not delete any selected items from this shelf.</div>
+                    [% END %]
+                    [% IF ( paramsloo.somedeleted) %]
+                      <div class="dialog message">Warning: You could not delete all selected items from this shelf.</div>
+                    [% END %]
                   </div>
                 </div>
               [% END %]<!-- /paramsloop -->
@@ -257,7 +266,7 @@ $(function() {
                                           </span>
                                         [% END %]
                                       [% END %]
-                    [% IF ( loggedinusername && manageshelf ) %]<span id="removeitems"></span>[% END %]</span>
+                    [% IF ( loggedinusername && allowremovingitems ) %]<span id="removeitems"></span>[% END %]</span>
                   </div>
                   <form action="/cgi-bin/koha/opac-shelves.pl" method="post" id="myform" name="myform" class="checkboxed">
                 [% IF ( manageshelf ) %]
@@ -394,21 +403,20 @@ $(function() {
             [% END %]<!-- /viewshelf -->
 
 
-            [% IF ( manageshelf ) %]
-              <!-- Editing shelf -->
-              [% IF ( itemsloop ) %]
+            [% IF ( itemsloop && allowremovingitems ) %]
+                <form method="post" action="opac-shelves.pl">
                 <input type="hidden" name="shelfnumber" value="[% shelfnumber %]" />
                 <input type="hidden" name="modifyshelfcontents" value="1" />
-                <input type="hidden" name="viewshelf" value="[% shelfnumber %]" /><input type="submit" value="Remove Selected Items" class="icon delete" />
-              [% ELSE %]
+                <input type="hidden" name="viewshelf" value="[% shelfnumber %]" /><input type="submit" value="Remove Selected Items" class="icon delete"/>
+                </form>
+            [% ELSIF ( !itemsloop && manageshelf ) %]
                 <form method="post" action="opac-shelves.pl">
                   <input type="hidden" name="DEL-[% shelfnumber %]" value="1" />
                   <input type="hidden" name="shelves" value="1" />
 		  <input type="hidden" name="shelfoff" value="[% shelfoff %]" />
                   <input type="submit" class="icon delete" value="Delete this List" onclick="return confirmDelete(MSG_CONFIRM_DELETE_LIST)" />
-              [% END %]
-            [% END %]
                 </form>
+            [% END %]
 
             
             [% IF ( edit ) %]
@@ -429,11 +437,13 @@ $(function() {
                         </select>
                       </li>
                       <li>
+			[% IF (OpacAllowPublicListCreation) %]
                         <label for="category">Category:</label>
                         <select name="category" id="category">
                           [% IF ( category1 ) %]<option value="1" selected="selected">Private</option>[% ELSE %]<option value="1">Private</option>[% END %]
                           [% IF ( category2 ) %]<option value="2" selected="selected">Public</option>[% ELSE %]<option value="2">Public</option>[% END %]
                         </select>
+			[% END %]
                       </li>
                     </ol>
                   </fieldset>
@@ -489,7 +499,6 @@ $(function() {
                               <td>
                                 [% IF ( shelveslooppri.viewcategory1 ) %]Private[% END %]
                                 [% IF ( shelveslooppri.viewcategory2 ) %]Public[% END %]
-                                [% IF ( shelveslooppri.viewcategory3 ) %]Open[% END %]
                               </td>
                               <td>
                               [% IF ( shelveslooppri.mine ) %]
@@ -556,7 +565,6 @@ $(function() {
                           <td>
                             [% IF ( shelvesloo.viewcategory1 ) %]Private[% END %]
                             [% IF ( shelvesloo.viewcategory2 ) %]Public[% END %]
-                            [% IF ( shelvesloo.viewcategory3 ) %]Open[% END %]
 	                      </td>
                           <td>
 							[% IF ( shelvesloo.mine ) %]
@@ -620,7 +628,9 @@ $(function() {
                         <label for="category">Category:</label>
                         <select name="category" id="category">
                           <option value="1">Private</option>
+			  [% IF (OpacAllowPublicListCreation) %]
                           <option value="2">Public</option>
+			  [% END %]
                         </select>
                       </li>
                     </ol>
