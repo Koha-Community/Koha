@@ -16,8 +16,8 @@ my @all_koha_dirs = qw( acqui admin authorities basket C4 catalogue cataloguing 
 labels members misc offline_circ opac patroncards reports reserve reviews rotating_collections
 serials sms suggestion t tags test tools virtualshelves);
 
-my @dirs = qw( acqui admin authorities basket circ debian errors offline_circ reserve reviews rotating_collections
-serials sms virtualshelves );
+my @dirs = qw( acqui admin authorities basket catalogue cataloguing circ debian errors labels
+    offline_circ reserve reviews rotating_collections serials sms virtualshelves );
 
 if ( not $ENV{TEST_QA} ) {
     my $msg = 'Author test. Set $ENV{TEST_QA} to a true value to run';

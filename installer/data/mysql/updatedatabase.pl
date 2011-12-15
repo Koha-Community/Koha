@@ -4567,14 +4567,14 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
 $DBversion = "3.06.00.002";
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     $dbh->do("UPDATE borrowers SET debarred=NULL WHERE debarred='0000-00-00';");
-    print "Setting NULL to debarred where 0000-00-00 is stored (bug 7272)";
+    print "Setting NULL to debarred where 0000-00-00 is stored (bug 7272)\n";
     SetVersion($DBversion);
 }
 
 $DBversion = "3.06.02.001";
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     $dbh->do(" UPDATE `message_attributes` SET message_name='Item_Due' WHERE message_name='Item_DUE'");
-    print "Updating message_name in message_attributes";
+    print "Updating message_name in message_attributes\n";
     SetVersion($DBversion);
 }
 

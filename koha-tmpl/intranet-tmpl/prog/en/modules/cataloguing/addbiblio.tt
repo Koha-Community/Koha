@@ -2,6 +2,7 @@
 <title>Koha &rsaquo; Cataloging &rsaquo; [% IF ( biblionumber ) %]Editing [% title |html %] (Record Number [% biblionumber %])[% ELSE %]Add MARC Record[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <script type="text/javascript" src="[% themelang %]/lib/yui/plugins/bubbling-min.js"></script>
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.fixFloat.js"></script>
 <script type="text/javascript">
 //<![CDATA[
 
@@ -709,6 +710,7 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
 	// prepare DOM for YUI Toolbar
 
 	 $(document).ready(function() {
+        $('#toolbar').fixFloat();
 		$("#z3950searchc").empty();
         $("#savebutton").empty();
 	    yuiToolbar();

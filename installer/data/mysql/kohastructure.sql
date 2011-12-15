@@ -116,16 +116,16 @@ DROP TABLE IF EXISTS `biblio`;
 CREATE TABLE `biblio` ( -- table that stores bibliographic information
   `biblionumber` int(11) NOT NULL auto_increment, -- unique identifier assigned to each bibliographic record
   `frameworkcode` varchar(4) NOT NULL default '', -- foriegn key from the biblio_framework table to identify which framework was used in cataloging this record
-  `author` mediumtext, -- statement of responsibility from MARC record (100 in MARC21)
-  `title` mediumtext, -- title (without the subtitle) from the MARC record (245 in MARC21)
-  `unititle` mediumtext, -- uniform title (without the subtitle) from the MARC record (240 in MARC21)
-  `notes` mediumtext, -- values from the general notes field in the MARC record (500 in MARC21) split by bar (|)
+  `author` mediumtext, -- statement of responsibility from MARC record (100$a in MARC21)
+  `title` mediumtext, -- title (without the subtitle) from the MARC record (245$a in MARC21)
+  `unititle` mediumtext, -- uniform title (without the subtitle) from the MARC record (240$a in MARC21)
+  `notes` mediumtext, -- values from the general notes field in the MARC record (500$a in MARC21) split by bar (|)
   `serial` tinyint(1) default NULL, -- foreign key, linking to the subscriptionid in the serial table
   `seriestitle` mediumtext,
   `copyrightdate` smallint(6) default NULL, -- publication or copyright date from the MARC record
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- date and time this record was last touched
   `datecreated` DATE NOT NULL, -- the date this record was added to Koha
-  `abstract` mediumtext, -- summary from the MARC record (520 in MARC21)
+  `abstract` mediumtext, -- summary from the MARC record (520$a in MARC21)
   PRIMARY KEY  (`biblionumber`),
   KEY `blbnoidx` (`biblionumber`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -146,39 +146,39 @@ CREATE TABLE `biblio_framework` (
 --
 
 DROP TABLE IF EXISTS `biblioitems`;
-CREATE TABLE `biblioitems` (
-  `biblioitemnumber` int(11) NOT NULL auto_increment,
-  `biblionumber` int(11) NOT NULL default 0,
+CREATE TABLE `biblioitems` ( -- information related to bibliographic records in Koha
+  `biblioitemnumber` int(11) NOT NULL auto_increment, -- primary key, unique identifier assigned by Koha
+  `biblionumber` int(11) NOT NULL default 0, -- foreign key linking this table to the biblio table
   `volume` mediumtext,
   `number` mediumtext,
-  `itemtype` varchar(10) default NULL,
-  `isbn` varchar(30) default NULL,
-  `issn` varchar(9) default NULL,
+  `itemtype` varchar(10) default NULL, -- biblio level item type (MARC21 942$c)
+  `isbn` varchar(30) default NULL, -- ISBN (MARC21 020$a)
+  `issn` varchar(9) default NULL, -- ISSN (MARC21 022$a)
   `publicationyear` text,
-  `publishercode` varchar(255) default NULL,
+  `publishercode` varchar(255) default NULL, -- publisher (MARC21 260$b)
   `volumedate` date default NULL,
-  `volumedesc` text,
+  `volumedesc` text, -- volume information (MARC21 362$a)
   `collectiontitle` mediumtext default NULL,
   `collectionissn` text default NULL,
   `collectionvolume` mediumtext default NULL,
   `editionstatement` text default NULL,
   `editionresponsibility` text default NULL,
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
-  `illus` varchar(255) default NULL,
-  `pages` varchar(255) default NULL,
+  `illus` varchar(255) default NULL, -- illustrations (MARC21 300$b)
+  `pages` varchar(255) default NULL, -- number of pages (MARC21 300$c)
   `notes` mediumtext,
-  `size` varchar(255) default NULL,
-  `place` varchar(255) default NULL,
-  `lccn` varchar(25) default NULL,
-  `marc` longblob,
-  `url` varchar(255) default NULL,
-  `cn_source` varchar(10) default NULL,
+  `size` varchar(255) default NULL, -- material size (MARC21 300$c)
+  `place` varchar(255) default NULL, -- publication place (MARC21 260$a)
+  `lccn` varchar(25) default NULL, -- library of congress control number (MARC21 010$a)
+  `marc` longblob, -- full bibliographic MARC record
+  `url` varchar(255) default NULL, -- url (MARC21 856$u)
+  `cn_source` varchar(10) default NULL, -- classification source (MARC21 942$2)
   `cn_class` varchar(30) default NULL,
   `cn_item` varchar(10) default NULL,
   `cn_suffix` varchar(10) default NULL,
   `cn_sort` varchar(30) default NULL,
   `totalissues` int(10),
-  `marcxml` longtext NOT NULL,
+  `marcxml` longtext NOT NULL, -- full bibliographic MARC record in MARCXML
   PRIMARY KEY  (`biblioitemnumber`),
   KEY `bibinoidx` (`biblioitemnumber`),
   KEY `bibnoidx` (`biblionumber`),
@@ -417,21 +417,21 @@ CREATE TABLE `browser` (
 --
 
 DROP TABLE IF EXISTS `categories`;
-CREATE TABLE `categories` (
-  `categorycode` varchar(10) NOT NULL default '',
-  `description` mediumtext,
-  `enrolmentperiod` smallint(6) default NULL,
-  `enrolmentperioddate` DATE NULL DEFAULT NULL,
-  `upperagelimit` smallint(6) default NULL,
+CREATE TABLE `categories` ( -- this table shows information related to Koha patron categories
+  `categorycode` varchar(10) NOT NULL default '', -- unique primary key used to idenfity the patron category
+  `description` mediumtext, -- description of the patron category
+  `enrolmentperiod` smallint(6) default NULL, -- number of months the patron is enrolled for (will be NULL if enrolmentperioddate is set)
+  `enrolmentperioddate` DATE NULL DEFAULT NULL, -- date the patron is enrolled until (will be NULL if enrolmentperiod is set)
+  `upperagelimit` smallint(6) default NULL, -- age limit for the patron
   `dateofbirthrequired` tinyint(1) default NULL,
-  `finetype` varchar(30) default NULL,
+  `finetype` varchar(30) default NULL, -- unused in Koha
   `bulk` tinyint(1) default NULL,
-  `enrolmentfee` decimal(28,6) default NULL,
-  `overduenoticerequired` tinyint(1) default NULL,
-  `issuelimit` smallint(6) default NULL,
-  `reservefee` decimal(28,6) default NULL,
-  `hidelostitems` tinyint(1) NOT NULL default '0',
-  `category_type` varchar(1) NOT NULL default 'A',
+  `enrolmentfee` decimal(28,6) default NULL, -- enrollment fee for the patron
+  `overduenoticerequired` tinyint(1) default NULL, -- are overdue notices sent to this patron category (1 for yes, 0 for no)
+  `issuelimit` smallint(6) default NULL, -- unused in Koha
+  `reservefee` decimal(28,6) default NULL, -- cost to place holds
+  `hidelostitems` tinyint(1) NOT NULL default '0', -- are lost items shown to this category (1 for yes, 0 for no)
+  `category_type` varchar(1) NOT NULL default 'A', -- type of Koha patron (Adult, Child, Professional, Organizational, Statistical, Staff)
   PRIMARY KEY  (`categorycode`),
   UNIQUE KEY `categorycode` (`categorycode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -591,16 +591,16 @@ DROP TABLE IF EXISTS `deletedbiblio`;
 CREATE TABLE `deletedbiblio` ( -- stores information about bibliographic records that have been deleted
   `biblionumber` int(11) NOT NULL auto_increment, -- unique identifier assigned to each bibliographic record
   `frameworkcode` varchar(4) NOT NULL default '', -- foriegn key from the biblio_framework table to identify which framework was used in cataloging this record
-  `author` mediumtext, -- statement of responsibility from MARC record (100 in MARC21)
-  `title` mediumtext, -- title (without the subtitle) from the MARC record (245 in MARC21)
-  `unititle` mediumtext, -- uniform title (without the subtitle) from the MARC record (240 in MARC21)
-  `notes` mediumtext, -- values from the general notes field in the MARC record (500 in MARC21) split by bar (|)
+  `author` mediumtext, -- statement of responsibility from MARC record (100$a in MARC21)
+  `title` mediumtext, -- title (without the subtitle) from the MARC record (245$a in MARC21)
+  `unititle` mediumtext, -- uniform title (without the subtitle) from the MARC record (240$a in MARC21)
+  `notes` mediumtext, -- values from the general notes field in the MARC record (500$a in MARC21) split by bar (|)
   `serial` tinyint(1) default NULL, -- foreign key, linking to the subscriptionid in the serial table
   `seriestitle` mediumtext,
   `copyrightdate` smallint(6) default NULL, -- publication or copyright date from the MARC record
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- date and time this record was last touched
   `datecreated` DATE NOT NULL, -- the date this record was added to Koha
-  `abstract` mediumtext, -- summary from the MARC record (520 in MARC21)
+  `abstract` mediumtext, -- summary from the MARC record (520$a in MARC21)
   PRIMARY KEY  (`biblionumber`),
   KEY `blbnoidx` (`biblionumber`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -610,39 +610,39 @@ CREATE TABLE `deletedbiblio` ( -- stores information about bibliographic records
 --
 
 DROP TABLE IF EXISTS `deletedbiblioitems`;
-CREATE TABLE `deletedbiblioitems` (
-  `biblioitemnumber` int(11) NOT NULL default 0,
-  `biblionumber` int(11) NOT NULL default 0,
+CREATE TABLE `deletedbiblioitems` ( -- information about bibliographic records that have been deleted
+  `biblioitemnumber` int(11) NOT NULL default 0, -- primary key, unique identifier assigned by Koha
+  `biblionumber` int(11) NOT NULL default 0, -- foreign key linking this table to the biblio table
   `volume` mediumtext,
   `number` mediumtext,
-  `itemtype` varchar(10) default NULL,
-  `isbn` varchar(30) default NULL,
-  `issn` varchar(9) default NULL,
+  `itemtype` varchar(10) default NULL, -- biblio level item type (MARC21 942$c)
+  `isbn` varchar(30) default NULL, -- ISBN (MARC21 020$a)
+  `issn` varchar(9) default NULL, -- ISSN (MARC21 022$a)
   `publicationyear` text,
-  `publishercode` varchar(255) default NULL,
+  `publishercode` varchar(255) default NULL, -- publisher (MARC21 260$b)
   `volumedate` date default NULL,
-  `volumedesc` text,
+  `volumedesc` text, -- volume information (MARC21 362$a)
   `collectiontitle` mediumtext default NULL,
   `collectionissn` text default NULL,
   `collectionvolume` mediumtext default NULL,
   `editionstatement` text default NULL,
   `editionresponsibility` text default NULL,
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
-  `illus` varchar(255) default NULL,
-  `pages` varchar(255) default NULL,
+  `illus` varchar(255) default NULL, -- illustrations (MARC21 300$b)
+  `pages` varchar(255) default NULL, -- number of pages (MARC21 300$c)
   `notes` mediumtext,
-  `size` varchar(255) default NULL,
-  `place` varchar(255) default NULL,
-  `lccn` varchar(25) default NULL,
-  `marc` longblob,
-  `url` varchar(255) default NULL,
-  `cn_source` varchar(10) default NULL,
+  `size` varchar(255) default NULL, -- material size (MARC21 300$c)
+  `place` varchar(255) default NULL, -- publication place (MARC21 260$a)
+  `lccn` varchar(25) default NULL, -- library of congress control number (MARC21 010$a)
+  `marc` longblob, -- full bibliographic MARC record
+  `url` varchar(255) default NULL, -- url (MARC21 856$u)
+  `cn_source` varchar(10) default NULL, -- classification source (MARC21 942$2)
   `cn_class` varchar(30) default NULL,
   `cn_item` varchar(10) default NULL,
   `cn_suffix` varchar(10) default NULL,
   `cn_sort` varchar(30) default NULL,
   `totalissues` int(10),
-  `marcxml` longtext NOT NULL,
+  `marcxml` longtext NOT NULL, -- full bibliographic MARC record in MARCXML
   PRIMARY KEY  (`biblioitemnumber`),
   KEY `bibinoidx` (`biblioitemnumber`),
   KEY `bibnoidx` (`biblionumber`),
@@ -733,46 +733,46 @@ CREATE TABLE `deletedborrowers` ( -- stores data related to the patrons/borrower
 
 DROP TABLE IF EXISTS `deleteditems`;
 CREATE TABLE `deleteditems` (
-  `itemnumber` int(11) NOT NULL default 0,
-  `biblionumber` int(11) NOT NULL default 0,
-  `biblioitemnumber` int(11) NOT NULL default 0,
-  `barcode` varchar(20) default NULL,
-  `dateaccessioned` date default NULL,
-  `booksellerid` mediumtext default NULL,
-  `homebranch` varchar(10) default NULL,
-  `price` decimal(8,2) default NULL,
-  `replacementprice` decimal(8,2) default NULL,
-  `replacementpricedate` date default NULL,
-  `datelastborrowed` date default NULL,
-  `datelastseen` date default NULL,
+  `itemnumber` int(11) NOT NULL default 0, -- primary key and unique identifier added by Koha
+  `biblionumber` int(11) NOT NULL default 0, -- foreign key from biblio table used to link this item to the right bib record
+  `biblioitemnumber` int(11) NOT NULL default 0, -- foreign key from the biblioitems table to link to item to additional information
+  `barcode` varchar(20) default NULL, -- item barcode (MARC21 952$p)
+  `dateaccessioned` date default NULL, -- date the item was acquired or added to Koha (MARC21 952$d)
+  `booksellerid` mediumtext default NULL, -- where the item was purchased (MARC21 952$e)
+  `homebranch` varchar(10) default NULL, -- foreign key from the branches table for the library that owns this item (MARC21 952$a)
+  `price` decimal(8,2) default NULL, -- purchase price (MARC21 952$g)
+  `replacementprice` decimal(8,2) default NULL, -- cost the library charges to replace the item if it has been marked lost (MARC21 952$v)
+  `replacementpricedate` date default NULL, -- the date the price is effective from (MARC21 952$w)
+  `datelastborrowed` date default NULL, -- the date the item was last checked out
+  `datelastseen` date default NULL, -- the date the item was last see (usually the last time the barcode was scanned or inventory was done)
   `stack` tinyint(1) default NULL,
-  `notforloan` tinyint(1) NOT NULL default 0,
-  `damaged` tinyint(1) NOT NULL default 0,
-  `itemlost` tinyint(1) NOT NULL default 0,
-  `wthdrawn` tinyint(1) NOT NULL default 0,
-  `itemcallnumber` varchar(255) default NULL,
-  `issues` smallint(6) default NULL,
-  `renewals` smallint(6) default NULL,
-  `reserves` smallint(6) default NULL,
-  `restricted` tinyint(1) default NULL,
-  `itemnotes` mediumtext,
-  `holdingbranch` varchar(10) default NULL,
+  `notforloan` tinyint(1) NOT NULL default 0, -- authorized value defining why this item is not for loan (MARC21 952$7)
+  `damaged` tinyint(1) NOT NULL default 0, -- authorized value defining this item as damaged (MARC21 952$4)
+  `itemlost` tinyint(1) NOT NULL default 0, -- authorized value defining this item as lost (MARC21 952$1)
+  `wthdrawn` tinyint(1) NOT NULL default 0, -- authorized value defining this item as withdrawn (MARC21 952$0)
+  `itemcallnumber` varchar(255) default NULL, -- call number for this item (MARC21 952$o)
+  `issues` smallint(6) default NULL, -- number of times this item has been checked out
+  `renewals` smallint(6) default NULL, -- number of times this item has been renewed
+  `reserves` smallint(6) default NULL, -- number of times this item has been placed on hold/reserved
+  `restricted` tinyint(1) default NULL, -- authorized value defining use restrictions for this item (MARC21 952$5)
+  `itemnotes` mediumtext, -- public notes on this item (MARC21 952$x)
+  `holdingbranch` varchar(10) default NULL, -- foreign key from the branches table for the library that is currently in possession item (MARC21 952$b)
   `paidfor` mediumtext,
-  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
-  `location` varchar(80) default NULL,
-  `permanent_location` varchar(80) default NULL,
-  `onloan` date default NULL,
-  `cn_source` varchar(10) default NULL,
-  `cn_sort` varchar(30) default NULL,
-  `ccode` varchar(10) default NULL,
-  `materials` varchar(10) default NULL,
-  `uri` varchar(255) default NULL,
-  `itype` varchar(10) default NULL,
-  `more_subfields_xml` longtext default NULL,
-  `enumchron` text default NULL,
-  `copynumber` varchar(32) default NULL,
-  `stocknumber` varchar(32) default NULL,
-  `marc` longblob,
+  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- date and time this item was last altered
+  `location` varchar(80) default NULL, -- authorized value for the shelving location for this item (MARC21 952$c)
+  `permanent_location` varchar(80) default NULL, -- linked to the CART and PROC temporary locations feature, stores the permanent shelving location
+  `onloan` date default NULL, -- defines if this item is currently checked out (1 for yes, 0 for no)
+  `cn_source` varchar(10) default NULL, -- classification source used on this item (MARC21 952$2)
+  `cn_sort` varchar(30) default NULL, -- normalized form of the call number (MARC21 952$o) used for sorting
+  `ccode` varchar(10) default NULL, -- authorized value for the collection code associated with this item (MARC21 952$8)
+  `materials` varchar(10) default NULL, -- materials specified (MARC21 952$3)
+  `uri` varchar(255) default NULL, -- URL for the item (MARC21 952$u)
+  `itype` varchar(10) default NULL, -- foreign key from the itemtypes table defining the type for this item (MARC21 952$y)
+  `more_subfields_xml` longtext default NULL, -- additional 952 subfields in XML format
+  `enumchron` text default NULL, -- serial enumeration/chronology for the item (MARC21 952$h)
+  `copynumber` varchar(32) default NULL, -- copy number (MARC21 952$t)
+  `stocknumber` varchar(32) default NULL, -- inventory number (MARC21 952$i)
+  `marc` longblob, -- unused in Koha
   PRIMARY KEY  (`itemnumber`),
   KEY `delitembarcodeidx` (`barcode`),
   KEY `delitemstocknumberidx` (`stocknumber`),
@@ -998,46 +998,46 @@ CREATE TABLE `issuingrules` (
 --
 
 DROP TABLE IF EXISTS `items`;
-CREATE TABLE `items` (
-  `itemnumber` int(11) NOT NULL auto_increment,
-  `biblionumber` int(11) NOT NULL default 0,
-  `biblioitemnumber` int(11) NOT NULL default 0,
-  `barcode` varchar(20) default NULL,
-  `dateaccessioned` date default NULL,
-  `booksellerid` mediumtext default NULL,
-  `homebranch` varchar(10) default NULL,
-  `price` decimal(8,2) default NULL,
-  `replacementprice` decimal(8,2) default NULL,
-  `replacementpricedate` date default NULL,
-  `datelastborrowed` date default NULL,
-  `datelastseen` date default NULL,
+CREATE TABLE `items` ( -- holdings/item information 
+  `itemnumber` int(11) NOT NULL auto_increment, -- primary key and unique identifier added by Koha
+  `biblionumber` int(11) NOT NULL default 0, -- foreign key from biblio table used to link this item to the right bib record
+  `biblioitemnumber` int(11) NOT NULL default 0, -- foreign key from the biblioitems table to link to item to additional information
+  `barcode` varchar(20) default NULL, -- item barcode (MARC21 952$p)
+  `dateaccessioned` date default NULL, -- date the item was acquired or added to Koha (MARC21 952$d)
+  `booksellerid` mediumtext default NULL, -- where the item was purchased (MARC21 952$e)
+  `homebranch` varchar(10) default NULL, -- foreign key from the branches table for the library that owns this item (MARC21 952$a)
+  `price` decimal(8,2) default NULL, -- purchase price (MARC21 952$g)
+  `replacementprice` decimal(8,2) default NULL, -- cost the library charges to replace the item if it has been marked lost (MARC21 952$v)
+  `replacementpricedate` date default NULL, -- the date the price is effective from (MARC21 952$w)
+  `datelastborrowed` date default NULL, -- the date the item was last checked out/issued
+  `datelastseen` date default NULL, -- the date the item was last see (usually the last time the barcode was scanned or inventory was done)
   `stack` tinyint(1) default NULL,
-  `notforloan` tinyint(1) NOT NULL default 0,
-  `damaged` tinyint(1) NOT NULL default 0,
-  `itemlost` tinyint(1) NOT NULL default 0,
-  `wthdrawn` tinyint(1) NOT NULL default 0,
-  `itemcallnumber` varchar(255) default NULL,
-  `issues` smallint(6) default NULL,
-  `renewals` smallint(6) default NULL,
-  `reserves` smallint(6) default NULL,
-  `restricted` tinyint(1) default NULL,
-  `itemnotes` mediumtext,
-  `holdingbranch` varchar(10) default NULL,
+  `notforloan` tinyint(1) NOT NULL default 0, -- authorized value defining why this item is not for loan (MARC21 952$7)
+  `damaged` tinyint(1) NOT NULL default 0, -- authorized value defining this item as damaged (MARC21 952$4)
+  `itemlost` tinyint(1) NOT NULL default 0, -- authorized value defining this item as lost (MARC21 952$1)
+  `wthdrawn` tinyint(1) NOT NULL default 0, -- authorized value defining this item as withdrawn (MARC21 952$0)
+  `itemcallnumber` varchar(255) default NULL, -- call number for this item (MARC21 952$o)
+  `issues` smallint(6) default NULL, -- number of times this item has been checked out/issued
+  `renewals` smallint(6) default NULL, -- number of times this item has been renewed
+  `reserves` smallint(6) default NULL, -- number of times this item has been placed on hold/reserved
+  `restricted` tinyint(1) default NULL, -- authorized value defining use restrictions for this item (MARC21 952$5)
+  `itemnotes` mediumtext, -- public notes on this item (MARC21 952$x)
+  `holdingbranch` varchar(10) default NULL, -- foreign key from the branches table for the library that is currently in possession item (MARC21 952$b)
   `paidfor` mediumtext,
-  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
-  `location` varchar(80) default NULL,
-  `permanent_location` varchar(80) default NULL,
-  `onloan` date default NULL,
-  `cn_source` varchar(10) default NULL,
-  `cn_sort` varchar(30) default NULL,
-  `ccode` varchar(10) default NULL,
-  `materials` varchar(10) default NULL,
-  `uri` varchar(255) default NULL,
-  `itype` varchar(10) default NULL,
-  `more_subfields_xml` longtext default NULL,
-  `enumchron` text default NULL,
-  `copynumber` varchar(32) default NULL,
-  `stocknumber` varchar(32) default NULL,
+  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- date and time this item was last altered
+  `location` varchar(80) default NULL, -- authorized value for the shelving location for this item (MARC21 952$c)
+  `permanent_location` varchar(80) default NULL, -- linked to the CART and PROC temporary locations feature, stores the permanent shelving location
+  `onloan` date default NULL, -- defines if this item is currently checked out (1 for yes, 0 for no)
+  `cn_source` varchar(10) default NULL, -- classification source used on this item (MARC21 952$2)
+  `cn_sort` varchar(30) default NULL,  -- normalized form of the call number (MARC21 952$o) used for sorting
+  `ccode` varchar(10) default NULL, -- authorized value for the collection code associated with this item (MARC21 952$8)
+  `materials` varchar(10) default NULL, -- materials specified (MARC21 952$3)
+  `uri` varchar(255) default NULL, -- URL for the item (MARC21 952$u)
+  `itype` varchar(10) default NULL, -- foreign key from the itemtypes table defining the type for this item (MARC21 952$y)
+  `more_subfields_xml` longtext default NULL, -- additional 952 subfields in XML format
+  `enumchron` text default NULL, -- serial enumeration/chronology for the item (MARC21 952$h)
+  `copynumber` varchar(32) default NULL, -- copy number (MARC21 952$t)
+  `stocknumber` varchar(32) default NULL, -- inventory number (MARC21 952$i)
   PRIMARY KEY  (`itemnumber`),
   UNIQUE KEY `itembarcodeidx` (`barcode`),
   KEY `itemstocknumberidx` (`stocknumber`),
@@ -1382,22 +1382,22 @@ CREATE TABLE `old_issues` ( -- lists items that were checked out and have been r
 -- Table structure for table `old_reserves`
 --
 DROP TABLE IF EXISTS `old_reserves`;
-CREATE TABLE `old_reserves` (
-  `borrowernumber` int(11) default NULL,
-  `reservedate` date default NULL,
-  `biblionumber` int(11) default NULL,
+CREATE TABLE `old_reserves` ( -- this table holds all holds/reserves that have been completed (either filled or cancelled)
+  `borrowernumber` int(11) default NULL, -- foreign key from the borrowers table defining which patron this hold is for
+  `reservedate` date default NULL, -- the date the hold was places
+  `biblionumber` int(11) default NULL, -- foreign key from the biblio table defining which bib record this hold is on
   `constrainttype` varchar(1) default NULL,
-  `branchcode` varchar(10) default NULL,
-  `notificationdate` date default NULL,
-  `reminderdate` date default NULL,
-  `cancellationdate` date default NULL,
-  `reservenotes` mediumtext,
-  `priority` smallint(6) default NULL,
-  `found` varchar(1) default NULL,
-  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
-  `itemnumber` int(11) default NULL,
-  `waitingdate` date default NULL,
-  `expirationdate` DATE DEFAULT NULL,
+  `branchcode` varchar(10) default NULL, -- foreign key from the branches table defining which branch the patron wishes to pick this hold up at
+  `notificationdate` date default NULL, -- currently unused
+  `reminderdate` date default NULL, -- currently unused
+  `cancellationdate` date default NULL, -- the date this hold was cancelled
+  `reservenotes` mediumtext, -- notes related to this hold
+  `priority` smallint(6) default NULL, -- where in the queue the patron sits
+  `found` varchar(1) default NULL, -- a one letter code defining what the the status is of the hold is after it has been confirmed
+  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- the date and time this hold was last updated
+  `itemnumber` int(11) default NULL, -- foreign key from the items table defining the specific item the patron has placed on hold or the item this hold was filled with
+  `waitingdate` date default NULL, -- the date the item was marked as waiting for the patron at the library
+  `expirationdate` DATE DEFAULT NULL, -- the date the hold expires (usually the date entered by the patron to say they don't need the hold after a certain date)
   `lowestPriority` tinyint(1) NOT NULL,
   KEY `old_reserves_borrowernumber` (`borrowernumber`),
   KEY `old_reserves_biblionumber` (`biblionumber`),
@@ -1557,22 +1557,22 @@ CREATE TABLE `reserveconstraints` (
 --
 
 DROP TABLE IF EXISTS `reserves`;
-CREATE TABLE `reserves` (
-  `borrowernumber` int(11) NOT NULL default 0,
-  `reservedate` date default NULL,
-  `biblionumber` int(11) NOT NULL default 0,
+CREATE TABLE `reserves` ( -- information related to holds/reserves in Koha
+  `borrowernumber` int(11) NOT NULL default 0, -- foreign key from the borrowers table defining which patron this hold is for
+  `reservedate` date default NULL, -- the date the hold was places
+  `biblionumber` int(11) NOT NULL default 0, -- foreign key from the biblio table defining which bib record this hold is on
   `constrainttype` varchar(1) default NULL,
-  `branchcode` varchar(10) default NULL,
-  `notificationdate` date default NULL,
-  `reminderdate` date default NULL,
-  `cancellationdate` date default NULL,
-  `reservenotes` mediumtext,
-  `priority` smallint(6) default NULL,
-  `found` varchar(1) default NULL,
-  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
-  `itemnumber` int(11) default NULL,
-  `waitingdate` date default NULL,
-  `expirationdate` DATE DEFAULT NULL,
+  `branchcode` varchar(10) default NULL, -- foreign key from the branches table defining which branch the patron wishes to pick this hold up at
+  `notificationdate` date default NULL, -- currently unused
+  `reminderdate` date default NULL, -- currently unused
+  `cancellationdate` date default NULL, -- the date this hold was cancelled
+  `reservenotes` mediumtext, -- notes related to this hold
+  `priority` smallint(6) default NULL, -- where in the queue the patron sits
+  `found` varchar(1) default NULL, -- a one letter code defining what the the status is of the hold is after it has been confirmed
+  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- the date and time this hold was last updated
+  `itemnumber` int(11) default NULL, -- foreign key from the items table defining the specific item the patron has placed on hold or the item this hold was filled with
+  `waitingdate` date default NULL, -- the date the item was marked as waiting for the patron at the library
+  `expirationdate` DATE DEFAULT NULL, -- the date the hold expires (usually the date entered by the patron to say they don't need the hold after a certain date)
   `lowestPriority` tinyint(1) NOT NULL,
   KEY priorityfoundidx (priority,found),
   KEY `borrowernumber` (`borrowernumber`),

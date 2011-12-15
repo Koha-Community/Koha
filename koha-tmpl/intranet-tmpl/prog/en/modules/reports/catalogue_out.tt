@@ -65,13 +65,20 @@
 			</tr>
 				[% IF ( looptable.looprow ) %]
 				[% FOREACH loopro IN looptable.looprow %]
-                    [% UNLESS ( loop.odd ) %]<tr class="highlight">
-                    [% ELSE %]<tr>[% END %]
+				[% DEFAULT
+				    loopro.itemcallnumber="No Call Number"
+				    loopro.barcode="No Barcode"
+				    loopro.title="NO TITLE"
+				    loopro.author=""
+				%]
+				    [% UNLESS ( loop.odd ) %]<tr class="highlight">
+		                    [% ELSE %]<tr>[% END %]
+		    
 						<td>[% loop.count %]</td>
-						<td>[% DEFAULT loopro.itemcallnumber="No Call Number" %]</td>
-						<td>[% DEFAULT loopro.barcode="No Barcode" %]</td>
-						<td><p><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% loopro.biblionumber %]">[% DEFAULT loopro.title="NO TITLE" %]</a></p>
-							[% DEFAULT loopro.author="" %]
+						<td>[% loopro.itemcallnumber %]</td>
+						<td>[% loopro.barcode %]</td>
+ 						<td><p><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% loopro.biblionumber %]">[% loopro.title %]</a></p>
+							[% loopro.author %]
 							[% IF ( loopro.branch ) %]at [% loopro.branch %][% END %]
 						</td>
 					</tr>

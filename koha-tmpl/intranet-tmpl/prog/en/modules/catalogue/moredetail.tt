@@ -1,5 +1,5 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Catalog &rsaquo; Item details for [% FOREACH BIBITEM_DAT IN BIBITEM_DATA %][% BIBITEM_DAT.title %][% END %]</title>
+<title>Koha &rsaquo; Catalog &rsaquo; Item details for [% title %] [% FOREACH subtitl IN subtitle %] [% subtitl.subfield %][% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <style type="text/css">h3{padding-top: 1em; border-top: 2px solid #CCCCCC;}</style>
 </head>
@@ -8,7 +8,7 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>  &rsaquo; Item Details for <i>[% FOREACH BIBITEM_DAT IN BIBITEM_DATA %][% BIBITEM_DAT.title |html %][% END %]</i></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>  &rsaquo; Item Details for <i>[% title |html %] [% FOREACH subtitl IN subtitle %] [% subtitl.subfield|html %][% END %]</i></div>
 
 <div id="doc3" class="yui-t2">
 
@@ -18,24 +18,25 @@
 [% INCLUDE 'cat-toolbar.inc' %]
 
 <div id="catalogue_detail_biblio">
-    [% FOREACH BIBITEM_DAT IN BIBITEM_DATA %]
-    <h2>[% BIBITEM_DAT.title |html %] [% IF ( BIBITEM_DAT.author ) %], by [% BIBITEM_DAT.author %][% END %]</h2>
+
+    <h2>[% title |html %]</h2>
+    [% IF ( subtitle ) %]<h4>[% FOREACH subtitl IN subtitle %] [% subtitl.subfield|html %][% END %]</h4>[% END %]
+    [% IF ( author ) %]<h4>by [% author %]</h4>[% END %]
     <ol class="bibliodetails">
-        <li><span class="label">Biblionumber:</span> [% BIBITEM_DAT.biblionumber %]&nbsp;</li>
+        <li><span class="label">Biblionumber:</span> [% biblionumber %]&nbsp;</li>
         [% UNLESS ( item_level_itypes ) %]
-        <li><span class="label">Item type:</span> [% BIBITEM_DAT.itemtypename %]&nbsp;</li>
+        <li><span class="label">Item type:</span> [% itemtypename %]&nbsp;</li>
         [% END %]
-        <!-- deprecated? <li><span class="label">Loan length:</span> [% BIBITEM_DAT.loanlength %]&nbsp;</li> -->
-        <li><span class="label">Rental charge:</span>[% BIBITEM_DAT.rentalcharge %]&nbsp;</li>
-        <li><span class="label">ISBN:</span> [% BIBITEM_DAT.isbn %]&nbsp;</li>
-        <li><span class="label">Publisher:</span>[% BIBITEM_DAT.place %] [% BIBITEM_DAT.publishercode |html %] [% BIBITEM_DAT.publicationyear %]&nbsp;</li>
-        [% IF ( BIBITEM_DAT.volumeddesc ) %]<li><span class="label">Volume:</span> [% BIBITEM_DAT.volumeddesc %]</li>[% END %]
-        <li><span class="label">Physical Details:</span> [% BIBITEM_DAT.pages %] [% BIBITEM_DAT.illus %] [% BIBITEM_DAT.size %]&nbsp;</li>
-        [% IF ( BIBITEM_DAT.bnotes ) %]<li><span class="label">Notes:</span> [% BIBITEM_DAT.bnotes %]</li>[% END %]
-        <li><span class="label">No. of Items:</span> [% BIBITEM_DAT.count %]&nbsp;[% IF ( BIBITEM_DAT.hiddencount ) %]total ([% BIBITEM_DAT.showncount %] shown / [% BIBITEM_DAT.hiddencount %] hidden) 
-<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% BIBITEM_DAT.biblionumber %]&showallitems=1">Show all items</a>[% END %]</li>
+        [% IF ( rentalcharge ) %]<li><span class="label">Rental charge:</span>[% rentalcharge %]&nbsp;</li>[% END %]
+        <li><span class="label">ISBN:</span> [% isbn %]&nbsp;</li>
+        <li><span class="label">Publisher:</span>[% place %] [% publishercode |html %] [% publicationyear %]&nbsp;</li>
+        [% IF ( volumeddesc ) %]<li><span class="label">Volume:</span> [% volumeddesc %]</li>[% END %]
+        <li><span class="label">Physical Details:</span> [% pages %] [% illus %] [% size %]&nbsp;</li>
+        [% IF ( bnotes ) %]<li><span class="label">Notes:</span> [% bnotes %]</li>[% END %]
+        <li><span class="label">No. of Items:</span> [% count %]&nbsp;[% IF ( hiddencount ) %]total ([% showncount %] shown / [% hiddencount %] hidden) 
+<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% biblionumber %]&amp;showallitems=1">Show all items</a>[% END %]</li>
     </ol>
-    [% END %]
+
     <br clear="all" />
     [% IF ( ONLY_ONE ) %]
         <div class="dialog message">You are only viewing one item.  <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% biblionumber %]&amp;bi=[% biblioitemnumber %]#item[% itemnumber %]">View All</a></div>

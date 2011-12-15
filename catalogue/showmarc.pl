@@ -23,7 +23,7 @@
 use strict;
 #use warnings; FIXME - Bug 2505
 
-use open OUT=>':utf8', ':std';
+use open OUT=>":encoding(UTF-8)", ':std';
 
 # standard or CPAN modules used
 use CGI qw(:standard);

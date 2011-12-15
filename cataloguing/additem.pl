@@ -381,7 +381,8 @@ if ($op eq "additem") {
         my ($tagfield,$tagsubfield) = &GetMarcFromKohaField("items.barcode",$frameworkcode);
 
 	# If there is a barcode and we can't find him new values, we can't add multiple copies
-        my $testbarcode = $barcodeobj->next_value($oldbarcode) if $barcodeobj;
+	my $testbarcode;
+        $testbarcode = $barcodeobj->next_value($oldbarcode) if $barcodeobj;
 	if ($oldbarcode && !$testbarcode) {
 
 	    push @errors, "no_next_barcode";
@@ -480,7 +481,17 @@ if ($op eq "additem") {
             $nextop="additem";
         } 
         else {
-            print $input->redirect("/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=$biblionumber");
+            my $defaultview = C4::Context->preference('IntranetBiblioDefaultView');
+            my $views = { C4::Search::enabled_staff_search_views };
+            if ($defaultview eq 'isbd' && $views->{can_view_ISBD}) {
+                print $input->redirect("/cgi-bin/koha/catalogue/ISBDdetail.pl?biblionumber=$biblionumber");
+            } elsif  ($defaultview eq 'marc' && $views->{can_view_MARC}) {
+                print $input->redirect("/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=$biblionumber");
+            } elsif  ($defaultview eq 'labeled_marc' && $views->{can_view_labeledMARC}) {
+                print $input->redirect("/cgi-bin/koha/catalogue/labeledMARCdetail.pl?biblionumber=$biblionumber");
+            } else {
+                print $input->redirect("/cgi-bin/koha/catalogue/detail.pl?biblionumber=$biblionumber");
+            }
             exit;
         }
 	}

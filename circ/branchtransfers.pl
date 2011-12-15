@@ -118,13 +118,16 @@ if ($barcode) {
         my %item;
         my $frbranchcd =  C4::Context->userenv->{'branch'};
 #         if ( not($found) ) {
-        $item{'biblionumber'} = $iteminformation->{'biblionumber'};
-        $item{'title'}        = $iteminformation->{'title'};
-        $item{'author'}       = $iteminformation->{'author'};
-        $item{'itemtype'}     = $iteminformation->{'itemtype'};
-        $item{'ccode'}        = $iteminformation->{'ccode'};
-        $item{'frbrname'}     = $branches->{$frbranchcd}->{'branchname'};
-        $item{'tobrname'}     = $branches->{$tobranchcd}->{'branchname'};
+        $item{'biblionumber'}          = $iteminformation->{'biblionumber'};
+        $item{'itemnumber'}            = $iteminformation->{'itemnumber'};
+        $item{'title'}                 = $iteminformation->{'title'};
+        $item{'author'}                = $iteminformation->{'author'};
+        $item{'itemtype'}              = $iteminformation->{'itemtype'};
+        $item{'ccode'}                 = $iteminformation->{'ccode'};
+        $item{'itemcallnumber'}        = $iteminformation->{'itemcallnumber'};
+        $item{'location'}              = GetKohaAuthorisedValueLib("LOC",$iteminformation->{'location'});
+        $item{'frbrname'}              = $branches->{$frbranchcd}->{'branchname'};
+        $item{'tobrname'}              = $branches->{$tobranchcd}->{'branchname'};
 #         }
         $item{counter}  = 0;
         $item{barcode}  = $barcode;
@@ -148,13 +151,16 @@ foreach ( $query->param ) {
     $item{frombrcd} = $frbcd;
     $item{tobrcd}   = $tobcd;
     my ($iteminformation) = GetBiblioFromItemNumber( GetItemnumberFromBarcode($bc) );
-    $item{'biblionumber'} = $iteminformation->{'biblionumber'};
-    $item{'title'}        = $iteminformation->{'title'};
-    $item{'author'}       = $iteminformation->{'author'};
-    $item{'itemtype'}     = $iteminformation->{'itemtype'};
-    $item{'ccode'}        = $iteminformation->{'ccode'};
-    $item{'frbrname'}     = $branches->{$frbcd}->{'branchname'};
-    $item{'tobrname'}     = $branches->{$tobcd}->{'branchname'};
+    $item{'biblionumber'}          = $iteminformation->{'biblionumber'};
+    $item{'itemnumber'}            = $iteminformation->{'itemnumber'};
+    $item{'title'}                 = $iteminformation->{'title'};
+    $item{'author'}                = $iteminformation->{'author'};
+    $item{'itemtype'}              = $iteminformation->{'itemtype'};
+    $item{'ccode'}                 = $iteminformation->{'ccode'};
+    $item{'itemcallnumber'}        = $iteminformation->{'itemcallnumber'};
+    $item{'location'}              = GetKohaAuthorisedValueLib("LOC",$iteminformation->{'location'});
+    $item{'frbrname'}              = $branches->{$frbcd}->{'branchname'};
+    $item{'tobrname'}              = $branches->{$tobcd}->{'branchname'};
     push( @trsfitemloop, \%item );
 }
 
@@ -187,35 +193,37 @@ if ( $codeType eq 'itemtype' ) {
 
 my @errmsgloop;
 foreach my $code ( keys %$messages ) {
-    my %err;
-    if ( $code eq 'BadBarcode' ) {
-        $err{msg}        = $messages->{'BadBarcode'};
-        $err{errbadcode} = 1;
+    if ( $code ne 'WasTransfered' ) {
+        my %err;
+        if ( $code eq 'BadBarcode' ) {
+            $err{msg}        = $messages->{'BadBarcode'};
+            $err{errbadcode} = 1;
+        }
+        elsif ( $code eq "NotAllowed" ) {
+            warn "NotAllowed: $messages->{'NotAllowed'} to  " . $branches->{ $messages->{'NotAllowed'} }->{'branchname'};
+            # Do we really want a error log message here? --atz
+            $err{errnotallowed} =  1;
+            my ( $tbr, $typecode ) = split( /::/,  $messages->{'NotAllowed'} );
+            $err{tbr}      = $branches->{ $tbr }->{'branchname'};
+            $err{code}     = $typecode;
+            $err{codeType} = $codeTypeDescription;
+        }
+        elsif ( $code eq 'IsPermanent' ) {
+            $err{errispermanent} = 1;
+            $err{msg} = $branches->{ $messages->{'IsPermanent'} }->{'branchname'};
+        }
+        elsif ( $code eq 'WasReturned' ) {
+            $err{errwasreturned} = 1;
+            $err{borrowernumber} = $messages->{'WasReturned'};
+            my $borrower = GetMember('borrowernumber'=>$messages->{'WasReturned'});
+            $err{title}      = $borrower->{'title'};
+            $err{firstname}  = $borrower->{'firstname'};
+            $err{surname}    = $borrower->{'surname'};
+            $err{cardnumber} = $borrower->{'cardnumber'};
+        }
+        $err{errdesteqholding} = ( $code eq 'DestinationEqualsHolding' );
+        push( @errmsgloop, \%err );
     }
-    elsif ( $code eq "NotAllowed" ) {
-        warn "NotAllowed: $messages->{'NotAllowed'} to  " . $branches->{ $messages->{'NotAllowed'} }->{'branchname'};
-        # Do we really want a error log message here? --atz
-        $err{errnotallowed} =  1;
-        my ( $tbr, $typecode ) = split( /::/,  $messages->{'NotAllowed'} );
-        $err{tbr}      = $branches->{ $tbr }->{'branchname'};
-        $err{code}     = $typecode;
-        $err{codeType} = $codeTypeDescription; 
-    }
-    elsif ( $code eq 'IsPermanent' ) {
-        $err{errispermanent} = 1;
-        $err{msg} = $branches->{ $messages->{'IsPermanent'} }->{'branchname'};
-    }
-    elsif ( $code eq 'WasReturned' ) {
-        $err{errwasreturned} = 1;
-		$err{borrowernumber} = $messages->{'WasReturned'};
-		my $borrower = GetMember('borrowernumber'=>$messages->{'WasReturned'});
-		$err{title}      = $borrower->{'title'};
-		$err{firstname}  = $borrower->{'firstname'};
-		$err{surname}    = $borrower->{'surname'};
-		$err{cardnumber} = $borrower->{'cardnumber'};
-    }
-    $err{errdesteqholding} = ( $code eq 'DestinationEqualsHolding' );
-    push( @errmsgloop, \%err );
 }
 
 # use Data::Dumper;

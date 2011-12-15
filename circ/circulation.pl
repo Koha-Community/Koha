@@ -510,7 +510,7 @@ if ($borrowerslist) {
     {
         push @values, $_->{'borrowernumber'};
         $labels{ $_->{'borrowernumber'} } =
-"$_->{'surname'}, $_->{'firstname'} ... ($_->{'cardnumber'} - $_->{'categorycode'}) ...  $_->{'address'} ";
+"$_->{'surname'}, $_->{'firstname'} ... ($_->{'cardnumber'} - $_->{'categorycode'} - $_->{'branchcode'}) ...  $_->{'address'} ";
     }
     $CGIselectborrower = CGI::scrolling_list(
         -name     => 'borrowernumber',

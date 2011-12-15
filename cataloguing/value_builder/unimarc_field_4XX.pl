@@ -269,8 +269,10 @@ sub plugin {
             $subfield_value_t = $marcrecord->field('500')->subfield("a");
         }
 
-        my $subfield_value_u = $marcrecord->field('856')->subfield("u")
-          if ( $marcrecord->field('856') );
+        my $subfield_value_u;
+        if ( $marcrecord->field('856') ) {
+            $subfield_value_u = $marcrecord->field('856')->subfield("u");
+        }
 
         my $subfield_value_v;
         if (   ( $marcrecord->field('225') )
@@ -283,14 +285,17 @@ sub plugin {
         {
             $subfield_value_v = $marcrecord->field('200')->subfield("h");
         }
-        my $subfield_value_x = $marcrecord->field('011')->subfield("a")
-          if (
+        my $subfield_value_x;
+        if (
             $marcrecord->field('011')
             and not( ( $marcrecord->field('011')->subfield("y") )
-                or ( $marcrecord->field('011')->subfield("z") ) )
-          );
-        my $subfield_value_y = $marcrecord->field('013')->subfield("a")
-          if ( $marcrecord->field('013') );
+                or ( $marcrecord->field('011')->subfield("z") ) ) ) {
+             $subfield_value_x = $marcrecord->field('011')->subfield("a");
+        }
+        my $subfield_value_y;
+          if ( $marcrecord->field('013') ) {
+             $subfield_value_y = $marcrecord->field('013')->subfield("a");
+        }
         if   ( $marcrecord->field('010') ) {
             $subfield_value_y = $marcrecord->field('010')->subfield("a");
         }
@@ -374,7 +379,10 @@ sub plugin {
             my $record = MARC::Record::new_from_usmarc( $results->[$i] );
             my $rechash = TransformMarcToKoha( $dbh, $record );
             my $pos;
-            my $countitems = 1 if ( $rechash->{itemnumber} );
+            my $countitems;
+            if ( $rechash->{itemnumber} ) {
+                $countitems=1;
+            }
             while ( index( $rechash->{itemnumber}, '|', $pos ) > 0 ) {
                 $countitems += 1;
                 $pos = index( $rechash->{itemnumber}, '|', $pos ) + 1;
