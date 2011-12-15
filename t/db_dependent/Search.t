@@ -23,7 +23,7 @@ foreach my $string ("Leçon","modèles") {
     ok($results[0] eq $string,"$string is not modified");
 }
 
-foreach my $string ("Les chaussettes de l'archiduchesse") {
+foreach my $string ("A book about the stars") {
     my @results=C4::Search::_remove_stopwords($string,"kw");
     $debug && warn "$string ",Dump(@results);
     ok($results[0] ne $string,"$results[0] from $string");
