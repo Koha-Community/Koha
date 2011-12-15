@@ -605,8 +605,6 @@ if($itemrecord){
             next if subfield_is_koha_internal_p($subfieldtag);
             next if ($tagslib->{$tag}->{$subfieldtag}->{'tab'} ne "10");
 
-            $subfieldlib->{hidden} = 1
-              if $tagslib->{$tag}->{$subfieldtag}->{authorised_value} eq 'LOST';
             my $subfield_data = generate_subfield_form($tag, $subfieldtag, $value, $tagslib, $subfieldlib, $branches, $today_iso, $biblionumber, $temp, \@loop_data, $i);        
 
             push @fields, "$tag$subfieldtag";
