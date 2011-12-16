@@ -665,10 +665,7 @@ my $onlymine = C4::Context->preference('IndependantBranches') &&
                C4::Context->userenv                           && 
                C4::Context->userenv->{flags}!=1               && 
                C4::Context->userenv->{branch};
-my $branch = C4::Context->userenv->{branch};
-if ($frameworkcode eq 'FA'){
-    $branch = $input->param('branch');
-}    
+my $branch = $input->param{'branch'} || C4::Context->userenv->{branch};
 my $branches = GetBranchesLoop($branch,$onlymine);  # build once ahead of time, instead of multiple times later.
 
 # We generate form, from actuel record
