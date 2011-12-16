@@ -38,7 +38,7 @@
 		{ text: _("RIS"), url: "/cgi-bin/koha/virtualshelves/downloadshelf.pl?format=ris&shelfid=[% shelfnumber %]" },
 		{ text: _("BibTex"), url: "/cgi-bin/koha/virtualshelves/downloadshelf.pl?format=bibtex&shelfid=[% shelfnumber %]" },
 [% FOREACH csv_profile IN csv_profiles %]
-		{ text: _("CSV - [% csv_profile.profile %]"), url: "/cgi-bin/koha/virtualshelves/downloadshelf.pl?format=[% csv_profile.export_format_id %]&shelfid=[% csv_profile.shelfnumber %]" },
+		{ text: _("CSV - [% csv_profile.profile %]"), url: "/cgi-bin/koha/virtualshelves/downloadshelf.pl?format=[% csv_profile.export_format_id %]&shelfid=[% shelfnumber %]" },
 [% END %]
 		];
 
@@ -96,4 +96,3 @@
 	[% END %]
 </ul>
 </div>
- 
