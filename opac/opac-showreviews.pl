@@ -101,8 +101,10 @@ for my $result (@$reviews){
 	$result->{size} = $bib->{'size'};
 	$result->{notes} = $bib->{'notes'};
 	$result->{timestamp} = $bib->{'timestamp'};
+    $result->{borrtitle} = $borr->{'title'};
 	$result->{firstname} = $borr->{'firstname'};
 	$result->{surname} = $borr->{'surname'};
+    $result->{userid} = $borr->{'userid'};
         if ($libravatar_enabled and $borr->{'email'}) {
             $result->{avatarurl} = libravatar_url(email => $borr->{'email'}, size => 40, https => $ENV{HTTPS});
         }

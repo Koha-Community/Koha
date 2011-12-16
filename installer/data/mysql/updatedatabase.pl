@@ -4726,6 +4726,14 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.07.00.019";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do(" UPDATE `systempreferences` SET  `value` =  'none', `options` =  'none|full|first|surname|firstandinitial|username', `explanation` =  'Choose how a commenter''s identity is presented alongside comments in the OPAC', `type` =  'Choice' WHERE  `systempreferences`.`variable` =  'ShowReviewer' AND `systempreferences`.`variable` = 0");
+    $dbh->do(" UPDATE `systempreferences` SET  `value` =  'full', `options` =  'none|full|first|surname|firstandinitial|username', `explanation` =  'Choose how a commenter''s identity is presented alongside comments in the OPAC', `type` =  'Choice' WHERE  `systempreferences`.`variable` =  'ShowReviewer' AND `systempreferences`.`variable` = 1");
+    print "Adding additional options for the display of commenter's identity in the OPAC: Full name, first name, last name, first name and last name first initial, username, or no information\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 DropAllForeignKeys($table)

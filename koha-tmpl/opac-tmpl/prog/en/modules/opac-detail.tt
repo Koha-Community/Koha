@@ -873,18 +873,26 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
         </p></div>
             [% ELSE %]
             <div class="commentline">
-            [% IF ( ShowReviewer ) %]
-                [% IF ( review.avatarurl ) %]
-            <img class="avatar" src="[% review.avatarurl %]" height="80" width="80" alt="" />
-                [% END %]
-            <h5>
-                Comment by
-                [% review.title %]
-                [% review.firstname %]
-                [% review.surname %]
-            </h5>
+            [% IF ( ShowReviewer != "none" ) %]
+                    [% IF ( review.avatarurl ) %]
+                <img class="avatar" src="[% review.avatarurl %]" height="80" width="80" alt="" />
+                    [% END %]
+                    [% SWITCH ShowReviewer %]
+                    [% CASE 'full' %]
+                        <h5>Comment by [% review.title %] [% review.firstname %] [% review.surname %]</h5>
+                    [% CASE 'first' %]
+                        <h5>Comment by [% review.firstname %]</h5>
+                    [% CASE 'surname' %]
+                        <h5>Comment by [% review.surname %]</h5>
+                    [% CASE 'firstandinitial' %]
+                        <h5>Comment by [% review.firstname %] [% review.surname|truncate(2,'.') %]</h5>
+                    [% CASE 'username' %]
+                        <h5>Comment by [% review.userid %]</h5>
+                    [% END %]
+                <small>[% review.datereviewed %]</small>
+            [% ELSIF ( ShowReviewer == "none") %]
+                <h5>Patron comment on [% review.datereviewed %]</h5>
             [% END %]
-            <small>[% review.datereviewed %]</small>
         <p>
           [% FILTER html_break %]
           [% review.review |html %]
