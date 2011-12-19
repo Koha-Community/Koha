@@ -9,7 +9,7 @@
 <div id="changelanguage" class="ft">
 [% IF ( languages_loop && opaclanguagesdisplay ) %]
     [% UNLESS ( one_language_enabled ) %]
-        <div class="lang"><strong>Languages: </strong></div>
+        <div class="lang"><strong>Languages:&nbsp;</strong></div>
         [% FOREACH languages_loo IN languages_loop %]
 	    <div class="lang">
             [% IF ( languages_loo.group_enabled ) %]
