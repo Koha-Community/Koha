@@ -1115,12 +1115,12 @@ $(document).ready(function() {
         <li>
            <label for="acqui_date"> First issue publication date:</label>
                 [% UNLESS ( modify ) %]<img src="[% themelang %]/lib/calendar/cal.gif" id="acqui_button" style="cursor: pointer;" alt="Show Calendar" title="Show Calendar" />[% END %]
-                [% IF ( modify ) %]<input type="text" name="firstacquidate" value="[% firstacquidate %]"  size="13" maxlength="10" id="acqui_date" disabled="disabled" style="border-width: 0px;"  />
-                [% ELSE %]<input type="text" name="firstacquidate" value="[% firstacquidate %]"  size="13" maxlength="10" id="acqui_date" style="border-width: 0px;"  />[% END %]
+                [% IF ( modify ) %]<input type="text" name="firstacquidate" value="[% firstacquidate %]"  size="13" maxlength="10" id="acqui_date" disabled="disabled" />
+                [% ELSE %]<input type="text" name="firstacquidate" value="[% firstacquidate %]"  size="13" maxlength="10" id="acqui_date" />[% END %]
         </li>
            [% IF ( modify ) %]<li><label for="next_acqui_date"> Next issue publication date:</label>
                 <img src="[% themelang %]/lib/calendar/cal.gif" id="next_acqui_button" style="cursor: pointer;" alt="Show Calendar" title="Show Calendar" />
-                <input type="text" name="nextacquidate" value="[% nextacquidate %]" size="13" maxlength="10" id="next_acqui_date" style="border-width: 0px;"  />
+                <input type="text" name="nextacquidate" value="[% nextacquidate %]" size="13" maxlength="10" id="next_acqui_date" />
                 </li>[% END %]
                 
         <li><!-- both scripts for calendar must follow the input field --> 
@@ -1307,7 +1307,7 @@ $(document).ready(function() {
            <label for="beginning_date" class="required"> Subscription start date:</label>
             
                 <img src="[% themelang %]/lib/calendar/cal.gif" id="button1" style="cursor: pointer;" alt="Show Calendar" title="Show Calendar" />
-                <input type="text" name="startdate" value="[% startdate %]" size="13" maxlength="10" id="beginning_date" style="border-width: 0px;" />
+                <input type="text" name="startdate" value="[% startdate %]" size="13" maxlength="10" id="beginning_date" />
                 <!-- both scripts for calendar must follow the input field --> 
                 <script type="text/javascript">
                     Calendar.setup({
@@ -1340,7 +1340,7 @@ $(document).ready(function() {
            <label for="ending_date"> Subscription end date:</label>
             
                 <img src="[% themelang %]/lib/calendar/cal.gif" id="buttonend1" style="cursor: pointer;" alt="Show Calendar" title="Show Calendar" />
-                <input type="text" name="enddate" value="[% enddate %]" size="13" maxlength="10" id="ending_date" style="border-width: 0px;" />
+                <input type="text" name="enddate" value="[% enddate %]" size="13" maxlength="10" id="ending_date" />
                 <!-- both scripts for calendar must follow the input field --> 
                 <script type="text/javascript">
                     Calendar.setup({
