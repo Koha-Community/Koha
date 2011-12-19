@@ -320,7 +320,7 @@ sub ModBiblio {
     SetUTF8Flag($record);
     my $dbh = C4::Context->dbh;
 
-    $frameworkcode = "" unless $frameworkcode;
+    $frameworkcode = "" if !$frameworkcode || $frameworkcode eq "Default"; # XXX
 
     _strip_item_fields($record, $frameworkcode);
 
@@ -1043,9 +1043,13 @@ for the given frameworkcode
 
 sub GetMarcFromKohaField {
     my ( $kohafield, $frameworkcode ) = @_;
-    return 0, 0 unless $kohafield and defined $frameworkcode;
+    return (0, undef) unless $kohafield and defined $frameworkcode;
     my $relations = C4::Context->marcfromkohafield;
-    return ( $relations->{$frameworkcode}->{$kohafield}->[0], $relations->{$frameworkcode}->{$kohafield}->[1] );
+    if ( my $mf = $relations->{$frameworkcode}->{$kohafield} ) {
+        return @$mf;
+    }
+    warn qq{No marc tags for framework "$frameworkcode" field $kohafield};
+    return (0, undef);
 }
 
 =head2 GetMarcBiblio
@@ -3157,9 +3161,24 @@ sub _koha_marc_update_bib_ids {
     # we drop the original field
     # we add the new builded field.
     my ( $biblio_tag,     $biblio_subfield )     = GetMarcFromKohaField( "biblio.biblionumber",          $frameworkcode );
+    die qq{No biblionumber tag for framework "$frameworkcode"} unless $biblio_tag;
     my ( $biblioitem_tag, $biblioitem_subfield ) = GetMarcFromKohaField( "biblioitems.biblioitemnumber", $frameworkcode );
+    die qq{No biblioitemnumber tag for framework "$frameworkcode"} unless $biblio_tag;
 
-    if ( $biblio_tag != $biblioitem_tag ) {
+    if ( $biblio_tag == $biblioitem_tag ) {
+
+        # biblionumber & biblioitemnumber are in the same field (can't be <10 as fields <10 have only 1 value)
+        my $new_field = MARC::Field->new(
+            $biblio_tag, '', '',
+            "$biblio_subfield"     => $biblionumber,
+            "$biblioitem_subfield" => $biblioitemnumber
+        );
+
+        # drop old field and create new one...
+        my $old_field = $record->field($biblio_tag);
+        $record->delete_field($old_field) if $old_field;
+        $record->insert_fields_ordered($new_field);
+    } else {
 
         # biblionumber & biblioitemnumber are in different fields
 
@@ -3185,20 +3204,6 @@ sub _koha_marc_update_bib_ids {
 
         # drop old field and create new one...
         $old_field = $record->field($biblioitem_tag);
-        $record->delete_field($old_field) if $old_field;
-        $record->insert_fields_ordered($new_field);
-
-    } else {
-
-        # biblionumber & biblioitemnumber are in the same field (can't be <10 as fields <10 have only 1 value)
-        my $new_field = MARC::Field->new(
-            $biblio_tag, '', '',
-            "$biblio_subfield"     => $biblionumber,
-            "$biblioitem_subfield" => $biblioitemnumber
-        );
-
-        # drop old field and create new one...
-        my $old_field = $record->field($biblio_tag);
         $record->delete_field($old_field) if $old_field;
         $record->insert_fields_ordered($new_field);
     }

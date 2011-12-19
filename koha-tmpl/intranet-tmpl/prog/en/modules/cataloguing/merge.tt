@@ -161,6 +161,10 @@ $(document).ready(function(){
 
 });
 
+function changeFramework(fw) {
+    $("#Frameworks").val(fw);
+}
+
 //]]>
 </script>
 </head>
@@ -194,10 +198,34 @@ $(document).ready(function(){
 <form id="mergeform" action="/cgi-bin/koha/cataloguing/merge.pl" method="post">
     <fieldset class="rows">
 	<legend>Merge reference</legend>
+    <table>
+      <tr>
+        <td style="border-width: 0px; text-align: left">
 	<ol>
-	<li class="radio"><input type="radio" value="[% biblio1 %]" checked="checked" id="mergereference1" name="mergereference" /><label style="float:none" for="mergereference1">[% title1 %] ([% biblio1 %])</label></li>
-	<li class="radio"><input type="radio" value="[% biblio2 %]" id="mergereference2" name="mergereference" /><label style="float:none" for="mergereference2">[% title2 %] ([% biblio2 %])</label></li>
+	<li class="radio"><input type="radio" value="[% biblio1 %]" checked="checked" id="mergereference1" name="mergereference" onclick="changeFramework('[% frameworkcode1 %]')" /><label style="float:none" for="mergereference1">[% title1 %] ([% biblio1 %])</label></li>
+	<li class="radio"><input type="radio" value="[% biblio2 %]" id="mergereference2" name="mergereference" onclick="changeFramework('[% frameworkcode2 %]')" /><label style="float:none" for="mergereference2">[% title2 %] ([% biblio2 %])</label></li>
 </ol>
+        </td>
+        <td style="border-width: 0px">
+    [% IF frameworkselect %]
+          <label style="float:none" for="frameworkcode">Framework:</label><br>
+            <select name="frameworkcode" id="Frameworks">
+                            <option value="Default">Default</option>
+                            [% FOREACH frameworkcodeloo IN frameworkselect %]
+                                [% IF ( frameworkcodeloo.selected ) %]
+                                    <option value="[% frameworkcodeloo.value %]" selected="selected">
+                                [% ELSE %]
+                                    <option value="[% frameworkcodeloo.value %]">
+                                [% END %]
+                                 [% frameworkcodeloo.frameworktext %]
+                                 </option>
+                            [% END %]
+            </select>
+    [% END %]
+        </td>
+      </tr>
+    </table>
+
 	<input type="hidden" name="biblionumber" value="[% biblio1 %]" />
 	<input type="hidden" name="biblionumber" value="[% biblio2 %]" />
 	<fieldset class="action"><input type="submit" value="Next" /></fieldset>
@@ -332,14 +360,15 @@ $(document).ready(function(){
 		[% END %]
 
 	    </ul>
+</div>
+</div> <!-- // #result -->
+</div> <!-- .yui-u -->
 
 <input type="hidden" name="biblio1" value="[% biblio1 %]" />
 <input type="hidden" name="biblio2" value="[% biblio2 %]" />
 <input type="hidden" name="mergereference" value="[% mergereference %]" />
+<input type="hidden" name="frameworkcode" value="[% framework %]" />
 
-</div>
-</div> <!-- // #result -->
-</div> <!-- .yui-u -->
 <fieldset class="action"><input type="submit" name="merge" value="Merge" /></fieldset>
 </div>
 </form>
