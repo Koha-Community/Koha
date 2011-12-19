@@ -679,6 +679,7 @@ sub parse_letter { # FIXME: this code should probably be moved to C4::Letters:pa
             $params->{'letter'} = C4::Letters::parseletter( $params->{'letter'}, 'biblio',      $item->{'biblionumber'} );
             $params->{'letter'} = C4::Letters::parseletter( $params->{'letter'}, 'biblioitems', $item->{'biblionumber'} );
             $params->{'letter'} = C4::Letters::parseletter( $params->{'letter'}, 'items', $item->{'itemnumber'} );
+            $params->{'letter'} = C4::Letters::parseletter( $params->{'letter'}, 'issues', $item->{'itemnumber'} );
             $params->{'letter'}->{'content'} =~ s/(<item>.*<\/item>)/$1\n$item_format/ if scalar(@{$params->{'items'}} > 0);
 
         }
