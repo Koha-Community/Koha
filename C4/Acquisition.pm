@@ -925,7 +925,6 @@ sub NewOrder {
 =cut
 
 sub NewOrderItem {
-    #my ($biblioitemnumber,$ordernumber, $biblionumber) = @_;
     my ($itemnumber, $ordernumber)  = @_;
     my $dbh = C4::Context->dbh;
     my $query = qq|

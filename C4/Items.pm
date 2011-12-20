@@ -454,8 +454,7 @@ sub ModItemFromMarc {
 
 =head2 ModItem
 
-  ModItem({ column => $newvalue }, $biblionumber, 
-                  $itemnumber[, $original_item_marc]);
+  ModItem({ column => $newvalue }, $biblionumber, $itemnumber);
 
 Change one or more columns in an item record and update
 the MARC representation of the item.
