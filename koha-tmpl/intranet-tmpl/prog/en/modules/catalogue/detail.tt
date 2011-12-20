@@ -248,15 +248,14 @@ function verify_images() {
                 <th>Status</th>
                 <th>Last seen</th>
                 <th>Barcode</th>
-		[% IF materials %]<th>Materials Specified</th>[% END %]
                 [% IF ( volinfo ) %]<th>Publication Details</th>[% END %]
                 [% IF ( itemdata_uri ) %]<th>url</th>[% END %]
                 [% IF ( itemdata_copynumber ) %]<th>Copy No.</th>[% END %]
+                [% IF materials %]<th>Materials Specified</th>[% END %]
                 [% IF ( itemdata_itemnotes ) %]<th>Public notes</th>[% END %]
 		[% IF ( SpineLabelShowPrintOnBibDetails ) %]<th>Spine Label</th>[% END %]
 		[% IF ( hostrecords ) %]<th>Host Records</th>[% END %]
-		[% IF ( analyze ) %]<th>Used in</th>[% END %]
-		[% IF ( analyze ) %]<th></th>[% END %]
+		[% IF ( analyze ) %]<th>Used in</th><th></th>[% END %]
             </tr>
             [% FOREACH itemloo IN itemloop %]
                 <tr>
@@ -378,8 +377,8 @@ function verify_images() {
 				[% IF ( itemdata_copynumber ) %]
 					<td class="copynumber">[% itemloo.copynumber %]</td>
 				[% END %]
-	        [% IF itemloo.materials %]
-		    <td> [% itemloo.materials %] </td>
+	        [% IF materials %]
+		    <td class="materials"> [% itemloo.materials %] </td>
 		[% END %]
                 [% IF ( itemdata_itemnotes ) %]<td><div class="itemnotes">[% itemloo.itemnotes %]</div></td>[% END %]
 		[% IF ( SpineLabelShowPrintOnBibDetails ) %]
