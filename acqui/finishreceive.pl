@@ -54,28 +54,11 @@ my $error_url_str;
 my $ecost = $input->param('ecost');
 my $note = $input->param("note");
 
-my %tplorder = ( 'quantity'                  =>     $input->param('quantity') || '',
-                             'quantityreceived'   =>     $input->param('quantityrec') || '',
-                             'notes'                      =>      $input->param("note") || '',
-                             'rrp'                          =>      $input->param('rrp') || '',
-                             'ecost'                      =>      $input->param('ecost') || '',
-                             'unitprice'                =>      $input->param('cost') || '',
-                     );
-my $order = GetOrder($ordernumber);
-if ( any { $order->{$_} ne $tplorder{$_} } qw(quantity quantityreceived notes rrp ecost unitprice) ) {
-    $order->{quantity} = $tplorder{quantity} if $tplorder{quantity};
-    $order->{quantityreceived} = $tplorder{quantityreceived} if $tplorder{quantityreceived};
-    $order->{notes} = $tplorder{notes} if $tplorder{notes};
-    $order->{rrp} = $tplorder{rrp} if $tplorder{rrp};
-    $order->{ecost} = $tplorder{ecost} if $tplorder{ecost};
-    $order->{unitprice} = $tplorder{unitprice} if $tplorder{unitprice};
-    ModOrder($order);
-}
-
 #need old recievedate if we update the order, parcel.pl only shows the right parcel this way FIXME
 if ($quantityrec > $origquantityrec ) {
     # now, add items if applicable
     if (C4::Context->preference('AcqCreateItem') eq 'receiving') {
+
         my @tags         = $input->param('tag');
         my @subfields    = $input->param('subfield');
         my @field_values = $input->param('field_value');
@@ -105,13 +88,30 @@ if ($quantityrec > $origquantityrec ) {
                                     $itemhash{$item}->{'ind_tag'},
                                     $itemhash{$item}->{'indicator'},'ITEM');
             my $record=MARC::Record::new_from_xml($xml, 'UTF-8');
-            my ($biblionumber,$bibitemnum,$itemnumber) = AddItemFromMarc($record,$biblionumber);
+            my (undef,$bibitemnum,$itemnumber) = AddItemFromMarc($record,$biblionumber);
+            NewOrderItem($itemnumber, $ordernumber);
         }
     }
     
     # save the quantity received.
-	if( $quantityrec > 0 ) {
-    	$datereceived = ModReceiveOrder($biblionumber,$ordernumber, $quantityrec ,$user,$unitprice,$invoiceno,$freight,$replacement,undef,$datereceived);
-	}
+	$datereceived = ModReceiveOrder($biblionumber,$ordernumber, $quantityrec ,$user,$unitprice,$invoiceno,$freight,$replacement,undef,$datereceived);
 }
-    print $input->redirect("/cgi-bin/koha/acqui/parcel.pl?invoice=$invoiceno&supplierid=$supplierid&freight=$freight&gst=$gst&datereceived=$datereceived$error_url_str");
+
+update_item( $_ ) foreach GetItemnumbersFromOrder( $ordernumber );
+
+print $input->redirect("/cgi-bin/koha/acqui/parcel.pl?invoice=$invoiceno&supplierid=$supplierid&freight=$freight&gst=$gst&datereceived=$datereceived$error_url_str");
+
+################################ End of script ################################
+
+sub update_item {
+    my ( $itemnumber ) = @_;
+    warn "AAA $itemnumber";
+
+    ModItem( {
+        booksellerid         => $supplierid,
+        dateaccessioned      => $datereceived,
+        price                => $unitprice,
+        replacementprice     => $replacement,
+        replacementpricedate => $datereceived,
+    }, $biblionumber, $itemnumber );
+}
