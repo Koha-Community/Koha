@@ -72,6 +72,6 @@
         [% ELSE %]
             You are not logged in |
         [% END %]
-        <a href="/cgi-bin/koha/help.pl" id="helper" onclick="window.open('/cgi-bin/koha/help.pl?url='+escape(document.url),'Koha_Help','width=600,height=600,toolbar=false,scrollbars=yes'); return false;">[ ? ]</a>
+        <a href="/cgi-bin/koha/help.pl" id="helper" onclick="var link=window.open('','Koha_Help','width=600,height=600,toolbar=false,scrollbars=yes'); link.location='/cgi-bin/koha/help.pl'; return false;">[ ? ]</a>
     </div>
 </div>	
