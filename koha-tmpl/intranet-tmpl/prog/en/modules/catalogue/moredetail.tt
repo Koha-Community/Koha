@@ -164,8 +164,18 @@
                     [% END %]
                 [% ELSE %]
                     [% ITEM_DAT.dateaccessioned %]
-                [% END %] </li>
-
+                [% END %]
+                </li>
+                [% IF ITEM_DAT.vendor %]
+                <li><span class="label">Vendor</span>
+                  [% ITEM_DAT.vendor %]
+                </li>
+                    [% IF ITEM_DAT.booksellerinvoicenumber %]
+                <li><span class="label">Invoice number</span>
+                  [% ITEM_DAT.booksellerinvoicenumber %]
+                </li>
+                    [% END %]
+                [% END %]
                 
                 <li><span class="label">Total Checkouts:</span>[% IF ( ITEM_DAT.issues ) %][% ITEM_DAT.issues %][% ELSE %]0[% END %]  (<a href="/cgi-bin/koha/circ/bookcount.pl?&amp;biblionumber=[% ITEM_DAT.biblionumber %]&amp;bi=[% ITEM_DAT.biblioitemnumber %]&amp;itm=[% ITEM_DAT.itemnumber %]">View item's checkout history</a>)</li>
 

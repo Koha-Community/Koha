@@ -27,7 +27,8 @@ use C4::Biblio;
 use C4::Items;
 use C4::Branch;
 use C4::Acquisition;
-use C4::Output;
+use C4::Bookseller qw(GetBookSellerFromId);
+use C4::Output;             # contains gettemplate
 use C4::Auth;
 use C4::Serials;
 use C4::Dates qw/format_date/;
@@ -147,6 +148,11 @@ foreach my $item (@items){
     $item->{'ordernumber'}             = $order->{'ordernumber'};
     $item->{'basketno'}                = $order->{'basketno'};
     $item->{'booksellerinvoicenumber'} = $order->{'booksellerinvoicenumber'};
+    if ($item->{'basketno'}){
+	    my $basket = GetBasket($item->{'basketno'});
+	    my $bookseller = GetBookSellerFromId($basket->{'booksellerid'});
+	    $item->{'vendor'} = $bookseller->{'name'};
+    }
     $item->{'datereceived'}            = $order->{'datereceived'};
 
     if ($item->{notforloantext} or $item->{itemlost} or $item->{damaged} or $item->{wthdrawn}) {
