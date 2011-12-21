@@ -132,7 +132,13 @@ elsif ( $op eq "checkout" ) {
     my $impossible  = {};
     my $needconfirm = {};
     if ( !$confirmed ) {
-        ( $impossible, $needconfirm ) = CanBookBeIssued( $borrower, $barcode );
+        ( $impossible, $needconfirm ) = CanBookBeIssuedCheckout(
+            $borrower,
+            $barcode,
+            undef,
+            0,
+            C4::Context->preference("AllowItemsOnHoldCheckout")
+        );
     }
     $confirm_required = scalar keys %$needconfirm;
 
@@ -213,7 +219,13 @@ if ($borrower->{cardnumber}) {
     my ($issueslist) = GetPendingIssues( $borrower->{'borrowernumber'} );
     foreach my $it (@$issueslist) {
         $it->{date_due_display} = format_date($it->{date_due});
-        my ($renewokay, $renewerror) = CanBookBeIssued($borrower, $it->{'barcode'},'','');
+        my ($renewokay, $renewerror) = CanBookBeIssued(
+            $borrower,
+            $it->{'barcode'},
+            undef,
+            0,
+            C4::Context->preference("AllowItemsOnHoldCheckout")
+        );
         $it->{'norenew'} = 1 if $renewokay->{'NO_MORE_RENEWALS'};
         push @issues, $it;
     }

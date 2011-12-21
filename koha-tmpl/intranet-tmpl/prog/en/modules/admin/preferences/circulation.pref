@@ -112,6 +112,12 @@ Circulation:
                   no: "Don't allow"
             - staff to manually override the renewal limit and renew a checkout when it would go over the renewal limit.
         -
+            - pref: AllowItemsOnHoldCheckout
+              choices:
+                  yes: Allow
+                  no: "Don't allow"
+            - checkouts of items items reserved to someone else. If allowed do not generate RESERVE_WAITING and RESERVED warning. This allows self checkouts for those items.
+        -
             - pref: AllFinesNeedOverride
               choices:
                   yes: Require

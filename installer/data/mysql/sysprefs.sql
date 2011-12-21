@@ -334,3 +334,4 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('LocalCoverImages','0','Display local cover images on intranet details pages.','1','YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('AllowMultipleCovers','0','Allow multiple cover images to be attached to each bibliographic record.','1','YesNo');
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('BorrowerRenewalPeriodBase', 'now', 'Set whether the borrower renewal date should be counted from the dateexpiry or from the current date ','dateexpiry|now','Choice');
+INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES ('AllowItemsOnHoldCheckout',0,'Do not generate RESERVE_WAITING and RESERVED warning when checking out items reserved to someone else. This allows self checkouts for those items.','','YesNo');

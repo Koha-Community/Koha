@@ -58,7 +58,13 @@ sub do_checkout {
 	$debug and warn "do_checkout: patron (" . $patron_barcode . ")";
 	my $borrower = $self->{patron}->getmemberdetails_object();
 	$debug and warn "do_checkout borrower: . " . Dumper $borrower;
-	my ($issuingimpossible,$needsconfirmation) = CanBookBeIssued( $borrower, $barcode );
+	my ($issuingimpossible,$needsconfirmation) = CanBookBeIssued(
+        $borrower,
+        $barcode,
+        undef,
+        0,
+        C4::Context->preference("AllowItemsOnHoldCheckout")
+    );
 	my $noerror=1;
     if (scalar keys %$issuingimpossible) {
         foreach (keys %$issuingimpossible) {
