@@ -35,6 +35,7 @@ BEGIN {
 }
 use C4::Context;
 use C4::Items;
+use C4::Circulation qw/LostItem/;
 use Getopt::Long;
 
 my  $lost;  #  key=lost value,  value=num days.
