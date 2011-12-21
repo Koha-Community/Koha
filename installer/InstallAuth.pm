@@ -274,7 +274,8 @@ sub checkauth {
             C4::Context->_unset_userenv($sessionID);
             $sessionID = undef;
             $userid    = undef;
-            open L, ">>/tmp/sessionlog";
+	   # Commented out due to its lack of usefulness
+           # open L, ">>/tmp/sessionlog";
             my $time = localtime( time() );
             printf L "%20s from %16s logged out at %30s (manually).\n", $userid,
               $ip, $time;

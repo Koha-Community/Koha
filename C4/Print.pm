@@ -79,7 +79,8 @@ sub remoteprint ($$) {
     # to have spaces in them). Or perhaps if $queue eq "" and
     # $env->{file} ne "", then that should mean "print to $env->{file}".
     if ( $queue eq "" || $queue eq 'nulllp' ) {
-        open( PRINTER, ">/tmp/kohaiss" );
+        return;
+	#open( PRINTER, ">/tmp/kohaiss" );
     }
     else {
 
@@ -125,6 +126,10 @@ sub remoteprint ($$) {
 }
 
 sub printreserve {
+
+    # FIXME - make useful
+    return;
+
     my ( $branchname, $bordata, $itemdata ) = @_;
     my $printer = '';
     (return) unless ( C4::Context->boolean_preference('printreserveslips') );
@@ -175,6 +180,9 @@ print a slip for the given $borrowernumber
 
 #'
 sub printslip ($) {
+
+    #FIXME - make useful
+
     my $borrowernumber = shift;
     my $borrower   = GetMemberDetails($borrowernumber);
 	my $issueslist = GetPendingIssues($borrowernumber); 
