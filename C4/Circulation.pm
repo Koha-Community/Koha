@@ -569,7 +569,7 @@ sub itemissues {
 =head2 CanBookBeIssued
 
   ( $issuingimpossible, $needsconfirmation ) =  CanBookBeIssued( $borrower, 
-                                      $barcode, $duedatespec, $inprocess );
+                      $barcode, $duedatespec, $inprocess, $ignore_reserves );
 
 Check if a book can be issued.
 
@@ -583,7 +583,8 @@ C<$issuingimpossible> and C<$needsconfirmation> are some hashref.
 
 =item C<$duedatespec> is a C4::Dates object.
 
-=item C<$inprocess>
+=item C<$inprocess> boolean switch
+=item C<$ignore_reserves> boolean switch
 
 =back
 
@@ -660,7 +661,7 @@ if the borrower borrows to much things
 =cut
 
 sub CanBookBeIssued {
-    my ( $borrower, $barcode, $duedate, $inprocess ) = @_;
+    my ( $borrower, $barcode, $duedate, $inprocess, $ignore_reserves ) = @_;
     my %needsconfirmation;    # filled with problems that needs confirmations
     my %issuingimpossible;    # filled with problems that causes the issue to be IMPOSSIBLE
     my $item = GetItem(GetItemnumberFromBarcode( $barcode ));
@@ -867,37 +868,40 @@ sub CanBookBeIssued {
         $needsconfirmation{issued_borrowernumber} = $currborinfo->{'borrowernumber'};
     }
 
-    # See if the item is on reserve.
-    my ( $restype, $res, undef ) = C4::Reserves::CheckReserves( $item->{'itemnumber'} );
-    if ($restype) {
-		my $resbor = $res->{'borrowernumber'};
-		my ( $resborrower ) = C4::Members::GetMember( borrowernumber => $resbor );
-		my $branches  = GetBranches();
-		my $branchname = $branches->{ $res->{'branchcode'} }->{'branchname'};
-        if ( $resbor ne $borrower->{'borrowernumber'} && $restype eq "Waiting" )
-        {
-            # The item is on reserve and waiting, but has been
-            # reserved by some other patron.
-            $needsconfirmation{RESERVE_WAITING} = 1;
-            $needsconfirmation{'resfirstname'} = $resborrower->{'firstname'};
-            $needsconfirmation{'ressurname'} = $resborrower->{'surname'};
-            $needsconfirmation{'rescardnumber'} = $resborrower->{'cardnumber'};
-            $needsconfirmation{'resborrowernumber'} = $resborrower->{'borrowernumber'};
-            $needsconfirmation{'resbranchname'} = $branchname;
-            $needsconfirmation{'reswaitingdate'} = format_date($res->{'waitingdate'});
-        }
-        elsif ( $restype eq "Reserved" ) {
-            # The item is on reserve for someone else.
-            $needsconfirmation{RESERVED} = 1;
-            $needsconfirmation{'resfirstname'} = $resborrower->{'firstname'};
-            $needsconfirmation{'ressurname'} = $resborrower->{'surname'};
-            $needsconfirmation{'rescardnumber'} = $resborrower->{'cardnumber'};
-            $needsconfirmation{'resborrowernumber'} = $resborrower->{'borrowernumber'};
-            $needsconfirmation{'resbranchname'} = $branchname;
-            $needsconfirmation{'resreservedate'} = format_date($res->{'reservedate'});
+    unless ( $ignore_reserves ) {
+        # See if the item is on reserve.
+        my ( $restype, $res ) = C4::Reserves::CheckReserves( $item->{'itemnumber'} );
+        if ($restype) {
+            my $resbor = $res->{'borrowernumber'};
+            if ( $resbor ne $borrower->{'borrowernumber'} ) {
+                my ( $resborrower ) = C4::Members::GetMember( borrowernumber => $resbor );
+                my $branchname = GetBranchName( $res->{'branchcode'} );
+                if ( $restype eq "Waiting" )
+                {
+                    # The item is on reserve and waiting, but has been
+                    # reserved by some other patron.
+                    $needsconfirmation{RESERVE_WAITING} = 1;
+                    $needsconfirmation{'resfirstname'} = $resborrower->{'firstname'};
+                    $needsconfirmation{'ressurname'} = $resborrower->{'surname'};
+                    $needsconfirmation{'rescardnumber'} = $resborrower->{'cardnumber'};
+                    $needsconfirmation{'resborrowernumber'} = $resborrower->{'borrowernumber'};
+                    $needsconfirmation{'resbranchname'} = $branchname;
+                    $needsconfirmation{'reswaitingdate'} = format_date($res->{'waitingdate'});
+                }
+                elsif ( $restype eq "Reserved" ) {
+                    # The item is on reserve for someone else.
+                    $needsconfirmation{RESERVED} = 1;
+                    $needsconfirmation{'resfirstname'} = $resborrower->{'firstname'};
+                    $needsconfirmation{'ressurname'} = $resborrower->{'surname'};
+                    $needsconfirmation{'rescardnumber'} = $resborrower->{'cardnumber'};
+                    $needsconfirmation{'resborrowernumber'} = $resborrower->{'borrowernumber'};
+                    $needsconfirmation{'resbranchname'} = $branchname;
+                    $needsconfirmation{'resreservedate'} = format_date($res->{'reservedate'});
+                }
+            }
         }
     }
-	return ( \%issuingimpossible, \%needsconfirmation );
+    return ( \%issuingimpossible, \%needsconfirmation );
 }
 
 =head2 AddIssue

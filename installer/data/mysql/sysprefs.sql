@@ -328,4 +328,4 @@ INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('OpacKohaUrl','1',"Show 'Powered by Koha' text on OPAC footer.",NULL,NULL);
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('EasyAnalyticalRecords','0','If on, display in the catalogue screens tools to easily setup analytical record relationships','','YesNo');
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('OpacShowRecentComments',0,'If ON a link to recent comments will appear in the OPAC masthead',NULL,'YesNo');
-
+INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES ('AllowItemsOnHoldCheckout',0,'Do not generate RESERVE_WAITING and RESERVED warning when checking out items reserved to someone else. This allows self checkouts for those items.','','YesNo');

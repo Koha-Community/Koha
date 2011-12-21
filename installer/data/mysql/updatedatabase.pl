@@ -4596,12 +4596,17 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 }
 
 
-$DBversion = "3.06.00.001";
+$DBversion = "3.06.03.001";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     print "RELTERMS category available for English-, French-, and Spanish-language relator terms. They are not loaded during upgrade but can be easily inserted using the provided marc21_relatorterms.sql SQL script (currently available for en, es, and fr only).\n";
     SetVersion($DBversion);
 }
-
+$DBversion = "3.06.03.002";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+	$dbh->do("INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES ('AllowItemsOnHoldCheckout',0,'Do not generate RESERVE_WAITING and RESERVED warning when checking out items reserved to someone else. This allows self checkouts for those items.','','YesNo')");
+    print "Upgrade to $DBversion add 'AllowItemsOnHoldCheckout' syspref \n";
+    SetVersion ($DBversion);
+}
 =head1 FUNCTIONS
 
 =head2 DropAllForeignKeys($table)
