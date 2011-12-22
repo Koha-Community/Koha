@@ -55,7 +55,7 @@ function Dopop(link) {
 <div class="yui-g">
 
 [% IF ( collectionItemNeedsTransferred ) %]
-	<div class="dialog message">This item is part of a Rotating Collection and needs to be Transferred to [% collectionBranch %]</div>
+	<div id="rotating-collection" class="dialog message">This item is part of a Rotating Collection and needs to be Transferred to [% collectionBranch %]</div>
 [% END %]
 
 <!-- Patron has fines -->
@@ -68,7 +68,7 @@ function Dopop(link) {
 
 <!-- Patron has waiting holds -->
 [% IF ( waiting_holds ) %]
-    <div class="dialog message">
+    <div id="awaiting-pickup" class="dialog message">
         <h3>[% holdsfirstname %] [% holdssurname %] has [% waiting_holds %] hold(s) waiting for pickup.</h3>
         <p><a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% holdsborrowernumber %]">Check out to this patron</a>.</p>
     </div>
@@ -80,7 +80,7 @@ function Dopop(link) {
 </div>
 [% END %]
 <!-- case of a mistake in transfer loop -->
-[% IF ( WrongTransfer ) %]<div class="dialog message"><!-- WrongTransfer --><h3>Please return <a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber %]">[% title |html %]</a> to [% TransferWaitingAt %] or <a href="/cgi-bin/koha/circ/returns.pl?itemnumber=[% itemnumber %]&amp;canceltransfer=1">Cancel Transfer</a></h3>
+[% IF ( WrongTransfer ) %]<div id="return2" class="dialog message"><!-- WrongTransfer --><h3>Please return <a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber %]">[% title |html %]</a> to [% TransferWaitingAt %] or <a href="/cgi-bin/koha/circ/returns.pl?itemnumber=[% itemnumber %]&amp;canceltransfer=1">Cancel Transfer</a></h3>
 [% IF ( wborcnum ) %]<h5>Hold for:</h5>
         <ul><li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">
             [% borsurname %], [% borfirstname %]</a> ([% borcnum %])</li>
@@ -111,7 +111,7 @@ function Dopop(link) {
 <audio src="/intranet-tmpl/prog/sound/ending.ogg" autoplay="autoplay" autobuffer="autobuffer"></audio>
 [% END %]
 
-<div class="dialog message">
+<div id="hold-found1" class="dialog message">
         <h3>Hold Found (item is already waiting):  <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% itembiblionumber %]">[% title |html %]</a></h3>
         [% IF ( reservenotes ) %]<h4>Notes: [% reservenotes %]</h4>[% END %]
         <h4>Hold for:</h4>
@@ -153,7 +153,7 @@ function Dopop(link) {
         [% IF ( soundon ) %]
         <audio src="/intranet-tmpl/prog/sound/opening.ogg" autoplay="autoplay" autobuffer="autobuffer"></audio>
         [% END %]
-        <div class="dialog message">
+        <div id="transfer-needed" class="dialog message">
 		<h3>Hold needing transfer found: <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% itembiblionumber %]">[% title |html %]</a></h3>
                 <h4>Hold for: </h4>
                     <ul>
@@ -190,7 +190,7 @@ function Dopop(link) {
 
     [% IF ( transfer ) %]
     <!-- transfer: item with no reservation, must be returned to its homebranch -->
-	<div class="dialog message">
+	<div id="return1" class="dialog message">
             <h3>Please return <a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber %]">[% title or "item" |html %]</a> to [% homebranchname %]</h3>
         </div>
         [% IF ( soundon ) %]
@@ -203,7 +203,7 @@ function Dopop(link) {
         [% IF ( soundon ) %]
         <audio src="/intranet-tmpl/prog/sound/opening.ogg" autoplay="autoplay" autobuffer="autobuffer"></audio>
         [% END %]
-	<div class="dialog message"><h3> This item needs to be transferred to [% homebranchname %]</h3>
+	<div id="item-transfer" class="dialog message"><h3> This item needs to be transferred to [% homebranchname %]</h3>
 	Transfer Now?<br />
     <form method="post" action="returns.pl" name="mainform" id="mainform">
 	<input type="submit" name="dotransfer" value="Yes" class="submit" />
@@ -255,7 +255,7 @@ function Dopop(link) {
         <audio src="/intranet-tmpl/prog/sound/opening.ogg" autoplay="autoplay" autobuffer="autobuffer"></audio>
         [% END %]
 
-	<div class="dialog message">
+	<div id="hold-found2" class="dialog message">
 	  <h3>Hold Found: <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% itembiblionumber %]">[% title |html %]</a></h3>
         [% IF ( reservenotes ) %]<h4>Notes: [% reservenotes %]</h4>[% END %]
         <h5>Hold for:</h5>
