@@ -2967,14 +2967,17 @@ sub CreateBranchTransferLimit {
 
 =head2 DeleteBranchTransferLimits
 
-  DeleteBranchTransferLimits();
+DeleteBranchTransferLimits($frombranch);
+
+Deletes all the branch transfer limits for one branch
 
 =cut
 
 sub DeleteBranchTransferLimits {
-   my $dbh = C4::Context->dbh;
-   my $sth = $dbh->prepare("TRUNCATE TABLE branch_transfer_limits");
-   $sth->execute();
+    my $branch = shift;
+    my $dbh    = C4::Context->dbh;
+    my $sth    = $dbh->prepare("DELETE FROM branch_transfer_limits WHERE fromBranch = ?");
+    $sth->execute($branch);
 }
 
 sub ReturnLostItem{
