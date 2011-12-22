@@ -93,7 +93,8 @@ while ( my $row = $sth->fetchrow_hashref ) {
 
 ## If Form Data Passed, Update the Database
 if ( $input->param('updateLimits') ) {
-	DeleteBranchTransferLimits();
+    DeleteBranchTransferLimits($branchcode);
+
 
 	foreach my $code ( @codes ) {
 		foreach my $toBranch ( @branchcodes ) {
