@@ -59,7 +59,7 @@ if ( $step && $step == 1 ) {
     $template->param( language => 1 );
     $template->param( 'checkmodule' => 1 ); # we start with the assumption that there are no problems and set this to 0 if there are
 
-    unless ( $] >= 5.008008 ) {    # Bug 4505
+    unless ( $] >= 5.010000 ) {    # Bug 7375
         $template->param( problems => 1, perlversion => 1, checkmodule => 0 );
     }
 
