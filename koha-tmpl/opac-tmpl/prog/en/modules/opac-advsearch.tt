@@ -158,11 +158,10 @@
     <table>
         <tr>
     [% FOREACH itemtypeloo IN advsearchloo.code_loop %]
-        <td><input type="checkbox" id="[% itemtypeloo.ccl %]-[% itemtypeloo.number %]" name="limit" value="mc-[% itemtypeloo.ccl %]:[% itemtypeloo.code %]"/><label for="[% itemtypeloo.ccl %]-[% itemtypeloo.number %]">[% UNLESS ( noItemTypeImages ) %][% IF ( itemtypeloo.imageurl ) %]<img border="0" src="[% itemtypeloo.imageurl %]" alt="[% itemtypeloo.description %]" />[% END %]&nbsp;[% END %]
+        <td><input type="checkbox" id="[% itemtypeloo.ccl FILTER remove(',') %]-[% itemtypeloo.number %]" name="limit" value="mc-[% itemtypeloo.ccl %]:[% itemtypeloo.code %]"/><label for="[% itemtypeloo.ccl FILTER remove(',') %]-[% itemtypeloo.number %]">[% UNLESS ( noItemTypeImages ) %][% IF ( itemtypeloo.imageurl ) %]<img border="0" src="[% itemtypeloo.imageurl %]" alt="[% itemtypeloo.description %]" />[% END %]&nbsp;[% END %]
         [% itemtypeloo.description %]</label></td>
-        [% UNLESS ( loop.count % 5 ) %]</tr><tr>[% END %]
+        [% IF ( loop.last ) %]</tr>[% ELSE %][% UNLESS ( loop.count % 5 ) %]</tr><tr>[% END %][% END %]
     [% END %]
-        </tr>
     </table>
     </fieldset>
     </div>
@@ -172,7 +171,7 @@
     <fieldset><legend>Language</legend>
     <!-- LANGUAGE LIMIT -->
                 <p><label for="language-limit">Language: </label>                                        
-                <select name="limit">
+                <select id="language-limit" name="limit">
                 <option value="">No Limit</option>
                 [% FOREACH search_languages_loo IN search_languages_loop %]
                     [% IF ( search_languages_loo.selected ) %]

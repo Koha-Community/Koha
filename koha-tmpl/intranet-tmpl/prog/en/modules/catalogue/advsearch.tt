@@ -112,18 +112,15 @@
       </ul>
     [% FOREACH advsearchloo IN advancedsearchesloop %]
     <div id="advsearch-[% advsearchloo.advanced_search_type %]" class="advsearch">
-    <fieldset>
-    <legend>Limit to any of the following:</legend>
+    <h4>Limit to any of the following:</h4>
     <table>
         <tr>
     [% FOREACH itemtypeloo IN advsearchloo.code_loop %]
-        <td><input type="checkbox" id="[% itemtypeloo.ccl %]-[% itemtypeloo.number %]" name="limit" value="mc-[% itemtypeloo.ccl %]:[% itemtypeloo.code %]"/><label for="[% itemtypeloo.ccl %]-[% itemtypeloo.number %]">[% UNLESS ( noItemTypeImages ) %][% IF ( itemtypeloo.imageurl ) %]<img border="0" src="[% itemtypeloo.imageurl %]" alt="[% itemtypeloo.description %]" />[% END %]&nbsp;[% END %]
+        <td><input type="checkbox" id="[% itemtypeloo.ccl FILTER remove(',') %]-[% itemtypeloo.number %]" name="limit" value="mc-[% itemtypeloo.ccl %]:[% itemtypeloo.code %]"/><label for="[% itemtypeloo.ccl FILTER remove(',') %]-[% itemtypeloo.number %]">[% UNLESS ( noItemTypeImages ) %][% IF ( itemtypeloo.imageurl ) %]<img border="0" src="[% itemtypeloo.imageurl %]" alt="[% itemtypeloo.description %]" />[% END %]&nbsp;[% END %]
         [% itemtypeloo.description %]</label></td>
-        [% UNLESS ( loop.count % 5 ) %]</tr><tr>[% END %]
+        [% IF ( loop.last ) %]</tr>[% ELSE %][% UNLESS ( loop.count % 5 ) %]</tr><tr>[% END %][% END %]
     [% END %]
-        </tr>
     </table>
-    </fieldset>
     </div>
     [% END %]
 <!-- /MC-TYPE LIMIT -->
@@ -282,6 +279,7 @@
             <a href="/cgi-bin/koha/catalogue/search.pl?do=Clear">[New search]</a> 
             </fieldset>
 <!-- /SEARCH BUTTONS -->
+</div>
 </div>
 </form>
 </div>
