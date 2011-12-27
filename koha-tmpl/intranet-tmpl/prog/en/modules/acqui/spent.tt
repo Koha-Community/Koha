@@ -1,0 +1,101 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Acquisitions &rsaquo; Spent</title>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'acquisitions-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; Spent </div>
+
+<div id="doc3" class="yui-t2">
+
+<div id="bd">
+    <div id="yui-main">
+        <div class="yui-b">
+
+<h1>Budgets &amp; Bookfunds</h1>
+<h2>Spent</h2>
+
+
+<table cellspacing="0" cellpadding="0" border="0" id="spent" class="collapse">
+    <thead>
+    <tr>
+        <th> Title </th>
+	<th> Order </th>
+	<th> Supplier </th>
+	<th> Invoice </th>
+	<th> Itemtype </th>
+	<th> Receieved </th>
+	<th> Unit Price </th>
+	<th> Freight per Item </th>
+	<th> Date Received </th>
+	<th> Subtotal </th>
+    </tr>
+    </thead>
+
+[% FOREACH order IN spent %]
+    [% IF loop.odd %]
+    <tr class="highlight">
+    [% ELSE %]
+    <tr>
+    [% END %]
+
+	<td class="cell">
+	    [% order.title %]
+	</td>
+	<td class="cell">
+            <a href="/cgi-bin/koha/acqui/orderreceive.pl?ordernumber=[% order.ordernumber %]&biblio=[% order.biblionumber %]&invoice=[% order.booksellerinvoicenumber %]&supplierid=[% order.booksellerid %]&catview=yes">[% order.ordernumber %]</a>
+	</td>
+	<td class="cell">
+	    [% order.booksellerid %]
+	</td>
+	<td class="cell">
+	    <a href="/cgi-bin/koha/acqui/parcel.pl?invoice=[% order.booksellerinvoicenumber %]&supplierid=[% order.booksellerid %]&datereceived=[% order.datereceived %]">[% order.booksellerinvoicenumber %]</a>
+	</td>
+	<td class="cell">
+	    [% order.itype %]
+	</td>
+	<td class="cell">
+	    [% order.quantityreceived %]
+	</td>
+	<td class="cell" align="right">
+	    [% order.unitprice %]
+	</td>
+	<td class="cell" align="right">
+	    [% order.freight %]
+	</td>
+	<td class="cell">
+	    [% order.datereceived %]
+	</td>
+	<td class="cell" align="right">
+	    [% order.subtotal %]
+	</td>
+    </tr>
+[% END %]
+    <tfoot>
+        <tr valign="top">
+        <td> Total </td>
+        <td> </td>
+        <td> </td>
+        <td> </td>
+        <td> </td>
+        <td> </td>
+        <td> </td>
+        <td> </td>
+	<td> </td>
+        <td align="right">
+		[% total %]
+	</td>
+        </tr>
+    </tfoot>
+
+</table>
+
+</div>
+</div>
+<div class="yui-b">
+[% INCLUDE 'acquisitions-menu.inc' %]
+</div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]
