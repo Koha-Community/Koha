@@ -142,7 +142,7 @@ for ( my $tabloop = 0 ; $tabloop <= 10 ; $tabloop++ ) {
             for my $i ( 0 .. $#subf ) {
                 $subf[$i][0] = "@" unless $subf[$i][0];
                 my $sf_def = $tagslib->{ $fields[$x_i]->tag() }->{ $subf[$i][0] };
-                next if ( ($sf_def->{tab}||'') ne $tabloop );
+                next if ( ($sf_def->{tab}||0) != $tabloop );
                 next if ( ($sf_def->{hidden}||0) > 0 );
                 my %subfield_data;
                 $subfield_data{marc_lib} = ($sf_def->{lib} eq $previous) ?  '--' : $sf_def->{lib};
