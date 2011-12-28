@@ -6,7 +6,7 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'acquisitions-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; Spent </div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; Spent [% fund %]</div>
 
 <div id="doc3" class="yui-t2">
 
@@ -14,7 +14,7 @@
     <div id="yui-main">
         <div class="yui-b">
 
-<h1>Budgets &amp; Bookfunds</h1>
+<h1>Bookfund [% fund %]</h1>
 <h2>Spent</h2>
 
 
@@ -23,12 +23,13 @@
     <tr>
         <th> Title </th>
 	<th> Order </th>
-	<th> Supplier </th>
+	<th> Vendor </th>
 	<th> Invoice </th>
 	<th> Itemtype </th>
-	<th> Receieved </th>
+	<th> Received </th>
 	<th> Unit Price </th>
 	<th> Freight per Item </th>
+	<th> Date Ordered </th>
 	<th> Date Received </th>
 	<th> Subtotal </th>
     </tr>
@@ -48,7 +49,7 @@
             <a href="/cgi-bin/koha/acqui/orderreceive.pl?ordernumber=[% order.ordernumber %]&biblio=[% order.biblionumber %]&invoice=[% order.booksellerinvoicenumber %]&supplierid=[% order.booksellerid %]&catview=yes">[% order.ordernumber %]</a>
 	</td>
 	<td class="cell">
-	    [% order.booksellerid %]
+	    <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=[% order.booksellerid %]">[% order.booksellerid %]</a>
 	</td>
 	<td class="cell">
 	    <a href="/cgi-bin/koha/acqui/parcel.pl?invoice=[% order.booksellerinvoicenumber %]&supplierid=[% order.booksellerid %]&datereceived=[% order.datereceived %]">[% order.booksellerinvoicenumber %]</a>
@@ -64,6 +65,9 @@
 	</td>
 	<td class="cell" align="right">
 	    [% order.freight %]
+	</td>
+	<td class="cell">
+	    [% order.entrydate %]
 	</td>
 	<td class="cell">
 	    [% order.datereceived %]
@@ -83,6 +87,7 @@
         <td> </td>
         <td> </td>
         <td> </td>
+	<td> </td>
 	<td> </td>
         <td align="right">
 		[% total %]
