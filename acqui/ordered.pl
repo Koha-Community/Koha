@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 # Copyright 2008 - 2009 BibLibre SARL
-# Copyright 2010 Catalyst IT Limited
+# Copyright 2010,2011 Catalyst IT Limited
 # This file is part of Koha.
 #
 # Koha is free software; you can redistribute it and/or modify it under the
@@ -27,19 +27,19 @@ this script is to show orders ordered but not yet received
 
 =cut
 
-
 use C4::Context;
 use strict;
 use warnings;
 use CGI;
 use C4::Auth;
 use C4::Output;
+use C4::Dates;
 
-my $dbh      = C4::Context->dbh;
-my $input    = new CGI;
+my $dbh     = C4::Context->dbh;
+my $input   = new CGI;
 my $fund_id = $input->param('fund');
-my $start    = $input->param('start');
-my $end      = $input->param('end');
+my $start   = $input->param('start');
+my $end     = $input->param('end');
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
@@ -56,7 +56,7 @@ my $query = <<EOQ;
 SELECT
     aqorders.basketno, aqorders.ordernumber,
     quantity-quantityreceived AS tleft,
-    ecost, budgetdate,
+    ecost, budgetdate, entrydate,
     aqbasket.booksellerid,
     itype,
     title
@@ -73,13 +73,14 @@ WHERE
     (datecancellationprinted IS NULL OR
         datecancellationprinted='0000-00-00') AND
     (quantity > quantityreceived OR quantityreceived IS NULL)
+    GROUP BY aqorders.ordernumber
 EOQ
 
 my $sth = $dbh->prepare($query);
 
-$sth->execute( $fund_id);
-if ($sth->err) {
-    die "Error occurred fetching records: ".$sth->errstr;
+$sth->execute($fund_id);
+if ( $sth->err ) {
+    die "Error occurred fetching records: " . $sth->errstr;
 }
 my @ordered;
 
@@ -91,18 +92,20 @@ while ( my $data = $sth->fetchrow_hashref ) {
     }
     if ( $left && $left > 0 ) {
         my $subtotal = $left * $data->{'ecost'};
-        $data->{subtotal} =  sprintf ("%.2f",  $subtotal);
+        $data->{subtotal} = sprintf( "%.2f", $subtotal );
         $data->{'left'} = $left;
         push @ordered, $data;
         $total += $subtotal;
     }
+    my $entrydate = C4::Dates->new( $data->{'entrydate'}, 'iso' );
+    $data->{'entrydate'} = $entrydate->output("syspref");
 }
-$total =   sprintf ("%.2f",  $total);
-$template->param(
-    ordered     => \@ordered,
-    total       => $total
-);
+$total = sprintf( "%.2f", $total );
+
+$template->{VARS}->{'fund'}    = $fund_id;
+$template->{VARS}->{'ordered'} = \@ordered;
+$template->{VARS}->{'total'}   = $total;
+
 $sth->finish;
-$dbh->disconnect;
 
 output_html_with_http_headers $input, $cookie, $template->output;

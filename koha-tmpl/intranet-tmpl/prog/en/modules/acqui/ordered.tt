@@ -6,7 +6,7 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'acquisitions-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; Ordered </div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; Ordered - [% fund %]</div>
 
 <div id="doc3" class="yui-t2">
 
@@ -14,18 +14,19 @@
     <div id="yui-main">
         <div class="yui-b">
 
-<h1>Budgets &amp; Bookfunds</h1>
-<h2>Ordered</h2>
+<h1>Bookfunds</h1>
+<h2>Ordered - [% fund %]</h2>
 
 <table cellspacing="0" cellpadding="0" border="0" id="spent" class="collapse">
     <thead>
     <tr>
         <th> Title </th>
 	<th> Order </th>
+	<th> Vendor </th>
 	<th> Itemtype </th>
 	<th> Left on Order </th>
 	<th> Estimated cost per unit </th>
-	<th> Budget Date </th>
+	<th> Date Ordered </th>
 	<th> Subtotal </th>
     </tr>
     </thead>
@@ -43,6 +44,9 @@
 	    <a href=/cgi-bin/koha/acqui/neworderempty.pl?ordernumber=[% order.ordernumber %]&booksellerid=[% order.booksellerid %]&basketno=[% order.basketno %]">[% order.ordernumber %]</a>
 	</td>
 	<td class="cell">
+	    <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=[% order.booksellerid %]">[% order.booksellerid %]</a>
+	</td>
+	<td class="cell">
 	    [% order.itype %]
 	</td>
 	<td class="cell">
@@ -52,7 +56,7 @@
 	    [% order.ecost %]
 	</td>
 	<td class="cell">
-	    [% order.budgetdate %]
+	    [% order.entrydate %]
 	</td>
 	<td class="cell" align="right">
 	    [% order.subtotal %]
@@ -68,6 +72,7 @@
         <td> </td>
         <td> </td>
         <td> </td>
+	<td> </td>
         <td align="right">
             [% total %]
         </td>
