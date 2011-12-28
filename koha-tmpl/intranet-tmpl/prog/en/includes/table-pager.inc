@@ -1,4 +1,4 @@
-<div class="pager"><form class="formpager" action=""><label>Page(s):
+<div class="pager"><p class="formpager" action=""><label>Page(s):
 	<img src="[% interface %]/prog/img/first.png" alt="" class="first"/>
 	<img src="[% interface %]/prog/img/prev.png" alt="" class="prev"/>
 	<input type="text" size="5" class="pagedisplay"/></label>
@@ -14,4 +14,4 @@
 	[% IF ( perpage == 100) %]<option value="100" selected="selected">100</option>[% ELSE %]<option value="100">100</option>[% END %]
 	[% IF ( perpage == 200) %]<option value="200" selected="selected">200</option>[% ELSE %]<option value="200">200</option>[% END %]
 	</select></label>
-</form></div>
+</p></div>
