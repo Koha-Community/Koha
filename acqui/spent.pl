@@ -57,7 +57,7 @@ my $query = <<EOQ;
 SELECT
     aqorders.basketno, aqorders.ordernumber,
     quantity-quantityreceived AS tleft,
-    ecost, budgetdate,
+    ecost, budgetdate, entrydate,
     aqbasket.booksellerid,
     itype,
     title,
@@ -115,6 +115,7 @@ $template->param(
     spent       => \@spent,
     total       => $total
 );
+$template->{VARS}->{'fund'} = $bookfund;
 $sth->finish;
 
 $dbh->disconnect;
