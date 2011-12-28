@@ -22,8 +22,6 @@ use warnings;
 
 use MIME::Lite;
 use Mail::Sendmail;
-use Encode;
-use Carp;
 
 use C4::Members;
 use C4::Branch;
@@ -390,8 +388,8 @@ sub SendAlerts {
             my %mail = (
                 To             => $to,
                 From           => $userenv->{emailaddress},
-                Subject        => "" . $innerletter->{title},
-                Message        => "" . $innerletter->{content},
+                Subject        => Encode::encode( "utf8", "" . $innerletter->{title} ),
+                Message        => Encode::encode( "utf8", "" . $innerletter->{content} ),
                 'Content-Type' => 'text/plain; charset="utf8"',
             );
             sendmail(%mail) or carp $Mail::Sendmail::error;
