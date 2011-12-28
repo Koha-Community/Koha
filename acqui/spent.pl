@@ -3,7 +3,7 @@
 # script to show a breakdown of committed and spent budgets
 
 # Copyright 2002-2009 Katipo Communications Limited
-# Copyright 2010 Catalyst IT Limited
+# Copyright 2010,2011 Catalyst IT Limited
 # This file is part of Koha.
 #
 # Koha is free software; you can redistribute it and/or modify it under the
@@ -29,11 +29,12 @@ this script is designed to show the spent amount in budges
 
 =cut
 
-
 use C4::Context;
 use C4::Auth;
 use C4::Output;
+use C4::Dates;
 use strict;
+use warnings;
 use CGI;
 
 my $dbh      = C4::Context->dbh;
@@ -82,9 +83,9 @@ WHERE
     GROUP BY aqorders.ordernumber
 EOQ
 my $sth = $dbh->prepare($query);
-$sth->execute( $bookfund);
-if ($sth->err) {
-    die "An error occurred fetching records: ".$sth->errstr;
+$sth->execute($bookfund);
+if ( $sth->err ) {
+    die "An error occurred fetching records: " . $sth->errstr;
 }
 my $total = 0;
 my $toggle;
@@ -92,31 +93,24 @@ my @spent;
 while ( my $data = $sth->fetchrow_hashref ) {
     my $recv = $data->{'quantityreceived'};
     if ( $recv > 0 ) {
-        my $subtotal = $recv * ($data->{'unitprice'} + $data->{'freight'});
-        $data->{'subtotal'}  =   sprintf ("%.2f",  $subtotal);
-	$data->{'freight'}   =   sprintf ("%.2f", $data->{'freight'});
-        $data->{'unitprice'} =   sprintf ("%.2f",   $data->{'unitprice'}  );
-        $total               += $subtotal;
-
-        if ($toggle) {
-            $toggle = 0;
-        }
-        else {
-            $toggle = 1;
-        }
-        $data->{'toggle'} = $toggle;
+        my $subtotal = $recv * ( $data->{'unitprice'} + $data->{'freight'} );
+        $data->{'subtotal'}  = sprintf( "%.2f", $subtotal );
+        $data->{'freight'}   = sprintf( "%.2f", $data->{'freight'} );
+        $data->{'unitprice'} = sprintf( "%.2f", $data->{'unitprice'} );
+        $total += $subtotal;
+        my $entrydate = C4::Dates->new( $data->{'entrydate'}, 'iso' );
+        $data->{'entrydate'} = $entrydate->output("syspref");
+        my $datereceived = C4::Dates->new( $data->{'datereceived'}, 'iso' );
+        $data->{'datereceived'} = $datereceived->output("syspref");
         push @spent, $data;
     }
 
 }
-$total =   sprintf ("%.2f",  $total);
+$total = sprintf( "%.2f", $total );
 
-$template->param(
-    spent       => \@spent,
-    total       => $total
-);
-$template->{VARS}->{'fund'} = $bookfund;
+$template->{VARS}->{'fund'}  = $bookfund;
+$template->{VARS}->{'spent'} = \@spent;
+$template->{VARS}->{'total'} = $total;
 $sth->finish;
 
-$dbh->disconnect;
 output_html_with_http_headers $input, $cookie, $template->output;
