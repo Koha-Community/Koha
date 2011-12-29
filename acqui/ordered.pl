@@ -97,8 +97,6 @@ while ( my $data = $sth->fetchrow_hashref ) {
         push @ordered, $data;
         $total += $subtotal;
     }
-    my $entrydate = C4::Dates->new( $data->{'entrydate'}, 'iso' );
-    $data->{'entrydate'} = $entrydate->output("syspref");
 }
 $total = sprintf( "%.2f", $total );
 

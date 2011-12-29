@@ -1,3 +1,4 @@
+[% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; Spent</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -67,10 +68,10 @@
 	    [% order.freight %]
 	</td>
 	<td class="cell">
-	    [% order.entrydate %]
+	    [% order.entrydate | $KohaDates %]
 	</td>
 	<td class="cell">
-	    [% order.datereceived %]
+	    [% order.datereceived | $KohaDates %]
 	</td>
 	<td class="cell" align="right">
 	    [% order.subtotal %]

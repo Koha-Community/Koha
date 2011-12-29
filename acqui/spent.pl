@@ -98,10 +98,6 @@ while ( my $data = $sth->fetchrow_hashref ) {
         $data->{'freight'}   = sprintf( "%.2f", $data->{'freight'} );
         $data->{'unitprice'} = sprintf( "%.2f", $data->{'unitprice'} );
         $total += $subtotal;
-        my $entrydate = C4::Dates->new( $data->{'entrydate'}, 'iso' );
-        $data->{'entrydate'} = $entrydate->output("syspref");
-        my $datereceived = C4::Dates->new( $data->{'datereceived'}, 'iso' );
-        $data->{'datereceived'} = $datereceived->output("syspref");
         push @spent, $data;
     }
 
