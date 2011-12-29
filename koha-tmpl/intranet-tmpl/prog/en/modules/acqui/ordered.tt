@@ -1,3 +1,4 @@
+[% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; Ordered</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -41,7 +42,7 @@
 	    [% order.title %]
 	</td>
 	<td class="cell">
-	    <a href=/cgi-bin/koha/acqui/neworderempty.pl?ordernumber=[% order.ordernumber %]&booksellerid=[% order.booksellerid %]&basketno=[% order.basketno %]">[% order.ordernumber %]</a>
+	    <a href="/cgi-bin/koha/acqui/neworderempty.pl?ordernumber=[% order.ordernumber %]&booksellerid=[% order.booksellerid %]&basketno=[% order.basketno %]">[% order.ordernumber %]</a>
 	</td>
 	<td class="cell">
 	    <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=[% order.booksellerid %]">[% order.booksellerid %]</a>
@@ -56,7 +57,7 @@
 	    [% order.ecost %]
 	</td>
 	<td class="cell">
-	    [% order.entrydate %]
+	    [% order.entrydate | $KohaDates %]
 	</td>
 	<td class="cell" align="right">
 	    [% order.subtotal %]

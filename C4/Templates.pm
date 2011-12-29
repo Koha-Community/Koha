@@ -58,6 +58,7 @@ sub new {
     my $template = Template->new(
         {   EVAL_PERL    => 1,
             ABSOLUTE     => 1,
+	    PLUGIN_BASE => 'Koha::Template::Plugin',
             INCLUDE_PATH => [
                 "$htdocs/$theme/$lang/includes",
                 "$htdocs/$theme/en/includes"
