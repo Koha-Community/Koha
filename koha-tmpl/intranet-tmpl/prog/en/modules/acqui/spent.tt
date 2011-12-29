@@ -7,7 +7,7 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'acquisitions-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; Spent [% fund %]</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; Spent - [% fund_code %]</div>
 
 <div id="doc3" class="yui-t2">
 
@@ -15,7 +15,7 @@
     <div id="yui-main">
         <div class="yui-b">
 
-<h1>Bookfund [% fund %]</h1>
+<h1>Fund: [% fund_code %]</h1>
 <h2>Spent</h2>
 
 
@@ -67,10 +67,10 @@
 	<td class="cell" align="right">
 	    [% order.freight %]
 	</td>
-	<td class="cell">
+	<td class="cell" align="right">
 	    [% order.entrydate | $KohaDates %]
 	</td>
-	<td class="cell">
+	<td class="cell" align="right">
 	    [% order.datereceived | $KohaDates %]
 	</td>
 	<td class="cell" align="right">

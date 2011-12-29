@@ -40,8 +40,7 @@ use CGI;
 my $dbh      = C4::Context->dbh;
 my $input    = new CGI;
 my $bookfund = $input->param('fund');
-my $start    = $input->param('start');
-my $end      = $input->param('end');
+my $fund_code = $input->param('fund_code');
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
@@ -107,6 +106,7 @@ $total = sprintf( "%.2f", $total );
 $template->{VARS}->{'fund'}  = $bookfund;
 $template->{VARS}->{'spent'} = \@spent;
 $template->{VARS}->{'total'} = $total;
+$template->{VARS}->{'fund_code'} = $fund_code;
 $sth->finish;
 
 output_html_with_http_headers $input, $cookie, $template->output;

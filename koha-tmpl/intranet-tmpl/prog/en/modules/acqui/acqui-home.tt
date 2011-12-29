@@ -122,8 +122,8 @@ $(document).ready(function() {
                 <td align="center">[% loop_budge.budget_owner %]</td>
                 <td align="center">[% loop_budge.budget_branchname %]</td>
                 <td align="right" >[% loop_budge.budget_amount %]</td>
-                <td align="right" ><a href="ordered.pl?fund=[% loop_budge.budget_id %]">[% loop_budge.budget_ordered %]</a></td>
-                <td align="right" ><a href="spent.pl?fund=[% loop_budge.budget_id %]">[% loop_budge.budget_spent %]</a></td>
+                <td align="right" ><a href="ordered.pl?fund=[% loop_budge.budget_id %]&fund_code=[% loop_budge.budget_code %]">[% loop_budge.budget_ordered %]</a></td>
+                <td align="right" ><a href="spent.pl?fund=[% loop_budge.budget_id %]&fund_code=[% loop_budge.budget_code %]">[% loop_budge.budget_spent %]</a></td>
                 <td align="right" >[% loop_budge.budget_avail %]</td>
             </tr>
             [% ELSE %]
@@ -136,8 +136,8 @@ $(document).ready(function() {
                 <td align="center">[% loop_budge.budget_owner %]</td>
                 <td align="center">[% loop_budge.budget_branchname %]</td>
                 <td align="right" >[% loop_budge.budget_amount %]</td>
-                <td align="right" ><a href="ordered.pl?fund=[% loop_budge.budget_id %]">[% loop_budge.budget_ordered %]</a></td>
-                <td align="right" ><a href="spent.pl?fund=[% loop_budge.budget_id %]">[% loop_budge.budget_spent %]</a></td>
+                <td align="right" ><a href="ordered.pl?fund=[% loop_budge.budget_id %]&fund_code=[% loop_budge.budget_code %]">[% loop_budge.budget_ordered %]</a></td>
+                <td align="right" ><a href="spent.pl?fund=[% loop_budge.budget_id %]&fund_code=[% loop_budge.budget_code %]">[% loop_budge.budget_spent %]</a></td>
                 <td align="right" >[% loop_budge.budget_avail %]</td>
             [% END %]
         [% END %]
