@@ -41,7 +41,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user (
         template_name   => "opac-sendshelfform.tmpl",
         query           => $query,
         type            => "opac",
-        authnotrequired => 1,
+        authnotrequired => 0,
         flagsrequired   => { borrow => 1 },
     }
 );
