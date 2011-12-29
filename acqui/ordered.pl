@@ -38,8 +38,7 @@ use C4::Dates;
 my $dbh     = C4::Context->dbh;
 my $input   = new CGI;
 my $fund_id = $input->param('fund');
-my $start   = $input->param('start');
-my $end     = $input->param('end');
+my $fund_code = $input->param('fund_code');
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
@@ -103,6 +102,7 @@ $total = sprintf( "%.2f", $total );
 $template->{VARS}->{'fund'}    = $fund_id;
 $template->{VARS}->{'ordered'} = \@ordered;
 $template->{VARS}->{'total'}   = $total;
+$template->{VARS}->{'fund_code'} = $fund_code;
 
 $sth->finish;
 
