@@ -13,6 +13,10 @@ a:hover,#toolbar input.editshelf:hover,input.editshelf:hover,a.editshelf:hover,i
 	color : #990033;
 }
 
+a.disabled {
+	color : #888888 !important;
+}
+
 body {
 	background-color : white;
 	text-align : left;
@@ -467,16 +471,37 @@ a .term {
 
 /* toolbar buttons */
 
-#toolbar {
+#toolbar,
+#selections-toolbar {
 background-color:#EEEEEE;
 border:1px solid #E8E8E8;
-margin : .5em 0;
+margin : 0 0;
 padding:3px 3px 5px 5px;
 vertical-align:middle;
 }
 
+#basket #toolbar {
+	padding: 7px 5px 9px 9px;
+}
+
+#selections-toolbar {
+background: #E8E8E8; /* Old browsers */
+background: -moz-linear-gradient(top, #b2b2b2 0%, #e0e0e0 14%, #e8e8e8 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#b2b2b2), color-stop(14%,#e0e0e0), color-stop(100%,#e8e8e8)); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top, #b2b2b2 0%,#e0e0e0 14%,#e8e8e8 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top, #b2b2b2 0%,#e0e0e0 14%,#e8e8e8 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top, #b2b2b2 0%,#e0e0e0 14%,#e8e8e8 100%); /* IE10+ */
+background: linear-gradient(top, #b2b2b2 0%,#e0e0e0 14%,#e8e8e8 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e0e0e0', endColorstr='#e8e8e8',GradientType=0 ); /* IE6-9 */
+	margin : 0 0 1em 0;
+	padding-top : .5em;
+	padding-left : 10px;
+}
+
 #toolbar a,
-#toolbar input {
+#selections-toolbar a,
+#toolbar input,
+#selections-toolbar input {
 	white-space : nowrap;
 }
 
@@ -499,15 +524,15 @@ vertical-align:middle;
 
 
 #toolbar a.print {
-	background: transparent url(../../images/print-small.png) 5px 50% no-repeat;
+	background: transparent url(../../images/print-small.png) 10px 50% no-repeat;
 	text-decoration : none;
-	padding-left : 23px;
+	padding-left : 30px;
 }
 
 #toolbar a.brief {
 	background: transparent url(../../images/brief.gif) 5px 50% no-repeat;
 	text-decoration : none;
-	padding-left : 23px;
+	padding-left : 27px;
 }
 
 #toolbar a.detail {
@@ -540,16 +565,32 @@ vertical-align:middle;
 	padding-left : 26px;
 }
 
-#toolbar a.hold {
+#toolbar a.hold,
+#selections-toolbar a.hold {
 	background: transparent url(../../images/place-hold-small.png) 5px 50% no-repeat;
 	text-decoration : none;
 	padding-left : 23px;
+}
+
+#selections-toolbar a.hold.disabled {
+	background: transparent url(../../images/place-hold-small-disabled.png) 5px 50% no-repeat;
 }
 
 #toolbar a.newshelf {
 	background : transparent url("../../images/shelf-new.gif") 5px 50% no-repeat;
 	padding-left : 23px;
 	text-decoration : none;
+}
+
+#selections-toolbar a.removeitems {
+	background: transparent url(../../images/shelf-delete.gif) 11px 50% no-repeat;
+	text-decoration : none;
+	padding-left : 25px;
+}
+
+
+#selections-toolbar a.removeitems.disabled {
+	background: transparent url(../../images/shelf-delete-disabled.gif) 11px 50% no-repeat;
 }
 
 #toolbar a.send,
@@ -585,7 +626,8 @@ input.editshelf {
 	text-decoration : none;
 }
 
-#toolbar input.newshelf {
+#toolbar input.newshelf,
+a.newshelf {
 	background : transparent url("../../images/shelf-new.gif") center left no-repeat;
 	border : 0;
 	color : #006699;
@@ -596,14 +638,24 @@ input.editshelf {
 	text-decoration : none;
 }
 
+a.newshelf.disabled {
+	background : transparent url("../../images/shelf-new-disabled.gif") center left no-repeat;
+}
+
 #toolbar input.deleteshelf,
-input.deleteshelf {
+input.deleteshelf,
+a.deleteshelf {
 	background : transparent url("../../images/shelf-delete.gif") 7px 50% no-repeat;
 	border : 0;
 	color : #006699;
 	cursor : pointer;
 	font-size : 100%;
 	padding-left : 20px;
+	text-decoration : none;
+}
+
+a.deleteshelf.disabled {
+	background : transparent url("../../images/shelf-delete-disabled.gif") 7px 50% no-repeat;
 }
 
 #toolbar input.deleteshelf:hover {
@@ -618,6 +670,10 @@ input.deleteshelf:active {
 	border : 0;
 }
 
+#selections {
+	font-weight : bold;
+}
+
 #tagsel_span input.submit,
 #tagsel_tag {
 	background-image: url(../../images/tags-small.png);
@@ -625,6 +681,10 @@ input.deleteshelf:active {
 	background-repeat : no-repeat;
 	padding-left : 25px;
 	text-decoration: none;
+}
+
+#tagsel_tag.disabled {
+	background-image: url(../../images/tags-small-disabled.png);
 }
 
 #tagslist li { display : inline; }
@@ -2298,4 +2358,10 @@ p.patronimage {
 p.patronimage.edit {
 	border-color:#E8E8E8;
 	margin: 1em 1em 1em 0;
+}
+
+span.sep {
+	color: #888;
+	padding: 0 .2em;
+	text-shadow: 1px 1px 0 #FFF;
 }
