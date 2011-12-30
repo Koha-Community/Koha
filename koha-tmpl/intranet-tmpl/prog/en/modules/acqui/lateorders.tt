@@ -1,6 +1,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; Late orders</title>
 [% INCLUDE 'doc-head-close.inc' %]
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
 <script type="text/javascript">
 //<![CDATA[
 $(document).ready(function() {
@@ -12,6 +13,8 @@ $(document).ready(function() {
             $("input:checkbox[name=claim_for]").attr('disabled', false);
         }
     });
+    $('#CheckAll').click(function(){ $("#late_orders td").checkCheckboxes();});
+    $('#CheckNone').click(function(){ $("#late_orders td").unCheckCheckboxes();});
 });
 //]]>
 </script>
@@ -35,7 +38,7 @@ $(document).ready(function() {
     <div class="error">[% error_claim %]</div>
 [% END %]
 [% IF info_claim %]
-    <div class="info">[% info_claim %]</div>
+    <div class="info">Email has been sent.</div>
 [% END %]
 [% IF ( lateorders ) %]
 <form action="lateorders.pl" name="claim" method="post">
@@ -50,7 +53,7 @@ $(document).ready(function() {
 	  </select>
 	</p>
 	[% END %]
-    <table>
+    <table id="late_orders">
         <tr>
             <th>Order Date</th>
             <th>Vendor</th>
@@ -61,7 +64,7 @@ $(document).ready(function() {
             <th>Claimed date</th>
             <!-- TMPL_IF name="Supplier" -->
             [% IF Supplier %]
-                <th><input type="checkbox" id="checkAll"></th>
+                <th><a id="CheckAll" href="#">Check all</a><br /><a id="CheckNone" href="#">Uncheck all</a></th>
             [% ELSE %]
                 <th></th>
             [% END %]
@@ -103,7 +106,7 @@ $(document).ready(function() {
             <td>[% lateorder.claimed_date %]</td>
             <td>
                 [% UNLESS lateorder.budget_lock %]
-                    <input type="checkbox" name="claim_for" value="[% lateorder.ordernumber %]"  supplierid="[% lateorder.supplierid %]"/>
+                    <input type="checkbox" class="checkbox" name="claim_for" value="[% lateorder.ordernumber %]"  supplierid="[% lateorder.supplierid %]"/>
                 [% END %]
              </td>
             </td>

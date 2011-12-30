@@ -393,7 +393,7 @@ sub SendAlerts {
                 'Content-Type' => 'text/plain; charset="utf8"',
             );
             sendmail(%mail) or carp $Mail::Sendmail::error;
-            warn "sending to $mail{To} From $mail{From} subj $mail{Subject} Mess $mail{Message}";
+            warn "sending to $mail{To} From $mail{From} subj $mail{Subject} Mess $mail{Message}" if $debug;
             if ( C4::Context->preference("LetterLog") ) {
                 logaction( "ACQUISITION", "Send Acquisition claim letter", "", "order list : " . join( ",", @$externalid ) . "\n$innerletter->{title}\n$innerletter->{content}" ) if $type eq 'claimacquisition';
                 logaction( "ACQUISITION", "CLAIM ISSUE", undef, "To=" . $mail{To} . " Title=" . $innerletter->{title} . " Content=" . $innerletter->{content} ) if $type eq 'claimissues';
@@ -402,7 +402,7 @@ sub SendAlerts {
             die "This bookseller has no email\n";
         }
 
-        warn "sending to From $userenv->{emailaddress} subj $innerletter->{title} Mess $innerletter->{content}";
+        warn "sending to From $userenv->{emailaddress} subj $innerletter->{title} Mess $innerletter->{content}" if $debug;
     }
 
     # send an "account details" notice to a newly created user
