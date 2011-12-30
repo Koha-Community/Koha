@@ -132,17 +132,12 @@ BEGIN {
 }
 
 eval {
-    my $servers = C4::Context->config('memcached_servers');
-    if ($servers) {
+    if (C4::Context->ismemcached) {
         require Memoize::Memcached;
         import Memoize::Memcached qw(memoize_memcached);
 
-        my $memcached = {
-            servers     => [$servers],
-            key_prefix  => C4::Context->config('memcached_namespace') || 'koha',
-            expire_time => 600
-        }; # cache for 10 mins, if you want to cache for different make a different memcached hash
-        memoize_memcached( 'GetMarcStructure', memcached => $memcached );
+        memoize_memcached( 'GetMarcStructure',
+                            memcached => C4::Context->memcached);
     }
 };
 

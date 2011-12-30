@@ -26,20 +26,13 @@ use C4::Context;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $DEBUG);
 
 eval {
-    my $servers = C4::Context->config('memcached_servers');
-    if ($servers) {
+    if (C4::Context->ismemcached) {
         require Memoize::Memcached;
         import Memoize::Memcached qw(memoize_memcached);
 
-        my $memcached = {
-            servers     => [$servers],
-            key_prefix  => C4::Context->config('memcached_namespace') || 'koha',
-            expire_time => 600
-        };    # cache for 10 mins
-
-        memoize_memcached( 'getTranslatedLanguages', memcached => $memcached );
-        memoize_memcached( 'getFrameworkLanguages',  memcached => $memcached );
-        memoize_memcached( 'getAllLanguages',        memcached => $memcached );
+        memoize_memcached('getTranslatedLanguages', memcached => C4::Context->memcached);
+        memoize_memcached('getFrameworkLanguages' , memcached => C4::Context->memcached);
+        memoize_memcached('getAllLanguages',        memcached => C4::Context->memcached);
     }
 };
 

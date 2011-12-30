@@ -88,6 +88,7 @@ BEGIN {
 		      servers => [ $servers ],
 		      debug   => 0,
 		      compress_threshold => 10_000,
+              expire_time => 600,
 		      namespace => $ENV{'MEMCACHED_NAMESPACE'} || 'koha'
 		  });
         # Verify memcached available (set a variable and test the output)
@@ -251,6 +252,31 @@ sub read_config_file {		# Pass argument naming config file to read
     }
 
     return $koha;			# Return value: ref-to-hash holding the configuration
+}
+
+=head2 ismemcached
+
+Returns the value of the $ismemcached variable (0/1)
+
+=cut
+
+sub ismemcached {
+    return $ismemcached;
+}
+
+=head2 memcached
+
+If $ismemcached is true, returns the $memcache variable.
+Returns undef otherwise
+
+=cut
+
+sub memcached {
+    if ($ismemcached) {
+      return $memcached;
+    } else {
+      return undef;
+    }
 }
 
 # db_scheme2dbi

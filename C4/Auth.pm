@@ -33,7 +33,7 @@ use POSIX qw/strftime/;
 use List::MoreUtils qw/ any /;
 
 # use utf8;
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $debug $ldap $cas $caslogout $servers $memcached);
+use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $debug $ldap $cas $caslogout);
 
 BEGIN {
     sub psgi_env { any { /^psgi\./ } keys %ENV }
@@ -59,16 +59,7 @@ BEGIN {
     if ($cas) {
         import  C4::Auth_with_cas qw(check_api_auth_cas checkpw_cas login_cas logout_cas login_cas_url);
     }
-    $servers = C4::Context->config('memcached_servers');
-    if ($servers) {
-	require Cache::Memcached;
-        $memcached = Cache::Memcached->new({
-					       servers => [ $servers ],
-					       debug   => 0,
-					       compress_threshold => 10_000,
-					       namespace => C4::Context->config('memcached_namespace') || 'koha',
-					   });
-    }
+
 }
 
 =head1 NAME
@@ -1424,8 +1415,8 @@ sub get_session {
     elsif ($storage_method eq 'Pg') {
         $session = new CGI::Session("driver:PostgreSQL;serializer:yaml;id:md5", $sessionID, {Handle=>$dbh});
     }
-    elsif ($storage_method eq 'memcached' && $servers){
-	$session = new CGI::Session("driver:memcached;serializer:yaml;id:md5", $sessionID, { Memcached => $memcached } );
+    elsif ($storage_method eq 'memcached' && C4::Context->ismemcached){
+	$session = new CGI::Session("driver:memcached;serializer:yaml;id:md5", $sessionID, { Memcached => C4::Context->memcached } );
     }
     else {
         # catch all defaults to tmp should work on all systems
