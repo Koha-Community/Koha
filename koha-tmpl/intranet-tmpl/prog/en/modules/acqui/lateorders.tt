@@ -35,7 +35,11 @@ $(document).ready(function() {
 <div id="acqui_lateorders">
 
 [% IF error_claim %]
-    <div class="error">[% error_claim %]</div>
+    [% IF ( error_claim == "no_email" ) %]
+        <div class="error">This vendor has no email</div>
+    [% ELSE %]
+        <div class="error">[% error_claim %]</div>
+    [% END %]
 [% END %]
 [% IF info_claim %]
     <div class="info">Email has been sent.</div>
@@ -62,7 +66,6 @@ $(document).ready(function() {
             <th>Basket</th>
             <th>Claims count</th>
             <th>Claimed date</th>
-            <!-- TMPL_IF name="Supplier" -->
             [% IF Supplier %]
                 <th><a id="CheckAll" href="#">Check all</a><br /><a id="CheckNone" href="#">Uncheck all</a></th>
             [% ELSE %]

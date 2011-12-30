@@ -399,7 +399,7 @@ sub SendAlerts {
                 logaction( "ACQUISITION", "CLAIM ISSUE", undef, "To=" . $mail{To} . " Title=" . $innerletter->{title} . " Content=" . $innerletter->{content} ) if $type eq 'claimissues';
             }
         } else {
-            die "This bookseller has no email\n";
+            return {error => "no_email" };
         }
 
         warn "sending to From $userenv->{emailaddress} subj $innerletter->{title} Mess $innerletter->{content}" if $debug;

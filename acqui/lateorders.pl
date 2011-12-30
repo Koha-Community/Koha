@@ -78,12 +78,15 @@ unless ($delay =~ /^\d{1,3}$/) {
 
 if ($op and $op eq "send_alert"){
     my @ordernums = $input->param("claim_for");# FIXME: Fallback values?
+    my $err;
     eval {
-        SendAlerts( 'claimacquisition', \@ordernums, $input->param("letter_code") );    # FIXME: Fallback value?
+        $err = SendAlerts( 'claimacquisition', \@ordernums, $input->param("letter_code") );    # FIXME: Fallback value?
         AddClaim ( $_ ) for @ordernums;
     };
     if ( $@ ) {
         $template->param(error_claim => $@);
+    } elsif ( defined $err->{error} and $err->{error} eq "no_email" ) {
+        $template->{VARS}->{'error_claim'} = "no_email";
     } else {
         $template->{VARS}->{'info_claim'} = 1;
     }
