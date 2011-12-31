@@ -87,7 +87,7 @@ use C4::Input;
 use C4::Koha;
 use C4::Branch;			# GetBranches
 use C4::Members;
-use C4::Search qw/FindDuplicate BiblioAddAuthorities/;
+use C4::Search qw/FindDuplicate/;
 
 #needed for z3950 import:
 use C4::ImportBatch qw/GetImportRecordMarc SetImportRecordStatus/;
@@ -150,7 +150,7 @@ if ( $ordernumber eq '' and defined $params->{'breedingid'}){
     }
     #from this point: add a new record
         if (C4::Context->preference("BiblioAddsAuthorities")){
-            my ($countlinked,$countcreated)=BiblioAddAuthorities($marcrecord, $params->{'frameworkcode'});
+            my $headings_linked=BiblioAutoLink($marcrecord, $params->{'frameworkcode'});
         }
         my $bibitemnum;
         $params->{'frameworkcode'} or $params->{'frameworkcode'} = "";

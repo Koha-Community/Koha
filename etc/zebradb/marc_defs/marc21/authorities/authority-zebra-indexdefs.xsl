@@ -1101,10 +1101,10 @@ authority-zebra-indexdefs.xsl` (substituting the appropriate file names).
     </z:index>
   </xslo:template>
   <xslo:template mode="index_match_heading" match="marc:datafield[@tag='100']">
-    <z:index name="Match-heading:p Match-heading:s">
+    <z:index name="Match:w Match:p Match-heading:p Match-heading:s">
       <xslo:variable name="raw_heading">
         <xslo:for-each select="marc:subfield">
-          <xslo:if test="contains('abcdefghjklmnopqrstvxyz', @code)" name="Match-heading:p Match-heading:s">
+          <xslo:if test="contains('abcdefghjklmnopqrstvxyz', @code)" name="Match:w Match:p Match-heading:p Match-heading:s">
             <xslo:if test="position() &gt; 1">
               <xslo:choose>
                 <xslo:when test="contains('vxyz', @code)">
@@ -1128,7 +1128,11 @@ authority-zebra-indexdefs.xsl` (substituting the appropriate file names).
                 </xslo:otherwise>
               </xslo:choose>
             </xslo:if>
-            <xslo:value-of select="."/>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
           </xslo:if>
         </xslo:for-each>
       </xslo:variable>
@@ -1136,10 +1140,10 @@ authority-zebra-indexdefs.xsl` (substituting the appropriate file names).
     </z:index>
   </xslo:template>
   <xslo:template mode="index_match_heading" match="marc:datafield[@tag='400']">
-    <z:index name="Match-heading-see-from:p Match-heading-see-from:s">
+    <z:index name="Match:w Match:p Match-heading-see-from:p Match-heading-see-from:s">
       <xslo:variable name="raw_heading">
         <xslo:for-each select="marc:subfield">
-          <xslo:if test="contains('abcdefghjklmnopqrstvxyz', @code)" name="Match-heading-see-from:p Match-heading-see-from:s">
+          <xslo:if test="contains('abcdefghjklmnopqrstvxyz', @code)" name="Match:w Match:p Match-heading-see-from:p Match-heading-see-from:s">
             <xslo:if test="position() &gt; 1">
               <xslo:choose>
                 <xslo:when test="contains('vxyz', @code)">
@@ -1163,7 +1167,50 @@ authority-zebra-indexdefs.xsl` (substituting the appropriate file names).
                 </xslo:otherwise>
               </xslo:choose>
             </xslo:if>
-            <xslo:value-of select="."/>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_match_heading" match="marc:datafield[@tag='500']">
+    <z:index name="Match:w Match:p">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('abcdefghjklmnopqrstvxyz', @code)" name="Match:w Match:p">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('vxyz', @code)">
+                  <xslo:choose>
+                    <xslo:when test="@code = $general_subdivision_subfield">
+                      <xslo:text> generalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $form_subdivision_subfield">
+                      <xslo:text> formsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $chronological_subdivision_subfield">
+                      <xslo:text> chronologicalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $geographic_subdivision_subfield">
+                      <xslo:text> geographicsubdiv </xslo:text>
+                    </xslo:when>
+                  </xslo:choose>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
           </xslo:if>
         </xslo:for-each>
       </xslo:variable>
@@ -1171,10 +1218,10 @@ authority-zebra-indexdefs.xsl` (substituting the appropriate file names).
     </z:index>
   </xslo:template>
   <xslo:template mode="index_match_heading" match="marc:datafield[@tag='110']">
-    <z:index name="Match-heading:p Match-heading:s">
+    <z:index name="Match:w Match:p Match-heading:p Match-heading:s">
       <xslo:variable name="raw_heading">
         <xslo:for-each select="marc:subfield">
-          <xslo:if test="contains('abcdefghklmnoprstvxyz', @code)" name="Match-heading:p Match-heading:s">
+          <xslo:if test="contains('abcdefghklmnoprstvxyz', @code)" name="Match:w Match:p Match-heading:p Match-heading:s">
             <xslo:if test="position() &gt; 1">
               <xslo:choose>
                 <xslo:when test="contains('vxyz', @code)">
@@ -1198,7 +1245,11 @@ authority-zebra-indexdefs.xsl` (substituting the appropriate file names).
                 </xslo:otherwise>
               </xslo:choose>
             </xslo:if>
-            <xslo:value-of select="."/>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
           </xslo:if>
         </xslo:for-each>
       </xslo:variable>
@@ -1206,10 +1257,10 @@ authority-zebra-indexdefs.xsl` (substituting the appropriate file names).
     </z:index>
   </xslo:template>
   <xslo:template mode="index_match_heading" match="marc:datafield[@tag='410']">
-    <z:index name="Match-heading-see-from:p Match-heading-see-from:s">
+    <z:index name="Match:w Match:p Match-heading-see-from:p Match-heading-see-from:s">
       <xslo:variable name="raw_heading">
         <xslo:for-each select="marc:subfield">
-          <xslo:if test="contains('abcdefghklmnoprstvxyz', @code)" name="Match-heading-see-from:p Match-heading-see-from:s">
+          <xslo:if test="contains('abcdefghklmnoprstvxyz', @code)" name="Match:w Match:p Match-heading-see-from:p Match-heading-see-from:s">
             <xslo:if test="position() &gt; 1">
               <xslo:choose>
                 <xslo:when test="contains('vxyz', @code)">
@@ -1233,7 +1284,50 @@ authority-zebra-indexdefs.xsl` (substituting the appropriate file names).
                 </xslo:otherwise>
               </xslo:choose>
             </xslo:if>
-            <xslo:value-of select="."/>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_match_heading" match="marc:datafield[@tag='510']">
+    <z:index name="Match:w Match:p">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('abcdefghklmnoprstvxyz', @code)" name="Match:w Match:p">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('vxyz', @code)">
+                  <xslo:choose>
+                    <xslo:when test="@code = $general_subdivision_subfield">
+                      <xslo:text> generalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $form_subdivision_subfield">
+                      <xslo:text> formsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $chronological_subdivision_subfield">
+                      <xslo:text> chronologicalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $geographic_subdivision_subfield">
+                      <xslo:text> geographicsubdiv </xslo:text>
+                    </xslo:when>
+                  </xslo:choose>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
           </xslo:if>
         </xslo:for-each>
       </xslo:variable>
@@ -1241,10 +1335,10 @@ authority-zebra-indexdefs.xsl` (substituting the appropriate file names).
     </z:index>
   </xslo:template>
   <xslo:template mode="index_match_heading" match="marc:datafield[@tag='111']">
-    <z:index name="Match-heading:p Match-heading:s">
+    <z:index name="Match:w Match:p Match-heading:p Match-heading:s">
       <xslo:variable name="raw_heading">
         <xslo:for-each select="marc:subfield">
-          <xslo:if test="contains('acdefghjklnpqstvxyz', @code)" name="Match-heading:p Match-heading:s">
+          <xslo:if test="contains('acdefghjklnpqstvxyz', @code)" name="Match:w Match:p Match-heading:p Match-heading:s">
             <xslo:if test="position() &gt; 1">
               <xslo:choose>
                 <xslo:when test="contains('vxyz', @code)">
@@ -1268,7 +1362,11 @@ authority-zebra-indexdefs.xsl` (substituting the appropriate file names).
                 </xslo:otherwise>
               </xslo:choose>
             </xslo:if>
-            <xslo:value-of select="."/>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
           </xslo:if>
         </xslo:for-each>
       </xslo:variable>
@@ -1276,10 +1374,10 @@ authority-zebra-indexdefs.xsl` (substituting the appropriate file names).
     </z:index>
   </xslo:template>
   <xslo:template mode="index_match_heading" match="marc:datafield[@tag='411']">
-    <z:index name="Match-heading-see-from:p Match-heading-see-from:s">
+    <z:index name="Match:w Match:p Match-heading-see-from:p Match-heading-see-from:s">
       <xslo:variable name="raw_heading">
         <xslo:for-each select="marc:subfield">
-          <xslo:if test="contains('acdefghjklnpqstvxyz', @code)" name="Match-heading-see-from:p Match-heading-see-from:s">
+          <xslo:if test="contains('acdefghjklnpqstvxyz', @code)" name="Match:w Match:p Match-heading-see-from:p Match-heading-see-from:s">
             <xslo:if test="position() &gt; 1">
               <xslo:choose>
                 <xslo:when test="contains('vxyz', @code)">
@@ -1303,7 +1401,50 @@ authority-zebra-indexdefs.xsl` (substituting the appropriate file names).
                 </xslo:otherwise>
               </xslo:choose>
             </xslo:if>
-            <xslo:value-of select="."/>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_match_heading" match="marc:datafield[@tag='511']">
+    <z:index name="Match:w Match:p">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('acdefghjklnpqstvxyz', @code)" name="Match:w Match:p">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('vxyz', @code)">
+                  <xslo:choose>
+                    <xslo:when test="@code = $general_subdivision_subfield">
+                      <xslo:text> generalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $form_subdivision_subfield">
+                      <xslo:text> formsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $chronological_subdivision_subfield">
+                      <xslo:text> chronologicalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $geographic_subdivision_subfield">
+                      <xslo:text> geographicsubdiv </xslo:text>
+                    </xslo:when>
+                  </xslo:choose>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
           </xslo:if>
         </xslo:for-each>
       </xslo:variable>
@@ -1311,10 +1452,10 @@ authority-zebra-indexdefs.xsl` (substituting the appropriate file names).
     </z:index>
   </xslo:template>
   <xslo:template mode="index_match_heading" match="marc:datafield[@tag='130']">
-    <z:index name="Match-heading:p Match-heading:s">
+    <z:index name="Match:w Match:p Match-heading:p Match-heading:s">
       <xslo:variable name="raw_heading">
         <xslo:for-each select="marc:subfield">
-          <xslo:if test="contains('adfghklmnoprstvxyz', @code)" name="Match-heading:p Match-heading:s">
+          <xslo:if test="contains('adfghklmnoprstvxyz', @code)" name="Match:w Match:p Match-heading:p Match-heading:s">
             <xslo:if test="position() &gt; 1">
               <xslo:choose>
                 <xslo:when test="contains('vxyz', @code)">
@@ -1338,7 +1479,11 @@ authority-zebra-indexdefs.xsl` (substituting the appropriate file names).
                 </xslo:otherwise>
               </xslo:choose>
             </xslo:if>
-            <xslo:value-of select="."/>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
           </xslo:if>
         </xslo:for-each>
       </xslo:variable>
@@ -1346,10 +1491,10 @@ authority-zebra-indexdefs.xsl` (substituting the appropriate file names).
     </z:index>
   </xslo:template>
   <xslo:template mode="index_match_heading" match="marc:datafield[@tag='430']">
-    <z:index name="Match-heading-see-from:p Match-heading-see-from:s">
+    <z:index name="Match:w Match:p Match-heading-see-from:p Match-heading-see-from:s">
       <xslo:variable name="raw_heading">
         <xslo:for-each select="marc:subfield">
-          <xslo:if test="contains('adfghklmnoprstvxyz', @code)" name="Match-heading-see-from:p Match-heading-see-from:s">
+          <xslo:if test="contains('adfghklmnoprstvxyz', @code)" name="Match:w Match:p Match-heading-see-from:p Match-heading-see-from:s">
             <xslo:if test="position() &gt; 1">
               <xslo:choose>
                 <xslo:when test="contains('vxyz', @code)">
@@ -1373,7 +1518,50 @@ authority-zebra-indexdefs.xsl` (substituting the appropriate file names).
                 </xslo:otherwise>
               </xslo:choose>
             </xslo:if>
-            <xslo:value-of select="."/>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_match_heading" match="marc:datafield[@tag='530']">
+    <z:index name="Match:w Match:p">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('adfghklmnoprstvxyz', @code)" name="Match:w Match:p">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('vxyz', @code)">
+                  <xslo:choose>
+                    <xslo:when test="@code = $general_subdivision_subfield">
+                      <xslo:text> generalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $form_subdivision_subfield">
+                      <xslo:text> formsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $chronological_subdivision_subfield">
+                      <xslo:text> chronologicalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $geographic_subdivision_subfield">
+                      <xslo:text> geographicsubdiv </xslo:text>
+                    </xslo:when>
+                  </xslo:choose>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
           </xslo:if>
         </xslo:for-each>
       </xslo:variable>
@@ -1381,10 +1569,10 @@ authority-zebra-indexdefs.xsl` (substituting the appropriate file names).
     </z:index>
   </xslo:template>
   <xslo:template mode="index_match_heading" match="marc:datafield[@tag='148']">
-    <z:index name="Match-heading:p Match-heading:s">
+    <z:index name="Match:w Match:p Match-heading:p Match-heading:s">
       <xslo:variable name="raw_heading">
         <xslo:for-each select="marc:subfield">
-          <xslo:if test="contains('avxyz', @code)" name="Match-heading:p Match-heading:s">
+          <xslo:if test="contains('avxyz', @code)" name="Match:w Match:p Match-heading:p Match-heading:s">
             <xslo:if test="position() &gt; 1">
               <xslo:choose>
                 <xslo:when test="contains('vxyz', @code)">
@@ -1408,7 +1596,11 @@ authority-zebra-indexdefs.xsl` (substituting the appropriate file names).
                 </xslo:otherwise>
               </xslo:choose>
             </xslo:if>
-            <xslo:value-of select="."/>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
           </xslo:if>
         </xslo:for-each>
       </xslo:variable>
@@ -1416,10 +1608,10 @@ authority-zebra-indexdefs.xsl` (substituting the appropriate file names).
     </z:index>
   </xslo:template>
   <xslo:template mode="index_match_heading" match="marc:datafield[@tag='448']">
-    <z:index name="Match-heading-see-from:p Match-heading-see-from:s">
+    <z:index name="Match:w Match:p Match-heading-see-from:p Match-heading-see-from:s">
       <xslo:variable name="raw_heading">
         <xslo:for-each select="marc:subfield">
-          <xslo:if test="contains('avxyz', @code)" name="Match-heading-see-from:p Match-heading-see-from:s">
+          <xslo:if test="contains('avxyz', @code)" name="Match:w Match:p Match-heading-see-from:p Match-heading-see-from:s">
             <xslo:if test="position() &gt; 1">
               <xslo:choose>
                 <xslo:when test="contains('vxyz', @code)">
@@ -1443,7 +1635,50 @@ authority-zebra-indexdefs.xsl` (substituting the appropriate file names).
                 </xslo:otherwise>
               </xslo:choose>
             </xslo:if>
-            <xslo:value-of select="."/>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_match_heading" match="marc:datafield[@tag='548']">
+    <z:index name="Match:w Match:p">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('avxyz', @code)" name="Match:w Match:p">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('vxyz', @code)">
+                  <xslo:choose>
+                    <xslo:when test="@code = $general_subdivision_subfield">
+                      <xslo:text> generalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $form_subdivision_subfield">
+                      <xslo:text> formsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $chronological_subdivision_subfield">
+                      <xslo:text> chronologicalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $geographic_subdivision_subfield">
+                      <xslo:text> geographicsubdiv </xslo:text>
+                    </xslo:when>
+                  </xslo:choose>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
           </xslo:if>
         </xslo:for-each>
       </xslo:variable>
@@ -1451,10 +1686,10 @@ authority-zebra-indexdefs.xsl` (substituting the appropriate file names).
     </z:index>
   </xslo:template>
   <xslo:template mode="index_match_heading" match="marc:datafield[@tag='150']">
-    <z:index name="Match-heading:p Match-heading:s">
+    <z:index name="Match:w Match:p Match-heading:p Match-heading:s">
       <xslo:variable name="raw_heading">
         <xslo:for-each select="marc:subfield">
-          <xslo:if test="contains('abvxyz', @code)" name="Match-heading:p Match-heading:s">
+          <xslo:if test="contains('abvxyz', @code)" name="Match:w Match:p Match-heading:p Match-heading:s">
             <xslo:if test="position() &gt; 1">
               <xslo:choose>
                 <xslo:when test="contains('vxyz', @code)">
@@ -1478,7 +1713,11 @@ authority-zebra-indexdefs.xsl` (substituting the appropriate file names).
                 </xslo:otherwise>
               </xslo:choose>
             </xslo:if>
-            <xslo:value-of select="."/>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
           </xslo:if>
         </xslo:for-each>
       </xslo:variable>
@@ -1486,10 +1725,10 @@ authority-zebra-indexdefs.xsl` (substituting the appropriate file names).
     </z:index>
   </xslo:template>
   <xslo:template mode="index_match_heading" match="marc:datafield[@tag='450']">
-    <z:index name="Match-heading-see-from:p Match-heading-see-from:s">
+    <z:index name="Match:w Match:p Match-heading-see-from:p Match-heading-see-from:s">
       <xslo:variable name="raw_heading">
         <xslo:for-each select="marc:subfield">
-          <xslo:if test="contains('abvxyz', @code)" name="Match-heading-see-from:p Match-heading-see-from:s">
+          <xslo:if test="contains('abvxyz', @code)" name="Match:w Match:p Match-heading-see-from:p Match-heading-see-from:s">
             <xslo:if test="position() &gt; 1">
               <xslo:choose>
                 <xslo:when test="contains('vxyz', @code)">
@@ -1513,7 +1752,50 @@ authority-zebra-indexdefs.xsl` (substituting the appropriate file names).
                 </xslo:otherwise>
               </xslo:choose>
             </xslo:if>
-            <xslo:value-of select="."/>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_match_heading" match="marc:datafield[@tag='550']">
+    <z:index name="Match:w Match:p">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('abvxyz', @code)" name="Match:w Match:p">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('vxyz', @code)">
+                  <xslo:choose>
+                    <xslo:when test="@code = $general_subdivision_subfield">
+                      <xslo:text> generalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $form_subdivision_subfield">
+                      <xslo:text> formsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $chronological_subdivision_subfield">
+                      <xslo:text> chronologicalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $geographic_subdivision_subfield">
+                      <xslo:text> geographicsubdiv </xslo:text>
+                    </xslo:when>
+                  </xslo:choose>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
           </xslo:if>
         </xslo:for-each>
       </xslo:variable>
@@ -1521,10 +1803,10 @@ authority-zebra-indexdefs.xsl` (substituting the appropriate file names).
     </z:index>
   </xslo:template>
   <xslo:template mode="index_match_heading" match="marc:datafield[@tag='151']">
-    <z:index name="Match-heading:p Match-heading:s">
+    <z:index name="Match:w Match:p Match-heading:p Match-heading:s">
       <xslo:variable name="raw_heading">
         <xslo:for-each select="marc:subfield">
-          <xslo:if test="contains('avxyz', @code)" name="Match-heading:p Match-heading:s">
+          <xslo:if test="contains('avxyz', @code)" name="Match:w Match:p Match-heading:p Match-heading:s">
             <xslo:if test="position() &gt; 1">
               <xslo:choose>
                 <xslo:when test="contains('vxyz', @code)">
@@ -1548,7 +1830,11 @@ authority-zebra-indexdefs.xsl` (substituting the appropriate file names).
                 </xslo:otherwise>
               </xslo:choose>
             </xslo:if>
-            <xslo:value-of select="."/>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
           </xslo:if>
         </xslo:for-each>
       </xslo:variable>
@@ -1556,10 +1842,10 @@ authority-zebra-indexdefs.xsl` (substituting the appropriate file names).
     </z:index>
   </xslo:template>
   <xslo:template mode="index_match_heading" match="marc:datafield[@tag='451']">
-    <z:index name="Match-heading-see-from:p Match-heading-see-from:s">
+    <z:index name="Match:w Match:p Match-heading-see-from:p Match-heading-see-from:s">
       <xslo:variable name="raw_heading">
         <xslo:for-each select="marc:subfield">
-          <xslo:if test="contains('avxyz', @code)" name="Match-heading-see-from:p Match-heading-see-from:s">
+          <xslo:if test="contains('avxyz', @code)" name="Match:w Match:p Match-heading-see-from:p Match-heading-see-from:s">
             <xslo:if test="position() &gt; 1">
               <xslo:choose>
                 <xslo:when test="contains('vxyz', @code)">
@@ -1583,7 +1869,50 @@ authority-zebra-indexdefs.xsl` (substituting the appropriate file names).
                 </xslo:otherwise>
               </xslo:choose>
             </xslo:if>
-            <xslo:value-of select="."/>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_match_heading" match="marc:datafield[@tag='551']">
+    <z:index name="Match:w Match:p">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('avxyz', @code)" name="Match:w Match:p">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('vxyz', @code)">
+                  <xslo:choose>
+                    <xslo:when test="@code = $general_subdivision_subfield">
+                      <xslo:text> generalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $form_subdivision_subfield">
+                      <xslo:text> formsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $chronological_subdivision_subfield">
+                      <xslo:text> chronologicalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $geographic_subdivision_subfield">
+                      <xslo:text> geographicsubdiv </xslo:text>
+                    </xslo:when>
+                  </xslo:choose>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
           </xslo:if>
         </xslo:for-each>
       </xslo:variable>
@@ -1591,10 +1920,10 @@ authority-zebra-indexdefs.xsl` (substituting the appropriate file names).
     </z:index>
   </xslo:template>
   <xslo:template mode="index_match_heading" match="marc:datafield[@tag='155']">
-    <z:index name="Match-heading:p Match-heading:s">
+    <z:index name="Match:w Match:p Match-heading:p Match-heading:s">
       <xslo:variable name="raw_heading">
         <xslo:for-each select="marc:subfield">
-          <xslo:if test="contains('avxyz', @code)" name="Match-heading:p Match-heading:s">
+          <xslo:if test="contains('avxyz', @code)" name="Match:w Match:p Match-heading:p Match-heading:s">
             <xslo:if test="position() &gt; 1">
               <xslo:choose>
                 <xslo:when test="contains('vxyz', @code)">
@@ -1618,7 +1947,11 @@ authority-zebra-indexdefs.xsl` (substituting the appropriate file names).
                 </xslo:otherwise>
               </xslo:choose>
             </xslo:if>
-            <xslo:value-of select="."/>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
           </xslo:if>
         </xslo:for-each>
       </xslo:variable>
@@ -1626,10 +1959,10 @@ authority-zebra-indexdefs.xsl` (substituting the appropriate file names).
     </z:index>
   </xslo:template>
   <xslo:template mode="index_match_heading" match="marc:datafield[@tag='455']">
-    <z:index name="Match-heading-see-from:p Match-heading-see-from:s">
+    <z:index name="Match:w Match:p Match-heading-see-from:p Match-heading-see-from:s">
       <xslo:variable name="raw_heading">
         <xslo:for-each select="marc:subfield">
-          <xslo:if test="contains('avxyz', @code)" name="Match-heading-see-from:p Match-heading-see-from:s">
+          <xslo:if test="contains('avxyz', @code)" name="Match:w Match:p Match-heading-see-from:p Match-heading-see-from:s">
             <xslo:if test="position() &gt; 1">
               <xslo:choose>
                 <xslo:when test="contains('vxyz', @code)">
@@ -1653,7 +1986,50 @@ authority-zebra-indexdefs.xsl` (substituting the appropriate file names).
                 </xslo:otherwise>
               </xslo:choose>
             </xslo:if>
-            <xslo:value-of select="."/>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_match_heading" match="marc:datafield[@tag='555']">
+    <z:index name="Match:w Match:p">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('avxyz', @code)" name="Match:w Match:p">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('vxyz', @code)">
+                  <xslo:choose>
+                    <xslo:when test="@code = $general_subdivision_subfield">
+                      <xslo:text> generalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $form_subdivision_subfield">
+                      <xslo:text> formsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $chronological_subdivision_subfield">
+                      <xslo:text> chronologicalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $geographic_subdivision_subfield">
+                      <xslo:text> geographicsubdiv </xslo:text>
+                    </xslo:when>
+                  </xslo:choose>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
           </xslo:if>
         </xslo:for-each>
       </xslo:variable>
@@ -1688,7 +2064,11 @@ authority-zebra-indexdefs.xsl` (substituting the appropriate file names).
                 </xslo:otherwise>
               </xslo:choose>
             </xslo:if>
-            <xslo:value-of select="."/>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
           </xslo:if>
         </xslo:for-each>
       </xslo:variable>
@@ -1723,7 +2103,11 @@ authority-zebra-indexdefs.xsl` (substituting the appropriate file names).
                 </xslo:otherwise>
               </xslo:choose>
             </xslo:if>
-            <xslo:value-of select="."/>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
           </xslo:if>
         </xslo:for-each>
       </xslo:variable>
@@ -1758,7 +2142,11 @@ authority-zebra-indexdefs.xsl` (substituting the appropriate file names).
                 </xslo:otherwise>
               </xslo:choose>
             </xslo:if>
-            <xslo:value-of select="."/>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
           </xslo:if>
         </xslo:for-each>
       </xslo:variable>
@@ -1793,7 +2181,11 @@ authority-zebra-indexdefs.xsl` (substituting the appropriate file names).
                 </xslo:otherwise>
               </xslo:choose>
             </xslo:if>
-            <xslo:value-of select="."/>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
           </xslo:if>
         </xslo:for-each>
       </xslo:variable>
@@ -1828,7 +2220,11 @@ authority-zebra-indexdefs.xsl` (substituting the appropriate file names).
                 </xslo:otherwise>
               </xslo:choose>
             </xslo:if>
-            <xslo:value-of select="."/>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
           </xslo:if>
         </xslo:for-each>
       </xslo:variable>
@@ -1863,7 +2259,11 @@ authority-zebra-indexdefs.xsl` (substituting the appropriate file names).
                 </xslo:otherwise>
               </xslo:choose>
             </xslo:if>
-            <xslo:value-of select="."/>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
           </xslo:if>
         </xslo:for-each>
       </xslo:variable>
@@ -1898,7 +2298,11 @@ authority-zebra-indexdefs.xsl` (substituting the appropriate file names).
                 </xslo:otherwise>
               </xslo:choose>
             </xslo:if>
-            <xslo:value-of select="."/>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
           </xslo:if>
         </xslo:for-each>
       </xslo:variable>
@@ -1933,7 +2337,11 @@ authority-zebra-indexdefs.xsl` (substituting the appropriate file names).
                 </xslo:otherwise>
               </xslo:choose>
             </xslo:if>
-            <xslo:value-of select="."/>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
           </xslo:if>
         </xslo:for-each>
       </xslo:variable>
@@ -1998,5 +2406,22 @@ authority-zebra-indexdefs.xsl` (substituting the appropriate file names).
     <z:index name="Any:w Any:p">
       <xslo:value-of select="."/>
     </z:index>
+  </xslo:template>
+  <xslo:template name="chopPunctuation">
+    <xslo:param name="chopString"/>
+    <xslo:variable name="length" select="string-length($chopString)"/>
+    <xslo:choose>
+      <xslo:when test="$length=0"/>
+      <xslo:when test="contains('-,.:=;!%/', substring($chopString,$length,1))">
+        <xslo:call-template name="chopPunctuation">
+          <xslo:with-param name="chopString" select="substring($chopString,1,$length - 1)"/>
+        </xslo:call-template>
+      </xslo:when>
+      <xslo:when test="not($chopString)"/>
+      <xslo:otherwise>
+        <xslo:value-of select="$chopString"/>
+      </xslo:otherwise>
+    </xslo:choose>
+    <xslo:text/>
   </xslo:template>
 </xslo:stylesheet>

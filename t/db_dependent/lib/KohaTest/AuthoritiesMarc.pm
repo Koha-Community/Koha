@@ -24,7 +24,6 @@ sub methods : Test( 1 ) {
                       GetAuthorityXML 
                       GetAuthority 
                       GetAuthType 
-                      AUTHhtml2marc 
                       FindDuplicateAuthority 
                       BuildSummary
                       BuildUnimarcHierarchies
