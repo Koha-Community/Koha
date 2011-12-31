@@ -17,9 +17,8 @@ package C4::AuthoritiesMarc;
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 use strict;
-#use warnings; FIXME - Bug 2505
+use warnings;
 use C4::Context;
-use C4::Koha;
 use MARC::Record;
 use C4::Biblio;
 use C4::Search;
@@ -41,7 +40,6 @@ BEGIN {
 	    &GetAuthType
 	    &GetAuthTypeCode
     	&GetAuthMARCFromKohaField 
-    	&AUTHhtml2marc
 
     	&AddAuthority
     	&ModAuthority
@@ -98,15 +96,16 @@ sub GetAuthMARCFromKohaField {
 =head2 SearchAuthorities 
 
   (\@finalresult, $nbresults)= &SearchAuthorities($tags, $and_or, 
-     $excluding, $operator, $value, $offset,$length,$authtypecode,$sortby)
+     $excluding, $operator, $value, $offset,$length,$authtypecode,
+     $sortby[, $skipmetadata])
 
 returns ref to array result and count of results returned
 
 =cut
 
 sub SearchAuthorities {
-    my ($tags, $and_or, $excluding, $operator, $value, $offset,$length,$authtypecode,$sortby) = @_;
-#     warn "CALL : $tags, $and_or, $excluding, $operator, $value, $offset,$length,$authtypecode,$sortby";
+    my ($tags, $and_or, $excluding, $operator, $value, $offset,$length,$authtypecode,$sortby,$skipmetadata) = @_;
+    # warn Dumper($tags, $and_or, $excluding, $operator, $value, $offset,$length,$authtypecode,$sortby);
     my $dbh=C4::Context->dbh;
     if (C4::Context->preference('NoZebra')) {
     
@@ -225,23 +224,45 @@ sub SearchAuthorities {
         for(my $i = 0 ; $i <= $#{$value} ; $i++)
         {
             if (@$value[$i]){
-                if (@$tags[$i] eq "mainmainentry") {
-
-                $attr =" \@attr 1=Heading-Main ";
-
-                }elsif (@$tags[$i] eq "mainentry") {
-                $attr =" \@attr 1=Heading ";
-                }else{
-                $attr =" \@attr 1=Any ";
+                if ( @$tags[$i] eq "mainmainentry" ) {
+                    $attr = " \@attr 1=Heading-Main ";
                 }
-                if (@$operator[$i] eq 'is') {
-                    $attr.=" \@attr 4=1  \@attr 5=100 ";##Phrase, No truncation,all of subfield field must match
-                }elsif (@$operator[$i] eq "="){
-                    $attr.=" \@attr 4=107 ";           #Number Exact match
-                }elsif (@$operator[$i] eq "start"){
-                    $attr.=" \@attr 3=2 \@attr 4=1 \@attr 5=1 ";#Firstinfield Phrase, Right truncated
-                } else {
-                    $attr .=" \@attr 5=1 \@attr 4=6 ";## Word list, right truncated, anywhere
+                elsif ( @$tags[$i] eq "mainentry" ) {
+                    $attr = " \@attr 1=Heading ";
+                }
+                elsif ( @$tags[$i] eq "any" ) {
+                    $attr = " \@attr 1=Any ";
+                }
+                elsif ( @$tags[$i] eq "match" ) {
+                    $attr = " \@attr 1=Match ";
+                }
+                elsif ( @$tags[$i] eq "match-heading" ) {
+                    $attr = " \@attr 1=Match-heading ";
+                }
+                elsif ( @$tags[$i] eq "see-from" ) {
+                    $attr = " \@attr 1=Match-heading-see-from ";
+                }
+                elsif ( @$tags[$i] eq "thesaurus" ) {
+                    $attr = " \@attr 1=Subject-heading-thesaurus ";
+                }
+                if ( @$operator[$i] eq 'is' ) {
+                    $attr .= " \@attr 4=1  \@attr 5=100 "
+                      ; ##Phrase, No truncation,all of subfield field must match
+                }
+                elsif ( @$operator[$i] eq "=" ) {
+                    $attr .= " \@attr 4=107 ";    #Number Exact match
+                }
+                elsif ( @$operator[$i] eq "start" ) {
+                    $attr .= " \@attr 3=2 \@attr 4=1 \@attr 5=1 "
+                      ;    #Firstinfield Phrase, Right truncated
+                }
+                elsif ( @$operator[$i] eq "exact" ) {
+                    $attr .= " \@attr 4=1  \@attr 5=100 \@attr 6=3 "
+                      ; ##Phrase, No truncation,all of subfield field must match
+                }
+                else {
+                    $attr .= " \@attr 5=1 \@attr 4=6 "
+                      ;    ## Word list, right truncated, anywhere
                 }
                 @$value[$i] =~ s/"/\\"/g; # Escape the double-quotes in the search value
                 $attr =$attr."\"".@$value[$i]."\"";
@@ -251,8 +272,8 @@ sub SearchAuthorities {
             }#if value
         }
         ##Add how many queries generated
-        if ($query=~/\S+/){
-          $query= $and x $attr_cnt . $query . $q2;
+        if (defined $query && $query=~/\S+/){
+          $query= $and x $attr_cnt . $query . (defined $q2 ? $q2 : '');
         } else {
           $query= $q2;
         }
@@ -309,35 +330,42 @@ sub SearchAuthorities {
             my $separator=C4::Context->preference('authoritysep');
             $authrecord = MARC::File::USMARC::decode($marcdata);
             my $authid=$authrecord->field('001')->data(); 
-            my $summary=BuildSummary($authrecord,$authid,$authtypecode);
-            my $query_auth_tag = "SELECT auth_tag_to_report FROM auth_types WHERE authtypecode=?";
-            my $sth = $dbh->prepare($query_auth_tag);
-            $sth->execute($authtypecode);
-            my $auth_tag_to_report = $sth->fetchrow;
-            my $reported_tag;
-            my $mainentry = $authrecord->field($auth_tag_to_report);
-            if ($mainentry) {
-                foreach ($mainentry->subfields()) {
-                    $reported_tag .='$'.$_->[0].$_->[1];
-                }
-            }
             my %newline;
-            $newline{summary} = $summary;
             $newline{authid} = $authid;
-            $newline{even} = $counter % 2;
-            $newline{reported_tag} = $reported_tag;
+            if ( !$skipmetadata ) {
+                my $summary =
+                  BuildSummary( $authrecord, $authid, $authtypecode );
+                my $query_auth_tag =
+"SELECT auth_tag_to_report FROM auth_types WHERE authtypecode=?";
+                my $sth = $dbh->prepare($query_auth_tag);
+                $sth->execute($authtypecode);
+                my $auth_tag_to_report = $sth->fetchrow;
+                my $reported_tag;
+                my $mainentry = $authrecord->field($auth_tag_to_report);
+                if ($mainentry) {
+
+                    foreach ( $mainentry->subfields() ) {
+                        $reported_tag .= '$' . $_->[0] . $_->[1];
+                    }
+                }
+                $newline{summary}      = $summary;
+                $newline{even}         = $counter % 2;
+                $newline{reported_tag} = $reported_tag;
+            }
             $counter++;
             push @finalresult, \%newline;
             }## while counter
-        ###
-        for (my $z=0; $z<@finalresult; $z++){
-                my  $count=CountUsage($finalresult[$z]{authid});
-                $finalresult[$z]{used}=$count;
-        }# all $z's
-        
+            ###
+            if (! $skipmetadata) {
+                for (my $z=0; $z<@finalresult; $z++){
+                    my  $count=CountUsage($finalresult[$z]{authid});
+                    $finalresult[$z]{used}=$count;
+                }# all $z's
+            }
+
         }## if nbresult
         NOLUCK:
-        # $oAResult->destroy();
+        $oAResult->destroy();
         # $oAuth[0]->destroy();
         
         return (\@finalresult, $nbresults);
@@ -854,53 +882,6 @@ sub GetAuthType {
 }
 
 
-sub AUTHhtml2marc {
-    my ($rtags,$rsubfields,$rvalues,%indicators) = @_;
-    my $dbh=C4::Context->dbh;
-    my $prevtag = -1;
-    my $record = MARC::Record->new();
-#---- TODO : the leader is missing
-
-#     my %subfieldlist=();
-    my $prevvalue; # if tag <10
-    my $field; # if tag >=10
-    for (my $i=0; $i< @$rtags; $i++) {
-        # rebuild MARC::Record
-        if (@$rtags[$i] ne $prevtag) {
-            if ($prevtag < 10) {
-                if ($prevvalue) {
-                    $record->add_fields((sprintf "%03s",$prevtag),$prevvalue);
-                }
-            } else {
-                if ($field) {
-                    $record->add_fields($field);
-                }
-            }
-            $indicators{@$rtags[$i]}.='  ';
-            if (@$rtags[$i] <10) {
-                $prevvalue= @$rvalues[$i];
-                undef $field;
-            } else {
-                undef $prevvalue;
-                $field = MARC::Field->new( (sprintf "%03s",@$rtags[$i]), substr($indicators{@$rtags[$i]},0,1),substr($indicators{@$rtags[$i]},1,1), @$rsubfields[$i] => @$rvalues[$i]);
-            }
-            $prevtag = @$rtags[$i];
-        } else {
-            if (@$rtags[$i] <10) {
-                $prevvalue=@$rvalues[$i];
-            } else {
-                if (length(@$rvalues[$i])>0) {
-                    $field->add_subfields(@$rsubfields[$i] => @$rvalues[$i]);
-                }
-            }
-            $prevtag= @$rtags[$i];
-        }
-    }
-    # the last has not been included inside the loop... do it now !
-    $record->add_fields($field) if $field;
-    return $record;
-}
-
 =head2 FindDuplicateAuthority
 
   $record= &FindDuplicateAuthority( $record, $authtypecode)
@@ -1015,14 +996,14 @@ sub BuildSummary{
     $resultstring =~ s/\n/<br>/g;
 	$summary      =  $resultstring;
   } else {
-    my $heading; 
-    my $altheading;
-    my $seealso;
-    my $broaderterms;
-    my $narrowerterms;
-    my $see;
-    my $seeheading;
-        my $notes;
+    my $heading = '';
+    my $altheading = '';
+    my $seealso = '';
+    my $broaderterms = '';
+    my $narrowerterms = '';
+    my $see = '';
+    my $seeheading = '';
+    my $notes = '';
     my @fields = $record->fields();
     if (C4::Context->preference('marcflavour') eq 'UNIMARC') {
     # construct UNIMARC summary, that is quite different from MARC21 one
@@ -1471,7 +1452,7 @@ sub get_auth_type_location {
     my $auth_type_code = @_ ? shift : '';
 
     my ($tag, $subfield) = GetAuthMARCFromKohaField('auth_header.authtypecode', $auth_type_code);
-    if (defined $tag and defined $subfield and $tag != 0 and $subfield != 0) {
+    if (defined $tag and defined $subfield and $tag != 0 and $subfield ne '' and $subfield ne ' ') {
         return ($tag, $subfield);
     } else {
         if (C4::Context->preference('marcflavour') eq "MARC21")  {

@@ -1,29 +1,74 @@
 Authorities:
-    -
-        - When editing records,
-        - pref: BiblioAddsAuthorities
-          default: no
-          choices:
-              yes: allow
-              no: "don't allow"
-        - them to automatically create new authority records if needed, rather than having to reference existing authorities.
-    -
-        - pref: dontmerge
-          default: yes
-          choices:
-              yes: "Don't"
-              no: Do
-        - automatically update attached biblios when changing an authority record. If this is off, please ask your administrator to enable the merge_authority.pl cronjob.
-    -
-        - Use the following text for the contents of MARC authority control field 008 position 06-39 (fixed length data elements). Do NOT include the date (position 00-05).
-        - pref: MARCAuthorityControlField008
-          default: "|| aca||aabn           | a|a     d"
-          type: textarea
-          class: code
-    -
-        - pref: UseAuthoritiesForTracings
-          default: yes
-          choices:
-              yes: Use
-              no: "Don't use"
-        - authority record numbers instead of text strings for searches from subject tracings.
+    General:
+        -
+            - When editing records,
+            - pref: BiblioAddsAuthorities
+              default: no
+              choices:
+                  yes: allow
+                  no: "don't allow"
+            - them to automatically create new authority records if needed, rather than having to reference existing authorities.
+        -
+            - When editing records,
+            - pref: AutoCreateAuthorities
+              default: yes
+              choices:
+                  yes: generate
+                  no: "do not generate"
+            - authority records that are missing (BiblioAddsAuthorities must be set to "allow" for this to have any effect).
+        -
+            - pref: dontmerge
+              default: yes
+              choices:
+                  yes: "Don't"
+                  no: Do
+            - automatically update attached biblios when changing an authority record. If this is off, please ask your administrator to enable the merge_authority.pl cronjob.
+        -
+            - Use the following text for the contents of MARC authority control field 008 position 06-39 (fixed length data elements). Do NOT include the date (position 00-05).
+            - pref: MARCAuthorityControlField008
+              default: "|| aca||aabn           | a|a     d"
+              type: textarea
+              class: code
+        -
+            - pref: UseAuthoritiesForTracings
+              default: yes
+              choices:
+                  yes: Use
+                  no: "Don't use"
+            - authority record numbers instead of text strings for searches from subject tracings.
+    Linker:
+        -
+            - Use the
+            - pref: LinkerModule
+              default: Default
+              choices:
+                  Default: Default
+                  FirstMatch: "First Match"
+                  LastMatch: "Last Match"
+            - linker module for matching headings to authority records.
+        -
+            - Set the following options for the authority linker
+            - pref: LinkerOptions
+              class: multi
+            - (separate options with |)
+        -
+            - pref: LinkerRelink
+              default: yes
+              choices:
+                  yes: Do
+                  no: "Do not"
+            - relink headings that have previously been linked to authority records.
+        -
+            - pref: LinkerKeepStale
+              default: no
+              choices:
+                  yes: Do
+                  no: "Do not"
+            - keep existing links to authority records for headings where the linker is unable to find a match.
+        -
+            - pref: CatalogModuleRelink
+              default: no
+              choices:
+                  yes: Do
+                  no: "Do not"
+            - automatically relink headings that have previously been linked when saving records in the cataloging module.

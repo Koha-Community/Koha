@@ -1,7 +1,7 @@
 package C4::Heading;
 
 # Copyright (C) 2008 LibLime
-# 
+#
 # This file is part of Koha.
 #
 # Koha is free software; you can redistribute it and/or modify it under the
@@ -18,12 +18,11 @@ package C4::Heading;
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 use strict;
-#use warnings; FIXME - Bug 2505
+use warnings;
 use MARC::Record;
 use MARC::Field;
 use C4::Context;
-use C4::Heading::MARC21;
-use C4::Search;
+use Module::Load;
 use Carp;
 
 our $VERSION = 3.00;
@@ -35,11 +34,11 @@ C4::Heading
 =head1 SYNOPSIS
 
  use C4::Heading;
- my $heading = C4::Heading->new_from_bib_field($field);
+ my $heading = C4::Heading->new_from_bib_field($field, $frameworkcode);
  my $thesaurus = $heading->thesaurus();
  my $type = $heading->type();
- my $display_heading = $heading->display();
- my $search_string = $heading->search_string();
+ my $display_heading = $heading->display_form();
+ my $search_form = $heading->search_form();
 
 =head1 DESCRIPTION
 
@@ -50,7 +49,7 @@ headings found in bibliographic and authority records.
 
 =head2 new_from_bib_field
 
-  my $heading = C4::Heading->new_from_bib_field($field[, $marc_flavour]);
+  my $heading = C4::Heading->new_from_bib_field($field, $frameworkcode, [, $marc_flavour]);
 
 Given a C<MARC::Field> object containing a heading from a 
 bib record, create a C<C4::Heading> object.
@@ -65,22 +64,52 @@ is returned.
 =cut
 
 sub new_from_bib_field {
-    my $class = shift;
-    my $field = shift;
-    my $marcflavour = @_ ? shift : C4::Context->preference('marcflavour');
+    my $class         = shift;
+    my $field         = shift;
+    my $frameworkcode = shift;
+    my $marcflavour   = @_ ? shift : C4::Context->preference('marcflavour');
 
     my $marc_handler = _marc_format_handler($marcflavour);
 
     my $tag = $field->tag();
-    return unless $marc_handler->valid_bib_heading_tag($tag);
+    return unless $marc_handler->valid_bib_heading_tag( $tag, $frameworkcode );
     my $self = {};
-   
-    ($self->{'auth_type'}, $self->{'subject_added_entry'}, $self->{'series_added_entry'}, $self->{'main_entry'},
-     $self->{'thesaurus'}, $self->{'search_form'}, $self->{'display_form'}) =
-        $marc_handler->parse_heading($field);
+
+    $self->{'field'} = $field;
+    (
+        $self->{'auth_type'},   $self->{'thesaurus'},
+        $self->{'search_form'}, $self->{'display_form'},
+        $self->{'match_type'}
+    ) = $marc_handler->parse_heading($field);
 
     bless $self, $class;
     return $self;
+}
+
+=head2 auth_type
+
+  my $auth_type = $heading->auth_type();
+
+Return the auth_type of the heading.
+
+=cut
+
+sub auth_type {
+    my $self = shift;
+    return $self->{'auth_type'};
+}
+
+=head2 field
+
+  my $field = $heading->field();
+
+Return the MARC::Field the heading is based on.
+
+=cut
+
+sub field {
+    my $self = shift;
+    return $self->{'field'};
 }
 
 =head2 display_form
@@ -96,23 +125,33 @@ sub display_form {
     return $self->{'display_form'};
 }
 
+=head2 search_form
+
+  my $search_form = $heading->search_form();
+
+Return the "canonical" search form of the heading.
+
+=cut
+
+sub search_form {
+    my $self = shift;
+    return $self->{'search_form'};
+}
+
 =head2 authorities
 
-  my $authorities = $heading->authorities;
+  my $authorities = $heading->authorities([$skipmetadata]);
 
 Return a list of authority records for this 
-heading.
+heading. If passed a true value for $skipmetadata,
+SearchAuthorities will return only authids.
 
 =cut
 
 sub authorities {
-    my $self = shift;
-    my $query = qq(Match-heading,do-not-truncate,ext="$self->{'search_form'}");
-    $query .= $self->_query_limiters();
-    my ($error, $results, $total_hits) = SimpleSearch( $query, undef, undef, [ "authorityserver" ] );
-    if (defined $error) {
-        carp "Error:$error from search $query";
-    }
+    my $self         = shift;
+    my $skipmetadata = shift;
+    my ( $results, $total ) = _search( $self, 'match-heading', $skipmetadata );
     return $results;
 }
 
@@ -127,36 +166,47 @@ that are a preferred form of the heading.
 
 sub preferred_authorities {
     my $self = shift;
-    my $query = "Match-heading-see-from,do-not-truncate,ext='$self->{'search_form'}'";
-    $query .= $self->_query_limiters();
-    my ($error, $results, $total_hits) = SimpleSearch( $query, undef, undef, [ "authorityserver" ] );
-    if (defined $error) {
-        carp "Error:$error from search $query";
-    }
+    my $skipmetadata = shift || undef;
+    my ( $results, $total ) = _search( 'see-from', $skipmetadata );
     return $results;
 }
 
 =head1 INTERNAL METHODS
 
-=head2 _query_limiters
+=head2 _search
 
 =cut
 
-sub _query_limiters {
-    my $self = shift;
+sub _search {
+    my $self         = shift;
+    my $index        = shift || undef;
+    my $skipmetadata = shift || undef;
+    my @marclist;
+    my @and_or;
+    my @excluding = [];
+    my @operator;
+    my @value;
 
-    my $limiters = " AND at='$self->{'auth_type'}'";
-    if ($self->{'subject_added_entry'}) {
-        $limiters .= " AND Heading-use-subject-added-entry=a"; # FIXME -- is this properly in C4::Heading::MARC21?
-        $limiters .= " AND Subject-heading-thesaurus=$self->{'thesaurus'}";
+    if ($index) {
+        push @marclist, $index;
+        push @and_or,   'and';
+        push @operator, $self->{'match_type'};
+        push @value,    $self->{'search_form'};
     }
-    if ($self->{'series_added_entry'}) {
-        $limiters .= " AND Heading-use-series-added-entry=a"; # FIXME -- is this properly in C4::Heading::MARC21?
-    }
-    if (not $self->{'subject_added_entry'} and not $self->{'series_added_entry'}) {
-        $limiters .= " AND Heading-use-main-or-added-entry=a" # FIXME -- is this properly in C4::Heading::MARC21?
-    }
-    return $limiters;
+
+    #    if ($self->{'thesaurus'}) {
+    #        push @marclist, 'thesaurus';
+    #        push @and_or, 'and';
+    #        push @excluding, '';
+    #        push @operator, 'is';
+    #        push @value, $self->{'thesaurus'};
+    #    }
+    require C4::AuthoritiesMarc;
+    return C4::AuthoritiesMarc::SearchAuthorities(
+        \@marclist, \@and_or, \@excluding, \@operator,
+        \@value,    0,        20,          $self->{'auth_type'},
+        '',         $skipmetadata
+    );
 }
 
 =head1 INTERNAL FUNCTIONS
@@ -169,14 +219,11 @@ depending on the selected MARC flavour.
 =cut
 
 sub _marc_format_handler {
-    my $marcflavour = shift;
-
-    if ($marcflavour eq 'UNIMARC') {
-        return C4::Heading::UNIMARC->new();
-    } else {
-        return C4::Heading::MARC21->new();
-    }
-
+    my $marcflavour = uc shift;
+    $marcflavour = 'MARC21' if ( $marcflavour eq 'NORMARC' );
+    my $pname = "C4::Heading::$marcflavour";
+    load $pname;
+    return $pname->new();
 }
 
 =head1 AUTHOR

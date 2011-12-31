@@ -67,6 +67,21 @@ authority-zebra-indexdefs.xsl` (substituting the appropriate file names).
                     <xslo:value-of select="."/>
                 </z:index>
             </xslo:template>
+            <xslo:template name="chopPunctuation">
+            <xslo:param name="chopString"/>
+                <xslo:variable name="length" select="string-length($chopString)"/>
+                <xslo:choose>
+                <xslo:when test="$length=0"/>
+                <xslo:when test="contains('-,.:=;!%/', substring($chopString,$length,1))">
+                    <xslo:call-template name="chopPunctuation">
+                    <xslo:with-param name="chopString" select="substring($chopString,1,$length - 1)"/>
+                    </xslo:call-template>
+                </xslo:when>
+                <xslo:when test="not($chopString)"/>
+                <xslo:otherwise><xslo:value-of select="$chopString"/></xslo:otherwise>
+                </xslo:choose>
+                <xslo:text> </xslo:text>
+            </xslo:template>
         </xslo:stylesheet>
     </xsl:template>
 
@@ -368,7 +383,11 @@ authority-zebra-indexdefs.xsl` (substituting the appropriate file names).
                                 </xslo:otherwise>
                             </xslo:choose>
                         </xslo:if>
-                        <xslo:value-of select="."/>
+                        <xslo:call-template name="chopPunctuation">
+                            <xslo:with-param name="chopString">
+                                <xslo:value-of select="."/>
+                            </xslo:with-param>
+                        </xslo:call-template>
                     </xslo:if>
                 </xslo:for-each>
             </xslo:variable>
