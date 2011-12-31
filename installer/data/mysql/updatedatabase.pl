@@ -4671,6 +4671,14 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.07.99.XXX"; #FIXME
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('OpacExportOptions','bibtex|dc|marcxml|marc8|utf8|marcstd|mods|ris','Define available export options on OPAC detail page.','','free');");
+    print "Upgrade to $DBversion done (Bug 7345: Add system preference OpacExportOptions.)\n";
+    SetVersion($DBversion);
+}
+
+
 =head1 FUNCTIONS
 
 =head2 DropAllForeignKeys($table)

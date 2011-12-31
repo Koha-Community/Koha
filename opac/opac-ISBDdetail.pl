@@ -159,13 +159,22 @@ $template->param(
     reviews             => $reviews,
 );
 
+#Export options
+my $OpacExportOptions=C4::Context->preference("OpacExportOptions");
+my @export_options = split(/\|/,$OpacExportOptions);
+$template->{VARS}->{'export_options'} = \@export_options;
+
 #Search for title in links
+my $marccontrolnumber   = GetMarcControlnumber   ($record, $marcflavour);
+
 if (my $search_for_title = C4::Context->preference('OPACSearchForTitleIn')){
     $dat->{author} ? $search_for_title =~ s/{AUTHOR}/$dat->{author}/g : $search_for_title =~ s/{AUTHOR}//g;
     $dat->{title} =~ s/\/+$//; # remove trailing slash
     $dat->{title} =~ s/\s+$//; # remove trailing space
     $dat->{title} ? $search_for_title =~ s/{TITLE}/$dat->{title}/g : $search_for_title =~ s/{TITLE}//g;
     $isbn ? $search_for_title =~ s/{ISBN}/$isbn/g : $search_for_title =~ s/{ISBN}//g;
+    $marccontrolnumber ? $search_for_title =~ s/{CONTROLNUMBER}/$marccontrolnumber/g : $search_for_title =~ s/{CONTROLNUMBER}//g;
+    $search_for_title =~ s/{BIBLIONUMBER}/$biblionumber/g;
  $template->param('OPACSearchForTitleIn' => $search_for_title);
 }
 

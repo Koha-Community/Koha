@@ -891,6 +891,11 @@ if (C4::Context->preference("OPACURLOpenInNewWindow")) {
     $template->param(covernewwindow => 'false');
 }
 
+#Export options
+my $OpacExportOptions=C4::Context->preference("OpacExportOptions");
+my @export_options = split(/\|/,$OpacExportOptions);
+$template->{VARS}->{'export_options'} = \@export_options;
+
 #Search for title in links
 my $marccontrolnumber   = GetMarcControlnumber   ($record, $marcflavour);
 
