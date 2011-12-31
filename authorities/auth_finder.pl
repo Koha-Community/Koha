@@ -60,7 +60,7 @@ if ( $op eq "do_search" ) {
     my @and_or    = $query->param('and_or');
     my @excluding = $query->param('excluding');
     my @operator  = $query->param('operator');
-    my @value     = ($query->param('value_mainstr')||undef, $query->param('value_main')||undef, $query->param('value_any')||undef);
+    my @value     = ($query->param('value_mainstr')||undef, $query->param('value_main')||undef, $query->param('value_any')||undef, $query->param('value_match')||undef);
     my $orderby   = $query->param('orderby');
 
     $resultsperpage = $query->param('resultsperpage');
@@ -106,6 +106,7 @@ if ( $op eq "do_search" ) {
     push @field_data, { term => "value_mainstr", val => $query->param('value_mainstr') || "" };
     push @field_data, { term => "value_main",    val => $query->param('value_main')    || "" };
     push @field_data, { term => "value_any",     val => $query->param('value_any')     || ""};
+    push @field_data, { term => "value_match",   val => $query->param('value_match')   || ""};
 
     my @numbers = ();
 
@@ -162,6 +163,7 @@ if ( $op eq "do_search" ) {
         value_mainstr  => $query->param('value_mainstr') || "", 
         value_main     => $query->param('value_main') || "",
         value_any      => $query->param('value_any') || "",
+        value_match    => $query->param('value_match') || "",
     );
 } else {
     ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -183,13 +185,11 @@ $template->param(
     value_mainstr => $query->param('value_mainstr') || "", 
     value_main    => $query->param('value_main') || "",
     value_any     => $query->param('value_any') || "",
+    value_match   => $query->param('value_match') || "",
     tagid         => $tagid,
     index         => $index,
     authtypesloop => \@authtypesloop,
     authtypecode  => $authtypecode,
-    value_mainstr  => $query->param('value_mainstr') || "", 
-    value_main     => $query->param('value_main')    || "",
-    value_any      => $query->param('value_any')     || "",
 );
 
 # Print the page

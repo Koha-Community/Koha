@@ -33,7 +33,7 @@ use C4::Input;
 use C4::Output;
 use C4::ImportBatch;
 use C4::Matcher;
-use C4::Search qw/FindDuplicate BiblioAddAuthorities/;
+use C4::Search qw/FindDuplicate/;
 use C4::Acquisition;
 use C4::Biblio;
 use C4::Items;
@@ -183,7 +183,7 @@ if ($op eq ""){
             SetImportRecordStatus( $biblio->{'import_record_id'}, 'imported' );
             # 2nd add authorities if applicable
             if (C4::Context->preference("BiblioAddsAuthorities")){
-                my ($countlinked,$countcreated)=BiblioAddAuthorities($marcrecord, $cgiparams->{'frameworkcode'});
+                my $headings_linked =BiblioAutoLink($marcrecord, $cgiparams->{'frameworkcode'});
             }
         } else {
             SetImportRecordStatus( $biblio->{'import_record_id'}, 'imported' );

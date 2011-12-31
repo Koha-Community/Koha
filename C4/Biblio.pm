@@ -38,6 +38,7 @@ use C4::Charset;
 require C4::Heading;
 require C4::Serials;
 require C4::Items;
+use C4::Linker;
 
 use vars qw($VERSION @ISA @EXPORT);
 
@@ -114,6 +115,7 @@ BEGIN {
     # To link headings in a bib record
     # to authority records.
     push @EXPORT, qw(
+      &BiblioAutoLink
       &LinkBibHeadingsToAuthorities
     );
 
@@ -458,9 +460,42 @@ sub DelBiblio {
     return;
 }
 
+
+=head2 BiblioAutoLink
+
+  my $headings_linked = BiblioAutoLink($record, $frameworkcode)
+
+Automatically links headings in a bib record to authorities.
+
+=cut
+
+sub BiblioAutoLink {
+    my $record        = shift;
+    my $frameworkcode = shift;
+    my ( $num_headings_changed, %results );
+
+    my $linker_module =
+      "C4::Linker::" . ( C4::Context->preference("LinkerModule") || 'Default' );
+    eval { eval "require $linker_module"; };
+    if ($@) {
+        $linker_module = 'C4::Linker::Default';
+        eval "require $linker_module";
+    }
+    if ($@) {
+        return 0, 0;
+    }
+
+    my $linker = $linker_module->new(
+        { 'options' => C4::Context->preference("LinkerOptions") } );
+    my ( $headings_changed, undef ) =
+      LinkBibHeadingsToAuthorities( $linker, $record, $frameworkcode, C4::Context->preference("CatalogModuleRelink") || '' );
+    # By default we probably don't want to relink things when cataloging
+    return $headings_changed;
+}
+
 =head2 LinkBibHeadingsToAuthorities
 
-  my $headings_linked = LinkBibHeadingsToAuthorities($marc);
+  my $num_headings_changed, %results = LinkBibHeadingsToAuthorities($linker, $marc, $frameworkcode, [$allowrelink]);
 
 Links bib headings to authority records by checking
 each authority-controlled field in the C<MARC::Record>
@@ -468,9 +503,9 @@ object C<$marc>, looking for a matching authority record,
 and setting the linking subfield $9 to the ID of that
 authority record.  
 
-If no matching authority exists, or if multiple
-authorities match, no $9 will be added, and any 
-existing one inthe field will be deleted.
+If $allowrelink is false, existing authids will never be
+replaced, regardless of the values of LinkerKeepStale and
+LinkerRelink.
 
 Returns the number of heading links changed in the
 MARC record.
@@ -478,37 +513,112 @@ MARC record.
 =cut
 
 sub LinkBibHeadingsToAuthorities {
-    my $bib = shift;
+    my $linker        = shift;
+    my $bib           = shift;
+    my $frameworkcode = shift;
+    my $allowrelink = shift;
+    my %results;
+    require C4::Heading;
+    require C4::AuthoritiesMarc;
 
+    $allowrelink = 1 unless defined $allowrelink;
     my $num_headings_changed = 0;
     foreach my $field ( $bib->fields() ) {
-        my $heading = C4::Heading->new_from_bib_field($field);
+        my $heading = C4::Heading->new_from_bib_field( $field, $frameworkcode );
         next unless defined $heading;
 
         # check existing $9
         my $current_link = $field->subfield('9');
 
-        # look for matching authorities
-        my $authorities = $heading->authorities();
+        if ( defined $current_link && (!$allowrelink || !C4::Context->preference('LinkerRelink')) )
+        {
+            $results{'linked'}->{ $heading->display_form() }++;
+            next;
+        }
 
-        # want only one exact match
-        if ( $#{$authorities} == 0 ) {
-            my $authority = MARC::Record->new_from_usmarc( $authorities->[0] );
-            my $authid    = $authority->field('001')->data();
-            next if defined $current_link and $current_link eq $authid;
+        my ( $authid, $fuzzy ) = $linker->get_link($heading);
+        if ($authid) {
+            $results{ $fuzzy ? 'fuzzy' : 'linked' }
+              ->{ $heading->display_form() }++;
+            next if defined $current_link and $current_link == $authid;
 
             $field->delete_subfield( code => '9' ) if defined $current_link;
             $field->add_subfields( '9', $authid );
             $num_headings_changed++;
-        } else {
-            if ( defined $current_link ) {
+        }
+        else {
+            if ( defined $current_link
+                && (!$allowrelink || C4::Context->preference('LinkerKeepStale')) )
+            {
+                $results{'fuzzy'}->{ $heading->display_form() }++;
+            }
+            elsif ( C4::Context->preference('AutoCreateAuthorities') ) {
+                my $authtypedata =
+                  C4::AuthoritiesMarc::GetAuthType( $heading->auth_type() );
+                my $marcrecordauth = MARC::Record->new();
+                if ( C4::Context->preference('marcflavour') eq 'MARC21' ) {
+                    $marcrecordauth->leader('     nz  a22     o  4500');
+                    SetMarcUnicodeFlag( $marcrecordauth, 'MARC21' );
+                }
+                my $authfield =
+                  MARC::Field->new( $authtypedata->{auth_tag_to_report},
+                    '', '', "a" => "" . $field->subfield('a') );
+                map {
+                    $authfield->add_subfields( $_->[0] => $_->[1] )
+                      if ( $_->[0] =~ /[A-z]/ && $_->[0] ne "a" )
+                } $field->subfields();
+                $marcrecordauth->insert_fields_ordered($authfield);
+
+# bug 2317: ensure new authority knows it's using UTF-8; currently
+# only need to do this for MARC21, as MARC::Record->as_xml_record() handles
+# automatically for UNIMARC (by not transcoding)
+# FIXME: AddAuthority() instead should simply explicitly require that the MARC::Record
+# use UTF-8, but as of 2008-08-05, did not want to introduce that kind
+# of change to a core API just before the 3.0 release.
+
+                if ( C4::Context->preference('marcflavour') eq 'MARC21' ) {
+                    $marcrecordauth->insert_fields_ordered(
+                        MARC::Field->new(
+                            '667', '', '',
+                            'a' => "Machine generated authority record."
+                        )
+                    );
+                    my $cite =
+                        $bib->author() . ", "
+                      . $bib->title_proper() . ", "
+                      . $bib->publication_date() . " ";
+                    $cite =~ s/^[\s\,]*//;
+                    $cite =~ s/[\s\,]*$//;
+                    $cite =
+                        "Work cat.: ("
+                      . C4::Context->preference('MARCOrgCode') . ")"
+                      . $bib->subfield( '999', 'c' ) . ": "
+                      . $cite;
+                    $marcrecordauth->insert_fields_ordered(
+                        MARC::Field->new( '670', '', '', 'a' => $cite ) );
+                }
+
+           #          warn "AUTH RECORD ADDED : ".$marcrecordauth->as_formatted;
+
+                $authid =
+                  C4::AuthoritiesMarc::AddAuthority( $marcrecordauth, '',
+                    $heading->auth_type() );
+                $field->add_subfields( '9', $authid );
+                $num_headings_changed++;
+                $results{'added'}->{ $heading->display_form() }++;
+            }
+            elsif ( defined $current_link ) {
                 $field->delete_subfield( code => '9' );
                 $num_headings_changed++;
+                $results{'unlinked'}->{ $heading->display_form() }++;
+            }
+            else {
+                $results{'unlinked'}->{ $heading->display_form() }++;
             }
         }
 
     }
-    return $num_headings_changed;
+    return $num_headings_changed, \%results;
 }
 
 =head2 GetRecordValue
@@ -1872,6 +1982,7 @@ sub PrepHostMarcField {
     my ($hostbiblionumber,$hostitemnumber, $marcflavour) = @_;
     $marcflavour ||="MARC21";
     
+    require C4::Items;
     my $hostrecord = GetMarcBiblio($hostbiblionumber);
 	my $item = C4::Items::GetItem($hostitemnumber);
 	
