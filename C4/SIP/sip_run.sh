@@ -26,12 +26,17 @@ done;
 unset x;
 cd $PERL5LIB/C4/SIP;
 echo;
-echo Running from `pwd`;
 
-sipconfig=${1:-`pwd`/SIPconfig.xml};
+sipconfig=${1};
 outfile=${2:-$HOME/sip.out};
 errfile=${3:-$HOME/sip.err};
 
-echo "Calling (backgrounded):";
-echo "perl -I./ ./SIPServer.pm $sipconfig >>$outfile 2>>$errfile";
-perl -I./ ./SIPServer.pm $sipconfig >>$outfile 2>>$errfile &
+if [ $sipconfig ]; then
+	echo "Running with config file located in $sipconfig" ;
+	echo "Calling (backgrounded):";
+	echo "perl -I./ ./SIPServer.pm $sipconfig >>$outfile 2>>$errfile";
+	perl -I./ ./SIPServer.pm $sipconfig >>$outfile 2>>$errfile &
+
+else
+	echo "Please specify a config file and try again."
+fi
