@@ -110,7 +110,7 @@ sub new {
     );
     }
     $debug and warn "patron fines: $ilspatron{fines} ... amountoutstanding: $kp->{amountoutstanding} ... CHARGES->amount: $flags->{CHARGES}->{amount}";
-	for (qw(EXPIRED CHARGES CREDITS GNA LOST DEBARRED NOTES)) {
+	for (qw(EXPIRED CHARGES CREDITS GNA LOST DBARRED NOTES)) {
 		($flags->{$_}) or next;
         if ($_ ne 'NOTES' and $flags->{$_}->{message}) {
             $ilspatron{screen_msg} .= " -- " . $flags->{$_}->{message};  # show all but internal NOTES
