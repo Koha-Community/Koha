@@ -66,6 +66,22 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 
 my $biblionumber = $query->param('biblionumber') || $query->param('bib');
 
+my $record       = GetMarcBiblio($biblionumber);
+if ( ! $record ) {
+    print $query->redirect("/cgi-bin/koha/errors/404.pl"); # escape early
+    exit;
+}
+$template->param( biblionumber => $biblionumber );
+
+
+SetUTF8Flag($record);
+
+# XSLT processing of some stuff
+if (C4::Context->preference("OPACXSLTDetailsDisplay") ) {
+    $template->param( 'XSLTBloc' => XSLTParse4Display($biblionumber, $record, 'Detail', 'opac') );
+}
+
+
 # We look for the busc param to build the simple paging from the search
 my $session = get_session($query->cookie("CGISESSID"));
 my %paging = (previous => {}, next => {});
@@ -351,19 +367,7 @@ if ($session->param('busc')) {
 $template->param( 'AllowOnShelfHolds' => C4::Context->preference('AllowOnShelfHolds') );
 $template->param( 'ItemsIssued' => CountItemsIssued( $biblionumber ) );
 
-my $record       = GetMarcBiblio($biblionumber);
-if ( ! $record ) {
-    print $query->redirect("/cgi-bin/koha/errors/404.pl");
-    exit;
-}
-$template->param( biblionumber => $biblionumber );
 
-SetUTF8Flag($record);
-
-# XSLT processing of some stuff
-if (C4::Context->preference("OPACXSLTDetailsDisplay") ) {
-    $template->param( 'XSLTBloc' => XSLTParse4Display($biblionumber, $record, 'Detail', 'opac') );
-}
 
 $template->param('OPACShowCheckoutName' => C4::Context->preference("OPACShowCheckoutName") ); 
 # change back when ive fixed request.pl

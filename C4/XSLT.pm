@@ -58,7 +58,7 @@ Replaces codes with authorized values in a MARC::Record object
 
 sub transformMARCXML4XSLT {
     my ($biblionumber, $record) = @_;
-    my $frameworkcode = GetFrameworkCode($biblionumber);
+    my $frameworkcode = GetFrameworkCode($biblionumber) || '';
     my $tagslib = &GetMarcStructure(1,$frameworkcode);
     my @fields;
     # FIXME: wish there was a better way to handle exceptions
