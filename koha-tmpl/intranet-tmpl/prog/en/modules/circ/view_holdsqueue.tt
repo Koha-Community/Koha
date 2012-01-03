@@ -50,6 +50,7 @@ $(document).ready(function() {
         <th class="hq-patron">Patron</th>
         <th class="hq-sendto">Send To</th>
         <th class="hq-date">Date</th>
+        <th class="hq-notes">Notes</th>
     </tr>
 	</thead>
      <tbody>[% FOREACH itemsloo IN itemsloop %]
@@ -75,6 +76,7 @@ $(document).ready(function() {
 			<td class="hq-patron"><p><a href="/cgi-bin/koha/circ/circulation.pl?findborrower=[% itemsloo.cardnumber %]#reserves">[% itemsloo.surname %], [% itemsloo.firstname %] ([% itemsloo.cardnumber %])</a></p> <p>[% itemsloo.phone %]</p></td>
             <td class="hq-sendto">[% itemsloo.pickbranch %]</td>
             <td class="hq-date">[% itemsloo.reservedate %]</td>
+            <td class="hq-notes">[% itemsloo.notes %]</td>
         </tr>
     [% END %]</tbody>
     </table>
