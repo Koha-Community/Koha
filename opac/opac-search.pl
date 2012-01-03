@@ -48,10 +48,10 @@ use CGI qw('-no_undef_params');
 my $cgi = new CGI;
 
 BEGIN {
-	if (C4::Context->preference('BakerTaylorEnabled')) {
-		require C4::External::BakerTaylor;
-		import C4::External::BakerTaylor qw(&image_url &link_url);
-	}
+    if (C4::Context->preference('BakerTaylorEnabled')) {
+        require C4::External::BakerTaylor;
+        import C4::External::BakerTaylor qw(&image_url &link_url);
+    }
 }
 
 my ($template,$borrowernumber,$cookie);
@@ -64,13 +64,13 @@ my @params = $cgi->param("limit");
 my $format = $cgi->param("format") || '';
 my $build_grouped_results = C4::Context->preference('OPACGroupResults');
 if ($format =~ /(rss|atom|opensearchdescription)/) {
-	$template_name = 'opac-opensearch.tmpl';
+    $template_name = 'opac-opensearch.tmpl';
 }
 elsif (@params && $build_grouped_results) {
     $template_name = 'opac-results-grouped.tmpl';
 }
 elsif ((@params>=1) || ($cgi->param("q")) || ($cgi->param('multibranchlimit')) || ($cgi->param('limit-yr')) ) {
-	$template_name = 'opac-results.tmpl';
+    $template_name = 'opac-results.tmpl';
 }
 else {
     $template_name = 'opac-advsearch.tmpl';
@@ -89,7 +89,7 @@ if ($template_name eq 'opac-results.tmpl') {
 }
 
 if ($format eq 'rss2' or $format eq 'opensearchdescription' or $format eq 'atom') {
-	$template->param($format => 1);
+    $template->param($format => 1);
     $template->param(timestamp => strftime("%Y-%m-%dT%H:%M:%S-00:00", gmtime)) if ($format eq 'atom'); 
     # FIXME - the timestamp is a hack - the biblio update timestamp should be used for each
     # entry, but not sure if that's worth an extra database query for each bib
@@ -104,18 +104,18 @@ $template->param( 'AllowOnShelfHolds' => C4::Context->preference('AllowOnShelfHo
 $template->param( 'OPACNoResultsFound' => C4::Context->preference('OPACNoResultsFound') );
 
 if (C4::Context->preference('BakerTaylorEnabled')) {
-	$template->param(
-		BakerTaylorEnabled  => 1,
-		BakerTaylorImageURL => &image_url(),
-		BakerTaylorLinkURL  => &link_url(),
-		BakerTaylorBookstoreURL => C4::Context->preference('BakerTaylorBookstoreURL'),
-	);
+    $template->param(
+        BakerTaylorEnabled  => 1,
+        BakerTaylorImageURL => &image_url(),
+        BakerTaylorLinkURL  => &link_url(),
+        BakerTaylorBookstoreURL => C4::Context->preference('BakerTaylorBookstoreURL'),
+    );
 }
 if (C4::Context->preference('TagsEnabled')) {
-	$template->param(TagsEnabled => 1);
-	foreach (qw(TagsShowOnList TagsInputOnList)) {
-		C4::Context->preference($_) and $template->param($_ => 1);
-	}
+    $template->param(TagsEnabled => 1);
+    foreach (qw(TagsShowOnList TagsInputOnList)) {
+        C4::Context->preference($_) and $template->param($_ => 1);
+    }
 }
 
 ## URI Re-Writing
@@ -163,32 +163,32 @@ my $cnt;
 my $advanced_search_types = C4::Context->preference("AdvancedSearchTypes");
 
 if (!$advanced_search_types or $advanced_search_types eq 'itemtypes') {
-	foreach my $thisitemtype ( sort {$itemtypes->{$a}->{'description'} cmp $itemtypes->{$b}->{'description'} } keys %$itemtypes ) {
-	    my %row =(  number=>$cnt++,
-		ccl => "$itype_or_itemtype,phr",
+    foreach my $thisitemtype ( sort {$itemtypes->{$a}->{'description'} cmp $itemtypes->{$b}->{'description'} } keys %$itemtypes ) {
+        my %row =(  number=>$cnt++,
+        ccl => "$itype_or_itemtype,phr",
                 code => $thisitemtype,
                 selected => $selected,
                 description => $itemtypes->{$thisitemtype}->{'description'},
                 count5 => $cnt % 4,
                 imageurl=> getitemtypeimagelocation( 'opac', $itemtypes->{$thisitemtype}->{'imageurl'} ),
             );
-    	$selected = 0; # set to zero after first pass through
-    	push @itemtypesloop, \%row;
-	}
+        $selected = 0; # set to zero after first pass through
+        push @itemtypesloop, \%row;
+    }
 } else {
     my $advsearchtypes = GetAuthorisedValues($advanced_search_types, '', 'opac');
-	for my $thisitemtype (@$advsearchtypes) {
-		my %row =(
-				number=>$cnt++,
-				ccl => $advanced_search_types,
+    for my $thisitemtype (@$advsearchtypes) {
+        my %row =(
+                number=>$cnt++,
+                ccl => $advanced_search_types,
                 code => $thisitemtype->{authorised_value},
                 selected => $selected,
                 description => $thisitemtype->{'lib'},
                 count5 => $cnt % 4,
                 imageurl=> getitemtypeimagelocation( 'opac', $thisitemtype->{'imageurl'} ),
             );
-		push @itemtypesloop, \%row;
-	}
+        push @itemtypesloop, \%row;
+    }
 }
 $template->param(itemtypeloop => \@itemtypesloop);
 
@@ -244,20 +244,20 @@ if ( $template_type && $template_type eq 'advsearch' ) {
         }
 
     }
-    $template->param(uc(C4::Context->preference("marcflavour")) => 1,   # we already did this for UNIMARC
-					  advsearch => 1,
-                      search_boxes_loop => \@search_boxes_array);
+    $template->param(uc(    C4::Context->preference("marcflavour")) => 1,   # we already did this for UNIMARC
+                            advsearch => 1,
+                            search_boxes_loop => \@search_boxes_array);
 
-# use the global setting by default
-	if ( C4::Context->preference("expandedSearchOption") == 1 ) {
-		$template->param( expanded_options => C4::Context->preference("expandedSearchOption") );
-	}
-	# but let the user override it
-	if (defined $cgi->param('expanded_options')) {
-   	    if ( ($cgi->param('expanded_options') == 0) || ($cgi->param('expanded_options') == 1 ) ) {
-    	    $template->param( expanded_options => $cgi->param('expanded_options'));
-	    }
+    # use the global setting by default
+    if ( C4::Context->preference("expandedSearchOption") == 1 ) {
+        $template->param( expanded_options => C4::Context->preference("expandedSearchOption") );
+    }
+    # but let the user override it
+    if (defined $cgi->param('expanded_options')) {
+        if ( ($cgi->param('expanded_options') == 0) || ($cgi->param('expanded_options') == 1 ) ) {
+            $template->param( expanded_options => $cgi->param('expanded_options'));
         }
+    }
     output_html_with_http_headers $cgi, $cookie, $template->output;
     exit;
 }
@@ -408,15 +408,15 @@ my $results_hashref;
 my @coins;
 
 if ($tag) {
-	$query_cgi = "tag=" .$tag . "&" . $query_cgi;
-	my $taglist = get_tags({term=>$tag, approved=>1});
-	$results_hashref->{biblioserver}->{hits} = scalar (@$taglist);
-	my @biblist  = (map {GetBiblioData($_->{biblionumber})} @$taglist);
-	my @marclist = (map {$_->{marc}} @biblist );
-	$DEBUG and printf STDERR "taglist (%s biblionumber)\nmarclist (%s records)\n", scalar(@$taglist), scalar(@marclist);
-	$results_hashref->{biblioserver}->{RECORDS} = \@marclist;
-	# FIXME: tag search and standard search should work together, not exclusively
-	# FIXME: No facets for tags search.
+    $query_cgi = "tag=" .$tag . "&" . $query_cgi;
+    my $taglist = get_tags({term=>$tag, approved=>1});
+    $results_hashref->{biblioserver}->{hits} = scalar (@$taglist);
+    my @biblist  = (map {GetBiblioData($_->{biblionumber})} @$taglist);
+    my @marclist = (map {$_->{marc}} @biblist );
+    $DEBUG and printf STDERR "taglist (%s biblionumber)\nmarclist (%s records)\n", scalar(@$taglist), scalar(@marclist);
+    $results_hashref->{biblioserver}->{RECORDS} = \@marclist;
+    # FIXME: tag search and standard search should work together, not exclusively
+    # FIXME: No facets for tags search.
 }
 elsif (C4::Context->preference('NoZebra')) {
     eval {
@@ -483,59 +483,58 @@ for (my $i=0;$i<@servers;$i++) {
 		    }
                 }
       
-	if ($results_hashref->{$server}->{"hits"}){
-	    $total = $total + $results_hashref->{$server}->{"hits"};
-	}
- 	# Opac search history
- 	my $newsearchcookie;
- 	if (C4::Context->preference('EnableOpacSearchHistory')) {
- 	    my @recentSearches; 
- 
- 	    # Getting the (maybe) already sent cookie
- 	    my $searchcookie = $cgi->cookie('KohaOpacRecentSearches');
- 	    if ($searchcookie){
- 		$searchcookie = uri_unescape($searchcookie);
- 		if (thaw($searchcookie)) {
- 		    @recentSearches = @{thaw($searchcookie)};
- 		}
- 	    }
- 
- 	    # Adding the new search if needed
-           if (!$borrowernumber || $borrowernumber eq '') {
- 	    # To a cookie (the user is not logged in)
- 
-               if (($params->{'offset'}||'') eq '') {
- 
-     		    push @recentSearches, {
-     					    "query_desc" => $query_desc || "unknown", 
-     					    "query_cgi"  => $query_cgi  || "unknown", 
-     					    "time"       => time(),
-     					    "total"      => $total
-     					  };
-     		    $template->param(ShowOpacRecentSearchLink => 1);
-     		}
- 
-            shift @recentSearches if (@recentSearches > 15);
-     		# Pushing the cookie back 
-     		$newsearchcookie = $cgi->cookie(
- 					    -name => 'KohaOpacRecentSearches',
- 					    # We uri_escape the whole freezed structure so we're sure we won't have any encoding problems
- 					    -value => uri_escape(freeze(\@recentSearches)),
- 					    -expires => ''
- 			);
- 			$cookie = [$cookie, $newsearchcookie];
- 	    } 
-		else {
- 	    # To the session (the user is logged in)
-                       if (($params->{'offset'}||'') eq '') {
-				AddSearchHistory($borrowernumber, $cgi->cookie("CGISESSID"), $query_desc, $query_cgi, $total);
-     		    $template->param(ShowOpacRecentSearchLink => 1);
-     		}
- 	    }
- 	}
-    ## If there's just one result, redirect to the detail page
+        if ($results_hashref->{$server}->{"hits"}){
+            $total = $total + $results_hashref->{$server}->{"hits"};
+        }
+
+        # Opac search history
+        my $newsearchcookie;
+        if (C4::Context->preference('EnableOpacSearchHistory')) {
+            my @recentSearches;
+
+            # Getting the (maybe) already sent cookie
+            my $searchcookie = $cgi->cookie('KohaOpacRecentSearches');
+            if ($searchcookie){
+                $searchcookie = uri_unescape($searchcookie);
+                if (thaw($searchcookie)) {
+                    @recentSearches = @{thaw($searchcookie)};
+                }
+            }
+
+            # Adding the new search if needed
+            if (!$borrowernumber || $borrowernumber eq '') {
+                # To a cookie (the user is not logged in)
+                if (($params->{'offset'}||'') eq '') {
+                    push @recentSearches, {
+                                "query_desc" => $query_desc || "unknown",
+                                "query_cgi"  => $query_cgi  || "unknown",
+                                "time"       => time(),
+                                "total"      => $total
+                              };
+                    $template->param(ShowOpacRecentSearchLink => 1);
+                }
+
+                shift @recentSearches if (@recentSearches > 15);
+                # Pushing the cookie back
+                $newsearchcookie = $cgi->cookie(
+                            -name => 'KohaOpacRecentSearches',
+                            # We uri_escape the whole freezed structure so we're sure we won't have any encoding problems
+                            -value => uri_escape(freeze(\@recentSearches)),
+                            -expires => ''
+                );
+                $cookie = [$cookie, $newsearchcookie];
+            }
+            else {
+                # To the session (the user is logged in)
+                if (($params->{'offset'}||'') eq '') {
+                    AddSearchHistory($borrowernumber, $cgi->cookie("CGISESSID"), $query_desc, $query_cgi, $total);
+                    $template->param(ShowOpacRecentSearchLink => 1);
+                }
+            }
+        }
+        ## If there's just one result, redirect to the detail page
         if ($total == 1 && $format ne 'rss2'
-	    && $format ne 'opensearchdescription' && $format ne 'atom') {   
+        && $format ne 'opensearchdescription' && $format ne 'atom') {
             my $biblionumber=$newresults[0]->{biblionumber};
             if (C4::Context->preference('BiblioDefaultView') eq 'isbd') {
                 print $cgi->redirect("/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=$biblionumber");
@@ -609,7 +608,7 @@ for (my $i=0;$i<@servers;$i++) {
             $template->param(   PAGE_NUMBERS => \@page_numbers,
                                 previous_page_offset => $previous_page_offset) unless $pages < 2;
             $template->param(next_page_offset => $next_page_offset) unless $pages eq $current_page_number;
-         }
+        }
         # no hits
         else {
             $template->param(searchdesc => 1,query_desc => $query_desc,limit_desc => $limit_desc);
@@ -640,7 +639,7 @@ $template->param(
             total => $total,
             opacfacets => 1,
             facets_loop => $facets,
-	    displayFacetCount=> C4::Context->preference('displayFacetCount')||0,
+            displayFacetCount=> C4::Context->preference('displayFacetCount')||0,
             scan => $scan,
             search_error => $error,
 );
@@ -656,18 +655,18 @@ my @addpubshelves;
 my $pubshelves = $session->param('pubshelves');
 my $barshelves = $session->param('barshelves');
 foreach my $shelf (@$pubshelves) {
-	next if ( ($shelf->{'owner'} != ($borrowernumber ? $borrowernumber : -1)) && ($shelf->{'category'} < 3) );
-	push (@addpubshelves, $shelf);
+    next if ( ($shelf->{'owner'} != ($borrowernumber ? $borrowernumber : -1)) && ($shelf->{'category'} < 3) );
+    push (@addpubshelves, $shelf);
 }
 
 if (@addpubshelves) {
-	$template->param( addpubshelves     => scalar (@addpubshelves));
-	$template->param( addpubshelvesloop => \@addpubshelves);
+    $template->param( addpubshelves     => scalar (@addpubshelves));
+    $template->param( addpubshelvesloop => \@addpubshelves);
 }
 
 if (defined $barshelves) {
-	$template->param( addbarshelves     => scalar (@$barshelves));
-	$template->param( addbarshelvesloop => $barshelves);
+    $template->param( addbarshelves     => scalar (@$barshelves));
+    $template->param( addbarshelvesloop => $barshelves);
 }
 
 my $content_type = ($format eq 'rss' or $format eq 'atom') ? $format : 'html';
