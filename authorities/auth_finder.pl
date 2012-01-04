@@ -137,7 +137,7 @@ if ( $op eq "do_search" ) {
     }
     ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         {
-            template_name   => "authorities/searchresultlist-auth.tmpl",
+            template_name   => "authorities/searchresultlist-auth.tt",
             query           => $query,
             type            => 'intranet',
             authnotrequired => 0,
@@ -168,7 +168,7 @@ if ( $op eq "do_search" ) {
 } else {
     ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         {
-            template_name   => "authorities/auth_finder.tmpl",
+            template_name   => "authorities/auth_finder.tt",
             query           => $query,
             type            => 'intranet',
             authnotrequired => 0,

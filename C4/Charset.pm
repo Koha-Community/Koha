@@ -39,6 +39,7 @@ BEGIN {
         SetUTF8Flag
         SetMarcUnicodeFlag
         StripNonXmlChars
+        nsb_clean
     );
 }
 
@@ -381,6 +382,40 @@ sub StripNonXmlChars {
     $str =~ s/[^\x09\x0A\x0D\x{0020}-\x{D7FF}\x{E000}-\x{FFFD}\x{10000}-\x{10FFFF}]//g;
     return $str;
 }
+
+
+
+=head2 nsb_clean
+
+=over 4
+
+nsb_clean($string);
+
+=back
+
+Removes Non Sorting Block characters
+
+=cut
+sub nsb_clean {
+    my $NSB  = '\x88' ;        # NSB : begin Non Sorting Block
+    my $NSE  = '\x89' ;        # NSE : Non Sorting Block end
+    my $NSB2 = '\x98' ;        # NSB : begin Non Sorting Block
+    my $NSE2 = '\x9C' ;        # NSE : Non Sorting Block end
+    my $C2   = '\xC2' ;        # What is this char ? It is sometimes left by the regexp after removing NSB / NSE
+
+    # handles non sorting blocks
+    my ($string) = @_ ;
+    $_ = $string ;
+    s/$NSB//g ;
+    s/$NSE//g ;
+    s/$NSB2//g ;
+    s/$NSE2//g ;
+    s/$C2//g ;
+    $string = $_ ;
+
+    return($string) ;
+}
+
 
 =head1 INTERNAL FUNCTIONS
 
