@@ -1635,8 +1635,6 @@ sub GetHistory {
         $line->{count} = $cnt++;
         $line->{toggle} = 1 if $cnt % 2;
         push @order_loop, $line;
-        $line->{creationdate} = format_date( $line->{creationdate} );
-        $line->{datereceived} = format_date( $line->{datereceived} );
         $total_qty         += $line->{'quantity'};
         $total_qtyreceived += $line->{'quantityreceived'};
         $total_price       += $line->{'quantity'} * $line->{'ecost'};
