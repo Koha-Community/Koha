@@ -2211,7 +2211,7 @@ sub DelItemCheck {
     if ($onloan){
         $error = "book_on_loan" 
     }
-    elsif ( C4::Context->userenv->{flags} & 1 and
+    elsif ( !(C4::Context->userenv->{flags} & 1) and
             C4::Context->preference("IndependantBranches") and
            (C4::Context->userenv->{branch} ne
              $item->{C4::Context->preference("HomeOrHoldingBranch")||'homebranch'}) )
