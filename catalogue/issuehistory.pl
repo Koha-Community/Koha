@@ -45,6 +45,10 @@ my $params = $query->Vars;
 my $biblionumber = $params->{'biblionumber'};
 my $itemnumber   = $params->{'itemnumber'};
 
+if (C4::Context->preference("HidePatronName")) {
+   $template->param(HidePatronName => 1);
+}
+
 my ($issues,$biblio,$barcode);
 if ($itemnumber){
 	$issues=GetItemIssues($itemnumber);
