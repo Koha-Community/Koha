@@ -95,7 +95,7 @@ my @loop_data = ();
 my $tag;
 
 # loop through each tab 0 through 9
-for ( my $tabloop = 0 ; $tabloop <= 10 ; $tabloop++ ) {
+for ( my $tabloop = 0 ; $tabloop <= 9 ; $tabloop++ ) {
 
     # loop through each tag
     my @loop_data = ();
@@ -140,7 +140,7 @@ for ( my $tabloop = 0 ; $tabloop <= 10 ; $tabloop++ ) {
             my $previous = '';
             # loop through each subfield
             for my $i ( 0 .. $#subf ) {
-                $subf[$i][0] = "@" unless $subf[$i][0];
+                $subf[$i][0] = "@" unless defined($subf[$i][0]);
                 my $sf_def = $tagslib->{ $fields[$x_i]->tag() }->{ $subf[$i][0] };
                 next if ( ($sf_def->{tab}||0) != $tabloop );
                 next if ( ($sf_def->{hidden}||0) > 0 );
@@ -215,7 +215,7 @@ foreach my $field (@fields) {
     # loop through each subfield
     for my $i ( 0 .. $#subf ) {
         my $sf_def = $tagslib->{ $field->tag() }->{ $subf[$i][0] };
-        next if ( ($sf_def->{tab}||'') ne 10 );
+        next if ( ($sf_def->{tab}||0) != 10 );
         next if ( ($sf_def->{hidden}||0) > 0 );
         $witness{ $subf[$i][0] } = $sf_def->{lib};
 
