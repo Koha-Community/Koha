@@ -339,7 +339,7 @@ function verify_images() {
                         Item-level hold
                     [% END %]
                     [% IF ( canreservefromotherbranches ) %]for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% itemloo.ReservedForBorrowernumber %]">
-		        [% IF ( hidepatronname ) %]
+		        [% IF ( itemloo.hidepatronname ) %]
 		            [% itemloo.Reservedcardnumber %]
 		        [% ELSE %]
 		            [% itemloo.ReservedForFirstname %] [% itemloo.ReservedForSurname %]
