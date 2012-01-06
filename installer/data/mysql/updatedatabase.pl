@@ -5669,6 +5669,18 @@ if(C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     $dbh->do("UPDATE auth_subfield_structure SET frameworkcode = 'PERSO_NAME' WHERE frameworkcode = 'PERSO_CODE'");
     $dbh->do("UPDATE auth_subfield_structure SET frameworkcode = 'CORPO_NAME' WHERE frameworkcode = 'ORGO_CODE'");
     print "Upgrade to $DBversion done (Bug 8207: correct typo in authority types)\n";
+    SetVersion ($DBversion);
+}
+
+$DBversion = "3.09.00.035";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do("
+    INSERT IGNORE INTO `systempreferences` (variable,value,explanation,options,type) VALUES('PrefillItem','0','When a new item is added, should it be prefilled with last created item values?','','YesNo');
+    ");
+    $dbh->do(
+    "INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('SubfieldsToUseWhenPrefill','','Define a list of subfields to use when prefilling items (separated by space)','','Free');
+    ");
+    print "Upgrade to $DBversion done (Adding PrefillItem and SubfieldsToUseWhenPrefill sysprefs)\n";
     SetVersion($DBversion);
 }
 
@@ -5694,8 +5706,6 @@ sub TableExists {
 Drop all foreign keys of the table $table
 
 =cut
-
-
 sub DropAllForeignKeys {
     my ($table) = @_;
     # get the table description

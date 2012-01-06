@@ -367,3 +367,5 @@ INSERT INTO systempreferences (variable,value,explanation,type) VALUES('EnableBo
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('UpdateTotalIssuesOnCirc','0','Whether to update the totalissues field in the biblio on each circ.',NULL,'YesNo');
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('IntranetSlipPrinterJS','','Use this JavaScript for printing slips. Define at least function printThenClose(). For use e.g. with Firefox PlugIn jsPrintSetup, see http://jsprintsetup.mozdev.org/','','Free');
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('OpacSuppressionByIPRange','','Restrict the suppression to IP adresses outside of the IP range','','free');
+INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('PrefillItem','0','When a new item is added, should it be prefilled with last created item values?','','YesNo');
+INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('SubfieldsToUseWhenPrefill','','Define a list of subfields to use when prefilling items (separated by space)','','Free');

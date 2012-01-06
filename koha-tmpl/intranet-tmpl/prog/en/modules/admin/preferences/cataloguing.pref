@@ -95,6 +95,16 @@ Cataloging:
                   hbyymmincr: generated in the form &lt;branchcode&gt;yymm0001.
                   EAN13: incremental EAN-13 barcodes
                   "OFF": not generated automatically.
+        -
+            - When a new item is added, should it be prefilled with last created item values?
+            - pref: PrefillItem
+              choices:
+                  yes: the new item is prefilled with last created item values
+                  no: the new item is not prefilled with last created item values
+        -
+            - Define a list of subfields to use when prefilling items (separated by space)
+            - pref: SubfieldsToUseWhenPrefill
+
     Display:
         -
             - 'Separate multiple displayed authors, series or subjects with '

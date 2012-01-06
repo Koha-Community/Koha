@@ -33,6 +33,9 @@ use C4::ClassSource;
 use C4::Dates;
 use List::MoreUtils qw/any/;
 use C4::Search;
+use Storable qw(thaw freeze);
+use URI::Escape;
+
 
 use MARC::File::XML;
 use URI::Escape;
@@ -277,6 +280,33 @@ sub generate_subfield_form {
         return \%subfield_data;
 }
 
+# Removes some subfields when prefilling items
+# This function will remove any subfield that is not in the SubfieldsToUseWhenPrefill syspref
+sub removeFieldsForPrefill {
+
+    my $item = shift;
+
+    # Getting item tag
+    my ($tag, $subtag) = GetMarcFromKohaField("items.barcode", '');
+
+    # Getting list of subfields to keep
+    my $subfieldsToUseWhenPrefill = C4::Context->preference('SubfieldsToUseWhenPrefill');
+
+    # Removing subfields that are not in the syspref
+    if ($tag && $subfieldsToUseWhenPrefill) {
+        my $field = $item->field($tag);
+        my @subfieldsToUse= split(/ /,$subfieldsToUseWhenPrefill);
+        foreach my $subfield ($field->subfields()) {
+            if (!grep { $subfield->[0] eq $_ } @subfieldsToUse) {
+                $field->delete_subfield(code => $subfield->[0]);
+            }
+
+        }
+    }
+
+    return $item;
+
+}
 
 my $input        = new CGI;
 my $error        = $input->param('error');
@@ -315,9 +345,26 @@ my $oldrecord = TransformMarcToKoha($dbh,$record);
 my $itemrecord;
 my $nextop="additem";
 my @errors; # store errors found while checking data BEFORE saving item.
+
+# Getting last created item cookie
+my $prefillitem = C4::Context->preference('PrefillItem');
+my $justaddeditem;
+my $cookieitemrecord;
+if ($prefillitem) {
+    my $lastitemcookie = $input->cookie('LastCreatedItem');
+    if ($lastitemcookie) {
+        $lastitemcookie = uri_unescape($lastitemcookie);
+        if ( thaw($lastitemcookie) ) {
+            $cookieitemrecord = thaw($lastitemcookie) ;
+            $cookieitemrecord = removeFieldsForPrefill($cookieitemrecord);
+        }
+    }
+}
+
 #-------------------------------------------------------------------------------
 if ($op eq "additem") {
-#-------------------------------------------------------------------------------
+
+    #-------------------------------------------------------------------------------
     # rebuild
     my @tags      = $input->param('tag');
     my @subfields = $input->param('subfield');
@@ -334,26 +381,55 @@ if ($op eq "additem") {
     my $add_multiple_copies_submit = $input->param('add_multiple_copies_submit');
     my $number_of_copies           = $input->param('number_of_copies');
 
+    # This is a bit tricky : if there is a cookie for the last created item and
+    # we just added an item, the cookie value is not correct yet (it will be updated
+    # next page). To prevent the form from being filled with outdated values, we
+    # force the use of "add and duplicate" feature, so the form will be filled with
+    # correct values.
+    $add_duplicate_submit = 1 if ($prefillitem);
+    $justaddeditem = 1;
+
+    # if autoBarcode is set to 'incremental', calculate barcode...
+    if ( C4::Context->preference('autoBarcode') eq 'incremental' ) {
+        $record = _increment_barcode($record, $frameworkcode);
+    }
+
+
     if (C4::Context->preference('autoBarcode') eq 'incremental') {
         $record = _increment_barcode($record, $frameworkcode);
     }
 
-    my $addedolditem = TransformMarcToKoha($dbh,$record);
+    my $addedolditem = TransformMarcToKoha( $dbh, $record );
 
     # If we have to add or add & duplicate, we add the item
-    if ($add_submit || $add_duplicate_submit) {
-	# check for item barcode # being unique
-	my $exist_itemnumber = get_item_from_barcode($addedolditem->{'barcode'});
-	push @errors,"barcode_not_unique" if($exist_itemnumber);
-	# if barcode exists, don't create, but report The problem.
-    unless ($exist_itemnumber) {
-	    my ($oldbiblionumber,$oldbibnum,$oldbibitemnum) = AddItemFromMarc($record,$biblionumber);
-        set_item_default_location($oldbibitemnum);
-    }
-	$nextop = "additem";
-	if ($exist_itemnumber) {
-	    $itemrecord = $record;
-	}
+    if ( $add_submit || $add_duplicate_submit ) {
+
+        # check for item barcode # being unique
+        my $exist_itemnumber = get_item_from_barcode( $addedolditem->{'barcode'} );
+        push @errors, "barcode_not_unique" if ($exist_itemnumber);
+
+        # if barcode exists, don't create, but report The problem.
+        unless ($exist_itemnumber) {
+            my ( $oldbiblionumber, $oldbibnum, $oldbibitemnum ) = AddItemFromMarc( $record, $biblionumber );
+            set_item_default_location($oldbibitemnum);
+
+            # Pushing the last created item cookie back
+            if ($prefillitem && defined $record) {
+                my $itemcookie = $input->cookie(
+                    -name => 'LastCreatedItem',
+                    # We uri_escape the whole freezed structure so we're sure we won't have any encoding problems
+                    -value   => uri_escape_utf8( freeze( $record ) ),
+                    -expires => ''
+                );
+
+                $cookie = [ $cookie, $itemcookie ];
+            }
+
+        }
+        $nextop = "additem";
+        if ($exist_itemnumber) {
+            $itemrecord = $record;
+        }
     }
 
     # If we have to add & duplicate
@@ -370,6 +446,7 @@ if ($op eq "additem") {
             $fieldItem->delete_subfields($tagsubfield);
             $itemrecord->insert_fields_ordered($fieldItem);
         }
+    $itemrecord = removeFieldsForPrefill($itemrecord) if ($prefillitem);
     }
 
     # If we have to add multiple copies
@@ -696,6 +773,11 @@ if($itemrecord){
             }
     # and now we add fields that are empty
 
+# Using last created item if it exists
+
+$itemrecord = $cookieitemrecord if ($prefillitem and not $justaddeditem and $op ne "edititem");
+
+# We generate form, and fill with values if defined
 foreach my $tag ( keys %{$tagslib}){
     foreach my $subtag (keys %{$tagslib->{$tag}}){
         next if subfield_is_koha_internal_p($subtag);
