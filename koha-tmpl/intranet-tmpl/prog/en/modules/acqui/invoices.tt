@@ -1,0 +1,232 @@
+[% USE KohaDates %]
+
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Acquisitions &rsaquo; Invoices</title>
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
+[% INCLUDE 'doc-head-close.inc' %]
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.min.js"></script>
+[% INCLUDE 'datatables-strings.inc' %]
+<script type="text/javascript" src="[% themelang %]/js/datatables.js"></script>
+[% INCLUDE 'calendar.inc' %]
+<script type="text/javascript">
+//<![CDATA[
+$(document).ready(function() {
+    $("#resultst").dataTable($.extend(true, {}, dataTablesDefaults, {
+        bInfo: false,
+        bPaginate: false,
+        bFilter: false,
+        sDom: "t",
+        aoColumnDefs: [
+            { "bSortable": false, "aTargets": [6] }
+        ]
+    }));
+});
+//]]>
+</script>
+</head>
+
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'acquisitions-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; Invoices</div>
+
+<div id="doc3" class="yui-t2">
+
+<div id="bd">
+  <div id="yui-main">
+    <div class="yui-b">
+      <h1>Invoices</h1>
+      [% IF ( do_search ) %]
+        [% IF ( results_loop ) %]
+          <table id="resultst">
+            <thead>
+              <tr>
+                <th>Invoice no.</th>
+                <th>Vendor</th>
+                <th>Billing date</th>
+                <th>Received biblios</th>
+                <th>Received items</th>
+                <th>Status</th>
+                <th>&nbsp;</th>
+              </tr>
+            </thead>
+            <tbody>
+              [% FOREACH result IN results_loop %]
+                <tr>
+                  <td>[% result.invoicenumber %]</td>
+                  <td>[% result.suppliername %]</td>
+                  <td>
+                    [% IF (result.billingdate) %]
+                      [% result.billingdate | $KohaDates %]
+                    [% END %]
+                  </td>
+                  <td>[% result.receivedbiblios %]</td>
+                  <td>[% result.receiveditems %]</td>
+                  <td>
+                    [% IF ( result.closedate ) %]
+                      Closed on [% result.closedate | $KohaDates %]
+                    [% ELSE %]
+                      Open
+                    [% END %]
+                  </td>
+                  <td>
+                    <a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% result.invoiceid %]">Details</a> /
+                    [% IF ( result.closedate ) %]
+                      <a href="invoice.pl?op=reopen&invoiceid=[% result.invoiceid %]&referer=/cgi-bin/koha/acqui/invoices.pl%3Fop=do_search%26invoicenumber=[% invoicenumber %]%26supplier=[% supplier %]%26billingdatefrom=[% billingdatefrom %]%26billingdateto=[% billingdateto %]%26isbneanissn=[% isbneanissn %]%26title=[% title %]%26author=[% author %]%26publisher=[% publisher %]%26publicationyear=[% publicationyear %]%26branch=[% branch %]">Reopen</a>
+                    [% ELSE %]
+                      <a href="invoice.pl?op=close&invoiceid=[% result.invoiceid %]&referer=/cgi-bin/koha/acqui/invoices.pl%3Fop=do_search%26invoicenumber=[% invoicenumber %]%26supplier=[% supplier %]%26billingdatefrom=[% billingdatefrom %]%26billingdateto=[% billingdateto %]%26isbneanissn=[% isbneanissn %]%26title=[% title %]%26author=[% author %]%26publisher=[% publisher %]%26publicationyear=[% publicationyear %]%26branch=[% branch %]">Close</a>
+                    [% END %]
+                  </td>
+                </tr>
+              [% END %]
+            </tbody>
+          </table>
+        [% ELSE %]
+          <p>Sorry, but there is no results for your search.</p>
+          <p>Search was:
+            <ul>
+              [% IF ( invoicenumber ) %]
+                <li>Invoice no.: [% invoicenumber %]</li>
+              [% END %]
+              [% IF ( supplier ) %]
+                <li>Vendor: [% suppliername %]</li>
+              [% END %]
+              [% IF ( billingdatefrom ) %]
+                <li>Billing date:
+                [% IF ( billingdateto ) %]
+                  From [% billingdatefrom %]
+                  To [% billingdateto %]
+                [% ELSE %]
+                  All since [% billingdatefrom %]
+                [% END %]
+                </li>
+              [% ELSE %]
+                [% IF ( billingdateto ) %]
+                  <li>Billing date:
+                    All until [% billingdateto %]
+                  </li>
+                [% END %]
+              [% END %]
+              [% IF ( isbneanissn ) %]
+                <li>ISBN/EAN/ISSN: [% isbneanissn %]</li>
+              [% END %]
+              [% IF ( title ) %]
+                <li>Title: [% title %]</li>
+              [% END %]
+              [% IF ( author ) %]
+                <li>Author: [% author %]</li>
+              [% END %]
+              [% IF ( publisher ) %]
+                <li>Publisher: [% publisher %]</li>
+              [% END %]
+              [% IF ( publicationyear ) %]
+                <li>Publication year: [% publicationyear %]</li>
+              [% END %]
+              [% IF ( branch ) %]
+                <li>Branch: [% branchname %]</li>
+              [% END %]
+            </ul>
+          </p>
+        [% END %]<!-- results_loop -->
+      [% ELSE %]
+        <p>Please fill in the form to the left to make a search.</p>
+      [% END %]<!-- do_search -->
+    </div>
+  </div>
+  <div class="yui-b">
+    <form action="" method="get">
+      <fieldset class="brief">
+        <h3>Search filters</h3>
+        <ol>
+          <li>
+            <label for="invoicenumber">Invoice no:</label>
+            <input type="text" id="invoicenumber" name="invoicenumber" value="[% invoicenumber %]" />
+          </li>
+          <li>
+            <label for="supplier">Supplier:</label>
+            <select id="supplier" name="supplier">
+              <option value="">All</option>
+              [% FOREACH supplier IN suppliers_loop %]
+                [% IF ( supplier.selected ) %]
+                  <option selected="selected" value="[% supplier.supplierid %]">[% supplier.suppliername %]</option>
+                [% ELSE %]
+                  <option value="[% supplier.supplierid %]">[% supplier.suppliername %]</option>
+                [% END %]
+              [% END %]
+            </select>
+          </li>
+          <li>
+            <fieldset class="brief">
+              <legend>Shipment date</legend>
+              <ol>
+                <li>
+                  <label for="shipmentdatefrom">From:</label>
+                  <input type="text" id="shipmentdatefrom" name="shipmentdatefrom" size="10" value="[% shipmentdatefrom %]" class="datepicker" />
+                </li>
+                <li>
+                  <label for="shipmentdateto">To:</label>
+                  <input type="text" id="shipmentdateto" name="shipmentdateto" size="10" value="[% shipmentdateto %]" class="datepicker" />
+                </li>
+              </ol>
+            </fieldset>
+          </li>
+          <li>
+            <fieldset class="brief">
+              <legend>Billing date</legend>
+              <ol>
+                <li>
+                  <label for="billingdatefrom">From:</label>
+                  <input type="text" id="billingdatefrom" name="billingdatefrom" size="10" value="[% billingdatefrom %]" class="datepicker" />
+                </li>
+                <li>
+                  <label for="billingdateto">To:</label>
+                  <input type="text" id="billingdateto" name="billingdateto" size="10" value="[% billingdateto %]" class="datepicker" />
+                </li>
+              </ol>
+            </fieldset>
+          </li>
+          <li>
+            <label for="isbneanissn">ISBN / EAN / ISSN:</label>
+            <input type="text" id="isbneanissn" name="isbneanissn" value="[% isbneanissn %]" />
+          </li>
+          <li>
+            <label for="title">Title:</label>
+            <input type="text" id="title" name="title" value="[% title %]" />
+          </li>
+          <li>
+            <label for="author">Author:</label>
+            <input type="text" id="author" name="author" value="[% author %]" />
+          </li>
+          <li>
+            <label for="publisher">Publisher:</label>
+            <input type="text" id="publisher" name="publisher" value="[% publisher %]" />
+          </li>
+          <li>
+            <label for="publicationyear">Publication year:</label>
+            <input type="text" id="publicationyear" name="publicationyear" value="[% publicationyear %]" />
+          </li>
+          <li>
+            <label for="branch">Branch:</label>
+            <select id="branch" name="branch">
+              <option value="">All</option>
+              [% FOREACH branch IN branches_loop %]
+                [% IF ( branch.selected ) %]
+                  <option selected="selected" value="[% branch.branchcode %]">[% branch.branchname %]</option>
+                [% ELSE %]
+                  <option value="[% branch.branchcode %]">[% branch.branchname %]</option>
+                [% END %]
+              [% END %]
+            </select>
+          </li>
+        </ol>
+        <fieldset class="action">
+          <input type="submit" value="Search" />
+        </fieldset>
+      </fieldset>
+      <input type="hidden" name="op" id="op" value="do_search" />
+    </form>
+    [% INCLUDE 'acquisitions-menu.inc' %]
+  </div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

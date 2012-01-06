@@ -45,6 +45,7 @@
                 null,
                 null,
                 null,
+                null
             ],
             "sPaginationType": "four_button"
         } ) );
@@ -125,11 +126,17 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'acquisitions-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo;  [% IF ( datereceived ) %]
-            Receipt summary for <i>[% name %]</i> [% IF ( invoice ) %]<i>[ [% invoice %] ]</i>[% END %] on <i>[% formatteddatereceived %]</i>
-        [% ELSE %]
-            Receive orders from [% name %]
-        [% END %]</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo;
+    [% IF ( datereceived ) %]
+        Receipt summary for <i>[% name %]</i>
+        [% IF ( invoice ) %]
+            <i>[ [% invoice %] ]</i>
+        [% END %]
+        on <i>[% formatteddatereceived %]</i>
+    [% ELSE %]
+        Receive orders from [% name %]
+    [% END %]
+</div>
 
 <div id="doc3" class="yui-t2">
 
@@ -185,8 +192,9 @@
 
 <div id="acqui_receive_summary">
 <p><strong>Invoice number:</strong> [% invoice %] <strong>Received by:</strong> [% loggedinusername %] <strong>On:</strong> [% formatteddatereceived %]</p>
-	<!-- TODO: Add date picker, change rcv date. -->
+<p><a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% invoiceid %]">Go to invoice details</a></p>
 </div>
+[% UNLESS (invoiceclosedate) %]
 <div id="acqui_receive_search">
     <h3>Pending orders</h3>
 
@@ -240,54 +248,61 @@
                 <td>[% loop_order.ecost %]</td>
                 <td>[% loop_order.ordertotal %]</td>
 				<td>
-                              <a href="orderreceive.pl?ordernumber=[% loop_order.ordernumber %]&amp;datereceived=[% invoicedatereceived %]&amp;invoice=[% invoice %]&amp;gst=[% loop_order.gst %]&amp;freight=[% loop_order.freight %]&amp;booksellerid=[% loop_order.booksellerid %]">Receive</a>
+                              <a href="orderreceive.pl?ordernumber=[% loop_order.ordernumber %]&amp;invoiceid=[% invoiceid %]">Receive</a>
 				    
 				</td>
 				<td>
-				    [% IF ( loop_order.left_holds_on_order ) %]
-                    <span class="button" title="Can't delete order, ([% loop_order.holds_on_order %]) holds are linked with this order cancel holds first">Can't delete order</span><br>
-                    [% ELSE %]
-                    <a href="javascript:confirm_delete_item([% loop_order.ordernumber %],[% loop_order.basketno %],[% loop_order.biblionumber %])" class="button">Delete order</a><br>
-                    [% END %]
-                    [% IF ( loop_order.can_del_bib ) %]
-                    <a href="javascript:confirm_delete_biblio([% loop_order.ordernumber %],[% loop_order.basketno %],[% loop_order.biblionumber %])" class="button">Delete order and catalog record</a><br>
-                    [% ELSE %]
-                    <span class="button" title="Can't delete catalog record, see constraints below">Can't delete order and catalog record</span><br>
-                    [% END %]
-                    [% IF ( loop_order.left_item ) %]
-                    <b title="Can't delete catalog record, because of [% loop_order.items %] existing item(s)" >[% loop_order.items %] item(s) left</b><br>
-                    [% END %]
-                    [% IF ( loop_order.left_biblio ) %]
-                    <b title="Can't delete catalog record, delete other orders linked to it first">[% loop_order.biblios %] order(s) left</b><br>
-                    [% END %]
-                    [% IF ( loop_order.left_subscription ) %]
-                    <b title="Can't delete catalog record, delete subscriptions first">[% loop_order.subscriptions %] subscription(s) left</b><br>
-                    [% END %]
-                    [% IF ( loop_order.left_holds ) %]
-                    <b title="Can't delete catalog record or order, cancel holds first">[% loop_order.holds %] hold(s) left</b>
-                    [% END %]
-				</td>
-            </tr>
+                        [% IF ( loop_order.left_holds_on_order ) %]
+                        <span class="button" title="Can't delete order, ([% loop_order.holds_on_order %]) holds are linked with this order cancel holds first">Can't delete order</span><br>
+                        [% ELSE %]
+                        <a href="javascript:confirm_delete_item([% loop_order.ordernumber %],[% loop_order.biblionumber %])" class="button">Delete order</a><br>
+                        [% END %]
+                        [% IF ( loop_order.can_del_bib ) %]
+                        <a href="javascript:confirm_delete_biblio([% loop_order.ordernumber %],[% loop_order.biblionumber %])" class="button">Delete order and catalog record</a><br>
+                        [% ELSE %]
+                        <span class="button" title="Can't delete catalog record, see constraints below">Can't delete order and catalog record</span><br>
+                        [% END %]
+                        [% IF ( loop_order.left_item ) %]
+                        <b title="Can't delete catalog record, because of [% loop_order.items %] existing item(s)" >[% loop_order.items %] item(s) left</b><br>
+                        [% END %]
+                        [% IF ( loop_order.left_biblio ) %]
+                        <b title="Can't delete catalog record, delete other orders linked to it first">[% loop_order.biblios %] order(s) left</b><br>
+                        [% END %]
+                        [% IF ( loop_order.left_subscription ) %]
+                        <b title="Can't delete catalog record, delete subscriptions first">[% loop_order.subscriptions %] subscription(s) left</b><br>
+                        [% END %]
+                        [% IF ( loop_order.left_holds ) %]
+                        <b title="Can't delete catalog record or order, cancel holds first">[% loop_order.holds %] hold(s) left</b>
+                        [% END %]
+                    </td>
+                </tr>
+            [% END %]
+        </tbody>
+         </table>[% ELSE %]There are no pending orders.[% END %]
+       <div id="resultnumber">
+        <!-- Row of numbers corresponding to search result pages -->
+        [% IF ( displayprev ) %]
+            <a href="parcel.pl?invoiceid=[% invoiceid %]&amp;startfrom=[% prevstartfrom %][% IF ( resultsperpage ) %]&amp;resultsperpage=[% resultsperpage %][% END %]#resultnumber">&lt;&lt; Previous</a>
         [% END %]
-    </tbody>
-     </table>[% ELSE %]There are no pending orders.[% END %]
-   <div id="resultnumber">
-	<!-- Row of numbers corresponding to search result pages -->
-	[% IF ( displayprev ) %]
-		<a href="parcel.pl?type=intra&amp;booksellerid=[% booksellerid %]&amp;startfrom=[% prevstartfrom %][% IF ( datereceived ) %]&amp;datereceived=[% datereceived %][% END %][% IF ( invoice ) %]&amp;invoice=[% invoice %][% END %][% IF ( resultsperpage ) %]&amp;resultsperpage=[% resultsperpage %][% END %]#resultnumber">&lt;&lt; Previous</a>
-	[% END %]
-	[% FOREACH number IN numbers %]
-		[% IF ( number.highlight ) %]
-		<span class="current">[% number.number %]</span>
-		[% ELSE %]
-		<a href="parcel.pl?type=intra&amp;booksellerid=[% booksellerid %]&amp;startfrom=[% number.startfrom %][% IF ( datereceived ) %]&amp;datereceived=[% datereceived %][% END %][% IF ( invoice ) %]&amp;invoice=[% invoice %][% END %][% IF ( resultsperpage ) %]&amp;resultsperpage=[% resultsperpage %][% END %]#resultnumber">[% number.number %]</a>
-		[% END %]
-	[% END %]
-	[% IF ( displaynext ) %]
-		<a href="parcel.pl?type=intra&amp;booksellerid=[% booksellerid %]&amp;startfrom=[% nextstartfrom %][% IF ( datereceived ) %]&amp;datereceived=[% datereceived %][% END %][% IF ( invoice ) %]&amp;invoice=[% invoice %][% END %][% IF ( resultsperpage ) %]&amp;resultsperpage=[% resultsperpage %][% END %]#resultnumber">Next &gt;&gt;</a>
-	[% END %]
-	</div>
-</div>
+        [% FOREACH number IN numbers %]
+            [% IF ( number.highlight ) %]
+            <span class="current">[% number.number %]</span>
+            [% ELSE %]
+            <a href="parcel.pl?invoiceid=[% invoiceid %]&amp;startfrom=[% number.startfrom %][% IF ( resultsperpage ) %]&amp;resultsperpage=[% resultsperpage %][% END %]#resultnumber">[% number.number %]</a>
+            [% END %]
+        [% END %]
+        [% IF ( displaynext ) %]
+            <a href="parcel.pl?invoiceid=[% invoiceid %]&amp;startfrom=[% nextstartfrom %][% IF ( resultsperpage ) %]&amp;resultsperpage=[% resultsperpage %][% END %]#resultnumber">Next &gt;&gt;</a>
+        [% END %]
+        </div>
+    </div>
+[% ELSE %]
+    <p>
+        Invoice is close, so you can't receive orders.
+        <a href="/cgi-bin/koha/acqui/invoice.pl?op=reopen&invoiceid=[% invoiceid %]&referer=/cgi-bin/koha/acqui/parcel.pl%3Finvoiceid=[% invoiceid %]">Reopen it</a>.
+    </p>
+[% END %]
+
 <div id="acqui_receive_receivelist">
     <h3>Already received</h3>
 
@@ -378,7 +393,7 @@
                             Can't cancel receipt
                         </span>
                     [% ELSE %]
-                        <a href="/cgi-bin/koha/acqui/parcel.pl?invoice=[% loop_receive.invoice %]&booksellerid=[% booksellerid %]&datereceived=[% datereceived %]&op=cancelreceipt&ordernumber=[% loop_receive.ordernumber %]">Cancel receipt</a>
+                        <a href="/cgi-bin/koha/acqui/parcel.pl?invoiceid=[% invoiceid %]&op=cancelreceipt&ordernumber=[% loop_receive.ordernumber %]">Cancel receipt</a>
                     [% END %]
                 </td>
             </tr>

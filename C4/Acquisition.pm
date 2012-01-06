@@ -64,6 +64,14 @@ BEGIN {
         &GetParcels &GetParcel
         &GetContracts &GetContract
 
+        &GetInvoices
+        &GetInvoice
+        &GetInvoiceDetails
+        &AddInvoice
+        &ModInvoice
+        &CloseInvoice
+        &ReopenInvoice
+
         &GetItemnumbersFromOrder
 
         &AddClaim
@@ -1245,15 +1253,14 @@ sub GetCancelledOrders {
 =head3 ModReceiveOrder
 
   &ModReceiveOrder($biblionumber, $ordernumber, $quantityreceived, $user,
-    $unitprice, $booksellerinvoicenumber, $biblioitemnumber,
-    $freight, $bookfund, $rrp);
+    $unitprice, $invoiceid, $biblioitemnumber,
+    $bookfund, $rrp, \@received_itemnumbers);
 
 Updates an order, to reflect the fact that it was received, at least
 in part. All arguments not mentioned below update the fields with the
 same name in the aqorders table of the Koha database.
 
-If a partial order is received, splits the order into two.  The received
-portion must have a booksellerinvoicenumber.
+If a partial order is received, splits the order into two.
 
 Updates the order with bibilionumber C<$biblionumber> and ordernumber
 C<$ordernumber>.
@@ -1264,7 +1271,7 @@ C<$ordernumber>.
 sub ModReceiveOrder {
     my (
         $biblionumber,    $ordernumber,  $quantrec, $user, $cost,
-        $invoiceno, $freight, $rrp, $budget_id, $datereceived, $received_items
+        $invoiceid, $rrp, $budget_id, $datereceived, $received_items
     )
     = @_;
 
@@ -1305,9 +1312,8 @@ sub ModReceiveOrder {
         $order->{'quantity'} = $quantrec;
         $order->{'quantityreceived'} = $quantrec;
         $order->{'datereceived'} = $datereceived;
-        $order->{'booksellerinvoicenumber'} = $invoiceno;
+        $order->{'invoiceid'} = $invoiceid;
         $order->{'unitprice'} = $cost;
-        $order->{'freight'} = $freight;
         $order->{'rrp'} = $rrp;
         $order->{'orderstatus'} = 3;    # totally received
         $new_ordernumber = NewOrder($order);
@@ -1319,10 +1325,10 @@ sub ModReceiveOrder {
         }
     } else {
         $sth=$dbh->prepare("update aqorders
-                            set quantityreceived=?,datereceived=?,booksellerinvoicenumber=?,
-                                unitprice=?,freight=?,rrp=?
+                            set quantityreceived=?,datereceived=?,invoiceid=?,
+                                unitprice=?,rrp=?
                             where biblionumber=? and ordernumber=?");
-        $sth->execute($quantrec,$datereceived,$invoiceno,$cost,$freight,$rrp,$biblionumber,$ordernumber);
+        $sth->execute($quantrec,$datereceived,$invoiceid,$cost,$rrp,$biblionumber,$ordernumber);
         $sth->finish;
     }
     return ($datereceived, $new_ordernumber);
@@ -1370,7 +1376,7 @@ sub CancelReceipt {
             UPDATE aqorders
             SET quantityreceived = ?,
                 datereceived = ?,
-                booksellerinvoicenumber = ?
+                invoiceid = ?
             WHERE ordernumber = ?
         };
         $sth = $dbh->prepare($query);
@@ -1597,9 +1603,10 @@ sub GetParcel {
         LEFT JOIN aqbasket ON aqbasket.basketno=aqorders.basketno
         LEFT JOIN borrowers ON aqbasket.authorisedby=borrowers.borrowernumber
         LEFT JOIN biblio ON aqorders.biblionumber=biblio.biblionumber
+        LEFT JOIN aqinvoices ON aqorders.invoiceid = aqinvoices.invoiceid
         WHERE
             aqbasket.booksellerid = ?
-            AND aqorders.booksellerinvoicenumber LIKE ?
+            AND aqinvoices.invoicenumber LIKE ?
             AND aqorders.datereceived = ? ";
 
     my @query_params = ( $supplierid, $code, $datereceived );
@@ -1672,18 +1679,19 @@ sub GetParcels {
     my $dbh    = C4::Context->dbh;
     my @query_params = ();
     my $strsth ="
-        SELECT  aqorders.booksellerinvoicenumber,
+        SELECT  aqinvoices.invoicenumber,
                 datereceived,purchaseordernumber,
                 count(DISTINCT biblionumber) AS biblio,
                 sum(quantity) AS itemsexpected,
                 sum(quantityreceived) AS itemsreceived
         FROM   aqorders LEFT JOIN aqbasket ON aqbasket.basketno = aqorders.basketno
+        LEFT JOIN aqinvoices ON aqorders.invoiceid = aqinvoices.invoiceid
         WHERE aqbasket.booksellerid = ? and datereceived IS NOT NULL
     ";
     push @query_params, $bookseller;
 
     if ( defined $code ) {
-        $strsth .= ' and aqorders.booksellerinvoicenumber like ? ';
+        $strsth .= ' and aqinvoices.invoicenumber like ? ';
         # add a % to the end of the code to allow stemming.
         push @query_params, "$code%";
     }
@@ -1698,7 +1706,7 @@ sub GetParcels {
         push @query_params, $dateto;
     }
 
-    $strsth .= "group by aqorders.booksellerinvoicenumber,datereceived ";
+    $strsth .= "group by aqinvoices.invoicenumber,datereceived ";
 
     # can't use a placeholder to place this column name.
     # but, we could probably be checking to make sure it is a column that will be fetched.
@@ -1915,7 +1923,7 @@ sub GetHistory {
             aqorders.quantityreceived,
             aqorders.ecost,
             aqorders.ordernumber,
-            aqorders.booksellerinvoicenumber as invoicenumber,
+            aqinvoices.invoicenumber,
             aqbooksellers.id as id,
             aqorders.biblionumber
         FROM aqorders
@@ -1923,7 +1931,8 @@ sub GetHistory {
         LEFT JOIN aqbasketgroups ON aqbasket.basketgroupid=aqbasketgroups.id
         LEFT JOIN aqbooksellers ON aqbasket.booksellerid=aqbooksellers.id
 	LEFT JOIN biblioitems ON biblioitems.biblionumber=aqorders.biblionumber
-        LEFT JOIN biblio ON biblio.biblionumber=aqorders.biblionumber";
+        LEFT JOIN biblio ON biblio.biblionumber=aqorders.biblionumber
+    LEFT JOIN aqinvoices ON aqorders.invoiceid = aqinvoices.invoiceid";
 
     $query .= " LEFT JOIN borrowers ON aqbasket.authorisedby=borrowers.borrowernumber"
     if ( C4::Context->preference("IndependantBranches") );
@@ -1977,8 +1986,8 @@ sub GetHistory {
     }
 
     if ($booksellerinvoicenumber) {
-        $query .= " AND (aqorders.booksellerinvoicenumber LIKE ? OR aqbasket.booksellerinvoicenumber LIKE ?)";
-        push @query_params, "%$booksellerinvoicenumber%", "%$booksellerinvoicenumber%";
+        $query .= " AND aqinvoices.invoicenumber LIKE ? ";
+        push @query_params, "%$booksellerinvoicenumber%";
     }
 
     if ($basketgroupname) {
@@ -2124,7 +2133,345 @@ sub AddClaim {
         ";
     my $sth = $dbh->prepare($query);
     $sth->execute($ordernumber);
+}
 
+=head3 GetInvoices
+
+    my @invoices = GetInvoices(
+        invoicenumber => $invoicenumber,
+        suppliername => $suppliername,
+        shipmentdatefrom => $shipmentdatefrom, # ISO format
+        shipmentdateto => $shipmentdateto, # ISO format
+        billingdatefrom => $billingdatefrom, # ISO format
+        billingdateto => $billingdateto, # ISO format
+        isbneanissn => $isbn_or_ean_or_issn,
+        title => $title,
+        author => $author,
+        publisher => $publisher,
+        publicationyear => $publicationyear,
+        branchcode => $branchcode,
+        order_by => $order_by
+    );
+
+Return a list of invoices that match all given criteria.
+
+$order_by is "column_name (asc|desc)", where column_name is any of
+'invoicenumber', 'booksellerid', 'shipmentdate', 'billingdate', 'closedate',
+'shipmentcost', 'shipmentcost_budgetid'.
+
+asc is the default if omitted
+
+=cut
+
+sub GetInvoices {
+    my %args = @_;
+
+    my @columns = qw(invoicenumber booksellerid shipmentdate billingdate
+        closedate shipmentcost shipmentcost_budgetid);
+
+    my $dbh = C4::Context->dbh;
+    my $query = qq{
+        SELECT aqinvoices.*, aqbooksellers.name AS suppliername,
+          COUNT(
+            DISTINCT IF(
+              aqorders.datereceived IS NOT NULL,
+              aqorders.biblionumber,
+              NULL
+            )
+          ) AS receivedbiblios,
+          SUM(aqorders.quantityreceived) AS receiveditems
+        FROM aqinvoices
+          LEFT JOIN aqbooksellers ON aqbooksellers.id = aqinvoices.booksellerid
+          LEFT JOIN aqorders ON aqorders.invoiceid = aqinvoices.invoiceid
+          LEFT JOIN biblio ON aqorders.biblionumber = biblio.biblionumber
+          LEFT JOIN biblioitems ON biblio.biblionumber = biblioitems.biblionumber
+          LEFT JOIN subscription ON biblio.biblionumber = subscription.biblionumber
+    };
+
+    my @bind_args;
+    my @bind_strs;
+    if($args{supplierid}) {
+        push @bind_strs, " aqinvoices.booksellerid = ? ";
+        push @bind_args, $args{supplierid};
+    }
+    if($args{invoicenumber}) {
+        push @bind_strs, " aqinvoices.invoicenumber LIKE ? ";
+        push @bind_args, "%$args{invoicenumber}%";
+    }
+    if($args{suppliername}) {
+        push @bind_strs, " aqbooksellers.name LIKE ? ";
+        push @bind_args, "%$args{suppliername}%";
+    }
+    if($args{shipmentdatefrom}) {
+        push @bind_strs, " aqinvoices.shipementdate >= ? ";
+        push @bind_args, $args{shipementdatefrom};
+    }
+    if($args{shipmentdateto}) {
+        push @bind_strs, " aqinvoices.shipementdate <= ? ";
+        push @bind_args, $args{shipementdateto};
+    }
+    if($args{billingdatefrom}) {
+        push @bind_strs, " aqinvoices.billingdate >= ? ";
+        push @bind_args, $args{billingdatefrom};
+    }
+    if($args{billingdateto}) {
+        push @bind_strs, " aqinvoices.billingdate <= ? ";
+        push @bind_args, $args{billingdateto};
+    }
+    if($args{isbneanissn}) {
+        push @bind_strs, " (biblioitems.isbn LIKE ? OR biblioitems.ean LIKE ? OR biblioitems.issn LIKE ? ) ";
+        push @bind_args, $args{isbneanissn}, $args{isbneanissn}, $args{isbneanissn};
+    }
+    if($args{title}) {
+        push @bind_strs, " biblio.title LIKE ? ";
+        push @bind_args, $args{title};
+    }
+    if($args{author}) {
+        push @bind_strs, " biblio.author LIKE ? ";
+        push @bind_args, $args{author};
+    }
+    if($args{publisher}) {
+        push @bind_strs, " biblioitems.publishercode LIKE ? ";
+        push @bind_args, $args{publisher};
+    }
+    if($args{publicationyear}) {
+        push @bind_strs, " biblioitems.publicationyear = ? ";
+        push @bind_args, $args{publicationyear};
+    }
+    if($args{branchcode}) {
+        push @bind_strs, " aqorders.branchcode = ? ";
+        push @bind_args, $args{branchcode};
+    }
+
+    $query .= " WHERE " . join(" AND ", @bind_strs) if @bind_strs;
+    $query .= " GROUP BY aqinvoices.invoiceid ";
+
+    if($args{order_by}) {
+        my ($column, $direction) = split / /, $args{order_by};
+        if(grep /^$column$/, @columns) {
+            $direction ||= 'ASC';
+            $query .= " ORDER BY $column $direction";
+        }
+    }
+
+    my $sth = $dbh->prepare($query);
+    $sth->execute(@bind_args);
+
+    my $results = $sth->fetchall_arrayref({});
+    return @$results;
+}
+
+=head3 GetInvoice
+
+    my $invoice = GetInvoice($invoiceid);
+
+Get informations about invoice with given $invoiceid
+
+Return a hash filled with aqinvoices.* fields
+
+=cut
+
+sub GetInvoice {
+    my ($invoiceid) = @_;
+    my $invoice;
+
+    return unless $invoiceid;
+
+    my $dbh = C4::Context->dbh;
+    my $query = qq{
+        SELECT *
+        FROM aqinvoices
+        WHERE invoiceid = ?
+    };
+    my $sth = $dbh->prepare($query);
+    $sth->execute($invoiceid);
+
+    $invoice = $sth->fetchrow_hashref;
+    return $invoice;
+}
+
+=head3 GetInvoiceDetails
+
+    my $invoice = GetInvoiceDetails($invoiceid)
+
+Return informations about an invoice + the list of related order lines
+
+Orders informations are in $invoice->{orders} (array ref)
+
+=cut
+
+sub GetInvoiceDetails {
+    my ($invoiceid) = @_;
+    my $invoice;
+
+    return unless $invoiceid;
+
+    my $dbh = C4::Context->dbh;
+    my $query = qq{
+        SELECT aqinvoices.*, aqbooksellers.name AS suppliername
+        FROM aqinvoices
+          LEFT JOIN aqbooksellers ON aqinvoices.booksellerid = aqbooksellers.id
+        WHERE invoiceid = ?
+    };
+    my $sth = $dbh->prepare($query);
+    $sth->execute($invoiceid);
+
+    $invoice = $sth->fetchrow_hashref;
+
+    $query = qq{
+        SELECT aqorders.*, biblio.*
+        FROM aqorders
+          LEFT JOIN biblio ON aqorders.biblionumber = biblio.biblionumber
+        WHERE invoiceid = ?
+    };
+    $sth = $dbh->prepare($query);
+    $sth->execute($invoiceid);
+    $invoice->{orders} = $sth->fetchall_arrayref({});
+    $invoice->{orders} ||= []; # force an empty arrayref if fetchall_arrayref fails
+
+    return $invoice;
+}
+
+=head3 AddInvoice
+
+    my $invoiceid = AddInvoice(
+        invoicenumber => $invoicenumber,
+        booksellerid => $booksellerid,
+        shipmentdate => $shipmentdate,
+        billingdate => $billingdate,
+        closedate => $closedate,
+        shipmentcost => $shipmentcost,
+        shipmentcost_budgetid => $shipmentcost_budgetid
+    );
+
+Create a new invoice and return its id or undef if it fails.
+
+=cut
+
+sub AddInvoice {
+    my %invoice = @_;
+
+    return unless(%invoice and $invoice{invoicenumber});
+
+    my @columns = qw(invoicenumber booksellerid shipmentdate billingdate
+        closedate shipmentcost shipmentcost_budgetid);
+
+    my @set_strs;
+    my @set_args;
+    foreach my $key (keys %invoice) {
+        if(0 < grep(/^$key$/, @columns)) {
+            push @set_strs, "$key = ?";
+            push @set_args, ($invoice{$key} || undef);
+        }
+    }
+
+    my $rv;
+    if(@set_args > 0) {
+        my $dbh = C4::Context->dbh;
+        my $query = "INSERT INTO aqinvoices SET ";
+        $query .= join (",", @set_strs);
+        my $sth = $dbh->prepare($query);
+        $rv = $sth->execute(@set_args);
+        if($rv) {
+            $rv = $dbh->last_insert_id(undef, undef, 'aqinvoices', undef);
+        }
+    }
+    return $rv;
+}
+
+=head3 ModInvoice
+
+    ModInvoice(
+        invoiceid => $invoiceid,    # Mandatory
+        invoicenumber => $invoicenumber,
+        booksellerid => $booksellerid,
+        shipmentdate => $shipmentdate,
+        billingdate => $billingdate,
+        closedate => $closedate,
+        shipmentcost => $shipmentcost,
+        shipmentcost_budgetid => $shipmentcost_budgetid
+    );
+
+Modify an invoice, invoiceid is mandatory.
+
+Return undef if it fails.
+
+=cut
+
+sub ModInvoice {
+    my %invoice = @_;
+
+    return unless(%invoice and $invoice{invoiceid});
+
+    my @columns = qw(invoicenumber booksellerid shipmentdate billingdate
+        closedate shipmentcost shipmentcost_budgetid);
+
+    my @set_strs;
+    my @set_args;
+    foreach my $key (keys %invoice) {
+        if(0 < grep(/^$key$/, @columns)) {
+            push @set_strs, "$key = ?";
+            push @set_args, ($invoice{$key} || undef);
+        }
+    }
+
+    my $dbh = C4::Context->dbh;
+    my $query = "UPDATE aqinvoices SET ";
+    $query .= join(",", @set_strs);
+    $query .= " WHERE invoiceid = ?";
+
+    my $sth = $dbh->prepare($query);
+    $sth->execute(@set_args, $invoice{invoiceid});
+}
+
+=head3 CloseInvoice
+
+    CloseInvoice($invoiceid);
+
+Close an invoice.
+
+Equivalent to ModInvoice(invoiceid => $invoiceid, closedate => undef);
+
+=cut
+
+sub CloseInvoice {
+    my ($invoiceid) = @_;
+
+    return unless $invoiceid;
+
+    my $dbh = C4::Context->dbh;
+    my $query = qq{
+        UPDATE aqinvoices
+        SET closedate = CAST(NOW() AS DATE)
+        WHERE invoiceid = ?
+    };
+    my $sth = $dbh->prepare($query);
+    $sth->execute($invoiceid);
+}
+
+=head3 ReopenInvoice
+
+    ReopenInvoice($invoiceid);
+
+Reopen an invoice
+
+Equivalent to ModInvoice(invoiceid => $invoiceid, closedate => C4::Dates->new()->output('iso'))
+
+=cut
+
+sub ReopenInvoice {
+    my ($invoiceid) = @_;
+
+    return unless $invoiceid;
+
+    my $dbh = C4::Context->dbh;
+    my $query = qq{
+        UPDATE aqinvoices
+        SET closedate = NULL
+        WHERE invoiceid = ?
+    };
+    my $sth = $dbh->prepare($query);
+    $sth->execute($invoiceid);
 }
 
 1;

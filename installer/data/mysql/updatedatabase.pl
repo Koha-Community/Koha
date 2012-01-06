@@ -5859,6 +5859,66 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion($DBversion);
 }
 
+$DBversion = "XXX";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("
+        CREATE TABLE aqinvoices (
+          invoiceid int(11) NOT NULL AUTO_INCREMENT,
+          invoicenumber mediumtext NOT NULL,
+          booksellerid int(11) NOT NULL,
+          shipmentdate date default NULL,
+          billingdate date default NULL,
+          closedate date default NULL,
+          shipmentcost decimal(28,6) default NULL,
+          shipmentcost_budgetid int(11) default NULL,
+          PRIMARY KEY (invoiceid),
+          CONSTRAINT aqinvoices_fk_aqbooksellerid FOREIGN KEY (booksellerid) REFERENCES aqbooksellers (id) ON DELETE CASCADE ON UPDATE CASCADE,
+          CONSTRAINT aqinvoices_fk_shipmentcost_budgetid FOREIGN KEY (shipmentcost_budgetid) REFERENCES aqbudgets (budget_id) ON DELETE SET NULL ON UPDATE CASCADE
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+    ");
+
+    # Fill this new table with existing invoices
+    my $sth = $dbh->prepare("
+        SELECT aqorders.booksellerinvoicenumber AS invoicenumber, aqbasket.booksellerid, aqorders.datereceived
+        FROM aqorders
+          LEFT JOIN aqbasket ON aqorders.basketno = aqbasket.basketno
+        WHERE aqorders.booksellerinvoicenumber IS NOT NULL
+          AND aqorders.booksellerinvoicenumber != ''
+        GROUP BY aqorders.booksellerinvoicenumber
+    ");
+    $sth->execute;
+    my $results = $sth->fetchall_arrayref({});
+    $sth = $dbh->prepare("
+        INSERT INTO aqinvoices (invoicenumber, booksellerid, shipmentdate) VALUES (?,?,?)
+    ");
+    foreach(@$results) {
+        $sth->execute($_->{invoicenumber}, $_->{booksellerid}, $_->{datereceived});
+    }
+
+    # Add the column in aqorders, fill it with correct value
+    # and then drop booksellerinvoicenumber column
+    $dbh->do("
+        ALTER TABLE aqorders
+        ADD COLUMN invoiceid int(11) default NULL AFTER booksellerinvoicenumber,
+        ADD CONSTRAINT aqorders_ibfk_3 FOREIGN KEY (invoiceid) REFERENCES aqinvoices (invoiceid) ON DELETE SET NULL ON UPDATE CASCADE
+    ");
+
+    $dbh->do("
+        UPDATE aqorders, aqinvoices
+        SET aqorders.invoiceid = aqinvoices.invoiceid
+        WHERE aqorders.booksellerinvoicenumber = aqinvoices.invoicenumber
+    ");
+
+    $dbh->do("
+        ALTER TABLE aqorders
+        DROP COLUMN booksellerinvoicenumber
+    ");
+
+    print "Upgrade to $DBversion done (Add aqinvoices table) \n";
+    SetVersion ($DBversion);
+}
+
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

@@ -152,16 +152,18 @@ foreach my $item (@items){
     }
 
     my $order  = GetOrderFromItemnumber( $item->{'itemnumber'} );
-    my $basket = GetBasket( $order->{'basketno'} );
-    $item->{'booksellerid'}            = $basket->{'booksellerid'};
     $item->{'ordernumber'}             = $order->{'ordernumber'};
     $item->{'basketno'}                = $order->{'basketno'};
-    $item->{'booksellerinvoicenumber'} = $order->{'booksellerinvoicenumber'};
     $item->{'orderdate'}               = $order->{'entrydate'};
     if ($item->{'basketno'}){
 	    my $basket = GetBasket($item->{'basketno'});
 	    my $bookseller = GetBookSellerFromId($basket->{'booksellerid'});
 	    $item->{'vendor'} = $bookseller->{'name'};
+    }
+    $item->{'invoiceid'}               = $order->{'invoiceid'};
+    if($item->{invoiceid}) {
+        my $invoice = GetInvoice($item->{invoiceid});
+        $item->{invoicenumber} = $invoice->{invoicenumber} if $invoice;
     }
     $item->{'datereceived'}            = $order->{'datereceived'};
 

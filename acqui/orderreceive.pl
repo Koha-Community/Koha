@@ -40,9 +40,9 @@ to know on what supplier this script has to display receive order.
 
 =item receive
 
-=item invoice
+=item invoiceid
 
-the number of this invoice.
+the id of this invoice.
 
 =item freight
 
@@ -82,19 +82,18 @@ use C4::Suggestions;
 my $input      = new CGI;
 
 my $dbh          = C4::Context->dbh;
-my $booksellerid = $input->param('booksellerid');
+my $invoiceid    = $input->param('invoiceid');
+my $invoice      = GetInvoice($invoiceid);
+my $booksellerid   = $invoice->{booksellerid};
+my $freight      = $invoice->{shipmentcost};
+my $datereceived = $invoice->{shipmentdate};
 my $ordernumber  = $input->param('ordernumber');
 my $search       = $input->param('receive');
-my $invoice      = $input->param('invoice');
-my $freight      = $input->param('freight');
-my $datereceived = $input->param('datereceived');
-
 
 $datereceived = $datereceived ? C4::Dates->new($datereceived, 'iso') : C4::Dates->new();
 
 my $bookseller = GetBookSellerFromId($booksellerid);
-my $input_gst = ($input->param('gst') eq '' ? undef : $input->param('gst'));
-my $gst= $input_gst // $bookseller->{gstrate} // C4::Context->preference("gist") // 0;
+my $gst = $bookseller->{gstrate} // C4::Context->preference("gist") // 0;
 my $results = SearchOrder($ordernumber,$search);
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -195,7 +194,8 @@ if ( $count == 1 ) {
         unitprice             => sprintf( "%.2f",$order->{'unitprice'}),
         memberfirstname       => $member->{firstname} || "",
         membersurname         => $member->{surname} || "",
-        invoice               => $invoice,
+        invoiceid             => $invoice->{invoiceid},
+        invoice               => $invoice->{invoicenumber},
         datereceived          => $datereceived->output(),
         datereceived_iso      => $datereceived->output('iso'),
         notes                 => $order->{notes},
@@ -209,7 +209,7 @@ else {
     for ( my $i = 0 ; $i < $count ; $i++ ) {
         my %line = %{ @$results[$i] };
 
-        $line{invoice}      = $invoice;
+        $line{invoice}      = $invoice->{invoicenumber};
         $line{datereceived} = $datereceived->output();
         $line{freight}      = $freight;
         $line{gst}          = $gst;
@@ -221,7 +221,8 @@ else {
 
     $template->param(
         loop         => \@loop,
-        booksellerid   => $booksellerid,
+        booksellerid => $booksellerid,
+        invoiceid    => $invoice->{invoiceid},
     );
 }
 my $op = $input->param('op');

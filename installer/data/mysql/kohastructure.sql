@@ -2753,7 +2753,7 @@ CREATE TABLE `aqorders` ( -- information related to the basket line items
   `listprice` decimal(28,6) default NULL, -- the vendor price for this line item
   `totalamount` decimal(28,6) default NULL, -- not used? always NULL
   `datereceived` date default NULL, -- the date this order was received
-  `booksellerinvoicenumber` mediumtext, -- the invoice number this line item was received on
+  invoiceid int(11) default NULL, -- id of invoice
   `freight` decimal(28,6) default NULL, -- shipping costs (not used)
   `unitprice` decimal(28,6) default NULL, -- the actual cost entered when receiving this line item
   `quantityreceived` smallint(6) NOT NULL default 0, -- the quantity that have been received so far
@@ -2786,7 +2786,8 @@ CREATE TABLE `aqorders` ( -- information related to the basket line items
   KEY `biblionumber` (`biblionumber`),
   KEY `budget_id` (`budget_id`),
   CONSTRAINT `aqorders_ibfk_1` FOREIGN KEY (`basketno`) REFERENCES `aqbasket` (`basketno`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `aqorders_ibfk_2` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE SET NULL ON UPDATE CASCADE
+  CONSTRAINT `aqorders_ibfk_2` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT aqorders_ibfk_3 FOREIGN KEY (invoiceid) REFERENCES aqinvoices (invoiceid) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -2802,6 +2803,27 @@ CREATE TABLE `aqorders_items` ( -- information on items entered in the acquisiti
   PRIMARY KEY  (`itemnumber`),
   KEY `ordernumber` (`ordernumber`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+--
+-- Table structure for table aqinvoices
+--
+
+DROP TABLE IF EXISTS aqinvoices;
+CREATE TABLE aqinvoices (
+  invoiceid int(11) NOT NULL AUTO_INCREMENT,    -- ID of the invoice, primary key
+  invoicenumber mediumtext NOT NULL,    -- Name of invoice
+  booksellerid int(11) NOT NULL,    -- foreign key to aqbooksellers
+  shipmentdate date default NULL,   -- date of shipment
+  billingdate date default NULL,    -- date of billing
+  closedate date default NULL,  -- invoice close date, NULL means the invoice is open
+  shipmentcost decimal(28,6) default NULL,  -- shipment cost
+  shipmentcost_budgetid int(11) default NULL,   -- foreign key to aqbudgets, link the shipment cost to a budget
+  PRIMARY KEY (invoiceid),
+  CONSTRAINT aqinvoices_fk_aqbooksellerid FOREIGN KEY (booksellerid) REFERENCES aqbooksellers (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT aqinvoices_fk_shipmentcost_budgetid FOREIGN KEY (shipmentcost_budgetid) REFERENCES aqbudgets (budget_id) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 --
 -- Table structure for table `fieldmapping`

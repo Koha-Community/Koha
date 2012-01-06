@@ -191,13 +191,11 @@ if ($op eq ""){
         # 3rd add order
         my $patron = C4::Members->GetMember( borrowernumber => $loggedinuser );
         my $branch = C4::Branch->GetBranchDetail( $patron->{branchcode} );
-        my ($invoice);
         # get quantity in the MARC record (1 if none)
         my $quantity = GetMarcQuantity($marcrecord, C4::Context->preference('marcflavour')) || 1;
         my %orderinfo = (
             "biblionumber", $biblionumber, "basketno", $cgiparams->{'basketno'},
             "quantity", $quantity, "branchcode", $branch, 
-            "booksellerinvoicenumber", $invoice, 
             "budget_id", $budget_id, "uncertainprice", 1,
             "sort1", $cgiparams->{'sort1'},"sort2", $cgiparams->{'sort2'},
             "notes", $cgiparams->{'notes'}, "budget_id", $cgiparams->{'budget_id'},

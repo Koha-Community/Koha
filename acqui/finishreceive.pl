@@ -45,14 +45,14 @@ my $origquantityrec=$input->param('origquantityrec');
 my $quantityrec=$input->param('quantityrec');
 my $quantity=$input->param('quantity');
 my $unitprice=$input->param('cost');
-my $invoiceno=$input->param('invoice');
-my $datereceived=$input->param('datereceived');
+my $invoiceid = $input->param('invoiceid');
+my $invoice = GetInvoice($invoiceid);
+my $invoiceno = $invoice->{invoicenumber};
+my $datereceived= $invoice->{shipmentdate};
 my $replacement=$input->param('rrp');
 my $gst=$input->param('gst');
-my $freight=$input->param('freight');
 my $booksellerid = $input->param('booksellerid');
 my $cnt=0;
-my $error_url_str;
 my $ecost = $input->param('ecost');
 my $note = $input->param("note");
 
@@ -68,8 +68,7 @@ if ($quantityrec > $origquantityrec ) {
     if ( $quantityrec > 0 ) {
         ($datereceived, $new_ordernumber) = ModReceiveOrder(
             $biblionumber, $ordernumber, $quantityrec, $user, $unitprice,
-            $invoiceno, $freight, $replacement, undef, $datereceived,
-            \@received_items);
+            $invoiceid, $replacement, undef, $datereceived, \@received_items);
     }
 
     # now, add items if applicable
@@ -112,7 +111,7 @@ if ($quantityrec > $origquantityrec ) {
 
 update_item( $_ ) foreach GetItemnumbersFromOrder( $ordernumber );
 
-print $input->redirect("/cgi-bin/koha/acqui/parcel.pl?invoice=$invoiceno&booksellerid=$booksellerid&freight=$freight&gst=$gst&datereceived=$datereceived$error_url_str");
+print $input->redirect("/cgi-bin/koha/acqui/parcel.pl?invoiceid=$invoiceid");
 
 ################################ End of script ################################
 

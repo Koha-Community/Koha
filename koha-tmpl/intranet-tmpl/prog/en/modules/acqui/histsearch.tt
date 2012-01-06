@@ -98,7 +98,11 @@
                         <br />[% suggestions_loo.author %] <br /> [% suggestions_loo.isbn %]</td>
 					<td><a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% suggestions_loo.id %]">[% suggestions_loo.name %]</a></td>
 					<td>[% suggestions_loo.creationdate | $KohaDates %]</td>
-					<td>[% suggestions_loo.datereceived | $KohaDates %]</td>
+                    <td>
+                        [% IF suggestions_loo.datereceived %]
+                            [% suggestions_loo.datereceived | $KohaDates %]
+                        [% END %]
+                    </td>
 					<td>[% suggestions_loo.quantity %]</td>
 					<td>[% suggestions_loo.ecost %]</td>
 				</tr>

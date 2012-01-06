@@ -60,10 +60,10 @@ SELECT
     aqbasket.booksellerid,
     itype,
     title,
-    aqorders.booksellerinvoicenumber,
+    aqorders.invoiceid,
+    aqinvoices.invoicenumber,
     quantityreceived,
     unitprice,
-    freight,
     datereceived,
     aqorders.biblionumber
 FROM (aqorders, aqbasket)
@@ -73,6 +73,8 @@ LEFT JOIN biblio ON
     biblio.biblionumber=aqorders.biblionumber
 LEFT JOIN aqorders_items ON
     aqorders.ordernumber=aqorders_items.ordernumber
+LEFT JOIN aqinvoices ON
+    aqorders.invoiceid = aqinvoices.invoiceid
 WHERE
     aqorders.basketno=aqbasket.basketno AND
     budget_id=? AND
@@ -85,27 +87,48 @@ $sth->execute($bookfund);
 if ( $sth->err ) {
     die "An error occurred fetching records: " . $sth->errstr;
 }
-my $total = 0;
+my $subtotal = 0;
 my $toggle;
 my @spent;
 while ( my $data = $sth->fetchrow_hashref ) {
     my $recv = $data->{'quantityreceived'};
     if ( $recv > 0 ) {
-        my $subtotal = $recv * ( $data->{'unitprice'} + $data->{'freight'} );
-        $data->{'subtotal'}  = sprintf( "%.2f", $subtotal );
-        $data->{'freight'}   = sprintf( "%.2f", $data->{'freight'} );
+        my $rowtotal = $recv * $data->{'unitprice'};
+        $data->{'rowtotal'}  = sprintf( "%.2f", $rowtotal );
         $data->{'unitprice'} = sprintf( "%.2f", $data->{'unitprice'} );
-        $total += $subtotal;
+        $subtotal += $rowtotal;
         push @spent, $data;
     }
 
 }
+
+my $total = $subtotal;
+$query = qq{
+    SELECT invoicenumber, shipmentcost
+    FROM aqinvoices
+    WHERE shipmentcost_budgetid = ?
+};
+$sth = $dbh->prepare($query);
+$sth->execute($bookfund);
+my @shipmentcosts;
+while (my $data = $sth->fetchrow_hashref) {
+    push @shipmentcosts, {
+        shipmentcost => sprintf("%.2f", $data->{shipmentcost}),
+        invoicenumber => $data->{invoicenumber}
+    };
+    $total += $data->{shipmentcost};
+}
+$sth->finish;
+
 $total = sprintf( "%.2f", $total );
 
-$template->{VARS}->{'fund'}  = $bookfund;
-$template->{VARS}->{'spent'} = \@spent;
-$template->{VARS}->{'total'} = $total;
-$template->{VARS}->{'fund_code'} = $fund_code;
-$sth->finish;
+$template->param(
+    fund => $bookfund,
+    spent => \@spent,
+    subtotal => $subtotal,
+    shipmentcosts => \@shipmentcosts,
+    total => $total,
+    fund_code => $fund_code
+);
 
 output_html_with_http_headers $input, $cookie, $template->output;

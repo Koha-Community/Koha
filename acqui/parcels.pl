@@ -44,9 +44,9 @@ To know the supplier this script has to show orders.
 sort list of order by 'orderby'.
 Orderby can be equals to
     * datereceived desc (default value)
-    * aqorders.booksellerinvoicenumber
+    * invoicenumber
     * datereceived
-    * aqorders.booksellerinvoicenumber desc
+    * invoicenumber desc
 
 =item filter
 
@@ -75,6 +75,7 @@ use C4::Output;
 use C4::Dates qw/format_date/;
 use C4::Acquisition;
 use C4::Bookseller qw/ GetBookSellerFromId /;
+use C4::Budgets;
 
 my $input          = CGI->new;
 my $booksellerid     = $input->param('booksellerid');
@@ -84,9 +85,10 @@ my $code           = $input->param('filter');
 my $datefrom       = $input->param('datefrom');
 my $dateto         = $input->param('dateto');
 my $resultsperpage = $input->param('resultsperpage');
+my $op             = $input->param('op');
 $resultsperpage ||= 20;
 
-our ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+our ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
     {   template_name   => 'acqui/parcels.tmpl',
         query           => $input,
         type            => 'intranet',
@@ -96,8 +98,38 @@ our ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
+if($op and $op eq 'new') {
+    my $invoicenumber = $input->param('invoice');
+    my $shipmentdate = $input->param('shipmentdate');
+    my $shipmentcost = $input->param('shipmentcost');
+    my $shipmentcost_budgetid = $input->param('shipmentcost_budgetid');
+    if($shipmentdate) {
+        $shipmentdate = C4::Dates->new($shipmentdate)->output('iso');
+    }
+    my $invoiceid = AddInvoice(
+        invoicenumber => $invoicenumber,
+        booksellerid => $booksellerid,
+        shipmentdate => $shipmentdate,
+        shipmentcost => $shipmentcost,
+        shipmentcost_budgetid => $shipmentcost_budgetid,
+    );
+    if(defined $invoiceid) {
+        # Successful 'Add'
+        print $input->redirect("/cgi-bin/koha/acqui/parcel.pl?invoiceid=$invoiceid");
+        exit 0;
+    } else {
+        $template->param(error_failed_to_create_invoice => 1);
+    }
+}
+
 my $bookseller = GetBookSellerFromId($booksellerid);
-my @parcels = GetParcels( $booksellerid, $order, $code, $datefrom, $dateto );
+my @parcels = GetInvoices(
+    supplierid => $booksellerid,
+    invoicenumber => $code,
+    shipmentdatefrom => $datefrom,
+    shipmentdateto => $dateto,
+    order_by => $order
+);
 my $count_parcels = @parcels;
 
 # multi page display gestion
@@ -114,19 +146,28 @@ for my $i ( $startfrom .. $last_row) {
 
     push @{$loopres},
       { number           => $i + 1,
-        code             => $p->{booksellerinvoicenumber},
-        nullcode         => $p->{booksellerinvoicenumber} eq 'NULL',
-        emptycode        => $p->{booksellerinvoicenumber} eq q{},
-        raw_datereceived => $p->{datereceived},
-        datereceived     => format_date( $p->{datereceived} ),
-        bibcount         => $p->{biblio},
-        reccount         => $p->{itemsreceived},
-        itemcount        => $p->{itemsexpected},
+        invoiceid        => $p->{invoiceid},
+        code             => $p->{invoicenumber},
+        nullcode         => $p->{invoicenumber} eq 'NULL',
+        emptycode        => $p->{invoicenumber} eq q{},
+        raw_datereceived => $p->{shipmentdate},
+        datereceived     => format_date( $p->{shipmentdate} ),
+        bibcount         => $p->{receivedbiblios} || 0,
+        reccount         => $p->{receiveditems} || 0,
+        itemcount        => $p->{itemsexpected} || 0,
       };
 }
 if ($count_parcels) {
     $template->param( searchresults => $loopres, count => $count_parcels );
 }
+
+my $budgets = GetBudgets();
+my @budgets_loop;
+foreach my $budget (@$budgets) {
+    next unless CanUserUseBudget($loggedinuser, $budget, $flags);
+    push @budgets_loop, $budget;
+}
+
 $template->param(
     orderby                  => $order,
     filter                   => $code,
@@ -135,9 +176,10 @@ $template->param(
     resultsperpage           => $resultsperpage,
     name                     => $bookseller->{'name'},
     DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
-    datereceived_today       => C4::Dates->new()->output(),
+    shipmentdate_today       => C4::Dates->new()->output(),
     booksellerid             => $booksellerid,
     GST                      => C4::Context->preference('gist'),
+    budgets                  => \@budgets_loop,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

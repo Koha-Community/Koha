@@ -184,16 +184,16 @@
 
             [% IF ITEM_DAT.dateaccessioned %]
                 <li><span class="label">Accession date:</span>
-                    [% IF ( CAN_user_acquisition_order_receive && ITEM_DAT.booksellerinvoicenumber ) %]
-                        <a href="/cgi-bin/koha/acqui/parcel.pl?booksellerid=[% ITEM_DAT.booksellerid %]&amp;invoice=[% ITEM_DAT.booksellerinvoicenumber %]&amp;datereceived=[% ITEM_DAT.datereceived %]">[% ITEM_DAT.dateaccessioned | $KohaDates %]</a>
+                    [% IF ( CAN_user_acquisition_order_receive && ITEM_DAT.invoiceid ) %]
+                        <a href="/cgi-bin/koha/acqui/parcel.pl?invoiceid=[% ITEM_DAT.invoiceid %]">[% ITEM_DAT.dateaccessioned | $KohaDates %]</a>
                     [% ELSE %]
                         [% ITEM_DAT.dateaccessioned | $KohaDates %]
                     [% END %]
                 </li>
             [% END %]
-            [% IF ( ITEM_DAT.booksellerinvoicenumber ) %]
+            [% IF ( ITEM_DAT.invoicenumber ) %]
                 <li><span class="label">Invoice number:</span>
-                    [% ITEM_DAT.booksellerinvoicenumber %]
+                    [% ITEM_DAT.invoicenumber %]
                 </li>
             [% END %]
 

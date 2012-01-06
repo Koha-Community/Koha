@@ -27,7 +27,12 @@
    <div id="bd">
 	<div id="yui-main">
 	<div class="yui-b">
-	
+
+[% IF ( error_failed_to_create_invoice ) %]
+    <div id="error" class="dialog error">
+        <p>An error has occured. Invoice cannot be created.</p>
+    </div>
+[% END %]
 <h1>Receive shipment from vendor <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]">[% name %]</a></h1>
 
 [% IF ( count ) %]
@@ -58,11 +63,14 @@
                 [% searchresult.number %]
             </td>
             <td>
-                <a href="/cgi-bin/koha/acqui/parcel.pl?type=intra&amp;booksellerid=[% booksellerid |url %]&amp;datereceived=[% searchresult.raw_datereceived |url %][% IF ( searchresult.code ) %]&amp;invoice=[% searchresult.code |url %][% END %]">
-                    [% searchresult.datereceived %]</a>
+                [% searchresult.datereceived %]
             </td>
             <td>
-                [% IF ( searchresult.code ) %][% searchresult.code %][% ELSE %]<acronym title="not available">n/a</acronym>[% END %]
+                [% IF ( searchresult.code ) %]
+                    <a href="/cgi-bin/koha/acqui/parcel.pl?invoiceid=[% searchresult.invoiceid %]">[% searchresult.code %]</a>
+                [% ELSE %]
+                    <acronym title="not available">n/a</acronym>
+                [% END %]
             </td>
             <td>
                 [% searchresult.reccount %]
@@ -98,7 +106,7 @@
 [% END %]
 
     <div id="parcels_new_parcel">
-        <form method="get" action="parcel.pl">
+        <form method="get" action="parcels.pl">
     <fieldset class="rows">
     <legend>Receive a new shipment</legend>
        <ol> <li>
@@ -118,9 +126,24 @@
             <label for="freight">Shipping:</label>
             <input type="text" size="20" id="freight" name="freight" />
         </li> -->
-         <li><label for="datereceived">Shipment date: </label>
-            <input type="text" id="datereceived" name="datereceived"  maxlength="10" size="10"  value="[% datereceived_today %]" class="datepicker" />
-				<div class="hint">[% INCLUDE 'date-format.inc' %]</div>	</li>
+         <li>
+            <label for="shipmentdate">Shipment date: </label>
+            <input type="text" id="shipmentdate" name="shipmentdate" maxlength="10" size="10" value="[% shipmentdate_today %]" class="datepicker" />
+            <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+        </li>
+        <li>
+            <label for="shipmentcost">Shipment cost: </label>
+            <input type="text" id="shipmentcost" name="shipmentcost" size="10" />
+        </li>
+        <li>
+            <label for="shipmentcost_budgetid">Budget: </label>
+            <select id="shipmentcost_budgetid" name="shipmentcost_budgetid">
+                <option value="">No budget</option>
+                [% FOREACH budget IN budgets %]
+                    <option value="[% budget.budget_id %]">[% budget.budget_name %]</option>
+                [% END %]
+            </select>
+        </li>
 		</ol>
     </fieldset>
             <fieldset class="action"><input type="submit" class="button" value="Next" /> <a class="cancel" href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]">Cancel</a></fieldset>
@@ -138,10 +161,10 @@
             <li><label for="datefrom">From:</label><input type="text" size="9" id="datefrom" name="datefrom" value="[% datefrom %]" /><br /> 
                 <label for="dateto">To:</label><input type="text" size="9" id="dateto" name="dateto" value="[% dateto %]" /></li>
             <li><label for="orderby">Sort by :</label><select name="orderby" id="orderby">
-                <option value="aqorders.booksellerinvoicenumber">Invoice number</option>
-                <option value="datereceived"> Date received</option>
-                <option value="datereceived desc"> Date received reverse</option>
-                <option value="aqorders.booksellerinvoicenumber desc"> Invoice number reverse</option>
+                <option value="invoicenumber">Invoice number</option>
+                <option value="shipmentdate">Shipment date</option>
+                <option value="shipmentdate desc">Shipment date reverse</option>
+                <option value="invoicenumber desc">Invoice number reverse</option>
                 </select><br />
                 <label for="resultsperpage">Results per page :</label><select name="resultsperpage" id="resultsperpage">
                 <option value="20">20</option>

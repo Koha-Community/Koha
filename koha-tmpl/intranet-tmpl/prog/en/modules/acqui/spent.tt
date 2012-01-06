@@ -42,7 +42,6 @@
 	<th> Itemtype </th>
 	<th> Received </th>
     <th> Unit price </th>
-    <th> Freight per item </th>
     <th> Date ordered </th>
     <th> Date received </th>
 	<th> Subtotal </th>
@@ -60,13 +59,13 @@
 	    [% order.title %]
 	</td>
 	<td class="cell">
-            <a href="/cgi-bin/koha/acqui/orderreceive.pl?ordernumber=[% order.ordernumber %]&amp;biblio=[% order.biblionumber %]&amp;invoice=[% order.booksellerinvoicenumber %]&amp;booksellerid=[% order.booksellerid %]&amp;catview=yes">[% order.ordernumber %]</a>
+            <a href="/cgi-bin/koha/acqui/orderreceive.pl?ordernumber=[% order.ordernumber %]&amp;biblio=[% order.biblionumber %]&amp;invoiceid=[% order.invoiceid %]">[% order.ordernumber %]</a>
 	</td>
 	<td class="cell">
 	    <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% order.booksellerid %]">[% order.booksellerid %]</a>
 	</td>
 	<td class="cell">
-	    <a href="/cgi-bin/koha/acqui/parcel.pl?invoice=[% order.booksellerinvoicenumber %]&amp;booksellerid=[% order.booksellerid %]&amp;datereceived=[% order.datereceived %]">[% order.booksellerinvoicenumber %]</a>
+	    <a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% order.invoiceid %]">[% order.invoicenumber %]</a>
 	</td>
 	<td class="cell">
 	    [% order.itype %]
@@ -78,37 +77,35 @@
 	    [% order.unitprice %]
 	</td>
 	<td class="cell" align="right">
-	    [% order.freight %]
-	</td>
-	<td class="cell" align="right">
 	    [% order.entrydate | $KohaDates %]
 	</td>
 	<td class="cell" align="right">
 	    [% order.datereceived | $KohaDates %]
 	</td>
 	<td class="cell" align="right">
-	    [% order.subtotal %]
+	    [% order.rowtotal %]
 	</td>
     </tr>
 [% END %]
     <tfoot>
-        <tr valign="top">
-        <td> Total </td>
-        <td> </td>
-        <td> </td>
-        <td> </td>
-        <td> </td>
-        <td> </td>
-        <td> </td>
-        <td> </td>
-	<td> </td>
-	<td> </td>
-        <td align="right">
-		[% total %]
-	</td>
+        [% IF shipmentcosts.size %]
+            <tr valign="top">
+                <td colspan="9"> Sub total </td>
+                <td align="right"> [% subtotal %] </td>
+            </tr>
+            [% FOREACH shipmentcost IN shipmentcosts %]
+                <tr>
+                    <td></td>
+                    <td colspan="8">Shipment cost for invoice [% shipmentcost.invoicenumber %]</td>
+                    <td class="total">[% shipmentcost.shipmentcost %]</td>
+                </tr>
+            [% END %]
+        [% END %]
+        <tr>
+            <td colspan="9">TOTAL</td>
+            <td class="total">[% total %]</td>
         </tr>
     </tfoot>
-
 </table>
 
 </div>

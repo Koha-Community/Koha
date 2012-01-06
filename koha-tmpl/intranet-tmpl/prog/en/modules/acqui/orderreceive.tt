@@ -258,11 +258,11 @@
         [% END %]
     [% END %]
     <input type="hidden" name="biblionumber" value="[% biblionumber %]" />
+    <input type="hidden" name="invoiceid" value="[% invoiceid %]" />
     <input type="hidden" name="ordernumber" value="[% ordernumber %]" />
     <input type="hidden" name="biblioitemnumber" value="[% biblioitemnumber %]" />
     <input type="hidden" name="booksellerid" value="[% booksellerid %]" />
     <input type="hidden" name="datereceived" value="[% datereceived_iso %]" />
-    <input type="hidden" name="freight" value="[% freight %]" />
     <input type="hidden" name="gst" value="[% gst %]" />
 	</div>
 	<div class="yui-u">
@@ -318,13 +318,12 @@
             <input type="text" size="20" name="cost" id="cost" value="[% ecost %]" />
         [% END %]</li></ol>
         <label for="note">Notes: </label><textarea name="note" width="40" rows="8" >[% notes %]</textarea>
-        <input type="hidden" name="invoice" value="[% invoice %]" />
     </fieldset>
 
 </div>
 </div><div class="yui-g"><fieldset class="action">
         <input type="submit"  value="Save" />
-        <a class="cancel" href="/cgi-bin/koha/acqui/parcel.pl?booksellerid=[% supplierid %]&amp;invoice=[% invoice %]&amp;gst=[% gst %]&amp;freight=[% freight %]">Cancel</a>
+        <a class="cancel" href="/cgi-bin/koha/acqui/parcel.pl?invoiceid=[% invoiceid %]">Cancel</a>
 </fieldset></div>    </form>
 [% ELSE %]
 <div id="acqui_acquire_orderlist">
@@ -341,7 +340,7 @@
         <tr>
             <td>[% loo.basketno %]</td>
             <td>[% loo.isbn %]</td>
-         <td><a href="orderreceive.pl?datereceived=[% loo.datereceived %]&amp;receive=[% loo.ordernumber %]&amp;biblio=[% loo.biblionumber %]&amp;invoice=[% loo.invoice %]&amp;freight=[% loo.freight %]&amp;gst=[% loo.gst %]&amp;id=[% loo.id %]">[% loo.title |html %]</a></td>
+         <td><a href="orderreceive.pl?ordernumber=[% loo.ordernumber %]&amp;invoiceid=[% invoiceid %]">[% loo.title |html %]</a></td>
             <td>[% loo.author %]</td>
             <td>[% loo.quantity %]</td>
             <td>[% loo.quantityreceived %]</td>
