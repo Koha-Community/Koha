@@ -4563,13 +4563,6 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.07.00.XXX";
-if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('CircAutoPrintQuickSlip', '1', 'Choose what should happen when an empty barcode field is submitted in circulation: Display a print quick slip window or Clear the screen.',NULL,'YesNo');");
-    print "Upgrade to $DBversion done (Add syspref CircAutoPrintQuickSlip to control what should happen when an empty barcode field is submitted in circulation: Display a print quick slip window or clear the screen. )\n";
-    SetVersion($DBversion);
-}
-
 $DBversion = "3.07.00.002";
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     $dbh->do("UPDATE borrowers SET debarred=NULL WHERE debarred='0000-00-00';");
@@ -4596,6 +4589,13 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('BorrowerUnwantedField','','Name the fields you don''t need to store for a patron''s account',NULL,'free')");
     print "Upgrade to $DBversion done (BorrowerUnwantedField syspref)\n";
     SetVersion ($DBversion);
+}
+
+$DBversion = "3.07.00.006";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('CircAutoPrintQuickSlip', '1', 'Choose what should happen when an empty barcode field is submitted in circulation: Display a print quick slip window or Clear the screen.',NULL,'YesNo');");
+    print "Upgrade to $DBversion done (Add syspref CircAutoPrintQuickSlip to control what should happen when an empty barcode field is submitted in circulation: Display a print quick slip window (default value, 3.6 behaviour) or clear the screen (previous 3.6 behaviour). )\n";
+    SetVersion($DBversion);
 }
 
 =head1 FUNCTIONS
