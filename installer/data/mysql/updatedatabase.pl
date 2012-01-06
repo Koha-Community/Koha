@@ -4551,9 +4551,9 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.06.00.001";
+$DBversion = "3.07.00.001";
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
-    my $borrowers = $dbh->selectcol_arrayref( "SELECT borrowernumber from borrowers where debarred <>0;", { Columns => [1] } );
+    my $borrowers = $dbh->selectcol_arrayref( "SELECT borrowernumber from borrowers where debarred =1;", { Columns => [1] } );
     $dbh->do("ALTER TABLE borrowers MODIFY debarred DATE DEFAULT NULL;");
     $dbh->do( "UPDATE borrowers set debarred='9999-12-31' where borrowernumber IN (" . join( ",", @$borrowers ) . ");" ) if ($borrowers and scalar(@$borrowers)>0);
     $dbh->do("ALTER TABLE borrowers ADD COLUMN debarredcomment VARCHAR(255) DEFAULT NULL AFTER debarred;");
@@ -4564,7 +4564,7 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.06.00.002";
+$DBversion = "3.07.00.002";
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     $dbh->do("UPDATE borrowers SET debarred=NULL WHERE debarred='0000-00-00';");
     print "Setting NULL to debarred where 0000-00-00 is stored (bug 7272)\n";
