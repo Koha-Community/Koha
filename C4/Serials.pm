@@ -612,14 +612,6 @@ sub GetSubscriptions {
     my $odd           = 1;
 
     while ( my $line = $sth->fetchrow_hashref ) {
-        if ( $previousbiblio eq $line->{biblionumber} ) {
-            $line->{title} = "";
-            $line->{issn}  = "";
-        } else {
-            $previousbiblio = $line->{biblionumber};
-            $odd           = -$odd;
-        }
-        $line->{toggle} = 1 if $odd == 1;
         $line->{'cannotedit'} =
           (      C4::Context->preference('IndependantBranches')
               && C4::Context->userenv
