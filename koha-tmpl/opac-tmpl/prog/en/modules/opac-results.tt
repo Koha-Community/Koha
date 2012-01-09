@@ -107,7 +107,7 @@ $(document).ready(function(){
 	param1 += "<option id=\"s[% addbarshelvesloo.shelfnumber %]\" value=\"addtolist\">[% addbarshelvesloo.shelfname |html %]<\/option>";[% END %]
     [% IF ( bartotal ) %]param1 += "<option value=\"morelists\">[ "+_("More lists")+" ]<\/option>";[% END %]
 	param1 += "<\/optgroup>";[% END %]
-	[% IF ( addpubshelves ) %]param1 += "<optgroup label=\""+_("Public Lists:")+"\">"[% FOREACH addpubshelvesloo IN addpubshelvesloop %]+"<option id=\"s[% addpubshelvesloo.shelfnumber %]\" value=\"addtolist\">[% addpubshelvesloo.shelfname |html %]<\/option>";[% END %][% END %]
+	[% IF ( addpubshelves ) %]param1 += "<optgroup label=\""+_("Public Lists:")+"\">"[% FOREACH addpubshelvesloo IN addpubshelvesloop %]+"<option id=\"s[% addpubshelvesloo.shelfnumber %]\" value=\"addtolist\">[% addpubshelvesloo.shelfname |html %]<\/option>"[% END %];[% END %]
 	param1 += "<\/optgroup>";
     param1 += "<option value=\"newlist\">[ "+_("New List")+" ]<\/option>";
 	[% END %]
