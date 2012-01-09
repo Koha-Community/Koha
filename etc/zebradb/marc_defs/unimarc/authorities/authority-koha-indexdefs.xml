@@ -1,0 +1,683 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This is the canonical source for the authority DOM indexing configuration
+for UNIMARC.. To generate the authority-zebra-indexdefs.xsl file that Zebra uses,
+run the following command:
+`xsltproc koha-indexdefs-to-zebra.xsl authority-koha-indexdefs.xml >
+authority-zebra-indexdefs.xsl`
+-->
+<kohaidx:index_defs xmlns:kohaidx="http://www.koha-community.org/schemas/index-defs">
+  <id>marc:controlfield[@tag='001']</id>
+  <!-- Original record ID -->
+  <kohaidx:index_control_field tag="001">
+    <kohaidx:target_index>Local-Number:w</kohaidx:target_index>
+    <kohaidx:target_index>Local-Number:s</kohaidx:target_index>
+    <kohaidx:target_index>Local-Number:n</kohaidx:target_index>
+  </kohaidx:index_control_field>
+
+  <!-- Personal name headings -->
+  <kohaidx:index_subfields tag="200" subfields="abcdfgjxyz">
+    <kohaidx:target_index>Personal-name:w</kohaidx:target_index>
+    <kohaidx:target_index>Personal-name:p</kohaidx:target_index>
+    <kohaidx:target_index>Heading:w</kohaidx:target_index>
+    <kohaidx:target_index>Heading:p</kohaidx:target_index>
+    <kohaidx:target_index>Match:w</kohaidx:target_index>
+    <kohaidx:target_index>Match:p</kohaidx:target_index>
+    <kohaidx:target_index>Match-heading:w</kohaidx:target_index>
+    <kohaidx:target_index>Match-heading:p</kohaidx:target_index>
+  </kohaidx:index_subfields>
+  <kohaidx:index_subfields tag="200" subfields="a">
+    <kohaidx:target_index>Heading:s</kohaidx:target_index>
+    <kohaidx:target_index>Heading-Main:w</kohaidx:target_index>
+    <kohaidx:target_index>Heading-Main:p</kohaidx:target_index>
+    <kohaidx:target_index>Heading-Main:s</kohaidx:target_index>
+    <kohaidx:target_index>Personal-name-heading:w</kohaidx:target_index>
+    <kohaidx:target_index>Personal-name-heading:p</kohaidx:target_index>
+    <kohaidx:target_index>Personal-name-heading:s</kohaidx:target_index>
+  </kohaidx:index_subfields>
+
+  <kohaidx:index_subfields tag="400" subfields="abcdfgjxyz">
+    <kohaidx:target_index>Personal-name-see:w</kohaidx:target_index>
+    <kohaidx:target_index>Personal-name-see:p</kohaidx:target_index>
+    <kohaidx:target_index>See:w</kohaidx:target_index>
+    <kohaidx:target_index>See:p</kohaidx:target_index>
+    <kohaidx:target_index>Match:w</kohaidx:target_index>
+    <kohaidx:target_index>Match:p</kohaidx:target_index>
+    <kohaidx:target_index>Match-heading-see-form:w</kohaidx:target_index>
+    <kohaidx:target_index>Match-heading-see-form:p</kohaidx:target_index>
+  </kohaidx:index_subfields>
+
+  <kohaidx:index_subfields tag="500" subfields="abcdfgjxyz">
+    <kohaidx:target_index>Personal-name-see-also:w</kohaidx:target_index>
+    <kohaidx:target_index>Personal-name-see-also:p</kohaidx:target_index>
+    <kohaidx:target_index>See-also:w</kohaidx:target_index>
+    <kohaidx:target_index>See-also:p</kohaidx:target_index>
+    <kohaidx:target_index>Match:w</kohaidx:target_index>
+    <kohaidx:target_index>Match:p</kohaidx:target_index>
+  </kohaidx:index_subfields>
+
+  <kohaidx:index_subfields tag="700" subfields="a">
+    <kohaidx:target_index>Personal-name-parallel:w</kohaidx:target_index>
+    <kohaidx:target_index>Personal-name-parallel:s</kohaidx:target_index>
+    <kohaidx:target_index>Parallel:w</kohaidx:target_index>
+    <kohaidx:target_index>Parallel:p</kohaidx:target_index>
+    <kohaidx:target_index>Match:w</kohaidx:target_index>
+    <kohaidx:target_index>Match:p</kohaidx:target_index>
+  </kohaidx:index_subfields>
+
+  <!-- Corporate name headings -->
+  <kohaidx:index_subfields tag="210" subfields="abcdefgjxyz">
+    <kohaidx:target_index>Corporate-name:w</kohaidx:target_index>
+    <kohaidx:target_index>Corporate-name:p</kohaidx:target_index>
+    <kohaidx:target_index>Conference-name:w</kohaidx:target_index>
+    <kohaidx:target_index>Conference-name:p</kohaidx:target_index>
+    <kohaidx:target_index>Heading:w</kohaidx:target_index>
+    <kohaidx:target_index>Heading:p</kohaidx:target_index>
+    <kohaidx:target_index>Match:w</kohaidx:target_index>
+    <kohaidx:target_index>Match:p</kohaidx:target_index>
+    <kohaidx:target_index>Match-heading:w</kohaidx:target_index>
+    <kohaidx:target_index>Match-heading:p</kohaidx:target_index>
+  </kohaidx:index_subfields>
+  <kohaidx:index_subfields tag="210" subfields="a">
+    <kohaidx:target_index>Heading:s</kohaidx:target_index>
+    <kohaidx:target_index>Heading-Main:w</kohaidx:target_index>
+    <kohaidx:target_index>Heading-Main:p</kohaidx:target_index>
+    <kohaidx:target_index>Heading-Main:s</kohaidx:target_index>
+    <kohaidx:target_index>Corporate-name-heading:w</kohaidx:target_index>
+    <kohaidx:target_index>Corporate-name-heading:p</kohaidx:target_index>
+    <kohaidx:target_index>Corporate-name-heading:s</kohaidx:target_index>
+    <kohaidx:target_index>Conference-name-heading:w</kohaidx:target_index>
+    <kohaidx:target_index>Conference-name-heading:p</kohaidx:target_index>
+    <kohaidx:target_index>Conference-name-heading:s</kohaidx:target_index>
+  </kohaidx:index_subfields>
+
+  <kohaidx:index_subfields tag="410" subfields="abcdefgjxyz">
+    <kohaidx:target_index>Corporate-name-see:w</kohaidx:target_index>
+    <kohaidx:target_index>Corporate-name-see:p</kohaidx:target_index>
+    <kohaidx:target_index>Conference-name-see:w</kohaidx:target_index>
+    <kohaidx:target_index>Conference-name-see:p</kohaidx:target_index>
+    <kohaidx:target_index>See:w</kohaidx:target_index>
+    <kohaidx:target_index>See:p</kohaidx:target_index>
+    <kohaidx:target_index>Match:w</kohaidx:target_index>
+    <kohaidx:target_index>Match:p</kohaidx:target_index>
+    <kohaidx:target_index>Match-heading-see-form:w</kohaidx:target_index>
+    <kohaidx:target_index>Match-heading-see-form:p</kohaidx:target_index>
+  </kohaidx:index_subfields>
+
+  <kohaidx:index_subfields tag="510" subfields="abcdefgjxyz">
+    <kohaidx:target_index>Corporate-name-see-also:w</kohaidx:target_index>
+    <kohaidx:target_index>Corporate-name-see-also:p</kohaidx:target_index>
+    <kohaidx:target_index>Conference-name-see-also:w</kohaidx:target_index>
+    <kohaidx:target_index>Conference-name-see-also:p</kohaidx:target_index>
+    <kohaidx:target_index>See-also:w</kohaidx:target_index>
+    <kohaidx:target_index>See-also:p</kohaidx:target_index>
+    <kohaidx:target_index>Match:w</kohaidx:target_index>
+    <kohaidx:target_index>Match:p</kohaidx:target_index>
+  </kohaidx:index_subfields>
+
+  <kohaidx:index_subfields tag="710" subfields="abcdefgjxyz">
+    <kohaidx:target_index>Corporate-name-parallel:w</kohaidx:target_index>
+    <kohaidx:target_index>Corporate-name-parallel:s</kohaidx:target_index>
+    <kohaidx:target_index>Conference-name-parallel:w</kohaidx:target_index>
+    <kohaidx:target_index>Conference-name-parallel:s</kohaidx:target_index>
+    <kohaidx:target_index>Parallel:w</kohaidx:target_index>
+    <kohaidx:target_index>Parallel:p</kohaidx:target_index>
+    <kohaidx:target_index>Match:w</kohaidx:target_index>
+    <kohaidx:target_index>Match:p</kohaidx:target_index>
+  </kohaidx:index_subfields>
+
+  <!-- Geographic name -->
+  <kohaidx:index_subfields tag="215" subfields="ajxyz">
+    <kohaidx:target_index>Name-geographic:w</kohaidx:target_index>
+    <kohaidx:target_index>Name-geographic:p</kohaidx:target_index>
+    <kohaidx:target_index>Name-geographic:s</kohaidx:target_index>
+    <kohaidx:target_index>Term-geographic:w</kohaidx:target_index>
+    <kohaidx:target_index>Term-geographic:p</kohaidx:target_index>
+    <kohaidx:target_index>Term-geographic:s</kohaidx:target_index>
+    <kohaidx:target_index>Heading:w</kohaidx:target_index>
+    <kohaidx:target_index>Heading:p</kohaidx:target_index>
+    <kohaidx:target_index>Heading:s</kohaidx:target_index>
+    <kohaidx:target_index>Match:w</kohaidx:target_index>
+    <kohaidx:target_index>Match:p</kohaidx:target_index>
+    <kohaidx:target_index>Match-heading:w</kohaidx:target_index>
+    <kohaidx:target_index>Match-heading:p</kohaidx:target_index>
+  </kohaidx:index_subfields>
+  <kohaidx:index_subfields tag="215" subfields="a">
+    <kohaidx:target_index>Heading-Main:w</kohaidx:target_index>
+    <kohaidx:target_index>Heading-Main:p</kohaidx:target_index>
+    <kohaidx:target_index>Heading-Main:s</kohaidx:target_index>
+    <kohaidx:target_index>Name-geographic-heading:w</kohaidx:target_index>
+    <kohaidx:target_index>Name-geographic-heading:p</kohaidx:target_index>
+    <kohaidx:target_index>Name-geographic-heading:s</kohaidx:target_index>
+    <kohaidx:target_index>Term-geographic-heading:w</kohaidx:target_index>
+    <kohaidx:target_index>Term-geographic-heading:p</kohaidx:target_index>
+    <kohaidx:target_index>Term-geographic-heading:s</kohaidx:target_index>
+  </kohaidx:index_subfields>
+
+  <kohaidx:index_subfields tag="415" subfields="ajxyz">
+    <kohaidx:target_index>Name-geographic-see:w</kohaidx:target_index>
+    <kohaidx:target_index>Name-geographic-see:p</kohaidx:target_index>
+    <kohaidx:target_index>Term-geographic-see:w</kohaidx:target_index>
+    <kohaidx:target_index>Term-geographic-see:p</kohaidx:target_index>
+    <kohaidx:target_index>Term-geographic-see:s</kohaidx:target_index>
+    <kohaidx:target_index>See:w</kohaidx:target_index>
+    <kohaidx:target_index>See:p</kohaidx:target_index>
+    <kohaidx:target_index>See:s</kohaidx:target_index>
+    <kohaidx:target_index>Match:w</kohaidx:target_index>
+    <kohaidx:target_index>Match:p</kohaidx:target_index>
+    <kohaidx:target_index>Match-heading-see-form:w</kohaidx:target_index>
+    <kohaidx:target_index>Match-heading-see-form:p</kohaidx:target_index>
+  </kohaidx:index_subfields>
+
+  <kohaidx:index_subfields tag="515" subfields="ajxyz">
+    <kohaidx:target_index>Name-geographic-see-also:w</kohaidx:target_index>
+    <kohaidx:target_index>Name-geographic-see-also:p</kohaidx:target_index>
+    <kohaidx:target_index>Term-geographic-see-also:w</kohaidx:target_index>
+    <kohaidx:target_index>Term-geographic-see-also:p</kohaidx:target_index>
+    <kohaidx:target_index>Term-geographic-see-also:s</kohaidx:target_index>
+    <kohaidx:target_index>See-also:w</kohaidx:target_index>
+    <kohaidx:target_index>See-also:p</kohaidx:target_index>
+    <kohaidx:target_index>Match:w</kohaidx:target_index>
+    <kohaidx:target_index>Match:p</kohaidx:target_index>
+  </kohaidx:index_subfields>
+
+  <kohaidx:index_subfields tag="715" subfields="ajxyz">
+    <kohaidx:target_index>Name-geographic-parallel:w</kohaidx:target_index>
+    <kohaidx:target_index>Name-geographic-parallel:s</kohaidx:target_index>
+    <kohaidx:target_index>Term-geographic-parallel:w</kohaidx:target_index>
+    <kohaidx:target_index>Term-geographic-parallel:s</kohaidx:target_index>
+    <kohaidx:target_index>Term-geographic-parallel:p</kohaidx:target_index>
+    <kohaidx:target_index>Parallel:w</kohaidx:target_index>
+    <kohaidx:target_index>Parallel:p</kohaidx:target_index>
+    <kohaidx:target_index>Match:w</kohaidx:target_index>
+    <kohaidx:target_index>Match:p</kohaidx:target_index>
+  </kohaidx:index_subfields>
+
+  <!-- Trademark-->
+  <kohaidx:index_subfields tag="216" subfields="afcjxyz">
+    <kohaidx:target_index>Trademark:w</kohaidx:target_index>
+    <kohaidx:target_index>Trademark:p</kohaidx:target_index>
+    <kohaidx:target_index>Heading:w</kohaidx:target_index>
+    <kohaidx:target_index>Heading:p</kohaidx:target_index>
+    <kohaidx:target_index>Match:w</kohaidx:target_index>
+    <kohaidx:target_index>Match:p</kohaidx:target_index>
+    <kohaidx:target_index>Match-heading:w</kohaidx:target_index>
+    <kohaidx:target_index>Match-heading:p</kohaidx:target_index>
+  </kohaidx:index_subfields>
+  <kohaidx:index_subfields tag="216" subfields="a">
+    <kohaidx:target_index>Heading:s</kohaidx:target_index>
+    <kohaidx:target_index>Heading-Main:w</kohaidx:target_index>
+    <kohaidx:target_index>Heading-Main:p</kohaidx:target_index>
+    <kohaidx:target_index>Heading-Main:s</kohaidx:target_index>
+    <kohaidx:target_index>Trademark-heading:w</kohaidx:target_index>
+    <kohaidx:target_index>Trademark-heading:p</kohaidx:target_index>
+    <kohaidx:target_index>Trademark-heading:s</kohaidx:target_index>
+  </kohaidx:index_subfields>
+
+  <kohaidx:index_subfields tag="416" subfields="afcjxyz">
+    <kohaidx:target_index>Trademark-see:w</kohaidx:target_index>
+    <kohaidx:target_index>Trademark-see:p</kohaidx:target_index>
+    <kohaidx:target_index>See:w</kohaidx:target_index>
+    <kohaidx:target_index>See:p</kohaidx:target_index>
+    <kohaidx:target_index>Match:w</kohaidx:target_index>
+    <kohaidx:target_index>Match:p</kohaidx:target_index>
+    <kohaidx:target_index>Match-heading-see-form:w</kohaidx:target_index>
+    <kohaidx:target_index>Match-heading-see-form:p</kohaidx:target_index>
+  </kohaidx:index_subfields>
+
+  <kohaidx:index_subfields tag="516" subfields="afcjxyz">
+    <kohaidx:target_index>Trademark-see-also:w</kohaidx:target_index>
+    <kohaidx:target_index>Trademark-see-also:p</kohaidx:target_index>
+    <kohaidx:target_index>See-also:w</kohaidx:target_index>
+    <kohaidx:target_index>See-also:p</kohaidx:target_index>
+    <kohaidx:target_index>Match:w</kohaidx:target_index>
+    <kohaidx:target_index>Match:p</kohaidx:target_index>
+  </kohaidx:index_subfields>
+
+  <kohaidx:index_subfields tag="716" subfields="afcjxyz">
+    <kohaidx:target_index>Trademark-parallel:w</kohaidx:target_index>
+    <kohaidx:target_index>Trademark-parallel:s</kohaidx:target_index>
+    <kohaidx:target_index>Parallel:w</kohaidx:target_index>
+    <kohaidx:target_index>Parallel:p</kohaidx:target_index>
+    <kohaidx:target_index>Match:w</kohaidx:target_index>
+    <kohaidx:target_index>Match:p</kohaidx:target_index>
+  </kohaidx:index_subfields>
+
+  <!-- Family name-->
+  <kohaidx:index_subfields tag="220" subfields="afjxyz">
+    <kohaidx:target_index>Name:w</kohaidx:target_index>
+    <kohaidx:target_index>Name:p</kohaidx:target_index>
+    <kohaidx:target_index>Heading:w</kohaidx:target_index>
+    <kohaidx:target_index>Heading:p</kohaidx:target_index>
+    <kohaidx:target_index>Match:w</kohaidx:target_index>
+    <kohaidx:target_index>Match:p</kohaidx:target_index>
+    <kohaidx:target_index>Match-heading:w</kohaidx:target_index>
+    <kohaidx:target_index>Match-heading:p</kohaidx:target_index>
+  </kohaidx:index_subfields>
+  <kohaidx:index_subfields tag="220" subfields="a">
+    <kohaidx:target_index>Heading:s</kohaidx:target_index>
+    <kohaidx:target_index>Heading-Main:w</kohaidx:target_index>
+    <kohaidx:target_index>Heading-Main:p</kohaidx:target_index>
+    <kohaidx:target_index>Heading-Main:s</kohaidx:target_index>
+    <kohaidx:target_index>Name-heading:w</kohaidx:target_index>
+    <kohaidx:target_index>Name-heading:p</kohaidx:target_index>
+    <kohaidx:target_index>Name-heading:s</kohaidx:target_index>
+  </kohaidx:index_subfields>
+
+  <kohaidx:index_subfields tag="420" subfields="afjxyz">
+    <kohaidx:target_index>Name-see:w</kohaidx:target_index>
+    <kohaidx:target_index>Name-see:p</kohaidx:target_index>
+    <kohaidx:target_index>See:w</kohaidx:target_index>
+    <kohaidx:target_index>See:p</kohaidx:target_index>
+    <kohaidx:target_index>Match:w</kohaidx:target_index>
+    <kohaidx:target_index>Match:p</kohaidx:target_index>
+    <kohaidx:target_index>Match-heading-see-form:w</kohaidx:target_index>
+    <kohaidx:target_index>Match-heading-see-form:p</kohaidx:target_index>
+  </kohaidx:index_subfields>
+
+  <kohaidx:index_subfields tag="520" subfields="afjxyz">
+    <kohaidx:target_index>Name-see-also:w</kohaidx:target_index>
+    <kohaidx:target_index>Name-see-also:p</kohaidx:target_index>
+    <kohaidx:target_index>See-also:w</kohaidx:target_index>
+    <kohaidx:target_index>See-also:p</kohaidx:target_index>
+    <kohaidx:target_index>Match:w</kohaidx:target_index>
+    <kohaidx:target_index>Match:p</kohaidx:target_index>
+  </kohaidx:index_subfields>
+
+  <kohaidx:index_subfields tag="720" subfields="afjxyz">
+    <kohaidx:target_index>Name-parallel:w</kohaidx:target_index>
+    <kohaidx:target_index>Name-parallel:s</kohaidx:target_index>
+    <kohaidx:target_index>Parallel:w</kohaidx:target_index>
+    <kohaidx:target_index>Parallel:p</kohaidx:target_index>
+    <kohaidx:target_index>Match:w</kohaidx:target_index>
+    <kohaidx:target_index>Match:p</kohaidx:target_index>
+  </kohaidx:index_subfields>
+
+  <!-- Uniform title -->
+  <kohaidx:index_subfields tag="230" subfields="abhiklmnqrsuwjxyz">
+    <kohaidx:target_index>Title-uniform:w</kohaidx:target_index>
+    <kohaidx:target_index>Title-uniform:p</kohaidx:target_index>
+    <kohaidx:target_index>Heading:w</kohaidx:target_index>
+    <kohaidx:target_index>Heading:p</kohaidx:target_index>
+    <kohaidx:target_index>Match:w</kohaidx:target_index>
+    <kohaidx:target_index>Match:p</kohaidx:target_index>
+    <kohaidx:target_index>Match-heading:w</kohaidx:target_index>
+    <kohaidx:target_index>Match-heading:p</kohaidx:target_index>
+  </kohaidx:index_subfields>
+  <kohaidx:index_subfields tag="230" subfields="a">
+    <kohaidx:target_index>Heading:s</kohaidx:target_index>
+    <kohaidx:target_index>Heading-Main:w</kohaidx:target_index>
+    <kohaidx:target_index>Heading-Main:p</kohaidx:target_index>
+    <kohaidx:target_index>Heading-Main:s</kohaidx:target_index>
+    <kohaidx:target_index>Title-uniform-heading:w</kohaidx:target_index>
+    <kohaidx:target_index>Title-uniform-heading:p</kohaidx:target_index>
+    <kohaidx:target_index>Title-uniform-heading:s</kohaidx:target_index>
+  </kohaidx:index_subfields>
+
+  <kohaidx:index_subfields tag="430" subfields="abhiklmnqrsuwjxyz">
+    <kohaidx:target_index>Title-uniform-see:w</kohaidx:target_index>
+    <kohaidx:target_index>Title-uniform-see:p</kohaidx:target_index>
+    <kohaidx:target_index>See:w</kohaidx:target_index>
+    <kohaidx:target_index>See:p</kohaidx:target_index>
+    <kohaidx:target_index>Match:w</kohaidx:target_index>
+    <kohaidx:target_index>Match:p</kohaidx:target_index>
+    <kohaidx:target_index>Match-heading-see-form:w</kohaidx:target_index>
+    <kohaidx:target_index>Match-heading-see-form:p</kohaidx:target_index>
+  </kohaidx:index_subfields>
+
+  <kohaidx:index_subfields tag="530" subfields="abhiklmnqrsuwjxyz">
+    <kohaidx:target_index>Title-uniform-see-also:w</kohaidx:target_index>
+    <kohaidx:target_index>Title-uniform-see-also:p</kohaidx:target_index>
+    <kohaidx:target_index>See-also:w</kohaidx:target_index>
+    <kohaidx:target_index>See-also:p</kohaidx:target_index>
+    <kohaidx:target_index>Match:w</kohaidx:target_index>
+    <kohaidx:target_index>Match:p</kohaidx:target_index>
+  </kohaidx:index_subfields>
+
+  <kohaidx:index_subfields tag="730" subfields="a">
+    <kohaidx:target_index>Title-uniform-parallel:w</kohaidx:target_index>
+    <kohaidx:target_index>Title-uniform-parallel:s</kohaidx:target_index>
+    <kohaidx:target_index>Parallel:w</kohaidx:target_index>
+    <kohaidx:target_index>Parallel:p</kohaidx:target_index>
+    <kohaidx:target_index>Match:w</kohaidx:target_index>
+    <kohaidx:target_index>Match:p</kohaidx:target_index>
+  </kohaidx:index_subfields>
+
+  <!-- Collective Uniform title -->
+  <kohaidx:index_subfields tag="235" subfields="abekmrsuwjxyz">
+    <kohaidx:target_index>Title-uniform:w</kohaidx:target_index>
+    <kohaidx:target_index>Title-uniform:p</kohaidx:target_index>
+    <kohaidx:target_index>Heading:w</kohaidx:target_index>
+    <kohaidx:target_index>Heading:p</kohaidx:target_index>
+    <kohaidx:target_index>Match:w</kohaidx:target_index>
+    <kohaidx:target_index>Match:p</kohaidx:target_index>
+    <kohaidx:target_index>Match-heading:w</kohaidx:target_index>
+    <kohaidx:target_index>Match-heading:p</kohaidx:target_index>
+  </kohaidx:index_subfields>
+  <kohaidx:index_subfields tag="235" subfields="a">
+    <kohaidx:target_index>Heading:s</kohaidx:target_index>
+    <kohaidx:target_index>Heading-Main:w</kohaidx:target_index>
+    <kohaidx:target_index>Heading-Main:p</kohaidx:target_index>
+    <kohaidx:target_index>Heading-Main:s</kohaidx:target_index>
+    <kohaidx:target_index>Title-uniform-heading:w</kohaidx:target_index>
+    <kohaidx:target_index>Title-uniform-heading:p</kohaidx:target_index>
+    <kohaidx:target_index>Title-uniform-heading:s</kohaidx:target_index>
+  </kohaidx:index_subfields>
+
+  <kohaidx:index_subfields tag="435" subfields="abekmrsuwjxyz">
+    <kohaidx:target_index>Title-uniform-see:w</kohaidx:target_index>
+    <kohaidx:target_index>Title-uniform-see:p</kohaidx:target_index>
+    <kohaidx:target_index>See:w</kohaidx:target_index>
+    <kohaidx:target_index>See:p</kohaidx:target_index>
+    <kohaidx:target_index>Match:w</kohaidx:target_index>
+    <kohaidx:target_index>Match:p</kohaidx:target_index>
+    <kohaidx:target_index>Match-heading-see-form:w</kohaidx:target_index>
+    <kohaidx:target_index>Match-heading-see-form:p</kohaidx:target_index>
+  </kohaidx:index_subfields>
+
+  <kohaidx:index_subfields tag="535" subfields="abekmrsuwjxyz">
+    <kohaidx:target_index>Title-uniform-see-also:w</kohaidx:target_index>
+    <kohaidx:target_index>Title-uniform-see-also:p</kohaidx:target_index>
+    <kohaidx:target_index>See-also:w</kohaidx:target_index>
+    <kohaidx:target_index>See-also:p</kohaidx:target_index>
+    <kohaidx:target_index>Match:w</kohaidx:target_index>
+    <kohaidx:target_index>Match:p</kohaidx:target_index>
+  </kohaidx:index_subfields>
+
+  <kohaidx:index_subfields tag="735" subfields="a">
+    <kohaidx:target_index>Title-uniform-parallel:w</kohaidx:target_index>
+    <kohaidx:target_index>Title-uniform-parallel:s</kohaidx:target_index>
+    <kohaidx:target_index>Parallel:w</kohaidx:target_index>
+    <kohaidx:target_index>Parallel:p</kohaidx:target_index>
+    <kohaidx:target_index>Match:w</kohaidx:target_index>
+    <kohaidx:target_index>Match:p</kohaidx:target_index>
+  </kohaidx:index_subfields>
+
+  <!-- Name and title -->
+  <kohaidx:index_subfields tag="240" subfields="atjxyz">
+    <kohaidx:target_index>Name-Title:w</kohaidx:target_index>
+    <kohaidx:target_index>Name-Title:p</kohaidx:target_index>
+    <kohaidx:target_index>Heading:w</kohaidx:target_index>
+    <kohaidx:target_index>Heading:p</kohaidx:target_index>
+    <kohaidx:target_index>Match:w</kohaidx:target_index>
+    <kohaidx:target_index>Match:p</kohaidx:target_index>
+    <kohaidx:target_index>Match-heading:w</kohaidx:target_index>
+    <kohaidx:target_index>Match-heading:p</kohaidx:target_index>
+  </kohaidx:index_subfields>
+  <kohaidx:index_subfields tag="240" subfields="a">
+    <kohaidx:target_index>Heading:s</kohaidx:target_index>
+    <kohaidx:target_index>Heading-Main:w</kohaidx:target_index>
+    <kohaidx:target_index>Heading-Main:p</kohaidx:target_index>
+    <kohaidx:target_index>Heading-Main:s</kohaidx:target_index>
+    <kohaidx:target_index>Name-Title-heading:w</kohaidx:target_index>
+    <kohaidx:target_index>Name-Title-heading:p</kohaidx:target_index>
+    <kohaidx:target_index>Name-Title-heading:s</kohaidx:target_index>
+  </kohaidx:index_subfields>
+
+  <kohaidx:index_subfields tag="440" subfields="atjxyz">
+    <kohaidx:target_index>Name-Title-see:w</kohaidx:target_index>
+    <kohaidx:target_index>Name-Title-see:p</kohaidx:target_index>
+    <kohaidx:target_index>See:w</kohaidx:target_index>
+    <kohaidx:target_index>See:p</kohaidx:target_index>
+    <kohaidx:target_index>Match:w</kohaidx:target_index>
+    <kohaidx:target_index>Match:p</kohaidx:target_index>
+    <kohaidx:target_index>Match-heading-see-form:w</kohaidx:target_index>
+    <kohaidx:target_index>Match-heading-see-form:p</kohaidx:target_index>
+  </kohaidx:index_subfields>
+
+  <kohaidx:index_subfields tag="540" subfields="atjxyz">
+    <kohaidx:target_index>Name-Title-see-also:w</kohaidx:target_index>
+    <kohaidx:target_index>Name-Title-see-also:p</kohaidx:target_index>
+    <kohaidx:target_index>See-also:w</kohaidx:target_index>
+    <kohaidx:target_index>See-also:p</kohaidx:target_index>
+    <kohaidx:target_index>Match:w</kohaidx:target_index>
+    <kohaidx:target_index>Match:p</kohaidx:target_index>
+  </kohaidx:index_subfields>
+
+  <kohaidx:index_subfields tag="740" subfields="a">
+    <kohaidx:target_index>Name-Title-parallel:w</kohaidx:target_index>
+    <kohaidx:target_index>Name-Title-parallel:s</kohaidx:target_index>
+    <kohaidx:target_index>Parallel:w</kohaidx:target_index>
+    <kohaidx:target_index>Parallel:p</kohaidx:target_index>
+    <kohaidx:target_index>Match:w</kohaidx:target_index>
+    <kohaidx:target_index>Match:p</kohaidx:target_index>
+  </kohaidx:index_subfields>
+
+  <!-- Name and collective title -->
+  <kohaidx:index_subfields tag="245" subfields="atjxyz">
+    <kohaidx:target_index>Title-uniform:w</kohaidx:target_index>
+    <kohaidx:target_index>Title-uniform:p</kohaidx:target_index>
+    <kohaidx:target_index>Heading:w</kohaidx:target_index>
+    <kohaidx:target_index>Heading:p</kohaidx:target_index>
+    <kohaidx:target_index>Match:w</kohaidx:target_index>
+    <kohaidx:target_index>Match:p</kohaidx:target_index>
+    <kohaidx:target_index>Match-heading:w</kohaidx:target_index>
+    <kohaidx:target_index>Match-heading:p</kohaidx:target_index>
+  </kohaidx:index_subfields>
+  <kohaidx:index_subfields tag="245" subfields="a">
+    <kohaidx:target_index>Heading:s</kohaidx:target_index>
+    <kohaidx:target_index>Heading-Main:w</kohaidx:target_index>
+    <kohaidx:target_index>Heading-Main:p</kohaidx:target_index>
+    <kohaidx:target_index>Heading-Main:s</kohaidx:target_index>
+    <kohaidx:target_index>Title-uniform-heading:w</kohaidx:target_index>
+    <kohaidx:target_index>Title-uniform-heading:p</kohaidx:target_index>
+    <kohaidx:target_index>Title-uniform-heading:s</kohaidx:target_index>
+  </kohaidx:index_subfields>
+
+  <kohaidx:index_subfields tag="445" subfields="atjxyz">
+    <kohaidx:target_index>Title-uniform-see:w</kohaidx:target_index>
+    <kohaidx:target_index>Title-uniform-see:p</kohaidx:target_index>
+    <kohaidx:target_index>See:w</kohaidx:target_index>
+    <kohaidx:target_index>See:p</kohaidx:target_index>
+    <kohaidx:target_index>Match:w</kohaidx:target_index>
+    <kohaidx:target_index>Match:p</kohaidx:target_index>
+    <kohaidx:target_index>Match-heading-see-form:w</kohaidx:target_index>
+    <kohaidx:target_index>Match-heading-see-form:p</kohaidx:target_index>
+  </kohaidx:index_subfields>
+
+  <kohaidx:index_subfields tag="545" subfields="atjxyz">
+    <kohaidx:target_index>Title-uniform-see-also:w</kohaidx:target_index>
+    <kohaidx:target_index>Title-uniform-see-also:p</kohaidx:target_index>
+    <kohaidx:target_index>See-also:w</kohaidx:target_index>
+    <kohaidx:target_index>See-also:p</kohaidx:target_index>
+    <kohaidx:target_index>Match:w</kohaidx:target_index>
+    <kohaidx:target_index>Match:p</kohaidx:target_index>
+  </kohaidx:index_subfields>
+
+  <kohaidx:index_subfields tag="745" subfields="a">
+    <kohaidx:target_index>Title-uniform-parallel:w</kohaidx:target_index>
+    <kohaidx:target_index>Title-uniform-parallel:s</kohaidx:target_index>
+    <kohaidx:target_index>Parallel:w</kohaidx:target_index>
+    <kohaidx:target_index>Parallel:p</kohaidx:target_index>
+    <kohaidx:target_index>Match:w</kohaidx:target_index>
+    <kohaidx:target_index>Match:p</kohaidx:target_index>
+  </kohaidx:index_subfields>
+
+  <!-- Topical term -->
+  <kohaidx:index_subfields tag="250" subfields="ajxyz">
+    <kohaidx:target_index>Subject:w</kohaidx:target_index>
+    <kohaidx:target_index>Subject:p</kohaidx:target_index>
+    <kohaidx:target_index>Heading:w</kohaidx:target_index>
+    <kohaidx:target_index>Heading:p</kohaidx:target_index>
+    <kohaidx:target_index>Match:w</kohaidx:target_index>
+    <kohaidx:target_index>Match:p</kohaidx:target_index>
+    <kohaidx:target_index>Match-heading:w</kohaidx:target_index>
+    <kohaidx:target_index>Match-heading:p</kohaidx:target_index>
+    <kohaidx:target_index>Subject-heading:w</kohaidx:target_index>
+    <kohaidx:target_index>Subject-heading:p</kohaidx:target_index>
+    <kohaidx:target_index>Subject-heading:s</kohaidx:target_index>
+  </kohaidx:index_subfields>
+  <kohaidx:index_subfields tag="250" subfields="a">
+    <kohaidx:target_index>Heading:s</kohaidx:target_index>
+    <kohaidx:target_index>Heading-Main:w</kohaidx:target_index>
+    <kohaidx:target_index>Heading-Main:p</kohaidx:target_index>
+    <kohaidx:target_index>Heading-Main:s</kohaidx:target_index>
+  </kohaidx:index_subfields>
+
+  <kohaidx:index_subfields tag="450" subfields="ajxyz">
+    <kohaidx:target_index>Subject-see:w</kohaidx:target_index>
+    <kohaidx:target_index>Subject-see:p</kohaidx:target_index>
+    <kohaidx:target_index>See:w</kohaidx:target_index>
+    <kohaidx:target_index>See:p</kohaidx:target_index>
+    <kohaidx:target_index>Match:w</kohaidx:target_index>
+    <kohaidx:target_index>Match:p</kohaidx:target_index>
+    <kohaidx:target_index>Match-heading-see-form:w</kohaidx:target_index>
+    <kohaidx:target_index>Match-heading-see-form:p</kohaidx:target_index>
+  </kohaidx:index_subfields>
+
+  <kohaidx:index_subfields tag="550" subfields="ajxyz">
+    <kohaidx:target_index>Subject-see-also:w</kohaidx:target_index>
+    <kohaidx:target_index>Subject-see-also:p</kohaidx:target_index>
+    <kohaidx:target_index>See-also:w</kohaidx:target_index>
+    <kohaidx:target_index>See-also:p</kohaidx:target_index>
+    <kohaidx:target_index>Match:w</kohaidx:target_index>
+    <kohaidx:target_index>Match:p</kohaidx:target_index>
+  </kohaidx:index_subfields>
+
+  <kohaidx:index_subfields tag="750" subfields="a">
+    <kohaidx:target_index>Subject-parallel:w</kohaidx:target_index>
+    <kohaidx:target_index>Subject-parallel:s</kohaidx:target_index>
+    <kohaidx:target_index>Parallel:w</kohaidx:target_index>
+    <kohaidx:target_index>Parallel:p</kohaidx:target_index>
+    <kohaidx:target_index>Match:w</kohaidx:target_index>
+    <kohaidx:target_index>Match:p</kohaidx:target_index>
+  </kohaidx:index_subfields>
+
+  <!-- Place -->
+  <kohaidx:index_subfields tag="260" subfields="abcdjxyz">
+    <kohaidx:target_index>Place:w</kohaidx:target_index>
+    <kohaidx:target_index>Place:p</kohaidx:target_index>
+    <kohaidx:target_index>Heading:w</kohaidx:target_index>
+    <kohaidx:target_index>Heading:p</kohaidx:target_index>
+    <kohaidx:target_index>Match:w</kohaidx:target_index>
+    <kohaidx:target_index>Match:p</kohaidx:target_index>
+    <kohaidx:target_index>Match-heading:w</kohaidx:target_index>
+    <kohaidx:target_index>Match-heading:p</kohaidx:target_index>
+    <kohaidx:target_index>Place-heading:w</kohaidx:target_index>
+    <kohaidx:target_index>Place-heading:p</kohaidx:target_index>
+    <kohaidx:target_index>Place-heading:s</kohaidx:target_index>
+  </kohaidx:index_subfields>
+  <kohaidx:index_subfields tag="260" subfields="a">
+    <kohaidx:target_index>Heading:s</kohaidx:target_index>
+    <kohaidx:target_index>Heading-Main:w</kohaidx:target_index>
+    <kohaidx:target_index>Heading-Main:p</kohaidx:target_index>
+    <kohaidx:target_index>Heading-Main:s</kohaidx:target_index>
+  </kohaidx:index_subfields>
+
+  <kohaidx:index_subfields tag="460" subfields="abcdjxyz">
+    <kohaidx:target_index>Place-see:w</kohaidx:target_index>
+    <kohaidx:target_index>Place-see:p</kohaidx:target_index>
+    <kohaidx:target_index>See:w</kohaidx:target_index>
+    <kohaidx:target_index>See:p</kohaidx:target_index>
+    <kohaidx:target_index>Match:w</kohaidx:target_index>
+    <kohaidx:target_index>Match:p</kohaidx:target_index>
+    <kohaidx:target_index>Match-heading-see-form:w</kohaidx:target_index>
+    <kohaidx:target_index>Match-heading-see-form:p</kohaidx:target_index>
+  </kohaidx:index_subfields>
+
+  <kohaidx:index_subfields tag="560" subfields="abcdjxyz">
+    <kohaidx:target_index>Place-see-also:w</kohaidx:target_index>
+    <kohaidx:target_index>Place-see-also:p</kohaidx:target_index>
+    <kohaidx:target_index>See-also:w</kohaidx:target_index>
+    <kohaidx:target_index>See-also:p</kohaidx:target_index>
+    <kohaidx:target_index>Match:w</kohaidx:target_index>
+    <kohaidx:target_index>Match:p</kohaidx:target_index>
+  </kohaidx:index_subfields>
+
+  <kohaidx:index_subfields tag="760" subfields="a">
+    <kohaidx:target_index>Place-parallel:w</kohaidx:target_index>
+    <kohaidx:target_index>Place-parallel:s</kohaidx:target_index>
+    <kohaidx:target_index>Parallel:w</kohaidx:target_index>
+    <kohaidx:target_index>Parallel:p</kohaidx:target_index>
+    <kohaidx:target_index>Match:w</kohaidx:target_index>
+    <kohaidx:target_index>Match:p</kohaidx:target_index>
+  </kohaidx:index_subfields>
+
+  <!-- Genre/form -->
+  <kohaidx:index_subfields tag="280" subfields="ajxyz">
+    <kohaidx:target_index>Form:w</kohaidx:target_index>
+    <kohaidx:target_index>Form:p</kohaidx:target_index>
+    <kohaidx:target_index>Heading:w</kohaidx:target_index>
+    <kohaidx:target_index>Heading:p</kohaidx:target_index>
+    <kohaidx:target_index>Match:w</kohaidx:target_index>
+    <kohaidx:target_index>Match:p</kohaidx:target_index>
+    <kohaidx:target_index>Match-heading:w</kohaidx:target_index>
+    <kohaidx:target_index>Match-heading:p</kohaidx:target_index>
+    <kohaidx:target_index>Form-heading:w</kohaidx:target_index>
+    <kohaidx:target_index>Form-heading:p</kohaidx:target_index>
+    <kohaidx:target_index>Form-heading:s</kohaidx:target_index>
+  </kohaidx:index_subfields>
+  <kohaidx:index_subfields tag="280" subfields="a">
+    <kohaidx:target_index>Heading:s</kohaidx:target_index>
+    <kohaidx:target_index>Heading-Main:w</kohaidx:target_index>
+    <kohaidx:target_index>Heading-Main:p</kohaidx:target_index>
+    <kohaidx:target_index>Heading-Main:s</kohaidx:target_index>
+  </kohaidx:index_subfields>
+
+  <kohaidx:index_subfields tag="480" subfields="ajxyz">
+    <kohaidx:target_index>Form-see:w</kohaidx:target_index>
+    <kohaidx:target_index>Form-see:p</kohaidx:target_index>
+    <kohaidx:target_index>See:w</kohaidx:target_index>
+    <kohaidx:target_index>See:p</kohaidx:target_index>
+    <kohaidx:target_index>Match:w</kohaidx:target_index>
+    <kohaidx:target_index>Match:p</kohaidx:target_index>
+    <kohaidx:target_index>Match-heading-see-form:w</kohaidx:target_index>
+    <kohaidx:target_index>Match-heading-see-form:p</kohaidx:target_index>
+  </kohaidx:index_subfields>
+
+  <kohaidx:index_subfields tag="580" subfields="ajxyz">
+    <kohaidx:target_index>Form-see-also:w</kohaidx:target_index>
+    <kohaidx:target_index>Form-see-also:p</kohaidx:target_index>
+    <kohaidx:target_index>See-also:w</kohaidx:target_index>
+    <kohaidx:target_index>See-also:p</kohaidx:target_index>
+    <kohaidx:target_index>Match:w</kohaidx:target_index>
+    <kohaidx:target_index>Match:p</kohaidx:target_index>
+  </kohaidx:index_subfields>
+
+  <kohaidx:index_subfields tag="780" subfields="a">
+    <kohaidx:target_index>Form-parallel:w</kohaidx:target_index>
+    <kohaidx:target_index>Form-parallel:s</kohaidx:target_index>
+    <kohaidx:target_index>Parallel:w</kohaidx:target_index>
+    <kohaidx:target_index>Parallel:p</kohaidx:target_index>
+    <kohaidx:target_index>Match:w</kohaidx:target_index>
+    <kohaidx:target_index>Match:p</kohaidx:target_index>
+  </kohaidx:index_subfields>
+
+  <!-- Notes 300, 305, 310, 320, 330, 340, 356-->
+  <kohaidx:index_subfields tag="300" subfields="a">
+    <kohaidx:target_index>Note:w</kohaidx:target_index>
+    <kohaidx:target_index>Note:p</kohaidx:target_index>
+  </kohaidx:index_subfields>
+  <kohaidx:index_subfields tag="305" subfields="a">
+    <kohaidx:target_index>Note:w</kohaidx:target_index>
+    <kohaidx:target_index>Note:p</kohaidx:target_index>
+  </kohaidx:index_subfields>
+  <kohaidx:index_subfields tag="310" subfields="a">
+    <kohaidx:target_index>Note:w</kohaidx:target_index>
+    <kohaidx:target_index>Note:p</kohaidx:target_index>
+  </kohaidx:index_subfields>
+  <kohaidx:index_subfields tag="320" subfields="a">
+    <kohaidx:target_index>Note:w</kohaidx:target_index>
+    <kohaidx:target_index>Note:p</kohaidx:target_index>
+  </kohaidx:index_subfields>
+  <kohaidx:index_subfields tag="330" subfields="a">
+    <kohaidx:target_index>Note:w</kohaidx:target_index>
+    <kohaidx:target_index>Note:p</kohaidx:target_index>
+  </kohaidx:index_subfields>
+  <kohaidx:index_subfields tag="340" subfields="a">
+    <kohaidx:target_index>Note:w</kohaidx:target_index>
+    <kohaidx:target_index>Note:p</kohaidx:target_index>
+  </kohaidx:index_subfields>
+  <kohaidx:index_subfields tag="356" subfields="a">
+    <kohaidx:target_index>Note:w</kohaidx:target_index>
+    <kohaidx:target_index>Note:p</kohaidx:target_index>
+  </kohaidx:index_subfields>
+
+  <!-- authtype-->
+  <kohaidx:index_subfields tag="152" subfields="b">
+    <kohaidx:target_index>authtype:w</kohaidx:target_index>
+    <kohaidx:target_index>authtype:p</kohaidx:target_index>
+  </kohaidx:index_subfields>
+  <kohaidx:index_subfields tag="942" subfields="a">
+    <kohaidx:target_index>authtype:w</kohaidx:target_index>
+  </kohaidx:index_subfields>
+</kohaidx:index_defs>
