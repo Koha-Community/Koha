@@ -4569,7 +4569,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.07.00.XXX";
+$DBversion = "3.06.02.002";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("ALTER TABLE items MODIFY materials text;");
     print "Upgrade to $DBversion done alter items.material from varchar(10) to text \n";
