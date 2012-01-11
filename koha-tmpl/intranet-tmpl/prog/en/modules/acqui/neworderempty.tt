@@ -365,11 +365,12 @@ $(document).ready(function()
             </li>
             <li>
                 [% IF ( close ) %]
-            <span class="label">Fund: </span>
+            <span class="label required">Fund: </span>
                     <input type="hidden" size="20" name="budget_id" id="budget_id" value="[% budget_id %]" />[% Budget_name %]
                 [% ELSE %]
-                <label for="budget_id">Fund: </label>
+                <label class="required" for="budget_id">Fund: </label>
                 <select id="budget_id" onchange="fetchSortDropbox(this.form)" size="1" name="budget_id">
+                        <option value="">Select a budget</option>
                 [% FOREACH budget_loo IN budget_loop %]
                     [% IF ( budget_loo.b_sel ) %]
                         <option value="[% budget_loo.b_id %]" selected="selected">[% budget_loo.b_txt %]</option>
