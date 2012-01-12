@@ -32,4 +32,22 @@ find({
         use_ok($m) || BAIL_OUT("***** PROBLEMS LOADING FILE '$m'");
     },
 }, $lib);
+
+$lib = File::Spec->rel2abs('Koha');
+find(
+    {
+        bydepth  => 1,
+        no_chdir => 1,
+        wanted   => sub {
+            my $m = $_;
+            return unless $m =~ s/[.]pm$//;
+            $m =~ s{^.*/Koha/}{Koha/};
+            $m =~ s{/}{::}g;
+            use_ok($m) || BAIL_OUT("***** PROBLEMS LOADING FILE '$m'");
+        },
+    },
+    $lib
+);
+
+
 done_testing();
