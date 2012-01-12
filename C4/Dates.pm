@@ -41,6 +41,12 @@ sub _prefformat {
     return $prefformat;
 }
 
+sub reset_prefformat {  # subroutine to clear the prefformat, called when we change it
+    if (defined $prefformat){
+	$prefformat = C4::Context->preference('dateformat');
+    }
+}
+
 our %format_map = (
     iso    => 'yyyy-mm-dd',           # plus " HH:MM:SS"
     metric => 'dd/mm/yyyy',           # plus " HH:MM:SS"
