@@ -6,19 +6,26 @@
 	vertical-align: top;
 }
 </style>
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+<link rel="stylesheet" href="[% themelang %]/css/datatables.css" />
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.min.js"></script>
+[% INCLUDE 'datatables-strings.inc' %]
+<script type="text/javascript" src="[% themelang %]/js/datatables.js"></script>
 <script type="text/javascript">
 //<![CDATA[
- $(document).ready(function() {
-        $("#vendorst").tablesorter({
-	    headers: { 
-		3: { 
-		    sorter: false 
-		}
-	    } 
-	}); 
- }); 
- //]]>
+$(document).ready(function() {
+    [% IF (dateformat == 'metric') %]
+        dt_add_type_uk_date();
+    [% END %]
+    $("table.baskets").dataTable($.extend(true, {}, dataTablesDefaults, {
+        'bPaginate': false,
+        'bFilter': false,
+        'bInfo': false,
+        'aoColumnDefs': [
+            { 'aTargets': [-1], 'bSortable': false }
+        ]
+    }));
+});
+//]]>
 </script>
 
 </head>
@@ -40,88 +47,88 @@
 [% ELSE %]
 <h1>You searched on <b>vendor [% supplier %],</b> [% count %] results found</h1>
 [% END %]
-[% IF ( loop_suppliers ) %]
-    <div id="acqui_order_supplierlist">
-        <table id="vendorst">
-	<thead>
-        <tr>
-            <th>Order</th>
-            <th>Order receive</th>
-            <th>Vendor</th>
-            <th>&nbsp;</th>
-        </tr>
-	</thead>
-	<tbody> 
-        [% FOREACH loop_supplier IN loop_suppliers %]
-        [% UNLESS ( loop.odd ) %]
-            <tr class="highlight">
-        [% ELSE %]
-            <tr>
-        [% END %]
-                <td>[% IF ( CAN_user_acquisition_order_manage ) %]
-                    [% IF ( loop_supplier.active ) %]
-                        <a href="basketheader.pl?booksellerid=[% loop_supplier.booksellerid %]&amp;op=add_form">New basket</a>
-                    [% ELSE %]
-                        Inactive
-                    [% END %]
-                    [% END %]
-                </td>
-                <td>	<a href="parcels.pl?booksellerid=[% loop_supplier.booksellerid %]">Receive shipment</a>
-                </td>
-                [% IF ( loop_supplier.name ) %]
-                <td><a href="supplier.pl?booksellerid=[% loop_supplier.booksellerid %]">[% loop_supplier.name %]</a></td>
-                [% ELSE %]
-                <td><a href="supplier.pl?booksellerid=[% loop_supplier.booksellerid %]">NO NAME</a></td>
-                [% END %]
-                <td>	<table>
-                        [% IF ( loop_supplier.loop_basket ) %]
-                            <tr>
-                                <th>Basket (#)</th>
-                                <th>Items</th>
-                                <th>Created by</th>
-                                <th>Date</th>
-                                <th>&nbsp;</th>
-                            </tr>
-                            [% FOREACH loop_baske IN loop_supplier.loop_basket %]
-                            [% IF ( loop_baske.uncertainprices ) %]
-                                <tr class="problem">
-                            [% ELSE %]
-                            [% UNLESS ( loop.odd ) %]
-                                <tr class="highlight">
-                            [% ELSE %]
-                                <tr>
-                            [% END %]
-                            [% END %]
-                                    <td>[% loop_baske.basketname %] (#[% loop_baske.basketno %])</td>
-                                    <td>[% loop_baske.total %]</td>
-                                    <td>						[% loop_baske.firstname %]
-                                            [% loop_baske.surname %]
-                                    </td>
-                                    <td>[% loop_baske.creationdate %]</td>
-                                    <td>						[% IF ( loop_baske.closedate ) %]
-                                            closed on [% loop_baske.closedate %]
-                                            <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% loop_baske.basketno %]">View</a>
-                                        [% ELSE %]
-                                            [% IF ( loop_baske.active ) %]
-                                                <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% loop_baske.basketno %]">modify</a>
-                                            [% ELSE %]
-                                                <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% loop_baske.basketno %]">View</a>
-                                            [% END %]
-                                        [% END %]
-                                    </td>
-                                </tr>
-                            [% END %]
-                        [% ELSE %]
-                            <tr><td>No pending baskets</td></tr>
-                        [% END %]
-                        </table>
-                </td>
-                </tr>
+[% IF ( loop_suppliers.size ) %]
+    [% UNLESS (count == 1) %]
+        <ul class="suppliers_anchors">
+            [% FOREACH supplier IN loop_suppliers %]
+                <li><a href="#[% supplier.booksellerid %]">[% supplier.name %]</a></li>
             [% END %]
-	    </tbody>
-            </table>
-        </div>
+        </ul>
     [% END %]
+    <div id="acqui_order_supplierlist">
+        [% FOREACH supplier IN loop_suppliers %]
+            <div class="supplier">
+                <span class="suppliername">
+                    [% IF (supplier.name) %]
+                        <a name="[% supplier.booksellerid %]" href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% supplier.booksellerid %]">[% supplier.name %]</a>
+                    [% ELSE %]
+                        <a name="[% supplier.booksellerid %]" href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% supplier.booksellerid %]">NO NAME</a>
+                    [% END %]
+                </span>
+                <span class="action">
+                    [% IF ( CAN_user_acquisition_order_manage ) %]
+                        [% IF ( supplier.active ) %]
+                            <input type="button" value="New basket" onclick="window.location.href='/cgi-bin/koha/acqui/basketheader.pl?booksellerid=[% supplier.booksellerid %]&op=add_form'" />
+                        [% ELSE %]
+                            (inactive)
+                        [% END %]
+                    [% END %]
+                    <input type="button" value="Receive shipment" onclick="window.location.href='/cgi-bin/koha/acqui/parcels.pl?booksellerid=[% supplier.booksellerid %]'" />
+                </span>
+                <div class="baskets">
+                    [% IF ( supplier.loop_basket.size ) %]
+                        <table class="baskets">
+                            <thead>
+                                <tr>
+                                    <th>Basket (#)</th>
+                                    <th>Biblios</th>
+                                    <th>Items</th>
+                                    <th>Expected items</th>
+                                    <th>Created by</th>
+                                    <th>Date</th>
+                                    <th>&nbsp;</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                [% FOREACH basket IN supplier.loop_basket %]
+                                    [% IF ( basket.uncertainprices ) %]
+                                        <tr class="problem">
+                                    [% ELSE %]
+                                        <tr>
+                                    [% END %]
+                                        <td>[% basket.basketname %] (#[% basket.basketno %])</td>
+                                        <td>[% basket.total_biblios %]</td>
+                                        <td>[% basket.total_items %]</td>
+                                        <td>[% basket.expected_items %]</td>
+                                        <td>
+                                            [% basket.authorisedby_firstname %]
+                                            [% basket.authorisedby_surname %]
+                                        </td>
+                                        <td>[% basket.creationdate %]</td>
+                                        <td>
+                                            [% IF ( basket.closedate ) %]
+                                                closed on [% basket.closedate %]
+                                                <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basket.basketno %]">View</a>
+                                            [% ELSE %]
+                                                [% IF ( basket.active ) %]
+                                                    <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basket.basketno %]">Modify</a>
+                                                [% ELSE %]
+                                                    <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basket.basketno %]">View</a>
+                                                [% END %]
+                                            [% END %]
+                                        </td>
+                                    </tr>
+                                [% END %][%# FOREACH basket IN supplier.loop_basket %]
+                            </tbody>
+                        </table>
+                    [% ELSE %]
+                        <p>No pending baskets</p>
+                    [% END %][%# IF ( supplier.loop_basket.size ) %]
+                </div>
+            </div>
+        [% END %][%# FOREACH supplier IN loop_suppliers %]
+    </div>
+[% END %][%# IF ( loop_suppliers.size ) %]
 </div>
 </div>
 <div class="yui-b">

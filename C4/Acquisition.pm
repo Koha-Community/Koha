@@ -44,6 +44,7 @@ BEGIN {
         &GetBasket &NewBasket &CloseBasket &DelBasket &ModBasket
 	&GetBasketAsCSV
         &GetBasketsByBookseller &GetBasketsByBasketgroup
+        &GetBasketsInfosByBookseller
 
         &ModBasketHeader
 
@@ -463,6 +464,39 @@ sub GetBasketsByBookseller {
     $sth->finish;
     return $results
 }
+
+=head3 GetBasketsInfosByBookseller
+
+    my $baskets = GetBasketsInfosByBookseller($supplierid);
+
+Returns in a arrayref of hashref all about booksellers baskets, plus:
+    total_biblios: Number of distinct biblios in basket
+    total_items: Number of items in basket
+    expected_items: Number of non-received items in basket
+
+=cut
+
+sub GetBasketsInfosByBookseller {
+    my ($supplierid) = @_;
+
+    return unless $supplierid;
+
+    my $dbh = C4::Context->dbh;
+    my $query = qq{
+        SELECT aqbasket.*,
+          SUM(aqorders.quantity) AS total_items,
+          COUNT(DISTINCT aqorders.biblionumber) AS total_biblios,
+          SUM(IF(aqorders.datereceived IS NULL, aqorders.quantity, 0)) AS expected_items
+        FROM aqbasket
+          LEFT JOIN aqorders ON aqorders.basketno = aqbasket.basketno
+        WHERE booksellerid = ?
+        GROUP BY aqbasket.basketno
+    };
+    my $sth = $dbh->prepare($query);
+    $sth->execute($supplierid);
+    return $sth->fetchall_arrayref({});
+}
+
 
 #------------------------------------------------------------#
 
