@@ -61,7 +61,8 @@ The biblionumber of this order.
 =cut
 
 use strict;
-#use warnings; FIXME - Bug 2505
+use warnings;
+
 use CGI;
 use C4::Context;
 use C4::Koha;   # GetKohaAuthorisedValues GetItemTypes
@@ -81,8 +82,8 @@ use C4::Suggestions;
 my $input      = new CGI;
 
 my $dbh          = C4::Context->dbh;
-my $booksellerid   = $input->param('booksellerid');
-my $ordernumber       = $input->param('ordernumber');
+my $booksellerid = $input->param('booksellerid');
+my $ordernumber  = $input->param('ordernumber');
 my $search       = $input->param('receive');
 my $invoice      = $input->param('invoice');
 my $freight      = $input->param('freight');
@@ -96,13 +97,6 @@ my $input_gst = ($input->param('gst') eq '' ? undef : $input->param('gst'));
 my $gst= $input_gst // $bookseller->{gstrate} // C4::Context->preference("gist") // 0;
 my $results = SearchOrder($ordernumber,$search);
 
-
-my $count   = scalar @$results;
-my $order 	= GetOrder($ordernumber);
-
-
-my $date = @$results[0]->{'entrydate'};
-
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
         template_name   => "acqui/orderreceive.tmpl",
@@ -114,8 +108,10 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
+my $count = scalar @$results;
 # prepare the form for receiving
 if ( $count == 1 ) {
+    my $order = $results->[0];
     if (C4::Context->preference('AcqCreateItem') eq 'receiving') {
         # Check if ACQ framework exists
         my $marc = GetMarcStructure(1, 'ACQ');
@@ -128,42 +124,39 @@ if ( $count == 1 ) {
         );
     }
 
-    if ( @$results[0]->{'quantityreceived'} == 0 ) {
-        @$results[0]->{'quantityreceived'} = '';
-    }
-    if ( @$results[0]->{'unitprice'} == 0 ) {
-        @$results[0]->{'unitprice'} = '';
+    if ( $order->{'unitprice'} == 0 ) {
+        $order->{'unitprice'} = '';
     }
 
-    my $suggestion   = GetSuggestionInfoFromBiblionumber(@$results[0]->{'biblionumber'});
+    my $suggestion   = GetSuggestionInfoFromBiblionumber($order->{'biblionumber'});
 
-    my $authorisedby = @$results[0]->{'authorisedby'};
+    my $authorisedby = $order->{'authorisedby'};
     my $member = GetMember( borrowernumber => $authorisedby );
 
-    my $budget = GetBudget( @$results[0]->{'budget_id'} );
+    my $budget = GetBudget( $order->{'budget_id'} );
 
     $template->param(
         count                 => 1,
-        biblionumber          => @$results[0]->{'biblionumber'},
-        ordernumber           => @$results[0]->{'ordernumber'},
-        biblioitemnumber      => @$results[0]->{'biblioitemnumber'},
-        booksellerid            => @$results[0]->{'booksellerid'},
+        biblionumber          => $order->{'biblionumber'},
+        ordernumber           => $order->{'ordernumber'},
+        biblioitemnumber      => $order->{'biblioitemnumber'},
+        booksellerid          => $order->{'booksellerid'},
         freight               => $freight,
         gst                   => $gst,
         name                  => $bookseller->{'name'},
-        date                  => format_date($date),
-        title                 => @$results[0]->{'title'},
-        author                => @$results[0]->{'author'},
-        copyrightdate         => @$results[0]->{'copyrightdate'},
-        isbn                  => @$results[0]->{'isbn'},
-        seriestitle           => @$results[0]->{'seriestitle'},
+        date                  => format_date($order->{entrydate}),
+        title                 => $order->{'title'},
+        author                => $order->{'author'},
+        copyrightdate         => $order->{'copyrightdate'},
+        isbn                  => $order->{'isbn'},
+        seriestitle           => $order->{'seriestitle'},
         bookfund              => $budget->{budget_name},
-        quantity              => @$results[0]->{'quantity'},
-        quantityreceivedplus1 => @$results[0]->{'quantityreceived'} + 1,
-        quantityreceived      => @$results[0]->{'quantityreceived'},
-        rrp                   => @$results[0]->{'rrp'},
-        ecost                 => @$results[0]->{'ecost'},
-        unitprice             => @$results[0]->{'unitprice'},
+        quantity              => $order->{'quantity'},
+        quantityreceivedplus1 => $order->{'quantityreceived'} + 1,
+        quantityreceived      => $order->{'quantityreceived'},
+        rrp                   => $order->{'rrp'},
+        ecost                 => $order->{'ecost'},
+        unitprice             => $order->{'unitprice'},
         memberfirstname       => $member->{firstname} || "",
         membersurname         => $member->{surname} || "",
         invoice               => $invoice,
@@ -196,7 +189,7 @@ else {
     );
 }
 my $op = $input->param('op');
-if ($op eq 'edit'){
+if ($op and $op eq 'edit'){
     $template->param(edit   =>   1);
 }
 output_html_with_http_headers $input, $cookie, $template->output;
