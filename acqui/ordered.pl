@@ -19,7 +19,7 @@
 
 =head1 NAME
 
-committed.pl
+ordered.pl
 
 =head1 DESCRIPTION
 
