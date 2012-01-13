@@ -4,6 +4,11 @@
 <script type="text/javascript">
 //<![CDATA[
 $(document).ready(function(){
+    [% IF (popup) %]
+        [% IF (opisadd) %]
+            window.close();
+        [% END %]
+    [% END %]
 		$("fieldset.rows input").keydown(function(e){ return checkEnter(e); });
 		/* Inline edit/delete links */
 		var biblionumber = $("input[name='biblionumber']").attr("value");
@@ -219,6 +224,9 @@ $(document).ready(function() {
 <div id="cataloguing_additem_newitem">
     <form method="post" action="/cgi-bin/koha/cataloguing/additem.pl" name="f">
     <input type="hidden" name="op" value="[% op %]" />
+    [% IF (popup) %]
+        <input type="hidden" name="popup" value="1" />
+    [% END %]
     <input type="hidden" name="biblionumber" value="[% biblionumber %]" />
     [% IF ( opisadd ) %]
         <h2 id="additema">Add item</h2>

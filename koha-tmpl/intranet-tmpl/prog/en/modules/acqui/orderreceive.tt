@@ -32,9 +32,68 @@
         return true;
     }
 
+    [% IF (AcqCreateItem == 'ordering') %]
+        var items_columns = [null, null, 'barcode', 'homebranchname',
+            'holdingbranchname', 'notforloan', 'restricted', 'location',
+            'itemcallnumber', 'copynumber', 'stocknumber', 'collection',
+            'itemtype', 'materials', 'itemnotes'];
+
+        function PopupEditPage(biblionumber, itemnumber) {
+            var url = "/cgi-bin/koha/cataloguing/additem.pl?op=edititem&biblionumber="
+                + biblionumber + "&itemnumber=" + itemnumber + "&popup=1#edititem";
+            var w = window.open(url);
+            var watchClose = setInterval(function() {
+                if (w.closed) {
+                    clearTimeout(watchClose);
+                    $.getJSON('/cgi-bin/koha/catalogue/getitem-ajax.pl',
+                        {
+                            'itemnumber': itemnumber
+                        },
+                        function(item) {
+                            var tds = $("#item_"+itemnumber+" td");
+                            for(var i=2; i<tds.length; i++) {
+                                var column = items_columns[i];
+                                $(tds[i]).text(item[column]);
+                            }
+                        }
+                    );
+                }
+            }, 500);
+        }
+
+        function CalcQtyToReceive() {
+            var qty = $("input[name='items_to_receive']:checked").length;
+            $("#quantity").val(qty);
+        }
+
+        function CheckNItems(n) {
+            $("input[name='items_to_receive']").each(function() {
+                $(this).attr('checked', false);
+            });
+            $("input[name='items_to_receive']:lt("+n+")").each(function () {
+                $(this).attr('checked', true);
+            });
+        }
+    [% END %]
+
     $(document).ready(function() {
         [% IF (AcqCreateItemReceiving) %]
             cloneItemBlock(0, '[% UniqueItemFields %]');
+        [% ELSIF (AcqCreateItem == 'ordering') %]
+            $("input[name='items_to_receive']").change(function() {
+                CalcQtyToReceive();
+            });
+            CalcQtyToReceive();
+            $("#quantity").keyup(function() {
+                var qty = parseInt($("#quantity").val());
+                var qtyto = parseInt($("#quantity_to_receive").val());
+                if(qty > qtyto) {
+                    $("#qtyrecerror").show();
+                } else {
+                    $("#qtyrecerror").hide();
+                }
+                CheckNItems($(this).val());
+            });
         [% END %]
     });
 //]]>
@@ -127,7 +186,55 @@
             [% END %]
             <div id="outeritemblock"></div>
         </fieldset>
-    [% END %][%# IF (AcqCreateItemReceiving) %]
+    [% ELSIF (AcqCreateItem == 'ordering') %]
+        [% IF (items.size) %]
+            <h5>Items</h5>
+            <div style="width:100%;overflow:auto">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Receive?</th>
+                            <th>&nbsp;</th>
+                            <th>Barcode</th>
+                            <th>Home branch</th>
+                            <th>Holding branch</th>
+                            <th>Not for loan</th>
+                            <th>Restricted</th>
+                            <th>Location</th>
+                            <th>Call number</th>
+                            <th>Copy number</th>
+                            <th>Stock number</th>
+                            <th>Collection code</th>
+                            <th>Item type</th>
+                            <th>Materials</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        [% FOREACH item IN items %]
+                            <tr id="item_[% item.itemnumber %]">
+                                <td style="text-align:center"><input type="checkbox" name="items_to_receive" value="[% item.itemnumber %]" /></td>
+                                <td><a style="cursor:pointer" onclick="PopupEditPage([% item.biblionumber %],[% item.itemnumber %]);">Edit</a></td>
+                                <td>[% item.barcode %]</td>
+                                <td>[% item.homebranchname %]</td>
+                                <td>[% item.holdingbranchname %]</td>
+                                <td>[% item.notforloan %]</td>
+                                <td>[% item.restricted %]</td>
+                                <td>[% item.location %]</td>
+                                <td>[% item.itemcallnumber %]</td>
+                                <td>[% item.copynumber %]</td>
+                                <td>[% item.stocknumber %]</td>
+                                <td>[% item.collection %]</td>
+                                <td>[% item.itemtype %]</td>
+                                <td>[% item.materials %]</td>
+                                <td>[% item.itemnotes %]</td>
+                            </tr>
+                        [% END %]
+                    </tbody>
+                </table>
+            </div>
+        [% END %]
+    [% END %]
     <input type="hidden" name="biblionumber" value="[% biblionumber %]" />
     <input type="hidden" name="ordernumber" value="[% ordernumber %]" />
     <input type="hidden" name="biblioitemnumber" value="[% biblioitemnumber %]" />
@@ -143,7 +250,7 @@
        <li><label for="datereceived">Date received: </label><span> [% datereceived %] </span></li>
        <li><label for="bookfund">Budget: </label><span> [% bookfund %] </span></li>
        <li><label for="creator">Created by: </label><span> [% IF ( memberfirstname and membersurname ) %][% IF ( memberfirstname ) %][% memberfirstname %][% END %] [% membersurname %][% ELSE %]No name[% END %]</span></li>
-       <li><label for="quantityto">Quantity to receive: </label><span class="label">
+       <li><label for="quantity_to_receive">Quantity to receive: </label><span class="label">
            [% IF ( edit ) %]
                <input type="text" id="quantity_to_receive" name="quantity" value="[% quantity %]" />
            [% ELSE %]
@@ -168,12 +275,16 @@
                 [% END %]
             [% ELSE %]
                 [% IF ( items ) %]
-                    <input READONLY type="text" id="quantity" size="20" name="quantityrec" value="1" />
+                    <input type="text" id="quantity" size="20" name="quantityrec" value="1" />
                 [% ELSE %]
                     <input type="text" size="20" id="quantity" name="quantityrec" value="1" />
                 [% END %]
                 <input id="origquantityrec" READONLY type="hidden" name="origquantityrec" value="0" />
             [% END %]
+            <div id="qtyrecerror" style="display:none">
+                <p class="error">Warning, you have entered more items than expected.
+                Items will not be created.</p>
+            </div>
           [% END %][%# IF (AcqCreateItemReceiving) %]
 		</li>
         <li><label for="rrp">Replacement cost: </label><input type="text" size="20" name="rrp" id="rrp" value="[% rrp %]" /></li>

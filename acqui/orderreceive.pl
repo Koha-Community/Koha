@@ -112,16 +112,51 @@ my $count = scalar @$results;
 # prepare the form for receiving
 if ( $count == 1 ) {
     my $order = $results->[0];
-    if (C4::Context->preference('AcqCreateItem') eq 'receiving') {
-        # Check if ACQ framework exists
-        my $marc = GetMarcStructure(1, 'ACQ');
-        unless($marc) {
-            $template->param('NoACQframework' => 1);
-        }
+
+    # Check if ACQ framework exists
+    my $acq_fw = GetMarcStructure(1, 'ACQ');
+    unless($acq_fw) {
+        $template->param('NoACQframework' => 1);
+    }
+
+    my $AcqCreateItem = C4::Context->preference('AcqCreateItem');
+    if ($AcqCreateItem eq 'receiving') {
         $template->param(
             AcqCreateItemReceiving => 1,
             UniqueItemFields => C4::Context->preference('UniqueItemFields'),
         );
+    } elsif ($AcqCreateItem eq 'ordering') {
+        my $fw = ($acq_fw) ? 'ACQ' : '';
+        my @itemnumbers = GetItemnumbersFromOrder($order->{ordernumber});
+        my @items;
+        foreach (@itemnumbers) {
+            my $item = GetItem($_);
+            if($item->{homebranch}) {
+                $item->{homebranchname} = GetBranchName($item->{homebranch});
+            }
+            if($item->{holdingbranch}) {
+                $item->{holdingbranchname} = GetBranchName($item->{holdingbranch});
+            }
+            if(my $code = GetAuthValCode("items.notforloan", $fw)) {
+                $item->{notforloan} = GetKohaAuthorisedValueLib($code, $item->{notforloan});
+            }
+            if(my $code = GetAuthValCode("items.restricted", $fw)) {
+                $item->{restricted} = GetKohaAuthorisedValueLib($code, $item->{restricted});
+            }
+            if(my $code = GetAuthValCode("items.location", $fw)) {
+                $item->{location} = GetKohaAuthorisedValueLib($code, $item->{location});
+            }
+            if(my $code = GetAuthValCode("items.ccode", $fw)) {
+                $item->{collection} = GetKohaAuthorisedValueLib($code, $item->{ccode});
+            }
+            if(my $code = GetAuthValCode("items.materials", $fw)) {
+                $item->{materials} = GetKohaAuthorisedValueLib($code, $item->{materials});
+            }
+            my $itemtype = getitemtypeinfo($item->{itype});
+            $item->{itemtype} = $itemtype->{description};
+            push @items, $item;
+        }
+        $template->param(items => \@items);
     }
 
     if ( $order->{'unitprice'} == 0 ) {
@@ -136,6 +171,7 @@ if ( $count == 1 ) {
     my $budget = GetBudget( $order->{'budget_id'} );
 
     $template->param(
+        AcqCreateItem         => $AcqCreateItem,
         count                 => 1,
         biblionumber          => $order->{'biblionumber'},
         ordernumber           => $order->{'ordernumber'},

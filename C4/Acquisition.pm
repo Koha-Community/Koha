@@ -57,7 +57,7 @@ BEGIN {
         &ModReceiveOrder &ModOrderBiblioitemNumber
         &GetCancelledOrders
 
-        &NewOrderItem &ModOrderItem
+        &NewOrderItem &ModOrderItem &ModItemOrder
 
         &GetParcels &GetParcel
         &GetContracts &GetContract
@@ -1053,6 +1053,29 @@ sub ModOrderItem {
     return 0;
 }
 
+=head3 ModItemOrder
+
+    ModItemOrder($itemnumber, $ordernumber);
+
+Modifies the ordernumber of an item in aqorders_items.
+
+=cut
+
+sub ModItemOrder {
+    my ($itemnumber, $ordernumber) = @_;
+
+    return unless ($itemnumber and $ordernumber);
+
+    my $dbh = C4::Context->dbh;
+    my $query = qq{
+        UPDATE aqorders_items
+        SET ordernumber = ?
+        WHERE itemnumber = ?
+    };
+    my $sth = $dbh->prepare($query);
+    return $sth->execute($ordernumber, $itemnumber);
+}
+
 #------------------------------------------------------------#
 
 
@@ -1138,7 +1161,7 @@ C<$ordernumber>.
 sub ModReceiveOrder {
     my (
         $biblionumber,    $ordernumber,  $quantrec, $user, $cost,
-        $invoiceno, $freight, $rrp, $budget_id, $datereceived
+        $invoiceno, $freight, $rrp, $budget_id, $datereceived, $received_items
     )
     = @_;
     my $dbh = C4::Context->dbh;
@@ -1181,7 +1204,19 @@ sub ModReceiveOrder {
         $order->{'quantity'} -= $quantrec;
         $order->{'quantityreceived'} = 0;
         my $newOrder = NewOrder($order);
-} else {
+        # Change ordernumber in aqorders_items for items not received
+        my @orderitems = GetItemnumbersFromOrder( $order->{'ordernumber'} );
+        my $count = scalar @orderitems;
+
+        for (my $i=0; $i<$count; $i++){
+            foreach (@$received_items){
+                splice (@orderitems, $i, 1) if ($orderitems[$i] == $_);
+            }
+        }
+        foreach (@orderitems) {
+            ModItemOrder($_, $newOrder);
+        }
+    } else {
         $sth=$dbh->prepare("update aqorders
                             set quantityreceived=?,datereceived=?,booksellerinvoicenumber=?,
                                 unitprice=?,freight=?,rrp=?

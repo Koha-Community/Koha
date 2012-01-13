@@ -94,9 +94,14 @@ if ($quantityrec > $origquantityrec ) {
             NewOrderItem($itemnumber, $ordernumber);
         }
     }
-    
+
+    my @received_items = ();
+    if(C4::Context->preference('AcqCreateItem') eq 'ordering') {
+        @received_items = $input->param('items_to_receive');
+    }
+
     # save the quantity received.
-    $datereceived = ModReceiveOrder($biblionumber,$ordernumber, $quantityrec ,$user,$unitprice,$invoiceno,$freight,$replacement,undef,$datereceived);
+    $datereceived = ModReceiveOrder($biblionumber,$ordernumber, $quantityrec ,$user,$unitprice,$invoiceno,$freight,$replacement,undef,$datereceived, \@received_items);
 }
 
 update_item( $_ ) foreach GetItemnumbersFromOrder( $ordernumber );
