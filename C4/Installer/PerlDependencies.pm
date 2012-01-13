@@ -479,6 +479,11 @@ our $PERL_DEPS = {
         'required' => '0',
         'min_ver'  => '1.03',
     },
+    'Modern::Perl' => {
+        'usage'    => 'Core',
+        'required' => '1',
+        'min_ver'  => '1.03',
+    },
 };
 
 1;
