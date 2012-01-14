@@ -52,7 +52,6 @@
                 [% CASE 'marcstd' %]<option value="utf8">MARC (Unicode/UTF-8, Standard)</option>
                 [% CASE 'mods' %]<option value="mods">MODS (XML)</option>
                 [% CASE 'ris' %]<option value="ris">RIS</option>
-                [% CASE %]<option value="[% option %]">[% option %]</option>
             [% END %]
         [% END %]
         </select>
