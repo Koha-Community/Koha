@@ -528,7 +528,6 @@ YAHOO.util.Event.onContentReady("searchheader", function () {
                                     [% IF ( SEARCH_RESULT.itemsplural ) %]items[% ELSE %]item[% END %][% IF ( SEARCH_RESULT.availablecount ) %], [% SEARCH_RESULT.availablecount %] available:[% ELSE %], None available[% END %]</strong>
 
                                     [% IF ( SEARCH_RESULT.availablecount ) %]
-                                    [% SEARCH_RESULT.availablecount %] available:
                                     <ul>
                                     [% FOREACH available_items_loo IN SEARCH_RESULT.available_items_loop %]
 
