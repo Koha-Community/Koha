@@ -459,7 +459,7 @@ YAHOO.util.Event.onContentReady("searchheader", function () {
 				[% INCLUDE 'biblio-default-view.inc' %]
                                             <b>[% IF ( SEARCH_RESULT.title ) %][% SEARCH_RESULT.title |html %][% ELSE %]No title[% END %]</b>
                                             </a>
-                                        [% FOREACH subtitl IN SEARCH_RESULT.subtitle %] , [% subtitl.subfield %] [% END %]
+                                        [% FOREACH subtitl IN SEARCH_RESULT.subtitle %], [% subtitl.subfield %][% END %]
 										[% IF ( SEARCH_RESULT.volume ) %],[% SEARCH_RESULT.volume %][% END %] [% IF ( SEARCH_RESULT.volumeddesc ) %], [% SEARCH_RESULT.volumeddesc %][% END %]
                                 </p>
                                 [% IF ( SEARCH_RESULT.summary ) %]
