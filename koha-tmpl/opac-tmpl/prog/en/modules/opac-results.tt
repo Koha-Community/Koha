@@ -417,7 +417,7 @@ $(document).ready(function(){
                                 [% ELSE %]<a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% SEARCH_RESULT.biblionumber |url %]" title="View details for this title">
                                 [% END %]
                                 [% END %]
-								[% IF ( SEARCH_RESULT.title ) %][% SEARCH_RESULT.title |html %][% ELSE %]No title[% END %] [% FOREACH subtitl IN SEARCH_RESULT.subtitle %][% subtitl.subfield %][% END %]</a>
+								[% IF ( SEARCH_RESULT.title ) %][% SEARCH_RESULT.title |html %][% ELSE %]No title[% END %] [% FOREACH subtitl IN SEARCH_RESULT.subtitle %], [% subtitl.subfield %][% END %]</a>
                                 [% IF ( SEARCH_RESULT.author ) %]by <a href="/cgi-bin/koha/opac-search.pl?q=au:[% SEARCH_RESULT.author |url %]" title="Search for works by this author" class="author">[% SEARCH_RESULT.author %]</a>
                                 [% ELSE %]&nbsp;
                                 [% END %]
