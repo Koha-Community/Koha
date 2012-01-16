@@ -143,6 +143,10 @@ Default items.content lists only those items that fall in the
 range of the currently processing notice.
 Choose list-all to include all overdue items in the list (limited by B<-max> setting).
 
+=item B<-date>
+
+use it in order to send overdues on a specific date and not Now.
+
 =back
 
 =head1 DESCRIPTION
@@ -259,6 +263,7 @@ my $listall = 0;
 my $itemscontent = join( ',', qw( date_due title barcode author itemnumber ) );
 my @myborcat;
 my @myborcatout;
+my $date;
 
 GetOptions(
     'help|?'         => \$help,
@@ -268,12 +273,13 @@ GetOptions(
     'max=s'          => \$MAX,
     'library=s'      => \@branchcodes,
     'csv:s'          => \$csvfilename,    # this optional argument gets '' if not supplied.
-    'html:s'          => \$htmlfilename,    # this optional argument gets '' if not supplied.
+    'html:s'         => \$htmlfilename,    # this optional argument gets '' if not supplied.
     'itemscontent=s' => \$itemscontent,
-    'list-all'      => \$listall,
-    't|triggered'             => \$triggered,
-    'borcat=s'      => \@myborcat,
-    'borcatout=s'   => \@myborcatout,
+    'list-all'       => \$listall,
+    't|triggered'    => \$triggered,
+    'date'           => \$date,
+    'borcat=s'       => \@myborcat,
+    'borcatout=s'    => \@myborcatout,
 ) or pod2usage(2);
 pod2usage(1) if $help;
 pod2usage( -verbose => 2 ) if $man;
@@ -318,6 +324,13 @@ if (@branchcodes) {
         $verbose and warn "Falling back on default rules for @branchcodes\n";
         @branches = ('');
     }
+}
+
+if ($date){
+    $date=$dbh->quote($date);
+}
+else {
+    $date="NOW()";
 }
 
 # these are the fields that will be substituted into <<item.content>>
@@ -376,13 +389,13 @@ foreach my $branchcode (@branches) {
     $verbose and warn sprintf "branchcode : '%s' using %s\n", $branchcode, $admin_email_address;
 
     my $sth2 = $dbh->prepare( <<'END_SQL' );
-SELECT biblio.*, items.*, issues.*, biblioitems.itemtype, TO_DAYS(NOW())-TO_DAYS(date_due) AS days_overdue
+SELECT biblio.*, items.*, issues.*, biblioitems.itemtype, TO_DAYS($date)-TO_DAYS(date_due) AS days_overdue
   FROM issues,items,biblio, biblioitems
   WHERE items.itemnumber=issues.itemnumber
     AND biblio.biblionumber   = items.biblionumber
     AND biblio.biblionumber   = biblioitems.biblionumber
     AND issues.borrowernumber = ?
-    AND TO_DAYS(NOW())-TO_DAYS(date_due) BETWEEN ? and ?
+    AND TO_DAYS($date)-TO_DAYS(date_due) BETWEEN ? and ?
 END_SQL
 
     my $query = "SELECT * FROM overduerules WHERE delay1 IS NOT NULL AND branchcode = ? ";
@@ -442,10 +455,10 @@ END_SQL
             }
             $borrower_sql .= '  AND categories.overduenoticerequired=1 ';
             if($triggered) {
-                $borrower_sql .= ' AND TO_DAYS(NOW())-TO_DAYS(date_due) = ?';
+                $borrower_sql .= ' AND TO_DAYS($date)-TO_DAYS(date_due) = ?';
                 push @borrower_parameters, $mindays;
             } else {
-                $borrower_sql .= ' AND TO_DAYS(NOW())-TO_DAYS(date_due) BETWEEN ? and ? ' ;
+                $borrower_sql .= ' AND TO_DAYS($date)-TO_DAYS(date_due) BETWEEN ? and ? ' ;
                 push @borrower_parameters, $mindays, $maxdays;
             }
 
