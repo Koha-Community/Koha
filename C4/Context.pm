@@ -549,7 +549,7 @@ the sysprefs cache.
 
 sub set_preference {
     my $self = shift;
-    my $var = shift;
+    my $var = lc(shift);
     my $value = shift;
 
     my $dbh = C4::Context->dbh or return 0;
@@ -565,7 +565,9 @@ sub set_preference {
         ON DUPLICATE KEY UPDATE value = VALUES(value)
     " );
 
-    $sth->execute( $var, $value );
+    if($sth->execute( $var, $value )) {
+        $sysprefs{$var} = $value;
+    }
     $sth->finish;
 }
 
