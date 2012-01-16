@@ -52,6 +52,8 @@ foreach (@$borrowers) {
 }
 $template->param(alertloop => $borrowers,
                 bibliotitle => $subscription->{bibliotitle},
-                subscriptionid => $subscriptionid);
+                subscriptionid => $subscriptionid,
+                (uc(C4::Context->preference("marcflavour"))) => 1
+                );
 
 output_html_with_http_headers $input, $cookie, $template->output;

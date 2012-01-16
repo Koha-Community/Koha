@@ -318,7 +318,7 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 ('072', 'c', 'Numéro additionnels suivant le code normalisé', '', 0, 0, '', 0, '', '', '', 0, 0, '', NULL, '', ''),
 ('072', 'd', 'Mention de disponibilité et/ou de prix', '', 0, 0, '', 0, '', '', '', 0, 0, '', NULL, '', ''),
 ('072', 'z', 'Numéro ou code erroné', '', 0, 0, '', 0, '', '', '', 0, 0, '', NULL, '', ''),
-('073', 'a', 'Numéro', '', 0, 0, '', 0, '', '', '', NULL, 0, '', '', NULL, ''),
+('073', 'a', 'Numéro', '', 0, 0, 'biblioitems.ean', 0, '', '', '', NULL, 0, '', '', NULL, ''),
 ('073', 'b', 'Qualificatif', '', 0, 0, '', 0, '', '', '', NULL, 0, '', '', NULL, ''),
 ('073', 'c', 'Numéros additionnels', '', 0, 0, '', 0, '', '', '', NULL, 0, '', '', NULL, ''),
 ('073', 'd', 'Prix et disponibilité', '', 0, 0, '', 0, '', '', '', NULL, 0, '', '', NULL, ''),

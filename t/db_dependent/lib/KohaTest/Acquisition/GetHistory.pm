@@ -71,6 +71,33 @@ sub one_order : Test( 55 ) {
         # diag( Data::Dumper->Dump( [ $order_loop ], [ 'order_loop' ] ) );
     }
 
+    # searching by isbn
+    {
+        my ( $order_loop, $total_qty, $total_price, $total_qtyreceived) = GetHistory( isbn => $bibliodata->{'isbn'} );
+        # diag( Data::Dumper->Dump( [ $order_loop, $total_qty, $total_price, $total_qtyreceived ], [ qw( order_loop total_qty total_price total_qtyreceived ) ] ) );
+
+        is( scalar @$order_loop, 1, 'order_loop searched by isbn' );
+        is( $total_qty,          1, 'total_qty searched by isbn' );
+        is( $total_price,        1, 'total_price searched by isbn' );
+        is( $total_qtyreceived,  0, 'total_qtyreceived searched by isbn' );
+
+        # diag( Data::Dumper->Dump( [ $order_loop ], [ 'order_loop' ] ) );
+    }
+
+    # searching by ean
+    {
+        my ( $order_loop, $total_qty, $total_price, $total_qtyreceived) = GetHistory( ean => $bibliodata->{'ean'} );
+        # diag( Data::Dumper->Dump( [ $order_loop, $total_qty, $total_price, $total_qtyreceived ], [ qw( order_loop total_qty total_price total_qtyreceived ) ] ) );
+
+        is( scalar @$order_loop, 1, 'order_loop searched by ean' );
+        is( $total_qty,          1, 'total_qty searched by ean' );
+        is( $total_price,        1, 'total_price searched by ean' );
+        is( $total_qtyreceived,  0, 'total_qtyreceived searched by ean' );
+
+        # diag( Data::Dumper->Dump( [ $order_loop ], [ 'order_loop' ] ) );
+    }
+
+
     # searching by basket number
     {
         my ( $order_loop, $total_qty, $total_price, $total_qtyreceived) = GetHistory( basket => $basketno );

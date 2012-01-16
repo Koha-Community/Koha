@@ -142,7 +142,7 @@ my ( $holdcount, $holds ) = GetReservesFromBiblionumber($biblionumber,1);
 
 #coping with subscriptions
 my $subscriptionsnumber = CountSubscriptionFromBiblionumber($biblionumber);
-my @subscriptions       = GetSubscriptions( $dat->{title}, $dat->{issn}, $biblionumber );
+my @subscriptions       = GetSubscriptions( $dat->{title}, $dat->{issn}, undef, $biblionumber );
 my @subs;
 
 foreach my $subscription (@subscriptions) {

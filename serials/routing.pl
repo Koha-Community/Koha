@@ -121,6 +121,8 @@ $template->param(
     dates => $dates,
     routingnotes => $serials[0]->{'routingnotes'},
     hasRouting => check_routing($subscriptionid),
+    (uc(C4::Context->preference("marcflavour"))) => 1
+
     );
 
 output_html_with_http_headers $query, $cookie, $template->output;

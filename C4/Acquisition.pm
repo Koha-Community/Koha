@@ -1268,7 +1268,7 @@ C<@results> is an array of references-to-hash with the following keys:
 
 sub SearchOrder {
 #### -------- SearchOrder-------------------------------
-    my ($ordernumber, $search, $supplierid, $basket) = @_;
+    my ( $ordernumber, $search, $ean, $supplierid, $basket ) = @_;
 
     my $dbh = C4::Context->dbh;
     my @args = ();
@@ -1288,7 +1288,11 @@ sub SearchOrder {
         $query .= " AND (biblio.title like ? OR biblio.author LIKE ? OR biblioitems.isbn like ?)";
         push @args, ("%$search%","%$search%","%$search%");
     }
-    if($supplierid){
+    if ($ean) {
+        $query .= " AND biblioitems.ean = ?";
+        push @args, $ean;
+    }
+    if ($supplierid) {
         $query .= "AND aqbasket.booksellerid = ?";
         push @args, $supplierid;
     }
@@ -1668,12 +1672,12 @@ sub GetHistory {
     my $title = $params{title};
     my $author = $params{author};
     my $isbn   = $params{isbn};
+    my $ean    = $params{ean};
     my $name = $params{name};
     my $from_placed_on = $params{from_placed_on};
     my $to_placed_on = $params{to_placed_on};
     my $basket = $params{basket};
     my $booksellerinvoicenumber = $params{booksellerinvoicenumber};
-
     my @order_loop;
     my $total_qty         = 0;
     my $total_qtyreceived = 0;
@@ -1685,12 +1689,13 @@ sub GetHistory {
             biblio.title,
             biblio.author,
 	    biblioitems.isbn,
+        biblioitems.ean,
             aqorders.basketno,
-    aqbasket.basketname,
-    aqbasket.basketgroupid,
-    aqbasketgroups.name as groupname,
+            aqbasket.basketname,
+            aqbasket.basketgroupid,
+            aqbasketgroups.name as groupname,
             aqbooksellers.name,
-    aqbasket.creationdate,
+            aqbasket.creationdate,
             aqorders.datereceived,
             aqorders.quantity,
             aqorders.quantityreceived,
@@ -1701,7 +1706,7 @@ sub GetHistory {
             aqorders.biblionumber
         FROM aqorders
         LEFT JOIN aqbasket ON aqorders.basketno=aqbasket.basketno
-    LEFT JOIN aqbasketgroups ON aqbasket.basketgroupid=aqbasketgroups.id
+        LEFT JOIN aqbasketgroups ON aqbasket.basketgroupid=aqbasketgroups.id
         LEFT JOIN aqbooksellers ON aqbasket.booksellerid=aqbooksellers.id
 	LEFT JOIN biblioitems ON biblioitems.biblionumber=aqorders.biblionumber
         LEFT JOIN biblio ON biblio.biblionumber=aqorders.biblionumber";
@@ -1728,7 +1733,10 @@ sub GetHistory {
         $query .= " AND biblioitems.isbn LIKE ? ";
         push @query_params, "%$isbn%";
     }
-
+    if ( defined $ean and $ean ) {
+        $query .= " AND biblioitems.ean = ? ";
+        push @query_params, "$ean";
+    }
     if ( $name ) {
         $query .= " AND aqbooksellers.name LIKE ? ";
         push @query_params, "%$name%";

@@ -154,6 +154,7 @@ CREATE TABLE `biblioitems` ( -- information related to bibliographic records in 
   `itemtype` varchar(10) default NULL, -- biblio level item type (MARC21 942$c)
   `isbn` varchar(30) default NULL, -- ISBN (MARC21 020$a)
   `issn` varchar(9) default NULL, -- ISSN (MARC21 022$a)
+  `ean` varchar(13) default NULL,
   `publicationyear` text,
   `publishercode` varchar(255) default NULL, -- publisher (MARC21 260$b)
   `volumedate` date default NULL,
@@ -625,6 +626,7 @@ CREATE TABLE `deletedbiblioitems` ( -- information about bibliographic records t
   `itemtype` varchar(10) default NULL, -- biblio level item type (MARC21 942$c)
   `isbn` varchar(30) default NULL, -- ISBN (MARC21 020$a)
   `issn` varchar(9) default NULL, -- ISSN (MARC21 022$a)
+  `ean` varchar(13) default NULL,
   `publicationyear` text,
   `publishercode` varchar(255) default NULL, -- publisher (MARC21 260$b)
   `volumedate` date default NULL,

@@ -138,6 +138,7 @@ $template->param(
     intranetcolorstylesheet => C4::Context->preference('intranetcolorstylesheet'),
     irregular_issues => scalar @irregular_issues,
     default_bib_view => $default_bib_view,
+    (uc(C4::Context->preference("marcflavour"))) => 1
     );
 
 output_html_with_http_headers $query, $cookie, $template->output;

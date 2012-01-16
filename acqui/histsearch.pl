@@ -63,6 +63,7 @@ my $title                   = $input->param( 'title');
 my $author                  = $input->param('author');
 my $isbn                    = $input->param('isbn');
 my $name                    = $input->param( 'name' );
+my $ean                     = $input->param('ean');
 my $basket                  = $input->param( 'basket' );
 my $booksellerinvoicenumber = $input->param( 'booksellerinvoicenumber' );
 my $do_search               = $input->param('do_search') || 0;
@@ -101,6 +102,7 @@ if ($do_search) {
         title => $title,
         author => $author,
         isbn   => $isbn,
+        ean   => $ean,
         name => $name,
         from_placed_on => $from_iso,
         to_placed_on => $to_iso,
@@ -120,7 +122,8 @@ $template->param(
     numresults              => $order_loop ? scalar(@$order_loop) : undef,
     title                   => $title,
     author                  => $author,
-    isbn                    => $isbn,
+    isbn		    => $isbn,
+    ean                     => $ean,
     name                    => $name,
     basket                  => $basket,
     booksellerinvoicenumber => $booksellerinvoicenumber,
@@ -129,6 +132,7 @@ $template->param(
     DHTMLcalendar_dateformat=> C4::Dates->DHTMLcalendar(),
     dateformat              => C4::Dates->new()->format(),
     debug                   => $debug || $input->param('debug') || 0,
+    uc(C4::Context->preference("marcflavour")) => 1
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

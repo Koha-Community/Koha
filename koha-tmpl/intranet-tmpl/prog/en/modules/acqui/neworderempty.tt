@@ -289,6 +289,17 @@ $(document).ready(function()
                 <input type="text" size="50" name="isbn" id="ISBN" value="[% isbn %]" />
             [% END %]
         </li>
+        [% IF (UNIMARC) %]
+        <li>
+            [% IF ( biblionumber ) %]
+            <span class="label">EAN: </span>
+                <input type="hidden" size="20" name="ean" id="EAN" value="[% ean %]" />[% ean %]
+            [% ELSE %]
+            <label for="EAN">EAN: </label>
+                <input type="text" size="20" name="ean" id="EAN" value="[% ean %]" />
+            [% END %]
+        </li>
+        [% END %]
         <li>
             [% IF ( biblionumber ) %]
             <span class="label">Series: </span>

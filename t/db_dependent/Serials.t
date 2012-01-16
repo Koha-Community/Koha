@@ -24,7 +24,10 @@ $debug && warn scalar(@subscriptions);
 @subscriptions = GetSubscriptions( undef, $$subscriptioninformation{issn} );
 isa_ok( \@subscriptions, 'ARRAY' );
 $debug && warn scalar(@subscriptions);
-@subscriptions = GetSubscriptions( undef,undef ,$$subscriptioninformation{bibnum} );
+@subscriptions = GetSubscriptions( undef, undef, $$subscriptioninformation{ean} );
+isa_ok( \@subscriptions, 'ARRAY' );
+$debug && warn scalar(@subscriptions);
+@subscriptions = GetSubscriptions( undef, undef, undef, $$subscriptioninformation{bibnum} );
 isa_ok( \@subscriptions, 'ARRAY' );
 $debug && warn scalar(@subscriptions);
 if ($subscriptioninformation->{periodicity} % 16==0){

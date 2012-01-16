@@ -76,8 +76,9 @@
     var summaryStatus = jQuery.trim($("#summaryfilter").val());
 	var basketStatus  = $("#basketfilter").val();
 	var orderStatus   = $("#orderfilter").val();
+    var eanStatus     = $("#eanfilter").val() || '';
 
-	if (summaryStatus == '' && basketStatus == '' && orderStatus == '') { clearFilters(); return false; }
+    if (summaryStatus == '' && basketStatus == '' && orderStatus == '' && eanStatus == '') { clearFilters(); return false; }
 
 	var filtered = "table#pendingt tbody.filterclass tr";
 
@@ -118,7 +119,7 @@
 			}catch(e){alert(e);}
 		}
 	}
-	var transaction = YAHOO.util.Connect.asyncRequest('GET', '/cgi-bin/koha/acqui/parcel.pl?booksellerid=[% booksellerid %]&search='+summaryStatus+'&basketno='+basketStatus+'&orderno='+orderStatus+'&format=json', callback, null);
+    var transaction = YAHOO.util.Connect.asyncRequest('GET', '/cgi-bin/koha/acqui/parcel.pl?booksellerid=[% booksellerid %]&search='+summaryStatus+'&basketno='+basketStatus+'&orderno='+orderStatus+'&ean='+eanStatus+'&format=json', callback, null);
 
 	return false;
     }
@@ -423,6 +424,12 @@
             <label for="orderfilter">Order line :</label>
 		    <input type="text" name="orderfilter" id="orderfilter" />
 		</li>
+                [% IF (UNIMARC) %]
+        <li>
+            <label for="eanfilter">EAN :</label>
+            <input type="text" name="eanfilter" id="eanfilter" />
+        </li>
+                [% END %]
 	    </ol>
 		<fieldset class="action">
 		    <input type="submit" value="Filter" />

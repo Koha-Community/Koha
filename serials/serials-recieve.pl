@@ -278,5 +278,6 @@ $template->param(
             frommissing => $manualstatus,
             missingdate => $manualdate,
             missingid => $manualid,
+            (uc(C4::Context->preference("marcflavour"))) => 1
         );
 output_html_with_http_headers $query, $cookie, $template->output;

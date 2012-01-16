@@ -112,8 +112,8 @@ $template->param(
 my $subscriptionsnumber = CountSubscriptionFromBiblionumber($biblionumber);
 my $dbh = C4::Context->dbh;
 my $dat                 = TransformMarcToKoha( $dbh, $record );
-my @subscriptions       = GetSubscriptions( undef, undef, $biblionumber );
 
+my @subscriptions       = GetSubscriptions( $dat->{title}, $dat->{issn}, undef, $biblionumber );
 my @subs;
 foreach my $subscription (@subscriptions) {
     my %cell;

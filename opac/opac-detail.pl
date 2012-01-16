@@ -90,6 +90,8 @@ if($query->cookie("bib_list")){
 
 
 SetUTF8Flag($record);
+my $marcflavour      = C4::Context->preference("marcflavour");
+my $ean = GetNormalizedEAN( $record, $marcflavour );
 
 # XSLT processing of some stuff
 if (C4::Context->preference("OPACXSLTDetailsDisplay") ) {
@@ -394,7 +396,6 @@ $template->param('OPACShowCheckoutName' => C4::Context->preference("OPACShowChec
 my @all_items = GetItemsInfo( $biblionumber );
 
 # adding items linked via host biblios
-my $marcflavour  = C4::Context->preference("marcflavour");
 
 my $analyticfield = '773';
 if ($marcflavour eq 'MARC21' || $marcflavour eq 'NORMARC'){
@@ -449,7 +450,7 @@ my $collections =  GetKohaAuthorisedValues('items.ccode',$dat->{'frameworkcode'}
 
 #coping with subscriptions
 my $subscriptionsnumber = CountSubscriptionFromBiblionumber($biblionumber);
-my @subscriptions       = GetSubscriptions( undef, undef, $biblionumber );
+my @subscriptions       = GetSubscriptions($dat->{'title'}, $dat->{'issn'}, $ean, $biblionumber );
 
 my @subs;
 $dat->{'serial'}=1 if $subscriptionsnumber;
@@ -627,7 +628,6 @@ foreach ( keys %{$dat} ) {
 # in each case, we're grabbing the first value we find in
 # the record and normalizing it
 my $upc = GetNormalizedUPC($record,$marcflavour);
-my $ean = GetNormalizedEAN($record,$marcflavour);
 my $oclc = GetNormalizedOCLCNumber($record,$marcflavour);
 my $isbn = GetNormalizedISBN(undef,$record,$marcflavour);
 my $content_identifier_exists;

@@ -545,15 +545,15 @@ sub GetFullSubscriptionsFromBiblionumber {
 
 =head2 GetSubscriptions
 
-@results = GetSubscriptions($title,$ISSN,$biblionumber);
-this function gets all subscriptions which have title like $title,ISSN like $ISSN and biblionumber like $biblionumber.
+@results = GetSubscriptions($title,$ISSN,$ean,$biblionumber);
+this function gets all subscriptions which have title like $title,ISSN like $ISSN,EAN like $ean and biblionumber like $biblionumber.
 return:
 a table of hashref. Each hash containt the subscription.
 
 =cut
 
 sub GetSubscriptions {
-    my ( $string, $issn, $biblionumber ) = @_;
+    my ( $string, $issn, $ean, $biblionumber ) = @_;
 
     #return unless $title or $ISSN or $biblionumber;
     my $dbh = C4::Context->dbh;
@@ -597,6 +597,20 @@ sub GetSubscriptions {
         }
         $sqlwhere .= ( $sqlwhere ? " AND " : " WHERE " ) . "((" . join( ") OR (", @sqlstrings ) . "))";
     }
+    if ($ean) {
+        my @sqlstrings;
+        my @strings_to_search;
+        @strings_to_search = map { "$_" } split( / /, $ean );
+        foreach my $index qw(biblioitems.ean) {
+            push @bind_params, @strings_to_search;
+            my $tmpstring = "OR $index = ? " x scalar(@strings_to_search);
+            $debug && warn "$tmpstring";
+            $tmpstring =~ s/^OR //;
+            push @sqlstrings, $tmpstring;
+        }
+        $sqlwhere .= ( $sqlwhere ? " AND " : " WHERE " ) . "((" . join( ") OR (", @sqlstrings ) . "))";
+    }
+
     $sql .= "$sqlwhere ORDER BY title";
     $debug and warn "GetSubscriptions query: $sql params : ", join( " ", @bind_params );
     $sth = $dbh->prepare($sql);

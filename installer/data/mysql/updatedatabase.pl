@@ -5315,6 +5315,19 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.09.00.011";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do("ALTER TABLE `biblioitems` ADD `ean` VARCHAR( 13 ) NULL AFTER issn");
+    $dbh->do("CREATE INDEX `ean` ON biblioitems (`ean`) ");
+    $dbh->do("ALTER TABLE `deletedbiblioitems` ADD `ean` VARCHAR( 13 ) NULL AFTER issn");
+    if (C4::Context->preference("marcflavour") eq 'UNIMARC') {
+         $dbh->do("UPDATE marc_subfield_structure SET kohafield='biblioitems.ean' WHERE tagfield='073' and tagsubfield='a'");
+    }
+    print "Upgrade to $DBversion done (Adding ean in biblioitems and deletedbiblioitems)\n";
+    print "If you have records with ean, please run misc/batchRebuildBiblioTables.pl to populate bibliotems.ean\n" if (C4::Context->preference("marcflavour") eq 'UNIMARC');
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

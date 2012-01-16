@@ -372,6 +372,7 @@ $template->param(
     editionstatement => $data->{'editionstatement'},
     budget_loop      => $budget_loop,
     isbn             => $data->{'isbn'},
+    ean              => $data->{'ean'},
     seriestitle      => $data->{'seriestitle'},
     itemtypeloop     => \@itemtypes,
     quantity         => $data->{'quantity'},
@@ -390,6 +391,7 @@ $template->param(
 # CHECKME: gst-stuff needs verifing, mason.
     gstrate          => $bookseller->{'gstrate'} // C4::Context->preference("gist") // 0,
     gstreg           => $bookseller->{'gstreg'},
+    (uc(C4::Context->preference("marcflavour"))) => 1
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
@@ -521,6 +523,7 @@ sub Load_Duplicate {
     booksellerid        => $basket->{'booksellerid'},
     breedingid          => $params->{'breedingid'},
     duplicatetitle      => $duplicatetitle,
+    (uc(C4::Context->preference("marcflavour"))) => 1
   );
 
   output_html_with_http_headers $input, $cookie, $template->output;

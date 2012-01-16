@@ -3,8 +3,17 @@
 <div id="header_search">
 	<div id="subscription_search" class="residentsearch">
     <p class="tip">Search subscriptions:</p>
- <form action="/cgi-bin/koha/serials/serials-home.pl" method="get">[% IF ( routing ) %]<input type="hidden" name="routing" value="[% routing %]" />[% END %]<input type="hidden" name="searched" value="1" /> <label for="ISSN_filter">ISSN:</label> <input type="text" size="10" maxlength="11" name="ISSN_filter" id="ISSN_filter" value="[% ISSN_filter %]" /> <label for="title_filter">Title:</label> <input type="text" size="20" maxlength="40" name="title_filter" id="title_filter" value="[% title_filter %]" /><input type="submit" value="Search" class="submit" />
-</form>
+ <form action="/cgi-bin/koha/serials/serials-home.pl" method="get">
+ [% IF ( routing ) %]<input type="hidden" name="routing" value="[% routing %]" />[% END %]
+ <input type="hidden" name="searched" value="1" />
+ <label for="ISSN_filter">ISSN:</label> <input type="text" size="10" maxlength="11" name="ISSN_filter" id="ISSN_filter" value="[% ISSN_filter %]" />
+
+ [% IF (UNIMARC) %]
+ <label for="EAN_filter">EAN:</label> <input type="text" size="20" maxlength="40" name="EAN_filter" id="EAN_filter" value="[% EAN_filter %]" />
+ [% END %]
+ <label for="title_filter">Title:</label> <input type="text" size="20" maxlength="40" name="title_filter" id="title_filter" value="[% title_filter %]" />
+ <input type="submit" value="Search" class="submit" />
+ </form>
 	</div>
     [% INCLUDE 'patron-search-box.inc' %]
 	[% IF ( CAN_user_catalogue ) %]

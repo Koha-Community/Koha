@@ -49,12 +49,13 @@ use C4::Output;
 use C4::Context;
 use C4::Branch;
 
-my $query         = new CGI;
-my $title         = $query->param('title_filter');
-my $ISSN          = $query->param('ISSN_filter');
-my $routing       = $query->param('routing')||C4::Context->preference("RoutingSerials");
-my $searched      = $query->param('searched');
-my $biblionumber  = $query->param('biblionumber');
+my $query        = new CGI;
+my $title        = $query->param('title_filter');
+my $ISSN         = $query->param('ISSN_filter');
+my $EAN          = $query->param('EAN_filter');
+my $routing      = $query->param('routing') || C4::Context->preference("RoutingSerials");
+my $searched     = $query->param('searched');
+my $biblionumber = $query->param('biblionumber');
 
 my @serialseqs = $query->param('serialseq');
 my @planneddates = $query->param('planneddate');
@@ -92,8 +93,8 @@ if (@serialseqs){
   $template->param('information'=>\@information);
 }
 my @subscriptions;
-if ($searched){
-    @subscriptions = GetSubscriptions( $title, $ISSN, $biblionumber );
+if ($searched) {
+    @subscriptions = GetSubscriptions( $title, $ISSN, $EAN, $biblionumber );
 }
 
 # to toggle between create or edit routing list options
@@ -110,5 +111,7 @@ $template->param(
     ISSN_filter   => $ISSN,
     done_searched => $searched,
     routing       => $routing,
+    (uc(C4::Context->preference("marcflavour"))) => 1
 );
+
 output_html_with_http_headers $query, $cookie, $template->output;

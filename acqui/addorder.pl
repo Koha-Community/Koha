@@ -202,6 +202,7 @@ if ( $orderinfo->{quantity} ne '0' ) {
                 "biblio.author"               => $$orderinfo{author}          ? $$orderinfo{author}        : "",
                 "biblio.seriestitle"          => $$orderinfo{series}          ? $$orderinfo{series}        : "",
                 "biblioitems.isbn"            => $$orderinfo{isbn}            ? $$orderinfo{isbn}          : "",
+                "biblioitems.ean"             => $$orderinfo{ean}             ? $$orderinfo{ean}           : "",
                 "biblioitems.publishercode"   => $$orderinfo{publishercode}   ? $$orderinfo{publishercode} : "",
                 "biblioitems.publicationyear" => $$orderinfo{publicationyear} ? $$orderinfo{publicationyear}: "",
                 "biblio.copyrightdate"        => $$orderinfo{publicationyear} ? $$orderinfo{publicationyear}: "",
