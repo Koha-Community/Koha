@@ -50,13 +50,18 @@ done_testing();
 sub create_template_test {
     my $includes = shift;
     return sub {
-	my $tt = Template->new({ABSOLUTE => 1,
-				   INCLUDE_PATH => $includes });
-	my $vars;
-	my $output;
-	if ( ! ok($tt->process($_,$vars,\$output), $_) ){
-	    diag($tt->error);
-	}
+        my $tt = Template->new(
+            {
+                ABSOLUTE     => 1,
+                INCLUDE_PATH => $includes,
+                PLUGIN_BASE  => 'Koha::Template::Plugin',
+            }
+        );
+        my $vars;
+        my $output;
+        if ( !ok( $tt->process( $_, $vars, \$output ), $_ ) ) {
+            diag( $tt->error );
+        }
     }
 }
 
