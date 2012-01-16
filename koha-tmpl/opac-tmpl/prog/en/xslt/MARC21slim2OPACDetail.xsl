@@ -717,14 +717,16 @@
         </span>
         </xsl:for-each>
 
-	<!-- 866 holdings public note -->
+        <!-- 866 textual holdings -->
         <xsl:if test="marc:datafield[@tag=866]">
-        <span class="results_summary holdings_note"><span class="label">Holdings Note: </span>
-        <xsl:for-each select="marc:datafield[@tag=866]">
-                <xsl:value-of select="marc:subfield[@code='z']"/>
-                <xsl:choose><xsl:when test="position()=last()"><xsl:text>.</xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
-        </xsl:for-each>
-        </span>
+            <span class="results_summary holdings_note"><span class="label">Holdings Note: </span>
+                <xsl:for-each select="marc:datafield[@tag=866]">
+                    <xsl:call-template name="subfieldSelect">
+                        <xsl:with-param name="codes">az</xsl:with-param>
+                    </xsl:call-template>
+                    <xsl:choose><xsl:when test="position()=last()"><xsl:text></xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
+                </xsl:for-each>
+            </span>
         </xsl:if>
 
         <!--  775 Other Edition  -->
