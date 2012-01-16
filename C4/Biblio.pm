@@ -1934,14 +1934,6 @@ sub PrepHostMarcField {
     return $hostmarcfield;
 }
 
-
-=head2 TransformKohaToMarcOneField
-
-    $record = TransformKohaToMarcOneField( $sth, $record, $kohafieldname, $value, $frameworkcode );
-
-=cut
-
-
 =head2 TransformHtmlToXml
 
   $xml = TransformHtmlToXml( $tags, $subfields, $values, $indicator, 

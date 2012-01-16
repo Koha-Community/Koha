@@ -38,7 +38,6 @@ sub methods : Test( 1 ) {
                        GetFrameworkCode
                        GetPublisherNameFromIsbn
                        TransformKohaToMarc
-                       TransformKohaToMarcOneField
                        TransformHtmlToXml
                        TransformHtmlToMarc
                        TransformMarcToKoha
