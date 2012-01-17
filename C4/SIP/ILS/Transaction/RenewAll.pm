@@ -38,6 +38,8 @@ sub do_renew_all {
 	my $patron = $self->{patron};							# SIP's  patron
 	my $borrower = GetMember('cardnumber'=>$patron->id);	# Koha's patron
 	my $all_ok = 1;
+    $self->{renewed} = [];
+    $self->{unrenewed} = [];
 	foreach my $itemx (@{$patron->{items}}) {
 		my $item_id = $itemx->{barcode};
 		my $item = new ILS::Item $item_id;
@@ -52,9 +54,9 @@ sub do_renew_all {
 		$self->do_renew_for($borrower);
 		if ($self->ok) {
 			$item->{due_date} = $self->{due};
-			push @{$self->renewed  }, $item_id;
+            push @{$self->{renewed}  }, $item_id;
 		} else {
-			push @{$self->unrenewed}, $item_id;
+            push @{$self->{unrenewed}}, $item_id;
 		}
 	}
 	$self->ok($all_ok);
