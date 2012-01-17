@@ -6,9 +6,11 @@
 use strict;
 use warnings;
 
-use Test::More tests => 1;
+use Test::More tests => 2;
 
 BEGIN {
         use_ok('C4::Reports');
 }
 
+
+ok(GetDelimiterChoices(),"Testing getting delimeter choices");  #Not testing the value of the output just that it returns something.
