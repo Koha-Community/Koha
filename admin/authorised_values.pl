@@ -104,13 +104,13 @@ if ($op eq 'add_form') {
     my $duplicate_entry = 0;
 
     if ( $id ) { # Update
-        my $sth = $dbh->prepare( "SELECT category, authorised_value FROM authorised_values WHERE id='$id' ");
-        $sth->execute();
+        my $sth = $dbh->prepare( "SELECT category, authorised_value FROM authorised_values WHERE id = ? ");
+        $sth->execute($id);
         my ($category, $authorised_value) = $sth->fetchrow_array();
         if ( $authorised_value ne $new_authorised_value ) {
             my $sth = $dbh->prepare_cached( "SELECT COUNT(*) FROM authorised_values " .
-                "WHERE category = '$new_category' AND authorised_value = '$new_authorised_value' and id<>$id");
-            $sth->execute();
+                "WHERE category = ? AND authorised_value = ? and id <> ? ");
+            $sth->execute($new_category, $new_authorised_value, $id);
             ($duplicate_entry) = $sth->fetchrow_array();
             warn "**** duplicate_entry = $duplicate_entry";
         }
@@ -133,8 +133,8 @@ if ($op eq 'add_form') {
     }
     else { # Insert
         my $sth = $dbh->prepare_cached( "SELECT COUNT(*) FROM authorised_values " .
-            "WHERE category = '$new_category' AND authorised_value = '$new_authorised_value' ");
-        $sth->execute();
+            "WHERE category = ? AND authorised_value = ? ");
+        $sth->execute($new_category, $new_authorised_value);
         ($duplicate_entry) = $sth->fetchrow_array();
         unless ( $duplicate_entry ) {
             my $sth=$dbh->prepare( 'INSERT INTO authorised_values
