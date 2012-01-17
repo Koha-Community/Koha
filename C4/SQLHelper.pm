@@ -27,6 +27,22 @@ use C4::Debug;
 require Exporter;
 use vars qw($VERSION @ISA @EXPORT_OK %EXPORT_TAGS);
 
+eval {
+    my $servers = C4::Context->config('memcached_servers');
+    if ($servers) {
+        require Memoize::Memcached;
+        import Memoize::Memcached qw(memoize_memcached);
+
+        my $memcached = {
+            servers    => [$servers],
+            key_prefix => C4::Context->config('memcached_namespace') || 'koha',
+        };
+
+        memoize_memcached( '_get_columns',   memcached => $memcached, expire_time => 600000 );    #cache for 10 minutes
+        memoize_memcached( 'GetPrimaryKeys', memcached => $memcached, expire_time => 600000 );    #cache for 10 minutes
+    }
+};
+
 BEGIN {
 	# set the version for version checking
 	$VERSION = 0.5;
@@ -38,10 +54,14 @@ BEGIN {
 	SearchInTable
 	UpdateInTable
 	GetPrimaryKeys
+        clear_columns_cache
 );
 	%EXPORT_TAGS = ( all =>[qw( InsertInTable DeleteInTable SearchInTable UpdateInTable GetPrimaryKeys)]
 				);
 }
+
+my $tablename;
+my $hashref;
 
 =head1 NAME
 
@@ -233,6 +253,23 @@ sub GetPrimaryKeys($) {
 	return  grep { $hash_columns->{$_}->{'Key'} =~/PRI/i}  keys %$hash_columns;
 }
 
+
+=head2 clear_columns_cache
+
+  C4::SQLHelper->clear_columns_cache();
+
+cleans the internal cache of sysprefs. Please call this method if
+you update a tables structure. Otherwise, your new changes
+will not be seen by this process.
+
+=cut
+
+sub clear_columns_cache {
+    %$hashref = ();
+}
+
+
+
 =head2 _get_columns
 
     _get_columns($tablename)
@@ -247,16 +284,24 @@ With
 =cut
 
 sub _get_columns($) {
-	my ($tablename)=@_;
-	my $dbh=C4::Context->dbh;
-	my $sth=$dbh->prepare_cached(qq{SHOW COLUMNS FROM $tablename });
-	$sth->execute;
-    my $columns= $sth->fetchall_hashref(qw(Field));
+    my ($tablename) = @_;
+    unless ( exists( $hashref->{$tablename} ) ) {
+        my $dbh = C4::Context->dbh;
+        my $sth = $dbh->prepare_cached(qq{SHOW COLUMNS FROM $tablename });
+        $sth->execute;
+        my $columns = $sth->fetchall_hashref(qw(Field));
+        $hashref->{$tablename} = $columns;
+    }
+    return $hashref->{$tablename};
 }
 
 =head2 _filter_columns
 
-    _filter_columns($tablename,$research, $filtercolumns)
+=over 4
+
+_filter_columns($tablename,$research, $filtercolumns)
+
+=back
 
 Given 
 	- a tablename 
