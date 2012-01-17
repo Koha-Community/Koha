@@ -7,7 +7,7 @@ use strict;
 use warnings;
 use C4::Auth;
 use CGI;
-use Test::More tests => 10;
+use Test::More tests => 11;
 
 BEGIN {
         use_ok('C4::BackgroundJob');
@@ -17,8 +17,8 @@ my ($userid, $cookie, $sessionID) = &checkauth($query, 1);
 #my ($sessionID, $job_name, $job_invoker, $num_work_units) = @_;
 my $background;
 diag $sessionID;
-ok ($background=C4::BackgroundJob->new($sessionID));
-ok ($background->id);
+ok ($background=C4::BackgroundJob->new($sessionID), "making job");
+ok ($background->id, "fetching id number");
 
 $background->name("George");
 is ($background->name, "George", "testing name");
@@ -29,12 +29,15 @@ is ($background->invoker, "enjoys", "testing invoker");
 $background->progress("testing");
 is ($background->progress, "testing", "testing progress");
 
-ok ($background->status);
+ok ($background->status, "testing status");
 
 $background->size("56");
 is ($background->size, "56", "testing size");
 
+ok (!$background->fetch($sessionID, $background->id), "testing fetch");
+
+
 $background->finish("finished");
 is ($background->status,'completed', "testing finished");
 
-ok ($background->results); # Will return undef unless finished
+ok ($background->results); #Will return undef unless finished
