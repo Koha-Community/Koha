@@ -274,15 +274,7 @@ if ($noreport) {
             $strsth.=" AND biblioitems.itemtype   = '" . $itemtypefilter . "' ";
         }
     }
-    if ( $borflagsfilter eq 'gonenoaddress' ) {
-        $strsth .= " AND borrowers.gonenoaddress <> 0";
-    }
-    elsif ( $borflagsfilter eq 'debarred' ) {
-        $strsth .= " AND borrowers.debarred >=  CURDATE()" ;
-    }
-    elsif ( $borflagsfilter eq 'lost') {
-        $strsth .= " AND borrowers.lost <> 0";
-    }
+    $strsth.=" AND borrowers.flags        = '" . $borflagsfilter . "' " if $borflagsfilter;
     $strsth.=" AND borrowers.branchcode   = '" . $branchfilter   . "' " if $branchfilter;
     $strsth.=" AND date_due < '" . $datedueto . "' "  if $datedueto;
     $strsth.=" AND date_due > '" . $dateduefrom . "' " if $dateduefrom;
