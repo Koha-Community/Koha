@@ -27,3 +27,7 @@ $transaction2->patron(my $patron2 = ILS::Patron->new("ABCDE12345"));
 ok(!defined $patron2, "patron code: ABCDE12345 is invalid");
 
 ok($transaction->do_renew_all(), "items renewed correctly");
+
+
+my $object = ILS::Transaction::Renew->new();
+is($object->do_renew(), "", "");
