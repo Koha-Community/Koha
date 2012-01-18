@@ -57,6 +57,8 @@ use C4::Output;
 use C4::Acquisition;
 use C4::Dates;
 use C4::Debug;
+use C4::Branch;
+use C4::Koha;
 
 my $input = new CGI;
 my $title                   = $input->param( 'title');
@@ -70,6 +72,9 @@ my $booksellerinvoicenumber = $input->param( 'booksellerinvoicenumber' );
 my $do_search               = $input->param('do_search') || 0;
 my $from_placed_on          = C4::Dates->new($input->param('from'));
 my $to_placed_on            = C4::Dates->new($input->param('to'));
+my $budget                  = $input->param( 'budget' );
+my $orderstatus             = $input->param( 'orderstatus' );
+
 if ( not $input->param('from') ) {
     # FIXME Dirty but we can't sent a Date::Calc to C4::Dates ?
     # We would use a function like Add_Delta_YM(-1, 0, 0);
@@ -110,21 +115,33 @@ if ($do_search) {
         basket => $basket,
         booksellerinvoicenumber => $booksellerinvoicenumber,
         basketgroupname => $basketgroupname,
+        budget => $budget,
+        orderstatus => $orderstatus,
     );
 }
 
 my $from_date = $from_placed_on ? $from_placed_on->output('syspref') : undef;
 my $to_date = $to_placed_on ? $to_placed_on->output('syspref') : undef;
 
+my $budgetperiods = C4::Budgets::GetBudgetPeriods;
+my $bp_loop = $budgetperiods;
+for my $bp ( @{$budgetperiods} ) {
+    my $hierarchy = C4::Budgets::GetBudgetHierarchy( $$bp{budget_period_id} );
+    for my $budget ( @{$hierarchy} ) {
+        $$budget{budget_display_name} = sprintf("%s", ">" x $$budget{depth} . $$budget{budget_name});
+    }
+    $$bp{hierarchy} = $hierarchy;
+}
+
 $template->param(
-    suggestions_loop        => $order_loop,
+    order_loop              => $order_loop,
     total_qty               => $total_qty,
     total_qtyreceived       => $total_qtyreceived,
     total_price             => sprintf( "%.2f", $total_price ),
     numresults              => $order_loop ? scalar(@$order_loop) : undef,
     title                   => $title,
     author                  => $author,
-    isbn		    => $isbn,
+    isbn                    => $isbn,
     ean                     => $ean,
     name                    => $name,
     basket                  => $basket,
@@ -132,6 +149,7 @@ $template->param(
     basketgroupname         => $basketgroupname,
     from_placed_on          => $from_date,
     to_placed_on            => $to_date,
+    bp_loop                 => $bp_loop,
     debug                   => $debug || $input->param('debug') || 0,
     uc(C4::Context->preference("marcflavour")) => 1
 );

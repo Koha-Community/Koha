@@ -1,6 +1,6 @@
 [% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Acquisitions &rsaquo; [% IF ( suggestions_loop ) %]Orders search &rsaquo; Search results[% ELSE %]Order search[% END %]</title>
+<title>Koha &rsaquo; Acquisitions &rsaquo; [% IF ( order_loop ) %]Orders search &rsaquo; Search results[% ELSE %]Order search[% END %]</title>
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
@@ -22,7 +22,7 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'acquisitions-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; [% IF ( suggestions_loop ) %]<a href="/cgi-bin/koha/acqui/histsearch.pl">Orders search</a> &rsaquo; Search results[% ELSE %]Order search[% END %]</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; [% IF ( order_loop ) %]<a href="/cgi-bin/koha/acqui/histsearch.pl">Orders search</a> &rsaquo; Search results[% ELSE %]Order search[% END %]</div>
 
 <div id="doc3" class="yui-t2">
    
@@ -30,7 +30,7 @@
 	<div id="yui-main">
 	<div class="yui-b">
 	
-		[% UNLESS ( suggestions_loop ) %]<form action="/cgi-bin/koha/acqui/histsearch.pl" method="post">
+[% UNLESS ( order_loop ) %]<form action="/cgi-bin/koha/acqui/histsearch.pl" method="post">
 <fieldset class="rows">
 	<legend>Search Orders</legend>
 		<ol>
@@ -47,6 +47,35 @@
             <label for="basketgroupname">Basket group:</label>
             <input type="text" name="basketgroupname" id="basketgroupname" value="[% basketgroupname %]" />
         </li>
+
+        <li>
+            <label for="orderstatus">Order Status: </label>
+            <select name="orderstatus" id="orderstatus">
+                <option value=""></option>
+                <option value="0">New</option>
+                <option value="1">Ordered</option>
+                <option value="2">Partial</option>
+                <option value="3">Complete</option>
+                <option value="4">Deleted</option>
+            </select>
+        </li>
+
+        <li>
+            <label for="fund">Fund: </label>
+            <select name="budget" id="fund">
+                <option value="">All funds</option>
+                [% FOREACH bp_loo IN bp_loop %]
+                    <optgroup label="[% bp_loo.budget_period_description %]">
+                    [% FOREACH h_loo IN bp_loo.hierarchy %]
+                        <option type="text" value="[% h_loo.budget_id %]" branchcode="[% h_loo.budget_branchcode %]">
+                            [% h_loo.budget_display_name %]
+                        </option>
+                    [% END %]
+                    </optgroup>
+                [% END %]
+            </select>
+        </li>
+
 		<li><label for="from">From: </label> 
         <input type="text" size="10" id="from" name="from" value="[% from_placed_on %]" class="datepickerfrom" />
 				<div class="hint">[% INCLUDE 'date-format.inc' %]</div>
@@ -60,11 +89,12 @@
     <input type="hidden" name="do_search" value="1" />
 	<fieldset class="action"><input type="submit" value="Search" /></fieldset>
 	</form>[% END %]
-    [% IF ( suggestions_loop ) %]<h1>Search results</h1>
+    [% IF ( order_loop ) %]<h1>Search results</h1>
 	<div id="acqui_histsearch">
         <table id="histsearcht">
             <thead>
 			<tr>
+                <th>Order line</th>
 				<th>Basket</th>
 				<th>Basket group</th>
                 <th>Invoice number</th>
@@ -73,41 +103,58 @@
 				<th>Vendor</th>
 				<th>Placed on</th>
 				<th>Received on</th>
-				<th>Quantity ordered</th>
+                <th>Status</th>
+                <th>Quantity received</th>
+                <th>Pending order</th>
 				<th>Unit cost</th>
+                <th>Fund</th>
 			</tr>
             </thead>
             <tbody>
-			[% FOREACH suggestions_loo IN suggestions_loop %]
-				<tr>
-                    <td>[% suggestions_loo.basketname %] (<a href="basket.pl?basketno=[% suggestions_loo.basketno %]">[% suggestions_loo.basketno %]</a>)</td>
+            [% FOREACH order IN order_loop %]
+                <tr>
+                    <td>[% order.parent_ordernumber %]</td>
+                    <td>[% order.basketname %] (<a href="basket.pl?basketno=[% order.basketno %]">[% order.basketno %]</a>)</td>
                     <td>
-                        [% IF ( suggestions_loo.basketgroupid ) %]
-                            [% suggestions_loo.groupname %] (<a href="basketgroup.pl?booksellerid=[% suggestions_loo.id %]">[% suggestions_loo.basketgroupid %]</a>)
+                        [% IF ( order.basketgroupid ) %]
+                            [% order.groupname %] (<a href="basketgroup.pl?booksellerid=[% order.id %]">[% order.basketgroupid %]</a>)
                         [% ELSE %]
                             &nbsp;
                         [% END %]
                     </td>
-                    <td>[% IF  suggestions_loo.invoicenumber  %]
-                        <a href="/cgi-bin/koha/acqui/parcel.pl?invoiceid=[% suggestions_loo.invoiceid %]">[% suggestions_loo.invoicenumber %]</a>
-					    [% ELSE %]
-					        &nbsp;
-					    [% END %]
-					</td>
-                    <td>[% suggestions_loo.ordernumber %]</td>
-					<td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% suggestions_loo.biblionumber %]">[% suggestions_loo.title |html %]</a>
-                        <br />[% suggestions_loo.author %] <br /> [% suggestions_loo.isbn %]</td>
-					<td><a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% suggestions_loo.id %]">[% suggestions_loo.name %]</a></td>
-					<td>[% suggestions_loo.creationdate | $KohaDates %]</td>
-                    <td>
-                        [% IF suggestions_loo.datereceived %]
-                            [% suggestions_loo.datereceived | $KohaDates %]
+                    <td>[% IF ( order.invoicenumber ) %]
+                            <a href="/cgi-bin/koha/acqui/parcel.pl?invoiceid=[% order.invoiceid %]">[% order.invoicenumber %]</a>
+                        [% ELSE %]
+                            &nbsp;
                         [% END %]
                     </td>
-					<td>[% suggestions_loo.quantity %]</td>
-					<td>[% suggestions_loo.ecost %]</td>
-				</tr>
-			[% END %]
+                    <td>[% order.ordernumber %]</td>
+                    <td>
+                        <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% order.biblionumber %]">[% order.title |html %]</a>
+                        <br />[% order.author %] <br /> [% order.isbn %]
+                    </td>
+                    <td><a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% order.id %]">[% order.name %]</a></td>
+                    <td>[% order.creationdate | $KohaDates %]</td>
+                    <td>
+                        [% IF order.datereceived %]
+                            [% order.datereceived | $KohaDates %]
+                        [% END %]
+                    </td>
+                    <td>
+                        [% SWITCH order.orderstatus %]
+                            [% CASE '0' %]New
+                            [% CASE '1' %]Ordered
+                            [% CASE '2' %]Partial
+                            [% CASE '3' %]Complete
+                            [% CASE '4' %]Deleted
+                        [% END %]
+                    </td>
+                    <td>[% order.quantityreceived %]</td>
+                    <td>[% order.quantity %]</td>
+                    <td>[% order.ecost %]</td>
+                    <td>[% order.budget_name %]</td>
+                </tr>
+            [% END %]
             </tbody>
 		</table>
 	</div>[% ELSE %][% END %]

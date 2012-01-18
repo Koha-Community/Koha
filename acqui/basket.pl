@@ -177,18 +177,16 @@ if ( $op eq 'delete_confirm' ) {
         }
         exit;
     } else {
-    $template->param(confirm_close => "1",
-            booksellerid    => $booksellerid,
-            basketno        => $basket->{'basketno'},
-                basketname      => $basket->{'basketname'},
-            basketgroupname => $basket->{'basketname'});
-        
+    $template->param(
+        confirm_close   => "1",
+        booksellerid    => $booksellerid,
+        basketno        => $basket->{'basketno'},
+        basketname      => $basket->{'basketname'},
+        basketgroupname => $basket->{'basketname'},
+    );
     }
 } elsif ($op eq 'reopen') {
-    my $basket;
-    $basket->{basketno} = $query->param('basketno');
-    $basket->{closedate} = undef;
-    ModBasket($basket);
+    ReopenBasket($query->param('basketno'));
     print $query->redirect('/cgi-bin/koha/acqui/basket.pl?basketno='.$basket->{'basketno'})
 } else {
     # get librarian branch...

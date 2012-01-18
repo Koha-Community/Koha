@@ -28,7 +28,7 @@ use MARC::Record;
 use C4::Suggestions;
 use C4::Biblio;
 use C4::Debug;
-use C4::SQLHelper qw(InsertInTable);
+use C4::SQLHelper qw(InsertInTable UpdateInTable);
 use C4::Bookseller qw(GetBookSellerFromId);
 use C4::Templates qw(gettemplate);
 
@@ -43,7 +43,7 @@ BEGIN {
     require Exporter;
     @ISA    = qw(Exporter);
     @EXPORT = qw(
-        &GetBasket &NewBasket &CloseBasket &DelBasket &ModBasket
+        &GetBasket &NewBasket &CloseBasket &ReopenBasket &DelBasket &ModBasket
         &GetBasketAsCSV &GetBasketGroupAsCSV
         &GetBasketsByBookseller &GetBasketsByBasketgroup
         &GetBasketsInfosByBookseller
@@ -77,6 +77,7 @@ BEGIN {
         &GetItemnumbersFromOrder
 
         &AddClaim
+        &GetBiblioCountByBasketno
     );
 }
 
@@ -216,7 +217,7 @@ sub NewBasket {
 
   &CloseBasket($basketno);
 
-close a basket (becomes unmodifiable,except for recieves)
+close a basket (becomes unmodifiable, except for receives)
 
 =cut
 
@@ -230,6 +231,48 @@ sub CloseBasket {
     ";
     my $sth = $dbh->prepare($query);
     $sth->execute($basketno);
+
+    my @orders = GetOrders($basketno);
+    foreach my $order (@orders) {
+        $query = qq{
+            UPDATE aqorders
+            SET orderstatus = 1
+            WHERE ordernumber = ?;
+        };
+        $sth = $dbh->prepare($query);
+        $sth->execute($order->{'ordernumber'});
+    }
+}
+
+=head3 ReopenBasket
+
+  &ReopenBasket($basketno);
+
+reopen a basket
+
+=cut
+
+sub ReopenBasket {
+    my ($basketno) = @_;
+    my $dbh        = C4::Context->dbh;
+    my $query = "
+        UPDATE aqbasket
+        SET    closedate=NULL
+        WHERE  basketno=?
+    ";
+    my $sth = $dbh->prepare($query);
+    $sth->execute($basketno);
+
+    my @orders = GetOrders($basketno);
+    foreach my $order (@orders) {
+        $query = qq{
+            UPDATE aqorders
+            SET orderstatus = 0
+            WHERE ordernumber = ?;
+        };
+        $sth = $dbh->prepare($query);
+        $sth->execute($order->{'ordernumber'});
+    }
 }
 
 #------------------------------------------------------------#
@@ -469,6 +512,7 @@ sub ModBasket {
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare($query);
     $sth->execute(@params);
+
     $sth->finish;
 }
 
@@ -1032,7 +1076,8 @@ The following keys are used: "biblionumber", "title", "basketno", "quantity", "n
 
 sub NewOrder {
     my $orderinfo = shift;
-#### ------------------------------
+    my $parent_ordernumber = shift;
+
     my $dbh = C4::Context->dbh;
     my @params;
 
@@ -1259,7 +1304,8 @@ sub ModReceiveOrder {
         # (entirely received)
         $sth=$dbh->prepare("
             UPDATE aqorders
-            SET quantity = ?
+            SET quantity = ?,
+                orderstatus = 2
             WHERE ordernumber = ?
         ");
 
@@ -1288,7 +1334,7 @@ sub ModReceiveOrder {
     } else {
         $sth=$dbh->prepare("update aqorders
                             set quantityreceived=?,datereceived=?,invoiceid=?,
-                                unitprice=?,rrp=?,ecost=?,budget_id=?
+                                unitprice=?,rrp=?,ecost=?,budget_id=?,orderstatus=3
                             where biblionumber=? and ordernumber=?");
         $sth->execute($quantrec,$datereceived,$invoiceid,$cost,$rrp,$ecost,$budget_id,$biblionumber,$ordernumber);
         $sth->finish;
@@ -1338,7 +1384,8 @@ sub CancelReceipt {
             UPDATE aqorders
             SET quantityreceived = ?,
                 datereceived = ?,
-                invoiceid = ?
+                invoiceid = ?,
+                orderstatus = 1
             WHERE ordernumber = ?
         };
         $sth = $dbh->prepare($query);
@@ -1365,7 +1412,8 @@ sub CancelReceipt {
         }
         $query = qq{
             UPDATE aqorders
-            SET quantity = ?
+            SET quantity = ?,
+                orderstatus = 1
             WHERE ordernumber = ?
         };
         $sth = $dbh->prepare($query);
@@ -1545,7 +1593,7 @@ sub DelOrder {
     my $dbh = C4::Context->dbh;
     my $query = "
         UPDATE aqorders
-        SET    datecancellationprinted=now()
+        SET    datecancellationprinted=now(), orderstatus=4
         WHERE  biblionumber=? AND ordernumber=?
     ";
     my $sth = $dbh->prepare($query);
@@ -1964,6 +2012,9 @@ sub GetHistory {
     my $basket = $params{basket};
     my $booksellerinvoicenumber = $params{booksellerinvoicenumber};
     my $basketgroupname = $params{basketgroupname};
+    my $budget = $params{budget};
+    my $orderstatus = $params{orderstatus};
+
     my @order_loop;
     my $total_qty         = 0;
     my $total_qtyreceived = 0;
@@ -1972,10 +2023,10 @@ sub GetHistory {
     my $dbh   = C4::Context->dbh;
     my $query ="
         SELECT
-            biblio.title,
-            biblio.author,
-	    biblioitems.isbn,
-        biblioitems.ean,
+            COALESCE(biblio.title,     deletedbiblio.title)     AS title,
+            COALESCE(biblio.author,    deletedbiblio.author)    AS author,
+            COALESCE(biblioitems.isbn, deletedbiblioitems.isbn) AS isbn,
+            COALESCE(biblioitems.ean,  deletedbiblioitems.ean)  AS ean,
             aqorders.basketno,
             aqbasket.basketname,
             aqbasket.basketgroupid,
@@ -1990,19 +2041,32 @@ sub GetHistory {
             aqorders.invoiceid,
             aqinvoices.invoicenumber,
             aqbooksellers.id as id,
-            aqorders.biblionumber
+            aqorders.biblionumber,
+            aqorders.orderstatus,
+            aqorders.parent_ordernumber,
+            aqbudgets.budget_name
+            ";
+    $query .= ", aqbudgets.budget_id AS budget" if defined $budget;
+    $query .= "
         FROM aqorders
         LEFT JOIN aqbasket ON aqorders.basketno=aqbasket.basketno
         LEFT JOIN aqbasketgroups ON aqbasket.basketgroupid=aqbasketgroups.id
         LEFT JOIN aqbooksellers ON aqbasket.booksellerid=aqbooksellers.id
-	LEFT JOIN biblioitems ON biblioitems.biblionumber=aqorders.biblionumber
+        LEFT JOIN biblioitems ON biblioitems.biblionumber=aqorders.biblionumber
         LEFT JOIN biblio ON biblio.biblionumber=aqorders.biblionumber
-    LEFT JOIN aqinvoices ON aqorders.invoiceid = aqinvoices.invoiceid";
+        LEFT JOIN aqbudgets ON aqorders.budget_id=aqbudgets.budget_id
+        LEFT JOIN aqinvoices ON aqorders.invoiceid = aqinvoices.invoiceid
+        LEFT JOIN deletedbiblio ON deletedbiblio.biblionumber=aqorders.biblionumber
+        LEFT JOIN deletedbiblioitems ON deletedbiblioitems.biblionumber=aqorders.biblionumber
+        ";
 
-    $query .= " LEFT JOIN borrowers ON aqbasket.authorisedby=borrowers.borrowernumber"
-    if ( C4::Context->preference("IndependentBranches") );
+    if ( C4::Context->preference("IndependentBranches") ) {
+        $query .= " LEFT JOIN borrowers ON aqbasket.authorisedby=borrowers.borrowernumber";
+    }
 
-    $query .= " WHERE (datecancellationprinted is NULL or datecancellationprinted='0000-00-00') ";
+    $query .= " WHERE 1 ";
+
+    $query .= " AND (datecancellationprinted is NULL or datecancellationprinted='0000-00-00') " if $orderstatus ne '4';
 
     my @query_params  = ();
 
@@ -2021,13 +2085,18 @@ sub GetHistory {
         $query .= " AND biblioitems.isbn LIKE ? ";
         push @query_params, "%$isbn%";
     }
-    if ( defined $ean and $ean ) {
+    if ( $ean ) {
         $query .= " AND biblioitems.ean = ? ";
         push @query_params, "$ean";
     }
     if ( $name ) {
         $query .= " AND aqbooksellers.name LIKE ? ";
         push @query_params, "%$name%";
+    }
+
+    if ( $budget ) {
+        $query .= " AND aqbudgets.budget_id = ? ";
+        push @query_params, "$budget";
     }
 
     if ( $from_placed_on ) {
@@ -2038,6 +2107,11 @@ sub GetHistory {
     if ( $to_placed_on ) {
         $query .= " AND creationdate <= ? ";
         push @query_params, $to_placed_on;
+    }
+
+    if ( defined $orderstatus and $orderstatus ne '') {
+        $query .= " AND aqorders.orderstatus = ? ";
+        push @query_params, "$orderstatus";
     }
 
     if ($basket) {
@@ -2075,9 +2149,9 @@ sub GetHistory {
         $line->{count} = $cnt++;
         $line->{toggle} = 1 if $cnt % 2;
         push @order_loop, $line;
-        $total_qty         += $line->{'quantity'};
-        $total_qtyreceived += $line->{'quantityreceived'};
-        $total_price       += $line->{'quantity'} * $line->{'ecost'};
+        $total_qty         += ( $line->{quantity} ) ? $line->{quantity} : 0;
+        $total_qtyreceived += ( $line->{quantityreceived} ) ? $line->{quantityreceived} : 0;
+        $total_price       += ( $line->{quantity} and $line->{ecost} ) ? $line->{quantity} * $line->{ecost} : 0;
     }
     return \@order_loop, $total_qty, $total_price, $total_qtyreceived;
 }
@@ -2599,6 +2673,31 @@ sub MergeInvoices {
         DelInvoice($source->{'invoiceid'});
     }
     return;
+}
+
+=head3 GetBiblioCountByBasketno
+
+$biblio_count = &GetBiblioCountByBasketno($basketno);
+
+Looks up the biblio's count that has basketno value $basketno
+
+Returns a quantity
+
+=cut
+
+sub GetBiblioCountByBasketno {
+    my ($basketno) = @_;
+    my $dbh          = C4::Context->dbh;
+    my $query        = "
+        SELECT COUNT( DISTINCT( biblionumber ) )
+        FROM   aqorders
+        WHERE  basketno = ?
+            AND (datecancellationprinted IS NULL OR datecancellationprinted='0000-00-00')
+        ";
+
+    my $sth = $dbh->prepare($query);
+    $sth->execute($basketno);
+    return $sth->fetchrow;
 }
 
 1;

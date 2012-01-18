@@ -7306,6 +7306,18 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.13.00.XXX";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    my $return_count;
+    $dbh->do("ALTER TABLE aqorders ADD COLUMN orderstatus tinyint(2) DEFAULT 0 AFTER parent_ordernumber");
+    $dbh->do("UPDATE aqorders SET orderstatus=1 WHERE basketno IN (SELECT basketno FROM aqbasket WHERE closedate IS NOT NULL)");
+    $dbh->do("UPDATE aqorders SET orderstatus=2 WHERE quantity > quantityreceived AND quantityreceived > 0");
+    $dbh->do("UPDATE aqorders SET orderstatus=3 WHERE quantity=quantityreceived");
+    $dbh->do("UPDATE aqorders SET orderstatus=4 WHERE datecancellationprinted IS NOT NULL");
+    print "Upgrade to $DBversion done (Add category ORDRSTATUS values in authorised_values table)\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)
