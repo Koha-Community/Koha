@@ -35,6 +35,19 @@
         [% seriestitle %]</li>
     </ol>
 	</fieldset>
+
+    [% IF ( suggestionid ) %]
+        <fieldset class="rows">
+        <legend>Suggestion</legend>
+        <ol>
+          <li>
+            <span class="label">Suggested by </span>
+            [% surnamesuggestedby %][% IF ( firstnamesuggestedby ) %], [% firstnamesuggestedby %][% END %] (from <a href="/cgi-bin/koha/suggestion/suggestion.pl?suggestionid=[% suggestionid %]">suggestion #[% suggestionid %]</a>)
+          </li>
+        </ol>
+        </fieldset>
+    [% END %]
+
     [% IF ( items ) %]
     <fieldset class="rows">
         <legend>Item</legend>

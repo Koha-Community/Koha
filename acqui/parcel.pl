@@ -67,6 +67,7 @@ use C4::Items;
 use CGI;
 use C4::Output;
 use C4::Dates qw/format_date format_date_in_iso/;
+use C4::Suggestions;
 use JSON;
 
 my $input=new CGI;
@@ -178,6 +179,11 @@ for (my $i = 0 ; $i < $countlines ; $i++) {
     $totalprice += $parcelitems[$i]->{'unitprice'};
     $line{unitprice} = sprintf($cfstr, $parcelitems[$i]->{'unitprice'});
 
+    my $suggestion   = GetSuggestionInfoFromBiblionumber($line{biblionumber});
+    $line{suggestionid}         = $suggestion->{suggestionid};
+    $line{surnamesuggestedby}   = $suggestion->{surnamesuggestedby};
+    $line{firstnamesuggestedby} = $suggestion->{firstnamesuggestedby};
+
     #double FIXME - totalfreight is redefined later.
 
 # FIXME - each order in a  parcel holds the freight for the whole parcel. This means if you receive a parcel with items from multiple budgets, you'll see the freight charge in each budget..
@@ -230,7 +236,12 @@ for (my $i = 0 ; $i < $countpendings ; $i++) {
             $itemholds += $nb;
         }
     }
-    
+
+    my $suggestion   = GetSuggestionInfoFromBiblionumber($line{biblionumber});
+    $line{suggestionid}         = $suggestion->{suggestionid};
+    $line{surnamesuggestedby}   = $suggestion->{surnamesuggestedby};
+    $line{firstnamesuggestedby} = $suggestion->{firstnamesuggestedby};
+
     # if the biblio is not in other orders and if there is no items elsewhere and no subscriptions and no holds we can then show the link "Delete order and Biblio" see bug 5680
     $line{can_del_bib}          = 1 if $countbiblio <= 1 && $itemcount == scalar @items && !(@subscriptions) && !($holds);
     $line{items}                = ($itemcount) - (scalar @items);

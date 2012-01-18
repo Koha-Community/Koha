@@ -75,6 +75,7 @@ use C4::Members;
 use C4::Branch;    # GetBranches
 use C4::Items;
 use C4::Biblio;
+use C4::Suggestions;
 
 
 my $input      = new CGI;
@@ -135,6 +136,8 @@ if ( $count == 1 ) {
         @$results[0]->{'unitprice'} = '';
     }
 
+    my $suggestion   = GetSuggestionInfoFromBiblionumber(@$results[0]->{'biblionumber'});
+
     my $authorisedby = @$results[0]->{'authorisedby'};
     my $member = GetMember( borrowernumber => $authorisedby );
 
@@ -167,7 +170,10 @@ if ( $count == 1 ) {
         invoice               => $invoice,
         datereceived          => $datereceived->output(),
         datereceived_iso      => $datereceived->output('iso'),
-        notes                 => $order->{notes}
+        notes                 => $order->{notes},
+        suggestionid          => $suggestion->{suggestionid},
+        surnamesuggestedby    => $suggestion->{surnamesuggestedby},
+        firstnamesuggestedby  => $suggestion->{firstnamesuggestedby},
     );
 }
 else {

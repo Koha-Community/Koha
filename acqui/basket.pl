@@ -34,6 +34,8 @@ use C4::Debug;
 use C4::Biblio;
 use C4::Members qw/GetMember/;  #needed for permissions checking for changing basketgroup of a basket
 use C4::Items;
+use C4::Suggestions;
+
 =head1 NAME
 
 basket.pl
@@ -237,6 +239,7 @@ if ( $op eq 'delete_confirm' ) {
 
     my $qty_total;
     my @books_loop;
+    my $suggestion;
 
     for my $order ( @results ) {
         my $rrp = $order->{'listprice'} || 0;
@@ -303,6 +306,12 @@ if ( $op eq 'delete_confirm' ) {
 	} else {
 	    $line{'title'} = "Deleted bibliographic notice, can't find title.";
 	}
+
+        $suggestion = GetSuggestionInfoFromBiblionumber($line{biblionumber});
+        $line{suggestionid}         = $suggestion->{suggestionid};
+        $line{surnamesuggestedby}   = $suggestion->{surnamesuggestedby};
+        $line{firstnamesuggestedby} = $suggestion->{firstnamesuggestedby};
+
         push @books_loop, \%line;
     }
 

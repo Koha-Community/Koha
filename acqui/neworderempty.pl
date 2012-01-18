@@ -204,6 +204,9 @@ else {    #modify order
     $booksellerid = $data2->{'booksellerid'};
 }
 
+my $suggestion;
+$suggestion = GetSuggestionInfo($suggestionid) if $suggestionid;
+
 # get currencies (for change rates calcs if needed)
 my $active_currency = GetCurrency();
 my $default_currency;
@@ -359,7 +362,9 @@ $template->param(
     authorisedbyname     => $basket->{'authorisedbyname'},
     closedate            => C4::Dates->new($basket->{'closedate'},'iso')->output,
     # order details
-    suggestionid     => $suggestionid,
+    suggestionid         => $suggestion->{suggestionid},
+    surnamesuggestedby   => $suggestion->{surnamesuggestedby},
+    firstnamesuggestedby => $suggestion->{firstnamesuggestedby},
     biblionumber     => $biblionumber,
     uncertainprice   => $data->{'uncertainprice'},
     authorisedbyname => $borrower->{'firstname'} . " " . $borrower->{'surname'},
