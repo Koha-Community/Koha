@@ -1,5 +1,8 @@
 #!/usr/bin/perl
 #
+# Copyright (C) 2011 C & P Bibliography Services
+# Jared Camins-Esakov <jcamins@cpbibliograpy.com>
+#
 # based on patronimage.pl
 #
 # This file is part of Koha.
@@ -23,14 +26,14 @@
 use strict;
 use warnings;
 
-use CGI; #qw(:standard escapeHTML);
+use CGI;    #qw(:standard escapeHTML);
 use C4::Context;
 use C4::Images;
 
-$|=1;
+$| = 1;
 
 my $DEBUG = 0;
-my $data = new CGI;
+my $data  = new CGI;
 my $imagenumber;
 
 =head1 NAME
@@ -57,17 +60,20 @@ imagenumber, a random image is selected.
 
 error() unless C4::Context->preference("OPACLocalCoverImages");
 
-if (defined $data->param('imagenumber')) {
+if ( defined $data->param('imagenumber') ) {
     $imagenumber = $data->param('imagenumber');
-} elsif (defined $data->param('biblionumber')) {
-    my @imagenumbers = ListImagesForBiblio($data->param('biblionumber'));
+}
+elsif ( defined $data->param('biblionumber') ) {
+    my @imagenumbers = ListImagesForBiblio( $data->param('biblionumber') );
     if (@imagenumbers) {
         $imagenumber = $imagenumbers[0];
-    } else {
+    }
+    else {
         warn "No images for this biblio" if $DEBUG;
         error();
     }
-} else {
+}
+else {
     $imagenumber = shift;
 }
 
@@ -79,25 +85,33 @@ if ($imagenumber) {
 
     if ($imagedata) {
         my $image;
-        if ($data->param('thumbnail')) {
+        if ( $data->param('thumbnail') ) {
             $image = $imagedata->{'thumbnail'};
-        } else {
+        }
+        else {
             $image = $imagedata->{'imagefile'};
         }
-        print $data->header (-type => $imagedata->{'mimetype'}, -'Cache-Control' => 'no-store', -expires => 'now', -Content_Length => length ($image)), $image;
+        print $data->header(
+            -type            => $imagedata->{'mimetype'},
+            -'Cache-Control' => 'no-store',
+            -expires         => 'now',
+            -Content_Length  => length($image)
+        ), $image;
         exit;
-    } else {
+    }
+    else {
         warn "No image exists for $imagenumber" if $DEBUG;
         error();
     }
-} else {
+}
+else {
     error();
 }
 
 error();
 
 sub error {
-    print $data->header ( -status=> '404', -expires => 'now' );
+    print $data->header( -status => '404', -expires => 'now' );
     exit;
 }
 

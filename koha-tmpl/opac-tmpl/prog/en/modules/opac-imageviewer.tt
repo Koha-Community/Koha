@@ -5,7 +5,7 @@
 //<![CDATA[
 
 $(document).ready(function(){
-	$("#largeCoverImg").attr("src","/opac-tmpl/prog/images/loading.gif");
+    $("#largeCoverImg").attr("src","/opac-tmpl/prog/images/loading.gif");
     showCover([% imagenumber %]);
 });
 
@@ -18,19 +18,19 @@ function showCover(img) {
 </script>
 <style type="text/css">
 #largeCoverImg {
-	border : 1px solid #CCCCCC;
-	display : block;
-	margin : auto;
-	padding : 1em;
+    border : 1px solid #CCCCCC;
+    display : block;
+    margin : auto;
+    padding : 1em;
 }
 #thumbnails {
-	text-align : center;
+    text-align : center;
 }
 #thumbnails a img {
-	border : 2px solid #8EB3E7;
+    border : 2px solid #8EB3E7;
 }
 img.thumbnail {
-	display : block;
+    display : block;
     float : none;
     padding : .5em;
 }
@@ -39,7 +39,7 @@ img.thumbnail {
     border-color: black;
     cursor : default;
     opacity:0.4;
-	filter:alpha(opacity=40); /* For IE8 and earlier */
+    filter:alpha(opacity=40); /* For IE8 and earlier */
 }
 </style>
 </head>
@@ -47,34 +47,34 @@ img.thumbnail {
 [% IF ( OpacNav ) %]<div id="doc3" class="yui-t1">[% ELSE %]<div id="doc3" class="yui-t7">[% END %]
    <div id="bd">
 [% INCLUDE 'masthead.inc' %]
-	<div id="yui-main">
-	<div class="yui-b">
-	<div class="yui-ge">
-	<div class="container">
-	<h1 class="title">Images for 				[% IF ( BiblioDefaultViewmarc ) %]<a class="title" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=[% biblionumber |url %]" title="View details for this title">
+    <div id="yui-main">
+    <div class="yui-b">
+    <div class="yui-ge">
+    <div class="container">
+    <h1 class="title">Images for                 [% IF ( BiblioDefaultViewmarc ) %]<a class="title" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=[% biblionumber |url %]" title="View details for this title">
                                 [% ELSE %]
                                 [% IF ( BiblioDefaultViewisbd ) %]<a class="title" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=[% biblionumber |url %]" title="View details for this title">
                                 [% ELSE %]<a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber |url %]" title="View details for this title">
                                 [% END %]
                                 [% END %][% biblio.title %]</a> [% biblio.author %]</h1>
-	<div class="yui-u first">
+    <div class="yui-u first">
 
-		<div id="largeCover"><img id="largeCoverImg" alt="" src="/cgi-bin/koha/opac-image.pl?imagenumber=[% imagenumber %]" /></div></div>
+        <div id="largeCover"><img id="largeCoverImg" alt="" src="/cgi-bin/koha/opac-image.pl?imagenumber=[% imagenumber %]" /></div></div>
 
-	[% IF OPACLocalCoverImages == 1 %]
-	<div class="yui-u"><div id="thumbnails">
-			[% FOREACH img IN images %]
-				[% IF img %]
-				<a href="/cgi-bin/koha/opac-imageviewer.pl?biblionumber=[% biblionumber %]&amp;imagenumber=[% img %]" onclick="showCover([% img %]); return false;">
-				[% IF ( imagenumber == img ) %]<img class="thumbnail selected" id="[% img %]" src="/cgi-bin/koha/opac-image.pl?imagenumber=[% img %]&amp;thumbnail=1" alt="Thumbnail"/>
-				[% ELSE %]
-				<img class="thumbnail" id="[% img %]" src="/cgi-bin/koha/opac-image.pl?imagenumber=[% img %]&amp;thumbnail=1" alt="Thumbnail"/>
-				[% END %]
-				</a>
-				[% END %]
-			[% END %]
-		</div></div>
-	</div>
+    [% IF OPACLocalCoverImages == 1 %]
+    <div class="yui-u"><div id="thumbnails">
+            [% FOREACH img IN images %]
+                [% IF img %]
+                <a href="/cgi-bin/koha/opac-imageviewer.pl?biblionumber=[% biblionumber %]&amp;imagenumber=[% img %]" onclick="showCover([% img %]); return false;">
+                [% IF ( imagenumber == img ) %]<img class="thumbnail selected" id="[% img %]" src="/cgi-bin/koha/opac-image.pl?imagenumber=[% img %]&amp;thumbnail=1" alt="Thumbnail"/>
+                [% ELSE %]
+                <img class="thumbnail" id="[% img %]" src="/cgi-bin/koha/opac-image.pl?imagenumber=[% img %]&amp;thumbnail=1" alt="Thumbnail"/>
+                [% END %]
+                </a>
+                [% END %]
+            [% END %]
+        </div></div>
+    </div>
 [% ELSE %]
 Unfortunately, images are not enabled for this catalog at this time.
 [% END %]

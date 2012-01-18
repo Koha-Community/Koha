@@ -391,6 +391,7 @@ sub get_template_and_user {
             NoZebra                     => C4::Context->preference('NoZebra'),
             EasyAnalyticalRecords       => C4::Context->preference('EasyAnalyticalRecords'),
             LocalCoverImages            => C4::Context->preference('LocalCoverImages'),
+            OPACLocalCoverImages        => C4::Context->preference('OPACLocalCoverImages'),
             AllowMultipleCovers         => C4::Context->preference('AllowMultipleCovers'),
         );
     }

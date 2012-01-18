@@ -102,7 +102,7 @@ function confirm_items_deletion() {
 	        [% IF ( CAN_user_editcatalogue_edit_items ) %]{ text: _("Edit Items"), url: "/cgi-bin/koha/cataloguing/additem.pl?biblionumber=[% biblionumber %]" },[% END %]
 	        [% IF ( CAN_user_editcatalogue_edit_items ) %]{ text: _("Attach Item"), url: "/cgi-bin/koha/cataloguing/moveitem.pl?biblionumber=[% biblionumber %]" },[% END %]
             [% IF ( EasyAnalyticalRecords ) %][% IF ( CAN_user_editcatalogue_edit_items ) %]{ text: _("Link to Host Item"), url: "/cgi-bin/koha/cataloguing/linkitem.pl?biblionumber=[% biblionumber %]" },[% END %][% END %]
-            [% IF ( LocalCoverImages ) %][% IF ( CAN_user_tools_upload_local_cover_images ) %]{ text: _("Upload Image"), url: "/cgi-bin/koha/tools/upload-cover-image.pl?biblionumber=[% biblionumber %]&filetype=image" },[% END %][% END %]
+            [% IF ( LocalCoverImages || OPACLocalCoverImages) %][% IF ( CAN_user_tools_upload_local_cover_images ) %]{ text: _("Upload Image"), url: "/cgi-bin/koha/tools/upload-cover-image.pl?biblionumber=[% biblionumber %]&filetype=image" },[% END %][% END %]
 	        [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]{ text: _("Edit as New (Duplicate)"), url: "/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% biblionumber %]&amp;frameworkcode=&amp;op=duplicate" },[% END %]
 			[% IF ( CAN_user_editcatalogue_edit_catalogue ) %]{ text: _("Replace Record via Z39.50"), onclick: {fn: PopupZ3950 } },[% END %]
 			[% IF ( CAN_user_editcatalogue_edit_catalogue ) %]{ text: _("Delete Record"), onclick: {fn: confirm_deletion }[% IF ( count ) %],id:'disabled'[% END %] },[% END %]

@@ -33,19 +33,19 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
         query           => $query,
         type            => "opac",
         authnotrequired => ( C4::Context->preference("OpacPublic") ? 1 : 0 ),
-        flagsrequired   => { borrow => 1 },
+        flagsrequired => { borrow => 1 },
     }
 );
 
 my $biblionumber = $query->param('biblionumber') || $query->param('bib');
 my $imagenumber = $query->param('imagenumber');
-my ($count, $biblio) = GetBiblio($biblionumber);
+my ( $count, $biblio ) = GetBiblio($biblionumber);
 
-if (C4::Context->preference("OPACLocalCoverImages")) {
+if ( C4::Context->preference("OPACLocalCoverImages") ) {
     my @images = ListImagesForBiblio($biblionumber);
     $template->{VARS}->{'OPACLocalCoverImages'} = 1;
-    $template->{VARS}->{'images'} = \@images;
-    $template->{VARS}->{'biblionumber'} = $biblionumber;
+    $template->{VARS}->{'images'}               = \@images;
+    $template->{VARS}->{'biblionumber'}         = $biblionumber;
     $template->{VARS}->{'imagenumber'} = $imagenumber || $images[0] || '';
 }
 

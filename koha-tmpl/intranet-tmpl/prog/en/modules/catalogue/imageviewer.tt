@@ -18,19 +18,19 @@ function showCover(img) {
 </script>
 <style type="text/css">
 #largeCoverImg {
-	border : 1px solid #CCCCCC;
-	display : block;
-	margin : auto;
-	padding : 1em;
+    border : 1px solid #CCCCCC;
+    display : block;
+    margin : auto;
+    padding : 1em;
 }
 #thumbnails {
-	text-align : center;
+    text-align : center;
 }
 #thumbnails a img {
-	border : 1px solid #0000CC;
+    border : 1px solid #0000CC;
 }
 img.thumbnail {
-	display : block;
+    display : block;
     float : none;
     margin: 0 5px 5px 0;
     padding : .5em;
@@ -40,7 +40,7 @@ img.thumbnail {
     border-color: black;
     cursor : default;
     opacity:0.4;
-	filter:alpha(opacity=40); /* For IE8 and earlier */
+    filter:alpha(opacity=40); /* For IE8 and earlier */
 }
 </style>[% END %]
 </head>
@@ -55,9 +55,9 @@ img.thumbnail {
 <div id="doc3" class="yui-t1">
 
 <div id="bd">
-	<div id="yui-main">
-	<div class="yui-b">
-	<div class="yui-ge">
+    <div id="yui-main">
+    <div class="yui-b">
+    <div class="yui-ge">
 
 [% INCLUDE 'cat-toolbar.inc' %]
 
@@ -65,32 +65,32 @@ img.thumbnail {
 <h4>[% biblio.author %]</h4>
 
 [% IF ( LocalCoverImages == 1 ) %]
-	[% IF ( images.size > 0 ) %]
-		<div class="yui-u first">
-		<div id="largeCover">
-			<img id="largeCoverImg" alt="" src="/cgi-bin/koha/catalogue/image.pl?imagenumber=[% imagenumber %]" />
-		</div></div>
+    [% IF ( images.size > 0 ) %]
+        <div class="yui-u first">
+        <div id="largeCover">
+            <img id="largeCoverImg" alt="" src="/cgi-bin/koha/catalogue/image.pl?imagenumber=[% imagenumber %]" />
+        </div></div>
 
-		<div class="yui-u"><div id="thumbnails">
+        <div class="yui-u"><div id="thumbnails">
 
-			[% FOREACH img IN images %]
-				[% IF img %]
-				<a href="/cgi-bin/koha/catalogue/imageviewer.pl?biblionumber=[% biblionumber %]&amp;imagenumber=[% img %]" onclick="showCover([% img %]); return false;">
-					[% IF ( imagenumber == img ) %]
-						<img class="thumbnail selected" id="[% img %]" src="/cgi-bin/koha/catalogue/image.pl?imagenumber=[% img %]&amp;thumbnail=1" alt="Thumbnail" />
-					[% ELSE %]
-						<img class="thumbnail" id="[% img %]" src="/cgi-bin/koha/catalogue/image.pl?imagenumber=[% img %]&amp;thumbnail=1" alt="Thumbnail" />
-					[% END %]
-				</a>
-				[% END %]
-			[% END %]
-		</div></div>
+            [% FOREACH img IN images %]
+                [% IF img %]
+                <a href="/cgi-bin/koha/catalogue/imageviewer.pl?biblionumber=[% biblionumber %]&amp;imagenumber=[% img %]" onclick="showCover([% img %]); return false;">
+                    [% IF ( imagenumber == img ) %]
+                        <img class="thumbnail selected" id="[% img %]" src="/cgi-bin/koha/catalogue/image.pl?imagenumber=[% img %]&amp;thumbnail=1" alt="Thumbnail" />
+                    [% ELSE %]
+                        <img class="thumbnail" id="[% img %]" src="/cgi-bin/koha/catalogue/image.pl?imagenumber=[% img %]&amp;thumbnail=1" alt="Thumbnail" />
+                    [% END %]
+                </a>
+                [% END %]
+            [% END %]
+        </div></div>
 
-	[% ELSE %]
-		<div class="dialog message">There are no images for this record.</div>
-	[% END %]
+    [% ELSE %]
+        <div class="dialog message">There are no images for this record.</div>
+    [% END %]
 [% ELSE %]
-	<div class="dialog message">Local images have not been enabled by your system administrator.</div>
+    <div class="dialog message">Local images have not been enabled by your system administrator.</div>
 [% END %]
 
 </div>
