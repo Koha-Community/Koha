@@ -288,6 +288,7 @@
                                         Suggested by: [% books_loo.surnamesuggestedby %][% IF ( books_loo.firstnamesuggestedby ) %], [% books_loo.firstnamesuggestedby %] [% END %]
                                         (<a href="/cgi-bin/koha/suggestion/suggestion.pl?suggestionid=[% books_loo.suggestionid %]">suggestion #[% books_loo.suggestionid %]</a>)
                                     [% END %]
+                                    [% IF ( books_loo.editionstatement ) %], [% books_loo.editionstatement %][% END %]
                             </p>
                             </td>
                         <td class="number">[% books_loo.rrp %]</td>
@@ -368,6 +369,7 @@
                         [% IF ( order.issn ) %] - [% order.issn %][% END %]
                         [% IF ( order.publishercode ) %], [% order.publishercode %][% END %]
                         [% IF ( order.publicationyear ) %], [% order.publicationyear %][% END %]
+                        [% IF ( books_loo.editionstatement ) %], [% books_loo.editionstatement %][% END %]
                       </p>
                     </td>
                     <td><p>[% order.rrp %]</p></td>

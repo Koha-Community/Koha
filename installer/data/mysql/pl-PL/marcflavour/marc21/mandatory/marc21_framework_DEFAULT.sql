@@ -1004,7 +1004,7 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 		('247', 'x', 'International Standard Serial Number', 'International Standard Serial Number', 0, 0, '', 2, '', '', '', NULL, -6, '', '', '', NULL),
 		('250', '6', 'Linkage', 'Linkage', 0, 0, '', 2, '', '', '', NULL, -6, '', '', '', NULL),
 		('250', '8', 'Field link and sequence number', 'Field link and sequence number', 1, 0, '', 2, '', '', '', NULL, -6, '', '', '', NULL),
-		('250', 'a', 'Edition statement', 'Edition statement', 0, 0, '', 2, '', '', '', NULL, 0, '', '', '', NULL),
+		('250', 'a', 'Edition statement', 'Edition statement', 0, 0, 'biblioitems.editionstatement', 2, '', '', '', NULL, 0, '', '', '', NULL),
 		('250', 'b', 'Remainder of edition statement', 'Remainder of edition statement', 0, 0, '', 2, '', '', '', NULL, 0, '', '', '', NULL),
 		('254', '6', 'Linkage', 'Linkage', 0, 0, '', 2, '', '', '', NULL, -6, '', '', '', NULL),
 		('254', '8', 'Field link and sequence number', 'Field link and sequence number', 1, 0, '', 2, '', '', '', NULL, -6, '', '', '', NULL),

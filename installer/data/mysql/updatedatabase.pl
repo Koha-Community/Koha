@@ -4670,17 +4670,38 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.07.00.013"; #FIXME
+$DBversion = "3.07.00.013";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('OpacExportOptions','bibtex|dc|marcxml|marc8|utf8|marcstd|mods|ris','Define available export options on OPAC detail page.','','free');");
     print "Upgrade to $DBversion done (Bug 7345: Add system preference OpacExportOptions.)\n";
-    SetVersion($DBversion);
+    SetVersion ($DBversion);
 }
-
 
 $DBversion = "3.07.00.014";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     print "RELTERMS category available for English-, French-, and Spanish-language relator terms. They are not loaded during upgrade but can be easily inserted using the provided marc21_relatorterms.sql SQL script (MARC21 only, and currently available for en, es, and fr only).\n";
+    SetVersion($DBversion);
+}
+
+$DBversion = "3.07.00.015";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    my $sth = $dbh->prepare(q|
+        SELECT COUNT(*) FROM marc_subfield_structure where kohafield="biblioitems.editionstatement"
+        |);
+    $sth->execute;
+    my $already_exists = $sth->fetchrow;
+    if ( not $already_exists ) {
+        my $field = C4::Context->preference("marcflavour") eq "UNIMARC" ? "205" : "250";
+        my $subfield = "a";
+        my $sth = $dbh->prepare( q|
+            UPDATE marc_subfield_structure SET kohafield = "biblioitems.editionstatement"
+            WHERE tagfield = ? AND tagsubfield = ?
+        |);
+        $sth->execute( $field, $subfield );
+        print "Upgrade to $DBversion done (Added a mapping for biblioitems.editionstatement.)\n";
+    } else {
+        print "Upgrade to $DBversion done (Added a mapping for biblioitems.editionstatement (already exists, nothing to do).)\n";
+    }
     SetVersion($DBversion);
 }
 

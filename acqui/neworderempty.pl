@@ -381,6 +381,7 @@ $template->param(
     title            => $data->{'title'},
     author           => $data->{'author'},
     publicationyear  => $data->{'publicationyear'} ? $data->{'publicationyear'} : $data->{'copyrightdate'},
+    editionstatement => $data->{'editionstatement'},
     budget_loop      => $budget_loop,
     isbn             => $data->{'isbn'},
     seriestitle      => $data->{'seriestitle'},
