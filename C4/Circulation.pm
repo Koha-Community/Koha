@@ -3120,7 +3120,7 @@ sub ProcessOfflineIssue {
     if ( $borrower->{borrowernumber} ) {
         my $itemnumber = C4::Items::GetItemnumberFromBarcode( $operation->{barcode} );
         unless ($itemnumber) {
-            return "barcode not found";
+            return "Barcode not found.";
         }
         my $issue = GetOpenIssue( $itemnumber );
 

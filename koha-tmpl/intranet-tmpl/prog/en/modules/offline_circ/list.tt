@@ -2,10 +2,20 @@
     <title>Koha &rsaquo; Circulation &rsaquo; Offline Circulation</title>
     [% INCLUDE "doc-head-close.inc" %]
     <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+    <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
     <script type="text/javascript" language="javascript">
+    //<![CDATA[
         $(document).ready(function() {
-            $('#checkall').click(function() {
-                $(":checkbox").attr('checked', $('#checkall').is(':checked'));
+
+        $("span.clearall").html("<a id=\"CheckNone\" href=\"/cgi-bin/koha/offline_circ/list.pl\">"+_('Uncheck All')+"<\/a>");
+        $("span.checkall").html("<a id=\"CheckAll\" href=\"/cgi-bin/koha/offline_circ/list.pl\">"+_('Check All')+"<\/a>");
+            $('#CheckNone').click(function() {
+                $("#operations").unCheckCheckboxes();
+                return false;
+            });
+            $('#CheckAll').click(function() {
+                $("#operations").checkCheckboxes();
+                return false;
             });
             $('#process,#delete').click(function() {
                 var action = $(this).attr("id");
@@ -17,7 +27,23 @@
                         async: false,
                         dataType: "text",
                         success: function(data) {
-                            cb.replaceWith(data);
+                            if( data == "Added." ){
+                                cb.replaceWith(_("Added."));
+                            } else if ( data == "Deleted."){
+                                cb.replaceWith(_("Deleted."));
+                            } else if ( data == "Success."){
+                                cb.replaceWith(_("Success."));
+                            } else if ( data == "Item not issued."){
+                                cb.replaceWith(_("Item not checked out."));
+                            } else if ( data == "Item not found."){
+                                cb.replaceWith(_("Item not found."));
+                            } else if ( data == "Barcode not found."){
+                                cb.replaceWith(_("Item not found."));
+                            } else if ( data == "Borrower not found."){
+                                cb.replaceWith(_("Patron not found."));
+                            } else {
+                                cb.replaceWith(data);
+                            }
                         }});
                 });
                 if( $('#operations tbody :checkbox').size() == 0 ) {
@@ -25,6 +51,7 @@
                 }
             });
         });
+    //]]>
     </script>
 </head>
 <body>
@@ -42,11 +69,12 @@
 	    [% IF ( pending_operations ) %]
 
 	        <form>
-
+             <p><span class="checkall"></span> |
+             <span class="clearall"></span></p>
 	        <table id="operations">
 	            <thead>
 		            <tr>
-		                <th><input type="checkbox" name="checkall" id="checkall" /></th>
+		                <th>&nbsp;</th>
 			            <th>Date</th>
 			            <th>Action</th>
 			            <th>Barcode</th>
