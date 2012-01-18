@@ -340,11 +340,12 @@ sub shelfpage ($$$$$) {
         my $owner     = $shelflist->{$element}->{'owner'};
         my $canmanage = ShelfPossibleAction( $loggedinuser, $element, 'manage' );
         my $sortfield = $shelflist->{$element}->{'sortfield'};
-        if ( $sortfield eq 'author' ) {
-            $shelflist->{$element}->{"authorsort"} = 'author';
-        }
-        if ( $sortfield eq 'year' ) {
-            $shelflist->{$element}->{"yearsort"} = 'year';
+        if ( $sortfield ){
+            if ( $sortfield eq 'author' ) {
+                $shelflist->{$element}->{"authorsort"} = 'author';
+            } elsif ( $sortfield eq 'year' ) {
+                $shelflist->{$element}->{"yearsort"} = 'year';
+            }
         }
         $shelflist->{$element}->{"viewcategory$category"} = 1;
         $shelflist->{$element}->{manageshelf} = $canmanage;
