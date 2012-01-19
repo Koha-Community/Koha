@@ -1,7 +1,44 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; Receipt summary for : [% name %] [% IF ( invoice ) %]invoice, [% invoice %][% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
+[% INCLUDE 'additem.js.inc' %]
 <script type="text/javascript" src="[% themelang %]/js/additem.js"> </script>
+<script type="text/javascript">
+//<![CDATA[
+    function Check(form) {
+        [% IF (AcqCreateItemReceiving) %]
+            // Remove last itemblock if it is not in items_list
+            var lastitemblock = $("#outeritemblock > div:last");
+            var tobedeleted = true;
+            var listitems = $("#items_list tr");
+            $(listitems).each(function(){
+                if($(this).attr('idblock') == $(lastitemblock).attr('id')){
+                    tobedeleted = false;
+                }
+            });
+            if(tobedeleted){
+                $(lastitemblock).remove();
+            }
+
+            if(check_additem('[% UniqueItemFields %]') == false){
+                alert(_('Duplicate values detected. Please correct the errors and resubmit.') );
+                if(tobedeleted) {
+                    $(lastitemblock).appendTo("#outeritemblock");
+                }
+                return false;
+            };
+        [% END %]
+
+        return true;
+    }
+
+    $(document).ready(function() {
+        [% IF (AcqCreateItemReceiving) %]
+            cloneItemBlock(0, '[% UniqueItemFields %]');
+        [% END %]
+    });
+//]]>
+</script>
 </head>
 <body id="acq_orderreceive" class="acq">
 [% INCLUDE 'header.inc' %]
@@ -18,10 +55,11 @@
 <h1>Receive items from : [% name %] [% IF ( invoice ) %][[% invoice %]] [% END %] (order #[% ordernumber %])</h1>
 
 [% IF ( count ) %]
-    <form action="/cgi-bin/koha/acqui/finishreceive.pl" method="post">
+    <form action="/cgi-bin/koha/acqui/finishreceive.pl" method="post" onsubmit="return Check(this);">
 <div class="yui-g">
 <div class="yui-u first">
-    
+    <div class="error" style="display:none"></div>
+
     <fieldset class="rows">
     <legend>Catalog Details</legend>
     <ol><li><span class="label">Title: </span><span class="title">[% title |html %]</span></li>
@@ -48,48 +86,48 @@
         </fieldset>
     [% END %]
 
-    [% IF ( items ) %]
-    <fieldset class="rows">
-        <legend>Item</legend>
-        [% IF ( NoACQframework ) %]
-            <p class="required">No ACQ framework, using default. You should create a framework with code ACQ, the items framework would be used</p>
-        [% END %]
-
-        [% FOREACH item IN items %]
-        <div id="outeritemblock">
-        <div id="itemblock">
-            <ol>[% FOREACH iteminformatio IN item.iteminformation %]<li style="[% iteminformatio.hidden %];">
-                <div class="subfield_line" id="subfield[% iteminformatio.serialid %][% iteminformatio.countitems %][% iteminformatio.subfield %][% iteminformatio.random %]">
-                                
-                    <label>[% iteminformatio.subfield %] - [% IF ( iteminformatio.mandatory ) %]<b>[% END %][% iteminformatio.marc_lib %][% IF ( iteminformatio.mandatory ) %] *</b>[% END %]</label>
-                    [% iteminformatio.marc_value %]
-                    <input type="hidden" name="itemid" value="1" />
-                    <input type="hidden" name="kohafield" value="[% iteminformatio.kohafield %]" />
-                    <input type="hidden" name="tag" value="[% iteminformatio.tag %]" />
-                    <input type="hidden" name="subfield" value="[% iteminformatio.subfield %]" />
-                    <input type="hidden" name="mandatory" value="[% iteminformatio.mandatory %]" />
-                    [% IF ( iteminformatio.ITEM_SUBFIELDS_ARE_NOT_REPEATABLE ) %]
-                        <span class="buttonPlus" onclick="CloneSubfield('subfield[% iteminformatio.serialid %][% iteminformatio.countitems %][% iteminformatio.subfield %][% iteminformatio.random %]')">+</span>
-                    [% END %]
-            
-                </div></li>
-            [% END %]
-            </ol>
-            <a class="addItem" onclick="cloneItemBlock('itemblock[% item.itemBlockIndex %]')">Add</a>
-            <a class="delItem" style="display:none;" onclick="deleteItemBlock('itemblock[% item.itemBlockIndex %]')">Delete</a>
-        </div><!-- /iteminformation -->
+    [% IF (AcqCreateItemReceiving) %]
+        <div id="items_list" style="display:none">
+            <p><b>Items list</b></p>
+            <div style="width:100%;overflow:auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>&nbsp;</th>
+                            <th>&nbsp;</th>
+                            <th>Barcode</th>
+                            <th>Home branch</th>
+                            <th>Holding branch</th>
+                            <th>Not for loan</th>
+                            <th>Restricted</th>
+                            <th>Location</th>
+                            <th>Call number</th>
+                            <th>Copy number</th>
+                            <th>Stock number</th>
+                            <th>Collection code</th>
+                            <th>Item type</th>
+                            <th>Materials</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
         </div>
-        
-        <input type="hidden" name="moditem" value="" /> 
-        <input type="hidden" name="tag" value="[% item.itemtagfield %]" />
-        <input type="hidden" name="subfield" value="[% item.itemtagsubfield %]" />
-        <input type="hidden" name="serial" value="[% item.serialid %]" />
-        <input type="hidden" name="bibnum" value="[% item.biblionumber %]" />
-        <input type="hidden" name="itemid" value="1" />
-        <input type="hidden" name="field_value" value="[% item.itemnumber %]" />
-        [% END %] <!-- /items -->
-    </fieldset>
-    [% END %] <!-- items -->
+
+        <fieldset class="rows" id="itemfieldset">
+            <legend>Item</legend>
+            [% IF ( NoACQframework ) %]
+                <p class="required">
+                    No ACQ framework, using default. You should create a
+                    framework with code ACQ, the items framework would be
+                    used
+                </p>
+            [% END %]
+            <div id="outeritemblock"></div>
+        </fieldset>
+    [% END %][%# IF (AcqCreateItemReceiving) %]
     <input type="hidden" name="biblionumber" value="[% biblionumber %]" />
     <input type="hidden" name="ordernumber" value="[% ordernumber %]" />
     <input type="hidden" name="biblioitemnumber" value="[% biblioitemnumber %]" />
@@ -107,12 +145,15 @@
        <li><label for="creator">Created by: </label><span> [% IF ( memberfirstname and membersurname ) %][% IF ( memberfirstname ) %][% memberfirstname %][% END %] [% membersurname %][% ELSE %]No name[% END %]</span></li>
        <li><label for="quantityto">Quantity to receive: </label><span class="label">
            [% IF ( edit ) %]
-               <input type="text" name="quantity" value="[% quantity %]" />
+               <input type="text" id="quantity_to_receive" name="quantity" value="[% quantity %]" />
            [% ELSE %]
-               <input type="text" READONLY name="quantity" value="[% quantity %]" />
+               <input type="text" readonly="readonly" id="quantity_to_receive" name="quantity" value="[% quantity %]" />
            [% END %]
            </span></li>
         <li><label for="quantity">Quantity received: </label>
+          [% IF (AcqCreateItemReceiving) %]
+            <input readonly="readonly" type="text" size="20" name="quantityrec" id="quantity" value="0" />
+          [% ELSE %]
             [% IF ( quantityreceived ) %]
                 [% IF ( edit ) %]
                     <input type="text" size="20" name="quantityrec" id="quantity" value="[% quantityreceived %]" />
@@ -133,6 +174,7 @@
                 [% END %]
                 <input id="origquantityrec" READONLY type="hidden" name="origquantityrec" value="0" />
             [% END %]
+          [% END %][%# IF (AcqCreateItemReceiving) %]
 		</li>
         <li><label for="rrp">Replacement cost: </label><input type="text" size="20" name="rrp" id="rrp" value="[% rrp %]" /></li>
         <li><label for="ecost">Budgeted cost: </label><input type="text" size="20" name="ecost" id="ecost" value="[% ecost %]" /></li>
@@ -148,7 +190,8 @@
 
 </div>
 </div><div class="yui-g"><fieldset class="action">
-        <input type="button"  value="Save" onclick="javascript:if(check_additem()) { this.form.submit(); } else { alert( _('Duplicate barcodes detected.  Please correct the errors and resubmit.') ); return false };" /> <a class="cancel" href="/cgi-bin/koha/acqui/parcel.pl?booksellerid=[% booksellerid %]&amp;invoice=[% invoice %]&amp;gst=[% gst %]&amp;freight=[% freight %]">Cancel</a>
+        <input type="submit"  value="Save" />
+        <a class="cancel" href="/cgi-bin/koha/acqui/parcel.pl?booksellerid=[% supplierid %]&amp;invoice=[% invoice %]&amp;gst=[% gst %]&amp;freight=[% freight %]">Cancel</a>
 </fieldset></div>    </form>
 [% ELSE %]
 <div id="acqui_acquire_orderlist">

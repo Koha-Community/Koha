@@ -117,16 +117,15 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 # prepare the form for receiving
 if ( $count == 1 ) {
     if (C4::Context->preference('AcqCreateItem') eq 'receiving') {
-        # prepare empty item form
-        my $cell = PrepareItemrecordDisplay('','','','ACQ');
-        unless ($cell) {
-            $cell = PrepareItemrecordDisplay('','','','');
+        # Check if ACQ framework exists
+        my $marc = GetMarcStructure(1, 'ACQ');
+        unless($marc) {
             $template->param('NoACQframework' => 1);
         }
-        my @itemloop;
-        push @itemloop,$cell;
-        
-        $template->param(items => \@itemloop);
+        $template->param(
+            AcqCreateItemReceiving => 1,
+            UniqueItemFields => C4::Context->preference('UniqueItemFields'),
+        );
     }
 
     if ( @$results[0]->{'quantityreceived'} == 0 ) {

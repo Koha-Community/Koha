@@ -4,12 +4,28 @@
 [% INCLUDE 'doc-head-close.inc' %]
 
 <script type="text/javascript" src="[% themelang %]/js/acq.js"></script>
+[% INCLUDE 'additem.js.inc' %]
 <script type="text/javascript" src="[% themelang %]/js/additem.js"></script>
 <script type="text/javascript">
 //<![CDATA[
 actTotal = "";
 
 function Check(ff) {
+    [% IF (AcqCreateItemOrdering) %]
+        // Remove last itemblock if it is not in items_list
+        var lastitemblock = $("#outeritemblock > div:last");
+        var tobedeleted = true;
+        var listitems = $("#items_list tr");
+        $(listitems).each(function(){
+            if($(this).attr('idblock') == $(lastitemblock).attr('id')){
+                tobedeleted = false;
+            }
+        });
+        if(tobedeleted){
+            $(lastitemblock).remove();
+        }
+    [% END %]
+
     var ok=0;
     var _alertString= _("Form not submitted because of the following problem(s)")+"\n";
 
@@ -25,7 +41,7 @@ function Check(ff) {
 					_alertString += "\n- "+ _("You must select a budget");
     }
 
-    if (!(isNum(ff.quantity,0))){
+    if (!(isNum(ff.quantity,0)) || ff.quantity.value == 0){
         ok=1;
                     _alertString += "\n- " + _("Quantity must be greater than '0'");
     }
@@ -47,15 +63,11 @@ function Check(ff) {
     }
 
     if ( ff.field_value ) {
-        var barcodes = [];
         var empty_item_mandatory = 0;
         for (i = 0; i < ff.field_value.length; i++) {
             //alert("i = " + i + " => " + ff.kohafield[i] );
             if (ff.field_value[i].value.length == 0 && ff.mandatory[i].value == 1) {
                 empty_item_mandatory++;
-            }
-            if(ff.subfield[i].value === '[% barcode_subfield %]' && ff.field_value[i].value.length != 0) {
-                barcodes.push(ff.field_value[i].value);
             }
         }
         if (empty_item_mandatory > 0) {
@@ -64,56 +76,34 @@ function Check(ff) {
                 "\n- " + empty_item_mandatory + _(" item mandatory fields empty");
         }
 
-        if(barcodes.length > 0) {
-            // Check for duplicate barcodes in the form
-            barcodes = barcodes.sort();
-            for(var i=0; i<barcodes.length-1; i++) {
-                if(barcodes[i] == barcodes[i+1]) {
-                    ok = 1;
-                    _alertString += "\n- " + _("The barcode ") + barcodes[i] + _(" is used more than once in the form. Every barcode must be unique");
-                }
-            }
-
-            // Check for duplicate barcodes in the database via an ajax call
-            $.ajax({
-                url: "/cgi-bin/koha/acqui/check_duplicate_barcode_ajax.pl",
-                async:false,
-                method: "post",
-                data: {barcodes : barcodes},
-                dataType: 'json',
-
-                error: function(xhr) {
-                    alert("Error: \n" + xhr.responseText);
-                },
-                success: function(json) {
-                    switch(json.status) {
-                        case 'UNAUTHORIZED':
-                            ok = 1;
-                            _alertString += "\n- " + _("Error: Duplicate barcode verification failed. Insufficient user permissions.");
-                            break;
-                        case 'DUPLICATES':
-                            ok = 1;
-                            $.each(json.barcodes, function(index, barcode) {
-                                _alertString += "\n- " + _("The barcode ") + barcode + _(" already exists in the database");
-                            });
-                            break;
-                    }
-                },
-            });
-        }
     }
 
     if (ok) {
         alert(_alertString);
+        [% IF (AcqCreateItemOrdering) %]
+            if(tobedeleted) {
+                $(lastitemblock).appendTo('#outeritemblock');
+            }
+        [% END %]
         return false;
     }
 
-    ff.submit();
-
+    [% IF (AcqCreateItemOrdering) %]
+        if(check_additem('[% UniqueItemFields %]') == false) {
+            alert(_('Duplicate values detected. Please correct the errors and resubmit.') );
+            if(tobedeleted) {
+                $(lastitemblock).appendTo('#outeritemblock');
+            }
+            return false;
+        }
+    [% END %]
 }
 
 $(document).ready(function() 
     {
+        [% IF (AcqCreateItemOrdering) %]
+            cloneItemBlock(0, '[% UniqueItemFields %]');
+        [% END %]
         //We apply the fonction only for modify option
         [% IF ( quantityrec ) %]
         $('#quantity').blur(function() 
@@ -169,6 +159,8 @@ $(document).ready(function()
     [% END %]
 </h2>
 
+<div class="error" style="display:none"></div>
+
 [% IF ( basketno ) %]
     <div id="acqui_basket_summary"  class="yui-g">
     <fieldset class="rows">
@@ -208,7 +200,7 @@ $(document).ready(function()
     </div>
 [% END %]
 
-<form action="/cgi-bin/koha/acqui/addorder.pl" method="post" id="Aform">
+<form action="/cgi-bin/koha/acqui/addorder.pl" method="post" id="Aform" onsubmit="return Check(this);">
 
 <fieldset class="rows">
         <legend>
@@ -333,41 +325,47 @@ $(document).ready(function()
         </fieldset>
     [% END %]
 
-    [% IF ( items ) %]
-    <fieldset class="rows">
+    [% IF (AcqCreateItemOrdering) %]
+
+    <div id="items_list" style="display:none">
+        <p><b>Items list</b></p>
+        <div style="width:100%;overflow:auto;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>&nbsp;</th>
+                        <th>&nbsp;</th>
+                        <th>Barcode</th>
+                        <th>Home branch</th>
+                        <th>Holding branch</th>
+                        <th>Not for loan</th>
+                        <th>Restricted</th>
+                        <th>Location</th>
+                        <th>Call number</th>
+                        <th>Copy number</th>
+                        <th>Stock number</th>
+                        <th>Collection code</th>
+                        <th>Item type</th>
+                        <th>Materials</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <fieldset class="rows" id="itemfieldset">
         <legend>Item</legend>
         [% IF ( NoACQframework ) %]
             <div class="dialog message">No ACQ framework, using default. You should create a framework with code ACQ, the items framework would be used</div>
         [% END %]
 
-        [% FOREACH item IN items %]
-        <div id="outeritemblock">
-        <div id="itemblock">
-            <ol>[% FOREACH iteminformatio IN item.iteminformation %]<li style="[% iteminformatio.hidden %];">
-                <div class="subfield_line" id="subfield[% iteminformatio.serialid %][% iteminformatio.countitems %][% iteminformatio.subfield %][% iteminformatio.random %]">
+        <div id="outeritemblock"></div>
 
-                    <label>[% iteminformatio.subfield %] - [% IF ( iteminformatio.mandatory ) %]<b>[% END %][% iteminformatio.marc_lib %][% IF ( iteminformatio.mandatory ) %] *</b>[% END %]</label>
-                    [% iteminformatio.marc_value %]
-                    <input type="hidden" name="itemid" value="1" />
-                    <input type="hidden" name="kohafield" value="[% iteminformatio.kohafield %]" />
-                    <input type="hidden" name="tag" value="[% iteminformatio.tag %]" />
-                    <input type="hidden" name="subfield" value="[% iteminformatio.subfield %]" />
-                    <input type="hidden" name="mandatory" value="[% iteminformatio.mandatory %]" />
-                    [% IF ( iteminformatio.ITEM_SUBFIELDS_ARE_NOT_REPEATABLE ) %]
-                        <span class="buttonPlus" onclick="CloneSubfield('subfield[% iteminformatio.serialid %][% iteminformatio.countitems %][% iteminformatio.subfield %][% iteminformatio.random %]')">+</span>
-                    [% END %]
-
-                </div></li>
-            [% END %]
-            </ol>
-            <a class="addItem" onclick="cloneItemBlock('itemblock[% item.itemBlockIndex %]')">Add</a>
-            <a class="delItem" style="display:none;" onclick="deleteItemBlock('itemblock[% item.itemBlockIndex %]')">Delete</a>
-        </div><!-- /iteminformation -->
-        </div>
-
-        [% END %] <!-- /items -->
     </fieldset>
-    [% END %] <!-- items -->
+    [% END %][%# IF (AcqCreateItemOrdering) %]
     <fieldset class="rows">
         <legend>Accounting Details</legend>
         <ol>
@@ -376,9 +374,9 @@ $(document).ready(function()
             <span class="label required">Quantity: </span>
                     <input type="hidden" size="20" name="quantity" value="[% quantity %]" />[% quantity %]
                 [% ELSE %]
-                <label class="required" for="quantity">Quantity: </label>
-                    [% IF ( items ) %]
-                        <input type="text" readonly="readonly" size="20" id="quantity" name="quantity" value="1" onchange="calcNeworderTotal();" />
+                    <label class="required" for="quantity">Quantity: </label>
+                    [% IF (AcqCreateItemOrdering) %]
+                        <input type="text" readonly="readonly" size="20" id="quantity" name="quantity" value="0" onchange="updateCosts();" />
                     [% ELSE %]
                         <input type="text" size="20" id="quantity" name="quantity" value="[% quantityrec %]" onchange="calcNeworderTotal();" />
                     [% END %]
@@ -530,7 +528,12 @@ $(document).ready(function()
 </ol>
     </fieldset>
     <fieldset class="action">
-        <input type="button" value="Save" onclick="Check(this.form)" /> [% IF ( suggestionid ) %]<a class="cancel" href="/cgi-bin/koha/acqui/newordersuggestion.pl?booksellerid=[% booksellerid %]&amp;basketno=[% basketno %]">Cancel</a>[% ELSE %]<a class="cancel" href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basketno %]">Cancel</a>[% END %]
+        <input type="submit" value="Save" />
+        [% IF (suggestionid) %]
+            <a class="cancel" href="/cgi-bin/koha/acqui/newordersuggestion.pl?booksellerid=[% booksellerid %]&amp;basketno=[% basketno %]">Cancel</a>
+        [% ELSE %]
+            <a class="cancel" href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basketno %]">Cancel</a>
+        [% END %]
     </fieldset>
 </form>
 </div>

@@ -5033,6 +5033,15 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
        ALTER TABLE z3950servers ADD timeout INT( 11 ) NOT NULL DEFAULT '0' AFTER syntax;
     });
     print "Upgrade to $DBversion done (New timeout field in z3950servers)\n";
+}
+
+$DBversion = "XXX";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do(qq{
+        INSERT INTO systempreferences(variable,value,explanation,options,type)
+        VALUES('UniqueItemFields', 'barcode', 'Space-separated list of fields that should be unique (used in acquisition module for item creation). Fields must be valid SQL column names of items table', '', 'Free')
+    });
+    print "Upgrade to $DBversion done (Added system preference 'UniqueItemFields')\n";
     SetVersion($DBversion);
 }
 

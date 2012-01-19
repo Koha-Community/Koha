@@ -308,17 +308,15 @@ if ($CGIsort2) {
 }
 
 if (C4::Context->preference('AcqCreateItem') eq 'ordering' && !$ordernumber) {
-    # prepare empty item form
-    my $cell = PrepareItemrecordDisplay('','','','ACQ');
-#     warn "==> ".Data::Dumper::Dumper($cell);
-    unless ($cell) {
-        $cell = PrepareItemrecordDisplay('','','','');
+    # Check if ACQ framework exists
+    my $marc = GetMarcStructure(1, 'ACQ');
+    unless($marc) {
         $template->param('NoACQframework' => 1);
     }
-    my @itemloop;
-    push @itemloop,$cell;
-    
-    $template->param(items => \@itemloop);
+    $template->param(
+        AcqCreateItemOrdering => 1,
+        UniqueItemFields => C4::Context->preference('UniqueItemFields'),
+    );
 }
 # Get the item types list, but only if item_level_itype is YES. Otherwise, it will be in the item, no need to display it in the biblio
 my @itemtypes;
