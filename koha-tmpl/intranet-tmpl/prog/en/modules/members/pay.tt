@@ -6,6 +6,14 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'patron-search.inc' %]
 
+<script type=text/javascript>
+
+function confirmWriteoffAll() {
+	return confirm("Are you sure you want to writeoff all fines?");
+}
+
+</script>
+
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>  &rsaquo; Pay Fines for [% borrower.firstname %] [% borrower.surname %]</div>
 
 <div id="doc3" class="yui-t2">
@@ -88,8 +96,8 @@
 </table>
 <fieldset class="action">
 <input type="submit" name="paycollect"  value="Pay Amount" class="submit" />
-<input type="submit" name="woall"  value="Writeoff All" class="submit" />
-<input type="submit" name="payselected"  value="Pay Selected" class="submit" />
+<input type="submit" name="woall"  value="Writeoff All" class="submit" onclick="return confirmWriteoffAll()" />
+<input type="submit" name="payselected"  value="Pay Selected" class="submit"/>
 <a class="cancel" href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% borrower.borrowernumber %]">Cancel</a>
 </fieldset>
 </form>
