@@ -43,6 +43,7 @@ use Date::Calc qw(
   Day_of_Week
   Add_Delta_Days	
   check_date
+  Delta_Days
 );
 use POSIX qw(strftime);
 use C4::Branch; # GetBranches
