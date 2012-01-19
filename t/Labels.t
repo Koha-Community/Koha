@@ -20,7 +20,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 2;
+use Test::More tests => 6;
 
 BEGIN {
     use_ok('C4::Labels::Label');
@@ -33,3 +33,11 @@ my $expected_fields = [
     { code => 'itemcallnumber', desc => 'itemcallnumber' }, 
 ];
 is_deeply($parsed_fields, $expected_fields, '"callnumber" in label layout alias for "itemcallnumber" per bug 5653');
+
+is(C4::Labels::Label::_check_params(),"0",'test checking parameters');
+
+ok(C4::Labels::Label::_guide_box(), 'test guide box with nothing entered');
+
+ok(C4::Labels::Label::_get_text_fields(), 'test getting textx fields');
+
+is(C4::Labels::Label::_split_lccn(),"0", 'test when _split_lccn is null');
