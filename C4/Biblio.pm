@@ -2142,6 +2142,7 @@ sub TransformHtmlToMarc {
     my $record = MARC::Record->new();
     my $i      = 0;
     my @fields;
+#FIXME This code assumes that the CGI params will be in the same order as the fields in the template; this is no absolute guarantee!
     while ( $params[$i] ) {    # browse all CGI params
         my $param    = $params[$i];
         my $newfield = 0;
@@ -2181,19 +2182,23 @@ sub TransformHtmlToMarc {
 
                 # > 009, deal with subfields
             } else {
-                while ( defined $params[$j] && $params[$j] =~ /_code_/ ) {    # browse all it's subfield
-                    my $inner_param = $params[$j];
-                    if ($newfield) {
-                        if ( $cgi->param( $params[ $j + 1 ] ) ne '' ) {         # only if there is a value (code => value)
-                            $newfield->add_subfields( $cgi->param($inner_param) => $cgi->param( $params[ $j + 1 ] ) );
-                        }
-                    } else {
-                        if ( $cgi->param( $params[ $j + 1 ] ) ne '' ) {         # creating only if there is a value (code => value)
-                            $newfield = MARC::Field->new( $tag, $ind1, $ind2, $cgi->param($inner_param) => $cgi->param( $params[ $j + 1 ] ), );
-                        }
+                # browse subfields for this tag (reason for _code_ match)
+                while(defined $params[$j] && $params[$j] =~ /_code_/) {
+                    last unless defined $params[$j+1];
+                    #if next param ne subfield, then it was probably empty
+                    #try next param by incrementing j
+                    if($params[$j+1]!~/_subfield_/) {$j++; next; }
+                    my $fval= $cgi->param($params[$j+1]);
+                    #check if subfield value not empty and field exists
+                    if($fval ne '' && $newfield) {
+                        $newfield->add_subfields( $cgi->param($params[$j]) => $fval);
+                    }
+                    elsif($fval ne '') {
+                        $newfield = MARC::Field->new( $tag, $ind1, $ind2, $cgi->param($params[$j]) => $fval );
                     }
                     $j += 2;
-                }
+                } #end-of-while
+                $i= $j-1; #update i for outer loop accordingly
             }
             push @fields, $newfield if ($newfield);
         }
