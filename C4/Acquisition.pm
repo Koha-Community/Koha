@@ -1070,16 +1070,13 @@ sub ModReceiveOrder {
     )
     = @_;
     my $dbh = C4::Context->dbh;
-#     warn "DATE BEFORE : $daterecieved";
-#    $daterecieved=POSIX::strftime("%Y-%m-%d",CORE::localtime) unless $daterecieved;
-#     warn "DATE REC : $daterecieved";
     $datereceived = C4::Dates->output('iso') unless $datereceived;
     my $suggestionid = GetSuggestionFromBiblionumber( $dbh, $biblionumber );
     if ($suggestionid) {
         ModSuggestion( {suggestionid=>$suggestionid,
-						STATUS=>'AVAILABLE',
-						biblionumber=> $biblionumber}
-						);
+                        STATUS=>'AVAILABLE',
+                        biblionumber=> $biblionumber}
+                        );
     }
 
     my $sth=$dbh->prepare("

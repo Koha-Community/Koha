@@ -83,10 +83,10 @@ if ($quantityrec > $origquantityrec ) {
         }
         foreach my $item (keys %itemhash){
             my $xml = TransformHtmlToXml( $itemhash{$item}->{'tags'},
-                                    $itemhash{$item}->{'subfields'},
-                                    $itemhash{$item}->{'field_values'},
-                                    $itemhash{$item}->{'ind_tag'},
-                                    $itemhash{$item}->{'indicator'},'ITEM');
+                                          $itemhash{$item}->{'subfields'},
+                                          $itemhash{$item}->{'field_values'},
+                                          $itemhash{$item}->{'ind_tag'},
+                                          $itemhash{$item}->{'indicator'},'ITEM');
             my $record=MARC::Record::new_from_xml($xml, 'UTF-8');
             my (undef,$bibitemnum,$itemnumber) = AddItemFromMarc($record,$biblionumber);
             NewOrderItem($itemnumber, $ordernumber);
@@ -94,7 +94,7 @@ if ($quantityrec > $origquantityrec ) {
     }
     
     # save the quantity received.
-	$datereceived = ModReceiveOrder($biblionumber,$ordernumber, $quantityrec ,$user,$unitprice,$invoiceno,$freight,$replacement,undef,$datereceived);
+    $datereceived = ModReceiveOrder($biblionumber,$ordernumber, $quantityrec ,$user,$unitprice,$invoiceno,$freight,$replacement,undef,$datereceived);
 }
 
 update_item( $_ ) foreach GetItemnumbersFromOrder( $ordernumber );
@@ -105,7 +105,6 @@ print $input->redirect("/cgi-bin/koha/acqui/parcel.pl?invoice=$invoiceno&supplie
 
 sub update_item {
     my ( $itemnumber ) = @_;
-    warn "AAA $itemnumber";
 
     ModItem( {
         booksellerid         => $supplierid,
