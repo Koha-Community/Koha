@@ -705,6 +705,7 @@ $template->param(
     soundon           => C4::Context->preference("SoundOn"),
     fast_cataloging   => $fast_cataloging,
     CircAutoPrintQuickSlip   => C4::Context->preference("CircAutoPrintQuickSlip"),
+	activeBorrowerRelationship => (C4::Context->preference('borrowerRelationship') ne ''),
 );
 
 # save stickyduedate to session

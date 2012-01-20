@@ -121,6 +121,7 @@ if (C4::Context->preference('ExtendedPatronAttributes')) {
 	    destination => $destination,
 		is_child        => ($bor->{'category_type'} eq 'C'),
 	    defaultnewpassword => $defaultnewpassword,
+		activeBorrowerRelationship => (C4::Context->preference('borrowerRelationship') ne ''),
 	);
 
 

@@ -481,6 +481,7 @@ $template->param(
     "dateformat_" . (C4::Context->preference("dateformat") || '') => 1,
     samebranch     => $samebranch,
     quickslip		  => $quickslip,
+	activeBorrowerRelationship => (C4::Context->preference('borrowerRelationship') ne ''),
 );
 
 #Get the slip news items

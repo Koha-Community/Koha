@@ -68,6 +68,7 @@ $template->param(
 			sentnotices 		=> 1,
                         branchname              => GetBranchName($borrower->{'branchcode'}),
                         categoryname            => $borrower->{'description'},
+			activeBorrowerRelationship => (C4::Context->preference('borrowerRelationship') ne ''),
 );
 output_html_with_http_headers $input, $cookie, $template->output;
 

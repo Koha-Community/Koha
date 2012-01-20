@@ -103,6 +103,8 @@ for (@names) {
     }
 }
 
+$template->param( activeBorrowerRelationship => (C4::Context->preference('borrowerRelationship') ne '') );
+
 add_accounts_to_template();
 
 output_html_with_http_headers $input, $cookie, $template->output;

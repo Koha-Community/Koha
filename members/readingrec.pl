@@ -133,6 +133,7 @@ $template->param(
 			   			branchname => GetBranchName($data->{'branchcode'}),
 						showfulllink => (scalar @loop_reading > 50),					
 						loop_reading => \@loop_reading,
+						activeBorrowerRelationship => (C4::Context->preference('borrowerRelationship') ne ''),
 );
 output_html_with_http_headers $input, $cookie, $template->output;
 

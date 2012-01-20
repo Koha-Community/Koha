@@ -102,6 +102,7 @@ if ($countissues > 0 or $flags->{'CHARGES'}  or $data->{'borrowernumber'}){
         email => $bor->{'email'},
         branchcode => $bor->{'branchcode'},
         branchname => GetBranchName($bor->{'branchcode'}),
+		activeBorrowerRelationship => (C4::Context->preference('borrowerRelationship') ne ''),
     );
     if ($countissues >0) {
         $template->param(ItemsOnIssues => $countissues);
