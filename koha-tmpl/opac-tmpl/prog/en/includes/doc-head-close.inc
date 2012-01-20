@@ -48,12 +48,15 @@
     [% IF ( opacbookbag ) %]var MSG_BASKET_EMPTY = _("Your cart is currently empty");
     var MSG_RECORD_IN_BASKET = _("This item is already in your cart");
     var MSG_RECORD_ADDED = _("This item has been added to your cart");
+    var MSG_RECORD_REMOVED = _("This item has been removed from your cart");
     var MSG_NRECORDS_ADDED = _(" item(s) added to your cart");
     var MSG_NRECORDS_IN_BASKET = _("already in your cart");
     var MSG_NO_RECORD_SELECTED = _("No item was selected");
     var MSG_NO_RECORD_ADDED = _("No item was added to your cart");
     var MSG_CONFIRM_DEL_BASKET = _("Are you sure you want to empty your cart?");
     var MSG_CONFIRM_DEL_RECORDS = _("Are you sure you want to remove the selected items?");
+    var MSG_ITEM_IN_CART = _("In your cart");
+    var MSG_ITEM_NOT_IN_CART = _("Add to your cart");
 	$("#cartDetails").ready(function(){ $("#cmspan").html("<a href=\"#\" id=\"cartmenulink\" class=\"\"><i><\/i><span><i><\/i><span><\/span><span id=\"carticon\"></span> "+_("Cart")+"<span id=\"basketcount\"><\/span><\/span><\/a>"); }); [% ELSE %][% IF ( virtualshelves ) %]
     var MSG_NO_RECORD_SELECTED = _("No item was selected");[% END %][% END %]
     [% IF ( opacuserlogin ) %][% IF ( TagsEnabled ) %]var MSG_TAGS_DISABLED = _("Sorry, tags are not enabled on this system.");
