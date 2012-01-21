@@ -114,7 +114,7 @@ function add_item(borrowernum,batch_id,type_id){
     <td> <input type="checkbox" name="borrowernumber" id="patron[% resultsloo.borrowernumber %]" value="[% resultsloo.borrowernumber %]" />	</td>
     <td>[% resultsloo.cardnumber %]</td>
     <td style="white-space: nowrap;"><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% resultsloo.borrowernumber %]">[% resultsloo.surname %], [% resultsloo.firstname %]</a> <br /> [% resultsloo.address %][% IF ( resultsloo.address2 ) %]<br />[% resultsloo.address2 %][% END %][% IF ( resultsloo.city ) %]<br />[% resultsloo.city %][% END %]</td>
-    <td>[% resultsloo.category_description %] ([% resultsloo.category_type %])</td>
+    <td>[% resultsloo.category_description %] ([% resultsloo.categorycode %])</td>
     <td>[% resultsloo.branchcode %]</td>
     <td>[% resultsloo.dateexpiry %]</td>
     <td>[% resultsloo.borrowernotes %]</td>

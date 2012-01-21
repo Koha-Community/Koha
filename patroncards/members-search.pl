@@ -33,8 +33,19 @@ my $batch_id = $cgi->param('batch_id') || 0;
 my $startfrom = $cgi->param('startfrom')||1;
 my $resultsperpage = $cgi->param('resultsperpage')||C4::Context->preference("PatronsPerPage")||20;
 my $category = $cgi->param('category') || undef;
-my $member = $cgi->param('member') || undef;
+my $member = $cgi->param('member') || '';
 my $orderby = $cgi->param('orderby') || undef;
+
+my @categories=C4::Category->all;
+my %categories_display;
+
+foreach my $category (@categories) {
+    my $hash={
+        category_description=>$$category{description},
+        category_type=>$$category{category_type}
+    };
+    $categories_display{$$category{categorycode}} = $hash;
+}
 
 my ($template, $loggedinuser, $cookie) = get_template_and_user({
                 template_name => "patroncards/members-search.tmpl",
@@ -49,7 +60,7 @@ $member =~ s/,//g;   #remove any commas from search string
 $member =~ s/\*/%/g;
 
 if ($member || $category) {
-    my $results = $category ? Search({''=>$member, category_type=>$category}, $orderby)
+    my $results = $category ? Search({''=>$member, categorycode=>$category}, $orderby)
                             : Search($member, $orderby);
     my $count = $results ? @$results : 0;
 
@@ -60,13 +71,12 @@ if ($member || $category) {
         my ($od,$issue,$fines) = GetMemberIssuesAndFines($results->[$i]{'borrowernumber'});
         my %row = (
             count               => $i + 1,
+                %{$categories_display{$results->[$i]{categorycode}}},
             borrowernumber      => $results->[$i]{'borrowernumber'},
             cardnumber          => $results->[$i]{'cardnumber'},
             surname             => $results->[$i]{'surname'},
             firstname           => $results->[$i]{'firstname'},
             categorycode        => $results->[$i]{'categorycode'},
-            category_type       => $results->[$i]{'category_type'},
-            category_description        => $results->[$i]{'description'},
             address             => $results->[$i]{'address'},
             address2            => $results->[$i]{'address2'},
             city                => $results->[$i]{'city'},
