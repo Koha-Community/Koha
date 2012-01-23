@@ -4932,6 +4932,18 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
+
+$DBversion = "3.07.00.029";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    my $installer = C4::Installer->new();
+    my $full_path = C4::Context->config('intranetdir') . "/installer/data/$installer->{dbms}/atomicupdate/oai_sets.sql";
+    my $error     = $installer->load_sql($full_path);
+    warn $error if $error;
+    print "Upgrade to $DBversion done (Atomic update for OAI-PMH sets management)\n";
+    SetVersion($DBversion);
+}
+
+
 =head1 FUNCTIONS
 
 =head2 DropAllForeignKeys($table)

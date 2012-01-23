@@ -43,6 +43,7 @@
     <li><a href="/cgi-bin/koha/admin/authtypes.pl">Authority types</a></li>
     <li><a href="/cgi-bin/koha/admin/classsources.pl">Classification sources</a></li>
     <li><a href="/cgi-bin/koha/admin/matching-rules.pl">Record matching rules</a></li>
+    <li><a href="/cgi-bin/koha/admin/oai_sets.pl">OAI Sets configuration</a></li>
 </ul>
 
 <h5>Acquisition parameters</h5>

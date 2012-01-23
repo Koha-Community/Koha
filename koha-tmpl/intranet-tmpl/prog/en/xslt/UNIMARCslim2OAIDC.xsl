@@ -163,9 +163,10 @@
       </dc:identifier>
     </xsl:for-each>
     <xsl:for-each select="marc:datafield[@tag=090]">
-       <dc:identifier>
-      <xsl:text>http://opac.mylibrary.org/bib/</xsl:text>
-      <xsl:value-of select="marc:subfield[@code='a']"/>
+      <dc:identifier>
+        <xsl:value-of select="$OPACBaseURL" />
+        <xsl:text>/bib/</xsl:text>
+        <xsl:value-of select="marc:subfield[@code='a']"/>
       </dc:identifier>
     </xsl:for-each>
     <xsl:for-each select="marc:datafield[@tag=995]">
@@ -175,10 +176,10 @@
         <xsl:when test="marc:subfield[@code='c']='MAIN'">Main Branch</xsl:when>
         <xsl:when test="marc:subfield[@code='c']='BIB2'">Library 2</xsl:when>
       </xsl:choose>
-      <xsl:foreach select="marc:subfield[@code='k']">
+      <xsl:for-each select="marc:subfield[@code='k']">
         <xsl:text>:</xsl:text>
         <xsl:value-of select="."/>
-      </xsl:foreach>
+      </xsl:for-each>
       </dc:identifier>
     </xsl:for-each>
   </xsl:template>

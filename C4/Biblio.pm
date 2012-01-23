@@ -35,6 +35,7 @@ use C4::Log;    # logaction
 use C4::ClassSource;
 use C4::Charset;
 use C4::Linker;
+use C4::OAI::Sets;
 
 use vars qw($VERSION @ISA @EXPORT);
 
@@ -268,6 +269,11 @@ sub AddBiblio {
     # now add the record
     ModBiblioMarc( $record, $biblionumber, $frameworkcode ) unless $defer_marc_save;
 
+    # update OAI-PMH sets
+    if(C4::Context->preference("OAI-PMH:AutoUpdateSets")) {
+        C4::OAI::Sets::UpdateOAISetsBiblio($biblionumber, $record);
+    }
+
     logaction( "CATALOGUING", "ADD", $biblionumber, "biblio" ) if C4::Context->preference("CataloguingLog");
     return ( $biblionumber, $biblioitemnumber );
 }
@@ -339,6 +345,12 @@ sub ModBiblio {
     # modify the other koha tables
     _koha_modify_biblio( $dbh, $oldbiblio, $frameworkcode );
     _koha_modify_biblioitem_nonmarc( $dbh, $oldbiblio );
+
+    # update OAI-PMH sets
+    if(C4::Context->preference("OAI-PMH:AutoUpdateSets")) {
+        C4::OAI::Sets::UpdateOAISetsBiblio($biblionumber, $record);
+    }
+
     return 1;
 }
 
