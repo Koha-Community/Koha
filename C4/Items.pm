@@ -1537,41 +1537,45 @@ sub GetHiddenItemnumbers {
     my @resultitems;
 
     my $yaml = C4::Context->preference('OpacHiddenItems');
+    $yaml = "$yaml\n"; # YAML is anal on ending \n. Surplus does not hurt
     my $hidingrules;
     eval {
-    	$hidingrules = YAML::Load($yaml);
+        $hidingrules = YAML::Load($yaml);
     };
     if ($@) {
-    	warn "Unable to parse OpacHiddenItems syspref : $@";
-    	return ();
-    } else {
+        warn "Unable to parse OpacHiddenItems syspref : $@";
+        return ();
+    }
     my $dbh = C4::Context->dbh;
 
-	# For each item
-	foreach my $item (@items) {
+    # For each item
+    foreach my $item (@items) {
 
-	    # We check each rule
-	    foreach my $field (keys %$hidingrules) {
-		my $query = "SELECT $field from items where itemnumber = ?";
-		my $sth = $dbh->prepare($query);	
-		$sth->execute($item->{'itemnumber'});
-		my ($result) = $sth->fetchrow;
+        # We check each rule
+        foreach my $field (keys %$hidingrules) {
+            my $val;
+            if (exists $item->{$field}) {
+                $val = $item->{$field};
+            }
+            else {
+                my $query = "SELECT $field from items where itemnumber = ?";
+                $val = $dbh->selectrow_array($query, undef, $item->{'itemnumber'});
+            }
+            $val = '' unless defined $val;
 
-		# If the results matches the values in the yaml file
-		if (any { $result eq $_ } @{$hidingrules->{$field}}) {
+            # If the results matches the values in the yaml file
+            if (any { $val eq $_ } @{$hidingrules->{$field}}) {
 
-		    # We add the itemnumber to the list
-		    push @resultitems, $item->{'itemnumber'};	    
+                # We add the itemnumber to the list
+                push @resultitems, $item->{'itemnumber'};
 
-		    # If at least one rule matched for an item, no need to test the others
-		    last;
-		}
-	    }
-	}
-	return @resultitems;
+                # If at least one rule matched for an item, no need to test the others
+                last;
+            }
+        }
     }
-
- }
+    return @resultitems;
+}
 
 =head3 get_item_authorised_values
 

@@ -379,7 +379,6 @@ $(document).ready(function(){
                 <td class="select selectcol">[% IF ( opacbookbag ) %]<input type="checkbox" id="bib[% SEARCH_RESULT.biblionumber %]" name="biblionumber" value="[% SEARCH_RESULT.biblionumber %]" /> <label for="bib[% SEARCH_RESULT.biblionumber %]"></label>[% ELSE %]
 [% IF ( virtualshelves ) %]<input type="checkbox" id="bib[% SEARCH_RESULT.biblionumber %]" name="biblionumber" value="[% SEARCH_RESULT.biblionumber %]" /> <label for="bib[% SEARCH_RESULT.biblionumber %]"></label>[% ELSE %]
 [% IF ( RequestOnOpac ) %][% UNLESS ( SEARCH_RESULT.norequests ) %][% IF ( opacuserlogin ) %]<input type="checkbox" id="bib[% SEARCH_RESULT.biblionumber %]" name="biblionumber" value="[% SEARCH_RESULT.biblionumber %]" /> <label for="bib[% SEARCH_RESULT.biblionumber %]"></label>[% END %][% END %][% END %][% END %][% END %]</td>
-                <td class="select selectcol">[% SEARCH_RESULT.result_number %].</td>
 
 				[% UNLESS ( item_level_itypes ) %]
                 [% UNLESS ( noItemTypeImages ) %]

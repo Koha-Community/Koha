@@ -542,7 +542,7 @@ for (my $i=0;$i<@servers;$i++) {
         $hits = $results_hashref->{$server}->{"hits"};
         my $page = $cgi->param('page') || 0;
         my @newresults = searchResults('intranet', $query_desc, $hits, $results_per_page, $offset, $scan,
-                                       @{$results_hashref->{$server}->{"RECORDS"}});
+                                       $results_hashref->{$server}->{"RECORDS"});
         $total = $total + $results_hashref->{$server}->{"hits"};
         ## If there's just one result, redirect to the detail page
         if ($total == 1) {         
