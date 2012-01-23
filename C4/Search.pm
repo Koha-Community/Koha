@@ -31,6 +31,7 @@ use C4::Branch;
 use C4::Reserves;    # CheckReserves
 use C4::Debug;
 use C4::Items;
+use C4::Charset;
 use YAML;
 use URI::Escape;
 
@@ -1413,11 +1414,16 @@ Format results in a form suitable for passing to the template
 # IMO this subroutine is pretty messy still -- it's responsible for
 # building the HTML output for the template
 sub searchResults {
-    my ( $search_context, $searchdesc, $hits, $results_per_page, $offset, $scan, @marcresults, $hidelostitems ) = @_;
+    my ( $search_context, $searchdesc, $hits, $results_per_page, $offset, $scan, $marcresults ) = @_;
     my $dbh = C4::Context->dbh;
     my @newresults;
 
-    $search_context = 'opac' unless $search_context eq 'opac' or $search_context eq 'intranet';
+    $search_context = 'opac' if !$search_context || $search_context ne 'intranet';
+    my ($is_opac, $hidelostitems);
+    if ($search_context eq 'opac') {
+        $hidelostitems = C4::Context->preference('hidelostitems');
+        $is_opac       = 1;
+    }
 
     #Build branchnames hash
     #find branchname
@@ -1480,12 +1486,11 @@ sub searchResults {
 	my $marcflavour = C4::Context->preference("marcflavour");
     # We get the biblionumber position in MARC
     my ($bibliotag,$bibliosubf)=GetMarcFromKohaField('biblio.biblionumber','');
-    my $fw;
 
     # loop through all of the records we've retrieved
     for ( my $i = $offset ; $i <= $times - 1 ; $i++ ) {
-        my $marcrecord = MARC::File::USMARC::decode( $marcresults[$i] );
-        $fw = $scan
+        my $marcrecord = MARC::File::USMARC::decode( $marcresults->[$i] );
+        my $fw = $scan
              ? undef
              : $bibliotag < 10
                ? GetFrameworkCode($marcrecord->field($bibliotag)->data)
@@ -1603,18 +1608,18 @@ sub searchResults {
         my $other_count           = 0;
         my $wthdrawn_count        = 0;
         my $itemlost_count        = 0;
+        my $hideatopac_count      = 0;
         my $itembinding_count     = 0;
         my $itemdamaged_count     = 0;
         my $item_in_transit_count = 0;
         my $can_place_holds       = 0;
-	my $item_onhold_count     = 0;
+        my $item_onhold_count     = 0;
         my $items_count           = scalar(@fields);
-        my $maxitems =
-          ( C4::Context->preference('maxItemsinSearchResults') )
-          ? C4::Context->preference('maxItemsinSearchResults') - 1
-          : 1;
+        my $maxitems_pref = C4::Context->preference('maxItemsinSearchResults');
+        my $maxitems = $maxitems_pref ? $maxitems_pref - 1 : 1;
 
         # loop through every item
+	      my @hiddenitems;
         foreach my $field (@fields) {
             my $item;
 
@@ -1624,9 +1629,11 @@ sub searchResults {
             }
 
 	        # Hidden items
-	        my @items = ($item);
-	        my (@hiddenitems) = GetHiddenItemnumbers(@items);
-    	    $item->{'hideatopac'} = 1 if (@hiddenitems); 
+            if ($is_opac) {
+	            my @hi = GetHiddenItemnumbers($item);
+	        $item->{'hideatopac'} = @hi;
+              push @hiddenitems, @hi;
+            }
 
             my $hbranch     = C4::Context->preference('HomeOrHoldingBranch') eq 'homebranch' ? 'homebranch'    : 'holdingbranch';
             my $otherbranch = C4::Context->preference('HomeOrHoldingBranch') eq 'homebranch' ? 'holdingbranch' : 'homebranch';
@@ -1710,6 +1717,7 @@ sub searchResults {
                     $wthdrawn_count++        if $item->{wthdrawn};
                     $itemlost_count++        if $item->{itemlost};
                     $itemdamaged_count++     if $item->{damaged};
+                    $hideatopac_count++      if $item->{hideatopac};
                     $item_in_transit_count++ if $transfertwhen ne '';
 		    $item_onhold_count++     if $reservestatus eq 'Waiting';
                     $item->{status} = $item->{wthdrawn} . "-" . $item->{itemlost} . "-" . $item->{damaged} . "-" . $item->{notforloan};
@@ -1748,11 +1756,11 @@ sub searchResults {
                 }
             }
         }    # notforloan, item level and biblioitem level
+
+        next if $is_opac       && $hideatopac_count >= $items_count;
+        next if $hidelostitems && $itemlost_count   >= $items_count;
+
         my ( $availableitemscount, $onloanitemscount, $otheritemscount );
-        $maxitems =
-          ( C4::Context->preference('maxItemsinSearchResults') )
-          ? C4::Context->preference('maxItemsinSearchResults') - 1
-          : 1;
         for my $key ( sort keys %$onloan_items ) {
             (++$onloanitemscount > $maxitems) and last;
             push @onloan_items_loop, $onloan_items->{$key};
@@ -1766,20 +1774,7 @@ sub searchResults {
             push @available_items_loop, $available_items->{$key}
         }
 
-        # XSLT processing of some stuff
-	use C4::Charset;
-	SetUTF8Flag($marcrecord);
-	$debug && warn $marcrecord->as_formatted;
-        if (!$scan && $search_context eq 'opac' && C4::Context->preference("OPACXSLTResultsDisplay")) {
-            # FIXME note that XSLTResultsDisplay (use of XSLT to format staff interface bib search results)
-            # is not implemented yet
-            $oldbiblio->{XSLTResultsRecord} = XSLTParse4Display($oldbiblio->{biblionumber}, $marcrecord, 'Results', 
-                                                                $search_context, 1);
-                # the last parameter tells Koha to clean up the problematic ampersand entities that Zebra outputs
-
-        }
-
-        # if biblio level itypes are used and itemtype is notforloan, it can't be reserved either
+         # if biblio level itypes are used and itemtype is notforloan, it can't be reserved either
         if (!C4::Context->preference("item-level_itypes")) {
             if ($itemtypes{ $oldbiblio->{itemtype} }->{notforloan}) {
                 $can_place_holds = 0;
@@ -1803,8 +1798,8 @@ sub searchResults {
         $oldbiblio->{intransitcount}       = $item_in_transit_count;
         $oldbiblio->{onholdcount}          = $item_onhold_count;
         $oldbiblio->{orderedcount}         = $ordered_count;
-        $oldbiblio->{isbn} =~
-          s/-//g;    # deleting - in isbn to enable amazon content
+        # deleting - in isbn to enable amazon content
+        $oldbiblio->{isbn} =~ s/-//g;
 
         if (C4::Context->preference("AlternateHoldingsField") && $items_count == 0) {
             my $fieldspec = C4::Context->preference("AlternateHoldingsField");
@@ -1834,10 +1829,24 @@ sub searchResults {
             $oldbiblio->{'alternateholdings_count'} = $alternateholdingscount;
         }
 
-        push( @newresults, $oldbiblio )
-            if(not $hidelostitems
-               or (($items_count > $itemlost_count )
-                    && $hidelostitems));
+       # XSLT processing of some stuff
+        if (!$scan && $search_context eq 'opac' && C4::Context->preference("OPACXSLTResultsDisplay")) {
+            SetUTF8Flag($marcrecord);
+            $debug && warn $marcrecord->as_formatted;
+            # FIXME note that XSLTResultsDisplay (use of XSLT to format staff interface bib search results)
+            # is not implemented yet
+            $oldbiblio->{XSLTResultsRecord}
+              = XSLTParse4Display($oldbiblio->{biblionumber},
+                                  $marcrecord,
+                                  'Results',
+                                  $search_context,
+                                  1, # clean up the problematic ampersand entities that Zebra outputs
+                                  \@hiddenitems
+                                );
+
+        }
+
+        push( @newresults, $oldbiblio );
     }
 
     return @newresults;

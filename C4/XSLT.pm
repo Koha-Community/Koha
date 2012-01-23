@@ -121,12 +121,12 @@ sub getAuthorisedValues4MARCSubfields {
 my $stylesheet;
 
 sub XSLTParse4Display {
-    my ( $biblionumber, $orig_record, $xsl_suffix, $interface, $fixamps ) = @_;
+    my ( $biblionumber, $orig_record, $xsl_suffix, $interface, $fixamps, $hidden_items ) = @_;
     $interface = 'opac' unless $interface;
     # grab the XML, run it through our stylesheet, push it out to the browser
     my $record = transformMARCXML4XSLT($biblionumber, $orig_record);
     #return $record->as_formatted();
-    my $itemsxml  = buildKohaItemsNamespace($biblionumber);
+    my $itemsxml  = buildKohaItemsNamespace($biblionumber, $hidden_items);
     my $xmlrecord = $record->as_xml(C4::Context->preference('marcflavour'));
     my $sysxml = "<sysprefs>\n";
     foreach my $syspref ( qw/ hidelostitems OPACURLOpenInNewWindow
@@ -180,8 +180,13 @@ sub XSLTParse4Display {
 }
 
 sub buildKohaItemsNamespace {
-    my ($biblionumber) = @_;
+    my ($biblionumber, $hidden_items) = @_;
+
     my @items = C4::Items::GetItemsInfo($biblionumber);
+    if ($hidden_items && @$hidden_items) {
+        my %hi = map {$_ => 1} @$hidden_items;
+        @items = grep { !$hi{$_->{itemnumber}} } @items;
+    }
     my $branches = GetBranches();
     my $itemtypes = GetItemTypes();
     my $xml = '';
