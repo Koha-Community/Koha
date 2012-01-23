@@ -284,9 +284,8 @@
                                     [% IF ( books_loo.publicationyear ) %], [% books_loo.publicationyear %][% END %]
                                     [% IF ( books_loo.suggestionid ) %]
                                         <br/>
-                                        Suggested by [% books_loo.surnamesuggestedby %]
-                                        [% IF ( books_loo.firstnamesuggestedby ) %], [% books_loo.firstnamesuggestedby %] [% END %]
-                                        (from <a href="/cgi-bin/koha/suggestion/suggestion.pl?suggestionid=[% books_loo.suggestionid %]">suggestion #[% books_loo.suggestionid %]</a>)
+                                        Suggested by: [% books_loo.surnamesuggestedby %][% IF ( books_loo.firstnamesuggestedby ) %], [% books_loo.firstnamesuggestedby %] [% END %]
+                                        (<a href="/cgi-bin/koha/suggestion/suggestion.pl?suggestionid=[% books_loo.suggestionid %]">suggestion #[% books_loo.suggestionid %]</a>)
                                     [% END %]
                             </p>
                             </td>
