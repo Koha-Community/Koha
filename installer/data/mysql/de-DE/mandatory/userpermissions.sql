@@ -36,6 +36,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (13, 'manage_csv_profiles', 'CSV-Profile für Export verwalten'),
    (13, 'moderate_tags', 'Von Benutzern vergebene Tags moderieren'),
    (13, 'rotating_collections', 'Wandernde Sammlungen verwalten'),
+   (13, 'upload_local_cover_images', 'Upload local cover images'),
    (15, 'check_expiration', 'Ablauf eines Abonnements prüfen'),
    (15, 'claim_serials', 'Fehlende Hefte reklamieren'),
    (15, 'create_subscription', 'Neues Abonnement anlegen'),

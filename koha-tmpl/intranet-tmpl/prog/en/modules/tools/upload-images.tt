@@ -93,11 +93,11 @@ function CheckForm(f) {
     <legend>File type</legend>
     <ol>
       <li class="radio">
-        <input type="radio" id="zipfile" name="filetype" value="zip" [% IF (filetype != 'image' ) %]checked="checked"[% END %] />
+        [% IF (filetype != 'image' ) %]<input type="radio" id="zipfile" name="filetype" value="zip" checked="checked" />[% ELSE %]<input type="radio" id="zipfile" name="filetype" value="zip" />[% END %]
         <label for="zipfile">ZIP file</label>
       </li>
       <li class="radio">
-        <input type="radio" id="image" name="filetype" value="image" [% IF (filetype == 'image' ) %]checked="checked"[% END %] />
+        [% IF (filetype == 'image' ) %]<input type="radio" id="image" name="filetype" value="image" checked="checked" />[% ELSE %]<input type="radio" id="image" name="filetype" value="image" />[% END %]
         <label for="imagefile">Image file</label>
       </li>
       <li class="radio">
@@ -109,7 +109,7 @@ function CheckForm(f) {
     <legend>Options</legend>
     <ol>
       <li class="checkbox">
-        <input type="checkbox" id="replace" name="replace" [% IF AllowMultipleCovers == 0 %]checked="checked" disabled="disabled"[% END %] value="1" />
+        [% IF AllowMultipleCovers == 0 %]<input type="checkbox" id="replace" name="replace" checked="checked" disabled="disabled" value="1" />[% ELSE %]<input type="checkbox" id="replace" name="replace" value="1" />[% END %]
         <label for="replace">Replace existing covers</label>
       </li>
     </ol>

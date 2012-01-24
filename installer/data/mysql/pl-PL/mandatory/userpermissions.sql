@@ -37,6 +37,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (13, 'moderate_tags', 'Moderate patron tags'),
    (16, 'execute_reports', 'Execute SQL reports'),
    (13, 'rotating_collections', 'Manage rotating collections'),
+   (13, 'upload_local_cover_images', 'Upload local cover images'),
    (15, 'check_expiration', 'Check the expiration of a serial'),
    (15, 'claim_serials', 'Claim missing serials'),
    (15, 'create_subscription', 'Create a new subscription'),
