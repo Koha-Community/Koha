@@ -428,7 +428,11 @@ function vShelfAdd() {
 
 function showCart(){
 		var position = $("#cartmenulink").offset();
+        var scrolld = $(window).scrollTop();
 		var top = position.top + $("#cartmenulink").outerHeight();
+        if( scrolld > top ){
+            top = scrolld + 15;
+        }
 		var menuWidth = 200;
 		var buttonWidth = $("#cartmenulink").innerWidth();
 		var buttonOffset = menuWidth - buttonWidth;
