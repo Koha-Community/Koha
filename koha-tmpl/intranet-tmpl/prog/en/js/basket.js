@@ -422,7 +422,11 @@ function vShelfAdd() {
 
 function showCart(){
 		var position = $("#cartmenulink").offset();
+        var scrolld = $(window).scrollTop();
 		var top = position.top + $("#cartmenulink").outerHeight();
+        if( scrolld > top ){
+            top = scrolld + 15;
+        }
 		var left = position.left
 		$("#cartDetails").css("position","absolute").css("top",top);
 		$("#cartDetails").css("position","absolute").css("left",left);
