@@ -1,5 +1,6 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Cataloging &rsaquo; Merging records</title>
+[% INCLUDE 'greybox.inc' %]
 [% INCLUDE 'doc-head-close.inc' %]
 <style type="text/css">
 div.record ul, div.record li { float:none; display:block; }
@@ -171,7 +172,7 @@ function changeFramework(fw) {
 <body>
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cataloging-search.inc' %]
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloging</a>  &rsaquo; [% IF ( biblionumber ) %]Editing <em>[% title |html %]</em> (Record Number [% biblionumber %])[% ELSE %]Add MARC Record[% END %]</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloging</a>  &rsaquo; Merging records</div>
 
 <div id="doc" class="yui-t7">
 
@@ -198,33 +199,26 @@ function changeFramework(fw) {
 <form id="mergeform" action="/cgi-bin/koha/cataloguing/merge.pl" method="post">
     <fieldset class="rows">
 	<legend>Merge reference</legend>
-    <table>
-      <tr>
-        <td style="border-width: 0px; text-align: left">
 	<ol>
-	<li class="radio"><input type="radio" value="[% biblio1 %]" checked="checked" id="mergereference1" name="mergereference" onclick="changeFramework('[% frameworkcode1 %]')" /><label style="float:none" for="mergereference1">[% title1 %] ([% biblio1 %])</label></li>
-	<li class="radio"><input type="radio" value="[% biblio2 %]" id="mergereference2" name="mergereference" onclick="changeFramework('[% frameworkcode2 %]')" /><label style="float:none" for="mergereference2">[% title2 %] ([% biblio2 %])</label></li>
-</ol>
-        </td>
-        <td style="border-width: 0px">
+	<li class="radio"><input type="radio" value="[% biblio1 %]" checked="checked" id="mergereference1" name="mergereference" onclick="changeFramework('[% frameworkcode1 %]')" /><label for="mergereference1">[% title1 %] [% FOREACH subtitl1 IN subtitle1 %] [% subtitl1.subfield %][% END %] (<a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% biblio1 %]" title="MARC" rel="gb_page_center[600,500]">[% biblio1 %]</a>)</label></li>
+	<li class="radio"><input type="radio" value="[% biblio2 %]" id="mergereference2" name="mergereference" onclick="changeFramework('[% frameworkcode2 %]')" /><label for="mergereference2">[% title2 %] [% FOREACH subtitl2 IN subtitle2 %] [% subtitl2.subfield %][% END %] (<a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% biblio2 %]" title="MARC" rel="gb_page_center[600,500]">[% biblio2 %]</a>)</label></li>
+
     [% IF frameworkselect %]
-          <label style="float:none" for="frameworkcode">Framework:</label><br>
-            <select name="frameworkcode" id="Frameworks">
-                            <option value="Default">Default</option>
-                            [% FOREACH frameworkcodeloo IN frameworkselect %]
-                                [% IF ( frameworkcodeloo.selected ) %]
-                                    <option value="[% frameworkcodeloo.value %]" selected="selected">
-                                [% ELSE %]
-                                    <option value="[% frameworkcodeloo.value %]">
-                                [% END %]
-                                 [% frameworkcodeloo.frameworktext %]
-                                 </option>
-                            [% END %]
-            </select>
+          <li><label for="frameworkcode">Using framework:</label>
+                      <select name="frameworkcode" id="frameworkcode">
+                                      <option value="Default">Default</option>
+                                      [% FOREACH frameworkcodeloo IN frameworkselect %]
+                                          [% IF ( frameworkcodeloo.selected ) %]
+                                              <option value="[% frameworkcodeloo.value %]" selected="selected">
+                                          [% ELSE %]
+                                              <option value="[% frameworkcodeloo.value %]">
+                                          [% END %]
+                                           [% frameworkcodeloo.frameworktext %]
+                                           </option>
+                                      [% END %]
+                      </select></li>
     [% END %]
-        </td>
-      </tr>
-    </table>
+</ol>
 
 	<input type="hidden" name="biblionumber" value="[% biblio1 %]" />
 	<input type="hidden" name="biblionumber" value="[% biblio2 %]" />
