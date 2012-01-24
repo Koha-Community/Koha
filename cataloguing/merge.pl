@@ -127,11 +127,18 @@ if ($merge) {
     }
     else {
         my $data1 = GetBiblioData($biblionumber[0]);
+        my $record1 = GetMarcBiblio($biblionumber[0]);
+
         my $data2 = GetBiblioData($biblionumber[1]);
+        my $record2 = GetMarcBiblio($biblionumber[1]);
 
         # Checks if both records use the same framework
         my $frameworkcode1 = &GetFrameworkCode($biblionumber[0]);
         my $frameworkcode2 = &GetFrameworkCode($biblionumber[1]);
+
+
+        my $subtitle1 = GetRecordValue('subtitle', $record1, $frameworkcode1);
+        my $subtitle2 = GetRecordValue('subtitle', $record2, $frameworkcode1);
 
         if ($mergereference) {
 
@@ -170,7 +177,9 @@ if ($merge) {
                 biblio1 => $biblionumber[0],
                 biblio2 => $biblionumber[1],
                 title1 => $data1->{'title'},
-                title2 => $data2->{'title'}
+                subtitle1 => $subtitle1,
+                title2 => $data2->{'title'},
+                subtitle2 => $subtitle2
             );
             if ($frameworkcode1 ne $frameworkcode2) {
                 my $frameworks = getframeworks;
