@@ -212,6 +212,9 @@ function Dopop(link) {
 	<div id="item-transfer" class="dialog message"><h3> This item needs to be transferred to [% homebranchname %]</h3>
 	Transfer Now?<br />
     <form method="post" action="returns.pl" name="mainform" id="mainform">
+    [% IF itemnumber %]
+        <input type="submit" name="dotransfer" value="Yes, Print slip" class="print" onclick="Dopop('transfer-slip.pl?transferitem=[% itemnumber %]&amp;&amp;branchcode=[% homebranch %]&amp;op=slip'); return true;" />
+    [% END %]
 	<input type="submit" name="dotransfer" value="Yes" class="submit" />
 	<input type="submit" name="notransfer" value="No" class="submit" />
 	<input type="hidden" name="tobranch" value="[% homebranch %]" />
