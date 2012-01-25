@@ -177,13 +177,13 @@
 </div>
 </div>
 <div id="breadcrumbs" class="yui-g">
-[% IF ( searchdesc ) %]<p>[% IF ( total ) %]<strong>&ldquo;[% query_desc |html %] [% limit_desc |html %]&rdquo; </strong>returned [% total |html %] results. [% IF ( related ) %] (related searches: [% FOREACH relate IN related %][% relate.related_search %][% END %]). [% END %]
+[% IF ( searchdesc ) %]<p>[% IF ( total ) %]<strong>Your search returned [% total |html %] results.</strong> [% IF ( related ) %] (related searches: [% FOREACH relate IN related %][% relate.related_search %][% END %]). [% END %]
 <a href="[% OPACBaseURL %]/cgi-bin/koha/opac-search.pl?[% query_cgi |html %][% limit_cgi |html %]&amp;count=[% countrss |html %]&amp;sort_by=acqdate_dsc&amp;format=rss2"><img src="/opac-tmpl/prog/images/feed-icon-16x16.png" alt="Subscribe to this search" title="Subscribe to this search" border="0" /></a>
 [% ELSE %]
 <strong>No Results Found!</strong>
 <p>
     [% IF ( searchdesc ) %]
-    No results match your search for <span style="font-weight: bold;">&ldquo;[% query_desc |html %] [% limit_desc |html %]&rdquo;</span> in [% LibraryName %] Catalog. <a href="[% OPACBaseURL %]/cgi-bin/koha/opac-search.pl?[% query_cgi |html %][% limit_cgi |html %]&amp;format=rss2"><img src="/opac-tmpl/prog/images/feed-icon-16x16.png" alt="Subscribe to this search" title="Subscribe to this search" border="0" /></a>
+    No results found for that in [% LibraryName %] Catalog. <a href="[% OPACBaseURL %]/cgi-bin/koha/opac-search.pl?[% query_cgi |html %][% limit_cgi |html %]&amp;format=rss2"><img src="/opac-tmpl/prog/images/feed-icon-16x16.png" alt="Subscribe to this search" title="Subscribe to this search" border="0" /></a>
     [% ELSE %]
     You did not specify any search criteria.
     [% END %]
