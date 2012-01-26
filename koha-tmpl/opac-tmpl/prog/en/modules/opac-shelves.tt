@@ -257,15 +257,15 @@ $(function() {
                                 [% ELSE %]<a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% itemsloo.biblionumber |url %]" title="View details for this title">
                                 [% END %]
                                 [% END %]
-                [% IF ( itemsloo.title ) %][% itemsloo.title |html %][% ELSE %]No title[% END %] [% FOREACH subtitl IN itemsloo.subtitle %][% subtitl.subfield %][% END %]</a>
+                [% IF ( itemsloo.title ) %][% itemsloo.title |html %][% ELSE %]No title[% END %] [% FOREACH subtitl IN itemsloo.subtitle %][% subtitl.subfield|html %][% END %]</a>
                                 [% IF ( itemsloo.author ) %]by <a href="/cgi-bin/koha/opac-search.pl?q=au:[% itemsloo.author |url %]" title="Search for works by this author" class="author">[% itemsloo.author %]</a>
                                 [% ELSE %]&nbsp;
                                 [% END %]
         <span class="results_summary"><span class="label">Publication:</span>
-                        [% IF ( itemsloo.place ) %][% itemsloo.place %] [% END %][% IF ( itemsloo.publishercode ) %][% itemsloo.publishercode %][% END %][% IF ( itemsloo.publicationyear ) %] [% itemsloo.publicationyear %]
+                        [% IF ( itemsloo.place ) %][% itemsloo.place %] [% END %][% IF ( itemsloo.publishercode ) %][% itemsloo.publishercode|html %][% END %][% IF ( itemsloo.publicationyear ) %] [% itemsloo.publicationyear %]
                     [% ELSE %][% IF ( itemsloo.copyrightdate ) %] [% itemsloo.copyrightdate %][% END %][% END %]
                         [% IF ( itemsloo.pages ) %]. [% itemsloo.pages %][% END %]
-                        [% IF ( itemsloo.notes ) %], [% itemsloo.notes %][% END %]
+                        [% IF ( itemsloo.notes ) %], [% itemsloo.notes|html %][% END %]
                         [% IF ( itemsloo.size ) %] [% itemsloo.size %][% END %]
                 </span>
                 <span class="results_summary"><span class="label">Holdings:</span>[% IF ( itemsloo.ITEM_RESULTS ) %][% FOREACH ITEM_RESULT IN itemsloo.ITEM_RESULTS %]
@@ -288,20 +288,19 @@ $(function() {
           [% END %]
                 [% IF ( TagsInputOnList ) %]
           [% IF ( loggedinusername ) %]
-                    <form name="tagform[% itemsloo.biblionumber %]" method="post" action="/cgi-bin/koha/opac-tags.pl">
                         <label for="newtag[% itemsloo.biblionumber %]">New tag:</label>
                         <input name="newtag[% itemsloo.biblionumber %]" id="newtag[% itemsloo.biblionumber %]" maxlength="100" />
                         <input name="tagbutton" class="tagbutton" title="[% itemsloo.biblionumber %]" type="submit" value="Add" />
-                    </form>
                     <span id="newtag[% itemsloo.biblionumber %]_status" class="tagstatus" style="display:none;">
                         Tag status here.
                     </span>
                     [% ELSIF ( loop.first ) %]<span class="tagstatus" id="login4tags">Log in to add tags.</span>
                   [% END %]
-                [% END %]
+                [% ELSE %]
             [% IF ( loggedinusername ) %]
-              <span id="newtag[% itemsloo.biblionumber %]_status" class="tagstatus" style="display:none;">Tag status here.</span>
+              <span id="newtag[% itemsloo.biblionumber %]_status" class="tagstatus results_summary" style="display:none;">Tag status here.</span>
             [% END %]
+                [% END %]
         [% END %]
 
 <span class="results_summary actions"><span class="label">Actions:</span>
@@ -325,12 +324,7 @@ $(function() {
             [% IF ( opacbookbag ) %]<a class="addtocart" href="#" onclick="addRecord('[% itemsloo.biblionumber %]'); return false;">Add to Cart</a>[% ELSE %]nocart[% END %]
         </span>
 
-
-
-                    <!-- COinS / Openurl -->
                           <!-- COinS / Openurl --><span class="Z3988" title="[% itemsloo.coins %]"></span>
-                          [% IF ( opacuserlogin ) %][% IF ( loggedinusername ) %][% IF ( TagsEnabled ) %]<br/>
-                          <div id="newtag[% itemsloo.biblionumber %]_status" class="tagstatus results_summary" style="display:none">Tag status here.</div>[% END %][% END %][% END %]
                         </td>
           <td>
           <a class="p1" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% itemsloo.biblionumber %]">

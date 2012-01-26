@@ -18,7 +18,7 @@ KOHA.LocalCover = {
      * olCallBack().
      */
     GetCoverFromBibnumber: function(uselink) {
-        $("div [id^=local-thumbnail]").each(function(i) {
+        $("div[id^=local-thumbnail],span[id^=local-thumbnail]").each(function(i) {
             var mydiv = this;
             var message = document.createElement("span");
             $(message).attr("class","no-image");
