@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-12-20 08:17+0200\n"
-"PO-Revision-Date: 2011-12-21 11:58+0200\n"
+"POT-Creation-Date: 2012-01-18 23:43+0200\n"
+"PO-Revision-Date: 2012-01-18 22:35+0200\n"
 "Last-Translator: Katrin <katrin.fischer@bsz-bw.de>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: de\n"
@@ -12,6 +12,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.1.6\n"
+"X-Poedit-Language: None\n"
+"X-Poedit-Country: None\n"
 
 # Acquisitions
 msgid "acquisitions.pref"
@@ -334,8 +336,12 @@ msgid "authorities.pref#dontmerge# Don't"
 msgstr "Kein automatisches Update"
 
 # Authorities
-msgid "authorities.pref#dontmerge# automatically update attached biblios when changing an authority record. If this is off, please ask your administrator to enable the merge_authorities.pl cronjob."
-msgstr "referenzierter Titelsatze, wenn ein Normdatensatz geändert wird. Wenn diese Option deaktiviert ist, bitten Sie Ihren Systemadministrator den Cronjob merge_authorities.pl zu aktivieren."
+# Authorities
+msgid "authorities.pref#dontmerge# automatically update attached biblios when changing an authority record. If this is off, please ask your administrator to enable the merge_authority.pl cronjob."
+msgstr ""
+"aktualisiere verknüpfte Titelsätze automatisch, wenn der Normdatensatz "
+"geändert wird. Wenn dieser Parameter deaktiviert ist, kann als Alternative "
+"der merge_authority.pl Cronjob verwendet werden."
 
 # Cataloging
 msgid "cataloguing.pref"
@@ -2806,7 +2812,6 @@ msgid "opac.pref#opacheader# Include the following HTML in the header of all pag
 msgstr "Zeige folgendes HTML in der Kopfzeile aller OPAC-Seiten:"
 
 # OPAC > Appearance
-# OPAC > Appearance
 msgid "opac.pref#opaclayoutstylesheet# Use the CSS stylesheet <!-- TMPL_VAR NAME=\"opacthemelang\" -->/css/"
 msgstr "Verwende das CSS-Stylesheet [% ( opacthemelang ) %]/css/"
 
@@ -2931,28 +2936,39 @@ msgid "patrons.pref#AutoEmailOpacUser# Send"
 msgstr "Verschicke"
 
 # Patrons
-msgid "patrons.pref#AutoEmailOpacUser# alternate"
+# Patrons
+msgid "patrons.pref#AutoEmailOpacUser# an email to newly created patrons with their account details."
+msgstr "eine Email mit den Kontodaten an neu angelegte Benutzer."
+
+# Patrons
+# Patrons
+msgid "patrons.pref#AutoEmailPrimaryAddress# Use"
+msgstr "Verwende die"
+
+# Patrons
+# Patrons
+msgid "patrons.pref#AutoEmailPrimaryAddress# alternate"
 msgstr "alternative"
 
 # Patrons
-msgid "patrons.pref#AutoEmailOpacUser# an email to newly created patrons with their account details at their"
-msgstr "Email mit Kontodaten an neu angemeldete Benutzer an ihre"
-
 # Patrons
-msgid "patrons.pref#AutoEmailOpacUser# email address."
-msgstr "Email-Adresse"
-
-# Patrons
-msgid "patrons.pref#AutoEmailOpacUser# first valid"
+msgid "patrons.pref#AutoEmailPrimaryAddress# first valid"
 msgstr "erste gültige"
 
 # Patrons
-msgid "patrons.pref#AutoEmailOpacUser# home"
-msgstr "normale"
+# Patrons
+msgid "patrons.pref#AutoEmailPrimaryAddress# home"
+msgstr "1."
 
 # Patrons
-msgid "patrons.pref#AutoEmailOpacUser# work"
-msgstr "berufliche"
+# Patrons
+msgid "patrons.pref#AutoEmailPrimaryAddress# patron email address for sending out emails."
+msgstr "Emailadresse eines Benutzers beim Versand von Benachrichtigungen."
+
+# Patrons
+# Patrons
+msgid "patrons.pref#AutoEmailPrimaryAddress# work"
+msgstr "2."
 
 # Patrons
 msgid "patrons.pref#BorrowerMandatoryField# (separate columns with |)"
@@ -3659,7 +3675,6 @@ msgid "staff_client.pref#intranetbookbag# the cart option in the staff client."
 msgstr "Warenkorb in der Dienstoberfläche."
 
 # Staff Client > Appearance
-# Staff Client > Appearance
 msgid "staff_client.pref#intranetcolorstylesheet# Include the stylesheet <code><!-- TMPL_VAR NAME=\"themelang\" -->/css/</code>"
 msgstr "Verwende das Stylesheet <code>[% ( themelang ) %]]/css/</code>"
 
@@ -3676,11 +3691,9 @@ msgid "staff_client.pref#intranetstylesheet# on all pages in the staff interface
 msgstr "auf allen Seiten der Dienstoberfläche, anstelle des Standard-Stylesheets. (Es muss eine komplette URL beginnend mit <code>http://</code> angegeben werden.)"
 
 # Staff Client > Appearance
-# Staff Client > Appearance
 msgid "staff_client.pref#intranetuserjs# Include the following JavaScript on all pages in the staff clien:"
 msgstr "Verwende das folgende JavaScript auf allen Seiten der Dienstoberfläche:"
 
-# Staff Client > Appearance
 # Staff Client > Appearance
 msgid "staff_client.pref#staffClientBaseURL# ."
 msgstr "."
