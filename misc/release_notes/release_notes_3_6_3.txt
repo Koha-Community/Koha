@@ -1,5 +1,5 @@
 RELEASE NOTES FOR KOHA 3.6.3
-18 Jan 2012
+26 Jan 2012
 ========================================================================
 
 Koha is the first free and open source software library automation package 
@@ -24,73 +24,72 @@ Koha 3.6.3 is a bugfix/maintenance release.
 Highlights of 3.6.3
 ======================
 
-6627    blocker     [security] insecure file creation
-2830    critical    Hold not removed when "trapped" item on hold shelf is checked out to a different patron in the holds queue
-3651    critical    Require patron login to send shelves and baskets
-5533    critical    marking item lost diff in two places
-6292    critical    Overdue notices have a bug when multiple overdues exist
-7193    critical    can't remove end date from subscriptions
-7360    critical    Importing a SQL file for frameworks based on Default Framework deletes the default framework
-7370    critical    Longoverdue cronjob claims Undefined subroutine &main::LostItem
-7394    critical    Broken detail page for last link from result page
-7407    critical    HidePatronName not working anymore
-2012    major       Add bilio crashes under no zebra
-6302    major       Failing to send email notices - to_address not set
-7226    major       Can't add tags on list
-7282    major       invalid language selection
+6627	blocker		[security] insecure file creation
+2830	critical	Hold not removed when "trapped" item on hold shelf is checked out to a different patron in the holds queue
+3651	critical	Require patron login to send shelves and baskets
+5533	critical	marking item lost diff in two places
+6292	critical	Overdue notices have a bug when multiple overdues exist
+7193	critical	can't remove end date from subscriptions
+7360	critical	Importing a SQL file for frameworks based on Default Framework deletes the default framework
+7370	critical	Longoverdue cronjob claims Undefined subroutine &main::LostItem
+7394	critical	Broken detail page for last link from result page
+7407	critical	HidePatronName not working anymore
+2012	major		Add bilio crashes under no zebra
+6302	major		Failing to send email notices - to_address not set
+7226	major		Can't add tags on list
+7282	major		invalid language selection
 
 
 Bugs fixed in 3.6.3
 ======================
 
-2307    normal      Calendar widget cannot be translated
-3431    normal      Catalog by itemtype report pulling from holdingbranch
-4300    normal      Display 866z summary holdings public note in OPAC
-5226    normal      MARC21 field 545 missing
-5369    normal      se queries with paranthesis fail
-6098    normal      zebra conf NSB NSE indexed as space
-6142    normal      CanBookBeReserved function is redefined in C4/ILSDI/Utility.pm
-6374    normal      Use "size" as names/hash keys leads to an unexpected results when using Template::Toolkit (name of a virtual method there)
-6466    normal      hung socket read causes SIP tests to fail
-6700    normal      Better handling of version numbers in updatedatabase
-6717    normal      Sub total doubled up on borrower pay fines page
-6885    normal      Superlibrarian users can't delete items from another library when IndependantBranches
-7097    normal      HidePatronName not hiding in all places
-7266    normal      overdue.pl : filter on flags "debarred" "suspended" and "gonenoaddress" not working
-7276    normal      member entry Performance improvement
-7277    normal      keyword mapping needs spaces in the OPAC
-7311    normal      Error when records have UNIMARC 461$0 or 773$0 for something other than bibnumber
-7313    normal      Untranslatable strings in 'search to hold' feature
-7328    normal      Expanded options in advanced search
-7332    normal      Translated title (MARC21 field 242) doesn't display
-7338    normal      link to serial detail wrong
-7349    normal      Sorting patron search result by cardnumber doesn't work
-7356    normal      Fix various typos and mis-spellings
-7361    normal      'Default' encoding in staged marc import breaks diacritics
-7363    normal      Downloading a list in CSV format doesn't work
-7381    normal      wrong isbn showing on the staff search results
-929     enhancement See details of a budget
-1623    enhancement Retain history of approved comments
-3184    enhancement Show creator and budget receiving a document
-5327    enhancement Unit tests required for all C4 modules
-5565    enhancement Default OAI UNIMARC to Dublin Core XSL adds superfluous blanks
-5607    enhancement Make fields from issues table available in overdues
-5729    enhancement Add coins information to the intranet
-6015    enhancement Enhancing the performance test suite
-6193    enhancement Use memcached cache koha-conf.xml configuration variables
-6787    enhancement NORMARC needs a Fast Add framework
-6990    enhancement TransformKohaToMarc enhancement
-7079    enhancement Default values for German system preferences (web installer)
-7143    enhancement Bug for tracking changes to the about page
-7220    enhancement Add IDs to check-in message dialogs to facilitate CSS customization
-7240    enhancement Cleaning up import tables and action_logs
-7247    enhancement rebuild_zebra.pl -v should show all Zebra log output
-7278    enhancement In the items table, make items.materials of type text, and show its contents at circulation
-7324    enhancement Show alternate email as mailto link on patron summary
-7326    enhancement longoverdue.pl was hardcoded to 1 year, is now a parameter
-7364    enhancement Fast-Add framework doesn't always get the branch for item creation
-7373    enhancement new bridge icons
-7439    enhancement Mailmap for 3.6.x not complete
+2307	normal		Calendar widget cannot be translated
+3431	normal		Catalog by itemtype report pulling from holdingbranch
+4300	normal		Display 866z summary holdings public note in OPAC
+5226	normal		MARC21 field 545 missing
+5369	normal		se queries with paranthesis fail
+6098	normal		zebra conf NSB NSE indexed as space
+6142	normal		CanBookBeReserved function is redefined in C4/ILSDI/Utility.pm
+6374	normal		Use "size" as names/hash keys leads to an unexpected results when using Template::Toolkit (name of a virtual method there)
+6466	normal		hung socket read causes SIP tests to fail
+6700	normal		Better handling of version numbers in updatedatabase
+6717	normal		Sub total doubled up on borrower pay fines page
+6885	normal		Superlibrarian users can't delete items from another library when IndependantBranches
+7097	normal		HidePatronName not hiding in all places
+7266	normal		overdue.pl : filter on flags "debarred" "suspended" and "gonenoaddress" not working
+7276	normal		member entry Performance improvement
+7277	normal		keyword mapping needs spaces in the OPAC
+7311	normal		Error when records have UNIMARC 461$0 or 773$0 for something other than bibnumber
+7313	normal		Untranslatable strings in 'search to hold' feature
+7328	normal		Expanded options in advanced search
+7332	normal		Translated title (MARC21 field 242) doesn't display
+7338	normal		link to serial detail wrong
+7349	normal		Sorting patron search result by cardnumber doesn't work
+7356	normal		Fix various typos and mis-spellings
+7361	normal		'Default' encoding in staged marc import breaks diacritics
+7363	normal		Downloading a list in CSV format doesn't work
+7381	normal		wrong isbn showing on the staff search results
+1623	enhancement	Retain history of approved comments
+3184	enhancement	Show creator and budget receiving a document
+5327	enhancement	Unit tests required for all C4 modules
+5565	enhancement	Default OAI UNIMARC to Dublin Core XSL adds superfluous blanks
+5607	enhancement	Make fields from issues table available in overdues
+5729	enhancement	Add coins information to the intranet
+6015	enhancement	Enhancing the performance test suite
+6193	enhancement	Use memcached cache koha-conf.xml configuration variables
+6787	enhancement	NORMARC needs a Fast Add framework
+6990	enhancement	TransformKohaToMarc enhancement
+7079	enhancement	Default values for German system preferences (web installer)
+7143	enhancement	Bug for tracking changes to the about page
+7220	enhancement	Add IDs to check-in message dialogs to facilitate CSS customization
+7240	enhancement	Cleaning up import tables and action_logs
+7247	enhancement	rebuild_zebra.pl -v should show all Zebra log output
+7278	enhancement	In the items table, make items.materials of type text, and show its contents at circulation
+7324	enhancement	Show alternate email as mailto link on patron summary
+7326	enhancement	longoverdue.pl was hardcoded to 1 year, is now a parameter
+7364	enhancement	Fast-Add framework doesn't always get the branch for item creation
+7373	enhancement	new bridge icons
+7439	enhancement	Mailmap for git shortlog
 
 
 System requirements
@@ -183,41 +182,41 @@ new features in Koha 3.6:
 We thank the following individuals who contributed patches to
 Koha 3.6.3. 
 
-     1  Tomas Cohen Arazi
-     1  Alex Arnaud
-     2  Marc Balmer
-     2  D Ruth Bavousett
-     6  Jared Camins-Esakov
-     1  Frédérick Capovilla
-     1  Garry Collum
-    15  Chris Cormack
-     1  Christophe Croullebois
-     7  Frédéric Demians
-     3  Connor Dewar
-     2  Nicole Engard
-     2  Magnus Enger
-    14  Katrin Fischer
-     4  Chris Hall
-     1  Srdjan Jankovic
-     1  Admin User Koha
-     2  Henri-Damien Laurent
-    12  Owen Leonard
-     1  Frère Sébastien Marie
-     1  Jesse Maseto
-     1  James Mason
-     2  Julian Maurice
-     3  Sophie Meynieux
-     5  Chris Nighswonger
-     1  Albert Oller
-     1  Dobrica Pavlinusic
-    10  Paul Poulain
-     2  Liz Rea
-     7  Marcel de Rooy
-     1  Fridolyn SOMERS
-     1  Sam Sanders
-     5  Adrien Saurat
-    11  Duncan Tyler
-     5  Ian Walls
+     1	Tomas Cohen Arazi
+     1	Alex Arnaud
+     2	Marc Balmer
+     2	D Ruth Bavousett
+     6	Jared Camins-Esakov
+     1	Frédérick Capovilla
+     1	Garry Collum
+    15	Chris Cormack
+     1	Christophe Croullebois
+     8	Frédéric Demians
+     3	Connor Dewar
+     2	Nicole Engard
+     2	Magnus Enger
+    14	Katrin Fischer
+     4	Chris Hall
+     1	Srdjan Jankovic
+     1	Admin User Koha
+     2	Henri-Damien Laurent
+    12	Owen Leonard
+     1	Frère Sébastien Marie
+     1	Jesse Maseto
+     1	James Mason
+     2	Julian Maurice
+     3	Sophie Meynieux
+     5	Chris Nighswonger
+     1	Albert Oller
+     1	Dobrica Pavlinusic
+    10	Paul Poulain
+     2	Liz Rea
+     7	Marcel de Rooy
+     1	Fridolyn SOMERS
+     1	Sam Sanders
+     5	Adrien Saurat
+    11	Duncan Tyler
+     5	Ian Walls
 
 
 We regret any omissions.  If a contributor has been inadvertantly missed,
@@ -248,4 +247,4 @@ tracker at
 
 Ehara taku toa i te toa takitahi, engari he toa takitini 
 
-##### Autogenerated release notes updated last on 18 Jan 2012 14:25:43 Z #####
+##### Autogenerated release notes updated last on 26 Jan 2012 15:06:56 Z #####
