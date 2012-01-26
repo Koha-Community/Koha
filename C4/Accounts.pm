@@ -191,7 +191,7 @@ sub makepayment {
     #here we update both the accountoffsets and the account lines
     #updated to check, if they are paying off a lost item, we return the item
     # from their card, and put a note on the item record
-    my ( $accountlines_id, $borrowernumber, $accountno, $amount, $user, $branch ) = @_;
+    my ( $accountlines_id, $borrowernumber, $accountno, $amount, $user, $branch, $payment_note ) = @_;
     my $dbh = C4::Context->dbh;
     my $manager_id = 0;
     $manager_id = C4::Context->userenv->{'number'} if C4::Context->userenv; 
@@ -227,15 +227,16 @@ sub makepayment {
         $udp->finish;
 
          # create new line
-        $payment = 0 - $amount;
+        my $payment = 0 - $amount;
+        $payment_note //= "";
         
         my $ins = 
             $dbh->prepare( 
                 "INSERT 
-                    INTO accountlines (borrowernumber, accountno, date, amount, itemnumber, description, accounttype, amountoutstanding, manager_id)
-                    VALUES ( ?, ?, now(), ?, ?, 'Payment,thanks', 'Pay', 0, ?)"
+                    INTO accountlines (borrowernumber, accountno, date, amount, itemnumber, description, accounttype, amountoutstanding, manager_id, note)
+                    VALUES ( ?, ?, now(), ?, ?, 'Payment,thanks', 'Pay', 0, ?, ?)"
             );
-        $ins->execute($borrowernumber, $nextaccntno, $payment, $data->{'itemnumber'}, $manager_id);
+        $ins->execute($borrowernumber, $nextaccntno, $payment, $data->{'itemnumber'}, $manager_id, $payment_note);
         $ins->finish;
     }
 
@@ -872,12 +873,13 @@ sub recordpayment_selectaccts {
 # makepayment needs to be fixed to handle partials till then this separate subroutine
 # fills in
 sub makepartialpayment {
-    my ( $accountlines_id, $borrowernumber, $accountno, $amount, $user, $branch ) = @_;
+    my ( $accountlines_id, $borrowernumber, $accountno, $amount, $user, $branch, $payment_note ) = @_;
     my $manager_id = 0;
     $manager_id = C4::Context->userenv->{'number'} if C4::Context->userenv;
     if (!$amount || $amount < 0) {
         return;
     }
+    $payment_note //= "";
     my $dbh = C4::Context->dbh;
 
     my $nextaccntno = getnextacctno($borrowernumber);
@@ -905,11 +907,11 @@ sub makepartialpayment {
 
     # create new line
     my $insert = 'INSERT INTO accountlines (borrowernumber, accountno, date, amount, '
-    .  'description, accounttype, amountoutstanding, itemnumber, manager_id) '
-    . ' VALUES (?, ?, now(), ?, ?, ?, 0, ?, ?)';
+    .  'description, accounttype, amountoutstanding, itemnumber, manager_id, note) '
+    . ' VALUES (?, ?, now(), ?, ?, ?, 0, ?, ?, ?)';
 
-    $dbh->do(  $insert, undef, $borrowernumber, $nextaccntno, 0 - $amount,
-        "Payment, thanks - $user", 'Pay', $data->{'itemnumber'}, $manager_id);
+    $dbh->do(  $insert, undef, $borrowernumber, $nextaccntno, $amount,
+        "Payment, thanks - $user", 'Pay', $data->{'itemnumber'}, $manager_id, $payment_note);
 
     UpdateStats( $user, 'payment', $amount, '', '', '', $borrowernumber, $accountno );
 
@@ -931,7 +933,7 @@ sub makepartialpayment {
 
 =head2 WriteOffFee
 
-  WriteOff( $borrowernumber, $accountline_id, $itemnum, $accounttype, $amount, $branch );
+  WriteOffFee( $borrowernumber, $accountline_id, $itemnum, $accounttype, $amount, $branch, $payment_note );
 
 Write off a fine for a patron.
 C<$borrowernumber> is the patron's borrower number.
@@ -940,11 +942,13 @@ C<$itemnum> is the itemnumber of of item whose fine is being written off.
 C<$accounttype> is the account type of the fine being written off.
 C<$amount> is a floating-point number, giving the amount that is being written off.
 C<$branch> is the branchcode of the library where the writeoff occurred.
+C<$payment_note> is the note to attach to this payment
 
 =cut
 
 sub WriteOffFee {
-    my ( $borrowernumber, $accountlines_id, $itemnum, $accounttype, $amount, $branch ) = @_;
+    my ( $borrowernumber, $accountlines_id, $itemnum, $accounttype, $amount, $branch, $payment_note ) = @_;
+    $payment_note //= "";
     $branch ||= C4::Context->userenv->{branch};
     my $manager_id = 0;
     $manager_id = C4::Context->userenv->{'number'} if C4::Context->userenv;
@@ -973,12 +977,12 @@ sub WriteOffFee {
 
     $query ="
         INSERT INTO accountlines
-        ( borrowernumber, accountno, itemnumber, date, amount, description, accounttype, manager_id )
-        VALUES ( ?, ?, ?, NOW(), ?, 'Writeoff', 'W', ? )
+        ( borrowernumber, accountno, itemnumber, date, amount, description, accounttype, manager_id, note )
+        VALUES ( ?, ?, ?, NOW(), ?, 'Writeoff', 'W', ?, ? )
     ";
     $sth = $dbh->prepare( $query );
     my $acct = getnextacctno($borrowernumber);
-    $sth->execute( $borrowernumber, $acct, $itemnum, $amount, $manager_id );
+    $sth->execute( $borrowernumber, $acct, $itemnum, $amount, $manager_id, $payment_note );
 
     if ( C4::Context->preference("FinesLog") ) {
         logaction("FINES", 'CREATE',$borrowernumber,Dumper({

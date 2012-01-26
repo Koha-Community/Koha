@@ -51,6 +51,7 @@
     <th>&nbsp;</th>
     <th>Fines &amp; charges</th>
 	<th>Description</th>
+    <th>Payment Note</th>
     <th>Account type</th>
 	<th>Notify id</th>
 	<th>Level</th>
@@ -91,6 +92,7 @@
     <input type="hidden" name="totals[% line.accountno %]" value="[% line.totals %]" />
     </td>
     <td>[% line.description %] ([% line.title |html_entity %])</td>
+    <td><input type="text" name="payment_note_[% line.accountno %]"></input></td>
     <td>[% line.accounttype %]</td>
     <td>[% line.notify_id %]</td>
     <td>[% line.notify_level %]</td>

@@ -29,6 +29,7 @@
 use strict;
 use warnings;
 
+use URI::Escape;
 use C4::Context;
 use C4::Auth;
 use C4::Output;
@@ -87,7 +88,8 @@ if ($writeoff_all) {
     my $itemno       = $input->param('itemnumber');
     my $account_type = $input->param('accounttype');
     my $amount       = $input->param('amountoutstanding');
-    WriteOffFee( $borrowernumber, $accountlines_id, $itemno, $account_type, $amount );
+    my $payment_note = $input->param("payment_note");
+    WriteOffFee( $borrowernumber, $accountlines_id, $itemno, $account_type, $amount, $branch, $payment_note );
 }
 
 for (@names) {
@@ -164,12 +166,12 @@ sub redirect_to_paycollect {
     $redirect .=
       get_for_redirect( 'amountoutstanding', "amountoutstanding$line_no", 1 );
     $redirect .= get_for_redirect( 'accountno',    "accountno$line_no",    0 );
-    $redirect .= get_for_redirect( 'description',  "description$line_no",  0 );
     $redirect .= get_for_redirect( 'title',        "title$line_no",        0 );
     $redirect .= get_for_redirect( 'itemnumber',   "itemnumber$line_no",   0 );
     $redirect .= get_for_redirect( 'notify_id',    "notify_id$line_no",    0 );
     $redirect .= get_for_redirect( 'notify_level', "notify_level$line_no", 0 );
     $redirect .= get_for_redirect( 'accountlines_id', "accountlines_id$line_no", 0 );
+    $redirect .= q{&} . 'payment_note' . q{=} . uri_escape( $input->param("payment_note_$line_no") );
     $redirect .= '&remote_user=';
     $redirect .= $user;
     return print $input->redirect($redirect);
@@ -188,7 +190,8 @@ sub writeoff_all {
             my $amount    = $input->param("amountoutstanding$value");
             my $accountno = $input->param("accountno$value");
             my $accountlines_id = $input->param("accountlines_id$value");
-            WriteOffFee( $borrowernumber, $accountlines_id, $itemno, $accounttype, $amount );
+            my $payment_note = $input->param("payment_note_$value");
+            WriteOffFee( $borrowernumber, $accountlines_id, $itemno, $accounttype, $amount, $branch, $payment_note );
         }
     }
 
