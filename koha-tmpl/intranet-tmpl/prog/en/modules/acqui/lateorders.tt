@@ -76,7 +76,7 @@ $(document).ready(function() {
         [% UNLESS ( loop.odd ) %]<tr class="highlight">
         [% ELSE %]<tr>[% END %]
             <td>
-                ([% lateorder.booksellerid %])
+                ([% lateorder.supplierid %])
                 [% lateorder.orderdate %]
                 ([% lateorder.latesince %] days)
             </td>
@@ -109,7 +109,7 @@ $(document).ready(function() {
             <td>[% lateorder.claimed_date %]</td>
             <td>
                 [% UNLESS lateorder.budget_lock %]
-                    <input type="checkbox" class="checkbox" name="claim_for" value="[% lateorder.ordernumber %]"  supplierid="[% lateorder.booksellerid %]"/>
+                    <input type="checkbox" class="checkbox" name="claim_for" value="[% lateorder.ordernumber %]"  booksellerid="[% lateorder.supplierid %]"/>
                 [% END %]
              </td>
             </td>
