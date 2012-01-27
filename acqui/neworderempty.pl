@@ -80,7 +80,8 @@ use C4::Dates;
 use C4::Bookseller  qw/ GetBookSellerFromId /;
 use C4::Acquisition;
 use C4::Suggestions;	# GetSuggestion
-use C4::Biblio;			# GetBiblioData
+use C4::Biblio;			# GetBiblioData GetMarcPrice
+use C4::Items; #PrepareItemRecord
 use C4::Output;
 use C4::Input;
 use C4::Koha;
@@ -121,6 +122,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
+my $marcflavour = C4::Context->preference('marcflavour');
 my $basket = GetBasket($basketno);
 my $contract = &GetContract($basket->{contractnumber});
 
@@ -154,26 +156,7 @@ if ( $ordernumber eq '' and defined $params->{'breedingid'}){
         $params->{'frameworkcode'} or $params->{'frameworkcode'} = "";
         ( $biblionumber, $bibitemnum ) = AddBiblio( $marcrecord, $params->{'frameworkcode'} );
         # get the price if there is one.
-        # filter by storing only the 1st number
-        # we suppose the currency is correct, as we have no possibilities to get it.
-        if ($marcrecord->subfield("345","d")) {
-            $listprice = $marcrecord->subfield("345","d");
-            if ($listprice =~ /^([\d\.,]*)/) {
-                $listprice = $1;
-                $listprice =~ s/,/\./;
-            } else {
-                $listprice = 0;
-            }
-        }
-        elsif ($marcrecord->subfield("010","d")) {
-            $listprice = $marcrecord->subfield("010","d");
-            if ($listprice =~ /^([\d\.,]*)/) {
-                $listprice = $1;
-                $listprice =~ s/,/\./;
-            } else {
-                $listprice = 0;
-            }
-        }
+        $listprice = GetMarcPrice($marcrecord, $marcflavour);
         SetImportRecordStatus($params->{'breedingid'}, 'imported');
 }
 
@@ -436,7 +419,7 @@ sub MARCfindbreeding {
             }
         }
         # fix the unimarc 100 coded field (with unicode information)
-        if (C4::Context->preference('marcflavour') eq 'UNIMARC' && $record->subfield(100,'a')) {
+        if ($marcflavour eq 'UNIMARC' && $record->subfield(100,'a')) {
             my $f100a=$record->subfield(100,'a');
             my $f100 = $record->field(100);
             my $f100temp = $f100->as_string;
