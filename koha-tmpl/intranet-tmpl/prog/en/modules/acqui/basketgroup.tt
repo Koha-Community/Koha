@@ -107,7 +107,7 @@ function submitForm(form) {
 function yuiToolbar() {
 	var booksellermenu = [
 		{ text: _("Vendor"), url: "/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]" },
-		{ text: _("Edit vendor"), url: "/cgi-bin/koha/acqui/booksellers.pl?booksellerid=[% booksellerid %]"},
+		{ text: _("Edit vendor"), url: "/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]&op=enter"},
 	]
 	var ordersbutton = [
 	         { text: _("Manage orders"), url: "/cgi-bin/koha/acqui/booksellers.pl?booksellerid=[% booksellerid %]" },
