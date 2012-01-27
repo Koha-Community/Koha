@@ -502,7 +502,6 @@ sub get_template_and_user {
 
         $template->param(OpacPublic => '1') if ($user || C4::Context->preference("OpacPublic"));
     }
-	$template->param(listloop=>[{shelfname=>"Freelist", shelfnumber=>110}]);
     return ( $template, $borrowernumber, $cookie, $flags);
 }
 
