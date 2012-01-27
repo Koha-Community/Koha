@@ -255,16 +255,12 @@ function verify_images() {
             [% FOREACH itemloo IN itemloop %]
                 <tr>
                     [% IF ( item_level_itypes ) %]
-                      <td class="itype">
-                        [% IF ( noItemTypeImages ) %]
-                          [% itemloo.description %]
-                        [% ELSE %]
-                          [% IF ( itemloo.imageurl ) %]
+                    <td class="itype">
+                        [% IF !noItemTypeImages && itemloo.imageurl %]
                             <img src="[% itemloo.imageurl %]" alt="[% itemloo.description %]" title="[% itemloo.description %]" />
-                          [% ELSE %]
-                            [% itemloo.description %]
-                          [% END %]
-                        [% END %]</td>
+                        [% END %]
+                        [% itemloo.description %]
+                    </td>
                     [% END %]
                     <td class="location">[% UNLESS ( singlebranchmode ) %][% itemloo.branchname %] [% END %]</td>
                     <td class="homebranch">[% itemloo.homebranch %]<span class="shelvingloc">[% itemloo.location %]</span> </td>
