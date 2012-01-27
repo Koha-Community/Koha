@@ -70,20 +70,14 @@ C4::Utils::DataTables - Utility subs for building query when DataTables source i
 
 =head1 FUNCTIONS
 
-=over 2
-
-=item dt_build_orderby
+=head2 dt_build_orderby
 
     my $orderby = dt_build_orderby($dt_param);
-
     This function takes a reference to a hash containing DataTables parameters
     and build the corresponding 'ORDER BY' clause.
     This hash must contains the following keys:
-
         iSortCol_N, where N is a number from 0 to the number of columns to sort on minus 1
-
         sSortDir_N is the sorting order ('asc' or 'desc) for the corresponding column
-
         mDataProp_N is a mapping between the column index, and the name of a SQL field
 
 =cut
@@ -113,25 +107,18 @@ sub dt_build_orderby {
     return $orderby;
 }
 
-=item dt_build_having
+=head2 dt_build_having
 
     my ($having, $having_params) = dt_build_having($dt_params)
 
     This function takes a reference to a hash containing DataTables parameters
     and build the corresponding 'HAVING' clause.
     This hash must contains the following keys:
-
         sSearch is the text entered in the global filter
-
         iColumns is the number of columns
-
         bSearchable_N is a boolean value that is true if the column is searchable
-
         mDataProp_N is a mapping between the column index, and the name of a SQL field
-
         sSearch_N is the text entered in individual filter for column N
-
-=back
 
 =cut
 
@@ -196,15 +183,11 @@ sub dt_build_having {
     return (\@filters, \@params);
 }
 
-=item dt_get_params
+=head2 dt_get_params
 
     my %dtparam = = dt_get_params( $input )
-
     This function takes a reference to a new CGI object.
-
     It prepares a hash containing Datatable parameters.
-
-=back
 
 =cut
 sub dt_get_params {
@@ -227,7 +210,7 @@ sub dt_get_params {
     return %dtparam;
 }
 
-=item dt_build_query_simple
+=head2 dt_build_query_simple
 
     my ( $query, $params )= dt_build_query_simple( $value, $field )
 
@@ -236,8 +219,6 @@ sub dt_get_params {
     It returns (undef, []) if not $value.
     Else, returns a SQL where string and an arrayref containing parameters
     for the execute method of the statement.
-
-=back
 
 =cut
 sub dt_build_query_simple {
@@ -251,7 +232,7 @@ sub dt_build_query_simple {
     return ( $query, \@params );
 }
 
-=item dt_build_query_dates
+=head2 dt_build_query_dates
 
     my ( $query, $params )= dt_build_query_dates( $datefrom, $dateto, $field)
 
@@ -260,8 +241,6 @@ sub dt_build_query_simple {
     It returns (undef, []) if not $value.
     Else, returns a SQL where string and an arrayref containing parameters
     for the execute method of the statement.
-
-=back
 
 =cut
 sub dt_build_query_dates {
@@ -279,7 +258,7 @@ sub dt_build_query_dates {
     return ( $query, \@params );
 }
 
-=item dt_build_query
+=head2 dt_build_query
 
     my ( $query, $filter ) = dt_build_query( $type, @params )
 
@@ -288,8 +267,6 @@ sub dt_build_query_dates {
     It calls dt_build_query_dates or dt_build_query_simple fonction of $type.
 
     $type can be 'simple' or 'rage_dates'.
-
-=back
 
 =cut
 sub dt_build_query {
