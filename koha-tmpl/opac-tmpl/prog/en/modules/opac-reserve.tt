@@ -508,8 +508,8 @@
                                 <td>[% itemLoo.enumchron %]</td>
                               [% END %]
                               <td>
-                                [% IF ( itemLoo.date_due ) %]
-                                  <span class="checkedout">Due [% itemLoo.date_due %]</span>
+                                [% IF ( itemLoo.dateDue ) %]
+                                  <span class="checkedout">Due [% itemLoo.dateDue %]</span>
                                 [% ELSIF ( itemLoo.transfertwhen ) %]
                                   <span class="intransit">In transit from [% itemLoo.transfertfrom %],
                                     to [% itemLoo.transfertto %], since [% itemLoo.transfertwhen %]</span>
