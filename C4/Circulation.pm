@@ -1794,7 +1794,7 @@ sub _FixFineDaysOnReturn {
     }
 
     my $branchcode = _GetCircControlBranch( $item, $borrower );
-    my $calendar = C4::Calendar->new( branchcode => $branchcode );
+    my $calendar = Koha::Calendar->new( branchcode => $branchcode );
     my $today = C4::Dates->new();
 
     my $deltadays = $calendar->daysBetween( $datedue, C4::Dates->new() );
