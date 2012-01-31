@@ -1866,10 +1866,11 @@ sub _FixAccountForLostAndReturned {
     my $item_id        = @_ ? shift : $itemnumber;  # Send the barcode if you want that logged in the description
     my $dbh = C4::Context->dbh;
     # check for charge made for lost book
-    my $sth = $dbh->prepare("SELECT * FROM accountlines WHERE (itemnumber = ?) AND (accounttype='L' OR accounttype='Rep') ORDER BY date DESC");
+    my $sth = $dbh->prepare("SELECT * FROM accountlines WHERE itemnumber = ? AND accounttype IN ('L', 'Rep', 'W') ORDER BY date DESC, accountno DESC");
     $sth->execute($itemnumber);
     my $data = $sth->fetchrow_hashref;
     $data or return;    # bail if there is nothing to do
+    $data->{accounttype} eq 'W' and return;    # Written off
 
     # writeoff this amount
     my $offset;

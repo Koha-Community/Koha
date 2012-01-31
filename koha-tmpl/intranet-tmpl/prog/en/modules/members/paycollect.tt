@@ -94,6 +94,7 @@ function moneyFormat(textObj) {
     <form name="payindivfine" onsubmit="return validatePayment(this);" method="post" action="/cgi-bin/koha/members/paycollect.pl">
     <input type="hidden" name="borrowernumber" id="borrowernumber" value="[% borrower.borrowernumber %]" />
     <input type="hidden" name="pay_individual" id="pay_individual" value="[% pay_individual %]" />
+    <input type="hidden" name="itemnumber" id="itemnumber" value="[% itemnumber %]" />
     <input type="hidden" name="description" id="description" value="[% description %]" />
     <input type="hidden" name="accounttype" id="accounttype" value="[% accounttype %]" />
     <input type="hidden" name="notify_id" id="notify_id" value="[% notify_id %]" />
@@ -148,6 +149,7 @@ function moneyFormat(textObj) {
     <form name="woindivfine" action="/cgi-bin/koha/members/pay.pl" method="post" >
     <input type="hidden" name="borrowernumber" id="borrowernumber" value="[% borrower.borrowernumber %]" />
     <input type="hidden" name="pay_individual" id="pay_individual" value="[% pay_individual %]" />
+    <input type="hidden" name="itemnumber" id="itemnumber" value="[% itemnumber %]" />
     <input type="hidden" name="description" id="description" value="[% description %]" />
     <input type="hidden" name="accounttype" id="accounttype" value="[% accounttype %]" />
     <input type="hidden" name="notify_id" id="notify_id" value="[% notify_id %]" />
