@@ -34,6 +34,9 @@ my $want_help;
 my $as_xml;
 my $process_zebraqueue;
 my $do_not_clear_zebraqueue;
+my $length;
+my $where;
+my $offset;
 my $verbose_logging = 0;
 my $zebraidx_log_opt = " -v none,fatal,warn ";
 my $result = GetOptions(
@@ -51,7 +54,10 @@ my $result = GetOptions(
 	'x'				=> \$as_xml,
     'y'             => \$do_not_clear_zebraqueue,
     'z'             => \$process_zebraqueue,
-    'v+'            => \$verbose_logging,
+    'where:s'        => \$where,
+    'length:i'        => \$length,
+    'offset:i'      => \$offset,
+    'v+'             => \$verbose_logging,
 );
 
 
@@ -294,13 +300,21 @@ sub select_all_records {
 }
 
 sub select_all_authorities {
-    my $sth = $dbh->prepare("SELECT authid FROM auth_header");
+    my $strsth=qq{SELECT authid FROM auth_header};
+    $strsth.=qq{ WHERE $where } if ($where);
+    $strsth.=qq{ LIMIT $length } if ($length && !$offset);
+    $strsth.=qq{ LIMIT $offset,$length } if ($length && $offset);
+    my $sth = $dbh->prepare($strsth);
     $sth->execute();
     return $sth;
 }
 
 sub select_all_biblios {
-    my $sth = $dbh->prepare("SELECT biblionumber FROM biblioitems ORDER BY biblionumber");
+    my $strsth = qq{ SELECT biblionumber FROM biblioitems };
+    $strsth.=qq{ WHERE $where } if ($where);
+    $strsth.=qq{ LIMIT $length } if ($length && !$offset);
+    $strsth.=qq{ LIMIT $offset,$length } if ($offset);
+    my $sth = $dbh->prepare($strsth);
     $sth->execute();
     return $sth;
 }
@@ -639,7 +653,14 @@ Parameters:
                             warnings and errors from the indexing are shown.
                             Use log level 2 (-v -v) to include all Zebra logs.
 
-    -munge-config           Deprecated option to try
+    --length   1234         how many biblio you want to export
+    --offset 1243           offset you want to start to
+                                example: --offset 500 --length=500 will result in a LIMIT 500,1000 (exporting 1000 records, starting by the 500th one)
+                                note that the numbers are NOT related to biblionumber, that's the intended behaviour.
+    --where                 let you specify a WHERE query, like itemtype='BOOK'
+                            or something like that
+
+    --munge-config          Deprecated option to try
                             to fix Zebra config files.
     --help or -h            show this message.
 _USAGE_
