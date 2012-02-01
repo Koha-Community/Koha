@@ -4651,7 +4651,16 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     $dbh->do(
         q|INSERT INTO permissions (module_bit, code, description) VALUES (13, 'upload_local_cover_images', 'Upload local cover images')|
     );
-    print "Upgrade done (Added support for local cover images)\n";
+    print "Upgrade to $DBversion done (Added support for local cover images)\n";
+    SetVersion($DBversion);
+}
+
+$DBversion = "3.07.00.011";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do(<<ENDOFRENEWAL);
+    INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('BorrowerRenewalPeriodBase', 'now', 'Set whether the borrower renewal date should be counted from the dateexpiry or from the current date ','dateexpiry|now','Choice');
+ENDOFRENEWAL
+    print "Upgrade to $DBversion done (Added a system preference to allow renewal of Patron account either from todays date or from existing expiry date in the patrons account.)\n";
     SetVersion($DBversion);
 }
 =head1 FUNCTIONS
