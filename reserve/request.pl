@@ -192,9 +192,9 @@ if ($borrowerslist) {
 
     foreach my $borrower (
         sort {
-                $a->{surname}
-              . $a->{firstname} cmp $b->{surname}
-              . $b->{firstname}
+                uc($a->{surname}
+              . $a->{firstname}) cmp uc($b->{surname}
+              . $b->{firstname})
         } @{$borrowerslist}
       )
     {
