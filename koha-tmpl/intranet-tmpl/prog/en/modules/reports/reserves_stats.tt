@@ -89,18 +89,18 @@
                 <td><input type="radio" name="Line" value="reservestatus" /></td>
                 <td><input type="radio" name="Column" value="reservestatus" checked="checked" /></td>
                 <td>
-				<input type="checkbox" name="filter_reservestatus_or_1" value="1"> Asked</input>
-				<input type="checkbox" name="filter_reservestatus_or_2" value="2"> Processing</input>
-				<input type="checkbox" name="filter_reservestatus_or_3" value="3"> Waiting</input>
-				<input type="checkbox" name="filter_reservestatus_or_4" value="4"> Satisfied</input>
-				<input type="checkbox" name="filter_reservestatus_or_5" value="5"> Cancelled</input>
+				<input type="checkbox" name="filter_reservestatus_or_1" value="1" /> Asked
+				<input type="checkbox" name="filter_reservestatus_or_2" value="2" /> Processing
+				<input type="checkbox" name="filter_reservestatus_or_3" value="3" /> Waiting
+				<input type="checkbox" name="filter_reservestatus_or_4" value="4" /> Satisfied
+				<input type="checkbox" name="filter_reservestatus_or_5" value="5" /> Cancelled
 				</td>
              </tr>
              <tr class="highlight">
                 <td>Hold Date</td>
                 <td><input type="radio" name="Line" value="reservedate" /></td>
                 <td><input type="radio" name="Column" value="reservedate" /></td>
-                <td><label for="reservedate_begin">From</label> <input type="text"  size="10" id="filter_reservedate_begin" name="filter_reservedate_begin" />
+                <td><label for="filter_reservedate_begin">From</label> <input type="text"  size="10" id="filter_reservedate_begin" name="filter_reservedate_begin" />
                     <img src="[% themelang %]/lib/calendar/cal.gif" alt="Show Calendar" border="0" id="openreservedateFrom" style="cursor: pointer;" />
                    <script type="text/javascript">
 				   //<![CDATA[ 
@@ -424,7 +424,7 @@
             <td><input type="radio" name="Column" value="items.itype" /></td>
            <td><select name="filter_items.itype" id="itype">
                <option value=""> </option>
-               [% FOREACH itypeloo IN itypeloop %]
+               [% FOREACH itypeloo IN itemtypeloop %]
                  [% IF ( itypeloo.selected ) %]<option value="[% itypeloo.code %]" selected="selected">[% itypeloo.description %]</option>[% ELSE %]<option value="[% itypeloo.code %]">[% itypeloo.description %]</option>[% END %]
                [% END %]
                </select>
@@ -444,9 +444,9 @@
         </tr>
         <tr class="highlight">
             <td>Holding Library</td>
-            <td><input type="radio" name="Line" value="holdingbranch" /></td>
-            <td><input type="radio" name="Column" value="holdingbranch" /></td>
-            <td><select name="filter_holdingbranch" id="holdingbranch">
+            <td><input type="radio" name="Line" value="items.holdingbranch" /></td>
+            <td><input type="radio" name="Column" value="items.holdingbranch" /></td>
+            <td><select name="filter_items.holdingbranch" id="holdingbranch">
                <option value=""> </option>
                [% FOREACH branchloo IN branchloop %]
 [% IF ( branchloo.selected ) %]<option value="[% branchloo.value %]" selected="selected">[% branchloo.branchname %]</option>[% ELSE %]<option value="[% branchloo.value %]">[% branchloo.branchname %]</option>[% END %]
@@ -456,9 +456,9 @@
         </tr>
         <tr>
             <td>Home Library</td>
-            <td><input type="radio" name="Line" value="homebranch" /></td>
-            <td><input type="radio" name="Column" value="homebranch" /></td>
-            <td><select name="filter_homebranch" id="homebranch">
+            <td><input type="radio" name="Line" value="items.homebranch" /></td>
+            <td><input type="radio" name="Column" value="items.homebranch" /></td>
+            <td><select name="filter_items.homebranch" id="homebranch">
                <option value=""> </option>
                [% FOREACH branchloo IN branchloop %]
 [% IF ( branchloo.selected ) %]<option value="[% branchloo.value %]" selected="selected">[% branchloo.branchname %]</option>[% ELSE %]<option value="[% branchloo.value %]">[% branchloo.branchname %]</option>[% END %]
@@ -494,7 +494,7 @@
             <td>Item Call Number</td>
             <td></td>
             <td></td>
-            <td>From <input type="text" name="filter_itemcallnumber" size="10" /> (inclusive) to <input type="text" name="fiter_itemcallnumber" size="10" /> (exclusive) </td>
+            <td>From <input type="text" name="filter_items.itemcallnumber_begin" size="10" /> (inclusive) to <input type="text" name="filter_items.itemcallnumber_endex" size="10" /> (exclusive) </td>
         </tr>
         [% IF ( hassort1 ) %]
         <tr><td>Patron sort1</td>

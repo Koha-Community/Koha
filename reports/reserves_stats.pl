@@ -19,6 +19,7 @@
 
 
 use strict;
+use warnings;
 
 use CGI;
 
@@ -74,7 +75,7 @@ my ($template, $borrowernumber, $cookie) = get_template_and_user({
 	flagsrequired => {reports => '*'},
 	debug => 0,
 });
-our $sep     = $input->param("sep");
+our $sep     = $input->param("sep") || '';
 $sep = "\t" if ($sep eq 'tabulation');
 $template->param(do_it => $do_it,
 	DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
@@ -169,6 +170,7 @@ my $CGIsepChoice=GetDelimiterChoices;
 $template->param(
 	categoryloop => $categoryloop,
 	itemtypeloop => \@itemtypeloop,
+	locationloop => \@locations,
 	   ccodeloop => \@ccodes,
 	  branchloop => GetBranchesLoop(C4::Context->userenv->{'branch'}),
 	hassort1=> $hassort1,
@@ -194,18 +196,25 @@ sub calculate {
 # Filters
 # Checking filters
 #
-	my @loopfilter;
-	foreach my $filter (keys %$filters_hashref){
-		$$filters_hashref{$filter} =~s/\*/%/;
-		$$filters_hashref{$filter} = format_date_in_iso($$filters_hashref{$_}) if ($_=~/date/);
-	}
-	#display
-	@loopfilter= map{{ crit=>$_ ,filter=>($_=~/date/?
-											format_date($$filters_hashref{$_})
-											:$$filters_hashref{$_}
-										  )
-					  }
-					} sort keys %$filters_hashref;
+    my @loopfilter;
+    foreach my $filter ( keys %$filters_hashref ) {
+        $filters_hashref->{$filter} =~ s/\*/%/;
+        $filters_hashref->{$filter} =
+          format_date_in_iso( $filters_hashref->{$filter} )
+          if ( $filter =~ /date/ );
+    }
+
+    #display
+    @loopfilter = map {
+        {
+            crit   => $_,
+            filter => (
+                $_ =~ /date/
+                ? format_date( $filters_hashref->{$_} )
+                : $filters_hashref->{$_}
+            )
+        }
+    } sort keys %$filters_hashref;
 
 
 
@@ -228,7 +237,7 @@ sub calculate {
         if ($linefield =~ /^biblio\./ or $colfield =~ /^biblio\./ or any {$_=~/biblio/}keys %$filters_hashref);
 	$strcalc .= "LEFT JOIN items ON reserves.itemnumber=items.itemnumber "
         if ($linefield =~ /^items\./ or $colfield =~ /^items\./ or any {$_=~/items/}keys %$filters_hashref);
-        
+
 	my @sqlparams;
 	my @sqlorparams;
 	my @sqlor;
@@ -238,13 +247,15 @@ sub calculate {
 		my $string;
 		my $stringfield=$filter;
 		$stringfield=~s/\_[a-z_]+$//;
-		warn $stringfield;
 		if ($filter=~/ /){
 			$string=$stringfield;
 		}
 		elsif ($filter=~/_or/){
 			 push @sqlor, qq{( }.changeifreservestatus($filter)." = ? ) ";
 			 push @sqlorparams, $$filters_hashref{$filter};
+		}
+		elsif ($filter=~/_endex$/){
+			$string = " $stringfield < ? ";
 		}
 		elsif ($filter=~/_end$/){
 			$string = " $stringfield <= ? ";
@@ -274,7 +285,6 @@ sub calculate {
 	$dbcalc->execute(@sqlparams,@sqlparams);
 	my ($emptycol,$emptyrow); 
 	my $data = $dbcalc->fetchall_hashref([qw(line col)]);
-	my @loopline;
 	my %cols_hash;
 	foreach my $row (keys %$data){
 		push @loopline, $row;
@@ -304,14 +314,13 @@ sub calculate {
 	for my $col ( sort keys %cols_hash ) {
 		my $total = 0;
 		foreach my $row (@loopline) {
-			$total += $$data{$row}{$col}{calculation};
+			$total += $data->{$row}{$col}{calculation} if $data->{$row}{$col}{calculation};
 			$debug and warn "value added ".$$data{$row}{$col}{calculation}. "for line ".$row;
 		}
 		push @loopfooter, {'totalcol' => $total};
 		push @loopcol, {'coltitle' => $col,
 						coltitle_display=>display_value($colfield,$col)};
 	}
-
 	# the header of the table
 	$globalline{loopfilter}=\@loopfilter;
 	# the core of the table
@@ -331,22 +340,34 @@ sub null_to_zzempty ($) {
 	($string eq "NULL") and return 'zzEMPTY';
 	return $string;		# else return the valid value
 }
-sub display_value{
-	my ($crit,$value)=@_;
-	my $display_value =
-		($crit =~ /ccode/   ) ? $ccodes->{$value}    :
-		($crit =~ /location/) ? $locations->{$value} :
-		($crit =~ /itemtype/) ? $itemtypes->{$value}->{description} :
-		($crit =~ /branch/) ? GetBranchName($value):
-		($crit =~ /reservestatus/) ? reservestatushuman($value):
-		$value; # default fallback
-	if ($crit =~ /(sort1|sort2)/) {
-		$display_value=GetAuthorisedValues("B$_",$value);
-	} elsif ($crit =~ /category/) {
-		my $element=any{$value eq $_->{categorycode}} @$categoryloop;
-		$display_value=$$element{description};
-	}
-	return $display_value;
+sub display_value {
+    my ( $crit, $value ) = @_;
+    my $display_value =
+        ( $crit =~ /ccode/ )         ? $ccodes->{$value}
+      : ( $crit =~ /location/ )      ? $locations->{$value}
+      : ( $crit =~ /itemtype/ )      ? $itemtypes->{$value}->{description}
+      : ( $crit =~ /branch/ )        ? GetBranchName($value)
+      : ( $crit =~ /reservestatus/ ) ? reservestatushuman($value)
+      :                                $value;    # default fallback
+    if ($crit =~ /sort1/) {
+        foreach (@$Bsort1) {
+            ($value eq $_->{authorised_value}) or next;
+            $display_value = $_->{lib} and last;
+        }
+    }
+    elsif ($crit =~ /sort2/) {
+        foreach (@$Bsort2) {
+            ($value eq $_->{authorised_value}) or next;
+            $display_value = $_->{lib} and last;
+        }
+    }
+    elsif ( $crit =~ /category/ ) {
+        foreach (@$categoryloop) {
+            ( $value eq $_->{categorycode} ) or next;
+            $display_value = $_->{description} and last;
+        }
+    }
+    return $display_value;
 }
 sub reservestatushuman{
 	my ($val)=@_;
