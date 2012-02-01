@@ -2642,11 +2642,11 @@ sub z3950_search_args {
 
     if (defined $isbn && $isbn->is_valid)
     {
-    $bibrec = { isbn => $bibrec } if !ref $bibrec;
-}
-else {
-     $bibrec = { title => $bibrec } if !ref $bibrec;
-}
+        $bibrec = { isbn => $bibrec } if !ref $bibrec;
+    }
+    else {
+        $bibrec = { title => $bibrec } if !ref $bibrec;
+    }
     my $array = [];
     for my $field (qw/ lccn isbn issn title author dewey subject /)
     {
