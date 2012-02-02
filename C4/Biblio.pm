@@ -1043,7 +1043,6 @@ sub GetMarcFromKohaField {
     if ( my $mf = $relations->{$frameworkcode}->{$kohafield} ) {
         return @$mf;
     }
-    warn qq{No marc tags for framework "$frameworkcode" field $kohafield};
     return (0, undef);
 }
 
