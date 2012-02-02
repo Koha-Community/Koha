@@ -67,6 +67,7 @@ if ( $individual || $writeoff ) {
     my $amount            = $input->param('amount');
     my $amountoutstanding = $input->param('amountoutstanding');
     $accountno = $input->param('accountno');
+    my $itemnumber  = $input->param('itemnumber');
     my $description  = $input->param('description');
     my $title        = $input->param('title');
     my $notify_id    = $input->param('notify_id');
@@ -78,6 +79,7 @@ if ( $individual || $writeoff ) {
         amount            => $amount,
         amountoutstanding => $amountoutstanding,
         title             => $title,
+        itemnumber        => $itemnumber,
         description       => $description,
         notify_id         => $notify_id,
         notify_level      => $notify_level,
