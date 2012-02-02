@@ -30,7 +30,8 @@ use C4::Koha;
 use C4::Tags 0.03 qw(get_tags remove_tag get_tag_rows);
 use C4::Output;
 
-my $needed_flags = { tools => 'moderate_tags' }; # FIXME: replace when more specific permission is created.
+my $needed_flags = { tools => 'moderate_tags'
+};    # FIXME: replace when more specific permission is created.
 
 my $query        = CGI->new;
 my $op           = $query->param('op') || '';
@@ -38,44 +39,55 @@ my $biblionumber = $query->param('biblionumber');
 my $tag          = $query->param('tag');
 my $tag_id       = $query->param('tag_id');
 
-my ($template, $borrowernumber, $cookie) = get_template_and_user({
-        template_name => "tags/list.tmpl",
-        query => $query,
-        type => "intranet",
-        debug => 1,
+my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
+    {
+        template_name   => "tags/list.tmpl",
+        query           => $query,
+        type            => "intranet",
+        debug           => 1,
         authnotrequired => 0,
-        flagsrequired => $needed_flags,
-});
-
-if( $op eq "del" ){
-        remove_tag($tag_id);
-        print $query->redirect("/cgi-bin/koha/tags/list.pl?tag=$tag");
-} else {
-
-my $marcflavour = C4::Context->preference('marcflavour');
-my @results;
-
-if ($tag) {
-        my $taglist = get_tag_rows({term=>$tag});
-        for ( @{$taglist} ) {
-        my $dat                 = &GetBiblioData($_->{biblionumber});
-        my $record              = &GetMarcBiblio($_->{biblionumber});
-        $dat->{'subtitle'}      = GetRecordValue('subtitle', $record, GetFrameworkCode($_->{biblionumber}));
-        my @items               = GetItemsInfo( $_->{biblionumber} );
-        $dat->{biblionumber}    = $_->{biblionumber};
-        $dat->{tag_id}          = $_->{tag_id};
-        $dat->{items}           = \@items;
-        $dat->{TagLoop}         = get_tags({biblionumber=>$_->{biblionumber}, 'sort'=>'-weight',limit=>10 });
-        push( @results, $dat );
+        flagsrequired   => $needed_flags,
     }
-
-my $resultsarray = \@results;
-
-$template->param(
-    tag => $tag,
-    titles => $resultsarray,
 );
+
+if ( $op eq "del" ) {
+    remove_tag($tag_id);
+    print $query->redirect("/cgi-bin/koha/tags/list.pl?tag=$tag");
 }
+else {
+
+    my $marcflavour = C4::Context->preference('marcflavour');
+    my @results;
+
+    if ($tag) {
+        my $taglist = get_tag_rows( { term => $tag } );
+        for ( @{$taglist} ) {
+            my $dat    = &GetBiblioData( $_->{biblionumber} );
+            my $record = &GetMarcBiblio( $_->{biblionumber} );
+            $dat->{'subtitle'} =
+              GetRecordValue( 'subtitle', $record,
+                GetFrameworkCode( $_->{biblionumber} ) );
+            my @items = GetItemsInfo( $_->{biblionumber} );
+            $dat->{biblionumber} = $_->{biblionumber};
+            $dat->{tag_id}       = $_->{tag_id};
+            $dat->{items}        = \@items;
+            $dat->{TagLoop}      = get_tags(
+                {
+                    biblionumber => $_->{biblionumber},
+                    'sort'       => '-weight',
+                    limit        => 10
+                }
+            );
+            push( @results, $dat );
+        }
+
+        my $resultsarray = \@results;
+
+        $template->param(
+            tag    => $tag,
+            titles => $resultsarray,
+        );
+    }
 }
 
 output_html_with_http_headers $query, $cookie, $template->output;
