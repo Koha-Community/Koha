@@ -137,8 +137,8 @@ $template->param(
  #borrowenumber  => $borrower->{borrowernumber}, # some templates require global
     borrowenumber => $borrowernumber,    # some templates require global
     borrower      => $borrower,
-    total         => $total_due
-	activeBorrowerRelationship => (C4::Context->preference('borrowerRelationship') ne ''),
+    total         => $total_due,
+    activeBorrowerRelationship => (C4::Context->preference('borrowerRelationship') ne ''),
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
