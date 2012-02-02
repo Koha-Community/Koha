@@ -1629,7 +1629,7 @@ sub GetHiddenItemnumbers {
     my @resultitems;
 
     my $yaml = C4::Context->preference('OpacHiddenItems');
-    $yaml = "$yaml\n"; # YAML is anal on ending \n. Surplus does not hurt
+    $yaml = "$yaml\n\n"; # YAML is anal on ending \n. Surplus does not hurt
     my $hidingrules;
     eval {
         $hidingrules = YAML::Load($yaml);
