@@ -30,15 +30,16 @@ eval {
     if ($servers) {
         require Memoize::Memcached;
         import Memoize::Memcached qw(memoize_memcached);
- 
-        my $memcached = {
-            servers    => [ $servers ],
-            key_prefix => C4::Context->config('memcached_namespace') || 'koha',
-        };
 
-        memoize_memcached('getTranslatedLanguages', memcached => $memcached, expire_time => 600); #cache for 10 minutes
-        memoize_memcached('getFrameworkLanguages' , memcached => $memcached, expire_time => 600);
-        memoize_memcached('getAllLanguages',        memcached => $memcached, expire_time => 600);
+        my $memcached = {
+            servers     => [$servers],
+            key_prefix  => C4::Context->config('memcached_namespace') || 'koha',
+            expire_time => 600
+        };    # cache for 10 mins
+
+        memoize_memcached( 'getTranslatedLanguages', memcached => $memcached );
+        memoize_memcached( 'getFrameworkLanguages',  memcached => $memcached );
+        memoize_memcached( 'getAllLanguages',        memcached => $memcached );
     }
 };
 
