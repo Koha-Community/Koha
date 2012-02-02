@@ -162,14 +162,16 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
 </table>
 <p><form method="get" action="/cgi-bin/koha/cataloguing/z3950_search.pl"><input type="hidden" name="biblionumber" value="[% biblionumber %]"/><input type="hidden" name="frameworkcode" value="[% frameworkcode %]"/><input type="submit" value="Try Another Search"/></form></p>
     [% ELSE %]
-        [% IF ( emptyserverlist ) %]
-            You didn't select any Z39.50 target.
-        [% ELSE %]
-            [% FOREACH errcon IN errconn %]
-                Connection failed to [% errcon.server %]
-            [% END %]
-        [% END %]
-	<p>Nothing found.</p>
+        [% IF ( errconn ) %]
+            <div class="dialog alert">
+                <ul>
+                [% FOREACH errcon IN errconn %]
+                    <li>Connection failed to [% errcon.server %]</li>
+                [% END %]
+                </ul>
+            </div>
+         [% END %]
+   <div class="dialog message">Nothing found.</div>
 	<p><form method="get" action="/cgi-bin/koha/cataloguing/z3950_search.pl"><input type="hidden" name="biblionumber" value="[% biblionumber %]"/><input type="hidden" name="frameworkcode" value="[% frameworkcode %]"/><input type="submit" value="Try Another Search"/></form></p>
     [% END %]
 

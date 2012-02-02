@@ -156,13 +156,19 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
 </table>
     [% ELSE %]
         [% IF ( emptyserverlist ) %]
-            You didn't select any Z39.50 target.
+            <div class="dialog alert">You didn't select any Z39.50 target.</div>
         [% ELSE %]
-            [% FOREACH errcon IN errconn %]
-                Connection failed to [% errcon.server %]
+            [% IF ( errconn ) %]
+                <div class="dialog alert">
+                    <ul>
+                    [% FOREACH errcon IN errconn %]
+                        <li>Connection failed to [% errcon.server %]</li>
+                    [% END %]
+                    </ul>
+                </div>
             [% END %]
         [% END %]
-        <p>Nothing found. <a href="javascript: history.back()">Try another search</a>.</p>
+        <div class="dialog message">Nothing found. <a href="javascript: history.back()">Try another search</a>.</div>
     [% END %]
 
 
