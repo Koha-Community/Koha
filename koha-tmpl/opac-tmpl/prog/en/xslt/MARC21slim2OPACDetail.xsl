@@ -126,68 +126,15 @@
                 </xsl:call-template>
             </h5>
         </xsl:if>
-
         <xsl:choose>
-        <xsl:when test="marc:datafield[@tag=100] or marc:datafield[@tag=110] or marc:datafield[@tag=111] or marc:datafield[@tag=700] or marc:datafield[@tag=710] or marc:datafield[@tag=711]">
-        <h5 class="author">by
-        <xsl:for-each select="marc:datafield[@tag=100 or @tag=700]">
-        <a>
-        <xsl:choose>
-            <xsl:when test="marc:subfield[@code=9] and $UseAuthoritiesForTracings='1'">
-                <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=an:<xsl:value-of select="marc:subfield[@code=9]"/></xsl:attribute>
+            <xsl:when test="marc:datafield[@tag=100] or marc:datafield[@tag=110] or marc:datafield[@tag=111] or marc:datafield[@tag=700] or marc:datafield[@tag=710] or marc:datafield[@tag=711]">
+                <h5 class="author">by
+                    <xsl:call-template name="showAuthor">
+                        <xsl:with-param name="authorfield" select="marc:datafield[@tag=100 or @tag=110 or @tag=111 or @tag=700 or @tag=710 or @tag=711]"/>
+                        <xsl:with-param name="UseAuthoritiesForTracings" select="$UseAuthoritiesForTracings"/>
+                    </xsl:call-template>
+                </h5>
             </xsl:when>
-            <xsl:otherwise>
-            <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=au:"<xsl:value-of select="marc:subfield[@code='a']"/>"</xsl:attribute>
-            </xsl:otherwise>
-        </xsl:choose>
-        <xsl:call-template name="nameABCDQ"/></a>
-        <xsl:choose>
-        <xsl:when test="position()!=last()"><xsl:text>; </xsl:text></xsl:when></xsl:choose>
-        </xsl:for-each>
-
-        <xsl:for-each select="marc:datafield[@tag=110 or @tag=710]">
-            <xsl:choose>
-                <xsl:when test="position()=1">
-                    <xsl:text>; </xsl:text>
-                </xsl:when>
-            </xsl:choose>
-        <a>
-        <xsl:choose>
-            <xsl:when test="marc:subfield[@code=9] and $UseAuthoritiesForTracings='1'">
-                <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=an:<xsl:value-of select="marc:subfield[@code=9]"/></xsl:attribute>
-            </xsl:when>
-            <xsl:otherwise>
-            <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=au:"<xsl:value-of select="marc:subfield[@code='a']"/>"</xsl:attribute>
-            </xsl:otherwise>
-        </xsl:choose>
-        <xsl:call-template name="nameABCDN"/></a>
-        <xsl:choose><xsl:when test="position()=last()"><xsl:text> </xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
-        </xsl:for-each>
-
-        <xsl:for-each select="marc:datafield[@tag=111 or @tag=711]">
-            <xsl:choose>
-            <xsl:when test="marc:subfield[@code='n']">
-               <xsl:text> </xsl:text>
-               <xsl:call-template name="subfieldSelect">
-                  <xsl:with-param name="codes">n</xsl:with-param>                              </xsl:call-template>
-               <xsl:text> </xsl:text>
-            </xsl:when>
-            </xsl:choose>
-        <a>
-        <xsl:choose>
-            <xsl:when test="marc:subfield[@code=9] and $UseAuthoritiesForTracings='1'">
-                <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=an:<xsl:value-of select="marc:subfield[@code=9]"/></xsl:attribute>
-            </xsl:when>
-            <xsl:otherwise>
-            <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=au:"<xsl:value-of select="marc:subfield[@code='a']"/>"</xsl:attribute>
-            </xsl:otherwise>
-        </xsl:choose>
-        <xsl:call-template name="nameACDEQ"/></a>
-        <xsl:choose><xsl:when test="position()=last()"><xsl:text>.</xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
-
-        </xsl:for-each>
-        </h5>
-        </xsl:when>
         </xsl:choose>
 
    <xsl:if test="$DisplayOPACiconsXSLT!='0'">
@@ -903,6 +850,49 @@
         </xsl:for-each>
         </xsl:if>
 
+    </xsl:template>
+
+    <xsl:template name="showAuthor">
+        <xsl:param name="authorfield" />
+        <xsl:param name="UseAuthoritiesForTracings" />
+        <xsl:for-each select="$authorfield">
+            <xsl:choose><xsl:when test="position()!=1"><xsl:text>; </xsl:text></xsl:when></xsl:choose>
+            <xsl:choose>
+                <xsl:when test="not(@tag=111 or @tag=711)" />
+                <xsl:when test="marc:subfield[@code='n']">
+                    <xsl:text> </xsl:text>
+                    <xsl:call-template name="subfieldSelect">
+                        <xsl:with-param name="codes">n</xsl:with-param>
+                    </xsl:call-template>
+                    <xsl:text> </xsl:text>
+                </xsl:when>
+            </xsl:choose>
+            <a>
+                <xsl:choose>
+                    <xsl:when test="marc:subfield[@code=9] and $UseAuthoritiesForTracings='1'">
+                        <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=an:<xsl:value-of select="marc:subfield[@code=9]"/></xsl:attribute>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=au:<xsl:value-of select="marc:subfield[@code='a']"/></xsl:attribute>
+                    </xsl:otherwise>
+                </xsl:choose>
+                <xsl:choose>
+                    <xsl:when test="@tag=100 or @tag=700"><xsl:call-template name="nameABCDQ"/></xsl:when>
+                    <xsl:when test="@tag=110 or @tag=710"><xsl:call-template name="nameABCDN"/></xsl:when>
+                    <xsl:when test="@tag=111 or @tag=711"><xsl:call-template name="nameACDEQ"/></xsl:when>
+                </xsl:choose>
+                <!-- add relator code too between brackets-->
+                <xsl:if test="marc:subfield[@code='4' or @code='e']">
+                    <xsl:text>[</xsl:text>
+                    <xsl:choose>
+                        <xsl:when test="marc:subfield[@code=4]"><xsl:value-of select="marc:subfield[@code=4]"/></xsl:when>
+                        <xsl:otherwise><xsl:value-of select="marc:subfield[@code='e']"/></xsl:otherwise>
+                    </xsl:choose>
+                    <xsl:text>]</xsl:text>
+                </xsl:if>
+            </a>
+        </xsl:for-each>
+        <xsl:text>.</xsl:text>
     </xsl:template>
 
     <xsl:template name="nameABCDQ">
