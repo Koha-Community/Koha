@@ -1025,6 +1025,12 @@ sub AddIssue {
           CartToShelf( $item->{'itemnumber'} );
         }
         $item->{'issues'}++;
+
+        ## If item was lost, it has now been found, reverse any list item charges if neccessary.
+        if ( $item->{'itemlost'} ) {
+            _FixAccountForLostAndReturned( $item->{'itemnumber'}, undef, $item->{'barcode'} );
+        }
+
         ModItem({ issues           => $item->{'issues'},
                   holdingbranch    => C4::Context->userenv->{'branch'},
                   itemlost         => 0,
