@@ -34,12 +34,13 @@ eval {
         import Memoize::Memcached qw(memoize_memcached);
 
         my $memcached = {
-            servers    => [$servers],
-            key_prefix => C4::Context->config('memcached_namespace') || 'koha',
-        };
+            servers     => [$servers],
+            key_prefix  => C4::Context->config('memcached_namespace') || 'koha',
+            expire_time => 600
+        };    # cache for 10 mins
 
-        memoize_memcached( '_get_columns',   memcached => $memcached, expire_time => 600000 );    #cache for 10 minutes
-        memoize_memcached( 'GetPrimaryKeys', memcached => $memcached, expire_time => 600000 );    #cache for 10 minutes
+        memoize_memcached( '_get_columns',   memcached => $memcached );
+        memoize_memcached( 'GetPrimaryKeys', memcached => $memcached );
     }
 };
 
