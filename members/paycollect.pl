@@ -135,9 +135,7 @@ if ( $total_paid and $total_paid ne '0.00' ) {
 borrower_add_additional_fields($borrower);
 
 $template->param(
-
- #borrowenumber  => $borrower->{borrowernumber}, # some templates require global
-    borrowenumber => $borrowernumber,    # some templates require global
+    borrowernumber => $borrowernumber,    # some templates require global
     borrower      => $borrower,
     total         => $total_due,
     activeBorrowerRelationship => (C4::Context->preference('borrowerRelationship') ne ''),
