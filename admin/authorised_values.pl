@@ -112,7 +112,6 @@ if ($op eq 'add_form') {
                 "WHERE category = ? AND authorised_value = ? and id <> ? ");
             $sth->execute($new_category, $new_authorised_value, $id);
             ($duplicate_entry) = $sth->fetchrow_array();
-            warn "**** duplicate_entry = $duplicate_entry";
         }
         unless ( $duplicate_entry ) {
             my $sth=$dbh->prepare( 'UPDATE authorised_values
