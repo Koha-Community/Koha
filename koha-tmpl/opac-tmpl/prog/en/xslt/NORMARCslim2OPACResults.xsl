@@ -18,6 +18,8 @@
     </xsl:template>
     <xsl:template match="marc:record">
 
+    <xsl:variable name="DisplayOPACiconsXSLT" select="marc:sysprefs/marc:syspref[@name='DisplayOPACiconsXSLT']"/>
+
         <xsl:variable name="leader" select="marc:leader"/>
         <xsl:variable name="leader6" select="substring($leader,7,1)"/>
         <xsl:variable name="leader7" select="substring($leader,8,1)"/>
@@ -369,6 +371,7 @@
 	</span>
     </xsl:if>
 
+<xsl:if test="$DisplayOPACiconsXSLT!='0'">
     <span class="results_summary">
     <xsl:if test="$typeOf008!=''">
         <span class="label">Type: </span>
@@ -673,6 +676,7 @@
         </xsl:choose>
     </xsl:if>
 	</span>
+</xsl:if>
 
 	<!-- Utgivelse, distribusjon osv -->
     <xsl:if test="marc:datafield[@tag=260]">
