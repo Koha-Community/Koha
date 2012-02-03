@@ -16,6 +16,8 @@
 
     <xsl:template match="marc:record">
 
+    <xsl:variable name="DisplayOPACiconsXSLT" select="marc:sysprefs/marc:syspref[@name='DisplayOPACiconsXSLT']"/>
+
         <xsl:variable name="leader" select="marc:leader"/>
         <xsl:variable name="leader6" select="substring($leader,7,1)"/>
         <xsl:variable name="leader7" select="substring($leader,8,1)"/>
@@ -144,13 +146,14 @@
         <span class="view"><a id="ISBDview" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber={marc:datafield[@tag=999]/marc:subfield[@code='c']}">Kortvisning (ISBD)</a></span>
         </div> 
 
-
+    <xsl:if test="$DisplayOPACiconsXSLT!='0'">
         <xsl:if test="$materialTypeCode!=''">
         <span class="results_summary"><span class="label">Materialtype: </span>
         <xsl:element name="img"><xsl:attribute name="src">/opac-tmpl/prog/famfamfam/<xsl:value-of select="$materialTypeCode"/>.png</xsl:attribute><xsl:attribute name="alt"></xsl:attribute></xsl:element>
         <xsl:value-of select="$materialTypeLabel"/>
         </span>
         </xsl:if>
+    </xsl:if>
 
         <!--Series -->
         <xsl:if test="marc:datafield[@tag=440 or @tag=490]">
