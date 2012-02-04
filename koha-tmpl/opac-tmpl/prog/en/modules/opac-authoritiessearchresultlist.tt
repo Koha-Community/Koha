@@ -47,7 +47,11 @@
 				<th>Full Heading</th>				
 			</tr>
 			[% FOREACH resul IN result %]
-				<tr>
+            [% UNLESS ( loop.odd ) %]
+                <tr class="highlight">
+            [% ELSE %]
+                <tr>
+            [% END %]
 					<td>[% resul.summary %]</td>
 
 						<td>
