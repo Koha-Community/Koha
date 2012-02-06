@@ -54,8 +54,20 @@ $(document).ready(function(){
             [% review.review |html %]
             [% END %]
             <span style="font-size:87%;font-color:#CCC;">Added [% review.datereviewed %] [% IF ( review.your_comment ) %] by <strong>you</strong>[% ELSE %]
-            [% IF ( ShowReviewer ) %] by
-            [% review.firstname %] [% review.surname %][% END %][% END %]</span></p>
+            [% IF ( review.borrowernumber && ShowReviewer != "none" ) %] by
+                [% SWITCH ShowReviewer %]
+                [% CASE 'full' %]
+                    [% review.borrtitle %] [% review.firstname %] [% review.surname %]
+                [% CASE 'first' %]
+                    [% review.firstname %]
+                [% CASE 'surname' %]
+                    [% review.surname %]
+                [% CASE 'firstandinitial' %]
+                    [% review.firstname %] [% review.surname|truncate(2,'.') %]
+                [% CASE 'username' %]
+                    [% review.userid %]
+                [% END %]
+            [% END %][% END %]</span></p>
         </td>
         <td>
 [% IF ( review.BiblioDefaultViewmarc ) %]<a class="title" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=[% review.biblionumber |url %]" title="View details for this title">
