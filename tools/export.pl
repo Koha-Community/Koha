@@ -47,11 +47,12 @@ my ($template, $loggedinuser, $cookie)
 
 	my $limit_ind_branch=(C4::Context->preference('IndependantBranches') &&
               C4::Context->userenv &&
-              C4::Context->userenv->{flags} % 2 !=1  &&
+              !(C4::Context->userenv->{flags} & 1) &&
               C4::Context->userenv->{branch}?1:0);
 	my $branches = GetBranches($limit_ind_branch);    
     my $branch                = $query->param("branch") || '';
-	if ( C4::Context->preference("IndependantBranches") ) {
+	if ( C4::Context->preference("IndependantBranches") &&
+         !(C4::Context->userenv->{flags} & 1) ) {
     	$branch = C4::Context->userenv->{'branch'};
 	}
 
