@@ -26,7 +26,7 @@
                         [% IF ( review.notes ) %], [% review.notes |html %][% END %]
                         [% IF ( review.size ) %] [% review.size |html %]. [% END %]
                         [% IF ( review.isbn ) %] [% review.isbn |html %][% END %] </p>
-<p>[% review.firstname %] [% review.surname %] commented on [% review.datereviewed %]: [% review.review |html %]</p>
+<p>[% IF ( review.borrowernumber && ShowReviewer ) %][% review.firstname %] [% review.surname %] commented[% ELSE %]Comment[% END %] on [% review.datereviewed %]: [% review.review |html %]</p>
 						]]></description>
        <guid>[% OPACBaseURL %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% review.biblionumber %]&amp;reviewid=[% review.reviewid %]</guid>
        <pubDate>[% review.timestamp %]</pubDate>

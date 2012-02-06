@@ -1616,7 +1616,9 @@ CREATE TABLE `reviews` ( -- patron opac comments
   `review` text, -- the body of the comment
   `approved` tinyint(4) default NULL, -- whether this comment has been approved by a librarian (1 for yes, 0 for no)
   `datereviewed` datetime default NULL, -- the date the comment was left
-  PRIMARY KEY  (`reviewid`)
+  PRIMARY KEY  (`reviewid`),
+  CONSTRAINT `reviews_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `reviews_ibfk_2` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --

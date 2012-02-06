@@ -54,7 +54,7 @@ $(document).ready(function(){
             [% review.review |html %]
             [% END %]
             <span style="font-size:87%;font-color:#CCC;">Added [% review.datereviewed %] [% IF ( review.your_comment ) %] by <strong>you</strong>[% ELSE %]
-            [% IF ( ShowReviewer != "none" ) %] by
+            [% IF ( review.borrowernumber && ShowReviewer != "none" ) %] by
                 [% SWITCH ShowReviewer %]
                 [% CASE 'full' %]
                     [% review.borrtitle %] [% review.firstname %] [% review.surname %]
