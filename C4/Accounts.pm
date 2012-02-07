@@ -201,10 +201,10 @@ sub makepayment {
         my $ins = 
             $dbh->prepare( 
                 "INSERT 
-                    INTO accountlines (borrowernumber, accountno, date, amount, description, accounttype, amountoutstanding)
-                    VALUES ( ?, ?, now(), ?, 'Payment,thanks', 'Pay', 0)"
+                    INTO accountlines (borrowernumber, accountno, date, amount, itemnumber, description, accounttype, amountoutstanding, manager_id)
+                    VALUES ( ?, ?, now(), ?, ?, 'Payment,thanks', 'Pay', 0, ?)"
             );
-        $ins->execute($borrowernumber, $nextaccntno, $payment);
+        $ins->execute($borrowernumber, $nextaccntno, $payment, $data->{'itemnumber'}, $manager_id);
         $ins->finish;
     }
 
@@ -725,6 +725,8 @@ sub recordpayment_selectaccts {
 # fills in
 sub makepartialpayment {
     my ( $borrowernumber, $accountno, $amount, $user, $branch ) = @_;
+    my $manager_id = 0;
+    $manager_id = C4::Context->userenv->{'number'} if C4::Context->userenv;
     if (!$amount || $amount < 0) {
         return;
     }
@@ -743,11 +745,11 @@ sub makepartialpayment {
 
     # create new line
     my $insert = 'INSERT INTO accountlines (borrowernumber, accountno, date, amount, '
-    .  'description, accounttype, amountoutstanding) '
-    . ' VALUES (?, ?, now(), ?, ?, ?, 0)';
+    .  'description, accounttype, amountoutstanding, itemnumber, manager_id) '
+    . ' VALUES (?, ?, now(), ?, ?, ?, 0, ?, ?)';
 
     $dbh->do(  $insert, undef, $borrowernumber, $nextaccntno, $amount,
-        "Payment, thanks - $user", 'Pay');
+        "Payment, thanks - $user", 'Pay', $data->{'itemnumber'}, $manager_id);
 
     UpdateStats( $user, 'payment', $amount, '', '', '', $borrowernumber, $accountno );
 
