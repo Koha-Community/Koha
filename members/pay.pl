@@ -111,6 +111,8 @@ output_html_with_http_headers $input, $cookie, $template->output;
 
 sub writeoff {
     my ( $accountnum, $itemnum, $accounttype, $amount ) = @_;
+    my $manager_id = 0;
+    $manager_id = C4::Context->userenv->{'number'} if C4::Context->userenv;
 
     # if no item is attached to fine, make sure to store it as a NULL
     $itemnum ||= undef;
@@ -118,7 +120,7 @@ sub writeoff {
     $writeoff_sth->execute( $accountnum, $borrowernumber );
 
     my $acct = getnextacctno($borrowernumber);
-    $add_writeoff_sth->execute( $borrowernumber, $acct, $itemnum, $amount );
+    $add_writeoff_sth->execute( $borrowernumber, $acct, $itemnum, $amount, $manager_id );
 
     UpdateStats( $branch, 'writeoff', $amount, q{}, q{}, q{}, $borrowernumber );
 
@@ -282,8 +284,8 @@ sub get_writeoff_sth {
           . 'WHERE accountno=? and borrowernumber=?';
         $writeoff_sth = $dbh->prepare($sql);
         my $insert =
-q{insert into accountlines (borrowernumber,accountno,itemnumber,date,amount,description,accounttype)}
-          . q{values (?,?,?,now(),?,'Writeoff','W')};
+q{insert into accountlines (borrowernumber,accountno,itemnumber,date,amount,description,accounttype,manager_id)}
+          . q{values (?,?,?,now(),?,'Writeoff','W',?)};
         $add_writeoff_sth = $dbh->prepare($insert);
     }
     return;
