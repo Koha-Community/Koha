@@ -202,13 +202,9 @@ if ($op eq ""){
             "notes", $cgiparams->{'notes'}, "budget_id", $cgiparams->{'budget_id'},
             "currency",$cgiparams->{'currency'},
         );
-        # get the price if there is one.
-        # filter by storing only the 1st number
-        # we suppose the currency is correct, as we have no possibilities to get it.
-        my $price= GetMarcPrice($marcrecord, C4::Context->preference('marcflavour'));
-        if ($price){
-            $price = $num->unformat_number($price);
-        }
+
+        my $price = GetMarcPrice($marcrecord, C4::Context->preference('marcflavour'));
+
         if ($price){
             $orderinfo{'listprice'} = $price;
             eval {

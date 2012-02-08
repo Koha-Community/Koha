@@ -83,6 +83,7 @@ BEGIN {
       &GetXmlBiblio
       &GetCOinSBiblio
       &GetMarcPrice
+      &MungeMarcPrice
       &GetMarcQuantity
 
       &GetAuthorisedValueDesc
@@ -1405,11 +1406,55 @@ sub GetMarcPrice {
     for my $field ( $record->field(@listtags) ) {
         for my $subfield_value  ($field->subfield($subfield)){
             #check value
+            $subfield_value = MungeMarcPrice( $subfield_value );
             return $subfield_value if ($subfield_value);
         }
     }
     return 0; # no price found
 }
+
+=head2 MungeMarcPrice
+
+Return the best guess at what the actual price is from a price field.
+=cut
+
+sub MungeMarcPrice {
+    my ( $price ) = @_;
+
+    return unless ( $price =~ m/\d/ ); ## No digits means no price.
+
+    ## Look for the currency symbol of the active currency, if it's there,
+    ## start the price string right after the symbol. This allows us to prefer
+    ## this native currency price over other currency prices, if possible.
+    my $active_currency = C4::Context->dbh->selectrow_hashref( 'SELECT * FROM currency WHERE active = 1', {} );
+    my $symbol = quotemeta( $active_currency->{'symbol'} );
+    if ( $price =~ m/$symbol/ ) {
+        my @parts = split(/$symbol/, $price );
+        $price = $parts[1];
+    }
+
+    ## Grab the first number in the string ( can use commas or periods for thousands separator and/or decimal separator )
+    ( $price ) = $price =~ m/([\d\,\.]+[[\,\.]\d\d]?)/;
+
+    ## Split price into array on periods and commas
+    my @parts = split(/[\,\.]/, $price);
+
+    ## If the last grouping of digits is more than 2 characters, assume there is no decimal value and put it back.
+    my $decimal = pop( @parts );
+    if ( length( $decimal ) > 2 ) {
+        push( @parts, $decimal );
+        $decimal = '';
+    }
+
+    $price = join('', @parts );
+
+    if ( $decimal ) {
+     $price .= ".$decimal";
+    }
+
+    return $price;
+}
+
 
 =head2 GetMarcQuantity
 

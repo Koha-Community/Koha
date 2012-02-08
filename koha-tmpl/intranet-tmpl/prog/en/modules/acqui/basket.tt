@@ -271,6 +271,7 @@
                     <td>&nbsp;</td>
                     <td>[% qty_total %]</td>
                     <td>[% total_est_gsti %]</td>
+                    <td colspan="3">&nbsp;</td>
                 </tr>
                 [% END %]
                 </tfoot>
@@ -298,10 +299,10 @@
                                 [% END %]
                             </p>
                         </td>
-                        <td class="number">[% books_loo.rrp %]</td>
-                        <td class="number">[% books_loo.ecost %]</td>
-                        <td class="number">[% books_loo.quantity %]</td>
-                        <td class="number">[% books_loo.line_total %]</td>
+                        <td class="number [% IF books_loo.rrp.search('^0') %]error[% END %]">[% books_loo.rrp %]</td>
+                        <td class="number [% IF books_loo.ecost.search('^0') %]error[% END %]">[% books_loo.ecost %]</td>
+                        <td class="number [% IF books_loo.quantity.search('^0') %]error[% END %]">[% books_loo.quantity %]</td>
+                        <td class="number [% IF books_loo.line_total.search('^0') %]error[% END %]">[% books_loo.line_total %]</td>
                         <td>[% books_loo.budget_name %]</td>
                         [% IF ( active ) %]
                             [% UNLESS ( closedate ) %]
