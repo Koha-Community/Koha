@@ -1,7 +1,6 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Catalog &rsaquo; [% IF ( searchdesc ) %]Results of Search [% IF ( query_desc ) %]for '[% query_desc | html %]'[% END %][% IF ( limit_desc ) %]&nbsp;with limit(s):&nbsp;'[% limit_desc | html %]'[% END %][% ELSE %]You did not specify any search criteria[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<script type="text/javascript" src="/intranet-tmpl/prog/en/lib/jquery/plugins/jquery.highlight-3.js"></script>
 <script type="text/javascript">
 //<![CDATA[
 var MSG_NO_ITEM_SELECTED = _("Nothing is selected.");
@@ -86,6 +85,7 @@ $(".addtocart").show();
     $("#selection_ops").show();
     $(".selection").show();
     [% IF ( query_desc ) %]
+    toHighlight = $("p,span.results_summary,a.title");
         var query_desc = "[% query_desc |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]";
         q_array = query_desc.split(" ");
         highlightOn();
@@ -94,17 +94,18 @@ $(".addtocart").show();
     [% END %]
 });
 
-function highlightOff() {
-    $("p").removeHighlight();
+
+[% IF ( query_desc ) %]function highlightOff() {
+    toHighlight.removeHighlight();
     $(".highlight_toggle").toggle();
 }
 function highlightOn() {
     var x;
     for (x in q_array) {
-        $("p").highlight(q_array[x]);
+        toHighlight.highlight(q_array[x]);
     }
     $(".highlight_toggle").toggle();
-}
+}[% END %]
 
 function selectAll () {
     $(".selection").attr("checked", "checked");
@@ -454,6 +455,7 @@ YAHOO.util.Event.onContentReady("searchheader", function () {
                             </td>
                             <td>
 			    [% IF ( SEARCH_RESULT.XSLTResultsRecord ) %]
+                [% SEARCH_RESULT.result_number %].
 				[% SEARCH_RESULT.XSLTResultsRecord %]
 			    [% ELSE %]
                                 <p>[% SEARCH_RESULT.result_number %].

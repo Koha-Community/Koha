@@ -19,18 +19,18 @@
         <!-- Option: Display Alternate Graphic Representation (MARC 880)  -->
         <xsl:variable name="display880" select="boolean(marc:datafield[@tag=880])"/>
 
-    <xsl:variable name="hidelostitems" select="marc:sysprefs/marc:syspref[@name='hidelostitems']"/>
-    <xsl:variable name="URLLinkText" select="marc:sysprefs/marc:syspref[@name='URLLinkText']"/>
-    <xsl:variable name="Show856uAsImage" select="marc:sysprefs/marc:syspref[@name='OPACDisplay856uAsImage']"/>
-    <xsl:variable name="AlternateHoldingsField" select="substring(marc:sysprefs/marc:syspref[@name='AlternateHoldingsField'], 1, 3)"/>
-    <xsl:variable name="AlternateHoldingsSubfields" select="substring(marc:sysprefs/marc:syspref[@name='AlternateHoldingsField'], 4)"/>
-    <xsl:variable name="AlternateHoldingsSeparator" select="marc:sysprefs/marc:syspref[@name='AlternateHoldingsSeparator']"/>
+        <xsl:variable name="hidelostitems" select="marc:sysprefs/marc:syspref[@name='hidelostitems']"/>
+        <xsl:variable name="URLLinkText" select="marc:sysprefs/marc:syspref[@name='URLLinkText']"/>
+        <xsl:variable name="Show856uAsImage" select="marc:sysprefs/marc:syspref[@name='Display856uAsImage']"/>
+        <xsl:variable name="AlternateHoldingsField" select="substring(marc:sysprefs/marc:syspref[@name='AlternateHoldingsField'], 1, 3)"/>
+        <xsl:variable name="AlternateHoldingsSubfields" select="substring(marc:sysprefs/marc:syspref[@name='AlternateHoldingsField'], 4)"/>
+        <xsl:variable name="AlternateHoldingsSeparator" select="marc:sysprefs/marc:syspref[@name='AlternateHoldingsSeparator']"/>
+        <xsl:variable name="UseAuthoritiesForTracings" select="marc:sysprefs/marc:syspref[@name='UseAuthoritiesForTracings']"/>
         <xsl:variable name="leader" select="marc:leader"/>
         <xsl:variable name="leader6" select="substring($leader,7,1)"/>
         <xsl:variable name="leader7" select="substring($leader,8,1)"/>
         <xsl:variable name="leader19" select="substring($leader,20,1)"/>
         <xsl:variable name="biblionumber" select="marc:datafield[@tag=999]/marc:subfield[@code='c']"/>
-        <xsl:variable name="isbn" select="marc:datafield[@tag=020]/marc:subfield[@code='a']"/>
         <xsl:variable name="controlField008" select="marc:controlfield[@tag=008]"/>
         <xsl:variable name="typeOf008">
             <xsl:choose>
@@ -324,7 +324,6 @@
         </xsl:for-each>
         </xsl:if>
     </a>
-    <p>
 
     <!-- Author Statement: Alternate Graphic Representation (MARC 880) -->
     <xsl:if test="$display880">
@@ -336,63 +335,95 @@
 
     <xsl:choose>
     <xsl:when test="marc:datafield[@tag=100] or marc:datafield[@tag=110] or marc:datafield[@tag=111] or marc:datafield[@tag=700] or marc:datafield[@tag=710] or marc:datafield[@tag=711]">
+    <p class="author">by
+    <xsl:for-each select="marc:datafield[@tag=100 or @tag=700]">
+    <a>
+    <xsl:choose>
+        <xsl:when test="marc:subfield[@code=9] and $UseAuthoritiesForTracings='1'">
+            <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=an:<xsl:value-of select="marc:subfield[@code=9]"/></xsl:attribute>
+        </xsl:when>
+        <xsl:otherwise>
+        <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=au:"<xsl:value-of select="marc:subfield[@code='a']"/>"</xsl:attribute>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:call-template name="nameABCDQ"/></a>
+    <xsl:choose>
+    <xsl:when test="position()=last()"><xsl:text>. </xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
+    </xsl:for-each>
 
-    by <span class="author">
-        <xsl:for-each select="marc:datafield[@tag=100 or @tag=700]">
-            <xsl:choose>
-            <xsl:when test="position()=last()">
-                <xsl:call-template name="nameABCDQ"/>.
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:call-template name="nameABCDQ"/>;
-            </xsl:otherwise>
-            </xsl:choose>
-        </xsl:for-each>
+    <xsl:for-each select="marc:datafield[@tag=110 or @tag=710]">
+    <a>
+    <xsl:choose>
+        <xsl:when test="marc:subfield[@code=9] and $UseAuthoritiesForTracings='1'">
+            <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=an:<xsl:value-of select="marc:subfield[@code=9]"/></xsl:attribute>
+        </xsl:when>
+        <xsl:otherwise>
+        <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=au:"<xsl:value-of select="marc:subfield[@code='a']"/>"</xsl:attribute>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:call-template name="nameABCDN"/></a>
+    <xsl:choose><xsl:when test="position()=last()"><xsl:text> </xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
+    </xsl:for-each>
 
-        <xsl:for-each select="marc:datafield[@tag=110 or @tag=710]">
-            <xsl:choose>
-            <xsl:when test="position()=1">
-		<xsl:text> -- </xsl:text>
-            </xsl:when>
-            </xsl:choose>
-            <xsl:choose>
-            <xsl:when test="position()=last()">
-                <xsl:call-template name="nameABCDN"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:call-template name="nameABCDN"/>;
-            </xsl:otherwise>
-            </xsl:choose>
-        </xsl:for-each>
+    <xsl:for-each select="marc:datafield[@tag=111 or @tag=711]">
+        <xsl:choose>
+        <xsl:when test="marc:subfield[@code='n']">
+           <xsl:text> </xsl:text>
+           <xsl:call-template name="subfieldSelect">
+              <xsl:with-param name="codes">n</xsl:with-param>                              </xsl:call-template>
+           <xsl:text> </xsl:text>
+        </xsl:when>
+        </xsl:choose>
+    <a>
+    <xsl:choose>
+        <xsl:when test="marc:subfield[@code=9] and $UseAuthoritiesForTracings='1'">
+            <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=an:<xsl:value-of select="marc:subfield[@code=9]"/></xsl:attribute>
+        </xsl:when>
+        <xsl:otherwise>
+        <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=au:"<xsl:value-of select="marc:subfield[@code='a']"/>"</xsl:attribute>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:call-template name="nameACDEQ"/></a>
+    <xsl:choose><xsl:when test="position()=last()"><xsl:text>. </xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
 
-        <xsl:for-each select="marc:datafield[@tag=111 or @tag=711]">
-            <xsl:choose>
-            <xsl:when test="position()=1">
-		<xsl:text> -- </xsl:text>
-            </xsl:when>
-            </xsl:choose>
-            <xsl:choose>
-            <xsl:when test="marc:subfield[@code='n']">
-               <xsl:text> </xsl:text>
-               <xsl:call-template name="subfieldSelect">
-                  <xsl:with-param name="codes">n</xsl:with-param>
-               </xsl:call-template>
-               <xsl:text> </xsl:text>
-            </xsl:when>
-            </xsl:choose>
-            <xsl:choose>
-            <xsl:when test="position()=last()">
-                <xsl:call-template name="nameACDEQ"/>.
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:call-template name="nameACDEQ"/>;
-            </xsl:otherwise>
-            </xsl:choose>
-        </xsl:for-each>
-    </span>
+    </xsl:for-each>
+    </p>
     </xsl:when>
     </xsl:choose>
-    </p>
+
+    <xsl:if test="marc:datafield[@tag=300]">
+    <span class="results_summary description"><span class="label">Description: </span>
+        <xsl:for-each select="marc:datafield[@tag=300]">
+            <xsl:call-template name="chopPunctuation">
+              <xsl:with-param name="chopString">
+                <xsl:call-template name="subfieldSelect">
+                    <xsl:with-param name="codes">abceg</xsl:with-param>
+                </xsl:call-template>
+               </xsl:with-param>
+           </xsl:call-template>
+                <xsl:choose><xsl:when test="position()=last()"><xsl:text>.</xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
+        </xsl:for-each>
+    </span>
+   </xsl:if>
+
+    <xsl:if test="marc:datafield[@tag=020]">
+    <span class="results_summary isbn"><span class="label">ISBN: </span>
+    <xsl:for-each select="marc:datafield[@tag=020]">
+    <xsl:variable name="isbn" select="marc:subfield[@code='a']"/>
+            <xsl:value-of select="marc:subfield[@code='a']"/>
+            <xsl:choose><xsl:when test="position()=last()"><xsl:text>.</xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
+    </xsl:for-each>
+    </span>
+    </xsl:if>
+
+    <xsl:if test="marc:datafield[@tag=022]">
+    <span class="results_summary issn"><span class="label">ISSN: </span>
+    <xsl:for-each select="marc:datafield[@tag=022]">
+            <xsl:value-of select="marc:subfield[@code='a']"/>
+            <xsl:choose><xsl:when test="position()=last()"><xsl:text>.</xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
+    </xsl:for-each>
+    </span>
+    </xsl:if>
 
     <xsl:if test="marc:datafield[@tag=250]">
 	<span class="results_summary">
@@ -803,109 +834,6 @@
                             </xsl:for-each>
                             </span>
                         </xsl:if>
-                        <span class="results_summary" id="availability">
-                        <span class="label">Availability: </span>
-                        <xsl:choose>
-				   <xsl:when test="count(key('item-by-status', 'available'))=0 and count(key('item-by-status', 'reference'))=0">
-                        <xsl:choose>
-                            <xsl:when test="string-length($AlternateHoldingsField)=3 and marc:datafield[@tag=$AlternateHoldingsField]">
-                            <xsl:variable name="AlternateHoldingsCount" select="count(marc:datafield[@tag=$AlternateHoldingsField])"/>
-                            <xsl:for-each select="marc:datafield[@tag=$AlternateHoldingsField][1]">
-                                <xsl:call-template select="marc:datafield[@tag=$AlternateHoldingsField]" name="subfieldSelect">
-                                    <xsl:with-param name="codes"><xsl:value-of select="$AlternateHoldingsSubfields"/></xsl:with-param>
-                                    <xsl:with-param name="delimeter"><xsl:value-of select="$AlternateHoldingsSeparator"/></xsl:with-param>
-                                </xsl:call-template>
-                            </xsl:for-each>
-                            (<xsl:value-of select="$AlternateHoldingsCount"/>)
-                            </xsl:when>
-                            <xsl:otherwise>No copies available </xsl:otherwise>
-                        </xsl:choose>
-				   </xsl:when>
-                   <xsl:when test="count(key('item-by-status', 'available'))>0">
-                   <span class="available">
-                       <b><xsl:text>Copies available for loan: </xsl:text></b>
-                       <xsl:variable name="available_items"
-                           select="key('item-by-status', 'available')"/>
-                       <xsl:for-each select="$available_items[generate-id() = generate-id(key('item-by-status-and-branch', concat(items:status, ' ', items:homebranch))[1])]">
-                           <xsl:value-of select="items:homebranch"/>
-						   <xsl:if test="items:itemcallnumber != '' and items:itemcallnumber"> [<xsl:value-of select="items:itemcallnumber"/>]</xsl:if>
-                           <xsl:text> (</xsl:text>
-                           <xsl:value-of select="count(key('item-by-status-and-branch', concat(items:status, ' ', items:homebranch)))"/>
-                           <xsl:text>)</xsl:text>
-<xsl:choose><xsl:when test="position()=last()"><xsl:text>. </xsl:text></xsl:when><xsl:otherwise><xsl:text>, </xsl:text></xsl:otherwise></xsl:choose>
-                       </xsl:for-each>
-                   </span>
-                   </xsl:when>
-				   </xsl:choose>
-
-                   <xsl:choose> <xsl:when test="count(key('item-by-status', 'available'))>0">
-                       <xsl:choose><xsl:when test="count(key('item-by-status', 'reference'))>0">
-                            <br/>
-                       </xsl:when></xsl:choose>
-                   </xsl:when> </xsl:choose>
-
-                   <xsl:choose>
-                   <xsl:when test="count(key('item-by-status', 'reference'))>0">
-                   <span class="available">
-                       <b><xsl:text>Copies available for reference: </xsl:text></b>
-                       <xsl:variable name="reference_items"
-                           select="key('item-by-status', 'reference')"/>
-                       <xsl:for-each select="$reference_items[generate-id() = generate-id(key('item-by-status-and-branch', concat(items:status, ' ', items:homebranch))[1])]">
-                           <xsl:value-of select="items:homebranch"/>
-						   <xsl:if test="items:itemcallnumber != '' and items:itemcallnumber"> [<xsl:value-of select="items:itemcallnumber"/>]</xsl:if>
-                           <xsl:text> (</xsl:text>
-                           <xsl:value-of select="count(key('item-by-status-and-branch', concat(items:status, ' ', items:homebranch)))"/>
-                           <xsl:text>)</xsl:text>
-                   <xsl:choose><xsl:when test="position()=last()"><xsl:text>. </xsl:text></xsl:when><xsl:otherwise><xsl:text>, </xsl:text></xsl:otherwise></xsl:choose>
-                       </xsl:for-each>
-                   </span>
-                   </xsl:when>
-                   </xsl:choose>
-
-                   <xsl:if test="count(key('item-by-status', 'Checked out'))>0">
-                   <span class="unavailable">
-                       <xsl:text>Checked out (</xsl:text>
-                       <xsl:value-of select="count(key('item-by-status', 'Checked out'))"/>
-                       <xsl:text>). </xsl:text>
-				   </span>
-                   </xsl:if>
-                   <xsl:if test="count(key('item-by-status', 'Withdrawn'))>0">
-                   <span class="unavailable">
-                       <xsl:text>Withdrawn (</xsl:text>
-                       <xsl:value-of select="count(key('item-by-status', 'Withdrawn'))"/>
-                       <xsl:text>). </xsl:text>                   </span>
-				   </xsl:if>
-                    <xsl:if test="$hidelostitems='0' and count(key('item-by-status', 'Lost'))>0">
-                   <span class="unavailable">
-                       <xsl:text>Lost (</xsl:text>
-                       <xsl:value-of select="count(key('item-by-status', 'Lost'))"/>
-                       <xsl:text>). </xsl:text>                   </span>
-				   </xsl:if>
-                    <xsl:if test="count(key('item-by-status', 'Damaged'))>0">
-                   <span class="unavailable">
-                       <xsl:text>Damaged (</xsl:text>
-                       <xsl:value-of select="count(key('item-by-status', 'Damaged'))"/>
-                       <xsl:text>). </xsl:text>                   </span>
-                   </xsl:if>
-                    <xsl:if test="count(key('item-by-status', 'On order'))>0">
-                   <span class="unavailable">
-                       <xsl:text>On order (</xsl:text>
-                       <xsl:value-of select="count(key('item-by-status', 'On order'))"/>
-                       <xsl:text>). </xsl:text>                   </span>
-                   </xsl:if>
-                    <xsl:if test="count(key('item-by-status', 'In transit'))>0">
-                   <span class="unavailable">
-                       <xsl:text>In transit (</xsl:text>
-                       <xsl:value-of select="count(key('item-by-status', 'In transit'))"/>
-                       <xsl:text>). </xsl:text>                   </span>
-                   </xsl:if>
-                    <xsl:if test="count(key('item-by-status', 'Waiting'))>0">
-                   <span class="unavailable">
-                       <xsl:text>On hold (</xsl:text>
-                       <xsl:value-of select="count(key('item-by-status', 'Waiting'))"/>
-                       <xsl:text>). </xsl:text>                   </span>
-                   </xsl:if>
-               </span>
     </xsl:template>
 
     <xsl:template name="nameABCDQ">
