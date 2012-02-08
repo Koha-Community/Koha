@@ -48,17 +48,15 @@ OPAC:
                   no: Show
             - lost items on search and detail pages.
         -
-            - Show biblio records on OPAC result page
+            - 'Display OPAC results using XSLT stylesheet at: '
             - pref: OPACXSLTResultsDisplay
-              choices:
-                  yes: using XSLT stylesheets.
-                  no: normally.
+              class: file
+            - '<br />Options:<br />- leave empty for "no xslt"<br />- enter "default" for the default one<br />- put a path to define a xslt file<br />- put an URL for an external specific stylesheet.'
         -
-            - Show item details pages on the OPAC
+            - 'Display OPAC details using XSLT stylesheet at: '
             - pref: OPACXSLTDetailsDisplay
-              choices:
-                  yes: using XSLT stylesheets.
-                  no: normally.
+              class: file
+            - '<br />Options:<br />- leave empty for "no xslt"<br />- enter "default" for the default one<br />- put a path to define a xslt file<br />- put an URL for an external specific stylesheet.'
         -
             - On pages displayed with XSLT stylesheets on the OPAC,
             - pref: DisplayOPACiconsXSLT

@@ -51,17 +51,15 @@ Staff Client:
               class: url
             - for the Staff Client's favicon. (This should be a complete URL, starting with <code>http://</code>.)
         -
-            - Show biblio records on result page in the staff client
+            - 'Display results in the staff client using XSLT stylesheet at: '
             - pref: XSLTResultsDisplay
-              choices:
-                  yes: using XSLT stylesheets.
-                  no: normally.
+              class: file
+            - '<br />Options:<br />- leave empty for "no xslt"<br />- enter "default" for the default one<br />- put a path to define a xslt file<br />- put an URL for an external specific stylesheet.'
         -
-            - Show item details pages in the staff client
+            - 'Display details in the staff client using XSLT stylesheet at: '
             - pref: XSLTDetailsDisplay
-              choices:
-                  yes: using XSLT stylesheets.
-                  no: normally.
+              class: file
+            - '<br />Options:<br />- leave empty for "no xslt"<br />- enter "default" for the default one<br />- put a path to define a xslt file<br />- put an URL for an external specific stylesheet.'
         -
             - Use the Yahoo UI libraries
             - pref: yuipath

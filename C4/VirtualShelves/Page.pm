@@ -257,7 +257,7 @@ sub shelfpage {
                     my $biblionumber = $this_item->{'biblionumber'};
                     my $record = GetMarcBiblio($biblionumber);
                     $this_item->{XSLTBloc} =
-                        XSLTParse4Display($biblionumber, $record, 'Results', 'opac')
+                        XSLTParse4Display($biblionumber, $record, "OPACXSLTResultsDisplay")
                             if C4::Context->preference("OPACXSLTResultsDisplay") && $type eq 'opac';
 
                     # the virtualshelfcontents table does not store these columns nor are they retrieved from the items

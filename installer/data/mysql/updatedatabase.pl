@@ -5109,6 +5109,36 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.07.00.043";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    my $countXSLTDetailsDisplay = 0;
+    my $valueXSLTDetailsDisplay = "";
+    my $valueXSLTResultsDisplay = "";
+    my $valueOPACXSLTDetailsDisplay = "";
+    my $valueOPACXSLTResultsDisplay = "";
+    #the line below test if database comes from a BibLibre's branch
+    $countXSLTDetailsDisplay = $dbh->do('SELECT 1 FROM systempreferences WHERE variable="IntranetXSLTDetailsDisplay"');
+    if ($countXSLTDetailsDisplay > 0)
+    {
+        #the two lines below will only be used to update the databases from the BibLibre's branch. They will not affect the others
+        $dbh->do(q|UPDATE systempreferences SET variable="XSLTDetailsDisplay" WHERE variable="IntranetXSLTDetailsDisplay"|);
+        $dbh->do(q|UPDATE systempreferences SET variable="XSLTResultsDisplay" WHERE variable="IntranetXSLTResultsDisplay"|);
+    }
+    else
+    {
+        $valueXSLTDetailsDisplay = "default" if (C4::Context->preference("XSLTDetailsDisplay"));
+        $valueXSLTResultsDisplay = "default" if (C4::Context->preference("XSLTResultsDisplay"));
+        $valueOPACXSLTDetailsDisplay = "default" if (C4::Context->preference("OPACXSLTDetailsDisplay"));
+        $valueOPACXSLTResultsDisplay = "default" if (C4::Context->preference("OPACXSLTResultsDisplay"));
+        $dbh->do("UPDATE systempreferences SET type='Free', value=\"$valueXSLTDetailsDisplay\" WHERE variable='XSLTDetailsDisplay'");
+        $dbh->do("UPDATE systempreferences SET type='Free', value=\"$valueXSLTResultsDisplay\" WHERE variable='XSLTResultsDisplay'");
+        $dbh->do("UPDATE systempreferences SET type='Free', value=\"$valueOPACXSLTDetailsDisplay\" WHERE variable='OPACXSLTDetailsDisplay'");
+        $dbh->do("UPDATE systempreferences SET type='Free', value=\"$valueOPACXSLTResultsDisplay\" WHERE variable='OPACXSLTResultsDisplay'");
+    }
+    print "XSLT systempreference takes a path to file rather than YesNo\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 DropAllForeignKeys($table)

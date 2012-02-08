@@ -1776,8 +1776,7 @@ sub searchResults {
 	$debug && warn $marcrecord->as_formatted;
 	my $interface = $search_context eq 'opac' ? 'OPAC' : '';
 	if (!$scan && C4::Context->preference($interface . "XSLTResultsDisplay")) {
-            $oldbiblio->{XSLTResultsRecord} = XSLTParse4Display($oldbiblio->{biblionumber}, $marcrecord, 'Results',
-                                                                $search_context, 1, \@hiddenitems);
+            $oldbiblio->{XSLTResultsRecord} = XSLTParse4Display($oldbiblio->{biblionumber}, $marcrecord, $interface."XSLTResultsDisplay", 1, \@hiddenitems);
 	    # the last parameter tells Koha to clean up the problematic ampersand entities that Zebra outputs
         }
 
