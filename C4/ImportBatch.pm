@@ -1150,7 +1150,7 @@ sub _update_import_record_marc {
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare("UPDATE import_records SET marc = ?, marcxml = ?
                              WHERE  import_record_id = ?");
-    $sth->execute($marc_record->as_usmarc(), $marc_record->as_xml(), $import_record_id);
+    $sth->execute($marc_record->as_usmarc(), $marc_record->as_xml(C4::Context->preference('marcflavour')), $import_record_id);
     $sth->finish();
 }
 
