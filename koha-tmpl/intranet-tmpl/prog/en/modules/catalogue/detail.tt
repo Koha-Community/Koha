@@ -436,7 +436,7 @@ function verify_images() {
 
 [% IF ( MARCNOTES ) %]
     [% FOREACH MARCNOTE IN MARCNOTES %]
-    <p>[% MARCNOTE.marcnote %]</p>
+    <p>[% MARCNOTE.marcnote FILTER html_line_break %]</p>
     [% END %]
     [% ELSE %]
     [% IF ( notes ) %]
