@@ -79,6 +79,8 @@ $.tablesorter.addParser({
                     <th>Title</th>
                     <th>Patron</th>
                     <th>Location</th>
+                    <th>Copy Number</th>
+                    <th>Enumeration</th>
                     <th>Action</th>
                </tr></thead>
                <tbody>[% FOREACH reserveloo IN reserveloop %]
@@ -95,6 +97,8 @@ $.tablesorter.addParser({
                         [% reserveloo.borrowermail %]</a>[% END %]
                     </td>
                     <td>[% reserveloo.homebranch %]<br />[% reserveloo.itemcallnumber %]</td>
+                    <td>[% reserveloo.copynumber %]</td>
+                    <td>[% reserveloo.enumchron %]</td>
                     <td>
                         <form name="cancelReserve" action="waitingreserves.pl" method="post">
                             <input type="hidden" name="borrowernumber" value="[% reserveloo.borrowernum %]" />
@@ -124,6 +128,8 @@ $.tablesorter.addParser({
                     <th>Title</th>
                     <th>Patron</th>
                     <th>Location</th>
+                    <th>Copy Number</th>
+                    <th>Enumeration</th>
                     <th>Action</th>
                </tr></thead>
                <tbody>[% FOREACH overloo IN overloop %]
@@ -139,6 +145,8 @@ $.tablesorter.addParser({
         [% overloo.borrowermail %]</a>[% END %]
                     </td>
                     <td>[% overloo.homebranch %] [% overloo.itemcallnumber %]</td>
+                    <td>[% overloo.copynumber %]</td>
+                    <td>[% overloo.enumchron %]</td>
                     <td><form name="cancelReserve" action="waitingreserves.pl" method="post">
                             <input type="hidden" name="borrowernumber" value="[% overloo.borrowernum %]" />
                             <input type="hidden" name="itemnumber" value="[% overloo.itemnumber %]" />

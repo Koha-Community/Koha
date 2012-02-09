@@ -134,13 +134,16 @@ if ( $run_report ) {
             GROUP_CONCAT(DISTINCT reserves.branchcode 
                     ORDER BY items.itemnumber SEPARATOR ', ') l_branch,
             items.holdingbranch as branch,
-            items.itemcallnumber,
             GROUP_CONCAT(DISTINCT items.itype 
                     ORDER BY items.itemnumber SEPARATOR '<br/>') l_itype,
             GROUP_CONCAT(DISTINCT items.location 
                     ORDER BY items.itemnumber SEPARATOR '<br/>') l_location,
             GROUP_CONCAT(DISTINCT items.itemcallnumber 
                     ORDER BY items.itemnumber SEPARATOR '<br/>') l_itemcallnumber,
+            GROUP_CONCAT(DISTINCT items.enumchron
+                    ORDER BY items.itemnumber SEPARATOR '<br/>') l_enumchron,
+            GROUP_CONCAT(DISTINCT items.copynumber
+                    ORDER BY items.itemnumber SEPARATOR '<br/>') l_copynumber,
             items.itemnumber,
             notes,
             notificationdate,
@@ -159,6 +162,7 @@ if ( $run_report ) {
     WHERE
     reserves.found IS NULL
     $sqldatewhere
+    AND (reserves.itemnumber IS NULL OR reserves.itemnumber = items.itemnumber)
     AND items.itemnumber NOT IN (SELECT itemnumber FROM branchtransfers where datearrived IS NULL)
     AND issues.itemnumber IS NULL
     AND reserves.priority <> 0 
@@ -200,6 +204,8 @@ if ( $run_report ) {
                 holdingbranch    => $data->{l_holdingbranch},
                 branch           => $data->{l_branch},
                 itemcallnumber   => $data->{l_itemcallnumber},
+                enumchron        => $data->{l_enumchron},
+		copyno           => $data->{l_copynumber},
                 notes            => $data->{notes},
                 notificationdate => $data->{notificationdate},
                 reminderdate     => $data->{reminderdate},
