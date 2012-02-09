@@ -7,7 +7,7 @@ Calendar._DN = new Array(_("Sunday"),_("Monday"),_("Tuesday"),_("Wednesday"),_("
 Calendar._SDN = new Array(_("Sun"),_("Mon"),_("Tue"),_("Wed"),_("Thu"),_("Fri"),_("Sat"),_("Sun"));
 // First day of the week. "0" means display Sunday first, "1" means display
 // Monday first, etc.
-Calendar._FD = 1;
+Calendar._FD = [% CalendarFirstDayOfWeek %];
 // full month names
 Calendar._MN = new Array(_("January"),_("February"),_("March"),_("April"),_("May"),_("June"),_("July"),_("August"),_("September"),_("October"),_("November"),_("December"));
 // short month names

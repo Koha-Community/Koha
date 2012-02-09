@@ -340,7 +340,8 @@
                 ifFormat : "[% DHTMLcalendar_dateformat %]",
                 button : "CalendarReserveDate[% bibitemloo.biblionumber %]",
                 disableFunc : validate[% bibitemloo.biblionumber %],
-                dateStatusFunc : validate[% bibitemloo.biblionumber %]
+                dateStatusFunc : validate[% bibitemloo.biblionumber %],
+                firstDay : [% CalendarFirstDayOfWeek %]
               }
               );
               //]]>
@@ -372,7 +373,8 @@
           ifFormat : "[% DHTMLcalendar_dateformat %]",
           button : "CalendarExpirationDate_[% bibitemloo.biblionumber %]",
           disableFunc : validate1,
-          dateStatusFunc : validate1
+          dateStatusFunc : validate1,
+          firstDay : [% CalendarFirstDayOfWeek %]
         }
       );
       //]]>
