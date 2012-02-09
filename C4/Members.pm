@@ -473,7 +473,7 @@ sub patronflags {
         $flaginfo{'message'} = $patroninformation->{'borrowernotes'};
         $flags{'NOTES'}      = \%flaginfo;
     }
-    my ( $odues, $itemsoverdue ) = checkoverdues($patroninformation->{'borrowernumber'});
+    my ( $odues, $itemsoverdue ) = C4::Overdues::checkoverdues($patroninformation->{'borrowernumber'});
     if ( $odues && $odues > 0 ) {
         my %flaginfo;
         $flaginfo{'message'}  = "Yes";
