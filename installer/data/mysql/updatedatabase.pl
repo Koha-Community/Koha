@@ -6221,6 +6221,12 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     $dbh->do("ALTER TABLE action_logs CHANGE timestamp timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;");
     print "Upgrade to $DBversion done (Bug 7241: Fix on circulation logs)\n";
     print "WARNING about bug 7241: to partially correct the broken logs, the log history is filled with the first found item for each biblio.\n";
+}
+
+$DBversion = "3.10.05.002";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do("INSERT INTO  permissions ( module_bit, code, description ) VALUES  ( '1',  'overdues_report',  'Execute overdue items report' )");
+    print "Upgrade to $DBversion done ( Add circ permission overdues_report )\n";
     SetVersion($DBversion);
 }
 
