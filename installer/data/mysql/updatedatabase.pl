@@ -4712,6 +4712,13 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.07.00.XXX";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('TransferWhenCancelAllWaitingHolds','0','Transfer items when cancelling all waiting holds',NULL,'YesNo')");
+    print "Upgrade to $DBversion done (Add sysprefs to control transfer when cancel all waiting holds)\n";
+    SetVersion ($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 DropAllForeignKeys($table)

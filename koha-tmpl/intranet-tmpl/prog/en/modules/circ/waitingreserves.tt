@@ -44,7 +44,8 @@ $.tablesorter.addParser({
             View all branches</a></span>
             [% END %]
         </h2>
-        [% IF ( messagetransfert ) %]
+    [% IF ( cancel_result ) %]
+        [% IF ( cancel_result.messagetransfert ) %]
             <div>
                 <h2>Hold find for ([% nextreservtitle %]), must be transferred</h2>
                 <p>This hold placed by : <b> [% nextreservsurname %] [% nextreservfirstname %]</b> at the library : <b> [% branchname %] </b>, Please transfer this hold.
@@ -54,7 +55,7 @@ $.tablesorter.addParser({
                 </form>
             </div>
         [% END %]
-        [% IF ( waiting ) %]
+        [% IF ( cancel_result.waiting ) %]
             <div id="bloc25">
                 <h2>This hold is waiting</h2>
                 <p>This hold ([% nextreservtitle %]) was placed by <b> : [% nextreservsurname %] [% nextreservfirstname %]</b>,
@@ -65,7 +66,7 @@ $.tablesorter.addParser({
                 </form>
             </div>
         [% END %]
-        [% UNLESS ( message ) %]
+    [% ELSE %]
         <div id="resultlist" class="toptabs">
             <ul>
                 <li><a href="/cgi-bin/koha/circ/waitingreserves.pl#holdswaiting">[% reservecount %] Hold(s) waiting</a></li>
@@ -121,7 +122,18 @@ $.tablesorter.addParser({
         </div>
         <div id="holdsover">
                 <p>Holds listed here have been awaiting pickup for more than [% ReservesMaxPickUpDelay %] days.</p>
-                [% IF ( overloop ) %]
+               [% IF ( overloop ) %]
+               <p>
+               <form name="cancelAllReserve" action="waitingreserves.pl" method="post">
+                   <input type="hidden" name="cancelall" value="1" />
+                   <input type="hidden" name="allbranches" value="[% allbranches %]" />
+                   <input type="submit" value="Cancel [% IF TransferWhenCancelAllWaitingHolds %]and Transfer [% END %]All" />
+               </form>
+               [% UNLESS TransferWhenCancelAllWaitingHolds %]
+               Only items that need not be transferred will be cancelled (TransferWhenCancelAllWaitingHolds sypref)
+               [% END %]
+               </p>
+               <br/>
                <table id="holdso">
                <thead><tr>
                     <th>Available since</th>

@@ -46,6 +46,7 @@ my $borrowernumber = $input->param('borrowernumber');
 my $fbr            = $input->param('fbr') || '';
 my $tbr            = $input->param('tbr') || '';
 my $all_branches   = $input->param('allbranches') || '';
+my $cancelall      = $input->param('cancelall');
 
 my $cancel;
 
@@ -62,42 +63,23 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 my $default = C4::Context->userenv->{'branch'};
 
+my $transfer_when_cancel_all = C4::Context->preference('TransferWhenCancelAllWaitingHolds');
+$template->param( TransferWhenCancelAllWaitingHolds => 1 ) if $transfer_when_cancel_all;
+
+my @cancel_result;
 # if we have a return from the form we launch the subroutine CancelReserve
 if ($item) {
-    my ( $messages, $nextreservinfo ) = ModReserveCancelAll( $item, $borrowernumber );
-    # if we have a result
-    if ($nextreservinfo) {
-        my $borrowerinfo = GetMemberDetails( $nextreservinfo );
-        my $iteminfo = GetBiblioFromItemNumber($item);
-        if ( $messages->{'transfert'} ) {
-            $template->param(
-                messagetransfert => $messages->{'transfert'},
-                branchname       => GetBranchName($messages->{'transfert'}),
-            );
-        }
-
-        $template->param(
-            message             => 1,
-            nextreservnumber    => $nextreservinfo,
-            nextreservsurname   => $borrowerinfo->{'surname'},
-            nextreservfirstname => $borrowerinfo->{'firstname'},
-            nextreservitem      => $item,
-            nextreservtitle     => $iteminfo->{'title'},
-            waiting             => ($messages->{'waiting'}) ? 1 : 0,
-        );
-    }
-
-# 	if the document is not in his homebranch location and there is not reservation after, we transfer it
-    if ($fbr ne $tbr  and not $nextreservinfo) {
-        ModItemTransfer( $item, $fbr, $tbr );
-    }
+    my $res = cancel( $item, $borrowernumber, $fbr, $tbr );
+    push @cancel_result, $res if $res;
 }
+
 if ( C4::Context->preference('IndependantBranches') ) {
     undef $all_branches;
 } else {
-    $template->param( all_branches_link => $input->url . '?allbranches=1&' . $input->query_string )
+    $template->param( all_branches_link => $input->url . '?allbranches=1' )
       unless $all_branches;
 }
+$template->param( all_branches => 1 ) if $all_branches;
 
 my (@reservloop, @overloop);
 my ($reservcount, $overcount);
@@ -107,8 +89,24 @@ my @getreserves = $all_branches ? GetReservesForBranch() : GetReservesForBranch(
 my $today = Date_to_Days(&Today);
 foreach my $num (@getreserves) {
     next unless ($num->{'waitingdate'} && $num->{'waitingdate'} ne '0000-00-00');
-    my %getreserv;
-    my $gettitle     = GetBiblioFromItemNumber( $num->{'itemnumber'} );
+
+    my $itemnumber = $num->{'itemnumber'};
+    my $gettitle     = GetBiblioFromItemNumber( $itemnumber );
+    my $borrowernum = $num->{'borrowernumber'};
+    my $holdingbranch = $gettitle->{'holdingbranch'};
+    my $homebranch = $gettitle->{'homebranch'};
+
+    if ($cancelall) {
+        my $res = cancel( $itemnumber, $borrowernum, $holdingbranch, $homebranch, !$transfer_when_cancel_all );
+        push @cancel_result, $res if $res;
+        next;
+    }
+
+    my %getreserv = (
+        itemnumber => $itemnumber,
+        borrowernum => $borrowernum,
+    );
+
     # fix up item type for display
     $gettitle->{'itemtype'} = C4::Context->preference('item-level_itypes') ? $gettitle->{'itype'} : $gettitle->{'itemtype'};
     my $getborrower = GetMember(borrowernumber => $num->{'borrowernumber'});
@@ -122,7 +120,6 @@ foreach my $num (@getreserves) {
 
     $getreserv{'itemtype'}       = $itemtypeinfo->{'description'};
     $getreserv{'title'}          = $gettitle->{'title'};
-    $getreserv{'itemnumber'}     = $gettitle->{'itemnumber'};
     $getreserv{'biblionumber'}   = $gettitle->{'biblionumber'};
     $getreserv{'barcode'}        = $gettitle->{'barcode'};
     $getreserv{'branchname'}     = GetBranchName($gettitle->{'homebranch'});
@@ -131,10 +128,9 @@ foreach my $num (@getreserves) {
     $getreserv{'itemcallnumber'} = $gettitle->{'itemcallnumber'};
     $getreserv{'enumchron'}      = $gettitle->{'enumchron'};
     $getreserv{'copynumber'}     = $gettitle->{'copynumber'};
-    if ( $gettitle->{'homebranch'} ne $gettitle->{'holdingbranch'} ) {
+    if ( $homebranch ne $holdingbranch ) {
         $getreserv{'dotransfer'} = 1;
     }
-    $getreserv{'borrowernum'}       = $getborrower->{'borrowernumber'};
     $getreserv{'borrowername'}      = $getborrower->{'surname'};
     $getreserv{'borrowerfirstname'} = $getborrower->{'firstname'};
     $getreserv{'borrowerphone'}     = $getborrower->{'phone'};
@@ -152,6 +148,7 @@ foreach my $num (@getreserves) {
     
 }
 
+$template->param(cancel_result => \@cancel_result) if @cancel_result;
 $template->param(
     reserveloop => \@reservloop,
     reservecount => $reservcount,
@@ -163,3 +160,42 @@ $template->param(
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
+
+exit;
+
+sub cancel {
+    my ($item, $borrowernumber, $fbr, $tbr, $skip_transfers ) = @_;
+
+    my $transfer = $fbr ne $tbr; # XXX && !$nextreservinfo;
+
+    return if $transfer && $skip_transfers;
+
+    my ( $messages, $nextreservinfo ) = ModReserveCancelAll( $item, $borrowernumber );
+
+# 	if the document is not in his homebranch location and there is not reservation after, we transfer it
+    if ($transfer && !$nextreservinfo) {
+        ModItemTransfer( $item, $fbr, $tbr );
+    }
+    # if we have a result
+    if ($nextreservinfo) {
+        my %res;
+        my $borrowerinfo = GetMemberDetails( $nextreservinfo );
+        my $iteminfo = GetBiblioFromItemNumber($item);
+        if ( $messages->{'transfert'} ) {
+            $res{messagetransfert} = $messages->{'transfert'};
+            $res{branchname}       = GetBranchName($messages->{'transfert'});
+        }
+
+        $res{message}             = 1;
+        $res{nextreservnumber}    = $nextreservinfo;
+        $res{nextreservsurname}   = $borrowerinfo->{'surname'};
+        $res{nextreservfirstname} = $borrowerinfo->{'firstname'};
+        $res{nextreservitem}      = $item;
+        $res{nextreservtitle}     = $iteminfo->{'title'};
+        $res{waiting}             = $messages->{'waiting'} ? 1 : 0;
+
+        return \%res;
+    }
+
+    return;
+}
