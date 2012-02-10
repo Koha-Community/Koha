@@ -23,6 +23,16 @@
             document.form.state.value=RegExp.$3;
             document.form.country.value=RegExp.$4;
         });
+
+        [% IF categorycode %]
+            update_category_code( "[% categorycode %]" );
+        [% ELSE %]
+            if ( $("#categorycode").length > 0 ){
+                var category_code = $("#categorycode").find("option:selected").val();
+                update_category_code( category_code );
+            }
+        [% END %]
+
     });
 
     function clear_entry(node) {
@@ -51,6 +61,26 @@
         $("select#patron_attr_" + newId, clone).attr('value','');
         original.parentNode.insertBefore(clone, original.nextSibling);
     }
+
+    function update_category_code(category_code) {
+        if ( $(category_code).is("select") ) {
+            category_code = $("#categorycode").find("option:selected").val();
+        }
+        var mytables = $(".attributes_table>tbody");
+
+        mytables.find("tr").each(function(){
+            $(this).hide()
+        });
+
+        mytables.find("tr[data-category_code="+category_code+"]").each(function(){
+            $(this).show();
+        });
+        mytables.find("tr[data-category_code='']").each(function(){
+            $(this).show();
+        });
+
+    }
+
 		var MSG_SEPARATOR = _("Separator must be / in field ");
         var MSG_INCORRECT_DAY = _("Invalid day entered in field ");
         var MSG_INCORRECT_MONTH = _("Invalid month entered in field ");
@@ -999,25 +1029,25 @@
         [% END %]
     <li>
         <label for="categorycode">Category: </label>
-        <select id="categorycode" name="categorycode">
+        <select id="categorycode" name="categorycode" onchange="update_category_code(this);">
         [% FOREACH typeloo IN typeloop %]
-			[% FOREACH categoryloo IN typeloo.categoryloop %]
-				[% IF ( loop.first ) %]
-					[% IF ( typeloo.typename_C ) %]<optgroup label="Child">[% END %]
-					[% IF ( typeloo.typename_A ) %]<optgroup label="Adult">[% END %]
-					[% IF ( typeloo.typename_S ) %]<optgroup label="Staff">[% END %]
-					[% IF ( typeloo.typename_I ) %]<optgroup label="Organization">[% END %]
-					[% IF ( typeloo.typename_P ) %]<optgroup label="Professional">[% END %]
-					[% IF ( typeloo.typename_X ) %]<optgroup label="Statistical">[% END %]
-			    [% END %]
-				[% IF ( categoryloo.categorycodeselected ) %]
-               <option value="[% categoryloo.categorycode %]" selected="selected">[% categoryloo.categoryname %]</option>
-				[% ELSE %]
-<option value="[% categoryloo.categorycode %]">[% categoryloo.categoryname %]</option>
-				[% END %]
-				[% IF ( loop.last ) %]
-			        </optgroup>
-				[% END %]
+            [% FOREACH categoryloo IN typeloo.categoryloop %]
+                [% IF ( loop.first ) %]
+                    [% IF ( typeloo.typename_C ) %]<optgroup label="Child"        value="C">[% END %]
+                    [% IF ( typeloo.typename_A ) %]<optgroup label="Adult"        value="A">[% END %]
+                    [% IF ( typeloo.typename_S ) %]<optgroup label="Staff"        value="S">[% END %]
+                    [% IF ( typeloo.typename_I ) %]<optgroup label="Organization" value="I">[% END %]
+                    [% IF ( typeloo.typename_P ) %]<optgroup label="Professional" value="P">[% END %]
+                    [% IF ( typeloo.typename_X ) %]<optgroup label="Statistical"  value="X">[% END %]
+                [% END %]
+                [% IF ( categoryloo.categorycodeselected ) %]
+                    <option value="[% categoryloo.categorycode %]" selected="selected" data-typename="[% typeloo.typename %]">[% categoryloo.categoryname %]</option>
+                [% ELSE %]
+                    <option value="[% categoryloo.categorycode %]" data-typename="[% typeloo.typename %]">[% categoryloo.categoryname %]</option>
+                [% END %]
+                [% IF ( loop.last ) %]
+                    </optgroup>
+                [% END %]
             [% END %]
        [% END %]
        </select>
@@ -1352,55 +1382,67 @@
   <fieldset class="rows" id="memberentry_patron_attributes">
     <input type="hidden" name="setting_extended_patron_attributes" value="1" />
     <legend>Additional attributes and identifiers</legend>
-    <table>
-        <tr>
-            <th>Type</th>
-            <th colspan="2">Value</th>
-        </tr>
-        [% FOREACH patron_attribute IN patron_attributes %]
-        <tr>
-            <td>[% patron_attribute.code %] ([% patron_attribute.description %])
-            </td>
-            <td>
-                <input type="hidden" id="[% patron_attribute.form_id %]_code" name="[% patron_attribute.form_id %]_code" value="[% patron_attribute.code |html %]" />
-                [% IF ( patron_attribute.use_dropdown ) %]
-                    <select id="[% patron_attribute.form_id %]" name="[% patron_attribute.form_id %]">
-                        <option value="" />
-                        [% FOREACH auth_val_loo IN patron_attribute.auth_val_loop %]
-                            [% IF ( auth_val_loo.selected ) %]
-                                <option value="[% auth_val_loo.authorised_value %]" selected="selected">
-                                    [% auth_val_loo.lib %]
-                                </option>
+    [% FOREACH pa_loo IN patron_attributes %]
+        [% IF pa_loo.class %]
+            <h4>[% pa_loo.lib %]</h4>
+            <table id=aai_[% pa_loo.class %] class="attributes_table">
+        [% ELSE %]
+            <table id="aai" class="attributes_table">
+        [% END %]
+        <thead>
+            <tr>
+                <th>Type</th>
+                <th colspan="2">Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            [% FOREACH patron_attribute IN pa_loo.items %]
+                <tr data-category_code="[% patron_attribute.category_code %]">
+                    <td>
+                        [% patron_attribute.code %] ([% patron_attribute.description %])
+                    </td>
+                    <td>
+                        <input type="hidden" id="[% patron_attribute.form_id %]_code" name="[% patron_attribute.form_id %]_code" value="[% patron_attribute.code |html %]" />
+                        [% IF ( patron_attribute.use_dropdown ) %]
+                            <select id="[% patron_attribute.form_id %]" name="[% patron_attribute.form_id %]">
+                                <option value="" />
+                                [% FOREACH auth_val_loo IN patron_attribute.auth_val_loop %]
+                                    [% IF ( auth_val_loo.selected ) %]
+                                        <option value="[% auth_val_loo.authorised_value %]" selected="selected">
+                                            [% auth_val_loo.lib %]
+                                        </option>
+                                    [% ELSE %]
+                                        <option value="[% auth_val_loo.authorised_value %]" >
+                                            [% auth_val_loo.lib %]
+                                        </option>
+                                    [% END %]
+                                [% END %]
+                            </select>
+                        [% ELSE %]
+                            [% IF ( opduplicate ) %]
+                            <input type="text" maxlength="64" value="[% patron_attribute.value %]"
+                                   id="[% patron_attribute.form_id %]" name="[% patron_attribute.form_id %]" onclick="this.value=''" />
                             [% ELSE %]
-                                <option value="[% auth_val_loo.authorised_value %]" >
-                                    [% auth_val_loo.lib %]
-                                </option>
+                            <input type="text" maxlength="64" value="[% patron_attribute.value %]"
+                                   id="[% patron_attribute.form_id %]" name="[% patron_attribute.form_id %]" />
                             [% END %]
                         [% END %]
-                    </select>
-                [% ELSE %]
-                    [% IF ( opduplicate ) %]
-                    <input type="text" maxlength="64" value="[% patron_attribute.value %]"
-                           id="[% patron_attribute.form_id %]" name="[% patron_attribute.form_id %]" onclick="this.value=''" />
-                    [% ELSE %]
-                    <input type="text" maxlength="64" value="[% patron_attribute.value %]"
-                           id="[% patron_attribute.form_id %]" name="[% patron_attribute.form_id %]" />
-                    [% END %]
-                [% END %]
-                [% IF ( patron_attribute.password_allowed ) %]
-                    (Password: <input type="password" maxlength="64" value="[% patron_attribute.password %]"
-                           id="[% patron_attribute.form_id %]_password" name="[% patron_attribute.form_id %]_password" />)
-                [% END %]
-            </td>
-            <td>
-                <a href="#" onclick="clear_entry(this); return false;">Clear</a>
-                [% IF ( patron_attribute.repeatable ) %]
-                <a href="#" onclick="clone_entry(this); return false;">New</a>
-                [% END %]
-            </td>
-        </tr>
-        [% END %]
-    </table>
+                        [% IF ( patron_attribute.password_allowed ) %]
+                            (Password: <input type="password" maxlength="64" value="[% patron_attribute.password %]"
+                                   id="[% patron_attribute.form_id %]_password" name="[% patron_attribute.form_id %]_password" />)
+                        [% END %]
+                    </td>
+                    <td>
+                        <a href="#" onclick="clear_entry(this); return false;">Clear</a>
+                        [% IF ( patron_attribute.repeatable ) %]
+                        <a href="#" onclick="clone_entry(this); return false;">New</a>
+                        [% END %]
+                    </td>
+                </tr>
+            [% END %]
+        </tbody>
+        </table>
+    [% END %]
   </fieldset>
 [% END %][% END %][% END %]
 

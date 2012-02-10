@@ -70,7 +70,7 @@ If $all_fields is true, then each hashref also contains the other fields from bo
 
 sub GetAttributeTypes {
     my ($all) = @_;
-    my $select = $all ? '*' : 'code, description';
+    my $select = $all ? '*' : 'code, description, class';
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare("SELECT $select FROM borrower_attribute_types ORDER by code");
     $sth->execute();
@@ -120,6 +120,9 @@ sub new {
     $self->{'staff_searchable'} = 0;
     $self->{'display_checkout'} = 0;
     $self->{'authorised_value_category'} = '';
+    $self->{'category_code'} = '';
+    $self->{'category_description'} = '';
+    $self->{'class'} = '';
 
     bless $self, $class;
     return $self;
@@ -140,11 +143,15 @@ sub fetch {
     my $self = {};
     my $dbh = C4::Context->dbh();
 
-    my $sth = $dbh->prepare_cached("SELECT * FROM borrower_attribute_types WHERE code = ?");
+    my $sth = $dbh->prepare_cached("
+        SELECT borrower_attribute_types.*, categories.description AS category_description
+        FROM borrower_attribute_types
+        LEFT JOIN categories ON borrower_attribute_types.category_code=categories.categorycode
+        WHERE code =?");
     $sth->execute($code);
     my $row = $sth->fetchrow_hashref;
     $sth->finish();
-    return undef unless defined $row;    
+    return undef unless defined $row;
 
     $self->{'code'}                      = $row->{'code'};
     $self->{'description'}               = $row->{'description'};
@@ -155,6 +162,9 @@ sub fetch {
     $self->{'staff_searchable'}          = $row->{'staff_searchable'};
     $self->{'display_checkout'}          = $row->{'display_checkout'};
     $self->{'authorised_value_category'} = $row->{'authorised_value_category'};
+    $self->{'category_code'}             = $row->{'category_code'};
+    $self->{'category_description'}      = $row->{'category_description'};
+    $self->{'class'}                     = $row->{'class'};
 
     bless $self, $class;
     return $self;
@@ -185,14 +195,16 @@ sub store {
                                          password_allowed = ?,
                                          staff_searchable = ?,
                                          authorised_value_category = ?,
-                                         display_checkout = ?
+                                         display_checkout = ?,
+                                         category_code = ?,
+                                         class = ?
                                      WHERE code = ?");
     } else {
         $sth = $dbh->prepare_cached("INSERT INTO borrower_attribute_types 
                                         (description, repeatable, unique_id, opac_display, password_allowed,
-                                         staff_searchable, authorised_value_category, display_checkout, code)
+                                         staff_searchable, authorised_value_category, display_checkout, category_code, class, code)
                                         VALUES (?, ?, ?, ?, ?,
-                                                ?, ?, ?, ?)");
+                                                ?, ?, ?, ?, ?, ?)");
     }
     $sth->bind_param(1, $self->{'description'});
     $sth->bind_param(2, $self->{'repeatable'});
@@ -202,7 +214,9 @@ sub store {
     $sth->bind_param(6, $self->{'staff_searchable'});
     $sth->bind_param(7, $self->{'authorised_value_category'});
     $sth->bind_param(8, $self->{'display_checkout'});
-    $sth->bind_param(9, $self->{'code'});
+    $sth->bind_param(9, $self->{'category_code'} || undef);
+    $sth->bind_param(10, $self->{'class'});
+    $sth->bind_param(11, $self->{'code'});
     $sth->execute;
 
 }
@@ -340,6 +354,61 @@ sub authorised_value_category {
     my $self = shift;
     @_ ? $self->{'authorised_value_category'} = shift : $self->{'authorised_value_category'};
 }
+
+=head2 category_code
+
+=over 4
+
+my $category_code = $attr_type->category_code();
+$attr_type->category_code($category_code);
+
+=back
+
+Accessor.
+
+=cut
+
+sub category_code {
+    my $self = shift;
+    @_ ? $self->{'category_code'} = shift : $self->{'category_code'};
+}
+
+=head2 category_description
+
+=over 4
+
+my $category_description = $attr_type->category_description();
+$attr_type->category_description($category_description);
+
+=back
+
+Accessor.
+
+=cut
+
+sub category_description {
+    my $self = shift;
+    @_ ? $self->{'category_description'} = shift : $self->{'category_description'};
+}
+
+=head2 class
+
+=over 4
+
+my $class = $attr_type->class();
+$attr_type->class($class);
+
+=back
+
+Accessor.
+
+=cut
+
+sub class {
+    my $self = shift;
+    @_ ? $self->{'class'} = shift : $self->{'class'};
+}
+
 
 =head2 delete
 

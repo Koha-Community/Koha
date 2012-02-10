@@ -25,6 +25,7 @@ use warnings;
 # external modules
 use CGI;
 # use Digest::MD5 qw(md5_base64);
+use List::MoreUtils qw/uniq/;
 
 # internal modules
 use C4::Auth;
@@ -423,6 +424,9 @@ if ($op eq 'add'){
 if ($op eq "modify")  {
     $template->param( updtype => 'M',modify => 1 );
     $template->param( step_1=>1, step_2=>1, step_3=>1, step_4=>1, step_5 => 1, step_6 => 1) unless $step;
+    if ( $step == 4 ) {
+        $template->param( categorycode => $borrower_data->{'categorycode'} );
+    }
 }
 if ( $op eq "duplicate" ) {
     $template->param( updtype => 'I' );
@@ -764,6 +768,8 @@ sub patron_attributes_form {
         return;
     }
     my $attributes = C4::Members::Attributes::GetBorrowerAttributes($borrowernumber);
+    my @classes = uniq( map {$_->{class}} @$attributes );
+    @classes = sort @classes;
 
     # map patron's attributes into a more convenient structure
     my %attr_hash = ();
@@ -773,14 +779,17 @@ sub patron_attributes_form {
 
     my @attribute_loop = ();
     my $i = 0;
+    my %items_by_class;
     foreach my $type_code (map { $_->{code} } @types) {
         my $attr_type = C4::Members::AttributeTypes->fetch($type_code);
         my $entry = {
+            class             => $attr_type->class(),
             code              => $attr_type->code(),
             description       => $attr_type->description(),
             repeatable        => $attr_type->repeatable(),
             password_allowed  => $attr_type->password_allowed(),
             category          => $attr_type->authorised_value_category(),
+            category_code     => $attr_type->category_code(),
             password          => '',
         };
         if (exists $attr_hash{$attr_type->code()}) {
@@ -795,8 +804,7 @@ sub patron_attributes_form {
                 }
                 $i++;
                 $newentry->{form_id} = "patron_attr_$i";
-                #use Data::Dumper; die Dumper($entry) if  $entry->{use_dropdown};
-                push @attribute_loop, $newentry;
+                push @{$items_by_class{$attr_type->class()}}, $newentry;
             }
         } else {
             $i++;
@@ -806,9 +814,18 @@ sub patron_attributes_form {
                 $newentry->{auth_val_loop} = GetAuthorisedValues($attr_type->authorised_value_category());
             }
             $newentry->{form_id} = "patron_attr_$i";
-            push @attribute_loop, $newentry;
+            push @{$items_by_class{$attr_type->class()}}, $newentry;
         }
     }
+    while ( my ($class, @items) = each %items_by_class ) {
+        my $lib = GetAuthorisedValueByCode( 'PA_CLASS', $class ) || $class;
+        push @attribute_loop, {
+            class => $class,
+            items => @items,
+            lib   => $lib,
+        }
+    }
+
     $template->param(patron_attributes => \@attribute_loop);
 
 }

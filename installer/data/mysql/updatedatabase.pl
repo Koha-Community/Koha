@@ -5001,6 +5001,18 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion($DBversion);
 }
 
+
+
+
+$DBversion = "3.07.00.XXX";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("ALTER TABLE borrower_attribute_types ADD COLUMN category_code VARCHAR(10) NULL DEFAULT NULL AFTER `display_checkout`");
+    $dbh->do("ALTER TABLE borrower_attribute_types ADD COLUMN class VARCHAR(255)  NOT NULL DEFAULT '' AFTER `category_code`");
+    $dbh->do("ALTER TABLE borrower_attribute_types ADD CONSTRAINT category_code_fk FOREIGN KEY (category_code) REFERENCES categories(categorycode)");
+    print "Upgrade to $DBversion done (New fields category_code and class in borrower_attribute_types table)\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 DropAllForeignKeys($table)

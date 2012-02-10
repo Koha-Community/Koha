@@ -251,7 +251,6 @@ my $issuecount     = @{$issue};
 my $relissuecount  = @{$relissue};
 my $roaddetails = &GetRoadTypeDetails( $data->{'streettype'} );
 my $today       = POSIX::strftime("%Y-%m-%d", localtime);	# iso format
-my @issuedata;
 my @borrowers_with_issues;
 my $overdues_exist = 0;
 my $totalprice = 0;
@@ -431,11 +430,29 @@ my $branch=C4::Context->userenv->{'branch'};
 $template->param(%$data);
 
 if (C4::Context->preference('ExtendedPatronAttributes')) {
-    my $attributes = GetBorrowerAttributes($borrowernumber);
+    my $attributes = C4::Members::Attributes::GetBorrowerAttributes($borrowernumber);
+    my @classes = uniq( map {$_->{class}} @$attributes );
+    @classes = sort @classes;
+
+    my @attributes_loop;
+    for my $class (@classes) {
+        my @items;
+        for my $attr (@$attributes) {
+            push @items, $attr if $attr->{class} eq $class
+        }
+        my $lib = GetAuthorisedValueByCode( 'PA_CLASS', $class ) || $class;
+        push @attributes_loop, {
+            class => $class,
+            items => \@items,
+            lib   => $lib,
+        };
+    }
+
     $template->param(
         ExtendedPatronAttributes => 1,
-        extendedattributes => $attributes
+        attributes_loop => \@attributes_loop
     );
+
     my @types = C4::Members::AttributeTypes::GetAttributeTypes();
     if (scalar(@types) == 0) {
         $template->param(no_patron_attribute_types => 1);

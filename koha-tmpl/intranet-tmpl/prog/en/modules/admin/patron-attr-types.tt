@@ -186,6 +186,34 @@ function CheckAttributeTypeForm(f) {
                   to be chosen from the authorized value list.  However, an authorized value list is not 
                   enforced during batch patron import.</span>
         </li>
+        <li>
+            <label for="category">Category: </label>
+            <select name="category_code" id="category">
+                <option value=""></option>
+                [% FOREACH cat IN categories %]
+                    [% IF ( cat.categorycode == category_code ) %]<option value="[% cat.categorycode %]" selected="selected">[% cat.description %]</option>[% ELSE %]<option value="[% cat.categorycode %]">[% cat.description %]</option>[% END %]
+                [% END %]
+            </select>
+            <span>Please let blank if you want these attributs to be for all types of patron. Else, select one type.</span>
+        </li>
+        <li>
+            <label for="class">Class: </label>
+            <select name="class">
+                <option value="" />
+                [% FOREACH class IN classes_val_loop %]
+                    [% IF ( class.selected ) %]
+                        <option value="[% class.authorised_value %]" selected="selected">
+                            [% class.lib %]
+                        </option>
+                    [% ELSE %]
+                        <option value="[% class.authorised_value %]" >
+                            [% class.lib %]
+                        </option>
+                    [% END %]
+                [% END %]
+            </select>
+            <span>Group attributes types with a block title (based on Authorised values category 'PA_CLASS')</span>
+        </li>
     </ol>
   </fieldset>
   <fieldset class="action">
@@ -248,23 +276,36 @@ function CheckAttributeTypeForm(f) {
 <div class="dialog message">Could not delete patron attribute type &quot;[% ERROR_delete_not_found %]&quot; 
     &mdash; it was already absent from the database.</div>
 [% END %]
-[% IF ( available_attribute_types ) %]<table>
-  <tr>
-    <th>Code</th>
-    <th>Description</th>
-    <th>Actions</th>
-  </tr>
-  [% FOREACH available_attribute_type IN available_attribute_types %]
-  <tr>
-    <td>[% available_attribute_type.code |html %]</td>
-    <td>[% available_attribute_type.description %]</td>
-    <td>
-      <a href="[% available_attribute_type.script_name %]?op=edit_attribute_type&amp;code=[% available_attribute_type.code |html %]">Edit</a>
-      <a href="[% available_attribute_type.script_name %]?op=delete_attribute_type&amp;code=[% available_attribute_type.code |html %]">Delete</a>
-    </td>
-  </tr>
+[% IF ( available_attribute_types ) %]
+  [% FOREACH attribute IN available_attribute_types %]
+    [% IF attribute.class %]
+        <h4>[% attribute.lib %]</h4>
+    [% END %]
+    <table class="patron_attributes_types">
+      <thead>
+        <tr>
+          <th>Code</th>
+          <th>Description</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        [% FOREACH item IN attribute.items %]
+          <tr>
+            <td>[% item.code |html %]</td>
+            <td>[% item.description %]</td>
+            <td>
+              <a href="[% item.script_name %]?op=edit_attribute_type&amp;code=[% item.code |html %]">Edit</a>
+              <a href="[% item.script_name %]?op=delete_attribute_type&amp;code=[% item.code |html %]">Delete</a>
+            </td>
+          </tr>
+        [% END %]
+      </tbody>
+    </table>
   [% END %]
-</table>[% ELSE %]<p>There are no saved patron attribute types.</p>[% END %]
+[% ELSE %]
+  <p>There are no saved patron attribute types.</p>
+[% END %]
 
 <div class="pages">[% pagination_bar %]</div>
 

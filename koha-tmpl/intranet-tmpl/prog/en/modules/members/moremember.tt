@@ -285,22 +285,35 @@ function validate1(date) {
 [% UNLESS ( no_patron_attribute_types ) %]
 <div id="patron-extended-attributes" style="padding-top: 1em;">
 <h3>Additional attributes and identifiers</h3>
-<table>
-    <tr>
-        <th>Type</th>
-        <th>Value</th>
-    </tr>
-    [% FOREACH extendedattribute IN extendedattributes %]
-    <tr>
-        <td>[% extendedattribute.code %] ([% extendedattribute.description %])</td>
-        <td>[% extendedattribute.value %]
-            [% IF ( extendedattribute.value_description ) %]
-                ([% extendedattribute.value_description %])
-            [% END %]
-        </td>
-    </tr>
+[% FOREACH attribute IN attributes_loop %]
+    [% IF attribute.class %]
+        <h4>[% attribute.lib %]</h4>
+        <table id=aai_[% attribute.class %]>
+    [% ELSE %]
+        <table id="aai">
     [% END %]
-</table>
+        <thead>
+            <tr>
+                <th>Type</th>
+                <th>Description</th>
+                <th>Value</th>
+            </tr>
+        </thead>
+        <tbody>
+        [% FOREACH item IN attribute.items %]
+            <tr>
+                <td>[% item.code %]</td>
+                <td>[% item.description %]</td>
+                <td>[% item.value %]
+                    [% IF ( item.value_description ) %]
+                        ([% item.value_description %])
+                    [% END %]
+                </td>
+            </tr>
+        [% END %]
+        </tbody>
+    </table>
+[% END %]
 </div>
 <div class="action"><a href="memberentry.pl?op=modify&amp;borrowernumber=[% borrowernumber %]&amp;step=4">Edit</a></div>
 [% END %]
