@@ -388,6 +388,21 @@
 
 
 </div>
+
+<div style="margin-top: 2em;">
+<form action="copy-holidays.pl" method="post">
+	<input type="hidden" name="from_branchcode" value="[% branch %]" />
+  <label for="branchcode">Copy holidays to:</label>
+  <select id="branchcode" name="branchcode">
+    <option value=""></option>
+    [% FOREACH branchloo IN branchloop %]
+    <option value="[% branchloo.value %]">[% branchloo.branchname %]</option>
+    [% END %]
+  </select>
+	<input type="submit" value="Copy" />
+</form>
+</div>
+
 </div>
 <div class="yui-u">
 <div class="help">

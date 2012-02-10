@@ -20,34 +20,11 @@ use warnings;
 use vars qw($VERSION @EXPORT);
 
 use Carp;
-use Date::Calc qw( Date_to_Days );
+use Date::Calc qw( Date_to_Days Today);
 
 use C4::Context;
 
-BEGIN {
-    # set the version for version checking
-    $VERSION = 3.01;
-    require Exporter;
-    @EXPORT = qw(
-        &get_week_days_holidays
-        &get_day_month_holidays
-        &get_exception_holidays 
-        &get_single_holidays
-        &insert_week_day_holiday
-        &insert_day_month_holiday
-        &insert_single_holiday
-        &insert_exception_holiday
-        &ModWeekdayholiday
-        &ModDaymonthholiday
-        &ModSingleholiday
-        &ModExceptionholiday
-        &delete_holiday
-        &isHoliday
-        &addDate
-        &daysBetween
-    );
-}
-
+use constant ISO_DATE_FORMAT => "%04d-%02d-%02d";
 =head1 NAME
 
 C4::Calendar::Calendar - Koha module dealing with holidays.
@@ -123,7 +100,7 @@ sub _init {
         $exception_holidays{"$year/$month/$day"}{title} = $title;
         $exception_holidays{"$year/$month/$day"}{description} = $description;
         $exception_holidays{"$year/$month/$day"}{date} = 
-		sprintf("%04d-%02d-%02d", $year, $month, $day);
+		sprintf(ISO_DATE_FORMAT, $year, $month, $day);
     }
     $self->{'exception_holidays'} = \%exception_holidays;
 
@@ -133,7 +110,7 @@ sub _init {
         $single_holidays{"$year/$month/$day"}{title} = $title;
         $single_holidays{"$year/$month/$day"}{description} = $description;
         $single_holidays{"$year/$month/$day"}{date} = 
-		sprintf("%04d-%02d-%02d", $year, $month, $day);
+		sprintf(ISO_DATE_FORMAT, $year, $month, $day);
     }
     $self->{'single_holidays'} = \%single_holidays;
     return $self;
@@ -218,11 +195,14 @@ sub insert_week_day_holiday {
     my $self = shift @_;
     my %options = @_;
 
+    my $weekday = $options{weekday};
+    croak "Invalid weekday $weekday" unless $weekday =~ m/^[0-6]$/;
+
     my $dbh = C4::Context->dbh();
     my $insertHoliday = $dbh->prepare("insert into repeatable_holidays (id,branchcode,weekday,day,month,title,description) values ( '',?,?,NULL,NULL,?,? )"); 
-	$insertHoliday->execute( $self->{branchcode}, $options{weekday},$options{title}, $options{description});
-    $self->{'week_days_holidays'}->{$options{weekday}}{title} = $options{title};
-    $self->{'week_days_holidays'}->{$options{weekday}}{description} = $options{description};
+	$insertHoliday->execute( $self->{branchcode}, $weekday, $options{title}, $options{description});
+    $self->{'week_days_holidays'}->{$weekday}{title} = $options{title};
+    $self->{'week_days_holidays'}->{$weekday}{description} = $options{description};
     return $self;
 }
 
@@ -283,6 +263,9 @@ sub insert_single_holiday {
     my $self = shift @_;
     my %options = @_;
     
+    @options{qw(year month day)} = ( $options{date} =~ m/(\d+)-(\d+)-(\d+)/o )
+      if $options{date} && !$options{day};
+
 	my $dbh = C4::Context->dbh();
     my $isexception = 0;
     my $insertHoliday = $dbh->prepare("insert into special_holidays (id,branchcode,day,month,year,isexception,title,description) values ('', ?,?,?,?,?,?,?)");
@@ -317,6 +300,9 @@ C<$description> Is the description to store for the holiday formed by $year/$mon
 sub insert_exception_holiday {
     my $self = shift @_;
     my %options = @_;
+
+    @options{qw(year month day)} = ( $options{date} =~ m/(\d+)-(\d+)-(\d+)/o )
+      if $options{date} && !$options{day};
 
     my $dbh = C4::Context->dbh();
     my $isexception = 1;
@@ -567,6 +553,66 @@ sub isHoliday {
 
 }
 
+=head2 copy_to_branch
+
+    $calendar->copy_to_branch($target_branch)
+
+=cut
+
+sub copy_to_branch {
+    my ($self, $target_branch) = @_;
+
+    croak "No target_branch" unless $target_branch;
+
+    my $target_calendar = C4::Calendar->new(branchcode => $target_branch);
+
+    my ($y, $m, $d) = Today();
+    my $today = sprintf ISO_DATE_FORMAT, $y,$m,$d;
+
+    my $wdh = $self->get_week_days_holidays;
+    $target_calendar->insert_week_day_holiday( weekday => $_, %{ $wdh->{$_} } )
+      foreach keys %$wdh;
+    $target_calendar->insert_day_month_holiday(%$_)
+      foreach values %{ $self->get_day_month_holidays };
+    $target_calendar->insert_exception_holiday(%$_)
+      foreach grep { $_->{date} gt $today } values %{ $self->get_exception_holidays };
+    $target_calendar->insert_single_holiday(%$_)
+      foreach grep { $_->{date} gt $today } values %{ $self->get_single_holidays };
+
+    return 1;
+}
+
+=head2 daysBetween
+
+    my $daysBetween = $calendar->daysBetween($startdate, $enddate)
+
+C<$startdate> and C<$enddate> are C4::Dates objects that define the interval.
+
+Returns the number of non-holiday days in the interval.
+useDaysMode syspref has no effect here.
+=cut
+
+sub daysBetween ($$$) {
+    my $self      = shift or return undef;
+    my $startdate = shift or return undef;
+    my $enddate   = shift or return undef;
+	my ($yearFrom,$monthFrom,$dayFrom) = split("-",$startdate->output('iso'));
+	my ($yearTo,  $monthTo,  $dayTo  ) = split("-",  $enddate->output('iso'));
+	if (Date_to_Days($yearFrom,$monthFrom,$dayFrom) > Date_to_Days($yearTo,$monthTo,$dayTo)) {
+		return 0;
+		# we don't go backwards  ( FIXME - handle this error better )
+	}
+    my $count = 0;
+    while (1) {
+        ($yearFrom != $yearTo or $monthFrom != $monthTo or $dayFrom != $dayTo) or last; # if they all match, it's the last day
+        unless ($self->isHoliday($dayFrom, $monthFrom, $yearFrom)) {
+            $count++;
+        }
+        ($yearFrom, $monthFrom, $dayFrom) = &Date::Calc::Add_Delta_Days($yearFrom, $monthFrom, $dayFrom, 1);
+    }
+    return($count);
+}
+
 =head2 addDate
 
     my ($day, $month, $year) = $calendar->addDate($date, $offset)
@@ -601,7 +647,7 @@ sub addDate {
 	} else { ## ($daysMode eq 'Days') 
         ($year, $month, $day) = &Date::Calc::Add_Delta_Days($year, $month, $day, $offset );
     }
-    return(C4::Dates->new( sprintf("%04d-%02d-%02d",$year,$month,$day),'iso'));
+    return(C4::Dates->new( sprintf(ISO_DATE_FORMAT,$year,$month,$day),'iso'));
 }
 
 =head2 daysBetween
