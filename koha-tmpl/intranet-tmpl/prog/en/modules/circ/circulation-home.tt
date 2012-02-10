@@ -40,7 +40,7 @@
 	<li>    <a href="/cgi-bin/koha/circ/waitingreserves.pl" title="holds waiting for patron pickup">Holds awaiting pickup</a></li>
 	<li>    <a href="/cgi-bin/koha/circ/reserveratios.pl">Hold ratios</a></li>
 	<li>    <a href="/cgi-bin/koha/circ/transferstoreceive.pl" title="transfers to receive at your library">Transfers to receive</a></li>
-	[% IF ( CAN_user_reports_execute_reports ) %]<li>    <a href="/cgi-bin/koha/circ/overdue.pl">Overdues</a>
+     [% IF ( CAN_user_circulate_overdues_report ) %]<li>    <a href="/cgi-bin/koha/circ/overdue.pl">Overdues</a>
 	- <b>Warning:</b> This report is very resource intensive on
 	systems with large numbers of overdue items.</li>[% END %]
 	<li>    <a href="/cgi-bin/koha/circ/branchoverdues.pl">Overdues with fines</a> - Limited to your library.  See report help for other details.</li>

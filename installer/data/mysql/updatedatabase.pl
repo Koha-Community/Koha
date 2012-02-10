@@ -6486,6 +6486,12 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.11.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do("INSERT INTO  permissions ( module_bit, code, description ) VALUES  ( '1',  'overdues_report',  'Execute overdue items report' )");
+    print "Upgrade to $DBversion done ( Add circ permission overdues_report )\n";
+    SetVersion($DBversion);
+}
 
 =head1 FUNCTIONS
 
