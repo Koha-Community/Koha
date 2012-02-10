@@ -29,6 +29,10 @@
 [% IF ( loop_reading ) %]
 <form action="/cgi-bin/koha/members/readingrec.pl" method="get"><input type="hidden" name="borrowernumber" id="borrowernumber" value="[% borrowernumber %]" /></form>
 
+<div id="pagertable_readingrec">
+[% INCLUDE 'table-pager.inc' perpage='20' %]
+</div>
+
 <table id="table_readingrec">
 <thead>
     <th>Date</th>

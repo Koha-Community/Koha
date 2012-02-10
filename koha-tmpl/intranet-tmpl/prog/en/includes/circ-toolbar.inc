@@ -33,6 +33,10 @@ function update_child() {
 [% END %]
 }
 
+function export_barcodes() {
+    window.open('/cgi-bin/koha/members/readingrec.pl?borrowernumber=[% borrowernumber %]&amp;op=export_barcodes');
+}
+
 	// prepare DOM for YUI Toolbar
 
 	 $(document).ready(function() {
@@ -67,8 +71,9 @@ function update_child() {
 			{ text: _("Renew Patron"),  onclick: { fn: confirm_reregistration } },
 			{ text: _("Set Permissions"), url: "/cgi-bin/koha/members/member-flags.pl?member=[% borrowernumber %]"[% UNLESS CAN_user_permissions %], disabled: true[% END %]},
             { text: _("Delete"), [% UNLESS CAN_user_borrowers %]disabled: true, [% END %] onclick: { fn: confirm_deletion } },
-			{ text: _("Update Child to Adult Patron") , onclick: { fn: update_child }[% UNLESS is_child %], disabled: true[% END %]}
-		];
+            { text: _("Update Child to Adult Patron") , onclick: { fn: update_child }[% UNLESS is_child %], disabled: true[% END %]},
+            { text: _("Export today's checked in barcodes"), onclick: { fn: export_barcodes }}
+        ];
 
 	    new YAHOO.widget.Button({
 	        type: "menu",

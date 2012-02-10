@@ -29,7 +29,7 @@ use C4::Auth;
 use C4::Output;
 use C4::Members;
 use C4::Branch;
-use List::MoreUtils qw/any/;
+use List::MoreUtils qw/any uniq/;
 
 use C4::Dates qw/format_date/;
 use C4::Members::Attributes qw(GetBorrowerAttributes);
@@ -64,6 +64,9 @@ my $limit = 0;
 my ( $issues ) = GetAllIssues($borrowernumber,$order,$limit);
 
 my @loop_reading;
+my @barcodes;
+my $today = C4::Dates->new();
+$today = $today->output("iso");
 
 foreach my $issue (@{$issues}){
  	my %line;
@@ -80,6 +83,23 @@ foreach my $issue (@{$issues}){
 	$line{barcode}         = $issue->{'barcode'};
 	$line{volumeddesc}     = $issue->{'volumeddesc'};
 	push(@loop_reading,\%line);
+    if (($input->param('op') eq 'export_barcodes') and ($today eq $issue->{'returndate'})) {
+        push( @barcodes, $issue->{'barcode'} );
+    }
+}
+
+if ($input->param('op') eq 'export_barcodes') {
+    my $borrowercardnumber = GetMember( borrowernumber => $borrowernumber )->{'cardnumber'} ;
+    my $delimiter = "\n";
+    binmode( STDOUT, ":encoding(UTF-8)");
+    print $input->header(
+        -type       => 'application/octet-stream',
+        -charset    => 'utf-8',
+        -attachment => "$today-$borrowercardnumber-checkinexport.txt"
+    );
+    my $content = join($delimiter, uniq(@barcodes));
+    print $content;
+    exit;
 }
 
 if ( $data->{'category_type'} eq 'C') {
