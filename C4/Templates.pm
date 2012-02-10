@@ -52,12 +52,13 @@ sub new {
     else {
         $htdocs = C4::Context->config('intrahtdocs');
     }
-
     my ($theme, $lang)= themelanguage( $htdocs, $tmplbase, $interface, $query);
     my $template = Template->new(
         {   EVAL_PERL    => 1,
             ABSOLUTE     => 1,
-	    PLUGIN_BASE => 'Koha::Template::Plugin',
+            PLUGIN_BASE => 'Koha::Template::Plugin',
+            COMPILE_EXT => C4::Context->config('template_cache_dir')?'.ttc':'',
+            COMPILE_DIR => C4::Context->config('template_cache_dir')?C4::Context->config('template_cache_dir'):'',,
             INCLUDE_PATH => [
                 "$htdocs/$theme/$lang/includes",
                 "$htdocs/$theme/en/includes"
