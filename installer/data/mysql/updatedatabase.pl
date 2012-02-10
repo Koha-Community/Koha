@@ -4663,9 +4663,10 @@ ENDOFRENEWAL
     print "Upgrade to $DBversion done (Added a system preference to allow renewal of Patron account either from todays date or from existing expiry date in the patrons account.)\n";
     SetVersion($DBversion);
 }
-$DBversion = "3.07.00.XXX";
+
+$DBversion = "3.07.00.012";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-	$dbh->do("INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES ('AllowItemsOnHoldCheckout',0,'Do not generate RESERVE_WAITING and RESERVED warning when checking out items reserved to someone else. This allows self checkouts for those items.','','YesNo')");
+    $dbh->do("INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES ('AllowItemsOnHoldCheckout',0,'Do not generate RESERVE_WAITING and RESERVED warning when checking out items reserved to someone else. This allows self checkouts for those items.','','YesNo')");
     print "Upgrade to $DBversion add 'AllowItemsOnHoldCheckout' syspref \n";
     SetVersion ($DBversion);
 }
