@@ -42,7 +42,7 @@ my ($template, $loggedinuser, $cookie);
                             query => $query,
                             type => "intranet",
                             authnotrequired => 0,
-                            flagsrequired => {serials => 'receive_serials'},
+                            flagsrequired => {serials => '*'},
                             debug => 1,
                             });
 my $biblionumber = $query->param('biblionumber');

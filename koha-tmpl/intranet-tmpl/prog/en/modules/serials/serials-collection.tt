@@ -201,8 +201,8 @@ $(document).ready(function() {
                 </th>
 		<th>Routing
 		</th>
-                <th>Edit
-                </th>
+
+                [% IF ( CAN_user_serials_receive_serials ) %]<th>Edit</th>[% END %]
             </tr>
       [% FOREACH serial IN year.serials %]
     [% UNLESS ( loop.odd ) %]<tr class="highlight">[% ELSE %]<tr>[% END %]
@@ -230,6 +230,7 @@ $(document).ready(function() {
 		<td>
 		   <a href="" onclick="print_slip([% serial.subscriptionid |html %], '[% serial.serialseq |html %]'); return false" >Print list</a>
 		</td>
+            [% IF ( CAN_user_serials_receive_serials ) %]
                 <td>
                   [% IF ( serial.cannotedit ) %]
                     disabled
@@ -245,10 +246,16 @@ $(document).ready(function() {
                     [% END %]
                   [% END %]
                 </td>
+            [% END %]
             </tr>
       [% END %]
         </table>
-      <p><input type="submit" value="Edit serials" />&nbsp;<input type="button" value="Generate Next" onclick="javascript:generateNext([% subscriptionidlist %])" /></p>
+    [% IF ( CAN_user_serials_receive_serials ) %]
+        <p>
+            <input type="submit" value="Edit serials" />&nbsp;
+            <input type="button" value="Generate Next" onclick="javascript:generateNext([% subscriptionidlist %])" />
+        </p>
+    [% END %]
     </div>
     [% END %]
   <input type="hidden" name="subscriptionid" value="[% subscriptionidlist %]" />
