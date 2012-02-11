@@ -22,7 +22,7 @@
     [% ELSE %]
             <li><span class="empty" id="noadressstored">No address stored.</span></li>
     [% END %]
-    [% IF ( city ) %]
+    <li>[% IF ( city ) %]
             [% city %][% IF ( state ) %], [% state %][% END %]
 	    [% zipcode %][% IF ( country ) %], [% country %][% END %]
     [% ELSE %]
