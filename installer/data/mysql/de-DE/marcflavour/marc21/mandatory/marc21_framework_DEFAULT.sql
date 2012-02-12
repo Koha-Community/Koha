@@ -993,7 +993,7 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 		('246', 'p', 'Titel eines Teils/einer Abteilung eines Werkes', 'Titel eines Teils/einer Abteilung eines Werkes', 1, 0, '', 2, '', '', '', NULL, -6, '', '', '', NULL),
 		('247', '6', 'Verknüpfung', 'Verknüpfung', 0, 0, '', 2, '', '', '', NULL, -6, '', '', '', NULL),
 		('247', '8', 'Feldverknüpfung und Reihenfolge', 'Feldverknüpfung und Reihenfolge', 1, 0, '', 2, '', '', '', NULL, -6, '', '', '', NULL),
-		('247', 'a', 'Titel', 'Titel', 0, 0, '', 2, '', '', '', NULL, -1, '', '', '', NULL),
+		('247', 'a', 'Titel', 'Titel', 0, 0, 'biblioitems.editionstatement', 2, '', '', '', NULL, -1, '', '', '', NULL),
 		('247', 'b', 'Zusatz zum Titel', 'Zusatz zum Titel', 0, 0, '', 2, '', '', '', NULL, -1, '', '', '', NULL),
 		('247', 'd', 'Designation of section (SE) [OBSOLETE]', 'Designation of section (SE) [OBSOLETE]', 0, 0, '', 2, '', '', '', NULL, -6, '', '', '', NULL),
 		('247', 'e', 'Name of part/section (SE) [OBSOLETE]', 'Name of part/section (SE) [OBSOLETE]', 0, 0, '', 2, '', '', '', NULL, -6, '', '', '', NULL),

@@ -438,7 +438,7 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 		('200', 'i', 'Name of a Part', 'Name of a Part', 0, 0, '', 2, '', '', '', 0, 0, '', '', '', NULL),
 		('200', 'v', 'Volume Designation', 'Volume Designation', 0, 0, '', 2, '', '', '', 0, 0, '', '', '', NULL),
 		('200', 'z', 'Language of Paralel Title Proper', 'Language of Paralel Title Proper', 0, 0, '', 2, '', '', '', 0, 0, '', '', '', NULL),
-		('205', 'a', 'Edition Statement', 'Edition Statement', 0, 0, '', 2, '', '', '', 0, 0, '', '', '', NULL),
+		('205', 'a', 'Edition Statement', 'Edition Statement', 0, 0, 'biblioitems.editionstatement', 2, '', '', '', 0, 0, '', '', '', NULL),
 		('205', 'b', 'Issue Statement', 'Issue Statement', 0, 0, '', 2, '', '', '', 0, 0, '', '', '', NULL),
 		('205', 'd', 'Parallel Edition Statement', 'Parallel Edition Statement', 0, 0, '', 2, '', '', '', 0, 0, '', '', '', NULL),
 		('205', 'f', 'Statement of Responsibility Relating to Edition', 'Statement of Responsibility Relating to Edition', 0, 0, '', 2, '', '', '', 0, 0, '', '', '', NULL),
