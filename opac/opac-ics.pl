@@ -25,7 +25,8 @@ use warnings;
 use CGI;
 use Data::ICal;
 use Data::ICal::Entry::Event;
-use Date::ICal;
+use DateTime;
+use DateTime::Format::ICal;
 use Date::Calc qw (Parse_Date);
 
 use C4::Auth;
@@ -60,28 +61,28 @@ foreach my $issue ( @$issues ) {
     my ($year,$month,$day)=Parse_Date($issue->{'date_due'});
     ($year,$month,$day)=split /-|\/|\.|:/,$issue->{'date_due'} unless ($year && $month);
 #    Decode_Date_EU2($string))
-    my $datestart = Date::ICal->new( 
-	day => $day, 
-	month => $month, 
-	year => $year,
-	hour => 9,
-	min => 0,
-	sec => 0
-    )->ical;
-    my $dateend = Date::ICal->new( 
-	day => $day, 
-	month => $month, 
-	year => $year,
-	hour => 10,
-	min => 0,
-	sec => 0
-    )->ical;
+    my $datestart = DateTime->new(
+        day    => $day,
+        month  => $month,
+        year   => $year,
+        hour   => 9,
+        minute => 0,
+        second => 0
+    );
+    my $dateend = DateTime->new(
+        day    => $day,
+        month  => $month,
+        year   => $year,
+        hour   => 10,
+        minute => 0,
+        second => 0
+    );
     $vevent->add_properties(
         summary => "$issue->{'title'} Due",
         description =>
 "Your copy of $issue->{'title'} barcode $issue->{'barcode'} is due back at the library today",
-        dtstart => $datestart,
-	dtend => $dateend,
+        dtstart => DateTime::Format::ICal->format_datetime($datestart),
+        dtend   => DateTime::Format::ICal->format_datetime($dateend),
     );
     $calendar->add_entry($vevent);
 }

@@ -259,11 +259,6 @@ our $PERL_DEPS = {
         'required' => '1',
         'min_ver'  => '5.43'
     },
-    'Date::ICal' => {
-        'usage'    => 'Core',
-        'required' => '1',
-        'min_ver'  => '1.72'
-    },
     'MARC::Crosswalk::DublinCore' => {
         'usage'    => 'Core',
         'required' => '1',
@@ -484,6 +479,11 @@ our $PERL_DEPS = {
         'required' => '1',
         'min_ver'  => '1.03',
     },
+    'DateTime::Format::ICal' => {
+        'usage'    => 'Core',
+        'required' => '1',
+        'min_ver'  => '0.09',
+      },
 };
 
 1;
