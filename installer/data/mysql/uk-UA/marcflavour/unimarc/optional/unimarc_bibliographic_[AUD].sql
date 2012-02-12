@@ -676,7 +676,7 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 ('200', 'i', 'Найменування частини', '', 0, 0, '', -1, '', '', '', NULL, NULL, 'AUD', '', NULL, NULL),
 ('200', 'v', 'Позначення тому', '', 0, 0, '', -1, '', '', '', NULL, NULL, 'AUD', '', NULL, NULL),
 ('200', 'z', 'Мова паралельної основної назви', '', 0, 0, '', -1, '', '', '', NULL, NULL, 'AUD', '', NULL, NULL),
-('205', 'a', 'Відомості про видання', '', 0, 0, '', 0, '', '', '', NULL, NULL, 'AUD', NULL, NULL, NULL),
+('205', 'a', 'Відомості про видання', '', 0, 0, 'biblioitems.editionstatement', 0, '', '', '', NULL, NULL, 'AUD', NULL, NULL, NULL),
 ('205', 'b', 'Додаткові відомості про видання', '', 0, 0, '', 0, '', '', '', NULL, NULL, 'AUD', NULL, NULL, NULL),
 ('205', 'd', 'Паралельні відомості про видання', '', 0, 0, '', -1, '', '', '', NULL, NULL, 'AUD', NULL, NULL, NULL),
 ('205', 'f', 'Перші відомості про відповідальність відносно видання', '', 0, 0, '', -1, '', '', '', NULL, NULL, 'AUD', NULL, NULL, NULL),

@@ -74,7 +74,7 @@ INSERT IGNORE INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblib
 		('245','s','Version','Version',0,0,'',0,'','','',0,0,'FA',NULL,'',''),
 		('250','6','Verknüpfung','Verknüpfung',0,0,'',0,'','','',0,0,'FA',NULL,'',''),
 		('250','8','Feldverknüpfung und Reihenfolge','Feldverknüpfung und Reihenfolge',1,0,'',0,'','','',0,0,'FA',NULL,'',''),
-		('250','a','Ausgabebezeichnung','Ausgabebezeichnung',0,0,'',0,'','','',0,0,'FA',NULL,'',''),
+		('250','a','Ausgabebezeichnung','Ausgabebezeichnung',0,0,'biblioitems.editionstatement',0,'','','',0,0,'FA',NULL,'',''),
 		('250','b','Zusatz zur Ausgabebezeichnung','Zusatz zur Ausgabebezeichnung',0,0,'',0,'','','',0,0,'FA',NULL,'',''),
 		('260','6','Verknüpfung','Verknüpfung',0,0,'',0,'','','',0,0,'FA',NULL,'',''),
 		('260','8','Feldverknüpfung und Reihenfolge','Feldverknüpfung und Reihenfolge',1,0,'',0,'','','',0,0,'FA',NULL,'',''),

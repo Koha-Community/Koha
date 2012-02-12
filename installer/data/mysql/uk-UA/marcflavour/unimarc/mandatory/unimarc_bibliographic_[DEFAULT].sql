@@ -484,7 +484,7 @@ INSERT INTO marc_subfield_structure (tagfield, tagsubfield, liblibrarian, libopa
 INSERT INTO marc_tag_structure (tagfield, liblibrarian, libopac, repeatable, mandatory, authorised_value, frameworkcode) VALUES
 ('205', 'Відомості про видання', '', 1, 0, '', '');
 INSERT INTO marc_subfield_structure (tagfield, tagsubfield, liblibrarian, libopac, repeatable, mandatory, kohafield, tab, authorised_value, authtypecode, value_builder, isurl, hidden, frameworkcode, seealso, link, defaultvalue) VALUES
-('205', 'a', 'Відомості про видання', '', 0, 0, '', 0, '', '', '', 0, 0, '', '', '', NULL),
+('205', 'a', 'Відомості про видання', '', 0, 0, 'biblioitems.editionstatement', 0, '', '', '', 0, 0, '', '', '', NULL),
 ('205', 'b', 'Додаткові відомості про видання', '', 0, 0, '', -1, '', '', '', 0, 0, '', '', '', NULL),
 ('205', 'd', 'Паралельні відомості про видання', '', 0, 0, '', -1, '', '', '', 0, 0, '', '', '', NULL),
 ('205', 'f', 'Перші відомості про відповідальність відносно видання', '', 0, 0, '', -1, '', '', '', 0, 0, '', '', '', NULL),
