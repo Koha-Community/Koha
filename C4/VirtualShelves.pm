@@ -522,8 +522,10 @@ sub DelFromShelf {
 	}
     }
     if($del_oth) {
-        $query = qq(DELETE FROM virtualshelfcontents
-            WHERE shelfnumber=? AND biblionumber=? AND borrowernumber<>?);
+        #includes a check if borrowernumber is null (deleted patron)
+        $query = qq/DELETE FROM virtualshelfcontents
+            WHERE shelfnumber=? AND biblionumber=? AND
+            (borrowernumber IS NULL OR borrowernumber<>?)/;
         $sth= $dbh->prepare($query);
 	foreach my $biblionumber (@$bibref) {
             $sth->execute($shelfnumber, $biblionumber, $user);
@@ -589,6 +591,40 @@ sub ShelvesMax {
   return SHELVES_COMBO_MAX if $which eq 'COMBO';
   return SHELVES_MASTHEAD_MAX if $which eq 'MASTHEAD';
   return SHELVES_MASTHEAD_MAX;
+}
+
+sub HandleDelBorrower {
+#when a member is deleted (DelMember in Members.pm), you should call me first
+#this routine deletes/moves lists and entries for the deleted member/borrower
+#you could just delete everything (and lose more than you want)
+#instead we now try to save all public/shared stuff and keep others happy
+    my ($borrower)= @_;
+    my $query;
+    my $dbh = C4::Context->dbh;
+
+    #Delete shares of this borrower (not lists !)
+    $query="DELETE FROM virtualshelfshares WHERE borrowernumber=?";
+    $dbh->do($query,undef,($borrower));
+
+    #Delete private lists without owner that now have no shares anymore
+    $query="DELETE vs.* FROM virtualshelves vs LEFT JOIN virtualshelfshares sh USING (shelfnumber) WHERE category=1 AND vs.owner IS NULL AND sh.shelfnumber IS NULL";
+    $dbh->do($query);
+
+    #Change owner for private lists which have shares
+    $query="UPDATE virtualshelves LEFT JOIN virtualshelfshares sh USING (shelfnumber) SET owner=NULL where owner=? AND category=1 AND sh.borrowernumber IS NOT NULL";
+    $dbh->do($query,undef,($borrower));
+
+    #Delete unshared private lists
+    $query="DELETE FROM virtualshelves WHERE owner=? AND category=1";
+    $dbh->do($query,undef,($borrower));
+
+    #Handle public lists owned by borrower
+    $query="UPDATE virtualshelves SET owner=NULL WHERE owner=? AND category=2";
+    $dbh->do($query,undef,($borrower));
+
+    #Handle entries added by borrower to lists of others
+    $query="UPDATE virtualshelfcontents SET borrowernumber=NULL WHERE borrowernumber=?";
+    $dbh->do($query,undef,($borrower));
 }
 
 # internal subs
