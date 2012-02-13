@@ -34,6 +34,7 @@ use C4::Biblio;
 use C4::Members qw/GetMember/;  #needed for permissions checking for changing basketgroup of a basket
 use C4::Items;
 use C4::Suggestions;
+use Date::Calc qw/Add_Delta_Days/;
 
 =head1 NAME
 
@@ -213,6 +214,15 @@ if ( $op eq 'delete_confirm' ) {
         }
         unshift( @$basketgroups, \%emptygroup );
     }
+
+    # if the basket is closed, calculate estimated delivery date
+    my $estimateddeliverydate;
+    if( $basket->{closedate} ) {
+        my ($year, $month, $day) = ($basket->{closedate} =~ /(\d+)-(\d+)-(\d+)/);
+        ($year, $month, $day) = Add_Delta_Days($year, $month, $day, $bookseller->{deliverytime});
+        $estimateddeliverydate = "$year-$month-$day";
+    }
+
     # if new basket, pre-fill infos
     $basket->{creationdate} = ""            unless ( $basket->{creationdate} );
     $basket->{authorisedby} = $loggedinuser unless ( $basket->{authorisedby} );
@@ -367,6 +377,7 @@ my $total_est_gste;
         authorisedby         => $basket->{authorisedby},
         authorisedbyname     => $basket->{authorisedbyname},
         closedate            => $basket->{closedate},
+        estimateddeliverydate=> $estimateddeliverydate,
         active               => $bookseller->{'active'},
         booksellerid         => $bookseller->{'id'},
         name                 => $bookseller->{'name'},

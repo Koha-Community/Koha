@@ -181,6 +181,7 @@
                 [% IF ( authorisedbyname ) %]<li><span class="label">Managed by:</span>  [% authorisedbyname %]</li>[% END %]
                 [% IF ( creationdate ) %]<li><span class="label">Opened on:</span>  [% creationdate | $KohaDates %]</li>[% END %]
                 [% IF ( closedate ) %]<li><span class="label">Closed on:</span> [% closedate | $KohaDates %]</li>[% END %]
+                [% IF ( estimateddeliverydate ) %]<li><span class="label">Estimated delivery date:</span> [% estimateddeliverydate | $KohaDates  %]</li>[% END %]
 
                 </ol>
                 </div>

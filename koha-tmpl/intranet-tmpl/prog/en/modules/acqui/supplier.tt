@@ -138,6 +138,10 @@ if (f.company.value == "") {
             <li><label for="discount">Discount</label>
                 <input type="text" size="6" id="discount" name="discount" value="[% discount %]" />%</li>
             <li><label for="gstrate">Tax rate</label><input type="text" name="gstrate" id="gstrate" size="6" value="[% gstrate %]"/>% (leave blank for default tax of [% default_gst_rate %]%)</li>
+            <li>
+                <label for="deliverytime">Delivery time</label>
+                <input type="text" size="2" id="deliverytime" name="deliverytime" value="[% deliverytime %]" /> days
+            </li>
             <li><label for="notes">Notes</label>
                 <textarea cols="40" rows="4" id="notes" name="notes" >[% notes %]</textarea></li></ol>
         </fieldset>
@@ -198,6 +202,10 @@ if (f.company.value == "") {
                 [% discount %] %</p>
             <p><strong>Tax rate: </strong>
                 [% GST %]%[% UNLESS ( default_tax ) %] (default)[% END %]</p>
+            [% IF deliverytime.defined %]
+                <p><strong>Delivery time: </strong>
+                    [% deliverytime %] days</p>
+            [% END %]
             [% IF ( notes ) %]<p><strong>Notes: </strong>
                 [% notes %]</p>[% END %]
         </div>

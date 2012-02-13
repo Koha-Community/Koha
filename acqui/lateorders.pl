@@ -66,14 +66,14 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user({
 
 my $booksellerid = $input->param('booksellerid') || undef; # we don't want "" or 0
 my $delay      = $input->param('delay');
+my $estimateddeliverydatefrom = $input->param('estimateddeliverydatefrom');
+my $estimateddeliverydateto   = $input->param('estimateddeliverydateto');
 my $branch     = $input->param('branch');
 my $op         = $input->param('op');
 
 my @errors = ();
-$delay = 30 unless defined $delay;
-unless ($delay =~ /^\d{1,3}$/) {
-	push @errors, {delay_digits => 1, bad_delay => $delay};
-	$delay = 30;	#default value for delay
+if ( defined $delay and not $delay =~ /^\d{1,3}$/ ) {
+    push @errors, {delay_digits => 1, bad_delay => $delay};
 }
 
 if ($op and $op eq "send_alert"){
@@ -92,7 +92,13 @@ if ($op and $op eq "send_alert"){
     }
 }
 
-my %supplierlist = GetBooksellersWithLateOrders($delay);
+my %supplierlist = GetBooksellersWithLateOrders(
+    $delay,
+    $branch,
+    C4::Dates->new($estimateddeliverydatefrom)->output("iso"),
+    C4::Dates->new($estimateddeliverydateto)->output("iso")
+);
+
 my (@sloopy);	# supplier loop
 foreach (keys %supplierlist){
 	push @sloopy, (($booksellerid and $booksellerid eq $_ )            ?
@@ -104,7 +110,13 @@ $template->param(SUPPLIER_LOOP => \@sloopy);
 $template->param(Supplier=>$supplierlist{$booksellerid}) if ($booksellerid);
 $template->param(booksellerid=>$booksellerid) if ($booksellerid);
 
-my @lateorders = GetLateOrders($delay,$booksellerid,$branch);
+my @lateorders = GetLateOrders(
+    $delay,
+    $booksellerid,
+    $branch,
+    C4::Dates->new($estimateddeliverydatefrom)->output("iso"),
+    C4::Dates->new($estimateddeliverydateto)->output("iso")
+);
 
 my $total;
 foreach (@lateorders){
@@ -122,7 +134,10 @@ $template->param(ERROR_LOOP => \@errors) if (@errors);
 $template->param(
 	lateorders => \@lateorders,
 	delay => $delay,
+    estimateddeliverydatefrom => $estimateddeliverydatefrom,
+    estimateddeliverydateto   => $estimateddeliverydateto,
 	total => $total,
 	intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+    DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
 );
 output_html_with_http_headers $input, $cookie, $template->output;

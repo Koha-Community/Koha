@@ -2602,6 +2602,7 @@ CREATE TABLE `aqbooksellers` ( -- information about the vendors listed in acquis
   `gstrate` decimal(6,4) default NULL, -- the tax rate the library is charged
   `discount` float(6,4) default NULL, -- discount offered on all items ordered from this vendor
   `fax` varchar(50) default NULL, -- vendor fax number
+  `deliverytime` int(11) default NULL, -- vendor delivery time
   PRIMARY KEY  (`id`),
   KEY `listprice` (`listprice`),
   KEY `invoiceprice` (`invoiceprice`),

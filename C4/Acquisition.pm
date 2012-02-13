@@ -1473,13 +1473,15 @@ sub GetLateOrders {
     my $delay      = shift;
     my $supplierid = shift;
     my $branch     = shift;
+    my $estimateddeliverydatefrom = shift;
+    my $estimateddeliverydateto = shift;
 
     my $dbh = C4::Context->dbh;
 
     #BEWARE, order of parenthesis and LEFT JOIN is important for speed
     my $dbdriver = C4::Context->config("db_scheme") || "mysql";
 
-    my @query_params = ($delay);	# delay is the first argument regardless
+    my @query_params = ();
     my $select = "
     SELECT aqbasket.basketno,
         aqorders.ordernumber,
@@ -1495,6 +1497,7 @@ sub GetLateOrders {
         biblio.author, biblio.title,
         biblioitems.publishercode AS publisher,
         biblioitems.publicationyear,
+        ADDDATE(aqbasket.closedate, INTERVAL aqbooksellers.deliverytime DAY) AS estimateddeliverydate,
     ";
     my $from = "
     FROM
@@ -1508,6 +1511,7 @@ sub GetLateOrders {
             OR datereceived IS NULL
             OR aqorders.quantityreceived < aqorders.quantity
         )
+        AND aqbasket.closedate IS NOT NULL
         AND (aqorders.datecancellationprinted IS NULL OR aqorders.datecancellationprinted='0000-00-00')
     ";
     my $having = "";
@@ -1515,9 +1519,12 @@ sub GetLateOrders {
         $select .= "
         aqorders.quantity - IFNULL(aqorders.quantityreceived,0)                 AS quantity,
         (aqorders.quantity - IFNULL(aqorders.quantityreceived,0)) * aqorders.rrp AS subtotal,
-        DATEDIFF(CURDATE( ),closedate) AS latesince
+        DATEDIFF(CAST(now() AS date),closedate) AS latesince
         ";
-        $from .= " AND (closedate <= DATE_SUB(CURDATE( ),INTERVAL ? DAY)) ";
+        if ( defined $delay ) {
+            $from .= " AND (closedate <= DATE_SUB(CAST(now() AS date),INTERVAL ? DAY)) " ;
+            push @query_params, $delay;
+        }
         $having = "
         HAVING quantity          <> 0
             AND unitpricesupplier <> 0
@@ -1528,9 +1535,12 @@ sub GetLateOrders {
         $select .= "
                 aqorders.quantity                AS quantity,
                 aqorders.quantity * aqorders.rrp AS subtotal,
-                (CURDATE - closedate)            AS latesince
+                (CAST(now() AS date) - closedate)            AS latesince
         ";
-        $from .= " AND (closedate <= (CURDATE -(INTERVAL ? DAY)) ";
+        if ( defined $delay ) {
+            $from .= " AND (closedate <= (CAST(now() AS date) -(INTERVAL ? DAY)) ";
+            push @query_params, $delay;
+        }
     }
     if (defined $supplierid) {
         $from .= ' AND aqbasket.booksellerid = ? ';
@@ -1539,6 +1549,18 @@ sub GetLateOrders {
     if (defined $branch) {
         $from .= ' AND borrowers.branchcode LIKE ? ';
         push @query_params, $branch;
+    }
+    if ( defined $estimateddeliverydatefrom ) {
+        $from .= '
+            AND aqbooksellers.deliverytime IS NOT NULL
+            AND ADDDATE(aqbasket.closedate, INTERVAL aqbooksellers.deliverytime DAY) >= ?';
+        push @query_params, $estimateddeliverydatefrom;
+    }
+    if ( defined $estimateddeliverydatefrom and defined $estimateddeliverydateto ) {
+        $from .= ' AND ADDDATE(aqbasket.closedate, INTERVAL aqbooksellers.deliverytime DAY) <= ?';
+        push @query_params, $estimateddeliverydateto;
+    } elsif ( defined $estimateddeliverydatefrom ) {
+        $from .= ' AND ADDDATE(aqbasket.closedate, INTERVAL aqbooksellers.deliverytime DAY) <= CAST(now() AS date)';
     }
     if (C4::Context->preference("IndependantBranches")
             && C4::Context->userenv

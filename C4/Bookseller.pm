@@ -102,19 +102,48 @@ Searches for suppliers with late orders.
 =cut
 
 sub GetBooksellersWithLateOrders {
-    my $delay = shift;
-    my $dbh   = C4::Context->dbh;
+    my ( $delay, $branch, $estimateddeliverydatefrom, $estimateddeliverydateto ) = @_;    # FIXME: Branch argument unused.
+    my $dbh = C4::Context->dbh;
 
-    # TODO delay should be verified
-    my $query_string =
-      "SELECT DISTINCT aqbasket.booksellerid, aqbooksellers.name
-    FROM aqorders LEFT JOIN aqbasket ON aqorders.basketno=aqbasket.basketno
-    LEFT JOIN aqbooksellers ON aqbasket.booksellerid = aqbooksellers.id
-    WHERE (closedate < DATE_SUB(CURDATE( ),INTERVAL $delay DAY)
-    AND (datereceived = '' OR datereceived IS NULL))";
+    # FIXME NOT quite sure that this operation is valid for DBMs different from Mysql, HOPING so
+    # should be tested with other DBMs
 
-    my $sth = $dbh->prepare($query_string);
-    $sth->execute;
+    my $strsth;
+    my @query_params = ();
+    my $dbdriver = C4::Context->config("db_scheme") || "mysql";
+    $strsth = "
+        SELECT DISTINCT aqbasket.booksellerid, aqbooksellers.name
+        FROM aqorders LEFT JOIN aqbasket ON aqorders.basketno=aqbasket.basketno
+        LEFT JOIN aqbooksellers ON aqbasket.booksellerid = aqbooksellers.id
+        WHERE
+            ( datereceived = ''
+            OR datereceived IS NULL
+            OR aqorders.quantityreceived < aqorders.quantity
+            )
+            AND aqorders.rrp <> 0
+            AND aqorders.ecost <> 0
+            AND aqorders.quantity - IFNULL(aqorders.quantityreceived,0) <> 0
+            AND aqbasket.closedate IS NOT NULL
+    ";
+    if ( defined $delay ) {
+        $strsth .= " AND (closedate <= DATE_SUB(CAST(now() AS date),INTERVAL ? DAY)) ";
+        push @query_params, $delay;
+    }
+    if ( defined $estimateddeliverydatefrom ) {
+        $strsth .= '
+            AND aqbooksellers.deliverytime IS NOT NULL
+            AND ADDDATE(aqbasket.closedate, INTERVAL aqbooksellers.deliverytime DAY) >= ?';
+        push @query_params, $estimateddeliverydatefrom;
+    }
+    if ( defined $estimateddeliverydatefrom and defined $estimateddeliverydateto ) {
+        $strsth .= ' AND ADDDATE(aqbasket.closedate, INTERVAL aqbooksellers.deliverytime DAY) <= ?';
+        push @query_params, $estimateddeliverydateto;
+    } elsif ( defined $estimateddeliverydatefrom ) {
+        $strsth .= ' AND ADDDATE(aqbasket.closedate, INTERVAL aqbooksellers.deliverytime DAY) <= CAST(now() AS date)';
+    }
+
+    my $sth = $dbh->prepare($strsth);
+    $sth->execute( @query_params );
     my %supplierlist;
     while ( my ( $id, $name ) = $sth->fetchrow ) {
         $supplierlist{$id} = $name;
@@ -201,7 +230,7 @@ sub ModBookseller {
             contphone=?,contfax=?,contaltphone=?,contemail=?,
             contnotes=?,active=?,listprice=?, invoiceprice=?,
             gstreg=?,listincgst=?,invoiceincgst=?,
-            discount=?,notes=?,gstrate=?
+            discount=?,notes=?,gstrate=?,deliverytime=?
         WHERE id=?';
     my $sth = $dbh->prepare($query);
     $sth->execute(
@@ -218,7 +247,9 @@ sub ModBookseller {
         $data->{'invoiceprice'}, $data->{'gstreg'},
         $data->{'listincgst'},   $data->{'invoiceincgst'},
         $data->{'discount'},     $data->{'notes'},
-        $data->{'gstrate'},      $data->{'id'}
+        $data->{'gstrate'},
+        $data->{deliverytime},
+        $data->{'id'}
     );
     return;
 }

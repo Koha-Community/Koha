@@ -107,6 +107,7 @@ if ($gstrate eq '') {
     $data{'gstrate'} = $input->param('gstrate')/100;
 }
 $data{'discount'}=$input->param('discount');
+$data{deliverytime} = $input->param('deliverytime');
 $data{'active'}=$input->param('status');
 if($data{'name'}) {
 	if ($data{'id'}){
