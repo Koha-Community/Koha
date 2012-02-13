@@ -168,6 +168,14 @@ sub shelfpage ($$$$$) {
                 };
 
                 ModShelf( $shelfnumber, $shelf );
+                if($displaymode eq "viewshelf"){
+                    print $query->redirect( $pages{$type}->{redirect} . "?viewshelf=$shelfnumber" );
+                } elsif($displaymode eq "publicshelves"){
+                    print $query->redirect( $pages{$type}->{redirect} );
+                } else {
+                    print $query->redirect( $pages{$type}->{redirect} . "?display=privateshelves" );
+                }
+                exit;
 
             } elsif ( $op eq 'modif' ) {
                 my ( $shelfnumber2, $shelfname, $owner, $category, $sortfield ) = GetShelf($shelfnumber);
@@ -176,6 +184,7 @@ sub shelfpage ($$$$$) {
                 $edit = 1;
                 $template->param(
                     edit                => 1,
+                    display             => $displaymode,
                     shelfnumber         => $shelfnumber2,
                     shelfname           => $shelfname,
                     owner               => $owner,
