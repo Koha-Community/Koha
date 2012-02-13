@@ -49,7 +49,7 @@
                 [% CASE 'marcxml' %]<option value="marcxml">MARCXML</option>
                 [% CASE 'marc8' %]<option value="marc8">MARC (non-Unicode/MARC-8)</option>
                 [% CASE 'utf8' %]<option value="utf8">MARC (Unicode/UTF-8)</option>
-                [% CASE 'marcstd' %]<option value="utf8">MARC (Unicode/UTF-8, Standard)</option>
+                [% CASE 'marcstd' %]<option value="marcstd">MARC (Unicode/UTF-8, Standard)</option>
                 [% CASE 'mods' %]<option value="mods">MODS (XML)</option>
                 [% CASE 'ris' %]<option value="ris">RIS</option>
             [% END %]
