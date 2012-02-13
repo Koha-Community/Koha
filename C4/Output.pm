@@ -297,12 +297,12 @@ sub output_with_http_headers($$$$;$) {
  
 #    utf8::encode($data) if utf8::is_utf8($data);
 
+    $data =~ s/\&amp\;amp\; /\&amp\; /g;
     print $query->header($options), $data;
 }
 
 sub output_html_with_http_headers ($$$;$) {
     my ( $query, $cookie, $data, $status ) = @_;
-    $data =~ s/\&amp\;amp\; /\&amp\; /g;
     output_with_http_headers( $query, $cookie, $data, 'html', $status );
 }
 
