@@ -340,12 +340,13 @@ foreach my $tag (sort keys %{$tagslib}) {
           #---- "true" authorised value
       }
       else {
-          push @authorised_values, "" unless ( $tagslib->{$tag}->{$subfield}->{mandatory} );
+          push @authorised_values, ""; # unless ( $tagslib->{$tag}->{$subfield}->{mandatory} );
           $authorised_values_sth->execute( $tagslib->{$tag}->{$subfield}->{authorised_value} );
           while ( my ( $value, $lib ) = $authorised_values_sth->fetchrow_array ) {
               push @authorised_values, $value;
               $authorised_lib{$value} = $lib;
           }
+          $value="";
       }
       $subfield_data{marc_value} =CGI::scrolling_list(      # FIXME: factor out scrolling_list
           -name     => "field_value",
