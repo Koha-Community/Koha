@@ -72,3 +72,12 @@ YAHOO.util.Event.onContentReady("listsmenu", function () {
 		YAHOO.util.Event.addListener("listsmenulink", "click", listMenu.show, null, listMenu);
 		YAHOO.widget.Overlay.windowResizeEvent.subscribe(positionlistMenu);
  });
+
+jQuery.fn.preventDoubleFormSubmit = function() {
+    jQuery(this).submit(function() {
+        if (this.beenSubmitted)
+            return false;
+        else
+            this.beenSubmitted = true;
+    });
+};
