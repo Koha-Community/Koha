@@ -179,7 +179,7 @@
 
 [% IF ( step_1 ) %]
 	<fieldset class="rows" id="memberentry_identity">
-		<legend>[% IF ( I ) %]Organization [% ELSE %]Patron [% END %]identity</legend>
+                <legend id="identity_lgd">[% IF ( I ) %]Organization [% ELSE %]Patron [% END %]identity</legend>
 		<ol>
 		[% UNLESS ( I ) %]
 		[% IF ( title_cgipopup ) %]
@@ -399,7 +399,7 @@
 
 [% END %]
 <fieldset class="rows">
-    <legend>Main address</legend><ol>
+    <legend id="main_address_lgd">Main address</legend><ol>
     <li>
       [% IF ( mandatorystreetnumber ) %]
       <label for="streetnumber" class="required">
@@ -524,7 +524,7 @@
 	</ol>
     </fieldset>
   <fieldset class="rows" id="memberentry_contact">
-    <legend>Contact</legend><ol>
+    <legend id="contact_lgd">Contact</legend><ol>
       <li>
       [% IF ( mandatoryphone ) %] 
       <label for="phone" class="required">
@@ -620,7 +620,7 @@
 [% IF ( step_6 ) %]
 
 		<fieldset class="rows" id="memberentry_address">
-		<legend>Alternate address</legend><ol>
+                <legend id="alt_address_lgd">Alternate address</legend><ol>
 			<li>
 				[% IF ( mandatoryB_address ) %]
 					<label for="B_address" class="required">
@@ -739,7 +739,7 @@
 [% END %]		
 [% IF ( step_2 ) %]
 		<fieldset class="rows" id="memberentry_altaddress">       
-		    <legend>Alternate Contact</legend><ol>
+               <legend id="alt_contact_lgd">Alternate Contact</legend><ol>
 			<li>
 			    [% IF ( mandatoryaltcontactsurname ) %]
 				<label for="altcontactsurname" class="required">
@@ -865,7 +865,7 @@
 [% IF ( step_3 ) %]
 
   <fieldset class="rows" id="memberentry_library_management">
-    <legend>Library Management</legend><ol>
+    <legend id="library_management_lgd">Library Management</legend><ol>
    <li> [% IF ( mandatorycardnumber ) %]
       <label for="cardnumber" class="required">
     [% ELSE %]
@@ -948,7 +948,7 @@
 	</ol>
   </fieldset>
 	<fieldset class="rows" id="memberentry_subscription">
-	<legend>Library set-up</legend><ol>
+    <legend id="library_setup_lgd">Library set-up</legend><ol>
 		<li>
 			[% IF ( mandatorydateenrolled ) %]
 			<label for="dateenrolled" class="required">
@@ -1034,7 +1034,7 @@
 		</ol>
 	</fieldset>
 	<fieldset class="rows" id="memberentry_userid">
-		<legend>OPAC/Staff Login</legend><ol>
+          <legend id="opac_staff_login_lgd">OPAC/Staff Login</legend><ol>
 		<li>
 			[% IF ( mandatoryuserid ) %]
 			<label for="userid" class="required">
@@ -1240,7 +1240,7 @@
     </script>
     [% END %]
     <input type="hidden" name="setting_messaging_prefs" value="1" />
-    <legend>Patron messaging preferences</legend>
+    <legend id="patron_messaging_prefs_lgd">Patron messaging preferences</legend>
     [% IF type_only %]
         <i>If no preferences are selected, the default preferences for the category chosen will be applied on save, otherwise your selection here is saved</i>
     [% END %]
