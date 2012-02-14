@@ -127,6 +127,8 @@ function checkMultiHold() {
 			$("#requestany").attr("checked","checked");
 		}
 	});
+
+    $('#hold-request-form').preventDoubleFormSubmit();
  });
 
 // ]]>
@@ -238,7 +240,7 @@ function checkMultiHold() {
   <fieldset class="rows left">
     <legend>Hold details</legend>
         [% UNLESS ( multi_hold ) %]
-            <form action="placerequest.pl" method="post" onsubmit="return check();" name="form">
+            <form action="placerequest.pl" method="post" onsubmit="return check();" name="form" id="hold-request-form">
         [% ELSE %]
             <form action="placerequest.pl" method="post" onsubmit="return checkMultiHold();" name="form">
         [% END %]

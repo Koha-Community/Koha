@@ -93,3 +93,12 @@ function checkEnter(e){ //e is event object passed from function invocation
 function clearHoldFor(){
 	$.cookie("holdfor",null, { path: "/", expires: 0 });
 }
+
+jQuery.fn.preventDoubleFormSubmit = function() {
+    jQuery(this).submit(function() {
+        if (this.beenSubmitted)
+            return false;
+        else
+            this.beenSubmitted = true;
+    });
+};
