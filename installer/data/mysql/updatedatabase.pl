@@ -4678,9 +4678,9 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 }
 
 
-$DBversion = "3.07.00.XXX";
+$DBversion = "3.07.00.014";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-    print "RELTERMS category available for English-, French-, and Spanish-language relator terms. They are not loaded during upgrade but can be easily inserted using the provided marc21_relatorterms.sql SQL script (currently available for en, es, and fr only).\n";
+    print "RELTERMS category available for English-, French-, and Spanish-language relator terms. They are not loaded during upgrade but can be easily inserted using the provided marc21_relatorterms.sql SQL script (MARC21 only, and currently available for en, es, and fr only).\n";
     SetVersion($DBversion);
 }
 
