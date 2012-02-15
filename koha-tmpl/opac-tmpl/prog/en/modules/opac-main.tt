@@ -47,6 +47,7 @@
     [% IF ( opacuserlogin ) %]
     [% UNLESS ( loggedinusername ) %]
     [% UNLESS ( casAuthentication ) %]
+    [% UNLESS ( shibbolethAuthentication ) %]
     <div id="login" class="container clearfix">
 	<form action="/cgi-bin/koha/opac-user.pl" method="post" name="auth" id="auth">
     <input type="hidden" name="koha_login_context" value="opac" />

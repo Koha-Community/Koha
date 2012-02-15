@@ -36,7 +36,7 @@ use POSIX qw/strftime/;
 use List::MoreUtils qw/ any /;
 
 # use utf8;
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $debug $ldap $cas $caslogout);
+use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $debug $ldap $cas $caslogout $shib $shib_login);
 
 BEGIN {
     sub psgi_env { any { /^psgi\./ } keys %ENV }
@@ -55,11 +55,18 @@ BEGIN {
     %EXPORT_TAGS = ( EditPermissions => [qw(get_all_subpermissions get_user_subpermissions)] );
     $ldap        = C4::Context->config('useldapserver') || 0;
     $cas         = C4::Context->preference('casAuthentication');
+    $shib        = C4::Context->preference('shibbolethAuthentication');
     $caslogout   = C4::Context->preference('casLogout');
     require C4::Auth_with_cas;             # no import
+    require C4::Auth_with_Shibboleth;
     if ($ldap) {
     require C4::Auth_with_ldap;
     import C4::Auth_with_ldap qw(checkpw_ldap);
+    }
+    if ($shib) {
+        import C4::Auth_with_Shibboleth qw(checkpw_shib logout_shib login_shib_url get_login_shib);
+        # Getting user login
+        $shib_login = get_login_shib();
     }
     if ($cas) {
         import  C4::Auth_with_cas qw(check_api_auth_cas checkpw_cas login_cas logout_cas login_cas_url);
@@ -669,8 +676,18 @@ sub checkauth {
     my $casparam = $query->param('cas');
     my $q_userid = $query->param('userid') // '';
 
-    if ( $userid = $ENV{'REMOTE_USER'} ) {
-            # Using Basic Authentication, no cookies required
+    # Basic authentication is incompatible with the use of Shibboleth,
+    # as Shibboleth may return REMOTE_USER as a Shibboleth attribute,
+    # and it may not be the attribute we want to use to match the koha login.
+    #
+    # Also, do not consider an empty REMOTE_USER.
+    #
+    # Finally, after those tests, we can assume (although if it would be better with
+    # a syspref) that if we get a REMOTE_USER, that's from basic authentication,
+    # and we can affect it to $userid.
+    if ( !$shib and $ENV{'REMOTE_USER'} ne '' and $userid = $ENV{'REMOTE_USER'} ) {
+
+        # Using Basic Authentication, no cookies required
         $cookie = $query->cookie(
             -name     => 'CGISESSID',
             -value    => '',
@@ -728,9 +745,15 @@ sub checkauth {
             $sessionID = undef;
             $userid    = undef;
 
-        if ($cas and $caslogout) {
-        logout_cas($query);
-        }
+            if ($cas and $caslogout) {
+                logout_cas($query);
+            }
+
+            # If we are in a shibboleth session (shibboleth is enabled, and a shibboleth username is set)
+            if ( $shib and $shib_login and $type eq 'opac') {
+            # (Note: $type eq 'opac' condition should be removed when shibboleth authentication for intranet will be implemented)
+                logout_shib($query);
+            }
         }
         elsif ( !$lasttime || ($lasttime < time() - $timeout) ) {
             # timed logout
@@ -800,13 +823,20 @@ sub checkauth {
         }
         if (   ( $cas && $query->param('ticket') )
             || $userid
+            || $shib
             || $pki_field ne 'None'
-            || $persona )
+	    || $persona )
         {
             my $password = $query->param('password');
 
             my ( $return, $cardnumber );
-            if ( $cas && $query->param('ticket') ) {
+            if ($shib && $shib_login && $type eq 'opac' && !$password) {
+                my $retuserid;
+                ( $return, $cardnumber, $retuserid ) = checkpw( $dbh, $userid, $password, $query );
+                $userid = $retuserid;
+                $info{'invalidShibLogin'} = 1 unless ($return);
+
+            } elsif ( $cas && $query->param('ticket') ) {
                 my $retuserid;
                 ( $return, $cardnumber, $retuserid ) =
                   checkpw( $dbh, $userid, $password, $query );
@@ -1053,6 +1083,7 @@ sub checkauth {
         login                => 1,
         INPUTS               => \@inputs,
         casAuthentication    => C4::Context->preference("casAuthentication"),
+        shibbolethAuthentication => C4::Context->preference("shibbolethAuthentication"),
         suggestion           => C4::Context->preference("suggestion"),
         virtualshelves       => C4::Context->preference("virtualshelves"),
         LibraryName          => "" . C4::Context->preference("LibraryName"),
@@ -1121,6 +1152,12 @@ sub checkauth {
     $template->param(
             invalidCasLogin => $info{'invalidCasLogin'}
         );
+    }
+
+    if ($shib) {
+            $template->param(
+                shibbolethLoginUrl    => login_shib_url($query),
+            );
     }
 
     my $self_url = $query->url( -absolute => 1 );
@@ -1557,6 +1594,28 @@ sub checkpw {
         return 0;
     }
 
+    # If we are in a shibboleth session (shibboleth is enabled and no password has been provided)
+    if ($shib && !$password) {
+
+        $debug and print STDERR "## checkpw - checking Shibboleth\n";
+        # In case of a Shibboleth authentication, we expect a shibboleth user attribute
+        # (defined in the shibbolethLoginAttribute) tto contain the login of the
+        # shibboleth-authenticated user
+
+        # Shibboleth attributes are mapped into http environmement variables,
+        # so we're getting the login of the user this way
+        my $attributename = C4::Context->preference('shibbolethLoginAttribute');
+        my $attributevalue = $ENV{$attributename};
+
+        # Then, we check if it matches a valid koha user
+        if ($shib_login) {
+            my ( $retval, $retcard, $retuserid ) = C4::Auth_with_Shibboleth::checkpw_shib( $dbh, $shib_login );    # EXTERNAL AUTH
+            ($retval) and return ( $retval, $retcard, $retuserid );
+            return 0;
+        }
+    }
+
+    # INTERNAL AUTH
     return checkpw_internal(@_)
 }
 

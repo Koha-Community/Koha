@@ -46,6 +46,22 @@
 <p>You entered an incorrect username or password. Please try again! And remember, usernames and passwords are case sensitive.</p>
 [% END %]
 
+[% IF ( shibbolethAuthentication ) %]
+<h4>Shibboleth Login</h4>
+
+[% IF ( invalidShibLogin ) %]
+<!-- This is what is displated if shibboleth login has failed -->
+<p>Sorry, the shibboleth login failed.</p>
+[% END %]
+
+<p>If you have a shibboleth account,
+please <a href="[% shibbolethLoginUrl %]">click here to login</a>.</p>
+
+<h4>Local Login</h4>
+<p>If you do not have a shibboleth account, but a local account, you can still log in : </p>
+
+[% END %]
+
 [% IF ( casAuthentication ) %]
 <h4>Cas login</h4>
 
