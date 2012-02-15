@@ -53,7 +53,16 @@ YAHOO.util.Event.onContentReady("header_search", function() {
 	<span class="filteraction" id="filteraction_off"> <a href="#" onclick="$('#filters').toggle();$('.filteraction').toggle();">[-]</a></span>
 	<span class="filteraction" id="filteraction_on"> <a href="#" onclick="$('#filters').toggle();$('.filteraction').toggle();">[+]</a></span>
 	[% END %]
-    order by:
+
+      <label for="searchfields">Search fields:</label>
+      <select name="searchfields" id="searchfields">
+          <option selected="selected" value=''>Standard</option>
+          <option value='email,emailpro,B_email,'>Email</option>
+          <option value='borrowernumber'>Borrower number</option>
+          <option value='phone,phonepro,B_phone,altcontactphone,mobile'>Phone number</option>
+      </select>
+
+    <label for="orderby">Order by:</label>
     <select name="orderby" id="searchorderby">
     <option value="surname,0">Surname</option>
     <option value="cardnumber,0">Cardnumber</option>

@@ -94,6 +94,9 @@ else {
 	@orderby = ({surname=>0},{firstname=>0});
 }
 
+my $searchfields = $input->param('searchfields');
+my @searchfields = $searchfields ? split( ',', $searchfields ) : ( "firstname", "surname", "othernames", "cardnumber", "userid", "email" );
+
 $member =~ s/,//g;   #remove any commas from search string
 $member =~ s/\*/%/g;
 
@@ -104,7 +107,7 @@ my ($count,$results);
 if ($member || keys %$patron) {
     #($results)=Search($member || $patron,{surname=>1,firstname=>1},[$from,$to],undef,["firstname","surname","email","othernames"]  );
     my $search_scope = ( $quicksearch ? "field_start_with" : "start_with" );
-    ($results) = Search( $member || $patron, \@orderby, undef, undef, [ "firstname", "surname", "othernames", "cardnumber", "userid", "email" ], $search_scope );
+    ($results) = Search( $member || $patron, \@orderby, undef, undef, \@searchfields, $search_scope );
 }
 
 if ($results) {
