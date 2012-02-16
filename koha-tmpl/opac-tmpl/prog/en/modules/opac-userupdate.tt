@@ -11,12 +11,15 @@
 
 <div id="userupdatecontainer" class="container">
 [% FOREACH BORROWER_INF IN BORROWER_INFO %]
-<h3><a href="/cgi-bin/koha/opac-user.pl">[% INCLUDE 'patron-title.inc' ifirstname = BORROWER_INF.firstname surname = BORROWER_INF.surname othernames = BORROWER_INF.othernames cardnumber = BORROWER_INF.cardnumber %]'s account</a> <img src="[% themelang %]../../images/caret.gif" width="16" height="16" alt="&gt;" border="0" /> Your Personal Details</h3>
+<h3><a href="/cgi-bin/koha/opac-user.pl">[% INCLUDE 'patron-title.inc' firstname = BORROWER_INF.firstname surname = BORROWER_INF.surname othernames = BORROWER_INF.othernames cardnumber = BORROWER_INF.cardnumber %]'s account</a> <img src="[% themelang %]../../images/caret.gif" width="16" height="16" alt="&gt;" border="0" /> Your Personal Details</h3>
 
 [% IF ( OPACPatronDetails ) %]
 <form action="/cgi-bin/koha/opac-userupdate.pl" method="get">
 <div class="yui-u first">
 <input type="hidden" name="modify" value="yes" />
+[% IF ( display_patron_image ) %]<p style="border:1px solid #EEE;padding:1em;">
+    <img src="/cgi-bin/koha/opac-patron-image.pl" alt="" />
+</p>[% END %]
 <fieldset class="brief"><legend>Name</legend><ol>
 <li><label for="firstname">First Name:</label> <input id="firstname" type="text" value="[% BORROWER_INF.firstname %]"  name="firstname" /></li>
 <li><label for="othernames">Other Name:</label> <input id="othernames" type="text" value="[% BORROWER_INF.othernames %]"  name="othernames" /></li>
@@ -102,6 +105,9 @@
 [% ELSE %]
 <p style="clear:left;padding:1em 0">To make changes to your record please contact the library.</p>
 <div class="yui-u first">
+[% IF ( display_patron_image ) %]<p style="border:1px solid #EEE;border-bottom-color:#000;padding:1em;">
+    <img src="/cgi-bin/koha/opac-patron-image.pl" alt="" />
+</p>[% END %]
 <fieldset class="rows">
 <legend>Contact Information</legend>
 <ol>

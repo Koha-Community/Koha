@@ -170,6 +170,15 @@ for (@{ $checkout_prefs->{transports} }) {
     $borr->{"items_borrowed_$_"} = 1;
 }
 
+if (C4::Context->preference('OPACpatronimages')) {
+    my ($image, $dberror) = GetPatronImage($borr->{'cardnumber'});
+    if ($image) {
+        $template->param(
+            display_patron_image => 1
+        );
+    }
+}
+
 my @bordat;
 $bordat[0] = $borr;
 
