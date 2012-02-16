@@ -146,7 +146,7 @@ if ( $op eq 'delete_confirm' ) {
         -type       => 'text/csv',
         -attachment => 'basket' . $basket->{'basketno'} . '.csv',
     );
-    print GetBasketAsCSV($query->param('basketno'));
+    print GetBasketAsCSV($query->param('basketno'), $query);
     exit;
 } elsif ($op eq 'close') {
     my $confirm = $query->param('confirm') || $confirm_pref eq '2';
@@ -156,8 +156,15 @@ if ( $op eq 'delete_confirm' ) {
         $basketno =~ /^\d+$/ and CloseBasket($basketno);
         # if requested, create basket group, close it and attach the basket
         if ($query->param('createbasketgroup')) {
+            my $branchcode;
+            if(C4::Context->userenv and C4::Context->userenv->{'branch'}
+              and C4::Context->userenv->{'branch'} ne "NO_LIBRARY_SET") {
+                $branchcode = C4::Context->userenv->{'branch'};
+            }
             my $basketgroupid = NewBasketgroup( { name => $basket->{basketname},
                             booksellerid => $booksellerid,
+                            deliveryplace => $branchcode,
+                            billingplace => $branchcode,
                             closed => 1,
                             });
             ModBasket( { basketno => $basketno,

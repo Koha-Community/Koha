@@ -29,6 +29,8 @@ use C4::Suggestions;
 use C4::Biblio;
 use C4::Debug;
 use C4::SQLHelper qw(InsertInTable);
+use C4::Bookseller qw(GetBookSellerFromId);
+use C4::Templates qw(gettemplate);
 
 use Time::localtime;
 use HTML::Entities;
@@ -42,7 +44,7 @@ BEGIN {
     @ISA    = qw(Exporter);
     @EXPORT = qw(
         &GetBasket &NewBasket &CloseBasket &DelBasket &ModBasket
-	&GetBasketAsCSV
+        &GetBasketAsCSV &GetBasketGroupAsCSV
         &GetBasketsByBookseller &GetBasketsByBasketgroup
         &GetBasketsInfosByBookseller
 
@@ -227,53 +229,126 @@ sub CloseBasket {
 
 Export a basket as CSV
 
+$cgi parameter is needed for column name translation
+
 =cut
 
 sub GetBasketAsCSV {
-    my ($basketno) = @_;
+    my ($basketno, $cgi) = @_;
     my $basket = GetBasket($basketno);
     my @orders = GetOrders($basketno);
     my $contract = GetContract($basket->{'contractnumber'});
-    my $csv = Text::CSV->new();
-    my $output; 
 
-    # TODO: Translate headers
-    my @headers = qw(contractname ordernumber entrydate isbn author title publishercode collectiontitle notes quantity rrp);
-
-    $csv->combine(@headers);                                                                                                        
-    $output = $csv->string() . "\n";	
+    my $template = C4::Templates::gettemplate("acqui/csv/basket.tmpl", "intranet", $cgi);
 
     my @rows;
     foreach my $order (@orders) {
-	my @cols;
-	# newlines are not valid characters for Text::CSV combine()
-        $order->{'notes'} =~ s/[\r\n]+//g;
-	push(@cols,
-		$contract->{'contractname'},
-		$order->{'ordernumber'},
-		$order->{'entrydate'}, 
-		$order->{'isbn'},
-		$order->{'author'},
-		$order->{'title'},
-		$order->{'publishercode'},
-		$order->{'collectiontitle'},
-		$order->{'notes'},
-		$order->{'quantity'},
-		$order->{'rrp'},
-	    );
-	push (@rows, \@cols);
+        my $bd = GetBiblioData( $order->{'biblionumber'} );
+        my $row = {
+            contractname => $contract->{'contractname'},
+            ordernumber => $order->{'ordernumber'},
+            entrydate => $order->{'entrydate'},
+            isbn => $order->{'isbn'},
+            author => $bd->{'author'},
+            title => $bd->{'title'},
+            publicationyear => $bd->{'publicationyear'},
+            publishercode => $bd->{'publishercode'},
+            collectiontitle => $bd->{'collectiontitle'},
+            notes => $order->{'notes'},
+            quantity => $order->{'quantity'},
+            rrp => $order->{'rrp'},
+            deliveryplace => $basket->{'deliveryplace'},
+            billingplace => $basket->{'billingplace'}
+        };
+        foreach(qw(
+            contractname author title publishercode collectiontitle notes
+            deliveryplace billingplace
+        ) ) {
+            # Double the quotes to not be interpreted as a field end
+            $row->{$_} =~ s/"/""/g if $row->{$_};
+        }
+        push @rows, $row;
     }
 
-    foreach my $row (@rows) {
-	$csv->combine(@$row);                                                                                                                    
-	$output .= $csv->string() . "\n";    
+    @rows = sort {
+        if(defined $a->{publishercode} and defined $b->{publishercode}) {
+            $a->{publishercode} cmp $b->{publishercode};
+        }
+    } @rows;
 
-    }
-                                                                                                                                                      
-    return $output;             
+    $template->param(rows => \@rows);
 
+    return $template->output;
 }
 
+
+=head3 GetBasketGroupAsCSV
+
+=over 4
+
+&GetBasketGroupAsCSV($basketgroupid);
+
+Export a basket group as CSV
+
+$cgi parameter is needed for column name translation
+
+=back
+
+=cut
+
+sub GetBasketGroupAsCSV {
+    my ($basketgroupid, $cgi) = @_;
+    my $baskets = GetBasketsByBasketgroup($basketgroupid);
+
+    my $template = C4::Templates::gettemplate('acqui/csv/basketgroup.tmpl', 'intranet', $cgi);
+
+    my @rows;
+    for my $basket (@$baskets) {
+        my @orders     = GetOrders( $$basket{basketno} );
+        my $contract   = GetContract( $$basket{contractnumber} );
+        my $bookseller = GetBookSellerFromId( $$basket{booksellerid} );
+
+        foreach my $order (@orders) {
+            my $bd = GetBiblioData( $order->{'biblionumber'} );
+            my $row = {
+                clientnumber => $bookseller->{accountnumber},
+                basketname => $basket->{basketname},
+                ordernumber => $order->{ordernumber},
+                author => $bd->{author},
+                title => $bd->{title},
+                publishercode => $bd->{publishercode},
+                publicationyear => $bd->{publicationyear},
+                collectiontitle => $bd->{collectiontitle},
+                isbn => $order->{isbn},
+                quantity => $order->{quantity},
+                rrp => $order->{rrp},
+                discount => $bookseller->{discount},
+                ecost => $order->{ecost},
+                notes => $order->{notes},
+                entrydate => $order->{entrydate},
+                booksellername => $bookseller->{name},
+                bookselleraddress => $bookseller->{address1},
+                booksellerpostal => $bookseller->{postal},
+                contractnumber => $contract->{contractnumber},
+                contractname => $contract->{contractname},
+            };
+            foreach(qw(
+                basketname author title publishercode collectiontitle notes
+                booksellername bookselleraddress booksellerpostal contractname
+                basketgroupdeliveryplace basketgroupbillingplace
+                basketdeliveryplace basketbillingplace
+            ) ) {
+                # Double the quotes to not be interpreted as a field end
+                $row->{$_} =~ s/"/""/g if $row->{$_};
+            }
+            push @rows, $row;
+         }
+     }
+    $template->param(rows => \@rows);
+
+    return $template->output;
+
+}
 
 =head3 CloseBasketgroup
 
@@ -514,8 +589,11 @@ Returns a reference to all baskets that belong to basketgroup $basketgroupid.
 
 sub GetBasketsByBasketgroup {
     my $basketgroupid = shift;
-    my $query = "SELECT * FROM aqbasket
-                LEFT JOIN aqcontract USING(contractnumber) WHERE basketgroupid=?";
+    my $query = qq{
+        SELECT *, aqbasket.booksellerid as booksellerid
+        FROM aqbasket
+        LEFT JOIN aqcontract USING(contractnumber) WHERE basketgroupid=?
+    };
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare($query);
     $sth->execute($basketgroupid);
