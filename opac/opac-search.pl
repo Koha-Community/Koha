@@ -494,7 +494,7 @@ elsif (C4::Context->preference('NoZebra')) {
     $pasarParams .= '&amp;simple_query=' . $simple_query;
     $pasarParams .= '&amp;query_type=' . $query_type if ($query_type);
     eval {
-        ($error, $results_hashref, $facets) = getRecords($query,$simple_query,\@sort_by,\@servers,$results_per_page,$offset,$expanded_facet,$branches,$itemtypes,$query_type,$scan);
+        ($error, $results_hashref, $facets) = getRecords($query,$simple_query,\@sort_by,\@servers,$results_per_page,$offset,$expanded_facet,$branches,$itemtypes,$query_type,$scan,1);
     };
 }
 # This sorts the facets into alphabetical order

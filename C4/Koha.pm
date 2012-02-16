@@ -24,7 +24,7 @@ use strict;
 #use warnings; FIXME - Bug 2505
 
 use C4::Context;
-
+use C4::Branch qw(GetBranchesCount);
 use Memoize;
 use DateTime;
 use DateTime::Format::MySQL;
@@ -714,14 +714,23 @@ sub getFacets {
                 tags  => [ qw/ 225a / ],
                 sep   => ', ',
             },
-        ];
-        my $library_facet = {
-            idx   => 'branch',
-            label => 'Libraries',
-            tags  => [ qw/ 995b / ],
-            expanded => '1',
-        };
-        push @$facets, $library_facet unless C4::Context->preference("singleBranchMode");
+            ];
+
+            my $library_facet;
+            unless ( C4::Context->preference("singleBranchMode") || GetBranchesCount() == 1 ) {
+                $library_facet = {
+                    idx  => 'branch',
+                    label => 'Libraries',
+                    tags        => [ qw/ 995b / ],
+                };
+            } else {
+                $library_facet = {
+                    idx  => 'location',
+                    label => 'Location',
+                    tags        => [ qw/ 995c / ],
+                };
+            }
+            push( @$facets, $library_facet );
     }
     else {
         $facets = [
@@ -768,15 +777,22 @@ sub getFacets {
                 sep   => ', ',
             },
             ];
+
             my $library_facet;
-            $library_facet = {
-                idx   => 'branch',
-                label => 'Libraries',
-                tags  => [ qw/ 952b / ],
-                sep   => ', ',
-                expanded    => '1',
-            };
-            push @$facets, $library_facet unless C4::Context->preference("singleBranchMode");
+            unless ( C4::Context->preference("singleBranchMode") || GetBranchesCount() == 1 ) {
+                $library_facet = {
+                    idx  => 'branch',
+                    label => 'Libraries',
+                    tags        => [ qw / 952b / ],
+                };
+            } else {
+                $library_facet = {
+                    idx => 'location',
+                    label => 'Location',
+                    tags => [ qw / 952c / ],
+                };
+            }
+            push( @$facets, $library_facet );
     }
     return $facets;
 }

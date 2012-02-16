@@ -46,6 +46,7 @@ BEGIN {
 		&DelBranchCategory
 	        &CheckCategoryUnique
 		&mybranch
+		&GetBranchesCount
 	);
 	@EXPORT_OK = qw( &onlymine &mybranch get_branch_code_from_name );
 }
@@ -578,6 +579,15 @@ sub get_branch_code_from_name {
    my $sth = $dbh->prepare($query);
    $sth->execute(@branch_name);
    return $sth->fetchrow_array;
+}
+
+sub GetBranchesCount {
+    my $dbh = C4::Context->dbh();
+    my $query = "SELECT COUNT(*) AS branches_count FROM branches";
+    my $sth = $dbh->prepare( $query );
+    $sth->execute();
+    my $row = $sth->fetchrow_hashref();
+    return $row->{'branches_count'};
 }
 
 1;

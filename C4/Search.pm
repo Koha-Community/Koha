@@ -303,8 +303,8 @@ See verbse embedded documentation.
 sub getRecords {
     my (
         $koha_query,       $simple_query, $sort_by_ref,    $servers_ref,
-        $results_per_page, $offset,       $expanded_facet, $branches,$itemtypes,
-        $query_type,       $scan
+        $results_per_page, $offset,       $expanded_facet, $branches,
+        $itemtypes,        $query_type,   $scan,           $opac
     ) = @_;
 
     my @servers = @$servers_ref;
@@ -570,6 +570,11 @@ sub getRecords {
                                 }
                             }
 
+                            # also, if it's a location code, use the name instead of the code
+                            if ( $link_value =~ /location/ ) {
+                                $facet_label_value = GetKohaAuthorisedValueLib('LOC', $one_facet, $opac);
+                            }
+
                             # but we're down with the whole label being in the link's title.
                             push @this_facets_array, {
                                 facet_count       => $facets_counter->{$link_value}->{$one_facet},
@@ -577,7 +582,7 @@ sub getRecords {
                                 facet_title_value => $one_facet,
                                 facet_link_value  => $facet_link_value,
                                 type_link_value   => $link_value,
-                            };
+                            } if ( $facet_label_value );
                         }
                     }
 
