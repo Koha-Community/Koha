@@ -15,6 +15,21 @@
 
         <!-- Sysprefs -->
         <xsl:variable name="OPACBaseURL" select="marc:sysprefs/marc:syspref[@name='OPACBaseURL']"/>
+        <xsl:variable name="SubjectModifier"><xsl:if test="marc:sysprefs/marc:syspref[@name='TraceCompleteSubfields']='1'">,complete-subfield</xsl:if></xsl:variable>
+        <xsl:variable name="TraceSubjectSubdivisions" select="marc:sysprefs/marc:syspref[@name='TraceSubjectSubdivisions']"/>
+        <xsl:variable name="TracingQuotesLeft">
+          <xsl:choose>
+            <xsl:when test="marc:sysprefs/marc:syspref[@name='UseICU']='1'">{</xsl:when>
+            <xsl:otherwise>"</xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="TracingQuotesRight">
+          <xsl:choose>
+            <xsl:when test="marc:sysprefs/marc:syspref[@name='UseICU']='1'">}</xsl:when>
+            <xsl:otherwise>"</xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="DisplayOPACiconsXSLT" select="marc:sysprefs/marc:syspref[@name='DisplayOPACiconsXSLT']"/>
 
         <xsl:variable name="leader" select="marc:leader"/>
         <xsl:variable name="leader6" select="substring($leader,7,1)"/>
@@ -293,16 +308,29 @@
         </span>
         </xsl:if>
 
+        <!-- Subjects -->
+
         <xsl:if test="marc:datafield[substring(@tag, 1, 1) = '6']">
-            <span class="results_summary"><span class="label">Emner: </span>
+            <span class="results_summary subjects"><span class="label">Emne(r): </span>
             <xsl:for-each select="marc:datafield[substring(@tag, 1, 1) = '6']">
             <a>
             <xsl:choose>
-            <xsl:when test="marc:subfield[@code=9]">
-                <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=an:<xsl:value-of select="marc:subfield[@code=9]"/></xsl:attribute>
+            <!-- Will implement this later
+                <xsl:when test="marc:subfield[@code=9] and $UseAuthoritiesForTracings='1'">
+                    <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=an:<xsl:value-of select="marc:subfield[@code=9]"/></xsl:attribute>
+                </xsl:when>
+            -->
+            <xsl:when test="$TraceSubjectSubdivisions='1'">
+                <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=<xsl:call-template name="subfieldSelect">
+                        <xsl:with-param name="codes">abcdvxyz</xsl:with-param>
+                        <xsl:with-param name="delimeter"> AND </xsl:with-param>
+                        <xsl:with-param name="prefix">(su<xsl:value-of select="$SubjectModifier"/>:<xsl:value-of select="$TracingQuotesLeft"/></xsl:with-param>
+                        <xsl:with-param name="suffix"><xsl:value-of select="$TracingQuotesRight"/>)</xsl:with-param>
+                    </xsl:call-template>
+                </xsl:attribute>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=su:<xsl:value-of select="marc:subfield[@code='a']"/></xsl:attribute>
+                <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=su<xsl:value-of select="$SubjectModifier"/>:<xsl:value-of select="$TracingQuotesLeft"/><xsl:value-of select="marc:subfield[@code='a']"/><xsl:value-of select="$TracingQuotesRight"/></xsl:attribute>
             </xsl:otherwise>
             </xsl:choose>
             <xsl:call-template name="chopPunctuation">
@@ -313,7 +341,8 @@
                         <xsl:with-param name="subdivDelimiter">-- </xsl:with-param>
                     </xsl:call-template>
                 </xsl:with-param>
-            </xsl:call-template></a>
+            </xsl:call-template>
+            </a>
             <xsl:choose>
             <xsl:when test="position()=last()"></xsl:when>
             <xsl:otherwise> | </xsl:otherwise>
