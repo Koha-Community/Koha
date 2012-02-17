@@ -1,6 +1,22 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; Add order from a suggestion</title>
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
 [% INCLUDE 'doc-head-close.inc' %]
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.min.js"></script>
+[% INCLUDE 'datatables-strings.inc' %]
+<script type="text/javascript" src="[% themelang %]/js/datatables.js"></script>
+<script type="text/javascript">
+//<![CDATA[
+ $(document).ready(function() {
+    var suggestionst = $("#suggestionst").dataTable($.extend(true, {}, dataTablesDefaults, {
+        "aoColumnDefs": [
+            { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
+        ],
+        "sPaginationType": "four_button"
+    } ) );
+ });
+ //]]>
+</script>
 </head>
 <body id="acq_newordersuggestion" class="acq">
 [% INCLUDE 'header.inc' %]
@@ -16,14 +32,16 @@
 	
 <h1>Suggestions</h1>
     [% IF ( suggestions_loop ) %]
-	<table>
+    <table id="suggestionst">
+        <thead>
         <tr>
             <th>Suggestion</th>
             <th>Suggested by</th>
             <th>Accepted by</th>
             <th>&nbsp;</th>
         </tr>
-        
+        </thead>
+        <tbody>
         [% FOREACH suggestions_loo IN suggestions_loop %]
             <tr>
                 <td>
@@ -53,7 +71,11 @@
                 </td>
             </tr>
         [% END %]
-    </table>[% ELSE %]There are no outstanding (accepted) suggestions.[% END %]
+        </tbody>
+    </table>
+    [% ELSE %]
+        There are no outstanding (accepted) suggestions.
+    [% END %]
 </div>
 </div>
 <div class="yui-b">
