@@ -1,7 +1,20 @@
 [% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; [% IF ( suggestions_loop ) %]Orders search &rsaquo; Search results[% ELSE %]Order search[% END %]</title>
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
 [% INCLUDE 'doc-head-close.inc' %]
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.min.js"></script>
+[% INCLUDE 'datatables-strings.inc' %]
+<script type="text/javascript" src="[% themelang %]/js/datatables.js"></script>
+<script type="text/javascript">
+//<![CDATA[
+ $(document).ready(function() {
+    var histsearcht = $("#histsearcht").dataTable($.extend(true, {}, dataTablesDefaults, {
+        "sPaginationType": "four_button"
+    } ) );
+ });
+ //]]>
+</script>
 [% INCLUDE 'calendar.inc' %]
 </head>
 <body id="acq_histsearch" class="acq">
@@ -62,7 +75,8 @@
 	</form>[% END %]
     [% IF ( suggestions_loop ) %]<h1>Search results</h1>
 	<div id="acqui_histsearch">
-		<table>
+        <table id="histsearcht">
+            <thead>
 			<tr>
 				<th>Basket</th>
 				<th>Basket group</th>
@@ -74,7 +88,8 @@
 				<th>Quantity ordered</th>
 				<th>Unit cost</th>
 			</tr>
-			
+            </thead>
+            <tbody>
 			[% FOREACH suggestions_loo IN suggestions_loop %]
 				<tr>
                     <td>[% suggestions_loo.basketname %] (<a href="basket.pl?basketno=[% suggestions_loo.basketno %]">[% suggestions_loo.basketno %]</a>)</td>
@@ -94,6 +109,7 @@
 					<td>[% suggestions_loo.ecost %]</td>
 				</tr>
 			[% END %]
+            </tbody>
 		</table>
 	</div>[% ELSE %][% END %]
 
