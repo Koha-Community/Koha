@@ -1,6 +1,22 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Orders with uncertain prices for Vendor [% booksellername %]</title>
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
 [% INCLUDE 'doc-head-close.inc' %]
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.min.js"></script>
+[% INCLUDE 'datatables-strings.inc' %]
+<script type="text/javascript" src="[% themelang %]/js/datatables.js"></script>
+<script type="text/javascript">
+//<![CDATA[
+ $(document).ready(function() {
+    var uncertainpricet = $("#uncertainpricet").dataTable($.extend(true, {}, dataTablesDefaults, {
+        "aoColumnDefs": [
+            { "aTargets": [ -1, -2, -3 ], "bSortable": false, "bSearchable": false },
+        ],
+        "sPaginationType": "four_button"
+    } ) );
+ });
+ //]]>
+</script>
 <script type="text/javascript" src="[% themelang %]/js/acq.js"></script>
 <script type="text/javascript">
 //<![CDATA[
@@ -68,7 +84,8 @@ function check(form) {
         <form action="[% scriptname %]" method="post" name="uncertainprices">
         <input type="hidden" name="booksellerid" value="[% booksellerid %]" />
         <input type="hidden" name="op" value="validate" />
-        <table>
+        <table id="uncertainpricet">
+        <thead>
 	    <tr>
             <th>basket</th>
 	        <th>order</th>
@@ -77,6 +94,8 @@ function check(form) {
 	        <th>price</th>
 	        <th>quantity</th>
 	    </tr>
+        </thead>
+        <tbody>
 	    [% FOREACH uncertainpriceorder IN uncertainpriceorders %]
 	    <tr>
         <td>
@@ -105,6 +124,7 @@ function check(form) {
 	    </td>
 	    </tr>
 	    [% END %]
+    </tbody>
 	</table>
 	<fieldset class="action"><input type="button" value="Save" onclick="check(this.form)" /></fieldset>
 	</form>
