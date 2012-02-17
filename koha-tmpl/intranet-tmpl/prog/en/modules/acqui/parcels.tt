@@ -1,7 +1,20 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; Receive shipment from vendor [% name %]</title>
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.min.js"></script>
+[% INCLUDE 'datatables-strings.inc' %]
+<script type="text/javascript" src="[% themelang %]/js/datatables.js"></script>
+<script type="text/javascript">
+//<![CDATA[
+ $(document).ready(function() {
+    var parcelst = $("#parcelst").dataTable($.extend(true, {}, dataTablesDefaults, {
+        "sPaginationType": "four_button"
+    } ) );
+ });
+ //]]>
+</script>
 </head>
 <body id="acq_parcels" class="acq">
 [% INCLUDE 'header.inc' %]
@@ -22,7 +35,8 @@
 <div id="resultlist">
 <!-- Search Results Table -->
 
-<table class="small">
+<table class="small" id="parcelst">
+    <thead>
         <tr>
             <th>Line</th>
             <th>Date received</th>
@@ -31,34 +45,37 @@
             <th>Biblio count</th>
             <th>Items expected</th>
         </tr>
-<!-- Actual Search Results -->
-[% FOREACH searchresult IN searchresults %]
-    [% UNLESS ( loop.odd ) %]
-    <tr class="highlight">
-    [% ELSE %]
-    <tr>
+    </thead>
+    <tbody>
+    <!-- Actual Search Results -->
+    [% FOREACH searchresult IN searchresults %]
+        [% UNLESS ( loop.odd ) %]
+        <tr class="highlight">
+        [% ELSE %]
+        <tr>
+        [% END %]
+            <td>
+                [% searchresult.number %]
+            </td>
+            <td>
+                <a href="/cgi-bin/koha/acqui/parcel.pl?type=intra&amp;booksellerid=[% booksellerid |url %]&amp;datereceived=[% searchresult.raw_datereceived |url %][% IF ( searchresult.code ) %]&amp;invoice=[% searchresult.code |url %][% END %]">
+                    [% searchresult.datereceived %]</a>
+            </td>
+            <td>
+                [% IF ( searchresult.code ) %][% searchresult.code %][% ELSE %]<acronym title="not available">n/a</acronym>[% END %]
+            </td>
+            <td>
+                [% searchresult.reccount %]
+            </td>
+            <td>
+                [% searchresult.bibcount %]
+            </td>
+            <td>
+                [% searchresult.itemcount %]
+            </td>
+        </tr>
     [% END %]
-        <td>
-            [% searchresult.number %]
-        </td>
-        <td>
-            <a href="/cgi-bin/koha/acqui/parcel.pl?type=intra&amp;booksellerid=[% booksellerid |url %]&amp;datereceived=[% searchresult.raw_datereceived |url %][% IF ( searchresult.code ) %]&amp;invoice=[% searchresult.code |url %][% END %]">
-                [% searchresult.datereceived %]</a>
-        </td>
-        <td>
-            [% IF ( searchresult.code ) %][% searchresult.code %][% ELSE %]<acronym title="not available">n/a</acronym>[% END %]
-        </td>
-        <td>
-            [% searchresult.reccount %] 
-        </td>
-        <td>
-            [% searchresult.bibcount %]
-        </td>
-        <td>
-            [% searchresult.itemcount %]
-        </td>
-    </tr>
-[% END %]
+    </tbody>
 </table>
 
 <div id="resultnumber">
