@@ -1,6 +1,9 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Basket grouping for [% booksellername |html %]</title>
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
 [% INCLUDE 'doc-head-close.inc' %]
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="[% themelang %]/js/datatables.js"></script>
 <script type="text/javascript" src="[% themelang %]/js/acq.js"></script>
 [% IF ( grouping ) %]
 <script type="text/javascript" src="[% yuipath %]/yahoo-dom-event/yahoo-dom-event.js"></script>
@@ -100,6 +103,17 @@ function submitForm(form) {
   //  $("#toolbar").empty();
     yuiToolbar();
     $("#basket_groups").tabs();
+
+    $("table").dataTable($.extend(true, {}, dataTablesDefaults, {
+        "aoColumnDefs": [
+            { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
+        ],
+        "bAutoWidth": false,
+        "bPaginate": false,
+        "bInfo": false,
+        "bFilter": false,
+    } ));
+
  });
 
 // YUI Toolbar Functions
@@ -250,10 +264,10 @@ function yuiToolbar() {
         [% ELSE %]<li><a href="#closed">Closed</a></li>[% END %]
     </ul>
     <div id="opened">
-		<table>
+        <table id="basket_group_opened">
 			<thead>
 				<tr>
-                    <th>Basket group</th><th colspan="3">Action</th>
+                    <th>Basket group</th><th>Action</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -267,13 +281,11 @@ function yuiToolbar() {
 												[% END %]</a>
 						</td>
 							<td>
+                              <span>
 								<input type="button" onclick="closeandprint([% basketgroup.id %])" value="Close and Print" />
-							</td>
-							<td>
 								<form action="/cgi-bin/koha/acqui/basketgroup.pl" method="get"><input type="hidden" name="op" value="add" /><input type="hidden" name="booksellerid" value="[% basketgroup.booksellerid %]" /><input type="hidden" name="basketgroupid" value="[% basketgroup.id %]" /><input type="submit" value="Edit" /></form>
-							</td>
-							<td>
 								<form action="/cgi-bin/koha/acqui/basketgroup.pl" method="get"><input type="hidden" name="op" value="delete" /><input type="hidden" name="booksellerid" value="[% basketgroup.booksellerid %]" /><input type="hidden" name="basketgroupid" value="[% basketgroup.id %]" /><input type="submit" value="Delete" /></form>
+                              </span>
 							</td>
 					</tr>
 				[% END %]
@@ -282,10 +294,10 @@ function yuiToolbar() {
 		</table>
     </div>
     <div id="closed">
-		<table>
+        <table id="basket_group_closed">
 			<thead>
 				<tr>
-                    <th>Basket group</th><th colspan="3">Action</th>
+                    <th>Basket group</th><th>Action</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -301,8 +313,6 @@ function yuiToolbar() {
 					</td>
 					<td>
 							<form action="/cgi-bin/koha/acqui/basketgroup.pl" method="get"><input type="hidden" name="op" value="reopen" /><input type="hidden" name="booksellerid" value="[% basketgroup.booksellerid %]" /><input type="hidden" name="basketgroupid" value="[% basketgroup.id %]" /><input type="submit" value="Reopen" /></form>
-						</td>
-						<td>
 							<form action="/cgi-bin/koha/acqui/basketgroup.pl" method="get"><input type="hidden" name="op" value="print" /><input type="hidden" name="basketgroupid" value="[% basketgroup.id %]" /><input type="submit" value="Print" /></form>
 						</td>
 				</tr>
