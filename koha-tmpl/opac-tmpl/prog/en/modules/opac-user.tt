@@ -97,8 +97,10 @@ $.tablesorter.addParser({
             [% IF ( BORROWER_INF.lost ) %]
                 <li><strong>Please note: </strong> Your library card has been marked as lost or stolen. If this is an error, please contact the library.</li>
             [% END %]
-            [% IF renewal_blocked_fines %]
+            [% IF ( renewal_blocked_fines ) && ( OpacRenewalAllowed ) %]
                 <li><strong>Please note: </strong> Since you have <a href="/cgi-bin/koha/opac-account.pl">more than [% renewal_blocked_fines %]</a> in fines, you cannot renew your books online. Please pay your fines if you wish to renew your books.</li>
+            [% ELSIF ( renewal_blocked_fines ) %]
+		<li><strong>Please note: </strong> You have <a href="/cgi-bin/koha/opac-account.pl">more than [% renewal_blocked_fines %]</a> in fines. </li>
             [% END %]
         </ul></div>
         [% END %]
