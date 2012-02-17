@@ -1,7 +1,20 @@
 [% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; Spent</title>
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
 [% INCLUDE 'doc-head-close.inc' %]
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.min.js"></script>
+[% INCLUDE 'datatables-strings.inc' %]
+<script type="text/javascript" src="[% themelang %]/js/datatables.js"></script>
+<script type="text/javascript">
+//<![CDATA[
+ $(document).ready(function() {
+    var spent = $("#spent").dataTable($.extend(true, {}, dataTablesDefaults, {
+        "sPaginationType": "four_button"
+    } ) );
+ });
+ //]]>
+</script>
 </head>
 <body id="acq_spent" class="acq">
 [% INCLUDE 'header.inc' %]
