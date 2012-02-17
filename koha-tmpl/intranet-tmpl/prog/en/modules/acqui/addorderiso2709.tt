@@ -7,17 +7,21 @@
  &rsaquo; Batch list
 [% END %]
 </title>
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
 [% INCLUDE 'doc-head-close.inc' %]
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.min.js"></script>
+[% INCLUDE 'datatables-strings.inc' %]
+<script type="text/javascript" src="[% themelang %]/js/datatables.js"></script>
 <script type="text/javascript" src="[% themelang %]/js/acq.js"></script>
 <script type="text/JavaScript">
 //<![CDATA[
     $(document).ready(function() {
-        $("#files").tablesorter({
-            headers: {
-                5: { sorter: false },
-            }
-        });
+        var srlt = $("#files").dataTable($.extend(true, {}, dataTablesDefaults, {
+            "aoColumnDefs": [
+                { "aTargets": [ 5 ], "bSortable": false, "bSearchable": false },
+            ],
+            "sPaginationType": "four_button"
+        } ) );
     });
 //]]>
 </script>
