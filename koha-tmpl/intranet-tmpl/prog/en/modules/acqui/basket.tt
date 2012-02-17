@@ -1,20 +1,14 @@
 [% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; [% UNLESS ( basketno ) %]New [% END %][% IF ( delete_confirm ) %]Delete [% END %]Basket [% basketname|html %] ([% basketno %]) for [% name|html %]</title>
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
 [% INCLUDE 'doc-head-close.inc' %]
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.min.js"></script>
+[% INCLUDE 'datatables-strings.inc' %]
+<script type="text/javascript" src="[% themelang %]/js/datatables.js"></script>
 [% UNLESS ( closedate ) %]
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
 <script type="text/javascript">
 //<![CDATA[
-    $(document).ready(function() {
-        $("#orders").tablesorter({
-            headers: {
-                9: { sorter: false },
-                10: { sorter: false }
-            }
-        });
-        $("#cancelledorderst").tablesorter();
-    });
             function confirm_close() {
                 var is_confirmed = confirm(_('Are you sure you want to close this basket?'));
                 if (is_confirmed) {
@@ -68,6 +62,19 @@
 </script>
 [% END %]
 [% END %]
+<script type="text/javascript">
+//<![CDATA[
+    $(document).ready(function() {
+        var orderst = $("#orders").dataTable($.extend(true, {}, dataTablesDefaults, {
+            "sPaginationType": "four_button"
+        } ) );
+        var cancelledorderst = $("#cancelledorderst").dataTable($.extend(true, {}, dataTablesDefaults, {
+            "sPaginationType": "four_button"
+        } ) );
+    } );
+//]]>
+</script>
+
 <style type="text/css">
 .sortmsg {font-size: 80%;}
 </style>
