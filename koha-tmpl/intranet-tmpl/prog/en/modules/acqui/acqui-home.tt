@@ -1,8 +1,15 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions</title>
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
 [% INCLUDE 'doc-head-close.inc' %]
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.min.js"></script>
+[% INCLUDE 'datatables-strings.inc' %]
+<script type="text/javascript" src="[% themelang %]/js/datatables.js"></script>
 <script type="text/javascript">
 //<![CDATA[
+
+dt_overwrite_html_sorting_localeCompare();
+
 $(document).ready(function() {
     $('#showallbudgets').click(function() {
 	if ( $('#showallbudgets:checked').val() !== undefined) {
@@ -18,6 +25,20 @@ $(document).ready(function() {
 	    $('.bu_active').hide();
 	}
     });
+    var srlt = $("#accounts").dataTable($.extend(true, {}, dataTablesDefaults, {
+        "aoColumns": [
+            null,
+            null,
+            null,
+            null,
+            { "sType": "num-html" },
+            { "sType": "num-html" },
+            null,
+        ],
+        'bPaginate': false,
+        'bFilter': false,
+        'bInfo': false,
+    } ) );
 });
 //]]>
 </script>
