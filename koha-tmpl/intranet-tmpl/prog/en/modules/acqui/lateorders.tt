@@ -1,12 +1,23 @@
 [% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; Late orders</title>
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
 [% INCLUDE 'doc-head-close.inc' %]
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.min.js"></script>
+[% INCLUDE 'datatables-strings.inc' %]
+<script type="text/javascript" src="[% themelang %]/js/datatables.js"></script>
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
 [% INCLUDE 'calendar.inc' %]
 <script type="text/javascript">
 //<![CDATA[
 $(document).ready(function() {
+    var late_orderst = $("#late_orders").dataTable($.extend(true, {}, dataTablesDefaults, {
+        "aoColumnDefs": [
+            { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
+        ],
+        "sPaginationType": "four_button"
+    } ) );
+
     $("input:checkbox[name=claim_for]").click(function(){
         var booksellerid = $(this).attr('booksellerid');
         if ( $("input:checkbox[name=claim_for]:checked").length > 0) {
@@ -60,6 +71,7 @@ $(document).ready(function() {
 	</p>
 	[% END %]
     <table id="late_orders">
+        <thead>
         <tr>
             <th>Order date</th>
             <th>Estimated delivery date</th>
@@ -75,6 +87,8 @@ $(document).ready(function() {
                 <th></th>
             [% END %]
         </tr>
+        </thead>
+        <tbody>
     [% FOREACH lateorder IN lateorders %]
         [% UNLESS ( loop.odd ) %]<tr class="highlight">
         [% ELSE %]<tr>[% END %]
@@ -123,9 +137,13 @@ $(document).ready(function() {
             </td>
         </tr>
         [% END %]
+    </tbody>
+    <tfoot>
         <tr> 
             <th>Total</th>
-            <th colspan="3">&nbsp;</th>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
             <th>[% total %]</th>
             <th>&nbsp;</th>
             <th>&nbsp;</th>
@@ -134,8 +152,9 @@ $(document).ready(function() {
                 <input type="submit" value="Claim Order" />
             </td>
         </tr>
+    </tfoot>
     </table>
-     </form>
+</form>
 [% ELSE %]<p>There are no late orders.</p>
 [% END %]
 </div>
