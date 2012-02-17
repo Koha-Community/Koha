@@ -430,6 +430,13 @@ sub DelBiblio {
         C4::Serials::DelSubscription( $subscription->{subscriptionid} );
     }
 
+    # We delete any existing holds
+    require C4::Reserves;
+    my ($count, $reserves) = C4::Reserves::GetReservesFromBiblionumber($biblionumber);
+    foreach my $res ( @$reserves ) {
+        C4::Reserves::CancelReserve( $res->{'biblionumber'}, $res->{'itemnumber'}, $res->{'borrowernumber'} );
+    }
+
     # Delete in Zebra. Be careful NOT to move this line after _koha_delete_biblio
     # for at least 2 reasons :
     # - we need to read the biblio if NoZebra is set (to remove it from the indexes

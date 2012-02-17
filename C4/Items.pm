@@ -26,6 +26,7 @@ use C4::Context;
 use C4::Koha;
 use C4::Biblio;
 use C4::Dates qw/format_date format_date_in_iso/;
+use C4::Search qw/SimpleSearch/;
 use MARC::Record;
 use C4::ClassSource;
 use C4::Log;
