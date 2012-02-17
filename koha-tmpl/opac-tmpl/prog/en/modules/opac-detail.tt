@@ -8,7 +8,7 @@
         var pag_index_ini = [% indexPag %];
         [% IF ( listResults ) %]
             [% FOREACH listResult IN listResults %]
-                arrPagination[[% listResult.index %]] = {url:"[% listResult.url %]", title:"[% listResult.title|html %]", author:"[% listResult.author|html %]", biblionumber:[% listResult.biblionumber %]};
+                arrPagination[[% listResult.index %]] = {url:"[% listResult.url %]", title:"[% listResult.title|remove('\n')|html %]", author:"[% listResult.author|html %]", biblionumber:[% listResult.biblionumber %]};
            [% END %]
         [% END %]
     [% END %]
