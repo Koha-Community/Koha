@@ -1731,10 +1731,10 @@ sub searchResults {
                 }
             }
         }    # notforloan, item level and biblioitem level
-
+	if ($items_count > 0) {
         next if $is_opac       && $hideatopac_count >= $items_count;
         next if $hidelostitems && $itemlost_count   >= $items_count;
-
+	}
         my ( $availableitemscount, $onloanitemscount, $otheritemscount );
         for my $key ( sort keys %$onloan_items ) {
             (++$onloanitemscount > $maxitems) and last;
