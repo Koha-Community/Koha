@@ -1,7 +1,4 @@
-[% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha Online[% END %][% ELSE %]Koha Online[% END %] Catalog &rsaquo;  Updating Details for
-[% FOREACH BORROWER_INF IN BORROWER_INFO %]
-    [% INCLUDE 'patron-title.inc' category_type = BORROWER_INF.category_type firstname = BORROWER_INF.firstname surname = BORROWER_INF.surname othernames = BORROWER_INF.othernames cardnumber = BORROWER_INF.cardnumber %]
-[% END %]
+[% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha Online[% END %][% ELSE %]Koha Online[% END %] Catalog &rsaquo;  Your personal details
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="opac-userupdate">
