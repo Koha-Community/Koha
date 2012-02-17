@@ -4705,7 +4705,7 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.07.00.XXX";
+$DBversion = "3.07.00.016";
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     $dbh->do("ALTER TABLE items ADD KEY `itemcallnumber` (itemcallnumber)");
     print "Upgrade to $DBversion done (Added index on items.itemcallnumber)\n";
