@@ -124,6 +124,7 @@ $template->param(
 	subscriptionid => $subscriptionid,
     serialslist => \@serialslist,
     hasRouting  => $hasRouting,
+    routing => C4::Context->preference("RoutingSerials"),
     totalissues => $totalissues,
     hemisphere => $hemisphere,
     cannotedit =>(C4::Context->preference('IndependantBranches') &&

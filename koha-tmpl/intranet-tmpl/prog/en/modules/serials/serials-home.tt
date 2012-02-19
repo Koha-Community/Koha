@@ -84,9 +84,9 @@ Serials updated :
             <th>Title</th>
             <th> Notes </th>
             <th>
-                Library (Callnumber)
+                Library (callnumber)
             </th>
-            [% IF ( routing ) %]
+            [% IF ( routing && CAN_user_serials_routing ) %]
               <th>Routing list</th>
             [% END %]        
             <th>&nbsp;</th>
@@ -99,7 +99,7 @@ Serials updated :
             <td><input type="text" class="filter" data-column_num="1" placeholder="Search title" /></td>
             <td><input type="text" class="filter" data-column_num="2" placeholder="Search notes" /></td>
             <td><input type="text" class="filter" data-column_num="3" placeholder="Search library" /></td>
-            <td></td>
+            [% IF ( routing && CAN_user_serials_routing ) %]<td></td>[% END %]
             <td></td>
             <td></td>
         </tr>
@@ -120,20 +120,20 @@ Serials updated :
                 [% IF ( subscription.branchcode ) %][% subscription.branchcode %][% END %]
                 [% IF ( subscription.callnumber ) %]([% subscription.callnumber %])[% END %]
                 </td>
-                [% IF ( routing ) %]
+                [% IF ( routing && CAN_user_serials_routing ) %]
                 <td>
-                [% IF ( subscription.cannotedit ) %]
-                  &nbsp;        
-                [% ELSE %]
-                    [% IF ( subscription.routingedit ) %]
-                        <a href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% subscription.subscriptionid %]">Edit</a>
-                	[% ELSE %]
-						<a href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% subscription.subscriptionid %]&amp;op=new">New</a>
-					[% END %]
-                [% END %]
+                    [% IF ( subscription.cannotedit ) %]
+                        &nbsp;
+                    [% ELSE %]
+                        [% IF ( subscription.routingedit ) %]
+                            <a href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% subscription.subscriptionid %]">Edit</a>
+                        [% ELSE %]
+                            <a href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% subscription.subscriptionid %]&amp;op=new">New</a>
+                        [% END %]
+                    [% END %]
                 </td>
                 [% END %]
-                <td><a href="/cgi-bin/koha/serials/serials-collection.pl?subscriptionid=[% subscription.subscriptionid %]">Issue History</a>
+                <td><a href="/cgi-bin/koha/serials/serials-collection.pl?subscriptionid=[% subscription.subscriptionid %]">Issue history</a>
                 </td>
                 <td>
                 [% IF ( subscription.cannotedit ) %]

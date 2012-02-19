@@ -431,12 +431,12 @@ $(document).ready(function() {
 [% INCLUDE 'serials-menu.inc' %]
 <ul>
     [% FOREACH subscription IN subscriptions %]
-    
-	<li><a href="serials-collection.pl?subscriptionid=[% subscription.subscriptionid %]" title="serial collection for [% subscription.bibliotitle %]">Serial collection</a></li>
-	<li><a href="subscription-detail.pl?subscriptionid=[% subscription.subscriptionid %]" title="detail of the subscription">Subscription #[% subscription.subscriptionid %]</a></li>
-        [% IF ( subscription.abouttoexpire ) %]<a href="#" onclick="javascript:popup([% subscription.subscriptionid %])">Renew [% subscription.subscriptionid %]</a>
+        <li><a href="serials-collection.pl?subscriptionid=[% subscription.subscriptionid %]" title="serial collection for [% subscription.bibliotitle %]">Serial collection #[% subscription.subscriptionid %]</a></li>
+        <li><a href="subscription-detail.pl?subscriptionid=[% subscription.subscriptionid %]" title="detail of the subscription">Subscription #[% subscription.subscriptionid %]</a></li>
+        [% IF ( subscription.abouttoexpire ) %]
+            <li><a href="#" onclick="javascript:popup([% subscription.subscriptionid %])">Renew #[% subscription.subscriptionid %]</a></li>
         [% END %]
-      [% END %]
+    [% END %]
     <li><a href="/cgi-bin/koha/catalogue/[% default_bib_view %].pl?biblionumber=[% biblionumber %]" title="go to [% bibliotitle %]">Show Biblio</a></li></ul>
 </div>
 </div>

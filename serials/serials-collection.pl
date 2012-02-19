@@ -158,6 +158,7 @@ $template->param(
           bibliotitle => $title,
           suggestion => C4::Context->preference("suggestion"),
           virtualshelves => C4::Context->preference("virtualshelves"),
+          routing => C4::Context->preference("RoutingSerials"),
           subscr=>$query->param('subscriptionid'),
           subscriptioncount => $subscriptioncount,
     location	       => $locationlib,

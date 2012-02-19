@@ -99,7 +99,7 @@ if($ok){
 				query => $query,
 				type => "intranet",
 				authnotrequired => 0,
-				flagsrequired => {serials => 'routing'},
+				flagsrequired => {serials => '*'},
 				debug => 1,
 				});
     $template->param("libraryname"=>$branchname);
@@ -109,7 +109,7 @@ if($ok){
 				query => $query,
 				type => "intranet",
 				authnotrequired => 0,
-				flagsrequired => {serials => 'routing'},
+				flagsrequired => {serials => '*'},
 				debug => 1,
 				});
 }
