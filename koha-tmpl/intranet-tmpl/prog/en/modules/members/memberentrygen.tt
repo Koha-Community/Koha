@@ -328,7 +328,7 @@
 		</ol>
 	</fieldset>
 [% END # hide fieldset %]
-	
+
 [% IF ( showguarantor ) %]<input type="hidden" id="guarantorid" name="guarantorid"   value="[% guarantorid %]" />
     <fieldset class="rows">
         <legend>Guarantor Information</legend>
@@ -810,7 +810,7 @@
 			</ol>
 		</fieldset>
     [% END # UNLESS noB_address && noB_city && noB_state && noB_phone && noB_email %]
-[% END %]		
+[% END %]
 [% IF ( step_2 ) %]
     [% UNLESS noaltcontactsurname && noaltcontactfirstname && noaltcontactaddress1 && noaltcontactaddress2 && noaltcontactaddress3 && noaltcontactstate && noaltcontactzipcode && noaltcontactcountry && noaltcontactphone %]
 		<fieldset class="rows" id="memberentry_altaddress">       
@@ -1263,7 +1263,7 @@
 		</li>
 		</ol>
 		</fieldset>
-        [% END # hide fieldset %]
+        [% END # hide fieldset %][% END %]
 		<!--this zones are not necessary in modif mode -->
 		[% UNLESS ( opadd ) %]
 		<fieldset class="rows">
@@ -1333,7 +1333,7 @@
 			</ol>
 			</fieldset>
     
-		[% END %]	
+		[% END %]
 
 [% END %]
 
@@ -1475,7 +1475,6 @@
 [% UNLESS ( opadd ) %]<div class="yui-b">
 [% INCLUDE 'members-menu.inc' %]
 </div>[% END %]
-[% END %]
 [% END %]
 </div>
 [% INCLUDE 'intranet-bottom.inc' %]
