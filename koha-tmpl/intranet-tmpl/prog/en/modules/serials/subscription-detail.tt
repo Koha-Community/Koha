@@ -222,15 +222,17 @@ $(document).ready(function() {
             [% END %]
             </tr>
             <tr><td>Rollover:</td>
-                <td align="center">[% whenmorethan1 %]</td>
+                <td align="center">
+                    [% IF ( whenmorethan1 < 9999999 ) %][% whenmorethan1 %][% ELSE %]Never[% END %]
+                </td>
             [% IF ( whenmorethan2 ) %]
-                <td align="center">&nbsp; 
-                    [% whenmorethan2 %]
+                <td align="center">&nbsp;
+                    [% IF ( whenmorethan2 < 9999999 ) %][% whenmorethan2 %][% ELSE %]Never[% END %]
                 </td>
             [% END %]
             [% IF ( whenmorethan3 ) %]
-                <td align="center">&nbsp; 
-                    [% whenmorethan3 %]
+                <td align="center">&nbsp;
+                    [% IF ( whenmorethan3 < 9999999 ) %][% whenmorethan3 %][% ELSE %]Never[% END %]
                 </td>
             [% END %]
             </tr>
