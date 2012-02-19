@@ -1,5 +1,5 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Serials  &rsaquo; Routing Slip Preview</title>
+<title>Koha &rsaquo; Serials  &rsaquo; Routing slip preview</title>
 [% INCLUDE 'doc-head-close.inc' %]
 
 <style type="text/css">
@@ -13,21 +13,31 @@
 
 <div id="custom-doc" class="yui-t7">
    <div id="bd">
-	
 
 <table>
-<tr><td colspan="3"><h3>[% libraryname %]</h3></td></tr>
-<tr><td colspan="3"><b>Title:</b> [% title |html %]<br />
-[% issue %]</td></tr>
-<tr><td><b>Name</b></td>
-    <td><b>Date Due</b></td></tr>
-[% FOREACH memberloo IN memberloop %]
-        <tr><td>[% memberloo.name %]</td>
-            <td>&nbsp;</td></tr>
-[% END %]
+    <tr>
+        <td colspan="2"><h3>[% libraryname %]</h3></td>
+    </tr>
+    <tr>
+        <td colspan="2"><b>Title:</b> [% title |html %]<br />[% issue %]</td>
+    </tr>
+    <tr>
+        <td><b>Name</b></td>
+        <td><b>Date due</b></td>
+    </tr>
+    [% FOREACH memberloo IN memberloop %]
+    <tr>
+        <td>[% memberloo.name %]</td>
+        <td>&nbsp;</td>
+    </tr>
+    [% END %]
 </table>
-<p><b>Notes:</b> Please return this item promptly as others are waiting for it.
-<br />[% routingnotes %]</p>
+
+<div id="routingnotes">
+    <p id="generalroutingnote">[% generalroutingnote %]</p>
+    <p id="routingnote">[% routingnotes %]</p>
+</div>
+
    <div id="slip-block-links" class="noprint">
    <a class="button" href="javascript:window.print();self.close()">Print</a> &nbsp; <a class="button" href="javascript:self.close()">Close</a>
    </div>

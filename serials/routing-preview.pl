@@ -131,6 +131,7 @@ $template->param(
     subscriptionid => $subscriptionid,
     memberloop => $memberloop,
     routingnotes => $routingnotes,
+    generalroutingnote => C4::Context->preference('RoutingListNote'),
     hasRouting => check_routing($subscriptionid),
     );
 
