@@ -189,6 +189,14 @@
         <span>Select All if this category type must to be displayed all the time. Otherwise select librairies you want to associate with this value.
         </span>
     </li>
+    <li><label for="block_expired">Block expired patrons</label>
+        <select name="block_expired" id="block_expired">
+            <option value="-1" [% IF ( BlockExpiredPatronOpacActions == -1  ) %] selected="selected" [% END %]> Follow system preference BlockExpiredPatronOpacActions </option>
+            <option value="1"  [% IF ( BlockExpiredPatronOpacActions == 1   ) %] selected="selected" [% END %]> Block </option>
+            <option value="0"  [% IF ( BlockExpiredPatronOpacActions == 0   ) %] selected="selected" [% END %]> Don't block </option>
+        </select>
+        Should patrons of this category be blocked from opac actions such as renew and reserve when their cards have expired.
+    </li>
     </ol>
 </fieldset>
 

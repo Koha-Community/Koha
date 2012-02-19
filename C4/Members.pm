@@ -323,11 +323,31 @@ sub GetMemberDetails {
     my $query;
     my $sth;
     if ($borrowernumber) {
-        $sth = $dbh->prepare("SELECT borrowers.*,category_type,categories.description,reservefee,enrolmentperiod FROM borrowers LEFT JOIN categories ON borrowers.categorycode=categories.categorycode WHERE  borrowernumber=?");
+        $sth = $dbh->prepare("
+            SELECT borrowers.*,
+                   category_type,
+                   categories.description,
+                   categories.BlockExpiredPatronOpacActions,
+                   reservefee,
+                   enrolmentperiod
+            FROM borrowers
+            LEFT JOIN categories ON borrowers.categorycode=categories.categorycode
+            WHERE borrowernumber = ?
+        ");
         $sth->execute($borrowernumber);
     }
     elsif ($cardnumber) {
-        $sth = $dbh->prepare("SELECT borrowers.*,category_type,categories.description,reservefee,enrolmentperiod FROM borrowers LEFT JOIN categories ON borrowers.categorycode=categories.categorycode WHERE cardnumber=?");
+        $sth = $dbh->prepare("
+            SELECT borrowers.*,
+                   category_type,
+                   categories.description,
+                   categories.BlockExpiredPatronOpacActions,
+                   reservefee,
+                   enrolmentperiod
+            FROM borrowers
+            LEFT JOIN categories ON borrowers.categorycode = categories.categorycode
+            WHERE cardnumber = ?
+        ");
         $sth->execute($cardnumber);
     }
     else {

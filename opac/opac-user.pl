@@ -64,10 +64,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     }
 );
 
-my $show_priority;
-for ( C4::Context->preference("OPACShowHoldQueueDetails") ) {
-    m/priority/ and $show_priority = 1;
-}
+my $OPACDisplayRequestPriority = (C4::Context->preference("OPACDisplayRequestPriority")) ? 1 : 0;
 my $patronupdate = $query->param('patronupdate');
 my $canrenew = 1;
 
@@ -109,7 +106,6 @@ if (  C4::Context->preference( 'OpacRenewalAllowed' ) && $borr->{amountoutstandi
     $canrenew = 0;
     $template->param(
         renewal_blocked_fines => sprintf( '%.02f', $no_renewal_amt ),
-        renewal_blocked_fines_amountoutstanding => sprintf( '%.02f', $borr->{amountoutstanding} ),
     );
 }
 
@@ -124,19 +120,22 @@ my @bordat;
 $bordat[0] = $borr;
 
 # Warningdate is the date that the warning starts appearing
-if ( $borr->{dateexpiry} && Date_to_Days( $today_year, $today_month, $today_day ) > Date_to_Days( $warning_year, $warning_month, $warning_day ) ) {
-    $borr->{'warnexpired'} = 1;
-}
-elsif ( $borr->{dateexpiry} && C4::Context->preference('NotifyBorrowerDeparture') &&
-        Date_to_Days(Add_Delta_Days($warning_year, $warning_month, $warning_day,- C4::Context->preference('NotifyBorrowerDeparture'))) <
-        Date_to_Days( $today_year, $today_month, $today_day ) ) {
+if ( $borr->{'dateexpiry'} && C4::Context->preference('NotifyBorrowerDeparture') ) {
+    my $days_to_expiry = Date_to_Days( $warning_year, $warning_month, $warning_day ) - Date_to_Days( $today_year, $today_month, $today_day );
+    if ( $days_to_expiry < 0 ) {
+        #borrower card has expired, warn the borrower
+        $borr->{'warnexpired'} = $borr->{'dateexpiry'};
+    } elsif ( $days_to_expiry < C4::Context->preference('NotifyBorrowerDeparture') ) {
         # borrower card soon to expire, warn the borrower
         $borr->{'warndeparture'} = $borr->{dateexpiry};
         if (C4::Context->preference('ReturnBeforeExpiry')){
             $borr->{'returnbeforeexpiry'} = 1;
         }
+    }
 }
 
+# pass on any renew errors to the template for displaying
+$template->param( RENEW_ERROR => $query->param('renew_error') ) if $query->param('renew_error');
 
 $template->param(   BORROWER_INFO     => \@bordat,
                     borrowernumber    => $borrowernumber,
@@ -157,7 +156,7 @@ my $issues = GetPendingIssues($borrowernumber);
 if ($issues){
     foreach my $issue ( sort { $b->{date_due}->datetime() cmp $a->{date_due}->datetime() } @{$issues} ) {
         # check for reserves
-        my $restype = GetReserveStatus( $issue->{'itemnumber'} );
+        my ( $restype, $res, undef ) = CheckReserves( $issue->{'itemnumber'} );
         if ( $restype ) {
             $issue->{'reserved'} = 1;
         }
@@ -168,8 +167,6 @@ if ($issues){
             if ( $ac->{'itemnumber'} == $issue->{'itemnumber'} ) {
                 $charges += $ac->{'amountoutstanding'}
                   if $ac->{'accounttype'} eq 'F';
-                $charges += $ac->{'amountoutstanding'}
-                  if $ac->{'accounttype'} eq 'FU';
                 $charges += $ac->{'amountoutstanding'}
                   if $ac->{'accounttype'} eq 'L';
             }
@@ -273,8 +270,8 @@ foreach my $res (@reserves) {
     $res->{'branch'} = $branches->{ $res->{'branchcode'} }->{'branchname'};
     my $biblioData = GetBiblioData($res->{'biblionumber'});
     $res->{'reserves_title'} = $biblioData->{'title'};
-    if ($show_priority) {
-        $res->{'priority'} ||= '';
+    if ($OPACDisplayRequestPriority) {
+        $res->{'priority'} = '' if $res->{'priority'} eq '0';
     }
     $res->{'suspend_until'} = C4::Dates->new( $res->{'suspend_until'}, "iso")->output("syspref") if ( $res->{'suspend_until'} );
 }
@@ -284,7 +281,7 @@ foreach my $res (@reserves) {
 
 $template->param( RESERVES       => \@reserves );
 $template->param( reserves_count => $#reserves+1 );
-$template->param( showpriority=>$show_priority );
+$template->param( showpriority=>1 ) if $OPACDisplayRequestPriority;
 
 my @waiting;
 my $wcount = 0;
@@ -371,6 +368,7 @@ $template->param(
     patronupdate => $patronupdate,
     OpacRenewalAllowed => C4::Context->preference("OpacRenewalAllowed"),
     userview => 1,
+    dateformat => C4::Context->preference("dateformat"),
 );
 
 $template->param(

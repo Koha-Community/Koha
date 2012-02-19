@@ -70,6 +70,7 @@ my $searchfield=$input->param('description');
 my $script_name="/cgi-bin/koha/admin/categorie.pl";
 my $categorycode=$input->param('categorycode');
 my $op = $input->param('op') // '';
+my $block_expired = $input->param("block_expired");
 
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "admin/categorie.tmpl",
@@ -96,7 +97,7 @@ if ($op eq 'add_form') {
     my @selected_branches;
 	if ($categorycode) {
 		my $dbh = C4::Context->dbh;
-		my $sth=$dbh->prepare("select categorycode,description,enrolmentperiod,enrolmentperioddate,upperagelimit,dateofbirthrequired,enrolmentfee,issuelimit,reservefee,hidelostitems,overduenoticerequired,category_type from categories where categorycode=?");
+         my $sth=$dbh->prepare("SELECT * FROM categories WHERE categorycode=?");
 		$sth->execute($categorycode);
 		$data=$sth->fetchrow_hashref;
 
@@ -139,6 +140,7 @@ if ($op eq 'add_form') {
                 TalkingTechItivaPhone => C4::Context->preference("TalkingTechItivaPhoneNotification"),
 				"type_".$data->{'category_type'} => 1,
                 branches_loop           => \@branches_loop,
+                BlockExpiredPatronOpacActions => $data->{'BlockExpiredPatronOpacActions'},
 				);
     if (C4::Context->preference('EnhancedMessagingPreferences')) {
         C4::Form::MessagingPreferences::set_form_values({ categorycode => $categorycode } , $template);
@@ -155,8 +157,37 @@ if ($op eq 'add_form') {
 	}
 	
 	if ($is_a_modif) {
-            my $sth=$dbh->prepare("UPDATE categories SET description=?,enrolmentperiod=?, enrolmentperioddate=?,upperagelimit=?,dateofbirthrequired=?,enrolmentfee=?,reservefee=?,hidelostitems=?,overduenoticerequired=?,category_type=? WHERE categorycode=?");
-            $sth->execute(map { $input->param($_) } ('description','enrolmentperiod','enrolmentperioddate','upperagelimit','dateofbirthrequired','enrolmentfee','reservefee','hidelostitems','overduenoticerequired','category_type','categorycode'));
+            my $sth=$dbh->prepare("
+                UPDATE categories
+                SET description=?,
+                    enrolmentperiod=?,
+                    enrolmentperioddate=?,
+                    upperagelimit=?,
+                    dateofbirthrequired=?,
+                    enrolmentfee=?,
+                    reservefee=?,
+                    hidelostitems=?,
+                    overduenoticerequired=?,
+                    category_type=?,
+                    BlockExpiredPatronOpacActions=?
+                WHERE categorycode=?"
+            );
+            $sth->execute(
+                map { $input->param($_) } (
+                    'description',
+                    'enrolmentperiod',
+                    'enrolmentperioddate',
+                    'upperagelimit',
+                    'dateofbirthrequired',
+                    'enrolmentfee',
+                    'reservefee',
+                    'hidelostitems',
+                    'overduenoticerequired',
+                    'category_type',
+                    'block_expired',
+                    'categorycode'
+                )
+            );
             my @branches = $input->param("branches");
             if ( @branches ) {
                 $sth = $dbh->prepare("DELETE FROM categories_branches WHERE categorycode = ?");
@@ -174,11 +205,42 @@ if ($op eq 'add_form') {
                 }
             }
             $sth->finish;
-        } else {
-            my $sth=$dbh->prepare("INSERT INTO categories  (categorycode,description,enrolmentperiod,enrolmentperioddate,upperagelimit,dateofbirthrequired,enrolmentfee,reservefee,hidelostitems,overduenoticerequired,category_type) values (?,?,?,?,?,?,?,?,?,?,?)");
-            $sth->execute(map { $input->param($_) } ('categorycode','description','enrolmentperiod','enrolmentperioddate','upperagelimit','dateofbirthrequired','enrolmentfee','reservefee','hidelostitems','overduenoticerequired','category_type'));
-            $sth->finish;
-        }
+    } else {
+        my $sth=$dbh->prepare("
+            INSERT INTO categories (
+                categorycode,
+                description,
+                enrolmentperiod,
+                enrolmentperioddate,
+                upperagelimit,
+                dateofbirthrequired,
+                enrolmentfee,
+                reservefee,
+                hidelostitems,
+                overduenoticerequired,
+                category_type,
+                BlockExpiredPatronOpacActions
+            )
+            VALUES (?,?,?,?,?,?,?,?,?,?,?,?)");
+        $sth->execute(
+            map { $input->param($_) } (
+                'categorycode',
+                'description',
+                'enrolmentperiod',
+                'enrolmentperioddate',
+                'upperagelimit',
+                'dateofbirthrequired',
+                'enrolmentfee',
+                'reservefee',
+                'hidelostitems',
+                'overduenoticerequired',
+                'category_type',
+                'block_expired'
+            )
+        );
+        $sth->finish;
+    }
+
     if (C4::Context->preference('EnhancedMessagingPreferences')) {
         C4::Form::MessagingPreferences::handle_form_action($input, 
                                                            { categorycode => $input->param('categorycode') }, $template);
@@ -199,7 +261,7 @@ if ($op eq 'add_form') {
 	$sth->finish;
 	$template->param(total => $total->{'total'});
 	
-	my $sth2=$dbh->prepare("select categorycode,description,enrolmentperiod,enrolmentperioddate,upperagelimit,dateofbirthrequired,enrolmentfee,issuelimit,reservefee,hidelostitems,overduenoticerequired,category_type from categories where categorycode=?");
+        my $sth2=$dbh->prepare("SELECT * FROM categories WHERE categorycode=?");
 	$sth2->execute($categorycode);
 	my $data=$sth2->fetchrow_hashref;
 	$sth2->finish;
@@ -221,6 +283,7 @@ if ($op eq 'add_form') {
                                 reservefee              =>  sprintf("%.2f",$data->{'reservefee'} || 0),
                                 hidelostitems           => $data->{'hidelostitems'},
                                 category_type           => $data->{'category_type'},
+                                BlockExpiredPatronOpacActions => $data->{'BlockExpiredPatronOpacActions'},
                                 );
 													# END $OP eq DELETE_CONFIRM
 ################## DELETE_CONFIRMED ##################################

@@ -35,6 +35,7 @@ use C4::Branch; # GetBranches
 use C4::Overdues;
 use C4::Debug;
 use Koha::DateUtils;
+use Date::Calc qw/Today Date_to_Days/;
 # use Data::Dumper;
 
 my $MAXIMUM_NUMBER_OF_RESERVES = C4::Context->preference("maxreserves");
@@ -64,6 +65,16 @@ sub get_out {
 
 # get borrower information ....
 my ( $borr ) = GetMemberDetails( $borrowernumber );
+
+# check if this user can place a reserve, -1 means use sys pref, 0 means dont block, 1 means block
+if( $borr->{'BlockExpiredPatronOpacActions'} == -1 ? C4::Context->preference("BlockExpiredPatronOpacActions") : $borr->{'BlockExpiredPatronOpacActions'} ) {
+
+    if( Date_to_Days( Today() ) > Date_to_Days( split /-/, $borr->{'dateexpiry'} ) ){
+        # cannot reserve, their card has expired and the rules set mean this is not allowed
+        $template->param( message=>1, expired_patron=>1 );
+        get_out($query, $cookie, $template->output);
+    }
+}
 
 # Pass through any reserve charge
 if ($borr->{reservefee} > 0){

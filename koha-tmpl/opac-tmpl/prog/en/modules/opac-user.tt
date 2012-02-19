@@ -94,6 +94,16 @@ var MSG_CONFIRM_RESUME_HOLDS  = _("Are you sure you want to resume all suspended
         <div class="dialog alert" id="warnexpired">
             <strong>Please note:</strong><span> Your card has expired. Please contact the library for more information.</span>
         </div>
+        [% ELSIF ( BORROWER_INF.warnexpired ) %]
+        <div class="dialog alert">
+                <string>Please note:</string><span> You card has expired as of [% BORROWER_INF.warnexpired %]. Please contact the library if you wish to renew your subscription.</span>
+        </div>
+        [% END %]
+
+        [% IF ( RENEW_ERROR ) %]
+        <div class="dialog alert">
+                <string>Please note:</string><span> You're renew failed with the following error: [% RENEW_ERROR %]</span>
+        </div>
         [% END %]
 
         [% IF ( patron_flagged ) %]

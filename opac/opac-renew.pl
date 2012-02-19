@@ -29,6 +29,7 @@ use C4::Circulation;
 use C4::Auth;
 use C4::Items;
 use C4::Members;
+use Date::Calc qw( Today Date_to_Days );
 my $query = new CGI;
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
@@ -46,33 +47,40 @@ my @items          = $query->param('item');
 my $opacrenew = C4::Context->preference("OpacRenewalAllowed");
 
 my $errorstring='';
-for my $itemnumber ( @items ) {
-    my ($status,$error) = CanBookBeRenewed( $borrowernumber, $itemnumber );
-    if ( $status == 1 && $opacrenew == 1 ) {
-	my $renewalbranch = C4::Context->preference('OpacRenewalBranch');
-	my $branchcode;
-	if ($renewalbranch eq 'itemhomebranch'){
-	    my $item = GetItem($itemnumber);
-	    $branchcode=$item->{'homebranch'};
-	}
-	elsif ($renewalbranch eq 'patronhomebranch'){
-	    my $borrower = GetMemberDetails($borrowernumber);
-	    $branchcode = $borrower->{'branchcode'};
-	}
-	elsif ($renewalbranch eq 'checkoutbranch'){
-	    my $issue = GetOpenIssue($itemnumber);
-	    $branchcode = $issue->{'branchcode'};
-	}
-	elsif ($renewalbranch eq 'NULL'){
-	    $branchcode='';
-	}
-	else {
-	    $branchcode='OPACRenew'
-	}
-        AddRenewal( $borrowernumber, $itemnumber, $branchcode);
-    }
-    else {
-	$errorstring .= $error ."|";
+my $member_details = GetMemberDetails($borrowernumber);
+# BlockExpiredPatronOpacActions syspref 0 is false, 1 is true. BlockExpiredPatronOpacActions for categories (from GetMemberDetails) -1 means use syspref, 0 is false, 1 is true (where false means dont block, true means block)
+if( ($member_details->{'BlockExpiredPatronOpacActions'} == -1 ? C4::Conext->preference('BlockExpiredPatronOpacActions') : $member_details->{'BlockExpiredPatronOpacActions'})
+    && Date_to_Days( Today() ) > Date_to_Days( split /-/, $member_details->{'dateexpiry'} ) ){
+   $errorstring='unable to renew as your card has expired';
+} else {
+    for my $itemnumber ( @items ) {
+        my ($status,$error) = CanBookBeRenewed( $borrowernumber, $itemnumber );
+        if ( $status == 1 && $opacrenew == 1 ) {
+            my $renewalbranch = C4::Context->preference('OpacRenewalBranch');
+            my $branchcode;
+            if ($renewalbranch eq 'itemhomebranch'){
+                my $item = GetItem($itemnumber);
+                $branchcode=$item->{'homebranch'};
+            }
+            elsif ($renewalbranch eq 'patronhomebranch'){
+                my $borrower = GetMemberDetails($borrowernumber);
+                $branchcode = $borrower->{'branchcode'};
+            }
+            elsif ($renewalbranch eq 'checkoutbranch'){
+                my $issue = GetOpenIssue($itemnumber);
+                $branchcode = $issue->{'branchcode'};
+            }
+            elsif ($renewalbranch eq 'NULL'){
+                $branchcode='';
+            }
+            else {
+                $branchcode='OPACRenew'
+            }
+            AddRenewal( $borrowernumber, $itemnumber, $branchcode);
+        }
+        else {
+            $errorstring .= $error ."|";
+        }
     }
 }
 
