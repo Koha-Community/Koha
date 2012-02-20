@@ -150,6 +150,7 @@ if ( $query->param('resbarcode') ) {
     if ( $messages->{'transfert'} ) {
         $template->param(
             itemtitle      => $iteminfo->{'title'},
+            itemnumber     => $iteminfo->{'itemnumber'},
             itembiblionumber => $iteminfo->{'biblionumber'},
             iteminfo       => $iteminfo->{'author'},
             tobranchname   => GetBranchName($messages->{'transfert'}),
@@ -313,6 +314,7 @@ if ( $messages->{'WasTransfered'} ) {
     $template->param(
         found          => 1,
         transfer       => 1,
+        itemnumber     => $itemnumber,
     );
 }
 
