@@ -159,7 +159,11 @@ $template->param(
     ReservesMaxPickUpDelay => C4::Context->preference('ReservesMaxPickUpDelay')
 );
 
-output_html_with_http_headers $input, $cookie, $template->output;
+if ($cancelall) {
+    print $input->redirect("/cgi-bin/koha/circ/waitingreserves.pl");
+} else {
+    output_html_with_http_headers $input, $cookie, $template->output;
+}
 
 exit;
 
