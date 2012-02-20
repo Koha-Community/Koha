@@ -45,7 +45,6 @@ sub methods : Test( 1 ) {
                        _disambiguate
                        get_koha_field_from_marc
                        TransformMarcToKohaOneField
-                       PrepareItemrecordDisplay
                        ModZebra
                        GetNoZebraIndexes
                        _DelBiblioNoZebra
@@ -60,8 +59,6 @@ sub methods : Test( 1 ) {
                        _koha_delete_biblio
                        _koha_delete_biblioitems
                        ModBiblioMarc
-                       z3950_extended_services
-                       set_service_options
                        get_biblio_authorised_values
                 );
     

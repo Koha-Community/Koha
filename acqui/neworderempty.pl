@@ -81,6 +81,7 @@ use C4::Bookseller  qw/ GetBookSellerFromId /;
 use C4::Acquisition;
 use C4::Suggestions;	# GetSuggestion
 use C4::Biblio;			# GetBiblioData
+use C4::Items; #PrepareItemRecord
 use C4::Output;
 use C4::Input;
 use C4::Koha;

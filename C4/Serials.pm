@@ -225,13 +225,14 @@ sub GetSerialInformation {
         my $queryitem = $dbh->prepare("SELECT itemnumber from serialitems where serialid=?");
         $queryitem->execute($serialid);
         my $itemnumbers = $queryitem->fetchall_arrayref( [0] );
+        require C4::Items;
         if ( scalar(@$itemnumbers) > 0 ) {
             foreach my $itemnum (@$itemnumbers) {
 
                 #It is ASSUMED that GetMarcItem ALWAYS WORK...
                 #Maybe GetMarcItem should return values on failure
                 $debug and warn "itemnumber :$itemnum->[0], bibnum :" . $data->{'biblionumber'};
-                my $itemprocessed = PrepareItemrecordDisplay( $data->{'biblionumber'}, $itemnum->[0], $data );
+                my $itemprocessed = C4::Items::PrepareItemrecordDisplay( $data->{'biblionumber'}, $itemnum->[0], $data );
                 $itemprocessed->{'itemnumber'}   = $itemnum->[0];
                 $itemprocessed->{'itemid'}       = $itemnum->[0];
                 $itemprocessed->{'serialid'}     = $serialid;
@@ -239,7 +240,7 @@ sub GetSerialInformation {
                 push @{ $data->{'items'} }, $itemprocessed;
             }
         } else {
-            my $itemprocessed = PrepareItemrecordDisplay( $data->{'biblionumber'}, '', $data );
+            my $itemprocessed = C4::Items::PrepareItemrecordDisplay( $data->{'biblionumber'}, '', $data );
             $itemprocessed->{'itemid'}       = "N$serialid";
             $itemprocessed->{'serialid'}     = $serialid;
             $itemprocessed->{'biblionumber'} = $data->{'biblionumber'};

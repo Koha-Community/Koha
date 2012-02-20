@@ -41,6 +41,7 @@ use C4::Members;
 use C4::VirtualShelves;
 use C4::XSLT;
 use C4::ShelfBrowser;
+use C4::Reserves;
 use C4::Charset;
 use MARC::Record;
 use MARC::Field;
@@ -509,11 +510,9 @@ for my $itm (@items) {
          $itm->{'lostimageurl'}   = $lostimageinfo->{ 'imageurl' };
          $itm->{'lostimagelabel'} = $lostimageinfo->{ 'label' };
      }
-
-     if( $itm->{'count_reserves'}){
-          if( $itm->{'count_reserves'} eq "Waiting"){ $itm->{'waiting'} = 1; }
-          if( $itm->{'count_reserves'} eq "Reserved"){ $itm->{'onhold'} = 1; }
-     }
+     my ($reserve_status) = C4::Reserves::CheckReserves($itm->{itemnumber});
+      if( $reserve_status eq "Waiting"){ $itm->{'waiting'} = 1; }
+      if( $reserve_status eq "Reserved"){ $itm->{'onhold'} = 1; }
     
      my ( $transfertwhen, $transfertfrom, $transfertto ) = GetTransfers($itm->{itemnumber});
      if ( defined( $transfertwhen ) && $transfertwhen ne '' ) {

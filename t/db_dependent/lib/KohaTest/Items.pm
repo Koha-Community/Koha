@@ -52,6 +52,7 @@ sub methods : Test( 1 ) {
       _get_unlinked_item_subfields
       _get_unlinked_subfields_xml
       _parse_unlinked_item_subfields_from_xml
+      PrepareItemrecordDisplay
     );
 
     can_ok( $self->testing_class, @methods );
