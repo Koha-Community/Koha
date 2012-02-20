@@ -9,7 +9,7 @@ use strict;
 use warnings;
 use C4::Context;
 
-use Test::More tests => 92;
+use Test::More tests => 82;
 
 # Getting some borrowers from database.
 my $dbh = C4::Context->dbh;
@@ -66,7 +66,8 @@ use_ok('C4::VirtualShelves');
 # creating 10 good shelves.
 my @shelves;
 for(my $i=0; $i<10;$i++){
-     my $ShelfNumber = AddShelf("Shelf_".$i,$borrowers[$i] || '',int(rand(3))+1);
+     my $ShelfNumber = AddShelf(
+	{shelfname=>"Shelf_".$i, category=>int(rand(2))+1 }, $borrowers[$i] );
      die "test Not ok, remove some shelves before" if ($ShelfNumber == -1);
      ok($ShelfNumber > -1, "created shelf");   # Shelf creation successful;
      push @shelves, $ShelfNumber if $ShelfNumber > -1;
@@ -76,7 +77,9 @@ ok(10 == scalar @shelves, 'created 10 lists'); # 10 shelves in @shelves;
 
 # try to create some shelf which already exists.
 for(my $i=0;$i<10;$i++){
-    my $badNumShelf = AddShelf("Shelf_".$i,$borrowers[$i] || '','');
+    my @shlf=GetShelf($shelves[$i]);
+    my $badNumShelf = AddShelf(
+	{shelfname=>"Shelf_".$i, category=>$shlf[3] }, $borrowers[$i]);
     ok(-1 == $badNumShelf, 'do not create lists with duplicate names');   # AddShelf returns -1 if name already exist.
 }
 
@@ -94,7 +97,7 @@ for(my $i=0; $i<10;$i++){
     my $should_fail = exists($used{$key}) ? 1 : 0;
  
     my ($biblistBefore,$countbefore) = GetShelfContents($shelfnumber);
-    my $status = AddToShelf($bib,$shelfnumber);
+    my $status = AddToShelf($bib,$shelfnumber,$borrowers[$i]);
     my ($biblistAfter,$countafter) = GetShelfContents($shelfnumber);
 
     if ($should_fail) {
@@ -121,15 +124,13 @@ for(my $i=0; $i<10;$i++){
     my $rand = int(rand(9));
     my $numA = $shelves[$rand];
     my $shelf = { shelfname => "NewName_".$rand,
-	owner => $borrowers[$rand],
-	category =>  int(rand(3))+1 };
+	category =>  int(rand(2))+1 };
     
     ModShelf($numA,$shelf);
     my ($numB,$nameB,$ownerB,$categoryB) = GetShelf($numA);
     
     ok($numA == $numB, 'modified shelf');
     ok($shelf->{shelfname} eq $nameB,     '... and name change took');
-    ok($shelf->{owner}     eq $ownerB,    '... and owner change took');
     ok($shelf->{category}  eq $categoryB, '... and category change took');
 }
 
