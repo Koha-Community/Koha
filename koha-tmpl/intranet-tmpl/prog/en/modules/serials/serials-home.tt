@@ -1,22 +1,18 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Serials [% biblionumber %]</title>
-<link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
 [% INCLUDE 'doc-head-close.inc' %]
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.min.js"></script>
-[% INCLUDE 'datatables-strings.inc' %]
-<script type="text/javascript" src="[% themelang %]/js/datatables.js"></script>
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
 <script type="text/javascript">
 //<![CDATA[
  $(document).ready(function() {
-    var srlt = $("#srlt").dataTable($.extend(true, {}, dataTablesDefaults, {
-        "aoColumnDefs": [
-            { "aTargets": [ -1, -2, -3 ], "bSortable": false, "bSearchable": false },
-        ],
-        "sPaginationType": "four_button"
-    } ) );
-
-    srlt.fnAddFilters("filter", 750);
- });
+        $("#srlt").tablesorter({
+            headers: {
+                2: { sorter: false },
+                4: { sorter: false },
+				5: { sorter: false }
+            }
+        }); 
+ }); 
  //]]>
 </script>
 </head>
@@ -89,24 +85,16 @@ Serials updated :
             [% IF ( routing ) %]
               <th>Routing list</th>
             [% END %]        
-            <th>&nbsp;</th>
-            <th>&nbsp;</th>
+            <th colspan="2">&nbsp;</th>
         </tr>
 	</thead>
-    <tfoot>
-        <tr>
-            <td><input type="text" class="filter" data-column_num="0" placeholder="Search ISSN" /></td>
-            <td><input type="text" class="filter" data-column_num="1" placeholder="Search title" /></td>
-            <td><input type="text" class="filter" data-column_num="2" placeholder="Search notes" /></td>
-            <td><input type="text" class="filter" data-column_num="3" placeholder="Search library" /></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-    </tfoot>
 	<tbody> 
         [% FOREACH subscription IN subscriptions %]
+        [% UNLESS ( loop.odd ) %]
+            <tr class="highlight">
+        [% ELSE %]
             <tr>
+        [% END %]
                 <td>
                 [% IF ( subscription.issn ) %][% subscription.issn %]
                 [% END %]
