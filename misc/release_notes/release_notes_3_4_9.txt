@@ -1,0 +1,237 @@
+RELEASE NOTES FOR KOHA 3.4.9
+21 Feb 2012 
+========================================================================
+
+Koha is the first free and open source software library automation package 
+(ILS). Development is sponsored by libraries of varying types and sizes, 
+volunteers, and support companies from around the world.  
+The website for the Koha project is 
+
+    http://koha-community.org/
+
+Koha 3.4.9 can be downloaded from:
+
+    http://download.koha-community.org/koha-3.04.09.tar.gz
+
+Installation instructions can be found at:
+
+    http://wiki.koha-community.org/wiki/Installation_Documentation
+
+    OR in the INSTALL files that come in the tarball
+
+Koha 3.4.9 is a bugfix/maintenance release.
+
+Highlights of 3.4.9
+======================
+
+7545	blocker		can't edit items
+7546	blocker		Cannot view subscription detail - bareword error
+6488	critical	opachiddenitems not working in master
+6984	critical	Holds Statistics Doesn't Work
+7018	critical	need all acq permissions to search
+7339	critical	Help System in IE8-9 Does Not Load With 500 Error
+7432	critical	Changing frameworks should refresh cache
+7450	critical	Missing placeholders in admin/authorised_values.pl
+7551	critical	Any logged-in OPAC user can renew items for others using a properly constructed URL
+3264	major		Uncloning a dropdown list in MARC authorities/biblio editor may clear all subfields (see comment 17)
+5327	major		Unit tests required for all C4 modules
+6115	major		Acquisition reports : date filter & sorting don't work
+6490	major		Lost and paid not updated when book is checked out without check-in
+6631	major		Unrestricted creation of lists by anonymous users
+6842	major		Branch transfer limits broken
+7431	major		OPAC item hold list doesn't show 'checked out'
+7459	major		Can only add to one public list in OPAC search results
+
+
+Bugs fixed in 3.4.9
+======================
+
+5473	normal		952 fields should be filled in by Acquisitions
+6598	normal		OPACFineNoRenewals syspreference does not stop user renewing in opac
+6694	normal		Anonymous sessions not kept when casAuthentication is on
+7114	normal		Hiding filters on funds page messes with layout
+7350	normal		In New order the "+" button duplicates input text but not the "selected" in ddl
+7406	normal		saved reports not showing right number
+7409	normal		Missing dependencies for Debian package
+7466	normal		Cart notification popup should appear onscreen even when button is offscreen
+7476	normal		Files executable that probably should not be
+7489	normal		Implement DisplayOPACiconsXSLT for NORMARC XSLT
+7501	normal		OPAC authority browser should mark alternate rows as highlighted
+7521	normal		Cannot receive serials without full serials permissions
+6210	enhancement	Choose framework on Merge
+6299	enhancement	Provide a list of authorized values for relator terms
+6314	enhancement	UNIMARC OPAC XSL improvements
+6752	enhancement	Be stricter with utf-8 output
+6790	enhancement	C4::Serials::getroutinglist returns unnecessary variable
+6838	enhancement	Filtering and pagination in subscriptions table
+6865	enhancement	Replace image-based gradient backgrounds with CSS3 gradients
+6875	enhancement	de-nesting C4 packages
+6913	enhancement	Improving koha-list and koha-create
+6985	enhancement	Hide "kw,wrdl:" from Search Results
+7083	enhancement	Show creator name on list of public lists
+7148	enhancement	Add some error handling to Acquisitions' Z39.50 search to match Cataloging's
+7157	enhancement	Improve the j2a.pl cronjob
+7201	enhancement	Hold to pull report needs extra fields
+7238	enhancement	move SIPconfig.xml, sip_run and sip_shutdown outside from C4 (NOT FOR 3.6)
+7246	enhancement	rebuild_zebra.pl --limit option to allow partial re-indexing
+7343	enhancement	search tag usability in MARC framework
+7345	enhancement	Should be possible to export MARC records without private fields
+7355	enhancement	Note subfields are not displayed in TEXTAREA if hidden
+7357	enhancement	Subscriptions titles are replaced by "---" when duplicated
+7458	enhancement	New call number allocation plugin
+7511	enhancement	Caching Templates
+7514	enhancement	Choose OPAC language with URL parameter
+7532	enhancement	opac-ics depends on Date::ICal which is largely unmaintained
+
+
+System requirements
+======================
+
+    Changes since 3.2:
+
+    * Template::Toolkit
+
+
+Documentation
+======================
+
+As of Koha 3.2, the Koha manual is now maintained in DocBook.  The
+home page for Koha documentation is
+
+    http://koha-community.org/documentation/
+
+As of the date of these release notes, only the english version of the
+Koha manual is available:
+
+    http://koha-community.org/documentation/3-4-manual/
+
+The Git repository for the Koha manual can be found at
+
+    http://git.koha-community.org/gitweb/?p=kohadocs.git;a=summary
+
+Translations
+======================
+
+Complete or near-complete translations of the OPAC and staff
+interface are available in this release for the following languages:
+
+  * Chinese
+  * Danish
+  * English (New Zealand)
+  * English (USA)
+  * French (France)
+  * French (Canada)
+  * German
+  * Greek
+  * Hindi
+  * Italian
+  * Norwegian
+  * Portuguese
+  * Spanish
+  * Turkish
+
+Partial translations are available for various other languages.
+
+The Koha team welcomes additional translations; please see
+
+    http://wiki.koha-community.org/wiki/Translating_Koha
+
+for information about translating Koha, and join the koha-translate 
+list to volunteer:
+
+    http://lists.koha-community.org/cgi-bin/mailman/listinfo/koha-translate
+
+The most up-to-date translations can be found at:
+
+    http://translate.koha-community.org/
+
+Release Team
+======================
+
+The release team for Koha 3.4 is
+
+Release Manager:        Chris Cormack <chrisc@catalyst.net.nz>
+Documentation Manager:  Nicole C Engard <nengard@gmail.com>
+Translation Manager:    Frédéric Demians <frederic@tamil.fr>
+Release Maintainer (3.2.x):
+                        Chris Nighswonger <cnighswonger@foundations.edu>
+Release Maintainer (3.4.x):
+                        Chris Nighswonger <cnighswonger@foundations.edu>
+QA Manager:             Colin Campbell
+
+
+Credits
+======================
+
+We thank the following individuals who contributed patches to
+Koha 3.4.9 (The numeral in the first column represents the number
+of patches included in this release):
+
+     3	Tomas Cohen Arazi
+     1	Alex Arnaud
+     1	D Ruth Bavousett
+     2	Jared Camins-Esakov
+     2	Colin Campbell
+     6	Garry Collum
+     9	Chris Cormack
+     1	Christophe Croullebois
+     1	Stéphane Delaune
+     7	Frédéric Demians
+     1	Connor Dewar
+     1	Nicole Engard
+     1	Magnus Enger
+     1	Katrin Fischer
+     2	Kyle M Hall
+     2	Kate Henderson
+     5	Srdjan Jankovic
+     1	Janusz Kaczmarek
+     1	Jorgia Kelsey
+     1	Henri-Damien Laurent
+     8	Owen Leonard
+     1	Peter Lorimer
+     3	Julian Maurice
+     1	Matthias Meusburger
+     2	Jono Mingard
+     3	Chris Nighswonger
+    23	Paul Poulain
+     1	MJ Ray
+     6	Liz Rea
+     5	Marcel de Rooy
+     5	Sam Sanders
+     2	Adrien Saurat
+     5	Robin Sheat
+     1	Juan Sieira
+     1	Duncan Tyler
+     1	Aleksa Vujicic
+     1	biblibre
+
+
+We regret any omissions.  If a contributor has been inadvertantly missed,
+please send a patch against these release notes to 
+koha-patches@lists.koha-community.org.
+
+Revision control notes
+======================
+
+The Koha project uses Git for version control.  The current development 
+version of Koha can be retrieved by checking out the master branch of 
+
+    git://git.koha-community.org/koha.git
+
+The branch for Koha 3.4.x (i.e., this version of Koha and future bugfix
+releases) is 3.4.x.
+
+The next major feature release of Koha will be Koha 3.6.0.
+
+Bugs and feature requests
+======================
+
+Bug reports and feature requests can be filed at the Koha bug
+tracker at
+
+    http://bugs.koha-community.org/
+
+
+Ehara taku toa i te toa takitahi, engari he toa takitini
+
+##### Autogenerated release notes updated last on 21 Feb 2012 01:08:17 Z #####
