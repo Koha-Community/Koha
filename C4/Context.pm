@@ -83,19 +83,19 @@ BEGIN {
     $servers = $ENV{'MEMCACHED_SERVERS'};
     if ($servers) {
         # Load required libraries and create the memcached object
-	require Cache::Memcached;
-	$memcached = Cache::Memcached->new({
-		      servers => [ $servers ],
-		      debug   => 0,
-		      compress_threshold => 10_000,
-              expire_time => 600,
-		      namespace => $ENV{'MEMCACHED_NAMESPACE'} || 'koha'
-		  });
+        require Cache::Memcached;
+        $memcached = Cache::Memcached->new({
+        servers => [ $servers ],
+        debug   => 0,
+        compress_threshold => 10_000,
+        expire_time => 600,
+        namespace => $ENV{'MEMCACHED_NAMESPACE'} || 'koha'
+    });
         # Verify memcached available (set a variable and test the output)
-	$ismemcached = $memcached->set('ismemcached','1');
+    $ismemcached = $memcached->set('ismemcached','1');
     }
 
-	$VERSION = '3.00.00.036';
+    $VERSION = '3.00.00.036';
 }
 
 use DBI;
@@ -362,15 +362,15 @@ sub new {
     }
     
     if ($ismemcached) {
-      # retreive from memcached
-      $self = $memcached->get('kohaconf');
-      if (not defined $self) {
-	# not in memcached yet
-	$self = read_config_file($conf_fname);
-      }
+        # retreive from memcached
+        $self = $memcached->get('kohaconf');
+        if (not defined $self) {
+            # not in memcached yet
+            $self = read_config_file($conf_fname);
+        }
     } else {
-      # non-memcached env, read from file
-      $self = read_config_file($conf_fname);
+        # non-memcached env, read from file
+        $self = read_config_file($conf_fname);
     }
 
     $self->{"config_file"} = $conf_fname;
