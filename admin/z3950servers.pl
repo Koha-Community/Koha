@@ -91,6 +91,7 @@ if ($op eq 'add_form') {
 	my $dbh=C4::Context->dbh;
 	my $sth=$dbh->prepare("select * from z3950servers where name=?");
 	$sth->execute($input->param('searchfield'));
+	my $checked = $input->param('checked') ? 1 : 0;
 	if ($sth->rows) {
 		$sth=$dbh->prepare("update z3950servers set host=?, port=?, db=?, userid=?, password=?, name=?, checked=?, rank=?,syntax=?,encoding=? where name=?");
 		$sth->execute($input->param('host'),
@@ -99,7 +100,7 @@ if ($op eq 'add_form') {
 		      $input->param('userid'),
 		      $input->param('password'),
 		      $input->param('searchfield'),
-		      $input->param('checked'),
+		      $checked,
 		      $input->param('rank'),
 			  $input->param('syntax'),
               $input->param('encoding'),

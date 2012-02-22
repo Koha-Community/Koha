@@ -57,8 +57,6 @@
                 }
                 if (isNaN(f.rank.value)) {_alertString += "- rank must be a number\n";
                 }
-                if (isNaN(f.checked.value) || f.checked.value<0 || f.checked.value>1) {_alertString += "- checked must be 0 or 1\n";
-                }
                 if (_alertString.length==0) {document.Aform.submit();
                 } else {alertString2 = "Form not submitted because of the following problem(s)\n";alertString2 += "------------------------------------------------------------------------------------\n\n";alertString2 += _alertString;alert(alertString2);
                 }
@@ -109,7 +107,13 @@
 		</li>
 		<li><label for="password">Password: </label>	<input type="text" name="password" id="password" value="[% password %]" />
 		</li>
-		<li><label for="checked">Checked (searched by default): </label>	<input type="text" size="1" name="checked" id="checked" value="[% checked %]" onblur="isNum(this)" />  </li>
+		<li><label for="checked">Checked (searched by default): </label>
+                        [% IF ( checked ) %]
+                                <input type="checkbox" name="checked" id="checked" value="1" checked="checked" />
+                        [% ELSE %]
+                                <input type="checkbox" name="checked" id="checked" value="1" />
+                        [% END %]
+                </li>
 		<li><label for="rank">Rank (display order): </label>	<input type="text" name="rank" id="rank" size="4" value="[% rank %]" onblur="isNum(this)" />
 		</li>	
 		<li><label for="syntax">Syntax (z3950 can send<br /> records in various format. Choose one): </label>	
@@ -305,7 +309,7 @@
                 [% ELSE %]
                     <tr>
                 [% END %]
-<td><a href="[% loo.script_name %]?op=add_form&amp;searchfield=[% loo.name |url %]">[% loo.name %]</a></td><td>[% loo.host %]:[% loo.port %]</td><td>[% loo.db %]</td><td>[% loo.userid %]</td><td>[% loo.password %]</td><td>[% loo.checked %]</td><td>[% loo.rank %]</td>			<td>[% loo.syntax %]</td><td>[% loo.encoding %]</td><td><a href="[% loo.script_name %]?op=add_form&amp;searchfield=[% loo.name |url %]">Edit</a></td><td><a href="[% loo.script_name %]?op=delete_confirm&amp;searchfield=[% loo.name |url %]">Delete</a></td>                </tr>
+<td><a href="[% loo.script_name %]?op=add_form&amp;searchfield=[% loo.name |url %]">[% loo.name %]</a></td><td>[% loo.host %]:[% loo.port %]</td><td>[% loo.db %]</td><td>[% loo.userid %]</td><td>[% loo.password %]</td><td>[% IF ( loo.checked ) %]Yes[% ELSE %]No[% END %]</td><td>[% loo.rank %]</td>			<td>[% loo.syntax %]</td><td>[% loo.encoding %]</td><td><a href="[% loo.script_name %]?op=add_form&amp;searchfield=[% loo.name |url %]">Edit</a></td><td><a href="[% loo.script_name %]?op=delete_confirm&amp;searchfield=[% loo.name |url %]">Delete</a></td>                </tr>
                 [% END %]</tbody>
 	</table>
 
