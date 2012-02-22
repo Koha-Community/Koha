@@ -21,8 +21,11 @@ use warnings;
 use CGI;
 use C4::Auth;    # get_template_and_user
 use C4::Output;
+use C4::VirtualShelves;
+use C4::Branch;          # GetBranches
 use C4::Members;         # GetMember
 use C4::NewsChannels;    # get_opac_news
+use C4::Acquisition;     # GetRecentAcqui
 use C4::Languages qw(getTranslatedLanguages accept_language);
 
 my $input = new CGI;
