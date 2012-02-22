@@ -13,10 +13,13 @@
 # WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
 # A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 #
-# You should have received a copy of the GNU General Public License along with
-# Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
-# Suite 330, Boston, MA  02111-1307 USA
+# You should have received a copy of the GNU General Public License along
+# with Koha; if not, write to the Free Software Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
+
+use strict;
+use warnings;
 
 use CGI;
 use C4::Auth;
@@ -30,17 +33,17 @@ my ($status, $cookie, $sessionId) = C4::Auth::check_api_auth($cgi, undef);
 my $result;
 
 if ($status eq 'ok') { # if authentication is ok
-	if ( $cgi->param('pending') eq 'true' ) { # if the 'pending' flag is true, we store the operation in the db instead of directly processing them
-		$result = AddOfflineOperation(
-	        $cgi->param('userid')     || '',
+    if ( $cgi->param('pending') eq 'true' ) { # if the 'pending' flag is true, we store the operation in the db instead of directly processing them
+        $result = AddOfflineOperation(
+            $cgi->param('userid')     || '',
             $cgi->param('branchcode') || '',
             $cgi->param('timestamp')  || '',
             $cgi->param('action')     || '',
             $cgi->param('barcode')    || '',
             $cgi->param('cardnumber') || '',
-		);
-	} else {
-		$result = ProcessOfflineOperation(
+        );
+    } else {
+        $result = ProcessOfflineOperation(
             {
                 'userid'      => $cgi->param('userid'),
                 'branchcode'  => $cgi->param('branchcode'),
@@ -49,8 +52,8 @@ if ($status eq 'ok') { # if authentication is ok
                 'barcode'     => $cgi->param('barcode'),
                 'cardnumber'  => $cgi->param('cardnumber'),
             }
-		);
-	}
+        );
+    }
 } else {
     $result = "Authentication failed."
 }

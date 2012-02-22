@@ -3037,51 +3037,50 @@ sub LostItem{
 }
 
 sub GetOfflineOperations {
-	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare("SELECT * FROM pending_offline_operations WHERE branchcode=? ORDER BY timestamp");
-	$sth->execute(C4::Context->userenv->{'branch'});
-	my $results = $sth->fetchall_arrayref({});
-	$sth->finish;
-	return $results;
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare("SELECT * FROM pending_offline_operations WHERE branchcode=? ORDER BY timestamp");
+    $sth->execute(C4::Context->userenv->{'branch'});
+    my $results = $sth->fetchall_arrayref({});
+    $sth->finish;
+    return $results;
 }
 
 sub GetOfflineOperation {
-	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare("SELECT * FROM pending_offline_operations WHERE operationid=?");
-	$sth->execute( shift );
-	my $result = $sth->fetchrow_hashref;
-	$sth->finish;
-	return $result;
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare("SELECT * FROM pending_offline_operations WHERE operationid=?");
+    $sth->execute( shift );
+    my $result = $sth->fetchrow_hashref;
+    $sth->finish;
+    return $result;
 }
 
 sub AddOfflineOperation {
-	my $dbh = C4::Context->dbh;
-	warn Data::Dumper::Dumper(@_);
-	my $sth = $dbh->prepare("INSERT INTO pending_offline_operations VALUES('',?,?,?,?,?,?)");
-	$sth->execute( @_ );
-	return "Added.";
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare("INSERT INTO pending_offline_operations (userid, branchcode, timestamp, action, barcode, cardnumber) VALUES(?,?,?,?,?,?)");
+    $sth->execute( @_ );
+    return "Added.";
 }
 
 sub DeleteOfflineOperation {
-	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare("DELETE FROM pending_offline_operations WHERE operationid=?");
-	$sth->execute( shift );
-	return "Deleted.";
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare("DELETE FROM pending_offline_operations WHERE operationid=?");
+    $sth->execute( shift );
+    return "Deleted.";
 }
 
 sub ProcessOfflineOperation {
-	my $operation = shift;
+    my $operation = shift;
 
     my $report;
-	if ( $operation->{action} eq 'return' ) {
+    if ( $operation->{action} eq 'return' ) {
         $report = ProcessOfflineReturn( $operation );
-	} elsif ( $operation->{action} eq 'issue' ) {
-	    $report = ProcessOfflineIssue( $operation );
-	}
+    } elsif ( $operation->{action} eq 'issue' ) {
+        $report = ProcessOfflineIssue( $operation );
+    }
 
-	DeleteOfflineOperation( $operation->{operationid} ) if $operation->{operationid};
+    DeleteOfflineOperation( $operation->{operationid} ) if $operation->{operationid};
 
-	return $report;
+    return $report;
 }
 
 sub ProcessOfflineReturn {

@@ -13,10 +13,13 @@
 # WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
 # A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 #
-# You should have received a copy of the GNU General Public License along with
-# Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
-# Suite 330, Boston, MA  02111-1307 USA
+# You should have received a copy of the GNU General Public License along
+# with Koha; if not, write to the Free Software Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
+
+use strict;
+use warnings;
 
 use CGI;
 use C4::Output;
@@ -41,14 +44,16 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user({
 my $operations = GetOfflineOperations;
 
 for (@$operations) {
-	my $biblio             = GetBiblioFromItemNumber(undef, $_->{'barcode'});
-	$_->{'bibliotitle'}    = $biblio->{'title'};
-	$_->{'biblionumber'}   = $biblio->{'biblionumber'};
-	my $borrower           = GetMemberDetails(undef,$_->{'cardnumber'});
-	$_->{'borrowernumber'} = $borrower->{'borrowernumber'};
-	$_->{'borrower'}       = join(' ', $borrower->{'firstname'}, $borrower->{'surname'});
-	$_->{'actionissue'}    = $_->{'action'} eq 'issue';
-	$_->{'actionreturn'}   = $_->{'action'} eq 'return';
+    my $biblio             = GetBiblioFromItemNumber(undef, $_->{'barcode'});
+    $_->{'bibliotitle'}    = $biblio->{'title'};
+    $_->{'biblionumber'}   = $biblio->{'biblionumber'};
+    my $borrower           = GetMemberDetails(undef,$_->{'cardnumber'});
+    if ($borrower) {
+        $_->{'borrowernumber'} = $borrower->{'borrowernumber'};
+        $_->{'borrower'}       = ($borrower->{'firstname'}?$borrower->{'firstname'}:'').' '.$borrower->{'surname'};
+    }
+    $_->{'actionissue'}    = $_->{'action'} eq 'issue';
+    $_->{'actionreturn'}   = $_->{'action'} eq 'return';
 }
 $template->param(pending_operations => $operations);
 
