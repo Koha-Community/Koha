@@ -1,5 +1,19 @@
-[% INCLUDE 'doc-head-open.inc' %]<title>Koha &rsaquo; Acquisitions  &rsaquo;
-[% IF ( op_save ) %][% IF ( suttesionid ) %]Edit purchase suggestion #[% suggestionid %][% ELSE %]Enter a new purchase suggestion[% END %][% ELSE %]Suggestions Management[% END %]</title>
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Acquisitions  &rsaquo;
+    [% IF ( op_save ) %]
+        [% IF ( suggestionid) %]
+            [% IF ( op == 'show' ) %]
+                Show purchase suggestion #[% suggestionid %]
+            [% ELSE %]
+                Edit purchase suggestion #[% suggestionid %]
+            [% END %]
+        [% ELSE %]
+            Enter a new purchase suggestion
+        [% END %]
+    [% ELSE %]
+        Suggestions Management
+    [% END %]
+</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
 [% IF ( op_else ) %] <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
@@ -91,7 +105,114 @@ $(document).ready(function() { calcNewsuggTotal(); });
 <body>
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; [% IF ( op_save ) %] <a href="/cgi-bin/koha/suggestion/suggestion.pl">Suggestions</a> &rsaquo; [% IF ( suggestionid ) %]Suggestion edit #[% suggestionid %][% ELSE %]New purchase suggestion[% END %][% ELSE %]Suggestions Management[% END %] </div>
+<div id="breadcrumbs">
+    <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo;
+    [% IF ( op_save ) %]
+        <a href="/cgi-bin/koha/suggestion/suggestion.pl">Suggestions</a> &rsaquo;
+        [% IF ( op == 'show' ) %]
+            Show suggestion #[% suggestionid %]
+        [% ELSE %]
+            Suggestion edit #[% suggestionid %]
+        [% END %]
+    [% ELSE %]
+        Suggestions Management
+    [% END %]
+</div>
+
+[% IF ( op == 'show' ) %]
+<div id="doc" class="yui-t7"> <!-- <div id="doc3" class="yui-t2"> -->
+<div id="bd">
+    <div id="yui-main">
+    <div class="yui-b">
+
+    <fieldset class="rows">
+      <legend>Bibliographic information</legend>
+      <ol>
+        <li><span class="label">Title:</span>[% title |html %]</li>
+        <li><span class="label">Author:</span>[% author %]</li>
+        <li><span class="label">Copyright date:</span>[% copyrightdate %]</li>
+        <li><span class="label">ISBN or ISSN or other standard number:</span>[% isbn %]</li>
+        <li><span class="label">Publisher:</span>[% publishercode %]</li>
+        <li><span class="label">Publication Place:</span>[% place %]</li>
+        <li><span class="label">Collection Title:</span>[% collectiontitle %]</li>
+        <li><span class="label">Document Type:</span>
+            [% FOREACH itemtypeloo IN itemtypeloop %]
+                [% IF ( itemtypeloo.selected ) %][% itemtypeloo.description %][% END %]
+            [% END %]
+        </li>
+        [% IF ( patron_reason_loop ) %]
+          <li><span class="label">Reason for suggestion: </span>
+            [% FOREACH patron_reason_loo IN patron_reason_loop %]
+              [% IF ( patron_reason_loo.selected ) %][% patron_reason_loo.lib %][% END %]
+            [% END %]
+          </li>
+        [% END %]
+        <li><span class="label">Notes:</span>[% note %]</li>
+      </ol>
+    </fieldset>
+    <fieldset class="rows"> <legend>Suggestion management</legend>
+      <ol>
+        <li>
+          <span class="label">Status:</span>
+          [% IF ( STATUS == 'ASKED' ) %]Pending
+          [% ELSIF ( STATUS == 'ACCEPTED' ) %]Accepted
+          [% ELSIF ( STATUS == 'CHECKED' ) %]Checked
+          [% ELSIF ( STATUS == 'REJECTED' ) %]Rejected
+          [% ELSE %]No Status
+          [% END %]
+        </li>
+        <li>
+          <table>
+            <thead><tr><th>&nbsp;</th><th>Date</th><th>By</th></tr></thead>
+            <tbody>
+            <tr>
+                <th><span class="label">Suggestion creation</span> </th>
+                <td>[% suggesteddate %]</td>
+                <td>[% IF ( suggestedby_borrowernumber ) %]<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% suggestedby_borrowernumber %]">[% suggestedby_surname %], [% suggestedby_firstname %]</a>  [% suggestedby_branchcode %] ([% suggestedby_description %])[% END %]
+                </td>
+            </tr>
+            <tr>
+                <th><span class="label">Suggestion management</span> </th>
+                <td>[% manageddate %]</td>
+                <td>[% IF ( managedby_borrowernumber ) %]<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% managedby_borrowernumber %]">[% managedby_surname %], [% managedby_firstname %]</a> [% managedby_branchcode %] ([% managedby_description %])[% END %]</td>
+            </tr>
+            <tr>
+                <th><span class="label">Suggestion Accepted</span> </th>
+                <td>[% accepteddate %]</td>
+                <td>[% IF ( acceptedby_borrowernumber ) %]<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% acceptedby_borrowernumber %]">[% acceptedby_surname %], [% acceptedby_firstname %]</a> [% acceptedby_branchcode %] ([% acceptedby_description %])[% END %]</td>
+            </tr>
+            </tbody>
+        </table></li></ol>
+    </fieldset>
+    <fieldset class="rows"> <legend>Acquisition information</legend>
+      <ol>
+        <li>
+          <span class="label">Library:</span> [% branchname %]
+        </li>
+        <li>
+          <span class="label">Budget:</span> [% budgetname %]
+        </li>
+        <li>
+          <span class="label">Copies:</span>[% quantity %]
+        </li>
+        <li>
+          <span class="label">Currency:</span>[% currency %]
+        </li>
+        <li>
+          <span class="label">Price:</span>[% price %]
+        </li>
+        <li>
+          <span class="label">Total</span>[% total %]
+        </li>
+      </ol>
+    </fieldset>
+
+    <a class="cancel" href="suggestion.pl">&lt;&lt;Back to the list</a>
+
+    </div>
+    </div>
+</div>
+[% ELSE %]
 
 [% IF ( op_save ) %]<div id="doc" class="yui-t7">[% ELSE %]<div id="doc3" class="yui-t2">[% END %]
 <div id="bd">
@@ -189,7 +310,7 @@ $(document).ready(function() { calcNewsuggTotal(); });
 			<input type="text" readonly="readonly" id="total" name="total" size="10" value="[% total %]"/>
                 </li></ol>
     </fieldset><input type="hidden" id="returnsuggested" name="returnsuggested" value="[% IF ( returnsuggestedby ) %][% returnsuggestedby %][% ELSE %]noone[% END %]"/>
-    <fieldset class="action"><input type="hidden" name="op" value="[% op %]" />[% IF ( suggestionid ) %]<input type="submit" value="Save" /> <a class="cancel" href="[% IF ( returnsuggestedby ) %]/cgi-bin/koha/members/moremember.pl?borrowernumber=[% returnsuggestedby %]#suggestions[% ELSE %]suggestion.pl?suggestionid=[% suggestionid %][% END %]">Cancel</a>[% ELSE %]<input type="submit" value="Submit Your Suggestion" /> <a class="cancel" href="suggestion.pl">Cancel</a>[% END %]
+    <fieldset class="action"><input type="hidden" name="op" value="[% op %]" />[% IF ( suggestionid ) %]<input type="submit" value="Save" /> <a class="cancel" href="[% IF ( returnsuggestedby ) %]/cgi-bin/koha/members/moremember.pl?borrowernumber=[% returnsuggestedby %]#suggestions[% ELSE %]suggestion.pl?suggestionid=[% suggestionid %]&amp;op=show[% END %]">Cancel</a>[% ELSE %]<input type="submit" value="Submit Your Suggestion" /> <a class="cancel" href="suggestion.pl">Cancel</a>[% END %]
     </fieldset>
     </form>
 [% END %]
@@ -245,9 +366,9 @@ $(document).ready(function() { calcNewsuggTotal(); });
                     <input type="checkbox" name="edit_field" value="[% suggestions_loo.suggestionid %]" />
                 </td>
                 <td>
-                    <a href="suggestion.pl?suggestionid=[% suggestions_loo.suggestionid %]&amp;op=edit" title="suggestion" >
-                        [% suggestions_loo.title |html %][% IF ( suggestions_loo.author ) %], by [% suggestions_loo.author %][% END %]
-                    </a>
+                    <a href="suggestion.pl?suggestionid=[% suggestions_loo.suggestionid %]&amp;op=show" title="suggestion" >
+                        [% suggestions_loo.title |html %][% IF ( suggestions_loo.author ) %], by [% suggestions_loo.author %][% END %]</a>
+                    [<a href="suggestion.pl?suggestionid=[% suggestions_loo.suggestionid %]&amp;op=edit" title="suggestion" >edit</a>]
                     <br />
                     [% IF ( suggestions_loo.copyrightdate ) %]&copy; [% suggestions_loo.copyrightdate %] [% END %]
                         [% IF ( suggestions_loo.volumedesc ) %]; Volume:<i>[% suggestions_loo.volumedesc %]</i> [% END %]
@@ -314,7 +435,7 @@ $(document).ready(function() { calcNewsuggTotal(); });
 </div>
 </div>
 
-      [% UNLESS ( op_save ) %] <div class="yui-b">
+      [% UNLESS ( op_save ) %] [% UNLESS ( op == 'show' ) %]<div class="yui-b">
 <form name="suggestionfilter" action="suggestion.pl" method="get">
 <fieldset class="brief"><ol style="display:block;"><li><label for="displayby">Organize by: </label>
                 <select name="displayby" id="displayby" style="width:auto;">
@@ -458,7 +579,10 @@ $(document).ready(function() { calcNewsuggTotal(); });
                 </fieldset>
     </div>
             </form>
-        </div>[% END %]
+        </div>
+    [% END %]
+    [% END %]
 </div>
+[% END %]
 [% INCLUDE 'intranet-bottom.inc' %]
 

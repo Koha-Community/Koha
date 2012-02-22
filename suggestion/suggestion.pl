@@ -34,13 +34,13 @@ use C4::Debug;
 
 sub Init{
     my $suggestion= shift @_;
-    foreach my $date qw(suggesteddate manageddate){
+    foreach my $date ( qw(suggesteddate manageddate) ){
         $suggestion->{$date}=(($suggestion->{$date} eq "0000-00-00" ||$suggestion->{$date} eq "")?
                                 $suggestion->{$date}=C4::Dates->today:
                                 format_date($suggestion->{$date}) 
                               );
     }               
-    foreach my $date qw(rejecteddate accepteddate){
+    foreach my $date ( qw(rejecteddate accepteddate) ){
     $suggestion->{$date}=(($suggestion->{$date} eq "0000-00-00" ||$suggestion->{$date} eq "")?
                                 "":
                                 format_date($suggestion->{$date}) 
@@ -173,6 +173,13 @@ elsif ($op eq "change" ) {
     }
     $op = 'else';
 }
+elsif ( $op eq 'show' ) {
+    $suggestion_ref=&GetSuggestion($$suggestion_ref{'suggestionid'});
+    $$suggestion_ref{branchname} = GetBranchName $$suggestion_ref{branchcode};
+    my $budget = GetBudget $$suggestion_ref{budgetid};
+    $$suggestion_ref{budgetname} = $$budget{budget_name};
+    Init($suggestion_ref);
+}
 if ($op=~/else/) {
     $op='else';
     
@@ -193,7 +200,7 @@ if ($op=~/else/) {
                 my $budget = GetBudget($suggestion->{budgetid});
                 $suggestion->{budget_name}=$budget->{budget_name} if $budget;
             }
-            foreach my $date qw(suggesteddate manageddate accepteddate){
+            foreach my $date ( qw(suggesteddate manageddate accepteddate) ){
                 if ($suggestion->{$date} ne "0000-00-00" && $suggestion->{$date} ne "" ){
                 $suggestion->{$date}=format_date($suggestion->{$date}) ;
                 } else {
@@ -219,7 +226,7 @@ if ($op=~/else/) {
     );
 }
 
-foreach my $element qw(managedby suggestedby acceptedby) {
+foreach my $element ( qw(managedby suggestedby acceptedby) ) {
 #    $debug || warn $$suggestion_ref{$element};
     if ($$suggestion_ref{$element}){
         my $member=GetMember(borrowernumber=>$$suggestion_ref{$element});
@@ -333,7 +340,7 @@ $template->param(
 );
 
 my %hashlists;
-foreach my $field qw(managedby acceptedby suggestedby budgetid) {
+foreach my $field ( qw(managedby acceptedby suggestedby budgetid) ) {
     my $values_list;
     $values_list=GetDistinctValues("suggestions.".$field) ;
     my @codes_list = map{

@@ -244,7 +244,7 @@
                 [% IF ( loop_order.suggestionid ) %]
                     <br/>
                     Suggested by: [% loop_order.surnamesuggestedby %][% IF ( loop_order.firstnamesuggestedby ) %], [% loop_order.firstnamesuggestedby %] [% END %]
-                    (<a href="/cgi-bin/koha/suggestion/suggestion.pl?suggestionid=[% loop_order.suggestionid %]">suggestion #[% loop_order.suggestionid %]</a>)
+                    (<a href="/cgi-bin/koha/suggestion/suggestion.pl?suggestionid=[% loop_order.suggestionid %]&amp;op=show">suggestion #[% loop_order.suggestionid %]</a>)
                 [% END %]
                 </td>
                 <td><a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% loop_order.biblionumber %]" title="MARC" rel="gb_page_center[600,500]">MARC</a> | <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;id=[% loop_order.biblionumber %]" title="MARC" rel="gb_page_center[600,500]">Card</a></td>
@@ -369,7 +369,7 @@
                 [% IF ( loop_receive.suggestionid ) %]
                     <br/>
                     Suggested by: [% loop_receive.surnamesuggestedby %][% IF ( loop_receive.firstnamesuggestedby ) %], [% loop_receive.firstnamesuggestedby %] [% END %]
-                    (<a href="/cgi-bin/koha/suggestion/suggestion.pl?suggestionid=[% loop_receive.suggestionid %]">suggestion #[% loop_receive.suggestionid %]</a>)
+                    (<a href="/cgi-bin/koha/suggestion/suggestion.pl?suggestionid=[% loop_receive.suggestionid %]&amp;op=show">suggestion #[% loop_receive.suggestionid %]</a>)
                 [% END %]
                 </td>
                 <td><a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% loop_receive.biblionumber %]" title="MARC" rel="gb_page_center[600,500]">MARC</a> | <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;id=[% loop_receive.biblionumber %]" title="MARC" rel="gb_page_center[600,500]">Card</a></td>
