@@ -2491,6 +2491,45 @@ sub GetItemHolds {
 }
 =head1  OTHER FUNCTIONS
 
+=head2 _find_value
+
+  ($indicators, $value) = _find_value($tag, $subfield, $record,$encoding);
+
+Find the given $subfield in the given $tag in the given
+MARC::Record $record.  If the subfield is found, returns
+the (indicators, value) pair; otherwise, (undef, undef) is
+returned.
+
+PROPOSITION :
+Such a function is used in addbiblio AND additem and serial-edit and maybe could be used in Authorities.
+I suggest we export it from this module.
+
+=cut
+
+sub _find_value {
+    my ( $tagfield, $insubfield, $record, $encoding ) = @_;
+    my @result;
+    my $indicator;
+    if ( $tagfield < 10 ) {
+        if ( $record->field($tagfield) ) {
+            push @result, $record->field($tagfield)->data();
+        } else {
+            push @result, "";
+        }
+    } else {
+        foreach my $field ( $record->field($tagfield) ) {
+            my @subfields = $field->subfields();
+            foreach my $subfield (@subfields) {
+                if ( @$subfield[0] eq $insubfield ) {
+                    push @result, @$subfield[1];
+                    $indicator = $field->indicator(1) . $field->indicator(2);
+                }
+            }
+        }
+    }
+    return ( $indicator, @result );
+}
+
 
 =head2 PrepareItemrecordDisplay
 
