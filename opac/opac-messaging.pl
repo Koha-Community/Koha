@@ -67,6 +67,7 @@ C4::Form::MessagingPreferences::set_form_values({ borrowernumber     => $borrowe
 $template->param( BORROWER_INFO         => [ $borrower ],
                   messagingview         => 1,
                   SMSnumber => defined $borrower->{'smsalertnumber'} ? $borrower->{'smsalertnumber'} : $borrower->{'mobile'},
-                  SMSSendDriver                =>  C4::Context->preference("SMSSendDriver") );
+                  SMSSendDriver                =>  C4::Context->preference("SMSSendDriver"),
+                  TalkingTechItivaPhone        =>  C4::Context->preference("TalkingTechItivaPhoneNotification") );
 
 output_html_with_http_headers $query, $cookie, $template->output;

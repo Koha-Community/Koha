@@ -398,6 +398,7 @@ if (C4::Context->preference('EnhancedMessagingPreferences')) {
     $template->param(messaging_form_inactive => 1);
     $template->param(SMSSendDriver => C4::Context->preference("SMSSendDriver"));
     $template->param(SMSnumber     => defined $data->{'smsalertnumber'} ? $data->{'smsalertnumber'} : $data->{'mobile'});
+    $template->param(TalkingTechItivaPhone => C4::Context->preference("TalkingTechItivaPhoneNotification"));
 }
 
 # in template <TMPL_IF name="I"> => instutitional (A for Adult, C for children) 

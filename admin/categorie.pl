@@ -112,8 +112,9 @@ if ($op eq 'add_form') {
                                 hidelostitems           => $data->{'hidelostitems'},
 				category_type           => $data->{'category_type'},
 				DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
+                SMSSendDriver => C4::Context->preference("SMSSendDriver"),
+                TalkingTechItivaPhone => C4::Context->preference("TalkingTechItivaPhoneNotification"),
 				"type_".$data->{'category_type'} => 1,
-				SMSSendDriver => C4::Context->preference("SMSSendDriver")
 				);
     if (C4::Context->preference('EnhancedMessagingPreferences')) {
         C4::Form::MessagingPreferences::set_form_values({ categorycode => $categorycode } , $template);

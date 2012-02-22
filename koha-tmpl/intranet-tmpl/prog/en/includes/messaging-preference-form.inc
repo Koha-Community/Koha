@@ -21,6 +21,7 @@
     <tr><th></th>
         <th>Days in advance</th>
         [% IF ( SMSSendDriver ) %]<th>SMS</th>[% END %]
+        [% IF ( TalkingTechItivaPhone ) %]<th>Phone</th>[% END %]
         <th>Email</th><th>Digests only?</th>
         <!-- <th>RSS</th> -->
         [% UNLESS ( messaging_form_inactive ) %]<th>Do not notify</th>[% END %]
@@ -82,6 +83,34 @@
       [% ELSE %]
       <td>-</td>
       [% END %]
+
+      [% IF ( TalkingTechItivaPhone ) %]<td>
+          [% IF ( messaging_form_inactive ) %]
+              [% IF ( messaging_preference.transports_phone ) %]
+                 <input type="checkbox"
+                 id="phone[% messaging_preference.message_attribute_id %]"
+                 name="[% messaging_preference.message_attribute_id %]"
+                 value="phone" checked="checked" disabled="disabled" />
+              [% ELSE %]
+                 <input type="checkbox"
+                 id="phone[% messaging_preference.message_attribute_id %]"
+                 name="[% messaging_preference.message_attribute_id %]"
+                 value="phone" disabled="disabled" />
+              [% END %]
+          [% ELSE %]
+              [% IF ( messaging_preference.transports_phone ) %]
+                 <input type="checkbox"
+                 id="phone[% messaging_preference.message_attribute_id %]"
+                 name="[% messaging_preference.message_attribute_id %]"
+                 value="phone" checked="checked" onclick = "$('#none'+'[% messaging_preference.message_attribute_id %]').attr('checked','');" />
+              [% ELSE %]
+                 <input type="checkbox"
+                 id="phone[% messaging_preference.message_attribute_id %]"
+                 name="[% messaging_preference.message_attribute_id %]"
+                 value="phone" onclick = "$('#none'+'[% messaging_preference.message_attribute_id %]').attr('checked','');" />
+              [% END %]
+          [% END %]
+      </td>[% END %]
 
       [% IF ( messaging_preference.transport_email ) %]
       <td>

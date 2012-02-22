@@ -36,7 +36,7 @@
   <div class="dialog message"><h3>Settings updated</h3></div>
   [% END %]
   <table style="margin-right:1em;">
-    <tr><th>&nbsp;</th><th>Days in advance</th>[% IF ( SMSSendDriver ) %]<th>SMS</th>[% END %]<th>Email</th><th>Digests only?</th><!-- <th>RSS</th> --><th>Do not notify</th></tr>
+    <tr><th>&nbsp;</th><th>Days in advance</th>[% IF ( SMSSendDriver ) %]<th>SMS</th>[% END %][% IF ( TalkingTechItivaPhone ) %]<th>Phone</th>[% END %]<th>Email</th><th>Digests only?</th><!-- <th>RSS</th> --><th>Do not notify</th></tr>
     [% FOREACH messaging_preference IN messaging_preferences %]
     <tr>
       <td>[% IF ( messaging_preference.Item_Due ) %]Item due
@@ -75,7 +75,22 @@
         </td>
         [% END %]
       [% ELSE %]
-        <td>-</td>
+        <td>--</td>
+      [% END %]
+        [% IF ( TalkingTechItivaPhone ) %]
+        <td>
+          [% IF ( messaging_preference.transports_phone ) %]
+          <input type="checkbox"
+                     id="phone[% messaging_preference.message_attribute_id %]"
+                     name="[% messaging_preference.message_attribute_id %]"
+                     value="phone" checked="checked" onclick = "document.opacmessaging.none[% messaging_preference.message_attribute_id %].checked=false;" />
+          [% ELSE %]
+          <input type="checkbox"
+                     id="phone[% messaging_preference.message_attribute_id %]"
+                     name="[% messaging_preference.message_attribute_id %]"
+                     value="phone" onclick = "document.opacmessaging.none[% messaging_preference.message_attribute_id %].checked=false;" />
+          [% END %]
+        </td>
       [% END %]
 
       [% IF ( messaging_preference.transport_email ) %]

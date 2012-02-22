@@ -661,7 +661,7 @@ places a letter in the message_queue database table, which will
 eventually get processed (sent) by the process_message_queue.pl
 cronjob when it calls SendQueuedMessages.
 
-return true on success
+return message_id on success
 
 =cut
 
@@ -703,7 +703,7 @@ ENDSQL
         $params->{'from_address'},                # from_address
         $params->{'letter'}->{'content-type'},    # content_type
     );
-    return $result;
+    return $dbh->last_insert_id(undef,undef,'message_queue', undef);
 }
 
 =head2 SendQueuedMessages ([$hashref]) 
