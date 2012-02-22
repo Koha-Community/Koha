@@ -26,7 +26,10 @@ use warnings;
 
 use Carp;
 use C4::Context;
+use C4::Circulation;
 use C4::Debug;
+use C4::Members;
+require C4::Auth;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK);
 
@@ -463,8 +466,7 @@ sub ShelfPossibleAction {
     my $sth = $dbh->prepare($query);
     $sth->execute($shelfnumber);
     my ( $owner, $category ) = $sth->fetchrow;
-    require C4::Members;
-	my $borrower = C4::Members::GetMemberDetails($user);
+	my $borrower = GetMemberDetails($user);
 	return 0 if not defined($user);
 	return 1 if ( $category >= 3);							# open list
     return 1 if (($category >= 2) and
@@ -557,7 +559,7 @@ This function is used in conjunction with the 'Lists' button in masthead.inc.
 =cut
 
 sub RefreshShelvesSummary ($$$) {
-	require C4::Auth;
+	
 	my ($sessionID, $loggedinuser, $row_count) = @_;
 	my $session = C4::Auth::get_session($sessionID);
 	my ($total, $totshelves, $barshelves, $pubshelves);
