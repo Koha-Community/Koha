@@ -23,7 +23,10 @@ package C4::Koha;
 use strict;
 #use warnings; FIXME - Bug 2505
 use C4::Context;
+use C4::Output;
+use URI::Split qw(uri_split);
 use Memoize;
+use Business::ISBN;
 
 use vars qw($VERSION @ISA @EXPORT $DEBUG);
 
@@ -469,9 +472,8 @@ sub getitemtypeimagelocation($$) {
 	my ( $src, $image ) = @_;
 
 	return '' if ( !$image );
-    require URI::Split;
 
-	my $scheme = ( URI::Split::uri_split( $image ) )[0];
+	my $scheme = ( uri_split( $image ) )[0];
 
 	return $image if ( $scheme );
 
@@ -1313,7 +1315,6 @@ sub _normalize_match_point {
 }
 
 sub _isbn_cleanup {
-    require Business::ISBN;
     my $isbn = Business::ISBN->new( $_[0] );
     if ( $isbn ) {
         $isbn = $isbn->as_isbn10 if $isbn->type eq 'ISBN13';
