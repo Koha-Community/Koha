@@ -32,7 +32,6 @@ use C4::Branch; # XXX subfield_is_koha_internal_p
 use C4::ClassSource;
 use C4::Dates;
 use List::MoreUtils qw/any/;
-use C4::Search;
 
 use MARC::File::XML;
 use URI::Escape;
