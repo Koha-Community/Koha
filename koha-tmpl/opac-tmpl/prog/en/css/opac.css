@@ -1679,110 +1679,101 @@ span.starMT {
 }
 
 #cartmenulink, #listsmenulink {
+	background-repeat: no-repeat;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
 	display : block;
 	position : relative;
-	background : #aaa;
-	padding : 5px;
 	float : left;
 	color : #333;
 	text-decoration : none;
 	cursor : pointer;
-}
-
- #cartmenulink *, #listsmenulink * {
-	font-style : normal;
-	background-image : url(../../images/button-background.png);
-	background-repeat : no-repeat;
-	display : block;
-	position : relative;
-}
-
- #cartmenulink i, #listsmenulink i {
-	background-position : top left;
-	position : absolute;
-	margin-bottom : -5px;
-	top : 0;
-	left : 0;
-	width : 5px;
-	height : 5px;
-}
-
- #cartmenulink span, #listsmenulink span {
-	background-position : bottom left;
-	left : -5px;
-	padding : 0 0 5px 10px;
-	margin-bottom : -5px;
-}
-/* For IE7 */
- *:first-child+html #cartmenulink span { padding-top : 3px; padding-bottom : 7px; }
- *:first-child+html #listsmenulink span { padding-top : 5px; }
-
- #cartmenulink span i, #listsmenulink span i {
-	background-position : bottom right;
-	margin-bottom : 0;
-	position : absolute;
-	left : 100%;
-	width : 10px;
-	height : 100%;
-	top : 0;
-}
-
- #cartmenulink span span, #listsmenulink span span {
-	background-position : top right;
-	position : absolute;
-	right : -10px;
-	margin-left : 10px;
-	top : -5px;
-	height : 0;
-}
-
-* html #cartmenulink span, * html #cartmenulink i, * html #listsmenulink span, * html #listsmenulink i {
-	float : left;
-	width : auto;
-	background-image : none;
-	cursor : pointer;
-}
-* html #cartmenulink span, * html #listsmenulink span {
-	padding-top : 5px;
-}
-
-#cartmenulink span#carticon {
-	background: transparent url("../../images/cart.gif") top left no-repeat;
-	position: static;
-	width : 14px;
-	height:14px;
-	margin: 0.35em 0.45em 0 0.2em;
-	padding:0;
-	float: left;
+	font-size : 105%;
+	font-weight : bold;
+	line-height : 185%;
+	margin-left : 1.5em;
+	padding : .3em .7em;
 }
 
 #listsmenulink {
 	background : #9FBFFF;
-}
-
-#cartmenulink {
-	background : #98CB58;
-	color : #336600;
-	font-size : 105%;
-}
-
-#cartmenulink[class], #listsmenulink[class] {
-	background-image : url(../../images/button-background-gradient.png);
-	background-position : left top;
+	background: url("../../images/list.gif"),-moz-linear-gradient(top, #d7e5ff 0%, #b1cbff 50%, #9fbfff 100%); /* FF3.6+ */
+	background: url("../../images/list.gif"),-webkit-gradient(linear, left top, left bottom, color-stop(0%,#d7e5ff), color-stop(50%,#b1cbff), color-stop(100%,#9fbfff)); /* Chrome,Safari4+ */
+	background: url("../../images/list.gif"),-webkit-linear-gradient(top, #d7e5ff 0%,#b1cbff 50%,#9fbfff 100%); /* Chrome10+,Safari5.1+ */
+	background: url("../../images/list.gif"),-o-linear-gradient(top, #d7e5ff 0%,#b1cbff 50%,#9fbfff 100%); /* Opera 11.10+ */
+	background: url("../../images/list.gif"),-ms-linear-gradient(top, #d7e5ff 0%,#b1cbff 50%,#9fbfff 100%); /* IE10+ */
+	background: url("../../images/list.gif"),linear-gradient(top, #d7e5ff 0%,#b1cbff 50%,#9fbfff 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d7e5ff', endColorstr='#9fbfff',GradientType=0 ); /* IE6-9 */
+	background-position: 85% 46%;
+	background-repeat: no-repeat;
+	border: 1px solid #629DCF;
+	color : #006699;
+	padding-right: 20px;
 }
 
 #listsmenulink:hover {
 	background-color : #b8d0e6;
+	background: url("../../images/list.gif"),-moz-linear-gradient(top, #e2ecf5 0%, #c3d8ea 50%, #b8d0e6 100%); /* FF3.6+ */
+	background: url("../../images/list.gif"),-webkit-gradient(linear, left top, left bottom, color-stop(0%,#e2ecf5), color-stop(50%,#c3d8ea), color-stop(100%,#b8d0e6)); /* Chrome,Safari4+ */
+	background: url("../../images/list.gif"),-webkit-linear-gradient(top, #e2ecf5 0%,#c3d8ea 50%,#b8d0e6 100%); /* Chrome10+,Safari5.1+ */
+	background: url("../../images/list.gif"),-o-linear-gradient(top, #e2ecf5 0%,#c3d8ea 50%,#b8d0e6 100%); /* Opera 11.10+ */
+	background: url("../../images/list.gif"),-ms-linear-gradient(top, #e2ecf5 0%,#c3d8ea 50%,#b8d0e6 100%); /* IE10+ */
+	background: url("../../images/list.gif"),linear-gradient(top, #e2ecf5 0%,#c3d8ea 50%,#b8d0e6 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e2ecf5', endColorstr='#b8d0e6',GradientType=0 ); /* IE6-9 */
+	background-repeat: no-repeat;
+	background-position: 85% 46%;
+}
+
+#cartmenulink {
+	background: #98CB58; /* Old browsers */
+	background: url("../../images/cart.gif"),-moz-linear-gradient(top, #d5eaba 0%, #b7db8a 50%, #98cb59 100%); /* FF3.6+ */
+	background: url("../../images/cart.gif"),-webkit-gradient(linear, left top, left bottom, color-stop(0%,#d5eaba), color-stop(50%,#b7db8a), color-stop(100%,#98cb59)); /* Chrome,Safari4+ */
+	background: url("../../images/cart.gif"),-webkit-linear-gradient(top, #d5eaba 0%,#b7db8a 50%,#98cb59 100%); /* Chrome10+,Safari5.1+ */
+	background: url("../../images/cart.gif"),-o-linear-gradient(top, #d5eaba 0%,#b7db8a 50%,#98cb59 100%); /* Opera 11.10+ */
+	background: url("../../images/cart.gif"),-ms-linear-gradient(top, #d5eaba 0%,#b7db8a 50%,#98cb59 100%); /* IE10+ */
+	background: url("../../images/cart.gif"),linear-gradient(top, #d5eaba 0%,#b7db8a 50%,#98cb59 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d5eaba', endColorstr='#98cb59',GradientType=0 ); /* IE6-9 */
+	background-position: 15% 46%;
+	background-repeat: no-repeat;
+	border: 1px solid #5EA28C;
+	color : #336600;
+	padding-left : 30px;
 }
 
 #cartmenulink:hover {
 	background-color : #BFDE96;
+	background: url("../../images/cart.gif"),-moz-linear-gradient(top, #e5f1d4 0%, #cbe4aa 50%, #c0de98 100%); /* FF3.6+ */
+	background: url("../../images/cart.gif"),-webkit-gradient(linear, left top, left bottom, color-stop(0%,#e5f1d4), color-stop(50%,#cbe4aa), color-stop(100%,#c0de98)); /* Chrome,Safari4+ */
+	background: url("../../images/cart.gif"),-webkit-linear-gradient(top, #e5f1d4 0%,#cbe4aa 50%,#c0de98 100%); /* Chrome10+,Safari5.1+ */
+	background: url("../../images/cart.gif"),-o-linear-gradient(top, #e5f1d4 0%,#cbe4aa 50%,#c0de98 100%); /* Opera 11.10+ */
+	background: url("../../images/cart.gif"),-ms-linear-gradient(top, #e5f1d4 0%,#cbe4aa 50%,#c0de98 100%); /* IE10+ */
+	background: url("../../images/cart.gif"),linear-gradient(top, #e5f1d4 0%,#cbe4aa 50%,#c0de98 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e5f1d4', endColorstr='#c0de98',GradientType=0 ); /* IE6-9 */
+	background-repeat: no-repeat;
+	background-position: 15% 46%;
 }
 
-#cartmenulink img {
-	background-image : none;
-	display : inline;
-	padding : 3px 3px 0 3px;
+/* IE 6 & 7  don't do multiple backgrounds, so remove extra padding */
+* html #listsmenulink,
+*+html #listsmenulink {
+	padding-right : .7em;
+}
+
+/* IE 6 & 7  don't do multiple backgrounds, so remove extra padding */
+* html #cartmenulink,
+*+html #cartmenulink {
+	padding-left : .7em;
+}
+
+/* IE 8 doesn't do multiple backgrounds, so remove extra padding */
+#listsmenulink {
+  padding-right: .7em\0/;
+}
+
+/* IE 8 doesn't do multiple backgrounds, so remove extra padding */
+#cartmenulink {
+  padding-left: .7em\0/;
 }
 
 #cartmenulink span#basketcount {
@@ -1812,49 +1803,6 @@ span.starMT {
 	left : auto;
 	right : auto;
 	top : auto;
-}
-
-a#listsmenulink, a#listsmenulink:hover {
-	color : #006699;
-	font-size : 105%;
-	font-weight : bold;
-	line-height : 185%;
-	margin-left : 1.5em;
-}
-
-a#cartmenulink, a#cartmenulink:hover {
-	color : #336600;
-	font-size : 105%;
-	font-weight : bold;
-	line-height : 185%;
-	margin-left : 1.5em;
-}
-* html a#cartmenulink {
-	padding-top: 0;
-}
- * html a#cartmenulink:hover {
-	padding-top : 0;
-}
-/* For IE7 */
-*:first-child+html a#listsmenulink { padding-top : 0; }
-*:first-child+html a#listsmenulink:hover { padding-top : 0; }
-*:first-child+html a#cartmenulink { padding-top : 0; }
-*:first-child+html a#cartmenulink:hover { padding-top : 0; }
-*:first-child+html #cartmenulink span i{ top : -4px; }
-*:first-child+html #listsmenulink span i { top : -5px; }
-
-#listsmenulink img {
-	background-image : none;
-	display : inline;
-	padding : 0 0 2px 0;
-}
-
-* html #cartmenulink {
-	border : 1px solid #336600;
-}
-
-* html #listsmenulink {
-	border : 1px solid #006699;
 }
 
 ul.ui-tabs-nav li {

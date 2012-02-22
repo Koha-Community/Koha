@@ -100,11 +100,11 @@
     <input type="submit" value="Go" id="searchsubmit" class="left" />
 [% IF ( opacbookbag ) %]<span id="cmspan"></span>[% END %]
 
-[% IF ( virtualshelves ) %]<a href="/cgi-bin/koha/opac-shelves.pl" id="listsmenulink" class=""><i></i><span><i></i><span></span>Lists </span></a>[% END %]
+[% IF ( virtualshelves ) %]<a href="/cgi-bin/koha/opac-shelves.pl" id="listsmenulink">Lists</a>[% END %]
     </form>
 [% ELSE %]
 <div style="width:80%;*margin-bottom:-30px;">
-[% IF ( virtualshelves ) %]<a href="/cgi-bin/koha/opac-shelves.pl" id="listsmenulink" class=""><i></i><span><i></i><span></span>Lists </span></a>[% END %][% IF ( opacbookbag ) %]<span id="cmspan"></span>[% END %]
+[% IF ( virtualshelves ) %]<a href="/cgi-bin/koha/opac-shelves.pl" id="listsmenulink">Lists</a>[% END %][% IF ( opacbookbag ) %]<span id="cmspan"></span>[% END %]
 </div>
 [% END %]
 

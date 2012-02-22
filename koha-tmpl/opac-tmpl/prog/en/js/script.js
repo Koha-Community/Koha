@@ -58,8 +58,9 @@ YAHOO.util.Event.onContentReady("changelanguage", function () {
 			
 // Build lists menu
 YAHOO.util.Event.onContentReady("listsmenu", function () {
+	YAHOO.widget.Menu.prototype.onRender = function () { };
     $("#listsmenu").css("display","block").css("visibility","hidden");
-	$("#listsmenulink").attr("href","#").find("span:eq(0)").append("<img src=\"/opac-tmpl/prog/images/list.gif\" width=\"5\" height=\"6\" alt=\"\" border=\"0\" />");
+	$("#listsmenulink").attr("href","#");
 	var listMenu = new YAHOO.widget.Menu("listsmenu");
 		listMenu.render();
 		listMenu.cfg.setProperty("context", ["listsmenulink", "tr", "br"]);
