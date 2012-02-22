@@ -197,7 +197,7 @@ if ( $query->param('place_reserve') ) {
         my $itemNum   = shift(@selectedItems);
         my $branch    = shift(@selectedItems); # i.e., branch code, not name
 
-        my $singleBranchMode = $template->param('singleBranchMode');
+        my $singleBranchMode = C4::Context->preference("singleBranchMode");
         if ($singleBranchMode || ! $OPACChooseBranch) { # single branch mode or disabled user choosing
             $branch = $borr->{'branchcode'};
         }
