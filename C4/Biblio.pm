@@ -70,6 +70,7 @@ BEGIN {
       &GetMarcControlnumber
       &GetMarcNotes
       &GetMarcISBN
+      &GetMarcISSN
       &GetMarcSubjects
       &GetMarcBiblio
       &GetMarcAuthors
@@ -1374,9 +1375,9 @@ Get the control number / record Identifier from the MARC record and return it.
 sub GetMarcControlnumber {
     my ( $record, $marcflavour ) = @_;
     my $controlnumber = "";
-    # Control number or Record identifier are the same field in MARC21 and UNIMARC
+    # Control number or Record identifier are the same field in MARC21, UNIMARC and NORMARC
     # Keep $marcflavour for possible later use
-    if ($marcflavour eq "MARC21" || $marcflavour eq "UNIMARC") {
+    if ($marcflavour eq "MARC21" || $marcflavour eq "UNIMARC" || $marcflavour eq "NORMARC") {
         my $controlnumberField = $record->field('001');
         if ($controlnumberField) {
             $controlnumber = $controlnumberField->data();
@@ -1390,7 +1391,7 @@ sub GetMarcControlnumber {
   $marcisbnsarray = GetMarcISBN( $record, $marcflavour );
 
 Get all ISBNs from the MARC record and returns them in an array.
-ISBNs stored in differents places depending on MARC flavour
+ISBNs stored in different fields depending on MARC flavour
 
 =cut
 
@@ -1425,12 +1426,38 @@ sub GetMarcISBN {
     return \@marcisbns;
 }    # end GetMarcISBN
 
+
+=head2 GetMarcISSN
+
+  $marcissnsarray = GetMarcISSN( $record, $marcflavour );
+
+Get all valid ISSNs from the MARC record and returns them in an array.
+ISSNs are stored in different fields depending on MARC flavour
+
+=cut
+
+sub GetMarcISSN {
+    my ( $record, $marcflavour ) = @_;
+    my $scope;
+    if ( $marcflavour eq "UNIMARC" ) {
+        $scope = '011';
+    }
+    else {    # assume MARC21 or NORMARC
+        $scope = '022';
+    }
+    my @marcissns;
+    foreach my $field ( $record->field($scope) ) {
+        push @marcissns, $field->subfield( 'a' );
+    }
+    return \@marcissns;
+}    # end GetMarcISSN
+
 =head2 GetMarcNotes
 
   $marcnotesarray = GetMarcNotes( $record, $marcflavour );
 
 Get all notes from the MARC record and returns them in an array.
-The note are stored in differents places depending on MARC flavour
+The note are stored in different fields depending on MARC flavour
 
 =cut
 
@@ -1470,7 +1497,7 @@ sub GetMarcNotes {
   $marcsubjcts = GetMarcSubjects($record,$marcflavour);
 
 Get all subjects from the MARC record and returns them in an array.
-The subjects are stored in differents places depending on MARC flavour
+The subjects are stored in different fields depending on MARC flavour
 
 =cut
 
@@ -1545,7 +1572,7 @@ sub GetMarcSubjects {
   authors = GetMarcAuthors($record,$marcflavour);
 
 Get all authors from the MARC record and returns them in an array.
-The authors are stored in differents places depending on MARC flavour
+The authors are stored in different fields depending on MARC flavour
 
 =cut
 
@@ -1682,7 +1709,7 @@ sub GetMarcUrls {
   $marcseriesarray = GetMarcSeries($record,$marcflavour);
 
 Get all series from the MARC record and returns them in an array.
-The series are stored in differents places depending on MARC flavour
+The series are stored in different fields depending on MARC flavour
 
 =cut
 

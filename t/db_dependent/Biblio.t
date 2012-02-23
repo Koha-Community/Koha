@@ -5,12 +5,12 @@
 
 use strict;
 use warnings;
-use Test::More tests => 9;
+use Test::More tests => 17;
 use MARC::Record;
 use C4::Biblio;
 
 BEGIN {
-	use_ok('C4::Biblio');
+    use_ok('C4::Biblio');
 }
 
 my $isbn = '0590353403';
@@ -68,6 +68,46 @@ eval {
     $success = 0;
 };
 ok($success, "ModBiblio handles 655 with no subfields");
+
+# Testing GetMarcISSN
+my $issns;
+$issns = GetMarcISSN( $marc_record, 'MARC21' );
+is( $issns->[0], undef,
+    'GetMarcISSN handles records without 022 (list is empty)' );
+is( scalar @$issns, 0, 'GetMarcISSN handles records without 022 (number of elements correct)' );
+
+my $issn = '1234-1234';
+$field = MARC::Field->new( '022', '', '', 'a', => $issn );
+$marc_record->append_fields($field);
+$issns = GetMarcISSN( $marc_record, 'MARC21' );
+is( $issns->[0], $issn,
+    'GetMarcISSN handles records with single 022 (first element is correct)' );
+is( scalar @$issns, 1, 'GetMARCISSN handles records with single 022 (number of elements correct)'
+);
+
+my @more_issns = qw/1111-1111 2222-2222 3333-3333/;
+foreach (@more_issns) {
+    $field = MARC::Field->new( '022', '', '', 'a', => $_ );
+    $marc_record->append_fields($field);
+}
+$issns = GetMarcISSN( $marc_record, 'MARC21' );
+is( scalar @$issns, 4, 'GetMARCISSN handles records with multiple 022 (number of elements correct)'
+);
+
+# Testing GetMarcControlnumber
+my $controlnumber;
+$controlnumber = GetMarcControlnumber( $marc_record, 'MARC21' );
+is( $controlnumber, '', 'GetMarcControlnumber handles records without 001' );
+
+$field = MARC::Field->new( '001', '' );
+$marc_record->append_fields($field);
+$controlnumber = GetMarcControlnumber( $marc_record, 'MARC21' );
+is( $controlnumber, '', 'GetMarcControlnumber handles records with empty 001' );
+
+$field = $marc_record->field('001');
+$field->update('123456789X');
+$controlnumber = GetMarcControlnumber( $marc_record, 'MARC21' );
+is( $controlnumber, '123456789X', 'GetMarcControlnumber handles records with 001' );
 
 # clean up after ourselves
 DelBiblio($biblionumber);
