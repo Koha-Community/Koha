@@ -58,7 +58,7 @@ function Focus$function_name(subfield_managed) {
 	if ( document.getElementById(\"$field_number\").value ) {
 	}
 	else {
-		document.getElementById(\"$field_number\").value='$dateentered' + 't        xxu||||| |||| 00| 0 eng d';
+		document.getElementById(\"$field_number\").value='$dateentered' + 'b        xxu||||| |||| 00| 0 eng d';
 	}
     return 1;
 }
@@ -96,8 +96,7 @@ sub plugin {
         }
     );
 
-    #	$result = "      t        xxu           00  0 eng d" unless $result;
-    $result = "$dateentered" . "t        xxu||||| |||| 00| 0 eng d" unless $result;
+    $result = "$dateentered" . "b        xxu||||| |||| 00| 0 eng d" unless $result;
     my $errorXml = '';
     # Check if the xml, xsd exists and is validated
     my $dir = C4::Context->config('intrahtdocs') . '/prog/' . $template->{lang} . '/modules/cataloguing/value_builder/';
