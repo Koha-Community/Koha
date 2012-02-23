@@ -861,6 +861,7 @@ Cancels all reserves with an expiration date from before today.
 
 sub CancelExpiredReserves {
 
+    # Cancel reserves that have passed their expiration date.
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare( "
         SELECT * FROM reserves WHERE DATE(expirationdate) < DATE( CURDATE() ) 
@@ -872,6 +873,24 @@ sub CancelExpiredReserves {
         CancelReserve( $res->{'biblionumber'}, '', $res->{'borrowernumber'} );
     }
   
+    # Cancel reserves that have been waiting too long
+    if ( C4::Context->preference("ExpireReservesMaxPickUpDelay") ) {
+        my $max_pickup_delay = C4::Context->preference("ReservesMaxPickUpDelay");
+        my $charge = C4::Context->preference("ExpireReservesMaxPickUpDelayCharge");
+
+        my $query = "SELECT * FROM reserves WHERE TO_DAYS( NOW() ) - TO_DAYS( waitingdate ) > ? AND found = 'W' AND priority = 0";
+        $sth = $dbh->prepare( $query );
+        $sth->execute( $max_pickup_delay );
+
+        while (my $res = $sth->fetchrow_hashref ) {
+            if ( $charge ) {
+                manualinvoice($res->{'borrowernumber'}, $res->{'itemnumber'}, 'Hold waiting too long', 'F', $charge);
+            }
+
+            CancelReserve( $res->{'biblionumber'}, '', $res->{'borrowernumber'} );
+        }
+    }
+
 }
 
 =head2 CancelReserve
@@ -1138,13 +1157,9 @@ sub ModReserveStatus {
 
     #first : check if we have a reservation for this item .
     my ($itemnumber, $newstatus) = @_;
-    my $dbh          = C4::Context->dbh;
-    my $query = " UPDATE reserves
-    SET    found=?,waitingdate = now()
-    WHERE itemnumber=?
-      AND found IS NULL
-      AND priority = 0
-    ";
+    my $dbh = C4::Context->dbh;
+
+    my $query = "UPDATE reserves SET found = ?, waitingdate = NOW() WHERE itemnumber = ? AND found IS NULL AND priority = 0";
     my $sth_set = $dbh->prepare($query);
     $sth_set->execute( $newstatus, $itemnumber );
 
@@ -1197,15 +1212,15 @@ sub ModReserveAffect {
     }
     else {
     # affect the reserve to Waiting as well.
-    $query = "
-        UPDATE reserves
-        SET     priority = 0,
-                found = 'W',
-                waitingdate=now(),
-                itemnumber = ?
-        WHERE borrowernumber = ?
-          AND biblionumber = ?
-    ";
+        $query = "
+            UPDATE reserves
+            SET     priority = 0,
+                    found = 'W',
+                    waitingdate = NOW(),
+                    itemnumber = ?
+            WHERE borrowernumber = ?
+              AND biblionumber = ?
+        ";
     }
     $sth = $dbh->prepare($query);
     $sth->execute( $itemnumber, $borrowernumber,$biblionumber);
@@ -1907,7 +1922,6 @@ sub MergeHolds {
         }
     }
 }
-
 
 =head2 ReserveSlip
 

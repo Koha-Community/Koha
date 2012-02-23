@@ -284,6 +284,17 @@ Circulation:
               class: integer
             - days.
         -
+            - pref: ExpireReservesMaxPickUpDelay
+              choices:
+                  yes: Allow
+                  no: "Don't allow"
+            - "holds to expire automatically if they have not been picked by within the time period specified in ReservesMaxPickUpDelay"
+        -
+            - If using ExpireReservesMaxPickUpDelay, charge a borrower who allows his or her waiting hold to expire a fee of
+            - pref: ExpireReservesMaxPickUpDelayCharge
+              class: currency
+            - [% local_currency %].
+        -
             - Satisfy holds from the libraries
             - pref: StaticHoldsQueueWeight
               class: multi
