@@ -146,7 +146,13 @@ function placeHold () {
 		[% END %] 
 		[% IF ( paramsloo.duplicatebiblio ) %]
 		<div class="dialog alert">A record matching barcode <b>[% paramsloo.duplicatebiblio %]</b> has already been added.</div>
-		[% END %] 
+		[% END %]
+                [% IF ( paramsloo.nothingdeleted) %]
+                      <div class="dialog message">Warning: You could not delete any selected items from this shelf.</div>
+                [% END %]
+                [% IF ( paramsloo.somedeleted) %]
+                      <div class="dialog message">Warning: You could not delete all selected items from this shelf.</div>
+                [% END %]
 	</div>
 </div>
 [% END %]
