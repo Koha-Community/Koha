@@ -112,7 +112,7 @@ my @bordat;
 $bordat[0] = $borr;
 
 # Warningdate is the date that the warning starts appearing
-if ( C4::Context->preference('NotifyBorrowerDeparture') &&
+if ( $borr->{dateexpiry} && C4::Context->preference('NotifyBorrowerDeparture') &&
     Date_to_Days(Add_Delta_Days($warning_year,$warning_month,$warning_day,- C4::Context->preference('NotifyBorrowerDeparture'))) <
     Date_to_Days( $today_year, $today_month, $today_day ) ) 
 {
