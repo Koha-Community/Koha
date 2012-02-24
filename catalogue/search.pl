@@ -265,7 +265,7 @@ foreach my $advanced_srch_type (@advanced_search_types) {
         push @advancedsearchesloop, \%search_code;
     } else {
     # covers all the other cases: non-itemtype authorized values
-       my $advsearchtypes = GetAuthorisedValues($advanced_srch_type, '', 'opac');
+       my $advsearchtypes = GetAuthorisedValues($advanced_srch_type);
         my @authvalueloop;
 	for my $thisitemtype (@$advsearchtypes) {
 		my %row =(
