@@ -48,6 +48,7 @@ sub one_parcel : Test( 17 ) {
                                         undef,         # $quantrec,
                                         undef,         # $user,
                                         undef,         # $cost,
+                                        undef,         # $ecost,
                                         $invoice,         # $invoiceno,
                                         undef,         # $freight,
                                         undef,         # $rrp,

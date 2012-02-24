@@ -100,7 +100,7 @@ my $hasRouting = check_routing($subscriptionid);
 
 # COMMENT hdl : IMHO, we should think about passing more and more data hash to template->param rather than duplicating code a new coding Guideline ?
 
-for my $date qw(startdate enddate firstacquidate histstartdate histenddate){
+for my $date ( qw(startdate enddate firstacquidate histstartdate histenddate) ) {
     $$subs{$date}      = format_date($$subs{$date}) if $date && $$subs{$date};
 }
 $subs->{location} = GetKohaAuthorisedValueLib("LOC",$subs->{location});
@@ -119,6 +119,33 @@ if (! $subs->{periodicity}) {
     $subs->{periodicity} = '0';
 }
 my $default_bib_view = get_default_view();
+
+my ( $order, $bookseller, $tmpl_infos );
+if ( defined $subscriptionid ) {
+    my $lastOrderNotReceived = GetLastOrderNotReceivedFromSubscriptionid $subscriptionid;
+    my $lastOrderReceived = GetLastOrderReceivedFromSubscriptionid $subscriptionid;
+    if ( defined $lastOrderNotReceived ) {
+        my $basket = GetBasket $lastOrderNotReceived->{basketno};
+        my $bookseller = GetBookSellerFromId $basket->{booksellerid};
+        ( $tmpl_infos->{valuegsti_ordered}, $tmpl_infos->{valuegste_ordered} ) = get_value_with_gst_params ( $lastOrderNotReceived->{ecost}, $lastOrderNotReceived->{gstrate}, $bookseller );
+        $tmpl_infos->{valuegsti_ordered} = sprintf( "%.2f", $tmpl_infos->{valuegsti_ordered} );
+        $tmpl_infos->{valuegste_ordered} = sprintf( "%.2f", $tmpl_infos->{valuegste_ordered} );
+        $tmpl_infos->{budget_name_ordered} = GetBudgetName $lastOrderNotReceived->{budget_id};
+        $tmpl_infos->{basketno} = $lastOrderNotReceived->{basketno};
+        $tmpl_infos->{ordered_exists} = 1;
+    }
+    if ( defined $lastOrderReceived ) {
+        my $basket = GetBasket $lastOrderReceived->{basketno};
+        my $bookseller = GetBookSellerFromId $basket->{booksellerid};
+        ( $tmpl_infos->{valuegsti_spent}, $tmpl_infos->{valuegste_spent} ) = get_value_with_gst_params ( $lastOrderReceived->{unitprice}, $lastOrderReceived->{gstrate}, $bookseller );
+        $tmpl_infos->{valuegsti_spent} = sprintf( "%.2f", $tmpl_infos->{valuegsti_spent} );
+        $tmpl_infos->{valuegste_spent} = sprintf( "%.2f", $tmpl_infos->{valuegste_spent} );
+        $tmpl_infos->{budget_name_spent} = GetBudgetName $lastOrderReceived->{budget_id};
+        $tmpl_infos->{invoicenumber} = $lastOrderReceived->{booksellerinvoicenumber};
+        $tmpl_infos->{spent_exists} = 1;
+    }
+}
+
 $template->param(
 	subscriptionid => $subscriptionid,
     serialslist => \@serialslist,
@@ -138,7 +165,8 @@ $template->param(
     intranetcolorstylesheet => C4::Context->preference('intranetcolorstylesheet'),
     irregular_issues => scalar @irregular_issues,
     default_bib_view => $default_bib_view,
-    (uc(C4::Context->preference("marcflavour"))) => 1
+    (uc(C4::Context->preference("marcflavour"))) => 1,
+    show_acquisition_details => defined $tmpl_infos->{ordered_exists} || defined $tmpl_infos->{spent_exists} ? 1 : 0,
     );
 
 output_html_with_http_headers $query, $cookie, $template->output;

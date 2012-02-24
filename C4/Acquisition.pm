@@ -1021,7 +1021,7 @@ Else, the upcoming July 1st is used.
 
 =item defaults entrydate to Now
 
-The following keys are used: "biblionumber", "title", "basketno", "quantity", "notes", "biblioitemnumber", "rrp", "ecost", "gst", "unitprice", "subscription", "sort1", "sort2", "booksellerinvoicenumber", "listprice", "budgetdate", "purchaseordernumber", "branchcode", "booksellerinvoicenumber", "bookfundid".
+The following keys are used: "biblionumber", "title", "basketno", "quantity", "notes", "biblioitemnumber", "rrp", "ecost", "gstrate", "unitprice", "subscription", "sort1", "sort2", "booksellerinvoicenumber", "listprice", "budgetdate", "purchaseordernumber", "branchcode", "booksellerinvoicenumber", "bookfundid".
 
 =back
 
@@ -1270,7 +1270,7 @@ C<$ordernumber>.
 
 sub ModReceiveOrder {
     my (
-        $biblionumber,    $ordernumber,  $quantrec, $user, $cost,
+        $biblionumber,    $ordernumber,  $quantrec, $user, $cost, $ecost,
         $invoiceid, $rrp, $budget_id, $datereceived, $received_items
     )
     = @_;
@@ -1306,6 +1306,7 @@ sub ModReceiveOrder {
         ");
 
         $sth->execute($order->{quantity} - $quantrec, $ordernumber);
+
         $sth->finish;
 
         delete $order->{'ordernumber'};
@@ -1315,6 +1316,7 @@ sub ModReceiveOrder {
         $order->{'invoiceid'} = $invoiceid;
         $order->{'unitprice'} = $cost;
         $order->{'rrp'} = $rrp;
+        $order->{ecost} = $ecost;
         $order->{'orderstatus'} = 3;    # totally received
         $new_ordernumber = NewOrder($order);
 
@@ -1326,9 +1328,9 @@ sub ModReceiveOrder {
     } else {
         $sth=$dbh->prepare("update aqorders
                             set quantityreceived=?,datereceived=?,invoiceid=?,
-                                unitprice=?,rrp=?
+                                unitprice=?,rrp=?,ecost=?
                             where biblionumber=? and ordernumber=?");
-        $sth->execute($quantrec,$datereceived,$invoiceid,$cost,$rrp,$biblionumber,$ordernumber);
+        $sth->execute($quantrec,$datereceived,$invoiceid,$cost,$rrp,$ecost,$biblionumber,$ordernumber);
         $sth->finish;
     }
     return ($datereceived, $new_ordernumber);
@@ -1598,6 +1600,7 @@ sub GetParcel {
                 aqorders.listprice,
                 aqorders.rrp,
                 aqorders.ecost,
+                aqorders.gstrate,
                 biblio.title
         FROM aqorders
         LEFT JOIN aqbasket ON aqbasket.basketno=aqorders.basketno

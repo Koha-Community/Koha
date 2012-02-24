@@ -106,7 +106,7 @@ $(document).ready(function()
         [% END %]
 
         $("#quantity").change(function() {
-            calcNeworderTotal();
+            updateCosts();
         });
 
         //We apply the fonction only for modify option
@@ -143,7 +143,7 @@ $(document).ready(function()
 //]]>
 </script>
 </head>
-<body id="acq_neworderempty" class="acq">
+<body id="acq_neworderempty" class="acq" onload="updateCosts()">
 
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'acquisitions-search.inc' %]
@@ -222,18 +222,13 @@ $(document).ready(function()
         <input type="hidden" name="booksellerid" value="[% booksellerid %]" />
         <input type="hidden" name="biblionumber" value="[% biblionumber %]" />
         <input type="hidden" name="biblioitemnumber" value="[% biblioitemnumber %]" />
-        <input type="hidden" name="discount" value="[% discount %]" />
-        <input type="hidden" name="listinc" value="[% listincgst %]" />
-<!--        <input type="hidden" name="currency" value="[% currency %]" />-->
-        <input type="hidden" name="applygst" value="[% gstreg %]" />
-        <input type="hidden" name="invoiceincgst" value="[% invoiceincgst %]" />
-        <input type="hidden" name="gstrate" value="[% gstrate %]" />
+        <input type="hidden" name="listinc" id="listinc" value="[% listincgst %]" />
+        <input type="hidden" name="applygst" id="applygst" value="[% gstreg %]" />
+        <input type="hidden" name="invoiceincgst" id="invoiceincgst" value="[% invoiceincgst %]" />
         <input type="hidden" name="suggestionid" value="[% suggestionid %]" />
         <input type="hidden" name="import_batch_id" value="[% import_batch_id %]" />
+        <input type="hidden" name="currency_rate" id="currency_rate" value="[% currency_rate %]" />
 
-        [% FOREACH loop_currencie IN loop_currencies %]
-            <input type="hidden" id="[% loop_currencie.currcode %]"  name="[% loop_currencie.currcode %]" value="[% loop_currencie.rate %]" />
-        [% END %]
         <ol><li>
             [% IF ( biblionumber ) %]
             <span class="label">Title</span>
@@ -394,7 +389,7 @@ $(document).ready(function()
                     [% IF (AcqCreateItemOrdering) %]
                         <input type="text" readonly="readonly" size="20" id="quantity" name="quantity" value="0" />
                     [% ELSE %]
-                        <input type="text" size="20" id="quantity" name="quantity" value="[% quantityrec %]" />
+                        <input type="text" size="20" id="quantity" name="quantity" value="[% quantityrec %]" onchange="updateCosts();" />
                     [% END %]
                 [% END %]
                 <!-- origquantityrec only here for javascript compatibility (additem.js needs it, useless here, usefull when receiveing an order -->
@@ -428,7 +423,7 @@ $(document).ready(function()
 			<input type="hidden" size="10" name="currency" id="currency" value="[% currency %]" />[% currency %]
                 [% ELSE %]
 			<label for="currency">Currency:</label>
-			<select name="currency" id="currency" onchange="calcNeworderTotal();">
+			<select name="currency" id="currency" onchange="updateCosts();">
 			[% FOREACH loop_currencie IN loop_currencies %]
 	                [% IF ( loop_currencie.selected ) %]<option value="[% loop_currencie.currcode %]" selected="selected">[% loop_currencie.currcode %]</option>[% ELSE %]<option value="[% loop_currencie.currcode %]">[% loop_currencie.currcode %]</option>[% END %][% END %]
 			</select>
@@ -436,11 +431,11 @@ $(document).ready(function()
                 </li>
             <li>
                 [% IF ( close ) %]
-            <span class="label">Vendor price: </span>
+                    <span class="label">Vendor price: </span>
                     <input type="hidden" size="20" name="listprice" id="listprice" value="[% listprice %]" />[% listprice %]
                 [% ELSE %]
                 <label for="listprice">Vendor price: </label>
-                    <input type="text" size="20" name="listprice" id="listprice" value="[% listprice %]" onchange="calcNeworderTotal()" />
+                    <input type="text" size="20" name="listprice" id="listprice" value="[% listprice %]" onchange="updateCosts()" />
                 [% END %]
             </li>
             [% UNLESS ( close ) %]
@@ -453,53 +448,73 @@ $(document).ready(function()
                 [% END %]
             </li>
             [% END %]
-			<li>
+            <li>
                 [% IF ( close ) %]
-            <span class="label">Replacement cost: </span>
+                    <span class="label">gstrate: </span>
+                    <input type="hidden" size="20" name="gstrate" id="gstrate" value="[% gstrate %]" />[% gstrate %]%
+                [% ELSE %]
+                    <label for="gst">gstrate: </label>
+                    <select name="gstrate" id="gstrate" onchange="updateCosts();">
+                    [% FOREACH gst IN gst_values %]
+                      [% IF ( gst.option == gstrate ) %]
+                        <option value="[% gst.option %]" selected="selected">[% gst.option * 100 | format("%.1f") %]%</option>
+                      [% ELSE %]
+                        <option value="[% gst.option %]">[% gst.option * 100 | format("%.1f") %]%</option>
+                      [% END %]
+                    [% END %]
+                    </select>
+                [% END %]
+            </li>
+            <li>
+                <label for="discount">Discount: </label>
+                [% IF ( close ) %]
+                    [% IF ( orderdiscount ) %]
+                        <input type="hidden" name="discount" id="discount" value="[% orderdiscount %]" />[% orderdiscount_2dp %]%
+                    [% ELSE %]
+                        <input type="hidden" name="discount" id="discount" value="[% discount %]" />[% discount_2dp %]%
+                    [% END %]
+                [% ELSE %]
+                    [% IF ( orderdiscount ) %]
+                        <input type="text" size="6" name="discount" id="discount" value="[% orderdiscount %]" onchange="updateCosts();" />%
+                    [% ELSE %]
+                        <input type="text" size="6" name="discount" id="discount" value="[% discount %]" onchange="updateCosts();" />%
+                    [% END %]
+                [% END %]
+            </li>
+            <li>
+                [% IF ( close ) %]
+                    <span class="label">Replacement cost: </span>
                     <input type="hidden" size="20" name="rrp" id="rrp" value="[% rrp %]" />[% rrp %]
                 [% ELSE %]
-                <label for="rrp">Replacement cost: </label>
+                    <label for="rrp">Replacement cost: </label>
                     <input type="text" size="20" name="rrp" id="rrp" value="[% rrp %]" /> (adjusted for [% cur_active %])
                 [% END %]
             </li>
             <li>
                 [% IF ( close ) %]
-            <label for="ecost">Budgeted cost: </label>
+                    <label for="ecost">Budgeted cost: </label>
                     <input type="text" size="20" name="ecost" id="ecost" value="[% ecost %]" readonly="readonly"  />
                 [% ELSE %]
-                <label for="ecost">Budgeted cost: </label>
+                    <label for="ecost">Budgeted cost: </label>
                     <input type="text" size="20" name="ecost" id="ecost" value="[% ecost %]" />
                 [% END %]
-                [% IF ( discount_2dp ) %]  (adjusted for [% discount_2dp %]% discount)  [% END %]
-
             </li>
-            [% IF ( GST ) %]
             <li>
                 [% IF ( close ) %]
-            <label for="GST">Budgeted GST: </label>
-                <input type="text" id="" size="20" name="gst" value="" id="GST" readonly="readonly" />
+                    <label for="total">Total: </label>
+                    <input type="text" id="total" size="20" name="total" value="[% total %]" readonly="readonly" />
                 [% ELSE %]
-                <label for="GST">Budgeted GST: </label>
-                <input type="text" size="20" name="gst" id="GST" value="" />
-                [% END %]
-            </li>
-            [% END %]
-            <li>
-                [% IF ( close ) %]
-            <label for="total">Total: </label>
-                <input type="text" id="total" size="20" name="total" value="[% total %]" readonly="readonly" />
-                [% ELSE %]
-                <label for="total">Total: </label>
-                <input type="text" id="total" size="20" name="total" value="[% total %]" /> (budgeted cost * quantity)
+                    <label for="total">Total: </label>
+                    <input type="text" id="total" size="20" name="total" value="[% total %]" /> (budgeted cost * quantity)
                 [% END %]
             </li>
             <li>
                 [% IF ( close ) %]
-            <label for="cost">Actual cost: </label>
-                <input type="text" id="unitprice" size="20" name="unitprice" value="[% unitprice %]" readonly="readonly" />
+                    <label for="unitprice">Actual cost: </label>
+                    <input type="text" id="unitprice" size="20" name="unitprice" value="[% unitprice %]" readonly="readonly" />
                 [% ELSE %]
-                <label for="cost">Actual cost: </label>
-                <input type="text" id="unitprice" size="20" name="unitprice" value="[% unitprice %]" />
+                    <label for="unitprice">Actual cost: </label>
+                    <input type="text" id="unitprice" size="20" name="unitprice" value="[% unitprice %]" />
                 [% END %]
             </li>
             <li>

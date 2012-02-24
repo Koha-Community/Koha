@@ -276,6 +276,7 @@ sub create_order {
                                         undef,         # $quantrec,
                                         undef,         # $user,
                                         undef,         # $cost,
+                                        undef,         # $ecost,
                                         $param{'invoice'},         # $invoiceno,
                                         undef,         # $freight,
                                         undef,         # $rrp,

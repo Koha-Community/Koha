@@ -71,6 +71,43 @@ use JSON;
 
 my $input=new CGI;
 
+sub get_value_with_gst_params {
+    my $value = shift;
+    my $gstrate = shift;
+    my $bookseller = shift;
+    if ( $bookseller->{listincgst} ) {
+        if ( $bookseller->{invoiceincgst} ) {
+            return $value;
+        } else {
+            return $value / ( 1 + $gstrate );
+        }
+    } else {
+        if ( $bookseller->{invoiceincgst} ) {
+            return $value * ( 1 + $gstrate );
+        } else {
+            return $value;
+        }
+    }
+}
+
+sub get_gste {
+    my $value = shift;
+    my $gstrate = shift;
+    my $bookseller = shift;
+    return $bookseller->{invoiceincgst}
+        ? $value / ( 1 + $gstrate )
+        : $value;
+}
+
+sub get_gst {
+    my $value = shift;
+    my $gstrate = shift;
+    my $bookseller = shift;
+    return $bookseller->{invoiceincgst}
+        ? $value / ( 1 + $gstrate ) * $gstrate
+        : $value * ( 1 + $gstrate ) - $value;
+}
+
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "acqui/parcel.tmpl",
                  query => $input,
@@ -125,21 +162,33 @@ my $countlines    = scalar @parcelitems;
 my $totalprice    = 0;
 my $totalquantity = 0;
 my $total;
-my $tototal;
 my @loop_received = ();
+my @book_foot_loop;
+my %foot;
+my $total_quantity = 0;
+my $total_gste = 0;
+my $total_gsti = 0;
 
-for (my $i = 0 ; $i < $countlines ; $i++) {
-
-    $total = ($parcelitems[$i]->{'unitprice'}) * $parcelitems[$i]->{'quantityreceived'};
-    $parcelitems[$i]->{'unitprice'} += 0;
+for my $item ( @parcelitems ) {
+    $item->{unitprice} = get_value_with_gst_params( $item->{unitprice}, $item->{gstrate}, $bookseller );
+    $total = ( $item->{'unitprice'} ) * $item->{'quantityreceived'};
+    $item->{'unitprice'} += 0;
     my %line;
-    %line          = %{ $parcelitems[$i] };
+    %line          = %{ $item };
+    my $ecost = get_value_with_gst_params( $line{ecost}, $line{gstrate}, $bookseller );
+    $line{ecost} = sprintf( "%.2f", $ecost );
     $line{invoice} = $invoice->{invoicenumber};
-    $line{gst}     = $gst;
     $line{total} = sprintf($cfstr, $total);
     $line{booksellerid} = $invoice->{booksellerid};
-    $totalprice += $parcelitems[$i]->{'unitprice'};
-    $line{unitprice} = sprintf($cfstr, $parcelitems[$i]->{'unitprice'});
+    $totalprice += $item->{'unitprice'};
+    $line{unitprice} = sprintf( $cfstr, $item->{'unitprice'} );
+    my $gste = get_gste( $line{total}, $line{gstrate}, $bookseller );
+    my $gst = get_gst( $line{total}, $line{gstrate}, $bookseller );
+    $foot{$line{gstrate}}{gstrate} = $line{gstrate};
+    $foot{$line{gstrate}}{value} += sprintf( "%.2f", $gst );
+    $total_quantity += $line{quantity};
+    $total_gste += $gste;
+    $total_gsti += $gste + $gst;
 
     my $suggestion   = GetSuggestionInfoFromBiblionumber($line{biblionumber});
     $line{suggestionid}         = $suggestion->{suggestionid};
@@ -154,11 +203,16 @@ for (my $i = 0 ; $i < $countlines ; $i++) {
         }
     }
 
-    push @loop_received, \%line;
-    $totalquantity += $parcelitems[$i]->{'quantityreceived'};
-    $tototal       += $total;
-}
+    my $budget = GetBudget( $line{budget_id} );
+    $line{budget_name} = $budget->{'budget_name'};
 
+    push @loop_received, \%line;
+    $totalquantity += $item->{'quantityreceived'};
+
+}
+push @book_foot_loop, map { $_ } values %foot;
+
+my @loop_orders = ();
 if(!defined $invoice->{closedate}) {
     my $pendingorders;
     if($input->param('op') eq "search"){
@@ -174,29 +228,22 @@ if(!defined $invoice->{closedate}) {
     }
     my $countpendings = scalar @$pendingorders;
 
-    # pending orders totals
-    my ($totalPunitprice, $totalPquantity, $totalPecost, $totalPqtyrcvd);
-    my $ordergrandtotal;
-    my @loop_orders = ();
     for (my $i = 0 ; $i < $countpendings ; $i++) {
         my %line;
         %line = %{$pendingorders->[$i]};
 
-        $line{quantity}+=0;
-        $line{quantityreceived}+=0;
+        my $ecost = get_value_with_gst_params( $line{ecost}, $line{gstrate}, $bookseller );
+        $line{unitprice} = get_value_with_gst_params( $line{unitprice}, $line{gstrate}, $bookseller );
+        $line{quantity} += 0;
+        $line{quantityreceived} += 0;
         $line{unitprice}+=0;
-        $totalPunitprice += $line{unitprice};
-        $totalPquantity +=$line{quantity};
-        $totalPqtyrcvd +=$line{quantityreceived};
-        $totalPecost += $line{ecost};
-        $line{ecost} = sprintf("%.2f",$line{ecost});
-        $line{ordertotal} = sprintf("%.2f",$line{ecost}*$line{quantity});
+        $line{ecost} = sprintf( "%.2f", $ecost );
+        $line{ordertotal} = sprintf( "%.2f", $ecost * $line{quantity} );
         $line{unitprice} = sprintf("%.2f",$line{unitprice});
         $line{invoice} = $invoice;
-        $line{gst} = $gst;
-        $line{total} = $total;
         $line{booksellerid} = $booksellerid;
-        $ordergrandtotal += $line{ecost} * $line{quantity};
+
+
 
         my $biblionumber = $line{'biblionumber'};
         my $countbiblio = CountBiblioInOrders($biblionumber);
@@ -231,6 +278,8 @@ if(!defined $invoice->{closedate}) {
         $line{holds}                = $holds;
         $line{holds_on_order}       = $itemholds?$itemholds:$holds if $line{left_holds_on_order};
 
+        my $budget = GetBudget( $line{budget_id} );
+        $line{budget_name} = $budget->{'budget_name'};
 
         push @loop_orders, \%line if ($i >= $startfrom and $i < $startfrom + $resultsperpage);
     }
@@ -269,16 +318,9 @@ if(!defined $invoice->{closedate}) {
     }
 
     $template->param(
-        countpending => $countpendings,
         loop_orders  => \@loop_orders,
-        ordergrandtotal => sprintf($cfstr, $ordergrandtotal),
-        totalPunitprice => sprintf("%.2f", $totalPunitprice),
-        totalPquantity  => $totalPquantity,
-        totalPqtyrcvd   => $totalPqtyrcvd,
-        totalPecost     => sprintf("%.2f", $totalPecost),
     );
 }
-
 
 $template->param(
     invoiceid             => $invoice->{invoiceid},
@@ -289,15 +331,17 @@ $template->param(
     formatteddatereceived => $datereceived->output(),
     name                  => $bookseller->{'name'},
     booksellerid          => $bookseller->{id},
-    gst                   => $gst,
     countreceived         => $countlines,
     loop_received         => \@loop_received,
+    booksellerid          => $booksellerid,
+    loop_orders           => \@loop_orders,
+    book_foot_loop        => \@book_foot_loop,
     totalprice            => sprintf($cfstr, $totalprice),
     totalquantity         => $totalquantity,
-    tototal               => sprintf($cfstr, $tototal),
-    gst                   => $gst,
-    grandtot              => sprintf($cfstr, $tototal + $gst),
     resultsperpage        => $resultsperpage,
-    (uc(C4::Context->preference("marcflavour"))) => 1
+    (uc(C4::Context->preference("marcflavour"))) => 1,
+    total_quantity       => $total_quantity,
+    total_gste           => sprintf( "%.2f", $total_gste ),
+    total_gsti           => sprintf( "%.2f", $total_gsti ),
 );
 output_html_with_http_headers $input, $cookie, $template->output;

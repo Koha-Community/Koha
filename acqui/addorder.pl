@@ -153,39 +153,9 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 my $orderinfo					= $input->Vars;
 $orderinfo->{'list_price'}    ||=  0;
 $orderinfo->{'uncertainprice'} ||= 0;
-#my $ordernumber        = $input->param('ordernumber');
-#my $basketno      = $input->param('basketno');
-#my $booksellerid  = $input->param('booksellerid');
-#my $existing      = $input->param('existing');    # existing biblio, (not basket or order)
-#my $title         = $input->param('title');
-#my $author        = $input->param('author');
-#my $publicationyear= $input->param('publicationyear');
-#my $isbn          = $input->param('ISBN');
-#my $itemtype      = $input->param('format');
-#my $quantity      = $input->param('quantity');		# FIXME: else ERROR!
-#my $branch        = $input->param('branch');
-#my $series        = $input->param('series');
-#my $notes         = $input->param('notes');
-#my $budget_id     = $input->param('budget_id');
-#my $sort1         = $input->param('sort1');
-#my $sort2         = $input->param('sort2');
-#my $rrp           = $input->param('rrp');
-#my $ecost         = $input->param('ecost');
-#my $gst           = $input->param('GST');
-#my $budget        = $input->param('budget');
-#my $cost          = $input->param('cost');
-#my $sub           = $input->param('sub');
-#my $purchaseorder = $input->param('purchaseordernumber');
-#my $invoice       = $input->param('invoice');
-#my $publishercode = $input->param('publishercode');
-#my $suggestionid  = $input->param('suggestionid');
-#my $biblionumber  = $input->param('biblionumber');
-#my $uncertainprice = $input->param('uncertainprice');
-#my $import_batch_id= $input->param('import_batch_id');
-#
-#my $createbibitem = $input->param('createbibitem');
-#
-my $user          = $input->remote_user;
+
+my $user = $input->remote_user;
+
 # create, modify or delete biblio
 # create if $quantity>=0 and $existing='no'
 # modify if $quantity>=0 and $existing='yes'
@@ -208,6 +178,13 @@ if ( $orderinfo->{quantity} ne '0' ) {
                 "biblio.copyrightdate"        => $$orderinfo{publicationyear} ? $$orderinfo{publicationyear}: "",
                 "biblioitems.itemtype"        => $$orderinfo{itemtype} ? $$orderinfo{itemtype} : "",
                 "biblioitems.editionstatement"=> $$orderinfo{editionstatement} ? $$orderinfo{editionstatement} : "",
+                "aqorders.branchcode"         => $$orderinfo{branchcode} ? $$orderinfo{branchcode} : "",
+                "aqorders.quantity"           => $$orderinfo{quantity} ? $$orderinfo{quantity} : "",
+                "aqorders.listprice"          => $$orderinfo{listprice} ? $$orderinfo{listprice} : "",
+                "aqorders.uncertainprice"     => $$orderinfo{uncertainprice} ? $$orderinfo{uncertainprice} : "",
+                "aqorders.rrp"                => $$orderinfo{rrp} ? $$orderinfo{rrp} : "",
+                "aqorders.ecost"              => $$orderinfo{ecost} ? $$orderinfo{ecost} : "",
+                "aqorders.discount"           => $$orderinfo{discount} ? $$orderinfo{discount} : "",
             });
 
         # create the record in catalogue, with framework ''
@@ -219,6 +196,8 @@ if ( $orderinfo->{quantity} ne '0' ) {
 		$orderinfo->{biblioitemnumber}=$bibitemnum;
 		$orderinfo->{biblionumber}=$biblionumber;
     }
+
+    $orderinfo->{unitprice} = $orderinfo->{ecost} if not defined $orderinfo->{unitprice} or $orderinfo->{unitprice} eq '';
 
     # if we already have $ordernumber, then it's an ordermodif
     if ($$orderinfo{ordernumber}) {

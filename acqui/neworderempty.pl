@@ -331,6 +331,13 @@ $template->param(
     budget_name  => $budget_name
 ) if ($close);
 
+# get option values for gist syspref
+my @gst_values = map {
+    option => $_
+}, split( '\|', C4::Context->preference("gist") );
+
+my $cur = GetCurrency();
+
 $template->param(
     existing         => $biblionumber,
     ordernumber           => $ordernumber,
@@ -350,18 +357,21 @@ $template->param(
     suggestionid         => $suggestion->{suggestionid},
     surnamesuggestedby   => $suggestion->{surnamesuggestedby},
     firstnamesuggestedby => $suggestion->{firstnamesuggestedby},
-    biblionumber     => $biblionumber,
-    uncertainprice   => $data->{'uncertainprice'},
-    authorisedbyname => $borrower->{'firstname'} . " " . $borrower->{'surname'},
-    biblioitemnumber => $data->{'biblioitemnumber'},
-    discount_2dp     => sprintf( "%.2f",  $bookseller->{'discount'}) ,   # for display
-    discount         => $bookseller->{'discount'},
+    biblionumber         => $biblionumber,
+    uncertainprice       => $data->{'uncertainprice'},
+    authorisedbyname     => $borrower->{'firstname'} . " " . $borrower->{'surname'},
+    biblioitemnumber     => $data->{'biblioitemnumber'},
+    discount_2dp         => sprintf( "%.2f",  $bookseller->{'discount'} ) ,   # for display
+    discount             => $bookseller->{'discount'},
+    orderdiscount_2dp    => sprintf( "%.2f", $data->{'discount'} || 0 ),
+    orderdiscount        => $data->{'discount'},
     listincgst       => $bookseller->{'listincgst'},
     invoiceincgst    => $bookseller->{'invoiceincgst'},
     name             => $bookseller->{'name'},
     cur_active_sym   => $active_currency->{'symbol'},
     cur_active       => $active_currency->{'currency'},
     loop_currencies  => \@loop_currency,
+    currency_rate    => $cur->{rate},
     orderexists      => ( $new eq 'yes' ) ? 0 : 1,
     title            => $data->{'title'},
     author           => $data->{'author'},
@@ -375,19 +385,17 @@ $template->param(
     quantity         => $data->{'quantity'},
     quantityrec      => $data->{'quantity'},
     rrp              => $data->{'rrp'},
-    listprice        => sprintf("%.2f", $data->{'listprice'}||$data->{'price'}||$listprice),
-    total            => sprintf("%.2f", ($data->{'ecost'}||0)*($data->{'quantity'}||0) ),
-    ecost            => $data->{'ecost'},
-    unitprice        => sprintf("%.2f", $data->{'unitprice'}||0),
+    gst_values       => \@gst_values,
+    gstrate          => $data->{gstrate} ? $data->{gstrate}+0.0 : $bookseller->{gstrate} ? $bookseller->{gstrate}+0.0 : 0,
+    gstreg           => $bookseller->{'gstreg'},
+    listprice        => sprintf( "%.2f", $data->{listprice} || $data->{price} || $listprice),
+    total            => sprintf( "%.2f", ($data->{ecost} || 0) * ($data->{'quantity'} || 0) ),
+    ecost            => sprintf( "%.2f", $data->{ecost} || 0),
+    unitprice        => sprintf( "%.2f", $data->{unitprice} || 0),
     notes            => $data->{'notes'},
     publishercode    => $data->{'publishercode'},
     barcode_subfield => $barcode_subfield,
-    
     import_batch_id  => $import_batch_id,
-
-# CHECKME: gst-stuff needs verifing, mason.
-    gstrate          => $bookseller->{'gstrate'} // C4::Context->preference("gist") // 0,
-    gstreg           => $bookseller->{'gstreg'},
     (uc(C4::Context->preference("marcflavour"))) => 1
 );
 

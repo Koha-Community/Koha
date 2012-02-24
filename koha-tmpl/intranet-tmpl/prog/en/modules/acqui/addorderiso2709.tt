@@ -163,7 +163,7 @@
                             [% ELSE %]
                             <li>
                             <label for="currency">Currency:</label>
-                            <select name="currency" id="currency" onchange="calcNeworderTotal();">
+                            <select name="currency" id="currency">
                             [% FOREACH loop_currencie IN loop_currencies %]
                                     [% IF ( loop_currencie.selected ) %]<option value="[% loop_currencie.currcode %]" selected="selected">[% loop_currencie.currcode %]</option>[% ELSE %]<option value="[% loop_currencie.currcode %]">[% loop_currencie.currcode %]</option>[% END %][% END %]
                             </select>

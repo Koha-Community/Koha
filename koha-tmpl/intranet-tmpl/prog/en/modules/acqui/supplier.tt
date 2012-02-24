@@ -129,7 +129,7 @@ if (f.company.value == "") {
             </li>
             </ol>
             <ol class="radio">
-            <li><label for="gstyes" class="radio">Tax Number Registered:</label>
+            <li><label for="gstyes" class="radio">Tax number registered:</label>
                 [% IF ( gstreg ) %]
                     <label for="gstyes">Yes</label> <input type="radio" name="gst" id="gstyes" value="1" checked="checked" />
                     <label for="gstno">No</label> <input type="radio" name="gst" id="gstno" value="0" />
@@ -156,10 +156,23 @@ if (f.company.value == "") {
                     <label for="invoice_gstno">Don't include tax</label> <input type="radio" id="invoice_gstno" name="invoice_gst" value="0" checked="checked" />
                 [% END %]</li>
             </ol>
+             <ol>
+                <li>
+                    <label for="gst">Tax rate</label>
+                    <select name="gstrate" id="gstrate">
+                    [% FOREACH gst IN gst_values %]
+                      [% IF ( gstrate == gst.option ) %]
+                        <option value="[% gst.option %]" selected="selected">[% gst.option * 100 | format ("%.1f") %] %</option>
+                      [% ELSE %]
+                        <option value="[% gst.option %]">[% gst.option * 100 | format ("%.1f") %] %</option>
+                      [% END %]
+                    [% END %]
+                    </select>
+                </li>
+            </ol>
             <ol>
             <li><label for="discount">Discount</label>
                 <input type="text" size="6" id="discount" name="discount" value="[% discount %]" />%</li>
-            <li><label for="gstrate">Tax rate</label><input type="text" name="gstrate" id="gstrate" size="6" value="[% gstrate %]"/>% (leave blank for default tax of [% default_gst_rate %]%)</li>
             <li>
                 <label for="deliverytime">Delivery time</label>
                 <input type="text" size="2" id="deliverytime" name="deliverytime" value="[% deliverytime %]" /> days
@@ -214,7 +227,7 @@ if (f.company.value == "") {
                     [% END %]</p>
             <p><strong>List prices are: </strong>[% listprice %]</p>
             <p><strong>Invoice prices are: </strong>[% invoiceprice %]</p>
-            [% IF ( GST ) %]<p><strong>Tax number registered: </strong>
+            [% IF ( gstrate ) %]<p><strong>Tax number registered: </strong>
                     [% IF ( gstreg ) %]Yes[% ELSE %]No[% END %]</p>
             <p><strong>List item price includes tax: </strong>
                     [% IF ( listincgst ) %]Yes[% ELSE %]No[% END %]</p>
@@ -223,7 +236,7 @@ if (f.company.value == "") {
             <p><strong>Discount: </strong>
                 [% discount %] %</p>
             <p><strong>Tax rate: </strong>
-                [% GST %]%[% UNLESS ( default_tax ) %] (default)[% END %]</p>
+                [% 0 + gstrate * 100 | format("%.1f") %]%</p>
             [% IF deliverytime.defined %]
                 <p><strong>Delivery time: </strong>
                     [% deliverytime %] days</p>

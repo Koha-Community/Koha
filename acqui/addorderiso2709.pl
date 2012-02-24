@@ -205,7 +205,6 @@ if ($op eq ""){
         my $price = GetMarcPrice($marcrecord, C4::Context->preference('marcflavour'));
 
         if ($price){
-            $orderinfo{'listprice'} = $price;
             eval {
 		require C4::Acquisition;
 		import C4::Acquisition qw/GetBasket/;
@@ -222,13 +221,19 @@ if ($op eq ""){
 	    }
             my $basket     = GetBasket( $orderinfo{basketno} );
             my $bookseller = GetBookSellerFromId( $basket->{booksellerid} );
-            my $gst        = $bookseller->{gstrate} || C4::Context->preference("gist") || 0;
-            $orderinfo{'unitprice'} = $orderinfo{listprice} - ( $orderinfo{listprice} * ( $bookseller->{discount} / 100 ) );
-            $orderinfo{'ecost'} = $orderinfo{unitprice};
+            $orderinfo{gstrate} = $bookseller->{gstrate};
+            if ( $bookseller->{listincgst} ) {
+                $orderinfo{ecost} = $price;
+            } else {
+                $orderinfo{ecost} = $price * ( 1 + $orderinfo{gstrate} );
+            }
+            $orderinfo{rrp} = ( $orderinfo{ecost} * 100 ) / ( 100 - $bookseller->{discount} );
+            $orderinfo{listprice} = $orderinfo{rrp};
+            $orderinfo{unitprice} = $orderinfo{ecost};
+            $orderinfo{total} = $orderinfo{ecost};
         } else {
             $orderinfo{'listprice'} = 0;
         }
-        $orderinfo{'rrp'} = $orderinfo{'listprice'};
 
         # remove uncertainprice flag if we have found a price in the MARC record
         $orderinfo{uncertainprice} = 0 if $orderinfo{listprice};

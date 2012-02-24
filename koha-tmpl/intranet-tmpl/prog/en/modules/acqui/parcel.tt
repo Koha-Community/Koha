@@ -17,7 +17,7 @@
     $(document).ready(function(){
         var pendingt = $("#pendingt").dataTable($.extend(true, {}, dataTablesDefaults, {
             "aoColumnDefs": [
-                { "aTargets": [ 3, 7, 8 ], "bSortable": false, "bSearchable": false },
+                { "aTargets": [ 3, 8, 9 ], "bSortable": false, "bSearchable": false },
             ],
             "aoColumns": [
                 { "sType": "num-html" },
@@ -29,12 +29,13 @@
                 null,
                 null,
                 null,
+                null,
             ],
             "sPaginationType": "four_button"
         } ) );
         var receivedt = $("#receivedt").dataTable($.extend(true, {}, dataTablesDefaults, {
             "aoColumnDefs": [
-                { "aTargets": [ 3 ], "bSortable": false, "bSearchable": false },
+                { "aTargets": [ 3, -1 ], "bSortable": false, "bSearchable": false },
             ],
             "aoColumns": [
                 { "sType": "num-html" },
@@ -49,6 +50,11 @@
             ],
             "sPaginationType": "four_button"
         } ) );
+/*
+    $("#pendingt").tablesorter({
+		headers: { 2: { sorter: 'articles' },3: { sorter: false },8:{sorter:false}}
+    });
+*/
 
 	rowCountPending  = $("#pendingt tbody.filterclass tr").length;
 	rowCountReceived = $("#receivedt tbody.filterclass tr").length;
@@ -73,7 +79,7 @@
 	$("#pendingcollapserow").remove();
     $("#pendingt tr").show();
 	$("#pendingt tbody.filterclass tr:gt(" + (rowsToCollapse-1) + ")").hide();
-	$("#pendingt").before("<p id=\"pendingcollapserow\">" + _("Only the first ")  + rowsToCollapse +  _(" items are displayed.") + "<a href=\"javascript:pendingExpand();\">" + _("Click here to show all ")  + rowCountPending + _(" items") + "<\/a>.<\/p>");
+	$("#pendingt").before("<p id=\"pendingcollapserow\">" + _("Only the first ")  + rowsToCollapse +  _(" items are displayed.") + " <a href=\"javascript:pendingExpand();\">" + _("Click here to show all ")  + rowCountPending + _(" items") + "<\/a>.<\/p>");
 
     }
 
@@ -83,7 +89,7 @@
 	$("#pendingcollapserow").remove();
 	$("#pendingt tr").show();
     $("#pendingt tbody.filterclass tr.orderfound").remove();
-	$("#pendingt").before("<p id=\"pendingcollapserow\">" + rowCountPending + _(" items are displayed.") + "<a href=\"javascript:pendingCollapse();\">" + _("Click here to show only the first ") + rowsToCollapse + _(" items") + "<\/a>.<\/p>");
+	$("#pendingt").before("<p id=\"pendingcollapserow\">" + rowCountPending + _(" items are displayed.") + " <a href=\"javascript:pendingCollapse();\">" + _("Click here to show only the first ") + rowsToCollapse + _(" items") + "<\/a>.<\/p>");
     }
 
     // Collapse already received items table
@@ -91,7 +97,7 @@
         $.cookie("receivedKeepExpanded", 0, { path: "/", expires: 9999 });
 	$("#receivedcollapserow").remove();
 	$("#receivedt tbody.filterclass tr:gt(" + (rowsToCollapse-1) + ")").hide();
-	$("#receivedt").before("<p id=\"receivedcollapserow\">" + _("Only the first ") + rowsToCollapse + _(" items are displayed.") + "<a href=\"javascript:receivedExpand();\">" + _("Click here to show all ") + rowCountReceived + _(" items") + "<\/a>.<\/p>");
+	$("#receivedt").before("<p id=\"receivedcollapserow\">" + _("Only the first ") + rowsToCollapse + _(" items are displayed.") + " <a href=\"javascript:receivedExpand();\">" + _("Click here to show all ") + rowCountReceived + _(" items") + "<\/a>.<\/p>");
     }
 
     // Expand already received items table
@@ -99,7 +105,7 @@
         $.cookie("receivedKeepExpanded", 1, { path: "/", expires: 9999 });
 	$("#receivedcollapserow").remove();
 	$("#receivedt tr").show();
-	$("#receivedt").before("<p id=\"receivedcollapserow\">" + _("All ") + rowCountReceived + _(" items are displayed.") + "<a href=\"javascript:receivedCollapse();\">" + _("Click here to show only the first ") + rowsToCollapse + _(" items") + "<\/a>.<\/p>");
+	$("#receivedt").before("<p id=\"receivedcollapserow\">" + _("All ") + rowCountReceived + _(" items are displayed.") + " <a href=\"javascript:receivedCollapse();\">" + _("Click here to show only the first ") + rowsToCollapse + _(" items") + "<\/a>.<\/p>");
     }
 
 //]]>
@@ -207,19 +213,11 @@
             <th>Quantity</th>
             <th>Unit cost</th>
             <th>Order cost</th>
+            <th>Fund</th>
             <th>&nbsp;</th>
             <th>&nbsp;</th>
         </tr>
     </thead>
-		<tfoot>
-            <tr><td colspan="4" class="total">TOTAL</td>
-                <td> [% totalPquantity %] </td>
-				<td>&nbsp;</td>
-                <td>[% ordergrandtotal %]</td>
-				<td>&nbsp;</td>
-				<td>&nbsp;</td>
-            </tr>
-		</tfoot>
     <tbody class="filterclass">
         [% FOREACH loop_order IN loop_orders %]
             <tr>
@@ -246,9 +244,9 @@
                 <td>[% loop_order.quantity %]</td>
                 <td>[% loop_order.ecost %]</td>
                 <td>[% loop_order.ordertotal %]</td>
+                <td>[% loop_order.budget_name %]</td>
 				<td>
                               <a href="orderreceive.pl?ordernumber=[% loop_order.ordernumber %]&amp;invoiceid=[% invoiceid %]">Receive</a>
-				    
 				</td>
 				<td>
                         [% IF ( loop_order.left_holds_on_order ) %]
@@ -323,41 +321,23 @@
 	    </tr>
     </thead>
     <tfoot>
-	    <tr>
-		<td colspan="4" class="total">SUBTOTAL</td>
-		<td colspan="2">&nbsp;</td>
-		<td>[% totalprice %]</td>
-		<td>[% tototal %]</td>
-        <td></td>
-	    </tr>
-	      
-	      [% IF ( totalfreight ) %]
-		    <tr>
-			<td colspan="6">&nbsp;
-		</td>
-			    <td>Shipping</td>
-		<td>[% totalfreight %]</td>
-	    	</tr> 
-	    [% END %]
-	      [% IF ( gst ) %]
-		    <tr>
-			<td colspan="6">
-		<p class="message">
-			    <b>HELP</b><br />
-		    The total at the bottom of the page should be within a few cents of the total for the invoice.
-		</p>
-		</td>
-			    <td><b>Tax rate</b></td>
-		<td>[% gst %]</td>
-	    	</tr> 
-	    [% END %]
-	    <tr>
-	    <td colspan="4" class="total">TOTAL</td>
-		<td>[% totalquantity %]</td>
-		<td colspan="2">&nbsp;</td>
-		<td>[% grandtot %]</td>
-        <td></td>
-	    </tr>
+        <tr>
+            <th colspan="7" class="total">Total tax exc.</th>
+            <th>[% total_gste %]</th>
+            <th></th>
+        </tr>
+        [% FOREACH book_foot IN book_foot_loop %]
+            <tr>
+                <th colspan="7">Total (GST [% book_foot.gstrate * 100 | format ("%.1f") %]%)</th>
+                <th>[% book_foot.value %]</th>
+                <th></th>
+            </tr>
+        [% END %]
+        <tr>
+            <th colspan="7" class="total">Total tax inc.</th>
+            <th>[% total_gsti %]</th>
+            <th></th>
+        </tr>
     </tfoot>
 	<tbody class="filterclass">
 	    [% FOREACH loop_receive IN loop_received %]

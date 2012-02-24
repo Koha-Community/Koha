@@ -5617,7 +5617,6 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
 
     $dbh->do("UPDATE systempreferences SET options = concat(options,'|EAN13'), explanation = concat(explanation,'; EAN13 - incremental') WHERE variable = 'autoBarcode' AND options NOT LIKE '%EAN13%'");
     print "Upgrade to $DBversion done ( Added EAN13 barcode autogeneration sequence )\n";
-
     SetVersion($DBversion);
 }
 
@@ -5952,6 +5951,20 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+
+$DBversion = "3.09.00.XXX";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do("ALTER TABLE aqorders CHANGE COLUMN gst gstrate DECIMAL(6,4)  DEFAULT NULL");
+    print "Upgrade to $DBversion done (Change column name in aqorders gst --> gstrate)\n";
+    SetVersion($DBversion);
+}
+
+$DBversion = "3.09.00.XXX";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do("ALTER TABLE aqorders ADD discount float(6,4) DEFAULT NULL AFTER gstrate");
+    print "Upgrade to $DBversion done (Add discount field in aqorders table)\n";
+    SetVersion($DBversion);
+}
 
 =head1 FUNCTIONS
 

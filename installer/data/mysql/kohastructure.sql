@@ -2786,7 +2786,8 @@ CREATE TABLE `aqorders` ( -- information related to the basket line items
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- the date and time this order line was last modified
   `rrp` decimal(13,2) default NULL, -- the replacement cost for this line item
   `ecost` decimal(13,2) default NULL, -- the estimated cost for this line item
-  `gst` decimal(13,2) default NULL, -- the tax rate for this line item
+  `gstrate` decimal(6,4) default NULL, -- the tax rate for this line item
+  `discount` float(6,4) default NULL, -- the discount for this line item
   `budget_id` int(11) NOT NULL, -- the fund this order goes against (aqbudgets.budget_id)
   `budgetgroup_id` int(11) NOT NULL, -- not used? always zero
   `budgetdate` date default NULL, -- not used? always NULL

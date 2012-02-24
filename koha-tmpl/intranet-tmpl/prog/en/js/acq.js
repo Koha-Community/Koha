@@ -639,49 +639,25 @@ function messenger(X,Y,etc){    // FIXME: unused?
 
 //  NEXT BLOCK IS USED BY NEWORDERBEMPTY
 
-function calcNeworderTotal(){
-    //collect values
-    var f        = document.getElementById('Aform');
-    var quantity = new Number(f.quantity.value);
-    var discount = new Number(f.discount.value);
-    var listinc  = new Number (f.listinc.value);
-    //var currency = f.currency.value;
-    var applygst = new Number (f.applygst.value);
-    var listprice   =  new Number(f.listprice.value);
-    var invoiceingst =  new Number (f.invoiceincgst.value);
-//    var exchangerate =  new Number(f.elements[currency].value);      //get exchange rate
-        var currcode = new String(document.getElementById('currency').value);
-	var exchangerate =  new Number(document.getElementById(currcode).value);
+function updateCosts(){
+    var quantity = new Number($("#quantity").val());
+    var discount = new Number($("#discount").val());
+    var applygst = new Number ($("#applygst").val());
+    var listprice   =  new Number($("#listprice").val());
+    var exchangerate =  new Number($("#currency_rate").val());
+    var gst_on=false;
 
-    var gst_on=(!listinc && invoiceingst);
-
-    //do real stuff
     var rrp   = new Number(listprice*exchangerate);
     var ecost = rrp;
-    if (100-discount != 100) { //Prevent rounding issues if no discount
-        ecost = new Number(Math.floor(rrp * (100 - discount ))/100);
+    if ( 100-discount != 100 ) { //Prevent rounding issues if no discount
+        ecost = new Number(Math.floor(rrp * (100 - discount )) / 100);
     }
-    var GST   = new Number(0);
-    if (gst_on) {
-            rrp=rrp * (1+f.gstrate.value / 100);
-        GST=ecost * f.gstrate.value / 100;
-    }
+    var total =  new Number( ecost * quantity);
+    $("#rrp").val(rrp.toFixed(2));
+    $("#ecost").val(ecost.toFixed(2));
+    $("#total").val(total.toFixed(2));
+    $("listprice").val(listprice.toFixed(2));
 
-    var total =  new Number( (ecost + GST) * quantity);
-
-    f.rrp.value = rrp.toFixed(2);
-
-//	f.rrp.value = rrp
-//	f.rrp.value = 'moo'
-
-    f.ecost.value = ecost.toFixed(2);
-    f.total.value = total.toFixed(2);
-    f.listprice.value =  listprice.toFixed(2);
-
-//  gst-stuff needs verifing, mason.
-    if (f.GST) {
-        f.GST.value=GST;
-    }
     return true;
 }
 

@@ -93,7 +93,6 @@ my $search       = $input->param('receive');
 $datereceived = $datereceived ? C4::Dates->new($datereceived, 'iso') : C4::Dates->new();
 
 my $bookseller = GetBookSellerFromId($booksellerid);
-my $gst = $bookseller->{gstrate} // C4::Context->preference("gist") // 0;
 my $results = SearchOrder($ordernumber,$search);
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -158,16 +157,40 @@ if ( $count == 1 ) {
         $template->param(items => \@items);
     }
 
-    if ( $order->{'unitprice'} == 0 ) {
-        $order->{'unitprice'} = '';
-    }
+    $order->{quantityreceived} = '' if $order->{quantityreceived} == 0;
+    $order->{unitprice} = '' if $order->{unitprice} == 0;
 
-    my $suggestion   = GetSuggestionInfoFromBiblionumber($order->{'biblionumber'});
+    my $rrp;
+    my $ecost;
+    my $unitprice;
+    if ( $bookseller->{listincgst} ) {
+        if ( $bookseller->{invoiceincgst} ) {
+            $rrp = $order->{rrp};
+            $ecost = $order->{ecost};
+            $unitprice = $order->{unitprice};
+        } else {
+            $rrp = $order->{rrp} / ( 1 + $order->{gstrate} );
+            $ecost = $order->{ecost} / ( 1 + $order->{gstrate} );
+            $unitprice = $order->{unitprice} / ( 1 + $order->{gstrate} );
+        }
+    } else {
+        if ( $bookseller->{invoiceincgst} ) {
+            $rrp = $order->{rrp} * ( 1 + $order->{gstrate} );
+            $ecost = $order->{ecost} * ( 1 + $order->{gstrate} );
+            $unitprice = $order->{unitprice} * ( 1 + $order->{gstrate} );
+        } else {
+            $rrp = $order->{rrp};
+            $ecost = $order->{ecost};
+            $unitprice = $order->{unitprice};
+        }
+     }
 
-    my $authorisedby = $order->{'authorisedby'};
+    my $suggestion = GetSuggestionInfoFromBiblionumber($order->{biblionumber});
+
+    my $authorisedby = $order->{authorisedby};
     my $member = GetMember( borrowernumber => $authorisedby );
 
-    my $budget = GetBudget( $order->{'budget_id'} );
+    my $budget = GetBudget( $order->{budget_id} );
 
     $template->param(
         AcqCreateItem         => $AcqCreateItem,
@@ -177,7 +200,7 @@ if ( $count == 1 ) {
         biblioitemnumber      => $order->{'biblioitemnumber'},
         booksellerid          => $order->{'booksellerid'},
         freight               => $freight,
-        gst                   => $gst,
+        gstrate               => $order->{gstrate} || $bookseller->{gstrate} || C4::Context->preference("gist") || 0,
         name                  => $bookseller->{'name'},
         date                  => format_date($order->{entrydate}),
         title                 => $order->{'title'},
@@ -189,9 +212,9 @@ if ( $count == 1 ) {
         quantity              => $order->{'quantity'},
         quantityreceivedplus1 => $order->{'quantityreceived'} + 1,
         quantityreceived      => $order->{'quantityreceived'},
-        rrp                   => $order->{'rrp'},
-        ecost                 => sprintf( "%.2f",$order->{'ecost'}),
-        unitprice             => sprintf( "%.2f",$order->{'unitprice'}),
+        rrp                   => sprintf( "%.2f", $rrp ),
+        ecost                 => sprintf( "%.2f", $ecost ),
+        unitprice             => sprintf( "%.2f", $unitprice),
         memberfirstname       => $member->{firstname} || "",
         membersurname         => $member->{surname} || "",
         invoiceid             => $invoice->{invoiceid},
@@ -212,10 +235,10 @@ else {
         $line{invoice}      = $invoice->{invoicenumber};
         $line{datereceived} = $datereceived->output();
         $line{freight}      = $freight;
-        $line{gst}          = $gst;
+        $line{gstrate}      = @$results[$i]->{'gstrate'} || $bookseller->{gstrate} || C4::Context->preference("gist") || 0;
         $line{title}        = @$results[$i]->{'title'};
         $line{author}       = @$results[$i]->{'author'};
-        $line{booksellerid}   = $booksellerid;
+        $line{booksellerid} = $booksellerid;
         push @loop, \%line;
     }
 

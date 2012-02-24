@@ -28,6 +28,7 @@ use C4::Output;
 use C4::Context;
 use C4::Acquisition;
 use C4::Biblio;
+use C4::Bookseller;
 use C4::Items;
 use C4::Search;
 use List::MoreUtils qw/any/;
@@ -37,24 +38,25 @@ my $flagsrequired = {acquisition => 'order_receive'};
 
 checkauth($input, 0, $flagsrequired, 'intranet');
 
-my $user=$input->remote_user;
-my $biblionumber = $input->param('biblionumber');
-my $biblioitemnumber=$input->param('biblioitemnumber');
-my $ordernumber=$input->param('ordernumber');
-my $origquantityrec=$input->param('origquantityrec');
-my $quantityrec=$input->param('quantityrec');
-my $quantity=$input->param('quantity');
-my $unitprice=$input->param('cost');
-my $invoiceid = $input->param('invoiceid');
-my $invoice = GetInvoice($invoiceid);
-my $invoiceno = $invoice->{invoicenumber};
-my $datereceived= $invoice->{shipmentdate};
-my $replacement=$input->param('rrp');
-my $gst=$input->param('gst');
-my $booksellerid = $input->param('booksellerid');
-my $cnt=0;
-my $ecost = $input->param('ecost');
-my $note = $input->param("note");
+my $user             = $input->remote_user;
+my $biblionumber     = $input->param('biblionumber');
+my $biblioitemnumber = $input->param('biblioitemnumber');
+my $ordernumber      = $input->param('ordernumber');
+my $origquantityrec  = $input->param('origquantityrec');
+my $quantityrec      = $input->param('quantityrec');
+my $quantity         = $input->param('quantity');
+my $unitprice        = $input->param('cost');
+my $invoiceid        = $input->param('invoiceid');
+my $invoice          = GetInvoice($invoiceid);
+my $invoiceno        = $invoice->{invoicenumber};
+my $datereceived     = $invoice->{shipmentdate};
+my $booksellerid     = $input->param('booksellerid');
+my $cnt              = 0;
+my $error_url_str;
+my $ecost            = $input->param('ecost');
+my $rrp              = $input->param('rrp');
+my $note             = $input->param("note");
+my $order            = GetOrder($ordernumber);
 
 #need old recievedate if we update the order, parcel.pl only shows the right parcel this way FIXME
 if ($quantityrec > $origquantityrec ) {
@@ -63,12 +65,40 @@ if ($quantityrec > $origquantityrec ) {
         @received_items = $input->param('items_to_receive');
     }
 
+    $order->{rrp} = $rrp;
+    $order->{ecost} = $ecost;
+    $order->{unitprice} = $unitprice;
+    my $bookseller = C4::Bookseller::GetBookSellerFromId($booksellerid);
+    if ( $bookseller->{listincgst} ) {
+        if ( not $bookseller->{invoiceincgst} ) {
+            $order->{rrp} = $order->{rrp} * ( 1 + $order->{gstrate} );
+            $order->{ecost} = $order->{ecost} * ( 1 + $order->{gstrate} );
+            $order->{unitprice} = $order->{unitprice} * ( 1 + $order->{gstrate} );
+        }
+    } else {
+        if ( $bookseller->{invoiceincgst} ) {
+            $order->{rrp} = $order->{rrp} / ( 1 + $order->{gstrate} );
+            $order->{ecost} = $order->{ecost} / ( 1 + $order->{gstrate} );
+            $order->{unitprice} = $order->{unitprice} / ( 1 + $order->{gstrate} );
+        }
+    }
+
     my $new_ordernumber = $ordernumber;
     # save the quantity received.
     if ( $quantityrec > 0 ) {
         ($datereceived, $new_ordernumber) = ModReceiveOrder(
-            $biblionumber, $ordernumber, $quantityrec, $user, $unitprice,
-            $invoiceid, $replacement, undef, $datereceived, \@received_items);
+            $biblionumber,
+            $ordernumber,
+            $quantityrec,
+            $user,
+            $order->{unitprice},
+            $order->{ecost},
+            $invoiceno,
+            $order->{rrp},
+            undef,
+            $datereceived,
+            \@received_items,
+        );
     }
 
     # now, add items if applicable
@@ -107,6 +137,7 @@ if ($quantityrec > $origquantityrec ) {
             NewOrderItem($itemnumber, $new_ordernumber);
         }
     }
+
 }
 
 update_item( $_ ) foreach GetItemnumbersFromOrder( $ordernumber );
@@ -122,7 +153,7 @@ sub update_item {
         booksellerid         => $booksellerid,
         dateaccessioned      => $datereceived,
         price                => $unitprice,
-        replacementprice     => $replacement,
+        replacementprice     => $rrp,
         replacementpricedate => $datereceived,
     }, $biblionumber, $itemnumber );
 }

@@ -126,6 +126,40 @@ $(document).ready(function() {
      </div>
 </div>
 </div>
+    [% IF ( show_acquisition_details ) %]
+        <div id="acquisition_details">
+            <h2>Acquisition details</h2>
+            <table>
+                <thead>
+                    <tr><th></th><th>Price exc. taxes</th><th>Price inc. taxes</th><th>fund</th><th></th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Ordered amount</td>
+                        <td>[% valuegste_ordered %]</td>
+                        <td>[% valuegsti_ordered %]</td>
+                        <td>[% budget_name_ordered %]</td>
+                        <td>
+                            [% IF ( ordered_exists ) %]
+                                <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basketno %]">See basket informations</a>
+                            [% END %]
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Spent amount</td>
+                        <td>[% valuegste_spent %]</td>
+                        <td>[% valuegsti_spent %]</td>
+                        <td>[% budget_name_spent %]</td>
+                        <td>
+                            [% IF ( spent_exists ) %]
+                                <a href="/cgi-bin/koha/acqui/invoice.pl?invoicenumber=[% invoicenumber %]">See invoice informations</a>
+                            [% END %]
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    [% END %]
     <div id="subscription_planning">
     <div class="yui-g">
     <div class="rows">
