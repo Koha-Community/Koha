@@ -176,7 +176,7 @@
 [% IF step == 4 || step == 5 || step == 6 || step == 2 || step == 1 %]
 [%# Only put the cardnumber if we arent showing it in the form later %]
 [% IF cardnumber %]
-<input type="hidden" name="cardnumber" value="[% cardnumber %]">
+<input type="hidden" name="cardnumber" value="[% cardnumber %]" />
 [% END %]
 [% END %]
 [% END %]
@@ -992,12 +992,12 @@
         [% FOREACH typeloo IN typeloop %]
 			[% FOREACH categoryloo IN typeloo.categoryloop %]
 				[% IF ( loop.first ) %]
-					[% IF ( categoryloo.typename_C ) %]<optgroup label="Child">[% END %]
-					[% IF ( categoryloo.typename_A ) %]<optgroup label="Adult">[% END %]
-					[% IF ( categoryloo.typename_S ) %]<optgroup label="Staff">[% END %]
-					[% IF ( categoryloo.typename_I ) %]<optgroup label="Organization">[% END %]
-					[% IF ( categoryloo.typename_P ) %]<optgroup label="Professional">[% END %]
-					[% IF ( categoryloo.typename_X ) %]<optgroup label="Statistical">[% END %]
+					[% IF ( typeloo.typename_C ) %]<optgroup label="Child">[% END %]
+					[% IF ( typeloo.typename_A ) %]<optgroup label="Adult">[% END %]
+					[% IF ( typeloo.typename_S ) %]<optgroup label="Staff">[% END %]
+					[% IF ( typeloo.typename_I ) %]<optgroup label="Organization">[% END %]
+					[% IF ( typeloo.typename_P ) %]<optgroup label="Professional">[% END %]
+					[% IF ( typeloo.typename_X ) %]<optgroup label="Statistical">[% END %]
 			    [% END %]
 				[% IF ( categoryloo.categorycodeselected ) %]
                <option value="[% categoryloo.categorycode %]" selected="selected">[% categoryloo.categoryname %]</option>
@@ -1307,9 +1307,9 @@
 				<br />
 				<label for="datedebarred" class="radio">until:</label> 
 				[% IF opduplicate %]
-				    <input type="text" name="datedebarred" id="debarred" class="debarred" value="[% datedebarred %]" onclick="this.value=''" />
+				    <input type="text" name="datedebarred" id="datedebarred" class="debarred" value="[% datedebarred %]" onclick="this.value=''" />
 				[% ELSE %]
-				    <input type="text" name="datedebarred" id="debarred" class="debarred" value="[% datedebarred %]" />
+				    <input type="text" name="datedebarred" id="datedebarred" class="debarred" value="[% datedebarred %]" />
 				[% END %]
 				<img src="[% themelang %]/lib/calendar/cal.gif" id="debarred_button" alt="Show Calendar" />
 		         <script language="JavaScript" type="text/javascript">
@@ -1326,7 +1326,7 @@
 			       [% IF ( opduplicate ) %] 
 			           <textarea id="debarredcomment" name="debarredcomment" cols="55" rows="3" onclick="this.value=''">[% debarredcomment %]</textarea>
 			       [% ELSE %]
-				   <textarea id="debarredcomment" name="debarredcomment" cols="55" rows="3" ">[% debarredcomment %]</textarea> 
+				   <textarea id="debarredcomment" name="debarredcomment" cols="55" rows="3">[% debarredcomment %]</textarea>
 			       [% END %]
 	        </li>
 
