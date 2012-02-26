@@ -106,7 +106,7 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 		('952', '0', 'Ausgeschieden', 'Ausgeschieden', 0, 0, 'items.wthdrawn', 10, 'WITHDRAWN', '', '', 0, 0, '', '', '', NULL),
 		('952', '1', 'Verloren', 'Verloren', 0, 0, 'items.itemlost', 10, 'LOST', '', '', 0, 0, '', '', '', NULL),
 		('952', '2', 'Klassifikationsschema', 'Klassifikationsschema oder Aufstellungssystematik', 0, 0, 'items.cn_source', 10, 'cn_source', '', '', NULL, 0, '', '', '', NULL),
-		('952', '3', 'Spezifische Materialangaben (gebundener Band oder anderer Teil)', 'Spezifische Materialangaben (gebundener Band oder anderer Teil)', 0, 0, 'items.materials', 10, '', '', '', NULL, -1, '', '', '', NULL),
+		('952', '3', 'Beilagenotiz', 'Beilagenotiz', 0, 0, 'items.materials', 10, '', '', '', NULL, -1, '', '', '', NULL),
 		('952', '4', 'Beschädigt', 'Beschädigt', 0, 0, 'items.damaged', 10, 'DAMAGED', '', '', NULL, 0, '', '', '', NULL),
 		('952', '5', 'Eingeschränkte Benutzung', 'Eingeschränkte Benutzung', 0, 0, 'items.restricted', 10, 'RESTRICTED', '', '', 0, 0, '', '', '', NULL),
 		('952', '6', 'Normierte Signatur für Sortierung (Koha)', 'Normierte Signatur für Sortierung (Koha)', 0, 0, 'items.cn_sort', -1, '', '', '', 0, 7, '', '', '', NULL),
