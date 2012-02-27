@@ -69,18 +69,18 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
             <input type="hidden" name="op" value="add" />
             <table>
             <tr>
-                <th>Patron Category</th>
-                <th>Item Type</th>
-                <th>Current Checkouts Allowed</th>
-                <th>Loan Period (day)</th>
-                <th>Hard Due Date</th>
-                <th>Fine Amount</th>
-                <th>Fine Charging Interval</th>
-                <th>Fine Grace period (day)</th>
-                <th>Suspension in Days (day)</th>
-                <th>Renewals Allowed (count)</th>
-                <th>Holds Allowed (count)</th>
-		        <th>Rental Discount (%)</th>
+                <th>Patron category</th>
+                <th>Item type</th>
+                <th>Current checkouts allowed</th>
+                <th>Loan period (day)</th>
+                <th>Hard due date</th>
+                <th>Fine amount</th>
+                <th>Fine charging interval</th>
+                <th>Fine grace period (day)</th>
+                <th>Suspension in days (day)</th>
+                <th>Renewals allowed (count)</th>
+                <th>Holds allowed (count)</th>
+		        <th>Rental discount (%)</th>
 				<th>&nbsp;</th>
             </tr>
 				[% FOREACH rule IN rules %]
@@ -182,17 +182,17 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
         </form>
     </div>
     <div id="defaults-for-this-library" class="container">
-    <h3>Default checkout and hold policy for [% IF ( humanbranch ) %][% humanbranch %][% ELSE %]all libraries[% END %]</h3>
-        <p>You can set a default maximum number of checkouts and hold policy that will be used if none is defined below for a particular item type or category.</p>
+    <h3>Default checkout, checkin and hold policy for [% IF ( humanbranch ) %][% humanbranch %][% ELSE %]all libraries[% END %]</h3>
+        <p>You can set a default maximum number of checkouts, hold policy and checkin policy that will be used if none is defined below for a particular item type or category.</p>
         <form method="post" action="/cgi-bin/koha/admin/smart-rules.pl">
             <input type="hidden" name="op" value="set-branch-defaults" />
             <input type="hidden" name="branch" value="[% current_branch %]"/>
             <table>
                 <tr>
                     <th>&nbsp;</th>
-                    <th>Total Current Checkouts Allowed</th>
-                    <th>Hold Policy</th>
-                    <th>Return Policy</th>
+                    <th>Total current checkouts allowed</th>
+                    <th>Hold policy</th>
+                    <th>Return policy</th>
                     <th>&nbsp;</th>
                     <th>&nbsp;</th>
                 </tr>
@@ -206,21 +206,21 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
                             [% ELSE %]
                             <option value="2">
                             [% END %]
-                                From Any Library
+                                From any library
                             </option>
                             [% IF ( default_holdallowed_same ) %]
                             <option value="1" selected="selected">
                             [% ELSE %]
                             <option value="1">
                             [% END %]
-                                From Home Library
+                                From home library
                             </option>
                             [% IF ( default_holdallowed_none ) %]
                             <option value="0" selected="selected">
                             [% ELSE %]
                             <option value="0">
                             [% END %]
-                                No Holds Allowed
+                                No holds allowed
                             </option>
                         </select>
                     </td>
@@ -231,21 +231,21 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
                             [% ELSE %]
                             <option value="homebranch">
                             [% END %]
-                                Item Returns Home
+                                Item returns home
                             </option>
                             [% IF ( default_returnbranch == 'holdingbranch' ) %]
                             <option value="holdingbranch" selected="selected">
                             [% ELSE %]
                             <option value="holdingbranch">
                             [% END %]
-                                Item Returns to Issuing Branch
+                                Item returns to issuing branch
                             </option>
                             [% IF ( default_returnbranch == 'noreturn' ) %]
                             <option value="noreturn" selected="selected">
                             [% ELSE %]
                             <option value="noreturn">
                             [% END %]
-                                Item Floats
+                                Item floats
                             </option>
                         </select>
                     </td>
@@ -271,8 +271,8 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
             <input type="hidden" name="branch" value="[% current_branch %]"/>
             <table>
                 <tr>
-                    <th>Patron Category</th>
-                    <th>Total Current Checkouts Allowed</th>
+                    <th>Patron category</th>
+                    <th>Total current checkouts allowed</th>
                     <th>&nbsp;</th>
                 </tr>
                 [% FOREACH branch_cat_rule_loo IN branch_cat_rule_loop %]
@@ -324,9 +324,9 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
             The various policies have the following effects:
         </p>
         <ul>
-            <li><strong>From Any Library:</strong> Patrons from any library may put this item on hold. <cite>(default if none is defined)</cite></li>
-            <li><strong>From Home Library:</strong> Only patrons from the item's home library may put this book on hold.</li>
-            <li><strong>No Holds Allowed:</strong> No patron may put this book on hold.</li>
+            <li><strong>From any library:</strong> Patrons from any library may put this item on hold. <cite>(default if none is defined)</cite></li>
+            <li><strong>From home library:</strong> Only patrons from the item's home library may put this book on hold.</li>
+            <li><strong>No holds allowed:</strong> No patron may put this book on hold.</li>
         </ul>
         <p>
             Note that if the system preference
@@ -340,9 +340,9 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
             <input type="hidden" name="branch" value="[% current_branch %]"/>
             <table>
                 <tr>
-                    <th>Item Type</th>
-                    <th>Hold Policy</th>
-                    <th>Return Policy</th>
+                    <th>Item type</th>
+                    <th>Hold policy</th>
+                    <th>Return policy</th>
                     <th>&nbsp;</th>
                 </tr>
                 [% FOREACH branch_item_rule_loo IN branch_item_rule_loop %]
@@ -358,19 +358,19 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
                             [% END %]
                         </td>
                         <td>[% IF ( branch_item_rule_loo.holdallowed_any ) %]
-                                From Any Library
+                                From any library
                             [% ELSIF ( branch_item_rule_loo.holdallowed_same ) %]
-                                From Home Library
+                                From home library
                             [% ELSE %]
-                                No Holds Allowed
+                                No holds allowed
                             [% END %]
                         </td>
                         <td>[% IF ( branch_item_rule_loo.returnbranch == 'homebranch' ) %]
-                                Item Returns Home
+                                Item returns home
                             [% ELSIF ( branch_item_rule_loo.returnbranch == 'holdingbranch' ) %]
-                                Item Returns to Issuing Branch
+                                Item returns to issuing branch
                             [% ELSIF ( branch_item_rule_loo.returnbranch == 'noreturn' ) %]
-                                Item Floats
+                                Item floats
                             [% ELSE %]
                                 Error - unknown option
                             [% END %]
@@ -390,16 +390,16 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
                     </td>
                     <td>
                         <select name="holdallowed">
-                            <option value="2">From Any Library</option>
-                            <option value="1">From Home Library</option>
-                            <option value="0">No Holds Allowed</option>
+                            <option value="2">From any library</option>
+                            <option value="1">From home library</option>
+                            <option value="0">No holds allowed</option>
                         </select>
                     </td>
                     <td>
                         <select name="returnbranch">
-                            <option value="homebranch">Item Returns Home</option>
-                            <option value="holdingbranch">Item Returns to Issuing Branch</option>
-                            <option value="noreturn">Item Floats</option>
+                            <option value="homebranch">Item returns home</option>
+                            <option value="holdingbranch">Item returns to issuing branch</option>
+                            <option value="noreturn">Item floats</option>
                         </select>
                     </td>
                     <td><input type="submit" value="Add" class="submit" /></td>
