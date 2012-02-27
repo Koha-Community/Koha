@@ -4,21 +4,22 @@
 [% INCLUDE 'calendar.inc' %]
 <script type="text/javascript">
 //<![CDATA[
-        $(document).ready(function() {
-        // http://jqueryui.com/demos/datepicker/#date-range
-        var dates = $( "#from, #to" ).datepicker({
-            changeMonth: true,
-            numberOfMonths: 1,
-            onSelect: function( selectedDate ) {
-                var option = this.id == "from" ? "minDate" : "maxDate",
-                    instance = $( this ).data( "datepicker" );
-                    date = $.datepicker.parseDate(
-                        instance.settings.dateFormat ||
-                        $.datepicker._defaults.dateFormat,
-                        selectedDate, instance.settings );
-                dates.not( this ).datepicker( "option", option, date );
-            }
-        });
+    function changeRemovedDateTrStatus() {
+        var Cellvalue = $("input[name='Cellvalue']:checked").val();
+        if(Cellvalue == "deleteditems") {
+            $("#removeddatetr").show();
+            $("input[value='deleteditems.timestamp']").attr('disabled', false);
+            $("#deldateFrom").attr('disabled', false);
+            $("#deldateTo").attr('disabled', false);
+        } else {
+            $("#removeddatetr").hide();
+            $("input[value='deleteditems.timestamp']").attr('disabled', true).attr('checked', false);
+            $("#deldateFrom").attr('disabled', true).val('');
+            $("#deldateTo").attr('disabled', true).val('');
+        }
+    }
+
+    $(document).ready(function() {
         var datesRO = $( "#fromRO, #toRO" ).datepicker({
             changeMonth: true,
             numberOfMonths: 1,
@@ -32,7 +33,11 @@
                 datesRO.not( this ).datepicker( "option", option, date );
             }
         });
+        $("input[name='Cellvalue']").change(function() {
+            changeRemovedDateTrStatus();
         });
+        changeRemovedDateTrStatus();
+    });
 //]]>
 </script>
 </head>
@@ -218,6 +223,56 @@
 					</select>
 				</td>
 			</tr>
+            [% IF (notforloan) %]
+                <tr>
+                    <td>[% notforloan_label %]</td>
+                    <td><input type="radio" name="Line"   value="items.notforloan" /></td>
+                    <td><input type="radio" name="Column" value="items.notforloan" /></td>
+                    <td>
+                        [% IF (notforloan_avlist) %]
+                            <select name="Filter" id="notforloan">
+                                <option value="">&nbsp;</option>
+                                [% FOREACH av IN notforloan_avlist %]
+                                    <option value="[% av.authorised_value %]">
+                                        [% av.lib %]
+                                    </option>
+                                [% END %]
+                            </select>
+                        [% ELSE %]
+                            <input type="text" name="Filter" id="notforloan" />
+                        [% END %]
+                    </td>
+                </tr>
+            [% ELSE %]
+                <tr style="display:none">
+                    <td colspan="4"><input type="hidden" name="Filter" /></td>
+                </tr>
+            [% END %]
+            [% IF (materials) %]
+                <tr>
+                    <td>[% materials_label %]</td>
+                    <td><input type="radio" name="Line"   value="items.materials" /></td>
+                    <td><input type="radio" name="Column" value="items.materials" /></td>
+                    <td>
+                        [% IF (materials_avlist) %]
+                            <select name="Filter" id="materials">
+                                <option value="">&nbsp;</option>
+                                [% FOREACH av IN materials_avlist %]
+                                    <option value="[% av.authorised_value %]">
+                                        [% av.lib %]
+                                    </option>
+                                [% END %]
+                            </select>
+                        [% ELSE %]
+                            <input type="text" name="Filter" id="materials" />
+                        [% END %]
+                    </td>
+                </tr>
+            [% ELSE %]
+                <tr style="display:none">
+                    <td colspan="4"><input type="hidden" name="Filter" /></td>
+                </tr>
+            [% END %]
             <tr>
                 <td colspan="3">Filter barcode</td>
                 <td>
@@ -229,8 +284,48 @@
                     (use * to do a fuzzy search)
                 </td>
             </tr>
+            <tr>
+                <td>Acquired date</td>
+                <td><input type="radio" name="Line" value="items.dateaccessioned" /></td>
+                <td><input type="radio" name="Column" value="items.dateaccessioned" /></td>
+                <td>
+                    <label for="acqdateFrom">From:</label>
+                    <input type="text" name="Filter" id="acqdateFrom" class="datepicker" />
+                    <label for="acqdateTo">To:</label>
+                    <input type="text" name="Filter" id="acqdateTo" class="datepicker" />
+                </td>
+            </tr>
+            <tr id="removeddatetr">
+                <td>Removed date</td>
+                <td><input type="radio" name="Line" value="deleteditems.timestamp" /></td>
+                <td><input type="radio" name="Column" value="deleteditems.timestamp" /></td>
+                <td>
+                    <label for="deldateFrom">From:</label>
+                    <input type="text" name="Filter" id="deldateFrom" class="datepicker" />
+                    <label for="deldateTo">To:</label>
+                    <input type="text" name="Filter" id="deldateTo" class="datepicker"/>
+                </td>
+            </tr>
 		</tbody>
 	</table><br /></fieldset>
+
+    <fieldset class="rows">
+        <legend>Cell value</legend>
+        <ol>
+            <li>
+                <label for="cellvalue_items">Count total items</label>
+                <input type="radio" name="Cellvalue" value="items" id="cellvalue_items" checked="checked" />
+            </li>
+            <li>
+                <label for="cellvalue_biblios">Count unique biblios</label>
+                <input type="radio" name="Cellvalue" value="biblios" id="cellvalue_biblios" />
+            </li>
+            <li>
+                <label for="cellvalue_deleteditems">Count deleted items</label>
+                <input type="radio" name="Cellvalue" value="deleteditems" id="cellvalue_deleteditems" />
+            </li>
+        </ol>
+    </fieldset>
 	
 	<fieldset class="rows">
 	<legend>Output</legend>
