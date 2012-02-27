@@ -88,27 +88,27 @@ sub AddBibliosToShelf {
 
 sub HandleNewVirtualShelf {
     if($authorized= ShelfPossibleAction($loggedinuser, undef, $category==1? 'new_private': 'new_public')) {
-	$shelfnumber = AddShelf( {
+    $shelfnumber = AddShelf( {
             shelfname => $newvirtualshelf,
             category => $category }, $loggedinuser);
-	if($shelfnumber == -1) {
-	    $authorized=0;
-	    $errcode=1;
-	    return;
-	}
-	AddBibliosToShelf($shelfnumber, @biblionumber);
-	#Reload the page where you came from
-	print $query->header;
-	print "<html><meta http-equiv=\"refresh\" content=\"0\" /><body onload=\"window.opener.location.reload(true);self.close();\"></body></html>";
+    if($shelfnumber == -1) {
+        $authorized=0;
+        $errcode=1;
+        return;
+    }
+    AddBibliosToShelf($shelfnumber, @biblionumber);
+    #Reload the page where you came from
+    print $query->header;
+    print "<html><meta http-equiv=\"refresh\" content=\"0\" /><body onload=\"window.opener.location.reload(true);self.close();\"></body></html>";
     }
 }
 
 sub HandleShelfNumber {
     if($authorized= ShelfPossibleAction($loggedinuser, $shelfnumber, 'add')) {
-	AddBibliosToShelf($shelfnumber,@biblionumber);
-	#Close this page and return
-	print $query->header;
-	print "<html><meta http-equiv=\"refresh\" content=\"0\" /><body onload=\"self.close();\"></body></html>";
+    AddBibliosToShelf($shelfnumber,@biblionumber);
+    #Close this page and return
+    print $query->header;
+    print "<html><meta http-equiv=\"refresh\" content=\"0\" /><body onload=\"self.close();\"></body></html>";
     }
 }
 
@@ -117,10 +117,10 @@ sub HandleSelectedShelf {
         #adding to specific shelf
         my ($singleshelf, $singleshelfname, $singlecategory)= GetShelf($query->param('selectedshelf'));
         $template->param(
-	    singleshelf               => 1,
-	    shelfnumber               => $singleshelf,
-	    shelfname                 => $singleshelfname,
-	    "category$singlecategory" => 1
+        singleshelf               => 1,
+        shelfnumber               => $singleshelf,
+        shelfname                 => $singleshelfname,
+        "category$singlecategory" => 1
         );
     }
 }
@@ -130,41 +130,41 @@ sub HandleSelect {
     my $privateshelves = GetAllShelves(1,$loggedinuser,1);
     if(@{$privateshelves}){
         $template->param (
-	    privatevirtualshelves          => $privateshelves,
-	    existingshelves => 1
-	);
+        privatevirtualshelves          => $privateshelves,
+        existingshelves => 1
+    );
     }
     my $publicshelves = GetAllShelves(2,$loggedinuser,1);
     if(@{$publicshelves}){
         $template->param (
-	    publicvirtualshelves          => $publicshelves,
-	    existingshelves => 1
-	);
+        publicvirtualshelves          => $publicshelves,
+        existingshelves => 1
+    );
     }
 }
 
 sub LoadBib {
     for my $bib (@biblionumber) {
         my $data = GetBiblioData( $bib );
-	push(@biblios,
-		{ biblionumber => $bib,
-		  title        => $data->{'title'},
-		  author       => $data->{'author'},
-	} );
+    push(@biblios,
+        { biblionumber => $bib,
+          title        => $data->{'title'},
+          author       => $data->{'author'},
+    } );
     }
     $template->param(
         multiple => (scalar(@biblios) > 1),
-	total    => scalar @biblios,
-	biblios  => \@biblios,
+    total    => scalar @biblios,
+    biblios  => \@biblios,
     );
 }
 
 sub ShowTemplate {
     $template->param (
-	newshelf => $newshelf||0,
-	authorized	=> $authorized,
-	errcode		=> $errcode,
-	OpacAllowPublicListCreation => C4::Context->preference('OpacAllowPublicListCreation'),
+    newshelf => $newshelf||0,
+    authorized	=> $authorized,
+    errcode		=> $errcode,
+    OpacAllowPublicListCreation => C4::Context->preference('OpacAllowPublicListCreation'),
     );
     output_html_with_http_headers $query, $cookie, $template->output;
 }

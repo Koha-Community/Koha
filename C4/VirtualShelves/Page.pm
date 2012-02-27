@@ -61,8 +61,8 @@ sub shelfpage {
     $query            or die "No query";
     $template         or die "No template";
     $template->param(
-	loggedinuser => $loggedinuser,
-	OpacAllowPublicListCreation => C4::Context->preference('OpacAllowPublicListCreation'),
+    loggedinuser => $loggedinuser,
+    OpacAllowPublicListCreation => C4::Context->preference('OpacAllowPublicListCreation'),
     );
     my $edit;
     my $shelves;
@@ -178,7 +178,7 @@ sub shelfpage {
 
   SWITCH: {
         if ($op) {
-	    #Saving modified shelf
+        #Saving modified shelf
             if ( $op eq 'modifsave' ) {
                 unless ($okmanage) {
                         push @paramsloop, { nopermission => $shelfnumber };
@@ -205,8 +205,8 @@ sub shelfpage {
                 }
                 exit;
             }
-	    #Editing a shelf
-            elsif ( $op eq 'modif' ) {
+        #Editing a shelf
+        elsif ( $op eq 'modif' ) {
                 my ( $shelfnumber2, $shelfname, $owner, $category, $sortfield ) = GetShelf($shelfnumber);
                 my $member = GetMember( 'borrowernumber' => $owner );
                 my $ownername = defined($member) ? $member->{firstname} . " " . $member->{surname} : '';
@@ -315,7 +315,7 @@ sub shelfpage {
         if ( $query->param('shelves') ) {
             my $stay = 1;
 
-	    #Add a shelf
+        #Add a shelf
             if ( my $newshelf = $query->param('addshelf') ) {
 
                 # note: a user can always add a new shelf
@@ -335,7 +335,7 @@ sub shelfpage {
                 }
             }
 
-	    #Deleting a shelf (asking for confirmation if it has entries)
+        #Deleting a shelf (asking for confirmation if it has entries)
             foreach ( $query->param() ) {
                 /DEL-(\d+)/ or next;
                 $delflag = 1;

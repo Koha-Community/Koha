@@ -136,9 +136,9 @@ sub HandleNewVirtualShelf {
         sortfield => $sortfield,
         category => $category }, $loggedinuser);
     if($shelfnumber == -1) {
-	    $authorized=0;
-	    $errcode=1; #add failed
-	    return;
+        $authorized=0;
+        $errcode=1; #add failed
+        return;
     }
     AddBibliosToShelf($shelfnumber, @biblionumber);
     #Reload the page where you came from
@@ -148,13 +148,13 @@ sub HandleNewVirtualShelf {
 
 sub HandleShelfNumber {
     if($authorized= ShelfPossibleAction($loggedinuser, $shelfnumber, 'add')) {
-	AddBibliosToShelf($shelfnumber, @biblionumber);
-	#Close this page and return
-	print $query->header;
-	print "<html><meta http-equiv=\"refresh\" content=\"0\" /><body onload=\"self.close();\"></body></html>";
+    AddBibliosToShelf($shelfnumber, @biblionumber);
+    #Close this page and return
+    print $query->header;
+    print "<html><meta http-equiv=\"refresh\" content=\"0\" /><body onload=\"self.close();\"></body></html>";
     }
     else {
-	$errcode=2; #no perm
+    $errcode=2; #no perm
     }
 }
 
@@ -163,14 +163,14 @@ sub HandleSelectedShelf {
         #confirm adding to specific shelf
         my ($singleshelf, $singleshelfname, $singlecategory)= GetShelf($shelfnumber);
         $template->param(
-	    singleshelf               => 1,
-	    shelfnumber               => $singleshelf,
-	    shelfname                 => $singleshelfname,
-	    "category$singlecategory" => 1
+        singleshelf               => 1,
+        shelfnumber               => $singleshelf,
+        shelfname                 => $singleshelfname,
+        "category$singlecategory" => 1
         );
     }
     else {
-	$errcode=2; #no perm
+    $errcode=2; #no perm
     }
 }
 
@@ -178,8 +178,8 @@ sub HandleSelect {
     my $privateshelves = GetAllShelves(1,$loggedinuser,1);
     my $publicshelves = GetAllShelves(2,$loggedinuser,1);
     $template->param(
-	privatevirtualshelves => $privateshelves,
-	publicvirtualshelves  => $publicshelves,
+    privatevirtualshelves => $privateshelves,
+    publicvirtualshelves  => $publicshelves,
     );
 }
 
@@ -187,24 +187,24 @@ sub LoadBib {
     my @biblios;
     for my $bib (@biblionumber) {
         my $data = GetBiblioData($bib);
-	push(@biblios,
-		{ biblionumber => $bib,
-		  title        => $data->{'title'},
-		  author       => $data->{'author'},
-	} );
+    push(@biblios,
+        { biblionumber => $bib,
+          title        => $data->{'title'},
+          author       => $data->{'author'},
+    } );
     }
     $template->param(
         multiple => (scalar(@biblios) > 1),
-	total    => scalar @biblios,
-	biblios  => \@biblios,
+    total    => scalar @biblios,
+    biblios  => \@biblios,
     );
 }
 
 sub ShowTemplate {
     $template->param (
-	newshelf => $newshelf||0,
-	authorized	=> $authorized,
-	errcode		=> $errcode,
+    newshelf => $newshelf||0,
+    authorized	=> $authorized,
+    errcode		=> $errcode,
     );
     output_html_with_http_headers $query, $cookie, $template->output;
 }
