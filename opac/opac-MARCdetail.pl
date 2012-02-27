@@ -81,6 +81,17 @@ $template->param(
     bibliotitle => $biblio->{title},
 );
 
+# get biblionumbers stored in the cart
+my @cart_list;
+
+if($query->cookie("bib_list")){
+    my $cart_list = $query->cookie("bib_list");
+    @cart_list = split(/\//, $cart_list);
+    if ( grep {$_ eq $biblionumber} @cart_list) {
+        $template->param( incart => 1 );
+    }
+}
+
 $template->param( 'AllowOnShelfHolds' => C4::Context->preference('AllowOnShelfHolds') );
 $template->param( 'ItemsIssued' => CountItemsIssued( $biblionumber ) );
 

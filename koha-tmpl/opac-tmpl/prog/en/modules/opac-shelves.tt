@@ -320,8 +320,13 @@ $(function() {
 
         [% IF ( opacuserlogin ) %][% IF ( loggedinusername ) %][% IF ( virtualshelves ) %]<a class="addtolist" href="/cgi-bin/koha/opac-addbybiblionumber.pl?biblionumber=[% itemsloo.biblionumber %]" onclick="Dopop('opac-addbybiblionumber.pl?biblionumber=[% itemsloo.biblionumber %]'); return false;">Save to another list</a>
           [% END %][% END %][% END %]
-
-            [% IF ( opacbookbag ) %]<a class="addtocart" href="#" onclick="addRecord('[% itemsloo.biblionumber %]'); return false;">Add to Cart</a>[% ELSE %]nocart[% END %]
+          [% IF ( opacbookbag ) %]
+              [% IF ( itemsloo.incart ) %]
+                  <a class="addtocart cart[% itemsloo.biblionumber %]" href="#" onclick="addRecord('[% itemsloo.biblionumber %]'); return false;">In your cart</a> <a class="cartRemove cartR[% itemsloo.biblionumber %]" href="#" onclick="delSingleRecord('[% itemsloo.biblionumber %]'); return false;">(remove)</a>
+              [% ELSE %]
+                  <a class="addtocart cart[% itemsloo.biblionumber %]" href="#" onclick="addRecord('[% itemsloo.biblionumber %]'); return false;">Add to Cart</a> <a style="display:none;" class="cartRemove cartR[% itemsloo.biblionumber %]" href="#" onclick="delSingleRecord('[% itemsloo.biblionumber %]'); return false;">(remove)</a>
+              [% END %]
+          [% END %]
         </span>
 
                           <!-- COinS / Openurl --><span class="Z3988" title="[% itemsloo.coins %]"></span>

@@ -68,6 +68,14 @@ sub shelfpage ($$$$$) {
     my ( $shelflimit, $shelfoffset, $shelveslimit, $shelvesoffset );
     my $marcflavour = C4::Context->preference("marcflavour");
 
+    # get biblionumbers stored in the cart
+    my @cart_list;
+    my $cart_cookie = ( $type eq 'opac' ? "bib_list" : "intranet_bib_list" );
+    if($query->cookie($cart_cookie)){
+        my $cart_list = $query->cookie($cart_cookie);
+        @cart_list = split(/\//, $cart_list);
+    }
+
     $shelflimit = ( $type eq 'opac' ? C4::Context->preference('OPACnumSearchResults') : C4::Context->preference('numSearchResults') );
     $shelflimit = $shelflimit || 20;
     $shelfoffset   = ( $itemoff - 1 ) * $shelflimit;     # Sets the offset to begin retrieving items at
@@ -227,6 +235,9 @@ sub shelfpage ($$$$$) {
                     my @items_infos = &GetItemsLocationInfo( $this_item->{'biblionumber'});
                     $this_item->{'itemsissued'} = CountItemsIssued( $this_item->{'biblionumber'} );
                     $this_item->{'ITEM_RESULTS'} = \@items_infos;
+                    if ( grep {$_ eq $biblionumber} @cart_list) {
+                        $this_item->{'incart'} = 1;
+                    }
 
                     if (C4::Context->preference('TagsEnabled') and $tag_quantity = C4::Context->preference('TagsShowOnList')) {
                         $this_item->{'TagLoop'} = get_tags({

@@ -521,7 +521,13 @@ $(document).ready(function(){
 
 				[% IF ( opacuserlogin ) %][% IF ( loggedinusername ) %][% IF ( virtualshelves ) %]<a class="addtoshelf" href="/cgi-bin/koha/opac-addbybiblionumber.pl?biblionumber=[% SEARCH_RESULT.biblionumber %]" onclick="Dopop('opac-addbybiblionumber.pl?biblionumber=[% SEARCH_RESULT.biblionumber %]'); return false;">Save to Lists</a>
     			[% END %][% END %][% END %]
-        		[% IF ( opacbookbag ) %]<a class="addtocart" href="#" onclick="addRecord('[% SEARCH_RESULT.biblionumber %]'); return false;">Add to Cart</a>[% END %]
+                [% IF ( opacbookbag ) %]
+                    [% IF ( SEARCH_RESULT.incart ) %]
+                        <a class="addtocart cart[% SEARCH_RESULT.biblionumber %]" href="#" onclick="addRecord('[% SEARCH_RESULT.biblionumber %]'); return false;">In your Cart</a> <a class="cartRemove cartR[% SEARCH_RESULT.biblionumber %]" href="#" onclick="delSingleRecord('[% SEARCH_RESULT.biblionumber %]'); return false;">(remove)</a>
+                    [% ELSE %]
+                        <a class="addtocart cart[% SEARCH_RESULT.biblionumber %]" href="#" onclick="addRecord('[% SEARCH_RESULT.biblionumber %]'); return false;">Add to Cart</a> <a style="display:none;" class="cartRemove cartR[% SEARCH_RESULT.biblionumber %]" href="#" onclick="delSingleRecord('[% SEARCH_RESULT.biblionumber %]'); return false;">(remove)</a>
+                    [% END %]
+                [% END %]
 				</span>
 				</td><td>
 					<a class="p1" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% SEARCH_RESULT.biblionumber %]">

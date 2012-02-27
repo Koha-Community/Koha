@@ -21,7 +21,11 @@
         [% END %][% END %]
     [% END %]
     [% IF ( opacbookbag ) %]
-        <li><a class="addtocart" href="#" onclick="addRecord('[% biblionumber %]'); return false;">Add to Your Cart</a></li>
+        [% IF ( incart ) %]
+            <li><a class="incart cart[% biblionumber %]" href="#" onclick="addRecord('[% biblionumber %]'); return false;">In your cart</a> <a class="cartRemove cartR[% biblionumber %]" href="#" onclick="delSingleRecord('[% biblionumber %]'); return false;">(remove)</a></li>
+        [% ELSE %]
+            <li><a class="addtocart cart[% biblionumber %]" href="#" onclick="addRecord('[% biblionumber %]'); return false;">Add to your cart</a>  <a style="display:none;" class="cartRemove cartR[% biblionumber %]" href="#" onclick="delSingleRecord('[% biblionumber %]'); return false;">(remove)</a></li>
+        [% END %]
     [% END %]
     <li style="display:none;"><a href="#" id="furthersearches">More searches</a></li>
 </ul>
