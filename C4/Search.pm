@@ -1783,7 +1783,7 @@ sub searchResults {
 	my $interface = $search_context eq 'opac' ? 'OPAC' : '';
 	if (!$scan && C4::Context->preference($interface . "XSLTResultsDisplay")) {
             $oldbiblio->{XSLTResultsRecord} = XSLTParse4Display($oldbiblio->{biblionumber}, $marcrecord, 'Results',
-                                                                $search_context, 1);
+                                                                $search_context, 1, \@hiddenitems);
 	    # the last parameter tells Koha to clean up the problematic ampersand entities that Zebra outputs
         }
 
@@ -1840,23 +1840,6 @@ sub searchResults {
 
             $oldbiblio->{'ALTERNATEHOLDINGS'} = \@alternateholdingsinfo;
             $oldbiblio->{'alternateholdings_count'} = $alternateholdingscount;
-        }
-
-       # XSLT processing of some stuff
-        if (!$scan && $search_context eq 'opac' && C4::Context->preference("OPACXSLTResultsDisplay")) {
-            SetUTF8Flag($marcrecord);
-            $debug && warn $marcrecord->as_formatted;
-            # FIXME note that XSLTResultsDisplay (use of XSLT to format staff interface bib search results)
-            # is not implemented yet
-            $oldbiblio->{XSLTResultsRecord}
-              = XSLTParse4Display($oldbiblio->{biblionumber},
-                                  $marcrecord,
-                                  'Results',
-                                  $search_context,
-                                  1, # clean up the problematic ampersand entities that Zebra outputs
-                                  \@hiddenitems
-                                );
-
         }
 
         push( @newresults, $oldbiblio );
