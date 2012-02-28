@@ -7,49 +7,12 @@
 [% ELSE %]
     <link rel="stylesheet" type="text/css" href="[% themelang %]/css/staff-global.css" />
 [% END %]
-[% IF ( css_libs ) %]
-    [% FOREACH css_lib IN css_libs %]
-        <link rel="stylesheet" type="text/css" href="[% themelang %]/[% css_lib.lib %]" />
-    [% END %]
-[% END %]
-
-[% IF ( css_module ) %]
-    <link rel="stylesheet" type="text/css" href="[% themelang %]/css/modules/[% css_module %]" />
-[% END %]
-[% IF ( css_page ) %]
-    <link rel="stylesheet" type="text/css" href="[% themelang %]/css/pages/[% css_page %]" />
-[% END %]
-
-[% IF ( css_widgets ) %]
-    [% FOREACH css_widget IN css_widgets %]
-    <link rel="stylesheet" type="text/css" href="[% themelang %]/[% css_widget.widget %]" />
-    [% END %]
-[% END %]
 [% IF ( IntranetUserCSS ) %]<style type="text/css">[% IntranetUserCSS %]</style>[% END %]
-
 <script type="text/javascript" src="[% themelang %]/lib/jquery/jquery.js"></script>
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/ui.tabs.js"></script>
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.hotkeys.min.js"></script>
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.cookie.min.js"></script>
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.highlight-3.js"></script>
-
-[% IF ( js_libs ) %]
-    [% FOREACH js_lib IN js_libs %]
-        <script type="text/javascript" src="[% themelang %]/[% js_lib.lib %]"></script>
-    [% END %]
-[% END %]
-[% IF ( js_module ) %]
-    <script type="text/javascript" src="[% themelang %]/js/modules/[% js_module %]"></script>
-[% END %]
-[% IF ( js_page ) %]
-    <script type="text/javascript" src="[% themelang %]/js/pages/[% js_page %]"></script>
-[% END %]
-
-[% IF ( js_widgets ) %]
-    [% FOREACH js_widget IN js_widgets %]
-        <script type="text/javascript" src="[% themelang %]/[% js_widget.widget %]"></script>
-    [% END %]
-[% END %]
 [% IF ( login ) %]
     <link rel="stylesheet" type="text/css" href="[% themelang %]/css/login.css" />
 [% END %]
