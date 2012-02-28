@@ -182,7 +182,7 @@ sub writeoff_all {
 
             #    my $borrowernum    = $input->param("borrowernumber$value");
             my $itemno    = $input->param("itemnumber$value");
-            my $amount    = $input->param("amount$value");
+            my $amount    = $input->param("amountoutstanding$value");
             my $accountno = $input->param("accountno$value");
             WriteOff( $borrowernumber, $accountno, $itemno, $accounttype, $amount, $branch );
         }
