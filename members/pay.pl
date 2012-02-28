@@ -89,7 +89,7 @@ if ($writeoff_all) {
     my $accountno    = $input->param('accountno');
     my $itemno       = $input->param('itemnumber');
     my $account_type = $input->param('accounttype');
-    my $amount       = $input->param('amount');
+    my $amount       = $input->param('amountoutstanding');
     writeoff( $accountno, $itemno, $account_type, $amount );
 }
 
