@@ -29,7 +29,7 @@ use C4::Labels 1.000000;
 
 my $cgi = new CGI;
 
-my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
+my ( undef, $loggedinuser, $cookie ) = get_template_and_user({
 								     template_name   => "labels/label-home.tt",
 								     query           => $cgi,
 								     type            => "intranet",
