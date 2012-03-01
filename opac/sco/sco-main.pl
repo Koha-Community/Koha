@@ -132,7 +132,7 @@ elsif ( $op eq "checkout" ) {
     my $impossible  = {};
     my $needconfirm = {};
     if ( !$confirmed ) {
-        ( $impossible, $needconfirm ) = CanBookBeIssuedCheckout(
+        ( $impossible, $needconfirm ) = CanBookBeIssued(
             $borrower,
             $barcode,
             undef,
