@@ -205,7 +205,7 @@ $(function() {
 
                       <a href="/cgi-bin/koha/opac-downloadshelf.pl?shelfid=[% shelfnumber %]" class="download tag_hides" onclick="open(CGIBIN+'opac-downloadshelf.pl?shelfid=[% shelfnumber %]','win_form','dependant=yes,scrollbars=no,resizable=no,height=300,width=450,top=50,left=100'); return false;">Download List</a>
 
-<span class="sendlist"><a href="/cgi-bin/koha/opac-sendshelf.pl?shelfid=[% shelfnumber %]" class="send tag_hides" onclick="open(CGIBIN+'opac-sendshelf.pl?shelfid=[% shelfnumber %]','win_form','dependant=yes,scrollbars=no,resizable=no,height=300,width=450,top=50,left=100'); return false; ">Send List</a></span>
+[% IF ( opacuserlogin ) %]<span class="sendlist"><a href="/cgi-bin/koha/opac-sendshelf.pl?shelfid=[% shelfnumber %]" class="send tag_hides" onclick="open(CGIBIN+'opac-sendshelf.pl?shelfid=[% shelfnumber %]','win_form','dependant=yes,scrollbars=no,resizable=no,height=300,width=450,top=50,left=100'); return false; ">Send List</a></span>[% END %]
 
 <a class="print tag_hides" href="opac-shelves.pl" onclick="print(); return false;">Print List</a>
 
@@ -352,7 +352,7 @@ $(function() {
                   </div>
                   [% IF ( pagination_bar ) %]<div class="pages">[% pagination_bar %]</div>[% END %]
                 [% ELSE %]
-                  <div class="dialog message">This List is empty.  You can add to your lists from the results of any <a href="opac-main.pl">search</a>!</div>
+                  <div class="dialog message">This List is empty.  [% IF ( opacuserlogin ) %]You can add to your lists from the results of any <a href="opac-main.pl">search</a>![% END %]</div>
               [% END %]<!-- /itemsloop -->
             [% END %]<!-- /viewshelf -->
 
@@ -410,10 +410,12 @@ $(function() {
                 [% UNLESS ( shelves ) %]
                   <h2>Lists</h2>
                   <ul class="link-tabs">
+                  [% IF ( opacuserlogin ) %]
                   [% IF ( showprivateshelves ) %]
                     <li id="privateshelves_tab" class="on"><a href="/cgi-bin/koha/opac-shelves.pl?display=privateshelves">Your private lists</a></li>
                   [% ELSE %]
                     <li id="privateshelves_tab" class="off"><a href="/cgi-bin/koha/opac-shelves.pl?display=privateshelves">Your private lists</a></li>
+                  [% END %]
                   [% END %]
                   [% IF ( showpublicshelves ) %]
                     <li id="publicshelves_tab" class="on"><a href="/cgi-bin/koha/opac-shelves.pl?display=publicshelves">Public lists</a></li>
@@ -483,7 +485,7 @@ $(function() {
                     [% END %]<!-- /shelveslooppriv -->
                   [% END %]<!-- /showprivateshelves -->
                   [% ELSE %]<!-- /loggedinusername -->
-                      <div><a href="/cgi-bin/koha/opac-user.pl">Log in</a> to create new Lists.</div>
+                      [% IF ( opacuserlogin ) %]<div><a href="/cgi-bin/koha/opac-user.pl">Log in</a> to create new Lists.</div>[% END %]
                   [% END %]<!-- /loggedinusername -->
 
                   
@@ -497,7 +499,7 @@ $(function() {
                   [% IF ( loggedinusername ) %]
                  <div id="toolbar"> <a class="newshelf" href="/cgi-bin/koha/opac-shelves.pl?shelves=1">New List</a></div>
                   [% ELSE %]
-                  <div><a href="/cgi-bin/koha/opac-user.pl">Log in</a> to create new Lists.</div>
+                  [% IF ( opacuserlogin ) %]<div><a href="/cgi-bin/koha/opac-user.pl">Log in</a> to create new Lists.</div>[% END %]
                   [% END %]
                   [% IF ( shelvesloop ) %]
                       <table>
