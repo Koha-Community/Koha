@@ -168,13 +168,13 @@ Sorry, This Self-Checkout Station has lost authentication.  Please contact the a
 	[% END %]
 	</div>
 	[% IF ( nouser ) %]
-	<div class="error"><h4>Sorry</h4><p>The userid <strong>[% patronid %]</strong> was not found in the database.  Please try again.</p></div>
+	<div class="dialog alert"><h4>Sorry</h4><p>The userid <strong>[% patronid %]</strong> was not found in the database.  Please try again.</p></div>
 	<br />
 	[% END %]
 	[% END %]
 
 	[% IF ( timedout ) %]
-	<div class="error"><h4>Sorry</h4><p>Your session has timed out due to inactivity.  Please sign in.</p></div>
+	<div class="dialog message"><h4>Sorry</h4><p>Your session has timed out due to inactivity.  Please sign in.</p></div>
 	<br />
 	[% END %]
 	[% IF ( validuser ) %]

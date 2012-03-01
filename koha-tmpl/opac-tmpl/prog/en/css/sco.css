@@ -61,9 +61,21 @@ h6 {
 	font-size : 100%;
 }
 
-input[type=submit], input[type=button], input[type=reset] {
-	background : #b8d0e6 url(../../images/submit-bg.gif) repeat-x 0 0;
-	background-color : #b8d0e6;
+input[type=submit],
+input[type=button],
+input[type=reset],
+fieldset.brief input[type=submit],
+fieldset.brief input[type=button],
+fieldset.brief input[type=reset]
+{
+	background: #f4f9fc; /* Old browsers */
+	background: -moz-linear-gradient(top, #f4f9fc 0%, #dfeefa 4%, #bfd5ea 93%, #a1c4e2 97%, #b8d0e6 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f4f9fc), color-stop(4%,#dfeefa), color-stop(93%,#bfd5ea), color-stop(97%,#a1c4e2), color-stop(100%,#b8d0e6)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #f4f9fc 0%,#dfeefa 4%,#bfd5ea 93%,#a1c4e2 97%,#b8d0e6 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #f4f9fc 0%,#dfeefa 4%,#bfd5ea 93%,#a1c4e2 97%,#b8d0e6 100%); /* Opera11.10+ */
+	background: -ms-linear-gradient(top, #f4f9fc 0%,#dfeefa 4%,#bfd5ea 93%,#a1c4e2 97%,#b8d0e6 100%); /* IE10+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f4f9fc', endColorstr='#b8d0e6',GradientType=0 ); /* IE6-9 */
+	background: linear-gradient(top, #f4f9fc 0%,#dfeefa 4%,#bfd5ea 93%,#a1c4e2 97%,#b8d0e6 100%); /* W3C */
 	border-top: 1px solid #cccccc;
 	border-left: 1px solid #cccccc;
 	border-right: 1px solid #eeeeee;
@@ -74,7 +86,7 @@ input[type=submit], input[type=button], input[type=reset] {
 	padding : 4px;
 }
 
-input[type=submit]:active, input[type=button], input[type=reset] {
+input[type=submit]:active, input[type=button]:active, input[type=reset]:active {
 	border: 1px inset #666666;
 	float : none;
 }
@@ -91,12 +103,32 @@ input[type=submit]:active, input[type=button], input[type=reset] {
   }
  
 div.alert {
-  background : #FFC url(../../images/alert-bg.gif) repeat-x left 0;
-  text-align : center;
+	background: #fef8d3; /* Old browsers */
+	background: -moz-linear-gradient(top, #fef8d3 0%, #ffec91 9%, #ffed87 89%, #f9dc00 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#fef8d3), color-stop(9%,#ffec91), color-stop(89%,#ffed87), color-stop(100%,#f9dc00)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #fef8d3 0%,#ffec91 9%,#ffed87 89%,#f9dc00 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #fef8d3 0%,#ffec91 9%,#ffed87 89%,#f9dc00 100%); /* Opera11.10+ */
+	background: -ms-linear-gradient(top, #fef8d3 0%,#ffec91 9%,#ffed87 89%,#f9dc00 100%); /* IE10+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fef8d3', endColorstr='#f9dc00',GradientType=0 ); /* IE6-9 */
+	background: linear-gradient(top, #fef8d3 0%,#ffec91 9%,#ffed87 89%,#f9dc00 100%); /* W3C */
+	text-align : center;
 }
 
 div.alert strong {
 	color : #900;
+}
+
+div.message {
+	background: #ffffff; /* Old browsers */
+	background: -moz-linear-gradient(top, #ffffff 0%, #f4f6fa 2%, #eaeef5 23%, #e8edf6 94%, #cddbf2 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(2%,#f4f6fa), color-stop(23%,#eaeef5), color-stop(94%,#e8edf6), color-stop(100%,#cddbf2)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #ffffff 0%,#f4f6fa 2%,#eaeef5 23%,#e8edf6 94%,#cddbf2 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #ffffff 0%,#f4f6fa 2%,#eaeef5 23%,#e8edf6 94%,#cddbf2 100%); /* Opera11.10+ */
+	background: -ms-linear-gradient(top, #ffffff 0%,#f4f6fa 2%,#eaeef5 23%,#e8edf6 94%,#cddbf2 100%); /* IE10+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#cddbf2',GradientType=0 ); /* IE6-9 */
+	background: linear-gradient(top, #ffffff 0%,#f4f6fa 2%,#eaeef5 23%,#e8edf6 94%,#cddbf2 100%); /* W3C */
+	border : 1px solid #bcbcbc;
+	width : 55%;
 }
 
 .dialog input {
@@ -237,4 +269,45 @@ span.koha_url {
 a.koha_url {
     text-decoration: none;
     color: #666666;
+}
+
+
+div#changelanguage{
+	background-color: #fff;
+	border-top: 1px solid #CCC;
+	color : #666;
+	font-size : 85%;
+	padding : 1em;
+	margin-top : 2em;
+ }
+
+div#changelanguage a {
+	font-weight : normal;
+	padding : .5em;
+}
+
+div#changelanguage a.more {
+	background-image:url(../../images/more-up-arrow.gif);
+	background-position:right center;
+	background-repeat:no-repeat;
+	padding-right:13px;
+}
+
+div#changelanguage li.yuimenuitem {
+	font-size : 120%;
+	font-weight : normal;
+	margin : 0;
+	padding : 0 1em;
+}
+
+div#changelanguage li.yuimenuitem a.yuimenuitemlabel {
+	padding : 0;
+}
+
+div.lang{
+        float:left;
+}
+
+div.ft {
+	clear : both;
 }
