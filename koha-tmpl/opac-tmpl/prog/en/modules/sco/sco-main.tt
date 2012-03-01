@@ -1,4 +1,4 @@
-[% INCLUDE 'doc-head-open.inc' %][% LibraryName %] &rsaquo; Self Checkout </title>
+[% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha [% END %] &rsaquo; Self Checkout </title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="Koha [% Version %]" /> <!-- leave this for stats -->
 <link rel="shortcut icon" href="[% themelang %]/includes/favicon.ico" type="image/x-icon" />
@@ -67,7 +67,6 @@ $(document).ready(function() {
 
 <div id="masthead"><h1>[% LibraryName %] Self Checkout System</h1></div>
 <div id="bd">
-    <div class="yui-g">
 
 [% IF ( impossible ) %]<!-- We tried to issue, but failed. -->
 <div class="dialog alert"><h3>Item cannot be checked out.</h3><p>Sorry, This item cannot be checked out at this station.  </p>
@@ -161,10 +160,7 @@ Sorry, This Self-Checkout Station has lost authentication.  Please contact the a
 
 	[% IF ( patronid ) %]
 	[% IF ( validuser ) %]
-	<h3 class="warning">You are logged in as [% borrowername %].</h3>
-    [% IF ( display_patron_image ) %]
-        <img src="/cgi-bin/koha/sco/sco-patron-image.pl?cardnumber=[% cardnumber %]" alt="" />
-    [% END %]
+    <h3 class="warning">You are logged in as [% borrowername %].</h3>
 	[% END %]
 	</div>
 	[% IF ( nouser ) %]
@@ -178,6 +174,7 @@ Sorry, This Self-Checkout Station has lost authentication.  Please contact the a
 	<br />
 	[% END %]
 	[% IF ( validuser ) %]
+  [% IF ( display_patron_image ) %]<div class="yui-ge"><div class="yui-u first">[% END %]
 	<div id="newcheckout" class="sco_entry">
 	<form id="scan_form" name="scan_form" method="post" action="/cgi-bin/koha/sco/sco-main.pl" onsubmit="return checkout_confirm('[% patronid %]');">
 	<fieldset><legend> Check out[% IF ( AllowSelfCheckReturns ) %], return[% END %] or renew an item: </legend>
@@ -190,7 +187,14 @@ Sorry, This Self-Checkout Station has lost authentication.  Please contact the a
 	</form>
 	<div><form method="post" action="/cgi-bin/koha/sco/sco-main.pl?op=logout" ><input type="submit" value="Finish" class="finish" /></form></div>
 	</div> <!-- sco_entry --> <!-- newcheckout -->
-
+  [% IF ( display_patron_image ) %]</div> <!-- /yui-u first -->[% END %]
+  [% IF ( display_patron_image ) %]
+  <div class="yui-u">
+        <img src="/cgi-bin/koha/sco/sco-patron-image.pl?cardnumber=[% cardnumber %]" alt="" />
+  </div>
+  [% END %]
+  </div> <!-- /yui-ge -->
+  <div class="yui-g">
 	<div id="borrowerdetails">
 	[% IF ( issues_count ) %]
 	<table id="loanTable"><caption>Checkouts for [% borrowername %] <span class="count">([% issues_count %] total)</span></caption>
@@ -233,7 +237,7 @@ Sorry, This Self-Checkout Station has lost authentication.  Please contact the a
 	[% ELSE %]
 	<h3>You currently have nothing checked out.</h3>
 	[% END %]
-
+</div> <!-- /yui-g -->
 	[% ELSE %]<!-- not validuser -->
 	<div class="sco_entry" >
 	<form id="mainform" action="/cgi-bin/koha/sco/sco-main.pl" name="mainform" method="post">
@@ -256,7 +260,6 @@ Sorry, This Self-Checkout Station has lost authentication.  Please contact the a
 	[% END %]
 [% END %] <!-- ( / hide main) -->	
 	
-	</div>
 	</div>
 </div>
 [% INCLUDE 'opac-bottom.inc' %]
