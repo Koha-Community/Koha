@@ -121,8 +121,8 @@ for my $vendor (@suppliers) {
         if ($userenv->{'flags'} & 1 || #user is superlibrarian
                (haspermission( $uid, { acquisition => q{*} } ) && #user has acq permissions and
                    ($viewbaskets eq 'all' || #user is allowed to see all baskets
-                   ($viewbaskets eq 'branch' && $authorisedby && $userbranch eq GetMember( borrowernumber => $authorisedby )->{branchcode}) || #basket belongs to user's branch
-                   ($basket->{authorisedby} &&  $viewbaskets == 'user' && $authorisedby == $loggedinuser) #user created this basket
+                   ($viewbaskets eq 'branch' && $authorisedby && $userbranch eq $basketbranch) || #basket belongs to user's branch
+                   ($basket->{authorisedby} &&  $viewbaskets eq 'user' && $authorisedby == $loggedinuser) #user created this basket
                    ) 
                 ) 
            ) { 
