@@ -17,7 +17,7 @@
 <form action="/cgi-bin/koha/opac-userupdate.pl" method="get">
 <div class="yui-u first">
 <input type="hidden" name="modify" value="yes" />
-[% IF ( display_patron_image ) %]<p style="border:1px solid #EEE;padding:1em;">
+[% IF ( display_patron_image ) %]<p class="patronimage edit">
     <img src="/cgi-bin/koha/opac-patron-image.pl" alt="" />
 </p>[% END %]
 <fieldset class="brief"><legend>Name</legend><ol>
@@ -105,7 +105,7 @@
 [% ELSE %]
 <p style="clear:left;padding:1em 0">To make changes to your record please contact the library.</p>
 <div class="yui-u first">
-[% IF ( display_patron_image ) %]<p style="border:1px solid #EEE;border-bottom-color:#000;padding:1em;">
+[% IF ( display_patron_image ) %]<p class="patronimage">
     <img src="/cgi-bin/koha/opac-patron-image.pl" alt="" />
 </p>[% END %]
 <fieldset class="rows">
