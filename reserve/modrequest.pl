@@ -46,6 +46,7 @@ my @biblionumber=$query->param('biblionumber');
 my @borrower=$query->param('borrowernumber');
 my @branch=$query->param('pickup');
 my @itemnumber=$query->param('itemnumber');
+my @suspend_until=$query->param('suspend_until');
 my $multi_hold = $query->param('multi_hold');
 my $biblionumbers = $query->param('biblionumbers');
 my $count=@rank;
@@ -66,7 +67,7 @@ if ($CancelBorrowerNumber) {
 else {
     for (my $i=0;$i<$count;$i++){
         undef $itemnumber[$i] unless $itemnumber[$i] ne '';
-        ModReserve($rank[$i],$biblionumber[$i],$borrower[$i],$branch[$i],$itemnumber[$i]); #from C4::Reserves
+        ModReserve($rank[$i],$biblionumber[$i],$borrower[$i],$branch[$i],$itemnumber[$i],$suspend_until[$i]); #from C4::Reserves
     }
 }
 my $from=$query->param('from');

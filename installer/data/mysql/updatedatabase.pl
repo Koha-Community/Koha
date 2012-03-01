@@ -5095,6 +5095,20 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.07.00.042";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("ALTER TABLE reserves ADD suspend BOOLEAN NOT NULL DEFAULT 0");
+    $dbh->do("ALTER TABLE old_reserves ADD suspend BOOLEAN NOT NULL DEFAULT 0");
+
+    $dbh->do("ALTER TABLE reserves ADD suspend_until DATETIME NULL DEFAULT NULL");
+    $dbh->do("ALTER TABLE old_reserves ADD suspend_until DATETIME NULL DEFAULT NULL");
+
+    $dbh->do("INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES ('AutoResumeSuspendedHolds',  '1', NULL ,  'Allow suspended holds to be automatically resumed by a set date.',  'YesNo')");
+
+    print "Upgrade to $DBversion done (Add suspend fields to reserves table, add syspref AutoResumeSuspendedHolds)\n";
+    SetVersion ($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 DropAllForeignKeys($table)

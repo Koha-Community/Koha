@@ -344,6 +344,12 @@ Circulation:
                   yes: Transfer
                   no: "Don't transfer"
             - items when cancelling all waiting holds.
+        -
+            - pref: AutoResumeSuspendedHolds
+              choices:
+                  yes: Allow
+                  no: "Don't allow"
+            - suspended holds to be automatically resumed by a set date.
     Fines Policy:
         -
             - Calculate fines based on days overdue

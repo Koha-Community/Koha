@@ -3,6 +3,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 [% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha Online[% END %] Catalog &rsaquo; Your library home
 [% INCLUDE 'doc-head-close.inc' %]
+[% INCLUDE 'calendar.inc' %]
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.metadata.min.js"></script>
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
 <script type="text/JavaScript">
@@ -397,6 +398,8 @@ $.tablesorter.addParser({
                             [% IF ( RESERVE.intransit ) %]
                                 Item in transit from <b> [% RESERVE.frombranch %]</b> since 
                                 [% RESERVE.datesent | $KohaDates %]
+                            [% ELSIF ( RESERVE.suspend ) %]
+                                Suspended [% IF ( RESERVE.suspend_until ) %] until [% RESERVE.suspend_until %] [% END %]
                             [% ELSE %]
                                 Pending
                             [% END %]
@@ -409,14 +412,66 @@ $.tablesorter.addParser({
 		<input type="hidden" name="reservenumber" value="[% RESERVE.reservenumber %]" />
 			<input type="submit" name="submit" class="icon delete cancel" value="Cancel" onclick="return confirmDelete('Are you sure you want to cancel this hold?');" /></form>
 		[% ELSE %]
-			&nbsp;
 		[% END %]
 		</td>
+
 
             </tr>
             [% END %]
 			</tbody>
         </table>
+
+	<div>
+            <form action="/cgi-bin/koha/opac-modrequest-suspend.pl" method="post">
+              <input type="submit" name="submit" class="icon delete cancel" value="Suspend all holds" onclick="return confirmDelete('Are you sure you want to suspend all holds?');" />
+              <input type="hidden" name="suspend" value="1" />
+
+	      [% IF AutoResumeSuspendedHolds %]
+	      <label for="suspend_until"> until </label>
+              <input name="suspend_until" id="suspend_until" readonly="readonly" size="10">
+              <script language="JavaScript" type="text/javascript">
+              //<![CDATA[
+
+              var cal_img = document.createElement('img');
+              cal_img.src = "[% themelang %]/lib/calendar/cal.gif";
+              cal_img.alt = "Show Calendar";
+              cal_img.border = "0";
+              cal_img.id = "CalendarSuspendUntil";
+              cal_img.style.cursor = "pointer";
+              document.getElementById("suspend_until").parentNode.appendChild( cal_img );
+
+              function validate(date) {
+                  var today = new Date();
+                        if ( (date > today) ||
+                                ( date.getDate() == today.getDate() &&
+                                  date.getMonth() == today.getMonth() &&
+                                  date.getFullYear() == today.getFullYear() ) ) {
+                            return false;
+                        } else {
+                            return true;
+                        }
+              };
+              Calendar.setup(
+              {
+                inputField : "suspend_until",
+                ifFormat : "[% DHTMLcalendar_dateformat %]",
+                button : "CalendarSuspendUntil",
+                disableFunc : validate,
+                dateStatusFunc : validate
+              }
+              );
+              //]]>
+              </script>
+              <a href="#" style="font-size:85%;text-decoration:none;" onclick="document.getElementById('suspend_until').value='';return false;">Clear Date</a></p>
+              [% END %]
+            </form>
+	</div>
+	<div>
+            <form action="/cgi-bin/koha/opac-modrequest-suspend.pl" method="post">
+              <input type="submit" name="submit" class="icon delete cancel" value="Resume all suspended holds" onclick="return confirmDelete('Are you sure you want to resume all suspended holds?');" />
+              <input type="hidden" name="suspend" value="0" />
+            </form>
+	</div>
     </div>
     [% END %]
     </div><!-- /opac-user views -->

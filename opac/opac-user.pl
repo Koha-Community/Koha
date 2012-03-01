@@ -263,6 +263,7 @@ foreach my $res (@reserves) {
     if ($OPACDisplayRequestPriority) {
         $res->{'priority'} = '' if $res->{'priority'} eq '0';
     }
+    $res->{'suspend_until'} = C4::Dates->new( $res->{'suspend_until'}, "iso")->output("syspref") if ( $res->{'suspend_until'} );
 }
 
 # use Data::Dumper;
@@ -359,6 +360,9 @@ $template->param(
     userview => 1,
     dateformat    => C4::Context->preference("dateformat"),
 );
+
+$template->param( DHTMLcalendar_dateformat  => C4::Dates->DHTMLcalendar() );
+$template->param( AutoResumeSuspendedHolds => C4::Context->preference('AutoResumeSuspendedHolds') );
 
 output_html_with_http_headers $query, $cookie, $template->output;
 

@@ -110,6 +110,10 @@ if ( $action eq 'move' ) {
   my $borrowernumber = $input->param('borrowernumber');
   my $biblionumber   = $input->param('biblionumber');
   ToggleLowestPriority( $borrowernumber, $biblionumber );
+} elsif ( $action eq 'toggleSuspend' ) {
+  my $borrowernumber = $input->param('borrowernumber');
+  my $biblionumber   = $input->param('biblionumber');
+  ToggleSuspend( $borrowernumber, $biblionumber );
 }
 
 if ($findborrower) {
@@ -568,7 +572,8 @@ foreach my $biblionumber (@biblionumbers) {
         $reserve{'lowestPriority'}    = $res->{'lowestPriority'};
         $reserve{'branchloop'} = GetBranchesLoop($res->{'branchcode'});
         $reserve{'optionloop'} = \@optionloop;
-
+        $reserve{'suspend'} = $res->{'suspend'};
+        $reserve{'suspend_until'} = C4::Dates->new( $res->{'suspend_until'}, "iso")->output("syspref");
         push( @reserveloop, \%reserve );
     }
 
@@ -626,6 +631,8 @@ if ($multihold) {
 if ( C4::Context->preference( 'AllowHoldDateInFuture' ) ) {
     $template->param( reserve_in_future => 1 );
 }
+
+$template->param( AutoResumeSuspendedHolds => C4::Context->preference('AutoResumeSuspendedHolds') );
 
 # printout the page
 output_html_with_http_headers $input, $cookie, $template->output;

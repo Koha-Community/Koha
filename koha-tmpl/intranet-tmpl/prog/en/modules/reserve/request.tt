@@ -597,6 +597,7 @@ function checkMultiHold() {
             <th><img src="/intranet-tmpl/[% theme %]/img/go-bottom.png" border="0" alt="Toggle Set to Lowest Priority" /></th>
         [% END %]
 	<th>&nbsp;</th>
+	<th>&nbsp;</th>
       </tr>
   [% FOREACH reserveloo IN biblioloo.reserveloop %]
   [% UNLESS ( loop.odd ) %]<tr class="highlight">[% ELSE %]<tr>[% END %]
@@ -653,7 +654,7 @@ function checkMultiHold() {
         <td>
     [% IF ( reserveloo.wait ) %]
     	[% IF ( reserveloo.atdestination ) %]
-                [% IF ( reserveloo.found ) %]
+            [% IF ( reserveloo.found ) %]
                 Item waiting at <b> [% reserveloo.wbrname %]</b> <input type="hidden" name="pickup" value="[% reserveloo.wbrcode %]" />
             [% ELSE %]
                 Waiting to be pulled <input type="hidden" name="pickup" value="[% reserveloo.wbrcode %]" />
@@ -728,6 +729,44 @@ function checkMultiHold() {
                 </a>
 	</td>
 
+	<td>
+	[% UNLESS ( reserveloo.wait ) %]
+            <input type="button" value="[% IF ( reserveloo.suspend ) %]Unsuspend[% ELSE %]Suspend[% END %]" onclick="window.location.href='request.pl?action=toggleSuspend&amp;borrowernumber=[% reserveloo.borrowernumber %]&amp;biblionumber=[% reserveloo.biblionumber %]&amp;date=[% reserveloo.date %]'" />
+
+            [% IF AutoResumeSuspendedHolds %]
+	    <label for="suspend_until_[% reserveloo.borrowernumber %]">[% IF ( reserveloo.suspend ) %] on [% ELSE %] until [% END %]</label>
+	    <input name="suspend_until" id="suspend_until_[% reserveloo.borrowernumber %]" size="10" readonly="readonly" value="[% reserveloo.suspend_until %]" />
+	    <img src="[% themelang %]/lib/calendar/cal.gif" alt="Show Calendar" border="0" id="SuspendUntilDate_[% reserveloo.borrowernumber %]" style="cursor: pointer;" />
+	    <script language="JavaScript" type="text/javascript">
+		//<![CDATA[
+		function validate1(date) {
+			var today = new Date();
+			if ( (date > today) ||
+                    ( date.getDate() == today.getDate() &&
+                      date.getMonth() == today.getMonth() &&
+                      date.getFullYear() == today.getFullYear() ) ) {
+				return false;
+			} else {
+				return true;
+			}
+		};
+		Calendar.setup(
+			{
+				inputField : "suspend_until_[% reserveloo.borrowernumber %]",
+				ifFormat : "[% DHTMLcalendar_dateformat %]",
+				button : "SuspendUntilDate_[% reserveloo.borrowernumber %]",
+				disableFunc : validate1,
+				dateStatusFunc : validate1
+			}
+		);
+		//]]>
+	    </script>
+	    <a href='#' onclick="document.getElementById('suspend_until_[% reserveloo.borrowernumber %]').value='';">Clear Date</a>
+            [% END %]
+	[% ELSE %]
+		<input type="hidden" name="suspend_until" value="" />
+	[% END %]
+	</td>
       </tr>
 
   [% END %] <!-- existing reserveloop -->

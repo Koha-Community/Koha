@@ -1459,6 +1459,8 @@ CREATE TABLE `old_reserves` ( -- this table holds all holds/reserves that have b
   `waitingdate` date default NULL, -- the date the item was marked as waiting for the patron at the library
   `expirationdate` DATE DEFAULT NULL, -- the date the hold expires (usually the date entered by the patron to say they don't need the hold after a certain date)
   `lowestPriority` tinyint(1) NOT NULL,
+  `suspend` BOOLEAN NOT NULL DEFAULT 0,
+  `suspend_until` DATETIME NULL DEFAULT NULL,
   KEY `old_reserves_borrowernumber` (`borrowernumber`),
   KEY `old_reserves_biblionumber` (`biblionumber`),
   KEY `old_reserves_itemnumber` (`itemnumber`),
@@ -1652,6 +1654,8 @@ CREATE TABLE `reserves` ( -- information related to holds/reserves in Koha
   `waitingdate` date default NULL, -- the date the item was marked as waiting for the patron at the library
   `expirationdate` DATE DEFAULT NULL, -- the date the hold expires (usually the date entered by the patron to say they don't need the hold after a certain date)
   `lowestPriority` tinyint(1) NOT NULL,
+  `suspend` BOOLEAN NOT NULL DEFAULT 0,
+  `suspend_until` DATETIME NULL DEFAULT NULL,
   KEY priorityfoundidx (priority,found),
   KEY `borrowernumber` (`borrowernumber`),
   KEY `biblionumber` (`biblionumber`),

@@ -354,6 +354,8 @@ if ($borrowernumber) {
         $getreserv{itemcallnumber} = $getiteminfo->{'itemcallnumber'};
         $getreserv{biblionumber}   = $getiteminfo->{'biblionumber'};
         $getreserv{waitingat}      = GetBranchName( $num_res->{'branchcode'} );
+        $getreserv{suspend}        = $num_res->{'suspend'};
+        $getreserv{suspend_until}  = C4::Dates->new( $num_res->{'suspend_until'}, "iso")->output("syspref");
         #         check if we have a waiting status for reservations
         if ( $num_res->{'found'} eq 'W' ) {
             $getreserv{color}   = 'reserved';
@@ -726,4 +728,7 @@ $template->param(
     DHTMLcalendar_dateformat  => C4::Dates->DHTMLcalendar(),
     canned_bor_notes_loop     => $canned_notes,
 );
+
+$template->param( AutoResumeSuspendedHolds => C4::Context->preference('AutoResumeSuspendedHolds') );
+
 output_html_with_http_headers $query, $cookie, $template->output;

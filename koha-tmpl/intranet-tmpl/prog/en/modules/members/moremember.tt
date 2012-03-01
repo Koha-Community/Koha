@@ -606,6 +606,7 @@ function validate1(date) {
 			<th>Barcode</th>
 			<th>Priority</th>
 			<th>Delete?</th>
+			<th>&nbsp;</th>
 		</tr></thead>
 		<tbody>[% FOREACH reservloo IN reservloop %]
 		<tr class="[% reservloo.color %]">
@@ -637,12 +638,65 @@ function validate1(date) {
                 <input type="hidden" name="biblionumber" value="[% reservloo.biblionumber %]" />
                 <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
             </td>
+            <td>[% IF ( reservloo.suspend ) %]Suspended [% IF ( reservloo.suspend_until ) %] until [% reservloo.suspend_until %][% END %][% END %]</td>
         </tr>
 		[% END %]</tbody>
     </table>
 
         <fieldset class="action"><input type="submit" class="cancel" name="submit" value="Cancel Marked Requests" /></fieldset>
     </form>
+    <fieldset class="action">
+        <form action="/cgi-bin/koha/reserve/modrequest_suspendall.pl" method="post">
+            <input type="hidden" name="from" value="borrower" />
+            <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
+            <input type="submit" value="Suspend All Requests" />
+
+            [% IF AutoResumeSuspendedHolds %]
+            <label for="suspend_until">until</label>
+            <input type="text" size="10" id="suspend_until" name="suspend_until"/>
+            <img src="[% themelang %]/lib/calendar/cal.gif" alt="Show Calendar"  border="0" id="CalendarSuspendUntil" style="cursor: pointer;" />
+            <span class="hint">Specify date on which to resume [% INCLUDE 'date-format.inc' %]: </span>
+
+             <script language="JavaScript" type="text/javascript">
+			 //<![CDATA[
+                   function validate1(date) {
+                         var today = new Date();
+                         if ( date < today ) {
+                             return true;
+                          } else {
+                             return false;
+                          }
+                     };
+                     function refocus(calendar) {
+                        $('#barcode').focus();
+                        calendar.hide();
+                     };
+				//#TODO - ADD syspref (AllowPostDatedCheckouts).
+                     Calendar.setup(
+                          {
+                             inputField : "suspend_until",
+                             ifFormat : "[% DHTMLcalendar_dateformat %]",
+                             button : "CalendarSuspendUntil",
+//                           disableFunc : validate1,
+//                           dateStatusFunc : validate1,
+                             onClose : refocus
+                           }
+                        );
+				//]]>
+             </script>
+            [% END %]
+        </form>
+    </fieldset>
+
+    <fieldset class="action">
+        <form action="/cgi-bin/koha/reserve/modrequest_suspendall.pl" method="post">
+            <input type="hidden" name="from" value="borrower" />
+            <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
+            <input type="hidden" name="suspend" value="0" />
+            <input type="submit" value="Resume All Suspended All Requests" />
+	</form>
+    </fieldset>
+
     [% ELSE %]<p>Patron has nothing on hold.</p>[% END %]
 	</div>
 

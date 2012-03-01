@@ -320,6 +320,8 @@ if ($borrowernumber) {
             $getreserv{biblionumber}  = $num_res->{'biblionumber'};	
         }
         $getreserv{waitingposition} = $num_res->{'priority'};
+        $getreserv{suspend} = $num_res->{'suspend'};
+        $getreserv{suspend_until} = C4::Dates->new( $num_res->{'suspend_until'}, "iso")->output("syspref");;
 
         push( @reservloop, \%getreserv );
     }
@@ -427,8 +429,8 @@ $template->param(
     "dateformat_" . (C4::Context->preference("dateformat") || '') => 1,
     samebranch     => $samebranch,
     quickslip		  => $quickslip,
-	activeBorrowerRelationship => (C4::Context->preference('borrowerRelationship') ne ''),
-);
+    activeBorrowerRelationship => (C4::Context->preference('borrowerRelationship') ne ''),
+    AutoResumeSuspendedHolds => C4::Context->preference('AutoResumeSuspendedHolds') );
 
 output_html_with_http_headers $input, $cookie, $template->output;
 

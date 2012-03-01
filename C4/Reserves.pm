@@ -117,12 +117,16 @@ BEGIN {
         &CancelReserve
         &CancelExpiredReserves
 
+        &AutoUnsuspendReserves
+
         &IsAvailableForItemLevelRequest
         
         &AlterPriority
         &ToggleLowestPriority
 
         &ReserveSlip
+        &ToggleSuspend
+        &SuspendAll
     );
     @EXPORT_OK = qw( MergeHolds );
 }    
@@ -264,7 +268,9 @@ sub GetReservesFromBiblionumber {
                 itemnumber,
                 reservenotes,
                 expirationdate,
-                lowestPriority
+                lowestPriority,
+                suspend,
+                suspend_until
         FROM     reserves
         WHERE biblionumber = ? ";
     unless ( $all_dates ) {
@@ -894,6 +900,24 @@ sub CancelExpiredReserves {
 
 }
 
+=head2 AutoUnsuspendReserves
+
+  AutoUnsuspendReserves();
+
+Unsuspends all suspended reserves with a suspend_until date from before today.
+
+=cut
+
+sub AutoUnsuspendReserves {
+
+    my $dbh = C4::Context->dbh;
+
+    my $query = "UPDATE reserves SET suspend = 0, suspend_until = NULL WHERE DATE( suspend_until ) < DATE( CURDATE() )";
+    my $sth = $dbh->prepare( $query );
+    $sth->execute();
+
+}
+
 =head2 CancelReserve
 
   &CancelReserve($biblionumber, $itemnumber, $borrowernumber);
@@ -1029,7 +1053,7 @@ itemnumber and supplying itemnumber.
 
 sub ModReserve {
     #subroutine to update a reserve
-    my ( $rank, $biblio, $borrower, $branch , $itemnumber) = @_;
+    my ( $rank, $biblio, $borrower, $branch , $itemnumber, $suspend_until) = @_;
      return if $rank eq "W";
      return if $rank eq "n";
     my $dbh = C4::Context->dbh;
@@ -1062,14 +1086,25 @@ sub ModReserve {
         
     }
     elsif ($rank =~ /^\d+/ and $rank > 0) {
-        my $query = qq/
-        UPDATE reserves SET priority = ? ,branchcode = ?, itemnumber = ?, found = NULL, waitingdate = NULL
+        my $query = "
+            UPDATE reserves SET priority = ? ,branchcode = ?, itemnumber = ?, found = NULL, waitingdate = NULL
             WHERE biblionumber   = ?
-             AND borrowernumber = ?
-        /;
+            AND borrowernumber = ?
+        ";
         my $sth = $dbh->prepare($query);
         $sth->execute( $rank, $branch,$itemnumber, $biblio, $borrower);
         $sth->finish;
+
+        if ( defined( $suspend_until ) ) {
+            if ( $suspend_until ) {
+                $suspend_until = C4::Dates->new( $suspend_until )->output("iso");
+                warn "SUSPEND UNTIL: $suspend_until";
+                $dbh->do("UPDATE reserves SET suspend = 1, suspend_until = ? WHERE biblionumber = ? AND borrowernumber = ?", undef, ( $suspend_until, $biblio, $borrower ) );
+            } else {
+                $dbh->do("UPDATE reserves SET suspend_until = NULL WHERE biblionumber = ? AND borrowernumber = ?", undef, ( $biblio, $borrower ) );
+            }
+        }
+
         _FixPriority( $biblio, $borrower, $rank);
     }
 }
@@ -1472,6 +1507,93 @@ sub ToggleLowestPriority {
     _FixPriority( $biblionumber, $borrowernumber, '999999' );
 }
 
+=head2 ToggleSuspend
+
+  ToggleSuspend( $borrowernumber, $biblionumber );
+
+This function sets the suspend field to true if is false, and false if it is true.
+If the reserve is currently suspended with a suspend_until date, that date will
+be cleared when it is unsuspended.
+
+=cut
+
+sub ToggleSuspend {
+    my ( $borrowernumber, $biblionumber ) = @_;
+
+    my $dbh = C4::Context->dbh;
+
+    my $sth = $dbh->prepare(
+        "UPDATE reserves SET suspend = NOT suspend,
+        suspend_until = CASE WHEN suspend = 0 THEN NULL ELSE suspend_until END
+        WHERE biblionumber = ?
+        AND borrowernumber = ?
+    ");
+    $sth->execute(
+        $biblionumber,
+        $borrowernumber,
+    );
+    $sth->finish;
+}
+
+=head2 SuspendAll
+
+  SuspendAll(
+      borrowernumber   => $borrowernumber,
+      [ biblionumber   => $biblionumber, ]
+      [ suspend_until  => $suspend_until, ]
+      [ suspend        => $suspend ]
+  );
+
+  This function accepts a set of hash keys as its parameters.
+  It requires either borrowernumber or biblionumber, or both.
+
+  suspend_until is wholly optional.
+
+=cut
+
+sub SuspendAll {
+    my %params = @_;
+
+    my $borrowernumber = $params{'borrowernumber'} || undef;
+    my $biblionumber   = $params{'biblionumber'}   || undef;
+    my $suspend_until  = $params{'suspend_until'}  || undef;
+    my $suspend        = defined( $params{'suspend'} ) ? $params{'suspend'} :  1;
+
+    warn "C4::Reserves::SuspendAll( borrowernumber => $borrowernumber, biblionumber => $biblionumber, suspend_until => $suspend_until, suspend => $suspend )";
+
+    $suspend_until = C4::Dates->new( $suspend_until )->output("iso") if ( defined( $suspend_until ) );
+
+    return unless ( $borrowernumber || $biblionumber );
+
+    my ( $query, $sth, $dbh, @query_params );
+
+    $query = "UPDATE reserves SET suspend = ? ";
+    push( @query_params, $suspend );
+    if ( !$suspend ) {
+        $query .= ", suspend_until = NULL ";
+    } elsif ( $suspend_until ) {
+        $query .= ", suspend_until = ? ";
+        push( @query_params, $suspend_until );
+    }
+    $query .= " WHERE ";
+    if ( $borrowernumber ) {
+        $query .= " borrowernumber = ? ";
+        push( @query_params, $borrowernumber );
+    }
+    $query .= " AND " if ( $borrowernumber && $biblionumber );
+    if ( $biblionumber ) {
+        $query .= " biblionumber = ? ";
+        push( @query_params, $biblionumber );
+    }
+    $query .= " AND found IS NULL ";
+
+    $dbh = C4::Context->dbh;
+    $sth = $dbh->prepare( $query );
+    $sth->execute( @query_params );
+    $sth->finish;
+}
+
+
 =head2 _FixPriority
 
   &_FixPriority($biblio,$borrowernumber,$rank,$ignoreSetLowestRank);
@@ -1616,6 +1738,7 @@ sub _Findgroupreserve {
         AND item_level_request = 1
         AND itemnumber = ?
         AND reservedate <= CURRENT_DATE()
+        AND suspend = 0
     /;
     my $sth = $dbh->prepare($item_level_target_query);
     $sth->execute($itemnumber);
@@ -1646,6 +1769,7 @@ sub _Findgroupreserve {
         AND item_level_request = 0
         AND hold_fill_targets.itemnumber = ?
         AND reservedate <= CURRENT_DATE()
+        AND suspend = 0
     /;
     $sth = $dbh->prepare($title_level_target_query);
     $sth->execute($itemnumber);
@@ -1677,6 +1801,7 @@ sub _Findgroupreserve {
           OR  reserves.constrainttype='a' )
           AND (reserves.itemnumber IS NULL OR reserves.itemnumber = ?)
           AND reserves.reservedate <= CURRENT_DATE()
+          AND suspend = 0
     /;
     $sth = $dbh->prepare($query);
     $sth->execute( $biblio, $bibitem, $itemnumber );
