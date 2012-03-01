@@ -124,7 +124,7 @@ function tagAdded() {
 <div id="toolbar">
 <ul>
 	<li>[% IF ( verbose ) %]<a href="opac-basket.pl" class="brief" onclick="showLess(); return false;">Brief Display</a>[% ELSE %]<a href="opac-basket.pl" class="detail" onclick="showMore(); return false;">More Details</a>[% END %]</li>
-	<li><a class="send" href="opac-basket.pl" onclick="sendBasket(); return false;">Send</a></li>
+	[% IF ( opacuserlogin ) %]<li><a class="send" href="opac-basket.pl" onclick="sendBasket(); return false;">Send</a></li>[% END %]
 	<li><a class="download" href="opac-basket.pl" onclick="downloadBasket(); return false;">Download</a></li>
 	<li><a class="print" href="opac-basket.pl" onclick="printBasket(); return false;">Print</a></li>
 	<li><a class="empty" href="opac-basket.pl" onclick="delBasket(); return false;">Empty and Close</a></li>
