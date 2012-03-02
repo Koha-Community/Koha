@@ -7,25 +7,42 @@
 <script type="text/javascript" src="[% themelang %]/lib/calendar/calendar.js"></script>
 <script type="text/javascript" src="[% themelang %]/lib/calendar/calendar-en.js"></script>
 <script type="text/javascript" src="[% themelang %]/lib/calendar/calendar-setup.js"></script>
-<!-- End of additions -->
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+<!-- Plugin datatables -->
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="[% themelang %]/js/datatables.js"></script>
 <script type="text/JavaScript" language="JavaScript">
 //<![CDATA[
-$.tablesorter.addParser({
-    id: 'articles', 
-    is: function(s) {return false;  }, 
-    format: function(s) { return s.toLowerCase().replace(/^(the|an|a) /,''); }, 
-    type: 'text' 
+$(document).ready(function() {
+  var holdst = $("#holdst").dataTable($.extend(true, {}, dataTablesDefaults, {
+  }));
+  holdst.fnAddFilters("filter");
+  function createSelect( data ) {
+      var r='<select style="width:99%"><option value="">None</option>', i, len=data.length;
+      for ( i=0 ; i<len ; i++ ) {
+	  r += '<option value="'+data[i]+'">'+data[i]+'</option>';
+      }
+      return r+'</select>';
+  }
+  $("#homebranchfilter").each( function () {
+      $(this).html( createSelect( holdst.fnGetColumnData(4) ) );
+      $('select', this).change( function () {
+	  holdst.fnFilter( $(this).val(), 4 );
+      } );
+  } );
+  $("#itypefilter").each( function () {
+      $(this).html( createSelect( holdst.fnGetColumnData(8) ) );
+      $('select', this).change( function () {
+	  holdst.fnFilter( $(this).val(), 8 );
+      } );
+  } );
+  $("#locationfilter").each( function () {
+      $(this).html( createSelect( holdst.fnGetColumnData(9) ) );
+      $('select', this).change( function () {
+	  holdst.fnFilter( $(this).val(), 9 );
+      } );
+  } );
 });
-	 $(document).ready(function() {
-	 	$("th a").hide();
-		$.tablesorter.defaults.widgets = ['zebra'];
-		$("#holdst").tablesorter({[% IF ( dateformat == 'metric' ) %]
-		dateFormat: 'uk',[% END %]
-			sortList: [[3,0]],
-			headers: { 0:{sorter:false},1:{sorter:false},3: { sorter: 'articles' },7:{sorter:false}}
-		}); 
- 	 });
 //]]>
 </script>
 </head>
@@ -49,131 +66,70 @@ $.tablesorter.addParser({
 <div class="searchresults">
     [% IF ( reserveloop ) %]
     <table id="holdst">
-    <thead>
-    <tr>
-        <th>
-				Pull This Many Items
-        </th>        
-        <th>
-				Items Available
-        </th>
-        <th>
-				Patrons with Holds
-        </th>
-        <th>Title
-        <a href="/cgi-bin/koha/circ/pendingreserves.pl?order=biblio&amp;from=[% from %]&amp;to=[% to %]">Sort</a>
-        </th>
-        <th>
-            Libraries
-				<a href="/cgi-bin/koha/circ/pendingreserves.pl?order=library&amp;from=[% from %]&amp;to=[% to %]">Sort</a>
-        </th>
-        <th>
-            Available Call Numbers
-				<a href="/cgi-bin/koha/circ/pendingreserves.pl?order=call&amp;from=[% from %]&amp;to=[% to %]">Sort</a>
-        </th>
-        <th>
-            Available Copy No
-        </th>
-        <th>
-            Available Enumeration
-        </th>
-        <th>
-            Available Itypes
-				<a href="/cgi-bin/koha/circ/pendingreserves.pl?order=itype&amp;from=[% from %]&amp;to=[% to %]">Sort</a>
-        </th>
-        <th>
-            Available Locations
-				<a href="/cgi-bin/koha/circ/pendingreserves.pl?order=location&amp;from=[% from %]&amp;to=[% to %]">Sort</a>
-        </th>
-        <th >Earliest Hold Date
-            <a href="/cgi-bin/koha/circ/pendingreserves.pl?order=date&amp;from=[% from %]&amp;to=[% to %]">Sort</a>
-        </th>
-    </tr>
-    </thead>
-    <tbody>
-        [% IF ( next_or_previous ) %]
-        <tr>
-            <td colspan="3" align="left">
-            [% IF ( prev_results ) %]
-                <form action="/cgi-bin/koha/circ/pendingreserves.pl" method="POST">
-                    <input type="hidden" name="from" value="[% from %]">
-                    <input type="hidden" name="to" value="[% to %]">
-                    <input type="hidden" name="report_page" value="[% prev_results %]">
-                    <input type="submit" name="run_report" value="&lt; Prev">
-                </form>
-            [% END %]
-            </td>
-            <td colspan="3"></td>
-            <td colspan="3" align="right">
-            [% IF ( next_results ) %]
-                <form action="/cgi-bin/koha/circ/pendingreserves.pl" method="POST">
-                    <input type="hidden" name="from" value="[% from %]">
-                    <input type="hidden" name="to" value="[% to %]">
-                    <input type="hidden" name="report_page" value="[% next_results %]">
-                    <input type="submit" name="run_report" value="Next &gt;">
-                </form>
-            [% END %]
-            </td>
-        </tr>
-        [% END %]
-        [% FOREACH reserveloo IN reserveloop %]
-        <tr>
-            [% IF ( reserveloo.borrowernumber ) %]
-                <td><p><b>[% reserveloo.pullcount %]</b></p></td>
-                <td>[% reserveloo.count %]</td>  
-                <td>[% reserveloo.rcount %]</td> 
-                <td>
-                    <p>
-            [% INCLUDE 'biblio-default-view.inc' biblionumber = reserveloo.biblionumber %]
-                                [% reserveloo.title |html %] [% reserveloo.subtitle %]
-                            </a>
-                    </p>
-                </td>
-            [% ELSE %]
-                <td colspan="3">
-                    &nbsp;
-                </td>
-                <td>"</td>
-            [% END %]
-            <td><p>[% reserveloo.holdingbranch %]</p></td>
-            <td><p>[% reserveloo.itemcallnumber %]</p></td>
-            <td><p>[% reserveloo.copyno %]</p></td>
-            <td><p>[% reserveloo.enumchron %]</p></td>
-            <td><p>[% reserveloo.itype %]</p></td> 
-            <td><p>[% reserveloo.location %]</p></td>
-            <td width="15%">
-                <p>[% reserveloo.reservedate %]</p>
-                <p>in [% reserveloo.branch %]</p>
-                [% IF ( reserveloo.statusw ) %]<p>Waiting</p>[% END %][% IF ( reserveloo.statusf ) %]<p>Fullfilled</p>[% END %]
-            </td>
-        </tr>
-        [% END %]
-        [% IF ( next_or_previous ) %]
-        <tr>
-            <td colspan="3" align="left">
-            [% IF ( prev_results ) %]
-                <form action="/cgi-bin/koha/circ/pendingreserves.pl" method="POST">
-                    <input type="hidden" name="from" value="[% from %]">
-                    <input type="hidden" name="to" value="[% to %]">
-                    <input type="hidden" name="report_page" value="[% prev_results %]">
-                    <input type="submit" name="run_report" value="&lt; Prev">
-                </form>
-            [% END %]
-            </td>
-            <td colspan="3"></td>
-            <td colspan="3" align="right">
-            [% IF ( next_results ) %]
-                <form action="/cgi-bin/koha/circ/pendingreserves.pl" method="POST">
-                    <input type="hidden" name="from" value="[% from %]">
-                    <input type="hidden" name="to" value="[% to %]">
-                    <input type="hidden" name="report_page" value="[% next_results %]">
-                    <input type="submit" name="run_report" value="Next &gt;">
-                </form>
-            [% END %]
-            </td>
-        </tr>
-        [% END %]
-    </tbody>
+	<thead>
+	    <tr>
+		<th>Pull This Many Items</th>
+		<th>Items Available</th>
+		<th>Patrons with Holds</th>
+		<th>Title</th>
+		<th>Libraries</th>
+		<th>Available Call Numbers</th>
+		<th>Available Copy No</th>
+		<th>Available Enumeration</th>
+		<th>Available Itypes</th>
+		<th>Available Locations</th>
+		<th>Earliest Hold Date</th>
+	    </tr>
+	</thead>
+	<tbody>
+	    [% FOREACH reserveloo IN reserveloop %]
+	    <tr>
+		[% IF ( reserveloo.borrowernumber ) %]
+		    <td><p><b>[% reserveloo.pullcount %]</b></p></td>
+		    <td>[% reserveloo.count %]</td>
+		    <td>[% reserveloo.rcount %]</td>
+		    <td>
+			<p>
+		[% INCLUDE 'biblio-default-view.inc' biblionumber = reserveloo.biblionumber %]
+				    [% reserveloo.title |html %] [% reserveloo.subtitle %]
+				</a>
+			</p>
+		    </td>
+		[% ELSE %]
+		    <td>"</td>
+		    <td>"</td>
+		    <td>"</td>
+		    <td>"</td>
+		[% END %]
+		<td>[% reserveloo.holdingbranch %]</td>
+		<td><p>[% reserveloo.itemcallnumber %]</p></td>
+		<td><p>[% reserveloo.copyno %]</p></td>
+		<td><p>[% reserveloo.enumchron %]</p></td>
+		<td>[% reserveloo.itype %]</td>
+		<td>[% reserveloo.location %]</td>
+		<td width="15%">
+		    <p>[% reserveloo.reservedate %]</p>
+		    <p>in [% reserveloo.branch %]</p>
+		    [% IF ( reserveloo.statusw ) %]<p>Waiting</p>[% END %][% IF ( reserveloo.statusf ) %]<p>Fullfilled</p>[% END %]
+		</td>
+	    </tr>
+	    [% END %]
+	</tbody>
+	<tfoot>
+	    <tr>
+		<td><input type="text" class="filter" data-column_num="0" placeholder="Pull This many items" style="width:95%"/></td>
+		<td><input type="text" class="filter" data-column_num="1" placeholder="Items available" style="width:95%"/></td>
+		<td><input type="text" class="filter" data-column_num="2" placeholder="Patron holds" style="width:95%"/></td>
+		<td><input type="text" class="filter" data-column_num="3" placeholder="Title" style="width:95%"/></td>
+		<td id="homebranchfilter"></td>
+		<td><input type="text" class="filter" data-column_num="5" placeholder="Call number" style="width:95%"/></td>
+		<td><input type="text" class="filter" data-column_num="6" placeholder="Available copy" style="width:95%"/></td>
+		<td><input type="text" class="filter" data-column_num="7" placeholder="Available enumeration" style="width:95%"/></td>
+		<td id="itypefilter"></td>
+		<td id="locationfilter"></td>
+		<td></td>
+	    </tr>
+	</tfoot>
     </table>
     [% ELSE %]
         <b>No items found.</b>
