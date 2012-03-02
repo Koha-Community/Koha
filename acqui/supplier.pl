@@ -114,10 +114,15 @@ if ( $op eq 'display' ) {
         GST           => $tax_rate,
         default_tax   => defined($seller_gstrate),
         basketcount   => $supplier->{'basketcount'},
+        subscriptioncount   => $supplier->{'subscriptioncount'},
         contracts     => $contracts,
     );
 } elsif ( $op eq 'delete' ) {
-    DelBookseller($booksellerid);
+    # no further message needed for the user
+    # the DELETE button only appears in the template if basketcount == 0
+    if ( $supplier->{'basketcount'} == 0 ) {
+        DelBookseller($booksellerid);
+    }
     print $query->redirect('/cgi-bin/koha/acqui/acqui-home.pl');
     exit;
 } else {

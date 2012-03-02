@@ -16,6 +16,7 @@
         new YAHOO.widget.Button("newsupplier");
         new YAHOO.widget.Button("newbasket");
         new YAHOO.widget.Button("editsupplier");
+        new YAHOO.widget.Button("deletesupplier");
         new YAHOO.widget.Button("receive");
         new YAHOO.widget.Button("newcontract");
         new YAHOO.widget.Button("editcontracts");
@@ -46,6 +47,9 @@
         [% IF ( booksellerid ) %]
             [% IF ( CAN_user_acquisition_vendors_manage ) %]
                 <li><a id="editsupplier" href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]&amp;op=enter">Edit</a></li>
+                [% UNLESS ( basketcount OR subscriptioncount ) %]
+                    <li><a id="deletesupplier" href="javascript:confirm_deletion()">Delete</a></li>
+                [% END %]
                 <li><a id="newcontract" href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&booksellerid=[% booksellerid %]">New Contract</a></li>
                 <li><a id="editcontracts" href="/cgi-bin/koha/admin/aqcontract.pl?booksellerid=[% booksellerid %]">Contracts</a></li>
                 [% UNLESS ( basketcount ) %]

@@ -84,6 +84,9 @@ sub GetBookSellerFromId {
         ( $vendor->{basketcount} ) = $dbh->selectrow_array(
             'SELECT count(*) FROM aqbasket where booksellerid = ?',
             {}, $id );
+        ( $vendor->{subscriptioncount} ) = $dbh->selectrow_array(
+            'SELECT count(*) FROM subscription WHERE aqbooksellerid = ?',
+            {}, $id );
     }
     return $vendor;
 }
