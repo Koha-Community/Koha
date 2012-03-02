@@ -36,10 +36,11 @@ use C4::Biblio;  # GetBiblioData
 use C4::Koha;
 use C4::Tags qw(get_tags);
 use C4::Branch; # GetBranches
+use C4::SocialData;
 use POSIX qw(ceil floor strftime);
 use URI::Escape;
 use Storable qw(thaw freeze);
-
+use Business::ISBN;
 
 
 my $DisplayMultiPlaceHold = C4::Context->preference("DisplayMultiPlaceHold");
@@ -533,9 +534,23 @@ for (my $i=0;$i<@servers;$i++) {
             foreach (@newresults) {
                 my $record = GetMarcBiblio($_->{'biblionumber'});
                 $_->{coins} = GetCOinSBiblio($record);
+                if ( C4::Context->preference( "Babeltheque" ) and $_->{normalized_isbn} ) {
+                    my $isbn = Business::ISBN->new( $_->{normalized_isbn} );
+                    next if not $isbn;
+                    $isbn = $isbn->as_isbn13->as_string;
+                    $isbn =~ s/-//g;
+                    my $social_datas = C4::SocialData::get_data( $isbn );
+                    next if not $social_datas;
+                    for my $key ( keys %$social_datas ) {
+                        $_->{$key} = $$social_datas{$key};
+                        if ( $key eq 'score_avg' ){
+                            $_->{score_int} = sprintf("%.0f", $$social_datas{score_avg} );
+                        }
+                    }
+                }
             }
         }
-      
+
         if ($results_hashref->{$server}->{"hits"}){
             $total = $total + $results_hashref->{$server}->{"hits"};
         }

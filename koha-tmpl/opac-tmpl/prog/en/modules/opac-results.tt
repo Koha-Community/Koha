@@ -392,6 +392,9 @@ $(document).ready(function(){
                 [% IF ( SEARCH_RESULT.imageurl ) %]
                 <img src="[% SEARCH_RESULT.imageurl %]" title="[% SEARCH_RESULT.description %]" alt="[% SEARCH_RESULT.description %]" />
                 [% END %]
+                [% IF ( SEARCH_RESULT.score_avg ) %]
+                    <img src="[% themelang %]/../images/bonus.png" title="bonus" style="max-height: 35px;"/>
+                [% END %]
                 </td>
                 [% END %]
                 [% END %]
@@ -479,6 +482,23 @@ $(document).ready(function(){
                     </span>
                 </span>
 
+                [% END %]
+                [% IF ( SEARCH_RESULT.score_avg ) %]
+                    <span class="result_summary">
+                        <img src="[% themelang %]/../images/Star[% SEARCH_RESULT.score_int %].gif" title="" style="max-height: 15px;"/> <span style="font-size: 85%;">[% SEARCH_RESULT.score_avg %] / 5 (on [% SEARCH_RESULT.num_scores %] rates)</span>
+                        [% IF ( SEARCH_RESULT.num_critics ) %]
+                            <span class="social_data">[% SEARCH_RESULT.num_critics %] Internet user critics</span>
+                        [% END %]
+                        [% IF ( SEARCH_RESULT.num_critics_pro ) %]
+                            <span class="social_data">[% SEARCH_RESULT.num_critics_pro %] Professional critics</span>
+                        [% END %]
+                        [% IF ( SEARCH_RESULT.num_videos ) %]
+                            <span class="social_data">[% SEARCH_RESULT.num_videos %] Video extracts</span>
+                        [% END %]
+                        [% IF ( SEARCH_RESULT.num_quotations ) %]
+                            <span class="social_data">[% SEARCH_RESULT.num_quotations %] Quotations</span>
+                        [% END %]
+                    </span>
                 [% END %]
                 [% IF ( LibraryThingForLibrariesID ) %]<div class="ltfl_reviews"></div>[% END %]
                 [% IF ( opacuserlogin ) %][% IF ( TagsEnabled ) %]

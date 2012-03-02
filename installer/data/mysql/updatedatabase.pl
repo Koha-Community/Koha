@@ -5000,9 +5000,6 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion($DBversion);
 }
 
-
-
-
 $DBversion = "3.07.00.034";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("ALTER TABLE borrower_attribute_types ADD COLUMN category_code VARCHAR(10) NULL DEFAULT NULL AFTER `display_checkout`");
@@ -5060,6 +5057,32 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
         VALUES('UniqueItemFields', 'barcode', 'Space-separated list of fields that should be unique (used in acquisition module for item creation). Fields must be valid SQL column names of items table', '', 'Free')
     });
     print "Upgrade to $DBversion done (Added system preference 'UniqueItemFields')\n";
+    SetVersion($DBversion);
+}
+
+$DBversion = "3.07.00.039";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do( qq{INSERT IGNORE INTO `systempreferences` (variable,value,explanation,options,type) VALUES('Babeltheque_url_js','','Url for Babeltheque javascript (e.g. http://www.babeltheque.com/bw_XX.js','','Free')} );
+    $dbh->do( qq{CREATE TABLE IF NOT EXISTS `social_data`
+      ( `isbn` VARCHAR(30),
+        `num_critics` INT,
+        `num_critics_pro` INT,
+        `num_quotations` INT,
+        `num_videos` INT,
+        `score_avg` DECIMAL(5,2),
+        `num_scores` INT,
+        PRIMARY KEY  (`isbn`)
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+    } );
+    $dbh->do( qq{INSERT IGNORE INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('Babeltheque_url_update', '', 'Url for Babeltheque update (E.G. http://www.babeltheque.com/.../file.csv.bz2)', '', 'Free')} );
+    print "Upgrade to $DBversion done (added syspref and table for babeltheque (Babeltheque_url_js, babeltheque))\n";
+    SetVersion($DBversion);
+}
+
+$DBversion = "3.07.00.040";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do( qq{INSERT IGNORE INTO `systempreferences` (variable,value,explanation,options,type) VALUES('SocialNetworks','1','Enable/Disable social networks links in opac detail','','YesNo')} );
+    print "Upgrade to $DBversion done (added syspref Social_networks)\n";
     SetVersion($DBversion);
 }
 

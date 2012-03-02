@@ -837,7 +837,14 @@ $template->param(NovelistSelectView => C4::Context->preference('NovelistSelectVi
 if ( C4::Context->preference("Babeltheque") ) {
     $template->param( 
         Babeltheque => 1,
+        Babeltheque_url_js => C4::Context->preference("Babeltheque_url_js"),
     );
+}
+
+# Social Networks
+if ( C4::Context->preference( "SocialNetworks" ) ) {
+    $template->param( current_url => C4::Context->preference('OPACBaseURL') . "/cgi-bin/koha/opac-detail.pl?biblionumber=$biblionumber" );
+    $template->param( SocialNetworks => 1 );
 }
 
 # Shelf Browser Stuff

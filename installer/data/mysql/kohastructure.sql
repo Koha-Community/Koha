@@ -2789,6 +2789,22 @@ CREATE TABLE `biblioimages` (
  CONSTRAINT `bibliocoverimage_fk1` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Table structure for table `social_data`
+--
+
+DROP TABLE IF EXISTS `social_data`;
+CREATE TABLE IF NOT EXISTS `social_data` (
+  `isbn` VARCHAR(30),
+  `num_critics` INT,
+  `num_critics_pro` INT,
+  `num_quotations` INT,
+  `num_videos` INT,
+  `score_avg` DECIMAL(5,2),
+  `num_scores` INT,
+  PRIMARY KEY  (`isbn`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

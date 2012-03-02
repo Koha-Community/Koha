@@ -2,6 +2,9 @@
 [% INCLUDE 'doc-head-close.inc' %]
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tools.min.js"></script>
+<script type="text/javascript" src="https://apis.google.com/js/plusone.js">
+  {lang: '[% lang %]'}
+</script>
 <script type="text/JavaScript" language="JavaScript">
 //<![CDATA[
     [% IF ( busc ) %]
@@ -496,6 +499,15 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
        [% END %]
     [% END %]
 
+    [% IF ( Babeltheque ) %]
+        <input type="hidden" name="BW_id_isbn" id="BW_id_isbn" value="[% normalized_isbn %]"/>
+
+        <div id="BW_notes"></div>
+        <div id="BW_critiques"></div>
+        <div id="BW_critiques_pro"></div>
+        <div id="BW_citations"></div>
+    [% END %]
+
 </div>
 
 <div id="bibliodescriptions" class="toptabs">
@@ -550,7 +562,6 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
     [% IF ( OPACFRBRizeEditions ) %][% IF ( XISBNS ) %]<li><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]#editions">Editions</a></li>[% END %][% END %]
     
     [% IF ( OPACAmazonEnabled ) %][% IF ( OPACAmazonReviews ) %]<li><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]#amazonreviews">Amazon Reviews</a></li>[% END %][% END %]
-    [% IF ( Babeltheque ) %]<li><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]#babeltheque">Babelthèque</a></li>[% END %]
 
     [% IF ( serialcollection ) %]
 		[% IF ( defaulttab == 'serialcollection' ) %]<li class="ui-tabs-selected">
@@ -937,15 +948,6 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 </div>
 [% END %]
 
-[% IF ( Babeltheque ) %]
-<div id="babeltheque">
-  <div id="BW_notes"></div>
-  <div id="BW_critiques"></div>
-  <div id="BW_citations"></div>
-  <div id="BW_etiquettes"></div>
-</div>
-[% END %]
-
 [% IF ( OPACFRBRizeEditions ) %][% IF ( XISBNS ) %]
 <div id="editions">
 
@@ -1039,6 +1041,16 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 </div>
 [% END %][% END %]
 </div>
+
+[% IF ( Babeltheque ) %]
+    <div>
+        <div id="BW_etiquettes"></div>
+        <div id="BW_suggestions"></div>
+    </div>
+    <div class="clearfix"></div>
+    <div id="BW_videos"></div>
+[% END %]
+
 </div>
 
 
@@ -1067,13 +1079,31 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 [% END %]
 
 [% INCLUDE 'opac-detail-sidebar.inc' %]
-
         [% IF ( NovelistSelectProfile ) %] [% IF ( NovelistSelectView == 'right') %]
          <div id="NovelistSelect">
             <h4>Novelist Select</h4>
             <div data-novelist-novelistselect=[% normalized_isbn %]></div>
          </div>
         [% END %] [% END %]
+
+[% IF ( Babeltheque ) %]
+    <div class="babeltheque_adds">
+        <div id="BW_critiques_aj"></div>
+        <div id="BW_citations_aj"></div>
+    </div>
+[% END %]
+
+[% IF ( SocialNetworks ) %]
+    <div class="social_networks">
+        <span>Share</span>
+        <a href="http://www.facebook.com/sharer.php?u=[% current_url |url %]&t=[% title |url %]" title="Share on Facebook"><img alt="Share on Facebook" src="/opac-tmpl/prog/images/socnet/facebook16.png" /></a>
+        <a href="http://twitter.com/share" title="Share on Twitter"><img alt="Share on Twitter" src="/opac-tmpl/prog/images/socnet/twitter16.png" /></a>
+        <a href="http://www.linkedin.com/shareArticle?mini=true&url=[% current_url |url %]&title=[% title |url %]" title="Share on LinkedIn"><img alt="Share on LinkedIn" src="/opac-tmpl/prog/images/socnet/linkedin16.png" /></a>
+        <a href="http://www.delicious.com/save?url=[% current_url |url %]&title=[% title |url %]" title="Share on Delicious"><img alt="Share on Delicious" src="/opac-tmpl/prog/images/socnet/delicious16.gif" /></a>
+        <g:plusone size="small"></g:plusone>
+        <a href="mailto:ADRESSE?subject=TO READ : [% title %]>&body=[% title %]> [% current_url |url %]" title="Share by email"><img alt="Share by email" src="/opac-tmpl/prog/images/socnet/mailto16.png" /></a>
+    </div>
+[% END %]
 
 </div>
 </div>
@@ -1098,4 +1128,9 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 [% IF ( NovelistSelectProfile ) %]
 <script type="text/javascript" src="http://imageserver.ebscohost.com/novelistselect/ns2init.js"></script>
 [% END %]
+
+[% IF ( Babeltheque ) %]
+    <script type="text/javascript" src="[% Babeltheque_url_js %]"></script>
+[% END %]
+
 [% INCLUDE 'opac-bottom.inc' %]
