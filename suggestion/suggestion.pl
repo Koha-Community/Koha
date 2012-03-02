@@ -77,13 +77,13 @@ my $input           = CGI->new;
 my $suggestedbyme   = (defined $input->param('suggestedbyme')? $input->param('suggestedbyme'):1);
 my $op              = $input->param('op')||'else';
 my @editsuggestions = $input->param('edit_field');
-my $branchfilter   = $input->param('branchcode');
-my $suggestedby    = $input->param('suggestedby');
-my $returnsuggested = $input->param('returnsuggested');
+my $suggestedby     = $input->param('suggestedby');
 my $returnsuggestedby = $input->param('returnsuggestedby');
-my $managedby    = $input->param('managedby');
-my $displayby    = $input->param('displayby');
-my $tabcode    = $input->param('tabcode');
+my $returnsuggested = $input->param('returnsuggested');
+my $managedby       = $input->param('managedby');
+my $displayby       = $input->param('displayby') || '';
+my $branchfilter    = ($displayby ne "branchcode") ? $input->param('branchcode') : '';
+my $tabcode         = $input->param('tabcode');
 
 # filter informations which are not suggestion related.
 my $suggestion_ref  = $input->Vars;
@@ -189,21 +189,29 @@ if ($op=~/else/) {
     $op='else';
     
     $displayby||="STATUS";
+    delete $$suggestion_ref{'branchcode'} if($displayby eq "branchcode");
     my $criteria_list=GetDistinctValues("suggestions.".$displayby);
     my @allsuggestions;
     my $reasonsloop = GetAuthorisedValues("SUGGEST");
-    foreach my $criteriumvalue (map{$$_{'value'}} @$criteria_list){
+    foreach my $criteriumvalue ( map { $$_{'value'} } @$criteria_list ) {
+        # By default, display suggestions from current working branch
+        if(not defined $branchfilter) {
+            $$suggestion_ref{'branchcode'} = C4::Context->userenv->{'branch'};
+        }
         my $definedvalue = defined $$suggestion_ref{$displayby} && $$suggestion_ref{$displayby} ne "";
-        
-        next if ($definedvalue && $$suggestion_ref{$displayby} ne $criteriumvalue);
-        $$suggestion_ref{$displayby}=$criteriumvalue;
-#        warn $$suggestion_ref{$displayby}."=$criteriumvalue; $displayby";
-    
+
+        next if ( $definedvalue && $$suggestion_ref{$displayby} ne $criteriumvalue );
+        $$suggestion_ref{$displayby} = $criteriumvalue;
+
         my $suggestions = &SearchSuggestion($suggestion_ref);
-        foreach my $suggestion (@$suggestions){
-            if($suggestion->{budgetid}) {
-                my $budget = GetBudget($suggestion->{budgetid});
-                $suggestion->{budget_name}=$budget->{budget_name} if $budget;
+        foreach my $suggestion (@$suggestions) {
+            $suggestion->{budget_name} = GetBudget( $suggestion->{budgetid} )->{budget_name} if $suggestion->{budgetid};
+            foreach my $date qw(suggesteddate manageddate accepteddate) {
+                if ($suggestion->{$date} and $suggestion->{$date} ne "0000-00-00" && $suggestion->{$date} ne "" ) {
+                    $suggestion->{$date} = format_date( $suggestion->{$date} );
+                } else {
+                    $suggestion->{$date} = "";
+                }
             }
             foreach my $date ( qw(suggesteddate manageddate accepteddate) ){
                 if ($suggestion->{$date} ne "0000-00-00" && $suggestion->{$date} ne "" ){
@@ -272,8 +280,7 @@ foreach my $thisbranch ( sort {$branches->{$a}->{'branchname'} cmp $branches->{$
     my %row = (
         value      => $thisbranch,
         branchname => $branches->{$thisbranch}->{'branchname'},
-        selected   => ($branches->{$thisbranch}->{'branchcode'} eq $branchfilter)
-                    ||($branches->{$thisbranch}->{'branchcode'} eq $$suggestion_ref{'branchcode'})    
+        selected   => ($branchfilter and $branches->{$thisbranch}->{'branchcode'} eq $branchfilter ) || ( $$suggestion_ref{'branchcode'} and $branches->{$thisbranch}->{'branchcode'} eq $$suggestion_ref{'branchcode'} )
     );
     push @branchloop, \%row;
 }
@@ -283,14 +290,16 @@ $template->param( branchloop => \@branchloop,
                 branchfilter => $branchfilter);
 
 # the index parameter is different for item-level itemtypes
-my $supportlist=GetSupportList();				
-foreach my $support(@$supportlist){
-    $$support{'selected'}= $$support{'itemtype'} eq $$suggestion_ref{'itemtype'};
-    if ($$support{'imageurl'}){
-        $$support{'imageurl'}= getitemtypeimagelocation( 'intranet', $$support{'imageurl'} );
-    }
-    else {
-    delete $$support{'imageurl'}
+my $supportlist = GetSupportList();
+
+foreach my $support (@$supportlist) {
+    $$support{'selected'} = (defined $$suggestion_ref{'itemtype'})
+        ? $$support{'itemtype'} eq $$suggestion_ref{'itemtype'}
+        : 0;
+    if ( $$support{'imageurl'} ) {
+        $$support{'imageurl'} = getitemtypeimagelocation( 'intranet', $$support{'imageurl'} );
+    } else {
+        delete $$support{'imageurl'};
     }
 }
 $template->param(itemtypeloop=>$supportlist);
@@ -314,7 +323,7 @@ foreach my $budget ( @{$budgets} ) {
 };
 
 $template->param( budgetsloop => $budgets);
-$template->param( "statusselected_$$suggestion_ref{'STATUS'}" =>1);
+$template->param( "statusselected_$$suggestion_ref{'STATUS'}" =>1) if ($$suggestion_ref{'STATUS'});
 
 # get currencies and rates
 my @rates = GetCurrencies();
@@ -347,14 +356,14 @@ $template->param(
 my %hashlists;
 foreach my $field ( qw(managedby acceptedby suggestedby budgetid) ) {
     my $values_list;
-    $values_list=GetDistinctValues("suggestions.".$field) ;
-    my @codes_list = map{
-                        { 'code'=>$$_{'value'},
-                        'desc'=>GetCriteriumDesc($$_{'value'},$field),
-                        'selected'=> $$_{'value'} eq $$suggestion_ref{$field}
-                        }
-                    } @$values_list;
-    $hashlists{lc($field)."_loop"}=\@codes_list;
+    $values_list = GetDistinctValues( "suggestions." . $field );
+    my @codes_list = map {
+        {   'code' => $$_{'value'},
+            'desc' => GetCriteriumDesc( $$_{'value'}, $field ),
+            'selected' => ($$suggestion_ref{$field}) ? $$_{'value'} eq $$suggestion_ref{$field} : 0,
+        }
+    } @$values_list;
+    $hashlists{ lc($field) . "_loop" } = \@codes_list;
 }
 $template->param(%hashlists);
 $template->param(DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),);
