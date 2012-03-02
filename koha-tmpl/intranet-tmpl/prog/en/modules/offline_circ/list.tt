@@ -1,0 +1,97 @@
+    [% INCLUDE "doc-head-open.inc" %]
+    <title>Koha &rsaquo; Circulation &rsaquo; Offline Circulation</title>
+    [% INCLUDE "doc-head-close.inc" %]
+    <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+    <script type="text/javascript" language="javascript">
+        $(document).ready(function() {
+            $('#checkall').click(function() {
+                $(":checkbox").attr('checked', $('#checkall').is(':checked'));
+            });
+            $('#process,#delete').click(function() {
+                var action = $(this).attr("id");
+                $(":checkbox[name=operationid]:checked").each(function() {
+                    var cb = $(this);
+                    $.ajax({
+                        url: "process.pl",
+                        data: { 'action': action, 'operationid': this.value },
+                        async: false,
+                        dataType: "text",
+                        success: function(data) {
+                            cb.replaceWith(data);
+                        }});
+                });
+                if( $('#operations tbody :checkbox').size() == 0 ) {
+                    $('#actions').hide();
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+    [% INCLUDE 'header.inc' %]
+    [% INCLUDE 'circ-search.inc' %]
+
+    <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a> &rsaquo; Offline Circulation</div>
+
+    <div id="doc" class="yui-t7">
+
+	    <div id="bd">
+
+	    <h2>Offline Circulation</h2>
+
+	    [% IF ( pending_operations ) %]
+
+	        <form>
+
+	        <table id="operations">
+	            <thead>
+		            <tr>
+		                <th><input type="checkbox" name="checkall" id="checkall" /></th>
+			            <th>Date</th>
+			            <th>Action</th>
+			            <th>Barcode</th>
+			            <th>Cardnumber</th>
+		            </tr>
+		        </thead>
+		        <tbody>
+		            [% FOREACH operation IN pending_operations %]
+		                <tr class="oc-[% operation.action %]">
+		                    <td><input type="checkbox" name="operationid" value="[% operation.operationid %]" /></td>
+			                <td>[% operation.timestamp %]</td>
+			                <td>[% operation.action %]</td>
+			                <td>
+			                    [% IF ( biblionumber ) %]
+			                        <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% operation.biblionumber %]" title="[% operation.bibliotitle %]">[% operation.barcode %]</a>
+			                    [% ELSE %]
+			                        <span class="error">[% operation.barcode %]</span>
+			                    [% END %]
+			                </td>
+			                <td>
+			                [% IF ( operation.actionissue ) %]
+		                        [% IF ( operation.borrowernumber ) %]
+		                            <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% operation.borrowernumber %]" title="[% operation.borrower %]">[% operation.cardnumber %]</a>
+		                        [% ELSE %]
+		                            <span class="error">[% operation.cardnumber %]</span>
+		                        [% END %]
+			                [% END %]
+			                </td>
+		                </tr>
+		            [% END %]
+		        </tbody>
+	        </table>
+
+            <p id="actions">For the selected operations:
+            <input type="button" id="process" value="Process" />
+            <input type="button" id="delete" value="Delete" /></p>
+
+            </form>
+
+        [% ELSE %]
+
+            <p>There is no pending offline operations.</p>
+
+        [% END %]
+
+    </div>
+
+    [% INCLUDE 'intranet-bottom.inc' %]

@@ -4719,6 +4719,13 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.07.00.XXX";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("CREATE TABLE `pending_offline_operations` ( `operationid` int(11) NOT NULL AUTO_INCREMENT, `userid` varchar(30) NOT NULL, `branchcode` varchar(10) NOT NULL, `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP, `action` varchar(10) NOT NULL, `barcode` varchar(20) NOT NULL, `cardnumber` varchar(16) DEFAULT NULL, PRIMARY KEY (`operationid`) ) ENGINE=MyISAM DEFAULT CHARSET=utf8;");
+    print "Upgrade to $DBversion done ( adding offline operations table )\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 DropAllForeignKeys($table)

@@ -1476,6 +1476,24 @@ CREATE TABLE `patronimage` (
   CONSTRAINT `patronimage_fk1` FOREIGN KEY (`cardnumber`) REFERENCES `borrowers` (`cardnumber`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- Table structure for table `pending_offline_operations`
+--
+-- this table is MyISAM, InnoDB tables are growing only and this table is filled/emptied/filled/emptied...
+-- so MyISAM is better in this case
+
+CREATE TABLE `pending_offline_operations` (
+  `operationid` int(11) NOT NULL AUTO_INCREMENT,
+  `userid` varchar(30) NOT NULL,
+  `branchcode` varchar(10) NOT NULL,
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `action` varchar(10) NOT NULL,
+  `barcode` varchar(20) NOT NULL,
+  `cardnumber` varchar(16) DEFAULT NULL,
+  PRIMARY KEY (`operationid`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+
+
 --
 -- Table structure for table `printers`
 --
