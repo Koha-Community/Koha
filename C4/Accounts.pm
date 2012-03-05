@@ -46,7 +46,7 @@ BEGIN {
 		&ReversePayment
                 &makepartialpayment
                 &recordpayment_selectaccts
-                &WriteOff
+                &WriteOffFee
 	);
 }
 
@@ -778,7 +778,7 @@ C<$branch> is the branchcode of the library where the writeoff occurred.
 
 =cut
 
-sub WriteOff {
+sub WriteOffFee {
     my ( $borrowernumber, $accountnum, $itemnum, $accounttype, $amount, $branch ) = @_;
     my $branch ||= C4::Context->userenv->{branch};
     my $manager_id = 0;

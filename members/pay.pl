@@ -87,7 +87,7 @@ if ($writeoff_all) {
     my $itemno       = $input->param('itemnumber');
     my $account_type = $input->param('accounttype');
     my $amount       = $input->param('amountoutstanding');
-    WriteOff( $borrowernumber, $accountno, $itemno, $account_type, $amount, $branch );
+    WriteOffFee( $borrowernumber, $accountno, $itemno, $account_type, $amount, $branch );
 }
 
 for (@names) {
@@ -184,7 +184,7 @@ sub writeoff_all {
             my $itemno    = $input->param("itemnumber$value");
             my $amount    = $input->param("amountoutstanding$value");
             my $accountno = $input->param("accountno$value");
-            WriteOff( $borrowernumber, $accountno, $itemno, $accounttype, $amount, $branch );
+            WriteOffFee( $borrowernumber, $accountno, $itemno, $accounttype, $amount, $branch );
         }
     }
 
