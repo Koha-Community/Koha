@@ -131,7 +131,7 @@ sub XSLTParse4Display {
     my $sysxml = "<sysprefs>\n";
     foreach my $syspref ( qw/ hidelostitems OPACURLOpenInNewWindow
                               DisplayOPACiconsXSLT URLLinkText viewISBD
-                              OPACBaseURL TraceCompleteSubfields
+                              OPACBaseURL TraceCompleteSubfields UseICU
                               UseAuthoritiesForTracings TraceSubjectSubdivisions
                               Display856uAsImage OPACDisplay856uAsImage 
                               UseControlNumber

@@ -27,6 +27,18 @@
     <xsl:variable name="UseAuthoritiesForTracings" select="marc:sysprefs/marc:syspref[@name='UseAuthoritiesForTracings']"/>
     <xsl:variable name="TraceSubjectSubdivisions" select="marc:sysprefs/marc:syspref[@name='TraceSubjectSubdivisions']"/>
     <xsl:variable name="Show856uAsImage" select="marc:sysprefs/marc:syspref[@name='OPACDisplay856uAsImage']"/>
+    <xsl:variable name="TracingQuotesLeft">
+      <xsl:choose>
+        <xsl:when test="marc:sysprefs/marc:syspref[@name='UseICU']='1'">{</xsl:when>
+        <xsl:otherwise>"</xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="TracingQuotesRight">
+      <xsl:choose>
+        <xsl:when test="marc:sysprefs/marc:syspref[@name='UseICU']='1'">}</xsl:when>
+        <xsl:otherwise>"</xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
         <xsl:variable name="leader" select="marc:leader"/>
         <xsl:variable name="leader6" select="substring($leader,7,1)"/>
         <xsl:variable name="leader7" select="substring($leader,8,1)"/>
@@ -522,13 +534,13 @@
                 <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=<xsl:call-template name="subfieldSelect">
                         <xsl:with-param name="codes">abcdfgklmnopqrstvxyz</xsl:with-param>
                         <xsl:with-param name="delimeter"> and </xsl:with-param>
-                        <xsl:with-param name="prefix">(su<xsl:value-of select="$SubjectModifier"/>:{</xsl:with-param>
-                        <xsl:with-param name="suffix">})</xsl:with-param>
+                        <xsl:with-param name="prefix">(su<xsl:value-of select="$SubjectModifier"/>:<xsl:value-of select="$TracingQuotesLeft"/></xsl:with-param>
+                        <xsl:with-param name="suffix"><xsl:value-of select="$TracingQuotesRight"/>)</xsl:with-param>
                     </xsl:call-template>
                 </xsl:attribute>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=su<xsl:value-of select="$SubjectModifier"/>:{<xsl:value-of select="marc:subfield[@code='a']"/>}</xsl:attribute>
+                <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=su<xsl:value-of select="$SubjectModifier"/>:<xsl:value-of select="$TracingQuotesLeft"/><xsl:value-of select="marc:subfield[@code='a']"/><xsl:value-of select="$TracingQuotesRight"/></xsl:attribute>
             </xsl:otherwise>
             </xsl:choose>
             <xsl:call-template name="chopPunctuation">
