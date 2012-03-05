@@ -98,7 +98,7 @@
                     </select>
                     [% ELSIF ( CHUNK.type_textarea ) %]
 					<a class="expand-textarea" style="display: none" href="#">Click to Edit</a>
-					<textarea name="pref_[% CHUNK.name %]" id="pref_[% CHUNK.name %]" class="preference preference-[% CHUNK.class or "short" %]">[% CHUNK.value %]</textarea>
+					<textarea name="pref_[% CHUNK.name %]" id="pref_[% CHUNK.name %]" class="preference preference-[% CHUNK.class or "short" %]" rows="10" cols="40">[% CHUNK.value %]</textarea>
                     [% ELSIF ( CHUNK.type_languages ) %]
                     <dl>
                     [% FOREACH language IN CHUNK.languages %]
