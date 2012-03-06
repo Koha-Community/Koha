@@ -1448,6 +1448,7 @@ CREATE TABLE `old_issues` ( -- lists items that were checked out and have been r
 --
 DROP TABLE IF EXISTS `old_reserves`;
 CREATE TABLE `old_reserves` ( -- this table holds all holds/reserves that have been completed (either filled or cancelled)
+  `reserve_id` int(11) NOT NULL, -- primary key
   `borrowernumber` int(11) default NULL, -- foreign key from the borrowers table defining which patron this hold is for
   `reservedate` date default NULL, -- the date the hold was places
   `biblionumber` int(11) default NULL, -- foreign key from the biblio table defining which bib record this hold is on
@@ -1466,6 +1467,7 @@ CREATE TABLE `old_reserves` ( -- this table holds all holds/reserves that have b
   `lowestPriority` tinyint(1) NOT NULL,
   `suspend` BOOLEAN NOT NULL DEFAULT 0,
   `suspend_until` DATETIME NULL DEFAULT NULL,
+  PRIMARY KEY (`reserve_id`),
   KEY `old_reserves_borrowernumber` (`borrowernumber`),
   KEY `old_reserves_biblionumber` (`biblionumber`),
   KEY `old_reserves_itemnumber` (`itemnumber`),
@@ -1644,6 +1646,7 @@ CREATE TABLE `reserveconstraints` (
 
 DROP TABLE IF EXISTS `reserves`;
 CREATE TABLE `reserves` ( -- information related to holds/reserves in Koha
+  `reserve_id` int(11) NOT NULL auto_increment, -- primary key
   `borrowernumber` int(11) NOT NULL default 0, -- foreign key from the borrowers table defining which patron this hold is for
   `reservedate` date default NULL, -- the date the hold was places
   `biblionumber` int(11) NOT NULL default 0, -- foreign key from the biblio table defining which bib record this hold is on
@@ -1662,6 +1665,7 @@ CREATE TABLE `reserves` ( -- information related to holds/reserves in Koha
   `lowestPriority` tinyint(1) NOT NULL,
   `suspend` BOOLEAN NOT NULL DEFAULT 0,
   `suspend_until` DATETIME NULL DEFAULT NULL,
+  PRIMARY KEY (`reserve_id`),
   KEY priorityfoundidx (priority,found),
   KEY `borrowernumber` (`borrowernumber`),
   KEY `biblionumber` (`biblionumber`),

@@ -5473,6 +5473,69 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.09.00.025";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do('START TRANSACTION');
+    $dbh->do('CREATE TABLE tmp_reserves AS SELECT * FROM old_reserves LIMIT 0');
+    $dbh->do('ALTER TABLE tmp_reserves ADD reserve_id INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST');
+    $dbh->do("
+        INSERT INTO tmp_reserves (
+          borrowernumber, reservedate, biblionumber,
+          constrainttype, branchcode, notificationdate,
+          reminderdate, cancellationdate, reservenotes,
+          priority, found, timestamp, itemnumber,
+          waitingdate, expirationdate, lowestPriority
+        ) SELECT
+          borrowernumber, reservedate, biblionumber,
+          constrainttype, branchcode, notificationdate,
+          reminderdate, cancellationdate, reservenotes,
+          priority, found, timestamp, itemnumber,
+          waitingdate, expirationdate, lowestPriority
+        FROM old_reserves ORDER BY reservedate
+    ");
+    $dbh->do('SET @ai = ( SELECT MAX( reserve_id ) FROM tmp_reserves )');
+    $dbh->do('TRUNCATE old_reserves');
+    $dbh->do('ALTER TABLE old_reserves ADD reserve_id INT( 11 ) NOT NULL PRIMARY KEY FIRST');
+    $dbh->do('INSERT INTO old_reserves SELECT * FROM tmp_reserves WHERE reserve_id <= @ai');
+    $dbh->do("
+        INSERT INTO tmp_reserves (
+          borrowernumber, reservedate, biblionumber,
+          constrainttype, branchcode, notificationdate,
+          reminderdate, cancellationdate, reservenotes,
+          priority, found, timestamp, itemnumber,
+          waitingdate, expirationdate, lowestPriority
+        ) SELECT
+          borrowernumber, reservedate, biblionumber,
+          constrainttype, branchcode, notificationdate,
+          reminderdate, cancellationdate, reservenotes,
+          priority, found, timestamp, itemnumber,
+          waitingdate, expirationdate, lowestPriority
+        FROM reserves ORDER BY reservedate
+    ");
+    $dbh->do('TRUNCATE reserves');
+    $dbh->do('ALTER TABLE reserves ADD reserve_id INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST');
+    $dbh->do('INSERT INTO reserves SELECT * FROM tmp_reserves WHERE reserve_id > @ai');
+    $dbh->do('DROP TABLE tmp_reserves');
+    $dbh->do('COMMIT');
+
+    my $sth = $dbh->prepare("
+        SELECT COUNT( * ) AS count
+        FROM information_schema.COLUMNS
+        WHERE COLUMN_NAME =  'reserve_id'
+        AND (
+          TABLE_NAME LIKE  'reserves'
+          OR
+          TABLE_NAME LIKE  'old_reserves'
+        )
+    ");
+    $sth->execute();
+    my $row = $sth->fetchrow_hashref();
+    die("Failed to add reserve_id to reserves tables, please refresh the page to try again.") unless ( $row->{'count'} );
+
+    print "Upgrade to $DBversion done (add reserve_id to reserves & old_reserves tables)\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)
