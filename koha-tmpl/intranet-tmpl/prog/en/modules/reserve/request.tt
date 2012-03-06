@@ -93,7 +93,7 @@ function checkMultiHold() {
  $(document).ready(function() {
     $("input.needsoverride").click(function() { // This must be before the radio button/checkbox switch logic
         var itemnumber = this.value;
-        var msg;
+        var msg = '';
 
         switch (override_items[itemnumber].holdallowed) {
             case 0: msg = _( 'This item normally cannot be put on hold.' ); break;
