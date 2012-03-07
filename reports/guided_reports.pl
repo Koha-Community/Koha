@@ -112,9 +112,12 @@ elsif ( $phase eq 'Delete Saved') {
 elsif ( $phase eq 'Show SQL'){
 	
 	my $id = $input->param('reports');
-	my $sql = get_sql($id);
+    my ($sql,$type,$reportname,$notes) = get_saved_report($id);
 	$template->param(
-		'sql' => $sql,
+        'id'      => $id,
+        'reportname' => $reportname,
+        'notes'      => $notes,
+		'sql'     => $sql,
 		'showsql' => 1,
     );
 }
@@ -154,6 +157,7 @@ elsif ( $phase eq 'Update SQL'){
         update_sql( $id, $sql, $reportname, $notes );
         $template->param(
             'save_successful'       => 1,
+            'reportname'            => $reportname,
             'id'                    => $id,
         );
     }
@@ -392,6 +396,7 @@ elsif ( $phase eq 'Save Report' ) {
         my $id = save_report( $borrowernumber, $sql, $name, $type, $notes );
         $template->param(
             'save_successful'       => 1,
+            'reportname'            => $name,
             'id'                    => $id,
         );
     }
@@ -531,6 +536,7 @@ elsif ($phase eq 'Run this report'){
         $template->param(
             'results' => \@rows,
             'sql'     => $sql,
+            'id'      => $report,
             'execute' => 1,
             'name'    => $name,
             'notes'   => $notes,

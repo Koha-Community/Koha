@@ -87,6 +87,7 @@ $(document).ready(function(){
 <div id="bd">
 <div id="yui-main">
     <div class="yui-b">
+    [% INCLUDE "reports-toolbar.inc" %]
 
 [% IF ( start ) %]
     <h2>Guided Reports</h2>
@@ -562,7 +563,8 @@ canned reports and writing custom SQL reports.</p>
 </fieldset>
 
 <fieldset class="action"><input type="hidden" name="phase" value="Save Report" />
-<input type="submit" name="submit" value="Save Report" /></fieldset>
+<input type="submit" name="submit" value="Save Report" /> <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved" class="cancel">Cancel</a>
+</fieldset>
 </form>
 [% END %]
 
@@ -603,7 +605,13 @@ Sub report:<select name="subreport">
 [% END %]
 
 [% IF ( showsql ) %]
-<textarea id="sql">[% sql %]</textarea>
+<fieldset class="rows">
+    <legend>[% reportname %]</legend>
+    <ol>
+        [% IF ( notes ) %]<li><span class="label">Notes:</span> [% notes %]</li>[% ELSE %][% END %]
+        <li><textarea id="sql">[% sql %]</textarea></li>
+    </ol>
+</fieldset>
 [% END %]
 
 [% IF ( editsql ) %]
@@ -611,16 +619,17 @@ Sub report:<select name="subreport">
 <input type="hidden" name="phase" value="Update SQL" />
 <input type="hidden" name="id" value="[% id %]"/>
 <fieldset class="rows">
-<legend>Edit SQL</legend>
+<legend>Edit SQL report</legend>
 <ol>
-<li><label for="reportname">Report Name:</label><input type="text" id="reportname" name="reportname" value="[% reportname %]" /></li>
+<li><label for="reportname">Report Name:</label><input type="text" id="reportname" name="reportname" value="[% reportname %]" size="50" /></li>
 <li><label for="notes">Notes:</label><textarea id="notes" name="notes" cols="50" rows="2">[% notes %]</textarea></li>
 <li><textarea id="sql" name="sql" rows="10" cols="60">[% sql %]</textarea></li>
 </ol>
 </fieldset>
 
 <fieldset class="action">
-<input type="submit" name="submit" value="Update SQL" /></fieldset>
+<input type="submit" name="submit" value="Update SQL" /> <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved" class="cancel">Cancel</a>
+</fieldset>
 </form>
 
 
@@ -629,7 +638,7 @@ Sub report:<select name="subreport">
 [% IF ( save_successful ) %]
 [% UNLESS ( errors ) %]
 <h2>Your report has been saved</h2>
-<p>The report you have created has now been saved. You can now</p>
+<h4>[% reportname %]</h4>
 <ul>
     [% IF ( id ) %]
     <li><a href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% id %]&amp;phase=Run%20this%20report">Run this report</a></li>
