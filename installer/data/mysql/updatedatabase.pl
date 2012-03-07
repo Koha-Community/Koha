@@ -4734,7 +4734,7 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.07.00.XXX";
+$DBversion = "3.07.00.020";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('OPACpatronimages',0,'Enable patron images in the OPAC',NULL,'YesNo');");
     print "Upgrade to $DBversion done (Bug 3516: Add the option to show patron images in the OPAC.)\n";
