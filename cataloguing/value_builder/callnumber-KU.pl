@@ -104,7 +104,7 @@ sub plugin {
             if ( my $first = $dbh->selectrow_array("SELECT itemcallnumber
                                                     FROM items
                                                     WHERE itemcallnumber = ?", undef, $padded) ) {
-                my $icn = $dbh->selectcol_arrayref("SELECT itemcallnumber
+                my $icn = $dbh->selectcol_arrayref("SELECT DISTINCT itemcallnumber
                                                     FROM items
                                                     WHERE itemcallnumber LIKE ?
                                                       AND itemcallnumber >   ?
