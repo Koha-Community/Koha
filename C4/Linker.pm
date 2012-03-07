@@ -86,8 +86,6 @@ sub new {
 
     return $self->SUPER::_handle_auth_limit($authid), $fuzzy;
 
-=back
-
 Function to be called by subclasses to handle authority record limits.
 
 =cut
