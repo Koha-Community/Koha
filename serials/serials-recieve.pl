@@ -192,10 +192,7 @@ for(my $i=0;$i<$count;$i++){
     $serialslist[$i]->{'barcode'} = "TEMP" . sprintf("%.0f",$temp);
 }
 
-my $sth= C4::Serials::GetSubscriptionHistoryFromSubscriptionId();
-
-$sth->execute($subscriptionid);
-my $solhistory = $sth->fetchrow_hashref;
+my $solhistory = GetSubscriptionHistoryFromSubscriptionId($subscriptionid);
 
 $subs = &GetSubscription($subscriptionid);
 ($totalissues,@serialslist) = GetSerials($subscriptionid);
@@ -253,9 +250,7 @@ if (C4::Context->preference("serialsadditems")){
     $template->param(branchloop=>[],itemstatusloop=>[],itemlocationloop=>[]) ;
 }
 
-$sth= C4::Serials::GetSubscriptionHistoryFromSubscriptionId();
-$sth->execute($subscriptionid);
-$solhistory = $sth->fetchrow_hashref;
+$solhistory = GetSubscriptionHistoryFromSubscriptionId($subscriptionid);
 
 $template->param(
             user => $auser,
