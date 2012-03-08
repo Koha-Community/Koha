@@ -34,25 +34,24 @@ function active(numlayer)
     }
 }
 function Check(f) {
-
     var total_errors=0;
-//	alert(f.field_value.length);
-    for (i=0 ; i<f.field_value.length ; i++) {
-//	alert (f.field_value[i].value);
-        if (f.field_value[i].value.length==0 && f.mandatory[i].value==1) {
-            document.getElementById("error"+i).style.backgroundColor="#FF0000";
-            total_errors++;
-        } else {
-//			document.getElementById("error"+i).style.backgroundColor="#FFFFFF";
+    $("input[name='mandatory'],select[name='mandatory']").each(function(i){
+        if($(this).val() == 1){
+            var mandatory_field = $("input[name='field_value'],select[name='field_value']").eq(i);
+            if(mandatory_field.val() == ''){
+                mandatory_field.css("background-color","#FFFFCC");
+                total_errors++;
+            }
         }
-    }
+    });
+
     var alertString2;
     if (total_errors==0) {
         return true;
     } else {
         alertString2  = _("Form not submitted because of the following problem(s)");
         alertString2 += "\n------------------------------------------------------------------------------------\n";
-        alertString2 += "\n- "+ total_errors+_(" mandatory fields empty (see bold subfields)");
+        alertString2 += "\n- "+ total_errors+_(" mandatory fields empty (highlighted)");
         alert(alertString2);
         return false;
     }
@@ -237,8 +236,11 @@ function set_to_today(id, force) {
 	<ol>
         [% FOREACH ite IN item %]
                <li><div class="subfield_line" style="[% ite.visibility %]" id="subfield[% ite.tag %][% ite.subfield %][% ite.random %]">
-
-               <label>[% ite.subfield %] - [% IF ( ite.mandatory ) %]<b>[% END %][% ite.marc_lib %][% IF ( ite.mandatory ) %] *</b>[% END %]</label>
+                [% IF ( ite.mandatory ) %]
+               <label class="required">[% ite.subfield %] - [% ite.marc_lib %]</label>
+               [% ELSE %]
+               <label>[% ite.subfield %] - [% ite.marc_lib %]</label>
+               [% END %]
                 [% ite.marc_value %]
                 <input type="hidden" name="tag"       value="[% ite.tag %]" />
                 <input type="hidden" name="subfield"  value="[% ite.subfield %]" />
@@ -246,7 +248,7 @@ function set_to_today(id, force) {
                 [% IF ( ite.repeatable ) %]
                     <span class="buttonPlus" onclick="CloneSubfield('subfield[% ite.tag %][% ite.subfield %][% ite.random %]')">+</span>
                 [% END %]
-
+                [% IF ( ite.mandatory ) %] <span class="required">Required</span>[% END %]
             </div></li>
         [% END %]
     </ol>
