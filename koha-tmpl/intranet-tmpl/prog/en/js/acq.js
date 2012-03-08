@@ -214,83 +214,28 @@ function calcNewsuggTotal(){
     return true;
 }
 
-
-// ----------------------------------------
-//USED BY NEWORDEREMPTY.PL
-/*
-function fetchSortDropbox(f) {
-    var  budgetId=f.budget_id.value;
-    var handleSuccess = function(o){
-        if(o.responseText !== undefined){
-            sort_dropbox.innerHTML   = o.responseText;
-        }
-    }
-
-    var callback = {   success:handleSuccess };
-    var sUrl = '../acqui/fetch_sort_dropbox.pl?sort=1&budget_id='+budgetId
-    var sort_dropbox = document.getElementById('sort1');
-    var request1 = YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
-    var rr = '00';
-
-// FIXME: ---------  twice , coz the 2 requests get mixed up otherwise
-
-    var handleSuccess2 = function(o){
-    if(o.responseText !== undefined){
-        sort2_dropbox.innerHTML   = o.responseText;
-        }
-    }
-
-    var callback2 = {   success:handleSuccess };
-    var sUrl2 = '../acqui/fetch_sort_dropbox.pl?sort=2&budget_id='+budgetId;
-    var sort2_dropbox = document.getElementById('sort2');
-    var request2 = YAHOO.util.Connect.asyncRequest('GET', sUrl2, callback2);
-
-}
-*/
-
-
-
-//USED BY NEWORDEREMPTY.PL
-function fetchSortDropbox(f) {
-    var  budgetId=f.budget_id.value;
-
-for (i=1;i<=2;i++) {
-
-    var sort_zone = document.getElementById('sort'+i+'_zone');
-    var url = '../acqui/fetch_sort_dropbox.pl?sort='+i+'&budget_id='+budgetId;
-
-    var xmlhttp = null;
-    xmlhttp = new XMLHttpRequest();
-    if ( typeof xmlhttp.overrideMimeType != 'undefined') {
-        xmlhttp.overrideMimeType('text/xml');
-    }
-
-    xmlhttp.open('GET', url, false);
-    xmlhttp.send(null);
-
-    xmlhttp.onreadystatechange = function() {
-        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-    // stupid JS...
-        } else {
-    // wait for the call to complete
-        }
-    };
-    // rc =  eval ( xmlhttp.responseText );
-    var retRootType = xmlhttp.responseXML.firstChild.nodeName;
-    var existingInputs = sort_zone.getElementsByTagName('input');
-    if (existingInputs.length > 0 && retRootType == 'input') {
-        // when sort is already an input, do not override to preseve value
+function getAuthValueDropbox( name, cat, destination, selected ) {
+    if (cat == null || cat == "") {
+        $(destination).replaceWith(' <input type="text" name="' + name + '" />' );
         return;
     }
-    sort_zone.innerHTML = xmlhttp.responseText;
+    $.ajax({
+        url: "/cgi-bin/koha/acqui/ajax-getauthvaluedropbox.pl",
+        data: {
+            name: name,
+            category: cat,
+            default: selected
+        },
+        async: false,
+        success: function(data){
+            if(data === "0"){
+                $(destination).replaceWith(' <input type="text" name="' + name + '" />' );
+            }else{
+                $(destination).replaceWith(data);
+            }
+        }
+    });
 }
-}
-
-
-
-
-
-
 
 //USED BY NEWORDEREMPTY.PL
 function totalExceedsBudget(budgetId, total) {

@@ -35,6 +35,7 @@ BEGIN {
 
         &GetBudget
         &GetBudgetByOrderNumber
+        &GetBudgetByCode
         &GetBudgets
         &GetBudgetHierarchy
 	    &AddBudget
@@ -693,6 +694,29 @@ sub GetBudgetByOrderNumber {
     $sth->execute( $ordernumber );
     my $result = $sth->fetchrow_hashref;
     return $result;
+}
+
+=head2 GetBudgetByCode
+
+    my $budget = &GetBudgetByCode($budget_code);
+
+Retrieve all aqbudgets fields as a hashref for the budget that has
+given budget_code
+
+=cut
+
+sub GetBudgetByCode {
+    my ( $budget_code ) = @_;
+
+    my $dbh = C4::Context->dbh;
+    my $query = qq{
+        SELECT *
+        FROM aqbudgets
+        WHERE budget_code = ?
+    };
+    my $sth = $dbh->prepare( $query );
+    $sth->execute( $budget_code );
+    return $sth->fetchrow_hashref;
 }
 
 =head2 GetChildBudgetsSpent

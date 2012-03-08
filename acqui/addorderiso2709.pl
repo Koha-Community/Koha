@@ -21,11 +21,11 @@
 # with Koha; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-use strict;
-use warnings;
+use Modern::Perl;
 use CGI;
 use Carp;
 use Number::Format qw(:all);
+use YAML qw/Load/;
 
 use C4::Context;
 use C4::Auth;
@@ -56,7 +56,7 @@ my ($template, $loggedinuser, $cookie, $userflags) = get_template_and_user({
 });
 
 my $cgiparams = $input->Vars;
-my $op = $cgiparams->{'op'};
+my $op = $cgiparams->{'op'} || '';
 my $booksellerid  = $input->param('booksellerid');
 my $bookseller = GetBookSellerFromId($booksellerid);
 my $data;
@@ -65,7 +65,6 @@ $template->param(scriptname => "/cgi-bin/koha/acqui/addorderiso2709.pl",
                 booksellerid => $booksellerid,
                 booksellername => $bookseller->{name},
                 );
-my $ordernumber;
 
 if ($cgiparams->{'import_batch_id'} && $op eq ""){
     $op = "batch_details";
@@ -124,7 +123,7 @@ if ($op eq ""){
                      loop_currencies  => \@loop_currency,
                      );
     import_biblios_list($template, $cgiparams->{'import_batch_id'});
-    if ( C4::Context->preference('AcqCreateItem') eq 'ordering' && !$ordernumber ) {
+    if ( C4::Context->preference('AcqCreateItem') eq 'ordering' ) {
         # prepare empty item form
         my $cell = PrepareItemrecordDisplay( '', '', '', 'ACQ' );
 
@@ -157,19 +156,37 @@ if ($op eq ""){
     # retrieve the file you want to import
     my $import_batch_id = $cgiparams->{'import_batch_id'};
     my $biblios = GetImportRecordsRange($import_batch_id);
+    my @import_record_id_selected = $input->param("import_record_id");
+    my @quantities = $input->param('quantity');
+    my @prices = $input->param('price');
+    my @budgets_id = $input->param('budget_id');
+    my @rrp = $input->param('rrp');
+    my @discount = $input->param('discount');
+    my @sort1 = $input->param('sort1');
+    my @sort2 = $input->param('sort2');
+    my $cur = GetCurrency();
     for my $biblio (@$biblios){
-        # 1st insert the biblio, or find it through matcher
+        # Check if this import_record_id was selected
+        next if not grep { $_ eq $$biblio{import_record_id} } @import_record_id_selected;
         my ( $marcblob, $encoding ) = GetImportRecordMarc( $biblio->{'import_record_id'} );
         my $marcrecord = MARC::Record->new_from_usmarc($marcblob) || die "couldn't translate marc information";
         my $match = GetImportRecordMatches( $biblio->{'import_record_id'}, 1 );
         my $biblionumber=$#$match > -1?$match->[0]->{'biblionumber'}:0;
+        my $c_quantity = shift( @quantities ) || GetMarcQuantity($marcrecord, C4::Context->preference('marcflavour') ) || 1;
+        my $c_budget_id = shift( @budgets_id ) || $input->param('all_budget_id') || $budget_id;
+        my $c_rrp = shift( @rrp ); # rrp include tax
+        my $c_discount = shift ( @discount);
+        $c_discount = $c_discount / 100 if $c_discount > 100;
+        my $c_sort1 = shift( @sort1 ) || $input->param('all_sort1') || '';
+        my $c_sort2 = shift( @sort2 ) || $input->param('all_sort2') || '';
 
+        # 1st insert the biblio, or find it through matcher
         unless ( $biblionumber ) {
             # add the biblio
             my $bibitemnum;
 
             # remove ISBN -
-            my ( $isbnfield, $isbnsubfield ) = GetMarcFromKohaField( 'biblioitems.isbn', '' );                
+            my ( $isbnfield, $isbnsubfield ) = GetMarcFromKohaField( 'biblioitems.isbn', '' );
             if ( $marcrecord->field($isbnfield) ) {
                 foreach my $field ( $marcrecord->field($isbnfield) ) {
                     foreach my $subfield ( $field->subfield($isbnsubfield) ) {
@@ -180,7 +197,6 @@ if ($op eq ""){
                 }
             }
             ( $biblionumber, $bibitemnum ) = AddBiblio( $marcrecord, $cgiparams->{'frameworkcode'} || '' );
-            SetImportRecordStatus( $biblio->{'import_record_id'}, 'imported' );
             # 2nd add authorities if applicable
             if (C4::Context->preference("BiblioAddsAuthorities")){
                 my $headings_linked =BiblioAutoLink($marcrecord, $cgiparams->{'frameworkcode'});
@@ -194,48 +210,54 @@ if ($op eq ""){
         # get quantity in the MARC record (1 if none)
         my $quantity = GetMarcQuantity($marcrecord, C4::Context->preference('marcflavour')) || 1;
         my %orderinfo = (
-            "biblionumber", $biblionumber, "basketno", $cgiparams->{'basketno'},
-            "quantity", $quantity, "branchcode", $branch, 
-            "budget_id", $budget_id, "uncertainprice", 1,
-            "sort1", $cgiparams->{'sort1'},"sort2", $cgiparams->{'sort2'},
-            "order_internalnote", $cgiparams->{'order_internalnote'}, "budget_id", $cgiparams->{'budget_id'},
-            "currency",$cgiparams->{'currency'},
-            "order_vendornote" => $cgiparams->{'order_vendornote'},
+            biblionumber       => $biblionumber,
+            basketno           => $cgiparams->{'basketno'},
+            quantity           => $c_quantity,
+            branchcode         => $patron->{branchcode},
+            budget_id          => $c_budget_id,
+            uncertainprice     => 1,
+            sort1              => $c_sort1,
+            sort2              => $c_sort2,
+            order_internalnote => $cgiparams->{'all_order_internalnote'},
+            order_vendornote   => $cgiparams->{'all_order_vendornote'},
+            currency           => $cgiparams->{'all_currency'},
         );
-
-        my $price = GetMarcPrice($marcrecord, C4::Context->preference('marcflavour'));
-
+        # get the price if there is one.
+        my $price= shift( @prices ) || GetMarcPrice($marcrecord, C4::Context->preference('marcflavour'));
         if ($price){
-            eval {
-		require C4::Acquisition;
-		import C4::Acquisition qw/GetBasket/;
-	    };
-	    if ($@){
-		croak $@;
-	    }
-            eval {
-		require C4::Bookseller;
-	        import C4::Bookseller qw/GetBookSellerFromId/;
-	    };
-	    if ($@){
-		croak $@;
-	    }
-            my $basket     = GetBasket( $orderinfo{basketno} );
-            my $bookseller = GetBookSellerFromId( $basket->{booksellerid} );
+            # in France, the cents separator is the , but sometimes, ppl use a .
+            # in this case, the price will be x100 when unformatted ! Replace the . by a , to get a proper price calculation
+            $price =~ s/\./,/ if C4::Context->preference("CurrencyFormat") eq "FR";
+            $price = $num->unformat_number($price);
             $orderinfo{gstrate} = $bookseller->{gstrate};
-            $orderinfo{rrp}   = $price;
-            $orderinfo{ecost} = $orderinfo{rrp} * ( 1 - $bookseller->{discount} / 100 );
-            $orderinfo{listprice} = $orderinfo{rrp};
+            my $c = $c_discount ? $c_discount / 100 : $bookseller->{discount} / 100;
+            if ( $bookseller->{listincgst} ) {
+                if ( $c_discount ) {
+                    $orderinfo{ecost} = $price;
+                    $orderinfo{rrp}   = $orderinfo{ecost} / ( 1 - $c );
+                } else {
+                    $orderinfo{ecost} = $price * ( 1 - $c );
+                    $orderinfo{rrp}   = $price;
+                }
+            } else {
+                if ( $c_discount ) {
+                    $orderinfo{ecost} = $price / ( 1 + $orderinfo{gstrate} );
+                    $orderinfo{rrp}   = $orderinfo{ecost} / ( 1 - $c );
+                } else {
+                    $orderinfo{rrp}   = $price / ( 1 + $orderinfo{gstrate} );
+                    $orderinfo{ecost} = $orderinfo{rrp} * ( 1 - $c );
+                }
+            }
+            $orderinfo{listprice} = $orderinfo{rrp} / $cur->{rate};
             $orderinfo{unitprice} = $orderinfo{ecost};
-            $orderinfo{total} = $orderinfo{ecost};
+            $orderinfo{total} = $orderinfo{ecost} * $c_quantity;
         } else {
-            $orderinfo{'listprice'} = 0;
+            $orderinfo{listprice} = 0;
         }
 
         # remove uncertainprice flag if we have found a price in the MARC record
         $orderinfo{uncertainprice} = 0 if $orderinfo{listprice};
-        my $basketno;
-        ( $basketno, $ordernumber ) = NewOrder( \%orderinfo );
+        my ( $basketno, $ordernumber ) = NewOrder( \%orderinfo );
 
         # 4th, add items if applicable
         # parse the item sent by the form, and create an item just for the import_record_id we are dealing with
@@ -255,12 +277,10 @@ if ($op eq ""){
             push @{ $item->{indicator} },    $indicator[0];
             my $xml = TransformHtmlToXml( \@tags, \@subfields, \@field_values, \@ind_tag, \@indicator );
             my $record = MARC::Record::new_from_xml( $xml, 'UTF-8' );
-            for (my $qtyloop=1;$qtyloop <=$quantity;$qtyloop++) {
+            for (my $qtyloop=1;$qtyloop <= $c_quantity;$qtyloop++) {
                 my ( $biblionumber, $bibitemnum, $itemnumber ) = AddItemFromMarc( $record, $biblionumber );
                 NewOrderItem( $itemnumber, $ordernumber );
             }
-        } else {
-            SetImportRecordStatus( $biblio->{'import_record_id'}, 'imported' );
         }
     }
     # go to basket page
@@ -277,8 +297,8 @@ my $budget = GetBudget($budget_id);
 
 # build budget list
 my $budget_loop = [];
-$budgets = GetBudgetHierarchy;
-foreach my $r ( @{$budgets} ) {
+my $budgets_hierarchy = GetBudgetHierarchy;
+foreach my $r ( @{$budgets_hierarchy} ) {
     next unless (CanUserUseBudget($borrower, $r, $userflags));
     if ( !defined $r->{budget_amount} || $r->{budget_amount} == 0 ) {
         next;
@@ -286,6 +306,8 @@ foreach my $r ( @{$budgets} ) {
     push @{$budget_loop},
       { b_id  => $r->{budget_id},
         b_txt => $r->{budget_name},
+        b_sort1_authcat => $r->{'sort1_authcat'},
+        b_sort2_authcat => $r->{'sort2_authcat'},
         b_sel => ( $r->{budget_id} == $budget_id ) ? 1 : 0,
       };
 }
@@ -297,7 +319,8 @@ if ($budget) {    # its a mod ..
         $CGIsort1 = GetAuthvalueDropbox(  $budget->{'sort1_authcat'}, $data->{'sort1'} );
     }
 } elsif ( scalar(@$budgets) ) {
-    $CGIsort1 = GetAuthvalueDropbox(  @$budgets[0]->{'sort1_authcat'}, '' );
+} elsif ( scalar(@$budgets_hierarchy) ) {
+    $CGIsort1 = GetAuthvalueDropbox( @$budgets_hierarchy[0]->{'sort1_authcat'}, '' );
 }
 # if CGIsort is successfully fetched, the use it
 # else - failback to plain input-field
@@ -312,8 +335,8 @@ if ($budget) {
     if ( defined $budget->{'sort2_authcat'} ) {
         $CGIsort2 = GetAuthvalueDropbox(  $budget->{'sort2_authcat'}, $data->{'sort2'} );
     }
-} elsif ( scalar(@$budgets) ) {
-    $CGIsort2 = GetAuthvalueDropbox(  @$budgets[0]->{sort2_authcat}, '' );
+} elsif ( scalar(@$budgets_hierarchy) ) {
+    $CGIsort2 = GetAuthvalueDropbox( @$budgets_hierarchy[0]->{sort2_authcat}, '' );
 }
 if ($CGIsort2) {
     $template->param( CGIsort2 => $CGIsort2 );
@@ -378,9 +401,34 @@ sub import_biblios_list {
             record_sequence => $biblio->{'record_sequence'},
             overlay_status => $biblio->{'overlay_status'},
             match_biblionumber => $#$match > -1 ? $match->[0]->{'biblionumber'} : 0,
-            match_citation => $#$match > -1 ? $match->[0]->{'title'} . ' ' . $match->[0]->{'author'} : '',
+            match_citation     => $#$match > -1 ? $match->[0]->{'title'} || '' . ' ' . $match->[0]->{'author'} || '': '',
             match_score => $#$match > -1 ? $match->[0]->{'score'} : 0,
         );
+        my ( $marcblob, $encoding ) = GetImportRecordMarc( $biblio->{'import_record_id'} );
+        my $marcrecord = MARC::Record->new_from_usmarc($marcblob) || die "couldn't translate marc information";
+        my $infos = get_infos_syspref($marcrecord, ['price', 'quantity', 'budget_code', 'rrp', 'discount', 'sort1', 'sort2']);
+        my $price = $infos->{price};
+        my $quantity = $infos->{quantity};
+        my $budget_code = $infos->{budget_code};
+        my $rrp = $infos->{rrp};
+        my $discount = $infos->{discount};
+        my $sort1 = $infos->{sort1};
+        my $sort2 = $infos->{sort2};
+        my $budget_id;
+        if($budget_code) {
+            my $biblio_budget = GetBudgetByCode($budget_code);
+            if($biblio_budget) {
+                $budget_id = $biblio_budget->{budget_id};
+            }
+        }
+        $cellrecord{price} = $price || '';
+        $cellrecord{quantity} = $quantity || '';
+        $cellrecord{budget_id} = $budget_id || '';
+        $cellrecord{rrp} = $rrp || '';
+        $cellrecord{discount} = $discount || '';
+        $cellrecord{sort1} = $sort1 || '';
+        $cellrecord{sort2} = $sort2 || '';
+
         push @list, \%cellrecord;
     }
     my $num_biblios = $batch->{'num_biblios'};
@@ -439,4 +487,23 @@ sub add_matcher_list {
         }
     }
     $template->param(available_matchers => \@matchers);
+}
+
+sub get_infos_syspref {
+    my ($record, $field_list) = @_;
+    my $syspref = C4::Context->preference('MarcFieldsToOrder');
+    my $yaml = YAML::Load($syspref);
+    my $r;
+    for my $field_name ( @$field_list ) {
+        my @fields = split /\|/, $yaml->{$field_name};
+        for my $field ( @fields ) {
+            my ( $f, $sf ) = split /\$/, $field;
+            next unless $f and $sf;
+            if ( my $v = $record->subfield( $f, $sf ) ) {
+                $r->{$field_name} = $v;
+            }
+            last if $yaml->{$field};
+        }
+    }
+    return $r;
 }
