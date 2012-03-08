@@ -20,26 +20,26 @@ $(document).ready(function() {
   function createSelect( data ) {
       var r='<select style="width:99%"><option value="">None</option>', i, len=data.length;
       for ( i=0 ; i<len ; i++ ) {
-	  r += '<option value="'+data[i]+'">'+data[i]+'</option>';
+          r += '<option value="'+data[i]+'">'+data[i]+'</option>';
       }
       return r+'</select>';
   }
   $("#homebranchfilter").each( function () {
       $(this).html( createSelect( holdst.fnGetColumnData(4) ) );
       $('select', this).change( function () {
-	  holdst.fnFilter( $(this).val(), 4 );
+          holdst.fnFilter( $(this).val(), 4 );
       } );
   } );
   $("#itypefilter").each( function () {
       $(this).html( createSelect( holdst.fnGetColumnData(8) ) );
       $('select', this).change( function () {
-	  holdst.fnFilter( $(this).val(), 8 );
+          holdst.fnFilter( $(this).val(), 8 );
       } );
   } );
   $("#locationfilter").each( function () {
       $(this).html( createSelect( holdst.fnGetColumnData(9) ) );
       $('select', this).change( function () {
-	  holdst.fnFilter( $(this).val(), 9 );
+          holdst.fnFilter( $(this).val(), 9 );
       } );
   } );
 });
@@ -54,10 +54,10 @@ $(document).ready(function() {
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a> &rsaquo; Holds to Pull</div>
 
 <div id="doc3" class="yui-t2">
-   
+
    <div id="bd">
-	<div id="yui-main">
-	<div class="yui-b">
+    <div id="yui-main">
+    <div class="yui-b">
 
 <h2>Holds to Pull[% IF ( run_report ) %] placed between [% from %] and [% to %][% END %]</h2>
 [% IF ( run_report ) %]
@@ -66,70 +66,70 @@ $(document).ready(function() {
 <div class="searchresults">
     [% IF ( reserveloop ) %]
     <table id="holdst">
-	<thead>
-	    <tr>
-		<th>Pull This Many Items</th>
-		<th>Items Available</th>
-		<th>Patrons with Holds</th>
-		<th>Title</th>
-		<th>Libraries</th>
-		<th>Available Call Numbers</th>
-		<th>Available Copy No</th>
-		<th>Available Enumeration</th>
-		<th>Available Itypes</th>
-		<th>Available Locations</th>
-		<th>Earliest Hold Date</th>
-	    </tr>
-	</thead>
-	<tbody>
-	    [% FOREACH reserveloo IN reserveloop %]
-	    <tr>
-		[% IF ( reserveloo.borrowernumber ) %]
-		    <td><p><b>[% reserveloo.pullcount %]</b></p></td>
-		    <td>[% reserveloo.count %]</td>
-		    <td>[% reserveloo.rcount %]</td>
-		    <td>
-			<p>
-		[% INCLUDE 'biblio-default-view.inc' biblionumber = reserveloo.biblionumber %]
-				    [% reserveloo.title |html %] [% reserveloo.subtitle %]
-				</a>
-			</p>
-		    </td>
-		[% ELSE %]
-		    <td>"</td>
-		    <td>"</td>
-		    <td>"</td>
-		    <td>"</td>
-		[% END %]
-		<td>[% reserveloo.holdingbranch %]</td>
-		<td><p>[% reserveloo.itemcallnumber %]</p></td>
-		<td><p>[% reserveloo.copyno %]</p></td>
-		<td><p>[% reserveloo.enumchron %]</p></td>
-		<td>[% reserveloo.itype %]</td>
-		<td>[% reserveloo.location %]</td>
-		<td width="15%">
-		    <p>[% reserveloo.reservedate %]</p>
-		    <p>in [% reserveloo.branch %]</p>
-		    [% IF ( reserveloo.statusw ) %]<p>Waiting</p>[% END %][% IF ( reserveloo.statusf ) %]<p>Fullfilled</p>[% END %]
-		</td>
-	    </tr>
-	    [% END %]
-	</tbody>
-	<tfoot>
-	    <tr>
-		<td><input type="text" class="filter" data-column_num="0" placeholder="Pull This many items" style="width:95%"/></td>
-		<td><input type="text" class="filter" data-column_num="1" placeholder="Items available" style="width:95%"/></td>
-		<td><input type="text" class="filter" data-column_num="2" placeholder="Patron holds" style="width:95%"/></td>
-		<td><input type="text" class="filter" data-column_num="3" placeholder="Title" style="width:95%"/></td>
-		<td id="homebranchfilter"></td>
-		<td><input type="text" class="filter" data-column_num="5" placeholder="Call number" style="width:95%"/></td>
-		<td><input type="text" class="filter" data-column_num="6" placeholder="Available copy" style="width:95%"/></td>
-		<td><input type="text" class="filter" data-column_num="7" placeholder="Available enumeration" style="width:95%"/></td>
-		<td id="itypefilter"></td>
-		<td id="locationfilter"></td>
-		<td></td>
-	    </tr>
-	</tfoot>
+    <thead>
+        <tr>
+        <th>Pull This Many Items</th>
+        <th>Items Available</th>
+        <th>Patrons with Holds</th>
+        <th>Title</th>
+        <th>Libraries</th>
+        <th>Available Call Numbers</th>
+        <th>Available Copy No</th>
+        <th>Available Enumeration</th>
+        <th>Available Itypes</th>
+        <th>Available Locations</th>
+        <th>Earliest Hold Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        [% FOREACH reserveloo IN reserveloop %]
+        <tr>
+        [% IF ( reserveloo.borrowernumber ) %]
+            <td><p><b>[% reserveloo.pullcount %]</b></p></td>
+            <td>[% reserveloo.count %]</td>
+            <td>[% reserveloo.rcount %]</td>
+            <td>
+            <p>
+        [% INCLUDE 'biblio-default-view.inc' biblionumber = reserveloo.biblionumber %]
+                    [% reserveloo.title |html %] [% reserveloo.subtitle %]
+                </a>
+            </p>
+            </td>
+        [% ELSE %]
+            <td>"</td>
+            <td>"</td>
+            <td>"</td>
+            <td>"</td>
+        [% END %]
+        <td>[% reserveloo.holdingbranch %]</td>
+        <td><p>[% reserveloo.itemcallnumber %]</p></td>
+        <td><p>[% reserveloo.copyno %]</p></td>
+        <td><p>[% reserveloo.enumchron %]</p></td>
+        <td>[% reserveloo.itype %]</td>
+        <td>[% reserveloo.location %]</td>
+        <td width="15%">
+            <p>[% reserveloo.reservedate %]</p>
+            <p>in [% reserveloo.branch %]</p>
+            [% IF ( reserveloo.statusw ) %]<p>Waiting</p>[% END %][% IF ( reserveloo.statusf ) %]<p>Fullfilled</p>[% END %]
+        </td>
+        </tr>
+        [% END %]
+    </tbody>
+    <tfoot>
+        <tr>
+        <td><input type="text" class="filter" data-column_num="0" placeholder="Pull This many items" style="width:95%"/></td>
+        <td><input type="text" class="filter" data-column_num="1" placeholder="Items available" style="width:95%"/></td>
+        <td><input type="text" class="filter" data-column_num="2" placeholder="Patron holds" style="width:95%"/></td>
+        <td><input type="text" class="filter" data-column_num="3" placeholder="Title" style="width:95%"/></td>
+        <td id="homebranchfilter"></td>
+        <td><input type="text" class="filter" data-column_num="5" placeholder="Call number" style="width:95%"/></td>
+        <td><input type="text" class="filter" data-column_num="6" placeholder="Available copy" style="width:95%"/></td>
+        <td><input type="text" class="filter" data-column_num="7" placeholder="Available enumeration" style="width:95%"/></td>
+        <td id="itypefilter"></td>
+        <td id="locationfilter"></td>
+        <td></td>
+        </tr>
+    </tfoot>
     </table>
     [% ELSE %]
         <b>No items found.</b>
