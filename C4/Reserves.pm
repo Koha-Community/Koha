@@ -866,6 +866,7 @@ sub CancelExpiredReserves {
     my $sth = $dbh->prepare( "
         SELECT * FROM reserves WHERE DATE(expirationdate) < DATE( CURDATE() ) 
         AND expirationdate IS NOT NULL
+        AND found IS NULL
     " );
     $sth->execute();
 
