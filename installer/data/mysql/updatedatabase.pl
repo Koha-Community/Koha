@@ -4761,7 +4761,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do(
     "INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('CatalogModuleRelink',0,'If OFF the linker will never replace the authids that are set in the cataloging module.',NULL,'YesNo');"
     );
-    print "Upgrade to $DBversion done (<b>Enhancement 7284, improved authority matching, see <a href='http://wiki.koha-community.org/wiki/Bug7284_authority_matching_improvement'> wiki page for configuration update needed</a></b>)\n";
+    print "Upgrade to $DBversion done (Enhancement 7284, improved authority matching, see http://wiki.koha-community.org/wiki/Bug7284_authority_matching_improvement wiki page for configuration update needed)\n";
     SetVersion($DBversion);
 }
 
