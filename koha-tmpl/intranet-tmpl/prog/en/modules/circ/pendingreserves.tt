@@ -1,5 +1,5 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Circulation &rsaquo; Holds to Pull</title>
+<title>Koha &rsaquo; Circulation &rsaquo; Holds to pull</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <!-- Additions to enable Calendar system -->
 <link rel="stylesheet" type="text/css" href="[% themelang %]/lib/calendar/calendar-system.css" />
@@ -51,7 +51,7 @@ $(document).ready(function() {
 [% INCLUDE 'circ-search.inc' %]
 
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a> &rsaquo; Holds to Pull</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a> &rsaquo; Holds to pull</div>
 
 <div id="doc3" class="yui-t2">
 
@@ -59,7 +59,7 @@ $(document).ready(function() {
     <div id="yui-main">
     <div class="yui-b">
 
-<h2>Holds to Pull[% IF ( run_report ) %] placed between [% from %] and [% to %][% END %]</h2>
+<h2>Holds to pull[% IF ( run_report ) %] placed between [% from %] and [% to %][% END %]</h2>
 [% IF ( run_report ) %]
 <h3>Reported on [% todaysdate %]</h3>
 <p>The following holds have not been filled. Please retrieve them and check them in.</p>
@@ -68,17 +68,17 @@ $(document).ready(function() {
     <table id="holdst">
     <thead>
         <tr>
-        <th>Pull This Many Items</th>
-        <th>Items Available</th>
-        <th>Patrons with Holds</th>
+        <th>Pull this many items</th>
+        <th>Items available</th>
+        <th>Patrons with holds</th>
         <th>Title</th>
         <th>Libraries</th>
-        <th>Available Call Numbers</th>
-        <th>Available Copy No</th>
-        <th>Available Enumeration</th>
-        <th>Available Itypes</th>
-        <th>Available Locations</th>
-        <th>Earliest Hold Date</th>
+        <th>Available call numbers</th>
+        <th>Available copy No</th>
+        <th>Available enumeration</th>
+        <th>Available itypes</th>
+        <th>Available locations</th>
+        <th>Earliest hold date</th>
         </tr>
     </thead>
     <tbody>
@@ -117,7 +117,7 @@ $(document).ready(function() {
     </tbody>
     <tfoot>
         <tr>
-        <td><input type="text" class="filter" data-column_num="0" placeholder="Pull This many items" style="width:95%"/></td>
+        <td><input type="text" class="filter" data-column_num="0" placeholder="Pull this many items" style="width:95%"/></td>
         <td><input type="text" class="filter" data-column_num="1" placeholder="Items available" style="width:95%"/></td>
         <td><input type="text" class="filter" data-column_num="2" placeholder="Patron holds" style="width:95%"/></td>
         <td><input type="text" class="filter" data-column_num="3" placeholder="Title" style="width:95%"/></td>
