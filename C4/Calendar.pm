@@ -582,37 +582,6 @@ sub copy_to_branch {
     return 1;
 }
 
-=head2 daysBetween
-
-    my $daysBetween = $calendar->daysBetween($startdate, $enddate)
-
-C<$startdate> and C<$enddate> are C4::Dates objects that define the interval.
-
-Returns the number of non-holiday days in the interval.
-useDaysMode syspref has no effect here.
-=cut
-
-sub daysBetween ($$$) {
-    my $self      = shift or return undef;
-    my $startdate = shift or return undef;
-    my $enddate   = shift or return undef;
-	my ($yearFrom,$monthFrom,$dayFrom) = split("-",$startdate->output('iso'));
-	my ($yearTo,  $monthTo,  $dayTo  ) = split("-",  $enddate->output('iso'));
-	if (Date_to_Days($yearFrom,$monthFrom,$dayFrom) > Date_to_Days($yearTo,$monthTo,$dayTo)) {
-		return 0;
-		# we don't go backwards  ( FIXME - handle this error better )
-	}
-    my $count = 0;
-    while (1) {
-        ($yearFrom != $yearTo or $monthFrom != $monthTo or $dayFrom != $dayTo) or last; # if they all match, it's the last day
-        unless ($self->isHoliday($dayFrom, $monthFrom, $yearFrom)) {
-            $count++;
-        }
-        ($yearFrom, $monthFrom, $dayFrom) = &Date::Calc::Add_Delta_Days($yearFrom, $monthFrom, $dayFrom, 1);
-    }
-    return($count);
-}
-
 =head2 addDate
 
     my ($day, $month, $year) = $calendar->addDate($date, $offset)
@@ -660,16 +629,16 @@ Returns the number of non-holiday days in the interval.
 useDaysMode syspref has no effect here.
 =cut
 
-sub daysBetween ($$$) {
-    my $self      = shift or return undef;
-    my $startdate = shift or return undef;
-    my $enddate   = shift or return undef;
-	my ($yearFrom,$monthFrom,$dayFrom) = split("-",$startdate->output('iso'));
-	my ($yearTo,  $monthTo,  $dayTo  ) = split("-",  $enddate->output('iso'));
-	if (Date_to_Days($yearFrom,$monthFrom,$dayFrom) > Date_to_Days($yearTo,$monthTo,$dayTo)) {
-		return 0;
-		# we don't go backwards  ( FIXME - handle this error better )
-	}
+sub daysBetween {
+    my $self      = shift or return;
+    my $startdate = shift or return;
+    my $enddate   = shift or return;
+    my ($yearFrom,$monthFrom,$dayFrom) = split("-",$startdate->output('iso'));
+    my ($yearTo,  $monthTo,  $dayTo  ) = split("-",  $enddate->output('iso'));
+    if (Date_to_Days($yearFrom,$monthFrom,$dayFrom) > Date_to_Days($yearTo,$monthTo,$dayTo)) {
+        return 0;
+        # we don't go backwards  ( FIXME - handle this error better )
+    }
     my $count = 0;
     while (1) {
         ($yearFrom != $yearTo or $monthFrom != $monthTo or $dayFrom != $dayTo) or last; # if they all match, it's the last day
