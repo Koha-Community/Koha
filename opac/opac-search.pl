@@ -625,8 +625,12 @@ for (my $i=0;$i<@servers;$i++) {
             }
             $template->param(stopwords_removed => "@$stopwords_removed") if $stopwords_removed;
             $template->param(results_per_page =>  $results_per_page);
-            $template->param(SEARCH_RESULTS => \@newresults,
-                                OPACItemsResultsDisplay => (C4::Context->preference("OPACItemsResultsDisplay") eq "itemdetails"?1:0),
+            my $hide = C4::Context->preference('OpacHiddenItems');
+            $hide = ($hide =~ m/\S/) if $hide; # Just in case it has some spaces/new lines
+            $template->param(
+                SEARCH_RESULTS => \@newresults,
+                OPACItemsResultsDisplay => (C4::Context->preference("OPACItemsResultsDisplay") eq "itemdetails"?1:0),
+                suppress_result_number => $hide,
                             );
 	    if (C4::Context->preference("OPACLocalCoverImages")){
 		$template->param(OPACLocalCoverImages => 1);
