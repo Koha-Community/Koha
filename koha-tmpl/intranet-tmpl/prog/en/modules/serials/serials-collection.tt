@@ -186,6 +186,13 @@ $(document).ready(function() {
 
  [% FOREACH year IN years %]
 <div id="subscription-year-[% year.year %]">
+    [% IF ( CAN_user_serials_receive_serials ) %]
+        <p>
+            <input type="submit" value="Edit serials" />&nbsp;
+            <input type="button" value="Generate Next" onclick="javascript:generateNext([% subscriptionidlist %])" />
+        </p>
+    [% END %]
+
         <table>
 	  <tr>
 [% IF ( subscriptions.size > 1 ) %]
@@ -254,12 +261,6 @@ $(document).ready(function() {
             </tr>
       [% END %]
         </table>
-    [% IF ( CAN_user_serials_receive_serials ) %]
-        <p>
-            <input type="submit" value="Edit serials" />&nbsp;
-            <input type="button" value="Generate Next" onclick="javascript:generateNext([% subscriptionidlist %])" />
-        </p>
-    [% END %]
     </div>
     [% END %]
   <input type="hidden" name="subscriptionid" value="[% subscriptionidlist %]" />
