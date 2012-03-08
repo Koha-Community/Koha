@@ -780,7 +780,7 @@ C<$branch> is the branchcode of the library where the writeoff occurred.
 
 sub WriteOffFee {
     my ( $borrowernumber, $accountnum, $itemnum, $accounttype, $amount, $branch ) = @_;
-    my $branch ||= C4::Context->userenv->{branch};
+    $branch ||= C4::Context->userenv->{branch};
     my $manager_id = 0;
     $manager_id = C4::Context->userenv->{'number'} if C4::Context->userenv;
 
