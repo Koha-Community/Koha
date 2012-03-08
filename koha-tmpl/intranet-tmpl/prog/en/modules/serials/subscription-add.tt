@@ -944,6 +944,16 @@ $(document).ready(function() {
     $('#numberpattern').change( function() { 
         reset_num_pattern(); 
     });
+
+    var node;
+    [% FOREACH field IN dont_export_field_loop %]
+        node = $("#[% field.fieldid %]");
+        if ( $(node).is('input') || $(node).is('textarea') ) {
+            $(node).val("");
+        } else if ( $(node).is('select') ) {
+            $(node).find("option:first").attr('selected','selected');
+        }
+    [% END %]
 });
 //]]>
 </script>
@@ -1333,7 +1343,7 @@ $(document).ready(function() {
 					[% IF ( subtype_numberlength ) %]<option value="numberlength" selected="selected">[% ELSE %]<option value="numberlength">[% END %] Number of issues</option>					
 					[% IF ( subtype_weeklength ) %]<option value="weeklength" selected="selected">[% ELSE %]<option value="weeklength">[% END %] Number of weeks</option>					
                 </select>
-                <input type="text" name="sublength" value="[% sublength %]" size="3" onkeypress="return check_input(event)" /> (enter amount in numerals)
+                <input type="text" id="numberlength" name="sublength" value="[% sublength %]" size="3" onkeypress="return check_input(event)" /> (enter amount in numerals)
             <span class="required">Required</span>
         </li>
         <li>
