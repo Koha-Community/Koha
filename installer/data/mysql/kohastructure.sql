@@ -1854,6 +1854,53 @@ DROP TABLE IF EXISTS `stopwords`;
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
+-- Table structure for table subscription_frequencies
+--
+
+DROP TABLE IF EXISTS subscription_frequencies;
+CREATE TABLE subscription_frequencies (
+    id INTEGER NOT NULL AUTO_INCREMENT,
+    description TEXT NOT NULL,
+    displayorder INT DEFAULT NULL,
+    unit ENUM('day','week','month','year') DEFAULT NULL,
+    unitsperissue INTEGER NOT NULL DEFAULT '1',
+    issuesperunit INTEGER NOT NULL DEFAULT '1',
+    PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Table structure for table subscription_numberpatterns
+--
+
+DROP TABLE IF EXISTS subscription_numberpatterns;
+CREATE TABLE subscription_numberpatterns (
+    id INTEGER NOT NULL AUTO_INCREMENT,
+    label VARCHAR(255) NOT NULL,
+    displayorder INTEGER DEFAULT NULL,
+    description TEXT NOT NULL,
+    numberingmethod VARCHAR(255) NOT NULL,
+    label1 VARCHAR(255) DEFAULT NULL,
+    add1 INTEGER DEFAULT NULL,
+    every1 INTEGER DEFAULT NULL,
+    whenmorethan1 INTEGER DEFAULT NULL,
+    setto1 INTEGER DEFAULT NULL,
+    numbering1 VARCHAR(255) DEFAULT NULL,
+    label2 VARCHAR(255) DEFAULT NULL,
+    add2 INTEGER DEFAULT NULL,
+    every2 INTEGER DEFAULT NULL,
+    whenmorethan2 INTEGER DEFAULT NULL,
+    setto2 INTEGER DEFAULT NULL,
+    numbering2 VARCHAR(255) DEFAULT NULL,
+    label3 VARCHAR(255) DEFAULT NULL,
+    add3 INTEGER DEFAULT NULL,
+    every3 INTEGER DEFAULT NULL,
+    whenmorethan3 INTEGER DEFAULT NULL,
+    setto3 INTEGER DEFAULT NULL,
+    numbering3 VARCHAR(255) DEFAULT NULL,
+    PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
 -- Table structure for table `subscription`
 --
 
@@ -1870,40 +1917,27 @@ CREATE TABLE `subscription` (
   `monthlength` int(11) default 0,
   `numberlength` int(11) default 0,
   `periodicity` tinyint(4) default 0,
-  `dow` varchar(100) default '',
-  `numberingmethod` varchar(100) default '',
+  countissuesperunit INTEGER NOT NULL DEFAULT 1,
   `notes` mediumtext,
   `status` varchar(100) NOT NULL default '',
-  `add1` int(11) default 0,
-  `every1` int(11) default 0,
-  `whenmorethan1` int(11) default 0,
-  `setto1` int(11) default NULL,
   `lastvalue1` int(11) default NULL,
-  `add2` int(11) default 0,
-  `every2` int(11) default 0,
-  `whenmorethan2` int(11) default 0,
-  `setto2` int(11) default NULL,
-  `lastvalue2` int(11) default NULL,
-  `add3` int(11) default 0,
-  `every3` int(11) default 0,
   `innerloop1` int(11) default 0,
+  `lastvalue2` int(11) default NULL,
   `innerloop2` int(11) default 0,
-  `innerloop3` int(11) default 0,
-  `whenmorethan3` int(11) default 0,
-  `setto3` int(11) default NULL,
   `lastvalue3` int(11) default NULL,
-  `issuesatonce` tinyint(3) NOT NULL default 1,
+  `innerloop3` int(11) default 0,
   `firstacquidate` date default NULL,
   `manualhistory` tinyint(1) NOT NULL default 0,
   `irregularity` text,
+  skip_serialseq BOOLEAN NOT NULL DEFAULT 0,
   `letter` varchar(20) default NULL,
   `numberpattern` tinyint(3) default 0,
+  locale VARCHAR(80) DEFAULT NULL,
   `distributedto` text,
   `internalnotes` longtext,
   `callnumber` text,
   `location` varchar(80) NULL default '',
   `branchcode` varchar(10) NOT NULL default '',
-  `hemisphere` tinyint(3) default 0,
   `lastbranch` varchar(10),
   `serialsadditems` tinyint(1) NOT NULL default '0',
   `staffdisplaycount` VARCHAR(10) NULL,
@@ -1911,7 +1945,9 @@ CREATE TABLE `subscription` (
   `graceperiod` int(11) NOT NULL default '0',
   `enddate` date default NULL,
   `closed` INT(1) NOT NULL DEFAULT 0,
-  PRIMARY KEY  (`subscriptionid`)
+  PRIMARY KEY  (`subscriptionid`),
+  CONSTRAINT subscription_ibfk_1 FOREIGN KEY (periodicity) REFERENCES subscription_frequencies (id) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT subscription_ibfk_2 FOREIGN KEY (numberpattern) REFERENCES subscription_numberpatterns (id) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --

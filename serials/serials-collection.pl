@@ -109,9 +109,6 @@ if (@subscriptionid){
     $subs->{missinglist}  =~ s/\n/\<br\/\>/g;
     $subs->{recievedlist} =~ s/\n/\<br\/\>/g;
     ##these are display information
-    $subs->{ "periodicity" . $subs->{periodicity} } = 1;
-    $subs->{ "numberpattern" . $subs->{numberpattern} } = 1;
-    $subs->{ "status" . $subs->{'status'} } = 1;
     $subs->{startdate}     = format_date( $subs->{startdate} );
     $subs->{histstartdate} = format_date( $subs->{histstartdate} );
     if ( !defined $subs->{enddate} || $subs->{enddate} eq '0000-00-00' ) {
@@ -125,6 +122,10 @@ if (@subscriptionid){
     $subs->{'subscriptionid'} = $subscriptionid;  # FIXME - why was this lost ?
 	$location = GetAuthorisedValues('LOC', $subs->{'location'});
 	$callnumber = $subs->{callnumber};
+    my $frequency = C4::Serials::Frequency::GetSubscriptionFrequency($subs->{periodicity});
+    my $numberpattern = C4::Serials::Numberpattern::GetSubscriptionNumberpattern($subs->{numberpattern});
+    $subs->{frequency} = $frequency;
+    $subs->{numberpattern} = $numberpattern;
     push @$subscriptiondescs,$subs;
     my $tmpsubscription= GetFullSubscription($subscriptionid);
     @subscriptioninformation=(@$tmpsubscription,@subscriptioninformation);
@@ -153,6 +154,7 @@ my $locationlib;
 foreach (@$location) {
     $locationlib = $_->{'lib'} if $_->{'selected'};
 }
+
 
 chop $subscriptionidlist;
 $template->param(

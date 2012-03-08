@@ -1,3 +1,5 @@
+[% USE KohaDates %]
+
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Serials &rsaquo; [% IF ( modify ) %][% bibliotitle |html %] &rsaquo; Modify subscription[% ELSE %]New subscription[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -11,952 +13,440 @@ fieldset.rows li.radio { width: 100%; } /* override staff-global.css */
 <script type="text/javascript">
 //<![CDATA[
 
-// the english words used in display purposes
-var text = new Array(_("Number"),_("Volume"),_("Issue"),_("Month"),_("Week"),_("Starting with:"),_("Rollover at:"),_("Choose Hemisphere:"),_("Northern"),_("Southern"),
-_("Autumn"),_("Winter"),_("Spring"),_("Summer"),_("Fall"),_("Season"),_("Year"));
-var weekno_label = _("Week # ");
-var is_season = 0;
-var is_hemisphere = 1;
-var irregular_issues;   // will hold irregularity object.
+var globalnumpatterndata;
+var globalfreqdata;
+var advancedpatternlocked;
+var patternneedtobetested = 0;
 
-function formatDate(myDate) {
-    var d = new Array( myDate.getFullYear(), myDate.getMonth() + 1 ,myDate.getDate());
-    if(d[1].toString().length == 1) { d[1] = '0'+d[1] };
-    if(d[2].toString().length == 1) { d[2] = '0'+d[2] };
-    [% IF ( dateformat_us ) %]
-        return(d[1] + '/' + d[2] + '/' + d[0]) ;
-    [% ELSIF ( dateformat_metric ) %]
-        return(d[2] + '/' + d[1] + '/' + d[0]) ;
-    [% ELSE %]
-        return(''+d[0] + '-' + d[1] + '-' + d[2]) ;
-    [% END %]    
-}
-
-Date.prototype.addDays = function(days) {
-    this.setDate(this.getDate()+days);
-}
-
-function getWeeksArray(startDate,periodicity) {
-// returns an array of syspref-formatted dates starting at the first day of startDate's year.
-// This prediction method will not accurately predict irregularites beyond the first year.
-// FIXME : Should replace with ajax query to get the first Monday of the year so that week numbers have correct dates.
-    var incr=1;
-    if(periodicity==3) {  // 1/2 wks
-        incr=2;
-    } else if(periodicity == 4) { // 1/3 wks
-        incr=3;
-    }
-    var weeksArray = new Array;
-    var jan01 = new Date();
-    jan01.setDate(1);
-    jan01.setMonth(0);
-    jan01.setFullYear(startDate.getFullYear());
-    for(var i=0;i<52;i++) {
-        weeksArray[i] = formatDate(jan01) + ' ' + weekno_label + (i + 1);
-        jan01.addDays( 7 ); 
-    }
-    return weeksArray;
-}
-
-function YMDaToYWDa(S) {
-    with (new Date(Date.UTC(S[0], S[1] - 1, S[2]))) {
-        var DoW = getUTCDay();
-        setUTCDate(getUTCDate() - (DoW + 6) % 7 + 3);
-        var ms = valueOf();
-        setUTCMonth(0, 4);
-        var WN = Math.round((ms - valueOf()) / 604800000) + 1;
-        return [getUTCFullYear(), WN, DoW == 0 ? 7 : DoW];
-    }
-}
-function dayofyear(d) { // d is a Date object
-var yn = d.getFullYear();
-var mn = d.getMonth();
-var dn = d.getDate();
-var d1 = new Date(yn,0,1,12,0,0); // noon on Jan. 1
-var d2 = new Date(yn,mn,dn,12,0,0); // noon on input date
-var ddiff = Math.round((d2-d1)/864e5);
-return ddiff+1;
-}
-
-
-// create irregularity object.
-function IrregularPattern() {
-	this.months = new Array(_("January"),_("February"),_("March"),_("April"),_("May"),_("June"),_("July"),_("August"),_("September"),_("October"),_("November"),_("December"));
-	this.seasons = new Array(_("Autumn"),_("Winter"),_("Spring"),_("Summer"),_("Fall"));
-    this.daynames = new Array(_("Monday"),_("Tuesday"),_("Wednesday"),_("Thursday"),_("Friday"),_("Saturday"),_("Sunday"));
-    // create weeks irregularity selection array:
-    this.firstissue = new Date();
-    this.firstissue.setDate(1);
-    this.firstissue.setMonth(0);
-    [% IF ( firstacquiyear ) %] // it's a mod, we already have a start date.
-        this.firstissue.setFullYear( [% firstacquiyear %] );
-    [% END %]
-   	this.weeks = getWeeksArray(this.firstissue); 
-
-    this.numskipped = 0;
-    // init:
-	var irregular = '[% irregularity %]';
-    this.skipped = irregular.split(',');
-}
-
-IrregularPattern.prototype.update = function() {
-		this.skipped= new Array;
-		var cnt = 0;
-		// daily periodicity, we interpret irregular array as which days of week to skip.
-		// else if weekly periodicity, week numbers (starting from 01 Jan) to skip.
-        // else  irregular array is list of issues to skip
-		var summary_str = '';
-		this.numskipped = 0;
-        if(document.f.irregularity_select) {
-            //$("#irregularity_select option:selected").each(...); //jquery can combine both conditionals and the for loop
-            for( var i in document.f.irregularity_select.options ) {
-                if( document.f.irregularity_select.options[i].selected ) {
-                    this.skipped[cnt] = document.f.irregularity_select.options[i].value ;
-                    summary_str += document.f.irregularity_select.options[i].text + "\n" ;
-				    cnt++;
-				    this.numskipped++;
-			    }
-		    }
-		    var summary = document.getElementById("irregularity_summary");
-		    if(summary) {
-			    summary.value = summary_str;
-			    summary.rows= ( cnt > 6 ) ? cnt : 6 ; // textarea will bre resized, but not more than 6 lines will show.
-		    }
-        }
-}
-
-IrregularPattern.prototype.irregular = function(index) { 
-	for( var i in this.skipped) {
-			if( this.skipped[i] == index) {
-				return true;
-			}
-	}
-	return false;
-}
-
-function init_pattern() {
-	irregular_issues = new IrregularPattern();
-}
-function reset_pattern() {
-	document.getElementById("numberpattern").value = '';
-    document.getElementById("irregularity").innerHTML = '';
-	init_pattern();
-	reset_num_pattern();
-}
-
-// common pre defined number patterns
-function reset_num_pattern() {
-var patternchoice = document.getElementById("numberpattern").value;
-    switch(patternchoice){
-    case "2":
-        document.f.add1.value=1;
-        document.f.add2.value=1;
-        document.f.add3.value=1;
-        document.f.every1.value=12;
-        document.f.every2.value=1;
-        document.f.every3.value=1;
-        document.f.whenmorethan1.value=9999999;
-        document.f.whenmorethan2.value=12;
-        document.f.whenmorethan3.value=4;
-        document.f.setto1.value=0;
-        document.f.setto2.value=1;
-        document.f.setto3.value=1;
-        document.f.lastvalue1.value=1;
-        document.f.lastvalue2.value=1;
-        document.f.lastvalue3.value=1;
-        document.f.numberingmethod.value=_("Vol {X}, No {Y}, Issue {Z}");
-        moreoptions(text[1],text[0],text[2]);
-        display_table(0); // toggle info box on (1) or off (0)
-        break;
-    case "3":
-        document.f.add1.value=1;
-        document.f.add2.value=1;
-        document.f.add3.value='';
-        document.f.every1.value=12;
-        document.f.every2.value=1;
-        document.f.every3.value='';
-        document.f.whenmorethan1.value=9999999;
-        document.f.whenmorethan2.value=12;
-        document.f.whenmorethan3.value='';
-        document.f.setto1.value=0;
-        document.f.setto2.value=1;
-        document.f.setto3.value='';
-        document.f.lastvalue1.value=1;
-        document.f.lastvalue2.value=1;
-        document.f.lastvalue3.value='';
-        document.f.numberingmethod.value=_("Vol {X}, No {Y}");
-        moreoptions(text[1],text[0]);
-        display_table(0);
-        break;
-    case "4":
-        document.f.add1.value=1;
-        document.f.add2.value=1;
-        document.f.add3.value='';
-        document.f.every1.value=12;
-        document.f.every2.value=1;
-        document.f.every3.value='';
-        document.f.whenmorethan1.value=9999999;
-        document.f.whenmorethan2.value=12;
-        document.f.whenmorethan3.value='';
-        document.f.setto1.value=0;
-        document.f.setto2.value=1;
-        document.f.setto3.value='';
-        document.f.lastvalue1.value=1;
-        document.f.lastvalue2.value=1;
-        document.f.lastvalue3.value='';
-        document.f.numberingmethod.value=_("Vol {X}, Issue {Y}");
-        moreoptions(text[1],text[2]);
-        display_table(0);
-        break;
-    case "5":
-//        var d = new Date(document.f.firstacquidate.value);
-//        var smonth = d.getMonth();
-        document.f.add1.value=1;
-        document.f.add2.value=1;
-        document.f.add3.value='';
-        document.f.every1.value=12;
-        document.f.every2.value=1;
-        document.f.every3.value='';
-        document.f.whenmorethan1.value=9999999;
-        document.f.whenmorethan2.value=12;
-        document.f.whenmorethan3.value='';
-        document.f.setto1.value=0;
-        document.f.setto2.value=1;
-        document.f.setto3.value='';
-        document.f.numberingmethod.value=_("No {X}, Issue {Y}");
-        moreoptions(text[0],text[2]);
-        display_table(0);
-        break;
-    case "6":
-        var d = new Date(document.f.firstacquidate.value);
-        var sYear = d.getFullYear();
-        moreoptions_seasons(text[15],sYear);
-        var d = new Date(document.f.firstacquidate.value);
-        var sYear = d.getFullYear();
-        document.f.add1.value=1;
-        document.f.add2.value='1';
-        document.f.add3.value='';
-        document.f.every1.value=4;
-        document.f.every2.value='1';
-        document.f.every3.value='';
-        document.f.whenmorethan1.value=9999999;
-        document.f.whenmorethan2.value='4';
-        document.f.whenmorethan3.value='';
-        document.f.setto1.value=0;
-        document.f.setto2.value='1';
-        document.f.setto3.value='';
-        document.f.periodicity.value='8';
-        document.f.numberingmethod.value=_("{Y} {X}");
-        moreoptions_seasons(text[15],sYear);
-        document.f.lastvalue1temp.value=document.f.lastvalue1.value=sYear;
-        display_table(0);
-        is_season = 1;
-        break;
-    case "7":
-        display_table(1);
-        document.getElementById("more_options").innerHTML = '';
-        document.f.irreg_check.value=1; 
-        break;
-    case "8":  // Year/Number
-        var d = (document.f.firstacquidate.value) ? new Date( document.f.firstacquidate.value) : new Date() ;
-        var sYear = d.getFullYear();
-        document.f.add1.value=1;
-        document.f.add2.value=1;
-        document.f.add3.value='';
-        document.f.every1.value=12;
-        document.f.every2.value=1;
-        document.f.every3.value='';
-        document.f.whenmorethan1.value=9999999;
-        document.f.whenmorethan2.value=12;
-        document.f.whenmorethan3.value='';
-        document.f.setto1.value=0;
-        document.f.setto2.value=1;
-        document.f.setto3.value='';
-        document.f.lastvalue1.value=sYear;
-          switch (document.f.periodicity.value){
-            case 1:              
-              var doy = dayofyear(d);
-              document.f.lastvalue2.value=doy; 
-              document.f.whenmorethan2.value=365; 
-              break;      
-            case 12:     
-              var doy = dayofyear(d);
-              document.f.lastvalue2.value=doy*2; 
-              document.f.whenmorethan2.value=730; 
-              break;      
-            case 2:
-            case 3:
-            case 4:
-              var YWDa = YMDaToYWDa(d);
-              document.f.lastvalue2.value=YWDA[1]/(document.f.periodicity.value-1); 
-              break;      
-            case 5:
-              var smonth = d.getMonth();
-              document.f.lastvalue2.value=smonth;
-              break;      
-            case 6:
-              var smonth = d.getMonth();
-              document.f.lastvalue2.value=smonth/2;
-              document.f.whenmorethan2.value=6;
-              break;      
-            case 7:
-            case 8:      
-              var smonth = d.getMonth();
-              document.f.lastvalue2.value=smonth/3;
-              document.f.whenmorethan2.value=4;
-              break;      
-            case 9:                        
-              var smonth = d.getMonth();
-              document.f.lastvalue2.value=smonth/6;
-              document.f.whenmorethan2.value=2;
-              break;      
-            default:
-          } 
-        document.f.lastvalue3.value='';
-        document.f.numberingmethod.value=_("{X} / {Y}");
-        moreoptions(text[16],text[0]);
-     //   document.f.lastvalue1temp.value=sYear;
-     //   document.f.lastvalue2temp.value=document.f.lastvalue2.value;
-        display_table(0);
-        break;
-    default:
-        document.f.add1.value=1;
-        document.f.add2.value='';
-        document.f.add3.value='';
-        document.f.every1.value=1;
-        document.f.every2.value='';
-        document.f.every3.value='';
-        document.f.whenmorethan1.value=9999999;
-        document.f.whenmorethan2.value='';
-        document.f.whenmorethan3.value='';
-        document.f.setto1.value=0;
-        document.f.setto2.value='';
-        document.f.setto3.value='';
-        document.f.lastvalue1.value=1;
-        document.f.lastvalue2.value='';
-        document.f.lastvalue3.value='';
-        document.f.numberingmethod.value='{X}';
-//        moreoptions_daily_check(text[0]);
-        moreoptions(text[0]);
-        document.f.irreg_check.value=1;
-        display_table(0);
-        break;
-    }
-}
-
-function display_table(n) {
-    if(n==1){
-        document.getElementById("basetable").style.display = 'block';
-    } else if(n==0){
-        document.getElementById("basetable").style.display = 'none';
-    } else {
-		var disp_val = ( document.getElementById("basetable").style.display == 'none' ) ? 'block' : 'none' ;
-			document.getElementById("basetable").style.display = disp_val;
-	}
-}
-
-function set_num_pattern_from_template_vars() {
-	if(!document.getElementById("numberpattern")){ return false; }
-    document.getElementById("numberpattern").value = '[% numberpattern %]';
-    reset_num_pattern();
-    
-    document.f.add1.value='[% add1 %]';
-    document.f.add2.value='[% add2 %]';
-    document.f.add3.value='[% add3 %]';
-    document.f.every1.value='[% every1 %]';
-    document.f.every2.value='[% every2 %]';
-    document.f.every3.value='[% every3 %]';
-    document.f.whenmorethan1.value='[% whenmorethan1 %]';
-    document.f.whenmorethan2.value='[% whenmorethan2 %]';
-    document.f.whenmorethan3.value='[% whenmorethan3 %]';
-    document.f.setto1.value='[% setto1 %]';
-    document.f.setto2.value='[% setto2 %]';
-    document.f.setto3.value='[% setto3 %]';
-    document.f.lastvalue1.value='[% lastvalue1 %]';
-    document.f.lastvalue2.value='[% lastvalue2 %]';
-    document.f.lastvalue3.value='[% lastvalue3 %]';
-    document.f.numberingmethod.value='[% numberingmethod %]';
-
-    var more_strY;
-    var more_strZ;
-    [% IF ( add2 ) %]
-    if([% add2 %] > 0){
-        more_strY="Y";
-    }
-    [% END %]
-    [% IF ( add3 ) %]
-    if([% add3 %] > 0){
-        more_strZ="Z";
-    }
-    [% END %]
-    document.f.lastvalue1temp.value='[% lastvalue1 %]';
-    if(more_strY){
-        document.f.lastvalue2temp.value='[% lastvalue2 %]';
-    document.f.whenmorethan2temp.value='[% whenmorethan2 %]';
-    }
-    if(more_strZ){
-        document.f.lastvalue3temp.value='[% lastvalue3 %]';
-    document.f.whenmorethan3temp.value='[% whenmorethan3 %]';
-    }
-}
-
-// a pre check with more options to see if 'number' and '1/day' are chosen
-function moreoptions_daily_check(x) {
-    var periodicity = document.f.periodicity.value;
-    var errortext='';
-    if(periodicity == 1){ // i.e. daily
-        document.getElementById("irregularity").innerHTML = '';
-        errortext =_("Please indicate which days of the week you DO NOT expect to receive issues.")+"<br \/>";
-        for(var j=0;j<irregular_issues.daynames.length;j++){
-            errortext +="<input type='checkbox' name='irregular' id='irregular"+(j+1)+"' value='"+(j+1)+"' />"+irregular_issues.daynames[j]+" &nbsp; ";
-        }
-        var error = errortext;
-        moreoptions(x);
-        document.getElementById("irregularity").innerHTML = error;
-    } else {
-        document.getElementById("irregularity").innerHTML = '';
-        document.getElementById("more_options").innerHTML = '';
-        moreoptions(x);
-    }
-}
-
-// to dispaly the more options section
-function moreoptions(x,y,z){
-document.getElementById("irregularity").innerHTML = '';
-document.getElementById("more_options").innerHTML = '';
-var textbox = '';
-    // alert("X: "+x+"Y: "+y+"Z: "+z);
-    if(x){
-        textbox +="<table id='irregularity_table'>\n<tr><th>&nbsp;<\/th><th>"+x+"<\/th>";
-        if(y){
-            textbox +="<th>"+y+"<\/th>";
-            if(z){
-                textbox +="<th>"+z+"<\/th>";
-            }
-        }
-        textbox +="<\/tr>\n";
-        textbox +="<tr><th scope=\"row\">"+text[5]+"<\/td><td><input type='text' name='lastvalue1temp' id='lastvalue1temp' size='4' onkeyup='moreoptionsupdate(this)' value=\"" + document.f.lastvalue1.value +  "\" /><\/td>\n";
-        if(y){
-            textbox +="<td><input type=\"text\" name=\"lastvalue2temp\" id=\"lastvalue2temp\" size=\"4\" onkeyup=\"moreoptionsupdate(this)\" value=\"" + document.f.lastvalue2.value + "\" /><\/td>\n";
-            if(z){
-                textbox +="<td><input type=\"text\" name=\"lastvalue3temp\" id=\"lastvalue3temp\" size=\"4\" onkeyup=\"moreoptionsupdate(this)\" value=\"" + document.f.lastvalue3.value + "\" /><\/td>\n";
-            }
-        }
-        textbox +="<\/tr>\n";
-        if(y){
-            textbox +="<tr><th scope=\"row\">"+text[6]+"<\/th>";
-            textbox +="<td>&nbsp;<\/td>\n";
-            textbox +="<td><input type=\"text\" name=\"whenmorethan2temp\" id=\"whenmorethan2temp\" size=\"4\" onkeyup=\"moreoptionsupdate(this,1)\"><\/td>\n";
-            if(z){
-                textbox +="<td><input type=\"text\" name=\"whenmorethan3temp\" id=\"whenmorethan3temp\" size=\"4\" onkeyup=\"moreoptionsupdate(this,1)\"><\/td>\n";
-            }
-            textbox +="<\/tr>";
-        } else {
-          textbox +="<tr> <td>"+_("issues expected")+"<\/td><td><input type=\"text\" name=\"issuesexpected1temp\" id=\"issuesexpected1temp\" size=\"4\" onkeyup=\"moreoptionsupdate(this,0)\" value=\"" + document.f.issuesexpected1.value + "\" ><\/td><\/tr>";
-        }
-        textbox +="<\/table>\n";
-    }
-    document.getElementById("more_options").innerHTML = textbox;
-}
-
-function hemispheres(chosen){
-var selbox = document.getElementById("season1");
-    if(selbox){
-    var selboxselected = selbox.options[selbox.selectedIndex].value;
-    selbox.options.length = 0;
-
-    if ( (chosen == "1") || ( ! (chosen) && is_hemisphere == 1 )) {
-        selbox.options[selbox.options.length] = new Option(text[11],'1');
-        selbox.options[selbox.options.length] = new Option(text[12],'2');
-        selbox.options[selbox.options.length] = new Option(text[13],'3');
-        selbox.options[selbox.options.length] = new Option(text[14],'4');
-        is_hemisphere = 1;
-        selbox.options[selboxselected-1].selected = true;
-    }
-
-    if ( (chosen == "2") || ( ! (chosen) && is_hemisphere == 2 )) {
-        selbox.options[selbox.options.length] = new Option(text[13],'1');
-        selbox.options[selbox.options.length] = new Option(text[10],'2');
-        selbox.options[selbox.options.length] = new Option(text[11],'3');
-        selbox.options[selbox.options.length] = new Option(text[12],'4');
-        is_hemisphere = 2;
-        selbox.options[selboxselected-1].selected = true;
-    }
-    }
-}
-
-// to display the more options section for seasons
-function moreoptions_seasons(x,y){
-// x = 'Season'.  y = 'Year'.
-document.getElementById("irregularity").innerHTML = '';
-document.getElementById("more_options").innerHTML = '';
-var textbox = '';
-    //alert("X: "+x+"Year: "+y);
-    if(x){
-        var hemi_select = parseInt('[% hemisphere %]');
-        textbox +="<li><label for=\"hemisphere\">"+ text[7]  +"<\/label><select name=\"hemisphere\" id=\"hemisphere\" onchange=\"hemispheres(this.options[this.selectedIndex].value)\">";
-        for(var i = 1; i <= 2; i++){
-            textbox +="<option value='"+i+"'";
-            if(i == hemi_select){
-                textbox += " selected "
-            }
-            textbox +=">"+text[i+7]+"<\/option>";
-        }
-        textbox +="<\/li>\n";
-        textbox +="<table id=\"seasonal_irregularity\"><tr><th>&nbsp;<\/th><th>"+x+"<\/th>";
-        textbox +="<th>"+text[16]+"<\/th>";
-        textbox +="<\/tr>\n";
-        textbox +="<tr><th scope=\"row\">"+text[5]+"<\/th><td><select name=\"lastvalue2temp\" id=\"lastvalue2temp\" id=\"season1\" onchange=\"moreoptionsupdate(this)\">";
-        for(var j = 1; j <= 4; j++){
-            textbox +="<option value='"+j+"'>"+text[j+9]+"<\/option>";
-        }
-        textbox +="<\/select><\/td>";
-        var isyr = irregular_issues.firstissue;
-        textbox += "<td>" + irregular_issues.firstissue.getFullYear() + "<\/td><\/tr>\n";
-        textbox +="<tr><th scope=\"row\">"+text[6]+"<\/th>";
-        textbox +="<td><input type=\"text\" name=\"whenmorethan2temp\" id=\"whenmorethan2temp\" size=\"4\" onkeyup=\"moreoptionsupdate(this,1)\"><\/td>\n";
-        textbox +="<\/tr><\/table>\n";
-    }
-    document.getElementById("more_options").innerHTML = textbox;
-}
-
-function irregularity_check(){
-    document.f.irreg_check.value = 1; // Irregularity button now pushed
-    var periodicity = document.f.periodicity.value;
-	var rollover = document.f.issuesexpected1.value;
-    if( (document.f.whenmorethan2) && ( document.f.whenmorethan2.value > 0) ){
-      rollover = document.f.whenmorethan2.value;
-    }
-    if((document.f.whenmorethan3) && document.f.whenmorethan3.value > 0 ){
-        // FIXME: Irregularity check assumes that the full prediction pattern repeats each year.
-		//  In cases where the outermost periodicity is > 1 year,  
-		//  e.g. where a volume spans two years, the irregularity check will be incorrect, 
-        // but you can safely ignore the check, submit the form, and the prediction pattern should be correct.
-		//  a way to distinguish between these two cases is needed.
-		rollover = document.f.whenmorethan3.value * document.f.whenmorethan2.value;
-    }
-    var error='';
-    var toobig;
-    var expected; 
-    var errortext = "<b>"+_("Warning irregularity detected")+"</b><br \/>";
-    switch(periodicity){
-    case "12":
-        if(rollover < 730) expected =730;
-        if(rollover > 730) {
-            expectedover=730;
-            toobig=1;
-        }
-        break;
-    case "1":
-        if(rollover < 365) expected =365;
-        if(rollover > 365) {
-            expectedover=365;
-            toobig=1;
-        }
-        break;
-    case "2":
-        if(rollover < 52) expected =52;
-        if(rollover > 52){
-            expectedover=52;
-            toobig=1;
-        }
-        break;
-    case "3":
-        if(rollover < 26) expected =26;
-        if(rollover > 26){
-            expectedover=26;
-            toobig=1;
-        }
-        break;
-    case "4":
-        if(rollover < 17) expected =17;
-        if(rollover > 17){
-            expectedover=17;
-            toobig=1;
-        }
-        break;
-    case "5":
-        if(rollover < 12) expected =12;
-        if(rollover > 12){
-            expectedover=12;
-            toobig=1;
-        }
-        break;
-    case "6":
-        if(rollover < 6) expected =6;
-        if(rollover > 6){
-            expectedover=6;
-            toobig=1;
-        }
-        break;
-    case "7":
-        if(rollover < 4) expected =4;
-        if(rollover > 4){
-            expectedover=4;
-            toobig=1;
-        }
-        break;
-    case "8":
-        if(rollover < 4) expected =4;
-        if(rollover > 4){
-            expectedover=4;
-            toobig=1;
-        }
-        break;
-    case "9":
-        if(rollover < 2) expected =2;
-        if(rollover > 2){
-            expectedover=2;
-            toobig=1;
-        }
-        break;
-    case "10":
-        if(rollover < 1) expected =1;
-        if(rollover > 1){
-            expectedover=1;
-            toobig=1;
-        }
-        break;
-    default:
-        break;
-    }
-    if(expected){
-        if(expected == 365 || expected==730){  // what about leap years ?
-			// FIXME:  We interpret irregularity as which days per week for periodicity==1.
-			//  We need two cases: one in which we're published n days/week, in which case irregularity should be per week,
-			//  and a regular daily pub, where irregularity should be per year.
-            errortext += _("Please indicate which days of the week you DO NOT expect to receive issues.")+"<br \/>";
-        } else {
-            errortext +=expected+_(" issues expected, ")+rollover+_(" were entered.")+"<br \/>"+_("Please indicate which date(s) an issue is not expected")+"<br \/>";
-            irregular_issues.numskipped = expected - rollover;
-		}
-        errortext +="<select multiple id=\"irregularity_select\" name=\"irregularity_select\" onchange=\"irregular_issues.update();\">\n";
-		errortext +=irregular_options(periodicity);
-		errortext += "<\/select>\n <textarea rows=\"6\" width=\"18\" id=\"irregularity_summary\" name=\"irregularity_summary\" value=\"foo\"><\/textarea>";
-        error=errortext;
-    }
-    if(toobig){
-        errortext +=expectedover+_(" issues expected, ")+rollover+_(" were entered")+"<p class=\"warning\">"+_("You seem to have indicated more issues per year than expected.<\/p>");
-        error=errortext;
-    }
-    if(error.length ==0){
-        error=_("No irregularities noticed");
-    }
-	display_example(expected);
-    document.getElementById("irregularity").innerHTML = error;
-	irregular_issues.update();
-}
-
-function irregular_options(periodicity){
-    var titles;
-    var count;
-    var errortext='';
-    var numberpattern = document.getElementById('numberpattern').value;
-    if(periodicity == 1) {
-        expected = 7;
-        titles = irregular_issues.daynames;
-        count = 1;
-    }
-    if(periodicity == 2 || periodicity == 3 || periodicity == 4) { 
-        titles = irregular_issues.weeks;
-		count = 1;
-        if(periodicity==3) {  // 1/2 wks
-            expected = 26;
-        } else if(periodicity == 4) { // 1/3 wks
-            expected = 17;
-        } else {
-            expected = 52;
-        }
-    }
-    if(periodicity == 5 || periodicity == 6 || periodicity == 7 || periodicity == 8 || periodicity == 9) {
-        if(periodicity == 8 && numberpattern==8) {
-            is_season = 1; // setting up from edit page
-        } 
-        if(is_season){
-            titles = irregular_issues.seasons;
-            expected = 4;
-            if(is_hemisphere == 2){
-                count = 2;
-            } else {
-                count = 1;
-            }
-        } else {
-            titles = irregular_issues.months;
-            expected = 12;
-            count = 1;
-        }
-    }
-	if( !expected) {
-		return '';   // don't know how to deal with irregularity.
-	} 	
-    for(var j=0;j<expected;j++){   // rch - changed frrom (1..expected).
-        if(isArray(titles)){
-            if(count>expected){
-                count = count-expected;
-            }
-            if(is_season && is_hemisphere == 1){
-                errortext +="<option value='"+((count*3)-2)+"'>"+titles[j]+"<\/option>\n";
-// alert("value: "+((count*3)-2)+" title: "+titles[j]);
-            } else if(is_season && is_hemisphere == 2){
-                errortext +="<option value='"+((count*3)-2)+"'>"+titles[j-1]+"<\/option>\n";
-// alert("value: "+((count*3)-2)+" title: "+titles[j-1]);
-            } else {  // all non-seasonal periodicities:
-                var incr=1; // multiplier for ( 1/n weeks)  patterns; in this case the irreg calc relies on the week# , not the issue#.
-                if(periodicity==3) {  // 1/2 wks
-                    incr=2;
-                } else if(periodicity == 4) { // 1/3 wks
-                    incr=3;
-                }
-                errortext += "<option value='" + (1+j*incr) ;  
-				if(irregular_issues.irregular(1+incr*j)) {
-					errortext += "' selected='selected" ;
-				}
-				errortext += "'>"+titles[incr*j]+"<\/option>\n";
-            }
-            count++;
-        } else { 
-            errortext +="<option value='"+j+"'>"+titles+" "+j+"<\/option>\n";
-        }
-    }
-    return errortext;
-}
-
-
-function display_example(expected){
-    var startfrom1 = parseInt(document.f.lastvalue1.value);
-    var startfrom2 = parseInt(document.f.lastvalue2.value);
-    var startfrom3 = parseInt(document.f.lastvalue3.value);
-    var every1 = parseInt(document.f.every1.value);
-    var every2 = parseInt(document.f.every2.value);
-    var every3 = parseInt(document.f.every3.value);
-    var numberpattern = document.f.numberingmethod.value;
-    var whenmorethan2 = parseInt(document.f.whenmorethan2.value);
-    var whenmorethan3 = parseInt(document.f.whenmorethan3.value);
-    var setto2 = parseInt(document.f.setto2.value);
-    var setto3 = parseInt(document.f.setto3.value);
-    var displaytext = _("Based on the information entered, the Numbering Pattern will look like this: ") + "<br \/><ul class=\"numpattern_preview\">";
-    if(startfrom3>0){
-        var count=startfrom3-1;
-        var count2=startfrom2;
-        for(var i = 0 ; i < 12; i++){
-            if(count>=whenmorethan3){
-                count=setto3;
-                if(count2>=whenmorethan2){
-                    startfrom1++;
-                    count2=setto2;
-                } else {
-                    count2++;
-                }
-            } else {
-                count++;
-            }
-            displaytext += '<li>' + numberpattern.replace(/{Z}/,count) + '<\/li>\n';
-            displaytext = displaytext.replace(/{Y}/,count2);
-            displaytext = displaytext.replace(/{X}/,startfrom1);
-
-        }
-    }
-    if(startfrom2>0 && !startfrom3){
-        var count=startfrom2-1;
-        for(var i=0;i<12;i++){
-            if(count>=whenmorethan2){
-                startfrom1++;
-                count=setto2;
-            } else {
-                count++;
-            }
-
-            if(is_season){
-                if(is_hemisphere == 2){
-                    if(count == 1) {
-                        displaytext += numberpattern.replace(/{Y}/,text[count+12])+'\n';
-                    } else {
-                        displaytext += numberpattern.replace(/{Y}/,text[count+8])+'\n';
-                    }
-                } else {
-                displaytext += numberpattern.replace(/{Y}/,text[count+10])+'\n';
-                }
-            } else {
-                displaytext += numberpattern.replace(/{Y}/,count)+'\n';
-            }
-            displaytext = displaytext.replace(/{X}/,startfrom1)+'<br \/>\n';
-        }
-    }
-    if(startfrom1>0 && !startfrom2 && !startfrom3){
-        var offset=eval(document.f.issuesexpected1.value);
-        if (!offset){
-            offset = 12 
-        }
-        for(var i=startfrom1;i<(startfrom1+offset);i+=every1){
-            displaytext += numberpattern.replace(/{X}/,i)+'<br \/>\n';
-        }
-    }
-   //  displaytext = "<div style='padding: 5px; background-color: #CCCCCC'>"+displaytext+"<\/div>";
-    document.getElementById("displayexample").innerHTML = displaytext;
-}
-
-function isArray(obj) {
-if (obj.constructor.toString().indexOf("Array") == -1)
-    return false;
-else
-    return true;
-}
-
-function moreoptionsupdate(inputfield,rollover){
-    fieldname = inputfield.name;
-    // find parent element in base table by stripping 'temp' from element name.
-    basefield = document.getElementById(fieldname.slice(0,-4));
-    var fieldnumber = fieldname.slice(-5,-4);
-
-    basefield.value = inputfield.value;
-    var patternchoice = document.getElementById("numberpattern").value;
-    switch(patternchoice){
-    case "2":
-    case "4":
-    case "5":
-    case "8": // Year, Number.  -- Why not just use Vol, Number withvol==year??
-                //  FIXME: this my conflict with innerloop calc below.
-       if (document.f.lastvalue2temp.value > 0){document.f.innerloop1.value = document.f.lastvalue2temp.value - 1;}
-      break;   
-    }  
-    if(basefield.name.slice(0,-1) == 'lastvalue' || 'whenmorethan' ) {
-        // The enumeration string is held in a positional numeral notation with three positions, X,Y,Z.
-        // The last values lastvalue1, lastvalue2,lastvalue3 should match the last received serial's X,Y,Z enumeration.
-        // make array indexes start with 1 for consistency with variable names.
-        var innerloop = new Array( undefined, document.getElementById('innerloop1'), document.getElementById('innerloop2'), document.getElementById('innerloop3') );
-        var lastvalue = new Array( undefined, document.getElementById('lastvalue1').value *1 , document.getElementById('lastvalue2').value *1 , document.getElementById('lastvalue3').value *1  );
-        var every = new Array( undefined, document.getElementById('every1').value *1 , document.getElementById('every2').value *1 , document.getElementById('every3').value *1  );
-        var add = new Array( undefined, document.getElementById('add1').value *1 , document.getElementById('add2').value *1 , document.getElementById('add3').value *1  );
-        var whenmorethan = new Array( undefined, document.getElementById('whenmorethan1').value *1 , document.getElementById('whenmorethan2').value *1 , document.getElementById('whenmorethan3').value *1  );
-        
-       if(rollover){
-       // calculate rollover  for higher level of periodicity.
-       // if there are two levels of periodicity, (e.g. vol{X},num{Y},issue{Z}, then every1=every2*whenmorethan2 / add2 .
-          for(var N=3;N>1;N--){
-            if( add[N] > 0){
-                var addN = (add[N]) ? add[N] : 1 ;
-                var everyN = (document.getElementById('every'+N)) ? document.getElementById('every'+N).value : 1 ;
-                document.getElementById('every'+(N-1)).value = whenmorethan[N] * everyN / addN ;
-            }
-          }
-        }
-        innerloop[3].value = ( every[3] > 1 ) ? lastvalue[3] % every[3] : 0 ;
-        innerloop[2].value = ( every[2] > 1 ) ? lastvalue[3] - 1 : 0 ;
-        innerloop[1].value = ( every[1] > 1 ) ? 
-                                    ( whenmorethan[3] > 0 ) ?  (lastvalue[2] - 1) * every[2] + 1* innerloop[2].value 
-                                                            : lastvalue[2] - 1
-                                               : 0 ;
-    }
-     //FIXME : add checks for innerloop || lastvalue .gt. rollover  
-}
-
-
-function check_input(e){
-    var unicode=e.charCode? e.charCode : e.keyCode
-    if (unicode!=8 && unicode !=46 && unicode!=9 && unicode !=13){ // if key isn't backspace or delete
-        if (unicode<48||unicode>57) { // if not a number
-            alert(_("Needs to be entered in digit form -eg 10"));
-            return false // disable key press
+function check_issues(){
+    if (globalfreqdata.unit.length >0) {
+        if (document.f.subtype.value == globalfreqdata.unit){
+            document.f.issuelengthcount.value=(document.f.sublength.value*globalfreqdata.issuesperunit)/globalfreqdata.unitsperissue;
+        } else if (document.f.subtype.value != "issues"){
+            alert(_("Frequency and subscription length provided doesn't combine well. Please consider entering an issue count rather than a time period."));
         }
     }
 }
 
 function addbiblioPopup(biblionumber) {
-	var destination = "/cgi-bin/koha/cataloguing/addbiblio.pl?mode=popup";
-	if(biblionumber){ destination += "&biblionumber="+biblionumber; }
- window.open(destination,'AddBiblioPopup','width=1024,height=768,toolbar=no,scrollbars=yes');
+    var destination = "/cgi-bin/koha/cataloguing/addbiblio.pl?mode=popup";
+    if(biblionumber){
+        destination += "&biblionumber="+biblionumber;
+    }
+    window.open(destination,'AddBiblioPopup','width=1024,height=768,toolbar=no,scrollbars=yes');
 }
 
 function Plugin(f)
 {
-	 window.open('subscription-bib-search.pl','FindABibIndex','width=800,height=400,toolbar=no,scrollbars=yes');
+    window.open('subscription-bib-search.pl','FindABibIndex','width=800,height=400,toolbar=no,scrollbars=yes');
 }
 
 function FindAcqui(f)
 {
-	 window.open('acqui-search.pl','FindASupplier','width=800,height=400,toolbar=no,scrollbars=yes');
+    window.open('acqui-search.pl','FindASupplier','width=800,height=400,toolbar=no,scrollbars=yes');
 }
 
 function Find_ISSN(f)
 {
-	 window.open('issn-search.pl','FindABibIndex','width=800,height=400,toolbar=no,scrollbars=yes');
+    window.open('issn-search.pl','FindABibIndex','width=800,height=400,toolbar=no,scrollbars=yes');
 }
 
+function Clear(id) {
+    $("#"+id).val('');
+}
 
-function Check(f) {
-    if (f.aqbooksellerid.value.length==0) {
+function Check_page1() {
+    if ( $("#aqbooksellerid").val().length == 0) {
         input_box = confirm(_("If you wish to claim late or missing issues you must link this subscription to a vendor. Click OK to ignore or Cancel to return and enter a vendor"));
-		if (input_box==true) {
-		}
-		else {
-			return false;
-		}
+        if (input_box==false) {
+            return false;
+        }
     }
-	if (f.biblionumber.value.length==0) {
+    if ($("#biblionumber").val().length == 0) {
         alert(_("You must choose or create a biblio"));
-    } else if(f.startdate.value.length != 0 && f.sublength.value > 0) {
-        if (f.irreg_check.value == 1) {
-            document.f.submit();
-        } else {
-            if(f.numbering_pattern.value == ''){
-                alert(_("Please choose a numbering pattern"));
+        return false;
+    }
+
+    return true;
+}
+
+function Check_page2(){
+    [% UNLESS (more_than_one_serial) %]
+      if($("#acqui_date").val().length == 0){
+          alert(_("You must choose a first publication date"));
+          return false;
+      }
+    [% END %]
+    if($("#frequency").val().length == 0){
+        alert(_("You must choose a frequency"));
+        return false;
+    }
+    if($("input[name='startdate']").val().length == 0){
+        alert(_("You must choose a start date"));
+        return false;
+    }
+    if($("#sublength").val().length == 0 && $("input[name='enddate']").val().length == 0){
+        alert(_("You must choose a subscription length or an end date."));
+        return false;
+    }
+    if($("#numberpattern").val().length == 0){
+        alert(_("You must choose a numbering pattern"));
+        return false;
+    }
+    if(advancedpatternlocked == 0){
+        alert(_("You have modified the advanced prediction pattern. Please save your work or cancel modifications."));
+        return false;
+    }
+    if(patternneedtobetested){
+        alert(_("Please click on 'Test prediction pattern' before saving subscription."));
+        return false;
+    }
+
+    return true;
+}
+
+function frequencyload(){
+    $.getJSON("subscription-frequency.pl",{"frequency_id":document.f.frequency.value,ajax:'true'},
+        function(freqdata){
+            globalfreqdata=freqdata;
+            if ( globalfreqdata.unit.length == 0 ) {
+                var option = $("#subtype option[value='issues']");
+                $(option).attr('selected', 'selected');
+                $("#subtype option[value!='issues']").attr('disabled', 'disabled')
             } else {
-                alert(_("Please check for irregularity by clicking 'Test Prediction Pattern'"));
+                $("#subtype option").attr('disabled', false)
             }
         }
-    } else {
-        alert(_("You must choose a start date and a subscription length"));
-    }
-	if(irregular_issues.numskipped < irregular_issues.skipped.length ) {
-		alert(_("You have not accounted for all missing issues."));
-	}
-    return false;
+    )
 }
 
-$(document).ready(function() {
-    init_pattern();
-    // http://jqueryui.com/demos/datepicker/#date-range
-    var dates = $( "#histstartdate, #histenddate" ).datepicker({
-        changeMonth: true,
-        numberOfMonths: 1,
-        onSelect: function( selectedDate ) {
-            var option = this.id == "histstartdate" ? "minDate" : "maxDate",
-                instance = $( this ).data( "datepicker" );
-                date = $.datepicker.parseDate(
-                    instance.settings.dateFormat ||
-                    $.datepicker._defaults.dateFormat,
-                    selectedDate, instance.settings );
-            dates.not( this ).datepicker( "option", option, date );
+function numberpatternload(){
+    $.getJSON("subscription-numberpattern.pl",{"numberpattern_id":document.f.numbering_pattern.value,ajax:'true'},
+        function(numpatterndata){
+            globalnumpatterndata=numpatterndata;
+            if (globalnumpatterndata==undefined){
+                return false;
+            }
+            displaymoreoptions();
+            restoreAdvancedPattern();
         }
+    );
+}
+
+function displaymoreoptions() {
+    if(globalnumpatterndata == undefined){
+        $("#moreoptionst").hide();
+        return false;
+    }
+
+    var X = 0, Y = 0, Z = 0;
+    var numberingmethod = unescape(globalnumpatterndata.numberingmethod);
+    if(numberingmethod.match(/{X}/)) X = 1;
+    if(numberingmethod.match(/{Y}/)) Y = 1;
+    if(numberingmethod.match(/{Z}/)) Z = 1;
+
+    if(X || Y || Z) {
+        $("#moreoptionst").show();
+    } else {
+        $("#moreoptionst").hide();
+    }
+
+    if(X) {
+        if(globalnumpatterndata.label1) {
+            $("#headerX").html(unescape(globalnumpatterndata.label1));
+        } else {
+            $("#headerX").html("X");
+        }
+        $("#headerX").show();
+        $("#beginsX").show();
+        $("#innerX").show();
+    } else {
+        $("#headerX").hide();
+        $("#beginsX").hide();
+        $("#innerX").hide();
+        $("#lastvaluetemp1").val('');
+        $("#innerlooptemp1").val('');
+    }
+    if(Y) {
+        if(globalnumpatterndata.label2) {
+            $("#headerY").html(unescape(globalnumpatterndata.label2));
+        } else {
+            $("#headerY").html("Y");
+        }
+        $("#headerY").show();
+        $("#beginsY").show();
+        $("#innerY").show();
+    } else {
+        $("#headerY").hide();
+        $("#beginsY").hide();
+        $("#innerY").hide();
+        $("#lastvaluetemp2").val('');
+        $("#innerlooptemp2").val('');
+    }
+    if(Z) {
+        if(globalnumpatterndata.label3) {
+            $("#headerZ").html(unescape(globalnumpatterndata.label3));
+        } else {
+            $("#headerZ").html("Z");
+        }
+        $("#headerZ").show();
+        $("#beginsZ").show();
+        $("#innerZ").show();
+    } else {
+        $("#headerZ").hide();
+        $("#beginsZ").hide();
+        $("#innerZ").hide();
+        $("#lastvaluetemp3").val('');
+        $("#innerlooptemp3").val('');
+    }
+}
+
+function toggleAdvancedPattern() {
+    $("#advancedpredictionpattern").toggle();
+}
+
+function modifyAdvancedPattern() {
+    $("#patternname").attr("readonly", false).val('');
+    $("#numberingmethod").attr("readonly", false);
+
+    $("#advancedpredictionpatternt input").each(function() {
+        $(this).attr("readonly", false);
+    });
+    $("#advancedpredictionpatternt select").each(function() {
+        $(this).attr("disabled", false);
     });
 
-    [% IF ( manualhistory ) %] $("#subscription_form_history").show();[% END %]
-	$("#cancel_manual_history").click(function(){
-		$("#subscription_form_history").hide();
-        $("#manuallist").removeAttr("checked");
-	});
-   	$("#manuallist").click( function(){
-		if($(this).attr("checked")){
-			$("#subscription_form_history").show();
-		} else {
-			$("#subscription_form_history").hide();
-		}
-	}
-	);
-   //  $(".widelabel").attr("width", "300px");  // labels stay skinny in IE7 anyway.
-[% IF ( modify ) %]
-    set_num_pattern_from_template_vars();
-    [% IF ( hemisphere ) %]
-	is_hemisphere = [% hemisphere %] ;
-    hemispheres();
-    [% END %]
-[% END %]
-[% IF ( irregularity ) %]
-    irregularity_check();
-[% END %]
-    $('#numberpattern').change( function() { 
-        reset_num_pattern(); 
+    $("#restoreadvancedpatternbutton").show();
+    $("#saveadvancedpatternbutton").show();
+    $("#modifyadvancedpatternbutton").hide();
+
+    advancedpatternlocked = 0;
+}
+
+function restoreAdvancedPattern() {
+    $("#patternname").attr("readonly", true).val(unescape(globalnumpatterndata.label));
+    $("#numberingmethod").attr("readonly", true).val(unescape(globalnumpatterndata.numberingmethod));
+
+    $("#advancedpredictionpatternt input").each(function() {
+        $(this).attr("readonly", true);
+        var id = $(this).attr('id');
+        if(id.match(/lastvalue/) || id.match(/innerloop/)) {
+            var tempid = id.replace(/(\d)/, "temp$1");
+            $(this).val($("#"+tempid).val());
+        } else {
+            $(this).val(unescape(globalnumpatterndata[id]));
+        }
     });
+    $("#advancedpredictionpatternt select").each(function() {
+        $(this).attr("disabled", true);
+        var id = $(this).attr('id');
+        $(this).val(unescape(globalnumpatterndata[id]));
+    });
+
+    $("#restoreadvancedpatternbutton").hide();
+    $("#saveadvancedpatternbutton").hide();
+    $("#modifyadvancedpatternbutton").show();
+
+    advancedpatternlocked = 1;
+}
+
+function testPredictionPattern() {
+    var frequencyid = $("#frequency").val();
+    var acquidate;
+    var error = 0;
+    var error_msg = "";
+    if(frequencyid == undefined || frequencyid == ""){
+        error_msg += _("- Frequency is not defined\n");
+        error ++;
+    }
+    acquidate = $("#acqui_date").val();
+    if(acquidate == undefined || acquidate == ""){
+        error_msg += _("- First publication date is not defined\n");
+        error ++;
+    }
+    [% IF (more_than_one_serial) %]
+      var nextacquidate = $("#nextacquidate").val();
+      if(nextacquidate == undefined || nextacquidate == ""){
+        error_msg += _("- Next issue publication date is not defined\n");
+        error ++;
+      }
+    [% END %]
+
+    if(error){
+        alert(_("Cannot test prediction pattern for the following reason(s):\n\n")
+            + error_msg);
+        return false;
+    }
+
+    var custompattern = 0;
+    if(advancedpatternlocked == 0) {
+        custompattern = 1;
+    }
+
+    var ajaxData = {
+        'custompattern': custompattern,
+        [% IF (subscriptionid) %]
+            'subscriptionid': [% subscriptionid %],
+        [% END %]
+        [% IF (more_than_one_serial) %]
+          'nextacquidate': nextacquidate,
+        [% END %]
+        'firstacquidate': acquidate
+    };
+    var ajaxParams = [
+        'to', 'subtype', 'sublength', 'frequency', 'numberingmethod',
+        'lastvalue1', 'lastvalue2', 'lastvalue3', 'add1', 'add2', 'add3',
+        'every1', 'every2', 'every3', 'innerloop1', 'innerloop2', 'innerloop3',
+        'setto1', 'setto2', 'setto3', 'numbering1', 'numbering2', 'numbering3',
+        'whenmorethan1', 'whenmorethan2', 'whenmorethan3', 'locale'
+    ];
+    for(i in ajaxParams) {
+        var param = ajaxParams[i];
+        var value = $("#"+param).val();
+        if(value.length > 0)
+            ajaxData[param] = value;
+    }
+
+    $.ajax({
+        url:"/cgi-bin/koha/serials/showpredictionpattern.pl",
+        data: ajaxData,
+        success: function(data) {
+            $("#displayexample").html(data);
+            patternneedtobetested = 0;
+        }
+    });
+}
+
+function saveAdvancedPattern() {
+    if ($("#patternname").val().length == 0) {
+        alert(_("Please enter a name for this pattern"));
+        return false;
+    }
+
+    // Check if patternname already exists, and modify pattern
+    // instead of creating it if so
+    var found = 0;
+    $("#numberpattern option").each(function(){
+        if($(this).text() == $("#patternname").val()){
+            found = 1;
+            return false;
+        }
+    });
+    var cnfrm = 1;
+    if(found){
+        var msg = _("This pattern name already exists. Do you want to modify it?")
+            + "\n" + _("Warning: it will modify the pattern for all subscriptions")
+            + _("that are using it.");
+        cnfrm = confirm(msg);
+    }
+
+    if(cnfrm) {
+        var ajaxData = {};
+        var ajaxParams = [
+            'patternname', 'numberingmethod', 'label1', 'label2', 'label3',
+            'add1', 'add2', 'add3', 'every1', 'every2', 'every3',
+            'setto1', 'setto2', 'setto3', 'numbering1', 'numbering2', 'numbering3',
+            'whenmorethan1', 'whenmorethan2', 'whenmorethan3', 'locale'
+        ];
+        for(i in ajaxParams) {
+            var param = ajaxParams[i];
+            var value = $("#"+param).val();
+            if(value.length > 0)
+                ajaxData[param] = value;
+        }
+
+        $.getJSON(
+            "/cgi-bin/koha/serials/create-numberpattern.pl",
+            ajaxData,
+            function(data){
+                if (data.numberpatternid) {
+                    if(found == 0){
+                        $("#numberpattern").append("<option value=\""+data.numberpatternid+"\">"+$("#patternname").val()+"</option>");
+                    }
+                    $("#numberpattern").val(data.numberpatternid);
+                    numberpatternload();
+                } else {
+                    alert(_("Something went wrong. Unable to create a new numbering pattern."));
+                }
+            }
+        );
+    }
+}
+
+function show_page_1() {
+    $("#page_1").show();
+    $("#page_2").hide();
+    $("#page_number").text("1/2");
+}
+
+function show_page_2() {
+    $("#page_1").hide();
+    $("#page_2").show();
+    $("#page_number").text("2/2");
+    displaymoreoptions();
+}
+
+
+$(document).ready(function() {
+    $("select#frequency").change(function(){
+        patternneedtobetested = 1;
+        $("input[name='enddate']").val('');
+        frequencyload();
+    });
+    $("select#numberpattern").change(function(){
+        patternneedtobetested = 1;
+        numberpatternload();
+    });
+    $("#subtype").change(function(){
+        $("input[name='enddate']").val('');
+    });
+    $("#sublength").change(function(){
+        $("input[name='enddate']").val('');
+    });
+    $("#lastvaluetemp1").keyup(function(){
+        $("#lastvalue1").val($(this).val());
+    });
+    $("#lastvaluetemp2").keyup(function(){
+        $("#lastvalue2").val($(this).val());
+    });
+    $("#lastvaluetemp3").keyup(function(){
+        $("#lastvalue3").val($(this).val());
+    });
+    $("#lastvalue1").keyup(function(){
+        $("#lastvaluetemp1").val($(this).val());
+    });
+    $("#lastvalue2").keyup(function(){
+        $("#lastvaluetemp2").val($(this).val());
+    });
+    $("#lastvalue3").keyup(function(){
+        $("#lastvaluetemp3").val($(this).val());
+    });
+
+    $("#innerlooptemp1").keyup(function(){
+        $("#innerloop1").val($(this).val());
+    });
+    $("#innerlooptemp2").keyup(function(){
+        $("#innerloop2").val($(this).val());
+    });
+    $("#innerlooptemp3").keyup(function(){
+        $("#innerloop3").val($(this).val());
+    });
+    $("#innerloop1").keyup(function(){
+        $("#innerlooptemp1").val($(this).val());
+    });
+    $("#innerloop2").keyup(function(){
+        $("#innerlooptemp2").val($(this).val());
+    });
+    $("#innerloop3").keyup(function(){
+        $("#innerlooptemp3").val($(this).val());
+    });
+
+    if($("#frequency").val() != ""){
+        frequencyload();
+    }
+    if($("#numberpattern").val() != ""){
+        numberpatternload();
+    }
 
     var node;
     [% FOREACH field IN dont_export_field_loop %]
@@ -967,6 +457,8 @@ $(document).ready(function() {
             $(node).find("option:first").attr('selected','selected');
         }
     [% END %]
+
+    show_page_1();
 });
 //]]>
 </script>
@@ -978,415 +470,369 @@ $(document).ready(function() {
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a> &rsaquo; [% IF ( modify ) %]<a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscriptionid %]"><i>[% bibliotitle |html %]</i></a> &rsaquo; Modify subscription[% ELSE %]New subscription[% END %]</div>
 
 <div id="doc3" class="yui-t7">
-   
-   <div id="bd">
-<h1>[% IF ( modify ) %] Modify subscription for <i>[% bibliotitle |html %]</i>[% ELSE %]Add a new subscription[% END %]</h1>
-   <div class="yui-g">
-    <form method="post" name="f" action="/cgi-bin/koha/serials/subscription-add.pl">
-[% IF ( modify ) %]
-        <input type="hidden" name="op" value="modsubscription" />
-        <input type="hidden" name="subscriptionid" value="[% subscriptionid %]" />
-[% ELSE %]
-        <input type="hidden" name="op" value="addsubscription" />
-[% END %]
-<input type="hidden" name="user" value="[% loggedinusername %]" />
-<input type="hidden" name="irreg_check" value="0" />
-<input type="hidden" name="issuesexpected1" id="issuesexpected1" value="0" />
+    <div id="bd">
+        <div class="yui-g">
+            <h1>[% IF ( modify ) %] Modify subscription for <i>[% bibliotitle |html %]</i>[% ELSE %]Add a new subscription[% END %] (<span id="page_number">1/2</span>)</h1>
+            <form method="post" name="f" action="/cgi-bin/koha/serials/subscription-add.pl">
+                [% IF ( modify ) %]
+                    <input type="hidden" name="op" value="modsubscription" />
+                    <input type="hidden" name="subscriptionid" value="[% subscriptionid %]" />
+                [% ELSE %]
+                        <input type="hidden" name="op" value="addsubscription" />
+                [% END %]
+                <input type="hidden" name="user" value="[% loggedinusername %]" />
+                <input type="hidden" name="irreg_check" value="0" />
 
-	<div class="yui-u first">
-    <fieldset id="subscription_add_information" class="rows">
-	<legend>Subscription details</legend>
-	<ol>
-	    [% IF ( subscriptionid ) %]
-        <li><span class="label">Subscription #</span> [% subscriptionid %]</li>
-        [% END %]
-        <li>
-            <label for="aqbooksellerid">Vendor: </label>
-            <input type="text" name="aqbooksellerid" id="aqbooksellerid" value="[% aqbooksellerid %]" size="8" /> (<input type="text" name="aqbooksellername" value="[% aqbooksellername %]" disabled="disabled" readonly="readonly" />) <a href="#" onclick="FindAcqui(f)">Search for a vendor</a>
-        </li>
-        <li>
-            <label for="biblionumber" class="required" title="Subscriptions must be associated with a bibliographic record">Biblio:</label>
-            
-                <input type="text" name="biblionumber" id="biblionumber" value="[% bibnum %]" size="8" /> 
-                (<input type="text" name="title" value="[% bibliotitle %]" disabled="disabled" readonly="readonly" />) <span class="required" title="Subscriptions must be associated with a bibliographic record">Required</span>
-               <div class="inputnote"> <a href="#" onclick="Plugin(f)">Search for Biblio</a>
-		    [% IF ( CAN_user_editcatalogue ) %] 
-		       [% IF ( modify ) %]
-		       | <a href="#" onclick="addbiblioPopup([% bibnum %]); return false;">Edit biblio</a>
-		       [% ELSE %]
-		       | <a href="#" onclick="addbiblioPopup(); return false;">Create Biblio</a>
-		       [% END %]
-		    [% END %]
-	       </div>
-            
-        </li>
-        <li class="radio">
-            [% IF ( serialsadditems ) %]
-                <p><input type="radio" id="serialsadditems-yes" name="serialsadditems" value="1" checked="checked" /><label class="widelabel" for="serialsadditems-yes">create an item record when receiving this serial</label></p>
-                <p><input type="radio" id="serialsadditems-no" name="serialsadditems" value="0" /><label class="widelabel" for="serialsadditems-no">do not create an item record when receiving this serial </label></p>
-            [% ELSE %]
-                <p><input type="radio" id="serialsadditems-yes" name="serialsadditems" value="1"/><label class="widelabel" for="serialsadditems-yes">create an item record when receiving this serial</label></p>
-                <p><input type="radio" id="serialsadditems-no" name="serialsadditems" value="0" checked="checked" /><label class="widelabel" for="serialsadditems-no">do not create an item record when receiving this serial</label></p>
-            [% END %]
-        </li>
-        <li>
-            <label for="branchcode">Library:</label>
-            
-                <select name="branchcode" id="branchcode" style="width: 20em;">
-                    [% UNLESS ( Independantbranches ) %]<option value="">None</option>[% END %]
-                    [% FOREACH branchloo IN branchloop %][% IF ( branchloo.selected ) %]<option value="[% branchloo.value %]" selected="selected">[% branchloo.branchname %]</option>
-				[% ELSE %]
-				<option value="[% branchloo.value %]">[% branchloo.branchname %]</option>
-				[% END %]
-                    [% END %]
-                </select> (select a library)
-            
-        </li>
-        <li>
-            <label for="location">Location:</label>
-            <select name="location" id="location">
-                <option value="">None</option>
-                [% FOREACH locations_loo IN locations_loop %][% IF ( locations_loo.selected ) %]<option value="[% locations_loo.authorised_value %]" selected="selected">[% locations_loo.lib %]</option>[% ELSE %]<option value="[% locations_loo.authorised_value %]">[% locations_loo.lib %]</option>[% END %][% END %]
-            </select>
-        </li>
-         <li>
-            <label for="callnumber">Call number:</label>
-            <input type="text" name="callnumber" id="callnumber" value="[% callnumber %]" size="20" />
-        </li>
-        <li>
-            <label for="graceperiod">Grace period:</label> <input type="text" name="graceperiod" id="graceperiod" value="[% graceperiod %]" size="5"/> day(s)
-        </li>
-        <li>
-            <label for="notes">OPAC note:</label>
-            <textarea name="notes" id="notes" cols="30" rows="2">[% notes %]</textarea>
-        </li>
-        <li>
-            <label for="internalnotes">Nonpublic note:</label>
-            <textarea name="internalnotes" id="internalnotes" cols="30" rows="2">[% internalnotes %]</textarea>
-        </li>
-        <li>
-            
-               [% IF ( letterloop ) %]
-            <label for="letter">Patron notification: </label>
-			   <select name="letter" id="letter">
-                    <option value="">None</option>
-                [% FOREACH letterloo IN letterloop %]
-				[% IF ( letterloo.selected ) %]
-                    <option value="[% letterloo.value %]" selected="selected">[% letterloo.lettername %]</option>
-[% ELSE %]
-                    <option value="[% letterloo.value %]">[% letterloo.lettername %]</option>
-[% END %]
-                [% END %]
-                </select> 
-                <div class="hint">Select a notice and subscribers will be notified when new issues are received.</div>
-            	[% ELSE %]
-            <span class="label">Patron notification: </span>
-				<div class="hint">To notify patrons of new serial issues, you must <a href="/cgi-bin/koha/tools/letter.pl">define a notice</a>.</div>
-				[% END %]
-        </li>
-		<li>
-			 <label class="widelabel" for="staffdisplaycount">Number of issues to display to staff: </label>
-			 <input type="text" name="staffdisplaycount" id="staffdisplaycount" value="[% staffdisplaycount %]" size="4"/>
-		 </li>
-		 <li>
-            <label class="widelabel" for="opacdisplaycount">Number of issues to display in OPAC: </label>
-			<input type="text" name="opacdisplaycount" id="opacdisplaycount" value="[% opacdisplaycount %]" size="4"/>
-		</li>
-	</ol>
-	</fieldset>
-	</div>
-	
-<div class="yui-u">
-<div id="subscription_form_history" style="display:none"><h3 style="display:inline">Subscription history</h3> <a href="#" id="cancel_manual_history">[cancel manual history]</a>
-        <p>Hint: you can update the serial history manually. This can be useful for an old subscription or to clean the existing history. Modify these fields with care, as future serial receive will continue to update them automatically.</p>
-        <fieldset class="rows">
-            <ol>
-                <li>
-                <label for="histstartdate">Subscription start date</label>
-                <input type="text" name="histstartdate" id="histstartdate" value="[% histstartdate %]" /><div class="hint"> (start date of the 1st subscription)</div>
-                </li>
-                <li>
-                <label for="histenddate">Subscription end date</label>
-                <input type="text" name="histenddate" id="histenddate" value="[% histenddate %]" /> <div class="hint">(if empty, subscription is still active)</div>
-                </li>
-                <li>
-                <label for="recievedlist">Received issues</label>
-                <textarea name="recievedlist" id="recievedlist" cols="60" rows="5">[% recievedlist %]</textarea>
-                </li>
-                <li>
-                <label for="missinglist">Missing issues</label>
-                <textarea name="missinglist" id="missinglist" cols="60" rows="5">[% missinglist %]</textarea>
-                </li>
-                <li>
-                <label for="opacnote">Note for OPAC</label>
-                <textarea name="opacnote" id="opacnote" cols="60" rows="5">[% opacnote %]</textarea>
-                </li>
-                <li>
-                <label for="librariannote">Note for staff</label>
-                <textarea name="librariannote" id="librariannote" cols="60" rows="5">[% librariannote %]</textarea>
-                </li>
-            </ol>
-        </fieldset>
-    <fieldset class="action"><input type="submit" value="Save subscription history"  /></fieldset>
-</div>
+                <div id="page_1">
+                    <div class="yui-u first">
+                        <fieldset id="subscription_add_information" class="rows">
+                            <legend>Subscription details</legend>
+                            <ol>
+                                [% IF ( subscriptionid ) %]
+                                    <li><span class="label">Subscription #</span> [% subscriptionid %]</li>
+                                [% END %]
+                                <li>
+                                    <label for="aqbooksellerid">Vendor: </label>
+                                    <input type="text" name="aqbooksellerid" id="aqbooksellerid" value="[% aqbooksellerid %]" size="8" /> (<input type="text" name="aqbooksellername" value="[% aqbooksellername %]" disabled="disabled" readonly="readonly" />) <a href="#" onclick="FindAcqui(f)">Search for a vendor</a>
+                                </li>
+                                <li>
+                                    <label for="biblionumber" class="required" title="Subscriptions must be associated with a bibliographic record">Biblio:</label>
+                                    <input type="text" name="biblionumber" id="biblionumber" value="[% bibnum %]" size="8" />
+                                    (<input type="text" name="title" value="[% bibliotitle %]" disabled="disabled" readonly="readonly" />) <span class="required" title="Subscriptions must be associated with a bibliographic record">Required</span>
+                                    <div class="inputnote"> <a href="#" onclick="Plugin(f)">Search for Biblio</a>
+                                        [% IF ( CAN_user_editcatalogue ) %]
+                                            [% IF ( modify ) %]
+                                            | <a href="#" onclick="addbiblioPopup([% bibnum %]); return false;">Edit biblio</a>
+                                            [% ELSE %]
+                                            | <a href="#" onclick="addbiblioPopup(); return false;">Create Biblio</a>
+                                            [% END %]
+                                        [% END %]
+                                    </div>
+                                </li>
+                                <li class="radio">
+                                    [% IF ( serialsadditems ) %]
+                                        <p><input type="radio" id="serialsadditems-yes" name="serialsadditems" value="1" checked="checked" /><label class="widelabel" for="serialsadditems-yes">create an item record when receiving this serial</label></p>
+                                        <p><input type="radio" id="serialsadditems-no" name="serialsadditems" value="0" /><label class="widelabel" for="serialsadditems-no">do not create an item record when receiving this serial </label></p>
+                                    [% ELSE %]
+                                        <p><input type="radio" id="serialsadditems-yes" name="serialsadditems" value="1"/><label class="widelabel" for="serialsadditems-yes">create an item record when receiving this serial</label></p>
+                                        <p><input type="radio" id="serialsadditems-no" name="serialsadditems" value="0" checked="checked" /><label class="widelabel" for="serialsadditems-no">do not create an item record when receiving this serial</label></p>
+                                    [% END %]
+                                </li>
+                                <li class="radio">
+                                  <p>When there is an irregular issue:</p>
+                                  [% IF (skip_serialseq) %]
+                                    <p>
+                                      <input type="radio" id="skip_serialseq_yes" name="skip_serialseq" value="1" checked="checked" />
+                                      <label for="skip_serialseq_yes">Skip issue number</label>
+                                    </p>
+                                    <p>
+                                      <input type="radio" id="skip_serialseq_no" name="skip_serialseq" value="0" />
+                                      <label for="skip_serialseq_no">Keep issue number</label>
+                                    </p>
+                                  [% ELSE %]
+                                    <p>
+                                      <input type="radio" id="skip_serialseq_yes" name="skip_serialseq" value="1" />
+                                      <label for="skip_serialseq_yes">Skip issue number</label>
+                                    </p>
+                                    <p>
+                                      <input type="radio" id="skip_serialseq_no" name="skip_serialseq" value="0" checked="checked" />
+                                      <label for="skip_serialseq_no">Keep issue number</label>
+                                    </p>
+                                  [% END %]
+                                </li>
+                                <li>
+                                    <label for="manualhistory">Manual history</label>
+                                    [% IF (manualhistory) %]
+                                        <input type="checkbox" id="manualhistory" name="manualhist" checked="checked" />
+                                    [% ELSE %]
+                                        <input type="checkbox" id="manualhistory" name="manualhist" />
+                                    [% END %]
+                                </li>
+                                <li>
+                                    <label for="callnumber">Call number</label>
+                                    <input type="text" name="callnumber" id="callnumber" value="[% callnumber %]" size="20" />
+                                </li>
+                                <li>
+                                    <label for="branchcode">Library:</label>
+                                    <select name="branchcode" id="branchcode" style="width: 20em;">
+                                        [% UNLESS ( Independantbranches ) %]
+                                            <option value="">None</option>
+                                        [% END %]
+                                        [% FOREACH branchloo IN branchloop %]
+                                            [% IF ( branchloo.selected ) %]
+                                                <option value="[% branchloo.value %]" selected="selected">[% branchloo.branchname %]</option>
+                                            [% ELSE %]
+                                                <option value="[% branchloo.value %]">[% branchloo.branchname %]</option>
+                                            [% END %]
+                                        [% END %]
+                                    </select> (select a library)
+                                </li>
+                                <li>
+                                    <label for="notes">Public note:</label>
+                                    <textarea name="notes" id="notes" cols="30" rows="2">[% notes %]</textarea>
+                                </li>
+                                <li>
+                                    <label for="internalnotes">Nonpublic note:</label>
+                                    <textarea name="internalnotes" id="internalnotes" cols="30" rows="2">[% internalnotes %]</textarea>
+                                </li>
+                                <li>
+                                    [% IF ( letterloop ) %]
+                                        <label for="letter">Patron notification: </label>
+                                        <select name="letter" id="letter">
+                                            <option value="">None</option>
+                                            [% FOREACH letterloo IN letterloop %]
+                                                [% IF ( letterloo.selected ) %]
+                                                    <option value="[% letterloo.value %]" selected="selected">[% letterloo.lettername %]</option>
+                                                [% ELSE %]
+                                                    <option value="[% letterloo.value %]">[% letterloo.lettername %]</option>
+                                                [% END %]
+                                            [% END %]
+                                        </select>
+                                        <div class="hint">Select a notice and patrons on the routing list will be notified when new issues are received.</div>
+                                    [% ELSE %]
+                                        <span class="label">Patron notification: </span>
+                                        <div class="hint">To notify patrons of new serial issues, you must <a href="/cgi-bin/koha/tools/letter.pl">define a notice</a>.</div>
+                                    [% END %]
+                                </li>
+                                <li>
+                                    <label for="location">Location:</label>
+                                    <select name="location" id="location">
+                                        <option value="">None</option>
+                                        [% FOREACH locations_loo IN locations_loop %]
+                                            [% IF ( locations_loo.selected ) %]
+                                                <option value="[% locations_loo.authorised_value %]" selected="selected">[% locations_loo.lib %]</option>
+                                            [% ELSE %]
+                                                <option value="[% locations_loo.authorised_value %]">[% locations_loo.lib %]</option>
+                                            [% END %]
+                                        [% END %]
+                                    </select>
+                                </li>
+                                <li>
+                                    <label for="graceperiod">Grace period:</label>
+                                    <input type="text" name="graceperiod" id="graceperiod" value="[% graceperiod %]" size="5"/> day(s)
+                                </li>
+                                <li>
+                                     <label class="widelabel" for="staffdisplaycount">Number of issues to display to staff: </label>
+                                     <input type="text" name="staffdisplaycount" id="staffdisplaycount" value="[% staffdisplaycount %]" size="4"/>
+                                 </li>
+                                 <li>
+                                    <label class="widelabel" for="opacdisplaycount">Number of issues to display to the public: </label>
+                                    <input type="text" name="opacdisplaycount" id="opacdisplaycount" value="[% opacdisplaycount %]" size="4"/>
+                                </li>
+                            </ol>
+                        </fieldset>
+                        <fieldset class="action">
+                            <input type="button" value="Next >>" onclick="if ( Check_page1() ) show_page_2();" style="float:right;" />
+                        </fieldset>
+                    </div>
+                </div>
 
-<div id="subscription_form_planning">
-	<fieldset class="rows">
-	<legend>Serials planning</legend>
-    <ol>
-        <li>
-           <label for="acqui_date"> First issue publication date:</label>
-                [% IF ( modify ) %]<input type="text" name="firstacquidate" value="[% firstacquidate %]"  size="13" maxlength="10" id="acqui_date" disabled="disabled" />
-                [% ELSE %]<input type="text" name="firstacquidate" value="[% firstacquidate %]"  size="13" maxlength="10" id="acqui_date" class="datepicker" />[% END %]
-        </li>
-           [% IF ( modify ) %]<li><label for="next_acqui_date"> Next issue publication date:</label>
-                <input type="text" name="nextacquidate" value="[% nextacquidate %]" size="13" maxlength="10" id="next_acqui_date" class="datepicker" />
-                </li>[% END %]
-                
-        <li>
-            <label for="periodicity" class="required">Frequency:</label>
-                <select name="periodicity" size="1" id="periodicity" onchange="javascript:document.getElementsByName('manualhist')[0].checked=(this.value==1); reset_num_pattern();">
-                <option value="" selected="selected">-- please choose --</option>
-                [% IF ( periodicity16 ) %]
-                <option value="16" selected="selected">Without periodicity</option>
-                [% ELSE %]
-                    <option value="16">Without periodicity</option>
-                [% END %]
-                [% IF ( periodicity48 ) %]
-                <option value="48" selected="selected">Unknown</option>
-                [% ELSE %]
-                <option value="48">Unknown</option>
-                [% END %]
-                [% IF ( periodicity32 ) %]
-                <option value="32" selected="selected">Irregular</option>
-                [% ELSE %]
-                    <option value="32">Irregular</option>
-                [% END %]
-
-                [% IF ( periodicity12 ) %]
-                    <option value="12" selected="selected">2/day</option>
-                [% ELSE %]
-                    <option value="12">2/day</option>
-                [% END %]
-                [% IF ( periodicity1 ) %]
-                    <option value="1" selected="selected">daily (n/week)</option>
-                [% ELSE %]
-                    <option value="1">daily (n/week)</option>
-                [% END %]
-                [% IF ( periodicity2 ) %]
-                    <option value="2" selected="selected">1/week</option>
-                [% ELSE %]
-                    <option value="2">1/week</option>
-                [% END %]
-                [% IF ( periodicity3 ) %]
-                    <option value="3" selected="selected">1/2 weeks </option>
-                [% ELSE %]
-                    <option value="3">1/2 weeks </option>
-                [% END %]
-                [% IF ( periodicity4 ) %]
-                    <option value="4" selected="selected">1/3 weeks</option>
-                [% ELSE %]
-                    <option value="4">1/3 weeks</option>
-                [% END %]
-                [% IF ( periodicity5 ) %]
-                    <option value="5" selected="selected">1/month</option>
-                [% ELSE %]
-                    <option value="5">1/month</option>
-                [% END %]
-                [% IF ( periodicity6 ) %]
-                    <option value="6" selected="selected">1/2 months (6/year)</option>
-                [% ELSE %]
-                    <option value="6">1/2 months (6/year)</option>
-                [% END %]
-                [% IF ( periodicity7 ) %]
-                    <option value="7" selected="selected">1/3 months (1/quarter)</option>
-                [% ELSE %]
-                    <option value="7">1/3 months (1/quarter)</option>
-                [% END %]
-                <!-- periodicity8 is 1/quarter, exactly like periodicity7 but will use it for seasonal option -->
-                [% IF ( periodicity8 ) %]
-                    <option value="8" selected="selected">1/quarter (seasonal)</option>
-                [% ELSE %]
-                    <option value="8">1/quarter (seasonal)</option>
-                [% END %]
-                [% IF ( periodicity13 ) %]
-                    <option value="13" selected="selected">1/4 months (3/year)</option>
-                [% ELSE %]
-                    <option value="13">1/4 months (3/year)</option>
-                [% END %]
-
-                [% IF ( periodicity9 ) %]
-                    <option value="9" selected="selected">2/years</option>
-                [% ELSE %]
-                    <option value="9">2/year</option>
-                [% END %]
-                [% IF ( periodicity10 ) %]
-                    <option value="10" selected="selected">1/year</option>
-                [% ELSE %]
-                    <option value="10">1/year</option>
-                [% END %]
-                [% IF ( periodicity11 ) %]
-                    <option value="11" selected="selected">1/2 years</option>
-                [% ELSE %]
-                    <option value="11">1/2 years</option>
-                [% END %]
-                </select> <span class="required">Required</span></li>
-                <li>
-                    <label for="manuallist"> Manual history:</label>
-                    [% IF ( manualhistory ) %]
-                        <input type="checkbox" name="manualhist" id="manuallist" value="1" checked="checked" />
-                    [% ELSE %]
-                        <input type="checkbox" name="manualhist" id="manuallist" value="1" />
-                    [% END %]
-                </li>
-        <li>
-           <label for="numberpattern"> Numbering pattern:</label>
-            
-                <select name="numbering_pattern" size="1" id="numberpattern" >
-                    <option value="" selected="selected">-- please choose --</option>
-                    [% IF ( numberpattern1 ) %]
-                        <option value="1" selected="selected">Number</option>
-                    [% ELSE %]
-                        <option value="1">Number</option>
-                    [% END %]
-                    [% IF ( numberpattern2 ) %]
-                        <option value="2" selected="selected">Volume, number, issue</option>
-                    [% ELSE %]
-                        <option value="2">Volume, number, issue</option>
-                    [% END %]
-                    [% IF ( numberpattern3 ) %]
-                        <option value="3" selected="selected">Volume, number</option>
-                    [% ELSE %]
-                        <option value="3">Volume, number</option>
-                    [% END %]
-                    [% IF ( numberpattern4 ) %]
-                        <option value="4" selected="selected">Volume, issue</option>
-                    [% ELSE %]
-                        <option value="4">Volume, issue</option>
-                    [% END %]
-                    [% IF ( numberpattern5 ) %]
-                        <option value="5" selected="selected">Number, issue</option>
-                    [% ELSE %]
-                        <option value="5">Number, issue</option>
-                    [% END %]
-                    [% IF ( numberpattern6 ) %]
-                        <option value="6" selected="selected">Seasonal only</option>
-                    [% ELSE %]
-                        <option value="6">Seasonal only</option>
-                    [% END %]
-                    [% IF ( numberpattern8 ) %]
-                        <option value="8" selected="selected">Year/Number</option>
-                    [% ELSE %]
-                        <option value="8">Year/Number</option>
-                    [% END %]          
-                    [% IF ( numberpattern7 ) %]
-                        <option value="7" selected="selected">None of the above</option>
-                    [% ELSE %]
-                        <option value="7">None of the above</option>
-                    [% END %]
-                </select>
-        </li>
-                <li id="more_options"></li>
-                <li id="irregularity"></li>
-   	           <li id="displayexample"></li>
-        <li>
-           <label for="from" class="required"> Subscription start date:</label>
-                <input type="text" name="startdate" value="[% startdate %]" size="13" maxlength="10" id="from" class="datepickerfrom" />
-            <span class="required">Required</span>
-        </li>
-        <li>
-            <label for="subtype" class="required">Subscription length:</label>
-            
-                <select name="subtype" id="subtype">
-                    [% IF ( subtype_monthlength ) %]<option value="monthlength" selected="selected">[% ELSE %]<option value="monthlength">[% END %] Number of months</option>
-                    [% IF ( subtype_numberlength ) %]<option value="numberlength" selected="selected">[% ELSE %]<option value="numberlength">[% END %] Number of issues</option>
-                    [% IF ( subtype_weeklength ) %]<option value="weeklength" selected="selected">[% ELSE %]<option value="weeklength">[% END %] Number of weeks</option>
-                </select>
-                <input type="text" id="numberlength" name="sublength" value="[% sublength %]" size="3" onkeypress="return check_input(event)" /> (enter amount in numerals)
-            <span class="required">Required</span>
-        </li>
-        <li>
-           <label for="to"> Subscription end date:</label>
-                <input type="text" name="enddate" value="[% enddate %]" size="13" maxlength="10" id="to" class="datepickerto" />
-        </li>
-    <li><label for="numberingmethod">Numbering formula:</label> <input type="text" name="numberingmethod" id="numberingmethod" value="[% numberingmethod %]" />
-    </li>
-    </ol>
-	</fieldset>
-
-	<fieldset class="action">
-    <input type="button" class="action_test" value="Test prediction pattern" onclick="javascript:irregularity_check()" />
-    <input type="button" class="action_reset" value="Reset pattern" onclick="javascript:reset_pattern()" />
-    <input type="button" class="action_save"  value="Save subscription" onclick="Check(this.form)" accesskey="w" />
-	</fieldset>
-    <fieldset class="action">
-    <input type="button" class="action_advanced" value="Show/Hide advanced pattern" onclick="javascript:display_table()" />
-    </fieldset>
-           <div id="basetable"  style="display: none;">
-            <table class="small">
-                <tr><th colspan="4">Advanced prediction pattern</th></tr>
-				<tr>
-                    <th>&nbsp;</th>
-                    <th>X</th>
-                    <th>Y</th>
-                    <th>Z</th>
-                </tr>
-                <tr>
-                    <td>Add</td>
-                    <td>
-                        <input type="text" name="add1" id="add1" value="[% add1 %]" />
-                    </td>
-                    <td>
-                        <input type="text" name="add2" id="add2" value="[% add2 %]" />
-                    </td>
-                    <td>
-                        <input type="text" name="add3" id="add3" value="[% add3 %]" />
-                    </td>
-                </tr>
-                <tr>
-                    <td>once every</td>
-                    <td><input type="text" name="every1" id="every1" value="[% every1 %]" /></td>
-                    <td><input type="text" name="every2" id="every2" value="[% every2 %]" /></td>
-                    <td><input type="text" name="every3" id="every3" value="[% every3 %]" /></td>
-                </tr>
-                <tr>
-                    <td>When more than</td>
-                    <td><input type="text" name="whenmorethan1" id="whenmorethan1" value="[% whenmorethan1 %]" /></td>
-                    <td><input type="text" name="whenmorethan2" id="whenmorethan2" value="[% whenmorethan2 %]" /></td>
-                    <td><input type="text" name="whenmorethan3" id="whenmorethan3" value="[% whenmorethan3 %]" /></td>
-                </tr>
-                <tr>
-                    <td>inner counter</td>
-                    <td><input type="text" name="innerloop1" id="innerloop1" value="[% innerloop1 %]" /></td>
-                    <td><input type="text" name="innerloop2" id="innerloop2" value="[% innerloop2 %]" /></td>
-                    <td><input type="text" name="innerloop3" id="innerloop3" value="[% innerloop3 %]" /></td>
-                </tr>
-                <tr>
-                    <td>Set back to</td>
-                    <td><input type="text" name="setto1" id="setto1" value="[% setto1 %]" /></td>
-                    <td><input type="text" name="setto2" id="setto2" value="[% setto2 %]" /></td>
-                    <td><input type="text" name="setto3" id="setto3" value="[% setto3 %]" /></td>
-                </tr>
-                <tr>
-                    <td>
-                        [% IF ( modify ) %]
-                            Last value
-                        [% ELSE %]
-                            Begins with
-                        [% END %]
-                    </td>
-                    <td><input type="text" name="lastvalue1" id="lastvalue1" value="[% lastvalue1 %]" /></td>
-                    <td><input type="text" name="lastvalue2" id="lastvalue2" value="[% lastvalue2 %]" /></td>
-                    <td><input type="text" name="lastvalue3" id="lastvalue3" value="[% lastvalue3 %]" /></td>
-                </tr>
-            </table>
+                <div id="page_2">
+                    <div class="yui-u first">
+                        <div id="subscription_form_planning">
+                            <fieldset class="rows">
+                                <legend>Serials planning</legend>
+                                <ol>
+                                    <li>
+                                        <label for="firstacquidate">First issue publication date: (*)</label>
+                                        [% UNLESS (more_than_one_serial) %]
+                                          <input type="text" size="10" id="acqui_date" name="firstacquidate" value="[% firstacquidate | $KohaDates %]" class="datepicker" readonly="readonly"/>
+                                        [% ELSE %]
+                                          [% firstacquidate | $KohaDates %]
+                                          <input type="hidden" size="10" id="acqui_date" name="firstacquidate" value="[% firstacquidate | $KohaDates %]"/>
+                                        [% END %]
+                                    </li>
+                                    [% IF (more_than_one_serial) %]
+                                      <li>
+                                        <label for="nextacquidate">Next issue publication date:</label>
+                                        <input type="text" size="10" id="nextacquidate" name="nextacquidate" value="[% nextacquidate | $KohaDates %]" class="datepicker" readonly="readonly"/>
+                                      </li>
+                                    [% END %]
+                                    <li>
+                                        <label for="frequency">Frequency: (*)</label>
+                                        <select name="frequency" size="1" id="frequency">
+                                            <option value="">-- please choose --</option>
+                                            [% FOREACH frequency IN frequencies %]
+                                                <option value="[% frequency.id %]" [% IF (frequency.selected) %] selected="selected" [% END %]>
+                                                    [% frequency.label %]
+                                                </option>
+                                            [% END %]
+                                        </select>
+                                    </li>
+                                    <li>
+                                        <label for="subtype">Subscription length:</label>
+                                        <select name="subtype" id="subtype">
+                                            [% FOREACH subt IN subtype %]
+                                                <option value="[% subt.name %]" [% IF (subt.selected) %] selected="selected" [% END %] >
+                                                    [% subt.name %]
+                                                </option>
+                                            [% END %]
+                                        </select>
+                                        <input type="text" name="sublength" id="sublength" value="[% sublength %]" size="3" /> (enter amount in numerals)
+                                        <input type="hidden" name="issuelengthcount">
+                                    </li>
+                                    <li>
+                                        <label for="startdate"> Subscription start date: (*)</label>
+                                        <input type="text" size="10" id="from" name="startdate" value="[% startdate | $KohaDates %]" class="datepickerfrom" readonly="readonly"/>
+                                    </li>
+                                    <li>
+                                        <label for="enddate">Subscription end date:</label>
+                                        <input type="text" size="10" id="to" name="enddate" value="[% enddate | $KohaDates %]" class="datepickerto" readonly="readonly"/>
+                                    </li>
+                                    <li>
+                                        <label for="numberpattern">Numbering pattern:</label>
+                                        <select name="numbering_pattern" size="1" id="numberpattern">
+                                            <option value="">-- please choose --</option>
+                                            [% FOREACH numberpattern IN numberpatterns %]
+                                                <option value="[% numberpattern.id %]" [% IF (numberpattern.selected) %] selected="selected" [% END %]>[% numberpattern.label %]</option>
+                                            [% END %]
+                                        </select>
+                                    </li>
+                                    <li>
+                                        <label for="locale">Locale</label>
+                                        <select id="locale" name="locale">
+                                            <option value=""></option>
+                                            [% FOREACH locale IN locales %]
+                                                <option value="[% locale %]">
+                                                    [% locale %]
+                                                </option>
+                                            [% END %]
+                                        </select>
+                                        <span class="hint">If empty, system locale is used</span>
+                                    </li>
+                                    <li id="more_options">
+                                        <table id="moreoptionst">
+                                            <thead>
+                                                <tr>
+                                                    <th>&nbsp;</th>
+                                                    <th id="headerX">&nbsp;</th>
+                                                    <th id="headerY">&nbsp;</th>
+                                                    <th id="headerZ">&nbsp;</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>
+                                                      [% IF (more_than_one_serial) %]
+                                                        Last value
+                                                      [% ELSE %]
+                                                        Begins with
+                                                      [% END %]
+                                                    </td>
+                                                    <td id="beginsX"><input type="text" id="lastvaluetemp1" name="lastvaluetemp1" value="[% lastvalue1 %]" /></td>
+                                                    <td id="beginsY"><input type="text" id="lastvaluetemp2" name="lastvaluetemp2" value="[% lastvalue2 %]" /></td>
+                                                    <td id="beginsZ"><input type="text" id="lastvaluetemp3" name="lastvaluetemp3" value="[% lastvalue3 %]" /></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Inner counter</td>
+                                                    <td id="innerX"><input type="text" id="innerlooptemp1" name="innerlooptemp1" value="[% innerloop1 %]" /></td>
+                                                    <td id="innerY"><input type="text" id="innerlooptemp2" name="innerlooptemp2" value="[% innerloop2 %]" /></td>
+                                                    <td id="innerZ"><input type="text" id="innerlooptemp3" name="innerlooptemp3" value="[% innerloop3 %]" /></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </li>
+                                    <li><a style="cursor:pointer" onclick="toggleAdvancedPattern();">Show/Hide advanced pattern</a></li>
+                                    <div id="advancedpredictionpattern" style="display:none">
+                                      <li>
+                                        <label for="patternname">Pattern name: (*)</label>
+                                        <input id="patternname" name="patternname" type="text" readonly="readonly" />
+                                      </li>
+                                      <li>
+                                        <label for="numberingmethod">Numbering formula:</label>
+                                        <input readonly="readonly" type="text" name="numberingmethod" id="numberingmethod" size="50" value="[% numberingmethod %]" />
+                                      </li>
+                                        <table id="advancedpredictionpatternt">
+                                            <thead>
+                                                <tr>
+                                                    <th colspan="4">Advanced prediction pattern</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>&nbsp;</th>
+                                                    <th>X</th>
+                                                    <th>Y</th>
+                                                    <th>Z</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Label</td>
+                                                    <td><input type="text" readonly="readonly" id="label1" name="label1" /></td>
+                                                    <td><input type="text" readonly="readonly" id="label2" name="label2" /></td>
+                                                    <td><input type="text" readonly="readonly" id="label3" name="label3" /></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Begins with</td>
+                                                    <td><input type="text" readonly="readonly" id="lastvalue1" name="lastvalue1" /></td>
+                                                    <td><input type="text" readonly="readonly" id="lastvalue2" name="lastvalue2" /></td>
+                                                    <td><input type="text" readonly="readonly" id="lastvalue3" name="lastvalue3" /></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Add</td>
+                                                    <td><input type="text" readonly="readonly" id="add1" name="add1" /></td>
+                                                    <td><input type="text" readonly="readonly" id="add2" name="add2" /></td>
+                                                    <td><input type="text" readonly="readonly" id="add3" name="add3" /></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Every</td>
+                                                    <td><input type="text" readonly="readonly" id="every1" name="every1" /></td>
+                                                    <td><input type="text" readonly="readonly" id="every2" name="every2" /></td>
+                                                    <td><input type="text" readonly="readonly" id="every3" name="every3" /></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Set back to</td>
+                                                    <td><input type="text" readonly="readonly" id="setto1" name="setto1" /></td>
+                                                    <td><input type="text" readonly="readonly" id="setto2" name="setto2" /></td>
+                                                    <td><input type="text" readonly="readonly" id="setto3" name="setto3" /></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>When more than</td>
+                                                    <td><input type="text" readonly="readonly" id="whenmorethan1" name="whenmorethan1" /></td>
+                                                    <td><input type="text" readonly="readonly" id="whenmorethan2" name="whenmorethan2" /></td>
+                                                    <td><input type="text" readonly="readonly" id="whenmorethan3" name="whenmorethan3" /></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Inner counter</td>
+                                                    <td><input type="text" readonly="readonly" id="innerloop1" name="innerloop1" /></td>
+                                                    <td><input type="text" readonly="readonly" id="innerloop2" name="innerloop2" /></td>
+                                                    <td><input type="text" readonly="readonly" id="innerloop3" name="innerloop3" /></td>
+                                                </tr>
+                                                <tr>
+                                                    [% BLOCK numbering_select %]
+                                                        <select disabled="disabled" id="[% name %]" name="[% name %]" />
+                                                            <option value=""></option>
+                                                            <option value="dayname">Name of day</option>
+                                                            <option value="monthname">Name of month</option>
+                                                            <option value="season">Name of season</option>
+                                                        </select>
+                                                    [% END %]
+                                                    <td>Formatting</td>
+                                                    <td>[% PROCESS numbering_select name="numbering1" %]</td>
+                                                    <td>[% PROCESS numbering_select name="numbering2" %]</td>
+                                                    <td>[% PROCESS numbering_select name="numbering3" %]</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <input id="modifyadvancedpatternbutton" type="button" value="Modify pattern" onclick="modifyAdvancedPattern();" />
+                                        <input id="restoreadvancedpatternbutton" type="button" value="Cancel modifications" onclick="restoreAdvancedPattern();" style="display:none" />
+                                        <input id="saveadvancedpatternbutton" type="button" value="Save as new pattern" onclick="saveAdvancedPattern();" style="display:none" />
+                                    </div>
+                                </ol>
+                            </fieldset>
+                            <fieldset class="action">
+                                <input type="button" value="<< Previous" onclick="show_page_1();" style="float:left;"/>
+                                <input id="testpatternbutton" type="button" value="Test prediction pattern" onclick="testPredictionPattern();" />
+                                <input type="button" value="Save subscription" onclick="if (Check_page2()) submit();" style="float:right;" accesskey="w" />
+                            </fieldset>
+                        </div>
+                    </div>
+                    <div class="yui-u">
+                        <li id="displayexample"></li>
+                    </div>
+                </div>
+            </form>
         </div>
-
-</div>
-</div>
-</form>
-</div>
-
+    </div>
 </div>
 
 [% INCLUDE 'intranet-bottom.inc' %]
