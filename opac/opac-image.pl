@@ -58,62 +58,44 @@ imagenumber, a random image is selected.
 
 =cut
 
-error() unless C4::Context->preference("OPACLocalCoverImages");
-
-if ( defined $data->param('imagenumber') ) {
-    $imagenumber = $data->param('imagenumber');
-}
-elsif ( defined $data->param('biblionumber') ) {
-    my @imagenumbers = ListImagesForBiblio( $data->param('biblionumber') );
-    if (@imagenumbers) {
-        $imagenumber = $imagenumbers[0];
+my ( $image, $mimetype ) = C4::Images->NoImage;
+if ( C4::Context->preference("OPACLocalCoverImages") ) {
+    if ( defined $data->param('imagenumber') ) {
+        $imagenumber = $data->param('imagenumber');
     }
-    else {
-        warn "No images for this biblio" if $DEBUG;
-        error();
-    }
-}
-else {
-    $imagenumber = shift;
-}
-
-if ($imagenumber) {
-    warn "imagenumber passed in: $imagenumber" if $DEBUG;
-    my $imagedata = RetrieveImage($imagenumber);
-
-    error() unless $imagedata;
-
-    if ($imagedata) {
-        my $image;
-        if ( $data->param('thumbnail') ) {
-            $image = $imagedata->{'thumbnail'};
+    elsif ( defined $data->param('biblionumber') ) {
+        my @imagenumbers = ListImagesForBiblio( $data->param('biblionumber') );
+        if (@imagenumbers) {
+            $imagenumber = $imagenumbers[0];
         }
         else {
-            $image = $imagedata->{'imagefile'};
+            warn "No images for this biblio" if $DEBUG;
         }
-        print $data->header(
-            -type            => $imagedata->{'mimetype'},
-            -'Cache-Control' => 'no-store',
-            -expires         => 'now',
-            -Content_Length  => length($image)
-        ), $image;
-        exit;
     }
     else {
-        warn "No image exists for $imagenumber" if $DEBUG;
-        error();
+        $imagenumber = shift;
+    }
+
+    if ($imagenumber) {
+        warn "imagenumber passed in: $imagenumber" if $DEBUG;
+        my $imagedata = RetrieveImage($imagenumber);
+        if ($imagedata) {
+            if ( $data->param('thumbnail') ) {
+                $image = $imagedata->{'thumbnail'};
+            }
+            else {
+                $image = $imagedata->{'imagefile'};
+            }
+            $mimetype = $imagedata->{'mimetype'};
+        }
     }
 }
-else {
-    error();
-}
-
-error();
-
-sub error {
-    print $data->header( -status => '404', -expires => 'now' );
-    exit;
-}
+print $data->header(
+    -type            => $mimetype,
+    -'Cache-Control' => 'no-store',
+    -expires         => 'now',
+    -Content_Length  => length($image)
+), $image;
 
 =head1 AUTHOR
 
