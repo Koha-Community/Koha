@@ -672,6 +672,13 @@ sub EnqueueLetter ($) {
     return unless exists $params->{'borrowernumber'};
     return unless exists $params->{'message_transport_type'};
 
+    my $content = $params->{letter}->{content};
+    $content =~ s/\s+//g if(defined $content);
+    if ( not defined $content or $content eq '' ) {
+        warn "Trying to add an empty message to the message queue" if $debug;
+        return;
+    }
+
     # If we have any attachments we should encode then into the body.
     if ( $params->{'attachments'} ) {
         $params->{'letter'} = _add_attachments(
