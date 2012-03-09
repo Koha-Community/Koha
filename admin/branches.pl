@@ -328,6 +328,7 @@ sub branchinfotable {
         # - branchfax       |
         # - branchemail    /
         # - branchurl      /
+        # - opac_info (can contain HTML)
         # - address-empty-p (1 if no address information, 0 otherwise)
         # - categories      (containing a static error message)
         # - category_list   (loop containing "categoryname")
@@ -343,7 +344,7 @@ sub branchinfotable {
             'branchaddress3', 'branchzip',
             'branchcity', 'branchstate', 'branchcountry',
             'branchphone', 'branchfax',
-            'branchemail', 'branchurl',
+            'branchemail', 'branchurl', 'opac_info',
             'branchip',       'branchprinter', 'branchnotes'
           )
         {
@@ -406,6 +407,7 @@ sub _branch_to_template {
          branchfax      => $data->{'branchfax'},
          branchemail    => $data->{'branchemail'},
          branchurl      => $data->{'branchurl'},
+         opac_info      => $data->{'opac_info'},
          branchip       => $data->{'branchip'},
          branchnotes    => $data->{'branchnotes'}, 
     );
