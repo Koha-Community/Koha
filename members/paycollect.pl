@@ -56,7 +56,7 @@ my $writeoff     = $input->param('writeoff_individual');
 my $select_lines = $input->param('selected');
 my $select       = $input->param('selected_accts');
 my $accountno;
-
+my $accountlines_id;
 if ( $individual || $writeoff ) {
     if ($individual) {
         $template->param( pay_individual => 1 );
@@ -64,6 +64,7 @@ if ( $individual || $writeoff ) {
         $template->param( writeoff_individual => 1 );
     }
     my $accounttype       = $input->param('accounttype');
+    $accountlines_id       = $input->param('accountlines_id');
     my $amount            = $input->param('amount');
     my $amountoutstanding = $input->param('amountoutstanding');
     $accountno = $input->param('accountno');
@@ -75,6 +76,7 @@ if ( $individual || $writeoff ) {
     $total_due = $amountoutstanding;
     $template->param(
         accounttype       => $accounttype,
+        accountlines_id    => $accountlines_id,
         accountno         => $accountno,
         amount            => $amount,
         amountoutstanding => $amountoutstanding,
@@ -101,10 +103,10 @@ if ( $total_paid and $total_paid ne '0.00' ) {
     } else {
         if ($individual) {
             if ( $total_paid == $total_due ) {
-                makepayment( $borrowernumber, $accountno, $total_paid, $user,
+                makepayment( $accountlines_id, $borrowernumber, $accountno, $total_paid, $user,
                     $branch );
             } else {
-                makepartialpayment( $borrowernumber, $accountno, $total_paid,
+                makepartialpayment( $accountlines_id, $borrowernumber, $accountno, $total_paid,
                     $user, $branch );
             }
             print $input->redirect(

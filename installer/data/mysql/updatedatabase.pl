@@ -5788,6 +5788,13 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.09.00.046";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do("ALTER TABLE `accountlines` ADD `accountlines_id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST;");
+    print "Upgrade to $DBversion done (adding accountlines_id field in accountlines table)\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

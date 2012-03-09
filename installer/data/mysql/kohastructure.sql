@@ -2466,6 +2466,7 @@ CREATE TABLE `messages` ( -- circulation messages left via the patron's check ou
 
 DROP TABLE IF EXISTS `accountlines`;
 CREATE TABLE `accountlines` (
+  `accountlines_id` int(11) NOT NULL AUTO_INCREMENT,
   `borrowernumber` int(11) NOT NULL default 0,
   `accountno` smallint(6) NOT NULL default 0,
   `itemnumber` int(11) default NULL,
@@ -2481,6 +2482,7 @@ CREATE TABLE `accountlines` (
   `notify_level` int(2) NOT NULL default 0,
   `note` text NULL default NULL,
   `manager_id` int(11) NULL,
+  PRIMARY KEY (`accountlines_id`),
   KEY `acctsborridx` (`borrowernumber`),
   KEY `timeidx` (`timestamp`),
   KEY `itemnumber` (`itemnumber`),
