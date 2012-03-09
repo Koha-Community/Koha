@@ -26,42 +26,18 @@ serials-home.pl
 
 this script is the main page for serials/
 
-=head1 PARAMETERS
-
-=over 4
-
-=item title
-
-=item ISSN
-
-=item biblionumber
-
-=back
-
 =cut
 
-use strict;
-use warnings;
+use Modern::Perl;
 use CGI;
 use C4::Auth;
-use C4::Serials;
-use C4::Output;
-use C4::Context;
 use C4::Branch;
+use C4::Context;
+use C4::Output;
+use C4::Serials;
 
-my $query        = new CGI;
-my $title        = $query->param('title_filter');
-my $ISSN         = $query->param('ISSN_filter');
-my $EAN          = $query->param('EAN_filter');
-my $routing      = $query->param('routing') || C4::Context->preference("RoutingSerials");
-my $searched     = $query->param('searched');
-my $biblionumber = $query->param('biblionumber');
-
-my @serialseqs = $query->param('serialseq');
-my @planneddates = $query->param('planneddate');
-my @publisheddates = $query->param('publisheddate');
-my @status = $query->param('status');
-my @notes = $query->param('notes');
+my $query   = new CGI;
+my $routing = $query->param('routing') || C4::Context->preference("RoutingSerials");
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
@@ -74,42 +50,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-if (@serialseqs){
-  my @information;
-  my $index;
-  foreach my $seq (@serialseqs){
-    if ($seq){
-      ### FIXME  This limitation that a serial must be given a title may not be very efficient for some library who do not update serials titles.
-      push @information,
-        { serialseq=>$seq,
-          publisheddate=>$publisheddates[$index],
-          planneddate=>$planneddates[$index],
-          notes=>$notes[$index],
-          status=>$status[$index]
-        }
-    }
-    $index++;
-  }
-  $template->param('information'=>\@information);
-}
-my @subscriptions;
-if ($searched) {
-    @subscriptions = GetSubscriptions( $title, $ISSN, $EAN, $biblionumber );
-}
-
-# to toggle between create or edit routing list options
-if ($routing) {
-    for my $subscription ( @subscriptions) {
-        $subscription->{routingedit} = check_routing( $subscription->{subscriptionid} );
-        $subscription->{branchname} = GetBranchName ( $subscription->{branchcode} );
-    }
-}
-
 $template->param(
-    subscriptions => \@subscriptions,
-    title_filter  => $title,
-    ISSN_filter   => $ISSN,
-    done_searched => $searched,
     routing       => $routing,
     (uc(C4::Context->preference("marcflavour"))) => 1
 );

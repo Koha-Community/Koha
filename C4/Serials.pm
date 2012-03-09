@@ -36,6 +36,7 @@ BEGIN {
     @EXPORT = qw(
       &NewSubscription    &ModSubscription    &DelSubscription    &GetSubscriptions
       &GetSubscription    &CountSubscriptionFromBiblionumber      &GetSubscriptionsFromBiblionumber
+      &SearchSubscriptions
       &GetFullSubscriptionsFromBiblionumber   &GetFullSubscription &ModSubscriptionHistory
       &HasSubscriptionStrictlyExpired &HasSubscriptionExpired &GetExpirationDate &abouttoexpire
 
@@ -630,6 +631,74 @@ sub GetSubscriptions {
     }
     return @results;
 }
+
+=head2 SearchSubscriptions
+
+@results = SearchSubscriptions($args);
+$args is a hashref. Its keys can be contained: title, issn, ean, publisher, bookseller and branchcode
+
+this function gets all subscriptions which have title like $title, ISSN like $issn, EAN like $ean, publisher like $publisher, bookseller like $bookseller AND branchcode eq $branch.
+
+return:
+a table of hashref. Each hash containt the subscription.
+
+=cut
+
+sub SearchSubscriptions {
+    my ( $args ) = @_;
+
+    my $query = qq{
+        SELECT subscription.*, subscriptionhistory.*, biblio.*, biblioitems.issn
+        FROM subscription
+            LEFT JOIN subscriptionhistory USING(subscriptionid)
+            LEFT JOIN biblio ON biblio.biblionumber = subscription.biblionumber
+            LEFT JOIN biblioitems ON biblioitems.biblionumber = subscription.biblionumber
+            LEFT JOIN aqbooksellers ON subscription.aqbooksellerid = aqbooksellers.id
+    };
+    my @where_strs;
+    my @where_args;
+    if( $args->{biblionumber} ) {
+        push @where_strs, "biblio.biblionumber = ?";
+        push @where_args, $args->{biblionumber};
+    }
+    if( $args->{title} ){
+        push @where_strs, "biblio.title LIKE ?";
+        push @where_args, "%$args->{title}%";
+    }
+    if( $args->{issn} ){
+        push @where_strs, "biblioitems.issn LIKE ?";
+        push @where_args, "%$args->{issn}%";
+    }
+    if( $args->{ean} ){
+        push @where_strs, "biblioitems.ean LIKE ?";
+        push @where_args, "%$args->{ean}%";
+    }
+    if( $args->{publisher} ){
+        push @where_strs, "biblioitems.publishercode LIKE ?";
+        push @where_args, "%$args->{publisher}%";
+    }
+    if( $args->{bookseller} ){
+        push @where_strs, "aqbooksellers.name LIKE ?";
+        push @where_args, "%$args->{bookseller}%";
+    }
+    if( $args->{branch} ){
+        push @where_strs, "subscription.branchcode = ?";
+        push @where_args, "$args->{branch}";
+    }
+
+    if(@where_strs){
+        $query .= " WHERE " . join(" AND ", @where_strs);
+    }
+
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare($query);
+    $sth->execute(@where_args);
+    my $results = $sth->fetchall_arrayref( {} );
+    $sth->finish;
+
+    return @$results;
+}
+
 
 =head2 GetSerials
 

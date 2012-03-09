@@ -25,7 +25,7 @@
     [% END %]
     [% IF ( EasyAnalyticalRecords ) %][% IF ( analyze ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% IF ( object ) %][% object %]&amp;analyze=1[% ELSE %][% biblionumber %]&amp;analyze=1[% END %]">Analytics</a></li>[% END %]
 
-    [% IF ( subscriptionsnumber ) %]<li><a href="/cgi-bin/koha/serials/serials-home.pl?searched=1&amp;biblionumber=[% biblionumber %]">Subscription(s)</a></li>[% END %]
+    [% IF ( subscriptionsnumber ) %]<li><a href="/cgi-bin/koha/serials/serials-search.pl?searched=1&amp;biblionumber=[% biblionumber %]">Subscription(s)</a></li>[% END %]
 </ul>
 <ul>
 [% IF ( issuehistoryview ) %]<li class="active">[% ELSE %]<li>[% END %]

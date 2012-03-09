@@ -1,0 +1,183 @@
+[% INCLUDE 'doc-head-open.inc' %]
+[% USE KohaDates %]
+<title>Koha &rsaquo; Serials [% biblionumber %]</title>
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
+[% INCLUDE 'doc-head-close.inc' %]
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.min.js"></script>
+[% INCLUDE 'datatables-strings.inc' %]
+<script type="text/javascript" src="[% themelang %]/js/datatables.js"></script>
+<script type="text/javascript">
+//<![CDATA[
+ $(document).ready(function() {
+    var srlt = $("#srlt").dataTable($.extend(true, {}, dataTablesDefaults, {
+        "aoColumnDefs": [
+            { "aTargets": [ -1, -2, -3 ], "bSortable": false, "bSearchable": false },
+        ],
+        "sPaginationType": "four_button"
+    } ) );
+
+    srlt.fnAddFilters("filter", 750);
+ });
+ //]]>
+</script>
+</head>
+<body id="ser_serials-home" class="ser">
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'serials-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; [% IF ( done_searched ) %]<a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a> &rsaquo; Search results[% ELSE %]Serials [% END %] </div>
+
+<div id="doc3" class="yui-t2">
+  <div id="bd">
+    <div id="yui-main">
+      <div class="yui-b">
+      [% INCLUDE 'serials-toolbar.inc' %]
+
+      <h2>Serials subscriptions</h2>
+
+      <div id="advsearch">
+        <form action="/cgi-bin/koha/serials/serials-search.pl" method="get">
+          <fieldset class="brief">
+            [% IF ( done_searched ) %]
+              <div onclick="$('#advsearch_form').slideToggle(400);" style="width:100%;">
+                <a id="unfold_advsearch" style="cursor:pointer">Advanced search</a>
+              </div>
+              <div id="advsearch_form" style="display:none">
+            [% ELSE %]
+              <div>
+            [% END %]
+              <ol>
+                <li>
+                  <label for="issn">ISSN:</label>
+                  <input type="text" id="issn" name="ISSN_filter" value="[% ISSN_filter %]" />
+                </li>
+                <li>
+                  <label for="title">Title:</label>
+                  <input type="text" id="title" name="title_filter" value="[% title_filter %]" />
+                </li>
+                <li>
+                  <label for="ean">EAN:</label>
+                  <input type="text" id="ean" name="EAN_filter" value="[% EAN_filter %]" />
+                </li>
+                <li>
+                  <label for="publisher">Publisher:</label>
+                  <input type="text" id="publisher" name="publisher_filter" value="[% publisher_filter %]" />
+                </li>
+                <li>
+                  <label for="bookseller">Bookseller:</label>
+                  <input type="text" id="bookseller" name="bookseller_filter" value="[% bookseller_filter %]" />
+                </li>
+                <li>
+                  <label for="branch">Branch:</label>
+                  <select id="branch" name="branch_filter">
+                    <option value="">All</option>
+                    [% FOREACH branch IN branches_loop %]
+                      [% IF ( branch.selected ) %]
+                        <option selected="selected" value="[% branch.branchcode %]">[% branch.branchname %]</option>
+                      [% ELSE %]
+                        <option value="[% branch.branchcode %]">[% branch.branchname %]</option>
+                      [% END %]
+                    [% END %]
+                  </select>
+                </li>
+              </ol>
+              <input type="hidden" name="searched" value="1" />
+              <fieldset class="action">
+                <input type="submit" value="Search" />
+              </fieldset>
+            </div>
+          </fieldset>
+        </form>
+      </div>
+
+      [% IF ( done_searched ) %]
+        [% IF ( subscriptions ) %]
+          <table id="srlt">
+            <thead>
+              <tr>
+                  <th>ISSN</th>
+                  <th>Title</th>
+                  <th> Notes </th>
+                  <th>Library</th>
+                  <th>Call number</th>
+                  <th>Expiration date</th>
+                  [% IF ( routing && CAN_user_serials_routing ) %]
+                    <th>Routing list</th>
+                  [% END %]
+                  <th>&nbsp;</th>
+                  <th>&nbsp;</th>
+              </tr>
+            </thead>
+            <tfoot>
+              <tr>
+                <td><input type="text" class="filter" data-column_num="0" placeholder="Search ISSN" /></td>
+                <td><input type="text" class="filter" data-column_num="1" placeholder="Search title" /></td>
+                <td><input type="text" class="filter" data-column_num="2" placeholder="Search notes" /></td>
+                <td><input type="text" class="filter" data-column_num="3" placeholder="Search library" /></td>
+                <td><input type="text" class="filter" data-column_num="4" placeholder="Search callnumber" /></td>
+                <td><input type="text" class="filter" data-column_num="5" placeholder="Search expiration date" /></td>
+                [% IF ( routing && CAN_user_serials_routing ) %]<td></td>[% END %]
+                <td></td>
+                <td></td>
+              </tr>
+            </tfoot>
+            <tbody>
+              [% FOREACH subscription IN subscriptions %]
+                <tr>
+                  <td>
+                  [% IF ( subscription.issn ) %][% subscription.issn %]
+                  [% END %]
+                  </td>
+                  <td><a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscription.subscriptionid %]" class="button" title="subscription detail">[% subscription.title |html %]</a>
+                  </td>
+                  <td>[% IF ( subscription.notes ) %][% subscription.notes %][% END %]
+                  [% IF ( subscription.internalnotes ) %]([% subscription.internalnotes %])[% END %]
+                  </td>
+                  <td>
+                    [% IF ( subscription.branchname ) %][% subscription.branchname %][% END %]
+                  </td>
+                  <td>
+                    [% IF ( subscription.callnumber ) %][% subscription.callnumber %][% END %]
+                  </td>
+                  <td>
+                    [% IF ( subscription.enddate ) %][% subscription.enddate | $KohaDates %][% END %]
+                  </td>
+                  [% IF ( routing && CAN_user_serials_routing ) %]
+                  <td>
+                    [% IF ( subscription.cannotedit ) %]
+                      &nbsp;
+                    [% ELSE %]
+                      [% IF ( subscription.routingedit ) %]
+                        <a href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% subscription.subscriptionid %]">Edit</a>
+                        ([% subscription.routingedit %])
+                      [% ELSE %]
+                        <a href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% subscription.subscriptionid %]&amp;op=new">New</a>
+                      [% END %]
+                    [% END %]
+                  </td>
+                  [% END %]
+                  <td><a href="/cgi-bin/koha/serials/serials-collection.pl?subscriptionid=[% subscription.subscriptionid %]">Issue history</a>
+                  </td>
+                  <td>
+                  [% IF ( subscription.cannotedit ) %]
+                    &nbsp;
+                  [% ELSE %]
+                    [% IF ( CAN_user_serials_receive_serials ) %]<a href="/cgi-bin/koha/serials/serials-edit.pl?subscriptionid=[% subscription.subscriptionid %]&amp;serstatus=1,3,7">Serial receive</a>[% END %]
+                  [% END %]
+                  </td>
+                </tr>
+              [% END %]
+            </tbody>
+          </table>
+        [% ELSE %]
+          There is no subscription for your search.
+        [% END %]
+      [% END %]
+    </div>
+  </div>
+
+  <div class="yui-b">
+    [% INCLUDE 'serials-menu.inc' %]
+  </div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]
