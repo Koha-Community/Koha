@@ -334,7 +334,6 @@ INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES (
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('NoticeCSS','','Notices CSS url.',NULL,'free');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('SlipCSS','','Slips CSS url.',NULL,'free');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('TransferWhenCancelAllWaitingHolds','0','Transfer items when cancelling all waiting holds',NULL,'YesNo');
->>>>>>> kc/master
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('OPACLocalCoverImages','0','Display local cover images on OPAC search and details pages.','1','YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('LocalCoverImages','0','Display local cover images on intranet details pages.','1','YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('AllowMultipleCovers','0','Allow multiple cover images to be attached to each bibliographic record.','1','YesNo');
