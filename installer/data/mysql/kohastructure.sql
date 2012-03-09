@@ -2695,12 +2695,12 @@ CREATE TABLE `fieldmapping` ( -- koha to keyword mapping
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Table structure for table `bibliocoverimage`
+-- Table structure for table `biblioimages`
 --
 
-DROP TABLE IF EXISTS `bibliocoverimage`;
+DROP TABLE IF EXISTS `biblioimages`;
 
-CREATE TABLE `bibliocoverimage` (
+CREATE TABLE `biblioimages` (
  `imagenumber` int(11) NOT NULL AUTO_INCREMENT,
  `biblionumber` int(11) NOT NULL,
  `mimetype` varchar(15) NOT NULL,

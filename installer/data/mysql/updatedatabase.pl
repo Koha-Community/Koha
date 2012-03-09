@@ -4892,6 +4892,24 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.07.00.XXX";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do( q|DROP TABLE bibliocoverimage;| );
+    $dbh->do(
+        q|CREATE TABLE biblioimages (
+          imagenumber int(11) NOT NULL AUTO_INCREMENT,
+          biblionumber int(11) NOT NULL,
+          mimetype varchar(15) NOT NULL,
+          imagefile mediumblob NOT NULL,
+          thumbnail mediumblob NOT NULL,
+          PRIMARY KEY (imagenumber),
+          CONSTRAINT bibliocoverimage_fk1 FOREIGN KEY (biblionumber) REFERENCES biblio (biblionumber) ON DELETE CASCADE ON UPDATE CASCADE
+          ) ENGINE=InnoDB DEFAULT CHARSET=utf8;|
+    );
+    print "Upgrade to $DBversion done (Correct table name for local cover images [please disregard any error messages])\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 DropAllForeignKeys($table)
