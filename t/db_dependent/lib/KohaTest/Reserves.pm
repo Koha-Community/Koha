@@ -33,6 +33,7 @@ sub methods : Test( 1 ) {
                        GetReserveInfo 
                        _FixPriority 
                        _Findgroupreserve 
+                       ReserveSlip
                 );
     
     can_ok( $self->testing_class, @methods );    

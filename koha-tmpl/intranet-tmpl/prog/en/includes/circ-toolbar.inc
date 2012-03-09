@@ -42,8 +42,10 @@ function update_child() {
 	 });
 
 	// YUI Toolbar Functions
+    var slip_re = /slip/;
 	function printx_window(print_type) {
-		window.open("/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]&amp;print=" + print_type, "printwindow");
+        var handler = print_type.match(slip_re) ? "printslip" : "moremember";
+		window.open("/cgi-bin/koha/members/" + handler + ".pl?borrowernumber=[% borrowernumber %]&amp;print=" + print_type, "printwindow");
 		return false;
 	}
 	function searchToHold(){

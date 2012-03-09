@@ -52,6 +52,7 @@ sub methods : Test( 1 ) {
                       GetBorrowersWhoHaveNeverBorrowed 
                       GetBorrowersWithIssuesHistoryOlderThan 
                       GetBorrowersNamesAndLatestIssue 
+                      IssueSlip
                 );
     
     can_ok( $self->testing_class, @methods );    

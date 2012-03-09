@@ -12,13 +12,12 @@ sub testing_class { 'C4::Letters' };
 
 sub methods : Test( 1 ) {
     my $self = shift;
-    my @methods = qw( getletter
-                      addalert
+    my @methods = qw( addalert
                       delalert
                       getalert
                       findrelatedto
                       SendAlerts
-                      parseletter
+                      GetPreparedLetter
                 );
     
     can_ok( $self->testing_class, @methods );    

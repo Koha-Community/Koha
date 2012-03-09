@@ -24,6 +24,7 @@ use MIME::Lite;
 use Mail::Sendmail;
 
 use C4::Members;
+use C4::Members::Attributes qw(GetBorrowerAttributes);
 use C4::Branch;
 use C4::Log;
 use C4::SMS;
@@ -40,7 +41,7 @@ BEGIN {
 	$VERSION = 3.01;
 	@ISA = qw(Exporter);
 	@EXPORT = qw(
-	&GetLetters &getletter &addalert &getalert &delalert &findrelatedto &SendAlerts GetPrintMessages
+	&GetLetters &GetPreparedLetter &GetWrappedLetter &addalert &getalert &delalert &findrelatedto &SendAlerts &GetPrintMessages
 	);
 }
 
@@ -115,13 +116,26 @@ sub GetLetters (;$) {
     return \%letters;
 }
 
-sub getletter ($$) {
-    my ( $module, $code ) = @_;
+my %letter;
+sub getletter ($$$) {
+    my ( $module, $code, $branchcode ) = @_;
+
+    if (C4::Context->preference('IndependantBranches') && $branchcode){
+        $branchcode = C4::Context->userenv->{'branch'};
+    }
+
+    if ( my $l = $letter{$module}{$code}{$branchcode} ) {
+        return { %$l }; # deep copy
+    }
+
     my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("select * from letter where module=? and code=?");
-    $sth->execute( $module, $code );
-    my $line = $sth->fetchrow_hashref;
-    return $line;
+    my $sth = $dbh->prepare("select * from letter where module=? and code=? and (branchcode = ? or branchcode = '') order by branchcode desc limit 1");
+    $sth->execute( $module, $code, $branchcode );
+    my $line = $sth->fetchrow_hashref
+      or return;
+    $line->{'content-type'} = 'text/html; charset="UTF-8"' if $line->{is_html};
+    $letter{$module}{$code}{$branchcode} = $line;
+    return { %$line };
 }
 
 =head2 addalert ($borrowernumber, $type, $externalid)
@@ -176,7 +190,7 @@ sub delalert ($) {
 sub getalert (;$$$) {
     my ( $borrowernumber, $type, $externalid ) = @_;
     my $dbh   = C4::Context->dbh;
-    my $query = "SELECT * FROM alert WHERE";
+    my $query = "SELECT a.*, b.branchcode FROM alert a JOIN borrowers b USING(borrowernumber) WHERE";
     my @bind;
     if ($borrowernumber and $borrowernumber =~ /^\d+$/) {
         $query .= " borrowernumber=? AND ";
@@ -232,20 +246,17 @@ sub findrelatedto ($$) {
     parameters :
     - $type : the type of alert
     - $externalid : the id of the "object" to query
-    - $letter : the letter to send.
+    - $letter_code : the letter to send.
 
     send an alert to all borrowers having put an alert on a given subject.
 
 =cut
 
 sub SendAlerts {
-    my ( $type, $externalid, $letter ) = @_;
+    my ( $type, $externalid, $letter_code ) = @_;
     my $dbh = C4::Context->dbh;
     my $strsth;
     if ( $type eq 'issue' ) {
-
-        # 		warn "sending issues...";
-        my $letter = getletter( 'serial', $letter );
 
         # prepare the letter...
         # search the biblionumber
@@ -253,52 +264,50 @@ sub SendAlerts {
           $dbh->prepare(
             "SELECT biblionumber FROM subscription WHERE subscriptionid=?");
         $sth->execute($externalid);
-        my ($biblionumber) = $sth->fetchrow;
+        my ($biblionumber) = $sth->fetchrow
+          or warn( "No subscription for '$externalid'" ),
+             return;
 
-        # parsing branch info
-        my $userenv = C4::Context->userenv;
-        parseletter( $letter, 'branches', $userenv->{branch} );
-
-        # parsing librarian name
-        $letter->{content} =~ s/<<LibrarianFirstname>>/$userenv->{firstname}/g;
-        $letter->{content} =~ s/<<LibrarianSurname>>/$userenv->{surname}/g;
-        $letter->{content} =~
-          s/<<LibrarianEmailaddress>>/$userenv->{emailaddress}/g;
-
-        # parsing biblio information
-        parseletter( $letter, 'biblio',      $biblionumber );
-        parseletter( $letter, 'biblioitems', $biblionumber );
-
+        my %letter;
         # find the list of borrowers to alert
         my $alerts = getalert( '', 'issue', $externalid );
         foreach (@$alerts) {
 
-            # and parse borrower ...
-            my $innerletter = $letter;
             my $borinfo = C4::Members::GetMember('borrowernumber' => $_->{'borrowernumber'});
-            parseletter( $innerletter, 'borrowers', $_->{'borrowernumber'} );
+            my $email = $borinfo->{email} or next;
+
+            # 		warn "sending issues...";
+            my $userenv = C4::Context->userenv;
+            my $letter = GetPreparedLetter (
+                module => 'serial',
+                letter_code => $letter_code,
+                branchcode => $userenv->{branch},
+                tables => {
+                    'branches'    => $_->{branchcode},
+                    'biblio'      => $biblionumber,
+                    'biblioitems' => $biblionumber,
+                    'borrowers'   => $borinfo,
+                },
+                want_librarian => 1,
+            ) or return;
 
             # ... then send mail
-            if ( $borinfo->{email} ) {
-                my %mail = (
-                    To      => $borinfo->{email},
-                    From    => $borinfo->{email},
-                    Subject => "" . $innerletter->{title},
-                    Message => "" . $innerletter->{content},
-                    'Content-Type' => 'text/plain; charset="utf8"',
-                    );
-                sendmail(%mail) or carp $Mail::Sendmail::error;
-
-            }
+            my %mail = (
+                To      => $email,
+                From    => $email,
+                Subject => "" . $letter->{title},
+                Message => "" . $letter->{content},
+                'Content-Type' => 'text/plain; charset="utf8"',
+                );
+            sendmail(%mail) or carp $Mail::Sendmail::error;
         }
     }
-    elsif ( $type eq 'claimacquisition' ) {
-
-        $letter = getletter( 'claimacquisition', $letter );
+    elsif ( $type eq 'claimacquisition' or $type eq 'claimissues' ) {
 
         # prepare the letter...
         # search the biblionumber
-        $strsth = qq{
+        $strsth =  $type eq 'claimacquisition'
+            ? qq{
             SELECT aqorders.*,aqbasket.*,biblio.*,biblioitems.*,aqbooksellers.*
             FROM aqorders
             LEFT JOIN aqbasket ON aqbasket.basketno=aqorders.basketno
@@ -306,114 +315,83 @@ sub SendAlerts {
             LEFT JOIN biblioitems ON aqorders.biblioitemnumber=biblioitems.biblioitemnumber
             LEFT JOIN aqbooksellers ON aqbasket.booksellerid=aqbooksellers.id
             WHERE aqorders.ordernumber IN (
-        }
-          . join( ",", @$externalid ) . ")";
-    }
-    elsif ( $type eq 'claimissues' ) {
-
-        $letter = getletter( 'claimissues', $letter );
-
-        # prepare the letter...
-        # search the biblionumber
-        $strsth = qq{
+            }
+            : qq{
             SELECT serial.*,subscription.*, biblio.*, aqbooksellers.*
             FROM serial
             LEFT JOIN subscription ON serial.subscriptionid=subscription.subscriptionid
             LEFT JOIN biblio ON serial.biblionumber=biblio.biblionumber
             LEFT JOIN aqbooksellers ON subscription.aqbooksellerid=aqbooksellers.id
             WHERE serial.serialid IN (
-        }
+            }
           . join( ",", @$externalid ) . ")";
-    }
-
-    if ( $type eq 'claimacquisition' or $type eq 'claimissues' ) {
         my $sthorders = $dbh->prepare($strsth);
         $sthorders->execute;
-        my @fields = map {
-            $sthorders->{mysql_table}[$_] . "." . $sthorders->{NAME}[$_] }
-            (0 .. $#{$sthorders->{NAME}} ) ;
+        my $dataorders = $sthorders->fetchall_arrayref( {} );
 
-        my @orders_infos;
-        while ( my $row = $sthorders->fetchrow_arrayref() ) {
-            my %rec = ();
-            @rec{@fields} = @$row;
-            push @orders_infos, \%rec;
+        my $sthbookseller =
+          $dbh->prepare("select * from aqbooksellers where id=?");
+        $sthbookseller->execute( $dataorders->[0]->{booksellerid} );
+        my $databookseller = $sthbookseller->fetchrow_hashref;
+
+        my @email;
+        push @email, $databookseller->{bookselleremail} if $databookseller->{bookselleremail};
+        push @email, $databookseller->{contemail}       if $databookseller->{contemail};
+        unless (@email) {
+            warn "Bookseller $dataorders->[0]->{booksellerid} without emails";
+            return;
         }
 
-        # parsing branch info
         my $userenv = C4::Context->userenv;
-        parseletter( $letter, 'branches', $userenv->{branch} );
-
-        # parsing librarian name
-        $letter->{content} =~ s/<<LibrarianFirstname>>/$userenv->{firstname}/g;
-        $letter->{content} =~ s/<<LibrarianSurname>>/$userenv->{surname}/g;
-        $letter->{content} =~ s/<<LibrarianEmailaddress>>/$userenv->{emailaddress}/g;
-
-        # Get Fields remplacement
-        my $order_format = $1 if ( $letter->{content} =~ m/(<order>.*<\/order>)/xms );
-
-        # Foreach field to remplace
-        while ( $letter->{content} =~ m/<<([^>]*)>>/g ) {
-            my $field = $1;
-            my $value = $orders_infos[0]->{$field} || "";
-            $value = sprintf("%.2f", $value) if $field =~ /price/;
-            $letter->{content} =~ s/<<$field>>/$value/g;
-        }
-
-        if ( $order_format ) {
-            # For each order
-            foreach my $infos ( @orders_infos ) {
-                my $order_content = $order_format;
-                # We replace by value
-                while ( $order_content =~ m/<<([^>]*)>>/g ) {
-                    my $field = $1;
-                    my $value = $infos->{$field} || "";
-                    $value = sprintf("%.2f", $value) if $field =~ /price/;
-                    $order_content =~ s/(<<$field>>)/$value/g;
-                }
-                $order_content =~ s/<\/{0,1}?order>//g;
-                $letter->{content} =~ s/<order>.*<\/order>/$order_content\n$order_format/xms;
-            }
-            $letter->{content} =~ s/<order>.*<\/order>//xms;
-        }
-
-        my $innerletter = $letter;
+        my $letter = GetPreparedLetter (
+            module => $type,
+            letter_code => $letter_code,
+            branchcode => $userenv->{branch},
+            tables => {
+                'branches'    => $userenv->{branch},
+                'aqbooksellers' => $databookseller,
+            },
+            repeat => $dataorders,
+            want_librarian => 1,
+        ) or return;
 
         # ... then send mail
-        if (   $orders_infos[0]->{'aqbooksellers.bookselleremail'}
-            || $orders_infos[0]->{'aqbooksellers.contemail'} ) {
-            my $to = $orders_infos[0]->{'aqbooksellers.bookselleremail'};
-            $to .= ", " if $to;
-            $to .= $orders_infos[0]->{'aqbooksellers.contemail'} || "";
-            my %mail = (
-                To             => $to,
-                From           => $userenv->{emailaddress},
-                Subject        => Encode::encode( "utf8", "" . $innerletter->{title} ),
-                Message        => Encode::encode( "utf8", "" . $innerletter->{content} ),
-                'Content-Type' => 'text/plain; charset="utf8"',
-            );
-            sendmail(%mail) or carp $Mail::Sendmail::error;
-            warn "sending to $mail{To} From $mail{From} subj $mail{Subject} Mess $mail{Message}" if $debug;
-            if ( C4::Context->preference("LetterLog") ) {
-                logaction( "ACQUISITION", "Send Acquisition claim letter", "", "order list : " . join( ",", @$externalid ) . "\n$innerletter->{title}\n$innerletter->{content}" ) if $type eq 'claimacquisition';
-                logaction( "ACQUISITION", "CLAIM ISSUE", undef, "To=" . $mail{To} . " Title=" . $innerletter->{title} . " Content=" . $innerletter->{content} ) if $type eq 'claimissues';
-            }
-        } else {
-            return {error => "no_email" };
-        }
+        my %mail = (
+            To => join( ','. @email),
+            From           => $userenv->{emailaddress},
+            Subject        => "" . $letter->{title},
+            Message        => "" . $letter->{content},
+            'Content-Type' => 'text/plain; charset="utf8"',
+        );
+        sendmail(%mail) or carp $Mail::Sendmail::error;
 
-        warn "sending to From $userenv->{emailaddress} subj $innerletter->{title} Mess $innerletter->{content}" if $debug;
+        logaction(
+            "ACQUISITION",
+            $type eq 'claimissues' ? "CLAIM ISSUE" : "ACQUISITION CLAIM",
+            undef,
+            "To="
+                . $databookseller->{contemail}
+                . " Title="
+                . $letter->{title}
+                . " Content="
+                . $letter->{content}
+        ) if C4::Context->preference("LetterLog");
     }
-
-    # send an "account details" notice to a newly created user
+   # send an "account details" notice to a newly created user
     elsif ( $type eq 'members' ) {
-        # must parse the password special, before it's hashed.
-        $letter->{content} =~ s/<<borrowers.password>>/$externalid->{'password'}/g;
-
-        parseletter( $letter, 'borrowers', $externalid->{'borrowernumber'});
-        parseletter( $letter, 'branches', $externalid->{'branchcode'} );
-
         my $branchdetails = GetBranchDetail($externalid->{'branchcode'});
+        my $letter = GetPreparedLetter (
+            module => 'members',
+            letter_code => $letter_code,
+            branchcode => $externalid->{'branchcode'},
+            tables => {
+                'branches'    => $branchdetails,
+                'borrowers' => $externalid->{'borrowernumber'},
+            },
+            substitute => { 'borrowers.password' => $externalid->{'password'} },
+            want_librarian => 1,
+        ) or return;
+
         my %mail = (
                 To      =>     $externalid->{'emailaddr'},
                 From    =>  $branchdetails->{'branchemail'} || C4::Context->preference("KohaAdminEmailAddress"),
@@ -425,24 +403,148 @@ sub SendAlerts {
     }
 }
 
-=head2 parseletter($letter, $table, $pk)
+=head2 GetPreparedLetter( %params )
 
-    parameters :
-    - $letter : a hash to letter fields (title & content useful)
-    - $table : the Koha table to parse.
-    - $pk : the primary key to query on the $table table
-    parse all fields from a table, and replace values in title & content with the appropriate value
-    (not exported sub, used only internally)
+    %params hash:
+      module => letter module, mandatory
+      letter_code => letter code, mandatory
+      branchcode => for letter selection, if missing default system letter taken
+      tables => a hashref with table names as keys. Values are either:
+        - a scalar - primary key value
+        - an arrayref - primary key values
+        - a hashref - full record
+      substitute => custom substitution key/value pairs
+      repeat => records to be substituted on consecutive lines:
+        - an arrayref - tries to guess what needs substituting by
+          taking remaining << >> tokensr; not recommended
+        - a hashref token => @tables - replaces <token> << >> << >> </token>
+          subtemplate for each @tables row; table is a hashref as above
+      want_librarian => boolean,  if set to true triggers librarian details
+        substitution from the userenv
+    Return value:
+      letter fields hashref (title & content useful)
 
 =cut
 
-our %handles = ();
-our %columns = ();
+sub GetPreparedLetter {
+    my %params = @_;
 
-sub parseletter_sth {
+    my $module      = $params{module} or croak "No module";
+    my $letter_code = $params{letter_code} or croak "No letter_code";
+    my $branchcode  = $params{branchcode} || '';
+
+    my $letter = getletter( $module, $letter_code, $branchcode )
+        or warn( "No $module $letter_code letter"),
+            return;
+
+    my $tables = $params{tables};
+    my $substitute = $params{substitute};
+    my $repeat = $params{repeat};
+    $tables || $substitute || $repeat
+      or carp( "ERROR: nothing to substitute - both 'tables' and 'substitute' are empty" ),
+         return;
+    my $want_librarian = $params{want_librarian};
+
+    if ($substitute) {
+        while ( my ($token, $val) = each %$substitute ) {
+            $letter->{title} =~ s/<<$token>>/$val/g;
+            $letter->{content} =~ s/<<$token>>/$val/g;
+       }
+    }
+
+    if ($want_librarian) {
+        # parsing librarian name
+        my $userenv = C4::Context->userenv;
+        $letter->{content} =~ s/<<LibrarianFirstname>>/$userenv->{firstname}/go;
+        $letter->{content} =~ s/<<LibrarianSurname>>/$userenv->{surname}/go;
+        $letter->{content} =~ s/<<LibrarianEmailaddress>>/$userenv->{emailaddress}/go;
+    }
+
+    my ($repeat_no_enclosing_tags, $repeat_enclosing_tags);
+
+    if ($repeat) {
+        if (ref ($repeat) eq 'ARRAY' ) {
+            $repeat_no_enclosing_tags = $repeat;
+        } else {
+            $repeat_enclosing_tags = $repeat;
+        }
+    }
+
+    if ($repeat_enclosing_tags) {
+        while ( my ($tag, $tag_tables) = each %$repeat_enclosing_tags ) {
+            if ( $letter->{content} =~ m!<$tag>(.*)</$tag>!s ) {
+                my $subcontent = $1;
+                my @lines = map {
+                    my %subletter = ( title => '', content => $subcontent );
+                    _substitute_tables( \%subletter, $_ );
+                    $subletter{content};
+                } @$tag_tables;
+                $letter->{content} =~ s!<$tag>.*</$tag>!join( "\n", @lines )!se;
+            }
+        }
+    }
+
+    if ($tables) {
+        _substitute_tables( $letter, $tables );
+    }
+
+    if ($repeat_no_enclosing_tags) {
+        if ( $letter->{content} =~ m/[^\n]*<<.*>>[^\n]*/so ) {
+            my $line = $&;
+            my $i = 1;
+            my @lines = map {
+                my $c = $line;
+                $c =~ s/<<count>>/$i/go;
+                foreach my $field ( keys %{$_} ) {
+                    $c =~ s/(<<[^\.]+.$field>>)/$_->{$field}/;
+                }
+                $i++;
+                $c;
+            } @$repeat_no_enclosing_tags;
+
+            my $replaceby = join( "\n", @lines );
+            $letter->{content} =~ s/\Q$line\E/$replaceby/s;
+        }
+    }
+
+    $letter->{content} =~ s/<<\S*>>//go; #remove any stragglers
+#   $letter->{content} =~ s/<<[^>]*>>//go;
+
+    return $letter;
+}
+
+sub _substitute_tables {
+    my ( $letter, $tables ) = @_;
+    while ( my ($table, $param) = each %$tables ) {
+        next unless $param;
+
+        my $ref = ref $param;
+
+        my $values;
+        if ($ref && $ref eq 'HASH') {
+            $values = $param;
+        }
+        else {
+            my @pk;
+            my $sth = _parseletter_sth($table);
+            unless ($sth) {
+                warn "_parseletter_sth('$table') failed to return a valid sth.  No substitution will be done for that table.";
+                return;
+            }
+            $sth->execute( $ref ? @$param : $param );
+
+            $values = $sth->fetchrow_hashref;
+        }
+
+        _parseletter ( $letter, $table, $values );
+    }
+}
+
+my %handles = ();
+sub _parseletter_sth {
     my $table = shift;
     unless ($table) {
-        carp "ERROR: parseletter_sth() called without argument (table)";
+        carp "ERROR: _parseletter_sth() called without argument (table)";
         return;
     }
     # check cache first
@@ -456,9 +558,12 @@ sub parseletter_sth {
     ($table eq 'borrowers'    ) ? "SELECT * FROM $table WHERE borrowernumber = ?"                      :
     ($table eq 'branches'     ) ? "SELECT * FROM $table WHERE     branchcode = ?"                      :
     ($table eq 'suggestions'  ) ? "SELECT * FROM $table WHERE   suggestionid = ?"                      :
-    ($table eq 'aqbooksellers') ? "SELECT * FROM $table WHERE             id = ?"                      : undef ;
+    ($table eq 'aqbooksellers') ? "SELECT * FROM $table WHERE             id = ?"                      :
+    ($table eq 'aqorders'     ) ? "SELECT * FROM $table WHERE    ordernumber = ?"                      :
+    ($table eq 'opac_news'    ) ? "SELECT * FROM $table WHERE          idnew = ?"                      :
+    undef ;
     unless ($query) {
-        warn "ERROR: No parseletter_sth query for table '$table'";
+        warn "ERROR: No _parseletter_sth query for table '$table'";
         return;     # nothing to get
     }
     unless ($handles{$table} = C4::Context->dbh->prepare($query)) {
@@ -468,25 +573,21 @@ sub parseletter_sth {
     return $handles{$table};    # now cache is populated for that $table
 }
 
-sub parseletter {
-    my ( $letter, $table, $pk, $pk2 ) = @_;
-    unless ($letter) {
-        carp "ERROR: parseletter() 1st argument 'letter' empty";
-        return;
-    }
-    my $sth = parseletter_sth($table);
-    unless ($sth) {
-        warn "parseletter_sth('$table') failed to return a valid sth.  No substitution will be done for that table.";
-        return;
-    }
-    if ( $pk2 ) {
-        $sth->execute($pk, $pk2);
-    } else {
-        $sth->execute($pk);
-    }
+=head2 _parseletter($letter, $table, $values)
 
-    my $values = $sth->fetchrow_hashref;
-    
+    parameters :
+    - $letter : a hash to letter fields (title & content useful)
+    - $table : the Koha table to parse.
+    - $values : table record hashref
+    parse all fields from a table, and replace values in title & content with the appropriate value
+    (not exported sub, used only internally)
+
+=cut
+
+my %columns = ();
+sub _parseletter {
+    my ( $letter, $table, $values ) = @_;
+
     # TEMPORARY hack until the expirationdate column is added to reserves
     if ( $table eq 'reserves' && $values->{'waitingdate'} ) {
         my @waitingdate = split /-/, $values->{'waitingdate'};
@@ -500,16 +601,51 @@ sub parseletter {
         )->output();
     }
 
+    if ($letter->{content} && $letter->{content} =~ /<<today>>/) {
+        my @da = localtime();
+        my $todaysdate = "$da[2]:$da[1]  " . C4::Dates->today();
+        $letter->{content} =~ s/<<today>>/$todaysdate/go;
+    }
 
     # and get all fields from the table
-    my $columns = C4::Context->dbh->prepare("SHOW COLUMNS FROM $table");
-    $columns->execute;
-    while ( ( my $field ) = $columns->fetchrow_array ) {
-        my $replacefield = "<<$table.$field>>";
-        $values->{$field} =~ s/\p{P}(?=$)//g if $values->{$field};
-        my $replacedby   = $values->{$field} || '';
-        ($letter->{title}  ) and $letter->{title}   =~ s/$replacefield/$replacedby/g;
-        ($letter->{content}) and $letter->{content} =~ s/$replacefield/$replacedby/g;
+#   my $columns = $columns{$table};
+#   unless ($columns) {
+#       $columns = $columns{$table} =  C4::Context->dbh->selectcol_arrayref("SHOW COLUMNS FROM $table");
+#   }
+#   foreach my $field (@$columns) {
+
+    while ( my ($field, $val) = each %$values ) {
+        my $replacetablefield = "<<$table.$field>>";
+        my $replacefield = "<<$field>>";
+        $val =~ s/\p{P}(?=$)//g if $val;
+        my $replacedby   = defined ($val) ? $val : '';
+        ($letter->{title}  ) and do {
+            $letter->{title}   =~ s/$replacetablefield/$replacedby/g;
+            $letter->{title}   =~ s/$replacefield/$replacedby/g;
+        };
+        ($letter->{content}) and do {
+            $letter->{content} =~ s/$replacetablefield/$replacedby/g;
+            $letter->{content} =~ s/$replacefield/$replacedby/g;
+        };
+    }
+
+    if ($table eq 'borrowers' && $letter->{content}) {
+        if ( my $attributes = GetBorrowerAttributes($values->{borrowernumber}) ) {
+            my %attr;
+            foreach (@$attributes) {
+                my $code = $_->{code};
+                my $val  = $_->{value_description} || $_->{value};
+                $val =~ s/\p{P}(?=$)//g if $val;
+                next unless $val gt '';
+                $attr{$code} ||= [];
+                push @{ $attr{$code} }, $val;
+            }
+            while ( my ($code, $val_ar) = each %attr ) {
+                my $replacefield = "<<borrower-attribute:$code>>";
+                my $replacedby   = join ',', @$val_ar;
+                $letter->{content} =~ s/$replacefield/$replacedby/g;
+            }
+        }
     }
     return $letter;
 }
@@ -694,31 +830,32 @@ returns your letter object, with the content updated.
 sub _add_attachments {
     my $params = shift;
 
-    return unless 'HASH' eq ref $params;
-    foreach my $required_parameter (qw( letter attachments message )) {
-        return unless exists $params->{$required_parameter};
-    }
-    return $params->{'letter'} unless @{ $params->{'attachments'} };
+    my $letter = $params->{'letter'};
+    my $attachments = $params->{'attachments'};
+    return $letter unless @$attachments;
+    my $message = $params->{'message'};
 
     # First, we have to put the body in as the first attachment
-    $params->{'message'}->attach(
-        Type => 'TEXT',
-        Data => $params->{'letter'}->{'content'},
+    $message->attach(
+        Type => $letter->{'content-type'} || 'TEXT',
+        Data => $letter->{'is_html'}
+            ? _wrap_html($letter->{'content'}, $letter->{'title'})
+            : $letter->{'content'},
     );
 
-    foreach my $attachment ( @{ $params->{'attachments'} } ) {
-        $params->{'message'}->attach(
+    foreach my $attachment ( @$attachments ) {
+        $message->attach(
             Type     => $attachment->{'type'},
             Data     => $attachment->{'content'},
             Filename => $attachment->{'filename'},
         );
     }
     # we're forcing list context here to get the header, not the count back from grep.
-    ( $params->{'letter'}->{'content-type'} ) = grep( /^Content-Type:/, split( /\n/, $params->{'message'}->header_as_string ) );
-    $params->{'letter'}->{'content-type'} =~ s/^Content-Type:\s+//;
-    $params->{'letter'}->{'content'} = $params->{'message'}->body_as_string;
+    ( $letter->{'content-type'} ) = grep( /^Content-Type:/, split( /\n/, $params->{'message'}->header_as_string ) );
+    $letter->{'content-type'} =~ s/^Content-Type:\s+//;
+    $letter->{'content'} = $message->body_as_string;
 
-    return $params->{'letter'};
+    return $letter;
 
 }
 
@@ -785,14 +922,17 @@ sub _send_message_by_email ($;$$$) {
 
     my $utf8   = decode('MIME-Header', $message->{'subject'} );
     $message->{subject}= encode('MIME-Header', $utf8);
+    my $subject = encode('utf8', $message->{'subject'});
     my $content = encode('utf8', $message->{'content'});
+    my $content_type = $message->{'content_type'} || 'text/plain; charset="UTF-8"';
+    my $is_html = $content_type =~ m/html/io;
     my %sendmail_params = (
         To   => $to_address,
         From => $message->{'from_address'} || C4::Context->preference('KohaAdminEmailAddress'),
-        Subject => encode('utf8', $message->{'subject'}),
+        Subject => $subject,
         charset => 'utf8',
-        Message => $content,
-        'content-type' => $message->{'content_type'} || 'text/plain; charset="UTF-8"',
+        Message => $is_html ? _wrap_html($content, $subject) : $content,
+        'content-type' => $content_type,
     );
     $sendmail_params{'Auth'} = {user => $username, pass => $password, method => $method} if $username;
     if ( my $bcc = C4::Context->preference('OverdueNoticeBcc') ) {
@@ -810,6 +950,27 @@ sub _send_message_by_email ($;$$$) {
         carp $Mail::Sendmail::error;
         return;
     }
+}
+
+sub _wrap_html {
+    my ($content, $title) = @_;
+
+    my $css = C4::Context->preference("NoticeCSS") || '';
+    $css = qq{<link rel="stylesheet" type="text/css" href="$css">} if $css;
+    return <<EOS;
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>$title</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+$css
+</head>
+<body>
+$content
+</body>
+</html>
+EOS
 }
 
 sub _send_message_by_sms ($) {

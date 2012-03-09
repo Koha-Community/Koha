@@ -23,7 +23,7 @@ package C4::Members;
 use strict;
 #use warnings; FIXME - Bug 2505
 use C4::Context;
-use C4::Dates qw(format_date_in_iso);
+use C4::Dates qw(format_date_in_iso format_date);
 use Digest::MD5 qw(md5_base64);
 use Date::Calc qw/Today Add_Delta_YM check_date Date_to_Days/;
 use C4::Log; # logaction
@@ -31,8 +31,10 @@ use C4::Overdues;
 use C4::Reserves;
 use C4::Accounts;
 use C4::Biblio;
+use C4::Letters;
 use C4::SQLHelper qw(InsertInTable UpdateInTable SearchInTable);
 use C4::Members::Attributes qw(SearchIdMatchingAttribute);
+use C4::NewsChannels; #get slip news
 
 our ($VERSION,@ISA,@EXPORT,@EXPORT_OK,$debug);
 
@@ -91,6 +93,8 @@ BEGIN {
 		&DeleteMessage
 		&GetMessages
 		&GetMessagesCount
+
+        &IssueSlip
 	);
 
 	#Modify data
@@ -2229,7 +2233,80 @@ sub DeleteMessage {
     logaction("MEMBERS", "DELCIRCMESSAGE", $message->{'borrowernumber'}, $message->{'message'}) if C4::Context->preference("BorrowersLog");
 }
 
-END { }    # module clean-up code here (global destructor)
+=head2 IssueSlip
+
+  IssueSlip($branchcode, $borrowernumber, $quickslip)
+
+  Returns letter hash ( see C4::Letters::GetPreparedLetter )
+
+  $quickslip is boolean, to indicate whether we want a quick slip
+
+=cut
+
+sub IssueSlip {
+    my ($branch, $borrowernumber, $quickslip) = @_;
+
+#   return unless ( C4::Context->boolean_preference('printcirculationslips') );
+
+    my $today       = POSIX::strftime("%Y-%m-%d", localtime);
+
+    my $issueslist = GetPendingIssues($borrowernumber);
+    foreach my $it (@$issueslist){
+        if ($it->{'issuedate'} eq $today) {
+            $it->{'today'} = 1;
+        }
+        elsif ($it->{'date_due'} le $today) {
+            $it->{'overdue'} = 1;
+        }
+
+        $it->{'date_due'}=format_date($it->{'date_due'});
+    }
+    my @issues = sort { $b->{'timestamp'} <=> $a->{'timestamp'} } @$issueslist;
+
+    my ($letter_code, %repeat);
+    if ( $quickslip ) {
+        $letter_code = 'ISSUEQSLIP';
+        %repeat =  (
+            'checkedout' => [ map {
+                'biblio' => $_,
+                'items'  => $_,
+                'issues' => $_,
+            }, grep { $_->{'today'} } @issues ],
+        );
+    }
+    else {
+        $letter_code = 'ISSUESLIP';
+        %repeat =  (
+            'checkedout' => [ map {
+                'biblio' => $_,
+                'items'  => $_,
+                'issues' => $_,
+            }, grep { !$_->{'overdue'} } @issues ],
+
+            'overdue' => [ map {
+                'biblio' => $_,
+                'items'  => $_,
+                'issues' => $_,
+            }, grep { $_->{'overdue'} } @issues ],
+
+            'news' => [ map {
+                $_->{'timestamp'} = $_->{'newdate'};
+                { opac_news => $_ }
+            } @{ GetNewsToDisplay("slip") } ],
+        );
+    }
+
+    return  C4::Letters::GetPreparedLetter (
+        module => 'circulation',
+        letter_code => $letter_code,
+        branchcode => $branch,
+        tables => {
+            'branches'    => $branch,
+            'borrowers'   => $borrowernumber,
+        },
+        repeat => \%repeat,
+    );
+}
 
 1;
 

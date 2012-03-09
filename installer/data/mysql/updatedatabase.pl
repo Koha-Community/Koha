@@ -4497,7 +4497,6 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
         print "Upgrade to $DBversion done (Add 461 subfield 9 to default framework)\n";
         SetVersion ($DBversion);
     }
-		
 }
 
 $DBversion = "3.05.00.018";
@@ -4772,6 +4771,116 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     $dbh->do("ALTER TABLE reviews ADD CONSTRAINT reviews_ibfk_2 FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE");
     $dbh->do("ALTER TABLE reviews ADD CONSTRAINT reviews_ibfk_1 FOREIGN KEY (borrowernumber) REFERENCES borrowers (borrowernumber ) ON UPDATE CASCADE ON DELETE SET NULL");
     print "Upgrade to $DBversion done (Bug 7493 - Add constraint linking OPAC comment biblionumber to biblio, OPAC comment borrowernumber to borrowers.)\n";
+    SetVersion($DBversion);
+}
+
+$DBversion = "3.07.00.XXX";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("ALTER TABLE `message_transports` DROP FOREIGN KEY `message_transports_ibfk_3`");
+    $dbh->do("ALTER TABLE `letter` DROP PRIMARY KEY");
+    $dbh->do("ALTER TABLE `letter` ADD `branchcode` varchar(10) default NULL AFTER `code`");
+    $dbh->do("ALTER TABLE `letter` ADD PRIMARY KEY  (`module`,`code`, `branchcode`)");
+    $dbh->do("ALTER TABLE `message_transports` ADD `branchcode` varchar(10) NOT NULL default ''");
+    $dbh->do("ALTER TABLE `message_transports` ADD CONSTRAINT `message_transports_ibfk_3` FOREIGN KEY (`letter_module`, `letter_code`, `branchcode`) REFERENCES `letter` (`module`, `code`, `branchcode`) ON DELETE CASCADE ON UPDATE CASCADE");
+    $dbh->do("ALTER TABLE `letter` ADD `is_html` tinyint(1) default 0 AFTER `name`");
+
+    $dbh->do("INSERT INTO `letter` (module, code, name, title, content, is_html)
+              VALUES ('circulation','ISSUESLIP','Issue Slip','Issue Slip', '<h3><<branches.branchname>></h3>
+Checked out to <<borrowers.title>> <<borrowers.firstname>> <<borrowers.initials>> <<borrowers.surname>> <br />
+(<<borrowers.cardnumber>>) <br />
+
+<<today>><br />
+
+<h4>Checked Out</h4>
+<checkedout>
+<p>
+<<biblio.title>> <br />
+Barcode: <<items.barcode>><br />
+Date due: <<issues.date_due>><br />
+</p>
+</checkedout>
+
+<h4>Overdues</h4>
+<overdue>
+<p>
+<<biblio.title>> <br />
+Barcode: <<items.barcode>><br />
+Date due: <<issues.date_due>><br />
+</p>
+</overdue>
+
+<hr>
+
+<h4 style=\"text-align: center; font-style:italic;\">News</h4>
+<news>
+<div class=\"newsitem\">
+<h5 style=\"margin-bottom: 1px; margin-top: 1px\"><b><<opac_news.title>></b></h5>
+<p style=\"margin-bottom: 1px; margin-top: 1px\"><<opac_news.new>></p>
+<p class=\"newsfooter\" style=\"font-size: 8pt; font-style:italic; margin-bottom: 1px; margin-top: 1px\">Posted on <<opac_news.timestamp>></p>
+<hr />
+</div>
+</news>', 1)");
+    $dbh->do("INSERT INTO `letter` (module, code, name, title, content, is_html)
+              VALUES ('circulation','ISSUEQSLIP','Issue Quick Slip','Issue Quick Slip', '<h3><<branches.branchname>></h3>
+Checked out to <<borrowers.title>> <<borrowers.firstname>> <<borrowers.initials>> <<borrowers.surname>> <br />
+(<<borrowers.cardnumber>>) <br />
+
+<<today>><br />
+
+<h4>Checked Out Today</h4>
+<checkedout>
+<p>
+<<biblio.title>> <br />
+Barcode: <<items.barcode>><br />
+Date due: <<issues.date_due>><br />
+</p>
+</checkedout>', 1)");
+    $dbh->do("INSERT INTO `letter` (module, code, name, title, content, is_html)
+              VALUES ('circulation','RESERVESLIP','Reserve Slip','Reserve Slip', '<h5>Date: <<today>></h5>
+
+<h3> Transfer to/Hold in <<branches.branchname>></h3>
+
+<h3><<borrowers.surname>>, <<borrowers.firstname>></h3>
+
+<ul>
+    <li><<borrowers.cardnumber>></li>
+    <li><<borrowers.phone>></li>
+    <li> <<borrowers.address>><br />
+         <<borrowers.address2>><br />
+         <<borrowers.city >>  <<borrowers.zipcode>>
+    </li>
+    <li><<borrowers.email>></li>
+</ul>
+<br />
+<h3>ITEM ON HOLD</h3>
+<h4><<biblio.title>></h4>
+<h5><<biblio.author>></h5>
+<ul>
+   <li><<items.barcode>></li>
+   <li><<items.itemcallnumber>></li>
+   <li><<reserves.waitingdate>></li>
+</ul>
+<p>Notes:
+<pre><<reserves.reservenotes>></pre>
+</p>', 1)");
+    $dbh->do("INSERT INTO `letter` (module, code, name, title, content, is_html)
+              VALUES ('circulation','TRANSFERSLIP','Transfer Slip','Transfer Slip', '<h5>Date: <<today>></h5>
+<h3>Transfer to <<branches.branchname>></h3>
+
+<h3>ITEM</h3>
+<h4><<biblio.title>></h4>
+<h5><<biblio.author>></h5>
+<ul>
+   <li><<items.barcode>></li>
+   <li><<items.itemcallnumber>></li>
+</ul>', 1)");
+
+    $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('NoticeCSS','','Notices CSS url.',NULL,'free')");
+    $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('SlipCSS','','Slips CSS url.',NULL,'free')");
+
+    $dbh->do("UPDATE `letter` SET content = replace(content, '<<title>>', '<<biblio.title>>') WHERE code = 'HOLDPLACED'");
+
+    print "Upgrade to $DBversion done (Add branchcode and is_html to letter table; Default ISSUESLIP, RESERVESLIP and TRANSFERSLIP letters; Add NoticeCSS and SlipCSS sysprefs)\n";
     SetVersion($DBversion);
 }
 

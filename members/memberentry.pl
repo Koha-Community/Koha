@@ -347,10 +347,7 @@ if ((!$nok) and $nodouble and ($op eq 'insert' or $op eq 'save')){
             # if we manage to find a valid email address, send notice 
             if ($emailaddr) {
                 $newdata{emailaddr} = $emailaddr;
-                my $letter = getletter ('members', "ACCTDETAILS:$newdata{'branchcode'}") ;
-                # if $branch notice fails, then email a default notice instead.
-                $letter = getletter ('members', "ACCTDETAILS")  if !$letter;
-                SendAlerts ( 'members' , \%newdata , $letter ) if $letter
+                SendAlerts ( 'members', \%newdata, "ACCTDETAILS" );
             }
         } 
 

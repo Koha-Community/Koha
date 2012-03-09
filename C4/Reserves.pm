@@ -121,6 +121,8 @@ BEGIN {
         
         &AlterPriority
         &ToggleLowestPriority
+
+        &ReserveSlip
     );
     @EXPORT_OK = qw( MergeHolds );
 }    
@@ -194,31 +196,30 @@ sub AddReserve {
     # Send e-mail to librarian if syspref is active
     if(C4::Context->preference("emailLibrarianWhenHoldIsPlaced")){
         my $borrower = C4::Members::GetMember(borrowernumber => $borrowernumber);
-        my $biblio   = GetBiblioData($biblionumber);
-        my $letter = C4::Letters::getletter( 'reserves', 'HOLDPLACED');
-	my $branchcode = $borrower->{branchcode};
-        my $branch_details = C4::Branch::GetBranchDetail($branchcode);
-        my $admin_email_address =$branch_details->{'branchemail'} || C4::Context->preference('KohaAdminEmailAddress');
+        my $branch_details = C4::Branch::GetBranchDetail($borrower->{branchcode});
+        if ( my $letter =  C4::Letters::GetPreparedLetter (
+            module => 'reserves',
+            letter_code => 'HOLDPLACED',
+            branchcode => $branch,
+            tables => {
+                'branches'  => $branch_details,
+                'borrowers' => $borrower,
+                'biblio'    => $biblionumber,
+            },
+        ) ) {
 
-        my %keys = (%$borrower, %$biblio);
-        foreach my $key (keys %keys) {
-            my $replacefield = "<<$key>>";
-            $letter->{content} =~ s/$replacefield/$keys{$key}/g;
-            $letter->{title} =~ s/$replacefield/$keys{$key}/g;
+            my $admin_email_address =$branch_details->{'branchemail'} || C4::Context->preference('KohaAdminEmailAddress');
+
+            C4::Letters::EnqueueLetter(
+                {   letter                 => $letter,
+                    borrowernumber         => $borrowernumber,
+                    message_transport_type => 'email',
+                    from_address           => $admin_email_address,
+                    to_address           => $admin_email_address,
+                }
+            );
         }
-        
-        C4::Letters::EnqueueLetter(
-                            {   letter                 => $letter,
-                                borrowernumber         => $borrowernumber,
-                                message_transport_type => 'email',
-                                from_address           => $admin_email_address,
-                                to_address           => $admin_email_address,
-                            }
-                        );
-        
-
     }
-
 
     #}
     ($const eq "o" || $const eq "e") or return;   # FIXME: why not have a useful return value?
@@ -1720,21 +1721,21 @@ sub _koha_notify_reserve {
 
     my $admin_email_address = $branch_details->{'branchemail'} || C4::Context->preference('KohaAdminEmailAddress');
 
-    my $letter = getletter( 'reserves', $letter_code );
-    die "Could not find a letter called '$letter_code' in the 'reserves' module" unless( $letter );
+    my $letter =  C4::Letters::GetPreparedLetter (
+        module => 'reserves',
+        letter_code => $letter_code,
+        branchcode => $reserve->{branchcode},
+        tables => {
+            'branches'  => $branch_details,
+            'borrowers' => $borrower,
+            'biblio'    => $biblionumber,
+            'reserves'  => $reserve,
+            'items', $reserve->{'itemnumber'},
+        },
+        substitute => { today => C4::Dates->new()->output() },
+    ) or die "Could not find a letter called '$letter_code' in the 'reserves' module";
 
-    C4::Letters::parseletter( $letter, 'branches', $reserve->{'branchcode'} );
-    C4::Letters::parseletter( $letter, 'borrowers', $borrowernumber );
-    C4::Letters::parseletter( $letter, 'biblio', $biblionumber );
-    C4::Letters::parseletter( $letter, 'reserves', $borrowernumber, $biblionumber );
 
-    if ( $reserve->{'itemnumber'} ) {
-        C4::Letters::parseletter( $letter, 'items', $reserve->{'itemnumber'} );
-    }
-    my $today = C4::Dates->new()->output();
-    $letter->{'title'} =~ s/<<today>>/$today/g;
-    $letter->{'content'} =~ s/<<today>>/$today/g;
-    $letter->{'content'} =~ s/<<[a-z0-9_]+\.[a-z0-9]+>>//g; #remove any stragglers
 
     if ( $print_mode ) {
         C4::Letters::EnqueueLetter( {
@@ -1907,6 +1908,36 @@ sub MergeHolds {
     }
 }
 
+
+=head2 ReserveSlip
+
+  ReserveSlip($branchcode, $borrowernumber, $biblionumber)
+
+  Returns letter hash ( see C4::Letters::GetPreparedLetter ) or undef
+
+=cut
+
+sub ReserveSlip {
+    my ($branch, $borrowernumber, $biblionumber) = @_;
+
+#   return unless ( C4::Context->boolean_preference('printreserveslips') );
+
+    my $reserve = GetReserveInfo($borrowernumber,$biblionumber )
+      or return;
+
+    return  C4::Letters::GetPreparedLetter (
+        module => 'circulation',
+        letter_code => 'RESERVESLIP',
+        branchcode => $branch,
+        tables => {
+            'reserves'    => $reserve,
+            'branches'    => $reserve->{branchcode},
+            'borrowers'   => $reserve,
+            'biblio'      => $reserve,
+            'items'       => $reserve,
+        },
+    );
+}
 
 =head1 AUTHOR
 

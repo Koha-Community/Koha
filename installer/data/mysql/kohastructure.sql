@@ -1169,10 +1169,12 @@ DROP TABLE IF EXISTS `letter`;
 CREATE TABLE `letter` ( -- table for all notice templates in Koha
   `module` varchar(20) NOT NULL default '', -- Koha module that triggers this notice
   `code` varchar(20) NOT NULL default '', -- unique identifier for this notice
+  `branchcode` varchar(10) default NULL, -- foreign key, linking to the branches table for the location the item was checked out
   `name` varchar(100) NOT NULL default '', -- plain text name for this notice
+  `is_html` tinyint(1) default 0,
   `title` varchar(200) NOT NULL default '', -- subject line of the notice
   `content` text, -- body text for the notice
-  PRIMARY KEY  (`module`,`code`)
+  PRIMARY KEY  (`module`,`code`, `branchcode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -2273,12 +2275,13 @@ CREATE TABLE `message_transports` (
   `is_digest` tinyint(1) NOT NULL default '0',
   `letter_module` varchar(20) NOT NULL default '',
   `letter_code` varchar(20) NOT NULL default '',
+  `branchcode` varchar(10) NOT NULL default '',
   PRIMARY KEY  (`message_attribute_id`,`message_transport_type`,`is_digest`),
   KEY `message_transport_type` (`message_transport_type`),
   KEY `letter_module` (`letter_module`,`letter_code`),
   CONSTRAINT `message_transports_ibfk_1` FOREIGN KEY (`message_attribute_id`) REFERENCES `message_attributes` (`message_attribute_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `message_transports_ibfk_2` FOREIGN KEY (`message_transport_type`) REFERENCES `message_transport_types` (`message_transport_type`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `message_transports_ibfk_3` FOREIGN KEY (`letter_module`, `letter_code`) REFERENCES `letter` (`module`, `code`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `message_transports_ibfk_3` FOREIGN KEY (`letter_module`, `letter_code`, `branchcode`) REFERENCES `letter` (`module`, `code`, `branchcode`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --

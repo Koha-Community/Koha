@@ -111,16 +111,11 @@ for my $vendor (@suppliers) {
     
     for my $basket ( @{$baskets} ) {
         my $authorisedby = $basket->{authorisedby};
-        my $basketbranch = ''; # set a blank branch to start with
-        if ( GetMember( borrowernumber => $authorisedby ) ) {
-           # authorisedby may not be a valid borrowernumber; it's not foreign-key constrained!
-           $basketbranch = GetMember( borrowernumber => $authorisedby )->{branchcode};
-        }
         
         if ($userenv->{'flags'} & 1 || #user is superlibrarian
                (haspermission( $uid, { acquisition => q{*} } ) && #user has acq permissions and
                    ($viewbaskets eq 'all' || #user is allowed to see all baskets
-                   ($viewbaskets eq 'branch' && $authorisedby && $userbranch eq $basketbranch) || #basket belongs to user's branch
+                   ($viewbaskets eq 'branch' && $authorisedby && $userbranch eq GetMember( borrowernumber => $authorisedby )->{branchcode}) || #basket belongs to user's branch
                    ($basket->{authorisedby} &&  $viewbaskets == 'user' && $authorisedby == $loggedinuser) #user created this basket
                    ) 
                 ) 

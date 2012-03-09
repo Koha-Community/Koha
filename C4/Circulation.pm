@@ -99,6 +99,7 @@ BEGIN {
                 &IsBranchTransferAllowed
                 &CreateBranchTransferLimit
                 &DeleteBranchTransferLimits
+        &TransferSlip
 	);
 
     # subs to deal with offline circulation
@@ -2676,11 +2677,18 @@ sub SendCirculationAlert {
         borrowernumber => $borrower->{borrowernumber},
         message_name   => $message_name{$type},
     });
-    my $letter = C4::Letters::getletter('circulation', $type);
-    C4::Letters::parseletter($letter, 'biblio',      $item->{biblionumber});
-    C4::Letters::parseletter($letter, 'biblioitems', $item->{biblionumber});
-    C4::Letters::parseletter($letter, 'borrowers',   $borrower->{borrowernumber});
-    C4::Letters::parseletter($letter, 'branches',    $branch);
+    my $letter =  C4::Letters::GetPreparedLetter (
+        module => 'circulation',
+        letter_code => $type,
+        branchcode => $branch,
+        tables => {
+            'biblio'      => $item->{biblionumber},
+            'biblioitems' => $item->{biblionumber},
+            'borrowers'   => $borrower,
+            'branches'    => $branch,
+        }
+    ) or return;
+
     my @transports = @{ $borrower_preferences->{transports} };
     # warn "no transports" unless @transports;
     for (@transports) {
@@ -2695,7 +2703,8 @@ sub SendCirculationAlert {
             $message->update;
         }
     }
-    $letter;
+
+    return $letter;
 }
 
 =head2 updateWrongTransfer
@@ -3145,6 +3154,35 @@ sub ProcessOfflineIssue {
     }
 }
 
+
+
+=head2 TransferSlip
+
+  TransferSlip($user_branch, $itemnumber, $to_branch)
+
+  Returns letter hash ( see C4::Letters::GetPreparedLetter ) or undef
+
+=cut
+
+sub TransferSlip {
+    my ($branch, $itemnumber, $to_branch) = @_;
+
+    my $item =  GetItem( $itemnumber )
+      or return;
+
+    my $pulldate = C4::Dates->new();
+
+    return C4::Letters::GetPreparedLetter (
+        module => 'circulation',
+        letter_code => 'TRANSFERSLIP',
+        branchcode => $branch,
+        tables => {
+            'branches'    => $to_branch,
+            'biblio'      => $item->{biblionumber},
+            'items'       => $item,
+        },
+    );
+}
 
 
 1;

@@ -425,20 +425,24 @@ sub ModSuggestion {
     if ($suggestion->{STATUS}) {
         # fetch the entire updated suggestion so that we can populate the letter
         my $full_suggestion = GetSuggestion($suggestion->{suggestionid});
-        my $letter = C4::Letters::getletter('suggestions', $full_suggestion->{STATUS});
-        if ($letter) {
-            C4::Letters::parseletter($letter, 'branches',    $full_suggestion->{branchcode});
-            C4::Letters::parseletter($letter, 'borrowers',   $full_suggestion->{suggestedby});
-            C4::Letters::parseletter($letter, 'suggestions', $full_suggestion->{suggestionid});
-            C4::Letters::parseletter($letter, 'biblio',      $full_suggestion->{biblionumber});
-            my $enqueued = C4::Letters::EnqueueLetter({
+        if ( my $letter =  C4::Letters::GetPreparedLetter (
+            module => 'suggestions',
+            letter_code => $full_suggestion->{STATUS},
+            branchcode => $full_suggestion->{branchcode},
+            tables => {
+                'branches'    => $full_suggestion->{branchcode},
+                'borrowers'   => $full_suggestion->{suggestedby},
+                'suggestions' => $full_suggestion,
+                'biblio'      => $full_suggestion->{biblionumber},
+            },
+        ) ) {
+            C4::Letters::EnqueueLetter({
                 letter                  => $letter,
                 borrowernumber          => $full_suggestion->{suggestedby},
                 suggestionid            => $full_suggestion->{suggestionid},
                 LibraryName             => C4::Context->preference("LibraryName"),
                 message_transport_type  => 'email',
-            });
-            if (!$enqueued){warn "can't enqueue letter $letter";}
+            }) or warn "can't enqueue letter $letter";
         }
     }
     return $status_update_table;

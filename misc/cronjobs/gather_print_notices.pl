@@ -39,11 +39,9 @@ use Getopt::Long;
 
 sub usage {
     print STDERR <<USAGE;
-Usage: $0 [ -s STYLESHEET ] OUTPUT_DIRECTORY
+Usage: $0 OUTPUT_DIRECTORY
   Will print all waiting print notices to
   OUTPUT_DIRECTORY/notices-CURRENT_DATE.html .
-  If the filename of a CSS stylesheet is specified with -s, the contents of that
-  file will be included in the HTML.
 USAGE
     exit $_[0];
 }
@@ -51,7 +49,6 @@ USAGE
 my ( $stylesheet, $help );
 
 GetOptions(
-    's:s' => \$stylesheet,
     'h|help' => \$help,
 ) || usage( 1 );
 
@@ -71,16 +68,9 @@ exit unless( @messages );
 open OUTPUT, '>', File::Spec->catdir( $output_directory, "holdnotices-" . $today->output( 'iso' ) . ".html" );
 
 my $template = C4::Templates::gettemplate( 'batch/print-notices.tmpl', 'intranet', new CGI );
-my $stylesheet_contents = '';
-
-if ($stylesheet) {
-  open STYLESHEET, '<', $stylesheet;
-  while ( <STYLESHEET> ) { $stylesheet_contents .= $_ }
-  close STYLESHEET;
-}
 
 $template->param(
-    stylesheet => $stylesheet_contents,
+    stylesheet => C4::Context->preference("NoticeCSS"),
     today => $today->output(),
     messages => \@messages,
 );

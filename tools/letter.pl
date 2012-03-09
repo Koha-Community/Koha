@@ -46,14 +46,35 @@ use CGI;
 use C4::Auth;
 use C4::Context;
 use C4::Output;
+use C4::Branch; # GetBranches
+use C4::Members::Attributes;
 
-# letter_exists($module, $code)
-# - return true if a letter with the given $module and $code exists
+# _letter_from_where($branchcode,$module, $code)
+# - return FROM WHERE clause and bind args for a letter
+sub _letter_from_where {
+    my ($branchcode, $module, $code) = @_;
+    my $sql = q{FROM letter WHERE branchcode = ? AND module = ? AND code = ?};
+    my @args = ($branchcode || '', $module, $code);
+# Mysql is retarded. cause branchcode is part of the primary key it cannot be null. How does that
+# work with foreign key constraint I wonder...
+
+#   if ($branchcode) {
+#       $sql .= " AND branchcode = ?";
+#       push @args, $branchcode;
+#   } else {
+#       $sql .= " AND branchcode IS NULL";
+#   }
+
+    return ($sql, \@args);
+}
+
+# letter_exists($branchcode,$module, $code)
+# - return true if a letter with the given $branchcode, $module and $code exists
 sub letter_exists {
-    my ($module, $code) = @_;
+    my ($sql, $args) = _letter_from_where(@_);
     my $dbh = C4::Context->dbh;
-    my $letters = $dbh->selectall_arrayref(q{SELECT name FROM letter WHERE module = ? AND code = ?}, undef, $module, $code);
-    return @{$letters};
+    my $letter = $dbh->selectrow_hashref("SELECT * $sql", undef, @$args);
+    return $letter;
 }
 
 # $protected_letters = protected_letters()
@@ -67,16 +88,14 @@ sub protected_letters {
 my $input       = new CGI;
 my $searchfield = $input->param('searchfield');
 my $script_name = '/cgi-bin/koha/tools/letter.pl';
+my $branchcode  = $input->param('branchcode');
 my $code        = $input->param('code');
 my $module      = $input->param('module');
 my $content     = $input->param('content');
-my $op          = $input->param('op');
+my $op          = $input->param('op') || '';
 my $dbh = C4::Context->dbh;
-if (!defined $module ) {
-    $module = q{};
-}
 
-my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
+my ( $template, $borrowernumber, $cookie, $staffflags ) = get_template_and_user(
     {
         template_name   => 'tools/letter.tmpl',
         query           => $input,
@@ -87,32 +106,39 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     }
 );
 
-if (!defined $op) {
-    $op = q{}; # silence errors from eq
-}
+my $my_branch = C4::Context->preference("IndependantBranches") && !$staffflags->{'superlibrarian'}
+  ?  C4::Context->userenv()->{'branch'}
+  : undef;
 # we show only the TMPL_VAR names $op
 
 $template->param(
+    independant_branch => $my_branch,
 	script_name => $script_name,
+  searchfield => $searchfield,
 	action => $script_name
 );
 
+if ($op eq 'copy') {
+    add_copy();
+    $op = 'add_form';
+}
+
 if ($op eq 'add_form') {
-    add_form($module, $code);
+    add_form($branchcode, $module, $code);
 }
 elsif ( $op eq 'add_validate' ) {
     add_validate();
     $op = q{}; # next operation is to return to default screen
 }
 elsif ( $op eq 'delete_confirm' ) {
-    delete_confirm($module, $code);
+    delete_confirm($branchcode, $module, $code);
 }
 elsif ( $op eq 'delete_confirmed' ) {
-    delete_confirmed($module, $code);
+    delete_confirmed($branchcode, $module, $code);
     $op = q{}; # next operation is to return to default screen
 }
 else {
-    default_display($searchfield);
+    default_display($branchcode,$searchfield);
 }
 
 # Do this last as delete_confirmed resets
@@ -125,23 +151,21 @@ if ($op) {
 output_html_with_http_headers $input, $cookie, $template->output;
 
 sub add_form {
-    my ($module, $code ) = @_;
+    my ($branchcode,$module, $code ) = @_;
 
     my $letter;
     # if code has been passed we can identify letter and its an update action
     if ($code) {
-        $letter = $dbh->selectrow_hashref(q{SELECT module, code, name, title, content FROM letter WHERE module=? AND code=?},
-            undef, $module, $code);
+        $letter = letter_exists($branchcode,$module, $code);
+    }
+    if ($letter) {
         $template->param( modify => 1 );
         $template->param( code   => $letter->{code} );
     }
     else { # initialize the new fields
         $letter = {
-            module  => $module,
-            code    => q{},
-            name    => q{},
-            title   => q{},
-            content => q{},
+            branchcode => $branchcode,
+            module     => $module,
         };
         $template->param( adding => 1 );
     }
@@ -173,14 +197,20 @@ sub add_form {
             {value => q{},             text => '---ITEMS---'  },
             {value => 'items.content', text => 'items.content'},
             add_fields('issues','borrowers');
+        if ($module eq 'circulation') {
+            push @{$field_selection}, add_fields('opac_news');
+        }
     }
 
     $template->param(
-        name    => $letter->{name},
-        title   => $letter->{title},
-        content => $letter->{content},
-        module  => $module,
-        $module => 1,
+        branchcode => $letter->{branchcode},
+        name       => $letter->{name},
+        is_html    => $letter->{is_html},
+        title      => $letter->{title},
+        content    => $letter->{content},
+        module     => $module,
+        $module    => 1,
+        branchloop => _branchloop($branchcode),
         SQLfieldname => $field_selection,
     );
     return;
@@ -188,37 +218,56 @@ sub add_form {
 
 sub add_validate {
     my $dbh        = C4::Context->dbh;
-    my $module     = $input->param('module');
-    my $oldmodule  = $input->param('oldmodule');
-    my $code       = $input->param('code');
-    my $name       = $input->param('name');
-    my $title      = $input->param('title');
-    my $content    = $input->param('content');
-    if (letter_exists($oldmodule, $code)) {
+    my $oldbranchcode = $input->param('oldbranchcode');
+    my $branchcode    = $input->param('branchcode') || '';
+    my $module        = $input->param('module');
+    my $oldmodule     = $input->param('oldmodule');
+    my $code          = $input->param('code');
+    my $name          = $input->param('name');
+    my $is_html       = $input->param('is_html');
+    my $title         = $input->param('title');
+    my $content       = $input->param('content');
+    if (letter_exists($oldbranchcode,$oldmodule, $code)) {
         $dbh->do(
-            q{UPDATE letter SET module = ?, code = ?, name = ?, title = ?, content = ? WHERE module = ? AND code = ?},
+            q{UPDATE letter SET branchcode = ?, module = ?, name = ?, is_html = ?, title = ?, content = ? WHERE branchcode = ? AND module = ? AND code = ?},
             undef,
-            $module, $code, $name, $title, $content,
-            $oldmodule, $code
+            $branchcode, $module, $name, $is_html || 0, $title, $content,
+            $oldbranchcode, $oldmodule, $code
         );
     } else {
         $dbh->do(
-            q{INSERT INTO letter (module,code,name,title,content) VALUES (?,?,?,?,?)},
+            q{INSERT INTO letter (branchcode,module,code,name,is_html,title,content) VALUES (?,?,?,?,?,?,?)},
             undef,
-            $module, $code, $name, $title, $content
+            $branchcode, $module, $code, $name, $is_html || 0, $title, $content
         );
     }
     # set up default display
-    default_display();
-    return;
+    default_display($branchcode);
+}
+
+sub add_copy {
+    my $dbh        = C4::Context->dbh;
+    my $oldbranchcode = $input->param('oldbranchcode');
+    my $branchcode    = $input->param('branchcode');
+    my $module        = $input->param('module');
+    my $code          = $input->param('code');
+
+    return if letter_exists($branchcode,$module, $code);
+
+    my $old_letter = letter_exists($oldbranchcode,$module, $code);
+
+    $dbh->do(
+        q{INSERT INTO letter (branchcode,module,code,name,is_html,title,content) VALUES (?,?,?,?,?,?,?)},
+        undef,
+        $branchcode, $module, $code, $old_letter->{name}, $old_letter->{is_html}, $old_letter->{title}, $old_letter->{content}
+    );
 }
 
 sub delete_confirm {
-    my ($module, $code) = @_;
+    my ($branchcode, $module, $code) = @_;
     my $dbh = C4::Context->dbh;
-    my $letter = $dbh->selectrow_hashref(q|SELECT  name FROM letter WHERE module = ? AND code = ?|,
-        { Slice => {} },
-        $module, $code);
+    my $letter = letter_exists($branchcode, $module, $code);
+    $template->param( branchcode => $branchcode, branchname => GetBranchName($branchcode) );
     $template->param( code => $code );
     $template->param( module => $module);
     $template->param( name => $letter->{name});
@@ -226,40 +275,53 @@ sub delete_confirm {
 }
 
 sub delete_confirmed {
-    my ($module, $code) = @_;
+    my ($branchcode, $module, $code) = @_;
+    my ($sql, $args) = _letter_from_where($branchcode, $module, $code);
     my $dbh    = C4::Context->dbh;
-    $dbh->do('DELETE FROM letter WHERE module=? AND code=?',{},$module,$code);
+    $dbh->do("DELETE $sql", undef, @$args);
     # setup default display for screen
-    default_display();
+    default_display($branchcode);
     return;
 }
 
 sub retrieve_letters {
-    my $searchstring = shift;
+    my ($branchcode, $searchstring) = @_;
+
+    $branchcode = $my_branch if $branchcode && $my_branch;
+
     my $dbh = C4::Context->dbh;
-    if ($searchstring) {
-        if ($searchstring=~m/(\S+)/) {
-            $searchstring = $1 . q{%};
-            return $dbh->selectall_arrayref('SELECT module, code, name FROM letter WHERE code LIKE ? ORDER BY module, code',
-                { Slice => {} }, $searchstring);
-        }
+    my ($sql, @where, @args);
+    $sql = "SELECT branchcode, module, code, name, branchname
+            FROM letter
+            LEFT OUTER JOIN branches USING (branchcode)";
+    if ($searchstring && $searchstring=~m/(\S+)/) {
+        $searchstring = $1 . q{%};
+        push @where, 'code LIKE ?';
+        push @args, $searchstring;
     }
-    else {
-        return $dbh->selectall_arrayref('SELECT module, code, name FROM letter ORDER BY module, code', { Slice => {} });
+    elsif ($branchcode) {
+        push @where, 'branchcode = ?';
+        push @args, $branchcode || '';
     }
-    return;
+    elsif ($my_branch) {
+        push @where, "(branchcode = ? OR branchcode = '')";
+        push @args, $my_branch;
+    }
+
+    $sql .= " WHERE ".join(" AND ", @where) if @where;
+    $sql .= " ORDER BY module, code, branchcode";
+#   use Data::Dumper; die Dumper($sql, \@args);
+    return $dbh->selectall_arrayref($sql, { Slice => {} }, @args);
 }
 
 sub default_display {
-    my $searchfield = shift;
-    my $results;
+    my ($branchcode, $searchfield) = @_;
+
     if ( $searchfield  ) {
         $template->param( search      => 1 );
-        $template->param( searchfield => $searchfield );
-        $results = retrieve_letters($searchfield);
-    } else {
-        $results = retrieve_letters();
     }
+    my $results = retrieve_letters($branchcode,$searchfield);
+
     my $loop_data = [];
     my $protected_letters = protected_letters();
     foreach my $row (@{$results}) {
@@ -267,8 +329,27 @@ sub default_display {
         push @{$loop_data}, $row;
 
     }
-    $template->param( letter => $loop_data );
-    return;
+
+    $template->param(
+        letter => $loop_data,
+        branchloop => _branchloop($branchcode),
+    );
+}
+
+sub _branchloop {
+    my ($branchcode) = @_;
+
+    my $branches = GetBranches();
+    my @branchloop;
+    for my $thisbranch (sort { $branches->{$a}->{branchname} cmp $branches->{$b}->{branchname} } keys %$branches) {
+        push @branchloop, {
+            value      => $thisbranch,
+            selected   => $branchcode && $thisbranch eq $branchcode,
+            branchname => $branches->{$thisbranch}->{'branchname'},
+        };
+    }
+
+    return \@branchloop;
 }
 
 sub add_fields {
@@ -307,6 +388,7 @@ sub get_columns_for {
             text  => $tlabel,
         };
     }
+
     my $sql = "SHOW COLUMNS FROM $table";# TODO not db agnostic
     my $table_prefix = $table . q|.|;
     my $rows = C4::Context->dbh->selectall_arrayref($sql, { Slice => {} });
@@ -315,6 +397,16 @@ sub get_columns_for {
         push @fields, {
             value => $table_prefix . $row->{Field},
             text  => $table_prefix . $row->{Field},
+        }
+    }
+    if ($table eq 'borrowers') {
+        if ( my $attributes = C4::Members::Attributes::GetAttributes() ) {
+            foreach (@$attributes) {
+                push @fields, {
+                    value => "borrower-attribute:$_",
+                    text  => "attribute:$_",
+                }
+            }
         }
     }
     return @fields;

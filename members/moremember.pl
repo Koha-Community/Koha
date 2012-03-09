@@ -51,7 +51,6 @@ use C4::Reserves;
 use C4::Branch; # GetBranchName
 use C4::Overdues qw/CheckBorrowerDebarred/;
 use C4::Form::MessagingPreferences;
-use C4::NewsChannels; #get slip news
 use List::MoreUtils qw/uniq/;
 use C4::Members::Attributes qw(GetBorrowerAttributes);
 
@@ -482,15 +481,6 @@ $template->param(
     samebranch     => $samebranch,
     quickslip		  => $quickslip,
 	activeBorrowerRelationship => (C4::Context->preference('borrowerRelationship') ne ''),
-);
-
-#Get the slip news items
-my $all_koha_news   = &GetNewsToDisplay("slip");
-my $koha_news_count = scalar @$all_koha_news;
-
-$template->param(
-    koha_news       => $all_koha_news,
-    koha_news_count => $koha_news_count
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

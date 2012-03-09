@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
-
-# Copyright 2008 LibLime
+# Copyright 2000-2002 Katipo Communications
+# Copyright 2010 BibLibre
 #
 # This file is part of Koha.
 #
@@ -18,57 +18,75 @@
 # with Koha; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
+
+=head1 moremember.pl
+
+ script to do a borrower enquiry/bring up borrower details etc
+ Displays all the details about a borrower
+ written 20/12/99 by chris@katipo.co.nz
+ last modified 21/1/2000 by chris@katipo.co.nz
+ modified 31/1/2001 by chris@katipo.co.nz
+   to not allow items on request to be renewed
+
+ needs html removed and to use the C4::Output more, but its tricky
+
+=cut
+
 use strict;
 #use warnings; FIXME - Bug 2505
-use C4::Context;
-use C4::Output;
 use CGI;
+use C4::Context;
 use C4::Auth qw/:DEFAULT get_session/;
-use C4::Reserves;
+use C4::Output;
+use C4::Members;
+use C4::Koha;
+
+#use Smart::Comments;
+#use Data::Dumper;
 
 use vars qw($debug);
 
 BEGIN {
-    $debug = $ENV{DEBUG} || 0;
+	$debug = $ENV{DEBUG} || 0;
 }
 
 my $input = new CGI;
 my $sessionID = $input->cookie("CGISESSID");
 my $session = get_session($sessionID);
 
-my $biblionumber = $input->param('biblionumber');
-my $borrowernumber = $input->param('borrowernumber');
-my $transfer = $input->param('transfer');
+$debug or $debug = $input->param('debug') || 0;
+my $print = $input->param('print');
+my $error = $input->param('error');
+
+# circ staff who process checkouts but can't edit
+# patrons still need to be able to print receipts
+my $flagsrequired = { circulate => "circulate_remaining_permissions" };
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-    {   
+    {
         template_name   => "circ/printslip.tmpl",
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,
-        flagsrequired   => { circulate => "circulate_remaining_permissions" },
-        debug           => $debug,
+        flagsrequired   => $flagsrequired,
+        debug           => 1,
     }
 );
 
-my $userenv = C4::Context->userenv;
+my $borrowernumber = $input->param('borrowernumber');
+my $branch=C4::Context->userenv->{'branch'};
 my ($slip, $is_html);
-if ( my $letter = ReserveSlip ($session->param('branch') || $userenv->{branch}, $borrowernumber, $biblionumber) ) {
+if (my $letter = IssueSlip ($session->param('branch') || $branch, $borrowernumber, $print eq "qslip")) {
     $slip = $letter->{content};
     $is_html = $letter->{is_html};
 }
-else {
-    $slip = "Reserve not found";
-}
+
 $template->param(
     slip => $slip,
     plain => !$is_html,
-    title => "Koha -- Circulation: Transfers",
+    title => "Print Receipt for $borrowernumber",
     stylesheet => C4::Context->preference("SlipCSS"),
+    error           => $error,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
-
-
-
-

@@ -18,9 +18,15 @@ How to add a new message to the queue:
   use C4::Items;
   my $borrower = { borrowernumber => 1 };
   my $item     = C4::Items::GetItem(1);
-  my $letter   = C4::Letters::getletter('circulation', 'CHECKOUT');
-  C4::Letters::parseletter($letter, 'biblio', $item->{biblionumber});
-  C4::Letters::parseletter($letter, 'biblioitems', $item->{biblionumber});
+  my $letter =  C4::Letters::GetPreparedLetter (
+      module => 'circulation',
+      letter_code => 'CHECKOUT',
+      branchcode => $branch,
+      tables => {
+          'biblio', $item->{biblionumber},
+          'biblioitems', $item->{biblionumber},
+      },
+  );
   C4::Message->enqueue($letter, $borrower->{borrowernumber}, 'email');
 
 How to update a borrower's last checkout message:

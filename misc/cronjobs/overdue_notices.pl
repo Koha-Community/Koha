@@ -460,16 +460,6 @@ END_SQL
             {
                 $verbose and warn "borrower $firstname, $lastname ($borrowernumber) has items triggering level $i.";
     
-                my $letter = C4::Letters::getletter( 'circulation', $overdue_rules->{"letter$i"} );
-
-                unless ($letter) {
-                    $verbose and warn "Message '$overdue_rules->{letter$i}' content not found";
-    
-                    # might as well skip while PERIOD, no other borrowers are going to work.
-                    # FIXME : Does this mean a letter must be defined in order to trigger a debar ?
-                    next PERIOD;
-                }
-    
                 if ( $overdue_rules->{"debarred$i"} ) {
     
                     #action taken is debarring
@@ -494,11 +484,12 @@ END_SQL
                     my @item_info = map { $_ =~ /^date|date$/ ? format_date( $item_info->{$_} ) : $item_info->{$_} || '' } @item_content_fields;
                     $titles .= join("\t", @item_info) . "\n";
                     $itemcount++;
-                    push @items, { itemnumber => $item_info->{'itemnumber'}, biblionumber => $item_info->{'biblionumber'} };
+                    push @items, $item_info;
                 }
                 $sth2->finish;
-                $letter = parse_letter(
-                    {   letter          => $letter,
+
+                my $letter = parse_letter(
+                    {   letter_code     => $overdue_rules->{"letter$i"},
                         borrowernumber  => $borrowernumber,
                         branchcode      => $branchcode,
                         items           => \@items,
@@ -509,6 +500,13 @@ END_SQL
                                            }
                     }
                 );
+                unless ($letter) {
+                    $verbose and warn "Message '$overdue_rules->{letter$i}' content not found";
+
+                    # might as well skip while PERIOD, no other borrowers are going to work.
+                    # FIXME : Does this mean a letter must be defined in order to trigger a debar ?
+                    next PERIOD;
+                }
                 
                 if ( $exceededPrintNoticesMaxLines ) {
                   $letter->{'content'} .= "List too long for form; please check your account online for a complete list of your overdue items.";
@@ -643,54 +641,56 @@ substituted keys and values.
 
 =cut
 
-sub parse_letter { # FIXME: this code should probably be moved to C4::Letters:parseletter
+sub parse_letter {
     my $params = shift;
-    foreach my $required (qw( letter borrowernumber )) {
+    foreach my $required (qw( letter_code borrowernumber )) {
         return unless exists $params->{$required};
     }
 
-   my $todaysdate = C4::Dates->new()->output("syspref");
-   $params->{'letter'}->{title}   =~ s/<<today>>/$todaysdate/g;
-   $params->{'letter'}->{content} =~ s/<<today>>/$todaysdate/g;
+    my $substitute = $params->{'substitute'} || {};
+    $substitute->{today} ||= C4::Dates->new()->output("syspref");
 
-    if ( $params->{'substitute'} ) {
-        while ( my ( $key, $replacedby ) = each %{ $params->{'substitute'} } ) {
-            my $replacefield = "<<$key>>";
-            $params->{'letter'}->{title}   =~ s/$replacefield/$replacedby/g;
-            $params->{'letter'}->{content} =~ s/$replacefield/$replacedby/g;
-        }
+    my %tables = ( 'borrowers' => $params->{'borrowernumber'} );
+    if ( my $p = $params->{'branchcode'} ) {
+        $tables{'branches'} = $p;
     }
 
-    $params->{'letter'} = C4::Letters::parseletter( $params->{'letter'}, 'borrowers', $params->{'borrowernumber'} );
-
-    if ( $params->{'branchcode'} ) {
-        $params->{'letter'} = C4::Letters::parseletter( $params->{'letter'}, 'branches', $params->{'branchcode'} );
+    my $currency_format;
+    if ($params->{'letter'}->{'content'} =~ m/<fine>(.*)<\/fine>/o) { # process any fine tags...
+        $currency_format = $1;
+        $params->{'letter'}->{'content'} =~ s/<fine>.*<\/fine>/<<item.fine>>/o;
     }
 
-    if ( $params->{'items'} ) {
+    my @item_tables;
+    if ( my $i = $params->{'items'} ) {
         my $item_format = '';
-        PROCESS_ITEMS:
-        while (scalar(@{$params->{'items'}}) > 0) {
-            my $item = shift @{$params->{'items'}};
+        foreach my $item (@$i) {
             my $fine = GetFine($item->{'itemnumber'}, $params->{'borrowernumber'});
             if (!$item_format) {
                 $params->{'letter'}->{'content'} =~ m/(<item>.*<\/item>)/;
                 $item_format = $1;
             }
-            if ($params->{'letter'}->{'content'} =~ m/<fine>(.*)<\/fine>/) { # process any fine tags...
-                my $formatted_fine = currency_format("$1", "$fine", FMT_SYMBOL);
-                $params->{'letter'}->{'content'} =~ s/<fine>.*<\/fine>/$formatted_fine/;
-            }
-            $params->{'letter'} = C4::Letters::parseletter( $params->{'letter'}, 'biblio',      $item->{'biblionumber'} );
-            $params->{'letter'} = C4::Letters::parseletter( $params->{'letter'}, 'biblioitems', $item->{'biblionumber'} );
-            $params->{'letter'} = C4::Letters::parseletter( $params->{'letter'}, 'items', $item->{'itemnumber'} );
-            $params->{'letter'} = C4::Letters::parseletter( $params->{'letter'}, 'issues', $item->{'itemnumber'} );
-            $params->{'letter'}->{'content'} =~ s/(<item>.*<\/item>)/$1\n$item_format/ if scalar(@{$params->{'items'}} > 0);
 
+            $item->{'fine'} = currency_format($currency_format, "$fine", FMT_SYMBOL)
+              if $currency_format;
+
+            push @item_tables, {
+                'biblio' => $item->{'biblionumber'},
+                'biblioitems' => $item->{'biblionumber'},
+                'items' => $item,
+                'issues' => $item->{'itemnumber'},
+            };
         }
     }
-    $params->{'letter'}->{'content'} =~ s/<\/{0,1}?item>//g; # strip all remaining item tags...
-    return $params->{'letter'};
+
+    return C4::Letters::GetPreparedLetter (
+        module => 'circulation',
+        letter_code => $params->{'letter_code'},
+        branchcode => $params->{'branchcode'},
+        tables => \%tables,
+        substitute => $substitute,
+        repeat => { item => \@item_tables },
+    );
 }
 
 =head2 prepare_letter_for_printing

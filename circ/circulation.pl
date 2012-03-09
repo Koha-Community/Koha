@@ -24,7 +24,6 @@ use strict;
 #use warnings; FIXME - Bug 2505
 use CGI;
 use C4::Output;
-use C4::Print;
 use C4::Auth qw/:DEFAULT get_session/;
 use C4::Dates qw/format_date/;
 use C4::Branch; # GetBranches
@@ -176,7 +175,7 @@ if ( $barcode eq '' && $query->param('charges') eq 'yes' ) {
 }
 
 if ( $print eq 'yes' && $borrowernumber ne '' ) {
-    printslip( $borrowernumber );
+    PrintIssueSlip($session->param('branch') || $branch, $borrowernumber);
     $query->param( 'borrowernumber', '' );
     $borrowernumber = '';
 }

@@ -10,7 +10,7 @@ use Test::More;
 sub GetLetter : Test( 6 ) {
     my $self = shift;
 
-    my $letter = getletter( 'circulation', 'ODUE' );
+    my $letter = getletter( 'circulation', 'ODUE', '' );
 
     isa_ok( $letter, 'HASH' )
       or diag( Data::Dumper->Dump( [ $letter ], [ 'letter' ] ) );
@@ -20,7 +20,6 @@ sub GetLetter : Test( 6 ) {
     ok( exists $letter->{'content'}, 'content' );
     ok( exists $letter->{'name'}, 'name' );
     ok( exists $letter->{'title'}, 'title' );
-
 
 }
 
