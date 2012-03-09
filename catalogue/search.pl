@@ -256,7 +256,7 @@ foreach my $advanced_srch_type (@advanced_search_types) {
 		ccl => "$itype_or_itemtype,phr",
                 code => $thisitemtype,
                 description => $itemtypes->{$thisitemtype}->{'description'},
-                imageurl=> getitemtypeimagelocation( 'opac', $itemtypes->{$thisitemtype}->{'imageurl'} ),
+                imageurl=> getitemtypeimagelocation( 'intranet', $itemtypes->{$thisitemtype}->{'imageurl'} ),
             );
 	    push @itypesloop, \%row;
 	}
