@@ -27,11 +27,9 @@ use CGI;
 use C4::Output;
 use C4::Print;
 use C4::Auth qw/:DEFAULT get_session/;
-use C4::Dates qw/format_date/;
 use C4::Branch; # GetBranches
 use C4::Koha;   # GetPrinter
 use C4::Circulation;
-use C4::Overdues qw/CheckBorrowerDebarred/;
 use C4::Members;
 use C4::Biblio;
 use C4::Reserves;
@@ -241,7 +239,7 @@ if ($borrowernumber) {
             flagged  => "1",
             noissues => "1",
             expired => "1",
-            renewaldate => format_date("$renew_year-$renew_month-$renew_day")
+            renewaldate => "$renew_year-$renew_month-$renew_day",
         );
     }
     # check for NotifyBorrowerDeparture
@@ -250,7 +248,7 @@ if ($borrowernumber) {
             Date_to_Days( $today_year, $today_month, $today_day ) ) 
     {
         # borrower card soon to expire warn librarian
-        $template->param("warndeparture" => format_date($borrower->{dateexpiry}),
+        $template->param("warndeparture" => $borrower->{dateexpiry},
         flagged       => "1",);
         if (C4::Context->preference('ReturnBeforeExpiry')){
             $template->param("returnbeforeexpiry" => 1);
@@ -262,12 +260,12 @@ if ($borrowernumber) {
         finetotal    => $fines
     );
 
-    my $debar = CheckBorrowerDebarred($borrowernumber);
+    my $debar = $borrower->{debarred};
     if ($debar) {
         $template->param( 'userdebarred'    => 1 );
         $template->param( 'debarredcomment' => $borrower->{debarredcomment} );
         if ( $debar ne "9999-12-31" ) {
-            $template->param( 'userdebarreddate' => C4::Dates::format_date($debar) );
+            $template->param( 'userdebarreddate' => $debar );
         }
     }
 
@@ -349,7 +347,7 @@ if ($borrowernumber) {
         $getreserv{transfered}    = 0;
         $getreserv{nottransfered} = 0;
 
-        $getreserv{reservedate}    = format_date( $num_res->{'reservedate'} );
+        $getreserv{reservedate}    = $num_res->{'reservedate'};
         $getreserv{reservenumber}  = $num_res->{'reservenumber'};
         $getreserv{title}          = $getiteminfo->{'title'};
         $getreserv{itemtype}       = $itemtypeinfo->{'description'};
@@ -369,7 +367,7 @@ if ($borrowernumber) {
         $getWaitingReserveInfo{biblionumber} = $getiteminfo->{'biblionumber'};
         $getWaitingReserveInfo{itemtype}     = $itemtypeinfo->{'description'};
         $getWaitingReserveInfo{author}       = $getiteminfo->{'author'};
-        $getWaitingReserveInfo{reservedate}  = format_date( $num_res->{'reservedate'} );
+        $getWaitingReserveInfo{reservedate}  = $num_res->{'reservedate'};
         $getWaitingReserveInfo{waitingat}    = GetBranchName( $num_res->{'branchcode'} );
         $getWaitingReserveInfo{waitinghere}  = 1 if $num_res->{'branchcode'} eq $branch;
         }
@@ -377,7 +375,7 @@ if ($borrowernumber) {
         if ($transfertwhen) {
             $getreserv{color}      = 'transfered';
             $getreserv{transfered} = 1;
-            $getreserv{datesent}   = format_date($transfertwhen);
+            $getreserv{datesent}   = $transfertwhen;
             $getreserv{frombranch} = GetBranchName($transfertfrom);
         } elsif ($getiteminfo->{'holdingbranch'} ne $num_res->{'branchcode'}) {
             $getreserv{nottransfered}   = 1;
@@ -448,16 +446,14 @@ sub build_issue_data {
         $it->{'can_renew'} = $can_renew;
         $it->{'can_confirm'} = !$can_renew && !$restype;
         $it->{'renew_error'} = $restype;
-        $it->{'checkoutdate'} = C4::Dates->new($it->{'issuedate'},'iso')->output('syspref');
+        $it->{'checkoutdate'} = $it->{'issuedate'};
+        $it->{'duedate'} = $it->{'date_due'};
+        $it->{'od'} = ( $it->{'date_due'} lt $todaysdate ) ? 1 : 0 ;
         $it->{'issuingbranchname'} = GetBranchName($it->{'branchcode'});
 
         $totalprice += $it->{'replacementprice'};
         $it->{'itemtype'} = $itemtypeinfo->{'description'};
         $it->{'itemtype_image'} = $itemtypeinfo->{'imageurl'};
-        $it->{'dd'} = output_pref($it->{'date_due'});
-        $it->{'displaydate'} = output_pref($it->{'issuedate'});
-        #$it->{'od'} = ( $it->{'date_due'} lt $todaysdate ) ? 1 : 0 ;
-        $it->{'od'} = $it->{'overdue'};
         ($it->{'author'} eq '') and $it->{'author'} = ' ';
         $it->{'renew_failed'} = $renew_failed{$it->{'itemnumber'}};
 
@@ -671,8 +667,8 @@ $template->param(
     surname           => $borrower->{'surname'},
     showname          => $borrower->{'showname'},
     category_type     => $borrower->{'category_type'},
-    dateexpiry        => format_date($newexpiry),
-    expiry            => format_date($borrower->{'dateexpiry'}),
+    dateexpiry        => $newexpiry,
+    expiry            => $borrower->{'dateexpiry'},
     categorycode      => $borrower->{'categorycode'},
     categoryname      => $borrower->{description},
     address           => $address,

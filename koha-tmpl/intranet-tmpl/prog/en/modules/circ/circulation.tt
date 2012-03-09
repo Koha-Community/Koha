@@ -226,7 +226,7 @@ function refocus(calendar) {
 </form>
 </div>
 
-[% IF ( dateexpiry ) %]<div class="dialog message">Patron's account has been renewed until [% dateexpiry %]</div>[% END %]
+[% IF ( dateexpiry ) %]<div class="dialog message">Patron's account has been renewed until [% dateexpiry | $KohaDates %]</div>[% END %]
 
 [% IF additional_materials %]
     <div id="materials" class="dialog message">Note about the accompanying materials: <br />
@@ -254,7 +254,7 @@ function refocus(calendar) {
 [% END %]
 
 [% IF ( RESERVED ) %]
-    <li>Item <i>[% getTitleMessageIteminfo %]</i> ([% getBarcodeMessageIteminfo %]) has been on hold for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% resborrowernumber %]">[% resfirstname %] [% ressurname %]</a> ([% rescardnumber %]) at [% resbranchname %] since [% resreservedate %]</li>
+    <li>Item <i>[% getTitleMessageIteminfo %]</i> ([% getBarcodeMessageIteminfo %]) has been on hold for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% resborrowernumber %]">[% resfirstname %] [% ressurname %]</a> ([% rescardnumber %]) at [% resbranchname %] since [% resreservedate | $KohaDates %]</li>
 [% END %]
 
 [% IF ( ISSUED_TO_ANOTHER ) %]
@@ -550,7 +550,7 @@ No patron matched <span class="ex">[% message %]</span>
 
 			[% IF ( warndeparture ) %]
 			<li><span class="circ-hlt">Expiration:</span> Patron's card will expire soon.
-			Patron's card expires on [% expiry %] <a href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% borrowernumber %]&amp;cardnumber=[% cardnumber %]&amp;destination=circ&amp;reregistration=y">Renew</a> or <a href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;destination=circ&amp;borrowernumber=[% borrowernumber %]&amp;categorycode=[% categorycode %]">Edit Details</a>
+            Patron's card expires on [% expiry | $KohaDates %] <a href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% borrowernumber %]&amp;cardnumber=[% cardnumber %]&amp;destination=circ&amp;reregistration=y">Renew</a> or <a href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;destination=circ&amp;borrowernumber=[% borrowernumber %]&amp;categorycode=[% categorycode %]">Edit Details</a>
 
 			</li>
 			[% END %]
@@ -563,7 +563,7 @@ No patron matched <span class="ex">[% message %]</span>
 
 			[% IF ( expired ) %]
 			<li><span class="circ-hlt">Expiration:</span> Patron's card has expired.
-			[% IF ( expiry ) %]Patron's card expired on [% expiry %][% END %] <a href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% borrowernumber %]&amp;cardnumber=[% cardnumber %]&amp;destination=circ&amp;reregistration=y">Renew</a> or <a href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;destination=circ&amp;borrowernumber=[% borrowernumber %]&amp;categorycode=[% categorycode %]">Edit Details</a>
+            [% IF ( expiry ) %]Patron's card expired on [% expiry | $KohaDates %][% END %] <a href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% borrowernumber %]&amp;cardnumber=[% cardnumber %]&amp;destination=circ&amp;reregistration=y">Renew</a> or <a href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;destination=circ&amp;borrowernumber=[% borrowernumber %]&amp;categorycode=[% categorycode %]">Edit Details</a>
 
 			</li>
 			[% END %]
@@ -578,7 +578,7 @@ No patron matched <span class="ex">[% message %]</span>
 
             [% IF ( userdebarred ) %]
                <li class="blocker">
-               <span class="circ-hlt"> Restricted:</span> Patron's account is restricted [% IF (userdebarreddate ) %] until [% userdebarreddate %] [% END %] [% IF (debarredcomment ) %] with the comment "[% debarredcomment %]"[% END %]
+               <span class="circ-hlt"> Restricted:</span> Patron's account is restricted [% IF (userdebarreddate ) %] until [% userdebarreddate | $KohaDates %] [% END %] [% IF (debarredcomment ) %] with the comment "[% debarredcomment %]"[% END %]
                <form class="inline compact" action="/cgi-bin/koha/members/setstatus.pl" method="post">
 	                <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
 	                <input type="hidden" name="destination" value="circ" />
@@ -615,7 +615,7 @@ No patron matched <span class="ex">[% message %]</span>
 		    <h4>Holds waiting:</h4>
 			        [% FOREACH WaitingReserveLoo IN WaitingReserveLoop %]
 			            <ul>
-			                <li> <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% WaitingReserveLoo.biblionumber %]">[% WaitingReserveLoo.title |html %]</a> ([% WaitingReserveLoo.itemtype %]), [% IF ( WaitingReserveLoo.author ) %]by [% WaitingReserveLoo.author %][% END %] Hold placed on [% WaitingReserveLoo.reservedate %].
+                            <li> <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% WaitingReserveLoo.biblionumber %]">[% WaitingReserveLoo.title |html %]</a> ([% WaitingReserveLoo.itemtype %]), [% IF ( WaitingReserveLoo.author ) %]by [% WaitingReserveLoo.author %][% END %] Hold placed on [% WaitingReserveLoo.reservedate | $KohaDates %].
 			            [% IF ( WaitingReserveLoo.waitingat ) %]
 			                <br />[% IF ( WaitingReserveLoo.waitinghere ) %]<strong class="waitinghere">[% ELSE %]<strong>[% END %]Waiting at [% WaitingReserveLoo.waitingat %]</strong>
 			            [% END %]
@@ -720,11 +720,11 @@ No patron matched <span class="ex">[% message %]</span>
     <tr class="highlight">
     [% END %]
         [% IF ( todayissue.od ) %]<td class="od">[% ELSE %]<td>[% END %]
-        [% todayissue.dd %]
+        [% todayissue.duedate | $KohaDates %]
         </td>
         <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% todayissue.biblionumber %]&amp;type=intra"><strong>[% todayissue.title |html %]</strong></a>[% IF ( todayissue.author ) %], by [% todayissue.author %][% END %][% IF ( todayissue.itemnotes ) %]- <span class="circ-hlt">[% todayissue.itemnotes %]</span>[% END %] <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% todayissue.biblionumber %]&amp;itemnumber=[% todayissue.itemnumber %]#item[% todayissue.itemnumber %]">[% todayissue.barcode %]</a></td>
         <td>[% UNLESS ( noItemTypeImages ) %] [% IF ( todayissue.itemtype_image ) %]<img src="[% todayissue.itemtype_image %]" alt="" />[% END %][% END %][% todayissue.itemtype %]</td>
-        <td>[% todayissue.checkoutdate %]</td>
+        <td>[% todayissue.checkoutdate | $KohaDates %]</td>
         [% IF ( todayissue.multiple_borrowers ) %]<td>[% todayissue.firstname %] [% todayissue.surname %]</td>[% END %]
         <td>[% todayissue.issuingbranchname %]</td>
         <td>[% todayissue.itemcallnumber %]</td>
@@ -793,13 +793,13 @@ No patron matched <span class="ex">[% message %]</span>
         <tr class="highlight">
     [% END %]
         [% IF ( previssue.od ) %]<td class="od">[% ELSE %]<td>[% END %]
-        [% previssue.dd %]
+        [% previssue.duedate | $KohaDates %]
         </td>
         <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% previssue.biblionumber %]&amp;type=intra"><strong>[% previssue.title |html %]</strong></a>[% IF ( previssue.author ) %], by [% previssue.author %][% END %] [% IF ( previssue.itemnotes ) %]- [% previssue.itemnotes %][% END %] <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% previssue.biblionumber %]&amp;itemnumber=[% previssue.itemnumber %]#item[% previssue.itemnumber %]">[% previssue.barcode %]</a></td>
         <td>
             [% previssue.itemtype %]
         </td>
-        <td>[% previssue.displaydate %]</td>
+        <td>[% previssue.issuedate | $KohaDates %]</td>
         [% IF ( previssue.multiple_borrowers ) %]<td>[% previssue.firstname %] [% previssue.surname %]</td>[% END %]
         <td>[% previssue.issuingbranchname %]</td>
         <td>[% previssue.itemcallnumber %]</td>
@@ -961,7 +961,7 @@ No patron matched <span class="ex">[% message %]</span>
 		<tbody>
         [% FOREACH reservloo IN reservloop %]
         <tr class="[% reservloo.color %]">
-                    <td>[% reservloo.reservedate %]</td>
+                    <td>[% reservloo.reservedate | $KohaDates %]</td>
                     <td><a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% reservloo.biblionumber %]"><strong>[% reservloo.title |html %]</strong></a>[% IF ( reservloo.author ) %], by [% reservloo.author %][% END %]</td>
                     <td>[% reservloo.itemcallnumber %]</td>
 					<td><em>[% IF ( reservloo.barcodereserv ) %]Item [% reservloo.barcodereserv %]
