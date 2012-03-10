@@ -21,7 +21,6 @@ use warnings;
 use CGI;
 use C4::Auth;    # get_template_and_user
 use C4::Output;
-use C4::Members;         # GetMember
 use C4::NewsChannels;    # get_opac_news
 use C4::Languages qw(getTranslatedLanguages accept_language);
 
@@ -43,11 +42,6 @@ $template->param(
     casAuthentication   => $casAuthentication,
 );
 
-
-my $borrower = GetMember( borrowernumber=>$borrowernumber );
-$template->param(
-    textmessaging        => $borrower->{textmessaging},
-) if (ref($borrower) eq "HASH");
 
 # display news
 # use cookie setting for language, bug default to syspref if it's not set
