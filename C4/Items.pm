@@ -653,7 +653,7 @@ sub CheckItemPreSave {
 
     # check for valid home branch
     if (exists $item_ref->{'homebranch'} and defined $item_ref->{'homebranch'}) {
-        my $branch_name = GetBranchName($item_ref->{'homebranch'});
+        my $branch_name = C4::Branch::GetBranchName($item_ref->{'homebranch'});
         unless (defined $branch_name) {
             # relies on fact that branches.branchname is a non-NULL column,
             # so GetBranchName returns undef only if branch does not exist
@@ -663,7 +663,7 @@ sub CheckItemPreSave {
 
     # check for valid holding branch
     if (exists $item_ref->{'holdingbranch'} and defined $item_ref->{'holdingbranch'}) {
-        my $branch_name = GetBranchName($item_ref->{'holdingbranch'});
+        my $branch_name = C4::Branch::GetBranchName($item_ref->{'holdingbranch'});
         unless (defined $branch_name) {
             # relies on fact that branches.branchname is a non-NULL column,
             # so GetBranchName returns undef only if branch does not exist
