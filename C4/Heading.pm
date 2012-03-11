@@ -205,7 +205,7 @@ sub _search {
     return C4::AuthoritiesMarc::SearchAuthorities(
         \@marclist, \@and_or, \@excluding, \@operator,
         \@value,    0,        20,          $self->{'auth_type'},
-        '',         $skipmetadata
+        'AuthidAsc',         $skipmetadata
     );
 }
 
