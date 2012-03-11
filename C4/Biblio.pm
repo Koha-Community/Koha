@@ -3650,19 +3650,25 @@ Generate the host item entry for an analytic child entry
 
 sub prepare_host_field {
     my ( $hostbiblio, $marcflavour ) = @_;
-    $marcflavour ||= 'MARC21';
+    $marcflavour ||= C4::Context->preference('marcflavour');
     my $host = GetMarcBiblio($hostbiblio);
-    if ( $marcflavour eq 'MARC21' ) {
-
-        # unfortunately as_string does not 'do the right thing'
-        # if field returns undef
-        my %sfd;
-        my $field;
-        if ( $field = $host->author() ) {
-            $sfd{a} = $field;
+    # unfortunately as_string does not 'do the right thing'
+    # if field returns undef
+    my %sfd;
+    my $field;
+    my $host_field;
+    if ( $marcflavour eq 'MARC21' || $marcflavour eq 'NORMARC' ) {
+        if ( $field = $host->field('100') || $host->field('110') || $host->field('11') ) {
+            my $s = $field->as_string('ab');
+            if ($s) {
+                $sfd{a} = $s;
+            }
         }
-        if ( $field = $host->title() ) {
-            $sfd{t} = $field;
+        if ( $field = $host->field('245') ) {
+            my $s = $field->as_string('a');
+            if ($s) {
+                $sfd{t} = $s;
+            }
         }
         if ( $field = $host->field('260') ) {
             my $s = $field->as_string('abc');
@@ -3685,13 +3691,76 @@ sub prepare_host_field {
         if ( $field = $host->field('020') ) {
             my $s = $field->as_string('a');
             if ($s) {
-                $sfd{x} = $s;
+                $sfd{z} = $s;
             }
         }
         if ( $field = $host->field('001') ) {
             $sfd{w} = $field->data(),;
         }
-        my $host_field = MARC::Field->new( 773, '0', ' ', %sfd );
+        $host_field = MARC::Field->new( 773, '0', ' ', %sfd );
+        return $host_field;
+    }
+    elsif ( $marcflavour eq 'UNIMARC' ) {
+        #author
+        if ( $field = $host->field('700') || $host->field('710') || $host->field('720') ) {
+            my $s = $field->as_string('ab');
+            if ($s) {
+                $sfd{a} = $s;
+            }
+        }
+        #title
+        if ( $field = $host->field('200') ) {
+            my $s = $field->as_string('a');
+            if ($s) {
+                $sfd{t} = $s;
+            }
+        }
+        #place of publicaton
+        if ( $field = $host->field('210') ) {
+            my $s = $field->as_string('a');
+            if ($s) {
+                $sfd{c} = $s;
+            }
+        }
+        #date of publication
+        if ( $field = $host->field('210') ) {
+            my $s = $field->as_string('d');
+            if ($s) {
+                $sfd{d} = $s;
+            }
+        }
+        #edition statement
+        if ( $field = $host->field('205') ) {
+            my $s = $field->as_string();
+            if ($s) {
+                $sfd{a} = $s;
+            }
+        }
+        #URL
+        if ( $field = $host->field('856') ) {
+            my $s = $field->as_string('u');
+            if ($s) {
+                $sfd{u} = $s;
+            }
+        }
+        #ISSN
+        if ( $field = $host->field('011') ) {
+            my $s = $field->as_string('a');
+            if ($s) {
+                $sfd{x} = $s;
+            }
+        }
+        #ISBN
+        if ( $field = $host->field('010') ) {
+            my $s = $field->as_string('a');
+            if ($s) {
+                $sfd{y} = $s;
+            }
+        }
+        if ( $field = $host->field('001') ) {
+            $sfd{0} = $field->data(),;
+        }
+        $host_field = MARC::Field->new( 461, '0', ' ', %sfd );
         return $host_field;
     }
     return;

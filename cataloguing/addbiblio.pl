@@ -995,12 +995,3 @@ $template->param(
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
-
-sub get_host_control_num {
-    my $host_biblio_nr = shift;
-    my $host = GetMarcBiblio($host_biblio_nr);
-    my $control_num = GetMarcControlnumber($host, C4::Context->preference('marcflavour'));
-    $host = GetBiblioData($host_biblio_nr);
-    $host->{control_number} = $control_num;
-    return $host;
-}
