@@ -1648,7 +1648,7 @@ sub GetMarcSubjects {
 
             # ignore $9
             my @this_link_loop = @link_loop;
-            push @subfields_loop, { code => $code, value => $value, link_loop => \@this_link_loop, separator => $separator } unless ( $subject_subfield->[0] eq 9 );
+            push @subfields_loop, { code => $code, value => $value, link_loop => \@this_link_loop, separator => $separator } unless ( $subject_subfield->[0] eq 9 || $subject_subfield->[0] eq '0' );
             $counter++;
         }
 
@@ -1732,7 +1732,7 @@ sub GetMarcAuthors {
                 link_loop => \@this_link_loop,
                 separator => $separator
               }
-              unless ( $authors_subfield->[0] eq '9' );
+              unless ( $authors_subfield->[0] eq '9' || $authors_subfield->[0] eq '0');
             $count_auth++;
         }
         push @marcauthors, { MARCAUTHOR_SUBFIELDS_LOOP => \@subfields_loop };
