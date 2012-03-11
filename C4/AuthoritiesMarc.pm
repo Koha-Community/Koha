@@ -279,13 +279,16 @@ sub SearchAuthorities {
         }
         ## Adding order
         #$query=' @or  @attr 7=2 @attr 1=Heading 0 @or  @attr 7=1 @attr 1=Heading 1'.$query if ($sortby eq "HeadingDsc");
-        my $orderstring= ($sortby eq "HeadingAsc"?
-                           '@attr 7=1 @attr 1=Heading 0'
-                         :
-                           $sortby eq "HeadingDsc"?      
-                            '@attr 7=2 @attr 1=Heading 0'
-                           :''
-                        );            
+        my $orderstring;
+        if ($sortby eq 'HeadingAsc') {
+            $orderstring = '@attr 7=1 @attr 1=Heading 0';
+        } elsif ($sortby eq 'HeadingDsc') {
+            $orderstring = '@attr 7=2 @attr 1=Heading 0';
+        } elsif ($sortby eq 'AuthidAsc') {
+            $orderstring = '@attr 7=1 @attr 1=Local-Number 0';
+        } elsif ($sortby eq 'AuthidDsc') {
+            $orderstring = '@attr 7=2 @attr 1=Local-Number 0';
+        }
         $query=($query?$query:"\@attr 1=_ALLRECORDS \@attr 2=103 ''");
         $query="\@or $orderstring $query" if $orderstring;
 
