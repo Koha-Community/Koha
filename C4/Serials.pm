@@ -1073,7 +1073,8 @@ sub ModSerialStatus {
 
 # check if an alert must be sent... (= a letter is defined & status became "arrived"
         if ( $val->{letter} && $status == 2 && $oldstatus != 2 ) {
-            SendAlerts( 'issue', $val->{subscriptionid}, $val->{letter} );
+            require C4::Letters;
+            C4::Letters::SendAlerts( 'issue', $val->{subscriptionid}, $val->{letter} );
         }
     }
     return;
