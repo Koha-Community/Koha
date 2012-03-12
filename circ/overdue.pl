@@ -256,7 +256,8 @@ if ($noreport) {
         biblio.biblionumber,
         borrowers.branchcode,
         items.itemcallnumber,
-        items.replacementprice
+        items.replacementprice,
+        items.enumchron
       FROM issues
     LEFT JOIN borrowers   ON (issues.borrowernumber=borrowers.borrowernumber )
     LEFT JOIN items       ON (issues.itemnumber=items.itemnumber)
@@ -342,6 +343,7 @@ if ($noreport) {
             branchcode             => $data->{branchcode},
             itemcallnumber         => $data->{itemcallnumber},
             replacementprice       => $data->{replacementprice},
+            enumchron              => $data->{enumchron},
             patron_attr_value_loop => \@patron_attr_value_loop,
         };
     }
