@@ -286,7 +286,7 @@
                                     [% IF ( books_loo.suggestionid ) %]
                                         <br/>
                                         Suggested by: [% books_loo.surnamesuggestedby %][% IF ( books_loo.firstnamesuggestedby ) %], [% books_loo.firstnamesuggestedby %] [% END %]
-                                        (<a href="/cgi-bin/koha/suggestion/suggestion.pl?suggestionid=[% books_loo.suggestionid %]">suggestion #[% books_loo.suggestionid %]</a>)
+                                        (<a href="/cgi-bin/koha/suggestion/suggestion.pl?suggestionid=[% books_loo.suggestionid %]&op=show">suggestion #[% books_loo.suggestionid %]</a>)
                                     [% END %]
                                     [% IF ( books_loo.editionstatement ) %], [% books_loo.editionstatement %][% END %]
                             </p>
