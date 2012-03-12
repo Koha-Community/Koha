@@ -255,7 +255,6 @@ sub findrelatedto ($$) {
 sub SendAlerts {
     my ( $type, $externalid, $letter_code ) = @_;
     my $dbh = C4::Context->dbh;
-    my $strsth;
     if ( $type eq 'issue' ) {
 
         # prepare the letter...
@@ -306,7 +305,7 @@ sub SendAlerts {
 
         # prepare the letter...
         # search the biblionumber
-        $strsth =  $type eq 'claimacquisition'
+        my $strsth =  $type eq 'claimacquisition'
             ? qq{
             SELECT aqorders.*,aqbasket.*,biblio.*,biblioitems.*,aqbooksellers.*
             FROM aqorders
