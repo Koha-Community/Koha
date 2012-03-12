@@ -496,7 +496,7 @@ canned reports and writing custom SQL reports.</p>
 <h1>[% name %]</h1>
 [% IF ( notes ) %]<p>[% notes %]</p>[% END %]
 [% IF ( unlimited_total ) %]<p>Total number of rows matching the (unlimited) query is [% unlimited_total %].</p>[% END %]
-<pre id="sql_output">[% sql %]</pre>
+<pre id="sql_output">[% sql |html %]</pre>
 <div class="pages">[% pagination_bar %]</div>
 [% UNLESS ( errors ) %]
 <table>
