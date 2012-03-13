@@ -47,7 +47,7 @@ The functions in this module handle sending text to a printer.
 
 =cut
 
-=comment
+=for comment
     my $slip = <<"EOF";
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Date: $todaysdate;
