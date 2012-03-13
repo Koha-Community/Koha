@@ -4892,7 +4892,7 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.07.00.XXX";
+$DBversion = "3.07.00.025";
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     $dbh->do( q|DROP TABLE bibliocoverimage;| );
     $dbh->do(
@@ -4906,7 +4906,7 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
           CONSTRAINT bibliocoverimage_fk1 FOREIGN KEY (biblionumber) REFERENCES biblio (biblionumber) ON DELETE CASCADE ON UPDATE CASCADE
           ) ENGINE=InnoDB DEFAULT CHARSET=utf8;|
     );
-    print "Upgrade to $DBversion done (Correct table name for local cover images [please disregard any error messages])\n";
+    print "Upgrade to $DBversion done (Correct table name for local cover images [please disregard the following error messages: \"Unknown table 'bibliocoverimage'...\" and \"Table 'biblioimages' already exists...\"])\n";
     SetVersion($DBversion);
 }
 
