@@ -87,9 +87,9 @@ $marcxml_utf8 =~ s/\n//g;
 my $error; my $marc; my $marcxml; my $dcxml; # some scalars to store values
 ## MARC to MARCXML
 print "\n1. Checking conversion of simple ISO-2709 (MARC21) records to MARCXML\n";
-ok (($error,$marcxml) = marc2marcxml($marc21_marc8,'UTF-8','MARC21'), 'marc2marcxml - from MARC-8 to UTF-8 (MARC21)'); 
+ok (($error,$marcxml) = marc2marcxml($marc21_marc8,'UTF-8','MARC21'), 'marc2marcxml - from MARC-8 to UTF-8 (MARC21)');
 ok (!$error, 'no errors in conversion');
-	$marcxml =~ s/\n//g; 
+	$marcxml =~ s/\n//g;
 	$marcxml =~ s/v\/ s/v\/s/g; # FIXME: bug in new_from_xml_record!!
 is ($marcxml,$marcxml_utf8, 'record matches antitype');
 
