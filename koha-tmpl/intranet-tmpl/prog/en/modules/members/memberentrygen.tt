@@ -82,6 +82,17 @@
 	<div id="yui-main">
 	<div class="yui-b">
 
+    [% IF error_alert %]
+        [% IF ( error_alert == "no_email" ) %]
+            <div class="error">This member has no email</div>
+        [% ELSE %]
+            <div class="error">[% error_alert %]</div>
+        [% END %]
+    [% END %]
+    [% IF info_alert %]
+        <div class="dialog message">Email has been sent.</div>
+    [% END %]
+
 	[% IF ( no_add ) %]<div class="dialog alert"><h3>Cannot add patron</h3>
 		[% IF ( no_branches ) %]<p>There are <strong>no libraries defined</strong>. [% IF ( CAN_user_parameters ) %]Please <a href="/cgi-bin/koha/admin/branches.pl">add a library</a>.[% ELSE %]An administrator must define at least one library.[% END %]</p>[% END %]
 		[% IF ( no_categories ) %]<p>There are <strong>no patron categories defined</strong>. [% IF ( CAN_user_parameters ) %]Please <a href="/cgi-bin/koha/admin/categorie.pl">add a patron category</a>.[% ELSE %]An administrator must define at least one patron category.</p>[% END %][% END %]</div>[% END %]

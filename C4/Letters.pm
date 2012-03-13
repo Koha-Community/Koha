@@ -294,8 +294,8 @@ sub SendAlerts {
             my %mail = (
                 To      => $email,
                 From    => $email,
-                Subject => "" . $letter->{title},
-                Message => "" . $letter->{content},
+                Subject => Encode::encode( "utf8", "" . $letter->{title} ),
+                Message => Encode::encode( "utf8", "" . $letter->{content} ),
                 'Content-Type' => 'text/plain; charset="utf8"',
                 );
             sendmail(%mail) or carp $Mail::Sendmail::error;
@@ -322,8 +322,8 @@ sub SendAlerts {
             LEFT JOIN biblio ON serial.biblionumber=biblio.biblionumber
             LEFT JOIN aqbooksellers ON subscription.aqbooksellerid=aqbooksellers.id
             WHERE serial.serialid IN (
-            }
-          . join( ",", @$externalid ) . ")";
+            };
+        $strsth .= join( ",", @$externalid ) . ")";
         my $sthorders = $dbh->prepare($strsth);
         $sthorders->execute;
         my $dataorders = $sthorders->fetchall_arrayref( {} );
@@ -338,7 +338,7 @@ sub SendAlerts {
         push @email, $databookseller->{contemail}       if $databookseller->{contemail};
         unless (@email) {
             warn "Bookseller $dataorders->[0]->{booksellerid} without emails";
-            return;
+            return { error => "no_email" };
         }
 
         my $userenv = C4::Context->userenv;
@@ -358,8 +358,8 @@ sub SendAlerts {
         my %mail = (
             To => join( ','. @email),
             From           => $userenv->{emailaddress},
-            Subject        => "" . $letter->{title},
-            Message        => "" . $letter->{content},
+            Subject        => Encode::encode( "utf8", "" . $letter->{title} ),
+            Message        => Encode::encode( "utf8", "" . $letter->{content} ),
             'Content-Type' => 'text/plain; charset="utf8"',
         );
         sendmail(%mail) or carp $Mail::Sendmail::error;
@@ -391,11 +391,12 @@ sub SendAlerts {
             want_librarian => 1,
         ) or return;
 
+        return { error => "no_email" } unless $externalid->{'emailaddr'};
         my %mail = (
                 To      =>     $externalid->{'emailaddr'},
                 From    =>  $branchdetails->{'branchemail'} || C4::Context->preference("KohaAdminEmailAddress"),
-                Subject => $letter->{'title'}, 
-                Message => $letter->{'content'},
+                Subject => Encode::encode( "utf8", $letter->{'title'} ),
+                Message => Encode::encode( "utf8", $letter->{'content'} ),
                 'Content-Type' => 'text/plain; charset="utf8"',
         );
         sendmail(%mail) or carp $Mail::Sendmail::error;

@@ -347,9 +347,19 @@ if ((!$nok) and $nodouble and ($op eq 'insert' or $op eq 'save')){
             # if we manage to find a valid email address, send notice 
             if ($emailaddr) {
                 $newdata{emailaddr} = $emailaddr;
-                SendAlerts ( 'members', \%newdata, "ACCTDETAILS" );
+                my $err;
+                eval {
+                    $err = SendAlerts ( 'members', \%newdata, "ACCTDETAILS" );
+                };
+                if ( $@ ) {
+                    $template->param(error_alert => $@);
+                } elsif ( defined $err->{error} and $err->{error} eq "no_email" ) {
+                    $template->{VARS}->{'error_alert'} = "no_email";
+                } else {
+                    $template->{VARS}->{'info_alert'} = 1;
+                }
             }
-        } 
+        }
 
 		if ($data{'organisations'}){            
 			# need to add the members organisations
