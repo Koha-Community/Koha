@@ -325,7 +325,7 @@ sub default_display {
     my $loop_data = [];
     my $protected_letters = protected_letters();
     foreach my $row (@{$results}) {
-        $row->{protected} = $protected_letters->{ $row->{code}};
+        $row->{protected} = !$row->{branchcode} && $protected_letters->{ $row->{code} };
         push @{$loop_data}, $row;
 
     }
