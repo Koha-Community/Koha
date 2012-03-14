@@ -24,7 +24,9 @@
 
 			var attrcode = $("script", clone).attr("x-code");
 			var newsuffix = parts[1] + appendid;
-			create_auto_completion_responder(newsuffix,attrcode);
+            [% IF ( CircAutocompl ) %]
+                create_auto_completion_responder(newsuffix,attrcode);
+            [% END %]
 		}
 
         parent.parentNode.insertBefore(clone, parent.nextSibling);
@@ -33,6 +35,7 @@
         var parent = node.parentNode;
         parent.parentNode.removeChild(parent);
     }
+    [% IF ( CircAutocompl ) %]
 	function create_auto_completion_responder(uniqueid,attrcode) {
 		YAHOO.util.Event.onContentReady("pattrodue-getready-"+uniqueid, function() {
 			new function() {
@@ -64,6 +67,7 @@
 			}
 		});
 	}
+    [% END %]
 //]]>
 </script>
 <style type="text/css">
@@ -190,8 +194,8 @@
 		<!-- domid cgivalue ismany isclone ordinal code description repeatable authorised_value_category -->
 		<li>
 			<label>[% patron_attr_filter_loo.description %]:</label>
-			[% IF ( patron_attr_filter_loo.authorised_value_category ) %]
-				<script type="text/JavaScript" language="JavaScript" x-code="[% patron_attr_filter_loo.code |html %]">create_auto_completion_responder([% patron_attr_filter_loo.domid %],"[% patron_attr_filter_loo.code |html %]");</script>
+            [% IF ( patron_attr_filter_loo.authorised_value_category AND CircAutocompl) %]
+                <script type="text/JavaScript" language="JavaScript" x-code="[% patron_attr_filter_loo.code |html %]">create_auto_completion_responder([% patron_attr_filter_loo.domid %],"[% patron_attr_filter_loo.code |html %]");</script>
 				<span id="pattrodue-getready-[% patron_attr_filter_loo.domid %]">
 						<div class="pattrodue-autocomplete">
 							<input autocomplete="off" id="pattrodue-input-[% patron_attr_filter_loo.domid %]" name="patron_attr_filter_[% patron_attr_filter_loo.code |html %]" value="[% patron_attr_filter_loo.cgivalue |html %]"  class="pattrodue-input" type="text" />
