@@ -4891,13 +4891,6 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     print "Upgrade to $DBversion done (Added system preference ExpireReservesMaxPickUpDelay, system preference ExpireReservesMaxPickUpDelayCharge, add reseves.charge_if_expired)\n";
 }
 
-$DBversion = "3.07.00.XXX";
-if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
-    $dbh->do(q{INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('RoutingListNote','To change this note edit <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=RoutingListNote#jumped">RoutlingListNote</a> system preference.','Define a note to be shown on all routing lists','70|10','Textarea');});
-    print "Upgrade to $DBversion done (Added system preference RoutingListNote for adding a general note to all routing lists.)\n";
-    SetVersion($DBversion);
-}
-
 $DBversion = "3.07.00.025";
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     $dbh->do( q|DROP TABLE bibliocoverimage;| );
@@ -4916,13 +4909,20 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
-
 $DBversion = "3.07.00.026";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('CalendarFirstDayOfWeek','Sunday','Select the first day of week to use in the calendar.','Sunday|Monday','Choice');");
     print "Upgrade to $DBversion done (Add syspref CalendarFirstDayOfWeek used to select the first day of week to use in the calendar. )\n";
     SetVersion($DBversion);
 }
+
+$DBversion = "3.07.00.027";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do(q{INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('RoutingListNote','','Define a note to be shown on all routing lists','70|10','Textarea');});
+    print "Upgrade to $DBversion done (Added system preference RoutingListNote for adding a general note to all routing lists.)\n";
+    SetVersion($DBversion);
+}
+
 
 =head1 FUNCTIONS
 
