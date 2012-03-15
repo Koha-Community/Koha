@@ -59,8 +59,8 @@ package C4::Ris;
 #
 #
 
-#use strict;
-#use warnings; FIXME - Bug 2505
+use strict;
+use warnings;
 
 use vars qw($VERSION @ISA @EXPORT);
 
@@ -763,7 +763,7 @@ sub get_keywords {
     my @subfields = ('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'x', 'y', 'z', '2', '3', '4');
 
     ## loop over all 6XX fields
-    foreach $kwfield (@keywords) {
+    foreach my $kwfield (@keywords) {
 	if ($kwfield != undef) {
 	    ## authornames get special treatment
 	    if ($fieldname eq "600") {
@@ -776,9 +776,9 @@ sub get_keywords {
 		@kwsubfields = $kwfield->subfields();
 		
 		## loop over all available subfield tuples
-		foreach $kwtuple (@kwsubfields) {
+        foreach my $kwtuple (@kwsubfields) {
 		    ## loop over all subfields to check
-		    foreach $subfield (@subfields) {
+            foreach my $subfield (@subfields) {
 			## [0] contains subfield code
 			if (@$kwtuple[0] eq $subfield) {
 			    ## [1] contains value, remove trailing separators
@@ -886,15 +886,15 @@ sub pool_subx {
     }
 
     ## loop over all notefields
-    foreach $notefield (@notefields) {
+    foreach my $notefield (@notefields) {
 	if ($notefield != undef) {
 	    ## retrieve all available subfield tuples
 	    @notesubfields = $notefield->subfields();
 
 	    ## loop over all subfield tuples
-	    foreach $notetuple (@notesubfields) {
+        foreach my $notetuple (@notesubfields) {
 		## loop over all subfields to check
-		foreach $subfield (@subfields) {
+        foreach my $subfield (@subfields) {
 		    ## [0] contains subfield code
 		    if (@$notetuple[0] eq $subfield) {
 			## [1] contains value, remove trailing separators
@@ -927,20 +927,20 @@ sub print_abstract {
     my @abstrings;
 
     ## loop over all abfields
-    foreach $abfield (@abfields) {
-	foreach $field (@subfields) { 
-	    if (length ($abfield->subfield($field)) > 0) {
-		my $ab = $abfield->subfield($field);
+    foreach my $abfield (@abfields) {
+        foreach my $field (@subfields) {
+            if ( length( $abfield->subfield($field) ) > 0 ) {
+                my $ab = $abfield->subfield($field);
 
-		print "<marc>field 520 subfield $field: $ab\r\n" if $marcprint;
+                print "<marc>field 520 subfield $field: $ab\r\n" if $marcprint;
 
-		## strip trailing separators
-		$ab =~ s% *[;,:./]*$%%;
+                ## strip trailing separators
+                $ab =~ s% *[;,:./]*$%%;
 
-		## add string to the list
-		push (@abstrings, $ab);
-	    }
-	}
+                ## add string to the list
+                push( @abstrings, $ab );
+            }
+        }
     }
 
     my $allabs = join "; ", @abstrings;
