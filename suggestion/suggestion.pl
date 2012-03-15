@@ -34,20 +34,26 @@ use C4::Debug;
 
 sub Init{
     my $suggestion= shift @_;
-    foreach my $date ( qw(suggesteddate manageddate) ){
-        $suggestion->{$date}=(($suggestion->{$date} eq "0000-00-00" ||$suggestion->{$date} eq "")?
-                                $suggestion->{$date}=C4::Dates->today:
-                                format_date($suggestion->{$date}) 
-                              );
-    }               
+    # "Managed by" is used only when a suggestion is being edited (not when created)
+    if ($suggestion->{'suggesteddate'} eq "0000-00-00" ||$suggestion->{'suggesteddate'} eq "") {
+        # new suggestion
+        $suggestion->{'suggesteddate'} = C4::Dates->today;
+        $suggestion->{'suggestedby'} = C4::Context->userenv->{"number"} unless ($suggestion->{'suggestedby'});
+    }
+    else {
+        # editing of an existing suggestion
+        $suggestion->{'manageddate'} = C4::Dates->today;
+        warn $suggestion->{'manageddate'};
+        $suggestion->{'managedby'} = C4::Context->userenv->{"number"} unless ($suggestion->{'managedby'});
+        # suggesteddate, when coming from the DB, needs to be formated
+        $suggestion->{'suggesteddate'} = format_date($suggestion->{'suggesteddate'});
+    }
     foreach my $date ( qw(rejecteddate accepteddate) ){
     $suggestion->{$date}=(($suggestion->{$date} eq "0000-00-00" ||$suggestion->{$date} eq "")?
                                 "":
                                 format_date($suggestion->{$date}) 
                               );
-	}
-    $suggestion->{'managedby'}=C4::Context->userenv->{"number"} unless ($suggestion->{'managedby'});
-    $suggestion->{'createdby'}=C4::Context->userenv->{"number"} unless ($suggestion->{'createdby'});
+    }
     $suggestion->{'branchcode'}=C4::Context->userenv->{"branch"} unless ($suggestion->{'branchcode'});
 }
 
