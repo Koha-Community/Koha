@@ -421,18 +421,7 @@ elsif ($phase eq 'Run this report'){
             my ($text,$authorised_value) = split /\|/,$split[$i*2+1];
             my $input;
             if ($authorised_value eq "date") {
-               $input = qq(<input id="date_$text" type="text" value="" size="10" name="sql_params">
-                         <img id="date_picker_$text" alt="Show Calendar" src="/intranet-tmpl/prog/en/lib/calendar/cal.gif">
-                         <script type="text/javascript">
-                              Calendar.setup(
-                              {
-                                 inputField : "date_$text",
-                                 ifFormat : "%Y-%m-%d",
-                                 button : "date_picker_$text"
-                              }
-                              );
-                         </script>
-                         );
+               $input = 'date';
             }
             elsif ($authorised_value) {
                 my $dbh=C4::Context->dbh;
