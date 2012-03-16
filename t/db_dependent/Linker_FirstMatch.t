@@ -39,6 +39,12 @@ SKIP: {
     my $heading;
     ok(defined ($heading = C4::Heading->new_from_bib_field($bibfield, '')), "Creating heading from bib field");
 
+    # If Zebra is not running, or authorities have not been indexed, test 3
+    # will fail. Skip it if we are unable to retrieve a list of headings from
+    # Zebra.
+    my @authids = $heading->authorities(1);
+    skip "Unable to search Zebra", 1 unless $#authids > 0;
+
     my $authmatch;
     my $fuzzy;
     ($authmatch, $fuzzy) = $linker->get_link($heading);
