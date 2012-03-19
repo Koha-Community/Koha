@@ -32,7 +32,6 @@ use C4::Biblio;
 use C4::Items;
 use C4::Circulation;
 use C4::Tags qw(get_tags);
-use C4::Dates qw/format_date/;
 use C4::XISBN qw(get_xisbns get_biblionumber_from_isbn);
 use C4::External::Amazon;
 use C4::External::Syndetics qw(get_syndetics_index get_syndetics_summary get_syndetics_toc get_syndetics_excerpt get_syndetics_reviews get_syndetics_anotes );
@@ -454,8 +453,8 @@ foreach my $subscription (@subscriptions) {
     $cell{subscriptionnotes} = $subscription->{notes};
     $cell{missinglist}       = $subscription->{missinglist};
     $cell{opacnote}          = $subscription->{opacnote};
-    $cell{histstartdate}     = format_date($subscription->{histstartdate});
-    $cell{histenddate}       = format_date($subscription->{histenddate});
+    $cell{histstartdate}     = $subscription->{histstartdate};
+    $cell{histenddate}       = $subscription->{histenddate};
     $cell{branchcode}        = $subscription->{branchcode};
     $cell{branchname}        = GetBranchName($subscription->{branchcode});
     $cell{hasalert}          = $subscription->{hasalert};
@@ -528,7 +527,7 @@ for my $itm (@items) {
     
      my ( $transfertwhen, $transfertfrom, $transfertto ) = GetTransfers($itm->{itemnumber});
      if ( defined( $transfertwhen ) && $transfertwhen ne '' ) {
-        $itm->{transfertwhen} = format_date($transfertwhen);
+        $itm->{transfertwhen} = $transfertwhen;
         $itm->{transfertfrom} = $branches->{$transfertfrom}{branchname};
         $itm->{transfertto}   = $branches->{$transfertto}{branchname};
      }
@@ -642,7 +641,6 @@ foreach ( @$reviews ) {
     }
     $_->{userid}    = $borrowerData->{'userid'};
     $_->{cardnumber}    = $borrowerData->{'cardnumber'};
-    $_->{datereviewed} = format_date($_->{datereviewed});
     if ($borrowerData->{'borrowernumber'} eq $borrowernumber) {
 		$_->{your_comment} = 1;
 		$loggedincommenter = 1;
@@ -724,9 +722,6 @@ if ( C4::Context->preference("OPACAmazonEnabled") ) {
     if ( $amazon_reviews ) {
         my $item = $amazon_details->{Items}->{Item}->[0];
         my $customer_reviews = \@{ $item->{CustomerReviews}->{Review} };
-        for my $one_review ( @$customer_reviews ) {
-            $one_review->{Date} = format_date($one_review->{Date});
-        }
         my $editorial_reviews = \@{ $item->{EditorialReviews}->{EditorialReview} };
         my $average_rating = $item->{CustomerReviews}->{AverageRating} || 0;
         $template->param( amazon_average_rating    => $average_rating * 20);

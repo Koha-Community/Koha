@@ -1,3 +1,5 @@
+[% USE KohaDates %]
+
 [% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha Online[% END %] Catalog &rsaquo; Details for: [% title |html %][% FOREACH subtitl IN subtitle %], [% subtitl.subfield |html %][% END %]
 [% INCLUDE 'doc-head-close.inc' %]
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
@@ -635,7 +637,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 		[% IF ( itemdata_copynumber ) %]<td>[% ITEM_RESULT.copynumber %]</td>[% END %]
 		<td>[% INCLUDE 'item-status.inc' item = ITEM_RESULT %]</td>
 		[% IF ( itemdata_itemnotes ) %]<td>[% ITEM_RESULT.itemnotes %]</td>[% END %]
-		<td>[% ITEM_RESULT.datedue %]</td>
+		<td>[% ITEM_RESULT.datedue | $KohaDates %]</td>
 	    </tr>
 	    [% END %]</tbody>
 	</table>
@@ -817,7 +819,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
     [% IF ( subscription.branchname ) %]<h3>At library: [% subscription.branchname %]</h3>[% ELSE %]
     [% IF ( subscription.branchcode ) %]<h3>At library: [% subscription.branchcode %]</h3>[% END %][% END %]
     [% IF ( subscription.subscriptionnotes ) %]<p>[% subscription.subscriptionnotes %] </p>[% END %]
-    <p>Subscription from: [% subscription.histstartdate %]  to:[% IF ( subscription.histenddate ) %] [% subscription.histenddate %] [% ELSE %] now (current)[% END %]</p>
+    <p>Subscription from: [% subscription.histstartdate | $KohaDates %] to:[% IF ( subscription.histenddate ) %] [% subscription.histenddate | $KohaDates %] [% ELSE %] now (current)[% END %]</p>
     [% IF ( subscription.missinglist ) %]<p>Missing issues: [% subscription.missinglist %] </p>[% END %]
     [% IF ( subscription.opacnote ) %]<p>([% subscription.opacnote %])</p>[% END %]
 [% IF ( subscription.latestserials ) %]
@@ -899,7 +901,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
             <h5>
                 Your Comment
             </h5>
-            <small>[% review.datereviewed %]</small>
+            <small>[% review.datereviewed | $KohaDates %]</small>
         <p>
           [% FILTER html_break %]
           [% review.review |html %]
@@ -924,9 +926,9 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
                     [% CASE 'username' %]
                         <h5>Comment by [% review.userid %]</h5>
                     [% END %]
-                <small>[% review.datereviewed %]</small>
+                <small>[% review.datereviewed | $KohaDates %]</small>
             [% ELSIF ( ShowReviewer == "none") %]
-                <h5>Patron comment on [% review.datereviewed %]</h5>
+                <h5>Patron comment on [% review.datereviewed | $KohaDates %]</h5>
             [% END %]
         <p>
           [% FILTER html_break %]
@@ -1006,7 +1008,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 
         [% FOREACH AMAZON_CUSTOMER_REVIEW IN AMAZON_CUSTOMER_REVIEWS %]
             <div class="content_set">
-            <div class="clearfix" style="margin: .5em 0;"><h4 style="float: left;">[% AMAZON_CUSTOMER_REVIEW.Summary |html %]</h4>  <span class="starMT" style="float: left;"><span class="starFull" style="float: left; width:[% Rating * 10 %]px"></span></span> </div>  [% AMAZON_CUSTOMER_REVIEW.Date %]
+            <div class="clearfix" style="margin: .5em 0;"><h4 style="float: left;">[% AMAZON_CUSTOMER_REVIEW.Summary |html %]</h4>  <span class="starMT" style="float: left;"><span class="starFull" style="float: left; width:[% Rating * 10 %]px"></span></span> </div>  [% AMAZON_CUSTOMER_REVIEW.Date | $KohaDates %]
             [% IF ( AMAZON_CUSTOMER_REVIEW.Content ) %]
                 <p style="margin-left: .2em;">[% AMAZON_CUSTOMER_REVIEW.Content |html %]</p>
             [% END %]
