@@ -1,3 +1,5 @@
+[% USE KohaDates %]
+
 [% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha Online[% END %] Catalog &rsaquo; Tags
 [% INCLUDE 'doc-head-close.inc' %]
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
@@ -117,7 +119,7 @@
 			</td>
 			<td><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% MY_TAG.biblionumber %]">
 				[% MY_TAG.bib_summary |html %]</a></td>
-			<td>[% MY_TAG.date_created_display %]</td>
+			<td>[% MY_TAG.date_created | $KohaDates %]</td>
 			<td><input type="submit" name="del[% MY_TAG.tag_id %]" value="Delete" /></td>
 		</tr>
 	[% END %]</tbody>

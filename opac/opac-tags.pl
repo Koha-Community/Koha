@@ -39,7 +39,6 @@ use C4::Auth qw(:DEFAULT check_cookie_auth);
 use C4::Context;
 use C4::Debug;
 use C4::Output 3.02 qw(:html :ajax pagination_bar);
-use C4::Dates qw(format_date);
 use C4::Scrubber;
 use C4::Biblio;
 use C4::Tags qw(add_tag get_approval_rows get_tag_rows remove_tag);
@@ -232,7 +231,6 @@ if ($loggedinuser) {
 		my $date = $_->{date_created} || '';
 		$date =~ /\s+(\d{2}\:\d{2}\:\d{2})/;
 		$_->{time_created_display} = $1;
-		$_->{date_created_display} = format_date($_->{date_created});
 	}
 }
 
