@@ -50,7 +50,13 @@
             [% LoginBranchname %]
             </strong>
         [% ELSE %]
-            <strong>[% LoginBranchname %]</strong>
+            <strong>
+            [% IF ( LoginBranchname == 'NO_LIBRARY_SET' ) %]
+                NO LIBRARY SET
+            [% ELSE %]
+                [% LoginBranchname %]
+            [% END %]
+            </strong>
             [% IF ( IndependantBranches ) %]
                 [% IF ( CAN_user_management || CAN_user_editcatalogue_edit_catalogue ) %]
                     (<a href="/cgi-bin/koha/circ/selectbranchprinter.pl">Set library</a>)
