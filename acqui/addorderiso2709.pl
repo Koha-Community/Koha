@@ -41,7 +41,6 @@ use C4::Koha;
 use C4::Budgets;
 use C4::Acquisition;
 use C4::Bookseller qw/GetBookSellerFromId/;
-use C4::Dates;
 use C4::Suggestions;    # GetSuggestion
 use C4::Branch;         # GetBranches
 use C4::Members;
@@ -343,11 +342,13 @@ sub import_batches_list {
             # check if there is at least 1 line still staged
             my $stagedList=GetImportBibliosRange($batch->{'import_batch_id'}, undef, undef, 'staged');
             if (scalar @$stagedList) {
+                my ($staged_date, $staged_hour) = split (/ /, $batch->{'upload_timestamp'});
                 push @list, {
                         import_batch_id => $batch->{'import_batch_id'},
                         num_biblios => $batch->{'num_biblios'},
                         num_items => $batch->{'num_items'},
-                        upload_timestamp => $batch->{'upload_timestamp'},
+                        staged_date => $staged_date,
+                        staged_hour => $staged_hour,
                         import_status => $batch->{'import_status'},
                         file_name => $batch->{'file_name'},
                         comments => $batch->{'comments'},
