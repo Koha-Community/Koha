@@ -75,7 +75,6 @@ use C4::Input;
 use C4::Auth;
 use C4::Budgets;
 use C4::Input;
-use C4::Dates;
 
 use C4::Bookseller  qw/ GetBookSellerFromId /;
 use C4::Acquisition;
@@ -346,10 +345,10 @@ $template->param(
     basketbooksellernote => $basket->{booksellernote},
     basketcontractno     => $basket->{contractnumber},
     basketcontractname   => $contract->{contractname},
-    creationdate         => C4::Dates->new($basket->{creationdate},'iso')->output,
+    creationdate         => $basket->{creationdate},
     authorisedby         => $basket->{'authorisedby'},
     authorisedbyname     => $basket->{'authorisedbyname'},
-    closedate            => C4::Dates->new($basket->{'closedate'},'iso')->output,
+    closedate            => $basket->{'closedate'},
     # order details
     suggestionid         => $suggestion->{suggestionid},
     surnamesuggestedby   => $suggestion->{surnamesuggestedby},

@@ -1,3 +1,4 @@
+[% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; [% UNLESS ( basketno ) %]New [% END %][% IF ( delete_confirm ) %]Delete [% END %]Basket [% basketname|html %] ([% basketno %]) for [% name|html %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -178,8 +179,8 @@
                     <li><span class="label">Contract name:</span> <a href="../admin/aqcontract.pl?op=add_form&amp;contractnumber=[% basketcontractno %]&amp;booksellerid=[% booksellerid %]">[% basketcontractname %]</a></li>
                 [% END %]
                 [% IF ( authorisedbyname ) %]<li><span class="label">Managed by:</span>  [% authorisedbyname %]</li>[% END %]
-                [% IF ( creationdate ) %]<li><span class="label">Opened on:</span>  [% creationdate %]</li>[% END %]
-                [% IF ( closedate ) %]<li><span class="label">Closed on:</span> [% closedate %]</li>[% END %]
+                [% IF ( creationdate ) %]<li><span class="label">Opened on:</span>  [% creationdate | $KohaDates %]</li>[% END %]
+                [% IF ( closedate ) %]<li><span class="label">Closed on:</span> [% closedate | $KohaDates %]</li>[% END %]
 
                 </ol>
                 </div>

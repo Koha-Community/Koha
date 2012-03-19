@@ -1,3 +1,4 @@
+[% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; Basket [% basketno %] &rsaquo; [% IF ( ordernumber ) %]Modify order details (line #[% ordernumber %])[% ELSE %]New order[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -180,10 +181,10 @@ $(document).ready(function()
             <li><span class="label">Contract name:</span> <a href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&amp;contractnumber=[% basketcontractno %]">[% basketcontractname %]</a></li>
         [% END %]
         [% IF ( authorisedbyname ) %]<li><span class="label">Managed by:</span>  [% authorisedbyname %]</li>[% END %]
-        [% IF ( creationdate ) %]<li><span class="label">Open on:</span>  [% creationdate %]</li>[% END %]
+        [% IF ( creationdate ) %]<li><span class="label">Open on:</span>  [% creationdate | $KohaDates %]</li>[% END %]
         [% IF ( closedate ) %]
         <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="post">
-        <li><span class="label">Closed on:</span>  [% closedate %]</li>
+        <li><span class="label">Closed on:</span>  [% closedate | $KohaDates %]</li>
         [% IF ( basketgroups ) %]
             <li>Basketgroup: <select id="basketgroupid" name="basketgroupid">
                 [% FOREACH basketgroup IN basketgroups %]
