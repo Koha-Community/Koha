@@ -1,3 +1,5 @@
+[% USE KohaDates %]
+
 [% INCLUDE 'doc-head-open.inc' %][% LibraryNameTitle or "Koha Online" %] Catalog &rsaquo; Your checkout history
 [% INCLUDE 'doc-head-close.inc' %]
 <style type="text/css">ul.ui-tabs-nav li a, ul.ui-tabs-nav li span.a  { padding:0.6em 1em; }</style>
@@ -82,7 +84,7 @@ You have never borrowed anything from this library.
                     </span></td>
 <td>[% UNLESS ( noItemTypeImages ) %][% IF ( READING_RECOR.imageurl ) %]<img src="[% READING_RECOR.imageurl %]" alt="" />[% END %][% END %] [% READING_RECOR.description %]</td>
 <td>[% READING_RECOR.itemcallnumber %]</td>
-<td>[% IF ( READING_RECOR.returndate ) %][% READING_RECOR.returndate %][% ELSE %]<em>(Checked out)</em>[% END %]</td>
+<td>[% IF ( READING_RECOR.returndate ) %][% READING_RECOR.returndate | $KohaDates %][% ELSE %]<em>(Checked out)</em>[% END %]</td>
 </tr>
 
 [% END %]

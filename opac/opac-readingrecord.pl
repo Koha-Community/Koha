@@ -89,8 +89,8 @@ foreach my $issue (@{$issues} ) {
     $line{title}           = $issue->{'title'};
     $line{author}          = $issue->{'author'};
     $line{itemcallnumber}  = $issue->{'itemcallnumber'};
-    $line{date_due}        = format_sqlduedatetime( $issue->{date_due} );
-    $line{returndate}      = format_sqldatetime( $issue->{returndate} );
+    $line{date_due}        = $issue->{'date_due'};
+    $line{returndate}      = $issue->{'returndate'};
     $line{volumeddesc}     = $issue->{'volumeddesc'};
     $issue->{'itemtype'}   = C4::Context->preference('item-level_itypes') ? $issue->{'itype'} : $issue->{'itemtype'};
     if($issue->{'itemtype'}) {
