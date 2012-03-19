@@ -33,10 +33,13 @@ my $orders = GetPendingOrders( $supplierid, $grouped );
 isa_ok( $orders, 'ARRAY' );
 
 my @lateorders = GetLateOrders(0);
-my $order = $lateorders[0];
-AddClaim( $order->{ordernumber} );
-my $neworder = GetOrder( $order->{ordernumber} );
-is( $neworder->{claimed_date}, strftime( "%Y-%m-%d", localtime(time) ), "AddClaim : Check claimed_date" );
+SKIP: {
+   skip 'No Late Orders, cannot test AddClaim', 1 unless @lateorders;
+   my $order = $lateorders[0];
+   AddClaim( $order->{ordernumber} );
+   my $neworder = GetOrder( $order->{ordernumber} );
+   is( $neworder->{claimed_date}, strftime( "%Y-%m-%d", localtime(time) ), "AddClaim : Check claimed_date" );
+}
 
 SKIP: {
     skip 'No relevant orders in database, cannot test baskets', 33 unless( scalar @$orders );
@@ -56,7 +59,7 @@ SKIP: {
                              entrydate
                              firstname
                              freight
-                             gst
+                             gstrate
                              listprice
                              notes
                              ordernumber
