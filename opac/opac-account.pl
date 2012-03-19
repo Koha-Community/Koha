@@ -24,7 +24,6 @@ use C4::Members;
 use C4::Circulation;
 use C4::Auth;
 use C4::Output;
-use C4::Dates qw/format_date/;
 use warnings;
 
 my $query = new CGI;
@@ -50,7 +49,6 @@ $template->param( BORROWER_INFO => \@bordat );
 my ( $total , $accts, $numaccts) = GetMemberAccountRecords( $borrowernumber );
 
 for ( my $i = 0 ; $i < $numaccts ; $i++ ) {
-    $accts->[$i]{'date'} = format_date( $accts->[$i]{'date'} );
     $accts->[$i]{'amount'} = sprintf( "%.2f", $accts->[$i]{'amount'} || '0.00');
     if ( $accts->[$i]{'amount'} >= 0 ) {
         $accts->[$i]{'amountcredit'} = 1;

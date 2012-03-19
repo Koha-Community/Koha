@@ -1,3 +1,5 @@
+[% USE KohaDates %]
+
 [% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha Online[% END %] Catalog &rsaquo; Your fines and charges
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
@@ -35,7 +37,7 @@
             <tbody>
                 [% FOREACH ACCOUNT_LINE IN ACCOUNT_LINES %]
                     [% IF ( ACCOUNT_LINE.odd ) %]<tr class="highlight">[% ELSE %]<tr>[% END %]
-                        <td>[% ACCOUNT_LINE.date %]</td>
+                        <td>[% ACCOUNT_LINE.date | $KohaDates %]</td>
                         <td>[% ACCOUNT_LINE.description %]
                         [% IF ( ACCOUNT_LINE.title ) %][% ACCOUNT_LINE.title |html %][% END %]</td>
                         [% IF ( ACCOUNT_LINE.amountcredit ) %]<td class="credit">[% ELSE %]<td class="debit">[% END %][% ACCOUNT_LINE.amount %]</td>
