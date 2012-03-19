@@ -5,17 +5,19 @@
 <script type="text/javascript">
 //<![CDATA[
 
-	 $(document).ready(function() {
- 		$('#subfieldtabs > ul').tabs();
-		$("a.displaymore").click(function(){
-			$("#"+$(this).attr("href").replace("#","")).toggle();
-			if($(this).html() == "display more constraints"){
-				$(this).html("hide constraints");
-			} else {
-				$(this).html("display more constraints");
-			}
-		});
-	 });
+$(document).ready(function() {
+    $('#subfieldtabs > ul').tabs();
+        $("a.displaymore").click(function(){
+        var link = $(this);
+        var constraints = $("#"+$(this).attr("href").replace("#",""));
+        constraints.toggle();
+            if($(constraints).is(':visible')){
+                link.html(_("Hide constraints"));
+            } else {
+                link.html(_("Display more constraints"));
+            }
+    });
+});
 
 /*function displayMoreConstraint(numlayer){
     var thisdiv = document.getElementById(numlayer);
@@ -102,7 +104,7 @@
                 	</ol>
             </fieldset>
 			
-            <a class="displaymore" href="#more[% loo.urisubfieldcode %]">display more constraints</a>
+            <a class="displaymore" href="#more[% loo.urisubfieldcode %]">Display more constraints</a>
             <div id="more[% loo.urisubfieldcode %]" style="display:none; clear: both">
              <fieldset class="rows" style="float:none;">
 				<legend>Advanced constraints:</legend>
