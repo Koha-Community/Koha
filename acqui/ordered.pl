@@ -33,7 +33,6 @@ use warnings;
 use CGI;
 use C4::Auth;
 use C4::Output;
-use C4::Dates;
 
 my $dbh     = C4::Context->dbh;
 my $input   = new CGI;
