@@ -4923,7 +4923,7 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.07.00.XXX";
+$DBversion = "3.07.00.028";
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     $dbh->do(qq{
     INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('AllowPKIAuth','None','Use the field from a client-side SSL certificate to look a user in the Koha database','None|Common Name|emailAddress','Choice');
