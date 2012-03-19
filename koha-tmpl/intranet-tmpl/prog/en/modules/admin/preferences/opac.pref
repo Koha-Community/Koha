@@ -317,7 +317,7 @@ OPAC:
               choices:
                   yes: "Don't allow"
                   no: Allow
-            - patrons to select their branch on the OPAC.
+            - patrons to select their library on the OPAC.
         -
             - pref: SearchMyLibraryFirst
               choices:
@@ -352,9 +352,9 @@ OPAC:
             - Use 
             - pref: OpacRenewalBranch
               choices:
-                  itemhomebranch: "the item's home branch"
-                  patronhomebranch: "the patron's home branch"
-                  checkoutbranch: "the branch the item was checked out from"
+                  itemhomebranch: "the item's home library"
+                  patronhomebranch: "the patron's home library"
+                  checkoutbranch: "the library the item was checked out from"
                   null: "NULL"
                   opacrenew: "'OPACRenew'"
             - as branchcode to store in the statistics table.
@@ -375,7 +375,7 @@ OPAC:
               choices:
                   no: "Don't allow"
                   yes: Allow
-            - patrons to select branch when making a purchase suggestion
+            - patrons to select library when making a purchase suggestion
         -
             - pref: OpacHiddenItems
               type: textarea
@@ -435,7 +435,7 @@ OPAC:
               choices:
                   yes: Use
                   no: "Don't use"
-            - "the item home branch when finding items for the shelf browser."      
+            - "the item home library when finding items for the shelf browser."
         -
             - pref: ShelfBrowserUsesCcode
               default: 0

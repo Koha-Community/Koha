@@ -477,7 +477,7 @@ function verify_images() {
     <p> (There are [% subscriptionsnumber %] subscriptions associated with this title).</p> 
     [% FOREACH subscription IN subscriptions %]
 	    [% IF ( subscription.branchname ) %]<h3>At library: [% subscription.branchname %]</h3>[% ELSE %]
-	    [% IF ( subscription.branchcode ) %]<h3>At branch: [% subscription.branchcode %]</h3>[% END %][% END %]
+	    [% IF ( subscription.branchcode ) %]<h3>At library: [% subscription.branchcode %]</h3>[% END %][% END %]
             [% IF ( subscription.subscriptionnotes ) %]<p>[% subscription.subscriptionnotes %] </p>[% END %]
             [% IF ( subscription.latestserials ) %]
             <p> The [% subscription.staffdisplaycount %] latest issues related to this subscription:</p>

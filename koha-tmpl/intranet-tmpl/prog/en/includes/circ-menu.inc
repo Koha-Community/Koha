@@ -58,7 +58,7 @@
         [% END %]
     [% END %][% END %]
     <li>Category: [% categoryname %] ([% categorycode %])</li>
-    <li>Home Library: [% IF ( branchname ) %][% branchname %][% ELSE %][% branch %][% END %]</li>
+    <li>Home library: [% IF ( branchname ) %][% branchname %][% ELSE %][% branch %][% END %]</li>
 </ul></div>
 <div id="menu">
 <ul>

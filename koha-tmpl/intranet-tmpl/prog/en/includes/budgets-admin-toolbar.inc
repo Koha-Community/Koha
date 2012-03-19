@@ -47,7 +47,7 @@
                             [% UNLESS ( CAN_user_acquisition_planning_manage ) %],  id:'disabled' [% END %]
                         },
 
-                        { text: _("Plan by Branches"),
+                        { text: _("Plan by libraries"),
                             url: "/cgi-bin/koha/admin/aqplan.pl?budget_period_id=[% budget_period_id %]&authcat=BRANCHES"
                             [% UNLESS ( CAN_user_acquisition_planning_manage ) %],  id:'disabled' [% END %]
                         },

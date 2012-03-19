@@ -188,7 +188,7 @@ function set_to_today(id, force) {
 [% IF ( no_next_barcode ) %]<div class="dialog alert"><strong>Error saving items</strong>: Unable to automatically determine values for barcodes. No item has been inserted.</div>[% END %]
 [% IF ( book_on_loan ) %]<div class="dialog alert"><strong>Cannot Delete</strong>: item is checked out.</div>[% END %]
 [% IF ( book_reserved ) %]<div class="dialogalert"><strong>Cannot Delete</strong>: item has a waiting hold.</div>[% END %]
-[% IF ( not_same_branch ) %]<div class="dialog alert"><strong>Cannot Delete</strong>: The items do not belong to your branch.</div>[% END %]
+[% IF ( not_same_branch ) %]<div class="dialog alert"><strong>Cannot Delete</strong>: The items do not belong to your library.</div>[% END %]
 [% IF ( linked_analytics ) %]<div class="dialog alert"><strong>Cannot Delete</strong>: item has linked <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber %]&amp;analyze=1">analytics.</a>.</div>[% END %]
 
 <div id="cataloguing_additem_itemlist">
