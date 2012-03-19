@@ -123,6 +123,12 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 my $marcflavour = C4::Context->preference('marcflavour');
+
+if(!$basketno) {
+    my $order = GetOrder($ordernumber);
+    $basketno = $order->{'basketno'};
+}
+
 my $basket = GetBasket($basketno);
 my $contract = &GetContract($basket->{contractnumber});
 

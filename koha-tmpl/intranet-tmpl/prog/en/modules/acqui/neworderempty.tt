@@ -170,9 +170,9 @@ $(document).ready(function()
 
 [% IF ( basketno ) %]
     <div id="acqui_basket_summary"  class="yui-g">
-	<fieldset class="rows">
+    <fieldset class="rows">
         <legend>Basket details</legend>
-		<ol>
+        <ol>
         [% IF ( basketnote ) %]<li><span class="label">Internal note:</span> [% basketnote %]</li>[% END %]
         [% IF ( basketbooksellernote ) %]<li><span class="label">Vendor note:</span> [% basketbooksellernote %]</li>[% END %]
         [% IF ( basketcontractno ) %]
@@ -198,12 +198,12 @@ $(document).ready(function()
                 <input type="hidden" value="mod_basket" name="op" />
                 <input type="hidden" name="booksellerid" value="[% booksellerid %]" />
             </li>
-		<fieldset class="action"><input type="submit" value="Change basketgroup" /></fieldset>
+            <fieldset class="action"><input type="submit" value="Change basketgroup" /></fieldset>
+        [% END %]
         </form>
         [% END %]
-        [% END %]
-			</ol>
-</fieldset>
+        </ol>
+    </fieldset>
     </div>
 [% END %]
 
