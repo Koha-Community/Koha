@@ -33,7 +33,6 @@ use C4::Output;
 use C4::Overdues qw/CheckBorrowerDebarred/;
 use C4::Biblio;
 use C4::Items;
-use C4::Dates qw/format_date/;
 use C4::Letters;
 use C4::Branch; # GetBranches
 use Koha::DateUtils;
@@ -76,9 +75,6 @@ my ( $borr ) = GetMemberDetails( $borrowernumber );
 my (  $today_year,   $today_month,   $today_day) = Today();
 my ($warning_year, $warning_month, $warning_day) = split /-/, $borr->{'dateexpiry'};
 
-for (qw(dateenrolled dateexpiry dateofbirth)) {
-    ($borr->{$_}) and $borr->{$_} = format_date($borr->{$_});
-}
 $borr->{'ethnicity'} = fixEthnicity( $borr->{'ethnicity'} );
 
 my $debar = CheckBorrowerDebarred($borrowernumber);
@@ -88,7 +84,7 @@ if ($debar) {
     $userdebarred = 1;
     $template->param( 'userdebarred' => $userdebarred );
     if ( $debar ne "9999-12-31" ) {
-        $borr->{'userdebarreddate'} = C4::Dates::format_date($debar);
+        $borr->{'userdebarreddate'} = $debar;
     }
 }
 
@@ -254,18 +250,14 @@ $template->param( branchloop => \@branch_loop );
 # now the reserved items....
 my @reserves  = GetReservesFromBorrowernumber( $borrowernumber );
 foreach my $res (@reserves) {
-    $res->{'reservedate'} = format_date( $res->{'reservedate'} );
 
-    if ( $res->{'expirationdate'} ne '0000-00-00' ) {
-      $res->{'expirationdate'} = format_date( $res->{'expirationdate'} ) 
-    } else {
+    if ( $res->{'expirationdate'} eq '0000-00-00' ) {
       $res->{'expirationdate'} = '';
     }
     
     my $publictype = $res->{'publictype'};
     $res->{$publictype} = 1;
     $res->{'waiting'} = 1 if $res->{'found'} eq 'W';
-    $res->{'formattedwaitingdate'} = format_date($res->{'waitingdate'});
     $res->{'branch'} = $branches->{ $res->{'branchcode'} }->{'branchname'};
     my $biblioData = GetBiblioData($res->{'biblionumber'});
     $res->{'reserves_title'} = $biblioData->{'title'};
@@ -311,7 +303,7 @@ foreach my $res (@reserves) {
             my ($transfertwhen, $transfertfrom, $transfertto) = GetTransfers( $res->{'itemnumber'} );
             if ($transfertwhen) {
                 $res->{intransit} = 1;
-                $res->{datesent}   = format_date($transfertwhen);
+                $res->{datesent}   = $transfertwhen;
                 $res->{frombranch} = GetBranchName($transfertfrom);
             }
         }

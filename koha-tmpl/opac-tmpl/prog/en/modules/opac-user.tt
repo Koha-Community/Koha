@@ -1,3 +1,5 @@
+[% USE KohaDates %]
+
 [% INCLUDE 'doc-head-open.inc' %]
 [% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha Online[% END %] Catalog &rsaquo; Your library home
 [% INCLUDE 'doc-head-close.inc' %]
@@ -62,7 +64,7 @@ $.tablesorter.addParser({
 	                       [% FOREACH bor_messages_loo IN bor_messages_loop %]
 					<li>
 						<strong>[% bor_messages_loo.message %]</strong><br>
-	                        		&nbsp;&nbsp;&nbsp;<i>Written on [% bor_messages_loo.message_date_formatted %] by [% bor_messages_loo.branchname %]</i>
+                            &nbsp;&nbsp;&nbsp;<i>Written on [% bor_messages_loo.message_date | $KohaDates %] by [% bor_messages_loo.branchname %]</i>
 					</li>
 	                        [% END %]
 
@@ -89,7 +91,7 @@ $.tablesorter.addParser({
 		<div class="dialog alert">
         <ul>
             [% IF ( userdebarred ) %]
-                <li><strong>Please note:</strong> Your account has been frozen[% IF ( BORROWER_INF.userdebarreddate ) %] until [% BORROWER_INF.userdebarreddate %][% END %][% IF ( BORROWER_INF.debarredcomment ) %] with the comment "[% BORROWER_INF.debarredcomment %]"[% END %]. Usually the reason for freezing an account is old overdues or damage fees. If <a href="/cgi-bin/koha/opac-user.pl">your account page</a> shows your account to be clear, please contact the library.</li>
+                <li><strong>Please note:</strong> Your account has been frozen[% IF ( BORROWER_INF.userdebarreddate ) %] until [% BORROWER_INF.userdebarreddate | $KohaDates %][% END %][% IF ( BORROWER_INF.debarredcomment ) %] with the comment "[% BORROWER_INF.debarredcomment %]"[% END %]. Usually the reason for freezing an account is old overdues or damage fees. If <a href="/cgi-bin/koha/opac-user.pl">your account page</a> shows your account to be clear, please contact the library.</li>
             [% END %]
             [% IF ( BORROWER_INF.gonenoaddress ) %]
                 <li><strong>Please note:</strong> According to our records, we don't have up-to-date [% UNLESS ( BORROWER_INF.OPACPatronDetails ) %]<a href="/cgi-bin/koha/opac-userupdate.pl">contact information</a>[% ELSE %]contact information[% END %] on file.  Please contact the library[% IF ( BORROWER_INF.OPACPatronDetails ) %] or use the <a href="/cgi-bin/koha/opac-userupdate.pl">online update form</a> to submit current information (<em>Please note:</em> there may be a delay in restoring your account if you submit online)[% END %].</li>
@@ -169,7 +171,7 @@ $.tablesorter.addParser({
                         </a><span class="item-details">
                             [% WAITIN.author %]
                         </span></td>
-                    <td>[% WAITIN.reservedate %]</td>
+                    <td>[% WAITIN.reservedate | $KohaDates %]</td>
                     <td>[% IF ( WAITIN.atdestination ) %]<strong>Waiting</strong> at [% WAITIN.branch %]
                         [% ELSE %]
                         In transit from [% WAITIN.holdingbranch %] to [% WAITIN.branch %]
@@ -234,9 +236,9 @@ $.tablesorter.addParser({
                         [% ISSUE.author %]
                     </span></td>
                 [% IF ( ISSUE.overdue ) %]
-                    <td class="overdue">[% ISSUE.date_due %]</td>
+                    <td class="overdue">[% ISSUE.date_due | $KohaDates %]</td>
                 [% ELSE %]
-                    <td>[% ISSUE.date_due %]</td>
+                    <td>[% ISSUE.date_due | $KohaDates %]</td>
                 [% END %]
                 [% UNLESS ( item_level_itypes ) %]<td>[% IF ( ISSUE.imageurl ) %]<img src="[% ISSUE.imageurl %]" title="[% ISSUE.description %]" alt="[% ISSUE.description %]" />[% END %] [% ISSUE.description %]</td>[% END %]
                 [% IF ( show_barcode ) %]<td>[% ISSUE.barcode %]</td>[% END %]
@@ -320,7 +322,7 @@ $.tablesorter.addParser({
 [% UNLESS ( item_level_itypes ) %]<td>[% IF ( OVERDUE.imageurl ) %]<img src="[% OVERDUE.imageurl %]" title="[% OVERDUE.description %]" alt="[% OVERDUE.description %]" />[% END %] [% OVERDUE.description %]</td>[% END %]
 [% IF ( show_barcode ) %]<td>[% OVERDUE.barcode %]</td>[% END %]
 <td>[% OVERDUE.itemcallnumber %]</td>
-<td>[% OVERDUE.date_due %]</td>
+<td>[% OVERDUE.date_due | $KohaDates %]</td>
                 [% IF ( OpacRenewalAllowed ) %]
 <td>
 [% IF ( OVERDUE.debarred ) %]Account Frozen
@@ -373,8 +375,8 @@ $.tablesorter.addParser({
                 <td><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% RESERVE.biblionumber %]">[% RESERVE.reserves_title %]</a>
                     [% RESERVE.author %]
                 </td>
-                <td>[% RESERVE.reservedate %]</td>
-		<td>[% IF ( RESERVE.expirationdate ) %][% RESERVE.expirationdate %][% ELSE %]Never Expires[% END %]</td>
+                <td>[% RESERVE.reservedate | $KohaDates %]</td>
+		<td>[% IF ( RESERVE.expirationdate ) %][% RESERVE.expirationdate | $KohaDates %][% ELSE %]Never Expires[% END %]</td>
                 <td>[% RESERVE.branch %]</td>
 				[% IF ( showpriority ) %]
 				<td>[% RESERVE.priority %] </td>
@@ -383,7 +385,7 @@ $.tablesorter.addParser({
                     [% IF ( RESERVE.wait ) %]
                         [% IF ( RESERVE.atdestination ) %]
                             [% IF ( RESERVE.found ) %]
-                            Item waiting at <b> [% RESERVE.wbrname %]</b>[% IF ( RESERVE.formattedwaitingdate ) %] since [% RESERVE.formattedwaitingdate %][% END %]
+                            Item waiting at <b> [% RESERVE.wbrname %]</b>[% IF ( RESERVE.formattedwaitingdate ) %] since [% RESERVE.waitingdate | $KohaDates %][% END %]
                             <input type="hidden" name="pickup" value="[% RESERVE.wbrcd %]" />
                             [% ELSE %]
                             Item waiting to be pulled from <b> [% RESERVE.wbrname %]</b>
@@ -394,7 +396,7 @@ $.tablesorter.addParser({
                     [% ELSE %]
                             [% IF ( RESERVE.intransit ) %]
                                 Item in transit from <b> [% RESERVE.frombranch %]</b> since 
-                                [% RESERVE.datesent %]
+                                [% RESERVE.datesent | $KohaDates %]
                             [% ELSE %]
                                 Pending
                             [% END %]
