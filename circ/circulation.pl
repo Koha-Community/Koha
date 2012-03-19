@@ -449,7 +449,7 @@ sub build_issue_data {
         $it->{'itemtype'} = $itemtypeinfo->{'description'};
         $it->{'itemtype_image'} = $itemtypeinfo->{'imageurl'};
         $it->{'dd'} = output_pref($it->{'date_due'});
-        $it->{'displaydate'} = format_date($it->{'issuedate'});
+        $it->{'displaydate'} = output_pref($it->{'issuedate'});
         #$it->{'od'} = ( $it->{'date_due'} lt $todaysdate ) ? 1 : 0 ;
         $it->{'od'} = $it->{'overdue'};
         ($it->{'author'} eq '') and $it->{'author'} = ' ';

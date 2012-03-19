@@ -1039,7 +1039,7 @@ sub GetPendingIssues {
     my $today = DateTime->now( time_zone => $tz);
     foreach (@{$data}) {
         if ($_->{issuedate}) {
-            $_->{issuedate} = dt_from_string($_->{issuedate}. 'sql');
+            $_->{issuedate} = dt_from_string($_->{issuedate}, 'sql');
         }
         $_->{date_due} or next;
         $_->{date_due} = DateTime::Format::DateParse->parse_datetime($_->{date_due}, $tz->name());

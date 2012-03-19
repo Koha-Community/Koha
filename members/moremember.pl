@@ -431,7 +431,6 @@ sub build_issue_data {
            $issuedate = $issue->{issuedate}->clone();
         }
 
-        #wtf $issue->{'date_due'}  = format_date($issue->[$i]->{issuedate});
         $issue->{date_due}  = output_pref( $issue->{date_due} );
         $issue->{issuedate} = output_pref( $issue->{issuedate} ) if defined $issue->{issuedate};
         my $biblionumber = $issue->{biblionumber};
