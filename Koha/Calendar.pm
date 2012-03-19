@@ -83,7 +83,8 @@ sub _init {
 }
 
 sub addDate {
-    my ( $self, $base_date, $add_duration, $unit ) = @_;
+    my ( $self, $startdate, $add_duration, $unit ) = @_;
+    my $base_date = $startdate->clone();
     if ( ref $add_duration ne 'DateTime::Duration' ) {
         $add_duration = DateTime::Duration->new( days => $add_duration );
     }

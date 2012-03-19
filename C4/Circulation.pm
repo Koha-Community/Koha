@@ -996,12 +996,12 @@ sub AddIssue {
 		# check if we just renew the issue.
 		#
 		if ($actualissue->{borrowernumber} eq $borrower->{'borrowernumber'}) {
-			$datedue = AddRenewal(
-				$borrower->{'borrowernumber'},
-				$item->{'itemnumber'},
-				$branch,
-				$datedue,
-                $issuedate, # here interpreted as the renewal date
+		    $datedue = AddRenewal(
+			$borrower->{'borrowernumber'},
+			$item->{'itemnumber'},
+			$branch,
+			$datedue,
+			$issuedate, # here interpreted as the renewal date
 			);
 		}
 		else {
@@ -1016,7 +1016,6 @@ sub AddIssue {
 			}
 
             MoveReserve( $item->{'itemnumber'}, $borrower->{'borrowernumber'}, $cancelreserve );
-
 			# Starting process for transfer job (checking transfert and validate it if we have one)
             my ($datesent) = GetTransfers($item->{'itemnumber'});
             if ($datesent) {
