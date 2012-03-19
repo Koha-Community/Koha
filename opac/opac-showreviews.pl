@@ -28,7 +28,7 @@ use C4::Output;
 use C4::Circulation;
 use C4::Review;
 use C4::Biblio;
-use C4::Dates qw/format_date/;
+use C4::Dates;
 use C4::Members qw/GetMemberDetails/;
 use POSIX qw(ceil strftime);
 
@@ -117,9 +117,6 @@ for my $result (@$reviews){
         my $rsstimestamp = C4::Dates->new($result->{datereviewed},"iso");
         my $rsstimestamp_output = $rsstimestamp->output("rfc822");
         $result->{timestamp} = $rsstimestamp_output;
-        $result->{datereviewed} = format_date($result->{datereviewed});
-    } else {
-        $result->{datereviewed} = format_date($result->{datereviewed});
     }
 }
 ## Build the page numbers on the bottom of the page

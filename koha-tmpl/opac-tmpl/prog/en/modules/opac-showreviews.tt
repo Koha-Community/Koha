@@ -1,3 +1,5 @@
+[% USE KohaDates %]
+
 [% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha Online[% END %] Catalog &rsaquo; Recent Comments
 [% INCLUDE 'doc-head-close.inc' %]
 <link rel="alternate" type="application/rss+xml" title="[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha Online[% END %] Catalog Recent Comments" href="[% OPACBaseURL %]/cgi-bin/koha/opac-showreviews.pl?format=rss" />
@@ -53,7 +55,7 @@ $(document).ready(function(){
             [% FILTER html_break %]
             [% review.review |html %]
             [% END %]
-            <span style="font-size:87%;font-color:#CCC;">Added [% review.datereviewed %] [% IF ( review.your_comment ) %] by <strong>you</strong>[% ELSE %]
+            <span style="font-size:87%;font-color:#CCC;">Added [% review.datereviewed | $KohaDates %] [% IF ( review.your_comment ) %] by <strong>you</strong>[% ELSE %]
             [% IF ( review.borrowernumber && ShowReviewer != "none" ) %] by
                 [% SWITCH ShowReviewer %]
                 [% CASE 'full' %]
