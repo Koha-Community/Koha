@@ -1,3 +1,5 @@
+[% USE KohaDates %]
+
 [% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha Online[% END %][% ELSE %]Koha Online[% END %] Catalog &rsaquo;  Your personal details
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
@@ -68,7 +70,7 @@
 </fieldset>
 <fieldset class="brief">
 <ol>
-<li><label for="dob">Date of Birth: </label> <input id="dob" type="text" size="10" value="[% BORROWER_INF.dateofbirth %]" name="dateofbirth" /></li>
+<li><label for="dob">Date of Birth: </label> <input id="dob" type="text" size="10" value="[% BORROWER_INF.dateofbirth | $KohaDates %]" name="dateofbirth" /></li>
 <li><label for="sex">Gender: </label> <select name="sex" id="sex"><option></option>
 [% IF ( BORROWER_INF.sex == 'F' ) %]<option value="F" selected="selected">Female</option>[% ELSE %]<option value="F">Female</option>[% END %]
 [% IF ( BORROWER_INF.sex == 'M' ) %]<option value="M" selected="selected">Male</option>[% ELSE %]<option value="M">Male</option>[% END %]
@@ -81,8 +83,8 @@
     <li><label for="branchname">Home library:</label><input type="text" id="branchname" disabled="disabled" readonly="readonly" value="[% BORROWER_INF.branchname %]" /></li>
 	<li><label for="borrowernumber">Patron Number:</label><input type="text" id="borrowernumber" disabled="disabled" readonly="readonly" value="[% BORROWER_INF.borrowernumber %]" /></li>
 	<li><label for="categorycode">Patron Category:</label><input type="text" id="categorycode" disabled="disabled" readonly="readonly" value="[% BORROWER_INF.description %] ([% BORROWER_INF.categorycode %])" /></li>
-	<li><label for="dateenrolled">Joined: </label><input type="text" id="dateenrolled" disabled="disabled" readonly="readonly" value="[% BORROWER_INF.dateenrolled %]" /></li>
-	<li><label for="dateexpiry">Expires: </label><input type="text" id="dateexpiry" disabled="disabled" readonly="readonly" value="[% BORROWER_INF.dateexpiry %]" /></li>
+	<li><label for="dateenrolled">Joined: </label><input type="text" id="dateenrolled" disabled="disabled" readonly="readonly" value="[% BORROWER_INF.dateenrolled | $KohaDates %]" /></li>
+	<li><label for="dateexpiry">Expires: </label><input type="text" id="dateexpiry" disabled="disabled" readonly="readonly" value="[% BORROWER_INF.dateexpiry | $KohaDates %]" /></li>
    [% IF ( BORROWER_INF.ExtendedPatronAttributes ) %]
     [% FOREACH patron_attribute IN BORROWER_INF.patron_attributes %]
         <li><label>[% patron_attribute.description %]</label>
@@ -131,7 +133,7 @@
 <fieldset class="rows">
 <legend>Personal Information</legend>
 <ol>
-<li><span class="label">Date of Birth:</span> [% BORROWER_INF.dateofbirth %]</li>
+<li><span class="label">Date of Birth:</span> [% BORROWER_INF.dateofbirth | $KohaDates %]</li>
 <li><span class="label">Gender:</span>
 [% IF ( sex == 'F' ) %]Female[% END %]
 [% IF ( sex == 'M' ) %]Male[% END %]
@@ -162,8 +164,8 @@
 <li><span class="label">Home library:</span> [% BORROWER_INF.branchname %]</li>
 <li><span class="label">Patron Number:</span> [% BORROWER_INF.borrowernumber %]</li>
 <li><span class="label">Patron Category:</span> [% BORROWER_INF.description %] ([% BORROWER_INF.categorycode %])</li>
-<li><span class="label">Joined:</span> [% BORROWER_INF.dateenrolled %]</li>
-<li><span class="label">Expires:</span> [% BORROWER_INF.dateexpiry %]</li>
+<li><span class="label">Joined:</span> [% BORROWER_INF.dateenrolled | $KohaDates %]</li>
+<li><span class="label">Expires:</span> [% BORROWER_INF.dateexpiry | $KohaDates %]</li>
    [% IF ( BORROWER_INF.ExtendedPatronAttributes ) %]
     [% FOREACH patron_attribute IN BORROWER_INF.patron_attributes %]
         <li><span class="label">[% patron_attribute.description %]</span>

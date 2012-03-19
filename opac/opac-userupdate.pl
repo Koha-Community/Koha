@@ -141,9 +141,6 @@ EOF
     }
 }
 
-$borr->{'dateenrolled'} = format_date( $borr->{'dateenrolled'} );
-$borr->{'dateexpiry'}   = format_date( $borr->{'dateexpiry'} );
-$borr->{'dateofbirth'}  = format_date( $borr->{'dateofbirth'} );
 $borr->{'ethnicity'}    = fixEthnicity( $borr->{'ethnicity'} );
 $borr->{'branchname'}   = GetBranchName($borr->{'branchcode'});
 
