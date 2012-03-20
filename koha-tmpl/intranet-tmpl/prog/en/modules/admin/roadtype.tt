@@ -50,7 +50,7 @@
 //]]>
 </script>
 </head>
-<body>
+<body id="admin_roadtype" class="admin">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'roadtype-admin-search.inc' %]
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; [% IF ( add_form ) %]<a href="/cgi-bin/koha/admin/roadtype.pl">Road Types</a> &rsaquo; [% IF ( roadtypeid ) %] Modify Road Type[% ELSE %] New Road Type[% END %][% ELSE %][% IF ( delete_confirm ) %]<a href="/cgi-bin/koha/admin/roadtype.pl">Road Types</a> &rsaquo; Confirm Deletion of Road Type[% ELSE %] Road Type[% END %][% END %]</div>
