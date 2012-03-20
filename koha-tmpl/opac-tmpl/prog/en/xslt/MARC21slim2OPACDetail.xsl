@@ -485,7 +485,7 @@
             <xsl:when test="$TraceSubjectSubdivisions='1'">
                 <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=<xsl:call-template name="subfieldSelect">
                         <xsl:with-param name="codes">abcdfgklmnopqrstvxyz</xsl:with-param>
-                        <xsl:with-param name="delimeter"> and </xsl:with-param>
+                        <xsl:with-param name="delimeter"> AND </xsl:with-param>
                         <xsl:with-param name="prefix">(su<xsl:value-of select="$SubjectModifier"/>:<xsl:value-of select="$TracingQuotesLeft"/></xsl:with-param>
                         <xsl:with-param name="suffix"><xsl:value-of select="$TracingQuotesRight"/>)</xsl:with-param>
                     </xsl:call-template>
