@@ -13,8 +13,8 @@
 // to check if the data are correctly entered.
 function Check(ff) {
     var ok=0;
-    var _alertString="Form not submitted because of the following problem(s)\n";
-    _alertString +="-------------------------------------------------------------------\n\n";
+    var _alertString="Form not submitted because of the following problem(s)";
+    _alertString +="\n-------------------------------------------------------------------\n\n";
     if (!(isNotNull(ff.basketname,0))){
         ok=1;
         _alertString += "- name missing\n";
@@ -84,7 +84,7 @@ li.list2 {
 </style>
 
 </head>
-<body>
+<body id="acq_basketheader" class="acq">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'acquisitions-search.inc' %]
 
