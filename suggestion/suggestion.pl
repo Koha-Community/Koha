@@ -43,7 +43,6 @@ sub Init{
     else {
         # editing of an existing suggestion
         $suggestion->{'manageddate'} = C4::Dates->today;
-        warn $suggestion->{'manageddate'};
         $suggestion->{'managedby'} = C4::Context->userenv->{"number"} unless ($suggestion->{'managedby'});
         # suggesteddate, when coming from the DB, needs to be formated
         $suggestion->{'suggesteddate'} = format_date($suggestion->{'suggesteddate'});
