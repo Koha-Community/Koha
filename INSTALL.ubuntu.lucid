@@ -11,7 +11,7 @@ Modified for Ubuntu by: Chris Nighswonger (cnighswonger AT foundations DOT edu)
 Feedback/bug reports: Koha Developer's List:
 http://lists.koha-community.org/cgi-bin/mailman/listinfo/koha-devel
 
-This document last modified: 11 Sep 2010
+This document last modified: 20 Marchp 2012
 
 Installation Instructions
 =============================
@@ -217,7 +217,7 @@ To add a user do:
 
 Option 1: run the Zebra processes from the command line:
 
-1.1 Zebra Search Server
+5.1.1 Zebra Search Server
 
 This process send responses to search requests sent by Koha or
 Z39.50/SRU/SRW clients.
@@ -230,7 +230,7 @@ Note: the user you run Zebra as will be the only user with write permission
       on the Zebra index; in development mode, you may wish to use your
       system user.
 
-1.2 Zebra Indexer
+5.1.2 Zebra Indexer
 
 Added/updated/deleted records in Koha MySQL database must be indexed
 into Zebra. A specific script must be launched each time a bibliographic
@@ -244,7 +244,7 @@ Option 2: run the Zebra process as a daemon, and add to startup process:
 Note that references to $SCRIPT_DIR refer to the directory where
 Koha's command-line scripts are installed, e.g., /usr/share/koha/bin.
 
-1.1 Zebra Search Server
+5.2.1 Zebra Search Server
 
     $ sudo ln -s ${SCRIPT_DIR}/koha-zebra-ctl.sh  /etc/init.d/koha-zebra-daemon
     (Note: ${SCRIPT_DIR} is /usr/share/koha/bin/ by default in a standard install)
@@ -253,7 +253,7 @@ Koha's command-line scripts are installed, e.g., /usr/share/koha/bin.
 
     $ sudo ${SCRIPT_DIR}/koha-zebra-ctl.sh start
 
-1.2 Zebra Indexer
+5.2.2 Zebra Indexer
 
 Add an entry in Koha user crontab to scheduled added/updated/deleted records
 indexing by Zebra with this command:
@@ -262,6 +262,8 @@ indexing by Zebra with this command:
 
 See check misc/cronjobs/crontab.example for usage examples.
 NOTE: This job should be setup under the kohauser (the default is 'koha').
+
+You can also configure zebra-indexing as an background daemon, see http://wiki.koha-community.org/wiki/Background_indexing_with_Zebra
 
 6. Run the Web Installer, populate the database, initial configuration of settings
 
@@ -296,6 +298,8 @@ NOTE: This job should be setup under the kohauser (the default is 'koha').
     You need to run rebuild_zebra.pl -b -a -z as a regular cron job in orde to pick up new bibs
     and items as you add them. Check misc/cronjobs/crontab.example for usage examples. See 7.0 above.
     NOTE: This job should be setup under the kohauser (the default is 'koha').
+
+    You can also indexing in background, see 5.2.2 above
 
 7.4 To enable public Z39.50/SRU servers, you'll need to edit your koha-conf.xml and
     change the <listen> options to listen on a TCP port; then restart the zebra daemon.

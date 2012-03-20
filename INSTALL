@@ -36,7 +36,7 @@ Default installation instructions:
     perl translate install fr-FR # or use your preferred language codes
 
 2. make
-3.(optional) make test 
+3.(optional) make test
 4. sudo make install
 5. sudo ln -s /etc/koha/koha-httpd.conf /etc/apache2/sites-available/koha
   (note that the path to koha-httpd.conf may be different depending on your
@@ -68,7 +68,7 @@ UPGRADE
 =======
 If you are running in another language other than english, please
 switch to english before doing the upgrade, the templating system has
-changed and the templates will need to be regenerated. 
+changed and the templates will need to be regenerated.
 Once you have upgraded, please regenerate your templates in your
 chosen languages.
 
@@ -94,7 +94,7 @@ Use the packaged version or install from CPAN
  sudo make upgrade
 
 Koha 3.4.x or later  no longer stores items in biblio records.
-If you are upgrading from an older version ou will need to do the 
+If you are upgrading from an older version ou will need to do the
 following two steps, they can take a long time (several hours) to
 complete for large databases
 
@@ -125,14 +125,12 @@ WHAT NEXT?
     Once the indexing has completed, you will be able to search for records in your
     system. NOTE: if you don't run the Fast Index utility, and you have the index
     updates scheduled as per 7.3 the indexing process will happen in the background,
-    Once the indexing has completed, you will be able to search for records in your
-    system. NOTE: if you don't run the Fast Index utility, and you have the index
-    updates scheduled as per 7.3 the indexing process will happen in the background,
     but it will be orders of magnitude slower.
 
 4. Schedule regular index updates
-    run rebuild_zebra.pl -b -a -z as a regular cron job, check misc/cronjobs/crontab.example
-    for usage examples
+    run rebuild_zebra.pl -b -a -z as a regular cron job, check the 'misc/cronjobs/crontab.example' file for usage examples
+
+    You can also configure zebra-indexing as an background daemon, see http://wiki.koha-community.org/wiki/Background_indexing_with_Zebra
 
 5. To enable public Z39.50/SRU servers, you'll need to edit your koha-conf.xml and
     change the <listen> options to listen on a TCP port; then restart the zebra daemon.

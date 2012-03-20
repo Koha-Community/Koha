@@ -5,11 +5,11 @@ Version for openSUSE 11.3 adapted by Freek de Kruijf - freek -at- opensuse -dot-
 
 No liability for the contents of this document can be accepted.
 
-Feedback/bug reports: Koha Developer's List: 
+Feedback/bug reports: Koha Developer's List:
 
 http://lists.koha-community.org/cgi-bin/mailman/listinfo/koha-devel
 
-This document last modified: 15 Oct 2010
+This document last modified: 20 Mar 2012
 
 == Installation Instructions ==
 
@@ -19,7 +19,7 @@ The installation of Linux system described below is a basic, it is not designed 
 
 This document describes the different stages of installing the software Koha 3 on the openSUSE 11.3 Linux distribution in a "new" computer, the author uses a VirtualBox virtual machine, that is, a virtual computer that will have its virtual hard disk contents COMPLETELY ERASED to install openSUSE and Koha!
 
-In this example, the virtual machine uses a bridged network connection, which mimics a separate computer in the local network, it's assumed that your server gets an IP address by DHCP that later will be changed to 192.168.1.16. 
+In this example, the virtual machine uses a bridged network connection, which mimics a separate computer in the local network, it's assumed that your server gets an IP address by DHCP that later will be changed to 192.168.1.16.
 
 You'll have to change this to the real IP address that your machine should get (or use DHCP, if that's the case).
 
@@ -34,7 +34,7 @@ Place the DVD in the drive and restart the machine. In the case of a virtualmach
 After the "Welcome" screen, you'll get a First menu, with the following options:
 
 ----
-Boot from Hard Disk 
+Boot from Hard Disk
 
 Installation
 
@@ -42,7 +42,7 @@ Repair Installed System
 
 Rescue System
 
-Firmware Test 
+Firmware Test
 
 Memory Test
 ----
@@ -58,8 +58,8 @@ Choose "Installation" (second command)
 
 You'll see two Dropdown Lists: "Language" and "Keyboard Layout"
 
-This depends of your place and preference, naturally. 
-I live in The Netherlands, and we use the English (US) Keyboard Layout but I prefer an Operating System in English. 
+This depends of your place and preference, naturally.
+I live in The Netherlands, and we use the English (US) Keyboard Layout but I prefer an Operating System in English.
 So I leave the default option selected for "Language"  and "Keyboard Layout" to (English (US)).
 
 Check the "I Agree to the License Terms" checkbox (under the "License Agreement" textbox).
@@ -269,7 +269,7 @@ koha-server login:
 You may now login with your "root" user.
 
 ==== Changing the Hostname and Domain Name ====
- 
+
 
 Maybe you want to change the hostname, domain name and switch from DHCP to a Static IP address.
 Changing the hostname and domain name will not be shown here, because we assume that was done according to your whishes during installation.
@@ -295,7 +295,7 @@ Press the ENTER key.
 I want to disable IPv6, so I first go to the "Global Options" section (by pushing the key combination ALT+G to press the "G" letter in Global Options that is highlighted).
 In the next screen, I push ALT+E to uncheck the "Enable IPv6" checkbox.
 I'll get a dialog box with a Warning saying that "To apply this change a reboot is needed.".
-I just press ENTER on that dialog box, but I do NOT reboot (at least not yet). 
+I just press ENTER on that dialog box, but I do NOT reboot (at least not yet).
 
 Then I press Alt+V to go to the "Overview" (still in "Network Settings").
 Then I press ALT+I to "Edit" the information for this Network Card.
@@ -350,8 +350,8 @@ For this you use vim to change the config file of sshd.
 Find the lines starting with AcceptEnv and insert a # in front of these, There are three lines.
 Afterwards these lines will look like:
 |--------------------
-#AcceptEnv LANG LC_CTYPE LC_NUMERIC LC_TIME LC_COLLATE LC_MONETARY LC_MESSAGES 
-#AcceptEnv LC_PAPER LC_NAME LC_ADDRESS LC_TELEPHONE LC_MEASUREMENT 
+#AcceptEnv LANG LC_CTYPE LC_NUMERIC LC_TIME LC_COLLATE LC_MONETARY LC_MESSAGES
+#AcceptEnv LC_PAPER LC_NAME LC_ADDRESS LC_TELEPHONE LC_MEASUREMENT
 #AcceptEnv LC_IDENTIFICATION LC_ALL
 |--------------------
 
@@ -396,18 +396,18 @@ Inside yast, select Software -> Software Repositories
 
 ==== "Configured Software Repositories" screen ====
 
-When on this screen, you already see a table that has: 
+When on this screen, you already see a table that has:
 
 * as configured repositories (in the "Name" column)
 ** "Updates for openSUSE 11.3 11.3-1.82"
 ** "openSUSE-11.3 11.3-1.82"
 ** "openSUSE-11.3-Debug"
-** "openSUSE-11.3-Non-Oss" "openSUSE-11.3-Oss" ... 
+** "openSUSE-11.3-Non-Oss" "openSUSE-11.3-Oss" ...
 * at least the following repositories have an "x" in the "Enabled" column
 ** "Updates for openSUSE 11.3 11.3-1.82"
 ** "openSUSE-11.3-Oss"
 * you still have to add the folowing repositiory to this list
-** "openSUSE BuildService - devel:languages:perl" 
+** "openSUSE BuildService - devel:languages:perl"
 Press ALT+A to Add Repositories.
 
 ==== "Media type" screen ====
@@ -486,7 +486,7 @@ We want to have en_US.UTF-8 in all LC_* variables. So, we'll do the following:
 |--------------------
 System -> Language
 
-The "Languages" screen should appear. 
+The "Languages" screen should appear.
 
 In the first section (Primary Language Settings):
 
@@ -667,8 +667,8 @@ Shutting down service MySQL                                           done
 Starting service MySQL                                                done
 |--------------------
 
-Now, let's type again the show variables like 'char%' mysql command to see if 
-the character_set_variables have changed from latin1 to utf8 (character_set_filesystem 
+Now, let's type again the show variables like 'char%' mysql command to see if
+the character_set_variables have changed from latin1 to utf8 (character_set_filesystem
 will still read "binary" but I think that's OK:
 |--------------------
 myhost:/etc # mysql -p
@@ -702,11 +702,11 @@ Bye
 
 === Create the koha database and user with associated privileges ===
 |--------------------
-# mysqladmin -uroot create koha -p 
+# mysqladmin -uroot create koha -p
 |--------------------
 (you may name the koha database something different from koha)
 
-=== Grant privileges to a MySQL user to the koha database === 
+=== Grant privileges to a MySQL user to the koha database ===
 
 Assuming that you want to have a MySQL user called "kohaadmin" to administer a database called "koha" with the password "kohapassword", you'd enter this:
 |--------------------
@@ -754,7 +754,7 @@ You must be sure you're using the XML::LibXML SAX parser, not Expat or PurePerl,
 |--------------------
 # cd /root/koha-3.00.00/
 
-myhost:~/koha-3.00.00 # misc/sax_parser_print.pl 
+myhost:~/koha-3.00.00 # misc/sax_parser_print.pl
 |--------------------
 
 You will probably see this:
@@ -762,7 +762,7 @@ You will probably see this:
 XML::SAX::PurePerl=HASH(0x8356a4c)
 |--------------------
 
-If you're using PurePerl (you probably are) or Expat, you'll need to edit your ParserDetails.ini file to use the LibXML Parser. 
+If you're using PurePerl (you probably are) or Expat, you'll need to edit your ParserDetails.ini file to use the LibXML Parser.
 To find the ParserDetails.ini file, you may use locate.
 To do this, first update the locate database by running the updatedb command:
 |--------------------
@@ -815,7 +815,7 @@ You will notice that a few dependencies need to be resolved, so a few other pack
 |--------------------
 myhost:/usr/lib/perl5/vendor_perl/5.10.0/XML/SAX # cd /root/koha-3.00.00
 |--------------------
-After installation of a number of CPAN/perl packages we will run perl Makefile.PL to run the Koha installer. 
+After installation of a number of CPAN/perl packages we will run perl Makefile.PL to run the Koha installer.
 
 
 === Using zypper to install CPAN modules ===
@@ -880,7 +880,7 @@ The commands show below need to be given one by one, because zypper will always 
 == Running the Makefile.PL module to configure Koha ==
 
 My installation is a UNIMARC installation, so I'm answering unimarc to the "MARC format for Zebra indexing (marc21, unimarc) [marc21]" question below.
-If your Library uses the MARC21 format instead of UNIMARC, you should press ENTER to accept the default (which is marc21). 
+If your Library uses the MARC21 format instead of UNIMARC, you should press ENTER to accept the default (which is marc21).
 
 Because my bibliographic catalog will have mainly records in English and Arabic, I'm answering "en" (English) to the "Primary language for Zebra indexing (en, fr) [en]" question below.
 
@@ -1136,32 +1136,32 @@ cp koha-tmpl/opac-tmpl/prog/famfamfam/mini/note.gif blib/OPAC_TMPL_DIR/prog/famf
 
 [many more lines beginning with "cp" should appear...]
 
-t/Amazon.t .................. ok   
-t/Barcodes_PrinterConfig.t .. ok   
-t/Bookfund.t ................ ok   
-t/Bookseller.t .............. ok   
-t/Boolean.t ................. ok     
-t/Branch.t .................. ok   
-t/Calendar.t ................ ok   
-t/Charset.t ................. ok   
+t/Amazon.t .................. ok
+t/Barcodes_PrinterConfig.t .. ok
+t/Bookfund.t ................ ok
+t/Bookseller.t .............. ok
+t/Boolean.t ................. ok
+t/Branch.t .................. ok
+t/Calendar.t ................ ok
+t/Charset.t ................. ok
 t/Debug.t ................... # BEFORE use:     $debug is not defined
 # BEFORE use: $cgi_debug is not defined
 t/Debug.t ................... 1/3 #  AFTER use:     $debug is 0
 #  AFTER use: $cgi_debug is 0
 # Done.
-t/Debug.t ................... ok   
-t/dummy.t ................... ok   
-t/Input.t ................... ok   
-t/Koha.t .................... ok   
-t/Languages.t ............... ok   
-t/Maintainance.t ............ ok   
-t/Output.t .................. ok   
-t/Record.t .................. ok   
-t/Review.t .................. ok   
+t/Debug.t ................... ok
+t/dummy.t ................... ok
+t/Input.t ................... ok
+t/Koha.t .................... ok
+t/Languages.t ............... ok
+t/Maintainance.t ............ ok
+t/Output.t .................. ok
+t/Record.t .................. ok
+t/Review.t .................. ok
 t/Scrubber.t ................ 1/10 # Note: scrubber test output will have whitespace collapsed for readability
 # done.
-t/Scrubber.t ................ ok     
-t/Stats.t ................... ok   
+t/Scrubber.t ................ ok
+t/Stats.t ................... ok
 All tests successful.
 Files=19, Tests=47,  3 wallclock secs ( 0.06 usr  0.08 sys +  2.12 cusr  0.25 csys =  2.51 CPU)
 Result: PASS
@@ -1214,7 +1214,7 @@ Exit the shell and log back in.
 |--------------------
 myhost:/etc # exit
 |--------------------
-After logging back in, type the following commands to check if 
+After logging back in, type the following commands to check if
 the KOHA_CONF and PERL5LIB environment variables have been correctly set:
 |--------------------
 myhost:~ # env | grep KOHA
@@ -1283,7 +1283,7 @@ At the beginning of the koha-httpd.conf file, under the commented NameVirtualHos
 |--------------------
 Listen 8080
 |--------------------
-In that file, you should find two VirtualHost sections: one for the OPAC area of Koha and the other one for the Intranet. 
+In that file, you should find two VirtualHost sections: one for the OPAC area of Koha and the other one for the Intranet.
 If the two virtualHost directives - the lines that start with <nowiki><VirtualHost</nowiki> - in that file are set for the IP Address 127.0.0.2, replace them by the correct IP address of your server.
 
 That file will have 2 ServerName directives (one for each of the 2 VirtualHosts).
@@ -1355,3 +1355,22 @@ If not you may have forgotten to open the 8080 port.
 
 You may now login with your koha administrator username and password and reply to the several questions you will be asked.
 
+== Add Zebra Indexer ==
+
+Add an entry in Koha user crontab to process scheduled added/updated/deleted records
+indexing by Zebra. <script_dir>cronjobs/crontab.example contains examples for these cron jobs (and many more).
+
+NOTE: The cronjobs should be setup under the kohauser (the default is 'koha', but
+this is the user you set up in section 'Create the Koha User and Group').
+
+Edit the crontab for the koha user by running
+    $ sudo -u <kohauser> crontab -e
+
+For Zebra indexing, you are looking for the example that begins with
+
+    # ZEBRA INDEX UPDATES with -z option, incremental index updates throughout the day
+    # for both authorities and bibs
+
+It may be easiest to copy/paste the example into your own crontab and modify as necessary.
+
+You can also configure zebra-indexing as an background daemon, see http://wiki.koha-community.org/wiki/Background_indexing_with_Zebra

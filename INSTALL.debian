@@ -8,7 +8,7 @@ Some parts copyright 2011 MJ Ray and software.coop
 Feedback/bug reports: Koha Developer's List:
 http://lists.koha-community.org/cgi-bin/mailman/listinfo/koha-devel
 
-This document last modified: 2011-06-19
+This document last modified: 2012-March-20
 
 Installation Instructions
 =============================
@@ -127,13 +127,13 @@ PurePerl, both of which have outstanding bugs with pre-composed characters.
 You can test your SAX parser by running:
 
     $ cd koha
-    $ misc/sax_parser_print.pl 
+    $ misc/sax_parser_print.pl
 
 You should see something like:
 
     XML::LibXML::SAX::Parser=HASH(0x81fe220)
 
-If you are configured to use PurePerl or Expat, the script will say you have a problem and 
+If you are configured to use PurePerl or Expat, the script will say you have a problem and
 you'll need to edit your ini file to correct it.
 
 The file is typically located at:
@@ -198,15 +198,15 @@ Note: you may still see the usual Apache default site if your VirtualHost
 Point your browser to http://<servername>:8080/
 
 Note: <servername> is (usually) the IP of your server, or localhost (if you are connecting
-      from the same machine Koha is installed on. You can verify the location by checking 
+      from the same machine Koha is installed on. You can verify the location by checking
       the VirtualHost settings for both the opac and intranet virtual hosts in koha-httpd.conf
 
-Koha will redirect you to the Web Installer where you can continue the setup. You will be prompted to enter in your DATABASE username and password. It is through this interface 
-that 
+Koha will redirect you to the Web Installer where you can continue the setup. You will be prompted to enter in your DATABASE username and password. It is through this interface
+that
 you can install the sample data for libraries, patrons, and much more.
 
-Be aware that removing sample data at a later time (when you may want to take the 
-server into production) may not be easy, and if your intent is to take this 
+Be aware that removing sample data at a later time (when you may want to take the
+server into production) may not be easy, and if your intent is to take this
 install from testing to production, go with minimal sample data (no patrons or bibliographic records).
 
 6. Configure and start Zebra
@@ -274,12 +274,13 @@ Edit the crontab for the koha user by running
     $ sudo -u <kohauser> crontab -e
 
 For Zebra indexing, you are looking for the example that begins with
-    
+
     # ZEBRA INDEX UPDATES with -z option, incremental index updates throughout the day
     # for both authorities and bibs
 
 It may be easiest to copy/paste the example into your own crontab and modify as necessary.
 
+You can also configure zebra-indexing as an background daemon, see http://wiki.koha-community.org/wiki/Background_indexing_with_Zebra
 
 7. What next?
 
@@ -306,10 +307,13 @@ Authority data in MARC21 format
     Once the indexing has completed, you will be able to search for records in your system.
     NOTE: This script should be run as the kohauser (the default is 'koha', this is the user we set up in step 2.3).
 
-7.3 Schedule regular index updates
+7.3 Schedule regular index updates with cron ,or configure zebra indexing as a background daemon
+
     You need to run rebuild_zebra.pl -b -a -z as a regular cron job in orde to pick up new bibs
     and items as you add them. Check misc/cronjobs/crontab.example for usage examples. See 7.0 above.
     NOTE: This job should be setup under the kohauser (the default is 'koha', this is the user we set up in step 2.3).
+
+    To setup indexing in background see 6.2.2
 
 7.4 To enable public Z39.50/SRU servers, you'll need to edit your koha-conf.xml and
     change the <listen> options to listen on a TCP port; then restart the zebra daemon.
