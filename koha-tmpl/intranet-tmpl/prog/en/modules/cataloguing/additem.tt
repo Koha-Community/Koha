@@ -157,13 +157,6 @@ $(document).ready(function() {
         function () {$(this).attr("class",""         );}
     );
 });
-
-function set_to_today(id, force) {
-    if (! id) { alert(_("Bad id ") + id + _(" sent to set_to_today()")); return 0; }
-    if ($("#" + id).val() == '' || $("#" + id).val() == '0000-00-00' || force) {
-        $("#" + id).val("[% today_iso %]");
-    }
-}
 //]]>
 </script>
 <link type="text/css" rel="stylesheet" href="[% themelang %]/css/addbiblio.css" />
