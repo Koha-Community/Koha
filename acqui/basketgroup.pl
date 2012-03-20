@@ -60,7 +60,7 @@ use C4::Members qw/GetMember/;
 
 my $input=new CGI;
 
-my ($template, $loggedinuser, $cookie)
+our ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "acqui/basketgroup.tmpl",
 			     query => $input,
 			     type => "intranet",
