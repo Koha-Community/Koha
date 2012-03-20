@@ -1785,7 +1785,9 @@ Internal function, called only by AddReturn that calculate and update the user f
 
 sub _FixFineDaysOnReturn {
     my ( $borrower, $item, $datedue ) = @_;
-
+    
+    my $dt_due =  dt_from_string($datedue);
+    my $dt_today = DateTime->now( time_zone => C4::Context->tz() );
     if ($datedue) {
         $datedue = C4::Dates->new( $datedue, "iso" );
     } else {
@@ -1796,7 +1798,7 @@ sub _FixFineDaysOnReturn {
     my $calendar = Koha::Calendar->new( branchcode => $branchcode );
     my $today = C4::Dates->new();
 
-    my $deltadays = $calendar->days_between( $datedue, C4::Dates->new() );
+    my $deltadays = $calendar->days_between( $dt_due, $dt_today );
 
     my $circcontrol = C4::Context::preference('CircControl');
     my $issuingrule = GetIssuingRule( $borrower->{categorycode}, $item->{itype}, $branchcode );
