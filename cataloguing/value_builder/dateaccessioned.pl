@@ -18,7 +18,7 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 use strict;
-#use warnings; FIXME - Bug 2505
+use warnings;
 
 =head1
 
@@ -71,13 +71,20 @@ function Focus$function_name(subfield_managed, id, force) {
     //  summary += i + ": " + document.f.tag[i].value + " " + document.f.subfield[i].value + ": " + document.f.field_value[i].value + "\\n"; 
     //}
     //alert("Got focus, subfieldmanaged: " + subfield_managed + "\\n" + summary);
-    set_to_today(id); // defined in additem.pl HEAD
+    set_to_today(id);
     return 0;
 }
 
 function Clic$function_name(id) {
-    set_to_today(id, 1); // defined in additem.pl HEAD
+    set_to_today(id, 1);
     return 0;
+}
+
+function set_to_today(id, force) {
+    if (! id) { alert(_("Bad id ") + id + _(" sent to set_to_today()")); return 0; }
+    if (\$("#" + id).val() == '' || \$("#" + id).val() == '0000-00-00' || force) {
+        \$("#" + id).val("$date");
+    }
 }
 //]]>
 </script>
