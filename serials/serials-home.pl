@@ -47,6 +47,7 @@ use C4::Auth;
 use C4::Serials;
 use C4::Output;
 use C4::Context;
+use C4::Branch;
 
 my $query         = new CGI;
 my $title         = $query->param('title_filter');
@@ -99,6 +100,7 @@ if ($searched){
 if ($routing) {
     for my $subscription ( @subscriptions) {
         $subscription->{routingedit} = check_routing( $subscription->{subscriptionid} );
+        $subscription->{branchname} = GetBranchName ( $subscription->{branchcode} );
     }
 }
 
