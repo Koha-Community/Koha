@@ -15,6 +15,7 @@
 <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.cookie.min.js"></script>
 <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.highlight-3.js"></script>
 <script type="text/javascript" src="[% interface %]/lib/bootstrap/bootstrap.min.js"></script>
+<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.validate.min.js"></script>
 
 [% IF ( login ) %]
     <link rel="stylesheet" type="text/css" href="[% themelang %]/css/login.css" />
@@ -36,6 +37,7 @@
 
 <!-- koha core js -->
 <script type="text/javascript" src="[% themelang %]/js/staff-global.js"></script>
+[% INCLUDE 'validator-strings.inc' %]
 [% IF ( intranetuserjs ) %]
     <script type="text/javascript">
     //<![CDATA[
