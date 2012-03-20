@@ -1081,7 +1081,7 @@ sub GetMarcStructure {
     }
 
     $sth = $dbh->prepare(
-        "SELECT tagfield,tagsubfield,liblibrarian,libopac,tab,mandatory,repeatable,authorised_value,authtypecode,value_builder,kohafield,seealso,hidden,isurl,link,defaultvalue 
+        "SELECT tagfield,tagsubfield,liblibrarian,libopac,tab,mandatory,repeatable,authorised_value,authtypecode,value_builder,kohafield,seealso,hidden,isurl,link,defaultvalue,maxlength
          FROM   marc_subfield_structure 
          WHERE  frameworkcode=? 
          ORDER BY tagfield,tagsubfield
@@ -1100,10 +1100,12 @@ sub GetMarcStructure {
     my $isurl;
     my $link;
     my $defaultvalue;
+    my $maxlength;
 
     while (
         (   $tag,          $subfield,      $liblibrarian, $libopac, $tab,    $mandatory, $repeatable, $authorised_value,
-            $authtypecode, $value_builder, $kohafield,    $seealso, $hidden, $isurl,     $link,       $defaultvalue
+            $authtypecode, $value_builder, $kohafield,    $seealso, $hidden, $isurl,     $link,       $defaultvalue,
+            $maxlength
         )
         = $sth->fetchrow
       ) {
@@ -1120,6 +1122,7 @@ sub GetMarcStructure {
         $res->{$tag}->{$subfield}->{isurl}            = $isurl;
         $res->{$tag}->{$subfield}->{'link'}           = $link;
         $res->{$tag}->{$subfield}->{defaultvalue}     = $defaultvalue;
+        $res->{$tag}->{$subfield}->{maxlength}        = $maxlength;
     }
 
     $marc_structure_cache->{$forlibrarian}->{$frameworkcode} = $res;

@@ -179,6 +179,7 @@ if ( $op eq 'add_form' ) {
     while ( $data = $sth->fetchrow_hashref ) {
         my %row_data;    # get a fresh hash for the row data
         $row_data{defaultvalue} = $data->{defaultvalue};
+        $row_data{maxlength} = $data->{maxlength};
         $row_data{tab} = CGI::scrolling_list(
             -name   => 'tab',
             -id     => "tab$i",
@@ -386,11 +387,11 @@ elsif ( $op eq 'add_validate' ) {
 #                                     values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
 #     );
     my $sth_insert = $dbh->prepare(qq{
-        insert into marc_subfield_structure (tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,seealso,authorised_value,authtypecode,value_builder,hidden,isurl,frameworkcode, link,defaultvalue)
-        values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+        insert into marc_subfield_structure (tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,seealso,authorised_value,authtypecode,value_builder,hidden,isurl,frameworkcode, link,defaultvalue,maxlength)
+        values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
     });
     my $sth_update = $dbh->prepare(qq{
-        update marc_subfield_structure set tagfield=?, tagsubfield=?, liblibrarian=?, libopac=?, repeatable=?, mandatory=?, kohafield=?, tab=?, seealso=?, authorised_value=?, authtypecode=?, value_builder=?, hidden=?, isurl=?, frameworkcode=?,  link=?, defaultvalue=?
+        update marc_subfield_structure set tagfield=?, tagsubfield=?, liblibrarian=?, libopac=?, repeatable=?, mandatory=?, kohafield=?, tab=?, seealso=?, authorised_value=?, authtypecode=?, value_builder=?, hidden=?, isurl=?, frameworkcode=?,  link=?, defaultvalue=?, maxlength=?
         where tagfield=? and tagsubfield=? and frameworkcode=?
     });
     my @tagsubfield       = $input->param('tagsubfield');
@@ -405,6 +406,7 @@ elsif ( $op eq 'add_validate' ) {
     my @value_builder     = $input->param('value_builder');
     my @link              = $input->param('link');
     my @defaultvalue      = $input->param('defaultvalue');
+    my @maxlength         = $input->param('maxlength');
     
     for ( my $i = 0 ; $i <= $#tagsubfield ; $i++ ) {
         my $tagfield    = $input->param('tagfield');
@@ -425,6 +427,7 @@ elsif ( $op eq 'add_validate' ) {
         my $isurl  = $input->param("isurl$i") ? 1 : 0;
         my $link   = $link[$i];
         my $defaultvalue = $defaultvalue[$i];
+        my $maxlength = $maxlength[$i];
         
         if (defined($liblibrarian) && $liblibrarian ne "") {
             unless ( C4::Context->config('demo') eq 1 ) {
@@ -447,6 +450,7 @@ elsif ( $op eq 'add_validate' ) {
                         $frameworkcode,
                         $link,
                         $defaultvalue,
+                        $maxlength,
                         (
                             $tagfield,
                             $tagsubfield,
@@ -472,6 +476,7 @@ elsif ( $op eq 'add_validate' ) {
                         $frameworkcode,
                         $link,
                         $defaultvalue,
+                        $maxlength,
                     );
                 }
             }

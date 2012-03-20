@@ -5036,6 +5036,24 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.07.00.XXX";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do("
+       ALTER TABLE  `marc_subfield_structure` ADD  `maxlength` INT( 4 ) NOT NULL DEFAULT  '9999';
+       ");
+       $dbh->do("
+       UPDATE `marc_subfield_structure` SET maxlength=24 WHERE tagfield='000';
+       ");
+       $dbh->do("
+       UPDATE marc_subfield_structure SET maxlength = IF ((SELECT value FROM systempreferences WHERE variable = 'marcflavour')='MARC21','40','9999') WHERE tagfield='008';
+       ");
+       $dbh->do("
+       UPDATE marc_subfield_structure SET maxlength = IF ((SELECT value FROM systempreferences WHERE variable = 'marcflavour')='UNIMARC','36','9999') WHERE tagfield='100';
+       ");
+    print "Upgrade to $DBversion done (Add new field maxlength to marc_subfield_structure)\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 DropAllForeignKeys($table)

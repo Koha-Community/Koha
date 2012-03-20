@@ -293,14 +293,6 @@ sub create_input {
 
     $value =~ s/"/&quot;/g;
 
-    # determine maximum length; 9999 bytes per ISO 2709 except for leader and MARC21 008
-    my $max_length = 9999;
-    if ($tag eq '000') {
-        $max_length = 24;
-    } elsif ($tag eq '008' and C4::Context->preference('marcflavour') eq 'MARC21')  {
-        $max_length = 40;
-    }
-
     # if there is no value provided but a default value in parameters, get it
     if ( $value eq '' ) {
         $value = $tagslib->{$tag}->{$subfield}->{defaultvalue};
@@ -335,6 +327,7 @@ sub create_input {
         index          => $index_tag,
         id             => "tag_".$tag."_subfield_".$id_subfield."_".$index_tag."_".$index_subfield,
         value          => $value,
+        maxlength      => $tagslib->{$tag}->{$subfield}->{maxlength},
         random         => CreateKey(),
     );
 
@@ -374,7 +367,7 @@ sub create_input {
                     class=\"input_marceditor readonly\"
                     tabindex=\"1\"
                     size=\"5\"
-                    maxlength=\"$max_length\"
+                    maxlength=\"".$subfield_data{maxlength}."\"
                     readonly=\"readonly\"
                     \/>";
 
@@ -390,7 +383,7 @@ sub create_input {
                     class=\"input_marceditor readonly\"
                     tabindex=\"1\"
                     size=\"67\"
-                    maxlength=\"$max_length\"
+                    maxlength=\"".$subfield_data{maxlength}."\"
                     \/>
                     <span class=\"subfield_controls\"><a href=\"#\" class=\"buttonDot\"
                        onclick=\"openAuth(this.parentNode.parentNode.getElementsByTagName('input')[1].id,'".$tagslib->{$tag}->{$subfield}->{authtypecode}."'); return false;\" tabindex=\"1\" title=\"Tag Editor\"><img src=\"/intranet-tmpl/prog/img/edit-tag.png\" alt=\"Tag Editor\" /></a></span>
@@ -404,7 +397,7 @@ sub create_input {
                     class=\"input_marceditor readonly\"
                     tabindex=\"1\"
                     size=\"67\"
-                    maxlength=\"$max_length\"
+                    maxlength=\"".$subfield_data{maxlength}."\"
                     readonly=\"readonly\"
                     \/><span class=\"subfield_controls\"><a href=\"#\" class=\"buttonDot\"
                         onclick=\"openAuth(this.parentNode.parentNode.getElementsByTagName('input')[1].id,'".$tagslib->{$tag}->{$subfield}->{authtypecode}."'); return false;\" tabindex=\"1\" title=\"Tag Editor\"><img src=\"/intranet-tmpl/prog/img/edit-tag.png\" alt=\"Tag Editor\" /></a></span>
@@ -435,7 +428,7 @@ sub create_input {
                             class=\"input_marceditor\"
                             onfocus=\"Focus$function_name($index_tag)\"
                             size=\"67\"
-                            maxlength=\"$max_length\"
+                            maxlength=\"".$subfield_data{maxlength}."\"
                             onblur=\"Blur$function_name($index_tag); \" \/>
                             <span class=\"subfield_controls\"><a href=\"#\" class=\"buttonDot\" onclick=\"Clic$function_name('$subfield_data{id}'); return false;\" tabindex=\"1\" title=\"Tag Editor\"><img src=\"/intranet-tmpl/prog/img/edit-tag.png\" alt=\"Tag Editor\" /></a></span>
                     $javascript";
@@ -449,7 +442,7 @@ sub create_input {
                         value=\"$value\"
                         tabindex=\"1\"
                         size=\"67\"
-                        maxlength=\"$max_length\"
+                        maxlength=\"".$subfield_data{maxlength}."\"
                         class=\"input_marceditor\"
                 \/>
                 ";
@@ -463,7 +456,7 @@ sub create_input {
                     id=\"".$subfield_data{id}."\"
                     name=\"".$subfield_data{id}."\"
                     size=\"67\"
-                    maxlength=\"$max_length\"
+                    maxlength=\"".$subfield_data{maxlength}."\"
                     value=\"$value\" \/>
             ";
     }
@@ -497,7 +490,7 @@ sub create_input {
                         value=\"$value\"
                         tabindex=\"1\"
                         size=\"67\"
-                        maxlength=\"$max_length\"
+                        maxlength=\"".$subfield_data{maxlength}."\"
                         class=\"input_marceditor\"
                 \/>
                 ";

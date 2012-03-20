@@ -1207,6 +1207,7 @@ CREATE TABLE `marc_subfield_structure` (
   `seealso` varchar(1100) default NULL,
   `link` varchar(80) default NULL,
   `defaultvalue` text default NULL,
+  `maxlength` int(4) NOT NULL DEFAULT '9999',
   PRIMARY KEY  (`frameworkcode`,`tagfield`,`tagsubfield`),
   KEY `kohafield_2` (`kohafield`),
   KEY `tab` (`frameworkcode`,`tab`),

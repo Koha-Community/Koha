@@ -120,6 +120,7 @@ sub generate_subfield_form {
         $subfield_data{marc_lib}   ="<span id=\"error$i\" title=\"".$subfieldlib->{lib}."\">".$subfieldlib->{lib}."</span>";
         $subfield_data{mandatory}  = $subfieldlib->{mandatory};
         $subfield_data{repeatable} = $subfieldlib->{repeatable};
+        $subfield_data{maxlength}  = $subfieldlib->{maxlength};
         
         $value =~ s/"/&quot;/g;
         if ( ! defined( $value ) || $value eq '')  {
@@ -150,7 +151,7 @@ sub generate_subfield_form {
 	    my $input = new CGI;
 	    $value = $input->param('barcode');
 	}
-        my $attributes_no_value = qq(tabindex="1" id="$subfield_data{id}" name="field_value" class="input_marceditor" size="67" maxlength="255" );
+        my $attributes_no_value = qq(tabindex="1" id="$subfield_data{id}" name="field_value" class="input_marceditor" size="67" maxlength="$subfield_data{maxlength}" );
         my $attributes          = qq($attributes_no_value value="$value" );
         
         if ( $subfieldlib->{authorised_value} ) {
