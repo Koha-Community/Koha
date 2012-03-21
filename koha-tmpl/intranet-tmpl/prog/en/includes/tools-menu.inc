@@ -23,7 +23,7 @@
 	<li><a href="/cgi-bin/koha/tools/import_borrowers.pl">Import patrons</a></li>
     [% END %]
     [% IF ( CAN_user_tools_edit_notices ) %]
-	<li><a href="/cgi-bin/koha/tools/letter.pl">Notices</a></li>
+	<li><a href="/cgi-bin/koha/tools/letter.pl">Notices & Slips</a></li>
     [% END %]
     [% IF ( CAN_user_tools_edit_notice_status_triggers ) %]
 	<li><a href="/cgi-bin/koha/tools/overduerules.pl">Overdue notice/status triggers</a></li>
