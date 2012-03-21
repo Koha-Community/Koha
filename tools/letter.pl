@@ -85,17 +85,17 @@ sub protected_letters {
     return { map { $_->[0] => 1 } @{$codes} };
 }
 
-my $input       = new CGI;
+our $input       = new CGI;
 my $searchfield = $input->param('searchfield');
 my $script_name = '/cgi-bin/koha/tools/letter.pl';
-my $branchcode  = $input->param('branchcode');
+our $branchcode  = $input->param('branchcode');
 my $code        = $input->param('code');
 my $module      = $input->param('module');
 my $content     = $input->param('content');
 my $op          = $input->param('op') || '';
 my $dbh = C4::Context->dbh;
 
-my ( $template, $borrowernumber, $cookie, $staffflags ) = get_template_and_user(
+our ( $template, $borrowernumber, $cookie, $staffflags ) = get_template_and_user(
     {
         template_name   => 'tools/letter.tmpl',
         query           => $input,
@@ -106,7 +106,7 @@ my ( $template, $borrowernumber, $cookie, $staffflags ) = get_template_and_user(
     }
 );
 
-my $my_branch = C4::Context->preference("IndependantBranches") && !$staffflags->{'superlibrarian'}
+our $my_branch = C4::Context->preference("IndependantBranches") && !$staffflags->{'superlibrarian'}
   ?  C4::Context->userenv()->{'branch'}
   : undef;
 # we show only the TMPL_VAR names $op
