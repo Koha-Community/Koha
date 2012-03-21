@@ -10,21 +10,21 @@ borrowers.relationship	Relationship
 borrowers.guarantorid	Guarantor borrower number
 borrowers.streetnumber	Street number
 borrowers.streettype	Street type
-borrowers.address
-borrowers.address2
+borrowers.address	Address
+borrowers.address2	Address 2
 borrowers.city	City
 borrowers.state	State
 borrowers.zipcode	Zip/postal code
 borrowers.country	Country
 borrowers.phone	Primary phone
-borrowres.phonepro	Secondary phone
+borrowers.phonepro	Secondary phone
 borrowers.mobile	Other phone
 borrowers.email	Primary email
 borrowers.emailpro	Secondary email
 borrowers.fax	Fax
 borrowers.B_streetnumber	Alternate address: Street number
-borrowers.B_stretttype	Alternatate address: Street type
-borrowres.B_address	Alternate address: Address
+borrowers.B_streettype	Alternate address: Street type
+borrowers.B_address	Alternate address: Address
 borrowers.B_address2	Alternate address: Address 2
 borrowers.B_city	Alternate address: City
 borrowers.B_state	Alternate address: State
@@ -32,18 +32,21 @@ borrowers.B_zipcode	Alternate address: Zip/postal code
 borrowers.B_country	Alternate address: Country
 borrowers.B_phone	Alternate address: Phone
 borrowers.B_email	Alternate address: Email
-borrowers.contactnote	Altenate address: contact note
-borrowers.altcontactfirstname	Alternate contact: Surname
-borrowres.altcontactsurname	Alternate contact: First name
+borrowers.contactnote	Alternate contact: Note
+borrowers.altcontactfirstname	Alternate contact: Last name
+borrowers.altcontactsurname	Alternate contact: First name
 borrowers.altcontactaddress1	Alternate contact: Address
-borrowers.altcontactaddress2	Alternate contact: Adress 2
+borrowers.altcontactaddress2	Alternate contact: Address 2
 borrowers.altcontactaddress3	Alternate contact: City
+borrowers.contactname	Alternate contact: Surname
+borrowers.contactfirstname	Alternate contact: First name
+borrowers.contacttitle	Alternate contact: Title
 borrowers.altcontactstate	Alternate contact: State
 borrowers.altcontactzipcode	Alternate contact: Zip/postal code
 borrowers.altcontactcountry	Alternate contact: Country
 borrowers.altcontactphone	Alternate contact: Phone
 borrowers.cardnumber	Card number
-borrowers.branchcode	Library
+borrowers.branchcode	Home library
 borrowers.categorycode	Category
 borrowers.sort1	Sort 1
 borrowers.sort2	Sort 2
@@ -51,12 +54,15 @@ borrowers.dateenrolled	Registration date
 borrowers.dateexpiry	Expiry date
 borrowers.opacnote	OPAC note
 borrowers.borrowernotes	Circulation note
-borrowres.username	Username
+borrowers.userid	Username
 borrowers.password	Password
-borrowers.gonenoaddress	Gone no address
-borrowers.lost	Lost card
-borrowers.debarred	Restricted until
-borrowers.debarredcomment	Coment
+borrowers.flags	System permissions
+borrowers.gonenoaddress	Gone no address flag
+borrowers.lost	Lost card flag
+borrowers.debarred	Restricted [until] flag
+borrowers.debarredcomment	Comment
+borrowers.smsalertnumber	Mobile phone number
+borrowers.privacy	Privacy settings
 items.itemnumber	Item number (internal)
 items.biblionumber	Biblio number (internal)
 items.biblioitemnumber	Biblioitem number (internal)
@@ -71,7 +77,7 @@ items.datelastborrowed	Date last checked out
 items.datelastseen	Date last seen
 items.stack	Shelving control number
 items.onloan	Due date
-items.cn_source	Source of classificaton / shelving scheme
+items.cn_source	Source of classification / shelving scheme
 items.cn_sort	Koha normalized classification for sorting
 items.notforloan	Not for loan
 items.itemlost	Lost status
@@ -112,7 +118,7 @@ biblio.timestamp	Modification date
 biblioitems.biblioitemnumber	Biblioitem number
 biblioitems.biblionumber	Biblio number
 biblioitems.volume	Volume number
-biblioitems.number	number
+biblioitems.number	Number
 biblioitems.classification	Classification
 biblioitems.itemtype	Biblio-level item type
 biblioitems.isbn	ISBN
@@ -122,7 +128,7 @@ biblioitems.subclass	Sub classification
 biblioitems.publicationyear	Publication date
 biblioitems.publishercode	Publisher
 biblioitems.volumedate	Volume date
-biblioitems.volumeddesc	Volume information
+biblioitems.volumedesc	Volume information
 biblioitems.timestamp	Timestamp
 biblioitems.illus	Illustrator
 biblioitems.pages	Number of pages
