@@ -1424,7 +1424,7 @@ sub checkpw {
 
     my ( $dbh, $userid, $password, $query ) = @_;
     if ($ldap) {
-        $debug and print "## checkpw - checking LDAP\n";
+        $debug and print STDERR "## checkpw - checking LDAP\n";
         my ($retval,$retcard,$retuserid) = checkpw_ldap(@_);    # EXTERNAL AUTH
         ($retval) and return ($retval,$retcard,$retuserid);
     }
