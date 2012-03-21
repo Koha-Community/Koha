@@ -48,7 +48,7 @@ usage() if $#ARGV != 1 && $#ARGV != 0;
 my ($cmd, $lang) = @ARGV;
 $cmd = lc $cmd;
 if ( $cmd =~ /create|install|update/ ) {
-    my $installer = LangInstaller->new( $lang, $pref );
+    my $installer = LangInstaller->new( $lang, $pref, $verbose );
     if ( $cmd !~ /create/ && $lang && not $lang ~~ $installer->{langs} ) {
         print "Unsupported language: $lang\n";
         exit;

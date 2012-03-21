@@ -272,7 +272,6 @@ if (defined $href) {
     die "$str_file: PO file is corrupted, or not a PO file\n" unless defined $href->{'""'};
     $charset_out = TmplTokenizer::charset_canon $2 if $href->{'""'}->msgstr =~ /\bcharset=(["']?)([^;\s"'\\]+)\1/;
     $charset_in = $charset_out;
-    warn "Charset in/out: ".$charset_out;
 #     for my $msgid (keys %$href) {
 #   if ($msgid =~ /\bcharset=(["']?)([^;\s"'\\]+)\1/) {
 #       my $candidate = TmplTokenizer::charset_canon $2;
@@ -350,7 +349,7 @@ if ($action eq 'create')  {
         close INPUT;
         close OUTPUT;
     }
-    $st = system('msgmerge', '-U', '-s', $str_file, $tmpfile2);
+    $st = system("msgmerge -U ".($quiet?'-q':'')." -s $str_file $tmpfile2");
     } else {
     error_normal "Text extraction failed: $xgettext: $!\n", undef;
     error_additional "Will not run msgmerge\n", undef;
@@ -376,7 +375,7 @@ if ($action eq 'create')  {
     # Merge the temporary "pot file" with the specified po file ($str_file)
     # FIXME: msgmerge(1) is a Unix dependency
     # FIXME: need to check the return value
-    $st = system('msgmerge', '-U', '-s', $str_file, $tmpfile2);
+    $st = system("msgmerge -U ".($quiet?'-q':'')." -s $str_file $tmpfile2");
     } else {
     error_normal "Text extraction failed: $xgettext: $!\n", undef;
     error_additional "Will not run msgmerge\n", undef;
