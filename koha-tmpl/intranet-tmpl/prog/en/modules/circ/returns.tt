@@ -1,3 +1,4 @@
+[% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Circulation &rsaquo; Check In [% title |html %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -331,7 +332,7 @@ function Dopop(link) {
                         <p class="problem">Item is withdrawn.</p>
                     [% END %]
                     [% IF ( errmsgloo.debarred ) %]
-                        <p class="problem"><a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% errmsgloo.debarborrowernumber %]">[% errmsgloo.debarname %]([% errmsgloo.debarcardnumber %])</a> is now debarred until [% errmsgloo.debarred %] </p>
+                        <p class="problem"><a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% errmsgloo.debarborrowernumber %]">[% errmsgloo.debarname %]([% errmsgloo.debarcardnumber %])</a> is now debarred until [% errmsgloo.debarred | $KohaDates %] </p>
                     [% END %]
             [% END %]
 [% IF ( soundon ) %]

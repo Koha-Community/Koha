@@ -464,7 +464,7 @@ foreach my $code ( keys %$messages ) {
     elsif ( $code eq 'Wrongbranch' ) {
     }
     elsif ( $code eq 'Debarred' ) {
-        $err{debarred}            = C4::Dates::format_date( $messages->{'Debarred'} );
+        $err{debarred}            = $messages->{'Debarred'};
         $err{debarcardnumber}     = $borrower->{cardnumber};
         $err{debarborrowernumber} = $borrower->{borrowernumber};
         $err{debarname}           = "$borrower->{firstname} $borrower->{surname}";

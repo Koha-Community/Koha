@@ -1785,19 +1785,15 @@ Internal function, called only by AddReturn that calculate and update the user f
 
 sub _FixFineDaysOnReturn {
     my ( $borrower, $item, $datedue ) = @_;
+    return unless ($datedue);
     
-    my $dt_due =  dt_from_string($datedue);
+    my $dt_due =  dt_from_string( $datedue );
     my $dt_today = DateTime->now( time_zone => C4::Context->tz() );
-    if ($datedue) {
-        $datedue = C4::Dates->new( $datedue, "iso" );
-    } else {
-        return;
-    }
 
     my $branchcode = _GetCircControlBranch( $item, $borrower );
     my $calendar = Koha::Calendar->new( branchcode => $branchcode );
-    my $today = C4::Dates->new();
 
+    # $deltadays is a DateTime::Duration object
     my $deltadays = $calendar->days_between( $dt_due, $dt_today );
 
     my $circcontrol = C4::Context::preference('CircControl');
@@ -1806,22 +1802,22 @@ sub _FixFineDaysOnReturn {
 
     # exit if no finedays defined
     return unless $finedays;
-    my $grace = $issuingrule->{firstremind};
+    my $grace = DateTime::Duration->new( days => $issuingrule->{firstremind} );
 
-    if ( $deltadays - $grace > 0 ) {
-        my @newdate = Add_Delta_Days( Today(), $deltadays * $finedays );
-        my $isonewdate = join( '-', @newdate );
-        my ( $deby, $debm, $debd ) = split( /-/, $borrower->{debarred} );
-        if ( check_date( $deby, $debm, $debd ) ) {
-            my @olddate = split( /-/, $borrower->{debarred} );
-
-            if ( Delta_Days( @olddate, @newdate ) > 0 ) {
-                C4::Members::DebarMember( $borrower->{borrowernumber}, $isonewdate );
-                return $isonewdate;
+    if ( ( $deltadays - $grace )->is_positive ) { # you can't compare DateTime::Durations with logical operators
+        my $new_debar_dt = $dt_today->clone()->add_duration( $deltadays * $finedays );
+        my $borrower_debar_dt = dt_from_string( $borrower->{debarred} );
+        # check to see if the current debar date is a valid date
+        if ( $borrower->{debarred} && $borrower_debar_dt ) {
+        # if so, is it before the new date?  update only if true
+            if ( DateTime->compare( $borrower_debar_dt, $new_debar_dt ) == -1 ) {
+                C4::Members::DebarMember( $borrower->{borrowernumber}, $new_debar_dt->ymd() );
+                return $new_debar_dt->ymd();
             }
+        # if the borrower's debar date is not set or valid, debar them
         } else {
-            C4::Members::DebarMember( $borrower->{borrowernumber}, $isonewdate );
-            return $isonewdate;
+            C4::Members::DebarMember( $borrower->{borrowernumber}, $new_debar_dt->ymd() );
+            return $new_debar_dt->ymd();
         }
     }
 }
