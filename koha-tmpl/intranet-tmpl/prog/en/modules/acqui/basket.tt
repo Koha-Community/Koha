@@ -1,3 +1,4 @@
+[% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; [% UNLESS ( basketno ) %]New [% END %][% IF ( delete_confirm ) %]Delete [% END %]Basket [% basketname|html %] ([% basketno %]) for [% name|html %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -178,8 +179,8 @@
                     <li><span class="label">Contract name:</span> <a href="../admin/aqcontract.pl?op=add_form&amp;contractnumber=[% basketcontractno %]&amp;booksellerid=[% booksellerid %]">[% basketcontractname %]</a></li>
                 [% END %]
                 [% IF ( authorisedbyname ) %]<li><span class="label">Managed by:</span>  [% authorisedbyname %]</li>[% END %]
-                [% IF ( creationdate ) %]<li><span class="label">Opened on:</span>  [% creationdate %]</li>[% END %]
-                [% IF ( closedate ) %]<li><span class="label">Closed on:</span> [% closedate %]</li>[% END %]
+                [% IF ( creationdate ) %]<li><span class="label">Opened on:</span>  [% creationdate | $KohaDates %]</li>[% END %]
+                [% IF ( closedate ) %]<li><span class="label">Closed on:</span> [% closedate | $KohaDates %]</li>[% END %]
 
                 </ol>
                 </div>
@@ -278,19 +279,24 @@
                         <td>
                             <p>[% IF ( books_loo.order_received ) %] (rcvd)[% END %]
                                 <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% books_loo.biblionumber %]">[% books_loo.title |html %]</a> by [% books_loo.author %]
-                                    [% IF ( books_loo.notes ) %] [% books_loo.notes %][% END %]
-                                    [% IF ( books_loo.isbn ) %] - [% books_loo.isbn %][% END %]
-                                    [% IF ( books_loo.issn ) %] - [% books_loo.issn %][% END %]
-                                    [% IF ( books_loo.publishercode ) %], [% books_loo.publishercode %][% END %]
-                                    [% IF ( books_loo.publicationyear ) %], [% books_loo.publicationyear %][% END %]
-                                    [% IF ( books_loo.suggestionid ) %]
-                                        <br/>
-                                        Suggested by: [% books_loo.surnamesuggestedby %][% IF ( books_loo.firstnamesuggestedby ) %], [% books_loo.firstnamesuggestedby %] [% END %]
-                                        (<a href="/cgi-bin/koha/suggestion/suggestion.pl?suggestionid=[% books_loo.suggestionid %]&op=show">suggestion #[% books_loo.suggestionid %]</a>)
-                                    [% END %]
-                                    [% IF ( books_loo.editionstatement ) %], [% books_loo.editionstatement %][% END %]
+                                <br />
+                                [% IF ( books_loo.isbn ) %] - [% books_loo.isbn %][% END %]
+                                [% IF ( books_loo.issn ) %] - [% books_loo.issn %][% END %]
+                                [% IF ( books_loo.publishercode ) %], [% books_loo.publishercode %][% END %]
+                                [% IF ( books_loo.publicationyear ) %], [% books_loo.publicationyear %][% END %]
+                                [% IF ( books_loo.editionstatement ) %], [% books_loo.editionstatement %][% END %]
+                                [% IF ( books_loo.suggestionid ) %]
+                                    <br/>
+                                    Suggested by: [% books_loo.surnamesuggestedby %][% IF ( books_loo.firstnamesuggestedby ) %], [% books_loo.firstnamesuggestedby %] [% END %]
+                                    (<a href="/cgi-bin/koha/suggestion/suggestion.pl?suggestionid=[% books_loo.suggestionid %]&op=show">suggestion #[% books_loo.suggestionid %]</a>)
+                                [% END %]
+                                [% IF ( books_loo.notes ) %]
+                                    <p class="ordernote"><strong>Note: </strong>[% books_loo.notes|html %] [<a href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% books_loo.ordernumber %]">Change note</a>]</p>
+                                [% ELSE %]
+                                    [<a href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% books_loo.ordernumber %]">Add note</a>]
+                                [% END %]
                             </p>
-                            </td>
+                        </td>
                         <td class="number">[% books_loo.rrp %]</td>
                         <td class="number">[% books_loo.ecost %]</td>
                         <td class="number">[% books_loo.quantity %]</td>

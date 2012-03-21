@@ -363,7 +363,6 @@ if ( $borr->{'opacnote'} ) {
 $template->param(
     bor_messages_loop	=> GetMessages( $borrowernumber, 'B', 'NONE' ),
     waiting_count      => $wcount,
-    textmessaging      => $borr->{textmessaging},
     patronupdate => $patronupdate,
     OpacRenewalAllowed => C4::Context->preference("OpacRenewalAllowed"),
     userview => 1,

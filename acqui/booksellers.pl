@@ -57,6 +57,7 @@ use C4::Output;
 use CGI;
 
 use C4::Dates qw/format_date/;
+use C4::Acquisition qw/ GetBasketsInfosByBookseller /;
 use C4::Bookseller qw/ GetBookSellerFromId GetBookSeller /;
 use C4::Members qw/GetMember/;
 use C4::Context;
@@ -105,18 +106,23 @@ my $userbranch = $userenv->{branch};
 my $loop_suppliers = [];
 
 for my $vendor (@suppliers) {
-    my $baskets = get_vendors_baskets( $vendor->{id} );
+    my $baskets = GetBasketsInfosByBookseller( $vendor->{id} );
 
     my $loop_basket = [];
-    
+
     for my $basket ( @{$baskets} ) {
         my $authorisedby = $basket->{authorisedby};
-        
+        my $basketbranch = ''; # set a blank branch to start with
+        my $member = GetMember( borrowernumber => $authorisedby );
+        if ( $member ) {
+           $basketbranch = $member->{branchcode};
+        }
+
         if ($userenv->{'flags'} & 1 || #user is superlibrarian
                (haspermission( $uid, { acquisition => q{*} } ) && #user has acq permissions and
                    ($viewbaskets eq 'all' || #user is allowed to see all baskets
-                   ($viewbaskets eq 'branch' && $authorisedby && $userbranch eq GetMember( borrowernumber => $authorisedby )->{branchcode}) || #basket belongs to user's branch
-                   ($basket->{authorisedby} &&  $viewbaskets == 'user' && $authorisedby == $loggedinuser) #user created this basket
+                   ($viewbaskets eq 'branch' && $authorisedby && $userbranch eq $basketbranch) || #basket belongs to user's branch
+                   ($basket->{authorisedby} &&  $viewbaskets eq 'user' && $authorisedby == $loggedinuser) #user created this basket
                    ) 
                 ) 
            ) { 
@@ -124,6 +130,13 @@ for my $vendor (@suppliers) {
                 if ( $basket->{$date_field} ) {
                     $basket->{$date_field} = format_date( $basket->{$date_field} );
                 }
+            }
+            foreach (qw(total_items total_biblios expected_items)) {
+                $basket->{$_} ||= 0;
+            }
+            if($member) {
+                $basket->{authorisedby_firstname} = $member->{firstname};
+                $basket->{authorisedby_surname} = $member->{surname};
             }
             push @{$loop_basket}, $basket; 
         }
@@ -141,21 +154,7 @@ $template->param(
     loop_suppliers => $loop_suppliers,
     supplier       => ( $booksellerid || $supplier ),
     count          => $supplier_count,
+    dateformat     => C4::Context->preference('dateformat'),
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;
-
-sub get_vendors_baskets {
-    my $supplier_id = shift;
-    my $dbh         = C4::Context->dbh;
-    my $sql         = <<'ENDSQL';
-select aqbasket.*, count(*) as total,  borrowers.firstname, borrowers.surname
-from aqbasket left join aqorders on aqorders.basketno = aqbasket.basketno
-left join borrowers on aqbasket.authorisedby = borrowers.borrowernumber
-where booksellerid = ?
-AND ( aqorders.quantity > aqorders.quantityreceived OR quantityreceived IS NULL)
-AND datecancellationprinted IS NULL
-group by basketno
-ENDSQL
-    return $dbh->selectall_arrayref( $sql, { Slice => {} }, $supplier_id );
-}

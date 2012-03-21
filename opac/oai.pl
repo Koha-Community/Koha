@@ -2,7 +2,6 @@
 
 use strict;
 use warnings;
-use diagnostics;
 
 use CGI qw/:standard -oldstyle_urls/;
 use vars qw( $GZIP );
@@ -59,7 +58,6 @@ package C4::OAI::ResumptionToken;
 
 use strict;
 use warnings;
-use diagnostics;
 use HTTP::OAI;
 
 use base ("HTTP::OAI::ResumptionToken");
@@ -70,9 +68,9 @@ sub new {
 
     my $self = $class->SUPER::new(%args);
 
-    my ($metadata_prefix, $offset, $from, $until);
+    my ($metadata_prefix, $offset, $from, $until, $set);
     if ( $args{ resumptionToken } ) {
-        ($metadata_prefix, $offset, $from, $until)
+        ($metadata_prefix, $offset, $from, $until, $set)
             = split( ':', $args{resumptionToken} );
     }
     else {
@@ -84,15 +82,17 @@ sub new {
             $until = sprintf( "%.4d-%.2d-%.2d", $year+1900, $mon+1,$mday );
         }
         $offset = $args{ offset } || 0;
+        $set = $args{set};
     }
 
     $self->{ metadata_prefix } = $metadata_prefix;
     $self->{ offset          } = $offset;
     $self->{ from            } = $from;
     $self->{ until           } = $until;
+    $self->{ set             } = $set;
 
     $self->resumptionToken(
-        join( ':', $metadata_prefix, $offset, $from, $until ) );
+        join( ':', $metadata_prefix, $offset, $from, $until, $set ) );
     $self->cursor( $offset );
 
     return $self;
@@ -106,7 +106,6 @@ package C4::OAI::Identify;
 
 use strict;
 use warnings;
-use diagnostics;
 use HTTP::OAI;
 use C4::Context;
 
@@ -145,7 +144,6 @@ package C4::OAI::ListMetadataFormats;
 
 use strict;
 use warnings;
-use diagnostics;
 use HTTP::OAI;
 
 use base ("HTTP::OAI::ListMetadataFormats");
@@ -188,14 +186,13 @@ package C4::OAI::Record;
 
 use strict;
 use warnings;
-use diagnostics;
 use HTTP::OAI;
 use HTTP::OAI::Metadata::OAI_DC;
 
 use base ("HTTP::OAI::Record");
 
 sub new {
-    my ($class, $repository, $marcxml, $timestamp, %args) = @_;
+    my ($class, $repository, $marcxml, $timestamp, $setSpecs, %args) = @_;
 
     my $self = $class->SUPER::new(%args);
 
@@ -205,11 +202,18 @@ sub new {
         datestamp   => $timestamp,
     ) );
 
+    foreach my $setSpec (@$setSpecs) {
+        $self->header->setSpec($setSpec);
+    }
+
     my $parser = XML::LibXML->new();
     my $record_dom = $parser->parse_string( $marcxml );
     my $format =  $args{metadataPrefix};
     if ( $format ne 'marcxml' ) {
-        $record_dom = $repository->stylesheet($format)->transform( $record_dom );
+        my %args = (
+            OPACBaseURL => "'" . C4::Context->preference('OPACBaseURL') . "'"
+        );
+        $record_dom = $repository->stylesheet($format)->transform($record_dom, %args);
     }
     $self->metadata( HTTP::OAI::Metadata->new( dom => $record_dom ) );
 
@@ -224,8 +228,8 @@ package C4::OAI::GetRecord;
 
 use strict;
 use warnings;
-use diagnostics;
 use HTTP::OAI;
+use C4::OAI::Sets;
 
 use base ("HTTP::OAI::GetRecord");
 
@@ -254,9 +258,15 @@ sub new {
         );
     }
 
+    my $oai_sets = GetOAISetsBiblio($biblionumber);
+    my @setSpecs;
+    foreach (@$oai_sets) {
+        push @setSpecs, $_->{spec};
+    }
+
     #$self->header( HTTP::OAI::Header->new( identifier  => $args{identifier} ) );
     $self->record( C4::OAI::Record->new(
-        $repository, $marcxml, $timestamp, %args ) );
+        $repository, $marcxml, $timestamp, \@setSpecs, %args ) );
 
     return $self;
 }
@@ -269,8 +279,8 @@ package C4::OAI::ListIdentifiers;
 
 use strict;
 use warnings;
-use diagnostics;
 use HTTP::OAI;
+use C4::OAI::Sets;
 
 use base ("HTTP::OAI::ListIdentifiers");
 
@@ -282,42 +292,148 @@ sub new {
 
     my $token = new C4::OAI::ResumptionToken( %args );
     my $dbh = C4::Context->dbh;
-    my $sql = "SELECT biblionumber, timestamp
-               FROM   biblioitems
-               WHERE  timestamp >= ? AND timestamp <= ?
-               LIMIT  " . $repository->{koha_max_count} . "
-               OFFSET " . $token->{offset};
+    my $set;
+    if(defined $token->{'set'}) {
+        $set = GetOAISetBySpec($token->{'set'});
+    }
+    my $sql = "
+        SELECT biblioitems.biblionumber, biblioitems.timestamp
+        FROM biblioitems
+    ";
+    $sql .= " JOIN oai_sets_biblios ON biblioitems.biblionumber = oai_sets_biblios.biblionumber " if defined $set;
+    $sql .= " WHERE DATE(timestamp) >= ? AND DATE(timestamp) <= ? ";
+    $sql .= " AND oai_sets_biblios.set_id = ? " if defined $set;
+    $sql .= "
+        LIMIT $repository->{'koha_max_count'}
+        OFFSET $token->{'offset'}
+    ";
     my $sth = $dbh->prepare( $sql );
-   	$sth->execute( $token->{from}, $token->{until} );
+    my @bind_params = ($token->{'from'}, $token->{'until'});
+    push @bind_params, $set->{'id'} if defined $set;
+    $sth->execute( @bind_params );
 
     my $pos = $token->{offset};
- 	while ( my ($biblionumber, $timestamp) = $sth->fetchrow ) {
- 	    $timestamp =~ s/ /T/, $timestamp .= 'Z';
+    while ( my ($biblionumber, $timestamp) = $sth->fetchrow ) {
+        $timestamp =~ s/ /T/, $timestamp .= 'Z';
         $self->identifier( new HTTP::OAI::Header(
             identifier => $repository->{ koha_identifier} . ':' . $biblionumber,
             datestamp  => $timestamp,
         ) );
         $pos++;
- 	}
- 	$self->resumptionToken( new C4::OAI::ResumptionToken(
-        metadataPrefix  => $token->{metadata_prefix},
-        from            => $token->{from},
-        until           => $token->{until},
-        offset          => $pos ) ) if ($pos > $token->{offset});
+    }
+    $self->resumptionToken(
+        new C4::OAI::ResumptionToken(
+            metadataPrefix  => $token->{metadata_prefix},
+            from            => $token->{from},
+            until           => $token->{until},
+            offset          => $pos,
+            set             => $token->{set}
+        )
+    ) if ($pos > $token->{offset});
 
     return $self;
 }
 
 # __END__ C4::OAI::ListIdentifiers
 
+package C4::OAI::Description;
 
+use strict;
+use warnings;
+use HTTP::OAI;
+use HTTP::OAI::SAXHandler qw/ :SAX /;
+
+sub new {
+    my ( $class, %args ) = @_;
+
+    my $self = {};
+
+    if(my $setDescription = $args{setDescription}) {
+        $self->{setDescription} = $setDescription;
+    }
+    if(my $handler = $args{handler}) {
+        $self->{handler} = $handler;
+    }
+
+    bless $self, $class;
+    return $self;
+}
+
+sub set_handler {
+    my ( $self, $handler ) = @_;
+
+    $self->{handler} = $handler if $handler;
+
+    return $self;
+}
+
+sub generate {
+    my ( $self ) = @_;
+
+    g_data_element($self->{handler}, 'http://www.openarchives.org/OAI/2.0/', 'setDescription', {}, $self->{setDescription});
+
+    return $self;
+}
+
+# __END__ C4::OAI::Description
+
+package C4::OAI::ListSets;
+
+use strict;
+use warnings;
+use HTTP::OAI;
+use C4::OAI::Sets;
+
+use base ("HTTP::OAI::ListSets");
+
+sub new {
+    my ( $class, $repository, %args ) = @_;
+
+    my $self = HTTP::OAI::ListSets->new(%args);
+
+    my $token = C4::OAI::ResumptionToken->new(%args);
+    my $sets = GetOAISets;
+    my $pos = 0;
+    foreach my $set (@$sets) {
+        if ($pos < $token->{offset}) {
+            $pos++;
+            next;
+        }
+        my @descriptions;
+        foreach my $desc (@{$set->{'descriptions'}}) {
+            push @descriptions, C4::OAI::Description->new(
+                setDescription => $desc,
+            );
+        }
+        $self->set(
+            HTTP::OAI::Set->new(
+                setSpec => $set->{'spec'},
+                setName => $set->{'name'},
+                setDescription => \@descriptions,
+            )
+        );
+        $pos++;
+        last if ($pos + 1 - $token->{offset}) > $repository->{koha_max_count};
+    }
+
+    $self->resumptionToken(
+        new C4::OAI::ResumptionToken(
+            metadataPrefix => $token->{metadata_prefix},
+            offset         => $pos
+        )
+    ) if ( $pos > $token->{offset} );
+
+    return $self;
+}
+
+# __END__ C4::OAI::ListSets;
 
 package C4::OAI::ListRecords;
 
 use strict;
 use warnings;
-use diagnostics;
 use HTTP::OAI;
+use C4::OAI::Sets;
 
 use base ("HTTP::OAI::ListRecords");
 
@@ -329,28 +445,50 @@ sub new {
 
     my $token = new C4::OAI::ResumptionToken( %args );
     my $dbh = C4::Context->dbh;
-    my $sql = "SELECT biblionumber, marcxml, timestamp
-               FROM   biblioitems
-               WHERE  timestamp >= ? AND timestamp <= ?
-               LIMIT  " . $repository->{koha_max_count} . "
-               OFFSET " . $token->{offset};
+    my $set;
+    if(defined $token->{'set'}) {
+        $set = GetOAISetBySpec($token->{'set'});
+    }
+    my $sql = "
+        SELECT biblioitems.biblionumber, biblioitems.marcxml, biblioitems.timestamp
+        FROM biblioitems
+    ";
+    $sql .= " JOIN oai_sets_biblios ON biblioitems.biblionumber = oai_sets_biblios.biblionumber " if defined $set;
+    $sql .= " WHERE DATE(timestamp) >= ? AND DATE(timestamp) <= ? ";
+    $sql .= " AND oai_sets_biblios.set_id = ? " if defined $set;
+    $sql .= "
+        LIMIT $repository->{'koha_max_count'}
+        OFFSET $token->{'offset'}
+    ";
+
     my $sth = $dbh->prepare( $sql );
-   	$sth->execute( $token->{from}, $token->{until} );
+    my @bind_params = ($token->{'from'}, $token->{'until'});
+    push @bind_params, $set->{'id'} if defined $set;
+    $sth->execute( @bind_params );
 
     my $pos = $token->{offset};
- 	while ( my ($biblionumber, $marcxml, $timestamp) = $sth->fetchrow ) {
+    while ( my ($biblionumber, $marcxml, $timestamp) = $sth->fetchrow ) {
+        my $oai_sets = GetOAISetsBiblio($biblionumber);
+        my @setSpecs;
+        foreach (@$oai_sets) {
+            push @setSpecs, $_->{spec};
+        }
         $self->record( C4::OAI::Record->new(
-            $repository, $marcxml, $timestamp,
+            $repository, $marcxml, $timestamp, \@setSpecs,
             identifier      => $repository->{ koha_identifier } . ':' . $biblionumber,
             metadataPrefix  => $token->{metadata_prefix}
         ) );
         $pos++;
- 	}
- 	$self->resumptionToken( new C4::OAI::ResumptionToken(
-        metadataPrefix  => $token->{metadata_prefix},
-        from            => $token->{from},
-        until           => $token->{until},
-        offset          => $pos ) ) if ($pos > $token->{offset});
+    }
+    $self->resumptionToken(
+        new C4::OAI::ResumptionToken(
+            metadataPrefix  => $token->{metadata_prefix},
+            from            => $token->{from},
+            until           => $token->{until},
+            offset          => $pos,
+            set             => $token->{set}
+        )
+    ) if ($pos > $token->{offset});
 
     return $self;
 }
@@ -365,7 +503,6 @@ use base ("HTTP::OAI::Repository");
 
 use strict;
 use warnings;
-use diagnostics;
 
 use HTTP::OAI;
 use HTTP::OAI::Repository qw/:validate/;
@@ -418,14 +555,8 @@ sub new {
     else {
         my %attr = CGI::Vars();
         my $verb = delete( $attr{verb} );
-        if ( grep { $_ eq $verb } qw( ListSets ) ) {
-            $response = HTTP::OAI::Response->new(
-                requestURL  => $self->self_url(),
-                errors      => [ new HTTP::OAI::Error(
-                    code    => 'noSetHierarchy',
-                    message => "Koha repository doesn't have sets",
-                    ) ] ,
-            );
+        if ( $verb eq 'ListSets' ) {
+            $response = C4::OAI::ListSets->new($self, %attr);
         }
         elsif ( $verb eq 'Identify' ) {
             $response = C4::OAI::Identify->new( $self );

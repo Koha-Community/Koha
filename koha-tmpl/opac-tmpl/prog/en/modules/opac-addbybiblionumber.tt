@@ -64,7 +64,9 @@
 		<li><label for="category">Category:</label>
 		<select name="category" id="category">
 		<option value="1">Private</option>
-		<option value="2">Public</option>
+		[% IF (OpacAllowPublicListCreation) %]
+			<option value="2">Public</option>
+		[% END %]
 		</select></li></ol></fieldset>
 		[% FOREACH biblio IN biblios %] <input type="hidden" name="biblionumber" value="[% biblio.biblionumber | html%]" />[% END %]
 		<fieldset class="action"><input type="submit" value="Save" class="submit" /> <a class="close cancel" href="#">Cancel</a></fieldset>
@@ -72,8 +74,11 @@
 	[% END %]
 [% ELSE %]
 	<p align="center">
-		This is not an open list.
-		Items cannot be added to it.
+	[% IF (errcode==1) %]
+	Could not create new list. Please check if the name is unique.
+	[% ELSE %]
+	Sorry, you cannot add items to this list.
+	[% END %]
 	</p>
 [% END %]
 <p align="center">

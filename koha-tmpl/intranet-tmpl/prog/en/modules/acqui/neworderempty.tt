@@ -1,3 +1,4 @@
+[% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; Basket [% basketno %] &rsaquo; [% IF ( ordernumber ) %]Modify order details (line #[% ordernumber %])[% ELSE %]New order[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -170,9 +171,9 @@ $(document).ready(function()
 
 [% IF ( basketno ) %]
     <div id="acqui_basket_summary"  class="yui-g">
-	<fieldset class="rows">
+    <fieldset class="rows">
         <legend>Basket details</legend>
-		<ol>
+        <ol>
         [% IF ( basketnote ) %]<li><span class="label">Internal note:</span> [% basketnote %]</li>[% END %]
         [% IF ( basketbooksellernote ) %]<li><span class="label">Vendor note:</span> [% basketbooksellernote %]</li>[% END %]
         [% IF ( basketcontractno ) %]
@@ -180,10 +181,10 @@ $(document).ready(function()
             <li><span class="label">Contract name:</span> <a href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&amp;contractnumber=[% basketcontractno %]">[% basketcontractname %]</a></li>
         [% END %]
         [% IF ( authorisedbyname ) %]<li><span class="label">Managed by:</span>  [% authorisedbyname %]</li>[% END %]
-        [% IF ( creationdate ) %]<li><span class="label">Open on:</span>  [% creationdate %]</li>[% END %]
+        [% IF ( creationdate ) %]<li><span class="label">Open on:</span>  [% creationdate | $KohaDates %]</li>[% END %]
         [% IF ( closedate ) %]
         <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="post">
-        <li><span class="label">Closed on:</span>  [% closedate %]</li>
+        <li><span class="label">Closed on:</span>  [% closedate | $KohaDates %]</li>
         [% IF ( basketgroups ) %]
             <li>Basketgroup: <select id="basketgroupid" name="basketgroupid">
                 [% FOREACH basketgroup IN basketgroups %]
@@ -198,12 +199,12 @@ $(document).ready(function()
                 <input type="hidden" value="mod_basket" name="op" />
                 <input type="hidden" name="booksellerid" value="[% booksellerid %]" />
             </li>
-		<fieldset class="action"><input type="submit" value="Change basketgroup" /></fieldset>
+            <fieldset class="action"><input type="submit" value="Change basketgroup" /></fieldset>
+        [% END %]
         </form>
         [% END %]
-        [% END %]
-			</ol>
-</fieldset>
+        </ol>
+    </fieldset>
     </div>
 [% END %]
 

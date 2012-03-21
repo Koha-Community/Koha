@@ -32,9 +32,5 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
         authnotrequired => ( C4::Context->preference("OpacPublic") ? 1 : 0 ),
     });
 $template->param(listsview => 1);
-# if $loggedinuser is not defined, set it to -1, which should
-# not correspond to any real borrowernumber.  
-# FIXME: this is a hack to temporarily avoid changing several
-#        routines in C4::VirtualShelves and C4::VirtualShelves::page
-#        to deal with lists accessed during an anonymous OPAC session
-shelfpage('opac', $query, $template, (defined($loggedinuser) ? $loggedinuser : -1), $cookie);
+
+shelfpage('opac', $query, $template, $loggedinuser, $cookie);

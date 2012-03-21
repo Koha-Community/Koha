@@ -75,7 +75,6 @@ use C4::Input;
 use C4::Auth;
 use C4::Budgets;
 use C4::Input;
-use C4::Dates;
 
 use C4::Bookseller  qw/ GetBookSellerFromId /;
 use C4::Acquisition;
@@ -123,6 +122,12 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 my $marcflavour = C4::Context->preference('marcflavour');
+
+if(!$basketno) {
+    my $order = GetOrder($ordernumber);
+    $basketno = $order->{'basketno'};
+}
+
 my $basket = GetBasket($basketno);
 my $contract = &GetContract($basket->{contractnumber});
 
@@ -340,10 +345,10 @@ $template->param(
     basketbooksellernote => $basket->{booksellernote},
     basketcontractno     => $basket->{contractnumber},
     basketcontractname   => $contract->{contractname},
-    creationdate         => C4::Dates->new($basket->{creationdate},'iso')->output,
+    creationdate         => $basket->{creationdate},
     authorisedby         => $basket->{'authorisedby'},
     authorisedbyname     => $basket->{'authorisedbyname'},
-    closedate            => C4::Dates->new($basket->{'closedate'},'iso')->output,
+    closedate            => $basket->{'closedate'},
     # order details
     suggestionid         => $suggestion->{suggestionid},
     surnamesuggestedby   => $suggestion->{surnamesuggestedby},

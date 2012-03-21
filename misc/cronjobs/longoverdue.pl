@@ -41,14 +41,16 @@ use Getopt::Long;
 my  $lost;  #  key=lost value,  value=num days.
 my ($charge, $verbose, $confirm, $quiet);
 my $endrange = 366;
+my $mark_returned = 0;
 
 GetOptions( 
-    'lost=s%'    => \$lost,
-    'c|charge=s' => \$charge,
-    'confirm'    => \$confirm,
-    'verbose'    => \$verbose,
-    'quiet'      => \$quiet,
-    'maxdays=s'  => \$endrange
+    'lost=s%'       => \$lost,
+    'c|charge=s'    => \$charge,
+    'confirm'       => \$confirm,
+    'verbose'       => \$verbose,
+    'quiet'         => \$quiet,
+    'maxdays=s'     => \$endrange,
+    'mark-returned' => \$mark_returned,
 );
 
 my $usage = << 'ENDUSAGE';
@@ -74,6 +76,8 @@ This script takes the following parameters :
 
     --maxdays           Specifies the end of the range of overdue days to deal with (defaults to 366).  This
                         value is universal to all lost num days overdue passed.
+
+    --mark-returned     When an item is marked lost, remove it from the borrowers issued items.
 
   examples :
   $PERL5LIB/misc/cronjobs/longoverdue.pl --lost 30=1
@@ -161,7 +165,7 @@ foreach my $startrange (sort keys %$lost) {
             printf ("Due %s: item %5s from borrower %5s to lost: %s\n", $row->{date_due}, $row->{itemnumber}, $row->{borrowernumber}, $lostvalue) if($verbose);
             if($confirm) {
                 ModItem({ itemlost => $lostvalue }, $row->{'biblionumber'}, $row->{'itemnumber'});
-                LostItem($row->{'itemnumber'}, undef, 'CHARGE FEE') if( $charge && $charge eq $lostvalue);
+                LostItem($row->{'itemnumber'}, $mark_returned, 'CHARGE FEE') if( $charge && $charge eq $lostvalue);
             }
             $count++;
         }

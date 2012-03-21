@@ -40,6 +40,7 @@ use C4::Output;
 use C4::Dates qw/format_date format_date_in_iso/;
 use C4::Members;        # GetBorrowersWhoHavexxxBorrowed.
 use C4::Circulation;    # AnonymiseIssueHistory.
+use C4::VirtualShelves (); #no import
 use Date::Calc qw/Today Add_Delta_YM/;
 
 my $cgi = new CGI;
@@ -117,13 +118,15 @@ if ( $params->{'step3'} ) {
             my $i;
             for ( $i = 0 ; $i < $totalDel ; $i++ ) {
                 MoveMemberToDeleted( $membersToDelete->[$i]->{'borrowernumber'} );
+                C4::VirtualShelves::HandleDelBorrower($membersToDelete->[$i]->{'borrowernumber'});
                 DelMember( $membersToDelete->[$i]->{'borrowernumber'} );
             }
         }
         else {    # delete completly.
             my $i;
             for ( $i = 0 ; $i < $totalDel ; $i++ ) {
-               DelMember($membersToDelete->[$i]->{'borrowernumber'});
+                C4::VirtualShelves::HandleDelBorrower($membersToDelete->[$i]->{'borrowernumber'});
+                DelMember($membersToDelete->[$i]->{'borrowernumber'});
             }
         }
         $template->param(

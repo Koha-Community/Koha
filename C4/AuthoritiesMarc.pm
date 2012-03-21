@@ -1312,7 +1312,11 @@ sub merge {
             my $rec;
             $rec=$oResult->record($z);
             my $marcdata = $rec->raw();
-            push @reccache, $marcdata;
+            my $marcrecordzebra= MARC::Record->new_from_xml($marcdata,"utf8",C4::Context->preference("marcflavour"));
+            my ( $biblionumbertagfield, $biblionumbertagsubfield ) = &GetMarcFromKohaField( "biblio.biblionumber", '' );
+            my $i = $marcrecordzebra->subfield($biblionumbertagfield, $biblionumbertagsubfield);
+            my $marcrecorddb=GetMarcBiblio($i);
+            push @reccache, $marcrecorddb;
             $z++;
         }
         $oResult->destroy();
@@ -1338,7 +1342,6 @@ sub merge {
     # May be used as a template for a bulkedit field  
     foreach my $marcrecord(@reccache){
         my $update;           
-        $marcrecord= MARC::Record->new_from_xml($marcrecord,"utf8",C4::Context->preference("marcflavour")) unless(C4::Context->preference('NoZebra'));
         foreach my $tagfield (@tags_using_authtype){
 #             warn "tagfield : $tagfield ";
             foreach my $field ($marcrecord->field($tagfield)){

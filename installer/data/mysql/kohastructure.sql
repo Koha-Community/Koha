@@ -317,6 +317,7 @@ CREATE TABLE `branch_item_rules` (
   `branchcode` varchar(10) NOT NULL,
   `itemtype` varchar(10) NOT NULL,
   `holdallowed` tinyint(1) default NULL,
+  `returnbranch` varchar(15) default NULL,
   PRIMARY KEY  (`itemtype`,`branchcode`),
   KEY `branch_item_rules_ibfk_2` (`branchcode`),
   CONSTRAINT `branch_item_rules_ibfk_1` FOREIGN KEY (`itemtype`) REFERENCES `itemtypes` (`itemtype`)
@@ -497,6 +498,7 @@ CREATE TABLE `default_branch_circ_rules` (
   `branchcode` VARCHAR(10) NOT NULL,
   `maxissueqty` int(4) default NULL,
   `holdallowed` tinyint(1) default NULL,
+  `returnbranch` varchar(15) default NULL,
   PRIMARY KEY (`branchcode`),
   CONSTRAINT `default_branch_circ_rules_ibfk_1` FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`)
     ON DELETE CASCADE ON UPDATE CASCADE
@@ -509,6 +511,7 @@ DROP TABLE IF EXISTS `default_branch_item_rules`;
 CREATE TABLE `default_branch_item_rules` (
   `itemtype` varchar(10) NOT NULL,
   `holdallowed` tinyint(1) default NULL,
+  `returnbranch` varchar(15) default NULL,
   PRIMARY KEY  (`itemtype`),
   CONSTRAINT `default_branch_item_rules_ibfk_1` FOREIGN KEY (`itemtype`) REFERENCES `itemtypes` (`itemtype`)
     ON DELETE CASCADE ON UPDATE CASCADE
@@ -523,6 +526,7 @@ CREATE TABLE `default_circ_rules` (
     `singleton` enum('singleton') NOT NULL default 'singleton',
     `maxissueqty` int(4) default NULL,
     `holdallowed` int(1) default NULL,
+    `returnbranch` varchar(15) default NULL,
     PRIMARY KEY (`singleton`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -1356,6 +1360,55 @@ CREATE TABLE `nozebra` (
   ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
+-- Table structure for table `oai_sets`
+--
+
+DROP TABLE IF EXISTS `oai_sets`;
+CREATE TABLE `oai_sets` (
+  `id` int(11) NOT NULL auto_increment,
+  `spec` varchar(80) NOT NULL UNIQUE,
+  `name` varchar(80) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Table structure for table `oai_sets_descriptions`
+--
+
+DROP TABLE IF EXISTS `oai_sets_descriptions`;
+CREATE TABLE `oai_sets_descriptions` (
+  `set_id` int(11) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  CONSTRAINT `oai_sets_descriptions_ibfk_1` FOREIGN KEY (`set_id`) REFERENCES `oai_sets` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Table structure for table `oai_sets_mappings`
+--
+
+DROP TABLE IF EXISTS `oai_sets_mappings`;
+CREATE TABLE `oai_sets_mappings` (
+  `set_id` int(11) NOT NULL,
+  `marcfield` char(3) NOT NULL,
+  `marcsubfield` char(1) NOT NULL,
+  `marcvalue` varchar(80) NOT NULL,
+  CONSTRAINT `oai_sets_mappings_ibfk_1` FOREIGN KEY (`set_id`) REFERENCES `oai_sets` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Table structure for table `oai_sets_biblios`
+--
+
+DROP TABLE IF EXISTS `oai_sets_biblios`;
+CREATE TABLE `oai_sets_biblios` (
+  `biblionumber` int(11) NOT NULL,
+  `set_id` int(11) NOT NULL,
+  PRIMARY KEY (`biblionumber`, `set_id`),
+  CONSTRAINT `oai_sets_biblios_ibfk_1` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `oai_sets_biblios_ibfk_2` FOREIGN KEY (`set_id`) REFERENCES `oai_sets` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
 -- Table structure for table `old_issues`
 --
 
@@ -2002,11 +2055,15 @@ DROP TABLE IF EXISTS `virtualshelves`;
 CREATE TABLE `virtualshelves` ( -- information about lists (or virtual shelves) 
   `shelfnumber` int(11) NOT NULL auto_increment, -- unique identifier assigned by Koha
   `shelfname` varchar(255) default NULL, -- name of the list
-  `owner` varchar(80) default NULL, -- foriegn key linking to the borrowers table (using borrowernumber) for the creator of this list
-  `category` varchar(1) default NULL, -- type of list (public [2], private [1] or open [3])
+  `owner` int default NULL, -- foreign key linking to the borrowers table (using borrowernumber) for the creator of this list (changed from varchar(80) to int)
+  `category` varchar(1) default NULL, -- type of list (private [1], public [2])
   `sortfield` varchar(16) default NULL, -- the field this list is sorted on
   `lastmodified` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- date and time the list was last modified
-  PRIMARY KEY  (`shelfnumber`)
+  `allow_add` tinyint(1) default 0, -- permission for adding entries to list
+  `allow_delete_own` tinyint(1) default 1, -- permission for deleting entries frm list that you added yourself
+  `allow_delete_other` tinyint(1) default 0, -- permission for deleting entries from list that another person added
+  PRIMARY KEY  (`shelfnumber`),
+  CONSTRAINT `virtualshelves_ibfk_1` FOREIGN KEY (`owner`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE SET NULL -- no cascaded delete, please see HandleDelBorrower in VirtualShelves.pm
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -2019,10 +2076,27 @@ CREATE TABLE `virtualshelfcontents` ( -- information about the titles in a list 
   `biblionumber` int(11) NOT NULL default 0, -- foreign key linking to the biblio table, defines the bib record that has been added to the list
   `flags` int(11) default NULL,
   `dateadded` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- date and time this bib record was added to the list
+  `borrowernumber` int, -- borrower number that created this list entry (only the first one is saved: no need for use in/as key)
   KEY `shelfnumber` (`shelfnumber`),
   KEY `biblionumber` (`biblionumber`),
   CONSTRAINT `virtualshelfcontents_ibfk_1` FOREIGN KEY (`shelfnumber`) REFERENCES `virtualshelves` (`shelfnumber`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `shelfcontents_ibfk_2` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `shelfcontents_ibfk_2` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `shelfcontents_ibfk_3` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE SET NULL -- no cascaded delete, please see HandleDelBorrower in VirtualShelves.pm
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Table structure for table `virtualshelfshares`
+--
+
+DROP TABLE IF EXISTS `virtualshelfshares`;
+CREATE TABLE `virtualshelfshares` ( -- shared private lists
+  `id` int AUTO_INCREMENT PRIMARY KEY,  -- unique key
+  `shelfnumber` int NOT NULL,  -- foreign key for virtualshelves
+  `borrowernumber` int,  -- borrower that accepted access to this list
+  `invitekey` varchar(10), -- temporary string used in accepting the invitation to access thist list; not-empty means that the invitation has not been accepted yet
+  `sharedate` datetime,  -- date of invitation or acceptance of invitation
+  CONSTRAINT `virtualshelfshares_ibfk_1` FOREIGN KEY (`shelfnumber`) REFERENCES `virtualshelves` (`shelfnumber`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `virtualshelfshares_ibfk_2` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE SET NULL -- no cascaded delete, please see HandleDelBorrower in VirtualShelves.pm
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --

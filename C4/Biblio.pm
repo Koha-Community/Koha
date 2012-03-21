@@ -35,6 +35,7 @@ use C4::Log;    # logaction
 use C4::ClassSource;
 use C4::Charset;
 use C4::Linker;
+use C4::OAI::Sets;
 
 use vars qw($VERSION @ISA @EXPORT);
 
@@ -131,6 +132,7 @@ BEGIN {
       &TransformHtmlToMarc
       &TransformHtmlToXml
       &GetNoZebraIndexes
+      prepare_host_field
     );
 }
 
@@ -268,6 +270,11 @@ sub AddBiblio {
     # now add the record
     ModBiblioMarc( $record, $biblionumber, $frameworkcode ) unless $defer_marc_save;
 
+    # update OAI-PMH sets
+    if(C4::Context->preference("OAI-PMH:AutoUpdateSets")) {
+        C4::OAI::Sets::UpdateOAISetsBiblio($biblionumber, $record);
+    }
+
     logaction( "CATALOGUING", "ADD", $biblionumber, "biblio" ) if C4::Context->preference("CataloguingLog");
     return ( $biblionumber, $biblioitemnumber );
 }
@@ -339,6 +346,12 @@ sub ModBiblio {
     # modify the other koha tables
     _koha_modify_biblio( $dbh, $oldbiblio, $frameworkcode );
     _koha_modify_biblioitem_nonmarc( $dbh, $oldbiblio );
+
+    # update OAI-PMH sets
+    if(C4::Context->preference("OAI-PMH:AutoUpdateSets")) {
+        C4::OAI::Sets::UpdateOAISetsBiblio($biblionumber, $record);
+    }
+
     return 1;
 }
 
@@ -415,6 +428,13 @@ sub DelBiblio {
     my $subscriptions = C4::Serials::GetFullSubscriptionsFromBiblionumber($biblionumber);
     foreach my $subscription (@$subscriptions) {
         C4::Serials::DelSubscription( $subscription->{subscriptionid} );
+    }
+
+    # We delete any existing holds
+    require C4::Reserves;
+    my ($count, $reserves) = C4::Reserves::GetReservesFromBiblionumber($biblionumber);
+    foreach my $res ( @$reserves ) {
+        C4::Reserves::CancelReserve( $res->{'biblionumber'}, $res->{'itemnumber'}, $res->{'borrowernumber'} );
     }
 
     # Delete in Zebra. Be careful NOT to move this line after _koha_delete_biblio
@@ -3628,8 +3648,133 @@ sub GetHolds {
     return ($holds);
 }
 
+=head2 prepare_host_field
+
+$marcfield = prepare_host_field( $hostbiblioitem, $marcflavour );
+Generate the host item entry for an analytic child entry
+
+=cut
+
+sub prepare_host_field {
+    my ( $hostbiblio, $marcflavour ) = @_;
+    $marcflavour ||= C4::Context->preference('marcflavour');
+    my $host = GetMarcBiblio($hostbiblio);
+    # unfortunately as_string does not 'do the right thing'
+    # if field returns undef
+    my %sfd;
+    my $field;
+    my $host_field;
+    if ( $marcflavour eq 'MARC21' || $marcflavour eq 'NORMARC' ) {
+        if ( $field = $host->field('100') || $host->field('110') || $host->field('11') ) {
+            my $s = $field->as_string('ab');
+            if ($s) {
+                $sfd{a} = $s;
+            }
+        }
+        if ( $field = $host->field('245') ) {
+            my $s = $field->as_string('a');
+            if ($s) {
+                $sfd{t} = $s;
+            }
+        }
+        if ( $field = $host->field('260') ) {
+            my $s = $field->as_string('abc');
+            if ($s) {
+                $sfd{d} = $s;
+            }
+        }
+        if ( $field = $host->field('240') ) {
+            my $s = $field->as_string();
+            if ($s) {
+                $sfd{b} = $s;
+            }
+        }
+        if ( $field = $host->field('022') ) {
+            my $s = $field->as_string('a');
+            if ($s) {
+                $sfd{x} = $s;
+            }
+        }
+        if ( $field = $host->field('020') ) {
+            my $s = $field->as_string('a');
+            if ($s) {
+                $sfd{z} = $s;
+            }
+        }
+        if ( $field = $host->field('001') ) {
+            $sfd{w} = $field->data(),;
+        }
+        $host_field = MARC::Field->new( 773, '0', ' ', %sfd );
+        return $host_field;
+    }
+    elsif ( $marcflavour eq 'UNIMARC' ) {
+        #author
+        if ( $field = $host->field('700') || $host->field('710') || $host->field('720') ) {
+            my $s = $field->as_string('ab');
+            if ($s) {
+                $sfd{a} = $s;
+            }
+        }
+        #title
+        if ( $field = $host->field('200') ) {
+            my $s = $field->as_string('a');
+            if ($s) {
+                $sfd{t} = $s;
+            }
+        }
+        #place of publicaton
+        if ( $field = $host->field('210') ) {
+            my $s = $field->as_string('a');
+            if ($s) {
+                $sfd{c} = $s;
+            }
+        }
+        #date of publication
+        if ( $field = $host->field('210') ) {
+            my $s = $field->as_string('d');
+            if ($s) {
+                $sfd{d} = $s;
+            }
+        }
+        #edition statement
+        if ( $field = $host->field('205') ) {
+            my $s = $field->as_string();
+            if ($s) {
+                $sfd{a} = $s;
+            }
+        }
+        #URL
+        if ( $field = $host->field('856') ) {
+            my $s = $field->as_string('u');
+            if ($s) {
+                $sfd{u} = $s;
+            }
+        }
+        #ISSN
+        if ( $field = $host->field('011') ) {
+            my $s = $field->as_string('a');
+            if ($s) {
+                $sfd{x} = $s;
+            }
+        }
+        #ISBN
+        if ( $field = $host->field('010') ) {
+            my $s = $field->as_string('a');
+            if ($s) {
+                $sfd{y} = $s;
+            }
+        }
+        if ( $field = $host->field('001') ) {
+            $sfd{0} = $field->data(),;
+        }
+        $host_field = MARC::Field->new( 461, '0', ' ', %sfd );
+        return $host_field;
+    }
+    return;
+}
 
 1;
+
 
 __END__
 

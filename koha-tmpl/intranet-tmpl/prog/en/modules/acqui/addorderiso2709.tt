@@ -1,3 +1,4 @@
+[% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; Order Staged MARC Records
 [% IF ( batch_details ) %]
@@ -90,7 +91,7 @@
                         <td>[% batch_lis.file_name %]</td>
                        <td>[% batch_lis.comments %]</td>
                        <td>[% batch_lis.import_status %]</td>
-                       <td>[% batch_lis.upload_timestamp %]</td>
+                       <td>[% batch_lis.staged_date | $KohaDates %] [% batch_lis.staged_hour %]</td>
                        <td>[% batch_lis.num_biblios %]</td>
                        <td><a href="[% batch_lis.scriptname %]?import_batch_id=[% batch_lis.import_batch_id %]&amp;basketno=[% basketno %]&amp;booksellerid=[% booksellerid %]">Add orders</a></td>
                      </tr>

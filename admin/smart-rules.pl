@@ -136,6 +136,7 @@ elsif ($op eq "set-branch-defaults") {
     my $categorycode  = $input->param('categorycode');
     my $maxissueqty   = $input->param('maxissueqty');
     my $holdallowed   = $input->param('holdallowed');
+    my $returnbranch  = $input->param('returnbranch');
     $maxissueqty =~ s/\s//g;
     $maxissueqty = undef if $maxissueqty !~ /^\d+/;
     $holdallowed =~ s/\s//g;
@@ -145,34 +146,34 @@ elsif ($op eq "set-branch-defaults") {
         my $sth_search = $dbh->prepare("SELECT count(*) AS total
                                         FROM default_circ_rules");
         my $sth_insert = $dbh->prepare("INSERT INTO default_circ_rules
-                                        (maxissueqty, holdallowed)
-                                        VALUES (?, ?)");
+                                        (maxissueqty, holdallowed, returnbranch)
+                                        VALUES (?, ?, ?)");
         my $sth_update = $dbh->prepare("UPDATE default_circ_rules
-                                        SET maxissueqty = ?, holdallowed = ?");
+                                        SET maxissueqty = ?, holdallowed = ?, returnbranch = ?");
 
         $sth_search->execute();
         my $res = $sth_search->fetchrow_hashref();
         if ($res->{total}) {
-            $sth_update->execute($maxissueqty, $holdallowed);
+            $sth_update->execute($maxissueqty, $holdallowed, $returnbranch);
         } else {
-            $sth_insert->execute($maxissueqty, $holdallowed);
+            $sth_insert->execute($maxissueqty, $holdallowed, $returnbranch);
         }
     } else {
         my $sth_search = $dbh->prepare("SELECT count(*) AS total
                                         FROM default_branch_circ_rules
                                         WHERE branchcode = ?");
         my $sth_insert = $dbh->prepare("INSERT INTO default_branch_circ_rules
-                                        (branchcode, maxissueqty, holdallowed)
-                                        VALUES (?, ?, ?)");
+                                        (branchcode, maxissueqty, holdallowed, returnbranch)
+                                        VALUES (?, ?, ?, ?)");
         my $sth_update = $dbh->prepare("UPDATE default_branch_circ_rules
-                                        SET maxissueqty = ?, holdallowed = ?
+                                        SET maxissueqty = ?, holdallowed = ?, returnbranch = ?
                                         WHERE branchcode = ?");
         $sth_search->execute($branch);
         my $res = $sth_search->fetchrow_hashref();
         if ($res->{total}) {
-            $sth_update->execute($maxissueqty, $holdallowed, $branch);
+            $sth_update->execute($maxissueqty, $holdallowed, $returnbranch, $branch);
         } else {
-            $sth_insert->execute($branch, $maxissueqty, $holdallowed);
+            $sth_insert->execute($branch, $maxissueqty, $holdallowed, $returnbranch);
         }
     }
 }
@@ -259,6 +260,7 @@ elsif ($op eq "add-branch-cat") {
 elsif ($op eq "add-branch-item") {
     my $itemtype  = $input->param('itemtype');
     my $holdallowed   = $input->param('holdallowed');
+    my $returnbranch  = $input->param('returnbranch');
     $holdallowed =~ s/\s//g;
     $holdallowed = undef if $holdallowed !~ /^\d+/;
 
@@ -267,34 +269,34 @@ elsif ($op eq "add-branch-item") {
             my $sth_search = $dbh->prepare("SELECT count(*) AS total
                                             FROM default_circ_rules");
             my $sth_insert = $dbh->prepare("INSERT INTO default_circ_rules
-                                            (holdallowed)
-                                            VALUES (?)");
+                                            (holdallowed, returnbranch)
+                                            VALUES (?, ?)");
             my $sth_update = $dbh->prepare("UPDATE default_circ_rules
-                                            SET holdallowed = ?");
+                                            SET holdallowed = ?, returnbranch = ?");
 
             $sth_search->execute();
             my $res = $sth_search->fetchrow_hashref();
             if ($res->{total}) {
-                $sth_update->execute($holdallowed);
+                $sth_update->execute($holdallowed, $returnbranch);
             } else {
-                $sth_insert->execute($holdallowed);
+                $sth_insert->execute($holdallowed, $returnbranch);
             }
         } else {
             my $sth_search = $dbh->prepare("SELECT count(*) AS total
                                             FROM default_branch_item_rules
                                             WHERE itemtype = ?");
             my $sth_insert = $dbh->prepare("INSERT INTO default_branch_item_rules
-                                            (itemtype, holdallowed)
-                                            VALUES (?, ?)");
+                                            (itemtype, holdallowed, returnbranch)
+                                            VALUES (?, ?, ?)");
             my $sth_update = $dbh->prepare("UPDATE default_branch_item_rules
-                                            SET holdallowed = ?
+                                            SET holdallowed = ?, returnbranch = ?
                                             WHERE itemtype = ?");
             $sth_search->execute($itemtype);
             my $res = $sth_search->fetchrow_hashref();
             if ($res->{total}) {
-                $sth_update->execute($holdallowed, $itemtype);
+                $sth_update->execute($holdallowed, $returnbranch, $itemtype);
             } else {
-                $sth_insert->execute($itemtype, $holdallowed);
+                $sth_insert->execute($itemtype, $holdallowed, $returnbranch);
             }
         }
     } elsif ($itemtype eq "*") {
@@ -302,17 +304,17 @@ elsif ($op eq "add-branch-item") {
                                         FROM default_branch_circ_rules
                                         WHERE branchcode = ?");
         my $sth_insert = $dbh->prepare("INSERT INTO default_branch_circ_rules
-                                        (branchcode, holdallowed)
-                                        VALUES (?, ?)");
+                                        (branchcode, holdallowed, returnbranch)
+                                        VALUES (?, ?, ?)");
         my $sth_update = $dbh->prepare("UPDATE default_branch_circ_rules
-                                        SET holdallowed = ?
+                                        SET holdallowed = ?, returnbranch = ?
                                         WHERE branchcode = ?");
         $sth_search->execute($branch);
         my $res = $sth_search->fetchrow_hashref();
         if ($res->{total}) {
-            $sth_update->execute($holdallowed, $branch);
+            $sth_update->execute($holdallowed, $returnbranch, $branch);
         } else {
-            $sth_insert->execute($branch, $holdallowed);
+            $sth_insert->execute($branch, $holdallowed, $returnbranch);
         }
     } else {
         my $sth_search = $dbh->prepare("SELECT count(*) AS total
@@ -320,19 +322,19 @@ elsif ($op eq "add-branch-item") {
                                         WHERE branchcode = ?
                                         AND   itemtype = ?");
         my $sth_insert = $dbh->prepare("INSERT INTO branch_item_rules
-                                        (branchcode, itemtype, holdallowed)
-                                        VALUES (?, ?, ?)");
+                                        (branchcode, itemtype, holdallowed, returnbranch)
+                                        VALUES (?, ?, ?, ?)");
         my $sth_update = $dbh->prepare("UPDATE branch_item_rules
-                                        SET holdallowed = ?
+                                        SET holdallowed = ?, returnbranch = ?
                                         WHERE branchcode = ?
                                         AND itemtype = ?");
 
         $sth_search->execute($branch, $itemtype);
         my $res = $sth_search->fetchrow_hashref();
         if ($res->{total}) {
-            $sth_update->execute($holdallowed, $branch, $itemtype);
+            $sth_update->execute($holdallowed, $returnbranch, $branch, $itemtype);
         } else {
-            $sth_insert->execute($branch, $itemtype, $holdallowed);
+            $sth_insert->execute($branch, $itemtype, $holdallowed, $returnbranch);
         }
     }
 }
@@ -485,6 +487,7 @@ if ($defaults) {
     $template->param(default_holdallowed_same => 1) if($defaults->{holdallowed} == 1);
     $template->param(default_holdallowed_any => 1) if($defaults->{holdallowed} == 2);
     $template->param(default_maxissueqty => $defaults->{maxissueqty});
+    $template->param(default_returnbranch => $defaults->{returnbranch});
 }
 
 $template->param(default_rules => ($defaults ? 1 : 0));

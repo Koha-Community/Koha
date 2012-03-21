@@ -24,7 +24,7 @@ $(document).ready(function(){
 
 	function confirmDelete(message){
 		if (window.confirm(message)) {
-		    location.href="/cgi-bin/koha/virtualshelves/shelves.pl?[% IF ( showprivateshelves ) %] display=privateshelves&[% END %]shelves=1&DEL-[% shelfnumber %]=1&shelfoff=[% shelfoff %]";
+		    location.href="/cgi-bin/koha/virtualshelves/shelves.pl?[% IF ( showprivateshelves ) %]display=privateshelves&[% END %]shelves=1&DEL-[% shelfnumber %]=1&shelfoff=[% shelfoff %]";
 		} else { 
 			return false;
 		}
@@ -146,7 +146,13 @@ function placeHold () {
 		[% END %] 
 		[% IF ( paramsloo.duplicatebiblio ) %]
 		<div class="dialog alert">A record matching barcode <b>[% paramsloo.duplicatebiblio %]</b> has already been added.</div>
-		[% END %] 
+		[% END %]
+                [% IF ( paramsloo.nothingdeleted) %]
+                      <div class="dialog message">Warning: You could not delete any selected items from this shelf.</div>
+                [% END %]
+                [% IF ( paramsloo.somedeleted) %]
+                      <div class="dialog message">Warning: You could not delete all selected items from this shelf.</div>
+                [% END %]
 	</div>
 </div>
 [% END %]
@@ -162,7 +168,7 @@ function placeHold () {
  <fieldset>
   <legend>Contents of <i>[% shelfname | html %]</i></legend>
    
- [% IF ( manageshelf ) %]
+ [% IF ( itemsloop ) %]
      <p><span class="checkall"></span> |
      <span class="clearall"></span></p>
  [% END %]
@@ -170,7 +176,7 @@ function placeHold () {
  <div class="pages">[% pagination_bar %]</div>
     <table>
             <tr>
-                [% IF ( manageshelf ) %]<th class="checkall">&nbsp;</th>[% END %]
+                [% IF ( itemsloop ) %]<th class="checkall">&nbsp;</th>[% END %]
                 [% UNLESS ( item_level_itypes ) %]<th>Item Type</th>[% END %]
                 <th>Title</th>
                 <th>Author</th>
@@ -183,7 +189,7 @@ function placeHold () {
 			[% ELSE %]
 			<tr>
 			[% END %]
-			[% IF ( manageshelf ) %]
+			[% IF ( itemsloop ) %]
 			<td>
 				[% IF ( itemsloo.confirm ) %]
 				<input type="hidden"   name="CONFIRM-[% itemsloo.confirm %]" />
@@ -210,9 +216,9 @@ function placeHold () {
 			</tr>
 		[% END %]<!-- /itemsloop -->
     </table><fieldset class="action">
-        [% IF ( manageshelf ) %]
+        [% IF ( itemsloop ) %]
             <input type="button" id="placehold" style="display:none" onclick="placeHold(); return false;" value="Place Holds" />
-            <input type="submit" value="Remove selected records" onclick="return confirm(_('Are you sure you want to remove these records from the shelf?'));" />
+            [% IF ( allowremovingitems ) %]<input type="submit" value="Remove selected records" onclick="return confirm(_('Are you sure you want to remove these records from the shelf?'));" />[% END %]
             <input type="submit" value="Merge selected records" onclick="return MergeItems();" />
         [% END %]
  </fieldset>
@@ -223,7 +229,7 @@ function placeHold () {
    </div>
 [% END %]<!-- /viewshelf -->
 
-[% IF ( manageshelf ) %]
+[% IF ( allowaddingitem ) %]
 <div class="yui-g">
 <form action="/cgi-bin/koha/virtualshelves/shelves.pl" method="post">
  <fieldset class="brief">
@@ -240,7 +246,7 @@ function placeHold () {
  </fieldset>
 </form>
 </div>
-[% END %]<!-- /manageshelf -->
+[% END %]<!-- /allowaddingitem -->
 
 [% IF ( debug ) %]
   [% IF ( edit ) %]<div>Edit is on ([% shelfname | html %])</div>[% END %]
@@ -269,7 +275,6 @@ function placeHold () {
 			<select name="category" id="category">
                   <option value="1">Private</option>
                   <option value="2">Public</option>
-                  <option value="3">Open</option>
 			</select></li></ol>
     [% END %]
 
@@ -299,11 +304,6 @@ function placeHold () {
 			[% ELSE %]
 				<option value="2">Public</option>
 			[% END %]
-			[% IF ( category3 ) %]
-				<option value="3" selected="selected">Open</option>
-			[% ELSE %]
-				<option value="3">Open</option>
-			[% END %]
 			</select></li></ol>
 	[% END %]
 
@@ -317,8 +317,8 @@ function placeHold () {
         <div class="help"><ul>
             <li>A <b>Private</b> List is managed by you and can be seen only by you.</li>
             <li> A <b>Public</b> List can be seen by everybody, but managed only by you.</li>
-            <li> A <b>Open</b> List can be seen and managed by everybody.</li>
-        </ul></div>
+        </ul>
+        </div>
     </div>
 </div>
 [% END %]<!-- /seflag -->
@@ -354,7 +354,6 @@ function placeHold () {
         <td>[% IF ( shelveslooppri.authorsort ) %]Author[% ELSIF ( shelveslooppri.yearsort ) %]Year[% ELSE %]Title[% END %]</td>
         <td>[% IF ( shelveslooppri.viewcategory1 ) %]Private[% END %]
 			[% IF ( shelveslooppri.viewcategory2 ) %]Public[% END %]
-			[% IF ( shelveslooppri.viewcategory3 ) %]Open[% END %]
 		</td>
         <td>
             [% IF ( shelveslooppri.mine ) %]
@@ -408,7 +407,6 @@ function placeHold () {
         <td>[% IF ( shelvesloo.authorsort ) %]Author[% ELSIF ( shelvesloo.yearsort ) %]Year[% ELSE %]Title[% END %]</td>
         <td>[% IF ( shelvesloo.viewcategory1 ) %]Private[% END %]
 			[% IF ( shelvesloo.viewcategory2 ) %]Public[% END %]
-			[% IF ( shelvesloo.viewcategory3 ) %]Open[% END %]
 		</td>
         <td>
             [% IF ( shelvesloo.manageshelf ) %]

@@ -147,7 +147,7 @@ use C4::Search;
 use C4::Languages qw(getAllLanguages);
 use C4::Koha;
 use C4::Members qw(GetMember);
-use C4::VirtualShelves qw(GetRecentShelves);
+use C4::VirtualShelves;
 use POSIX qw(ceil floor);
 use C4::Branch; # GetBranches
 
@@ -701,21 +701,13 @@ if ($query_desc || $limit_desc) {
 # VI. BUILD THE TEMPLATE
 
 # Build drop-down list for 'Add To:' menu...
-
-my $row_count = 10; # FIXME:This probably should be a syspref
-my ($pubshelves, $total) = GetRecentShelves(2, $row_count, undef);
-my ($barshelves, $total) = GetRecentShelves(1, $row_count, $borrowernumber);
-
-if (@{$pubshelves}) {
-        $template->param( addpubshelves     => scalar @{$pubshelves});
-        $template->param( addpubshelvesloop => $pubshelves);
-}
-
-if (@{$barshelves}) {
-        $template->param( addbarshelves     => scalar @{$barshelves});
-        $template->param( addbarshelvesloop => $barshelves);
-}
-
-
+my ($totalref, $pubshelves, $barshelves)=
+	C4::VirtualShelves::GetSomeShelfNames($borrowernumber,'COMBO',1);
+$template->param(
+        addbarshelves     => $totalref->{bartotal},
+        addbarshelvesloop => $barshelves,
+	addpubshelves     => $totalref->{pubtotal},
+	addpubshelvesloop => $pubshelves,
+	);
 
 output_html_with_http_headers $cgi, $cookie, $template->output;

@@ -98,7 +98,7 @@ BEGIN {
         &GetReservesToBranch
         &GetReserveCount
         &GetReserveFee
-		&GetReserveInfo
+        &GetReserveInfo
         &GetReserveStatus
         
         &GetOtherReserves
@@ -901,8 +901,8 @@ sub CancelExpiredReserves {
 Cancels a reserve.
 
 Use either C<$biblionumber> or C<$itemnumber> to specify the item to
-cancel, but not both: if both are given, C<&CancelReserve> does
-nothing.
+cancel, but not both: if both are given, C<&CancelReserve> uses
+C<$itemnumber>.
 
 C<$borrowernumber> is the borrower number of the patron on whose
 behalf the book was reserved.

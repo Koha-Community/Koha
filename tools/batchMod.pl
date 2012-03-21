@@ -41,6 +41,7 @@ my $error        = $input->param('error');
 my @itemnumbers  = $input->param('itemnumber');
 my $op           = $input->param('op');
 my $del          = $input->param('del');
+my $del_records  = $input->param('del_records');
 my $completedJobID = $input->param('completedJobID');
 my $runinbackground = $input->param('runinbackground');
 
@@ -76,8 +77,9 @@ my $items_display_hashref;
 my $frameworkcode="";
 my $tagslib = &GetMarcStructure(1,$frameworkcode);
 
-my $deleted_items = 0;     # Numbers of deleted items
-my $not_deleted_items = 0; # Numbers of items that could not be deleted
+my $deleted_items = 0;     # Number of deleted items
+my $deleted_records = 0;   # Number of deleted records ( with no items attached )
+my $not_deleted_items = 0; # Number of items that could not be deleted
 my @not_deleted;           # List of the itemnumbers that could not be deleted
 
 my %cookies = parse CGI::Cookie($cookie);
@@ -156,7 +158,7 @@ if ($op eq "action") {
 	foreach my $itemnumber(@itemnumbers){
 
 		$job->progress($i) if $runinbackground;
-		my $itemdata=GetItem($itemnumber);
+		my $itemdata = GetItem($itemnumber);
 		if ($input->param("del")){
 			my $return = DelItemCheck(C4::Context->dbh, $itemdata->{'biblionumber'}, $itemdata->{'itemnumber'});
 			if ($return == 1) {
@@ -171,15 +173,24 @@ if ($op eq "action") {
 				  $return => 1
 				};
 			}
+
+			# If there are no items left, delete the biblio
+			if ( $del_records ) {
+                            my $itemscount = GetItemsCount($itemdata->{'biblionumber'});
+                            if ( $itemscount == 0 ) {
+			        my $error = DelBiblio($itemdata->{'biblionumber'});
+			        $deleted_records++ unless ( $error );
+                            }
+                        }
 		} else {
 		    if ($values_to_modify || $values_to_blank) {
 			my $localmarcitem = Item2Marc($itemdata);
 			UpdateMarcWith( $marcitem, $localmarcitem );
 			eval{
-                if ( my $item = ModItemFromMarc( $localmarcitem, $itemdata->{biblionumber}, $itemnumber ) ) {
-                    LostItem($itemnumber, 'MARK RETURNED', 'CHARGE FEE') if $item->{itemlost};
-                }
-            };
+                            if ( my $item = ModItemFromMarc( $localmarcitem, $itemdata->{biblionumber}, $itemnumber ) ) {
+                                LostItem($itemnumber, 'MARK RETURNED', 'CHARGE FEE') if $item->{itemlost};
+                            }
+                        };
 		    }
 		}
 		$i++;
@@ -433,6 +444,8 @@ if ($op eq "action") {
     $template->param(
 	not_deleted_items => $not_deleted_items,
 	deleted_items => $deleted_items,
+	delete_records => $del_records,
+	deleted_records => $deleted_records,
 	not_deleted_loop => \@not_deleted 
     );
 }

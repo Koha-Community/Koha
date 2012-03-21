@@ -6,10 +6,11 @@
 var MSG_NO_TAG_SPECIFIED = _("No tag was specified.");
 var MSG_REMOVE_FROM_LIST = _("Are you sure you want to remove these items from the list?");
 var MSG_CONFIRM_DELETE_LIST = _("Are you sure you want to delete this list?");
+var MSG_NO_RECORD_SELECTED = _("Please select one or more items");
 
 [% IF ( opacuserlogin ) %][% IF ( RequestOnOpac ) %]
 function holdSelections() {
-    var checkedBoxes = $(":checkbox:checked");
+    var checkedBoxes = $("input:checkbox:checked");
     if ($(checkedBoxes).size() == 0) {
         alert(MSG_NO_RECORD_SELECTED);
     } else {
@@ -63,25 +64,43 @@ function tagAdded() {
     return false;
 }[% END %][% END %][% END %]
 
+function enableCheckboxActions(){
+    // Enable/disable controls if checkboxes are checked
+    var checkedBoxes = $(".checkboxed input:checkbox:checked");
+    if ($(checkedBoxes).size()) {
+      $("#selections").html(_("With selected titles: "));
+      $("#selections-toolbar .links a").removeClass("disabled");
+    } else {
+      $("#selections").html(_("Select titles to: "));
+      $("#selections-toolbar .links a").addClass("disabled");
+    }
+}
+
 $(function() {
     [% IF ( opacbookbag ) %]$(".addtocart").show();[% END %]
-    $("span.clearall").html("<a id=\"CheckNone\" href=\"#\">"+_('Clear All')+"<\/a>|");
-    $("span.checkall").html("<a id=\"CheckAll\" href=\"#\">"+_('Select All')+"<\/a>");
+    $("span.clearall").html("<a id=\"CheckNone\" href=\"#\">"+_('Clear all')+"<\/a>");
+    $("span.checkall").html("<a id=\"CheckAll\" href=\"#\">"+_('Select all')+"<\/a>");
   $("a.print").show();
 
-    [% IF ( opacuserlogin ) %][% IF ( RequestOnOpac ) %]$("#placehold").html("<a href=\"#\" class=\"hold tag_hides\">"+_('Place Hold')+"<\/a>");
-      $("#toolbar a.hold").click(function(){
+    [% IF ( opacuserlogin ) %][% IF ( RequestOnOpac ) %]$("#placehold").html("<a href=\"#\" class=\"hold tag_hides disabled\">"+_('Place hold')+"<\/a>");
+      $("#selections-toolbar a.hold").click(function(){
          holdSelections();
          return false;
       });[% END %][% END %]
 
     $("#CheckAll").click(function(){
         $(".checkboxed").checkCheckboxes();
+        enableCheckboxActions();
         return false;
     });
     $("#CheckNone").click(function(){
         $(".checkboxed").unCheckCheckboxes();
+        enableCheckboxActions();
         return false;
+    });
+
+    $(".cb").click(function(){
+      enableCheckboxActions();
     });
 
     [% IF ( opacuserlogin ) %][% IF ( loggedinusername ) %][% IF ( TagsEnabled ) %]
@@ -89,7 +108,7 @@ $(function() {
             tagSelected();
             return false;
           });
-          $("#addtags").html("<a id=\"tagsel_tag\" href=\"#\">"+_("Tag")+"<\/a> |");
+          $("#addtags").html("<a id=\"tagsel_tag\" href=\"#\" class=\"disabled\">"+_("Tag")+"<\/a> ");
 
         $(".tagbutton").click(KOHA.Tags.add_tag_button);
       [% IF ( loggedinusername ) %]
@@ -112,6 +131,22 @@ $(function() {
             });
         [% END %]
         [% END %][% END %][% END %]
+  [% IF ( loggedinusername && allowremovingitems ) %]
+  $("#myform").submit(function(){
+    var checkedBoxes = $(".checkboxed input:checkbox:checked");
+    if ($(checkedBoxes).size()) {
+      return confirmDelete(MSG_REMOVE_FROM_LIST);
+    } else {
+      alert(MSG_NO_RECORD_SELECTED);
+      return false;
+    }
+  });
+    $("#removeitems").html("<a href=\"#\" class=\"removeitems tag_hides disabled\">"+_("Remove from list")+"</a>")
+    .click(function(){
+      $("#myform").submit();
+      return false;
+    });
+  [% END %]
   [% IF ( GoogleJackets ) %]KOHA.Google.GetCoverFromIsbn();[% END %]
 });
       function Check(f) {
@@ -175,6 +210,15 @@ $(function() {
                     [% IF ( paramsloo.unrecognized ) %]
                       <div class="dialog message">ERROR: List number [% paramsloo.unrecognized %] unrecognized.</div>
                     [% END %]
+                    [% IF ( paramsloo.modifyfailure) %]
+                      <div class="dialog message">ERROR: Shelf could not be renamed to [% paramsloo.modifyfailure %]. This name may not be unique for this type of list. Please check.</div>
+                    [% END %]
+                    [% IF ( paramsloo.nothingdeleted) %]
+                      <div class="dialog message">Warning: You could not delete any selected items from this shelf.</div>
+                    [% END %]
+                    [% IF ( paramsloo.somedeleted) %]
+                      <div class="dialog message">Warning: You could not delete all selected items from this shelf.</div>
+                    [% END %]
                   </div>
                 </div>
               [% END %]<!-- /paramsloop -->
@@ -185,34 +229,19 @@ $(function() {
             [% IF ( viewshelf ) %]<!--  Viewing a particular shelf -->
               <h3><a href="/cgi-bin/koha/opac-shelves.pl">Lists</a> <img src="[% themelang %]/../images/caret.gif" width="16" height="16" alt="&gt;" border="0" /> <em>[% shelfname |html %]</em></h3>
               [% IF ( itemsloop ) %]
-                  <div id="toolbar" class="list-actions"> <span class="checkall"></span>
-                    <span class="clearall"></span>
+                  <div id="toolbar" class="list-actions">
 
-[% IF ( RequestOnOpac ) %]
-                      <span id="placehold"></span>[% UNLESS ( TagsEnabled ) %] |[% END %]
-[% END %]
-[% IF ( loggedinusername ) %]
-    [% IF ( TagsEnabled ) %]
-                    <span id="addtags"></span>
-                    <span id="tagsel_form" style="display:none">
-                      <label for="tagsel_new" style="display:inline">New&nbsp;Tag:</label>
-                      <input name="tagsel_new" id="tagsel_new" maxlength="100" style="display:inline"/>
-                      <input id="tagsel_button" name="tagsel_button" class="input tagsel_button" title="tagsel_button"
-                             type="submit" value="Add" style="display:inline" />
-                      <a href="#" id="tagsel_cancel" onclick="tagCanceled(); return false;" style="display:inline">Cancel</a>
-                  </span>
-    [% END %][% END %]
+                      <a href="/cgi-bin/koha/opac-downloadshelf.pl?shelfid=[% shelfnumber %]" class="download" onclick="open(CGIBIN+'opac-downloadshelf.pl?shelfid=[% shelfnumber %]','win_form','dependant=yes,scrollbars=no,resizable=no,height=300,width=450,top=50,left=100'); return false;">Download List</a>
 
-                      <a href="/cgi-bin/koha/opac-downloadshelf.pl?shelfid=[% shelfnumber %]" class="download tag_hides" onclick="open(CGIBIN+'opac-downloadshelf.pl?shelfid=[% shelfnumber %]','win_form','dependant=yes,scrollbars=no,resizable=no,height=300,width=450,top=50,left=100'); return false;">Download List</a>
+[% IF ( opacuserlogin ) %]<span class="sendlist"><a href="/cgi-bin/koha/opac-sendshelf.pl?shelfid=[% shelfnumber %]" class="send" onclick="open(CGIBIN+'opac-sendshelf.pl?shelfid=[% shelfnumber %]','win_form','dependant=yes,scrollbars=no,resizable=no,height=300,width=450,top=50,left=100'); return false; ">Send List</a></span>[% END %]
 
-[% IF ( opacuserlogin ) %]<span class="sendlist"><a href="/cgi-bin/koha/opac-sendshelf.pl?shelfid=[% shelfnumber %]" class="send tag_hides" onclick="open(CGIBIN+'opac-sendshelf.pl?shelfid=[% shelfnumber %]','win_form','dependant=yes,scrollbars=no,resizable=no,height=300,width=450,top=50,left=100'); return false; ">Send List</a></span>[% END %]
+<a class="print" href="opac-shelves.pl" onclick="print(); return false;">Print List</a>
 
-<a class="print tag_hides" href="opac-shelves.pl" onclick="print(); return false;">Print List</a>
-
-                [% IF ( manageshelf ) %] | <form method="get" action="opac-shelves.pl" class="tag_hides"><input type="hidden" name="op" value="modif" />
+                [% IF ( manageshelf ) %] <span class="sep">|</span> <form method="get" action="opac-shelves.pl"><input type="hidden" name="op" value="modif" />
                 <input type="hidden" name="display" value="viewshelf" />
-                <input type="hidden" name="shelfnumber" value="[% shelfnumber %]" /> <input type="submit" class="editshelf tag_hides" value="Edit List" /></form>
-                      <form method="post" action="opac-shelves.pl" class="tag_hides">
+                <input type="hidden" name="shelfnumber" value="[% shelfnumber %]" /> <input type="submit" class="editshelf" value="Edit List" /></form>
+
+                      <form method="post" action="opac-shelves.pl">
                         <input type="hidden" value="1" name="shelves"/>
                          <input type="hidden" value="1" name="DEL-[% shelfnumber %]"/>
                          <input type="submit" class="deleteshelf" value="Delete List" onclick="return confirmDelete(MSG_CONFIRM_DELETE_LIST);"/>
@@ -220,8 +249,26 @@ $(function() {
 
 
                   </div>
-
-                  <form action="/cgi-bin/koha/opac-shelves.pl" method="post" name="myform" class="checkboxed">
+                  <div id="selections-toolbar" class="list-actions">
+                  <span class="checkall"></span> <span class="clearall"></span> <span class="sep">|</span>
+                  <span class="links"><span id="selections">Select titles to: </span>
+                                      [% IF ( RequestOnOpac ) %]
+                                        <span id="placehold"></span>
+                                      [% END %]
+                                      [% IF ( loggedinusername ) %]
+                                        [% IF ( TagsEnabled ) %]
+                                          <span id="addtags"></span>
+                                          <span id="tagsel_form" style="display:none">
+                                          <label for="tagsel_new" style="display:inline">New&nbsp;Tag:</label>
+                                          <input name="tagsel_new" id="tagsel_new" maxlength="100" style="display:inline"/>
+                                          <input id="tagsel_button" name="tagsel_button" class="input tagsel_button" title="tagsel_button" type="submit" value="Add" style="display:inline" />
+                                          <a href="#" id="tagsel_cancel" onclick="tagCanceled(); return false;" style="display:inline">Cancel</a>
+                                          </span>
+                                        [% END %]
+                                      [% END %]
+                    [% IF ( loggedinusername && allowremovingitems ) %]<span id="removeitems"></span>[% END %]</span>
+                  </div>
+                  <form action="/cgi-bin/koha/opac-shelves.pl" method="post" id="myform" name="myform" class="checkboxed">
                 [% IF ( manageshelf ) %]
                     <input type="hidden" name="viewshelf" value="[% shelfnumber %]" />
                     <input type="hidden" name="modifyshelfcontents" value="1" />
@@ -235,7 +282,7 @@ $(function() {
                     [% ELSE %]
                       <tr>
                     [% END %]
-                        <td><input type="checkbox" name="REM-[% itemsloo.biblionumber %]"
+                        <td><input type="checkbox" class="cb" name="REM-[% itemsloo.biblionumber %]"
                                    value="[% itemsloo.biblionumber %]" /></td>
                     [% UNLESS ( item_level_itypes ) %]
                         <td>
@@ -258,6 +305,7 @@ $(function() {
                                 [% END %]
                 [% IF ( itemsloo.title ) %][% itemsloo.title |html %][% ELSE %]No title[% END %] [% FOREACH subtitl IN itemsloo.subtitle %][% subtitl.subfield|html %][% END %]</a>
                                 [% IF ( itemsloo.author ) %]by <a href="/cgi-bin/koha/opac-search.pl?q=au:[% itemsloo.author |url %]" title="Search for works by this author" class="author">[% itemsloo.author %]</a>
+
                                 [% ELSE %]&nbsp;
                                 [% END %]
         <span class="results_summary"><span class="label">Publication:</span>
@@ -355,21 +403,20 @@ $(function() {
             [% END %]<!-- /viewshelf -->
 
 
-            [% IF ( manageshelf ) %]
-              <!-- Editing shelf -->
-              [% IF ( itemsloop ) %]
+            [% IF ( itemsloop && allowremovingitems ) %]
+                <form method="post" action="opac-shelves.pl">
                 <input type="hidden" name="shelfnumber" value="[% shelfnumber %]" />
                 <input type="hidden" name="modifyshelfcontents" value="1" />
-                <input type="hidden" name="viewshelf" value="[% shelfnumber %]" /><input type="submit" value="Remove Selected Items" class="icon delete" onclick="return confirmDelete(MSG_REMOVE_FROM_LIST)" />
-              [% ELSE %]
+                <input type="hidden" name="viewshelf" value="[% shelfnumber %]" /><input type="submit" value="Remove Selected Items" class="icon delete"/>
+                </form>
+            [% ELSIF ( !itemsloop && manageshelf ) %]
                 <form method="post" action="opac-shelves.pl">
                   <input type="hidden" name="DEL-[% shelfnumber %]" value="1" />
                   <input type="hidden" name="shelves" value="1" />
 		  <input type="hidden" name="shelfoff" value="[% shelfoff %]" />
                   <input type="submit" class="icon delete" value="Delete this List" onclick="return confirmDelete(MSG_CONFIRM_DELETE_LIST)" />
-              [% END %]
-            [% END %]
                 </form>
+            [% END %]
 
             
             [% IF ( edit ) %]
@@ -390,11 +437,13 @@ $(function() {
                         </select>
                       </li>
                       <li>
+			[% IF (OpacAllowPublicListCreation) %]
                         <label for="category">Category:</label>
                         <select name="category" id="category">
                           [% IF ( category1 ) %]<option value="1" selected="selected">Private</option>[% ELSE %]<option value="1">Private</option>[% END %]
                           [% IF ( category2 ) %]<option value="2" selected="selected">Public</option>[% ELSE %]<option value="2">Public</option>[% END %]
                         </select>
+			[% END %]
                       </li>
                     </ol>
                   </fieldset>
@@ -450,7 +499,6 @@ $(function() {
                               <td>
                                 [% IF ( shelveslooppri.viewcategory1 ) %]Private[% END %]
                                 [% IF ( shelveslooppri.viewcategory2 ) %]Public[% END %]
-                                [% IF ( shelveslooppri.viewcategory3 ) %]Open[% END %]
                               </td>
                               <td>
                               [% IF ( shelveslooppri.mine ) %]
@@ -517,7 +565,6 @@ $(function() {
                           <td>
                             [% IF ( shelvesloo.viewcategory1 ) %]Private[% END %]
                             [% IF ( shelvesloo.viewcategory2 ) %]Public[% END %]
-                            [% IF ( shelvesloo.viewcategory3 ) %]Open[% END %]
 	                      </td>
                           <td>
 							[% IF ( shelvesloo.mine ) %]
@@ -581,7 +628,9 @@ $(function() {
                         <label for="category">Category:</label>
                         <select name="category" id="category">
                           <option value="1">Private</option>
+			  [% IF (OpacAllowPublicListCreation) %]
                           <option value="2">Public</option>
+			  [% END %]
                         </select>
                       </li>
                     </ol>

@@ -29,7 +29,6 @@ use CGI;
 use C4::Acquisition;
 use C4::Budgets;
 use C4::Bookseller qw( GetBookSellerFromId);
-use C4::Dates qw/format_date/;
 use C4::Debug;
 use C4::Biblio;
 use C4::Members qw/GetMember/;  #needed for permissions checking for changing basketgroup of a basket
@@ -126,10 +125,10 @@ if ( $op eq 'delete_confirm' ) {
         basketbooksellernote => $basket->{booksellernote},
         basketcontractno     => $basket->{contractnumber},
         basketcontractname   => $contract->{contractname},
-        creationdate         => format_date( $basket->{creationdate} ),
+        creationdate         => $basket->{creationdate},
         authorisedby         => $basket->{authorisedby},
         authorisedbyname     => $basket->{authorisedbyname},
-        closedate            => format_date( $basket->{closedate} ),
+        closedate            => $basket->{closedate},
         active               => $bookseller->{'active'},
         booksellerid         => $bookseller->{'id'},
         name                 => $bookseller->{'name'},
@@ -364,14 +363,13 @@ my $total_est_gste;
         basketbooksellernote => $basket->{booksellernote},
         basketcontractno     => $basket->{contractnumber},
         basketcontractname   => $contract->{contractname},
-        creationdate         => C4::Dates->new($basket->{creationdate},'iso')->output,
+        creationdate         => $basket->{creationdate},
         authorisedby         => $basket->{authorisedby},
         authorisedbyname     => $basket->{authorisedbyname},
-        closedate            => C4::Dates->new($basket->{closedate},'iso')->output,
+        closedate            => $basket->{closedate},
         active               => $bookseller->{'active'},
         booksellerid         => $bookseller->{'id'},
         name                 => $bookseller->{'name'},
-        entrydate            => C4::Dates->new($results[0]->{'entrydate'},'iso')->output,
         books_loop           => \@books_loop,
         cancelledorders_loop => \@cancelledorders,
         gist_rate            => sprintf( "%.2f", $gist * 100 ) . '%',

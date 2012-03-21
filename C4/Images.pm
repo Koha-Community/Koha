@@ -25,7 +25,7 @@ use 5.010;
 use C4::Context;
 use GD;
 
-use vars qw($debug $VERSION @ISA @EXPORT);
+use vars qw($debug $noimage $VERSION @ISA @EXPORT);
 
 BEGIN {
 
@@ -40,6 +40,11 @@ BEGIN {
       &DelImage
     );
     $debug = $ENV{KOHA_DEBUG} || $ENV{DEBUG} || 0;
+
+    $noimage = pack( "H*",
+            '47494638396101000100800000FFFFFF'
+          . '00000021F90401000000002C00000000'
+          . '010001000002024401003B' );
 }
 
 =head2 PutImage
@@ -101,13 +106,14 @@ sub RetrieveImage {
     my $sth = $dbh->prepare($query);
     $sth->execute($imagenumber);
     my $imagedata = $sth->fetchrow_hashref;
+    if ( !$imagedata ) {
+        $imagedata->{'thumbnail'} = $noimage;
+        $imagedata->{'imagefile'} = $noimage;
+    }
     if ( $sth->err ) {
-        warn "Database error!";
-        return undef;
+        warn "Database error!" if $debug;
     }
-    else {
-        return $imagedata;
-    }
+    return $imagedata;
 }
 
 =head2 ListImagesForBiblio
@@ -190,6 +196,19 @@ sub _scale_image {
     else {
         return $image;
     }
+}
+
+=head2 NoImage
+
+    C4::Images->NoImage;
+
+Returns the gif to be used when there is no image matching the request, and
+its mimetype (image/gif).
+
+=cut
+
+sub NoImage {
+    return $noimage, 'image/gif';
 }
 
 1;

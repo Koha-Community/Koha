@@ -80,7 +80,7 @@ window.onload=function(){
         [% ELSIF ( 202 ) %]
         An error has occurred. Please ask your system administrator to check the error log for more details.
         [% ELSIF ( 203 ) %]
-        A non-existent or invalid branch code was supplied. Please <a href="/cgi-bin/koha/circ/selectbranchprinter.pl">verify</a> that you have a branch selected.
+        A non-existent or invalid library code was supplied. Please <a href="/cgi-bin/koha/circ/selectbranchprinter.pl">verify</a> that you have a library selected.
         [% ELSIF ( 301 ) %]
         An error has occurred while attempting to upload the image file. Please ask you system administrator to check the error log for more details.
         [% ELSIF ( 302 ) %]
@@ -90,7 +90,7 @@ window.onload=function(){
         [% ELSIF ( 401 ) %]
         An error has occurred and the item(s) was not added to batch [% batch_id %]. Please have your system administrator check the error log for details.
         [% ELSIF ( 402 ) %]
-        The item(s) was not added because the branch is not set. Please set your branch before adding items to a batch.
+        The item(s) was not added because the library is not set. Please set your library before adding items to a batch.
         [% ELSIF ( 403 ) %]
         An error has occurred and the item(s) was not removed from batch [% batch_id %]. Please have your system administrator check the error log for details.
         [% ELSIF ( 404 ) %]

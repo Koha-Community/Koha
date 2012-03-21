@@ -133,6 +133,7 @@ for( x=0; x<allColumns.length; x++ ){
 		    <div id="jobfailed"></div>
 		</div>
 		[% IF ( too_many_items ) %]<input type="submit" name="mainformsubmit" value="Delete ALL submitted items" onclick="return submitBackgroundJob(this.form);" />[% ELSE %]
+		<input type="checkbox" name="del_records" id="del_records" /> <label for="del_records">Delete records if no items remain.</label><p>
 		<input type="submit" name="mainformsubmit" value="Delete selected items" onclick="return submitBackgroundJob(this.form);" />[% END %]
 
 		<a href="/cgi-bin/koha/tools/batchMod.pl?del=1" class="cancel">Cancel</a>
@@ -146,7 +147,10 @@ for( x=0; x<allColumns.length; x++ ){
     [% END %]
 
 [% IF ( action ) %]
-	<div class="dialog message"><p>[% deleted_items %] item(s) deleted.</p></div>
+	<div class="dialog message">
+            <p>[% deleted_items %] item(s) deleted.</p>
+            [% IF delete_records %] <p>[% deleted_records %] record(s) deleted.</p> [% END %]
+        </div>
 	[% IF ( not_deleted_items ) %]
 	<div style="width:55%;margin:auto;">
 	    <p>[% not_deleted_items %] item(s) could not be deleted: [% FOREACH not_deleted_itemnumber IN not_deleted_itemnumbers %][% not_deleted_itemnumber.itemnumber %][% END %]</p>

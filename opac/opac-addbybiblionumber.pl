@@ -25,26 +25,11 @@
 use strict;
 use warnings;
 
-use C4::Biblio;
 use CGI;
-use C4::VirtualShelves qw/:DEFAULT GetAllShelves RefreshShelvesSummary/;
-use C4::Auth;
+use C4::Biblio;
+use C4::VirtualShelves qw/:DEFAULT GetAllShelves/;
 use C4::Output;
-use C4::Auth qw/get_session/;
-use C4::Debug;
-
-#splits incoming biblionumber(s) to array and adds each to shelf.
-sub AddBibliosToShelf {
-    my ($shelfnumber,@biblionumber)=@_;
-
-    # multiple bibs might come in as '/' delimited string (from where, i don't see), or as array.
-    if (scalar(@biblionumber) == 1) {
-        @biblionumber = (split /\//,$biblionumber[0]);
-    }
-    for my $bib (@biblionumber){
-        AddToShelf($bib, $shelfnumber);
-    }
-}
+use C4::Auth;
 
 my $query        	= new CGI;
 my @biblionumber 	= $query->param('biblionumber');
@@ -53,6 +38,9 @@ my $newshelf 		= $query->param('newshelf');
 my $shelfnumber  	= $query->param('shelfnumber');
 my $newvirtualshelf	= $query->param('newvirtualshelf');
 my $category     	= $query->param('category');
+my $authorized          = 1;
+my $errcode		= 0;
+my @biblios;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
@@ -63,72 +51,120 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-if ($newvirtualshelf) {
-	$shelfnumber = AddShelf(  $newvirtualshelf, $loggedinuser, $category );
-	AddBibliosToShelf($shelfnumber, @biblionumber);
-	RefreshShelvesSummary($query->cookie("CGISESSID"),$loggedinuser,($loggedinuser == -1 ? 20 : 10));
-	print $query->header;
-	print "<html><meta http-equiv=\"refresh\" content=\"0;url=opac-shelves.pl?display=privateshelves\" /><body onload=\"window.opener.location.reload(true);self.close();\"></body></html>";
-	exit;
+if( $newvirtualshelf) {
+    HandleNewVirtualShelf();
+    exit if $authorized;
+    ShowTemplate(); #error message
 }
-
-# verify user is authorized to perform the action on the shelf...
-my $authorized = 1;
-if ($selectedshelf) {
-	$authorized = 0 unless ShelfPossibleAction( $loggedinuser, $selectedshelf );
+elsif($shelfnumber) {
+    HandleShelfNumber();
+    exit if $authorized;
+    ShowTemplate(); #error message
 }
-
-if ($shelfnumber && ($shelfnumber != -1)) {
-	AddBibliosToShelf($shelfnumber,@biblionumber);
-	RefreshShelvesSummary($query->cookie("CGISESSID"),$loggedinuser,($loggedinuser == -1 ? 20 : 10));
-	print $query->header;
-	print "<html><meta http-equiv=\"refresh\" content=\"0;url=opac-shelves.pl?display=privateshelves\" /><body onload=\"self.close();\"></body></html>";
-	exit;
+elsif($selectedshelf) {
+    HandleSelectedShelf();
+    LoadBib() if $authorized;
+    ShowTemplate();
 }
 else {
-	if($selectedshelf){
-	# adding to specific shelf
-	my ( $singleshelf, $singleshelfname, $singlecategory ) = GetShelf( $query->param('selectedshelf') );
-				$template->param(
-				singleshelf 		=> 1,
-				shelfnumber         => $singleshelf,
-				shelfname           => $singleshelfname,
-				"category$singlecategory" => 1
-			);
-	} else {
-
-        my $privateshelves = GetAllShelves(1,$loggedinuser);
-        if(@{$privateshelves}){
-			$template->param (
-				privatevirtualshelves          => $privateshelves,
-				existingshelves => 1
-			);
-		}
-        my $publicshelves = GetAllShelves(2,$loggedinuser);
-        if(@{$publicshelves}){
-			$template->param (
-				publicvirtualshelves          => $publicshelves,
-				existingshelves => 1
-			);
-        }
-
+    HandleSelect();
+    LoadBib() if $authorized;
+    ShowTemplate();
 }
-	my @biblios;
-	for my $bib (@biblionumber) {
-		my $data = GetBiblioData( $bib );
-		push(@biblios, 
-			{ biblionumber => $bib,
-			  title        => $data->{'title'},
-			  author       => $data->{'author'},
-			} );
-	}
-	$template->param (
-		newshelf => $newshelf,
-		multiple => (scalar(@biblios) > 1),
-		total    => scalar @biblios,
-		biblios  => \@biblios,
-		authorized	=> $authorized,
-	);
+#end
 
-	output_html_with_http_headers $query, $cookie, $template->output;
+sub AddBibliosToShelf {
+    #splits incoming biblionumber(s) to array and adds each to shelf.
+    my ($shelfnumber,@biblionumber)=@_;
+
+    #multiple bibs might come in as '/' delimited string (from where, i don't see), or as array.
+    if (scalar(@biblionumber) == 1) {
+        @biblionumber = (split /\//,$biblionumber[0]);
+    }
+    for my $bib (@biblionumber) {
+        AddToShelf($bib, $shelfnumber, $loggedinuser);
+    }
+}
+
+sub HandleNewVirtualShelf {
+    if($authorized= ShelfPossibleAction($loggedinuser, undef, $category==1? 'new_private': 'new_public')) {
+    $shelfnumber = AddShelf( {
+            shelfname => $newvirtualshelf,
+            category => $category }, $loggedinuser);
+    if($shelfnumber == -1) {
+        $authorized=0;
+        $errcode=1;
+        return;
+    }
+    AddBibliosToShelf($shelfnumber, @biblionumber);
+    #Reload the page where you came from
+    print $query->header;
+    print "<html><meta http-equiv=\"refresh\" content=\"0\" /><body onload=\"window.opener.location.reload(true);self.close();\"></body></html>";
+    }
+}
+
+sub HandleShelfNumber {
+    if($authorized= ShelfPossibleAction($loggedinuser, $shelfnumber, 'add')) {
+    AddBibliosToShelf($shelfnumber,@biblionumber);
+    #Close this page and return
+    print $query->header;
+    print "<html><meta http-equiv=\"refresh\" content=\"0\" /><body onload=\"self.close();\"></body></html>";
+    }
+}
+
+sub HandleSelectedShelf {
+    if($authorized= ShelfPossibleAction( $loggedinuser, $selectedshelf, 'add')){
+        #adding to specific shelf
+        my ($singleshelf, $singleshelfname, $singlecategory)= GetShelf($query->param('selectedshelf'));
+        $template->param(
+        singleshelf               => 1,
+        shelfnumber               => $singleshelf,
+        shelfname                 => $singleshelfname,
+        "category$singlecategory" => 1
+        );
+    }
+}
+
+sub HandleSelect {
+    return unless $authorized= $loggedinuser>0;
+    my $privateshelves = GetAllShelves(1,$loggedinuser,1);
+    if(@{$privateshelves}){
+        $template->param (
+        privatevirtualshelves          => $privateshelves,
+        existingshelves => 1
+    );
+    }
+    my $publicshelves = GetAllShelves(2,$loggedinuser,1);
+    if(@{$publicshelves}){
+        $template->param (
+        publicvirtualshelves          => $publicshelves,
+        existingshelves => 1
+    );
+    }
+}
+
+sub LoadBib {
+    for my $bib (@biblionumber) {
+        my $data = GetBiblioData( $bib );
+    push(@biblios,
+        { biblionumber => $bib,
+          title        => $data->{'title'},
+          author       => $data->{'author'},
+    } );
+    }
+    $template->param(
+        multiple => (scalar(@biblios) > 1),
+    total    => scalar @biblios,
+    biblios  => \@biblios,
+    );
+}
+
+sub ShowTemplate {
+    $template->param (
+    newshelf => $newshelf||0,
+    authorized	=> $authorized,
+    errcode		=> $errcode,
+    OpacAllowPublicListCreation => C4::Context->preference('OpacAllowPublicListCreation'),
+    );
+    output_html_with_http_headers $query, $cookie, $template->output;
 }

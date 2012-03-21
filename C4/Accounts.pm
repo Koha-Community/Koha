@@ -33,12 +33,20 @@ BEGIN {
 	require Exporter;
 	@ISA    = qw(Exporter);
 	@EXPORT = qw(
-		&recordpayment &makepayment &manualinvoice
-		&getnextacctno &reconcileaccount &getcharges &ModNote &getcredits
-		&getrefunds &chargelostitem
+		&recordpayment
+		&makepayment
+		&manualinvoice
+		&getnextacctno
+		&reconcileaccount
+		&getcharges
+		&ModNote
+		&getcredits
+		&getrefunds
+		&chargelostitem
 		&ReversePayment
-        makepartialpayment
-        recordpayment_selectaccts
+                &makepartialpayment
+                &recordpayment_selectaccts
+                &WriteOffFee
 	);
 }
 
@@ -756,7 +764,51 @@ sub makepartialpayment {
     return;
 }
 
+=head2 WriteOff
 
+  WriteOff( $borrowernumber, $accountnum, $itemnum, $accounttype, $amount, $branch );
+
+Write off a fine for a patron.
+C<$borrowernumber> is the patron's borrower number.
+C<$accountnum> is the accountnumber of the fee to write off.
+C<$itemnum> is the itemnumber of of item whose fine is being written off.
+C<$accounttype> is the account type of the fine being written off.
+C<$amount> is a floating-point number, giving the amount that is being written off.
+C<$branch> is the branchcode of the library where the writeoff occurred.
+
+=cut
+
+sub WriteOffFee {
+    my ( $borrowernumber, $accountnum, $itemnum, $accounttype, $amount, $branch ) = @_;
+    $branch ||= C4::Context->userenv->{branch};
+    my $manager_id = 0;
+    $manager_id = C4::Context->userenv->{'number'} if C4::Context->userenv;
+
+    # if no item is attached to fine, make sure to store it as a NULL
+    $itemnum ||= undef;
+
+    my ( $sth, $query );
+    my $dbh = C4::Context->dbh();
+
+    $query = "
+        UPDATE accountlines SET amountoutstanding = 0
+        WHERE accountno = ? AND borrowernumber = ?
+    ";
+    $sth = $dbh->prepare( $query );
+    $sth->execute( $accountnum, $borrowernumber );
+
+    $query ="
+        INSERT INTO accountlines
+        ( borrowernumber, accountno, itemnumber, date, amount, description, accounttype, manager_id )
+        VALUES ( ?, ?, ?, NOW(), ?, 'Writeoff', 'W', ? )
+    ";
+    $sth = $dbh->prepare( $query );
+    my $acct = getnextacctno($borrowernumber);
+    $sth->execute( $borrowernumber, $acct, $itemnum, $amount, $manager_id );
+
+    UpdateStats( $branch, 'writeoff', $amount, q{}, q{}, q{}, $borrowernumber );
+
+}
 
 END { }    # module clean-up code here (global destructor)
 

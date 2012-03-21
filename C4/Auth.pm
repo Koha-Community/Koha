@@ -164,19 +164,13 @@ sub get_template_and_user {
         $template->param( loggedinusername => $user );
         $template->param( sessionID        => $sessionID );
 
-        my ($total, $pubshelves, $barshelves) = C4::Context->get_shelves_userenv();
-        if (defined($pubshelves)) {
-            $template->param( pubshelves     => scalar @{$pubshelves},
-                              pubshelvesloop => $pubshelves,
-            );
-            $template->param( pubtotal   => $total->{'pubtotal'}, ) if ($total->{'pubtotal'} > scalar @{$pubshelves});
-        }
-        if (defined($barshelves)) {
-            $template->param( barshelves      => scalar @{$barshelves},
-                              barshelvesloop  => $barshelves,
-            );
-            $template->param( bartotal  => $total->{'bartotal'}, ) if ($total->{'bartotal'} > scalar @{$barshelves});
-        }
+        my ($total, $pubshelves, $barshelves) = C4::VirtualShelves::GetSomeShelfNames($borrowernumber, 'MASTHEAD');
+        $template->param(
+            pubshelves     => $total->{pubtotal},
+            pubshelvesloop => $pubshelves,
+            barshelves      => $total->{bartotal},
+            barshelvesloop  => $barshelves,
+        );
 
         require C4::Members;
         my ( $borr ) = C4::Members::GetMemberDetails( $borrowernumber );
@@ -284,14 +278,11 @@ sub get_template_and_user {
 
         $template->param( sessionID        => $sessionID );
         
-        my ($total, $pubshelves) = C4::Context->get_shelves_userenv();  # an anonymous user has no 'barshelves'...
-        if (defined $pubshelves) {
-            $template->param(   pubshelves      => scalar @{$pubshelves},
-                                pubshelvesloop  => $pubshelves,
-                            );
-            $template->param(   pubtotal        => $total->{'pubtotal'}, ) if ($total->{'pubtotal'} > scalar @{$pubshelves});
-        }
-
+        my ($total, $pubshelves) = C4::VirtualShelves::GetSomeShelfNames(undef, 'MASTHEAD');
+	$template->param(
+	    pubshelves     => $total->{pubtotal},
+	    pubshelvesloop => $pubshelves,
+	);
     }
  	# Anonymous opac search history
  	# If opac search history is enabled and at least one search has already been performed
@@ -900,22 +891,6 @@ sub checkauth {
                     $session->param('emailaddress'), $session->param('branchprinter')
                 );
 
-                # Grab borrower's shelves and public shelves and add them to the session
-                # $row_count determines how many records are returned from the db query
-                # and the number of lists to be displayed of each type in the 'Lists' button drop down
-                my $row_count = 10; # FIXME:This probably should be a syspref
-                my ($total, $totshelves, $barshelves, $pubshelves);
-                ($barshelves, $totshelves) = C4::VirtualShelves::GetRecentShelves(1, $row_count, $borrowernumber);
-                $total->{'bartotal'} = $totshelves;
-                ($pubshelves, $totshelves) = C4::VirtualShelves::GetRecentShelves(2, $row_count, undef);
-                $total->{'pubtotal'} = $totshelves;
-                $session->param('barshelves', $barshelves);
-                $session->param('pubshelves', $pubshelves);
-                $session->param('totshelves', $total);
-
-                C4::Context::set_shelves_userenv('bar',$barshelves);
-                C4::Context::set_shelves_userenv('pub',$pubshelves);
-                C4::Context::set_shelves_userenv('tot',$total);
             }
         	else {
             	if ($userid) {
@@ -928,16 +903,6 @@ sub checkauth {
             # if we are here this is an anonymous session; add public lists to it and a few other items...
             # anonymous sessions are created only for the OPAC
 			$debug and warn "Initiating an anonymous session...";
-
-			# Grab the public shelves and add to the session...
-			my $row_count = 20; # FIXME:This probably should be a syspref
-			my ($total, $totshelves, $pubshelves);
-			($pubshelves, $totshelves) = C4::VirtualShelves::GetRecentShelves(2, $row_count, undef);
-			$total->{'pubtotal'} = $totshelves;
-			$session->param('pubshelves', $pubshelves);
-			$session->param('totshelves', $total);
-			C4::Context::set_shelves_userenv('pub',$pubshelves);
-			C4::Context::set_shelves_userenv('tot',$total);
 
 			# setting a couple of other session vars...
 			$session->param('ip',$session->remote_addr());

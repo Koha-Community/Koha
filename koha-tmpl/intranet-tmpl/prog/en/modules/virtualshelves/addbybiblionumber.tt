@@ -7,6 +7,13 @@
 </head>
 <body>
 
+[% UNLESS (authorized) %]
+    <p align="center">
+        [% IF (errcode==1) %]Could not make new shelf. Please check the name.<br/>[% END %]
+        [% IF (errcode==2) %]Sorry, you do not have permission to add items to this list.<br/>[% END %]
+        <a href="javascript:self.close();">Close this window.</a>
+    </p>
+[% ELSE %]
 <div id="custom-doc" class="yui-t7">
    <div id="bd">
                 [% IF ( multiple ) %]
@@ -29,11 +36,29 @@
 
 [% UNLESS ( shelfnumber ) %]
 
-[% IF ( CGIvirtualshelves ) %]    [% UNLESS ( newshelf ) %]
+[% UNLESS ( newshelf ) %]
      <fieldset class="rows">
 	<legend>Select an existing list</legend>
 	<ol>
-	    <li><label>Choose list</label>[% CGIvirtualshelves %]</li>
+	    <li>
+		<label>Choose list</label>
+		<select name="shelfnumber" id="shelfnumber">
+		[% IF ( privatevirtualshelves ) %]
+		<optgroup label="Private Lists">
+		[% FOREACH privatevirtualshelve IN privatevirtualshelves %]
+		<option value="[% privatevirtualshelve.shelfnumber %]">[% privatevirtualshelve.shelfname %]</option>
+		[% END %]
+		</optgroup>
+		[% END %]
+		[% IF ( publicvirtualshelves ) %]
+		<optgroup label="Public Lists">
+		[% FOREACH publicvirtualshelve IN publicvirtualshelves %]
+		<option value="[% publicvirtualshelve.shelfnumber %]">[% publicvirtualshelve.shelfname %]</option>
+		[% END %]
+		</optgroup>
+		[% END %]
+		</select>
+	    </li>
 	</ol>
 	[% FOREACH biblio IN biblios %]<input type="hidden" name="biblionumber" value="[% biblio.biblionumber %]" />[% END %]
 	[% UNLESS ( biblionumbers ) %]
@@ -43,9 +68,8 @@
 	[% END %]
 	</fieldset>
 
-	<p>... or...</p> [% END %]
-
-    [% END %]
+	<p>... or...</p>
+[% END %]
 
     <fieldset class="rows"><legend>Add to a new list:</legend>
 	<ol><li>
@@ -66,7 +90,6 @@
 	    <select name="category" id="category">
 		<option value="1">Private</option>
 		<option value="2">Public</option>
-		<option value="3">Open</option>
 	    </select>
 	</li></ol>
     </fieldset>
@@ -85,3 +108,4 @@
 </div>
 
 [% INCLUDE 'intranet-bottom.inc' %]
+[% END %]

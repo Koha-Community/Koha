@@ -729,6 +729,7 @@ sub build_tabs {
 my $input = new CGI;
 my $error = $input->param('error');
 my $biblionumber  = $input->param('biblionumber'); # if biblionumber exists, it's a modif, not a new biblio.
+my $parentbiblio  = $input->param('parentbiblionumber');
 my $breedingid    = $input->param('breedingid');
 my $z3950         = $input->param('z3950');
 my $op            = $input->param('op');
@@ -808,13 +809,25 @@ if (($biblionumber) && !($breedingid)){
 if ($breedingid) {
     ( $record, $encoding ) = MARCfindbreeding( $breedingid ) ;
 }
+
 #populate hostfield if hostbiblionumber is available
-if ($hostbiblionumber){
-	my $marcflavour = C4::Context->preference("marcflavour");
-	$record=MARC::Record->new();
-	$record->leader('');
-        my $field = PrepHostMarcField($hostbiblionumber, $hostitemnumber,$marcflavour);
-	$record->append_fields($field);
+if ($hostbiblionumber) {
+    my $marcflavour = C4::Context->preference("marcflavour");
+    $record = MARC::Record->new();
+    $record->leader('');
+    my $field =
+      PrepHostMarcField( $hostbiblionumber, $hostitemnumber, $marcflavour );
+    $record->append_fields($field);
+}
+
+# This is  a child record
+if ($parentbiblio) {
+    my $marcflavour = C4::Context->preference('marcflavour');
+    $record = MARC::Record->new();
+    my $hostfield = prepare_host_field($parentbiblio,$marcflavour);
+    if ($hostfield) {
+        $record->append_fields($hostfield);
+    }
 }
 
 $is_a_modif = 0;

@@ -59,44 +59,25 @@
 =cut
 
 use strict;
-#use warnings; FIXME - Bug 2505
-use C4::Biblio;
+use warnings;
+
 use CGI;
+use C4::Biblio;
 use C4::Output;
-use C4::VirtualShelves qw/:DEFAULT GetRecentShelves/;
-use C4::Circulation;
+use C4::VirtualShelves qw/:DEFAULT GetAllShelves/;
 use C4::Auth;
 
-# splits incoming biblionumber(s) to array and adds each to shelf.
-sub AddBibliosToShelf {
-    my ($shelfnumber,@biblionumber)=@_;
-
-    # multiple bibs might come in as '/' delimited string (from where, i don't see), or as array.
-    # (Note : they come in as '/' when added from the cart)
-    if (scalar(@biblionumber) == 1) {
-        @biblionumber = (split /\//,$biblionumber[0]);
-    }
-    for my $bib (@biblionumber){
-        AddToShelf($bib, $shelfnumber);
-    }
-}
 
 my $query           = new CGI;
-
-# If set, then single item case.
-my $biblionumber    = $query->param('biblionumber');
-
-# If set, then multiple item case.
-my @biblionumber   = $query->param('biblionumber');
-my $biblionumbers   = $query->param('biblionumbers');
-
+my @biblionumber    = HandleBiblioPars();
 my $shelfnumber     = $query->param('shelfnumber');
 my $newvirtualshelf = $query->param('newvirtualshelf');
 my $newshelf        = $query->param('newshelf');
 my $category        = $query->param('category');
 my $sortfield	    = $query->param('sortfield');
 my $confirmed       = $query->param('confirmed') || 0;
-
+my $authorized      = 1;
+my $errcode	    = 0;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
@@ -108,120 +89,122 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-my @biblionumbers;
-if ($biblionumbers) {
-    @biblionumbers = split '/', $biblionumbers;
-} else {
-    @biblionumbers = (@biblionumber);
+if( $newvirtualshelf) {
+    HandleNewVirtualShelf();
+    exit if $authorized;
+    ShowTemplate(); #error message
 }
-if (scalar(@biblionumber) == 1) {
-        @biblionumber = (split /\//,$biblionumber[0]);
+elsif($shelfnumber && $confirmed) {
+    HandleShelfNumber();
+    exit if $authorized;
+    ShowTemplate(); #error message
+}
+elsif($shelfnumber) { #still needs confirmation
+    HandleSelectedShelf();
+    LoadBib() if $authorized;
+    ShowTemplate();
+}
+else {
+    HandleSelect();
+    LoadBib();
+    ShowTemplate();
+}
+#end
+
+sub HandleBiblioPars {
+    my @bib= $query->param('biblionumber');
+    if(@bib==0 && $query->param('biblionumbers')) {
+        my $str= $query->param('biblionumbers');
+        @bib= split '/', $str;
+    }
+    elsif(@bib==1 && $bib[0]=~/\//) {
+        @bib= split '/', $bib[0];
+    }
+    return @bib;
 }
 
-$shelfnumber = AddShelf( $newvirtualshelf, $loggedinuser, $category, $sortfield ) if $newvirtualshelf;
-if ( $shelfnumber || ( $shelfnumber == -1 ) ) {    # the shelf already exist.
+sub AddBibliosToShelf {
+    my ($shelfnumber, @biblionumber)=@_;
+    for my $bib (@biblionumber){
+        AddToShelf($bib, $shelfnumber, $loggedinuser);
+    }
+}
 
-    if ($confirmed == 1) {
-	AddBibliosToShelf($shelfnumber,@biblionumber);
-	print
-    "Content-Type: text/html\n\n<html><body onload=\"window.opener.location.reload(true);window.close()\"></body></html>";
-	exit;
-    } else {
-	my ( $singleshelf, $singleshelfname, $singlecategory ) = GetShelf( $query->param('shelfnumber') );
-	my @biblios;
-        for my $bib (@biblionumber) {
-	    my $data = GetBiblioData( $bib );
-            push(@biblios,
-                        { biblionumber => $bib,
-                          title        => $data->{'title'},
-                          author       => $data->{'author'},
-                        } );
-        }
+sub HandleNewVirtualShelf {
+    $shelfnumber = AddShelf( {
+        shelfname => $newvirtualshelf,
+        sortfield => $sortfield,
+        category => $category }, $loggedinuser);
+    if($shelfnumber == -1) {
+        $authorized=0;
+        $errcode=1; #add failed
+        return;
+    }
+    AddBibliosToShelf($shelfnumber, @biblionumber);
+    #Reload the page where you came from
+    print $query->header;
+    print "<html><meta http-equiv=\"refresh\" content=\"0\" /><body onload=\"window.opener.location.reload(true);self.close();\"></body></html>";
+}
 
-       	$template->param
-        (
-         biblionumber => \@biblionumber,
-         biblios      => \@biblios,
-         multiple     => (scalar(@biblionumber) > 1),
-         singleshelf  => 1,
-         shelfname    => $singleshelfname,
-         shelfnumber  => $singleshelf,
-         total        => scalar(@biblionumber),
-         confirm      => 1,
+sub HandleShelfNumber {
+    if($authorized= ShelfPossibleAction($loggedinuser, $shelfnumber, 'add')) {
+    AddBibliosToShelf($shelfnumber, @biblionumber);
+    #Close this page and return
+    print $query->header;
+    print "<html><meta http-equiv=\"refresh\" content=\"0\" /><body onload=\"self.close();\"></body></html>";
+    }
+    else {
+    $errcode=2; #no perm
+    }
+}
+
+sub HandleSelectedShelf {
+    if($authorized= ShelfPossibleAction( $loggedinuser, $shelfnumber, 'add')){
+        #confirm adding to specific shelf
+        my ($singleshelf, $singleshelfname, $singlecategory)= GetShelf($shelfnumber);
+        $template->param(
+        singleshelf               => 1,
+        shelfnumber               => $singleshelf,
+        shelfname                 => $singleshelfname,
+        "category$singlecategory" => 1
         );
     }
+    else {
+    $errcode=2; #no perm
+    }
 }
-else {    # this shelf doesn't already exist.
-#    my $limit = 10;
-    my ($shelflist);
-    my @shelvesloop;
-    my %shelvesloop;
 
-    #grab each type of shelf, open (type 3) should not be limited by user.
-    foreach my $shelftype (1,2,3) {
-	    my ($shelflist) = GetRecentShelves($shelftype, undef, $shelftype == 3 ? undef : $loggedinuser);
-	    for my $shelf (@{ $shelflist }) {
-		    push(@shelvesloop, $shelf->{shelfnumber});
-		    $shelvesloop{$shelf->{shelfnumber}} = $shelf->{shelfname};
-	    }
-    }
-
-    if( @shelvesloop ){
-        my $CGIvirtualshelves = CGI::scrolling_list
-          (
-           -name     => 'shelfnumber',
-           -values   => \@shelvesloop,
-           -labels   => \%shelvesloop,
-           -size     => 1,
-           -tabindex => '',
-           -multiple => 0
-          );
-        $template->param
-          (
-           CGIvirtualshelves => $CGIvirtualshelves,
-          );
-    }
-   	my @biblios;
-        for my $bib (@biblionumber) {
-	    my $data = GetBiblioData( $bib );
-            push(@biblios,
-                        { biblionumber => $bib,
-                          title        => $data->{'title'},
-                          author       => $data->{'author'},
-                        } );
-        }
+sub HandleSelect {
+    my $privateshelves = GetAllShelves(1,$loggedinuser,1);
+    my $publicshelves = GetAllShelves(2,$loggedinuser,1);
     $template->param(
-           newshelf     => $newshelf,
-	   biblios=>\@biblios,
-           multiple     => (scalar(@biblionumber) > 1),
-           total        => scalar(@biblionumber),
+    privatevirtualshelves => $privateshelves,
+    publicvirtualshelves  => $publicshelves,
     );
-
-    unless (@biblionumbers) {
-        my ( $bibliocount, @biblios ) = GetBiblio($biblionumber);
-    
-        $template->param
-          (
-           biblionumber      => $biblionumber,
-           title             => $biblios[0]->{'title'},
-           author            => $biblios[0]->{'author'},
-          );
-    } else {
-        my @biblioloop = ();
-        foreach my $biblionumber (@biblionumbers) {
-            my ( $bibliocount, @biblios ) = GetBiblio($biblionumber);
-            my %biblioiter = (
-                              title=>$biblios[0]->{'title'},
-                              author=>$biblios[0]->{'author'}
-                             );
-            push @biblioloop, \%biblioiter;
-        }
-        $template->param
-          (
-           biblioloop => \@biblioloop,
-           biblionumbers => $biblionumbers
-          );
-    }
-    
 }
-output_html_with_http_headers $query, $cookie, $template->output;
+
+sub LoadBib {
+    my @biblios;
+    for my $bib (@biblionumber) {
+        my $data = GetBiblioData($bib);
+    push(@biblios,
+        { biblionumber => $bib,
+          title        => $data->{'title'},
+          author       => $data->{'author'},
+    } );
+    }
+    $template->param(
+        multiple => (scalar(@biblios) > 1),
+    total    => scalar @biblios,
+    biblios  => \@biblios,
+    );
+}
+
+sub ShowTemplate {
+    $template->param (
+    newshelf => $newshelf||0,
+    authorized	=> $authorized,
+    errcode		=> $errcode,
+    );
+    output_html_with_http_headers $query, $cookie, $template->output;
+}

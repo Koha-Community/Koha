@@ -196,7 +196,7 @@ function Dopop(link) {
     [% END %]
 
     [% IF ( transfer ) %]
-    <!-- transfer: item with no reservation, must be returned to its homebranch -->
+    <!-- transfer: item with no reservation, must be returned to its home library -->
 	<div id="return1" class="dialog message">
             <h3>Please return <a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber %]">[% title or "item" |html %]</a> to [% homebranchname %]<br/>( <a href="#" onclick="Dopop('transfer-slip.pl?transferitem=[% itemnumber %]&amp;branchcode=[% homebranch %]&amp;op=slip'); return true;">Print Slip</a> )</h3>
         </div>

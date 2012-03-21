@@ -41,6 +41,7 @@ use URI::Escape;
 use Storable qw(thaw freeze);
 
 
+
 my $DisplayMultiPlaceHold = C4::Context->preference("DisplayMultiPlaceHold");
 # create a new CGI object
 # FIXME: no_undef_params needs to be tested
@@ -741,24 +742,14 @@ if ($query_desc || $limit_desc) {
 
 # VI. BUILD THE TEMPLATE
 # Build drop-down list for 'Add To:' menu...
-my $session = get_session($cgi->cookie("CGISESSID"));
-my @addpubshelves;
-my $pubshelves = $session->param('pubshelves');
-my $barshelves = $session->param('barshelves');
-foreach my $shelf (@$pubshelves) {
-    next if ( ($shelf->{'owner'} != ($borrowernumber ? $borrowernumber : -1)) && ($shelf->{'category'} < 3) );
-    push (@addpubshelves, $shelf);
-}
-
-if (@addpubshelves) {
-    $template->param( addpubshelves     => scalar (@addpubshelves));
-    $template->param( addpubshelvesloop => \@addpubshelves);
-}
-
-if (defined $barshelves) {
-    $template->param( addbarshelves     => scalar (@$barshelves));
-    $template->param( addbarshelvesloop => $barshelves);
-}
+my ($totalref, $pubshelves, $barshelves)=
+	C4::VirtualShelves::GetSomeShelfNames($borrowernumber,'COMBO',1);
+$template->param(
+	addbarshelves     => $totalref->{bartotal},
+	addbarshelvesloop => $barshelves,
+	addpubshelves     => $totalref->{pubtotal},
+	addpubshelvesloop => $pubshelves,
+	);
 
 my $content_type = ($format eq 'rss' or $format eq 'atom') ? $format : 'html';
 

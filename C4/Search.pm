@@ -71,6 +71,7 @@ This module provides searching functions for Koha's bibliographic databases
   &AddSearchHistory
   &GetDistinctValues
   &enabled_staff_search_views
+  &SimpleSearch
 );
 
 # make all your functions, whether exported or not;

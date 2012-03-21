@@ -27,10 +27,10 @@ use C4::Biblio;
 use C4::Items;
 use C4::Branch;
 use C4::Acquisition;
-use C4::Output;
+use C4::Bookseller qw(GetBookSellerFromId);
+use C4::Output;             # contains gettemplate
 use C4::Auth;
 use C4::Serials;
-use C4::Dates qw/format_date/;
 use C4::Circulation;  # to use itemissues
 use C4::Members; # to use GetMember
 use C4::Search;		# enabled_staff_search_views
@@ -120,7 +120,7 @@ my $ccodes= GetKohaAuthorisedValues('items.ccode',$fw);
 my $itemtypes = GetItemTypes;
 
 $data->{'itemtypename'} = $itemtypes->{$data->{'itemtype'}}->{'description'};
-
+$data->{'rentalcharge'} = sprintf( "%.2f", $data->{'rentalcharge'} );
 foreach ( keys %{$data} ) {
     $template->param( "$_" => defined $data->{$_} ? $data->{$_} : '' );
 }
@@ -132,9 +132,7 @@ foreach my $item (@items){
     $item->{'collection'}              = $ccodes->{ $item->{ccode} } if ($ccodes);
     $item->{'itype'}                   = $itemtypes->{ $item->{'itype'} }->{'description'};
     $item->{'replacementprice'}        = sprintf( "%.2f", $item->{'replacementprice'} );
-    $item->{$_}                        = format_date( $item->{$_} ) foreach qw/datelastborrowed dateaccessioned datelastseen lastreneweddate/;
     $item->{'copyvol'}                 = $item->{'copynumber'};
-
 
     # item has a host number if its biblio number does not match the current bib
     if ($item->{biblionumber} ne $biblionumber){
@@ -148,6 +146,12 @@ foreach my $item (@items){
     $item->{'ordernumber'}             = $order->{'ordernumber'};
     $item->{'basketno'}                = $order->{'basketno'};
     $item->{'booksellerinvoicenumber'} = $order->{'booksellerinvoicenumber'};
+    $item->{'orderdate'}               = $order->{'entrydate'};
+    if ($item->{'basketno'}){
+	    my $basket = GetBasket($item->{'basketno'});
+	    my $bookseller = GetBookSellerFromId($basket->{'booksellerid'});
+	    $item->{'vendor'} = $bookseller->{'name'};
+    }
     $item->{'datereceived'}            = $order->{'datereceived'};
 
     if ($item->{notforloantext} or $item->{itemlost} or $item->{damaged} or $item->{wthdrawn}) {
@@ -163,8 +167,7 @@ foreach my $item (@items){
     }
     $item->{'homebranchname'} = GetBranchName($item->{'homebranch'});
     $item->{'holdingbranchname'} = GetBranchName($item->{'holdingbranch'});
-    if ($item->{datedue}) {
-        $item->{datedue} = format_sqldatetime($item->{datedue});
+    if ($item->{'datedue'}) {
         $item->{'issue'}= 1;
     } else {
         $item->{'issue'}= 0;

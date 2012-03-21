@@ -25,14 +25,13 @@
 
 =head1 DESCRIPTION
 
-this script is designed to show the spent amount in budges
+this script is designed to show the spent amount in budgets
 
 =cut
 
 use C4::Context;
 use C4::Auth;
 use C4::Output;
-use C4::Dates;
 use strict;
 use warnings;
 use CGI;
