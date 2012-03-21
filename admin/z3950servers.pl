@@ -20,7 +20,7 @@
 #	- we delete the record having primkey=$primkey
 
 use strict;
-#use warnings; FIXME - Bug 2505
+use warnings;
 use CGI;
 use C4::Context;
 use C4::Auth;
@@ -29,16 +29,33 @@ use C4::Output;
 sub StringSearch  {
 	my ($searchstring,$type)=@_;
 	my $dbh = C4::Context->dbh;
-	$searchstring=~ s/\'/\\\'/g;
-	my @data=split(' ',$searchstring);
-	my $count=@data;
-	my $sth=$dbh->prepare("Select host,port,db,userid,password,name,id,checked,rank,syntax,encoding from z3950servers where (name like ?) order by rank,name");
-	$sth->execute("$data[0]\%");
+    my @data = ('%');
+    my $count = 1;
+	if ( defined $searchstring ) {
+        $searchstring =~ s/\'/\\\'/g;
+        @data=split(' ',$searchstring);
+        $count=@data;
+    }
+    else {
+        $searchstring = '';
+    }
+
+    my $query    = "SELECT host,port,db,userid,password,name,id,checked,rank,syntax,encoding";
+    $query      .= " FROM z3950servers";
+    if ( $searchstring ne '' ) { $query .= " WHERE (name like ?)" }
+    $query      .= " ORDER BY rank,name";
+	my $sth=$dbh->prepare($query);
+
+    if ( $searchstring ne '' ) {
+        $sth->execute("$data[0]\%");
+    }
+    else {
+        $sth->execute;
+    }
 	my @results;
 	while (my $data=$sth->fetchrow_hashref) {
 	    push(@results,$data);
 	}
-	#  $sth->execute;
 	$sth->finish;
 	$dbh->disconnect;
 	return (scalar(@results),\@results);
@@ -46,11 +63,11 @@ sub StringSearch  {
 
 my $input = new CGI;
 my $searchfield=$input->param('searchfield');
-my $offset=$input->param('offset');
+my $offset=$input->param('offset') || 0;
 my $script_name="/cgi-bin/koha/admin/z3950servers.pl";
 
 my $pagesize=20;
-my $op = $input->param('op');
+my $op = $input->param('op') || '';
 
 my ($template, $loggedinuser, $cookie) 
     = get_template_and_user({template_name => "admin/z3950servers.tmpl",
@@ -119,7 +136,7 @@ if ($op eq 'add_form') {
             $input->param( 'userid' ),
             $input->param( 'password' ),
             $input->param( 'searchfield' ),
-            $input->param( 'checked' ),
+            $checked,
             $input->param( 'rank' ),
             $input->param( 'syntax' ),
             $input->param( 'encoding' ) );
@@ -162,8 +179,8 @@ if ($op eq 'add_form') {
 	$template->param(else => 1);
 	my ($count,$results)=StringSearch($searchfield,'web');
 	my @loop;
+
 	for (my $i=$offset; $i < ($offset+$pagesize<$count?$offset+$pagesize:$count); $i++){
-			
 		my $urlsearchfield=$results->[$i]{name};
 		$urlsearchfield=~s/ /%20/g;
 		my %row	= ( name => $results->[$i]{'name'},
