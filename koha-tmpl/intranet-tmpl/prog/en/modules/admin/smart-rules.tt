@@ -182,8 +182,8 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
         </form>
     </div>
     <div id="defaults-for-this-library" class="container">
-    <h3>Default checkout, checkin and hold policy for [% IF ( humanbranch ) %][% humanbranch %][% ELSE %]all libraries[% END %]</h3>
-        <p>You can set a default maximum number of checkouts, hold policy and checkin policy that will be used if none is defined below for a particular item type or category.</p>
+    <h3>Default checkout, hold and return policy for [% IF ( humanbranch ) %][% humanbranch %][% ELSE %]all libraries[% END %]</h3>
+        <p>You can set a default maximum number of checkouts, hold policy and return policy that will be used if none is defined below for a particular item type or category.</p>
         <form method="post" action="/cgi-bin/koha/admin/smart-rules.pl">
             <input type="hidden" name="op" value="set-branch-defaults" />
             <input type="hidden" name="branch" value="[% current_branch %]"/>
