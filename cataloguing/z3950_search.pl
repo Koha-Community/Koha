@@ -179,6 +179,7 @@ warn "query ".$query  if $DEBUG;
             $option1->option('user',         $server->{userid}  ) if $server->{userid};
             $option1->option('password',     $server->{password}) if $server->{password};
             $option1->option('preferredRecordSyntax', $server->{syntax});
+            $option1->option( 'timeout', $server->{timeout} ) if ($server->{timeout});
             $oConnection[$s] = create ZOOM::Connection($option1)
               || $DEBUG
               && warn( "" . $oConnection[$s]->errmsg() );
@@ -222,7 +223,7 @@ warn "query ".$query  if $DEBUG;
           $oConnection[$k]->error_x();
         if ($error) {
             if ($error =~ m/^(10000|10007)$/ ) {
-                push(@errconn, {'server' => $serverhost[$k]});
+                push(@errconn, {'server' => $serverhost[$k], 'error' => $error});
             }
             $DEBUG and warn "$k $serverhost[$k] error $query: $errmsg ($error) $addinfo\n";
         }

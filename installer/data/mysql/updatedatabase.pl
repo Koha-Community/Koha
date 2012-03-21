@@ -5027,6 +5027,15 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.07.00.xxx";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do(qq{
+       ALTER TABLE `z3950servers` ADD `timeout` INT( 11 ) NOT NULL DEFAULT '0' AFTER `syntax`;
+    });
+    print "Upgrade to $DBversion done (New timeout field in z3950servers)\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 DropAllForeignKeys($table)

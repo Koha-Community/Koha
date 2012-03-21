@@ -230,6 +230,9 @@
 [% END %]
 </select>
 </li>
+    <li><label for="timeout">Timeout (0 its like not set): </label>
+		<input type="text" name="timeout" id="timeout" size="4" value="[% timeout %]" onblur="isNum(this)" /> seconds
+	</li>
 </ol>
         </fieldset>
 		
@@ -258,6 +261,7 @@
                 <li><strong>Rank: </strong>[% rank %]</li>
                 <li><strong>Syntax: </strong>[% syntax %]</li>
                 <li><strong>Encoding: </strong>[% encoding %]</li>
+                <li><strong>Timeout: </strong>[% timeout %]</li>
  	</ul>                <form action="[% script_name %]" method="post"><input type="hidden" name="op" value="delete_confirmed" /><input type="hidden" name="searchfield" value="[% searchfield %]" /><input type="submit" value="Delete this Server" /></form>  <form action="[% script_name %]" method="post"><input type="submit" value="Do Not Delete" /></form>
 
 
@@ -301,7 +305,7 @@
                 You searched for [% searchfield %]
         [% END %]		
 <table id="serverst">
-                <thead><tr><th>Target</th><th>Hostname/Port</th><th>Database</th><th>Userid</th><th>Password</th><th>Checked</th><th>Rank</th>       			<th>Syntax</th><th>Encoding</th><th colspan="2">&nbsp;</th>
+                <thead><tr><th>Target</th><th>Hostname/Port</th><th>Database</th><th>Userid</th><th>Password</th><th>Checked</th><th>Rank</th>       			<th>Syntax</th><th>Encoding</th><th>Timeout</th><th colspan="2">&nbsp;</th>
                 </tr></thead>
                 <tbody>[% FOREACH loo IN loop %]
                 [% UNLESS ( loop.odd ) %]
@@ -309,7 +313,7 @@
                 [% ELSE %]
                     <tr>
                 [% END %]
-<td><a href="[% loo.script_name %]?op=add_form&amp;searchfield=[% loo.name |url %]">[% loo.name %]</a></td><td>[% loo.host %]:[% loo.port %]</td><td>[% loo.db %]</td><td>[% loo.userid %]</td><td>[% loo.password %]</td><td>[% IF ( loo.checked ) %]Yes[% ELSE %]No[% END %]</td><td>[% loo.rank %]</td>			<td>[% loo.syntax %]</td><td>[% loo.encoding %]</td><td><a href="[% loo.script_name %]?op=add_form&amp;searchfield=[% loo.name |url %]">Edit</a></td><td><a href="[% loo.script_name %]?op=delete_confirm&amp;searchfield=[% loo.name |url %]">Delete</a></td>                </tr>
+<td><a href="[% loo.script_name %]?op=add_form&amp;searchfield=[% loo.name |url %]">[% loo.name %]</a></td><td>[% loo.host %]:[% loo.port %]</td><td>[% loo.db %]</td><td>[% loo.userid %]</td><td>[% loo.password %]</td><td>[% IF ( loo.checked ) %]Yes[% ELSE %]No[% END %]</td><td>[% loo.rank %]</td>			<td>[% loo.syntax %]</td><td>[% loo.encoding %]</td><td>[% loo.timeout %]</td><td><a href="[% loo.script_name %]?op=add_form&amp;searchfield=[% loo.name |url %]">Edit</a></td><td><a href="[% loo.script_name %]?op=delete_confirm&amp;searchfield=[% loo.name |url %]">Delete</a></td>                </tr>
                 [% END %]</tbody>
 	</table>
 

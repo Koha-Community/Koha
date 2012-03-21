@@ -166,7 +166,8 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
             <div class="dialog alert">
                 <ul>
                 [% FOREACH errcon IN errconn %]
-                    <li>Connection failed to [% errcon.server %]</li>
+                    [% IF ( errcon.error == '10000' ) %]<li>Connection failed to [% errcon.server %]</li>
+                    [% ELSIF ( errcon.error == '10007' ) %]<li>Connection timeout to [% errcon.server %]</li>[% END %]
                 [% END %]
                 </ul>
             </div>

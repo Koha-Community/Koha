@@ -40,7 +40,7 @@ sub StringSearch  {
         $searchstring = '';
     }
 
-    my $query    = "SELECT host,port,db,userid,password,name,id,checked,rank,syntax,encoding";
+    my $query    = "SELECT host,port,db,userid,password,name,id,checked,rank,syntax,encoding,timeout";
     $query      .= " FROM z3950servers";
     if ( $searchstring ne '' ) { $query .= " WHERE (name like ?)" }
     $query      .= " ORDER BY rank,name";
@@ -52,6 +52,7 @@ sub StringSearch  {
     else {
         $sth->execute;
     }
+
 	my @results;
 	while (my $data=$sth->fetchrow_hashref) {
 	    push(@results,$data);
@@ -91,13 +92,13 @@ if ($op eq 'add_form') {
 	my $data;
 	if ($searchfield) {
 		my $dbh = C4::Context->dbh;
-		my $sth=$dbh->prepare("select host,port,db,userid,password,name,id,checked,rank,syntax,encoding from z3950servers where (name = ?) order by rank,name");
+		my $sth=$dbh->prepare("select host,port,db,userid,password,name,id,checked,rank,syntax,encoding,timeout from z3950servers where (name = ?) order by rank,name");
 		$sth->execute($searchfield);
 		$data=$sth->fetchrow_hashref;
 		$sth->finish;
 	}
     $template->param( $_ => $data->{$_} ) 
-        for ( qw( host port db userid password checked rank ) );
+        for ( qw( host port db userid password checked rank timeout ) );
     $template->param( $_ . $data->{$_} => 1)
         for ( qw( syntax encoding ) );
 													# END $OP eq ADD_FORM
@@ -110,7 +111,7 @@ if ($op eq 'add_form') {
 	$sth->execute($input->param('searchfield'));
 	my $checked = $input->param('checked') ? 1 : 0;
 	if ($sth->rows) {
-		$sth=$dbh->prepare("update z3950servers set host=?, port=?, db=?, userid=?, password=?, name=?, checked=?, rank=?,syntax=?,encoding=? where name=?");
+		$sth=$dbh->prepare("update z3950servers set host=?, port=?, db=?, userid=?, password=?, name=?, checked=?, rank=?,syntax=?,encoding=?,timeout=? where name=?");
 		$sth->execute($input->param('host'),
 		      $input->param('port'),
 		      $input->param('db'),
@@ -121,14 +122,15 @@ if ($op eq 'add_form') {
 		      $input->param('rank'),
 			  $input->param('syntax'),
               $input->param('encoding'),
+              $input->param('timeout'),
 		      $input->param('searchfield'),
 		      );
 	} 
 	else {
 		$sth=$dbh->prepare(
 		  "INSERT INTO z3950servers " .
-		  "(host,port,db,userid,password,name,checked,rank,syntax,encoding) " .
-		  "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)" );
+		  "(host,port,db,userid,password,name,checked,rank,syntax,encoding,timeout) " .
+		  "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)" );
         $sth->execute(
             $input->param( 'host' ),
             $input->param( 'port' ),
@@ -139,6 +141,7 @@ if ($op eq 'add_form') {
             $checked,
             $input->param( 'rank' ),
             $input->param( 'syntax' ),
+            $input->param( 'timeout' ),
             $input->param( 'encoding' ) );
 	}
 	$sth->finish;
@@ -149,7 +152,7 @@ if ($op eq 'add_form') {
 	$template->param(delete_confirm => 1);
 	my $dbh = C4::Context->dbh;
 
-	my $sth2=$dbh->prepare("select host,port,db,userid,password,name,id,checked,rank,syntax,encoding from z3950servers where (name = ?) order by rank,name");
+	my $sth2=$dbh->prepare("select host,port,db,userid,password,name,id,checked,rank,syntax,encoding,timeout from z3950servers where (name = ?) order by rank,name");
 	$sth2->execute($searchfield);
 	my $data=$sth2->fetchrow_hashref;
 	$sth2->finish;
@@ -162,6 +165,7 @@ if ($op eq 'add_form') {
                          checked => $data->{'checked'},
                          rank => $data->{'rank'},
                          syntax => $data->{'syntax'},
+                         timeout => $data->{'timeout'},
                          encoding => $data->{'encoding'}            );
 
 													# END $OP eq DELETE_CONFIRM
@@ -192,7 +196,8 @@ if ($op eq 'add_form') {
 			checked => $results->[$i]{'checked'},
 			rank => $results->[$i]{'rank'},
 			syntax => $results->[$i]{'syntax'},
-      encoding => $results->[$i]{'encoding'});
+			encoding => $results->[$i]{'encoding'},
+      timeout => $results->[$i]{'timeout'});
 		push @loop, \%row;
 
 	}

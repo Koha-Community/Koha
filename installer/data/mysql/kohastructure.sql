@@ -2118,6 +2118,7 @@ CREATE TABLE `z3950servers` ( -- connection information for the Z39.50 targets u
   `checked` smallint(6) default NULL, -- whether this target is checked by default  (1 for yes, 0 for no)
   `rank` int(11) default NULL, -- where this target appears in the list of targets
   `syntax` varchar(80) default NULL, -- marc format provided by this target
+  `timeout` int(11) NOT NULL DEFAULT '0',
   `icon` text, -- unused in Koha
   `position` enum('primary','secondary','') NOT NULL default 'primary',
   `type` enum('zed','opensearch') NOT NULL default 'zed',
