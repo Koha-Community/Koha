@@ -46,15 +46,13 @@ if ($auth_status ne "ok") {
     exit 0;
 }
 
-my $uploaded_file = C4::UploadedFile->new($sessionID);
+our $uploaded_file = C4::UploadedFile->new($sessionID);
 unless (defined $uploaded_file) {
     # FIXME - failed to create file for some reason
     send_reply('failed', '');
     exit 0;
 }
 $uploaded_file->max_size($ENV{'CONTENT_LENGTH'}); # may not be the file size, exactly
-
-my $first_chunk = 1;
 
 my $query;
 $query = new CGI \&upload_hook;
@@ -68,9 +66,8 @@ exit 0;
 sub upload_hook {
     my ($file_name, $buffer, $bytes_read, $session) = @_;
     $uploaded_file->stash(\$buffer, $bytes_read);
-    if ($first_chunk) {
+    if ( ! $uploaded_file->name && $file_name ) { # save name on first chunk
         $uploaded_file->name($file_name);
-        $first_chunk = 0;
     }
 }
 
