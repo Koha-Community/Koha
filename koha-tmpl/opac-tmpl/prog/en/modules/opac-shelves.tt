@@ -244,7 +244,7 @@ $(function() {
                       <form method="post" action="opac-shelves.pl">
                         <input type="hidden" value="1" name="shelves"/>
                          <input type="hidden" value="1" name="DEL-[% shelfnumber %]"/>
-                         <input type="submit" class="deleteshelf" value="Delete List" onclick="return confirmDelete(MSG_CONFIRM_DELETE_LIST);"/>
+                         [% IF ( showprivateshelves ) %]<input type="hidden" name="display" value="privateshelves"/>[% END %]<input type="submit" class="deleteshelf" value="Delete List" onclick="return confirmDelete(MSG_CONFIRM_DELETE_LIST);"/>
                       </form> [% END %]
 
 
