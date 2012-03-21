@@ -39,7 +39,7 @@ sub set_lang {
 
 
 sub new {
-    my ($class, $lang, $pref_only) = @_;
+    my ($class, $lang, $pref_only, $verbose) = @_;
 
     my $self                 = { };
 
@@ -49,8 +49,9 @@ sub new {
                                '/prog/en/modules/admin/preferences';
     set_lang( $self, $lang ) if $lang;
     $self->{pref_only}       = $pref_only;
-    $self->{translator_path} = $Bin;
-    $self->{path_po}         = $self->{translator_path} . "/po";
+    $self->{verbose}         = $verbose;
+    $self->{process}         = "$Bin/tmpl_process3.pl " . ($verbose ? '' : '-q');
+    $self->{path_po}         = "$Bin/po";
     $self->{po}              = {};
 
     # Get all .pref file names
@@ -210,7 +211,7 @@ sub save_po {
     my $self = shift;
     # Write .po entries into a file put in Koha standard po directory
     Locale::PO->save_file_fromhash( $self->po_filename, $self->{po} );
-    print "Saved in file: ", $self->po_filename, "\n";
+    print "Saved in file: ", $self->po_filename, "\n" if $self->{verbose};
 }
 
 
@@ -236,7 +237,7 @@ sub get_po_merged_with_en {
 sub update_prefs {
     my $self = shift;
     print "Update '", $self->{lang},
-          "' preferences .po file from 'en' .pref files\n";
+          "' preferences .po file from 'en' .pref files\n" if $self->{verbose};
     $self->get_po_merged_with_en();
     $self->save_po();
 }
@@ -281,7 +282,7 @@ sub install_prefs {
             $pref->{$tab} = $ntab;
         }
         my $file_trans = $self->{po_path_lang} . "/$file";
-        print "Write $file\n";
+        print "Write $file\n" if $self->{verbose};
         open my $fh, ">", $file_trans;
         print $fh Dump($pref);
     }
@@ -290,19 +291,18 @@ sub install_prefs {
 
 sub install_tmpl {
     my $self = shift;
-
-    print
-        "Install templates\n";
+    print "Install templates\n" if $self->{verbose};
     while ( my ($interface, $tmpl) = each %{$self->{interface}} ) {
         print
             "  Install templates '$interface\n",
             "    From: $tmpl->{dir}/en/\n",
             "    To  : $tmpl->{dir}/$self->{lang}\n",
-            "    With: $self->{path_po}/$self->{lang}$tmpl->{suffix}\n";
+            "    With: $self->{path_po}/$self->{lang}$tmpl->{suffix}\n"
+                if $self->{verbose};
         my $lang_dir = "$tmpl->{dir}/$self->{lang}";
         mkdir $lang_dir unless -d $lang_dir;
         system
-            "$self->{translator_path}/tmpl_process3.pl install " .
+            "$self->{process} install " .
             "-i $tmpl->{dir}/en/ " .
             "-o $tmpl->{dir}/$self->{lang} ".
             "-s $self->{path_po}/$self->{lang}$tmpl->{suffix} -r"
@@ -313,17 +313,17 @@ sub install_tmpl {
 sub update_tmpl {
     my $self = shift;
 
-    print
-        "Update templates\n";
+    print "Update templates\n" if $self->{verbose};
     while ( my ($interface, $tmpl) = each %{$self->{interface}} ) {
         print
             "  Update templates '$interface'\n",
             "    From: $tmpl->{dir}/en/\n",
-            "    To  : $self->{path_po}/$self->{lang}$tmpl->{suffix}\n";
+            "    To  : $self->{path_po}/$self->{lang}$tmpl->{suffix}\n"
+                if $self->{verbose};
         my $lang_dir = "$tmpl->{dir}/$self->{lang}";
         mkdir $lang_dir unless -d $lang_dir;
         system
-            "$self->{translator_path}/tmpl_process3.pl update " .
+            "$self->{process} update " .
             "-i $tmpl->{dir}/en/ " .
             "-s $self->{path_po}/$self->{lang}$tmpl->{suffix} -r"
     }
@@ -341,15 +341,15 @@ sub create_prefs {
 sub create_tmpl {
     my $self = shift;
 
-    print
-        "Create templates\n";
+    print "Create templates\n" if $self->{verbose};
     while ( my ($interface, $tmpl) = each %{$self->{interface}} ) {
         print
             "  Create templates .po files for '$interface'\n",
             "    From: $tmpl->{dir}/en/\n",
-            "    To  : $self->{path_po}/$self->{lang}$tmpl->{suffix}\n";
+            "    To  : $self->{path_po}/$self->{lang}$tmpl->{suffix}\n"
+                if $self->{verbose};
         system
-            "$self->{translator_path}/tmpl_process3.pl create " .
+            "$self->{process} create " .
             "-i $tmpl->{dir}/en/ " .
             "-s $self->{path_po}/$self->{lang}$tmpl->{suffix} -r"
     }
