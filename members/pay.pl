@@ -43,7 +43,7 @@ use C4::Members::Attributes qw(GetBorrowerAttributes);
 
 my $input = CGI->new;
 
-my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+our ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {   template_name   => 'members/pay.tmpl',
         query           => $input,
         type            => 'intranet',
