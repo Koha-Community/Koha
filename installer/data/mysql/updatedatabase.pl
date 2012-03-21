@@ -4943,6 +4943,22 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.07.00.030";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do("ALTER TABLE default_circ_rules ADD
+            COLUMN `returnbranch` varchar(15) default NULL AFTER `holdallowed`");
+    $dbh->do("ALTER TABLE branch_item_rules ADD
+            COLUMN `returnbranch` varchar(15) default NULL AFTER `holdallowed`");
+    $dbh->do("ALTER TABLE default_branch_circ_rules ADD
+            COLUMN `returnbranch` varchar(15) default NULL AFTER `holdallowed`");
+    $dbh->do("ALTER TABLE default_branch_item_rules ADD
+            COLUMN `returnbranch` varchar(15) default NULL AFTER `holdallowed`");
+    # set the default rule to the current value of HomeOrHoldingBranchReturn (default to 'homebranch' if need be)
+    my $homeorholdingbranchreturn = C4::Context->prefernce('HomeOrHoldingBranchReturn') || 'homebranch';
+    $dbh->do("UPDATE default_circ_rules SET returnbranch = '$homeorholdingbranchreturn'");
+    print "Upgrade to $DBversion done (Atomic update for OAI-PMH sets management)\n";
+    SetVersion($DBversion);
+}
 
 =head1 FUNCTIONS
 
