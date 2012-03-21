@@ -168,7 +168,6 @@ sub read_SIP_packet {
     # local $/ = "\r";      # don't need any of these here.  use whatever the prevailing $/ is.
     local $/ = "\015";    # proper SPEC: (octal) \015 = (hex) x0D = (dec) 13 = (ascii) carriage return
     {    # adapted from http://perldoc.perl.org/5.8.8/functions/readline.html
-        for ( my $tries = 1 ; $tries <= 3 ; $tries++ ) {
             undef $!;
             $record = readline($fh);
             if ( defined($record) ) {
@@ -183,14 +182,7 @@ sub read_SIP_packet {
                 while ( chomp($record) ) { 1; }
 
                 $record and last;    # success
-            } else {
-                if ($!) {
-                    syslog( "LOG_DEBUG", "read_SIP_packet (try #$tries) ERROR: $! $@" );
-                    # die "read_SIP_packet ERROR: $!";
-                    warn "read_SIP_packet ERROR: $! $@";
-                }
             }
-        }
     }
     if ($record) {
         my $len2 = length($record);

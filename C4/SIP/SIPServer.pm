@@ -35,7 +35,6 @@ BEGIN {
 my %transports = (
     RAW    => \&raw_transport,
     telnet => \&telnet_transport,
-    # http   => \&http_transport,	# for http just use the OPAC
 );
 
 #
@@ -126,31 +125,18 @@ sub raw_transport {
     my $self = shift;
     my ($input);
     my $service = $self->{service};
-    my $strikes = 3;
 
-    eval {
-		local $SIG{ALRM} = sub { die "raw_transport Timed Out!\n"; };
-		syslog("LOG_DEBUG", "raw_transport: timeout is %d", $service->{timeout});
-		while ($strikes--) {
-		    alarm $service->{timeout};
-		    $input = Sip::read_SIP_packet(*STDIN);
-		    alarm 0;
-			if (!$input) {
-				# EOF on the socket
-				syslog("LOG_INFO", "raw_transport: shutting down: EOF during login");
-				return;
-		    }
-		    $input =~ s/[\r\n]+$//sm;	# Strip off trailing line terminator(s)
-		    last if Sip::MsgType::handle($input, $self, LOGIN);
-		}
-	};
-
-    if (length $@) {
-		syslog("LOG_ERR", "raw_transport: LOGIN ERROR: '$@'");
-		die "raw_transport: login error (timeout? $@), exiting";
-    } elsif (!$self->{account}) {
-		syslog("LOG_ERR", "raw_transport: LOGIN FAILED");
-		die "raw_transport: Login failed (no account), exiting";
+    while (!$self->{account}) {
+    local $SIG{ALRM} = sub { die "raw_transport Timed Out!\n"; };
+    syslog("LOG_DEBUG", "raw_transport: timeout is %d", $service->{timeout});
+    $input = Sip::read_SIP_packet(*STDIN);
+    if (!$input) {
+        # EOF on the socket
+        syslog("LOG_INFO", "raw_transport: shutting down: EOF during login");
+        return;
+    }
+    $input =~ s/[\r\n]+$//sm;	# Strip off trailing line terminator(s)
+    last if Sip::MsgType::handle($input, $self, LOGIN);
     }
 
     syslog("LOG_DEBUG", "raw_transport: uname/inst: '%s/%s'",
@@ -269,32 +255,29 @@ sub sip_protocol_loop {
 	# In short, we'll take any valid message here.
 	#my $expect = SC_STATUS;
     my $expect = '';
-    my $strikes = 3;
-    while ($input = Sip::read_SIP_packet(*STDIN)) {
+    while (1) {
+        $input = Sip::read_SIP_packet(*STDIN);
+        unless ($input) {
+            return;		# EOF
+        }
 		# begin input hacks ...  a cheap stand in for better Telnet layer
 		$input =~ s/^[^A-z0-9]+//s;	# Kill leading bad characters... like Telnet handshakers
 		$input =~ s/[^A-z0-9]+$//s;	# Same on the end, should get DOSsy ^M line-endings too.
 		while (chomp($input)) {warn "Extra line ending on input";}
 		unless ($input) {
-			if ($strikes--) {
-				syslog("LOG_ERR", "sip_protocol_loop: empty input skipped");
-				next;
-			} else {
-				syslog("LOG_ERR", "sip_protocol_loop: quitting after too many errors");
-				die "sip_protocol_loop: quitting after too many errors";
-			}
+            syslog("LOG_ERR", "sip_protocol_loop: empty input skipped");
+            print("96$CR");
+            next;
 		}
 		# end cheap input hacks
 		my $status = Sip::MsgType::handle($input, $self, $expect);
 		if (!$status) {
 			syslog("LOG_ERR", "sip_protocol_loop: failed to handle %s",substr($input,0,2));
-			die "sip_protocol_loop: failed Sip::MsgType::handle('$input', $self, '$expect')";
 		}
 		next if $status eq REQUEST_ACS_RESEND;
 		if ($expect && ($status ne $expect)) {
 			# We received a non-"RESEND" that wasn't what we were expecting.
 		    syslog("LOG_ERR", "sip_protocol_loop: expected %s, received %s, exiting", $expect, $input);
-			die "sip_protocol_loop: exiting: expected '$expect', received '$status'";
 		}
 		# We successfully received and processed what we were expecting
 		$expect = '';

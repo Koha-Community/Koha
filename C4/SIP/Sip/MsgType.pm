@@ -405,7 +405,9 @@ sub handle {
 	}
 	unless ($self->{handler}) {
 		syslog("LOG_WARNING", "No handler defined for '%s'", $msg);
-        return;
+        $last_response = REQUEST_SC_RESEND;
+        print("$last_response\r");
+        return REQUEST_ACS_RESEND;
 	}
     return($self->{handler}->($self, $server));  # FIXME
 	# FIXME: Use of uninitialized value in subroutine entry
