@@ -2576,6 +2576,7 @@ sub PrepareItemrecordDisplay {
                 $subfield_data{subfield}      = $subfield;
                 $subfield_data{countsubfield} = $cntsubf++;
                 $subfield_data{kohafield}     = $tagslib->{$tag}->{$subfield}->{'kohafield'};
+                $subfield_data{id}            = "tag_".$tag."_subfield_".$subfield."_".int(rand(1000000));
 
                 #        $subfield_data{marc_lib}=$tagslib->{$tag}->{$subfield}->{lib};
                 $subfield_data{marc_lib}   = $tagslib->{$tag}->{$subfield}->{lib};
@@ -2714,8 +2715,6 @@ sub PrepareItemrecordDisplay {
                             my $extended_param = plugin_parameters( $dbh, $temp, $tagslib, $subfield_data{id}, undef );
                             my ( $function_name, $javascript ) = plugin_javascript( $dbh, $temp, $tagslib, $subfield_data{id}, undef );
                             $subfield_data{random}     = int(rand(1000000));    # why do we need 2 different randoms?
-                            my $index_subfield = int(rand(1000000));
-                            $subfield_data{id} = "tag_".$tag."_subfield_".$subfield."_".$index_subfield;
                             $subfield_data{marc_value} = qq[<input tabindex="1" id="$subfield_data{id}" name="field_value" class="input_marceditor" size="67" maxlength="255"
                                 onfocus="Focus$function_name($subfield_data{random}, '$subfield_data{id}');"
                                  onblur=" Blur$function_name($subfield_data{random}, '$subfield_data{id}');" />
