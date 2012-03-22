@@ -1780,7 +1780,7 @@ DROP TABLE IF EXISTS sessions;
 CREATE TABLE sessions (
   `id` varchar(32) NOT NULL,
   `a_session` text NOT NULL,
-  UNIQUE KEY id (id)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
