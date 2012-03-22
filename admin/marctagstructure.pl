@@ -348,6 +348,7 @@ sub StringSearch  {
 #
 sub duplicate_framework {
 	my ($newframeworkcode,$oldframeworkcode) = @_;
+	my $dbh = C4::Context->dbh;
 	my $sth = $dbh->prepare("select tagfield,liblibrarian,libopac,repeatable,mandatory,authorised_value from marc_tag_structure where frameworkcode=?");
 	$sth->execute($oldframeworkcode);
 	my $sth_insert = $dbh->prepare("insert into marc_tag_structure (tagfield, liblibrarian, libopac, repeatable, mandatory, authorised_value, frameworkcode) values (?,?,?,?,?,?,?)");
