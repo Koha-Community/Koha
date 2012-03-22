@@ -1826,10 +1826,16 @@ sub _FixFineDaysOnReturn {
     my $circcontrol = C4::Context::preference('CircControl');
     my $issuingrule = GetIssuingRule( $borrower->{categorycode}, $item->{itype}, $branchcode );
     my $finedays    = $issuingrule->{finedays};
+    my $unit        = $issuingrule->{lengthunit};
 
     # exit if no finedays defined
     return unless $finedays;
-    my $grace = DateTime::Duration->new( days => $issuingrule->{firstremind} );
+    # finedays is in days, so hourly loans must multiply by 24
+    # thus 1 hour late equals 1 day suspension * finedays rate
+    $finedays       = $finedays * 24 if ($unit eq 'hours');
+
+    # grace period is measured in the same units as the loan
+    my $grace = DateTime::Duration->new( $unit => $issuingrule->{firstremind} );
 
     if ( ( $deltadays - $grace )->is_positive ) { # you can't compare DateTime::Durations with logical operators
         my $new_debar_dt = $dt_today->clone()->add_duration( $deltadays * $finedays );
