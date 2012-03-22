@@ -33,11 +33,11 @@ use C4::Members::AttributeTypes;
 
 my $script_name = "/cgi-bin/koha/admin/patron-attr-types.pl";
 
-my $input = new CGI;
+our $input = new CGI;
 my $op = $input->param('op') || '';
 
 
-my ($template, $loggedinuser, $cookie)
+our ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "admin/patron-attr-types.tmpl",
                  query => $input,
                  type => "intranet",
