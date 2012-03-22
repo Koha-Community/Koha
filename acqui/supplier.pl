@@ -46,7 +46,6 @@ use C4::Auth;
 use C4::Contract qw/GetContract/;
 use C4::Biblio;
 use C4::Output;
-use C4::Dates qw/format_date /;
 use CGI;
 
 use C4::Bookseller qw( GetBookSellerFromId DelBookseller );
@@ -78,11 +77,6 @@ $tax_rate *= 100;
 if ( $op eq 'display' ) {
 
     my $contracts = GetContract( { booksellerid => $booksellerid } );
-
-    for ( @{$contracts} ) {
-        $_->{contractstartdate} = format_date( $_->{contractstartdate} );
-        $_->{contractenddate}   = format_date( $_->{contractenddate} );
-    }
 
     $template->param(
         booksellerid  => $booksellerid,

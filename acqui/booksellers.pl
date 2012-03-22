@@ -56,7 +56,6 @@ use C4::Biblio;
 use C4::Output;
 use CGI;
 
-use C4::Dates qw/format_date/;
 use C4::Acquisition qw/ GetBasketsInfosByBookseller /;
 use C4::Bookseller qw/ GetBookSellerFromId GetBookSeller /;
 use C4::Members qw/GetMember/;
@@ -126,11 +125,6 @@ for my $vendor (@suppliers) {
                    ) 
                 ) 
            ) { 
-            for my $date_field (qw( creationdate closedate)) {
-                if ( $basket->{$date_field} ) {
-                    $basket->{$date_field} = format_date( $basket->{$date_field} );
-                }
-            }
             foreach (qw(total_items total_biblios expected_items)) {
                 $basket->{$_} ||= 0;
             }

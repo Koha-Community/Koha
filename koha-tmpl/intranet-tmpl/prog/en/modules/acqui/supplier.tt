@@ -1,3 +1,4 @@
+[% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Vendor [% bookselname %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -217,8 +218,8 @@ if (f.company.value == "") {
                             <a href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&amp;contractnumber=[% contract.contractnumber %]&amp;booksellerid=[% contract.booksellerid %]">[% contract.contractname %]</a>
                         </td>
                         <td>[% contract.contractdescription %]</td>
-                        <td>[% contract.contractstartdate %]</td>
-                        <td>[% contract.contractenddate %]</td>
+                        <td>[% contract.contractstartdate | $KohaDates %]</td>
+                        <td>[% contract.contractenddate | $KohaDates %]</td>
                         <td><a href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&amp;contractnumber=[% contract.contractnumber %]&amp;booksellerid=[% contract.booksellerid %]">Edit</a></td>
                         <td><a href="/cgi-bin/koha/admin/aqcontract.pl?op=delete_confirm&amp;contractnumber=[% contract.contractnumber %]&amp;booksellerid=[% contract.booksellerid %]">Delete</a></td>
                         </tr>
