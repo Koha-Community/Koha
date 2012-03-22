@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 
 # Copyright 2007 LibLime
+# Copyright 2012 software.coop and MJ Ray
 #
 # This file is part of Koha.
 #
@@ -24,6 +25,7 @@ use warnings;
 use CGI;
 use C4::Auth qw/check_api_auth/;
 use C4::Biblio;
+use C4::Items;
 use XML::Simple;
 
 my $query = new CGI;
@@ -58,7 +60,7 @@ exit 0;
 sub fetch_bib {
     my $query = shift;
     my $biblionumber = shift;
-    my $record = GetMarcBiblio($biblionumber);
+    my $record = GetMarcBiblio( $biblionumber, $query->url_param('items') );
     if  (defined $record) {
         print $query->header(-type => 'text/xml');
         print $record->as_xml_record();
@@ -86,13 +88,28 @@ sub update_bib {
         $result->{'status'} = "failed";
         $result->{'error'} = $@;
     } else {
+        my $fullrecord = $record->clone();
+        my ( $itemtag, $itemsubfield ) =
+          GetMarcFromKohaField( "items.itemnumber", '' );
+
         # delete any item tags
-        my ( $itemtag, $itemsubfield ) = GetMarcFromKohaField("items.itemnumber", '');
-        foreach my $field ($record->field($itemtag)) {
+        foreach my $field ( $record->field($itemtag) ) {
             $record->delete_field($field);
         }
-        ModBiblio($record, $biblionumber, '');
-        my $new_record = GetMarcBiblio($biblionumber);
+
+        if ( $query->url_param('items') ) {
+            foreach my $field ( $fullrecord->field($itemtag) ) {
+                my $one_item_record = $record->clone();
+                $one_item_record->add_fields($field);
+                ModItemFromMarc( $one_item_record, $biblionumber,
+                    $field->subfield($itemsubfield) );
+            }
+        }
+
+        ModBiblio( $record, $biblionumber, '' );
+        my $new_record =
+          GetMarcBiblio( $biblionumber, $query->url_param('items') );
+
         $result->{'status'} = "ok";
         $result->{'biblionumber'} = $biblionumber;
         my $xml = $new_record->as_xml_record();
