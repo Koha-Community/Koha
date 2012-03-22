@@ -42,7 +42,7 @@ my $script_name = "/cgi-bin/koha/tools/manage-marc-import.pl";
 my $input = new CGI;
 my $op = $input->param('op') || '';
 my $completedJobID = $input->param('completedJobID');
-my $runinbackground = $input->param('runinbackground');
+our $runinbackground = $input->param('runinbackground');
 my $import_batch_id = $input->param('import_batch_id') || '';
 
 # record list displays
@@ -60,7 +60,7 @@ my ($template, $loggedinuser, $cookie)
 
 my %cookies = parse CGI::Cookie($cookie);
 my $sessionID = $cookies{'CGISESSID'}->value;
-my $dbh = C4::Context->dbh;
+our $dbh = C4::Context->dbh;
 
 # Frameworks selection loop
 {
@@ -433,11 +433,11 @@ sub batch_info {
             $template->param('current_matcher_description' => $matcher->description());
         }
     }
-    add_matcher_list($batch->{'matcher_id'});
+    add_matcher_list($template,$batch->{'matcher_id'});
 }
 
 sub add_matcher_list {
-    my $current_matcher_id = shift;
+    my ($template,$current_matcher_id) = @_;
     my @matchers = C4::Matcher::GetMatcherList();
     if (defined $current_matcher_id) {
         for (my $i = 0; $i <= $#matchers; $i++) {
