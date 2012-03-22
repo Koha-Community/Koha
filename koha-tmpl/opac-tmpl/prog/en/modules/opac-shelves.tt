@@ -170,6 +170,34 @@ $(function() {
 </script>
 </head>
 [% IF ( loggedinusername ) %]<body id="opac-userlists">[% ELSE %]<body id="opac-lists">[% END %]
+
+[% BLOCK list_permissions %]
+    <li>
+        <label for="permissions">Permissions: </label>
+        <select name="allow_add" id="allow_add">
+            [% IF allow_add %]<option value="0">Do not allow</option>[% ELSE %]<option value="0" selected="selected">Do not allow</option>[% END %]
+            [% IF allow_add %]<option value="1" selected="selected">Allow</option>[% ELSE %]<option value="1">Allow</option>[% END %]
+        </select>
+        &nbsp;<span>anyone else to add entries. (The owner of a list is always allowed to add entries, but needs permission to remove.)</span>
+    </li>
+    <li>
+        <label>&nbsp;</label>
+        <select name="allow_delete_own" id="allow_delete_own">
+            [% IF allow_delete_own %]<option value="0">Do not allow</option>[% ELSE %]<option value="0" selected="selected">Do not allow</option>[% END %]
+            [% IF allow_delete_own %]<option value="1" selected="selected">Allow</option>[% ELSE %]<option value="1">Allow</option>[% END %]
+        </select>
+        &nbsp;<span>anyone to remove his own contributed entries.</span>
+    </li>
+    <li>
+        <label>&nbsp;</label>
+        <select name="allow_delete_other" id="allow_delete_other">
+            [% IF allow_delete_other %]<option value="0">Do not allow</option>[% ELSE %]<option value="0" selected="selected">Do not allow</option>[% END %]
+            [% IF allow_delete_other %]<option value="1" selected="selected">Allow</option>[% ELSE %]<option value="1">Allow</option>[% END %]
+        </select>
+        &nbsp;<span>anyone to remove other contributed entries.</span>
+    </li>
+[% END %]
+
 [% IF ( OpacNav ) %]<div id="doc3" class="yui-t1">[% ELSIF ( loggedinusername ) %]<div id="doc3" class="yui-t1">[% ELSE %]<div id="doc3" class="yui-t7">[% END %]
     <div id="bd">
       [% INCLUDE 'masthead.inc' %]
@@ -445,6 +473,7 @@ $(function() {
                         </select>
 			[% END %]
                       </li>
+                      [% INCLUDE list_permissions %]
                     </ol>
                   </fieldset>
                   <fieldset class="action"><input type="submit" value="Save" class="submit" /> [% IF ( showprivateshelves ) %]<a class="cancel" href="/cgi-bin/koha/opac-shelves.pl?shelfnumber=[% shelfnumber %]&amp;display=privateshelves">Cancel</a>[% ELSE %]<a class="cancel" href="/cgi-bin/koha/opac-shelves.pl?shelfnumber=[% shelfnumber %]">Cancel</a>[% END %]</fieldset>
@@ -633,6 +662,7 @@ $(function() {
 			  [% END %]
                         </select>
                       </li>
+                      [% INCLUDE list_permissions %]
                     </ol>
                   </fieldset>
                   <fieldset class="action">
