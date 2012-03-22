@@ -41,6 +41,11 @@ function cartList(){
             Dopop('/cgi-bin/koha/virtualshelves/addbybiblionumber.pl?newshelf=1&' + vShelfAdd());
         }
         return false;
+    } else if($("#addto").find("option:selected").attr("value") == "morelists"){
+        if (vShelfAdd()) {
+            Dopop('/cgi-bin/koha/virtualshelves/addbybiblionumber.pl?' + vShelfAdd());
+        }
+        return false;
     }
     if($("#addto").find("option:selected").attr("value") == "addtocart"){
         addMultiple();
@@ -64,8 +69,11 @@ $(".addtocart").show();
         param1 += "<option id=\"s[% addbarshelvesloo.shelfnumber %]\" value=\"addtolist\">[% addbarshelvesloo.shelfname |html %]<\/option>";[% END %]
         param1 += "<\/optgroup>";[% END %]
         [% IF ( addpubshelves ) %]param1 += "<optgroup label=\""+_("Public Lists:")+"\">"[% FOREACH addpubshelvesloo IN addpubshelvesloop %]+"<option id=\"s[% addpubshelvesloo.shelfnumber %]\" value=\"addtolist\">[% addpubshelvesloo.shelfname |html %]<\/option>"[% END %]
+        param1 += "<\/optgroup>";[% END %]
+        [% IF ( addbarshelvesloop.size>9 || addpubshelvesloop.size>9 ) %]
+            param1 += "<option value=\"morelists\">[ "+_("More Lists")+" ]<\/option>";
         [% END %]
-        param1 +="<\/optgroup><option value=\"newlist\">"+_("[ New List ]")+"<\/option>"
+        param1 +="<option value=\"newlist\">"+_("[ New List ]")+"<\/option>"
         [% END %]
         param1 += "<\/select> <input id=\"cartsubmit\" type=\"submit\" class=\"submit\" value=\""+_("Save")+"\" />";
  $('#sortsubmit').hide();
