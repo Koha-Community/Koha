@@ -19,6 +19,8 @@ package Koha::Template::Plugin::KohaDates;
 
 use Template::Plugin::Filter;
 use base qw( Template::Plugin::Filter );
+use warnings;
+use strict;
 
 use C4::Dates;
 
