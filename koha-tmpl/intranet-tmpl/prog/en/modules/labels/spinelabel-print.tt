@@ -17,13 +17,13 @@
 	</style>
 </head>
 	[% IF ( BarcodeNotFound ) %]
-		<body>
+		<body id="labels_spinelabel-print" class="tools labels">
 			<p>The barcode [% Barcode %] was not found.</p>
 			<p><a href="spinelabel-home.pl">Return To Spine Label Printer</a></p>
 		</body>
 	[% ELSE %]
 		[% IF ( autoprint ) %]
-			<body onLoad="window.print()">
+			<body id="labels_spinelabel-print" class="tools labels" onLoad="window.print()">
 		[% ELSE %]	
 			<body>
 		[% END %] 
