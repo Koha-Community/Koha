@@ -52,7 +52,6 @@ if ( ShelfPossibleAction( (defined($borrowernumber) ? $borrowernumber : -1), $sh
 
     if ($shelfid && $format) {
 
-        my @shelf               = GetShelf($shelfid);
         my ($items, $totitems)  = GetShelfContents($shelfid);
         my $marcflavour         = C4::Context->preference('marcflavour');
         my $output;
