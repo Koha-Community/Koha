@@ -46,14 +46,14 @@ use C4::Dates qw(format_date);
 use C4::Output;
 use C4::Budgets qw/GetCurrency GetCurrencies/;
 
-my $input = CGI->new;
+our $input = CGI->new;
 my $searchfield = $input->param('searchfield') || $input->param('description') || q{};
-my $offset      = $input->param('offset') || 0;
+our $offset      = $input->param('offset') || 0;
 my $op          = $input->param('op')     || q{};
 my $script_name = '/cgi-bin/koha/admin/currency.pl';
-my $pagesize = 20;
+our $pagesize = 20;
 
-my ($template, $loggedinuser, $cookie) = get_template_and_user({
+our ($template, $loggedinuser, $cookie) = get_template_and_user({
     template_name => 'admin/currency.tmpl',
     query => $input,
     type => 'intranet',
@@ -67,7 +67,7 @@ $searchfield=~ s/\,//g;
 $template->param(searchfield => $searchfield,
         script_name => $script_name);
 
-my $dbh = C4::Context->dbh;
+our $dbh = C4::Context->dbh;
 
 if ( $op eq 'add_form' ) {
     add_form($searchfield);
