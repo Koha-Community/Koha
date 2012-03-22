@@ -30,7 +30,7 @@ use C4::Matcher;
 
 my $script_name = "/cgi-bin/koha/admin/matching-rules.pl";
 
-my $input = new CGI;
+our $input = new CGI;
 my $op = $input->param('op') || '';
 
 
