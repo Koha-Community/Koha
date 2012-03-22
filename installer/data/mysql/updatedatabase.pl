@@ -4967,7 +4967,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.07.99.032";
+$DBversion = "3.07.00.032";
 if ( C4::Context->preference("Version") lt TransformToNum($DBversion) ) {
     $dbh->do("ALTER TABLE virtualshelves MODIFY COLUMN owner int"); #should have been int already (fk to borrowers)
     $dbh->do("UPDATE virtualshelves vi LEFT JOIN borrowers bo ON bo.borrowernumber=vi.owner SET vi.owner=NULL where bo.borrowernumber IS NULL"); #before adding the constraint on borrowernumber, we need to get rid of deleted owners
