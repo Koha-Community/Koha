@@ -88,7 +88,7 @@ $(document).ready(function() { calcNewsuggTotal(); });
 [% END %]
 <script type="text/javascript" src="[% themelang %]/js/acq.js"></script>
 </head>
-<body>
+<body id="acq_suggestion" class="acq">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; [% IF ( op_save ) %] <a href="/cgi-bin/koha/suggestion/suggestion.pl">Suggestions</a> &rsaquo; [% IF ( suggestionid ) %]Suggestion edit #[% suggestionid %][% ELSE %]New purchase suggestion[% END %][% ELSE %]Suggestions Management[% END %] </div>
