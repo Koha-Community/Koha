@@ -64,7 +64,6 @@ my $op            = $input->param('op');
 my $booksellerid = $input->param('booksellerid');
 my $basketno = $input->param('basketno');
 my $noconnection;
-my $numberpending;
 my $attr = '';
 my $term;
 my $host;
@@ -88,7 +87,7 @@ unless ($random)
     $random = rand(1000000000);
 }
 
-my $DEBUG = 0;    # if set to 1, many debug message are send on syslog.
+my $DEBUG = $ENV{DEBUG} || 0;    # if set to 1, many debug message are send on syslog.
 
 # get framework list
 my $frameworks = getframeworks;
@@ -131,11 +130,12 @@ if ( $op ne "do_search" ) {
         biblionumber => $biblionumber,
     );
     output_html_with_http_headers $input, $cookie, $template->output;
+    exit;
 }
-else {
+
     my @id = $input->param('id');
 
-    if ( not defined @id ) {
+    if ( not @id ) {
         # empty server list -> report and exit
         $template->param( emptyserverlist => 1 );
         output_html_with_http_headers $input, $cookie, $template->output;
@@ -228,7 +228,10 @@ warn "query ".$query  if $DEBUG;
         # $oResult[$z] = $oConnection[$z]->search_pqf($query);
     }
 
-sub displayresults {
+  warn "# nremaining = $nremaining\n" if $DEBUG;
+
+  while ( $nremaining-- ) {
+
     my $k;
     my $event;
     while ( ( $k = ZOOM::event( \@oConnection ) ) != 0 ) {
@@ -241,7 +244,7 @@ sub displayresults {
 
     if ( $k != 0 ) {
         $k--;
-        warn $serverhost[$k] if $DEBUG;
+        warn "event from $k server = ",$serverhost[$k] if $DEBUG;
         my ( $error, $errmsg, $addinfo, $diagset ) =
           $oConnection[$k]->error_x();
         if ($error) {
@@ -252,6 +255,7 @@ sub displayresults {
         }
         else {
             my $numresults = $oResult[$k]->size();
+            warn "numresults = $numresults" if $DEBUG;
             my $i;
             my $result = '';
             if ( $numresults > 0 ) {
@@ -305,20 +309,15 @@ sub displayresults {
             }    #$numresults
         }
     }    # if $k !=0
-    $numberpending = $nremaining - 1;
-    $template->param(
-        breeding_loop => \@breeding_loop,
-        server        => $servername[$k],
-        numberpending => $numberpending,
-        errconn       => \@errconn
-    );
-    output_html_with_http_headers $input, $cookie, $template->output if $numberpending == 0;
-
     #   print  $template->output  if $firstresult !=1;
     $firstresult++;
-}
-displayresults();
-while ( --$nremaining > 0 ) {
-        displayresults();
-    }
-}    ## if op=search
+
+  } # while nremaining
+
+$template->param(
+breeding_loop => \@breeding_loop,
+#server        => $servername[$k],
+numberpending => $nremaining > 0 ? $nremaining : 0,
+errconn       => \@errconn
+);
+output_html_with_http_headers $input, $cookie, $template->output;
