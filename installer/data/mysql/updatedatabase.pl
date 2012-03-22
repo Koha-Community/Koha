@@ -4994,7 +4994,7 @@ if ( C4::Context->preference("Version") lt TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.07.00.XXX";
+$DBversion = "3.07.00.033";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("ALTER TABLE branches ADD opac_info text;");
     print "Upgrade to $DBversion done add opac_info to branches \n";
