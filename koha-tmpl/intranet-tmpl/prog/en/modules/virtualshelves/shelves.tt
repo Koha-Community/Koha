@@ -115,6 +115,32 @@ function placeHold () {
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
+[% BLOCK list_permissions %]
+    <li>
+        <label for="permissions">Permissions: </label>
+        <select name="allow_add" id="allow_add">
+            [% IF allow_add %]<option value="0">Do not allow</option>[% ELSE %]<option value="0" selected="selected">Do not allow</option>[% END %]
+            [% IF allow_add %]<option value="1" selected="selected">Allow</option>[% ELSE %]<option value="1">Allow</option>[% END %]
+        </select>
+        &nbsp;<span>anyone else to add entries.</span>
+    </li>
+    <li>
+        <label>&nbsp;</label>
+        <select name="allow_delete_own" id="allow_delete_own">
+            [% IF allow_delete_own %]<option value="0">Do not allow</option>[% ELSE %]<option value="0" selected="selected">Do not allow</option>[% END %]
+            [% IF allow_delete_own %]<option value="1" selected="selected">Allow</option>[% ELSE %]<option value="1">Allow</option>[% END %]
+        </select>
+        &nbsp;<span>anyone to remove his own contributed entries.</span>
+    </li>
+    <li>
+        <label>&nbsp;</label>
+        <select name="allow_delete_other" id="allow_delete_other">
+            [% IF allow_delete_other %]<option value="0">Do not allow</option>[% ELSE %]<option value="0" selected="selected">Do not allow</option>[% END %]
+            [% IF allow_delete_other %]<option value="1" selected="selected">Allow</option>[% ELSE %]<option value="1">Allow</option>[% END %]
+        </select>
+        &nbsp;<span>anyone to remove other contributed entries.</span>
+    </li>
+[% END %]
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/virtualshelves/shelves.pl">Lists</a> [% IF ( category1 ) %] &rsaquo; [% IF ( viewshelf || edit ) %] <a href="/cgi-bin/koha/virtualshelves/shelves.pl?display=privateshelves">Your lists</a> [% ELSE %] Your lists [% END %] [% ELSIF ( category2 ) %] &rsaquo; [% IF ( viewshelf ) %] <a href="/cgi-bin/koha/virtualshelves/shelves.pl?display=publicshelves">Public lists</a> [% ELSE %] Public lists [% END %] [% ELSIF ( showprivateshelves ) %] &rsaquo; [% IF ( viewshelf || edit ) %] <a href="/cgi-bin/koha/virtualshelves/shelves.pl?display=privateshelves">Your lists</a> [% ELSE %] Your lists [% END %] [% ELSIF ( showpublicshelves ) %] &rsaquo; [% IF ( viewshelf || edit ) %] <a href="/cgi-bin/koha/virtualshelves/shelves.pl?display=publicshelves">Public lists</a> [% ELSE %] Public lists [% END %] [% END %]
 
 [% IF ( viewshelf ) %]&rsaquo; Contents of <i>[% shelfname | html %]</i>[% END %][% IF ( shelves ) %] &rsaquo; Create new list[% END %][% IF ( edit ) %] &rsaquo; Edit list <i>[% shelfname | html %]</i>[% END %]</div>
@@ -152,6 +178,9 @@ function placeHold () {
                 [% END %]
                 [% IF ( paramsloo.somedeleted) %]
                       <div class="dialog message">Warning: You could not delete all selected items from this shelf.</div>
+                [% END %]
+                [% IF ( paramsloo.modifyfailure) %]
+                      <div class="dialog message">ERROR: List could not be modified.</div>
                 [% END %]
 	</div>
 </div>
@@ -275,7 +304,9 @@ function placeHold () {
 			<select name="category" id="category">
                   <option value="1">Private</option>
                   <option value="2">Public</option>
-			</select></li></ol>
+            </select></li>
+            [% INCLUDE list_permissions %]
+        </ol>
     [% END %]
 
     [% IF ( edit ) %]
@@ -304,7 +335,9 @@ function placeHold () {
 			[% ELSE %]
 				<option value="2">Public</option>
 			[% END %]
-			</select></li></ol>
+            </select></li>
+            [% INCLUDE list_permissions %]
+            </ol>
 	[% END %]
 
 		</fieldset>
@@ -317,6 +350,8 @@ function placeHold () {
         <div class="help"><ul>
             <li>A <b>Private</b> list is managed by you and can be seen only by you.</li>
             <li> A <b>Public</b> list can be seen by everybody, but managed only by you.</li>
+            <br/>
+            <li>The owner of a list is always allowed to add entries, but needs permission to remove.</li>
         </ul>
         </div>
     </div>

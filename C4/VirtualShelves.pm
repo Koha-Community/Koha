@@ -215,19 +215,17 @@ sub GetSomeShelfNames {
 
 =head2 GetShelf
 
-  (shelfnumber,shelfname,owner,category,sortfield) = &GetShelf($shelfnumber);
+  (shelfnumber,shelfname,owner,category,sortfield,allow_add,allow_delete_own,allow_delete_other) = &GetShelf($shelfnumber);
 
-Looks up information about the contents of virtual virtualshelves number
-C<$shelfnumber>
-
-Returns the database's information on 'virtualshelves' table.
+Returns the above-mentioned fields for passed virtual shelf number.
 
 =cut
 
 sub GetShelf ($) {
     my ($shelfnumber) = @_;
     my $query = qq(
-        SELECT shelfnumber, shelfname, owner, category, sortfield
+        SELECT shelfnumber, shelfname, owner, category, sortfield,
+            allow_add, allow_delete_own, allow_delete_other
         FROM   virtualshelves
         WHERE  shelfnumber=?
     );
@@ -311,7 +309,7 @@ sub AddShelf {
 
     #initialize missing hash values to silence warnings
     foreach('shelfname','category', 'sortfield', 'allow_add', 'allow_delete_own', 'allow_delete_other' ) {
-        $hashref->{$_}= exists $hashref->{$_}? $hashref->{$_}||'': '';
+        $hashref->{$_}= undef unless exists $hashref->{$_};
     }
 
     return -1 unless _CheckShelfName($hashref->{shelfname}, $hashref->{category}, $owner, 0);
@@ -326,9 +324,9 @@ sub AddShelf {
         $owner,
         $hashref->{category},
         $hashref->{sortfield},
-        $hashref->{allow_add}||0,
-        $hashref->{allow_delete_own}||1,
-        $hashref->{allow_delete_other}||0 );
+        $hashref->{allow_add}//0,
+        $hashref->{allow_delete_own}//1,
+        $hashref->{allow_delete_other}//0 );
     my $shelfnumber = $dbh->{'mysql_insertid'};
     return $shelfnumber;
 }
@@ -393,16 +391,17 @@ sub ModShelf {
 
     #initialize missing hash values to silence warnings
     foreach('shelfname','category', 'sortfield', 'allow_add', 'allow_delete_own', 'allow_delete_other' ) {
-        $hashref->{$_}= exists $hashref->{$_}? $hashref->{$_}||'': '';
+        $hashref->{$_}= undef unless exists $hashref->{$_};
     }
 
     #if name or category changes, the name should be tested
     if($hashref->{shelfname} || $hashref->{category}) {
         unless(_CheckShelfName(
-        $hashref->{shelfname}||$oldrecord->{shelfname},
-        $hashref->{category}||$oldrecord->{category},
-        $oldrecord->{owner}, $shelfnumber )) {
-        return 0; #name check failed
+            $hashref->{shelfname}//$oldrecord->{shelfname},
+            $hashref->{category}//$oldrecord->{category},
+            $oldrecord->{owner},
+            $shelfnumber )) {
+                return 0; #name check failed
         }
     }
 
@@ -410,12 +409,12 @@ sub ModShelf {
     $query= "UPDATE virtualshelves SET shelfname=?, category=?, sortfield=?, allow_add=?, allow_delete_own=?, allow_delete_other=? WHERE shelfnumber=?";
     $sth = $dbh->prepare($query);
     $sth->execute(
-        $hashref->{shelfname}||$oldrecord->{shelfname},
-        $hashref->{category}||$oldrecord->{category},
-        $hashref->{sortfield}||$oldrecord->{sortfield},
-        $hashref->{allow_add}||$oldrecord->{allow_add},
-        $hashref->{allow_delete_own}||$oldrecord->{allow_delete_own},
-        $hashref->{allow_delete_other}||$oldrecord->{allow_delete_other},
+        $hashref->{shelfname}//$oldrecord->{shelfname},
+        $hashref->{category}//$oldrecord->{category},
+        $hashref->{sortfield}//$oldrecord->{sortfield},
+        $hashref->{allow_add}//$oldrecord->{allow_add},
+        $hashref->{allow_delete_own}//$oldrecord->{allow_delete_own},
+        $hashref->{allow_delete_other}//$oldrecord->{allow_delete_other},
         $shelfnumber );
     return $@? 0: 1;
 }

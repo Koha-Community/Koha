@@ -185,8 +185,11 @@ sub shelfpage {
                         last SWITCH;
                 }
                 my $shelf = {
-                    'shelfname' => $query->param('shelfname'),
-                    'sortfield' => $query->param('sortfield'),
+                    shelfname          => $query->param('shelfname'),
+                    sortfield          => $query->param('sortfield'),
+                    allow_add          => $query->param('allow_add'),
+                    allow_delete_own   => $query->param('allow_delete_own'),
+                    allow_delete_other => $query->param('allow_delete_other'),
                 };
                 if($query->param('category')) { #optional
                     $shelf->{category}= $query->param('category');
@@ -207,7 +210,7 @@ sub shelfpage {
             }
         #Editing a shelf
         elsif ( $op eq 'modif' ) {
-                my ( $shelfnumber2, $shelfname, $owner, $category, $sortfield ) = GetShelf($shelfnumber);
+                my ( $shelfnumber2, $shelfname, $owner, $category, $sortfield, $allow_add, $allow_delete_own, $allow_delete_other) = GetShelf($shelfnumber);
                 my $member = GetMember( 'borrowernumber' => $owner );
                 my $ownername = defined($member) ? $member->{firstname} . " " . $member->{surname} : '';
                 $edit = 1;
@@ -222,6 +225,9 @@ sub shelfpage {
                     "category$category" => 1,
                     category            => $category,
                     "sort_$sortfield"   => 1,
+                    allow_add           => $allow_add,
+                    allow_delete_own    => $allow_delete_own,
+                    allow_delete_other  => $allow_delete_other,
                 );
             }
             last SWITCH;
@@ -322,7 +328,11 @@ sub shelfpage {
                 my $shelfnumber = AddShelf( {
                     shelfname => $newshelf,
                     sortfield => $query->param('sortfield'),
-                    category => $query->param('category') },
+                    category => $query->param('category'),
+                    allow_add => $query->param('allow_add'),
+                    allow_delete_own => $query->param('allow_delete_own'),
+                    allow_delete_other => $query->param('allow_delete_other'),
+                    },
                     $query->param('owner') );
                 $stay = 1;
                 if ( $shelfnumber == -1 ) {    #shelf already exists.
@@ -454,6 +464,9 @@ sub shelfpage {
         $edit
       ) {
         $template->param( seflag => 1 );
+        #This hack is just another argument for refactoring this script one day
+        #At this point you are adding or editing a list; if you add, then you add a private list (by default) with permissions as below; if you edit, do not pass these permissions, they must come from the database
+        $template->param( allow_add => 0, allow_delete_own => 1, allow_delete_other => 0) unless $shelfnumber;
     }
 
 #Next call updates the shelves for the Lists button.
