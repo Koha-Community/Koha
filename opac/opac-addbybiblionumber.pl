@@ -115,12 +115,11 @@ sub HandleShelfNumber {
 sub HandleSelectedShelf {
     if($authorized= ShelfPossibleAction( $loggedinuser, $selectedshelf, 'add')){
         #adding to specific shelf
-        my ($singleshelf, $singleshelfname, $singlecategory)= GetShelf($query->param('selectedshelf'));
+        my ($singleshelf, $singleshelfname)= GetShelf($query->param('selectedshelf'));
         $template->param(
         singleshelf               => 1,
         shelfnumber               => $singleshelf,
         shelfname                 => $singleshelfname,
-        "category$singlecategory" => 1
         );
     }
 }
