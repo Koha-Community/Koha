@@ -45,14 +45,14 @@ sub AuthorizedValuesForCategory {
 my $input = new CGI;
 my $id          = $input->param('id');
 my $op          = $input->param('op')     || '';
-my $offset      = $input->param('offset') || 0;
-my $searchfield = $input->param('searchfield');
+our $offset      = $input->param('offset') || 0;
+our $searchfield = $input->param('searchfield');
 $searchfield = '' unless defined $searchfield;
 $searchfield =~ s/\,//g;
-my $script_name = "/cgi-bin/koha/admin/authorised_values.pl";
-my $dbh = C4::Context->dbh;
+our $script_name = "/cgi-bin/koha/admin/authorised_values.pl";
+our $dbh = C4::Context->dbh;
 
-my ($template, $borrowernumber, $cookie)= get_template_and_user({
+our ($template, $borrowernumber, $cookie)= get_template_and_user({
     template_name => "admin/authorised_values.tmpl",
     authnotrequired => 0,
     flagsrequired => {parameters => 1},
