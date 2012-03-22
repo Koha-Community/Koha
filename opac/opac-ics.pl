@@ -28,6 +28,8 @@ use Data::ICal::Entry::Event;
 use DateTime;
 use DateTime::Format::ICal;
 use Date::Calc qw (Parse_Date);
+use DateTime;
+use DateTime::Event::ICal;
 
 use C4::Auth;
 use C4::Koha;
@@ -54,7 +56,7 @@ my ( $borr ) =  GetMemberDetails( $borrowernumber );
 my $calendar = Data::ICal->new();
 
 # get issued items ....
-my ($issues) = GetPendingIssues($borrowernumber);
+my $issues = GetPendingIssues($borrowernumber);
 
 foreach my $issue ( @$issues ) {
     my $vevent = Data::ICal::Entry::Event->new();

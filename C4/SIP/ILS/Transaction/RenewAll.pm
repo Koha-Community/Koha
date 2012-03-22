@@ -53,8 +53,8 @@ sub do_renew_all {
 		$self->{item} = $item;
 		$self->do_renew_for($borrower);
 		if ($self->ok) {
-			$item->{due_date} = $self->{due};
-            push @{$self->{renewed}  }, $item_id;
+		    $item->{due_date} = $self->{due}->clone();
+		    push @{$self->renewed  }, $item_id;
 		} else {
             push @{$self->{unrenewed}}, $item_id;
 		}

@@ -197,7 +197,37 @@ our $PERL_DEPS = {
     'DateTime' => {
         'usage'    => 'Core',
         'required' => '1',
-        'min_ver'  => '0.51'
+        'min_ver'  => '0.58'
+    },
+    'DateTime::TimeZone' => {
+        'usage'    => 'Core',
+        'required' => '1',
+        'min_ver'  => '1.26'
+    },
+    'DateTime::Format::DateParse' => {
+        'usage'    => 'Core',
+        'required' => '1',
+        'min_ver'  => '0.04'
+    },
+    'DateTime::Set' => {
+        'usage'    => 'Core',
+        'required' => '1',
+        'min_ver'  => '0.28'
+    },
+    'DateTime::Event::ICal' => {
+        'usage'    => 'Core',
+        'required' => '1',
+        'min_ver'  => '0.08'
+    },
+    'Readonly' => {
+        'usage'    => 'Core',
+        'required' => '1',
+        'min_ver'  => '1.03'
+    },
+    'Readonly::XS' => {
+        'usage'    => 'Core',
+        'required' => '0',
+        'min_ver'  => '1.02'
     },
     'Graphics::Magick' => {
         'usage'    => 'Patron Card Creator Feature',

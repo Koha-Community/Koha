@@ -35,6 +35,9 @@ use C4::Letters;
 use C4::SQLHelper qw(InsertInTable UpdateInTable SearchInTable);
 use C4::Members::Attributes qw(SearchIdMatchingAttribute);
 use C4::NewsChannels; #get slip news
+use DateTime;
+use DateTime::Format::DateParse;
+use Koha::DateUtils;
 
 our ($VERSION,@ISA,@EXPORT,@EXPORT_OK,$debug);
 
@@ -639,7 +642,7 @@ sub IsMemberBlocked {
         "SELECT COUNT(*) as latedocs
          FROM issues
          WHERE borrowernumber = ?
-         AND date_due < curdate()"
+         AND date_due < now()"
     );
     $sth->execute($borrowernumber);
     my $latedocs = $sth->fetchrow_hashref->{'latedocs'};
@@ -677,7 +680,7 @@ sub GetMemberIssuesAndFines {
     $sth = $dbh->prepare(
         "SELECT COUNT(*) FROM issues 
          WHERE borrowernumber = ? 
-         AND date_due < curdate()"
+         AND date_due < now()"
     );
     $sth->execute($borrowernumber);
     my $overdue_count = $sth->fetchrow_arrayref->[0];
@@ -1032,9 +1035,15 @@ sub GetPendingIssues {
     my $sth = C4::Context->dbh->prepare($query);
     $sth->execute(@borrowernumbers);
     my $data = $sth->fetchall_arrayref({});
-    my $today = C4::Dates->new->output('iso');
+    my $tz = C4::Context->tz();
+    my $today = DateTime->now( time_zone => $tz);
     foreach (@{$data}) {
-        if ($_->{date_due}  and $_->{date_due} lt $today) {
+        if ($_->{issuedate}) {
+            $_->{issuedate} = dt_from_string($_->{issuedate}, 'sql');
+        }
+        $_->{date_due} or next;
+        $_->{date_due} = DateTime::Format::DateParse->parse_datetime($_->{date_due}, $tz->name());
+        if ( DateTime->compare($_->{date_due}, $today) == -1 ) {
             $_->{overdue} = 1;
         }
     }

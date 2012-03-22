@@ -27,7 +27,7 @@ use CGI;
 use C4::Circulation;
 use C4::Auth;
 use URI::Escape;
-use C4::Dates qw/format_date_in_iso/;
+use Koha::DateUtils;
 my $input = new CGI;
 
 #Set Up User_env
@@ -66,7 +66,7 @@ if ($input->param('return_all')) {
 my $branch=$input->param('branch');
 my $datedue;
 if ($input->param('newduedate')){
-    $datedue=C4::Dates->new($input->param('newduedate'));
+    $datedue = dt_from_string($input->param('newduedate'));
 }
 
 # warn "barcodes : @barcodes";

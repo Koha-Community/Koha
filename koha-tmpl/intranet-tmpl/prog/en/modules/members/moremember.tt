@@ -409,8 +409,8 @@ function validate1(date) {
 
 <div id="finesholdsissues" class="toptabs">
 	<ul>
-		<li><a href="/cgi-bin/koha/members/moremember.pl#checkedout">[% issuecount %] Checkout(s)</a></li>
-    [% IF ( relissuecount ) %]
+		<li><a href="/cgi-bin/koha/members/moremember.pl#checkedout">[% issueloop.size %] Checkout(s)</a></li>
+    [% IF relissueloop.size %]
         <li><a href="/cgi-bin/koha/members/moremember.pl#relissues">Relatives' Checkouts</a></li>
     [% END %]
 		<li><a href="/cgi-bin/koha/members/moremember.pl#finesandcharges">Fines &amp; Charges</a></li>
@@ -541,7 +541,7 @@ function validate1(date) {
 </div>
 
 
-[% IF ( relissuecount ) %]
+[% IF relissueloop %]
 <div id="relissues">
  <table id="relissuest">
     <thead>

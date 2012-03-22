@@ -25,8 +25,8 @@ use C4::Auth;
 use C4::Koha;
 use C4::Biblio;
 use C4::Circulation;
-use C4::Dates qw/format_date/;
 use C4::Members;
+use Koha::DateUtils;
 
 use C4::Output;
 
@@ -89,8 +89,8 @@ foreach my $issue (@{$issues} ) {
     $line{title}           = $issue->{'title'};
     $line{author}          = $issue->{'author'};
     $line{itemcallnumber}  = $issue->{'itemcallnumber'};
-    $line{date_due}        = format_date( $issue->{'date_due'} );
-    $line{returndate}      = format_date( $issue->{'returndate'} );
+    $line{date_due}        = format_sqlduedatetime( $issue->{date_due} );
+    $line{returndate}      = format_sqldatetime( $issue->{returndate} );
     $line{volumeddesc}     = $issue->{'volumeddesc'};
     $issue->{'itemtype'}   = C4::Context->preference('item-level_itypes') ? $issue->{'itype'} : $issue->{'itemtype'};
     if($issue->{'itemtype'}) {

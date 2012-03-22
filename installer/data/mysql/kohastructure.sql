@@ -956,15 +956,15 @@ DROP TABLE IF EXISTS `issues`;
 CREATE TABLE `issues` ( -- information related to check outs or issues
   `borrowernumber` int(11), -- foreign key, linking this to the borrowers table for the patron this item was checked out to
   `itemnumber` int(11), -- foreign key, linking this to the items table for the item that was checked out
-  `date_due` date default NULL, -- date the item is due (yyyy-mm-dd)
+  `date_due` datetime default NULL, -- datetime the item is due (yyyy-mm-dd hh:mm::ss)
   `branchcode` varchar(10) default NULL, -- foreign key, linking to the branches table for the location the item was checked out
   `issuingbranch` varchar(18) default NULL,
-  `returndate` date default NULL, -- date the item was returned, will be NULL until moved to old_issues
-  `lastreneweddate` date default NULL, -- date the item was last renewed
+  `returndate` datetime default NULL, -- date the item was returned, will be NULL until moved to old_issues
+  `lastreneweddate` datetime default NULL, -- date the item was last renewed
   `return` varchar(4) default NULL,
   `renewals` tinyint(4) default NULL, -- lists the number of times the item was renewed
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- the date and time this record was last touched
-  `issuedate` date default NULL, -- date the item was checked out or issued
+  `issuedate` datetime default NULL, -- date the item was checked out or issued
   KEY `issuesborridx` (`borrowernumber`),
   KEY `bordate` (`borrowernumber`,`timestamp`),
   CONSTRAINT `issues_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE RESTRICT ON UPDATE CASCADE,
@@ -1419,15 +1419,15 @@ DROP TABLE IF EXISTS `old_issues`;
 CREATE TABLE `old_issues` ( -- lists items that were checked out and have been returned
   `borrowernumber` int(11) default NULL, -- foreign key, linking this to the borrowers table for the patron this item was checked out to
   `itemnumber` int(11) default NULL, -- foreign key, linking this to the items table for the item that was checked out
-  `date_due` date default NULL, -- date the item is due (yyyy-mm-dd)
+  `date_due` datetime default NULL, -- date the item is due (yyyy-mm-dd)
   `branchcode` varchar(10) default NULL, -- foreign key, linking to the branches table for the location the item was checked out
   `issuingbranch` varchar(18) default NULL,
-  `returndate` date default NULL, -- date the item was returned
-  `lastreneweddate` date default NULL, -- date the item was last renewed
+  `returndate` datetime default NULL, -- date the item was returned
+  `lastreneweddate` datetime default NULL, -- date the item was last renewed
   `return` varchar(4) default NULL,
   `renewals` tinyint(4) default NULL, -- lists the number of times the item was renewed
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- the date and time this record was last touched
-  `issuedate` date default NULL, -- date the item was checked out or issued
+  `issuedate` datetime default NULL, -- date the item was checked out or issued
   KEY `old_issuesborridx` (`borrowernumber`),
   KEY `old_issuesitemidx` (`itemnumber`),
   KEY `old_bordate` (`borrowernumber`,`timestamp`),

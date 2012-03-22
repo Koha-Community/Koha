@@ -4,6 +4,7 @@
 #           2006 SAN-OP
 #           2007-2010 BibLibre, Paul POULAIN
 #           2010 Catalyst IT
+#           2011 PTFS-Europe Ltd.
 #
 # This file is part of Koha.
 #
@@ -30,13 +31,11 @@ use strict;
 #use warnings; FIXME - Bug 2505
 
 use CGI;
+use DateTime;
 use C4::Context;
 use C4::Auth qw/:DEFAULT get_session/;
 use C4::Output;
 use C4::Circulation;
-use C4::Dates qw/format_date/;
-use Date::Calc qw/Add_Delta_Days/;
-use C4::Calendar;
 use C4::Print;
 use C4::Reserves;
 use C4::Biblio;
@@ -45,6 +44,8 @@ use C4::Members;
 use C4::Branch; # GetBranches GetBranchName
 use C4::Koha;   # FIXME : is it still useful ?
 use C4::RotatingCollections;
+use Koha::DateUtils;
+use Koha::Calendar;
 
 my $query = new CGI;
 
@@ -175,10 +176,9 @@ my $dropboxmode = $query->param('dropboxmode');
 my $dotransfer  = $query->param('dotransfer');
 my $canceltransfer = $query->param('canceltransfer');
 my $dest = $query->param('dest');
-my $calendar    = C4::Calendar->new( branchcode => $userenv_branch );
+my $calendar    = Koha::Calendar->new( branchcode => $userenv_branch );
 #dropbox: get last open day (today - 1)
-my $today       = C4::Dates->new();
-my $today_iso   = $today->output('iso');
+my $today       = DateTime->now( time_zone => C4::Context->tz());
 my $dropboxdate = $calendar->addDate($today, -1);
 if ($dotransfer){
 # An item has been returned to a branch other than the homebranch, and the librarian has chosen to initiate a transfer
@@ -249,13 +249,14 @@ if ($barcode) {
     );
 
     if ($returned) {
-        my $duedate = $issueinformation->{'date_due'};
+        my $time_now = DateTime->now( time_zone => C4::Context->tz )->truncate( to => 'minutes');
+        my $duedate = $issueinformation->{date_due}->strftime('%Y-%m-%d %H:%M');
         $returneditems{0}      = $barcode;
         $riborrowernumber{0}   = $borrower->{'borrowernumber'};
         $riduedate{0}          = $duedate;
         $input{borrowernumber} = $borrower->{'borrowernumber'};
         $input{duedate}        = $duedate;
-        $input{return_overdue} = 1 if ($duedate and $duedate lt $today->output('iso'));
+        $input{return_overdue} = 1 if (DateTime->compare($issueinformation->{date_due}, $time_now) == -1);
         push( @inputloop, \%input );
 
         if ( C4::Context->preference("FineNotifyAtCheckin") ) {
@@ -463,7 +464,7 @@ foreach my $code ( keys %$messages ) {
     elsif ( $code eq 'Wrongbranch' ) {
     }
     elsif ( $code eq 'Debarred' ) {
-        $err{debarred}            = format_date( $messages->{'Debarred'} );
+        $err{debarred}            = $messages->{'Debarred'};
         $err{debarcardnumber}     = $borrower->{cardnumber};
         $err{debarborrowernumber} = $borrower->{borrowernumber};
         $err{debarname}           = "$borrower->{firstname} $borrower->{surname}";
@@ -519,7 +520,7 @@ if ($borrower) {
             {
                 my $biblio = GetBiblioFromItemNumber( $item->{'itemnumber'});
                 push @itemloop, {
-                    duedate   => format_date($item->{'date_due'}),
+                    duedate   => format_sqldatetime($item->{date_due}),
                     biblionum => $biblio->{'biblionumber'},
                     barcode   => $biblio->{'barcode'},
                     title     => $biblio->{'title'},
@@ -545,7 +546,6 @@ if ($borrower) {
         riborfirstname   => $borrower->{'firstname'}
     );
 }
-
 #set up so only the last 8 returned items display (make for faster loading pages)
 my $returned_counter = ( C4::Context->preference('numReturnedItemsToShow') ) ? C4::Context->preference('numReturnedItemsToShow') : 8;
 my $count = 0;
@@ -555,15 +555,16 @@ foreach ( sort { $a <=> $b } keys %returneditems ) {
     my %ri;
     if ( $count++ < $returned_counter ) {
         my $bar_code = $returneditems{$_};
-        my $duedate = $riduedate{$_};
-        if ($duedate) {
-            my @tempdate = split( /-/, $duedate );
-            $ri{year}  = $tempdate[0];
-            $ri{month} = $tempdate[1];
-            $ri{day}   = $tempdate[2];
-            $ri{duedate} = format_date($duedate);
+        if ($riduedate{$_}) {
+            my $duedate = dt_from_string( $riduedate{$_}, 'sql');
+            $ri{year}  = $duedate->year();
+            $ri{month} = $duedate->month();
+            $ri{day}   = $duedate->day();
+            $ri{hour}   = $duedate->hour();
+            $ri{minute}   = $duedate->minute();
+            $ri{duedate} = output_pref($duedate);
             my ($b)      = GetMemberDetails( $riborrowernumber{$_}, 0 );
-            $ri{return_overdue} = 1 if ($duedate lt $today->output('iso'));
+            $ri{return_overdue} = 1 if (DateTime->compare($duedate, DateTime->now()) == -1 );
             $ri{borrowernumber} = $b->{'borrowernumber'};
             $ri{borcnum}        = $b->{'cardnumber'};
             $ri{borfirstname}   = $b->{'firstname'};
@@ -600,7 +601,6 @@ foreach ( sort { $a <=> $b } keys %returneditems ) {
     }
     push @riloop, \%ri;
 }
-
 $template->param(
     riloop         => \@riloop,
     genbrname      => $branches->{$userenv_branch}->{'branchname'},
@@ -610,7 +610,7 @@ $template->param(
     errmsgloop     => \@errmsgloop,
     exemptfine     => $exemptfine,
     dropboxmode    => $dropboxmode,
-    dropboxdate    => $dropboxdate->output(),
+    dropboxdate    => output_pref($dropboxdate),
     overduecharges => $overduecharges,
     soundon        => C4::Context->preference("SoundOn"),
 );

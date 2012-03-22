@@ -4,6 +4,7 @@
 
 # Copyright 2000-2002 Katipo Communications
 # copyright 2010 BibLibre
+# Copyright 2011 PTFS-Europe Ltd.
 #
 # This file is part of Koha.
 #
@@ -21,7 +22,7 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 use strict;
-#use warnings; FIXME - Bug 2505
+use warnings;
 use CGI;
 use C4::Output;
 use C4::Auth qw/:DEFAULT get_session/;
@@ -36,6 +37,7 @@ use C4::Reserves;
 use C4::Context;
 use CGI::Session;
 use C4::Members::Attributes qw(GetBorrowerAttributes);
+use Koha::DateUtils;
 
 use Date::Calc qw(
   Today
@@ -144,14 +146,9 @@ my $duedatespec_allow = C4::Context->preference('SpecifyDueDate');
 if($duedatespec_allow){
     if ($duedatespec) {
         if ($duedatespec =~ C4::Dates->regexp('syspref')) {
-            my $tempdate = C4::Dates->new($duedatespec);
-#           if ($tempdate and $tempdate->output('iso') gt C4::Dates->new()->output('iso')) {
-#               # i.e., it has to be later than today/now
-                $datedue = $tempdate;
-#           } else {
-#               $invalidduedate = 1;
-#               $template->param(IMPOSSIBLE=>1, INVALID_DATE=>$duedatespec);
-#           }
+                $datedue = dt_from_string($duedatespec);
+                $datedue->set_hour(23);
+                $datedue->set_minute(59);
         } else {
             $invalidduedate = 1;
             $template->param(IMPOSSIBLE=>1, INVALID_DATE=>$duedatespec);
@@ -451,9 +448,10 @@ sub build_issue_data {
         $totalprice += $it->{'replacementprice'};
         $it->{'itemtype'} = $itemtypeinfo->{'description'};
         $it->{'itemtype_image'} = $itemtypeinfo->{'imageurl'};
-        $it->{'dd'} = format_date($it->{'date_due'});
-        $it->{'displaydate'} = format_date($it->{'issuedate'});
-        $it->{'od'} = ( $it->{'date_due'} lt $todaysdate ) ? 1 : 0 ;
+        $it->{'dd'} = output_pref($it->{'date_due'});
+        $it->{'displaydate'} = output_pref($it->{'issuedate'});
+        #$it->{'od'} = ( $it->{'date_due'} lt $todaysdate ) ? 1 : 0 ;
+        $it->{'od'} = $it->{'overdue'};
         ($it->{'author'} eq '') and $it->{'author'} = ' ';
         $it->{'renew_failed'} = $renew_failed{$it->{'itemnumber'}};
 

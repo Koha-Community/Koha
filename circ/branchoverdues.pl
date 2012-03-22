@@ -22,12 +22,12 @@ use C4::Context;
 use CGI;
 use C4::Output;
 use C4::Auth;
-use C4::Dates qw/format_date/;
 use C4::Overdues;    # AddNotifyLine
 use C4::Biblio;
 use C4::Koha;
 use C4::Debug;
 use C4::Branch;
+use Data::Dumper;
 
 =head1 branchoverdues.pl
 
@@ -97,7 +97,6 @@ elsif ( $input->param('action') eq 'remove' ) {
 
 my @overduesloop;
 my @getoverdues = GetOverduesForBranch( $default, $location );
-use Data::Dumper;
 $debug and warn "HERE : $default / $location" . Dumper(@getoverdues);
 # search for location authorised value
 my ($tag,$subfield) = GetMarcFromKohaField('items.location','');
@@ -114,7 +113,8 @@ foreach my $num (@getoverdues) {
     if ($record){
         $overdueforbranch{'subtitle'} = GetRecordValue('subtitle',$record,'')->[0]->{subfield};
     }
-    $overdueforbranch{'date_due'}          = format_date( $num->{'date_due'} );
+    my $dt = dt_from_string($num->{date_due}, 'sql');
+    $overdueforbranch{'date_due'}          = output_pref($dt);
     $overdueforbranch{'title'}             = $num->{'title'};
     $overdueforbranch{'description'}       = $num->{'description'};
     $overdueforbranch{'barcode'}           = $num->{'barcode'};
@@ -151,7 +151,6 @@ foreach my $num (@getoverdues) {
 # initiate the templates for the overdueloop
 $template->param(
     overduesloop => \@overduesloop,
-    show_date    => format_date(C4::Dates->today('iso')),
     location     => $location,
 );
 

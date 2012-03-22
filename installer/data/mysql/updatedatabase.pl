@@ -4932,7 +4932,6 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
-
 $DBversion = "3.07.00.029";
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     my $installer = C4::Installer->new();
@@ -5010,6 +5009,21 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("ALTER TABLE borrower_attribute_types ADD COLUMN class VARCHAR(255)  NOT NULL DEFAULT '' AFTER `category_code`");
     $dbh->do("ALTER TABLE borrower_attribute_types ADD CONSTRAINT category_code_fk FOREIGN KEY (category_code) REFERENCES categories(categorycode)");
     print "Upgrade to $DBversion done (New fields category_code and class in borrower_attribute_types table)\n";
+    SetVersion($DBversion);
+}
+
+$DBversion = "3.07.00.035";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do("ALTER TABLE issues CHANGE date_due date_due datetime");
+    $dbh->do("ALTER TABLE issues CHANGE returndate returndate datetime");
+    $dbh->do("ALTER TABLE issues CHANGE lastreneweddate lastreneweddate datetime");
+    $dbh->do("ALTER TABLE issues CHANGE issuedate issuedate datetime");
+    $dbh->do("ALTER TABLE old_issues CHANGE date_due date_due datetime");
+    $dbh->do("ALTER TABLE old_issues CHANGE returndate returndate datetime");
+    $dbh->do("ALTER TABLE old_issues CHANGE lastreneweddate lastreneweddate datetime");
+    $dbh->do("ALTER TABLE old_issues CHANGE issuedate issuedate datetime");
+    $dbh->do("alter table issuingrules add column lengthunit varchar(10) default 'days' after issuelength");
+    print "Upgrade to $DBversion done (Setting up issues tables for hourly loans)\n";
     SetVersion($DBversion);
 }
 

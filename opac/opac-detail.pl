@@ -47,6 +47,7 @@ use MARC::Record;
 use MARC::Field;
 use List::MoreUtils qw/any none/;
 use C4::Images;
+use Koha::DateUtils;
 
 BEGIN {
 	if (C4::Context->preference('BakerTaylorEnabled')) {
@@ -494,7 +495,7 @@ for my $itm (@items) {
         # I can't actually find any case in which this is defined. --amoore 2008-12-09
         $itm->{ $itm->{'publictype'} } = 1;
     }
-    $itm->{datedue}      = format_date($itm->{datedue});
+    $itm->{datedue}      = format_sqlduedatetime($itm->{datedue});
     $itm->{datelastseen} = format_date($itm->{datelastseen});
 
     # get collection code description, too

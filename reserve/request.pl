@@ -42,6 +42,7 @@ use C4::Circulation;
 use C4::Dates qw/format_date/;
 use C4::Members;
 use C4::Search;		# enabled_staff_search_views
+use Koha::DateUtils;
 
 my $dbh = C4::Context->dbh;
 my $sth;
@@ -367,7 +368,7 @@ foreach my $biblionumber (@biblionumbers) {
             # change the background color
             my $issues= GetItemIssue($itemnumber);
             if ( $issues->{'date_due'} ) {
-                $item->{date_due} = format_date($issues->{'date_due'});
+                $item->{date_due} = format_sqldatetime($issues->{date_due});
                 $item->{backgroundcolor} = 'onloan';
             }
 

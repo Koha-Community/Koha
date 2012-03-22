@@ -17,7 +17,6 @@ use Data::Dumper;
 
 use C4::Debug;
 use C4::Context;
-# use C4::Dates;
 use C4::Koha;
 use C4::Members;
 use C4::Reserves;

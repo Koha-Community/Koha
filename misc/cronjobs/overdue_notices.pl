@@ -323,7 +323,7 @@ if (@branchcodes) {
 # these are the fields that will be substituted into <<item.content>>
 my @item_content_fields = split( /,/, $itemscontent );
 
-binmode STDOUT, ':encoding(UTF-8)';
+binmode( STDOUT, ':encoding(UTF-8)' );
 
 
 our $csv;       # the Text::CSV_XS object
@@ -350,8 +350,8 @@ if ( defined $htmlfilename ) {
   if ( $htmlfilename eq '' ) {
     $html_fh = *STDOUT;
   } else {
-    my $today = C4::Dates->new();
-    open $html_fh, ">",File::Spec->catdir ($htmlfilename,"notices-".$today->output('iso').".html");
+    my $today = DateTime->now(time_zone => C4::Context->tz );
+    open $html_fh, ">",File::Spec->catdir ($htmlfilename,"notices-".$today->ymd().".html");
   }
   
   print $html_fh "<html>\n";

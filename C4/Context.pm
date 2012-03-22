@@ -104,6 +104,7 @@ use XML::Simple;
 use C4::Boolean;
 use C4::Debug;
 use POSIX ();
+use DateTime::TimeZone;
 
 =head1 NAME
 
@@ -384,6 +385,7 @@ sub new {
     $self->{"userenv"} = undef;        # User env
     $self->{"activeuser"} = undef;        # current active user
     $self->{"shelves"} = undef;
+    $self->{tz} = undef; # local timezone object
 
     bless $self, $class;
     return $self;
@@ -1110,6 +1112,24 @@ sub get_versions {
     }
     return %versions;
 }
+
+
+=head2 tz
+
+  C4::Context->tz
+
+  Returns a DateTime::TimeZone object for the system timezone
+
+=cut
+
+sub tz {
+    my $self = shift;
+    if (!defined $context->{tz}) {
+        $context->{tz} = DateTime::TimeZone->new(name => 'local');
+    }
+    return $context->{tz};
+}
+
 
 
 1;

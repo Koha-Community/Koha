@@ -72,7 +72,8 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
                 <th>Patron category</th>
                 <th>Item type</th>
                 <th>Current checkouts allowed</th>
-                <th>Loan period (day)</th>
+                <th>Loan period</th>
+                <th>Unit</th>
                 <th>Hard due date</th>
                 <th>Fine amount</th>
                 <th>Fine charging interval</th>
@@ -80,7 +81,7 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
                 <th>Suspension in days (day)</th>
                 <th>Renewals allowed (count)</th>
                 <th>Holds allowed (count)</th>
-		        <th>Rental discount (%)</th>
+		<th>Rental discount (%)</th>
 				<th>&nbsp;</th>
             </tr>
 				[% FOREACH rule IN rules %]
@@ -108,6 +109,9 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
 								[% END %]
 							</td>
 							<td>[% rule.issuelength %]</td>
+							<td>
+							    [% rule.lengthunit %]
+							</td>
                                                         <td>[% IF ( rule.hardduedate ) %]
                                                                [% IF ( rule.hardduedatebefore ) %]before [% rule.hardduedate %]</td>
                                                                [% ELSE %][% IF ( rule.hardduedateexact ) %]on [% rule.hardduedate %]</td>
@@ -146,6 +150,12 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
                     </td>
                     <td><input name="maxissueqty" size="3" /></td>
                     <td><input name="issuelength" size="3" /> </td>
+                    <td>
+		      <select name="lengthunit">
+			<option value="days" selected>Days</option>
+			<option value="hours">Hours</option>
+		      </select>
+		    </td>
                     <td><select name="hardduedatecompare">
                            <option value="-1">Before</option>
                            <option value="0">Exactly on</option>

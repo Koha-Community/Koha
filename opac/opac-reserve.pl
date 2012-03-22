@@ -31,6 +31,7 @@ use C4::Members;
 use C4::Branch; # GetBranches
 use C4::Overdues;
 use C4::Debug;
+use Koha::DateUtils;
 # use Data::Dumper;
 
 my $MAXIMUM_NUMBER_OF_RESERVES = C4::Context->preference("maxreserves");
@@ -397,7 +398,7 @@ foreach my $biblioNum (@biblionumbers) {
         # change the background color.
         my $issues= GetItemIssue($itemNum);
         if ( $issues->{'date_due'} ) {
-            $itemLoopIter->{dateDue} = format_date($issues->{'date_due'});
+            $itemLoopIter->{dateDue} = format_sqlduedatetime($issues->{date_due});
             $itemLoopIter->{backgroundcolor} = 'onloan';
         }
 

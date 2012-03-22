@@ -33,6 +33,7 @@ use C4::ILSDI::Utility;
 use XML::Simple;
 use HTML::Entities;
 use CGI;
+use DateTime;
 
 =head1 NAME
 
@@ -558,7 +559,7 @@ sub RenewLoan {
     # Hashref building
     my $out;
     $out->{'renewals'} = $issue->{'renewals'};
-    $out->{'date_due'} = $issue->{'date_due'};
+    $out->{date_due}   = $issue->{date_due}->strftime('%Y-%m-%d %H:%S');
     $out->{'success'}  = $renewal[0];
     $out->{'error'}    = $renewal[1];
 
