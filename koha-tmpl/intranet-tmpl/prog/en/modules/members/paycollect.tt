@@ -54,7 +54,7 @@ function moneyFormat(textObj) {
 //]]>
 </script>
 </head>
-<body>
+<body id="pat_paycollect" class="pat">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'patron-search.inc' %]
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>  &rsaquo; <a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% borrower.borrowernumber %]">Pay Fines for [% borrower.firstname %] [% borrower.surname %]</a> &rsaquo; [% IF ( pay_individual ) %]Pay an individual fine[% ELSIF ( writeoff_individual ) %]Write off an individual fine[% ELSE %][% IF ( selected_accts ) %]Pay an amount toward selected fines[% ELSE %]Pay an amount toward all fines[% END %][% END %]</div>
