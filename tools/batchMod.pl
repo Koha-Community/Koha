@@ -126,12 +126,10 @@ if ($op eq "action") {
 	# Job size is the number of items we have to process
 	my $job_size = scalar(@itemnumbers);
 	my $job = undef;
-	my $callback = sub {};
 
 	# If we asked for background processing
 	if ($runinbackground) {
 	    $job = put_in_background($job_size);
-	    $callback = progress_callback($job, $dbh);
 	}
 
 	#initializing values for updates
@@ -628,13 +626,5 @@ sub put_in_background {
     return $job;
 }
 
-sub progress_callback {
-    my $job = shift;
-    my $dbh = shift;
-    return sub {
-        my $progress = shift;
-        $job->progress($progress);
-    }
-}
 
 
