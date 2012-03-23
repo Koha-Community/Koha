@@ -35,7 +35,7 @@ use C4::Auth qw/check_cookie_auth/;
 
 my $query = new CGI;
 
-binmode STDOUT, ":utf8";
+binmode STDOUT, ':encoding(UTF-8)';
 print $query->header( -type => 'text/plain', -charset => 'UTF-8' );
 
 my ( $auth_status, $sessionID ) = check_cookie_auth( $query->cookie('CGISESSID'), { } );
