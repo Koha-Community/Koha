@@ -298,7 +298,7 @@
 		[% IF ( number.highlight ) %]
 		<span class="current">[% number.number %]</span>
 		[% ELSE %]
-		<a href="parcel.pl?type=intra&amp;booksellerid=[% booksellerid %]&amp;startfrom=[% number.startfrom %][% IF ( number.datereceived ) %]&amp;datereceived=[% number.datereceived %][% END %][% IF ( number.invoice ) %]&amp;invoice=[% number.invoice %][% END %][% IF ( number.resultsperpage ) %]&amp;resultsperpage=[% number.resultsperpage %][% END %]#resultnumber">[% number.number %]</a>
+		<a href="parcel.pl?type=intra&amp;booksellerid=[% booksellerid %]&amp;startfrom=[% number.startfrom %][% IF ( datereceived ) %]&amp;datereceived=[% datereceived %][% END %][% IF ( invoice ) %]&amp;invoice=[% invoice %][% END %][% IF ( resultsperpage ) %]&amp;resultsperpage=[% resultsperpage %][% END %]#resultnumber">[% number.number %]</a>
 		[% END %]
 	[% END %]
 	[% IF ( displaynext ) %]
