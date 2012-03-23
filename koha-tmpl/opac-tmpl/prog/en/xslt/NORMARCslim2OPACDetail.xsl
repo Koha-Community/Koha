@@ -139,12 +139,6 @@
         </h5>
         </xsl:when>
         </xsl:choose>
-        <div id="views">
-        <span class="view"><span id="Normalview">Normal visning</span> </span>
-        <span class="view"><a id="MARCviewPop" href="/cgi-bin/koha/opac-showmarc.pl?id={marc:datafield[@tag=999]/marc:subfield[@code='c']}" title="MARC" rel="gb_page_center[600,500]">MARC-visning</a></span>
-        <span class="view"><a id="MARCview" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber={marc:datafield[@tag=999]/marc:subfield[@code='c']}" title="MARC">Utvidet MARC-visning</a></span>
-        <span class="view"><a id="ISBDview" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber={marc:datafield[@tag=999]/marc:subfield[@code='c']}">Kortvisning (ISBD)</a></span>
-        </div> 
 
     <xsl:if test="$DisplayOPACiconsXSLT!='0'">
         <xsl:if test="$materialTypeCode!=''">
