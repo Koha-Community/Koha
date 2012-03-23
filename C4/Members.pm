@@ -692,10 +692,6 @@ sub GetMemberIssuesAndFines {
     return ($overdue_count, $issue_count, $total_fines);
 }
 
-sub columns(;$) {
-    return @{C4::Context->dbh->selectcol_arrayref("SHOW columns from borrowers")};
-}
-
 =head2 ModMember
 
   my $success = ModMember(borrowernumber => $borrowernumber,
