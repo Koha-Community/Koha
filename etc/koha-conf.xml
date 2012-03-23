@@ -27,7 +27,7 @@ __PAZPAR2_TOGGLE_XML_PRE__
 <listen id="mergeserver">tcp:@:__MERGE_SERVER_PORT__</listen>
 <server id="mergeserver"  listenref="mergeserver"> 
     <directory>__ZEBRA_DATA_DIR__/biblios</directory>
-    <config>__ZEBRA_CONF_DIR__/zebra-biblios.cfg</config>
+    <config>__ZEBRA_CONF_DIR__/__ZEBRA_BIB_CFG__</config>
     <cql2rpn>__ZEBRA_CONF_DIR__/pqf.properties</cql2rpn>
 </server>
 __PAZPAR2_TOGGLE_XML_POST__
@@ -35,11 +35,14 @@ __PAZPAR2_TOGGLE_XML_POST__
 <!-- BIBLIOGRAPHIC RECORDS -->
 <server id="biblioserver"  listenref="biblioserver"> 
     <directory>__ZEBRA_DATA_DIR__/biblios</directory>
-    <config>__ZEBRA_CONF_DIR__/zebra-biblios.cfg</config>
+    <config>__ZEBRA_CONF_DIR__/__ZEBRA_BIB_CFG__</config>
     <cql2rpn>__ZEBRA_CONF_DIR__/pqf.properties</cql2rpn>
      <!-- <docpath>xsl</docpath> -->
      <!-- <stylesheet>xsl/default.xsl</stylesheet> -->
      <!-- <maximumrecordsize>2000000</maximumrecordsize> -->
+    <xi:include href="__KOHA_CONF_DIR__/zebradb/__BIB_RETRIEVAL_CFG__"
+                xmlns:xi="http://www.w3.org/2001/XInclude">
+      <xi:fallback>
      <retrievalinfo>
        <retrieval syntax="usmarc" name="F"/>
        <retrieval syntax="usmarc" name="B"/>
@@ -88,6 +91,8 @@ __PAZPAR2_TOGGLE_XML_POST__
          </backend>
        </retrieval>
      </retrievalinfo>
+      </xi:fallback>
+      </xi:include>
     <xi:include href="__KOHA_CONF_DIR__/zebradb/explain-biblios.xml"
                 xmlns:xi="http://www.w3.org/2001/XInclude">
       <xi:fallback>
@@ -182,8 +187,11 @@ __PAZPAR2_TOGGLE_XML_POST__
 <!--
 <server id="publicserver"  listenref="publicserver"> 
     <directory>__ZEBRA_DATA_DIR__/biblios</directory>
-    <config>__ZEBRA_CONF_DIR__/zebra-biblios.cfg</config>
+    <config>__ZEBRA_CONF_DIR__/__ZEBRA_BIB_CFG__</config>
     <cql2rpn>__ZEBRA_CONF_DIR__/pqf.properties</cql2rpn>
+    <xi:include href="__KOHA_CONF_DIR__/zebradb/__AUTH_RETRIEVAL_CFG__"
+                xmlns:xi="http://www.w3.org/2001/XInclude">
+      <xi:fallback>
      <retrievalinfo>
        <retrieval syntax="usmarc" name="F"/>
        <retrieval syntax="usmarc" name="B"/>
@@ -232,6 +240,8 @@ __PAZPAR2_TOGGLE_XML_POST__
          </backend>
        </retrieval>
      </retrievalinfo>
+      </xi:fallback>
+    </xi:include>
     <xi:include href="__KOHA_CONF_DIR__/zebradb/explain-biblios.xml"
                 xmlns:xi="http://www.w3.org/2001/XInclude">
       <xi:fallback>

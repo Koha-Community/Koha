@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+$Id: dom-config.xml,v 1.1 2007-12-13 17:42:28 adam Exp $
+   Copyright (C) 1995-2006
+   Index Data ApS
+
+This file is part of the Zebra server.
+
+Zebra is free software; you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free
+Software Foundation; either version 2, or (at your option) any later
+version.
+
+Zebra is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+for more details.
+
+You should have received a copy of the GNU General Public License
+along with Zebra; see the file LICENSE.zebra.  If not, write to the
+Free Software Foundation, 51 Franklin Street, Fifth Floor, Boston,
+MA 02110-1301 USA.
+-->
+
+<!--
+Bibliographic DOM config for MARC XML input
+-->
+<dom>
+  <extract name="index">
+    <xslt stylesheet="biblio-zebra-indexdefs.xsl"/>
+  </extract>
+  <retrieve name="F">
+    <xslt stylesheet="identity.xsl" />
+  </retrieve>
+  <retrieve name="usmarc">
+    <xslt stylesheet="identity.xsl" />
+  </retrieve>
+  <retrieve name="marc">
+    <xslt stylesheet="identity.xsl" />
+  </retrieve>
+  <retrieve name="marcxml">
+    <xslt stylesheet="identity.xsl" />
+  </retrieve>
+  <retrieve name="zebra">
+    <xslt stylesheet="zebra.xsl"/>
+  </retrieve>
+  <retrieve name="index">
+    <xslt stylesheet="biblio-zebra-indexdefs.xsl"/>
+  </retrieve>
+  <input>
+    <xmlreader level="0"/>
+  </input>
+</dom>

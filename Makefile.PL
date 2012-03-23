@@ -409,6 +409,7 @@ my %config_defaults = (
   'INSTALL_SRU'       => 'yes',
   'INSTALL_PAZPAR2'   => 'no',
   'AUTH_INDEX_MODE'   => 'dom',
+  'BIB_INDEX_MODE'    => 'dom',
   'ZEBRA_MARC_FORMAT' => 'marc21',
   'ZEBRA_LANGUAGE'    => 'en',
   'ZEBRA_TOKENIZER'   => 'chr',
@@ -461,6 +462,7 @@ my %valid_config_values = (
   'INSTALL_ZEBRA' => { 'yes' => 1, 'no' => 1 },
   'INSTALL_SRU' => { 'yes' => 1, 'no' => 1 },
   'AUTH_INDEX_MODE' => { 'grs1' => 1, 'dom' => 1 },
+  'BIB_INDEX_MODE'  => { 'grs1' => 1, 'dom' => 1 },
   'ZEBRA_MARC_FORMAT' => { 'marc21' => 1, 'normarc' => 1, 'unimarc' => 1 }, # FIXME should generate from contents of distributation
   'ZEBRA_LANGUAGE'    => { 'en' => 1, 'fr' => 1, 'nb' => 1 }, # FIXME should generate from contents of distribution
   'ZEBRA_TOKENIZER' => { chr => 1, icu => 1 },
@@ -502,12 +504,15 @@ if ($config{'INSTALL_ZEBRA'} eq "yes") {
     push @{ $pl_files->{'rewrite-config.PL'} }, (
         'blib/ZEBRA_CONF_DIR/etc/passwd',
         'blib/ZEBRA_CONF_DIR/zebra-biblios.cfg',
+        'blib/ZEBRA_CONF_DIR/zebra-biblios-dom.cfg',
         'blib/ZEBRA_CONF_DIR/zebra-authorities.cfg',
         'blib/ZEBRA_CONF_DIR/zebra-authorities-dom.cfg',
         'blib/ZEBRA_CONF_DIR/explain-authorities.xml',
         'blib/ZEBRA_CONF_DIR/explain-biblios.xml',
         'blib/ZEBRA_CONF_DIR/retrieval-info-auth-grs1.xml',
         'blib/ZEBRA_CONF_DIR/retrieval-info-auth-dom.xml',
+        'blib/ZEBRA_CONF_DIR/retrieval-info-bib-grs1.xml',
+        'blib/ZEBRA_CONF_DIR/retrieval-info-bib-dom.xml',
     );
     push @{ $pl_files->{'rewrite-config.PL'} }, (
         'blib/SCRIPT_DIR/koha-zebra-ctl.sh',
@@ -521,8 +526,11 @@ if ($config{'INSTALL_ZEBRA'} eq "yes") {
         );
     }
     $config{'ZEBRA_AUTH_CFG'} = $config{'AUTH_INDEX_MODE'} eq 'dom' ? 'zebra-authorities-dom.cfg' : 'zebra-authorities.cfg';
+    $config{'ZEBRA_BIB_CFG'}  = $config{'BIB_INDEX_MODE'}  eq 'dom' ? 'zebra-biblios-dom.cfg'     : 'zebra-biblios.cfg';
     $config{'AUTH_RETRIEVAL_CFG'} =
         $config{'AUTH_INDEX_MODE'} eq 'dom' ? 'retrieval-info-auth-dom.xml' : 'retrieval-info-auth-grs1.xml';
+    $config{'BIB_RETRIEVAL_CFG'}  =
+        $config{'BIB_INDEX_MODE'}  eq 'dom' ? 'retrieval-info-bib-dom.xml'  : 'retrieval-info-bib-grs1.xml';
 }
 
 if ($config{'INSTALL_MODE'} ne "dev") {
@@ -940,6 +948,20 @@ records.
 Primary language for Zebra indexing);
         $msg .= _add_valid_values_disp('ZEBRA_LANGUAGE', $valid_values);
         $config{'ZEBRA_LANGUAGE'} = _get_value('ZEBRA_LANGUAGE', $msg, $defaults->{'ZEBRA_LANGUAGE'}, $valid_values, $install_log_values);
+
+        $msg = q(
+Koha can use one of  two different indexing modes
+for the MARC bibliographic records:
+
+grs1 - uses the Zebra GRS-1 filter, available
+       for legacy support
+dom  - uses the DOM XML filter; offers improved
+       functionality.
+
+Bibliographic indexing mode);
+        $msg .= _add_valid_values_disp('BIB_INDEX_MODE', $valid_values);
+        $config{'BIB_INDEX_MODE'} = _get_value('BIB_INDEX_MODE', $msg, $defaults->{'BIB_INDEX_MODE'}, $valid_values, $install_log_values);
+
 
         $msg = q(
 Koha can use one of  two different indexing modes
