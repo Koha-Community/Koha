@@ -57,6 +57,8 @@ export DB_PASS='katikoan'
 
 export AUTH_INDEX_MODE=grs1
 #export AUTH_INDEX_MODE=dom
+export BIB_INDEX_MODE=grs1
+#export BIB_INDEX_MODE=dom
 
 #export ZEBRA_MARC_FORMAT=unimarc
 export ZEBRA_MARC_FORMAT=marc21
