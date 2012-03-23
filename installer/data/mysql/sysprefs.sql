@@ -358,3 +358,4 @@ INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('Babeltheque_url_js','','Url for Babeltheque javascript (e.g. http://www.babeltheque.com/bw_XX.js)','','Free');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('Babeltheque_url_update', '', 'Url for Babeltheque update (E.G. http://www.babeltheque.com/.../file.csv.bz2)', '', 'Free');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('SocialNetworks','1','Enable/Disable social networks links in opac detail pages','','YesNo');
+INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES('SubscriptionDuplicateDroppedInput','','','List of fields which must not be rewritten when a subscription is duplicated (Separated by pipe |)','Free');

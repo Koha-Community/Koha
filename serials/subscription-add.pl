@@ -115,7 +115,7 @@ if ($op eq 'modify' || $op eq 'dup' || $op eq 'modsubscription') {
 
     if ( $op eq 'dup' ) {
         my $dont_copy_fields = C4::Context->preference('SubscriptionDuplicateDroppedInput');
-        my @fields_id = map { fieldid => $_ }, split ';', $dont_copy_fields;
+        my @fields_id = map { fieldid => $_ }, split '|', $dont_copy_fields;
         $template->param( dont_export_field_loop => \@fields_id );
     }
 }
