@@ -385,7 +385,7 @@ sub ModBasket {
 
 =head3 ModBasketHeader
 
-  &ModBasketHeader($basketno, $basketname, $note, $booksellernote, $contractnumber);
+  &ModBasketHeader($basketno, $basketname, $note, $booksellernote, $contractnumber, $booksellerid);
 
 Modifies a basket's header.
 
@@ -401,16 +401,20 @@ Modifies a basket's header.
 
 =item C<$contractnumber> is the "contractnumber" (foreign) key in the "aqbasket" table.
 
+=item C<$booksellerid> is the id (foreign) key in the "aqbooksellers" table for the vendor.
+
 =back
 
 =cut
 
 sub ModBasketHeader {
-    my ($basketno, $basketname, $note, $booksellernote, $contractnumber) = @_;
-    my $query = "UPDATE aqbasket SET basketname=?, note=?, booksellernote=? WHERE basketno=?";
+    my ($basketno, $basketname, $note, $booksellernote, $contractnumber, $booksellerid) = @_;
+
+    my $query = "UPDATE aqbasket SET basketname=?, note=?, booksellernote=?, booksellerid=? WHERE basketno=?";
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare($query);
-    $sth->execute($basketname,$note,$booksellernote,$basketno);
+    $sth->execute($basketname,$note,$booksellernote,$booksellerid,$basketno);
+
     if ( $contractnumber ) {
         my $query2 ="UPDATE aqbasket SET contractnumber=? WHERE basketno=?";
         my $sth2 = $dbh->prepare($query2);

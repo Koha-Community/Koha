@@ -126,6 +126,14 @@ li.list2 {
                         <input type="text" name="basketname" id="basketname" size="40" maxlength="80" value="[% basketname %]" />
                 </li>
                 <li>
+                    <label for="basketbooksellerid">Vendor</label> &nbsp;
+                    <select name="basketbooksellerid" id="basketbooksellerid">
+            [% FOREACH b IN booksellers %]
+                <option value="[% b.id %]" [% IF booksellerid == b.id %] selected="selected"[% END %]>[% b.name %]</option>
+            [% END %]
+            </select>
+                </li>
+                <li>
                     <label for="basketnote">Internal note</label> &nbsp;
                     <textarea name="basketnote" id="basketnote" rows="5" cols="40">[% basketnote %]</textarea>
                 </li>

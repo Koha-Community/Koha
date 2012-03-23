@@ -52,7 +52,7 @@ use C4::Context;
 use C4::Auth;
 use C4::Output;
 use C4::Acquisition qw/GetBasket NewBasket GetContracts ModBasketHeader/;
-use C4::Bookseller qw/GetBookSellerFromId/;
+use C4::Bookseller qw/GetBookSellerFromId GetBookSeller/;
 
 
 my $input = new CGI;
@@ -68,8 +68,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 #parameters:
-my $booksellerid;
-$booksellerid = $input->param('booksellerid');
+my $booksellerid = $input->param('booksellerid');
 my $basketno = $input->param('basketno');
 my $basket;
 my $op = $input ->param('op');
@@ -101,13 +100,15 @@ if ( $op eq 'add_form' ) {
         $template->param(contractloop => \@contractloop,
                          basketcontractnumber => $basket->{'contractnumber'});
     }
+    my @booksellers = GetBookSeller();
     $template->param( add_form => 1,
                     basketname => $basket->{'basketname'},
                     basketnote => $basket->{'note'},
                     basketbooksellernote => $basket->{'booksellernote'},
                     booksellername => $bookseller->{'name'},
                     booksellerid => $booksellerid,
-                    basketno => $basketno
+                    basketno => $basketno,
+                    booksellers => \@booksellers,
     	);
 #End Edit
 } elsif ( $op eq 'add_validate' ) {
@@ -115,7 +116,7 @@ if ( $op eq 'add_form' ) {
     my $basketno;
     if ( $is_an_edit ) {
         $basketno = $input->param('basketno');
-        ModBasketHeader($input->param('basketno'),$input->param('basketname'),$input->param('basketnote'),$input->param('basketbooksellernote'),$input->param('basketcontractnumber'));
+        ModBasketHeader( $input->param('basketno'), $input->param('basketname'), $input->param('basketnote'), $input->param('basketbooksellernote'), $input->param('basketcontractnumber') || undef, $input->param('basketbooksellerid') );
     } else { #New basket
         $basketno = NewBasket($booksellerid, $loggedinuser, $input->param('basketname'), $input->param('basketnote'), $input->param('basketbooksellernote'), $input->param('basketcontractnumber'));
     }
