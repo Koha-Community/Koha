@@ -690,7 +690,7 @@ sub checkauth {
         elsif ( $lasttime < time() - $timeout ) {
             # timed logout
             $info{'timed_out'} = 1;
-            $session->delete();
+            $session->delete() if $session;
             C4::Context->_unset_userenv($sessionID);
             #_session_log(sprintf "%20s from %16s logged out at %30s (inactivity).\n", $userid,$ip,(strftime "%c",localtime));
             $userid    = undef;
