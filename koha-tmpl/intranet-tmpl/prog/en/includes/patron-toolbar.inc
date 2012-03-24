@@ -39,7 +39,7 @@
 
 	    new YAHOO.widget.Button({
 	        type: "menu",
-	        label: _("New"),
+	        label: _("New patron"),
 	        name: "newmenubutton",
 	        menu: newmenu,
 	        container: "newmenuc"
