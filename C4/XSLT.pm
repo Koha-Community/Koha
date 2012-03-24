@@ -170,6 +170,12 @@ sub XSLTParse4Display {
                         "slim2OPACResults.xsl";
         }
     }
+
+    if ( $xslfilename =~ m/{langcode}/ ) {
+        my $lang = C4::Templates::_current_language;
+        $xslfilename =~ s/{langcode}/$lang/;
+    }
+
     # grab the XML, run it through our stylesheet, push it out to the browser
     my $record = transformMARCXML4XSLT($biblionumber, $orig_record);
     #return $record->as_formatted();
