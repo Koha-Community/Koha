@@ -5035,16 +5035,6 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     print "Upgrade to $DBversion done (New timeout field in z3950servers)\n";
 }
 
-$DBversion = "XXX";
-if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
-    $dbh->do(qq{
-        INSERT INTO systempreferences(variable,value,explanation,options,type)
-        VALUES('UniqueItemFields', 'barcode', 'Space-separated list of fields that should be unique (used in acquisition module for item creation). Fields must be valid SQL column names of items table', '', 'Free')
-    });
-    print "Upgrade to $DBversion done (Added system preference 'UniqueItemFields')\n";
-    SetVersion($DBversion);
-}
-
 $DBversion = "3.07.00.037";
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     $dbh->do("
@@ -5060,6 +5050,16 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
        UPDATE marc_subfield_structure SET maxlength = IF ((SELECT value FROM systempreferences WHERE variable = 'marcflavour')='UNIMARC','36','9999') WHERE tagfield='100';
        ");
     print "Upgrade to $DBversion done (Add new field maxlength to marc_subfield_structure)\n";
+    SetVersion($DBversion);
+}
+
+$DBversion = "3.07.00.038";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do(qq{
+        INSERT INTO systempreferences(variable,value,explanation,options,type)
+        VALUES('UniqueItemFields', 'barcode', 'Space-separated list of fields that should be unique (used in acquisition module for item creation). Fields must be valid SQL column names of items table', '', 'Free')
+    });
+    print "Upgrade to $DBversion done (Added system preference 'UniqueItemFields')\n";
     SetVersion($DBversion);
 }
 
