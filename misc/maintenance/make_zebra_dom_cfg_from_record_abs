@@ -1,0 +1,72 @@
+#!/usr/bin/perl
+
+# Copyright (c) 2012 Equinox Software, Inc.
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 2 of the License, or (at your option) any later
+# version.
+#
+# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
+# Suite 330, Boston, MA  02111-1307 USA
+
+use strict;
+use warnings;
+use 5.010;
+
+use Koha::Indexer::Utils;
+
+use Getopt::Long;
+
+my $input_file;
+my $output_file;
+my $want_help;
+my $result = GetOptions(
+    'input:s'      => \$input_file,
+    'output:s'     => \$output_file,
+    'help|h'       => \$want_help,
+);
+
+if ( not $result or $want_help or not defined $input_file or not defined $output_file ) {
+    print_usage();
+    exit 0;
+}
+
+open my $infh,  '<', $input_file or die "$0: cannot open input file $input_file: $!\n";
+open my $outfh, '>', $output_file or die "$0: cannot open output file $output_file: $!\n";
+
+my $grs1_cfg = join('', <$infh>);
+close $infh;
+my $dom_cfg = Koha::Indexer::Utils::zebra_record_abs_to_dom($grs1_cfg);
+print $outfh $dom_cfg;
+close $outfh;
+
+sub print_usage {
+    print <<_USAGE_;
+$0: generate a DOM filter Zebra index config from a GRS-1 config
+
+Given a Zebra record.abs file containing a set of index definitions for
+Zebra's GRS-1 filter, write an equivalent DOM filter configuration.
+
+To generate the XSLT that is to be used by Zebra, run something like
+the following on the output of this utility:
+
+xsltproc ZEBRA_CFG_DIR/xsl/koha-indexdefs-to-zebra.xsl \\
+  biblio-koha-indexdefs.xml \\
+  > ZEBRA_CFG_DIR/marc_defs/marc21/biblios/biblio-zebra-indexdefs.xsl
+
+The above example assumes that the output of the program was named
+biblio-koha-indexdefs.xsl.
+
+Parameters:
+    --input                 input file name
+    --output                output file name
+    --help or -h            show this message
+_USAGE_
+}
