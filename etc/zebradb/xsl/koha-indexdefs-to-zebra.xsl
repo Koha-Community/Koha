@@ -15,6 +15,7 @@
     <xsl:key name="index_control_field_tag"   match="kohaidx:index_control_field"   use="@tag"/>
     <xsl:key name="index_subfields_tag" match="kohaidx:index_subfields" use="@tag"/>
     <xsl:key name="index_heading_tag"   match="kohaidx:index_heading"   use="@tag"/>
+    <xsl:key name="index_data_field_tag"   match="kohaidx:index_data_field"   use="@tag"/>
     <xsl:key name="index_match_heading_tag" match="kohaidx:index_match_heading" use="@tag"/>
 
     <xsl:template match="kohaidx:index_defs">
@@ -30,6 +31,7 @@ authority-zebra-indexdefs.xsl` (substituting the appropriate file names).
             <xslo:output indent="yes" method="xml" version="1.0" encoding="UTF-8"/>
             <xslo:template match="text()"/>
             <xslo:template match="text()" mode="index_subfields"/>
+            <xslo:template match="text()" mode="index_data_field"/>
             <xslo:template match="text()" mode="index_heading"/>
             <xslo:template match="text()" mode="index_match_heading"/>
             <xslo:template match="text()" mode="index_subject_thesaurus"/>
@@ -50,6 +52,7 @@ authority-zebra-indexdefs.xsl` (substituting the appropriate file names).
                     <xslo:attribute name="z:id"><xslo:value-of select="$controlField001"/></xslo:attribute>
                     <xslo:apply-templates/>
                     <xslo:apply-templates mode="index_subfields"/>
+                    <xslo:apply-templates mode="index_data_field"/>
                     <xslo:apply-templates mode="index_heading"/>
                     <xslo:apply-templates mode="index_match_heading"/>
                     <xslo:apply-templates mode="index_subject_thesaurus"/>
@@ -59,6 +62,7 @@ authority-zebra-indexdefs.xsl` (substituting the appropriate file names).
             <xsl:call-template name="handle-index-leader"/>
             <xsl:call-template name="handle-index-control-field"/>
             <xsl:call-template name="handle-index-subfields"/>
+            <xsl:call-template name="handle-index-data-field"/>
             <xsl:call-template name="handle-index-heading"/>
             <xsl:call-template name="handle-index-match-heading"/>
             <xsl:apply-templates/>
@@ -258,6 +262,39 @@ authority-zebra-indexdefs.xsl` (substituting the appropriate file names).
                     </z:index>
                 </xslo:if>
             </xslo:for-each>
+    </xsl:template>
+
+    <xsl:template name="handle-index-data-field">
+        <xsl:for-each select="//kohaidx:index_data_field[generate-id() = generate-id(key('index_data_field_tag', @tag)[1])]">
+            <xslo:template mode="index_data_field">
+                <xsl:attribute name="match">
+                    <xsl:text>marc:datafield[@tag='</xsl:text>
+                    <xsl:value-of select="@tag"/>
+                    <xsl:text>']</xsl:text>
+                </xsl:attribute>
+                <xsl:for-each select="key('index_data_field_tag', @tag)">
+                    <xsl:call-template name="handle-one-data-field"/>
+                </xsl:for-each>
+            </xslo:template>
+        </xsl:for-each>
+    </xsl:template>
+
+    <xsl:template name="handle-one-data-field">
+        <xsl:variable name="indexes">
+            <xsl:call-template name="get-target-indexes"/>
+        </xsl:variable>
+        <z:index>
+            <xsl:attribute name="name"><xsl:value-of select="normalize-space($indexes)"/></xsl:attribute>
+            <xslo:variable name="raw_heading">
+                <xslo:for-each select="marc:subfield">
+                        <xslo:if test="position() > 1">
+                            <xslo:value-of select="substring(' ', 1, 1)"/> <!-- FIXME surely there's a better way  to specify a space -->
+                        </xslo:if>
+                        <xslo:value-of select="."/>
+                </xslo:for-each>
+            </xslo:variable>
+            <xslo:value-of select="normalize-space($raw_heading)"/>
+        </z:index>
     </xsl:template>
 
     <xsl:template name="handle-index-heading">
