@@ -21,6 +21,22 @@ use C4::Context;
 use Business::ISBN;
 use C4::Koha;
 
+=head1 NAME
+
+C4::SocialData - Koha functions for dealing with social datas
+For now used by babeltheque, a french company providing, for books, comments, upload of videos, scoring (star)...
+the social_data table could be used and improved by other provides.
+
+=head1 SYNOPSIS
+
+use C4::SocialData;
+
+=head1 DESCRIPTION
+
+The functions in this module deal with social datas
+
+=head1 FUNCTIONS
+
 =head2 get_data
 
 Get social data from a biblio
@@ -39,6 +55,7 @@ returns:
   score_avg = average score
   num_scores = number of score
 =cut
+
 sub get_data {
     my ( $isbn ) = @_;
     my $dbh = C4::Context->dbh;
@@ -49,7 +66,7 @@ sub get_data {
     return $results;
 }
 
-=head 2
+=head2 update_data
 
 Update Social data
 
@@ -60,6 +77,7 @@ data separator : ; (semicolon)
 data order : isbn ; active ; critics number , critics pro number ; quotations number ; videos number ; average score ; scores number
 
 =cut
+
 sub update_data {
     my ( $output_filepath ) = @_;
 
@@ -91,11 +109,12 @@ sub update_data {
     say "$i data insered or updated";
 }
 
-=head 2
+=head2 get_report
 
 Get social data report
 
 =cut
+
 sub get_report {
     my $dbh = C4::Context->dbh;
 
