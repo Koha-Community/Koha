@@ -474,9 +474,10 @@ OPAC:
         -
             - pref: OPACItemHolds
               choices:
-                  yes: Allow
                   no: "Don't allow"
-            - patrons to place holds on specific items in the OPAC. If this is disabled, users can only put a hold on the next available item.
+                  yes: Allow
+                  force: Force
+            - patrons to place holds on specific items in the OPAC. If this is disabled, users can only put a hold on the next available item. If this is forced, users must put a hold on a specific item.
         -
             - pref: OpacRenewalAllowed
               choices:

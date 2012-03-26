@@ -20,19 +20,36 @@
      return s.substring(index + 1);
  }
 
+// Select the first item available
+function select_first_available(id){
+    var radios = $("input:radio[name='checkitem_" + id + "']");
+    $(radios).first().attr("checked", "checked");
+}
+
  $(document).ready(function() {
     $('#hold-request-form').preventDoubleFormSubmit();
 
     var copiesRowId = null;
     var wasSpecific = false;
     var lastCopiesRowId = null;
-	$(".checkitem").parent().click(function(e){
-		if(e.target.tagName.toLowerCase() == 'td'){
+    $(".checkitem").parent().click(function(e){
+        if(e.target.tagName.toLowerCase() == 'td'){
            $(this).find("input.checkitem").each( function() {
-               $(this).attr('checked', !$(this).attr('checked'));
-			});
-		}
-	});
+               $(this).attr('checked', 'checked');
+            });
+        }
+    });
+
+    // click on a first td check the confirmjs checkbox
+    $("td.hold").click(function(e){
+      if(e.target.tagName.toLowerCase() == 'td'){
+        $(this).find("input.confirmjs").each( function() {
+           $(this).attr('checked', !$(this).attr('checked'));
+           $(this).change();
+        });
+      }
+    });
+
     // Hides all 'specific copy' table rows on load.
     $(".copiesrow").hide();
 
@@ -45,7 +62,7 @@
         }
     });
 
-    $("#place_on_hdr,.place_on_type,.toggle-hold-options").show();
+    $(".toggle-hold-options").show();
     $(".hold-options").hide();
     $(".holddatefrom,.holddateto").prop("readOnly", true);
 
@@ -69,65 +86,73 @@
     $(".confirmjs_hold").each(function(){
         var bib = $(this).attr("title");
         var html = "<label><input type =\"checkbox\" class=\"confirmjs\" checked=\"checked\"";
-        html += "value=\"" + bib + "\"/> " + _("Place a hold on") + " </label> ";
+        html += "value=\"" + bib + "\" id=\"" + bib + "\" /> " + _("Place a hold on") + " </label> ";
         $(this).html(html);
     });
     $(".confirmjs_nohold").each(function(){
         var bib = $(this).attr("title");
         var html = "<label><input type =\"checkbox\" class=\"confirmjs\" disabled=\"disabled\"";
-        html += "value=\"" + bib + "\"/>" + _("Place a hold on: ") + "</label>";
+        html += "value=\"" + bib + "\" id=\"" + bib + "\" />" + _("Place a hold on: ") + "</label>";
         $(this).html(html);
     });
 
-    // Make sure a specific item was selected where specified
-    // before moving on to a new item.
-    function changeSelection (newCopiesRowId, isSpecific) {
-        if (copiesRowId && ((copiesRowId != newCopiesRowId) || (wasSpecific != isSpecific))) {
-            var biblioNum = suffixOf(copiesRowId, "_");
-
-            // If the 'specific copy' radio button was checked
-              if (wasSpecific && (copiesRowId != newCopiesRowId)) {
-                // Find the selected copy
-                var item = $(".checkitem_" + biblioNum + ":checked");
-                if ($(item).size() == 0) {
-                    alert(MSG_NO_ITEM_SELECTED);
-                    return false;
-                }
-            }
-        }
-        copiesRowId = newCopiesRowId;
-        wasSpecific = isSpecific;
-        return true;
-    }
-
-    // When 'specific copy' radio button is clicked
-    $(".selectspecific").click(function() {
-
-        // Make sure all other specific copy table rows are hidden
-        biblioNum = suffixOf($(this).attr("id"), "_");
+    // expand or collapse the copiesrow tr
+    function toggle_copiesrow(biblioNum) {
+        var checkbox = $("input:checkbox[value='"+biblioNum+"']");
         newCopiesRowId = "#copiesrow_" + biblioNum;
+        var select_specific = $("#reqspecific_"+biblioNum).is(":checked");
 
-        if (!changeSelection(newCopiesRowId, true)) {
-            return false;
+        // If the checkbox is checked AND we want a specific item, we display the items block
+        if ( $(checkbox).is(":checked") && select_specific ) {
+            $(newCopiesRowId).show();
+        } else {
+            $(newCopiesRowId).hide();
         }
+    };
 
-        // Show the specific copy table for this radio button.
-        $(newCopiesRowId).show();
+    $("#place_on_hdr").show();
+
+    [% IF OPACItemHolds == '1' %]
+        $(".place_on_type").show();
+        // onload, selectany is checked
+        $(".selectany").attr("checked", "checked");
+    [% END %]
+
+    // If we can choose a specific item, we preselect the first one
+    [% IF OPACItemHolds =="1" or OPACItemHolds == 'force' %]
+        $("table.copiesrow").each(function(){
+            var id = suffixOf($(this).attr("id"), "_");
+            select_first_available(id);
+        });
+    [% END %]
+
+    // On confirmsjs change
+    $(".confirmjs").change(function(){
+        var id = suffixOf($(this).attr("id"), "_");
+        // If I m checked, I enable radio buttons
+        if ( $(this).is(":checked") ) {
+            $("#reqspecific_" + id).attr("disabled", false);
+            $("#reqany_" + id).attr("disabled", false);
+        }
+        // Else its are disabled
+        else {
+            $("#reqspecific_" + id).attr("disabled", "disabled");
+            $("#reqany_" + id).attr("disabled", "disabled");
+        }
+        // expand or collaspe the items block
+        toggle_copiesrow(id);
+   });
+
+    // When 'specific copy' or 'first available' radio button is clicked
+    $(".selectspecific, .selectany").click(function() {
+        var id = suffixOf($(this).attr("id"), "_");
+        toggle_copiesrow(id);
     });
 
-
-    // When 'first available' radion button is clicked
-    $(".selectany").click(function() {
-        // Make sure all other specific copy table rows are hidden
+    // Show or hide holds notes
+    $(".shownotes").click(function(){
         biblioNum = suffixOf($(this).attr("id"), "_");
-        newCopiesRowId = "#copiesrow_" + biblioNum;
-
-        if (!changeSelection(newCopiesRowId, false)) {
-            return false;
-        }
-
-        // Hide the copies table row
-        $(newCopiesRowId).hide();
+        $("#notesrow_"+biblioNum).toggle();
     });
 
     // When 'Place Hold' button is clicked
@@ -176,7 +201,6 @@
 
         $("#selections").val(selections);
         $("#biblionumbers").val(biblionumbers);
-
         return true;
     });
     $(".toggle-hold-options").on("click",function(e){
@@ -426,48 +450,54 @@
 
                         [% IF ( bibitemloo.holdable ) %]
                             <!-- HOLD ABLE -->
-                            [% IF ( OPACItemHolds ) %]
+                            [% IF OPACItemHolds == '1' or OPACItemHolds == 'force' %]
                             <!-- ITEM HOLDS -->
 
-                                <li class="radio">
-                                  [% UNLESS ( bibitemloo.holdable ) %]
+                                <li class="radio place_on_type" style="display:none;">
+                                  [% IF OPACItemHolds == "1" %]
                                     <input type="radio" name="reqtype_[% bibitemloo.biblionumber %]"
-                                           id="reqany_[% bibitemloo.biblionumber %]"
-                                           class="selectany"
-                                           value="Any"
-                                           disabled="disabled"
-                                    />
+                                            id="reqany_[% bibitemloo.biblionumber %]"
+                                            class="selectany"
+                                            value="Any"
+                                            checked="checked"
+                                     />
                                   [% ELSE %]
                                     <input type="radio" name="reqtype_[% bibitemloo.biblionumber %]"
-                                           id="reqany_[% bibitemloo.biblionumber %]"
-                                           class="selectany"
-                                           value="Any"
-                                           checked="checked"
-                                    />
+                                            id="reqany_[% bibitemloo.biblionumber %]"
+                                            class="selectany"
+                                            value="Any"
+                                     />
                                   [% END %]
-
                                   <label for="reqany_[% bibitemloo.biblionumber %]">Next available item</label>
-                                  [% UNLESS ( bibitemloo.holdable ) %]
-                                    <input type="radio" name="reqtype_[% bibitemloo.biblionumber %]"
-                                           id="reqspecific_[% bibitemloo.biblionumber %]"
-                                           class="selectspecific"
-                                           disabled="disabled"
-                                           value="Specific"
-                                    />
+                                  [% IF OPACItemHolds == "force" %]
+                                      <input type="radio" name="reqtype_[% bibitemloo.biblionumber %]"
+                                             id="reqspecific_[% bibitemloo.biblionumber %]"
+                                             class="selectspecific"
+                                             value="Specific"
+                                             checked="checked"
+                                      />
                                   [% ELSE %]
-                                    <input type="radio" name="reqtype_[% bibitemloo.biblionumber %]"
-                                           id="reqspecific_[% bibitemloo.biblionumber %]"
-                                           class="selectspecific"
-                                           value="Specific"
-                                    />
+                                      <input type="radio" name="reqtype_[% bibitemloo.biblionumber %]"
+                                             id="reqspecific_[% bibitemloo.biblionumber %]"
+                                             class="selectspecific"
+                                             value="Specific"
+                                      />
                                   [% END %]
                                   <label for="reqspecific_[% bibitemloo.biblionumber %]">A specific item</label>
                                 </li>
 
+                        [% IF OPACItemHolds == 'force' %]
+                            <script type="text/javascript">
+                                $(document).ready(function() {
+                                    $("#copiesrow_[% bibitemloo.biblionumber %]").show();
+                                });
+                            </script>
+                        [% END %]
+
                             [% END %]
                 </ul>
                         [% END %]
-                  [% IF ( OPACItemHolds ) %]
+                  [% IF OPACItemHolds == '1' || OPACItemHolds == 'force' %]
                   [% IF ( bibitemloo.holdable ) %]
 
                         <table class="copiesrow" id="copiesrow_[% bibitemloo.biblionumber %]">
@@ -496,7 +526,8 @@
                                   <input type="radio" class="checkitem checkitem_[% bibitemloo.biblionumber %]" name="checkitem_[% bibitemloo.biblionumber %]"
                                          value="[% itemLoo.itemnumber %]" />
                                 [% ELSE %]
-                                  <input disabled="disabled" type="radio" class="checkitem" name="checkitem" value="[% itemLoo.itemnumber %]" />
+                                  <input disabled="disabled" type="radio" class="checkitem" name="checkitem" value="[% itemLoo.itemnumber %]"
+                                         style="display:none;" />
                                   <img src="/opac-tmpl/lib/famfamfam/silk/cross.png" alt="Cannot be put on hold" title="Cannot be put on hold" />
                                 [% END %] [% IF ( itemLoo.copynumber ) %][% itemLoo.copynumber %][% END %]
                               </td>
@@ -552,7 +583,6 @@
 
             </div>
                 [% END %]
-
               [% END %] <!-- if message -->
             </div><!-- bigloop -->
 
