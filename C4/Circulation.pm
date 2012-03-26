@@ -2756,7 +2756,7 @@ sub SendCirculationAlert {
         }
     ) or return;
 
-    my @transports = @{ $borrower_preferences->{transports} };
+    my @transports = keys %{ $borrower_preferences->{transports} };
     # warn "no transports" unless @transports;
     for (@transports) {
         # warn "transport: $_";

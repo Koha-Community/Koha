@@ -98,9 +98,8 @@ END_SQL
         $return->{'days_in_advance'} = $row->{'days_in_advance'} if defined $row->{'days_in_advance'};
         $return->{'wants_digest'}    = $row->{'wants_digest'}    if defined $row->{'wants_digest'};
         $return->{'letter_code'}     = $row->{'letter_code'};
-        $transports{$row->{'message_transport_type'}} = 1;
+        $return->{'transports'}->{ $row->{'message_transport_type'} } = $row->{'letter_code'};
     }
-    @{$return->{'transports'}} = keys %transports;
     return $return;
 }
 
@@ -248,8 +247,9 @@ sub SetMessagingPreferencesFromDefaults {
         # FIXME - except for setting the borrowernumber, it really ought to be possible
         # to have the output of GetMessagingPreferences be able to be the input
         # to SetMessagingPreference
+        my @message_transport_types = keys %{ $default_pref->{transports} };
         $default_pref->{message_attribute_id}    = $option->{'message_attribute_id'};
-        $default_pref->{message_transport_types} = $default_pref->{transports};
+        $default_pref->{message_transport_types} = \@message_transport_types;
         $default_pref->{borrowernumber}          = $params->{borrowernumber};
         SetMessagingPreference( $default_pref );
     }

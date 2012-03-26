@@ -250,7 +250,7 @@ sub _get_brief_messaging_prefs {
             message_name            => $option->{'message_name'},
             $option->{'message_name'} => 1
         };
-        foreach my $transport ( @{$pref->{'transports'}} ) {
+        foreach my $transport ( keys %{$pref->{'transports'}} ) {
             push @{ $brief_pref->{'transports'} }, { transport => $transport };
         }
         push @$results, $brief_pref;

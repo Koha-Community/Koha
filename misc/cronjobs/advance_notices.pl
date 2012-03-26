@@ -210,7 +210,7 @@ UPCOMINGITEM: foreach my $upcoming ( @$upcoming_dues ) {
         print $letter->{'content'};
       }
       else {
-        foreach my $transport ( @{$borrower_preferences->{'transports'}} ) {
+        foreach my $transport ( keys %{$borrower_preferences->{'transports'}} ) {
             C4::Letters::EnqueueLetter( { letter                 => $letter,
                                           borrowernumber         => $upcoming->{'borrowernumber'},
                                           from_address           => $from_address,
@@ -264,7 +264,7 @@ PATRON: while ( my ( $borrowernumber, $digest ) = each %$upcoming_digest ) {
       print $letter->{'content'};
     }
     else {
-      foreach my $transport ( @{$borrower_preferences->{'transports'}} ) {
+      foreach my $transport ( keys %{$borrower_preferences->{'transports'}} ) {
         C4::Letters::EnqueueLetter( { letter                 => $letter,
                                       borrowernumber         => $borrowernumber,
                                       from_address           => $from_address,
@@ -303,7 +303,7 @@ PATRON: while ( my ( $borrowernumber, $digest ) = each %$due_digest ) {
       print $letter->{'content'};
     }
     else {
-      foreach my $transport ( @{$borrower_preferences->{'transports'}} ) {
+      foreach my $transport ( keys %{$borrower_preferences->{'transports'}} ) {
         C4::Letters::EnqueueLetter( { letter                 => $letter,
                                       borrowernumber         => $borrowernumber,
                                       from_address           => $from_address,

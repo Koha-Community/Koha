@@ -139,7 +139,7 @@ sub set_form_values {
                 selected   => $_ == $days_in_advance ? 'selected="selected"' :'' } 
             } ( 0..30 ); # FIXME: 30 is a magic number.
         }
-        foreach my $transport ( @{$pref->{'transports'}} ) {
+        foreach my $transport ( keys %{$pref->{'transports'}} ) {
             $option->{'transports_'.$transport} = 1;
         }
         $option->{'digest'} = 1 if $pref->{'wants_digest'};

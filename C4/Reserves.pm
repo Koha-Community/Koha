@@ -1849,11 +1849,7 @@ sub _koha_notify_reserve {
     my $messagingprefs;
     if ( $to_address || $borrower->{'smsalertnumber'} ) {
         $messagingprefs = C4::Members::Messaging::GetMessagingPreferences( { borrowernumber => $borrowernumber, message_name => 'Hold_Filled' } );
-
-        return if ( !defined( $messagingprefs->{'letter_code'} ) );
-        $letter_code = $messagingprefs->{'letter_code'};
     } else {
-        $letter_code = 'HOLD_PRINT';
         $print_mode = 1;
     }
 
@@ -1869,9 +1865,8 @@ sub _koha_notify_reserve {
 
     my $admin_email_address = $branch_details->{'branchemail'} || C4::Context->preference('KohaAdminEmailAddress');
 
-    my $letter =  C4::Letters::GetPreparedLetter (
+    my %letter_params = (
         module => 'reserves',
-        letter_code => $letter_code,
         branchcode => $reserve->{branchcode},
         tables => {
             'branches'  => $branch_details,
@@ -1881,11 +1876,13 @@ sub _koha_notify_reserve {
             'items', $reserve->{'itemnumber'},
         },
         substitute => { today => C4::Dates->new()->output() },
-    ) or die "Could not find a letter called '$letter_code' in the 'reserves' module";
-
+    );
 
 
     if ( $print_mode ) {
+        $letter_params{ 'letter_code' } = 'HOLD_PRINT';
+        my $letter =  C4::Letters::GetPreparedLetter ( %letter_params ) or die "Could not find a letter called '$letter_params{'letter_code'}' in the 'reserves' module";
+
         C4::Letters::EnqueueLetter( {
             letter => $letter,
             borrowernumber => $borrowernumber,
@@ -1895,8 +1892,10 @@ sub _koha_notify_reserve {
         return;
     }
 
-    if ( grep { $_ eq 'email' } @{$messagingprefs->{transports}} ) {
-        # aka, 'email' in ->{'transports'}
+    if ( $to_address && defined $messagingprefs->{transports}->{'email'} ) {
+        $letter_params{ 'letter_code' } = $messagingprefs->{transports}->{'email'};
+        my $letter =  C4::Letters::GetPreparedLetter ( %letter_params ) or die "Could not find a letter called '$letter_params{'letter_code'}' in the 'reserves' module";
+
         C4::Letters::EnqueueLetter(
             {   letter                 => $letter,
                 borrowernumber         => $borrowernumber,
@@ -1906,7 +1905,10 @@ sub _koha_notify_reserve {
         );
     }
 
-    if ( grep { $_ eq 'sms' } @{$messagingprefs->{transports}} ) {
+    if ( $borrower->{'smsalertnumber'} && defined $messagingprefs->{transports}->{'sms'} ) {
+        $letter_params{ 'letter_code' } = $messagingprefs->{transports}->{'sms'};
+        my $letter =  C4::Letters::GetPreparedLetter ( %letter_params ) or die "Could not find a letter called '$letter_params{'letter_code'}' in the 'reserves' module";
+
         C4::Letters::EnqueueLetter(
             {   letter                 => $letter,
                 borrowernumber         => $borrowernumber,
