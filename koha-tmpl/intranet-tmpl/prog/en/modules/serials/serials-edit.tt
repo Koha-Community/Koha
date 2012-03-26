@@ -185,7 +185,7 @@ $(document).ready(function() {
 [% IF ( Errors ) %]
 <div class="dialog alert">
 <ul>
-[% IF ( barcode_not_unique ) %]<li>Error : Barcode Not Unique For [% FOREACH errse IN errseq %]serialseq [% errse.serialseq %]<br/>[% END %]</li>[% END %]
+[% IF ( barcode_not_unique ) %]<li>Error: Barcode not unique for [% FOREACH errse IN errseq %]serialseq [% errse.serialseq %]<br/>[% END %]</li>[% END %]
 </ul>
 </div>
 [% END %]
