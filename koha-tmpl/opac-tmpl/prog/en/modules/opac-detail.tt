@@ -2,9 +2,11 @@
 [% INCLUDE 'doc-head-close.inc' %]
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tools.min.js"></script>
-<script type="text/javascript" src="https://apis.google.com/js/plusone.js">
-  {lang: '[% lang %]'}
-</script>
+[% IF ( SocialNetworks ) %]
+    <script type="text/javascript" src="https://apis.google.com/js/plusone.js">
+      {lang: '[% lang %]'}
+    </script>
+[% END %]
 <script type="text/JavaScript" language="JavaScript">
 //<![CDATA[
     [% IF ( busc ) %]
