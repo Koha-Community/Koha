@@ -102,7 +102,7 @@ if ($do_it) {
 		print join($sep, map {$_->{totalcol}} @$cols);
         print $sep.@$results[0]->{total};
     }
-    exit(0);
+    exit;
 }
 
 my $dbh = C4::Context->dbh;

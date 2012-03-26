@@ -96,7 +96,7 @@ if ($do_it) {
         }
         print $sep.@$results[0]->{total};
     }
-	exit(1); # in either case, exit after do_it
+    exit; # in either case, exit after do_it
 }
 
 # Displaying choices (i.e., not do_it)

@@ -107,7 +107,7 @@ if ($do_it) {
 		}
 		print $sep.@$results[0]->{total};
 	}
-	exit(1);	# exit after do_it, regardless
+	exit;	# exit after do_it, regardless
 } else {
 	my $dbh = C4::Context->dbh;
 	my $req;

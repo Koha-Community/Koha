@@ -74,7 +74,7 @@ if ($do_it) {
 	if ($output eq "screen"){
 		$template->param(mainloop => $results);
 		output_html_with_http_headers $input, $cookie, $template->output;
-		exit(1);
+		exit;
 	} else {
 		print $input->header(-type => 'application/vnd.sun.xml.calc',
                                      -encoding    => 'utf-8',
@@ -102,7 +102,7 @@ if ($do_it) {
 			print $sep.$col->{totalcol};
 		}
 		print $sep.@$results[0]->{total};
-		exit(1);
+		exit;
 	}
 } else {
 	my $dbh = C4::Context->dbh;

@@ -108,7 +108,7 @@ if ($do_it) {
         }
         print $sep. @$results[0]->{total};
     }
-    exit(1);
+    exit;
 }
 else {
     my $dbh = C4::Context->dbh;

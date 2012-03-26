@@ -125,7 +125,7 @@ if($do_it){
             print $item->{startdate}.$sep;
             print $item->{enddate}."\n";
         }
-        exit(1);
+        exit;
     }
 }else{
     ## We generate booksellers list
