@@ -276,6 +276,8 @@ foreach my $r (@{$budgets}) {
     };
 }
 
+@{$budget_loop} =
+  sort { uc( $a->{b_txt}) cmp uc( $b->{b_txt}) } @{$budget_loop};
 
 if ($close) {
     $budget_id      =  $data->{'budget_id'};
