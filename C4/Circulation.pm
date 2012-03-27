@@ -38,6 +38,8 @@ use C4::Branch; # GetBranches
 use C4::Log; # logaction
 use C4::Koha qw(GetAuthorisedValueByCode);
 use C4::Overdues qw(CalcFine UpdateFine);
+use Algorithm::CheckDigits;
+
 use Data::Dumper;
 use Koha::DateUtils;
 use Koha::Calendar;
@@ -169,6 +171,14 @@ sub barcodedecode {
 				$barcode =~ s/^(\D+)[0]*(\d+)$/$branch-$1-$2/i;
 			}
 		}
+    } elsif ($filter eq 'EAN13') {
+        my $ean = CheckDigits('ean');
+        if ( $ean->is_valid($barcode) ) {
+            #$barcode = sprintf('%013d',$barcode); # this doesn't work on 32-bit systems
+            $barcode = '0' x ( 13 - length($barcode) ) . $barcode;
+        } else {
+            warn "# [$barcode] not valid EAN-13/UPC-A\n";
+        }
 	}
     return $barcode;    # return barcode, modified or not
 }

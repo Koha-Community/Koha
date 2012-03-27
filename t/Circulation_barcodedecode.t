@@ -4,7 +4,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 24;
+use Test::More tests => 26;
 C4::Context->_new_userenv(123456);
 C4::Context->set_userenv(1,'kmkale' , 1, 'kk1' , 'IMS', 0, 'kmkale@anantcorp.com');
 
@@ -18,6 +18,7 @@ our %inputs = (
     whitespace => [" 26002315", "26002315 ", "\n\t26002315\n"],
     'T-prefix' => [qw(T0031472 T32)],
     'libsuite8' => ['b000126', 'b12', 'B0126', 'IMS-B-126', 'ims-b-126','CD0000024','00123','11998'],
+    EAN13      => [qw(892685001928 695152)],
     other      => [qw(26002315 T0031472 T32 Alphanum123), "Alpha Num 345"],
 );
 our %outputs = (
@@ -25,6 +26,7 @@ our %outputs = (
     whitespace => [qw(26002315 26002315 26002315)],
     'T-prefix' => [qw(T0031472 T0000002         )],
     'libsuite8' => ['IMS-b-126', 'IMS-b-12', 'IMS-B-126', 'IMS-B-126', 'ims-b-126','IMS-CD-24','IMS-b-123','IMS-b-11998'],
+    EAN13      => [qw(0892685001928 0000000695152)],
     other      => [qw(26002315 T0031472 T32 Alphanum123), "Alpha Num 345"],
 );
     

@@ -5610,6 +5610,13 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.09.00.XXX"; # FIXME
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do("UPDATE systempreferences SET options=concat(options,'|EAN13') WHERE variable='itemBarcodeInputFilter' AND options NOT LIKE '%EAN13%'");
+    print "Upgrade to $DBversion done (Add itemBarcodeInputFilter choice EAN13)\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)
