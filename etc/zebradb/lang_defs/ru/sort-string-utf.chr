@@ -1,0 +1,23 @@
+# Generic character map.
+#
+
+encoding utf-8
+
+# Define the basic value-set. *Beware* of changing this without re-indexing
+# your databases.
+lowercase {0-9}{a-z}абвгґдеэєжзіїийклмнопрстуфхцчшщьыъюяёў
+uppercase {0-9}{A-Z}АБВГҐДЕЭЄЖЗІЇИЙКЛМНОПРСТУФХЦЧШЩЬЫЪЮЯЁЎ
+
+# Breaking characters
+
+space {\001-\040}!"#$%&'\()*+,-./:;<=>?@\[\\]^_`\{|}~{\x88-\x89}
+
+# Characters to be considered equivalent for searching purposes.
+equivalent ґ(г)
+equivalent ё(е)
+equivalent ъ(ь)
+
+# Supplemental mappings
+
+map (^En\s)    @
+map (^Den\s)    @
