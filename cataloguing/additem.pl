@@ -147,7 +147,7 @@ sub generate_subfield_form {
             }
         }
         
-        if ($frameworkcode eq 'FA' && $subfieldlib->{kohafield} eq 'items.barcode'){
+        if ($frameworkcode eq 'FA' && $subfieldlib->{kohafield} eq 'items.barcode' && !$value){
 	    my $input = new CGI;
 	    $value = $input->param('barcode');
 	}
