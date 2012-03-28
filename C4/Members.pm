@@ -42,86 +42,87 @@ use Koha::DateUtils;
 our ($VERSION,@ISA,@EXPORT,@EXPORT_OK,$debug);
 
 BEGIN {
-	$VERSION = 3.02;
-	$debug = $ENV{DEBUG} || 0;
-	require Exporter;
-	@ISA = qw(Exporter);
-	#Get data
-	push @EXPORT, qw(
-		&Search
-		&GetMemberDetails
+    $VERSION = 3.02;
+    $debug = $ENV{DEBUG} || 0;
+    require Exporter;
+    @ISA = qw(Exporter);
+    #Get data
+    push @EXPORT, qw(
+        &Search
+        &GetMemberDetails
         &GetMemberRelatives
-		&GetMember
+        &GetMember
 
-		&GetGuarantees 
+        &GetGuarantees
 
-		&GetMemberIssuesAndFines
-		&GetPendingIssues
-		&GetAllIssues
+        &GetMemberIssuesAndFines
+        &GetPendingIssues
+        &GetAllIssues
 
-		&get_institutions 
-		&getzipnamecity 
-		&getidcity
+        &get_institutions
+        &getzipnamecity
+        &getidcity
 
-                &GetFirstValidEmailAddress
+        &GetFirstValidEmailAddress
 
-		&GetAge 
-		&GetCities 
-		&GetRoadTypes 
-		&GetRoadTypeDetails 
-		&GetSortDetails
-		&GetTitles
+        &GetAge
+        &GetCities
+        &GetRoadTypes
+        &GetRoadTypeDetails
+        &GetSortDetails
+        &GetTitles
 
-    &GetPatronImage
-    &PutPatronImage
-    &RmPatronImage
+        &GetPatronImage
+        &PutPatronImage
+        &RmPatronImage
 
-                &GetHideLostItemsPreference
+        &GetHideLostItemsPreference
 
-		&IsMemberBlocked
-		&GetMemberAccountRecords
-		&GetBorNotifyAcctRecord
+        &IsMemberBlocked
+        &GetMemberAccountRecords
+        &GetBorNotifyAcctRecord
 
-		&GetborCatFromCatType 
-		&GetBorrowercategory
-    &GetBorrowercategoryList
+        &GetborCatFromCatType
+        &GetBorrowercategory
+        GetBorrowerCategorycode
+        &GetBorrowercategoryList
 
-		&GetBorrowersWhoHaveNotBorrowedSince
-		&GetBorrowersWhoHaveNeverBorrowed
-		&GetBorrowersWithIssuesHistoryOlderThan
+        &GetBorrowersWhoHaveNotBorrowedSince
+        &GetBorrowersWhoHaveNeverBorrowed
+        &GetBorrowersWithIssuesHistoryOlderThan
 
-		&GetExpiryDate
+        &GetExpiryDate
 
-		&AddMessage
-		&DeleteMessage
-		&GetMessages
-		&GetMessagesCount
+        &AddMessage
+        &DeleteMessage
+        &GetMessages
+        &GetMessagesCount
 
         &IssueSlip
-		GetBorrowersWithEmail
-	);
+        GetBorrowersWithEmail
+    );
 
-	#Modify data
-	push @EXPORT, qw(
-		&ModMember
-		&changepassword
+    #Modify data
+    push @EXPORT, qw(
+        &ModMember
+        &changepassword
          &ModPrivacy
-	);
+    );
 
-	#Delete data
-	push @EXPORT, qw(
-		&DelMember
-	);
+    #Delete data
+    push @EXPORT, qw(
+        &DelMember
+    );
 
-	#Insert data
-	push @EXPORT, qw(
-		&AddMember
-		&add_member_orgs
-		&MoveMemberToDeleted
-		&ExtendMemberSubscriptionTo
-	);
+    #Insert data
+    push @EXPORT, qw(
+        &AddMember
+        &add_member_orgs
+        &MoveMemberToDeleted
+        &ExtendMemberSubscriptionTo
+    );
 
-	#Check data
+    #Check data
     push @EXPORT, qw(
         &checkuniquemember
         &checkuserpassword
@@ -329,7 +330,7 @@ sub GetMemberDetails {
         $sth->execute($cardnumber);
     }
     else {
-        return undef;
+        return;
     }
     my $borrower = $sth->fetchrow_hashref;
     my ($amount) = GetMemberAccountRecords( $borrowernumber);
@@ -581,7 +582,7 @@ sub GetMemberRelatives {
     $sth->execute($borrowernumber);
     my $data = $sth->fetchrow_arrayref();
     push @glist, $data->[0] if $data->[0];
-    my $guarantor = $data->[0] if $data->[0];
+    my $guarantor = $data->[0] ? $data->[0] : undef;
 
     # Getting guarantees
     $query = "SELECT borrowernumber FROM borrowers WHERE guarantorid=?";
@@ -846,7 +847,7 @@ mode, to avoid database corruption.
 use vars qw( @weightings );
 my @weightings = ( 8, 4, 6, 3, 5, 2, 1 );
 
-sub fixup_cardnumber ($) {
+sub fixup_cardnumber {
     my ($cardnumber) = @_;
     my $autonumber_members = C4::Context->boolean_preference('autoMemberNum') || 0;
 
@@ -1409,10 +1410,6 @@ sub GetborCatFromCatType {
 Given the borrower's category code, the function returns the corresponding
 data hashref for a comprehensive information display.
 
-  $arrayref_hashref = &GetBorrowercategory;
-
-If no category code provided, the function returns all the categories.
-
 =cut
 
 sub GetBorrowercategory {
@@ -1432,6 +1429,26 @@ sub GetBorrowercategory {
     } 
     return;  
 }    # sub getborrowercategory
+
+
+=head2 GetBorrowerCategorycode
+
+    $categorycode = &GetBorrowerCategoryCode( $borrowernumber );
+
+Given the borrowernumber, the function returns the corresponding categorycode
+=cut
+
+sub GetBorrowerCategorycode {
+    my ( $borrowernumber ) = @_;
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare( qq{
+        SELECT categorycode
+        FROM borrowers
+        WHERE borrowernumber = ?
+    } );
+    $sth->execute( $borrowernumber );
+    return $sth->fetchrow;
+}
 
 =head2 GetBorrowercategoryList
 

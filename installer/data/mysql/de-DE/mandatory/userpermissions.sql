@@ -28,6 +28,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (13, 'manage_staged_marc', 'MARC-Importe verwalten, auch Übernahme in Katalog und Import rückgängig machen'),
    (13, 'export_catalog', 'Titel- und Exemplardaten exportieren'),
    (13, 'import_patrons', 'Benutzerdaten importieren'),
+   (13, 'edit_patrons', 'Perform batch modification of patrons'),
    (13, 'delete_anonymize_patrons', 'Inaktive Benutzer löschen und Ausleihhistorie anonymisieren (Benutzerausleihhistorie löschen)'),
    (13, 'batch_upload_patron_images', 'Benutzerfotos einzeln oder im Stapel hochladen'),
    (13, 'schedule_tasks', 'Aufgabenplaner verwenden'),

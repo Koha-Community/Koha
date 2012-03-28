@@ -29,6 +29,7 @@ use C4::Dates;
 
 sub filter {
     my ($self,$text) = @_;
+    return "" if not $text;
     my $date = C4::Dates->new( $text, 'iso' );
     return $date->output("syspref");
 }

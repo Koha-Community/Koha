@@ -49,6 +49,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (13, 'manage_staged_marc', 'Behandle lagrede MARC-poster, inkludert ferdigstilling og reversering av importer'),
    (13, 'export_catalog', 'Eksportere bibliografiske data og beholdningsdata'),
    (13, 'import_patrons', 'Importere låneropplysninger'),
+   (13, 'edit_patrons', 'Perform batch modification of patrons'),
    (13, 'delete_anonymize_patrons', 'Slette utgåtte lånere og anonymisere lånehistorikk'),
    (13, 'batch_upload_patron_images', 'Laste opp bilder av lånere enkeltvis eller en masse'),
    (13, 'schedule_tasks', 'Planlegge oppgaver som skal kjøres'),

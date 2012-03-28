@@ -151,7 +151,7 @@ sub fetch {
     $sth->execute($code);
     my $row = $sth->fetchrow_hashref;
     $sth->finish();
-    return undef unless defined $row;
+    return unless defined $row;
 
     $self->{'code'}                      = $row->{'code'};
     $self->{'description'}               = $row->{'description'};

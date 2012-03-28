@@ -5239,6 +5239,17 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
+
+
+
+
+$DBversion = "3.07.00.XXX";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do("INSERT IGNORE INTO permissions (module_bit, code, description) VALUES('13', 'edit_patrons', 'Perform batch modifivation of patrons')");
+    print "Upgrade to $DBversion done (Adds permissions flag for access to the patron modifications tool)\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

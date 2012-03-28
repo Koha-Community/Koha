@@ -18,6 +18,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (13, 'manage_staged_marc', 'Gérer les notices du réservoir, les charger ou annuler leur chargement'),
    (13, 'export_catalog', 'Exporter des notices bibliographiques et leurs exemplaires'),
    (13, 'import_patrons', 'Importer des données d''adhérents'),
+   (13, 'edit_patrons', 'Modification par lot des lecteurs'),
    (13, 'delete_anonymize_patrons', 'Supprimer les anciens adhérents et anonymiser l''historique des prêts (supprime l''historique des prêts des lecteurs'),
    (13, 'batch_upload_patron_images', 'Charger sur le serveur les images des adhérents par lot ou un par un'),
    (13, 'schedule_tasks', 'Planifier les tâches à exécuter'),
