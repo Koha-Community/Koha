@@ -91,6 +91,8 @@ sub recordpayment {
     my $accdata    = "";
     my $branch     = C4::Context->userenv->{'branch'};
     my $amountleft = $data;
+    my $manager_id = 0;
+    $manager_id = C4::Context->userenv->{'number'} if C4::Context->userenv;
 
     # begin transaction
     my $nextaccntno = getnextacctno($borrowernumber);
@@ -133,10 +135,10 @@ sub recordpayment {
     # create new line
     my $usth = $dbh->prepare(
         "INSERT INTO accountlines
-  (borrowernumber, accountno,date,amount,description,accounttype,amountoutstanding)
-  VALUES (?,?,now(),?,'Payment,thanks','Pay',?)"
+  (borrowernumber, accountno,date,amount,description,accounttype,amountoutstanding,manager_id)
+  VALUES (?,?,now(),?,'Payment,thanks','Pay',?,?)"
     );
-    $usth->execute( $borrowernumber, $nextaccntno, 0 - $data, 0 - $amountleft );
+    $usth->execute( $borrowernumber, $nextaccntno, 0 - $data, 0 - $amountleft, $manager_id );
     $usth->finish;
     UpdateStats( $branch, 'payment', $data, '', '', '', $borrowernumber, $nextaccntno );
     $sth->finish;
@@ -301,15 +303,17 @@ sub chargelostitem{
 
     # OK, they haven't
     unless ($existing_charge_hashref) {
+        my $manager_id = 0;
+        $manager_id = C4::Context->userenv->{'number'} if C4::Context->userenv;
         # This item is on issue ... add replacement cost to the borrower's record and mark it returned
         #  Note that we add this to the account even if there's no replacement price, allowing some other
         #  process (or person) to update it, since we don't handle any defaults for replacement prices.
         my $accountno = getnextacctno($borrowernumber);
         my $sth2=$dbh->prepare("INSERT INTO accountlines
-        (borrowernumber,accountno,date,amount,description,accounttype,amountoutstanding,itemnumber)
-        VALUES (?,?,now(),?,?,'L',?,?)");
+        (borrowernumber,accountno,date,amount,description,accounttype,amountoutstanding,itemnumber,manager_id)
+        VALUES (?,?,now(),?,?,'L',?,?,?)");
         $sth2->execute($borrowernumber,$accountno,$amount,
-        $description,$amount,$itemnumber);
+        $description,$amount,$itemnumber,$manager_id);
         $sth2->finish;
     # FIXME: Log this ?
     }
@@ -688,6 +692,8 @@ sub recordpayment_selectaccts {
     my $accdata    = q{};
     my $branch     = C4::Context->userenv->{branch};
     my $amountleft = $amount;
+    my $manager_id = 0;
+    $manager_id = C4::Context->userenv->{'number'} if C4::Context->userenv;
     my $sql = 'SELECT * FROM accountlines WHERE (borrowernumber = ?) ' .
     'AND (amountoutstanding<>0) ';
     if (@{$accts} ) {
@@ -722,9 +728,9 @@ sub recordpayment_selectaccts {
 
     # create new line
     $sql = 'INSERT INTO accountlines ' .
-    '(borrowernumber, accountno,date,amount,description,accounttype,amountoutstanding) ' .
-    q|VALUES (?,?,now(),?,'Payment,thanks','Pay',?)|;
-    $dbh->do($sql,{},$borrowernumber, $nextaccntno, 0 - $amount, 0 - $amountleft );
+    '(borrowernumber, accountno,date,amount,description,accounttype,amountoutstanding,manager_id) ' .
+    q|VALUES (?,?,now(),?,'Payment,thanks','Pay',?,?)|;
+    $dbh->do($sql,{},$borrowernumber, $nextaccntno, 0 - $amount, 0 - $amountleft, $manager_id );
     UpdateStats( $branch, 'payment', $amount, '', '', '', $borrowernumber, $nextaccntno );
     return;
 }
