@@ -277,9 +277,12 @@ of the reserves and an arrayref pointing to the reserves for C<$biblionumber>.
 sub GetReservesFromBiblionumber {
     my ($biblionumber) = shift or return (0, []);
     my ($all_dates) = shift;
+    my ($itemnumber) = shift;
+    warn "ITEMNUMBER: $itemnumber";
     my $dbh   = C4::Context->dbh;
 
     # Find the desired items in the reserves
+    my @params;
     my $query = "
         SELECT  reserve_id,
                 branchcode,
@@ -298,12 +301,17 @@ sub GetReservesFromBiblionumber {
                 suspend_until
         FROM     reserves
         WHERE biblionumber = ? ";
+    push( @params, $biblionumber );
     unless ( $all_dates ) {
-        $query .= "AND reservedate <= CURRENT_DATE()";
+        $query .= " AND reservedate <= CURRENT_DATE() ";
+    }
+    if ( $itemnumber ) {
+        $query .= " AND ( itemnumber IS NULL OR itemnumber = ? )";
+        push( @params, $itemnumber );
     }
     $query .= "ORDER BY priority";
     my $sth = $dbh->prepare($query);
-    $sth->execute($biblionumber);
+    $sth->execute( @params );
     my @results;
     my $i = 0;
     while ( my $data = $sth->fetchrow_hashref ) {

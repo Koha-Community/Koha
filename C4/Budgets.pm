@@ -34,6 +34,7 @@ BEGIN {
 	@EXPORT = qw(
 
         &GetBudget
+        &GetBudgetByOrderNumber
         &GetBudgets
         &GetBudgetHierarchy
 	    &AddBudget
@@ -668,6 +669,30 @@ sub GetBudget {
         ";
     my $sth = $dbh->prepare($query);
     $sth->execute( $budget_id );
+    my $result = $sth->fetchrow_hashref;
+    return $result;
+}
+
+=head2 GetBudgetByOrderNumber
+
+  &GetBudgetByOrderNumber($ordernumber);
+
+get a specific budget by order number
+
+=cut
+
+# -------------------------------------------------------------------
+sub GetBudgetByOrderNumber {
+    my ( $ordernumber ) = @_;
+    my $dbh = C4::Context->dbh;
+    my $query = "
+        SELECT aqbudgets.*
+        FROM   aqbudgets, aqorders
+        WHERE  ordernumber=?
+        AND    aqorders.budget_id = aqbudgets.budget_id
+        ";
+    my $sth = $dbh->prepare($query);
+    $sth->execute( $ordernumber );
     my $result = $sth->fetchrow_hashref;
     return $result;
 }

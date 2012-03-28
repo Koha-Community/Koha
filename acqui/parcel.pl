@@ -67,6 +67,7 @@ use CGI;
 use C4::Output;
 use C4::Dates qw/format_date format_date_in_iso/;
 use C4::Suggestions;
+use C4::Reserves qw/GetReservesFromBiblionumber/;
 use JSON;
 
 my $input=new CGI;
@@ -170,6 +171,9 @@ for my $item ( @parcelitems ) {
     $line{invoice} = $invoice->{invoicenumber};
     $line{total} = sprintf($cfstr, $total);
     $line{booksellerid} = $invoice->{booksellerid};
+    my ($count) = &GetReservesFromBiblionumber($line{biblionumber},undef,$item->{itemnumber});
+    $line{holds} = $count;
+    $line{budget} = GetBudgetByOrderNumber( $line{ordernumber} );
     $totalprice += $item->{'unitprice'};
     $line{unitprice} = sprintf( $cfstr, $item->{'unitprice'} );
     my $gste = get_gste( $line{total}, $line{gstrate}, $bookseller );
@@ -187,7 +191,8 @@ for my $item ( @parcelitems ) {
 
     if ( $line{parent_ordernumber} != $line{ordernumber} ) {
         if ( grep { $_->{ordernumber} == $line{parent_ordernumber} }
-            @parcelitems )
+            @parcelitems
+            )
         {
             $line{cannot_cancel} = 1;
         }
