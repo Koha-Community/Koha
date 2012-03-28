@@ -152,12 +152,12 @@ for ( my $i = 0 ; $i < scalar(@$data) ; $i++ ) {
     my $datedue;
     my $datedue_days;
     eval {
-	$datedue = C4::Dates->new( $data->[$i]->{'date_due'}, 'iso' );
-	$datedue_days = Date_to_Days( split( /-/, $datedue->output('iso') ) );
+        $datedue = C4::Dates->new( $data->[$i]->{'date_due'}, 'iso' );
+        $datedue_days = Date_to_Days( split( /-/, $datedue->output('iso') ) );
     };
     if ($@) {
-	warn "Error on date for borrower " . $data->[$i]->{'borrowernumber'} .  ": $@date_due: " . $data->[$i]->{'date_due'} . "\ndatedue_days: " . $datedue_days . "\nSkipping";
-	next;
+        warn "Error on date for borrower " . $data->[$i]->{'borrowernumber'} .  ": $@date_due: " . $data->[$i]->{'date_due'} . "\ndatedue_days: " . $datedue_days . "\nSkipping";
+        next;
     }
     my $due_str = $datedue->output();
     unless ( defined $data->[$i]->{'borrowernumber'} ) {
