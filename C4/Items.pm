@@ -308,7 +308,7 @@ Sequence number of original item tag in the MARC record.
 Item barcode, provide to assist in the construction of
 useful error messages.
 
-=item error_condition
+=item error_code
 
 Code representing the error condition.  Can be 'duplicate_barcode',
 'invalid_homebranch', or 'invalid_holdingbranch'.
@@ -328,6 +328,9 @@ sub AddItemBatchFromMarc {
     my @errors = ();
     my $dbh = C4::Context->dbh;
 
+    # We modify the record, so lets work on a clone so we don't change the
+    # original.
+    $record = $record->clone();
     # loop through the item tags and start creating items
     my @bad_item_fields = ();
     my ($itemtag, $itemsubfield) = &GetMarcFromKohaField("items.itemnumber",'');

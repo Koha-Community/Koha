@@ -33,8 +33,8 @@ use Pod::Usage;
 binmode STDOUT, ':encoding(UTF-8)';
 my ( $input_marc_file, $number, $offset) = ('',0,0);
 my ($version, $delete, $test_parameter, $skip_marc8_conversion, $char_encoding, $verbose, $commit, $fk_off,$format,$biblios,$authorities,$keepids,$match, $isbn_check, $logfile);
-my ($sourcetag,$sourcesubfield,$idmapfl);
 my $cleanisbn = 1;
+my ($sourcetag,$sourcesubfield,$idmapfl, $dedup_barcode);
 
 $|=1;
 
@@ -61,6 +61,7 @@ GetOptions(
     'y:s' => \$sourcesubfield,
     'idmap:s' => \$idmapfl,
     'cleanisbn!'     => \$cleanisbn,
+    'dedupbarcode' => \$dedup_barcode,
 );
 $biblios=!$authorities||$biblios;
 
@@ -318,21 +319,67 @@ RECORD: while (  ) {
 				printlog({id=>$id||$originalid||$biblionumber, op=>"insert",status=>"ok"}) if ($logfile);
 			}
             eval { ( $itemnumbers_ref, $errors_ref ) = AddItemBatchFromMarc( $record, $biblionumber, $biblioitemnumber, '' ); };
-            if ( $@ ) {
-                warn "ERROR: Adding items to bib $biblionumber failed: $@\n";
+            my $error_adding = $@;
+            # Work on a clone so that if there are real errors, we can maybe
+            # fix them up later.
+			my $clone_record = $record->clone();
+            C4::Biblio::_strip_item_fields($clone_record, '');
+            # This sets the marc fields if there was an error, and also calls
+            # defer_marc_save.
+            ModBiblioMarc( $clone_record, $biblionumber, '' );
+            if ( $error_adding ) {
+                warn "ERROR: Adding items to bib $biblionumber failed: $error_adding";
 				printlog({id=>$id||$originalid||$biblionumber, op=>"insertitem",status=>"ERROR"}) if ($logfile);
                 # if we failed because of an exception, assume that 
                 # the MARC columns in biblioitems were not set.
-                C4::Biblio::_strip_item_fields($record, '');
-                ModBiblioMarc( $record, $biblionumber, '' );
                 next RECORD;
-            } 
+            }
  			else{
-                C4::Biblio::_strip_item_fields($record, '');
-                ModBiblioMarc( $record, $biblionumber, '' ); # need to call because of defer_marc_save
 				printlog({id=>$id||$originalid||$biblionumber, op=>"insert",status=>"ok"}) if ($logfile);
 			}
-            if ($#{ $errors_ref } > -1) { 
+            if ($dedup_barcode && grep { exists $_->{error_code} && $_->{error_code} eq 'duplicate_barcode' } @$errors_ref) {
+                # Find the record called 'barcode'
+                my ($tag, $sub) = C4::Biblio::GetMarcFromKohaField('items.barcode', '');
+                # Now remove any items that didn't have a duplicate_barcode error,
+                # erase the barcodes on items that did, and re-add those items.
+                my %dupes;
+                foreach my $i (0 .. $#{$errors_ref}) {
+                    my $ref = $errors_ref->[$i];
+                    if ($ref && ($ref->{error_code} eq 'duplicate_barcode')) {
+                        $dupes{$ref->{item_sequence}} = 1;
+                        # Delete the error message because we're going to
+                        # retry this one.
+                        delete $errors_ref->[$i];
+                    }
+                }
+                my $seq = 0;
+                foreach my $field ($record->field($tag)) {
+                    $seq++;
+                    if ($dupes{$seq}) {
+                        # Here we remove the barcode
+                        $field->delete_subfield(code => $sub);
+                    } else {
+                        # otherwise we delete the field because we don't want
+                        # two of them
+                        $record->delete_fields($field);
+                    }
+                }
+                # Now re-add the record as before, adding errors to the prev list
+                my $more_errors;
+                eval { ( $itemnumbers_ref, $more_errors ) = AddItemBatchFromMarc( $record, $biblionumber, $biblioitemnumber, '' ); };
+                if ( $@ ) {
+                    warn "ERROR: Adding items to bib $biblionumber failed: $@\n";
+                    printlog({id=>$id||$originalid||$biblionumber, op=>"insertitem",status=>"ERROR"}) if ($logfile);
+                    # if we failed because of an exception, assume that
+                    # the MARC columns in biblioitems were not set.
+                    ModBiblioMarc( $record, $biblionumber, '' );
+                    next RECORD;
+                } else {
+                    printlog({id=>$id||$originalid||$biblionumber, op=>"insert",status=>"ok"}) if ($logfile);
+                }
+                push @$errors_ref, @{ $more_errors };
+            }
+            if ($#{ $errors_ref } > -1) {
                 report_item_errors($biblionumber, $errors_ref);
             }
         }
@@ -403,6 +450,7 @@ sub report_item_errors {
     my $errors_ref = shift;
 
     foreach my $error (@{ $errors_ref }) {
+        next if !$error;
         my $msg = "Item not added (bib $biblionumber, item tag #$error->{'item_sequence'}, barcode $error->{'item_barcode'}): ";
         my $error_code = $error->{'error_code'};
         $error_code =~ s/_/ /g;
@@ -538,6 +586,13 @@ I<FILE> for the koha bib and source id
 Store ids in 009 (usefull for authorities, where 001 contains the authid for
 Koha, that can contain a very valuable info for authorities coming from LOC or
 BNF. useless for biblios probably)
+
+=item B<-dedupbarcode>
+
+If set, whenever a duplicate barcode is detected, it is removed and the attempt
+to add the record is retried, thereby giving the record a blank barcode. This
+is useful when something has set barcodes to be a biblio ID, or similar
+(usually other software.)
 
 =back
 

@@ -3468,9 +3468,12 @@ Function exported, but should NOT be used, unless you really know what you're do
 =cut
 
 sub ModBiblioMarc {
-
-    # pass the MARC::Record to this function, and it will create the records in the marc field
+    # pass the MARC::Record to this function, and it will create the records in
+    # the marc field
     my ( $record, $biblionumber, $frameworkcode ) = @_;
+
+    # Clone record as it gets modified
+    $record = $record->clone();
     my $dbh    = C4::Context->dbh;
     my @fields = $record->fields();
     if ( !$frameworkcode ) {
