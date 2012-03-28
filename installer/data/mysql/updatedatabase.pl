@@ -5614,6 +5614,10 @@ $DBversion = "3.09.00.XXX"; # FIXME
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     $dbh->do("UPDATE systempreferences SET options=concat(options,'|EAN13') WHERE variable='itemBarcodeInputFilter' AND options NOT LIKE '%EAN13%'");
     print "Upgrade to $DBversion done (Add itemBarcodeInputFilter choice EAN13)\n";
+
+    $dbh->do("UPDATE systempreferences SET options = concat(options,'|EAN13'), explanation = concat(explanation,'; EAN13 - incremental') WHERE variable = 'autoBarcode' AND options NOT LIKE '%EAN13%'");
+    print "Upgrade to $DBversion done ( Added EAN13 barcode autogeneration sequence )\n";
+
     SetVersion($DBversion);
 }
 

@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 49;
+use Test::More tests => 66;
 BEGIN {
 	use FindBin;
 	use lib $FindBin::Bin;
@@ -14,6 +14,7 @@ my %thash = (
 	incremental => [],
 	annual => [],
 	hbyymmincr => ['MAIN'],
+    EAN13 => ['0000000695152','892685001928'],
 );
 
 print "\n";

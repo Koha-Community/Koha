@@ -28,6 +28,7 @@ use C4::Dates;
 use C4::Barcodes::hbyymmincr;
 use C4::Barcodes::annual;
 use C4::Barcodes::incremental;
+use C4::Barcodes::EAN13;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 use vars qw($debug $cgi_debug);	# from C4::Debug, of course
@@ -138,7 +139,7 @@ sub next_value {
 
 	$debug and warn "$incr";
 	$head = $self->process_head($head,$max,$specific);
-	$tail = $self->process_tail($tail,$max,$specific);
+    $tail = $self->process_tail($tail,$incr,$specific); # XXX use $incr and not $max!
 	my $next_value = $head . $incr . $tail;
 	$debug and print STDERR "(  next ) max barcode found: $next_value\n";
 	return $next_value;
@@ -177,6 +178,7 @@ our $types = {
 	incremental => sub {C4::Barcodes::incremental->new_object(@_);},
 	hbyymmincr  => sub {C4::Barcodes::hbyymmincr->new_object(@_); },
 	OFF         => sub {C4::Barcodes::OFF->new_object(@_);        },
+    EAN13       => sub {C4::Barcodes::EAN13->new_object(@_);      },
 };
 
 sub new {
