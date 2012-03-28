@@ -130,7 +130,7 @@ $(document).ready(function() {
 	<div class="yui-b">
 
 [% IF ( no_op_set ) %]
-    <form method="get" action="?" id="selectlibrary">
+    <form method="get" action="/cgi-bin/koha/tools/letter.pl" id="selectlibrary">
       <input type="hidden" name="searchfield" value="[% searchfield %]" />
     [% UNLESS independant_branch %]
       <p>
@@ -185,12 +185,12 @@ $(document).ready(function() {
 				<td>[% lette.name %]</td>
 				<td>
         [% IF can_edit %]
-					<a href="/cgi-bin/koha/tools/letter.pl?op=add_form&branchcode=[% lette.branchcode %]&module=[% lette.module %]&code=[% lette.code %]">Edit</a>
+					<a href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;branchcode=[% lette.branchcode %]&amp;module=[% lette.module %]&amp;code=[% lette.code %]">Edit</a>
         [% END %]
 				</td>
 				<td>
         [% IF !independant_branch || !lette.branchcode %]
-                    <form method="post" action="?">
+                    <form method="post" action="/cgi-bin/koha/tools/letter.pl">
                         <input type="hidden" name="op" value="copy" />
 				        <input type="hidden" name="oldbranchcode" value="[% lette.branchcode %]" />
                         <input type="hidden" name="module" value="[% lette.module %]" />
@@ -206,7 +206,7 @@ $(document).ready(function() {
 				</td>
 				<td>
         [% IF !lette.protected && can_edit %]
-					<a href="/cgi-bin/koha/tools/letter.pl?op=delete_confirm&branchcode=[%lette.branchcode %]&module=[% lette.module %]&code=[% lette.code %]">Delete</a>
+					<a href="/cgi-bin/koha/tools/letter.pl?op=delete_confirm&amp;branchcode=[%lette.branchcode %]&amp;module=[% lette.module %]&amp;code=[% lette.code %]">Delete</a>
         [% END %]
 				</td>
 			</tr>
@@ -228,13 +228,13 @@ $(document).ready(function() {
 		[% END %]
 		<fieldset class="rows">
 		<legend>[% IF ( modify ) %]Modify notice[% ELSE %]Add notice[% END %]</legend>
-		<ol>
 				<input type="hidden" name="oldbranchcode" value="[% branchcode %]" />
             [% IF independant_branch %]
                 <input type="hidden" name="branchcode" value="[% independant_branch %]" />
             [% ELSE %]
+		<ol>
 			<li>
-				<label for="branchcode">Library:</label>
+				<label for="branch">Library:</label>
                 <select name="branchcode" id="branch" style="width:20em;">
                     <option value="">All libraries</option>
                 [% FOREACH branchloo IN branchloop %]
@@ -320,8 +320,7 @@ $(document).ready(function() {
 		</li>
 		</ol>
 		</fieldset>
-		<fieldset class="action"><input type="button" value="Submit" onclick="Check(this.form)" class="button" /></fieldset>
-		<fieldset class="action"><input type="button" value="Cancel" onclick="cancel(this.form)" class="button" /></fieldset>
+		<fieldset class="action"><input type="button" value="Submit" onclick="Check(this.form)" class="button" /> <a class="cancel" href="/cgi-bin/koha/tools/letter.pl">Cancel</a></fieldset>
       <input type="hidden" name="searchfield" value="[% searchfield %]" />
 		</form>
 [% END %]
