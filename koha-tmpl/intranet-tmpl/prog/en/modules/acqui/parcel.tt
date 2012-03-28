@@ -51,8 +51,8 @@
 
 	rowCountPending  = $("#pendingt tbody.filterclass tr").length;
 	rowCountReceived = $("#receivedt tbody.filterclass tr").length;
-	if (rowCountPending  > rowsToCollapse) { pendingCollapse(); }
-	if (rowCountReceived > rowsToCollapse) { receivedCollapse(); }
+	if (rowCountPending  > rowsToCollapse && $.cookie("pendingKeepExpanded") != 1 ) { pendingCollapse(); }
+	if (rowCountReceived > rowsToCollapse && $.cookie("receivedKeepExpanded") != 1 ) { receivedCollapse(); } else { receivedExpand(); }
     });
 
      // Case-insensitive version of jquery's contains function
@@ -68,6 +68,7 @@
 
     // Collapse pending items table
     function pendingCollapse() {
+        $.cookie("pendingKeepExpanded", 0, { path: "/", expires: 9999 });
 	$("#pendingcollapserow").remove();
     $("#pendingt tr").show();
 	$("#pendingt tbody.filterclass tr:gt(" + (rowsToCollapse-1) + ")").hide();
@@ -77,6 +78,7 @@
 
     // Expend pending items table
     function pendingExpand() {
+        $.cookie("pendingKeepExpanded", 1, { path: "/", expires: 9999 });
 	$("#pendingcollapserow").remove();
 	$("#pendingt tr").show();
     $("#pendingt tbody.filterclass tr.orderfound").remove();
@@ -85,6 +87,7 @@
 
     // Collapse already received items table
     function receivedCollapse() {
+        $.cookie("receivedKeepExpanded", 0, { path: "/", expires: 9999 });
 	$("#receivedcollapserow").remove();
 	$("#receivedt tbody.filterclass tr:gt(" + (rowsToCollapse-1) + ")").hide();
 	$("#receivedt").before("<p id=\"receivedcollapserow\">" + _("Only the first ") + rowsToCollapse + _(" items are displayed.") + "<a href=\"javascript:receivedExpand();\">" + _("Click here to show all ") + rowCountReceived + _(" items") + "<\/a>.<\/p>");
@@ -92,6 +95,7 @@
 
     // Expand already received items table
     function receivedExpand() {
+        $.cookie("receivedKeepExpanded", 1, { path: "/", expires: 9999 });
 	$("#receivedcollapserow").remove();
 	$("#receivedt tr").show();
 	$("#receivedt").before("<p id=\"receivedcollapserow\">" + _("All ") + rowCountReceived + _(" items are displayed.") + "<a href=\"javascript:receivedCollapse();\">" + _("Click here to show only the first ") + rowsToCollapse + _(" items") + "<\/a>.<\/p>");
