@@ -33,36 +33,21 @@ use Modern::Perl;
 
 use CGI;
 use JSON;
-use C4::Context;
 use C4::Output;
-use C4::Auth;
+use C4::Items;
 
 my $input = new CGI;
 my @field = $input->param('field');
 my @value = $input->param('value');
 
-my $dbh = C4::Context->dbh;
-
-my $query = "SHOW COLUMNS FROM items";
-my $sth = $dbh->prepare($query);
-$sth->execute;
-my $results = $sth->fetchall_hashref('Field');
-my @columns = keys %$results;
-
 my $r = {};
-my $index = 0;
-for my $f ( @field ) {
-    if(0 < grep /^$f$/, @columns) {
-        $query = "SELECT $f FROM items WHERE $f = ?";
-        $sth = $dbh->prepare( $query );
-        $sth->execute( $value[$index] );
-        my @values = $sth->fetchrow_array;
+my $i = 0;
+for ( my $i=0; $i<@field; $i++ ) {
+    my $items = C4::Items::SearchItems($field[$i], $value[$i]);
 
-        if ( @values ) {
-            push @{ $r->{$f} }, $values[0];
-        }
+    if ( @$items ) {
+        push @{ $r->{$field[$i]} }, $value[$i];
     }
-    $index++;
 }
 
 output_with_http_headers $input, undef, to_json($r), 'json';

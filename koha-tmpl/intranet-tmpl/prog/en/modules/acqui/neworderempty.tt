@@ -104,6 +104,11 @@ $(document).ready(function()
         [% IF (AcqCreateItemOrdering) %]
             cloneItemBlock(0, '[% UniqueItemFields %]');
         [% END %]
+
+        $("#quantity").change(function() {
+            calcNeworderTotal();
+        });
+
         //We apply the fonction only for modify option
         [% IF ( quantityrec ) %]
         $('#quantity').blur(function() 
@@ -376,9 +381,9 @@ $(document).ready(function()
                 [% ELSE %]
                     <label class="required" for="quantity">Quantity: </label>
                     [% IF (AcqCreateItemOrdering) %]
-                        <input type="text" readonly="readonly" size="20" id="quantity" name="quantity" value="0" onchange="updateCosts();" />
+                        <input type="text" readonly="readonly" size="20" id="quantity" name="quantity" value="0" />
                     [% ELSE %]
-                        <input type="text" size="20" id="quantity" name="quantity" value="[% quantityrec %]" onchange="calcNeworderTotal();" />
+                        <input type="text" size="20" id="quantity" name="quantity" value="[% quantityrec %]" />
                     [% END %]
                 [% END %]
                 <!-- origquantityrec only here for javascript compatibility (additem.js needs it, useless here, usefull when receiveing an order -->
