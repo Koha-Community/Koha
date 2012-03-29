@@ -171,9 +171,9 @@ sub XSLTParse4Display {
         }
     }
 
-    if ( $xslfilename =~ m/{langcode}/ ) {
+    if ( $xslfilename =~ m/\{langcode\}/ ) {
         my $lang = C4::Templates::_current_language;
-        $xslfilename =~ s/{langcode}/$lang/;
+        $xslfilename =~ s/\{langcode\}/$lang/;
     }
 
     # grab the XML, run it through our stylesheet, push it out to the browser
