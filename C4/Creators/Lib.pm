@@ -263,8 +263,9 @@ NOTE: Do not pass in the keyword 'WHERE.'
 sub get_batch_summary {
     my %params = @_;
     my @batches = ();
-    my $query = "SELECT DISTINCT batch_id FROM creator_batches WHERE creator=?";
-    $query .= ($params{'filter'} ? " AND $params{'filter'};" : ';');
+    my $query = "SELECT batch_id,count(batch_id) as _item_count FROM creator_batches WHERE creator=?";
+    $query .= ($params{'filter'} ? " AND $params{'filter'}" : '');
+    $query .= " GROUP BY batch_id";
     my $sth = C4::Context->dbh->prepare($query);
 #    $sth->{'TraceLevel'} = 3;
     $sth->execute($params{'creator'});
@@ -272,17 +273,7 @@ sub get_batch_summary {
         warn sprintf('Database returned the following error on attempted SELECT: %s', $sth->errstr);
         return -1;
     }
-    ADD_BATCHES:
     while (my $batch = $sth->fetchrow_hashref) {
-        my $query = "SELECT count(batch_id) FROM creator_batches WHERE batch_id=? AND creator=?;";
-        my $sth1 = C4::Context->dbh->prepare($query);
-        $sth1->execute($batch->{'batch_id'}, $params{'creator'});
-        if ($sth1->err) {
-            warn sprintf('Database returned the following error on attempted SELECT count: %s', $sth1->errstr);
-            return -1;
-        }
-        my $count = $sth1->fetchrow_arrayref;
-        $batch->{'_item_count'} = @$count[0];
         push(@batches, $batch);
     }
     return \@batches;
