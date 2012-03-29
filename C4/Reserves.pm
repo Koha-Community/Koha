@@ -1098,7 +1098,6 @@ sub ModReserve {
         if ( defined( $suspend_until ) ) {
             if ( $suspend_until ) {
                 $suspend_until = C4::Dates->new( $suspend_until )->output("iso");
-                warn "SUSPEND UNTIL: $suspend_until";
                 $dbh->do("UPDATE reserves SET suspend = 1, suspend_until = ? WHERE biblionumber = ? AND borrowernumber = ?", undef, ( $suspend_until, $biblio, $borrower ) );
             } else {
                 $dbh->do("UPDATE reserves SET suspend_until = NULL WHERE biblionumber = ? AND borrowernumber = ?", undef, ( $biblio, $borrower ) );
@@ -1558,8 +1557,6 @@ sub SuspendAll {
     my $biblionumber   = $params{'biblionumber'}   || undef;
     my $suspend_until  = $params{'suspend_until'}  || undef;
     my $suspend        = defined( $params{'suspend'} ) ? $params{'suspend'} :  1;
-
-    warn "C4::Reserves::SuspendAll( borrowernumber => $borrowernumber, biblionumber => $biblionumber, suspend_until => $suspend_until, suspend => $suspend )";
 
     $suspend_until = C4::Dates->new( $suspend_until )->output("iso") if ( defined( $suspend_until ) );
 
