@@ -2747,11 +2747,14 @@ sub SendCirculationAlert {
         borrowernumber => $borrower->{borrowernumber},
         message_name   => $message_name{$type},
     });
+    my $issues_table = ( $type eq 'CHECKOUT' ) ? 'issues' : 'old_issues';
     my $letter =  C4::Letters::GetPreparedLetter (
         module => 'circulation',
         letter_code => $type,
         branchcode => $branch,
         tables => {
+            $issues_table => $item->{itemnumber},
+            'items'       => $item->{itemnumber},
             'biblio'      => $item->{biblionumber},
             'biblioitems' => $item->{biblionumber},
             'borrowers'   => $borrower,
