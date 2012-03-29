@@ -552,17 +552,18 @@ sub _parseletter_sth {
     # check cache first
     (defined $handles{$table}) and return $handles{$table};
     my $query = 
-    ($table eq 'biblio'       ) ? "SELECT * FROM $table WHERE   biblionumber = ?"                      :
-    ($table eq 'biblioitems'  ) ? "SELECT * FROM $table WHERE   biblionumber = ?"                      :
-    ($table eq 'items'        ) ? "SELECT * FROM $table WHERE     itemnumber = ?"                      :
-    ($table eq 'issues'       ) ? "SELECT * FROM $table WHERE     itemnumber = ?"                      :
-    ($table eq 'reserves'     ) ? "SELECT * FROM $table WHERE borrowernumber = ? and biblionumber = ?" :
-    ($table eq 'borrowers'    ) ? "SELECT * FROM $table WHERE borrowernumber = ?"                      :
-    ($table eq 'branches'     ) ? "SELECT * FROM $table WHERE     branchcode = ?"                      :
-    ($table eq 'suggestions'  ) ? "SELECT * FROM $table WHERE   suggestionid = ?"                      :
-    ($table eq 'aqbooksellers') ? "SELECT * FROM $table WHERE             id = ?"                      :
-    ($table eq 'aqorders'     ) ? "SELECT * FROM $table WHERE    ordernumber = ?"                      :
-    ($table eq 'opac_news'    ) ? "SELECT * FROM $table WHERE          idnew = ?"                      :
+    ($table eq 'biblio'       ) ? "SELECT * FROM $table WHERE   biblionumber = ?"                                 :
+    ($table eq 'biblioitems'  ) ? "SELECT * FROM $table WHERE   biblionumber = ?"                                 :
+    ($table eq 'items'        ) ? "SELECT * FROM $table WHERE     itemnumber = ?"                                 :
+    ($table eq 'issues'       ) ? "SELECT * FROM $table WHERE     itemnumber = ?"                                 :
+    ($table eq 'old_issues'   ) ? "SELECT * FROM $table WHERE     itemnumber = ? ORDER BY timestamp DESC LIMIT 1" :
+    ($table eq 'reserves'     ) ? "SELECT * FROM $table WHERE borrowernumber = ? and biblionumber = ?"            :
+    ($table eq 'borrowers'    ) ? "SELECT * FROM $table WHERE borrowernumber = ?"                                 :
+    ($table eq 'branches'     ) ? "SELECT * FROM $table WHERE     branchcode = ?"                                 :
+    ($table eq 'suggestions'  ) ? "SELECT * FROM $table WHERE   suggestionid = ?"                                 :
+    ($table eq 'aqbooksellers') ? "SELECT * FROM $table WHERE             id = ?"                                 :
+    ($table eq 'aqorders'     ) ? "SELECT * FROM $table WHERE    ordernumber = ?"                                 :
+    ($table eq 'opac_news'    ) ? "SELECT * FROM $table WHERE          idnew = ?"                                 :
     undef ;
     unless ($query) {
         warn "ERROR: No _parseletter_sth query for table '$table'";

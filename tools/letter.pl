@@ -196,9 +196,16 @@ sub add_form {
         push @{$field_selection}, add_fields('biblio','biblioitems'),
             {value => q{},             text => '---ITEMS---'  },
             {value => 'items.content', text => 'items.content'},
-            add_fields('issues','borrowers');
+            add_fields('borrowers');
         if ($module eq 'circulation') {
             push @{$field_selection}, add_fields('opac_news');
+
+        }
+
+        if ( $module eq 'circulation' && $code eq "CHECKIN" ) {
+            push @{$field_selection}, add_fields('old_issues');
+        } else {
+            push @{$field_selection}, add_fields('issues');
         }
     }
 
