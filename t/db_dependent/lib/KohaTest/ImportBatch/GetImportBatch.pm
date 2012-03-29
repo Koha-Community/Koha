@@ -25,13 +25,7 @@ sub add_one_and_find_it : Test( 7 ) {
         file_name      => 'foo',
         comments       => 'inserted during automated testing',
     };
-    my $batch_id = AddImportBatch(
-      $batch->{'overlay_action'},
-      $batch->{'import_status'},
-      $batch->{'batch_type'},
-      $batch->{'file_name'},
-      $batch->{'comments'},
-    );
+    my $batch_id = AddImportBatch($batch);
     ok( $batch_id, "successfully inserted batch: $batch_id" );
 
     my $retrieved = GetImportBatch( $batch_id );

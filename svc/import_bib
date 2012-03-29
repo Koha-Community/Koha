@@ -1,0 +1,101 @@
+#!/usr/bin/perl
+
+# Copyright 2012 CatalystIT Ltd
+#
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 2 of the License, or (at your option) any later
+# version.
+#
+# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with Koha; if not, write to the Free Software Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+#
+
+use strict;
+use warnings;
+
+use CGI;
+use C4::Auth qw/check_api_auth/;
+use C4::Context;
+use C4::ImportBatch;
+use C4::Matcher;
+use XML::Simple;
+# use Carp::Always;
+
+my $query = new CGI;
+binmode STDOUT, ':encoding(UTF-8)';
+
+my ($status, $cookie, $sessionID) = check_api_auth($query, { editcatalogue => 'edit_catalogue'} );
+unless ($status eq "ok") {
+    print $query->header(-type => 'text/xml', -status => '403 Forbidden');
+    print XMLout({ auth_status => $status }, NoAttr => 1, RootName => 'response', XMLDecl => 1);
+    exit 0;
+}
+
+my $xml;
+if ($query->request_method eq "POST") {
+    $xml = $query->param('POSTDATA');
+}
+if ($xml) {
+    my %params = map { $_ => $query->url_param($_) } $query->url_param;
+    my $result = import_bib($xml, \%params );
+    print $query->header(-type => 'text/xml');
+    print XMLout($result, NoAttr => 1, RootName => 'response', XMLDecl => 1);
+} else {
+    print $query->header(-type => 'text/xml', -status => '400 Bad Request');
+}
+
+exit 0;
+
+sub import_bib {
+    my ($inxml, $params) = @_;
+
+    my $result = {};
+
+    my $import_mode = delete $params->{import_mode} || '';
+    my $framework   = delete $params->{framework}   || '';
+
+    if (my $matcher_code = delete $params->{matcher}) {
+        $params->{matcher_id} = C4::Matcher::GetMatcherId($matcher_code);
+    }
+
+    my $batch_id = GetWebserviceBatchId($params);
+    unless ($batch_id) {
+        $result->{'status'} = "failed";
+        $result->{'error'} = "Batch create error";
+        return $result;
+    }
+
+    my $marcflavour = C4::Context->preference('marcflavour') || 'MARC21';
+    my $marc_record = eval {MARC::Record::new_from_xml( $inxml, "utf8", $marcflavour)};
+    if ($@) {
+        $result->{'status'} = "failed";
+        $result->{'error'} = $@;
+        return $result;
+    }
+
+    my $import_record_id = AddBiblioToBatch($batch_id, 0, $marc_record, "utf8", int(rand(99999)));
+    my @import_items_ids = AddItemsToImportBiblio($batch_id, $import_record_id, $marc_record, 'UPDATE COUNTS');
+    my $marcxml = GetImportRecordMarcXML($import_record_id);
+    unless ($marcxml) {
+        $result->{'status'} = "failed";
+        $result->{'error'} = "database write error";
+        return $result;
+    }
+    $marcxml =~ s/<\?xml.*?\?>//i;
+
+    # XXX we are ignoring the result of this;
+    BatchCommitBibRecords($batch_id, $framework) if lc($import_mode) eq 'direct';
+
+    $result->{'status'} = "ok";
+    $result->{'import_batch_id'} =  $batch_id;
+    $result->{'marcxml'} =  $marcxml;
+    return $result;
+}

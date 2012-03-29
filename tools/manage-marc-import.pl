@@ -218,7 +218,7 @@ sub import_batches_list {
             num_items => $batch->{'num_items'},
             upload_timestamp => $batch->{'upload_timestamp'},
             import_status => $batch->{'import_status'},
-            file_name => $batch->{'file_name'},
+            file_name => $batch->{'file_name'} || "($batch->{'batch_type'})",
             comments => $batch->{'comments'},
             can_clean => ($batch->{'import_status'} ne 'cleaned') ? 1 : 0,
         };

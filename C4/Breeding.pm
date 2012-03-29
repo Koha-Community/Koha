@@ -76,13 +76,7 @@ sub ImportBreeding {
     
     my $dbh = C4::Context->dbh;
     
-    my $batch_id = 0;
-    if ($batch_type eq 'z3950') {
-        $batch_id = GetZ3950BatchId($filename);
-    } else {
-        # create a new one
-        $batch_id = AddImportBatch('create_new', 'staging', 'batch', $filename, '');
-    }
+    my $batch_id = GetZ3950BatchId($filename);
     my $searchisbn = $dbh->prepare("select biblioitemnumber from biblioitems where isbn=?");
     my $searchissn = $dbh->prepare("select biblioitemnumber from biblioitems where issn=?");
     # FIXME -- not sure that this kind of checking is actually needed

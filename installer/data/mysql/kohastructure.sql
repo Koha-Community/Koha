@@ -858,7 +858,7 @@ CREATE TABLE `import_batches` (
   `nomatch_action` enum('create_new', 'ignore') NOT NULL default 'create_new',
   `item_action` enum('always_add', 'add_only_for_matches', 'add_only_for_new', 'ignore') NOT NULL default 'always_add',
   `import_status` enum('staging', 'staged', 'importing', 'imported', 'reverting', 'reverted', 'cleaned') NOT NULL default 'staging',
-  `batch_type` enum('batch', 'z3950') NOT NULL default 'batch',
+  `batch_type` enum('batch', 'z3950', 'webservice') NOT NULL default 'batch',
   `file_name` varchar(100),
   `comments` mediumtext,
   PRIMARY KEY (`import_batch_id`),

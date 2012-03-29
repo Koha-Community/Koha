@@ -5146,6 +5146,16 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
+
+
+
+$DBversion = "3.07.00.XXX";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("ALTER TABLE import_batches MODIFY COLUMN batch_type ENUM('batch','z3950','webservice') NOT NULL default 'batch'");
+    print "Upgrade to $DBversion done (Add 'webservice' to batch_type enum)\n";
+    SetVersion ($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 DropAllForeignKeys($table)

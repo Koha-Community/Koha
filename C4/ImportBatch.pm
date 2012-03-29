@@ -35,10 +35,13 @@ BEGIN {
 	@ISA    = qw(Exporter);
 	@EXPORT = qw(
     GetZ3950BatchId
+    GetWebserviceBatchId
     GetImportRecordMarc
+    GetImportRecordMarcXML
     AddImportBatch
     GetImportBatch
     AddBiblioToBatch
+    AddItemsToImportBiblio
     ModBiblioInBatch
 
     BatchStageMarcRecords
@@ -48,6 +51,7 @@ BEGIN {
     CleanBatch
 
     GetAllImportBatches
+    GetStagedWebserviceBatches
     GetImportBatchRangeDesc
     GetNumberOfNonZ3950ImportBatches
     GetImportBibliosRange
@@ -105,10 +109,49 @@ sub GetZ3950BatchId {
     if (defined $rowref) {
         return $rowref->[0];
     } else {
-        my $batch_id = AddImportBatch('create_new', 'staged', 'z3950', $z3950server, '');
+        my $batch_id = AddImportBatch( {
+                overlay_action => 'create_new',
+                import_status => 'staged',
+                batch_type => 'z3950',
+                file_name => $z3950server,
+            } );
         return $batch_id;
     }
     
+}
+
+=head2 GetWebserviceBatchId
+
+  my $batchid = GetWebserviceBatchId();
+
+Retrieves the ID of the import batch for webservice.
+If necessary, creates the import batch.
+
+=cut
+
+my $WEBSERVICE_BASE_QRY = <<EOQ;
+SELECT import_batch_id FROM import_batches
+WHERE  batch_type = 'webservice'
+AND    import_status = 'staged'
+EOQ
+sub GetWebserviceBatchId {
+    my ($params) = @_;
+
+    my $dbh = C4::Context->dbh;
+    my $sql = $WEBSERVICE_BASE_QRY;
+    my @args;
+    foreach my $field (qw(matcher_id overlay_action nomatch_action item_action)) {
+        if (my $val = $params->{$field}) {
+            $sql .= " AND $field = ?";
+            push @args, $val;
+        }
+    }
+    my $id = $dbh->selectrow_array($sql, undef, @args);
+    return $id if $id;
+
+    $params->{batch_type} = 'webservice';
+    $params->{import_status} = 'staged';
+    return AddImportBatch($params);
 }
 
 =head2 GetImportRecordMarc
@@ -129,26 +172,48 @@ sub GetImportRecordMarc {
 
 }
 
+=head2 GetImportRecordMarcXML
+
+  my $marcxml = GetImportRecordMarcXML($import_record_id);
+
+=cut
+
+sub GetImportRecordMarcXML {
+    my ($import_record_id) = @_;
+
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare("SELECT marcxml FROM import_records WHERE import_record_id = ?");
+    $sth->execute($import_record_id);
+    my ($marcxml) = $sth->fetchrow();
+    $sth->finish();
+    return $marcxml;
+
+}
+
 =head2 AddImportBatch
 
-  my $batch_id = AddImportBatch($overlay_action, $import_status, $type, 
-                                $file_name, $comments);
+  my $batch_id = AddImportBatch($params_hash);
 
 =cut
 
 sub AddImportBatch {
-    my ($overlay_action, $import_status, $type, $file_name, $comments) = @_;
+    my ($params) = @_;
 
+    my (@fields, @vals);
+    foreach (qw( matcher_id template_id branchcode
+                 overlay_action nomatch_action item_action
+                 import_status batch_type file_name comments )) {
+        if (exists $params->{$_}) {
+            push @fields, $_;
+            push @vals, $params->{$_};
+        }
+    }
     my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("INSERT INTO import_batches (overlay_action, import_status, batch_type,
-                                                         file_name, comments)
-                                    VALUES (?, ?, ?, ?, ?)");
-    $sth->execute($overlay_action, $import_status, $type, $file_name, $comments);
-    my $batch_id = $dbh->{'mysql_insertid'};
-    $sth->finish();
-
-    return $batch_id;
-
+    $dbh->do("INSERT INTO import_batches (".join( ',', @fields).")
+                                  VALUES (".join( ',', map '?', @fields).")",
+             undef,
+             @vals);
+    return $dbh->{'mysql_insertid'};
 }
 
 =head2 GetImportBatch 
@@ -237,7 +302,13 @@ sub  BatchStageMarcRecords {
         $progress_interval = 0 unless 'CODE' eq ref $progress_callback;
     } 
     
-    my $batch_id = AddImportBatch('create_new', 'staging', 'batch', $file_name, $comments);
+    my $batch_id = AddImportBatch( {
+            overlay_action => 'create_new',
+            import_status => 'staging',
+            batch_type => 'batch',
+            file_name => $file_name,
+            comments => $comments,
+        } );
     if ($parse_items) {
         SetImportBatchItemAction($batch_id, 'always_add');
     } else {
@@ -688,7 +759,7 @@ ascending order by import_batch_id.
 sub  GetAllImportBatches {
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare_cached("SELECT * FROM import_batches
-                                    WHERE batch_type = 'batch'
+                                    WHERE batch_type IN ('batch', 'webservice')
                                     ORDER BY import_batch_id ASC");
 
     my $results = [];
@@ -698,6 +769,25 @@ sub  GetAllImportBatches {
     }
     $sth->finish();
     return $results;
+}
+
+=head2 GetStagedWebserviceBatches
+
+  my $batch_ids = GetStagedWebserviceBatches();
+
+Returns a references to an array of batch id's
+of batch_type 'webservice' that are not imported
+
+=cut
+
+my $PENDING_WEBSERVICE_BATCHES_QRY = <<EOQ;
+SELECT import_batch_id FROM import_batches
+WHERE batch_type = 'webservice'
+AND import_status = 'staged'
+EOQ
+sub  GetStagedWebserviceBatches {
+    my $dbh = C4::Context->dbh;
+    return $dbh->selectcol_arrayref($PENDING_WEBSERVICE_BATCHES_QRY);
 }
 
 =head2 GetImportBatchRangeDesc
@@ -715,7 +805,7 @@ sub GetImportBatchRangeDesc {
 
     my $dbh = C4::Context->dbh;
     my $query = "SELECT * FROM import_batches
-                                    WHERE batch_type = 'batch'
+                                    WHERE batch_type IN ('batch', 'webservice')
                                     ORDER BY import_batch_id DESC";
     my @params;
     if ($results_per_group){
@@ -759,7 +849,7 @@ sub GetItemNumbersFromImportBatch {
 
 sub GetNumberOfNonZ3950ImportBatches {
     my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("SELECT COUNT(*) FROM import_batches WHERE batch_type='batch'");
+    my $sth = $dbh->prepare("SELECT COUNT(*) FROM import_batches WHERE batch_type != 'z3950'");
     $sth->execute();
     my ($count) = $sth->fetchrow_array();
     $sth->finish();
@@ -1196,26 +1286,22 @@ sub _update_batch_record_counts {
     my ($batch_id) = @_;
 
     my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare_cached("UPDATE import_batches SET num_biblios = (
-                                    SELECT COUNT(*)
-                                    FROM import_records
-                                    WHERE import_batch_id = import_batches.import_batch_id
-                                    AND record_type = 'biblio')
+    my $sth = $dbh->prepare_cached("UPDATE import_batches SET
+                                        num_biblios = (
+                                            SELECT COUNT(*)
+                                            FROM import_records
+                                            WHERE import_batch_id = import_batches.import_batch_id
+                                            AND record_type = 'biblio'),
+                                        num_items = (
+                                            SELECT COUNT(*)
+                                            FROM import_records
+                                            JOIN import_items USING (import_record_id)
+                                            WHERE import_batch_id = import_batches.import_batch_id
+                                            AND record_type = 'biblio')
                                     WHERE import_batch_id = ?");
     $sth->bind_param(1, $batch_id);
     $sth->execute();
     $sth->finish();
-    $sth = $dbh->prepare_cached("UPDATE import_batches SET num_items = (
-                                    SELECT COUNT(*)
-                                    FROM import_records
-                                    JOIN import_items USING (import_record_id)
-                                    WHERE import_batch_id = import_batches.import_batch_id
-                                    AND record_type = 'biblio')
-                                    WHERE import_batch_id = ?");
-    $sth->bind_param(1, $batch_id);
-    $sth->execute();
-    $sth->finish();
-
 }
 
 sub _get_commit_action {

@@ -95,6 +95,22 @@ sub GetMatcherList {
     return @results;
 }
 
+=head2 GetMatcherId
+
+  my $matcher_id = C4::Matcher::GetMatcherId($code);
+
+Returns the matcher_id of a code.
+
+=cut
+
+sub GetMatcherId {
+    my ($code) = @_;
+    my $dbh = C4::Context->dbh;
+
+    my $matcher_id = $dbh->selectrow_array("SELECT matcher_id FROM marc_matchers WHERE code = ?", undef, $code);
+    return $matcher_id;
+}
+
 =head1 METHODS
 
 =head2 new
