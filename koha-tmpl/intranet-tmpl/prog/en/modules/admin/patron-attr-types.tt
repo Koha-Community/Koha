@@ -194,7 +194,7 @@ function CheckAttributeTypeForm(f) {
                     [% IF ( cat.categorycode == category_code ) %]<option value="[% cat.categorycode %]" selected="selected">[% cat.description %]</option>[% ELSE %]<option value="[% cat.categorycode %]">[% cat.description %]</option>[% END %]
                 [% END %]
             </select>
-            <span>Please let blank if you want these attributs to be for all types of patron. Else, select one type.</span>
+            <span>Choose one to limit this attribute to one patron type. Please leave blank if you want these attributes to be available for all types of patrons.</span>
         </li>
         <li>
             <label for="class">Class: </label>
