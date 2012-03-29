@@ -218,7 +218,7 @@ INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES
 	('TagsShowOnList',   '6','','Number of tags to display on search results list.  0 is off.','Integer');
 
 INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES('OPACShelfBrowser','1','','Enable/disable Shelf Browser on item details page. WARNING: this feature is very resource consuming on collections with large numbers of items.','YesNo');
-INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES
+INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES
 ('OPACXSLTDetailsDisplay','','','Enable XSL stylesheet control over details page display on OPAC','Free'),
 ('OPACXSLTResultsDisplay','','','Enable XSL stylesheet control over results page display on OPAC','Free'),
 ('XSLTDetailsDisplay','','','Enable XSL stylesheet control over details page display on intranet','Free'),
