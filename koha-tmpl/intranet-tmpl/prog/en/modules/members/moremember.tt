@@ -638,18 +638,18 @@ function validate1(date) {
                 <input type="hidden" name="biblionumber" value="[% reservloo.biblionumber %]" />
                 <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
             </td>
-            <td>[% IF ( reservloo.suspend ) %]Suspended [% IF ( reservloo.suspend_until ) %] until [% reservloo.suspend_until %][% END %][% END %]</td>
+            <td>[% IF ( reservloo.suspend ) %]Suspended [% IF ( reservloo.suspend_until ) %] until [% reservloo.suspend_until | $KohaDates %][% END %][% END %]</td>
         </tr>
 		[% END %]</tbody>
     </table>
 
-        <fieldset class="action"><input type="submit" class="cancel" name="submit" value="Cancel Marked Requests" /></fieldset>
+        <fieldset class="action"><input type="submit" class="cancel" name="submit" value="Cancel marked holds" /></fieldset>
     </form>
     <fieldset class="action">
         <form action="/cgi-bin/koha/reserve/modrequest_suspendall.pl" method="post">
             <input type="hidden" name="from" value="borrower" />
             <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
-            <input type="submit" value="Suspend All Requests" />
+            <input type="submit" value="Suspend all holds" />
 
             [% IF AutoResumeSuspendedHolds %]
             <label for="suspend_until">until</label>
@@ -693,7 +693,7 @@ function validate1(date) {
             <input type="hidden" name="from" value="borrower" />
             <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
             <input type="hidden" name="suspend" value="0" />
-            <input type="submit" value="Resume All Suspended All Requests" />
+            <input type="submit" value="Resume all suspended holds" />
 	</form>
     </fieldset>
 

@@ -355,7 +355,7 @@ if ($borrowernumber) {
         $getreserv{biblionumber}   = $getiteminfo->{'biblionumber'};
         $getreserv{waitingat}      = GetBranchName( $num_res->{'branchcode'} );
         $getreserv{suspend}        = $num_res->{'suspend'};
-        $getreserv{suspend_until}  = C4::Dates->new( $num_res->{'suspend_until'}, "iso")->output("syspref");
+        $getreserv{suspend_until}  = $num_res->{'suspend_until'};
         #         check if we have a waiting status for reservations
         if ( $num_res->{'found'} eq 'W' ) {
             $getreserv{color}   = 'reserved';
