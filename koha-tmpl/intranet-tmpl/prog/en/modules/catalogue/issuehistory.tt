@@ -1,6 +1,18 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Catalog &rsaquo; Checkout history for [% title |html %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
+<link rel="stylesheet" href="[% themelang %]/css/datatables.css" />
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="[% themelang %]/js/datatables.js"></script>
+[% INCLUDE 'datatables-strings.inc' %]
+<script type="text/javascript" id="js">
+$(document).ready(function() {
+    $("#table_issues").dataTable($.extend(true, {}, dataTablesDefaults, {
+//      maybe some defaults?
+        })
+    );
+}); </script>
+
 </head>
 <body id="catalog_issuehistory" class="catalog">
 
@@ -21,7 +33,7 @@
 <div class="searchresults">
     [% IF ( issues ) %]
         <h4>Checked out [% total %] times</h4>
-        <table>
+        <table id="table_issues">
             <thead><tr>
             <th>Patron</th>
             <th>Barcode</th>
