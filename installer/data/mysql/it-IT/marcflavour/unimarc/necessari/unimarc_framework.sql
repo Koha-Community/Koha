@@ -2675,5 +2675,7 @@ insert  into `marc_subfield_structure`(`tagfield`,`tagsubfield`,`liblibrarian`,`
 insert  into `marc_subfield_structure`(`tagfield`,`tagsubfield`,`liblibrarian`,`libopac`,`repeatable`,`mandatory`,`kohafield`,`tab`,`authorised_value`,`authtypecode`,`value_builder`,`isurl`,`hidden`,`frameworkcode`,`seealso`,`link`,`defaultvalue`) values ('995','y','Codice dell\'ente destinatario superiore','',0,0,'',10,'','','',0,-5,'PR',NULL,'','');
 insert  into `marc_subfield_structure`(`tagfield`,`tagsubfield`,`liblibrarian`,`libopac`,`repeatable`,`mandatory`,`kohafield`,`tab`,`authorised_value`,`authtypecode`,`value_builder`,`isurl`,`hidden`,`frameworkcode`,`seealso`,`link`,`defaultvalue`) values ('995','z','Ente destinatario superiore, testo libero','',0,0,'',10,'','','',0,-5,'PR',NULL,'','');
 
+UPDATE `marc_subfield_structure` SET maxlength=24 WHERE tagfield='000';
+UPDATE `marc_subfield_structure` SET maxlength=36 WHERE tagfield='100';
 
 SET FOREIGN_KEY_CHECKS=1;

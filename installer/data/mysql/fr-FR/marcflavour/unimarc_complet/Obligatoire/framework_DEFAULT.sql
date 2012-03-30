@@ -2033,3 +2033,5 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 ('995', 's', 'élément de tri', '', 0, 1, '', -1, '', '', '', NULL, 0, '', NULL, NULL, ''),
 ('995', 'u', 'note', '', 0, 0, 'items.itemnotes', 10, '', '', '', NULL, 0, '', NULL, NULL, '');
 
+UPDATE `marc_subfield_structure` SET maxlength=24 WHERE tagfield='000';
+UPDATE `marc_subfield_structure` SET maxlength=36 WHERE tagfield='100';

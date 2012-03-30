@@ -7885,3 +7885,6 @@ INSERT INTO `authorised_values` (`id`, `category`, `authorised_value`, `lib`) VA
 INSERT INTO `authorised_values` (`id`, `category`, `authorised_value`, `lib`) VALUES (147, 'COUNTRY', 'FR', 'France');
 INSERT INTO `authorised_values` (`id`, `category`, `authorised_value`, `lib`) VALUES (148, 'COUNTRY', 'EN', 'Grande Bretagne');
 INSERT INTO `authorised_values` (`id`, `category`, `authorised_value`, `lib`) VALUES (149, 'COUNTRY', 'DE', 'Allemagne');
+
+UPDATE `marc_subfield_structure` SET maxlength=24 WHERE tagfield='000';
+UPDATE `marc_subfield_structure` SET maxlength=36 WHERE tagfield='100';

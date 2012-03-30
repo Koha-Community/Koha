@@ -5044,6 +5044,9 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
        UPDATE marc_subfield_structure SET maxlength = IF ((SELECT value FROM systempreferences WHERE variable = 'marcflavour')='MARC21','40','9999') WHERE tagfield='008';
        ");
        $dbh->do("
+       UPDATE marc_subfield_structure SET maxlength = IF ((SELECT value FROM systempreferences WHERE variable = 'marcflavour')='NORMARC','40','9999') WHERE tagfield='008';
+       ");
+       $dbh->do("
        UPDATE marc_subfield_structure SET maxlength = IF ((SELECT value FROM systempreferences WHERE variable = 'marcflavour')='UNIMARC','36','9999') WHERE tagfield='100';
        ");
     print "Upgrade to $DBversion done (Add new field maxlength to marc_subfield_structure)\n";

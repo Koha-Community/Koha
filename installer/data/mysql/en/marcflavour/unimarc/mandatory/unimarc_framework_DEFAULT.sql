@@ -1402,4 +1402,5 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 		('856', 'y', 'Access Method', 'Access Method', 0, 0, '', 8, '', '', '', 0, -5, '', '', '', NULL),
 		('856', 'z', 'Public Note', 'Public Note', 1, 0, '', 8, '', '', '', 0, -5, '', '', '', NULL);
 
-
+UPDATE `marc_subfield_structure` SET maxlength=24 WHERE tagfield='000';
+UPDATE `marc_subfield_structure` SET maxlength=36 WHERE tagfield='100';
