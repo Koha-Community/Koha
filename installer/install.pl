@@ -185,7 +185,7 @@ elsif ( $step && $step == 3 ) {
         # we have finished, just redirect to mainpage.
         #
         print $query->redirect("/cgi-bin/koha/mainpage.pl");
-        exit 1;
+        exit;
     }
     elsif ( $op && $op eq 'finish' ) {
         $installer->set_version_syspref();
@@ -312,6 +312,15 @@ elsif ( $step && $step == 3 ) {
         # Not 1st install, the only sub-step : update database
         #
         #Do updatedatabase And report
+
+    if ( ! defined $ENV{PERL5LIB} ) {
+        my $find = "C4/Context.pm";
+        my $path = $INC{$find};
+        $path =~ s/\Q$find\E//;
+        $ENV{PERL5LIB} = $path;
+        warn "# plack? inserted PERL5LIB $ENV{PERL5LIB}\n";
+    }
+
         my $cmd = C4::Context->config("intranetdir") . "/installer/data/$info{dbms}/updatedatabase.pl";
         my ($success, $error_code, $full_buf, $stdout_buf, $stderr_buf) = IPC::Cmd::run(command => $cmd, verbose => 0);
 
