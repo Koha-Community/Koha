@@ -6,6 +6,10 @@ OPAC:
               choices: opac-templates
             - theme on the OPAC.
         -
+
+
+
+
             - "The OPAC is located at http://"
             - pref: OPACBaseURL
               class: url
@@ -21,6 +25,14 @@ OPAC:
                   yes: Enable
                   no: Disable
             - "Koha OPAC as public. Private OPAC requires authentification before accessing the OPAC."
+        -
+            - "Show star-ratings on"
+            - pref: OpacStarRatings
+              choices:
+                  all: "results and details"
+                  disable: "no"
+                  details: "only details"
+            - "pages."
         -
             - pref: OpacMaintenance
               choices:

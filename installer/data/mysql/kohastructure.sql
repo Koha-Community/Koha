@@ -2813,6 +2813,21 @@ CREATE TABLE IF NOT EXISTS `social_data` (
   PRIMARY KEY  (`isbn`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- 'Ratings' table. This tracks the star ratings set by borrowers.
+--
+
+DROP TABLE IF EXISTS ratings;
+CREATE TABLE ratings (
+    borrowernumber int(11) NOT NULL, --- the borrower this rating is for
+    biblionumber int(11) NOT NULL, --- the biblio it's for
+    rating_value tinyint(1) NOT NULL, --- the rating, from 1-5
+    timestamp timestamp NOT NULL default CURRENT_TIMESTAMP,
+    PRIMARY KEY  (borrowernumber,biblionumber),
+    CONSTRAINT ratings_ibfk_1 FOREIGN KEY (borrowernumber) REFERENCES borrowers (borrowernumber) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT ratings_ibfk_2 FOREIGN KEY (biblionumber) REFERENCES biblio (biblionumber) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

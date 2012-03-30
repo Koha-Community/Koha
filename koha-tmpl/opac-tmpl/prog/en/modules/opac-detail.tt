@@ -9,6 +9,9 @@
       {lang: '[% lang %]'}
     </script>
 [% END %]
+<script type="text/javascript" src="/opac-tmpl/prog/en/lib/jquery/plugins/jquery.rating.js"></script>
+<link rel="stylesheet" type="text/css" href="/opac-tmpl/prog/en/css/jquery.rating.css" />
+
 <script type="text/JavaScript" language="JavaScript">
 //<![CDATA[
     [% IF ( busc ) %]
@@ -83,8 +86,55 @@
         [% END %]
 
         $(".branch-info-tooltip-trigger").tooltip({delay: 100, position: "top right"});
-});
 
+// -----------------------------------------------------
+// star-ratings code
+// -----------------------------------------------------
+// hide 'rate' button if javascript enabled
+
+$('input[name="rate_button"]').remove();
+
+$(function () {
+  $(".auto-submit-star").rating({
+    callback: function (value, link) {
+
+      // if the new value equals the old value, dont execute callback...
+      // just do nothing!
+      if ($("#rating_value").attr("value") != value) {
+
+        $(function () {
+
+          $.post("/cgi-bin/koha/opac-ratings-ajax.pl", {
+            rating_old_value: $("#rating_value").attr("value"),
+            borrowernumber: "[% borrowernumber %]",
+            biblionumber: "[% biblionumber %]",
+            rating_value: value,
+            auth_error: value,
+          }, function (data) {
+
+            if (data.auth_status != 'ok') {
+              window.alert('Your CGI session cookie is not current. Please refresh the page and try again.');
+            } else {
+              $("#rating_value").val(data.rating_value);
+
+              if (data.rating_value) {
+                $("#rating_value_text").text('your rating: ' + data.rating_value + ', ');
+              } else {
+                $("#rating_value_text").text('');
+              }
+
+              $("#rating_text").text('average rating: ' + data.rating_avg_int + ' (' + data.rating_total + ' votes)');
+
+            }
+          }, "json");
+        });
+      };
+    }
+  });
+});
+// -----------------------------------------------------
+
+});
 
 [% IF ( busc ) %]
 
@@ -215,7 +265,6 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 		YAHOO.util.Event.addListener("furthersearches", "click", furthersearchesMenu.show, null, furthersearchesMenu);
 		YAHOO.widget.Overlay.windowResizeEvent.subscribe(positionfurthersearchesMenu);
  });
-	
 //]]>
 </script>
 [% IF ( opacuserlogin ) %][% IF ( loggedinusername ) %][% IF ( TagsEnabled ) %]<style type="text/css">
@@ -487,6 +536,44 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
         [% END %]
         </span>
         [% END %][% END %][% END %]
+
+    [% IF ( OpacStarRatings != 'disable' ) %]
+        <form method="post" action="/cgi-bin/koha/opac-ratings.pl">
+        <div class="results_summary">
+
+      [% FOREACH i  IN [ 1 2 3 4 5  ] %]
+        [% IF rating_avg == i && borrowernumber %]
+            <input class="auto-submit-star" type="radio" name="rating"  value="[% i %]"  checked="checked" />
+        [% ELSIF rating_avg == i %]
+            <input class="auto-submit-star" type="radio" name="rating" value="[% i %]" checked="checked" disabled="disabled" />
+        [% ELSIF borrowernumber  %]
+            <input class="auto-submit-star" type="radio" name="rating" value="[% i %]" />
+        [% ELSE   %]
+            <input class="auto-submit-star" type="radio" name="rating" value="[% i %]" disabled="disabled" />
+        [% END %]
+      [% END %]
+
+<!-- define some hidden vars for ratings -->
+
+        <input  type="hidden" name='biblionumber'  value="[% biblionumber %]" />
+        <input  type="hidden" name='borrowernumber'  value="[% borrowernumber %]" />
+        <input  type="hidden" name='rating_value' id='rating_value' value="[% rating_value %]" />
+        <input  type="hidden" name='rating_total' id='rating_total' value="[% rating_total %]" />
+        <input  type="hidden" name='rating_avg_int' id='rating_avg_int' value="[% rating_avg_int %]" />
+
+        [% UNLESS ( rating_readonly ) %]&nbsp;  <INPUT name="rate_button" type="submit" value="Rate me">[% END %]&nbsp;
+
+        [% IF ( rating_value ) %]
+            <span id="rating_value_text">your rating: [% rating_value %], </span>
+        [% ELSE %]
+            <span id="rating_value_text"></span>
+        [% END %]
+
+            <span id="rating_text">average rating: [% rating_avg_int %] ([% rating_total %] votes)</span>
+
+        </div>
+        </FORM>
+    [% END %]
 
     [% IF ( BakerTaylorContentURL ) %]
         <span class="results_summary">

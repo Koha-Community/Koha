@@ -6,8 +6,10 @@
     You did not specify any search criteria.
 [% END %]
 [% INCLUDE 'doc-head-close.inc' %]
-<link rel="alternate" type="application/rss+xml" title="[% LibraryName |html %] Search RSS Feed" href="[% OPACBaseURL %]/cgi-bin/koha/opac-search.pl?[% query_cgi |html %][% limit_cgi |html %]&amp;count=[% countrss |html %]&amp;sort_by=acqdate_dsc&amp;format=rss2" />
-
+<link rel="alternate" type="application/rss+xml" title="[% LibraryName |html %] Search RSS Feed" href="[% OPACBaseurl %]/cgi-bin/koha/opac-search.pl?[% query_cgi |html %][% limit_cgi |html %]&amp;count=[% countrss |html %]&amp;sort_by=acqdate_dsc&amp;format=rss2" />
+<script type="text/javascript" src="/opac-tmpl/prog/en/lib/jquery/jquery.js"></script>
+<script type="text/javascript" src="/opac-tmpl/prog/en/lib/jquery/plugins/jquery.rating.js"></script>
+<link rel="stylesheet" type="text/css" href="/opac-tmpl/prog/en/css/jquery.rating.css" />
 
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
 [% IF ( OpacHighlightedWords ) %]<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.highlight-3.js"></script>
@@ -234,6 +236,7 @@ $(document).ready(function(){
     [% IF OPACLocalCoverImages %]KOHA.LocalCover.GetCoverFromBibnumber(false);[% END %]
     [% IF ( GoogleJackets ) %]KOHA.Google.GetCoverFromIsbn();[% END %]
 });
+
 //]]>
 </script>
 </head>
@@ -481,8 +484,8 @@ $(document).ready(function(){
                     [% IF ( SEARCH_RESULT.intransitcount ) %] In transit ([% SEARCH_RESULT.intransitcount %]),[% END %]
                     </span>
                 </span>
-
                 [% END %]
+
                 [% IF ( SEARCH_RESULT.score_avg ) %]
                     <span class="result_summary">
                         <img src="[% themelang %]/../images/Star[% SEARCH_RESULT.score_int %].gif" title="" style="max-height: 15px;"/> <span style="font-size: 85%;">[% SEARCH_RESULT.score_avg %] / 5 (on [% SEARCH_RESULT.num_scores %] rates)</span>
@@ -500,6 +503,33 @@ $(document).ready(function(){
                         [% END %]
                     </span>
                 [% END %]
+
+
+                [% IF ( OpacStarRatings == 'all' ) %]
+                <div class="results_summary">
+
+[% FOREACH i  IN [ 1 2 3 4 5  ] %]
+
+[% IF ( SEARCH_RESULT.rating_avg == i ) %]
+    <input class="star" type="radio"  name="rating-[% SEARCH_RESULT.biblionumber %]" value="[% i %]" checked="checked" disabled="disabled"   />
+[% ELSE   %]
+    <input class="star" type="radio"  name="rating-[% SEARCH_RESULT.biblionumber %]" value="[% i %]" disabled="disabled"   />
+[% END %]
+
+[% END %]
+                <input type="hidden" name='biblionumber'  value="[% SEARCH_RESULT.biblionumber %]" />
+                <input type="hidden" name='loggedinuser'  value="[% loggedinuser %]" />
+
+                [% IF (  SEARCH_RESULT.rating_total ) > 0  %]
+                    <span id="rating_total_[% SEARCH_RESULT.biblionumber %]">&nbsp;&nbsp;([% SEARCH_RESULT.rating_total %] votes)</span>
+                [% ELSE %]
+                    </br>
+                [% END %]
+
+                </div>
+                [% END %]
+
+
                 [% IF ( LibraryThingForLibrariesID ) %]<div class="ltfl_reviews"></div>[% END %]
                 [% IF ( opacuserlogin ) %][% IF ( TagsEnabled ) %]
                                 [% IF ( TagsShowOnList ) %]

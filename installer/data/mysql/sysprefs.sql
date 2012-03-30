@@ -360,3 +360,4 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('SocialNetworks','1','Enable/Disable social networks links in opac detail pages','','YesNo');
 INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES('SubscriptionDuplicateDroppedInput','','','List of fields which must not be rewritten when a subscription is duplicated (Separated by pipe |)','Free');
 INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES ('AutoResumeSuspendedHolds',  '1', NULL ,  'Allow suspended holds to be automatically resumed by a set date.',  'YesNo');
+INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('OpacStarRatings','all',NULL,'disable|all|details','Choice');

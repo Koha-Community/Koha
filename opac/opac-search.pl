@@ -1,7 +1,8 @@
 #!/usr/bin/perl
 
-# Copyright 2008 Garry Collum and the Koha Koha Development team
+# Copyright 2008 Garry Collum and the Koha Development team
 # Copyright 2010 BibLibre
+# Copyright 2011 KohaAloha, NZ
 #
 # This file is part of Koha.
 #
@@ -37,11 +38,12 @@ use C4::Koha;
 use C4::Tags qw(get_tags);
 use C4::Branch; # GetBranches
 use C4::SocialData;
+use C4::Ratings;
+
 use POSIX qw(ceil floor strftime);
 use URI::Escape;
 use Storable qw(thaw freeze);
 use Business::ISBN;
-
 
 my $DisplayMultiPlaceHold = C4::Context->preference("DisplayMultiPlaceHold");
 # create a new CGI object
@@ -113,6 +115,9 @@ elsif (C4::Context->preference("marcflavour") eq "MARC21" ) {
 $template->param( 'AllowOnShelfHolds' => C4::Context->preference('AllowOnShelfHolds') );
 $template->param( 'OPACNoResultsFound' => C4::Context->preference('OPACNoResultsFound') );
 
+$template->param(
+    OpacStarRatings => C4::Context->preference("OpacStarRatings") );
+
 if (C4::Context->preference('BakerTaylorEnabled')) {
     $template->param(
         BakerTaylorEnabled  => 1,
@@ -121,6 +126,7 @@ if (C4::Context->preference('BakerTaylorEnabled')) {
         BakerTaylorBookstoreURL => C4::Context->preference('BakerTaylorBookstoreURL'),
     );
 }
+
 if (C4::Context->preference('TagsEnabled')) {
     $template->param(TagsEnabled => 1);
     foreach (qw(TagsShowOnList TagsInputOnList)) {
@@ -520,6 +526,7 @@ for (my $i=0;$i<@servers;$i++) {
             }
         }
 
+
         my $tag_quantity;
         if (C4::Context->preference('TagsEnabled') and
             $tag_quantity = C4::Context->preference('TagsShowOnList')) {
@@ -530,6 +537,7 @@ for (my $i=0;$i<@servers;$i++) {
                                         limit=>$tag_quantity });
             }
         }
+
         if (C4::Context->preference('COinSinOPACResults')) {
             foreach (@newresults) {
                 my $record = GetMarcBiblio($_->{'biblionumber'});
@@ -548,6 +556,17 @@ for (my $i=0;$i<@servers;$i++) {
                         }
                     }
                 }
+            }
+        }
+
+
+        if ( C4::Context->preference('OpacStarRatings') eq 'all' ) {
+            foreach my $res (@newresults) {
+                my $rating = GetRating( $res->{'biblionumber'}, $borrowernumber );
+                $res->{'rating_value'}  = $rating->{'rating_value'};
+                $res->{'rating_total'}  = $rating->{'rating_total'};
+                $res->{'rating_avg'}    = $rating->{'rating_avg'};
+                $res->{'rating_avg_int'} = $rating->{'rating_avg_int'};
             }
         }
 
@@ -773,4 +792,5 @@ if (C4::Context->preference('GoogleIndicTransliteration')) {
         $template->param('GoogleIndicTransliteration' => 1);
 }
 
+    $template->param( borrowernumber    => $borrowernumber);
 output_with_http_headers $cgi, $cookie, $template->output, $content_type;
