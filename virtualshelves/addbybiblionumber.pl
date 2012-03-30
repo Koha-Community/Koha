@@ -68,18 +68,18 @@ use C4::VirtualShelves qw/:DEFAULT GetAllShelves/;
 use C4::Auth;
 
 
-my $query           = new CGI;
-my @biblionumber    = HandleBiblioPars();
-my $shelfnumber     = $query->param('shelfnumber');
-my $newvirtualshelf = $query->param('newvirtualshelf');
-my $newshelf        = $query->param('newshelf');
-my $category        = $query->param('category');
-my $sortfield	    = $query->param('sortfield');
+our $query           = new CGI;
+our @biblionumber    = HandleBiblioPars();
+our $shelfnumber     = $query->param('shelfnumber');
+our $newvirtualshelf = $query->param('newvirtualshelf');
+our $newshelf        = $query->param('newshelf');
+our $category        = $query->param('category');
+our $sortfield	    = $query->param('sortfield');
 my $confirmed       = $query->param('confirmed') || 0;
-my $authorized      = 1;
-my $errcode	    = 0;
+our $authorized      = 1;
+our $errcode	    = 0;
 
-my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+our ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
         template_name   => "virtualshelves/addbybiblionumber.tmpl",
         query           => $query,
