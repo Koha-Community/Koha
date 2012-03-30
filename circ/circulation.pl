@@ -93,7 +93,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user (
 my $branches = GetBranches();
 
 my @failedrenews = $query->param('failedrenew');    # expected to be itemnumbers 
-my %renew_failed;
+our %renew_failed;
 for (@failedrenews) { $renew_failed{$_} = 1; }
 
 my $findborrower = $query->param('findborrower');
@@ -156,7 +156,7 @@ if($duedatespec_allow){
     }
 }
 
-my $todaysdate = C4::Dates->new->output('iso');
+our $todaysdate = C4::Dates->new->output('iso');
 
 # check and see if we should print
 if ( $barcode eq '' && $print eq 'maybe' ) {
@@ -413,13 +413,13 @@ if ($borrowernumber) {
 # make the issued books table.
 my $todaysissues = '';
 my $previssues   = '';
-my @todaysissues;
-my @previousissues;
-my @relissues;
-my @relprevissues;
+our @todaysissues;
+our @previousissues;
+our @relissues;
+our @relprevissues;
 my $displayrelissues;
 
-my $totalprice = 0;
+our $totalprice = 0;
 
 sub build_issue_data {
     my $issueslist = shift;
