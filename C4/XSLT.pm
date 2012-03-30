@@ -172,7 +172,7 @@ sub XSLTParse4Display {
     }
 
     if ( $xslfilename =~ m/\{langcode\}/ ) {
-        my $lang = C4::Templates::_current_language;
+        my $lang = C4::Templates::_current_language();
         $xslfilename =~ s/\{langcode\}/$lang/;
     }
 
