@@ -33,6 +33,7 @@ use C4::BackgroundJob;
 use C4::ClassSource;
 use C4::Dates;
 use C4::Debug;
+use C4::Members;
 use MARC::File::XML;
 use List::MoreUtils qw/uniq/;
 
@@ -69,6 +70,11 @@ my ($template, $loggedinuser, $cookie)
                  flagsrequired => $template_flag,
                  });
 
+# Does the user have a limited item edition permission?
+my $uid = GetMember( borrowernumber => $loggedinuser )->{userid} if ($loggedinuser) ;
+my $limitededition = haspermission($uid,  {'tools' => 'items_limited_batchmod'}) if ($uid);
+# In case user is a superlibrarian, edition is not limited
+$limitededition = 0 if ($limitededition != 0 && $limitededition->{'superlibrarian'} eq 1);
 
 my $today_iso = C4::Dates->today('iso');
 $template->param(today_iso => $today_iso);
@@ -293,11 +299,15 @@ unshift (@$branches, $nochange_branch);
 
 my $pref_itemcallnumber = C4::Context->preference('itemcallnumber');
 
+# Getting list of subfields to keep when limited batchmod edit is enabled
+my $subfieldsToAllowForBatchmod = C4::Context->preference('SubfieldsToAllowForLimitedBatchmod');
+my @subfieldsToAllow = split(/ /, $subfieldsToAllowForBatchmod);
 
 foreach my $tag (sort keys %{$tagslib}) {
     # loop through each subfield
     foreach my $subfield (sort keys %{$tagslib->{$tag}}) {
      	next if subfield_is_koha_internal_p($subfield);
+        next if ($limitededition && !grep { $tag . '$' . $subfield eq $_ } @subfieldsToAllow );
     	next if ($tagslib->{$tag}->{$subfield}->{'tab'} ne "10");
         # barcode and stocknumber are not meant to be batch-modified
     	next if $tagslib->{$tag}->{$subfield}->{'kohafield'} eq 'items.barcode';

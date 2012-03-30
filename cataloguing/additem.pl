@@ -36,7 +36,7 @@ use List::MoreUtils qw/any/;
 use C4::Search;
 use Storable qw(thaw freeze);
 use URI::Escape;
-
+use C4::Members;
 
 use MARC::File::XML;
 use URI::Escape;
@@ -104,9 +104,10 @@ sub _increment_barcode {
 
 
 sub generate_subfield_form {
-        my ($tag, $subfieldtag, $value, $tagslib,$subfieldlib, $branches, $today_iso, $biblionumber, $temp, $loop_data, $i) = @_;
+        my ($tag, $subfieldtag, $value, $tagslib,$subfieldlib, $branches, $today_iso, $biblionumber, $temp, $loop_data, $i, $limitededition) = @_;
   
-  my $frameworkcode = &GetFrameworkCode($biblionumber);
+        my $frameworkcode = &GetFrameworkCode($biblionumber);
+
         my %subfield_data;
         my $dbh = C4::Context->dbh;
         
@@ -156,6 +157,19 @@ sub generate_subfield_form {
 	}
         my $attributes_no_value = qq(id="$subfield_data{id}" name="field_value" class="input_marceditor" size="50" maxlength="$subfield_data{maxlength}" );
         my $attributes_no_value_textarea = qq(id="$subfield_data{id}" name="field_value" class="input_marceditor" rows="5" cols="64" );
+
+        # Getting list of subfields to keep when limited edition is enabled
+        my $subfieldsToAllowForLimitedEdition = C4::Context->preference('SubfieldsToAllowForLimitedEdition');
+        my @subfieldsToAllow = split(/ /, $subfieldsToAllowForLimitedEdition);
+
+        # If we're on limited edition, and our field is not in the list of subfields to allow,
+        # then it is read-only
+        $attributes_no_value .= 'readonly="readonly" '
+            if (
+                $limitededition
+                and !grep { $tag . '$' . $subfieldtag  eq $_ } @subfieldsToAllow
+            );
+
         my $attributes          = qq($attributes_no_value value="$value" );
         
         if ( $subfieldlib->{authorised_value} ) {
@@ -216,7 +230,7 @@ sub generate_subfield_form {
                 $subfield_data{marc_value} = qq(<input type="hidden" $attributes /> $authorised_lib{$value});
             }
             else {
-                $subfield_data{marc_value} =CGI::scrolling_list(      # FIXME: factor out scrolling_list
+                my @scrparam = (
                     -name     => "field_value",
                     -values   => \@authorised_values,
                     -default  => $value,
@@ -227,6 +241,15 @@ sub generate_subfield_form {
                     -id       => "tag_".$tag."_subfield_".$subfieldtag."_".$index_subfield,
                     -class    => "input_marceditor",
                 );
+
+                # If we're on limited edition, and our field is not in the list of subfields to allow,
+                # then it is read-only
+                push @scrparam, (-readonly => "readonly"), (-disabled => "disabled")
+                    if (
+                        $limitededition
+                        and !grep { $tag . '$' . $subfieldtag  eq $_ } @subfieldsToAllow
+                    );
+                $subfield_data{marc_value} =CGI::scrolling_list(@scrparam);
             }
 
         }
@@ -344,6 +367,12 @@ my ($template, $loggedinuser, $cookie)
                  debug => 1,
                  });
 
+
+# Does the user have a limited item edition permission?
+my $uid = GetMember( borrowernumber => $loggedinuser )->{userid} if ($loggedinuser) ;
+my $limitededition = haspermission($uid,  {'editcatalogue' => 'limited_item_edition'}) if ($uid);
+# In case user is a superlibrarian, edition is not limited
+$limitededition = 0 if ($limitededition != 0 && $limitededition->{'superlibrarian'} eq 1);
 
 my $today_iso = C4::Dates->today('iso');
 my $tagslib = &GetMarcStructure(1,$frameworkcode);
@@ -777,8 +806,7 @@ if($itemrecord){
             next if subfield_is_koha_internal_p($subfieldtag);
             next if ($tagslib->{$tag}->{$subfieldtag}->{'tab'} ne "10");
 
-            my $subfield_data = generate_subfield_form($tag, $subfieldtag, $value, $tagslib, $subfieldlib, $branches, $today_iso, $biblionumber, $temp, \@loop_data, $i);        
-
+            my $subfield_data = generate_subfield_form($tag, $subfieldtag, $value, $tagslib, $subfieldlib, $branches, $today_iso, $biblionumber, $temp, \@loop_data, $i, $limitededition);
             push @fields, "$tag$subfieldtag";
             push (@loop_data, $subfield_data);
             $i++;
@@ -802,7 +830,7 @@ foreach my $tag ( keys %{$tagslib}){
         my @values = (undef);
         @values = $itemrecord->field($tag)->subfield($subtag) if ($itemrecord && defined($itemrecord->field($tag)) && defined($itemrecord->field($tag)->subfield($subtag)));
         for my $value (@values){
-            my $subfield_data = generate_subfield_form($tag, $subtag, $value, $tagslib, $tagslib->{$tag}->{$subtag}, $branches, $today_iso, $biblionumber, $temp, \@loop_data, $i); 
+            my $subfield_data = generate_subfield_form($tag, $subtag, $value, $tagslib, $tagslib->{$tag}->{$subtag}, $branches, $today_iso, $biblionumber, $temp, \@loop_data, $i, $limitededition);
             push (@loop_data, $subfield_data);
             $i++;
         } 

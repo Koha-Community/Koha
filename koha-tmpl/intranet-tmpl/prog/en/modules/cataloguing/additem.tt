@@ -61,7 +61,16 @@ function active(numlayer)
 }
 function Check(f) {
     var total_errors = CheckMandatorySubfields(f);
-    if (total_errors > 0) {
+    if (total_errors==0) {
+        // Explanation about this line:
+        // In case of limited edition permission, we have to prevent user from modifying some fields.
+        // But there is no such thing as readonly attribute for select elements.
+        // So we use disabled instead. But disabled prevent values from being passed through the form at submit.
+        // So we "un-disable" the elements just before submitting.
+        // That's a bit clumsy, and if someone comes up with a better solution, feel free to improve that.
+        $("select[name=field_value]").removeAttr("disabled");
+        return true;
+    } else {
         var alertString2 = _("Form not submitted because of the following problem(s)");
         alertString2 += "\n------------------------------------------------------------------------------------\n";
         alertString2 += "\n- " + _("%s mandatory fields empty (highlighted)").format(total_errors);
@@ -192,7 +201,7 @@ $(document).ready(function() {
 </div>
 <div class="yui-u">
 <div id="cataloguing_additem_newitem">
-    <form method="post" action="/cgi-bin/koha/cataloguing/additem.pl" name="f">
+    <form id="f" method="post" action="/cgi-bin/koha/cataloguing/additem.pl" name="f">
     <input type="hidden" name="op" value="[% op %]" />
     [% IF (popup) %]
         <input type="hidden" name="popup" value="1" />
