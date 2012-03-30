@@ -41,7 +41,7 @@ use C4::Overdues;
 use C4::Branch;
 use C4::Members::Attributes qw(GetBorrowerAttributes);
 
-my $input = CGI->new;
+our $input = CGI->new;
 
 our ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {   template_name   => 'members/pay.tmpl',
@@ -55,18 +55,18 @@ our ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 my @names = $input->param;
 
-my $borrowernumber = $input->param('borrowernumber');
+our $borrowernumber = $input->param('borrowernumber');
 if ( !$borrowernumber ) {
     $borrowernumber = $input->param('borrowernumber0');
 }
 
 # get borrower details
-my $borrower = GetMember( borrowernumber => $borrowernumber );
-my $user = $input->remote_user;
+our $borrower = GetMember( borrowernumber => $borrowernumber );
+our $user = $input->remote_user;
 $user ||= q{};
 
 my $branches = GetBranches();
-my $branch = GetBranch( $input, $branches );
+our $branch = GetBranch( $input, $branches );
 
 my $writeoff_item = $input->param('confirm_writeoff');
 my $paycollect    = $input->param('paycollect');
