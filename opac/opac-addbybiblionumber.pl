@@ -31,18 +31,18 @@ use C4::VirtualShelves qw/:DEFAULT GetAllShelves/;
 use C4::Output;
 use C4::Auth;
 
-my $query        	= new CGI;
-my @biblionumber 	= $query->param('biblionumber');
-my $selectedshelf 	= $query->param('selectedshelf');
-my $newshelf 		= $query->param('newshelf');
-my $shelfnumber  	= $query->param('shelfnumber');
-my $newvirtualshelf	= $query->param('newvirtualshelf');
-my $category     	= $query->param('category');
-my $authorized          = 1;
-my $errcode		= 0;
-my @biblios;
+our $query        	= new CGI;
+our @biblionumber 	= $query->param('biblionumber');
+our $selectedshelf 	= $query->param('selectedshelf');
+our $newshelf 		= $query->param('newshelf');
+our $shelfnumber  	= $query->param('shelfnumber');
+our $newvirtualshelf	= $query->param('newvirtualshelf');
+our $category     	= $query->param('category');
+our $authorized          = 1;
+our $errcode		= 0;
+our @biblios;
 
-my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+our ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
         template_name   => "opac-addbybiblionumber.tmpl",
         query           => $query,
