@@ -425,7 +425,7 @@ sub build_csv {
     my @lines = ();
 
     # build header ...
-    my @keys = qw /duedate title author borrowertitle name phone barcode email address address2 zipcode city country
+    my @keys = qw /duedate title author borrowertitle firstname surname phone barcode email address address2 zipcode city country
                 branchcode itemcallnumber biblionumber borrowernumber itemnum issuedate replacementprice streetnumber streettype/;
     my $csv = Text::CSV_XS->new();
     $csv->combine(@keys);
