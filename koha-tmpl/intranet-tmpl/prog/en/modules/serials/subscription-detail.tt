@@ -110,7 +110,12 @@ $(document).ready(function() {
         [% IF ( callnumber ) %]<li><span class="label">Call Number:</span> [% callnumber %]</li>[% END %]
 		[% IF ( staffdisplaycount ) %]<li><span class="label">Number of issues to display to staff:</span>[% staffdisplaycount %]</li>[% END %]
 		[% IF ( opacdisplaycount ) %]<li><span class="label">Number of issues to display to the public:</span>[% opacdisplaycount %]</li>[% END %]
-        [% IF ( letter ) %]<li><span class="label">Patron alert with:</span> [% letter %]</li>[% END %]
+        [% IF ( letter ) %]
+            <li>
+                <span class="label">Patron alert with:</span> [% letter %]
+                (<a href="/cgi-bin/koha/serials/viewalerts.pl?subscriptionid=[% subscriptionid %]">subscribers</a>)
+            </li>
+        [% END %]
         [% IF ( hasRouting ) %]<li><span class="label">Routing:</span> yes</li>[% END %]
      </ol>
      </div>
