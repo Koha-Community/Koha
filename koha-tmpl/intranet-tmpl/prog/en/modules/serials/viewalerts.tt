@@ -9,30 +9,31 @@
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a> &rsaquo; Alert subscribers for <i>[% bibliotitle %]</i></div>
 
 <div id="doc3" class="yui-t2">
-   
-   <div id="bd">
-	<div id="yui-main">
-	<div class="yui-b">
+    <div id="bd">
+    <div id="yui-main">
+    <div class="yui-b">
 
 <h1>Alert subscribers for <i>[% bibliotitle %]</i></h1>
-		<a href="subscription-detail.pl?subscriptionid=[% subscriptionid %]" class="button">subscription</a>
-		[% IF ( alertloop ) %]
-			<table>
-			<tr>
-				<th>Patron name</th>
-				<th>&nbsp;</th>
-			</tr>
 
-			[% FOREACH alertloo IN alertloop %]
-				<tr>
-					<td>[% alertloo.name %]</td>
-					<td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% alertloo.borrowernumber %]" class="button">View</a></td>
-				</tr>
-			[% END %]
-			</table>
-		[% ELSE %]
-			Nobody
-		[% END %]
+<p>
+    <span class="label">Subscription:</span> <a href="subscription-detail.pl?subscriptionid=[% subscriptionid %]">[% bibliotitle %] #[% subscriptionid %]</a>
+</p>
+
+[% IF ( alertloop ) %]
+    <table>
+        <tr>
+            <th>Patron name</th>
+        </tr>
+        [% FOREACH alertloo IN alertloop %]
+        <tr>
+            <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% alertloo.borrowernumber %]">[% alertloo.name %]</a></td>
+        </tr>
+        [% END %]
+    </table>
+[% ELSE %]
+    <p>There are no patrons subsribed to this subscription serial alert.</p>
+[% END %]
+
 </div>
 </div>
 
