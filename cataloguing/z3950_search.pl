@@ -82,7 +82,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
 $template->param( frameworkcode => $frameworkcode, );
 
 if ( $op ne "do_search" ) {
-    my $sth = $dbh->prepare("select id,host,name,checked from z3950servers  order by host");
+    my $sth = $dbh->prepare("SELECT id,host,name,checked FROM z3950servers ORDER BY rank, name");
     $sth->execute();
     my $serverloop = $sth->fetchall_arrayref( {} );
     $template->param(
@@ -168,7 +168,7 @@ for my $i (1..$nterms-1) {
 warn "query ".$query  if $DEBUG;
 
     foreach my $servid (@id) {
-        my $sth = $dbh->prepare("select * from z3950servers where id=?");
+        my $sth = $dbh->prepare("SELECT * FROM z3950servers WHERE id=? ORDER BY rank, name");
         $sth->execute($servid);
         while ( $server = $sth->fetchrow_hashref ) {
             warn "serverinfo ".join(':',%$server) if $DEBUG;
