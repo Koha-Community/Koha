@@ -26,14 +26,12 @@ INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('SUGGEST
 INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('SUGGEST','AVILL','Tilgjengelig via fjernlån');
 
 -- availability statuses
-INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('LOST','0','');
 INSERT INTO `authorised_values`  (category, authorised_value, lib) VALUES ('LOST','2','Regnes som tapt');
 INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('LOST','1','Tapt');
 INSERT INTO `authorised_values`  (category, authorised_value, lib ) VALUES ('LOST','3','Tapt og erstattet');
 INSERT INTO `authorised_values`  (category, authorised_value, lib )VALUES ('LOST','4','Savnet');
 
 -- damaged status of an item
-INSERT INTO `authorised_values`  (category, authorised_value, lib) VALUES ('DAMAGED','0','');
 INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('DAMAGED','1','Skadet');
 
 -- location qualification for an item, departments are linked by default to items.location
@@ -54,17 +52,14 @@ INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('CCODE
 INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('CCODE','NFIC','Faglitteratur');
 
 -- withdrawn status of an item, linked to items.wthdrawn
-INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('WITHDRAWN','0','');
 INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('WITHDRAWN','1','Trukket tilbake');
 
 -- loanability status of an item, linked to items.notforloan
 INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('NOT_LOAN','-1','I bestilling');
-INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('NOT_LOAN','0','');
 INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('NOT_LOAN','1','Ikke til utlån');
 INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('NOT_LOAN','2','Kun til internt bruk');
 
 -- restricted status of an item, linked to items.restricted
-INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('RESTRICTED','0','');
 INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('RESTRICTED','1','Begrenset tilgang');
 
 -- manual invoice types

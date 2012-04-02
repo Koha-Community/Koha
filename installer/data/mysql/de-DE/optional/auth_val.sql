@@ -1,18 +1,16 @@
 -- Reasons for acceptance or rejection of suggestions in acquisitions
 INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('SUGGEST','BSELL','Bestseller');
 INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('SUGGEST','SCD','Vorhandenes Exemplar beschädigt');
-INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('SUGGEST','LCL','Biblitoheksexemplar vermisst');
+INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('SUGGEST','LCL','Bibliotheksexemplar vermisst');
 INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('SUGGEST','AVILL','Über Fernleihe bestellbar');
 
 -- availability statuses
-INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('LOST','0','');
 INSERT INTO `authorised_values`  (category, authorised_value, lib) VALUES ('LOST','2','Lange überfällig (Verloren)');
 INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('LOST','1','Verloren');
 INSERT INTO `authorised_values`  (category, authorised_value, lib ) VALUES ('LOST','3','Verloren und Buchersatz bezahlt');
 INSERT INTO `authorised_values`  (category, authorised_value, lib )VALUES ('LOST','4','Vermisst');
 
 -- damaged status of an item
-INSERT INTO `authorised_values`  (category, authorised_value, lib) VALUES ('DAMAGED','0','');
 INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('DAMAGED','1','Beschädigt');
 
 -- location qualification for an item, departments are linked by default to items.location
@@ -33,17 +31,14 @@ INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('CCODE
 INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('CCODE','NFIC','Sachliteratur');
 
 -- withdrawn status of an item, linked to items.wthdrawn
-INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('WITHDRAWN','0','');
 INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('WITHDRAWN','1','Ausgeschieden');
 
 -- loanability status of an item, linked to items.notforloan
 INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('NOT_LOAN','-1','Bestellt');
-INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('NOT_LOAN','0','');
 INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('NOT_LOAN','1','Nicht entleihbar');
 INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('NOT_LOAN','2','Mitarbeiterbibliothek');
 
 -- restricted status of an item, linked to items.restricted
-INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('RESTRICTED','0','');
 INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('RESTRICTED','1','Eingeschränkt zugänglich');
 
 -- manual invoice types
