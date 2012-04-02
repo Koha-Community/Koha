@@ -731,6 +731,13 @@ sub _build_stemmed_operand {
 
 # FIXME: the locale should be set based on the user's language and/or search choice
     #warn "$lang";
+    # Make sure we only use the first two letters from the language code
+    $lang = lc(substr($lang, 0, 2));
+    # The language codes for the two variants of Norwegian will now be "nb" and "nn",
+    # none of which Lingua::Stem::Snowball can use, so we need to "translate" them
+    if ($lang eq 'nb' || $lang eq 'nn') {
+      $lang = 'no';
+    }
     my $stemmer = Lingua::Stem::Snowball->new( lang => $lang,
                                                encoding => "UTF-8" );
 
