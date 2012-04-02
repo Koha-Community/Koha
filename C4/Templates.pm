@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use Carp;
 use CGI;
-use List::Util qw/first/;
+use List::MoreUtils qw/any/;
 
 # Copyright 2009 Chris Cormack and The Koha Dev Team
 #
@@ -313,9 +313,9 @@ sub getlanguage {
     my ($query, $interface) = @_;
 
     # Select a language based on cookie, syspref available languages & browser
-    my $is_intranet = $interface eq 'intranet';
-    my @languages = split(",", C4::Context->preference(
-        $is_intranet ? 'language' : 'opaclanguages'));
+    my $preference_to_check =
+      $interface eq 'intranet' ? 'language' : 'opaclanguages';
+    my @languages = split /,/, C4::Context->preference($preference_to_check);
 
     my $lang;
 
@@ -326,20 +326,18 @@ sub getlanguage {
     }
 
     # HTTP_ACCEPT_LANGUAGE
-    unless ($lang) {
-        my $http_accept_language = $ENV{ HTTP_ACCEPT_LANGUAGE };
-        $lang = accept_language( $http_accept_language,
-            getTranslatedLanguages($interface,'prog') );
+    if ( !$lang && $ENV{HTTP_ACCEPT_LANGUAGE} ) {
+        $lang = accept_language( $ENV{HTTP_ACCEPT_LANGUAGE},
+            getTranslatedLanguages( $interface, 'prog' ) );
     }
 
     # Ignore a lang not selected in sysprefs
-    $lang = undef  unless first { $_ eq $lang } @languages;
+    if ( $lang && any { $_ eq $lang } @languages ) {
+        return $lang;
+    }
 
     # Fall back to English if necessary
-    $lang = 'en' unless $lang;
-
-    return $lang;
+    return 'en';
 }
 
 1;
-
