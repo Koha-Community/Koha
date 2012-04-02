@@ -70,7 +70,7 @@ $(".addtocart").show();
         param1 += "<\/optgroup>";[% END %]
         [% IF ( addpubshelves ) %]param1 += "<optgroup label=\""+_("Public Lists:")+"\">"[% FOREACH addpubshelvesloo IN addpubshelvesloop %]+"<option id=\"s[% addpubshelvesloo.shelfnumber %]\" value=\"addtolist\">[% addpubshelvesloo.shelfname |html %]<\/option>"[% END %]
         param1 += "<\/optgroup>";[% END %]
-        [% IF ( addbarshelvesloop.size>9 || addpubshelvesloop.size>9 ) %]
+        [% IF ( ( addbarshelvesloop && addbarshelvesloop.size>9 ) || (addpubshelvesloop && addpubshelvesloop.size>9 )) %]
             param1 += "<option value=\"morelists\">[ "+_("More Lists")+" ]<\/option>";
         [% END %]
         param1 +="<option value=\"newlist\">"+_("[ New List ]")+"<\/option>"
