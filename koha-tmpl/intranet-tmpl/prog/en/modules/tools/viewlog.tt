@@ -193,7 +193,7 @@
                                     </td>
                                     <td>
                                         [% IF ( loopro.CIRCULATION ) %]
-                                            <a href="/cgi-bin/koha/catalogue/moredetail.pl?item=[% loopro.info %]&biblionumber=[% loopro.biblionumber %]&bi=[% loopro.biblioitemnumber %]#item[% loopro.object %]" title="Display detail for this biblio">Item [% loopro.info |html %]</a>
+                                            <a href="/cgi-bin/koha/catalogue/moredetail.pl?item=[% loopro.info %]&biblionumber=[% loopro.biblionumber %]&bi=[% loopro.biblioitemnumber %]#item[% loopro.object %]" title="Display detail for this biblio">Item [% loopro.barcode |html %]</a>
                                         [% ELSE %]
                                             [% loopro.info |html %]
                                         [% END %]

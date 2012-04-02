@@ -123,6 +123,7 @@ if ($do_it) {
 	    my $item=GetItem($itemnumber);
 	    $result->{'biblionumber'}=$item->{'biblionumber'};
 	    $result->{'biblioitemnumber'}=$item->{'biblionumber'};		
+        $result->{'barcode'}=$item->{'barcode'};
 	}
     }
     
