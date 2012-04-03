@@ -19,7 +19,7 @@
                 ]
             new YAHOO.widget.Button({
                 type: "menu",
-                label: _("Root Budgets"),
+                label: _("Root budgets"),
                 name: "periods_button",
                 menu: periods_menu,
                 container: "periods_menuc"

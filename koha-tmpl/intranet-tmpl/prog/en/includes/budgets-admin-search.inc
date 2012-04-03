@@ -46,7 +46,7 @@ YAHOO.util.Event.onContentReady("header_search", function() {
  </script>  [% END %][% END %]
 <div id="header_search">
 	<div id="budgets_search" class="residentsearch">
-	<p class="tip">Search Budgets:</p>
+    <p class="tip">Search budgets:</p>
 
 	<form action="/cgi-bin/koha/admin/aqbudgets.pl" method="post">
 
@@ -107,9 +107,9 @@ YAHOO.util.Event.onContentReady("header_search", function() {
 		</form>
 	</div>[% END %]
 			<ul>
-			<li><a href="/cgi-bin/koha/admin/aqbudgets.pl#budgets_search">Search Budgets</a></li>
-			[% IF ( CAN_user_circulate ) %]<li><a href="/cgi-bin/koha/circ/circulation.pl#circ_search">Check Out</a></li>[% END %]
-			[% IF ( CAN_user_catalogue ) %]<li><a href="/cgi-bin/koha/catalogue/search.pl#catalog_search">Search the Catalog</a></li>[% END %]
+            <li><a href="/cgi-bin/koha/admin/aqbudgets.pl#budgets_search">Search budgets</a></li>
+            [% IF ( CAN_user_circulate ) %]<li><a href="/cgi-bin/koha/circ/circulation.pl#circ_search">Check out</a></li>[% END %]
+            [% IF ( CAN_user_catalogue ) %]<li><a href="/cgi-bin/koha/catalogue/search.pl#catalog_search">Search the catalog</a></li>[% END %]
 			</ul>	
 </div>
 <!-- End Suggestions Resident Search Box -->

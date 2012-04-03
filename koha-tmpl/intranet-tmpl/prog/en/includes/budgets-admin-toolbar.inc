@@ -42,7 +42,7 @@
 
                var planning_menu = [
 
-                        { text: _("Plan by Months"),
+                        { text: _("Plan by months"),
                             url: "/cgi-bin/koha/admin/aqplan.pl?budget_period_id=[% budget_period_id %]&authcat=MONTHS"
                             [% UNLESS ( CAN_user_acquisition_planning_manage ) %],  id:'disabled' [% END %]
                         },
@@ -52,7 +52,7 @@
                             [% UNLESS ( CAN_user_acquisition_planning_manage ) %],  id:'disabled' [% END %]
                         },
 
-                        { text: _("Plan by Item Types"),
+                        { text: _("Plan by item types"),
                             url: "/cgi-bin/koha/admin/aqplan.pl?budget_period_id=[% budget_period_id %]&authcat=ITEMTYPES"
                             [% UNLESS ( CAN_user_acquisition_planning_manage ) %],  id:'disabled' [% END %]
                         },
@@ -103,7 +103,7 @@
 	//]]>
 </script>
 	<ul class="toolbar">
-        [% UNLESS ( budget_period_id ) %]<li><a id="newrootbudget" href="/cgi-bin/koha/admin/aqbudgetperiods.pl?op=add_form">New Budget</a></li>[% END %]
+        [% UNLESS ( budget_period_id ) %]<li><a id="newrootbudget" href="/cgi-bin/koha/admin/aqbudgetperiods.pl?op=add_form">New budget</a></li>[% END %]
 		[% UNLESS ( period_button_only ) %]<li id="budgets_menuc"><a id="budgets_menu" href="/cgi-bin/koha/cataloguing/addbiblio.pl">New</a></li>[% END %]
         <li id="periods_menuc"><a id="periods_menu" href="/cgi-bin/koha/admin/aqbudgetperiods.pl?op=add_form">Budgets</a></li>
 		[% UNLESS ( period_button_only ) %]<li id="planning_menuc"><a id="planning_menu" href="/cgi-bin/koha/admin/aqplan.pl?budget_period_id=[% budget_period_id %]">Budget planning</a></li>
