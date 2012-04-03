@@ -45,7 +45,7 @@
                 [% END %]
     [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]
     <li><a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloging</a><ul>
-        <li><a href="/cgi-bin/koha/cataloguing/addbiblio.pl">Add MARC Record</a></li>
+        <li><a href="/cgi-bin/koha/cataloguing/addbiblio.pl">Add MARC record</a></li>
         <li><a href="/cgi-bin/koha/authorities/authorities-home.pl">Authorities</a></li>
     [% END %]
     [% IF ( CAN_user_serials ) %]

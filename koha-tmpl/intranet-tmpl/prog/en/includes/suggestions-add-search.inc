@@ -46,7 +46,7 @@ YAHOO.util.Event.onContentReady("header_search", function() {
  </script>  [% END %][% END %]
 <div id="header_search">
 	<div id="suggestions_search" class="residentsearch">
-	<p class="tip">Suggestions Search:</p>
+    <p class="tip">Suggestions search:</p>
 	<form action="/cgi-bin/koha/acqui/newordersuggestion.pl" method="get">
     <input type="hidden" name="booksellerid" value="[% booksellerid %]" />
 	<label for="searchtitle">Title:</label> <input type="text" id="searchtitle" name="title" size="10" value="[% title %]" />
@@ -88,9 +88,9 @@ YAHOO.util.Event.onContentReady("header_search", function() {
 	</div>
 	[% END %]
 			<ul>
-			<li><a href="/cgi-bin/koha/acqui/newordersuggestion.pl?booksellerid=[% booksellerid %]&amp;basketno=[% basketno %]#suggestions_search">Search Suggestions</a></li>
-			[% IF ( CAN_user_circulate ) %]<li><a href="/cgi-bin/koha/circ/circulation.pl#circ_search">Check Out</a></li>[% END %]
-			[% IF ( CAN_user_catalogue ) %]<li><a href="/cgi-bin/koha/catalogue/search.pl#catalog_search">Search the Catalog</a></li>[% END %]
+            <li><a href="/cgi-bin/koha/acqui/newordersuggestion.pl?booksellerid=[% booksellerid %]&amp;basketno=[% basketno %]#suggestions_search">Search suggestions</a></li>
+            [% IF ( CAN_user_circulate ) %]<li><a href="/cgi-bin/koha/circ/circulation.pl#circ_search">Check out</a></li>[% END %]
+            [% IF ( CAN_user_catalogue ) %]<li><a href="/cgi-bin/koha/catalogue/search.pl#catalog_search">Search the catalog</a></li>[% END %]
 			</ul>	
 </div>
 <!-- End Suggestions Resident Search Box -->
