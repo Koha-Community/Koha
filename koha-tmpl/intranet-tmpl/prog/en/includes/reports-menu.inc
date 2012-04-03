@@ -1,6 +1,6 @@
-<h5>Guided Reports</h5>
+<h5>Guided reports</h5>
 	<ul>
-		<li><a href="/cgi-bin/koha/reports/guided_reports.pl">Guided Reports</a></li>
+        <li><a href="/cgi-bin/koha/reports/guided_reports.pl">Guided reports</a></li>
 	</ul>
 
 <h5>Statistics wizards</h5>
@@ -14,10 +14,10 @@
 	</ul>
 
 
-	<h5>Top Lists</h5>
+    <h5>Top lists</h5>
 	<ul>
 		<li><a href="/cgi-bin/koha/reports/bor_issues_top.pl">Patrons with the most checkouts</a></li>
-		<li><a href="/cgi-bin/koha/reports/cat_issues_top.pl">Most-Circulated Items</a></li>
+        <li><a href="/cgi-bin/koha/reports/cat_issues_top.pl">Most-circulated items</a></li>
 	</ul>
 	
 	<h5>Inactive</h5>
@@ -29,7 +29,7 @@
 
 	<h5>Other</h5>
 	<ul>
-		<li><a href="/cgi-bin/koha/reports/itemslost.pl">Lost Items</a></li>
-		<li><a href="/cgi-bin/koha/reports/manager.pl?report_name=itemtypes">Catalog by Item Type</a></li>
+        <li><a href="/cgi-bin/koha/reports/itemslost.pl">Lost items</a></li>
+        <li><a href="/cgi-bin/koha/reports/manager.pl?report_name=itemtypes">Catalog by item type</a></li>
 		<li><a href="/cgi-bin/koha/reports/issues_avg_stats.pl">Average loan time</a></li>
 	</ul>
