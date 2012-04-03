@@ -18,13 +18,13 @@
     [% IF ( subscriptionid ) %]
 	    var editmenu = [
 	        [% IF ( CAN_user_serials_edit_subscription ) %]
-		    { text: _("Edit Subscription"),  [% IF ( cannotedit ) %]disabled: true, [% END %] url: "/cgi-bin/koha/serials/subscription-add.pl?op=modify&amp;subscriptionid=[% subscriptionid %]" },
+            { text: _("Edit subscription"),  [% IF ( cannotedit ) %]disabled: true, [% END %] url: "/cgi-bin/koha/serials/subscription-add.pl?op=modify&amp;subscriptionid=[% subscriptionid %]" },
 		[% END %]
 	        [% IF ( CAN_user_serials_create_subscription ) %]
-		    { text: _("Edit as New (Duplicate)"), [% IF ( cannotedit ) %]disabled: true, [% END %] url: "/cgi-bin/koha/serials/subscription-add.pl?op=dup&amp;subscriptionid=[% subscriptionid %]" },
+            { text: _("Edit as new (duplicate)"), [% IF ( cannotedit ) %]disabled: true, [% END %] url: "/cgi-bin/koha/serials/subscription-add.pl?op=dup&amp;subscriptionid=[% subscriptionid %]" },
 		[% END %]
 	        [% IF ( CAN_user_serials_delete_subscription ) %]
-			{ text: _("Delete Subscription"), [% IF ( cannotedit ) %]disabled: true, [% END %] onclick: {fn: confirm_deletion }}
+            { text: _("Delete subscription"), [% IF ( cannotedit ) %]disabled: true, [% END %] onclick: {fn: confirm_deletion }}
 		[% END %]
 	    ];
 	 [% END %]
@@ -58,9 +58,9 @@ onclick: {fn:function(){popup([% subscriptionid %])}}
 <ul class="toolbar">
     [% IF ( CAN_user_serials_create_subscription ) %]
 	[% IF ( biblionumber_for_new_subscription ) %]
-		<li><a id="newsubscription" href="/cgi-bin/koha/serials/subscription-add.pl?biblionumber_for_new_subscription=[% biblionumber_for_new_subscription %]">New Subscription</a></li>
+        <li><a id="newsubscription" href="/cgi-bin/koha/serials/subscription-add.pl?biblionumber_for_new_subscription=[% biblionumber_for_new_subscription %]">New subscription</a></li>
 	[% ELSE %]
-		<li><a id="newsubscription" href="/cgi-bin/koha/serials/subscription-add.pl">New Subscription</a></li>
+        <li><a id="newsubscription" href="/cgi-bin/koha/serials/subscription-add.pl">New subscription</a></li>
 	[% END %]
     [% END %]
 
