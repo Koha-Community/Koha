@@ -50,14 +50,14 @@
                 [% UNLESS ( basketcount OR subscriptioncount ) %]
                     <li><a id="deletesupplier" href="javascript:confirm_deletion()">Delete</a></li>
                 [% END %]
-                <li><a id="newcontract" href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&booksellerid=[% booksellerid %]">New Contract</a></li>
+                <li><a id="newcontract" href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&amp;booksellerid=[% booksellerid %]">New contract</a></li>
                 <li><a id="editcontracts" href="/cgi-bin/koha/admin/aqcontract.pl?booksellerid=[% booksellerid %]">Contracts</a></li>
                 [% UNLESS ( basketcount ) %]
-                    <li><a id="newbasket" href="/cgi-bin/koha/acqui/basketheader.pl?booksellerid=[% booksellerid %]&op=add_form">New Basket</a></li>
+                    <li><a id="newbasket" href="/cgi-bin/koha/acqui/basketheader.pl?booksellerid=[% booksellerid %]&amp;op=add_form">New basket</a></li>
                 [% END %]
             [% END %]
         [% ELSE %]
-            <li><a id="newbudget" href="/cgi-bin/koha/acqui/supplier.pl?op=enter">New Vendor</a></li>
+            <li><a id="newbudget" href="/cgi-bin/koha/acqui/supplier.pl?op=enter">New vendor</a></li>
         [% END %]
     </ul>
 </div>
