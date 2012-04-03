@@ -20,9 +20,9 @@
 	</div>
 	[% END %]
 			<ul>
-			<li><a href="/cgi-bin/koha/admin/roadtype.pl#syspref_search">Search System Preferences</a></li>
-			[% IF ( CAN_user_circulate ) %]<li><a href="/cgi-bin/koha/circ/circulation.pl#circ_search">Check Out</a></li>[% END %]
-			[% IF ( CAN_user_catalogue ) %]<li><a href="/cgi-bin/koha/catalogue/search.pl#catalog_search">Search the Catalog</a></li>[% END %]
+            <li><a href="/cgi-bin/koha/admin/roadtype.pl#syspref_search">Search system preferences</a></li>
+            [% IF ( CAN_user_circulate ) %]<li><a href="/cgi-bin/koha/circ/circulation.pl#circ_search">Check out</a></li>[% END %]
+            [% IF ( CAN_user_catalogue ) %]<li><a href="/cgi-bin/koha/catalogue/search.pl#catalog_search">Search the catalog</a></li>[% END %]
 			</ul>
 </div>
 <!-- End Stopwords Resident Search Box -->

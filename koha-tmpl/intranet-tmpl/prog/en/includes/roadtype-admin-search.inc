@@ -46,7 +46,7 @@ YAHOO.util.Event.onContentReady("header_search", function() {
 </script>[% END %][% END %]
 <div id="header_search">
 	<div id="roadtype_search" class="residentsearch">
-	<p class="tip">Road Type Search:</p>
+    <p class="tip">Road type search:</p>
 		<form action="[% script_name %]" method="post">
 		<input type="text" name="road_type" value="[% searchfield %]" size="40" />
 		<input type="submit" name="submit" value="OK" class="submit" />
@@ -85,9 +85,9 @@ YAHOO.util.Event.onContentReady("header_search", function() {
 	</div>
 	[% END %]
 			<ul>
-			<li><a href="/cgi-bin/koha/admin/roadtype.pl#roadtype_search">Search Road Types</a></li>
-			[% IF ( CAN_user_circulate ) %]<li><a href="/cgi-bin/koha/circ/circulation.pl#circ_search">Check Out</a></li>[% END %]
-			[% IF ( CAN_user_catalogue ) %]<li><a href="/cgi-bin/koha/catalogue/search.pl#catalog_search">Search the Catalog</a></li>[% END %]
+            <li><a href="/cgi-bin/koha/admin/roadtype.pl#roadtype_search">Search road types</a></li>
+            [% IF ( CAN_user_circulate ) %]<li><a href="/cgi-bin/koha/circ/circulation.pl#circ_search">Check out</a></li>[% END %]
+            [% IF ( CAN_user_catalogue ) %]<li><a href="/cgi-bin/koha/catalogue/search.pl#catalog_search">Search the catalog</a></li>[% END %]
 			</ul>	
 </div>
 <!-- End Roads Resident Search Box -->

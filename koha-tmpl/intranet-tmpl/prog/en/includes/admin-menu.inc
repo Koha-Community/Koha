@@ -11,9 +11,9 @@
 </script>
 <div id="navmenu">
 <div id="navmenulist">
-<h5>System Preferences</h5>
+<h5>System preferences</h5>
 <ul>
-	<li><a href="/cgi-bin/koha/admin/preferences.pl">System Preferences</a></li>
+    <li><a href="/cgi-bin/koha/admin/preferences.pl">System preferences</a></li>
 </ul>
 
 <h5>Basic parameters</h5>
@@ -36,14 +36,14 @@
 
 <h5>Catalog</h5>
 <ul>
-	<li><a href="/cgi-bin/koha/admin/biblio_framework.pl">MARC Bibliographic framework</a></li>
+    <li><a href="/cgi-bin/koha/admin/biblio_framework.pl">MARC bibliographic framework</a></li>
 	<li><a href="/cgi-bin/koha/admin/koha2marclinks.pl">Koha to MARC mapping</a></li>
 	<li><a href="/cgi-bin/koha/admin/fieldmapping.pl">Keywords to MARC mapping</a></li>
-	<li><a href="/cgi-bin/koha/admin/checkmarc.pl">MARC Bibliographic framework test</a></li>
+    <li><a href="/cgi-bin/koha/admin/checkmarc.pl">MARC bibliographic framework test</a></li>
     <li><a href="/cgi-bin/koha/admin/authtypes.pl">Authority types</a></li>
     <li><a href="/cgi-bin/koha/admin/classsources.pl">Classification sources</a></li>
     <li><a href="/cgi-bin/koha/admin/matching-rules.pl">Record matching rules</a></li>
-    <li><a href="/cgi-bin/koha/admin/oai_sets.pl">OAI Sets configuration</a></li>
+    <li><a href="/cgi-bin/koha/admin/oai_sets.pl">OAI sets configuration</a></li>
 </ul>
 
 <h5>Acquisition parameters</h5>
@@ -58,9 +58,9 @@
 <h5>Additional parameters</h5>
 
 <ul>
-	[% IF ( NoZebra ) %]<li><a href="/cgi-bin/koha/admin/stopwords.pl">Stop Words</a></li>[% END %]
+    [% IF ( NoZebra ) %]<li><a href="/cgi-bin/koha/admin/stopwords.pl">Stop words</a></li>[% END %]
 	<!-- <li><a href="/cgi-bin/koha/admin/printers.pl">Network Printers</a></li> -->
-	<li><a href="/cgi-bin/koha/admin/z3950servers.pl">Z39.50 Client Targets</a></li>
+    <li><a href="/cgi-bin/koha/admin/z3950servers.pl">Z39.50 client targets</a></li>
 </ul>
 </div>
 </div>

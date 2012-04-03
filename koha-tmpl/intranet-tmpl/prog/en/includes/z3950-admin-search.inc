@@ -46,7 +46,7 @@ YAHOO.util.Event.onContentReady("header_search", function() {
 </script>[% END %][% END %]
 <div id="header_search">
 	<div id="z3950_search" class="residentsearch">
-	<p class="tip">Z39.50 Server Search:</p>
+    <p class="tip">Z39.50 server search:</p>
 	<form action="/cgi-bin/koha/admin/z3950servers.pl" method="post">
                 <input type="text" name="searchfield" size="40" value="[% searchfield %]" />
                 <input type="submit" class="submit" name="search" value="Search" />
@@ -85,9 +85,9 @@ YAHOO.util.Event.onContentReady("header_search", function() {
 	</div>
 	[% END %]
 			<ul>
-			<li><a href="/cgi-bin/koha/admin/z3950servers.pl#z3950_search">Search z390.50 Servers</a></li>
-			[% IF ( CAN_user_circulate ) %]<li><a href="/cgi-bin/koha/circ/circulation.pl#circ_search">Check Out</a></li>[% END %]
-			[% IF ( CAN_user_catalogue ) %]<li><a href="/cgi-bin/koha/catalogue/search.pl#catalog_search">Search the Catalog</a></li>[% END %]
+            <li><a href="/cgi-bin/koha/admin/z3950servers.pl#z3950_search">Search Z390.50 servers</a></li>
+            [% IF ( CAN_user_circulate ) %]<li><a href="/cgi-bin/koha/circ/circulation.pl#circ_search">Check out</a></li>[% END %]
+            [% IF ( CAN_user_catalogue ) %]<li><a href="/cgi-bin/koha/catalogue/search.pl#catalog_search">Search the catalog</a></li>[% END %]
 			</ul>	
 </div>
 <!-- End Members Resident Search Box -->
