@@ -13,8 +13,8 @@
 </div>
     [% INCLUDE 'patron-search-box.inc' %]
 			<ul>
-			<li><a href="/cgi-bin/koha/catalogue/search.pl#addbooks_search">Cataloging Search</a></li>
-			[% IF ( CAN_user_circulate ) %]<li><a href="/cgi-bin/koha/circ/circulation.pl#circ_search">Check Out</a></li>[% END %]
+            <li><a href="/cgi-bin/koha/catalogue/search.pl#addbooks_search">Cataloging search</a></li>
+            [% IF ( CAN_user_circulate ) %]<li><a href="/cgi-bin/koha/circ/circulation.pl#circ_search">Check out</a></li>[% END %]
 			</ul>	
 </div>
 <!-- End Cataloging Resident Search Box -->
