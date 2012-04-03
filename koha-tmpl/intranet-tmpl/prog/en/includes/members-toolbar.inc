@@ -52,16 +52,16 @@ function update_child() {
 	}
 	function yuiToolbar() {
 	    var printmenu = [
-	        { text: _("Print Page"), onclick: {fn: function(){printx_window("page")}} },
-	        { text: _("Print Slip"), onclick: {fn: function(){printx_window("slip")}} },
-	        { text: _("Quick Slip"), onclick: {fn: function(){printx_window("qslip")}} }
+            { text: _("Print page"), onclick: {fn: function(){printx_window("page")}} },
+            { text: _("Print slip"), onclick: {fn: function(){printx_window("slip")}} },
+            { text: _("Quick slip"), onclick: {fn: function(){printx_window("qslip")}} }
 	    ];
 
 		var moremenu = [
-			{ text: _("Renew Patron"),  onclick: { fn: confirm_reregistration } },
-			{ text: _("Set Permissions"), url: "/cgi-bin/koha/members/member-flags.pl?member=[% borrowernumber %]"[% UNLESS ( CAN_user_permissions ) %], disabled: true[% END %]},
+            { text: _("Renew patron"),  onclick: { fn: confirm_reregistration } },
+            { text: _("Set permissions"), url: "/cgi-bin/koha/members/member-flags.pl?member=[% borrowernumber %]"[% UNLESS ( CAN_user_permissions ) %], disabled: true[% END %]},
 			{ text: _("Delete"), onclick: { fn: confirm_deletion}[% UNLESS ( CANDELETEUSER ) %], disabled: true[% END %] },
-			{ text: _("Update Child to Adult Patron") , onclick: { fn: update_child }[% UNLESS ( is_child ) %], disabled: true[% END %]}
+            { text: _("Update child to adult patron") , onclick: { fn: update_child }[% UNLESS ( is_child ) %], disabled: true[% END %]}
 		];
 
 	    new YAHOO.widget.Button({
@@ -115,10 +115,10 @@ function update_child() {
             [% END %]
         [% END %]
 	[% IF ( adultborrower AND activeBorrowerRelationship ) %]<li><a id="addchild" href="/cgi-bin/koha/members/memberentry.pl?op=add&amp;guarantorid=[% borrowernumber %]&amp;category_type=C">Add child</a></li>[% END %]
-	[% IF CAN_user_staffaccess %]<li><a id="changepassword" href="/cgi-bin/koha/members/member-password.pl?member=[% borrowernumber %]">Change Password</a></li> [% END %]
+    [% IF CAN_user_staffaccess %]<li><a id="changepassword" href="/cgi-bin/koha/members/member-password.pl?member=[% borrowernumber %]">Change password</a></li> [% END %]
 	<li><a id="duplicate" href="/cgi-bin/koha/members/memberentry.pl?op=duplicate&amp;borrowernumber=[% borrowernumber %]&amp;category_type=[% category_type %]">Duplicate</a></li>
-    <li id="printmenuc"><a id="printpage" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]&amp;print=page">Print Page</a></li>
-	<li><a id="printslip" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]&amp;print=slip">Print Slip</a></li>
+    <li id="printmenuc"><a id="printpage" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]&amp;print=page">Print page</a></li>
+    <li><a id="printslip" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]&amp;print=slip">Print slip</a></li>
 	<li id="searchtoholdc"><a id="searchtohold" href="#">Search to hold</a></li>
-	<li id="moremenuc"><a id="renewpatron" href="/cgi-bin/koha/members/moremember.pl?reregistration=y&amp;borrowernumber=[% borrowernumber %]">Renew Account</a></li>[% IF ( CAN_user_permissions ) %]<li><a id="patronflags" href="/cgi-bin/koha/members/member-flags.pl?member=[% borrowernumber %]">Set Permissions</a></li>[% END %]<li><a id="deletepatron" href="javascript:confirm_deletion();">Delete</a></li>
+    <li id="moremenuc"><a id="renewpatron" href="/cgi-bin/koha/members/moremember.pl?reregistration=y&amp;borrowernumber=[% borrowernumber %]">Renew account</a></li>[% IF ( CAN_user_permissions ) %]<li><a id="patronflags" href="/cgi-bin/koha/members/member-flags.pl?member=[% borrowernumber %]">Set permissions</a></li>[% END %]<li><a id="deletepatron" href="javascript:confirm_deletion();">Delete</a></li>
 </ul></div>
