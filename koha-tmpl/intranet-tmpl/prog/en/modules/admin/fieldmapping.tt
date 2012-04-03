@@ -1,5 +1,5 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Administration &rsaquo; Keyword to MARC Mapping</title>
+<title>Koha &rsaquo; Administration &rsaquo; Keyword to MARC mapping</title>
 [% INCLUDE 'doc-head-close.inc' %]
 
 <script type="text/javascript">
@@ -19,11 +19,11 @@ $(document).ready(function() {
 <body id="admin_fieldmapping" class="admin">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; Keyword to MARC Mapping</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; Keyword to MARC mapping</div>
 <div id="doc3" class="yui-t2">
 	<div id="yui-main">
 		<div class="yui-b">
-			<h2>Keyword to MARC Mapping</h2>
+            <h2>Keyword to MARC mapping</h2>
 			[% UNLESS ( fields ) %]
 			<div class="dialog message"><p>There are no mappings for the [% IF ( frameworktext ) %]<em>[% frameworktext %]</em>[% ELSE %]default[% END %] framework. </p></div>
 			[% END %]
@@ -62,8 +62,8 @@ $(document).ready(function() {
 								<caption>Mappings for the [% IF ( frameworktext ) %]<em>[% frameworktext %]</em>[% ELSE %]default[% END %] framework</caption>
 									<tr>
 										<th>Field</th>
-										<th>MARC Field</th>
-										<th>MARC Subfield</th>
+                                        <th>MARC field</th>
+                                        <th>MARC subfield</th>
 										<th>&nbsp;</th>
 									</tr>
 									[% FOREACH field IN fields %]

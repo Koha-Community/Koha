@@ -1,7 +1,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo;
-[% IF ( add_form ) %] Koha to MARC Mapping &rsaquo; Connect [% tablename %].[% kohafield %] to a MARC subfield[% END %]
-[% IF ( else ) %]Koha to MARC Mapping [% tagfield %][% END %]</title>
+[% IF ( add_form ) %] Koha to MARC mapping &rsaquo; Connect [% tablename %].[% kohafield %] to a MARC subfield[% END %]
+[% IF ( else ) %]Koha to MARC mapping [% tagfield %][% END %]</title>
 
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
@@ -10,7 +10,7 @@
 [% INCLUDE 'cat-search.inc' %]
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; [% IF ( add_form ) %] <a href="/cgi-bin/koha/admin/koha2marclinks.pl">Koha to MARC Mapping</a> &rsaquo; Connect [% tablename %].[% kohafield %] to a MARC subfield[% END %]
-[% IF ( else ) %]Koha to MARC Mapping[% tagfield %][% END %]</div>
+[% IF ( else ) %]Koha to MARC mapping[% tagfield %][% END %]</div>
 [% IF ( add_form ) %]
 <div id="doc" class="yui-t7">
 
@@ -142,13 +142,13 @@
 
 [% IF ( else ) %]
 
-<h1>Koha to MARC Mapping [% tagfield %]</h1>
+<h1>Koha to MARC mapping [% tagfield %]</h1>
 <form action="[% script_name %]" method="post">
 <p>[% tablename %] <input type="submit" value="OK" /></p>
 </form>
 <table>
 <tr>
-    <th>Koha Field</th>
+    <th>Koha field</th>
     <th>Tag</th>
     <th>Subfield</th>
     <th>Lib</th>

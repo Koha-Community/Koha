@@ -1,20 +1,20 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Administration &rsaquo; Item Types [% IF ( add_form ) %]&rsaquo; 
+<title>Koha &rsaquo; Administration &rsaquo; Item types [% IF ( add_form ) %]&rsaquo;
   [% IF ( itemtype ) %]
-Modify Item Type '[% itemtype %]'
+Modify item type '[% itemtype %]'
   [% ELSE %]
-Add Item Type
+Add item type
   [% END %]
 [% END %]
 [% IF ( delete_confirm ) %]&rsaquo; 
   [% IF ( total ) %]
-Cannot Delete Item Type '[% itemtype %]'
+Cannot delete item type '[% itemtype %]'
   [% ELSE %]
-Delete Item Type '[% itemtype %]'?
+Delete item type '[% itemtype %]'?
   [% END %]
 [% END %]
 [% IF ( delete_confirmed ) %]&rsaquo; 
-Data Deleted
+Data deleted
 [% END %]
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -101,23 +101,23 @@ function Check(f) {
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; [% IF ( add_form ) %]
   [% IF ( itemtype ) %]
-<a href="/cgi-bin/koha/admin/itemtypes.pl">Item Types</a> &rsaquo; Modify Item Type '[% itemtype %]'
+<a href="/cgi-bin/koha/admin/itemtypes.pl">Item types</a> &rsaquo; Modify item type '[% itemtype %]'
   [% ELSE %]
-<a href="/cgi-bin/koha/admin/itemtypes.pl">Item Types</a> &rsaquo; Add Item Type
+<a href="/cgi-bin/koha/admin/itemtypes.pl">Item types</a> &rsaquo; Add item type
   [% END %]
 [% END %]
 [% IF ( delete_confirm ) %]
   [% IF ( total ) %]
-<a href="/cgi-bin/koha/admin/itemtypes.pl">Item Types</a> &rsaquo; Cannot Delete Item Type '[% itemtype %]'
+<a href="/cgi-bin/koha/admin/itemtypes.pl">Item types</a> &rsaquo; Cannot delete item type '[% itemtype %]'
   [% ELSE %]
-<a href="/cgi-bin/koha/admin/itemtypes.pl">Item Types</a> &rsaquo; Delete Item Type '[% itemtype %]'?
+<a href="/cgi-bin/koha/admin/itemtypes.pl">Item types</a> &rsaquo; Delete item type '[% itemtype %]'?
   [% END %]
 [% END %]
 [% IF ( delete_confirmed ) %]
-<a href="/cgi-bin/koha/admin/itemtypes.pl">Item Types</a> &rsaquo;Data Deleted
+<a href="/cgi-bin/koha/admin/itemtypes.pl">Item types</a> &rsaquo;Data deleted
 [% END %]
 [% IF ( else ) %]
-Item Types Administration
+Item types administration
 [% END %]</div>
 
 <div id="doc3" class="yui-t2">
@@ -145,14 +145,14 @@ Item Types Administration
 	//]]>
 	</script>
 	<ul class="toolbar">
-	<li><a id="newitemtype" href="/cgi-bin/koha/admin/itemtypes.pl?op=add_form">New Item Type</a></li>
+    <li><a id="newitemtype" href="/cgi-bin/koha/admin/itemtypes.pl?op=add_form">New item type</a></li>
 </ul></div>[% ELSE %]&nbsp;[% END %]
 
 [% IF ( add_form ) %]
   [% IF ( itemtype ) %]
-      <h3>Modify Item Type</h3>
+      <h3>Modify item type</h3>
   [% ELSE %]
-      <h3>Add Item Type</h3>
+      <h3>Add item type</h3>
   [% END %]
 <form action="[% script_name %]" name="Aform" method="post">
   <input type="hidden" name="op" value="add_validate" />
@@ -176,13 +176,13 @@ Item Types Administration
 	 <li><span class="label">Image: </span>Item type images are disabled. To enable them, turn off the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&amp;searchfield=noItemTypeImages">noItemTypeImages system preference</a></li></ol>
 	 [% ELSE %]</ol>
 		<div id="icons" class="toptabs">
-		<h5 style="margin-left:10px;">Choose an Icon:</h5>
+        <h5 style="margin-left:10px;">Choose an icon:</h5>
 			<ul>
 					<li><a href="/cgi-bin/koha/admin/itemtypes.pl#none">None</a></li>
 				  [% FOREACH imageset IN imagesets %]
             [% IF ( imageset.imagesetactive ) %]<li class="ui-tabs-selected">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/admin/itemtypes.pl#[% imageset.imagesetname %]">[% imageset.imagesetname %]</a></li>
 				  [% END %]
-				  [% IF ( remote_image ) %]<li class="ui-tabs-selected">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/admin/itemtypes.pl#remote">Remote Image</a></li>
+                  [% IF ( remote_image ) %]<li class="ui-tabs-selected">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/admin/itemtypes.pl#remote">Remote image</a></li>
 			</ul>
 		</div>
   <div id="none"><ul>
@@ -257,10 +257,10 @@ Item Types Administration
 
 [% IF ( delete_confirm ) %]
 [% IF ( total ) %]<div class="dialog message">
-<h3>Cannot Delete Item Type</h3>
+<h3>Cannot delete item type</h3>
 <p><strong>This record is used [% total %] times</strong>. Deletion is not possible.</p>
 [% ELSE %]<div class="dialog alert">
-<h3>Delete Item Type '[% itemtype %]'?</h3>
+<h3>Delete item type '[% itemtype %]'?</h3>
 [% END %]
 <table>
 		<tr>
@@ -284,7 +284,7 @@ Item Types Administration
 [% END %]
 
 [% IF ( else ) %]
-<h2>Item Types Administration</h2>
+<h2>Item types administration</h2>
 [% IF ( loop ) %]<div id="pagertable_item_type">
 [% INCLUDE 'table-pager.inc' perpage='10' %]
 </div>

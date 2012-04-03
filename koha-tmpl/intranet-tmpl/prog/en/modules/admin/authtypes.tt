@@ -1,9 +1,9 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Administration &rsaquo; Authority Types
+<title>Koha &rsaquo; Administration &rsaquo; Authority types
 [% IF ( add_form ) %]
 &rsaquo; [% IF ( authtypecode ) %]Modify authority type[% ELSE %]New authority type[% END %]
 [% ELSIF ( delete_confirm ) %]
-&rsaquo; Confirm Deletion of Authority Type
+&rsaquo; Confirm deletion of authority type
 [% END %]
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -55,11 +55,11 @@ $(document).ready(function() {
 <div id="breadcrumbs">
          <a href="/cgi-bin/koha/mainpage.pl">Home</a>
 &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
-&rsaquo; <a href="[% script_name %]">Authority Types</a>
+&rsaquo; <a href="[% script_name %]">Authority types</a>
 [% IF ( add_form ) %]
-&rsaquo; [% IF ( authtypecode ) %]Modify[% ELSE %]New[% END %] Authority Type
+&rsaquo; [% IF ( authtypecode ) %]Modify[% ELSE %]New[% END %] Authority type
 [% ELSIF ( delete_confirm ) %]
-&rsaquo; Confirm Deletion of Authority Type
+&rsaquo; Confirm deletion of authority type
 [% END %]
 </div>
 
@@ -110,7 +110,7 @@ $(document).ready(function() {
 [% END %]
 
 [% IF ( delete_confirm ) %]
-		<div class="dialog alert"><h3>Confirm Deletion of authority structure definition for <span class="ex">'[% authtypetext %]' ([% authtypecode %])</span></h3>
+        <div class="dialog alert"><h3>Confirm deletion of authority structure definition for <span class="ex">'[% authtypetext %]' ([% authtypecode %])</span></h3>
 	[% IF ( total ) %]
 		<p>This record is used <strong>[% total %]</strong> times</p>
 	[% END %]		
@@ -126,10 +126,10 @@ $(document).ready(function() {
 
 <div id="toolbar">
 	<ul class="toolbar">
-	<li><a id="authtype" href="[% script_name %]?op=add_form">New Authority Type</a></li>
+    <li><a id="authtype" href="[% script_name %]?op=add_form">New authority type</a></li>
 </ul></div>
 
-<h1>Authority Types</h1>
+<h1>Authority types</h1>
 <p>Define authority types, then authority MARC structure in the same way you define itemtypes and biblio MARC tag structure. Authority values are managed through plugins</p>
 <table>
 	<tr>

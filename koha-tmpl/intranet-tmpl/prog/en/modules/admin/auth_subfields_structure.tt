@@ -29,7 +29,7 @@ function displayMoreConstraint(numlayer){
   [% IF ( else ) %]Authority MARC subfield structure
   [% ELSE %]<a href="/cgi-bin/koha/admin/auth_subfields_structure.pl?tagfield=[% tagfield %]&amp;tagsubfield=[% tagsubfield %]&amp;authtypecode=[% authtypecode %]">Authority MARC subfield structure</a> &rsaquo;
   [% END %]
-  [% IF ( delete_confirm ) %]Confirm Deletion of Subfield [% tagsubfield %]?[% END %]
+  [% IF ( delete_confirm ) %]Confirm deletion of subfield [% tagsubfield %]?[% END %]
   [% IF ( delete_confirmed ) %]Data deleted[% END %]
   [% IF ( add_form ) %]
   [% IF ( use_heading_flags_p ) %]
@@ -53,7 +53,7 @@ function displayMoreConstraint(numlayer){
         <input type="hidden" name="op" value="add_validate" />
         <input type="hidden" name="tagfield" value="[% tagfield %]" />
         <input type="hidden" name="authtypecode" value="[% authtypecode %]" />
-        <fieldset class="action"><input type="submit" class="submit" value="Save Changes" /> <a class="cancel" href="/cgi-bin/koha/admin/auth_subfields_structure.pl?tagfield=[% tagfield %]&amp;authtypecode=[% authtypecode %]">Cancel</a></fieldset>
+        <fieldset class="action"><input type="submit" class="submit" value="Save changes" /> <a class="cancel" href="/cgi-bin/koha/admin/auth_subfields_structure.pl?tagfield=[% tagfield %]&amp;authtypecode=[% authtypecode %]">Cancel</a></fieldset>
         <div id="subfieldtabs" class="toptabs numbered">
             <ul>
                 [% FOREACH loo IN loop %]
@@ -95,7 +95,7 @@ function displayMoreConstraint(numlayer){
                         </ol>
                     </fieldset>
                 </li>
-                <li><label for="isurl[% loo.row %]">Is a url:</label>[% loo.isurl %] (if checked, it means that the subfield is a url and can be clicked)</li>
+                <li><label for="isurl[% loo.row %]">Is a URL:</label>[% loo.isurl %] (if checked, it means that the subfield is a URL and can be clicked)</li>
                 <li>
                     <fieldset><legend>Help input</legend>	
                         <ol>
@@ -114,7 +114,7 @@ function displayMoreConstraint(numlayer){
 
 [% IF ( delete_confirm ) %]
 
-	<div class="dialog alert"><h3>Delete Subfield <span class="ex">'[% tagsubfield %]'?</span></h3>
+    <div class="dialog alert"><h3>Delete subfield <span class="ex">'[% tagsubfield %]'?</span></h3>
     <form action="[% delete_link %]" method="post"><input type="hidden" name="op" value="delete_confirmed" />
     <table><tr><th scope="row">Subfield:</th> <td>[% tagsubfield %]</td></tr>
     <tr><th scope="row">Description:</th> <td>[% liblibrarian %]</td></tr></table>

@@ -1,6 +1,6 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Administration &rsaquo; [% IF ( add_form ) %] System Preferences &rsaquo; [% IF ( modify ) %]Modify system preference '[% searchfield %]'[% ELSE %]Add a system preference[% END %][% END %][% IF ( add_validate ) %] System Preferences &rsaquo; Data Added[% END %]
-[% IF ( delete_confirm ) %] System Preferences &rsaquo; [% searchfield %] &rsaquo; Confirm Deletion of Parameter '[% searchfield %]'[% END %][% IF ( delete_confirmed ) %] System Preferences &rsaquo; Parameter Deleted[% END %][% IF ( else ) %]System Preferences[% END %]</title>
+<title>Koha &rsaquo; Administration &rsaquo; [% IF ( add_form ) %] System preferences &rsaquo; [% IF ( modify ) %]Modify system preference '[% searchfield %]'[% ELSE %]Add a system preference[% END %][% END %][% IF ( add_validate ) %] System preferences &rsaquo; Data added[% END %]
+[% IF ( delete_confirm ) %] System preferences &rsaquo; [% searchfield %] &rsaquo; Confirm deletion of parameter '[% searchfield %]'[% END %][% IF ( delete_confirmed ) %] System preferences &rsaquo; Parameter deleted[% END %][% IF ( else ) %]System preferences[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <script type="text/javascript">
 //<![CDATA[
@@ -77,8 +77,8 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'sysprefs-admin-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; [% IF ( add_form ) %] <a href="/cgi-bin/koha/admin/systempreferences.pl">System Preferences</a> &rsaquo; [% IF ( modify ) %]Modify system preference '[% searchfield %]'[% ELSE %]Add a system preference[% END %][% END %][% IF ( add_validate ) %] <a href="/cgi-bin/koha/admin/systempreferences.pl">System Preferences</a> &rsaquo; Data Added[% END %]
-[% IF ( delete_confirm ) %] <a href="/cgi-bin/koha/admin/systempreferences.pl">System Preferences</a> &rsaquo; <a href="/cgi-bin/koha/admin/systempreferences.pl?op=add_form&amp;searchfield=[% searchfield %]">[% searchfield %]</a> &rsaquo; Confirm Deletion of Parameter '[% searchfield %]'[% END %][% IF ( delete_confirmed ) %] <a href="/cgi-bin/koha/admin/systempreferences.pl">System Preferences</a> &rsaquo; Parameter Deleted[% END %][% IF ( else ) %]System Preferences[% END %]</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; [% IF ( add_form ) %] <a href="/cgi-bin/koha/admin/systempreferences.pl">System preferences</a> &rsaquo; [% IF ( modify ) %]Modify system preference '[% searchfield %]'[% ELSE %]Add a system preference[% END %][% END %][% IF ( add_validate ) %] <a href="/cgi-bin/koha/admin/systempreferences.pl">System preferences</a> &rsaquo; Data added[% END %]
+[% IF ( delete_confirm ) %] <a href="/cgi-bin/koha/admin/systempreferences.pl">System Preferences</a> &rsaquo; <a href="/cgi-bin/koha/admin/systempreferences.pl?op=add_form&amp;searchfield=[% searchfield %]">[% searchfield %]</a> &rsaquo; Confirm deletion of parameter '[% searchfield %]'[% END %][% IF ( delete_confirmed ) %] <a href="/cgi-bin/koha/admin/systempreferences.pl">System preferences</a> &rsaquo; Parameter deleted[% END %][% IF ( else ) %]System preferences[% END %]</div>
 
 <div id="doc3" class="yui-t2">
    
@@ -199,7 +199,7 @@
         <div class="hint"> (<span class="variabletype" id="Choice">Choice</span>, <span class="variabletype" id="YesNo">YesNo</span>, <span class="variabletype" id="Integer">Integer</span>, <span class="variabletype" id="Textarea">Textarea</span>, <span class="variabletype" id="Float">Float</span>, <span class="variabletype" id="Themes">Themes</span>, <span class="variabletype" id="Languages">Languages</span>, <span class="variabletype" id="Upload">Upload</span> or <span class="variabletype" id="ClassSources">ClassSources</span>)</div>
         <input type="text" name="preftype" id="preftype" value="[% preftype %]" size="40" maxlength="40" /></li>
         <li><label for="prefoptions">Variable options:</label>
-        <div class="hint">(a choice list for Choice (separated by |) or cols|rows for Texarea)</div>
+        <div class="hint">(a choice list for choice (separated by |) or cols|rows for texarea)</div>
         <input type="text" name="prefoptions" id="prefoptions" value="[% prefoptions %]" size="60" maxlength="80" /></li>
         </ol>
         </fieldset>
@@ -216,9 +216,9 @@
     
     [% IF ( delete_confirm ) %]
     <table>
-        <caption>Confirm Deletion of [% searchfield %]?</caption>
+        <caption>Confirm deletion of [% searchfield %]?</caption>
         <tr>
-            <th>Variable Name:</th>
+            <th>Variable name:</th>
             <td>[% searchfield %]</td>
         </tr>
         <tr><th>Value: </th><td>
@@ -228,8 +228,8 @@
         <input type="hidden" name="op" value="delete_confirmed" />
         <input type="hidden" name="searchfield" value="[% searchfield %]" />
         <input type="hidden" name="Tvalue" value="[% Tvalue %]" />
-        <input type="submit"  value="Yes, Delete" /></form> 
-        <form class="inline" action="[% script_name %]" method="post"><input type="submit" value="No, Do not Delete" /></form>
+        <input type="submit"  value="Yes, delete" /></form>
+        <form class="inline" action="[% script_name %]" method="post"><input type="submit" value="No, do not delete" /></form>
     [% END %]
     
     [% IF ( delete_confirmed ) %]
@@ -259,7 +259,7 @@
     }   //]]>
     </script>
     <ul class="toolbar">
-        <li><a id="newstopword" href="[% script_name %]?op=add_form">New Preference</a></li>
+        <li><a id="newstopword" href="[% script_name %]?op=add_form">New preference</a></li>
     </ul></div>
     
     <h1>System preferences admin</h1>
@@ -294,7 +294,7 @@
                 <input type="file" name="value" value="[% loo.value |html %]" />
                 [% END %]
                 [% IF ( loo.type_textarea ) %]
-                <a class="expand-textarea" style="display: none" href="#">Click to Edit</a>
+                <a class="expand-textarea" style="display: none" href="#">Click to edit</a>
                 <textarea name="value" rows="[% loo.rows %]" cols="[% loo.cols %]">[% loo.value |html %]</textarea>
                 [% END %]
                 [% IF ( loo.type_choice ) %]

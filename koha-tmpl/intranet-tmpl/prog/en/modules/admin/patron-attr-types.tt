@@ -1,5 +1,5 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Administration &rsaquo; Patron Attribute Types
+<title>Koha &rsaquo; Administration &rsaquo; Patron attribute types
 [% IF ( attribute_type_form ) %]
   [% IF ( edit_attribute_type ) %]
     &rsaquo; Modify patron attribute type
@@ -48,7 +48,7 @@ function CheckAttributeTypeForm(f) {
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; [% IF ( display_list ) %]Patron Attribute Types[% ELSE %]<a href="/cgi-bin/koha/admin/patron-attr-types.pl">Patron Attribute Types</a>[% END %]
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; [% IF ( display_list ) %]Patron attribute types[% ELSE %]<a href="/cgi-bin/koha/admin/patron-attr-types.pl">Patron attribute types</a>[% END %]
 [% IF ( attribute_type_form ) %]
   [% IF ( edit_attribute_type ) %]
     &rsaquo; Modify patron attribute type
@@ -255,10 +255,10 @@ function CheckAttributeTypeForm(f) {
 	}	//]]>
 	</script>
 	<ul class="toolbar">
-	<li><a id="newrule" href="[% script_name %]?op=add_attribute_type">New Patron Attribute Type</a></li>
+    <li><a id="newrule" href="[% script_name %]?op=add_attribute_type">New patron attribute type</a></li>
 </ul></div>
 
-<h2>Patron Attribute Types</h2>
+<h2>Patron attribute types</h2>
 [% IF ( added_attribute_type ) %]
 <div class="dialog message">Added patron attribute type &quot;[% added_attribute_type %]&quot;</div>
 [% END %]

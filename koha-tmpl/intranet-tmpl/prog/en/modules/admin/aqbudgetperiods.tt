@@ -94,7 +94,7 @@
             Delete budget '[% budget_period_description %]'?
     [% END %]
     [% IF ( delete_confirmed ) %]&rsaquo;
-        Data Deleted
+        Data deleted
     [% END %]
 </title>
 
@@ -269,14 +269,14 @@
     <li>
         <!-- ACTIVE -->
         <!-- ############################## -->
-        <label for="budget_period_active">Make Budget Active</label>
+        <label for="budget_period_active">Make budget active</label>
         [% IF ( budget_period_active ) %]<input type="checkbox" checked="checked" id="budget_period_active" name="budget_period_active" value="1" />[% ELSE %]  <input type="checkbox" id="budget_period_active" name="budget_period_active" value="1"/> [% END %]
     </li>
 
     <li>
         <!-- LOCK  -->
         <!-- ############################## -->
-        <label for="budget_period_locked">Lock Budget</label>
+        <label for="budget_period_locked">Lock budget</label>
         [% IF ( budget_period_locked ) %]<input type="checkbox" checked="checked" id="budget_period_locked" name="budget_period_locked" value="1" />[% ELSE %]  <input type="checkbox" id="budget_period_locked" name="budget_period_locked" value="1"/> [% END %]
     </li>
     </ol>
@@ -285,7 +285,7 @@
     <fieldset class="action">
         <!-- "save changes" button -->
         <!-- ###################################### -->
-        <input type="button" value="Save Changes"  onclick="Check(this.form)"    />
+        <input type="button" value="Save changes"  onclick="Check(this.form)"    />
         <!--             <input type="submit" value="Save Changes"  />  -->
         <!--            <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl" class="cancel">Cancel</a> -->
     </fieldset>
@@ -334,9 +334,9 @@
     <table id="periodsh">
     <thead>
 	    <tr>
-	        <th>Budget Name</th>
-	        <th>Start Date</th>
-	        <th>End Date</th>
+            <th>Budget name</th>
+            <th>Start date</th>
+            <th>End date</th>
 	        <th>Active</th>
 	        <th>Locked</th>
 	        <th>Total</th>
@@ -359,7 +359,7 @@
 	        <td>
 	            <a href="[% period_loo.script_name %]?op=add_form&amp;budget_period_id=[% period_loo.budget_period_id |html %]">Edit</a>
 	            <a href="[% period_loo.script_name %]?op=delete_confirm&amp;budget_period_id=[% period_loo.budget_period_id %]">Delete</a>
-	           	<a href="/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&amp;budget_period_id=[% period_loo.budget_period_id %]">Add Fund</a>
+            <a href="/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&amp;budget_period_id=[% period_loo.budget_period_id %]">Add fund</a>
 	        </td>
 	        </tr>
 	    [% END %]

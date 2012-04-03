@@ -1,8 +1,8 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Administration &rsaquo; Currencies &amp; Exchange Rates &rsaquo;
-[% IF ( add_form ) %][% IF ( searchfield ) %]Modify Currency '[% searchfield %]'[% ELSE %]New Currency[% END %][% END %]
-[% IF ( delete_confirm ) %]Confirm Deletion of Currency '[% searchfield %]'[% END %]
-[% IF ( delete_confirmed ) %]Currency Deleted[% END %]
+<title>Koha &rsaquo; Administration &rsaquo; Currencies &amp; Exchange rates &rsaquo;
+[% IF ( add_form ) %][% IF ( searchfield ) %]Modify currency '[% searchfield %]'[% ELSE %]New currency[% END %][% END %]
+[% IF ( delete_confirm ) %]Confirm deletion of currency '[% searchfield %]'[% END %]
+[% IF ( delete_confirmed ) %]Currency deleted[% END %]
 [% IF ( else ) %]Currencies[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <script type="text/javascript">
@@ -56,9 +56,9 @@
 
 
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo;  <a href="/cgi-bin/koha/admin/currency.pl">Currencies &amp; Exchange Rates</a> &rsaquo; [% IF ( add_form ) %][% IF ( searchfield ) %]Modify Currency '[% searchfield %]'[% ELSE %]New Currency[% END %][% END %]
-[% IF ( delete_confirm ) %]Confirm Deletion of Currency '<span class="ex">[% searchfield %]</span>'[% END %]
-[% IF ( delete_confirmed ) %]Currency Deleted[% END %]
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo;  <a href="/cgi-bin/koha/admin/currency.pl">Currencies &amp; Exchange rates</a> &rsaquo; [% IF ( add_form ) %][% IF ( searchfield ) %]Modify currency '[% searchfield %]'[% ELSE %]New currency[% END %][% END %]
+[% IF ( delete_confirm ) %]Confirm deletion of currency '<span class="ex">[% searchfield %]</span>'[% END %]
+[% IF ( delete_confirmed ) %]Currency deleted[% END %]
 [% IF ( else ) %]Currencies[% END %]
 </div>
 
@@ -71,7 +71,7 @@
 [% IF ( else ) %]
 <div id="toolbar">
     <ul class="toolbar">
-    <li><a id="newcurrency" href="[% script_name %]?op=add_form">New Currency</a></li>
+    <li><a id="newcurrency" href="[% script_name %]?op=add_form">New currency</a></li>
 </ul></div>
 [% END %]
 
@@ -105,7 +105,7 @@
         </li>
 
         <li>
-            <span class="label">Last Updated: </span>[% timestamp %]
+            <span class="label">Last updated: </span>[% timestamp %]
         </li>
         <li>
             <label for="active">Active: </label>
@@ -130,7 +130,7 @@
 [% IF ( delete_confirm ) %]
     [% IF ( totalgtzero ) %]
     <div class="dialog message">
-        <h3>Cannot Delete Currency <span class="ex">'[% searchfield %]'</span></h3>
+        <h3>Cannot delete currency <span class="ex">'[% searchfield %]'</span></h3>
         <p>This currency is used [% total %] times. Deletion not possible</p>
         <form action="[% script_name %]" method="post">
             <input type="submit" value="OK" class="approve" />
@@ -138,7 +138,7 @@
     </div>
     [% ELSE %]
     <div class="dialog alert">
-        <h3>Confirm Deletion of Currency <span class="ex">'[% searchfield %]'</span></h3>
+        <h3>Confirm deletion of currency <span class="ex">'[% searchfield %]'</span></h3>
         <table>
             <tr><th>Currency</th>
                 <td>[% searchfield %]</td>
@@ -160,7 +160,7 @@
 [% END %]
 
 [% IF ( delete_confirmed ) %]
-<div class="dialog message"><h3>Currency Deleted</h3>
+<div class="dialog message"><h3>Currency deleted</h3>
 <form action="[% script_name %]" method="post">
     <input type="submit" class="approve" value="OK" />
 </form></div>
@@ -168,7 +168,7 @@
 
 [% IF ( else ) %]
 
-<h2>Currencies and Exchange Rates</h2>
+<h2>Currencies and exchange rates</h2>
 
 [% IF ( loop ) %][% UNLESS ( activecurrency ) %]<div class="dialog alert"><h3>No active currency is defined</h3><p>Please edit one currency and mark it as active.</p></div>[% END %][% END %]
 
@@ -182,7 +182,7 @@
             <th>Currency</th>
             <th>Rate</th>
             <th>Symbol</th>
-            <th>Last Updated</th>
+            <th>Last updated</th>
             <th>Active</th>
             <th colspan="2">Actions&nbsp;</th>
         </tr>

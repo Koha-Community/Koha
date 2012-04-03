@@ -1,9 +1,9 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Administration &rsaquo; [% IF ( else ) %]Z39.50 Servers[% END %]
-[% IF ( add_form ) %] Z39.50 Servers &rsaquo; [% IF ( searchfield ) %]Modify Z39.50 Server [% searchfield %][% ELSE %]New Z39.50 Server[% END %][% END %]
-[% IF ( delete_confirm ) %]Z39.50 Servers &rsaquo; Confirm Deletion[% END %]
-[% IF ( add_validate ) %]Z39.50 Servers &rsaquo; Z39.50 Server Added[% END %]
-[% IF ( delete_confirmed ) %]Z39.50 Servers &rsaquo; Z39.50 Server Deleted[% END %]</title>
+<title>Koha &rsaquo; Administration &rsaquo; [% IF ( else ) %]Z39.50 servers[% END %]
+[% IF ( add_form ) %] Z39.50 servers &rsaquo; [% IF ( searchfield ) %]Modify Z39.50 server [% searchfield %][% ELSE %]New Z39.50 server[% END %][% END %]
+[% IF ( delete_confirm ) %]Z39.50 servers &rsaquo; Confirm deletion[% END %]
+[% IF ( add_validate ) %]Z39.50 servers &rsaquo; Z39.50 server added[% END %]
+[% IF ( delete_confirmed ) %]Z39.50 servers &rsaquo; Z39.50 server deleted[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 
 [% IF ( add_form ) %]
@@ -69,11 +69,11 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'z3950-admin-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; [% IF ( else ) %]Z39.50 Servers[% END %]
-[% IF ( add_form ) %] <a href="/cgi-bin/koha/admin/z3950servers.pl">Z39.50 Servers</a> &rsaquo; [% IF ( searchfield ) %]Modify Z39.50 Server [% searchfield %][% ELSE %]New Z39.50 Server[% END %][% END %]
-[% IF ( delete_confirm ) %] <a href="/cgi-bin/koha/admin/z3950servers.pl">Z39.50 Servers</a> &rsaquo; Confirm Deletion[% END %]
-[% IF ( add_validate ) %] <a href="/cgi-bin/koha/admin/z3950servers.pl">Z39.50 Servers</a> &rsaquo; Z39.50 Server Added[% END %]
-[% IF ( delete_confirmed ) %] <a href="/cgi-bin/koha/admin/z3950servers.pl">Z39.50 Servers</a> &rsaquo; Z39.50 Server Deleted[% END %]</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; [% IF ( else ) %]Z39.50 servers[% END %]
+[% IF ( add_form ) %] <a href="/cgi-bin/koha/admin/z3950servers.pl">Z39.50 servers</a> &rsaquo; [% IF ( searchfield ) %]Modify Z39.50 server [% searchfield %][% ELSE %]New Z39.50 server[% END %][% END %]
+[% IF ( delete_confirm ) %] <a href="/cgi-bin/koha/admin/z3950servers.pl">Z39.50 servers</a> &rsaquo; Confirm deletion[% END %]
+[% IF ( add_validate ) %] <a href="/cgi-bin/koha/admin/z3950servers.pl">Z39.50 servers</a> &rsaquo; Z39.50 server added[% END %]
+[% IF ( delete_confirmed ) %] <a href="/cgi-bin/koha/admin/z3950servers.pl">Z39.50 servers</a> &rsaquo; Z39.50 server deleted[% END %]</div>
 
 <div id="doc3" class="yui-t2">
    
@@ -86,15 +86,15 @@
         <form action="[% script_name %]" name="Aform" method="post">
         <input type="hidden" name="op" value="add_validate" />
 [% IF ( searchfield ) %]
-                <h1>Modify Z39.50 Server</h1>
+                <h1>Modify Z39.50 server</h1>
         [% ELSE %]
-                <h1>New Z39.50 Server</h1>
+                <h1>New Z39.50 server</h1>
         [% END %]                
         <fieldset class="rows">
         <ol>[% IF ( searchfield ) %]
-                <li><span class="label">Z39.50 Server: </span>        <input type="hidden" name="searchfield" value="[% searchfield %]" />[% searchfield %]</li>
+                <li><span class="label">Z39.50 server: </span>        <input type="hidden" name="searchfield" value="[% searchfield %]" />[% searchfield %]</li>
         [% ELSE %]
-                <li><label for="searchfield">Z39.50 Server: </label>        <input type="text" name="searchfield" id="searchfield" size="65" maxlength="100" onblur="toUC(this)" /></li>
+                <li><label for="searchfield">Z39.50 server: </label>        <input type="text" name="searchfield" id="searchfield" size="65" maxlength="100" onblur="toUC(this)" /></li>
         [% END %]
 
 		<li><label for="host">Hostname: </label>	<input type="text" name="host" id="host" size="30" value="[% host %]" />
@@ -241,7 +241,7 @@
 [% END %]
 
 [% IF ( add_validate ) %]
-<h3>Z39.50 Server Added</h3>
+<h3>Z39.50 server added</h3>
 <form action="[% script_name %]" method="post">
         <input type="submit" value="OK" />
         </form>
@@ -249,7 +249,7 @@
 
 [% IF ( delete_confirm ) %]
 	[% reqsel %]
-<h3>Confirm Deletion of Server [% searchfield %]</h3>	
+<h3>Confirm deletion of server [% searchfield %]</h3>
         <ul>
                 <li><strong>Target: </strong>        [% searchfield %]</li>
                 <li><strong>Hostname: </strong>[% host %]</li>
@@ -269,7 +269,7 @@
 [% END %]
 
 [% IF ( delete_confirmed ) %]
-<h3>Z39.50 Server Deleted</h3>
+<h3>Z39.50 server deleted</h3>
 <form action="[% script_name %]" method="post">
                 <input type="submit" value="OK" />
 </form>
@@ -296,10 +296,10 @@
 	}	//]]>
 	</script>
 	<ul class="toolbar">
-	<li><a id="newserver" href="/cgi-bin/koha/admin/z3950servers.pl?op=add_form">New Z39.50 Server</a></li>
+    <li><a id="newserver" href="/cgi-bin/koha/admin/z3950servers.pl?op=add_form">New Z39.50 server</a></li>
 </ul></div>
 
-<h3>Z39.50 Servers Administration</h3>
+<h3>Z39.50 servers administration</h3>
 
         [% IF ( searchfield ) %]
                 You searched for [% searchfield %]

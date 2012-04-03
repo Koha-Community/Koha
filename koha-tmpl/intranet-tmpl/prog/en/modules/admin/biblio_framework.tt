@@ -1,9 +1,9 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Administration &rsaquo; MARC Frameworks
+<title>Koha &rsaquo; Administration &rsaquo; MARC frameworks
 [% IF ( add_form ) %]
 &rsaquo; [% IF ( frameworkcode ) %]Modify framework text[% ELSE %]Add framework[% END %]
 [% ELSIF ( delete_confirm ) %]
-&rsaquo; Delete Framework for [% frameworktext %] ([% frameworkcode %])?
+&rsaquo; Delete framework for [% frameworktext %] ([% frameworkcode %])?
 [% END %]
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -129,11 +129,11 @@ $(document).ready(function() {
 <div id="breadcrumbs">
         <a href="/cgi-bin/koha/mainpage.pl">Home</a>
 &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
-&rsaquo; <a href="/cgi-bin/koha/admin/biblio_framework.pl">MARC Frameworks</a>
+&rsaquo; <a href="/cgi-bin/koha/admin/biblio_framework.pl">MARC frameworks</a>
 [% IF ( add_form ) %]
 &rsaquo; [% IF ( frameworkcode ) %]Modify framework text[% ELSE %]Add framework[% END %]
 [% ELSIF ( delete_confirm ) %]
-&rsaquo; Delete Framework for [% frameworktext %] ([% frameworkcode %])?
+&rsaquo; Delete framework for [% frameworktext %] ([% frameworkcode %])?
 [% END %]
 </div>
 
@@ -144,7 +144,7 @@ $(document).ready(function() {
 	
 [% IF ( else ) %]<div id="toolbar">
 	<ul class="toolbar">
-	<li><a id="newframework" href="/cgi-bin/koha/admin/biblio_framework.pl?op=add_form">New Framework</a></li>
+    <li><a id="newframework" href="/cgi-bin/koha/admin/biblio_framework.pl?op=add_form">New framework</a></li>
 </ul></div>[% END %]
 
 [% IF ( add_form ) %]
@@ -154,11 +154,11 @@ $(document).ready(function() {
     <fieldset class="rows">
     <ol>
 	[% IF ( frameworkcode ) %]
-        <li><span class="label">Framework Code</span><input type="hidden" id="frameworkcode" name="frameworkcode" value="[% frameworkcode %]" />[% frameworkcode %]
+        <li><span class="label">Framework code</span><input type="hidden" id="frameworkcode" name="frameworkcode" value="[% frameworkcode %]" />[% frameworkcode %]
             <input type="hidden" name="modif" value="1" />
         </li>
 	[% ELSE %]
-        <li><label for="frameworkcode">Framework Code</label><input type="text" id="frameworkcode" name="frameworkcode" size="4" maxlength="4" onblur="toUC(this)" /></li>
+        <li><label for="frameworkcode">Framework code</label><input type="text" id="frameworkcode" name="frameworkcode" size="4" maxlength="4" onblur="toUC(this)" /></li>
 	[% END %]
         <li><label for="description">Description</label>
         <input type="text" name="frameworktext" id="description" size="40" maxlength="80" value="[% frameworktext |html %]" /></li></ol></fieldset>
@@ -172,14 +172,14 @@ $(document).ready(function() {
     [% IF ( total ) %]
        <p><strong>This framework is used [% total %] times</strong>.</p>
     [% END %]
-    <form class="inline" action="[% script_name %]" method="post"><input type="hidden" name="op" value="delete_confirmed" /><input type="hidden" name="frameworkcode" value="[% frameworkcode %]" /><input type="submit" class="approve" value="Yes, Delete this Framework!" />
+    <form class="inline" action="[% script_name %]" method="post"><input type="hidden" name="op" value="delete_confirmed" /><input type="hidden" name="frameworkcode" value="[% frameworkcode %]" /><input type="submit" class="approve" value="Yes, delete this framework!" />
     </form>
-    <form class="inline" action="[% script_name %]" method="get"><input type="submit" class="deny" value="No, Do not Delete!" /></form>
+    <form class="inline" action="[% script_name %]" method="get"><input type="submit" class="deny" value="No, do not delete!" /></form>
 </div>
 [% END %]
 
 [% IF ( else ) %]
-<h1>MARC Frameworks</h1>
+<h1>MARC frameworks</h1>
 <p>Framework name, then go to MARC biblio to set MARC editor parameters</p>
 <table>
     <tr>
@@ -203,9 +203,9 @@ $(document).ready(function() {
                     <input type="hidden" name="frameworkcode" value="[% frameworkcode %]" />
                     <ul>
                         <li class="li_close_import_export"><span class="import_export_close" title="Close popup">Close</span></li>
-                        <li><input type="radio" name="type_export_[% frameworkcode %]" value="csv" id="type_export_[% frameworkcode %]" checked="checked" /><label for="type_export_[% frameworkcode %]" title="Export to CSV Spreadsheet">Export to CSV Spreadsheet</label></li>
-                        <li><input type="radio" name="type_export_[% frameworkcode %]" value="excel" id="type_export_[% frameworkcode %]" /><label for="type_export_[% frameworkcode %]" title="Export to Excel as xml format, compatible with OpenOffice/LibreOffice as well">Export to Excel with xml format</label></li>
-                        <li><input type="radio" name="type_export_[% frameworkcode %]" value="ods" id="type_export_[% frameworkcode %]" /><label for="type_export_[% frameworkcode %]">Export to OpenDocument Spreadsheet format</label></li>
+                        <li><input type="radio" name="type_export_[% frameworkcode %]" value="csv" id="type_export_[% frameworkcode %]" checked="checked" /><label for="type_export_[% frameworkcode %]" title="Export to CSV spreadsheet">Export to CSV spreadsheet</label></li>
+                        <li><input type="radio" name="type_export_[% frameworkcode %]" value="excel" id="type_export_[% frameworkcode %]" /><label for="type_export_[% frameworkcode %]" title="Export to Excel as XML format, compatible with OpenOffice/LibreOffice as well">Export to Excel with XML format</label></li>
+                        <li><input type="radio" name="type_export_[% frameworkcode %]" value="ods" id="type_export_[% frameworkcode %]" /><label for="type_export_[% frameworkcode %]">Export to OpenDocument spreadsheet format</label></li>
                         <li><input type="radio" name="type_export_[% frameworkcode %]" value="sql" id="type_export_[% frameworkcode %]" /><label for="type_export_[% frameworkcode %]" title="Export to SQL">Export to SQL</label></li>
                         <li><input type="submit" class="export_ok" href="#" value="Export" title="Export to a spreadsheet" /></li>
                     </ul>
@@ -245,9 +245,9 @@ $(document).ready(function() {
                         <input type="hidden" name="frameworkcode" value="[% loo.frameworkcode %]" />
                         <ul>
                             <li class="li_close_import_export"><span class="import_export_close" title="Close popup">Close</span></li>
-                            <li><input type="radio" name="type_export_[% loo.frameworkcode %]" value="csv" id="type_export_[% loo.frameworkcode %]" checked="checked" /><label for="type_export_[% loo.frameworkcode %]" title="Export to CSV Spreadsheet">Export to CSV Spreadsheet</label></li>
-                            <li><input type="radio" name="type_export_[% loo.frameworkcode %]" value="excel" id="type_export_[% loo.frameworkcode %]" /><label for="type_export_[% loo.frameworkcode %]" title="Export to Excel as xml format, compatible with OpenOffice/LibreOffice as well">Export to Excel as xml format</label></li>
-                            <li><input type="radio" name="type_export_[% loo.frameworkcode %]" value="ods" id="type_export_[% loo.frameworkcode %]" /><label for="type_export_[% loo.frameworkcode %]">Export to OpenDocument Spreadsheet format</label></li>
+                            <li><input type="radio" name="type_export_[% loo.frameworkcode %]" value="csv" id="type_export_[% loo.frameworkcode %]" checked="checked" /><label for="type_export_[% loo.frameworkcode %]" title="Export to CSV spreadsheet">Export to CSV spreadsheet</label></li>
+                            <li><input type="radio" name="type_export_[% loo.frameworkcode %]" value="excel" id="type_export_[% loo.frameworkcode %]" /><label for="type_export_[% loo.frameworkcode %]" title="Export to Excel as XML format, compatible with OpenOffice/LibreOffice as well">Export to Excel as XML format</label></li>
+                            <li><input type="radio" name="type_export_[% loo.frameworkcode %]" value="ods" id="type_export_[% loo.frameworkcode %]" /><label for="type_export_[% loo.frameworkcode %]">Export to OpenDocument spreadsheet format</label></li>
                             <li><input type="radio" name="type_export_[% loo.frameworkcode %]" value="sql" id="type_export_[% loo.frameworkcode %]" /><label for="type_export_[% loo.frameworkcode %]" title="Export to SQL">Export to SQL</label></li>
                             <li><input type="submit" class="export_ok" href="#" value="Export" title="Export to a spreadsheet" /></li>
                         </ul>
