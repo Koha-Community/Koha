@@ -12,7 +12,7 @@
 <div id="navmenu">
 <div id="navmenulist">
 <ul>
-	<li><a href="/cgi-bin/koha/tools/tools-home.pl">Tools Home</a></li>
+    <li><a href="/cgi-bin/koha/tools/tools-home.pl">Tools home</a></li>
 </ul>
 <h5>Patrons and circulation</h5>
 <ul>
@@ -23,7 +23,7 @@
 	<li><a href="/cgi-bin/koha/tools/import_borrowers.pl">Import patrons</a></li>
     [% END %]
     [% IF ( CAN_user_tools_edit_notices ) %]
-	<li><a href="/cgi-bin/koha/tools/letter.pl">Notices & Slips</a></li>
+    <li><a href="/cgi-bin/koha/tools/letter.pl">Notices &amp; slips</a></li>
     [% END %]
     [% IF ( CAN_user_tools_edit_notice_status_triggers ) %]
 	<li><a href="/cgi-bin/koha/tools/overduerules.pl">Overdue notice/status triggers</a></li>
@@ -71,10 +71,10 @@
 	<li><a href="/cgi-bin/koha/tools/manage-marc-import.pl">Staged MARC management</a></li>
     [% END %]
     [% IF ( CAN_user_tools_upload_local_cover_images ) %]
-	<li><a href="/cgi-bin/koha/tools/upload-cover-image.pl">Upload Local Cover Image</a></li>
+    <li><a href="/cgi-bin/koha/tools/upload-cover-image.pl">Upload local cover image</a></li>
     [% END %]
 </ul>
-<h5>Additional Tools</h5>
+<h5>Additional tools</h5>
 <ul>
     [% IF ( CAN_user_tools_edit_calendar ) %]
 	<li><a href="/cgi-bin/koha/tools/holidays.pl">Calendar</a></li>
