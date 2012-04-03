@@ -52,9 +52,9 @@ function update_child() {
 	}
 	function yuiToolbar() {
 	    var printmenu = [
-            { text: _("Print page"), onclick: {fn: function(){printx_window("page")}} },
+            { text: _("Print summary"), onclick: {fn: function(){printx_window("page")}} },
             { text: _("Print slip"), onclick: {fn: function(){printx_window("slip")}} },
-            { text: _("Quick slip"), onclick: {fn: function(){printx_window("qslip")}} }
+            { text: _("Print quick slip"), onclick: {fn: function(){printx_window("qslip")}} }
 	    ];
 
 		var moremenu = [
@@ -117,7 +117,7 @@ function update_child() {
 	[% IF ( adultborrower AND activeBorrowerRelationship ) %]<li><a id="addchild" href="/cgi-bin/koha/members/memberentry.pl?op=add&amp;guarantorid=[% borrowernumber %]&amp;category_type=C">Add child</a></li>[% END %]
     [% IF CAN_user_staffaccess %]<li><a id="changepassword" href="/cgi-bin/koha/members/member-password.pl?member=[% borrowernumber %]">Change password</a></li> [% END %]
 	<li><a id="duplicate" href="/cgi-bin/koha/members/memberentry.pl?op=duplicate&amp;borrowernumber=[% borrowernumber %]&amp;category_type=[% category_type %]">Duplicate</a></li>
-    <li id="printmenuc"><a id="printpage" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]&amp;print=page">Print page</a></li>
+    <li id="printmenuc"><a id="printpage" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]&amp;print=page">Print summary</a></li>
     <li><a id="printslip" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]&amp;print=slip">Print slip</a></li>
 	<li id="searchtoholdc"><a id="searchtohold" href="#">Search to hold</a></li>
     <li id="moremenuc"><a id="renewpatron" href="/cgi-bin/koha/members/moremember.pl?reregistration=y&amp;borrowernumber=[% borrowernumber %]">Renew account</a></li>[% IF ( CAN_user_permissions ) %]<li><a id="patronflags" href="/cgi-bin/koha/members/member-flags.pl?member=[% borrowernumber %]">Set permissions</a></li>[% END %]<li><a id="deletepatron" href="javascript:confirm_deletion();">Delete</a></li>
