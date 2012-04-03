@@ -79,10 +79,10 @@
                         alert(_("Please select at least one label to export."));
                         return;     // no batch selected
                     }
-                    return GB_showCenter('Export Labels', "/cgi-bin/koha/labels/label-print.pl?batch_id=[% batch_id %]&" + getstr, 700, 800);
+                    return GB_showCenter('Export labels', "/cgi-bin/koha/labels/label-print.pl?batch_id=[% batch_id %]&" + getstr, 700, 800);
                 }
                 else if (mode == 'batch') {
-                    return GB_showCenter('Export Labels', "/cgi-bin/koha/labels/label-print.pl?batch_id=[% batch_id %]", 700, 800);
+                    return GB_showCenter('Export labels', "/cgi-bin/koha/labels/label-print.pl?batch_id=[% batch_id %]", 700, 800);
                 }
                 else {
                     // some pass-thru error trapping just in case...
@@ -121,7 +121,7 @@
                 id: "additems", 
                 type: "link", 
                 href: "#",
-                label: _("Add Item(s)"), 
+                label: _("Add item(s)"),
                 container: "additemsc",
                 onclick: {fn:function(){Add()}}
             });
@@ -130,7 +130,7 @@
                 id: "removeitems", 
                 type: "link", 
                 href: "#",
-                label: _("Remove Item(s)"), 
+                label: _("Remove item(s)"),
                 container: "removeitemsc",
                 onclick: {fn:function(){Remove()}}
             });
@@ -139,7 +139,7 @@
                 id: "deletebatch", 
                 type: "link", 
                 href: "#",
-                label: _("Delete Batch"), 
+                label: _("Delete batch"),
                 container: "deletebatchc",
                 onclick: {fn:function(){DeleteConfirm()}}
             });
@@ -148,7 +148,7 @@
                 id: "deduplicate", 
                 type: "link", 
                 href: "#",
-                label: _("Remove Duplicates"), 
+                label: _("Remove duplicates"),
                 container: "deduplicatec",
                 onclick: {fn:function(){DeDuplicate()}}
             });
@@ -157,7 +157,7 @@
                 id: "exportitems", 
                 type: "link", 
                 href: "#",
-                label: _("Export Item(s)"), 
+                label: _("Export item(s)"),
                 container: "exportitemsc",
                 onclick: {fn:function(){Xport('label')}}
             });
@@ -166,7 +166,7 @@
                 id: "exportbatch", 
                 type: "link", 
                 href: "#",
-                label: _("Export Batch"), 
+                label: _("Export batch"),
                 container: "exportbatchc",
                 onclick: {fn:function(){Xport('batch')}}
             });
@@ -175,11 +175,11 @@
         //]]>
     </script>
     <ul class="toolbar">
-        <li id="additemsc"><a id="additems" href="#">Add Item(s)</a></li>[% IF ( table_loop ) %]
-        <li id="removeitemsc"><a id="removeitems" href="#">Remove Item(s)</a></li>
-        <li id="deletebatchc"><a id="deletebatch" href="#">Delete Batch</a></li>
-        <li id="deduplicatec"><a id="deduplicate" href="#">Remove Duplicates</a></li>
-        <li id="exportitemsc"><a id="exportitems" href="#">Export Item(s)</a></li>
-        <li id="exportbatchc"><a id="exportbatch" href="#">Export Batch</a></li>[% END %]
+        <li id="additemsc"><a id="additems" href="#">Add item(s)</a></li>[% IF ( table_loop ) %]
+        <li id="removeitemsc"><a id="removeitems" href="#">Remove item(s)</a></li>
+        <li id="deletebatchc"><a id="deletebatch" href="#">Delete batch</a></li>
+        <li id="deduplicatec"><a id="deduplicate" href="#">Remove duplicates</a></li>
+        <li id="exportitemsc"><a id="exportitems" href="#">Export item(s)</a></li>
+        <li id="exportbatchc"><a id="exportbatch" href="#">Export batch</a></li>[% END %]
     </ul>
 </div>
