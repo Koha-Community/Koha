@@ -155,9 +155,9 @@ if (f.company.value == "") {
         <div class="yui-g">
             <div id="supplier-company-details" class="yui-u first">
                 <h2>Vendor details</h2>
-                <p><span class="label">Company Name: </span>[% name %]</p>
-                <p><span class="label">Postal Address: </span>[% postal %]</p>
-                <p><span class="label">Physical Address: </span>[% address1 %][% address2 %][% address3 %][% address4 %]</p>
+                <p><span class="label">Company name: </span>[% name %]</p>
+                <p><span class="label">Postal address: </span>[% postal %]</p>
+                <p><span class="label">Physical address: </span>[% address1 %][% address2 %][% address3 %][% address4 %]</p>
                 <p><span class="label">Phone: </span>[% phone %]</p>
                 <p><span class="label">Fax: </span>[% fax %]</p>
                 [% IF ( url ) %]
@@ -192,11 +192,11 @@ if (f.company.value == "") {
                     [% END %]</p>
             <p><strong>List prices are: </strong>[% listprice %]</p>
             <p><strong>Invoice prices are: </strong>[% invoiceprice %]</p>
-            [% IF ( GST ) %]<p><strong>Tax Number Registered: </strong>
+            [% IF ( GST ) %]<p><strong>Tax number registered: </strong>
                     [% IF ( gstreg ) %]Yes[% ELSE %]No[% END %]</p>
-            <p><strong>List Item Price Includes Tax: </strong>
+            <p><strong>List item price includes tax: </strong>
                     [% IF ( listincgst ) %]Yes[% ELSE %]No[% END %]</p>
-            <p><strong>Invoice Item Price Includes Tax: </strong>
+            <p><strong>Invoice item price includes tax: </strong>
                     [% IF ( invoiceincgst ) %]Yes[% ELSE %]No[% END %]</p>[% END %]
             <p><strong>Discount: </strong>
                 [% discount %] %</p>

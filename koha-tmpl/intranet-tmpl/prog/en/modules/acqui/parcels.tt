@@ -25,9 +25,9 @@
 <table class="small">
         <tr>
             <th>Line</th>
-            <th>Date Received</th>
-            <th>Invoice Number</th>
-            <th>Item Count</th>
+            <th>Date received</th>
+            <th>Invoice number</th>
+            <th>Item count</th>
             <th>Biblio count</th>
             <th>Items expected</th>
         </tr>
@@ -85,7 +85,7 @@
     <fieldset class="rows">
     <legend>Receive a new shipment</legend>
        <ol> <li>
-            <label for="invoice">Vendor Invoice </label>
+            <label for="invoice">Vendor invoice </label>
             <input type="hidden" name="booksellerid" value="[% booksellerid %]" />
             <input type="hidden" name="op" value="new" />
 			<input type="text" size="20" id="invoice" name="invoice" />
@@ -131,8 +131,8 @@
                 <label for="dateto">To:</label><input type="text" size="9" id="dateto" name="dateto" value="[% dateto %]" /></li>
             <li><label for="orderby">Sort by :</label><select name="orderby" id="orderby">
                 <option value="aqorders.booksellerinvoicenumber">Invoice number</option>
-                <option value="datereceived"> Date Received</option>
-                <option value="datereceived desc"> Date Received reverse</option>
+                <option value="datereceived"> Date received</option>
+                <option value="datereceived desc"> Date received reverse</option>
                 <option value="aqorders.booksellerinvoicenumber desc"> Invoice number reverse</option>
                 </select><br />
                 <label for="resultsperpage">Results per page :</label><select name="resultsperpage" id="resultsperpage">

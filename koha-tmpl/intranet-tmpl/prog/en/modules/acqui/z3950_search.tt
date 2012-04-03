@@ -76,14 +76,14 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
 	    <fieldset class="rows">
 		 <ol><li><label for="searchtitle">Title: </label> <input type="text" id="searchtitle"  name="title" value="[% title |html %]" /></li>
 		 <li><label for="isbn">ISBN/ISSN: </label> <input type="text" id="isbn" name="isbn" value="[% isbn %]" /></li>
-		 <li><label for="lccall">LC Call Number: </label> <input type="text" id="lccall" name="lccall" value="" /></li>
-         <li><label for="controlnumber">Control No.: </label> <input type="text" id="controlnumber" name="controlnumber" value="" /></li>
+         <li><label for="lccall">LC call number: </label> <input type="text" id="lccall" name="lccall" value="" /></li>
+         <li><label for="controlnumber">Control no.: </label> <input type="text" id="controlnumber" name="controlnumber" value="" /></li>
 </ol>
 		</fieldset>
 	    </div>
     <div class="yui-u">
 	<fieldset class="rows">		 <ol><li><label for="author">Author: </label> <input type="text" id="author" name="author" value="[% author %]" /><!--  <label for="Keyword">Keyword</label> <input type="text" name="keyword" value="" /> --></li>
-		 <li> <label for="subject">Subject Heading: </label> <input type="text" id="subject" name="subject" value="" /></li>
+         <li> <label for="subject">Subject heading: </label> <input type="text" id="subject" name="subject" value="" /></li>
 		 <li><label for="dewey">Dewey: </label> <input type="text" id="dewey" name="dewey" value="" /></li></ol></fieldset>
 	     <fieldset class="rows" >
                  <ol>
@@ -108,7 +108,7 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
 	    </div>
 </div>
 <div class="yui-g">
-<h2>Search targets <span style="display: inline; font-size: 70%; padding-left: 1em;"><span class="checkall"><a id="CheckAll" href="#">Select All</a></span><span class="clearall"><a id="CheckNone" href="#">Clear All</a></span></span></h2>
+<h2>Search targets <span style="display: inline; font-size: 70%; padding-left: 1em;"><span class="checkall"><a id="CheckAll" href="#">Select all</a></span><span class="clearall"><a id="CheckNone" href="#">Clear all</a></span></span></h2>
 
     [% FOREACH serverloo IN serverloop %]
         <p>
@@ -143,7 +143,7 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
         [% IF ( breeding_loo.breedingid ) %]
 
         [% IF ( breeding_loo.toggle ) %]<tr class="highlight">[% ELSE %]<tr>[% END %]
-            <td>[% breeding_loo.server %] <div class="linktools"><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% breeding_loo.breedingid %]" rel="gb_page_center[600,500]">Preview MARC</a> <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;importid=[% breeding_loo.breedingid %]" rel="gb_page_center[600,500]">Preview Card</a> <a href="/cgi-bin/koha/acqui/neworderempty.pl?frameworkcode=[% frameworkcode %]&amp;breedingid=[% breeding_loo.breedingid %]&amp;booksellerid=[% booksellerid %]&amp;basketno=[% basketno %]">Order</a> <a href="#" id="closemenu" title="Close this menu"> X </a></div></td>
+            <td>[% breeding_loo.server %] <div class="linktools"><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% breeding_loo.breedingid %]" rel="gb_page_center[600,500]">Preview MARC</a> <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;importid=[% breeding_loo.breedingid %]" rel="gb_page_center[600,500]">Preview card</a> <a href="/cgi-bin/koha/acqui/neworderempty.pl?frameworkcode=[% frameworkcode %]&amp;breedingid=[% breeding_loo.breedingid %]&amp;booksellerid=[% booksellerid %]&amp;basketno=[% basketno %]">Order</a> <a href="#" id="closemenu" title="Close this menu"> X </a></div></td>
             <td>[% breeding_loo.title |html %]</td>
             <td>[% breeding_loo.author %]</td>
             <td>[% breeding_loo.isbn %]</td>

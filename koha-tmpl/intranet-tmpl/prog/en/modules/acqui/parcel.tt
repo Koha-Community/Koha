@@ -1,6 +1,6 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; [% IF ( date ) %]
-            Receipt Summary for [% name %] [% IF ( invoice ) %]Invoice [% invoice %][% END %] on [% formatteddatereceived %][% ELSE %]Receive Orders from [% name %][% END %]</title>
+            Receipt summary for [% name %] [% IF ( invoice ) %]invoice [% invoice %][% END %] on [% formatteddatereceived %][% ELSE %]Receive orders from [% name %][% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'greybox.inc' %]
 <script type="text/javascript" src="[% yuipath %]/json/json-min.js"></script>
@@ -158,7 +158,7 @@
 [% INCLUDE 'acquisitions-search.inc' %]
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo;  [% IF ( datereceived ) %]
-            Receipt Summary for <i>[% name %]</i> [% IF ( invoice ) %]<i>[ [% invoice %] ]</i>[% END %] on <i>[% formatteddatereceived %]</i>
+            Receipt summary for <i>[% name %]</i> [% IF ( invoice ) %]<i>[ [% invoice %] ]</i>[% END %] on <i>[% formatteddatereceived %]</i>
         [% ELSE %]
             Receive orders from [% name %]
         [% END %]</div>
@@ -180,7 +180,7 @@
 	[% END %]
     <h1>
         [% IF ( datereceived ) %]
-            Receipt Summary for <i>[% name %]</i> [% IF ( invoice ) %] <i> [ [% invoice %] ] </i>[% END %] on <i>[% formatteddatereceived %]</i>
+            Receipt summary for <i>[% name %]</i> [% IF ( invoice ) %] <i> [ [% invoice %] ] </i>[% END %] on <i>[% formatteddatereceived %]</i>
         [% ELSE %]
             Receive orders from [% name %]
         [% END %]
@@ -202,15 +202,15 @@
 	<!-- TODO: Add date picker, change rcv date. -->
 </div>
 <div id="acqui_receive_search">
-    <h3>Pending Orders</h3>
+    <h3>Pending orders</h3>
 
  [% IF ( loop_orders ) %]<table id="pendingt">
     <thead>
         <tr>
             <th>Basket</th>
-            <th>Order Line</th>
+            <th>Order line</th>
             <th>Summary</th>
-    	    <th>View Record</th>
+        <th>View record</th>
             <th>Quantity</th>
             <th>Unit cost</th>
             <th>Order cost</th>
@@ -307,7 +307,7 @@
 	</div>
 </div>
 <div id="acqui_receive_receivelist">
-    <h3>Already Received</h3>
+    <h3>Already received</h3>
 
    [% IF ( loop_received ) %]
    <form action="/cgi-bin/koha/acqui/parcel.pl" method="get" name="orderform">
@@ -315,9 +315,9 @@
         <thead>
 	    <tr>
 		<th>Basket</th>
-		<th>Order Line</th>
+        <th>Order line</th>
 		<th>Summary</th>
-		<th>View Record</th>
+        <th>View record</th>
 		<th>Quantity</th>  
 		<th>Est cost</th>
 		<th>Actual cost</th>
@@ -420,7 +420,7 @@
 		</li>
 
 		<li>
-		    <label for="orderfilter">Order Line :</label>
+            <label for="orderfilter">Order line :</label>
 		    <input type="text" name="orderfilter" id="orderfilter" />
 		</li>
 	    </ol>
