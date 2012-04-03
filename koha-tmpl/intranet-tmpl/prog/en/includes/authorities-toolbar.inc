@@ -21,7 +21,7 @@
 
 	    new YAHOO.widget.Button({
 	        type: "menu",
-	        label: _("New Authority"),
+            label: _("New authority"),
 	        name: "newmenubutton",
 	        menu: newmenu,
 	        container: "newmenuc"

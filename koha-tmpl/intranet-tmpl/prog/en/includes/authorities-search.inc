@@ -93,9 +93,9 @@
     </form>
     </div>
     <ul>
-        <li><a href="/cgi-bin/koha/authorities/authorities-home.pl#authority_search">Search Authorities</a></li>
-        <li><a href="/cgi-bin/koha/authorities/authorities-home.pl#main_heading">Search Main Heading</a></li>
-        <li><a href="/cgi-bin/koha/authorities/authorities-home.pl#all_headings">Search All Headings</a></li>
+        <li><a href="/cgi-bin/koha/authorities/authorities-home.pl#authority_search">Search authorities</a></li>
+        <li><a href="/cgi-bin/koha/authorities/authorities-home.pl#main_heading">Search main heading</a></li>
+        <li><a href="/cgi-bin/koha/authorities/authorities-home.pl#all_headings">Search all headings</a></li>
     </ul>
 </div>
 <!-- End Authorities Resident Search Box -->

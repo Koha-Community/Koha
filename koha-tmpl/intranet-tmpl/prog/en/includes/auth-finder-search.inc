@@ -130,8 +130,8 @@ YAHOO.util.Event.onContentReady("header_search", function() {
         <label for="orderby">Sort by </label>
         <select name="orderby" id="orderby">
             <option value="">No order</option>
-            <option value="HeadingAsc" selected="selected">Heading Ascendant</option>
-            <option value="HeadingDsc">Heading Descendant</option>
+            <option value="HeadingAsc" selected="selected">Heading ascendant</option>
+            <option value="HeadingDsc">Heading descendant</option>
         </select>
         </li></ol></fieldset>
             <fieldset class="action"> <input type="submit" value="Start search" class="submit" /> <a class="cancel close" href="#">Cancel</a></fieldset>
