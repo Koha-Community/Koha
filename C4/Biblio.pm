@@ -90,6 +90,7 @@ BEGIN {
       &GetAuthorisedValueDesc
       &GetMarcStructure
       &GetMarcFromKohaField
+      &GetMarcSubfieldStructureFromKohaField
       &GetFrameworkCode
       &TransformKohaToMarc
       &PrepHostMarcField
@@ -1212,6 +1213,38 @@ sub GetMarcFromKohaField {
         return @$mf;
     }
     return (0, undef);
+}
+
+=head2 GetMarcSubfieldStructureFromKohaField
+
+    my $subfield_structure = &GetMarcSubfieldStructureFromKohaField($kohafield, $frameworkcode);
+
+Returns a hashref where keys are marc_subfield_structure column names for the
+row where kohafield=$kohafield for the given framework code.
+
+$frameworkcode is optional. If not given, then the default framework is used.
+
+=cut
+
+sub GetMarcSubfieldStructureFromKohaField {
+    my ($kohafield, $frameworkcode) = @_;
+
+    return undef unless $kohafield;
+    $frameworkcode //= '';
+
+    my $dbh = C4::Context->dbh;
+    my $query = qq{
+        SELECT *
+        FROM marc_subfield_structure
+        WHERE kohafield = ?
+          AND frameworkcode = ?
+    };
+    my $sth = $dbh->prepare($query);
+    $sth->execute($kohafield, $frameworkcode);
+    my $result = $sth->fetchrow_hashref;
+    $sth->finish;
+
+    return $result;
 }
 
 =head2 GetMarcBiblio
