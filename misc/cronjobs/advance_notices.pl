@@ -160,7 +160,8 @@ UPCOMINGITEM: foreach my $upcoming ( @$upcoming_dues ) {
               my @item_info = map { $_ =~ /^date|date$/ ? format_date($item_info->{$_}) : $item_info->{$_} || '' } @item_content_fields;
               $titles .= join("\t",@item_info) . "\n";
             }
-        
+
+            ## Get branch info for borrowers home library.
             $letter = parse_letter( { letter_code    => $letter_type,
                                       borrowernumber => $upcoming->{'borrowernumber'},
                                       branchcode     => $upcoming->{'branchcode'},
@@ -191,7 +192,8 @@ UPCOMINGITEM: foreach my $upcoming ( @$upcoming_dues ) {
               my @item_info = map { $_ =~ /^date|date$/ ? format_date($item_info->{$_}) : $item_info->{$_} || '' } @item_content_fields;
               $titles .= join("\t",@item_info) . "\n";
             }
-        
+
+            ## Get branch info for borrowers home library.
             $letter = parse_letter( { letter_code    => $letter_type,
                                       borrowernumber => $upcoming->{'borrowernumber'},
                                       branchcode     => $upcoming->{'branchcode'},
@@ -252,10 +254,15 @@ PATRON: while ( my ( $borrowernumber, $digest ) = each %$upcoming_digest ) {
       my @item_info = map { $_ =~ /^date|date$/ ? format_date($item_info->{$_}) : $item_info->{$_} || '' } @item_content_fields;
       $titles .= join("\t",@item_info) . "\n";
     }
+
+    ## Get branch info for borrowers home library.
+    my %branch_info = get_branch_info( $borrowernumber );
+
     my $letter = parse_letter( { letter_code    => $letter_type,
                               borrowernumber => $borrowernumber,
                               substitute     => { count => $count,
-                                                  'items.content' => $titles
+                                                  'items.content' => $titles,
+                                                  %branch_info,
                                                 }
                          } )
       or die "no letter of type '$letter_type' found. Please see sample_notices.sql";
@@ -290,10 +297,15 @@ PATRON: while ( my ( $borrowernumber, $digest ) = each %$due_digest ) {
       my @item_info = map { $_ =~ /^date|date$/ ? format_date($item_info->{$_}) : $item_info->{$_} || '' } @item_content_fields;
       $titles .= join("\t",@item_info) . "\n";
     }
+
+    ## Get branch info for borrowers home library.
+    my %branch_info = get_branch_info( $borrowernumber );
+
     my $letter = parse_letter( { letter_code    => $letter_type,
                               borrowernumber => $borrowernumber,
                               substitute     => { count => $count,
-                                                  'items.content' => $titles
+                                                  'items.content' => $titles,
+                                                  %branch_info,
                                                 }
                          } )
       or die "no letter of type '$letter_type' found. Please see sample_notices.sql";
@@ -351,6 +363,25 @@ sub format_date {
     my $date_string = shift;
     my $dt=dt_from_string($date_string);
     return output_pref($dt);
+}
+
+=head2 get_branch_info
+
+=cut
+
+sub get_branch_info {
+    my ( $borrowernumber ) = @_;
+
+    ## Get branch info for borrowers home library.
+    my $borrower_details = C4::Members::GetMemberDetails( $borrowernumber );
+    my $borrower_branchcode = $borrower_details->{'branchcode'};
+    my $branch = C4::Branch::GetBranchDetail( $borrower_branchcode );
+    my %branch_info;
+    foreach my $key( keys %$branch ) {
+        $branch_info{"branches.$key"} = $branch->{$key};
+    }
+
+    return %branch_info;
 }
 
 1;
