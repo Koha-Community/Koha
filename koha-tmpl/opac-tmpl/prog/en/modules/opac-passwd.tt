@@ -1,4 +1,4 @@
-[% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha Online[% END %] Catalog &rsaquo; Change your password
+[% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Change your password
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="opac-passwd">
@@ -9,7 +9,7 @@
 	<div id="yui-main">
 	<div class="yui-b"><div class="yui-g">
 	<div id="userpasswd" class="container">
-	<h3><a href="/cgi-bin/koha/opac-user.pl">[% firstname %] [% surname %]'s account</a> <img src="[% themelang %]l../../images/caret.gif" width="16" height="16" alt="&gt;" border="0" /> Change your Password </h3>
+    <h3><a href="/cgi-bin/koha/opac-user.pl">[% firstname %] [% surname %]'s account</a> <img src="[% themelang %]l../../images/caret.gif" width="16" height="16" alt="&gt;" border="0" /> Change your password </h3>
 
     [% IF ( Error_messages ) %]
 <div class="dialog error">        <h3>There was a problem with your submission</h3>
@@ -21,7 +21,7 @@
             Your new password must be at least [% minpasslen %] characters long
             [% END %]
             [% IF ( WrongPass ) %]
-            Your current password was entered incorrectly.  If this problem persists, please ask a librarian to re-set your password for you.	
+            Your current password was entered incorrectly.  If this problem persists, please ask a librarian to re-set your password for you.
             [% END %]
         </p></div>
     [% END %]
@@ -30,10 +30,10 @@
         [% IF ( OpacPasswordChange ) %]
         <form action="/cgi-bin/koha/opac-passwd.pl" name="mainform" id="mainform" method="post"><fieldset class="brief">
 			[% UNLESS ( ShortPass ) %]<div class="hint">Your password must be at least [% minpasslen %] characters long.</div>[% END %]
-          <ol>  <li><label for="Oldkey">Current Password:</label> <input type="password" id="Oldkey" size="25"  name="Oldkey" /></li>
-            <li><label for="Newkey">New Password:</label> <input type="password" id="Newkey"  size="25"  name="Newkey" /></li>
-            <li><label for="Confirm">Re-Type New Password:</label> <input type="password"  id="Confirm" size="25" name="Confirm" /></li></ol></fieldset>
-            <fieldset class="action"><input type="submit" value="Submit Changes" class="submit" /> <a href="/cgi-bin/koha/opac-user.pl" class="cancel">Cancel</a></fieldset>
+          <ol>  <li><label for="Oldkey">Current password:</label> <input type="password" id="Oldkey" size="25"  name="Oldkey" /></li>
+            <li><label for="Newkey">New password:</label> <input type="password" id="Newkey"  size="25"  name="Newkey" /></li>
+            <li><label for="Confirm">Re-type new password:</label> <input type="password"  id="Confirm" size="25" name="Confirm" /></li></ol></fieldset>
+            <fieldset class="action"><input type="submit" value="Submit changes" class="submit" /> <a href="/cgi-bin/koha/opac-user.pl" class="cancel">Cancel</a></fieldset>
     </form>
         [% ELSE %]
             <div class="dialog alert">You can't change your password.</div>
@@ -41,11 +41,11 @@
     [% END %]
     
     [% IF ( password_updated ) %]
-        <div class="dialog message"><h1>Password Updated</h1>
+        <div class="dialog message"><h1>Password updated</h1>
         Your password has been changed</div>
         <form action="/cgi-bin/koha/opac-user.pl" method="post">
             <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
-            <p><input type="submit" class="icon back" value="Return to Your Record" /></p>
+            <p><input type="submit" class="icon back" value="Return to your record" /></p>
         </form>
     [% END %]
 </div>

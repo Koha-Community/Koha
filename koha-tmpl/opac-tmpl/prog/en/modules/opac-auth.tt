@@ -1,8 +1,8 @@
-[% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha Online[% END %] 
+[% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %]
 [% IF ( opacuserlogin ) %]
- Catalog &rsaquo;  Log in to Your Account
+ catalog &rsaquo;  Log in to your account
 [% ELSE %]
- Catalog &rsaquo; Catalog Login Disabled
+ catalog &rsaquo; Catalog login disabled
 [% END %]
 [% INCLUDE 'doc-head-close.inc' %]
 
@@ -46,7 +46,7 @@
 [% END %]
 
 [% IF ( casAuthentication ) %]
-<h4>Cas Login</h4>
+<h4>Cas login</h4>
 
 [% IF ( invalidCasLogin ) %]
 <!-- This is what is displayed if cas login has failed -->
@@ -67,7 +67,7 @@ please choose against which one you would like to authenticate: </p>
 [% END %]
 </ul>
 
-<h4>Local Login</h4>
+<h4>Local login</h4>
 <p>If you do not have a CAS account, but a local account, you can still log in : </p>
 
 [% END %]

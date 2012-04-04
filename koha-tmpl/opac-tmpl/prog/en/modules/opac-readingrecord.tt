@@ -1,6 +1,6 @@
 [% USE KohaDates %]
 
-[% INCLUDE 'doc-head-open.inc' %][% LibraryNameTitle or "Koha Online" %] Catalog &rsaquo; Your checkout history
+[% INCLUDE 'doc-head-open.inc' %][% LibraryNameTitle or "Koha online" %] catalog &rsaquo; Your checkout history
 [% INCLUDE 'doc-head-close.inc' %]
 <style type="text/css">ul.ui-tabs-nav li a, ul.ui-tabs-nav li span.a  { padding:0.6em 1em; }</style>
 <script type="text/javascript">
@@ -24,7 +24,7 @@ $(document).ready(function(){
 	<div class="yui-b"><div class="yui-g">
 <div id="userreadingrecord" class="container">
 <!--CONTENT-->
-<h3><a href="/cgi-bin/koha/opac-user.pl">[% firstname %] [% surname %]'s account</a> <img src="[% themelang %]../../images/caret.gif" width="16" height="16" alt="&gt;" border="0" /> Checkout History</h3>
+<h3><a href="/cgi-bin/koha/opac-user.pl">[% firstname %] [% surname %]'s account</a> <img src="[% themelang %]../../images/caret.gif" width="16" height="16" alt="&gt;" border="0" /> Checkout history</h3>
 
 [% UNLESS ( count ) %]
 You have never borrowed anything from this library.
@@ -45,19 +45,19 @@ You have never borrowed anything from this library.
 
 [% IF ( showfulllink ) %]
 [% IF ( limit ) %]
-<li><a href="/cgi-bin/koha/opac-readingrecord.pl?limit=full[% IF ( orderbytitle ) %]&amp;order=title[% END %]">Show All Items</a></li><li class="ui-tabs-selected"><a href="#readingrec">Showing Last 50 Items</a></li>
+<li><a href="/cgi-bin/koha/opac-readingrecord.pl?limit=full[% IF ( orderbytitle ) %]&amp;order=title[% END %]">Show all items</a></li><li class="ui-tabs-selected"><a href="#readingrec">Showing last 50 items</a></li>
 [% ELSE %]
-<li class="ui-tabs-selected"><a href="/cgi-bin/koha/opac-readingrecord.pl#readingrec">Showing All Items</a></li><li><a href="/cgi-bin/koha/opac-readingrecord.pl?limit=50[% IF ( orderbytitle ) %]&amp;order=title[% END %]">Show Last 50 Items Only</a></li>
+<li class="ui-tabs-selected"><a href="/cgi-bin/koha/opac-readingrecord.pl#readingrec">Showing all items</a></li><li><a href="/cgi-bin/koha/opac-readingrecord.pl?limit=50[% IF ( orderbytitle ) %]&amp;order=title[% END %]">Show last 50 items only</a></li>
 [% END %]
 [% ELSE %]
-<li class="ui-tabs-selected"><a href="/cgi-bin/koha/opac-readingrecord.pl#readingrec">Showing All Items</a></li>
+<li class="ui-tabs-selected"><a href="/cgi-bin/koha/opac-readingrecord.pl#readingrec">Showing all items</a></li>
 [% END %]
 </ul>
 <div class="ui-tabs-panel"><table id="readingrec">
 <tr>
 <th colspan="2">Title</th>
-<th>Item Type</th>
-<th>Call No.</th>
+<th>Item type</th>
+<th>Call no.</th>
 <th>Date</th>
 </tr>
 

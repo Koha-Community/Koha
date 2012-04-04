@@ -1,4 +1,4 @@
-[% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha Online[% END %] Catalog &rsaquo;  MARC Details for Record No. [% biblionumber %]
+[% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo;  MARC details for record no. [% biblionumber %]
 [% INCLUDE 'doc-head-close.inc' %]
 <script type="text/javascript">
 //<![CDATA[
@@ -67,10 +67,10 @@ $(document).ready(function(){
     <div id="catalogue_detail_biblio">
 
     <div id="views">
-    <span class="view"><a id="Normalview" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]">Normal View</a></span>
+    <span class="view"><a id="Normalview" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]">Normal view</a></span>
 
-<span class="view"><span id="MARCview">MARC View</span></span>
-[% IF ( ISBD ) %]<span class="view"><a id="ISBDview"  href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=[% biblionumber %]">ISBD View</a></span>[% END %]
+<span class="view"><span id="MARCview">MARC view</span></span>
+[% IF ( ISBD ) %]<span class="view"><a id="ISBDview"  href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=[% biblionumber %]">ISBD view</a></span>[% END %]
 </div>
     <h1 class="title">[% bibliotitle %] (Record no. [% biblionumber %])</h1>
     [% IF ( OPACXSLTDetailsDisplay ) %]

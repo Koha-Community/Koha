@@ -1,6 +1,6 @@
-[% USE KohaDates %]
+[% use KohaDates %]
 
-[% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha [% END %] &rsaquo; Self Checkout </title>
+[% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha [% END %] &rsaquo; Self checkout </title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="Koha [% Version %]" /> <!-- leave this for stats -->
 <link rel="shortcut icon" href="[% themelang %]/includes/favicon.ico" type="image/x-icon" />
@@ -67,7 +67,7 @@ $(document).ready(function() {
 
 <div id="doc" class="yui-t7">
 
-<div id="masthead"><h1>[% LibraryName %] Self Checkout System</h1></div>
+<div id="masthead"><h1>[% LibraryName %] Self checkout system</h1></div>
 <div id="bd">
 
 [% IF ( impossible ) %]<!-- We tried to issue, but failed. -->
@@ -130,22 +130,22 @@ $(document).ready(function() {
 <input type="hidden" name="confirmed" value="" />
 [% IF ( renew ) %]
 [% IF ( AllowSelfCheckReturns ) %]
-<input type="button" value="Return Item" name="confirm" class="return" onclick="this.form.op.value='returnbook';this.form.submit();"  />
+<input type="button" value="Return item" name="confirm" class="return" onclick="this.form.op.value='returnbook';this.form.submit();"  />
 [% END %]
 [% END %]
-[% UNLESS ( renew ) %]<input type="button" value="Renew Item" name="confirm" class="renew" onclick="this.form.confirmed.value='1';this.form.submit();" />
-[% ELSE %]<input type="button" value="Renew Item" class="renew" onclick="this.form.confirmed.value='1';this.form.submit();" />[% END %]
+[% UNLESS ( renew ) %]<input type="button" value="Renew item" name="confirm" class="renew" onclick="this.form.confirmed.value='1';this.form.submit();" />
+[% ELSE %]<input type="button" value="Renew item" class="renew" onclick="this.form.confirmed.value='1';this.form.submit();" />[% END %]
 <input type="button" value="Cancel" class="cancel" onclick="this.form.op.value='';this.form.submit();return true;"  />
 </form>
 </div>
 [% END %]
 
-[% IF ( nopermission ) %]<!-- This is what is displayed if user doesnt have permission --><div class="dialog alert"><h3>Access Denied</h3>
-Sorry, This Self-Checkout Station has lost authentication.  Please contact the administrator to resolve this problem. </div>
+[% IF ( nopermission ) %]<!-- This is what is displayed if user doesnt have permission --><div class="dialog alert"><h3>Access denied</h3>
+Sorry, this self-checkout station has lost authentication.  Please contact the administrator to resolve this problem. </div>
 [% END %]
 [% IF ( timed_out ) %]<!-- This is what is displayed if login has timed out -->
 <div class="dialog alert"><h3>Session timed out</h3>Sorry, your session has timed out, please log in again.</div>[% END %]
-[% IF ( different_ip ) %]<!-- This is what is displayed if user doesnt have permission --><div class="dialog alert"><h3>Session Lost</h3>You are accessing Self-Checkout from a different IP address! please log in again.</div>[% END %]
+[% IF ( different_ip ) %]<!-- This is what is displayed if user doesnt have permission --><div class="dialog alert"><h3>Session lost</h3>You are accessing self-checkout from a different IP address! please log in again.</div>[% END %]
 [% IF ( invalid_username_or_password ) %]
 <!-- This is what is displayed if user doesnt have permission --><div class="dialog alert"><h3>Record not found</h3><p>Your userid was not found in the database.  Please try again.</p></div>[% END %]
 
@@ -153,7 +153,7 @@ Sorry, This Self-Checkout Station has lost authentication.  Please contact the a
 [% UNLESS ( hide_main ) %]
 	<div class="sco_head">
 	[% UNLESS ( validuser ) %] 
-	<h3>Self Checkout</h3>
+    <h3>Self checkout</h3>
 	[% END %]
 
 	<div id="checkouthelp">
@@ -202,7 +202,7 @@ Sorry, This Self-Checkout Station has lost authentication.  Please contact the a
 	<table id="loanTable"><caption>Checkouts for [% borrowername %] <span class="count">([% issues_count %] total)</span></caption>
 	<!-- ISSUES TABLE ROWS -->
     <thead>
-	<tr><th>Title</th><th>Call No.</th><th>Due</th><th>Renew</th>[% UNLESS ( nofines ) %]<th>Fines</th>[% END %]</tr>
+        <tr><th>Title</th><th>Call no.</th><th>Due</th><th>Renew</th>[% UNLESS ( nofines ) %]<th>Fines</th>[% END %]</tr>
     </thead>
 
     <tbody>

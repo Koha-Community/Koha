@@ -1,6 +1,6 @@
 [% USE KohaDates %]
 
-[% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha Online[% END %] Catalog &rsaquo; Details for: [% title |html %][% FOREACH subtitl IN subtitle %], [% subtitl.subfield |html %][% END %]
+[% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Details for: [% title |html %][% FOREACH subtitl IN subtitle %], [% subtitl.subfield |html %][% END %]
 [% INCLUDE 'doc-head-close.inc' %]
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tools.min.js"></script>
@@ -245,7 +245,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 
     <div id="bookcover">
     [% IF ( OPACLocalCoverImages ) %]<div style="block" title="[% biblionumber |url %]" class="[% biblionumber %]" id="local-thumbnail-preview"></div>[% END %]
-    [% IF ( OPACAmazonEnabled ) %][% IF ( OPACAmazonCoverImages ) %][% IF ( OPACurlOpenInNewWindow ) %]<a href="http://www.amazon[% AmazonTld %]/gp/reader/[% normalized_isbn %]/ref=sib_dp_pt/002-7879865-0184864#reader-link" target="_blank"><img border="0" src="http://images.amazon.com/images/P/[% normalized_isbn %].01.MZZZZZZZ.jpg" alt="Cover Image" /></a>[% ELSE %]<a href="http://www.amazon[% AmazonTld %]/gp/reader/[% normalized_isbn %]/ref=sib_dp_pt/002-7879865-0184864#reader-link"><img border="0" src="http://images.amazon.com/images/P/[% normalized_isbn %].01.MZZZZZZZ.jpg" alt="Cover Image" /></a>[% END %][% END %][% END %]
+    [% IF ( OPACAmazonEnabled ) %][% IF ( OPACAmazonCoverImages ) %][% IF ( OPACurlOpenInNewWindow ) %]<a href="http://www.amazon[% AmazonTld %]/gp/reader/[% normalized_isbn %]/ref=sib_dp_pt/002-7879865-0184864#reader-link" target="_blank"><img border="0" src="http://images.amazon.com/images/P/[% normalized_isbn %].01.MZZZZZZZ.jpg" alt="Cover image" /></a>[% ELSE %]<a href="http://www.amazon[% AmazonTld %]/gp/reader/[% normalized_isbn %]/ref=sib_dp_pt/002-7879865-0184864#reader-link"><img border="0" src="http://images.amazon.com/images/P/[% normalized_isbn %].01.MZZZZZZZ.jpg" alt="Cover image" /></a>[% END %][% END %][% END %]
 
     [% IF ( SyndeticsEnabled ) %][% IF ( SyndeticsCoverImages ) %][% IF ( content_identifier_exists ) %][% IF ( using_https ) %]
     <img src="https://secure.syndetics.com/index.aspx?isbn=[% normalized_isbn %]/[% SyndeticsCoverImageSize %].GIF&amp;client=[% SyndeticsClientCode %]&amp;type=xw10&amp;upc=[% normalized_upc %]&amp;oclc=[% normalized_oclc %]" alt="" class="thumbnail" />
@@ -265,7 +265,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
     <span class="Z3988" title="[% ocoins %]"></span>
     [% END %]
 
-    <div id="views"><span class="view"><span id="Normalview">Normal View</span></span> <span class="view"><a id="MARCview" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=[% biblionumber %]">MARC View</a></span> [% IF ( ISBD ) %]<span class="view"><a id="ISBDview" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=[% biblionumber %]">ISBD View</a></span>[% END %]
+    <div id="views"><span class="view"><span id="Normalview">Normal view</span></span> <span class="view"><a id="MARCview" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=[% biblionumber %]">MARC view</a></span> [% IF ( ISBD ) %]<span class="view"><a id="ISBDview" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=[% biblionumber %]">ISBD view</a></span>[% END %]
     </div>
     [% IF ( OPACXSLTDetailsDisplay ) %]
         [% XSLTBloc %]
@@ -367,7 +367,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
     </span>[% END %]
 
     [% IF ( MARCURLS ) %]
-    <div class="results_summary"><span class="label">Online Resources:</span>
+    <div class="results_summary"><span class="label">Online resources:</span>
     <ul>    [% FOREACH MARCurl IN MARCURLS %]
         <li>[% IF ( MARCurl.part ) %][% MARCurl.part %]
             <br />[% END %] 
@@ -452,7 +452,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 
         [% IF ( SyndeticsEnabled ) %][% IF ( SyndeticsSeries ) %][% IF ( SyndeticsSERIES1Exists ) %]
         <span class="results_summary">
-        <span class="label">Series Information:</span>
+        <span class="label">Series information:</span>
 
         [% IF ( using_https ) %]<a target="_blank" href="https://secure.syndetics.com/ffseries.aspx?isbn=[% normalized_isbn %]&amp;type=series&amp;num=1&amp;client=[% SyndeticsClientCode %][% IF ( normalized_upc ) %]&amp;upc=[% normalized_upc %][% END %][% IF ( normalized_oclc ) %]&amp;oclc=[% normalized_oclc %][% END %]">Click to open in new window</a>
         [% ELSE %]
@@ -462,7 +462,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
         [% END %][% END %]
         [% IF ( SyndeticsAVPROFILEExists ) %]
         <span class="results_summary">
-        <span class="label">Audiovisual Profile:</span>
+        <span class="label">Audiovisual profile:</span>
         [% IF ( using_https ) %]<a target="_blank" href="https://secure.syndetics.com/index.aspx?isbn=[% normalized_isbn %]/avprofile.html&amp;client=[% SyndeticsClientCode %][% IF ( normalized_upc ) %]&amp;upc=[% normalized_upc %][% END %][% IF ( normalized_oclc ) %]&amp;oclc=[% normalized_oclc %][% END %]&amp;type=xw10">Click to open in new window</a>
         [% ELSE %]
         <a target="_blank" href="http://www.syndetics.com/index.aspx?isbn=[% normalized_isbn %]/avprofile.html&amp;client=[% SyndeticsClientCode %][% IF ( normalized_upc ) %]&amp;upc=[% normalized_upc %][% END %][% IF ( normalized_oclc ) %]&amp;oclc=[% normalized_oclc %][% END %]&amp;type=xw10">Click to open in new window</a>
@@ -471,7 +471,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
         [% END %]
         [% IF ( SyndeticsFICTIONExists ) %]
         <span class="results_summary">
-        <span class="label">Fiction Notes:</span>
+        <span class="label">Fiction notes:</span>
         [% IF ( using_https ) %]<a target="_blank" href="https://secure.syndetics.com/index.aspx?isbn=[% normalized_isbn %]/fiction.html&amp;client=[% SyndeticsClientCode %][% IF ( normalized_upc ) %]&amp;upc=[% normalized_upc %][% END %][% IF ( normalized_oclc ) %]&amp;oclc=[% normalized_oclc %][% END %]&amp;type=xw10">Click to open in new window</a>
         [% ELSE %]
         <a target="_blank" href="http://www.syndetics.com/index.aspx?isbn=[% normalized_isbn %]/fiction.html&amp;client=[% SyndeticsClientCode %][% IF ( normalized_upc ) %]&amp;upc=[% normalized_upc %][% END %][% IF ( normalized_oclc ) %]&amp;oclc=[% normalized_oclc %][% END %]&amp;type=xw10">Click to open in new window</a>
@@ -490,7 +490,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 
     [% IF ( BakerTaylorContentURL ) %]
         <span class="results_summary">
-        <span class="label">Enhanced Content: </span> 
+        <span class="label">Enhanced content: </span>
               [% IF ( OPACurlOpenInNewWindow ) %]<a href="[% BakerTaylorContentURL |html %]" target="_blank">Content Cafe</a>[% ELSE %]<a href="[% BakerTaylorContentURL |html %]">Content Cafe</a>[% END %]
         </span>
     [% END %]
@@ -520,7 +520,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 [% IF ( defaulttab == 'holdings' ) %]<li id="tab_holdings" class="ui-tabs-selected">[% ELSE %]<li id="tab_holdings">[% END %]
     <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]#holdings">Holdings ( [% count %] )</a>
 </li>
-<li id="tab_descriptions"> <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]#descriptions">Title Notes</a></li>
+<li id="tab_descriptions"> <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]#descriptions">Title notes</a></li>
 [% IF ( SYNDETICS_TOC ) %]
     <li id="tab_toc"> <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]#toc">TOC</a></li>
 [% END %]
@@ -541,13 +541,13 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
         </li>
     [% END %][% END %]
     [% IF ( SyndeticsAuthorNotes ) %][% IF ( SYNDETICS_ANOTES ) %]
-        <li id="tab_anotes"> <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]#anotes">About the Author</a></li>
+        <li id="tab_anotes"> <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]#anotes">About the author</a></li>
     [% END %][% END %]
 [% END %]
 [% IF ( LibraryThingForLibrariesID ) %] 
 [% IF ( LibraryThingForLibrariesTabbedView ) %]
-    <li id="tab_LFTLSimilarItems"> <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]#LFTLSimilarItems">Similar Items</a></li>
-    <li id="tab_LTFLTagBrowse"> <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]#LTFLTagBrowse">Tag Browser</a></li>
+    <li id="tab_LFTLSimilarItems"> <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]#LFTLSimilarItems">Similar items</a></li>
+    <li id="tab_LTFLTagBrowse"> <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]#LTFLTagBrowse">Tag browser</a></li>
 [% END %]
 [% END %]
 [% IF ( subscriptionsnumber ) %]
@@ -574,7 +574,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 [% END %][% END %]
 
 [% IF ( OPACAmazonEnabled ) %][% IF ( OPACAmazonReviews ) %]
-    <li id="tab_amazonreviews"><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]#amazonreviews">Amazon Reviews</a></li>
+    <li id="tab_amazonreviews"><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]#amazonreviews">Amazon reviews</a></li>
 [% END %][% END %]
 [% IF ( Babeltheque ) %]
     <li id="tab_babeltheque"><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]#babeltheque">Babelthèque</a></li>
@@ -582,7 +582,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 
 [% IF ( serialcollection ) %]
     [% IF ( defaulttab == 'serialcollection' ) %]<li id="tab_serialcollection" class="ui-tabs-selected">[% ELSE %]<li id="tab_serialcollection">[% END %]
-        <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]#serialcollection">Serial Collection</a>
+        <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]#serialcollection">Serial collection</a>
     </li>
 [% END %]
 
@@ -622,13 +622,13 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
             [% IF ( item_level_itypes ) %]<th id="item_itemtype">Item type</th>[% END %]
             <th id="item_location">Location</th>
             [% IF ( itemdata_ccode ) %]<th id="item_ccode">Collection</th>[% END %]
-            <th id="item_callnumber">Call Number</th>
-            [% IF ( itemdata_enumchron ) %]<th id="item_enumchron">Vol Info</th>[% END %]
+            <th id="item_callnumber">Call number</th>
+            [% IF ( itemdata_enumchron ) %]<th id="item_enumchron">Vol info</th>[% END %]
             [% IF ( itemdata_uri ) %]<th id="item_url">url</th>[% END %]
             [% IF ( itemdata_copynumber ) %]<th id="item_copy">Copy</th>[% END %]
             <th id="item_status">Status</th>
             [% IF ( itemdata_itemnotes ) %]<th id="item_notes">Notes</th>[% END %]
-            <th id="item_datedue">Date Due</th>
+            <th id="item_datedue">Date due</th>
         </tr></thead>
 	    <tbody>[% FOREACH ITEM_RESULT IN ITEM_RESULTS %]
 	    <tr>[% IF ( item_level_itypes ) %]<td>[% UNLESS ( noItemTypeImages ) %][% IF ( ITEM_RESULT.imageurl ) %]<img src="[% ITEM_RESULT.imageurl %]" title="[% ITEM_RESULT.description %]" alt="[% ITEM_RESULT.description %]" />[% END %][% END %] [% ITEM_RESULT.description %]</td>[% END %]
@@ -646,7 +646,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
     <span class="shelvingloc">[% ITEM_RESULT.location_description %]</span>
     </td>
 		[% IF ( itemdata_ccode ) %]<td>[% ITEM_RESULT.ccode %]</td>[% END %]
-		<td>[% IF ( ITEM_RESULT.itemcallnumber ) %] [% ITEM_RESULT.itemcallnumber %][% IF ( OPACShelfBrowser ) %] (<a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% ITEM_RESULT.biblionumber %]&amp;shelfbrowse_itemnumber=[% ITEM_RESULT.itemnumber %]#shelfbrowser">Browse Shelf</a>)[% END %][% END %]</td>
+        <td>[% IF ( ITEM_RESULT.itemcallnumber ) %] [% ITEM_RESULT.itemcallnumber %][% IF ( OPACShelfBrowser ) %] (<a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% ITEM_RESULT.biblionumber %]&amp;shelfbrowse_itemnumber=[% ITEM_RESULT.itemnumber %]#shelfbrowser">Browse shelf</a>)[% END %][% END %]</td>
 		[% IF ( itemdata_enumchron ) %]<td>[% ITEM_RESULT.enumchron %]</td>[% END %]
 		[% IF ( itemdata_uri ) %]<td><a href="[% ITEM_RESULT.uri %]">[% ITEM_RESULT.uri %]</a></td>[% END %]
 		[% IF ( itemdata_copynumber ) %]<td>[% ITEM_RESULT.copynumber %]</td>[% END %]
@@ -669,7 +669,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 
 [% IF ( OpenOPACShelfBrowser ) %]
 <div id="shelfbrowser">
-<h5 style="text-align: center;">[% IF ( starting_homebranch ) %]Browsing [% starting_homebranch %] Shelves[% END %][% IF ( starting_location ) %], Shelving Location: [% starting_location %][% END %][% IF ( starting_ccode ) %], Collection Code: [% starting_ccode %][% END %] <a style="font-size: 75%;" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]">Close Shelf Browser</a></h5>
+<h5 style="text-align: center;">[% IF ( starting_homebranch ) %]Browsing [% starting_homebranch %] Shelves[% END %][% IF ( starting_location ) %], Shelving location: [% starting_location %][% END %][% IF ( starting_ccode ) %], Collection code: [% starting_ccode %][% END %] <a style="font-size: 75%;" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]">Close shelf browser</a></h5>
 
         
         <table><tr>
@@ -742,7 +742,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 [% IF ( SyndeticsEnabled ) %]
 [% IF ( SyndeticsSummary ) %]
 [% IF ( SYNDETICS_SUMMARY ) %]
-    <h4>Enhanced Descriptions from Syndetics:</h4>
+    <h4>Enhanced descriptions from Syndetics:</h4>
     <p>[% SYNDETICS_SUMMARY %]</p>
 [% END %]
 [% END %]
@@ -768,7 +768,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 [% IF ( SyndeticsTOC ) %][% IF ( SYNDETICS_TOC ) %]
 <div id="toc">
 <div class="content_set">
-<h3>Table of Contents provided by Syndetics</h3>
+<h3>Table of contents provided by Syndetics</h3>
 <ul>
 [% FOREACH SYNDETICS_TO IN SYNDETICS_TOC %]
     [% IF ( SYNDETICS_TO.p ) %]
@@ -812,7 +812,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 [% IF ( SyndeticsAuthorNotes ) %][% IF ( SYNDETICS_ANOTES ) %]
 <div id="anotes">
 <div class="content_set">
-<h3>Author Notes provided by Syndetics</h3>
+<h3>Author notes provided by Syndetics</h3>
 [% FOREACH SYNDETICS_ANOTE IN SYNDETICS_ANOTES %]
     [% IF ( SYNDETICS_ANOTE.content ) %]
         [% SYNDETICS_ANOTE.content %]
@@ -863,7 +863,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
                     [% ELSE %]
                     [% IF ( latestserial.status4 ) %]Missing
                     [% ELSE %]
-                    [% IF ( latestserial.status5 ) %]Not Issued
+                    [% IF ( latestserial.status5 ) %]Not issued
                     [% END %]
                     [% END %]
                     [% END %]
@@ -917,7 +917,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
             <img class="avatar" src="[% review.avatarurl %]" height="80" width="80" alt="" />
                 [% END %]
             <h5>
-                Your Comment
+                Your comment
             </h5>
             <small>[% review.datereviewed | $KohaDates %]</small>
         <p>
@@ -973,7 +973,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 [% IF ( OPACFRBRizeEditions ) %][% IF ( XISBNS ) %]
 <div id="editions">
 
-<h4>Other Editions of this Work</h4>
+<h4>Other editions of this work</h4>
 <table>
 [% FOREACH XISBN IN XISBNS %]
 <tr>
@@ -1022,7 +1022,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 <!-- Amazon Reviews -->
 <div id="amazonreviews">
         [% IF ( amazon_average_rating ) %]
-            <div class="clearfix"><h3 style="float: left;">Average Rating (from Amazon[% AmazonTld %]): </h3><span class="starMT" style="float: left;"><span class="starFull" style="float: left; width:[% amazon_average_rating / 2 %]px"></span></span> [% IF ( normalized_isbn ) %][% IF ( OPACurlOpenInNewWindow ) %]<a href="http://www.amazon[% AmazonTld %]/gp/customer-reviews/write-a-review.html/002-2970817-7876066?%5Fencoding=UTF8&amp;asin=[% normalized_isbn %]&amp;store=books" target="_blank">Add your own review</a>[% ELSE %]<a href="http://www.amazon[% AmazonTld %]/gp/customer-reviews/write-a-review.html/002-2970817-7876066?%5Fencoding=UTF8&amp;asin=[% normalized_isbn %]&amp;store=books">Add your own review</a>[% END %][% END %]</div>
+            <div class="clearfix"><h3 style="float: left;">Average rating (from Amazon[% AmazonTld %]): </h3><span class="starMT" style="float: left;"><span class="starFull" style="float: left; width:[% amazon_average_rating / 2 %]px"></span></span> [% IF ( normalized_isbn ) %][% IF ( OPACurlOpenInNewWindow ) %]<a href="http://www.amazon[% AmazonTld %]/gp/customer-reviews/write-a-review.html/002-2970817-7876066?%5Fencoding=UTF8&amp;asin=[% normalized_isbn %]&amp;store=books" target="_blank">Add your own review</a>[% ELSE %]<a href="http://www.amazon[% AmazonTld %]/gp/customer-reviews/write-a-review.html/002-2970817-7876066?%5Fencoding=UTF8&amp;asin=[% normalized_isbn %]&amp;store=books">Add your own review</a>[% END %][% END %]</div>
 
         [% FOREACH AMAZON_CUSTOMER_REVIEW IN AMAZON_CUSTOMER_REVIEWS %]
             <div class="content_set">
@@ -1118,12 +1118,12 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 [% IF ( SocialNetworks ) %]
     <div class="social_networks">
         <span>Share</span>
-        <a href="http://www.facebook.com/sharer.php?u=[% current_url |url %]&t=[% title |url %]" title="Share on Facebook"><img alt="Share on Facebook" src="/opac-tmpl/prog/images/socnet/facebook16.png" /></a>
+        <a href="http://www.facebook.com/sharer.php?u=[% current_url |url %]&amp;t=[% title |url %]" title="Share on Facebook"><img alt="Share on Facebook" src="/opac-tmpl/prog/images/socnet/facebook16.png" /></a>
         <a href="http://twitter.com/share" title="Share on Twitter"><img alt="Share on Twitter" src="/opac-tmpl/prog/images/socnet/twitter16.png" /></a>
-        <a href="http://www.linkedin.com/shareArticle?mini=true&url=[% current_url |url %]&title=[% title |url %]" title="Share on LinkedIn"><img alt="Share on LinkedIn" src="/opac-tmpl/prog/images/socnet/linkedin16.png" /></a>
-        <a href="http://www.delicious.com/save?url=[% current_url |url %]&title=[% title |url %]" title="Share on Delicious"><img alt="Share on Delicious" src="/opac-tmpl/prog/images/socnet/delicious16.gif" /></a>
+        <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=[% current_url |url %]&amp;title=[% title |url %]" title="Share on LinkedIn"><img alt="Share on LinkedIn" src="/opac-tmpl/prog/images/socnet/linkedin16.png" /></a>
+        <a href="http://www.delicious.com/save?url=[% current_url |url %]&amp;title=[% title |url %]" title="Share on Delicious"><img alt="Share on Delicious" src="/opac-tmpl/prog/images/socnet/delicious16.gif" /></a>
         <g:plusone size="small"></g:plusone>
-        <a href="mailto:ADRESSE?subject=TO READ : [% title %]>&body=[% title %]> [% current_url |url %]" title="Share by email"><img alt="Share by email" src="/opac-tmpl/prog/images/socnet/mailto16.png" /></a>
+        <a href="mailto:ADRESSE?subject=TO READ : [% title %]>&amp;body=[% title %]> [% current_url |url %]" title="Share by email"><img alt="Share by email" src="/opac-tmpl/prog/images/socnet/mailto16.png" /></a>
     </div>
 [% END %]
 

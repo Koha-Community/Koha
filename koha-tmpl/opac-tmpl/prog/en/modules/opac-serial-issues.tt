@@ -1,4 +1,4 @@
-[% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha Online[% END %] Catalog &rsaquo;  Serials
+[% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo;  Serials
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="opac-serial-issues">
@@ -12,9 +12,9 @@
 <div id="userserialissues" class="container">
 <h2>Issues for a subscription</h2>
 <div id="views">
-	<span class="view"><a id="Normalview" href="opac-detail.pl?biblionumber=[% biblionumber | html %]" class="button">Normal View</a></span>
+    <span class="view"><a id="Normalview" href="opac-detail.pl?biblionumber=[% biblionumber | html %]" class="button">Normal view</a></span>
 		<span class="view"><span id="Briefhistory">Brief history</span></span>
-	<span class="view"><a id="Fullhistory" href="opac-serial-issues.pl?selectview=full&amp;biblionumber=[% biblionumber | html%]" class="button">Full History</a></span>
+    <span class="view"><a id="Fullhistory" href="opac-serial-issues.pl?selectview=full&amp;biblionumber=[% biblionumber | html%]" class="button">Full history</a></span>
 </div>
 <form method="post" name="f">
 [% FOREACH subscription_LOO IN subscription_LOOP %]
@@ -91,13 +91,13 @@
 		</p>
     <h4>[% subscription_LOO.branchname %] [% subscription_LOO.notes %]</h4>
   [% IF ( subscription_LOO.recievedlist ) %]
-    <h5>Available Issues</h5>
+    <h5>Available issues</h5>
     <p>
       [% subscription_LOO.recievedlist %]
     </p>
   [% END %]
   [% IF ( subscription_LOO.missinglist ) %]
-    <h5>Unavailable Issues</h5>
+    <h5>Unavailable issues</h5>
     <p>
       [% subscription_LOO.missinglist %]
     </p>

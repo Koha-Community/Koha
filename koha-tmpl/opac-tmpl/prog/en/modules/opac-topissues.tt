@@ -1,4 +1,4 @@
-[% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha Online[% END %] Catalog &rsaquo; Most Popular Titles
+[% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Most popular titles
 [% INCLUDE 'doc-head-close.inc' %]
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
 <script language="JavaScript" type="text/javascript">
@@ -79,14 +79,14 @@ function Dopop(link) {
                         </td>
                         <td>[% results_loo.description %]</td>
                         <td>[% results_loo.tot %]</td>
-						[% IF ( opacuserlogin ) %]<td>[% IF ( RequestOnOpac ) %][% UNLESS ( results_loo.norequests ) %]<a href="/cgi-bin/koha/opac-reserve.pl?biblionumber=[% results_loo.biblionumber %]">Place Hold</a>[% END %][% END %]</td>[% END %]
+                        [% IF ( opacuserlogin ) %]<td>[% IF ( RequestOnOpac ) %][% UNLESS ( results_loo.norequests ) %]<a href="/cgi-bin/koha/opac-reserve.pl?biblionumber=[% results_loo.biblionumber %]">Place hold</a>[% END %][% END %]</td>[% END %]
                         </tr>
                 [% END %]</tbody>
         </table>
 [% ELSE %]
 <form method="post" action="/cgi-bin/koha/opac-topissues.pl">
 		<fieldset class="rows">
-		<legend>See the Most Popular Titles</legend>
+        <legend>See the most popular titles</legend>
           <ol>  <li><label for="limit">Show the top </label> <select name="limit" id="limit">
                             [% IF ( limit == 10 ) %]<option value ="10" selected="selected">10 titles</option>[% ELSE %]<option value="10">10 titles</option>[% END %]
                             [% IF ( limit == 15 ) %]<option value ="15" selected="selected">15 titles</option>[% ELSE %]<option value="15">15 titles</option>[% END %]

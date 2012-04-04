@@ -1,5 +1,5 @@
 [% INCLUDE 'doc-head-open.inc' %]
-[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha Online[% END %] Catalog
+[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="opac-main">
@@ -47,7 +47,7 @@
 	<form action="/cgi-bin/koha/opac-user.pl" method="post" name="auth" id="auth">
     <input type="hidden" name="koha_login_context" value="opac" />
 	<fieldset class="brief">
-		<legend>Log in to Your Account:</legend>
+        <legend>Log in to your account:</legend>
 		<ol>
 		<li><label for="userid">Login:</label><input type="text" id="userid" size="10" name="userid" /></li>
 		<li><label for="password">Password:</label><input type="password" id="password" size="10" name="password" /></li>

@@ -1,4 +1,4 @@
-[% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha Online[% END %] Catalog &rsaquo;  Subscription information for [% bibliotitle %]
+[% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo;  Subscription information for [% bibliotitle %]
 [% INCLUDE 'doc-head-close.inc' %]
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
 <script type="text/javascript" language="javascript">
@@ -204,7 +204,7 @@ function showlayer(numlayer){
 			[% IF ( serial.status2 ) %]Arrived[% END %]
 			[% IF ( serial.status3 ) %]Late[% END %]
 			[% IF ( serial.status4 ) %]Missing[% END %]
-			[% IF ( serial.status5 ) %]Not Available[% END %]
+            [% IF ( serial.status5 ) %]Not available[% END %]
 			[% IF ( serial.status7 ) %]Claimed[% END %]
 		    </td>
 		    <td class="subscriptionidfilterclass">    [% serial.subscriptionid %]

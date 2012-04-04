@@ -1,4 +1,4 @@
-[% INCLUDE 'doc-head-open.inc' %][% LibraryNameTitle or "Koha Online" %] &rsaquo; ILS-DI
+[% INCLUDE 'doc-head-open.inc' %][% LibraryNameTitle or "Koha online" %] &rsaquo; ILS-DI
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body>
@@ -36,11 +36,11 @@
                     <dt><strong>return_fmt</strong> (Optional)</dt>
                     <dd>requests a particular format or set of formats in reporting availability</dd>
                 </dl>
-                <h4>Example Call</h4>
+                <h4>Example call</h4>
                 <a href="ilsdi.pl?service=GetAvailability&amp;id=1+2+99999&amp;id_type=item">
                     ilsdi.pl?service=GetAvailability&amp;id=1+2+99999&amp;id_type=item
                 </a>
-                <h4>Example Response</h4>
+                <h4>Example response</h4>
 <pre>&lt;?xml version="1.0" encoding="ISO-8859-1" ?&gt;
 &lt;dlf:collection
   xmlns:dlf="http://diglib.org/ilsdi/1.1"
@@ -113,7 +113,7 @@
                 <a href="ilsdi.pl?service=GetRecords&amp;id=1+2+99999">
                     ilsdi.pl?service=GetRecords&amp;id=1+2+99999
                 </a>
-                <h4>Example Response</h4>
+                <h4>Example response</h4>
 <pre>&lt;?xml version="1.0" encoding="ISO-8859-1" ?&gt;
 &lt;GetRecords&gt;
   &lt;record&gt;
@@ -313,11 +313,11 @@
                         </ul>
                     </dd>
                 </dl>
-                <h4>Example Call</h4>
+                <h4>Example call</h4>
                 <a href="ilsdi.pl?service=GetAuthorityRecords&amp;id=1+2+99999">
                     ilsdi.pl?service=GetAuthorityRecords&amp;id=1+2+99999
                 </a>
-                <h4>Example Response</h4>
+                <h4>Example response</h4>
 <pre>&lt;xml version="1.0" encoding="UTF-8"&gt;;
 &lt;GetAuthorityRecords&gt;
   &lt;record&gt;
@@ -371,11 +371,11 @@
                         </ul>
                     </dd>
                 </dl>
-                <h4>Example Call</h4>
+                <h4>Example call</h4>
                 <a href="ilsdi.pl?service=LookupPatron&amp;id=815&amp;id_type=cardnumber">
                     ilsdi.pl?service=LookupPatron&amp;id=815&amp;id_type=cardnumber
                 </a>
-                <h4>Example Response</h4>
+                <h4>Example response</h4>
 <pre>&lt;?xml version="1.0" encoding="ISO-8859-1" ?&gt;
 &lt;LookupPatron&gt;
   &lt;id&gt;419&lt;/id&gt;
@@ -392,7 +392,7 @@
                     <dt><strong>password</strong> (Required)</dt>
                     <dd>user's password</dd>
                 </dl>
-                <h4>Example Call</h4>
+                <h4>Example call</h4>
                 <a href="ilsdi.pl?service=AuthenticatePatron&amp;username=john9&amp;password=soul">
                     ilsdi.pl?service=AuthenticatePatron&amp;username=john9&amp;password=soul
                 </a>
@@ -422,11 +422,11 @@
                     <dt><strong>show_loans</strong> (Optional, default 0)</dt>
                     <dd>whether or not to return loan information in the response</dd>
                 </dl>
-                <h4>Example Call</h4>
+                <h4>Example call</h4>
                 <a href="ilsdi.pl?service=GetPatronInfo&amp;patron_id=1&amp;show_contact=0&amp;show_loans=1">
                     ilsdi.pl?service=GetPatronInfo&amp;patron_id=1&amp;show_contact=0&amp;show_loans=1
                 </a>
-                <h4>Example Response</h4>
+                <h4>Example response</h4>
 <pre>&lt;?xml version="1.0" encoding="ISO-8859-1" ?&gt;
 &lt;GetPatronInfo&gt;
   &lt;category_type&gt;A&lt;/category_type&gt;
@@ -541,7 +541,7 @@
                     <dt><strong>patron_id</strong> (Required)</dt>
                     <dd>the unique patron identifier in the ILS; the same identifier returned by LookupPatron or AuthenticatePatron</dd>
                 </dl>
-                <h4>Example Call</h4>
+                <h4>Example call</h4>
                 <a href="ilsdi.pl?service=GetPatronStatus&amp;patron_id=1">
                     ilsdi.pl?service=GetPatronStatus&amp;patron_id=1
                 </a>
@@ -564,11 +564,11 @@
                     <dt><strong>item_id</strong> (Required)</dt>
                     <dd>system item identifier</dd>
                 </dl>
-                <h4>Example Call</h4>
+                <h4>Example call</h4>
                 <a href="ilsdi.pl?service=GetServices&amp;patron_id=1&amp;item_id=1">
                     ilsdi.pl?service=GetServices&amp;patron_id=1&amp;item_id=1
                 </a>
-                <h4>Example Response</h4>
+                <h4>Example response</h4>
 <pre>&lt;?xml version="1.0" encoding="ISO-8859-1" ?&gt;
 &lt;GetServices&gt;
   &lt;AvailableFor&gt;title level hold&lt;/AvailableFor&gt;
@@ -588,11 +588,11 @@
                     <dt><strong>desired_due_date</strong> (Required)</dt>
                     <dd>the date the patron would like the item returned by</dd>
                 </dl>
-                <h4>Example Call</h4>
+                <h4>Example call</h4>
                 <a href="ilsdi.pl?service=RenewLoan&amp;patron_id=1&amp;item_id=1">
                     ilsdi.pl?service=RenewLoan&amp;patron_id=1&amp;item_id=1
                 </a>
-                <h4>Example Response</h4>
+                <h4>Example response</h4>
 <pre>&lt;?xml version="1.0" encoding="ISO-8859-1" ?&gt;
 &lt;RenewLoan&gt;
   &lt;success&gt;0&lt;/success&gt;
@@ -623,7 +623,7 @@
                 <a href="ilsdi.pl?service=HoldTitle&amp;patron_id=1&amp;bib_id=1&amp;request_location=127.0.0.1">
                     ilsdi.pl?service=HoldTitle&amp;patron_id=1&amp;bib_id=1&amp;request_location=127.0.0.1
                 </a>
-                <h4>Example Response</h4>
+                <h4>Example response</h4>
 <pre>&lt;?xml version="1.0" encoding="ISO-8859-1" ?&gt;
 &lt;HoldTitle&gt;
   &lt;title&gt;(les) galères de l'Orfèvre&lt;/title&gt;
@@ -654,7 +654,7 @@
                 <a href="ilsdi.pl?service=HoldItem&amp;patron_id=1&amp;bib_id=1&amp;item_id=1">
                     ilsdi.pl?service=HoldItem&amp;patron_id=1&amp;bib_id=1&amp;item_id=1
                 </a>
-                <h4>Example Response</h4>
+                <h4>Example response</h4>
 <pre>&lt;?xml version="1.0" encoding="ISO-8859-1" ?&gt;
 &lt;HoldTitle&gt;
   &lt;title&gt;(les) galères de l'Orfèvre&lt;/title&gt;
@@ -673,11 +673,11 @@
                     <dt><strong>item_id</strong> (Required)</dt>
                     <dd>system item identifier</dd>
                 </dl>
-                <h4>Example Call</h4>
+                <h4>Example call</h4>
                 <a href="ilsdi.pl?service=CancelHold&amp;patron_id=1&amp;item_id=1">
                     ilsdi.pl?service=CancelHold&amp;patron_id=1&amp;item_id=1
                 </a>
-                <h4>Example Response</h4>
+                <h4>Example response</h4>
 <pre>&lt;?xml version="1.0" encoding="ISO-8859-1" ?&gt;
 &lt;CancelHold&gt;
   &lt;message&gt;Canceled&lt;/message&gt;
@@ -685,7 +685,7 @@
 
 [% ELSE %]
 
-                <h2>Level 1: Basic Discovery Interfaces</h2>
+                <h2>Level 1: Basic discovery interfaces</h2>
                 <ul>
                     <li>HarvestBibliographicRecords <em>(Use OAI-PMH instead)</em></li>
                     <li>HarvestExpandedRecords <em>(Use OAI-PMH instead)</em></li>

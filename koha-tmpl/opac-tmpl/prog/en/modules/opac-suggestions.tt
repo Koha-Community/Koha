@@ -1,4 +1,4 @@
-[% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha Online[% END %] Catalog &rsaquo;  
+[% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo;
 [% IF ( op_add ) %]Enter a new purchase suggestion[% END %]
 [% IF ( op_else ) %]Purchase Suggestions[% END %]
 [% INCLUDE 'doc-head-close.inc' %]
@@ -83,9 +83,9 @@ $.tablesorter.addParser({
     <li><label for="copyrightdate">Copyright Date:</label><input type="text" id="copyrightdate" name="copyrightdate" size="4" maxlength="4" /></li>
     <li><label for="isbn">Standard Number (ISBN, ISSN or Other):</label><input type="text" id="isbn" name="isbn" size="50" maxlength="80" /></li>
     <li><label for="publishercode">Publisher:</label><input type="text" id="publishercode" name="publishercode" size="50" maxlength="80" /></li>
-    <li><label for="collectiontitle">Collection Title:</label><input type="text" id="collectiontitle" name="collectiontitle" size="50" maxlength="80" /></li>
-    <li><label for="place">Publication Place:</label><input type="text" id="place" name="place" size="50" maxlength="80" /></li>
-    <li><label for="itemtype">Item Type:</label><select name="itemtype" id="itemtype">
+    <li><label for="collectiontitle">Collection title:</label><input type="text" id="collectiontitle" name="collectiontitle" size="50" maxlength="80" /></li>
+    <li><label for="place">Publication place:</label><input type="text" id="place" name="place" size="50" maxlength="80" /></li>
+    <li><label for="itemtype">Item type:</label><select name="itemtype" id="itemtype">
             <option value="">Default</option>
         [% FOREACH itemtypeloo IN itemtypeloop %]
 			[% IF ( itemtypeloo.selected ) %]<option value="[% itemtypeloo.itemtype %]" selected="selected"> [% ELSE %]<option value="[% itemtypeloo.itemtype %]"> [% END %] [% itemtypeloo.description %]</option>
@@ -115,7 +115,7 @@ $.tablesorter.addParser({
 [% END %]
 
 [% IF ( op_else ) %]
-    <h1>[% UNLESS ( OPACViewOthersSuggestions ) %][% IF ( loggedinusername ) %]My [% END %][% END %]Purchase Suggestions</h1>
+    <h1>[% UNLESS ( OPACViewOthersSuggestions ) %][% IF ( loggedinusername ) %]My [% END %][% END %]Purchase suggestions</h1>
 
     [% IF ( deleted ) %]<div class="dialog message">The selected suggestions have been deleted.</div>[% END %]
     [% IF ( submitted ) %]<div class="dialog message">Your suggestion has been submitted.</div>[% END %]
@@ -148,15 +148,15 @@ $.tablesorter.addParser({
             </form>[% END %]
         <form action="/cgi-bin/koha/opac-suggestions.pl" method="post">
             <input type="hidden" name="op" value="delete_confirm" />
-			<div><span class="checkall"><a href="#" id="CheckAll">Select All</a></span>
-		<span class="clearall"><a href="#" id="CheckNone">Clear All</a></span> | [% IF ( loggedinusername ) %]<a class="new" href="/cgi-bin/koha/opac-suggestions.pl?op=add">New purchase suggestion</a>[% ELSE %][% IF ( AnonSuggestions ) %]<a class="new" href="/cgi-bin/koha/opac-suggestions.pl?op=add">New purchase suggestion</a>[% END %][% END %]
+            <div><span class="checkall"><a href="#" id="CheckAll">Select all</a></span>
+        <span class="clearall"><a href="#" id="CheckNone">Clear all</a></span> | [% IF ( loggedinusername ) %]<a class="new" href="/cgi-bin/koha/opac-suggestions.pl?op=add">New purchase suggestion</a>[% ELSE %][% IF ( AnonSuggestions ) %]<a class="new" href="/cgi-bin/koha/opac-suggestions.pl?op=add">New purchase suggestion</a>[% END %][% END %]
 </div>
 			<table id="suggestt" class="checkboxed">
 			<thead><tr>
             [% IF ( loggedinusername ) %]<th>&nbsp;</th>[% END %]
             <th>Summary</th>
             <th>Note</th>
-            [% IF ( OPACViewOthersSuggestions ) %]<th>Suggested For</th>[% END %]
+            [% IF ( OPACViewOthersSuggestions ) %]<th>Suggested for</th>[% END %]
             <th>Managed by</th>
             <th>Status</th>
         </tr></thead>

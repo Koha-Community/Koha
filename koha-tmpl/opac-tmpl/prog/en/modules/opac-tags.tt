@@ -1,6 +1,6 @@
 [% USE KohaDates %]
 
-[% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha Online[% END %] Catalog &rsaquo; Tags
+[% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Tags
 [% INCLUDE 'doc-head-close.inc' %]
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
 <style type="text/css">
@@ -111,7 +111,7 @@
 		<form method="post" action="opac-tags.pl">
 		<h2>My Tags</h2>
 		<table id="mytagst">
-		<thead><tr><th>Term</th><th>Title</th><th>Date Added</th><th>Delete</th>
+        <thead><tr><th>Term</th><th>Title</th><th>Date added</th><th>Delete</th>
 		</tr></thead>
 	<tbody>[% FOREACH MY_TAG IN MY_TAGS %]
 		<tr><td><a href="/cgi-bin/koha/opac-search.pl?tag=[% MY_TAG.term |url %]&amp;q=[% MY_TAG.term |url %]">
