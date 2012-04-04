@@ -319,6 +319,7 @@ $(document).ready(function() {
 
 		</li>
 		</ol>
+                [% IF code.search('DGST') %] <span class="overdue">Warning, this is a template for a Digest, as such, any references to branch data ( e.g. branches.branchname ) will refer to the borrower's home branch.</span> [% END %]
 		</fieldset>
 		<fieldset class="action"><input type="button" value="Submit" onclick="Check(this.form)" class="button" /> <a class="cancel" href="/cgi-bin/koha/tools/letter.pl">Cancel</a></fieldset>
       <input type="hidden" name="searchfield" value="[% searchfield %]" />
