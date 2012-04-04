@@ -4,7 +4,7 @@
   [% IF ( unknownbiblionumber ) %]
     Unknown record
   [% ELSE %]
-    Labeled MARC Details for [% bibliotitle %]
+    Labeled MARC details for [% bibliotitle %]
   [% END %]
 </title>
 
@@ -31,7 +31,7 @@
 		[% IF ( unknownbiblionumber ) %]
 		  Unknown record
 		[% ELSE %]
-		  MARC Details for <i>[% bibliotitle %]</i>
+            MARC details for <i>[% bibliotitle %]</i>
 		[% END %]
 	</div>
 
@@ -50,7 +50,7 @@
 					[% UNLESS ( popup ) %]
 						<h1>Labeled MARC biblio : [% biblionumber %]  ( [% bibliotitle %] )</h1>
 					[% END %]
-					<p><b>With Framework :[% framework %]</b></p>
+                    <p><b>With framework :[% framework %]</b></p>
 					<!-- div id="bibliotabs" class="toptabs numbered" -->
 					<div>
 						<table class="labeledmarc-table">

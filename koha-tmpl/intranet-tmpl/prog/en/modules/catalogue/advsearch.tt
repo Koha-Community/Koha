@@ -1,5 +1,5 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Catalog &rsaquo; Advanced Search</title>
+<title>Koha &rsaquo; Catalog &rsaquo; Advanced search</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <script type="text/JavaScript" language="JavaScript">
 	/**
@@ -22,14 +22,14 @@
 <body id="catalog_advsearch" class="catalog">
 
 [% INCLUDE 'header.inc' %]
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; Advanced Search</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; Advanced search</div>
 
 <div id="doc" class="yui-t7">
    <div id="bd">
 	
 <form action="search.pl" method="get">
 <div id="advanced-search">
-<h1>Advanced Search</h1>
+<h1>Advanced search</h1>
 
 [% IF ( outer_servers_loop ) %]
 <!-- DATABASES -->
@@ -56,7 +56,7 @@
 
 <!-- BOOLEAN SEARCH OPTIONS -->
     <fieldset id="searchterms">
-    <legend>Search For </legend>
+    <legend>Search for </legend>
     [% FOREACH search_box IN search_boxes_loop %]
         [% IF ( search_boxes_label ) %]<div style="text-indent: 4.5em;">[% ELSE %]<div>[% END %]
 			[% IF ( expanded_options ) %]
@@ -75,7 +75,7 @@
                     <a href="JavaScript:add_field();" id="ButtonPlus" title="Add another field">[+]</a>
 				[% END %]
               [% IF ( search_box.scan_index ) %]
-                <label for="scan">Scan Indexes</label> <input type="checkbox" name="scan" id="scan" value="1" />
+                <label for="scan">Scan indexes</label> <input type="checkbox" name="scan" id="scan" value="1" />
               [% END %]
             [% END %]
 		</div>
@@ -86,7 +86,7 @@
 <!-- SEARCH BUTTONS -->
             <fieldset class="action" id="submit1"><input class="submit" type="submit" accesskey="s" value="Search" />
             [% IF ( expanded_options ) %]
-            <a href="/cgi-bin/koha/catalogue/search.pl?expanded_options=0">[Fewer Options]</a>
+            <a href="/cgi-bin/koha/catalogue/search.pl?expanded_options=0">[Fewer options]</a>
             [% ELSE %]
             <a href="/cgi-bin/koha/catalogue/search.pl?expanded_options=1">[More options]</a>
             [% END %]
@@ -101,10 +101,10 @@
       [% FOREACH advsearchloo IN advancedsearchesloop %]
         <li id="advsearch-tab-[% advsearchloo.advanced_search_type %]">
            <a href="/cgi-bin/koha/opac-search.pl#advsearch-[% advsearchloo.advanced_search_type %]">
-           [% IF ( advsearchloo.advanced_search_type == 'itemtypes' ) %]Item Type
+           [% IF ( advsearchloo.advanced_search_type == 'itemtypes' ) %]Item type
            [% ELSIF ( advsearchloo.advanced_search_type == 'ccode' ) %]Collection
-           [% ELSIF ( advsearchloo.advanced_search_type == 'loc' ) %]Shelving Location
-           [% ELSE %]Something Else
+           [% ELSIF ( advsearchloo.advanced_search_type == 'loc' ) %]Shelving location
+           [% ELSE %]Something else
            [% END %]
            </a>
         </li>
@@ -138,7 +138,7 @@
 <!-- LANGUAGE LIMIT -->
 		<p><label for="language-limit">Language: </label>                                        
 		<select name="limit" id="language-limit">
-		<option value="">No Limit</option>
+        <option value="">No limit</option>
 		[% FOREACH search_languages_loo IN search_languages_loop %]
 		[% IF ( search_languages_loo.selected ) %]
 		<option value="ln,rtrn:[% search_languages_loo.iso639_2_code %]" selected="selected">[% search_languages_loo.language_description %]</option>
@@ -194,13 +194,13 @@
             <option value="l-format:ss" >Cassette recording</option>
             <option value="l-format:vf" >VHS tape / Videocassette</option>
             <option value="l-format:vd" >DVD video / Videodisc</option>
-            <option value="l-format:co" >CD Software</option>
+            <option value="l-format:co" >CD software</option>
             <option value="l-format:cr" >Website</option>
         </select>
         
         <select name="limit" class="subtype">
             <option value="" >Additional content types</option>
-            <option value="ctype:a" >Abstracts/summaries</option>
+            <option value="ctype:a" >Abstracts / Summaries</option>
             <option value="ctype:b" >Bibliographies</option>
             <option value="ctype:c" >Catalogs</option>
             <option value="ctype:d" >Dictionaries</option>
@@ -235,8 +235,8 @@
 </fieldset>
 
 <fieldset id="select-libs">
-        <p><label for="branchloop">Individual Libraries:</label><select name="limit" id="branchloop" onchange='if(this.value != ""){document.getElementById("categoryloop").disabled=true;} else {document.getElementById("categoryloop").disabled=false;}'>
-        <option value="">All Libraries</option>
+        <p><label for="branchloop">Individual libraries:</label><select name="limit" id="branchloop" onchange='if(this.value != ""){document.getElementById("categoryloop").disabled=true;} else {document.getElementById("categoryloop").disabled=false;}'>
+        <option value="">All libraries</option>
         [% FOREACH branchloo IN branchloop %]
         [% IF ( branchloo.selected ) %]
         <option value="branch:[% branchloo.value %]" selected="selected">[% branchloo.branchname %]</option>
@@ -248,7 +248,7 @@
     <!-- <input type="hidden" name="limit" value="branch: MAIN" /> -->
         [% IF ( searchdomainloop ) %]
     <p>OR</p> <!-- should addjs to grey out group pulldown if a library is selected. -->
-        <p><label for="categoryloop">Groups of Libraries</label><select name="multibranchlimit" id="categoryloop">
+        <p><label for="categoryloop">Groups of libraries</label><select name="multibranchlimit" id="categoryloop">
         <option value=""> -- none -- </option>
         [% FOREACH searchdomainloo IN searchdomainloop %]
         <option value="[% searchdomainloo.categorycode %]">[% searchdomainloo.categoryname %]</option>
@@ -272,7 +272,7 @@
 <!-- SEARCH BUTTONS -->
             <fieldset class="action" id="submit2"><input class="submit" type="submit" accesskey="s" value="Search" />
             [% IF ( expanded_options ) %]
-            <a href="/cgi-bin/koha/catalogue/search.pl?expanded_options=0">[Fewer Options]</a>
+            <a href="/cgi-bin/koha/catalogue/search.pl?expanded_options=0">[Fewer options]</a>
             [% ELSE %]
             <a href="/cgi-bin/koha/catalogue/search.pl?expanded_options=1">[More options]</a>
             [% END %]

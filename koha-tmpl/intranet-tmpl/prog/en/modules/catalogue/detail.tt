@@ -129,7 +129,7 @@ function verify_images() {
             [% IF ( author ) %]<p>By <a href="/cgi-bin/koha/catalogue/search.pl?q=au:[% author |url %]">[% author %]</a></p>[% END %]
         <ul>
         [% IF ( MARCAUTHORS ) %]
-            <li><strong>Additional Authors:</strong><ul>
+            <li><strong>Additional authors:</strong><ul>
             [% FOREACH MARCAUTHOR IN MARCAUTHORS %]
                 <li>[% FOREACH MARCAUTHOR_SUBFIELDS_LOO IN MARCAUTHOR.MARCAUTHOR_SUBFIELDS_LOOP %][% MARCAUTHOR_SUBFIELDS_LOO.separator %]<a title="‡[% MARCAUTHOR_SUBFIELDS_LOO.code %] [% MARCAUTHOR_SUBFIELDS_LOO.value |url %]" href="/cgi-bin/koha/catalogue/search.pl?q=[% FOREACH link_loo IN MARCAUTHOR_SUBFIELDS_LOO.link_loop %][% link_loo.operator |url %][% link_loo.limit %]:[% link_loo.link |url %][% END %]">[% MARCAUTHOR_SUBFIELDS_LOO.value %]</a>[% END %]</li>
                 [% END %]
@@ -157,7 +157,7 @@ function verify_images() {
         </li>
 [% IF ( MARCURLS ) %]<li>
     
-	<strong>Online Resources:</strong>
+    <strong>Online resources:</strong>
     <ul>    [% FOREACH MARCurl IN MARCURLS %]
 		<li>[% IF ( MARCurl.part ) %][% MARCurl.part %]
 			<br />[% END %] 
@@ -169,7 +169,7 @@ function verify_images() {
     [% END %]
     
     [% IF ( OpacUrl ) %]
-    	<li><strong>OPAC View:</strong>
+        <li><strong>OPAC view:</strong>
     	<a href="http://[% OpacUrl %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]" target="_blank">Open in new window</a>
 		</li>
 	[% END %]
@@ -259,7 +259,7 @@ function verify_images() {
 <li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber %]#description">Descriptions</a></li>
 [% IF ( subscriptionsnumber ) %]<li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber %]#subscriptions">Subscriptions</a></li>[% END %]
 [% IF ( FRBRizeEditions ) %][% IF ( XISBNS ) %]<li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber %]#editions">Editions</a></li>[% END %][% END %]
-[% IF ( AmazonSimilarItems ) %]<li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber %]#related">Related Titles</a></li>[% END %]
+[% IF ( AmazonSimilarItems ) %]<li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber %]#related">Related titles</a></li>[% END %]
 [% IF ( LocalCoverImages ) %][% IF ( localimages || CAN_user_tools_upload_local_cover_images ) %]<li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber %]#images">Images</a></li>[% END %][% END %]
  </ul>
 
@@ -269,20 +269,20 @@ function verify_images() {
         <table>
             <tr>
                 [% IF ( item_level_itypes ) %]<th>Item type</th>[% END %]
-                <th>Current Location</th>
+                <th>Current location</th>
                 <th>Home Library</th>
                 [% IF ( itemdata_ccode ) %]<th>Collection</th>[% END %]
-                <th>Call Number</th>
+                <th>Call number</th>
                 <th>Status</th>
                 <th>Last seen</th>
                 <th>Barcode</th>
-                [% IF ( volinfo ) %]<th>Publication Details</th>[% END %]
+                [% IF ( volinfo ) %]<th>Publication details</th>[% END %]
                 [% IF ( itemdata_uri ) %]<th>url</th>[% END %]
-                [% IF ( itemdata_copynumber ) %]<th>Copy No.</th>[% END %]
-                [% IF materials %]<th>Materials Specified</th>[% END %]
+                [% IF ( itemdata_copynumber ) %]<th>Copy no.</th>[% END %]
+                [% IF materials %]<th>Materials specified</th>[% END %]
                 [% IF ( itemdata_itemnotes ) %]<th>Public notes</th>[% END %]
-		[% IF ( SpineLabelShowPrintOnBibDetails ) %]<th>Spine Label</th>[% END %]
-		[% IF ( hostrecords ) %]<th>Host Records</th>[% END %]
+        [% IF ( SpineLabelShowPrintOnBibDetails ) %]<th>Spine label</th>[% END %]
+        [% IF ( hostrecords ) %]<th>Host records</th>[% END %]
 		[% IF ( analyze ) %]<th>Used in</th><th></th>[% END %]
             </tr>
             [% FOREACH itemloo IN itemloop %]
@@ -406,7 +406,7 @@ function verify_images() {
 		[% END %]
                 [% IF ( itemdata_itemnotes ) %]<td><div class="itemnotes">[% itemloo.itemnotes %]</div></td>[% END %]
 		[% IF ( SpineLabelShowPrintOnBibDetails ) %]
-			<td><a href="/cgi-bin/koha/labels/spinelabel-print.pl?barcode=[% itemloo.barcode %]" >Print Label</a></td>
+            <td><a href="/cgi-bin/koha/labels/spinelabel-print.pl?barcode=[% itemloo.barcode %]" >Print label</a></td>
 		[% END %]
                 [% IF ( hostrecords ) %]
                       <td>[% IF ( itemloo.hostbiblionumber) %]<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% itemloo.hostbiblionumber %]" >[% itemloo.hosttitle %]</a>[% END %]</td>
@@ -417,7 +417,7 @@ function verify_images() {
 			[% END %]</td>
 		[% END %]
                 [% IF ( analyze ) %]
-                        <td><a href="/cgi-bin/koha/cataloguing/addbiblio.pl?hostbiblionumber=[% itemloo.biblionumber %]&amp;hostitemnumber=[% itemloo.itemnumber %]">Create Analytics</a></td>
+                        <td><a href="/cgi-bin/koha/cataloguing/addbiblio.pl?hostbiblionumber=[% itemloo.biblionumber %]&amp;hostitemnumber=[% itemloo.itemnumber %]">Create analytics</a></td>
                 [% END %]
 
                 </tr>
@@ -500,7 +500,7 @@ function verify_images() {
                                 [% ELSE %]
                                     [% IF ( latestserial.status4 ) %]Missing
                                     [% ELSE %]
-                                        [% IF ( latestserial.status5 ) %]Not Issued
+                                        [% IF ( latestserial.status5 ) %]Not issued
                                         [% END %]
                                     [% END %]
                                 [% END %]
@@ -511,7 +511,7 @@ function verify_images() {
             [% END %]
             </table>
             [% END %]
-			<a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscription.subscriptionid %]">Subscription Details</a>
+            <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscription.subscriptionid %]">Subscription details</a>
     [% END %]
 </div>
 </div>
@@ -571,7 +571,7 @@ function verify_images() {
 <form method="get" action="/cgi-bin/koha/catalogue/export.pl">
 <table>  <tr>
       <th>Save Record</th>   </tr>
-  <tr>     <td> Select Download Format:    <select name="format">
+    <tr><td> Select download format:    <select name="format">
         <option value="mods">MODS (XML)</option>
         <option value="dc">Dublin Core (XML)</option>
         <option value="marcxml">MARCXML</option>

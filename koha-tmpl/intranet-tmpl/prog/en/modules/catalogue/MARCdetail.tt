@@ -3,7 +3,7 @@
   [% IF ( unknownbiblionumber ) %]
     Unknown record
   [% ELSE %]
-    MARC Details for [% bibliotitle %]
+    MARC details for [% bibliotitle %]
   [% END %]
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -51,7 +51,7 @@ function Changefwk(FwkList) {
 
 [% END %]
 
-    <p><b>With Framework : <select name="Frameworks" id="Frameworks" onchange="Changefwk(this);">
+    <p><b>With framework : <select name="Frameworks" id="Frameworks" onchange="Changefwk(this);">
                             <option value="">Default</option>
                             [% FOREACH frameworkcodeloo IN frameworkcodeloop %]
                             [% IF ( frameworkcodeloo.selected ) %]<option value="[% frameworkcodeloo.value %]" selected="selected">[% frameworkcodeloo.frameworktext %]</option>[% ELSE %]<option value="[% frameworkcodeloo.value %]">[% frameworkcodeloo.frameworktext %]</option>[% END %]
