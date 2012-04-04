@@ -1,361 +1,361 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>UNIMARC Field 141 builder</title>
+<title>UNIMARC field 141 builder</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="cat_unimarc_field_141" class="cat" style="padding:1em;">
-<h3>UNIMARC Field 141 builder</h3>
+<h3>UNIMARC field 141 builder</h3>
 <form name="f_pop" action="">
 <table>
 	<tr>
-		<td><label for="f1">Binding Material 1:</label></td>
+        <td><label for="f1">Binding material 1:</label></td>
 		<td>
 			<select name="f1" id="f1" size="1">
             
 			[% IF ( f1 ) %]
-				<option value=" " SELECTED>non required value</option>
+                <option value=" " selected="selected">non required value</option>
 			[% ELSE %]
 				<option value=" ">non required value</option>
 			[% END %]
 			[% IF ( f1a ) %]
-				<option value="a" SELECTED>parchment, vellum</option>
+                <option value="a" selected="selected">parchment, vellum</option>
 			[% ELSE %]
 				<option value="a">parchment, vellum</option>
 			[% END %]
 			[% IF ( f1b ) %]
-				<option value="b" SELECTED>leather</option>
+                <option value="b" selected="selected">leather</option>
 			[% ELSE %]
 				<option value="b">leather</option>
 			[% END %]
 			[% IF ( f1c ) %]
-				<option value="c" SELECTED>wood</option>
+                <option value="c" selected="selected">wood</option>
 			[% ELSE %]
 				<option value="c">wood</option>
 			[% END %]
 			[% IF ( f1d ) %]
-				<option value="d" SELECTED>cloth</option>
+                <option value="d" selected="selected">cloth</option>
 			[% ELSE %]
 				<option value="d">cloth</option>
 			[% END %]
 			[% IF ( f1e ) %]
-				<option value="e" SELECTED>synthetics</option>
+                <option value="e" selected="selected">synthetics</option>
 			[% ELSE %]
 				<option value="e">synthetics</option>
 			[% END %]
 			[% IF ( f1f ) %]
-				<option value="f" SELECTED>cardboard</option>
+                <option value="f" selected="selected">cardboard</option>
 			[% ELSE %]
 				<option value="f">cardboard</option>
 			[% END %]
 			[% IF ( f1g ) %]
-				<option value="g" SELECTED>paper</option>
+                <option value="g" selected="selected">paper</option>
 			[% ELSE %]
 				<option value="g">paper</option>
 			[% END %]
 			[% IF ( f1h ) %]
-				<option value="h" SELECTED>unbound</option>
+                <option value="h" selected="selected">unbound</option>
 			[% ELSE %]
 				<option value="h">unbound</option>
 			[% END %]
 			[% IF ( f1z ) %]
-				<option value="z" SELECTED>other</option>
+                <option value="z" selected="selected">other</option>
 			[% ELSE %]
 				<option value="z">other</option>
 			[% END %]
 	</select>
 		</td></tr>	<tr>
-		<td><label for="f2">Binding Material 2:</label></td>
+        <td><label for="f2">Binding material 2:</label></td>
 		<td>
 			<select name="f2" id="f2" size="1">
             
 			[% IF ( f2 ) %]
-				<option value=" " SELECTED>non required value</option>
+                <option value=" " selected="selected">non required value</option>
 			[% ELSE %]
 				<option value=" ">non required value</option>
 			[% END %]
 			[% IF ( f2a ) %]
-				<option value="a" SELECTED>parchment, vellum</option>
+                <option value="a" selected="selected">parchment, vellum</option>
 			[% ELSE %]
 				<option value="a">parchment, vellum</option>
 			[% END %]
 			[% IF ( f2b ) %]
-				<option value="b" SELECTED>leather</option>
+                <option value="b" selected="selected">leather</option>
 			[% ELSE %]
 				<option value="b">leather</option>
 			[% END %]
 			[% IF ( f2c ) %]
-				<option value="c" SELECTED>wood</option>
+                <option value="c" selected="selected">wood</option>
 			[% ELSE %]
 				<option value="c">wood</option>
 			[% END %]
 			[% IF ( f2d ) %]
-				<option value="d" SELECTED>cloth</option>
+                <option value="d" selected="selected">cloth</option>
 			[% ELSE %]
 				<option value="d">cloth</option>
 			[% END %]
 			[% IF ( f2e ) %]
-				<option value="e" SELECTED>synthetics</option>
+                <option value="e" selected="selected">synthetics</option>
 			[% ELSE %]
 				<option value="e">synthetics</option>
 			[% END %]
 			[% IF ( f2f ) %]
-				<option value="f" SELECTED>cardboard</option>
+                <option value="f" selected="selected">cardboard</option>
 			[% ELSE %]
 				<option value="f">cardboard</option>
 			[% END %]
 			[% IF ( f2g ) %]
-				<option value="g" SELECTED>paper</option>
+                <option value="g" selected="selected">paper</option>
 			[% ELSE %]
 				<option value="g">paper</option>
 			[% END %]
 			[% IF ( f2h ) %]
-				<option value="h" SELECTED>unbound</option>
+                <option value="h" selected="selected">unbound</option>
 			[% ELSE %]
 				<option value="h">unbound</option>
 			[% END %]
 			[% IF ( f2z ) %]
-				<option value="z" SELECTED>other</option>
+                <option value="z" selected="selected">other</option>
 			[% ELSE %]
 				<option value="z">other</option>
 			[% END %]
 	</select>
 		</td></tr>
                 <tr>
-		<td><label for="f3">Binding Material 3:</label></td>
+        <td><label for="f3">Binding material 3:</label></td>
 		<td>
 			<select name="f3" id="f3" size="1">
                         [% IF ( f3 ) %]
-                                <option value=" " SELECTED>non required value</option>
+                                <option value=" " selected="selected">non required value</option>
                         [% ELSE %]
                                 <option value=" ">non required value</option>
                         [% END %]
 			[% IF ( f3a ) %]
-				<option value="a" SELECTED>parchment, vellum</option>
+                <option value="a" selected="selected">parchment, vellum</option>
 			[% ELSE %]
 				<option value="a">parchment, vellum</option>
 			[% END %]
 			[% IF ( f3b ) %]
-				<option value="b" SELECTED>leather</option>
+                <option value="b" selected="selected">leather</option>
 			[% ELSE %]
 				<option value="b">leather</option>
 			[% END %]
 			[% IF ( f3c ) %]
-				<option value="c" SELECTED>wood</option>
+                <option value="c" selected="selected">wood</option>
 			[% ELSE %]
 				<option value="c">wood</option>
 			[% END %]
 			[% IF ( f3d ) %]
-				<option value="d" SELECTED>cloth</option>
+                <option value="d" selected="selected">cloth</option>
 			[% ELSE %]
 				<option value="d">cloth</option>
 			[% END %]
 			[% IF ( f3e ) %]
-				<option value="e" SELECTED>synthetics</option>
+                <option value="e" selected="selected">synthetics</option>
 			[% ELSE %]
 				<option value="e">synthetics</option>
 			[% END %]
 			[% IF ( f3f ) %]
-				<option value="f" SELECTED>cardboard</option>
+                <option value="f" selected="selected">cardboard</option>
 			[% ELSE %]
 				<option value="f">cardboard</option>
 			[% END %]
 			[% IF ( f3g ) %]
-				<option value="g" SELECTED>paper</option>
+                <option value="g" selected="selected">paper</option>
 			[% ELSE %]
 				<option value="g">paper</option>
 			[% END %]
 			[% IF ( f3h ) %]
-				<option value="h" SELECTED>unbound</option>
+                <option value="h" selected="selected">unbound</option>
 			[% ELSE %]
 				<option value="h">unbound</option>
 			[% END %]
 			[% IF ( f3z ) %]
-				<option value="z" SELECTED>other</option>
+                <option value="z" selected="selected">other</option>
 			[% ELSE %]
 				<option value="z">other</option>
 			[% END %]
 	</select>
 		</td></tr>
 		<tr>
-		<td><label for="f4">Types of Binding:</label></td>
+        <td><label for="f4">Types of binding:</label></td>
 		<td>
 			<select name="f4" id="f4" size="1">
 
 			[% IF ( f4a ) %]
-				<option value="a" SELECTED>original, i.e. primary</option>
+                <option value="a" selected="selected">original, i.e. primary</option>
 			[% ELSE %]
 				<option value="a">original, i.e. primary</option>
 			[% END %]
 			[% IF ( f4b ) %]
-				<option value="b" SELECTED>rebound</option>
+                <option value="b" selected="selected">rebound</option>
 			[% ELSE %]
 				<option value="b">rebound</option>
 			[% END %]
 			[% IF ( f4c ) %]
-				<option value="c" SELECTED>modern</option>
+                <option value="c" selected="selected">modern</option>
 			[% ELSE %]
 				<option value="c">modern</option>
 			[% END %]
 			[% IF ( f4d ) %]
-				<option value="d" SELECTED>restored, facsimile</option>
+                <option value="d" selected="selected">restored, facsimile</option>
 			[% ELSE %]
 				<option value="d">restored, facsimile</option>
 			[% END %]
 			[% IF ( f4e ) %]
-				<option value="e" SELECTED>restored, imitation</option>
+                <option value="e" selected="selected">restored, imitation</option>
 			[% ELSE %]
 				<option value="e">restored, imitation</option>
 			[% END %]
 			[% IF ( f4f ) %]
-				<option value="f" SELECTED>work bound with another</option>
+                <option value="f" selected="selected">work bound with another</option>
 			[% ELSE %]
 				<option value="f">work bound with another</option>
 			[% END %]
 			[% IF ( f4h ) %]
-				<option value="h" SELECTED>unbound</option>
+                <option value="h" selected="selected">unbound</option>
 			[% ELSE %]
 				<option value="h">unbound</option>
 			[% END %]
 			[% IF ( f4z ) %]
-				<option value="z" SELECTED>other</option>
+                <option value="z" selected="selected">other</option>
 			[% ELSE %]
 				<option value="z">other</option>
 			[% END %]
 			</select>
 		</td></tr>	<tr>
-		<td><label for="f5">Bound with':</label></td>
+        <td><label for="f5">Bound with:</label></td>
 		<td>
 			<select name="f5" id="f5" size="1">
 
 			[% IF ( f50 ) %]
-				<option value="0" SELECTED>single item</option>
+                <option value="0" selected="selected">single item</option>
 			[% ELSE %]
 				<option value="0">single item</option>
 			[% END %]
 			[% IF ( f51 ) %]
-				<option value="1" SELECTED>bound with one or more others</option>
+                <option value="1" selected="selected">bound with one or more others</option>
 			[% ELSE %]
 				<option value="1">bound with one or more others</option>
 			[% END %]
 			</select>
 		</td></tr><tr>
-	<td><label for="f6">State of Preservation - Binding:</label></td>
+    <td><label for="f6">State of preservation - Binding:</label></td>
 		<td>
 			<select name="f6" id="f6" size="1">
 
 			[% IF ( f6a ) %]
-				<option value="a" SELECTED>excellent</option>
+                <option value="a" selected="selected">excellent</option>
 			[% ELSE %]
 				<option value="a">excellent</option>
 			[% END %]
 			[% IF ( f6b ) %]
-				<option value="b" SELECTED>good</option>
+                <option value="b" selected="selected">good</option>
 			[% ELSE %]
 				<option value="b">good</option>
 			[% END %]
 			[% IF ( f6c ) %]
-				<option value="c" SELECTED>worn</option>
+                <option value="c" selected="selected">worn</option>
 			[% ELSE %]
 				<option value="c">worn</option>
 			[% END %]
 			[% IF ( f6d ) %]
-				<option value="d" SELECTED>damaged</option>
+                <option value="d" selected="selected">damaged</option>
 			[% ELSE %]
 				<option value="d">damaged</option>
 			[% END %]
 			[% IF ( f6e ) %]
-				<option value="e" SELECTED>broken back</option>
+                <option value="e" selected="selected">broken back</option>
 			[% ELSE %]
 				<option value="e">broken back</option>
 			[% END %]
 			[% IF ( f6f ) %]
-				<option value="f" SELECTED>missing</option>
+                <option value="f" selected="selected">missing</option>
 			[% ELSE %]
 				<option value="f">missing</option>
 			[% END %]
 			[% IF ( f6z ) %]
-				<option value="z" SELECTED>other</option>
+                <option value="z" selected="selected">other</option>
 			[% ELSE %]
 				<option value="z">other</option>
 			[% END %]
 			</select>
 </td></tr><tr>
-	<td><label for="f7">State of Preservation - Body of the Book 1 :</label></td>
+    <td><label for="f7">State of preservation - Body of the book 1 :</label></td>
 		<td>
 			<select name="f7" id="f7" size="1">
 
 			[% IF ( f7a ) %]
-				<option value="a" SELECTED>excellent</option>
+                <option value="a" selected="selected">excellent</option>
 			[% ELSE %]
 				<option value="a">excellent</option>
 			[% END %]
 			[% IF ( f7b ) %]
-				<option value="b" SELECTED>good</option>
+                <option value="b" selected="selected">good</option>
 			[% ELSE %]
 				<option value="b">good</option>
 			[% END %]
 			[% IF ( f7c ) %]
-				<option value="c" SELECTED>worn</option>
+                <option value="c" selected="selected">worn</option>
 			[% ELSE %]
 				<option value="c">worn</option>
 			[% END %]
 			[% IF ( f7d ) %]
-				<option value="d" SELECTED>damaged</option>
+                <option value="d" selected="selected">damaged</option>
 			[% ELSE %]
 				<option value="d">damaged</option>
 			[% END %]
 			[% IF ( f7e ) %]
-				<option value="e" SELECTED>incomplete</option>
+                <option value="e" selected="selected">incomplete</option>
 			[% ELSE %]
 				<option value="e">incomplete</option>
 			[% END %]
 			[% IF ( f7g ) %]
-				<option value="g" SELECTED>restored</option>
+                <option value="g" selected="selected">restored</option>
 			[% ELSE %]
 				<option value="g">restored</option>
 			[% END %]
 			[% IF ( f7z ) %]
-				<option value="z" SELECTED>other</option>
+                <option value="z" selected="selected">other</option>
 			[% ELSE %]
 				<option value="z">other</option>
 			[% END %]
 			</select>
 </td></tr><tr>
-	<td><label for="f8">State of Preservation - Body of the Book 2 :</label></td>
+    <td><label for="f8">State of preservation - Body of the book 2 :</label></td>
 		<td>
 			<select name="f8" id="f8" size="1">
 
 			[% IF ( f8a ) %]
-				<option value="a" SELECTED>excellent</option>
+                <option value="a" selected="selected">excellent</option>
 			[% ELSE %]
 				<option value="a">excellent</option>
 			[% END %]
 			[% IF ( f8b ) %]
-				<option value="b" SELECTED>good</option>
+                <option value="b" selected="selected">good</option>
 			[% ELSE %]
 				<option value="b">good</option>
 			[% END %]
 			[% IF ( f8c ) %]
-				<option value="c" SELECTED>worn</option>
+                <option value="c" selected="selected">worn</option>
 			[% ELSE %]
 				<option value="c">worn</option>
 			[% END %]
 			[% IF ( f8d ) %]
-				<option value="d" SELECTED>damaged</option>
+                <option value="d" selected="selected">damaged</option>
 			[% ELSE %]
 				<option value="d">damaged</option>
 			[% END %]
 			[% IF ( f8e ) %]
-				<option value="e" SELECTED>incomplete</option>
+                <option value="e" selected="selected">incomplete</option>
 			[% ELSE %]
 				<option value="e">incomplete</option>
 			[% END %]
 			[% IF ( f8g ) %]
-				<option value="g" SELECTED>restored</option>
+                <option value="g" selected="selected">restored</option>
 			[% ELSE %]
 				<option value="g">restored</option>
 			[% END %]
 			[% IF ( f8z ) %]
-				<option value="z" SELECTED>other</option>
+                <option value="z" selected="selected">other</option>
 			[% ELSE %]
 				<option value="z">other</option>
 			[% END %]

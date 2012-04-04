@@ -79,7 +79,7 @@
 
 </head>
 <body id="cat_unimarc_field_4XX" class="cat" style="padding:1em;">
-<h3>UNIMARC Field 4XX builder</h3>
+<h3>UNIMARC field 4XX builder</h3>
 [% ELSE %]
 		<script type="text/javascript">
 //<![CDATA[			
@@ -103,10 +103,10 @@
 
 </head>
 <body style="padding:1em;">
-<h3>UNIMARC Field 4XX builder</h3>
+<h3>UNIMARC field 4XX builder</h3>
 	[% IF ( Search ) %]
 		<div id="UNIMARC_Field_4XX_search">
-		<h2> Search On  </h2>
+        <h2> Search on  </h2>
 		<form name="f" method="post" action="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl">
 	
 			<p>
@@ -118,7 +118,7 @@
 				<input type="text" name="search" id="searchbox" size="35" /><br />
 				<label for="itypeloop">Item type:</label>
 				<select name="itype" id="itypeloop">
-				<option value="">All Item Types</option>
+                <option value="">All item types</option>
 				[% FOREACH itypeloo IN itypeloop %]
 				[% IF ( itypeloo.selected ) %]
 				<option value="[% itypeloo.itemtype %]" selected="selected">[% itypeloo.description %]</option>
@@ -157,7 +157,7 @@
 			<table>
 				<tr>
 					<th>Summary</th>
-					<th>Item Count</th>
+                    <th>Item count</th>
 					<th>Location</th>
 					<th>&nbsp;</th>
 				</tr>
@@ -190,7 +190,7 @@
                       [% IF ( resul.biblionumber ) %]
 						<a href="javascript:jumpfull('/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl&amp;index=[% index %]&amp;biblionumber=[% resul.biblionumber %]&amp;type=intranet&amp;op=fillinput')">Choose</a>
                       [% ELSE %]
-						<a href="javascript:jumpfull('/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl&amp;index=[% index %]&amp;type=intranet&amp;op=fillinput')">Clear Field</a>
+                        <a href="javascript:jumpfull('/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl&amp;index=[% index %]&amp;type=intranet&amp;op=fillinput')">Clear field</a>
                       [% END %]
 					</td>
 				</tr>
