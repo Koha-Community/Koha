@@ -2,7 +2,7 @@
   [% IF ( opacuserlogin ) %]
 	<ul>
 [% UNLESS ( loggedinusername ) %]
-               <li><a href="/cgi-bin/koha/opac-user.pl">Log in to Your Account</a></li>[% END %]
+               <li><a href="/cgi-bin/koha/opac-user.pl">Log in to your account</a></li>[% END %]
             [% IF ( loggedinusername ) %]
                 <li><span class="members">Welcome, <a href="/cgi-bin/koha/opac-user.pl"><span class="loggedinusername">[% FOREACH USER_INF IN USER_INFO %][% USER_INF.title %] [% USER_INF.firstname %] [% USER_INF.surname %][% END %]</span></a></span></li>
 
@@ -37,9 +37,9 @@
 
 	<select name="idx" id="masthead_search" class="left">
 	[% IF ( ms_kw ) %]
-        <option selected="selected" value="">Library Catalog</option>
+        <option selected="selected" value="">Library catalog</option>
 		[% ELSE %]
-        <option value="">Library Catalog</option>
+        <option value="">Library catalog</option>
 		[% END %]
 		[% IF ( ms_ti ) %]
         <option selected="selected" value="ti">Title</option>
@@ -67,9 +67,9 @@
         <option value="se">Series</option>
 		[% END %]
 		[% IF ( ms_callnum ) %]
-        <option selected="selected" value="callnum">Call Number</option>
+        <option selected="selected" value="callnum">Call number</option>
 		[% ELSE %]
-        <option value="callnum">Call Number</option>
+        <option value="callnum">Call number</option>
 		[% END %]</select>
 [% IF ( ms_value ) %]
         <input type="text" id = "transl1" name="q" value="[% ms_value |html %]" class="left" style="width: 35%; font-size: 111%;"/><div id="translControl"></div>
@@ -78,7 +78,7 @@
 [% END %]
    [% IF ( OpacAddMastheadLibraryPulldown ) %]
       <select name="limit" id="select_library" class="left">
-         <option value="">All Libraries</option>
+         <option value="">All libraries</option>
          [% FOREACH BranchesLoo IN BranchesLoop %]
             [% IF ( BranchesLoo.selected ) %]<option selected="selected" value="branch:[% BranchesLoo.value %]">[% BranchesLoo.branchname %]</option>
             [% ELSE %]<option value="branch:[% BranchesLoo.value %]">[% BranchesLoo.branchname %]</option>[% END %]
@@ -109,16 +109,16 @@
 [% END %]
 
 <div id="moresearches">
-<a href="/cgi-bin/koha/opac-search.pl">Advanced Search</a>
-[% IF ( OpacBrowser ) %]<span class="pipe"> | </span><a href="/cgi-bin/koha/opac-browser.pl">Browse by Hierarchy</a>[% END %]
+<a href="/cgi-bin/koha/opac-search.pl">Advanced search</a>
+[% IF ( OpacBrowser ) %]<span class="pipe"> | </span><a href="/cgi-bin/koha/opac-browser.pl">Browse by hierarchy</a>[% END %]
 [% IF ( OpacAuthorities ) %]<span class="pipe"> | </span><a href="/cgi-bin/koha/opac-authorities-home.pl">Browse by author or subject</a>[% END %]
-[% IF ( opacuserlogin && reviewson && OpacShowRecentComments ) %]<span class="pipe"> | </span><a href="/cgi-bin/koha/opac-showreviews.pl">Recent Comments</a>[% END %]
-[% IF ( TagsEnabled ) %]<span class="pipe"> | </span><a href="/cgi-bin/koha/opac-tags.pl">Tag Cloud</a>[% END %]
-[% IF ( OpacCloud ) %]<span class="pipe"> | </span><a href="/cgi-bin/koha/opac-tags_subject.pl">Subject Cloud</a>[% END %]
-[% IF ( OpacTopissue ) %]<span class="pipe"> | </span><a href="/cgi-bin/koha/opac-topissues.pl">Most Popular</a>[% END %]
+[% IF ( opacuserlogin && reviewson && OpacShowRecentComments ) %]<span class="pipe"> | </span><a href="/cgi-bin/koha/opac-showreviews.pl">Recent comments</a>[% END %]
+[% IF ( TagsEnabled ) %]<span class="pipe"> | </span><a href="/cgi-bin/koha/opac-tags.pl">Tag cloud</a>[% END %]
+[% IF ( OpacCloud ) %]<span class="pipe"> | </span><a href="/cgi-bin/koha/opac-tags_subject.pl">Subject cloud</a>[% END %]
+[% IF ( OpacTopissue ) %]<span class="pipe"> | </span><a href="/cgi-bin/koha/opac-topissues.pl">Most popular</a>[% END %]
 [% IF ( suggestion ) %]
-  [% IF ( AnonSuggestions ) %]<span class="pipe"> | </span><a href="/cgi-bin/koha/opac-suggestions.pl">Purchase Suggestions</a>
-  [% ELSIF ( OPACViewOthersSuggestions ) %]<span class="pipe"> | </span><a href="/cgi-bin/koha/opac-suggestions.pl">Purchase Suggestions</a>
+  [% IF ( AnonSuggestions ) %]<span class="pipe"> | </span><a href="/cgi-bin/koha/opac-suggestions.pl">Purchase suggestions</a>
+  [% ELSIF ( OPACViewOthersSuggestions ) %]<span class="pipe"> | </span><a href="/cgi-bin/koha/opac-suggestions.pl">Purchase suggestions</a>
   [% END %]
 [% END %]
 </div>
@@ -132,34 +132,34 @@
 [% IF ( virtualshelves ) %]
 <div id="listsmenu" class="yuimenu" style="display: none">
     <div class="bd">
-	<h4>Public Lists</h4>
+    <h4>Public lists</h4>
 		[% IF ( pubshelves ) %]
 			<ul class="first-of-type">
 			[% FOREACH pubshelvesloo IN pubshelvesloop %]
 			<li class="yuimenuitem"><a href="/cgi-bin/koha/opac-shelves.pl?viewshelf=[% pubshelvesloo.shelfnumber %]&amp;sortfield=[% pubshelvesloo.sortfield %]">[% pubshelvesloo.shelfname |html %]</a></li>
 			[% END %]
 			<li class="yuimenuitem"><a class="yuimenuitemlabel" href="/cgi-bin/koha/opac-shelves.pl?display=publicshelves">[View All]</a></li>
-			</ul>   
+        </ul>
 		[% ELSE %]
-			No Public Lists
+        No public lists
 		[% END %]
   [% IF ( opacuserlogin ) %]
-	<h4>Your Lists</h4>
+    <h4>Your lists</h4>
 	[% IF ( loggedinusername ) %]
 		[% IF ( barshelves ) %]
 			<ul class="first-of-type">
 			[% FOREACH barshelvesloo IN barshelvesloop %]
 			<li class="yuimenuitem"><a href="/cgi-bin/koha/opac-shelves.pl?viewshelf=[% barshelvesloo.shelfnumber %]&amp;sortfield=[% barshelvesloo.sortfield %]">[% barshelvesloo.shelfname |html %]</a></li>
 			[% END %]
-			<li class="yuimenuitem"><a class="yuimenuitemlabel" href="/cgi-bin/koha/opac-shelves.pl?display=privateshelves">[View All]</a></li>
-			</ul>   
+        <li class="yuimenuitem"><a class="yuimenuitemlabel" href="/cgi-bin/koha/opac-shelves.pl?display=privateshelves">[View all]</a></li>
+        </ul>
 		[% ELSE %]
 			<ul class="first-of-type">
-			<li>No Private Lists</li>
-			<li class="yuimenuitem"><a class="yuimenuitemlabel" href="/cgi-bin/koha/opac-shelves.pl?display=privateshelves">[New List]</a></li></ul>
+        <li>No private lists</li>
+        <li class="yuimenuitem"><a class="yuimenuitemlabel" href="/cgi-bin/koha/opac-shelves.pl?display=privateshelves">[New list]</a></li></ul>
 		[% END %]
 	[% ELSE %]
-		<ul class="first-of-type"><li><a href="/cgi-bin/koha/opac-user.pl">Log in to Create Your Own Lists</a></li></ul>
+        <ul class="first-of-type"><li><a href="/cgi-bin/koha/opac-user.pl">Log in to create your own lists</a></li></ul>
 	[% END %]
   [% END %]
 	  </div>
@@ -172,10 +172,10 @@
 [% IF ( searchdesc ) %]<p>[% IF ( total ) %]<strong>Your search returned [% total |html %] results.</strong> [% IF ( related ) %] (related searches: [% FOREACH relate IN related %][% relate.related_search %][% END %]). [% END %]
 <a href="[% OPACBaseURL %]/cgi-bin/koha/opac-search.pl?[% query_cgi |html %][% limit_cgi |html %]&amp;count=[% countrss |html %]&amp;sort_by=acqdate_dsc&amp;format=rss2"><img src="/opac-tmpl/prog/images/feed-icon-16x16.png" alt="Subscribe to this search" title="Subscribe to this search" border="0" /></a>
 [% ELSE %]
-<strong>No Results Found!</strong>
+<strong>No results found!</strong>
 <p>
     [% IF ( searchdesc ) %]
-    No results found for that in [% LibraryName %] Catalog. <a href="[% OPACBaseURL %]/cgi-bin/koha/opac-search.pl?[% query_cgi |html %][% limit_cgi |html %]&amp;format=rss2"><img src="/opac-tmpl/prog/images/feed-icon-16x16.png" alt="Subscribe to this search" title="Subscribe to this search" border="0" /></a>
+    No results found for that in [% LibraryName %] catalog. <a href="[% OPACBaseURL %]/cgi-bin/koha/opac-search.pl?[% query_cgi |html %][% limit_cgi |html %]&amp;format=rss2"><img src="/opac-tmpl/prog/images/feed-icon-16x16.png" alt="Subscribe to this search" title="Subscribe to this search" border="0" /></a>
     [% ELSE %]
     You did not specify any search criteria.
     [% END %]
