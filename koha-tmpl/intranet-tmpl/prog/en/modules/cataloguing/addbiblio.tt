@@ -1,5 +1,5 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Cataloging &rsaquo; [% IF ( biblionumber ) %]Editing [% title |html %] (Record Number [% biblionumber %])[% ELSE %]Add MARC Record[% END %]</title>
+<title>Koha &rsaquo; Cataloging &rsaquo; [% IF ( biblionumber ) %]Editing [% title |html %] (Record number [% biblionumber %])[% ELSE %]Add MARC record[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <script type="text/javascript" src="[% themelang %]/lib/yui/plugins/bubbling-min.js"></script>
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.fixFloat.js"></script>
@@ -657,7 +657,7 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
 //]]>
 </script>
 [% INCLUDE 'header.inc' %]
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloging</a>  &rsaquo; [% IF ( biblionumber ) %]Editing <em>[% title |html %]</em> (Record Number [% biblionumber %])[% ELSE %]Add MARC Record[% END %]</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloging</a>  &rsaquo; [% IF ( biblionumber ) %]Editing <em>[% title |html %]</em> (Record number [% biblionumber %])[% ELSE %]Add MARC record[% END %]</div>
 
 <div id="doc" class="yui-t7">
 
@@ -665,7 +665,7 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
         <div id="yui-main">
         <div class="yui-g">
 
-<h1>[% IF ( biblionumber ) %]Editing <em>[% title |html %]</em> (Record Number [% biblionumber %])</h1>[% ELSE %]Add MARC Record</h1>[% END %]
+<h1>[% IF ( biblionumber ) %]Editing <em>[% title |html %]</em> (Record number [% biblionumber %])</h1>[% ELSE %]Add MARC record</h1>[% END %]
 [% IF marcflavour != 'NORMARC' %]
 <div><input type="checkbox" name="marcDocsSelect" id="marcDocsSelect" checked="true" /> Show MARC tag documentation links<br/></div>
 [% END %]
@@ -674,7 +674,7 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
     <!-- show duplicate warning on tab 0 only -->
         [% IF ( duplicatebiblionumber ) %]
                     <div class="dialog alert">
-                        <h4>Duplicate Record suspected</h4>
+                        <h4>Duplicate record suspected</h4>
                         <p>Is this a duplicate of <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% duplicatebiblionumber %]" onclick="openWindow('../MARCdetail.pl?biblionumber=[% duplicatebiblionumber %]&amp;popup=1', 'Duplicate biblio'; return false;)">[% duplicatetitle %]</a>?</p>
                         [% IF ( CAN_user_editcatalogue_edit_items ) %]<form action="/cgi-bin/koha/cataloguing/additem.pl" method="get">
                                                     <input type="hidden" name="biblionumber" value="[% duplicatebiblionumber %]" />
@@ -684,7 +684,7 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
                                                     <input type="submit" value="Yes: View existing items" />
                                                 </form>[% END %]
                         <form action="/cgi-bin/koha/cataloguing/addbiblio.pl" method="get">
-                        [% IF ( CAN_user_editcatalogue_edit_items ) %]<input type="button" class="save" onclick="confirmnotdup('items'); return false;" value="No: Save as New Record" />[% ELSE %]<input type="button" class="save" onclick="confirmnotdup('view'); return false;" value="No: Save as New Record" />[% END %]
+                        [% IF ( CAN_user_editcatalogue_edit_items ) %]<input type="button" class="save" onclick="confirmnotdup('items'); return false;" value="No: Save as new record" />[% ELSE %]<input type="button" class="save" onclick="confirmnotdup('view'); return false;" value="No: Save as new record" />[% END %]
                         </form>
                     </div>
         [% END %]

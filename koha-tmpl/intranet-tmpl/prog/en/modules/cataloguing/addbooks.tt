@@ -99,7 +99,7 @@
 				<td> <a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% resultsloo.biblionumber %]" title="MARC" rel="gb_page_center[600,500]">MARC</a> | <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;id=[% resultsloo.biblionumber %]" title="MARC" rel="gb_page_center[600,500]">Card</a>
                 </td>
                 [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]<td><a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% resultsloo.biblionumber %]">Edit biblio</a></td>[% END %]
-                [% IF ( CAN_user_editcatalogue_edit_items ) %]<td><a href="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=[% resultsloo.biblionumber %]">Add/Edit Items</a></td>[% END %]
+                [% IF ( CAN_user_editcatalogue_edit_items ) %]<td><a href="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=[% resultsloo.biblionumber %]">Add/Edit items</a></td>[% END %]
             </tr>
     [% END %]
     </table>
@@ -123,8 +123,8 @@
                 <th>ISBN</th>
                 <th>Date</th>
                 <th>Edition</th>
-                <th>coming from</th>
-                <th>preview</th>
+                <th>Coming from</th>
+                <th>Preview</th>
                 <th>&nbsp;</th>
             </tr>
             [% FOREACH breeding_loo IN breeding_loop %]

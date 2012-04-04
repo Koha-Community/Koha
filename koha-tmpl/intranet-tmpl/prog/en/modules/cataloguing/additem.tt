@@ -198,10 +198,10 @@ $(document).ready(function() {
             </tr>
                 [% FOREACH item_loo IN item_loop %]
                 <tr id="row[% item_loo.itemnumber %]">
-                    [% IF ( item_loo.nomod ) %] <td colspan="2">&nbsp;</td>[% ELSE %][% IF ( item_loo.hostitemflag ) %]<td><a href="additem.pl?op=edititem&amp;biblionumber=[% item_loo.hostbiblionumber %]&amp;itemnumber=[% item_loo.itemnumber %]#edititem">Edit in Host</a></td>
+                    [% IF ( item_loo.nomod ) %] <td colspan="2">&nbsp;</td>[% ELSE %][% IF ( item_loo.hostitemflag ) %]<td><a href="additem.pl?op=edititem&amp;biblionumber=[% item_loo.hostbiblionumber %]&amp;itemnumber=[% item_loo.itemnumber %]#edititem">Edit in host</a></td>
 <td><a class="delete" href="/cgi-bin/koha/cataloguing/additem.pl?op=delinkitem&amp;biblionumber=[% biblionumber %]&amp;hostitemnumber=[% item_loo.itemnumber %]">Delink</a></td>
 [% ELSE %]<td><a href="additem.pl?op=edititem&amp;biblionumber=[% biblionumber %]&amp;itemnumber=[% item_loo.itemnumber %]#edititem">Edit</a></td>
-                    <td>[% IF ( item_loo.countanalytics ) %]<a href="/cgi-bin/koha/catalogue/search.pl?idx=hi&amp;q=% item_loo.itemnumber %]">view analytics</a>[% ELSE %]<a class="delete" href="/cgi-bin/koha/cataloguing/additem.pl?op=delitem&amp;biblionumber=[% biblionumber %]&amp;itemnumber=[% item_loo.itemnumber %]" onclick="confirm_deletion([% biblionumber %],[% item_loo.itemnumber %]); return false;">Delete</a>[% END %]</td>[% END %][% END %]
+                    <td>[% IF ( item_loo.countanalytics ) %]<a href="/cgi-bin/koha/catalogue/search.pl?idx=hi&amp;q=% item_loo.itemnumber %]">View analytics</a>[% ELSE %]<a class="delete" href="/cgi-bin/koha/cataloguing/additem.pl?op=delitem&amp;biblionumber=[% biblionumber %]&amp;itemnumber=[% item_loo.itemnumber %]" onclick="confirm_deletion([% biblionumber %],[% item_loo.itemnumber %]); return false;">Delete</a>[% END %]</td>[% END %][% END %]
                 [% FOREACH item_valu IN item_loo.item_value %]
                     <td>[% item_valu.field |html %]</td>
                 [% END %]
@@ -221,9 +221,9 @@ $(document).ready(function() {
     <input type="hidden" name="op" value="[% op %]" />
     <input type="hidden" name="biblionumber" value="[% biblionumber %]" />
     [% IF ( opisadd ) %]
-        <h2 id="additema">Add Item</h2>
+        <h2 id="additema">Add item</h2>
     [% ELSE %]
-        <h2 id="edititem">Edit Item #[% itemnumber %]</h2>
+        <h2 id="edititem">Edit item #[% itemnumber %]</h2>
     [% END %]
 	<fieldset class="rows">
 	<ol>
