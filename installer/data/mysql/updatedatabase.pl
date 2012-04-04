@@ -4697,12 +4697,21 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
+
 $DBversion = "3.06.07.000";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     print "Upgrade to $DBversion done (Incrementing version for 3.6.7 release. See release notes for details.) \n";
     SetVersion ($DBversion);
 }
 
+
+$DBversion = "3.06.00.XXX";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do("CREATE INDEX items_location ON items(location)");
+    $dbh->do("CREATE INDEX items_ccode ON items(ccode)");
+    print "Upgrade to $DBversion done (items_location and items_ccode indexes added for ShelfBrowser)";
+    SetVersion($DBversion);
+}
 
 =head1 FUNCTIONS
 
