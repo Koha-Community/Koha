@@ -1577,8 +1577,8 @@ sub AddReturn {
         $branches->{$hbr}->{PE} and $messages->{'IsPermanent'} = $hbr;
     }
 
-    # if indy branches and returning to different branch, refuse the return
-    if ($hbr ne $branch && C4::Context->preference("IndependantBranches")){
+    # if indy branches and returning to different branch, refuse the return unless canreservefromotherbranches is turned on
+    if ($hbr ne $branch && C4::Context->preference("IndependantBranches") && !(C4::Context->preference("canreservefromotherbranches"))){
         $messages->{'Wrongbranch'} = {
             Wrongbranch => $branch,
             Rightbranch => $hbr,
