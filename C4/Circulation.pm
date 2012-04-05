@@ -36,7 +36,7 @@ use C4::Message;
 use C4::Debug;
 use C4::Branch; # GetBranches
 use C4::Log; # logaction
-
+use C4::Koha qw(GetAuthorisedValueByCode);
 use Data::Dumper;
 use Koha::DateUtils;
 use Koha::Calendar;
@@ -847,6 +847,9 @@ sub CanBookBeIssued {
         && $item->{'restricted'} == 1 )
     {
         $issuingimpossible{RESTRICTED} = 1;
+    }
+    if ( $item->{'itemlost'} ) {
+        $needsconfirmation{ITEM_LOST} = GetAuthorisedValueByCode( 'LOST', $item->{'itemlost'} );
     }
     if ( C4::Context->preference("IndependantBranches") ) {
         my $userenv = C4::Context->userenv;

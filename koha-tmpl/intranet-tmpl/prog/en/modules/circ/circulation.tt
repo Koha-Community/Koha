@@ -275,8 +275,13 @@ function refocus(calendar) {
 [% IF ( NOT_FOR_LOAN_FORCING ) %]
     <li>Item is normally not for loan.  Check out anyway?</li>
 [% END %]
+
 [% IF ( USERBLOCKEDOVERDUE ) %]
     <li>Patron has [% USERBLOCKEDOVERDUE %] overdue item(s).  Check out anyway?</li>
+[% END %]
+
+[% IF ( ITEM_LOST ) %]
+    <li>This item has been lost with a status of "[% ITEM_LOST %]". Check out anyway?</li>
 [% END %]
 </ul>
 
