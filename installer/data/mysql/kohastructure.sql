@@ -990,6 +990,7 @@ CREATE TABLE `issuingrules` (
   `chargename` varchar(100) default NULL,
   `maxissueqty` int(4) default NULL,
   `issuelength` int(4) default NULL,
+  `lengthunit` varchar(10) default 'days',
   `hardduedate` date default NULL,
   `hardduedatecompare` tinyint NOT NULL default "0",
   `renewalsallowed` smallint(6) NOT NULL default "0",

@@ -5019,7 +5019,6 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     $dbh->do("ALTER TABLE old_issues CHANGE returndate returndate datetime");
     $dbh->do("ALTER TABLE old_issues CHANGE lastreneweddate lastreneweddate datetime");
     $dbh->do("ALTER TABLE old_issues CHANGE issuedate issuedate datetime");
-    $dbh->do("alter table issuingrules add column lengthunit varchar(10) default 'days' after issuelength");
     print "Upgrade to $DBversion done (Setting up issues tables for hourly loans)\n";
     SetVersion($DBversion);
 }
@@ -5146,12 +5145,18 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
-
 $DBversion = "3.07.00.045";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("ALTER TABLE import_batches MODIFY COLUMN batch_type ENUM('batch','z3950','webservice') NOT NULL default 'batch'");
     print "Upgrade to $DBversion done (Add 'webservice' to batch_type enum)\n";
     SetVersion ($DBversion);
+}
+
+$DBversion = "3.07.00.046";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do("ALTER TABLE issuingrules ADD COLUMN lengthunit varchar(10) DEFAULT 'days' AFTER issuelength");
+    print "Upgrade to $DBversion done (Setting up issues tables for hourly loans (lengthunit fix))\n";
+    SetVersion($DBversion);
 }
 
 =head1 FUNCTIONS
