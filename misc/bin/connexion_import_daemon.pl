@@ -112,11 +112,11 @@ sub parse_config {
 
     my $config_file = $self->{config_file};
 
-    open CONF, $config_file or die "Cannot open config file $config: $!";
+    open (my $conf_fh, '<', $config_file) or die "Cannot open config file $config: $!";
 
     my %param;
     my $line = 0;
-    while (<CONF>) {
+    while (<$conf_fh>) {
         $line++;
         chomp;
         s/\s*#.*//o; # remove comments
@@ -145,7 +145,7 @@ sub parse_config {
     my $log_fh;
     close $self->{log_fh} if $self->{log_fh};
     if (my $logfile = delete $param{log}) {
-        open $log_fh, ">>$logfile" or die "Cannot open $logfile for write: $!";
+        open ($log_fh, '>>', $logfile) or die "Cannot open $logfile for write: $!";
     } else {
         $log_fh = \*STDERR;
     }
