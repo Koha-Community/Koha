@@ -186,7 +186,7 @@ if ( $op eq 'show' ) {
         {
             name => "sort1",
             lib  => "Sort 1",
-            type => "select",
+            type => @sort1_option ? "select" : "text",
             option => \@sort1_option,
             mandatory => ( grep /sort1/, @mandatoryFields ) ? 1 : 0,
         }
@@ -194,7 +194,7 @@ if ( $op eq 'show' ) {
         {
             name => "sort2",
             lib  => "Sort 2",
-            type => "select",
+            type => @sort2_option ? "select" : "text",
             option => \@sort2_option,
             mandatory => ( grep /sort2/, @mandatoryFields ) ? 1 : 0,
         }
