@@ -85,9 +85,10 @@ use C4::Biblio;
 sub new {
 
     my $self = {};
-    my ($class, $timeout) = @_;
+    my ($class, $timeout, $agent) = @_;
     
     my $uagent = new LWP::UserAgent;
+    $uagent->agent( $agent ) if $agent;
     $uagent->timeout( $timeout) if $timeout;
     $self->{ user_agent } = $uagent;
     $self->{ bad_url    } = { };
@@ -156,6 +157,7 @@ my $host        = '';
 my $host_pro    = '';
 my $html        = 0;
 my $uriedit     = "/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=";
+my $agent       = '';
 my $timeout     = 15;
 GetOptions( 
     'verbose'       => \$verbose,
@@ -163,6 +165,7 @@ GetOptions(
     'help'          => \$help,
     'host=s'        => \$host,
     'host-pro=s'    => \$host_pro,
+    'agent=s'       => \$agent;
     'timeout=i',    => \$timeout,
 );
 
@@ -184,7 +187,7 @@ sub bibediturl {
 # Check all URLs from all current Koha biblio records
 #
 sub check_all_url {
-    my $checker = C4::URL::Checker->new($timeout);
+    my $checker = C4::URL::Checker->new($timeout,$agent);
     $checker->{ host_default }  = $host;
     
     my $context = new C4::Context(  );  
@@ -243,7 +246,7 @@ check-url.pl - Check URLs from 856$u field.
 
 =over
 
-=item check-url.pl [--verbose|--help] [--host=http://default.tld] 
+=item check-url.pl [--verbose|--help] [--agent=agent-string] [--host=http://default.tld]
 
 Scan all URLs found in 856$u of bib records 
 and display if resources are available or not.
@@ -273,6 +276,12 @@ record in edit mode. With this parameter B<--host-pro> is required.
 =item B<--host-pro=http://koha-pro.tld>
 
 Server host used to link to biblio record editing page.
+
+=item B<--agent=agent-string>
+
+Change default libwww user-agent string to custom.  Some sites do
+not like libwww user-agent and return false 40x failure codes,
+so this allows Koha to report itself as Koha, or a browser.
 
 =item B<--timeout=15>
 
