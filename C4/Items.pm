@@ -1247,73 +1247,19 @@ sub GetItemsInfo {
         $data->{'datedue'}        = $datedue;
 
         # get notforloan complete status if applicable
-        my $sthnflstatus = $dbh->prepare(
-            'SELECT authorised_value
-            FROM   marc_subfield_structure
-            WHERE  kohafield="items.notforloan"
-        '
-        );
-
-        $sthnflstatus->execute;
-        my ($authorised_valuecode) = $sthnflstatus->fetchrow;
-        if ($authorised_valuecode) {
-            $sthnflstatus = $dbh->prepare(
-                "SELECT lib FROM authorised_values
-                 WHERE  category=?
-                 AND authorised_value=?"
-            );
-            $sthnflstatus->execute( $authorised_valuecode,
-                $data->{itemnotforloan} );
-            my ($lib) = $sthnflstatus->fetchrow;
-            $data->{notforloanvalue} = $lib;
+        if ( my $code = C4::Koha::GetAuthValCode( 'items.notforloan', $data->{frameworkcode} ) ) {
+            $data->{notforloanvalue} = C4::Koha::GetAuthorisedValueByCode( $code, $data->{itemnotforloan} );
         }
 
         # get restricted status and description if applicable
-        my $restrictedstatus = $dbh->prepare(
-            'SELECT authorised_value
-            FROM   marc_subfield_structure
-            WHERE  kohafield="items.restricted"
-        '
-        );
-
-        $restrictedstatus->execute;
-        ($authorised_valuecode) = $restrictedstatus->fetchrow;
-        if ($authorised_valuecode) {
-            $restrictedstatus = $dbh->prepare(
-                "SELECT lib,lib_opac FROM authorised_values
-                 WHERE  category=?
-                 AND authorised_value=?"
-            );
-            $restrictedstatus->execute( $authorised_valuecode,
-                $data->{restricted} );
-
-            if ( my $rstdata = $restrictedstatus->fetchrow_hashref ) {
-                $data->{restricted} = $rstdata->{'lib'};
-                $data->{restrictedopac} = $rstdata->{'lib_opac'};
-            }
+        if ( my $code = C4::Koha::GetAuthValCode( 'items.restricted', $data->{frameworkcode} ) ) {
+            $data->{restricted}     = C4::Koha::GetKohaAuthorisedValueLib( $code, $data->{restricted} );
+            $data->{restrictedopac} = C4::Koha::GetKohaAuthorisedValueLib( $code, $data->{restricted}, 'opac' );
         }
 
         # my stack procedures
-        my $stackstatus = $dbh->prepare(
-            'SELECT authorised_value
-             FROM   marc_subfield_structure
-             WHERE  kohafield="items.stack"
-        '
-        );
-        $stackstatus->execute;
-
-        ($authorised_valuecode) = $stackstatus->fetchrow;
-        if ($authorised_valuecode) {
-            $stackstatus = $dbh->prepare(
-                "SELECT lib
-                 FROM   authorised_values
-                 WHERE  category=?
-                 AND    authorised_value=?
-            "
-            );
-            $stackstatus->execute( $authorised_valuecode, $data->{stack} );
-            my ($lib) = $stackstatus->fetchrow;
-            $data->{stack} = $lib;
+        if ( my $code = C4::Koha::GetAuthValCode( 'items.stack', $data->{frameworkcode} ) ) {
+            $data->{stack}          = C4::Koha::GetKohaAuthorisedValueLib( $code, $data->{stack} );
         }
         # Find the last 3 people who borrowed this item.
         my $sth2 = $dbh->prepare("SELECT * FROM old_issues,borrowers
