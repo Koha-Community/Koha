@@ -146,7 +146,8 @@ for my $result (@$reviews){
                     # the page number for this page
                     my $this_page_number = $i;
                     # it should only be highlighted if it's the current page
-                    my $highlight = 1 if ($this_page_number == $current_page_number);
+                    my $highlight;
+            $highlight = 1 if ($this_page_number == $current_page_number);
                     # put it in the array
                     push @page_numbers, { offset => $this_offset, pg => $this_page_number, highlight => $highlight };
 
@@ -158,7 +159,8 @@ for my $result (@$reviews){
                 for ($i=$current_page_number; $i<=($current_page_number + 20 );$i++) {
                     my $this_offset = ((($i-9)*$results_per_page)-$results_per_page);
                     my $this_page_number = $i-9;
-                    my $highlight = 1 if ($this_page_number == $current_page_number);
+                    my $highlight;
+            $highlight = 1 if ($this_page_number == $current_page_number);
                     if ($this_page_number <= $pages) {
                         push @page_numbers, { offset => $this_offset, pg => $this_page_number, highlight => $highlight };
                     }
