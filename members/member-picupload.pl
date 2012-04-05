@@ -59,13 +59,13 @@ if ($photo){
 
 	my $filename=$borrowernumber.'.jpg';
 	my $upload_filehandle = $input->upload("photo");
-	open UPLOADFILE, ">$upload_dir/$filename";
-	binmode UPLOADFILE;
+    open (my $upload_fh, '>', "$upload_dir/$filename");
+    binmode $upload_fh;
 	while ( <$upload_filehandle> )
 	{
-		print UPLOADFILE;
+        print $upload_fh;
 	}
-	close UPLOADFILE;
+    close $upload_fh;
 }
 else {
 	$template->param(

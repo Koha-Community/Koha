@@ -58,7 +58,8 @@ my $branches = GetBranches;
 my @branchloop;
 
 foreach (sort { $branches->{$a}->{branchname} cmp $branches->{$b}->{branchname} } keys %$branches) {
-  my $selected = 1 if $branches->{$_}->{branchcode} eq $$patron{branchcode};
+  my $selected;
+  $selected = 1 if $branches->{$_}->{branchcode} eq $$patron{branchcode};
   my %row = ( value => $_,
         selected => $selected,
         branchname => $branches->{$_}->{branchname},
