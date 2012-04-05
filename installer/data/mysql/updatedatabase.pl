@@ -4893,19 +4893,21 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
 
 $DBversion = "3.07.00.025";
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
-    $dbh->do( q|DROP TABLE bibliocoverimage;| );
-    $dbh->do(
-        q|CREATE TABLE biblioimages (
-          imagenumber int(11) NOT NULL AUTO_INCREMENT,
-          biblionumber int(11) NOT NULL,
-          mimetype varchar(15) NOT NULL,
-          imagefile mediumblob NOT NULL,
-          thumbnail mediumblob NOT NULL,
-          PRIMARY KEY (imagenumber),
-          CONSTRAINT bibliocoverimage_fk1 FOREIGN KEY (biblionumber) REFERENCES biblio (biblionumber) ON DELETE CASCADE ON UPDATE CASCADE
-          ) ENGINE=InnoDB DEFAULT CHARSET=utf8;|
-    );
-    print "Upgrade to $DBversion done (Correct table name for local cover images [please disregard the following error messages: \"Unknown table 'bibliocoverimage'...\" and \"Table 'biblioimages' already exists...\"])\n";
+    if (TableExists('bibliocoverimage')) {
+        $dbh->do( q|DROP TABLE bibliocoverimage;| );
+        $dbh->do(
+            q|CREATE TABLE biblioimages (
+              imagenumber int(11) NOT NULL AUTO_INCREMENT,
+              biblionumber int(11) NOT NULL,
+              mimetype varchar(15) NOT NULL,
+              imagefile mediumblob NOT NULL,
+              thumbnail mediumblob NOT NULL,
+              PRIMARY KEY (imagenumber),
+              CONSTRAINT bibliocoverimage_fk1 FOREIGN KEY (biblionumber) REFERENCES biblio (biblionumber) ON DELETE CASCADE ON UPDATE CASCADE
+              ) ENGINE=InnoDB DEFAULT CHARSET=utf8;|
+        );
+    }
+    print "Upgrade to $DBversion done (Correct table name for local cover images if needed. )\n";
     SetVersion($DBversion);
 }
 
@@ -5133,7 +5135,7 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
         $dbh->do("UPDATE systempreferences SET type='Free', value=\"$valueOPACXSLTDetailsDisplay\" WHERE variable='OPACXSLTDetailsDisplay'");
         $dbh->do("UPDATE systempreferences SET type='Free', value=\"$valueOPACXSLTResultsDisplay\" WHERE variable='OPACXSLTResultsDisplay'");
     }
-    print "XSLT systempreference takes a path to file rather than YesNo\n";
+    print "Upgrade to $DBversion done (XSLT systempreference takes a path to file rather than YesNo)\n";
     SetVersion($DBversion);
 }
 
@@ -5198,6 +5200,21 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
 
 
 =head1 FUNCTIONS
+
+=head2 TableExists($table)
+
+=cut
+
+sub TableExists {
+    my $table = shift;
+    eval {
+                local $dbh->{PrintError} = 0;
+                local $dbh->{RaiseError} = 1;
+                $dbh->do(qq{SELECT * FROM $table WHERE 1 = 0 });
+            };
+    return 1 unless $@;
+    return 0;
+}
 
 =head2 DropAllForeignKeys($table)
 
