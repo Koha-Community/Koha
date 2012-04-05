@@ -7,6 +7,7 @@
         [%- CASE 'PAT'  -%]Patrons
         [%- CASE 'ACQ'  -%]Acquisitions
         [%- CASE 'ACC'  -%]Accounts
+        [%- CASE 'SER'  -%]Serials
     [%- END -%]
 [%- END -%]
 
@@ -572,7 +573,7 @@ canned reports and writing custom SQL reports.</p>
             <td>
                 <select name="[% criteri.name %]_value">
                 [% FOREACH value IN criteri.values %]
-                <option value="[% value.availablevalues %]">[% IF ( value.default ) %]Default[% ELSE %][% value.availablevalues |html %][% END %]</option>
+                <option value="[% value.availablevalues %]">[% IF ( value.default ) %]Default[% ELSE %][% value.display_value |html %][% END %]</option>
                 [% END %]
                 </select>
             </td>

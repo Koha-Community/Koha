@@ -17,8 +17,7 @@ package C4::Reports::Guided;
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use strict;
-#use warnings; FIXME - Bug 2505 this module needs a lot of repair to run clean under warnings
+use Modern::Perl;
 use CGI qw ( -utf8 );
 use Carp;
 
@@ -49,6 +48,7 @@ BEGIN {
       GetParametersFromSQL
       IsAuthorisedValueValid
       ValidateSQLParameters
+      nb_rows update_sql
     );
 }
 
@@ -79,6 +79,7 @@ sub get_area_name_sql_snippet {
         [PAT  => "Patrons"],
         [ACQ  => "Acquisition"],
         [ACC  => "Accounts"],
+        [SER  => "Serials"],
     );
 
     return "CASE report_area " .
@@ -88,7 +89,7 @@ sub get_area_name_sql_snippet {
 
 sub get_report_areas {
 
-    my $report_areas = [ 'CIRC', 'CAT', 'PAT', 'ACQ', 'ACC' ];
+    my $report_areas = [ 'CIRC', 'CAT', 'PAT', 'ACQ', 'ACC', 'SER' ];
 
     return $report_areas;
 }
@@ -100,6 +101,7 @@ sub get_table_areas {
     PAT  => ['borrowers'],
     ACQ  => [ 'aqorders', 'biblio', 'items' ],
     ACC  => [ 'borrowers', 'accountlines' ],
+    SER  => [ 'serial', 'serialitems', 'subscription', 'subscriptionhistory', 'subscriptionroutinglist', 'biblioitems', 'biblio', 'aqbooksellers' ],
     );
 }
 
@@ -240,6 +242,7 @@ sub build_query {
         ACQ  => [ 'aqorders.biblionumber=biblio.biblionumber',
                   'biblio.biblionumber=items.biblionumber' ],
         ACC  => ['borrowers.borrowernumber=accountlines.borrowernumber'],
+        SER  => [ 'serial.serialid=serialitems.serialid', 'serial.subscriptionid=subscription.subscriptionid', 'serial.subscriptionid=subscriptionhistory.subscriptionid', 'serial.subscriptionid=subscriptionroutinglist.subscriptionid', 'biblioitems.biblionumber=serial.biblionumber', 'biblio.biblionumber=biblioitems.biblionumber', 'subscription.aqbooksellerid=aqbooksellers.id'],
     );
 
 
@@ -330,6 +333,7 @@ sub get_criteria {
         PAT  => [ 'borrowers.branchcode', 'borrowers.categorycode' ],
         ACQ  => ['aqorders.datereceived|date'],
         ACC  => [ 'borrowers.branchcode', 'borrowers.categorycode' ],
+        SER  => ['subscription.startdate|date', 'subscription.enddate|date', 'subscription.periodicity', 'subscription.callnumber', 'subscription.location', 'subscription.branchcode'],
     );
 
     # Adds itemtypes to criteria, according to the syspref
@@ -386,10 +390,14 @@ sub get_criteria {
             $list='itemtypes' if $column eq 'itype';
             $list='ccode' if $column eq 'ccode';
             # TODO : improve to let the librarian choose the description at runtime
-            push @values, { availablevalues => "<<$column".($list?"|$list":'').">>" };
+            push @values, {
+                availablevalues => "<<$column" . ( $list ? "|$list" : '' ) . ">>",
+                display_value   => "<<$column" . ( $list ? "|$list" : '' ) . ">>",
+            };
             while ( my $row = $sth->fetchrow_hashref() ) {
+                if ($row->{'availablevalues'} eq '') { $row->{'default'} = 1 }
+                else { $row->{display_value} = _get_display_value( $row->{'availablevalues'}, $column ); }
                 push @values, $row;
-                if ($row->{'availablevalues'} eq '') { $row->{'default'} = 1 };
             }
             $sth->finish();
 
@@ -400,7 +408,6 @@ sub get_criteria {
 
             push @criteria_array, \%temp;
         }
-
     }
     return ( \@criteria_array );
 }
@@ -1038,6 +1045,18 @@ sub ValidateSQLParameters {
     }
 
     return \@problematic_parameters;
+}
+
+sub _get_display_value {
+    my ( $original_value, $column ) = @_;
+    if ( $column eq 'periodicity' ) {
+        my $dbh = C4::Context->dbh();
+        my $query = "SELECT description FROM subscription_frequencies WHERE id = ?";
+        my $sth   = $dbh->prepare($query);
+        $sth->execute($original_value);
+        return $sth->fetchrow;
+    }
+    return $original_value;
 }
 
 1;
