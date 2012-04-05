@@ -53,7 +53,7 @@ my $perBibResults = {};
 # Indexes of @errors that do not apply to a particular biblionumber.
 my @globalErrorIndexes = ();
 
-sub ajax_auth_cgi ($) {     # returns CGI object
+sub ajax_auth_cgi {     # returns CGI object
 	my $needed_flags = shift;
 	my %cookies = fetch CGI::Cookie;
 	my $input = CGI->new;

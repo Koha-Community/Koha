@@ -146,7 +146,8 @@ if (!$advanced_search_types or $advanced_search_types eq 'itemtypes') {
 } else {
     my $advsearchtypes = GetAuthorisedValues($advanced_search_types, '', 'opac');
         for my $thisitemtype (@$advsearchtypes) {
-                my $selected = 1 if $thisitemtype->{authorised_value} eq $itemtype;
+                my $selected;
+            $selected = 1 if $thisitemtype->{authorised_value} eq $itemtype;
                 my %row =( value => $thisitemtype->{authorised_value},
                 selected    => $thisitemtype eq $itemtype,
                 description => $thisitemtype->{'lib'},
