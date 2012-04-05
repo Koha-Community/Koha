@@ -66,7 +66,8 @@
 			<tr>
 				<th>Basket</th>
 				<th>Basket group</th>
-                <th>Invoice number</th>
+                <th>Invoice Number</th>
+                <th>Order Number</th>
 				<th>Summary</th>
 				<th>Vendor</th>
 				<th>Placed on</th>
@@ -85,6 +86,7 @@
 					        &nbsp;
 					    [% END %]
 					</td>
+                    <td>[% suggestions_loo.ordernumber %]</td>
 					<td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% suggestions_loo.biblionumber %]">[% suggestions_loo.title |html %]</a>
                         <br />[% suggestions_loo.author %] <br /> [% suggestions_loo.isbn %]</td>
 					<td><a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% suggestions_loo.id %]">[% suggestions_loo.name %]</a></td>
