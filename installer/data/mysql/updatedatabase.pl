@@ -5147,9 +5147,7 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
 }
 
 
-
-
-$DBversion = "3.07.00.XXX";
+$DBversion = "3.07.00.045";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("ALTER TABLE import_batches MODIFY COLUMN batch_type ENUM('batch','z3950','webservice') NOT NULL default 'batch'");
     print "Upgrade to $DBversion done (Add 'webservice' to batch_type enum)\n";
