@@ -1,6 +1,6 @@
 [% INCLUDE 'doc-head-open.inc' %]
-[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha Online[% END %]
-    Catalog &rsaquo; Advanced Search
+[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %]
+    catalog &rsaquo; Advanced search
 [% INCLUDE 'doc-head-close.inc' %]
 <script type="text/javascript" language="javascript">//<![CDATA[
             $(document).ready(function() {
@@ -68,36 +68,36 @@
             <option value="kw">Keyword</option>
             <option value="su,wrdl">Subject</option>
 [% IF ( search_boxes_loo.expanded_options ) %]
-            <option value="su,phr">&nbsp;&nbsp;&nbsp;&nbsp; Subject Phrase</option>
+            <option value="su,phr">&nbsp;&nbsp;&nbsp;&nbsp; Subject phrase</option>
 [% END %]
             <option value="ti">Title</option>
 [% IF ( expanded_options ) %]
-            <option value="ti,phr">&nbsp;&nbsp;&nbsp;&nbsp; Title Phrase</option>
-            <option value="se,wrdl">Series Title</option>
-            <option value="callnum">Call Number</option>
-            <option value="location">Shelving Location</option>
+            <option value="ti,phr">&nbsp;&nbsp;&nbsp;&nbsp; Title phrase</option>
+            <option value="se,wrdl">Series title</option>
+            <option value="callnum">Call number</option>
+            <option value="location">Shelving location</option>
 [% END %]
             <option value="au,wrdl">Author</option>
             
 [% IF ( expanded_options ) %]
-            <option value="au,phr">&nbsp;&nbsp;&nbsp;&nbsp; Author Phrase</option>
-            <option value="cpn,wrdl">&nbsp;&nbsp;&nbsp;&nbsp; Corporate Name</option>
-            <option value="cfn,wrdl">&nbsp;&nbsp;&nbsp;&nbsp; Conference Name</option>
-            <option value="cfn,phr">&nbsp;&nbsp;&nbsp;&nbsp; Conference Name Phrase</option>
-            <option value="pn,wrdl">&nbsp;&nbsp;&nbsp;&nbsp; Personal Name</option>
-            <option value="pn,phr">&nbsp;&nbsp;&nbsp;&nbsp; Personal Name Phrase</option>
+            <option value="au,phr">&nbsp;&nbsp;&nbsp;&nbsp; Author phrase</option>
+            <option value="cpn,wrdl">&nbsp;&nbsp;&nbsp;&nbsp; Corporate name</option>
+            <option value="cfn,wrdl">&nbsp;&nbsp;&nbsp;&nbsp; Conference name</option>
+            <option value="cfn,phr">&nbsp;&nbsp;&nbsp;&nbsp; Conference name phrase</option>
+            <option value="pn,wrdl">&nbsp;&nbsp;&nbsp;&nbsp; Personal name</option>
+            <option value="pn,phr">&nbsp;&nbsp;&nbsp;&nbsp; Personal name phrase</option>
 [% END %]
 [% IF ( expanded_options ) %]
             <option value="nt">Notes/Comments</option>
             <option value="curriculum">Curriculum</option>
 [% END %]
             <option value="pb,wrdl">Publisher</option>
-            <option value="pl,wrdl">Publisher Location</option>
+            <option value="pl,wrdl">Publisher location</option>
 [% IF ( expanded_options ) %]
-            <option value="sn">Standard Number</option>
+            <option value="sn">Standard number</option>
             <option value="nb">&nbsp;&nbsp;&nbsp;&nbsp; ISBN</option>
             <option value="ns">&nbsp;&nbsp;&nbsp;&nbsp; ISSN</option>
-            <option value="lcn,phr">&nbsp;&nbsp;&nbsp;&nbsp; Call Number</option>
+            <option value="lcn,phr">&nbsp;&nbsp;&nbsp;&nbsp; Call number</option>
 [% ELSE %]
             <option value="nb">ISBN</option>
 [% END %]
@@ -117,18 +117,18 @@
 
     <input class="submit" type="submit" accesskey="s" name="do" title="Search" value="Search" />
     [% IF ( expanded_options ) %]
-        <a href="/cgi-bin/koha/opac-search.pl?expanded_options=0">[Fewer Options]</a>
+        <a href="/cgi-bin/koha/opac-search.pl?expanded_options=0">[Fewer options]</a>
     [% ELSE %]
         <a href="/cgi-bin/koha/opac-search.pl?expanded_options=1">[More options]</a>
     [% END %]
-    <a href="/cgi-bin/koha/opac-search.pl?do=Clear">[New Search]</a>
+    <a href="/cgi-bin/koha/opac-search.pl?do=Clear">[New search]</a>
 
 <!-- /SEARCH BUTTONS --></div></div>
 <div class="yui-g">
 <div id="pubrange" class="container">
 <fieldset>
 <!-- PUB RANGE OPTION -->
-<legend>Publication Date Range:</legend>
+<legend>Publication date range:</legend>
 <span>For example:  1999-2001.  You could also use "-1987" for everything published before 1987 or "2008-" for everything published after 2008.</span>
 <input type="text" size="30" name="limit-yr" title="Enter search terms" value="" />
 </fieldset>
@@ -141,10 +141,10 @@
       [% FOREACH advsearchloo IN advancedsearchesloop %]
         <li id="advsearch-tab-[% advsearchloo.advanced_search_type %]">
            <a href="/cgi-bin/koha/opac-search.pl#advsearch-[% advsearchloo.advanced_search_type %]">
-           [% IF ( advsearchloo.advanced_search_type == 'itemtypes' ) %]Item Type
+           [% IF ( advsearchloo.advanced_search_type == 'itemtypes' ) %]Item type
            [% ELSIF ( advsearchloo.advanced_search_type == 'ccode' ) %]Collection
-           [% ELSIF ( advsearchloo.advanced_search_type == 'loc' ) %]Shelving Location
-           [% ELSE %]Something Else
+           [% ELSIF ( advsearchloo.advanced_search_type == 'loc' ) %]Shelving location
+           [% ELSE %]Something else
            [% END %]
            </a>
         </li>
@@ -172,7 +172,7 @@
     <!-- LANGUAGE LIMIT -->
                 <p><label for="language-limit">Language: </label>                                        
                 <select id="language-limit" name="limit">
-                <option value="">No Limit</option>
+                <option value="">No limit</option>
                 [% FOREACH search_languages_loo IN search_languages_loop %]
                     [% IF ( search_languages_loo.selected ) %]
                         <option value="ln,rtrn:[% search_languages_loo.iso639_2_code %]" selected="selected">[% search_languages_loo.language_description %]</option>
@@ -189,17 +189,17 @@
         <!-- SUBTYPE LIMITS -->
             <div id="subtypes" class="container"><fieldset>
             <legend>Subtype limits</legend><select name="limit" class="subtype">
-                <option value="" selected="selected" class="menuheader">Any Audience</option>
+                <option value="" selected="selected" class="menuheader">Any audience</option>
                     <option value="aud:a">Easy</option>
                     <option value="aud:c">Juvenile</option>
-                    <option value="aud:d">Young Adult</option>
+                    <option value="aud:d">Young adult</option>
                     <option value="aud:e">Adult</option>
                 </select>
             
             <select name="limit" class="subtype">
-                <option value="" selected="selected" class="menuheader">Any Content</option>
+                <option value="" selected="selected" class="menuheader">Any content</option>
                     <option value="fic:1">Fiction</option>
-                    <option value="fic:0">Non Fiction</option>
+                    <option value="fic:0">Non fiction</option>
                     <option value="bio:b">Biography</option>
                     <option value="mus:j">Musical recording</option>
                     <option value="mus:i">Non-musical recording</option>
@@ -207,7 +207,7 @@
     
             
             <select name="limit" class="subtype">
-                <option value="" selected="selected" class="menuheader">Any Format</option>
+                <option value="" selected="selected" class="menuheader">Any format</option>
                     <option value="l-format:ta">Regular print</option>
                     <option value="l-format:tb">Large print</option>
                     <option value="l-format:fk">Braille</option>
@@ -216,12 +216,12 @@
                     <option value="l-format:ss">Cassette recording</option>
                     <option value="l-format:vf">VHS tape / Videocassette</option>
                     <option value="l-format:vd">DVD video / Videodisc</option>
-                    <option value="l-format:co">CD Software</option>
+                    <option value="l-format:co">CD software</option>
                     <option value="l-format:cr">Website</option>
                 </select>
             
             <select name="limit" class="subtype">
-                <option value="">Additional Content Types for Books/Printed Materials</option>
+                <option value="">Additional content types for books/printed materials</option>
                     <option value="ctype:a">Abstracts/summaries</option>
                     <option value="ctype:b">Bibliographies</option>
                     <option value="ctype:c">Catalogs</option>
@@ -274,7 +274,7 @@
         </select>
         [% IF ( searchdomainloop ) %]
             <p>OR</p> <!-- should addjs to grey out group pulldown if a library is selected. -->
-                <label for="categoryloop">Groups of Libraries</label><select name="multibranchlimit" id="categoryloop">
+                <label for="categoryloop">Groups of libraries</label><select name="multibranchlimit" id="categoryloop">
                 <option value=""> -- none -- </option>
                 [% FOREACH searchdomainloo IN searchdomainloop %]
                 <option value="[% searchdomainloo.categorycode %]">[% searchdomainloo.categoryname %]</option>
@@ -300,11 +300,11 @@
 
     <input class="submit" type="submit" accesskey="s" name="do" title="Search" value="Search" />
     [% IF ( expanded_options ) %]
-        <a href="/cgi-bin/koha/opac-search.pl?expanded_options=0">[Fewer Options]</a>
+        <a href="/cgi-bin/koha/opac-search.pl?expanded_options=0">[Fewer options]</a>
     [% ELSE %]
         <a href="/cgi-bin/koha/opac-search.pl?expanded_options=1">[More options]</a>
     [% END %]
-    <a href="/cgi-bin/koha/opac-search.pl?do=Clear">[New Search]</a>
+    <a href="/cgi-bin/koha/opac-search.pl?do=Clear">[New search]</a>
 
 <!-- /SEARCH BUTTONS --></div></div>
 </form>

@@ -1,4 +1,4 @@
-[% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha Online[% END %] Catalog &rsaquo;  Your personal details
+[% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo;  Your personal details
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body>
@@ -9,23 +9,23 @@
 	<div id="yui-main">
 	<div class="yui-b"><div class="yui-g">
 
-<h3><a href="/cgi-bin/koha/opac-user.pl">[% firstname %] [% surname %]'s account</a> <img src="[% themelang %]../../images/caret.gif" width="16" height="16" alt="&gt;" border="0" /> Personal Details</h3>
+<h3><a href="/cgi-bin/koha/opac-user.pl">[% firstname %] [% surname %]'s account</a> <img src="[% themelang %]../../images/caret.gif" width="16" height="16" alt="&gt;" border="0" /> Personal details</h3>
 
 <table>
 <tr><th scope="row">Name:</th><td> [% firstname %] [% surname %]</td></tr>
 <tr><th scope="row">
-Card Number:</th><td>[% cardnumber %]</td></tr>
+Card number:</th><td>[% cardnumber %]</td></tr>
 </table>
 
 <table>
-<caption>Contact Details</caption>
-<tr><th scope="row">Mailing Address:</th><td>[% address %], [% city %]</td></tr>
+<caption>Contact details</caption>
+<tr><th scope="row">Mailing address:</th><td>[% address %], [% city %]</td></tr>
 
-<tr><th scope="row">Permanent Address:</th><td> [% B_address %], [% B_address2 %], [% B_city %]</td></tr>
+<tr><th scope="row">Permanent address:</th><td> [% B_address %], [% B_address2 %], [% B_city %]</td></tr>
 
-<tr><th scope="row">Primary Phone:</th><td>[% IF ( phone ) %][% phone %][% ELSE %]&nbsp;[% END %]</td></tr>
+<tr><th scope="row">Primary phone:</th><td>[% IF ( phone ) %][% phone %][% ELSE %]&nbsp;[% END %]</td></tr>
 
-<tr><th scope="row">Secondary Phone:</th><td>[% IF ( mobile ) %][% mobile %][% ELSE %]&nbsp;[% END %]</td></tr>
+<tr><th scope="row">Secondary phone:</th><td>[% IF ( mobile ) %][% mobile %][% ELSE %]&nbsp;[% END %]</td></tr>
 
 <tr><th scope="row">Fax:</th><td>[% IF ( fax ) %][% fax %][% ELSE %]&nbsp;[% END %]</td></tr>
 
@@ -34,10 +34,10 @@ Card Number:</th><td>[% cardnumber %]</td></tr>
 </table>
 
 <table>
-<caption>Membership Details</caption>
-<tr><th scope="row">Membership Number:</th><td> [% borrowernumber %]</td></tr>
+<caption>Membership details</caption>
+<tr><th scope="row">Membership number:</th><td> [% borrowernumber %]</td></tr>
 
-<tr><th scope="row">Membership Category:</th><td>  [% categorycode %]</td></tr>
+<tr><th scope="row">Membership category:</th><td>  [% categorycode %]</td></tr>
 
 <!-- <td>Fee:</th><td>  /year, Paid</td> -->
 
@@ -48,15 +48,15 @@ Card Number:</th><td>[% cardnumber %]</td></tr>
 [% IF ( joiningbranch ) %]<tr><th>Joining library:</th><td>[% joiningbranch %]</td></tr>[% ELSE %]&nbsp;[% END %]</table>
 
 <table>
-<caption>Identity Details</caption>
+<caption>Identity details</caption>
 <tr><th scope="row">DoB:</th><td> [% IF ( dateofbirth ) %][% dateofbirth %][% ELSE %]&nbsp;[% END %]</td></tr>
 
 <tr><th scope="row">Gender:</th><td>[% IF ( sex ) %][% sex %][% ELSE %]&nbsp;[% END %]</td></tr></table>
 
 [% IF ( contactname ) %]
 <table>
-<caption>Alternate Contact Details</caption>
-<tr><th scope="row">Alternate Contact:</th><td> [% IF ( contactname ) %][% contactname %][% ELSE %]&nbsp;[% END %]</td></tr>
+<caption>Alternate contact details</caption>
+<tr><th scope="row">Alternate contact:</th><td> [% IF ( contactname ) %][% contactname %][% ELSE %]&nbsp;[% END %]</td></tr>
 
 <tr><th scope="row">Phone:</th><td> [% IF ( B_phone ) %][% B_phone %][% ELSE %]&nbsp;[% END %]</td></tr>
 

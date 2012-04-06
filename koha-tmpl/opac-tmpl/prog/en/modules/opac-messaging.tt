@@ -1,4 +1,4 @@
-[% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha Online[% END %][% ELSE %]Koha Online[% END %] Catalog &rsaquo; Your messaging settings
+[% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %][% ELSE %]Koha online[% END %] catalog &rsaquo; Your messaging settings
 [% INCLUDE 'doc-head-close.inc' %]
 <script type="text/javascript">//<![CDATA[
 	$(document).ready(function(){
@@ -25,7 +25,7 @@
 	<div class="yui-b"><div class="yui-g" id="usermessaging">
 
 [% FOREACH BORROWER_INF IN BORROWER_INFO %]
-<h3><a href="/cgi-bin/koha/opac-user.pl">[% BORROWER_INF.firstname %] [% BORROWER_INF.surname %]'s account</a> <img src="[% themelang %]../../images/caret.gif" width="16" height="16" alt="&gt;" border="0" /> Your Messaging Settings</h3>
+<h3><a href="/cgi-bin/koha/opac-user.pl">[% BORROWER_INF.firstname %] [% BORROWER_INF.surname %]'s account</a> <img src="[% themelang %]../../images/caret.gif" width="16" height="16" alt="&gt;" border="0" /> Your messaging settings</h3>
 [% END %]
 
 <form action="/cgi-bin/koha/opac-messaging.pl" method="get" name="opacmessaging">
@@ -33,18 +33,18 @@
 
 <fieldset class="rows">
   [% IF ( settings_updated ) %]
-  <div class="dialog message"><h3>Settings Updated</h3></div>
+  <div class="dialog message"><h3>Settings updated</h3></div>
   [% END %]
   <table style="margin-right:1em;">
     <tr><th>&nbsp;</th><th>Days in advance</th>[% IF ( SMSSendDriver ) %]<th>SMS</th>[% END %]<th>Email</th><th>Digests only?</th><!-- <th>RSS</th> --><th>Do not notify</th></tr>
     [% FOREACH messaging_preference IN messaging_preferences %]
     <tr>
-      <td>[% IF ( messaging_preference.Item_Due ) %]Item Due
-          [% ELSIF ( messaging_preference.Advance_Notice ) %]Advance Notice
-          [% ELSIF ( messaging_preference.Upcoming_Events ) %]Upcoming Events
-          [% ELSIF ( messaging_preference.Hold_Filled ) %]Hold Filled
-          [% ELSIF ( messaging_preference.Item_Check_in ) %]Item Check-in
-          [% ELSIF ( messaging_preference.Item_Checkout ) %]Item Checkout
+      <td>[% IF ( messaging_preference.Item_Due ) %]Item due
+          [% ELSIF ( messaging_preference.Advance_Notice ) %]Advance notice
+          [% ELSIF ( messaging_preference.Upcoming_Events ) %]Upcoming events
+          [% ELSIF ( messaging_preference.Hold_Filled ) %]Hold filled
+          [% ELSIF ( messaging_preference.Item_Check_in ) %]Item check-in
+          [% ELSIF ( messaging_preference.Item_Checkout ) %]Item checkout
           [% ELSE %]Unknown [% END %]</td>
       [% IF ( messaging_preference.takes_days ) %]
       <td><select name="[% messaging_preference.message_attribute_id %]-DAYS">

@@ -1,4 +1,4 @@
-[% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha Online[% END %] Catalog &rsaquo; Browse by author or subject
+[% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Browse by author or subject
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="opac-authorities">
@@ -15,7 +15,7 @@
 <fieldset class="rows">
             <legend>Browse by author or subject</legend>
 <ol>
- <li><label for="authtypecode">Search: : </label> <select name="authtypecode" id="authtypecode">
+ <li><label for="authtypecode">Search: </label> <select name="authtypecode" id="authtypecode">
                 [% FOREACH authtypesloo IN authtypesloop %]
                 [% IF ( authtypesloo.selected ) %]<option value="[% authtypesloo.value %]" selected="selected">[% authtypesloo.authtypetext %]</option>
                 [% ELSE %]<option value="[% authtypesloo.value %]"> [% authtypesloo.authtypetext %]</option>
@@ -34,8 +34,8 @@
             </li>
             <li><label for="orderby">Order by: </label><select name="orderby" id="orderby">
                 <option value="">None</option>
-                    <option value="HeadingAsc" selected="selected">Heading Ascendant</option>
-                    <option value="HeadingDsc">Heading Descendant</option>
+                    <option value="HeadingAsc" selected="selected">Heading ascendant</option>
+                    <option value="HeadingDsc">Heading descendant</option>
                 </select>
             </li></ol>
 			</fieldset>

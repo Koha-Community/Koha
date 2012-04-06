@@ -1,4 +1,4 @@
-[% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha Online[% END %] Catalog &rsaquo; [% IF ( total ) %]Authority Search Result[% ELSE %]No results found[% END %]
+[% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; [% IF ( total ) %]Authority search result[% ELSE %]No results found[% END %]
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="opac-authoritiesresultlist">
@@ -39,12 +39,12 @@
 <div class="searchresults">
 		<table>
 			<tr>
-				<th>Authorized Headings</th>
-				<th>Type of Heading</th>
+                <th>Authorized headings</th>
+                <th>Type of heading</th>
 				[% UNLESS ( isEDITORS ) %]
-					<th>Biblio records</th>
+                    <th>Biblio records</th>
 				[% END %]
-				<th>Full Heading</th>				
+                <th>Full heading</th>
 			</tr>
 			[% FOREACH resul IN result %]
             [% UNLESS ( loop.odd ) %]
@@ -63,7 +63,7 @@
 						</td>
 					[% END %]
 						<td>
-							<a href="opac-authoritiesdetail.pl?authid=[% resul.authid %]">View Full Heading</a>
+                            <a href="opac-authoritiesdetail.pl?authid=[% resul.authid %]">View full heading</a>
 						</td>
 				</tr>
 			[% END %]

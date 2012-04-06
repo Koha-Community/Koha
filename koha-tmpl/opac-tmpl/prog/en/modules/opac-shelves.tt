@@ -1,4 +1,4 @@
-[% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha Online[% END %] Catalog &rsaquo;   [% IF ( viewshelf ) %]Contents of [% shelfname |html %][% ELSE %]Your lists[% END %][% INCLUDE 'doc-head-close.inc' %]
+[% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo;   [% IF ( viewshelf ) %]Contents of [% shelfname |html %][% ELSE %]Your lists[% END %][% INCLUDE 'doc-head-close.inc' %]
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
 <script type="text/javascript">
@@ -154,7 +154,7 @@ $(function() {
 		var alertString2;
 
 	    if(f.addshelf.value.length ==0){
-			_alertString += _("- You must enter a List Name") + "\n";
+        _alertString += _("- You must enter a list name") + "\n";
 		}
 
 		if (_alertString.length==0) {
@@ -181,7 +181,7 @@ $(function() {
               [% FOREACH paramsloo IN paramsloop %]
                 <div class="yui-ge">
                   <div class="yui-u first">
-                    [% IF ( paramsloo.already ) %]<div class="dialog alert">A List named <b>[% paramsloo.already %]</b> already exists!</div>[% END %]
+                    [% IF ( paramsloo.already ) %]<div class="dialog alert">A list named <b>[% paramsloo.already %]</b> already exists!</div>[% END %]
                     [% IF ( paramsloo.status ) %]<div class="dialog alert">[% paramsloo.string %]</div>[% END %]
                     [% IF ( paramsloo.nobarcode ) %]<div class="dialog alert">ERROR: No barcode given.</div>[% END %]
                     [% IF ( paramsloo.noshelfnumber ) %]<div class="dialog alert">ERROR: No shelfnumber given.</div>[% END %]
@@ -231,20 +231,20 @@ $(function() {
               [% IF ( itemsloop ) %]
                   <div id="toolbar" class="list-actions">
 
-                      <a href="/cgi-bin/koha/opac-downloadshelf.pl?shelfid=[% shelfnumber %]" class="download" onclick="open(CGIBIN+'opac-downloadshelf.pl?shelfid=[% shelfnumber %]','win_form','dependant=yes,scrollbars=no,resizable=no,height=300,width=450,top=50,left=100'); return false;">Download List</a>
+                      <a href="/cgi-bin/koha/opac-downloadshelf.pl?shelfid=[% shelfnumber %]" class="download" onclick="open(CGIBIN+'opac-downloadshelf.pl?shelfid=[% shelfnumber %]','win_form','dependant=yes,scrollbars=no,resizable=no,height=300,width=450,top=50,left=100'); return false;">Download list</a>
 
-[% IF ( opacuserlogin ) %]<span class="sendlist"><a href="/cgi-bin/koha/opac-sendshelf.pl?shelfid=[% shelfnumber %]" class="send" onclick="open(CGIBIN+'opac-sendshelf.pl?shelfid=[% shelfnumber %]','win_form','dependant=yes,scrollbars=no,resizable=no,height=300,width=450,top=50,left=100'); return false; ">Send List</a></span>[% END %]
+[% IF ( opacuserlogin ) %]<span class="sendlist"><a href="/cgi-bin/koha/opac-sendshelf.pl?shelfid=[% shelfnumber %]" class="send" onclick="open(CGIBIN+'opac-sendshelf.pl?shelfid=[% shelfnumber %]','win_form','dependant=yes,scrollbars=no,resizable=no,height=300,width=450,top=50,left=100'); return false; ">Send list</a></span>[% END %]
 
-<a class="print" href="opac-shelves.pl" onclick="print(); return false;">Print List</a>
+<a class="print" href="opac-shelves.pl" onclick="print(); return false;">Print list</a>
 
                 [% IF ( manageshelf ) %] <span class="sep">|</span> <form method="get" action="opac-shelves.pl"><input type="hidden" name="op" value="modif" />
                 <input type="hidden" name="display" value="viewshelf" />
-                <input type="hidden" name="shelfnumber" value="[% shelfnumber %]" /> <input type="submit" class="editshelf" value="Edit List" /></form>
+                <input type="hidden" name="shelfnumber" value="[% shelfnumber %]" /> <input type="submit" class="editshelf" value="Edit list" /></form>
 
                       <form method="post" action="opac-shelves.pl">
                         <input type="hidden" value="1" name="shelves"/>
                          <input type="hidden" value="1" name="DEL-[% shelfnumber %]"/>
-                         [% IF ( showprivateshelves ) %]<input type="hidden" name="display" value="privateshelves"/>[% END %]<input type="submit" class="deleteshelf" value="Delete List" onclick="return confirmDelete(MSG_CONFIRM_DELETE_LIST);"/>
+                         [% IF ( showprivateshelves ) %]<input type="hidden" name="display" value="privateshelves"/>[% END %]<input type="submit" class="deleteshelf" value="Delete list" onclick="return confirmDelete(MSG_CONFIRM_DELETE_LIST);"/>
                       </form> [% END %]
 
 
@@ -259,7 +259,7 @@ $(function() {
                                         [% IF ( TagsEnabled ) %]
                                           <span id="addtags"></span>
                                           <span id="tagsel_form" style="display:none">
-                                          <label for="tagsel_new" style="display:inline">New&nbsp;Tag:</label>
+                                          <label for="tagsel_new" style="display:inline">New&nbsp;tag:</label>
                                           <input name="tagsel_new" id="tagsel_new" maxlength="100" style="display:inline"/>
                                           <input id="tagsel_button" name="tagsel_button" class="input tagsel_button" title="tagsel_button" type="submit" value="Add" style="display:inline" />
                                           <a href="#" id="tagsel_cancel" onclick="tagCanceled(); return false;" style="display:inline">Cancel</a>
@@ -355,10 +355,10 @@ $(function() {
           [% UNLESS ( itemsloo.norequests ) %]
             [% IF ( opacuserlogin ) %]
               [% IF ( AllowOnShelfHolds ) %]
-                <a class="hold" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=[% itemsloo.biblionumber %]">Place Hold</a><!-- add back when available 0 holds in queue-->
+                <a class="hold" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=[% itemsloo.biblionumber %]">Place hold</a><!-- add back when available 0 holds in queue-->
               [% ELSE %]
                 [% IF ( itemsloo.itemsissued ) %]
-                  <a class="hold" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=[% itemsloo.biblionumber %]">Place Hold</a><!-- add back when available 0 holds in queue-->
+                  <a class="hold" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=[% itemsloo.biblionumber %]">Place hold</a><!-- add back when available 0 holds in queue-->
                 [% END %]
               [% END %]
             [% END %]
@@ -371,7 +371,7 @@ $(function() {
               [% IF ( itemsloo.incart ) %]
                   <a class="addtocart cart[% itemsloo.biblionumber %]" href="#" onclick="addRecord('[% itemsloo.biblionumber %]'); return false;">In your cart</a> <a class="cartRemove cartR[% itemsloo.biblionumber %]" href="#" onclick="delSingleRecord('[% itemsloo.biblionumber %]'); return false;">(remove)</a>
               [% ELSE %]
-                  <a class="addtocart cart[% itemsloo.biblionumber %]" href="#" onclick="addRecord('[% itemsloo.biblionumber %]'); return false;">Add to Cart</a> <a style="display:none;" class="cartRemove cartR[% itemsloo.biblionumber %]" href="#" onclick="delSingleRecord('[% itemsloo.biblionumber %]'); return false;">(remove)</a>
+                  <a class="addtocart cart[% itemsloo.biblionumber %]" href="#" onclick="addRecord('[% itemsloo.biblionumber %]'); return false;">Add to cart</a> <a style="display:none;" class="cartRemove cartR[% itemsloo.biblionumber %]" href="#" onclick="delSingleRecord('[% itemsloo.biblionumber %]'); return false;">(remove)</a>
               [% END %]
           [% END %]
         </span>
@@ -398,7 +398,7 @@ $(function() {
                   </div>
                   [% IF ( pagination_bar ) %]<div class="pages">[% pagination_bar %]</div>[% END %]
                 [% ELSE %]
-                  <div class="dialog message">This List is empty.  [% IF ( opacuserlogin ) %]You can add to your lists from the results of any <a href="opac-main.pl">search</a>![% END %]</div>
+                  <div class="dialog message">This list is empty.  [% IF ( opacuserlogin ) %]You can add to your lists from the results of any <a href="opac-main.pl">search</a>![% END %]</div>
               [% END %]<!-- /itemsloop -->
             [% END %]<!-- /viewshelf -->
 
@@ -407,14 +407,14 @@ $(function() {
                 <form method="post" action="opac-shelves.pl">
                 <input type="hidden" name="shelfnumber" value="[% shelfnumber %]" />
                 <input type="hidden" name="modifyshelfcontents" value="1" />
-                <input type="hidden" name="viewshelf" value="[% shelfnumber %]" /><input type="submit" value="Remove Selected Items" class="icon delete"/>
+                <input type="hidden" name="viewshelf" value="[% shelfnumber %]" /><input type="submit" value="Remove selected items" class="icon delete"/>
                 </form>
             [% ELSIF ( !itemsloop && manageshelf ) %]
                 <form method="post" action="opac-shelves.pl">
                   <input type="hidden" name="DEL-[% shelfnumber %]" value="1" />
                   <input type="hidden" name="shelves" value="1" />
 		  <input type="hidden" name="shelfoff" value="[% shelfoff %]" />
-                  <input type="submit" class="icon delete" value="Delete this List" onclick="return confirmDelete(MSG_CONFIRM_DELETE_LIST)" />
+                  <input type="submit" class="icon delete" value="Delete this list" onclick="return confirmDelete(MSG_CONFIRM_DELETE_LIST)" />
                 </form>
             [% END %]
 
@@ -427,7 +427,7 @@ $(function() {
                   <input type="hidden" name="shelfnumber" value="[% shelfnumber %]" />
                   <fieldset class="rows">
                     <ol>
-                      <li><label for="shelfname">List Name: </label><input type="text" id="shelfname" name="shelfname" size="60" value="[% shelfname |html %]" /></li>
+                      <li><label for="shelfname">List name: </label><input type="text" id="shelfname" name="shelfname" size="60" value="[% shelfname |html %]" /></li>
                       <li>
                         <label for="sortfield" >Sort this list by: </label>
                         <select name="sortfield" id="sortfield">
@@ -478,12 +478,12 @@ $(function() {
                   [% END %]
         
                   [% IF ( loggedinusername ) %]
-                    <div id="toolbar"><a class="newshelf" href="/cgi-bin/koha/opac-shelves.pl?shelves=1">New List</a></div>
+                    <div id="toolbar"><a class="newshelf" href="/cgi-bin/koha/opac-shelves.pl?shelves=1">New list</a></div>
                   [% IF ( showprivateshelves ) %]
                     [% IF ( shelveslooppriv ) %]
                       <table>
                         <tr>
-                          <th>List Name</th>
+                          <th>List name</th>
                           <th>Contents</th>
                           <th>Type</th>
                           <th>&nbsp;</th>
@@ -531,7 +531,7 @@ $(function() {
                     [% END %]<!-- /shelveslooppriv -->
                   [% END %]<!-- /showprivateshelves -->
                   [% ELSE %]<!-- /loggedinusername -->
-                      [% IF ( opacuserlogin ) %]<div><a href="/cgi-bin/koha/opac-user.pl">Log in</a> to create new Lists.</div>[% END %]
+                      [% IF ( opacuserlogin ) %]<div><a href="/cgi-bin/koha/opac-user.pl">Log in</a> to create new lists.</div>[% END %]
                   [% END %]<!-- /loggedinusername -->
 
                   
@@ -543,14 +543,14 @@ $(function() {
                     <div id="publicshelves" class="tab-container" style="display:none;">
                   [% END %]
                   [% IF ( loggedinusername ) %]
-                 <div id="toolbar"> <a class="newshelf" href="/cgi-bin/koha/opac-shelves.pl?shelves=1">New List</a></div>
+                 <div id="toolbar"> <a class="newshelf" href="/cgi-bin/koha/opac-shelves.pl?shelves=1">New list</a></div>
                   [% ELSE %]
-                  [% IF ( opacuserlogin ) %]<div><a href="/cgi-bin/koha/opac-user.pl">Log in</a> to create new Lists.</div>[% END %]
+                  [% IF ( opacuserlogin ) %]<div><a href="/cgi-bin/koha/opac-user.pl">Log in</a> to create new lists.</div>[% END %]
                   [% END %]
                   [% IF ( shelvesloop ) %]
                       <table>
                         <tr>
-                          <th>List Name</th>
+                          <th>List name</th>
                           <th>Contents</th>
                           <th>Type</th><th>&nbsp;</th>
                         </tr>
@@ -604,11 +604,11 @@ $(function() {
               <div id="addshelf">
                 <form method="post" action="/cgi-bin/koha/opac-shelves.pl">
                   <fieldset class="rows">
-                    <legend>Create a New List</legend>
+                    <legend>Create a new list</legend>
                     <input type="hidden" name="shelves" value="1" />
                     <ol>
                       <li>
-                        <label class="required" for="addshelf">List Name:</label>
+                        <label class="required" for="addshelf">List name:</label>
                         [% IF ( already ) %]
                           <input id="addshelf" type="text" name="addshelf" value="[% already %]" size="60" />
                         [% ELSE %]

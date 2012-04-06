@@ -1,7 +1,7 @@
 [% USE KohaDates %]
 
 [% INCLUDE 'doc-head-open.inc' %]
-[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha Online[% END %] Catalog &rsaquo; Your library home
+[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Your library home
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.metadata.min.js"></script>
@@ -60,7 +60,7 @@ $.tablesorter.addParser({
 	<div id="userdetails" class="container">
 	[% IF ( bor_messages ) %]
 	       <div class="dialog message">
-	               <h3>Messages For You</h3>
+                   <h3>Messages for you</h3>
 	               <ul>
 	                       [% FOREACH bor_messages_loo IN bor_messages_loop %]
 					<li>
@@ -110,7 +110,7 @@ $.tablesorter.addParser({
         
 <div id="opac-user-views" class="toptabs">
         <ul>
-            <li><a href="/cgi-bin/koha/opac-user.pl#opac-user-checkouts">Checked Out</a></li>
+            <li><a href="/cgi-bin/koha/opac-user.pl#opac-user-checkouts">Checked out</a></li>
             [% IF ( overdues_count ) %]<li><a href="/cgi-bin/koha/opac-user.pl#opac-user-overdues">Overdue</a></li>[% END %]
 [% IF ( OPACFinesTab ) %]
             [% IF ( BORROWER_INF.amountoverfive ) %]<li><a href="/cgi-bin/koha/opac-user.pl#opac-user-fines">Fines</a></li>[% END %]
@@ -124,7 +124,7 @@ $.tablesorter.addParser({
 [% IF ( OPACFinesTab ) %]
         <!-- FINES BOX -->
         [% IF ( BORROWER_INF.amountoverfive ) %]
-            <div id="opac-user-fines"> <h3>Fines and Charges</h3>
+            <div id="opac-user-fines"> <h3>Fines and charges</h3>
             <table>
                 <tr><th colspan="2">Amount</th></tr>
                 <tr>
@@ -135,7 +135,7 @@ $.tablesorter.addParser({
         [% END %]
 
         [% IF ( BORROWER_INF.amountoverzero ) %]
-           <div id="opac-user-fines"> <h3>Fines and Charges</h3>
+           <div id="opac-user-fines"> <h3>Fines and charges</h3>
             <table>
                 <tr><th colspan="2">Amount</th></tr>
                 <tr><td>You currently owe fines and charges amounting to:</td>
@@ -158,11 +158,11 @@ $.tablesorter.addParser({
     [% IF ( atdestination ) %]
     <div id="opac-user-waiting">
         <table id="waitingt">
-            <caption>Holds Waiting</caption>
+            <caption>Holds waiting</caption>
            <thead> <tr>
                 <th colspan="2" class="{sorter:'articles'}">Title</th>
                 <th>Hold date</th>
-                <th>Pick Up Library</th>
+                <th>Pick up library</th>
             </tr></thead>
             <tbody>[% FOREACH WAITIN IN WAITING %]
                 <tr>
@@ -188,12 +188,12 @@ $.tablesorter.addParser({
 	<input type="hidden" name="borrowernumber" value="[% borrowernumber %]">
 	<input type="hidden" name="from" value="opac_user" />
         <table id="checkoutst">
-        <caption>[% issues_count %] Item(s) Checked Out</caption>
+        <caption>[% issues_count %] Item(s) checked out</caption>
        <thead><tr>
 		[% IF ( JacketImages ) %]<th class="{sorter: false}">&nbsp;</th>[% END %]
         <th class="{sorter:'articles'}">Title</th>
         <th>Due</th>
-		[% UNLESS ( item_level_itypes ) %]<th>Item Type</th> [% END %]
+        [% UNLESS ( item_level_itypes ) %]<th>Item type</th> [% END %]
         [% IF ( show_barcode ) %]<th>Barcode</th>[% END %]
         <th>Call No.</th>
         [% IF ( OpacRenewalAllowed ) %]
@@ -287,9 +287,9 @@ $.tablesorter.addParser({
 <thead><tr>
 [% IF ( JacketImages ) %]<th class="{sorter: false}">&nbsp;</th>[% END %]
 <th class="{sorter:'articles'}">Title</th>
-[% UNLESS ( item_level_itypes ) %]<th>Item Type</th> [% END %]
+[% UNLESS ( item_level_itypes ) %]<th>Item type</th> [% END %]
 [% IF ( show_barcode ) %]<th>Barcode</th>[% END %]
-<th>Call No.</th>
+<th>Call no.</th>
 <th>Due</th>
 [% IF ( OpacRenewalAllowed ) %]
                     <th class="{sorter: false}">Renew</th>
@@ -326,7 +326,7 @@ $.tablesorter.addParser({
 <td>[% OVERDUE.date_due | $KohaDates %]</td>
                 [% IF ( OpacRenewalAllowed ) %]
 <td>
-[% IF ( OVERDUE.debarred ) %]Account Frozen
+[% IF ( OVERDUE.debarred ) %]Account frozen
 [% ELSIF ( OVERDUE.status ) %]
 [% IF ( canrenew ) %]<a href="/cgi-bin/koha/opac-renew.pl?from=opac_user&amp;item=[% OVERDUE.itemnumber %]&amp;bornum=[% OVERDUE.borrowernumber %]">Renew</a>[% END %] <span class="renewals">([% OVERDUE.renewsleft %] of [% OVERDUE.renewsallowed %] renewals remaining)</span>
 [% ELSIF ( OVERDUE.onreserve ) %]On hold
@@ -349,9 +349,9 @@ $.tablesorter.addParser({
             <!-- RESERVES TABLE ROWS -->
             <thead><tr>
                 <th class="{sorter:'articles'}">Title</th>
-                <th>Placed On</th>
-		<th>Expires On</th>
-                <th>Pick Up Location</th>
+                <th>Placed on</th>
+        <th>Expires on</th>
+                <th>Pick up location</th>
 		[% IF ( showpriority ) %]
 			<th>Priority</th>
 		[% END %]
@@ -377,7 +377,7 @@ $.tablesorter.addParser({
                     [% RESERVE.author %]
                 </td>
                 <td>[% RESERVE.reservedate | $KohaDates %]</td>
-		<td>[% IF ( RESERVE.expirationdate ) %][% RESERVE.expirationdate | $KohaDates %][% ELSE %]Never Expires[% END %]</td>
+        <td>[% IF ( RESERVE.expirationdate ) %][% RESERVE.expirationdate | $KohaDates %][% ELSE %]Never expires[% END %]</td>
                 <td>[% RESERVE.branch %]</td>
 				[% IF ( showpriority ) %]
 				<td>[% RESERVE.priority %] </td>
@@ -462,7 +462,7 @@ $.tablesorter.addParser({
               );
               //]]>
               </script>
-              <a href="#" style="font-size:85%;text-decoration:none;" onclick="document.getElementById('suspend_until').value='';return false;">Clear Date</a></p>
+              <a href="#" style="font-size:85%;text-decoration:none;" onclick="document.getElementById('suspend_until').value='';return false;">Clear date</a></p>
               [% END %]
             </form>
 	</div>

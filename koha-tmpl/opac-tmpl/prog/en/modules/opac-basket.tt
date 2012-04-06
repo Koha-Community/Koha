@@ -1,5 +1,5 @@
 [% INCLUDE 'doc-head-open.inc' %]
-[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha Online[% END %] Catalog &rsaquo; Your Cart
+[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Your cart
     [% IF ( print_basket ) %]</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="shortcut icon" href="[% themelang %]/includes/favicon.ico" type="image/x-icon" />
@@ -140,12 +140,12 @@ function enableCheckboxActions(){
 [% UNLESS ( print_basket ) %]
 <div id="toolbar">
 <ul>
-	<li>[% IF ( verbose ) %]<a href="opac-basket.pl" class="brief" onclick="showLess(); return false;">Brief Display</a>[% ELSE %]<a href="opac-basket.pl" class="detail" onclick="showMore(); return false;">More Details</a>[% END %]</li>
+    <li>[% IF ( verbose ) %]<a href="opac-basket.pl" class="brief" onclick="showLess(); return false;">Brief display</a>[% ELSE %]<a href="opac-basket.pl" class="detail" onclick="showMore(); return false;">More details</a>[% END %]</li>
 	[% IF ( opacuserlogin ) %]<li><a class="send" href="opac-basket.pl" onclick="sendBasket(); return false;">Send</a></li>[% END %]
 	<li><a class="download" href="opac-basket.pl" onclick="downloadBasket(); return false;">Download</a></li>
 	<li><a class="print" href="opac-basket.pl" onclick="printBasket(); return false;">Print</a></li>
-	<li><a class="empty" href="opac-basket.pl" onclick="delBasket(); return false;">Empty and Close</a></li>
-	<li><a class="hide close" href="opac-basket.pl">Hide Window</a></li>
+    <li><a class="empty" href="opac-basket.pl" onclick="delBasket(); return false;">Empty and close</a></li>
+    <li><a class="hide close" href="opac-basket.pl">Hide window</a></li>
 </ul>
 </div>
         [% END %]
@@ -164,7 +164,7 @@ function enableCheckboxActions(){
 [% END %]
 </span>
      <span id="tagsel_form" style="display:none">
-       <label for="tagsel_new" style="display:inline">New&nbsp;Tag:</label>
+       <label for="tagsel_new" style="display:inline">New&nbsp;tag:</label>
        <input name="tagsel_new" id="tagsel_new" maxlength="100" style="display:inline"/>
        <input id="tagsel_button" name="tagsel_button" class="input tagsel_button" title="tagsel_button"
            type="submit" value="Add" style="display:inline" />
@@ -296,7 +296,7 @@ function enableCheckboxActions(){
 
         [% IF ( BIBLIO_RESULT.MARCurlS ) %]
         <tr>
-            <th scope="row">url(s)</th>
+            <th scope="row">URL(s)</th>
             <td>
 	   [% FOREACH MARCurl IN BIBLIO_RESULT.MARCurlS %]
 		<p>[% IF ( MARCurl.part ) %][% MARCurl.part %]
@@ -326,8 +326,8 @@ function enableCheckboxActions(){
 [% UNLESS ( print_basket ) %]
 <form action="/cgi-bin/koha/opac-basket.pl" method="get" name="bookbag_form" id="bookbag_form" class="checkboxed">
 <div id="selections-toolbar">
-    <a id="CheckAll" href="#">Select All</a>
-    <a id="CheckNone" href="#">Clear All</a>
+    <a id="CheckAll" href="#">Select all</a>
+    <a id="CheckNone" href="#">Clear all</a>
     <span class="sep">|</span> <span class="links"><span id="selections">Select titles to: </span>
         <a href="#" class="deleteshelf disabled" onclick="delSelRecords(); return false;">Remove</a>
     [% IF ( opacuserlogin ) %]
@@ -340,7 +340,7 @@ function enableCheckboxActions(){
     [% END %]
     </span>
          [% IF ( opacuserlogin ) %][% IF ( loggedinusername ) %][% IF ( TagsEnabled ) %]<span id="tagsel_form" style="display:none">
-           <label for="tagsel_new" style="display:inline">New&nbsp;Tag:</label>
+           <label for="tagsel_new" style="display:inline">New&nbsp;tag:</label>
            <input name="tagsel_new" id="tagsel_new" maxlength="100"  style="display:inline"/>
            <input id="tagsel_button" name="tagsel_button" class="input tagsel_button" title="tagsel_button" type="submit" value="Add"  style="display:inline"/>
            <a href="#" id="tagsel_cancel" onclick="tagCanceled(); return false;" style="display:inline">Cancel</a>

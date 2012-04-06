@@ -1,12 +1,12 @@
-[% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha Online[% END %] Catalog &rsaquo;  Sending Your Cart
+[% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo;  Sending your cart
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body style="padding: 1em;" id="sendbasket">
 <div id="usersendbasket" class="container">[% IF ( email_add ) %]
 
 	[% IF ( SENT ) %]
-		<h3>Message Sent</h3>
-	    <p>The cart was sent to: [% email_add %]</p>
+        <h3>Message sent</h3>
+        <p>The cart was sent to: [% email_add %]</p>
 		<p><a class="focus close" href="#">Close window</a></p>
 	[% END %]
 	[% IF ( error ) %]
@@ -20,7 +20,7 @@
 <fieldset class="rows"> 
 <legend>Sending your cart</legend>
 <ol>   <li>
-        <label for="email_add">Email Address:</label>
+        <label for="email_add">Email address:</label>
         <input type="text" id="email_add" name="email_add" size="43" class="focus" />
     </li>
     <li>

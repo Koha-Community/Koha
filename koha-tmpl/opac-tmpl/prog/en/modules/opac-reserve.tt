@@ -1,4 +1,4 @@
-[% INCLUDE 'doc-head-open.inc' %][% LibraryNameTitle or "Koha Online" %] Catalog &rsaquo;  Placing a hold
+[% INCLUDE 'doc-head-open.inc' %][% LibraryNameTitle or "Koha online" %] catalog &rsaquo;  Placing a hold
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
 <script type="text/javascript">
@@ -240,21 +240,21 @@
                   <th>Hold</th>
                   <th>Title</th>
                   [% UNLESS ( item_level_itypes ) %]
-                    <th>Item Type</th>
+                    <th>Item type</th>
                   [% END %]
                   [% IF ( showpriority ) %]
                   <th>Priority</th>
                   [% END %]
 		  [% IF ( reserve_in_future ) %]
-		  <th>Hold Starts on Date</th>
+        <th>Hold starts on date</th>
 		  [% END %]
-		  <th>Hold Not Needed After</th>
+        <th>Hold not needed after</th>
                   [% IF ( OPACItemHolds ) %]
-                    <th id="place_on_hdr" style="display:none">Place On</th>
+                    <th id="place_on_hdr" style="display:none">Place on</th>
                   [% END %]
                   [% UNLESS ( singleBranchMode ) %]
 		    [% IF ( choose_branch ) %]
-                        <th>Pickup Location</th>
+                        <th>Pickup location</th>
 		    [% END %]
                   [% END %]
                 </tr>[% ELSE %]<tr><th colspan="5">Title</th></tr>[% END %]
@@ -347,7 +347,7 @@
               //]]>
               </script>
       <p style="margin:.3em 2em;">
-      <a href="#" style="font-size:85%;text-decoration:none;" onclick="document.getElementById('reserve_date_[% bibitemloo.biblionumber %]').value='';return false;">Clear Date</a></p>
+      <a href="#" style="font-size:85%;text-decoration:none;" onclick="document.getElementById('reserve_date_[% bibitemloo.biblionumber %]').value='';return false;">Clear date</a></p>
                 </td>[% END %]
 
 		    [% END %]
@@ -380,7 +380,7 @@
       //]]>
         </script>
       <p style="margin:.3em 2em;">
-      <a href="#" style="font-size:85%;text-decoration:none;" onclick="document.getElementById('expiration_date_[% bibitemloo.biblionumber %]').value='';return false;">Clear Date</a></p>
+      <a href="#" style="font-size:85%;text-decoration:none;" onclick="document.getElementById('expiration_date_[% bibitemloo.biblionumber %]').value='';return false;">Clear date</a></p>
     </td>[% END %]
 
                     [% IF ( bibitemloo.holdable ) %]
@@ -469,16 +469,16 @@
                           <tr>
                             <th>Copy</th>
                             [% IF ( item_level_itypes ) %]
-                              <th>Item Type</th>
+                              <th>Item type</th>
                             [% END %]
                             <th>Barcode</th>
                             [% UNLESS ( singleBranchMode ) %]
-                              <th>Home Library</th>
-                              <th>Last Location</th>
+                              <th>Home library</th>
+                              <th>Last location</th>
                             [% END %]
-                            <th>Call Number</th>
+                            <th>Call number</th>
                             [% IF ( bibitemloo.itemdata_enumchron ) %]
-                              <th>Vol Info</th>
+                              <th>Vol info</th>
                             [% END %]
                             <th>Information</th>
                           </tr>

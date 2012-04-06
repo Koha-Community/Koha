@@ -1,7 +1,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
-[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha Online[% END %] Catalog &rsaquo;
+[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo;
 [% IF ( searchdesc ) %]
-    Results of Search [% IF ( query_desc ) %]for '[% query_desc | html%]'[% END %][% IF ( limit_desc ) %]&nbsp;with limit(s):&nbsp;'[% limit_desc | html %]'[% END %]
+    Results of search [% IF ( query_desc ) %]for '[% query_desc | html%]'[% END %][% IF ( limit_desc ) %]&nbsp;with limit(s):&nbsp;'[% limit_desc | html %]'[% END %]
 [% ELSE %]
     You did not specify any search criteria.
 [% END %]
@@ -103,29 +103,29 @@ $(document).ready(function(){
     var param1 = "<label for=\"addto\">"+_("Add to: ")+"<\/label><select name=\"addto\" id=\"addto\"><option value=\"\"><\/option>";
     [% IF ( opacbookbag ) %]    param1 += "<option value=\"addtocart\">"+_("Cart")+"<\/option>";
     [% END %][% IF ( virtualshelves ) %][% IF ( loggedinusername ) %][% IF ( addbarshelves ) %]
-    param1 += "<optgroup label=\""+_("Your Lists:")+"\">";[% FOREACH addbarshelvesloo IN addbarshelvesloop %]
+    param1 += "<optgroup label=\""+_("Your lists:")+"\">";[% FOREACH addbarshelvesloo IN addbarshelvesloop %]
     param1 += "<option id=\"s[% addbarshelvesloo.shelfnumber %]\" value=\"addtolist\">[% addbarshelvesloo.shelfname |html %]<\/option>";[% END %]
     param1 += "<\/optgroup>";[% END %]
-    [% IF ( addpubshelves ) %]param1 += "<optgroup label=\""+_("Public Lists:")+"\">"[% FOREACH addpubshelvesloo IN addpubshelvesloop %]+"<option id=\"s[% addpubshelvesloo.shelfnumber %]\" value=\"addtolist\">[% addpubshelvesloo.shelfname |html %]<\/option>"[% END %];
+    [% IF ( addpubshelves ) %]param1 += "<optgroup label=\""+_("Public lists:")+"\">"[% FOREACH addpubshelvesloo IN addpubshelvesloop %]+"<option id=\"s[% addpubshelvesloo.shelfnumber %]\" value=\"addtolist\">[% addpubshelvesloo.shelfname |html %]<\/option>"[% END %];
     param1 += "<\/optgroup>";[% END %]
     [% IF (( addbarshelvesloop && addbarshelvesloop.size>9) || (addpubshelvesloop && addpubshelvesloop.size>9 )) %]
-        param1 += "<option value=\"morelists\">[ "+_("More Lists")+" ]<\/option>";
+        param1 += "<option value=\"morelists\">[ "+_("More lists")+" ]<\/option>";
     [% END %]
-    param1 += "<option value=\"newlist\">[ "+_("New List")+" ]<\/option>";
+    param1 += "<option value=\"newlist\">[ "+_("New list")+" ]<\/option>";
     [% END %]
     [% END %]
     param1 += "<\/select> <input type=\"submit\" class=\"submit\" value=\""+_("Save")+"\" />";
     [% ELSE %]
-        var param1 = "<a id=\"addto\" class=\"addtocart\" href=\"#\">Add to Cart<\/a>";
+        var param1 = "<a id=\"addto\" class=\"addtocart\" href=\"#\">Add to cart<\/a>";
     [% END %]
 [% ELSE %]
         var param1 = "<label for=\"addto\">"+_("Add to list: ")+"<\/label><select name=\"addto\" id=\"addto\"><option value=\"\"><\/option>";
 [% IF ( virtualshelves ) %][% IF ( loggedinusername ) %][% IF ( addbarshelves ) %]
-    param1 += "<optgroup label=\""+_("Your Lists:")+"\">";[% FOREACH addbarshelvesloo IN addbarshelvesloop %]
+    param1 += "<optgroup label=\""+_("Your lists:")+"\">";[% FOREACH addbarshelvesloo IN addbarshelvesloop %]
     param1 += "<option id=\"s[% addbarshelvesloo.shelfnumber %]\" value=\"addtolist\">[% addbarshelvesloo.shelfname |html %]<\/option>";[% END %]
     param1 += "<\/optgroup>";[% END %]
-    [% IF ( addpubshelves ) %]param1 += "<optgroup label=\""+_("Public Lists:")+"\">"[% FOREACH addpubshelvesloo IN addpubshelvesloop %]+"<option id=\"s[% addpubshelvesloo.shelfnumber %]\" value=\"addtolist\">[% addpubshelvesloo.shelfname |html %]<\/option>"[% END %][% END %]
-    param1 +="<\/optgroup><option value=\"newlist\">[ "+_("New List")+" ]<\/option>"
+    [% IF ( addpubshelves ) %]param1 += "<optgroup label=\""+_("Public lists:")+"\">"[% FOREACH addpubshelvesloo IN addpubshelvesloop %]+"<option id=\"s[% addpubshelvesloo.shelfnumber %]\" value=\"addtolist\">[% addpubshelvesloo.shelfname |html %]<\/option>"[% END %][% END %]
+    param1 +="<\/optgroup><option value=\"newlist\">[ "+_("New list")+" ]<\/option>"
     [% END %]
     [% END %]
     param1 += "<\/select> <input type=\"submit\" class=\"submit\" value=\""+_("Save")+"\" />";
@@ -135,8 +135,8 @@ $(document).ready(function(){
     $('#sort_by').change(function() {
         $('#bookbag_form').submit();
     });
-    $("span.clearall").html("<a id=\"CheckNone\" href=\"#\">"+_("Clear All")+"<\/a>");
-    $("span.checkall").html("<a id=\"CheckAll\" href=\"#\">"+_("Select All")+"<\/a>");
+    $("span.clearall").html("<a id=\"CheckNone\" href=\"#\">"+_("Clear all")+"<\/a>");
+    $("span.checkall").html("<a id=\"CheckAll\" href=\"#\">"+_("Select all")+"<\/a>");
 [% IF ( opacbookbag ) %]$("span.addto").html(param1);[% ELSE %][% IF ( virtualshelves ) %][% IF ( loggedinusername ) %]$("span.addto").html(param1);[% END %][% END %][% END %]
 [% IF ( opacbookbag ) %]
     [% IF ( virtualshelves ) %]
@@ -166,12 +166,12 @@ $(document).ready(function(){
         } else if($("#addto").find("option:selected").attr("value") == "newlist"){
             [% IF ( loggedinusername ) %]if (vShelfAdd()) {
             Dopop('/cgi-bin/koha/opac-addbybiblionumber.pl?newshelf=1&' + vShelfAdd());
-            }[% ELSE %] alert(_('You must be logged in to create or add to Lists')); [% END %]
+            }[% ELSE %] alert(_('You must be logged in to create or add to lists')); [% END %]
             return false;
         } else if($("#addto").find("option:selected").attr("value") == "morelists"){
             [% IF ( loggedinusername ) %]if (vShelfAdd()) {
             Dopop('/cgi-bin/koha/opac-addbybiblionumber.pl?' + vShelfAdd());
-            }[% ELSE %] alert(_('You must be logged in to create or add to Lists')); [% END %]
+            }[% ELSE %] alert(_('You must be logged in to create or add to lists')); [% END %]
             return false;
         }
         if($("#addto").find("option:selected").attr("value") == "addtocart" || $("#addto").attr("class") == "addtocart"){
@@ -190,7 +190,7 @@ $(document).ready(function(){
 [% IF ( RequestOnOpac ) %]
   [% IF ( opacuserlogin ) %]
   [% IF ( DisplayMultiPlaceHold ) %]
-    $("#placehold").html("<input class=\"submit\" type=\"submit\" value=\""+_("Place Hold")+"\"/>");
+    $("#placehold").html("<input class=\"submit\" type=\"submit\" value=\""+_("Place hold")+"\"/>");
     $("#placehold").find("input:submit").click(function(){
         holdMultiple();
         return false;
@@ -268,25 +268,25 @@ $(document).ready(function(){
 <!-- Search Results Table -->
 [% IF ( total ) %]
 [% IF ( scan ) %]
-    <h1>Scan Index:</h1>
+    <h1>Scan index:</h1>
     <form action="/cgi-bin/koha/opac-search.pl" method="get">
         <table>
             <tr>
                 <td>
-                    Scan Index for: <input type="text" name="q" id="scan-index" size="35" value="" />
+                    Scan index for: <input type="text" name="q" id="scan-index" size="35" value="" />
                 </td>
             </tr>
             <tr>
                 <td>
                     <label for="scan-index">Indexed in:</label>
                     <select name="idx" id="scan-index">
-                        <option value="">Any Word</option>
-                        <option value="kw,phr:">Any Phrase</option>
+                        <option value="">Any word</option>
+                        <option value="kw,phr:">Any phrase</option>
                         <option value="ti:">Title</option>
-                        <option value="ti,phr:">Title Phrase</option>
+                        <option value="ti,phr:">Title phrase</option>
                         <option value="au,phr:">Author</option>
                         <option value="su:">Subject</option>
-                        <option value="su,phr:">Subject Phrase</option>
+                        <option value="su,phr:">Subject phrase</option>
                         <option value="se:">Series</option>
                         <option value="pb:">Publisher</option>
                         <option value="nt:">Notes</option>
@@ -358,7 +358,7 @@ $(document).ready(function(){
                             <span id="tagsel_span"></span>
                           [% IF ( loggedinusername ) %]
                             <span id="tagsel_form" style="display:none">
-                              <label for="tagsel_new">New Tag:</label>
+                              <label for="tagsel_new">New tag:</label>
                               <input name="tagsel_new" id="tagsel_new" maxlength="100" />
                               <input id="tagsel_button" name="tagsel_button" class="input tagsel_button" title="tagsel_button" type="submit" value="Add" />
                               <a href="#" id="tagsel_cancel">Cancel</a>
@@ -531,10 +531,10 @@ $(document).ready(function(){
                     [% UNLESS ( SEARCH_RESULT.norequests ) %]
                         [% IF ( opacuserlogin ) %]
                             [% IF ( AllowOnShelfHolds ) %]
-                                <a class="hold" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=[% SEARCH_RESULT.biblionumber %]">Place Hold</a><!-- add back when available 0 holds in queue-->
+                                <a class="hold" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=[% SEARCH_RESULT.biblionumber %]">Place hold</a><!-- add back when available 0 holds in queue-->
                             [% ELSE %]
                                 [% IF ( SEARCH_RESULT.itemsissued ) %]
-                                    <a class="hold" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=[% SEARCH_RESULT.biblionumber %]">Place Hold</a><!-- add back when available 0 holds in queue-->
+                                    <a class="hold" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=[% SEARCH_RESULT.biblionumber %]">Place hold</a><!-- add back when available 0 holds in queue-->
                                 [% END %]
                             [% END %]
                         [% END %]
@@ -546,9 +546,9 @@ $(document).ready(function(){
                 [% END %][% END %][% END %]
                 [% IF ( opacbookbag ) %]
                     [% IF ( SEARCH_RESULT.incart ) %]
-                        <a class="addtocart cart[% SEARCH_RESULT.biblionumber %]" href="#" onclick="addRecord('[% SEARCH_RESULT.biblionumber %]'); return false;">In your Cart</a> <a class="cartRemove cartR[% SEARCH_RESULT.biblionumber %]" href="#" onclick="delSingleRecord('[% SEARCH_RESULT.biblionumber %]'); return false;">(remove)</a>
+                        <a class="addtocart cart[% SEARCH_RESULT.biblionumber %]" href="#" onclick="addRecord('[% SEARCH_RESULT.biblionumber %]'); return false;">In your cart</a> <a class="cartRemove cartR[% SEARCH_RESULT.biblionumber %]" href="#" onclick="delSingleRecord('[% SEARCH_RESULT.biblionumber %]'); return false;">(remove)</a>
                     [% ELSE %]
-                        <a class="addtocart cart[% SEARCH_RESULT.biblionumber %]" href="#" onclick="addRecord('[% SEARCH_RESULT.biblionumber %]'); return false;">Add to Cart</a> <a style="display:none;" class="cartRemove cartR[% SEARCH_RESULT.biblionumber %]" href="#" onclick="delSingleRecord('[% SEARCH_RESULT.biblionumber %]'); return false;">(remove)</a>
+                        <a class="addtocart cart[% SEARCH_RESULT.biblionumber %]" href="#" onclick="addRecord('[% SEARCH_RESULT.biblionumber %]'); return false;">Add to cart</a> <a style="display:none;" class="cartRemove cartR[% SEARCH_RESULT.biblionumber %]" href="#" onclick="delSingleRecord('[% SEARCH_RESULT.biblionumber %]'); return false;">(remove)</a>
                     [% END %]
                 [% END %]
                 </span>

@@ -1,5 +1,5 @@
 <SUBJECT>
-Your List : [% shelfname %]
+Your list : [% shelfname %]
 <END_SUBJECT>
 
 <HEADER>
@@ -8,7 +8,7 @@ Hi,
 [% firstname %] [% surname %], sent you from our online catalog, the virtual shelf called :  [% shelfname %].
 
 Please note that the attached file is a MARC bibliographic records file
-which can be imported into a Personal Bibliographic Software like EndNote,
+which can be imported into personal bibliographic software like EndNote,
 Reference Manager or ProCite.
 <END_HEADER>
 
@@ -34,10 +34,10 @@ Serial: [% BIBLIO_RESULT.serial %][% END %][% IF ( BIBLIO_RESULT.dewey ) %]
 Dewey: [% BIBLIO_RESULT.dewey %][% END %][% IF ( BIBLIO_RESULT.classification ) %]
 Classification: [% BIBLIO_RESULT.classification %][% END %][% IF ( BIBLIO_RESULT.lccn ) %]
 LCCN: [% BIBLIO_RESULT.lccn %][% END %][% IF ( BIBLIO_RESULT.url ) %]
-url : [% BIBLIO_RESULT.url %][% END %][% IF ( OPACBaseURL ) %]
+URL: [% BIBLIO_RESULT.url %][% END %][% IF ( OPACBaseURL ) %]
 In the online catalog:
     http://[% OPACBaseURL %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% BIBLIO_RESULT.biblionumber |url %][% END %]
-Items : [% FOREACH ITEM_RESULT IN BIBLIO_RESULT.ITEM_RESULTS %]
+Items: [% FOREACH ITEM_RESULT IN BIBLIO_RESULT.ITEM_RESULTS %]
     [% ITEM_RESULT.branchname %] [% ITEM_RESULT.location %] [% IF ( ITEM_RESULT.itemcallnumber ) %]([% ITEM_RESULT.itemcallnumber %])[% END %] [% ITEM_RESULT.barcode %][% END %]
 
 ---------------------------------------------
