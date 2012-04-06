@@ -1,7 +1,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; Libraries and groups
 [% IF ( editcategory ) %]
-    &rsaquo;[% IF ( categorycode ) %]Edit group [% categorycode %][% ELSE %]New Group[% END %]
+    &rsaquo;[% IF ( categorycode ) %]Edit group [% categorycode %][% ELSE %]New group[% END %]
 [% ELSIF ( delete_category ) %]
     &rsaquo; Confirm deletion of group [% categorycode %]
 [% ELSIF ( add ) %]
@@ -287,7 +287,7 @@ tinyMCE.init({
         <td><a href="[% catloo.action %]?op=delete_category&amp;categorycode=[% catloo.categorycode |url %]">Delete</a>
         </td>
         </tr>
-    [% END %][% ELSE %]<tr><td colspan="5">No [% IF ( branchcategorie.properties ) %]Properties[% ELSIF ( branchcategorie.searchdomain ) %]Search domain[% END %] Defined</td></tr>[% END %]
+    [% END %][% ELSE %]<tr><td colspan="5">No [% IF ( branchcategorie.properties ) %]properties[% ELSIF ( branchcategorie.searchdomain ) %]search domain[% END %] defined</td></tr>[% END %]
     </table>
     [% END %]
     [% ELSE %]
