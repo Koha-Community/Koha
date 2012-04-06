@@ -3,14 +3,15 @@
 This file has been automatically generated from a Koha index definition file
 with the stylesheet koha-indexdefs-to-zebra.xsl. Do not manually edit this file,
 as it may be overwritten. To regenerate, edit the appropriate Koha index
-definition file (probably something like authority-koha-indexdefs.xml) and run:
-`xsltproc koha-indexdefs-to-zebra.xsl authority-koha-indexdefs.xml >
-authority-zebra-indexdefs.xsl` (substituting the appropriate file names).
+definition file (probably something like {biblio,authority}-koha-indexdefs.xml) and run:
+`xsltproc koha-indexdefs-to-zebra.xsl {biblio,authority}-koha-indexdefs.xml >
+{biblio,authority}-zebra-indexdefs.xsl` (substituting the appropriate file names).
 -->
 <xslo:stylesheet xmlns:xslo="http://www.w3.org/1999/XSL/Transform" xmlns:marc="http://www.loc.gov/MARC21/slim" xmlns:z="http://indexdata.com/zebra-2.0" xmlns:kohaidx="http://www.koha-community.org/schemas/index-defs" version="1.0">
   <xslo:output indent="yes" method="xml" version="1.0" encoding="UTF-8"/>
   <xslo:template match="text()"/>
   <xslo:template match="text()" mode="index_subfields"/>
+  <xslo:template match="text()" mode="index_data_field"/>
   <xslo:template match="text()" mode="index_heading"/>
   <xslo:template match="text()" mode="index_match_heading"/>
   <xslo:template match="text()" mode="index_subject_thesaurus"/>
@@ -32,6 +33,7 @@ authority-zebra-indexdefs.xsl` (substituting the appropriate file names).
       </xslo:attribute>
       <xslo:apply-templates/>
       <xslo:apply-templates mode="index_subfields"/>
+      <xslo:apply-templates mode="index_data_field"/>
       <xslo:apply-templates mode="index_heading"/>
       <xslo:apply-templates mode="index_match_heading"/>
       <xslo:apply-templates mode="index_subject_thesaurus"/>
