@@ -2911,6 +2911,7 @@ CREATE TABLE `aqorders` ( -- information related to the basket line items
   `cancelledby` varchar(10) default NULL, -- not used? always NULL
   `datecancellationprinted` date default NULL, -- the date the line item was deleted
   `notes` mediumtext, -- notes related to this order line
+  internalnotes mediumtext DEFAULT NULL, -- used by Koha to store some informations, not editable by librarians
   `supplierreference` mediumtext, -- not used? always NULL
   `purchaseordernumber` mediumtext, -- not used? always NULL
   `basketno` int(11) default NULL, -- links this order line to a specific basket (aqbasket.basketno)

@@ -57,7 +57,7 @@ BEGIN {
         &GetLateOrders &GetOrderFromItemnumber
         &SearchOrder &GetHistory &GetRecentAcqui
         &ModReceiveOrder &CancelReceipt
-        &GetCancelledOrders
+        &GetCancelledOrders &TransferOrder
         &GetLastOrderNotReceivedFromSubscriptionid &GetLastOrderReceivedFromSubscriptionid
         &NewOrderItem &ModItemOrder
 
@@ -1594,6 +1594,77 @@ sub DelOrder {
     	C4::Items::DelItem( $dbh, $bibnum, $itemnumber );
     }
     
+}
+
+=head3 TransferOrder
+
+    my $newordernumber = TransferOrder($ordernumber, $basketno);
+
+Transfer an order line to a basket.
+Mark $ordernumber as cancelled with an internal note 'Cancelled and transfered
+to BOOKSELLER on DATE' and create new order with internal note
+'Transfered from BOOKSELLER on DATE'.
+Move all attached items to the new order.
+Received orders cannot be transfered.
+Return the ordernumber of created order.
+
+=cut
+
+sub TransferOrder {
+    my ($ordernumber, $basketno) = @_;
+
+    return unless $ordernumber or $basketno;
+
+    my $order = GetOrder( $ordernumber );
+    return if $order->{datereceived};
+
+    my $today = C4::Dates->new()->output("iso");
+    my $query = qq{
+        SELECT aqbooksellers.name
+        FROM aqorders
+            LEFT JOIN aqbasket ON aqorders.basketno = aqbasket.basketno
+            LEFT JOIN aqbooksellers ON aqbasket.booksellerid = aqbooksellers.id
+        WHERE aqorders.ordernumber = ?
+    };
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare($query);
+    $sth->execute($ordernumber);
+    my ($booksellerfromname) = $sth->fetchrow_array;
+
+    $query = qq{
+        SELECT aqbooksellers.name
+        FROM aqbasket
+            LEFT JOIN aqbooksellers ON aqbasket.booksellerid = aqbooksellers.id
+        WHERE aqbasket.basketno = ?
+    };
+    $sth = $dbh->prepare($query);
+    $sth->execute($basketno);
+    my ($booksellertoname) = $sth->fetchrow_array;
+
+    $query = qq{
+        UPDATE aqorders
+        SET datecancellationprinted = CAST(NOW() AS date),
+            internalnotes = ?
+        WHERE ordernumber = ?
+    };
+    $sth = $dbh->prepare($query);
+    $sth->execute("Cancelled and transfered to $booksellertoname on $today", $ordernumber);
+
+    delete $order->{'ordernumber'};
+    $order->{'basketno'} = $basketno;
+    $order->{'internalnotes'} = "Transfered from $booksellerfromname on $today";
+    my $newordernumber;
+    (undef, $newordernumber) = NewOrder($order);
+
+    $query = qq{
+        UPDATE aqorders_items
+        SET ordernumber = ?
+        WHERE ordernumber = ?
+    };
+    $sth = $dbh->prepare($query);
+    $sth->execute($newordernumber, $ordernumber);
+
+    return $newordernumber;
 }
 
 =head2 FUNCTIONS ABOUT PARCELS

@@ -1,0 +1,121 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Acquisitions &rsaquo; Transfer order</title>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'acquisitions-search.inc' %]
+
+<div id="breadcrumbs">
+    <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+    &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a>
+    &rsaquo; Transfer order
+</div>
+
+<div id="doc3" class="yui-t2">
+<div id="bd">
+<div id="yui-main">
+    <div class="yui-b">
+        [% IF ( show_baskets ) %]
+            <h1>Baskets for [% booksellertoname %]</h1>
+            [% IF ( basketsloop ) %]
+                <table>
+                    <thead>
+                        <th>Basket (#)</th>
+                        <th>Created by</th>
+                        <th>Date</th>
+                        <th>&nbsp;</th>
+                    </thead>
+                    <tbody>
+                        [% FOREACH basket IN basketsloop %]
+                          <tr>
+                            <td>[% basket.basketname %] (#[% basket.basketno %])</td>
+                            <td>[% basket.createdby %]</td>
+                            <td>[% basket.creationdate %]</td>
+                            <td><a href="transferorder.pl?basketno=[% basket.basketno %]&ordernumber=[% ordernumber %][% IF (referrer) %]&referrer=[% referrer | uri %][% END %]" onclick="return confirm('Do you want to transfer order [% ordernumber %] from basket [% basketfromname %] ([% booksellerfromname %]) to basket [% basket.basketname %] ([% booksellertoname %]) ?');">Choose</a>
+                          </tr>
+                        [% END %]
+                    </tbody>
+                </table>
+            [% ELSE %]
+                <p>There is no open baskets for this supplier.</p>
+            [% END %]
+        [% END %]
+        [% IF ( ordersloop ) %]
+            <h1>Orders for [% booksellerfromname %]</h1>
+            <table>
+                <thead>
+                    <th>Order</th>
+                    <th>Summary</th>
+                    <th>&nbsp;</th>
+                </thead>
+                <tbody>
+                    [% FOREACH ordersloo IN ordersloop %]
+                      <tr>
+                        <td><a href="neworderempty.pl?ordernumber=[% ordersloo.ordernumber %]">[% ordersloo.ordernumber %]</a></td>
+                        <td>
+                            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% ordersloo.biblionumber %]">[% ordersloo.title |html %]</a>
+                            [% IF ( ordersloo.author ) %] by [% ordersloo.author %][% END %]
+                            [% IF ( ordersloo.isbn ) %] &ndash; [% ordersloo.isbn %][% END %]
+                            [% IF ( ordersloo.publishercode ) %]<br />Publisher :[% ordersloo.publishercode %][% END %]
+                        </td>
+                        <td><a href="transferorder.pl?bookselleridfrom=[% ordersloo.bookselleridfrom %]&ordernumber=[% ordersloo.ordernumber %][% IF (referrer) %]&referrer=[% referrer | uri %][% END %]">Transfer</a></td>
+                      </tr>
+                    [% END %]
+                </tbody>
+            </table>
+        [% END %]
+        [% IF ( do_search ) %]
+            [% IF ( bookselleridfrom ) %]
+                <h1>Choose a vendor to transfer to</h1>
+            [% ELSE %]
+                <h1>Choose a vendor to transfer from</h1>
+            [% END %]
+            [% IF ( booksellersloop ) %]
+                <table>
+                    <thead>
+                        <th>Name</th>
+                        <th>&nbsp;</th>
+                    </thead>
+                    <tbody>
+                        [% FOREACH bookseller IN booksellersloop %]
+                          <tr>
+                            <td>[% bookseller.name %]</td>
+                            <td><a href="transferorder.pl?[% IF (bookselleridfrom) %]bookselleridto[% ELSE %]bookselleridfrom[% END %]=[% bookseller.id %][% IF (ordernumber) %]&ordernumber=[% ordernumber %][% END %][% IF (referrer) %]&referrer=[% referrer | uri %][% END %]">Choose</a></td>
+                          </tr>
+                        [% END %]
+                    </tbody>
+                 </table>
+            [% ELSE %]
+                <p>No results found.</p>
+            [% END %]
+        [% END %]
+        [% IF ( search_form ) %]
+            [% IF ( bookselleridfrom ) %]
+                <h1>Search for a vendor to transfer to</h1>
+            [% ELSE %]
+                <h1>Search for a vendor to transfer from</h1>
+            [% END %]
+            <form method="get" action="transferorder.pl">
+                <input type="hidden" name="op" value="do_search" />
+                <input type="hidden" name="referrer" value="[% referrer %]" />
+                [% IF ( ordernumber ) %]
+                    <input type="hidden" name="ordernumber" value="[% ordernumber %]" />
+                [% END %]
+                [% IF ( bookselleridfrom ) %]
+                    <input type="hidden" name="bookselleridfrom" value="[% bookselleridfrom %]" />
+                [% END %]
+                <label for="query">Vendor:</label>
+                <input type="text" name="query" />
+                <input type="submit" value="Search" />
+            </form>
+        [% END %]
+    </div>
+</div>
+
+<div class="yui-b">
+    [% INCLUDE 'acquisitions-menu.inc' %]
+</div>
+</div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

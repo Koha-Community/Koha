@@ -215,6 +215,8 @@
                 <td>[% loop_order.budget_name %]</td>
 				<td>
                               <a href="orderreceive.pl?ordernumber=[% loop_order.ordernumber %]&amp;invoiceid=[% invoiceid %]">Receive</a>
+                    <br />
+                    <a href="/cgi-bin/koha/acqui/transferorder.pl?ordernumber=[% loop_order.ordernumber %]&amp;referrer=[% "/cgi-bin/koha/acqui/parcel.pl?invoiceid=[% invoiceid %]" | uri %]">Transfer</a>
 				</td>
 				<td>
                         [% IF ( loop_order.left_holds_on_order ) %]

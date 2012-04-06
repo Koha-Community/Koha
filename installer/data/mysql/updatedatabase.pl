@@ -7104,6 +7104,17 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "XXX";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do(qq{
+        ALTER TABLE aqorders
+        ADD COLUMN internalnotes MEDIUMTEXT DEFAULT NULL AFTER notes
+    });
+    print "Upgrade to $DBversion done (Add internalnotes field in aqorders table)\n";
+    SetVersion($DBversion);
+}
+
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

@@ -348,6 +348,7 @@
                                 [% ELSE %]
                                     <p>[<a href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% books_loo.ordernumber %]">Add note</a>]</p>
                                 [% END %]
+                            <p>[% books_loo.internalnotes %]</p>
                         </td>
                         <td class="number gste [% IF books_loo.rrpgste.search('^0') %]error[% END %]">[% books_loo.rrpgste %]</td>
                         <td class="number gste [% IF books_loo.ecostgste.search('^0') %]error[% END %]">[% books_loo.ecostgste %]</td>
@@ -363,6 +364,10 @@
                             [% UNLESS ( closedate ) %]
                             <td>
                                 <a href="neworderempty.pl?ordernumber=[% books_loo.ordernumber %]&amp;booksellerid=[% booksellerid %]&amp;basketno=[% basketno %]">Modify</a>
+                                [% UNLESS (books_loo.order_received) %]
+                                    <br />
+                                    <a href="/cgi-bin/koha/acqui/transferorder.pl?ordernumber=[% books_loo.ordernumber %]&referrer=[% "/cgi-bin/koha/acqui/basket.pl?basketno=$basketno" | uri %]">Transfer</a>
+                                [% END %]
                             </td>
                             <td>
                             [% IF ( books_loo.left_holds_on_order ) %]
@@ -435,6 +440,7 @@
                         [% IF ( order.publicationyear ) %], [% order.publicationyear %][% END %]
                         [% IF ( books_loo.editionstatement ) %], [% books_loo.editionstatement %][% END %]
                       </p>
+                      <p>[% order.internalnotes %]</p>
                     </td>
                     <td class="number gste">[% order.rrpgste %]</td>
                     <td class="number gste">[% order.ecostgste %]</td>
