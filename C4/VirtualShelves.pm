@@ -1,8 +1,4 @@
-# -*- tab-width: 8 -*-
-# Please use 8-character tabs for this file (indents are every 4 characters)
-
 package C4::VirtualShelves;
-
 
 # Copyright 2000-2002 Katipo Communications
 #
@@ -198,20 +194,20 @@ sub GetSomeShelfNames {
     $qry1.= "ORDER BY vs.lastmodified DESC LIMIT $limit";
 
     unless($adding_allowed && (!defined($owner) || $owner<=0)) {
-      #if adding items, user should be known
-      $pub= $dbh->selectall_arrayref($qry1,{Slice=>{}},@params);
+        #if adding items, user should be known
+        $pub= $dbh->selectall_arrayref($qry1,{Slice=>{}},@params);
     }
 
     if($owner) {
-      my $qry2= $bquery. qq{
-        LEFT JOIN virtualshelfshares sh ON sh.shelfnumber=vs.shelfnumber AND sh.borrowernumber=?
-        WHERE vs.category=1 AND (vs.owner=? OR sh.borrowernumber=?) };
-      @params=($owner,$owner,$owner);
-      $qry2.= "AND (allow_add=1 OR owner=?) " if $adding_allowed;
-      push @params, $owner if $adding_allowed;
-      $qry2.= "ORDER BY vs.lastmodified DESC ";
-      $qry2.= "LIMIT $limit";
-      $bar= $dbh->selectall_arrayref($qry2,{Slice=>{}},@params);
+        my $qry2= $bquery. qq{
+            LEFT JOIN virtualshelfshares sh ON sh.shelfnumber=vs.shelfnumber AND sh.borrowernumber=?
+            WHERE vs.category=1 AND (vs.owner=? OR sh.borrowernumber=?) };
+        @params=($owner,$owner,$owner);
+        $qry2.= "AND (allow_add=1 OR owner=?) " if $adding_allowed;
+        push @params, $owner if $adding_allowed;
+        $qry2.= "ORDER BY vs.lastmodified DESC ";
+        $qry2.= "LIMIT $limit";
+        $bar= $dbh->selectall_arrayref($qry2,{Slice=>{}},@params);
     }
 
     return ( { bartotal => $bar? scalar @$bar: 0, pubtotal => $pub? scalar @$pub: 0}, $pub, $bar);
@@ -326,13 +322,13 @@ sub AddShelf {
 
     my $sth = $dbh->prepare($query);
     $sth->execute(
-    $hashref->{shelfname},
-    $owner,
-    $hashref->{category},
-    $hashref->{sortfield},
-    $hashref->{allow_add}||0,
-    $hashref->{allow_delete_own}||1,
-    $hashref->{allow_delete_other}||0 );
+        $hashref->{shelfname},
+        $owner,
+        $hashref->{category},
+        $hashref->{sortfield},
+        $hashref->{allow_add}||0,
+        $hashref->{allow_delete_own}||1,
+        $hashref->{allow_delete_other}||0 );
     my $shelfnumber = $dbh->{'mysql_insertid'};
     return $shelfnumber;
 }
@@ -357,7 +353,7 @@ sub AddToShelf {
     my $sth = $dbh->prepare($query);
 
     $sth->execute( $shelfnumber, $biblionumber );
-    ($sth->rows) and return undef;	# already on shelf
+    ($sth->rows) and return undef; # already on shelf
     $query = qq(
         INSERT INTO virtualshelfcontents
             (shelfnumber, biblionumber, flags, borrowernumber)
@@ -414,13 +410,13 @@ sub ModShelf {
     $query= "UPDATE virtualshelves SET shelfname=?, category=?, sortfield=?, allow_add=?, allow_delete_own=?, allow_delete_other=? WHERE shelfnumber=?";
     $sth = $dbh->prepare($query);
     $sth->execute(
-    $hashref->{shelfname}||$oldrecord->{shelfname},
-    $hashref->{category}||$oldrecord->{category},
-    $hashref->{sortfield}||$oldrecord->{sortfield},
-    $hashref->{allow_add}||$oldrecord->{allow_add},
-    $hashref->{allow_delete_own}||$oldrecord->{allow_delete_own},
-    $hashref->{allow_delete_other}||$oldrecord->{allow_delete_other},
-    $shelfnumber );
+        $hashref->{shelfname}||$oldrecord->{shelfname},
+        $hashref->{category}||$oldrecord->{category},
+        $hashref->{sortfield}||$oldrecord->{sortfield},
+        $hashref->{allow_add}||$oldrecord->{allow_add},
+        $hashref->{allow_delete_own}||$oldrecord->{allow_delete_own},
+        $hashref->{allow_delete_other}||$oldrecord->{allow_delete_other},
+        $shelfnumber );
     return $@? 0: 1;
 }
 
@@ -471,23 +467,23 @@ sub ShelfPossibleAction {
 
     return 0 unless $shelf && ($shelf->{category}==2 || $shelf->{owner}==$user || $shelf->{borrowernumber}==$user);
     if($action eq 'view') {
-    #already handled in the above condition
-    return 1;
+        #already handled in the above condition
+        return 1;
     }
     elsif($action eq 'add') {
-    return 0 if $user<=0; #should be logged in
-    return 1 if $shelf->{allow_add}==1 || $shelf->{owner}==$user;
-    #owner may always add
+        return 0 if $user<=0; #should be logged in
+        return 1 if $shelf->{allow_add}==1 || $shelf->{owner}==$user;
+        #owner may always add
     }
     elsif($action eq 'delete') {
         #this answer is just diplomatic: it says that you may be able to delete
         #some items from that shelf
         #it does not answer the question about a specific biblio
         #DelFromShelf checks the situation per biblio
-    return 1 if $user>0 && ($shelf->{allow_delete_own}==1 || $shelf->{allow_delete_other}==1);
+        return 1 if $user>0 && ($shelf->{allow_delete_own}==1 || $shelf->{allow_delete_other}==1);
     }
     elsif($action eq 'manage') {
-    return 1 if $user && $shelf->{owner}==$user;
+        return 1 if $user && $shelf->{owner}==$user;
     }
     return 0;
 }
@@ -515,11 +511,11 @@ sub DelFromShelf {
         $query = qq(DELETE FROM virtualshelfcontents
             WHERE shelfnumber=? AND biblionumber=? AND borrowernumber=?);
         $sth= $dbh->prepare($query);
-    foreach my $biblionumber (@$bibref) {
+        foreach my $biblionumber (@$bibref) {
             $sth->execute($shelfnumber, $biblionumber, $user);
-        $r= $sth->rows; #Expect -1, 0 or 1 (-1 means Don't know; count as 1)
-        $t+= ($r==-1)? 1: $r;
-    }
+            $r= $sth->rows; #Expect -1, 0 or 1 (-1 means Don't know; count as 1)
+            $t+= ($r==-1)? 1: $r;
+        }
     }
     if($del_oth) {
         #includes a check if borrowernumber is null (deleted patron)
@@ -527,11 +523,11 @@ sub DelFromShelf {
             WHERE shelfnumber=? AND biblionumber=? AND
             (borrowernumber IS NULL OR borrowernumber<>?)/;
         $sth= $dbh->prepare($query);
-    foreach my $biblionumber (@$bibref) {
+        foreach my $biblionumber (@$bibref) {
             $sth->execute($shelfnumber, $biblionumber, $user);
-        $r= $sth->rows;
-        $t+= ($r==-1)? 1: $r;
-    }
+            $r= $sth->rows;
+            $t+= ($r==-1)? 1: $r;
+        }
     }
     return $t;
 }
@@ -585,12 +581,12 @@ main Koha toolbar with Lists button.
 =cut
 
 sub ShelvesMax {
-  my $which= shift;
-  return SHELVES_POPUP_MAX if $which eq 'POPUP';
-  return SHELVES_MGRPAGE_MAX if $which eq 'MGRPAGE';
-  return SHELVES_COMBO_MAX if $which eq 'COMBO';
-  return SHELVES_MASTHEAD_MAX if $which eq 'MASTHEAD';
-  return SHELVES_MASTHEAD_MAX;
+    my $which= shift;
+    return SHELVES_POPUP_MAX if $which eq 'POPUP';
+    return SHELVES_MGRPAGE_MAX if $which eq 'MGRPAGE';
+    return SHELVES_COMBO_MAX if $which eq 'COMBO';
+    return SHELVES_MASTHEAD_MAX if $which eq 'MASTHEAD';
+    return SHELVES_MASTHEAD_MAX;
 }
 
 sub HandleDelBorrower {
@@ -643,7 +639,7 @@ sub _shelf_count {
         @params= ($owner, $owner, $owner);
     }
     else {
-    $query.='WHERE category=2';
+        $query.='WHERE category=2';
         @params= ();
     }
     my $sth = $dbh->prepare($query);
@@ -657,9 +653,9 @@ sub _biblionumber_sth { #only used in obsolete sub below
     my $query = 'select biblionumber from virtualshelfcontents where shelfnumber = ?';
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare($query)
-    or die $dbh->errstr;
+        or die $dbh->errstr;
     $sth->execute( $shelf )
-    or die $sth->errstr;
+        or die $sth->errstr;
     $sth;
 }
 
@@ -667,9 +663,9 @@ sub each_biblionumbers (&$) { #OBSOLETE
     my ($code,$shelf) = @_;
     my $ref =  _biblionumber_sth($shelf)->fetchall_arrayref;
     map {
-    $_=$$_[0];
-    $code->();
-    } @$ref;
+        $_=$$_[0];
+        $code->();
+        } @$ref;
 }
 
 sub _CheckShelfName {
@@ -678,7 +674,7 @@ sub _CheckShelfName {
     my $query = qq(
         SELECT DISTINCT shelfnumber
         FROM   virtualshelves
-    LEFT JOIN virtualshelfshares sh USING (shelfnumber)
+        LEFT JOIN virtualshelfshares sh USING (shelfnumber)
         WHERE  shelfname=? AND shelfnumber<>?);
     if($cat==1) {
         $query.= ' AND (sh.borrowernumber=? OR owner=?) AND category=1';
