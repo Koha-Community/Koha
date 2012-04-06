@@ -72,12 +72,6 @@ if (not $biblios and not $authorities) {
     die $msg;
 }
 
-if ($authorities and $as_xml) {
-    my $msg = "Cannot specify both -a and -x\n";
-    $msg   .= "Please do '$0 --help' to see usage.\n";
-    die $msg;
-}
-
 if ( !$as_xml and $nosanitize ) {
     my $msg = "Cannot specify both -no_xml and -nosanitize\n";
     $msg   .= "Please do '$0 --help' to see usage.\n";
@@ -117,6 +111,9 @@ my $biblioserverdir = C4::Context->zebraconfig('biblioserver')->{directory};
 my $authorityserverdir = C4::Context->zebraconfig('authorityserver')->{directory};
 
 my $kohadir = C4::Context->config('intranetdir');
+my $bib_index_mode = C4::Context->config('zebra_bib_index_mode') || 'grs1';
+my $auth_index_mode = C4::Context->config('zebra_auth_index_mode') || 'dom';
+
 my $dbh = C4::Context->dbh;
 my ($biblionumbertagfield,$biblionumbertagsubfield) = &GetMarcFromKohaField("biblio.biblionumber","");
 my ($biblioitemnumbertagfield,$biblioitemnumbertagsubfield) = &GetMarcFromKohaField("biblioitems.biblioitemnumber","");
@@ -319,11 +316,26 @@ sub select_all_biblios {
     return $sth;
 }
 
+sub include_xml_wrapper {
+    my $as_xml = shift;
+    my $record_type = shift;
+
+    return 0 unless $as_xml;
+    return 1 if $record_type eq 'biblio' and $bib_index_mode eq 'dom';
+    return 1 if $record_type eq 'authority' and $auth_index_mode eq 'dom';
+    return 0;
+
+}
+
 sub export_marc_records_from_sth {
     my ($record_type, $sth, $directory, $as_xml, $noxml, $nosanitize) = @_;
 
     my $num_exported = 0;
     open my $fh, '>:encoding(UTF-8) ', "$directory/exported_records" or die $!;
+    if (include_xml_wrapper($as_xml, $record_type)) {
+        # include XML declaration and root element
+        print {$fh} '<?xml version="1.0" encoding="UTF-8"?><collection>';
+    }
     my $i = 0;
     my ( $itemtag, $itemsubfield ) = GetMarcFromKohaField("items.itemnumber",'');
     while (my ($record_number) = $sth->fetchrow_array) {
@@ -358,13 +370,15 @@ sub export_marc_records_from_sth {
         }
         my ($marc) = get_corrected_marc_record($record_type, $record_number, $noxml);
         if (defined $marc) {
-            # FIXME - when more than one record is exported and $as_xml is true,
-            # the output file is not valid XML - it's just multiple <record> elements
-            # strung together with no single root element.  zebraidx doesn't seem
-            # to care, though, at least if you're using the GRS-1 filter.  It does
-            # care if you're using the DOM filter, which requires valid XML file(s).
             eval {
-                print {$fh} ($as_xml) ? $marc->as_xml_record(C4::Context->preference('marcflavour')) : $marc->as_usmarc();
+                my $rec;
+                if ($as_xml) {
+                    $rec = $marc->as_xml_record(C4::Context->preference('marcflavour'));
+                    $rec =~ s!<\?xml version="1.0" encoding="UTF-8"\?>\n!!;
+                } else {
+                    $rec = $marc->as_usmarc();
+                }
+                print {$fh} $rec;
                 $num_exported++;
             };
             if ($@) {
@@ -373,6 +387,7 @@ sub export_marc_records_from_sth {
         }
     }
     print "\nRecords exported: $num_exported\n" if ( $verbose_logging );
+    print {$fh} '</collection>' if (include_xml_wrapper($as_xml, $record_type));
     close $fh;
     return $num_exported;
 }
@@ -382,6 +397,10 @@ sub export_marc_records_from_list {
 
     my $num_exported = 0;
     open my $fh, '>:encoding(UTF-8)', "$directory/exported_records" or die $!;
+    if (include_xml_wrapper($as_xml, $record_type)) {
+        # include XML declaration and root element
+        print {$fh} '<?xml version="1.0" encoding="UTF-8"?><collection>';
+    }
     my $i = 0;
 
     # Skip any deleted records. We check for this anyway, but this reduces error spam
@@ -393,16 +412,25 @@ sub export_marc_records_from_list {
         print "\r$i" unless ($i++ %100 or !$verbose_logging);
         my ($marc) = get_corrected_marc_record($record_type, $record_number, $noxml);
         if (defined $marc) {
-            # FIXME - when more than one record is exported and $as_xml is true,
-            # the output file is not valid XML - it's just multiple <record> elements
-            # strung together with no single root element.  zebraidx doesn't seem
-            # to care, though, at least if you're using the GRS-1 filter.  It does
-            # care if you're using the DOM filter, which requires valid XML file(s).
-            print {$fh} ($as_xml) ? $marc->as_xml_record(C4::Context->preference('marcflavour')) : $marc->as_usmarc();
+            eval {
+                my $rec;
+                if ($as_xml) {
+                    $rec = $marc->as_xml_record(C4::Context->preference('marcflavour'));
+                    $rec =~ s!<\?xml version="1.0" encoding="UTF-8"\?>\n!!;
+                } else {
+                    $rec = $marc->as_usmarc();
+                }
+                print {$fh} $rec;
+                $num_exported++;
+            };
+            if ($@) {
+              warn "Error exporting record $record_number ($record_type) ".($noxml ? "not XML" : "XML");
+            }
             $num_exported++;
         }
     }
     print "\nRecords exported: $num_exported\n" if ( $verbose_logging );
+    print {$fh} '</collection>' if (include_xml_wrapper($as_xml, $record_type));
     close $fh;
     return $num_exported;
 }
@@ -412,6 +440,10 @@ sub generate_deleted_marc_records {
 
     my $records_deleted = {};
     open my $fh, '>:encoding(UTF-8)', "$directory/exported_records" or die $!;
+    if (include_xml_wrapper($as_xml, $record_type)) {
+        # include XML declaration and root element
+        print {$fh} '<?xml version="1.0" encoding="UTF-8"?><collection>';
+    }
     my $i = 0;
     foreach my $record_number (map { $_->{biblio_auth_number} } @$entries ) {
         print "\r$i" unless ($i++ %100 or !$verbose_logging);
@@ -427,11 +459,19 @@ sub generate_deleted_marc_records {
             fix_unimarc_100($marc);
         }
 
-        print {$fh} ($as_xml) ? $marc->as_xml_record(C4::Context->preference("marcflavour")) : $marc->as_usmarc();
+        my $rec;
+        if ($as_xml) {
+            $rec = $marc->as_xml_record(C4::Context->preference('marcflavour'));
+            $rec =~ s!<\?xml version="1.0" encoding="UTF-8"\?>\n!!;
+        } else {
+            $rec = $marc->as_usmarc();
+        }
+        print {$fh} $rec;
 
         $records_deleted->{$record_number} = 1;
     }
     print "\nRecords exported: $i\n" if ( $verbose_logging );
+    print {$fh} '</collection>' if (include_xml_wrapper($as_xml, $record_type));
     close $fh;
     return $records_deleted;
     
