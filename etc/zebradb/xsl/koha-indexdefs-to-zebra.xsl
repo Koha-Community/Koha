@@ -23,9 +23,9 @@
 This file has been automatically generated from a Koha index definition file
 with the stylesheet koha-indexdefs-to-zebra.xsl. Do not manually edit this file,
 as it may be overwritten. To regenerate, edit the appropriate Koha index
-definition file (probably something like authority-koha-indexdefs.xml) and run:
-`xsltproc koha-indexdefs-to-zebra.xsl authority-koha-indexdefs.xml >
-authority-zebra-indexdefs.xsl` (substituting the appropriate file names).
+definition file (probably something like {biblio,authority}-koha-indexdefs.xml) and run:
+`xsltproc koha-indexdefs-to-zebra.xsl {biblio,authority}-koha-indexdefs.xml >
+{biblio,authority}-zebra-indexdefs.xsl` (substituting the appropriate file names).
 </xsl:comment>
         <xslo:stylesheet version="1.0">
             <xslo:output indent="yes" method="xml" version="1.0" encoding="UTF-8"/>
