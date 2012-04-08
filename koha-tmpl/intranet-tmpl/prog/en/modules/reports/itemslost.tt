@@ -1,12 +1,12 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Reports &rsaquo; Lost Items</title>
+<title>Koha &rsaquo; Reports &rsaquo; Lost items</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="rep_itemslost" class="rep">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a>[% IF ( get_items ) %] &rsaquo; <a href="/cgi-bin/koha/reports/itemslost.pl">Lost Items</a> &rsaquo; Results[% ELSE %] &rsaquo; Lost Items[% END %]</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a>[% IF ( get_items ) %] &rsaquo; <a href="/cgi-bin/koha/reports/itemslost.pl">Lost Items</a> &rsaquo; Results[% ELSE %] &rsaquo; Lost items[% END %]</div>
 
 <div id="doc3" class="yui-t2">
    
@@ -14,7 +14,7 @@
 	<div id="yui-main">
 	<div class="yui-b">
 
-<h1>Lost Items</h1>
+<h1>Lost items</h1>
 
 [% IF ( get_items ) %]
 
@@ -30,13 +30,13 @@
     <tr>
         <th>Title</th>
         <th>Author</th>
-        <th>Lost Code</th>
+        <th>Lost code</th>
         <th>Barcode</th>
         <th>Date last seen</th>
         <th>Price</th>
-        <th>Rep.Price</th>
+        <th>Rep.price</th>
         <th>Library</th>
-        <th>Itemtype</th>
+        <th>Item type</th>
         <th>Current location</th>
         <th>Location</th>
         <th>Notes</th>
@@ -76,12 +76,12 @@
         <option value="title">Title</option>
         <option value="author">Author</option>
         <option value="homebranch">Home library</option>
-        <option value="itype">Itemtypes</option>
+        <option value="itype">Item types</option>
         <option value="barcode">Barcode</option>
         <option value="price">Price</option>
-        <option value="replacementprice">Replacement Price</option>
-        <option value="lib">Lost Code</option>
-        <option value="datelastseen">Date Last Seen</option>
+        <option value="replacementprice">Replacement price</option>
+        <option value="lib">Lost code</option>
+        <option value="datelastseen">Date last seen</option>
         <option value="location">Location</option>
     </select></li>
 	
@@ -95,7 +95,7 @@
 				[% END %]
             [% END %]
             </select></li>
-	<li><label for="itemtypesfilter">Item Type: </label><select name="itemtypesfilter" id="itemtypesfilter">
+    <li><label for="itemtypesfilter">Item type: </label><select name="itemtypesfilter" id="itemtypesfilter">
                 <option value="">All</option>
                 [% FOREACH itemtypeloo IN itemtypeloop %]
                 [% IF ( itemtypeloo.selected ) %]<option value="[% itemtypeloo.value %]" selected="selected">[% itemtypeloo.description %]</option>
@@ -105,7 +105,7 @@
                 [% END %]
             </select></li>
 
-	<li><label for="loststatusfilter">Lost Status: </label><select name="loststatusfilter" id="loststatusfilter">
+    <li><label for="loststatusfilter">Lost status: </label><select name="loststatusfilter" id="loststatusfilter">
                 <option value="">All</option>
                 [% FOREACH loststatusloo IN loststatusloop %]
                 [% IF ( loststatusloo.selected ) %]<option value="[% loststatusloo.authorised_value %]" selected="selected">[% loststatusloo.lib %]</option>

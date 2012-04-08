@@ -1,5 +1,5 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Reports &rsaquo; Guided Reports &rsaquo; Dictionary</title>
+<title>Koha &rsaquo; Reports &rsaquo; Guided reports &rsaquo; Dictionary</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
 <style type="text/css">fieldset.rows table { clear: none; margin: 0;}</style>
@@ -8,7 +8,7 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'circ-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a> &rsaquo; <a href="/cgi-bin/koha/reports/guided_reports.pl">Guided Reports Wizard</a> 
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a> &rsaquo; <a href="/cgi-bin/koha/reports/guided_reports.pl">Guided reports wizard</a>
 [% IF ( new_dictionary ) %] &rsaquo; <a href="/cgi-bin/koha/reports/dictionary.pl">Dictionary</a> &rsaquo; <strong>Name the new definition</strong>
 [% ELSIF ( step_2 ) %] &rsaquo; <a href="/cgi-bin/koha/reports/dictionary.pl">Dictionary</a> &rsaquo; <strong>Step 2: Choose the area </strong> 
 [% ELSIF ( step_3 ) %] &rsaquo; <a href="/cgi-bin/koha/reports/dictionary.pl">Dictionary</a> &rsaquo; <strong>Step 3: Choose columns </strong> 
@@ -29,9 +29,9 @@
 	<p>Use the dictionary to define custom criteria for reporting.</p>
 
 		[% IF ( definitions ) %]
-		<h2>Current Terms</h2>
+        <h2>Current terms</h2>
 		<form action="/cgi-bin/koha/reports/dictionary.pl" method="post">
-		<input type="hidden" name="phase" value="View Dictionary" />
+        <input type="hidden" name="phase" value="View dictionary" />
 		[% IF ( areas ) %]
 			Filter by area <select name="areas">
 			<option value="">All</option>
@@ -77,30 +77,30 @@
 [% END %]
 
 [% IF ( new_dictionary ) %]
-<h3>Add New Definition</h3>
+<h3>Add new definition</h3>
 <form action="/cgi-bin/koha/reports/dictionary.pl" method="post">
 <fieldset class="rows"><legend>Step 1 of 5: Name the new definition</legend><ol>
 <li>
-<label for="definition_name">Definition Name:</label>
+<label for="definition_name">Definition name:</label>
 <input type="text" id="definition_name" name="definition_name" />
 </li>
 <li>
-<label for="definition_description">Definition Description:</label>
+<label for="definition_description">Definition description:</label>
 <textarea name="definition_description" id="definition_description" rows="3" cols="20"></textarea>
 </li>
 </ol></fieldset>
-																													  
+
 <fieldset class="action"><input type="hidden" name="phase" value="New Term step 2" />
 <input name="submit" value="Next" type="submit" /></fieldset>
 </form>
 [% END %]
 
 [% IF ( step_2 ) %]
-<h3>Add New Definition</h3>
+<h3>Add new definition</h3>
 <form action="/cgi-bin/koha/reports/dictionary.pl" method="post">
 <fieldset class="rows">
 <legend>Step 2 of 5: Choose the area</legend>
-<ol><li><input type="hidden" name="phase" value="New Term step 3" />
+<ol><li><input type="hidden" name="phase" value="New term step 3" />
 <input type="hidden" name="definition_name" value="[% definition_name %]" />
 <input type="hidden" name="definition_description" value="[% definition_description %]" />
 <label for="areas">Select table </label><select name="areas" id="areas">
@@ -115,7 +115,7 @@
 [% END %]
 
 [% IF ( step_3 ) %]
-<h3>Add New Definition</h3>
+<h3>Add new definition</h3>
 <form action="/cgi-bin/koha/reports/dictionary.pl" method="post">      
 <fieldset class="rows">
 <legend>Step 3 of 5: Choose columns</legend>
@@ -149,14 +149,14 @@
 
 <td style="border: 0;"><select id="selectedColumns" name="columns" size="25" style="width:200px;height:300px;"></select>     </td>   </tr></table>     
 
-<input type="hidden" name="phase" value="New Term step 4" />
+<input type="hidden" name="phase" value="New term step 4" />
 </fieldset>
 <fieldset class="action"><input type="submit" name="submit" value="Next" /></fieldset>
 </form>
 [% END %]
 
 [% IF ( step_4 ) %]
-<h3>Add New Definition</h3>
+<h3>Add new definition</h3>
 <form action="/cgi-bin/koha/reports/dictionary.pl" method="post">
 <fieldset class="rows">
 <legend>Step 4 of 5: Specify a value</legend>
@@ -223,7 +223,7 @@
 
 [% END %]
 </ol>
-<input type="hidden" name="phase" value="New Term step 5" />
+<input type="hidden" name="phase" value="New term step 5" />
 </fieldset>
 <fieldset class="action">
 <input type="submit" name="submit" value="Next" />
@@ -238,7 +238,7 @@
 <input type="hidden" name="definition_description" value="[% definition_description %]" />
 <input type="hidden" name="columnstring" value="[% columnstring %]" />
 
-<h3>Add New Definition</h3>
+<h3>Add new definition</h3>
 
 <fieldset class="rows">
 <legend>Step 5 of 5: Confirm details</legend>

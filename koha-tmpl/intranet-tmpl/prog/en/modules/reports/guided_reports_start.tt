@@ -1,14 +1,14 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Reports &rsaquo; Guided Reports Wizard 
+<title>Koha &rsaquo; Reports &rsaquo; Guided reports wizard
 [% IF ( saved1 ) %]&rsaquo; Saved Reports
 [% ELSIF ( create ) %]&rsaquo; Create from SQL
-[% ELSIF ( showsql ) %]&rsaquo; Saved Reports &rsaquo; SQL View
-[% ELSIF ( execute ) %]&rsaquo; Saved Reports &rsaquo; [% name %] Report
-[% ELSIF ( buildx ) %]&rsaquo; Build A Report, Step [% buildx %] of 6:
-[% IF ( build1 ) %]Choose a Module
-[% ELSIF ( build2 ) %]Pick a Report Type
-[% ELSIF ( build3 ) %]Select Columns for Display
-[% ELSIF ( build4 ) %]Select Criteria to Limit on
+[% ELSIF ( showsql ) %]&rsaquo; Saved reports &rsaquo; SQL view
+[% ELSIF ( execute ) %]&rsaquo; Saved reports &rsaquo; [% name %] Report
+[% ELSIF ( buildx ) %]&rsaquo; Build a report, step [% buildx %] of 6:
+[% IF ( build1 ) %]Choose a module
+[% ELSIF ( build2 ) %]Pick a report type
+[% ELSIF ( build3 ) %]Select columns for display
+[% ELSIF ( build4 ) %]Select criteria to limit on
 [% ELSIF ( build5 ) %]Pick which columns to total
 [% ELSIF ( build6 ) %]Select how you want the report ordered
 [% END %]
@@ -66,17 +66,17 @@ $(document).ready(function(){
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a>
 &rsaquo; <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a>
-&rsaquo; <a href="/cgi-bin/koha/reports/guided_reports.pl">Guided Reports Wizard</a>
+&rsaquo; <a href="/cgi-bin/koha/reports/guided_reports.pl">Guided reports wizard</a>
 &rsaquo; 
-[% IF ( saved1 ) %]Saved Reports
+[% IF ( saved1 ) %]Saved reports
 [% ELSIF ( create ) %]Create from SQL
-[% ELSIF ( showsql ) %]<a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved">Saved Reports</a> &rsaquo; SQL View
-[% ELSIF ( execute ) %]<a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved">Saved Reports</a> &rsaquo; <em>[% name %]</em> Report
-[% ELSIF ( buildx ) %]<a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Build%20new">Build A Report</a> &rsaquo; Step [% buildx %] of 6:
-    [% IF ( build1 ) %]Choose a Module
-    [% ELSIF ( build2 ) %]Pick a Report Type
-    [% ELSIF ( build3 ) %]Select Columns for Display
-    [% ELSIF ( build4 ) %]Select Criteria to Limit on
+[% ELSIF ( showsql ) %]<a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved">Saved reports</a> &rsaquo; SQL view
+[% ELSIF ( execute ) %]<a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved">Saved reports</a> &rsaquo; <em>[% name %]</em> Report
+[% ELSIF ( buildx ) %]<a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Build%20new">Build a report</a> &rsaquo; Step [% buildx %] of 6:
+    [% IF ( build1 ) %]Choose a module
+    [% ELSIF ( build2 ) %]Pick a report type
+    [% ELSIF ( build3 ) %]Select columns for display
+    [% ELSIF ( build4 ) %]Select criteria to limit on
     [% ELSIF ( build5 ) %]Pick which columns to total
     [% ELSIF ( build6 ) %]Select how you want the report ordered
     [% END %]
@@ -90,12 +90,12 @@ $(document).ready(function(){
     [% INCLUDE "reports-toolbar.inc" %]
 
 [% IF ( start ) %]
-    <h2>Guided Reports</h2>
+    <h2>Guided reports</h2>
     <p>Use the guided reports engine to create non standard reports.
 This feature aims to provide some middle ground between the built in
 canned reports and writing custom SQL reports.</p>
 
-    <h3>Build And Run Reports</h3>
+    <h3>Build and run reports</h3>
         [% IF ( CAN_user_reports_create_reports ) %]
         <form action="/cgi-bin/koha/reports/guided_reports.pl">
             <input type="hidden" name="phase" value="Build new" />
@@ -117,13 +117,13 @@ canned reports and writing custom SQL reports.</p>
 <h3>Reports Dictionary</h3>
 <p>Use the reports dictionary to define custom criteria to use in your reports</p>
 <form action="/cgi-bin/koha/reports/dictionary.pl">
-<input type="hidden" name="phase" value="View Dictionary"/>
-<input type="submit" name="submit" value="View Dictionary"/>
+<input type="hidden" name="phase" value="View dictionary"/>
+<input type="submit" name="submit" value="View dictionary"/>
 </form>
 [% END %]
 
 [% IF ( saved1 ) %]
-[% IF ( savedreports ) %]<h1>Saved Reports</h1>
+[% IF ( savedreports ) %]<h1>Saved reports</h1>
 
 <div id="pagertable_reports">
 [% INCLUDE 'table-pager.inc' perpage='20' %]
@@ -133,12 +133,12 @@ canned reports and writing custom SQL reports.</p>
 <thead>
  <tr>
   <th>ID</th>
-  <th>Report Name</th>
+  <th>Report name</th>
   <th>Type</th>
   <th>Notes</th>
   <th>Author</th>
-  <th>Creation Date</th>
-  <th>Saved Results</th>
+  <th>Creation date</th>
+  <th>Saved results</th>
   <th>Saved SQL</th>
   <th>&nbsp;</th>
   <th>&nbsp;</th>
@@ -199,10 +199,10 @@ canned reports and writing custom SQL reports.</p>
 
 
 [% IF ( build1 ) %]
-<h1>Build A Report</h1>
+<h1>Build a report</h1>
 <form action="/cgi-bin/koha/reports/guided_reports.pl">
 <fieldset class="rows">
-<legend>Step 1 of 6: Choose a Module to Report on</legend>
+<legend>Step 1 of 6: Choose a module to report on</legend>
 <ol><li><label for="areas">Choose: </label><select name="areas" id="areas">
 [% FOREACH area IN areas %]
 <option value="[% area.id %]">[% area.name %]</option>
@@ -222,7 +222,7 @@ canned reports and writing custom SQL reports.</p>
 <h1>Build A Report</h1>
 <form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
 <input type="hidden" name="area" value="[% area %]" />
-<fieldset class="rows"><legend>Step 2 of 6: Pick a Report Type</legend>
+<fieldset class="rows"><legend>Step 2 of 6: Pick a report type</legend>
 <ol><li><label for="types">Choose: </label>
     <select id="types" name="types">
         <option value="1">Tabular</option>
@@ -249,7 +249,7 @@ canned reports and writing custom SQL reports.</p>
 [% END %]
 
 [% IF ( build3 ) %]
-<h3>Step 3 of 6: Select Columns for Display</h3>
+<h3>Step 3 of 6: Select columns for display</h3>
 <p>Note: Be careful selecting when selecting columns. If your choice is too broad it could result in a very large report that will either not complete, or slow your system down.</p>
 
 <form id="column_submit" action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
@@ -303,7 +303,7 @@ canned reports and writing custom SQL reports.</p>
     <input type="hidden" name="area" value="[% area %]" />
     <input type="hidden" name="type" value="[% type %]" />
     <input type="hidden" name="column" value="[% column %]" />
-    <fieldset><legend>Step 4 of 6: Select Criteria to Limit on</legend>
+    <fieldset><legend>Step 4 of 6: Select criteria to limit on</legend>
     <table>
         [% FOREACH criteri IN criteria %]
         <tr>
@@ -314,7 +314,7 @@ canned reports and writing custom SQL reports.</p>
         [% IF ( criteri.date ) %]
         <td>
             <input type="text" size="10" id="[% criteri.name %]_value" name="[% criteri.name %]_value" value="" />
-            <img src="[% themelang %]/lib/calendar/cal.gif" id="buttonfrom[% criteri.name %]" style="cursor: pointer;" alt="Show Calendar" title="Show Calendar" />                 
+            <img src="[% themelang %]/lib/calendar/cal.gif" id="buttonfrom[% criteri.name %]" style="cursor: pointer;" alt="Show calendar" title="Show calendar" />
             <script type="text/javascript">   
             Calendar.setup({  
             inputField     : "[% criteri.name %]_value",
@@ -337,7 +337,7 @@ canned reports and writing custom SQL reports.</p>
             [% IF ( criteri.daterange ) %]
             <td>from 
             <input type="text" size="10" id="from_[% criteri.name %]_value" name="from_[% criteri.name %]_value" value="" />
-            <img src="[% themelang %]/lib/calendar/cal.gif" id="buttonfromfrom_[% criteri.name %]" style="cursor: pointer;" alt="Show Calendar" title="Show Calendar" />                 
+            <img src="[% themelang %]/lib/calendar/cal.gif" id="buttonfromfrom_[% criteri.name %]" style="cursor: pointer;" alt="Show calendar" title="Show calendar" />
             <script type="text/javascript">   
                 Calendar.setup({  
                 inputField     : "from_[% criteri.name %]_value",
@@ -348,7 +348,7 @@ canned reports and writing custom SQL reports.</p>
             </script>         
             to
             <input type="text" size="10" id="to_[% criteri.name %]_value" name="to_[% criteri.name %]_value" value="" />
-            <img src="[% themelang %]/lib/calendar/cal.gif" id="buttonfromto_[% criteri.name %]" style="cursor: pointer;" alt="Show Calendar" title="Show Calendar" />                 
+            <img src="[% themelang %]/lib/calendar/cal.gif" id="buttonfromto_[% criteri.name %]" style="cursor: pointer;" alt="Show calendar" title="Show calendar" />
             <script type="text/javascript">   
                 Calendar.setup({  
                 inputField     : "to_[% criteri.name %]_value",
@@ -377,7 +377,7 @@ canned reports and writing custom SQL reports.</p>
     </fieldset>
 
 [% IF ( definitions ) %]
-<fieldset><legend>Dictionary Definitions</legend><table>
+<fieldset><legend>Dictionary definitions</legend><table>
 [% FOREACH definition IN definitions %]
     <tr><td><input type="checkbox" name="definition" value="[% definition.id %]" /> [% definition.name %]</td></tr>
 [% END %]
@@ -413,7 +413,7 @@ canned reports and writing custom SQL reports.</p>
 [% END %]
 </table></fieldset>
 
-<fieldset class="action"><input type="hidden" name="phase" value="Choose These Operations" />
+<fieldset class="action"><input type="hidden" name="phase" value="Choose these operations" />
     <input type="button" name="back" value="&lt;&lt; Back" onclick="javascript:history.back()" />
     <input type="submit" name="submit" value="Next &gt;&gt;" /></fieldset>
 </form>
@@ -443,14 +443,14 @@ canned reports and writing custom SQL reports.</p>
 </table></fieldset>
 
 <fieldset class="action">
-<input type="hidden" name="phase" value="Build Report" />
+<input type="hidden" name="phase" value="Build report" />
 <input type="submit" name="submit" value="Finish" /></fieldset>
 </form>
 [% END %]
 
 
 [% IF ( showreport ) %]
-<h1>Confirm Custom Report</h1>
+<h1>Confirm custom report</h1>
 <p>Your report will be generated with the following SQL statement.</p>
 <p> 
 [% sql |html %]
@@ -470,13 +470,13 @@ canned reports and writing custom SQL reports.</p>
 <input type="hidden" name="sql" value="[% sql |html %]" />
 <input type="hidden" name="type" value="[% type %]" />
 <fieldset class="rows">
-<legend>Save Your Custom Report</legend>
+<legend>Save your custom report</legend>
 <ol>
-    <li><label for="reportname">Report Name: </label><input type="text" id="reportname" name="reportname" /></li>
+    <li><label for="reportname">Report name: </label><input type="text" id="reportname" name="reportname" /></li>
     <li><label for="notes">Notes:</label> <textarea name="notes" id="notes"></textarea></li>
 </ol></fieldset>
-<fieldset class="action"><input type="hidden" name="phase" value="Save Report" />
-<input type="submit" name="submit" value="Save Report" /></fieldset>
+<fieldset class="action"><input type="hidden" name="phase" value="Save report" />
+<input type="submit" name="submit" value="Save report" /></fieldset>
 </form>
 [% END %]
 
@@ -490,7 +490,7 @@ canned reports and writing custom SQL reports.</p>
             [% IF sql_param.input == 'date' %]
                 <p>
                 [% sql_param.entry %]: <input id="date_[% sql_param_entry %]" type="text" value="" size="10" name="sql_params">
-                <img id="date_picker_[% sql_param_entry %]" alt="Show Calendar" src="/intranet-tmpl/prog/en/lib/calendar/cal.gif">
+                <img id="date_picker_[% sql_param_entry %]" alt="Show calendar" src="/intranet-tmpl/prog/en/lib/calendar/cal.gif">
                 <script type="text/javascript">
                       Calendar.setup( {
                          inputField : "date_[% sql_param_entry %]",
@@ -526,8 +526,8 @@ canned reports and writing custom SQL reports.</p>
 <fieldset class="action">
 <label for="format">Download the report: </label>
 <select name="format" id="format">
-<option value="csv">Comma Separated Text</option>
-<option value="tab">Tab Separated Text</option>
+<option value="csv">Comma separated text</option>
+<option value="tab">Tab separated text</option>
 </select>
 <input type="hidden" name="sql" value="[% sql |html %]" />
 <input type="hidden" name="phase" value="Export" />
@@ -539,9 +539,9 @@ canned reports and writing custom SQL reports.</p>
 [% IF ( create ) %]
 <form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
 <fieldset class="rows">
-<legend>Create Report From SQL</legend>
+<legend>Create report from SQL</legend>
 <ol>
-    <li><label for="reportname">Report Name:</label> 
+    <li><label for="reportname">Report name:</label>
         [% IF ( reportname ) %]<input type="text" id="reportname" name="reportname" value="[% reportname %]" />
         [% ELSE %]<input type="text" id="reportname" name="reportname" />[% END %] 
     </li>
@@ -562,7 +562,7 @@ canned reports and writing custom SQL reports.</p>
 </div>
 </fieldset>
 
-<fieldset class="action"><input type="hidden" name="phase" value="Save Report" />
+<fieldset class="action"><input type="hidden" name="phase" value="Save report" />
 <input type="submit" name="submit" value="Save Report" /> <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved" class="cancel">Cancel</a>
 </fieldset>
 </form>
@@ -582,8 +582,8 @@ Sub report:<select name="subreport">
 [% END %]
 </select>
 <br />
-<input type="hidden" name="phase" value="Save Compound" />
-<input type="submit" name="submit" value="Save Compound" />
+<input type="hidden" name="phase" value="Save compound" />
+<input type="submit" name="submit" value="Save compound" />
 </form>
 [% END %]
 
@@ -594,7 +594,7 @@ Sub report:<select name="subreport">
 
 
 [% IF ( retresults ) %]
-<h1>Saved Report Results</h1>
+<h1>Saved report results</h1>
 <h2>[% name %]</h2>
 <p>[% notes %]</p>
 <table>
@@ -621,7 +621,7 @@ Sub report:<select name="subreport">
 <fieldset class="rows">
 <legend>Edit SQL report</legend>
 <ol>
-<li><label for="reportname">Report Name:</label><input type="text" id="reportname" name="reportname" value="[% reportname %]" size="50" /></li>
+<li><label for="reportname">Report name:</label><input type="text" id="reportname" name="reportname" value="[% reportname %]" size="50" /></li>
 <li><label for="notes">Notes:</label><textarea id="notes" name="notes" cols="50" rows="2">[% notes %]</textarea></li>
 <li><textarea id="sql" name="sql" rows="10" cols="60">[% sql %]</textarea></li>
 </ol>
@@ -643,9 +643,9 @@ Sub report:<select name="subreport">
     [% IF ( id ) %]
     <li><a href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% id %]&amp;phase=Run%20this%20report">Run this report</a></li>
     [% END %]
-    <li>Access this report from the: <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved">Saved Reports Page</a></li>
-    <li>Schedule this report to run using the: <a href="/cgi-bin/koha/tools/scheduler.pl">Scheduler Tool</a></li>
-    <li>Return to: <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved">Guided Reports</a></li>
+    <li>Access this report from the: <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved">Saved reports page</a></li>
+    <li>Schedule this report to run using the: <a href="/cgi-bin/koha/tools/scheduler.pl">Scheduler tool</a></li>
+    <li>Return to: <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved">Guided reports</a></li>
 </ul>
 [% END %]
 [% END %]
@@ -664,7 +664,7 @@ Sub report:<select name="subreport">
 [% END %]
 </div>
 <fieldset class="action"><input type="hidden" name="phase" value="Use saved" />
-<input type="submit" name="submit" value="Saved Reports" /></fieldset>
+<input type="submit" name="submit" value="Saved reports" /></fieldset>
 </form>
 [% END %]
 
@@ -681,7 +681,7 @@ Sub report:<select name="subreport">
   <h3>Filter</h3>
   <ol>
     <li><label for="filter_date">Date:
-  <img src="[% themelang %]/lib/calendar/cal.gif" id="datedueto_button" alt="Show Calendar" /></label> <input type="text" id="filter_date" name="filter_date" size="10" value="[% filter_date %]" />
+  <img src="[% themelang %]/lib/calendar/cal.gif" id="datedueto_button" alt="Show calendar" /></label> <input type="text" id="filter_date" name="filter_date" size="10" value="[% filter_date %]" />
     <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
     <script type="text/javascript">
         Calendar.setup(

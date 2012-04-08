@@ -1,5 +1,5 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Reports [% IF ( do_it ) %]&rsaquo; Acquisitions Statistics &rsaquo; Results[% ELSE %]&rsaquo; Acquisitions Statistics[% END %]</title>
+<title>Koha &rsaquo; Reports [% IF ( do_it ) %]&rsaquo; Acquisitions statistics &rsaquo; Results[% ELSE %]&rsaquo; Acquisitions statistics[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
 </head>
@@ -7,7 +7,7 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a> [% IF ( do_it ) %]&rsaquo; <a href="/cgi-bin/koha/reports/acquisitions_stats.pl">Acquisitions Statistics</a> &rsaquo; Results[% ELSE %] &rsaquo; Acquisitions Statistics [% END %]</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a> [% IF ( do_it ) %]&rsaquo; <a href="/cgi-bin/koha/reports/acquisitions_stats.pl">Acquisitions statistics</a> &rsaquo; Results[% ELSE %] &rsaquo; Acquisitions statistics [% END %]</div>
 
 <div id="doc3" class="yui-t2">
 
@@ -75,11 +75,11 @@
 		</thead>
 		<tbody>
 			<tr class="hilighted">
-				<td>Placed On</td>
+                <td>Placed on</td>
 				<td><input type="radio" name="Line" value="aqbasket.closedate" /></td>
 				<td><input type="radio" checked="checked" name="Column" value="aqbasket.closedate" /> </td>
 				<td> From <input type="text" size="10" id="from" name="Filter" value="" />
-							<img src="[% themelang %]/lib/calendar/cal.gif" alt="Show Calendar" border="0" id="openCalendarFrom" style="cursor: pointer;" />
+                            <img src="[% themelang %]/lib/calendar/cal.gif" alt="Show calendar" border="0" id="openCalendarFrom" style="cursor: pointer;" />
 									<script type="text/javascript">
 									//<![CDATA[
 									function validate1(date) {
@@ -157,7 +157,7 @@
 				<td>&nbsp;</td>
 			</tr>
 			<tr>
-				<td>Received On</td>
+                <td>Received on</td>
 				<td><input type="radio" name="Line" value="aqorders.datereceived" /></td>
 				<td><input type="radio" name="Column" value="aqorders.datereceived" /></td>
 				<td> From <input type="text" size="10" id="fromRO" name="Filter" value="" />

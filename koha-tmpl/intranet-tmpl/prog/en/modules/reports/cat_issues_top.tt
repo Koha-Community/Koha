@@ -1,5 +1,5 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Reports &rsaquo; Most-Circulated Items[% IF ( do_it ) %] &rsaquo; Results[% END %]</title>
+<title>Koha &rsaquo; Reports &rsaquo; Most-circulated items[% IF ( do_it ) %] &rsaquo; Results[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
 [% IF ( do_it ) %]
@@ -14,7 +14,7 @@ function Dopop(link) {
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a> &rsaquo; [% IF ( do_it ) %]<a href="/cgi-bin/koha/reports/cat_issues_top.pl">Most-Circulated Items</a> &rsaquo; Results[% ELSE %]Most-Circulated Items[% END %]</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a> &rsaquo; [% IF ( do_it ) %]<a href="/cgi-bin/koha/reports/cat_issues_top.pl">Most-circulated items</a> &rsaquo; Results[% ELSE %]Most-Circulated Items[% END %]</div>
 
 <div id="doc3" class="yui-t2">
    
@@ -25,7 +25,7 @@ function Dopop(link) {
 [% IF ( do_it ) %]
 
 	[% FOREACH mainloo IN mainloop %]
-		<h1>Top [% mainloo.limit %] Most-Circulated Items</h1>
+        <h1>Top [% mainloo.limit %] Most-circulated items</h1>
 		[% IF ( mainloo.loopfilter ) %]
 			<p>Filtered on</p>
 			[% FOREACH loopfilte IN mainloo.loopfilter %]
@@ -42,7 +42,7 @@ function Dopop(link) {
 				<th>&nbsp;</th>
 				[% FOREACH loopco IN mainloo.loopcol %]
 					<th>Item</th>
-					<th>Count of Checkouts</th>
+                    <th>Count of checkouts</th>
 				[% END %]
 			  </tr>
 				[% FOREACH loopro IN mainloo.looprow %]
@@ -72,7 +72,7 @@ function Dopop(link) {
 		</table>
 	[% END %]
 [% ELSE %]
-	<h1>Most-Circulated Items</h1>
+    <h1>Most-circulated items</h1>
 	<form method="post" action="/cgi-bin/koha/reports/cat_issues_top.pl">
 	<fieldset class="rows">
 	<ol>
@@ -193,20 +193,20 @@ function Dopop(link) {
 								);
 							</script> <span class="hint">[% INCLUDE 'date-format.inc' %]</span></li>
 				<li><label for="branch">Library: </label>
-<select name="Filter" id="branch"><option value="" > Any Library</option>
+<select name="Filter" id="branch"><option value="" > Any library</option>
     [% FOREACH branchloo IN branchloop %]
         <option value="[% branchloo.value %]" >[% branchloo.branchname %] </option>  
      [% END %] 
     </select>     </li>
       <li> 
-        <label for="documenttype">Item Type: </label><select name="Filter" id="documenttype"><option value="" > Any item type</option>
+        <label for="documenttype">Item type: </label><select name="Filter" id="documenttype"><option value="" > Any item type</option>
     [% FOREACH itemtypeloo IN itemtypeloop %]
         <option value="[% itemtypeloo.value %]" >[% itemtypeloo.description %] </option>  
      [% END %] 
     </select>
       </li>
       <li> 
-        <label for="patroncategory">Patron Category: </label><select name="Filter" id="patroncategory"><option value="" > Any Category code</option>
+        <label for="patroncategory">Patron category: </label><select name="Filter" id="patroncategory"><option value="" > Any Category code</option>
     [% FOREACH borcatloo IN borcatloop %]
         <option value="[% borcatloo.value %]" >[% borcatloo.description %] </option>  
      [% END %] 

@@ -1,5 +1,5 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Reports &rsaquo; Patrons with No Checkouts</title>
+<title>Koha &rsaquo; Reports &rsaquo; Patrons with no checkouts</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
 </head>
@@ -7,7 +7,7 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a> &rsaquo; Patrons with No Checkouts</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a> &rsaquo; Patrons with no checkouts</div>
 
 <div id="doc3" class="yui-t2">
    
@@ -17,7 +17,7 @@
 
 [% IF ( do_it ) %]
     [% FOREACH mainloo IN mainloop %]
-        <h1>Patrons with no Checkouts</h1>
+        <h1>Patrons with no checkouts</h1>
         [% IF ( mainloo.loopfilter ) %]
             <p>Filtered on</p>
             [% FOREACH loopfilte IN mainloo.loopfilter %]
@@ -48,11 +48,11 @@
         </table>
     [% END %]
 [% ELSE %]
-    <h1>Patrons with no Checkouts</h1>
+    <h1>Patrons with no checkouts</h1>
     <form method="post" action="/cgi-bin/koha/reports/borrowers_out.pl">
     <fieldset class="rows">
 		<ol>
-			<li><label for="patroncategory">Patron category: </label> <select name="Filter" id="patroncategory"><option value="" > Any Category code</option>
+            <li><label for="patroncategory">Patron category: </label> <select name="Filter" id="patroncategory"><option value="" > Any category code</option>
     [% FOREACH borcatloo IN borcatloop %]
         <option value="[% borcatloo.value %]" >[% borcatloo.description %] </option>  
      [% END %] 
@@ -88,7 +88,7 @@
                     </select></li>
 			<li><label for="criteria">By: </label><select name="Criteria" id="criteria">
                         <option value ="" selected="selected">None</option>
-                        <option value ="categorycode">Patron Category</option>
+                        <option value ="categorycode">Patron category</option>
                         <option value ="branchcode">Library</option>
                     </select></li>
 		</ol>
