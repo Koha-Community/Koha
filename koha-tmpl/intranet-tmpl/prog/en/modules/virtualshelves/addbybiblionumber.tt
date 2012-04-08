@@ -1,5 +1,5 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Add to List</title>
+<title>Koha &rsaquo; Add to list</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <style type="text/css">
    #custom-doc { width:34.62em;*width:33.78em;min-width:450px; margin:auto; margin-top: .4em;text-align:left; }
@@ -9,7 +9,7 @@
 
 [% UNLESS (authorized) %]
     <p align="center">
-        [% IF (errcode==1) %]Could not make new shelf. Please check the name.<br/>[% END %]
+        [% IF (errcode==1) %]Could not create a new list. Please check the name.<br/>[% END %]
         [% IF (errcode==2) %]Sorry, you do not have permission to add items to this list.<br/>[% END %]
         <a href="javascript:self.close();">Close this window.</a>
     </p>
@@ -44,14 +44,14 @@
 		<label>Choose list</label>
 		<select name="shelfnumber" id="shelfnumber">
 		[% IF ( privatevirtualshelves ) %]
-		<optgroup label="Private Lists">
+        <optgroup label="Private lists">
 		[% FOREACH privatevirtualshelve IN privatevirtualshelves %]
 		<option value="[% privatevirtualshelve.shelfnumber %]">[% privatevirtualshelve.shelfname %]</option>
 		[% END %]
 		</optgroup>
 		[% END %]
 		[% IF ( publicvirtualshelves ) %]
-		<optgroup label="Public Lists">
+        <optgroup label="Public lists">
 		[% FOREACH publicvirtualshelve IN publicvirtualshelves %]
 		<option value="[% publicvirtualshelve.shelfnumber %]">[% publicvirtualshelve.shelfname %]</option>
 		[% END %]

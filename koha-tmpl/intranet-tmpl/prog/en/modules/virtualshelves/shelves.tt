@@ -1,5 +1,5 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; [% IF ( viewshelf ) %]Lists &rsaquo; Contents of [% shelfname | html %][% ELSE %]Lists[% END %][% IF ( shelves ) %] &rsaquo; Create New List[% END %][% IF ( edit ) %] &rsaquo; Edit List [% shelfname | html %][% END %]</title>
+<title>Koha &rsaquo; [% IF ( viewshelf ) %]Lists &rsaquo; Contents of [% shelfname | html %][% ELSE %]lists[% END %][% IF ( shelves ) %] &rsaquo; Create new list[% END %][% IF ( edit ) %] &rsaquo; Edit list [% shelfname | html %][% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
 <script type="text/javascript">
@@ -9,8 +9,8 @@ var MSG_NO_ITEM_SELECTED = _("Nothing is selected.");
 
 $(document).ready(function(){
 	$("#addbarcode").focus();
-	$("span.clearall").html("<a id=\"CheckNone\" href=\"/cgi-bin/koha/shelves.pl\">"+_('Clear All')+"<\/a>");
-	$("span.checkall").html("<a id=\"CheckAll\" href=\"/cgi-bin/koha/shelves.pl\">"+_('Select All')+"<\/a>");
+    $("span.clearall").html("<a id=\"CheckNone\" href=\"/cgi-bin/koha/shelves.pl\">"+_('Clear all')+"<\/a>");
+    $("span.checkall").html("<a id=\"CheckAll\" href=\"/cgi-bin/koha/shelves.pl\">"+_('Select all')+"<\/a>");
     $("#CheckAll").click(function(){
         $(".checkboxed").checkCheckboxes();
         return false;
@@ -115,9 +115,9 @@ function placeHold () {
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/virtualshelves/shelves.pl">Lists</a> [% IF ( category1 ) %] &rsaquo; [% IF ( viewshelf || edit ) %] <a href="/cgi-bin/koha/virtualshelves/shelves.pl?display=privateshelves">Your Lists</a> [% ELSE %] Your Lists [% END %] [% ELSIF ( category2 ) %] &rsaquo; [% IF ( viewshelf ) %] <a href="/cgi-bin/koha/virtualshelves/shelves.pl?display=publicshelves">Public Lists</a> [% ELSE %] Public Lists [% END %] [% ELSIF ( showprivateshelves ) %] &rsaquo; [% IF ( viewshelf || edit ) %] <a href="/cgi-bin/koha/virtualshelves/shelves.pl?display=privateshelves">Your Lists</a> [% ELSE %] Your Lists [% END %] [% ELSIF ( showpublicshelves ) %] &rsaquo; [% IF ( viewshelf || edit ) %] <a href="/cgi-bin/koha/virtualshelves/shelves.pl?display=publicshelves">Public Lists</a> [% ELSE %] Public Lists [% END %] [% END %]
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/virtualshelves/shelves.pl">Lists</a> [% IF ( category1 ) %] &rsaquo; [% IF ( viewshelf || edit ) %] <a href="/cgi-bin/koha/virtualshelves/shelves.pl?display=privateshelves">Your lists</a> [% ELSE %] Your lists [% END %] [% ELSIF ( category2 ) %] &rsaquo; [% IF ( viewshelf ) %] <a href="/cgi-bin/koha/virtualshelves/shelves.pl?display=publicshelves">Public lists</a> [% ELSE %] Public lists [% END %] [% ELSIF ( showprivateshelves ) %] &rsaquo; [% IF ( viewshelf || edit ) %] <a href="/cgi-bin/koha/virtualshelves/shelves.pl?display=privateshelves">Your lists</a> [% ELSE %] Your lists [% END %] [% ELSIF ( showpublicshelves ) %] &rsaquo; [% IF ( viewshelf || edit ) %] <a href="/cgi-bin/koha/virtualshelves/shelves.pl?display=publicshelves">Public lists</a> [% ELSE %] Public lists [% END %] [% END %]
 
-[% IF ( viewshelf ) %]&rsaquo; Contents of <i>[% shelfname | html %]</i>[% END %][% IF ( shelves ) %] &rsaquo; Create New List[% END %][% IF ( edit ) %] &rsaquo; Edit List <i>[% shelfname | html %]</i>[% END %]</div>
+[% IF ( viewshelf ) %]&rsaquo; Contents of <i>[% shelfname | html %]</i>[% END %][% IF ( shelves ) %] &rsaquo; Create new list[% END %][% IF ( edit ) %] &rsaquo; Edit list <i>[% shelfname | html %]</i>[% END %]</div>
 
 <div id="doc" class="yui-t7">
  <div id="bd">
@@ -177,10 +177,10 @@ function placeHold () {
     <table>
             <tr>
                 [% IF ( itemsloop ) %]<th class="checkall">&nbsp;</th>[% END %]
-                [% UNLESS ( item_level_itypes ) %]<th>Item Type</th>[% END %]
+                [% UNLESS ( item_level_itypes ) %]<th>Item type</th>[% END %]
                 <th>Title</th>
                 <th>Author</th>
-                <th>Date Added</th>
+                <th>Date added</th>
                 <th>&nbsp;</th>
             </tr>
 		[% FOREACH itemsloo IN itemsloop %]
@@ -217,7 +217,7 @@ function placeHold () {
 		[% END %]<!-- /itemsloop -->
     </table><fieldset class="action">
         [% IF ( itemsloop ) %]
-            <input type="button" id="placehold" style="display:none" onclick="placeHold(); return false;" value="Place Holds" />
+            <input type="button" id="placehold" style="display:none" onclick="placeHold(); return false;" value="Place holds" />
             [% IF ( allowremovingitems ) %]<input type="submit" value="Remove selected records" onclick="return confirm(_('Are you sure you want to remove these records from the shelf?'));" />[% END %]
             <input type="submit" value="Merge selected records" onclick="return MergeItems();" />
         [% END %]
@@ -261,9 +261,9 @@ function placeHold () {
 
     [% IF ( shelves ) %]
         <input type="hidden" name="shelves" value="1" />
-        <legend>Create a new List</legend>
+        <legend>Create a new list</legend>
         <ol>
-        <li><label class="required" for="addshelf">List Name:</label><input id="addshelf" type="text" name="addshelf" size="25" /></li>
+        <li><label class="required" for="addshelf">List name:</label><input id="addshelf" type="text" name="addshelf" size="25" /></li>
         <li><span class="label">Owner: </span><input type="hidden" name="owner" id="owner" value="[% loggedinuser %]" />[% loggedinusername %]</li>
 		<li><label for="sortfield" >Sort this list by: </label>
 		<select name="sortfield" id="sortfield">
@@ -282,7 +282,7 @@ function placeHold () {
 		<input type="hidden" name="op" value="modifsave" />
         [% IF ( showprivateshelves ) %]<input type="hidden" name="display" value="privateshelves" />[% END %]
 		<input type="hidden" name="shelfnumber" value="[% shelfnumber %]" />
-		<legend>Edit List <i>[% shelfname | html %]</i></legend>
+        <legend>Edit list <i>[% shelfname | html %]</i></legend>
 		<ol>
 		<li><label for="shelfname">Name: </label><input type="text" id="shelfname" name="shelfname" size="25" value="[% shelfname |html %]" /></li>
 		<li><label for="owner">Owner: </label><input type="hidden" id="owner" name="owner" value="[% IF ( owner ) %][% ownername %][% ELSE %][% loggedinusername %][% END %]" />[% IF ( owner ) %][% ownername %][% ELSE %][% loggedinusername %][% END %]</li>
@@ -315,8 +315,8 @@ function placeHold () {
     </div>
     <div class="yui-u">
         <div class="help"><ul>
-            <li>A <b>Private</b> List is managed by you and can be seen only by you.</li>
-            <li> A <b>Public</b> List can be seen by everybody, but managed only by you.</li>
+            <li>A <b>Private</b> list is managed by you and can be seen only by you.</li>
+            <li> A <b>Public</b> list can be seen by everybody, but managed only by you.</li>
         </ul>
         </div>
     </div>
@@ -328,14 +328,14 @@ function placeHold () {
 		<div class="toptabs">
         <ul class="ui-tabs-nav">
         [% IF ( showprivateshelves ) %]
-            <li id="privateshelves_tab" class="ui-tabs-selected"><a href="/cgi-bin/koha/virtualshelves/shelves.pl?display=privateshelves">Your Lists</a></li>
+            <li id="privateshelves_tab" class="ui-tabs-selected"><a href="/cgi-bin/koha/virtualshelves/shelves.pl?display=privateshelves">Your lists</a></li>
         [% ELSE %]
-            <li id="privateshelves_tab" class=""><a href="/cgi-bin/koha/virtualshelves/shelves.pl?display=privateshelves">Your Lists</a></li>
+            <li id="privateshelves_tab" class=""><a href="/cgi-bin/koha/virtualshelves/shelves.pl?display=privateshelves">Your lists</a></li>
         [% END %]
         [% IF ( showpublicshelves ) %]
-            <li id="publicshelves_tab" class="ui-tabs-selected"><a href="/cgi-bin/koha/virtualshelves/shelves.pl?display=publicshelves">Public Lists</a></li>
+            <li id="publicshelves_tab" class="ui-tabs-selected"><a href="/cgi-bin/koha/virtualshelves/shelves.pl?display=publicshelves">Public lists</a></li>
         [% ELSE %]
-            <li id="publicshelves_tab" class=""><a href="/cgi-bin/koha/virtualshelves/shelves.pl?display=publicshelves">Public Lists</a></li>
+            <li id="publicshelves_tab" class=""><a href="/cgi-bin/koha/virtualshelves/shelves.pl?display=publicshelves">Public lists</a></li>
         [% END %]
         </ul>
         [% IF ( showprivateshelves ) %]
@@ -375,7 +375,7 @@ function placeHold () {
 					<input type="hidden" name="CONFIRM-[% shelveslooppri.confirm %]" value="1" />
 					<input type="submit" class="approve" value="Confirm" />
 					[% ELSE %]
-					<input type="submit" class="deleteshelf" onclick="return confirmDelete(_('Are you sure you want to remove this List?'));" value="Delete" />
+                    <input type="submit" class="deleteshelf" onclick="return confirmDelete(_('Are you sure you want to remove this list?'));" value="Delete" />
 					[% END %]
 				</form>
 			[% ELSE %]
@@ -423,7 +423,7 @@ function placeHold () {
 					<input type="hidden" name="CONFIRM-[% shelvesloo.confirm %]" value="1" />
 					<input type="submit" class="approve" value="Confirm" />
 					[% ELSE %]
-					<input type="submit" class="deleteshelf" onclick="return confirmDelete(_('Are you sure you want to remove this List?'));" value="Delete" />
+                    <input type="submit" class="deleteshelf" onclick="return confirmDelete(_('Are you sure you want to remove this list?'));" value="Delete" />
 					[% END %]
 				</form>
 			[% ELSE %]
