@@ -1,5 +1,5 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Borrowers &rsaquo; Create Manual Invoice</title>
+<title>Koha &rsaquo; Borrowers &rsaquo; Create manual invoice</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <script type="text/javascript">
 //<![CDATA[
@@ -55,10 +55,10 @@ type_fees['[% invoice_types_loo.authorised_value %]'] = "[% invoice_types_loo.li
 </script>
         <label for="type">Type: </label>
         <select name="type" id="type" onchange="this.form.desc.value=this.options[this.selectedIndex].value; this.form.amount.value=type_fees[this.options[this.selectedIndex].value];">
-          <option value="L">Lost Item</option>
+          <option value="L">Lost item</option>
           <option value="F">Fine</option>
-          <option value="A">Account Management Fee</option>
-          <option value="N">New Card</option>
+          <option value="A">Account management fee</option>
+          <option value="N">New card</option>
           <option value="M">Sundry</option>
           [% FOREACH invoice_types_loo IN invoice_types_loop %]
             <option value="[% invoice_types_loo.authorised_value %]">[% invoice_types_loo.authorised_value %]</option>

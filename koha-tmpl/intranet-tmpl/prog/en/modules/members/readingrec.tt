@@ -17,7 +17,7 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'patron-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>  &rsaquo; Circulation History for [% INCLUDE 'patron-title.inc' %]</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>  &rsaquo; Circulation history for [% INCLUDE 'patron-title.inc' %]</div>
 
 <div id="doc3" class="yui-t2">
    
@@ -25,7 +25,7 @@
 	<div id="yui-main">
 	<div class="yui-b">
 [% INCLUDE 'circ-toolbar.inc' %]
-<h1>Circulation History</h1>
+<h1>Circulation history</h1>
 [% IF ( loop_reading ) %]
 <form action="/cgi-bin/koha/members/readingrec.pl" method="get"><input type="hidden" name="borrowernumber" id="borrowernumber" value="[% borrowernumber %]" /></form>
 
@@ -38,13 +38,13 @@
     <th>Date</th>
 	<th>Title</th>
 	<th>Author</th>
-	<th>Call No.</th>
+    <th>Call no.</th>
 	<th>Barcode</th>
-	<th>Number of Renewals</th>
+    <th>Number of renewals</th>
 	<th>Checked out on</th>
 	<th>Checked out from</th>
-	<th>Date Due</th>
-	<th>Return Date</th>
+    <th>Date due</th>
+    <th>Return date</th>
 </thead>
 [% FOREACH loop_readin IN loop_reading %]
     [% IF ( loop_readin.returndate ) %]<tr>[% ELSE %]<tr class="onissue">[% END %]

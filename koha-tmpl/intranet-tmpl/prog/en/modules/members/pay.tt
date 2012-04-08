@@ -18,7 +18,7 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'patron-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>  &rsaquo; Pay Fines for [% borrower.firstname %] [% borrower.surname %]</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>  &rsaquo; Pay fines for [% borrower.firstname %] [% borrower.surname %]</div>
 
 <div id="doc3" class="yui-t2">
    
@@ -44,14 +44,14 @@
 <table>
 <thead>
 <tr>
-	<th>Fines &amp; Charges</th>
+    <th>Fines &amp; charges</th>
     <th>Sel</th>
 	<th>Description</th>
-	<th>Account Type</th>
+    <th>Account type</th>
 	<th>Notify id</th>
 	<th>Level</th>
 	<th>Amount</th>
-	<th>Amount Outstanding</th>
+    <th>Amount outstanding</th>
 </tr>
 </thead>
 <tfoot>
@@ -96,7 +96,7 @@
 [% IF ( account_grp.total ) %]
 <tr>
 
-    <td class="total" colspan="7">Sub Total:</td>
+    <td class="total" colspan="7">Sub total:</td>
     <td>[% account_grp.total | format('%.2f') %]</td>
 </tr>
 [% END %]
