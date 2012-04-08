@@ -1,5 +1,5 @@
     [% INCLUDE 'doc-head-open.inc' %]
-    <title>Koha &rsaquo; Tools &rsaquo; Patron Card Creator &rsaquo; Templates</title>
+    <title>Koha &rsaquo; Tools &rsaquo; Patron card creator &rsaquo; Templates</title>
     [% INCLUDE 'doc-head-close.inc' %]
     <script type="text/javascript">
         //<![CDATA[
@@ -69,9 +69,9 @@
     <div id="breadcrumbs">
         <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
         <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo;
-        <a href="/cgi-bin/koha/patroncards/home.pl">Patron Card Creator</a> &rsaquo;
-        <a href="/cgi-bin/koha/patroncards/manage.pl?card_element=template">Patron Card Templates</a> &rsaquo;
-        Edit Patron Card Template
+        <a href="/cgi-bin/koha/patroncards/home.pl">Patron card creator</a> &rsaquo;
+        <a href="/cgi-bin/koha/patroncards/manage.pl?card_element=template">Patron card templates</a> &rsaquo;
+        Edit patron card template
     </div>
     <div id="doc3" class="yui-t2">
         <div id="bd">
@@ -79,7 +79,7 @@
                 <div class="yui-b">
                     <form name="input" action="/cgi-bin/koha/patroncards/edit-template.pl" method="get">
                     <div class="yui-g">
-                        <h3>Edit Patron Card Template</h3>
+                        <h3>Edit patron card template</h3>
                         <div class="yui-u first">
                             <fieldset class="rows">
                                 <ol>
@@ -87,11 +87,11 @@
                                         <span class="label">Template ID:</span>[% IF ( template_id ) %][% template_id %][% ELSE %]N/A[% END %]
                                     </li>
                                     <li>
-                                        <label for="template_code">Template Code:</label>
+                                        <label for="template_code">Template code:</label>
                                         <input type="text" size="30" maxlength="43" name="template_code" id="template_code" value="[% template_code %]" />
                                     </li>
                                     <li>
-                                        <label for="template_desc">Template Description:</label>
+                                        <label for="template_desc">Template description:</label>
                                         <textarea cols="30" rows="3" id="template_desc" name="template_desc">[% template_desc %]</textarea>
                                     </li>
                                      <li>
@@ -111,19 +111,19 @@
                                  </select>
                              </li>
                                     <li>
-                                        <label for="page_height">Page Height:</label>
+                                        <label for="page_height">Page height:</label>
                                         <input type="text" size="4" name="page_height" id="page_height" value="[% page_height %]" />
                                     </li>
                                     <li>
-                                        <label for="page_width">Page Width:</label>
+                                        <label for="page_width">Page width:</label>
                                         <input type="text" size="4" name="page_width" id="page_width" value="[% page_width %]" />
                                     </li>
                                     <li>
-                                        <label for="card_width">Card Width:</label>
+                                        <label for="card_width">Card width:</label>
                                         <input type="text" size="4" name="card_width" id="card_width" value="[% card_width %]" />
                                     </li>
                                     <li>
-                                        <label for="card_height">Card Height:</label>
+                                        <label for="card_height">Card height:</label>
                                         <input type="text" size="4" name="card_height" id="card_height" value="[% card_height %]" />
                                     </li>
 
@@ -133,27 +133,27 @@
                         <div class="yui-u">
                             <fieldset class="rows">
                                 <ol><li>
-                                    <label for="top_margin">Top Page Margin:</label>
+                                    <label for="top_margin">Top page margin:</label>
                                     <input type="text" size="4" name="top_margin" id="top_margin" value="[% top_margin %]" />
                                 </li>
                                 <li>
-                                    <label for="left_margin">Left Page Margin:</label>
+                                    <label for="left_margin">Left page margin:</label>
                                     <input type="text" size="4" name="left_margin" id="left_margin" value="[% left_margin %]" />
                                 </li>
                                     <li>
-                                        <label for="cols">Number of Columns:</label>
+                                        <label for="cols">Number of columns:</label>
                                         <input type="text" size="4" name="cols" id="cols" value="[% cols %]" />
                                     </li>
                                     <li>
-                                        <label for="rows">Number of Rows:</label>
+                                        <label for="rows">Number of rows:</label>
                                         <input type="text" size="4" name="rows" id="rows" value="[% rows %]" />
                                     </li>
                                     <li>
-                                        <label for="col_gap">Gap between Columns:</label>
+                                        <label for="col_gap">Gap between columns:</label>
                                         <input type="text" size="4" name="col_gap" id="col_gap" value="[% col_gap %]" />
                                     </li>
                                     <li>
-                                        <label for="row_gap">Gap between Rows:</label>
+                                        <label for="row_gap">Gap between rows:</label>
                                         <input type="text" size="4" name="row_gap" id="row_gap" value="[% row_gap %]" />
                                     </li>
 
