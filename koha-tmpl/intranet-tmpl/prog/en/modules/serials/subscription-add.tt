@@ -1037,14 +1037,14 @@ $(document).ready(function() {
             </select>
         </li>
          <li>
-            <label for="callnumber">Call Number:</label>
+            <label for="callnumber">Call number:</label>
             <input type="text" name="callnumber" id="callnumber" value="[% callnumber %]" size="20" />
         </li>
         <li>
             <label for="graceperiod">Grace period:</label> <input type="text" name="graceperiod" id="graceperiod" value="[% graceperiod %]" size="5"/> day(s)
         </li>
         <li>
-            <label for="notes">Public note:</label>
+            <label for="notes">OPAC note:</label>
             <textarea name="notes" id="notes" cols="30" rows="2">[% notes %]</textarea>
         </li>
         <li>
@@ -1065,7 +1065,7 @@ $(document).ready(function() {
 [% END %]
                 [% END %]
                 </select> 
-				<div class="hint">Select a notice and patrons on the routing list will be notified when new issues are received.</div>
+                <div class="hint">Select a notice and subscribers will be notified when new issues are received.</div>
             	[% ELSE %]
             <span class="label">Patron notification: </span>
 				<div class="hint">To notify patrons of new serial issues, you must <a href="/cgi-bin/koha/tools/letter.pl">define a notice</a>.</div>
@@ -1076,7 +1076,7 @@ $(document).ready(function() {
 			 <input type="text" name="staffdisplaycount" id="staffdisplaycount" value="[% staffdisplaycount %]" size="4"/>
 		 </li>
 		 <li>
-			<label class="widelabel" for="opacdisplaycount">Number of issues to display to the public: </label>
+            <label class="widelabel" for="opacdisplaycount">Number of issues to display in OPAC: </label>
 			<input type="text" name="opacdisplaycount" id="opacdisplaycount" value="[% opacdisplaycount %]" size="4"/>
 		</li>
 	</ol>
@@ -1274,24 +1274,24 @@ $(document).ready(function() {
                         <option value="1">Number</option>
                     [% END %]
                     [% IF ( numberpattern2 ) %]
-                        <option value="2" selected="selected">Volume, Number, Issue</option>
+                        <option value="2" selected="selected">Volume, number, issue</option>
                     [% ELSE %]
-                        <option value="2">Volume, Number, Issue</option>
+                        <option value="2">Volume, number, issue</option>
                     [% END %]
                     [% IF ( numberpattern3 ) %]
-                        <option value="3" selected="selected">Volume, Number</option>
+                        <option value="3" selected="selected">Volume, number</option>
                     [% ELSE %]
-                        <option value="3">Volume, Number</option>
+                        <option value="3">Volume, number</option>
                     [% END %]
                     [% IF ( numberpattern4 ) %]
-                        <option value="4" selected="selected">Volume, Issue</option>
+                        <option value="4" selected="selected">Volume, issue</option>
                     [% ELSE %]
-                        <option value="4">Volume, Issue</option>
+                        <option value="4">Volume, issue</option>
                     [% END %]
                     [% IF ( numberpattern5 ) %]
-                        <option value="5" selected="selected">Number, Issue</option>
+                        <option value="5" selected="selected">Number, issue</option>
                     [% ELSE %]
-                        <option value="5">Number, Issue</option>
+                        <option value="5">Number, issue</option>
                     [% END %]
                     [% IF ( numberpattern6 ) %]
                         <option value="6" selected="selected">Seasonal only</option>
@@ -1316,7 +1316,7 @@ $(document).ready(function() {
         <li>
            <label for="beginning_date" class="required"> Subscription start date:</label>
             
-                <img src="[% themelang %]/lib/calendar/cal.gif" id="button1" style="cursor: pointer;" alt="Show Calendar" title="Show Calendar" />
+                <img src="[% themelang %]/lib/calendar/cal.gif" id="button1" style="cursor: pointer;" alt="Show calendar" title="Show calendar" />
                 <input type="text" name="startdate" value="[% startdate %]" size="13" maxlength="10" id="beginning_date" />
                 <!-- both scripts for calendar must follow the input field --> 
                 <script type="text/javascript">
@@ -1339,9 +1339,9 @@ $(document).ready(function() {
             <label for="subtype" class="required">Subscription length:</label>
             
                 <select name="subtype" id="subtype">
-					[% IF ( subtype_monthlength ) %]<option value="monthlength" selected="selected">[% ELSE %]<option value="monthlength">[% END %] Number of months</option>					
-					[% IF ( subtype_numberlength ) %]<option value="numberlength" selected="selected">[% ELSE %]<option value="numberlength">[% END %] Number of issues</option>					
-					[% IF ( subtype_weeklength ) %]<option value="weeklength" selected="selected">[% ELSE %]<option value="weeklength">[% END %] Number of weeks</option>					
+                    [% IF ( subtype_monthlength ) %]<option value="monthlength" selected="selected">[% ELSE %]<option value="monthlength">[% END %] Number of months</option>
+                    [% IF ( subtype_numberlength ) %]<option value="numberlength" selected="selected">[% ELSE %]<option value="numberlength">[% END %] Number of issues</option>
+                    [% IF ( subtype_weeklength ) %]<option value="weeklength" selected="selected">[% ELSE %]<option value="weeklength">[% END %] Number of weeks</option>
                 </select>
                 <input type="text" id="numberlength" name="sublength" value="[% sublength %]" size="3" onkeypress="return check_input(event)" /> (enter amount in numerals)
             <span class="required">Required</span>
@@ -1373,16 +1373,16 @@ $(document).ready(function() {
 	</fieldset>
 </div>
 	<fieldset class="action">
-	<input type="button" class="action_test" value="Test Prediction Pattern" onclick="javascript:irregularity_check()" />
-	<input type="button" class="action_reset" value="Reset Pattern" onclick="javascript:reset_pattern()" />
+    <input type="button" class="action_test" value="Test prediction pattern" onclick="javascript:irregularity_check()" />
+    <input type="button" class="action_reset" value="Reset pattern" onclick="javascript:reset_pattern()" />
     <input type="button" class="action_save"  value="Save subscription" onclick="Check(this.form)" accesskey="w" />
 	</fieldset>
     <fieldset class="action">
-    <input type="button" class="action_advanced" value="Show/Hide Advanced Pattern" onclick="javascript:display_table()" />
+    <input type="button" class="action_advanced" value="Show/Hide advanced pattern" onclick="javascript:display_table()" />
     </fieldset>
            <div id="basetable"  style="display: none;">
             <table class="small">
-                <tr><th colspan="4">Advanced Prediction Pattern</th></tr>
+                <tr><th colspan="4">Advanced prediction pattern</th></tr>
 				<tr>
                     <th>&nbsp;</th>
                     <th>X</th>

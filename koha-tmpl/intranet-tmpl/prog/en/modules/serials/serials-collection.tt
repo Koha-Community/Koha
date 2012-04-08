@@ -1,5 +1,5 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Serials &rsaquo; Serial Collection information for [% bibliotitle %]</title>
+<title>Koha &rsaquo; Serials &rsaquo; Serial collection information for [% bibliotitle %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 
 <script type="text/javascript">
@@ -52,7 +52,7 @@ $(document).ready(function() {
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'serials-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a> &rsaquo; Serial Collection information for  <i>[% bibliotitle %]</i></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a> &rsaquo; Serial collection information for  <i>[% bibliotitle %]</i></div>
 
 <div id="doc3" class="yui-t2">
    
@@ -77,7 +77,7 @@ $(document).ready(function() {
 <caption> Subscription summaries</caption>
 [% END %]
 <tr>
-  <th>Subscription num. </th>
+  <th>Subscription num.</th>
   <th>Frequency</th>
   <th>Numbering pattern</th>
   <th>Library</th>
@@ -127,16 +127,16 @@ $(document).ready(function() {
                     Number
                 [% END %]
                 [% IF ( subscription.numberpattern2 ) %]
-                    Volume, Number, Issue
+                    Volume, number, issue
                 [% END %]
                 [% IF ( subscription.numberpattern3 ) %]
-                    Volume, Number
+                    Volume, number
                 [% END %]
                 [% IF ( subscription.numberpattern4 ) %]
-                    Volume, Issue
+                    Volume, issue
                 [% END %]
                 [% IF ( subscription.numberpattern5 ) %]
-                    Number, Issue
+                    Number, issue
                 [% END %]
                 [% IF ( subscription.numberpattern6 ) %]
                     Seasonal only

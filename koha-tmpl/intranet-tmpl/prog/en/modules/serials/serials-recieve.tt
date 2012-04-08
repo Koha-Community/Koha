@@ -1,5 +1,5 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Serials &rsaquo; Check In subscription for [% bibliotitle %]</title>
+<title>Koha &rsaquo; Serials &rsaquo; Check in subscription for [% bibliotitle %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <script language="JavaScript" type="text/javascript">
 //<![CDATA[
@@ -44,7 +44,7 @@ function barcode_check(){
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'serials-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a> &rsaquo; Check In subscription for <i>[% bibliotitle %]</i></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a> &rsaquo; Check in subscription for <i>[% bibliotitle %]</i></div>
 
 <div id="doc3" class="yui-t2">
    
@@ -55,8 +55,8 @@ function barcode_check(){
 <h1>Check In subscription for <i>[% bibliotitle %]</i></h1>
 <div id="action">
     <a href="subscription-detail.pl?subscriptionid=[% subscriptionid %]" title="detail of the subscription">Subscription Details</a>
-    <!-- <a href="/cgi-bin/koha/serials/serials-home.pl?biblionumber=[% biblionumber %]" class="button" title="all subscriptions on [% bibliotitle %]">Search All Subscriptions</a> -->
-    <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber %]" title="go to [% bibliotitle %]">Show Biblio</a>
+    <!-- <a href="/cgi-bin/koha/serials/serials-home.pl?biblionumber=[% biblionumber %]" class="button" title="all subscriptions on [% bibliotitle %]">Search all subscriptions</a> -->
+    <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber %]" title="go to [% bibliotitle %]">Show biblio</a>
     [% IF ( routing ) %]
     <a href="routing.pl?subscriptionid=[% subscriptionid %]" title="subscription routing list">Routing list</a>
     [% END %]
@@ -72,7 +72,7 @@ function barcode_check(){
 	<tr>
 		<th>Numbered</th>
 		<th>Published on</th>
-		<th>planned for</th>
+        <th>Planned for</th>
 		<th>Status</th>
 		<th>Notes</th>
 	</tr>
@@ -82,7 +82,7 @@ function barcode_check(){
 				Issue <input type="text" name="serialseq" value="[% serialslis.serialseq %]" size="20" maxlength="100" />
 			[% IF ( serialslis.serialadditems ) %]
 				<br /><br />
-				Callnumber <input type="text" name="itemcallnumber" value="[% serialslis.callnumber %]" size="15" maxlength="100" />
+                Call number <input type="text" name="itemcallnumber" value="[% serialslis.callnumber %]" size="15" maxlength="100" />
 				Barcode <input type="text" name="barcode" value="[% serialslis.barcode %]" id="barcode[% serialslis.num %]" size="20" maxlength="20" />
 			[% END %]
 			</td>
@@ -128,9 +128,9 @@ function barcode_check(){
 						<option value="4">Missing</option>
 					[% END %]
 					[% IF ( serialslis.status5 ) %]
-						<option value="5" selected="selected">Not Available</option>
+                        <option value="5" selected="selected">Not available</option>
 					[% ELSE %]
-						<option value="5">Not Available</option>
+                        <option value="5">Not available</option>
 					[% END %]
 					[% IF ( serialslis.status6 ) %]
 						<option value="6" selected="selected">Delete</option>
@@ -152,7 +152,7 @@ function barcode_check(){
 						[% END %]
 				    [% ELSE %]
 					<select name="itemstatus">
-						<option value="">Item Status</option>
+                        <option value="">Item status</option>
 						[% FOREACH itemstatusloo IN serialslis.itemstatusloop %]
 						[% IF ( itemstatusloo.selected ) %]
 							<option value="[% itemstatusloo.itemval %]" selected="selected">[% itemstatusloo.itemlib %]</option>
@@ -196,7 +196,7 @@ function barcode_check(){
 				Manual issue <input type="text" name="serialseq" size="30" maxlength="100" value="[% missingseq %]" />
 			[% IF ( serialadditems ) %]
 				<br /><br />
-				Callnumber <input type="text" name="itemcallnumber" value="" size="10" maxlength="15" />
+                Call number <input type="text" name="itemcallnumber" value="" size="10" maxlength="15" />
 				Barcode <input type="text" name="barcode" value="" size="20" maxlength="20" />
 			[% END %]
 			</td>
@@ -240,7 +240,7 @@ function barcode_check(){
 						<option value="3" selected="selected">Late</option>
 						[% END %]
 						<option value="4">Missing</option>
-						<option value="5">Not Available</option>
+                        <option value="5">Not available</option>
 
 
 				</select>
@@ -258,7 +258,7 @@ function barcode_check(){
 						[% END %]
 				    [% ELSE %]
 					<select name="itemstatus">
-						<option value="">Item Status</option>
+                        <option value="">Item status</option>
 						[% FOREACH itemstatusloo IN itemstatusloop %]
 						[% IF ( itemstatusloo.selected ) %]
 							<option value="[% itemstatusloo.itemval %]" selected="selected">[% itemstatusloo.itemlib %]</option>

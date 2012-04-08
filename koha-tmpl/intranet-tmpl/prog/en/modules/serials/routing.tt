@@ -1,5 +1,5 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Serials &rsaquo; [% title |html %] &rsaquo; [% IF ( op ) %]Create Routing List[% ELSE %]Edit Routing List[% END %]</title>
+<title>Koha &rsaquo; Serials &rsaquo; [% title |html %] &rsaquo; [% IF ( op ) %]Create Routing List[% ELSE %]Edit routing list[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <script language="javascript" type="text/javascript">
 <!--
@@ -20,7 +20,7 @@ function search_member(subscriptionid){
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'serials-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a> &rsaquo; <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscriptionid %]"><i>[% title |html %]</i></a> &rsaquo; [% IF ( op ) %]Create Routing List[% ELSE %]Edit Routing List[% END %]</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a> &rsaquo; <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscriptionid %]"><i>[% title |html %]</i></a> &rsaquo; [% IF ( op ) %]Create Routing List[% ELSE %]Edit routing list[% END %]</div>
 
 <div id="doc3" class="yui-t2">
    
@@ -30,9 +30,9 @@ function search_member(subscriptionid){
 
 
 [% IF ( op ) %]
-<h1>Create Routing List for <i>[% title |html %]</i></h1>
+<h1>Create routing list for <i>[% title |html %]</i></h1>
 [% ELSE %]
-<h1>Edit Routing List for <i>[% title |html %]</i></h1>
+<h1>Edit routing list for <i>[% title |html %]</i></h1>
 [% END %]
 
 <form method="post" action="routing.pl">
@@ -73,7 +73,7 @@ function search_member(subscriptionid){
         [% END %]
         </table><p style="margin-left:10em;"><a onclick="search_member([% subscriptionid %]); return false"
 href="/cgi-bin/koha/serials/member-search.pl?subscriptionid=[% subscriptionid %]" class="button">Add recipients</a> &nbsp; <a
-href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% subscriptionid %]&amp;op=delete" class="button">Delete All</a></p></li>
+href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% subscriptionid %]&amp;op=delete" class="button">Delete all</a></p></li>
 [% ELSE %]
 <li><span class="label">Recipients:</span>
     <a onclick="search_member([% subscriptionid %]); return false" href="/cgi-bin/koha/serials/member-search.pl?subscriptionid=[% subscriptionid %]" class="button">Add recipients</a></li>

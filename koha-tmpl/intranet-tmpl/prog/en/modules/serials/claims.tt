@@ -193,7 +193,7 @@
 </form>
 
    [% IF ( missingissues ) %]	
-    <h3>Missing Issues</h3>
+    <h3>Missing issues</h3>
     <form action="claims.pl" onsubmit="return false;">
 	<fieldset class="rows">
 	<legend>Filters :</legend>
@@ -228,7 +228,7 @@
 	
 	<li>
 	    <label for="begindate">From</label>
-	    <img src="[% themelang %]/lib/calendar/cal.gif" id="begindatebutton" style="cursor: pointer;" alt="Show Calendar" title="Show Calendar" />
+        <img src="[% themelang %]/lib/calendar/cal.gif" id="begindatebutton" style="cursor: pointer;" alt="Show calendar" title="Show Calendar" />
 	    <input type="text" name="begindate" id="begindate" value="[% begindate %]" size="10" maxlength="10" />
 	    <script type="text/javascript">
 		 //<![CDATA[ 
@@ -241,7 +241,7 @@
 	    </script>
 
 	    <label for="enddate" style="float:none;">To</label>
-	    <img src="[% themelang %]/lib/calendar/cal.gif" id="enddatebutton" style="cursor: pointer;" alt="Show Calendar" title="Show Calendar" />
+        <img src="[% themelang %]/lib/calendar/cal.gif" id="enddatebutton" style="cursor: pointer;" alt="Show calendar" title="Show Calendar" />
 	    <input type="text" name="enddate" id="enddate" value="[% enddate %]" size="10" maxlength="10" />
 	    <script type="text/javascript">
 		 //<![CDATA[ 
@@ -256,7 +256,7 @@
         </li>
 	
 	<li>
-	    <input type="reset" value="Clear Filters" onclick="clearFilters();" />
+        <input type="reset" value="Clear filters" onclick="clearFilters();" />
 	</li>
 	</ol>
 	</fieldset>
@@ -276,8 +276,8 @@
                     <th>Issue number</th>
                     <th>Status</th>
                     <th>Since</th>
-                    <th>Claim Date</th>
-                <th>Begin Claim</th>
+                    <th>Claim date</th>
+                <th>Begin claim</th>
                 </tr></thead>
                 <tbody>[% FOREACH missingissue IN missingissues %]
                     <tr>
@@ -366,7 +366,7 @@
         [% END %]
 [% END %]
         [% IF ( missingissues ) %]
-        <h3>Missing Issues</h3>
+        <h3>Missing issues</h3>
         <table>
             <tr>
                 <td><b>Vendor<b></td>
