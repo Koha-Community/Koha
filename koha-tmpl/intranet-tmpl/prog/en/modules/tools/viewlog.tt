@@ -52,7 +52,7 @@
 									<option value="CIRCULATION">Circulation</option>
 									<option value="LETTER">Letter</option>
 									<option value="FINES">Fines</option>
-									<option value="SYSTEMPREFERENCE">System Prefs</option>
+                                    <option value="SYSTEMPREFERENCE">System prefs</option>
 								</select>
 							</li>
 							<li>
@@ -76,12 +76,12 @@
 							</li>
 							<li>
 								<label for="from"> Display from: </label> <input type="text" size="10" id="from" name="from" value="[% datefrom %]" />
-								<img src="[% themelang %]/lib/calendar/cal.gif" border="0" alt="Show Calendar" id="openCalendarFrom" style="cursor: pointer;" />
+                                <img src="[% themelang %]/lib/calendar/cal.gif" border="0" alt="Show calendar" id="openCalendarFrom" style="cursor: pointer;" />
 				<div class="hint">[% INCLUDE 'date-format.inc' %]</div>
 							</li>
 							<li>
 								<label for="to">Display to: </label> <input size="10" id="to" name="to" type="text" value="[% dateto %]" />
-								<img src="[% themelang %]/lib/calendar/cal.gif" id="openCalendarTo" alt="Show Calendar" style="cursor: pointer;" border="0" />
+                                <img src="[% themelang %]/lib/calendar/cal.gif" id="openCalendarTo" alt="Show calendar" style="cursor: pointer;" border="0" />
 									<script type="text/javascript">
 									//<![CDATA[
 
@@ -205,7 +205,7 @@
                         <div class="dialog alert">
                             No log found
                             [% IF ( CATALOGUING ) %]
-                                for <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% object %]">Bibliographic Record [% object %]</a>
+                                for <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% object %]">Bibliographic record [% object %]</a>
                             [% END %]
                             [% IF ( MEMBERS ) %]
                                 for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% object %]">[% INCLUDE 'patron-title.inc' %]</a>

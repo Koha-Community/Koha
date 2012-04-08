@@ -1,5 +1,5 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Tools &rsaquo; Notices[% IF ( add_form ) %][% IF ( modify ) %] &rsaquo; Modify notice[% ELSE %] &rsaquo; Add notice[% END %][% END %][% IF ( add_validate ) %] &rsaquo; Notice added[% END %][% IF ( delete_confirm ) %] &rsaquo; Confirm Deletion[% END %]</title>
+<title>Koha &rsaquo; Tools &rsaquo; Notices[% IF ( add_form ) %][% IF ( modify ) %] &rsaquo; Modify notice[% ELSE %] &rsaquo; Add notice[% END %][% END %][% IF ( add_validate ) %] &rsaquo; Notice added[% END %][% IF ( delete_confirm ) %] &rsaquo; Confirm deletion[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
 	<script type="text/javascript">
@@ -121,7 +121,7 @@ $(document).ready(function() {
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'letters-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; [% IF ( add_form ) %][% IF ( modify ) %]<a href="/cgi-bin/koha/tools/letter.pl">Notices &amp; Slips</a> &rsaquo; Modify notice[% ELSE %] <a href="/cgi-bin/koha/tools/letter.pl">Notices &amp; Slips</a> &rsaquo; Add notice[% END %][% ELSE %][% IF ( add_validate ) %] <a href="/cgi-bin/koha/tools/letter.pl">Notices &amp; Slips</a> &rsaquo; Notice added[% ELSE %][% IF ( delete_confirm ) %] <a href="/cgi-bin/koha/tools/letter.pl">Notices &amp; Slips</a> &rsaquo; Confirm Deletion[% ELSE %]Notices &amp; Slips[% END %][% END %][% END %]</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; [% IF ( add_form ) %][% IF ( modify ) %]<a href="/cgi-bin/koha/tools/letter.pl">Notices &amp; Slips</a> &rsaquo; Modify notice[% ELSE %] <a href="/cgi-bin/koha/tools/letter.pl">Notices &amp; Slips</a> &rsaquo; Add notice[% END %][% ELSE %][% IF ( add_validate ) %] <a href="/cgi-bin/koha/tools/letter.pl">Notices &amp; Slips</a> &rsaquo; Notice added[% ELSE %][% IF ( delete_confirm ) %] <a href="/cgi-bin/koha/tools/letter.pl">Notices &amp; Slips</a> &rsaquo; Confirm deletion[% ELSE %]Notices &amp; Slips[% END %][% END %][% END %]</div>
 
 [% IF ( add_form ) %]<div id="doc" class="yui-t7">[% ELSE %]<div id="doc3" class="yui-t2">[% END %]
    
@@ -150,7 +150,7 @@ $(document).ready(function() {
     </form>
 
 		[% IF ( search ) %]
-		<p>You Searched for <b>[% searchfield %]</b></p>
+        <p>You searched for <b>[% searchfield %]</b></p>
 		[% END %]
 		[% IF ( letter && !independant_branch) %]
             [% select_for_copy = BLOCK %]
@@ -258,14 +258,14 @@ $(document).ready(function() {
                                     <option value="circulation">Circulation</option>
                                     [% END %]
                                     [% IF ( claimacquisition ) %]
-                                    <option value="claimacquisition" selected="selected">Claim Acquisition</option>
+                                    <option value="claimacquisition" selected="selected">Claim acquisition</option>
                                     [% ELSE %]
-                                    <option value="claimacquisition">Claim Acquisition</option>
+                                    <option value="claimacquisition">Claim acquisition</option>
                                     [% END %]
                                     [% IF ( claimissues ) %]
-                                    <option value="claimissues" selected="selected">Claim Serial Issue</option>
+                                    <option value="claimissues" selected="selected">Claim serial issue</option>
                                     [% ELSE %]
-                                    <option value="claimissues">Claim Serial Issue</option>
+                                    <option value="claimissues">Claim serial issue</option>
                                     [% END %]
                                     [% IF ( reserves ) %]
                                     <option value="reserves" selected="selected">Holds</option>
@@ -278,9 +278,9 @@ $(document).ready(function() {
                                     <option value="members">Members</option>
                                     [% END %]
                                     [% IF ( serial ) %]
-                                    <option value="serial" selected="selected">Serials (Routing List)</option>
+                                    <option value="serial" selected="selected">Serials (routing list)</option>
                                     [% ELSE %]
-                                    <option value="serial">Serials (Routing List)</option>
+                                    <option value="serial">Serials (routing list)</option>
                                     [% END %]
                                     [% IF ( suggestions ) %]
                                     <option value="suggestions" selected="selected">Suggestions</option>
@@ -296,7 +296,7 @@ $(document).ready(function() {
 			<label for="name">Name:</label><input type="text" id="name" name="name" size="60" value="[% name %]" />
 		</li>
 		<li>
-			<label for="is_html">HTML Message:</label>
+            <label for="is_html">HTML message:</label>
       [% IF is_html %]
       <input type="checkbox" id="is_html" name="is_html" value="1" checked />
       [% ELSE %]
@@ -304,10 +304,10 @@ $(document).ready(function() {
       [% END %]
 		</li>
 		<li>
-			<label for="title">Message Subject:</label><input type="text" id="title" name="title" size="60" value="[% title %]" />
+            <label for="title">Message subject:</label><input type="text" id="title" name="title" size="60" value="[% title %]" />
 		</li>
 		<li>
-			<label for="SQLfieldname">Message Body:</label>
+            <label for="SQLfieldname">Message body:</label>
 		</li>
 		<li>
 		<table>
@@ -333,7 +333,7 @@ $(document).ready(function() {
 [% END %]
 	
 [% IF ( delete_confirm ) %]
-	<div class="dialog alert"><h3>Delete Notice?</h3>
+    <div class="dialog alert"><h3>Delete notice?</h3>
 	<table>
         <thead>
 		<tr>
@@ -355,11 +355,11 @@ $(document).ready(function() {
 		<input type="hidden" name="branchcode" value="[% branchcode %]" />
 		<input type="hidden" name="code" value="[% code %]" />
 		<input type="hidden" name="module" value="[% module %]" />
-				<input type="submit" value="Yes, Delete" class="approve" />
+                <input type="submit" value="Yes, delete" class="approve" />
 				</form>
 
 				<form action="[% action %]" method="get">
-					<input type="submit" value="No, Do Not Delete" class="deny" />
+                    <input type="submit" value="No, do not delete" class="deny" />
 				</form>
 		</div>
 

@@ -71,9 +71,9 @@ Edit News Item[% ELSE %]Add News Item[% END %][% ELSE %]News[% END %]</div>
             <input type="hidden" name="op" value="[% op %]" />
             <input type="hidden" name="id" value="[% id %]" />
 			<fieldset class="rows">
-			<legend>OPAC and Koha News</legend>
+            <legend>OPAC and Koha news</legend>
            <ol> <li>
-            <label for="lang">Display Location</label>
+            <label for="lang">Display location</label>
             <select id="lang" name="lang">
                 <option value="koha">Librarian interface</option>
                 [% IF ( slip ) %]<option value="slip" selected="selected">Slip</option>[% ELSE %]<option value="slip">Slip</option>[% END %]
@@ -89,7 +89,7 @@ Edit News Item[% ELSE %]Add News Item[% END %][% ELSE %]News[% END %]</div>
             <li>
                 <label for="timestamp">Publication date</label>
                 <input id="timestamp" type="text" name="timestamp" size="15" value="[% new_detail.timestamp %]" />
-                <img src="[% themelang %]/lib/calendar/cal.gif" alt="Show Calendar" border="0" id="timestampButton" style="cursor: pointer;" />
+                <img src="[% themelang %]/lib/calendar/cal.gif" alt="Show calendar" border="0" id="timestampButton" style="cursor: pointer;" />
                 <script type="text/javascript">
                     Calendar.setup(
                     {
@@ -104,7 +104,7 @@ Edit News Item[% ELSE %]Add News Item[% END %][% ELSE %]News[% END %]</div>
             <li>
                 <label for="expirationdate">Expiration date</label>
                 <input id="expirationdate" type="text" name="expirationdate" size="15" value="[% new_detail.expirationdate %]" />
-                <img src="[% themelang %]/lib/calendar/cal.gif" alt="Show Calendar" border="0" id="openCalendar" style="cursor: pointer;" />
+                <img src="[% themelang %]/lib/calendar/cal.gif" alt="Show calendar" border="0" id="openCalendar" style="cursor: pointer;" />
                 <script type="text/javascript">
                     Calendar.setup(
                     {
@@ -134,7 +134,7 @@ Edit News Item[% ELSE %]Add News Item[% END %][% ELSE %]News[% END %]</div>
     [% ELSE %]
         <div style="margin-bottom:5px;">
         <form name="add_form" method="post" action="/cgi-bin/koha/tools/koha-news.pl" >
-            <label for="lang">Display Location:</label>
+            <label for="lang">Display location:</label>
             <select name="lang" id="lang">
             <option value="">All</option>
             <option value="koha">Librarian interface</option>
@@ -159,8 +159,8 @@ Edit News Item[% ELSE %]Add News Item[% END %][% ELSE %]News[% END %]</div>
                         <th>&nbsp;</th>
                         <th>Location</th>
                         <th>Number</th>
-                        <th>Creation&nbsp;Date</th>
-                        <th>Expiration&nbsp;Date</th>
+                        <th>Creation date</th>
+                        <th>Expiration date</th>
                         <th>Title</th>
                         <th>News</th>
                         <th>&nbsp;</th>

@@ -1,5 +1,5 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Tools &rsaquo; MARC Export</title>
+<title>Koha &rsaquo; Tools &rsaquo; MARC export</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <link rel="stylesheet" type="text/css" href="[% themelang %]/lib/calendar/calendar-system.css" />
 <script type="text/javascript" src="[% themelang %]/lib/calendar/calendar.js"></script>
@@ -10,7 +10,7 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; MARC Export</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; MARC export</div>
 
 <div id="doc3" class="yui-t2">
    
@@ -24,7 +24,7 @@
 
 <form method="post" action="/cgi-bin/koha/tools/export.pl">
     <fieldset class="rows">
-    <legend> Select Records to Export </legend>
+    <legend> Select records to export </legend>
         <ol><li>
             <label for="start">From biblio number: </label>
             <input id="start" type="text" name="StartingBiblionumber" size="5" />
@@ -61,11 +61,11 @@
                 </select>
         </li>
         <li>
-            <label for="startcn">From itemcallnumber: </label>
+            <label for="startcn">From item call number: </label>
             <input id="startcn" type="text" name="start_callnumber" size="5" />
         </li>
         <li>
-            <label for="endcn">To itemcallnumber: </label>
+            <label for="endcn">To item call number: </label>
             <input id="endcn" type="text" name="end_callnumber" size="5" />
         </li>
 	<li>Accession date (inclusive):
@@ -132,7 +132,7 @@ Calendar.setup(
         </li></ol>
     </fieldset>
     <input type="hidden" name="op" value="export" />
-	
+
     <fieldset class="action"><input type="submit" value="Export" class="button" /></fieldset>
 </form>
 

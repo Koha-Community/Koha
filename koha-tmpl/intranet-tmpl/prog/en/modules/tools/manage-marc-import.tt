@@ -1,5 +1,5 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Tools &rsaquo; Manage Staged MARC Records
+<title>Koha &rsaquo; Tools &rsaquo; Manage staged MARC records
 [% IF ( import_batch_id ) %]
  &rsaquo; Batch [% import_batch_id %]
 [% END %]
@@ -35,10 +35,10 @@ $(document).ready(function(){
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> 
 [% IF ( import_batch_id ) %]
  &rsaquo;
- <a href="[% script_name %]">Manage Staged MARC Records</a>
+ <a href="[% script_name %]">Manage staged MARC records</a>
  &rsaquo; Batch [% import_batch_id %]
 [% ELSE %]
- &rsaquo; Manage Staged MARC Records
+ &rsaquo; Manage staged MARC records
 [% END %]
 </div>
 
@@ -48,7 +48,7 @@ $(document).ready(function(){
 	<div id="yui-main">
 	<div class="yui-b">
 
-<h1>Manage Staged MARC Records
+<h1>Manage staged MARC records
 [% IF ( import_batch_id ) %]
  &rsaquo; Batch [% import_batch_id %]
 [% END %]
@@ -232,7 +232,7 @@ Page
     <td>[% batch_lis.import_status %]</td>
     <td>[% batch_lis.upload_timestamp %]</td>
     <td>[% batch_lis.num_biblios %]</td>
-    <td>[% batch_lis.num_items %][% IF ( batch_lis.num_items ) %] <a href="[% batch_lis.script_name %]?import_batch_id=[% batch_lis.import_batch_id %]&amp;op=create_labels">(Create Label Batch)</a>[% END %]</td>
+    <td>[% batch_lis.num_items %][% IF ( batch_lis.num_items ) %] <a href="[% batch_lis.script_name %]?import_batch_id=[% batch_lis.import_batch_id %]&amp;op=create_labels">(Create label batch)</a>[% END %]</td>
     <td>[% IF ( batch_lis.can_clean ) %]
           <form method="post" action="[% batch_lis.script_name %]" name="clean_batch_[% batch_lis.import_batch_id %]" id="clean_batch_[% batch_lis.import_batch_id %]" >
             <input type="hidden" name="import_batch_id" value="[% batch_lis.import_batch_id %]" />
