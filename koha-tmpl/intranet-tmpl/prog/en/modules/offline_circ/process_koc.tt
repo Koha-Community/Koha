@@ -1,5 +1,5 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Circulation &rsaquo; Offline Circulation File Upload</title>
+<title>Koha &rsaquo; Circulation &rsaquo; Offline circulation file upload</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'file-upload.inc' %]
 [% INCLUDE 'background-job.inc' %]
@@ -38,14 +38,14 @@ function CheckForm(f) {
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'circ-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a> &rsaquo; [% IF ( transactions_loaded ) %] <a href="/cgi-bin/koha/offline_circ/process_koc.pl">Offline Circulation File Upload</a> &rsaquo; Results[% ELSE %] Offline Circulation File Upload[% END %]</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a> &rsaquo; [% IF ( transactions_loaded ) %] <a href="/cgi-bin/koha/offline_circ/process_koc.pl">Offline circulation file upload</a> &rsaquo; Results[% ELSE %] Offline circulation file upload[% END %]</div>
 
 <div id="doc" class="yui-t7">
 
    <div id="bd">
 
 [% IF ( transactions_loaded ) %]
-  <h2>Koha Offline Circulation</h2>
+  <h2>Koha offline circulation</h2>
   <p>Your data was processed. Here are the results:</p>
   [% FOREACH message IN messages %]
     [% IF ( message.message ) %]
@@ -60,11 +60,11 @@ function CheckForm(f) {
 	[% IF ( message.payment ) %]<p>Accepted payment ([% message.amount %]) from <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% message.borrowernumber %]">[% message.firstname %] [% message.surname %]</a> ([% message.cardnumber %]): [% message.datetime %]</p>[% END %]
   [% END %]
 [% ELSE %]
-  <h2>Upload Offline Circulation Data</h2>
+  <h2>Upload offline circulation data</h2>
    <div id="fileuploadform">
      <form method="post" action="[% SCRIPT_NAME %]" enctype="multipart/form-data">
 		<fieldset class="brief">
-       <ol><li><label for="fileToUpload">Choose .koc File: </label>
+       <ol><li><label for="fileToUpload">Choose .koc file: </label>
        <input type="file" id="fileToUpload" size="50" name="fileToUpload" /></li></ol>
 	   <fieldset class="action"><input type="button" class="submit" value="Upload file" onclick="CheckUpload(this.form);" /></fieldset>
 	   </fieldset>

@@ -1,5 +1,5 @@
     [% INCLUDE "doc-head-open.inc" %]
-    <title>Koha &rsaquo; Circulation &rsaquo; Offline Circulation</title>
+    <title>Koha &rsaquo; Circulation &rsaquo; Offline circulation</title>
     [% INCLUDE "doc-head-close.inc" %]
     <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
     <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
@@ -7,8 +7,8 @@
     //<![CDATA[
         $(document).ready(function() {
 
-        $("span.clearall").html("<a id=\"CheckNone\" href=\"/cgi-bin/koha/offline_circ/list.pl\">"+_('Uncheck All')+"<\/a>");
-        $("span.checkall").html("<a id=\"CheckAll\" href=\"/cgi-bin/koha/offline_circ/list.pl\">"+_('Check All')+"<\/a>");
+        $("span.clearall").html("<a id=\"CheckNone\" href=\"/cgi-bin/koha/offline_circ/list.pl\">"+_('Uncheck all')+"<\/a>");
+        $("span.checkall").html("<a id=\"CheckAll\" href=\"/cgi-bin/koha/offline_circ/list.pl\">"+_('Check all')+"<\/a>");
             $('#CheckNone').click(function() {
                 $("#operations").unCheckCheckboxes();
                 return false;
@@ -58,13 +58,13 @@
     [% INCLUDE 'header.inc' %]
     [% INCLUDE 'circ-search.inc' %]
 
-    <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a> &rsaquo; Offline Circulation</div>
+    <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a> &rsaquo; Offline circulation</div>
 
     <div id="doc" class="yui-t7">
 
 	    <div id="bd">
 
-	    <h2>Offline Circulation</h2>
+        <h2>Offline circulation</h2>
 
 	    [% IF ( pending_operations ) %]
 
@@ -78,7 +78,7 @@
 			            <th>Date</th>
 			            <th>Action</th>
 			            <th>Barcode</th>
-			            <th>Cardnumber</th>
+                        <th>Card number</th>
 		            </tr>
 		        </thead>
 		        <tbody>
