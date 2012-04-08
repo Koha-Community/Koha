@@ -1,42 +1,42 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Tools &rsaquo; Rotating Collections &rsaquo; Edit Collections</title>
+<title>Koha &rsaquo; Tools &rsaquo; Rotating collections &rsaquo; Edit collections</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="rcoll_editCollections" class="tools rcoll">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; <a href="/cgi-bin/koha/rotating_collections/rotatingCollections.pl">Rotating Collections</a> &rsaquo; Edit Collections</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; <a href="/cgi-bin/koha/rotating_collections/rotatingCollections.pl">Rotating collections</a> &rsaquo; Edit collections</div>
 
 <div id="doc3">
 <div id="bd">
         <div class="yui-gb">
-      <h1>Rotating Collections: Edit Collections</h1>
+      <h1>Rotating collections: Edit collections</h1>
 
 <!--
       [% IF ( previousActionCreate ) %]
         [% IF ( createSuccess ) %]
-          <div>Collection '[% createdTitle %]' Created Successfully!</div>
+          <div>Collection '[% createdTitle %]' Created successfully!</div>
         [% ELSE %]
-          <div>Collection '[% createdTitle %]' Failed To Be Created!</div>
+          <div>Collection '[% createdTitle %]' Failed to be created!</div>
           <div>Reason: <strong>[% failureMessage %]</strong></div>
         [% END %]
       [% END %]
 
       [% IF ( previousActionDelete ) %]
         [% IF ( DeleteSuccess ) %]
-          <div>Collection Deleted Successfully!</div>
+          <div>Collection Deleted successfully!</div>
         [% ELSE %]
-          <div>Collection Failed To Be Deleted!</div>
+          <div>Collection Failed to be deleted!</div>
         [% END %]
       [% END %]
 -->
 
       [% IF ( previousActionUpdate ) %]
         [% IF ( updateSuccess ) %]
-          <div>Collection '[% updatedTitle %]' Updated Successfully!</div>
+          <div>Collection '[% updatedTitle %]' Updated successfully!</div>
         [% ELSE %]
-          <div>Collection '[% updatedTitle %]' Failed To Be Updated!</div>
+          <div>Collection '[% updatedTitle %]' Failed to be updated!</div>
           <div>Reason: <strong>[% failureMessage %]</strong></div>
         [% END %]
       [% END %]
@@ -47,7 +47,7 @@
             <tr>
               <th>Title</th>
               <th>Description</th>
-              <th>Holding Library</th>
+              <th>Holding library</th>
               <td></td>
               <td></td>
             </tr>
@@ -62,7 +62,7 @@
             [% END %]
           </table>
         [% ELSE %]
-          There are no Collections currently defined.
+          There are no collections currently defined.
         [% END %]
       </div>    
 
@@ -72,7 +72,7 @@
         [% IF ( previousActionEdit ) %]
           <h1>Edit Collection</h1>
         [% ELSE %]
-          <h1>Create New Collection</h1>
+          <h1>Create new collection</h1>
         [% END %]
 
         <form action="editCollections.pl" method="post">
@@ -119,7 +119,7 @@
 
       <div>
         <br/>
-        <input type="button" value="Return to Rotating Collections Home" onclick="window.location.href='rotatingCollections.pl'">
+        <input type="button" value="Return to rotating collections home" onclick="window.location.href='rotatingCollections.pl'">
       </div>
 
 </div>

@@ -1,27 +1,27 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Tools &rsaquo; Rotating Collections</title>
+<title>Koha &rsaquo; Tools &rsaquo; Rotating collections</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="rcoll_rotatingCollections" class="tools rcoll">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; Rotating Collections</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; Rotating collections</div>
 
 <div id="doc3">
 <div id="bd">
         <div class="yui-gb">
 
-      <h1>Rotating Collections</h1>
+      <h1>Rotating collections</h1>
       <div>
         [% IF ( collectionsLoop ) %]
           <table>
             <tr>
               <th><strong>Title</strong></th>
               <th>Description</strong></th>
-              <th>Current Location</th>
-              <th>Add/Remove Items</th>
-              <th>Transfer Collection</th>
+              <th>Current location</th>
+              <th>Add/Remove items</th>
+              <th>Transfer collection</th>
             </tr>
             [% FOREACH collectionsLoo IN collectionsLoop %]
               <tr>
@@ -34,13 +34,13 @@
             [% END %]
           </table>
         [% ELSE %]
-          There are no Collections currently defined.
+          There are no collections currently defined.
         [% END %]
       </div>
 
       <div>
 	<br/>
-	<input type="button" value="Edit Collections" onclick="window.location.href='editCollections.pl'"> 
+    <input type="button" value="Edit collections" onclick="window.location.href='editCollections.pl'">
       </div>    
 </div>
 </div>
