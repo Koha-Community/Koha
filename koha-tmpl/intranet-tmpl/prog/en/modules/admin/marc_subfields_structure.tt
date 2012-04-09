@@ -112,8 +112,8 @@ $(document).ready(function() {
                     <input type="text" name="defaultvalue" id="defaultvalue[% loo.row %]" value="[% loo.defaultvalue %]" /></li>
 				<li><label for="maxlength[% loo.row %]">Max length:</label><input type="text" id="maxlength[% loo.row %]" name="maxlength" value="[% loo.maxlength %]" size="4" /> (see online help)</li>
                 <li><label for="hidden[% loo.row %]">hidden</label><input type="text" id="hidden[% loo.row %]" name="hidden" value="[% loo.hidden %]" size="2" /> (see online help)</li>
-                <li><label for="isurl[% loo.row %]">Is a url:</label>[% loo.isurl %] (if checked, it means that the subfield is a url and can be clicked)</li>
-                <li><label for="link[% loo.row %]">Link:</label><input type="text" id="link[% loo.row %]" name="link" value="[% loo.link %]" size="10" maxlength="80" /> (e.g., title or local-number) <span class="error"><em>NOTE: If you change this value you must ask your administrator to run misc/batchRebuildBiblioTables.pl.</em></span></li>
+                <li><label for="isurl[% loo.row %]">Is a URL:</label>[% loo.isurl %] (if checked, it means that the subfield is a URL and can be clicked)</li>
+                <li><label for="link[% loo.row %]">Link:</label><input type="text" id="link[% loo.row %]" name="link" value="[% loo.link %]" size="10" maxlength="80" /> (e.g., Title or Local-Number) <span class="error"><em>NOTE: If you change this value you must ask your administrator to run misc/batchRebuildBiblioTables.pl.</em></span></li>
                 <li><label for="kohafield[% loo.row %]">Koha link:</label>[% loo.kohafield %]</li>
 			</ol>
 	</fieldset>
@@ -202,7 +202,7 @@ $(document).ready(function() {
             [% IF ( loo.mandatory ) %]Mandatory, [% ELSE %]Not mandatory,[% END %]
             [% IF ( loo.seealso ) %] | See Also: [% loo.seealso %],[% END %]
             [% IF ( loo.hidden ) %]hidden,[% END %]
-            [% IF ( loo.isurl ) %]is a url,[% END %]
+            [% IF ( loo.isurl ) %]is a URL,[% END %]
             [% IF ( loo.authorised_value ) %] | Auth value:[% loo.authorised_value %],[% END %]
             [% IF ( loo.authtypecode ) %] | Authority:[% loo.authtypecode %],[% END %]
             [% IF ( loo.value_builder ) %] | Plugin:[% loo.value_builder %],[% END %]
