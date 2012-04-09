@@ -81,8 +81,11 @@ if (C4::Context->preference("OPACXSLTDetailsDisplay") ) {
     $template->param( 'XSLTBloc' => XSLTParse4Display($biblionumber, $record, 'Detail', 'opac') );
 }
 
+my $OpacBrowseResults = C4::Context->preference("OpacBrowseResults");
+$template->{VARS}->{'OpacBrowseResults'} = $OpacBrowseResults;
 
 # We look for the busc param to build the simple paging from the search
+if ($OpacBrowseResults) {
 my $session = get_session($query->cookie("CGISESSID"));
 my %paging = (previous => {}, next => {});
 if ($session->param('busc')) {
@@ -360,6 +363,7 @@ if ($session->param('busc')) {
     }
     $template->param('listResults' => \@listResults) if (@listResults);
     $template->param('indexPag' => 1 + $offset, 'totalPag' => $arrParamsBusc{'total'}, 'indexPagEnd' => scalar(@arrBiblios) + $offset);
+}
 }
 
 
