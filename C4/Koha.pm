@@ -22,10 +22,15 @@ package C4::Koha;
 
 use strict;
 #use warnings; FIXME - Bug 2505
-use C4::Context;
-use Memoize;
 
-use vars qw($VERSION @ISA @EXPORT $DEBUG);
+use C4::Context;
+
+use Memoize;
+use DateTime;
+use DateTime::Format::MySQL;
+use autouse 'Data::Dumper' => qw(Dumper);
+
+use vars qw($VERSION @ISA @EXPORT @EXPORT_OK $DEBUG);
 
 BEGIN {
 	$VERSION = 3.01;
@@ -67,6 +72,7 @@ BEGIN {
 		$DEBUG
 	);
 	$DEBUG = 0;
+@EXPORT_OK = qw( GetDailyQuote );
 }
 
 # expensive functions
@@ -1299,6 +1305,78 @@ sub GetNormalizedOCLCNumber {
             }
         }
     }
+}
+
+=head2 GetDailyQuote($opts)
+
+Takes a hashref of options
+
+Currently supported options are:
+
+'id'        An exact quote id
+'random'    Select a random quote
+noop        When no option is passed in, this sub will return the quote timestamped for the current day
+
+The function returns an anonymous hash following this format:
+
+        {
+          'source' => 'source-of-quote',
+          'timestamp' => 'timestamp-value',
+          'text' => 'text-of-quote',
+          'id' => 'quote-id'
+        };
+
+=cut
+
+# This is definitely a candidate for some sort of caching once we finally settle caching/persistence issues...
+# at least for default option
+
+sub GetDailyQuote {
+    my %opts = @_;
+    my $dbh = C4::Context->dbh;
+    my $query = '';
+    my $sth = undef;
+    my $quote = undef;
+    if ($opts{'id'}) {
+        $query = 'SELECT * FROM quotes WHERE id = ?';
+        $sth = $dbh->prepare($query);
+        $sth->execute($opts{'id'});
+        $quote = $sth->fetchrow_hashref();
+    }
+    elsif ($opts{'random'}) {
+        # Fall through... we also return a random quote as a catch-all if all else fails
+    }
+    else {
+        $query = 'SELECT * FROM quotes WHERE timestamp LIKE CONCAT(CURRENT_DATE,\'%\') ORDER BY timestamp LIMIT 0,1';
+        $sth = $dbh->prepare($query);
+        $sth->execute();
+        $quote = $sth->fetchrow_hashref();
+    }
+    unless ($quote) {        # if there are not matches, choose a random quote
+        # get a list of all available quote ids
+        $sth = C4::Context->dbh->prepare('SELECT count(*) FROM quotes;');
+        $sth->execute;
+        my $range = ($sth->fetchrow_array)[0];
+        if ($range > 1) {
+            # chose a random id within that range if there is more than one quote
+            my $id = int(rand($range));
+            # grab it
+            $query = 'SELECT * FROM quotes WHERE id = ?;';
+            $sth = C4::Context->dbh->prepare($query);
+            $sth->execute($id);
+        }
+        else {
+            $query = 'SELECT * FROM quotes;';
+            $sth = C4::Context->dbh->prepare($query);
+            $sth->execute();
+        }
+        $quote = $sth->fetchrow_hashref();
+        # update the timestamp for that quote
+        $query = 'UPDATE quotes SET timestamp = ? WHERE id = ?';
+        $sth = C4::Context->dbh->prepare($query);
+        $sth->execute(DateTime::Format::MySQL->format_datetime(DateTime->now), $quote->{'id'});
+    }
+    return $quote;
 }
 
 sub _normalize_match_point {

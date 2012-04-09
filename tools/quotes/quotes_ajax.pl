@@ -1,0 +1,116 @@
+#!/usr/bin/perl
+
+# Copyright 2012 Foundations Bible College Inc.
+#
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 2 of the License, or (at your option) any later
+# version.
+#
+# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with Koha; if not, write to the Free Software Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+use strict;
+use warnings;
+
+use CGI;
+use JSON;
+use autouse 'Data::Dumper' => qw(Dumper);
+
+use C4::Auth;
+use C4::Context;
+
+my $cgi = CGI->new;
+my $dbh = C4::Context->dbh;
+my $sort_columns = ["id", "source", "text", "timestamp"];
+
+my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
+    {
+        template_name   => "",
+        query           => $cgi,
+        type            => "intranet",
+        authnotrequired => 0,
+        flagsrequired   => { tools => 'edit_quotes' },
+        debug           => 1,
+    }
+);
+
+# NOTE: This is a collection of ajax functions for use with tools/quotes.pl
+
+my $params = $cgi->Vars; # NOTE: Multivalue parameters NOT allowed!!
+
+print $cgi->header('application/json');
+
+if ($params->{'action'} eq 'add') {
+    my $sth = $dbh->prepare('INSERT INTO quotes (source, text) VALUES (?, ?);');
+    $sth->execute($params->{'source'}, $params->{'text'});
+    if ($sth->err) {
+        warn sprintf('Database returned the following error: %s', $sth->errstr);
+        exit 0;
+    }
+    my $new_quote_id = $dbh->{q{mysql_insertid}}; # ALERT: mysqlism here
+    $sth = $dbh->prepare('SELECT * FROM quotes WHERE id = ?;');
+    $sth->execute($new_quote_id);
+    print to_json($sth->fetchall_arrayref);
+    exit 1;
+}
+elsif ($params->{'action'} eq 'edit') {
+    my $editable_columns = [qw(source text)]; # pay attention to element order; these columns match the quotes table columns
+    my $sth = $dbh->prepare("UPDATE quotes SET $editable_columns->[$params->{'column'}-1]  = ? WHERE id = ?;");
+    $sth->execute($params->{'value'}, $params->{'id'});
+    if ($sth->err) {
+        warn sprintf('Database returned the following error: %s', $sth->errstr);
+        exit 0;
+    }
+    print $sth->fetchrow_array();
+    exit 1;
+}
+elsif ($params->{'action'} eq 'delete') {
+    my $sth = $dbh->prepare("DELETE FROM quotes WHERE id = ?;");
+    $sth->execute($params->{'id'});
+    if ($sth->err) {
+        warn sprintf('Database returned the following error: %s', $sth->errstr);
+        exit 0;
+    }
+    exit 1;
+}
+else {
+    my $aaData = [];
+    my $iTotalRecords = '';
+    my $sth = '';
+
+    if (my $filter = $params->{'sSearch'}) {
+        # This seems a bit brute force and ungraceful, but it provides a very general, simple search on all fields
+        my $like = " id LIKE \"%$filter%\" OR source LIKE \"%$filter%\" OR text LIKE \"%$filter%\" OR timestamp LIKE \"%$filter%\"";
+        $iTotalRecords = $dbh->selectrow_array("SELECT count(*) FROM quotes WHERE $like;");
+        $sth = $dbh->prepare("SELECT * FROM quotes;");
+    }
+    else {
+        $iTotalRecords = $dbh->selectrow_array('SELECT count(*) FROM quotes;');
+        $sth = $dbh->prepare("SELECT * FROM quotes;");
+    }
+
+    $sth->execute();
+    if ($sth->err) {
+        warn sprintf('Database returned the following error: %s', $sth->errstr);
+        exit 0;
+    }
+
+    $aaData = $sth->fetchall_arrayref;
+    my $iTotalDisplayRecords = $iTotalRecords; # no filtering happening here
+
+
+    print to_json({
+                    iTotalRecords       =>  $iTotalRecords,
+                    iTotalDisplayRecords=>  $iTotalDisplayRecords,
+                    sEcho               =>  $params->{'sEcho'},
+                    aaData              =>  $aaData,
+                  });
+}

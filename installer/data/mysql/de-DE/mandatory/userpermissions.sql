@@ -22,6 +22,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (13, 'moderate_comments', 'Benutzerkommentare moderieren'),
    (13, 'edit_notices', 'Benachrichtigungen verwalten'),
    (13, 'edit_notice_status_triggers', 'Mahntrigger für überfällige Medien verwalten'),
+   (13, 'edit_quotes', 'Edit quotes for quote-of-the-day feature'),
    (13, 'view_system_logs', 'Logs durchsuchen/einsehen'),
    (13, 'inventory', 'Inventur durchführen'),
    (13, 'stage_marc_import', 'MARC-Datensätze zwischenspeichern'),

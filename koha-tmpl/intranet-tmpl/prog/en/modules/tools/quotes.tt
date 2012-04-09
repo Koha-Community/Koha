@@ -1,0 +1,205 @@
+    [% INCLUDE 'doc-head-open.inc' %]
+    <title>Koha &rsaquo; Tools &rsaquo; Quote editor</title>
+    [% INCLUDE 'doc-head-close.inc' %]
+    <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
+    <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/dataTables.fnReloadAjax.js"></script>
+    [% INCLUDE 'datatables-strings.inc' %]
+    </script>
+    <script type="text/javascript" src="/intranet-tmpl/prog/en/js/datatables.js"></script>
+    <script type="text/javascript" src="/intranet-tmpl/prog/en/js/jquery.jeditable.mini.js"></script>
+    <script type="text/javascript">
+    //<![CDATA[
+    var oTable; /* oTable needs to be global */
+    var sEmptyTable = _('No quotes available. Please use the \"Add Quote\" button to add a quote.'); /* override the default message in datatables-strings.inc */
+    $(document).ready(function() {
+        /* NOTE: This is an ajax-source datatable and *not* a server-side sourced datatable. */
+        /* See the datatable docs if you don't understand this difference. */
+        oTable = $("#quotes_editor").dataTable({
+                    "bAutoWidth"        : false,
+                    "bProcessing"       : true,
+                    "bPaginate"         : true,
+                    "sPaginationType"   : "full_numbers",
+                    "sAjaxSource"       : "/cgi-bin/koha/tools/quotes/quotes_ajax.pl",
+                    "aoColumns"         : [
+                                            { "sWidth": "3%"  },
+                                            { "sWidth": "11%" },
+                                            { "sWidth": "75%" },
+                                            { "sWidth": "11%" },
+                                          ],
+                   "oLanguage"          : {
+                                            "sEmptyTable": sEmptyTable,
+                                          },
+                   "fnPreDrawCallback": function(oSettings) {
+                        return true;
+                    },
+                    "fnRowCallback": function( nRow, aData, iDisplayIndex ) {
+                        /* do foo on the current row and its child nodes */
+                        var noEditFields = [];
+                        var quoteID = $('td', nRow)[0].innerHTML;
+                        $(nRow).attr("id", quoteID); /* set row ids to quote id */
+                        $('td:eq(0)', nRow).click(function() {$(this.parentNode).toggleClass('selected',this.clicked);}); /* add row selectors */
+                        $('td:eq(0)', nRow).attr("title", "Click ID to select/deselect quote");
+                        if (isNaN(quoteID)) {
+                            noEditFields = [0,1,2,3]; /* all fields when adding a quote */
+                        }
+                        else {
+                            noEditFields = [0,3]; /* id, timestamp */
+                        }
+                        /* apply no_edit id to noEditFields */
+                        for (i=0; i<noEditFields.length; i++) {
+                            $('td', nRow)[noEditFields[i]].setAttribute("id","no_edit");
+                        }
+                        return nRow;
+                    },
+                   "fnDrawCallback": function(oSettings) {
+                        /* Apply the jEditable handlers to the table on all fields w/o the no_edit id */
+                        $('#quotes_editor tbody td[id!="no_edit"]').editable( "/cgi-bin/koha/tools/quotes/quotes_ajax.pl", {
+                            "submitdata"    : function ( value, settings ) {
+                                                  return {
+                                                      "column"        : oTable.fnGetPosition( this )[2],
+                                                      "action"        : "edit",
+                                                  };
+                                              },
+                            "height"        : "14px",
+                            "placeholder"   : "Saving data...",
+                        });
+                   },
+        });
+    });
+
+        function fnClickAddQuote(e, node) {
+            if (e.charCode) {
+                /* some browsers only give charCode, so this will need to be */
+                /* fixed up to handle that */
+                console.log('charCode: '+e.charCode);
+            }
+            if (e.keyCode == 13) {
+                var quoteSource = $('#quoteSource').val();
+                var quoteText = $('#quoteText').val()
+                /* If passed a quote source, add the quote to the db */
+                if (quoteSource && quoteText) {
+                    $.ajax({
+                        url: "/cgi-bin/koha/tools/quotes/quotes_ajax.pl",
+                        type: "POST",
+                        data: {
+                                "source"    : quoteSource,
+                                "text"      : quoteText,
+                                "action"    : "add",
+                        },
+                        success: function(data){
+                                    var newQuote = data[0];
+                                    var aRow = oTable.fnUpdate(
+                                        newQuote,
+                                        node,
+                                        false,
+                                        false
+                                    );
+                                    oTable.fnPageChange( 'last' );
+                                    $('.add_quote_button').attr('onclick', 'fnClickAddRow()'); // re-enable add button
+                            }
+                    });
+                }
+                else {
+                    alert('Please supply both the text and source of the quote before saving.');
+                }
+            }
+            else if (e.keyCode == 27) {
+                if (confirm('Are you sure you want to cancel adding this quote?')) {
+                    oTable.fnDeleteRow(node);
+                }
+                else {
+                    return;
+                }
+            }
+        }
+
+        function fnClickAddRow() {
+            $('.add_quote_button').removeAttr('onclick'); // disable add button once it has been clicked
+            var aRow = oTable.fnAddData(
+                [
+                    'NA', // this is hackish to fool the datatable sort routine into placing this row at the end of the list...
+                    '<input id="quoteSource" type="text" style="height:14px; width:99%" onkeydown="fnClickAddQuote(event,this.parentNode.parentNode)"/>',
+                    '<input id="quoteText" type="text" style="height:14px; width:99%" onkeydown="fnClickAddQuote(event,this.parentNode.parentNode)"/>',
+                    '0000-00-00 00:00:00',
+                ],
+                false
+            );
+            oTable.fnPageChange( 'last' );
+            $('#quoteSource').focus();
+        }
+
+        function fnClickDeleteRow() {
+            var idsToDelete = oTable.$('.selected').map(function() {
+                  return this.id;
+            }).get().join(', ');
+            if (!idsToDelete) {
+                alert('Please select a quote(s) by clicking the quote id(s) you desire to delete.');
+            }
+            else if (confirm('Are you sure you wish to delete quote(s) '+idsToDelete+'?')) {
+                oTable.$('.selected').each(function(){
+                        var quoteID = $(this).attr('id');
+                            $.ajax({
+                                url: "/cgi-bin/koha/tools/quotes/quotes_ajax.pl",
+                                type: "POST",
+                                data: {
+                                        "id"        : quoteID,
+                                        "action"    : "delete",
+                                },
+                                /* Delete the row from the datatable */
+                                success: function(){
+                                    oTable.fnDeleteRow(this);
+                                    oTable.fnReloadAjax(null, null, true);
+                                }
+                            });
+                    });
+            }
+            else {
+                return;
+            }
+        }
+    //]]>
+    </script>
+</head>
+<body id="tools_quotes" class="tools">
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'cat-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; Quote Editor</div>
+
+<div id="doc3" class="yui-t2">
+    <div id="bd">
+        <div id="yui-main">
+            <div class="yui-b">
+                [% INCLUDE 'quotes-toolbar.inc' %]
+                <h2>Quote editor</h2>
+                <table id="quotes_editor" style="float: left; width: 100%;">
+                <thead>
+                    <tr>
+                        <th><span style="cursor: help" onclick="event.stopPropagation();alert('Click on the quote\'s id to select or deselect the quote. Multiple quotes may be selected.');">ID</span></th>
+                        <th>Source</th>
+                        <th>Text</th>
+                        <th>Last Displayed</th>
+<!--                        <th>Actions</th>-->
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- tbody content is generated by DataTables -->
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td>Loading data...</td>
+                        <td></td>
+<!--                        <td></td>-->
+                    </tr>
+                </tbody>
+                </table>
+                <fieldset id="footer" class="action" style="height:25px;">
+                </fieldset>
+            </div>
+        </div>
+    <div class="yui-b noprint">
+        [% INCLUDE 'tools-menu.inc' %]
+    </div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

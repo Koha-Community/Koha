@@ -24,6 +24,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (13, 'moderate_comments', 'Modera i commenti degli utenti'),
    (13, 'edit_notices', 'Definisci le notifiche'),
    (13, 'edit_notice_status_triggers', 'Imposta il messaggio o lo stato delle notifiche per le copie in ritardo'),
+   (13, 'edit_quotes', 'Edit quotes for quote-of-the-day feature'),
    (13, 'view_system_logs', 'Scorri i log di sistema'),
    (13, 'inventory', 'Lavora sugli inventari (stocktaking) del tuo catalogo'),
    (13, 'stage_marc_import', 'Opera sui Record MARC presenti nella zona di lavoro'),

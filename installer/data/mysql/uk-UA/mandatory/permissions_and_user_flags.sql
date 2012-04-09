@@ -46,6 +46,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (13, 'moderate_comments',           'Регулювання коментарів від відвідувачів'),
    (13, 'edit_notices',                'Визначення повідомлень'),
    (13, 'edit_notice_status_triggers', 'Встановлення тригерів повідомлень/статусів для прострочених примірників'),
+   (13, 'edit_quotes', 'Edit quotes for quote-of-the-day feature'),
    (13, 'view_system_logs',            'Перегляд протоколів системи'),
    (13, 'inventory',                   'Проведення інвентаризації(аналізу) Вашого каталогу'),
    (13, 'stage_marc_import',           'Заготівля МАРК-записів у сховище'),

@@ -2831,6 +2831,19 @@ CREATE TABLE ratings (
     CONSTRAINT ratings_ibfk_2 FOREIGN KEY (biblionumber) REFERENCES biblio (biblionumber) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Table structure for table `quotes`
+--
+
+DROP TABLE IF EXISTS quotes;
+CREATE TABLE `quotes` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `source` varchar(45) DEFAULT NULL,
+  `text` mediumtext NOT NULL,
+  `timestamp` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
+
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

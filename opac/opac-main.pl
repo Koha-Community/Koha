@@ -23,6 +23,7 @@ use C4::Auth;    # get_template_and_user
 use C4::Output;
 use C4::NewsChannels;    # get_opac_news
 use C4::Languages qw(getTranslatedLanguages accept_language);
+use C4::Koha qw( GetDailyQuote );
 
 my $input = new CGI;
 my $dbh   = C4::Context->dbh;
@@ -50,9 +51,13 @@ my ($theme, $news_lang) = C4::Templates::themelanguage(C4::Context->config('opac
 my $all_koha_news   = &GetNewsToDisplay($news_lang);
 my $koha_news_count = scalar @$all_koha_news;
 
+my $quote = GetDailyQuote();   # other options are to pass in an exact quote id or select a random quote each pass... see perldoc C4::Koha
+
 $template->param(
-    koha_news       => $all_koha_news,
-    koha_news_count => $koha_news_count
+    koha_news           => $all_koha_news,
+    koha_news_count     => $koha_news_count,
+    display_daily_quote => C4::Context->preference('QuoteOfTheDay'),
+    daily_quote         => $quote,
 );
 
 # If GoogleIndicTransliteration system preference is On Set paramter to load Google's javascript in OPAC search screens

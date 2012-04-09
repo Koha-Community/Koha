@@ -12,6 +12,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (13, 'moderate_comments', 'Modérer les commentaires des adhérents'),
    (13, 'edit_notices', 'Définir les notifications'),
    (13, 'edit_notice_status_triggers', 'Définir les déclencheurs de notification de retard'),
+   (13, 'edit_quotes', 'Edit quotes for quote-of-the-day feature'),
    (13, 'view_system_logs', 'Parcourir les journaux de l''activité du système'),
    (13, 'inventory', 'Réaliser les tâches de récolement'),
    (13, 'stage_marc_import', 'Importer des notices MARC dans le réservoir'),

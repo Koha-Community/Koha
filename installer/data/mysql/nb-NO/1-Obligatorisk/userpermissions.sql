@@ -43,6 +43,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (13, 'moderate_comments', 'Behandle kommentarer fra lånere'),
    (13, 'edit_notices', 'Definere meldinger'),
    (13, 'edit_notice_status_triggers', 'Definere utløsere for meldinger og statusenderinger for for sent leverte dokumenter'),
+   (13, 'edit_quotes', 'Edit quotes for quote-of-the-day feature'),
    (13, 'view_system_logs', 'Se Koha sine logger'),
    (13, 'inventory', 'Foreta varetelling'),
    (13, 'stage_marc_import', 'Importere MARC-poster til brønnen'),

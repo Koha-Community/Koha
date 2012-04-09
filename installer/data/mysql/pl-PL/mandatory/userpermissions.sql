@@ -22,6 +22,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (13, 'moderate_comments', 'Moderate patron comments'),
    (13, 'edit_notices', 'Define notices'),
    (13, 'edit_notice_status_triggers', 'Set notice/status triggers for overdue items'),
+   (13, 'edit_quotes', 'Edit quotes for quote-of-the-day feature'),
    (13, 'view_system_logs', 'Przeglądanie logów systemowych'),
    (13, 'inventory', 'Perform inventory (stocktaking) of your catalog'),
    (13, 'stage_marc_import', 'Stage MARC records into the reservoir'),

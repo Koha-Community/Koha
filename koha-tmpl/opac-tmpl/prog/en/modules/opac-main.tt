@@ -35,6 +35,10 @@
 </div>
 [% END %]
 
+      [% IF ( display_daily_quote && daily_quote ) %]
+    <div id="daily-quote" class="container"><h1>Quote of the Day</h1><div><span id="daily-quote-text">[% daily_quote.text %]</span><span id="daily-quote-sep"> ~ </span><span id="daily-quote-source">[% daily_quote.source %]</span></div></div>
+[% END %]
+
 	[% IF ( OpacMainUserBlock ) %]<div id="opacmainuserblock" class="container">[% OpacMainUserBlock %]</div>[% END %]
 
 </div>

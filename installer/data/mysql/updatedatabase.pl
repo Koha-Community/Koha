@@ -5246,6 +5246,29 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.09.00.XXX";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    unless (TableExists('quotes')) {
+        $dbh->do( qq{
+            CREATE TABLE `quotes` (
+              `id` int(11) NOT NULL AUTO_INCREMENT,
+              `source` varchar(45) DEFAULT NULL,
+              `text` mediumtext NOT NULL,
+              `timestamp` datetime NOT NULL,
+              PRIMARY KEY (`id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+        });
+    }
+    $dbh->do( qq{
+        INSERT IGNORE INTO permissions VALUES (13, "edit_quotes","Edit quotes for quote-of-the-day feature");
+    });
+    $dbh->do( qq{
+        INSERT IGNORE INTO `systempreferences` (variable,value,explanation,options,type) VALUES('QuoteOfTheDay',0,'Enable or disable display of Quote of the Day on the OPAC home page',NULL,'YesNo');
+    });
+    print "Upgrade to $DBversion done (Adding Quote of the Day Option.)\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)
