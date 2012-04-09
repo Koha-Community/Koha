@@ -274,14 +274,13 @@ if ( $op eq 'add_form' ) {
     }
 
     # add more_subfields empty lines for add if needed
-    for ( my $j = 1 ; $j <= 1 ; $j++ ) {
         my %row_data;    # get a fresh hash for the row data
         $row_data{'new_subfield'} = 1;
         $row_data{'subfieldcode'} = '';
 
         $row_data{tab} = CGI::scrolling_list(
             -name   => 'tab',
-            -id     => "tab$j",
+            -id     => "tab$i",
             -values =>
               [ '-1', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10' ],
             -labels => {
@@ -311,7 +310,7 @@ if ( $op eq 'add_form' ) {
         $row_data{seealso}      = "";
         $row_data{kohafield}    = CGI::scrolling_list(
             -name     => 'kohafield',
-            -id       => "kohafield$j",
+            -id       => "kohafield$i",
             -values   => \@kohafields,
             -default  => "",
             -size     => 1,
@@ -319,29 +318,29 @@ if ( $op eq 'add_form' ) {
         );
         $row_data{hidden}     = "";
         $row_data{repeatable} = CGI::checkbox(
-            -name     => "repeatable$j",
-            -id       => "repeatable$j",
+            -name     => "repeatable$i",
+            -id       => "repeatable$i",
             -checked  => '',
             -value    => 1,
             -label    => ''
         );
         $row_data{mandatory} = CGI::checkbox(
-            -name     => "mandatory$j",
-            -id       => "mandatory$j",
+            -name     => "mandatory$i",
+            -id       => "mandatory$i",
             -checked  => '',
             -value    => 1,
             -label    => ''
         );
         $row_data{isurl} = CGI::checkbox(
-            -name     => "isurl$j",
-            -id       => "isurl$j",
+            -name     => "isurl$i",
+            -id       => "isurl$i",
             -checked  => '',
             -value    => 1,
             -label    => ''
         );
         $row_data{value_builder} = CGI::scrolling_list(
             -name     => "value_builder",
-            -id       => "value_builder$j",
+            -id       => "value_builder$i",
             -values   => \@value_builder,
             -default  => $data->{'value_builder'},
             -size     => 1,
@@ -349,22 +348,22 @@ if ( $op eq 'add_form' ) {
         );
         $row_data{authorised_value} = CGI::scrolling_list(
             -name     => "authorised_value",
-            -id       => "authorised_value$j",
+            -id       => "authorised_value$i",
             -values   => \@authorised_values,
             -size     => 1,
             -multiple => 0,
         );
         $row_data{authtypes} = CGI::scrolling_list(
             -name     => "authtypecode",
-            -id       => "authtypecode$j",
+            -id       => "authtypecode$i",
             -values   => \@authtypes,
             -size     => 1,
             -multiple => 0,
         );
         $row_data{link}   = CGI::escapeHTML( $data->{'link'} );
-        $row_data{row}    = $j;
+        $row_data{row}    = $i;
         push( @loop_data, \%row_data );
-    }
+
     $template->param( 'use_heading_flags_p'      => 1 );
     $template->param( 'heading_edit_subfields_p' => 1 );
     $template->param(
