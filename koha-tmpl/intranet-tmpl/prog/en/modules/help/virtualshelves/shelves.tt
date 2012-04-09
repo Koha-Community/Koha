@@ -51,6 +51,22 @@
 
 <p>Clicking on the 'List name' will show the contents of the list</p>
 
-<p><strong>See the full documentation for lists in the <a href="http://manual.koha-community.org/3.6/en/stafflists.html#lists">manual</a> (online).</strong></p>
+<h2>Merging Bibliographic Records Via Lists</h2>
+
+<p>The easiest way to merge together duplicate bibliographic records is to add them to a list and use the Merge Tool from there.</p>
+
+<p>From the list, check the two items you want to merge. If you choose more than or fewer than 2, you will be presented with an error</p>
+
+<p>Once you have selected the records you want to merge, click the 'Merge selected items' button. You will be asked which of the two records you would like to keep as your primary record and which will be deleted after the merge. If the records were created using different frameworks, Koha will also ask you what Framework you would like the newly merged record to use.</p>
+
+<p>You will be presented with the MARC for both of the records (each accessible by tabs labeled with the bib numbers for those records). By default the entire first record will be selected, uncheck the fields you don't want in the final (destination) record and then move on to the second tab to choose which fields should be in the final (destination) record.</p>
+
+<p>Should you try to add a field that is not repeatable two times (like choosing the 245 field from both record #1 and #2) you will be presented with an error</p>
+
+<p>Once you have completed your selections click the 'merge' button. The primary record will now show the data you chose for it as well as all of the items/holdings from both bib records, and the second record will be deleted.</p>
+
+<p style="color: rgb(153, 0, 0);">Important: It is important to rebuild your zebra index immediately after merging records. If a search is performed for a record which has been deleted Koha will present the patrons with an error in the OPAC.</p>
+
+<p><strong>See the full documentation for Lists in the <a href="http://manual.koha-community.org/3.8/en/stafflists.html#lists">manual</a> (online).</strong></p>
 
 [% INCLUDE 'help-bottom.inc' %]
