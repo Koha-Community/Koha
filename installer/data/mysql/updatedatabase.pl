@@ -5089,7 +5089,7 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
 $DBversion = "3.07.00.041";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES('SubscriptionDuplicateDroppedInput','','','List of fields which must not be rewritten when a subscription is duplicated (Separated by pipe |)','Free')");
-    print "Upgrade to $DBversion done (Add System Preferences SubscriptionDuplicateDroppedInput)\n";
+    print "Upgrade to $DBversion done (Add system preference SubscriptionDuplicateDroppedInput)\n";
     SetVersion($DBversion);
 }
 
@@ -5186,6 +5186,13 @@ q /INSERT INTO systempreferences (variable,value,explanation,options,type) VALUE
 
     print
 "Upgrade to $DBversion done (Add 'ratings' table and 'OpacStarRatings' syspref)\n";
+    SetVersion($DBversion);
+}
+
+$DBversion = "3.07.00.049";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('OpacBrowseResults','1','Disable/enable browsing and paging search results from the OPAC detail page.',NULL,'YesNo')");
+    print "Upgrade to $DBversion done (Add system preference OpacBrowseResults ))\n";
     SetVersion($DBversion);
 }
 

@@ -14,7 +14,8 @@
 
 <script type="text/JavaScript" language="JavaScript">
 //<![CDATA[
-    [% IF ( busc ) %]
+
+    [% IF ( OpacBrowseResults && busc ) %]
         var arrPagination = new Array();
         var pag_index_ini = [% indexPag %];
         [% IF ( listResults ) %]
@@ -58,7 +59,9 @@
         [% END %]
 	[% IF ( opacuserlogin ) %][% IF ( loggedinusername ) %][% IF ( TagsEnabled ) %]
         $(".tagbutton").click(KOHA.Tags.add_tag_button);[% END %][% END %][% END %]
-        [% IF ( busc ) %]
+
+
+    [% IF ( OpacBrowseResults && busc ) %]
         if (arrPagination.length > 0) {
             renderPagIndexList(pag_index_ini, $("#listResults"));
         }
@@ -83,7 +86,7 @@
             var navigation = $(".pagination");
             navigation.hide();
         });
-        [% END %]
+    [% END %]
 
         $(".branch-info-tooltip-trigger").tooltip({delay: 100, position: "top right"});
 
@@ -136,8 +139,7 @@ $(function () {
 
 });
 
-[% IF ( busc ) %]
-
+[% IF ( OpacBrowseResults && busc ) %]
 var timeoutRFW;
 var totalPagItemList = 10;
 
@@ -1165,7 +1167,8 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 
 <div class="yui-u">
 <div id="ulactioncontainer" class="container">
-[% IF ( busc ) %]
+
+[% IF ( OpacBrowseResults && busc ) %]
     <div class="nav_results">
         <div class="l_Results">[% IF ( listResults ) %]<a href="#" id="a_listResults" title="Show pagination list ([% indexPag %]-[% indexPagEnd %] / [% totalPag %])">Browse results</a>[% ELSE %]<span>Browse results</span>[% END %]</div>
         <ul class="pg_menu clearfix">
