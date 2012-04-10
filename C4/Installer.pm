@@ -20,7 +20,7 @@ package C4::Installer;
 use strict;
 #use warnings; FIXME - Bug 2505
 
-our $VERSION = 3.00;
+our $VERSION = 3.07.00.049;
 use C4::Context;
 use C4::Installer::PerlModules 1.000000;
 

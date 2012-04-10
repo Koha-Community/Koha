@@ -42,14 +42,14 @@ use Koha::DateUtils;
 our ($VERSION,@ISA,@EXPORT,@EXPORT_OK,$debug);
 
 BEGIN {
-	$VERSION = 3.02;
-	$debug = $ENV{DEBUG} || 0;
-	require Exporter;
-	@ISA = qw(Exporter);
-	#Get data
-	push @EXPORT, qw(
-		&Search
-		&GetMemberDetails
+    $VERSION = 3.07.00.049;
+    $debug = $ENV{DEBUG} || 0;
+    require Exporter;
+    @ISA = qw(Exporter);
+    #Get data
+    push @EXPORT, qw(
+        &Search
+        &GetMemberDetails
         &GetMemberRelatives
 		&GetMember
 

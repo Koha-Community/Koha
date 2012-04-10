@@ -1,7 +1,7 @@
 package C4::Labels;
 
 BEGIN {
-    use version; our $VERSION = qv('1.0.0_1');
+    use version; our $VERSION = qv('3.07.00.049');
 
     use C4::Labels::Batch 1.000000;
     use C4::Labels::Label 1.000000;

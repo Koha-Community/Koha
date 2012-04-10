@@ -24,7 +24,7 @@ use warnings;
 use base qw( Exporter );
 
 # set the version for version checking
-our $VERSION   = 4.01;
+our $VERSION   = 3.07.00.049;
 our @EXPORT_OK = qw(
   GetBookSeller GetBooksellersWithLateOrders GetBookSellerFromId
   ModBookseller

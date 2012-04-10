@@ -24,7 +24,7 @@ use PDF::API2::Page;
 
 BEGIN {
 	# set the version for version checking
-	$VERSION = 0.02;
+    $VERSION = 3.07.00.049;
 	require Exporter;
 	@EXPORT = qw(&labelsPage &getLabelPosition setPositionsForX setPositionsForY);
 }

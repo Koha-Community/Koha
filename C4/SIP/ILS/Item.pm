@@ -25,7 +25,7 @@ use C4::Reserves;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK);
 
 BEGIN {
-	$VERSION = 2.11;
+    $VERSION = 3.07.00.049;
 	require Exporter;
 	@ISA = qw(Exporter);
 	@EXPORT_OK = qw();

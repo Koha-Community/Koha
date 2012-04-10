@@ -23,7 +23,7 @@ use PDF::Reuse;
 use PDF::Reuse::Barcode;
 
 BEGIN {
-    use version; our $VERSION = qv('1.0.0_1');
+    use version; our $VERSION = qv('3.07.00.049');
 }
 
 sub _InitVars {

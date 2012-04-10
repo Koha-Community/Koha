@@ -39,7 +39,7 @@ use vars qw($VERSION @ISA @EXPORT);
 
 BEGIN {
     require Exporter;
-    $VERSION = 0.03;
+    $VERSION = 3.07.00.049;
     @ISA = qw(Exporter);
     @EXPORT = qw(
         &XSLTParse4Display
