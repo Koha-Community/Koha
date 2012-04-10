@@ -4931,29 +4931,6 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     print "Upgrade to $DBversion done (Bug 6296 New System preference AllowPKIAuth)\n";
 }
 
-$DBversion = "3.07.00.XXX";
-if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
-    $dbh->do(
-        q | CREATE TABLE ratings (
-  borrowernumber int(11) NOT NULL,
-  biblionumber int(11) NOT NULL,
-  rating_value tinyint(1) NOT NULL,
-  timestamp timestamp NOT NULL default CURRENT_TIMESTAMP,
-  PRIMARY KEY  (borrowernumber,biblionumber),
-  CONSTRAINT ratings_ibfk_1 FOREIGN KEY (borrowernumber) REFERENCES borrowers (borrowernumber) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT ratings_ibfk_2 FOREIGN KEY (biblionumber) REFERENCES biblio (biblionumber) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 |
-    );
-
-    $dbh->do(
-q /INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('OpacStarRatings','disable',NULL,'disable|all|details','Choice') /
-    );
-
-    print
-"Upgrade to $DBversion done (Add 'ratings' table and 'OpacStarRatings' syspref)\n";
-    SetVersion($DBversion);
-}
-
 $DBversion = "3.07.00.029";
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     my $installer = C4::Installer->new();
@@ -5188,6 +5165,30 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     print "Upgrade to $DBversion done (items_location and items_ccode indexes added for ShelfBrowser)";
     SetVersion($DBversion);
 }
+
+$DBversion = "3.07.00.048";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do(
+        q | CREATE TABLE ratings (
+  borrowernumber int(11) NOT NULL,
+  biblionumber int(11) NOT NULL,
+  rating_value tinyint(1) NOT NULL,
+  timestamp timestamp NOT NULL default CURRENT_TIMESTAMP,
+  PRIMARY KEY  (borrowernumber,biblionumber),
+  CONSTRAINT ratings_ibfk_1 FOREIGN KEY (borrowernumber) REFERENCES borrowers (borrowernumber) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT ratings_ibfk_2 FOREIGN KEY (biblionumber) REFERENCES biblio (biblionumber) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 |
+    );
+
+    $dbh->do(
+q /INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('OpacStarRatings','disable',NULL,'disable|all|details','Choice') /
+    );
+
+    print
+"Upgrade to $DBversion done (Add 'ratings' table and 'OpacStarRatings' syspref)\n";
+    SetVersion($DBversion);
+}
+
 
 =head1 FUNCTIONS
 
