@@ -1,5 +1,5 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Administration &rsaquo; Record Matching Rules
+<title>Koha &rsaquo; Administration &rsaquo; Record matching rules
 [% IF ( matching_rule_form ) %]
   [% IF ( edit_matching_rule ) %]
     &rsaquo; Modify record matching rule
@@ -172,7 +172,7 @@ function CheckRuleForm(f) {
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; [% IF ( display_list ) %]Record Matching Rules[% ELSE %]<a href="/cgi-bin/koha/admin/matching-rules.pl">Record Matching Rules</a>[% END %]
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; [% IF ( display_list ) %]Record matching rules[% ELSE %]<a href="/cgi-bin/koha/admin/matching-rules.pl">Record matching rules</a>[% END %]
 [% IF ( matching_rule_form ) %]
   [% IF ( edit_matching_rule ) %]
     &rsaquo; Modify record matching rule
@@ -232,7 +232,7 @@ function CheckRuleForm(f) {
   [% FOREACH matchpoint IN matchpoints %]
   <div id="mp_[% matchpoint.mp_num %]" class="matchgroup">
   <fieldset class="rows">
-    <legend>Match Point [% matchpoint.mp_num %] | <a href="#" class="button" onclick="InsertMatchpoint('mp_[% matchpoint.mp_num %]', 'mp_template'); return false;">Add match point</a> | <a href="#" class="button" onclick="DeleteMatchpoint(this); return false;">Remove this match point</a></legend>
+    <legend>Match point [% matchpoint.mp_num %] | <a href="#" class="button" onclick="InsertMatchpoint('mp_[% matchpoint.mp_num %]', 'mp_template'); return false;">Add match point</a> | <a href="#" class="button" onclick="DeleteMatchpoint(this); return false;">Remove this match point</a></legend>
     <ol>
       <li>
         <label for="mp_[% matchpoint.mp_num %]_search_index">Search index: </label>
@@ -302,7 +302,7 @@ function CheckRuleForm(f) {
   [% ELSE %]
   <div id="mp_1" class="matchgroup">
   <fieldset class="rows">
-    <legend>Match Point 1 | <a href="#" class="button" onclick="InsertMatchpoint('mp_1', 'mp_template'); return false;">Add match point</a> | <a href="#" class="button" onclick="DeleteMatchpoint(this); return false;">Remove this match point</a></legend>
+    <legend>Match point 1 | <a href="#" class="button" onclick="InsertMatchpoint('mp_1', 'mp_template'); return false;">Add match point</a> | <a href="#" class="button" onclick="DeleteMatchpoint(this); return false;">Remove this match point</a></legend>
     <ol>
       <li>
         <label for="mp_1_search_index">Search index: </label>
@@ -546,10 +546,10 @@ function CheckRuleForm(f) {
 	}	//]]>
 	</script>
 	<ul class="toolbar">
-	<li><a id="newrule" href="[% script_name %]?op=add_matching_rule">New Record Matching Rule</a></li>
+    <li><a id="newrule" href="[% script_name %]?op=add_matching_rule">New record matching rule</a></li>
 </ul></div>
 
-<h2>Record Matching Rules</h2>
+<h2>Record matching rules</h2>
 [% IF ( added_matching_rule ) %]
 <div class="dialog message">Added record matching rule &quot;[% added_matching_rule %]&quot;</div>
 [% END %]

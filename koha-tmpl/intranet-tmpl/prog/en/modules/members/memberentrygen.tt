@@ -372,7 +372,7 @@
 
 [% IF ( showguarantor ) %]<input type="hidden" id="guarantorid" name="guarantorid"   value="[% guarantorid %]" />
     <fieldset class="rows">
-        <legend>Guarantor Information</legend>
+        <legend>Guarantor information</legend>
         <ol>
 [% IF ( P ) %]
 	        [% IF ( guarantorid ) %]
@@ -455,7 +455,7 @@
             [% IF ( guarantorid ) %]
             <input id="guarantorsearch" type="button" value="Change" onclick="Dopopguarantor('guarantor_search.pl?category_type=[% category_type %]');" />
             [% ELSE %]
-            <input id="guarantorsearch" type="button" value="Set to Patron" onclick="Dopopguarantor('guarantor_search.pl?category_type=[% category_type %]');" />
+            <input id="guarantorsearch" type="button" value="Set to patron" onclick="Dopopguarantor('guarantor_search.pl?category_type=[% category_type %]');" />
             [% END %]
             <input id="guarantordelete" type="button" value="Delete" />
         </li>
@@ -615,7 +615,7 @@
       [% ELSE %]
       <label for="phone">
       [% END %]
-      Primary Phone: </label>
+      Primary phone: </label>
       [% IF ( opduplicate ) %]
 			<input type="text" id="phone" name="phone" value="[% phone %]" onclick="this.value=''" />
       [% ELSE %]
@@ -632,7 +632,7 @@
       [% ELSE %]
       <label for="phonepro">
       [% END %]
-      Secondary Phone: </label>
+      Secondary phone: </label>
       [% IF ( opduplicate ) %]
 			<input type="text" id="phonepro" name="phonepro" value="[% phonepro %]" onclick="this.value=''" />
       [% ELSE %]
@@ -648,7 +648,7 @@
       [% ELSE %]
       <label for="mobile">
       [% END %]
-      Other Phone: </label>
+      Other phone: </label>
       [% IF ( opduplicate ) %]
 		<input type="text" id="mobile" name="mobile" value="[% mobile %]" onclick="this.value=''" />
       [% ELSE %]
@@ -664,7 +664,7 @@
       [% ELSE %]
       <label for="email">
       [% END %]
-      Primary Email: </label>
+      Primary email: </label>
       [% IF ( opduplicate ) %]
 		<input type="text" id="email" name="email" size="45" value="[% email %]" onclick="this.value=''" />
       [% ELSE %]
@@ -681,7 +681,7 @@
       [% ELSE %]
       <label for="emailpro">
       [% END %]
-      Secondary Email: </label>
+      Secondary email: </label>
       [% IF ( opduplicate ) %]
 		<input type="text" id="emailpro" name="emailpro" size="45" value="[% emailpro %]" onclick="this.value=''" />
       [% ELSE %]
@@ -855,7 +855,7 @@
 [% IF ( step_2 ) %]
     [% UNLESS noaltcontactsurname && noaltcontactfirstname && noaltcontactaddress1 && noaltcontactaddress2 && noaltcontactaddress3 && noaltcontactstate && noaltcontactzipcode && noaltcontactcountry && noaltcontactphone %]
 		<fieldset class="rows" id="memberentry_altaddress">       
-		    <legend id="alt_contact_lgd">Alternate Contact</legend><ol>
+            <legend id="alt_contact_lgd">Alternate contact</legend><ol>
         [% UNLESS noaltcontactsurname %]
 			<li>
 			    [% IF ( mandatoryaltcontactsurname ) %]
@@ -1000,7 +1000,7 @@
 [% IF ( step_3 ) %]
 
   <fieldset class="rows" id="memberentry_library_management">
-    <legend id="library_management_lgd">Library Management</legend><ol>
+    <legend id="library_management_lgd">Library management</legend><ol>
         [% UNLESS nocardnumber %]
    <li> [% IF ( mandatorycardnumber ) %]
       <label for="cardnumber" class="required">
@@ -1189,7 +1189,7 @@
 
     [% UNLESS nouserid && nopassword %]
 	<fieldset class="rows" id="memberentry_userid">
-		<legend id="opac_staff_login_lgd">OPAC/Staff Login</legend><ol>
+        <legend id="opac_staff_login_lgd">OPAC/Staff login</legend><ol>
         [% UNLESS nouserid %]
 		<li>
 			[% IF ( mandatoryuserid ) %]
@@ -1308,13 +1308,13 @@
 		<!--this zones are not necessary in modif mode -->
 		[% UNLESS ( opadd ) %]
 		<fieldset class="rows">
-			<legend>Patron Account Flags</legend>
+            <legend>Patron account flags</legend>
 			<ol class="radio">
 			[% FOREACH flagloo IN flagloop %]
 				<li><label class="radio" for="yes[% flagloo.name %]">
-				[% IF ( flagloo.key == 'gonenoaddress' ) %]Gone no Address:[% END %]
+                [% IF ( flagloo.key == 'gonenoaddress' ) %]Gone no address:[% END %]
 				[% IF ( flagloo.key == 'debarred' ) %]Restricted:[% END %]
-				[% IF ( flagloo.key == 'lost' ) %]Lost Card:[% END %]
+                [% IF ( flagloo.key == 'lost' ) %]Lost card:[% END %]
                 </label>
 				<label for="yes[% flagloo.name %]">Yes </label>
 				[% IF ( flagloo.yes ) %]

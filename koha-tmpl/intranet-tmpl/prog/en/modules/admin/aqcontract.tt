@@ -6,8 +6,8 @@
 [% END %]
 [% IF ( else ) %]Contracts of [% booksellername %][% END %]
 [% IF ( add_validate ) %]Data recorded[% END %]
-[% IF ( delete_confirm ) %]Confirm Deletion of Contract '[% contractnumber %]'[% END %]
-[% IF ( delete_confirmed ) %]Contract Deleted[% END %]</title>
+[% IF ( delete_confirm ) %]Confirm deletion of contract '[% contractnumber %]'[% END %]
+[% IF ( delete_confirmed ) %]Contract deleted[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
 <script type="text/javascript" src="[% themelang %]/js/acq.js"></script>
@@ -75,7 +75,7 @@ function Check(ff) {
     [% END %]
     [% IF ( delete_confirm ) %]
         <a href="/cgi-bin/koha/admin/aqcontract.pl?booksellerid=[% booksellerid %]">Contracts</a>
-        &rsaquo; Confirm Deletion of Contract [% contractnumber %]
+        &rsaquo; Confirm deletion of contract [% contractnumber %]
     [% END %]
     [% IF ( delete_confirmed ) %]
         <a href="/cgi-bin/koha/admin/aqcontract.pl?booksellerid=[% booksellerid %]">Contracts</a> &rsaquo; Contract Deleted
@@ -154,7 +154,7 @@ function Check(ff) {
             [% IF ( delete_confirm ) %]
                 <form action="[% script_name %]" method="post">
                     <fieldset>
-                        <legend>Confirm Deletion of Contract [% contractnumber %]</legend>
+                        <legend>Confirm deletion of contract [% contractnumber %]</legend>
                         <table>
                             <tr><th scope="row">Contract number:</th><td>[% contractnumber %]</td></tr>
                             <tr><th scope="row">Contract name:</th><td>[% contractname %]</td></tr>
@@ -174,7 +174,7 @@ function Check(ff) {
                 </form>
             [% END %]
             [% IF ( delete_confirmed ) %]
-                <h3>Contract Deleted</h3>
+                <h3>Contract deleted</h3>
                 <form action="[% script_name %]" method="post">
                     <input type="hidden" name="booksellerid" value="[% booksellerid %]" />
                     <input type="submit" value="OK" />
@@ -195,7 +195,7 @@ function Check(ff) {
                         //]]>
                     </script>
                     <ul class="toolbar">
-                        <li><a id="newcontract" href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&amp;booksellerid=[% booksellerid %]">New Contract</a></li>
+                        <li><a id="newcontract" href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&amp;booksellerid=[% booksellerid %]">New contract</a></li>
                     </ul>
                 </div>
                 <h2>Contract(s) of [% booksellername %]</h2>

@@ -3,10 +3,10 @@
         [% IF ( opacuserlogin ) %]
             [% IF ( RequestOnOpac ) %]
                 [% IF ( AllowOnShelfHolds ) %]
-                    <li><a class="reserve" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=[% biblionumber %]">Place Hold</a></li>
+                    <li><a class="reserve" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=[% biblionumber %]">Place hold</a></li>
                 [% ELSE %]
                     [% IF ( ItemsIssued ) %]
-                        <li><a class="reserve" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=[% biblionumber %]">Place Hold</a></li>
+                        <li><a class="reserve" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=[% biblionumber %]">Place hold</a></li>
                     [% END %]
                 [% END %]
             [% END %]
@@ -16,7 +16,7 @@
     [% IF ( virtualshelves ) %]
         [% IF ( opacuserlogin ) %][% IF ( loggedinusername ) %]
             <li><a class="addtoshelf" href="/cgi-bin/koha/opac-addbybiblionumber.pl?biblionumber=[% biblionumber %]" onclick="Dopop('opac-addbybiblionumber.pl?biblionumber=[% biblionumber %]'); return false;">
-                Save to Your Lists
+                Save to your lists
             </a></li>
         [% END %][% END %]
     [% END %]
@@ -44,7 +44,7 @@
 [% IF ( export_options.size ) %]
     <div id="export" class="detailtagcell">
         <form method="get" action="/cgi-bin/koha/opac-export.pl">
-        <label for="format">Save Record:</label>
+        <label for="format">Save record:</label>
         <select name="format" id="format">
         [% FOREACH option IN export_options %]
             [% SWITCH option %]

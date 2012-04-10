@@ -1,5 +1,5 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Circulation &rsaquo; Items Overdue as of [% todaysdate %]</title>
+<title>Koha &rsaquo; Circulation &rsaquo; Items overdue as of [% todaysdate %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <script type="text/JavaScript" language="JavaScript">
 //<![CDATA[
@@ -89,14 +89,13 @@
 
 [% IF ( noreport ) %]
 
-<h2>Overdue Report</h2>
+<h2>Overdue report</h2>
 
 <p>Please choose one or more filters to proceed.</p>
 
 [% ELSE %]
 
-<h2>[% nnoverdue %] [% IF ( noverdue_is_plural ) %]Items[% ELSE %]Item[% END %]
-	 Overdue as of [% todaysdate %][% IF ( isfiltered ) %] (filtered)[% END %]</h2>
+<h2>[% nnoverdue %] [% IF ( noverdue_is_plural ) %]items[% ELSE %]item[% END %] overdue as of [% todaysdate %][% IF ( isfiltered ) %] (filtered)[% END %]</h2>
 
 <p>
     [% IF ( isfiltered ) %]
@@ -109,7 +108,7 @@
 <div class="searchresults">
 <table id="overduest">
 <thead><tr>
-    <th>Due Date</th>
+    <th>Due date</th>
     <th>Patron</th>
     <th>Library</th>
     <th>Title</th>
@@ -140,12 +139,12 @@
 <div class="yui-b">
 <form method="post" action="/cgi-bin/koha/circ/overdue.pl">
   <fieldset class="brief">
-<h4>Filter On:</h4>
+<h4>Filter on:</h4>
 	<fieldset><legend>Date due:</legend>
 	<ol>
     <li><label for="dateduefrom">From:</label>
 	<input type="text" id="dateduefrom" name="dateduefrom" size="10" value="[% dateduefrom %]" />
-	<img src="[% themelang %]/lib/calendar/cal.gif" id="dateduefrom_button" alt="Show Calendar" />
+    <img src="[% themelang %]/lib/calendar/cal.gif" id="dateduefrom_button" alt="Show calendar" />
 	<script language="JavaScript" type="text/javascript">
 	    Calendar.setup(
 	    {
@@ -159,7 +158,7 @@
 	<li>
 	<label for="datedueto">To:</label>
 	<input type="text" id="datedueto" name="datedueto" size="10" value="[% datedueto %]" />
-	<img src="[% themelang %]/lib/calendar/cal.gif" id="datedueto_button" alt="Show Calendar" />
+    <img src="[% themelang %]/lib/calendar/cal.gif" id="datedueto_button" alt="Show calendar" />
 	<script language="JavaScript" type="text/javascript">
 	    Calendar.setup(
 	    {
@@ -186,8 +185,8 @@
             [% ELSE %]<option value="gonenoaddress">Address in question</option>[% END %]
             [% IF ( borflag_debarred ) %]<option value="debarred" selected="selected">Restricted</option>
             [% ELSE %]<option value="debarred">Restricted</option>[% END %]
-            [% IF ( borflag_lost ) %]<option value="lost" selected="selected">Lost Card</option>
-            [% ELSE %]<option value="lost">Lost Card</option>[% END %]
+            [% IF ( borflag_lost ) %]<option value="lost" selected="selected">Lost card</option>
+            [% ELSE %]<option value="lost">Lost card</option>[% END %]
         </select>
     </li>
 	[% FOREACH patron_attr_filter_loo IN patron_attr_filter_loop %]
@@ -244,11 +243,11 @@
     [% ELSE %]
     <option value="[% ORDER_LOO.ordervalue %]">
     [% END %]
-    [% IF ( ORDER_LOO.order_date_due ) %]Due Date
+    [% IF ( ORDER_LOO.order_date_due ) %]Due date
     [% ELSIF ( ORDER_LOO.order_borrower ) %]Patron
     [% ELSIF ( ORDER_LOO.order_barcode ) %]Barcode
     [% ELSIF ( ORDER_LOO.order_title ) %]Title
-    [% ELSIF ( ORDER_LOO.order_date_due_desc ) %]Due Date desc
+    [% ELSIF ( ORDER_LOO.order_date_due_desc ) %]Due date desc
     [% ELSIF ( ORDER_LOO.order_borrower_desc ) %]Patron desc
     [% ELSIF ( ORDER_LOO.order_barcode_desc ) %]Barcode desc
     [% ELSIF ( ORDER_LOO.order_title_desc ) %]Title desc

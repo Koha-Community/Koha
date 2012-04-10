@@ -1,8 +1,8 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Web Installer &rsaquo; Step 1</title>
+<title>Koha &rsaquo; Web installer &rsaquo; Step 1</title>
 [% INCLUDE 'installer-doc-head-close.inc' %]
 <div>
-<h1 id="logo"><img alt="Koha" src="/intranet-tmpl/prog/img/koha.org-logo.gif" /> Web Installer &rsaquo; Step 1</h1>
+<h1 id="logo"><img alt="Koha" src="/intranet-tmpl/prog/img/koha.org-logo.gif" /> Web installer &rsaquo; Step 1</h1>
 [% UNLESS ( language ) %]
 <p>You are about to install Koha.</p>
 
@@ -26,13 +26,13 @@ listed, please inform your systems administrator.</p>
 </select>
 </p>
 
-<p> Click Next to continue <input value="Next &gt;&gt;" type="submit" /></p>
+<p> Click 'Next' to continue <input value="Next &gt;&gt;" type="submit" /></p>
 </form>
 [% END %]
 [% IF ( language ) %]
   [% UNLESS ( checkmodule ) %]
   [% IF ( missing_modules ) %]
-  <p>Some perl modules are missing. Modules in red <b>must</b> be installed before you may continue.<br />
+  <p>Some Perl modules are missing. Modules in red <b>must</b> be installed before you may continue.<br />
   <ul>
   [% FOREACH missing_module IN missing_modules %]
     [% IF ( missing_module.require ) %]
@@ -59,7 +59,7 @@ listed, please inform your systems administrator.</p>
 [% IF ( checkmodule ) %]
 <input type="hidden" name="step" value="2" />
 <p> All dependencies installed.</p>
-<p>Please click next to continue <input value="Next &gt;&gt;" type="submit" /></p>
+<p>Please click 'Next' to continue <input value="Next &gt;&gt;" type="submit" /></p>
 [% ELSE %]
 <input type="hidden" name="step" value="1" />
 <p>Click to recheck dependencies <input value="Recheck" type="submit" /></p>

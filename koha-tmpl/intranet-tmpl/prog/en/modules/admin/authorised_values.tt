@@ -1,8 +1,8 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Administration &rsaquo; Authorized Values [% IF ( add_form ) %] &rsaquo; [% IF ( action_modify ) %]Modify authorized value[% END %]
+<title>Koha &rsaquo; Administration &rsaquo; Authorized values [% IF ( add_form ) %] &rsaquo; [% IF ( action_modify ) %]Modify authorized value[% END %]
 	   [% IF ( action_add_value ) %] &rsaquo;  New authorized value[% END %]
 	   [% IF ( action_add_category ) %] &rsaquo; New category[% END %][% END %]
-[% IF ( delete_confirm ) %] &rsaquo; Confirm Deletion[% END %]
+[% IF ( delete_confirm ) %] &rsaquo; Confirm deletion[% END %]
 [% IF ( else ) %]Authorized values[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
@@ -32,10 +32,10 @@
 <body id="admin_authorised_values" class="admin">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; [% IF ( add_form ) %] <a href="/cgi-bin/koha/admin/authorised_values.pl">Authorized Values</a> &rsaquo; [% IF ( action_modify ) %]Modify authorized value[% END %]
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; [% IF ( add_form ) %] <a href="/cgi-bin/koha/admin/authorised_values.pl">Authorized values</a> &rsaquo; [% IF ( action_modify ) %]Modify authorized value[% END %]
 	   [% IF ( action_add_value ) %]New authorized value[% END %]
 	   [% IF ( action_add_category ) %]New category[% END %][% END %]
-[% IF ( delete_confirm ) %] <a href="/cgi-bin/koha/admin/authorised_values.pl">Authorized Values</a> &rsaquo; Confirm Deletion[% END %]
+[% IF ( delete_confirm ) %] <a href="/cgi-bin/koha/admin/authorised_values.pl">Authorized values</a> &rsaquo; Confirm deletion[% END %]
 [% IF ( else ) %]Authorized values[% END %]</div>
 
 <div id="doc3" class="yui-t2">
@@ -79,7 +79,7 @@
         </li>
 		</ol>
 		<div id="icons" class="toptabs">
-		<h5 style="margin-left:10px;">Choose an Icon:</h5>
+        <h5 style="margin-left:10px;">Choose an icon:</h5>
 			<ul>
 					<li><a href="/cgi-bin/koha/admin/authorised_values.pl?op=add_form&amp;category=[% category %]#none">None</a></li>
 				  [% FOREACH imageset IN imagesets %]
@@ -122,7 +122,7 @@
 
 [% IF ( delete_confirm ) %]
 	<div class="dialog alert">
-<h3>Confirm Deletion</h3>
+<h3>Confirm deletion</h3>
 <table>
 	<tr>
 		<th>Category</th>
@@ -140,8 +140,8 @@
 	<form action="[% script_name %]" method="post">
 		<input type="hidden" name="op" value="delete_confirmed" />
 		<input type="hidden" name="id" value="[% id %]" />
-		<input type="hidden" name="searchfield" value="[% searchfield %]" /><fieldset class="action"><input type="submit" value="Yes, Delete" class="approve" /></form>
-<form action="[% script_name %]" method="get"><input type="hidden" name="searchfield" value="[% searchfield %]" /><input type="submit" value="No, Do Not Delete" class="deny" /></form>
+        <input type="hidden" name="searchfield" value="[% searchfield %]" /><fieldset class="action"><input type="submit" value="Yes, delete" class="approve" /></form>
+<form action="[% script_name %]" method="get"><input type="hidden" name="searchfield" value="[% searchfield %]" /><input type="submit" value="No, do not delete" class="deny" /></form>
 </div>
 [% END %]
 
@@ -171,8 +171,8 @@
 	//]]>
 	</script>
 	<ul class="toolbar">
-	 <li><a id="addauth" href= "/cgi-bin/koha/admin/authorised_values.pl?op=add_form&amp;category=[% category %]">New Authorized value for [% category %]</a></li>
-    <li><a id="addcat" href= "/cgi-bin/koha/admin/authorised_values.pl?op=add_form">New Category</a></li>
+     <li><a id="addauth" href= "/cgi-bin/koha/admin/authorised_values.pl?op=add_form&amp;category=[% category %]">New authorized value for [% category %]</a></li>
+    <li><a id="addcat" href= "/cgi-bin/koha/admin/authorised_values.pl?op=add_form">New category</a></li>
 </ul></div>
 
 <h1>Authorized values</h1>
@@ -182,7 +182,7 @@
 <div class="dialog alert">Could not add value &quot;[% duplicate_value %]&quot; for category &quot;[% duplicate_category %]&quot; &mdash; value already present.
 </div>
 [% END %]
-<form action="/cgi-bin/koha/admin/authorised_values.pl" method="post" id="category"><label for="searchfield">Show Category: </label>[% tab_list %] <input type="submit" value="Submit" /></form>
+<form action="/cgi-bin/koha/admin/authorised_values.pl" method="post" id="category"><label for="searchfield">Show category: </label>[% tab_list %] <input type="submit" value="Submit" /></form>
 [% IF ( category == 'Bsort1' ) %]
     <p>An authorized value attached to patrons, that can be used for stats purposes</p>
 [% END %]

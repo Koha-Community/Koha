@@ -1,5 +1,5 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Patrons &rsaquo; Collect Fine Payment for  [% borrower.firstname %] [% borrower.surname %]</title>
+<title>Koha &rsaquo; Patrons &rsaquo; Collect fine payment for  [% borrower.firstname %] [% borrower.surname %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <script type= "text/javascript">
 //<![CDATA[
@@ -57,7 +57,7 @@ function moneyFormat(textObj) {
 <body id="pat_paycollect" class="pat">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'patron-search.inc' %]
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>  &rsaquo; <a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% borrower.borrowernumber %]">Pay Fines for [% borrower.firstname %] [% borrower.surname %]</a> &rsaquo; [% IF ( pay_individual ) %]Pay an individual fine[% ELSIF ( writeoff_individual ) %]Write off an individual fine[% ELSE %][% IF ( selected_accts ) %]Pay an amount toward selected fines[% ELSE %]Pay an amount toward all fines[% END %][% END %]</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>  &rsaquo; <a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% borrower.borrowernumber %]">Pay fines for [% borrower.firstname %] [% borrower.surname %]</a> &rsaquo; [% IF ( pay_individual ) %]Pay an individual fine[% ELSIF ( writeoff_individual ) %]Write off an individual fine[% ELSE %][% IF ( selected_accts ) %]Pay an amount toward selected fines[% ELSE %]Pay an amount toward all fines[% END %][% END %]</div>
 
 <div id="doc3" class="yui-t2">
 
@@ -109,11 +109,11 @@ function moneyFormat(textObj) {
     <table>
     <thead><tr>
             <th>Description</th>
-            <th>Account Type</th>
+            <th>Account type</th>
             <th>Notify id</th>
             <th>Level</th>
             <th>Amount</th>
-            <th>Amount Outstanding</th>
+            <th>Amount outstanding</th>
         </tr></thead>
     <tfoot>
         <td colspan="5">Total amount payable:</td><td>[% amountoutstanding | format('%.2f') %]</td>
@@ -161,11 +161,11 @@ function moneyFormat(textObj) {
     <table>
     <thead><tr>
             <th>Description</th>
-            <th>Account Type</th>
+            <th>Account type</th>
             <th>Notify id</th>
             <th>Level</th>
             <th>Amount</th>
-            <th>Amount Outstanding</th>
+            <th>Amount outstanding</th>
         </tr></thead>
     <tfoot><td colspan="5">Total amount to be written off:</td><td>[% amountoutstanding | format('%.2f') %]</td></tfoot>
     <tbody><tr>

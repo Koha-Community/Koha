@@ -1,6 +1,6 @@
 [% INCLUDE 'help-top.inc' %]
 
-<h1>Circulation and Fines Rules</h1>
+<h1>Circulation and fines rules</h1>
 
 <p>These rules define how your items are circulated, how/when fines are calculated and how holds are handled.</p>
 
@@ -20,7 +20,7 @@
 
 <p style="color: #990000;">Important: At the very least you will need to set a default circulation rule. This rule should be set for all item types, all libraries and all patron categories. That will catch all instances that do not match a specific rule. When checking out if you do not have a rule for all libraries, all item types and all patron types then you may see patrons getting blocked from placing holds. You will also want a rule for your specific library set for all item types and all patron types to avoid this holds issue. Koha needs to know what rule to fall back on.</p>
 
-<h2>Default Circulation Rules</h2>
+<h2>Default circulation rules</h2>
 
 <p>Using the issuing rules matrix you can define rules that depend on patron/item type combos. To set your rules, choose a library from the pull down (or 'all libraries' if you want to apply these rules to all libraries):</p>
 
@@ -33,14 +33,14 @@
 	<li>You can also define a hard due date for a specific patron category and item type. A hard due date ignores your usual circulation rules and makes it so that all items of the type defined are due on, before or after the date you specify.</li>
 	<li>'Fine Amount' should have the amount you would like to charge for overdue items</li>
 <ul>
-	<li>Important Enter only numbers and decimal points (no currency symbols).</li>
+    <li>Important: Enter only numbers and decimal points (no currency symbols).</li>
 </ul>
-	<li>The 'Fine Grace Period' is the period of time an item can be overdue before you start charging fines.</li>
-	<li>Enter the 'Fine Charging Interval' in days (ex. charge fines every 1 day, or every 2 days)</li>
-	<li>If your library 'fines' patrons by suspending their account you can enter the number of days their fine should be suspended in the 'Suspension in Days' field</li>
-	<li>Next decide if the patron can renew this item type and if so, enter how many times they can renew it in the 'Renewals Allowed' box</li>
-	<li>If the patron can place holds on this item type, enter the total numbers of items (of this type) that can be put on hold in the 'Holds Allowed' field</li>
-	<li>Finally, if you charge a rental fee for the item type and want to give a specific patron type a discount on that fee, enter the percentage discount (without the % symbol) in the 'Rental Discount' field</li>
+    <li>The 'Fine grace period' is the period of time an item can be overdue before you start charging fines.</li>
+    <li>Enter the 'Fine charging interval' in days (ex. charge fines every 1 day, or every 2 days)</li>
+    <li>If your library 'fines' patrons by suspending their account you can enter the number of days their fine should be suspended in the 'Suspension in days' field</li>
+    <li>Next decide if the patron can renew this item type and if so, enter how many times they can renew it in the 'Renewals allowed' box</li>
+    <li>If the patron can place holds on this item type, enter the total numbers of items (of this type) that can be put on hold in the 'Holds allowed' field</li>
+    <li>Finally, if you charge a rental fee for the item type and want to give a specific patron type a discount on that fee, enter the percentage discount (without the % symbol) in the 'Rental discount' field</li>
 </ul>
 
 <p>When finished, click 'Add' to save your changes. To modify a rule, create a new one with the same patron type and item type. If you would like to delete your rule, simply click the 'Delete' link to the right of the rule.</p>
@@ -49,42 +49,42 @@
 
 <p>After choosing to clone you will be presented with a confirmation message.</p>
 
-<h2>Default Checkouts and Hold Policy</h2>
+<h2>Default checkouts and hold policy</h2>
 
 <p>You can set a default maximum number of checkouts and hold policy that will be used if none is defined below for a particular item type or category.</p>
 
 <p>From this menu you can set a default to apply to all item types and patrons in the library.</p>
 <ul>
-	<li>In 'Total Current Checkouts Allowed' enter the total number of items patrons can have checked out at one time</li>
-	<li>Control where patrons can place holds from using the 'Hold Policy' menu</li>
+    <li>In 'Total current checkouts allowed' enter the total number of items patrons can have checked out at one time</li>
+    <li>Control where patrons can place holds from using the 'Hold policy' menu</li>
 <ul>
-	<li>From Any Library: Patrons from any library may put this item on hold. (default if none is defined)</li>
-	<li>From Home Library: Only patrons from the item's home library may put this book on hold.</li>
-	<li>No Holds Allowed: No patron may put this book on hold.</li>
+    <li>From any library: Patrons from any library may put this item on hold. (default if none is defined)</li>
+    <li>From home library: Only patrons from the item's home library may put this book on hold.</li>
+    <li>No holds allowed: No patron may put this book on hold.</li>
 </ul>
 	<li>Once your policy is set, you can unset it by clicking the 'Unset' link to the right of the rule</li>
 </ul>
-<h2>Checkouts Per Patron</h2>
+<h2>Checkouts per patron</h2>
 
 <p>For this library, you can specify the maximum number of loans that a patron of a given category can make, regardless of the item type.</p>
 
 <p style="background-color: #ffe599;">Tip: If the total amount loanable for a given patron category is left blank, no limit applies, except possibly for a limit you define for a specific item type.</p>
 
-<h2>Item Hold Policies</h2>
+<h2>Item hold policies</h2>
 
 <p>For this library, you can edit rules for given itemtypes, regardless of the patron's category. Currently, this means hold policies.</p>
 
 <p>The various policies have the following effects:</p>
 <ul>
-	<li>From Any Library: Patrons from any library may put this item on hold. (default if none is defined)</li>
-	<li>From Home Library: Only patrons from the item's home library may put this book on hold.</li>
-	<li>No Holds Allowed: No patron may put this book on hold.</li>
+    <li>From any library: Patrons from any library may put this item on hold. (default if none is defined)</li>
+    <li>From home library: Only patrons from the item's home library may put this book on hold.</li>
+    <li>No holds allowed: No patron may put this book on hold.</li>
 </ul>
 
 <p style="color: #990000;">Important: Note that if the system preference AllowHoldPolicyOverride set to 'allow', these policies can be overridden by your circulation staff.</p>
 
 <p style="color: #990000;">Important: These policies are based on the patron's home library, not the library that the reserving staff member is from.</p>
 
-<p><strong>See the full documentation for Circulation and Fine Rules in the <a href="http://manual.koha-community.org/3.6/en/patscirc.html#circfinerules">manual</a> (online).</strong></p>
+<p><strong>See the full documentation for circulation and fine rules in the <a href="http://manual.koha-community.org/3.6/en/patscirc.html#circfinerules">manual</a> (online).</strong></p>
 
 [% INCLUDE 'help-bottom.inc' %]

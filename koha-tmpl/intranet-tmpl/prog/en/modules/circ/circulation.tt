@@ -196,7 +196,7 @@ function refocus(calendar) {
     <li>
             <label for="message_type">Add a message for:</label>
           <select name="message_type" id="message_type">
-            <option value="L">Other Librarians</option>
+            <option value="L">Other librarians</option>
             <option value="B">[% firstname %]</option>
         </select>
     </li>
@@ -204,7 +204,7 @@ function refocus(calendar) {
         <li>
                 <label for="type">Predefined notes: </label>
                 <select name="type" id="type" onchange="this.form.borrower_message.value=this.options[this.selectedIndex].value;">
-                    <option value="">Select Note</option>
+                    <option value="">Select note</option>
                     [% FOREACH canned_bor_notes_loo IN canned_bor_notes_loop %]
                     <option value="[% canned_bor_notes_loo.lib %]">[% canned_bor_notes_loo.lib %]</option>
                     [% END %]
@@ -237,7 +237,7 @@ function refocus(calendar) {
 <div class="yui-g">
 
 <div id="circ_needsconfirmation" class="dialog alert">
-<h3>Please Confirm Checkout</h3>
+<h3>Please confirm checkout</h3>
 
 <ul>
 [% IF ( DEBT ) %]
@@ -308,7 +308,7 @@ function refocus(calendar) {
     [% IF ( INVALID_DATE ) %]
     <p>
     <input type="text" size="10" id="duedatespec" name="duedatespec" value="[% duedatespec %]" />
-    <label for="duedatespec">Due Date</label>
+    <label for="duedatespec">Due date</label>
     </p>
     [% ELSE %]
     <input type="hidden" name="duedatespec" value="[% duedatespec %]" />
@@ -347,7 +347,7 @@ function refocus(calendar) {
 <!-- RESULT OF ISSUING REQUEST -->
         <ul>
         [% IF ( STATS ) %]
-            <li>Local Use Recorded</li>
+            <li>Local use recorded</li>
         [% END %]
 
         [% IF ( INVALID_DATE ) %]
@@ -358,7 +358,7 @@ function refocus(calendar) {
             <li>The barcode was not found [% barcode %]</li>
 	    [% IF ( fast_cataloging ) %]
 	        [% IF ( CAN_user_editcatalogue_fast_cataloging ) %]
-                    <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?frameworkcode=FA&barcode=[% barcode %]&borrowernumber=[% borrowernumber %]&branch=[% branch %]&duedatespec=[% duedatespec %]&stickyduedate=[% stickyduedate %]">Fast cataloging</a>
+                    <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?frameworkcode=FA&amp;barcode=[% barcode %]&amp;borrowernumber=[% borrowernumber %]&amp;branch=[% branch %]&amp;duedatespec=[% duedatespec %]&amp;stickyduedate=[% stickyduedate %]">Fast cataloging</a>
 		[% END %]
 	    [% END %]
         [% END %]
@@ -416,7 +416,7 @@ function refocus(calendar) {
     [% END %] <!-- /impossible -->
 
 [% IF ( issued ) %]
-<p>Item Checked out</p>
+<p>Item checked out</p>
 [% END %]
 
 [% IF ( message ) %]
@@ -480,10 +480,10 @@ No patron matched <span class="ex">[% message %]</span>
     <input type="submit" value="Check Out" />
 
     [% IF ( SpecifyDueDate ) %]<div class="date-select">
-        <div class="hint">Specify Due Date [% INCLUDE 'date-format.inc' %]: </div>
+        <div class="hint">Specify due date [% INCLUDE 'date-format.inc' %]: </div>
 		[% IF ( duedatespec ) %]<input type="text" size="10" id="duedatespec" name="duedatespec" value="[% duedatespec %]" />[% ELSE %]<input type="text" size="10" id="duedatespec" name="duedatespec" value="" />
 [% END %]
-		<img src="[% themelang %]/lib/calendar/cal.gif" alt="Show Calendar"  border="0" id="CalendarDueDate" style="cursor: pointer;" />
+        <img src="[% themelang %]/lib/calendar/cal.gif" alt="Show calendar"  border="0" id="CalendarDueDate" style="cursor: pointer;" />
              <script language="JavaScript" type="text/javascript">
 			 //<![CDATA[
                    function validate1(date) {
@@ -512,7 +512,7 @@ No patron matched <span class="ex">[% message %]</span>
 				//]]>
                  </script>
 
-          <label for="stickyduedate"> Remember for Session:</label>
+          <label for="stickyduedate"> Remember for session:</label>
 [% IF ( stickyduedate ) %]
 <input type="checkbox" id="stickyduedate" onclick="this.form.barcode.focus();" name="stickyduedate" checked="checked" />
 [% ELSE %]
@@ -677,7 +677,7 @@ No patron matched <span class="ex">[% message %]</span>
             <a href="/cgi-bin/koha/circ/circulation.pl#checkouts">0 Checkouts</a>
     [% END %]</li>
 [% IF ( displayrelissues ) %]
-<li><a href="/cgi-bin/koha/circ/circulation.pl#relissues">Relatives' Checkouts</a></li>
+<li><a href="/cgi-bin/koha/circ/circulation.pl#relissues">Relatives' checkouts</a></li>
 [% END %]
 <li>[% IF ( countreserv ) %]
             <a href="/cgi-bin/koha/circ/circulation.pl#reserves">[% countreserv %] Hold(s)</a>
@@ -699,7 +699,7 @@ No patron matched <span class="ex">[% message %]</span>
     <thead><tr>
         <th scope="col">Due date</th>
         <th scope="col">Title</th>
-        <th scope="col">Item Type</th>
+        <th scope="col">Item type</th>
         <th scope="col">Checked out on</th>
         <th scope="col">Checked out from</th>
         <th scope="col">Call no</th>
@@ -730,7 +730,7 @@ No patron matched <span class="ex">[% message %]</span>
             <td>[% todayissue.charge %]</td>
             <td>[% todayissue.replacementprice %]</td>
       [% IF ( todayissue.renew_failed ) %]
-            <td class="problem">Renewal Failed</td>
+            <td class="problem">Renewal failed</td>
       [% ELSE %]
         <td><span style="padding: 0 1em;">[% IF ( todayissue.renewals ) %][% todayissue.renewals %][% ELSE %]0[% END %]</span>
         [% IF ( todayissue.can_renew ) %]
@@ -752,10 +752,10 @@ No patron matched <span class="ex">[% message %]</span>
                 <span class="renewals-disabled">
             [% END %]
 		[% IF ( todayissue.renew_error_on_reserve ) %]
-			<a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% todayissue.biblionumber %]">On Hold</a>
+            <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% todayissue.biblionumber %]">On hold</a>
 		[% END %]
                 [% IF ( todayissue.renew_error_too_many ) %]
-			Not Renewable
+            Not renewable
                 [% END %]
             [% IF ( todayissue.can_confirm ) %]
                 </span>
@@ -764,10 +764,10 @@ No patron matched <span class="ex">[% message %]</span>
         </td>
         [% END %]
   [% IF ( todayissue.return_failed ) %]
-            <td class="problem">Checkin Failed</td>
+            <td class="problem">Checkin failed</td>
       [% ELSE %]
             [% IF ( todayissue.renew_error_on_reserve ) %]
-               <td><a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% todayissue.biblionumber %]">On Hold</a>
+               <td><a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% todayissue.biblionumber %]">On hold</a>
                 <input type="checkbox" name="all_barcodes[]" value="[% todayissue.barcode %]" checked="checked" style="display: none;" />
                 </td>
             [% ELSE %]
@@ -805,7 +805,7 @@ No patron matched <span class="ex">[% message %]</span>
         <td>[% previssue.charge %]</td>
         <td>[% previssue.replacementprice %]</td>
       [% IF ( previssue.renew_failed ) %]
-            <td class="problem">Renewal Failed</td>
+            <td class="problem">Renewal failed</td>
       [% ELSE %]
         <td><span style="padding: 0 1em;">[% IF ( previssue.renewals ) %][% previssue.renewals %][% ELSE %]0[% END %]</span>
         [% IF ( previssue.can_renew ) %]
@@ -827,10 +827,10 @@ No patron matched <span class="ex">[% message %]</span>
                 <span class="renewals-disabled">
             [% END %]
 		[% IF ( previssue.renew_error_on_reserve ) %]
-			<a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% previssue.biblionumber %]">On Hold</a>
+            <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% previssue.biblionumber %]">On hold</a>
 		[% END %]
                 [% IF ( previssue.renew_error_too_many ) %]
-			Not Renewable
+            Not renewable
                 [% END %]
             [% IF ( previssue.can_confirm ) %]
                 </span>
@@ -839,10 +839,10 @@ No patron matched <span class="ex">[% message %]</span>
         </td>
         [% END %]
 		  [% IF ( previssue.return_failed ) %]
-            <td class="problem">Checkin Failed</td>
+            <td class="problem">Checkin failed</td>
         [% ELSE %]
             [% IF ( previssue.renew_error_on_reserve ) %]
-               <td><a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% previssue.biblionumber %]">On Hold</a>
+               <td><a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% previssue.biblionumber %]">On hold</a>
                 <input type="checkbox" name="all_barcodes[]" value="[% previssue.barcode %]" checked="checked" style="display: none;" />
                 </td>
             [% ELSE %]
@@ -860,7 +860,7 @@ No patron matched <span class="ex">[% message %]</span>
     <fieldset class="action">
         [% IF ( CAN_user_circulate_override_renewals ) %]
         [% IF ( AllowRenewalLimitOverride ) %]
-        <label for="override_limit">Override Renewal Limit:</label>
+        <label for="override_limit">Override renewal limit:</label>
         <input type="checkbox" name="override_limit" id="override_limit" value="1" />
         [% END %]
         [% END %]
@@ -883,7 +883,7 @@ No patron matched <span class="ex">[% message %]</span>
     <tr>
         <th scope="col">Due date</th>
         <th scope="col">Title</th>
-        <th scope="col">Item Type</th>
+        <th scope="col">Item type</th>
         <th scope="col">Checked out on</th>
         <th scope="col">Checked out from</th>
         <th scope="col">Call no</th>
@@ -951,7 +951,7 @@ No patron matched <span class="ex">[% message %]</span>
         <thead><tr>
             <th>Hold date</th>
             <th>Title</th>
-            <th>Call Number</th>
+            <th>Call number</th>
             <th>Barcode</th>
             <th>Priority</th>
             <th>Delete?</th>
@@ -998,7 +998,7 @@ No patron matched <span class="ex">[% message %]</span>
             [% IF AutoResumeSuspendedHolds %]
             <label for="suspend_until">until</label>
             <input type="text" size="10" id="suspend_until" name="suspend_until"/>
-            <img src="[% themelang %]/lib/calendar/cal.gif" alt="Show Calendar"  border="0" id="CalendarSuspendUntil" style="cursor: pointer;" />
+            <img src="[% themelang %]/lib/calendar/cal.gif" alt="Show calendar"  border="0" id="CalendarSuspendUntil" style="cursor: pointer;" />
             <span class="hint">Specify date on which to resume [% INCLUDE 'date-format.inc' %]: </span>
 
              <script language="JavaScript" type="text/javascript">

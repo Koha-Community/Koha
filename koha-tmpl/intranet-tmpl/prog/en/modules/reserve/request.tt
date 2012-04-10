@@ -2,7 +2,7 @@
 [% UNLESS ( multi_hold ) %]
     <title>Koha &rsaquo; Circulation &rsaquo; Holds &rsaquo; Place a hold on [% title |html %]</title>
 [% ELSE %]
-    <title>Koha &rsaquo; Circulation &rsaquo; Holds &rsaquo; Confirm Holds</title>
+    <title>Koha &rsaquo; Circulation &rsaquo; Holds &rsaquo; Confirm holds</title>
 [% END %]
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
@@ -141,7 +141,7 @@ function checkMultiHold() {
 [% UNLESS ( multi_hold ) %]
     <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a> &rsaquo; <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber %]">[% title |html %]</a> &rsaquo; Place a hold on [% title |html %]</div>
 [% ELSE %]
-    <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a> &rsaquo; Confirm Holds</div>
+    <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a> &rsaquo; Confirm holds</div>
 [% END %]
 
  <div id="doc3" class="yui-t2">
@@ -173,7 +173,7 @@ function checkMultiHold() {
 
   [% UNLESS ( borrowernumber ) %]
     [% IF ( messageborrower ) %]
-      <div class="dialog alert"><h3>Patron Not Found</h3><p>No patron with this name, Please, try another</p> </div>
+      <div class="dialog alert"><h3>Patron Not Found</h3><p>No patron with this name, please, try another</p> </div>
     [% END %]
     <form action="request.pl?biblionumber=[% biblionumber %]" method="post">
         [% UNLESS ( CGIselectborrower ) %]
@@ -201,7 +201,7 @@ function checkMultiHold() {
     <div class="dialog alert">
 
     [% UNLESS ( multi_hold ) %]
-      <h3>Cannot Place Hold</h3>
+      <h3>Cannot place hold</h3>
   	  <ul>
         [% IF ( maxreserves ) %]
           <li><strong>Too Many Holds: </strong> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borrowerfirstname %] [% borrowersurname %] </a> has too many holds.</li>
@@ -214,7 +214,7 @@ function checkMultiHold() {
         [% END %]
 	  </ul>
     [% ELSE %]
-      <h3>Cannot Place Hold on Some Items</h3>
+      <h3>Cannot place hold on some items</h3>
     [% END %]
 
     </div>
@@ -289,7 +289,7 @@ function checkMultiHold() {
 	<li>
 	    <label for="reserve_date">Hold starts on date:</label>
 	    <input name="reserve_date" id="reserve_date" size="10" readonly="readonly">
-	    <img src="[% themelang %]/lib/calendar/cal.gif" alt="Show Calendar" border="0" id="CalendarReserveDate" style="cursor: pointer;" />
+        <img src="[% themelang %]/lib/calendar/cal.gif" alt="Show calendar" border="0" id="CalendarReserveDate" style="cursor: pointer;" />
 	    <script language="JavaScript" type="text/javascript">
 		//<![CDATA[
 		function validate1(date) {
@@ -321,7 +321,7 @@ function checkMultiHold() {
 	<li>
 	    <label for="expiration_date">Hold expires on date:</label>
 	    <input name="expiration_date" id="expiration_date" size="10" readonly="readonly" />
-	    <img src="[% themelang %]/lib/calendar/cal.gif" alt="Show Calendar" border="0" id="CalendarExpirationDate" style="cursor: pointer;" />
+        <img src="[% themelang %]/lib/calendar/cal.gif" alt="Show calendar" border="0" id="CalendarExpirationDate" style="cursor: pointer;" />
 	    <script language="JavaScript" type="text/javascript">
 		//<![CDATA[
 		function validate1(date) {
@@ -346,7 +346,7 @@ function checkMultiHold() {
 		);
 		//]]>
 	    </script>
-		<a href='#' onclick="document.getElementById('expiration_date').value='';">Clear Date</a>
+        <a href='#' onclick="document.getElementById('expiration_date').value='';">Clear date</a>
 	</li>
 
         [% UNLESS ( multi_hold ) %]
@@ -362,11 +362,11 @@ function checkMultiHold() {
         <fieldset class="action">
             [% IF ( borrowernumber ) %]
                 [% IF ( override_required ) %]
-                    <input type="submit" class="warning" value="Place Hold" />
+                    <input type="submit" class="warning" value="Place hold" />
                 [% ELSIF ( none_available ) %]
-                    <input type="submit" disabled="disabled" value="Place Hold" />
+                    <input type="submit" disabled="disabled" value="Place hold" />
                 [% ELSE %]
-                    <input type="submit" value="Place Hold" />
+                    <input type="submit" value="Place hold" />
                 [% END %]
             [% END %]
         </fieldset>
@@ -387,8 +387,8 @@ function checkMultiHold() {
                 <th>Item type</th>
             [% END %]
             <th>Barcode</th>
-            <th>Home Library</th>
-            <th>Last Location</th>
+            <th>Home library</th>
+            <th>Last location</th>
             <th>Call no.</th>
             <th>Copy no.</th>
             [% IF itemdata_enumchron %]
@@ -486,7 +486,7 @@ function checkMultiHold() {
       <tr>
         <th>Title</th>
         [% UNLESS ( item_level_itypes ) %]
-          <th>Item Type</th>
+          <th>Item type</th>
         [% END %]
         <th>Priority</th>
         <th>Information</th>
@@ -550,11 +550,11 @@ function checkMultiHold() {
     <fieldset class="action">
         [% IF ( borrowernumber ) %]
             [% IF ( override_required ) %]
-                <input type="submit" class="warning" value="Place Hold" />
+                <input type="submit" class="warning" value="Place hold" />
             [% ELSIF ( none_available ) %]
-                <input type="submit" disabled="disabled" value="Place Hold" />
+                <input type="submit" disabled="disabled" value="Place hold" />
             [% ELSE %]
-                <input type="submit" value="Place Hold" />
+                <input type="submit" value="Place hold" />
             [% END %]
         [% END %]
     </fieldset>
@@ -591,10 +591,10 @@ function checkMultiHold() {
         <th>Notes</th>
         <th>Date</th>
 	<th>Expiration</th>
-        <th>Pick up Library</th>
+        <th>Pick up library</th>
         <th>Details</th>
         [% IF ( CAN_user_reserveforothers_modify_holds_priority ) %]
-            <th><img src="/intranet-tmpl/[% theme %]/img/go-bottom.png" border="0" alt="Toggle Set to Lowest Priority" /></th>
+            <th><img src="/intranet-tmpl/[% theme %]/img/go-bottom.png" border="0" alt="Toggle set to lowest priority" /></th>
         [% END %]
 	<th>&nbsp;</th>
 	<th>&nbsp;</th>
@@ -625,15 +625,15 @@ function checkMultiHold() {
             <img src="/intranet-tmpl/[% theme %]/img/go-up.png" border="0" alt="Go up" />
                 </a>
 
-		<a title="Move Hold To Top" href="request.pl?action=move&amp;where=top&amp;borrowernumber=[% reserveloo.borrowernumber %]&amp;biblionumber=[% reserveloo.biblionumber %]&amp;date=[% reserveloo.date %]">
+        <a title="Move hold to top" href="request.pl?action=move&amp;where=top&amp;borrowernumber=[% reserveloo.borrowernumber %]&amp;biblionumber=[% reserveloo.biblionumber %]&amp;date=[% reserveloo.date %]">
                     <img src="/intranet-tmpl/[% theme %]/img/go-top.png" border="0" alt="Go top" />
                 </a>
 
-                <a title="Move Hold To Bottom" href="request.pl?action=move&amp;where=bottom&amp;borrowernumber=[% reserveloo.borrowernumber %]&amp;biblionumber=[% reserveloo.biblionumber %]&amp;date=[% reserveloo.date %]">
+                <a title="Move hold to bottom" href="request.pl?action=move&amp;where=bottom&amp;borrowernumber=[% reserveloo.borrowernumber %]&amp;biblionumber=[% reserveloo.biblionumber %]&amp;date=[% reserveloo.date %]">
                     <img src="/intranet-tmpl/[% theme %]/img/go-bottom.png" border="0" alt="Go bottom" />
                 </a>
 
-                <a title="Move Hold Down" href="request.pl?action=move&amp;where=down&amp;borrowernumber=[% reserveloo.borrowernumber %]&amp;biblionumber=[% reserveloo.biblionumber %]&amp;date=[% reserveloo.date %]">
+                <a title="Move hold down" href="request.pl?action=move&amp;where=down&amp;borrowernumber=[% reserveloo.borrowernumber %]&amp;biblionumber=[% reserveloo.biblionumber %]&amp;date=[% reserveloo.date %]">
                     <img src="/intranet-tmpl/[% theme %]/img/go-down.png" border="0" alt="Go down" />
                 </a>
         </td>
@@ -683,7 +683,7 @@ function checkMultiHold() {
                     [% reserveloo.barcodenumber %]
                     <input type="hidden" name="itemnumber" value="[% reserveloo.itemnumber %]" />
                 [% ELSE %]
-                    No Barcode
+                    No barcode
                 [% END %]
           </a>
     [% ELSE %]
@@ -695,7 +695,7 @@ function checkMultiHold() {
                          [% reserveloo.barcodenumber %]
                         <input type="hidden" name="itemnumber" value="[% reserveloo.itemnumber %]" />
                     [% ELSE %]
-                        No Barcode
+                        No barcode
                     [% END %]
                 </a>
                 </i>
@@ -713,7 +713,7 @@ function checkMultiHold() {
 
     [% IF ( CAN_user_reserveforothers_modify_holds_priority ) %]
 	<td>
-		<a title="Toggle Lowest Priority" href="request.pl?action=setLowestPriority&amp;borrowernumber=[% reserveloo.borrowernumber %]&amp;biblionumber=[% reserveloo.biblionumber %]&amp;date=[% reserveloo.date %]"> 
+        <a title="Toggle lowest priority" href="request.pl?action=setLowestPriority&amp;borrowernumber=[% reserveloo.borrowernumber %]&amp;biblionumber=[% reserveloo.biblionumber %]&amp;date=[% reserveloo.date %]">
 			[% IF ( reserveloo.lowestPriority ) %]
                         <img src="/intranet-tmpl/[% theme %]/img/go-bottom.png" border="0" alt="Unset Lowest Priority" />
 		        [% ELSE %]
@@ -724,7 +724,7 @@ function checkMultiHold() {
     [% END %]
 
 	<td>
-		<a title="Cancel Hold" href="request.pl?action=cancel&amp;borrowernumber=[% reserveloo.borrowernumber %]&amp;biblionumber=[% reserveloo.biblionumber %]&amp;date=[% reserveloo.date %]">
+        <a title="Cancel hold" href="request.pl?action=cancel&amp;borrowernumber=[% reserveloo.borrowernumber %]&amp;biblionumber=[% reserveloo.biblionumber %]&amp;date=[% reserveloo.date %]">
                     <img src="/intranet-tmpl/[% theme %]/img/x.png" border="0" alt="Cancel" />
                 </a>
 	</td>
@@ -736,7 +736,7 @@ function checkMultiHold() {
             [% IF AutoResumeSuspendedHolds %]
 	    <label for="suspend_until_[% reserveloo.borrowernumber %]">[% IF ( reserveloo.suspend ) %] on [% ELSE %] until [% END %]</label>
 	    <input name="suspend_until" id="suspend_until_[% reserveloo.borrowernumber %]" size="10" readonly="readonly" value="[% reserveloo.suspend_until %]" />
-	    <img src="[% themelang %]/lib/calendar/cal.gif" alt="Show Calendar" border="0" id="SuspendUntilDate_[% reserveloo.borrowernumber %]" style="cursor: pointer;" />
+        <img src="[% themelang %]/lib/calendar/cal.gif" alt="Show calendar" border="0" id="SuspendUntilDate_[% reserveloo.borrowernumber %]" style="cursor: pointer;" />
 	    <script language="JavaScript" type="text/javascript">
 		//<![CDATA[
 		function validate1(date) {

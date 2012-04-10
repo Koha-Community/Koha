@@ -29,11 +29,11 @@ to add to Batch [% batch_id %]
 [% IF ( selected ) %]<option value="au" selected="selected">Author</option>
 [% ELSE %]<option value="au">Author</option>[% END %]
 
-[% IF ( selected ) %]<option value="yr" selected="selected">Publication Date</option>
-[% ELSE %]<option value="yr">Publication Date</option>[% END %]
+[% IF ( selected ) %]<option value="yr" selected="selected">Publication date</option>
+[% ELSE %]<option value="yr">Publication date</option>[% END %]
 
-[% IF ( selected ) %]<option value="sn" selected="selected">Standard Number</option>
-[% ELSE %]<option value="sn">Standard Number</option>[% END %]
+[% IF ( selected ) %]<option value="sn" selected="selected">Standard number</option>
+[% ELSE %]<option value="sn">Standard number</option>[% END %]
 
 [% IF ( selected ) %]<option value="nb" selected="selected">ISBN</option>
 [% ELSE %]<option value="nb">ISBN</option>[% END %]
@@ -41,8 +41,8 @@ to add to Batch [% batch_id %]
 [% IF ( selected ) %]<option value="ns" selected="selected">ISSN</option>
 [% ELSE %]<option value="ns">ISSN</option>[% END %]
 
-[% IF ( selected ) %]<option value="lcn,phr" selected="selected">Call Number</option>
-[% ELSE %]<option value="lcn,phr">Call Number</option>[% END %]
+[% IF ( selected ) %]<option value="lcn,phr" selected="selected">Call number</option>
+[% ELSE %]<option value="lcn,phr">Call number</option>[% END %]
 
 [% IF ( selected ) %]<option value="su" selected="selected">Subject</option>
 [% ELSE %]<option value="su">Subject</option>[% END %]
@@ -52,17 +52,17 @@ to add to Batch [% batch_id %]
 [% ELSE %]
    <option value="ti" selected="selected">Title</option>[% END %]
 
-[% IF ( selected ) %]<option value="ti,phr" selected="selected">Title Phrase</option>
-[% ELSE %]<option value="ti,phr">Title Phrase</option>[% END %]
+[% IF ( selected ) %]<option value="ti,phr" selected="selected">Title phrase</option>
+[% ELSE %]<option value="ti,phr">Title phrase</option>[% END %]
 
-[% IF ( selected ) %]<option value="se" selected="selected">Series Title</option>
-[% ELSE %]<option value="se">Series Title</option>[% END %]
+[% IF ( selected ) %]<option value="se" selected="selected">Series title</option>
+[% ELSE %]<option value="se">Series title</option>[% END %]
 
 [% IF ( selected ) %]<option value="bc" selected="selected">Barcode</option>
 [% ELSE %]<option value="bc">Barcode</option>[% END %]
 
-[% IF ( selected ) %]<option value="acqdate" selected="selected">Acquisition Date</option>
-[% ELSE %]<option value="acqdate">Acquisition Date</option>[% END %]
+[% IF ( selected ) %]<option value="acqdate" selected="selected">Acquisition date</option>
+[% ELSE %]<option value="acqdate">Acquisition date</option>[% END %]
 </select>
 
    <input type="text" size="30" id="ccl_textbox" name="ccl_textbox" class="focus" title="Enter search terms" value=""/>
@@ -74,7 +74,7 @@ to add to Batch [% batch_id %]
 [% IF ( sort_by_loop ) %]
 <fieldset><legend>Sort by: </legend>
     <p><select id="sort_by" name="sort_by">
-        <option value="">Field-weighted, Relevance Ranked</option>
+        <option value="">Field-weighted, relevance ranked</option>
         [% FOREACH sort_by_loo IN sort_by_loop %]
 
 [% IF ( sort_by_loo.selected ) %]<option value="[% sort_by_loo.value %]" selected="selected">[% sort_by_loo.label %]</option>[% ELSE %]<option value="[% sort_by_loo.value %]">[% sort_by_loo.label %]</option>[% END %]

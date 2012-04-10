@@ -1,13 +1,13 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>UNIMARC Field 124g builder</title>
+<title>UNIMARC field 124g builder</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="cat_unimarc_field_124g" class="cat" style="padding:1em;">
-<h3>UNIMARC Field 124g builder</h3>
+<h3>UNIMARC field 124g builder</h3>
 <form name="f_pop" action="">
 <table>
 	<tr>
-		<td><label for="f1">Recording Technique for Remote Sensing Image:</label></td>
+        <td><label for="f1">Recording technique for remote sensing image:</label></td>
 		<td>
 			<select name="f1" id="f1" size="1">
 
@@ -47,14 +47,14 @@
 				<option value="dv">combination of various thermal infrared scanning</option>
 			[% END %]
 			[% IF ( f1ga ) %]
-				<option value="ga" selected="selected">Sidelooking Airbone Radar</option>
+                <option value="ga" selected="selected">Sidelooking airbone radar</option>
 			[% ELSE %]
-				<option value="ga">Sidelooking Airbone Radar</option>
+                <option value="ga">Sidelooking airbone radar</option>
 			[% END %]
 			[% IF ( f1gb ) %]
-				<option value="gb" selected="selected">Synthetic Aperture Radar</option>
+                <option value="gb" selected="selected">Synthetic aperture radar</option>
 			[% ELSE %]
-				<option value="gb">Synthetic Aperture Radar</option>
+                <option value="gb">Synthetic aperture radar</option>
 			[% END %]
 			[% IF ( f1gc ) %]
 				<option value="gc" selected="selected">passive microwave mapping</option>

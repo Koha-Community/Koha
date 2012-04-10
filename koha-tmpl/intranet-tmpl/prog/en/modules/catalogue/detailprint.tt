@@ -11,28 +11,28 @@
 [% FOREACH BIBLIO_RESULT IN BIBLIO_RESULTS %]
 	<table class="list">
 	<caption>[% BIBLIO_RESULT.title |html %] [% BIBLIO_RESULT.subtitle %]</caption>
-	<tr><th>Biblio Record Number: </th><td> [% BIBLIO_RESULT.biblionumber %]	</td></tr>
+    <tr><th>Biblio record number: </th><td> [% BIBLIO_RESULT.biblionumber %]	</td></tr>
 [% IF ( BIBLIO_RESULT.author ) %]<tr><th>Author: </th><td>[% BIBLIO_RESULT.author %]</td></tr>[% END %]
-[% IF ( BIBLIO_RESULT.additional ) %]<tr><th>Additional Author: </th><td>[% BIBLIO_RESULT.additional %]</td></tr>[% END %]
+[% IF ( BIBLIO_RESULT.additional ) %]<tr><th>Additional author: </th><td>[% BIBLIO_RESULT.additional %]</td></tr>[% END %]
 [% IF ( BIBLIO_RESULT.publishercode ) %]<tr><th>Publisher: </th><td>[% BIBLIO_RESULT.publishercode %]</td></tr>[% END %]
-<tr><th>Publication Details: </th><td>			[% IF ( BIBLIO_RESULT.publicationyear ) %][% BIBLIO_RESULT.publicationyear %][% END %]
+<tr><th>Publication details: </th><td>			[% IF ( BIBLIO_RESULT.publicationyear ) %][% BIBLIO_RESULT.publicationyear %][% END %]
 			[% IF ( BIBLIO_RESULT.pages ) %], [% END %][% BIBLIO_RESULT.pages %]
 			[% IF ( BIBLIO_RESULT.size ) %], [% END %][% BIBLIO_RESULT.size %]</td></tr>
 			[% IF ( BIBLIO_RESULT.collection ) %]<tr><th>Collection:</th><td> [% BIBLIO_RESULT.seriestitle %]</td></tr>[% END %]
 			[% IF ( BIBLIO_RESULT.subject ) %]<tr><th>Subject: </th><td>[% BIBLIO_RESULT.subject %]</td></tr>[% END %]
-			[% IF ( BIBLIO_RESULT.copyrightdate ) %]<tr><th>Copyright Date: </th><td> [% BIBLIO_RESULT.copyrightdate %]</td></tr>[% END %]
+            [% IF ( BIBLIO_RESULT.copyrightdate ) %]<tr><th>Copyright date: </th><td> [% BIBLIO_RESULT.copyrightdate %]</td></tr>[% END %]
 			[% IF ( BIBLIO_RESULT.notes ) %]<tr><th>Notes: </th><td>[% BIBLIO_RESULT.notes %]</td></tr>[% END %]
 			[% IF ( BIBLIO_RESULT.unititle ) %]<tr><th>Unititle: </th><td>[% BIBLIO_RESULT.unititle %]</td></tr>[% END %]
 			[% IF ( BIBLIO_RESULT.dewey ) %]<tr><th>Dewey: </th><td>[% BIBLIO_RESULT.dewey %]</td></tr>[% END %]
 			[% IF ( BIBLIO_RESULT.classification ) %]<tr><th>Classification: </th><td> [% BIBLIO_RESULT.classification %]</td></tr>[% END %]
 			[% IF ( BIBLIO_RESULT.lccn ) %]<tr><th>LCCN: </th><td>[% BIBLIO_RESULT.lccn %]</td></tr>[% END %]
-			[% IF ( BIBLIO_RESULT.url ) %]<tr><th>url: </th><td><a href="[% BIBLIO_RESULT.url %]">[% BIBLIO_RESULT.url %]</a></td></tr>[% END %]
+            [% IF ( BIBLIO_RESULT.url ) %]<tr><th>URL: </th><td><a href="[% BIBLIO_RESULT.url %]">[% BIBLIO_RESULT.url %]</a></td></tr>[% END %]
 			[% IF ( BIBLIO_RESULT.ISBN ) %]<tr><th>ISBN: </th><td>[% BIBLIO_RESULT.ISBN %]</td></tr>[% END %]
 	</table>
 [% END %]
 
 <table>
-	<tr><th>Item Type</th><th>Call Number</th><th>Location</th><th>Date Due</th><th>Last Seen</th><th>Barcode</th></tr>
+    <tr><th>Item type</th><th>Call number</th><th>Location</th><th>Date due</th><th>Last seen</th><th>Barcode</th></tr>
 	[% FOREACH ITEM_RESULT IN ITEM_RESULTS %]
 		<tr>
 			<td>[% ITEM_RESULT.description %]</td>

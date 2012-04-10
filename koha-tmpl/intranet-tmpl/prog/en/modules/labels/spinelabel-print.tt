@@ -6,9 +6,9 @@
 <html lang="[% lang %]" xml:lang="[% lang %]" xmlns="http://www.w3.org/1999/xhtml">
 [% END %]
 <head>
-	<title>Koha &rsaquo; Tools &rsaquo; Spine Labels</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<link rel="stylesheet" type="text/css" href="[% themelang %]/css/spinelabel.css" />
+<title>Koha &rsaquo; Tools &rsaquo; Spine labels</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/spinelabel.css" />
 
 		<style type="text/css">
 		@media print {
@@ -19,7 +19,7 @@
 	[% IF ( BarcodeNotFound ) %]
 		<body id="labels_spinelabel-print" class="tools labels">
 			<p>The barcode [% Barcode %] was not found.</p>
-			<p><a href="spinelabel-home.pl">Return To Spine Label Printer</a></p>
+            <p><a href="spinelabel-home.pl">Return to spine label printer</a></p>
 		</body>
 	[% ELSE %]
 		[% IF ( autoprint ) %]
@@ -31,7 +31,7 @@
 				[% content %]
 			</span>
 			<span id="print_button" class="noprint">
-				<button onclick="window.print()">Print This Label</button>
+                <button onclick="window.print()">Print this label</button>
 			</span>
 		</body>
 	[% END %]

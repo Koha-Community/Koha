@@ -1,8 +1,8 @@
-[% INCLUDE 'doc-head-open.inc' %]<title>Koha &rsaquo; Web Installer &rsaquo; Step 3</title>
+[% INCLUDE 'doc-head-open.inc' %]<title>Koha &rsaquo; Web installer &rsaquo; Step 3</title>
 [% IF ( finish ) %]<meta http-equiv="refresh" content="10; url=/cgi-bin/koha/mainpage.pl">[% END %]
 [% INCLUDE 'installer-doc-head-close.inc' %]
 <div>
-<h1 id="logo"><img alt="Koha" src="/intranet-tmpl/prog/img/koha.org-logo.gif" /> Web Installer &rsaquo; Step 3</h1>
+<h1 id="logo"><img alt="Koha" src="/intranet-tmpl/prog/img/koha.org-logo.gif" /> Web installer &rsaquo; Step 3</h1>
 
 [% IF ( selectframeworks ) %]
     <script language="JavaScript">
@@ -77,11 +77,11 @@
     </script>
 [% END %]
 [% IF ( finish ) %]
-    <h1>Congratulations, Installation complete</h1>
+    <h1>Congratulations, installation complete</h1>
     <p>If this page does not redirect in 5 seconds, click <a href="/">here</a>.</p> 
 [% END %]
 [% IF ( choosemarc ) %]
-    <h2 align="center">Select your MARC flavour</h2>
+    <h2 align="center">Select your MARC flavor</h2>
     <form name="frameworkselection" method="post" action="install.pl">   
     <input type="hidden" name="step" value="3" />
     <input type="hidden" name="op" value="selectframeworks" />
@@ -96,7 +96,7 @@
     </div>
     [% END %]
     </p>
-    <p> Click Next to continue <input value="Next &gt;&gt;" type="submit" /></p>
+    <p> Click 'Next' to continue <input value="Next &gt;&gt;" type="submit" /></p>
     </form>
 [% END %]
 
@@ -107,7 +107,7 @@
     <input type="hidden" name="op" value="addframeworks" />
     
     [% IF ( frameworksloop ) %]
-    <h2>MARC Frameworks: [% marcflavour %]</h2>
+    <h2>MARC frameworks: [% marcflavour %]</h2>
     [% IF ( en_marc_frameworks ) %]
         <h4><span class="error">No MARC frameworks are available for your language.  
                 Defaulting to the frameworks supplied for English (en)<span></h4>
@@ -182,7 +182,7 @@
     [% END %]
     <h3>All done!</h3>
     <p>Installation complete.<br />
-        <p>Click on Finish to complete and load the Koha Staff Interface.
+        <p>Click on 'Finish' to complete and load the Koha Staff Interface.
         <form name="finish">
         <input type="hidden" name="step" value="3" />
         <input type="hidden" name="op" value="finish" />
@@ -204,7 +204,7 @@
         </ul>
         <form action="install.pl">
         <input type="hidden" name="step" value="3" />
-            <p> Click Next to continue <input value="Next &gt;&gt;" type="submit" /></p>
+            <p> Click 'Next' to continue <input value="Next &gt;&gt;" type="submit" /></p>
         </form>
     [% END %]
 [% END %]
@@ -215,7 +215,7 @@
     <form action="install.pl">
     <input type="hidden" name="step" value="3" />
     <input type="hidden" name="op" value="importdatastructure" />
-    <p> Click Next to continue <input value="Next &gt;&gt;" type="submit" /></p>
+    <p> Click 'Next' to continue <input value="Next &gt;&gt;" type="submit" /></p>
     </form>
 [% END %]
 

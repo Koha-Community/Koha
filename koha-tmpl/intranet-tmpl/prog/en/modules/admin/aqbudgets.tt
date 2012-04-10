@@ -1,5 +1,5 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Administration &rsaquo; Funds[% IF ( add_form ) %] &rsaquo; [% IF ( budget_id ) %]Modify Fund[% IF ( budget_name ) %] '[% budget_name %]'[% END %][% ELSE %]Add Fund [% END %][% END %]</title>
+<title>Koha &rsaquo; Administration &rsaquo; Funds[% IF ( add_form ) %] &rsaquo; [% IF ( budget_id ) %]Modify fund[% IF ( budget_name ) %] '[% budget_name %]'[% END %][% ELSE %]Add fund [% END %][% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <script type="text/javascript" src="[% themelang %]/js/acq.js"></script>
 
@@ -225,12 +225,12 @@
             </ul>
         [% END %]</td>
     [% IF ( budge.budget_lock ) %]
-        <td> <span style="color: gray;" > Edit Delete </span> </td>
+        <td> <span style="color: gray;"> Edit Delete </span> </td>
     [% ELSE %]
         <td>
             <a href="/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&amp;budget_id=[% budge.budget_id %]&amp;budget_period_id=[% budge.budget_period_id %]" >Edit</a>
             <a href="/cgi-bin/koha/admin/aqbudgets.pl?op=delete_confirm&amp;budget_id=[% budge.budget_id %]&amp;budget_period_id=[% budge.budget_period_id %]">Delete</a>
-            <a href="/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&amp;budget_parent_id=[% budge.budget_id %]&amp;budget_period_id=[% budge.budget_period_id %]">Add Child Fund</a>
+            <a href="/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&amp;budget_parent_id=[% budge.budget_id %]&amp;budget_period_id=[% budge.budget_period_id %]">Add child fund</a>
         </td>
     [% END %]
     </tr>
@@ -260,19 +260,19 @@
     <ol>
     [% IF ( budget_parent_id ) %]
     <li>
-        <span class="label">Fund Parent: </span>
+        <span class="label">Fund parent: </span>
         [% budget_parent_name %]
         [% budget_parent_id %] - [% budget_parent_name %]
         <input type="hidden" name="budget_parent_id" value="[% budget_parent_id %]" />
     </li>
     [% END %]
     <li>
-    <label class="required"  for="budget_code">Fund Code: </label>
+    <label class="required"  for="budget_code">Fund code: </label>
     <input type="text" name="budget_code" id="budget_code" value="[% budget_code %]" size="30" />
     </li>
 
     <li>
-    <label class="required" for="budget_name">Fund Name: </label>
+    <label class="required" for="budget_name">Fund name: </label>
     <input type="text" name="budget_name" id="budget_name" value="[% budget_name %]" size="60" />
     </li>
 
@@ -377,10 +377,10 @@
 [% END %] <!-- add_form -->
 
 [% IF ( delete_confirm ) %]
-<div class="dialog alert"> <h3>Delete Fund [% budget_name %]?</h3>
+<div class="dialog alert"> <h3>Delete fund [% budget_name %]?</h3>
 <table>
     <tr>
-    <th scope="row">Fund Amount:</th>
+    <th scope="row">Fund amount:</th>
     <td>[% budget_amount %]</td>
     </tr>
 </table>
@@ -393,7 +393,7 @@
 </form>
 
 <form action="[% action %]" method="get">
-    <input type="submit" class="deny" value="No, Do Not Delete" />
+    <input type="submit" class="deny" value="No, do not delete" />
 </form>
 </div>
 [% END %]

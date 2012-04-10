@@ -1,5 +1,5 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Catalog &rsaquo; [% IF ( searchdesc ) %]Results of Search [% IF ( query_desc ) %]for '[% query_desc | html %]'[% END %][% IF ( limit_desc ) %]&nbsp;with limit(s):&nbsp;'[% limit_desc | html %]'[% END %][% ELSE %]You did not specify any search criteria[% END %]</title>
+<title>Koha &rsaquo; Catalog &rsaquo; [% IF ( searchdesc ) %]Results of search [% IF ( query_desc ) %]for '[% query_desc | html %]'[% END %][% IF ( limit_desc ) %]&nbsp;with limit(s):&nbsp;'[% limit_desc | html %]'[% END %][% ELSE %]You did not specify any search criteria[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <script type="text/javascript">
 //<![CDATA[
@@ -65,20 +65,20 @@ $(".addtocart").show();
         var param1 = "<label for=\"addto\">"+_("Add to:")+"<\/label><select name=\"addto\" id=\"addto\"><option value=\"\"><\/option>";
         [% IF ( intranetbookbag ) %]     param1 += "<option value=\"addtocart\">"+_("Cart")+"<\/option>"; [% END %]
         [% IF ( virtualshelves ) %][% IF ( addbarshelves ) %]
-        param1 += "<optgroup label=\""+_("Your Lists:")+"\">";[% FOREACH addbarshelvesloo IN addbarshelvesloop %]
+        param1 += "<optgroup label=\""+_("Your lists:")+"\">";[% FOREACH addbarshelvesloo IN addbarshelvesloop %]
         param1 += "<option id=\"s[% addbarshelvesloo.shelfnumber %]\" value=\"addtolist\">[% addbarshelvesloo.shelfname |html %]<\/option>";[% END %]
         param1 += "<\/optgroup>";[% END %]
-        [% IF ( addpubshelves ) %]param1 += "<optgroup label=\""+_("Public Lists:")+"\">"[% FOREACH addpubshelvesloo IN addpubshelvesloop %]+"<option id=\"s[% addpubshelvesloo.shelfnumber %]\" value=\"addtolist\">[% addpubshelvesloo.shelfname |html %]<\/option>"[% END %]
+        [% IF ( addpubshelves ) %]param1 += "<optgroup label=\""+_("Public lists:")+"\">"[% FOREACH addpubshelvesloo IN addpubshelvesloop %]+"<option id=\"s[% addpubshelvesloo.shelfnumber %]\" value=\"addtolist\">[% addpubshelvesloo.shelfname |html %]<\/option>"[% END %]
         param1 += "<\/optgroup>";[% END %]
         [% IF ( ( addbarshelvesloop && addbarshelvesloop.size>9 ) || (addpubshelvesloop && addpubshelvesloop.size>9 )) %]
-            param1 += "<option value=\"morelists\">[ "+_("More Lists")+" ]<\/option>";
+            param1 += "<option value=\"morelists\">[ "+_("More lists")+" ]<\/option>";
         [% END %]
-        param1 +="<option value=\"newlist\">"+_("[ New List ]")+"<\/option>"
+        param1 +="<option value=\"newlist\">"+_("[ New list ]")+"<\/option>"
         [% END %]
         param1 += "<\/select> <input id=\"cartsubmit\" type=\"submit\" class=\"submit\" value=\""+_("Save")+"\" />";
  $('#sortsubmit').hide();
-        $("span.clearall").html("<a id=\"CheckNone\" href=\"#\">"+_("Clear All")+"<\/a>");
-        $("span.checkall").html("<a id=\"CheckAll\" href=\"#\">"+_("Select All")+"<\/a>");
+        $("span.clearall").html("<a id=\"CheckNone\" href=\"#\">"+_("Clear all")+"<\/a>");
+        $("span.checkall").html("<a id=\"CheckAll\" href=\"#\">"+_("Select all")+"<\/a>");
         $("span.addto").html(param1);
         $("#addto").change(function(){
                 cartList();
@@ -283,9 +283,9 @@ YAHOO.util.Event.onContentReady("searchheader", function () {
                 [% total %] result(s) found [% IF ( query_desc ) %]for <span style="font-weight: bold;">'[% query_desc |html %]'</span>[% END %][% IF ( limit_desc ) %]&nbsp;with limit(s): <span style="font-weight: bold;">'[% limit_desc %]'</span>[% END %][% IF ( LibraryName ) %] in [% LibraryName %] Catalog[% END %].<br />&nbsp;
             </h3>
             <div id="selection_ops" class="cartlist" style="display:none">
-                <a href="#" onclick="selectAll(); return false;">Select All</a>
+                <a href="#" onclick="selectAll(); return false;">Select all</a>
                 |
-                <a href="#" onclick="clearAll(); return false;">Clear All</a>
+                <a href="#" onclick="clearAll(); return false;">Clear all</a>
                 |
                 <a href="#" class="highlight_toggle" id="highlight_toggle_off">Unhighlight</a>
                 <a href="#" class="highlight_toggle" id="highlight_toggle_on">Highlight</a>
@@ -328,7 +328,7 @@ YAHOO.util.Event.onContentReady("searchheader", function () {
     <!-- Search Results Table -->
     [% IF ( total ) %]
         [% IF ( scan ) %]
-            <h1>Scan Index:</h1>
+            <h1>Scan index:</h1>
             <form action="/cgi-bin/koha/catalogue/search.pl" method="get">
             <table>
                 <tr>
@@ -340,19 +340,19 @@ YAHOO.util.Event.onContentReady("searchheader", function () {
                     <td>
                         <label for="scan-index">Indexed in:</label>
                         <select name="idx" id="scan-index">
-                            <option value="">Any Word</option>
-                            [% IF ( ms_anycommaphr) %]<option selected="selected" value="any,phr">Any Phrase</option>
-                            [% ELSE %]<option value="any,phr">Any Phrase</option>[% END %]
+                            <option value="">Any word</option>
+                            [% IF ( ms_anycommaphr) %]<option selected="selected" value="any,phr">Any phrase</option>
+                            [% ELSE %]<option value="any,phr">Any phrase</option>[% END %]
                             [% IF ( ms_ti ) %]<option selected="selected" value="ti">Title</option>
                             [% ELSE %]<option value="ti">Title</option>[% END %]
-                            [% IF ( ms_ticommaphr ) %]<option selected="selected" value="ti,phr">Title Phrase</option>
-                            [% ELSE %]<option value="ti,phr">Title Phrase</option>[% END %]
+                            [% IF ( ms_ticommaphr ) %]<option selected="selected" value="ti,phr">Title phrase</option>
+                            [% ELSE %]<option value="ti,phr">Title phrase</option>[% END %]
                             [% IF ( ms_aucommaphr ) %]<option selected="selected" value="au,phr">Author</option>
                             [% ELSE %]<option value"au,phr">Author</option>[% END %]
                             [% IF ( ms_su ) %]<option selected="selected" value="su">Subject</option>
                             [% ELSE %]<option value="su">Subject</option>[% END %]
-                            [% IF ( ms_sucommaphr ) %]<option selected="selected" value="su,phr">Subject Phrase</option>
-                            [% ELSE %]<option value="su,phr">Subject Phrase</option>[% END %]
+                            [% IF ( ms_sucommaphr ) %]<option selected="selected" value="su,phr">Subject phrase</option>
+                            [% ELSE %]<option value="su,phr">Subject phrase</option>[% END %]
                             [% IF ( ms_se ) %]<option selected="selected" value="se">Series</option>
                             [% ELSE %]<option value="su">Series</option>[% END %]
                             [% IF ( ms_pb ) %]<option selected="selected" value="pb">Publisher</option>
@@ -414,7 +414,7 @@ YAHOO.util.Event.onContentReady("searchheader", function () {
                         [% IF ( facets_loo.expandable ) %]
                             <li class="showmore">
                                 <a href="/cgi-bin/koha/catalogue/search.pl?q=[% facets_loo.searchdesc %][% IF ( offset ) %]&amp;offset=[% offset %][% END %]&amp;expand=[% facets_loo.expand %]#[% facets_loo.type_id %]">
-                                    Show More
+                                    Show more
                                 </a>
                             </li>
                         [% END %]

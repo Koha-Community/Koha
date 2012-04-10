@@ -1,5 +1,5 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Guarantor Search</title>
+<title>Koha &rsaquo; Guarantor search</title>
 [% INCLUDE 'doc-head-close.inc' %]
     <style type="text/css">
     #custom-doc { width:44.46em;*width:43.39em;min-width:578px; margin:auto; text-align:left; }
@@ -68,7 +68,7 @@
 		<input type="text" name="member" id="member" value="[% member %]" class="focus" /> Ordered by
 		<select name="orderby">
 			<option value="surname,firstname">Surname</option>
-			<option value="cardnumber">Cardnumber</option>
+            <option value="cardnumber">Card number</option>
 		</select> <input type="submit" class="button" value="Search" /></fieldset>
 	</form>
 
@@ -76,7 +76,7 @@
 	<p>Searched for <span class="ex">[% member %]</span>, [% numresults %] patron(s) found:</p>
 	<table>
 		<tr>
-			<th>Cardnumber</th>
+            <th>Card number</th>
 			<th>Name</th>
 			<th>Date of birth</th>
 			<th>Address</th>

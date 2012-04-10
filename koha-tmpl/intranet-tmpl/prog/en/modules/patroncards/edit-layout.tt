@@ -1,5 +1,5 @@
     [% INCLUDE 'doc-head-open.inc' %]
-    <title>Koha &rsaquo; Tools &rsaquo; Patron Card Creator</title>
+    <title>Koha &rsaquo; Tools &rsaquo; Patron card creator</title>
     [% INCLUDE 'doc-head-close.inc' %]
     <script type="text/JavaScript" language="JavaScript">
         //<![CDATA[
@@ -139,9 +139,9 @@
     <div id="breadcrumbs">
         <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
         <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo;
-        <a href="/cgi-bin/koha/patroncards/home.pl">Patron Card Creator</a> &rsaquo;
-        <a href="/cgi-bin/koha/patroncards/manage.pl?card_element=layout">Manage Patron Card Layouts</a> &rsaquo;
-        [% IF ( layout_id ) %]Edit[% ELSE %]Create[% END %] Patron Card Layout
+        <a href="/cgi-bin/koha/patroncards/home.pl">Patron card creator</a> &rsaquo;
+        <a href="/cgi-bin/koha/patroncards/manage.pl?card_element=layout">Manage patron card layouts</a> &rsaquo;
+        [% IF ( layout_id ) %]Edit[% ELSE %]Create[% END %] patron card layout
     </div>
     <div id="doc3" class="yui-t2">
         <div id="bd">
@@ -152,13 +152,13 @@
                 <div class="yui-g">
                 <div class="yui-g first">
                         <fieldset class="rows">
-                            <legend>[% IF ( layout_id ) %]Edit[% ELSE %]Create[% END %] Patron Card Text Layout</legend>
+                            <legend>[% IF ( layout_id ) %]Edit[% ELSE %]Create[% END %] Patron card text layout</legend>
                             <ol>
                                 <li>
                                 <fieldset>
-                                <legend>General Settings</legend>
+                                <legend>General settings</legend>
                                 <li>
-                                    <label for="layout_name">Layout Name</label>
+                                    <label for="layout_name">Layout name</label>
                                     <input type="text" name="layout_name" id="layout_name" size="20" value="[% layout_name %]" />
                                 </li>
                                 <li>
@@ -176,7 +176,7 @@
                                     </select>
                                 </li>
                                 <li>
-                                    <label for="page_side">Page Side:</label>
+                                    <label for="page_side">Page side:</label>
                                     [% IF ( page_side ) %]
                                     <input type="radio" name="page_side" id="page_side" value="F" />Front
                                     <input type="radio" name="page_side" id="page_side" value="B" checked="checked" />Back
@@ -186,7 +186,7 @@
                                     [% END %]
                                 </li>
                                 <li>
-                                    <label for="guide_box">Guide Box:</label>
+                                    <label for="guide_box">Guide box:</label>
                                     [% IF ( guide_box ) %]
                                     <input type="radio" name="guide_box" id="guide_box" value="1" checked="checked" />On
                                     <input type="radio" name="guide_box" id="guide_box" value="0" />Off
@@ -199,7 +199,7 @@
                                 </li>
                                 <li>
                                     <fieldset>
-                                    <legend>Text Fields</legend>
+                                    <legend>Text fields</legend>
                                         <li>
                                             <fieldset>
                                             [% IF ( field_1 ) %]
@@ -225,12 +225,12 @@
                                                 </select>
                                             </li>
                                             <li>
-                                                <label for="field_1_font_size">Font Size</label>
+                                                <label for="field_1_font_size">Font size</label>
                                                 <input type="text" name="field_1_font_size" id="field_1_font_size" size="2" value="[% field_1_font_size |html %]" />
                                                 <span class="font_unit"> pt</span>
                                             </li>
                                             <li>
-                                                <label for="field_1_text_alignment">Text Alignment</label>
+                                                <label for="field_1_text_alignment">Text alignment</label>
                                                 <select name="field_1_text_alignment" id="field_1_text_alignment">
                                                     [% FOREACH field_1_text_alignmen IN field_1_text_alignment %]
                                                     [% IF ( field_1_text_alignmen.selected ) %]
@@ -242,11 +242,11 @@
                                                 </select>
                                             </li>
                                             <li>
-                                                <label for="field_1_llx">Lower Left X Coordinate</label>
+                                                <label for="field_1_llx">Lower left X coordinate</label>
                                                 <input type="text" name="field_1_llx" id="field_1_llx" size="2" value="[% field_1_llx |html %]" />
                                             </li>
                                             <li>
-                                                <label for="field_1_lly">Lower Left Y Coordinate</label>
+                                                <label for="field_1_lly">Lower left Y coordinate</label>
                                                 <input type="text" name="field_1_lly" id="field_1_lly" size="2" value="[% field_1_lly |html %]" />
                                             </li>
                                             </div>
@@ -277,12 +277,12 @@
                                                 </select>
                                             </li>
                                             <li>
-                                                <label for="field_2_font_size">Font Size</label>
+                                                <label for="field_2_font_size">Font size</label>
                                                 <input type="text" name="field_2_font_size" id="field_2_font_size" size="2" value="[% field_2_font_size |html %]" />
                                                 <span class="font_unit"> pt</span>
                                             </li>
                                             <li>
-                                                <label for="field_2_text_alignment">Text Alignment</label>
+                                                <label for="field_2_text_alignment">Text alignment</label>
                                                 <select name="field_2_text_alignment" id="field_2_text_alignment">
                                                     [% FOREACH field_2_text_alignmen IN field_2_text_alignment %]
                                                     [% IF ( field_2_text_alignmen.selected ) %]
@@ -294,11 +294,11 @@
                                                 </select>
                                             </li>
                                             <li>
-                                                <label for="field_2_llx">Lower Left X Coordinate</label>
+                                                <label for="field_2_llx">Lower left X coordinate</label>
                                                 <input type="text" name="field_2_llx" id="field_2_llx" size="2" value="[% field_2_llx |html %]" />
                                             </li>
                                             <li>
-                                                <label for="field_2_lly">Lower Left Y Coordinate</label>
+                                                <label for="field_2_lly">Lower left Y coordinate</label>
                                                 <input type="text" name="field_2_lly" id="field_2_lly" size="2" value="[% field_2_lly |html %]" />
                                             </li>
                                             </div>
@@ -329,12 +329,12 @@
                                                 </select>
                                             </li>
                                             <li>
-                                                <label for="field_3_font_size">Font Size</label>
+                                                <label for="field_3_font_size">Font size</label>
                                                 <input type="text" name="field_3_font_size" id="field_3_font_size" size="2" value="[% field_3_font_size |html %]" />
                                                 <span class="font_unit"> pt</span>
                                             </li>
                                             <li>
-                                                <label for="field_3_text_alignment">Text Alignment</label>
+                                                <label for="field_3_text_alignment">Text alignment</label>
                                                 <select name="field_3_text_alignment" id="field_3_text_alignment">
                                                     [% FOREACH field_3_text_alignmen IN field_3_text_alignment %]
                                                     [% IF ( field_3_text_alignmen.selected ) %]
@@ -346,11 +346,11 @@
                                                 </select>
                                             </li>
                                             <li>
-                                                <label for="field_3_llx">Lower Left X Coordinate</label>
+                                                <label for="field_3_llx">Lower left X coordinate</label>
                                                 <input type="text" name="field_3_llx" id="field_3_llx" size="2" value="[% field_3_llx |html %]" />
                                             </li>
                                             <li>
-                                                <label for="field_3_lly">Lower Left Y Coordinate</label>
+                                                <label for="field_3_lly">Lower left Y coordinate</label>
                                                 <input type="text" name="field_3_lly" id="field_3_lly" size="2" value="[% field_3_lly |html %]" />
                                             </li>
                                             </div>
@@ -367,12 +367,12 @@
                 </div>
                 <div class="yui-g">
                     <fieldset class="rows">
-                    <legend>[% IF ( layout_id ) %]Edit[% ELSE %]Create[% END %] Patron Card Graphic Layout</legend>
+                    <legend>[% IF ( layout_id ) %]Edit[% ELSE %]Create[% END %] Patron card graphic layout</legend>
                     <ol>
 <!--
                             <li>
                                 <fieldset>
-                                <label for="guidebox">Draw Guide Boxes</label>
+                                <label for="guidebox">Draw guide boxes</label>
                                 [% IF ( guidebox ) %]
                                 <input type="checkbox" name="guidebox" id="guidebox" value="1"  checked="checked" />
                                 [% ELSE %]
@@ -385,7 +385,7 @@
                             <fieldset>
                                 <legend>Barcode</legend>
                                 <li>
-                                    <label for="barcode_print">Print Card Number as Barcode</label>
+                                    <label for="barcode_print">Print card number as barcode</label>
                                     [% IF ( barcode_print ) %]
                                     <input type="checkbox" name="barcode_print" id="barcode_print" value="1" checked="checked" />
                                     [% ELSE %]
@@ -394,15 +394,15 @@
                                 </li>
                                 <div id="barcode_param" style="display: none;">
                                 <li>
-                                    <label for="barcode_llx">Lower Left X Coordinate</label>
+                                    <label for="barcode_llx">Lower left X coordinate</label>
                                     <input type="text" name="barcode_llx" id="barcode_llx" size="2" value="[% barcode_llx |html %]" />
                                 </li>
                                 <li>
-                                    <label for="barcode_lly">Lower Left Y Coordinate</label>
+                                    <label for="barcode_lly">Lower left Y coordinate</label>
                                     <input type="text" name="barcode_lly" id="barcode_lly" size="2" value="[% barcode_lly |html %]" />
                                 </li>
                                 <li>
-                                    <label for="barcode_type">Barcode Type</label>
+                                    <label for="barcode_type">Barcode type</label>
                                     <select name="barcode_type" id="barcode_type">
                                         [% FOREACH barcode_typ IN barcode_type %]
                                         [% IF ( barcode_typ.selected ) %]
@@ -414,7 +414,7 @@
                                     </select>
                                 </li>
                                 <li>
-                                    <label for="barcode_text_print">Print Card Number as Text Under Barcode</label>
+                                    <label for="barcode_text_print">Print card number as text under barcode</label>
                                     [% IF ( barcode_text_print ) %]
                                     <input type="checkbox" name="barcode_text_print" id="barcode_text_print" value="1" checked="checked" />
                                     [% ELSE %]
@@ -431,7 +431,7 @@
                                     <fieldset>
                                     <legend>Image 1</legend>
                                     <li>
-                                        <label for="image_1_image_source">Image Source</label>
+                                        <label for="image_1_image_source">Image source</label>
                                         <select name="image_1_image_source" id="image_1_image_source">
                                             [% FOREACH image_1_image_sourc IN image_1_image_source %]
                                             [% IF ( image_1_image_sourc.selected ) %]
@@ -458,15 +458,15 @@
                                     </div>
                                     <div id="image_1_image_metrics" style="display: none;">
                                     <li>
-                                        <label for="image_1_Dx">Display Height</label>
+                                        <label for="image_1_Dx">Display height</label>
                                         <input type="text" name="image_1_Dx" id="image_1_Dx" size="2" value="[% image_1_Dx |html %]" />
                                     </li>
                                     <li>
-                                        <label for="image_1_Tx">Lower Left X Coordinate</label>
+                                        <label for="image_1_Tx">Lower left X coordinate</label>
                                         <input type="text" name="image_1_Tx" id="image_1_Tx" size="2" value="[% image_1_Tx |html %]" />
                                     </li>
                                     <li>
-                                        <label for="image_1_Ty">Lower Left Y Coordinate</label>
+                                        <label for="image_1_Ty">Lower left Y coordinate</label>
                                         <input type="text" name="image_1_Ty" id="image_1_Ty" size="2" value="[% image_1_Ty |html %]" />
                                     </li>
                                     </div>
@@ -481,7 +481,7 @@
                                     <fieldset>
                                     <legend>Image 2</legend>
                                     <li>
-                                        <label for="image_2_image_source">Image Source</label>
+                                        <label for="image_2_image_source">Image source</label>
                                         <select name="image_2_image_source" id="image_2_image_source">
                                             [% FOREACH image_2_image_sourc IN image_2_image_source %]
                                             [% IF ( image_2_image_sourc.selected ) %]
@@ -508,15 +508,15 @@
                                     </div>
                                     <div id="image_2_image_metrics" style="display: none;">
                                     <li>
-                                        <label for="image_2_Dx">Display Height</label>
+                                        <label for="image_2_Dx">Display height</label>
                                         <input type="text" name="image_2_Dx" id="image_2_Dx" size="2" value="[% image_2_Dx |html %]" />
                                     </li>
                                     <li>
-                                        <label for="image_2_Tx">Lower Left X Coordinate</label>
+                                        <label for="image_2_Tx">Lower left X coordinate</label>
                                         <input type="text" name="image_2_Tx" id="image_2_Tx" size="2" value="[% image_2_Tx |html %]" />
                                     </li>
                                     <li>
-                                        <label for="image_2_Ty">Lower Left Y Coordinate</label>
+                                        <label for="image_2_Ty">Lower left Y coordinate</label>
                                         <input type="text" name="image_2_Ty" id="image_2_Ty" size="2" value="[% image_2_Ty |html %]" />
                                     </li>
                                     </div>

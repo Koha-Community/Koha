@@ -1,5 +1,5 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Administration &rsaquo; Classification Sources
+<title>Koha &rsaquo; Administration &rsaquo; Classification sources
 [% IF ( class_source_form ) %]
 &rsaquo; 
     [% IF ( edit_class_source ) %]Modify classification source[% ELSE %]Add classification source[% END %]
@@ -80,7 +80,7 @@ $(document).ready(function() {
 <div id="breadcrumbs">
          <a href="/cgi-bin/koha/mainpage.pl">Home</a>
 &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
-&rsaquo; <a href="/cgi-bin/koha/admin/classsources.pl">Classification Sources</a>
+&rsaquo; <a href="/cgi-bin/koha/admin/classsources.pl">Classification sources</a>
 [% IF ( class_source_form ) %]
 &rsaquo; [% IF ( edit_class_source ) %]Modify classification source[% ELSE %]Add classification source[% END %]
 [% END %]
@@ -129,7 +129,7 @@ $(document).ready(function() {
            [% IF ( used ) %]<input type="checkbox" id="used" name="used" value="used" checked="checked" />[% ELSE %]
 		  <input type="checkbox" id="used" name="used" value="used" />[% END %]
        </li>
-       <li><label for="sort_rule">Filing Rule: </label>
+       <li><label for="sort_rule">Filing rule: </label>
            <select id="sort_rule" name="sort_rule">
            [% FOREACH rules_dropdow IN rules_dropdown %]
              [% IF ( rules_dropdow.selected ) %]
@@ -173,7 +173,7 @@ $(document).ready(function() {
            <input type="text" id="description" name="description" size="50" maxlength="250" 
                   value="[% description |html %]" />
        </li>
-       <li><label for="sort_routine">Filing Routine: </label>
+       <li><label for="sort_routine">Filing routine: </label>
            <select id="sort_routine" name="sort_routine">
            [% FOREACH routines_dropdow IN routines_dropdown %]
              [% IF ( routines_dropdow.selected ) %]
@@ -234,11 +234,11 @@ $(document).ready(function() {
 
 <div id="toolbar">
 	<ul class="toolbar">
-	<li><a id="newsource" href="[% script_name %]?op=add_source">New Classification Source</a></li>
-	<li><a id="newrule" href="[% script_name %]?op=add_sort_rule">New Filing Rules</a></li>
+    <li><a id="newsource" href="[% script_name %]?op=add_source">New classification source</a></li>
+    <li><a id="newrule" href="[% script_name %]?op=add_sort_rule">New filing rules</a></li>
 </ul></div>
 
-<h2>Classification Sources</h2>
+<h2>Classification sources</h2>
 [% IF ( added_source ) %]
 <div class="dialog message">Added classification source [% added_source %]</div>
 [% END %]
@@ -276,7 +276,7 @@ $(document).ready(function() {
 
 <div class="pages">[% pagination_bar %]</div>
 
-<h2>Classification Filing Rules</h2>
+<h2>Classification filing rules</h2>
 [% IF ( added_rule ) %]
 <div class="dialog message">Added filing rule [% added_rule %]</div>
 [% END %]
@@ -290,7 +290,7 @@ $(document).ready(function() {
   <tr>
     <th>Code</th>
     <th>Description</th>
-    <th>Sorting Routine</th>
+    <th>Sorting routine</th>
     <th>Actions</th>
   </tr>
   [% FOREACH class_sort_rule IN class_sort_rules %]

@@ -6,7 +6,7 @@
 <h3>007 Physical description fixed field--General information</h3>
 <form id="f_pop" onsubmit="report()" action="">
 <input type="hidden" name="plugin_name" value="marc21_field_007.pl" />
-<p><label for="MatTypeList">Material Type: </label>
+<p><label for="MatTypeList">Material type: </label>
       <select name="MatTypeList" id="MatTypeList" onchange="RedrawChoices(this.options[selectedIndex].value);">
         [% IF ( f0a ) %]
 	  <option value="a" selected="selected">Map</option>
@@ -14,9 +14,9 @@
 	  <option value="a">Map</option>
         [% END %]
         [% IF ( f0c ) %]
-          <option value="c" selected="selected">Electronic Resource</option>
+          <option value="c" selected="selected">Electronic resource</option>
         [% ELSE %]
-          <option value="c">Electronic Resource</option>
+          <option value="c">Electronic resource</option>
         [% END %]
         [% IF ( f0d ) %]
           <option value="d" selected="selected">Globe</option>
@@ -24,14 +24,14 @@
           <option value="d">Globe</option>
         [% END %]
         [% IF ( f0f ) %]
-          <option value="f" selected="selected">Tactile Material</option>
+          <option value="f" selected="selected">Tactile material</option>
         [% ELSE %]
-          <option value="f">Tactile Material</option>
+          <option value="f">Tactile material</option>
         [% END %]
         [% IF ( f0g ) %]
-          <option value="g" selected="selected">Projected Graphic</option>
+          <option value="g" selected="selected">Projected graphic</option>
         [% ELSE %]
-          <option value="g">Projected Graphic</option>
+          <option value="g">Projected graphic</option>
         [% END %]
         [% IF ( f0h ) %]
           <option value="h" selected="selected">Microform</option>
@@ -39,14 +39,14 @@
           <option value="h">Microform</option>
         [% END %]
         [% IF ( f0k ) %]
-          <option value="k" selected="selected">Nonprojected Graphic</option>
+          <option value="k" selected="selected">Nonprojected graphic</option>
         [% ELSE %]
-          <option value="k">Nonprojected Graphic</option>
+          <option value="k">Nonprojected graphic</option>
         [% END %]
         [% IF ( f0m ) %]
-          <option value="m" selected="selected">Motion Picture</option>
+          <option value="m" selected="selected">Motion picture</option>
         [% ELSE %]
-          <option value="m">Motion Picture</option>
+          <option value="m">Motion picture</option>
         [% END %]
         [% IF ( f0o ) %]
           <option value="o" selected="selected">Kit</option>
@@ -54,19 +54,19 @@
           <option value="o">Kit</option>
         [% END %]
         [% IF ( f0q ) %]
-          <option value="q" selected="selected">Notated Music</option>
+          <option value="q" selected="selected">Notated music</option>
         [% ELSE %]
-          <option value="q">Notated Music</option>
+          <option value="q">Notated music</option>
         [% END %]
         [% IF ( f0r ) %]
-          <option value="r" selected="selected">Remote-sensing Image</option>
+          <option value="r" selected="selected">Remote-sensing image</option>
         [% ELSE %]
-          <option value="r">Remote-sensing Image</option>
+          <option value="r">Remote-sensing image</option>
         [% END %]
         [% IF ( f0s ) %]
-          <option value="s" selected="selected">Sound Recording</option>
+          <option value="s" selected="selected">Sound recording</option>
         [% ELSE %]
-          <option value="s">Sound Recording</option>
+          <option value="s">Sound recording</option>
         [% END %]
         [% IF ( f0t ) %]
           <option value="t" selected="selected">Text</option>
@@ -295,7 +295,7 @@ function RedrawChoices(typ){
                           </tr> \
  	                  <tr> \
                            <td><label for="f4">' +
-                               _("04 Physical Medium") +
+                               _("04 Physical medium") +
                            '</label></td> \
                            <td> \
                             <select name="f4" id="f4" size="1"> \
@@ -457,7 +457,7 @@ function RedrawChoices(typ){
                           </tr> \
  	                  <tr> \
                            <td><label for="f5">' +
-                               _("05 Type of Reproduction") +
+                               _("05 Type of reproduction") +
                            '</label></td> \
                            <td> \
                             <select name="f5" id="f5" size="1"> \
@@ -644,7 +644,7 @@ function RedrawChoices(typ){
                                _("00 Category of material") +
                            '</td> \
                            <td>' +
-                               _("c- Electronic Resource") +
+                               _("c- Electronic resource") +
                            '</td> \
 	                  </tr> \
 	                  <tr> \
@@ -1688,7 +1688,7 @@ function RedrawChoices(typ){
                                _("00 Category of material") +
                            '</td> \
                            <td>' +
-                               _("f- Tactile Material") +
+                               _("f- Tactile material") +
                            '</td> \
                           </tr> \
  	                  <tr> \

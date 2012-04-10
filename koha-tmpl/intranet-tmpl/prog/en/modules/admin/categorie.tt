@@ -1,8 +1,8 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Administration &rsaquo; Patron Categories &rsaquo; [% IF ( add_form ) %][% IF ( categorycode ) %]Modify category '[% categorycode |html %]'[% ELSE %]New category[% END %][% END %]
+<title>Koha &rsaquo; Administration &rsaquo; Patron categories &rsaquo; [% IF ( add_form ) %][% IF ( categorycode ) %]Modify category '[% categorycode |html %]'[% ELSE %]New category[% END %][% END %]
 [% IF ( add_validate ) %]Data recorded[% END %]
-[% IF ( delete_confirm ) %][% IF ( totalgtzero ) %]Cannot Delete: Category [% categorycode |html %] in Use[% ELSE %]Confirm Deletion of Category '[% categorycode |html %]'[% END %][% END %]
-[% IF ( delete_confirmed ) %]Category Deleted[% END %]</title>
+[% IF ( delete_confirm ) %][% IF ( totalgtzero ) %]Cannot delete: category [% categorycode |html %] in use[% ELSE %]Confirm deletion of category '[% categorycode |html %]'[% END %][% END %]
+[% IF ( delete_confirmed ) %]Category deleted[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.pager.js"></script>
@@ -93,11 +93,11 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'patrons-admin-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; [% IF ( add_form ) %] <a href="/cgi-bin/koha/admin/categorie.pl">Patron Categories</a> &rsaquo; [% IF ( categorycode ) %]Modify category '[% categorycode |html %]'[% ELSE %]New category[% END %][% END %]
-[% IF ( add_validate ) %] <a href="/cgi-bin/koha/admin/categorie.pl">Patron Categories</a> &rsaquo; Data recorded[% END %]
-[% IF ( delete_confirm ) %] <a href="/cgi-bin/koha/admin/categorie.pl">Patron Categories</a> &rsaquo; [% IF ( totalgtzero ) %]Cannot Delete: Category [% categorycode |html %] in Use[% ELSE %]Confirm Deletion of Category '[% categorycode |html %]'[% END %][% END %]
-[% IF ( delete_confirmed ) %] <a href="/cgi-bin/koha/admin/categorie.pl">Patron Categories</a> &rsaquo; Category Deleted[% END %]
-[% IF ( else ) %]Patron Categories[% END %]</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; [% IF ( add_form ) %] <a href="/cgi-bin/koha/admin/categorie.pl">Patron categories</a> &rsaquo; [% IF ( categorycode ) %]Modify category '[% categorycode |html %]'[% ELSE %]New category[% END %][% END %]
+[% IF ( add_validate ) %] <a href="/cgi-bin/koha/admin/categorie.pl">Patron categories</a> &rsaquo; Data recorded[% END %]
+[% IF ( delete_confirm ) %] <a href="/cgi-bin/koha/admin/categorie.pl">Patron categories</a> &rsaquo; [% IF ( totalgtzero ) %]Cannot delete: Category [% categorycode |html %] in use[% ELSE %]Confirm deletion of category '[% categorycode |html %]'[% END %][% END %]
+[% IF ( delete_confirmed ) %] <a href="/cgi-bin/koha/admin/categorie.pl">Patron categories</a> &rsaquo; Category deleted[% END %]
+[% IF ( else ) %]Patron categories[% END %]</div>
 
 <div id="doc3" class="yui-t2">
    
@@ -171,7 +171,7 @@
 					</select></li>
 	<li><label for="reservefee">Hold fee: </label><input type="text" name="reservefee" id="reservefee" size="6" value="[% reservefee %]" /></li>
 	<li><label for="category_type">Category type: </label> <select name="category_type" id="category_type">
-						[% IF ( type_n ) %]<option value="" selected="selected">Select a Category type</option>[% ELSE %]<option value="">Select a Category type</option>[% END %]
+                        [% IF ( type_n ) %]<option value="" selected="selected">Select a category type</option>[% ELSE %]<option value="">Select a category type</option>[% END %]
 					[% IF ( type_A ) %]<option value="A" selected="selected">Adult</option>[% ELSE %]<option value="A">Adult</option>[% END %]
 					[% IF ( type_C ) %]<option value="C" selected="selected">Child</option>[% ELSE %]<option value="C">Child</option>[% END %]
 					[% IF ( type_S ) %]<option value="S" selected="selected">Staff</option>[% ELSE %]<option value="S">Staff</option>[% END %]
@@ -207,7 +207,7 @@
 	<fieldset><legend>    	
 	[% IF ( totalgtzero ) %]
 	Category [% categorycode |html %] is in use.  Deletion not possible![% ELSE %]
-Confirm Deletion of Category [% categorycode |html %][% END %]</legend>
+Confirm deletion of category [% categorycode |html %][% END %]</legend>
 
 [% IF ( totalgtzero ) %]<div class="dialog alert"><strong>This category is used [% total %] times</strong>. Deletion not possible</div>[% END %]
 	<table>
@@ -233,12 +233,12 @@ Confirm Deletion of Category [% categorycode |html %][% END %]</legend>
 <input type="submit" value="OK" /></form>
 		[% ELSE %]
 			<input type="hidden" name="op" value="delete_confirmed" />
-			<input type="hidden" name="categorycode" value="[% categorycode |html %]" /> <input type="submit" value="Delete this Category" /> <a class="cancel" href="/cgi-bin/koha/admin/categorie.pl">Cancel</a> 
+            <input type="hidden" name="categorycode" value="[% categorycode |html %]" /> <input type="submit" value="Delete this category" /> <a class="cancel" href="/cgi-bin/koha/admin/categorie.pl">Cancel</a>
 		[% END %]</fieldset></fieldset></form>
 [% END %]
 
 [% IF ( delete_confirmed ) %]
-<h3>Category Deleted</h3>
+<h3>Category deleted</h3>
 
         <form action="[% script_name %]" method="post">
         <input type="submit" value="OK" />
@@ -266,10 +266,10 @@ Confirm Deletion of Category [% categorycode |html %][% END %]</legend>
 	//]]>
 	</script>
 	<ul class="toolbar">
-	<li><a id="newcategory" href="/cgi-bin/koha/admin/categorie.pl?op=add_form">New Category</a></li>
+    <li><a id="newcategory" href="/cgi-bin/koha/admin/categorie.pl?op=add_form">New category</a></li>
 </ul></div>
 
-<h2>Patron Category Administration</h2>
+<h2>Patron category administration</h2>
 [% IF ( searchfield ) %]
 		You Searched for [% searchfield %]</span>
 	[% END %]
@@ -287,7 +287,7 @@ Confirm Deletion of Category [% categorycode |html %][% END %]</legend>
 			<th scope="col">Upper age limit</th>
 			<th scope="col">Enrollment fee</th>
 			<th scope="col">Overdue</th>
-			<th scope="col">Lost Items</th>
+            <th scope="col">Lost items</th>
  			<th scope="col">Hold fee</th>
             [% IF ( EnhancedMessagingPreferences ) %]
             <th scope="col">Messaging</th>
@@ -328,12 +328,12 @@ Confirm Deletion of Category [% categorycode |html %][% END %]</legend>
                               [% FOREACH prefs IN loo.messaging_prefs %]
 	                                [% FOREACH transport IN prefs.transports %]
                                          [% IF ( transport.transport ) %]
-			                                [% IF ( prefs.Item_Due ) %]Item Due
-			                                [% ELSIF ( prefs.Advance_Notice ) %]Advance Notice
-			                                [% ELSIF ( prefs.Upcoming_Events ) %]Upcoming Events
-			                                [% ELSIF ( prefs.Hold_Filled ) %]Hold Filled
-			                                [% ELSIF ( prefs.Item_Check_in ) %]Item Check-in
-			                                [% ELSIF ( prefs.Item_Checkout ) %]Item Checkout
+                                            [% IF ( prefs.Item_Due ) %]Item due
+                                            [% ELSIF ( prefs.Advance_Notice ) %]Advance notice
+                                            [% ELSIF ( prefs.Upcoming_Events ) %]Upcoming events
+                                            [% ELSIF ( prefs.Hold_Filled ) %]Hold filled
+                                            [% ELSIF ( prefs.Item_Check_in ) %]Item check-in
+                                            [% ELSIF ( prefs.Item_Checkout ) %]Item checkout
 			                                [% ELSE %]Unknown
 			                                [% END %]:
 				                            <strong>[% transport.transport %]</strong><br />
