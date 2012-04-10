@@ -307,7 +307,8 @@ sub SendAlerts {
         # search the biblionumber
         my $strsth =  $type eq 'claimacquisition'
             ? qq{
-            SELECT aqorders.*,aqbasket.*,biblio.*,biblioitems.*,aqbooksellers.*
+            SELECT aqorders.*,aqbasket.*,biblio.*,biblioitems.*,aqbooksellers.*,
+            aqbooksellers.id AS booksellerid
             FROM aqorders
             LEFT JOIN aqbasket ON aqbasket.basketno=aqorders.basketno
             LEFT JOIN biblio ON aqorders.biblionumber=biblio.biblionumber
@@ -316,7 +317,8 @@ sub SendAlerts {
             WHERE aqorders.ordernumber IN (
             }
             : qq{
-            SELECT serial.*,subscription.*, biblio.*, aqbooksellers.*
+            SELECT serial.*,subscription.*, biblio.*, aqbooksellers.*,
+            aqbooksellers.id AS booksellerid
             FROM serial
             LEFT JOIN subscription ON serial.subscriptionid=subscription.subscriptionid
             LEFT JOIN biblio ON serial.biblionumber=biblio.biblionumber
@@ -356,7 +358,7 @@ sub SendAlerts {
 
         # ... then send mail
         my %mail = (
-            To => join( ','. @email),
+            To => join( ',', @email),
             From           => $userenv->{emailaddress},
             Subject        => Encode::encode( "utf8", "" . $letter->{title} ),
             Message        => Encode::encode( "utf8", "" . $letter->{content} ),

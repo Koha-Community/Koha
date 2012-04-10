@@ -81,11 +81,13 @@ if ($op and $op eq "send_alert"){
     my $err;
     eval {
         $err = SendAlerts( 'claimacquisition', \@ordernums, $input->param("letter_code") );    # FIXME: Fallback value?
-        AddClaim ( $_ ) for @ordernums;
+        if ( not ref $err or not exists $err->{error} ) {
+            AddClaim ( $_ ) for @ordernums;
+        }
     };
     if ( $@ ) {
         $template->param(error_claim => $@);
-    } elsif ( defined $err->{error} and $err->{error} eq "no_email" ) {
+    } elsif ( ref $err and exists $err->{error} and $err->{error} eq "no_email" ) {
         $template->{VARS}->{'error_claim'} = "no_email";
     } else {
         $template->{VARS}->{'info_claim'} = 1;
