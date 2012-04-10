@@ -19,7 +19,7 @@ package C4::AuthoritiesMarc::UNIMARC;
 
 use strict;
 #use warnings; FIXME - Bug 2505
-our $VERSION = 3.00;
+our $VERSION = 3.07.00.049;
 
 =head1 NAME
 

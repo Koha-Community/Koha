@@ -31,7 +31,7 @@ use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
 BEGIN {
 	require Exporter;
-	$VERSION = 3.01;
+    $VERSION = 3.07.00.049;
 	@ISA = qw(Exporter);
 	@EXPORT_OK = qw(
 		&get_xisbns

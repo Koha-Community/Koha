@@ -43,7 +43,7 @@ use Text::Unaccent qw( unac_string );
 our ($VERSION,@ISA,@EXPORT,@EXPORT_OK,$debug);
 
 BEGIN {
-    $VERSION = 3.02;
+    $VERSION = 3.07.00.049;
     $debug = $ENV{DEBUG} || 0;
     require Exporter;
     @ISA = qw(Exporter);

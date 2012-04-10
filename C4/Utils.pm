@@ -27,7 +27,7 @@ use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $debug);
 
 BEGIN {
 	require Exporter;
-	$VERSION = 1.00;        # set the version for version checking
+    $VERSION = 3.07.00.049;        # set the version for version checking
 	$debug = $ENV{DEBUG} || 0;
 	@ISA    = qw(Exporter);
 	@EXPORT_OK = qw(&maxwidth &hashdump);

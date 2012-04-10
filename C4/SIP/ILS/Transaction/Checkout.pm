@@ -24,7 +24,7 @@ use C4::Debug;
 use vars qw($VERSION @ISA $debug);
 
 BEGIN {
-	$VERSION = 1.03;
+    $VERSION = 3.07.00.049;
 	@ISA = qw(ILS::Transaction);
 }
 

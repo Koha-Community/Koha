@@ -33,7 +33,7 @@ use vars qw($VERSION @ISA @EXPORT @EXPORT_OK);
 
 BEGIN {
     # set the version for version checking
-    $VERSION = 3.02;
+    $VERSION = 3.07.00.049;
     require Exporter;
     @ISA    = qw(Exporter);
     @EXPORT = qw(

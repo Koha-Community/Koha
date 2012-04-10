@@ -29,7 +29,7 @@ require Exporter;
 use vars qw($VERSION @ISA @EXPORT);
 
 # set the version for version checking
-$VERSION = 0.01;
+$VERSION = 3.07.00.049;
 
 =head1 NAME
 

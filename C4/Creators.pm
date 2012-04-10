@@ -18,7 +18,7 @@ package C4::Creators;
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 BEGIN {
-    use version; our $VERSION = qv('1.0.0_1');
+    use version; our $VERSION = qv('3.07.00.049');
     use vars qw(@EXPORT @ISA);
     @ISA = qw(Exporter);
     our @EXPORT = qw(get_all_templates

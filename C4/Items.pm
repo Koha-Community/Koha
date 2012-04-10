@@ -36,7 +36,7 @@ use Data::Dumper; # used as part of logging item record changes, not just for
 use vars qw($VERSION @ISA @EXPORT);
 
 BEGIN {
-    $VERSION = 3.01;
+    $VERSION = 3.07.00.049;
 
 	require Exporter;
     @ISA = qw( Exporter );

@@ -25,7 +25,7 @@ use C4::Context;
 use Module::Load;
 use Carp;
 
-our $VERSION = 3.00;
+our $VERSION = 3.07.00.049;
 
 =head1 NAME
 

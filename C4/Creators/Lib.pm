@@ -26,7 +26,7 @@ use C4::Context;
 use C4::Debug;
 
 BEGIN {
-    use version; our $VERSION = qv('1.0.0_1');
+    use version; our $VERSION = qv('3.07.00.049');
     use base qw(Exporter);
     our @EXPORT = qw(get_all_templates
                      get_all_layouts

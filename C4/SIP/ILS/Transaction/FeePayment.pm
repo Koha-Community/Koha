@@ -27,7 +27,7 @@ use base qw(ILS::Transaction);
 use vars qw($VERSION @ISA $debug);
 
 our $debug   = 0;
-our $VERSION = 1.00;
+our $VERSION = 3.07.00.049;
 
 my %fields = ();
 

@@ -44,7 +44,7 @@ use constant VIRTUALSHELVES_COUNT => 20;
 use vars qw($debug @EXPORT @ISA $VERSION);
 
 BEGIN {
-    $VERSION = 1.01;
+    $VERSION = 3.07.00.049;
     @ISA     = qw(Exporter);
     @EXPORT  = qw(&shelfpage);
     $debug   = $ENV{DEBUG} || 0;

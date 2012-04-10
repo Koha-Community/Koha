@@ -11,7 +11,7 @@ use C4::Creators::Profile 1.000000;
 use C4::Creators::Lib 1.000000 qw(get_unit_values);
 
 BEGIN {
-    use version; our $VERSION = qv('1.0.0_1');
+    use version; our $VERSION = qv('3.07.00.049');
 }
 
 sub _check_params {

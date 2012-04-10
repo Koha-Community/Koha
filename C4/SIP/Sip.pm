@@ -20,7 +20,7 @@ use Sip::Checksum qw(checksum);
 use vars qw($VERSION @ISA @EXPORT_OK %EXPORT_TAGS);
 
 BEGIN {
-	$VERSION = 1.00;
+    $VERSION = 3.07.00.049;
 	@ISA = qw(Exporter);
 
 	@EXPORT_OK = qw(y_or_n timestamp add_field maybe_add add_count

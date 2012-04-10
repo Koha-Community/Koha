@@ -26,7 +26,7 @@ use Digest::MD5 qw(md5_base64);
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK);
 
 BEGIN {
-	$VERSION = 2.03;
+    $VERSION = 3.07.00.049;
 	@ISA = qw(Exporter);
 	@EXPORT_OK = qw(invalid_patron);
 }

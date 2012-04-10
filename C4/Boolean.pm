@@ -27,7 +27,7 @@ use warnings;
 use Carp;
 use base qw(Exporter);
 
-our    $VERSION = 0.03;
+our    $VERSION = 3.07.00.049;
 our    @EXPORT_OK = qw( true_p);
 
 =head1 NAME
