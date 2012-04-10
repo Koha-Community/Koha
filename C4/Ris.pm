@@ -59,8 +59,8 @@ package C4::Ris;
 #
 #
 
-use strict;
-use warnings;
+#use strict;
+#use warnings;
 
 use vars qw($VERSION @ISA @EXPORT);
 
