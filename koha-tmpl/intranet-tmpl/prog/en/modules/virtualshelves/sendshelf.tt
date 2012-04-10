@@ -33,7 +33,7 @@ Serial: [% BIBLIO_RESULT.serial %][% END %][% IF ( BIBLIO_RESULT.dewey ) %]
 Dewey: [% BIBLIO_RESULT.dewey %][% END %][% IF ( BIBLIO_RESULT.classification ) %]
 Classification: [% BIBLIO_RESULT.classification %][% END %][% IF ( BIBLIO_RESULT.lccn ) %]
 LCCN: [% BIBLIO_RESULT.lccn %][% END %][% IF ( BIBLIO_RESULT.url ) %]
-url : [% BIBLIO_RESULT.url %][% END %][% IF ( OPACBaseURL ) %]
+URL : [% BIBLIO_RESULT.url %][% END %][% IF ( OPACBaseURL ) %]
 In the online catalog:
     http://[% OPACBaseURL %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% BIBLIO_RESULT.biblionumber |url %][% END %]
 Items : [% FOREACH ITEM_RESULT IN BIBLIO_RESULT.ITEM_RESULTS %]

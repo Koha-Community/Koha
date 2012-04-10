@@ -7,7 +7,7 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a> [% IF ( do_it ) %]&rsaquo; <a href="/cgi-bin/koha/reports/issues_avg_stats.pl">Average Checkout Period</a> &rsaquo; Results [% ELSE %]&rsaquo; Average Checkout Period[% END %]</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a> [% IF ( do_it ) %]&rsaquo; <a href="/cgi-bin/koha/reports/issues_avg_stats.pl">Average checkout period</a> &rsaquo; Results [% ELSE %]&rsaquo; Average checkout period[% END %]</div>
 
 <div id="doc3" class="yui-t2">
    
@@ -17,7 +17,7 @@
 
 [% IF ( do_it ) %]
 	[% FOREACH mainloo IN mainloop %]
-		<h1>Average Checkout Period</h1>
+        <h1>Average checkout period</h1>
 		[% IF ( mainloo.loopfilter ) %]
 			<p>Filtered on</p>
 			[% FOREACH loopfilte IN mainloo.loopfilter %]
@@ -107,7 +107,7 @@
 									);
 								</script>
 					<label for="to">To</label> <input size="10" id="to" name="Filter" value="" type="text" />
-						<img src="[% themelang %]/lib/calendar/cal.gif" alt="Show Calendar" id="openCalendarTo" style="cursor: pointer;" border="0" />
+                        <img src="[% themelang %]/lib/calendar/cal.gif" alt="Show calendar" id="openCalendarTo" style="cursor: pointer;" border="0" />
 							<script type="text/javascript">
 								function validate2(date) {
 									var day = date.getDate();
@@ -154,7 +154,7 @@
 				<td><input type="radio" name="Line" value="returndate" /></td>
 				<td><input type="radio" name="Column" value="returndate" /></td>
 				<td > <label for="fromRO">From</label> <input type="text" size="10" id="fromRO" name="Filter" />
-							<img src="[% themelang %]/lib/calendar/cal.gif" alt="Show Calendar" border="0" id="openCalendarFromRO" style="cursor: pointer;" />
+                            <img src="[% themelang %]/lib/calendar/cal.gif" alt="Show calendar" border="0" id="openCalendarFromRO" style="cursor: pointer;" />
 								<script language="JavaScript" type="text/javascript">
 									function validate1(date) {
 										var day = date.getDate();
@@ -183,7 +183,7 @@
 									);
 								</script>
 					<label for="toRO">To</label> <input type="text" size="10" id="toRO" name="Filter" value="" />
-						<img src="[% themelang %]/lib/calendar/cal.gif" alt="Show Calendar" id="openCalendarToRO" style="cursor: pointer;" border="0" />
+                        <img src="[% themelang %]/lib/calendar/cal.gif" alt="Show calendar" id="openCalendarToRO" style="cursor: pointer;" border="0" />
 							<script type="text/javascript">
 								function validate2(date) {
 									var day = date.getDate();
@@ -245,7 +245,7 @@
 			</tr>
 <!-- Modified according to statistics table
 			<tr>
-				<td>Issuing Library</td>
+                <td>Issuing library</td>
 				<td><input type="radio" name="Line" value="issuingbranch"></td>
 				<td><input type="radio" name="Column" value="issuingbranch"></td>
 				<td >[% CGIBranch %]</td>

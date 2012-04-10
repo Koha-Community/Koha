@@ -35,7 +35,7 @@
 		[% IF ( mainloo.looptables ) %]
 			<h3><a name="summary" id="summary"></a>Summary</h3>
 			<table id="summary_table">
-				<tr><th>Group</th><th>Call Number Range</th><th>Number of Items Displayed</th><th>Total Items in Group</th>
+                <tr><th>Group</th><th>Call number range</th><th>Number of items displayed</th><th>Total items in group</th>
 				</tr>
 			[% FOREACH looptable IN mainloo.looptables %]
 				<tr><td><a href="#table[% looptable.coltitle %]">[% looptable.coltitle %]</a></td>
@@ -59,15 +59,15 @@
 		<table>
 			<tr>
 				<th>#</th>
-				<th>Call Number</th>
+                <th>Call number</th>
 				<th>Barcode</th>
-				<th>Item Details</th>
+                <th>Item details</th>
 			</tr>
 				[% IF ( looptable.looprow ) %]
 				[% FOREACH loopro IN looptable.looprow %]
 				[% DEFAULT
-				    loopro.itemcallnumber="No Call Number"
-				    loopro.barcode="No Barcode"
+                    loopro.itemcallnumber="No call number"
+                    loopro.barcode="No barcode"
 				    loopro.title="NO TITLE"
 				    loopro.author=""
 				%]
@@ -91,21 +91,21 @@
 		[% END %]
 	[% END %]
 [% ELSE %]
-	<h1>Items with no checkouts</h1>
+    <h1>Items with no checkouts</h1>
 	<form method="post" action="/cgi-bin/koha/reports/catalogue_out.pl">
 	
 	<fieldset class="rows">
 		<ol>
 			<li><label for="branch">Library: </label>
 	<select name="Filter" id="branch">
-		<option value="">Any Library</option>
+        <option value="">Any library</option>
     [% FOREACH branchloo IN branchloop %]
         <option value="[% branchloo.value %]">[% branchloo.branchname %]</option>  
      [% END %] 
     </select></li>
       <li> 
-        <label for="documenttype">Item Type: </label><select name="Filter" id="documenttype">
-		<option value="">Any Item Type</option>
+        <label for="documenttype">Item type: </label><select name="Filter" id="documenttype">
+        <option value="">Any item type</option>
     [% FOREACH itemtypeloo IN itemtypeloop %]
         <option value="[% itemtypeloo.value %]">[% itemtypeloo.description %]</option>  
      [% END %] 
@@ -135,7 +135,7 @@
 		<li><label for="criteria">By: </label><select name="Criteria" id="criteria">
 						<option value ="" selected="selected">None</option>
 						<option value ="homebranch">Library</option>
-						<option value ="itype">Itemtype</option>
+                        <option value ="itype">Item type</option>
 					</select></li>
 		</ol>
 	</fieldset>

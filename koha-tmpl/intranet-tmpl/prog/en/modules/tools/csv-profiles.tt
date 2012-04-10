@@ -110,10 +110,10 @@ function reloadPage(p) {
 						    </select></li>
 
 
-						    <li><label for="new_profile_content">Profile marcfields: </label>
+                            <li><label for="new_profile_content">Profile MARC fields: </label>
 						    <textarea cols="50" rows="2" name="profile_content" id="new_profile_content"></textarea>
 						    <p>You have to define which fields or subfields you want to export, separated by pipes.</p>
-						    <p>You can also use your own headers (instead of the ones from koha) by prefixing the field number with an header, followed by the equal sign.</p>
+                            <p>You can also use your own headers (instead of the ones from Koha) by prefixing the field number with an header, followed by the equal sign.</p>
 						    <p>Example: Personal name=200|Entry element=210$a|300|009</p>
 						    </li>
 						    </ol>
@@ -289,7 +289,7 @@ function reloadPage(p) {
 							[% END %]
 						    </select></li>
 
-						    <li><label for="modify_profile_content">Profile marcfields: </label>
+                            <li><label for="modify_profile_content">Profile MARC fields: </label>
 						    <textarea cols="50" rows="2" name="profile_content" id="modify_profile_content">[% selected_profile_marcfields %]</textarea></li>
 
 						   <li class="radio"> <label for="delete">Delete selected profile ?</label>

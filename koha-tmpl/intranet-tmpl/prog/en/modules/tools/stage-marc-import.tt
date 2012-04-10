@@ -1,5 +1,5 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Tools &rsaquo; Stage MARC Records For Import</title>
+<title>Koha &rsaquo; Tools &rsaquo; Stage MARC records for import</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'file-upload.inc' %]
 [% INCLUDE 'background-job.inc' %]
@@ -28,7 +28,7 @@ function CheckForm(f) {
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; [% IF ( uploadmarc ) %]<a href="/cgi-bin/koha/tools/stage-marc-import.pl">Stage MARC Records For Import</a> &rsaquo; Upload Results[% ELSE %]Stage MARC Records For Import[% END %]</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; [% IF ( uploadmarc ) %]<a href="/cgi-bin/koha/tools/stage-marc-import.pl">Stage MARC records for import</a> &rsaquo; Upload Results[% ELSE %]Stage MARC records for import[% END %]</div>
 
 <div id="doc3" class="yui-t2">
    
@@ -36,9 +36,9 @@ function CheckForm(f) {
 	<div id="yui-main">
 	<div class="yui-b">
 
-<h1>Stage MARC Records For Import</h1>
+<h1>Stage MARC records for import</h1>
 [% IF ( uploadmarc ) %]
-<p>MARC Staging results :</p>
+<p>MARC staging results :</p>
 <ul>
 	<li>[% total %]  records in file</li>
 	<li>[% import_errors %] records not staged because of MARC error</li>

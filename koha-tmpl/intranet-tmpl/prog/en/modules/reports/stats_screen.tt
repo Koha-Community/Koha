@@ -1,5 +1,5 @@
 [% INCLUDE 'doc-head-open.inc' %] 
-<title>Koha &rsaquo; Reports &rsaquo; Till Reconciliation</title>
+<title>Koha &rsaquo; Reports &rsaquo; Till reconciliation</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %] 
 
@@ -7,7 +7,7 @@
 <body id="rep_stats_screen" class="rep">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'circ-search.inc' %]
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a> &rsaquo; Till Reconciliation
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a> &rsaquo; Till reconciliation
 </div>
 
 <div id="doc3" class="yui-t2">
@@ -16,13 +16,13 @@
 	<div id="yui-main">
 	<div class="yui-b">
 
-<h1>Till Reconciliation</h1>
+<h1>Till reconciliation</h1>
 
 <fieldset><legend>Search between two dates</legend>
 <form action="stats.screen.pl" method="post">
   <label for="from">Start Date: </label>
   <input type="text" name="time" size="10" value="[% IF ( date ) %][% date %][% ELSE %]today[% END %]" id="from" /> 
-  <img src="[% themelang %]/lib/calendar/cal.gif" id="buttonfrom1" alt="Show Calendar" style="cursor: pointer;" />
+  <img src="[% themelang %]/lib/calendar/cal.gif" id="buttonfrom1" alt="Show calendar" style="cursor: pointer;" />
      <script type="text/javascript">
      Calendar.setup({
      inputField     :    "from",
@@ -33,7 +33,7 @@
      </script>
   <label for="to">End Date: </label>
   <input type="text" name="time2" size="10" value="[% IF ( date2 ) %][% date2 %][% ELSE %]tomorrow[% END %]" id="to" />
-  <img src="[% themelang %]/lib/calendar/cal.gif" id="buttonto1" alt="Show Calendar" style="cursor: pointer;" />
+  <img src="[% themelang %]/lib/calendar/cal.gif" id="buttonto1" alt="Show calendar" style="cursor: pointer;" />
      <script type="text/javascript">
      Calendar.setup({
      inputField     :    "to",
@@ -42,7 +42,7 @@
      align          :    "Tl"
      });
      </script>
-  <input type="submit" value="To Screen" name="submit" class="submit" />
+  <input type="submit" value="To screen" name="submit" class="submit" />
 <!--  <input type="submit" value="To Excel" name="submit" class="button"> --></fieldset>
 </form>
 
@@ -53,12 +53,12 @@
                         <th>Library</th>
                         <th>Date/time</th>
                         <th>Surname</th>
-                        <th>Firstname</th>
+                        <th>First name</th>
                         <th>Description</th>
-                        <th>Charge Type</th>
-                        <th>Invoice Amount</th>
-                        <th>Payment Type</th>
-                        <th>Payment Amount</th>
+                        <th>Charge type</th>
+                        <th>Invoice amount</th>
+                        <th>Payment type</th>
+                        <th>Payment amount</th>
                 </tr>
 
                 [% FOREACH loop IN loop1 %]
@@ -88,10 +88,10 @@
                         <th>Library</th>
                         <th>Date/time</th>
                         <th>Surname</th>
-                        <th>Firstname</th>
+                        <th>First name</th>
                         <th>Description</th>
-                        <th>Charge Type</th>
-                        <th>Invoice Amount</th>
+                        <th>Charge type</th>
+                        <th>Invoice amount</th>
                 </tr>
 
                 [% FOREACH loop IN loop2 %]
@@ -119,10 +119,10 @@
                         <th>Library</th>
                         <th>Date/time</th>
                         <th>Surname</th>
-                        <th>Firstname</th>
+                        <th>First name</th>
                         <th>Description</th>
-                        <th>Charge Type</th>
-                        <th>Invoice Amount</th>
+                        <th>Charge type</th>
+                        <th>Invoice amount</th>
                 </tr>
 
                 [% FOREACH loop IN loop3 %]

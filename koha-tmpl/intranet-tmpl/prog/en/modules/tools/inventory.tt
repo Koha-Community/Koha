@@ -14,8 +14,8 @@ $(document).ready(function(){
 	        $(".checkboxed").unCheckCheckboxes();
 	        return false;
 	    });
-[% IF ( offset ) %]$("#markseen").before("<input type=\"submit\" value=\"&lt;&lt; Mark Seen and Continue\" id=\"markback\" />");[% END %]
-[% IF ( nextoffset ) %]$("#markseen").after("<input type=\"submit\" id=\"marknext\" value=\"Mark Seen and Continue &gt;&gt;\" />");[% END %]
+[% IF ( offset ) %]$("#markseen").before("<input type=\"submit\" value=\"&lt;&lt; Mark seen and continue\" id=\"markback\" />");[% END %]
+[% IF ( nextoffset ) %]$("#markseen").after("<input type=\"submit\" id=\"marknext\" value=\"Mark seen and continue &gt;&gt;\" />");[% END %]
 	$("#markback").click(function(){
 		$(".checkboxed").find("input").filter("[name=offset]").attr("value","[% prevoffset %]");
 		return true;
@@ -59,7 +59,7 @@ $(document).ready(function(){
 	 <ol>
             <li><label for="uploadbarcodes">Barcode file: </label> <input type="file" id="uploadbarcodes" name="uploadbarcodes" /></li>
             <li><label for="setdate">Set inventory date to:</label> <input type="text" id="setdate" name="setdate" value="[% today %]" />
-             <img src="[% themelang %]/lib/calendar/cal.gif" id="setdate_button" alt="Show Calendar" />
+             <img src="[% themelang %]/lib/calendar/cal.gif" id="setdate_button" alt="Show calendar" />
             <script type="text/javascript">
             Calendar.setup(
             {
@@ -81,7 +81,7 @@ $(document).ready(function(){
             <input type="radio" name="branch" value="holdingbranch">Current location</input>
         </li><li>
         <label for="branchloop">Library</label><select id="branchloop" name="branchcode" style="width:12em;">
-            <option value="">All Locations</option>
+            <option value="">All locations</option>
         [% FOREACH branchloo IN branchloop %]
             [% IF ( branchloo.selected ) %]
                 <option value="[% branchloo.value %]" selected="selected">[% branchloo.branchname %]</option>
@@ -93,7 +93,7 @@ $(document).ready(function(){
         </li>
         [% IF ( authorised_values ) %]
         <li>
-            <label for="locationloop">Item Location (items.location) is</label> 
+            <label for="locationloop">Shelving location (items.location) is</label>
         <select id="locationloop" name="location">
                 <option value="">Filter location</option>
         [% FOREACH authorised_value IN authorised_values %]
@@ -106,7 +106,7 @@ $(document).ready(function(){
         </select>        </li>
         [% END %]
         <li>
-            <label for="minlocation">Item callnumber between: </label>
+            <label for="minlocation">Item call number between: </label>
                 <input type="text" name="minlocation" id="minlocation" value="[% minlocation %]" /> (items.itemcallnumber)  </li>
            <li><label for="maxlocation">...and: </label>
                 <input type="text" name="maxlocation" id="maxlocation" value="[% maxlocation %]" />
@@ -166,7 +166,7 @@ $(document).ready(function(){
             <input type="text" id="offset" name="offset" value="[% offset %]" size="5" maxlength="5" />
         </li>
         <li>
-           <label for="CSVexport">Export to csv file</label>
+           <label for="CSVexport">Export to CSV file</label>
            <input type="checkbox" name="CSVexport" id="CSVexport" />
         </li>
         <li>
@@ -191,7 +191,7 @@ $(document).ready(function(){
     <input type="hidden" name="datelastseen" value="[% datelastseen %]" />
     <input type="hidden" name="pagesize" value="[% pagesize %]" />
     <input type="hidden" name="offset" value="[% offset %]" />
-	<div style="padding : .3em 0"><a href="#" class="checkall">[Select All]</a> <a href="#" class="clearall">[Clear All]</a></div>
+    <div style="padding : .3em 0"><a href="#" class="checkall">[Select all]</a> <a href="#" class="clearall">[Clear all]</a></div>
     <table>
         <tr>
             <th>Seen</th>
@@ -219,7 +219,7 @@ $(document).ready(function(){
                  [% IF ( loo.notfoundbarcode ) %]
                      <p style="background: red;">Not found among barcodes in barcodes file.</p>
                  [% ELSIF ( loo.notfoundkoha ) %]
-                     <p style="background: red;">Not found in koha.</p>
+                     <p style="background: red;">Not found in Koha.</p>
                  [% ELSE %]
                      <p style="background: green;">None</p>
                  [% END %]
@@ -227,7 +227,7 @@ $(document).ready(function(){
         </tr>
     [% END %]
     </table>
-	<div style="padding : .3em 0"><a href="#" class="checkall">[Select All]</a> <a href="#" class="clearall">[Clear All]</a></div>
+    <div style="padding : .3em 0"><a href="#" class="checkall">[Select all]</a> <a href="#" class="clearall">[Clear all]</a></div>
      <input type="submit" id="markseen" value="Mark seen" />
     </form>
     [% IF ( offset ) %]
@@ -241,7 +241,7 @@ $(document).ready(function(){
         <input type="hidden" name="pagesize" value="[% pagesize %]" />
         <input type="hidden" name="offset" value="[% prevoffset %]" />
         <input type="hidden" name="op" value="do_it" />
-        <input type="submit" value="&lt;&lt; Continue without Marking" class="submit" />
+        <input type="submit" value="&lt;&lt; Continue without marking" class="submit" />
     </form>
     [% END %]
     [% IF ( nextoffset ) %]
@@ -255,7 +255,7 @@ $(document).ready(function(){
         <input type="hidden" name="pagesize" value="[% pagesize %]" />
         <input type="hidden" name="offset" value="[% nextoffset %]" />
         <input type="hidden" name="op" value="do_it" />
-        <input type="submit" value="Continue without Marking &gt;&gt;" class="submit" />
+        <input type="submit" value="Continue without marking &gt;&gt;" class="submit" />
     </form>
     </div>
     [% END %]
