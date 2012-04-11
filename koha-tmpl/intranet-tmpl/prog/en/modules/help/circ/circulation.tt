@@ -1,64 +1,59 @@
 [% INCLUDE 'help-top.inc' %]
 
-<h1>Checking out (issuing)</h1>
-
-<p>To begin the checkout process you must enter the patron barcode or part of their name. The checkout option appears in three main places:</p>
-
-<ul>
-	<li>Check out option on main staff client</li>
-	<li>Check out option on the patron record</li>
-	<li>Check out option on the quick search bar</li>
-</ul>
-
-<h2>Checking items out</h2>
+<h1>Checking Out (Issuing)</h1>
 
 <p>To check an item out to a patron, first search for that patron using one of the many options listed above.</p>
 
-<p>At the top of the Check Out screen is a box for you to type or scan the item's barcode into.</p>
+<p>At the top of the Check Out screen is a box for you to type or scan the item's barcode into.
 
 <ul>
-    <li style="color: #990000;">Important: Many modern barcode scanners will send a 'return' to the browser, making it so that the 'Check out' button is automatically clicked</li>
+    <li style="color: #990000">Important: Many modern barcode scanners will send a 'return' to the browser, making it so that the 'Check Out' button is automatically clicked</li>
+</ul>
+<ul>
 	<li>If the barcode is not found you will be prompted to use fast cataloging to add the item. Learn more about fast cataloging later in this manual.</li>
 </ul>
 
-<p>Below the box for the barcode there may be options for you to override the default due date for the item.</p>
+<p>Below the box for the barcode there may be options for you to override the default due date for the item.
 
 <ul>
 	<li>This option will only appear if you have set the SpecifyDueDate system preference to allow staff to override the due date</li>
 </ul>
 
-<p>At the bottom of the page there is a summary of the patron's current checked out items along with the due date, items checked out today will appear at the top.</p>
+<p>At the bottom of the page there is a summary of the patron's current checked out items along with the due date (and time if the item is an hourly loan), items checked out today will appear at the top.</p>
 
-<ul>
-	<li>This screen will show whether an item is renewable and if not, why not.</li>
-	<li>To override the renewal limits you can set the AllowRenewalLimitOverride system preference to allow overrides and a checkbox will appear below the list of checkouts that reads 'Override Renewal Limit'
-<ul>
-	<li>Checking that box will add checkboxes in the renew column above where before the item was not renewable.</li>
-</ul>
-</li>
-</ul>
+<p style="background-color: #ffe599"><strong>Tip</strong> If the checked out time is listed as 00:00 then the item is a daily loan item. The due time for daily checkouts will show 23:59 which is the last minute of the day.</p>
 
-<p>Also at the bottom of the page is the list of items the patron has on hold
+<p>Also at the bottom of the page is the list of items the patron has on hold</p>
 
-<p>Once you have checked out all of the items for the patron you can print them a receipt by choosing one of two methods.</p>
-
-<p>The first is that you can simply hit enter on your keyboard or scan a blank piece of paper with your barcode scanner. The idea being that you're "checking out" a blank barcode which triggers Koha to print the 'Quick slip.'</p>
-
-<p>The second is that you can click the Print button at the top of the screen and choosing 'Print slip' or 'Quick slip'.</p>
-
-<p>If you choose 'Print slip' it will print all of the items the patron has checked out, including those they checked out at an earlier date. Choosing 'Quick slip' will print only the items that were checked out today.</p>
+<p>From the holds list you can suspend or resume patrons holds using the options at the bottom of the list.</p>
 
 <p>If there are notes on the patron record these will appear to the right of the checkout box</p>
 
 <p>If the patron has a hold waiting at the library that too will appear to the right of the check out box making it easy for the circulation librarian to see that there is another item to give the patron</p>
 
-<p>When you're done checking an item out if you have the DisplayClearScreenButton preference set to 'Show' you can clear the current patron by clicking the 'X' in the top right of the patron's info to remove the current patron from the screen and start over.</p>
+<h3>Printing Receipts</h3>
 
-<h2>Check out messages</h2>
+<p>Once you have checked out all of the items for the patron you can print them a receipt by choosing one of two methods.</p>
+
+<p>If you have the CircAutoPrintQuickSlip preference set to 'open a print quick slip window' you can simply hit enter on your keyboard or scan a blank piece of paper with your barcode scanner. The idea being that you're "checking out" a blank barcode which triggers Koha to print the 'Quick slip.'</p>
+
+<p>You can also click the Print button at the top of the screen and choose 'Print slip' or 'Print quick slip'.</p>
+
+<p>If you choose 'Print slip' it will print all of the items the patron has checked out, including those they checked out at an earlier date. Choosing 'Print quick slip' will print only the items that were checked out today.</p>
+
+<p>What prints on the slips can be customized by altering the slip templates under the Notices Slips tool.</p>
+
+<h3>Clear Patron Information</h3>
+
+<p>When you're done checking an item out if you have the DisplayClearScreenButton preference set to 'Show' you can clear the current patron by clicking the X in the top right of the patron's info to remove the current patron from the screen and start over.</p>
+
+<p>If you have the CircAutoPrintQuickSlip preference set to 'clear the screen' then you simply need to hit enter or scan a blank barcode and the screen will be cleared of the current patron.</p>
+
+<h2>Check Out Messages</h2>
+
+<p>If you check out an item that has multiple pieces and you have cataloged that information in subfield 3 of the item record (in MARC21) a message will pop up when you check out that item telling you how many pieces should be there.</p>
 
 <p>There are times when Koha will prevent the librarian from being able to check out items to a patron. When this happens a warning will appear notifying the librarian of why the patron cannot check items out.</p>
-
-<p>These are the possible messages you might see:</p>
 
 <ul>
 	<li>Patron owes too much in fines
@@ -68,7 +63,7 @@
 </li>
 	<li>Patron has been barred from the library
 <ul>
-    <li>This can be set by the librarian editing a patron record and adding a flag or by the Overdue/Notice status triggers</li>
+    <li>This can be set by the librarian editing a patron record and adding a flag or by the Overdue/Notice Status Triggers</li>
 </ul>
 </li>
 	<li>Patron needs to confirm their address
@@ -83,11 +78,9 @@
 </li>
 </ul>
 
-<h2>Check out warnings</h2>
+<h2>Check Out Warnings</h2>
 
 <p>Sometimes checkouts will trigger warning messages that will appear in a yellow box above the check out field. These warnings need to be acknowledged before you will be able to continue checking items out.</p>
-
-<p>These are the possible warnings you might see:</p>
 
 <ul>
 	<li>Patron has outstanding fines</li>
@@ -102,9 +95,49 @@
 	<li>This can be overridden with the AllowRenewalLimitOverride system preference</li>
 </ul>
 </li>
-	<li>Barcode not found</li>
+    <li>Barcode not found
+<ul>
+    <li>Learn more about fast cataloging later in this manual.</li>
+</ul>
+</li>
 </ul>
 
-<p><strong>See the full documentation for checking out in the <a href="http://manual.koha-community.org/3.6/en/circulation.html#checkingout">manual</a> (online).</strong></p>
+<h2>Fast Add Cataloging</h2>
+
+<p>Sometimes circulation librarians need to quickly add a record to the system for an item they are about to check out. This is called 'Fast Add.' To allow circulation librarians access to the Fast Add Cataloging tool, simply make sure they have the fast_cataloging permissions. There are two ways to add titles via fast add. If you know that you're about to check out an item that isn't in you catalog you can go to the Circulation module and click 'Fast cataloging.'</p>
+
+<p>The cataloging interface will open up with the short cataloging record</p>
+
+<p>After adding your cataloging data you will be asked to enter item data. Enter the items barcode, collection code, etc and save the item before checking it out.</p>
+
+<p>The other way to fast catalog is from the checkout screen. When you enter a barcode at checkout that Koha can't find, it will prompt you to use fast cataloging to add the item to Koha and check it out.</p>
+
+<p>Clicking 'Fast cataloging' will bring you to the fast cataloging form where you can enter the title information</p>
+
+<p>After clicking 'Save' you will be brought to the item record where the barcode will already be filled in with the barcode you're trying to check out.</p>
+
+<p>After clicking the 'Add item' button the item will automatically be checked out the patron you were trying to check the book out to originally.</p>
+
+<h2>Circulation Messages</h2>
+
+<p>Circulation messages are short messages that librarians can leave for their patrons or their colleagues that will appear at the time of circulation.</p>
+
+<h3>Setting up Messages</h3>
+
+<p>Circulation messages are set up as Authorized Values. To add or edit Circulation Messages you want to work with the BOR_NOTES value.</p>
+
+<h3>Adding a Message</h3>
+
+<p>When on the patron's check out tab you will see a link to 'Add a new message' to the right of the check out box.</p>
+
+<p>When you click 'Add a new message' you will be asked to choose if the message is for the librarians or the patron and the message you would like to leave.</p>
+
+<h3>Viewing Messages</h3>
+
+<p>Circulation messages meant for the staff will appear on the patron's checkout screen.</p>
+
+<p>Circulation messages meant for the patron will appear when they log into the OPAC.</p>
+
+<p><strong>See the full documentation for Checking Out in the <a href="http://manual.koha-community.org/3.8/en/circulation.html#checkingout">manual</a> (online).</strong></p>
 
 [% INCLUDE 'help-bottom.inc' %]
