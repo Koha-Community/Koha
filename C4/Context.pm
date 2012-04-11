@@ -656,6 +656,8 @@ sub Zconn {
         $context->{"Zconn"}->{$server}->destroy() if defined($context->{"Zconn"}->{$server});
 
         $context->{"Zconn"}->{$server} = &_new_Zconn($server,$async,$auth,$piggyback,$syntax);
+        $context->{ Zconn }->{ $server }->option(
+            preferredRecordSyntax => C4::Context->preference("marcflavour") );
         return $context->{"Zconn"}->{$server};
     }
 }
