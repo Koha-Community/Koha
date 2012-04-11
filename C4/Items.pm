@@ -1498,11 +1498,11 @@ sub  GetLastAcquisitions {
 	return @results;
 }
 
-=head2 GetItemnumberForBiblio
+=head2 GetItemnumbersForBiblio
 
-  my @itemnumbers = GetItemnumbersForBiblio($biblionumber);
+  my $itemnumbers = GetItemnumbersForBiblio($biblionumber);
 
-Given a single biblionumber, return an array of all the corresponding itemnumbers
+Given a single biblionumber, return an arrayref of all the corresponding itemnumbers
 
 =cut
 
