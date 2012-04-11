@@ -148,7 +148,7 @@ $.tablesorter.addParser({
             </form>[% END %]
         <form action="/cgi-bin/koha/opac-suggestions.pl" method="post">
             <input type="hidden" name="op" value="delete_confirm" />
-            <div><span class="checkall"><a href="#" id="CheckAll">Select all</a></span>
+            <div id="toolbar"><span class="checkall"><a href="#" id="CheckAll">Select all</a></span>
         <span class="clearall"><a href="#" id="CheckNone">Clear all</a></span> | [% IF ( loggedinusername ) %]<a class="new" href="/cgi-bin/koha/opac-suggestions.pl?op=add">New purchase suggestion</a>[% ELSE %][% IF ( AnonSuggestions ) %]<a class="new" href="/cgi-bin/koha/opac-suggestions.pl?op=add">New purchase suggestion</a>[% END %][% END %]
 </div>
 			<table id="suggestt" class="checkboxed">
