@@ -384,14 +384,14 @@ sub GetReservesFromBorrowernumber {
 sub CanBookBeReserved{
     my ($borrowernumber, $biblionumber) = @_;
 
-    my @items = GetItemnumbersForBiblio($biblionumber);
+    my $items = GetItemnumbersForBiblio($biblionumber);
     #get items linked via host records
     my @hostitems = get_hostitemnumbers_of($biblionumber);
     if (@hostitems){
-	push (@items,@hostitems);
+    push (@$items,@hostitems);
     }
 
-    foreach my $item (@items){
+    foreach my $item (@$items){
         return 1 if CanItemBeReserved($borrowernumber, $item);
     }
     return 0;
