@@ -240,6 +240,14 @@ Circulation:
               choices:
                   homebranch: the library the item is from.
                   holdingbranch: the library the item was checked out from.
+        -
+            - "When issuing an item that has been marked as lost, "
+            - pref: IssueLostItem
+              choices:
+                  confirm: "require confirmation"
+                  alert: "display a message"
+                  nothing : "do nothing"
+            - .
     Holds Policy:
         -
             - pref: AllowHoldPolicyOverride

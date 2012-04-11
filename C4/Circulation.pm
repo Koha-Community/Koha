@@ -668,6 +668,8 @@ sub CanBookBeIssued {
     my ( $borrower, $barcode, $duedate, $inprocess, $ignore_reserves ) = @_;
     my %needsconfirmation;    # filled with problems that needs confirmations
     my %issuingimpossible;    # filled with problems that causes the issue to be IMPOSSIBLE
+    my %alerts;               # filled with messages that shouldn't stop issuing, but the librarian should be aware of.
+
     my $item = GetItem(GetItemnumberFromBarcode( $barcode ));
     my $issue = GetItemIssue($item->{itemnumber});
 	my $biblioitem = GetBiblioItemData($item->{biblioitemnumber});
@@ -849,8 +851,10 @@ sub CanBookBeIssued {
     {
         $issuingimpossible{RESTRICTED} = 1;
     }
-    if ( $item->{'itemlost'} ) {
-        $needsconfirmation{ITEM_LOST} = GetAuthorisedValueByCode( 'LOST', $item->{'itemlost'} );
+    if ( $item->{'itemlost'} && C4::Context->preference("IssueLostItem") ne 'nothing' ) {
+        my $code = GetAuthorisedValueByCode( 'LOST', $item->{'itemlost'} );
+        $needsconfirmation{ITEM_LOST} = $code if ( C4::Context->preference("IssueLostItem") eq 'confirm' );
+        $alerts{ITEM_LOST} = $code if ( C4::Context->preference("IssueLostItem") eq 'alert' );
     }
     if ( C4::Context->preference("IndependantBranches") ) {
         my $userenv = C4::Context->userenv;
@@ -927,7 +931,7 @@ sub CanBookBeIssued {
             }
         }
     }
-    return ( \%issuingimpossible, \%needsconfirmation );
+    return ( \%issuingimpossible, \%needsconfirmation, \%alerts );
 }
 
 =head2 AddIssue

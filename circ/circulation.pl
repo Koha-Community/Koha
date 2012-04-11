@@ -279,9 +279,11 @@ if ($borrowernumber) {
 #
 if ($barcode) {
     # always check for blockers on issuing
-    my ( $error, $question ) =
+    my ( $error, $question, $alerts ) =
     CanBookBeIssued( $borrower, $barcode, $datedue , $inprocess );
     my $blocker = $invalidduedate ? 1 : 0;
+
+    $template->param( alert => $alerts );
 
     delete $question->{'DEBT'} if ($debt_confirmed);
     foreach my $impossible ( keys %$error ) {
