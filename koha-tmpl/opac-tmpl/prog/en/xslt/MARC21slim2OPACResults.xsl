@@ -991,7 +991,7 @@
                             </xsl:for-each>
                             </span>
                         </xsl:if>
-                        <span class="results_summary" id="availability">
+                        <span class="results_summary availability">
                         <span class="label">Availability: </span>
                         <xsl:choose>
 				   <xsl:when test="count(key('item-by-status', 'available'))=0 and count(key('item-by-status', 'reference'))=0">
