@@ -1545,6 +1545,7 @@ CREATE TABLE `patronimage` (
 -- this table is MyISAM, InnoDB tables are growing only and this table is filled/emptied/filled/emptied...
 -- so MyISAM is better in this case
 
+DROP TABLE IF EXISTS `pending_offline_operations`;
 CREATE TABLE `pending_offline_operations` (
   `operationid` int(11) NOT NULL AUTO_INCREMENT,
   `userid` varchar(30) NOT NULL,
@@ -2819,9 +2820,9 @@ CREATE TABLE IF NOT EXISTS `social_data` (
 
 DROP TABLE IF EXISTS ratings;
 CREATE TABLE ratings (
-    borrowernumber int(11) NOT NULL, --- the borrower this rating is for
-    biblionumber int(11) NOT NULL, --- the biblio it's for
-    rating_value tinyint(1) NOT NULL, --- the rating, from 1-5
+    borrowernumber int(11) NOT NULL, -- the borrower this rating is for
+    biblionumber int(11) NOT NULL, -- the biblio it's for
+    rating_value tinyint(1) NOT NULL, -- the rating, from 1-5
     timestamp timestamp NOT NULL default CURRENT_TIMESTAMP,
     PRIMARY KEY  (borrowernumber,biblionumber),
     CONSTRAINT ratings_ibfk_1 FOREIGN KEY (borrowernumber) REFERENCES borrowers (borrowernumber) ON DELETE CASCADE ON UPDATE CASCADE,
