@@ -4,40 +4,42 @@
 <script type="text/javascript">
 //<![CDATA[
 function Dopop(link) {
-    var newin=window.open(link,'popup','width=600,height=400,resizable=1,toolbar=0,scrollbars=1,top');
+    var newin = window.open(link, 'popup', 'width=600,height=400,resizable=1,toolbar=0,scrollbars=1,top');
+    $("#barcode").focus();
 }
-	 $(document).ready(function() {
-	 	$("#exemptcheck").change(function(){
-			if(this.checked == true) {
-				$("#barcode").addClass("alert");
-				$("#exemptfines").show();
-			} else {
-				$("#barcode").removeClass("alert");
-				$("#exemptfines").hide();
-			}
-			$("#barcode").focus();
-		});
-	 	$("#dropboxcheck").change(function(){
-			if (this.checked == true) {
-				$("#barcode").addClass("alert");
-				$("#dropboxmode").show();
-			} else {
-				$("#barcode").removeClass("alert");
-				$("#dropboxmode").hide();
-			}
-			$("#barcode").focus();
-		});
-		[% IF ( overduecharges ) %]$("#barcode").focus(function(){
-			if(($("#exemptcheck").attr("checked") == true)||($("#dropboxcheck").attr("checked") == true)){
-				$("#barcode").addClass("alert");
-			} else {
-				$("#barcode").removeClass("alert");
-			}
-		});
-		$("#barcode").blur(function(){
-			$("#barcode").removeClass("alert");
-		});[% END %]
-	 });
+$(document).ready(function () {
+    $("#exemptcheck").change(function () {
+        if (this.checked == true) {
+            $("#barcode").addClass("alert");
+            $("#exemptfines").show();
+        } else {
+            $("#barcode").removeClass("alert");
+            $("#exemptfines").hide();
+        }
+        $("#barcode").focus();
+    });
+    $("#dropboxcheck").change(function () {
+        if (this.checked == true) {
+            $("#barcode").addClass("alert");
+            $("#dropboxmode").show();
+        } else {
+            $("#barcode").removeClass("alert");
+            $("#dropboxmode").hide();
+        }
+        $("#barcode").focus();
+    });
+    [% IF(overduecharges) %] $("#barcode").focus(function () {
+        if (($("#exemptcheck").attr("checked") == true) || ($("#dropboxcheck").attr("checked") == true)) {
+            $("#barcode").addClass("alert");
+        } else {
+            $("#barcode").removeClass("alert");
+        }
+    });
+    $("#barcode").blur(function () {
+        $("#barcode").removeClass("alert");
+    });
+    [% END %]
+});
 //]]>
 </script>
 </head>
