@@ -16,17 +16,24 @@
 </ul>
 </li>
 </ul>
+
 <h2>Add a new Patron</h2>
+
+<p>Patrons are added by going to the 'Patrons' module.</p>
+
 <ul>
 	<li>Click 'New'</li>
-	<li>Enter the identifying information regarding your patron
+    <li>First enter the identifying information regarding your patron
 <ul>
 	<li>Required fields are defined in the BorrowerMandatoryField system preference</li>
-	<li>Unwanted fields are defined in the BorrowerUnwantedField system preference</li>
 	<li>Salutation is populated by the BorrowersTitles system preference</li>
 </ul>
 </li>
-	<li>Next enter the contact information</li>
+    <li>Next enter the contact information
+<ul>
+    <li>For contact information, note that the primary phone and email addresses are the ones that appear on notices and slips printed during circulation (receipts, transfer slips and hold slips). The primary email is also the one that overdue notices and other messages go to.</li>
+</ul>
+</li>
 	<li>If this patron is a child, you will be asked to attach the child patron to an adult patron
 <ul>
 	<li>Click 'Set to Patron' to search your system for an existing patron</li>
@@ -47,6 +54,7 @@
 	<li>The library management section includes values that are used within the library
 <ul>
 	<li>The card number field is automatically calculated if you have the autoMemberNum system preference set that way</li>
+    <li><strong>Note:</strong> For a newly installed system this preference will start at 1 and increment by 1 each time after. To have it start with the starting number of your barcodes, enter the first barcode by hand in the patron record and save the patron. After that the field will increment that number by 1.</li>
 	<li>If you accidentally chose the wrong patron category at the beginning you can fix that here</li>
 	<li>Sort 1 and 2 are used for statistical purposes within your library</li>
 </ul>
@@ -57,19 +65,20 @@
 	<li>If your patron cards expire (based on your patron category settings) the Expiry date will automatically be calculated</li>
 	<li>The OPAC Note is a note for the patron - it will appear in the OPAC on the patron's record</li>
 	<li>The Circulation Note is meant solely for your library staff and will appear when the circulation staff goes to check an item out to the patron</li>
-	<li>The OPAC Login and Password are used by the patron to log into their account in the OPAC. They are also used for staff accounts to provide them access to the staff client.</li>
+    <li>The Staff/OPAC asks for the username and password to be used by the patron (and/or staff member) to log into their account in the OPAC and for staff to log in to the staff client.</li>
 </ul>
 </li>
 	<li>If you have set additional patron attributes up, these will appear next</li>
 	<li>Finally, if you have EnhancedMessagingPreferences set to 'allow,' you can choose the messaging preferences for this patron.
 <ul>
-	<li>These preferences will override any you set via the patron categories</li>
-	<li>These preference can be altered by the patron via the OPAC</li>
+    <li style="color: #990000">Important: These preferences will override any you set via the patron categories</li>
+    <li style="color: #990000">Important: These preference can be altered by the patron via the OPAC</li>
 </ul>
 </li>
 	<li>Once finished, click 'Save'</li>
-	<li>At this point if the system suspects this patron is a duplicate of another it will warn you.</li>
 </ul>
+
+<p>If the system suspects this patron is a duplicate of another it will warn you.</p>
 
 <h2>Add a Staff Patron</h2>
 
@@ -77,6 +86,6 @@
 
 <p style="color: #990000">Remember to assign your staff secure usernames and passwords since these will be used to log into the staff client.</p>
 
-<p><strong>See the full documentation for Adding Patrons in the <a href="http://manual.koha-community.org/3.6/en/patrons.html#addnewpatron">manual</a> (online).</strong></p>
+<p><strong>See the full documentation for Adding Patrons in the <a href="http://manual.koha-community.org/3.8/en/patrons.html#addnewpatron">manual</a> (online).</strong></p>
 
 [% INCLUDE 'help-bottom.inc' %]

@@ -6,7 +6,7 @@
 
 <p style="color: #990000">Important: In order for a staff member to log into the staff interface they must have (at the very least) 'catalogue' permissions which allow them to view the staff interface.</p>
 
-<h2>6.1. Setting Patron Permissions</h2>
+<h2>Setting Patron Permissions</h2>
 
 <p>To set patron permissions, you must first have a patron of the 'Staff' type open</p>
 
@@ -15,12 +15,16 @@
 	<li>You will be presented with a list of preferences, some of which can be expanded by clicking the plus sign to the left of the section title.</li>
 </ul>
 
-<h2>Patron Permissions Defined</h2>
+<h3>Patron Permissions Defined</h3>
 
 <ul>
 	<li>superlibrarian
 <ul>
-	<li>Access to all functions within the staff client</li>
+    <li>Access to all functions within the staff client
+<ul>
+    <li style="background-color: #ffe599;">Tip:  With this selected there is no need to choose any other permissions</li>
+</ul>
+</li>
 </ul>
 </li>
 	<li>circulate
@@ -110,28 +114,30 @@
 	<li>staffaccess
 <ul>
 	<li>Provides the ability to modify login / permissions for staff users</li>
+    <li style="color: #990000">Important: Requires the borrowers permission above</li>
 </ul>
 </li>
 </ul>
 
-<h3>Granular Circulate Permissions</h3>
+<h4>Granular Circulate Permissions</h4>
 
 <p>If the staff member has 'circulate' permissions they have the ability to perform all of these actions. If you would like to control circulation permissions on a more granular level choose from these options:</p>
 
 <ul>
 	<li>circulate_remaining_permissions
 <ul>
-	<li>All circulation rights except override permissions</li>
+    <li>All circulation rights except the ability to override renewals</li>
 </ul>
 </li>
 	<li>override_renewals
 <ul>
 	<li>Override blocked renewals</li>
+    <li>Requires that the staff member also has circulate_remaining_permissions</li>
 </ul>
 </li>
 </ul>
 
-<h3>Granular Holds Permissions</h3>
+<h4>Granular Holds Permissions</h4>
 
 <p>If the staff member has 'reserveforothers' permissions they have the ability to perform all of these actions. If you would like to control holds permissions on a more granular level choose from these options:</p>
 
@@ -143,12 +149,12 @@
 </li>
 	<li>place_holds
 <ul>
-	<li>All staff members to place holds for patrons via the staff interface</li>
+    <li>Allows staff members to place holds for patrons via the staff interface</li>
 </ul>
 </li>
 </ul>
 
-<h3>Granular Cataloging Permissions</h3>
+<h4>Granular Cataloging Permissions</h4>
 
 <p>If the staff member has 'editcatalogue' permissions they have the ability to perform all of these actions. If you would like to control cataloging permissions on a more granular level choose from these options:</p>
 
@@ -170,14 +176,14 @@
 </li>
 </ul>
 
-<h3>Granular Acquisitions Permissions</h3>
+<h4>Granular Acquisitions Permissions</h4>
 
 <p>If the staff member has 'acquisition' permissions they have the ability to perform all of these actions. If you would like to control acquisitions permissions on a more granular level choose from these options:</p>
 
 <ul>
 	<li>budget_add_del
 <ul>
-	<li>Ability to add and delete budgets (not modify()</li>
+    <li>Ability to add and delete budgets (not modify)</li>
 </ul>
 </li>
 	<li>budget_manage
@@ -227,7 +233,7 @@
 </li>
 </ul>
 
-<h3>Granular Serials Permissions</h3>
+<h4>Granular Serials Permissions</h4>
 
 <p>If the staff member has 'serials' permissions they have the ability to perform all of these actions. If you would like to control serials permissions on a more granular level choose from these options:</p>
 
@@ -274,7 +280,7 @@
 </li>
 </ul>
 
-<h3>Granular Tools Permissions</h3>
+<h4>Granular Tools Permissions</h4>
 
 <p>If the staff member has 'tools' permissions they have the ability to access and use all items under the Tools menu. If you would like to control which tools staff members have access to on a more granular level choose from these options:</p>
 
@@ -364,6 +370,11 @@
 	<li>Stage MARC records into the reservoir (Access to the Stage MARC Records Tool)</li>
 </ul>
 </li>
+    <li>upload_local_cover_images
+<ul>
+    <li>Upload local cover images (Access to the Upload Local Cover Image Tool)</li>
+</ul>
+</li>
 	<li>view_system_logs
 <ul>
 	<li>Browse the system logs (Access to the Log Viewer Tool)</li>
@@ -371,7 +382,7 @@
 </li>
 </ul>
 
-<h3>Granular Reports Permissions</h3>
+<h4>Granular Reports Permissions</h4>
 
 <p>If the staff member has 'reports' permissions they have the ability to perform all of these actions. If you would like to control reports permissions on a more granular level choose from these options:</p>
 
@@ -388,6 +399,6 @@
 </li>
 </ul>
 
-<p><strong>See the full documentation for Patron Permissions in the <a href="http://manual.koha-community.org/3.6/en/patronpermissions.html">manual</a> (online).</strong></p>
+<p><strong>See the full documentation for Patron Permissions in the <a href="http://manual.koha-community.org/3.8/en/patronpermissions.html">manual</a> (online).</strong></p>
 
 [% INCLUDE 'help-bottom.inc' %]

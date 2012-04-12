@@ -47,30 +47,37 @@
 <h2>Editing Patrons</h2>
 
 <p>Patrons in Koha can be edited using one of many edit buttons.</p>
+
 <ul>
 	<li>To edit the entire patron record simply click the 'Edit' button at the top of the patron record.</li>
 	<li>To only change the patron's password, click the 'Change Password' button
 <ul>
-	<li>Patron passwords are encrypted and cannot be recovered by the library staff</li>
-	<li>This form will automatically generate a random password, this password is not the patron's current password, just a new random password</li>
+    <li>Koha cannot display existing passwords. Leave the field blank to leave password unchanged.</li>
+    <li>This form can automatically generate a random password if you click the link labeled "Click to fill with a randomly generated suggestion. Passwords will be displayed as text."</li>
 </ul>
 </li>
 	<li>To edit a specific section of the patron record (for example the Library Use section) click the 'Edit' link below the section</li>
 	<li>A patron image can be added by browsing for the image on your machine from the 'Manage Patron Image' section
 <ul>
-	<li>This form will not appear if you have the patronimages system preference to allow patron images</li>
+    <li>This form will not appear if you have the patronimages system preference to not allow patron images</li>
 	<li>To add patron images in bulk, use the Upload Patron Images Tool</li>
 </ul>
 </li>
 	<li>Patrons can also be blocked from checking items out by setting Patron Flags
 <ul>
 	<li>If you would like your circulation staff to confirm a patron's address before checking items out to the patron, you can see the 'Gone no Address' flag</li>
-	<li>If you would like to prevent a patron from checking items out or performing circulation actions at the library you can set the 'Restricted' flag
+    <li>If you would like to bar a patron from the library you can set the 'Restricted' flag
 <ul>
-	<li>This flag can automatically be set with the Overdue/Notice Status Triggers</li>
+    <li>This flag can automatically be set with the Overdue/Notice StatusTriggers</li>
 </ul>
 </li>
+    <li>If you enter in a date and/or note related to the restriction you will see that in the restricted message as well</li>
 	<li>If the patron reports that they have lost their card you can set the 'Lost Card' flag to prevent someone else from using that card to check items out</li>
+</ul>
+</li>
+    <li>Children patrons do not become adults automatically in Koha. To upgrade a child patron to and adult patron category click on the 'More' menu and choose 'Update Child to Adult Patron'
+<ul>
+    <li>You will then be presented with a pop up window asking which one of your adult patron categories this Child should be updated to</li>
 </ul>
 </li>
 </ul>
@@ -90,6 +97,6 @@
 	<li>You will be brought to your new patron</li>
 </ul>
 
-<p><strong>See the full documentation for the Patron Details in the <a href="http://manual.koha-community.org/3.6/en/patroninformation.html">manual</a> (online).</strong></p>
+<p><strong>See the full documentation for the Patron Details in the <a href="http://manual.koha-community.org/3.8/en/patroninformation.html">manual</a> (online).</strong></p>
 
 [% INCLUDE 'help-bottom.inc' %]
