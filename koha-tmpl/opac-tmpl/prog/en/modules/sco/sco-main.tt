@@ -59,8 +59,14 @@ $(document).ready(function() {
     });
 });
 //]]>
+
 </script>
+[% IF ( opacuserjs ) %]<script type="text/javascript">[% opacuserjs %]</script>[% END %]
+
+
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/sco.css" />
+[% IF ( OPACUserCSS ) %]<style type="text/css">[% OPACUserCSS %]</style>[% END %]
+
 </head>
 <body onload="dofocus();">
 
