@@ -21,6 +21,7 @@ use strict;
 use warnings;
 use PDF::Reuse;
 use PDF::Reuse::Barcode;
+use File::Temp;
 
 BEGIN {
     use version; our $VERSION = qv('1.0.0_1');
@@ -42,7 +43,12 @@ sub new {
     delete($opts{InitVars});
     prDocDir($opts{'DocDir'}) if $opts{'DocDir'};
     delete($opts{'DocDir'});
-    prFile(%opts);
+
+    my $fh = File::Temp->new( UNLINK => 0, SUFFIX => '.pdf' );
+    $opts{Name} = $self->{filename} = "$fh"; # filename
+    close $fh; # we need just filename
+
+    prFile(\%opts);
     bless ($self, $type);
     return $self;
 }
@@ -52,6 +58,13 @@ sub End {
     # if the pdf stream is utf8, explicitly set it to utf8; this avoids at lease some wide character errors -chris_n
     utf8::encode($PDF::Reuse::stream) if utf8::is_utf8($PDF::Reuse::stream);
     prEnd();
+
+    # slurp temporary filename and print it out for plack to pick up
+    local $/ = undef;
+    open(my $fh, '<', $self->{filename}) || die "$self->{filename}: $!";
+    print <$fh>;
+    close $fh;
+    unlink $self->{filename};
 }
 
 sub Add {
