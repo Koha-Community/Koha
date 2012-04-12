@@ -95,7 +95,7 @@ $tabsysprefs{AutoLocation}          = "Admin";
 $tabsysprefs{DebugLevel}            = "Admin";
 $tabsysprefs{SessionStorage}        = "Admin";
 
-# This script is depricated so all of these prefs are lumped here to avoid their being displayed in the local use prefs tab
+# This script is deprecated so all of these prefs are lumped here to avoid their being displayed in the local use prefs tab
 
 $tabsysprefs{noItemTypeImages}      = "Admin";
 $tabsysprefs{OPACBaseURL}           = "Admin";
@@ -692,9 +692,8 @@ if ( $op eq 'add_form' ) {
     }
 
     $data->{'lang'} = $template->param('lang');
-
-    $template->param( GetPrefParams($data) );
-
+    my $prefparams = GetPrefParams($data);
+    $template->param( %$prefparams );
     $template->param( searchfield => $searchfield );
 
 ################## ADD_VALIDATE ##################################
@@ -745,7 +744,7 @@ if ( $op eq 'add_form' ) {
         }
     }
     $sth->finish;
-    print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=systempreferences.pl?tab=" . $tabsysprefs{ $input->param('variable') } . "\"></html>";
+    print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=systempreferences.pl?tab=\"></html>";
     exit;
 ################## DELETE_CONFIRM ##################################
     # called by default form, used to confirm deletion of data in DB
