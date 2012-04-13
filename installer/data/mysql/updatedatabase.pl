@@ -5369,6 +5369,14 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.09.00.015";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do(qq{
+        INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES('StatisticsFields','location|itype|ccode','Define Fields (from the items table) used for statistics members','location|itype|ccode','free')
+    });
+    print "Upgrade to $DBversion done (Add System preference StatisticsFields)\n";
+    SetVersion($DBversion);
+}
 
 =head1 FUNCTIONS
 
