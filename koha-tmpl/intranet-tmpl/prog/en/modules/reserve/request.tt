@@ -1,3 +1,4 @@
+[% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %]
 [% UNLESS ( multi_hold ) %]
     <title>Koha &rsaquo; Circulation &rsaquo; Holds &rsaquo; Place a hold on [% title |html %]</title>
@@ -731,11 +732,11 @@ function checkMultiHold() {
 
 	<td>
 	[% UNLESS ( reserveloo.wait ) %]
-            <input type="button" value="[% IF ( reserveloo.suspend ) %]Unsuspend[% ELSE %]Suspend[% END %]" onclick="window.location.href='request.pl?action=toggleSuspend&amp;borrowernumber=[% reserveloo.borrowernumber %]&amp;biblionumber=[% reserveloo.biblionumber %]&amp;date=[% reserveloo.date %]'" />
+            <input type="button" value="[% IF ( reserveloo.suspend ) %]Unsuspend[% ELSE %]Suspend[% END %]" onclick="window.location.href='request.pl?action=toggleSuspend&amp;borrowernumber=[% reserveloo.borrowernumber %]&amp;biblionumber=[% reserveloo.biblionumber %]&amp;date=[% reserveloo.date %]&amp;suspend_until=' + $('#suspend_until_[% reserveloo.borrowernumber %]').val()" />
 
             [% IF AutoResumeSuspendedHolds %]
 	    <label for="suspend_until_[% reserveloo.borrowernumber %]">[% IF ( reserveloo.suspend ) %] on [% ELSE %] until [% END %]</label>
-	    <input name="suspend_until" id="suspend_until_[% reserveloo.borrowernumber %]" size="10" readonly="readonly" value="[% reserveloo.suspend_until %]" />
+        <input name="suspend_until" id="suspend_until_[% reserveloo.borrowernumber %]" size="10" readonly="readonly" value="[% reserveloo.suspend_until | $KohaDates %]" />
         <img src="[% themelang %]/lib/calendar/cal.gif" alt="Show calendar" border="0" id="SuspendUntilDate_[% reserveloo.borrowernumber %]" style="cursor: pointer;" />
 	    <script language="JavaScript" type="text/javascript">
 		//<![CDATA[

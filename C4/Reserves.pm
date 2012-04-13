@@ -36,6 +36,9 @@ use C4::Members qw();
 use C4::Letters;
 use C4::Branch qw( GetBranchDetail );
 use C4::Dates qw( format_date_in_iso );
+
+use Koha::DateUtils;
+
 use List::MoreUtils qw( firstidx );
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
@@ -1517,20 +1520,27 @@ be cleared when it is unsuspended.
 =cut
 
 sub ToggleSuspend {
-    my ( $borrowernumber, $biblionumber ) = @_;
+    my ( $borrowernumber, $biblionumber, $suspend_until ) = @_;
+
+    $suspend_until = output_pref( dt_from_string( $suspend_until ), 'iso' ) if ( $suspend_until );
+
+    my $do_until = ( $suspend_until ) ? '?' : 'NULL';
 
     my $dbh = C4::Context->dbh;
 
     my $sth = $dbh->prepare(
         "UPDATE reserves SET suspend = NOT suspend,
-        suspend_until = CASE WHEN suspend = 0 THEN NULL ELSE suspend_until END
+        suspend_until = CASE WHEN suspend = 0 THEN NULL ELSE $do_until END
         WHERE biblionumber = ?
         AND borrowernumber = ?
     ");
-    $sth->execute(
-        $biblionumber,
-        $borrowernumber,
-    );
+
+    my @params;
+    push( @params, $suspend_until ) if ( $suspend_until );
+    push( @params, $biblionumber );
+    push( @params, $borrowernumber );
+
+    $sth->execute( @params );
     $sth->finish;
 }
 

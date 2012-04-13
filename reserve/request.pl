@@ -113,7 +113,8 @@ if ( $action eq 'move' ) {
 } elsif ( $action eq 'toggleSuspend' ) {
   my $borrowernumber = $input->param('borrowernumber');
   my $biblionumber   = $input->param('biblionumber');
-  ToggleSuspend( $borrowernumber, $biblionumber );
+  my $suspend_until  = $input->param('suspend_until');
+  ToggleSuspend( $borrowernumber, $biblionumber, $suspend_until );
 }
 
 if ($findborrower) {
@@ -573,7 +574,7 @@ foreach my $biblionumber (@biblionumbers) {
         $reserve{'branchloop'} = GetBranchesLoop($res->{'branchcode'});
         $reserve{'optionloop'} = \@optionloop;
         $reserve{'suspend'} = $res->{'suspend'};
-        $reserve{'suspend_until'} = C4::Dates->new( $res->{'suspend_until'}, "iso")->output("syspref");
+        $reserve{'suspend_until'} = $res->{'suspend_until'};
         push( @reserveloop, \%reserve );
     }
 
