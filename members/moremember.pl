@@ -430,7 +430,9 @@ $template->param(
     samebranch     => $samebranch,
     quickslip		  => $quickslip,
     activeBorrowerRelationship => (C4::Context->preference('borrowerRelationship') ne ''),
-    AutoResumeSuspendedHolds => C4::Context->preference('AutoResumeSuspendedHolds') );
+    AutoResumeSuspendedHolds => C4::Context->preference('AutoResumeSuspendedHolds'),
+    SuspendHoldsIntranet => C4::Context->preference('SuspendHoldsIntranet'),
+);
 
 output_html_with_http_headers $input, $cookie, $template->output;
 

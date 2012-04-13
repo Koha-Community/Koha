@@ -708,7 +708,9 @@ $template->param(
     soundon           => C4::Context->preference("SoundOn"),
     fast_cataloging   => $fast_cataloging,
     CircAutoPrintQuickSlip   => C4::Context->preference("CircAutoPrintQuickSlip"),
-	activeBorrowerRelationship => (C4::Context->preference('borrowerRelationship') ne ''),
+    activeBorrowerRelationship => (C4::Context->preference('borrowerRelationship') ne ''),
+    SuspendHoldsIntranet => C4::Context->preference('SuspendHoldsIntranet'),
+    AutoResumeSuspendedHolds => C4::Context->preference('AutoResumeSuspendedHolds'),
 );
 
 # save stickyduedate to session
@@ -732,7 +734,5 @@ $template->param(
     DHTMLcalendar_dateformat  => C4::Dates->DHTMLcalendar(),
     canned_bor_notes_loop     => $canned_notes,
 );
-
-$template->param( AutoResumeSuspendedHolds => C4::Context->preference('AutoResumeSuspendedHolds') );
 
 output_html_with_http_headers $query, $cookie, $template->output;

@@ -421,6 +421,7 @@ $.tablesorter.addParser({
 			</tbody>
         </table>
 
+        [% IF SuspendHoldsOpac %]
 	<div>
             <form action="/cgi-bin/koha/opac-modrequest-suspend.pl" method="post">
               <input type="submit" name="submit" class="icon delete cancel" value="Suspend all holds" onclick="return confirmDelete('Are you sure you want to suspend all holds?');" />
@@ -472,6 +473,7 @@ $.tablesorter.addParser({
               <input type="hidden" name="suspend" value="0" />
             </form>
 	</div>
+        [% END %]
     </div>
     [% END %]
     </div><!-- /opac-user views -->

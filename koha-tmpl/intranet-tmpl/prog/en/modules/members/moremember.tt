@@ -646,6 +646,8 @@ function validate1(date) {
 
         <fieldset class="action"><input type="submit" class="cancel" name="submit" value="Cancel marked holds" /></fieldset>
     </form>
+
+    [% IF SuspendHoldsIntranet %]
     <fieldset class="action">
         <form action="/cgi-bin/koha/reserve/modrequest_suspendall.pl" method="post">
             <input type="hidden" name="from" value="borrower" />
@@ -697,6 +699,7 @@ function validate1(date) {
             <input type="submit" value="Resume all suspended holds" />
 	</form>
     </fieldset>
+    [% END # IF SuspendHoldsIntranet %]
 
     [% ELSE %]<p>Patron has nothing on hold.</p>[% END %]
 	</div>
