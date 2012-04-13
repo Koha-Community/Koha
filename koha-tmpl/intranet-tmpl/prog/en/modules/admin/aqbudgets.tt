@@ -243,6 +243,7 @@ var MSG_PARENT_BENEATH_BUDGET = "- " + _("New budget-parent is beneath budget") 
             <th>Fund name</th>
             <th>Total<br />allocated</th>
             <th>Base-level<br />allocated</th>
+            <th>Base-level<br />ordered</th>
             <th>Base-level<br />spent</th>
             <th>Total sublevels<br />spent</th>
             <th>Base-level<br />remaining</th>
@@ -255,6 +256,7 @@ var MSG_PARENT_BENEATH_BUDGET = "- " + _("New budget-parent is beneath budget") 
     <th colspan="2" style="text-align: left;" nowrap="nowrap">Period allocated [% IF ( budget_period_total ) %][% budget_period_total %][% END %]  </th>
     <th nowrap="nowrap" class="data"> [% period_alloc_total %]</th>
     <th nowrap="nowrap"  class="data"> [% base_alloc_total %]</th>
+    <th class="data">[% base_ordered_total %]</th>
     <th class="data">[% base_spent_total %]</th>
     <th class="data">[% base_spent_total %]</th>
     <th class="data">[% base_remaining_total %]</th>
@@ -274,6 +276,7 @@ var MSG_PARENT_BENEATH_BUDGET = "- " + _("New budget-parent is beneath budget") 
     <td>[% budge.budget_name %]</td>
     <td class="data">[% budge.budget_amount_total %]</td>
     <td class="data">[% budge.budget_amount %] </td>
+    <td class="data">[% budge.budget_ordered %]</td>
     <td class="data">[% budge.budget_spent %] </td>
     <td class="data">[% budge.total_levels_spent %]</td>
     [% IF ( budge.remaining_pos ) %]

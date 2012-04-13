@@ -276,7 +276,7 @@ if ($op eq 'add_form') {
     my $toggle = 0;
     my @loop;
     my $period_total = 0;
-    my ( $period_alloc_total, $base_spent_total );
+    my ( $period_alloc_total, $base_spent_total, $base_ordered_total );
 
 	#This Looks WEIRD to me : should budgets be filtered in such a way ppl who donot own it would not see the amount spent on the budget by others ?
 
@@ -303,6 +303,7 @@ if ($op eq 'add_form') {
         # adds to total  - only if budget is a 'top-level' budget
         $period_alloc_total += $budget->{'budget_amount_total'} if $budget->{'depth'} == 0;
         $base_spent_total += $budget->{'budget_spent'};
+        $base_ordered_total += $budget->{budget_ordered};
         $budget->{'budget_remaining'} = $budget->{'budget_amount'} - $budget->{'total_levels_spent'};
 
 # if amount == 0 dont display...
@@ -312,12 +313,13 @@ if ($op eq 'add_form') {
 
         $budget->{'remaining_pos'} = 1 if $budget->{'budget_remaining'} > 0;
         $budget->{'remaining_neg'} = 1 if $budget->{'budget_remaining'} < 0;
-		for (grep {/total_levels_spent|budget_spent|budget_amount|budget_remaining|budget_unalloc/} keys %$budget){
+		for (grep {/total_levels_spent|budget_spent|budget_ordered|budget_amount|budget_remaining|budget_unalloc/} keys %$budget){
             $budget->{$_}               = $num->format_price( $budget->{$_} ) if defined($budget->{$_})
 		}
 
         # Value of budget_spent equals 0 instead of undefined value
         $budget->{"budget_spent"} = $num->format_price(0) unless defined($budget->{"budget_spent"});
+        $budget->{budget_ordered} = $num->format_price(0) unless defined($budget->{"budget_ordered"});
 
         my $borrower = &GetMember( borrowernumber=>$budget->{budget_owner_id} );
         $budget->{"budget_owner_name"}     = $borrower->{'firstname'} . ' ' . $borrower->{'surname'};
@@ -356,12 +358,17 @@ if ($op eq 'add_form') {
         $base_spent_total = $num->format_price($base_spent_total);
     }
 
+    if ($base_ordered_total) {
+        $base_ordered_total = $num->format_price($base_ordered_total);
+    }
+
     $template->param(
         else                   => 1,
         budget                 => \@loop,
         budget_period_total    => $budget_period_total,
         period_alloc_total     => $period_alloc_total,
         base_spent_total       => $base_spent_total,
+        base_ordered_total     => $base_ordered_total,
         branchloop             => \@branchloop2,
     );
 

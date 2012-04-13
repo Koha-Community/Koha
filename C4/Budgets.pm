@@ -611,6 +611,7 @@ sub GetBudgetHierarchy {
         $r->{'budget_name_indent'} = $moo;
 
         $r->{'budget_spent'}       = GetBudgetSpent( $r->{'budget_id'} );
+        $r->{budget_ordered} = GetBudgetOrdered( $r->{budget_id} );
 
         $r->{'budget_amount_total'} =  $r->{'budget_amount'};
 
