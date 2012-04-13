@@ -12,6 +12,17 @@ $.tablesorter.addParser({
     format: function(s) { return s.toLowerCase().replace(/^(the|an|a) /,''); }, 
     type: 'text' 
 });
+[% IF ( loggedinusername ) %]function enableCheckboxActions(){
+    // Enable/disable controls if checkboxes are checked
+    var checkedBoxes = $(".checkboxed input:checkbox:checked");
+    if ($(checkedBoxes).size()) {
+      $("#selections").html(_("With selected suggestions: "));
+      $("#selections-toolbar .links a").removeClass("disabled");
+    } else {
+      $("#selections").html(_("Select suggestions to: "));
+      $("#selections-toolbar .links a").addClass("disabled");
+    }
+}[% END %]
 
        $(function() {
 			$("#suggestt").tablesorter({
@@ -32,17 +43,29 @@ $.tablesorter.addParser({
 					[% END %]
 				[% END %]
 				}
-			}); 
-			$("#CheckAll").click(function(){
-		        $(".checkboxed").checkCheckboxes();
-		        return false;
-		    });
-		    $("#CheckNone").click(function(){
-		        $(".checkboxed").unCheckCheckboxes();
-		        return false;
-		    }); 
+            });
+            [% IF ( loggedinusername ) %]$("span.clearall").html("<a id=\"CheckNone\" href=\"#\">"+_('Clear all')+"<\/a>");
+            $("span.checkall").html("<a id=\"CheckAll\" href=\"#\">"+_('Select all')+"<\/a>");
+            $("#CheckAll").click(function(){
+                $(".checkboxed").checkCheckboxes();
+                enableCheckboxActions();
+                return false;
+            });
+            $("#CheckNone").click(function(){
+                $(".checkboxed").unCheckCheckboxes();
+                enableCheckboxActions();
+                return false;
+            });
+            $(".cb").click(function(){
+              enableCheckboxActions();
+            });
+            $("#removeitems").html("<a href=\"#\" class=\"removeitems tag_hides disabled\">"+_("Delete")+"</a>")
+            .click(function(){
+              $("#myform").submit();
+              return false;
+            });[% END %]
        });
-       	
+
       function Check(f) {
 		var _alertString="";
 		var alertString2;
@@ -115,7 +138,7 @@ $.tablesorter.addParser({
 [% END %]
 
 [% IF ( op_else ) %]
-    <h1>[% UNLESS ( OPACViewOthersSuggestions ) %][% IF ( loggedinusername ) %]My [% END %][% END %]Purchase suggestions</h1>
+    <h1>[% IF ( OPACViewOthersSuggestions ) %]Purchase suggestions[% ELSE %][% IF ( loggedinusername ) %]My purchase suggestions[% ELSE %]Purchase suggestions[% END %][% END %]</h1>
 
     [% IF ( deleted ) %]<div class="dialog message">The selected suggestions have been deleted.</div>[% END %]
     [% IF ( submitted ) %]<div class="dialog message">Your suggestion has been submitted.</div>[% END %]
@@ -146,11 +169,15 @@ $.tablesorter.addParser({
         </tr>
 		</table>
             </form>[% END %]
-        <form action="/cgi-bin/koha/opac-suggestions.pl" method="post">
+        <form action="/cgi-bin/koha/opac-suggestions.pl" method="post" id="myform">
             <input type="hidden" name="op" value="delete_confirm" />
-            <div id="toolbar"><span class="checkall"><a href="#" id="CheckAll">Select all</a></span>
-        <span class="clearall"><a href="#" id="CheckNone">Clear all</a></span> | [% IF ( loggedinusername ) %]<a class="new" href="/cgi-bin/koha/opac-suggestions.pl?op=add">New purchase suggestion</a>[% ELSE %][% IF ( AnonSuggestions ) %]<a class="new" href="/cgi-bin/koha/opac-suggestions.pl?op=add">New purchase suggestion</a>[% END %][% END %]
+            <div id="toolbar" class="list-actions">[% IF ( loggedinusername ) %]<a class="new" href="/cgi-bin/koha/opac-suggestions.pl?op=add">New purchase suggestion</a>[% ELSE %][% IF ( AnonSuggestions ) %]<a class="new" href="/cgi-bin/koha/opac-suggestions.pl?op=add">New purchase suggestion</a>[% END %][% END %]
 </div>
+          [% IF ( loggedinusername ) %]<div id="selections-toolbar" class="list-actions">
+                  <span class="checkall"></span> <span class="clearall"></span> <span class="sep">|</span>
+                  <span class="links"><span id="selections">Select suggestions to: </span>
+                  <span id="removeitems"></span>
+          </div>[% END %]
 			<table id="suggestt" class="checkboxed">
 			<thead><tr>
             [% IF ( loggedinusername ) %]<th>&nbsp;</th>[% END %]
@@ -164,7 +191,7 @@ $.tablesorter.addParser({
             [% IF ( suggestions_loo.even ) %]<tr>[% ELSE %]<tr class="highlight">[% END %]
 [% IF ( loggedinusername ) %]<td>
     [% IF ( suggestions_loo.showcheckbox ) %]
-                    <input type="checkbox" name="delete_field" value="[% suggestions_loo.suggestionid %]" />
+                    <input type="checkbox" class="cb" name="delete_field" value="[% suggestions_loo.suggestionid %]" />
     [% END %]
                 </td>[% END %]
                 <td>
@@ -199,7 +226,7 @@ $.tablesorter.addParser({
         [% END %]
        </tbody>
     </table> [% IF ( loggedinusername ) %]<fieldset class="action">
-                <input type="submit" value="Delete Checked Items" />
+                <input type="submit" value="Delete selected" />
             </fieldset>
         [% END %]
         </form>
