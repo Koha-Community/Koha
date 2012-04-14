@@ -423,7 +423,7 @@
 <tbody>
   [% FOREACH EXCEPTION_HOLIDAYS_LOO IN EXCEPTION_HOLIDAYS_LOOP %]
   <tr>
-  <td><a href="/cgi-bin/koha/tools/holidays.pl?branch=[% EXCEPTION_HOLIDAYS_LOO.branch %]&amp;calendardate=[% EXCEPTION_HOLIDAYS_LOO.DATE %]">[% EXCEPTION_HOLIDAYS_LOO.DATE %]</a></td>
+  <td><a href="/cgi-bin/koha/tools/holidays.pl?branch=[% branch %]&amp;calendardate=[% EXCEPTION_HOLIDAYS_LOO.DATE %]">[% EXCEPTION_HOLIDAYS_LOO.DATE %]</a></td>
   <td>[% EXCEPTION_HOLIDAYS_LOO.TITLE %]</td>
   <td>[% EXCEPTION_HOLIDAYS_LOO.DESCRIPTION %]</td> 
   </tr>
@@ -497,7 +497,7 @@
 <tbody>
     [% FOREACH HOLIDAYS_LOO IN HOLIDAYS_LOOP %]
 <tr>
-  <td><a href="/cgi-bin/koha/tools/holidays.pl?branch=[% HOLIDAYS_LOO.branch %]&amp;calendardate=[% HOLIDAYS_LOO.DATE %]">[% HOLIDAYS_LOO.DATE %]</a></td>
+  <td><a href="/cgi-bin/koha/tools/holidays.pl?branch=[% branch %]&amp;calendardate=[% HOLIDAYS_LOO.DATE %]">[% HOLIDAYS_LOO.DATE %]</a></td>
   <td>[% HOLIDAYS_LOO.TITLE %]</td>
   <td>[% HOLIDAYS_LOO.DESCRIPTION %]</td>
 </tr>
