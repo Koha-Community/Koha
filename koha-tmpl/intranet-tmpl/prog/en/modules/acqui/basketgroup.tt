@@ -293,7 +293,7 @@ function yuiToolbar() {
 				[% IF ( basketgroup.closed ) %]
 				<tr>
 				<td>
-					<a href="/cgi-bin/koha/acqui/basketgroup.pl?op=reopen&amp;booksellerid=[% basketgroup.booksellerid %]&amp;basketgroupid[% basketgroup.id %]">[% IF ( basketgroup.name ) %]
+                    <a href="/cgi-bin/koha/acqui/basketgroup.pl?op=reopen&amp;booksellerid=[% basketgroup.booksellerid %]&amp;basketgroupid=[% basketgroup.id %]">[% IF ( basketgroup.name ) %]
 											[% basketgroup.name %]
 										[% ELSE %]
 											Basket group no. [% basketgroup.id %]
