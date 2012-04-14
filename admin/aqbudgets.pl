@@ -74,9 +74,10 @@ my $budget_hash               = $input->Vars;
 my $budget_id                 = $$budget_hash{budget_id};
 my $budget_permission         = $input->param('budget_permission');
 my $filter_budgetbranch       = $input->param('filter_budgetbranch');
+my $filter_budgetname         = $input->param('filter_budgetname');
 #filtering non budget keys
 delete $$budget_hash{$_} foreach grep {/filter|^op$|show/} keys %$budget_hash;
-my $filter_budgetname         = $input->param('filter_budgetname');
+
 $template->param(
     notree => ($filter_budgetbranch or $show_mine)
 );
@@ -271,9 +272,10 @@ if ($op eq 'add_form') {
         }    # ...SUPER_LIB END
 
         # if a budget search doesnt match, next
-        if ($filter_budgetname ) {
-            next unless  $budget->{budget_code}  =~ m/$filter_budgetname/  ||
-            $budget->{name}  =~ m/$filter_budgetname/ ;
+        if ($filter_budgetname) {
+            next
+              unless $budget->{budget_code} =~ m/$filter_budgetname/i
+                  || $budget->{name} =~ m/$filter_budgetname/i;
         }
         if ($filter_budgetbranch ) {
             next unless  $budget->{budget_branchcode}  =~ m/$filter_budgetbranch/;
@@ -325,12 +327,21 @@ if ($op eq 'add_form') {
         $budget_period_total =
           $num->format_price( $period->{budget_period_total} );
     }
+
+    if ($period_alloc_total) {
+        $period_alloc_total = $num->format_price($period_alloc_total);
+    }
+
+    if ($base_spent_total) {
+        $base_spent_total = $num->format_price($base_spent_total);
+    }
+
     $template->param(
         else                   => 1,
         budget                 => \@loop,
         budget_period_total    => $budget_period_total,
-        period_alloc_total     => $num->format_price($period_alloc_total),
-        base_spent_total       => $num->format_price($base_spent_total),
+        period_alloc_total     => $period_alloc_total,
+        base_spent_total       => $base_spent_total,
         branchloop             => \@branchloop2,
     );
 
