@@ -250,6 +250,7 @@ check-url.pl - Check URLs from 856$u field.
 
 Scan all URLs found in 856$u of bib records 
 and display if resources are available or not.
+This script is deprecated. You should rather use check-url-quick.pl.
 
 =back
 

@@ -610,6 +610,16 @@ our $PERL_DEPS = {
         'required' => '1',
         'min_ver'  => '1.23',
     },
+    'AnyEvent' => {
+        'usage'    => 'Command line scripts',
+        'required' => '0',
+        'min_ver'  => '5.0',
+    },
+    'AnyEvent::HTTP' => {
+        'usage'    => 'Command line scripts',
+        'required' => '0',
+        'min_ver'  => '2.13',
+    },
 };
 
 1;
