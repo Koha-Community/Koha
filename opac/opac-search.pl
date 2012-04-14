@@ -679,7 +679,13 @@ for (my $i=0;$i<@servers;$i++) {
         }
         # no hits
         else {
-            $template->param(searchdesc => 1,query_desc => $query_desc,limit_desc => $limit_desc);
+            $template->param(
+                searchdesc => 1,
+                query_desc => $query_desc,
+                limit_desc => $limit_desc,
+                query_cgi  => $query_cgi,
+                limit_cgi  => $limit_cgi
+            );
         }
     } # end of the if local
     # asynchronously search the authority server
