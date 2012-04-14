@@ -30,6 +30,7 @@ use MARC::Record;
 use C4::ClassSource;
 use C4::Log;
 use List::MoreUtils qw/any/;
+use C4::Search;
 use Data::Dumper; # used as part of logging item record changes, not just for
                   # debugging; so please don't remove this
 
