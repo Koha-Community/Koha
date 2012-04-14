@@ -48,6 +48,7 @@ use C4::Auth;
 use C4::Output;
 use C4::Images;
 use C4::UploadedFile;
+use C4::Log;
 
 my $debug = 1;
 
@@ -143,10 +144,15 @@ if ($fileID) {
                             $error = 'DELERR';
                         }
                         else {
-                            ( $biblionumber, $filename ) = split $delim, $line;
+                            ( $biblionumber, $filename ) = split $delim, $line, 2;
                             $biblionumber =~
                               s/[\"\r\n]//g;    # remove offensive characters
-                            $filename =~ s/[\"\r\n\s]//g;
+                            $filename =~ s/[\"\r\n]//g;
+                            $filename =~ s/^\s+//;
+                            $filename =~ s/\s+$//;
+                            if (C4::Context->preference("CataloguingLog")) {
+                                logaction('CATALOGUING', 'MODIFY', $biblionumber, "cover image: $filename");
+                            }
                             my $srcimage = GD::Image->new("$dir/$filename");
                             if ( defined $srcimage ) {
                                 $total++;
