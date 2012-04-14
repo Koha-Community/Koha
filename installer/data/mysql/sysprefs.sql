@@ -364,3 +364,4 @@ INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES (
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('OpacStarRatings','all',NULL,'disable|all|details','Choice');
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('OpacBrowseResults','1','Disable/enable browsing and paging search results from the OPAC detail page.',NULL,'YesNo');
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('SvcMaxReportRows','10','Maximum number of rows to return via the report web service.',NULL,'Integer');
+INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES ('ReservesControlBranch','PatronLibrary','ItemHomeLibrary|PatronLibrary','Branch checked for members reservations rights','Choice');
