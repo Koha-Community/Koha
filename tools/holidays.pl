@@ -138,18 +138,20 @@ foreach my $yearMonthDay (keys %$single_holidays) {
     push @holidays, \%holiday;
 }
 
-$template->param(WEEK_DAYS_LOOP => \@week_days,
-        branchloop => \@branchloop, 
-        HOLIDAYS_LOOP => \@holidays,
-        EXCEPTION_HOLIDAYS_LOOP => \@exception_holidays,
-        DAY_MONTH_HOLIDAYS_LOOP => \@day_month_holidays,
-        calendardate => $calendardate,
-        keydate => $keydate,
-        branchcodes => $branchcodes,
-        branch => $branch,
-        DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
-        branchname => $branchname
-  );
+$template->param(
+    WEEK_DAYS_LOOP           => \@week_days,
+    branchloop               => \@branchloop,
+    HOLIDAYS_LOOP            => \@holidays,
+    EXCEPTION_HOLIDAYS_LOOP  => \@exception_holidays,
+    DAY_MONTH_HOLIDAYS_LOOP  => \@day_month_holidays,
+    calendardate             => $calendardate,
+    keydate                  => $keydate,
+    branchcodes              => $branchcodes,
+    branch                   => $branch,
+    DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
+    branchname               => $branchname,
+    branch                   => $branch,
+);
 
 # Shows the template with the real values replaced
 output_html_with_http_headers $input, $cookie, $template->output;
