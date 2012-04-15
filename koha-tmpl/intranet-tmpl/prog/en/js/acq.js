@@ -664,7 +664,10 @@ function calcNeworderTotal(){
 
     //do real stuff
     var rrp   = new Number(listprice*exchangerate);
-    var ecost = new Number(Math.floor(rrp * (100 - discount ))/100);
+    var ecost = rrp;
+    if (100-discount != 100) { //Prevent rounding issues if no discount
+        ecost = new Number(Math.floor(rrp * (100 - discount ))/100);
+    }
     var GST   = new Number(0);
     if (gst_on) {
             rrp=rrp * (1+f.gstrate.value / 100);
