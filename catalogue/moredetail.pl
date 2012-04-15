@@ -62,6 +62,8 @@ if($query->cookie("holdfor")){
     );
 }
 
+my $hidepatronname = C4::Context->preference("HidePatronName");
+
 # get variables
 
 my $biblionumber=$query->param('biblionumber');
@@ -172,6 +174,15 @@ foreach my $item (@items){
     } else {
         $item->{'issue'}= 0;
     }
+
+    unless ($hidepatronname) {
+        if ( $item->{'borrowernumber'} ) {
+            my $curr_borrower = GetMember('borrowernumber' => $item->{'borrowernumber'} );
+            $item->{borrowerfirstname} = $curr_borrower->{'firstname'};
+            $item->{borrowersurname} = $curr_borrower->{'surname'};
+        }
+    }
+
 }
 $template->param(count => $data->{'count'},
 	subscriptionsnumber => $subscriptionsnumber,
@@ -188,6 +199,7 @@ $template->param(
     itemnumber          => $itemnumber,
     z3950_search_params => C4::Search::z3950_search_args(GetBiblioData($biblionumber)),
     subtitle            => $subtitle,
+    hidepatronname      => $hidepatronname,
 );
 $template->param(ONLY_ONE => 1) if ( $itemnumber && $showncount != @items );
 

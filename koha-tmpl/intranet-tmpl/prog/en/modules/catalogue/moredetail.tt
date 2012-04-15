@@ -69,7 +69,23 @@
 
             <ol class="bibliodetails">
             <li><span class="label">Current location:</span> [% ITEM_DAT.holdingbranchname %]&nbsp;</li>
-            <li><span class="label">Checkout status:</span> [% IF ( ITEM_DAT.issue ) %]Checked out to <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% ITEM_DAT.borrowernumber %]">[% ITEM_DAT.cardnumber %]</a>[% IF ( ITEM_DAT.lastreneweddate ) %], Last renewed [% ITEM_DAT.lastreneweddate | $KohaDates %][% END %], Due back on [% ITEM_DAT.datedue | $KohaDates %][% ELSE %]Not checked out [% END %]</li>
+            <li><span class="label">Checkout status:</span>
+            [% IF ( ITEM_DAT.issue ) %]Checked out to
+                [% IF ( hidepatronname ) %]
+                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% ITEM_DAT.borrowernumber %]">[% ITEM_DAT.cardnumber %]</a>,
+                    [% ELSE %]
+                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% ITEM_DAT.borrowernumber %]">[% ITEM_DAT.borrowerfirstname %] [% ITEM_DAT.borrowersurname %]</a>,
+                [% END %]
+                [% IF ( ITEM_DAT.lastreneweddate ) %]
+                    Last renewed [% ITEM_DAT.lastreneweddate | $KohaDates %],
+                [% END %]
+                [% IF ( ITEM_DAT.datedue ) %]
+                    Due back on [% ITEM_DAT.datedue | $KohaDates %]
+                [% ELSE %]
+                    Not checked out
+                [% END %]
+            [% END %]
+            &nbsp;</li>
             <li><span class="label">Current renewals:</span> [% ITEM_DAT.renewals %]&nbsp;</li>
             [% IF ( ITEM_DAT.itemlostloop ) %]
                 <li><span class="label">Lost status:</span>
@@ -183,14 +199,14 @@
 
                 <li><span class="label">Total checkouts:</span>[% IF ( ITEM_DAT.issues ) %][% ITEM_DAT.issues %][% ELSE %]0[% END %]  (<a href="/cgi-bin/koha/circ/bookcount.pl?&amp;biblionumber=[% ITEM_DAT.biblionumber %]&amp;bi=[% ITEM_DAT.biblioitemnumber %]&amp;itm=[% ITEM_DAT.itemnumber %]">View item's checkout history</a>)</li>
 
-                <li><span class="label">Last seen:</span> [% ITEM_DAT.datelastseen | $KohaDates %]&nbsp;</li>
-                <li><span class="label">Last borrowed:</span> [% ITEM_DAT.datelastborrowed | $KohaDates %]&nbsp;</li>
+                <li><span class="label">Last seen:</span>[% IF ( ITEM_DAT.datelastseen ) %][% ITEM_DAT.datelastseen | $KohaDates %] [%END %]&nbsp;</li>
+                <li><span class="label">Last borrowed:</span>[% IF (ITEM_DAT.datelastborrowed ) %][% ITEM_DAT.datelastborrowed | $KohaDates %][% END %]&nbsp;</li>
                 [% IF ( ITEM_DAT.card0 ) %]<li><span class="label">Last borrower:</span> <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% ITEM_DAT.borrower0 %]">[% ITEM_DAT.card0 %]</a>&nbsp;</li>[% END %]
                 [% IF ( ITEM_DAT.card1 ) %]<li><span class="label">Previous borrower:</span> <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% ITEM_DAT.borrower1 %]">[% ITEM_DAT.card1 %]</a>&nbsp;</li>[% END %]
                 [% IF ( ITEM_DAT.card2 ) %]<li><span class="label">Previous borrower:</span> <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% ITEM_DAT.borrower2 %]">[% ITEM_DAT.card2 %]</a>&nbsp;</li>[% END %]
-                <li><span class="label">Paid for?:</span> [% ITEM_DAT.paidfor %]&nbsp;</li>
-            <li><span class="label">Serial enumeration:</span> [% ITEM_DAT.enumchron %]&nbsp;</li>
-            <li><span class="label">Public note:</span>
+                [% IF ( ITEM_DAT.paidfor ) %]<li><span class="label">Paid for?:</span> [% ITEM_DAT.paidfor %]&nbsp;</li>[% END %]
+                [% IF ( ITEM_DAT.enumchron ) %]<li><span class="label">Serial enumeration:</span> [% ITEM_DAT.enumchron %]&nbsp;</li>[% END %]
+                <li><span class="label">Public note:</span>
                 [% IF ( CAN_user_editcatalogue_edit_items ) %]
                 <form class="inline" action="updateitem.pl" method="post"><input type="hidden" name="biblionumber" value="[% ITEM_DAT.biblionumber %]" />
                     <input type="hidden" name="biblioitemnumber" value="[% ITEM_DAT.biblioitemnumber %]" /><input type="hidden" name="itemnumber" value="[% ITEM_DAT.itemnumber %]" />
