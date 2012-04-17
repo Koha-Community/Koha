@@ -6,10 +6,10 @@
 			if($(this).attr("checked")){
 				var rowid = $(this).attr("id");
 				newid = Number(rowid.replace("none","")) 
-			  	$("#sms"+newid).attr("checked","");
-			  	$("#email"+newid).attr("checked","");
-			  	$("#digest"+newid).attr("checked","");
-			  	$("#rss"+newid).attr("checked","");
+          $("#sms"+newid).removeAttr("checked");
+          $("#email"+newid).removeAttr("checked");
+          $("#digest"+newid).removeAttr("checked");
+          $("#rss"+newid).removeAttr("checked");
 			}
 		});
 	});
