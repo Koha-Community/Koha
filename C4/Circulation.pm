@@ -37,6 +37,7 @@ use C4::Debug;
 use C4::Branch; # GetBranches
 use C4::Log; # logaction
 use C4::Koha qw(GetAuthorisedValueByCode);
+use C4::Overdues qw(CalcFine UpdateFine);
 use Data::Dumper;
 use Koha::DateUtils;
 use Koha::Calendar;
@@ -1598,6 +1599,8 @@ sub AddReturn {
 
     # case of a return of document (deal with issues and holdingbranch)
     if ($doreturn) {
+    my $today = DateTime->now( time_zone => C4::Context->tz() );
+    my $datedue = $issue->{date_due};
         $borrower or warn "AddReturn without current borrower";
 		my $circControlBranch;
         if ($dropbox) {
@@ -1606,9 +1609,22 @@ sub AddReturn {
             # FIXME: check issuedate > returndate, factoring in holidays
             #$circControlBranch = _GetCircControlBranch($item,$borrower) unless ( $item->{'issuedate'} eq C4::Dates->today('iso') );;
             $circControlBranch = _GetCircControlBranch($item,$borrower);
+        my $datedue = $issue->{date_due};
+        $issue->{'overdue'} = DateTime->compare($issue->{'date_due'}, $today ) == -1 ? 1 : 0;
         }
 
         if ($borrowernumber) {
+        if($issue->{'overdue'}){
+                my ( $amount, $type, $daycounttotal ) = C4::Overdues::CalcFine( $item, $borrower->{categorycode},$branch, $datedue, $today );
+                my $type ||= q{};
+        if ( $amount > 0 && ( C4::Context->preference('finesMode') eq 'production' )) {
+          C4::Overdues::UpdateFine(
+              $issue->{itemnumber},
+              $issue->{borrowernumber},
+                      $amount, $type, output_pref($datedue)
+              );
+        }
+            }
             MarkIssueReturned($borrowernumber, $item->{'itemnumber'}, $circControlBranch, '', $borrower->{'privacy'});
             $messages->{'WasReturned'} = 1;    # FIXME is the "= 1" right?  This could be the borrower hash.
         }

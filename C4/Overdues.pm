@@ -255,7 +255,8 @@ sub CalcFine {
     my ( $item, $bortype, $branchcode, $due_dt, $end_date  ) = @_;
     my $start_date = $due_dt->clone();
     # get issuingrules (fines part will be used)
-    my $data = C4::Circulation::GetIssuingRule($bortype, $item->{itemtype}, $branchcode);
+    my $itemtype = $item->{itemtype} || $item->{itype};
+    my $data = C4::Circulation::GetIssuingRule($bortype, $itemtype, $branchcode);
     my $fine_unit = $data->{lengthunit};
     $fine_unit ||= 'days';
 
@@ -299,6 +300,9 @@ sub _get_chargeable_units {
             $charge_duration = $calendar->hours_between( $dt1, $dt2 );
         } else {
             $charge_duration = $dt2->delta_ms( $dt1 );
+        }
+        if($charge_duration->in_units('hours') == 0 && $charge_duration->in_units('seconds') > 0){
+            return 1;
         }
         return $charge_duration->in_units('hours');
     }
