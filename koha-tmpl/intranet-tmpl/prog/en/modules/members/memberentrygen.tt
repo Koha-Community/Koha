@@ -6,7 +6,7 @@
 <script type="text/javascript">
 //<![CDATA[
     $(document).ready(function() {
-		$("fieldset.rows input").keydown(function(e){ return checkEnter(e); });
+         $("fieldset.rows input").addClass("noEnterSubmit");
         $("#guarantordelete").click(function() {
             $("#contact-details").hide().find('a').remove();
             $("#guarantorid, #contactname, #contactfirstname").each(function () { this.value = "" });

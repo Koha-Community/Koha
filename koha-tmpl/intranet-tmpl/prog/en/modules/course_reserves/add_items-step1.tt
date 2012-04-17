@@ -1,0 +1,63 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Course reserves &rsaquo; Add items</title>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+
+<script type="text/javascript">
+//<![CDATA[
+
+$(document).ready(function() {
+  $('#barcode').focus();
+});
+
+//]]>
+</script>
+
+<body>
+
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'cat-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/course_reserves/course-reserves.pl">Course reserves</a> &rsaquo; Add reserves for <i><a href="/cgi-bin/koha/course_reserves/course-details.pl?course_id=[% course.course_id %]">[% course.course_name %]</a></i></div>
+
+<div id="doc2" class="yui-t7">
+    <div id="bd">
+        <div id="yui-main">
+            <div class="yui-b">
+                <div class="yui-g">
+                    <div class="yui-u first">
+                        [% IF ERROR_BARCODE_NOT_FOUND %]
+                            <div class="error">No item found for barcode [% ERROR_BARCODE_NOT_FOUND %]</div>
+                        [% END %]
+
+                        <form method="post" action="/cgi-bin/koha/course_reserves/add_items.pl">
+                            <input type="hidden" name="course_id" value="[% course.course_id %]" />
+                            <input type="hidden" name="action" value="lookup" />
+
+                            <fieldset class="rows">
+                                <legend>Add items: scan barcode</legend>
+
+                                    <p>
+
+                                    <li>
+                                        <label class="required" for="barcode">Item barcode:</label>
+                                        <input id="barcode" name="barcode" type="text" />
+                                    </li>
+                                </ol>
+                            </fieldset>
+
+                            <fieldset class="action">
+                                <input type="submit" value="Submit" class="submit" />
+
+                                <a href="/cgi-bin/koha/course_reserves/course-details.pl?course_id=[% course.course_id %]" class="cancel">Cancel</a>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+[% INCLUDE 'intranet-bottom.inc' %]

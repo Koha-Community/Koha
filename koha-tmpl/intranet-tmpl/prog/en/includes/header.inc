@@ -24,6 +24,9 @@
                             [% IF ( CAN_user_serials ) %]
                             <li><a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a></li>
                             [% END %]
+                            [% IF ( CAN_user_coursereserves ) %]
+                            <li><a href="/cgi-bin/koha/course_reserves/course-reserves.pl">Course Reserves</a></li>
+                            [% END %]
                             [% IF ( CAN_user_reports ) %]
                             <li><a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a></li>
                             [% END %]

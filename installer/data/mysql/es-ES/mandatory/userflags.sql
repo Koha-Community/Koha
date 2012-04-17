@@ -15,4 +15,5 @@ INSERT INTO `userflags` VALUES(14,'editauthorities','Allow to edit authorities',
 INSERT INTO `userflags` VALUES(15,'serials','Allow to manage serials subscriptions',0);
 INSERT INTO `userflags` VALUES(16,'reports','Allow to access to the reports module',0);
 INSERT INTO `userflags` VALUES(17,'staffaccess','Modify login / permissions for staff users',0);
+INSERT INTO `userflags` VALUES(18,'coursereserves','Course Reserves',0);
 INSERT INTO `userflags` VALUES(19, 'plugins', 'Koha plugins', '0');

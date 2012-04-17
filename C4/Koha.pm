@@ -206,9 +206,14 @@ sub GetSupportList{
 }
 =head2 GetItemTypes
 
-  $itemtypes = &GetItemTypes();
+  $itemtypes = &GetItemTypes( style => $style );
 
 Returns information about existing itemtypes.
+
+Params:
+    style: either 'array' or 'hash', defaults to 'hash'.
+           'array' returns an arrayref,
+           'hash' return a hashref with the itemtype value as the key
 
 build a HTML select with the following code :
 
@@ -242,6 +247,8 @@ build a HTML select with the following code :
 =cut
 
 sub GetItemTypes {
+    my ( %params ) = @_;
+    my $style = defined( $params{'style'} ) ? $params{'style'} : 'hash';
 
     # returns a reference to a hash of references to itemtypes...
     my %itemtypes;
@@ -252,10 +259,15 @@ sub GetItemTypes {
     |;
     my $sth = $dbh->prepare($query);
     $sth->execute;
-    while ( my $IT = $sth->fetchrow_hashref ) {
-        $itemtypes{ $IT->{'itemtype'} } = $IT;
+
+    if ( $style eq 'hash' ) {
+        while ( my $IT = $sth->fetchrow_hashref ) {
+            $itemtypes{ $IT->{'itemtype'} } = $IT;
+        }
+        return ( \%itemtypes );
+    } else {
+        return $sth->fetchall_arrayref({});
     }
-    return ( \%itemtypes );
 }
 
 sub get_itemtypeinfos_of {
@@ -1130,7 +1142,7 @@ sub IsAuthorisedValueCategory {
 
 =head2 GetAuthorisedValueByCode
 
-$authhorised_value = GetAuthorisedValueByCode( $category, $authvalcode );
+$authorised_value = GetAuthorisedValueByCode( $category, $authvalcode, $opac );
 
 Return the lib attribute from authorised_values from the row identified
 by the passed category and code

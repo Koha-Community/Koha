@@ -1,6 +1,20 @@
 [% USE KohaDates %]
+[% USE AuthorisedValues %]
 [% SET TagsShowEnabled = ( TagsEnabled && TagsShowOnDetail ) %]
 [% SET TagsInputEnabled = ( opacuserlogin && TagsEnabled && TagsInputOnDetail ) %]
+
+[% ShowCourseReservesHeader = 0 %]
+[% IF UseCourseReserves %]
+    [% FOREACH ITEM_RESULT IN itemloop %]
+       [% IF ITEM_RESULT.course_reserves %]
+           [% FOREACH r IN ITEM_RESULT.course_reserves %]
+               [% IF r.course.enabled == 'yes' %]
+                   [% ShowCourseReservesHeader = 1 %]
+               [% END %]
+           [% END %]
+        [% END %]
+    [% END %]
+[% END %]
 
 [% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Details for: [% title |html %][% FOREACH subtitl IN subtitle %], [% subtitl.subfield |html %][% END %]
 [% INCLUDE 'doc-head-close.inc' %]
@@ -1475,6 +1489,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
         [% ELSIF show_priority %]
             <th>Item hold queue priority</th>
         [% END %]
+        [% IF ( ShowCourseReservesHeader ) %]<th id="item_coursereserves">Course Reserves</th>[% END %]
         </tr></thead>
 	    <tbody>[% FOREACH ITEM_RESULT IN items %]
       [% IF ITEM_RESULT.this_branch %]<tr class="highlight-row-detail">[% ELSE %]<tr>[% END %]
@@ -1521,6 +1536,22 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
                 [% END %]
             [% END %]
                 </td>
+        [% END %]
+        [% IF ShowCourseReservesHeader %]
+            <td>
+                [% IF ITEM_RESULT.course_reserves %]
+                    [% FOREACH r IN ITEM_RESULT.course_reserves %]
+                        <p>
+                            <a href="opac-course-details.pl?course_id=[% r.course.course_id %]">
+                                [% r.course.course_name %]
+                                <!--[% IF r.course.course_number %] [% r.course.course_number %] [% END %]-->
+                                [% IF r.course.section %] [% r.course.section %] [% END %]
+                                [% IF r.course.term %] [% AuthorisedValues.GetByCode( 'TERM', r.course.term ) %] [% END %]
+                            </a>
+                        </p>
+                    [% END %]
+                [% END %]
+            </td>
         [% END %]
 	    </tr>
 	    [% END %]</tbody>

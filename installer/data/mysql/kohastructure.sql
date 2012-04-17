@@ -469,6 +469,108 @@ CREATE TABLE collections_tracking (
 ) ENGINE=InnoDB DEFAULT CHARACTER SET utf8;
 
 --
+-- Table structure for table `courses`
+--
+
+-- The courses table stores the courses created for the
+-- course reserves feature.
+
+DROP TABLE IF EXISTS courses;
+CREATE TABLE `courses` (
+  `course_id` int(11) NOT NULL AUTO_INCREMENT,
+  `department` varchar(20) DEFAULT NULL, -- Stores the authorised value DEPT
+  `course_number` varchar(255) DEFAULT NULL, -- An arbitrary field meant to store the "course number" assigned to a course
+  `section` varchar(255) DEFAULT NULL, -- Also arbitrary, but for the 'section' of a course.
+  `course_name` varchar(255) DEFAULT NULL,
+  `term` varchar(20) DEFAULT NULL, -- Stores the authorised value TERM
+  `staff_note` mediumtext,
+  `public_note` mediumtext,
+  `students_count` varchar(20) DEFAULT NULL, -- Meant to be just an estimate of how many students will be taking this course/section
+  `enabled` enum('yes','no') NOT NULL DEFAULT 'yes', -- Determines whether the course is active
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+   PRIMARY KEY (`course_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+--
+-- Table structure for table `course_instructors`
+--
+
+-- The course instructors table links Koha borrowers to the
+-- courses they are teaching. Many instructors can teach many
+-- courses. course_instructors is just a many-to-many join table.
+
+DROP TABLE IF EXISTS course_instructors;
+CREATE TABLE `course_instructors` (
+  `course_id` int(11) NOT NULL,
+  `borrowernumber` int(11) NOT NULL,
+  PRIMARY KEY (`course_id`,`borrowernumber`),
+  KEY `borrowernumber` (`borrowernumber`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Constraints for table `course_instructors`
+--
+ALTER TABLE `course_instructors`
+  ADD CONSTRAINT `course_instructors_ibfk_2` FOREIGN KEY (`course_id`) REFERENCES `courses` (`course_id`),
+  ADD CONSTRAINT `course_instructors_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Table structure for table `course_items`
+--
+
+-- If an item is placed on course reserve for one or more courses
+-- it will have an entry in this table. No matter how many courses an item
+-- is part of, it will only have one row in this table.
+
+DROP TABLE IF EXISTS course_items;
+CREATE TABLE `course_items` (
+  `ci_id` int(11) NOT NULL AUTO_INCREMENT,
+  `itemnumber` int(11) NOT NULL, -- items.itemnumber for the item on reserve
+  `itype` varchar(10) DEFAULT NULL, -- an optional new itemtype for the item to have while on reserve
+  `ccode` varchar(10) DEFAULT NULL, -- an optional new category code for the item to have while on reserve
+  `holdingbranch` varchar(10) DEFAULT NULL, -- an optional new holding branch for the item to have while on reserve
+  `location` varchar(80) DEFAULT NULL, -- an optional new shelving location for the item to have while on reseve
+  `enabled` enum('yes','no') NOT NULL DEFAULT 'no', -- If at least one enabled course has this item on reseve, this field will be 'yes', otherwise it will be 'no'
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+   PRIMARY KEY (`ci_id`),
+   UNIQUE KEY `itemnumber` (`itemnumber`),
+   KEY `holdingbranch` (`holdingbranch`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+--
+-- Constraints for table `course_items`
+--
+ALTER TABLE `course_items`
+  ADD CONSTRAINT `course_items_ibfk_2` FOREIGN KEY (`holdingbranch`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `course_items_ibfk_1` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Table structure for table `course_reserves`
+--
+
+-- This table connects an item placed on course reserve to a course it is on reserve for.
+-- There will be a row in this table for each course an item is on reserve for.
+
+DROP TABLE IF EXISTS course_reserves;
+CREATE TABLE `course_reserves` (
+  `cr_id` int(11) NOT NULL AUTO_INCREMENT,
+  `course_id` int(11) NOT NULL, -- Foreign key to the courses table
+  `ci_id` int(11) NOT NULL, -- Foreign key to the course_items table
+  `staff_note` mediumtext, -- Staff only note
+  `public_note` mediumtext, -- Public, OPAC visible note
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+   PRIMARY KEY (`cr_id`),
+   UNIQUE KEY `pseudo_key` (`course_id`,`ci_id`),
+   KEY `course_id` (`course_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+--
+-- Constraints for table `course_reserves`
+--
+ALTER TABLE `course_reserves`
+  ADD CONSTRAINT `course_reserves_ibfk_1` FOREIGN KEY (`course_id`) REFERENCES `courses` (`course_id`);
+
+--
 -- Table structure for table `branch_borrower_circ_rules`
 --
 

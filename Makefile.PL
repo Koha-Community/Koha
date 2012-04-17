@@ -265,6 +265,7 @@ my $target_map = {
   './changelanguage.pl'         => 'INTRANET_CGI_DIR',
   './check_sysprefs.pl'         => 'NONE',
   './circ'                      => 'INTRANET_CGI_DIR',
+  './course_reserves'           => 'INTRANET_CGI_DIR',
   './offline_circ'		=> 'INTRANET_CGI_DIR',
   './edithelp.pl'               => 'INTRANET_CGI_DIR',
   './etc'                       => { target => 'KOHA_CONF_DIR', trimdir => -1 },

@@ -1,0 +1,185 @@
+[% USE AuthorisedValues %]
+[% USE ItemTypes %]
+[% USE Branches %]
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Course reserves &rsaquo; New course</title>
+[% INCLUDE 'doc-head-close.inc' %]
+
+<script type="text/javascript">
+//<![CDATA[
+
+    function confirmItemDelete(){
+        return confirm( _('Are you sure you want to delete this item?');
+    }
+
+//]]>
+</script>
+
+</head>
+
+<body>
+
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'cat-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/course_reserves/course-reserves.pl">Course reserves</a> &rsaquo; Course details for <i>[% course.course_name %]</i></div>
+
+<div id="doc2" class="yui-t7">
+    <div id="bd">
+        <div id="yui-main">
+            <div id="toolbar">
+                <script type="text/javascript">
+                //<![CDATA[
+                    $(document).ready(function(){
+                        addItemsButton     = new YAHOO.widget.Button("add_items");
+                        editCourseButton   = new YAHOO.widget.Button("edit_course");
+                        deleteCourseButton = new YAHOO.widget.Button("delete_course");
+
+                        deleteCourseButton.on("click", confirmDelete );
+                    });
+
+                    function confirmDelete(p_oEvent){
+                        if ( ! confirm( _('Are you sure you want to delete this course?') ) ) {
+                            YAHOO.util.Event.stopEvent( p_oEvent );
+                        }
+                    }
+
+                //]]>
+                </script>
+                <ul class="toolbar">
+                    [% IF CAN_user_coursereserves_add_reserves %]<li><a id="add_items" href="/cgi-bin/koha/course_reserves/add_items.pl?course_id=[% course.course_id %]">Add reserves</a></li>[% END %]
+                    [% IF ( CAN_user_coursereserves_manage_courses ) %]<li><a id="edit_course" href="/cgi-bin/koha/course_reserves/course.pl?course_id=[% course.course_id %]">Edit course</a></li>[% END %]
+                    [% IF ( CAN_user_coursereserves_manage_courses ) %]<li><a id="delete_course" href="/cgi-bin/koha/course_reserves/mod_course.pl?course_id=[% course.course_id %]&action=del">Delete course</a></li>[% END %]
+                </ul>
+            </div><!-- /toolbar -->
+
+            <table>
+                <tr><th>Course name</th><td>[% course.course_name %]</td></tr>
+                <tr><th>Term</th><td>[% AuthorisedValues.GetByCode( 'TERM', course.term ) %]</td></tr>
+                <tr><th>Department</th><td>_[% AuthorisedValues.GetByCode( 'DEPARTMENT', course.department ) %]</td></tr>
+                <tr><th>Course number</th><td>[% course.course_number %]</td></tr>
+                <tr><th>Section</th><td>[% course.section %]</td></tr>
+                <tr><th>Instructors</th><td>[% FOREACH i IN course.instructors %]<div class="instructor"><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% i.borrowernumber %]">[% i.firstname %] [% i.surname %]</a></div>[% END %]</td></tr>
+                <tr><th>Staff note</th><td>[% course.staff_note %]</td></tr>
+                <tr><th>Public note</th><td>[% course.public_note %]</td></tr>
+                <tr><th>Students count</th><td>[% course.students_count %]</td></tr>
+                <tr><th>Status</th><td>[% IF course.enabled == 'yes' %]Active[% ELSE %]Inactive[% END %]</td></tr>
+            </table>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Barcode</th>
+                        <th>Call number</th>
+                        [% IF item_level_itypes %]<th>Item type</th>[% END %]
+                        <th>Collection</th>
+                        <th>Location</th>
+                        <th>Library</th>
+                        <th>Staff note</th>
+                        <th>Public note</th>
+                        [% IF CAN_user_coursereserves_add_reserves %]<th>&nbsp;<!-- Edit --></th>[% END %]
+                        [% IF CAN_user_coursereserves_delete_reserves %]<th>&nbsp;<!-- Remove --></th>[% END %]
+                        <th>Other course reserves</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    [% FOREACH cr IN course_reserves %]
+                        <tr>
+                            <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% cr.item.biblionumber %]">[% cr.item.title %]</a></td>
+                            <td><a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% cr.item.itemnumber %]&biblionumber=[% cr.item.biblionumber %]&bi=[% cr.item.biblioitemnumber %]">[% cr.item.barcode %]</a></td>
+                            <td>[% cr.item.itemcallnumber %]</td>
+                            [% IF item_level_itypes %]
+                            <td>
+                                [% IF cr.course_item.itype %]
+                                    [% IF cr.course_item.enabled == 'yes' %]
+                                        [% ItemTypes.GetDescription( cr.item.itype ) %]
+                                    [% ELSE %]
+                                        [% ItemTypes.GetDescription( cr.course_item.itype ) %]
+                                    [% END %]
+                                [% ELSE %]
+                                     <i>Unchanged</i>
+                                     ([% ItemTypes.GetDescription( cr.item.itype ) %])
+                                [% END %]
+                            </td>
+                            [% END %]
+                            <td>
+                                 [% IF cr.course_item.ccode %]
+                                     [% IF cr.course_item.enabled == 'yes' %]
+                                          [% AuthorisedValues.GetByCode( 'CCODE', cr.item.ccode ) %]
+                                     [% ELSE %]
+                                         [% AuthorisedValues.GetByCode( 'CCODE', cr.course_item.ccode ) %]
+                                     [% END %]
+                                 [% ELSE %]
+                                     <i>Unchanged</i>
+                                     ([% AuthorisedValues.GetByCode( 'CCODE', cr.item.ccode ) %])
+                                 [% END %]
+                            </td>
+                            <td>
+                                [% IF cr.course_item.location %]
+                                     [% IF cr.course_item.enabled == 'yes' %]
+                                         [% AuthorisedValues.GetByCode( 'LOC', cr.item.location ) %]
+                                    [% ELSE %]
+                                        [% AuthorisedValues.GetByCode( 'LOC', cr.course_item.location ) %]
+                                    [% END %]
+                                [% ELSE %]
+                                    <i>Unchanged</i>
+                                    ([% AuthorisedValues.GetByCode( 'LOC', cr.item.location ) %])
+                                [% END %]
+                            </td>
+                            <td>
+                                [% IF cr.course_item.holdingbranch %]
+                                    [% IF cr.course_item.enabled == 'yes' %]
+                                        [% Branches.GetName( cr.item.holdingbranch ) %]
+                                    [% ELSE %]
+                                        [% Branches.GetName( cr.course_item.holdingbranch ) %]
+                                    [% END %]
+                                [% ELSE %]
+                                    <i>Unchanged</i>
+                                    ([% Branches.GetName( cr.item.holdingbranch ) %])
+                                [% END %]
+                            </td>
+                            <td>[% cr.staff_note %]</td>
+                            <td>[% cr.public_note %]</td>
+
+                            [% IF CAN_user_coursereserves_add_reserves %]
+                                <td><a href="add_items.pl?course_id=[% course.course_id %]&barcode=[% cr.item.barcode %]&action=lookup">Edit</a></td>
+                            [% END %]
+
+                            [% IF CAN_user_coursereserves_delete_reserves %]
+                                <td>
+                                    [% IF cr.item.onloan %]
+                                        On Loan
+                                    [% ELSIF cr.item.itemlost %]
+                                        Item Lost
+                                    [% ELSE %]
+                                        <a href="course-details.pl?course_id=[% course.course_id %]&action=del_reserve&cr_id=[% cr.cr_id %]" onclick="return confirmItemDelete()" >Remove</a>
+                                    [% END %]
+
+                                </td>
+                            [% END %]
+
+                            <td>
+                                [% FOREACH course IN cr.courses %]
+                                    [% UNLESS cr.course_id == course.course_id %]
+                                        <p>
+                                            <a href="course-details.pl?course_id=[% course.course_id %]">
+                                                [% course.course_name %]
+                                                [% IF course.section %] [% course.section %] [% END %]
+                                                [% IF course.term %] [% AuthorisedValues.GetByCode( 'TERM', course.term ) %] [% END %]
+                                            </a>
+                                        </p>
+                                    [% END %]
+                                [% END %]
+                            </td>
+                        </tr>
+                    [% END %]
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+[% INCLUDE 'intranet-bottom.inc' %]

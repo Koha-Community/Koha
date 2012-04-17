@@ -5801,7 +5801,6 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
-
 $DBversion = "3.09.00.047";
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     # to preserve default behaviour as best as possible, set this new preference differently depending on whether IndependantBranches is set or not
@@ -6844,6 +6843,96 @@ $DBversion = '3.13.00.000';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     print "Upgrade to $DBversion done (start the journey to Koha Pi)\n";
     SetVersion ($DBversion);
+}
+
+$DBversion = "3.13.00.XXX";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do("INSERT INTO `systempreferences` (`variable`, `value`, `options`, `explanation`, `type`) VALUES ('UseCourseReserves', '0', NULL, 'Enable the course reserves feature.', 'YesNo')");
+    $dbh->do("INSERT INTO userflags (bit,flag,flagdesc,defaulton) VALUES ('18','coursereserves','Course Reserves','0')");
+    $dbh->do("
+CREATE TABLE `courses` (
+  `course_id` int(11) NOT NULL AUTO_INCREMENT,
+  `department` varchar(20) DEFAULT NULL,
+  `course_number` varchar(255) DEFAULT NULL,
+  `section` varchar(255) DEFAULT NULL,
+  `course_name` varchar(255) DEFAULT NULL,
+  `term` varchar(20) DEFAULT NULL,
+  `staff_note` mediumtext,
+  `public_note` mediumtext,
+  `students_count` varchar(20) DEFAULT NULL,
+  `enabled` enum('yes','no') NOT NULL DEFAULT 'yes',
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+   PRIMARY KEY (`course_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+    ");
+
+    $dbh->do("
+CREATE TABLE `course_instructors` (
+  `course_id` int(11) NOT NULL,
+  `borrowernumber` int(11) NOT NULL,
+  PRIMARY KEY (`course_id`,`borrowernumber`),
+  KEY `borrowernumber` (`borrowernumber`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+    ");
+
+    $dbh->do("
+ALTER TABLE `course_instructors`
+  ADD CONSTRAINT `course_instructors_ibfk_2` FOREIGN KEY (`course_id`) REFERENCES `courses` (`course_id`),
+  ADD CONSTRAINT `course_instructors_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE;
+    ");
+
+    $dbh->do("
+CREATE TABLE `course_items` (
+  `ci_id` int(11) NOT NULL AUTO_INCREMENT,
+  `itemnumber` int(11) NOT NULL,
+  `itype` varchar(10) DEFAULT NULL,
+  `ccode` varchar(10) DEFAULT NULL,
+  `holdingbranch` varchar(10) DEFAULT NULL,
+  `location` varchar(80) DEFAULT NULL,
+  `enabled` enum('yes','no') NOT NULL DEFAULT 'no',
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+   PRIMARY KEY (`ci_id`),
+   UNIQUE KEY `itemnumber` (`itemnumber`),
+   KEY `holdingbranch` (`holdingbranch`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+    ");
+
+    $dbh->do("
+ALTER TABLE `course_items`
+  ADD CONSTRAINT `course_items_ibfk_2` FOREIGN KEY (`holdingbranch`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `course_items_ibfk_1` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE CASCADE ON UPDATE CASCADE;
+");
+
+    $dbh->do("
+CREATE TABLE `course_reserves` (
+  `cr_id` int(11) NOT NULL AUTO_INCREMENT,
+  `course_id` int(11) NOT NULL,
+  `ci_id` int(11) NOT NULL,
+  `staff_note` mediumtext,
+  `public_note` mediumtext,
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+   PRIMARY KEY (`cr_id`),
+   UNIQUE KEY `pseudo_key` (`course_id`,`ci_id`),
+   KEY `course_id` (`course_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+");
+
+    $dbh->do("
+ALTER TABLE `course_reserves`
+  ADD CONSTRAINT `course_reserves_ibfk_1` FOREIGN KEY (`course_id`) REFERENCES `courses` (`course_id`);
+    ");
+
+    $dbh->do("
+INSERT INTO permissions (module_bit, code, description) VALUES
+  (18, 'manage_courses', 'Add, edit and delete courses'),
+  (18, 'add_reserves', 'Add course reserves'),
+  (18, 'delete_reserves', 'Remove course reserves')
+;
+    ");
+
+
+    print "Upgrade to $DBversion done (Add Course Reserves ( system preference UseCourseReserves ))\n";
+    SetVersion($DBversion);
 }
 
 =head1 FUNCTIONS

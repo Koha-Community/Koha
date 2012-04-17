@@ -53,9 +53,11 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (15, 'routing', 'Mettre en circulation'),
    (16, 'execute_reports', 'Lancer les rapports SQL'),
    (16, 'create_reports', 'Créer les rapports SQL Reports'),
+   (18, 'manage_courses', 'Add, edit and delete courses'),
+   (18, 'add_reserves', 'Add course reserves'),
+   (18, 'delete_reserves', 'Remove course reserves'),
    (19, 'manage', 'Manage plugins ( install / uninstall )'),
    (19, 'tool', 'Use tool plugins'),
    (19, 'report', 'Use report plugins'),
    (19, 'configure', 'Configure plugins')
-
 ;

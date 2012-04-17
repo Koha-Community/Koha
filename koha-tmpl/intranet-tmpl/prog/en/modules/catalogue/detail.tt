@@ -1,3 +1,18 @@
+[% USE AuthorisedValues %]
+
+[% ShowCourseReserves = 0 %]
+[% IF UseCourseReserves %]
+    [% FOREACH item IN itemloop %]
+       [% IF item.course_reserves %]
+           [% FOREACH r IN item.course_reserves %]
+               [% IF r.course.enabled == 'yes' %]
+                   [% ShowCourseReserves = 1 %]
+               [% END %]
+           [% END %]
+        [% END %]
+    [% END %]
+[% END %]
+
 [% INCLUDE 'doc-head-open.inc' %]
 [% INCLUDE 'greybox.inc' %]
 <title>Koha &rsaquo; Catalog &rsaquo;
@@ -370,6 +385,7 @@ function verify_images() {
                 [% IF ( SpineLabelShowPrintOnBibDetails ) %]<th>Spine label</th>[% END %]
                 [% IF ( hostrecords ) %]<th>Host records</th>[% END %]
                 [% IF ( analyze ) %]<th>Used in</th><th></th>[% END %]
+                [% IF ( ShowCourseReserves ) %]<th>Course Reserves</th>[% END %]
             </tr>
         </thead>
         <tbody>
@@ -520,6 +536,24 @@ function verify_images() {
                         <td><a href="/cgi-bin/koha/cataloguing/addbiblio.pl?hostbiblionumber=[% item.biblionumber %]&amp;hostitemnumber=[% item.itemnumber %]">Create analytics</a></td>
                     [% END %]
 
+                [% IF ShowCourseReserves %]
+                    <td>
+                        [% IF item.course_reserves %]
+                            [% FOREACH r IN item.course_reserves %]
+                                [% IF r.course.enabled == 'yes' %]
+                                    <p>
+                                      <a href="/cgi-bin/koha/course_reserves/course-details.pl?course_id=[% r.course.course_id %]">
+                                         [% r.course.course_name %]
+                                         <!--[% IF r.course.course_number %] [% r.course.course_number %] [% END %]-->
+                                         [% IF r.course.section %] [% r.course.section %] [% END %]
+                                         [% IF r.course.term %] [% AuthorisedValues.GetByCode( 'TERM', r.course.term ) %] [% END %]
+                                      </a>
+                                   </p>
+                               [% END %]
+                           [% END %]
+                       [% END %]
+                    </td>
+                [% END %]
                 </tr>
             [% END %]
         </tbody>

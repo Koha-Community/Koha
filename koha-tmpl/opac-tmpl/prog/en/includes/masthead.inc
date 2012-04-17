@@ -131,6 +131,7 @@
 
 <div id="moresearches">
 <a href="/cgi-bin/koha/opac-search.pl">Advanced search</a>
+[% IF ( UseCourseReserves ) %]<span class="pipe"> | </span><a href="/cgi-bin/koha/opac-course-reserves.pl">Course Reserves</a>[% END %]
 [% IF ( OpacBrowser ) %]<span class="pipe"> | </span><a href="/cgi-bin/koha/opac-browser.pl">Browse by hierarchy</a>[% END %]
 [% IF ( OpacAuthorities ) %]<span class="pipe"> | </span><a href="/cgi-bin/koha/opac-authorities-home.pl">Authority search</a>[% END %]
 [% IF ( opacuserlogin && reviewson && OpacShowRecentComments ) %]<span class="pipe"> | </span><a href="/cgi-bin/koha/opac-showreviews.pl">Recent comments</a>[% END %]

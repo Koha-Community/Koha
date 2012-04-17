@@ -1,0 +1,62 @@
+[% USE AuthorisedValues %]
+
+[% INCLUDE 'doc-head-open.inc' %]
+[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+<body id="opac-main">
+[% IF ( OpacNav ) %]<div id="doc3" class="yui-t1">[% ELSE %]<div id="doc3" class="yui-t7">[% END %]
+   <div id="bd">
+[% INCLUDE 'masthead.inc' %]
+
+
+<div id="doc2" class="yui-t7">
+        <div id="yui-main">
+            <div class="yui-b">
+                <div class="yui-g">
+
+                    <div id="search-toolbar">
+                        <form id="search_courses_form">
+                            <input type="text" name="search_on" id="search_on" />
+                            <input type="submit" value="Search" />
+                        </form>
+                    </div><!-- /toolbar -->
+
+                    <h1>Courses</h1>
+                    <table id="course_reserves_table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Dept.</th>
+                                <th>Course #</th>
+                                <th>Section</th>
+                                <th>Term</th>
+                                <th>Instructors</th>
+                                <th>Notes</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            [% FOREACH c IN courses %]
+                                <tr>
+                                    <td><a href="opac-course-details.pl?course_id=[% c.course_id %]">[% c.course_name %]</a></td>
+                                    <td>[% AuthorisedValues.GetByCode( 'DEPARTMENT', c.department, 1 ) %]</td>
+                                    <td>[% c.course_number %]</td>
+                                    <td>[% c.section %]</td>
+                                    <td>[% AuthorisedValues.GetByCode( 'TERM' c.term ) %]</td>
+                                    <td>
+                                      [% FOREACH i IN c.instructors %]
+                                          <div class="instructor">[% i.firstname %] [% i.surname %]</div>
+                                      [% END %]
+                                    </td>
+                                    <td>[% c.public_note %]</td>
+                            [% END %]
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+</div>
+
+
+[% INCLUDE 'opac-bottom.inc' %]

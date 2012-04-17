@@ -1,0 +1,205 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Course reserves &rsaquo; [% IF course_name %] Edit [% course_name %] [% ELSE %] New course [% END %]</title>
+[% INCLUDE 'doc-head-close.inc' %]
+
+<script type="text/javascript">
+//<![CDATA[
+
+    function Check(f) {
+        var _alertString = "";
+
+        if( ! $("#department").val() ) {
+            _alertString += _("- You must choose a department") + "\n";
+        }
+
+        if( ! $("#course_number").val() ) {
+            _alertString += _("- You must choose a course number") + "\n";
+        }
+
+        if( ! $("#course_name").val() ) {
+            _alertString += _("- You must add a course name") + "\n";
+        }
+
+        if ( _alertString.length ) {
+            var alertHeader;
+            alertHeader = _("Form not submitted because of the following problem(s)");
+            alertHeader += "\n------------------------------------------------------------------------------------\n\n";
+
+            alert( alertHeader + _alertString );
+        } else {
+            f.submit();
+        }
+    }
+
+//]]>
+</script>
+
+<script type="text/javascript">
+//<![CDATA[
+$(document).ready(function(){
+    $( "#find_instructor" ).autocomplete({
+        source: "/cgi-bin/koha/circ/ysearch.pl",
+        minLength: 3,
+        select: function( event, ui ) {
+            AddInstructor( ui.item.firstname + " " + ui.item.surname, ui.item.cardnumber );
+            return false;
+        }
+    })
+    .data( "autocomplete" )._renderItem = function( ul, item ) {
+        return $( "<li></li>" )
+        .data( "item.autocomplete", item )
+        .append( "<a>" + item.surname + ", " + item.firstname + " (" + item.cardnumber + ") <small>" + item.address + " " + item.city + " " + item.zipcode + " " + item.country + "</small></a>" )
+        .appendTo( ul );
+    };
+
+});
+
+function AddInstructor( name, cardnumber ) {
+    div = "<div id='borrower_" + cardnumber + "'>" + name + " ( <a href='#' onclick='RemoveInstructor(" + cardnumber + ");'> Remove </a> ) <input type='hidden' name='instructors' value='" + cardnumber + "' /></div>";
+    $('#instructors').append( div );
+
+    $('#find_instructor').val('').focus();
+}
+
+function RemoveInstructor( cardnumber ) {
+    $( '#borrower_' + cardnumber ).remove();
+}
+
+//]]>
+</script>
+
+</head>
+
+<body>
+
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'cat-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/course_reserves/course-reserves.pl">Course reserves</a> &rsaquo; [% IF course_name %] Edit <i>[% course_name %]</i> [% ELSE %] New course [% END %]</div>
+
+<div id="doc2" class="yui-t7">
+    <div id="bd">
+        <div id="yui-main">
+            <div class="yui-b">
+                <div class="yui-g">
+                    <div class="yui-u first">
+                        <form method="post" action="/cgi-bin/koha/course_reserves/mod_course.pl">
+                            [% IF course_id %]<input type="hidden" name="course_id" value="[% course_id %]" />[% END %]
+                            <fieldset class="rows">
+                                <legend>[% IF course_id %] Edit [% ELSE %] Create [% END %] course</legend>
+                                <ol>
+                                    <li>
+                                        <label class="required" for="department">Department:</label>
+                                        [% IF departments %]
+                                            <select id="department" name="department">
+                                                <option value="">Select A Department</option>
+
+                                                [% FOREACH d IN departments %]
+                                                    [% IF d.authorised_value == department %]
+                                                        <option value="[% d.authorised_value %]" selected="selected">[% d.lib %]</option>
+                                                    [% ELSE %]
+                                                        <option value="[% d.authorised_value %]">[% d.lib %]</option>
+                                                    [% END %]
+                                                [% END %]
+                                            </select>
+                                        [% ELSE %]
+                                            <span id="department">No DEPARTMENT authorised values found! Please create one or more authorised values with the category DEPARTMENT.</span>
+                                        [% END %]
+                                    </li>
+
+                                    <li>
+                                        <label class="required" for="course_number">Course number:</label>
+                                        <input id="course_number" name="course_number" type="text" value="[% course_number %]" />
+                                    </li>
+
+                                    <li>
+                                        <label for="section">Section:</label>
+                                        <input id="section" name="section" type="text" value="[% section %]"/>
+                                    </li>
+
+                                    <li>
+                                        <label class="required" for="course_name">Course name:</label>
+                                        <input id="course_name" name="course_name" type="text" value="[% course_name %]" />
+                                    </li>
+
+                                    <li>
+                                        <label for="term">Term:</label>
+                                        [% IF terms %]
+                                            <select id="term" name="term">
+                                                <option value=""></option>
+
+                                                [% FOREACH t IN terms %]
+                                                    [% IF t.authorised_value == term %]
+                                                        <option value="[% t.authorised_value %]" selected="selected">[% t.lib %]</option>
+                                                    [% ELSE %]
+                                                        <option value="[% t.authorised_value %]">[% t.lib %]</option>
+                                                    [% END %]
+                                                [% END %]
+                                            </select>
+                                        [% ELSE %]
+                                            <span id="term">No TERM authorised values found! Please create one or more authorised values with the category TERM.</span>
+                                        [% END %]
+                                    </li>
+
+                                    <!-- TODO: Add Instructors -->
+                                    <li>
+                                        <label for="instructors">Instructors:</label>
+
+                                        <fieldset>
+                                             <div id="instructors">
+                                                 [% FOREACH i IN instructors %]
+                                                     <div id="borrower_[% i.cardnumber %]">
+                                                         [% i.surname %], [% i.firstname %] ( <a href='#' onclick='RemoveInstructor( [% i.cardnumber %] );'> Remove </a> )
+                                                         <input type='hidden' name='instructors' value='[% i.cardnumber %]' />
+                                                     </div>
+                                                 [% END %]
+                                             </div>
+
+                                        </fieldset>
+
+                                        <fieldset>
+                                            <label for="find_instructor">Instructor search:</label>
+                                            <input autocomplete="off" id="find_instructor" type="text" style="width:150px" class="noEnterSubmit"/>
+                                            <div id="find_instructor_container"></div>
+                                        </fieldset>
+                                    <li>
+                                        <label for="staff_note">Staff note:</label>
+                                        <textarea name="staff_note" id="staff_note">[% staff_note %]</textarea>
+                                    </li>
+
+                                    <li>
+                                        <label for="public_note">Public note:</label>
+                                        <textarea name="public_note" id="public_note">[% public_note %]</textarea>
+                                    </li>
+
+                                    <li>
+                                        <label for="students_count">Number of students:</label>
+                                        <input id="students_count" name="students_count" type="text" value="[% students_count %]" />
+                                    </li>
+
+                                    <li>
+                                        <label for="enabled">Enabled?</label>
+                                        [% IF enabled == 'no' %]
+                                            <input type="checkbox" name="enabled" id="enabled" />
+                                        [% ELSE %]
+                                            <input type="checkbox" name="enabled" id="enabled" checked="checked" />
+                                        [% END %]
+                                    </li>
+                                </ol>
+                            </fieldset>
+
+                            <fieldset class="action">
+                                <input type="submit" onclick="Check(this.form); return false;" value="Save" class="submit" />
+
+                                <a href="/cgi-bin/koha/course_reserves/course-reserves.pl" class="cancel">Cancel</a>
+                            </fieldset>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+[% INCLUDE 'intranet-bottom.inc' %]

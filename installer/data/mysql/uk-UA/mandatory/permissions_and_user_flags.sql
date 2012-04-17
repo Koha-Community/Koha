@@ -18,6 +18,7 @@ INSERT INTO userflags (bit, flag, flagdesc, defaulton) VALUES
    (15,'serials',         'Дозвіл на керування підпискою періодичних видань',0),
    (16,'reports',         'Дозвіл на доступ до модуля звітів',0),
    (17,'staffaccess',     'Зміна імені(логіну)/привілеїв для працівників бібліотеки',0),
+   (18,'coursereserves',  'Course Reserves',0),
    (19,'plugins',         'Koha plugins', '0')
 ;
 
@@ -78,6 +79,9 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (15, 'routing',                     'Routing'),
    (16, 'execute_reports', 'Execute SQL reports'),
    (16, 'create_reports', 'Create SQL Reports'),
+   (18, 'manage_courses', 'Add, edit and delete courses'),
+   (18, 'add_reserves', 'Add course reserves'),
+   (18, 'delete_reserves', 'Remove course reserves'),
    (19, 'manage', 'Manage plugins ( install / uninstall )'),
    (19, 'tool', 'Use tool plugins'),
    (19, 'report', 'Use report plugins'),

@@ -50,6 +50,7 @@ use List::MoreUtils qw/any none/;
 use C4::Images;
 use Koha::DateUtils;
 use C4::HTML5Media;
+use C4::CourseReserves;
 
 BEGIN {
 	if (C4::Context->preference('BakerTaylorEnabled')) {
@@ -1054,5 +1055,11 @@ if (C4::Context->preference('OpacHighlightedWords')) {
     $template->{VARS}->{query_desc} = $query->param('query_desc');
 }
 $template->{VARS}->{'trackclicks'} = C4::Context->preference('TrackClicks');
+
+if ( C4::Context->preference('UseCourseReserves') ) {
+    foreach my $i ( @items ) {
+        $i->{'course_reserves'} = GetItemReservesInfo( itemnumber => $i->{'itemnumber'} );
+    }
+}
 
 output_html_with_http_headers $query, $cookie, $template->output;
