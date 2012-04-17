@@ -76,7 +76,7 @@ $(document).ready(function() {
                $(this).attr('checked', !$(this).attr('checked'));
 			   if($(this).attr('checked')){
                     $(this).parent().siblings().find("input:checkbox").each(function(){
-                       if($(this).attr('checked')){ $(this).attr('checked',''); }
+                       if($(this).attr('checked')){ $(this).removeAttr('checked'); }
                    });
 			   }
            });

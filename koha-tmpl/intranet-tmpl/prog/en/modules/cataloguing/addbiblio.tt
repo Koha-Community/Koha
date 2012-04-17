@@ -30,7 +30,7 @@
 		/* check cookie to hide/show marcdocs*/
 		if($.cookie("marcdocs_[% borrowernumber %]") == 'false'){
 			hideMARCdocLinks();
-			$("#marcDocsSelect").attr('checked',false);
+            $("#marcDocsSelect").removeAttr('checked');
 		} else {
 			/* reset cookie expire date */
 			$.cookie("marcdocs_[% borrowernumber %]",'true',

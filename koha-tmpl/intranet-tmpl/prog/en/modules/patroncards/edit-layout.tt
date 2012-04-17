@@ -45,7 +45,7 @@
                     eBarcode.style.display = 'block';
                 } else {
                     eBarcode.style.display = 'none';
-                    $('input[name=barcode_text_print]').attr('checked', false);
+                    $('input[name=barcode_text_print]').removeAttr('checked');
                 }
             }
             function getUnit(unit){

@@ -16,26 +16,8 @@
 		    $('#selectlibrary').submit();
 		 });
 
-
-		var checkcolumn = $(".checkcolumn");
-		var checkrow = $(".checkrow");
 		var checkall = $(".checkall");
 		var uncheckall = $(".uncheckall");
-
-		$(checkcolumn).click(function(){
-			if(this.checked){ status = "checked" } else { status = "" }
-			var tableid = $(this).parent().parent().parent().parent().attr("id");
-			var columncontext = $(this).parent();
-			var tdindex = columncontext.parent().children().index(columncontext);
-			$("#"+tableid+" tr td:nth-child("+(tdindex+2)+") input[type='checkbox']").attr("checked",status);
-		});
-
-		$(checkrow).click(function(){
-			if(this.checked){ status = "checked" } else { status = "" }
-			$(this).parent().siblings().each(function(){
-				$(this).find("input[type='checkbox']").attr("checked",status);
-			})
-		});
 
 		$(checkall).click(function(){
 			var tid = $(this).attr("id");

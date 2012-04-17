@@ -110,7 +110,7 @@ function checkMultiHold() {
  	$("#requestany").click(function() {
 		if(this.checked){
 		$("input[name=checkitem]").each(function() {
-			$(this).attr("checked","");
+            $(this).removeAttr("checked");
 		});
 		}
 	});
@@ -122,7 +122,7 @@ function checkMultiHold() {
 			}
 		});
 		if(onechecked == 1){
-			$("#requestany").attr("checked","");
+            $("#requestany").removeAttr("checked");
 		} else {
 			$("#requestany").attr("checked","checked");
 		}

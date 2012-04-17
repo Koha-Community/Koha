@@ -109,10 +109,10 @@ var allcheckboxes = $(".checkboxed");
 		if(e.target.tagName.toLowerCase() == 'td'){
            $(this).find("input:checkbox:visible").each( function() {
                 if($(this).attr("checked")){
-                    $(this).attr("checked",'');
+                    $(this).removeAttr("checked");
                 } else {
                     $(this).attr("checked","checked");
-                    radioCheckBox($(this));
+                  //  radioCheckBox($(this));
                 }
            });
         }
@@ -121,7 +121,7 @@ var allcheckboxes = $(".checkboxed");
     function radioCheckBox(box){
             box.parents("td").siblings().find("input:checkbox:visible").each(function(){
                 if($(this).attr("checked")){
-                    $(this).attr("checked",'');
+                    $(this).removeAttr("checked");
                 }
              });
      }

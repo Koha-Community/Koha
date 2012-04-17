@@ -9,19 +9,19 @@ function hideColumns(){
     return stringValue.split("/");
   });
   if(valCookie){
-    $("#showall").attr("checked","").parent().removeClass("selected");
+    $("#showall").removeAttr("checked").parent().removeClass("selected");
     for( i=0; i<valCookie.length; i++ ){
       if(valCookie[i] != ''){
         index = valCookie[i] - 2;
         $("#itemst td:nth-child("+valCookie[i]+"),#itemst th:nth-child("+valCookie[i]+")").toggle();
-        $("#checkheader"+index).attr("checked","").parent().removeClass("selected");
+        $("#checkheader"+index).removeAttr("checked").parent().removeClass("selected");
       }
     }
   }
 }
 
 function hideColumn(num) {
-  $("#hideall,#showall").attr("checked","").parent().removeClass("selected");
+  $("#hideall,#showall").removeAttr("checked").parent().removeClass("selected");
   valCookie = YAHOO.util.Cookie.get("showColumns", function(stringValue){
     return stringValue.split("/");
   });
@@ -62,7 +62,7 @@ Array.prototype.remove = function(from, to) {
 };
 
 function showColumn(num){
-  $("#hideall").attr("checked","").parent().removeClass("selected");
+  $("#hideall").removeAttr("checked").parent().removeClass("selected");
   $("#"+num).parent().addClass("selected");
   valCookie = YAHOO.util.Cookie.get("showColumns", function(stringValue){
     return stringValue.split("/");
@@ -93,7 +93,7 @@ function showAllColumns(){
     $("#selections span").addClass("selected");
     $("#itemst td:nth-child(2),#itemst tr th:nth-child(2)").nextAll().show();
     YAHOO.util.Cookie.remove("showColumns");
-    $("#hideall").attr("checked","").parent().removeClass("selected");
+    $("#hideall").removeAttr("checked").parent().removeClass("selected");
 }
 function hideAllColumns(){
     $("#selections").unCheckCheckboxes();

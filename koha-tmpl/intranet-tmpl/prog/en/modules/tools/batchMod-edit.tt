@@ -19,12 +19,12 @@ for( x=0; x<allColumns.length; x++ ){
 $("#itemst").tablesorter({ widgets : ['zebra'], headers: {0:{sorter: false}} });
 $("#selectallbutton").click(function() {
     $("#itemst").find("input:checkbox").each(function() {
- $(this).attr("checked", true);
+ $(this).attr("checked", "checked");
     });
 });
 $("#clearallbutton").click(function() {
     $("#itemst").find("input:checkbox").each(function() {
- $(this).attr("checked", false);
+ $(this).removeAttr("checked");
     });
 });
 $("input[name='disable_input']").click(function() {

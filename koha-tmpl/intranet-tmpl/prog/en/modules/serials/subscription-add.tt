@@ -920,7 +920,7 @@ $(document).ready(function() {
 	[% IF ( history ) %] $("#subscription_form_history").show();[% END %]
 	$("#cancel_manual_history").click(function(){
 		$("#subscription_form_history").hide();
-		$("#manuallist").attr("checked","");
+        $("#manuallist").removeAttr("checked");
 	});
    	$("#manuallist").click( function(){
 		if($(this).attr("checked")){
