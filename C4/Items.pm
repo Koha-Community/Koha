@@ -66,6 +66,7 @@ BEGIN {
         GetItemsInfo
 	GetItemsLocationInfo
 	GetHostItemsInfo
+        GetItemnumbersForBiblio
         get_itemnumbers_of
 	get_hostitemnumbers_of
         GetItemnumberFromBarcode
@@ -1493,6 +1494,26 @@ sub  GetLastAcquisitions {
 	}
 	
 	return @results;
+}
+
+=head2 GetItemnumbersForBiblio
+
+  my $itemnumbers = GetItemnumbersForBiblio($biblionumber);
+
+Given a single biblionumber, return an arrayref of all the corresponding itemnumbers
+
+=cut
+
+sub GetItemnumbersForBiblio {
+    my $biblionumber = shift;
+    my @items;
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare("SELECT itemnumber FROM items WHERE biblionumber = ?");
+    $sth->execute($biblionumber);
+    while (my $result = $sth->fetchrow_hashref) {
+        push @items, $result->{'itemnumber'};
+    }
+    return \@items;
 }
 
 =head2 get_itemnumbers_of
