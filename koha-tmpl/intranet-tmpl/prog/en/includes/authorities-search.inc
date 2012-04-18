@@ -1,3 +1,4 @@
+<div class="gradient">
 <h1 id="logo"><a href="/cgi-bin/koha/mainpage.pl">[% LibraryName %]</a></h1>
 <!-- Begin Authorities Resident Search Box -->
 <div id="header_search" class="residentsearch">
@@ -97,5 +98,6 @@
         <li><a href="/cgi-bin/koha/authorities/authorities-home.pl#main_heading">Search main heading</a></li>
         <li><a href="/cgi-bin/koha/authorities/authorities-home.pl#all_headings">Search all headings</a></li>
     </ul>
-</div>
+</div><!-- /header_search -->
+</div><!-- /gradient -->
 <!-- End Authorities Resident Search Box -->

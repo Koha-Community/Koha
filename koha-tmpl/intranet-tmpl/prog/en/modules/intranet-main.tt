@@ -1,135 +1,153 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha staff client</title>
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/mainpage.css" />
 [% INCLUDE 'doc-head-close.inc' %]
-<style type="text/css"> #koha-news { border: 1px solid #EEEEEE; margin: .2em;} #koha-news h3 {background-color: #EEEEEE; padding : .3em; margin: 0;} .newsitem {margin: .3em; border-bottom: 1px solid #EEE;} .newsitem:last-child {border-bottom : 0;} .newsfooter {font-size: 80%; color: #CCCCCC;} </style>
+<style type="text/css"> </style>
+
 </head>
 <body id="main_intranet-main" class="main">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'home-search.inc' %]
 
-<div id="breadcrumbs">Home</div>
-
-<div id="doc3" class="yui-t3">
-<div id="bd">
-<div id="yui-main"><div class="yui-b"><div class="yui-g">
-
-<h1>Welcome to Koha</h1>
-
-    <div class="yui-u first">
-    <!-- START - CIRCULATION -->
-    [% IF ( CAN_user_circulate ) %]
-    <h3><a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a></h3>
-    <ul>
-        <li><a href="/cgi-bin/koha/circ/branchtransfers.pl">Transfers</a></li>
-    </ul>
-    [% END %]
-    <!-- END - CIRCULATION -->
-
-    <!-- START - PATRONS -->
-    [% IF ( CAN_user_borrowers ) %]
-        <h3><a href="/cgi-bin/koha/members/members-home.pl">Patrons</a></h3>
-    [% END %]
-    <!-- END - PATRONS -->
-
-    <!-- START - ADVANCED SEARCH -->
-    [% IF ( CAN_user_catalogue ) %]
-        <h3><a href="/cgi-bin/koha/catalogue/search.pl">Advanced search</a></h3>
-    [% END %]
-    <!-- END - ADVANCED SEARCH -->
-    
-    <!-- START - LISTS -->
-    <h3><a href="/cgi-bin/koha/virtualshelves/shelves.pl">Lists</a></h3>
-    <!-- END - LISTS -->
-
-    <!-- START - CATALOGING -->
-    [% IF ( CAN_user_catalogue || CAN_user_editcatalogue || CAN_user_editauthorities ) %]
-        <h3><a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloging</a></h3>
-        <ul>
-        [% IF ( CAN_user_catalogue || CAN_user_editcatalogue ) %]
-                <li><a href="/cgi-bin/koha/cataloguing/addbiblio.pl">Add MARC record</a></li>
-        [% END %]
-        [% IF ( CAN_user_editauthorities ) %]
-                <li><a href="/cgi-bin/koha/authorities/authorities-home.pl">Authorities</a></li>
-        [% END %]
-        </ul>
-    [% END %]
-    <!-- END - CATALOGING -->
-    </div>
-
-    <div class="yui-u">
-    <!-- START - SERIALS -->
-    [% IF ( CAN_user_serials ) %]
-        <h3><a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a></h3>
-    [% END %]
-    [% IF ( CAN_user_acquisition ) %]
-        <h3><a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a></h3>
-        [% IF ( pendingsuggestions ) %]
-            <ul>
-                <li><a href="/cgi-bin/koha/suggestion/suggestion.pl">Suggestions pending approval</a>: <span class="holdcount"><a href="/cgi-bin/koha/suggestion/suggestion.pl">[% pendingsuggestions %]</a></span></li>
-            </ul>
-        [% END %]
-    [% END %]
-    <!-- END - SERIALS -->
-
-    <!-- START - REPORTS -->
-    [% IF ( CAN_user_reports ) %]
-        <h3><a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a></h3>
-    [% END %]
-    <!-- END - REPORTS -->
-
-    <!-- START - ADMINISTRATION -->
-    [% IF ( CAN_user_parameters ) %]
-        <h3><a href="/cgi-bin/koha/admin/admin-home.pl">Koha administration</a></h3>
-        <ul>
-            <li><a href="/cgi-bin/koha/admin/preferences.pl">System preferences</a></li>
-        </ul>
-        [% END %]
-    [% IF ( CAN_user_tools ) %] 
-        <h3><a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a></h3>
-        [% IF ( CAN_user_tools_moderate_comments && pendingcomments ) || ( CAN_user_tools_moderate_tags && pendingtags ) %]
-            <ul>
-                [% IF ( CAN_user_tools_moderate_comments && pendingcomments ) %]
-                    <li><a href="/cgi-bin/koha/reviews/reviewswaiting.pl">Comments pending approval</a>: <span class="holdcount"><a href="/cgi-bin/koha/reviews/reviewswaiting.pl">[% pendingcomments %]</a></span></li>
-                [% END %]
-                [% IF ( CAN_user_tools_moderate_tags && pendingtags ) %]
-                    <li><a href="/cgi-bin/koha/tags/review.pl">Tags pending approval</a>: <span class="holdcount"><a href="/cgi-bin/koha/tags/review.pl">[% pendingtags %]</a></span></li>
-                [% END %]
-            </ul>
-        [% END %]
-    [% END %]
-    <!-- END - ADMINISTRATION -->
-
-    <!-- START - ABOUT -->
-    <h3><a href="/cgi-bin/koha/about.pl">About Koha</a></h3>
-    <!-- END - ABOUT -->
-    </div>
-    </div>
-        [% IF ( IntranetmainUserblock ) %]
-            <div id="mainuserblock" class="yui-g">
-            [% IntranetmainUserblock %]
-            </div>[% ELSE %]&nbsp;
-        [% END %]
-    </div><!-- /yui-bd -->
-    </div><!-- /yui-main -->
+<div id="breadcrumbs" >Home</div>
+<div style="clear: both"></div>
+<div id="area-content">
     [% IF ( koha_news_count ) %]
-        <div class="yui-b">
-            <div id="koha-news">
-                <h3>News</h3>
-                [% FOREACH koha_new IN koha_news %]
-                    <div class="newsitem" id="news[% koha_new.idnew %]"><h4>[% koha_new.title %]</h4>
-                        <p>[% koha_new.new %]</p>
-                        <p class="newsfooter"> Posted on [% koha_new.newdate %]
-                            [% IF ( CAN_user_tools ) %]
-                                <a href="/cgi-bin/koha/tools/koha-news.pl?op=add_form&amp;id=[% koha_new.idnew %]">Edit</a> | <a href="/cgi-bin/koha/tools/koha-news.pl?op=del&amp;ids=[% koha_new.idnew %]">Delete</a> | <a href="/cgi-bin/koha/tools/koha-news.pl?op=add_form">New</a>
-                            [% END %]
-                        </p>
-                    </div>
-                [% END %]
-            </div><!-- /koha-news -->
-        </div>
+        <div id="area-news">
+            <h3><span="news_title">News</span></h3>
+            [% FOREACH koha_new IN koha_news %]
+                <div class="newsitem" id="news[% koha_new.idnew %]"><h4>[% koha_new.title %]</h4>
+                    <p>[% koha_new.new %]</p>
+                    <p class="newsfooter"> Posted on [% koha_new.newdate %]
+                        [% IF ( CAN_user_tools ) %]
+                            <a href="/cgi-bin/koha/tools/koha-news.pl?op=add_form&amp;id=[% koha_new.idnew %]">Edit</a>
+                             | <a href="/cgi-bin/koha/tools/koha-news.pl?op=del&amp;ids=[% koha_new.idnew %]">Delete</a>
+                             | <a href="/cgi-bin/koha/tools/koha-news.pl?op=add_form">New</a>
+                        [% END %]
+                    </p>
+                </div>
+            [% END %]
+        </div><!-- /koha-news -->
+    [% ELSE %]
+        <div id="area-nonews">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
     [% END %]
+        <div id="area-lists">
+            <div id="area-list-left">
+                <ul class="biglinks-list">
+                    [% IF ( CAN_user_circulate ) %]
+                    <li>
+                        <a class="icon_general icon_circulation" href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a>
+                    </li>
+                    [% END %]
 
+                    [% IF ( CAN_user_borrowers ) %]
+                    <li>
+                        <a class="icon_general icon_patrons" href="/cgi-bin/koha/members/members-home.pl">Patrons</a>
+                    </li>
+                    [% END %]
 
-</div>
+                    [% IF ( CAN_user_catalogue ) %]
+                    <li>
+                        <a class="icon_general icon_search" href="/cgi-bin/koha/catalogue/search.pl">Advanced Search</a>
+                    </li>
+                    [% END %]
 
+                    <li>
+                        <a class="icon_general icon_lists" href="/cgi-bin/koha/virtualshelves/shelves.pl">Lists</a>
+                    </li>
+
+                    [% IF ( CAN_user_catalogue || CAN_user_editcatalogue ) %]
+                    <li>
+                        <a class="icon_general icon_cataloging" href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloging</a>
+                    </li>
+                    [% END %]
+
+                    [% IF ( CAN_user_editauthorities ) %]
+                    <li>
+                        <a class="icon_general icon_authorities" href="/cgi-bin/koha/authorities/authorities-home.pl">Authorities</a>
+                    </li>
+                    [% END %]
+                </ul>
+            </div><!-- /area-list-left -->
+
+            <div id="area-list-right">
+                <ul class="biglinks-list">
+                    [% IF ( CAN_user_serials ) %]
+                    <li>
+                        <a class="icon_general icon_serials" href="/cgi-bin/koha/serials/serials-home.pl">Serials</a>
+                        <span class="biglink"></span>
+                    </li>
+                    [% END %]
+
+                    [% IF ( CAN_user_acquisition ) %]
+                    <li>
+                        <a class="icon_general icon_acquisitions" href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a>
+                        <span class="biglink"></span>
+                    </li>
+                    [% END %]
+
+                    [% IF ( CAN_user_reports ) %]
+                    <li>
+                        <a class="icon_general icon_reports" href="/cgi-bin/koha/reports/reports-home.pl">Reports</a>
+                    </li>
+                    [% END %]
+
+                    [% IF ( CAN_user_parameters ) %]
+                    <li>
+                        <a class="icon_general icon_administration" href="/cgi-bin/koha/admin/admin-home.pl">Koha Administration</a>
+                    </li>
+                    [% END %]
+
+                    [% IF ( CAN_user_tools ) %]
+                    <li>
+                        <a class="icon_general icon_tools" href="/cgi-bin/koha/tools/tools-home.pl">Tools</a>
+                    </li>
+                    [% END %]
+
+                    <li>
+                        <a class="icon_general icon_koha" href="/cgi-bin/koha/about.pl">About Koha</a>
+                    </li>
+                </ul>
+            </div><!-- /area-list-right -->
+
+            [% IF ( CAN_user_tools_moderate_comments ) && ( pendingsuggestions || pendingcomments || pendingtags ) %]
+                <div id="area-pending">
+                    [% IF ( pendingsuggestions ) %]
+                    <div class="pending-info">
+                        <a href="/cgi-bin/koha/suggestion/suggestion.pl">Suggestions pending approval:
+                        <span class="pending-number-link">[% pendingsuggestions %]</span></a>
+                    </div>
+                    [% END %]
+
+                    [% IF ( pendingcomments ) %]
+                    <div class="pending-info">
+                        <a href="/cgi-bin/koha/reviews/reviewswaiting.pl">Comments pending approval:
+                        <span class="pending-number-link">[% pendingcomments %]</span></a>
+                    </div>
+                    [% END %]
+
+                    [% IF ( pendingtags ) %]
+                    <div class="pending-info">
+                        <a href="/cgi-bin/koha/tags/review.pl">Tags pending approval:
+                        <span class="pending-number-link">[% pendingtags %]</span></a>
+                    </div>
+                    [% END %]
+                </div>
+            [% END %]
+
+            [% IF ( IntranetmainUserblock ) %]
+            <div id="area-userblock">
+                <div class="user-info">
+                    [% IntranetmainUserblock %]
+                </div>
+            </div>
+            [% END %]
+
+            <div style="height: 30px">
+                <!-- Without this white space the end of the page can be hidden by the language selector -->
+                &nbsp;
+            </div>
+        </div><!-- /area-lists -->
+
+<!-- the main div is closed in intranet-bottom.inc -->
 [% INCLUDE 'intranet-bottom.inc' %]

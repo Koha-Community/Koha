@@ -1,4 +1,4 @@
-
+<div class="gradient">
 <h1 id="logo"><a href="/cgi-bin/koha/mainpage.pl">[% LibraryName %]</a></h1><!-- Begin Patrons Resident Search Box -->
 [% IF ( CAN_user_circulate ) %][% IF ( CircAutocompl ) %]<script type="text/javascript">
 //<![CDATA[
@@ -130,7 +130,8 @@ YAHOO.util.Event.onContentReady("header_search", function() {
     [% IF ( CAN_user_circulate ) %]<li><a href="/cgi-bin/koha/circ/returns.pl#checkin_search">Check in</a></li>[% END %]
             [% IF ( CAN_user_catalogue ) %]<li><a href="/cgi-bin/koha/catalogue/search.pl#catalog_search">Search the catalog</a></li>[% END %]
 			</ul>
-</div>
+</div><!-- /header_search -->
+</div><!-- /gradient -->
 <script type="text/javascript">//<![CDATA[
 $(document).ready(function() {
     [% IF ( advsearch ) %]$("#filteraction_on").toggle();

@@ -1,0 +1,198 @@
+/*
+ * This file contains CSS styles used only on the front page of Koha
+ *
+ * COLORS
+ * Very light blue  Module links background                 : #f4f8f9
+ * Light blue       Navbar, breadcrumb                      : #e6f0f2
+ * Blue             Module links and breadcrumb border      : #b9d8d9
+ * Dark blue        Links                                   : #004d99
+ * Green            Links:hover                             : #538200
+ * These colors are used in staff-global.css too
+ *
+ */
+
+#area-content {
+    /* Contains the news + both columns of links + pending box + userblock box */
+    float: left;
+    background-image:url('/intranet-tmpl/prog/img/background_koha_logo.png');
+    background-repeat:no-repeat;
+    background-position:left top;
+    padding-top: 12px;
+}
+
+
+/* ==== NEWS - Start ==== */
+#area-news {
+    /* Displayed if news are available */
+    width: 300px;
+    float: left;
+    border: 1px solid #EEEEEE;
+    margin: .2em;
+    border-radius: 6px;
+}
+
+#area-news h3 {
+    /* Title section for the news block : transparency to let the koha logo appear */
+    background-color: #EEEEEE;
+    filter:alpha(opacity=50);   /* for IE */
+    -moz-opacity: 0.5;          /* for Firefox before 0.9 */
+    opacity: 0.5;
+    padding : .3em; margin: 0;
+}
+
+.newsitem {
+    /* Block for one News entry */
+    padding: 3px;
+    margin: .3em;
+    border-bottom: 1px solid #EEE;
+    background-color : #ffffff;
+    border-radius: 6px;
+    }
+
+.newsfooter {
+    /* Footer containing the publication date and edition links for an News entry */
+    font-size: 80%;
+    color: #808080;
+}
+
+#area-nonews {
+    /* Displayed if no news are available, to keep the structure intact */
+    width: 300px;
+    float: left;
+}
+/* ==== NEWS - End ==== */
+
+
+/* ==== MODULE LINKS - Start ==== */
+#area-lists {
+    /* Contains the two links columns */
+    margin-left: 20px;
+    float: left;
+}
+
+#area-list-left {
+    /* Left column for links */
+    width: 352px;
+    float: left;
+}
+#area-list-right {
+    /* Right column for links */
+    margin-left: 20px;
+    float: left;
+    width: 352px;
+}
+
+ul.biglinks-list {
+    /* List containing the module links */
+    padding: 0px;
+}
+
+ul.biglinks-list li {
+    /* Standard attributes for the list elements */
+    list-style-type:none;
+}
+
+ul.biglinks-list li a.icon_general {
+    /* Class used for each module link */
+    display: block;
+    float: left;
+
+    width:295px;
+    height: 46px;
+    margin-bottom: 14px;
+    padding-left:53px;
+    padding-top:5px;
+
+    border: solid 2px #b9d8d9;
+    border-radius: 6px;
+
+    text-decoration: none;
+    font-family: verdana, arial;
+    font-weight: bold;
+    font-size: large;
+    color: #000000;
+
+    background-color:#f4f8f9;
+    background-repeat:no-repeat;
+}
+
+ul.biglinks-list li a:hover.icon_general {
+    /* Class used for each module link hover state */
+    background-position:0 -46px;
+    color: #538200;
+    border-color: #538200;
+}
+
+/* CSS Sprites
+ * Each image contains the normal and the hover state of the icon
+ * The hover part starts at 46px below the top:
+ *
+ *  46px
+ * -------
+ * |     |
+ * |  N  | 46px \
+ * |     |       |
+ * -------        > 92px
+ * |     |       |
+ * |  H  | 46px /
+ * |     |
+ * -------
+ *
+ */
+
+/* Classes used for each individual module link */
+ul.biglinks-list li a.icon_circulation {background-image:url('/intranet-tmpl/prog/img/icon_circulation.png')}
+ul.biglinks-list li a.icon_patrons {background-image:url('/intranet-tmpl/prog/img/icon_patrons.png')}
+ul.biglinks-list li a.icon_search {background-image:url('/intranet-tmpl/prog/img/icon_search.png')}
+ul.biglinks-list li a.icon_lists {background-image:url('/intranet-tmpl/prog/img/icon_lists.png')}
+ul.biglinks-list li a.icon_cataloging {background-image:url('/intranet-tmpl/prog/img/icon_cataloging.png')}
+ul.biglinks-list li a.icon_authorities {background-image:url('/intranet-tmpl/prog/img/icon_authorities.png')}
+
+ul.biglinks-list li a.icon_serials {background-image:url('/intranet-tmpl/prog/img/icon_serials.png')}
+ul.biglinks-list li a.icon_acquisitions {background-image:url('/intranet-tmpl/prog/img/icon_acquisitions.png')}
+ul.biglinks-list li a.icon_reports {background-image:url('/intranet-tmpl/prog/img/icon_reports.png')}
+ul.biglinks-list li a.icon_administration {background-image:url('/intranet-tmpl/prog/img/icon_administration.png')}
+ul.biglinks-list li a.icon_tools {background-image:url('/intranet-tmpl/prog/img/icon_tools.png')}
+ul.biglinks-list li a.icon_koha {background-image:url('/intranet-tmpl/prog/img/icon_koha.png')}
+/* ==== MODULE LINKS - End ==== */
+
+
+/* ==== PENDING - Start ==== */
+#area-pending {
+    /* Block containing links to pending tags, comments and suggestions */
+    width: 100%;
+    border: solid 1px #b9d8d9;
+    border-radius: 6px;
+    clear: left;
+}
+
+.pending-info {
+    /* For the div containing a "pending" link (useful to preserve width of area-pending box width) */
+    margin-top: 2px;
+    margin-bottom: 2px;
+    margin-left: 8px;
+}
+
+.pending-number-link {
+    /* Style for the "pending" links : the number of pending items appear bigger */
+    font-weight: bold;
+    font-size: 1.1em;
+}
+/* ==== PENDING - End ==== */
+
+
+/* ==== USERBLOCK - Start ==== */
+#area-userblock {
+    /* Appears if the "IntranetmainUserblock" system preference is defined */
+    margin-top: 10px;
+    width: 100%;
+    border: solid 1px #b9d8d9;
+    border-radius: 6px;
+    clear: left;
+}
+
+.user-info {
+    /* For the div containing the information (useful to preserve width of area-userblock box width) */
+    margin: 8px;
+}
+/* ==== USERBLOCK - End ==== */

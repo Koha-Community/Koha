@@ -2,6 +2,7 @@
 	$("input[name=q]:eq(0)").focus();
 });</script>
 
+<div class="gradient">
 <h1 id="logo"><a href="/cgi-bin/koha/mainpage.pl">[% LibraryName %]</a></h1><!-- Begin Cataloging Resident Search Box -->
 <div id="header_search">
 <div id="addbooks_search" class="residentsearch">
@@ -16,5 +17,6 @@
             <li><a href="/cgi-bin/koha/catalogue/search.pl#addbooks_search">Cataloging search</a></li>
             [% IF ( CAN_user_circulate ) %]<li><a href="/cgi-bin/koha/circ/circulation.pl#circ_search">Check out</a></li>[% END %]
 			</ul>	
-</div>
+</div><!-- /header_search -->
+</div><!-- /gradient -->
 <!-- End Cataloging Resident Search Box -->

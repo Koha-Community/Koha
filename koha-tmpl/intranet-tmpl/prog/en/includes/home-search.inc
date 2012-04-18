@@ -1,4 +1,4 @@
-
+<div class="gradient">
 <h1 id="logo"><a href="/cgi-bin/koha/mainpage.pl">[% LibraryName %]</a></h1><!-- Begin Main page Resident Search Box -->
 
 <div id="header_search">
@@ -35,6 +35,6 @@
     [% IF ( CAN_user_catalogue ) %]<li><a href="/cgi-bin/koha/catalogue/search.pl#catalog_search">Search the catalog</a></li>[% END %]
 </ul>
 
-</div>
-
+</div><!-- /header_search -->
+</div><!-- /gradient -->
 <!-- End Main page Resident Search Box -->

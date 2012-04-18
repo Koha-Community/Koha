@@ -1,8 +1,29 @@
 @import url("../lib/yui/reset-fonts-grids.css");
 @import url("../lib/yui/skin.css");
 
-a, a:link, a:visited, a:active {
-	color : #0000CC;
+input:focus, textarea:focus {
+    border-color:#538200;
+    border-style:solid;
+    border-radius: 4px;
+}
+
+radio:focus, checkbox:focus {
+    border-color:#538200;
+    border-style:solid;
+    border-radius: 4px;
+}
+
+::selection      { background:#538200; color:#ffffff; /* Safari and Opera */ }
+::-moz-selection  { background:#538200; color:#ffffff; /* Firefox */ }
+
+a, a:link, a:visited {
+    color : #004d99;
+    text-decoration: none;
+}
+
+a:hover, a:active {
+    color : #538200;
+    text-decoration: none;
 }
 
 .yui-button,.yui-button a:link,.yui-button a:visited {
@@ -13,9 +34,6 @@ a.yuimenuitemlabel {
         color: #000000;
 }
 
-a:hover {
-	color : #669ACC;
-}
 
 a.overdue,
 .overdue,
@@ -164,9 +182,31 @@ ol li {
 }
 
 #header {
-	background-color : #F3F3F3;
-	border-bottom : 1px solid #E8E8E8;
-	line-height : 2em;
+    background-color : #e6f0f2;
+    line-height : 2em;
+}
+
+#header a.toplinks {
+    #color: #ffffff;
+    font-weight: bold;
+}
+
+.gradient {
+    background-image: linear-gradient(top, rgb(230,240,242) 1%, rgb(255,255,255) 99%);
+    background-image: -o-linear-gradient(top, rgb(230,240,242) 1%, rgb(255,255,255) 99%);
+    background-image: -moz-linear-gradient(top, rgb(230,240,242) 1%, rgb(255,255,255) 99%);
+    background-image: -webkit-linear-gradient(top, rgb(230,240,242) 1%, rgb(255,255,255) 99%);
+    background-image: -ms-linear-gradient(top, rgb(230,240,242) 1%, rgb(255,255,255) 99%);
+
+    background-image: -webkit-gradient(
+        linear,
+        left top,
+        left bottom,
+        color-stop(0.1, rgb(212,214,255)),
+        color-stop(0.99, rgb(255,255,255))
+    );
+    display: inline-block;
+    width:100%;
 }
 
 .clearfix:after {
@@ -177,7 +217,9 @@ ol li {
     visibility: hidden;
 }
 
-.clearfix {display: inline-block;}
+.clearfix {
+    display: inline-block;
+}
 
 /* Hides from IE-mac \*/
 * html .clearfix {height: 1%;}
@@ -318,25 +360,29 @@ span.problem {
 }
 
 fieldset {
-	border : 2px solid #EEEEEE;
 	margin : 1em 1em 1em 0;
 	padding : 1em;
+    background-color:#f4f8f9;
+    border:2px solid #b9d8d9;
+    border-radius:5px;
 }
 
 legend {
 	font-size : 123.1%;
 	font-weight : bold;
-	margin : 0 0 0 -1em;
-	padding : 0;
+    border:2px solid #b9d8d9;
+    background-color:#ffffff;
+    border-radius:3px;
+    text-align:right;
+    padding: 0.2em 0.5em;
 }
 
 #breadcrumbs {
-	background-color : #F3F3F3;
-	border-bottom : 1px solid #E8E8E8;
-	clear : both;
-	font-size : 90%;
-	padding :.2em .5em .4em 10px;
-	margin : 0;
+    background-color : #e6f0f2;
+    clear : both;
+    font-size : 90%;
+    padding :.2em .5em .4em 10px;
+    margin : 0;
 }
 
 #header+#breadcrumbs {
@@ -375,7 +421,7 @@ div#header_search ul.link-tabs li.off a {
 
 div#header_search div.residentsearch {
 	border : 0;
-	border-bottom : 1px solid #FF9900;
+    border-bottom : 1px solid #85ca11;
 	padding : 0 0 .2em 0;
 }
 
@@ -458,7 +504,7 @@ div.patroninfo {
 }
 
 div.patroninfo h5 {
-	border-right :  1px solid #000;
+    border-right:1px solid #b9d8d9;
 	margin-bottom : 0;
 	padding-left : -.5em;
 	padding-top : .3em;
@@ -467,7 +513,7 @@ div.patroninfo h5 {
 
 div.patroninfo ul {
 	border : 0;
-	border-right : 1px solid #000;
+    border-right:1px solid #b9d8d9;
 	border-bottom : 0;
 	border-top : 0;
 	padding : 0;
@@ -556,7 +602,7 @@ div.yui-b fieldset.brief fieldset legend {
 
 fieldset.rows {  
 border-width : 1px;
-border-bottom : 1px solid #666;
+border:2px solid #b9d8d9;
 float : left;
 font-size : 90%;
 clear : left;
@@ -666,6 +712,7 @@ fieldset.rows label.yesno {
 fieldset.action, div.action {
 	clear : both;
 	float : none;
+    background-color:#ffffff;
 	border : none;
 	margin : 0;
 	padding : 1em 0 .3em 0;
@@ -740,7 +787,7 @@ fieldset.rows .inputnote {
 }
 
 .ui-tabs-nav a, .ui-tabs-nav a span, .ui-tabs-nav span.a {
-   background : none;
+    background : none;
 	display : block;
 	padding: .2em .5em .25em .5em;
 }
@@ -750,14 +797,15 @@ fieldset.rows .inputnote {
 }
 
 .ui-tabs-nav .ui-tabs-selected a, .ui-tabs-nav .ui-tabs-selected span.a {
-	background-color : #FFFFCC;
-	border-top: 1px solid #FFFFCC;
-	border-right: 1px solid #FF9900;
-	border-bottom: 1px solid #FF9900;
-	border-left: 1px solid #FFCC66;
+    border-top: 1px solid #e6f0f2;
+    border-right: 1px solid #85ca11;
+    border-bottom: 1px solid #85ca11;
+    border-left: 1px solid #85ca11;
 	font-weight : bold;
 	text-align : center;
 	text-decoration : none;
+    border-radius: 0px 0px 4px 4px;
+    color : #000000;
 
 }
 
@@ -766,11 +814,11 @@ fieldset.rows .inputnote {
 }
 
 .ui-tabs-nav .ui-tabs-selected a:hover {
-	color : #0000CC;
+    color : #000000;
 }
 
 .ui-tabs-nav li.ui-tabs-selected {
-	background-color : #FFFFCC;
+    /* background-color : #FFFFCC; */
 }
 
 .ui-tabs-nav .ui-tabs-selected a, .ui-tabs-nav a:hover, .ui-tabs-nav a:focus, .ui-tabs-nav a:active, .ui-tabs-nav span.a {
@@ -803,12 +851,14 @@ fieldset.rows .inputnote {
 	border : 1px solid #E8E8E8;
 	text-align : center;
 	text-decoration : none;
+    border-radius : 3px;
 }
 
 .toptabs .ui-tabs-nav li.ui-tabs-selected a, .toptabs .ui-tabs-nav li.ui-tabs-selected span.a {
 	background-color : #FFF;
 	border-bottom : 1px solid #FFF;
 	margin-top : 0;
+    border-radius : 3px;
 }
 
 .toptabs .tabs-container {
@@ -1299,7 +1349,7 @@ a:hover .term {
 }
 
 div#menu {
-	border-right: 1px solid #000;
+    border-right:1px solid #b9d8d9;
 	margin-right: .5em;
 	padding-top: 1em;
 	padding-bottom: 2em;
@@ -1324,7 +1374,7 @@ div#menu li a {
 	border-top-left-radius: 5px;
 	-moz-border-bottom-left-radius: 5px;
 	border-bottom-left-radius: 5px;
-	border: 1px solid #000;
+    border:1px solid #b9d8d9;
 	font-size: 111%;
 	margin: .5em 0;
 	padding: .4em .3em;
@@ -1344,7 +1394,7 @@ div#menu li a:hover {
 
 div#menu li.active a:hover {
 	background-color: #fff;
-	color :  #0000CC;
+    color :  #538200;
 }
 
 #menu ul li {
@@ -1356,6 +1406,7 @@ div#menu li.active a:hover {
 	background-image : none;
 	border-right: 0;
 	font-weight: bold;
+    color:#000000;
 }
 
 ul.error {
@@ -1672,13 +1723,12 @@ a.yuimenuitemlabel:hover {
 #toplevelnav {
 	float : left;
 	margin-left : .5em;
-	width : 30em;
 }
 
 ul#toplevelmenu {
 	padding : 0;
 }
-		
+
 ul#toplevelmenu li {
 	display: inline;
 	padding : 0 .6em;
@@ -1871,7 +1921,8 @@ span.permissiondesc {
 	border: 0;
 	padding: 5;
 	font-size: 11pt;
-	color: darkblue;
+    color: #000000;
+    font-style: italic;
 }
 
 .labeledmarc-value {
