@@ -223,6 +223,24 @@ $(document).ready(function(){
                 tagAdded();
                 return false;
             });
+
+            $(".tag_results_add").click(function(){
+                var thisid = $(this).attr("id");
+                thisid = thisid.replace("tag_add","");
+                $(this).hide();
+                $("#tagform"+thisid).show();
+                $("#newtag"+thisid).focus();
+                return false;
+            })
+
+            $(".cancel_tag_add").click(function(){
+                var thisid = $(this).attr("id");
+                thisid = thisid.replace("cancel","");
+                $(this).parent().hide();
+                $("#tag_add"+thisid).show();
+                return false;
+            })
+
         [% ELSE %]
             $("#tagsel_tag").click(function(){
                 window.location = "/cgi-bin/koha/opac-user.pl";
@@ -503,6 +521,23 @@ $(document).ready(function(){
                     </span>
                 [% END %]
 
+                [% IF ( LibraryThingForLibrariesID ) %]<div class="ltfl_reviews"></div>[% END %]
+                [% IF ( opacuserlogin ) %][% IF ( TagsEnabled ) %]
+                                [% IF ( TagsShowOnList ) %]
+                                [% IF ( SEARCH_RESULT.TagLoop.size ) %]
+                                        <div class="results_summary"><span class="label">Tags:</span>
+                                        <ul style="display: inline; list-style: none;">[% FOREACH TagLoo IN SEARCH_RESULT.TagLoop %]<li style="display: inline; list-style: none;"><a href="/cgi-bin/koha/opac-search.pl?tag=[% TagLoo.term |url %]&amp;q=[% TagLoo.term |url %]">[% TagLoo.term %]</a> <span class="weight">([% TagLoo.weight_total %])</span></li>
+                                            [% END %]
+                                        </ul>
+                                   [% END %]
+                                    [% IF ( SEARCH_RESULT.TagLoop.size ) %]
+                                    </div>[% END %]
+                                [% END %]
+                                [% END %][% END %]
+                [% IF ( SEARCH_RESULT.searchhighlightblob ) %]<span class="results_summary"><span class="label">Match:</span> [% SEARCH_RESULT.searchhighlightblob %]</span>[% END %]
+
+
+
 
                 [% IF ( OpacStarRatings == 'all' ) %]
                 <div class="results_summary">
@@ -528,35 +563,8 @@ $(document).ready(function(){
                 </div>
                 [% END %]
 
-
-                [% IF ( LibraryThingForLibrariesID ) %]<div class="ltfl_reviews"></div>[% END %]
-                [% IF ( opacuserlogin ) %][% IF ( TagsEnabled ) %]
-                                [% IF ( TagsShowOnList ) %]
-                                [% IF ( SEARCH_RESULT.TagLoop.size ) %]
-                                        <div class="results_summary"><span class="label">Tags:</span>
-                                        <ul style="display: inline; list-style: none;">[% FOREACH TagLoo IN SEARCH_RESULT.TagLoop %]<li style="display: inline; list-style: none;"><a href="/cgi-bin/koha/opac-search.pl?tag=[% TagLoo.term |url %]&amp;q=[% TagLoo.term |url %]">[% TagLoo.term %]</a> <span class="weight">([% TagLoo.weight_total %])</span></li>
-                                            [% END %]
-                                        </ul>
-                                   [% END %]
-                                [% IF ( TagsInputOnList ) %]
-                                    [% IF ( loggedinusername ) %]
-                    <span class="label">New tag:</span>
-                                        <input name="newtag[% SEARCH_RESULT.biblionumber %]" id="newtag[% SEARCH_RESULT.biblionumber %]" maxlength="100" />
-                                        <input name="tagbutton" class="tagbutton" title="[% SEARCH_RESULT.biblionumber %]" type="submit" value="Add" />
-                                    <span id="newtag[% SEARCH_RESULT.biblionumber %]_status" class="tagstatus" style="display:none;">
-                                        Tag status here.
-                                    </span>
-                                       [% ELSIF ( loop.first ) %]<span class="tagstatus" id="login4tags">Log in to add tags.</span>
-                                    [% END %]
-                                [% END %]
-                                    [% IF ( SEARCH_RESULT.TagLoop.size ) %]
-                                    </div>[% END %]
-                                [% END %]
-                                [% END %][% END %]
-                [% IF ( SEARCH_RESULT.searchhighlightblob ) %]<span class="results_summary"><span class="label">Match:</span> [% SEARCH_RESULT.searchhighlightblob %]</span>[% END %]
-
 <span class="results_summary actions"><span class="label">Actions:</span>
-                                [% IF ( RequestOnOpac ) %]
+                [% IF ( RequestOnOpac ) %]
                     [% UNLESS ( SEARCH_RESULT.norequests ) %]
                         [% IF ( opacuserlogin ) %]
                             [% IF ( AllowOnShelfHolds ) %]
@@ -570,6 +578,17 @@ $(document).ready(function(){
                     [% END %]
                 [% END %]
 
+                [% IF ( TagsInputOnList ) %]
+                    [% IF ( loggedinusername ) %]
+                        <a class="tag_results_add" id="tag_add[% SEARCH_RESULT.biblionumber %]" href="#">Add tag</a>
+                        <span id="tagform[% SEARCH_RESULT.biblionumber %]" class="tag_results_input"><label for="newtag[% SEARCH_RESULT.biblionumber %]">New tag(s):</label><input name="newtag[% SEARCH_RESULT.biblionumber %]" id="newtag[% SEARCH_RESULT.biblionumber %]" maxlength="100" />
+                        <input name="tagbutton" class="tagbutton" title="[% SEARCH_RESULT.biblionumber %]" type="submit" value="Add" /> <a class="cancel_tag_add" id="cancel[% SEARCH_RESULT.biblionumber %]" href="#">Cancel</a>
+                        <span id="newtag[% SEARCH_RESULT.biblionumber %]_status" class="tagstatus" style="display:none;">
+                        Tag status here.
+                        </span></span>
+                    [% ELSIF ( loop.first ) %]<span id="login4tags">Log in to add tags.</span>
+                    [% END %]
+                [% END %]
 
                 [% IF ( opacuserlogin ) %][% IF ( loggedinusername ) %][% IF ( virtualshelves ) %]<a class="addtoshelf" href="/cgi-bin/koha/opac-addbybiblionumber.pl?biblionumber=[% SEARCH_RESULT.biblionumber %]" onclick="Dopop('opac-addbybiblionumber.pl?biblionumber=[% SEARCH_RESULT.biblionumber %]'); return false;">Save to Lists</a>
                 [% END %][% END %][% END %]
