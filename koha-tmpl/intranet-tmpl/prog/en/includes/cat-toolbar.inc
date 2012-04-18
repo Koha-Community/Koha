@@ -110,6 +110,7 @@ function confirm_items_deletion() {
 	    var editmenu = [
             [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]{ text: _("Edit record"), url: "/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% biblionumber %]&amp;frameworkcode=&amp;op=" },[% END %]
             [% IF ( CAN_user_editcatalogue_edit_items ) %]{ text: _("Edit items"), url: "/cgi-bin/koha/cataloguing/additem.pl?biblionumber=[% biblionumber %]" },[% END %]
+            [% IF ( CAN_user_tools_items_batchmod ) %]{ text: _("Edit Items In Batch"), url: "/cgi-bin/koha/tools/batchMod.pl?op=show&biblionumber=[% biblionumber %]&src=CATALOGUING" },[% END %]
             [% IF ( CAN_user_editcatalogue_edit_items ) %]{ text: _("Attach item"), url: "/cgi-bin/koha/cataloguing/moveitem.pl?biblionumber=[% biblionumber %]" },[% END %]
             [% IF ( EasyAnalyticalRecords ) %][% IF ( CAN_user_editcatalogue_edit_items ) %]{ text: _("Link to host item"), url: "/cgi-bin/koha/cataloguing/linkitem.pl?biblionumber=[% biblionumber %]" },[% END %][% END %]
             [% IF ( LocalCoverImages || OPACLocalCoverImages) %][% IF ( CAN_user_tools_upload_local_cover_images ) %]{ text: _("Upload image"), url: "/cgi-bin/koha/tools/upload-cover-image.pl?biblionumber=[% biblionumber %]&filetype=image" },[% END %][% END %]

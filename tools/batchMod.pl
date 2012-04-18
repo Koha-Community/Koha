@@ -39,11 +39,13 @@ my $input = new CGI;
 my $dbh = C4::Context->dbh;
 my $error        = $input->param('error');
 my @itemnumbers  = $input->param('itemnumber');
+my $biblionumber = $input->param('biblionumber');
 my $op           = $input->param('op');
 my $del          = $input->param('del');
 my $del_records  = $input->param('del_records');
 my $completedJobID = $input->param('completedJobID');
 my $runinbackground = $input->param('runinbackground');
+my $src          = $input->param('src');
 
 
 my $template_name;
@@ -227,6 +229,12 @@ if ($op eq "show"){
             @itemnumbers = @contentlist;
         }
     } else {
+        if (defined $biblionumber){
+            my @all_items = GetItemsInfo( $biblionumber );
+            foreach my $itm (@all_items) {
+                push @itemnumbers, $itm->{itemnumber};
+            }
+        }
         if ( my $list=$input->param('barcodelist')){
             push my @barcodelist, split(/\s\n/, $list);
 
@@ -451,6 +459,7 @@ if ($op eq "action") {
 foreach my $error (@errors) {
     $template->param($error => 1);
 }
+$template->param(src => $src);
 output_html_with_http_headers $input, $cookie, $template->output;
 exit;
 
