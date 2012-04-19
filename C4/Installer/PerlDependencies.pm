@@ -209,6 +209,11 @@ our $PERL_DEPS = {
         'required' => '1',
         'min_ver'  => '0.04'
     },
+    'DateTime::Format::MySQL' => {
+        'usage'    => 'Core',
+        'required' => '1',
+        'min_ver'  => '0.04'
+    },
     'DateTime::Set' => {
         'usage'    => 'Core',
         'required' => '1',
