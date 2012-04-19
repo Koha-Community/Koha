@@ -3974,20 +3974,25 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 }
 
 $DBversion = "3.03.00.015";
-if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-    my $sth = $dbh->prepare("INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `kohafield`, 
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    if ( C4::Context->preference("marcflavour") eq "MARC21" ) {
+        my $sth = $dbh->prepare(
+"INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `kohafield`,
                              `tab`, `authorised_value`, `authtypecode`, `value_builder`, `isurl`, `hidden`, `frameworkcode`, `seealso`, `link`, `defaultvalue`)
-                             VALUES ( ?, '9', '9 (RLIN)', '9 (RLIN)', 0, 0, '', 6, '', '', '', 0, -5, '', '', '', NULL)");
-    $sth->execute('648');
-    $sth->execute('654');
-    $sth->execute('655');
-    $sth->execute('656');
-    $sth->execute('657');
-    $sth->execute('658');
-    $sth->execute('662');
-    $sth->finish;
-    print "Upgrade to $DBversion done (Bug 5619: Add subfield 9 to marc21 648,654,655,656,657,658,662)\n";
-    SetVersion ($DBversion);
+                             VALUES ( ?, '9', '9 (RLIN)', '9 (RLIN)', 0, 0, '', 6, '', '', '', 0, -5, '', '', '', NULL)"
+        );
+        $sth->execute('648');
+        $sth->execute('654');
+        $sth->execute('655');
+        $sth->execute('656');
+        $sth->execute('657');
+        $sth->execute('658');
+        $sth->execute('662');
+        $sth->finish;
+        print
+"Upgrade to $DBversion done (Bug 5619: Add subfield 9 to marc21 648,654,655,656,657,658,662)\n";
+    }
+    SetVersion($DBversion);
 }
 
 $DBversion = '3.03.00.016';
