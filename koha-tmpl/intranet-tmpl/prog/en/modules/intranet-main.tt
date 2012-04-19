@@ -10,28 +10,13 @@
 [% INCLUDE 'home-search.inc' %]
 
 <div id="breadcrumbs" >Home</div>
-<div style="clear: both"></div>
-<div id="area-content">
-    [% IF ( koha_news_count ) %]
-        <div id="area-news">
-            <h3><span="news_title">News</span></h3>
-            [% FOREACH koha_new IN koha_news %]
-                <div class="newsitem" id="news[% koha_new.idnew %]"><h4>[% koha_new.title %]</h4>
-                    <p>[% koha_new.new %]</p>
-                    <p class="newsfooter"> Posted on [% koha_new.newdate %]
-                        [% IF ( CAN_user_tools ) %]
-                            <a href="/cgi-bin/koha/tools/koha-news.pl?op=add_form&amp;id=[% koha_new.idnew %]">Edit</a>
-                             | <a href="/cgi-bin/koha/tools/koha-news.pl?op=del&amp;ids=[% koha_new.idnew %]">Delete</a>
-                             | <a href="/cgi-bin/koha/tools/koha-news.pl?op=add_form">New</a>
-                        [% END %]
-                    </p>
-                </div>
-            [% END %]
-        </div><!-- /koha-news -->
-    [% ELSE %]
-        <div id="area-nonews">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
-    [% END %]
-        <div id="area-lists">
+
+
+<div id="doc3" class="yui-t3">
+   <div id="bd" role="main">
+    <div id="yui-main">
+    <div class="yui-b"><div class="yui-g">
+    <div class="yui-u first">
             <div id="area-list-left">
                 <ul class="biglinks-list">
                     [% IF ( CAN_user_circulate ) %]
@@ -69,7 +54,8 @@
                     [% END %]
                 </ul>
             </div><!-- /area-list-left -->
-
+        </div><!-- /yui-u first -->
+    <div class="yui-u">
             <div id="area-list-right">
                 <ul class="biglinks-list">
                     [% IF ( CAN_user_serials ) %]
@@ -109,8 +95,10 @@
                     </li>
                 </ul>
             </div><!-- /area-list-right -->
-
-            [% IF ( CAN_user_tools_moderate_comments ) && ( pendingsuggestions || pendingcomments || pendingtags ) %]
+        </div><!-- /yui-u -->
+</div><!-- /yui-g -->
+<div class="yui-g">
+                [% IF ( CAN_user_tools_moderate_comments ) && ( pendingsuggestions || pendingcomments || pendingtags ) %]
                 <div id="area-pending">
                     [% IF ( pendingsuggestions ) %]
                     <div class="pending-info">
@@ -135,19 +123,38 @@
                 </div>
             [% END %]
 
-            [% IF ( IntranetmainUserblock ) %]
-            <div id="area-userblock">
-                <div class="user-info">
-                    [% IntranetmainUserblock %]
-                </div>
-            </div>
-            [% END %]
 
-            <div style="height: 30px">
-                <!-- Without this white space the end of the page can be hidden by the language selector -->
-                &nbsp;
-            </div>
-        </div><!-- /area-lists -->
+</div>
+            [% IF ( IntranetmainUserblock ) %]
+                <div class="yui-g" id="area-userblock">
+                    <div class="user-info">
+                        [% IntranetmainUserblock %]
+                    </div>
+                </div>
+            [% END %]
+</div>
+    </div>
+    <div class="yui-b"><!-- YOUR NAVIGATION GOES HERE -->
+    [% IF ( koha_news_count ) %]
+        <div id="area-news">
+            <h3><span="news_title">News</span></h3>
+            [% FOREACH koha_new IN koha_news %]
+                <div class="newsitem" id="news[% koha_new.idnew %]"><h4>[% koha_new.title %]</h4>
+                    <p>[% koha_new.new %]</p>
+                    <p class="newsfooter"> Posted on [% koha_new.newdate %]
+                        [% IF ( CAN_user_tools ) %]
+                            <a href="/cgi-bin/koha/tools/koha-news.pl?op=add_form&amp;id=[% koha_new.idnew %]">Edit</a>
+                             | <a href="/cgi-bin/koha/tools/koha-news.pl?op=del&amp;ids=[% koha_new.idnew %]">Delete</a>
+                             | <a href="/cgi-bin/koha/tools/koha-news.pl?op=add_form">New</a>
+                        [% END %]
+                    </p>
+                </div>
+            [% END %]
+        </div><!-- /koha-news -->
+    [% END %]
+    </div>
+    </div>
+</div>
 
 <!-- the main div is closed in intranet-bottom.inc -->
 [% INCLUDE 'intranet-bottom.inc' %]

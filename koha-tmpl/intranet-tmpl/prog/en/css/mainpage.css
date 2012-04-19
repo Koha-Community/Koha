@@ -11,9 +11,8 @@
  *
  */
 
-#area-content {
+#doc3 {
     /* Contains the news + both columns of links + pending box + userblock box */
-    float: left;
     background-image:url('/intranet-tmpl/prog/img/background_koha_logo.png');
     background-repeat:no-repeat;
     background-position:left top;
@@ -22,13 +21,11 @@
 
 
 /* ==== NEWS - Start ==== */
+
 #area-news {
-    /* Displayed if news are available */
-    width: 300px;
-    float: left;
     border: 1px solid #EEEEEE;
-    margin: .2em;
-    border-radius: 6px;
+    border-radius: 6px 6px 6px 6px;
+    margin: 0.2em;
 }
 
 #area-news h3 {
@@ -55,32 +52,10 @@
     color: #808080;
 }
 
-#area-nonews {
-    /* Displayed if no news are available, to keep the structure intact */
-    width: 300px;
-    float: left;
-}
 /* ==== NEWS - End ==== */
 
 
 /* ==== MODULE LINKS - Start ==== */
-#area-lists {
-    /* Contains the two links columns */
-    margin-left: 20px;
-    float: left;
-}
-
-#area-list-left {
-    /* Left column for links */
-    width: 352px;
-    float: left;
-}
-#area-list-right {
-    /* Right column for links */
-    margin-left: 20px;
-    float: left;
-    width: 352px;
-}
 
 ul.biglinks-list {
     /* List containing the module links */
@@ -97,10 +72,11 @@ ul.biglinks-list li a.icon_general {
     display: block;
     float: left;
 
-    width:295px;
+    width: 83%;
+    max-width : 320px;
     height: 46px;
-    margin-bottom: 14px;
-    padding-left:53px;
+    margin: 0 1em 14px 0;
+    padding-left:57px;
     padding-top:5px;
 
     border: solid 2px #b9d8d9;
@@ -113,12 +89,13 @@ ul.biglinks-list li a.icon_general {
     color: #000000;
 
     background-color:#f4f8f9;
+    background-position: 5px 3px;
     background-repeat:no-repeat;
 }
 
 ul.biglinks-list li a:hover.icon_general {
     /* Class used for each module link hover state */
-    background-position:0 -46px;
+    background-position:5px -43px;
     color: #538200;
     border-color: #538200;
 }
@@ -188,7 +165,7 @@ ul.biglinks-list li a.icon_koha {background-image:url('/intranet-tmpl/prog/img/i
     width: 100%;
     border: solid 1px #b9d8d9;
     border-radius: 6px;
-    clear: left;
+
 }
 
 .user-info {
