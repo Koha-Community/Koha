@@ -17,9 +17,10 @@
 # with Koha; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-use strict;
-#use warnings; FIXME - Bug 2505
+use Modern::Perl;
 use CGI;
+use List::MoreUtils qw/uniq/;
+
 use C4::Auth;
 use C4::Context;
 use C4::Branch; # GetBranches
@@ -60,7 +61,7 @@ my $borstat1 = $input->param("activity");
 my $output = $input->param("output");
 my $basename = $input->param("basename");
 our $sep     = $input->param("sep");
-$sep = "\t" if ($sep eq 'tabulation');
+$sep = "\t" if ($sep and $sep eq 'tabulation');
 my $selected_branch; # = $input->param("?");
 
 our $branches = GetBranches;
@@ -75,7 +76,11 @@ my ($template, $borrowernumber, $cookie)
 				});
 $template->param(do_it => $do_it);
 if ($do_it) {
-	my $results = calculate($line, $column, $digits, $borstat,$borstat1 ,\@filters);
+        my $attributes;
+        if (C4::Context->preference('ExtendedPatronAttributes')) {
+            $attributes = parse_extended_patron_attributes($input);
+        }
+	my $results = calculate($line, $column, $digits, $borstat,$borstat1 ,\@filters, $attributes);
 	if ($output eq "screen"){
 		$template->param(mainloop => $results);
 		output_html_with_http_headers $input, $cookie, $template->output;
@@ -141,7 +146,10 @@ if ($do_it) {
 		CGIextChoice => $CGIextChoice,
 		CGIsepChoice => $CGIsepChoice,
     );
-
+    if (C4::Context->preference('ExtendedPatronAttributes')) {
+        $template->param(ExtendedPatronAttributes => 1);
+        patron_attributes_form($template);
+    }
 }
 output_html_with_http_headers $input, $cookie, $template->output;
 
@@ -160,7 +168,8 @@ sub catcodes_hash() {
 }
 
 sub calculate {
-	my ($line, $column, $digits, $status, $activity, $filters) = @_;
+	my ($line, $column, $digits, $status, $activity, $filters, $attr_filters) = @_;
+
 	my @mainloop;
 	my @loopfooter;
 	my @loopcol;
@@ -171,49 +180,63 @@ sub calculate {
 # extract parameters
 	my $dbh = C4::Context->dbh;
 
-# Filters
- 	my $linefilter = "";
-#	warn "filtres ".@filters[0];
-#	warn "filtres ".@filters[4];
-#	warn "filtres ".@filters[5];
-#	warn "filtres ".@filters[6];
+    # Filters
+    my $linefilter;
+    given ($line) {
+        when (/categorycode/) { $linefilter = @$filters[0] }
+        when (/zipcode/) { $linefilter = @$filters[1] }
+        when (/branchcode/) { $linefilter = @$filters[2] }
+        when (/sex/) { $linefilter = @$filters[5] }
+        when (/sort1/) { $linefilter = @$filters[6] }
+        when (/sort2/) { $linefilter = @$filters[7] }
+        when (/^patron_attr\.(.*)$/) { $linefilter = $attr_filters->{$1} }
+        default { $linefilter = '' }
+    }
 
- 	$linefilter = @$filters[0] if ($line =~ /categorycode/ )  ;
- 	$linefilter = @$filters[1] if ($line =~ /zipcode/ )  ;
- 	$linefilter = @$filters[2] if ($line =~ /branchcode/ ) ;
- 	$linefilter = @$filters[5] if ($line =~ /sex/);
- 	$linefilter = @$filters[6] if ($line =~ /sort1/ ) ;
-    $linefilter = @$filters[7] if ($line =~ /sort2/ ) ;
-# 
- 	my $colfilter = "";
- 	$colfilter = @$filters[0] if ($column =~ /categorycode/);
- 	$colfilter = @$filters[1] if ($column =~ /zipcode/);
- 	$colfilter = @$filters[2] if ($column =~ /branchcode/);
-    $colfilter = @$filters[5] if ($column =~ /sex/);
-    $colfilter = @$filters[6] if ($column =~ /sort1/);
- 	$colfilter = @$filters[7] if ($column =~ /sort2/);
+    my $colfilter;
+    given ($column) {
+        when (/categorycode/) { $colfilter = @$filters[0] }
+        when (/zipcode/) { $colfilter = @$filters[1] }
+        when (/branchcode/) { $colfilter = @$filters[2] }
+        when (/sex/) { $colfilter = @$filters[5] }
+        when (/sort1/) { $colfilter = @$filters[6] }
+        when (/sort2/) { $colfilter = @$filters[7] }
+        when (/^patron_attr\.(.*)$/) { $colfilter = $attr_filters->{$1} }
+        default { $colfilter = '' }
+    }
 
-	my @loopfilter;
-	for (my $i=0;$i<=7;$i++) {
-		my %cell;
-		if ( @$filters[$i] ) {
-		    if($i == 3 or $i == 4){
-		        $cell{filter} .= format_date(@$filters[$i]);
-		    }else{
-		        $cell{filter} .= @$filters[$i];
-		    }
-			
-			$cell{crit} .="Cat Code " if ($i==0);
-			$cell{crit} .="Zip Code" if ($i==1);
-			$cell{crit} .="Branchcode" if ($i==2);
-			$cell{crit} .="Date of Birth" if ($i==3);
-			$cell{crit} .="Date of Birth" if ($i==4);
-            $cell{crit} .="Sex" if ($i==5);
-			$cell{crit} .="Sort1" if ($i==6);
-			$cell{crit} .="Sort2" if ($i==7);
-			push @loopfilter, \%cell;
-		}
-	}
+    my @loopfilter;
+    for (my $i = 0; $i <= scalar @$filters; $i++) {
+        my %cell;
+        if ( @$filters[$i] ) {
+            if ($i == 3 or $i == 4) {
+                $cell{filter} = format_date(@$filters[$i]);
+            } else {
+                $cell{filter} = @$filters[$i];
+            }
+
+            given ($i) {
+                when (0) { $cell{crit} = "Cat code" }
+                when (1) { $cell{crit} = "Zip code" }
+                when (2) { $cell{crit} = "Branch code" }
+                when ([3,4]) { $cell{crit} = "Date of birth" }
+                when (5) { $cell{crit} = "Sex" }
+                when (6) { $cell{crit} = "Sort1" }
+                when (7) { $cell{crit} = "Sort2" }
+                default { $cell{crit} = "Unknown" }
+            }
+            push @loopfilter, \%cell;
+        }
+    }
+    foreach my $type (keys %$attr_filters) {
+        if($attr_filters->{$type}) {
+            push @loopfilter, {
+                crit => "Attribute $type",
+                filter => $attr_filters->{$type}
+            }
+        }
+    }
+
 	($status  ) and push @loopfilter,{crit=>"Status",  filter=>$status  };
 	($activity) and push @loopfilter,{crit=>"Activity",filter=>$activity};
 	push @loopfilter,{debug=>1, crit=>"Branches",filter=>join(" ", sort keys %$branches)};
@@ -223,30 +246,44 @@ sub calculate {
 	my $newperioddate=$period_year."-".$period_month."-".$period_day;
 # 1st, loop rows.
 	my $linefield;
-	if (($line =~/zipcode/) and ($digits)) {
-		$linefield .="left($line,$digits)";
-	} else{
-		$linefield .= $line;
-	}
+
+    my $line_attribute_type;
+    if ($line  =~/^patron_attr.(.*)$/) {
+        $line_attribute_type = $1;
+        $line = 'borrower_attributes.attribute';
+    }
+
+    if (($line =~/zipcode/) and ($digits)) {
+        $linefield = "left($line,$digits)";
+    } else {
+        $linefield = $line;
+    }
 
 	my %cathash = ($line eq 'categorycode' or $column eq 'categorycode') ? &catcodes_hash : ();
 	push @loopfilter, {debug=>1, crit=>"\%cathash", filter=>join(", ", map {$cathash{$_}} sort keys %cathash)};
 
-	my $strsth = "SELECT distinctrow $linefield FROM borrowers WHERE $line IS NOT NULL ";
+    my $strsth;
+    my @strparams; # bind parameters for the query
+    if ($line_attribute_type) {
+        $strsth = "SELECT distinct attribute FROM borrower_attributes
+            WHERE attribute IS NOT NULL AND code=?";
+        push @strparams, $line_attribute_type;
+    } else {
+        $strsth = "SELECT distinctrow $linefield FROM borrowers
+            WHERE $line IS NOT NULL ";
+    }
+
 	$linefilter =~ s/\*/%/g;
 	if ( $linefilter ) {
 		$strsth .= " AND $linefield LIKE ? " ;
+                push @strparams, $linefilter;
 	}
 	$strsth .= " AND $status='1' " if ($status);
-	$strsth .=" order by $linefield";
+    $strsth .=" order by $linefield";
 	
 	push @loopfilter, {sql=>1, crit=>"Query", filter=>$strsth};
 	my $sth = $dbh->prepare($strsth);
-	if ( $linefilter ) {
-		$sth->execute($linefilter);
-	} else {
-		$sth->execute;
-	}
+    $sth->execute(@strparams);
  	while (my ($celvalue) = $sth->fetchrow) {
  		my %cell;
 		if ($celvalue) {
@@ -260,25 +297,41 @@ sub calculate {
 
 # 2nd, loop cols.
 	my $colfield;
+
+    my $column_attribute_type;
+    if ($column  =~/^patron_attr.(.*)$/) {
+        $column_attribute_type = $1;
+        $column = 'borrower_attributes.attribute';
+    }
+
 	if (($column =~/zipcode/) and ($digits)) {
 		$colfield = "left($column,$digits)";
 	} else {
 		$colfield = $column;
 	}
-	my $strsth2 = "select distinctrow $colfield from borrowers where $column is not null";
+
+    my $strsth2;
+    my @strparams2; # bind parameters for the query
+    if ($column_attribute_type) {
+        $strsth2 = "SELECT DISTINCT attribute FROM borrower_attributes
+            WHERE attribute IS NOT NULL AND code=?";
+        push @strparams2, $column_attribute_type;
+    } else {
+        $strsth2 = "SELECT DISTINCTROW $colfield FROM borrowers
+            WHERE $column IS NOT NULL";
+    }
+
 	if ($colfilter) {
 		$colfilter =~ s/\*/%/g;
 		$strsth2 .= " AND $colfield LIKE ? ";
+        push @strparams2, $colfield;
 	}
 	$strsth2 .= " AND $status='1' " if ($status);
-	$strsth2 .= " order by $colfield";
+
+    $strsth2 .= " order by $colfield";
 	push @loopfilter, {sql=>1, crit=>"Query", filter=>$strsth2};
 	my $sth2 = $dbh->prepare($strsth2);
-	if ($colfilter) {
-		$sth2->execute($colfilter);
-	} else {
-		$sth2->execute;
-	}
+    $sth2->execute(@strparams2);
  	while (my ($celvalue) = $sth2->fetchrow) {
  		my %cell;
 		if ($celvalue) {
@@ -295,15 +348,43 @@ sub calculate {
 #	warn "init table";
 	foreach my $row (@loopline) {
 		foreach my $col ( @loopcol ) {
-#			warn " init table : $row->{rowtitle} / $col->{coltitle} ";
-			$table{$row->{rowtitle}}->{$col->{coltitle}}=0;
+            my $rowtitle = $row->{rowtitle} // '';
+            my $coltitle = $row->{coltitle} // '';
+            $table{$rowtitle}->{$coltitle} = 0;
 		}
 		$table{$row->{rowtitle}}->{totalrow}=0;
 		$table{$row->{rowtitle}}->{rowtitle_display} = $row->{rowtitle_display};
 	}
 
-# preparing calculation
-	my $strcalc .= "SELECT $linefield, $colfield, count( * ) FROM borrowers WHERE 1 ";
+    # preparing calculation
+    my $strcalc;
+    my @calcparams;
+    $strcalc = "SELECT ";
+    if ($line_attribute_type) {
+        $strcalc .= " attribute_$line_attribute_type.attribute AS line_attribute, ";
+    } else {
+        $strcalc .= " $linefield, ";
+    }
+    if ($column_attribute_type) {
+        $strcalc .= " attribute_$column_attribute_type.attribute AS column_attribute, ";
+    } else {
+        $strcalc .= " $colfield, ";
+    }
+
+    $strcalc .= " COUNT(*) FROM borrowers ";
+    foreach my $type (keys %$attr_filters) {
+        if (
+            ($line_attribute_type and $line_attribute_type eq $type)
+         or ($column_attribute_type and $column_attribute_type eq $type)
+         or ($attr_filters->{$type})
+        ) {
+            $strcalc .= " LEFT JOIN borrower_attributes AS attribute_$type
+                ON (borrowers.borrowernumber = attribute_$type.borrowernumber
+                    AND attribute_$type.code = " . $dbh->quote($type) . ") ";
+        }
+    }
+    $strcalc .= " WHERE 1 ";
+
 	@$filters[0]=~ s/\*/%/g if (@$filters[0]);
 	$strcalc .= " AND categorycode like '" . @$filters[0] ."'" if ( @$filters[0] );
 	@$filters[1]=~ s/\*/%/g if (@$filters[1]);
@@ -320,13 +401,33 @@ sub calculate {
 	$strcalc .= " AND sort1 like '" . @$filters[6] ."'" if ( @$filters[6] );
 	@$filters[7]=~ s/\*/%/g if (@$filters[7]);
 	$strcalc .= " AND sort2 like '" . @$filters[7] ."'" if ( @$filters[7] );
+
+    foreach my $type (keys %$attr_filters) {
+        if($attr_filters->{$type}) {
+            my $filter = $attr_filters->{$type};
+            $filter =~ s/\*/%/g;
+            $strcalc .= " AND attribute_$type.attribute LIKE '" . $filter . "' ";
+        }
+    }
 	$strcalc .= " AND borrowernumber in (select distinct(borrowernumber) from old_issues where issuedate > '" . $newperioddate . "')" if ($activity eq 'active');
 	$strcalc .= " AND borrowernumber not in (select distinct(borrowernumber) from old_issues where issuedate > '" . $newperioddate . "')" if ($activity eq 'nonactive');
 	$strcalc .= " AND $status='1' " if ($status);
-	$strcalc .= " group by $linefield, $colfield";
+
+    $strcalc .= " GROUP BY ";
+    if ($line_attribute_type) {
+        $strcalc .= " line_attribute, ";
+    } else {
+        $strcalc .= " $linefield, ";
+    }
+    if ($column_attribute_type) {
+        $strcalc .= " column_attribute ";
+    } else {
+        $strcalc .= " $colfield ";
+    }
+
 	push @loopfilter, {sql=>1, crit=>"Query", filter=>$strcalc};
 	my $dbcalc = $dbh->prepare($strcalc);
-	$dbcalc->execute;
+	(scalar(@calcparams)) ? $dbcalc->execute(@calcparams) : $dbcalc->execute();
 	
 	my $emptycol; 
 	while (my ($row, $col, $value) = $dbcalc->fetchrow) {
@@ -347,12 +448,14 @@ sub calculate {
 		#@loopcol ensures the order for columns is common with column titles
 		# and the number matches the number of columns
 		foreach my $col ( @loopcol ) {
-			my $value =$table{$row}->{($col->{coltitle} eq "NULL")?"zzEMPTY":$col->{coltitle}};
+            my $coltitle = $col->{coltitle} // '';
+            $coltitle = $coltitle eq "NULL" ? "zzEMPTY" : $coltitle;
+			my $value =$table{$row}->{$coltitle};
 			push @loopcell, {value => $value};
 		}
 		push @looprow,{
 			'rowtitle' => ($row eq "zzEMPTY")?"NULL":$row,
-			'rowtitle_display' => $table{$row}->{rowtitle_display} || $row,
+			'rowtitle_display' => $table{$row}->{rowtitle_display} || ($row eq "zzEMPTY" ? "NULL" : $row),
 			'loopcell' => \@loopcell,
 			'totalrow' => $table{$row}->{totalrow}
 		};
@@ -361,7 +464,12 @@ sub calculate {
 	foreach my $col ( @loopcol ) {
 		my $total=0;
 		foreach my $row ( @looprow ) {
-			$total += $table{($row->{rowtitle} eq "NULL")?"zzEMPTY":$row->{rowtitle}}->{($col->{coltitle} eq "NULL")?"zzEMPTY":$col->{coltitle}};
+            my $rowtitle = $row->{rowtitle} // '';
+            $rowtitle = ($rowtitle eq "NULL") ? "zzEMPTY" : $rowtitle;
+            my $coltitle = $col->{coltitle} // '';
+            $coltitle = ($coltitle eq "NULL") ? "zzEMPTY" : $coltitle;
+
+            $total += $table{$rowtitle}->{$coltitle} || 0;
 #			warn "value added ".$table{$row->{rowtitle}}->{$col->{coltitle}}. "for line ".$row->{rowtitle};
 		}
 #		warn "summ for column ".$col->{coltitle}."  = ".$total;
@@ -377,9 +485,66 @@ sub calculate {
 # 	# the foot (totals by borrower type)
  	$globalline{loopfooter} = \@loopfooter;
  	$globalline{total}= $grantotal;
-	$globalline{line} = $line;
-	$globalline{column} = $column;
+	$globalline{line} = ($line_attribute_type) ? $line_attribute_type : $line;
+	$globalline{column} = ($column_attribute_type) ? $column_attribute_type : $column;
 	push @mainloop,\%globalline;
 	return \@mainloop;
 }
 
+sub parse_extended_patron_attributes {
+    my ($input) = @_;
+
+    my @params_names = $input->param;
+    my %attr;
+    foreach my $name (@params_names) {
+        if ($name =~ /^Filter_patron_attr\.(.*)$/) {
+            my $code = $1;
+            my $value = $input->param($name);
+            $attr{$code} = $value;
+        }
+    }
+
+    return \%attr;
+}
+
+
+sub patron_attributes_form {
+    my $template = shift;
+
+    my @types = C4::Members::AttributeTypes::GetAttributeTypes();
+
+    my %items_by_class;
+    foreach my $type (@types) {
+        my $attr_type = C4::Members::AttributeTypes->fetch($type->{code});
+        my $entry = {
+            class             => $attr_type->class(),
+            code              => $attr_type->code(),
+            description       => $attr_type->description(),
+            repeatable        => $attr_type->repeatable(),
+            category          => $attr_type->authorised_value_category(),
+            category_code     => $attr_type->category_code(),
+        };
+
+        my $newentry = { %$entry };
+        if ($attr_type->authorised_value_category()) {
+            $newentry->{use_dropdown} = 1;
+            $newentry->{auth_val_loop} = GetAuthorisedValues(
+                $attr_type->authorised_value_category()
+            );
+        }
+        push @{ $items_by_class{ $attr_type->class() } }, $newentry;
+    }
+
+    my @attribute_loop;
+    foreach my $class ( sort keys %items_by_class ) {
+        my $lib = GetAuthorisedValueByCode( 'PA_CLASS', $class ) || $class;
+        push @attribute_loop, {
+            class => $class,
+            items => $items_by_class{$class},
+            lib   => $lib,
+        };
+    }
+
+    $template->param(patron_attributes => \@attribute_loop);
+
+}
