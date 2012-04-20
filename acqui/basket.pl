@@ -28,6 +28,7 @@ use C4::Output;
 use CGI;
 use C4::Acquisition;
 use C4::Budgets;
+use C4::Branch;
 use C4::Bookseller qw( GetBookSellerFromId);
 use C4::Debug;
 use C4::Biblio;
@@ -80,13 +81,25 @@ my ( $template, $loggedinuser, $cookie, $userflags ) = get_template_and_user(
 );
 
 my $basket = GetBasket($basketno);
+$booksellerid = $basket->{booksellerid} unless $booksellerid;
+my ($bookseller) = GetBookSellerFromId($booksellerid);
+
+unless (CanUserManageBasket($loggedinuser, $basket, $userflags)) {
+    $template->param(
+        cannot_manage_basket => 1,
+        basketno => $basketno,
+        basketname => $basket->{basketname},
+        booksellerid => $booksellerid,
+        name => $bookseller->{name}
+    );
+    output_html_with_http_headers $query, $cookie, $template->output;
+    exit;
+}
 
 # FIXME : what about the "discount" percentage?
 # FIXME : the query->param('booksellerid') below is probably useless. The bookseller is always known from the basket
 # if no booksellerid in parameter, get it from basket
 # warn "=>".$basket->{booksellerid};
-$booksellerid = $basket->{booksellerid} unless $booksellerid;
-my ($bookseller) = GetBookSellerFromId($booksellerid);
 my $op = $query->param('op');
 if (!defined $op) {
     $op = q{};
@@ -188,6 +201,21 @@ if ( $op eq 'delete_confirm' ) {
 } elsif ($op eq 'reopen') {
     ReopenBasket($query->param('basketno'));
     print $query->redirect('/cgi-bin/koha/acqui/basket.pl?basketno='.$basket->{'basketno'})
+} elsif ( $op eq 'mod_users' ) {
+    my $basketusers_ids = $query->param('basketusers_ids');
+    my @basketusers = split( /:/, $basketusers_ids );
+    ModBasketUsers($basketno, @basketusers);
+    print $query->redirect("/cgi-bin/koha/acqui/basket.pl?basketno=$basketno");
+    exit;
+} elsif ( $op eq 'mod_branch' ) {
+    my $branch = $query->param('branch');
+    $branch = undef if(defined $branch and $branch eq '');
+    ModBasket({
+        basketno => $basket->{basketno},
+        branch   => $branch
+    });
+    print $query->redirect("/cgi-bin/koha/acqui/basket.pl?basketno=$basketno");
+    exit;
 } else {
     # get librarian branch...
     if ( C4::Context->preference("IndependentBranches") ) {
@@ -203,6 +231,17 @@ if ( $op eq 'delete_confirm' ) {
             }
         }
     }
+    # get branches
+    my $branches = C4::Branch::GetBranches;
+    my @branches_loop;
+    foreach my $branch (sort keys %$branches) {
+        push @branches_loop, {
+            branchcode => $branch,
+            branchname => $branches->{$branch}->{branchname},
+            selected => (defined $basket->{branch} and $branch eq $basket->{branch}) ? 1 : 0
+        };
+    }
+
 #if the basket is closed,and the user has the permission to edit basketgroups, display a list of basketgroups
     my ($basketgroup, $basketgroups);
     my $staffuser = GetMember(borrowernumber => $loggedinuser);
@@ -238,6 +277,13 @@ if ( $op eq 'delete_confirm' ) {
       and warn sprintf
       "loggedinuser: $loggedinuser; creationdate: %s; authorisedby: %s",
       $basket->{creationdate}, $basket->{authorisedby};
+
+    my @basketusers_ids = GetBasketUsers($basketno);
+    my @basketusers;
+    foreach my $basketuser_id (@basketusers_ids) {
+        my $basketuser = GetMember(borrowernumber => $basketuser_id);
+        push @basketusers, $basketuser if $basketuser;
+    }
 
     #to get active currency
     my $cur = GetCurrency();
@@ -309,9 +355,12 @@ if ( $op eq 'delete_confirm' ) {
         basketbooksellernote => $basket->{booksellernote},
         basketcontractno     => $basket->{contractnumber},
         basketcontractname   => $contract->{contractname},
+        branches_loop        => \@branches_loop,
         creationdate         => $basket->{creationdate},
         authorisedby         => $basket->{authorisedby},
         authorisedbyname     => $basket->{authorisedbyname},
+        basketusers_ids      => join(':', @basketusers_ids),
+        basketusers          => \@basketusers,
         closedate            => $basket->{closedate},
         estimateddeliverydate=> $estimateddeliverydate,
         deliveryplace        => C4::Branch::GetBranchName( $basket->{deliveryplace} ),

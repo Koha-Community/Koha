@@ -59,7 +59,7 @@ use C4::Budgets;
 use C4::Output;
 use CGI;
 
-use C4::Acquisition qw/ GetBasketsInfosByBookseller /;
+use C4::Acquisition qw/ GetBasketsInfosByBookseller CanUserManageBasket /;
 use C4::Bookseller qw/ GetBookSellerFromId GetBookSeller /;
 use C4::Members qw/GetMember/;
 use C4::Context;
@@ -127,21 +127,8 @@ for my $vendor (@suppliers) {
     my $loop_basket = [];
 
     for my $basket ( @{$baskets} ) {
-        my $authorisedby = $basket->{authorisedby};
-        my $basketbranch = ''; # set a blank branch to start with
-        my $member = GetMember( borrowernumber => $authorisedby );
-        if ( $member ) {
-           $basketbranch = $member->{branchcode};
-        }
-
-        if ($userenv->{'flags'} & 1 || #user is superlibrarian
-               (haspermission( $uid, { acquisition => q{*} } ) && #user has acq permissions and
-                   ($viewbaskets eq 'all' || #user is allowed to see all baskets
-                   ($viewbaskets eq 'branch' && $authorisedby && $userbranch eq $basketbranch) || #basket belongs to user's branch
-                   ($basket->{authorisedby} &&  $viewbaskets eq 'user' && $authorisedby == $loggedinuser) #user created this basket
-                   ) 
-                ) 
-           ) { 
+        if (CanUserManageBasket($loggedinuser, $basket, $userflags)) {
+            my $member = GetMember( borrowernumber => $basket->{authorisedby} );
             foreach (qw(total_items total_biblios expected_items)) {
                 $basket->{$_} ||= 0;
             }

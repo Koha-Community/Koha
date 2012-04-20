@@ -48,6 +48,9 @@ BEGIN {
         &GetBasketsByBookseller &GetBasketsByBasketgroup
         &GetBasketsInfosByBookseller
 
+        &GetBasketUsers &ModBasketUsers
+        &CanUserManageBasket
+
         &ModBasketHeader
 
         &ModBasketgroup &NewBasketgroup &DelBasketgroup &GetBasketgroup &CloseBasketgroup
@@ -159,8 +162,7 @@ sub GetBasket {
     my $dbh        = C4::Context->dbh;
     my $query = "
         SELECT  aqbasket.*,
-                concat( b.firstname,' ',b.surname) AS authorisedbyname,
-                b.branchcode AS branch
+                concat( b.firstname,' ',b.surname) AS authorisedbyname
         FROM    aqbasket
         LEFT JOIN borrowers b ON aqbasket.authorisedby=b.borrowernumber
         WHERE basketno=?
@@ -656,6 +658,149 @@ sub GetBasketsInfosByBookseller {
     return $sth->fetchall_arrayref({});
 }
 
+=head3 GetBasketUsers
+
+    $basketusers_ids = &GetBasketUsers($basketno);
+
+Returns a list of all borrowernumbers that are in basket users list
+
+=cut
+
+sub GetBasketUsers {
+    my $basketno = shift;
+
+    return unless $basketno;
+
+    my $query = qq{
+        SELECT borrowernumber
+        FROM aqbasketusers
+        WHERE basketno = ?
+    };
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare($query);
+    $sth->execute($basketno);
+    my $results = $sth->fetchall_arrayref( {} );
+    $sth->finish();
+
+    my @borrowernumbers;
+    foreach (@$results) {
+        push @borrowernumbers, $_->{'borrowernumber'};
+    }
+
+    return @borrowernumbers;
+}
+
+=head3 ModBasketUsers
+
+    my @basketusers_ids = (1, 2, 3);
+    &ModBasketUsers($basketno, @basketusers_ids);
+
+Delete all users from basket users list, and add users in C<@basketusers_ids>
+to this users list.
+
+=cut
+
+sub ModBasketUsers {
+    my ($basketno, @basketusers_ids) = @_;
+
+    return unless $basketno;
+
+    my $dbh = C4::Context->dbh;
+    my $query = qq{
+        DELETE FROM aqbasketusers
+        WHERE basketno = ?
+    };
+    my $sth = $dbh->prepare($query);
+    $sth->execute($basketno);
+    $sth->finish();
+
+    $query = qq{
+        INSERT INTO aqbasketusers (basketno, borrowernumber)
+        VALUES (?, ?)
+    };
+    $sth = $dbh->prepare($query);
+    foreach my $basketuser_id (@basketusers_ids) {
+        $sth->execute($basketno, $basketuser_id);
+    }
+}
+
+=head3 CanUserManageBasket
+
+    my $bool = CanUserManageBasket($borrower, $basket[, $userflags]);
+    my $bool = CanUserManageBasket($borrowernumber, $basketno[, $userflags]);
+
+Check if a borrower can manage a basket, according to system preference
+AcqViewBaskets, user permissions and basket properties (creator, users list,
+branch).
+
+First parameter can be either a borrowernumber or a hashref as returned by
+C4::Members::GetMember.
+
+Second parameter can be either a basketno or a hashref as returned by
+C4::Acquisition::GetBasket.
+
+The third parameter is optional. If given, it should be a hashref as returned
+by C4::Auth::getuserflags. If not, getuserflags is called.
+
+If user is authorised to manage basket, returns 1.
+Otherwise returns 0.
+
+=cut
+
+sub CanUserManageBasket {
+    my ($borrower, $basket, $userflags) = @_;
+
+    if (!ref $borrower) {
+        $borrower = C4::Members::GetMember(borrowernumber => $borrower);
+    }
+    if (!ref $basket) {
+        $basket = GetBasket($basket);
+    }
+
+    return 0 unless ($basket and $borrower);
+
+    my $borrowernumber = $borrower->{borrowernumber};
+    my $basketno = $basket->{basketno};
+
+    my $AcqViewBaskets = C4::Context->preference('AcqViewBaskets');
+
+    if (!defined $userflags) {
+        my $dbh = C4::Context->dbh;
+        my $sth = $dbh->prepare("SELECT flags FROM borrowers WHERE borrowernumber = ?");
+        $sth->execute($borrowernumber);
+        my ($flags) = $sth->fetchrow_array;
+        $sth->finish;
+
+        $userflags = C4::Auth::getuserflags($flags, $borrower->{userid}, $dbh);
+    }
+
+    unless ($userflags->{superlibrarian}
+    || (ref $userflags->{acquisition} && $userflags->{acquisition}->{order_manage_all})
+    || (!ref $userflags->{acquisition} && $userflags->{acquisition}))
+    {
+        if (not exists $userflags->{acquisition}) {
+            return 0;
+        }
+
+        if ( (ref $userflags->{acquisition} && !$userflags->{acquisition}->{order_manage})
+        || (!ref $userflags->{acquisition} && !$userflags->{acquisition}) ) {
+            return 0;
+        }
+
+        if ($AcqViewBaskets eq 'user'
+        && $basket->{authorisedby} != $borrowernumber
+        && grep($borrowernumber, GetBasketUsers($basketno)) == 0) {
+            return 0;
+        }
+
+        if ($AcqViewBaskets eq 'branch' && defined $basket->{branch}
+        && $basket->{branch} ne $borrower->{branchcode}) {
+            return 0;
+        }
+    }
+
+    return 1;
+}
 
 #------------------------------------------------------------#
 

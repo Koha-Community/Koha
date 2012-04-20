@@ -2791,6 +2791,7 @@ CREATE TABLE `aqbasket` ( -- stores data about baskets in acquisitions
   `basketgroupid` int(11), -- links this basket to its group (aqbasketgroups.id)
   `deliveryplace` varchar(10) default NULL, -- basket delivery place
   `billingplace` varchar(10) default NULL, -- basket billing place
+  branch varchar(10) default NULL, -- basket branch
   PRIMARY KEY  (`basketno`),
   KEY `booksellerid` (`booksellerid`),
   KEY `basketgroupid` (`basketgroupid`),
@@ -2798,6 +2799,20 @@ CREATE TABLE `aqbasket` ( -- stores data about baskets in acquisitions
   CONSTRAINT `aqbasket_ibfk_1` FOREIGN KEY (`booksellerid`) REFERENCES `aqbooksellers` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `aqbasket_ibfk_2` FOREIGN KEY (`contractnumber`) REFERENCES `aqcontract` (`contractnumber`),
   CONSTRAINT `aqbasket_ibfk_3` FOREIGN KEY (`basketgroupid`) REFERENCES `aqbasketgroups` (`id`) ON UPDATE CASCADE
+  CONSTRAINT aqbasket_ibfk_4 FOREIGN KEY (branch) REFERENCES branches (branchcode) ON UPDATE CASCADE ON DELETE SET NULL,
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Table structure for table aqbasketusers
+--
+
+DROP TABLE IF EXISTS aqbasketusers;
+CREATE TABLE aqbasketusers (
+  basketno int(11) NOT NULL,
+  borrowernumber int(11) NOT NULL,
+  PRIMARY KEY (basketno,borrowernumber),
+  CONSTRAINT aqbasketusers_ibfk_1 FOREIGN KEY (basketno) REFERENCES aqbasket (basketno) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT aqbasketusers_ibfk_2 FOREIGN KEY (borrowernumber) REFERENCES borrowers (borrowernumber) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --

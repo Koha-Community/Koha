@@ -36,6 +36,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (11, 'budget_modify', 'Endre budsjetter (kan ikke legge til kontolinjer, men endre eksisterende)'),
    (11, 'planning_manage', 'Administrere budsjettplaner'),
    (11, 'order_manage', 'Administrere bestillinger og kurver'),
+   (11, 'order_manage_all', 'Manage all orders & baskets'),
    (11, 'group_manage', 'Administrere bestillinger og kurv-grupper'),
    (11, 'order_receive', 'Administrere bestillinger og kurver'),
    (11, 'budget_add_del', 'Legge til og slette budsjetter (men ikke endre budsjetter)'),

@@ -122,9 +122,42 @@
             confirm_reopen();
         });
     });
+
+    function basketUserSearchPopup(f) {
+        window.open(
+            "/cgi-bin/koha/acqui/aqbasketuser_search.pl",
+            'BasketUserSearchPopup',
+            'width=740,height=450,toolbar=no,'
+         );
+    }
+
+    function add_basket_user(borrowernumber, borrowername) {
+        var ids = $("#basketusers_ids").val();
+        if(ids.length > 0) {
+            ids = ids.split(':');
+        } else {
+            ids = new Array;
+        }
+        if (ids.indexOf(borrowernumber) < 0) {
+            ids.push(borrowernumber);
+            $("#basketusers_ids").val(ids.join(':'));
+            var li = '<li id="user_'+borrowernumber+'">'+borrowername
+                + ' [<a style="cursor:pointer" onclick="del_basket_user('+borrowernumber+');">'
+                + _('Delete user') + '</a>]</li>';
+            $("#basketusers_names").append(li);
+            return 0;
+        }
+        return -1;
+    }
+
+    function del_basket_user(borrowernumber) {
+      $("#user_"+borrowernumber).remove();
+      var ids = $("#basketusers_ids").val().split(':');
+      ids.splice(ids.indexOf(borrowernumber.toString()), 1);
+      $("#basketusers_ids").val(ids.join(':'));
+    }
 //]]>
 </script>
-
 <style type="text/css">
 .sortmsg {font-size: 80%;}
 </style>
@@ -140,6 +173,11 @@
 
 <div id="bd">
     <div id="yui-main">
+    [% IF (cannot_manage_basket) %]
+        <div class="yui-b">
+            <p class="error">You are not authorised to manage this basket.</p>
+        </div>
+    [% ELSE %]
     <div class="yui-b">
         [% UNLESS ( confirm_close ) %]
         [% UNLESS ( selectbasketg ) %]
@@ -203,7 +241,45 @@
                 [% END %]
                 [% IF ( deliveryplace ) %]<li><span class="label">Delivery place:</span> [% deliveryplace %]</li>[% END %]
                 [% IF ( billingplace ) %]<li><span class="label">Billing place:</span> [% billingplace %]</li>[% END %]
-                [% IF ( authorisedbyname ) %]<li><span class="label">Managed by:</span>  [% authorisedbyname %]</li>[% END %]
+                [% IF ( authorisedbyname ) %]<li><span class="label">Created by:</span>  [% authorisedbyname %]</li>[% END %]
+                <li>
+                    <form action="" method="post">
+                        <span class="label">Managed by:</span>
+                        <div style="float:left">
+                            <ul id="basketusers_names" style="padding-left:0">
+                              [% FOREACH user IN basketusers %]
+                                <li id="user_[% user.borrowernumber %]">
+                                    [% user.firstname %] [% user.surname %]
+                                    [<a onclick="del_basket_user([% user.borrowernumber %]);" style="cursor:pointer">Delete user</a>]
+                                </li>
+                              [% END %]
+                            </ul>
+                            <input type="hidden" id="basketno" name="basketno" value="[% basketno %]" />
+                            <input type="hidden" id="basketusers_ids" name="basketusers_ids" value="[% basketusers_ids %]" />
+                            <input type="hidden" id="op" name="op" value="mod_users" />
+                            <input type="button" id="add_user" onclick="basketUserSearchPopup();" value="Add user" />
+                            <input type="submit" value="Save changes" />
+                        </div>
+                    </form>
+                </li>
+                <li>
+                    <form action="" method="post">
+                        <span class="label">Branch:</span>
+                        <select id="branch" name="branch">
+                            <option value="">No branch</option>
+                            [% FOREACH branch IN branches_loop %]
+                                [% IF (branch.selected) %]
+                                    <option selected="selected" value="[% branch.branchcode %]"> [% branch.branchname %]</option>
+                                [% ELSE %]
+                                    <option value="[% branch.branchcode %]"> [% branch.branchname %]</option>
+                                [% END %]
+                            [% END %]
+                        </select>
+                        <input type="hidden" id="basketno" name="basketno" value="[% basketno %]" />
+                        <input type="hidden" id="op" name="op" value="mod_branch" />
+                        <input type="submit" value="Save" />
+                    </form>
+                </li>
                 [% IF ( creationdate ) %]<li><span class="label">Opened on:</span>  [% creationdate | $KohaDates %]</li>[% END %]
                 [% IF ( closedate ) %]<li><span class="label">Closed on:</span> [% closedate | $KohaDates %]</li>[% END %]
                 [% IF ( estimateddeliverydate ) %]<li><span class="label">Estimated delivery date:</span> [% estimateddeliverydate | $KohaDates  %]</li>[% END %]
@@ -525,6 +601,7 @@
         </div>
     [% END %]
 </div>
+[% END %][%# IF (cannot_manage_basket) %]
 </div>
 <div class="yui-b">
 [% INCLUDE 'acquisitions-menu.inc' %]

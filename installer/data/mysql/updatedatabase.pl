@@ -7653,6 +7653,39 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.13.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do("
+        ALTER TABLE aqbasket ADD branch varchar(10) default NULL
+    ");
+    $dbh->do("
+        ALTER TABLE aqbasket
+        ADD CONSTRAINT aqbasket_ibfk_4 FOREIGN KEY (branch)
+            REFERENCES branches (branchcode)
+            ON UPDATE CASCADE ON DELETE SET NULL
+    ");
+    $dbh->do("
+        DROP TABLE IF EXISTS aqbasketusers
+    ");
+    $dbh->do("
+        CREATE TABLE aqbasketusers (
+            basketno int(11) NOT NULL,
+            borrowernumber int(11) NOT NULL,
+            PRIMARY KEY (basketno,borrowernumber),
+            CONSTRAINT aqbasketusers_ibfk_1 FOREIGN KEY (basketno) REFERENCES aqbasket (basketno) ON DELETE CASCADE ON UPDATE CASCADE,
+            CONSTRAINT aqbasketusers_ibfk_2 FOREIGN KEY (borrowernumber) REFERENCES borrowers (borrowernumber) ON DELETE CASCADE ON UPDATE CASCADE
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+    ");
+    $dbh->do("
+        INSERT INTO permissions (module_bit, code, description)
+        VALUES (11, 'order_manage_all', 'Manage all orders & baskets')
+    ");
+
+    print "Upgrade to $DBversion done (Add branch and users list to baskets. "
+        . "New permission order_manage_all)\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

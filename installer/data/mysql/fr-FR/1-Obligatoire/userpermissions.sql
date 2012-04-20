@@ -33,6 +33,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (11, 'budget_modify', 'Modifier les budgets (impossible de créer les lignes, mais possible de modifier celles qui existent'),
    (11, 'planning_manage', 'Gérer de la planification des budgets'),
    (11, 'order_manage', 'Gérer les commandes et les paniers'),
+   (11, 'order_manage_all', 'Gérer toutes les commandes et panier'),
    (11, 'group_manage', 'Gérer les commandes et les bons de commande'),
    (11, 'order_receive', 'Gérer les réceptions'),
    (11, 'budget_add_del', 'Ajouter et supprimer les budgets (mais pas modifier)'),

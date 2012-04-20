@@ -18,6 +18,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (11, 'budget_modify', 'Modifica budget (non li crea ma modifica gli esistenti)'),
    (11, 'planning_manage', 'Intervieni sulla pianificazione dei budgets'),
    (11, 'order_manage', 'Gestisci ordini e raccoglitori'),
+   (11, 'order_manage_all', 'Manage all orders & baskets'),
    (11, 'group_manage', 'Gestisci ordini e raccoglitori raggruppati'),
    (11, 'order_receive', 'Gestisci arrivi'),
    (11, 'budget_add_del', 'Aggiungi e cancella budgets (senza modificarli)'),
