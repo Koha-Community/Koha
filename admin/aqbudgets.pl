@@ -275,7 +275,7 @@ if ($op eq 'add_form') {
         if ($filter_budgetname) {
             next
               unless $budget->{budget_code} =~ m/$filter_budgetname/i
-                  || $budget->{name} =~ m/$filter_budgetname/i;
+                  || $budget->{budget_name} =~ m/$filter_budgetname/i;
         }
         if ($filter_budgetbranch ) {
             next unless  $budget->{budget_branchcode}  =~ m/$filter_budgetbranch/;
