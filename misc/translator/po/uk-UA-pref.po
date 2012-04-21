@@ -1,6 +1,6 @@
 # Acquisitions
 msgid "acquisitions.pref"
-msgstr ""
+msgstr "Надходження"
 
 # Acquisitions > Policy
 msgid "acquisitions.pref Policy"
@@ -25,6 +25,22 @@ msgstr "розміщенні замовлення."
 # Acquisitions > Policy
 msgid "acquisitions.pref#AcqCreateItem# receiving an order."
 msgstr "отриманні замовлення."
+
+# Acquisitions > Policy
+msgid "acquisitions.pref#AcqViewBaskets# Show baskets"
+msgstr "Показувати пакунки"
+
+# Acquisitions > Policy
+msgid "acquisitions.pref#AcqViewBaskets# created by staff member."
+msgstr "створені працівниками бібліотеки."
+
+# Acquisitions > Policy
+msgid "acquisitions.pref#AcqViewBaskets# from staff member's library."
+msgstr ""
+
+# Acquisitions > Policy
+msgid "acquisitions.pref#AcqViewBaskets# in system, regardless of owner."
+msgstr "у системі, незалежно від власника."
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#BasketConfirmations# When closing or reopening a basket,"
@@ -59,6 +75,10 @@ msgid "acquisitions.pref#OrderPdfFormat# when printing basket groups."
 msgstr "при видруку груп з возика."
 
 # Acquisitions > Policy
+msgid "acquisitions.pref#UniqueItemFields# (space-separated list of fields that should be unique for items, must be valid SQL fields of items table)"
+msgstr ""
+
+# Acquisitions > Policy
 msgid "acquisitions.pref#gist# (enter in numeric form, 0.12 for 12%)"
 msgstr "(введіть в числовому форматі, наприклад, 0.12 для 12%)"
 
@@ -68,7 +88,7 @@ msgstr "Податкова ставка за умовчанням рівна "
 
 # Administration
 msgid "admin.pref"
-msgstr ""
+msgstr "Керування"
 
 # Administration > CAS Authentication
 msgid "admin.pref CAS Authentication"
@@ -81,6 +101,26 @@ msgstr "Параметри інтерфейсу"
 # Administration > Login options
 msgid "admin.pref Login options"
 msgstr "Параметри входу"
+
+# Administration > CAS Authentication
+msgid "admin.pref#AllowPkiAuth# Use"
+msgstr ""
+
+# Administration > CAS Authentication
+msgid "admin.pref#AllowPkiAuth# field for SSL client certificate authentication"
+msgstr ""
+
+# Administration > CAS Authentication
+msgid "admin.pref#AllowPkiAuth# no"
+msgstr ""
+
+# Administration > CAS Authentication
+msgid "admin.pref#AllowPkiAuth# the Common Name"
+msgstr ""
+
+# Administration > CAS Authentication
+msgid "admin.pref#AllowPkiAuth# the emailAddress"
+msgstr ""
 
 # Administration > Login options
 msgid "admin.pref#AutoLocation# Don't require"
@@ -131,8 +171,8 @@ msgid "admin.pref#KohaAdminEmailAddress# Use"
 msgstr "Використовувати "
 
 # Administration > Interface options
-msgid "admin.pref#KohaAdminEmailAddress# as the email address for the administrator of Koha. (This is the default From: address for emails unless there is one for the particular branch, and is referred to when an internal error occurs.)"
-msgstr "у якості адреси електронної пошти адміністратора АБІС Коха. (Це типова адреса для відправника електронної пошти, хоча у кожного окремого підрозділу є й своя електронна пошта, — ця використовується, коли трапляється внутрішня помилка.)"
+msgid "admin.pref#KohaAdminEmailAddress# as the email address for the administrator of Koha. (This is the default From: address for emails unless there is one for the particular library, and is referred to when an internal error occurs.)"
+msgstr ""
 
 # Administration > Login options
 msgid "admin.pref#SessionStorage# Store login session information"
@@ -243,7 +283,7 @@ msgid "admin.pref#timeout# Automatically log out users after"
 msgstr "Автоматичний вихід користувачів після"
 
 # Administration > Login options
-msgid "admin.pref#timeout# milliseconds of inactivity."
+msgid "admin.pref#timeout# seconds of inactivity. Adding d will specify it in days, e.g. 1d is timeout of one day."
 msgstr ""
 
 # Administration > Interface options
@@ -260,55 +300,143 @@ msgstr "працівникам бібліотеки та відвідувача�
 
 # Authorities
 msgid "authorities.pref"
+msgstr "Авторитетні джерела"
+
+# Authorities > General
+msgid "authorities.pref General"
 msgstr ""
 
-# Authorities
+# Authorities > Linker
+msgid "authorities.pref Linker"
+msgstr ""
+
+# Authorities > General
+msgid "authorities.pref#AutoCreateAuthorities# When editing records,"
+msgstr ""
+
+# Authorities > General
+msgid "authorities.pref#AutoCreateAuthorities# authority records that are missing (BiblioAddsAuthorities must be set to \"allow\" for this to have any effect)."
+msgstr ""
+
+# Authorities > General
+msgid "authorities.pref#AutoCreateAuthorities# do not generate"
+msgstr ""
+
+# Authorities > General
+msgid "authorities.pref#AutoCreateAuthorities# generate"
+msgstr ""
+
+# Authorities > General
 msgid "authorities.pref#BiblioAddsAuthorities# When editing records,"
 msgstr "При редагуванні записів "
 
-# Authorities
+# Authorities > General
 msgid "authorities.pref#BiblioAddsAuthorities# allow"
-msgstr "дозволити"
+msgstr "дозволяти"
 
-# Authorities
+# Authorities > General
 msgid "authorities.pref#BiblioAddsAuthorities# don't allow"
 msgstr "не дозволяти"
 
-# Authorities
+# Authorities > General
 msgid "authorities.pref#BiblioAddsAuthorities# them to automatically create new authority records if needed, rather than having to reference existing authorities."
+msgstr " також автоматично створювати, при необхідності, нові авторитетні записи, замість того, щоб посилатися на вже  існуючі авторитетні джерела."
+
+# Authorities > Linker
+msgid "authorities.pref#CatalogModuleRelink# Do"
 msgstr ""
 
-# Authorities
+# Authorities > Linker
+msgid "authorities.pref#CatalogModuleRelink# Do not"
+msgstr ""
+
+# Authorities > Linker
+msgid "authorities.pref#CatalogModuleRelink# automatically relink headings that have previously been linked when saving records in the cataloging module."
+msgstr ""
+
+# Authorities > Linker
+msgid "authorities.pref#LinkerKeepStale# Do"
+msgstr ""
+
+# Authorities > Linker
+msgid "authorities.pref#LinkerKeepStale# Do not"
+msgstr ""
+
+# Authorities > Linker
+msgid "authorities.pref#LinkerKeepStale# keep existing links to authority records for headings where the linker is unable to find a match."
+msgstr ""
+
+# Authorities > Linker
+msgid "authorities.pref#LinkerModule# Default"
+msgstr ""
+
+# Authorities > Linker
+msgid "authorities.pref#LinkerModule# First Match"
+msgstr ""
+
+# Authorities > Linker
+msgid "authorities.pref#LinkerModule# Last Match"
+msgstr ""
+
+# Authorities > Linker
+msgid "authorities.pref#LinkerModule# Use the"
+msgstr ""
+
+# Authorities > Linker
+msgid "authorities.pref#LinkerModule# linker module for matching headings to authority records."
+msgstr ""
+
+# Authorities > Linker
+msgid "authorities.pref#LinkerOptions# (separate options with |)"
+msgstr ""
+
+# Authorities > Linker
+msgid "authorities.pref#LinkerOptions# Set the following options for the authority linker"
+msgstr ""
+
+# Authorities > Linker
+msgid "authorities.pref#LinkerRelink# Do"
+msgstr ""
+
+# Authorities > Linker
+msgid "authorities.pref#LinkerRelink# Do not"
+msgstr ""
+
+# Authorities > Linker
+msgid "authorities.pref#LinkerRelink# relink headings that have previously been linked to authority records."
+msgstr ""
+
+# Authorities > General
 msgid "authorities.pref#MARCAuthorityControlField008# Use the following text for the contents of MARC authority control field 008 position 06-39 (fixed length data elements). Do NOT include the date (position 00-05)."
 msgstr ""
 
-# Authorities
+# Authorities > General
 msgid "authorities.pref#UseAuthoritiesForTracings# Don't use"
 msgstr "Не використовувати"
 
-# Authorities
+# Authorities > General
 msgid "authorities.pref#UseAuthoritiesForTracings# Use"
 msgstr "Використовувати"
 
-# Authorities
+# Authorities > General
 msgid "authorities.pref#UseAuthoritiesForTracings# authority record numbers instead of text strings for searches from subject tracings."
 msgstr "номери авторитетних записів замість текстових рядків при пошуках з відслідковування тематик."
 
-# Authorities
+# Authorities > General
 msgid "authorities.pref#dontmerge# Do"
 msgstr "Виконувати "
 
-# Authorities
+# Authorities > General
 msgid "authorities.pref#dontmerge# Don't"
 msgstr "Не виконувати"
 
-# Authorities
-msgid "authorities.pref#dontmerge# automatically update attached biblios when changing an authority record. If this is off, please ask your administrator to enable the merge_authorities.pl cronjob."
-msgstr "автоматичне оновлення пов’язаних бібліотечних записів при зміні авторитетного запису. Якщо ця опція вимкнена, будь ласка, попрохайте адміністратора задіяти періодичне завдання „merge_authorities.pl“ в „cronjob“."
+# Authorities > General
+msgid "authorities.pref#dontmerge# automatically update attached biblios when changing an authority record. If this is off, please ask your administrator to enable the merge_authority.pl cronjob."
+msgstr ""
 
 # Cataloging
 msgid "cataloguing.pref"
-msgstr ""
+msgstr "Каталогізація"
 
 # Cataloging > Display
 msgid "cataloguing.pref Display"
@@ -340,35 +468,47 @@ msgstr ""
 
 # Cataloging > Interface
 msgid "cataloguing.pref#DefaultClassificationSource# Use"
-msgstr ""
+msgstr "Використовувати "
 
 # Cataloging > Interface
 msgid "cataloguing.pref#DefaultClassificationSource# as the default classification source."
-msgstr ""
+msgstr " у якості джерела класифікації за умовчанням."
+
+# Cataloging > Interface
+msgid "cataloguing.pref#EasyAnalyticalRecords# Display"
+msgstr "Показувати "
+
+# Cataloging > Interface
+msgid "cataloguing.pref#EasyAnalyticalRecords# Don't Display"
+msgstr "Не показувати "
+
+# Cataloging > Interface
+msgid "cataloguing.pref#EasyAnalyticalRecords# easy ways to create analytical record relationships"
+msgstr " легкі шляхи для створення взаємозв’язків аналітичних записів."
 
 # Cataloging > Display
 msgid "cataloguing.pref#ISBD# Use the following as the ISBD template:"
-msgstr ""
+msgstr "Використовуйте наступне у якості шаблону ISBD: "
 
 # Cataloging > Display
 msgid "cataloguing.pref#IntranetBiblioDefaultView# By default, display biblio records in"
-msgstr ""
+msgstr "За умовчанням, відображати бібліографічний запис у "
 
 # Cataloging > Display
 msgid "cataloguing.pref#IntranetBiblioDefaultView# ISBD form (see below)."
-msgstr ""
+msgstr " формі ISBD-карточки (див. нижче)."
 
 # Cataloging > Display
 msgid "cataloguing.pref#IntranetBiblioDefaultView# Labelled MARC form"
-msgstr ""
+msgstr " формі МАРК з мітками"
 
 # Cataloging > Display
 msgid "cataloguing.pref#IntranetBiblioDefaultView# MARC form."
-msgstr ""
+msgstr " формі МАРК."
 
 # Cataloging > Display
 msgid "cataloguing.pref#IntranetBiblioDefaultView# normal form."
-msgstr ""
+msgstr " звичайній формі."
 
 # Cataloging > Display
 msgid "cataloguing.pref#LabelMARCView# Do"
@@ -384,19 +524,19 @@ msgstr ""
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#MARCOrgCode# Fill in the <a href=\"http://www.loc.gov/marc/organizations/orgshome.html\">MARC organization code</a>"
-msgstr ""
+msgstr "Введіть <a href=\"http://www.loc.gov/marc/organizations/orgshome.html\">MARC-код організації</a>"
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#MARCOrgCode# by default in new MARC records (leave blank to disable)."
-msgstr ""
+msgstr ", що використовуватиметься за умовчанням у нових MARC-записах (залиште порожнім якщо код невідомий)."
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#NewItemsDefaultLocation# (should be a location code, or blank to disable)."
-msgstr ""
+msgstr " (повинно бути кодом розташування, або порожнім якщо не використовується)."
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#NewItemsDefaultLocation# When items are created, give them the temporary location of"
-msgstr ""
+msgstr "Коли створюються примірники, надавати їм тимчасове розташування "
 
 # Cataloging > Display
 msgid "cataloguing.pref#OpacSuppression# Don't hide"
@@ -508,79 +648,79 @@ msgstr " не створюються автоматично. "
 
 # Cataloging > Display
 msgid "cataloguing.pref#hide_marc# Display"
-msgstr ""
+msgstr "Показувати "
 
 # Cataloging > Display
 msgid "cataloguing.pref#hide_marc# Don't display"
-msgstr ""
+msgstr "Не показувати "
 
 # Cataloging > Display
 msgid "cataloguing.pref#hide_marc# MARC tag numbers, subfield codes and indicators in MARC views."
-msgstr ""
+msgstr " не показувати номери МАРК-ознак, коди підполів та індикаторів у „Перегляді у МАРК“."
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#item-level_itypes# Use the item type of the"
-msgstr ""
+msgstr "Використовувати тип одиниці "
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#item-level_itypes# as the authoritative item type (for determining circulation and fines rules, etc)."
-msgstr ""
+msgstr " як авторитетний тип одиниці (для визначення правил обігу, штрафів тощо)."
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#item-level_itypes# biblio record"
-msgstr ""
+msgstr "бібліографічного запису"
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#item-level_itypes# specific item"
-msgstr ""
+msgstr "конкретного примірника"
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#itemcallnumber# Map the MARC subfield"
-msgstr ""
+msgstr "Відображати MARC-підполе "
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#itemcallnumber# to an item's callnumber. (This can contain multiple subfields to look in; for instance <code>082ab</code> would look in 082 subfields a and b.)<br />Examples: <strong>Dewey</strong>: <code>082ab</code> or <code>092ab</code>; <strong>LOC</strong>: <code>050ab</code> or <code>090ab</code>; <strong>from the item record</strong>: <code>852hi</code>"
-msgstr ""
+msgstr " у шифр зберігання примірника. (Тут може міститися кілька підполів, які можуть використовуватися: наприклад, при <code>680ab</code> будуть оглядатися підполя „a“ та „b“ з <code>680</code>). Приклади:<br /> <strong>Дьюї</strong>: <code>676a</code>(Unimarc) / (<code>082ab</code> або <code>092ab</code>)(Marc21);<br /> <strong>УДК</strong>: <code>675a</code>(Unimarc);<br /> <strong>КБК</strong>:  <code>680ab</code>(Unimarc) / (<code>050ab</code> або <code>090ab</code>)(Marc21);<br /> <strong>ББК та ін.</strong>:  <code>686abс</code>(Unimarc);<br /> <strong>з примірникового запису</strong>: <code>852gkl</code>(Unimarc) / <code>852hi</code>(Marc21)"
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#marcflavour# Interpret and store MARC records in the"
-msgstr ""
+msgstr "Тлумачити та зберігати MARC-записи у "
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#marcflavour# MARC21"
-msgstr ""
+msgstr "MARC21"
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#marcflavour# NORMARC"
-msgstr ""
+msgstr "NORMARC"
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#marcflavour# UNIMARC"
-msgstr ""
+msgstr "UNIMARC (УкрМАРК, РусМАРК)"
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#marcflavour# format."
-msgstr ""
+msgstr "-форматі."
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#z3950NormalizeAuthor# Copy"
-msgstr ""
+msgstr "Копіювати "
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#z3950NormalizeAuthor# Don't copy"
-msgstr ""
+msgstr "Не копіювати "
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#z3950NormalizeAuthor# authors from the UNIMARC"
-msgstr ""
+msgstr "авторів з UNIMARC-полів "
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#z3950NormalizeAuthor# tags (separated by commas) to the correct author tags when importing a record using Z39.50."
-msgstr ""
+msgstr " (розділених комами) у правильні поля автора при імпорті запису з використанням Z39.50."
 
 # Circulation
 msgid "circulation.pref"
-msgstr ""
+msgstr "Обіг"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref Checkout Policy"
@@ -660,7 +800,7 @@ msgstr "Не дозволяти"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#AllowHoldPolicyOverride# staff to override hold policies when placing holds."
-msgstr ""
+msgstr " працівникам бібліотеки перевизначати правила резервування при розміщенні резервувань."
 
 # Circulation > Holds Policy
 msgid "circulation.pref#AllowHoldsOnDamagedItems# Allow"
@@ -675,6 +815,18 @@ msgid "circulation.pref#AllowHoldsOnDamagedItems# hold requests to be placed on 
 msgstr ""
 
 # Circulation > Checkout Policy
+msgid "circulation.pref#AllowItemsOnHoldCheckout# Allow"
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#AllowItemsOnHoldCheckout# Don't allow"
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#AllowItemsOnHoldCheckout# checkouts of items items reserved to someone else. If allowed do not generate RESERVE_WAITING and RESERVED warning. This allows self checkouts for those items."
+msgstr ""
+
+# Circulation > Checkout Policy
 msgid "circulation.pref#AllowNotForLoanOverride# Allow"
 msgstr "Дозволити"
 
@@ -684,7 +836,7 @@ msgstr "Не дозволяти"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowNotForLoanOverride# staff to override and check out items that are marked as not for loan."
-msgstr ""
+msgstr " працівникам бібліотеки обходити обмеження та видавати примірники, які позначені як „не для випожичання“."
 
 # Circulation > Holds Policy
 msgid "circulation.pref#AllowOnShelfHolds# Allow"
@@ -722,6 +874,18 @@ msgstr ""
 msgid "circulation.pref#AllowSelfCheckReturns# patrons to return items through web-based self checkout system."
 msgstr ""
 
+# Circulation > Holds Policy
+msgid "circulation.pref#AutoResumeSuspendedHolds# Allow"
+msgstr ""
+
+# Circulation > Holds Policy
+msgid "circulation.pref#AutoResumeSuspendedHolds# Don't allow"
+msgstr ""
+
+# Circulation > Holds Policy
+msgid "circulation.pref#AutoResumeSuspendedHolds# suspended holds to be automatically resumed by a set date."
+msgstr ""
+
 # Circulation > Self Checkout
 msgid "circulation.pref#AutoSelfCheckAllowed# ."
 msgstr ""
@@ -744,31 +908,47 @@ msgstr ""
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AutomaticItemReturn# Do"
-msgstr ""
+msgstr "Здійснювати"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AutomaticItemReturn# Don't"
-msgstr ""
+msgstr "Не проводити"
 
 # Circulation > Checkout Policy
-msgid "circulation.pref#AutomaticItemReturn# automatically transfer items to their home branch when they are returned."
+msgid "circulation.pref#AutomaticItemReturn# automatically transfer items to their home library when they are returned."
+msgstr ""
+
+# Circulation > Interface
+msgid "circulation.pref#CircAutoPrintQuickSlip# ."
+msgstr ""
+
+# Circulation > Interface
+msgid "circulation.pref#CircAutoPrintQuickSlip# When an empty barcode field is submitted in circulation"
+msgstr ""
+
+# Circulation > Interface
+msgid "circulation.pref#CircAutoPrintQuickSlip# clear the screen"
+msgstr ""
+
+# Circulation > Interface
+msgid "circulation.pref#CircAutoPrintQuickSlip# open a print quick slip window"
 msgstr ""
 
 # Circulation > Interface
 msgid "circulation.pref#CircAutocompl# Don't try"
-msgstr ""
+msgstr "Не намагатися"
 
 # Circulation > Interface
 msgid "circulation.pref#CircAutocompl# Only returns the first 10 results at a time."
-msgstr ""
+msgstr "Лише повертає перші 10 результатів за раз."
 
 # Circulation > Interface
 msgid "circulation.pref#CircAutocompl# Try"
-msgstr ""
+msgstr "Намагатися"
 
 # Circulation > Interface
 msgid "circulation.pref#CircAutocompl# to guess the patron being entered while typing a patron search on the circulation screen."
-msgstr ""
+msgstr " вгадати відвідувача при введенні у полі пошуку відвідувача на екрані обігу. "
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#CircControl# Use the checkout and fines rules of"
@@ -808,6 +988,22 @@ msgstr ""
 
 # Circulation > Holds Policy
 msgid "circulation.pref#DisplayMultiPlaceHold# the ability to place holds on multiple biblio from the search results"
+msgstr ""
+
+# Circulation > Holds Policy
+msgid "circulation.pref#ExpireReservesMaxPickUpDelay# Allow"
+msgstr ""
+
+# Circulation > Holds Policy
+msgid "circulation.pref#ExpireReservesMaxPickUpDelay# Don't allow"
+msgstr ""
+
+# Circulation > Holds Policy
+msgid "circulation.pref#ExpireReservesMaxPickUpDelay# holds to expire automatically if they have not been picked by within the time period specified in ReservesMaxPickUpDelay"
+msgstr ""
+
+# Circulation > Holds Policy
+msgid "circulation.pref#ExpireReservesMaxPickUpDelayCharge# If using ExpireReservesMaxPickUpDelay, charge a borrower who allows his or her waiting hold to expire a fee of"
 msgstr ""
 
 # Circulation > Interface
@@ -882,6 +1078,14 @@ msgstr ""
 msgid "circulation.pref#IssuingInProcess# patrons from checking out an item whose rental charge would take them over the limit."
 msgstr ""
 
+# Circulation > Interface
+msgid "circulation.pref#NoticeCSS# Include the stylesheet at"
+msgstr ""
+
+# Circulation > Interface
+msgid "circulation.pref#NoticeCSS# on Notices. (This should be a complete URL, starting with <code>http://</code>)"
+msgstr ""
+
 # Circulation > Holds Policy
 msgid "circulation.pref#OPACAllowHoldDateInFuture# Allow"
 msgstr "Дозволити"
@@ -903,7 +1107,7 @@ msgid "circulation.pref#OPACAllowUserToChooseBranch# Don't allow"
 msgstr ""
 
 # Circulation > Holds Policy
-msgid "circulation.pref#OPACAllowUserToChooseBranch# a user to choose the branch to pick up a hold from."
+msgid "circulation.pref#OPACAllowUserToChooseBranch# a user to choose the library to pick up a hold from."
 msgstr ""
 
 # Circulation > Checkout Policy
@@ -912,19 +1116,19 @@ msgstr ""
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#OverduesBlockCirc# Ask for confirmation"
-msgstr ""
+msgstr "Запитувати підтвердження про"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#OverduesBlockCirc# Block"
-msgstr ""
+msgstr "Блокувати"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#OverduesBlockCirc# Don't block"
-msgstr ""
+msgstr "Не блокувати"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#OverduesBlockCirc# when checking out to a borrower that has overdues outstanding"
-msgstr ""
+msgstr " видачу відвідувачу, який має прострочені несплати"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#PrintNoticesMaxLines# Include up to"
@@ -1064,22 +1268,34 @@ msgstr "Не дозволяти"
 
 # Circulation > Interface
 msgid "circulation.pref#SpecifyDueDate# staff to specify a due date for a checkout."
-msgstr ""
+msgstr " бібліотечному персоналу зазначати дату повернення (очікування) при оформленні видачі."
 
 # Circulation > Holds Policy
 msgid "circulation.pref#StaticHoldsQueueWeight# (as branchcodes, separated by commas; if empty, uses all libraries)"
-msgstr ""
+msgstr " (коди підрозділів, розділені комами, якщо пусто, то використовуються усі бібліотеки)"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#StaticHoldsQueueWeight# Satisfy holds from the libraries"
-msgstr ""
+msgstr "Виконувати резервування з бібліотек "
 
 # Circulation > Holds Policy
 msgid "circulation.pref#StaticHoldsQueueWeight# in random order."
-msgstr ""
+msgstr "у випадковому порядку."
 
 # Circulation > Holds Policy
 msgid "circulation.pref#StaticHoldsQueueWeight# in that order."
+msgstr "у наданому порядку."
+
+# Circulation > Holds Policy
+msgid "circulation.pref#TransferWhenCancelAllWaitingHolds# Don't transfer"
+msgstr ""
+
+# Circulation > Holds Policy
+msgid "circulation.pref#TransferWhenCancelAllWaitingHolds# Transfer"
+msgstr ""
+
+# Circulation > Holds Policy
+msgid "circulation.pref#TransferWhenCancelAllWaitingHolds# items when cancelling all waiting holds."
 msgstr ""
 
 # Circulation > Checkout Policy
@@ -1092,26 +1308,26 @@ msgstr ""
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#UseBranchTransferLimits# ."
-msgstr ""
+msgstr "."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#UseBranchTransferLimits# Don't enforce"
-msgstr ""
+msgstr "Не дотримуватися"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#UseBranchTransferLimits# Enforce"
-msgstr ""
-
-# Circulation > Checkout Policy
-msgid "circulation.pref#UseBranchTransferLimits# branch transfer limits based on"
-msgstr ""
+msgstr "Дотримуватися"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#UseBranchTransferLimits# collection code"
-msgstr "шифр зібрання"
+msgstr "шифрі зібрання"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#UseBranchTransferLimits# item type"
+msgstr "типі примірника"
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#UseBranchTransferLimits# library transfer limits based on"
 msgstr ""
 
 # Circulation > Interface
@@ -1140,15 +1356,15 @@ msgstr ""
 
 # Circulation > Self Checkout
 msgid "circulation.pref#WebBasedSelfCheck# Don't enable"
-msgstr ""
+msgstr "Не задіювати"
 
 # Circulation > Self Checkout
 msgid "circulation.pref#WebBasedSelfCheck# Enable"
-msgstr ""
+msgstr "Задіяти"
 
 # Circulation > Self Checkout
 msgid "circulation.pref#WebBasedSelfCheck# the web-based self checkout system. (available at: /cgi-bin/koha/sco/sco-main.pl)"
-msgstr ""
+msgstr " веб-орієнтовану систему самообслуговування (доступна за адресою: /cgi-bin/koha/sco/sco-main.pl)."
 
 # Circulation > Holds Policy
 msgid "circulation.pref#canreservefromotherbranches# Allow"
@@ -1156,11 +1372,11 @@ msgstr "Дозволити"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#canreservefromotherbranches# Don't allow (with independent branches)"
-msgstr ""
+msgstr "Не дозволяти (у випадку незалежних підрозділів)"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#canreservefromotherbranches# a user from one library to place a hold on an item from another library"
-msgstr ""
+msgstr " користувачам з однієї бібліотеки розміщуватии резервування на примірники з іншої бібліотеки"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#emailLibrarianWhenHoldIsPlaced# Don't enable"
@@ -1176,31 +1392,31 @@ msgstr ""
 
 # Circulation > Fines Policy
 msgid "circulation.pref#finesCalendar# Calculate fines based on days overdue"
-msgstr ""
+msgstr "Розрахунок штрафів ґрунтується на кількості прострочених днів "
 
 # Circulation > Fines Policy
 msgid "circulation.pref#finesCalendar# directly."
-msgstr ""
+msgstr " безпосередньо."
 
 # Circulation > Fines Policy
 msgid "circulation.pref#finesCalendar# not including days the library is closed."
-msgstr ""
+msgstr " виключаючи дні коли бібліотека зачинена."
 
 # Circulation > Fines Policy
 msgid "circulation.pref#finesMode# Calculate (but only for mailing to the admin)"
-msgstr ""
+msgstr "Підраховувати (але лише для висилання адміністратору)"
 
 # Circulation > Fines Policy
 msgid "circulation.pref#finesMode# Calculate and charge"
-msgstr ""
+msgstr "Підраховувати та стягувати"
 
 # Circulation > Fines Policy
 msgid "circulation.pref#finesMode# Don't calculate"
-msgstr ""
+msgstr "Не підраховувати"
 
 # Circulation > Fines Policy
 msgid "circulation.pref#finesMode# fines (when <code>misc/cronjobs/fines.pl</code> is being run)."
-msgstr ""
+msgstr " штрафи (для випадку коли виконується періодичне завдання <code>misc/cronjobs/fines.pl</code>)."
 
 # Circulation > Interface
 msgid "circulation.pref#itemBarcodeInputFilter# Convert from CueCat form"
@@ -1236,11 +1452,11 @@ msgstr ""
 
 # Circulation > Holds Policy
 msgid "circulation.pref#maxreserves# Patrons can only have"
-msgstr ""
+msgstr "Відвідувачі можуть мати лише до "
 
 # Circulation > Holds Policy
 msgid "circulation.pref#maxreserves# holds at once."
-msgstr ""
+msgstr " резервувань за один раз."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#noissuescharge# Prevent patrons from checking out books if they have more than"
@@ -1252,15 +1468,15 @@ msgstr ""
 
 # Circulation > Interface
 msgid "circulation.pref#numReturnedItemsToShow# Show the"
-msgstr ""
+msgstr "Показувати "
 
 # Circulation > Interface
 msgid "circulation.pref#numReturnedItemsToShow# last returned items on the checkin screen."
-msgstr ""
+msgstr " останніх повернутих примірників на екрані повернень."
 
 # Circulation > Interface
 msgid "circulation.pref#previousIssuesDefaultSortOrder# Sort previous checkouts on the circulation page from"
-msgstr ""
+msgstr "Сортувати попередні видачі на сторінці обігу "
 
 # Circulation > Interface
 msgid "circulation.pref#previousIssuesDefaultSortOrder# due date."
@@ -1276,15 +1492,15 @@ msgstr ""
 
 # Circulation > Interface
 msgid "circulation.pref#soundon# Don't enable"
-msgstr ""
+msgstr "Не дозволяти"
 
 # Circulation > Interface
 msgid "circulation.pref#soundon# Enable"
-msgstr ""
+msgstr "Дозволити"
 
 # Circulation > Interface
 msgid "circulation.pref#soundon# circulation sounds during checkin and checkout in the staff interface.  Not supported by all web browsers yet."
-msgstr ""
+msgstr " обігові звуки під час видачі та повернення у інтерфейсі бібліотекарів. Підтримується наразі ще не усіма веб-браузерами."
 
 # Circulation > Interface
 msgid "circulation.pref#todaysIssuesDefaultSortOrder# Sort today's checkouts on the circulation page from"
@@ -1304,23 +1520,23 @@ msgstr ""
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#useDaysMode# Calculate the due date using"
-msgstr ""
+msgstr "Розраховувати дату повернення (очікування) використовуючи "
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#useDaysMode# circulation rules only."
-msgstr ""
+msgstr " лише правила обігу."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#useDaysMode# the calendar to push the due date to the next open day"
-msgstr ""
+msgstr " календар, продовжуючи дату повернення (очікування) до наступного дня, коли бібліотека відкрита."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#useDaysMode# the calendar to skip all days the library is closed."
-msgstr ""
+msgstr " календар, щоб пропустити усі дні, коли бібліотека зачинена."
 
 # Creators
 msgid "creators.pref"
-msgstr ""
+msgstr "Створювачі"
 
 # Creators > Patron Cards
 msgid "creators.pref Patron Cards"
@@ -1328,70 +1544,90 @@ msgstr "Картки відвідувачів"
 
 # Creators > Patron Cards
 msgid "creators.pref#ImageLimit# Limit the number of creator images stored in the database to"
-msgstr ""
+msgstr "Обмежити кількість зображень створювача (карток відвідувачів), що зберігатимуться у базі даних до "
 
 # Creators > Patron Cards
 msgid "creators.pref#ImageLimit# images."
-msgstr ""
+msgstr " зображень."
 
 # Enhanced Content
 msgid "enhanced_content.pref"
-msgstr ""
+msgstr "Розширений вміст"
 
 # Enhanced Content > All
 msgid "enhanced_content.pref All"
-msgstr ""
+msgstr "Усі"
 
 # Enhanced Content > Amazon
 msgid "enhanced_content.pref Amazon"
-msgstr ""
+msgstr "Amazon.com"
 
 # Enhanced Content > Babelthèque
 msgid "enhanced_content.pref Babelthèque"
-msgstr ""
+msgstr "Babeltheque.com"
 
 # Enhanced Content > Baker and Taylor
 msgid "enhanced_content.pref Baker and Taylor"
-msgstr ""
+msgstr "Бейкер & Тейлор (btol.com)"
 
 # Enhanced Content > Google
 msgid "enhanced_content.pref Google"
-msgstr ""
+msgstr "Google.com"
 
 # Enhanced Content > Library Thing
 msgid "enhanced_content.pref Library Thing"
+msgstr "LibraryThing.com"
+
+# Enhanced Content > Local Cover Images
+msgid "enhanced_content.pref Local Cover Images"
 msgstr ""
+
+# Enhanced Content > Novelist Select
+msgid "enhanced_content.pref Novelist Select"
+msgstr "NoveList Select, EBSCO"
 
 # Enhanced Content > OCLC
 msgid "enhanced_content.pref OCLC"
-msgstr ""
+msgstr "OCLC.org"
 
 # Enhanced Content > Open Library
 msgid "enhanced_content.pref Open Library"
-msgstr ""
+msgstr "OpenLibrary.org"
 
 # Enhanced Content > Syndetics
 msgid "enhanced_content.pref Syndetics"
-msgstr ""
+msgstr "Syndetics.com"
 
 # Enhanced Content > Tagging
 msgid "enhanced_content.pref Tagging"
-msgstr ""
+msgstr "Користувацькі мітки"
 
 # Enhanced Content > Amazon
 msgid "enhanced_content.pref#AWSAccessKeyID# (free, at <a href=\"http://aws.amazon.com/\">http://aws.amazon.com/</a>)."
-msgstr ""
+msgstr " (безкоштовно, посилання: <a href=\"http://aws.amazon.com/\">http://aws.amazon.com/</a>)."
 
 # Enhanced Content > Amazon
 msgid "enhanced_content.pref#AWSAccessKeyID# Access Amazon content using the access key"
-msgstr ""
+msgstr "Доступ до вмісту Amazon, використовуючи ключ доступу "
 
 # Enhanced Content > Amazon
 msgid "enhanced_content.pref#AWSPrivateKey# (free, at <a href=\"http://aws.amazon.com/\">http://aws.amazon.com/</a>)."
-msgstr ""
+msgstr " (безкоштовно, посилання: <a href=\"http://aws.amazon.com/\">http://aws.amazon.com/</a>)."
 
 # Enhanced Content > Amazon
 msgid "enhanced_content.pref#AWSPrivateKey# Access Amazon content (other than book jackets) using the private key"
+msgstr "Доступ до вмісту Amazon (окрім обкладинок книг) з використанням приватного ключа "
+
+# Enhanced Content > Local Cover Images
+msgid "enhanced_content.pref#AllowMultipleCovers# Allow"
+msgstr ""
+
+# Enhanced Content > Local Cover Images
+msgid "enhanced_content.pref#AllowMultipleCovers# Don't allow"
+msgstr ""
+
+# Enhanced Content > Local Cover Images
+msgid "enhanced_content.pref#AllowMultipleCovers# multiple images to be attached to each bibliographic record."
 msgstr ""
 
 # Enhanced Content > Amazon
@@ -1484,14 +1720,22 @@ msgstr ""
 
 # Enhanced Content > Babelthèque
 msgid "enhanced_content.pref#Babeltheque# Do"
-msgstr ""
+msgstr "Включати"
 
 # Enhanced Content > Babelthèque
 msgid "enhanced_content.pref#Babeltheque# Don't"
-msgstr ""
+msgstr "Не включати"
 
 # Enhanced Content > Babelthèque
 msgid "enhanced_content.pref#Babeltheque# include information (such as reviews and citations) from Babelthèque in item detail pages on the OPAC."
+msgstr " інформацію (на кшталт оглядів та цитат) з <a href=\"http://www.babeltheque.com/\">Babelthèque.com</a> на сторінки подробиць про записи в електронному каталозі."
+
+# Enhanced Content > Babelthèque
+msgid "enhanced_content.pref#Babeltheque_url_js# Defined the url for the Babeltheque javascript file (eg. http://www.babeltheque.com/bw_XX.js)"
+msgstr ""
+
+# Enhanced Content > Babelthèque
+msgid "enhanced_content.pref#Babeltheque_url_update# Defined the url for the Babeltheque update periodically (eq. http://www.babeltheque.com/.../file.csv.bz2)."
 msgstr ""
 
 # Enhanced Content > Baker and Taylor
@@ -1516,15 +1760,15 @@ msgstr ""
 
 # Enhanced Content > Baker and Taylor
 msgid "enhanced_content.pref#BakerTaylorUsername# ."
-msgstr ""
+msgstr "."
 
 # Enhanced Content > Baker and Taylor
 msgid "enhanced_content.pref#BakerTaylorUsername# Access Baker and Taylor using username"
-msgstr ""
+msgstr "Мати доступ до „<a href=\"http://www.btol.com/\">Бейкер & Тейлор</a>“, використовуючи ім’я користувача "
 
 # Enhanced Content > Baker and Taylor
 msgid "enhanced_content.pref#BakerTaylorUsername# and password"
-msgstr ""
+msgstr "та пароль "
 
 # Enhanced Content > All
 msgid "enhanced_content.pref#FRBRizeEditions# Don't show"
@@ -1540,15 +1784,15 @@ msgstr ""
 
 # Enhanced Content > Google
 msgid "enhanced_content.pref#GoogleJackets# Add"
-msgstr ""
+msgstr "Додавати"
 
 # Enhanced Content > Google
 msgid "enhanced_content.pref#GoogleJackets# Don't add"
-msgstr ""
+msgstr "Не додавати"
 
 # Enhanced Content > Google
 msgid "enhanced_content.pref#GoogleJackets# cover images from Google Books to search results and item detail pages on the OPAC."
-msgstr ""
+msgstr " обкладинки з „<a href=\"http://books.google.com.ua/\">Google Книги</a>“ в результати пошуку та на сторінки подробиць запису у електронному каталозі."
 
 # Enhanced Content > Library Thing
 msgid "enhanced_content.pref#LibraryThingForLibrariesEnabled# <a href=\"http://www.librarything.com/forlibraries/\">sign up</a>, then enter in your ID below."
@@ -1568,11 +1812,11 @@ msgstr ""
 
 # Enhanced Content > Library Thing
 msgid "enhanced_content.pref#LibraryThingForLibrariesID# ."
-msgstr ""
+msgstr "."
 
 # Enhanced Content > Library Thing
 msgid "enhanced_content.pref#LibraryThingForLibrariesID# Access Library Thing for Libraries using the customer ID"
-msgstr ""
+msgstr "Мати доступ до „<a href=\"http://www.librarything.com/forlibraries\">Library Thing для бібліотек</a>“,  використовуючи ідентифікатор клієнта "
 
 # Enhanced Content > Library Thing
 msgid "enhanced_content.pref#LibraryThingForLibrariesTabbedView# Show Library Thing for Libraries content"
@@ -1586,13 +1830,73 @@ msgstr ""
 msgid "enhanced_content.pref#LibraryThingForLibrariesTabbedView# in tabs."
 msgstr ""
 
-# Enhanced Content > OCLC
-msgid "enhanced_content.pref#OCLCAffiliateID# Use the <a href=\"http://www.worldcat.org/affiliate/webservices/xisbn/app.jsp\">OCLC affiliate ID</a>"
+# Enhanced Content > Local Cover Images
+msgid "enhanced_content.pref#LocalCoverImages# Display"
+msgstr ""
+
+# Enhanced Content > Local Cover Images
+msgid "enhanced_content.pref#LocalCoverImages# Don't display"
+msgstr ""
+
+# Enhanced Content > Local Cover Images
+msgid "enhanced_content.pref#LocalCoverImages# local cover images on intranet search and details pages."
+msgstr ""
+
+# Enhanced Content > Novelist Select
+msgid "enhanced_content.pref#NovelistSelectEnabled# Add"
+msgstr ""
+
+# Enhanced Content > Novelist Select
+msgid "enhanced_content.pref#NovelistSelectEnabled# Don't add"
+msgstr ""
+
+# Enhanced Content > Novelist Select
+msgid "enhanced_content.pref#NovelistSelectEnabled# Novelist Select content to the OPAC (requires that you have entered in a user profile and password, which can be seen in image links)."
+msgstr ""
+
+# Enhanced Content > Novelist Select
+msgid "enhanced_content.pref#NovelistSelectProfile# ."
+msgstr ""
+
+# Enhanced Content > Novelist Select
+msgid "enhanced_content.pref#NovelistSelectProfile# Access Novelist Select using user profile"
+msgstr ""
+
+# Enhanced Content > Novelist Select
+msgid "enhanced_content.pref#NovelistSelectProfile# and password"
+msgstr ""
+
+# Enhanced Content > Novelist Select
+msgid "enhanced_content.pref#NovelistSelectView# ."
+msgstr ""
+
+# Enhanced Content > Novelist Select
+msgid "enhanced_content.pref#NovelistSelectView# Display Novelist Select content"
+msgstr ""
+
+# Enhanced Content > Novelist Select
+msgid "enhanced_content.pref#NovelistSelectView# above the holdings table"
+msgstr ""
+
+# Enhanced Content > Novelist Select
+msgid "enhanced_content.pref#NovelistSelectView# below the holdings table"
+msgstr ""
+
+# Enhanced Content > Novelist Select
+msgid "enhanced_content.pref#NovelistSelectView# in an OPAC tab"
+msgstr ""
+
+# Enhanced Content > Novelist Select
+msgid "enhanced_content.pref#NovelistSelectView# under the Save Record dropdown, on the right"
 msgstr ""
 
 # Enhanced Content > OCLC
+msgid "enhanced_content.pref#OCLCAffiliateID# Use the <a href=\"http://www.worldcat.org/affiliate/webservices/xisbn/app.jsp\">OCLC affiliate ID</a>"
+msgstr "Використовувати „<a href=\"http://www.worldcat.org/affiliate/webservices/xisbn/app.jsp\">ідентифікатор партнера Онлайнового комп’ютерного бібліотечного центру (OCLC)</a>“ "
+
+# Enhanced Content > OCLC
 msgid "enhanced_content.pref#OCLCAffiliateID# to access the xISBN service. Note that unless you have signed up for an ID, you are limited to 1000 requests per day."
-msgstr ""
+msgstr " для доступу до сервісу xISBN. Зверніть увагу, що, якщо Ви підписалися на даний „OCLC affiliate ID“, Ви обмежені до 1000 запитів на день."
 
 # Enhanced Content > Amazon
 msgid "enhanced_content.pref#OPACAmazonCoverImages# Don't show"
@@ -1644,14 +1948,26 @@ msgstr ""
 
 # Enhanced Content > All
 msgid "enhanced_content.pref#OPACFRBRizeEditions# Don't show"
-msgstr ""
+msgstr "Не показувати"
 
 # Enhanced Content > All
 msgid "enhanced_content.pref#OPACFRBRizeEditions# Show"
-msgstr ""
+msgstr "Показувати"
 
 # Enhanced Content > All
 msgid "enhanced_content.pref#OPACFRBRizeEditions# other editions of an item on the OPAC."
+msgstr " інші видання одиниці у електронному каталозі."
+
+# Enhanced Content > Local Cover Images
+msgid "enhanced_content.pref#OPACLocalCoverImages# Display"
+msgstr ""
+
+# Enhanced Content > Local Cover Images
+msgid "enhanced_content.pref#OPACLocalCoverImages# Don't display"
+msgstr ""
+
+# Enhanced Content > Local Cover Images
+msgid "enhanced_content.pref#OPACLocalCoverImages# local cover images on OPAC search and details pages."
 msgstr ""
 
 # Enhanced Content > Open Library
@@ -1692,11 +2008,11 @@ msgstr ""
 
 # Enhanced Content > Syndetics
 msgid "enhanced_content.pref#SyndeticsClientCode# Use the client code"
-msgstr ""
+msgstr "Використовувати код клієнта "
 
 # Enhanced Content > Syndetics
 msgid "enhanced_content.pref#SyndeticsClientCode# to access Syndetics."
-msgstr ""
+msgstr " для доступу до <a href=\"http://www.bowker.com/syndetics/\">Syndetics</a>."
 
 # Enhanced Content > Syndetics
 msgid "enhanced_content.pref#SyndeticsCoverImages# Don't show"
@@ -1808,15 +2124,15 @@ msgstr ""
 
 # Enhanced Content > Tagging
 msgid "enhanced_content.pref#TagsEnabled# Allow"
-msgstr ""
+msgstr "Дозволити"
 
 # Enhanced Content > Tagging
 msgid "enhanced_content.pref#TagsEnabled# Don't allow"
-msgstr ""
+msgstr "Не дозволяти"
 
 # Enhanced Content > Tagging
 msgid "enhanced_content.pref#TagsEnabled# patrons and staff to put tags on items."
-msgstr ""
+msgstr " відвідувачам та працівникам бібліотеки ставити мітки на біб-записи."
 
 # Enhanced Content > Tagging
 msgid "enhanced_content.pref#TagsExternalDictionary# Allow tags in the dictionary of the ispell executable"
@@ -1912,6 +2228,22 @@ msgstr ""
 
 # I18N/L10N
 msgid "i18n_l10n.pref"
+msgstr "Інтернаціоналізація/локалізація"
+
+# I18N/L10N
+msgid "i18n_l10n.pref#CalendarFirstDayOfWeek# Monday"
+msgstr ""
+
+# I18N/L10N
+msgid "i18n_l10n.pref#CalendarFirstDayOfWeek# Sunday"
+msgstr ""
+
+# I18N/L10N
+msgid "i18n_l10n.pref#CalendarFirstDayOfWeek# Use"
+msgstr ""
+
+# I18N/L10N
+msgid "i18n_l10n.pref#CalendarFirstDayOfWeek# as the first day of week in the calendar."
 msgstr ""
 
 # I18N/L10N
@@ -1931,120 +2263,120 @@ msgid "i18n_l10n.pref#dateformat# mm/dd/yyyy"
 msgstr "мм/дд/рррр"
 
 # I18N/L10N
-msgid "i18n_l10n.pref#dateformat# yyyy/mm/dd"
-msgstr "рррр/мм/дд"
+msgid "i18n_l10n.pref#dateformat# yyyy-mm-dd"
+msgstr ""
 
 # I18N/L10N
 msgid "i18n_l10n.pref#language# Enable the following languages on the staff interface:"
-msgstr ""
+msgstr "Задіяти наступні мови у бібліотечному інтерфейсі: "
 
 # I18N/L10N
 msgid "i18n_l10n.pref#opaclanguages# Enable the following languages on the OPAC:"
-msgstr ""
+msgstr "Задіяти наступні мови для ЕК: "
 
 # I18N/L10N
 msgid "i18n_l10n.pref#opaclanguagesdisplay# Allow"
-msgstr ""
+msgstr "Дозволити "
 
 # I18N/L10N
 msgid "i18n_l10n.pref#opaclanguagesdisplay# Don't allow"
-msgstr ""
+msgstr "Заборонити "
 
 # I18N/L10N
 msgid "i18n_l10n.pref#opaclanguagesdisplay# patrons to change the language they see on the OPAC."
-msgstr ""
+msgstr " відвідувачам змінювати мову, якою вони бачать інтерфейс ЕК."
 
 # Local Use
 msgid "local_use.pref"
-msgstr ""
+msgstr "Місцеве використання"
 
 # Logging
 msgid "logs.pref"
-msgstr ""
+msgstr "Протоколи"
 
 # Logging
 msgid "logs.pref#AuthoritiesLog# Don't log"
-msgstr ""
+msgstr "Не записувати у журнал "
 
 # Logging
 msgid "logs.pref#AuthoritiesLog# Log"
-msgstr ""
+msgstr "Записувати у журнал "
 
 # Logging
 msgid "logs.pref#AuthoritiesLog# changes to authority records."
-msgstr ""
+msgstr " зміни в авторитетних записах."
 
 # Logging
 msgid "logs.pref#BorrowersLog# Don't log"
-msgstr ""
+msgstr "Не записувати у журнал "
 
 # Logging
 msgid "logs.pref#BorrowersLog# Log"
-msgstr ""
+msgstr "Записувати у журнал "
 
 # Logging
 msgid "logs.pref#BorrowersLog# changes to patron records."
-msgstr ""
+msgstr " зміни у записах відвідувачів."
 
 # Logging
 msgid "logs.pref#CataloguingLog# Don't log"
-msgstr ""
+msgstr "Не записувати у журнал "
 
 # Logging
 msgid "logs.pref#CataloguingLog# Log"
-msgstr ""
+msgstr "Записувати у журнал "
 
 # Logging
 msgid "logs.pref#CataloguingLog# any changes to bibliographic or item records. Since this occurs whenever a book is checked in or out as well, it is not advisable to turn this on."
-msgstr ""
+msgstr " будь-які зміни щодо бібліографічних чи примірникових записів. Оскільки це відбувається також щоразу, коли книга видається чи повертається, не рекомендується задіювати цей параметр."
 
 # Logging
 msgid "logs.pref#FinesLog# Don't log"
-msgstr ""
+msgstr "Не записувати у журнал "
 
 # Logging
 msgid "logs.pref#FinesLog# Log"
-msgstr ""
+msgstr "Записувати у журнал "
 
 # Logging
 msgid "logs.pref#FinesLog# when overdue fines are charged or automatically forgiven."
-msgstr ""
+msgstr " коли прострочені штрафи стягуються або автоматично прощені."
 
 # Logging
 msgid "logs.pref#IssueLog# Don't log"
-msgstr ""
+msgstr "Не записувати у журнал "
 
 # Logging
 msgid "logs.pref#IssueLog# Log"
-msgstr ""
+msgstr "Записувати у журнал "
 
 # Logging
 msgid "logs.pref#IssueLog# when items are checked out."
-msgstr ""
+msgstr " коли примірники видаються."
 
 # Logging
 msgid "logs.pref#LetterLog# Don't log"
-msgstr ""
+msgstr "Не записувати у журнал "
 
 # Logging
 msgid "logs.pref#LetterLog# Log"
-msgstr ""
+msgstr "Записувати у журнал "
 
 # Logging
 msgid "logs.pref#LetterLog# when an automatic claim notice is sent."
-msgstr ""
+msgstr " коли надсилається автоматичне повідомлення з претензією."
 
 # Logging
 msgid "logs.pref#ReturnLog# Don't log"
-msgstr ""
+msgstr "Не записувати у журнал "
 
 # Logging
 msgid "logs.pref#ReturnLog# Log"
-msgstr ""
+msgstr "Записувати у журнал "
 
 # Logging
 msgid "logs.pref#ReturnLog# when items are returned."
-msgstr ""
+msgstr " при поверненні примірників."
 
 # Logging
 msgid "logs.pref#SubscriptionLog# Don't log"
@@ -2060,7 +2392,7 @@ msgstr " коли серіальні видання додаються, вилу
 
 # OPAC
 msgid "opac.pref"
-msgstr ""
+msgstr "Електронний каталог"
 
 # OPAC > Appearance
 msgid "opac.pref Appearance"
@@ -2091,7 +2423,7 @@ msgid "opac.pref#AllowPurchaseSuggestionBranchChoice# Don't allow"
 msgstr ""
 
 # OPAC > Policy
-msgid "opac.pref#AllowPurchaseSuggestionBranchChoice# patrons to select branch when making a purchase suggestion"
+msgid "opac.pref#AllowPurchaseSuggestionBranchChoice# patrons to select library when making a purchase suggestion"
 msgstr ""
 
 # OPAC > Privacy
@@ -2108,11 +2440,11 @@ msgstr ""
 
 # OPAC > Privacy
 msgid "opac.pref#AnonymousPatron# Use borrowernumber"
-msgstr ""
+msgstr "Використовувати системний номер користувача "
 
 # OPAC > Privacy
 msgid "opac.pref#AnonymousPatron# as the Anonymous Patron (for anonymous suggestions and reading history)"
-msgstr ""
+msgstr " для анонімного відвідувача (для анонімних пропозицій на придбання та історії читання)"
 
 # OPAC > Appearance
 msgid "opac.pref#AuthorisedValueImages# Don't show"
@@ -2128,19 +2460,19 @@ msgstr ""
 
 # OPAC > Appearance
 msgid "opac.pref#BiblioDefaultView# By default, show bib records"
-msgstr ""
+msgstr "За умовчанням, показувати бібліотечні записи "
 
 # OPAC > Appearance
 msgid "opac.pref#BiblioDefaultView# as specified in the ISBD template."
-msgstr ""
+msgstr " як зазначено у шаблоні ISBD."
 
 # OPAC > Appearance
 msgid "opac.pref#BiblioDefaultView# in simple form."
-msgstr ""
+msgstr " у простій формі. "
 
 # OPAC > Appearance
 msgid "opac.pref#BiblioDefaultView# in their MARC form."
-msgstr ""
+msgstr " у МАРК-форматі. "
 
 # OPAC > Appearance
 msgid "opac.pref#COinSinOPACResults# COinS / OpenURL / Z39.88 in OPAC search results.  <br/>Warning: Enabling this feature will slow OPAC search response times."
@@ -2156,39 +2488,39 @@ msgstr ""
 
 # OPAC > Appearance
 msgid "opac.pref#DisplayOPACiconsXSLT# On pages displayed with XSLT stylesheets on the OPAC,"
-msgstr ""
+msgstr "На сторінках в ЕК, відображуваних з використанням таблиць стилів XSLT, "
 
 # OPAC > Appearance
 msgid "opac.pref#DisplayOPACiconsXSLT# don't show"
-msgstr ""
+msgstr "не відображати"
 
 # OPAC > Appearance
 msgid "opac.pref#DisplayOPACiconsXSLT# icons for itemtype and authorized values."
-msgstr ""
+msgstr " значки типів одиниць та авторитетних значень."
 
 # OPAC > Appearance
 msgid "opac.pref#DisplayOPACiconsXSLT# show"
-msgstr ""
+msgstr "відображати"
 
 # OPAC > Privacy
 msgid "opac.pref#EnableOpacSearchHistory# Don't keep"
-msgstr ""
+msgstr "Не зберігати"
 
 # OPAC > Privacy
 msgid "opac.pref#EnableOpacSearchHistory# Keep"
-msgstr ""
+msgstr "Зберігати"
 
 # OPAC > Privacy
 msgid "opac.pref#EnableOpacSearchHistory# patron search history in the OPAC."
-msgstr "історія пошуків"
+msgstr " історію пошуків відвідувача в електронному каталозі."
 
 # OPAC > Appearance
 msgid "opac.pref#LibraryName# Show"
-msgstr ""
+msgstr "Показувати "
 
 # OPAC > Appearance
 msgid "opac.pref#LibraryName# as the name of the library on the OPAC."
-msgstr ""
+msgstr " в якості назви бібліотеки в електронному каталозі."
 
 # OPAC > Appearance
 msgid "opac.pref#OPACBaseURL# . (This must be filled in correctly for RSS, unAPI, and search plugins to work.)"
@@ -2239,7 +2571,7 @@ msgid "opac.pref#OPACFineNoRenewals# Only allow patrons to renew their own books
 msgstr ""
 
 # OPAC > Policy
-msgid "opac.pref#OPACFineNoRenewals# [% local_currency %] in fines (set a large value to always allow renewal)."
+msgid "opac.pref#OPACFineNoRenewals# [% local_currency %] in fines (leave blank to disable)."
 msgstr ""
 
 # OPAC > Features
@@ -2268,15 +2600,15 @@ msgstr ""
 
 # OPAC > Appearance
 msgid "opac.pref#OPACMySummaryHTML# <br />Note: The placeholders {BIBLIONUMBER}, {TITLE}, {ISBN} and {AUTHOR} will be replaced with information from the displayed record."
-msgstr ""
+msgstr "<br />Примітка: позначки-заповнювачі {BIBLIONUMBER}, {TITLE}, {ISBN} та {AUTHOR} будуть замінені на інформацію з висвіченого запису."
 
 # OPAC > Appearance
 msgid "opac.pref#OPACMySummaryHTML# Include a \"Links\" column on the \"my summary\" tab when a user is logged in to the OPAC, with the following HTML (leave blank to disable):"
-msgstr ""
+msgstr "Включити колонку „Посилання“ на вкладці „моє зведення“ (доступна, коли користувач увійшов в електронний каталог) з наступним HTML-кодом (залиште порожнім для відключення):"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACNoResultsFound# Display this HTML when no results are found for a search in the OPAC:"
-msgstr ""
+msgstr "Показувати цей HTML-код при відсутності результату пошуку в електронному каталозі: "
 
 # OPAC > Features
 msgid "opac.pref#OPACPatronDetails# Allow"
@@ -2288,26 +2620,26 @@ msgstr "Не дозволяти"
 
 # OPAC > Features
 msgid "opac.pref#OPACPatronDetails# patrons to notify the library of changes to their contact information from the OPAC."
-msgstr ""
+msgstr "відвідувачам повідомляти бібліотеку  з ЕК про зміну своїх контактних даних."
 
 # OPAC > Privacy
 msgid "opac.pref#OPACPrivacy# Allow"
-msgstr ""
+msgstr "Дозволяти"
 
 # OPAC > Privacy
 msgid "opac.pref#OPACPrivacy# Don't allow"
-msgstr ""
+msgstr "Не дозволяти"
 
 # OPAC > Privacy
 msgid "opac.pref#OPACPrivacy# patrons to choose their own privacy settings for their reading history.  This requires opacreadinghistory and AnonymousPatron"
-msgstr ""
+msgstr " відвідувачам самостійно вибирати параметри конфіденційності для їх історії читання. Це також вимагає задіяти „opacreadinghistory“ та „AnonymousPatron“"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACResultsSidebar# Include the following HTML under the facets in OPAC search results:"
 msgstr ""
 
 # OPAC > Appearance
-msgid "opac.pref#OPACSearchForTitleIn# <br />Note: The placeholders {BIBLIONUMBER}, {CONTROLNUMBER}, {TITLE}, {ISBN} and {AUTHOR} will be replaced with information from the displayed record."
+msgid "opac.pref#OPACSearchForTitleIn# <br />Note: The placeholders {BIBLIONUMBER}, {CONTROLNUMBER}, {TITLE}, {ISBN}, {ISSN} and {AUTHOR} will be replaced with information from the displayed record."
 msgstr ""
 
 # OPAC > Appearance
@@ -2360,38 +2692,42 @@ msgstr ""
 
 # OPAC > Policy
 msgid "opac.pref#OPACViewOthersSuggestions# Don't show"
-msgstr ""
+msgstr "Не показувати"
 
 # OPAC > Policy
 msgid "opac.pref#OPACViewOthersSuggestions# Show"
-msgstr ""
+msgstr "Показувати"
 
 # OPAC > Policy
 msgid "opac.pref#OPACViewOthersSuggestions# purchase suggestions from other patrons on the OPAC."
+msgstr " пропозиції на придбання від інших відвідувачів в електронному каталозі."
+
+# OPAC > Appearance
+msgid "opac.pref#OPACXSLTDetailsDisplay# <br />Options:<br />- leave empty for \"no xslt\"<br />- enter \"default\" for the default one<br />- put a path to define a xslt file<br />- put an URL for an external specific stylesheet.<br />{langcode} will be replaced with current interface language"
 msgstr ""
 
 # OPAC > Appearance
-msgid "opac.pref#OPACXSLTDetailsDisplay# Show item details pages on the OPAC"
+msgid "opac.pref#OPACXSLTDetailsDisplay# Display OPAC details using XSLT stylesheet at: "
 msgstr ""
 
 # OPAC > Appearance
-msgid "opac.pref#OPACXSLTDetailsDisplay# normally."
+msgid "opac.pref#OPACXSLTResultsDisplay# <br />Options:<br />- leave empty for \"no xslt\"<br />- enter \"default\" for the default one<br />- put a path to define a xslt file<br />- put an URL for an external specific stylesheet.<br />{langcode} will be replaced with current interface language"
 msgstr ""
 
 # OPAC > Appearance
-msgid "opac.pref#OPACXSLTDetailsDisplay# using XSLT stylesheets."
+msgid "opac.pref#OPACXSLTResultsDisplay# Display OPAC results using XSLT stylesheet at: "
 msgstr ""
 
-# OPAC > Appearance
-msgid "opac.pref#OPACXSLTResultsDisplay# Show biblio records on OPAC result page"
+# OPAC > Features
+msgid "opac.pref#OPACpatronimages# Don't show"
 msgstr ""
 
-# OPAC > Appearance
-msgid "opac.pref#OPACXSLTResultsDisplay# normally."
+# OPAC > Features
+msgid "opac.pref#OPACpatronimages# Show"
 msgstr ""
 
-# OPAC > Appearance
-msgid "opac.pref#OPACXSLTResultsDisplay# using XSLT stylesheets."
+# OPAC > Features
+msgid "opac.pref#OPACpatronimages# patron images on the patron information page in the OPAC."
 msgstr ""
 
 # OPAC > Appearance
@@ -2404,6 +2740,30 @@ msgstr ""
 
 # OPAC > Appearance
 msgid "opac.pref#OpacAddMastheadLibraryPulldown# a library select pulldown menu on the OPAC masthead."
+msgstr ""
+
+# OPAC > Policy
+msgid "opac.pref#OpacAllowPublicListCreation# Allow"
+msgstr ""
+
+# OPAC > Policy
+msgid "opac.pref#OpacAllowPublicListCreation# Don't allow"
+msgstr ""
+
+# OPAC > Policy
+msgid "opac.pref#OpacAllowPublicListCreation# opac users to create public lists"
+msgstr ""
+
+# OPAC > Policy
+msgid "opac.pref#OpacAllowSharingPrivateLists# Allow"
+msgstr ""
+
+# OPAC > Policy
+msgid "opac.pref#OpacAllowSharingPrivateLists# Don't allow"
+msgstr ""
+
+# OPAC > Policy
+msgid "opac.pref#OpacAllowSharingPrivateLists# opac users to share private lists with other patrons. This feature is not active yet but will be released soon"
 msgstr ""
 
 # OPAC > Features
@@ -2419,6 +2779,18 @@ msgid "opac.pref#OpacAuthorities# patrons to search your authority records."
 msgstr ""
 
 # OPAC > Features
+msgid "opac.pref#OpacBrowseResults# Disable"
+msgstr ""
+
+# OPAC > Features
+msgid "opac.pref#OpacBrowseResults# Enable"
+msgstr ""
+
+# OPAC > Features
+msgid "opac.pref#OpacBrowseResults# browsing and paging search results from the OPAC detail page."
+msgstr ""
+
+# OPAC > Features
 msgid "opac.pref#OpacBrowser# Allow"
 msgstr "Дозволити"
 
@@ -2431,15 +2803,31 @@ msgid "opac.pref#OpacBrowser# patrons to browse subject authorities on OPAC (run
 msgstr ""
 
 # OPAC > Appearance
-msgid "opac.pref#OpacFavicon# Use the image at"
+msgid "opac.pref#OpacExportOptions# <br />Note: Available options are: BIBTEX (<code>bibtex</code>), Dublin Core (<code>dc</code>),"
 msgstr ""
 
 # OPAC > Appearance
-msgid "opac.pref#OpacFavicon# for the OPAC's favicon. (This should be a complete URL, starting with <code>http://</code>.)"
+msgid "opac.pref#OpacExportOptions# List export options that should be available from OPAC detail page separated by |:"
 msgstr ""
 
+# OPAC > Appearance
+msgid "opac.pref#OpacExportOptions# MARCXML (<code>marcxml</code>), MARC-8 encoded MARC (<code>marc8</code>), Unicode/UTF-8 encoded MARC (<code>utf8</code>),"
+msgstr ""
+
+# OPAC > Appearance
+msgid "opac.pref#OpacExportOptions# Unicode/UTF-8 encoded MARC without local use -9xx, x9x, xx9- fields and subfields (<code>marcstd</code>), MODS (<code>mods</code>), RIS (<code>ris</code>)"
+msgstr ""
+
+# OPAC > Appearance
+msgid "opac.pref#OpacFavicon# Use the image at"
+msgstr "Використовувати зображення за адресою "
+
+# OPAC > Appearance
+msgid "opac.pref#OpacFavicon# for the OPAC's favicon. (This should be a complete URL, starting with <code>http://</code>.)"
+msgstr " на <a href=\"http://uk.wikipedia.org/wiki/Favicon\">значок favicon</a> для електронного каталогу (має бути повною URL-адресою, що починається з <code>http://</code>)."
+
 # OPAC > Policy
-msgid "opac.pref#OpacHiddenItems# Allows to define custom rules for hiding specific items at opac. See docs/opac/OpacHiddenItems.txt for more informations."
+msgid "opac.pref#OpacHiddenItems# Allows to define custom rules for hiding specific items at opac. See docs/opac/OpacHiddenItems.txt for more informations"
 msgstr ""
 
 # OPAC > Appearance
@@ -2456,15 +2844,15 @@ msgstr ""
 
 # OPAC > Appearance
 msgid "opac.pref#OpacKohaUrl# 'Powered by Koha' text on OPAC footer."
-msgstr ""
+msgstr "текст „Працює на Коха“ на нижньому колонтитулі електронного каталогу."
 
 # OPAC > Appearance
 msgid "opac.pref#OpacKohaUrl# Don't show"
-msgstr ""
+msgstr "Не показувати"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacKohaUrl# Show"
-msgstr ""
+msgstr "Показувати"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacMainUserBlock# Show the following HTML in its own column on the main page of the OPAC:"
@@ -2486,6 +2874,10 @@ msgstr ""
 msgid "opac.pref#OpacNav# Show the following HTML on the left hand column of the main page and patron account on the OPAC (generally navigation links):"
 msgstr ""
 
+# OPAC > Appearance
+msgid "opac.pref#OpacNavBottom# Show the following HTML on the left hand column of the main page and patron account on the OPAC, after OpacNav, and before patron account links if available:"
+msgstr ""
+
 # OPAC > Features
 msgid "opac.pref#OpacPasswordChange# Allow"
 msgstr "Дозволити"
@@ -2500,15 +2892,15 @@ msgstr ""
 
 # OPAC > Appearance
 msgid "opac.pref#OpacPublic# Disable"
-msgstr ""
+msgstr "Не дозволяти"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacPublic# Enable"
-msgstr ""
+msgstr "Дозволити"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacPublic# Koha OPAC as public. Private OPAC requires authentification before accessing the OPAC."
-msgstr ""
+msgstr " бути відкритим електронному каталозі на АБІС Коха. Приватний електронний каталог вимагає автентифікації перед доступом до електронного каталогу."
 
 # OPAC > Policy
 msgid "opac.pref#OpacRenewalAllowed# Allow"
@@ -2539,15 +2931,47 @@ msgid "opac.pref#OpacRenewalBranch# as branchcode to store in the statistics tab
 msgstr ""
 
 # OPAC > Policy
-msgid "opac.pref#OpacRenewalBranch# the branch the item was checked out from"
+msgid "opac.pref#OpacRenewalBranch# the item's home library"
 msgstr ""
 
 # OPAC > Policy
-msgid "opac.pref#OpacRenewalBranch# the item's home branch"
+msgid "opac.pref#OpacRenewalBranch# the library the item was checked out from"
 msgstr ""
 
 # OPAC > Policy
-msgid "opac.pref#OpacRenewalBranch# the patron's home branch"
+msgid "opac.pref#OpacRenewalBranch# the patron's home library"
+msgstr ""
+
+# OPAC > Appearance
+msgid "opac.pref#OpacShowRecentComments# Don't show"
+msgstr ""
+
+# OPAC > Appearance
+msgid "opac.pref#OpacShowRecentComments# Show"
+msgstr ""
+
+# OPAC > Appearance
+msgid "opac.pref#OpacShowRecentComments# a link to recent comments in the OPAC masthead."
+msgstr ""
+
+# OPAC > Appearance
+msgid "opac.pref#OpacStarRatings# Show star-ratings on"
+msgstr ""
+
+# OPAC > Appearance
+msgid "opac.pref#OpacStarRatings# no"
+msgstr ""
+
+# OPAC > Appearance
+msgid "opac.pref#OpacStarRatings# only details"
+msgstr ""
+
+# OPAC > Appearance
+msgid "opac.pref#OpacStarRatings# pages."
+msgstr ""
+
+# OPAC > Appearance
+msgid "opac.pref#OpacStarRatings# results and details"
 msgstr ""
 
 # OPAC > Features
@@ -2576,15 +3000,15 @@ msgstr ""
 
 # OPAC > Policy
 msgid "opac.pref#SearchMyLibraryFirst# Don't limit"
-msgstr ""
+msgstr "Не обмежувати "
 
 # OPAC > Policy
 msgid "opac.pref#SearchMyLibraryFirst# Limit"
-msgstr ""
+msgstr "Обмежувати "
 
 # OPAC > Policy
 msgid "opac.pref#SearchMyLibraryFirst# patrons' searches to the library they are registered at."
-msgstr ""
+msgstr " результати пошуків бібліотекою, в якій відвідувач зареєстрований."
 
 # OPAC > Shelf Browser
 msgid "opac.pref#ShelfBrowserUsesCcode# Don't use"
@@ -2596,7 +3020,7 @@ msgstr ""
 
 # OPAC > Shelf Browser
 msgid "opac.pref#ShelfBrowserUsesCcode# the item collection code when finding items for the shelf browser."
-msgstr "шифр зібрання"
+msgstr ""
 
 # OPAC > Shelf Browser
 msgid "opac.pref#ShelfBrowserUsesHomeBranch# Don't use"
@@ -2607,7 +3031,7 @@ msgid "opac.pref#ShelfBrowserUsesHomeBranch# Use"
 msgstr ""
 
 # OPAC > Shelf Browser
-msgid "opac.pref#ShelfBrowserUsesHomeBranch# the item home branch when finding items for the shelf browser."
+msgid "opac.pref#ShelfBrowserUsesHomeBranch# the item home library when finding items for the shelf browser."
 msgstr ""
 
 # OPAC > Shelf Browser
@@ -2623,15 +3047,35 @@ msgid "opac.pref#ShelfBrowserUsesLocation# the item location when finding items 
 msgstr ""
 
 # OPAC > Features
-msgid "opac.pref#ShowReviewer# Hide"
-msgstr ""
-
-# OPAC > Features
 msgid "opac.pref#ShowReviewer# Show"
 msgstr ""
 
 # OPAC > Features
-msgid "opac.pref#ShowReviewer# reviewer's name above comments in OPAC."
+msgid "opac.pref#ShowReviewer# first name"
+msgstr ""
+
+# OPAC > Features
+msgid "opac.pref#ShowReviewer# first name and last name initial"
+msgstr ""
+
+# OPAC > Features
+msgid "opac.pref#ShowReviewer# full name"
+msgstr ""
+
+# OPAC > Features
+msgid "opac.pref#ShowReviewer# last name"
+msgstr ""
+
+# OPAC > Features
+msgid "opac.pref#ShowReviewer# no name"
+msgstr ""
+
+# OPAC > Features
+msgid "opac.pref#ShowReviewer# of commenter with comments in OPAC."
+msgstr ""
+
+# OPAC > Features
+msgid "opac.pref#ShowReviewer# username"
 msgstr ""
 
 # OPAC > Features
@@ -2644,6 +3088,18 @@ msgstr ""
 
 # OPAC > Features
 msgid "opac.pref#ShowReviewerPhoto# reviewer's photo beside comments in OPAC."
+msgstr ""
+
+# OPAC > Features
+msgid "opac.pref#SocialNetworks# Disable"
+msgstr ""
+
+# OPAC > Features
+msgid "opac.pref#SocialNetworks# Enable"
+msgstr ""
+
+# OPAC > Features
+msgid "opac.pref#SocialNetworks# social network links in opac detail pages"
 msgstr ""
 
 # OPAC > Appearance
@@ -2660,11 +3116,11 @@ msgstr ""
 
 # OPAC > Features
 msgid "opac.pref#numSearchRSSResults# Display"
-msgstr ""
+msgstr "Виводити до "
 
 # OPAC > Features
 msgid "opac.pref#numSearchRSSResults# search results in the RSS feed."
-msgstr ""
+msgstr " результатів пошуку у RSS-стрічку."
 
 # OPAC > Features
 msgid "opac.pref#opacbookbag# Allow"
@@ -2676,30 +3132,30 @@ msgstr "Не дозволяти"
 
 # OPAC > Features
 msgid "opac.pref#opacbookbag# patrons to store items in a temporary \"Cart\" on the OPAC."
-msgstr ""
+msgstr " відвідувачам зберігати записи у тимчасовому „возику“ в ЕК."
 
 # OPAC > Appearance
 msgid "opac.pref#opaccolorstylesheet# Include the additional CSS stylesheet"
 msgstr ""
 
 # OPAC > Appearance
-msgid "opac.pref#opaccolorstylesheet# to override specified settings from the default stylesheet. Enter the filename (if the file is in the server's css directory) or a complete URL beginning with <code>http://</code> (if the file lives on a remote server). Leave blank to disable."
+msgid "opac.pref#opaccolorstylesheet# to override specified settings from the default stylesheet (leave blank to disable). Enter a filename or a complete URL beginning with <code>http://</code> (if the file lives on a remote server). Please note that if you enter a filename, the file should be in the css subdirectory for each active theme and language within the Koha templates directory."
 msgstr ""
 
 # OPAC > Appearance
 msgid "opac.pref#opaccredits# Include the following HTML in the footer of all pages in the OPAC:"
-msgstr ""
+msgstr "Включити наступний HTML-код в нижній частині усіх сторінок в електронному каталозі: "
 
 # OPAC > Appearance
 msgid "opac.pref#opacheader# Include the following HTML in the header of all pages in the OPAC:"
+msgstr "Включити наступний HTML-код у заголовку усіх сторінок в ЕК: "
+
+# OPAC > Appearance
+msgid "opac.pref#opaclayoutstylesheet# Use the CSS stylesheet"
 msgstr ""
 
 # OPAC > Appearance
-msgid "opac.pref#opaclayoutstylesheet# Use the CSS stylesheet <!-- TMPL_VAR NAME=\"opacthemelang\" -->/css/"
-msgstr ""
-
-# OPAC > Appearance
-msgid "opac.pref#opaclayoutstylesheet# on all pages in the OPAC, instead of the default (leave blank to disable)."
+msgid "opac.pref#opaclayoutstylesheet# on all pages in the OPAC, instead of the default (leave blank to disable). Please enter filename only. The file should be in the css subdirectory for each active theme and language within the Koha templates directory."
 msgstr ""
 
 # OPAC > Privacy
@@ -2712,7 +3168,7 @@ msgstr "Не дозволяти"
 
 # OPAC > Privacy
 msgid "opac.pref#opacreadinghistory# patrons to see what books they have checked out in the past."
-msgstr ""
+msgstr " відвідувачам бачити, які книги вони брали в минулому."
 
 # OPAC > Appearance
 msgid "opac.pref#opacsmallimage# Use the image at"
@@ -2775,7 +3231,7 @@ msgid "opac.pref#singleBranchMode# Don't allow"
 msgstr "Не дозволяти"
 
 # OPAC > Policy
-msgid "opac.pref#singleBranchMode# patrons to select their branch on the OPAC."
+msgid "opac.pref#singleBranchMode# patrons to select their library on the OPAC."
 msgstr ""
 
 # OPAC > Features
@@ -2792,7 +3248,7 @@ msgstr ""
 
 # Patrons
 msgid "patrons.pref"
-msgstr ""
+msgstr "Відвідувачі"
 
 # Patrons
 msgid "patrons.pref#AddPatronLists# List"
@@ -2819,27 +3275,31 @@ msgid "patrons.pref#AutoEmailOpacUser# Send"
 msgstr ""
 
 # Patrons
-msgid "patrons.pref#AutoEmailOpacUser# alternate"
+msgid "patrons.pref#AutoEmailOpacUser# an email to newly created patrons with their account details."
 msgstr ""
 
 # Patrons
-msgid "patrons.pref#AutoEmailOpacUser# an email to newly created patrons with their account details at their"
+msgid "patrons.pref#AutoEmailPrimaryAddress# Use"
 msgstr ""
 
 # Patrons
-msgid "patrons.pref#AutoEmailOpacUser# email address."
+msgid "patrons.pref#AutoEmailPrimaryAddress# alternate"
 msgstr ""
 
 # Patrons
-msgid "patrons.pref#AutoEmailOpacUser# first valid"
+msgid "patrons.pref#AutoEmailPrimaryAddress# first valid"
 msgstr ""
 
 # Patrons
-msgid "patrons.pref#AutoEmailOpacUser# home"
+msgid "patrons.pref#AutoEmailPrimaryAddress# home"
 msgstr ""
 
 # Patrons
-msgid "patrons.pref#AutoEmailOpacUser# work"
+msgid "patrons.pref#AutoEmailPrimaryAddress# patron email address for sending out emails."
+msgstr ""
+
+# Patrons
+msgid "patrons.pref#AutoEmailPrimaryAddress# work"
 msgstr ""
 
 # Patrons
@@ -2847,8 +3307,28 @@ msgid "patrons.pref#BorrowerMandatoryField# (separate columns with |)"
 msgstr " (відокремлювати стовпці з допомогою знаку „|“)"
 
 # Patrons
-msgid "patrons.pref#BorrowerMandatoryField# The following database columns must be filled in on the patron entry screen:"
-msgstr "Наступні стовпці бази даних повинні бути заповнені при реєстрації відвідувача: "
+msgid "patrons.pref#BorrowerMandatoryField# The following <a href='http://schema.koha-community.org/tables/borrowers.html' target='blank'>database columns</a> must be filled in on the patron entry screen:"
+msgstr ""
+
+# Patrons
+msgid "patrons.pref#BorrowerRenewalPeriodBase# When renewing borrowers, base the new expiry date on"
+msgstr ""
+
+# Patrons
+msgid "patrons.pref#BorrowerRenewalPeriodBase# current date."
+msgstr ""
+
+# Patrons
+msgid "patrons.pref#BorrowerRenewalPeriodBase# current membership expiry date."
+msgstr ""
+
+# Patrons
+msgid "patrons.pref#BorrowerUnwantedField# (separate columns with |)"
+msgstr ""
+
+# Patrons
+msgid "patrons.pref#BorrowerUnwantedField# The following <a href='http://schema.koha-community.org/tables/borrowers.html' target='blank'>database columns</a> will not appear on the patron entry screen:"
+msgstr ""
 
 # Patrons
 msgid "patrons.pref#BorrowersTitles# (separate multiple choices with |)"
@@ -2868,7 +3348,7 @@ msgstr "Не дозволяти"
 
 # Patrons
 msgid "patrons.pref#EnhancedMessagingPreferences# patrons to choose which notices they receive and when they receive them. Note that this only applies to certain kinds of notices."
-msgstr ""
+msgstr " відвідувачам вибирати, які повідомлення вони отримують і коли вони їх отримують. Зверніть увагу, що це стосується лише певних видів повідомлень."
 
 # Patrons
 msgid "patrons.pref#ExtendedPatronAttributes# Don't enable"
@@ -2927,7 +3407,7 @@ msgid "patrons.pref#autoMemberNum# default the card number field on the patron a
 msgstr ""
 
 # Patrons
-msgid "patrons.pref#borrowerRelationship# (input multiple choices separated by |)"
+msgid "patrons.pref#borrowerRelationship# (input multiple choices separated by |). Leave empty to deactivate"
 msgstr ""
 
 # Patrons
@@ -2956,7 +3436,7 @@ msgstr "Не дозволяти"
 
 # Patrons
 msgid "patrons.pref#intranetreadinghistory# staff to access a patron's checkout history (it is stored regardless)."
-msgstr ""
+msgstr " працівникам бібліотеки мати доступ до історії видач відвідувачів (вона зберігається незалежно від цього вибору)."
 
 # Patrons
 msgid "patrons.pref#memberofinstitution# Do"
@@ -2972,11 +3452,11 @@ msgstr ""
 
 # Patrons
 msgid "patrons.pref#minPasswordLength# Login passwords for staff and patrons must be at least"
-msgstr ""
+msgstr "Паролі входу в Коха для персоналу та відвідувачів повинні складатися із щонайменше "
 
 # Patrons
 msgid "patrons.pref#minPasswordLength# characters long."
-msgstr ""
+msgstr " символів."
 
 # Patrons
 msgid "patrons.pref#patronimages# Allow"
@@ -2992,19 +3472,19 @@ msgstr ""
 
 # Patrons
 msgid "patrons.pref#uppercasesurnames# Do"
-msgstr ""
+msgstr "Все ж "
 
 # Patrons
 msgid "patrons.pref#uppercasesurnames# Don't"
-msgstr ""
+msgstr "Не "
 
 # Patrons
 msgid "patrons.pref#uppercasesurnames# store and display surnames in upper case."
-msgstr ""
+msgstr " зберігати й відображати прізвища у верхньому регістрі."
 
 # Searching
 msgid "searching.pref"
-msgstr ""
+msgstr "Пошуки"
 
 # Searching > Features
 msgid "searching.pref Features"
@@ -3019,19 +3499,15 @@ msgid "searching.pref Search Form"
 msgstr "Пошукова форма"
 
 # Searching > Search Form
-msgid "searching.pref#AdvancedSearchTypes# Show checkboxes to search by"
+msgid "searching.pref#AdvancedSearchTypes# <em>Currently supported values</em>: Item types (<strong>itemtypes</strong>), Collection Codes (<strong>ccode</strong>) and Shelving Location (<strong>loc</strong>)."
 msgstr ""
 
 # Searching > Search Form
-msgid "searching.pref#AdvancedSearchTypes# collection code"
-msgstr "шифр зібрання"
-
-# Searching > Search Form
-msgid "searching.pref#AdvancedSearchTypes# itemtype"
+msgid "searching.pref#AdvancedSearchTypes# Show tabs in OPAC and staff-side advanced search for limiting searches on the"
 msgstr ""
 
 # Searching > Search Form
-msgid "searching.pref#AdvancedSearchTypes# on the OPAC and staff advanced search pages."
+msgid "searching.pref#AdvancedSearchTypes# fields (separate values with |). Tabs appear in the order listed.<br/>"
 msgstr ""
 
 # Searching > Results Display
@@ -3044,79 +3520,79 @@ msgstr ""
 
 # Searching > Features
 msgid "searching.pref#NoZebra# Don't use"
-msgstr ""
+msgstr "Не використовувати"
 
 # Searching > Features
 msgid "searching.pref#NoZebra# Use"
-msgstr ""
+msgstr "Використовувати"
 
 # Searching > Features
 msgid "searching.pref#NoZebra# the Zebra search engine.  It is recommended to use Zebra; the option to not use Zebra is deprecated and is not guaranteed to work."
-msgstr ""
+msgstr "пошуковий рушій Zebra. Рекомендується використовувати Zebra, оскільки можливість „не використовувати Zebra“ наразі застаріла і її працездатність не ґарантується."
 
 # Searching > Results Display
 msgid "searching.pref#OPACItemsResultsDisplay# Don't show"
-msgstr ""
+msgstr "Не показувати"
 
 # Searching > Results Display
 msgid "searching.pref#OPACItemsResultsDisplay# Show"
-msgstr ""
+msgstr "Показувати"
 
 # Searching > Results Display
-msgid "searching.pref#OPACItemsResultsDisplay# an item's branch, location and call number in OPAC search results."
+msgid "searching.pref#OPACItemsResultsDisplay# an item's library, location and call number in OPAC search results."
 msgstr ""
 
 # Searching > Results Display
 msgid "searching.pref#OPACdefaultSortField# ,"
-msgstr ""
+msgstr ", "
 
 # Searching > Results Display
 msgid "searching.pref#OPACdefaultSortField# By default, sort search results in the OPAC by"
-msgstr ""
+msgstr "По умовчанню сортувати результати пошуку в ЕК за"
 
 # Searching > Results Display
 msgid "searching.pref#OPACdefaultSortField# ascending."
-msgstr ""
+msgstr "за зростанням."
 
 # Searching > Results Display
 msgid "searching.pref#OPACdefaultSortField# author"
-msgstr ""
+msgstr "автором"
 
 # Searching > Results Display
 msgid "searching.pref#OPACdefaultSortField# call number"
-msgstr ""
+msgstr "шифром зберігання"
 
 # Searching > Results Display
 msgid "searching.pref#OPACdefaultSortField# date added"
-msgstr ""
+msgstr "датою додавання"
 
 # Searching > Results Display
 msgid "searching.pref#OPACdefaultSortField# date of publication"
-msgstr ""
+msgstr "датою піблікації"
 
 # Searching > Results Display
 msgid "searching.pref#OPACdefaultSortField# descending."
-msgstr ""
+msgstr "за спаданням."
 
 # Searching > Results Display
 msgid "searching.pref#OPACdefaultSortField# from A to Z."
-msgstr ""
+msgstr "від А до Я."
 
 # Searching > Results Display
 msgid "searching.pref#OPACdefaultSortField# from Z to A."
-msgstr ""
+msgstr "від Я до А."
 
 # Searching > Results Display
 msgid "searching.pref#OPACdefaultSortField# relevance"
-msgstr ""
+msgstr "ранжуванням"
 
 # Searching > Results Display
 msgid "searching.pref#OPACdefaultSortField# title"
-msgstr ""
+msgstr "заголовком"
 
 # Searching > Results Display
 msgid "searching.pref#OPACdefaultSortField# total number of checkouts"
-msgstr ""
+msgstr "загальною кількістю видач"
 
 # Searching > Results Display
 msgid "searching.pref#OPACnumSearchResults# By default, show"
@@ -3226,57 +3702,69 @@ msgstr ""
 msgid "searching.pref#TraceSubjectSubdivisions# subdivisions for searches generated by clicking on subject tracings."
 msgstr ""
 
+# Searching > Features
+msgid "searching.pref#UseICU# ICU Zebra indexing. Please note: This setting will not affect Zebra indexing, it should only be used to tell Koha that you have activated ICU indexing if you have actually done so, since there is no way for Koha to figure this out on its own."
+msgstr ""
+
+# Searching > Features
+msgid "searching.pref#UseICU# Not using"
+msgstr ""
+
+# Searching > Features
+msgid "searching.pref#UseICU# Using"
+msgstr ""
+
 # Searching > Results Display
 msgid "searching.pref#defaultSortField# ,"
-msgstr ""
+msgstr ", "
 
 # Searching > Results Display
 msgid "searching.pref#defaultSortField# By default, sort search results in the staff client by"
-msgstr ""
+msgstr "По умовчанню сортувати результати пошуку в інтерфейсі бібліотекаря за "
 
 # Searching > Results Display
 msgid "searching.pref#defaultSortField# ascending."
-msgstr ""
+msgstr "за зростанням."
 
 # Searching > Results Display
 msgid "searching.pref#defaultSortField# author"
-msgstr ""
+msgstr "автором"
 
 # Searching > Results Display
 msgid "searching.pref#defaultSortField# call number"
-msgstr ""
+msgstr "шифром зберігання"
 
 # Searching > Results Display
 msgid "searching.pref#defaultSortField# date added"
-msgstr ""
+msgstr "датою додавання"
 
 # Searching > Results Display
 msgid "searching.pref#defaultSortField# date of publication"
-msgstr ""
+msgstr "датою піблікації"
 
 # Searching > Results Display
 msgid "searching.pref#defaultSortField# descending."
-msgstr ""
+msgstr "за спаданням."
 
 # Searching > Results Display
 msgid "searching.pref#defaultSortField# from A to Z."
-msgstr ""
+msgstr "від А до Я."
 
 # Searching > Results Display
 msgid "searching.pref#defaultSortField# from Z to A."
-msgstr ""
+msgstr "від Я до А."
 
 # Searching > Results Display
 msgid "searching.pref#defaultSortField# relevance"
-msgstr ""
+msgstr "ранжуванням"
 
 # Searching > Results Display
 msgid "searching.pref#defaultSortField# title"
-msgstr ""
+msgstr "заголовком"
 
 # Searching > Results Display
 msgid "searching.pref#defaultSortField# total number of checkouts"
-msgstr ""
+msgstr "загальною кількістю видач"
 
 # Searching > Results Display
 msgid "searching.pref#displayFacetCount# Don't show"
@@ -3332,7 +3820,7 @@ msgstr ""
 
 # Serials
 msgid "serials.pref"
-msgstr ""
+msgstr "Серіальні видання"
 
 # Serials
 msgid "serials.pref#OPACSerialIssueDisplayCount# Show the"
@@ -3367,6 +3855,10 @@ msgid "serials.pref#RoutingListAddReserves# received serials on hold if they are
 msgstr ""
 
 # Serials
+msgid "serials.pref#RoutingListNote# Include following note on all routing lists:"
+msgstr ""
+
+# Serials
 msgid "serials.pref#RoutingSerials# Add"
 msgstr ""
 
@@ -3387,19 +3879,23 @@ msgid "serials.pref#StaffSerialIssueDisplayCount# previous issues of a serial on
 msgstr ""
 
 # Serials
-msgid "serials.pref#SubscriptionHistory# When showing the subscription information for a biblio, show"
+msgid "serials.pref#SubscriptionDuplicateDroppedInput# List of fields which must not be rewritten when a subscription is duplicated (Separated by pipe |)"
 msgstr ""
 
 # Serials
-msgid "serials.pref#SubscriptionHistory# a full list"
+msgid "serials.pref#SubscriptionHistory# When showing the subscription information for a bibliographic record, preselect"
 msgstr ""
 
 # Serials
-msgid "serials.pref#SubscriptionHistory# a summary"
+msgid "serials.pref#SubscriptionHistory# brief history"
 msgstr ""
 
 # Serials
-msgid "serials.pref#SubscriptionHistory# of the serial issues."
+msgid "serials.pref#SubscriptionHistory# full history"
+msgstr ""
+
+# Serials
+msgid "serials.pref#SubscriptionHistory# view of serial issues."
 msgstr ""
 
 # Serials
@@ -3424,7 +3920,7 @@ msgstr ""
 
 # Staff Client
 msgid "staff_client.pref"
-msgstr ""
+msgstr "Клієнт для бібліотекарів"
 
 # Staff Client > Appearance
 msgid "staff_client.pref Appearance"
@@ -3472,11 +3968,11 @@ msgstr ""
 
 # Staff Client > Appearance
 msgid "staff_client.pref#IntranetFavicon# Use the image at"
-msgstr ""
+msgstr "Використовувати зображення за адресою "
 
 # Staff Client > Appearance
 msgid "staff_client.pref#IntranetFavicon# for the Staff Client's favicon. (This should be a complete URL, starting with <code>http://</code>.)"
-msgstr ""
+msgstr " на <a href=\"http://uk.wikipedia.org/wiki/Favicon\">значок favicon</a> для бібліотечного інтерфейсу (має бути повною URL-адресою, що починається з <code>http://</code>)."
 
 # Staff Client > Appearance
 msgid "staff_client.pref#IntranetNav# Show the following HTML to the left of the More menu at the top of each page on the staff client (should be a list of links or blank):"
@@ -3488,6 +3984,14 @@ msgstr ""
 
 # Staff Client > Appearance
 msgid "staff_client.pref#IntranetmainUserblock# Show the following HTML in its own column on the main page of the staff client:"
+msgstr ""
+
+# Staff Client > Appearance
+msgid "staff_client.pref#SlipCSS# Include the stylesheet at"
+msgstr ""
+
+# Staff Client > Appearance
+msgid "staff_client.pref#SlipCSS# on Issue and Reserve Slips. (This should be a complete URL, starting with <code>http://</code>.)"
 msgstr ""
 
 # Staff Client > Appearance
@@ -3503,27 +4007,19 @@ msgid "staff_client.pref#StaffAuthorisedValueImages# images for <a href=\"/cgi-b
 msgstr ""
 
 # Staff Client > Appearance
-msgid "staff_client.pref#XSLTDetailsDisplay# Show item details pages in the staff client"
+msgid "staff_client.pref#XSLTDetailsDisplay# <br />Options:<br />- leave empty for \"no xslt\"<br />- enter \"default\" for the default one<br />- put a path to define a xslt file<br />- put an URL for an external specific stylesheet.<br />{langcode} will be replaced with current interface language"
 msgstr ""
 
 # Staff Client > Appearance
-msgid "staff_client.pref#XSLTDetailsDisplay# normally."
+msgid "staff_client.pref#XSLTDetailsDisplay# Display details in the staff client using XSLT stylesheet at: "
 msgstr ""
 
 # Staff Client > Appearance
-msgid "staff_client.pref#XSLTDetailsDisplay# using XSLT stylesheets."
+msgid "staff_client.pref#XSLTResultsDisplay# <br />Options:<br />- leave empty for \"no xslt\"<br />- enter \"default\" for the default one<br />- put a path to define a xslt file<br />- put an URL for an external specific stylesheet.<br />{langcode} will be replaced with current interface language"
 msgstr ""
 
 # Staff Client > Appearance
-msgid "staff_client.pref#XSLTResultsDisplay# Show biblio records on result page in the staff client"
-msgstr ""
-
-# Staff Client > Appearance
-msgid "staff_client.pref#XSLTResultsDisplay# normally."
-msgstr ""
-
-# Staff Client > Appearance
-msgid "staff_client.pref#XSLTResultsDisplay# using XSLT stylesheets."
+msgid "staff_client.pref#XSLTResultsDisplay# Display results in the staff client using XSLT stylesheet at: "
 msgstr ""
 
 # Staff Client > Appearance
@@ -3632,7 +4128,7 @@ msgstr ""
 
 # Web Services
 msgid "web_services.pref"
-msgstr ""
+msgstr "Веб-сервіси"
 
 # Web Services > ILS-DI
 msgid "web_services.pref ILS-DI"
@@ -3675,12 +4171,24 @@ msgid "web_services.pref#OAI-PMH# Koha's"
 msgstr ""
 
 # Web Services > OAI-PMH
-msgid "web_services.pref#OAI-PMH:MaxCount# Only return"
+msgid "web_services.pref#OAI-PMH:AutoUpdateSets# Disable"
 msgstr ""
 
 # Web Services > OAI-PMH
-msgid "web_services.pref#OAI-PMH:MaxCount# records at a time in response to a ListRecords or ListIdentifiers query."
+msgid "web_services.pref#OAI-PMH:AutoUpdateSets# Enable"
 msgstr ""
+
+# Web Services > OAI-PMH
+msgid "web_services.pref#OAI-PMH:AutoUpdateSets# automatic update of OAI-PMH sets when a bibliographic record is created or updated"
+msgstr ""
+
+# Web Services > OAI-PMH
+msgid "web_services.pref#OAI-PMH:MaxCount# Only return"
+msgstr "Повертати лише "
+
+# Web Services > OAI-PMH
+msgid "web_services.pref#OAI-PMH:MaxCount# records at a time in response to a ListRecords or ListIdentifiers query."
+msgstr " записів за раз у відповідь на запит ListRecords чи ListIdentifiers."
 
 # Web Services > OAI-PMH
 msgid "web_services.pref#OAI-PMH:archiveID# : ."
