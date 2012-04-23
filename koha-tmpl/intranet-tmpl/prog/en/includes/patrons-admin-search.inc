@@ -1,4 +1,4 @@
-
+<div id="header" class="gradient">
 <h1 id="logo"><a href="/cgi-bin/koha/mainpage.pl">[% LibraryName %]</a></h1><!-- Begin Patrons Admin Resident Search Box -->
 <div id="header_search">
 	<div id="patron_category_search" class="residentsearch">
@@ -22,5 +22,6 @@
             [% IF ( CAN_user_circulate ) %]<li><a href="/cgi-bin/koha/circ/circulation.pl#circ_search">Check out</a></li>[% END %]
             [% IF ( CAN_user_catalogue ) %]<li><a href="/cgi-bin/koha/catalogue/search.pl#catalog_search">Search the catalog</a></li>[% END %]
 			</ul>	
+</div>
 </div>
 <!-- End Patrons Admin Resident Search Box -->
