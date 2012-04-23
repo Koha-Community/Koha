@@ -1,4 +1,5 @@
 
+<div id="header" class="gradient">
 <h1 id="logo"><a href="/cgi-bin/koha/mainpage.pl">[% LibraryName %]</a></h1><!-- Begin Roads Resident Search Box -->
 [% IF ( CAN_user_circulate ) %][% IF ( CircAutocompl ) %]<script type="text/javascript">
 //<![CDATA[
@@ -45,8 +46,8 @@ YAHOO.util.Event.onContentReady("header_search", function() {
 //]]>
 </script>[% END %][% END %]
 <div id="header_search">
-	<div id="roadtype_search" class="residentsearch">
-    <p class="tip">Road type search:</p>
+     <div id="roadtype_search" class="residentsearch ui-tabs-panel">
+        <p class="tip">Road type search:</p>
 		<form action="[% script_name %]" method="post">
 		<input type="text" name="road_type" value="[% searchfield %]" size="40" />
 		<input type="submit" name="submit" value="OK" class="submit" />
@@ -83,11 +84,13 @@ YAHOO.util.Event.onContentReady("header_search", function() {
 				<input type="submit" value="Submit"  class="submit" />
 		</form>
 	</div>
+
 	[% END %]
 			<ul>
             <li><a href="/cgi-bin/koha/admin/roadtype.pl#roadtype_search">Search road types</a></li>
             [% IF ( CAN_user_circulate ) %]<li><a href="/cgi-bin/koha/circ/circulation.pl#circ_search">Check out</a></li>[% END %]
             [% IF ( CAN_user_catalogue ) %]<li><a href="/cgi-bin/koha/catalogue/search.pl#catalog_search">Search the catalog</a></li>[% END %]
 			</ul>	
+</div>
 </div>
 <!-- End Roads Resident Search Box -->
