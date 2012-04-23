@@ -1,0 +1,521 @@
+Koha is the first free and open source software library automation package (ILS). Development is sponsored by libraries of varying types and sizes, volunteers, and support companies from around the world.
+
+The website for the Koha project is
+
+   http://koha-community.org/
+
+Koha 3.8.0 can be downloaded from:
+
+   http://download.koha-community.org/koha-3.08.00.tar.gz
+
+Installation instructions can be found at:
+
+   http://wiki.koha-community.org/wiki/Installation_Documentation
+   
+   OR in the INSTALL files that come in the tarball
+
+Koha 3.8.0 is a major feature release, that comes with a lot of new features, and many tweaks to improve performance. Those tweaks are usually not activated by default when you install Koha. If you're upgrading, they are not activated. Go the the "PERFORMANCE" chapter to see all of those improvements, and how to activate them.
+
+NEW FEATURES
+
+==========
+
+There are 130+ enhancements in Koha 3.8. Some of them are minor, some are major. The list is given below. The number in () is the bugzilla number (http://bugs.koha-community.org) The "IMPORTANT" flag before an enhancement description means it's a totally new feature, or a major improvement of an existing one, or a change that you should be warned, because you'll spot it in your daily use of Koha
+
+ CATALOGUE and CATALOGUING
+   * IMPORTANT Add ability to take book cover images from local img db (1633) 
+       This feature let you attach images to bibliographic records, that can be cover images or any kind of image
+   * Delete biblios if deleting all their items in batch deletion (6027)
+       When you do batch deletion, you can check a checkbox to automatically delete biblios that have no more items attached. The previous behaviour is still there (do not delete the biblio), and the checkbox not checked by default
+   * Choose framework on Merge (6210)
+        When you merge 2 bibliographic records, you can choose the framework of the merged record
+   * Attach/move items - adding option "try again" after success or wrong barcode (6323)
+   * Enhanced Workflow for adding analytical records (6831)
+       In cataloguing after searching for the parent record the new tool bar option 'add child' takes you into the addbiblio screen but with the Host Item Tag already populated with data derived from the parent record
+   * Adding invoice number and vendor name to the moredetail page (7235)
+       When a biblio is created through an acquisition order, the vendor name and invoice number is displayed, and linked to the order 
+   * In the items table, make items.materials of type text, and show its contents at circulation (7278)
+       The note in the item field mapped to items.materials will show up in a message box when checking the item in or out.
+   * New call number allocation plugin (7458) 
+       When you activate this new plugin (callnumber-KU), the callnumber has the following behaviour:
+       FREN 0 (then click on ...) - FREN 0000 is returned
+       FREN 0 (then click on ...) - FREN 0001 is returned (the first unused value beginning with this prefix) 
+       FREN 01 (then click on ...) - FREN 0100 is returned
+       FEAT AM (then click on ...) - FEAT AM01 is returned
+       FEAT AM (then click on ...) - FEAT AM02 is returned
+   * Create index for items.itemcallnumber (7509) 
+       This index speed up a lot the shelves browsing feature
+   * OCLC Connexion Gateway, including extension svc/import_bib (7613) 
+   * Add auto-completion on auth_finder (7400)
+   * 5 icons have been added to bridge itemtype icon theme (7373)
+   * A minor change in the “GetMarcAuthors”  function of C4/Biblio.pm would allow differentiate the type of authors in the templates (4376) 
+   * Add search links in detail pages (6120)
+   * IMPORTANT Authority matching improvements (7284)
+           Implemented new C4::Linker functionality to make it possible to easily add
+           custom authority linker algorithms. Currently available linker options are:
+           * Default: retains the current behavior of only creating links when there is
+             an exact match to one and only one authority record; if the 'broader_headings'
+             option is enabled, it will try to link to headings to authority records for
+             broader headings by removing subfields from the end of the heading (NOTE:
+             test the results before enabling broader_headings in a production system
+             because its usefulness is very much dependent on individual sites' authority
+             files)
+           * First Match: based on Default, creates a link to the *first* authority
+             record that matches a given heading, even if there is more than one
+             authority record that matches
+           * Last Match: based on Default, creates a link to the *last* authority
+             record that matches a given heading, even if there is more than one record
+             that matches
+
+
+ OPAC
+   * IMPORTANT XSLT systempreference should take a path to file rather than YesNo (4032) 
+       You can now display biblio detail and search results using a XSLT taken from a file. It means you can have a XSLT that is independant from the one provided by Koha. You can still choose to display using normal mode or the default XSLT provided
+   * Add ID attribute to certain areas of OPAC so jquery can be used to hide them (4819) 
+   * IMPORTANT Star ratings in the opac (5668) 
+       You can now activate (through a system preference) local rating in the OPAC. Logged-in users can rate any biblio
+   * IMPORTANT Display information about library on OPAC detail (7264)
+       In libraries administration, there is a new field that, if filled, is displayed on the OPAC when the patron put his mouse over library name. This can be used to enter library opening hours, address,...
+   * System preference to configure export options for OPAC detail page (7392)
+       The new system preference allows to give a list of | separated values to define, which download options are offered in OPAC. You can choose between BIBTEX (bibtex), Dublin Core (dc), MARCXML (marcxml), MARC-8 encoded MARC (marc8), Unicode/UTF-8 encoded MARC (utf8), Unicode/UTF-8 encoded MARC without local use (9xx, x9x, xx9) fields and subfields (marcstd), MODS and RIS
+   * Add ISSN to SearchForTitleIn (7576)
+       The placeholder {ISSN} is now available in SearchForTitleIn systempreference (as title, author, isbn were previously)
+   * Introduce sys pref to control 'browse results' in OPAC (7935)
+       A system preference has been added to activate or desactivate the "browse result" feature (that let you move to the next/previous record when you've made a search)
+   * "Add to Cart" changes to "Remove from Cart" when a record already in the cart is checked (3215)
+   * comments shouldn't show patron's full name (5503) 
+   * Babeltheque integration (7470)
+       Babeltheque is a french provider for enhanced content (comments, reviews,...). The basic support available in previous versions has been improved a lot.
+   * social networks links (7470)
+       You can activate a system preference that will display Facebook 'I like', google+ '+1', linkedIn and some other social networks links. (Note that the system preference OPACBaseURL must be filled in order to have this feature working correctly)
+
+ ACQUISITION
+   * Linking suggestions &amp; orders (5346) 
+       You can now jump from a suggestion to the order placed or from the order to the suggestion it comes from
+   * IMPORTANT keep track of cancelled orders (5358) 
+       When you cancel an order, it does not disappear, but is displayed in a table below the other orders
+   * Create new budget from a copy of a previous budget (6943) 
+   * Claim notice in acquisitions is now using the message queue (7103)
+   * Claims/Late orders in acquisitions give feedback (7104) 
+   * Modify order notes when basket is closed (7166)
+       When a basket is closed, you still can update an order notes. This will let you, for example, add a comment about a delay for delivery
+   * Change booksellers search results display (7169) 
+       The page displayed when you search for a bookseller has been changed a lot for a better readability
+   * edition statement field (7289) 
+       The edition statement field has been added to the order form
+   * IMPORTANT claims management improvement (5347)
+       When you claim a late order, the date of the last claim and the total number of claims is now saved and displayed 
+   * IMPORTANT new fields in vendor table (7293 and 7291) 
+       There is now a field to store the common delivery time. It is used to calculate estimated delivery when placing an order, and displayed in acquisition claims. There is also a field containing the library customer number at the vendor
+   * IMPORTANT display suggestions from librarian library only by default (7300)
+       By default, the librarian sees only the suggestions placed by patrons from his library
+   * Add default date limit to acquisitions histsearch (7301) 
+   * Suggestion show page (7577)
+       There is now a page to display a suggestion, that is used when jumping from order to suggestion
+   * Use of date filters on bookseller pages (7737) 
+   * When adding Vendor default to active currencies (4161) 
+
+ PATRONS
+   * The patron password is masked as it is entered (5280) 
+   * Display Organisation and Parent Organisation names when viewing a borrower of type organisation (6303) 
+   * Link in readingrec.pl to export a barcode file (6751) 
+   * A system preference has been added to renew membership from expiry date or from current date (6843) 
+   * Clean up interface on fine payment screens (7080) 
+   * IMPORTANT Group borrower attributes and link between patron category and attribute (7154) 
+       In patron extended attributes, you can now:
+         - group patron attributes, in a PA_GROUP authorised value list.
+         - select a patron category for a give attribute. If you choose one, only patrons of this category will have this attribute available and displayed
+   * IMPORTANT Add ability search borrowers only on email / phone (7544) 
+       In patron search, you can choose on which field you're doing your search:
+         - standard (the default option, the previous one&nbsp;: search on patron card, then name+surname)
+         - email
+         - borrowernumber (Koha internal number)
+         - phone
+   *  Custom field removal from patron entry screens (6190)
+       The systempreference BorrowerUnwantedField (same format as BorrowerMandatoryField) implement a mechanism for removing unwanted fields from the entry screens
+
+ SERIALS
+   * Partial duplication of a subscription (5354)
+       A syspref has been added that you can use to define fields that should not be duplicated when you duplicate a subscription
+   * Add a 1/4 month frequency (6321)
+   * The hardcoded routing list note is now a system preference (7557)
+
+ CIRCULATION
+   * IMPORTANT Hourly loans (5549)
+       issuing rules can now be defined in hour unit, enabling daily/hourly loans
+   * Make fields from issues table available in overdues (5607) 
+   * IMPRTANT Offline circulation improvements&nbsp;: Firefox plugin, and upload all files, apply at once (5877) 
+       You can download a Firefox plugin (https://addons.mozilla.org/fr/firefox/addon/koct/), that will let you do offline circulation when your network is down. When the network is back, you can upload all KOCT files from your circulation desks, and apply all of them at once.
+   * Adds staticfines.pl for static fines processing (6858) 
+       This script let you define static fine like "when the patron is late, set a fixed fine of 1€ for each book late"
+   * IMPORTANT User Configurable Slips (7001) 
+       - Slips and checkout reciepts are now driven under the notices editor.
+       - The Notice for a given event can be defined for all libraries, or library by library
+       - You can define a CSS to format the notices (see systempreferences)
+   * Floating collection (7144) 
+       Adds support for Floating Collections (i.e. items that don't automatically return home when checked in at another branch) on a per branchcode/itemtype basis.
+   * Display of issue number for serials in overdues (7434) 
+   * Printing Transfer Slips for checkin items that do not have holds but need transfer (7467) 
+   * Display fine amount and make payment link during checkin (7566) 
+   * add columns to overdues export (4051) 
+   * Double-clicking the 'place hold' button can result in duplicate holds (4054)
+   * Suspension of holds (7641)
+       Users are now able to place a hold 'on suspension'.  This means the hold will preserve it's place in the queue, but it will be skipped over to the next non-suspended hold when the item becomes available.  Upon un-suspension, the hold will resume it's original place in the queue.
+   * Expire holds that have been waiting too long (7408)
+       For holds that have been waiting for pickup longer than the ReservesMaxPickupDelay number of days, there is now an automated way to mark these holds as "expired" (misc/cronjobs/holds/expire_holds_over.pl).
+   * Cancel all waiting holds (6039)
+       There is now a button to cancel all waiting holds and an option to choose to cancel or not hold needing a transfer when clicking on this cancel all button
+   * Add "AllowItemsOnHoldCheckout" syspref to allow issue to the patron regardless of hold status (7090)
+       An item scanned at a self check station connected to Koha over SIP2 can generate an issue regardless of whether there is a hold on the item. If the patron has the book in hand, they should be allowed to check it out; otherwise, what's to stop them from just taking it?
+   * Add system pref to control behavior of submitting empty barcode field on circulation page (7077)
+       It used to be that submitting an empty barcode input field when a patron's account was open in Circulation would clear the page (the same behavior as the "clear screen" buton offers now). Since inclusion of Bug 4389 this action has been co-opted to pop up a quick slip print window. A system preference has been added to allow the library to choose which behavior they want.
+
+ PERFORMANCE (see below for more information about performance)
+   * Use memcached cache koha-conf.xml configuration variables (6193) 
+   * Caching Templates (7511) 
+   * work on persistency compatibility to make Koha Plack / mod_perl compliant (7172)
+   * Enhancing the performance test suite (6015) 
+
+ SEARCHING
+   * More options for AdvancedSearchTypes (7031)
+       Adds the ability to perform advanced searches in both the OPAC and staff client on more than
+       a single AdvancedSearchType at a time.  Support included for Itemtype, Collection Code and Shelving Location.
+   
+       AdvancedSearchTypes syspref preference is repurposed; no longer a single value, it can now take
+       multiple item code fields separated by "|".  The order of these fields will determine the order
+       of the tabs in the OPAC and staff client advanced search screens.  Values within the search type
+       are OR'ed together, while each different search type is AND'ed together in the query limits.  The
+       current stored values are supported without any required modification.
+   
+       Each set of advanced search fields are displayed in tabs in both the OPAC and staff client.  The
+       first value in the AdvancedSearchTypes syspref is the selected tab; if no values are present, "itemtypes"
+       is used.  For non-itemtype values, the value in AdvancedSearchTypes must match the Authorised Value name, and
+       must be indexed with 'mc-' prefixing that name.
+   * Add ICU option to Koha out of the box (7698)
+       during installation, you now have an option to use ICU. ICU is a unicode library that improve a lot zebra search engine for non latin alphabet catalogue
+
+ INTERNALS
+   * Be stricter with utf-8 output (6752) 
+   * Have mysql returning errors (7184) 
+   * Move SIPconfig.xml, sip_run and sip_shutdown outside from C4 (7238) 
+   * Allow authentication to Koha via PKI / x.509 certificates (6296) 
+   * Using OPACBaseURL for CAS Authentication (7745) 
+   * Cleaning up import tables and action_logs   (7240)
+       The cleanup_database.pl now can clean imported records and logs
+   * Opac-ics depends on Date::ICal which is largely unmaintained (7532)
+       the Date::ICal dependancy has been removed 
+   * Use KohaDates Template::Toolkit plugin to display dates (7743)
+       all dates are displayed through a Template::Toolkit plugin, that make the code more readable and maintainable. This change is not visible to users
+   * A lot of html div &amp; ids &amp; spans have been added to help with CSS customization (7760, 7781, 7876, and some others)
+
+ TOOLS
+   * Give option to use description for homebranch/holding branch in label creator instead of the branchcode (7615)
+   * It is now possible to export MARC records without private/local fields (7345)
+   * It is now possible to duplicate a holiday calendar (7477) 
+   * It is now possible to mark a range of holiday as closed (7681) 
+
+ LISTS
+   * a deep work has been started to clean up the code and make it more flexible (7310
+       most of this work is invisible for now, but new features will come soon.
+       for now, the only visible improvement is the system preference OpacAllowPublicListCreation that let you enable or disable the creation of public lists by patrons
+
+ VARIOUS
+   * Main page enhanced (7781)
+       The search toolbox available on most page has been introduced on the main page for more consistency. 
+       A "Welcome to Koha" has been added, 
+       The menus are located at the same position if there is no news or if there is some
+   * Improving koha-list and koha-create (6913)
+       The biggest change is to add support for pre-determined MySQL credentials using
+       a file in /etc/koha/passwd (for security reasons, if you use this feature, make
+       sure the file is not world-readable). The configuration file has the following
+       format:
+       instance:user:password:database
+       The database is optional, but the other two are both required if you want to
+       specify MySQL credentials. If no credentials are specified for a given instance,
+       the standard koha_instance username and an auto-generated password are used.
+   
+       The following additional command line options are now available:
+       * --use-db - use a pre-existing database, see also --database
+       * --database - specify the name of the mysql database (still defaults to
+         koha_instance)
+       * --passwdfile - specify a custom (Koha) passwd file for MySQL credentials
+ 
+       The following additional variables are now available (for use in
+       koha-sites.conf or a custom config file):
+       * OPACPORT (previously added but not documented) - port on which the OPAC
+         should be served
+       * OPACPREFIX - prefix for the OPAC's virtual host
+       * OPACSUFFIX - suffix for the OPAC's virtual host
+
+       This commit also adds the --keep-mysql option to koha-remove, which, if
+       specified, will prevent koha-remove from deleting the database or MySQL user
+       when removing an instance.
+   * rebuild_zebra.pl now has a --limit option to allow partial re-indexing (7246)
+   * a System Preference has been added to select the first day of week (Sunday or Monday) to use in the calendar (OPAC and Intranet) (7261)
+   * Koha's OAI-PMH now fully support sets (6440)
+   * Provide datepicker for sql reports runtime parameters (5698) 
+   * Installation might fail it user web doesn't have in its path the database command path (6008) 
+   * Script to recreate entries in the statistics table from the issues and oldissues table (6025) 
+   * Set a timeout to z3950 servers that could have network problems occasionally (6140) 
+
+PERFORMANCE
+
+==========
+
+A lot of work has been made to improve Koha performance. Some of those improvements are available for everybody in any situation (like database connexion that has been speeded by 200ms (7188) However, the 3 most important speed improvements requires a tweaking of your configuration file
+
+ TEMPLATE CACHING
+   Without the tweak, templates are compiled everytime you call them. It means that, when you call circulation.pl page, the circulation template is read, parsed and analysed before being filled. The read/parsing/analysis need to be done only once.
+   Fortunately, Template::Toolkit is a great tool and provide a caching mechanism: the read/parsing/analysis phase is made only once and the result is stored on your server, at a location defined in your koha configuration file. To activate the caching you must:
+       - open koha-conf.xml
+       - search for the <config> part of the file
+       - add a line <template_cache_dir>/tmp</template_cache_dir>
+       - that's all folks&nbsp;!
+   Of course, the /tmp directory is at your choice, you can use whatever directory you want. The directory you choose will be filled with files under path/to/koha/koha-tmpl/... (so, if you choose /tmp for template caching and your Koha is installed on /usr/opt/koha, you'll have /tmp/usr/opt/koha/koha-tmpl/...) The size of those files on the disk is less than 5MB
+   The performance improvement is a rough 10%, so it's worth it
+
+ MEMCACHE
+   Memcache is a global caching mechanism that we use for caching almost static data that are retrieved from mySQL. It has been introduced in previous versions of Koha, but it has been upgraded in this release. Previously, the memcache configuration was in the Koha configuration. The consequence was that it was not possible to cache the configuration file itself.
+   In Koha 3.8, the memcache configuration is now in the Apache setting. If you're upgrading from a previous version, you must update your configuration, or the memcache won't work anymore.
+   To activate memcache:
+       * install memcached server (apt-get install memcached). You should not need to update the memcached configuration file, the default values are OK, but it may be worth reading it, to let him use more memory or listen on a different unix port
+       * update your koha-httpd.conf file, and add the following lines:
+         <memcached_servers>127.0.0.1:11211</memcached_servers>
+         <memcached_namespace>KOHA</memcached_namespace>
+       Note that, if you have more than one Koha instance on your server, you *must* have a different namespace for each. Otherwise, the'll all share the same cached values, and you'll get some unexpected behaviour&nbsp;!!!
+       DISCLAIMER = the memcache mechanism read cached values only once every 10 minuts. So, if you change some parameter that is cached (like cataloguing frameworks), you'll have to wait up to 10 minuts before seing the changes when cataloguing. You've been warned. In future versions, we plan to add a more efficient caching mechanism that will update the cache when it's needed, but for now, just wait. At your option, you also can restart memcache (sudo /etc/init.d/memcached restart) or flush the cache (echo "flush_all" | /bin/netcat -q 2 127.0.0.1 11211)
+   The performance improvement is a rought 10%, mostly due to configuration caching (reading and parsing the XML on each page is costly)
+
+ PERSISTENCY
+   Since version 1, Koha run on the webserver in CGI mode. This mode is not the most efficient we can have. We made a lot of changes on the code to make it persistency compliant. The OPAC is safely run under Plack mode in production in Lyon 3 university and a few other early testers. The staff interface is still considered as experimental, but if you want to help us polishing and make it stable, you're welcomed to try it.
+   Setting up Plack result in a huge performance boost. The speed of most pages is multiplied by 3&nbsp;! It means that a page computed in 1.8s will be computed in 0.6s under Plack.
+   If you want to activate Plack, head to the wiki page: http://wiki.koha-community.org/wiki/Plack
+   If you want to activate Plack for staff, we strongly suggest to be (or become) a subscriber of koha-devel mailing list (the Koha developers one), and announce there that you're running Plack for staff&nbsp;!
+
+System Preferences
+
+==========
+
+The following system preferences have been added or changes (the number in () is the bugzilla number)
+
+ * OpacBrowseResults (7935)
+ * OpacStarsRating (5668)
+ * OPACXSLTDetailsDisplay, OPACXSLTResultsDisplay, XSLTDetailsDisplay and XSLTResultsDisplay (4032)
+ * AutoResumeSuspendedHolds (7641)
+ * Babeltheque_url_js and Babeltheque_url_update (7470)
+ * SocialNetworks (7470)
+ * OpacAllowPublicListCreation and OpacAllowSharingPrivateLists (7310)
+ * UseICU (7092) Be carefull that this syspref can be changed, but only in conjunction with zebra configuration files
+ * OAI-PMH:AutoUpdateSets (6440)
+ * AllowPKIAuth (6296)
+ * RoutingListNote (7557)
+ * CalendarFirstDayOfWeek (7261)
+ * ExpireReserveMaxPickupDelay and ExpireReserveMaxPickupDelayCharge (7408)
+ * NoticeCSS and SlipCSS (7001)
+ * AutoCreateAuthorities, LinkerModule, LinkerOptions, LinkerRelink, LinkerKeepStale, CatalogModuleRelink (7284)
+ * OpacPatronimages (3516)
+ * ShowReviewer is now none|full|first|surname|firstandinitial|username instead of yes/no (5503)
+ * TransferWhenCancelAllWaitingHolds (6039)
+ * OpacExportOptions (7392)
+ * AllowItemsOnHoldCheckout (7090)
+ * BorrowerRenewalPeriodBase
+ * OPACLocalCoverImages, LocalCoverImages, AllowMultipleCovers (1633)
+ * CircAutoPrintQuickSlip (7077)
+ * BorrowerUnWantedField (6190)
+   
+
+System requirements
+
+==========
+
+Installation
+
+==========
+
+You can install Koha from:
+
+ * the tag.gz provided, see INSTALL and INSTALL.debian (even if you're not using debian. There are some usefull hints here)
+ * git repository. Download Koha from git.koha-community.org, and checkout branch 3.8.x or tag 3.8.0
+ * debian package, that will be provided soon (check http://koha-community.org for announcement)
+
+Upgrading
+
+==========
+
+If you have a Koha already running, you must take care of the following changes:
+
+   * The SIP start and shutdown scripts and configuration file have been moved from C4 directory to misc/bin, Update your system or your SIP server won't work anymore
+   * The cleanup_database.pl script has 2 new options, to clean-up imported records and logs, update your crontab&nbsp;:
+       --import DAYS      purge records from import tables older than DAYS days.
+                          Defaults to 60 days if no days specified.
+       --logs DAYS        purge entries from action_logs older than DAYS days.
+                          Defaults to 180 days if no days specified.
+   * The Date::ICal dependancy has be removed and a DateTime::Format::ICal has been introduced, update your perl packages on your server&nbsp;!
+   * The memcache configuration has been moved from koha conf file to Apache configuration file
+
+Also note that Koha 3.4.x or later no longer stores items in biblio records. If you are upgrading from an older version ou will need to do the following two steps, they can take a long time (several hours) to complete for large databases
+
+misc/maintenance/remove_items_from_biblioitems.pl --run
+misc/migration_tools/rebuild_zebra.pl -b -r
+
+Documentation
+
+==========
+
+The Koha manual is maintained in DocBook format. The home page for Koha documentation is
+
+   http://koha-community.org/documentation/
+
+As of the date of these release notes, the Koha manual is available:
+
+   english: http://manual.koha-community.org/3.8/en/
+   french: http://manual.koha-community.org/3.8/fr/
+
+The Git repository for the Koha manual can be found at
+
+   http://git.koha-community.org/gitweb/?p=kohadocs.git;a=summary
+
+Translations
+
+==========
+
+Complete or near-complete translations are available in this release for the following languages:
+   * French (100%)
+   * Spanish (100%)
+   * German (100%)
+   * Chinese -Taïwan- (97%, OPAC 100%)
+   * Italian (86%, OPAC 100%)
+   * Danish (81%)
+   * Portuguese (79%)
+   * French -canada- (76%)
+   * English -nz- (76%)
+   * Greek (74%)
+   * Norwegian (73%)
+
+Note that some strings in online help have been introduced after string freeze, so:
+   * the previous number don't count them
+   * you'll find some strings in english in online help
+
+Partial (less than 50%) translations are available for various other languages.
+
+The Koha team welcomes additional translations; please see
+
+   http://wiki.koha-community.org/wiki/Translating_Koha
+
+for information about translating Koha, and join the koha-translate list to volunteer:
+
+   http://lists.koha-community.org/cgi-bin/mailman/listinfo/koha-translate
+
+The most up-to-date translations can be found at:
+
+   http://translate.koha-community.org/
+
+Release Team
+
+==========
+
+The release team for Koha 3.8 is
+
+Release Manager:       Paul Poulain <paul.poulain@biblibre.com> 
+Documentation Manager: Nicole C Engard <nengard@gmail.com> 
+Translation Manager:   Frédéric Demians <frederic@tamil.fr> 
+QA Manager:            Ian Walls <koha.sekjal@gmail.com> 
+QA team:               Marcel de Rooy <M.de.Rooy@rijksmuseum.nl>, Jonathan Druart <jonathan.druart@biblibre.com> 
+Bug Wranglers:         Katrin Fischer, Magnus Enger
+
+Release Maintainer (3.4.x): Chris Nighswonger <cnighswonger@foundations.edu>
+Release Maintainer (3.6.x): Chris Nighswonger <cnighswonger@foundations.edu>
+Release Maintainer (3.8.x): Chris Cormack <chrisc@catalyst.net.nz>
+
+
+Credits
+
+==========
+
+The following individuals contributed patches to Koha 3.8.0.:
+  Paul Poulain
+  Owen Leonard
+  Katrin Fischer
+  Chris Cormack
+  Colin Campbell
+  Marcel de Rooy
+  Dobrica Pavlinusic
+  Nicole C. Engard
+  Kyle M Hall
+  Ian Walls
+  Jonathan Druart
+  Jared Camins-Esakov
+  Adrien Saurat
+  Frédéric Demians
+  Julian Maurice
+  Srdjan Jankovic
+  Liz Rea
+  Robin Sheat
+  Magnus Enger
+  Duncan Tyler
+  Elliott Davis
+  Garry Collum
+  Chris Hall
+  Frédérick Capovilla
+  MJ Ray
+  Juan Romay Sieira
+  Chris Nighswonger
+  Alex Arnaud
+  Sam Sanders
+  Maxime Pelletier
+  Matthias Meusburger
+  Sophie Meynieux
+  Tomas Cohen Arazi
+  Mason James
+  Marc Balmer
+  Stéphane Delaune
+  Henri-Damien Laurent
+  D Ruth Bavousett
+  Connor Dewar
+  Christophe Croullebois
+  Zeno Tajoli
+  Gaetan Boisson
+  Aleksa Vujicic
+  Brendan Gallagher
+  Marc Veron
+  Galen Charlton
+  Serhij Dubyk {Сергій Дубик}
+  Janusz Kaczmarek
+  Salvador Zaragoza Rubio
+  Koustubha Kale
+  Kate Henderson
+  Jono Mingard
+  Albert Oller
+  Frère Sébastien Marie
+  Martin Renvoize
+  Peter Lorimer
+  Bart Jorgensen
+  Jorgia Kelsey
+  Lyon3 Team
+  James Mason
+  Jesse Maseto
+  Fridolyn Sommers
+  Jon Aker
+  Greg Barniskis
+  Joy Nelson                   
+  Nahuel Angelinetti
+
+We regret any omissions. If a contributor has been inadvertantly missed, please send a patch against these release notes to koha-patches@lists.koha-community.org.
+
+Revision control notes
+==========
+
+The Koha project uses Git for version control. The current development version of Koha can be retrieved by checking out the master branch of
+
+   git://git.koha-community.org/koha.git
+
+The branch for Koha 3.8.x (i.e., this version of Koha and future bugfix releases) is 3.8.x.
+
+Bugs and feature requests
+
+==========
+
+Bug reports and feature requests can be filed at the Koha bug tracker at
+
+   http://bugs.koha-community.org/
+
