@@ -98,23 +98,25 @@
         </div><!-- /yui-u -->
 </div><!-- /yui-g -->
 <div class="yui-g">
-                [% IF ( CAN_user_tools_moderate_comments ) && ( pendingsuggestions || pendingcomments || pendingtags ) %]
+            [% IF ( ( CAN_user_tools_moderate_comments  && pendingcomments ) 
+                    || ( CAN_user_tools_moderate_tags && pendingtags )
+                    || ( CAN_user_acquisition && pendingsuggestions ) ) %]
                 <div id="area-pending">
-                    [% IF ( pendingsuggestions ) %]
+                    [% IF ( CAN_user_acquisition && pendingsuggestions ) %]
                     <div class="pending-info">
                         <a href="/cgi-bin/koha/suggestion/suggestion.pl">Suggestions pending approval:
                         <span class="pending-number-link">[% pendingsuggestions %]</span></a>
                     </div>
                     [% END %]
 
-                    [% IF ( pendingcomments ) %]
+                    [% IF ( CAN_user_tools_moderate_comments  && pendingcomments ) %]
                     <div class="pending-info">
                         <a href="/cgi-bin/koha/reviews/reviewswaiting.pl">Comments pending approval:
                         <span class="pending-number-link">[% pendingcomments %]</span></a>
                     </div>
                     [% END %]
 
-                    [% IF ( pendingtags ) %]
+                    [% IF ( CAN_user_tools_moderate_tags && pendingtags ) %]
                     <div class="pending-info">
                         <a href="/cgi-bin/koha/tags/review.pl">Tags pending approval:
                         <span class="pending-number-link">[% pendingtags %]</span></a>
