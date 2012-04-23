@@ -33,7 +33,7 @@
 
                     [% IF ( CAN_user_catalogue ) %]
                     <li>
-                        <a class="icon_general icon_search" href="/cgi-bin/koha/catalogue/search.pl">Advanced Search</a>
+                        <a class="icon_general icon_search" href="/cgi-bin/koha/catalogue/search.pl">Advanced search</a>
                     </li>
                     [% END %]
 
@@ -80,7 +80,7 @@
 
                     [% IF ( CAN_user_parameters ) %]
                     <li>
-                        <a class="icon_general icon_administration" href="/cgi-bin/koha/admin/admin-home.pl">Koha Administration</a>
+                        <a class="icon_general icon_administration" href="/cgi-bin/koha/admin/admin-home.pl">Koha administration</a>
                     </li>
                     [% END %]
 
@@ -104,22 +104,22 @@
                 <div id="area-pending">
                     [% IF ( CAN_user_acquisition && pendingsuggestions ) %]
                     <div class="pending-info">
-                        <a href="/cgi-bin/koha/suggestion/suggestion.pl">Suggestions pending approval:
-                        <span class="pending-number-link">[% pendingsuggestions %]</span></a>
+                        <a href="/cgi-bin/koha/suggestion/suggestion.pl">Suggestions pending approval</a>:
+                        <span class="pending-number-link">[% pendingsuggestions %]</span>
                     </div>
                     [% END %]
 
                     [% IF ( CAN_user_tools_moderate_comments  && pendingcomments ) %]
                     <div class="pending-info">
-                        <a href="/cgi-bin/koha/reviews/reviewswaiting.pl">Comments pending approval:
-                        <span class="pending-number-link">[% pendingcomments %]</span></a>
+                        <a href="/cgi-bin/koha/reviews/reviewswaiting.pl">Comments pending approval</a>:
+                        <span class="pending-number-link">[% pendingcomments %]</span>
                     </div>
                     [% END %]
 
                     [% IF ( CAN_user_tools_moderate_tags && pendingtags ) %]
                     <div class="pending-info">
-                        <a href="/cgi-bin/koha/tags/review.pl">Tags pending approval:
-                        <span class="pending-number-link">[% pendingtags %]</span></a>
+                        <a href="/cgi-bin/koha/tags/review.pl">Tags pending approval</a>:
+                        <span class="pending-number-link">[% pendingtags %]</span>
                     </div>
                     [% END %]
                 </div>
