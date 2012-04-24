@@ -12,7 +12,7 @@
 //<![CDATA[
 
 	 $(document).ready(function() {
- 		$('#authoritiestabs>ul').tabs();
+    $('#authoritiestabs').tabs();
 	 });
 
 function confirm_deletion() {
@@ -131,7 +131,7 @@ function searchauthority() {
     <ul>
         [% FOREACH BIG_LOO IN BIG_LOOP %]
             <li>
-                <a href="/cgi-bin/koha/cataloguing/addbiblio.pl#tab[% BIG_LOO.number %]XX">[% BIG_LOO.number %]</a>
+                <a href="#tab[% BIG_LOO.number %]XX">[% BIG_LOO.number %]</a>
             </li>
         [% END %]
     </ul>

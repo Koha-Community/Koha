@@ -16,7 +16,7 @@ $.tablesorter.addParser({
     type: 'text' 
 });
             $(function() {
-            $('#opac-user-views > ul').tabs();
+            $('#opac-user-views').tabs();
             $.tablesorter.defaults.widgets = ['zebra'];
             [% IF ( dateformat == 'metric' ) %]$.tablesorter.defaults.dateFormat = ['uk'];[% END %]
 			$("#holdst").tablesorter({
@@ -110,15 +110,15 @@ $.tablesorter.addParser({
         
 <div id="opac-user-views" class="toptabs">
         <ul>
-            <li><a href="/cgi-bin/koha/opac-user.pl#opac-user-checkouts">Checked out</a></li>
-            [% IF ( overdues_count ) %]<li><a href="/cgi-bin/koha/opac-user.pl#opac-user-overdues">Overdue</a></li>[% END %]
+            <li><a href="#opac-user-checkouts">Checked out</a></li>
+            [% IF ( overdues_count ) %]<li><a href="#opac-user-overdues">Overdue</a></li>[% END %]
 [% IF ( OPACFinesTab ) %]
-            [% IF ( BORROWER_INF.amountoverfive ) %]<li><a href="/cgi-bin/koha/opac-user.pl#opac-user-fines">Fines</a></li>[% END %]
-            [% IF ( BORROWER_INF.amountoverzero ) %]<li><a href="/cgi-bin/koha/opac-user.pl#opac-user-fines">Fines</a></li>[% END %]
-            [% IF ( BORROWER_INF.amountlessthanzero ) %]<li><a href="/cgi-bin/koha/opac-user.pl#opac-user-fines">Credits</a></li>[% END %]
+            [% IF ( BORROWER_INF.amountoverfive ) %]<li><a href="#opac-user-fines">Fines</a></li>[% END %]
+            [% IF ( BORROWER_INF.amountoverzero ) %]<li><a href="#opac-user-fines">Fines</a></li>[% END %]
+            [% IF ( BORROWER_INF.amountlessthanzero ) %]<li><a href="#opac-user-fines">Credits</a></li>[% END %]
 [% END %]
-            [% IF ( waiting_count ) %][% IF ( BORROWER_INF.atdestination ) %]<li><a href="/cgi-bin/koha/opac-user.pl#opac-user-waiting">Waiting</a></li>[% END %][% END %]
-            [% IF ( reserves_count ) %]<li><a href="/cgi-bin/koha/opac-user.pl#opac-user-holds">Holds</a></li>[% END %]
+            [% IF ( waiting_count ) %][% IF ( BORROWER_INF.atdestination ) %]<li><a href="#opac-user-waiting">Waiting</a></li>[% END %][% END %]
+            [% IF ( reserves_count ) %]<li><a href="#opac-user-holds">Holds</a></li>[% END %]
         </ul>
 
     <div id="opac-user-checkouts">[% IF ( issues_count ) %]

@@ -13,7 +13,7 @@
     [% INCLUDE 'patron-search-box.inc' %]
 
 	[% IF ( CAN_user_catalogue ) %]
-	<div id="catalog_search" class="residentsearch" style="display:none;">
+    <div id="catalog_search" class="residentsearch">
 	<p class="tip">Enter search keywords:</p>
 		<form action="/cgi-bin/koha/catalogue/search.pl"  method="get" id="cat-search-block">
 			 <input type="text" name="q" id="search-form" size="40" value="" title="Enter the terms you wish to search for." class="form-text" />
@@ -21,9 +21,9 @@
 		</form>
 	</div>[% END %]
 			<ul>
-            <li><a href="/cgi-bin/koha/admin/aqcontact.pl#contract_description_search">Search contracts</a></li>
-            [% IF ( CAN_user_circulate ) %]<li><a href="/cgi-bin/koha/circ/circulation.pl#circ_search">Check out</a></li>[% END %]
-            [% IF ( CAN_user_catalogue ) %]<li><a href="/cgi-bin/koha/catalogue/search.pl#catalog_search">Search the catalog</a></li>[% END %]
+            <li><a href="#contract_description_search">Search contracts</a></li>
+            [% IF ( CAN_user_circulate ) %]<li><a href="#circ_search">Check out</a></li>[% END %]
+            [% IF ( CAN_user_catalogue ) %]<li><a href="#catalog_search">Search the catalog</a></li>[% END %]
 			</ul>	
 </div>
 <!-- End Patrons Admin Resident Search Box -->

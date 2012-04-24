@@ -5,7 +5,10 @@ a {
 	font-weight : bold;
 }
 
-a, a:visited {
+a,
+a:visited,
+.ui-widget-content a,
+.ui-widget-content a:visited {
 	color : #006699;
 }
 
@@ -1949,31 +1952,6 @@ span.starMT {
 	top : auto;
 }
 
-ul.ui-tabs-nav li {
-	margin-right : .5em;
-}
-
-ul.ui-tabs-nav li a, ul.ui-tabs-nav li span.a {
-	background-color : #F3F3F3;
-	border-top : 1px solid #E8E8E8;
-	border-left : 1px solid #E8E8E8;
-	border-right : 1px solid #E8E8E8;
-	border-bottom : 0;
-	padding : .2em 1em;
-	text-align : center;
-	text-decoration : none;
-}
-
-ul.ui-tabs-nav li.ui-tabs-selected a, ul.ui-tabs-nav li.ui-tabs-selected span.a {
-	background-color : #FFF;
-	border-top : 1px solid #E8E8E8;
-	border-left : 1px solid #E8E8E8;
-	border-right : 1px solid #E8E8E8;
-	border-bottom : 1px solid #FFF;
-	margin-bottom : -5px;
-	text-align : center;
-}
-
 #views {
 	border-bottom : 1px solid #E8E8E8;
 	margin-bottom : .5em;
@@ -2450,6 +2428,161 @@ span.sep {
 #daily-quote div {
     font-size: 12px;
     margin: 5px;
+}
+
+/* jQuery UI standard tabs */
+.ui-tabs-nav .ui-tabs-selected a,
+.ui-tabs-nav a:hover,
+.ui-tabs-nav a:focus,
+.ui-tabs-nav a:active,
+.ui-tabs-nav span.a {
+    background: none repeat scroll 0 0 transparent;
+    outline: 0 none;
+}
+
+.ui-tabs .ui-tabs-nav li.ui-tabs-selected {
+    background-color : #FFF;
+    border : 1px solid #D8D8D8;
+}
+
+.ui-widget,
+.ui-widget input,
+.ui-widget select,
+.ui-widget textarea,
+.ui-widget button {
+    font-family : inherit;
+    font-size : inherit;
+}
+ul.ui-tabs-nav li {
+    list-style : none;
+}
+.ui-tabs.ui-widget-content {
+    background : transparent none;
+    border : 0;
+}
+
+.ui-tabs .ui-tabs-panel {
+    border : 1px solid #D8D8D8;
+}
+.ui-tabs-nav.ui-widget-header {
+    border : 0;
+    background : none;
+}
+.ui-tabs .ui-tabs-nav li {
+    background: #F3F3F3 none;
+    border: 1px solid #D8D8D8;
+    margin-right : .4em;
+}
+.ui-tabs .ui-tabs-nav li.ui-tabs-selected a {
+    color : #000;
+    font-weight : bold;
+}
+
+.ui-tabs .ui-tabs-nav li.ui-state-default.ui-state-hover {
+    background : #F3F3F3 none;
+}
+
+.ui-tabs .ui-tabs-nav li.ui-tabs-selected.ui-state-hover {
+    background : #FFF none;
+}
+
+.ui-tabs .ui-state-default a,
+.ui-tabs .ui-state-default a:link,
+.ui-tabs .ui-state-default a:visited {
+    color: #006699;
+}
+
+.ui-tabs .ui-state-hover a,
+.ui-tabs .ui-state-hover a:link,
+.ui-tabs .ui-state-hover a:visited {
+    color: #990033;
+}
+
+.statictabs ul {
+    background: none repeat scroll 0 0 transparent;
+    border: 0 none;
+    margin: 0;
+    padding: 0.2em 0.2em 0;
+    border-bottom-right-radius: 4px;
+    border-bottom-left-radius: 4px;
+    border-top-right-radius: 4px;
+    border-top-left-radius: 4px;
+    color: #222222;
+    font-weight: bold;
+    font-size: 100%;
+    line-height: 1.3;
+    list-style: none outside none;
+    outline: 0 none;
+    text-decoration: none;
+}
+
+.statictabs ul:after {
+    clear: both;
+}
+
+.statictabs ul:before,
+.statictabs ul:after {
+    content: "";
+    display: table;
+}
+
+.statictabs ul li {
+    background: none repeat scroll 0 0 #E6F0F2;
+    border: 1px solid #B9D8D9;
+    border-bottom: 0 none !important;
+    border-top-right-radius: 4px;
+    border-top-left-radius: 4px;
+    float: left;
+    list-style: none outside none;
+    margin-bottom: 0;
+    margin-right: 0.4em;
+    padding: 0;
+    position: relative;
+    white-space: nowrap;
+    top: 1px;
+    color: #555555;
+    font-weight: normal;
+
+}
+
+.statictabs ul li.active {
+    background-color: #FFFFFF;
+    color: #212121;
+    font-weight: normal;
+    padding-bottom: 1px;
+}
+
+.statictabs ul li a {
+    color: #004D99;
+    cursor: pointer;
+    float: left;
+    padding: 0.5em 1em;
+    text-decoration: none;
+}
+
+.statictabs ul li a:hover {
+    background-color : #EDF4F5;
+    border-top-right-radius: 4px;
+    border-top-left-radius: 4px;
+    color : #538200;
+}
+
+.statictabs ul li.active a {
+    color: #000000;
+    font-weight: bold;
+    cursor: text;
+    background: none repeat scroll 0 0 transparent;
+    outline: 0 none;
+}
+
+.statictabs .tabs-container {
+    border: 1px solid #B9D8D9;
+    background: none repeat scroll 0 0 transparent;
+    display: block;
+    padding: 1em 1.4em;
+    border-bottom-right-radius: 4px;
+    border-bottom-left-radius: 4px;
+    color: #222222;
 }
 
 /* ## BABELTHEQUE ## */

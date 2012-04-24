@@ -29,7 +29,7 @@ $(document).ready(function(){
 [% UNLESS ( count ) %]
 You have never borrowed anything from this library.
 [% ELSE %]
-<div id="opac-user-readingrec" class="toptabs">
+<div id="opac-user-readingrec" class="statictabs">
 
 <div class="resultscontrol resort"> <form id="sortform" action="/cgi-bin/koha/opac-readingrecord.pl" method="get">
 [% UNLESS ( limit ) %]<input type="hidden" name="limit" value="full" />[% END %]
@@ -41,19 +41,19 @@ You have never borrowed anything from this library.
 
  </select> <input type="submit" value="Go" id="sortsubmit" class="submit clearfix" /></form></div>
 
-<ul class="ui-tabs-nav">
+<ul>
 
 [% IF ( showfulllink ) %]
 [% IF ( limit ) %]
-<li><a href="/cgi-bin/koha/opac-readingrecord.pl?limit=full[% IF ( orderbytitle ) %]&amp;order=title[% END %]">Show all items</a></li><li class="ui-tabs-selected"><a href="#readingrec">Showing last 50 items</a></li>
+<li><a href="/cgi-bin/koha/opac-readingrecord.pl?limit=full[% IF ( orderbytitle ) %]&amp;order=title[% END %]">Show all items</a></li><li class="active"><a href="#readingrec">Showing last 50 items</a></li>
 [% ELSE %]
-<li class="ui-tabs-selected"><a href="/cgi-bin/koha/opac-readingrecord.pl#readingrec">Showing all items</a></li><li><a href="/cgi-bin/koha/opac-readingrecord.pl?limit=50[% IF ( orderbytitle ) %]&amp;order=title[% END %]">Show last 50 items only</a></li>
+<li class="active"><a href="/cgi-bin/koha/opac-readingrecord.pl#readingrec">Showing all items</a></li><li><a href="/cgi-bin/koha/opac-readingrecord.pl?limit=50[% IF ( orderbytitle ) %]&amp;order=title[% END %]">Show last 50 items only</a></li>
 [% END %]
 [% ELSE %]
-<li class="ui-tabs-selected"><a href="/cgi-bin/koha/opac-readingrecord.pl#readingrec">Showing all items</a></li>
+<li class="active"><a href="/cgi-bin/koha/opac-readingrecord.pl#readingrec">Showing all items</a></li>
 [% END %]
 </ul>
-<div class="ui-tabs-panel"><table id="readingrec">
+<div class="tabs-container"><table id="readingrec">
 <tr>
 <th colspan="2">Title</th>
 <th>Item type</th>

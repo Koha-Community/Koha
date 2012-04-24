@@ -8,7 +8,7 @@
 
      var fields_in_use = {};
 	 $(document).ready(function() {
- 		$('#addbibliotabs > ul').tabs().bind('show.ui-tabs', function(e, ui) {
+        $('#addbibliotabs').tabs().bind('show.ui-tabs', function(e, ui) {
 			$("#"+ui.panel.id+" input:eq(0)").focus();
 		});
         $('.tag').each(function() {
@@ -39,7 +39,7 @@
 
 	});
 
-	$('#header_search > ul').tabs().bind('show.ui-tabs', function(e, ui) { $('#header_search > div:not(.ui-tabs-hide)').find('input').eq(0).focus(); });
+    $('#header_search').tabs().bind('show.ui-tabs', function(e, ui) { $('#header_search > div:not(.ui-tabs-hide)').find('input').eq(0).focus(); });
 
 
 function confirmnotdup(redirect){
@@ -804,9 +804,9 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
 <div id="addbibliotabs" class="toptabs numbered">
 	<ul>[% FOREACH BIG_LOO IN BIG_LOOP %]
           <li>  [% IF ( BIG_LOO.number ) %]
-                <a href="/cgi-bin/koha/cataloguing/addbiblio.pl#tab[% BIG_LOO.number %]XX">[% BIG_LOO.number %]</a>
+                <a href="#tab[% BIG_LOO.number %]XX">[% BIG_LOO.number %]</a>
             [% ELSE %]
-                <a href="/cgi-bin/koha/cataloguing/addbiblio.pl#tab[% BIG_LOO.number %]XX">[% BIG_LOO.number %]</a>
+                <a href="#tab[% BIG_LOO.number %]XX">[% BIG_LOO.number %]</a>
             [% END %]</li>
         [% END %]</ul>
 

@@ -36,7 +36,7 @@ function verify_images() {
         });
 }
      $(document).ready(function() {
-        $('#bibliodetails > ul').tabs();
+        $('#bibliodetails').tabs();
      });
      [% IF ( AmazonEnabled ) %]$(window).load(function() {
         verify_images();
@@ -255,12 +255,12 @@ function verify_images() {
 <div id="bibliodetails" class="toptabs">
 
 <ul>   
-<li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber %]#holdings">Holdings</a></li>
-<li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber %]#description">Descriptions</a></li>
-[% IF ( subscriptionsnumber ) %]<li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber %]#subscriptions">Subscriptions</a></li>[% END %]
-[% IF ( FRBRizeEditions ) %][% IF ( XISBNS ) %]<li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber %]#editions">Editions</a></li>[% END %][% END %]
-[% IF ( AmazonSimilarItems ) %]<li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber %]#related">Related titles</a></li>[% END %]
-[% IF ( LocalCoverImages ) %][% IF ( localimages || CAN_user_tools_upload_local_cover_images ) %]<li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber %]#images">Images</a></li>[% END %][% END %]
+<li><a href="#holdings">Holdings</a></li>
+<li><a href="#description">Descriptions</a></li>
+[% IF ( subscriptionsnumber ) %]<li><a href="#subscriptions">Subscriptions</a></li>[% END %]
+[% IF ( FRBRizeEditions ) %][% IF ( XISBNS ) %]<li><a href="#editions">Editions</a></li>[% END %][% END %]
+[% IF ( AmazonSimilarItems ) %]<li><a href="#related">Related titles</a></li>[% END %]
+[% IF ( LocalCoverImages ) %][% IF ( localimages || CAN_user_tools_upload_local_cover_images ) %]<li><a href="#images">Images</a></li>[% END %][% END %]
  </ul>
 
 <div id="holdings">

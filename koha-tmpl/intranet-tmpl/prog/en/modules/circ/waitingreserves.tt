@@ -11,7 +11,7 @@ $.tablesorter.addParser({
     type: 'text'
 });
      $(document).ready(function() {
-         $('#resultlist > ul').tabs();
+         $('#resultlist').tabs();
          $("th a").hide();
          $.tablesorter.defaults.widgets = ['zebra'];
          $("#holdst,#holdso").tablesorter({[% IF ( dateformat == 'metric' ) %]
@@ -69,8 +69,8 @@ $.tablesorter.addParser({
     [% ELSE %]
         <div id="resultlist" class="toptabs">
             <ul>
-                <li><a href="/cgi-bin/koha/circ/waitingreserves.pl#holdswaiting">[% reservecount %] Hold(s) waiting</a></li>
-                <li><a href="/cgi-bin/koha/circ/waitingreserves.pl#holdsover">[% overcount %] Hold(s) over</a></li>
+                <li><a href="#holdswaiting">[% reservecount %] Hold(s) waiting</a></li>
+                <li><a href="#holdsover">[% overcount %] Hold(s) over</a></li>
             </ul>
             <div id="holdswaiting">
             [% IF ( reserveloop ) %]

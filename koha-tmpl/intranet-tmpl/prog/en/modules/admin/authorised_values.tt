@@ -19,14 +19,15 @@
 <script type="text/JavaScript" language="JavaScript">
 //<![CDATA[
      $(document).ready(function() {
-        $('#icons > ul').tabs();
+        $('#icons').tabs();
      });
 //]]>
 </script>
 <style type="text/css">
 	fieldset.rows div.toptabs li { clear:none;margin-right:.5em;padding-bottom:0;width:auto; }
-	fieldset.rows div.toptabs .ui-tabs-nav li.ui-tabs-selected {background-color : transparent; }
+    fieldset.rows div.toptabs .ui-tabs-nav li.ui-tabs-selected {background-color : #F4F8F9; }
 	fieldset.rows .ui-tabs-panel { margin-right : 10px; margin-left : 10px;margin-bottom:10px;}
+    fieldset.rows .ui-tabs-nav { margin-left : 10px; }
 </style>
 </head>
 <body id="admin_authorised_values" class="admin">
@@ -78,15 +79,14 @@
             <input type="text" name="lib_opac" id="lib_opac" value="[% lib_opac %]" maxlength="80" />
         </li>
 		</ol>
-		<div id="icons" class="toptabs">
+        <div id="icons" class="toptabs" style="clear:both">
         <h5 style="margin-left:10px;">Choose an icon:</h5>
 			<ul>
-					<li><a href="/cgi-bin/koha/admin/authorised_values.pl?op=add_form&amp;category=[% category %]#none">None</a></li>
+                  <li><a href="#none">None</a></li>
 				  [% FOREACH imageset IN imagesets %]
-					[% IF ( imageset.imagesetactive ) %]<li class="ui-tabs-selected">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/admin/authorised_values.pl?op=add_form&amp;category=[% imageset.category %]#[% imageset.imagesetname %]">[% imageset.imagesetname %]</a></li>
+                        [% IF ( imageset.imagesetactive ) %]<li class="ui-tabs-selected">[% ELSE %]<li>[% END %]<a href="#[% imageset.imagesetname %]">[% imageset.imagesetname %]</a></li>
 				  [% END %]
 			</ul>
-		</div>
   <div id="none"><ul>
   <li><label for="noimage">No image: </label><input type="radio" name="imageurl" id="noimage" value="removeImage" /></li>
   </ul>
@@ -112,7 +112,7 @@
   <br class="clear" />
   </div>
   [% END %]
-  
+  </div>
         </fieldset>
        <fieldset class="action"> <input type="hidden" name="id" value="[% id %]" />
         <input type="submit" value="Save" /> <a class="cancel" href="/cgi-bin/koha/admin/authorised_values.pl?searchfield=[% category %]">Cancel</a></fieldset>

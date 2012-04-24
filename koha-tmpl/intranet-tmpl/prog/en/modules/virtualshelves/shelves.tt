@@ -1,5 +1,5 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; [% IF ( viewshelf ) %]Lists &rsaquo; Contents of [% shelfname | html %][% ELSE %]lists[% END %][% IF ( shelves ) %] &rsaquo; Create new list[% END %][% IF ( edit ) %] &rsaquo; Edit list [% shelfname | html %][% END %]</title>
+<title>Koha &rsaquo; [% IF ( viewshelf ) %]Lists &rsaquo; Contents of [% shelfname | html %][% ELSE %]Lists[% END %][% IF ( shelves ) %] &rsaquo; Create new list[% END %][% IF ( edit ) %] &rsaquo; Edit list [% shelfname | html %][% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
 <script type="text/javascript">
@@ -360,23 +360,23 @@ function placeHold () {
 
 [% UNLESS ( vseflag ) %]
         <h2>Lists</h2>
-		<div class="toptabs">
-        <ul class="ui-tabs-nav">
+        <div class="statictabs">
+        <ul>
         [% IF ( showprivateshelves ) %]
-            <li id="privateshelves_tab" class="ui-tabs-selected"><a href="/cgi-bin/koha/virtualshelves/shelves.pl?display=privateshelves">Your lists</a></li>
+            <li id="privateshelves_tab" class="active"><a href="/cgi-bin/koha/virtualshelves/shelves.pl?display=privateshelves">Your lists</a></li>
         [% ELSE %]
             <li id="privateshelves_tab" class=""><a href="/cgi-bin/koha/virtualshelves/shelves.pl?display=privateshelves">Your lists</a></li>
         [% END %]
         [% IF ( showpublicshelves ) %]
-            <li id="publicshelves_tab" class="ui-tabs-selected"><a href="/cgi-bin/koha/virtualshelves/shelves.pl?display=publicshelves">Public lists</a></li>
+            <li id="publicshelves_tab" class="active"><a href="/cgi-bin/koha/virtualshelves/shelves.pl?display=publicshelves">Public lists</a></li>
         [% ELSE %]
             <li id="publicshelves_tab" class=""><a href="/cgi-bin/koha/virtualshelves/shelves.pl?display=publicshelves">Public lists</a></li>
         [% END %]
         </ul>
         [% IF ( showprivateshelves ) %]
-		<div id="privateshelves" class="ui-tabs-panel" style="display:block;">
+        <div id="privateshelves" class="tabs-container" style="display:block;">
 		[% ELSE %]
-		<div id="privateshelves" class="ui-tabs-panel" style="display:none;">
+        <div id="privateshelves" class="tabs-container" style="display:none;">
 		[% END %]
             [% IF ( shelveslooppriv ) %]
 			<div class="pages">[% pagination_bar %]</div>
@@ -426,9 +426,9 @@ function placeHold () {
 		</div><!-- /privateshelves -->
 
         [% IF ( showpublicshelves ) %]
-		<div id="publicshelves" class="ui-tabs-panel" style="display:block;">
+        <div id="publicshelves" class="tabs-container" style="display:block;">
 		[% ELSE %]
-		<div id="publicshelves" class="ui-tabs-panel" style="display:none;">
+        <div id="publicshelves" class="tabs-container" style="display:none;">
 		[% END %]
         [% IF ( shelvesloop ) %]
 		<div class="pages">[% pagination_bar %]</div>

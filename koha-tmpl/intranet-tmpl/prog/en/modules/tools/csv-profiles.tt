@@ -6,7 +6,7 @@ function reloadPage(p) {
 	if (id != 0) { document.location = "/cgi-bin/koha/tools/csv-profiles.pl?id=" + id; }
 }
      $(document).ready(function() {
-        $('#csvexporttabs > ul').tabs();
+        $('#csvexporttabs').tabs();
      });
 //]]>
 </script>
@@ -39,14 +39,14 @@ function reloadPage(p) {
 				    [% END %]
 <div id="csvexporttabs" class="toptabs">
 <ul>
-	<li><a href="csv-profiles.pl#csvnew">New profile</a></li>
+    <li><a href="#csvnew">New profile</a></li>
 	[% IF ( existing_profiles ) %]
 	[% IF ( selected_profile_id ) %]
 	<li class="ui-tabs-selected">
 	[% ELSE %]
 	<li>
 	 [% END %]
-	<a href="csv-profiles.pl#csvedit">Edit existing profile</a></li> [% END %]
+    <a href="#csvedit">Edit existing profile</a></li> [% END %]
 </ul>
 	<div id="csvnew">
 					<h3>New CSV export profile</h3>

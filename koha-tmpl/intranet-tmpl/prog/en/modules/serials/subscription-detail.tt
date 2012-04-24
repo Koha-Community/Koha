@@ -33,7 +33,7 @@ function popup(subscriptionid) {
     newin=window.open("subscription-renew.pl?mode=popup&subscriptionid="+subscriptionid,'popup','width=590,height=440,toolbar=false,scrollbars=yes');
 }
 $(document).ready(function() {
-    $("#subscription_description > ul").tabs();
+    $("#subscription_description").tabs();
     $("#renewsub").click(function(){
         popup([% subscriptionid %]);
         return false;
@@ -82,10 +82,10 @@ $(document).ready(function() {
 
 <div id="subscription_description" class="toptabs">
 <ul class="ui-tabs-nav">
-    <li><a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscriptionid %]#subscription_info">Information</a></li>
-    <li><a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscriptionid %]#subscription_planning">Planning</a></li>
-    <li><a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscriptionid %]#subscription_issues">Issues</a></li>
-    <li><a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscriptionid %]#subscription_summary">Summary</a></li>
+    <li><a href="#subscription_info">Information</a></li>
+    <li><a href="#subscription_planning">Planning</a></li>
+    <li><a href="#subscription_issues">Issues</a></li>
+    <li><a href="#subscription_summary">Summary</a></li>
 </ul>
 
 <div id="subscription_info">

@@ -5,7 +5,7 @@
 //<![CDATA[
 
 	 $(document).ready(function() {
- 		$('#subfieldtabs > ul').tabs();
+        $('#subfieldtabs').tabs();
 	 });
 
 function displayMoreConstraint(numlayer){
@@ -59,10 +59,10 @@ function displayMoreConstraint(numlayer){
                 [% FOREACH loo IN loop %]
                     [% IF ( loo.new_subfield ) %]
                         [% IF ( tagfield >=10 ) %]<!-- display new only for > 10 fields -->
-                        <li><a href="/cgi-bin/koha/admin/auth_subfields_structure.pl#sub[% loo.tagsubfield %]field" title="[% loo.liblibrarian %]">New</a></li>
+                        <li><a href="#sub[% loo.tagsubfield %]field" title="[% loo.liblibrarian %]">New</a></li>
                         [% END %]
                     [% ELSE %]
-                        <li><a href="/cgi-bin/koha/admin/auth_subfields_structure.pl#sub[% loo.tagsubfield %]field" title="[% loo.liblibrarian %]">
+                        <li><a href="#sub[% loo.tagsubfield %]field" title="[% loo.liblibrarian %]">
                             [% loo.tagsubfield %]
                     </a></li>
                     [% END %]

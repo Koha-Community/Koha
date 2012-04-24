@@ -2,6 +2,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="Koha [% Version %]" /> <!-- leave this for stats -->
 <link rel="shortcut icon" href="[% IF ( OpacFavicon ) %][% OpacFavicon %][% ELSE %][% themelang %]/includes/favicon.ico[% END %]" type="image/x-icon" />
+<link rel="stylesheet" type="text/css" href="[% themelang %]/lib/jquery/jquery-ui.css" />
 [% IF ( opacstylesheet ) %]<link rel="stylesheet" type="text/css" href="[% opacstylesheet %]" />[% ELSE %]
 [% IF ( opaclayoutstylesheet ) %]<link rel="stylesheet" type="text/css" href="[% themelang %]/css/[% opaclayoutstylesheet %]" />[% ELSE %]<link rel="stylesheet" type="text/css" href="[% themelang %]/css/opac.css" />[% END %][% END %]
 [% IF ( opaccolorstylesheet ) %]
@@ -14,14 +15,13 @@
     <link rel="stylesheet" type="text/css" href="[% themelang %]/css/[% opac_css_override %]" />
 [% END %]
 <link rel="stylesheet" type="text/css" media="print" href="[% themelang %]/css/print.css" />
-<link rel="stylesheet" type="text/css" href="[% themelang %]/lib/jquery/plugins/ui.tabs.css" />
 [% IF ( OPACUserCSS ) %]<style type="text/css">[% OPACUserCSS %]</style>[% END %]
 <!-- yui js --> 
 <script type="text/javascript" src="[% yuipath %]/utilities/utilities.js"></script> 
 <script type="text/javascript" src="[% yuipath %]/container/container-min.js"></script> 
 <script type="text/javascript" src="[% yuipath %]/menu/menu-min.js"></script> 
 <script type="text/javascript" src="[% themelang %]/lib/jquery/jquery.js"></script>
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/ui.tabs.js"></script>
+<script type="text/javascript" src="[% themelang %]/lib/jquery/jquery-ui.js"></script>
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.hoverIntent.minified.js"></script>
 <script type="text/javascript" language="javascript" src="[% themelang %]/js/script.js"></script>
 [% IF ( OPACAmazonCoverImages ) %]

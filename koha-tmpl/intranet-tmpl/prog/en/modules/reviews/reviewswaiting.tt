@@ -18,10 +18,10 @@
 <h1>Comments</h1>
 
 <!-- The manual invoice and credit buttons -->
-<div class="toptabs">
-<ul class="ui-tabs-nav">
-    [% IF ( status ) %]<li class="ui-tabs-selected">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/reviews/reviewswaiting.pl?status=1">Approved comments</a></li>
-    [% IF ( status ) %]<li>[% ELSE %]<li class="ui-tabs-selected">[% END %]<a href="/cgi-bin/koha/reviews/reviewswaiting.pl" >Comments awaiting moderation</a></li>
+<div class="statictabs">
+<ul>
+    [% IF ( status ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/reviews/reviewswaiting.pl?status=1">Approved comments</a></li>
+    [% IF ( status ) %]<li>[% ELSE %]<li class="active">[% END %]<a href="/cgi-bin/koha/reviews/reviewswaiting.pl" >Comments awaiting moderation</a></li>
 </ul>
 <div class="tabs-container">
 

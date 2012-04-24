@@ -4,7 +4,7 @@
 [% INCLUDE 'doc-head-close.inc' %]
 <script type="text/javascript" language="javascript">//<![CDATA[
             $(document).ready(function() {
-            $('#advsearches > ul').tabs();
+            $('#advsearches').tabs();
 });
     //]]>
 </script>
@@ -140,7 +140,7 @@
       <ul>
       [% FOREACH advsearchloo IN advancedsearchesloop %]
         <li id="advsearch-tab-[% advsearchloo.advanced_search_type %]">
-           <a href="/cgi-bin/koha/opac-search.pl#advsearch-[% advsearchloo.advanced_search_type %]">
+           <a href="#advsearch-[% advsearchloo.advanced_search_type %]">
            [% IF ( advsearchloo.advanced_search_type == 'itemtypes' ) %]Item type
            [% ELSIF ( advsearchloo.advanced_search_type == 'ccode' ) %]Collection
            [% ELSIF ( advsearchloo.advanced_search_type == 'loc' ) %]Shelving location

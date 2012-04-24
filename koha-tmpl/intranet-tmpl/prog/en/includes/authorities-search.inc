@@ -31,7 +31,7 @@
          <input type="submit" class="submit" value="Submit" />
     </form>
     </div>
-    <div id="main_heading" class="residentsearch" style="display:none;">
+    <div id="main_heading" class="residentsearch">
     <p class="tip">Enter authority heading:</p>
     <form action="/cgi-bin/koha/authorities/authorities-home.pl" method="get">
         <input type="hidden" name="op" value="do_search" />
@@ -62,7 +62,7 @@
         <input type="submit" class="submit" value="Submit" />
     </form>
     </div>
-    <div id="all_headings" class="residentsearch" style="display:none;">
+    <div id="all_headings" class="residentsearch">
     <p class="tip">Enter any authority field:</p>
     <form action="/cgi-bin/koha/authorities/authorities-home.pl" method="get">
         <input type="hidden" name="op" value="do_search" />
@@ -94,9 +94,9 @@
     </form>
     </div>
     <ul>
-        <li><a href="/cgi-bin/koha/authorities/authorities-home.pl#authority_search">Search authorities</a></li>
-        <li><a href="/cgi-bin/koha/authorities/authorities-home.pl#main_heading">Search main heading</a></li>
-        <li><a href="/cgi-bin/koha/authorities/authorities-home.pl#all_headings">Search all headings</a></li>
+        <li><a href="#authority_search">Search authorities</a></li>
+        <li><a href="#main_heading">Search main heading</a></li>
+        <li><a href="#all_headings">Search all headings</a></li>
     </ul>
 </div><!-- /header_search -->
 </div><!-- /gradient -->

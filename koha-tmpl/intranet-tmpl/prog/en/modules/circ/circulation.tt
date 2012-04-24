@@ -15,7 +15,7 @@
 });[% END %]
 [% UNLESS ( borrowernumber ) %][% UNLESS ( CGIselectborrower ) %]window.onload=function(){ $('#findborrower').focus(); };[% END %][% END %]
 	 $(document).ready(function() {
- 		$('#patronlists > ul').tabs();
+        $('#patronlists').tabs();
 		[% IF ( UseTablesortForCirc ) %]$.tablesorter.defaults.widgets = ['zebra'];
 		$("#issuest").tablesorter({[% IF ( dateformat_metric ) %]
 		dateFormat: 'uk',[% END %]
@@ -677,17 +677,17 @@ No patron matched <span class="ex">[% message %]</span>
 
 <ul>
 <li>    [% IF ( issuecount ) %]
-            <a href="/cgi-bin/koha/circ/circulation.pl#checkouts">[% issuecount %] Checkout(s)</a>
+            <a href="#checkouts">[% issuecount %] Checkout(s)</a>
     [% ELSE %]
-            <a href="/cgi-bin/koha/circ/circulation.pl#checkouts">0 Checkouts</a>
+            <a href="#checkouts">0 Checkouts</a>
     [% END %]</li>
 [% IF ( displayrelissues ) %]
-<li><a href="/cgi-bin/koha/circ/circulation.pl#relissues">Relatives' checkouts</a></li>
+<li><a href="#relissues">Relatives' checkouts</a></li>
 [% END %]
 <li>[% IF ( countreserv ) %]
-            <a href="/cgi-bin/koha/circ/circulation.pl#reserves">[% countreserv %] Hold(s)</a>
+            <a href="#reserves">[% countreserv %] Hold(s)</a>
     [% ELSE %]
-            <a href="/cgi-bin/koha/circ/circulation.pl#reserves">0 Holds</a>
+            <a href="#reserves">0 Holds</a>
     [% END %]</li>
 
 </ul>

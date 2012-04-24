@@ -27,7 +27,7 @@
 
 
      $(document).ready(function() { 
-        $('#bibliodescriptions > ul').tabs();
+        $('#bibliodescriptions').tabs();
 [% IF ( opacuserlogin ) %][% IF ( loggedinusername ) %][% IF ( TagsEnabled ) %]$("#tagform").hide();
         $("#addtagl").show();
         $("#addtagl a").click(function(){
@@ -607,18 +607,18 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 
 <ul>   
 [% IF ( defaulttab == 'holdings' ) %]<li id="tab_holdings" class="ui-tabs-selected">[% ELSE %]<li id="tab_holdings">[% END %]
-    <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]#holdings">Holdings ( [% count %] )</a>
+    <a href="#holdings">Holdings ( [% count %] )</a>
 </li>
-<li id="tab_descriptions"> <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]#descriptions">Title notes</a></li>
+<li id="tab_descriptions"> <a href="#descriptions">Title notes</a></li>
 [% IF ( SYNDETICS_TOC ) %]
-    <li id="tab_toc"> <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]#toc">TOC</a></li>
+    <li id="tab_toc"> <a href="#toc">TOC</a></li>
 [% END %]
 [% IF ( SyndeticsEnabled ) %]
     [% IF ( SyndeticsExcerpt ) %][% IF ( SYNDETICS_EXCERPT ) %]
-        <li id="tab_excerpt"> <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]#excerpt">Excerpt</a></li>
+        <li id="tab_excerpt"> <a href="#excerpt">Excerpt</a></li>
     [% END %][% END %]
     [% IF ( SyndeticsReviews ) %][% IF ( SYNDETICS_REVIEWS ) %]
-        <li id="tab_reviews"> <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]#reviews">Reviews</a></li>
+        <li id="tab_reviews"> <a href="#reviews">Reviews</a></li>
         <li id="tab_LTFLreviews">
             [% IF ( using_https ) %]
                 <script src="https://www.librarything.com/forlibraries/widget.js?id=[% LibraryThingForLibrariesID %]" type="text/javascript"></script>
@@ -630,53 +630,53 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
         </li>
     [% END %][% END %]
     [% IF ( SyndeticsAuthorNotes ) %][% IF ( SYNDETICS_ANOTES ) %]
-        <li id="tab_anotes"> <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]#anotes">About the author</a></li>
+        <li id="tab_anotes"> <a href="#anotes">About the author</a></li>
     [% END %][% END %]
 [% END %]
 [% IF ( LibraryThingForLibrariesID ) %] 
 [% IF ( LibraryThingForLibrariesTabbedView ) %]
-    <li id="tab_LFTLSimilarItems"> <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]#LFTLSimilarItems">Similar items</a></li>
-    <li id="tab_LTFLTagBrowse"> <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]#LTFLTagBrowse">Tag browser</a></li>
+    <li id="tab_LFTLSimilarItems"> <a href="#LFTLSimilarItems">Similar items</a></li>
+    <li id="tab_LTFLTagBrowse"> <a href="#LTFLTagBrowse">Tag browser</a></li>
 [% END %]
 [% END %]
 [% IF ( subscriptionsnumber ) %]
     [% IF ( defaulttab == 'subscriptions' ) %]<li id="tab_subscriptions" class="ui-tabs-selected">[% ELSE %]<li id="tab_subscriptions">[% END %]
-        <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]#subscriptions">Subscriptions</a>
+        <a href="#subscriptions">Subscriptions</a>
     </li>
 [% END %]
 [% IF ( reviewson ) %]
-    <li id="tab_comments"><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]#comments">Comments ( [% IF reviews.defined %][% reviews.size %][% ELSE %]0[% END %] )</a></li>
+    <li id="tab_comments"><a href="#comments">Comments ( [% IF reviews.defined %][% reviews.size %][% ELSE %]0[% END %] )</a></li>
 [% END %]
 
 [% IF ( NovelistSelectProfile ) %] 
     [% IF ( NovelistSelectView == 'tab') %]
-        <li id="tab_NovelistSelect"> <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]#NovelistSelect">Novelist Select</a></li>
+        <li id="tab_NovelistSelect"> <a href="#NovelistSelect">Novelist Select</a></li>
     [% END %]
 [% END %]
 
 [% IF ( OPACAmazonEnabled ) %][% IF ( OPACAmazonSimilarItems ) %][% IF ( AMAZON_SIMILAR_PRODUCTS ) %]
-    <li id="tab_related"><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]#similars">Related</a></li>
+    <li id="tab_related"><a href="#similars">Related</a></li>
 [% END %][% END %][% END %]
 
 [% IF ( OPACFRBRizeEditions ) %][% IF ( XISBNS ) %]
-    <li id="tab_editions"><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]#editions">Editions</a></li>
+    <li id="tab_editions"><a href="#editions">Editions</a></li>
 [% END %][% END %]
 
 [% IF ( OPACAmazonEnabled ) %][% IF ( OPACAmazonReviews ) %]
-    <li id="tab_amazonreviews"><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]#amazonreviews">Amazon reviews</a></li>
+    <li id="tab_amazonreviews"><a href="#amazonreviews">Amazon reviews</a></li>
 [% END %][% END %]
 [% IF ( Babeltheque ) %]
-    <li id="tab_babeltheque"><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]#babeltheque">Babelthèque</a></li>
+    <li id="tab_babeltheque"><a href="#babeltheque">Babelthèque</a></li>
 [% END %]
 
 [% IF ( serialcollection ) %]
     [% IF ( defaulttab == 'serialcollection' ) %]<li id="tab_serialcollection" class="ui-tabs-selected">[% ELSE %]<li id="tab_serialcollection">[% END %]
-        <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]#serialcollection">Serial collection</a>
+        <a href="#serialcollection">Serial collection</a>
     </li>
 [% END %]
 
 [% IF ( OPACLocalCoverImages ) %][% IF ( localimages ) %]
-    <li id="tab_images"><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]#images">Images</a></li>
+    <li id="tab_images"><a href="#images">Images</a></li>
 [% END %][% END %]
 </ul>
 

@@ -14,8 +14,8 @@
 </div>
     [% INCLUDE 'patron-search-box.inc' %]
 			<ul>
-            <li><a href="/cgi-bin/koha/catalogue/search.pl#addbooks_search">Cataloging search</a></li>
-            [% IF ( CAN_user_circulate ) %]<li><a href="/cgi-bin/koha/circ/circulation.pl#circ_search">Check out</a></li>[% END %]
+            <li><a href="#addbooks_search">Cataloging search</a></li>
+            [% IF ( CAN_user_circulate ) %]<li><a href="#circ_search">Check out</a></li>[% END %]
 			</ul>	
 </div><!-- /header_search -->
 </div><!-- /gradient -->

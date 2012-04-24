@@ -41,7 +41,7 @@ function generateNext(subscriptionid) {
 }
 
 $(document).ready(function() {
-	$('#subscription_years > ul').tabs();
+    $('#subscription_years').tabs();
 });
  
 
@@ -179,7 +179,7 @@ $(document).ready(function() {
 <ul>
 	[% FOREACH year IN years %]
         [% IF ( year.year ) %]
-            <li><a href="/cgi-bin/koha/serials/serials-collection.pl?subscriptionid=[% year.subscriptionid %]#subscription-year-[% year.year %]">[% year.year %]</a></li>
+            <li><a href="#subscription-year-[% year.year %]">[% year.year %]</a></li>
         [% END %]
     [% END %]
 </ul>

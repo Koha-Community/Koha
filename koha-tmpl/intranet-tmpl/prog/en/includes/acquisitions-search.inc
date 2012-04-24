@@ -7,7 +7,7 @@
            <input type="text" size="25" name="supplier" id="supplier" class="focus" />
             <input type="submit" class="submit" value="Submit" /></form>
 </div>
-	<div id="orders_search" class="residentsearch" style="display:none;">
+    <div id="orders_search" class="residentsearch">
 	<p class="tip">Search orders:</p>
 	
 		<form action="/cgi-bin/koha/acqui/histsearch.pl" method="post">
@@ -24,8 +24,8 @@
 	</form>
 	</div>	
 			<ul id="tabtriggers">
-            <li><a href="/cgi-bin/koha/acqui/booksellers.pl#supplier_search">Vendor search</a></li>
-            <li><a href="/cgi-bin/koha/acqui/histsearch.pl#orders_search">Orders search</a></li>
+            <li><a href="#supplier_search">Vendor search</a></li>
+            <li><a href="#orders_search">Orders search</a></li>
 			</ul>	
 </div><!-- /header_search -->
 </div><!-- /gradient -->

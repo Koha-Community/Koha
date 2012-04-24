@@ -20,7 +20,7 @@ $.tablesorter.addParser({
     type: 'text' 
 });
 $(document).ready(function() {
-	$('#finesholdsissues > ul').tabs();
+    $('#finesholdsissues').tabs();
 	$.tablesorter.defaults.widgets = ['zebra'];
 	$("#issuest").tablesorter({[% IF ( dateformat_metric ) %]
 		dateFormat: 'uk',[% END %]
@@ -410,15 +410,14 @@ function validate1(date) {
 
 <div id="finesholdsissues" class="toptabs">
     <ul>
-        <li><a href="/cgi-bin/koha/members/moremember.pl#checkedout">[% issueloop.size %] Checkout(s)</a></li>
+        <li><a href="#checkedout">[% issueloop.size %] Checkout(s)</a></li>
     [% IF relissueloop.size %]
-        <li><a href="/cgi-bin/koha/members/moremember.pl#relissues">Relatives' Checkouts</a></li>
+        <li><a href="#relissues">Relatives' Checkouts</a></li>
     [% END %]
-        <li><a href="/cgi-bin/koha/members/moremember.pl#finesandcharges">Fines &amp; Charges</a></li>
+        <li><a href="#finesandcharges">Fines &amp; Charges</a></li>
         <li>[% IF ( countreserv ) %]
-            <a href="/cgi-bin/koha/members/moremember.pl#onhold">[% countreserv %] Hold(s)</a>
-    [% ELSE %]
-            <a href="/cgi-bin/koha/members/moremember.pl#onhold">0 Holds</a>
+            <a href="#onhold">[% countreserv %] Hold(s)</a>    [% ELSE %]
+            <a href="#onhold">0 Holds</a>
     [% END %]</li>
     </ul>
 

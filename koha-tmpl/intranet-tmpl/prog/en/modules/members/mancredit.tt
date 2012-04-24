@@ -23,12 +23,12 @@ $(document).ready(function(){
 [% INCLUDE 'members-toolbar.inc' %]
 
 <!-- The manual invoice and credit buttons -->
-<div class="toptabs">
-<ul class="ui-tabs-nav">
+<div class="statictabs">
+<ul>
 	<li><a href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% borrowernumber %]">Account</a></li>
 	<li><a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% borrowernumber %]" >Pay fines</a></li>
 	<li><a href="/cgi-bin/koha/members/maninvoice.pl?borrowernumber=[% borrowernumber %]" >Create manual invoice</a></li>
-	<li class="ui-tabs-selected"><a href="/cgi-bin/koha/members/mancredit.pl?borrowernumber=[% borrowernumber %]" >Create manual credit</a></li>
+    <li class="active"><a href="/cgi-bin/koha/members/mancredit.pl?borrowernumber=[% borrowernumber %]" >Create manual credit</a></li>
 </ul>
 <div class="tabs-container">
 

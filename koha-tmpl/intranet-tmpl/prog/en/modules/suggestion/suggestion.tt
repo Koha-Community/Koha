@@ -40,7 +40,7 @@ function displayOther(id,show,hide){
 }
 $(document).ready(function() {
     yuiToolbar();
-    $('#suggestiontabs > ul').tabs({
+    $('#suggestiontabs').tabs({
         select: function(ui) {
             $("#loadingtab").show();
         },
@@ -329,7 +329,7 @@ $(document).ready(function() { calcNewsuggTotal(); });
 <div id="suggestiontabs" class="toptabs">
 <ul class="ui-tabs-nav">
 [% FOREACH suggestion IN suggestions %]
-[% IF ( suggestion.first ) %]<li class="ui-tabs-selected">[% ELSE %]<li>[% END %]<a href="suggestion.pl#[% suggestion.suggestiontype %]">[% IF ( suggestion.suggestiontypelabel ) %]
+[% IF ( suggestion.first ) %]<li class="ui-tabs-selected">[% ELSE %]<li>[% END %]<a href="#[% suggestion.suggestiontype %]">[% IF ( suggestion.suggestiontypelabel ) %]
     [% IF (suggestion.suggestiontypelabel == "Pending") %]Pending
     [% ELSIF (suggestion.suggestiontypelabel == "Accepted") %]Accepted
     [% ELSIF (suggestion.suggestiontypelabel == "Checked") %]Checked
@@ -340,7 +340,6 @@ $(document).ready(function() { calcNewsuggTotal(); });
     [% ELSE %]No name[% END %] ([% suggestion.suggestionscount %])</a></li>
 [% END %]
     </ul>
-    </div>
 [% END %]
 
 [% FOREACH suggestion IN suggestions %]
@@ -431,6 +430,7 @@ $(document).ready(function() { calcNewsuggTotal(); });
 [% END %]
 </div>
 [% END %]
+    </div>
 [% END %]
 </div>
 </div>
@@ -458,7 +458,7 @@ $(document).ready(function() { calcNewsuggTotal(); });
                 </fieldset>
 				 <fieldset class="brief"><h4 class="collapse"><a href="#">Suggestion information</a></h4>
                     <ol>
-                      <li><label for="status"> Status:</label><select name="STATUS" id="STATUS"><option value="">Any</option>
+                      <li><label for="STATUS"> Status:</label><select name="STATUS" id="STATUS"><option value="">Any</option>
                         [% IF (statusselected_ASKED ) %]<option value="ASKED" selected="selected">Pending</option> 
                         [% ELSE %]<option value="ASKED">Pending</option>[% END %]
                         [% IF (statusselected_ACCEPTED ) %]<option value="ACCEPTED" selected="selected">Accepted</option>

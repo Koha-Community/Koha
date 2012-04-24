@@ -8,7 +8,7 @@
 
      var fields_in_use = {};
 	 $(document).ready(function() {
- 		$('#authoritytabs > ul').tabs();
+        $('#authoritytabs').tabs();
         $('.tag').each(function() {
             var field_id = this.getAttribute('id').substring(0, 7);
             if (field_id in fields_in_use) {
@@ -592,9 +592,9 @@ function searchauthority() {
 <div id="authoritytabs" class="toptabs numbered">
        <ul> [% FOREACH BIG_LOO IN BIG_LOOP %]
             <li>[% IF ( BIG_LOO.number ) %]
-                <a href="/cgi-bin/authorities/authorties.pl#tab[% BIG_LOO.number %]XX">[% BIG_LOO.number %]</a>
+                <a href="#tab[% BIG_LOO.number %]XX">[% BIG_LOO.number %]</a>
             [% ELSE %]
-                <a href="/cgi-bin/authorities/authorties.pl#tab[% BIG_LOO.number %]XX">[% BIG_LOO.number %]</a>
+                <a href="#tab[% BIG_LOO.number %]XX">[% BIG_LOO.number %]</a>
             [% END %]</li>
         [% END %]</ul>
 
