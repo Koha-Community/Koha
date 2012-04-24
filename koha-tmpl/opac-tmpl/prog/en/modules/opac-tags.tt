@@ -112,7 +112,7 @@
 		<thead><tr><th>Term</th><th>Title</th><th>Date Added</th><th>Delete</th>
 		</tr></thead>
 	<tbody>[% FOREACH MY_TAG IN MY_TAGS %]
-		<tr><td><a href="/cgi-bin/koha/opac-search.pl?tag=[% MY_TAG.term |url %]&amp;q=[% MY_TAG.term |url %]">
+        <tr><td class="tagterm"><a href="/cgi-bin/koha/opac-search.pl?tag=[% MY_TAG.term |url %]&amp;q=[% MY_TAG.term |url %]">
 				[% MY_TAG.term |html %]</a>
 			</td>
 			<td><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% MY_TAG.biblionumber %]">
