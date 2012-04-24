@@ -90,33 +90,13 @@ to add to Batch [% batch_id %]
 <fieldset class="rows">
 <ol>
 	<li>
-		<label for="datefrom">Added on or after date</label>
-	     <input type="text" size="10" id="datefrom" name="datefrom" value="" />
-  <img src="[% themelang %]/lib/calendar/cal.gif" border="0" id="openCalendarFrom" alt="Show Calendar" />
-<script type="text/javascript">
-    Calendar.setup({
-        inputField     :    "datefrom",
-      ifFormat : "[% DHTMLcalendar_dateformat %]",
-        button         :    "openCalendarFrom",
-        align          :    "Tl",
-        singleClick    :    false
-    });
-</script>
+    <label for="from">Added on or after date</label>
+        <input type="text" size="10" id="from" name="datefrom" class="datepickerfrom" value="" />
 <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
 </li>
 <li>
-		<label for="dateto">Added on or before date</label>
-  <input type="text" size="10" id="dateto" name="dateto" value="" />
-  <img src="[% themelang %]/lib/calendar/cal.gif" border="0" id="openCalendarTo" alt="Show Calendar" />
-
-<script type="text/javascript">
-    Calendar.setup({
-        inputField     :    "dateto",
-      ifFormat : "[% DHTMLcalendar_dateformat %]",
-        button         :    "openCalendarTo",
-        align          :    "Tl"
-    });
-</script>
+    <label for="to">Added on or before date</label>
+        <input type="text" size="10" id="to" name="dateto" class="datepickerto" value="" />
 <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
 </li></ol>
 </fieldset>

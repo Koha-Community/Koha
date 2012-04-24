@@ -83,62 +83,9 @@
                 <td>Period</td>
                 <td><input type="radio" name="Line" value="datetime" /></td>
                 <td><input type="radio" name="Column" value="datetime" /></td>
-                <td><label for="from">From</label> <input type="text" size="10" id="from" name="Filter" />
-                    <img src="[% themelang %]/lib/calendar/cal.gif" alt="Show calendar" border="0" id="openCalendarFrom" style="cursor: pointer;" />
-                   <script type="text/javascript">
-				   //<![CDATA[ 
-				   function validate1(date) {
-                        var day = date.getDate();
-                        var month = date.getMonth() + 1;
-                        var year = date.getFullYear();
-                        var weekDay = date.getDay();
-                        var dayMonth = month + '-' + day;
-                        var dateString = year + '-' + month + '-' + day;
-                        var dateTo = document.getElementById('to').value.split("-");
-                        var limitDate = new Date(dateTo[0], (dateTo[1] - 1), dateTo[2]);
-                        if (date > limitDate) {
-                             return true;
-                        } else {
-                             return false;
-                        }
-                    }
-                    Calendar.setup({
-                            inputField : "from",
-                            ifFormat : "[% DHTMLcalendar_dateformat %]",
-                            button : "openCalendarFrom",
-                            disableFunc : validate1,
-                            dateStatusFunc : validate1
-                    });
-					//]]>
-					</script>
-                    <label for="to">To</label> <input size="10" id="to" name="Filter" value="" type="text" />
-                    <img src="[% themelang %]/lib/calendar/cal.gif" alt="Show calendar" id="openCalendarTo" style="cursor: pointer;" border="0" />
-                    <script type="text/javascript">
-					//<![CDATA[  
-					function validate2(date) {
-                         var day = date.getDate();
-                         var month = date.getMonth() + 1;
-                         var year = date.getFullYear();
-                         var weekDay = date.getDay();
-                         var dayMonth = month + '-' + day;
-                         var dateString = year + '-' + month + '-' + day;
-                         var dateFrom = document.getElementById('from').value.split("-");
-                         var limitDate = new Date(dateFrom[0], (dateFrom[1] - 1), dateFrom[2]);
-                         if (limitDate > date) {
-                              return true;
-                         } else {
-                              return false;
-                         }
-                     }
-                     Calendar.setup({
-                             inputField : "to",
-                             ifFormat : "[% DHTMLcalendar_dateformat %]",
-                             button : "openCalendarTo",
-                             disableFunc : validate2,
-                             dateStatusFunc : validate2
-                     });
-					//]]>
-					</script> <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
+                <td><label for="from">From</label> <input type="text" size="10" id="from" name="Filter" class="datepickerfrom" />
+                    <label for="to">To</label> <input size="10" id="to" name="Filter" value="" type="text" class="datepickerto" />
+                    <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
                     </td>
                 </tr>
                 <tr class="highlight"> 

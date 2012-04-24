@@ -119,16 +119,7 @@
             <input type="text" size="20" id="freight" name="freight" />
         </li> -->
          <li><label for="datereceived">Shipment date: </label>
-            <input type="text" id="datereceived" name="datereceived"  maxlength="10" size="10"  value="[% datereceived_today %]" />
-            <img src="[% themelang %]/lib/calendar/cal.gif" id="datereceived_button" alt="Show Calendar" />
-      <script language="JavaScript" type="text/javascript">
-        Calendar.setup(
-          {
-            inputField : "datereceived",
-            ifFormat : "[% DHTMLcalendar_dateformat %]",
-            button : "datereceived_button"          }
-        );
-      </script>
+            <input type="text" id="datereceived" name="datereceived"  maxlength="10" size="10"  value="[% datereceived_today %]" class="datepicker" />
 				<div class="hint">[% INCLUDE 'date-format.inc' %]</div>	</li>
 		</ol>
     </fieldset>

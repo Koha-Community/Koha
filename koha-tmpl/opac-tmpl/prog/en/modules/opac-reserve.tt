@@ -1,6 +1,5 @@
 [% INCLUDE 'doc-head-open.inc' %][% LibraryNameTitle or "Koha online" %] catalog &rsaquo;  Placing a hold
 [% INCLUDE 'doc-head-close.inc' %]
-[% INCLUDE 'calendar.inc' %]
 <script type="text/javascript">
 // <![CDATA[
  var MSG_NO_COPY_SELECTED = _("Expecting a specific copy selection.");
@@ -318,40 +317,10 @@
                         [% END %]
                 [% IF ( reserve_in_future ) %]
                         <td>
-              <input name="reserve_date_[% bibitemloo.biblionumber %]" id="reserve_date_[% bibitemloo.biblionumber %]" size="10">
+              <input name="reserve_date_[% bibitemloo.biblionumber %]" id="from" size="10" class="datepickerfrom"/>
               <script language="JavaScript" type="text/javascript">
               //<![CDATA[
               $("#reserve_date_[% bibitemloo.biblionumber %]").attr( 'readonly', 'readonly' );
-
-              var cal_img = document.createElement('img');
-              cal_img.src = "[% themelang %]/lib/calendar/cal.gif";
-              cal_img.alt = "Show Calendar";
-              cal_img.border = "0";
-              cal_img.id = "CalendarReserveDate[% bibitemloo.biblionumber %]";
-              cal_img.style.cursor = "pointer";
-              document.getElementById("reserve_date_[% bibitemloo.biblionumber %]").parentNode.appendChild( cal_img );
-
-              function validate[% bibitemloo.biblionumber %](date) {
-                  var today = new Date();
-                        if ( (date > today) ||
-                                ( date.getDate() == today.getDate() &&
-                                  date.getMonth() == today.getMonth() &&
-                                  date.getFullYear() == today.getFullYear() ) ) {
-                            return false;
-                        } else {
-                            return true;
-                        }
-              };
-              Calendar.setup(
-              {
-                inputField : "reserve_date_[% bibitemloo.biblionumber %]",
-                ifFormat : "[% DHTMLcalendar_dateformat %]",
-                button : "CalendarReserveDate[% bibitemloo.biblionumber %]",
-                disableFunc : validate[% bibitemloo.biblionumber %],
-                dateStatusFunc : validate[% bibitemloo.biblionumber %],
-                firstDay : [% CalendarFirstDayOfWeek %]
-              }
-              );
               //]]>
               </script>
       <p style="margin:.3em 2em;">
@@ -360,33 +329,7 @@
 
 		    [% END %]
 	[% IF ( bibitemloo.holdable ) %]<td>
-        <input name="expiration_date_[% bibitemloo.biblionumber %]" id="expiration_date_[% bibitemloo.biblionumber %]" size="10" readonly="readonly" />
-        <img src="[% themelang %]/lib/calendar/cal.gif" alt="Show Calendar" border="0" id="CalendarExpirationDate_[% bibitemloo.biblionumber %]" style="cursor: pointer;" />
-        <script language="JavaScript" type="text/javascript">
-      //<![CDATA[
-      function validate1(date) {
-        var today = new Date();
-        if ( (date > today) ||
-                      ( date.getDate() == today.getDate() &&
-                        date.getMonth() == today.getMonth() &&
-                        date.getFullYear() == today.getFullYear() ) ) {
-          return false;
-        } else {
-          return true;
-        }
-      };
-      Calendar.setup(
-        {
-          inputField : "expiration_date_[% bibitemloo.biblionumber %]",
-          ifFormat : "[% DHTMLcalendar_dateformat %]",
-          button : "CalendarExpirationDate_[% bibitemloo.biblionumber %]",
-          disableFunc : validate1,
-          dateStatusFunc : validate1,
-          firstDay : [% CalendarFirstDayOfWeek %]
-        }
-      );
-      //]]>
-        </script>
+        <input name="expiration_date_[% bibitemloo.biblionumber %]" id="to" size="10" readonly="readonly" class="datepickerto" />
       <p style="margin:.3em 2em;">
       <a href="#" style="font-size:85%;text-decoration:none;" onclick="document.getElementById('expiration_date_[% bibitemloo.biblionumber %]').value='';return false;">Clear date</a></p>
     </td>[% END %]

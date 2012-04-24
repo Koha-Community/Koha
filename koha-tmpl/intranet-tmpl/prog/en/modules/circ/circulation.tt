@@ -2,6 +2,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Circulation [% IF ( borrowernumber ) %] &rsaquo; Checking out to [% INCLUDE 'patron-title.inc' %] [% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
+[% INCLUDE 'calendar.inc' %]
 [% IF ( UseTablesortForCirc ) %]<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>[% END %]
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
 <script type="text/javascript">
@@ -140,6 +141,11 @@ var allcheckboxes = $(".checkboxed");
      $("input.radio").click(function(){
         radioCheckBox($(this));
      });
+    $("#newduedate").datepicker({ minDate: 1 }); // require that renewal date is after today
+    $("#duedatespec").datepicker({
+        onSelect: function(dateText, inst) { $("#barcode").focus(); }
+    });
+
  });
 
 function validate1(date) {
@@ -150,13 +156,8 @@ function validate1(date) {
         return false;
      }
 };
-function refocus(calendar) {
-   document.getElementById('barcode').focus();
-   calendar.hide();
-};
 //]]>
 </script>
-[% INCLUDE 'calendar.inc' %]
 </head>
 <body id="circ_circulation" class="circ">
 
@@ -488,35 +489,6 @@ No patron matched <span class="ex">[% message %]</span>
         <div class="hint">Specify due date [% INCLUDE 'date-format.inc' %]: </div>
 		[% IF ( duedatespec ) %]<input type="text" size="10" id="duedatespec" name="duedatespec" value="[% duedatespec %]" />[% ELSE %]<input type="text" size="10" id="duedatespec" name="duedatespec" value="" />
 [% END %]
-        <img src="[% themelang %]/lib/calendar/cal.gif" alt="Show calendar"  border="0" id="CalendarDueDate" style="cursor: pointer;" />
-             <script language="JavaScript" type="text/javascript">
-			 //<![CDATA[
-                   function validate1(date) {
-                         var today = new Date();
-                         if ( date < today ) {
-                             return true;
-                          } else {
-                             return false;
-                          }
-                     };
-                     function refocus(calendar) {
-                        $('#barcode').focus();
-                        calendar.hide();
-                     };
-				//#TODO - ADD syspref (AllowPostDatedCheckouts).
-                     Calendar.setup(
-                          {
-                             inputField : "duedatespec",
-                             ifFormat : "[% DHTMLcalendar_dateformat %]",
-                             button : "CalendarDueDate",
-//                           disableFunc : validate1,
-//                           dateStatusFunc : validate1,
-                             onClose : refocus
-                           }
-                        );
-				//]]>
-                 </script>
-
           <label for="stickyduedate"> Remember for session:</label>
 [% IF ( stickyduedate ) %]
 <input type="checkbox" id="stickyduedate" onclick="this.form.barcode.focus();" name="stickyduedate" checked="checked" />
@@ -1003,37 +975,8 @@ No patron matched <span class="ex">[% message %]</span>
 
             [% IF AutoResumeSuspendedHolds %]
             <label for="suspend_until">until</label>
-            <input type="text" size="10" id="suspend_until" name="suspend_until"/>
-            <img src="[% themelang %]/lib/calendar/cal.gif" alt="Show calendar"  border="0" id="CalendarSuspendUntil" style="cursor: pointer;" />
+            <input type="text" size="10" id="suspend_until" name="suspend_until" class="datepicker" />
             <span class="hint">Specify date on which to resume [% INCLUDE 'date-format.inc' %]: </span>
-
-             <script language="JavaScript" type="text/javascript">
-			 //<![CDATA[
-                   function validate1(date) {
-                         var today = new Date();
-                         if ( date < today ) {
-                             return true;
-                          } else {
-                             return false;
-                          }
-                     };
-                     function refocus(calendar) {
-                        $('#barcode').focus();
-                        calendar.hide();
-                     };
-				//#TODO - ADD syspref (AllowPostDatedCheckouts).
-                     Calendar.setup(
-                          {
-                             inputField : "suspend_until",
-                             ifFormat : "[% DHTMLcalendar_dateformat %]",
-                             button : "CalendarSuspendUntil",
-//                           disableFunc : validate1,
-//                           dateStatusFunc : validate1,
-                             onClose : refocus
-                           }
-                        );
-				//]]>
-             </script>
              [% END %]
         </form>
     </fieldset>

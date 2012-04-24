@@ -1,6 +1,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Circulation &rsaquo; Items overdue as of [% todaysdate %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
+[% INCLUDE 'calendar.inc' %]
 <script type="text/javascript">
  //<![CDATA[
      function clone_parent(node) {
@@ -55,13 +56,12 @@
                 .css("font-size","90%").css("width","13em");
             };
         });
-	}
+    }
 //]]>
 </script>
 <style type="text/css">
     .sql {display:none;}
 </style>
-[% INCLUDE 'calendar.inc' %]
 </head>
 <body id="circ_overdue" class="circ">
 [% INCLUDE 'header.inc' %]
@@ -131,32 +131,12 @@ overdue as of [% todaysdate %][% IF ( isfiltered ) %] <span style="font-size:70%
 <h4>Filter on:</h4>
 	<fieldset><legend>Date due:</legend>
 	<ol>
-    <li><label for="dateduefrom">From:</label>
-	<input type="text" id="dateduefrom" name="dateduefrom" size="10" value="[% dateduefrom %]" />
-    <img src="[% themelang %]/lib/calendar/cal.gif" id="dateduefrom_button" alt="Show calendar" />
-	<script language="JavaScript" type="text/javascript">
-	    Calendar.setup(
-	    {
-		inputField : "dateduefrom",
-		ifFormat : "[% DHTMLcalendar_dateformat %]",
-		button : "dateduefrom_button"
-	    }
-	    );
-	</script>
+    <li><label for="from">From:</label>
+    <input type="text" id="from" name="dateduefrom" size="10" value="[% dateduefrom %]" class="datepickerfrom" />
 	</li>
 	<li>
-	<label for="datedueto">To:</label>
-	<input type="text" id="datedueto" name="datedueto" size="10" value="[% datedueto %]" />
-    <img src="[% themelang %]/lib/calendar/cal.gif" id="datedueto_button" alt="Show calendar" />
-	<script language="JavaScript" type="text/javascript">
-	    Calendar.setup(
-	    {
-		inputField : "datedueto",
-		ifFormat : "[% DHTMLcalendar_dateformat %]",
-		button : "datedueto_button"
-	    }
-	    );
-	</script>
+    <label for="to">To:</label>
+    <input type="text" id="to" name="datedueto" size="10" value="[% datedueto %]" class="datepickerto" />
     </li>
     </ol></fieldset>
     <ol>
@@ -224,7 +204,7 @@ overdue as of [% todaysdate %][% IF ( isfiltered ) %] <span style="font-size:70%
       </select>
     </li>
 
-    <li><label for="order">Sort By:</label> <select name="order" id="order">
+    <li><label for="order">Sort by:</label> <select name="order" id="order">
 [% FOREACH ORDER_LOO IN ORDER_LOOP %]
     [% IF ( ORDER_LOO.selected ) %]
     <option value="[% ORDER_LOO.ordervalue %]" selected="selected">
@@ -259,7 +239,7 @@ overdue as of [% todaysdate %][% IF ( isfiltered ) %] <span style="font-size:70%
 </li>
 </ol>
    <fieldset class="action">
-      <input type="submit" value="Apply Filter" class="submit" />
+      <input type="submit" value="Apply filter" class="submit" />
       <input type="hidden" name="op" value="apply filter" />
    </fieldset>
    </fieldset>

@@ -1,7 +1,6 @@
 [% INCLUDE 'doc-head-open.inc' %]
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
-
 <script type="text/javascript" src="[% themelang %]/js/acq.js"></script>
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
 <script type="text/javascript">
@@ -164,34 +163,14 @@
     <ol>
 
     <li>
-    <label class="required" for="budget_period_startdate">Start date</label>
-    <input type="text" size="10" id="budget_period_startdate" name="budget_period_startdate"   value="[% budget_period_startdate %]"  />
-    <img src="/intranet-tmpl/prog/en/lib/calendar/cal.gif" border="0" id="openCalendarFrom" style="cursor: pointer;" alt="Show start date calendar" />
-    <script type="text/javascript">
-        Calendar.setup({
-        inputField     :    "budget_period_startdate",
-        ifFormat         :    "[% DHTMLcalendar_dateformat %]",
-        button         :    "openCalendarFrom",
-        align          :    "Tl",
-        singleClick    :    false
-        });
-    </script>
+    <label class="required" for="from">Start date</label>
+    <input type="text" size="10" id="from" name="budget_period_startdate" value="[% budget_period_startdate %]" class="datepickerfrom" />
 				<div class="hint">[% INCLUDE 'date-format.inc' %]</div>
     </li>
     <li>
 
-    <label class="required" for="budget_period_enddate">End date</label>
-    <input type="text" size="10" id="budget_period_enddate" name="budget_period_enddate" value="[% budget_period_enddate %]" />
-    <img src="/intranet-tmpl/prog/en/lib/calendar/cal.gif" border="0" id="openCalendarTo" style="cursor: pointer;" alt="Show end date calendar" />
-
-    <script type="text/javascript">
-        Calendar.setup({
-        inputField     :    "budget_period_enddate",
-        ifFormat         :    "[% DHTMLcalendar_dateformat %]",
-        button         :    "openCalendarTo",
-        align          :    "Tl"
-        });
-    </script>
+    <label class="required" for="to">End date</label>
+    <input type="text" size="10" id="to" name="budget_period_enddate" value="[% budget_period_enddate %]" class="datepickerto" />
 				<div class="hint">[% INCLUDE 'date-format.inc' %]</div>
     </li>
 
@@ -223,34 +202,14 @@
     <input type="hidden" name="budget_period_id" value="[% budget_period_id %]" />
     <ol>
     <li>
-    <label class="required" for="budget_period_startdate">Start date</label>
-    <input type="text" size="10" id="budget_period_startdate" name="budget_period_startdate"   value="[% budget_period_startdate %]"  />
-    <img src="/intranet-tmpl/prog/en/lib/calendar/cal.gif" border="0" id="openCalendarFrom" style="cursor: pointer;" alt="Show start date calendar" />
-    <script type="text/javascript">
-        Calendar.setup({
-        inputField     :    "budget_period_startdate",
-        ifFormat         :    "[% DHTMLcalendar_dateformat %]",
-        button         :    "openCalendarFrom",
-        align          :    "Tl",
-        singleClick    :    false
-        });
-    </script>
+    <label class="required" for="from">Start date</label>
+    <input type="text" size="10" id="from" name="budget_period_startdate" value="[% budget_period_startdate %]" class="datepickerfrom" />
 				<div class="hint">[% INCLUDE 'date-format.inc' %]</div>
     </li>
     <li>
 
-    <label class="required" for="budget_period_enddate">End date</label>
-    <input type="text" size="10" id="budget_period_enddate" name="budget_period_enddate" value="[% budget_period_enddate %]" />
-    <img src="/intranet-tmpl/prog/en/lib/calendar/cal.gif" border="0" id="openCalendarTo" style="cursor: pointer;" alt="Show end date calendar" />
-
-    <script type="text/javascript">
-        Calendar.setup({
-        inputField     :    "budget_period_enddate",
-        ifFormat         :    "[% DHTMLcalendar_dateformat %]",
-        button         :    "openCalendarTo",
-        align          :    "Tl"
-        });
-    </script>
+    <label class="required" for="to">End date</label>
+    <input type="text" size="10" id="to" name="budget_period_enddate" value="[% budget_period_enddate %]" class="datepickerto" />
 				<div class="hint">[% INCLUDE 'date-format.inc' %]</div>
     </li>
 

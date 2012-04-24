@@ -1,13 +1,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Circulation &rsaquo; Hold ratios</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<!-- Additions to enable Calendar system -->
-<link rel="stylesheet" type="text/css" href="[% themelang %]/lib/calendar/calendar-system.css" />
-<!-- End of additions --><!-- Additions to enable Calendar system -->
-<script type="text/javascript" src="[% themelang %]/lib/calendar/calendar.js"></script>
-<script type="text/javascript" src="[% themelang %]/lib/calendar/calendar-en.js"></script>
-<script type="text/javascript" src="[% themelang %]/lib/calendar/calendar-setup.js"></script>
-<!-- End of additions -->
+[% INCLUDE 'calendar.inc' %]
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
 <script type="text/javascript">
 //<![CDATA[
@@ -30,7 +24,7 @@ $.tablesorter.addParser({
 		$("#holdst:has(tbody tr)").tablesorter({    // only add sort if the table has a body and rows
 			sortList: [[0,1]],
 			headers: { 1: { sorter: 'articles' }}
-		}); 
+        });
 	 });
 //]]>
 </script>
@@ -117,66 +111,13 @@ $.tablesorter.addParser({
 <li><label for="from">
     Start date:
 </label>
-<input type="text" size="10" id="from" name="from" value="[% from %]" />
-<img src="[% themelang %]/lib/calendar/cal.gif"  border="0" id="openCalendarFrom" style="cursor: pointer;" alt="" />
-<script language="JavaScript" type="text/javascript">
-function validate1(date) {
-    var day = date.getDate();
-    var month = date.getMonth() + 1;
-    var year = date.getFullYear();
-    var weekDay = date.getDay();
-    var dayMonth = month + '-' + day;
-    var dateString = year + '-' + month + '-' + day;
-    var dateTo = document.getElementById('to').value.split("-");
-    var limitDate = new Date(dateTo[0], (dateTo[1] - 1), dateTo[2]);
-    if (date > limitDate) {
-            return true;
-    } else {
-            return false;
-    }
-}
-Calendar.setup(
-        {
-        inputField : "from",
-        ifFormat : "[% DHTMLcalendar_dateformat %]",
-        button : "openCalendarFrom",
-        disableFunc : validate1,
-        dateStatusFunc : validate1
-        }
-);
-</script></li>
-<li><label for="to" >
+<input type="text" size="10" id="from" name="from" value="[% from %]" class="datepickerfrom" />
+</li>
+<li><label for="to">
     End date:
 </label>
-<input size="10" id="to" name="to" value="[% to %]" type="text" />
-<img src="[% themelang %]/lib/calendar/cal.gif" alt="" id="openCalendarTo" style="cursor: pointer;" border="0" />
-<script type="text/javascript">
-        function validate2(date) {
-            var day = date.getDate();
-            var month = date.getMonth() + 1;
-            var year = date.getFullYear();
-            var weekDay = date.getDay();
-            var dayMonth = month + '-' + day;
-            var dateString = year + '-' + month + '-' + day;
-            var dateFrom = document.getElementById('from').value.split("-");
-            var limitDate = new Date(dateFrom[0], (dateFrom[1] - 1), dateFrom[2]);
-            if (limitDate > date) {
-                    return true;
-            } else {
-                    return false;
-            }
-        }
-
-        Calendar.setup(
-                {
-                    inputField : "to",
-                    ifFormat : "[% DHTMLcalendar_dateformat %]",
-                    button : "openCalendarTo",
-                    disableFunc : validate2,
-                    dateStatusFunc : validate2
-                }
-        );
-</script></li></ol>
+<input size="10" id="to" name="to" value="[% to %]" type="text" class="datepickerto" />
+</li></ol>
 (inclusive)
 
 <fieldset class="action"><input type="submit" value="Go" class="submit"/></fieldset>

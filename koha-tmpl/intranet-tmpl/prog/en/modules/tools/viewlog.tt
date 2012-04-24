@@ -75,36 +75,11 @@
 								<input type="text" id="info" name="info" value="[% info %]" />
 							</li>
 							<li>
-								<label for="from"> Display from: </label> <input type="text" size="10" id="from" name="from" value="[% datefrom %]" />
-                                <img src="[% themelang %]/lib/calendar/cal.gif" border="0" alt="Show calendar" id="openCalendarFrom" style="cursor: pointer;" />
+                                <label for="from"> Display from: </label> <input type="text" size="10" id="from" name="from" value="[% datefrom %]" class="datepickerfrom" />
 				<div class="hint">[% INCLUDE 'date-format.inc' %]</div>
 							</li>
 							<li>
-								<label for="to">Display to: </label> <input size="10" id="to" name="to" type="text" value="[% dateto %]" />
-                                <img src="[% themelang %]/lib/calendar/cal.gif" id="openCalendarTo" alt="Show calendar" style="cursor: pointer;" border="0" />
-									<script type="text/javascript">
-									//<![CDATA[
-
-									// return true if the date is blocked.
-									function disable_from(date) {var limit = get_Calendar_limit(date,'to'  ); return (limit && limit < date);}
-									function disable_to  (date) {var limit = get_Calendar_limit(date,'from'); return (limit && limit > date);}
-
-									Calendar.setup({
-										inputField : "from",
-										ifFormat : "[% DHTMLcalendar_dateformat %]",
-										button : "openCalendarFrom",
-										disableFunc : disable_from,
-										dateStatusFunc : disable_from
-									});
-									Calendar.setup({
-										inputField : "to",
-										ifFormat : "[% DHTMLcalendar_dateformat %]",
-										button : "openCalendarTo",
-										disableFunc : disable_to,
-										dateStatusFunc : disable_to
-									});
-									//]]>
-									</script>
+                                <label for="to">Display to: </label> <input size="10" id="to" name="to" type="text" value="[% dateto %]" class="datepickerto" />
 				<div class="hint">[% INCLUDE 'date-format.inc' %]</div>
 							</li>
 						</ol>
@@ -173,7 +148,7 @@
                                             [% ELSE %]
                                                 [% IF ( module == 'CATALOGUING' ) %]
                                                     [% IF ( info == 'item' ) %]
-                                                        <a href="/cgi-bin/koha/catalogue/moredetail.pl?item=[% loopro.object %]&biblionumber=[% loopro.biblionumber %]&bi=[% loopro.biblioitemnumber %]#item[% loopro.object %]">Item [% loopro.object %]</a>
+                                                        <a href="/cgi-bin/koha/catalogue/moredetail.pl?item=[% loopro.object %]&amp;biblionumber=[% loopro.biblionumber %]&amp;bi=[% loopro.biblioitemnumber %]#item[% loopro.object %]">Item [% loopro.object %]</a>
                                                     [% ELSE %]
                                                         <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% loopro.object %]" title="Display detail for this biblio">biblio [% loopro.object %]</a>
                                                     [% END %]
@@ -193,7 +168,7 @@
                                     </td>
                                     <td>
                                         [% IF ( loopro.CIRCULATION ) %]
-                                            <a href="/cgi-bin/koha/catalogue/moredetail.pl?item=[% loopro.info %]&biblionumber=[% loopro.biblionumber %]&bi=[% loopro.biblioitemnumber %]#item[% loopro.object %]" title="Display detail for this biblio">Item [% loopro.barcode |html %]</a>
+                                            <a href="/cgi-bin/koha/catalogue/moredetail.pl?item=[% loopro.info %]&amp;biblionumber=[% loopro.biblionumber %]&amp;bi=[% loopro.biblioitemnumber %]#item[% loopro.object %]" title="Display detail for this biblio">Item [% loopro.barcode |html %]</a>
                                         [% ELSE %]
                                             [% loopro.info |html %]
                                         [% END %]

@@ -1,6 +1,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
     <title>Koha &rsaquo; Serials &rsaquo; Claims</title>
     [% INCLUDE 'doc-head-close.inc' %]
+[% INCLUDE 'calendar.inc' %]
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.uitablefilter.js"></script>
 <script type="text/JavaScript" language="JavaScript">
@@ -144,7 +145,6 @@
 
 //]]>
 </script>
-[% INCLUDE 'calendar.inc' %]
 </head>
 <body id="ser_claims" class="ser">
     [% INCLUDE 'header.inc' %]
@@ -227,31 +227,11 @@
 	</li>
 	
 	<li>
-	    <label for="begindate">From</label>
-        <img src="[% themelang %]/lib/calendar/cal.gif" id="begindatebutton" style="cursor: pointer;" alt="Show calendar" title="Show Calendar" />
-	    <input type="text" name="begindate" id="begindate" value="[% begindate %]" size="10" maxlength="10" />
-	    <script type="text/javascript">
-		 //<![CDATA[ 
-		Calendar.setup({
-		    inputField	: "begindate", 
-		    button		: "begindatebutton",
-		    ifFormat	: "[% DHTMLcalendar_dateformat %]"
-		});
-		//]]>
-	    </script>
-
-	    <label for="enddate" style="float:none;">To</label>
-        <img src="[% themelang %]/lib/calendar/cal.gif" id="enddatebutton" style="cursor: pointer;" alt="Show calendar" title="Show Calendar" />
-	    <input type="text" name="enddate" id="enddate" value="[% enddate %]" size="10" maxlength="10" />
-	    <script type="text/javascript">
-		 //<![CDATA[ 
-		 Calendar.setup({
-		    inputField      : "enddate", 
-		    button          : "enddatebutton",
-		    ifFormat        : "[% DHTMLcalendar_dateformat %]"
-		});
-		//]]>
-	    </script> <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
+        <label for="from">From</label>
+        <input type="text" name="begindate" id="from" value="[% begindate %]" size="10" maxlength="10" class="datepickerfrom" />
+        <label for="to" style="float:none;">To</label>
+        <input type="text" name="enddate" id="to" value="[% enddate %]" size="10" maxlength="10" class="datepickerto" />
+        <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
 	    <input type="button" value="OK" onclick="filterByDate();" />
         </li>
 	

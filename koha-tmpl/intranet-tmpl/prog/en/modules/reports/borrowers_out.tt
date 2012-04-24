@@ -2,6 +2,13 @@
 <title>Koha &rsaquo; Reports &rsaquo; Patrons with no checkouts</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
+<script type="text/javascript">
+//<![CDATA[
+$(document).ready(function(){
+    $("#to").datepicker({ maxDate: "-1D" });
+});
+//]]>
+</script>
 </head>
 <body id="rep_borrowers_out" class="rep">
 [% INCLUDE 'header.inc' %]
@@ -58,17 +65,8 @@
      [% END %] 
     </select>
 </li>
-	<li><label for="to">Not checked out since: </label> <input size="10" id="to" name="Filter" value="" type="text" />
-                        <img src="[% themelang %]/lib/calendar/cal.gif" alt="Show Calendar" id="openCalendarTo" style="cursor: pointer;" border="0" />
-                            <script type="text/javascript">
-                                Calendar.setup(
-                                    {
-                                        inputField : "to",
-                                        ifFormat : "[% DHTMLcalendar_dateformat %]",
-                                        button : "openCalendarTo"
-                                    }
-                                );
-                            </script></li>
+    <li><label for="to">Not checked out since: </label> <input size="10" id="to" name="Filter" value="" type="text" />
+</li>
 		</ol>
 	</fieldset>
 	

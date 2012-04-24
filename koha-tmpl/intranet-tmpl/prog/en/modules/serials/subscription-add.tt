@@ -2,7 +2,6 @@
 <title>Koha &rsaquo; Serials &rsaquo; [% IF ( modify ) %][% bibliotitle |html %] &rsaquo; Modify subscription[% ELSE %]New subscription[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
-
 <style type="text/css">
 fieldset.rows li.radio { width: 100%; } /* override staff-global.css */
 .yui-u li p label.widelabel {
@@ -916,7 +915,21 @@ function Check(f) {
 
 $(document).ready(function() {
     init_pattern();
-	
+    // http://jqueryui.com/demos/datepicker/#date-range
+    var dates = $( "#histstartdate, #histenddate" ).datepicker({
+        changeMonth: true,
+        numberOfMonths: 1,
+        onSelect: function( selectedDate ) {
+            var option = this.id == "histstartdate" ? "minDate" : "maxDate",
+                instance = $( this ).data( "datepicker" );
+                date = $.datepicker.parseDate(
+                    instance.settings.dateFormat ||
+                    $.datepicker._defaults.dateFormat,
+                    selectedDate, instance.settings );
+            dates.not( this ).datepicker( "option", option, date );
+        }
+    });
+
 	[% IF ( history ) %] $("#subscription_form_history").show();[% END %]
 	$("#cancel_manual_history").click(function(){
 		$("#subscription_form_history").hide();
@@ -1123,51 +1136,15 @@ $(document).ready(function() {
     <ol>
         <li>
            <label for="acqui_date"> First issue publication date:</label>
-                [% UNLESS ( modify ) %]<img src="[% themelang %]/lib/calendar/cal.gif" id="acqui_button" style="cursor: pointer;" alt="Show Calendar" title="Show Calendar" />[% END %]
                 [% IF ( modify ) %]<input type="text" name="firstacquidate" value="[% firstacquidate %]"  size="13" maxlength="10" id="acqui_date" disabled="disabled" />
-                [% ELSE %]<input type="text" name="firstacquidate" value="[% firstacquidate %]"  size="13" maxlength="10" id="acqui_date" />[% END %]
+                [% ELSE %]<input type="text" name="firstacquidate" value="[% firstacquidate %]"  size="13" maxlength="10" id="acqui_date" class="datepicker" />[% END %]
         </li>
            [% IF ( modify ) %]<li><label for="next_acqui_date"> Next issue publication date:</label>
-                <img src="[% themelang %]/lib/calendar/cal.gif" id="next_acqui_button" style="cursor: pointer;" alt="Show Calendar" title="Show Calendar" />
-                <input type="text" name="nextacquidate" value="[% nextacquidate %]" size="13" maxlength="10" id="next_acqui_date" />
+                <input type="text" name="nextacquidate" value="[% nextacquidate %]" size="13" maxlength="10" id="next_acqui_date" class="datepicker" />
                 </li>[% END %]
                 
-        <li><!-- both scripts for calendar must follow the input field --> 
-                <script type="text/javascript">
-                    Calendar.setup({
-                        inputField      :   "[% IF ( modify ) %]next_[% END %]acqui_date",
-                        ifFormat       :   "[% DHTMLcalendar_dateformat %]",
-                        button         :   "[% IF ( modify ) %]next_[% END %]acqui_button",
-                        align          :   "Tl",
-                        onUpdate        :    function(cal) { 
-                                                             irregular_issues.weeks = getWeeksArray(cal.date);
-                                                            irregular_issues.firstissue = cal.date;
-                                                            if(document.irregularity_summary) {
-                                                                irregular_issues.update();
-                                                            }
-                                                            if(document.getElementById("seasonal_irregularity")) {
-                                                                moreoptions_seasons(text[15]);
-                                                            }
-                                                        } 
-                        });
-                    Calendar.setup({
-                        inputField      :   "[% IF ( modify ) %]next_[% END %]acqui_date",
-                        ifFormat       :   "[% DHTMLcalendar_dateformat %]",
-                        button         :   "[% IF ( modify ) %]next_[% END %]acqui_date",
-                        align          :   "Tl",
-                        onUpdate        :    function(cal) { irregular_issues.weeks = getWeeksArray(cal.date);
-                                                            irregular_issues.firstissue = cal.date;
-                                                            if(document.irregularity_summary) {
-                                                                irregular_issues.update();
-                                                            }
-                                                            if(document.getElementById("seasonal_irregularity")) {
-                                                                moreoptions_seasons(text[15]);
-                                                            }
-                                                        } 
-                        });
-                </script>
+        <li>
             <label for="periodicity" class="required">Frequency:</label>
-            
                 <select name="periodicity" size="1" id="periodicity" onchange="javascript:document.getElementsByName('manualhist')[0].checked=(this.value==1); reset_num_pattern();">
                 <option value="" selected="selected">-- please choose --</option>
                 [% IF ( periodicity16 ) %]
@@ -1313,25 +1290,8 @@ $(document).ready(function() {
                 <li id="irregularity"></li>
    	           <li id="displayexample"></li>
         <li>
-           <label for="beginning_date" class="required"> Subscription start date:</label>
-            
-                <img src="[% themelang %]/lib/calendar/cal.gif" id="button1" style="cursor: pointer;" alt="Show calendar" title="Show calendar" />
-                <input type="text" name="startdate" value="[% startdate %]" size="13" maxlength="10" id="beginning_date" />
-                <!-- both scripts for calendar must follow the input field --> 
-                <script type="text/javascript">
-                    Calendar.setup({
-                        inputField   : "beginning_date",
-                        ifFormat     : "[% DHTMLcalendar_dateformat %]",
-                        button       : "button1",
-                        align        : "Tl"
-                    });
-                    Calendar.setup({
-                        inputField   : "beginning_date",
-                        ifFormat     : "[% DHTMLcalendar_dateformat %]",
-                        button       : "beginning_date",
-                        align        : "Tl"
-                    });
-                </script>
+           <label for="from" class="required"> Subscription start date:</label>
+                <input type="text" name="startdate" value="[% startdate %]" size="13" maxlength="10" id="from" class="datepickerfrom" />
             <span class="required">Required</span>
         </li>
         <li>
@@ -1346,25 +1306,8 @@ $(document).ready(function() {
             <span class="required">Required</span>
         </li>
         <li>
-           <label for="ending_date"> Subscription end date:</label>
-            
-                <img src="[% themelang %]/lib/calendar/cal.gif" id="buttonend1" style="cursor: pointer;" alt="Show Calendar" title="Show Calendar" />
-                <input type="text" name="enddate" value="[% enddate %]" size="13" maxlength="10" id="ending_date" />
-                <!-- both scripts for calendar must follow the input field --> 
-                <script type="text/javascript">
-                    Calendar.setup({
-                        inputField   : "ending_date",
-                        ifFormat     : "[% DHTMLcalendar_dateformat %]",
-                        button       : "buttonend1",
-                        align        : "Tl"
-                    });
-                    Calendar.setup({
-                        inputField   : "ending_date",
-                        ifFormat     : "[% DHTMLcalendar_dateformat %]",
-                        button       : "ending_date",
-                        align        : "Tl"
-                    });
-                </script>
+           <label for="to"> Subscription end date:</label>
+                <input type="text" name="enddate" value="[% enddate %]" size="13" maxlength="10" id="to" class="datepickerto" />
         </li>
     <li><label for="numberingmethod">Numbering formula:</label> <input type="text" name="numberingmethod" id="numberingmethod" value="[% numberingmethod %]" />
     </li>

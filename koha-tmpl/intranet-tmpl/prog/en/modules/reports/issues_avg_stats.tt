@@ -2,6 +2,39 @@
 <title>Koha &rsaquo; Reports &rsaquo; Average checkout period</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
+<script type="text/javascript">
+//<![CDATA[
+        $(document).ready(function() {
+        // http://jqueryui.com/demos/datepicker/#date-range
+        var dates = $( "#from, #to" ).datepicker({
+            changeMonth: true,
+            numberOfMonths: 1,
+            onSelect: function( selectedDate ) {
+                var option = this.id == "from" ? "minDate" : "maxDate",
+                    instance = $( this ).data( "datepicker" );
+                    date = $.datepicker.parseDate(
+                        instance.settings.dateFormat ||
+                        $.datepicker._defaults.dateFormat,
+                        selectedDate, instance.settings );
+                dates.not( this ).datepicker( "option", option, date );
+            }
+        });
+        var datesRO = $( "#fromRO, #toRO" ).datepicker({
+            changeMonth: true,
+            numberOfMonths: 1,
+            onSelect: function( selectedDate ) {
+                var option = this.id == "fromRO" ? "minDate" : "maxDate",
+                    instance = $( this ).data( "datepicker" );
+                    date = $.datepicker.parseDate(
+                        instance.settings.dateFormat ||
+                        $.datepicker._defaults.dateFormat,
+                        selectedDate, instance.settings );
+                datesRO.not( this ).datepicker( "option", option, date );
+            }
+        });
+        });
+//]]>
+</script>
 </head>
 <body id="rep_issues_avg_stats" class="rep">
 [% INCLUDE 'header.inc' %]
@@ -78,63 +111,8 @@
 				<td><input type="radio" name="Line" value="timestamp" /></td>
 				<td><input type="radio" name="Column" value="timestamp" /></td>
 				<td > <label for="from">From</label> <input type="text" size="10" id="from" name="Filter" />
-							<img src="[% themelang %]/lib/calendar/cal.gif" alt="Show Calendar" border="0" id="openCalendarFrom" style="cursor: pointer;" />
-								<script language="JavaScript" type="text/javascript">
-									function validate1(date) {
-										var day = date.getDate();
-										var month = date.getMonth() + 1;
-										var year = date.getFullYear();
-										var weekDay = date.getDay();
-										var dayMonth = month + '-' + day;
-										var dateString = year + '-' + month + '-' + day;
-										var dateTo = document.getElementById('to').value.split("-");
-										var limitDate = new Date(dateTo[0], (dateTo[1] - 1), dateTo[2]);
-										if (date > limitDate) {
-											return true;
-										} else {
-											return false;
-										}
-									}
-					
-									Calendar.setup(
-										{
-											inputField : "from",
-											ifFormat : "[% DHTMLcalendar_dateformat %]",
-											button : "openCalendarFrom",
-											disableFunc : validate1,
-											dateStatusFunc : validate1
-										}
-									);
-								</script>
 					<label for="to">To</label> <input size="10" id="to" name="Filter" value="" type="text" />
-                        <img src="[% themelang %]/lib/calendar/cal.gif" alt="Show calendar" id="openCalendarTo" style="cursor: pointer;" border="0" />
-							<script type="text/javascript">
-								function validate2(date) {
-									var day = date.getDate();
-									var month = date.getMonth() + 1;
-									var year = date.getFullYear();
-									var weekDay = date.getDay();
-									var dayMonth = month + '-' + day;
-									var dateString = year + '-' + month + '-' + day;
-									var dateFrom = document.getElementById('from').value.split("-");
-									var limitDate = new Date(dateFrom[0], (dateFrom[1] - 1), dateFrom[2]);
-									if (limitDate > date) {
-										return true;
-									} else {
-										return false;
-									}
-								}
-		
-								Calendar.setup(
-									{
-										inputField : "to",
-										ifFormat : "[% DHTMLcalendar_dateformat %]",
-										button : "openCalendarTo",
-										disableFunc : validate2,
-										dateStatusFunc : validate2
-									}
-								);
-							</script> <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
+                    <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
 				</td>
 			</tr>
 			<tr class="hilighted"> 
@@ -154,63 +132,8 @@
 				<td><input type="radio" name="Line" value="returndate" /></td>
 				<td><input type="radio" name="Column" value="returndate" /></td>
 				<td > <label for="fromRO">From</label> <input type="text" size="10" id="fromRO" name="Filter" />
-                            <img src="[% themelang %]/lib/calendar/cal.gif" alt="Show calendar" border="0" id="openCalendarFromRO" style="cursor: pointer;" />
-								<script language="JavaScript" type="text/javascript">
-									function validate1(date) {
-										var day = date.getDate();
-										var month = date.getMonth() + 1;
-										var year = date.getFullYear();
-										var weekDay = date.getDay();
-										var dayMonth = month + '-' + day;
-										var dateString = year + '-' + month + '-' + day;
-										var dateTo = document.getElementById('toRO').value.split("-");
-										var limitDate = new Date(dateTo[0], (dateTo[1] - 1), dateTo[2]);
-										if (date > limitDate) {
-											return true;
-										} else {
-											return false;
-										}
-									}
-					
-									Calendar.setup(
-										{
-											inputField : "fromRO",
-											ifFormat : "[% DHTMLcalendar_dateformat %]",
-											button : "openCalendarFromRO",
-											disableFunc : validate1,
-											dateStatusFunc : validate1
-										}
-									);
-								</script>
 					<label for="toRO">To</label> <input type="text" size="10" id="toRO" name="Filter" value="" />
-                        <img src="[% themelang %]/lib/calendar/cal.gif" alt="Show calendar" id="openCalendarToRO" style="cursor: pointer;" border="0" />
-							<script type="text/javascript">
-								function validate2(date) {
-									var day = date.getDate();
-									var month = date.getMonth() + 1;
-									var year = date.getFullYear();
-									var weekDay = date.getDay();
-									var dayMonth = month + '-' + day;
-									var dateString = year + '-' + month + '-' + day;
-									var dateFrom = document.getElementById('fromRO').value.split("-");
-									var limitDate = new Date(dateFrom[0], (dateFrom[1] - 1), dateFrom[2]);
-									if (limitDate > date) {
-										return true;
-									} else {
-										return false;
-									}
-								}
-		
-								Calendar.setup(
-									{
-										inputField : "toRO",
-										ifFormat : "[% DHTMLcalendar_dateformat %]",
-										button : "openCalendarToRO",
-										disableFunc : validate2,
-										dateStatusFunc : validate2
-									}
-								);
-							</script> <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
+                    <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
 				</td>
 			</tr>
 			<tr> 

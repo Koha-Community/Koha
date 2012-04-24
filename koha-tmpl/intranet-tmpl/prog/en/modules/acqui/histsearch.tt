@@ -3,6 +3,7 @@
 <title>Koha &rsaquo; Acquisitions &rsaquo; [% IF ( suggestions_loop ) %]Orders search &rsaquo; Search results[% ELSE %]Order search[% END %]</title>
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
 [% INCLUDE 'doc-head-close.inc' %]
+[% INCLUDE 'calendar.inc' %]
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.min.js"></script>
 [% INCLUDE 'datatables-strings.inc' %]
 <script type="text/javascript" src="[% themelang %]/js/datatables.js"></script>
@@ -15,7 +16,6 @@
  });
  //]]>
 </script>
-[% INCLUDE 'calendar.inc' %]
 </head>
 <body id="acq_histsearch" class="acq">
 [% INCLUDE 'header.inc' %]
@@ -35,7 +35,7 @@
 		<ol>
 		<li><label for="title">Title: </label> <input type="text" name="title" id="title" value="[% title %]" /></li>
 		<li><label for="author">Author: </label> <input type="text" name="author" id="author" value="[% author %]" /></li>
-		<li><label for="isbn">ISBN: </label> <input type="isbn" name="isbn" id="isbn" value="[% isbn %]" /></li>
+        <li><label for="isbn">ISBN: </label> <input type="text" name="isbn" id="isbn" value="[% isbn %]" /></li>
                 [% IF (UNIMARC) %]
         <li><label for="ean">EAN: </label> <input type="text" name="ean" id="ean" value="[% ean %]" /></li>
                 [% END %]
@@ -43,32 +43,11 @@
 		<li><label for="basket">Basket: </label> <input type="text" name="basket" id="basket" value="[% basket %]" /></li>
         <li><label for="booksellerinvoicenumber ">Bookseller invoice no: </label> <input type="text" name="booksellerinvoicenumber" id="booksellerinvoicenumber" value="[% booksellerinvoicenumber %]" /></li>
 		<li><label for="from">From: </label> 
-			<input type="text" size="10" id="from" name="from" value="[% from_placed_on %]" />
-			<img src="[% themelang %]/lib/calendar/cal.gif" id="openCalendarFrom" style="cursor: pointer;" alt="Show Calendar" />
+        <input type="text" size="10" id="from" name="from" value="[% from_placed_on %]" class="datepickerfrom" />
 				<div class="hint">[% INCLUDE 'date-format.inc' %]</div>
 		</li>
 		<li><label for="to">To: </label> 
-			<input type="text" size="10" id="to" name="to" value="[% to_placed_on %]" />
-			<img src="[% themelang %]/lib/calendar/cal.gif" id="openCalendarTo" style="cursor: pointer;" alt="Show Calendar" />
-			<script type="text/javascript">
-				// return true if the date is blocked.
-				function disable_from(date) {var limit = get_Calendar_limit(date,'to'  ); return (limit && limit < date);}  // true or false
-				function disable_to  (date) {var limit = get_Calendar_limit(date,'from'); return (limit && limit > date);}  // true or false
-				Calendar.setup({
-					inputField : "from",
-					ifFormat : "[% DHTMLcalendar_dateformat %]",
-					button : "openCalendarFrom",
-					disableFunc : disable_from,
-					dateStatusFunc : disable_from
-				});
-				Calendar.setup({
-					inputField : "to",
-					ifFormat : "[% DHTMLcalendar_dateformat %]",
-					button : "openCalendarTo",
-					disableFunc : disable_to,
-					dateStatusFunc : disable_to
-   	             });
-			</script>
+        <input type="text" size="10" id="to" name="to" value="[% to_placed_on %]" class="datepickerto" />
 				<div class="hint">[% INCLUDE 'date-format.inc' %]</div>
 		</li>
 		</ol>

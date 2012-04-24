@@ -288,65 +288,15 @@ function checkMultiHold() {
 
 	[% IF ( reserve_in_future ) %]
 	<li>
-	    <label for="reserve_date">Hold starts on date:</label>
-	    <input name="reserve_date" id="reserve_date" size="10" readonly="readonly">
-        <img src="[% themelang %]/lib/calendar/cal.gif" alt="Show calendar" border="0" id="CalendarReserveDate" style="cursor: pointer;" />
-	    <script language="JavaScript" type="text/javascript">
-		//<![CDATA[
-		function validate1(date) {
-			var today = new Date();
-			if ( (date > today) ||
-                    ( date.getDate() == today.getDate() &&
-                      date.getMonth() == today.getMonth() &&
-                      date.getFullYear() == today.getFullYear() ) ) {
-				return false;
-			} else {
-				return true;
-			}
-		};
-		Calendar.setup(
-			{
-				inputField : "reserve_date",
-				ifFormat : "[% DHTMLcalendar_dateformat %]",
-				button : "CalendarReserveDate",
-				disableFunc : validate1,
-				dateStatusFunc : validate1
-			}
-		);
-		//]]>
-	    </script>
+        <label for="from">Hold starts on date:</label>
+        <input name="reserve_date" id="from" size="10" readonly="readonly" class="datepickerfrom">
         <a href='#' onclick="document.getElementById('reserve_date').value='';">Clear Date</a>
 	</li>
 	[% END %]
 
 	<li>
-	    <label for="expiration_date">Hold expires on date:</label>
-	    <input name="expiration_date" id="expiration_date" size="10" readonly="readonly" />
-        <img src="[% themelang %]/lib/calendar/cal.gif" alt="Show calendar" border="0" id="CalendarExpirationDate" style="cursor: pointer;" />
-	    <script language="JavaScript" type="text/javascript">
-		//<![CDATA[
-		function validate1(date) {
-			var today = new Date();
-			if ( (date > today) ||
-                    ( date.getDate() == today.getDate() &&
-                      date.getMonth() == today.getMonth() &&
-                      date.getFullYear() == today.getFullYear() ) ) {
-				return false;
-			} else {
-				return true;
-			}
-		};
-		Calendar.setup(
-			{
-				inputField : "expiration_date",
-				ifFormat : "[% DHTMLcalendar_dateformat %]",
-				button : "CalendarExpirationDate",
-				disableFunc : validate1,
-				dateStatusFunc : validate1
-			}
-		);
-		//]]>
-	    </script>
+        <label for="to">Hold expires on date:</label>
+        <input name="expiration_date" id="to" size="10" readonly="readonly" class="datepickerto" />
         <a href='#' onclick="document.getElementById('expiration_date').value='';">Clear date</a>
 	</li>
 
@@ -737,32 +687,7 @@ function checkMultiHold() {
 
             [% IF AutoResumeSuspendedHolds %]
 	    <label for="suspend_until_[% reserveloo.borrowernumber %]">[% IF ( reserveloo.suspend ) %] on [% ELSE %] until [% END %]</label>
-        <input name="suspend_until" id="suspend_until_[% reserveloo.borrowernumber %]" size="10" readonly="readonly" value="[% reserveloo.suspend_until | $KohaDates %]" />
-        <img src="[% themelang %]/lib/calendar/cal.gif" alt="Show calendar" border="0" id="SuspendUntilDate_[% reserveloo.borrowernumber %]" style="cursor: pointer;" />
-	    <script language="JavaScript" type="text/javascript">
-		//<![CDATA[
-		function validate1(date) {
-			var today = new Date();
-			if ( (date > today) ||
-                    ( date.getDate() == today.getDate() &&
-                      date.getMonth() == today.getMonth() &&
-                      date.getFullYear() == today.getFullYear() ) ) {
-				return false;
-			} else {
-				return true;
-			}
-		};
-		Calendar.setup(
-			{
-				inputField : "suspend_until_[% reserveloo.borrowernumber %]",
-				ifFormat : "[% DHTMLcalendar_dateformat %]",
-				button : "SuspendUntilDate_[% reserveloo.borrowernumber %]",
-				disableFunc : validate1,
-				dateStatusFunc : validate1
-			}
-		);
-		//]]>
-	    </script>
+        <input name="suspend_until" id="suspend_until_[% reserveloo.borrowernumber %]" size="10" readonly="readonly" value="[% reserveloo.suspend_until | $KohaDates %]" class="datepicker" />
 	    <a href='#' onclick="document.getElementById('suspend_until_[% reserveloo.borrowernumber %]').value='';">Clear Date</a>
             [% END %]
 	[% ELSE %]

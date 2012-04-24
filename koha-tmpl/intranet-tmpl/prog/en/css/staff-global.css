@@ -2114,13 +2114,10 @@ div.pager {
 	padding : .3em .5em .3em .5em;
 	margin : .4em 0;
 }
-div.pager img {+/* jQuery UI Autocomplete */
-+ul.ui-autocomplete li { list-style-type: none; font-size : inherit; }
-+ul.ui-autocomplete { -webkit-box-shadow: 2px 2px 2px rgba(0,0,0,.3); -moz-box-shadow: 2px 2px 2px rgba(0,0,0,.3); box-shadow: 2px 2px 2px rgba(0,0,0,.3); }
-+input.ui-autocomplete-input.active { background: transparent url("../../img/loading-small.gif") right center no-repeat; }
-
+div.pager img {
 	vertical-align : middle;
 }
+
 div.pager img.last {
 	padding-right: 5px;
 }
@@ -2160,31 +2157,9 @@ div#acqui_order_supplierlist > div.supplier > div.baskets {
 }
 
 /* jQuery UI Autocomplete */
-ul.ui-autocomplete li {
-    list-style-type: none;
-    font-size : inherit;
-}
 
-ul.ui-autocomplete {
-    -webkit-box-shadow: 2px 2px 2px rgba(0,0,0,.3);
-    -moz-box-shadow: 2px 2px 2px rgba(0,0,0,.3);
-    box-shadow: 2px 2px 2px rgba(0,0,0,.3);
-}
 
-.ui-autocomplete.ui-widget-content {
-    background-image : none;
-}
 
-.ui-autocomplete.ui-widget-content .ui-state-hover {
-    border: 1px solid #B9D8D9;
-    background: #E6F0F2 none;
-    font-weight: normal;
-    color: #212121;
-}
-
-.ui-autocomplete-loading {
-    background: #FFF url("../../img/loading-small.gif") right center no-repeat;
-}
 
 /* jQuery UI standard tabs */
 .ui-tabs-nav .ui-tabs-selected a,
@@ -2365,11 +2340,21 @@ ul.ui-tabs-nav li {
      border-radius: 0 0 4px 4px;
 }
 
-
 .authref {
     text-indent: 2em;
 }
 
 .authref .label {
     font-style: italic;
+}
+
+/* jQuery UI Datepicker */
+.ui-datepicker-trigger {
+    vertical-align: middle;
+    margin : 0 3px;
+}
+.ui-datepicker {
+    -moz-box-shadow: 1px 1px 3px 0 #666;
+    -webkit-box-shadow: 1px 1px 3px 0 #666;
+    box-shadow: 1px 1px 3px 0 #666;
 }

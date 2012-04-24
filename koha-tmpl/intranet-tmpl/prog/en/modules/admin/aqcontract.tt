@@ -110,32 +110,12 @@ function Check(ff) {
                                 <li><label for="contractdescription">Description</label> &nbsp;
                                         <input type="text" name="contractdescription" id="contractdescription" size="40" maxlength="80" value="[% contractdescription %]" />
                                 </li>
-                                <li><label for="contractstartdate" class="required">Start date *</label> &nbsp;
-                                        <input type="text" name="contractstartdate" id="contractstartdate" value="[% contractstartdate %]" maxlength="10"  size="10"/>
-                                        <img src="[% themelang %]/lib/calendar/cal.gif" id="contractstartdate_button" alt="Show Calendar" />
-                                        <script language="JavaScript" type="text/javascript">
-                                            Calendar.setup(
-                                            {
-                                            inputField : "contractstartdate",
-                                            ifFormat : "[% DHTMLcalendar_dateformat %]",
-                                            button : "contractstartdate_button"
-                                            }
-                                            );
-                                        </script>
+                                <li><label for="from" class="required">Start date *</label> &nbsp;
+                                        <input type="text" name="contractstartdate" id="from" value="[% contractstartdate %]" maxlength="10" size="10" class="datepickerfrom" />
 				<div class="hint">[% INCLUDE 'date-format.inc' %]</div>
                                 </li>
-                                <li><label for="contractenddate" class="required">End date *</label> &nbsp;
-                                        <input type="text" name="contractenddate" id="contractenddate" value="[% contractenddate %]" maxlength="10"  size="10" />
-                                        <img src="[% themelang %]/lib/calendar/cal.gif" id="contractenddate_button" alt="Show Calendar" />
-                                        <script language="JavaScript" type="text/javascript">
-                                            Calendar.setup(
-                                            {
-                                            inputField : "contractenddate",
-                                            ifFormat : "[% DHTMLcalendar_dateformat %]",
-                                            button : "contractenddate_button"
-                                            }
-                                            );
-                                        </script>
+                                <li><label for="to" class="required">End date *</label> &nbsp;
+                                        <input type="text" name="contractenddate" id="to" value="[% contractenddate %]" maxlength="10"  size="10" class="datepickerto" />
 				<div class="hint">[% INCLUDE 'date-format.inc' %]</div>
                                 </li>
                             </ol>

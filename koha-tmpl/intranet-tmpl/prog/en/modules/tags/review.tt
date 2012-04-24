@@ -321,59 +321,18 @@ td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
 	    </li>
 	    <li>
 			<label for="from">Date: from </label>
-			<input type="text" size="10" id="from" name="from" value="[% filter_date_approved_from %]" />
-            <img src="[% themelang %]/lib/calendar/cal.gif" border="0" alt="Show calendar" style="cursor: pointer;" id="openCalendarFrom" />
+            <input type="text" size="10" id="from" name="from" value="[% filter_date_approved_from %]" class="datepickerfrom" />
 			<div class="hint">[% INCLUDE 'date-format.inc' %]</div>
 
 			<label for="to">...to </label>
-			<input type="text" size="10" id="to"   name="to"   value="[% filter_date_approved_to %]" />
-            <img src="[% themelang %]/lib/calendar/cal.gif" border="0" alt="Show calendar" style="cursor: pointer;" id="openCalendarTo" />
+            <input type="text" size="10" id="to" name="to" value="[% filter_date_approved_to %]" class="datepickerto" />
 			<div class="hint">[% INCLUDE 'date-format.inc' %]</div>
 	    </li>
   </ol>
  <fieldset class="action"><input type="submit" value="Apply filter(s)" /></fieldset>
 </fieldset>
 </form>
-<script type="text/javascript">
-//<![CDATA[
-// function submit_check (from_id,to_id) {
-//	var dateFrom = Date_from_syspref(document.getElementById(from_id).value);
-//	var dateTo   = Date_from_syspref(document.getElementById(  to_id).value);
-//	var today = new Date();
-// 	if (dateFrom < dateTo) {
-//		alert("The starting date cannot be after the ending date.");
-//		document.getElementById(to_id).select();
-//		return false;
-//	}
-// 	if (dateFrom > today) {
-//		alert("The starting date cannot be in the future.");
-//		document.getElementById(from_id).select();
-//		return false;
-//	}
-// }
-
-// return true if the date is blocked.
-function disable_from(date) {var limit = get_Calendar_limit(date,'to'  ); return (limit && limit < date);}
-function disable_to  (date) {var limit = get_Calendar_limit(date,'from'); return (limit && limit > date);}
-
-Calendar.setup({
-	inputField : "from",
-	  ifFormat : "[% DHTMLcalendar_dateformat %]",
-		button : "openCalendarFrom",
-	   disableFunc : disable_from,
-	dateStatusFunc : disable_from
-});
-Calendar.setup({
-	inputField : "to",
-	  ifFormat : "[% DHTMLcalendar_dateformat %]",
-		button : "openCalendarTo",
-	   disableFunc : disable_to,
-	dateStatusFunc : disable_to
-});
-//]]>
-</script>
-
- </div>
+</div>
 </div>
 [% INCLUDE 'intranet-bottom.inc' %]
 

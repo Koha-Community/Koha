@@ -1,8 +1,7 @@
 [% INCLUDE 'doc-head-open.inc' %] 
 <title>Koha &rsaquo; Reports &rsaquo; Till reconciliation</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% INCLUDE 'calendar.inc' %] 
-
+[% INCLUDE 'calendar.inc' %]
 </head>
 <body id="rep_stats_screen" class="rep">
 [% INCLUDE 'header.inc' %]
@@ -21,27 +20,9 @@
 <fieldset><legend>Search between two dates</legend>
 <form action="stats.screen.pl" method="post">
   <label for="from">Start Date: </label>
-  <input type="text" name="time" size="10" value="[% IF ( date ) %][% date %][% ELSE %]today[% END %]" id="from" /> 
-  <img src="[% themelang %]/lib/calendar/cal.gif" id="buttonfrom1" alt="Show calendar" style="cursor: pointer;" />
-     <script type="text/javascript">
-     Calendar.setup({
-     inputField     :    "from",
-     ifFormat       :    "[% DHTMLcalendar_dateformat %]",
-     button         :    "buttonfrom1",
-     align          :    "Tl"
-     });
-     </script>
+  <input type="text" name="time" size="10" value="[% IF ( date ) %][% date %][% ELSE %]today[% END %]" id="from" class="datepickerfrom" />
   <label for="to">End Date: </label>
-  <input type="text" name="time2" size="10" value="[% IF ( date2 ) %][% date2 %][% ELSE %]tomorrow[% END %]" id="to" />
-  <img src="[% themelang %]/lib/calendar/cal.gif" id="buttonto1" alt="Show calendar" style="cursor: pointer;" />
-     <script type="text/javascript">
-     Calendar.setup({
-     inputField     :    "to",
-     ifFormat       :    "[% DHTMLcalendar_dateformat %]",
-     button         :    "buttonto1",
-     align          :    "Tl"
-     });
-     </script>
+  <input type="text" name="time2" size="10" value="[% IF ( date2 ) %][% date2 %][% ELSE %]tomorrow[% END %]" class="datepickerto" id="to" />
   <input type="submit" value="To screen" name="submit" class="submit" />
 <!--  <input type="submit" value="To Excel" name="submit" class="button"> --></fieldset>
 </form>

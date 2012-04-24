@@ -83,6 +83,8 @@ $(document).ready(function() {
            });
 		}
 	});
+    $("#suspend_until").datepicker({ minDate: 1 }); // require that hold suspended until date is after today
+    $("#newduedate").datepicker({ minDate: 1 }); // require that renewal date is after today
  });
 function uncheck_sibling(me){
 nodename=me.getAttribute("name");
@@ -656,36 +658,7 @@ function validate1(date) {
             [% IF AutoResumeSuspendedHolds %]
             <label for="suspend_until">until</label>
             <input type="text" size="10" id="suspend_until" name="suspend_until"/>
-            <img src="[% themelang %]/lib/calendar/cal.gif" alt="Show Calendar"  border="0" id="CalendarSuspendUntil" style="cursor: pointer;" />
             <span class="hint">Specify date on which to resume [% INCLUDE 'date-format.inc' %]: </span>
-
-             <script language="JavaScript" type="text/javascript">
-			 //<![CDATA[
-                   function validate1(date) {
-                         var today = new Date();
-                         if ( date < today ) {
-                             return true;
-                          } else {
-                             return false;
-                          }
-                     };
-                     function refocus(calendar) {
-                        $('#barcode').focus();
-                        calendar.hide();
-                     };
-				//#TODO - ADD syspref (AllowPostDatedCheckouts).
-                     Calendar.setup(
-                          {
-                             inputField : "suspend_until",
-                             ifFormat : "[% DHTMLcalendar_dateformat %]",
-                             button : "CalendarSuspendUntil",
-//                           disableFunc : validate1,
-//                           dateStatusFunc : validate1,
-                             onClose : refocus
-                           }
-                        );
-				//]]>
-             </script>
             [% END %]
         </form>
     </fieldset>

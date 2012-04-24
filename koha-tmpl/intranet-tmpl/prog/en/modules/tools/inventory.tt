@@ -58,17 +58,7 @@ $(document).ready(function(){
             <legend>Use a barcode file</legend>
 	 <ol>
             <li><label for="uploadbarcodes">Barcode file: </label> <input type="file" id="uploadbarcodes" name="uploadbarcodes" /></li>
-            <li><label for="setdate">Set inventory date to:</label> <input type="text" id="setdate" name="setdate" value="[% today %]" />
-             <img src="[% themelang %]/lib/calendar/cal.gif" id="setdate_button" alt="Show calendar" />
-            <script type="text/javascript">
-            Calendar.setup(
-            {
-            inputField : "setdate",
-            ifFormat : "[% DHTMLcalendar_dateformat %]",
-            button : "setdate_button"
-            }
-            );
-            </script>
+            <li><label for="setdate">Set inventory date to:</label> <input type="text" id="setdate" name="setdate" value="[% today %]" class="datepicker" />
 			<div class="hint">[% INCLUDE 'date-format.inc' %]</div>
             </li>
           </ol>
@@ -141,17 +131,7 @@ $(document).ready(function(){
         [% END %]
 
         <li><label for="datelastseen">Inventory date:</label>
-            <input type="text" id="datelastseen" name="datelastseen" value="[% datelastseen %]" />
-            <img src="[% themelang %]/lib/calendar/cal.gif" id="datelastseen_button" alt="Show Calendar" />
-            <script type="text/javascript">
-            Calendar.setup(
-            {
-            inputField : "datelastseen",
-            ifFormat : "[% DHTMLcalendar_dateformat %]",
-            button : "datelastseen_button"
-            }
-            );
-            </script>
+            <input type="text" id="datelastseen" name="datelastseen" value="[% datelastseen %]" class="datepicker"/>
 			<div class="hint">[% INCLUDE 'date-format.inc' %]</div>
         </li>
         <li><label for="ignoreissued">Skip copies on loan: </label>

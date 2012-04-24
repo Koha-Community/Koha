@@ -2,6 +2,78 @@
 <title>Koha &rsaquo; Reports &rsaquo; Holds statistics [% IF ( do_it ) %]&rsaquo; Results[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
+<script type="text/javascript">
+//<![CDATA[
+        $(document).ready(function() {
+            // http://jqueryui.com/demos/datepicker/#date-range
+            var dates = $( "#filter_reservedate_begin, #filter_reservedate_end" ).datepicker({
+                changeMonth: true,
+                numberOfMonths: 1,
+                onSelect: function( selectedDate ) {
+                    var option = this.id == "filter_reservedate_begin" ? "minDate" : "maxDate",
+                        instance = $( this ).data( "datepicker" );
+                        date = $.datepicker.parseDate(
+                            instance.settings.dateFormat ||
+                            $.datepicker._defaults.dateFormat,
+                            selectedDate, instance.settings );
+                    dates.not( this ).datepicker( "option", option, date );
+                }
+            });
+            var datesND = $( "#filter_notificationdate_begin, #filter_notificationdate_end" ).datepicker({
+                changeMonth: true,
+                numberOfMonths: 1,
+                onSelect: function( selectedDate ) {
+                    var option = this.id == "filter_notificationdate_begin" ? "minDate" : "maxDate",
+                        instance = $( this ).data( "datepicker" );
+                        date = $.datepicker.parseDate(
+                            instance.settings.dateFormat ||
+                            $.datepicker._defaults.dateFormat,
+                            selectedDate, instance.settings );
+                    datesND.not( this ).datepicker( "option", option, date );
+                }
+            });
+            var datesRD = $( "#filter_reminderdate_begin, #filter_reminderdate_end" ).datepicker({
+                changeMonth: true,
+                numberOfMonths: 1,
+                onSelect: function( selectedDate ) {
+                    var option = this.id == "filter_reminderdate_begin" ? "minDate" : "maxDate",
+                        instance = $( this ).data( "datepicker" );
+                        date = $.datepicker.parseDate(
+                            instance.settings.dateFormat ||
+                            $.datepicker._defaults.dateFormat,
+                            selectedDate, instance.settings );
+                    datesRD.not( this ).datepicker( "option", option, date );
+                }
+            });
+            var datesWD = $( "#filter_waitingdate_begin, #filter_waitingdate_end" ).datepicker({
+                changeMonth: true,
+                numberOfMonths: 1,
+                onSelect: function( selectedDate ) {
+                    var option = this.id == "filter_waitingdate_begin" ? "minDate" : "maxDate",
+                        instance = $( this ).data( "datepicker" );
+                        date = $.datepicker.parseDate(
+                            instance.settings.dateFormat ||
+                            $.datepicker._defaults.dateFormat,
+                            selectedDate, instance.settings );
+                    datesWD.not( this ).datepicker( "option", option, date );
+                }
+            });
+            var datesCD = $( "#filter_cancellationdate_begin, #filter_cancellationdate_end" ).datepicker({
+                changeMonth: true,
+                numberOfMonths: 1,
+                onSelect: function( selectedDate ) {
+                    var option = this.id == "filter_cancellationdate_begin" ? "minDate" : "maxDate",
+                        instance = $( this ).data( "datepicker" );
+                        date = $.datepicker.parseDate(
+                            instance.settings.dateFormat ||
+                            $.datepicker._defaults.dateFormat,
+                            selectedDate, instance.settings );
+                    datesCD.not( this ).datepicker( "option", option, date );
+                }
+            });
+        });
+//]]>
+</script>
 <style type="text/css">
 	.sql {display:none;}
 </style>
@@ -101,61 +173,7 @@
                 <td><input type="radio" name="Line" value="reservedate" /></td>
                 <td><input type="radio" name="Column" value="reservedate" /></td>
                 <td><label for="filter_reservedate_begin">From</label> <input type="text"  size="10" id="filter_reservedate_begin" name="filter_reservedate_begin" />
-                    <img src="[% themelang %]/lib/calendar/cal.gif" alt="Show calendar" border="0" id="openreservedateFrom" style="cursor: pointer;" />
-                   <script type="text/javascript">
-				   //<![CDATA[ 
-				   function validate1(date) {
-                        var day = date.getDate();
-                        var month = date.getMonth() + 1;
-                        var year = date.getFullYear();
-                        var weekDay = date.getDay();
-                        var dayMonth = month + '-' + day;
-                        var dateString = year + '-' + month + '-' + day;
-                        var dateTo = document.getElementById('filter_reservedate_end').value.split("-");
-                        var limitDate = new Date(dateTo[0], (dateTo[1] - 1), dateTo[2]);
-                        if (date > limitDate) {
-                             return true;
-                        } else {
-                             return false;
-                        }
-                    }
-                    Calendar.setup({
-                            inputField : "filter_reservedate_begin",
-                            ifFormat : "[% DHTMLcalendar_dateformat %]",
-                            button : "openreservedateFrom",
-                            disableFunc : validate1,
-                            dateStatusFunc : validate1
-                    });
-					//]]>
-					</script>
                     <label for="filter_reservedate_end">To</label> <input size="10" id="filter_reservedate_end" name="filter_reservedate_end" value="" type="text" />
-                    <img src="[% themelang %]/lib/calendar/cal.gif" alt="Show calendar" id="openreservedateTo" style="cursor: pointer;" border="0" />
-                    <script type="text/javascript">
-					//<![CDATA[  
-					function validate2(date) {
-                         var day = date.getDate();
-                         var month = date.getMonth() + 1;
-                         var year = date.getFullYear();
-                         var weekDay = date.getDay();
-                         var dayMonth = month + '-' + day;
-                         var dateString = year + '-' + month + '-' + day;
-                         var dateFrom = document.getElementById('filter_reservedate_begin').value.split("-");
-                         var limitDate = new Date(dateFrom[0], (dateFrom[1] - 1), dateFrom[2]);
-                         if (limitDate > date) {
-                              return true;
-                         } else {
-                              return false;
-                         }
-                     }
-                     Calendar.setup({
-                             inputField : "filter_reservedate_end",
-                             ifFormat : "[% DHTMLcalendar_dateformat %]",
-                             button : "openreservedateTo",
-                             disableFunc : validate2,
-                             dateStatusFunc : validate2
-                     });
-					//]]>
-					</script>
                     </td>
                 </tr>
             <tr>
@@ -163,61 +181,7 @@
                 <td><input type="radio" name="Line" value="notificationdate" /></td>
                 <td><input type="radio" name="Column" value="notificationdate" /></td>
                 <td><label for="filter_notificationdate_begin">From</label> <input type="text"  size="10" id="filter_notificationdate_begin" name="filter_notificationdate_begin" />
-                    <img src="[% themelang %]/lib/calendar/cal.gif" alt="Show calendar" border="0" id="opennotificationdateFrom" style="cursor: pointer;" />
-                   <script type="text/javascript">
-				   //<![CDATA[ 
-				   function validate1(date) {
-                        var day = date.getDate();
-                        var month = date.getMonth() + 1;
-                        var year = date.getFullYear();
-                        var weekDay = date.getDay();
-                        var dayMonth = month + '-' + day;
-                        var dateString = year + '-' + month + '-' + day;
-                        var dateTo = document.getElementById('filter_notificationdate_end').value.split("-");
-                        var limitDate = new Date(dateTo[0], (dateTo[1] - 1), dateTo[2]);
-                        if (date > limitDate) {
-                             return true;
-                        } else {
-                             return false;
-                        }
-                    }
-                    Calendar.setup({
-                            inputField : "filter_notificationdate_begin",
-                            ifFormat : "[% DHTMLcalendar_dateformat %]",
-                            button : "opennotificationdateFrom",
-                            disableFunc : validate1,
-                            dateStatusFunc : validate1
-                    });
-					//]]>
-					</script>
                     <label for="filter_notificationdate_end">To</label> <input  size="10" id="filter_notificationdate_end" name="filter_notificationdate_end" value="" type="text" />
-                    <img src="[% themelang %]/lib/calendar/cal.gif" alt="Show calendar" id="opennotificationdateTo" style="cursor: pointer;" border="0" />
-                    <script type="text/javascript">
-					//<![CDATA[  
-					function validate2(date) {
-                         var day = date.getDate();
-                         var month = date.getMonth() + 1;
-                         var year = date.getFullYear();
-                         var weekDay = date.getDay();
-                         var dayMonth = month + '-' + day;
-                         var dateString = year + '-' + month + '-' + day;
-                         var dateFrom = document.getElementById('filter_notificationdate_begin').value.split("-");
-                         var limitDate = new Date(dateFrom[0], (dateFrom[1] - 1), dateFrom[2]);
-                         if (limitDate > date) {
-                              return true;
-                         } else {
-                              return false;
-                         }
-                     }
-                     Calendar.setup({
-                             inputField : "filter_notificationdate_end",
-                             ifFormat : "[% DHTMLcalendar_dateformat %]",
-                             button : "opennotificationdateTo",
-                             disableFunc : validate2,
-                             dateStatusFunc : validate2
-                     });
-					//]]>
-					</script>
                     </td>
              </tr>
             <tr>
@@ -225,61 +189,7 @@
                 <td><input type="radio" name="Line" value="reminderdate" /></td>
                 <td><input type="radio" name="Column" value="reminderdate" /></td>
                 <td><label for="filter_reminderdate_begin">From</label> <input type="text"  size="10" id="filter_reminderdate_begin" name="Filter" />
-                    <img src="[% themelang %]/lib/calendar/cal.gif" alt="Show calendar" border="0" id="openreminderdateFrom" style="cursor: pointer;" />
-                   <script type="text/javascript">
-				   //<![CDATA[ 
-				   function validate1(date) {
-                        var day = date.getDate();
-                        var month = date.getMonth() + 1;
-                        var year = date.getFullYear();
-                        var weekDay = date.getDay();
-                        var dayMonth = month + '-' + day;
-                        var dateString = year + '-' + month + '-' + day;
-                        var dateTo = document.getElementById('filter_reminderdate_end').value.split("-");
-                        var limitDate = new Date(dateTo[0], (dateTo[1] - 1), dateTo[2]);
-                        if (date > limitDate) {
-                             return true;
-                        } else {
-                             return false;
-                        }
-                    }
-                    Calendar.setup({
-                            inputField : "filter_reminderdate_begin",
-                            ifFormat : "[% DHTMLcalendar_dateformat %]",
-                            button : "openreminderdateFrom",
-                            disableFunc : validate1,
-                            dateStatusFunc : validate1
-                    });
-					//]]>
-					</script>
                     <label for="filter_reminderdate_end">To</label> <input size="10" id="filter_reminderdate_end" name="filter_reminderdate_end" value="" type="text" />
-                    <img src="[% themelang %]/lib/calendar/cal.gif" alt="Show calendar" id="openreminderdateTo" style="cursor: pointer;" border="0" />
-                    <script type="text/javascript">
-					//<![CDATA[  
-					function validate2(date) {
-                         var day = date.getDate();
-                         var month = date.getMonth() + 1;
-                         var year = date.getFullYear();
-                         var weekDay = date.getDay();
-                         var dayMonth = month + '-' + day;
-                         var dateString = year + '-' + month + '-' + day;
-                         var dateFrom = document.getElementById('filter_reminderdate_begin').value.split("-");
-                         var limitDate = new Date(dateFrom[0], (dateFrom[1] - 1), dateFrom[2]);
-                         if (limitDate > date) {
-                              return true;
-                         } else {
-                              return false;
-                         }
-                     }
-                     Calendar.setup({
-                             inputField : "filter_reminderdate_end",
-                             ifFormat : "[% DHTMLcalendar_dateformat %]",
-                             button : "openreminderdateTo",
-                             disableFunc : validate2,
-                             dateStatusFunc : validate2
-                     });
-					//]]>
-					</script>
                     </td>
              </tr>
             <tr>
@@ -287,61 +197,7 @@
                 <td><input type="radio" name="Line" value="waitingdate" /></td>
                 <td><input type="radio" name="Column" value="waitingdate" /></td>
                 <td><label for="filter_waitingdate_begin">From</label> <input type="text"  size="10" id="filter_waitingdate_begin" name="filter_waitingdate_begin" />
-                    <img src="[% themelang %]/lib/calendar/cal.gif" alt="Show calendar" border="0" id="openwaitingdateFrom" style="cursor: pointer;" />
-                   <script type="text/javascript">
-				   //<![CDATA[ 
-				   function validate1(date) {
-                        var day = date.getDate();
-                        var month = date.getMonth() + 1;
-                        var year = date.getFullYear();
-                        var weekDay = date.getDay();
-                        var dayMonth = month + '-' + day;
-                        var dateString = year + '-' + month + '-' + day;
-                        var dateTo = document.getElementById('filter_waitingdate_end').value.split("-");
-                        var limitDate = new Date(dateTo[0], (dateTo[1] - 1), dateTo[2]);
-                        if (date > limitDate) {
-                             return true;
-                        } else {
-                             return false;
-                        }
-                    }
-                    Calendar.setup({
-                            inputField : "filter_waitingdate_begin",
-                            ifFormat : "[% DHTMLcalendar_dateformat %]",
-                            button : "openwaitingdateFrom",
-                            disableFunc : validate1,
-                            dateStatusFunc : validate1
-                    });
-					//]]>
-					</script>
                     <label for="filter_waitingdate_end">To</label> <input  size="10" id="filter_waitingdate_end" name="filter_waitingdate_end" value="" type="text" />
-                    <img src="[% themelang %]/lib/calendar/cal.gif" alt="Show calendar" id="openwaitingdateTo" style="cursor: pointer;" border="0" />
-                    <script type="text/javascript">
-					//<![CDATA[  
-					function validate2(date) {
-                         var day = date.getDate();
-                         var month = date.getMonth() + 1;
-                         var year = date.getFullYear();
-                         var weekDay = date.getDay();
-                         var dayMonth = month + '-' + day;
-                         var dateString = year + '-' + month + '-' + day;
-                         var dateFrom = document.getElementById('filter_waitingdate_begin').value.split("-");
-                         var limitDate = new Date(dateFrom[0], (dateFrom[1] - 1), dateFrom[2]);
-                         if (limitDate > date) {
-                              return true;
-                         } else {
-                              return false;
-                         }
-                     }
-                     Calendar.setup({
-                             inputField : "filter_waitingdate_end",
-                             ifFormat : "[% DHTMLcalendar_dateformat %]",
-                             button : "openwaitingdateTo",
-                             disableFunc : validate2,
-                             dateStatusFunc : validate2
-                     });
-					//]]>
-					</script>
                     </td>
              </tr>
 			 <tr>
@@ -349,61 +205,7 @@
                 <td><input type="radio" name="Line" value="cancellationdate" /></td>
                 <td><input type="radio" name="Column" value="cancellationdate" /></td>
                 <td><label for="filter_cancellationdate_begin">From</label> <input type="text"  size="10" id="filter_cancellationdate_begin" name="filter_cancellationdate_begin" />
-                    <img src="[% themelang %]/lib/calendar/cal.gif" alt="Show calendar" border="0" id="opencancellationdateFrom" style="cursor: pointer;" />
-                   <script type="text/javascript">
-				   //<![CDATA[ 
-				   function validate1(date) {
-                        var day = date.getDate();
-                        var month = date.getMonth() + 1;
-                        var year = date.getFullYear();
-                        var weekDay = date.getDay();
-                        var dayMonth = month + '-' + day;
-                        var dateString = year + '-' + month + '-' + day;
-                        var dateTo = document.getElementById('filter_cancellationdate_end').value.split("-");
-                        var limitDate = new Date(dateTo[0], (dateTo[1] - 1), dateTo[2]);
-                        if (date > limitDate) {
-                             return true;
-                        } else {
-                             return false;
-                        }
-                    }
-                    Calendar.setup({
-                            inputField : "filter_cancellationdate_begin",
-                            ifFormat : "[% DHTMLcalendar_dateformat %]",
-                            button : "opencancellationdateFrom",
-                            disableFunc : validate1,
-                            dateStatusFunc : validate1
-                    });
-					//]]>
-					</script>
                     <label for="filter_cancellationdate_end">To</label> <input  size="10" id="filter_cancellationdate_end" name="filter_cancellationdate_end" value="" type="text" />
-                    <img src="[% themelang %]/lib/calendar/cal.gif" alt="Show calendar" id="opencancellationdateTo" style="cursor: pointer;" border="0" />
-                    <script type="text/javascript">
-					//<![CDATA[  
-					function validate2(date) {
-                         var day = date.getDate();
-                         var month = date.getMonth() + 1;
-                         var year = date.getFullYear();
-                         var weekDay = date.getDay();
-                         var dayMonth = month + '-' + day;
-                         var dateString = year + '-' + month + '-' + day;
-                         var dateFrom = document.getElementById('filter_cancellationdate_begin').value.split("-");
-                         var limitDate = new Date(dateFrom[0], (dateFrom[1] - 1), dateFrom[2]);
-                         if (limitDate > date) {
-                              return true;
-                         } else {
-                              return false;
-                         }
-                     }
-                     Calendar.setup({
-                             inputField : "filter_cancellationdate_end",
-                             ifFormat : "[% DHTMLcalendar_dateformat %]",
-                             button : "opencancellationdateTo",
-                             disableFunc : validate2,
-                             dateStatusFunc : validate2
-                     });
-					//]]>
-					</script>
                     </td>
              </tr>
         <tr>

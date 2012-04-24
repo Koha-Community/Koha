@@ -8,6 +8,7 @@
 <script type="text/javascript" src="[% themelang %]/js/datatables.js"></script>
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
 [% INCLUDE 'calendar.inc' %]
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
 <script type="text/javascript">
 //<![CDATA[
 $(document).ready(function() {
@@ -169,33 +170,12 @@ $(document).ready(function() {
 [% END %]
 <ol>
     <li><label for="delay">Order date:</label><input size="3" maxlength="3" id="delay" type="text" name="delay" value="[% delay %]" /> days ago</li>
-    <li><label for="delay">Estimated Delivery date from: </label>
-        <input type="text" size="10" id="estimateddeliverydatefrom" name="estimateddeliverydatefrom" value="[% estimateddeliverydatefrom %]" />
-        <img src="[% themelang %]/lib/calendar/cal.gif" id="openCalendarFrom" style="cursor: pointer;" alt="Show Calendar" />
+    <li><label for="from">Estimated delivery date from: </label>
+        <input type="text" size="10" id="from" name="estimateddeliverydatefrom" value="[% estimateddeliverydatefrom %]" class="datepickerfrom" />
         <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
     </li>
-    <li><label for="delay">To: </label>
-        <input type="text" size="10" id="estimateddeliverydateto" name="estimateddeliverydateto" value="[% estimateddeliverydateto %]" />
-        <img src="[% themelang %]/lib/calendar/cal.gif" id="openCalendarTo" style="cursor: pointer;" alt="Show Calendar" />
-        <script type="text/javascript">
-            // return true if the date is blocked.
-            function disable_from(date) {var limit = get_Calendar_limit(date,'estimateddeliverydatefrom'); return (limit && limit < date);}
-            function disable_to(date) {var limit = get_Calendar_limit(date,'estimateddeliverydateto'); return (limit && limit < date);}
-            Calendar.setup({
-                inputField : "estimateddeliverydatefrom",
-                ifFormat : "[% DHTMLcalendar_dateformat %]",
-                button : "openCalendarFrom",
-                disableFunc : disable_from,
-                dateStatusFunc : disable_from
-            });
-            Calendar.setup({
-                inputField : "estimateddeliverydateto",
-                ifFormat : "[% DHTMLcalendar_dateformat %]",
-                button : "openCalendarTo",
-                disableFunc : disable_to,
-                dateStatusFunc : disable_to
-             });
-        </script>
+    <li><label for="to">To: </label>
+        <input type="text" size="10" id="to" name="estimateddeliverydateto" value="[% estimateddeliverydateto %]" class="datepickerto" />
         <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
     </li>
 

@@ -32,7 +32,7 @@
                 update_category_code( category_code );
             }
         [% END %]
-
+        $("#dateofbirth").datepicker({ maxDate: "-1D" });
     });
 
     function clear_entry(node) {
@@ -295,16 +295,6 @@
                 <input type="text" id="dateofbirth" name="dateofbirth" size="20" value="[% IF ( opduplicate ) %][% ELSE %][% dateofbirth %][% END %]" />
 [% END %]
 
-                <img src="[% themelang %]/lib/calendar/cal.gif" id="dateofbirth_button" alt="Show Calendar" />
-        <script language="JavaScript" type="text/javascript">
-            Calendar.setup(
-            {
-                inputField : "dateofbirth",
-                ifFormat : "[% DHTMLcalendar_dateformat %]",
-                button : "dateofbirth_button"
-            }
-            );
-        </script>
         [% IF ( mandatorydateofbirth ) %]<span class="required">Required</span>[% END %]
         [% IF ( ERROR_dateofbirth ) %]<span class="required">(Error)</span>[% END %]
 		<div class="hint">[% INCLUDE 'date-format.inc' %]</div>
@@ -1096,26 +1086,16 @@
         [% UNLESS nodateenrolled %]
 		<li>
 			[% IF ( mandatorydateenrolled ) %]
-			<label for="dateenrolled" class="required">
+            <label for="from" class="required">
 			[% ELSE %]
-			<label for="dateenrolled">
+            <label for="from">
 			[% END %]
 			Registration date: </label>
 			[% IF ( metric ) %]
-				<input type="text" id="dateenrolled" name="dateenrolled"  maxlength="10" size="10" onchange="CheckDate(document.form.dateenrolled);check_manip_date('verify');" value="[% dateenrolled %]" />
+                <input type="text" id="from" name="dateenrolled"  maxlength="10" size="10" onchange="CheckDate(document.form.dateenrolled);check_manip_date('verify');" value="[% dateenrolled %]" class="datepickerfrom" />
 			[% ELSE %]
-				<input type="text" id="dateenrolled" name="dateenrolled"  maxlength="10" size="10" value="[% dateenrolled %]" />
+                <input type="text" id="from" name="dateenrolled"  maxlength="10" size="10" value="[% dateenrolled %]" class="datepickerfrom" />
 			[% END %]
-            <img src="[% themelang %]/lib/calendar/cal.gif" id="dateenrolled_button" alt="Show Calendar" />
-      <script language="JavaScript" type="text/javascript">
-        Calendar.setup(
-          {
-            inputField : "dateenrolled",
-            ifFormat : "[% DHTMLcalendar_dateformat %]",
-            button : "dateenrolled_button"
-          }
-        );
-      </script>
 		[% IF ( mandatorydateenrolled ) %]<span class="required">Required</span>[% END %]
 		[% IF ( ERROR_dateenrolled ) %]<span class="required">(Error)</span>[% END %]
 		<div class="hint">[% INCLUDE 'date-format.inc' %]</div>
@@ -1124,34 +1104,24 @@
         [% UNLESS nodateexpiry %]
 		<li>
 			[% IF ( mandatorydateexpiry ) %]
-			<label for="dateexpiry" class="required">
+            <label for="to" class="required">
 			[% ELSE %]
-			<label for="dateexpiry">
+            <label for="to">
 			[% END %]
 			Expiry date (leave blank for auto calc) </label>
 			[% IF ( metric ) %]
 				[% UNLESS ( opadd ) %]
-					<input type="text" id="dateexpiry" name="dateexpiry" maxlength="10"  size="10" onchange="CheckDate(document.form.dateexpiry);check_manip_date('verify');" value="[% dateexpiry %]" />
+                    <input type="text" id="to" name="dateexpiry" maxlength="10"  size="10" onchange="CheckDate(document.form.dateexpiry);check_manip_date('verify');" value="[% dateexpiry %]" class="datepickerto" />
 				[% ELSE %]
-					<input type="text" id="dateexpiry" name="dateexpiry" maxlength="10"  size="10" onchange="CheckDate(document.form.dateexpiry);check_manip_date('verify');" />
+                    <input type="text" id="to" name="dateexpiry" maxlength="10"  size="10" onchange="CheckDate(document.form.dateexpiry);check_manip_date('verify');" class="datepickerto" />
 				[% END %]
 			[% ELSE %]
 				[% UNLESS ( opadd ) %]
-				<input type="text" id="dateexpiry" name="dateexpiry" maxlength="10"  size="10" value="[% dateexpiry %]" />
+                <input type="text" id="to" name="dateexpiry" maxlength="10"  size="10" value="[% dateexpiry %]" class="datepickerto" />
 				[% ELSE %]
-				<input type="text" id="dateexpiry" name="dateexpiry" maxlength="10"  size="10" />
+                <input type="text" id="to" name="dateexpiry" maxlength="10"  size="10" class="datepickerto" />
 				[% END %]
 			[% END %]
-            <img src="[% themelang %]/lib/calendar/cal.gif" id="dateexpiry_button" alt="Show Calendar" />
-      <script language="JavaScript" type="text/javascript">
-        Calendar.setup(
-          {
-            inputField : "dateexpiry",
-            ifFormat : "[% DHTMLcalendar_dateformat %]",
-            button : "dateexpiry_button"
-          }
-        );
-      </script>
 		[% IF ( mandatorydateexpiry ) %]<span class="required">Required</span>[% END %]
 		[% IF ( ERROR_dateexpiry ) %]<span class="required">(Error)</span>[% END %]
 		<div class="hint">[% INCLUDE 'date-format.inc' %]</div>
@@ -1347,20 +1317,11 @@
 
                 <span id="debarreduntil"><label for="datedebarred" class="inline">Until:</label>
                                 [% IF opduplicate %]
-                                    <input type="text" name="datedebarred" id="datedebarred" class="debarred" value="[% datedebarred %]" onclick="this.value=''" />
+                                    <input type="text" name="datedebarred" id="datedebarred" class="debarred datepicker" value="[% datedebarred %]" onclick="this.value=''" />
                                 [% ELSE %]
-                                    <input type="text" name="datedebarred" id="datedebarred" class="debarred" value="[% datedebarred %]" />
+                                    <input type="text" name="datedebarred" id="datedebarred" class="debarred datepicker" value="[% datedebarred %]" />
                                 [% END %]
-                                <img src="[% themelang %]/lib/calendar/cal.gif" id="debarred_button" alt="Show Calendar" />
-                                 <script language="JavaScript" type="text/javascript">
-                                    Calendar.setup(
-                                    {
-                                        inputField : "datedebarred",
-                                        ifFormat : "[% DHTMLcalendar_dateformat %]",
-                                       button : "debarred_button"
-                                    }
-                                    );
-                                </script> <span class="hint">(optional)</span> </span>
+                <span class="hint">(optional)</span> </span>
                 </li>
                 <li>
 		        <label for="debarredcomment" class="radio">Comment:</label>

@@ -258,20 +258,9 @@
                                                 [% END %]
                                             [% END %]
                                             [% IF ( field.type == 'date' ) %]
-                                                <img src="[% themelang %]/lib/calendar/cal.gif" style="cursor: pointer;" alt="Show Calendar" title="Show Calendar" id="[% field.name %]button"/>
-                                                <input type="text" name="[% field.name %]" id="[% field.name %]" value="" size="10" maxlength="10" readonly />
+                                                <input type="text" name="[% field.name %]" id="[% field.name %]" value="" size="10" maxlength="10" readonly="readonly" class="datepicker" />
                                                 <a href="#" onclick="clearDate('[% field.name %]');return false;">X</a>
-                                                <script type="text/javascript">
-                                                 //<![CDATA[
-                                                Calendar.setup({
-                                                    inputField      : "[% field.name %]",
-                                                    button          : "[% field.name %]button",
-                                                    ifFormat        : "[% DHTMLcalendar_dateformat %]",
-                                                    onClose: function() { $("#[% field.name %]").change(); this.hide();}
-                                                });
-                                                //]]>
-                                                </script>
-                                            [% END %]
+                                                [% END %]
                                         </li>
                                         [% END %]
                                         [% IF ( patron_attributes_codes ) %]

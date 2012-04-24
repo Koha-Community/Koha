@@ -4,6 +4,7 @@
 [% IF ( delete_confirm ) %][% IF ( totalgtzero ) %]Cannot delete: category [% categorycode |html %] in use[% ELSE %]Confirm deletion of category '[% categorycode |html %]'[% END %][% END %]
 [% IF ( delete_confirmed ) %]Category deleted[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
+[% INCLUDE 'calendar.inc' %]
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.pager.js"></script>
 <script type="text/javascript" id="js">$(document).ready(function() {
@@ -12,8 +13,8 @@
 		widgets: ['zebra'],
 		headers: { 11: { sorter: false}}
 	}).tablesorterPager({container: $("#pagertable_categorie"),positionFixed: false,size: 20});
+    $( "#enrolmentperioddate" ).datepicker({ minDate: 1 }); // Require that "until date" be in the future
 }); </script>
-[% INCLUDE 'calendar.inc' %]
 <script type="text/javascript">
 //<![CDATA[
 	//
@@ -133,16 +134,7 @@
 	<li><label for="enrolmentperiod" style="width:6em;">In months: </label>
 		<input type="text" name="enrolmentperiod" id="enrolmentperiod" size="3" maxlength="3" value="[% IF ( enrolmentperiod ) %][% enrolmentperiod %][% END %]" /> months</li>
 	<li><label for="enrolmentperioddate" style="width:6em;">Until date: </label>
-		<input type="text" name="enrolmentperioddate" id="enrolmentperioddate" value="[% enrolmentperioddate %]" /> <img src="[% themelang %]/lib/calendar/cal.gif" id="enrolmentperioddate_button" alt="Show Calendar" />
-		<script type="text/javascript">
-            //<![CDATA[
-               Calendar.setup({
-                    inputField : "enrolmentperioddate",
-                    ifFormat : "[% DHTMLcalendar_dateformat %]",
-                	button : "enrolmentperioddate_button"
-            	});
-           	//]]>
-        </script>
+        <input type="text" name="enrolmentperioddate" id="enrolmentperioddate" value="[% enrolmentperioddate %]" />
 		<div id="enrolmentmessage" class="hint" style="margin-left:0;">Cannot have "months" and "until date" at the same time</div>
 	</li>
 	</ol>

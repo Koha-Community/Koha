@@ -87,6 +87,46 @@ $(document).ready(function() {
 	$("h4.collapse a").click(function(){
 		$(this).parent().parent().find("ol").toggle();
     });
+    // http://jqueryui.com/demos/datepicker/#date-range
+    var dates = $( "#suggesteddate_from, #suggesteddate_to" ).datepicker({
+        changeMonth: true,
+        numberOfMonths: 1,
+        onSelect: function( selectedDate ) {
+            var option = this.id == "suggesteddate_from" ? "minDate" : "maxDate",
+                instance = $( this ).data( "datepicker" );
+                date = $.datepicker.parseDate(
+                    instance.settings.dateFormat ||
+                    $.datepicker._defaults.dateFormat,
+                    selectedDate, instance.settings );
+            dates.not( this ).datepicker( "option", option, date );
+        }
+    });
+    var datesMD = $( "#manageddate_from, #manageddate_to" ).datepicker({
+        changeMonth: true,
+        numberOfMonths: 1,
+        onSelect: function( selectedDate ) {
+            var option = this.id == "manageddate_from" ? "minDate" : "maxDate",
+                instance = $( this ).data( "datepicker" );
+                date = $.datepicker.parseDate(
+                    instance.settings.dateFormat ||
+                    $.datepicker._defaults.dateFormat,
+                    selectedDate, instance.settings );
+            datesMD.not( this ).datepicker( "option", option, date );
+        }
+    });
+    var datesAD = $( "#accepteddate_from, #accepteddate_to" ).datepicker({
+        changeMonth: true,
+        numberOfMonths: 1,
+        onSelect: function( selectedDate ) {
+            var option = this.id == "accepteddate_from" ? "minDate" : "maxDate",
+                instance = $( this ).data( "datepicker" );
+                date = $.datepicker.parseDate(
+                    instance.settings.dateFormat ||
+                    $.datepicker._defaults.dateFormat,
+                    selectedDate, instance.settings );
+            datesAD.not( this ).datepicker( "option", option, date );
+        }
+    });
 });
 // ]]>
 </script>
@@ -474,28 +514,10 @@ $(document).ready(function() { calcNewsuggTotal(); });
                     <li><label for="suggesteddate_from"> Suggested on:</label>[% suggesteddate %]
                         <table class="invis">
                         <tr>
-                        <td>from :</td><td><input type="text" id="suggesteddate_from" name="suggesteddate_from" style="width:80px;" /><img src="[% themelang %]/lib/calendar/cal.gif" id="suggesteddate_from_button" alt="Show calendar" />
-                        <script language="JavaScript" type="text/javascript">
-                            Calendar.setup(
-                            {
-                                inputField : "suggesteddate_from",
-                                ifFormat : "[% DHTMLcalendar_dateformat %]",
-                                //ifFormat : "%Y-%m-%d", 
-                                button : "suggesteddate_from_button"
-                            });
-                        </script></td>
+                        <td><label for="suggesteddate_from">from:</label></td><td><input type="text" id="suggesteddate_from" name="suggesteddate_from" style="width:80px;" /></td>
                         </tr>
                         <tr>
-                        <td>to :</td><td><input type="text" id="suggesteddate_to" name="suggesteddate_to" style="width:80px;" /><img src="[% themelang %]/lib/calendar/cal.gif" id="suggesteddate_to_button" alt="Show calendar" />
-                        <script language="JavaScript" type="text/javascript">
-                            Calendar.setup(
-                            {
-                                inputField : "suggesteddate_to",
-                                ifFormat : "[% DHTMLcalendar_dateformat %]",
-                                //ifFormat : "%Y-%m-%d", 
-                                button : "suggesteddate_to_button"
-                            });
-                        </script></td>
+                        <td><label for="suggesteddate_to">to:</label></td><td><input type="text" id="suggesteddate_to" name="suggesteddate_to" style="width:80px;" /></td>
                         </tr>
                         </table>
                     </li>
@@ -505,28 +527,10 @@ $(document).ready(function() { calcNewsuggTotal(); });
                     <li><label for="manageddate_from"> Management date:</label>[% manageddate %]
                         <table class="invis">
                         <tr>
-                        <td>from :</td><td><input type="text" id="manageddate_from" name="manageddate_from" style="width:80px;" /><img src="[% themelang %]/lib/calendar/cal.gif" id="manageddate_from_button" alt="Show calendar" />
-                        <script language="JavaScript" type="text/javascript">
-                            Calendar.setup(
-                            {
-                                inputField : "manageddate_from",
-                                ifFormat : "[% DHTMLcalendar_dateformat %]",
-                                //ifFormat : "%Y-%m-%d", 
-                                button : "manageddate_from_button"
-                            });
-                        </script></td>
+                        <td><label for="manageddate_from">from:</label></td><td><input type="text" id="manageddate_from" name="manageddate_from" style="width:80px;" /></td>
                         </tr>
                         <tr>
-                        <td>to :</td><td><input type="text" id="manageddate_to" name="manageddate_to" style="width:80px;" /><img src="[% themelang %]/lib/calendar/cal.gif" id="manageddate_to_button" alt="Show calendar" />
-                        <script language="JavaScript" type="text/javascript">
-                            Calendar.setup(
-                            {
-                                inputField : "manageddate_to",
-                                ifFormat : "[% DHTMLcalendar_dateformat %]",
-                                //ifFormat : "%Y-%m-%d", 
-                                button : "manageddate_to_button"
-                            });
-                        </script></td>
+                        <td><label for="manageddate_to">to:</label></td><td><input type="text" id="manageddate_to" name="manageddate_to" style="width:80px;" /></td>
                         </tr>
                         </table>
                     </li>
@@ -536,28 +540,10 @@ $(document).ready(function() { calcNewsuggTotal(); });
                     <li><label for="accepteddate_from"> Accepted on:</label>[% accepteddate %]
                         <table class="invis">
                         <tr>
-                        <td>from :</td><td><input type="text" id="accepteddate_from" name="accepteddate_from" style="width:80px;" /><img src="[% themelang %]/lib/calendar/cal.gif" id="accepteddate_from_button" alt="Show calendar" />
-                        <script language="JavaScript" type="text/javascript">
-                            Calendar.setup(
-                            {
-                                inputField : "accepteddate_from",
-                                ifFormat : "[% DHTMLcalendar_dateformat %]",
-                                //ifFormat : "%Y-%m-%d", 
-                                button : "accepteddate_from_button"
-                            });
-                        </script></td>
+                        <td><label for="accepteddate_from">from:</label></td><td><input type="text" id="accepteddate_from" name="accepteddate_from" style="width:80px;" /></td>
                         </tr>
                         <tr>
-                        <td>to :</td><td><input type="text" id="accepteddate_to" name="accepteddate_to" style="width:80px;" /><img src="[% themelang %]/lib/calendar/cal.gif" id="accepteddate_to_button" alt="Show calendar" />
-                        <script language="JavaScript" type="text/javascript">
-                            Calendar.setup(
-                            {
-                                inputField : "accepteddate_to",
-                                ifFormat : "[% DHTMLcalendar_dateformat %]",
-                                //ifFormat : "%Y-%m-%d", 
-                                button : "accepteddate_to_button"
-                            });
-                        </script></td>
+                        <td><label for="accepteddate_to">to:</label></td><td><input type="text" id="accepteddate_to" name="accepteddate_to" style="width:80px;" /></td>
                         </tr>
                         </table>
                     </li>

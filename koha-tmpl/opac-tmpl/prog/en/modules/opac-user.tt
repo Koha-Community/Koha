@@ -3,7 +3,6 @@
 [% INCLUDE 'doc-head-open.inc' %]
 [% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Your library home
 [% INCLUDE 'doc-head-close.inc' %]
-[% INCLUDE 'calendar.inc' %]
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.metadata.min.js"></script>
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
 <script type="text/JavaScript">
@@ -46,6 +45,7 @@ $.tablesorter.addParser({
             $("#renewall").submit();
         });
         $("#checkoutst caption").append("<div id=\"renewcontrols\"><a id=\"renewselected_link\" href=\"#\">"+_("Renew selected")+"</a> <a id=\"renewall_link\" href=\"#\">"+_("Renew all")+"</a></div>");[% END %]
+        $( "#suspend_until" ).datepicker({ minDate: 1 }); // Require that "until date" be in the future
             });
 //]]>
 </script>
@@ -428,40 +428,7 @@ $.tablesorter.addParser({
 
 	      [% IF AutoResumeSuspendedHolds %]
 	      <label for="suspend_until"> until </label>
-              <input name="suspend_until" id="suspend_until" readonly="readonly" size="10">
-              <script language="JavaScript" type="text/javascript">
-              //<![CDATA[
-
-              var cal_img = document.createElement('img');
-              cal_img.src = "[% themelang %]/lib/calendar/cal.gif";
-              cal_img.alt = "Show Calendar";
-              cal_img.border = "0";
-              cal_img.id = "CalendarSuspendUntil";
-              cal_img.style.cursor = "pointer";
-              document.getElementById("suspend_until").parentNode.appendChild( cal_img );
-
-              function validate(date) {
-                  var today = new Date();
-                        if ( (date > today) ||
-                                ( date.getDate() == today.getDate() &&
-                                  date.getMonth() == today.getMonth() &&
-                                  date.getFullYear() == today.getFullYear() ) ) {
-                            return false;
-                        } else {
-                            return true;
-                        }
-              };
-              Calendar.setup(
-              {
-                inputField : "suspend_until",
-                ifFormat : "[% DHTMLcalendar_dateformat %]",
-                button : "CalendarSuspendUntil",
-                disableFunc : validate,
-                dateStatusFunc : validate
-              }
-              );
-              //]]>
-              </script>
+              <input name="suspend_until" id="suspend_until" readonly="readonly" size="10" />
               <a href="#" style="font-size:85%;text-decoration:none;" onclick="document.getElementById('suspend_until').value='';return false;">Clear date</a></p>
               [% END %]
             </form>

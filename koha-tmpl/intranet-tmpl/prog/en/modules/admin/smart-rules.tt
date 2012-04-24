@@ -1,7 +1,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; Circulation and fine rules</title>
 [% INCLUDE 'doc-head-close.inc' %]
-
+[% INCLUDE 'calendar.inc' %]
 <script type="text/javascript">
 //<![CDATA[
 $(document).ready(function() {
@@ -12,12 +12,6 @@ $(document).ready(function() {
 });
 //]]>
 </script>
-<!-- Enable Calendar system -->
-<link rel="stylesheet" type="text/css" href="[% themelang %]/lib/calendar/calendar-system.css" />
-<script type="text/javascript" src="[% themelang %]/lib/calendar/calendar.js"></script>
-<script type="text/javascript" src="[% themelang %]/lib/calendar/calendar-en.js"></script>
-<script type="text/javascript" src="[% themelang %]/lib/calendar/calendar-setup.js"></script>
-<!-- End Calendar system additions -->
 </head>
 <body id="admin_smart-rules" class="admin">
 [% INCLUDE 'header.inc' %]
@@ -161,23 +155,8 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
                            <option value="0">Exactly on</option>
                            <option value="1">After</option>
                         </select>
-                        <input type="text" size="10" id="hardduedate" name="hardduedate" value="[% hardduedate %]" />
-                        [% INCLUDE 'date-format.inc' %]
-                        <img src="[% themelang %]/lib/calendar/cal.gif" alt="Show Calendar"  border="0" id="CalendarDueDate" style="cursor: pointer;"/>
-                        <script language="JavaScript" type="text/javascript">
-                             function refocus(calendar) {
-                                 document.getElementById('hardduedate').focus();
-                                 calendar.hide();
-                             };
-                             Calendar.setup(
-                             {
-                             inputField : "hardduedate",
-                             ifFormat : "%m/%d/%Y",
-                             button : "CalendarDueDate",
-                             onClose: refocus
-                             }
-                             );
-                 </script>
+                        <input type="text" size="10" id="hardduedate" name="hardduedate" value="[% hardduedate %]" class="datepicker" />
+                        <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
                     </td>
                     <td><input name="fine" size="4" /></td>
                     <td><input name="chargeperiod" size="2" /></td>

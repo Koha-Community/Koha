@@ -53,17 +53,8 @@
         <input id="issn" type="text" name="issn" size="15" value="[% issn %]" /></li>
 
         <li><label for="date" class="required" title="Required field">Expiring before:</label>
-        <input id="date" type="text" name="date" size="10" value="[% date %]" class="focus" />
-                <img src="[% themelang %]/lib/calendar/cal.gif" alt="Show calendar" border="0" id="openCalendar" style="cursor: pointer;" />
-            <script type="text/javascript">
-                Calendar.setup(
-                 {
-					button : "openCalendar",
-                     inputField : "date",
-                     ifFormat : "[% DHTMLcalendar_dateformat %]"
-                 }
-                );
-            </script> <span class="required">Required</span>
+        <input id="date" type="text" name="date" size="10" value="[% date %]" class="focus datepicker" />
+        <span class="required">Required</span>
 			<div class="hint">[% INCLUDE 'date-format.inc' %]</div></li>
 			</ol>
         

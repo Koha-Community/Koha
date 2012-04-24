@@ -31,7 +31,7 @@
 		[% IF ( definitions ) %]
         <h2>Current terms</h2>
 		<form action="/cgi-bin/koha/reports/dictionary.pl" method="post">
-        <input type="hidden" name="phase" value="View dictionary" />
+        <input type="hidden" name="phase" value="View Dictionary" />
 		[% IF ( areas ) %]
 			Filter by area <select name="areas">
 			<option value="">All</option>
@@ -100,7 +100,7 @@
 <form action="/cgi-bin/koha/reports/dictionary.pl" method="post">
 <fieldset class="rows">
 <legend>Step 2 of 5: Choose the area</legend>
-<ol><li><input type="hidden" name="phase" value="New term step 3" />
+<ol><li><input type="hidden" name="phase" value="New Term step 3" />
 <input type="hidden" name="definition_name" value="[% definition_name %]" />
 <input type="hidden" name="definition_description" value="[% definition_description %]" />
 <label for="areas">Select table </label><select name="areas" id="areas">
@@ -149,7 +149,7 @@
 
 <td style="border: 0;"><select id="selectedColumns" name="columns" size="25" style="width:200px;height:300px;"></select>     </td>   </tr></table>     
 
-<input type="hidden" name="phase" value="New term step 4" />
+<input type="hidden" name="phase" value="New Term step 4" />
 </fieldset>
 <fieldset class="action"><input type="submit" name="submit" value="Next" /></fieldset>
 </form>
@@ -184,32 +184,14 @@
 	<table>
 	<tr>
 	<td>Start of date range</td>
-	<td><input type="text" size="10" id="[% column.name %]_start_value" name="[% column.name %]_start_value" value="" />      
-	<img src="[% themelang %]/lib/calendar/cal.gif" id="buttonfrom1" style="cursor: pointer;"  />
-	<script type="text/javascript">
-	Calendar.setup({
-	inputField     : "[% column.name %]_start_value",
-	ifFormat       : "[% DHTMLcalendar_dateformat %]",
-	button         : "buttonfrom1",
-	align          : "Tl"
-	});
-	</script>
+    <td><input type="text" size="10" id="from" name="[% column.name %]_start_value" value="" class="datepickerfrom" />
 	<div class="hint">[% INCLUDE 'date-format.inc' %]</div>
 	</td>
 	</tr>
 	<tr>
 	<td>End of date range</td>
 	<td>
-	<input type="text" size="10" id="[% column.name %]_end_value" name="[% column.name %]_end_value" value="" />      
-	<img src="[% themelang %]/lib/calendar/cal.gif" id="buttonfrom2" style="cursor: pointer;"  />
-	<script type="text/javascript">
-	Calendar.setup({
-	inputField     : "[% column.name %]_end_value",
-	ifFormat       : "[% DHTMLcalendar_dateformat %]",
-	button         : "buttonfrom2",
-	align          : "Tl"
-	});
-	</script>
+    <input type="text" size="10" id="to" name="[% column.name %]_end_value" value="" class="datepickerto" />
 	<div class="hint">[% INCLUDE 'date-format.inc' %]</div>
 	</td>
 	</tr>
@@ -223,7 +205,7 @@
 
 [% END %]
 </ol>
-<input type="hidden" name="phase" value="New term step 5" />
+<input type="hidden" name="phase" value="New Term step 5" />
 </fieldset>
 <fieldset class="action">
 <input type="submit" name="submit" value="Next" />

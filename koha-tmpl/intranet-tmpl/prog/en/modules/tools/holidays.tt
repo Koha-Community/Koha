@@ -8,11 +8,33 @@
 
 	var weekdays = new Array(_("Sundays"),_("Mondays"),_("Tuesdays"),_("Wednesdays"),_("Thursdays"),_("Fridays"),_("Saturdays"));
 
-	function holidayOperation(formObject, opType) {
-		var op = document.getElementsByName('operation');
-		op[0].value = opType;
-		formObject.submit();
-	}
+    /* Creates all the structures to deal with all diferents kinds of holidays */
+    var week_days = new Array();
+    var holidays = new Array();
+    var holidates = new Array();
+    var exception_holidays = new Array();
+    var day_month_holidays = new Array();
+    var hola= "[% code %]";
+    [% FOREACH WEEK_DAYS_LOO IN WEEK_DAYS_LOOP %]
+    week_days["[% WEEK_DAYS_LOO.KEY %]"] = {title:"[% WEEK_DAYS_LOO.TITLE %]", description:"[% WEEK_DAYS_LOO.DESCRIPTION %]"};
+    [% END %]
+    [% FOREACH HOLIDAYS_LOO IN HOLIDAYS_LOOP %]
+    holidates.push("[% HOLIDAYS_LOO.KEY %]");
+    holidays["[% HOLIDAYS_LOO.KEY %]"] = {title:"[% HOLIDAYS_LOO.TITLE %]", description:"[% HOLIDAYS_LOO.DESCRIPTION %]"};
+
+    [% END %]
+    [% FOREACH EXCEPTION_HOLIDAYS_LOO IN EXCEPTION_HOLIDAYS_LOOP %]
+    exception_holidays["[% EXCEPTION_HOLIDAYS_LOO.KEY %]"] = {title:"[% EXCEPTION_HOLIDAYS_LOO.TITLE %]", description:"[% EXCEPTION_HOLIDAYS_LOO.DESCRIPTION %]"};
+    [% END %]
+    [% FOREACH DAY_MONTH_HOLIDAYS_LOO IN DAY_MONTH_HOLIDAYS_LOOP %]
+    day_month_holidays["[% DAY_MONTH_HOLIDAYS_LOO.KEY %]"] = {title:"[% DAY_MONTH_HOLIDAYS_LOO.TITLE %]", description:"[% DAY_MONTH_HOLIDAYS_LOO.DESCRIPTION %]"};
+    [% END %]
+
+    function holidayOperation(formObject, opType) {
+        var op = document.getElementsByName('operation');
+        op[0].value = opType;
+        formObject.submit();
+    }
 
 	// This function shows the "Show Holiday" panel //
 	function showHoliday (exceptionPosibility, dayName, day, month, year, weekDay, title, description, holidayType) {
@@ -83,6 +105,52 @@
 	function Help() {
 		newin=window.open("/cgi-bin/koha/help.pl","KohaHelp",'width=600,height=600,toolbar=false,scrollbars=yes');
 	}
+
+    /* This function gives css clases to each kind of day */
+    function dateStatusHandler(date) {
+        date = new Date(date);
+        var day = date.getDate();
+        var month = date.getMonth() + 1;
+        var year = date.getFullYear();
+        var weekDay = date.getDay();
+        var dayMonth = month + '/' + day;
+        var dateString = year + '/' + month + '/' + day;
+        if (exception_holidays[dateString] != null) {
+            return [true, "exception", "Exception: "+exception_holidays[dateString].title];
+        } else if ( week_days[weekDay] != null ){
+            return [true, "repeatableweekly", "Weekly holdiay: "+week_days[weekDay].title];
+        } else if ( day_month_holidays[dayMonth] != null ) {
+            return [true, "repeatableyearly", "Yearly holdiay: "+day_month_holidays[dayMonth].title];
+        } else if (holidays[dateString] != null) {
+            return [true, "holiday", "Single holiday: "+holidays[dateString].title];
+        } else {
+            return [true, "normalday", "Normal day"];
+        }
+    }
+
+    /* This function is in charge of showing the correct panel considering the kind of holiday */
+    function dateChanged(calendar) {
+        calendar = new Date(calendar);
+        var day = calendar.getDate();
+        var month = calendar.getMonth() + 1;
+        var year = calendar.getFullYear();
+        var weekDay = calendar.getDay();
+        var dayName = weekdays[weekDay];
+        var dayMonth = month + '/' + day;
+        var dateString = year + '/' + month + '/' + day;
+            if (holidays[dateString] != null) {
+                showHoliday(0, dayName, day, month, year, weekDay, holidays[dateString].title, 	holidays[dateString].description, 'ymd');
+            } else if (exception_holidays[dateString] != null) {
+                showHoliday(0, dayName, day, month, year, weekDay, exception_holidays[dateString].title, exception_holidays[dateString].description, 'exception');
+            } else if (week_days[weekDay] != null) {
+                showHoliday(1, dayName, day, month, year, weekDay, week_days[weekDay].title, 	week_days[weekDay].description, 'weekday');
+            } else if (day_month_holidays[dayMonth] != null) {
+                showHoliday(1, dayName, day, month, year, weekDay, day_month_holidays[dayMonth].title, day_month_holidays[dayMonth].description, 'daymonth');
+            } else {
+                newHoliday(dayName, day, month, year, weekDay);
+            }
+    };
+
 	$(document).ready(function() {
 
 [% IF ( dateformat_metric ) %]		$.tablesorter.addParser({ // http://tablesorter.com/docs/example-parsers.html
@@ -128,16 +196,39 @@
 		$("a.helptext").click(function(){
 			$(this).parent().find(".hint").toggle(); return false;
 		});
+        $("#dateofrange").datepicker();
 		$("#dateofrange").each(function () { this.value = "" });
+        $("#jcalendar-container").datepicker({
+          beforeShowDay: function(thedate) {
+            var day = thedate.getDate();
+            var month = thedate.getMonth() + 1;
+            var year = thedate.getFullYear();
+            var dateString = year + '/' + month + '/' + day;
+            return dateStatusHandler(dateString);
+            },
+        onSelect: function(dateText, inst) {
+            dateChanged($(this).datepicker("getDate"));
+        },
+        defaultDate: new Date("[% keydate %]")
+    });
 	});
 //]]>
 </script>
 <style type="text/css"> .key { padding : 3px; white-space:nowrap; line-height:230%; }
+.ui-datepicker { font-size : 150%; }
+.ui-datepicker th, .ui-datepicker .ui-datepicker-title select { font-size : 80%; }
+.ui-datepicker td a { padding : .5em; }
+.ui-datepicker .ui-datepicker-buttonpane button.ui-datepicker-current { font-size : 80%; }
+.key { padding : 3px; white-space:nowrap; line-height:230%; }
 .normalday { background-color :  #EDEDED; color :  Black; border : 1px solid #BCBCBC; }
 .exception { background-color :  #b3d4ff; color :  Black; border : 1px solid #BCBCBC; }
 .holiday {  background-color :  #ffaeae; color :  Black;  border : 1px solid #BCBCBC; }
 .repeatableweekly {  background-color :  #FFFF99; color :  Black;  border : 1px solid #BCBCBC; }
 .repeatableyearly {  background-color :  #FFCC66; color :  Black;  border : 1px solid #BCBCBC; }
+td.exception a.ui-state-default, .exception { background:  #b3d4ff none; color :  Black; border : 1px solid #BCBCBC; }
+td.holiday a.ui-state-default, .holiday {  background:  #ffaeae none; color :  Black;  border : 1px solid #BCBCBC; }
+td.repeatableweekly a.ui-state-default, .repeatableweekly {  background:  #D8EFB3 none; color :  Black;  border : 1px solid #BCBCBC; }
+td.repeatableyearly a.ui-state-default, .repeatableyearly {  background:  #FFFF99 none; color :  Black;  border : 1px solid #BCBCBC; }
 .information { z-index : 1; background-color :  #DCD2F1; width : 300px; display : none; border : 1px solid #000000; color :  #000000; font-size :  8pt; font-weight :  bold; background-color :  #FFD700; cursor :  pointer; padding : 2px; }
 .panel { z-index : 1; display : none; border : 3px solid #CCC; padding : 3px; margin-top: .3em;  background-color: #FEFEFE; } fieldset.brief { border : 0; margin-top: 0; }
 #showHoliday { margin : .5em 0; } h1 select { width: 20em; } div.yui-b fieldset.brief ol { font-size:100%; } div.yui-b fieldset.brief li, div.yui-b fieldset.brief li.radio  { padding:0.2em 0; } .help { margin:.3em 0;border:1px solid #EEE;padding:.3em .7em; font-size : 90%; } #holidayweeklyrepeatable, #holidaysyearlyrepeatable, #holidaysunique, #holidayexceptions { font-size : 90%; margin-bottom : 1em;} .calendar td, .calendar th, .calendar .button, .calendar tbody .day { padding : .7em; font-size: 110%; } .calendar { width: auto; border : 0; }
@@ -248,17 +339,7 @@
 			</li>
 			<li class="dateinsert">
                 <b>To date : </b>
-				<input type="text" id="dateofrange" name="dateofrange" size="20" value="[% dateofrange %]" />
-                <img src="[% themelang %]/lib/calendar/cal.gif" id="dateofrange_button" alt="Show calendar" />
-				<script language="JavaScript" type="text/javascript">
-				Calendar.setup(
-					{
-					inputField : "dateofrange",
-					ifFormat : "[% DHTMLcalendar_dateformat %]",
-					button : "dateofrange_button"
-					}
-				);
-				</script>
+                <input type="text" id="dateofrange" name="dateofrange" size="20" value="[% dateofrange %]" class="datepicker" />
 			</li>
 			<li><label for="title">Title: </label><input type="text" name="newTitle" id="title" size="35" /></li>
 			<li><label for="newDescription">Description:</label>
@@ -311,83 +392,7 @@
 <!-- ******                              MAIN SCREEN CODE                            ****** -->
 <!-- ************************************************************************************** -->
 <h3>Calendar information</h3>
-<div id="calendar-container">
-<script type="text/javascript">
-	/* Creates all the structures to deal with all diferents kinds of holidays */
-	var week_days = new Array();
-	var holidays = new Array();
-	var exception_holidays = new Array();
-	var day_month_holidays = new Array();
-	var hola= "[% code %]";
-	[% FOREACH WEEK_DAYS_LOO IN WEEK_DAYS_LOOP %]
-	week_days["[% WEEK_DAYS_LOO.KEY %]"] = {title:"[% WEEK_DAYS_LOO.TITLE | replace('"','\"') %]", description:"[% WEEK_DAYS_LOO.DESCRIPTION | replace('"','\"') %]"};
-	[% END %]
-	[% FOREACH HOLIDAYS_LOO IN HOLIDAYS_LOOP %]
-	holidays["[% HOLIDAYS_LOO.KEY %]"] = {title:"[% HOLIDAYS_LOO.TITLE | replace('"','\"') %]", description:"[% HOLIDAYS_LOO.DESCRIPTION | replace('"','\"') %]"};
-	[% END %]
-	[% FOREACH EXCEPTION_HOLIDAYS_LOO IN EXCEPTION_HOLIDAYS_LOOP %]
-	exception_holidays["[% EXCEPTION_HOLIDAYS_LOO.KEY %]"] = {title:"[% EXCEPTION_HOLIDAYS_LOO.TITLE | replace('"','\"') %]", description:"[% EXCEPTION_HOLIDAYS_LOO.DESCRIPTION | replace('"','\"') %]"};
-	[% END %]
-	[% FOREACH DAY_MONTH_HOLIDAYS_LOO IN DAY_MONTH_HOLIDAYS_LOOP %]
-	day_month_holidays["[% DAY_MONTH_HOLIDAYS_LOO.KEY %]"] = {title:"[% DAY_MONTH_HOLIDAYS_LOO.TITLE | replace('"','\"') %]", description:"[% DAY_MONTH_HOLIDAYS_LOO.DESCRIPTION | replace('"','\"') %]"};
-	[% END %]
-
-	/* This function gives css clases to each kind of day */
-	function dateStatusHandler(date) {
-		var day = date.getDate();
-		var month = date.getMonth() + 1;
-		var year = date.getFullYear();
-		var weekDay = date.getDay();
-		var dayMonth = month + '/' + day;
-		var dateString = year + '/' + month + '/' + day;
-		if (exception_holidays[dateString] != null) {
-			return 'exception';
-		} else if ( week_days[weekDay] != null ){
-			return 'repeatableweekly';
-		} else if ( day_month_holidays[dayMonth] != null ) {
-			return 'repeatableyearly';
-		} else if (holidays[dateString] != null) {
-			return 'holiday';
-		} else {
-			return 'normalday';
-		}
-	}
-
-	/* This function is in charge of showing the correct panel considering the kind of holiday */
-	function dateChanged(calendar) {
-		var day = calendar.date.getDate();
-		var month = calendar.date.getMonth() + 1;
-		var year = calendar.date.getFullYear();
-		var weekDay = calendar.date.getDay();
-		var dayName = calendar.date.print('%A');
-		var dayMonth = month + '/' + day;
-		var dateString = year + '/' + month + '/' + day;
-		if (calendar.dateClicked) {
-			if (holidays[dateString] != null) {
-				showHoliday(0, dayName, day, month, year, weekDay, holidays[dateString].title, 	holidays[dateString].description, 'ymd');
-			} else if (exception_holidays[dateString] != null) {
-				showHoliday(0, dayName, day, month, year, weekDay, exception_holidays[dateString].title, exception_holidays[dateString].description, 'exception');
-			} else if (week_days[weekDay] != null) {
-				showHoliday(1, dayName, day, month, year, weekDay, week_days[weekDay].title, 	week_days[weekDay].description, 'weekday');
-			} else if (day_month_holidays[dayMonth] != null) {
-				showHoliday(1, dayName, day, month, year, weekDay, day_month_holidays[dayMonth].title, day_month_holidays[dayMonth].description, 'daymonth');
-			} else {
-				newHoliday(dayName, day, month, year, weekDay);
-			}
-		}
-	};
-	Calendar.setup(
-		{
-			flat : "calendar-container",
-			flatCallback : dateChanged,
-			date: "[% keydate %]",
-			dateStatusFunc : dateStatusHandler
-		}
-	);
-</script>
-
-
-</div>
+<div id="jcalendar-container"></div>
 
 <div style="margin-top: 2em;">
 <form action="copy-holidays.pl" method="post">
