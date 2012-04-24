@@ -1252,7 +1252,9 @@ sub AddIssue {
 
         ## If item was lost, it has now been found, reverse any list item charges if neccessary.
         if ( $item->{'itemlost'} ) {
-            _FixAccountForLostAndReturned( $item->{'itemnumber'}, undef, $item->{'barcode'} );
+            if ( C4::Context->preference('RefundLostItemFeeOnReturn' ) ) {
+                _FixAccountForLostAndReturned( $item->{'itemnumber'}, undef, $item->{'barcode'} );
+            }
         }
 
         ModItem({ issues           => $item->{'issues'},
@@ -1813,9 +1815,13 @@ sub AddReturn {
     }
 
     # fix up the accounts.....
-    if ($item->{'itemlost'}) {
-        _FixAccountForLostAndReturned($item->{'itemnumber'}, $borrowernumber, $barcode);    # can tolerate undef $borrowernumber
+    if ( $item->{'itemlost'} ) {
         $messages->{'WasLost'} = 1;
+
+        if ( C4::Context->preference('RefundLostItemFeeOnReturn' ) ) {
+            _FixAccountForLostAndReturned($item->{'itemnumber'}, $borrowernumber, $barcode);    # can tolerate undef $borrowernumber
+            $messages->{'LostItemFeeRefunded'} = 1;
+        }
     }
 
     # fix up the overdues in accounts...
