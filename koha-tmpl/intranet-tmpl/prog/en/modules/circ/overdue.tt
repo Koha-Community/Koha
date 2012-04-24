@@ -1,73 +1,61 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Circulation &rsaquo; Items overdue as of [% todaysdate %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<script type="text/JavaScript" language="JavaScript">
-//<![CDATA[
-    function clone_parent(node) {
+<script type="text/javascript">
+ //<![CDATA[
+     function clone_parent(node) {
         var parent = node.parentNode;
-		var clone = parent.cloneNode(true);
+        var clone = parent.cloneNode(true);
+        parent.parentNode.insertBefore(clone, parent.nextSibling);
         $("a", clone).attr("style", "visibility: visible");
         $("input", clone).attr("value", "");
 
-		var theid = $("span", clone).attr("id") || "";
-		var parts = theid.match(/^pattrodue-getready-(.*)$/);
-		if (parts && parts.length > 1)
-		{
-			var appendid = "-" + Math.floor(Math.random()*1000+1);
-			$("span", clone).attr("id",theid+appendid);
 
-			theid = $("input", clone).attr("id");
-			$("input", clone).attr("id",theid+appendid);
+        var theid = $("span", clone).attr("id") || "";
+        var theid = $("span", clone).attr("id") || "";
+        var parts = theid.match(/^pattrodue-getready-(.*)$/);
+        if (parts && parts.length > 1)
+        {
+            var appendid = "-" + Math.floor(Math.random()*1000+1);
+            $("span", clone).attr("id",theid+appendid);
 
-			theid = $("div[id]", clone).attr("id");
-			$("div[id]", clone).attr("id",theid+appendid);
+            theid = $("input", clone).attr("id");
+            $("input", clone).attr("id",theid+appendid);
 
-			var attrcode = $("script", clone).attr("x-code");
-			var newsuffix = parts[1] + appendid;
-            [% IF ( CircAutocompl ) %]
-                create_auto_completion_responder(newsuffix,attrcode);
-            [% END %]
-		}
+            theid = $("div[id]", clone).attr("id");
+            $("div[id]", clone).attr("id",theid+appendid);
 
-        parent.parentNode.insertBefore(clone, parent.nextSibling);
+            var attrcode = $("script", clone).attr("x-code");
+            var newsuffix = parts[1] + appendid;
+            create_auto_completion_responder(newsuffix,attrcode);
+        }
+
     }
+
+
     function delete_parent(node) {
         var parent = node.parentNode;
         parent.parentNode.removeChild(parent);
     }
-    [% IF ( CircAutocompl ) %]
-	function create_auto_completion_responder(uniqueid,attrcode) {
-		YAHOO.util.Event.onContentReady("pattrodue-getready-"+uniqueid, function() {
-			new function() {
-				// Define a custom formatter function
-				this.fnCustomFormatter = function(oResultItem, sQuery) {
-					var description = oResultItem[0];
-					var authorised_value = oResultItem[1];
-					var aMarkup = [
-						"<div class='pattrodue-result'>",
-						description,
-						" (",
-						authorised_value,
-						")",
-						"</div>"];
-					return (aMarkup.join(""));
-				};
 
-				// Instantiate an XHR DataSource
-				this.oACDS = new YAHOO.widget.DS_XHR("/cgi-bin/koha/circ/ypattrodue-attr-search-authvalue.pl/"+attrcode, ["\n", "\t"]);
-				this.oACDS.responseType = YAHOO.widget.DS_XHR.TYPE_FLAT;
-				this.oACDS.maxCacheEntries = 60;
-				this.oACDS.queryMatchSubset = true;
-
-				// Instantiate an AutoComplete Widget with uniqueid
-				var myInput = document.getElementById('pattrodue-input-'+uniqueid);
-				var myContainer = document.getElementById('pattrodue-container-'+uniqueid);
-				this.oAutoComp = new YAHOO.widget.AutoComplete(myInput,myContainer,this.oACDS);
-				this.oAutoComp.formatResult = this.fnCustomFormatter;
-			}
-		});
+    function create_auto_completion_responder(uniqueid,attrcode) {
+       $("#pattrodue-getready-" + uniqueid).ready(function(){
+            $( "#pattrodue-input-" + uniqueid ).autocomplete({
+                source: "/cgi-bin/koha/circ/ypattrodue-attr-search-authvalue.pl/"+attrcode,
+                select: function( event, ui ) {
+                    $( "#pattrodue-input-"+uniqueid ).val( ui.item.description );
+                    return false;
+                }
+            })
+            .data( "autocomplete" )._renderItem = function( ul, item ) {
+                return $( "<li></li>" )
+                .data( "item.autocomplete", item )
+                .append( "<a>" + item.description + " (" + item.authorised_value + ")</a>" )
+                .appendTo( ul )
+                .css("font-size","90%").css("width","13em");
+            };
+        });
 	}
-    [% END %]
 //]]>
 </script>
 <style type="text/css">
@@ -95,7 +83,8 @@
 
 [% ELSE %]
 
-<h2>[% nnoverdue %] [% IF ( noverdue_is_plural ) %]items[% ELSE %]item[% END %] overdue as of [% todaysdate %][% IF ( isfiltered ) %] (filtered)[% END %]</h2>
+<h2>[% nnoverdue %] [% IF ( noverdue_is_plural ) %]Items[% ELSE %]Item[% END %]
+overdue as of [% todaysdate %][% IF ( isfiltered ) %] <span style="font-size:70%;">(Filtered. <a href="/cgi-bin/koha/circ/overdue.pl">Reset filter</a>)</span>[% END %]</h2>
 
 <p>
     [% IF ( isfiltered ) %]
@@ -193,12 +182,11 @@
 		<!-- domid cgivalue ismany isclone ordinal code description repeatable authorised_value_category -->
 		<li>
 			<label>[% patron_attr_filter_loo.description %]:</label>
-            [% IF ( patron_attr_filter_loo.authorised_value_category AND CircAutocompl) %]
-                <script type="text/JavaScript" language="JavaScript" x-code="[% patron_attr_filter_loo.code |html %]">create_auto_completion_responder([% patron_attr_filter_loo.domid %],"[% patron_attr_filter_loo.code |html %]");</script>
+            [% IF ( patron_attr_filter_loo.authorised_value_category ) %]
+                <script type="text/javascript" x-code="[% patron_attr_filter_loo.code |html %]">create_auto_completion_responder([% patron_attr_filter_loo.domid %],"[% patron_attr_filter_loo.code |html %]");</script>
 				<span id="pattrodue-getready-[% patron_attr_filter_loo.domid %]">
 						<div class="pattrodue-autocomplete">
 							<input autocomplete="off" id="pattrodue-input-[% patron_attr_filter_loo.domid %]" name="patron_attr_filter_[% patron_attr_filter_loo.code |html %]" value="[% patron_attr_filter_loo.cgivalue |html %]"  class="pattrodue-input" type="text" />
-							<div id="pattrodue-container-[% patron_attr_filter_loo.domid %]" class="pattrodue-container"></div>
 						</div>
 				</span>
 			[% ELSE %]

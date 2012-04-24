@@ -2,6 +2,7 @@
 
 # This software is placed under the gnu General Public License, v2 (http://www.gnu.org/licenses/gpl.html)
 
+# Parts copyright 2012 Athens County Public Libraries
 # This file is part of Koha.
 #
 # Koha is free software; you can redistribute it and/or modify it under the
@@ -25,7 +26,7 @@ use C4::Auth qw/check_cookie_auth/;
 use C4::Debug;
 
 my $input    = new CGI;
-my $query    = $input->param('query');
+my $query    = $input->param('term');
 my $attrcode = $input->path_info || '';
 $attrcode =~ s|^/||;
 
@@ -45,8 +46,14 @@ my $sql = qq(SELECT authorised_value, lib description
 			AND v.lib like ?);
 my $sth = $dbh->prepare($sql);
 $sth->execute( $attrcode, "$query%" );
+
+print "[";
+my $i = 0;
 while ( my $rec = $sth->fetchrow_hashref ) {
     print STDERR ">> attrcode=$attrcode match '$query' ==> $rec->{description} ($rec->{authorised_value})\n" if $debug;
-    print "$rec->{description}\t$rec->{authorised_value}\n";
+    print "{\"description\":\"" . $rec->{description} . "\",\"" .
+    "authorised_value\":\"" . $rec->{authorised_value} . "\"" .
+    "}";
+    $i++;
 }
-
+print "]";

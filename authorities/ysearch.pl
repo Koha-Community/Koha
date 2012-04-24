@@ -3,6 +3,7 @@
 # This software is placed under the gnu General Public License, v2 (http://www.gnu.org/licenses/gpl.html)
 
 # Copyright 2011 BibLibre
+# Parts copyright 2012 Athens County Public Libraries
 #
 # This file is part of Koha.
 #
@@ -43,7 +44,7 @@ if ( $auth_status ne "ok" ) {
     exit 0;
 }
 
-    my $searchstr = $query->param('query');
+    my $searchstr = $query->param('term');
     my $searchtype = $query->param('querytype');
     my @value;
     given ($searchtype) {
@@ -62,10 +63,17 @@ if ( $auth_status ne "ok" ) {
     my $startfrom = 0;
 
     my ( $results, $total ) = SearchAuthorities( \@marclist, \@and_or, \@excluding, \@operator, \@value, $startfrom * $resultsperpage, $resultsperpage, $authtypecode, $orderby );
+
+print "[";
+my $i = 0;
     foreach (@$results) {
-	my ($value) = $_->{'summary'};
-        # Removes new lines
-        $value =~ s/<br \/>/ /g;
-        $value =~ s/\n//g;
-	print nsb_clean($value) . "\n";
+        if($i > 0){ print ","; }
+        my ($value) = $_->{'summary'};
+            # Removes new lines
+            $value =~ s/<br \/>/ /g;
+            $value =~ s/\n//g;
+            $value = "{\"summary\":\"" . $value . "\"" . "}";
+        print nsb_clean($value) . "\n";
+        $i++;
     }
+print "]";

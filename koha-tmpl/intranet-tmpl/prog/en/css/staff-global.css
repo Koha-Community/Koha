@@ -2203,7 +2203,11 @@ div.pager {
 	padding : .3em .5em .3em .5em;
 	margin : .4em 0;
 }
-div.pager img {
+div.pager img {+/* jQuery UI Autocomplete */
++ul.ui-autocomplete li { list-style-type: none; font-size : inherit; }
++ul.ui-autocomplete { -webkit-box-shadow: 2px 2px 2px rgba(0,0,0,.3); -moz-box-shadow: 2px 2px 2px rgba(0,0,0,.3); box-shadow: 2px 2px 2px rgba(0,0,0,.3); }
++input.ui-autocomplete-input.active { background: transparent url("../../img/loading-small.gif") right center no-repeat; }
+
 	vertical-align : middle;
 }
 div.pager img.last {
@@ -2242,4 +2246,20 @@ div#acqui_order_supplierlist > div.supplier > span.action {
 
 div#acqui_order_supplierlist > div.supplier > div.baskets {
     margin-top: 0.5em;
+}
+
+/* jQuery UI Autocomplete */
+ul.ui-autocomplete li {
+    list-style-type: none;
+    font-size : inherit;
+}
+
+ul.ui-autocomplete {
+    -webkit-box-shadow: 2px 2px 2px rgba(0,0,0,.3);
+    -moz-box-shadow: 2px 2px 2px rgba(0,0,0,.3);
+    box-shadow: 2px 2px 2px rgba(0,0,0,.3);
+}
+
+.ui-autocomplete-loading {
+    background: #FFF url("../../img/loading-small.gif") right center no-repeat;
 }

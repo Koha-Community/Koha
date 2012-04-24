@@ -3,6 +3,7 @@
 # This software is placed under the gnu General Public License, v2 (http://www.gnu.org/licenses/gpl.html)
 
 # Copyright 2007 Tamil s.a.r.l.
+# Parts copyright 2010-2012 Athens County Public Libraries
 #
 # This file is part of Koha.
 #
@@ -32,7 +33,7 @@ use C4::Members;
 use C4::Auth qw/check_cookie_auth/;
 
 my $input   = new CGI;
-my $query   = $input->param('query');
+my $query   = $input->param('term');
 
 binmode STDOUT, ":encoding(UTF-8)";
 print $input->header(-type => 'text/plain', -charset => 'UTF-8');
@@ -42,11 +43,29 @@ if ($auth_status ne "ok") {
     exit 0;
 }
 
-print map $_->{surname} . ", " . $_->{firstname} . "\t" .
-          $_->{cardnumber} . "\t" .
-          $_->{address} . "\t" .
-          $_->{city} . "\t" .
-          $_->{zipcode} . "\t" .
-          $_->{country} .
-          "\n",
-          @{ Search($query, [qw(surname firstname cardnumber)], [10], [qw(surname firstname cardnumber address city zipcode country)]) };
+my $dbh = C4::Context->dbh;
+my $sql = qq(SELECT surname, firstname, cardnumber, address, city, zipcode, country
+             FROM borrowers
+             WHERE surname LIKE ?
+             OR firstname LIKE ?
+             OR cardnumber LIKE ?
+             ORDER BY surname, firstname
+             LIMIT 10);
+my $sth = $dbh->prepare( $sql );
+$sth->execute("$query%", "$query%", "$query%");
+
+print "[";
+my $i = 0;
+while ( my $rec = $sth->fetchrow_hashref ) {
+    if($i > 0){ print ","; }
+    print "{\"surname\":\"" . $rec->{surname} . "\",\"" .
+          "firstname\":\"".$rec->{firstname} . "\",\"" .
+          "cardnumber\":\"".$rec->{cardnumber} . "\",\"" .
+          "address\":\"".$rec->{address} . "\",\"" .
+          "city\":\"".$rec->{city} . "\",\"" .
+          "zipcode\":\"".$rec->{zipcode} . "\",\"" .
+          "country\":\"".$rec->{country} . "\"" .
+          "}";
+    $i++;
+}
+print "]";
