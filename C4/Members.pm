@@ -1195,6 +1195,11 @@ sub GetBorNotifyAcctRecord {
     $sth->execute( $borrowernumber, $notifyid );
     my $total = 0;
     while ( my $data = $sth->fetchrow_hashref ) {
+        if ( $data->{itemnumber} ) {
+            my $biblio = GetBiblioFromItemNumber( $data->{itemnumber} );
+            $data->{biblionumber} = $biblio->{biblionumber};
+            $data->{title}        = $biblio->{title};
+        }
         $acctlines[$numlines] = $data;
         $numlines++;
         $total += int(100 * $data->{'amountoutstanding'});
