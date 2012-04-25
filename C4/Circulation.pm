@@ -1529,6 +1529,7 @@ patron who last borrowed the book.
 
 sub AddReturn {
     my ( $barcode, $branch, $exemptfine, $dropbox ) = @_;
+
     if ($branch and not GetBranchDetail($branch)) {
         warn "AddReturn error: branch '$branch' not found.  Reverting to " . C4::Context->userenv->{'branch'};
         undef $branch;
@@ -1761,6 +1762,7 @@ routine in C<C4::Accounts>.
 
 sub MarkIssueReturned {
     my ( $borrowernumber, $itemnumber, $dropbox_branch, $returndate, $privacy ) = @_;
+
     my $dbh   = C4::Context->dbh;
     my $query = 'UPDATE issues SET returndate=';
     my @bind;
@@ -3102,12 +3104,13 @@ sub LostItem{
 
     # if a borrower lost the item, add a replacement cost to the their record
     if ( my $borrowernumber = $issues->{borrowernumber} ){
+        my $borrower = C4::Members::GetMemberDetails( $borrowernumber );
 
         C4::Accounts::chargelostitem($borrowernumber, $itemnumber, $issues->{'replacementprice'}, "Lost Item $issues->{'title'} $issues->{'barcode'}")
           if $charge_fee;
         #FIXME : Should probably have a way to distinguish this from an item that really was returned.
         #warn " $issues->{'borrowernumber'}  /  $itemnumber ";
-        MarkIssueReturned($borrowernumber,$itemnumber) if $mark_returned;
+        MarkIssueReturned($borrowernumber,$itemnumber,undef,undef,$borrower->{'privacy'}) if $mark_returned;
     }
 }
 
