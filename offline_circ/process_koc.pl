@@ -329,7 +329,8 @@ sub kocReturnItem {
             $borrowernumber,
             $item->{'itemnumber'},
             undef,
-            $circ->{'date'}
+            $circ->{'date'},
+            $borrower->{'privacy'}
         );
 
         ModItem({ onloan => undef }, $item->{'biblionumber'}, $item->{'itemnumber'});
