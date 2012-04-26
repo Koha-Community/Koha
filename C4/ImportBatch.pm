@@ -26,6 +26,7 @@ use C4::Biblio;
 use C4::Items;
 use C4::Charset;
 use C4::AuthoritiesMarc;
+use Koha::MarcModificationTemplates;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -316,7 +317,7 @@ sub ModAuthInBatch {
 =head2 BatchStageMarcRecords
 
   ($batch_id, $num_records, $num_items, @invalid_records) = 
-    BatchStageMarcRecords($record_type, $encoding, $marc_records, $file_name,
+    BatchStageMarcRecords($encoding, $marc_records, $file_name, $marc_modification_template,
                           $comments, $branch_code, $parse_items,
                           $leave_as_staging, 
                           $progress_interval, $progress_callback);
@@ -328,6 +329,7 @@ sub  BatchStageMarcRecords {
     my $encoding = shift;
     my $marc_records = shift;
     my $file_name = shift;
+    my $marc_modification_template = shift;
     my $comments = shift;
     my $branch_code = shift;
     my $parse_items = shift;
@@ -377,6 +379,8 @@ sub  BatchStageMarcRecords {
             MarcToUTF8Record($marc_blob, $marc_type, $encoding);
 
         $encoding = $charset_guessed unless $encoding;
+
+        ModifyRecordWithTemplate( $marc_modification_template, $marc_record ) if ( $marc_modification_template );
 
         my $import_record_id;
         if (scalar($marc_record->fields()) == 0) {

@@ -41,6 +41,7 @@ use C4::ImportBatch;
 use C4::Matcher;
 use C4::UploadedFile;
 use C4::BackgroundJob;
+use Koha::MarcModificationTemplates;
 
 my $input = new CGI;
 my $dbh = C4::Context->dbh;
@@ -57,6 +58,8 @@ my $item_action = $input->param('item_action');
 my $comments = $input->param('comments');
 my $record_type = $input->param('record_type');
 my $encoding = $input->param('encoding');
+my $marc_modification_template = $input->param('marc_modification_template_id');
+
 my ($template, $loggedinuser, $cookie)
 	= get_template_and_user({template_name => "tools/stage-marc-import.tmpl",
 					query => $input,
@@ -131,7 +134,7 @@ if ($completedJobID) {
     }
 
     # FIXME branch code
-    my ($batch_id, $num_valid, $num_items, @import_errors) = BatchStageMarcRecords($record_type, $encoding, $marcrecord, $filename, $comments, '', $parse_items, 0, 50, staging_progress_callback($job, $dbh));
+    my ($batch_id, $num_valid, $num_items, @import_errors) = BatchStageMarcRecords($record_type, $encoding, $marcrecord, $filename, $marc_modification_template, $comments, '', $parse_items, 0, 50, staging_progress_callback($job, $dbh));
 
     $dbh->commit();
 
@@ -180,6 +183,8 @@ if ($completedJobID) {
                          matcher_code => $matcher_code,
                          import_batch_id => $batch_id
                         );
+
+
     }
 
 } else {
@@ -189,6 +194,10 @@ if ($completedJobID) {
     }
     my @matchers = C4::Matcher::GetMatcherList();
     $template->param(available_matchers => \@matchers);
+
+    my @templates = GetModificationTemplates();
+    $template->param( MarcModificationTemplatesLoop => \@templates );
+
 }
 
 output_html_with_http_headers $input, $cookie, $template->output;

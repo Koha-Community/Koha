@@ -7686,6 +7686,45 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.11.00.XXX";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("CREATE TABLE IF NOT EXISTS marc_modification_templates (
+              template_id int(11) NOT NULL auto_increment,
+              name text NOT NULL,
+              PRIMARY KEY  (template_id)
+              ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;"
+    );
+
+    $dbh->do("
+      CREATE TABLE IF NOT EXISTS marc_modification_template_actions (
+      mmta_id int(11) NOT NULL auto_increment,
+      template_id int(11) NOT NULL,
+      ordering int(3) NOT NULL,
+      action enum('delete_field','update_field','move_field','copy_field') NOT NULL,
+      field_number smallint(6) NOT NULL default '0',
+      from_field varchar(3) NOT NULL,
+      from_subfield varchar(1) NULL,
+      field_value varchar(100) default NULL,
+      to_field varchar(3) default NULL,
+      to_subfield varchar(1) default NULL,
+      to_regex text,
+      conditional enum('if','unless') default NULL,
+      conditional_field varchar(3) default NULL,
+      conditional_subfield varchar(1) default NULL,
+      conditional_comparison enum('exists','not_exists','equals','not_equals') default NULL,
+      conditional_value text,
+      conditional_regex tinyint(1) NOT NULL default '0',
+      description text,
+      PRIMARY KEY  (mmta_id)
+      ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+    ");
+
+    $dbh->do("INSERT INTO permissions (module_bit, code, description) VALUES ('13', 'marc_modification_templates', 'Manage marc modification templates')");
+
+    print "Upgrade to $DBversion done ( Added tables for MARC Modification Framework )\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

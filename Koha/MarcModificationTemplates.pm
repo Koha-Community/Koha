@@ -1,0 +1,579 @@
+package Koha::MarcModificationTemplates;
+
+# Copyright 2010 Kyle M Hall <kyle.m.hall@gmail.com>
+#
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 2 of the License, or (at your option) any later
+# version.
+#
+# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with Koha; if not, write to the Free Software Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+## NOTE:
+## Parts of this module are used from cgi scripts that are detached from apache before
+## execution. For this reason, the C4::Koha::Log function has been used to capture
+## output for debugging purposes.
+
+use strict;
+use warnings;
+
+use DateTime;
+
+use C4::Context;
+use Koha::SimpleMARC;
+
+use vars qw($VERSION @ISA @EXPORT);
+
+use constant DEBUG => 0;
+
+BEGIN {
+	$VERSION = 1.00;	# set the version for version checking
+	@ISA = qw(Exporter);
+	@EXPORT = qw(
+		&GetModificationTemplates
+		&AddModificationTemplate
+		&DelModificationTemplate
+
+		&GetModificationTemplateAction
+		&GetModificationTemplateActions
+
+		&AddModificationTemplateAction
+		&ModModificationTemplateAction
+		&DelModificationTemplateAction
+		&MoveModificationTemplateAction
+
+                &ModifyRecordsWithTemplate
+		&ModifyRecordWithTemplate
+	);
+}
+
+
+=head1 NAME
+
+Koha::MarcModificationTemplates - Module to manage MARC Modification Templates
+
+=head1 DESCRIPTION
+
+MARC Modification Templates are a tool for marc batch imports,
+so that librarians can set up templates for various vendors'
+files telling Koha what fields to insert data into.
+
+=head1 FUNCTIONS
+
+=cut
+
+=head2 GetModificationTemplates
+
+  my @templates = GetModificationTemplates( [ $template_id ] );
+
+  Passing a $template_id will mark the given id as the selected template.
+=cut
+
+sub GetModificationTemplates {
+  my ( $template_id ) = @_;
+  C4::Koha::Log("Koha::MarcModificationTemplates::GetModificationTemplates( $template_id )") if DEBUG;
+  warn("Koha::MarcModificationTemplates::GetModificationTemplates( $template_id )") if DEBUG;
+
+  my $dbh = C4::Context->dbh;
+  my $sth = $dbh->prepare("SELECT * FROM marc_modification_templates");
+  $sth->execute();
+
+  my @templates;
+  while ( my $template = $sth->fetchrow_hashref() ) {
+    $template->{'selected'} = 1 if ( $template->{'template_id'} eq $template_id );
+    push( @templates, $template );
+  }
+
+  return @templates;
+}
+
+=head2
+  AddModificationTemplate
+
+  $template_id = AddModificationTemplate( $template_name[, $template_id ] );
+
+  If $template_id is supplied, the actions from that template will be copied
+  into the newly created template.
+=cut
+
+sub AddModificationTemplate {
+  my ( $template_name, $template_id_copy ) = @_;
+
+  my $dbh = C4::Context->dbh;
+  my $sth = $dbh->prepare("INSERT INTO marc_modification_templates ( name ) VALUES ( ? )");
+  $sth->execute( $template_name );
+
+  $sth = $dbh->prepare("SELECT * FROM marc_modification_templates WHERE name = ?");
+  $sth->execute( $template_name );
+  my $row = $sth->fetchrow_hashref();
+  my $template_id = $row->{'template_id'};
+
+  if ( $template_id_copy ) {
+    my @actions = GetModificationTemplateActions( $template_id_copy );
+    foreach my $action ( @actions ) {
+      AddModificationTemplateAction(
+        $template_id,
+        $action->{'action'},
+        $action->{'field_number'},
+        $action->{'from_field'},
+        $action->{'from_subfield'},
+        $action->{'field_value'},
+        $action->{'to_field'},
+        $action->{'to_subfield'},
+        $action->{'to_regex'},
+        $action->{'conditional'},
+        $action->{'conditional_field'},
+        $action->{'conditional_subfield'},
+        $action->{'conditional_comparison'},
+        $action->{'conditional_value'},
+        $action->{'conditional_regex'},
+        $action->{'description'},
+      );
+
+    }
+  }
+
+  return $template_id;
+}
+
+=head2
+  DelModificationTemplate
+
+  DelModificationTemplate( $template_id );
+=cut
+
+sub DelModificationTemplate {
+  my ( $template_id ) = @_;
+
+  my $dbh = C4::Context->dbh;
+  my $sth = $dbh->prepare("DELETE FROM marc_modification_templates WHERE template_id = ?");
+  $sth->execute( $template_id );
+
+  $sth = $dbh->prepare("DELETE FROM marc_modification_template_actions WHERE template_id = ?");
+  $sth->execute( $template_id );
+}
+
+=head2
+  GetModificationTemplateAction
+
+  my $action = GetModificationTemplateAction( $mmta_id );
+=cut
+
+sub GetModificationTemplateAction {
+  my ( $mmta_id ) = @_;
+
+  my $dbh = C4::Context->dbh;
+  my $sth = $dbh->prepare("SELECT * FROM marc_modification_template_actions WHERE mmta_id = ?");
+  $sth->execute( $mmta_id );
+  my $action = $sth->fetchrow_hashref();
+
+  return $action;
+}
+
+=head2
+  GetModificationTemplateActions
+
+  my @actions = GetModificationTemplateActions( $template_id );
+=cut
+
+sub GetModificationTemplateActions {
+  my ( $template_id ) = @_;
+
+  C4::Koha::Log( "Koha::MarcModificationTemplates::GetModificationTemplateActions( $template_id )" ) if DEBUG;
+  warn( "Koha::MarcModificationTemplates::GetModificationTemplateActions( $template_id )" ) if DEBUG;
+
+  my $dbh = C4::Context->dbh;
+  my $sth = $dbh->prepare("SELECT * FROM marc_modification_template_actions WHERE template_id = ? ORDER BY ordering");
+  $sth->execute( $template_id );
+
+  my @actions;
+  while ( my $action = $sth->fetchrow_hashref() ) {
+    push( @actions, $action );
+  }
+
+  C4::Koha::Log( Data::Dumper::Dumper( @actions ) ) if DEBUG > 4;
+  warn( Data::Dumper::Dumper( @actions ) ) if DEBUG > 4;
+
+  return @actions;
+}
+
+=head2
+  AddModificationTemplateAction
+
+  AddModificationTemplateAction(
+    $template_id, $action, $field_number,
+    $from_field, $from_subfield, $field_value,
+    $to_field, $to_subfield, $to_regex,
+    $conditional, $conditional_field, $conditional_subfield,
+    $conditional_comparison, $conditional_value,
+    $conditional_regex, $description
+  );
+
+  Adds a new action to the given modification template.
+
+=cut
+
+sub AddModificationTemplateAction {
+  my (
+    $template_id,
+    $action,
+    $field_number,
+    $from_field,
+    $from_subfield,
+    $field_value,
+    $to_field,
+    $to_subfield,
+    $to_regex,
+    $conditional,
+    $conditional_field,
+    $conditional_subfield,
+    $conditional_comparison,
+    $conditional_value,
+    $conditional_regex,
+    $description
+  ) = @_;
+
+  C4::Koha::Log( "Koha::MarcModificationTemplates::AddModificationTemplateAction( $template_id, $action,
+                    $field_number, $from_field, $from_subfield, $field_value, $to_field, $to_subfield,
+                    $to_regex, $conditional, $conditional_field, $conditional_subfield, $conditional_comparison,
+                    $conditional_value, $conditional_regex, $description )" ) if DEBUG;
+  warn( "Koha::MarcModificationTemplates::AddModificationTemplateAction( $template_id, $action,
+                    $field_number, $from_field, $from_subfield, $field_value, $to_field, $to_subfield,
+                    $to_regex, $conditional, $conditional_field, $conditional_subfield, $conditional_comparison,
+                    $conditional_value, $conditional_regex, $description )" ) if DEBUG;
+
+  $conditional_regex ||= '0';
+
+  my $dbh = C4::Context->dbh;
+  my $sth = $dbh->prepare( 'SELECT MAX(ordering) + 1 AS next_ordering FROM marc_modification_template_actions WHERE template_id = ?' );
+  $sth->execute( $template_id );
+  my $row = $sth->fetchrow_hashref;
+  my $ordering = $row->{'next_ordering'} || 1;
+
+  my $query = "
+  INSERT INTO marc_modification_template_actions (
+  mmta_id,
+  template_id,
+  ordering,
+  action,
+  field_number,
+  from_field,
+  from_subfield,
+  field_value,
+  to_field,
+  to_subfield,
+  to_regex,
+  conditional,
+  conditional_field,
+  conditional_subfield,
+  conditional_comparison,
+  conditional_value,
+  conditional_regex,
+  description
+  )
+  VALUES ( NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
+
+  $sth = $dbh->prepare( $query );
+
+  $sth->execute(
+    $template_id,
+    $ordering,
+    $action,
+    $field_number,
+    $from_field,
+    $from_subfield,
+    $field_value,
+    $to_field,
+    $to_subfield,
+    $to_regex,
+    $conditional,
+    $conditional_field,
+    $conditional_subfield,
+    $conditional_comparison,
+    $conditional_value,
+    $conditional_regex,
+    $description
+  );
+}
+
+=head2
+  ModModificationTemplateAction
+
+  ModModificationTemplateAction(
+    $mmta_id, $action, $field_number, $from_field,
+    $from_subfield, $field_value, $to_field,
+    $to_subfield, $to_regex, $conditional,
+    $conditional_field, $conditional_subfield,
+    $conditional_comparison, $conditional_value,
+    $conditional_regex, $description
+  );
+
+  Modifies an existing action.
+
+=cut
+
+sub ModModificationTemplateAction {
+  my (
+    $mmta_id,
+    $action,
+    $field_number,
+    $from_field,
+    $from_subfield,
+    $field_value,
+    $to_field,
+    $to_subfield,
+    $to_regex,
+    $conditional,
+    $conditional_field,
+    $conditional_subfield,
+    $conditional_comparison,
+    $conditional_value,
+    $conditional_regex,
+    $description
+  ) = @_;
+
+  my $dbh = C4::Context->dbh;
+
+  my $query = "
+  UPDATE marc_modification_template_actions SET
+  action = ?,
+  field_number = ?,
+  from_field = ?,
+  from_subfield = ?,
+  field_value = ?,
+  to_field = ?,
+  to_subfield = ?,
+  to_regex = ?,
+  conditional = ?,
+  conditional_field = ?,
+  conditional_subfield = ?,
+  conditional_comparison = ?,
+  conditional_value = ?,
+  conditional_regex = ?,
+  description = ?
+  WHERE mmta_id = ?";
+
+  my $sth = $dbh->prepare( $query );
+
+  $sth->execute(
+    $action,
+    $field_number,
+    $from_field,
+    $from_subfield,
+    $field_value,
+    $to_field,
+    $to_subfield,
+    $to_regex,
+    $conditional,
+    $conditional_field,
+    $conditional_subfield,
+    $conditional_comparison,
+    $conditional_value,
+    $conditional_regex,
+    $description,
+    $mmta_id
+  );
+}
+
+
+=head2
+  DelModificationTemplateAction
+
+  DelModificationTemplateAction( $mmta_id );
+
+  Deletes the given template action.
+=cut
+
+sub DelModificationTemplateAction {
+  my ( $mmta_id ) = @_;
+
+  my $action = GetModificationTemplateAction( $mmta_id );
+
+  my $dbh = C4::Context->dbh;
+  my $sth = $dbh->prepare("DELETE FROM marc_modification_template_actions WHERE mmta_id = ?");
+  $sth->execute( $mmta_id );
+
+  $sth = $dbh->prepare("UPDATE marc_modification_template_actions SET ordering = ordering - 1 WHERE template_id = ? AND ordering > ?");
+  $sth->execute( $action->{'template_id'}, $action->{'ordering'} );
+}
+
+=head2
+  MoveModificationTemplateAction
+
+  MoveModificationTemplateAction( $mmta_id, $where );
+
+  Changes the order for the given action.
+  Options for $where are 'up', 'down', 'top' and 'bottom'
+=cut
+sub MoveModificationTemplateAction {
+  my ( $mmta_id, $where ) = @_;
+
+  my $action = GetModificationTemplateAction( $mmta_id );
+
+  return if ( $action->{'ordering'} eq '1' && ( $where eq 'up' || $where eq 'top' ) );
+  return if ( $action->{'ordering'} eq GetModificationTemplateActions( $action->{'template_id'} ) && ( $where eq 'down' || $where eq 'bottom' ) );
+
+  my $dbh = C4::Context->dbh;
+  my ( $sth, $query );
+
+  if ( $where eq 'up' || $where eq 'down' ) {
+
+    ## For up and down, we just swap the ordering number with the one above or below it.
+
+    ## Change the ordering for the other action
+    $query = "UPDATE marc_modification_template_actions SET ordering = ? WHERE template_id = ? AND ordering = ?";
+
+    my $ordering = $action->{'ordering'};
+    $ordering-- if ( $where eq 'up' );
+    $ordering++ if ( $where eq 'down' );
+
+    $sth = $dbh->prepare( $query );
+    $sth->execute( $action->{'ordering'}, $action->{'template_id'}, $ordering );
+
+    ## Change the ordering for this action
+    $query = "UPDATE marc_modification_template_actions SET ordering = ? WHERE mmta_id = ?";
+    $sth = $dbh->prepare( $query );
+    $sth->execute( $ordering, $action->{'mmta_id'} );
+
+  } elsif ( $where eq 'top' ) {
+
+    $sth = $dbh->prepare('UPDATE marc_modification_template_actions SET ordering = ordering + 1 WHERE template_id = ? AND ordering < ?');
+    $sth->execute( $action->{'template_id'}, $action->{'ordering'} );
+
+    $sth = $dbh->prepare('UPDATE marc_modification_template_actions SET ordering = 1 WHERE mmta_id = ?');
+    $sth->execute( $mmta_id );
+
+  } elsif ( $where eq 'bottom' ) {
+
+    my $ordering = GetModificationTemplateActions( $action->{'template_id'} );
+
+    $sth = $dbh->prepare('UPDATE marc_modification_template_actions SET ordering = ordering - 1 WHERE template_id = ? AND ordering > ?');
+    $sth->execute( $action->{'template_id'}, $action->{'ordering'} );
+
+    $sth = $dbh->prepare('UPDATE marc_modification_template_actions SET ordering = ? WHERE mmta_id = ?');
+    $sth->execute( $ordering, $mmta_id );
+
+  }
+
+}
+
+=head2
+  ModifyRecordsWithTemplate
+
+  ModifyRecordsWithTemplate( $template_id, $batch );
+
+  Accepts a template id and a MARC::Batch object.
+=cut
+
+sub ModifyRecordsWithTemplate {
+  my ( $template_id, $batch ) = @_;
+  C4::Koha::Log( "Koha::MarcModificationTemplates::ModifyRecordsWithTemplate( $template_id, $batch )" ) if DEBUG;
+  warn( "Koha::MarcModificationTemplates::ModifyRecordsWithTemplate( $template_id, $batch )" ) if DEBUG;
+
+  while ( my $record = $batch->next() ) {
+    ModifyRecordWithTemplate( $template_id, $record );
+  }
+}
+
+=head2
+  ModifyRecordWithTemplate
+
+  ModifyRecordWithTemplate( $template_id, $record )
+
+  Accepts a MARC::Record object ( $record ) and modifies
+  it based on the actions for the given $template_id
+=cut
+
+sub ModifyRecordWithTemplate {
+  my ( $template_id, $record ) = @_;
+  C4::Koha::Log( "Koha::MarcModificationTemplates::ModifyRecordWithTemplate( $template_id, $record )" ) if DEBUG;
+  warn( "Koha::MarcModificationTemplates::ModifyRecordWithTemplate( $template_id, $record )" ) if DEBUG;
+  C4::Koha::Log( "Unmodified Record:\n" . $record->as_formatted() ) if DEBUG >= 10;
+  warn( "Unmodified Record:\n" . $record->as_formatted() ) if DEBUG >= 10;
+
+  my $current_date = DateTime->now()->ymd();
+  my $branchcode = C4::Context->userenv->{branch};
+
+  my @actions = GetModificationTemplateActions( $template_id );
+
+  foreach my $a ( @actions ) {
+    my $action = $a->{'action'};
+    my $field_number = $a->{'field_number'};
+    my $from_field = $a->{'from_field'};
+    my $from_subfield = $a->{'from_subfield'};
+    my $field_value = $a->{'field_value'};
+    my $to_field = $a->{'to_field'};
+    my $to_subfield = $a->{'to_subfield'};
+    my $to_regex = $a->{'to_regex'};
+    my $conditional = $a->{'conditional'};
+    my $conditional_field = $a->{'conditional_field'};
+    my $conditional_subfield = $a->{'conditional_subfield'};
+    my $conditional_comparison = $a->{'conditional_comparison'};
+    my $conditional_value = $a->{'conditional_value'};
+    my $conditional_regex = $a->{'conditional_regex'};
+
+    my $eval = "$action( \$record, '$from_field', '$from_subfield', ";
+
+    if ( $field_value ) {
+      C4::Koha::Log( "Field value before replacements: $field_value" ) if ( DEBUG >= 3 );
+      warn( "Field value before replacements: $field_value" ) if ( DEBUG >= 3 );
+
+      $field_value =~ s/__CURRENTDATE__/$current_date/g;
+      $field_value =~ s/__BRANCHCODE__/$branchcode/g;
+
+      $eval .= " '$field_value' ";
+
+      C4::Koha::Log( "Field value after replacements: $field_value" ) if ( DEBUG >= 3 );
+      warn( "Field value after replacements: $field_value" ) if ( DEBUG >= 3 );
+    } elsif ( $to_field ) {
+      $eval .= " '$to_field', '$to_subfield', '$to_regex' ";
+    }
+
+    $eval .= ", '$field_number' " if ( $field_number );
+    $eval .= ') ';
+
+    if ( $conditional ) {
+      $eval .= " $conditional ( ";
+
+      if ( $conditional_comparison eq 'exists' ) {
+        $eval .= "field_exists( \$record, '$conditional_field', '$conditional_subfield' )";
+
+      } elsif ( $conditional_comparison eq 'not_exists' ) {
+        $eval .= "!field_exists( \$record, '$conditional_field', '$conditional_subfield' )";
+
+      } elsif ( $conditional_comparison eq 'equals' ) {
+        $eval .= "field_equals( \$record, '$conditional_value', '$conditional_field', '$conditional_subfield', '$conditional_regex' ) ";
+
+      } elsif ( $conditional_comparison eq 'not_equals' ) {
+        $eval .= "!field_equals( \$record, '$conditional_value', '$conditional_field', '$conditional_subfield', '$conditional_regex' ) ";
+      }
+
+      $eval .= " )";
+    }
+
+    $eval .= ";";
+
+    C4::Koha::Log("eval $eval") if DEBUG >= 2;
+    warn("eval $eval") if DEBUG >= 2;
+    eval $eval;
+    C4::Koha::Log( $record->as_formatted() ) if DEBUG >= 10;
+    warn( $record->as_formatted() ) if DEBUG >= 10;
+
+  }
+}
+1;
+__END__
+
+=head1 AUTHOR
+
+Kyle M Hall
+
+=cut

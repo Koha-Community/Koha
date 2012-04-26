@@ -117,6 +117,23 @@ function CheckForm(f) {
             <select name="encoding" id="encoding"><option value="utf8" selected="selected">UTF-8 (Default)</option><option value="MARC-8">MARC 8</option><option value="ISO_5426">ISO 5426</option><option value="ISO_6937">ISO 6937</option><option value=ISO_8859-1">ISO 8859-1</option><option value="EUC-KR">EUC-KR</option></select>
 	</li>
 </ol></fieldset>
+  [% IF MarcModificationTemplatesLoop %]
+    <fieldset class="rows">
+      <legend>Use MARC Modification Template:</legend>
+      <ol>
+        <li>
+          <label for="comments">Modify record using the following template: </label>
+          <select name="marc_modification_template_id" id="marc_modification_template_id">
+            <option value="">Do not use.</option>
+              [% FOREACH mmt IN MarcModificationTemplatesLoop %]
+                <option value="[% mmt.template_id %]">[% mmt.name %]</option>
+              [% END %]
+          </select>
+        </li>
+      </ol>
+    </fieldset>
+  [% END %]
+
   <fieldset class="rows">
     <legend>Look for existing records in catalog?</legend>
     <ol><li><label for="matcher">Record matching rule:</label>
