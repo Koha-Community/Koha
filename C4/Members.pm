@@ -1069,10 +1069,9 @@ C<items> tables of the Koha database.
 sub GetAllIssues {
     my ( $borrowernumber, $order, $limit ) = @_;
 
-    #FIXME: sanity-check order and limit
-    my $dbh   = C4::Context->dbh;
+    my $dbh = C4::Context->dbh;
     my $query =
-  "SELECT *, issues.timestamp as issuestimestamp, issues.renewals AS renewals,items.renewals AS totalrenewals,items.timestamp AS itemstimestamp 
+'SELECT *, issues.timestamp as issuestimestamp, issues.renewals AS renewals,items.renewals AS totalrenewals,items.timestamp AS itemstimestamp
   FROM issues 
   LEFT JOIN items on items.itemnumber=issues.itemnumber
   LEFT JOIN biblio ON items.biblionumber=biblio.biblionumber
@@ -1085,20 +1084,14 @@ sub GetAllIssues {
   LEFT JOIN biblio ON items.biblionumber=biblio.biblionumber
   LEFT JOIN biblioitems ON items.biblioitemnumber=biblioitems.biblioitemnumber
   WHERE borrowernumber=? AND old_issues.itemnumber IS NOT NULL
-  order by $order";
-    if ( $limit != 0 ) {
+  order by ' . $order;
+    if ($limit) {
         $query .= " limit $limit";
     }
 
     my $sth = $dbh->prepare($query);
-    $sth->execute($borrowernumber, $borrowernumber);
-    my @result;
-    my $i = 0;
-    while ( my $data = $sth->fetchrow_hashref ) {
-        push @result, $data;
-    }
-
-    return \@result;
+    $sth->execute( $borrowernumber, $borrowernumber );
+    return $sth->fetchall_arrayref( {} );
 }
 
 

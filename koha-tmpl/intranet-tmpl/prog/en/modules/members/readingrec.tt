@@ -1,3 +1,4 @@
+[% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Circulation History for [% INCLUDE 'patron-title.inc' %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -26,7 +27,7 @@
 	<div class="yui-b">
 [% INCLUDE 'circ-toolbar.inc' %]
 <h1>Circulation history</h1>
-[% IF ( loop_reading ) %]
+[% IF loop_reading %]
 <form action="/cgi-bin/koha/members/readingrec.pl" method="get"><input type="hidden" name="borrowernumber" id="borrowernumber" value="[% borrowernumber %]" /></form>
 
 
@@ -43,29 +44,37 @@
     <th>Date due</th>
     <th>Return date</th>
 </thead>
-[% FOREACH loop_readin IN loop_reading %]
-    [% IF ( loop_readin.returndate ) %]<tr>[% ELSE %]<tr class="onissue">[% END %]
+[% FOREACH issue IN loop_reading %]
+    [% IF  issue.returndate  %]<tr>[% ELSE %]<tr class="onissue">[% END %]
         <td>
-            [% loop_readin.issuestimestamp %]
+            [% issue.issuestimestamp | $KohaDates %]
         </td>
-        <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% loop_readin.biblionumber %]">[% loop_readin.title |html %]</a></td>
+        <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% issue.biblionumber %]">[% issue.title |html %]</a></td>
 
-        <td>[% loop_readin.author %]</td>
+        <td>[% issue.author %]</td>
 
-        <td>[% loop_readin.classification %]</td>
+        <td>
+            [% IF issue.classification %]
+                [% issue.classification %]
+            [% ELSE %]
+                [% issue.itemcallnumber %]
+            [% END %]
+       </td>
 
-        <td>[% loop_readin.barcode %]</td>
+        <td>[% issue.barcode %]</td>
 
             <td>
-        [% loop_readin.renewals %]</td>
+        [% issue.renewals %]</td>
             <td>
-        [% loop_readin.issuedate %]</td>
+        [% issue.issuedate | $KohaDates %]</td>
             <td>
-        [% loop_readin.issuingbranch %]</td>
-			<td>[% IF ( loop_readin.date_due ) %][% loop_readin.date_due %][% ELSE %]&nbsp;[% END %]</td>
+        [% issue.issuingbranch %]</td>
+			<td>[% IF issue.date_due %]
+                    [% issue.date_due | $KohaDates %]
+                [% ELSE %]&nbsp;[% END %]</td>
             <td>
-        [% IF ( loop_readin.returndate ) %]
-            [% loop_readin.returndate %]
+        [% IF  issue.returndate %]
+            [% issue.returndate | $KohaDates %]
         [% ELSE %]
             Checked Out
         [% END %]
