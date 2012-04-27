@@ -28,7 +28,7 @@ use CGI;
 use C4::Auth;
 use C4::Output;
 use C4::Members;
-use C4::Branch;
+use C4::Branch qw(GetBranches);
 use List::MoreUtils qw/any uniq/;
 use Koha::DateUtils;
 
@@ -62,44 +62,29 @@ if ($input->param('borrowernumber')) {
 
 my $order = 'date_due desc';
 my $limit = 0;
-my ( $issues ) = GetAllIssues($borrowernumber,$order,$limit);
+my $issues = GetAllIssues($borrowernumber,$order,$limit);
 
-my @loop_reading;
-my @barcodes;
-my $today = C4::Dates->new();
-$today = $today->output("iso");
-
-foreach my $issue (@{$issues}){
- 	my %line;
- 	$line{issuestimestamp} = format_date($issue->{'issuestimestamp'});
-	$line{biblionumber}    = $issue->{'biblionumber'};
-	$line{title}           = $issue->{'title'};
-	$line{author}          = $issue->{'author'};
-	$line{classification}  = $issue->{'classification'} || $issue->{'itemcallnumber'};
-	$line{date_due}        = format_sqldatetime($issue->{date_due});
-	$line{returndate}      = format_sqldatetime($issue->{returndate});
-	$line{issuedate}       = format_sqldatetime($issue->{issuedate});
-	$line{issuingbranch}   = GetBranchName($issue->{'branchcode'});
-	$line{renewals}        = $issue->{'renewals'};
-	$line{barcode}         = $issue->{'barcode'};
-	$line{volumeddesc}     = $issue->{'volumeddesc'};
-	push(@loop_reading,\%line);
-    my $return_dt = Koha::DateUtils::dt_from_string($issue->{'returndate'}, 'iso');
-    if ( ( $input->param('op') eq 'export_barcodes' ) and ( $today eq $return_dt->ymd() ) ) {
-        push( @barcodes, $issue->{'barcode'} );
-    }
+my $branches = GetBranches();
+foreach my $issue ( @{$issues} ) {
+    $issue->{issuingbranch} = $branches->{ $issue->{branchcode} }->{branchname};
 }
 
-if ($input->param('op') eq 'export_barcodes') {
-    my $borrowercardnumber = GetMember( borrowernumber => $borrowernumber )->{'cardnumber'} ;
+#   barcode export
+if ( $input->param('op') eq 'export_barcodes' ) {
+    my $today = C4::Dates->new();
+    $today = $today->output('iso');
+    my @barcodes =
+      map { $_->{barcode} } grep { $_->{returndate} =~ m/^$today/o } @{$issues};
+    my $borrowercardnumber =
+      GetMember( borrowernumber => $borrowernumber )->{'cardnumber'};
     my $delimiter = "\n";
-    binmode( STDOUT, ":encoding(UTF-8)");
+    binmode( STDOUT, ":encoding(UTF-8)" );
     print $input->header(
         -type       => 'application/octet-stream',
         -charset    => 'utf-8',
         -attachment => "$today-$borrowercardnumber-checkinexport.txt"
     );
-    my $content = join($delimiter, uniq(@barcodes));
+    my $content = join $delimiter, uniq(@barcodes);
     print $content;
     exit;
 }
@@ -116,6 +101,7 @@ if (! $limit){
 	$limit = 'full';
 }
 
+
 my ($picture, $dberror) = GetPatronImage($data->{'cardnumber'});
 $template->param( picture => 1 ) if $picture;
 
@@ -128,36 +114,31 @@ if (C4::Context->preference('ExtendedPatronAttributes')) {
 }
 
 $template->param(
-						readingrecordview => 1,
-						biblionumber => $data->{'biblionumber'},
-						title => $data->{'title'},
-						initials => $data->{'initials'},
-						surname => $data->{'surname'},
-						othernames => $data->{'othernames'},
-						borrowernumber => $borrowernumber,
-						limit => $limit,
-						firstname => $data->{'firstname'},
-						cardnumber => $data->{'cardnumber'},
-					    categorycode => $data->{'categorycode'},
-					    category_type => $data->{'category_type'},
-					   # category_description => $data->{'description'},
-					    categoryname	=> $data->{'description'},
-					    address => $data->{'address'},
-						address2 => $data->{'address2'},
-					    city => $data->{'city'},
-					    state => $data->{'state'},
-						zipcode => $data->{'zipcode'},
-						country => $data->{'country'},
-						phone => $data->{'phone'},
-						email => $data->{'email'},
-			   			branchcode => $data->{'branchcode'},
-			   			is_child        => ($data->{'category_type'} eq 'C'),
-			   			branchname => GetBranchName($data->{'branchcode'}),
-						showfulllink => (scalar @loop_reading > 50),					
-						loop_reading => \@loop_reading,
-						activeBorrowerRelationship => (C4::Context->preference('borrowerRelationship') ne ''),
+    readingrecordview => 1,
+    title             => $data->{title},
+    initials          => $data->{initials},
+    surname           => $data->{surname},
+    othernames        => $data->{othernames},
+    borrowernumber    => $borrowernumber,
+    firstname         => $data->{firstname},
+    cardnumber        => $data->{cardnumber},
+    categorycode      => $data->{categorycode},
+    category_type     => $data->{category_type},
+    categoryname      => $data->{description},
+    address           => $data->{address},
+    address2          => $data->{address2},
+    city              => $data->{city},
+    state             => $data->{state},
+    zipcode           => $data->{zipcode},
+    country           => $data->{country},
+    phone             => $data->{phone},
+    email             => $data->{email},
+    branchcode        => $data->{branchcode},
+    is_child          => ( $data->{category_type} eq 'C' ),
+    branchname        => $branches->{ $data->{branchcode} }->{branchname},
+    loop_reading      => $issues,
+    activeBorrowerRelationship =>
+      ( C4::Context->preference('borrowerRelationship') ne '' ),
 );
 output_html_with_http_headers $input, $cookie, $template->output;
-
-
 

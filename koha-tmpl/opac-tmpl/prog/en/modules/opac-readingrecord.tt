@@ -26,7 +26,7 @@ $(document).ready(function(){
 <!--CONTENT-->
 <h3><a href="/cgi-bin/koha/opac-user.pl">[% firstname %] [% surname %]'s account</a> &#8674; Checkout history</h3>
 
-[% UNLESS ( count ) %]
+[% IF READING_RECORD.size() == 0 %]
 You have never borrowed anything from this library.
 [% ELSE %]
 <div id="opac-user-readingrec" class="statictabs">
@@ -64,32 +64,67 @@ You have never borrowed anything from this library.
 [% END %]
 </tr>
 
-[% FOREACH READING_RECOR IN READING_RECORD %]
+[% FOREACH issue IN READING_RECORD %]
 
-[% UNLESS ( loop.odd ) %]<tr class="highlight">[% ELSE %]<tr>[% END %]
+[% IF  loop.even  %]<tr class="highlight">[% ELSE %]<tr>[% END %]
 <td>
-[% IF ( OPACAmazonCoverImages ) %][% IF ( READING_RECOR.normalized_isbn ) %]<a href="http://www.amazon.com/gp/reader/[% READING_RECOR.normalized_isbn %]/ref=sib_dp_pt/002-7879865-0184864#reader-link"><img border="0" src="http://images.amazon.com/images/P/[% READING_RECOR.normalized_isbn %].01.THUMBZZZ.jpg" alt="Cover Image" /></a>[% ELSE %]<span class="no-image">No cover image available</span>[% END %][% END %]
+[% IF  OPACAmazonCoverImages %]
+    [% IF  issue.normalized_isbn %]
+        <a href="http://www.amazon.com/gp/reader/[% issue.normalized_isbn %]/ref=sib_dp_pt/002-7879865-0184864#reader-link"><img border="0" src="http://images.amazon.com/images/P/[% issue.normalized_isbn %].01.THUMBZZZ.jpg" alt="Cover Image" /></a>
+    [% ELSE %]
+         <span class="no-image">No cover image available</span>
+    [% END %]
+[% END %]
 
-    [% IF ( GoogleJackets ) %][% IF ( READING_RECOR.normalized_isbn ) %]<div style="block" title="[% READING_RECOR.biblionumber |url %]" class="[% READING_RECOR.normalized_isbn %]" id="gbs-thumbnail[% loop.count %]"></div>[% ELSE %]<span class="no-image">No cover image available</span>[% END %][% END %]
+[% IF GoogleJackets %]
+    [% IF  issue.normalized_isbn %]
+        <div style="block" title="[% issue.biblionumber |url %]" class="[% issue.normalized_isbn %]" id="gbs-thumbnail[% loop.count %]"></div>
+    [% ELSE %]
+       <span class="no-image">No cover image available</span>
+    [% END %]
+[% END %]
 
-    [% IF ( BakerTaylorEnabled ) %][% IF ( READING_RECOR.normalized_isbn ) %]<a href="https://[% BakerTaylorBookstoreURL |html %][% READING_RECOR.normalized_isbn %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL |html %][% READING_RECOR.normalized_isbn %]" /></a>[% ELSE %]<span class="no-image">No cover image available</span>[% END %][% END %]
+[% IF BakerTaylorEnabled %]
+    [% IF issue.normalized_isbn %]
+      <a href="https://[% BakerTaylorBookstoreURL |html %][% issue.normalized_isbn %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL |html %][% issue.normalized_isbn %]" /></a>
+    [% ELSE %]
+       <span class="no-image">No cover image available</span>
+    [% END %]
+[% END %]
 
-	[% IF ( SyndeticsEnabled ) %][% IF ( SyndeticsCoverImages ) %][% IF ( using_https ) %]
-	<img src="https://secure.syndetics.com/index.aspx?isbn=[% READING_RECOR.normalized_isbn %]/SC.GIF&amp;client=[% SyndeticsClientCode %]&amp;type=xw10&amp;upc=[% READING_RECOR.normalized_upc %]&amp;oclc=[% READING_RECOR.normalized_oclc %]" alt="" class="thumbnail" />
-	[% ELSE %]
-	<img src="http://www.syndetics.com/index.aspx?isbn=[% READING_RECOR.normalized_isbn %]/SC.GIF&amp;client=[% SyndeticsClientCode %]&amp;type=xw10&amp;upc=[% READING_RECOR.normalized_upc %]&amp;oclc=[% READING_RECOR.normalized_oclc %]" alt="" class="thumbnail" />[% END %][% END %][% END %]
+[% IF SyndeticsEnabled %]
+    [% IF SyndeticsCoverImages %]
+        [% IF  using_https  %]
+<img src="https://secure.syndetics.com/index.aspx?isbn=[% issue.normalized_isbn %]/SC.GIF&amp;client=[% SyndeticsClientCode %]&amp;type=xw10&amp;upc=[% issue.normalized_upc %]&amp;oclc=[% issue.normalized_oclc %]" alt="" class="thumbnail" />
+       [% ELSE %]
+<img src="http://www.syndetics.com/index.aspx?isbn=[% issue.normalized_isbn %]/SC.GIF&amp;client=[% SyndeticsClientCode %]&amp;type=xw10&amp;upc=[% issue.normalized_upc %]&amp;oclc=[% issue.normalized_oclc %]" alt="" class="thumbnail" />
+       [% END %]
+    [% END %]
+[% END %]
 </td>
-<td>[% IF ( READING_RECOR.BiblioDefaultViewmarc ) %]<a class="title" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=[% READING_RECOR.biblionumber |url %]">[% READING_RECOR.title |html %] [% IF ( READING_RECOR.subtitle ) %][% FOREACH subtitl IN READING_RECOR.subtitle %][% subtitl.subfield %][% END %][% END %]</a>[% ELSE %]
-[% IF ( READING_RECOR.BiblioDefaultViewisbd ) %]<a class="title" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=[% READING_RECOR.biblionumber |url %]">[% READING_RECOR.title |html %] [% IF ( READING_RECOR.subtitle ) %][% FOREACH subtitl IN READING_RECOR.subtitle %][% subtitl.subfield %][% END %][% END %]</a>[% ELSE %]
-<a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% READING_RECOR.biblionumber |url %]">[% READING_RECOR.title |html %] [% IF ( READING_RECOR.subtitle ) %][% FOREACH subtitl IN READING_RECOR.subtitle %][% subtitl.subfield %][% END %][% END %]</a>[% END %][% END %]
+<td>
+[% IF  issue.BiblioDefaultViewmarc %]
+     <a class="title" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=[% issue.biblionumber |url %]">[% issue.title |html %] [% IF  issue.subtitle  %][% FOREACH subtitl IN issue.subtitle %][% subtitl.subfield %][% END %][% END %]</a>
+[% ELSIF issue.BiblioDefaultViewisbd %]
+     <a class="title" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=[% issue.biblionumber |url %]">[% issue.title |html %] [% IF issue.subtitle %][% FOREACH subtitl IN issue.subtitle %][% subtitl.subfield %][% END %][% END %]</a>
+[% ELSE %]
+     <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% issue.biblionumber |url %]">[% issue.title |html %] [% IF issue.subtitle %][% FOREACH subtitl IN issue.subtitle %][% subtitl.subfield %][% END %][% END %]</a>
+[% END %]
                     <span class="item-details">
-                        [% READING_RECOR.author %]
+                        [% issue.author %]
                     </span></td>
-<td>[% UNLESS ( noItemTypeImages ) %][% IF ( READING_RECOR.imageurl ) %]<img src="[% READING_RECOR.imageurl %]" alt="" />[% END %][% END %] [% READING_RECOR.description %]</td>
-<td>[% READING_RECOR.itemcallnumber %]</td>
-<td>[% IF ( READING_RECOR.returndate ) %][% READING_RECOR.returndate | $KohaDates %][% ELSE %]<em>(Checked out)</em>[% END %]</td>
-[% IF ( OPACMySummaryHTML ) %]
-<td>[% READING_RECOR.MySummaryHTML %]</td>
+<td>
+[% UNLESS ( noItemTypeImages ) %][% IF ( issue.imageurl ) %]<img src="[% issue.imageurl %]" alt="" />[% END %][% END %] [% issue.description %]</td>
+<td>[% issue.itemcallnumber %]</td>
+<td>
+[% IF issue.returndate %]
+    [% issue.returndate | $KohaDates %]
+[% ELSE %]
+    <em>(Checked out)</em>
+[% END %]
+</td>
+[% IF OPACMySummaryHTML %]
+    <td>[% issue.MySummaryHTML %]</td>
 [% END %]
 </tr>
 
