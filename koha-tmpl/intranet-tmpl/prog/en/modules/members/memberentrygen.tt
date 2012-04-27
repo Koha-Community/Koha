@@ -1344,25 +1344,25 @@
                 <label for="nodebarred">No </label>
                 <input type="radio" id="nodebarred" name="debarred" value="0" checked="checked"/>
 				[% END %]
-				
-				<br />
-				<label for="datedebarred" class="radio">until:</label> 
-				[% IF opduplicate %]
-				    <input type="text" name="datedebarred" id="datedebarred" class="debarred" value="[% datedebarred %]" onclick="this.value=''" />
-				[% ELSE %]
-				    <input type="text" name="datedebarred" id="datedebarred" class="debarred" value="[% datedebarred %]" />
-				[% END %]
-				<img src="[% themelang %]/lib/calendar/cal.gif" id="debarred_button" alt="Show Calendar" />
-		         <script language="JavaScript" type="text/javascript">
-		            Calendar.setup(
-		            {
-		                inputField : "datedebarred",
-		                ifFormat : "[% DHTMLcalendar_dateformat %]",
-		                button : "debarred_button"
-		            }
-		            );
-		        </script>
-		        <br />
+
+                <span id="debarreduntil"><label for="datedebarred" class="inline">Until:</label>
+                                [% IF opduplicate %]
+                                    <input type="text" name="datedebarred" id="datedebarred" class="debarred" value="[% datedebarred %]" onclick="this.value=''" />
+                                [% ELSE %]
+                                    <input type="text" name="datedebarred" id="datedebarred" class="debarred" value="[% datedebarred %]" />
+                                [% END %]
+                                <img src="[% themelang %]/lib/calendar/cal.gif" id="debarred_button" alt="Show Calendar" />
+                                 <script language="JavaScript" type="text/javascript">
+                                    Calendar.setup(
+                                    {
+                                        inputField : "datedebarred",
+                                        ifFormat : "[% DHTMLcalendar_dateformat %]",
+                                       button : "debarred_button"
+                                    }
+                                    );
+                                </script> <span class="hint">(optional)</span> </span>
+                </li>
+                <li>
 		        <label for="debarredcomment" class="radio">Comment:</label>
 			       [% IF ( opduplicate ) %] 
 			           <textarea id="debarredcomment" name="debarredcomment" cols="55" rows="3" onclick="this.value=''">[% debarredcomment %]</textarea>

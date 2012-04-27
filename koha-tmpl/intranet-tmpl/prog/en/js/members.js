@@ -167,3 +167,19 @@ function Dopopguarantor(link) {
 
 	var newin=window.open(link,'popup','width=600,height=400,resizable=no,toolbar=false,scrollbars=yes,top');
 }
+
+$(document).ready(function(){
+    if($("#yesdebarred").is(":checked")){
+        $("#debarreduntil").show();
+    } else {
+        $("#debarreduntil").hide();
+    }
+    $("#yesdebarred,#nodebarred").change(function(){
+        if($("#yesdebarred").is(":checked")){
+            $("#debarreduntil").show();
+            $("#datedebarred").focus();
+        } else {
+            $("#debarreduntil").hide();
+        }
+    });
+});
