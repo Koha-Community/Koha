@@ -33,6 +33,8 @@ my @trans_perms_files = qw(
     uk-UA/mandatory/permissions_and_user_flags.sql
     ru-RU/mandatory/permissions_and_user_flags.sql
     pl-PL/mandatory/userpermissions.sql
+    nb-NO/1-Obligatorisk/userpermissions.sql
+    es-ES/mandatory/userpermissions.sql
 );
 
 ok(
