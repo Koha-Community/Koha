@@ -5232,6 +5232,13 @@ saved_reports table.)\n";
     SetVersion($DBversion);
 }
 
+$DBversion = "3.09.00.XXX";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('SvcMaxReportRows','10','Maximum number of rows to return via the report web service.',NULL,'Integer');");
+    print "Upgrade to $DBversion done (Added SvcMaxReportRows syspref)\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

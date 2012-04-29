@@ -55,7 +55,7 @@ if ($usecache) {
 
 print $query->header;
 my $offset = 0;
-my $limit  = 10;
+my $limit  = C4::Context->preference("SvcMaxReportRows") || 10;
 my ( $sth, $errors ) = execute_query( $sql, $offset, $limit );
 my $lines     = $sth->fetchall_arrayref;
 my $json_text = to_json($lines);
