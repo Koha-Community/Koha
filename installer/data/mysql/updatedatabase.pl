@@ -5212,9 +5212,9 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.08.00.XXX";
+$DBversion = "3.09.00.001";
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
-    $dbh->do("ALTER TABLE borrower_attribute_types CHANGE category_code category_code VARCHAR( 1 ) NULL DEFAULT NULL");
+    $dbh->do("ALTER TABLE borrower_attribute_types MODIFY category_code VARCHAR( 1 ) NULL DEFAULT NULL");
     print "Upgrade to $DBversion done. (Bug 8002: Update patron attribute types table to allow NULL category_code)\n";
     SetVersion($DBversion);
 }
