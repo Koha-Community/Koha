@@ -141,8 +141,8 @@ if ($op eq 'add_form') {
             $checked,
             $input->param( 'rank' ),
             $input->param( 'syntax' ),
-            $input->param( 'timeout' ),
-            $input->param( 'encoding' ) );
+            $input->param( 'encoding' ),
+            $input->param( 'timeout' ) );
 	}
 	$sth->finish;
 													# END $OP eq ADD_VALIDATE
