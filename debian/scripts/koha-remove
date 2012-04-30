@@ -20,16 +20,16 @@
 set -e
 
 args=$(getopt -l keep-mysql -o k -n $0 -- "$@")
-set -- $args
+eval set -- $args
 while [ ! -z "$1" ]
 do
     case "$1" in
-         -k|--keep-mysql) keepmysql=1; exit;;
+         -k|--keep-mysql) keepmysql=1; shift;;
+         --) shift; break;;
           *) break;;
     esac
     shift
 done
-
 
 for name in "$@"
 do
