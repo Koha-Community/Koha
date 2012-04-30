@@ -1010,22 +1010,25 @@ C<$opac> If set to a true value, displays OPAC descriptions rather than normal o
 
 sub GetAuthorisedValues {
     my ($category,$selected,$opac) = @_;
-	my @results;
+    my @results;
     my $dbh      = C4::Context->dbh;
     my $query    = "SELECT * FROM authorised_values";
     $query .= " WHERE category = '" . $category . "'" if $category;
     $query .= " ORDER BY category, lib, lib_opac";
     my $sth = $dbh->prepare($query);
     $sth->execute;
-	while (my $data=$sth->fetchrow_hashref) {
-	    if ($selected && $selected eq $data->{'authorised_value'} ) {
-		    $data->{'selected'} = 1;
-	    }
-	    if ($opac && $data->{'lib_opac'}) {
-		$data->{'lib'} = $data->{'lib_opac'};
-	    }
-	    push @results, $data;
-	}
+    while (my $data=$sth->fetchrow_hashref) {
+        if ( (defined($selected)) && ($selected eq $data->{'authorised_value'}) ) {
+            $data->{'selected'} = 1;
+        }
+        else {
+            $data->{'selected'} = 0;
+        }
+        if ($opac && $data->{'lib_opac'}) {
+            $data->{'lib'} = $data->{'lib_opac'};
+        }
+        push @results, $data;
+    }
     #my $data = $sth->fetchall_arrayref({});
     return \@results; #$data;
 }
