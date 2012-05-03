@@ -701,8 +701,9 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
     <table id="serialcollectiont">
 	<thead>
 	    <tr>
-		<th id="serial_library">Library</th>
-		<th id="seral_collection">Serial collection</th>
+            <th id="serial_library">Library</th>
+            <th id="serial_collection">Serial collection</th>
+            <th id="serial_itemcallnumber">Item callnumber</th>
 	    </tr>
 	</thead>
 	<tbody>
@@ -710,6 +711,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 	    <tr>
 		<td>[% serialcollection.branch %]</td>
 		<td>[% serialcollection.text %]</td>
+        <td>[% serialcollection.itemcallnumber %]</td>
 	    </tr>
 	[% END %]
 	</tbody>

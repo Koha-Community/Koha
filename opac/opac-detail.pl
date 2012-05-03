@@ -722,6 +722,9 @@ if (C4::Context->preference("OPACFRBRizeEditions")==1) {
 
 # Serial Collection
 my @sc_fields = $record->field(955);
+my @lc_fields = $marcflavour eq 'UNIMARC'
+    ? $record->field(930)
+    : $record->field(852);
 my @serialcollections = ();
 
 foreach my $sc_field (@sc_fields) {
@@ -729,9 +732,15 @@ foreach my $sc_field (@sc_fields) {
 
     $row_data{text}    = $sc_field->subfield('r');
     $row_data{branch}  = $sc_field->subfield('9');
+    foreach my $lc_field (@lc_fields) {
+        $row_data{itemcallnumber} = $marcflavour eq 'UNIMARC'
+            ? $lc_field->subfield('a') # 930$a
+            : $lc_field->subfield('h') # 852$h
+            if ($sc_field->subfield('5') eq $lc_field->subfield('5'));
+    }
 
     if ($row_data{text} && $row_data{branch}) { 
-	push (@serialcollections, \%row_data);
+        push (@serialcollections, \%row_data);
     }
 }
 
