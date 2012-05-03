@@ -4641,7 +4641,7 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.06.XX.XXX";
+$DBversion = "3.06.04.003";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('UseICU', '1', 'Tell Koha if ICU indexing is in use for Zebra or not.','1','YesNo')");
     print "Upgrade to $DBversion done (Add syspref to tell Koha if ICU indexing is in use for Zebra or not.)\n";
