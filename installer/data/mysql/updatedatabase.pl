@@ -4607,7 +4607,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.06.XX.XXX";
+$DBversion = "3.06.04.001";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do(
     "INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('LinkerModule','Default','Chooses which linker module to use (see documentation).','Default|FirstMatchLastMatch','Choice');"
