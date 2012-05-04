@@ -66,6 +66,13 @@ sub new {
     $self->{process}         = "$Bin/tmpl_process3.pl " . ($verbose ? '' : '-q');
     $self->{path_po}         = "$Bin/po";
     $self->{po}              = { '' => $default_pref_po_header };
+    $self->{domain}          = 'messages';
+    $self->{cp}              = `which cp`;
+    $self->{msgmerge}        = `which msgmerge`;
+    $self->{xgettext}        = `which xgettext`;
+    chomp $self->{cp};
+    chomp $self->{msgmerge};
+    chomp $self->{xgettext};
 
     # Get all .pref file names
     opendir my $fh, $self->{path_pref_en};
@@ -405,6 +412,59 @@ sub create_tmpl {
     }
 }
 
+sub create_messages {
+    my $self = shift;
+
+    system
+        "$self->{cp} $self->{domain}.pot " .
+        "$self->{path_po}/$self->{lang}-$self->{domain}.po";
+}
+
+sub update_messages {
+    my $self = shift;
+
+    system
+        "$self->{msgmerge} -U " .
+        "$self->{path_po}/$self->{lang}-$self->{domain}.po " .
+        "$self->{domain}.pot";
+}
+
+sub extract_messages {
+    my $self = shift;
+
+    my $intranetdir = $self->{context}->config('intranetdir');
+    my @files_to_scan;
+    my @directories_to_scan = ('.');
+    my @blacklist = qw(blib koha-tmpl skel tmp t);
+    while (@directories_to_scan) {
+        my $dir = shift @directories_to_scan;
+        opendir DIR, "$intranetdir/$dir" or die "Unable to open $dir: $!";
+        foreach my $entry (readdir DIR) {
+            next if $entry =~ /^\./;
+            my $relentry = "$dir/$entry";
+            $relentry =~ s|^\./||;
+            if (-d "$intranetdir/$relentry" and not grep /^$relentry$/, @blacklist) {
+                push @directories_to_scan, "$relentry";
+            } elsif (-f "$intranetdir/$relentry" and $relentry =~ /(pl|pm)$/) {
+                push @files_to_scan, "$relentry";
+            }
+        }
+    }
+
+    my $xgettext_cmd = "$self->{xgettext} -L Perl --from-code=UTF-8 " .
+        "-kmaketext -o $Bin/$self->{domain}.pot -D $intranetdir";
+    $xgettext_cmd .= " $_" foreach (@files_to_scan);
+
+    if (system($xgettext_cmd) != 0) {
+        die "system call failed: $xgettext_cmd";
+    }
+}
+
+sub remove_pot {
+    my $self = shift;
+
+    unlink "$Bin/$self->{domain}.pot";
+}
 
 sub install {
     my ($self, $files) = @_;
@@ -426,11 +486,14 @@ sub get_all_langs {
 sub update {
     my ($self, $files) = @_;
     my @langs = $self->{lang} ? ($self->{lang}) : $self->get_all_langs();
+    $self->extract_messages();
     for my $lang ( @langs ) {
         $self->set_lang( $lang );
         $self->update_tmpl($files) unless $self->{pref_only};
         $self->update_prefs();
+        $self->update_messages();
     }
+    $self->remove_pot();
 }
 
 
@@ -439,6 +502,9 @@ sub create {
     return unless $self->{lang};
     $self->create_tmpl($files) unless $self->{pref_only};
     $self->create_prefs();
+    $self->extract_messages();
+    $self->create_messages();
+    $self->remove_pot();
 }
 
 
