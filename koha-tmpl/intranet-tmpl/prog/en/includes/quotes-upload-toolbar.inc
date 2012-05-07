@@ -33,10 +33,9 @@
 
 //]]>
 </script>
-<div id="toolbar">
+<div id="toolbar" style="visibility: hidden; position: absolute">
     <ul class="toolbar">
         <li id="save_quotes"><a id="save" href="#">Save quotes</a></li>
         <li id="delete_quote"><a id="delete" href="#">Delete quote(s)</a></li>
-        <span class="hint" style="">Click Source or Text field to edit contents. Press &lt;Enter&gt; to save changes.</span>
     </ul>
 </div>

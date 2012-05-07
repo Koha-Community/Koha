@@ -3,6 +3,7 @@
     [% INCLUDE 'doc-head-close.inc' %]
     <link rel="stylesheet" type="text/css" href="/intranet-tmpl/prog/en/css/uploader.css" />
     <link rel="stylesheet" type="text/css" href="/intranet-tmpl/prog/en/css/datatables.css" />
+    <link rel="stylesheet" type="text/css" href="/intranet-tmpl/prog/en/css/quotes.css" />
     <script type="text/javascript" src="/intranet-tmpl/prog/en/lib/jquery/plugins/jquery.dataTables.min.js"></script>
     [% INCLUDE 'datatables-strings.inc' %]
     </script>
@@ -134,6 +135,14 @@
         for(var i=0; i<aaData.length; i++) {
             aaData[i].unshift(i+1); // Add a column w/quote number
         }
+
+
+        /* Transition from the quote file uploader to the quote file editor interface */
+        $('#toolbar').css("visibility","visible");
+        $('#toolbar').css("position","");
+        $('#file_editor_inst').css("visibility", "visible");
+        $('#file_editor_inst').css("position", "");
+        $('#file_uploader_inst').css("visibility", "hidden");
         $('#save_quotes').css("visibility","visible");
         $('#file_uploader').css("visibility","hidden");
         $('#file_uploader').css("position","absolute");
@@ -141,6 +150,9 @@
         $('#quotes_editor').css("visibility","visible");
         oSaveButton.on("click", yuiGetData);
         oDeleteButton.on("click", fnClickDeleteRow);
+
+
+
         oTable = $('#quotes_editor').dataTable( {
             "bAutoWidth"        : false,
             "bPaginate"         : true,
@@ -169,7 +181,7 @@
                 var quoteNum = $('td', nRow)[0].innerHTML;
                 $(nRow).attr("id", quoteNum); /* set row ids to quote number */
                 $('td:eq(0)', nRow).click(function() {$(this.parentNode).toggleClass('selected',this.clicked);}); /* add row selectors */
-                $('td:eq(0)', nRow).attr("title", "Click ID to select/deselect quote");
+                $('td:eq(0)', nRow).attr("title", _("Click ID to select/deselect quote"));
                 /* apply no_edit id to noEditFields */
                 noEditFields = [0]; /* number */
                 for (i=0; i<noEditFields.length; i++) {
@@ -225,12 +237,12 @@
         var fileSizeInK = Math.round(evt.target.files[0].size/1024);
 
         if (!fileType.match(/comma-separated-values|csv|excel/i)) {
-            alert('Incorrect filetype: '+fileType+'. Uploads limited to csv.');
+            alert(_('Uploads limited to csv. Incorrect filetype: ')+fileType);
             parent.location='quotes-upload.pl';
             return;
         }
         if (fileSizeInK > 512) {
-            if (!confirm(evt.target.files[0].name+' is '+fileSizeInK+' K in size. Do you really want to upload this file?')) {
+            if (!confirm(evt.target.files[0].name+' '+fileSizeInK+_(' KB Do you really want to upload this file?'))) {
                 parent.location='quotes-upload.pl';
                 return;
             }
@@ -256,10 +268,10 @@
             success     : function(){
                             var response = JSON.parse(jqXHR.responseText);
                             if (response.success) {
-                                $("#server_response").text(response.records+' quotes saved.');
+                                $("#server_response").text(response.records+_(' quotes saved.'));
                             }
                             else {
-                                $("#server_response").text('An error has occurred. '+response.records+' quotes saved. Please ask your administrator to check the server log for more details.');
+                                $("#server_response").text(+response.records+_(' quotes saved, but an error has occurred. Please ask your administrator to check the server log for more details.'));
                             }
                             $("#server_response").fadeIn(200);
                           },
@@ -271,9 +283,9 @@
               return this.id;
         }).get().join(', ');
         if (!idsToDelete) {
-            alert('Please select a quote(s) by clicking the quote id(s) you desire to delete.');
+            alert(_('Please select a quote(s) by clicking the quote id(s) you desire to delete.'));
         }
-        else if (confirm('Are you sure you wish to delete quote(s) '+idsToDelete+'?')) {
+        else if (confirm(_('Are you sure you wish to delete quote(s) ')+idsToDelete+'?')) {
             oTable.$('.selected').each(function(){
                 oTable.fnDeleteRow(this);
             });
@@ -300,16 +312,35 @@
             <div class="yui-b">
                 [% INCLUDE 'quotes-upload-toolbar.inc' %]
                 <h2>Quote uploader</h2>
-                <fieldset id="file_uploader" class="rows" style="visibility:visible;">
+                <div id="instructions">
+                <fieldset id="file_uploader_help" class="rows">
+                    <legend>Instructions</legend>
+                    <div id="file_uploader_inst">
+                        <ul>
+                        <li>The quote uploader accepts standard csv files with two columns: "source","text"</li>
+                        <li>Click the "Choose File" button and select the csv file to be uploaded.</li>
+                        <li>The file will be imported into an editable table for review prior to saving.</li>
+                        </ul>
+                    </div>
+                    <div id="file_editor_inst">
+                        <ul>
+                        <li>Click on any field to edit the contents; Press the &lt;Enter&gt; key to save edit.</li>
+                        <li>Click on one or more quote numbers to select entire quotes for deletion; Click the 'Delete Quote(s)' button to delete selected quotes.</li>
+                        <li>Click the 'Save Quotes' button in the toolbar to save the entire batch of quotes.</li>
+                        </ul>
+                    </div>
+                </fieldset>
+                </div>
+                <fieldset id="file_uploader" class="rows">
                     <legend>Upload quotes</legend>
-                    <div id="file_upload" style="margin-left: 10px;">
+                    <div id="file_upload">
                         <input type="file" name="file" />
                         <button id="cancel_upload" style="visibility:hidden;" onclick="fnAbortRead();">Cancel Upload</button>
                         <div id="progress_bar"><div class="percent">0%</div></div>
                     </div>
                 </fieldset>
                 <div id="server_response" onclick='fnResetUpload()'>Server Response</div>
-                <table id="quotes_editor" style="float: left; width: 100%; visibility:hidden;">
+                <table id="quotes_editor">
                 <thead>
                     <tr>
                         <th>Source</th>
@@ -326,7 +357,7 @@
                     </tr>
                 </tbody>
                 </table>
-                <fieldset id="footer" class="action" style="visibility:hidden; height:25px">
+                <fieldset id="footer" class="action">
                 </fieldset>
             </div>
         </div>
