@@ -2,7 +2,7 @@
 INSERT INTO `quotes` VALUES
 (1,'George Washington','To be prepared for war is one of the most effectual means of preserving peace.','0000-00-00 00:00:00'),
 (2,'Thomas Jefferson','When angry, count ten, before you speak; if very angry, an hundred.','0000-00-00 00:00:00'),
-(3,'Abraham Lincoln','Four score and seven years ago our fathers brought forth on this continent, a new nation, conceived in Liberty, and dedicated to the proposition that all men are created equal.','2012-04-12 20:30:59'),
+(3,'Abraham Lincoln','Four score and seven years ago our fathers brought forth on this continent, a new nation, conceived in Liberty, and dedicated to the proposition that all men are created equal.','0000-00-00 00:00:00'),
 (4,'Abraham Lincoln','I have always found that mercy bears richer fruits than strict justice.','0000-00-00 00:00:00'),
 (5,'Andrew Johnson','I feel incompetent to perform duties...which have been so unexpectedly thrown upon me.','0000-00-00 00:00:00'),
 (6,'Rutherford B. Hayes','He serves his party best who serves his country best.','0000-00-00 00:00:00'),
@@ -23,7 +23,7 @@ INSERT INTO `quotes` VALUES
 (23,'Lyndon B. Johnson','The Great Society is a place where every child can find knowledge to enrich his mind and to enlarge his talents. It is a place where the city of man serves not only the needs of the body and the demands of commerce but the desire for beauty and the hunger for community. It is a place where men are more concerned with the quality of their goals than the quantity of their goods.','0000-00-00 00:00:00'),
 (24,'Richard Nixon','People have got to know whether or not their president is a crook. Well, I\'m not a crook.','0000-00-00 00:00:00'),
 (25,'Richard Nixon','When the President does it, that means that it is not illegal.','0000-00-00 00:00:00'),
-(26,'Gerald R. Ford','Our Long national nightmare is over.','2012-04-18 19:42:14'),
+(26,'Gerald R. Ford','Our Long national nightmare is over.','0000-00-00 00:00:00'),
 (27,'Gerald R. Ford','Our constitution works. Our great republic is a government of laws, not of men.','0000-00-00 00:00:00'),
 (28,'Jimmy Carter','A strong nation, like a strong person, can afford to be gentle, firm, thoughtful, and restrained. It can afford to extend a helping hand to others. It\'s a weak nation, like a weak person, that must behave with bluster and boasting and rashness and other signs of insecurity.','0000-00-00 00:00:00'),
 (30,'Ronald Reagan','It is not my intention to do away with government. It is rather to make it work -work with us, not over us; stand by our side, not ride on our back. Government can and must provide opportunity, not smother it; foster productivity, not stifle it. This Administration\'s objective will be a healthy, vigorous, growing economy.','0000-00-00 00:00:00'),
