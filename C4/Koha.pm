@@ -1347,7 +1347,7 @@ sub GetDailyQuote {
         # Fall through... we also return a random quote as a catch-all if all else fails
     }
     else {
-        $query = 'SELECT * FROM quotes WHERE timestamp LIKE CONCAT(CURRENT_DATE,\'%\') ORDER BY timestamp LIMIT 0,1';
+        $query = 'SELECT * FROM quotes WHERE timestamp LIKE CONCAT(CURRENT_DATE,\'%\') ORDER BY timestamp DESC LIMIT 0,1';
         $sth = $dbh->prepare($query);
         $sth->execute();
         $quote = $sth->fetchrow_hashref();
