@@ -44,36 +44,28 @@ YAHOO.util.Event.onContentReady("header_search", function() {
 });
  //]]>
  </script>  [% END %][% END %]
+
 <div id="header_search">
-	<div id="budgets_search" class="residentsearch">
-    <p class="tip">Search budgets:</p>
+    <div id="budgets_search" class="residentsearch">
+        <p class="tip">Search funds:</p>
+        <form action="/cgi-bin/koha/admin/aqbudgets.pl" method="post">
+            <label for="filter_budgetname">Fund code: </label><input type="text" name="filter_budgetname" id="filter_budgetname" size="20" value="[% filter_budgetname %]" />
+            <label for="filter_budgetbranch">Library: </label>
+            <select name="filter_budgetbranch" id="filter_budgetbranch" style="width:10em;">
+                <option value=""></option>
+                    [% FOREACH branchloo IN branchloop %]
+                        [% IF ( branchloo.selected ) %]
+                        <option value="[% branchloo.value %]" selected="selected">[% branchloo.branchname %]</option>
+                        [% ELSE %]
+                        <option value="[% branchloo.value %]" >[% branchloo.branchname %]</option>
+                        [% END %]
+                    [% END %]
+            </select>
+          <input type="hidden"  name="budget_period_id" value="[% budget_period_id %]" />
+          <input type="submit" class="submit" name="filter" value="Submit" />
+        </form>
+    </div>
 
-	<form action="/cgi-bin/koha/admin/aqbudgets.pl" method="post">
-
-
-
-      <label for="filter_budgetname">Name: </label><input type="text" name="filter_budgetname" id="filter_budgetname" size="20" value="[% filter_budgetname %]" />
-
-
-      <label for="filter_budgetbranch">Library: </label>
-
-       <select name="filter_budgetbranch" id="filter_budgetbranch" style="width:10em;">
-
-        <option value=""></option>
-            [% FOREACH branchloo IN branchloop %]
-                [% IF ( branchloo.selected ) %]
-                <option value="[% branchloo.value %]" selected="selected">[% branchloo.branchname %]</option>
-                [% ELSE %]
-                <option value="[% branchloo.value %]" >[% branchloo.branchname %]</option>
-                [% END %]
-            [% END %]     
-       </select>         
-
-      <input type="hidden"  name="budget_period_id" value="[% budget_period_id %]" /> 
-      <input type="submit" class="submit" name="filter" value="Submit" />
-</form>
-
-	</div>
 	[% IF ( CAN_user_circulate ) %]
 	<div id="circ_search" class="residentsearch" style="display:none;">
 	<p class="tip">Enter patron card number or partial name:</p>
@@ -107,7 +99,7 @@ YAHOO.util.Event.onContentReady("header_search", function() {
 		</form>
 	</div>[% END %]
 			<ul>
-            <li><a href="/cgi-bin/koha/admin/aqbudgets.pl#budgets_search">Search budgets</a></li>
+            <li><a href="/cgi-bin/koha/admin/aqbudgets.pl#budgets_search">Search funds</a></li>
             [% IF ( CAN_user_circulate ) %]<li><a href="/cgi-bin/koha/circ/circulation.pl#circ_search">Check out</a></li>[% END %]
             [% IF ( CAN_user_catalogue ) %]<li><a href="/cgi-bin/koha/catalogue/search.pl#catalog_search">Search the catalog</a></li>[% END %]
 			</ul>	
