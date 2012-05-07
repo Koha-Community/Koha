@@ -66,8 +66,8 @@
 			<tr>
 				<th>Basket</th>
 				<th>Basket group</th>
-                <th>Invoice Number</th>
-                <th>Order Number</th>
+                <th>Invoice number</th>
+                <th>Order number</th>
 				<th>Summary</th>
 				<th>Vendor</th>
 				<th>Placed on</th>
@@ -79,7 +79,7 @@
 			[% FOREACH suggestions_loo IN suggestions_loop %]
 				<tr>
                     <td>[% suggestions_loo.basketname %] (<a href="basket.pl?basketno=[% suggestions_loo.basketno %]">[% suggestions_loo.basketno %]</a>)</td>
-			<td>[% suggestions_loo.groupname %] (<a href="basketgroup.pl?booksellerid=[% suggestions_loo.id %]">[% suggestions_loo.basketgroupid %]</a>)</td>
+                    <td>[% suggestions_loo.groupname %] (<a href="basketgroup.pl?booksellerid=[% suggestions_loo.id %]">[% suggestions_loo.basketgroupid %]</a>)</td>
 					<td>[% IF ( suggestions_loo.invoicenumber ) %]
 					        <a href="/cgi-bin/koha/acqui/parcel.pl?invoice=[% suggestions_loo.invoicenumber %]&amp;booksellerid=[% suggestions_loo.id %]&amp;datereceived=[% suggestions_loo.datereceived %]">[% suggestions_loo.invoicenumber %]</a>
 					    [% ELSE %]
