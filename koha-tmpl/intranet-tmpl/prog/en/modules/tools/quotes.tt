@@ -2,6 +2,7 @@
     <title>Koha &rsaquo; Tools &rsaquo; Quote editor</title>
     [% INCLUDE 'doc-head-close.inc' %]
     <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
+    <link rel="stylesheet" type="text/css" href="[% themelang %]/css/quotes.css" />
     <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.min.js"></script>
     <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/dataTables.fnReloadAjax.js"></script>
     [% INCLUDE 'datatables-strings.inc' %]
@@ -39,7 +40,7 @@
                         var quoteID = $('td', nRow)[0].innerHTML;
                         $(nRow).attr("id", quoteID); /* set row ids to quote id */
                         $('td:eq(0)', nRow).click(function() {$(this.parentNode).toggleClass('selected',this.clicked);}); /* add row selectors */
-                        $('td:eq(0)', nRow).attr("title", "Click ID to select/deselect quote");
+                        $('td:eq(0)', nRow).attr("title", _("Click ID to select/deselect quote"));
                         if (isNaN(quoteID)) {
                             noEditFields = [0,1,2,3]; /* all fields when adding a quote */
                         }
@@ -101,11 +102,11 @@
                     });
                 }
                 else {
-                    alert('Please supply both the text and source of the quote before saving.');
+                    alert(_('Please supply both the text and source of the quote before saving.'));
                 }
             }
             else if (e.keyCode == 27) {
-                if (confirm('Are you sure you want to cancel adding this quote?')) {
+                if (confirm(_('Are you sure you want to cancel adding this quote?'))) {
                     oTable.fnDeleteRow(node);
                 }
                 else {
@@ -134,9 +135,9 @@
                   return this.id;
             }).get().join(', ');
             if (!idsToDelete) {
-                alert('Please select a quote(s) by clicking the quote id(s) you desire to delete.');
+                alert(_('Please select a quote(s) by clicking the quote id(s) you desire to delete.'));
             }
-            else if (confirm('Are you sure you wish to delete quote(s) '+idsToDelete+'?')) {
+            else if (confirm(_('Are you sure you wish to delete quote(s) ')+idsToDelete+'?')) {
                 oTable.$('.selected').each(function(){
                         var quoteID = $(this).attr('id');
                             $.ajax({
@@ -173,10 +174,23 @@
             <div class="yui-b">
                 [% INCLUDE 'quotes-toolbar.inc' %]
                 <h2>Quote editor</h2>
-                <table id="quotes_editor" style="float: left; width: 100%;">
+                <div id="instructions">
+                <fieldset id="quote_editor_help" class="rows">
+                    <legend>Instructions</legend>
+                    <div id="quote_editor_inst">
+                        <ul>
+                        <li>Click on the 'Add Quote' button to add a single quote; Press the &lt;Enter&gt; key to save the quote. <b>Note:</b> Both the 'source' and 'text' fields must have content in order for the quote to be saved.</li>
+                        <li>Click on any field to edit the contents; Press the &lt;Enter&gt; key to save edit.</li>
+                        <li>Click on one or more quote numbers to select entire quotes for deletion; Click the 'Delete Quote(s)' button to delete selected quotes.</li>
+                        <li>Click the 'Import Quotes' button in the toolbar to import a CSV file of quotes.</li>
+                        </ul>
+                    </div>
+                </fieldset>
+                </div>
+                <table id="quotes_editor">
                 <thead>
                     <tr>
-                        <th><span style="cursor: help" onclick="event.stopPropagation();alert('Click on the quote\'s id to select or deselect the quote. Multiple quotes may be selected.');">ID</span></th>
+                        <th><span style="cursor: help" onclick="event.stopPropagation();alert(_('Click on the quote\'s id to select or deselect the quote. Multiple quotes may be selected.'));">ID</span></th>
                         <th>Source</th>
                         <th>Text</th>
                         <th>Last Displayed</th>
@@ -194,7 +208,7 @@
                     </tr>
                 </tbody>
                 </table>
-                <fieldset id="footer" class="action" style="height:25px;">
+                <fieldset id="footer" class="action">
                 </fieldset>
             </div>
         </div>

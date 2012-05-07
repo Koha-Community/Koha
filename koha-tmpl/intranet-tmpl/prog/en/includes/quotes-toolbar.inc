@@ -43,6 +43,5 @@
         <li id="add_quote"><a id="add" href="#">Add quote</a></li>
         <li id="delete_quote"><a id="delete" href="#">Delete quote(s)</a></li>
         <li id="import_quotes"><a id="import" href="#">Import quotes</a></li>
-        <span class="hint" style="">Click Source or Text field to edit contents. Press &lt;Enter&gt; to save changes.</span>
     </ul>
 </div>
