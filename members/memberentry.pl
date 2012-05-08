@@ -354,7 +354,7 @@ if ((!$nok) and $nodouble and ($op eq 'insert' or $op eq 'save')){
                 };
                 if ( $@ ) {
                     $template->param(error_alert => $@);
-                } elsif ( defined $err->{error} and $err->{error} eq "no_email" ) {
+                } elsif ( ref($err) eq "HASH" && defined $err->{error} and $err->{error} eq "no_email" ) {
                     $template->{VARS}->{'error_alert'} = "no_email";
                 } else {
                     $template->{VARS}->{'info_alert'} = 1;
