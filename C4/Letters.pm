@@ -920,9 +920,9 @@ sub _send_message_by_email {
     my $message = shift or return;
     my ($username, $password, $method) = @_;
 
-    my $to_address = $message->{to_address};
+    my $member = C4::Members::GetMember( 'borrowernumber' => $message->{'borrowernumber'} );
+    my $to_address = $message->{'to_address'};
     unless ($to_address) {
-        my $member = C4::Members::GetMember( 'borrowernumber' => $message->{'borrowernumber'} );
         unless ($member) {
             warn "FAIL: No 'to_address' and INVALID borrowernumber ($message->{borrowernumber})";
             _set_message_status( { message_id => $message->{'message_id'},
@@ -947,7 +947,7 @@ sub _send_message_by_email {
     my $is_html = $content_type =~ m/html/io;
     my %sendmail_params = (
         To   => $to_address,
-        From => $message->{'from_address'} || C4::Context->preference('KohaAdminEmailAddress'),
+        From => $message->{'from_address'} || GetBranchDetail( $member->{'branchcode'} )->{'branchemail'} || C4::Context->preference('KohaAdminEmailAddress'),
         Subject => $subject,
         charset => 'utf8',
         Message => $is_html ? _wrap_html($content, $subject) : $content,
