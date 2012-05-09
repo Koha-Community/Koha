@@ -83,7 +83,7 @@ $.tablesorter.addParser({
 		
         [% IF ( BORROWER_INF.warndeparture ) %]
         <div class="dialog alert" id="warndeparture">
-                <strong>Please note:</strong><span> Your card will expire on <span id="warndeparture_date">[% BORROWER_INF.warndeparture %]</span>. Please contact the library if you wish to renew your subscription.</span>
+                <strong>Please note:</strong><span> Your card will expire on <span id="warndeparture_date">[% BORROWER_INF.warndeparture %]</span>. Please contact the library for more information.</span>
                 [% IF ( BORROWER_INF.returnbeforeexpiry ) %]<span id="warndeparture_returnbeforeexpiry"> Also note that you must return all checked out items before your card expires.</span>[% END %]
         </div>
         [% END %]
