@@ -21,14 +21,14 @@ use strict;
 use warnings;
 
 BEGIN {
-
     # find Koha's Perl modules
     # test carefully before changing this
     use FindBin;
     eval { require "$FindBin::Bin/../kohalib.pl" };
 }
 
-use CGI; # NOT a CGI script, this is just to keep C4::Templates::gettemplate happy
+use
+  CGI; # NOT a CGI script, this is just to keep C4::Templates::gettemplate happy
 use C4::Context;
 use C4::Dates;
 use C4::Debug;
@@ -42,41 +42,88 @@ sub usage {
 Usage: $0 OUTPUT_DIRECTORY
   Will print all waiting print notices to
   OUTPUT_DIRECTORY/notices-CURRENT_DATE.html .
+
+  -s --split  Split messages into separate file by borrower home library to OUTPUT_DIRECTORY/notices-CURRENT_DATE-BRANCHCODE.html
 USAGE
     exit $_[0];
 }
 
-my ( $stylesheet, $help );
+my ( $stylesheet, $help, $split );
 
 GetOptions(
-    'h|help' => \$help,
-) || usage( 1 );
+    'h|help'  => \$help,
+    's|split' => \$split,
+) || usage(1);
 
-usage( 0 ) if ( $help );
+usage(0) if ($help);
 
 my $output_directory = $ARGV[0];
 
 if ( !$output_directory || !-d $output_directory ) {
-    print STDERR "Error: You must specify a valid directory to dump the print notices in.\n";
-    usage( 1 );
+    print STDERR
+"Error: You must specify a valid directory to dump the print notices in.\n";
+    usage(1);
 }
 
-my $today = C4::Dates->new();
-my @messages = @{ GetPrintMessages() };
-exit unless( @messages );
+my $today        = C4::Dates->new();
+my @all_messages = @{ GetPrintMessages() };
+exit unless (@all_messages);
 
-open OUTPUT, '>', File::Spec->catdir( $output_directory, "holdnotices-" . $today->output( 'iso' ) . ".html" );
+if ($split) {
+    my %messages_by_branch;
+    foreach my $message (@all_messages) {
+        push( @{ $messages_by_branch{ $message->{'branchcode'} } }, $message );
+    }
 
-my $template = C4::Templates::gettemplate( 'batch/print-notices.tmpl', 'intranet', new CGI );
+    foreach my $branchcode ( keys %messages_by_branch ) {
+        my @messages = @{ $messages_by_branch{$branchcode} };
 
-$template->param(
-    stylesheet => C4::Context->preference("NoticeCSS"),
-    today => $today->output(),
-    messages => \@messages,
-);
+        open $OUTPUT, '>',
+          File::Spec->catdir( $output_directory,
+            "holdnotices-" . $today->output('iso') . "-$branchcode.html" );
 
-print OUTPUT $template->output;
+        my $template =
+          C4::Templates::gettemplate( 'batch/print-notices.tmpl', 'intranet',
+            new CGI );
 
-foreach my $message ( @messages ) {
-    C4::Letters::_set_message_status( { message_id => $message->{'message_id'}, status => 'sent' } );
+        $template->param(
+            stylesheet => C4::Context->preference("NoticeCSS"),
+            today      => $today->output(),
+            messages   => \@messages,
+        );
+
+        print $OUTPUT $template->output;
+
+        foreach my $message (@messages) {
+            C4::Letters::_set_message_status(
+                { message_id => $message->{'message_id'}, status => 'sent' } );
+        }
+
+        close $OUTPUT;
+    }
+}
+else {
+    open $OUTPUT, '>',
+      File::Spec->catdir( $output_directory,
+        "holdnotices-" . $today->output('iso') . ".html" );
+
+    my $template =
+      C4::Templates::gettemplate( 'batch/print-notices.tmpl', 'intranet',
+        new CGI );
+
+    $template->param(
+        stylesheet => C4::Context->preference("NoticeCSS"),
+        today      => $today->output(),
+        messages   => \@all_messages,
+    );
+
+    print $OUTPUT $template->output;
+
+    foreach my $message (@all_messages) {
+        C4::Letters::_set_message_status(
+            { message_id => $message->{'message_id'}, status => 'sent' } );
+    }
+
+    close $OUTPUT;
+
 }

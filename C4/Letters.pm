@@ -779,7 +779,8 @@ sub GetPrintMessages {
     my $params = shift || {};
     
     return _get_unsent_messages( { message_transport_type => 'print',
-                                   borrowernumber         => $params->{'borrowernumber'}, } );
+                                   borrowernumber         => $params->{'borrowernumber'},
+                                 } );
 }
 
 =head2 GetQueuedMessages ([$hashref])
@@ -874,8 +875,9 @@ sub _get_unsent_messages (;$) {
 
     my $dbh = C4::Context->dbh();
     my $statement = << 'ENDSQL';
-SELECT message_id, borrowernumber, subject, content, message_transport_type, status, time_queued, from_address, to_address, content_type
-  FROM message_queue
+SELECT mq.message_id, mq.borrowernumber, mq.subject, mq.content, mq.message_transport_type, mq.status, mq.time_queued, mq.from_address, mq.to_address, mq.content_type, b.branchcode
+  FROM message_queue mq
+  LEFT JOIN borrowers b ON b.borrowernumber = mq.borrowernumber
  WHERE status = ?
 ENDSQL
 
@@ -894,6 +896,7 @@ ENDSQL
             push @query_params, $params->{'limit'};
         }
     }
+
     $debug and warn "_get_unsent_messages SQL: $statement";
     $debug and warn "_get_unsent_messages params: " . join(',',@query_params);
     my $sth = $dbh->prepare( $statement );
