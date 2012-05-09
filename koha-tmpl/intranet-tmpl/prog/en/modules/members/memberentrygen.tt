@@ -1384,8 +1384,8 @@
     <legend>Additional attributes and identifiers</legend>
     [% FOREACH pa_loo IN patron_attributes %]
         [% IF pa_loo.class %]
-            <h4>[% pa_loo.lib %]</h4>
-            <table id=aai_[% pa_loo.class %] class="attributes_table">
+            <table id="aai_[% pa_loo.class %]" class="attributes_table">
+            <caption>[% pa_loo.lib %]</caption>
         [% ELSE %]
             <table id="aai" class="attributes_table">
         [% END %]
@@ -1497,7 +1497,7 @@
     <input type="hidden" name="setting_messaging_prefs" value="1" />
     <legend id="patron_messaging_prefs_lgd">Patron messaging preferences</legend>
     [% IF type_only %]
-        <i>If no preferences are selected, the default preferences for the category chosen will be applied on save, otherwise your selection here is saved</i>
+        <p>If no preferences are selected, the default preferences for the category chosen will be applied on save, otherwise your selection here is saved</p>
     [% END %]
     [% INCLUDE 'messaging-preference-form.inc' %]
     [% IF ( SMSSendDriver ) %]
