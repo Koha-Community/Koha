@@ -1129,46 +1129,6 @@
 
 </li>
 			[% END %]
-			<li>
-				<label for="yesdebarred" class="radio">Restricted: </label>
-				[% IF ( debarred ) %]
-				<label for="yesdebarred">Yes </label>
-				<input type="radio" id="yesdebarred" name="debarred" value="1" checked="checked"/>
-                <label for="nodebarred">No </label>
-                <input type="radio" id="nodebarred" name="debarred" value="0"/>
-				[% ELSE %]
-				<label for="yesdebarred">Yes </label>
-				<input type="radio" id="yesdebarred" name="debarred" value="1" />
-                <label for="nodebarred">No </label>
-                <input type="radio" id="nodebarred" name="debarred" value="0" checked="checked"/>
-				[% END %]
-				
-				<br />
-				<label for="datedebarred" class="radio">until:</label> 
-				[% IF opduplicate %]
-				    <input type="text" name="datedebarred" id="datedebarred" class="debarred" value="[% datedebarred %]" onclick="this.value=''" />
-				[% ELSE %]
-				    <input type="text" name="datedebarred" id="datedebarred" class="debarred" value="[% datedebarred %]" />
-				[% END %]
-				<img src="[% themelang %]/lib/calendar/cal.gif" id="debarred_button" alt="Show Calendar" />
-		         <script language="JavaScript" type="text/javascript">
-		            Calendar.setup(
-		            {
-		                inputField : "datedebarred",
-		                ifFormat : "[% DHTMLcalendar_dateformat %]",
-		                button : "debarred_button"
-		            }
-		            );
-		        </script>
-		        <br />
-		        <label for="debarredcomment" class="radio">Comment:</label>
-			       [% IF ( opduplicate ) %] 
-			           <textarea id="debarredcomment" name="debarredcomment" cols="55" rows="3" onclick="this.value=''">[% debarredcomment %]</textarea>
-			       [% ELSE %]
-				   <textarea id="debarredcomment" name="debarredcomment" cols="55" rows="3">[% debarredcomment %]</textarea>
-			       [% END %]
-	        </li>
-
 			</ol>
 			</fieldset>
 		[% END %]	
