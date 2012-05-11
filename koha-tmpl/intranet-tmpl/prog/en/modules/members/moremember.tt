@@ -289,7 +289,7 @@ function validate1(date) {
 [% FOREACH attribute IN attributes_loop %]
     [% IF attribute.class %]
         <h4>[% attribute.lib %]</h4>
-        <table id=aai_[% attribute.class %]>
+        <table id="aai_[% attribute.class %]">
     [% ELSE %]
         <table id="aai">
     [% END %]
@@ -409,35 +409,27 @@ function validate1(date) {
 </div>
 
 <div id="finesholdsissues" class="toptabs">
-	<ul>
-		<li><a href="/cgi-bin/koha/members/moremember.pl#checkedout">[% issueloop.size %] Checkout(s)</a></li>
+    <ul>
+        <li><a href="/cgi-bin/koha/members/moremember.pl#checkedout">[% issueloop.size %] Checkout(s)</a></li>
     [% IF relissueloop.size %]
         <li><a href="/cgi-bin/koha/members/moremember.pl#relissues">Relatives' Checkouts</a></li>
     [% END %]
-		<li><a href="/cgi-bin/koha/members/moremember.pl#finesandcharges">Fines &amp; Charges</a></li>
-		<li>[% IF ( countreserv ) %]
+        <li><a href="/cgi-bin/koha/members/moremember.pl#finesandcharges">Fines &amp; Charges</a></li>
+        <li>[% IF ( countreserv ) %]
             <a href="/cgi-bin/koha/members/moremember.pl#onhold">[% countreserv %] Hold(s)</a>
     [% ELSE %]
             <a href="/cgi-bin/koha/members/moremember.pl#onhold">0 Holds</a>
     [% END %]</li>
-	</ul>
-	
-<div id="finesandcharges">
-    [% IF ( totaldue_raw ) %]
-        <p>Total due: [% totaldue %]</p>
-    [% ELSE %]
-        <p>No outstanding charges</p>
-    [% END %]
-</div>
+    </ul>
 
     <form action="/cgi-bin/koha/reserve/renewscript.pl" method="post" class="checkboxed">
     <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
-	<input type="hidden" name="branch" value="[% branch %]" />
+    <input type="hidden" name="branch" value="[% branch %]" />
 <div id="checkedout">
     [% IF ( issueloop ) %]
     <table id="issuest">
     <thead>
-		<tr>
+        <tr>
             <th scope="col">Due date</th>
             <th scope="col">Title</th>
             <th scope="col">Item type</th>
@@ -459,7 +451,7 @@ function validate1(date) {
           <tr>
           [% END %]
           [% IF ( issueloo.red ) %]
-		      <td class="od">
+              <td class="od">
           [% ELSE %]
             <td>
           [% END %]
@@ -475,7 +467,7 @@ function validate1(date) {
 <td>[% UNLESS ( noItemTypeImages ) %] [% IF ( issueloo.itemtype_image ) %]<img src="[% issueloo.itemtype_image %]" alt="" />[% END %][% END %][% issueloo.itemtype_description %]</td>
             <td>[% issueloo.issuedate %]</td>
             <td>[% issueloo.issuingbranchname %]</td>
-	        <td>[% issueloo.itemcallnumber %]</td>
+            <td>[% issueloo.itemcallnumber %]</td>
             <td>[% issueloo.charge %]</td>
             <td>[% issueloo.replacementprice %]</td>
       [% IF ( issueloo.renew_failed ) %]
@@ -496,9 +488,9 @@ function validate1(date) {
                 [% IF ( issueloo.norenew_reason_on_reserve ) %]
                 <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% issueloo.biblionumber %]">On Hold</a>
                 [% END %]
-				    [% IF ( issueloo.norenew_reason_too_many ) %]
+                    [% IF ( issueloo.norenew_reason_too_many ) %]
                         Not renewable
-				    [% END %]
+                    [% END %]
                 [% IF ( issueloo.can_confirm ) %]
                     </span>
                 [% END %]
@@ -546,7 +538,7 @@ function validate1(date) {
 <div id="relissues">
  <table id="relissuest">
     <thead>
-	<tr>
+    <tr>
             <th scope="col">Due date</th>
             <th scope="col">Title</th>
             <th scope="col">Item type</th>
@@ -586,15 +578,23 @@ function validate1(date) {
         <td>[% relissueloo.itemcallnumber %]</td>
         <td>[% relissueloo.charge %]</td>
         <td>[% relissueloo.replacementprice %]</td>
-	    <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% relissueloo.borrowernumber %]">[% relissueloo.firstname %] [% relissueloo.surname %] ([% relissueloo.cardnumber %])</a></td>
+        <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% relissueloo.borrowernumber %]">[% relissueloo.firstname %] [% relissueloo.surname %] ([% relissueloo.cardnumber %])</a></td>
         </tr>
   [% END %]
         </tbody>
        </table>
-	</div>
+    </div>
 [% END %]
     </form>
-	
+
+<div id="finesandcharges">
+    [% IF ( totaldue_raw ) %]
+        <p>Total due: [% totaldue %]</p>
+    [% ELSE %]
+        <p>No outstanding charges</p>
+    [% END %]
+</div>
+
 <div id="onhold">
 [% IF ( reservloop ) %]
 <form action="/cgi-bin/koha/reserve/modrequest.pl" method="post">
