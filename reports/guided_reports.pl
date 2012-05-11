@@ -341,7 +341,7 @@ elsif ( $phase eq 'Choose these criteria' ) {
     $template->param( 'total_by' => \@total_by );
 }
 
-elsif ( $phase eq 'Choose These Operations' ) {
+elsif ( $phase eq 'Choose these operations' ) {
     my $area     = $input->param('area');
     my $type     = $input->param('type');
     my $column   = $input->param('column');
@@ -382,7 +382,7 @@ elsif ( $phase eq 'Choose These Operations' ) {
     $template->param( 'order_by' => \@order_by );
 }
 
-elsif ( $phase eq 'Build Report' ) {
+elsif ( $phase eq 'Build report' ) {
 
     # now we have all the info we need and can build the sql
     my $area     = $input->param('area');
