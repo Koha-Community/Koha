@@ -69,6 +69,8 @@ elsif ($params->{'action'} eq 'edit') {
         warn sprintf('Database returned the following error: %s', $sth->errstr);
         exit 0;
     }
+    $sth = $dbh->prepare("SELECT $editable_columns->[$params->{'column'}-1] FROM quotes WHERE id = ?;");
+    $sth->execute($params->{'id'});
     print $sth->fetchrow_array();
     exit 1;
 }
@@ -88,8 +90,7 @@ else {
 
     if (my $filter = $params->{'sSearch'}) {
         # This seems a bit brute force and ungraceful, but it provides a very general, simple search on all fields
-        my $like = " id LIKE \"%$filter%\" OR source LIKE \"%$filter%\" OR text LIKE \"%$filter%\" OR timestamp LIKE \"%$filter%\"";
-        $iTotalRecords = $dbh->selectrow_array("SELECT count(*) FROM quotes WHERE $like;");
+        $iTotalRecords = $dbh->selectrow_array("SELECT count(*) FROM quotes WHERE id LIKE %?% OR source LIKE %?% OR text LIKE %?% OR timestamp LIKE %?%;",undef,($filter, $filter, $filter, $filter));
         $sth = $dbh->prepare("SELECT * FROM quotes;");
     }
     else {
