@@ -380,7 +380,7 @@ $template->param(
     listprice        => sprintf("%.2f", $data->{'listprice'}||$data->{'price'}||$listprice),
     total            => sprintf("%.2f", ($data->{'ecost'}||0)*($data->{'quantity'}||0) ),
     ecost            => $data->{'ecost'},
-    unitprice        => sprintf("%.2f", $data->{'unitprice'}),
+    unitprice        => sprintf("%.2f", $data->{'unitprice'}||0),
     notes            => $data->{'notes'},
     publishercode    => $data->{'publishercode'},
     barcode_subfield => $barcode_subfield,
