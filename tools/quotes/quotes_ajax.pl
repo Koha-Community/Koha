@@ -88,15 +88,8 @@ else {
     my $iTotalRecords = '';
     my $sth = '';
 
-    if (my $filter = $params->{'sSearch'}) {
-        # This seems a bit brute force and ungraceful, but it provides a very general, simple search on all fields
-        $iTotalRecords = $dbh->selectrow_array("SELECT count(*) FROM quotes WHERE id LIKE %?% OR source LIKE %?% OR text LIKE %?% OR timestamp LIKE %?%;",undef,($filter, $filter, $filter, $filter));
-        $sth = $dbh->prepare("SELECT * FROM quotes;");
-    }
-    else {
-        $iTotalRecords = $dbh->selectrow_array('SELECT count(*) FROM quotes;');
-        $sth = $dbh->prepare("SELECT * FROM quotes;");
-    }
+    $iTotalRecords = $dbh->selectrow_array('SELECT count(*) FROM quotes;');
+    $sth = $dbh->prepare("SELECT * FROM quotes;");
 
     $sth->execute();
     if ($sth->err) {
