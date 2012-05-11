@@ -268,12 +268,13 @@
             success     : function(){
                             var response = JSON.parse(jqXHR.responseText);
                             if (response.success) {
-                                $("#server_response").text(response.records+_(' quotes saved.'));
+                                alert(response.records+_(' quotes saved.'));
+                                window.location.reload(true);   // is this the best route?
                             }
                             else {
-                                $("#server_response").text(+response.records+_(' quotes saved, but an error has occurred. Please ask your administrator to check the server log for more details.'));
+                                alert(response.records+_(' quotes saved, but an error has occurred. Please ask your administrator to check the server log for more details.'));
+                                window.location.reload(true);   // is this the best route?
                             }
-                            $("#server_response").fadeIn(200);
                           },
         });
     }
@@ -290,11 +291,6 @@
                 oTable.fnDeleteRow(this);
             });
         }
-    }
-
-    function fnResetUpload() {
-        $('#server_response').fadeOut(200);
-        window.location.reload(true);   // is this the best route?
     }
 
     //]]>
@@ -339,7 +335,6 @@
                         <div id="progress_bar"><div class="percent">0%</div></div>
                     </div>
                 </fieldset>
-                <div id="server_response" onclick='fnResetUpload()'>Server Response</div>
                 <table id="quotes_editor" style="visibility: hidden;">
                 <thead>
                     <tr>
