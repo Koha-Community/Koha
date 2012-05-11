@@ -53,7 +53,7 @@ my $sth = $dbh->prepare('INSERT INTO quotes (source, text) VALUES (?, ?);');
 my $insert_count = 0;
 
 foreach my $quote (@$quotes) {
-    $insert_count++ if $sth->execute($quote->[0], $quote->[1]);
+    $insert_count++ if $sth->execute($quote->[1], $quote->[2]);
     if ($sth->err) {
         warn sprintf('Database returned the following error: %s', $sth->errstr);
         $success = 'false';
