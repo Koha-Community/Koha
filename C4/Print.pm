@@ -28,7 +28,7 @@ BEGIN {
 	$VERSION = 3.01;
 	require Exporter;
 	@ISA    = qw(Exporter);
-	@EXPORT = qw(&printslip);
+    @EXPORT = qw(&NetworkPrint);
 }
 
 =head1 NAME
@@ -45,45 +45,16 @@ The functions in this module handle sending text to a printer.
 
 =head1 FUNCTIONS
 
-=cut
+=head2 NetworkPrint
 
-=for comment
-    my $slip = <<"EOF";
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Date: $todaysdate;
+  &NetworkPrint($text)
 
-ITEM RESERVED:
-$itemdata->{'title'} ($itemdata->{'author'})
-barcode: $itemdata->{'barcode'}
-
-COLLECT AT: $branchname
-
-BORROWER:
-$bordata->{'surname'}, $bordata->{'firstname'}
-card number: $bordata->{'cardnumber'}
-Phone: $bordata->{'phone'}
-$bordata->{'streetaddress'}
-$bordata->{'suburb'}
-$bordata->{'town'}
-$bordata->{'emailaddress'}
-
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-EOF
-=cut
-
-=head2 printslip
-
-  &printslip($slip)
-
-print a slip for the given $borrowernumber and $branchcode
+Queue some text for printing on the selected branch printer
 
 =cut
 
-sub printslip ($) {
-    my ($slip) = @_;
-
-    return unless ( C4::Context->boolean_preference('printcirculationslips') );
+sub NetworkPrint {
+    my ($text) = @_;
 
 # FIXME - It'd be nifty if this could generate pretty PostScript.
 
@@ -112,7 +83,7 @@ sub printslip ($) {
 
     #  print $queue;
     #open (FILE,">/tmp/$file");
-    print PRINTER $slip;
+    print PRINTER $text;
     print PRINTER "\r\n" x 7 ;
     close PRINTER;
 
