@@ -27,6 +27,7 @@ use C4::Biblio;
 use C4::Koha;
 use C4::Debug;
 use C4::Branch;
+use Koha::DateUtils;
 use Data::Dumper;
 
 =head1 branchoverdues.pl
