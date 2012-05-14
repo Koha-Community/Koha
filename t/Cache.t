@@ -13,9 +13,9 @@ BEGIN {
 }
 
 SKIP: {
-    my $cache = Koha::Cache->new ();
+    skip "Memcached not enabled", 7 unless Koha::Cache->is_cache_active();
 
-    skip "Cache not enabled", 7 unless (Koha::Cache->is_cache_active() && defined $cache);
+    my $cache = Koha::Cache->new ();
 
     # test fetching an item that isnt in the cache
     is( $cache->get_from_cache("not in here"), undef, "fetching item NOT in cache");

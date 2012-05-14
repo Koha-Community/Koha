@@ -139,16 +139,6 @@ BEGIN {
     );
 }
 
-eval {
-    if (C4::Context->ismemcached) {
-        require Memoize::Memcached;
-        import Memoize::Memcached qw(memoize_memcached);
-
-        memoize_memcached( 'GetMarcStructure',
-                            memcached => C4::Context->memcached);
-    }
-};
-
 =head1 NAME
 
 C4::Biblio - cataloging management functions
@@ -1057,16 +1047,18 @@ sub GetMarcStructure {
     my ( $forlibrarian, $frameworkcode ) = @_;
     my $dbh = C4::Context->dbh;
     $frameworkcode = "" unless $frameworkcode;
+    my $cache;
 
     if ( defined $marc_structure_cache and exists $marc_structure_cache->{$forlibrarian}->{$frameworkcode} ) {
         return $marc_structure_cache->{$forlibrarian}->{$frameworkcode};
     }
-
-    #     my $sth = $dbh->prepare(
-    #         "SELECT COUNT(*) FROM marc_tag_structure WHERE frameworkcode=?");
-    #     $sth->execute($frameworkcode);
-    #     my ($total) = $sth->fetchrow;
-    #     $frameworkcode = "" unless ( $total > 0 );
+    if (Koha::Cache->is_cache_active()) {
+        $cache = Koha::Cache->new();
+        if ($cache) {
+            my $cached = $cache->get_from_cache("GetMarcStructure:$frameworkcode:$forlibrarian");
+            return $cached if $cached;
+        }
+    }
     my $sth = $dbh->prepare(
         "SELECT tagfield,liblibrarian,libopac,mandatory,repeatable 
         FROM marc_tag_structure 
@@ -1130,6 +1122,9 @@ sub GetMarcStructure {
 
     $marc_structure_cache->{$forlibrarian}->{$frameworkcode} = $res;
 
+    if (Koha::Cache->is_cache_active() && defined $cache) {
+        $cache->set_in_cache("GetMarcStructure:$frameworkcode:$forlibrarian",$res,10000);
+    }
     return $res;
 }
 

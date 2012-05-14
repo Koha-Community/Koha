@@ -84,7 +84,7 @@ sub new {
 }
 
 sub is_cache_active {
-    return $ENV{CACHING_SYSTEM} ? '1' : '';
+    return $ENV{CACHING_SYSTEM} ? '1' : undef;
 }
 
 sub set_in_cache {
