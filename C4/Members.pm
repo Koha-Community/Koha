@@ -998,7 +998,6 @@ sub GetPendingIssues {
     # must avoid biblioitems.* to prevent large marc and marcxml fields from killing performance
     # FIXME: namespace collision: each table has "timestamp" fields.  Which one is "timestamp" ?
     # FIXME: circ/ciculation.pl tries to sort by timestamp!
-    # FIXME: C4::Print::printslip tries to sort by timestamp!
     # FIXME: namespace collision: other collisions possible.
     # FIXME: most of this data isn't really being used by callers.
     my $query =

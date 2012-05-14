@@ -25,6 +25,7 @@ use strict;
 use warnings;
 use CGI;
 use C4::Output;
+use C4::Print;
 use C4::Auth qw/:DEFAULT get_session/;
 use C4::Dates qw/format_date/;
 use C4::Branch; # GetBranches
@@ -172,7 +173,10 @@ if ( $barcode eq '' && $query->param('charges') eq 'yes' ) {
 }
 
 if ( $print eq 'yes' && $borrowernumber ne '' ) {
-    PrintIssueSlip($session->param('branch') || $branch, $borrowernumber);
+    if ( C4::Context->boolean_preference('printcirculationslips') ) {
+        my $letter = IssueSlip($branch, $borrowernumber, "QUICK");
+        NetworkPrint($letter->{content});
+    }
     $query->param( 'borrowernumber', '' );
     $borrowernumber = '';
 }

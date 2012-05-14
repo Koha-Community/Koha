@@ -12,7 +12,7 @@ sub testing_class { 'C4::Print' };
 
 sub methods : Test( 1 ) {
     my $self = shift;
-    my @methods = qw( printslip );
+    my @methods = qw( NetworkPrint );
     
     can_ok( $self->testing_class, @methods );    
 }
