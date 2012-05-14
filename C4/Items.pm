@@ -81,6 +81,7 @@ BEGIN {
 	GetAnalyticsCount
         GetItemHolds
 
+        SearchItems
 
         PrepareItemrecordDisplay
 
@@ -2517,6 +2518,43 @@ sub GetItemHolds {
     $holds = $sth->fetchrow;
     return $holds;
 }
+
+# Return the list of the column names of items table
+sub _get_items_columns {
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->column_info(undef, undef, 'items', '%');
+    $sth->execute;
+    my $results = $sth->fetchall_hashref('COLUMN_NAME');
+    return keys %$results;
+}
+
+=head2 SearchItems
+
+    my $items = SearchItems($field, $value);
+
+SearchItems will search for items on a specific given field.
+For instance you can search all items with a specific stocknumber like this:
+
+    my $items = SearchItems('stocknumber', $stocknumber);
+
+=cut
+
+sub SearchItems {
+    my ($field, $value) = @_;
+
+    my $dbh = C4::Context->dbh;
+    my @columns = _get_items_columns;
+    my $results = [];
+    if(0 < grep /^$field$/, @columns) {
+        my $query = "SELECT $field FROM items WHERE $field = ?";
+        my $sth = $dbh->prepare( $query );
+        $sth->execute( $value );
+        $results = $sth->fetchall_arrayref({});
+    }
+    return $results;
+}
+
+
 =head1  OTHER FUNCTIONS
 
 =head2 _find_value
