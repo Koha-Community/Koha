@@ -145,7 +145,7 @@
 				<p><a class="popup" href="javascript:Dopop('moremember.pl?print=brief&amp;borrowernumber=[% check_member %]');" >View existing record</a></p>
 				<form action="/cgi-bin/koha/members/memberentry.pl" method="get"><input type="hidden" name="op" value="modify" /><input type="hidden" name="borrowernumber" value="[% check_member %]" /><input type="hidden" name="category_type" value="[% check_categorytype %]" /><input class="edit" type="submit" value="It is a duplicate. Edit existing record" /></form>
 
-				<form name="form_double" action="/cgi-bin/koha/members/memberentry.pl" method="post">
+                <form name="form_double" action="/cgi-bin/koha/members/memberentry.pl" method="post" autocomplete="off">
 				<input type="hidden" name="nodouble" value="1" />
 				<input class="new" type="submit" value="Not a duplicate. Save as new record" />
 			</div>
@@ -197,7 +197,7 @@
 	[% END %]
 
 
-[% UNLESS ( check_member ) %]<form name="form" id="entryform"  action="/cgi-bin/koha/members/memberentry.pl" method="post">
+[% UNLESS ( check_member ) %]<form name="form" id="entryform"  action="/cgi-bin/koha/members/memberentry.pl" method="post" autocomplete="off">
 <input type="hidden" name="nodouble"  value="[% nodouble %]" /> [% END %]
 <!--    field always hidden in different form (1,2,3) -->
 <input type="hidden" name="BorrowerMandatoryField" value="[% BorrowerMandatoryField %]" />
