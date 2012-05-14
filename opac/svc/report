@@ -25,27 +25,21 @@ use C4::Reports::Guided;
 use JSON;
 use CGI;
 
+use Koha::Cache;
+
 my $query  = CGI->new();
 my $report = $query->param('id');
 
 my $cache;
-my $usecache = C4::Context->ismemcached;
 
 my ( $sql, $type, $name, $notes, $cache_expiry, $public ) =
   get_saved_report($report);
 die "Sorry this report is not public\n" unless $public;
 
-if ($usecache) {
-    require Koha::Cache;
-    Koha::Cache->import();
+if (Koha::Cache->is_cache_active) {
     $cache = Koha::Cache->new(
-        {
-            'cache_type'    => 'memcached',
-            'cache_servers' => $ENV{'MEMCACHED_SERVERS'}
-        }
     );
-    my $namespace = $ENV{'MEMCACHED_NAMESPACE'} || 'koha';
-    my $page = $cache->get_from_cache("$namespace:opac:report:$report");
+    my $page = $cache->get_from_cache("opac:report:$report");
     if ($page) {
         print $query->header;
         print $page;
@@ -61,8 +55,6 @@ my $lines     = $sth->fetchall_arrayref;
 my $json_text = to_json($lines);
 print $json_text;
 
-if ($usecache) {
-    my $namespace = $ENV{'MEMCACHED_NAMESPACE'} || 'koha';
-    $cache->set_in_cache( "$namespace:opac:report:$report",
-        $json_text, $cache_expiry );
+if (Koha::Cache->is_cache_active) {
+    $cache->set_in_cache( "opac:report:$report", $json_text, $cache_expiry );
 }

@@ -28,10 +28,14 @@ use base qw(Koha::Cache);
 sub _cache_handle {
     my $class  = shift;
     my $params = shift;
-    my @servers = split /,/, $params->{'cache_servers'};
+    my @servers = split /,/, $params->{'cache_servers'}?$params->{'cache_servers'}:$ENV{MEMCACHED_SERVERS};
+    $ENV{DEBUG} && warn "Caching server settings: ".join(', ',@servers)." with ".($ENV{MEMCACHED_NAMESPACE} || $params->{'namespace'} || 'koha');
     return Cache::Memcached->new(
         servers   => \@servers,
-        namespace => $params->{'namespace'} || 'KOHA',
+        debug   => 0,
+        compress_threshold => 10_000,
+        expire_time => 600,
+        namespace => $ENV{MEMCACHED_NAMESPACE} || $params->{'namespace'} || 'koha',
     );
 }
 
@@ -39,6 +43,7 @@ sub set_in_cache {
     my ( $self, $key, $value, $expiry ) = @_;
     croak "No key" unless $key;
     $self->cache->set_debug;
+    $ENV{DEBUG} && warn "set_in_cache for Memcache $key";
 
     if ( defined $expiry ) {
         return $self->cache->set( $key, $value, $expiry );
@@ -51,6 +56,7 @@ sub set_in_cache {
 sub get_from_cache {
     my ( $self, $key ) = @_;
     croak "No key" unless $key;
+    $ENV{DEBUG} && warn "get_from_cache for Memcache $key";
     return $self->cache->get($key);
 }
 

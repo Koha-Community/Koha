@@ -56,11 +56,15 @@ __PACKAGE__->mk_ro_accessors( qw( cache ) );
 sub new {
     my $class = shift;
     my $param = shift;
-    my $cache_type = $param->{cache_type} || 'memcached';
+    my $cache_type = $ENV{CACHING_SYSTEM} || $param->{cache_type} || 'memcached';
     my $subclass = __PACKAGE__."::".ucfirst($cache_type);
     my $cache    = $subclass->_cache_handle($param)
       or croak "Cannot create cache handle for '$cache_type'";
     return bless $class->SUPER::new({cache => $cache}), $subclass;
+}
+
+sub is_cache_active {
+    return $ENV{CACHING_SYSTEM} ? '1' : '' ;
 }
 
 =head2 EXPORT
@@ -74,6 +78,7 @@ Koha::Cache::Memcached
 =head1 AUTHOR
 
 Chris Cormack, E<lt>chris@bigballofwax.co.nzE<gt>
+Paul Poulain, E<lt>paul.poulain@biblibre.comE<gt>
 
 =cut
 
