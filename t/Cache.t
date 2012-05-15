@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Tests Koha::Cache and Koha::Cache::Memcached (through Koha::Cache)
+# Tests Koha::Cache and whichever type of cache is enabled (through Koha::Cache)
 
 use strict;
 use warnings;
@@ -13,9 +13,9 @@ BEGIN {
 }
 
 SKIP: {
-    skip "Memcached not enabled", 7 unless C4::Context->ismemcached;
+    my $cache = Koha::Cache->new ();
 
-    my $cache = Koha::Cache->new ( { 'cache_servers' => $ENV{'MEMCACHED_SERVERS'} } );
+    skip "Cache not enabled", 7 unless (Koha::Cache->is_cache_active() && defined $cache);
 
     # test fetching an item that isnt in the cache
     is( $cache->get_from_cache("not in here"), undef, "fetching item NOT in cache");

@@ -27,9 +27,12 @@ Koha::Cache - Handling caching of html and Objects for Koha
 
 =head1 DESCRIPTION
 
-Base class for Koha::Cache::X. Subclasses need to provide the following methods
+Base class for Koha::Cache::X. Subclasses must provide the following methods
 
 B<_cache_handle ($params_hr)> - cache handle creator
+
+Subclasses may override the following methods if they are not using a
+CHI-derived cache
 
 B<set_in_cache ($key, $value, $expiry)>
 
@@ -46,25 +49,78 @@ B<flush_all ()>
 use strict;
 use warnings;
 use Carp;
+use Module::Load::Conditional qw(can_load);
+use Module::Load;
+
+my $have_chi = 0;
+
+BEGIN: {
+    if ( can_load( modules => { CHI => undef } ) ) {
+        $have_chi = 1;
+    }
+}
 
 use base qw(Class::Accessor);
 
-use Koha::Cache::Memcached;
-
-__PACKAGE__->mk_ro_accessors( qw( cache ) );
+__PACKAGE__->mk_ro_accessors(qw( cache ));
 
 sub new {
     my $class = shift;
     my $param = shift;
-    my $cache_type = $ENV{CACHING_SYSTEM} || $param->{cache_type} || 'memcached';
-    my $subclass = __PACKAGE__."::".ucfirst($cache_type);
-    my $cache    = $subclass->_cache_handle($param)
-      or croak "Cannot create cache handle for '$cache_type'";
-    return bless $class->SUPER::new({cache => $cache}), $subclass;
+    my $cache_type =
+         $ENV{CACHING_SYSTEM}
+      || $param->{cache_type}
+      || 'memcached';
+    my $subclass = __PACKAGE__ . "::" . ucfirst($cache_type);
+    $param->{have_chi} = $have_chi;
+    unless ( can_load( modules => { $subclass => undef } ) ) {
+        $subclass = __PACKAGE__ . "::" . ucfirst('Null');
+        load $subclass;
+    }
+    my $cache = $subclass->_cache_handle($param);
+    return
+      bless $class->SUPER::new( { cache => $cache, have_chi => $have_chi } ),
+      $subclass;
 }
 
 sub is_cache_active {
-    return $ENV{CACHING_SYSTEM} ? '1' : '' ;
+    return $ENV{CACHING_SYSTEM} ? '1' : '';
+}
+
+sub set_in_cache {
+    my ( $self, $key, $value, $expiry ) = @_;
+    croak "No key" unless $key;
+    $ENV{DEBUG} && warn "set_in_cache for $key";
+
+    return unless $self->{have_chi};
+
+    if ( defined $expiry ) {
+        return $self->{cache}->set( $key, $value, $expiry );
+    }
+    else {
+        return $self->{cache}->set( $key, $value );
+    }
+}
+
+sub get_from_cache {
+    my ( $self, $key ) = @_;
+    croak "No key" unless $key;
+    $ENV{DEBUG} && warn "get_from_cache for $key";
+    return unless $self->{have_chi};
+    return $self->{cache}->get($key);
+}
+
+sub clear_from_cache {
+    my ( $self, $key ) = @_;
+    croak "No key" unless $key;
+    return unless $self->{have_chi};
+    return $self->{cache}->remove($key);
+}
+
+sub flush_all {
+    my $self = shift;
+    return unless $self->{have_chi};
+    return $self->{cache}->clear();
 }
 
 =head2 EXPORT
@@ -79,6 +135,7 @@ Koha::Cache::Memcached
 
 Chris Cormack, E<lt>chris@bigballofwax.co.nzE<gt>
 Paul Poulain, E<lt>paul.poulain@biblibre.comE<gt>
+Jared Camins-Esakov, E<lt>jcamins@cpbibliography.comE<gt>
 
 =cut
 
