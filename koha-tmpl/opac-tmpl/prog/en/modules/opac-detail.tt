@@ -811,7 +811,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 
         
         <table><tr>
-        <td rowspan="2" style="width:20px;"><a style="height: 10em;" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% IF ( shelfbrowser_prev_biblionumber ) %][% shelfbrowser_prev_biblionumber %][% ELSE %][% biblionumber %][% END %]&amp;shelfbrowse_itemnumber=[% shelfbrowser_prev_itemnumber %]#shelfbrowser"><img src="/opac-tmpl/prog/images/browse-prev.gif" alt="Previous" border="0" /></a></td>
+        <td rowspan="2" style="width:20px;"><div id="browser_previous"><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% IF ( shelfbrowser_prev_biblionumber ) %][% shelfbrowser_prev_biblionumber %][% ELSE %][% biblionumber %][% END %]&amp;shelfbrowse_itemnumber=[% shelfbrowser_prev_itemnumber %]#shelfbrowser">Previous</a></div></td>
 [% FOREACH PREVIOUS_SHELF_BROWS IN PREVIOUS_SHELF_BROWSE %]
         <td><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% PREVIOUS_SHELF_BROWS.biblionumber %]&amp;shelfbrowse_itemnumber=[% PREVIOUS_SHELF_BROWS.itemnumber %]#shelfbrowser">
     [% IF ( OPACAmazonCoverImages ) %][% IF ( PREVIOUS_SHELF_BROWS.browser_normalized_isbn ) %]<img border="0" src="http://images.amazon.com/images/P/[% PREVIOUS_SHELF_BROWS.browser_normalized_isbn %].01._AA75_PU_PU-5_.jpg" alt="" />[% ELSE %]<span class="no-image">No cover image available</span>[% END %][% END %]
@@ -845,7 +845,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 
 </a></td>
 [% END %]
-<td rowspan="2" style="width:20px;"><a style="height: 10em;" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% IF ( shelfbrowser_next_biblionumber ) %][% shelfbrowser_next_biblionumber %][% ELSE %][% biblionumber %][% END %]&amp;shelfbrowse_itemnumber=[% shelfbrowser_next_itemnumber %]#shelfbrowser"><img src="/opac-tmpl/prog/images/browse-next.gif" alt="Next" border="0" /></a></td>
+<td rowspan="2"><div id="browser_next"><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% IF ( shelfbrowser_next_biblionumber ) %][% shelfbrowser_next_biblionumber %][% ELSE %][% biblionumber %][% END %]&amp;shelfbrowse_itemnumber=[% shelfbrowser_next_itemnumber %]#shelfbrowser">Next</a></div></td>
 </tr>
 
 <tr>
@@ -854,7 +854,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 [% END %]
 
 [% FOREACH NEXT_SHELF_BROWS IN NEXT_SHELF_BROWSE %]
-       <td class="top">[% NEXT_SHELF_BROWS.itemcallnumber %]<a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% NEXT_SHELF_BROWS.biblionumber %]&amp;shelfbrowse_itemnumber=[% NEXT_SHELF_BROWS.itemnumber %]#shelfbrowser">[% NEXT_SHELF_BROWS.title |html %]</a></td>
+       <td class="top" style="width:20px;">[% NEXT_SHELF_BROWS.itemcallnumber %]<a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% NEXT_SHELF_BROWS.biblionumber %]&amp;shelfbrowse_itemnumber=[% NEXT_SHELF_BROWS.itemnumber %]#shelfbrowser">[% NEXT_SHELF_BROWS.title |html %]</a></td>
 [% END %]
 </tr>
 </table>

@@ -2012,7 +2012,6 @@ a#MARCview, a#MARCviewPop, a#ISBDview, a#Normalview, a#Fullhistory, a#Briefhisto
 	text-decoration : none;
 }
 #shelfbrowser td, #shelfbrowser th {
-	vertical-align : bottom;
 	width : 20%;
 }
 #shelfbrowser td.top {
@@ -2023,6 +2022,30 @@ a#MARCview, a#MARCviewPop, a#ISBDview, a#Normalview, a#Fullhistory, a#Briefhisto
 }
 #shelfbrowser a {
 	display : block;
+}
+#shelfbrowser #browser_next,
+#shelfbrowser #browser_previous {
+    background-image : url("../../images/sprite.png");
+    background-position : -5px -988px;
+    background-repeat: no-repeat;
+    width : 16px;
+}
+#shelfbrowser #browser_next a,
+#shelfbrowser #browser_previous a {
+    cursor: pointer;
+    display : block;
+    height: 0 !important;
+    margin: 0;
+    overflow: hidden;
+    padding: 50px 0 0;
+    text-decoration: none;
+    width: 16px;
+}
+#shelfbrowser #browser_previous {
+background-position: -9px -1001px;
+}
+#shelfbrowser #browser_next {
+background-position: -9px -1051px;
 }
 
 #comments .commentline {
@@ -2133,7 +2156,7 @@ div.ft {
 }
 #basket td ul li {
 	font-size:90%;
-	list-style:disc outside url("../../images/item-bullet.gif");
+    list-style:disc outside url(data:image/gif;base64,R0lGODlhBQAHAJECAP///5zD6v///wAAACH5BAEAAAIALAAAAAAFAAcAAAIMjCUGkbvhFGQSmVAAADs=);
 	padding:0.2em 0;
 }
 

@@ -13,7 +13,7 @@
 		<div id="useraccount" class="container">
 <!--CONTENT-->
     [% FOREACH BORROWER_INF IN BORROWER_INFO %]
-        <h3><a href="/cgi-bin/koha/opac-user.pl">[% BORROWER_INF.firstname %] [% BORROWER_INF.surname %]'s account</a> <img src="[% themelang %]../../images/caret.gif" width="16" height="16" alt="&gt;" border="0" /> Fines and charges</h3>
+        <h3><a href="/cgi-bin/koha/opac-user.pl">[% BORROWER_INF.firstname %] [% BORROWER_INF.surname %]'s account</a> &#8674; Fines and charges</h3>
     [% END %]
 
     [% IF ( ACCOUNT_LINES ) %]
