@@ -41,27 +41,22 @@ $(document).ready(function() {
 <div class="yui-g">
 <div class="yui-u first">
 <div id="acqui_acqui_home_order">
+
+    [% UNLESS ( loop_budget ) %]
+        [% IF ( CAN_user_parameters ) %]
+        <div class="dialog alert">You must <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">define a budget</a> in Administration</div>
+        [% ELSE %]
+        <div class="dialog alert">Your administrator must define a budget in Administration</div>
+        [% END %]
+    [% END %]
+
     <fieldset>
         <legend>Manage orders</legend>
-    [% IF ( nobudget ) %]
-        [% IF ( CAN_user_parameters ) %]
-        <span class="problem">You must <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">define a budget</a> in Administration</span>
-        [% ELSE %]
-        <span class="problem">Your administrator must define a budget in Administration</span>
-        [% END %]
-        <form name="findsupplier" action="/cgi-bin/koha/acqui/booksellers.pl" method="post">
-            <p><label for="supplierpage">Vendor </label><input type="text" size="25" name="supplier" id="supplierpage" class="focus" />
-            <input type="submit" value="Search" />
-            </p>
-        </form>
-    [% ELSE %]
         <form name="findsupplier" action="/cgi-bin/koha/acqui/booksellers.pl" method="post">
             <p><label for="supplierpage">Vendor: </label><input type="text" size="25" name="supplier" id="supplierpage" class="focus" />
             <input type="submit" value="Search" />
             </p>
         </form>
-
-    [% END %]
     </fieldset>
 </div>
 
