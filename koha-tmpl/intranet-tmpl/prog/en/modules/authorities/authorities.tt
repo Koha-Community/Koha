@@ -520,6 +520,31 @@ function searchauthority() {
 		opacity: 0.8
 	});
 })();
+     $(document).ready(function() {
+        yuiToolbar();
+        $("#addauthc,#action").empty();
+     });
+    // YUI Toolbar Functions
+    function yuiToolbar() {
+    var addauthButton = new YAHOO.widget.Button({
+                                            id: "addauth",
+                                            type: "button",
+                                            label: "Save",
+                                            container: "addauthc",
+                                            onclick: {fn: Check }
+                                        });
+    var addauthButton2 = new YAHOO.widget.Button({
+                                            id: "addauth2",
+                                            type: "button",
+                                            label: "Save",
+                                            container: "action",
+                                            onclick: {fn: Check }
+                                        });
+    }
+    function confirmnotdup(redirect){
+        $("#confirm_not_duplicate").attr("value","1");
+        Check();
+    }
 //]]>
 </script>
 [% INCLUDE 'header.inc' %]
@@ -536,52 +561,33 @@ function searchauthority() {
 <h1>Modify authority #[% authid %] [% authtypetext %]</h1>
 [% ELSE %]
 <h1>Adding authority [% authtypetext %]</h1>
-[% END %]  
+[% END %]
+
+[% IF ( duplicateauthid ) %]
+        <div class="dialog alert">
+                <h4>Duplicate record suspected</h4>
+                <p>Is this a duplicate of <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% duplicateauthid %]" onclick="openWindow('/cgi-bin/koha/authorities/detail.pl?authid=[% duplicateauthid %]&amp;popup=1', 'Duplicate authority','800','600'); return false;" class="button">[% duplicateauthvalue %]</a>?</p>
+
+                <form action="authorities.pl" method="get">
+                    <input type="hidden" name="authid" value="[% duplicateauthid %]" />
+                    <input type="submit" class="edit" value="Yes: Edit exisiting authority" />
+                </form>
+                <form action="authorities.pl" method="get">
+                    <input type="button" value="No: Save as new authority" class="save" accesskey="w" onclick="confirmnotdup('items'); return false;" />
+                </form>
+        </div>
+[% END %]
+
 <form method="post" name="f" action="/cgi-bin/koha/authorities/authorities.pl">
     <input type="hidden" name="op" value="add" />
     <input type="hidden" name="addfield_field" value="" />
     <input type="hidden" name="repeat_field" value="" />
     <input type="hidden" name="authtypecode" value="[% authtypecode %]" />
     <input type="hidden" name="authid" value="[% authid %]" />
+    <input type="hidden" value="0" id="confirm_not_duplicate" name="confirm_not_duplicate" />
 
 	<div id="toolbar">
-	<script type="text/javascript">
-	//<![CDATA[
-	// prepare DOM for YUI Toolbar
-	 $(document).ready(function() {
-	    yuiToolbar();
-	    $("#addauthc,#action").empty();
-	 });
-	// YUI Toolbar Functions
-	function yuiToolbar() {
-	var addauthButton = new YAHOO.widget.Button({
-                                            id: "addauth", 
-                                            type: "button", 
-                                            label: "Save", 
-                                            container: "addauthc",
-											onclick: {fn: Check }
-                                        });
-	var addauthButton2 = new YAHOO.widget.Button({
-                                            id: "addauth2", 
-                                            type: "button", 
-                                            label: "Save", 
-                                            container: "action",
-											onclick: {fn: Check }
-                                        });
-	} //]]>
-	</script>
 	<ul class="toolbar"><li id="addauthc"><input id="addauth" type="submit" value="Save" accesskey="w" /></li></ul></div>
-
-[% IF ( duplicateauthid ) %]
-        <div class="problem">
-                <p>Duplicate suspected with <a href="javascript:openWindow('detail.pl?authid=[% duplicateauthid %]&amp;popup=1', 'Duplicate authority')" class="button">[% duplicateauthvalue %]</a></p>
-                <p>You must either :</p>
-                <ul>
-                        <p><input type="checkbox" value="1" name="confirm_not_duplicate" />confirm it's not a duplicate (and click on <input type="button" value="Add authority" onclick="Check(this.form)" accesskey="w" class="button" /> again)</p>
-                        <p>Go to <a href="authorities.pl?authid=[% duplicateauthid %]" >original authority</a></p>
-                </ul>
-        </div>
-[% END %]
 
 <div id="authoritytabs" class="toptabs numbered">
        <ul> [% FOREACH BIG_LOO IN BIG_LOOP %]

@@ -102,3 +102,10 @@ jQuery.fn.preventDoubleFormSubmit = function() {
             this.beenSubmitted = true;
     });
 };
+
+function openWindow(link,name,width,height) {
+    name = (typeof name == "undefined")?'popup':name;
+    width = (typeof width == "undefined")?'600':width;
+    height = (typeof height == "undefined")?'400':height;
+    var newin=window.open(link,name,'width='+width+',height='+height+',resizable=yes,toolbar=false,scrollbars=yes,top');
+}
