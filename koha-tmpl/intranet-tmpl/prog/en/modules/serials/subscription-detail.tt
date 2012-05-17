@@ -34,6 +34,10 @@ function popup(subscriptionid) {
 }
 $(document).ready(function() {
     $("#subscription_description > ul").tabs();
+    $("#renewsub").click(function(){
+        popup([% subscriptionid %]);
+        return false;
+    })
 });
 //]]>
 </script>
@@ -52,7 +56,7 @@ $(document).ready(function() {
 	[% INCLUDE 'serials-toolbar.inc' %]
 
     <h1>Subscription for [% bibliotitle %] </h1>
-    [% IF ( abouttoexpire ) %]<div class="problem">Subscription is near its end. It should be renewed now.</div>[% END %]
+    [% IF ( abouttoexpire ) %]<div class="dialog message">Subscription will expire [% enddate %]. <a href="#" id="renewsub">Renew this subscription</a>.</div>[% END %]
     [% IF ( NEEDSCONFIRMATION ) %]
     <div id="circ_needsconfirmation" class="dialog alert">
 			<h3>Please Confirm Subscription deletion</h3>
