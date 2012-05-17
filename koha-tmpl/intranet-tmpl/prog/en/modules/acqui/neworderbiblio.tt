@@ -29,11 +29,7 @@
 [% END %]
 
 [% IF ( query_error ) %]
-<br /><br />
-<b>Error:</b>
-<span class="problem">
-    [% query_error %]
-</span>
+    <div class="dialog alert"><p><strong>Error:</strong> [% query_error %]</p></div>
 [% END %]
 
 [% IF ( total ) %]

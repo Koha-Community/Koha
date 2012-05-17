@@ -318,11 +318,7 @@ YAHOO.util.Event.onContentReady("searchheader", function () {
     [% END %]
 
     [% IF ( query_error ) %]
-        <br /><br />
-        Error:
-        <span  class="problem">
-            [% query_error %]
-        </span>
+        <div class="dialog alert"><p><strong>Error:</strong> [% query_error %]</p></div>
     [% END %]
 
     <!-- Search Results Table -->
