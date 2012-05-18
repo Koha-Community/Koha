@@ -41,9 +41,11 @@
         $("#rate").keyup(function() {
             if ( $(this).val() == 1.0 ) {
                 $("#active").removeAttr('disabled');
+                $("#hint").html("");
             } else {
                 $("#active").removeAttr('checked');
                 $("#active").attr('disabled','disabled');
+                $("#hint").html(_("The active currency must have a rate of 1.0"));
             }
         });
     });
@@ -114,6 +116,7 @@
             [% ELSE %]
             <input type="checkbox" id="active" name="active" value="1" />
             [% END %]
+            <span id="hint" class="hint"></span>
         </li>
 
         </ol>
