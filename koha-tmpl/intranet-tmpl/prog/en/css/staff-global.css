@@ -1713,6 +1713,16 @@ input[type=submit], input[type=reset], input[type=button], input.submit, button.
 	color: #333333;
 }
 
+input[type=submit]:disabled,
+input[type=reset]:disabled,
+input[type=button]:disabled,
+input.submit:disabled,
+button.submit:disabled {
+    color : #999;
+    border : 1px solid #C0C0C0;
+    background : #EEE none;
+}
+
 input[type=reset]:active, input[type=button]:active, input.submit:active, button.submit:active {
 	border : 1px inset #999999;
 }
