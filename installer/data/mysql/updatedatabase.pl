@@ -5445,6 +5445,13 @@ CREATE TABLE IF NOT EXISTS borrower_files (
     SetVersion($DBversion);
 }
 
+$DBversion = "3.09.00.021";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('UpdateTotalIssuesOnCirc','0','Whether to update the totalissues field in the biblio on each circ.',NULL,'YesNo');");
+    print "Upgrade to $DBversion done (Add syspref UpdateTotalIssuesOnCirc)\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

@@ -1063,6 +1063,9 @@ sub AddIssue {
           CartToShelf( $item->{'itemnumber'} );
         }
         $item->{'issues'}++;
+        if ( C4::Context->preference('UpdateTotalIssuesOnCirc') ) {
+            UpdateTotalIssues($item->{'biblionumber'}, 1);
+        }
 
         ## If item was lost, it has now been found, reverse any list item charges if neccessary.
         if ( $item->{'itemlost'} ) {

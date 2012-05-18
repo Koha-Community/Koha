@@ -373,3 +373,5 @@ INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('OPACShowBarcode','0','Show items barcode in holding tab','','YesNo');
 INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES ('OPACShowUnusedAuthorities','1','','Show authorities that are not being used in the OPAC.','YesNo');
 INSERT INTO systempreferences (variable,value,explanation,type) VALUES('EnableBorrowerFiles','0','If enabled, allows librarians to upload and attach arbitrary files to a borrower record.','YesNo');
+INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('UpdateTotalIssuesOnCirc','0','Whether to update the totalissues field in the biblio on each circ.',NULL,'YesNo');
+

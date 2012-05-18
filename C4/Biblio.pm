@@ -104,6 +104,7 @@ BEGIN {
       &ModBiblio
       &ModBiblioframework
       &ModZebra
+      &UpdateTotalIssues
     );
 
     # To delete something
@@ -3826,6 +3827,53 @@ sub prepare_host_field {
         return $host_field;
     }
     return;
+}
+
+
+=head2 UpdateTotalIssues
+
+  UpdateTotalIssues($biblionumber, $increase, [$value])
+
+Update the total issue count for a particular bib record.
+
+=over 4
+
+=item C<$biblionumber> is the biblionumber of the bib to update
+
+=item C<$increase> is the amount to increase (or decrease) the total issues count by
+
+=item C<$value> is the absolute value that total issues count should be set to. If provided, C<$increase> is ignored.
+
+=back
+
+=cut
+
+sub UpdateTotalIssues {
+    my ($biblionumber, $increase, $value) = @_;
+    my $totalissues;
+
+    my $data = GetBiblioData($biblionumber);
+
+    if (defined $value) {
+        $totalissues = $value;
+    } else {
+        $totalissues = $data->{'totalissues'} + $increase;
+    }
+     my ($totalissuestag, $totalissuessubfield) = GetMarcFromKohaField('biblioitems.totalissues', $data->{'frameworkcode'});
+
+     my $record = GetMarcBiblio($biblionumber);
+
+     my $field = $record->field($totalissuestag);
+     if (defined $field) {
+         $field->update( $totalissuessubfield => $totalissues );
+     } else {
+         $field = MARC::Field->new($totalissuestag, '0', '0',
+                 $totalissuessubfield => $totalissues);
+         $record->insert_grouped_field($field);
+     }
+
+     ModBiblio($record, $biblionumber, $data->{'frameworkcode'});
+     return;
 }
 
 1;
