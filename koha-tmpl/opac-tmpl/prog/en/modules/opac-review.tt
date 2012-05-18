@@ -51,7 +51,7 @@
 <div id="userreview" class="container">
 [% IF ( cgi_debug ) %]<div class="debug">CGI debug is on.</div>[% END %]
 [% IF ( ERRORS ) %]
-	<div class="error">
+    <div class="dialog alert">
 	[% FOREACH ERROR IN ERRORS %]
 		<p>
 		[% IF ( ERROR.scrubbed ) %]Note: your comment contained illegal markup code.
