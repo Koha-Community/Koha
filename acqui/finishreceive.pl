@@ -62,6 +62,21 @@ if ($quantityrec > $origquantityrec ) {
     my @received_items = ();
     if(C4::Context->preference('AcqCreateItem') eq 'ordering') {
         @received_items = $input->param('items_to_receive');
+        my @affects = split q{\|}, C4::Context->preference("AcqItemSetSubfieldsWhenReceived");
+        if ( @affects ) {
+            my $frameworkcode = GetFrameworkCode($biblionumber);
+            my ( $itemfield ) = GetMarcFromKohaField( 'items.itemnumber', $frameworkcode );
+            for my $in ( @received_items ) {
+                my $item = C4::Items::GetMarcItem( $biblionumber, $in );
+                for my $affect ( @affects ) {
+                    my ( $sf, $v ) = split q{=}, $affect;
+                    foreach ( $item->field($itemfield) ) {
+                        $_->update( $sf => $v );
+                    }
+                }
+                C4::Items::ModItemFromMarc( $item, $biblionumber, $in );
+            }
+        }
     }
 
     $order->{rrp} = $rrp;
@@ -136,7 +151,6 @@ if ($quantityrec > $origquantityrec ) {
             NewOrderItem($itemnumber, $new_ordernumber);
         }
     }
-
 }
 
 update_item( $_ ) foreach GetItemnumbersFromOrder( $ordernumber );

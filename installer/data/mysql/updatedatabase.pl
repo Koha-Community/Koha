@@ -7728,6 +7728,15 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.13.00.XXX";
+if(CheckVersion($DBversion)) {
+    $dbh->do(q{
+        INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('AcqItemSetSubfieldsWhenReceived','','Set subfields for item when items are created when receiving (e.g. o=5|a="foo bar")','','Free');
+    });
+    print "Upgrade to $DBversion done (Added AcqItemSetSubfieldsWhenReceived syspref)\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)
