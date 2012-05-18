@@ -287,7 +287,7 @@ tinyMCE.init({
         <td><a href="[% catloo.action %]?op=delete_category&amp;categorycode=[% catloo.categorycode |url %]">Delete</a>
         </td>
         </tr>
-    [% END %][% ELSE %]<tr><td colspan="5">No [% IF ( branchcategorie.properties ) %]properties[% ELSIF ( branchcategorie.searchdomain ) %]search domain[% END %] defined</td></tr>[% END %]
+    [% END %][% ELSE %]<tr><td colspan="5">No [% IF ( branchcategorie.properties ) %]properties[% ELSIF ( branchcategorie.searchdomain ) %]search domain[% END %] defined. <a href="/cgi-bin/koha/admin/branches.pl?op=editcategory">Add a new group</a>.</td></tr>[% END %]
     </table>
     [% END %]
     [% ELSE %]
