@@ -19,7 +19,7 @@
    <div id="bd">
 	<div id="yui-main">
 
-[% INCLUDE 'cataloging-toolbar.inc' %]
+[% IF ( CAN_user_editcatalogue_edit_catalogue ) %][% INCLUDE 'cataloging-toolbar.inc' %][% END %]
 
 	[% IF ( noitemsfound ) %]
 		No results found
@@ -125,7 +125,7 @@
                 <th>Edition</th>
                 <th>Coming from</th>
                 <th>Preview</th>
-                <th>&nbsp;</th>
+                [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]<th>&nbsp;</th>[% END %]
             </tr>
             [% FOREACH breeding_loo IN breeding_loop %]
             [% IF ( loop.odd ) %]
@@ -141,10 +141,9 @@
                 <td>[% breeding_loo.file %]</td>
                 <td> <a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% breeding_loo.id %]" title="MARC" rel="gb_page_center[600,500]">MARC</a> | <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;importid=[% breeding_loo.id %]" title="MARC" rel="gb_page_center[600,500]">Card</a>
 				</td>
-                <td>
-                    [% UNLESS ( CAN_user_editcatalogue_edit_catalogue ) %]<a href="/cgi-bin/koha/cataloguing/addbiblio.pl?breedingid=[% breeding_loo.id %]" class="disabled" onclick="return false;">Add biblio</a>
-                    [% ELSE %]<a href="/cgi-bin/koha/cataloguing/addbiblio.pl?breedingid=[% breeding_loo.id %]">Add biblio</a>[% END %]
-                </td>
+                [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]<td>
+                    <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?breedingid=[% breeding_loo.id %]">Add biblio</a>
+                </td>[% END %]
             </tr>
             [% END %]
         </table>
