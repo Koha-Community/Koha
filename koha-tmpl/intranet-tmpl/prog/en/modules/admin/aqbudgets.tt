@@ -6,20 +6,72 @@
 [% IF ( add_form ) %]
 <script type="text/javascript">
 //<![CDATA[
-//
-     var actTotal ="";
 
-    function ownerRemove(f) {
-        document.getElementById('budget_owner_name').innerHTML = '';
-        document.getElementById('budget_owner_id').value = '';
+    function userPopup() {
+        window.open("/cgi-bin/koha/admin/aqbudget_user_search.pl?type=user",
+            'PatronPopup',
+            'width=740,height=450,location=yes,toolbar=no,'
+            + 'scrollbars=yes,resize=yes'
+        );
+    }
+
+    function ownerPopup() {
+        window.open("/cgi-bin/koha/admin/aqbudget_user_search.pl?type=owner",
+            'PatronPopup',
+            'width=740,height=450,location=yes,toolbar=no,'
+            + 'scrollbars=yes,resize=yes'
+        );
+    }
+
+    function edit_owner(borrowernumber, surname, firstname) {
+        $('#budget_owner_name').empty();
+        $('#budget_owner_id').val('');
+        if (borrowernumber) {
+            var ownerlink = '<a href="/cgi-bin/koha/members/moremember.pl'
+                + '?borrowernumber=' + borrowernumber + '">'
+                + firstname + ' ' + surname + '</a>';
+            $('#budget_owner_name').html(ownerlink);
+            $('#budget_owner_id').val(borrowernumber);
+        }
+    }
+
+    function ownerRemove() {
+        edit_owner(0);
+    }
+
+    function add_user(borrowernumber, surname, firstname) {
+        var ids = $("#budget_users_id").val().split(':');
+        if(borrowernumber && ids.indexOf(borrowernumber) == -1) {
+            var li = '<li id="user_' + borrowernumber + '">'
+                + '<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber='
+                + borrowernumber + '">' + firstname + ' ' + surname
+                + '</a> [<a style="cursor:pointer"'
+                + 'onclick="del_user(' + borrowernumber +')">Remove</a>]</li>';
+            $(li).insertBefore("li#add_user_button");
+            ids.push(borrowernumber);
+            $("#budget_users_id").val(ids.join(':'));
+        } else {
+            return -1;
+        }
+        return 0;
+    }
+
+    function del_user(borrowernumber) {
+        var ids = $("#budget_users_id").val().split(':');
+        if (borrowernumber) {
+            var idx = ids.indexOf(borrowernumber+'');
+            if (idx != -1) {
+                ids.splice(idx, 1);
+                $("#budget_users_id").val(ids.join(':'));
+                $("li#user_" + borrowernumber).remove();
+            }
+        }
     }
 
     function Check(f) {
         var ok=1;
         var _alertString="";
         var alertString2;
-
-        // var actTotal ="";
 
         if (!(isNotNull(f.budget_code,1))) {
             _alertString += _("- Budget code cannot be blank") + "\n";
@@ -154,7 +206,15 @@
 <div id="yui-main">
 <div class="yui-b" id="content">
 
+
 [% UNLESS ( delete_confirm ) %][% INCLUDE 'budgets-admin-toolbar.inc' %][% END %]
+
+[% IF (error_not_authorised_to_modify) %]
+    <div class="error">
+        <p>You are not authorised to modify this fund</p>
+    </div>
+[% END %]
+
 [% IF ( else ) %]
 
 <h1>Funds for '[% budget_period_description %]'</h1>
@@ -246,7 +306,7 @@
 
 <!-- ********************************************************************************************** -->
 <!-- create add/mod entry form -->
-[% IF ( add_form ) %]
+[% IF ( add_form && !error_not_authorised_to_modify ) %]
 <form action="/cgi-bin/koha/admin/aqbudgets.pl" name="Aform" method="post">
     <fieldset class="rows">
     <legend>[% IF ( budget_id ) %]Modify[% ELSE %]Add[% END %] Fund
@@ -288,20 +348,43 @@
 
     <li>
     <label for="budget_expend">Expenditure: </label>
-    <input type="text" name="budget_expend" id="budget_expend" value="[% budget_expend %]" size="8" /><input type="hidden" name="budget_owner_id" id="budget_owner_id" value="[% budget_owner_id %]" />
+    <input type="text" name="budget_expend" id="budget_expend" value="[% budget_expend %]" size="8" />
     </li>
 
     <li>
-    <span class="label">Owner: </span>
-    <span  id="budget_owner_name">
-    <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% budget_owner_id %]">[% budget_owner_name %]</a>
-    </span>
+        <span class="label">Owner: </span>
+        <span  id="budget_owner_name">
+        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% budget_owner_id %]">
+            [% budget_owner_name %]
+        </a>
+        </span>
+        <input type="hidden" name="budget_owner_id" id="budget_owner_id"
+            value="[% budget_owner_id %]" />
 
-    <!-- FIXME: hardcoded button positions :/ -->
-    <input style="" type="button" id="edit_owner" value="Edit owner" onclick="ownerPopup(); return false;" />
-    <input style=""  type="button" id="remove_owner" value="Remove owner" onclick="ownerRemove(this.form); return false;" />
+        <!-- FIXME: hardcoded button positions :/ -->
+        <input type="button" id="edit_owner" value="Edit owner"
+            onclick="ownerPopup(); return false;" />
+        <input type="button" id="remove_owner" value="Remove owner"
+            onclick="ownerRemove(); return false;" />
     </li>
 
+    <li>
+        <span class="label">Users:</span>
+        <ul style="float:left;" id="budget_users">
+            [% FOREACH user IN budget_users %]
+                <li id="user_[% user.borrowernumber %]">
+                    <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% user.borrowernumber %]">
+                        [% user.firstname %] [% user.surname %]
+                    </a>
+                    [<a style="cursor:pointer"
+                    onclick="del_user([% user.borrowernumber %])">Remove</a>]
+                </li>
+            [% END %]
+            <li id="add_user_button">
+                <input type="button" onclick="userPopup()" value="Add users" />
+            </li>
+        </ul>
+        <input type="hidden" name="budget_users_ids" id="budget_users_id" value="[% budget_users_ids %]" />
     <li>
     <label for="budget_branchcode">Library: </label>
     <select name="budget_branchcode" id="budget_branchcode">
@@ -315,10 +398,37 @@
     <li>
     <label for="budget_permission">Restrict access to: </label>
     <select name="budget_permission" id="budget_permission">
-    [% IF ( budget_perm_0 ) %]<option value="0" selected="selected">None</option>[% ELSE %]<option value="0">None</option>[% END %]
-    [% IF ( budget_perm_1 ) %]<option value="1" selected="selected">Owner</option>[% ELSE %]<option value="1">Owner</option>[% END %]
-    [% IF ( budget_perm_2 ) %]<option value="2" selected="selected">Library</option>[% ELSE %]<option value="2">Library</option>[% END %]
-    </option>
+        [% IF ( budget_perm_0 ) %]
+            <option value="0" selected="selected">
+        [% ELSE %]
+            <option value="0">
+        [% END %]
+            None
+        </option>
+
+        [% IF ( budget_perm_1 ) %]
+            <option value="1" selected="selected">
+        [% ELSE %]
+            <option value="1">
+        [% END %]
+            Owner
+        </option>
+
+        [% IF ( budget_perm_3) %]
+            <option value="3" selected="selected">
+        [% ELSE %]
+            <option value="3">
+        [% END %]
+            Owner and users
+        </option>
+
+        [% IF ( budget_perm_2 ) %]
+            <option value="2" selected="selected">
+        [% ELSE %]
+            <option value="2">
+        [% END %]
+            Owner, users and library
+        </option>
     </select>
     </li>
 

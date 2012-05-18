@@ -41,7 +41,7 @@ use C4::Debug;
 use C4::Suggestions;
 
 my $query = CGI->new;
-my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+my ( $template, $loggedinuser, $cookie, $userflags ) = get_template_and_user(
     {   template_name   => 'acqui/acqui-home.tmpl',
         query           => $query,
         type            => 'intranet',
@@ -78,9 +78,7 @@ if ( $cur_format eq 'FR' ) {
 my $status           = $query->param('status') || "ASKED";
 my $suggestions_count       = CountSuggestion($status);
 
-my $budget_arr =
-  GetBudgetHierarchy( '', $user->{branchcode},
-    $template->{VARS}->{'USER_INFO'}[0]->{'borrowernumber'} );
+my $budget_arr = GetBudgetHierarchy;
 
 my $total      = 0;
 my $totspent   = 0;
@@ -93,7 +91,9 @@ my $totspent_active     = 0;
 my $totordered_active   = 0;
 my $totavail_active     = 0;
 
+my @budget_loop;
 foreach my $budget ( @{$budget_arr} ) {
+    next unless (CanUserUseBudget($loggedinuser, $budget, $userflags));
 
     $budget->{budget_code_indent} =~ s/\ /\&nbsp\;/g;
 
@@ -136,11 +136,13 @@ foreach my $budget ( @{$budget_arr} ) {
     for my $field (qw( budget_amount budget_spent budget_ordered budget_avail ) ) {
         $budget->{$field} = $num_formatter->format_price( $budget->{$field} );
     }
+
+    push @budget_loop, $budget;
 }
 
 $template->param(
     type          => 'intranet',
-    loop_budget   => $budget_arr,
+    loop_budget   => \@budget_loop,
     branchname    => $branchname,
     total         => $num_formatter->format_price($total),
     totspent      => $num_formatter->format_price($totspent),

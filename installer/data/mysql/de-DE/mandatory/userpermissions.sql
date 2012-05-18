@@ -16,6 +16,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (11, 'group_manage', 'Bestellgruppen vewalten'),
    (11, 'order_receive', 'Lieferungen verwalten'),
    (11, 'budget_add_del', 'Konten hinzufügen/ändern, aber bestehende nicht ändern'),
+   (11, 'budget_manage_all', 'Manage all budgets'),
    (13, 'edit_news', 'Nachrichten für OPAC und Dienstoberfläche verfassen'),
    (13, 'label_creator', 'Etiketten und Barcodes aus Katalog- und Benutzerdaten erstellen'),
    (13, 'edit_calendar', 'Schließtage eintragen'),

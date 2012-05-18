@@ -44,6 +44,11 @@ BEGIN {
         &GetPeriodsCount
         &GetChildBudgetsSpent
 
+        &GetBudgetUsers
+        &ModBudgetUsers
+        &CanUserUseBudget
+        &CanUserModifyBudget
+
 	    &GetBudgetPeriod
         &GetBudgetPeriods
         &ModBudgetPeriod
@@ -650,6 +655,159 @@ gets all budgets
 sub GetBudgets {
     my ($filters,$orderby) = @_;
     return SearchInTable("aqbudgets",$filters, $orderby, undef,undef, undef, "wide");
+}
+
+=head2 GetBudgetUsers
+
+    my @borrowernumbers = &GetBudgetUsers($budget_id);
+
+Return the list of borrowernumbers linked to a budget
+
+=cut
+
+sub GetBudgetUsers {
+    my ($budget_id) = @_;
+
+    my $dbh = C4::Context->dbh;
+    my $query = qq{
+        SELECT borrowernumber
+        FROM aqbudgetborrowers
+        WHERE budget_id = ?
+    };
+    my $sth = $dbh->prepare($query);
+    $sth->execute($budget_id);
+
+    my @borrowernumbers;
+    while (my ($borrowernumber) = $sth->fetchrow_array) {
+        push @borrowernumbers, $borrowernumber
+    }
+
+    return @borrowernumbers;
+}
+
+=head2 ModBudgetUsers
+
+    &ModBudgetUsers($budget_id, @borrowernumbers);
+
+Modify the list of borrowernumbers linked to a budget
+
+=cut
+
+sub ModBudgetUsers {
+    my ($budget_id, @budget_users_id) = @_;
+
+    return unless $budget_id;
+
+    my $dbh = C4::Context->dbh;
+    my $query = "DELETE FROM aqbudgetborrowers WHERE budget_id = ?";
+    my $sth = $dbh->prepare($query);
+    $sth->execute($budget_id);
+
+    $query = qq{
+        INSERT INTO aqbudgetborrowers (budget_id, borrowernumber)
+        VALUES (?,?)
+    };
+    $sth = $dbh->prepare($query);
+    foreach my $borrowernumber (@budget_users_id) {
+        next unless $borrowernumber;
+        $sth->execute($budget_id, $borrowernumber);
+    }
+}
+
+sub CanUserUseBudget {
+    my ($borrower, $budget, $userflags) = @_;
+
+    if (not ref $borrower) {
+        $borrower = C4::Members::GetMember(borrowernumber => $borrower);
+    }
+    if (not ref $budget) {
+        $budget = GetBudget($budget);
+    }
+
+    return 0 unless ($borrower and $budget);
+
+    if (not defined $userflags) {
+        $userflags = C4::Auth::getuserflags($borrower->{flags},
+            $borrower->{userid});
+    }
+
+    unless ($userflags->{superlibrarian}
+    || (ref $userflags->{acquisition}
+        && $userflags->{acquisition}->{budget_manage_all})
+    || (!ref $userflags->{acquisition} && $userflags->{acquisition}))
+    {
+        if (not exists $userflags->{acquisition}) {
+            return 0;
+        }
+
+        if (!ref $userflags->{acquisition} && !$userflags->{acquisition}) {
+            return 0;
+        }
+
+        # Budget restricted to owner
+        if ($budget->{budget_permission} == 1
+        && $budget->{budget_owner_id}
+        && $budget->{budget_owner_id} != $borrower->{borrowernumber}) {
+            return 0;
+        }
+
+        my @budget_users = GetBudgetUsers($budget->{budget_id});
+
+        # Budget restricted to owner, users and library
+        if ($budget->{budget_permission} == 2
+        && $budget->{budget_owner_id}
+        && $budget->{budget_owner_id} != $borrower->{borrowernumber}
+        && (0 == grep {$borrower->{borrowernumber} == $_} @budget_users)
+        && defined $budget->{budget_branchcode}
+        && $budget->{budget_branchcode} ne C4::Context->userenv->{branch}) {
+            return 0;
+        }
+
+        # Budget restricted to owner and users
+        if ($budget->{budget_permission} == 3
+        && $budget->{budget_owner_id}
+        && $budget->{budget_owner_id} != $borrower->{borrowernumber}
+        && (0 == grep {$borrower->{borrowernumber} == $_} @budget_users)) {
+            return 0;
+        }
+    }
+
+    return 1;
+}
+
+sub CanUserModifyBudget {
+    my ($borrower, $budget, $userflags) = @_;
+
+    if (not ref $borrower) {
+        $borrower = C4::Members::GetMember(borrowernumber => $borrower);
+    }
+    if (not ref $budget) {
+        $budget = GetBudget($budget);
+    }
+
+    return 0 unless ($borrower and $budget);
+
+    if (not defined $userflags) {
+        $userflags = C4::Auth::getuserflags($borrower->{flags},
+            $borrower->{userid});
+    }
+
+    unless ($userflags->{superlibrarian}
+    || (ref $userflags->{acquisition}
+        && $userflags->{acquisition}->{budget_manage_all})
+    || (!ref $userflags->{acquisition} && $userflags->{acquisition}))
+    {
+        if (!CanUserUseBudget($borrower, $budget, $userflags)) {
+            return 0;
+        }
+
+        if (ref $userflags->{acquisition}
+        && !$userflags->{acquisition}->{budget_modify}) {
+            return 0;
+        }
+    }
+
+    return 1;
 }
 
 # -------------------------------------------------------------------

@@ -354,6 +354,10 @@ my ( @budget_lines, %cell_hash );
 foreach my $budget (@budgets) {
     my $budget_lock;
 
+    unless (CanUserUseBudget($borrowernumber, $budget, $staff_flags)) {
+        $budget_lock = 1
+    }
+
     # check budget permission
     if ( $period->{budget_period_locked} == 1 ) {
         $budget_lock = 1;

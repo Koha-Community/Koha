@@ -92,7 +92,7 @@ delete $$suggestion_ref{$_} foreach qw( suggestedbyme op displayby tabcode edit_
 foreach (keys %$suggestion_ref){
     delete $$suggestion_ref{$_} if (!$$suggestion_ref{$_} && ($op eq 'else' || $op eq 'change'));
 }
-my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
+my ( $template, $borrowernumber, $cookie, $userflags ) = get_template_and_user(
         {
             template_name   => "suggestion/suggestion.tmpl",
             query           => $input,
@@ -320,12 +320,19 @@ if ($branchfilter) {
     $budgets = GetBudgets(undef);
 }
 
+my @budgets_loop;
 foreach my $budget ( @{$budgets} ) {
-## Please see file perltidy.ERR
-    $budget->{'selected'}=1 if ($$suggestion_ref{'budgetid'} && $budget->{'budget_id'} eq $$suggestion_ref{'budgetid'})
-};
+    next unless (CanUserUseBudget($borrowernumber, $budget, $userflags));
 
-$template->param( budgetsloop => $budgets);
+    ## Please see file perltidy.ERR
+    $budget->{'selected'} = 1
+        if ($$suggestion_ref{'budgetid'}
+        && $budget->{'budget_id'} eq $$suggestion_ref{'budgetid'});
+
+    push @budgets_loop, $budget;
+}
+
+$template->param( budgetsloop => \@budgets_loop);
 $template->param( "statusselected_$$suggestion_ref{'STATUS'}" =>1) if ($$suggestion_ref{'STATUS'});
 
 # get currencies and rates

@@ -46,14 +46,15 @@ use C4::Branch;         # GetBranches
 use C4::Members;
 
 my $input = new CGI;
-my ($template, $loggedinuser, $cookie) = get_template_and_user({
-                                        template_name => "acqui/addorderiso2709.tmpl",
-                                        query => $input,
-                                        type => "intranet",
-                                        authnotrequired => 0,
-                                        flagsrequired   => { acquisition => 'order_manage' },
-                                        debug => 1,
-                                        });
+my ($template, $loggedinuser, $cookie, $userflags) = get_template_and_user({
+    template_name => "acqui/addorderiso2709.tmpl",
+    query => $input,
+    type => "intranet",
+    authnotrequired => 0,
+    flagsrequired   => { acquisition => 'order_manage' },
+    debug => 1,
+});
+
 my $cgiparams = $input->Vars;
 my $op = $cgiparams->{'op'};
 my $booksellerid  = $input->param('booksellerid');
@@ -276,8 +277,9 @@ my $budget = GetBudget($budget_id);
 
 # build budget list
 my $budget_loop = [];
-$budgets = GetBudgetHierarchy( q{}, $borrower->{branchcode}, $borrower->{borrowernumber} );
+$budgets = GetBudgetHierarchy;
 foreach my $r ( @{$budgets} ) {
+    next unless (CanUserUseBudget($borrower, $r, $userflags));
     if ( !defined $r->{budget_amount} || $r->{budget_amount} == 0 ) {
         next;
     }

@@ -18,6 +18,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (11, 'group_manage', 'Gestisci ordini e raccoglitori raggruppati'),
    (11, 'order_receive', 'Gestisci arrivi'),
    (11, 'budget_add_del', 'Aggiungi e cancella budgets (senza modificarli)'),
+   (11, 'budget_manage_all', 'Manage all budgets'),
    (13, 'edit_news', 'Scrivi le news per l\'OPAC e per l\'interfaccia staff'),
    (13, 'label_creator', 'Crea etichette da stampare e barcodes dal catalogo e dai dati degli utenti'),
    (13, 'edit_calendar', 'Definisci i giorni di chiusura della biblioteca'),

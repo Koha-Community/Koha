@@ -40,6 +40,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (11, 'group_manage', 'Manage orders & basketgroups'),
    (11, 'order_receive', 'Manage orders & basket'),
    (11, 'budget_add_del', 'Add and delete budgets (but cant modify budgets)'),
+   (11, 'budget_manage_all', 'Manage all budgets'),
    (13, 'edit_news',                   'Написання новин для електронного каталогу та інтерфейсу бібліотекарів'),
    (13, 'label_creator',               'Створення друкованих наклейок і штрих-кодів з каталогу та з даними про користувачів'),
    (13, 'edit_calendar',               'Визначення днів, коли бібліотека закрита'),

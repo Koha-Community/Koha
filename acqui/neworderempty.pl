@@ -110,7 +110,7 @@ my $new = 'no';
 
 my $budget_name;
 
-my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+my ( $template, $loggedinuser, $cookie, $userflags ) = get_template_and_user(
     {
         template_name   => "acqui/neworderempty.tmpl",
         query           => $input,
@@ -251,8 +251,9 @@ my ( $flags, $homebranch )= ($borrower->{'flags'},$borrower->{'branchcode'});
 my $budget =  GetBudget($budget_id);
 # build budget list
 my $budget_loop = [];
-my $budgets = GetBudgetHierarchy(q{},$borrower->{branchcode},$borrower->{borrowernumber});
+my $budgets = GetBudgetHierarchy;
 foreach my $r (@{$budgets}) {
+    next unless (CanUserUseBudget($borrower, $r, $userflags));
     if (!defined $r->{budget_amount} || $r->{budget_amount} == 0) {
         next;
     }

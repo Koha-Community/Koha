@@ -1,0 +1,111 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Budget
+    [% IF (type == 'owner') %]
+        owner
+    [% ELSE %]
+        user
+    [% END %]
+    search
+</title>
+[% INCLUDE 'doc-head-close.inc' %]
+    <style type="text/css">
+    #custom-doc {
+        width:44.46em;
+        *width:43.39em;
+        min-width:578px;
+        margin:auto;
+        text-align:left;
+    }
+    </style>
+
+    <script type="text/javascript">
+    //<![CDATA[
+
+    // modify parent window owner element
+    function add_user(borrowernumber, surname, firstname) {
+        [% IF (type == 'owner') %]
+            top.opener.edit_owner(borrowernumber, surname, firstname);
+            window.close();
+        [% ELSE %]
+            var ret = top.opener.add_user(borrowernumber, surname, firstname);
+            if (ret != 0) {
+                alert(_("This user is already in the list."));
+            }
+        [% END %]
+    }
+
+    //]]>
+    </script>
+</head>
+
+<body id="admin_aqbudget_owner_search" class="admin">
+<div id="custom-doc" class="yui-t7">
+<div id="bd">
+<div class="yui-g">
+
+<h3>Search for budget
+    [% IF (type == 'owner') %]
+        owner
+    [% ELSE %]
+        user
+    [% END %]
+</h3>
+<form action="/cgi-bin/koha/admin/aqbudget_user_search.pl" method="post">
+    <fieldset>
+        <input type="text" name="member" id="member" value="[% member %]"
+            class="focus" />
+
+        <input type="hidden" name="type" value="[% type %]" />
+        <input type="submit" class="button" value="Search" />
+    </fieldset>
+
+    <div class="hint">
+        Only staff with superlibrarian or acquisitions permissions are returned
+        in the search results.
+    </div>
+</form>
+
+
+[% IF ( results ) %]
+    <p>Searched for <span class="ex">[% member %]</span>,
+    [% resultsloop.size || 0 %] patron(s) found:</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Cardnumber</th>
+                <th>Name</th>
+                <th>Library</th>
+                <th>Categorycode</th>
+                <th>Select?</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            [% FOREACH result IN resultsloop %]
+                <tr>
+                    <td>[% result.cardnumber %]</td>
+                    <td>[% result.surname %], [% result.firstname %]</td>
+                    <td>[% result.branchcode %]</td>
+                    <td>[% result.categorycode %]</td>
+                    <td>
+                    <a style="cursor:pointer"
+                        onclick="add_user(
+                            '[% result.borrowernumber %]',
+                            '[% result.surname %]',
+                            '[% result.firstname %]'
+                        );"
+                    />Select</a>
+                    </td>
+                </tr>
+            [% END %]
+        </tbody>
+    </table>
+[% END %]
+
+<div id="closewindow">
+    <a href="#" class="close">Close</a>
+</div>
+</div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

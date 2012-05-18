@@ -5392,6 +5392,30 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "XXX";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("DROP TABLE IF EXISTS aqbudgetborrowers");
+    $dbh->do("
+        CREATE TABLE aqbudgetborrowers (
+          budget_id int(11) NOT NULL,
+          borrowernumber int(11) NOT NULL,
+          PRIMARY KEY (budget_id, borrowernumber),
+          CONSTRAINT aqbudgetborrowers_ibfk_1 FOREIGN KEY (budget_id)
+            REFERENCES aqbudgets (budget_id)
+            ON DELETE CASCADE ON UPDATE CASCADE,
+          CONSTRAINT aqbudgetborrowers_ibfk_2 FOREIGN KEY (borrowernumber)
+            REFERENCES borrowers (borrowernumber)
+            ON DELETE CASCADE ON UPDATE CASCADE
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+    ");
+    $dbh->do("
+        INSERT INTO permissions (module_bit, code, description)
+        VALUES (11, 'budget_manage_all', 'Manage all budgets')
+    ");
+    print "Upgrade to $DBversion done (Add aqbudgetborrowers table)\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

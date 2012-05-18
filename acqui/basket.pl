@@ -68,7 +68,7 @@ my $query        = new CGI;
 my $basketno     = $query->param('basketno');
 my $booksellerid = $query->param('booksellerid');
 
-my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+my ( $template, $loggedinuser, $cookie, $userflags ) = get_template_and_user(
     {
         template_name   => "acqui/basket.tmpl",
         query           => $query,
@@ -351,12 +351,14 @@ my $total_est_gste;
     my @orders = GetOrders($basketno);
 
     my $borrower= GetMember('borrowernumber' => $loggedinuser);
-    my $budgets = GetBudgetHierarchy(q{},$borrower->{branchcode},$borrower->{borrowernumber});
+    my $budgets = GetBudgetHierarchy;
     my $has_budgets = 0;
     foreach my $r (@{$budgets}) {
         if (!defined $r->{budget_amount} || $r->{budget_amount} == 0) {
             next;
         }
+        next unless (CanUserUseBudget($loggedinuser, $r, $userflags));
+
         $has_budgets = 1;
         last;
     }

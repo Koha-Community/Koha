@@ -531,14 +531,7 @@ function log(message) {
     logLine.appendChild(log.window_.document.createTextNode(message));
     log.window_.document.body.appendChild(logLine);
 }
-//=======================================================================
 
-
-
-    function ownerPopup(f) {
-    window.open("/cgi-bin/koha/admin/aqbudget_owner_search.pl?op=budget",'PatronPopup','width=740,height=450,location=yes,toolbar=no,scrollbars=yes,resize=yes');
-    }
-        //
 //=======================================================================
 function getElementsByClass( searchClass, domNode, tagName) {
     if (domNode == null) domNode = document;

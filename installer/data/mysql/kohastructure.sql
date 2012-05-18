@@ -2642,6 +2642,22 @@ CREATE TABLE `aqbudgets` (
   PRIMARY KEY  (`budget_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Table structure for table aqbudgetborrowers
+--
+
+DROP TABLE IF EXISTS aqbudgetborrowers;
+CREATE TABLE aqbudgetborrowers (
+  budget_id int(11) NOT NULL,
+  borrowernumber int(11) NOT NULL,
+  PRIMARY KEY (budget_id, borrowernumber),
+  CONSTRAINT aqbudgetborrowers_ibfk_1 FOREIGN KEY (budget_id)
+    REFERENCES aqbudgets (budget_id)
+    ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT aqbudgetborrowers_ibfk_2 FOREIGN KEY (borrowernumber)
+    REFERENCES borrowers (borrowernumber)
+    ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Table structure for table `aqbudgetperiods`

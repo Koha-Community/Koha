@@ -19,8 +19,8 @@
 # with Koha; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-use strict;
-#use warnings; FIXME - Bug 2505
+use Modern::Perl;
+
 use CGI;
 use List::Util qw/min/;
 use Number::Format qw(format_price);
@@ -56,15 +56,17 @@ $template->param( symbol => $cur->{symbol},
                   currency => $cur->{currency}
                );
 
-my $op = $input->param('op');
+my $op = $input->param('op') // '';
 
 # see if the user want to see all budgets or only owned ones
 my $show_mine    = 1; #SHOW BY DEFAULT
-my $show         = $input->param('show'); # SET TO 1, BY A FORM SUMBIT
+my $show         = $input->param('show') // 0; # SET TO 1, BY A FORM SUMBIT
 $show_mine       = $input->param('show_mine') if $show == 1;
 
 # IF USER DOESNT HAVE PERM FOR AN 'ADD', THEN REDIRECT TO THE DEFAULT VIEW...
-if  (  not defined $template->{VARS}->{'CAN_user_acquisition_budget_add_del'}  &&  $op ==  'add_form'  )   {
+if (not defined $template->{VARS}->{'CAN_user_acquisition_budget_add_del'}
+    and $op eq 'add_form')
+{
     $op = '';
 }
 my $num=FormatNumber;
@@ -73,7 +75,7 @@ my $script_name               = "/cgi-bin/koha/admin/aqbudgets.pl";
 my $budget_hash               = $input->Vars;
 my $budget_id                 = $$budget_hash{budget_id};
 my $budget_permission         = $input->param('budget_permission');
-my $filter_budgetbranch       = $input->param('filter_budgetbranch');
+my $filter_budgetbranch       = $input->param('filter_budgetbranch') // '';
 my $filter_budgetname         = $input->param('filter_budgetname');
 #filtering non budget keys
 delete $$budget_hash{$_} foreach grep {/filter|^op$|show/} keys %$budget_hash;
@@ -126,7 +128,12 @@ if ($op eq 'add_form') {
     #  pass the period_id to build the dropbox - because we only want to show  budgets from this period
     my $dropbox_disabled;
     if (defined $budget_id ) {    ### MOD
-        $budget           = GetBudget($budget_id);
+        $budget = GetBudget($budget_id);
+        if (!CanUserModifyBudget($borrowernumber, $budget, $staffflags)) {
+            $template->param(error_not_authorised_to_modify => 1);
+            output_html_with_http_headers $input, $cookie, $template->output;
+            exit;
+        }
         $dropbox_disabled = BudgetHasChildren($budget_id);
         my $borrower = &GetMember( borrowernumber=>$budget->{budget_owner_id} );
         $budget->{budget_owner_name} = $borrower->{'firstname'} . ' ' . $borrower->{'surname'};
@@ -189,6 +196,24 @@ if ($op eq 'add_form') {
         $template->param($budget_permission => 1);
     }
 
+    if ($budget) {
+        my @budgetusers = GetBudgetUsers($budget->{budget_id});
+        my @budgetusers_loop;
+        foreach my $borrowernumber (@budgetusers) {
+            my $member = C4::Members::GetMember(
+                borrowernumber => $borrowernumber);
+            push @budgetusers_loop, {
+                firstname => $member->{firstname},
+                surname => $member->{surname},
+                borrowernumber => $borrowernumber
+            };
+        }
+        $template->param(
+            budget_users => \@budgetusers_loop,
+            budget_users_ids => join ':', @budgetusers
+        );
+    }
+
     # if no buget_id is passed then its an add
     $template->param(
         add_validate                  => 1,
@@ -218,10 +243,24 @@ if ($op eq 'add_form') {
     if ( $op eq 'delete_confirmed' ) {
         my $rc = DelBudget($budget_id);
     }elsif( $op eq 'add_validate' ) {
+        my @budgetusersid;
+        if (defined $$budget_hash{'budget_users_ids'}){
+            @budgetusersid = split(':', $budget_hash->{'budget_users_ids'});
+        }
+
         if ( defined $$budget_hash{budget_id} ) {
-            ModBudget( $budget_hash );
+            if (CanUserModifyBudget($borrowernumber, $budget_hash->{budget_id},
+                $staffflags)
+            ) {
+                ModBudget( $budget_hash );
+                ModBudgetUsers($budget_hash->{budget_id}, @budgetusersid);
+            }
+            else {
+                $template->param(error_not_authorised_to_modify => 1);
+            }
         } else {
             AddBudget( $budget_hash );
+            ModBudgetUsers($budget_hash->{budget_id}, @budgetusersid);
         }
     }
     my $branches = GetBranches();
@@ -230,8 +269,10 @@ if ($op eq 'add_form') {
         %$period,
     );
 
-    my $moo = GetBudgetHierarchy($$period{budget_period_id}, C4::Context->userenv->{branchcode}, $show_mine?$borrower_id:'');
-    my @budgets = @$moo; #FIXME
+    my @budgets = @{
+        GetBudgetHierarchy($$period{budget_period_id},
+            C4::Context->userenv->{branchcode}, $show_mine ? $borrower_id : '')
+    };
 
     my $toggle = 0;
     my @loop;
@@ -245,31 +286,9 @@ if ($op eq 'add_form') {
         $budget->{'total_levels_spent'} = GetChildBudgetsSpent($budget->{"budget_id"});
 
         # PERMISSIONS
-        unless($staffflags->{'superlibrarian'} % 2   == 1 ) {
-            #IF NO PERMS, THEN DISABLE EDIT/DELETE
-            unless ( $template->{VARS}->{'CAN_user_acquisition_budget_modify'} ) {
-                $budget->{'budget_lock'} = 1;
-            }
-            # check budget permission
-            if ( $$period{budget_period_locked} == 1 ) {
-                $budget->{'budget_lock'} = 1;
-
-            } elsif ( $budget->{budget_permission} == 1 ) {
-
-                if ( $borrower_id != $budget->{'budget_owner_id'} ) {
-                    $budget->{'budget_lock'} = 1;
-                }
-                # check parent perms too
-                my $parents_perm = 0;
-                if ( $budget->{depth} > 0 ) {
-                    $parents_perm = CheckBudgetParentPerm( $budget, $borrower_id );
-                    delete $budget->{'budget_lock'} if $parents_perm == '1';
-                }
-            } elsif ( $budget->{budget_permission} == 2 ) {
-
-                $budget->{'budget_lock'} = 1 if $user_branchcode ne $budget->{budget_branchcode};
-            }
-        }    # ...SUPER_LIB END
+        unless(CanUserModifyBudget($borrowernumber, $budget, $staffflags)) {
+            $budget->{'budget_lock'} = 1;
+        }
 
         # if a budget search doesnt match, next
         if ($filter_budgetname) {
@@ -288,7 +307,9 @@ if ($op eq 'add_form') {
         $budget->{'budget_remaining'} = $budget->{'budget_amount'} - $budget->{'total_levels_spent'};
 
 # if amount == 0 dont display...
-        delete  $budget->{'budget_unalloc_sublevel'} if  $budget->{'budget_unalloc_sublevel'} == 0 ;
+        delete $budget->{'budget_unalloc_sublevel'}
+            if (!defined $budget->{'budget_unalloc_sublevel'}
+            or $budget->{'budget_unalloc_sublevel'} == 0);
 
         $budget->{'remaining_pos'} = 1 if $budget->{'budget_remaining'} > 0;
         $budget->{'remaining_neg'} = 1 if $budget->{'budget_remaining'} < 0;
@@ -312,7 +333,7 @@ if ($op eq 'add_form') {
             push @budget_hierarchy, { element_name => $parent->{"budget_name"}, element_id => $parent->{"budget_id"} };
             $parent_id = $parent->{"budget_parent_id"};
         }
-        push  @budget_hierarchy, { element_name => $period->{"budget_period_description"} }; 
+        push  @budget_hierarchy, { element_name => $period->{"budget_period_description"} };
         @budget_hierarchy = reverse(@budget_hierarchy);
 
         push( @loop, {  %{$budget},

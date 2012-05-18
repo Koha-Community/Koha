@@ -37,6 +37,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (11, 'group_manage', 'Administrere bestillinger og kurv-grupper'),
    (11, 'order_receive', 'Administrere bestillinger og kurver'),
    (11, 'budget_add_del', 'Legge til og slette budsjetter (men ikke endre budsjetter)'),
+   (11, 'budget_manage_all', 'Manage all budgets'),
    (13, 'edit_news', 'Legge ut nyhter i OPACen og det interne grensesnittet'),
    (13, 'label_creator', 'Lage etiketter og strekkoder basert på bibliografiske poster og lånerdata'),
    (13, 'edit_calendar', 'Definere dager da biblioteket er stengt'),
