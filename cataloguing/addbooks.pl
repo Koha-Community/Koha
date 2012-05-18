@@ -49,7 +49,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,
-        flagsrequired   => { editcatalogue => 'edit_catalogue' },
+        flagsrequired   => { editcatalogue => '*' },
         debug           => 1,
     }
 );
