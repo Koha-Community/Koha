@@ -2838,7 +2838,7 @@ CREATE TABLE ratings (
 DROP TABLE IF EXISTS quotes;
 CREATE TABLE `quotes` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `source` varchar(45) DEFAULT NULL,
+  `source` text DEFAULT NULL,
   `text` mediumtext NOT NULL,
   `timestamp` datetime NOT NULL,
   PRIMARY KEY (`id`)
