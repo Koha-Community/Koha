@@ -5423,6 +5423,28 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.09.00.020";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,type) VALUES('EnableBorrowerFiles','0','If enabled, allows librarians to upload and attach arbitrary files to a borrower record.','YesNo')");
+    $dbh->do("
+CREATE TABLE IF NOT EXISTS borrower_files (
+  file_id int(11) NOT NULL AUTO_INCREMENT,
+  borrowernumber int(11) NOT NULL,
+  file_name varchar(255) NOT NULL,
+  file_type varchar(255) NOT NULL,
+  file_description varchar(255) DEFAULT NULL,
+  file_content longblob NOT NULL,
+  date_uploaded timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (file_id),
+  KEY borrowernumber (borrowernumber)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+    ");
+    $dbh->do("ALTER TABLE borrower_files ADD CONSTRAINT borrower_files_ibfk_1 FOREIGN KEY (borrowernumber) REFERENCES borrowers (borrowernumber) ON DELETE CASCADE ON UPDATE CASCADE");
+
+    print "Upgrade to $DBversion done (Added borrow_files table, EnableBorrowerFiles syspref)\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

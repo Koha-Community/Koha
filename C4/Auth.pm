@@ -365,6 +365,7 @@ sub get_template_and_user {
             LocalCoverImages            => C4::Context->preference('LocalCoverImages'),
             OPACLocalCoverImages        => C4::Context->preference('OPACLocalCoverImages'),
             AllowMultipleCovers         => C4::Context->preference('AllowMultipleCovers'),
+            EnableBorrowerFiles         => C4::Context->preference('EnableBorrowerFiles'),
         );
     }
     else {

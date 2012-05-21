@@ -1,0 +1,74 @@
+[% USE KohaDates %]
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Files for [% INCLUDE 'patron-title.inc' %]</title>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'patron-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>  &rsaquo; Files for [% INCLUDE 'patron-title.inc' %]</div>
+
+<div id="doc3" class="yui-t2">
+    <div id="bd">
+        <div id="yui-main">
+            <div class="yui-b">
+                [% INCLUDE 'circ-toolbar.inc' %]
+
+                <h1>Files</h1>
+
+                <table>
+                    <thead>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                        <th>Uploaded</th>
+                        [% IF CAN_user_borrowers %]<th>&nbsp;</th>[% END %]
+                    </thead>
+
+                    <tbody>
+                        [% IF errors %]
+                            <div class="error warn">
+                                [% IF errors.empty_upload %]The file you are attempting to upload has no contents.[% END %]
+                                [% IF errors.no_file %]You did not select a file to upload.[% END %]
+                            </div>
+                        [% END %]
+
+                        [% FOREACH f IN files %]
+                            <tr>
+                                 <td><a href="?borrowernumber=[% borrowernumber %]&op=download&file_id=[% f.file_id %]">[% f.file_name %]</a></td>
+                                 <td>[% f.file_type %]</td>
+                                 <td>[% f.file_description %]</td>
+                                 <td>[% f.date_uploaded | $KohaDates %]</td>
+                                 [% IF CAN_user_borrowers %]<td><a href="?borrowernumber=[% borrowernumber %]&op=delete&file_id=[% f.file_id %]">Delete</a></td>[% END %]
+                            </tr>
+                        [% END %]
+                    </tbody>
+                </table>
+
+                <form method="post" enctype="multipart/form-data">
+                    <fieldset>
+                        <legend>Upload New File</legend>
+
+                        <input type="hidden" name="op" value="upload" />
+                        <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
+                        <input type="hidden" name="MAX_FILE_SIZE" value="2000000" />
+
+                        <label for="description">Description:</label>
+                        <input name="description" type="text" />
+
+                        <input name="uploadfile" type="file" id="uploadfile" />
+
+                        <input name="upload" type="submit" id="upload" value="Upload File" />
+                    </fieldset>
+                </form>
+
+            </div>
+        </div>
+
+        <div class="yui-b">
+            [% INCLUDE 'circ-menu.inc' %]
+        </div>
+    </div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]
