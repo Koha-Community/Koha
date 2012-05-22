@@ -562,7 +562,7 @@ sub fix_unimarc_100 {
     my $marc = shift;
 
     my $string;
-    if ( length($marc->subfield( 100, "a" )) == 35 ) {
+    if ( length($marc->subfield( 100, "a" )) == 36 ) {
         $string = $marc->subfield( 100, "a" );
         my $f100 = $marc->field(100);
         $marc->delete_field($f100);
@@ -573,7 +573,7 @@ sub fix_unimarc_100 {
         $string = sprintf( "%-*s", 35, $string );
     }
     substr( $string, 22, 6, "frey50" );
-    unless ( length($marc->subfield( 100, "a" )) == 35 ) {
+    unless ( length($marc->subfield( 100, "a" )) == 36 ) {
         $marc->delete_field($marc->field(100));
         $marc->insert_grouped_field(MARC::Field->new( 100, "", "", "a" => $string ));
     }
