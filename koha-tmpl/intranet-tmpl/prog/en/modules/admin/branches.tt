@@ -269,30 +269,40 @@ tinyMCE.init({
    [% IF ( branchcategories ) %]
    [% FOREACH branchcategorie IN branchcategories %]
     <h3>Group(s):  [% IF ( branchcategorie.properties ) %]Properties[% ELSE %][% IF ( branchcategorie.searchdomain ) %]Search domain[% END %][% END %]</h3>
-	<table>
-    <tr>
-        <th>Name</th>
-        <th>Code</th>
-        <th>Description</th>
-        <th>&nbsp;</th>
-        <th>&nbsp;</th>
-    </tr>
-[% IF ( branchcategorie.catloop ) %][% FOREACH catloo IN branchcategorie.catloop %]
-        <tr>
-        <td>[% catloo.categoryname %]</td>
-        <td>[% catloo.categorycode %]</td>
-        <td>[% catloo.codedescription %]</td>
-        <td><a href="[% catloo.action %]?op=editcategory&amp;categorycode=[% catloo.categorycode |url %]">Edit</a>
-        </td>
-        <td><a href="[% catloo.action %]?op=delete_category&amp;categorycode=[% catloo.categorycode |url %]">Delete</a>
-        </td>
-        </tr>
-    [% END %][% ELSE %]<tr><td colspan="5">No [% IF ( branchcategorie.properties ) %]properties[% ELSIF ( branchcategorie.searchdomain ) %]search domain[% END %] defined. <a href="/cgi-bin/koha/admin/branches.pl?op=editcategory">Add a new group</a>.</td></tr>[% END %]
-    </table>
-    [% END %]
+    [% IF ( branchcategorie.catloop ) %]
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Code</th>
+            <th>Description</th>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
+          </tr>
+        </thead>
+        <tbody>
+          [% FOREACH catloo IN branchcategorie.catloop %]
+            <tr>
+              <td>[% catloo.categoryname %]</td>
+              <td>[% catloo.categorycode %]</td>
+              <td>[% catloo.codedescription %]</td>
+              <td>
+                <a href="[% catloo.action %]?op=editcategory&amp;categorycode=[% catloo.categorycode |url %]">Edit</a>
+              </td>
+              <td>
+                <a href="[% catloo.action %]?op=delete_category&amp;categorycode=[% catloo.categorycode |url %]">Delete</a>
+              </td>
+            </tr>
+          [% END %]
+        </tbody>
+      </table>
     [% ELSE %]
-        <p>No groups defined.</p>
-    [% END %] <!-- NAME="branchcategories" -->
+      No [% IF ( branchcategorie.properties ) %]properties[% ELSIF ( branchcategorie.searchdomain ) %]search domain[% END %] defined. <a href="/cgi-bin/koha/admin/branches.pl?op=editcategory">Add a new group</a>.
+    [% END %]
+  [% END %]
+  [% ELSE %]
+    <p>No groups defined.</p>
+  [% END %] <!-- NAME="branchcategories" -->
 [% END %]
 
 [% IF ( editcategory ) %]
