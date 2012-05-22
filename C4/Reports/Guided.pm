@@ -473,7 +473,7 @@ Returns id of the newly created report
 
 sub save_report {
     my ( $borrowernumber, $sql, $name, $type, $notes, $cache_expiry, $public ) = @_;
-    $cache_expiry ||= 0;
+    $cache_expiry ||= 300;
     my $dbh = C4::Context->dbh();
     $sql =~ s/(\s*\;\s*)$//; # removes trailing whitespace and /;/
     my $query =
