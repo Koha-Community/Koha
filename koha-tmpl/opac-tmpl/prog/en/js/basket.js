@@ -384,10 +384,10 @@ function showLess() {
 function updateBasket(updated_value,target) {
 	if(target){
 	target.$('#basketcount').html("<span>"+updated_value+"</span>");
-	target.$('#cartDetails').html(_("Your cart contains ")+updated_value+_(" items"));
+    target.$('#cartDetails').html(MSG_IN_YOUR_CART+updated_value);
 	} else {
 	$('#basketcount').html("<span>"+updated_value+"</span>");
-	$('#cartDetails').html(_("Your cart contains ")+updated_value+_(" items"));
+    $('#cartDetails').html(MSG_IN_YOUR_CART+updated_value);
 	}
 	var basketcount = updated_value;
 }
