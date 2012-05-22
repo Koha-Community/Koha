@@ -65,6 +65,9 @@ function constructTrNode(index, unique_item_fields) {
         } else {
             field_value = $(field_elt).val();
         }
+        if (field_value == undefined) {
+            field_value = '';
+        }
         result += "<td>" + field_value + "</td>";
     }
     result += "</tr>";
