@@ -56,6 +56,7 @@
     var MSG_CONFIRM_DEL_BASKET = _("Are you sure you want to empty your cart?");
     var MSG_CONFIRM_DEL_RECORDS = _("Are you sure you want to remove the selected items?");
     var MSG_ITEM_IN_CART = _("In your cart");
+    var MSG_IN_YOUR_CART = _("Items in your cart: ");
     var MSG_ITEM_NOT_IN_CART = _("Add to your cart");
 	$("#cartDetails").ready(function(){ $("#cmspan").html("<a href=\"#\" id=\"cartmenulink\" class=\"\"><i><\/i><span><i><\/i><span><\/span><span id=\"carticon\"></span> "+_("Cart")+"<span id=\"basketcount\"><\/span><\/span><\/a>"); }); [% ELSE %][% IF ( virtualshelves ) %]
     var MSG_NO_RECORD_SELECTED = _("No item was selected");[% END %][% END %]
