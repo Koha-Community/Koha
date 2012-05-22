@@ -1,6 +1,8 @@
 INSERT INTO permissions (module_bit, code, description) VALUES
    ( 1, 'circulate_remaining_permissions', 'Übrige Ausleihberechtigungen'),
    ( 1, 'override_renewals', 'Gesperrte Verlängerungen überschreiben'),
+   ( 3, 'parameters_remaining_permissions', 'Remaining system parameters permissions'),
+   ( 3, 'manage_circ_rules', 'manage circulation rules'),
    ( 6, 'place_holds', 'Vormerkungen für Benutzer setzen'),
    ( 6, 'modify_holds_priority', 'Vormerkungspriorität verändern'),
    ( 9, 'edit_catalogue', 'Katalogdaten bearbeiten (Titel- und Exemplardaten ändern)'),

@@ -5536,6 +5536,24 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
+
+
+
+$DBversion = "3.09.00.XXX";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do("INSERT INTO permissions (module_bit, code, description) VALUES
+        ( 3, 'parameters_remaining_permissions', 'Remaining system parameters permissions'),
+        ( 3, 'manage_circ_rules', 'manage circulation rules')");
+    $dbh->do("INSERT INTO user_permissions (borrowernumber, module_bit, code)
+        SELECT borrowernumber, 3, 'parameters_remaining_permissions'
+        FROM borrowers WHERE flags & (1 << 3)");
+    $dbh->do("INSERT INTO user_permissions (borrowernumber, module_bit, code)
+        SELECT borrowernumber, 3, 'manage_circ_rules'
+        FROM borrowers WHERE flags & (1 << 3)");
+    print "Upgrade to $DBversion done (Added parameters subpermissions)\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

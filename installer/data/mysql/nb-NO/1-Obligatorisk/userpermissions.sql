@@ -22,6 +22,8 @@
 INSERT INTO permissions (module_bit, code, description) VALUES
    ( 1, 'circulate_remaining_permissions', 'Øvrige rettigheter for sirkulasjon'),
    ( 1, 'override_renewals', 'Overstyre blokkerte fornyinger'),
+   ( 3, 'parameters_remaining_permissions', 'Remaining system parameters permissions'),
+   ( 3, 'manage_circ_rules', 'manage circulation rules'),
    ( 6, 'place_holds', 'Foreta reservering for lånere'),
    ( 6, 'modify_holds_priority', 'Endre rekkefølge på reserveringer'),
    ( 9, 'edit_catalogue', 'Endre katalogen (Endre bibliografiske poster og eksemplaropplysninger)'),

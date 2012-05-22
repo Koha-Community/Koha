@@ -65,7 +65,7 @@ sub show {
             query           => $input,
             type            => "intranet",
             authnotrequired => 0,
-            flagsrequired   => { parameters => 1 },
+            flagsrequired   => { parameters => 'parameters_remaining_permissions' },
             debug           => defined($input->param('debug')),
         }
     );

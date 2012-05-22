@@ -39,7 +39,7 @@ my ($template, $loggedinuser, $cookie)
 			     query => $query,
 			     type => "intranet",
 			     authnotrequired => 0,
-			     flagsrequired => {parameters => 1},
+                 flagsrequired => {parameters => 'parameters_remaining_permissions'},
 			     debug => 1,
 			     });
 

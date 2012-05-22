@@ -1,6 +1,8 @@
 INSERT INTO permissions (module_bit, code, description) VALUES
    ( 1, 'circulate_remaining_permissions', 'Fonctions de circulation restantes'),
    ( 1, 'override_renewals', 'Outrepasser les limites de renouvellement'),
+   ( 3, 'parameters_remaining_permissions', 'Remaining system parameters permissions'),
+   ( 3, 'manage_circ_rules', 'manage circulation rules'),
    ( 6, 'place_holds', 'Réserver pour des adhérents'),
    ( 6, 'modify_holds_priority', 'Modifier la priorité des réservations'),
    ( 9, 'edit_catalogue', 'Ajouter et modifier des notices au catalogue'),

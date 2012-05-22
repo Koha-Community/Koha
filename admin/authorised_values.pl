@@ -55,7 +55,7 @@ our $dbh = C4::Context->dbh;
 our ($template, $borrowernumber, $cookie)= get_template_and_user({
     template_name => "admin/authorised_values.tmpl",
     authnotrequired => 0,
-    flagsrequired => {parameters => 1},
+    flagsrequired => {parameters => 'parameters_remaining_permissions'},
     query => $input,
     type => "intranet",
     debug => 1,
