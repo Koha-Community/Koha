@@ -290,6 +290,7 @@ my $target_map = {
   './rewrite-config.PL'         => 'NONE',
   './reviews'                   => 'INTRANET_CGI_DIR',
   './serials'                   => 'INTRANET_CGI_DIR',
+  './services'                  => 'INTRANET_CGI_DIR',
   './skel'                      => 'NONE',
   './skel/var/log/koha'         => { target => 'LOG_DIR', trimdir => -1 },
   './skel/var/run/koha/zebradb' => { target => 'ZEBRA_RUN_DIR', trimdir => -1 },
