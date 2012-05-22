@@ -93,7 +93,7 @@ $template->param(LETTERLOOP => \@letterloop);
 
 =cut
 
-sub GetLetters (;$) {
+sub GetLetters {
 
     # returns a reference to a hash of references to ALL letters...
     my $cat = shift;
@@ -117,7 +117,7 @@ sub GetLetters (;$) {
 }
 
 my %letter;
-sub getletter ($$$) {
+sub getletter {
     my ( $module, $code, $branchcode ) = @_;
 
     if (C4::Context->preference('IndependantBranches') && $branchcode){
@@ -149,7 +149,7 @@ sub getletter ($$$) {
 
 =cut
 
-sub addalert ($$$) {
+sub addalert {
     my ( $borrowernumber, $type, $externalid ) = @_;
     my $dbh = C4::Context->dbh;
     my $sth =
@@ -170,7 +170,7 @@ sub addalert ($$$) {
 
 =cut
 
-sub delalert ($) {
+sub delalert {
     my $alertid = shift or die "delalert() called without valid argument (alertid)";    # it's gonna die anyway.
     $debug and warn "delalert: deleting alertid $alertid";
     my $sth = C4::Context->dbh->prepare("delete from alert where alertid=?");
@@ -187,7 +187,7 @@ sub delalert ($) {
 
 =cut
 
-sub getalert (;$$$) {
+sub getalert {
     my ( $borrowernumber, $type, $externalid ) = @_;
     my $dbh   = C4::Context->dbh;
     my $query = "SELECT a.*, b.branchcode FROM alert a JOIN borrowers b USING(borrowernumber) WHERE";
@@ -224,16 +224,16 @@ sub getalert (;$$$) {
 # outmoded POD:
 # When type=virtual, the id is related to a virtual shelf and this sub returns the name of the sub
 
-sub findrelatedto ($$) {
-    my $type       = shift or return undef;
-    my $externalid = shift or return undef;
+sub findrelatedto {
+    my $type       = shift or return;
+    my $externalid = shift or return;
     my $q = ($type eq 'issue'   ) ?
 "select title as result from subscription left join biblio on subscription.biblionumber=biblio.biblionumber where subscriptionid=?" :
             ($type eq 'borrower') ?
 "select concat(firstname,' ',surname) from borrowers where borrowernumber=?" : undef;
     unless ($q) {
         warn "findrelatedto(): Illegal type '$type'";
-        return undef;
+        return;
     }
     my $sth = C4::Context->dbh->prepare($q);
     $sth->execute($externalid);
@@ -666,8 +666,8 @@ return message_id on success
 
 =cut
 
-sub EnqueueLetter ($) {
-    my $params = shift or return undef;
+sub EnqueueLetter {
+    my $params = shift or return;
 
     return unless exists $params->{'letter'};
     return unless exists $params->{'borrowernumber'};
@@ -724,7 +724,7 @@ returns number of messages sent.
 
 =cut
 
-sub SendQueuedMessages (;$) {
+sub SendQueuedMessages {
     my $params = shift;
 
     my $unsent_messages = _get_unsent_messages();
@@ -870,7 +870,7 @@ sub _add_attachments {
 
 }
 
-sub _get_unsent_messages (;$) {
+sub _get_unsent_messages {
     my $params = shift;
 
     my $dbh = C4::Context->dbh();
@@ -904,7 +904,7 @@ ENDSQL
     return $sth->fetchall_arrayref({});
 }
 
-sub _send_message_by_email ($;$$$) {
+sub _send_message_by_email {
     my $message = shift or return;
     my ($username, $password, $method) = @_;
 
@@ -986,8 +986,8 @@ $content
 EOS
 }
 
-sub _send_message_by_sms ($) {
-    my $message = shift or return undef;
+sub _send_message_by_sms {
+    my $message = shift or return;
     my $member = C4::Members::GetMember( 'borrowernumber' => $message->{'borrowernumber'} );
     return unless $member->{'smsalertnumber'};
 
@@ -1005,11 +1005,11 @@ sub _update_message_to_address {
     $dbh->do('UPDATE message_queue SET to_address=? WHERE message_id=?',undef,($to,$id));
 }
 
-sub _set_message_status ($) {
-    my $params = shift or return undef;
+sub _set_message_status {
+    my $params = shift or return;
 
     foreach my $required_parameter ( qw( message_id status ) ) {
-        return undef unless exists $params->{ $required_parameter };
+        return unless exists $params->{ $required_parameter };
     }
 
     my $dbh = C4::Context->dbh();
