@@ -53,13 +53,11 @@ sub new {
         $kp->{opacnote} .= 'PATRON EXPIRED';
     }
     my %ilspatron;
-    my $adr     = $kp->{streetnumber} || '';
-    my $address = $kp->{address}      || '';
+    my $adr     = _get_address($kp);
     my $dob     = $kp->{dateofbirth};
     $dob and $dob =~ s/-//g;    # YYYYMMDD
     my $dexpiry     = $kp->{dateexpiry};
     $dexpiry and $dexpiry =~ s/-//g;    # YYYYMMDD
-    $adr .= ($adr && $address) ? " $address" : $address;
     my $fines_amount = $flags->{CHARGES}->{amount};
     $fines_amount = ($fines_amount and $fines_amount > 0) ? $fines_amount : 0;
     {
@@ -347,6 +345,24 @@ sub invalid_patron {
 sub charge_denied {
     my $self = shift;
     return "Please contact library staff";
+}
+
+sub _get_address {
+    my $patron = shift;
+
+    my $address = $patron->{streetnumber} || q{};
+    for my $field (qw( roaddetails address address2 city state zipcode country))
+    {
+        next unless $patron->{$field};
+        if ($address) {
+            $address .= q{ };
+            $address .= $patron->{$field};
+        }
+        else {
+            $address .= $patron->{$field};
+        }
+    }
+    return $address;
 }
 
 1;
