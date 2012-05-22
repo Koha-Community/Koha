@@ -34,20 +34,25 @@
         }
     }
 
+    function check_currency(val) {
+        if ( val == 1.0 ) {
+            $("#active").removeAttr('disabled');
+            $("#hint").html("");
+        } else {
+            $("#active").removeAttr('checked');
+            $("#active").attr('disabled','disabled');
+            $("#hint").html(_("The active currency must have a rate of 1.0"));
+        }
+    }
+
     $(document).ready(function() {
         new YAHOO.widget.Button("newcurrency");
 
         // prevents users to check active with a currency != 1
         $("#rate").keyup(function() {
-            if ( $(this).val() == 1.0 ) {
-                $("#active").removeAttr('disabled');
-                $("#hint").html("");
-            } else {
-                $("#active").removeAttr('checked');
-                $("#active").attr('disabled','disabled');
-                $("#hint").html(_("The active currency must have a rate of 1.0"));
-            }
+            check_currency( $(this).val() );
         });
+        check_currency( $("#rate").val() );
     });
 //]]>
 </script>
