@@ -4,6 +4,11 @@
 
 <script type="text/javascript">
 //<![CDATA[
+function generateReceive(subscriptionid) {
+    if(nbissues=prompt(_("How many issues do you want to receive ?"))){
+        document.location = 'serials-collection.pl?op=gennext&subscriptionid='+subscriptionid+'&nbissues='+nbissues;
+    }
+}
 function print_slip(subscriptionid,issue){
     var myurl = 'routing-preview.pl?ok=1&subscriptionid='+subscriptionid+'&issue='+issue;
     window.open(myurl,'PrintSlip','width=500,height=500,toolbar=no,scrollbars=yes');
@@ -190,6 +195,7 @@ $(document).ready(function() {
         <p>
             <input type="submit" value="Edit serials" />&nbsp;
             <input type="button" value="Generate Next" onclick="javascript:generateNext([% subscriptionidlist %])" />
+            [% IF ( subscriptions.size == 1 ) %]&nbsp;<input type="button" value="Multi receiving" onclick="javascript:generateReceive([% subscriptionidlist %])" />[% END %]
         </p>
     [% END %]
 

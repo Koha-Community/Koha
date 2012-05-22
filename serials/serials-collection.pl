@@ -34,6 +34,7 @@ use List::MoreUtils qw/uniq/;
 
 my $query = new CGI;
 my $op = $query->param('op') || q{};
+my $nbissues=$query->param('nbissues');
 my $dbh = C4::Context->dbh;
 
 my ($template, $loggedinuser, $cookie);
@@ -55,19 +56,20 @@ my $subscriptions;
 
 if($op eq 'gennext' && @subscriptionid){
     my $subscriptionid = $subscriptionid[0];
-    my $subscription = GetSubscription($subscriptionid);
-
-	my $sth = $dbh->prepare("SELECT publisheddate, serialid, serialseq, planneddate
+    my $sth = $dbh->prepare("SELECT publisheddate, serialid, serialseq, planneddate
 							FROM serial WHERE status = 1 AND subscriptionid = ?");
+    my $status = defined( $nbissues ) ? 2 : 3;
+    $nbissues ||= 1;
+    for ( my $i = 0; $i < $nbissues; $i++ ){
 	$sth->execute($subscriptionid);
-
 	# modify actual expected issue, to generate the next
 	if ( my $issue = $sth->fetchrow_hashref ) {
 		ModSerialStatus( $issue->{serialid}, $issue->{serialseq},
                 $issue->{planneddate}, $issue->{publisheddate},
-                3, "" );
+                $status, "" );
 	}else{
-		my $expected = GetNextExpected($subscriptionid);
+            my $subscription = GetSubscription($subscriptionid);
+            my $expected = GetNextExpected($subscriptionid);
 	    my (
 	         $newserialseq,  $newlastvalue1, $newlastvalue2, $newlastvalue3,
              $newinnerloop1, $newinnerloop2, $newinnerloop3
@@ -82,14 +84,16 @@ if($op eq 'gennext' && @subscriptionid){
 	     ## Updating the subscription seq status
 	     my $squery = "UPDATE subscription SET lastvalue1=?, lastvalue2=?, lastvalue3=?, innerloop1=?, innerloop2=?, innerloop3=?
 	                 WHERE  subscriptionid = ?";
-	     $sth = $dbh->prepare($squery);
-	     $sth->execute(
+	     my $seqsth = $dbh->prepare($squery);
+	     $seqsth->execute(
 	         $newlastvalue1, $newlastvalue2, $newlastvalue3, $newinnerloop1,
 	         $newinnerloop2, $newinnerloop3, $subscriptionid
 	         );
 
 	}
-
+	last if $nbissues == 1;
+	last if HasSubscriptionExpired($subscriptionid) > 0;
+    }
     print $query->redirect('/cgi-bin/koha/serials/serials-collection.pl?subscriptionid='.$subscriptionid);
 }
 
