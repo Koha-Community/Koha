@@ -43,6 +43,8 @@ use C4::Scrubber;
 use C4::Biblio;
 use C4::Tags qw(add_tag get_approval_rows get_tag_rows remove_tag);
 
+use Data::Dumper;
+
 my %newtags = ();
 my @deltags = ();
 my %counts  = ();
