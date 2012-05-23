@@ -32,7 +32,7 @@ use C4::Labels 1.000000;
 my $cgi = new CGI;
 
 my $batch_id;
-my @labels_id;
+my @label_ids;
 my @item_numbers;
 $batch_id    = $cgi->param('batch_id') if $cgi->param('batch_id');
 my $template_id = $cgi->param('template_id') || undef;
