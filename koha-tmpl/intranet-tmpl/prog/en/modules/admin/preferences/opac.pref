@@ -79,11 +79,13 @@ OPAC:
                   no: "Don't include"
             - "COinS / OpenURL / Z39.88 in OPAC search results.  <br/>Warning: Enabling this feature will slow OPAC search response times."
         -
-            - pref: OPACDisplayRequestPriority
+            - pref: OPACShowHoldQueueDetails
               choices:
-                  yes: Show
-                  no: "Don't show"
-            - patrons the priority level of their holds in the OPAC.
+                  none: "Don't show any hold details"
+                  priority: "Show priority level"
+                  holds: "Show holds"
+                  holds_priority: "Show holds and their priority level"
+            - to patrons in the OPAC.
         -
             - pref: OPACShowCheckoutName
               default: 0

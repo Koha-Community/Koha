@@ -5269,6 +5269,21 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
+
+
+$DBversion = "3.07.00.XXX";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do("UPDATE systempreferences SET
+                variable = 'OPACShowHoldQueueDetails',
+                value = CASE value WHEN '1' THEN 'priority' ELSE 'none' END,
+                options = 'none|priority|holds|holds_priority',
+                explanation = 'Show holds details in OPAC',
+                type = 'Choice'
+              WHERE variable = 'OPACDisplayRequestPriority'");
+    print "Upgrade to $DBversion done (Changed system preference OPACDisplayRequestPriority -> OPACShowHoldQueueDetails)\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

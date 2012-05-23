@@ -65,7 +65,10 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     }
 );
 
-my $OPACDisplayRequestPriority = (C4::Context->preference("OPACDisplayRequestPriority")) ? 1 : 0;
+my $show_priority;
+for ( C4::Context->preference("OPACShowHoldQueueDetails") ) {
+    m/priority/ and $show_priority = 1;
+}
 my $patronupdate = $query->param('patronupdate');
 my $canrenew = 1;
 
@@ -260,8 +263,8 @@ foreach my $res (@reserves) {
     $res->{'branch'} = $branches->{ $res->{'branchcode'} }->{'branchname'};
     my $biblioData = GetBiblioData($res->{'biblionumber'});
     $res->{'reserves_title'} = $biblioData->{'title'};
-    if ($OPACDisplayRequestPriority) {
-        $res->{'priority'} = '' if $res->{'priority'} eq '0';
+    if ($show_priority) {
+        $res->{'priority'} ||= '';
     }
     $res->{'suspend_until'} = C4::Dates->new( $res->{'suspend_until'}, "iso")->output("syspref") if ( $res->{'suspend_until'} );
 }
@@ -271,7 +274,7 @@ foreach my $res (@reserves) {
 
 $template->param( RESERVES       => \@reserves );
 $template->param( reserves_count => $#reserves+1 );
-$template->param( showpriority=>1 ) if $OPACDisplayRequestPriority;
+$template->param( showpriority=>$show_priority );
 
 my @waiting;
 my $wcount = 0;

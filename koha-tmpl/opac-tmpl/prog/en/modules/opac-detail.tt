@@ -718,6 +718,11 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
             <th id="item_status">Status</th>
             [% IF ( itemdata_itemnotes ) %]<th id="item_notes">Notes</th>[% END %]
             <th id="item_datedue">Date due</th>
+        [% IF holds_count.defined %]
+            <th>Item holds</th>
+        [% ELSIF show_priority %]
+            <th>Item hold queue priority</th>
+        [% END %]
         </tr></thead>
 	    <tbody>[% FOREACH ITEM_RESULT IN ITEM_RESULTS %]
 	    <tr>[% IF ( item_level_itypes ) %]<td>[% UNLESS ( noItemTypeImages ) %][% IF ( ITEM_RESULT.imageurl ) %]<img src="[% ITEM_RESULT.imageurl %]" title="[% ITEM_RESULT.description %]" alt="[% ITEM_RESULT.description %]" />[% END %][% END %] [% ITEM_RESULT.description %]</td>[% END %]
@@ -742,9 +747,35 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 		<td>[% INCLUDE 'item-status.inc' item = ITEM_RESULT %]</td>
 		[% IF ( itemdata_itemnotes ) %]<td>[% ITEM_RESULT.itemnotes %]</td>[% END %]
 		<td>[% ITEM_RESULT.datedue | $KohaDates %]</td>
+        [% IF holds_count.defined || show_priority %]
+        <td>
+            [% IF holds_count.defined %] [% ITEM_RESULT.holds_count %] [% END %]
+            [% IF ITEM_RESULT.priority %]
+                [% IF holds_count.defined %]
+                (priority [% ITEM_RESULT.priority %])
+                [% ELSE %]
+                [% ITEM_RESULT.priority %]
+                [% END %]
+            [% END %]
+                </td>
+        [% END %]
 	    </tr>
 	    [% END %]</tbody>
 	</table>
+    [% END %]
+    [% IF holds_count.defined || priority %]
+    <div id="bib_holds">
+        [% IF holds_count.defined %]
+        Total holds: [% holds_count %]
+        [% END %]
+        [% IF priority %]
+            [% IF holds_count.defined %]
+            (priority [% priority %])
+            [% ELSE %]
+            Overall queue priority: [% priority %]
+            [% END %]
+        [% END %]
+        </div>
     [% END %]
 [% ELSE %]
     [% IF ( ALTERNATEHOLDINGS ) %]

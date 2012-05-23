@@ -242,7 +242,11 @@
                   [% UNLESS ( item_level_itypes ) %]
                     <th>Item type</th>
                   [% END %]
-                  [% IF ( showpriority ) %]
+                  [% IF showholds && showpriority %]
+                  <th>Holds and priority</th>
+                  [% ELSIF showholds %]
+                  <th>Holds</th>
+                  [% ELSIF showpriority %]
                   <th>Priority</th>
                   [% END %]
 		  [% IF ( reserve_in_future ) %]
@@ -297,19 +301,23 @@
                         [% END %]
 
                     </td>
-                    [% IF ( bibitemloo.holdable ) %][% UNLESS ( item_level_itypes ) %]
-                                          <td>
-                                            [% IF ( bibitemloo.imageurl ) %]<img src="[% bibitemloo.imageurl %]" alt="" />[% END %]
-                                [% bibitemloo.description %]
-                                          </td>
-                                        [% END %][% END %]
                     [% IF ( bibitemloo.holdable ) %]
-                    [% IF ( showpriority ) %]
-                    <td>
-                    [% bibitemloo.rank %] out of [% bibitemloo.reservecount %]
-                    </td>[% END %][% END %]
-		    [% IF ( reserve_in_future ) %]
-		    [% IF ( bibitemloo.holdable ) %]<td>
+            <!-- HOLDABLE -->
+                        [% UNLESS ( item_level_itypes ) %]
+                        <td>
+                            [% IF ( bibitemloo.imageurl ) %]<img src="[% bibitemloo.imageurl %]" alt="" />[% END %]
+                            [% bibitemloo.description %]
+                        </td>
+                        [% END %]
+                        [% IF showholds || showpriority %]
+                        <td>
+                        [% IF showpriority %] [% bibitemloo.rank %] [% END %]
+                        [% IF showholds && showpriority %] out of [% END %]
+                        [% IF showholds %] [% bibitemloo.reservecount %] [% END %]
+                        </td>
+                        [% END %]
+                [% IF ( reserve_in_future ) %]
+                        <td>
               <input name="reserve_date_[% bibitemloo.biblionumber %]" id="reserve_date_[% bibitemloo.biblionumber %]" size="10">
               <script language="JavaScript" type="text/javascript">
               //<![CDATA[

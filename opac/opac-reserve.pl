@@ -47,7 +47,13 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
         debug           => 1,
     }
 );
-my $OPACDisplayRequestPriority = (C4::Context->preference("OPACDisplayRequestPriority")) ? 1 : 0;
+
+my ($show_holds_count, $show_priority);
+for ( C4::Context->preference("OPACShowHoldQueueDetails") ) {
+    m/holds/o and $show_holds_count = 1;
+    m/priority/ and $show_priority = 1;
+}
+
 sub get_out ($$$) {
 	output_html_with_http_headers(shift,shift,shift); # $query, $cookie, $template->output;
 	exit;
@@ -113,12 +119,8 @@ $template->param( choose_branch => $OPACChooseBranch);
 #
 #
 
-# Hash of biblionumber to biblio/biblioitems record.
-my %biblioDataHash;
-
-# Hash of itemnumber to item info.
-my %itemInfoHash;
-
+my %biblioDataHash; # Hash of biblionumber to biblio/biblioitems record.
+my %itemInfoHash; # Hash of itemnumber to item info.
 foreach my $biblioNumber (@biblionumbers) {
 
     my $biblioData = GetBiblioData($biblioNumber);
@@ -128,33 +130,36 @@ foreach my $biblioNumber (@biblionumbers) {
 
     my $marcrecord= GetMarcBiblio($biblioNumber);
 
-	# flag indicating existence of at least one item linked via a host record
-	my $hostitemsflag;
-	# adding items linked via host biblios
-	my @hostitemInfos = GetHostItemsInfo($marcrecord);
-	if (@hostitemInfos){
-		$hostitemsflag =1;
-	        push (@itemInfos,@hostitemInfos);
-	}
-
-
+    # flag indicating existence of at least one item linked via a host record
+    my $hostitemsflag;
+    # adding items linked via host biblios
+    my @hostitemInfos = GetHostItemsInfo($marcrecord);
+    if (@hostitemInfos){
+        $hostitemsflag =1;
+        push (@itemInfos,@hostitemInfos);
+    }
 
     $biblioData->{itemInfos} = \@itemInfos;
     foreach my $itemInfo (@itemInfos) {
         $itemInfoHash{$itemInfo->{itemnumber}} = $itemInfo;
     }
 
-    # Compute the priority rank.
-    my ( $rank, $reserves ) = GetReservesFromBiblionumber($biblioNumber,1);
-    $biblioData->{reservecount} = $rank;
-    foreach my $res (@$reserves) {
-        my $found = $res->{'found'};
-        if ( $found && ($found eq 'W') ) {
-            $rank--;
+    if ($show_holds_count) {
+        # Compute the priority rank.
+        my ( $rank, $reserves ) = GetReservesFromBiblionumber($biblioNumber,1);
+        $biblioData->{reservecount} = 1; # new reserve
+        foreach my $res (@$reserves) {
+            my $found = $res->{'found'};
+            if ( $found && ($found eq 'W') ) {
+                $rank--;
+            }
+            else {
+                $biblioData->{reservecount}++;
+            }
         }
+        $rank++;
+        $biblioData->{rank} = $rank;
     }
-    $rank++;
-    $biblioData->{rank} = $rank;
 }
 
 #
@@ -528,7 +533,8 @@ $template->param(itemtable_colspan => $itemTableColspan);
 
 # display infos
 $template->param(bibitemloop => $biblioLoop);
-$template->param( showpriority=>1 ) if $OPACDisplayRequestPriority;
+$template->param( showholds=>$show_holds_count);
+$template->param( showpriority=>$show_priority);
 # can set reserve date in future
 if (
     C4::Context->preference( 'AllowHoldDateInFuture' ) &&

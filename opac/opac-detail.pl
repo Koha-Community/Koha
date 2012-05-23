@@ -486,10 +486,34 @@ if ($dat->{'count'} >= 50 && !$viewallitems) {
 
 my $biblio_authorised_value_images = C4::Items::get_authorised_value_images( C4::Biblio::get_biblio_authorised_values( $biblionumber, $record ) );
 
+my (%item_reserves, %priority);
+my ($show_holds_count, $show_priority);
+for ( C4::Context->preference("OPACShowHoldQueueDetails") ) {
+    m/holds/o and $show_holds_count = 1;
+    m/priority/ and $show_priority = 1;
+}
+my $has_hold;
+if ( $show_holds_count || $show_priority) {
+    my ($reserve_count,$reserves) = GetReservesFromBiblionumber($biblionumber);
+    $template->param( holds_count  => $reserve_count ) if $show_holds_count;
+    foreach (@$reserves) {
+        $item_reserves{ $_->{itemnumber} }++ if $_->{itemnumber};
+        if ($show_priority && $_->{borrowernumber} == $borrowernumber) {
+            $has_hold = 1;
+            $_->{itemnumber}
+                ? ($priority{ $_->{itemnumber} } = $_->{priority})
+                : ($template->param( priority => $_->{priority} ));
+        }
+    }
+}
+$template->param( show_priority => $has_hold ) ;
+
 my $norequests = 1;
 my $branches = GetBranches();
 my %itemfields;
 for my $itm (@items) {
+    $itm->{holds_count} = $item_reserves{ $itm->{itemnumber} };
+    $itm->{priority} = $priority{ $itm->{itemnumber} };
     $norequests = 0
        if ( (not $itm->{'wthdrawn'} )
          && (not $itm->{'itemlost'} )
