@@ -25,6 +25,7 @@ use Exporter;
 
 use C4::Context;
 use C4::Debug;
+#use Data::Dumper;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 use vars qw($ext_dict $select_all @fields);
@@ -67,7 +68,7 @@ INIT {
 	$select_all = "SELECT " . join(',',@fields) . "\n FROM   tags_all\n";
 }
 
-sub get_filters (;$) {
+sub get_filters {
 	my $query = "SELECT * FROM tags_filters ";
 	my ($sth);
 	if (@_) {
@@ -83,7 +84,7 @@ sub get_filters (;$) {
 # 	(SELECT count(*) FROM tags_all     ) as tags_all,
 # 	(SELECT count(*) FROM tags_index   ) as tags_index,
 
-sub approval_counts () { 
+sub approval_counts {
 	my $query = "SELECT
 		(SELECT count(*) FROM tags_approval WHERE approved= 1) as approved_count,
 		(SELECT count(*) FROM tags_approval WHERE approved=-1) as rejected_count,
@@ -115,7 +116,7 @@ sub get_count_by_tag_status  {
   return $sth->fetchrow;
 }
 
-sub remove_tag ($;$) {
+sub remove_tag {
 	my $tag_id  = shift or return undef;
 	my $user_id = (@_) ? shift : undef;
 	my $rows = (defined $user_id) ?
@@ -143,25 +144,25 @@ sub remove_tag ($;$) {
 	delete_tag_row_by_id($tag_id);
 }
 
-sub delete_tag_index ($$) {
+sub delete_tag_index {
 	(@_) or return undef;
 	my $sth = C4::Context->dbh->prepare("DELETE FROM tags_index WHERE term = ? AND biblionumber = ? LIMIT 1");
 	$sth->execute(@_);
 	return $sth->rows || 0;
 }
-sub delete_tag_approval ($) {
+sub delete_tag_approval {
 	(@_) or return undef;
 	my $sth = C4::Context->dbh->prepare("DELETE FROM tags_approval WHERE term = ? LIMIT 1");
 	$sth->execute(shift);
 	return $sth->rows || 0;
 }
-sub delete_tag_row_by_id ($) {
+sub delete_tag_row_by_id {
 	(@_) or return undef;
 	my $sth = C4::Context->dbh->prepare("DELETE FROM tags_all WHERE tag_id = ? LIMIT 1");
 	$sth->execute(shift);
 	return $sth->rows || 0;
 }
-sub delete_tag_rows_by_ids (@) {
+sub delete_tag_rows_by_ids {
 	(@_) or return undef;
 	my $i=0;
 	foreach(@_) {
@@ -172,7 +173,7 @@ sub delete_tag_rows_by_ids (@) {
 	return $i;
 }
 
-sub get_tag_rows ($) {
+sub get_tag_rows {
 	my $hash = shift || {};
 	my @ok_fields = @fields;
 	push @ok_fields, 'limit';	# push the limit! :)
@@ -213,7 +214,7 @@ sub get_tag_rows ($) {
 	return $sth->fetchall_arrayref({});
 }
 
-sub get_tags (;$) {		# i.e., from tags_index
+sub get_tags {		# i.e., from tags_index
 	my $hash = shift || {};
 	my @ok_fields = qw(term biblionumber weight limit sort approved);
 	my $wheres;
@@ -282,7 +283,7 @@ sub get_tags (;$) {		# i.e., from tags_index
 	return $sth->fetchall_arrayref({});
 }
 
-sub get_approval_rows (;$) {		# i.e., from tags_approval
+sub get_approval_rows {		# i.e., from tags_approval
 	my $hash = shift || {};
 	my @ok_fields = qw(term approved date_approved approved_by weight_total limit sort borrowernumber);
 	my $wheres;
@@ -357,7 +358,7 @@ sub get_approval_rows (;$) {		# i.e., from tags_approval
 	return $sth->fetchall_arrayref({});
 }
 
-sub is_approved ($) {
+sub is_approved {
 	my $term = shift or return undef;
 	my $sth = C4::Context->dbh->prepare("SELECT approved FROM tags_approval WHERE term = ?");
 	$sth->execute($term);
@@ -368,7 +369,7 @@ sub is_approved ($) {
 	return $sth->fetchrow;
 }
 
-sub get_tag_index ($;$) {
+sub get_tag_index {
 	my $term = shift or return undef;
 	my $sth;
 	if (@_) {
@@ -432,7 +433,7 @@ sub remove_filter {
 	return scalar @_;
 }
 
-sub add_tag_approval ($;$$) {	# or disapproval
+sub add_tag_approval {	# or disapproval
 	$debug and warn "add_tag_approval(" . join(", ",map {defined($_) ? $_ : 'UNDEF'} @_) . ")";
 	my $term = shift or return undef;
 	my $query = "SELECT * FROM tags_approval WHERE term = ?";
@@ -457,7 +458,7 @@ sub add_tag_approval ($;$$) {	# or disapproval
 	return $sth->rows;
 }
 
-sub mod_tag_approval ($$$) {
+sub mod_tag_approval {
 	my $operator = shift;
 	defined $operator or return undef; # have to test defined to allow =0 (kohaadmin)
 	my $term     = shift or return undef;
@@ -468,7 +469,7 @@ sub mod_tag_approval ($$$) {
 	$sth->execute($operator,$approval,$term);
 }
 
-sub add_tag_index ($$;$) {
+sub add_tag_index {
 	my $term         = shift or return undef;
 	my $biblionumber = shift or return undef;
 	my $query = "SELECT * FROM tags_index WHERE term = ? AND biblionumber = ?";
@@ -482,14 +483,14 @@ sub add_tag_index ($$;$) {
 	return $sth->rows;
 }
 
-sub get_tag ($) {		# by tag_id
+sub get_tag {		# by tag_id
 	(@_) or return undef;
 	my $sth = C4::Context->dbh->prepare("$select_all WHERE tag_id = ?");
 	$sth->execute(shift);
 	return $sth->fetchrow_hashref;
 }
 
-sub rectify_weights (;$) {
+sub rectify_weights {
 	my $dbh = C4::Context->dbh;
 	my $sth;
 	my $query = "
@@ -516,27 +517,27 @@ sub rectify_weights (;$) {
 	return ($results,\%tally);
 }
 
-sub increment_weights ($$) {
+sub increment_weights {
 	increment_weight(@_);
 	increment_weight_total(shift);
 }
-sub decrement_weights ($$) {
+sub decrement_weights {
 	decrement_weight(@_);
 	decrement_weight_total(shift);
 }
-sub increment_weight_total ($) {
+sub increment_weight_total {
 	_set_weight_total('weight_total+1',shift);
 }
-sub increment_weight ($$) {
+sub increment_weight {
 	_set_weight('weight+1',shift,shift);
 }
-sub decrement_weight_total ($) {
+sub decrement_weight_total {
 	_set_weight_total('weight_total-1',shift);
 }
-sub decrement_weight ($$) {
+sub decrement_weight {
 	_set_weight('weight-1',shift,shift);
 }
-sub _set_weight_total ($$) {
+sub _set_weight_total {
 	my $sth = C4::Context->dbh->prepare("
 	UPDATE tags_approval
 	SET    weight_total=" . (shift) . "
@@ -544,7 +545,7 @@ sub _set_weight_total ($$) {
 	");						# note: CANNOT use "?" for weight_total (see the args above).
 	$sth->execute(shift);	# just the term
 }
-sub _set_weight ($$$) {
+sub _set_weight {
 	my $dbh = C4::Context->dbh;
 	my $sth = $dbh->prepare("
 	UPDATE tags_index
@@ -555,7 +556,7 @@ sub _set_weight ($$$) {
 	$sth->execute(@_);
 }
 
-sub add_tag ($$;$$) {	# biblionumber,term,[borrowernumber,approvernumber]
+sub add_tag {	# biblionumber,term,[borrowernumber,approvernumber]
 	my $biblionumber = shift or return undef;
 	my $term         = shift or return undef;
 	my $borrowernumber = (@_) ? shift : 0;		# the user, default to kohaadmin
