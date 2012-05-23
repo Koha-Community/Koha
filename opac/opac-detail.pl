@@ -143,8 +143,10 @@ if ($session->param('busc')) {
         my @servers;
         @servers = @{$arrParamsBusc->{'server'}} if $arrParamsBusc->{'server'};
         @servers = ("biblioserver") unless (@servers);
-        my $default_sort_by = C4::Context->preference('OPACdefaultSortField')."_".C4::Context->preference('OPACdefaultSortOrder') if (C4::Context->preference('OPACdefaultSortField') && C4::Context->preference('OPACdefaultSortOrder'));
-        my @sort_by = @{$arrParamsBusc->{'sort_by'}} if $arrParamsBusc->{'sort_by'};
+
+        my ($default_sort_by, @sort_by);
+        $default_sort_by = C4::Context->preference('OPACdefaultSortField')."_".C4::Context->preference('OPACdefaultSortOrder') if (C4::Context->preference('OPACdefaultSortField') && C4::Context->preference('OPACdefaultSortOrder'));
+        @sort_by = @{$arrParamsBusc->{'sort_by'}} if $arrParamsBusc->{'sort_by'};
         $sort_by[0] = $default_sort_by if !$sort_by[0] && defined($default_sort_by);
         my ($error, $results_hashref, $facets);
         eval {
@@ -420,7 +422,8 @@ my @items;
 my @hiddenitems = GetHiddenItemnumbers(@all_items);
 
 # Are there items to hide?
-my $hideitems = 1 if C4::Context->preference('hidelostitems') or scalar(@hiddenitems) > 0;
+my $hideitems;
+$hideitems = 1 if C4::Context->preference('hidelostitems') or scalar(@hiddenitems) > 0;
 
 # Hide items
 if ($hideitems) {

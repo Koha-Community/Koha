@@ -57,7 +57,7 @@ for ( C4::Context->preference("OPACShowHoldQueueDetails") ) {
     m/priority/ and $show_priority = 1;
 }
 
-sub get_out ($$$) {
+sub get_out {
 	output_html_with_http_headers(shift,shift,shift); # $query, $cookie, $template->output;
 	exit;
 }
