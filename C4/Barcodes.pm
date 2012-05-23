@@ -56,21 +56,21 @@ sub initial {
 sub width {
 	return undef;
 }
-sub process_head($$;$$) {	# (self,head,whole,specific)
+sub process_head {	# (self,head,whole,specific)
 	my $self = shift;
 	return shift;			# Default: just return the head unchanged.
 }
-sub process_tail($$;$$) {	# (self,tail,whole,specific)
+sub process_tail {	# (self,tail,whole,specific)
 	my $self = shift;
 	return shift;			# Default: just return the tail unchanged.
 }
-sub is_max ($;$) {
+sub is_max {
 	my $self = shift;
 	ref($self) or carp "Called is_max on a non-object: '$self'";
 	(@_) and $self->{is_max} = shift;
 	return $self->{is_max} || 0;
 }
-sub value ($;$) {
+sub value {
 	my $self = shift;
 	if (@_) {
 		my $value = shift;
@@ -83,14 +83,14 @@ sub value ($;$) {
 	}
 	return $self->{value};
 }
-sub autoBarcode (;$) {
+sub autoBarcode {
 	(@_) or return _prefformat;
 	my $self = shift;
 	my $value = $self->{autoBarcode} or return _prefformat;
 	$value =~ s/^.*:://;	# in case we get C4::Barcodes::incremental, we just want 'incremental'
 	return $value;
 }
-sub parse ($;$) {	# return 3 parts of barcode: non-incrementing, incrementing, non-incrementing
+sub parse {	# return 3 parts of barcode: non-incrementing, incrementing, non-incrementing
 	my $self = shift;
 	my $barcode = (@_) ? shift : $self->value;
 	unless ($barcode =~ /(.*?)(\d+)$/) {	# non-greedy match in first part
@@ -100,7 +100,7 @@ sub parse ($;$) {	# return 3 parts of barcode: non-incrementing, incrementing, n
 	$debug and warn "Barcode '$barcode' parses into: '$1', '$2', ''";
 	return ($1,$2,'');	# the third part is in anticipation of barcodes that include checkdigits
 }
-sub max ($;$) {
+sub max {
 	my $self = shift;
 	if ($self->{is_max}) {
 		$debug and print STDERR "max taken from Barcodes value $self->value\n";
@@ -109,14 +109,14 @@ sub max ($;$) {
 	$debug and print STDERR "Retrieving max database query.\n";
 	return $self->db_max;
 }
-sub db_max () {
+sub db_max {
 	my $self = shift;
 	my $query = "SELECT max(abs(barcode)) FROM items LIMIT 1"; # Possible problem if multiple barcode types populated
 	my $sth = C4::Context->dbh->prepare($query);
 	$sth->execute();
 	return $sth->fetchrow_array || $self->initial;
 }
-sub next_value ($;$) {
+sub next_value {
 	my $self = shift;
 	my $specific = (scalar @_) ? 1 : 0;
 	my $max = $specific ? shift : $self->max;		# optional argument, i.e. next_value after X
@@ -143,22 +143,22 @@ sub next_value ($;$) {
 	$debug and print STDERR "(  next ) max barcode found: $next_value\n";
 	return $next_value;
 }
-sub next ($;$) {
+sub next {
 	my $self = shift or return undef;
 	(@_) and $self->{next} = shift;
 	return $self->{next};
 }
-sub previous ($;$) {
+sub previous {
 	my $self = shift or return undef;
 	(@_) and $self->{previous} = shift;
 	return $self->{previous};
 }
-sub serial ($;$) {
+sub serial {
 	my $self = shift or return undef;
 	(@_) and $self->{serial} = shift;
 	return $self->{serial};
 }
-sub default_self (;$) {
+sub default_self {
 	(@_) or carp "default_self called with no argument.  Reverting to _prefformat.";
 	my $autoBarcode = (@_) ? shift : _prefformat;
 	$autoBarcode =~ s/^.*:://;  # in case we get C4::Barcodes::incremental, we just want 'incremental'
