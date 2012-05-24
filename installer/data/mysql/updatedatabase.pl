@@ -5284,11 +5284,11 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.09.00.XXX";
+$DBversion = "3.09.00.007";
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     unless(C4::Context->preference('ReservesControlBranch')){
         $dbh->do("INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES ('ReservesControlBranch','PatronLibrary','ItemHomeLibrary|PatronLibrary','Branch checked for members reservations rights.','Choice')");
-}
+    }
     print "Upgrade to $DBversion done (Insert ReservesControlBranch systempreference into systempreferences table )\n";
     SetVersion($DBversion);
 }
