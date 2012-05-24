@@ -65,6 +65,9 @@ function constructTrNode(index, unique_item_fields) {
         } else {
             field_value = $(field_elt).val();
         }
+        if (field_value == undefined) {
+            field_value = '';
+        }
         result += "<td>" + field_value + "</td>";
     }
     result += "</tr>";
@@ -182,8 +185,11 @@ function check_additem(unique_item_fields) {
     // Check if a value is duplicated in form
     for ( field in array_fields ) {
         var fieldname = array_fields[field];
+        if (fieldname == '') {
+            continue;
+        }
         var values = new Array();
-        $("[name='kohafield'][value=items."+array_fields[field]+"]").each(function(){
+        $("[name='kohafield'][value=items."+ fieldname +"]").each(function(){
             var input = $(this).prevAll("input[name='field_value']")[0];
             if($(input).val()) {
                 values.push($(input).val());
