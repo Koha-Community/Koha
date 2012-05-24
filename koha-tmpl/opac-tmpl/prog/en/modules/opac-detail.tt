@@ -9,8 +9,8 @@
       {lang: '[% lang %]'}
     </script>
 [% END %]
-<script type="text/javascript" src="/opac-tmpl/prog/en/lib/jquery/plugins/jquery.rating.js"></script>
-<link rel="stylesheet" type="text/css" href="/opac-tmpl/prog/en/css/jquery.rating.css" />
+[% IF ( OpacStarRatings != 'disable' ) %]<script type="text/javascript" src="/opac-tmpl/prog/en/lib/jquery/plugins/jquery.rating.js"></script>
+<link rel="stylesheet" type="text/css" href="/opac-tmpl/prog/en/css/jquery.rating.css" />[% END %]
 
 <script type="text/JavaScript" language="JavaScript">
 //<![CDATA[
@@ -89,7 +89,7 @@
     [% END %]
 
         $(".branch-info-tooltip-trigger").tooltip({delay: 100, position: "top right"});
-
+[% IF ( OpacStarRatings != 'disable' ) %]
 // -----------------------------------------------------
 // star-ratings code
 // -----------------------------------------------------
@@ -136,7 +136,7 @@ $(function () {
   });
 });
 // -----------------------------------------------------
-
+[% END %]
 });
 
 [% IF ( OpacBrowseResults && busc ) %]
@@ -563,7 +563,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
         <input  type="hidden" name='rating_total' id='rating_total' value="[% rating_total %]" />
         <input  type="hidden" name='rating_avg_int' id='rating_avg_int' value="[% rating_avg_int %]" />
 
-        [% UNLESS ( rating_readonly ) %]&nbsp;  <INPUT name="rate_button" type="submit" value="Rate me">[% END %]&nbsp;
+        [% UNLESS ( rating_readonly ) %]&nbsp;  <input name="rate_button" type="submit" value="Rate me" />[% END %]&nbsp;
 
         [% IF ( rating_value ) %]
             <span id="rating_value_text">your rating: [% rating_value %], </span>
@@ -574,7 +574,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
             <span id="rating_text">average rating: [% rating_avg_int %] ([% rating_total %] votes)</span>
 
         </div>
-        </FORM>
+        </form>
     [% END %]
 
     [% IF ( BakerTaylorContentURL ) %]
