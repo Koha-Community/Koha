@@ -5246,7 +5246,7 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.09.00.XXX";
+$DBversion = "3.09.00.005";
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     unless (TableExists('quotes')) {
         $dbh->do( qq{
