@@ -12,7 +12,7 @@
     <script type="text/javascript">
     //<![CDATA[
     var oTable; /* oTable needs to be global */
-    var sEmptyTable = _('No quotes available. Please use the "Add Quote" button to add a quote.'); /* override the default message in datatables-strings.inc */
+    var sEmptyTable = _('No quotes available. Please use the "Add quote" button to add a quote.'); /* override the default message in datatables-strings.inc */
     $(document).ready(function() {
         /* NOTE: This is an ajax-source datatable and *not* a server-side sourced datatable. */
         /* See the datatable docs if you don't understand this difference. */
@@ -180,10 +180,10 @@
                     <legend>Instructions</legend>
                     <div id="quote_editor_inst">
                         <ul>
-                        <li>Click on the 'Add Quote' button to add a single quote; Press the &lt;Enter&gt; key to save the quote. <b>Note:</b> Both the 'source' and 'text' fields must have content in order for the quote to be saved.</li>
+                        <li>Click on the 'Add quote' button to add a single quote; Press the &lt;Enter&gt; key to save the quote. <b>Note:</b> Both the 'source' and 'text' fields must have content in order for the quote to be saved.</li>
                         <li>Click on any field to edit the contents; Press the &lt;Enter&gt; key to save edit.</li>
-                        <li>Click on one or more quote numbers to select entire quotes for deletion; Click the 'Delete Quote(s)' button to delete selected quotes.</li>
-                        <li>Click the 'Import Quotes' button in the toolbar to import a CSV file of quotes.</li>
+                        <li>Click on one or more quote numbers to select entire quotes for deletion; Click the 'Delete quote(s)' button to delete selected quotes.</li>
+                        <li>Click the 'Import quotes' button in the toolbar to import a CSV file of quotes.</li>
                         </ul>
                     </div>
                 </fieldset>
@@ -194,7 +194,7 @@
                         <th><span style="cursor: help" onclick="event.stopPropagation();alert(_('Click on the quote\'s id to select or deselect the quote. Multiple quotes may be selected.'));">ID</span></th>
                         <th>Source</th>
                         <th>Text</th>
-                        <th>Last Displayed</th>
+                        <th>Last displayed</th>
                     </tr>
                 </thead>
                 <tbody>
