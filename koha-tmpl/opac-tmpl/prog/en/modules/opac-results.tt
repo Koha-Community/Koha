@@ -522,7 +522,7 @@ $(document).ready(function(){
                 [% IF (  SEARCH_RESULT.rating_total ) > 0  %]
                     <span id="rating_total_[% SEARCH_RESULT.biblionumber %]">&nbsp;&nbsp;([% SEARCH_RESULT.rating_total %] votes)</span>
                 [% ELSE %]
-                    </br>
+                    <br />
                 [% END %]
 
                 </div>
@@ -600,8 +600,8 @@ $(document).ready(function(){
             [% END %]
                 [% END %]
 
-                [% IF ( GoogleJackets ) %][% IF ( SEARCH_RESULT.normalized_isbn ) %]<div style="block" title="[% SEARCH_RESULT.biblionumber |url %]" class="[% SEARCH_RESULT.normalized_isbn %]" id="gbs-thumbnail[% loop.count %]"></div>[% ELSE %]<span class="no-image">No cover image available</span>[% END %][% END %]
-        [% IF OpenLibraryCovers %][% IF SEARCH_RESULT.normalized_isbn %]<div style="block" title="[% SEARCH_RESULT.biblionumber %]" class="[% SEARCH_RESULT.normalized_isbn %]" id="openlibrary-thumbnail[% loop.count %]"></div>[% ELSE %]<span class="no-image">No cover image available</span>[% END %][% END %]
+                [% IF ( GoogleJackets ) %][% IF ( SEARCH_RESULT.normalized_isbn ) %]<span style="block" title="[% SEARCH_RESULT.biblionumber |url %]" class="[% SEARCH_RESULT.normalized_isbn %]" id="gbs-thumbnail[% loop.count %]"></span>[% ELSE %]<span class="no-image">No cover image available</span>[% END %][% END %]
+        [% IF OpenLibraryCovers %][% IF SEARCH_RESULT.normalized_isbn %]<span style="block" title="[% SEARCH_RESULT.biblionumber %]" class="[% SEARCH_RESULT.normalized_isbn %]" id="openlibrary-thumbnail[% loop.count %]"></span>[% ELSE %]<span class="no-image">No cover image available</span>[% END %][% END %]
                 </a>
                 [% IF ( BakerTaylorEnabled ) %][% IF ( SEARCH_RESULT.normalized_isbn ) %]<a href="https://[% BakerTaylorBookstoreURL |html %][% SEARCH_RESULT.normalized_isbn %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL |html %][% SEARCH_RESULT.normalized_isbn %]" /></a>[% ELSE %]<span class="no-image">No cover image available</span>[% END %][% END %]
                 </td>
