@@ -128,9 +128,13 @@ li.list2 {
                 <li>
                     <label for="basketbooksellerid">Vendor</label> &nbsp;
                     <select name="basketbooksellerid" id="basketbooksellerid">
-            [% FOREACH b IN booksellers %]
-                <option value="[% b.id %]" [% IF booksellerid == b.id %] selected="selected"[% END %]>[% b.name %]</option>
-            [% END %]
+                    [% FOREACH b IN booksellers %]
+                        [% IF booksellerid == b.id %]
+                           <option value="[% b.id %]" selected="selected">[% b.name %]</option>
+                        [% ELSE %]
+                           <option value="[% b.id %]">[% b.name %]</option>
+                        [% END %]
+                    [% END %]
             </select>
                 </li>
                 <li>
