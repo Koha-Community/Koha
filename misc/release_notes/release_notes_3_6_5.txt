@@ -1,0 +1,259 @@
+RELEASE NOTES FOR KOHA 3.6.5
+24 May 2012
+========================================================================
+
+Koha is the first free and open source software library automation package 
+(ILS). Development is sponsored by libraries of varying types and sizes, 
+volunteers, and support companies from around the world.  
+The website for the Koha project is 
+
+    http://koha-community.org/
+
+Koha 3.6.5 can be downloaded from:
+
+    http://download.koha-community.org/koha-3.06.05.tar.gz
+
+Installation instructions can be found at:
+
+    http://wiki.koha-community.org/wiki/Installation_Documentation
+    
+    OR in the INSTALL files that come in the tarball
+
+Koha 3.6.5 is a bugfix/maintenance release.
+
+Highlights of 3.6.5
+======================
+
+3916	critical	Batch Modify tool overwrites dropdown fields - no option for "no change"
+6488	critical	opachiddenitems not working in master
+7485	critical	Cannot edit barcode on Fast Add
+7513	critical	MARC Import Hangs
+7597	critical	fines not recording the right info in the stats table
+7631	critical	Self checkout renewal fails because of reference to non-existent subroutine in sco-main.pl
+7893	critical	Missing build-dependency on libdatetime-format-dateparse-perl and libreadonly-perl
+7924	critical	Fix handling of command line arguments in koha-remove
+7231	major		ordering from staged file not using price
+7272	major		Fix for Bug 6328 causes user accounts to be frozen (SIP2)
+7284	major		Authority matching algorithm improvements
+7454	major		Sip renewal all response returns incorrect info
+7482	major		overdues report downloads without names
+7581	major		Holds not working in OPAC in singlebranchmode
+7636	major		error when trying to email cart when opacuserlogin set to don't allow
+7838	major		Add sort-string-utf.chr for Ukrainian and Russian
+
+
+Bugs fixed in 3.6.5
+======================
+
+1662	normal		Is there a difference between Full and Simplified for Serials History
+3216	normal		UNIMARC author facets
+4976	normal		Status of item returned with process_koc.pl is empty in Intranet
+5180	normal		Autocomplete broken on overdues report
+5373	normal		fields listed on patron import do not match the csv file
+5482	normal		Translation problem in guided reports - Item field names
+5657	normal		biblio records update fails when updating multiple authorities linked with the same biblio
+5749	normal		The display of borrower adresses composed of streetnumber, streettype and address is broken
+5841	normal		Routing slip not displaying publication date
+6125	normal		Plugin for date acquired does not work on ACQ framework
+6434	normal		Many changes for Ukrainian and Russian sql-tables
+6701	normal		language on timeout system preference is wrong
+7092	normal		Complete-subfield searches TraceCompleteSubfields syspref not working correctly
+7271	normal		Revert getitems default sort to homebranch instead of holding branch
+7445	normal		Clicking on a tag gives "Language ... does not exist"
+7493	normal		Deleting a record with comments breaks
+7537	normal		Implement TraceCompleteSubfields, TraceSubjectSubdivisions and UseICU for NORMARC XSLT
+7558	normal		Serial issue note doubled up in full history
+7579	normal		Icons for authorized values/item types not showing in OPAC
+7590	normal		Cataloging authorities search result page is broken
+7609	normal		Improving links to find analytics and volumes when using UseControlnumber
+7644	normal		Invalid markup in staff client language chooser
+7645	normal		System preferences editor save button obscured by language chooser
+7656	normal		"undefined" pop-up message when putting hold on reference item
+7665	normal		Bibs with no ISBN's show broken images for covers when using Syndetics cover images.
+7695	normal		Boolean operator AND in XSLT gets translated
+7699	normal		Restricted until datepicker broken
+7724	normal		Tests requiring Zebra should be skipped if Zebra isn't set up
+7727	normal		NORMARC XSLT OPAC detail view shows double tabs
+7749	normal		Not all OKs on the start page are translatable
+7766	normal		C4/Auth.pm emits debug output to STDOUT
+7780	normal		fix translator tool verbosity
+7824	normal		[3.6 only] Typo in opac-userupdate.tt causes the first name to not show in the header
+7837	normal		nb-NO z3950servers.sql misses column names
+7858	normal		Missing packages from install_misc/ubuntu.packages
+7885	normal		Change filename of TransferLog suggested by packages to fit with logrotate
+7886	normal		C4/ShelfBrowser slow SQL performance
+7940	normal		Placing a hold on a single item from the staff cart causes errors
+8020	normal		Prepare debian packages for 3.8 release
+4819	enhancement	Add ID attribute to certain areas of OPAC so jquery can be used to hide them
+7140	enhancement	Add item type description on the catalogue search and detail screens
+7143	enhancement	Bug for tracking changes to the about page
+7436	enhancement	Set itemtypes.rentalcharge = 0 in sample data for nb-NO and de-DE
+7617	enhancement	Authority search results should optionally be sorted by system order
+7700	enhancement	Cart's more details view shows identity numbers
+7734	enhancement	NO_LIBRARY_SET should be translatable
+7738	enhancement	"Display more constraints" in subfield configuraton is not properly translatable
+7746	enhancement	In staff 'No public lists.' is not translatable
+7758	enhancement	Koha allowing LOST items to check out without alert
+7760	enhancement	Add ids and classes to every staff page to help with customizaton
+7761	enhancement	cleaning up empty declarations from staff-global.css
+7876	enhancement	Add ids to divs and spans with ids in opac-user.tt
+7935	enhancement	Introduce sys pref to control 'browse results' in OPAC
+
+
+New sysprefs in 3.6.5
+======================
+
+  * AutoCreateAuthorities
+  * CatalogModuleRelink
+  * LinkerKeepStale
+  * LinkerModule
+  * LinkerOptions
+  * LinkerRelink
+  * OpacBrowseResults
+  * UseICU
+  * dateformat
+
+
+System requirements
+======================
+
+    Changes since 3.4:
+    
+    * Perl 5.10 is required
+
+
+Documentation
+======================
+
+As of Koha 3.2, the Koha manual is now maintained in DocBook.  The
+home page for Koha documentation is 
+
+    http://koha-community.org/documentation/
+
+As of the date of these release notes, only the English version of the
+Koha manual is available:
+
+    http://manual.koha-community.org/3.6/en/
+
+The Git repository for the Koha manual can be found at
+
+    http://git.koha-community.org/gitweb/?p=kohadocs.git;a=summary
+
+Translations
+======================
+
+Complete or near-complete translations of the OPAC and staff
+interface are available in this release for the following languages:
+
+  * Chinese (Taiwan)
+  * Danish
+  * English (USA)
+  * English (UK)
+  * French (France)
+  * German
+  * Italian
+  * Portuguese (Brazil)
+  * Spanish
+
+Partial translations are available for various other languages.
+
+The Koha team welcomes additional translations; please see
+
+    http://wiki.koha-community.org/wiki/Translating_Koha
+
+for information about translating Koha, and join the koha-translate 
+list to volunteer:
+
+    http://lists.koha-community.org/cgi-bin/mailman/listinfo/koha-translate
+
+The most up-to-date translations can be found at:
+
+    http://translate.koha-community.org/
+
+Release Team
+======================
+
+The release team for Koha 3.6 is
+
+Release Manager:        Chris Cormack <chrisc@catalyst.net.nz>
+Documentation Manager:  Nicole C Engard <nengard@gmail.com>
+Translation Manager:    Frédéric Demians <frederic@tamil.fr>
+QA Manager:             Ian Walls <ian.walls@bywatersolutions.com>
+Bug Wranglers:          Katrin Fischer, Magnus Enger
+
+Past Release Maintainer (3.6.x): Chris Nighswonger <cnighswonger@foundations.edu>
+Release Maintainer (3.6.x): Jared Camins-Esakov <jcamins@cpbibliography.com>
+
+Credits
+======================
+
+We thank the following libraries who are known to have sponsored
+new features in Koha 3.6:
+  * Los Gatos Public Library
+  * NEKLS
+  * East Brunswick Public Library
+  * Athens County Public Libraries
+  * Horowhenua Library Trust
+  * Halton Borough Council
+  * South Taranaki District Council
+
+We thank the following individuals who contributed patches to
+Koha 3.6.5. 
+
+     1	BibLibre
+     1	Gaetan Boisson
+    12	Jared Camins-Esakov
+     3	Colin Campbell
+     1	David
+     2	Stéphane Delaune
+     2	Frédéric Demians
+     1	Jonathan Druart
+     9	Magnus Enger
+    28	Katrin Fischer
+     1	Chris Hall
+    12	Kyle M Hall
+     3	Srdjan Jankovic
+     1	Janusz Kaczmarek
+    11	Owen Leonard
+     1	Sophie Meynieux
+     1	Chris Nighswonger
+     3	Dobrica Pavlinusic
+     1	Maxime Pelletier
+     6	Paul Poulain
+     1	MJ Ray
+     3	Liz Rea
+     2	Marcel de Rooy
+     3	Adrien Saurat
+     5	Robin Sheat
+     1	Zeno Tajoli
+     2	Serhij Dubyk {Сергій Дубик}
+
+
+We regret any omissions.  If a contributor has been inadvertantly missed,
+please send a patch against these release notes to 
+koha-patches@lists.koha-community.org.
+
+Revision control notes
+======================
+
+The Koha project uses Git for version control.  The current development 
+version of Koha can be retrieved by checking out the master branch of 
+
+    git://git.koha-community.org/koha.git
+
+The branch for Koha 3.6.x (i.e., this version of Koha and future bugfix
+releases) is 3.6.x.
+
+Koha 3.8.0 was released on April 23, 2012. The next major feature release of
+Koha will be Koha 3.10.0.
+
+Bugs and feature requests
+======================
+
+Bug reports and feature requests can be filed at the Koha bug
+tracker at
+
+    http://bugs.koha-community.org/
+
+
+Ehara taku toa i te toa takitahi, engari he toa takitini 
