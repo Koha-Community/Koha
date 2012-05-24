@@ -66,7 +66,14 @@
 //<![CDATA[
     $(document).ready(function() {
         var orderst = $("#orders").dataTable($.extend(true, {}, dataTablesDefaults, {
-            "sPaginationType": "four_button"
+            "sPaginationType": "four_button",
+            [% IF ( active ) %]
+              [% UNLESS ( closedate ) %]
+                "aoColumnDefs": [
+                    { "aTargets": [ -1, -2 ], "bSortable": false, "bSearchable": false },
+                ],
+              [% END %]
+            [% END %]
         } ) );
         var cancelledorderst = $("#cancelledorderst").dataTable($.extend(true, {}, dataTablesDefaults, {
             "sPaginationType": "four_button"
