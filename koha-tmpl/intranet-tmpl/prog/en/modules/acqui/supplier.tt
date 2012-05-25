@@ -1,7 +1,12 @@
 [% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Vendor [% bookselname %]</title>
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
 [% INCLUDE 'doc-head-close.inc' %]
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.min.js"></script>
+[% INCLUDE 'datatables-strings.inc' %]
+<script type="text/javascript" src="[% themelang %]/js/datatables.js"></script>
+
 <script type="text/javascript">
 //<![CDATA[
 function confirm_deletion() {
@@ -16,6 +21,23 @@ if (f.company.value == "") {
 }
     f.submit();
 }
+
+ $(document).ready(function() {
+    [% IF (dateformat == 'metric') %]
+        dt_add_type_uk_date();
+    [% END %]
+    var contractst = $("#contractst").dataTable($.extend(true, {}, dataTablesDefaults, {
+        "aoColumnDefs": [
+          { "aTargets": [ -1, -2 ], "bSortable": false, "bSearchable": false },
+          [% IF (dateformat == 'metric') %]
+            { "aTargets": [ 2, 3 ], "sType": "uk_date" },
+          [% END %]
+        ],
+        'bPaginate': false,
+        'bFilter': false,
+        'bInfo': false,
+    } ) );
+ });
 //]]>
 </script>
 </head>
@@ -212,14 +234,18 @@ if (f.company.value == "") {
         [% IF ( contracts ) %]
             <div id="supplier-contracts" class="yui-g">
                 <h2>Contract(s)</h2>
-                <table>
+                <table id="contractst">
+                  <thead>
                     <tr>
                         <th scope="col">Name</th>
                         <th scope="col">Description</th>
                         <th scope="col">Start date</th>
                         <th scope="col">End date</th>
-                        <th scope="col" colspan="2">&nbsp; </th>
+                        <th scope="col">&nbsp; </th>
+                        <th scope="col">&nbsp; </th>
                     </tr>
+                  </thead>
+                  <tbody>
                     [% FOREACH contract IN contracts %]
                         [% IF ( loop.even ) %]<tr class="highlight">[% ELSE %]<tr>[% END %]
                         <td>
@@ -232,6 +258,7 @@ if (f.company.value == "") {
                         <td><a href="/cgi-bin/koha/admin/aqcontract.pl?op=delete_confirm&amp;contractnumber=[% contract.contractnumber %]&amp;booksellerid=[% contract.booksellerid %]">Delete</a></td>
                         </tr>
                     [% END %]
+                  </tbody>
                 </table>
             </div>
         [% END %]
