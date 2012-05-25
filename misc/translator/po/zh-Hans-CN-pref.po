@@ -1,15 +1,3 @@
-msgid ""
-msgstr ""
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Project-Id-Version: \n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: rocknet <rocknet@sina.com>\n"
-"Language-Team: \n"
-"MIME-Version: 1.0\n"
-"X-Poedit-Bookmarks: -1,-1,-1,-1,-1,-1,-1,-1,490,-1\n"
-
 # Acquisitions
 msgid "acquisitions.pref"
 msgstr "acquisitions.pref"
@@ -271,8 +259,8 @@ msgid "admin.pref#timeout# Automatically log out users after"
 msgstr "当读者闲置"
 
 # Administration > Login options
-msgid "admin.pref#timeout# milliseconds of inactivity."
-msgstr "毫秒以后，自动注销读者。"
+msgid "admin.pref#timeout# seconds of inactivity. Adding d will specify it in days, e.g. 1d is timeout of one day."
+msgstr ""
 
 # Administration > Interface options
 msgid "admin.pref#virtualshelves# Allow"
@@ -290,47 +278,135 @@ msgstr "馆员和读者建立、查看保存在系统中的虚拟书架。"
 msgid "authorities.pref"
 msgstr "authorities.pref"
 
-# Authorities
+# Authorities > General
+msgid "authorities.pref General"
+msgstr ""
+
+# Authorities > Linker
+msgid "authorities.pref Linker"
+msgstr ""
+
+# Authorities > General
+msgid "authorities.pref#AutoCreateAuthorities# When editing records,"
+msgstr ""
+
+# Authorities > General
+msgid "authorities.pref#AutoCreateAuthorities# authority records that are missing (BiblioAddsAuthorities must be set to \"allow\" for this to have any effect)."
+msgstr ""
+
+# Authorities > General
+msgid "authorities.pref#AutoCreateAuthorities# do not generate"
+msgstr ""
+
+# Authorities > General
+msgid "authorities.pref#AutoCreateAuthorities# generate"
+msgstr ""
+
+# Authorities > General
 msgid "authorities.pref#BiblioAddsAuthorities# When editing records,"
 msgstr "编辑记录时，如果需要，"
 
-# Authorities
+# Authorities > General
 msgid "authorities.pref#BiblioAddsAuthorities# allow"
 msgstr "允许"
 
-# Authorities
+# Authorities > General
 msgid "authorities.pref#BiblioAddsAuthorities# don't allow"
 msgstr "不允许"
 
-# Authorities
+# Authorities > General
 msgid "authorities.pref#BiblioAddsAuthorities# them to automatically create new authority records if needed, rather than having to reference existing authorities."
 msgstr "他们自动建立新的规范记录，不必引用已有的规范记录。"
 
-# Authorities
+# Authorities > Linker
+msgid "authorities.pref#CatalogModuleRelink# Do"
+msgstr ""
+
+# Authorities > Linker
+msgid "authorities.pref#CatalogModuleRelink# Do not"
+msgstr ""
+
+# Authorities > Linker
+msgid "authorities.pref#CatalogModuleRelink# automatically relink headings that have previously been linked when saving records in the cataloging module."
+msgstr ""
+
+# Authorities > Linker
+msgid "authorities.pref#LinkerKeepStale# Do"
+msgstr ""
+
+# Authorities > Linker
+msgid "authorities.pref#LinkerKeepStale# Do not"
+msgstr ""
+
+# Authorities > Linker
+msgid "authorities.pref#LinkerKeepStale# keep existing links to authority records for headings where the linker is unable to find a match."
+msgstr ""
+
+# Authorities > Linker
+msgid "authorities.pref#LinkerModule# Default"
+msgstr ""
+
+# Authorities > Linker
+msgid "authorities.pref#LinkerModule# First Match"
+msgstr ""
+
+# Authorities > Linker
+msgid "authorities.pref#LinkerModule# Last Match"
+msgstr ""
+
+# Authorities > Linker
+msgid "authorities.pref#LinkerModule# Use the"
+msgstr ""
+
+# Authorities > Linker
+msgid "authorities.pref#LinkerModule# linker module for matching headings to authority records."
+msgstr ""
+
+# Authorities > Linker
+msgid "authorities.pref#LinkerOptions# (separate options with |)"
+msgstr ""
+
+# Authorities > Linker
+msgid "authorities.pref#LinkerOptions# Set the following options for the authority linker"
+msgstr ""
+
+# Authorities > Linker
+msgid "authorities.pref#LinkerRelink# Do"
+msgstr ""
+
+# Authorities > Linker
+msgid "authorities.pref#LinkerRelink# Do not"
+msgstr ""
+
+# Authorities > Linker
+msgid "authorities.pref#LinkerRelink# relink headings that have previously been linked to authority records."
+msgstr ""
+
+# Authorities > General
 msgid "authorities.pref#MARCAuthorityControlField008# Use the following text for the contents of MARC authority control field 008 position 06-39 (fixed length data elements). Do NOT include the date (position 00-05)."
 msgstr "使用以下文字作为MARC权威控制字段008字段的第6到第39个字符。不包含日期(第0到第5个字符)。"
 
-# Authorities
+# Authorities > General
 msgid "authorities.pref#UseAuthoritiesForTracings# Don't use"
 msgstr "不使用"
 
-# Authorities
+# Authorities > General
 msgid "authorities.pref#UseAuthoritiesForTracings# Use"
 msgstr "使用"
 
-# Authorities
+# Authorities > General
 msgid "authorities.pref#UseAuthoritiesForTracings# authority record numbers instead of text strings for searches from subject tracings."
 msgstr "规范记录的号码，而不使用字符串，从追踪项检索时。"
 
-# Authorities
+# Authorities > General
 msgid "authorities.pref#dontmerge# Do"
 msgstr "要"
 
-# Authorities
+# Authorities > General
 msgid "authorities.pref#dontmerge# Don't"
 msgstr "不要"
 
-# Authorities
+# Authorities > General
 msgid "authorities.pref#dontmerge# automatically update attached biblios when changing an authority record. If this is off, please ask your administrator to enable the merge_authority.pl cronjob."
 msgstr "自动更新关联的记录，当规范记录改变时。如果要更新，请联系管理员启用merge_authority.pl这个cronjob。"
 
@@ -713,6 +789,18 @@ msgstr "不允许"
 # Circulation > Holds Policy
 msgid "circulation.pref#AllowHoldsOnDamagedItems# hold requests to be placed on damaged items."
 msgstr "预约损坏的馆藏。"
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#AllowItemsOnHoldCheckout# Allow"
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#AllowItemsOnHoldCheckout# Don't allow"
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#AllowItemsOnHoldCheckout# checkouts of items items reserved to someone else. If allowed do not generate RESERVE_WAITING and RESERVED warning. This allows self checkouts for those items."
+msgstr ""
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowNotForLoanOverride# Allow"
@@ -2511,6 +2599,18 @@ msgid "opac.pref#OpacAuthorities# patrons to search your authority records."
 msgstr "读者检索规范记录。"
 
 # OPAC > Features
+msgid "opac.pref#OpacBrowseResults# Disable"
+msgstr ""
+
+# OPAC > Features
+msgid "opac.pref#OpacBrowseResults# Enable"
+msgstr ""
+
+# OPAC > Features
+msgid "opac.pref#OpacBrowseResults# browsing and paging search results from the OPAC detail page."
+msgstr ""
+
+# OPAC > Features
 msgid "opac.pref#OpacBrowser# Allow"
 msgstr "允许"
 
@@ -3338,6 +3438,18 @@ msgstr "包含"
 msgid "searching.pref#TraceSubjectSubdivisions# subdivisions for searches generated by clicking on subject tracings."
 msgstr "复分检索在点击主题追踪生成的链接里。"
 
+# Searching > Features
+msgid "searching.pref#UseICU# ICU Zebra indexing. Please note: This setting will not affect Zebra indexing, it should only be used to tell Koha that you have activated ICU indexing if you have actually done so, since there is no way for Koha to figure this out on its own."
+msgstr ""
+
+# Searching > Features
+msgid "searching.pref#UseICU# Not using"
+msgstr ""
+
+# Searching > Features
+msgid "searching.pref#UseICU# Using"
+msgstr ""
+
 # Searching > Results Display
 msgid "searching.pref#defaultSortField# ,"
 msgstr "，"
@@ -3499,20 +3611,20 @@ msgid "serials.pref#StaffSerialIssueDisplayCount# previous issues of a serial on
 msgstr "期过期期刊。"
 
 # Serials
-msgid "serials.pref#SubscriptionHistory# When showing the subscription information for a biblio, show"
-msgstr "当显示期刊的订阅信息时，显示该期刊的"
+msgid "serials.pref#SubscriptionHistory# When showing the subscription information for a bibliographic record, preselect"
+msgstr ""
 
 # Serials
-msgid "serials.pref#SubscriptionHistory# a full list"
-msgstr "完整"
+msgid "serials.pref#SubscriptionHistory# brief history"
+msgstr ""
 
 # Serials
-msgid "serials.pref#SubscriptionHistory# a summary"
-msgstr "摘要"
+msgid "serials.pref#SubscriptionHistory# full history"
+msgstr ""
 
 # Serials
-msgid "serials.pref#SubscriptionHistory# of the serial issues."
-msgstr "信息。"
+msgid "serials.pref#SubscriptionHistory# view of serial issues."
+msgstr ""
 
 # Serials
 msgid "serials.pref#opacSerialDefaultTab# Holdings tab"

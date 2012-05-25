@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-01 16:53+0200\n"
-"PO-Revision-Date: 2012-02-24 12:52+0200\n"
+"POT-Creation-Date: 2012-05-11 18:25+0200\n"
+"PO-Revision-Date: 2012-05-11 18:20+0200\n"
 "Last-Translator: Katrin <katrin.fischer@bsz-bw.de>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: de\n"
@@ -12,8 +12,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.1.6\n"
-"X-Poedit-Language: None\n"
-"X-Poedit-Country: None\n"
 
 # Acquisitions
 msgid "acquisitions.pref"
@@ -276,8 +274,10 @@ msgid "admin.pref#timeout# Automatically log out users after"
 msgstr "Melde Benutzer automatisch nach"
 
 # Administration > Login options
-msgid "admin.pref#timeout# milliseconds of inactivity."
-msgstr "Millisekunden Inaktivität."
+msgid "admin.pref#timeout# seconds of inactivity. Adding d will specify it in days, e.g. 1d is timeout of one day."
+msgstr ""
+"Sekunden Inaktivität. Wird hinter dem Wert ein d angegeben, gilt der "
+"Zeitraum in Tagen, zum Beispiel setzt 1d den Timeout auf einen Tag."
 
 # Administration > Interface options
 msgid "admin.pref#virtualshelves# Allow"
@@ -295,47 +295,137 @@ msgstr "dass Mitarbeiter und Benutzer Listen erstellen und betrachten können."
 msgid "authorities.pref"
 msgstr "Normdaten"
 
-# Authorities
+# Authorities > General
+msgid "authorities.pref General"
+msgstr "Allgemein"
+
+# Authorities > Linker
+msgid "authorities.pref Linker"
+msgstr "Linker"
+
+# Authorities > General
+msgid "authorities.pref#AutoCreateAuthorities# When editing records,"
+msgstr "Bei der Exemplarbearbeitung sollen fehlende Normdatensätze"
+
+# Authorities > General
+msgid "authorities.pref#AutoCreateAuthorities# authority records that are missing (BiblioAddsAuthorities must be set to \"allow\" for this to have any effect)."
+msgstr "werden (BiblioAddsAuthorities muss hierzu aktiviert sein)."
+
+# Authorities > General
+msgid "authorities.pref#AutoCreateAuthorities# do not generate"
+msgstr "nicht automatisch generiert"
+
+# Authorities > General
+msgid "authorities.pref#AutoCreateAuthorities# generate"
+msgstr "automatisch generiert"
+
+# Authorities > General
 msgid "authorities.pref#BiblioAddsAuthorities# When editing records,"
 msgstr "Bei der Bearbeitung von Titeln"
 
-# Authorities
+# Authorities > General
 msgid "authorities.pref#BiblioAddsAuthorities# allow"
 msgstr "sollen"
 
-# Authorities
+# Authorities > General
 msgid "authorities.pref#BiblioAddsAuthorities# don't allow"
 msgstr "sollen nicht"
 
-# Authorities
+# Authorities > General
 msgid "authorities.pref#BiblioAddsAuthorities# them to automatically create new authority records if needed, rather than having to reference existing authorities."
 msgstr "automatisch neue Normdatensätze angelegt werden, statt mit existierenden Normdatensätzen verlinken zu müssen."
 
-# Authorities
+# Authorities > Linker
+msgid "authorities.pref#CatalogModuleRelink# Do"
+msgstr "Verlinke"
+
+# Authorities > Linker
+msgid "authorities.pref#CatalogModuleRelink# Do not"
+msgstr "Verlinke nicht"
+
+# Authorities > Linker
+msgid "authorities.pref#CatalogModuleRelink# automatically relink headings that have previously been linked when saving records in the cataloging module."
+msgstr "zuvor bereits in der Katalogisierung verlinkte Ansetzungen erneut."
+
+# Authorities > Linker
+msgid "authorities.pref#LinkerKeepStale# Do"
+msgstr "Erhalte"
+
+# Authorities > Linker
+msgid "authorities.pref#LinkerKeepStale# Do not"
+msgstr "Erhalte nicht"
+
+# Authorities > Linker
+msgid "authorities.pref#LinkerKeepStale# keep existing links to authority records for headings where the linker is unable to find a match."
+msgstr ""
+"bestehende Verlinkungen der Ansetzungsformen, wenn der Linker keinen Treffer "
+"erzielt."
+
+# Authorities > Linker
+msgid "authorities.pref#LinkerModule# Default"
+msgstr "'Default'"
+
+# Authorities > Linker
+msgid "authorities.pref#LinkerModule# First Match"
+msgstr "'Erster Treffer'"
+
+# Authorities > Linker
+msgid "authorities.pref#LinkerModule# Last Match"
+msgstr "'Letzter Treffer'"
+
+# Authorities > Linker
+msgid "authorities.pref#LinkerModule# Use the"
+msgstr "Verwende das"
+
+# Authorities > Linker
+msgid "authorities.pref#LinkerModule# linker module for matching headings to authority records."
+msgstr "Linker-Modul um Ansetzungen mit Normdatensätzen zu verlinken."
+
+# Authorities > Linker
+msgid "authorities.pref#LinkerOptions# (separate options with |)"
+msgstr "(einzelne Optionen mit | trennen)"
+
+# Authorities > Linker
+msgid "authorities.pref#LinkerOptions# Set the following options for the authority linker"
+msgstr "Verwende folgende Optionen für den Normdaten-Linker"
+
+# Authorities > Linker
+msgid "authorities.pref#LinkerRelink# Do"
+msgstr "Verlinke"
+
+# Authorities > Linker
+msgid "authorities.pref#LinkerRelink# Do not"
+msgstr "Verlinke nicht"
+
+# Authorities > Linker
+msgid "authorities.pref#LinkerRelink# relink headings that have previously been linked to authority records."
+msgstr "Ansetzungen erneut, die bereits zu vor mit Normdaten verlinkt wurden."
+
+# Authorities > General
 msgid "authorities.pref#MARCAuthorityControlField008# Use the following text for the contents of MARC authority control field 008 position 06-39 (fixed length data elements). Do NOT include the date (position 00-05)."
 msgstr "Verwende den folgenden Text als Standardwert für Feld 008, Position 06-39 in den Normdaten. Position 00-05 werden NICHT angegeben."
 
-# Authorities
+# Authorities > General
 msgid "authorities.pref#UseAuthoritiesForTracings# Don't use"
 msgstr "Verwende keine"
 
-# Authorities
+# Authorities > General
 msgid "authorities.pref#UseAuthoritiesForTracings# Use"
 msgstr "Verwende"
 
-# Authorities
+# Authorities > General
 msgid "authorities.pref#UseAuthoritiesForTracings# authority record numbers instead of text strings for searches from subject tracings."
 msgstr "Normdatenidentnummern anstelle von Text für die Suche nach Schlagworten."
 
-# Authorities
+# Authorities > General
 msgid "authorities.pref#dontmerge# Do"
 msgstr "Automatisches Update"
 
-# Authorities
+# Authorities > General
 msgid "authorities.pref#dontmerge# Don't"
 msgstr "Kein automatisches Update"
 
-# Authorities
+# Authorities > General
 msgid "authorities.pref#dontmerge# automatically update attached biblios when changing an authority record. If this is off, please ask your administrator to enable the merge_authority.pl cronjob."
 msgstr "aktualisiere verknüpfte Titelsätze automatisch, wenn der Normdatensatz geändert wird. Wenn dieser Parameter deaktiviert ist, kann als Alternative der merge_authority.pl Cronjob verwendet werden."
 
@@ -720,23 +810,16 @@ msgid "circulation.pref#AllowHoldsOnDamagedItems# hold requests to be placed on 
 msgstr "Vormerkungen auf beschädigte Exemplare."
 
 # Circulation > Checkout Policy
-# Circulation > Checkout Policy
 msgid "circulation.pref#AllowItemsOnHoldCheckout# Allow"
 msgstr "Erlaube"
 
-# Circulation > Checkout Policy
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowItemsOnHoldCheckout# Don't allow"
 msgstr "Erlaube nicht"
 
 # Circulation > Checkout Policy
-# Circulation > Checkout Policy
 msgid "circulation.pref#AllowItemsOnHoldCheckout# checkouts of items items reserved to someone else. If allowed do not generate RESERVE_WAITING and RESERVED warning. This allows self checkouts for those items."
-msgstr ""
-"dass Exemplare ausgeliehen werden, die bereits für jemanden vorgemerkt sind. "
-"Wenn die Ausleihe erlaubt ist, werden keine RESERVE_WAITING oder RESERVED "
-"Warnungen erzeugt. Dies betrifft die Ausleihe von Medien über die "
-"SIP2-Schnittstelle (Selbstverbucher)."
+msgstr "dass Exemplare ausgeliehen werden, die bereits für jemanden vorgemerkt sind. Wenn die Ausleihe erlaubt ist, werden keine RESERVE_WAITING oder RESERVED Warnungen erzeugt. Dies betrifft die Ausleihe von Medien über die SIP2-Schnittstelle (Selbstverbucher)."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowNotForLoanOverride# Allow"
@@ -2535,6 +2618,19 @@ msgid "opac.pref#OpacAuthorities# patrons to search your authority records."
 msgstr "dass Benutzer in den Normdaten suchen."
 
 # OPAC > Features
+msgid "opac.pref#OpacBrowseResults# Disable"
+msgstr "Deaktiviere"
+
+# OPAC > Features
+msgid "opac.pref#OpacBrowseResults# Enable"
+msgstr "Aktiviere"
+
+# OPAC > Features
+msgid "opac.pref#OpacBrowseResults# browsing and paging search results from the OPAC detail page."
+msgstr ""
+"das Blättern und Stöbern in Trefferlisten von der OPAC-Detailansicht aus."
+
+# OPAC > Features
 msgid "opac.pref#OpacBrowser# Allow"
 msgstr "Erlaube,"
 
@@ -3362,6 +3458,21 @@ msgstr "Berücksichtige"
 msgid "searching.pref#TraceSubjectSubdivisions# subdivisions for searches generated by clicking on subject tracings."
 msgstr "Unterabteilungen von Schlagworten bei der Suchanfrage, die ausgelöst wird, wenn auf ein Schlagwort geklickt wird."
 
+# Searching > Features
+msgid "searching.pref#UseICU# ICU Zebra indexing. Please note: This setting will not affect Zebra indexing, it should only be used to tell Koha that you have activated ICU indexing if you have actually done so, since there is no way for Koha to figure this out on its own."
+msgstr ""
+"ICU-Indexierung für Zebra. Hinweis: Dieser Parameter beeinflusst nicht die "
+"tatsächliche Indexierung mit Zebra, sondern dient nur der korrekten "
+"Konfiguration der Suchoptionen in Koha."
+
+# Searching > Features
+msgid "searching.pref#UseICU# Not using"
+msgstr "Verwendet nicht"
+
+# Searching > Features
+msgid "searching.pref#UseICU# Using"
+msgstr "Verwendet"
+
 # Searching > Results Display
 msgid "searching.pref#defaultSortField# ,"
 msgstr ","
@@ -3523,20 +3634,20 @@ msgid "serials.pref#StaffSerialIssueDisplayCount# previous issues of a serial on
 msgstr "zugegangenen Hefte einer Zeitschrift in der Dienstoberfläche."
 
 # Serials
-msgid "serials.pref#SubscriptionHistory# When showing the subscription information for a biblio, show"
-msgstr "Zeige die Details eines Zeitschriftenabonnements in Form"
+msgid "serials.pref#SubscriptionHistory# When showing the subscription information for a bibliographic record, preselect"
+msgstr "Für die Anzeige von Abonnementinformationen im OPAC, wird die "
 
 # Serials
-msgid "serials.pref#SubscriptionHistory# a full list"
-msgstr " einer vollständigen LIste"
+msgid "serials.pref#SubscriptionHistory# brief history"
+msgstr "Kurzhistorie"
 
 # Serials
-msgid "serials.pref#SubscriptionHistory# a summary"
-msgstr " einer Zusammenfassung"
+msgid "serials.pref#SubscriptionHistory# full history"
+msgstr "volle Historie"
 
 # Serials
-msgid "serials.pref#SubscriptionHistory# of the serial issues."
-msgstr "der Zeitschriftenhefte."
+msgid "serials.pref#SubscriptionHistory# view of serial issues."
+msgstr "der Zeitschriftenhefte vorausgewählt."
 
 # Serials
 msgid "serials.pref#opacSerialDefaultTab# Holdings tab"

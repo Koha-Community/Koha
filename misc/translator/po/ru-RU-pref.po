@@ -259,8 +259,8 @@ msgid "admin.pref#timeout# Automatically log out users after"
 msgstr "Автоматический выход пользователей после"
 
 # Administration > Login options
-msgid "admin.pref#timeout# milliseconds of inactivity."
-msgstr " миллисекунд бездействия."
+msgid "admin.pref#timeout# seconds of inactivity. Adding d will specify it in days, e.g. 1d is timeout of one day."
+msgstr ""
 
 # Administration > Interface options
 msgid "admin.pref#virtualshelves# Allow"
@@ -278,47 +278,135 @@ msgstr "работникам библиотеки и посетителям со
 msgid "authorities.pref"
 msgstr "Авторитетные источники"
 
-# Authorities
+# Authorities > General
+msgid "authorities.pref General"
+msgstr ""
+
+# Authorities > Linker
+msgid "authorities.pref Linker"
+msgstr ""
+
+# Authorities > General
+msgid "authorities.pref#AutoCreateAuthorities# When editing records,"
+msgstr ""
+
+# Authorities > General
+msgid "authorities.pref#AutoCreateAuthorities# authority records that are missing (BiblioAddsAuthorities must be set to \"allow\" for this to have any effect)."
+msgstr ""
+
+# Authorities > General
+msgid "authorities.pref#AutoCreateAuthorities# do not generate"
+msgstr ""
+
+# Authorities > General
+msgid "authorities.pref#AutoCreateAuthorities# generate"
+msgstr ""
+
+# Authorities > General
 msgid "authorities.pref#BiblioAddsAuthorities# When editing records,"
 msgstr "При редактировании записей "
 
-# Authorities
+# Authorities > General
 msgid "authorities.pref#BiblioAddsAuthorities# allow"
 msgstr "разрешить"
 
-# Authorities
+# Authorities > General
 msgid "authorities.pref#BiblioAddsAuthorities# don't allow"
 msgstr "запретить"
 
-# Authorities
+# Authorities > General
 msgid "authorities.pref#BiblioAddsAuthorities# them to automatically create new authority records if needed, rather than having to reference existing authorities."
 msgstr " также автоматически создавать, при необходимости, новые авторитетные записи, вместо того, чтобы ссылаться на уже существующие авторитетные источники."
 
-# Authorities
+# Authorities > Linker
+msgid "authorities.pref#CatalogModuleRelink# Do"
+msgstr ""
+
+# Authorities > Linker
+msgid "authorities.pref#CatalogModuleRelink# Do not"
+msgstr ""
+
+# Authorities > Linker
+msgid "authorities.pref#CatalogModuleRelink# automatically relink headings that have previously been linked when saving records in the cataloging module."
+msgstr ""
+
+# Authorities > Linker
+msgid "authorities.pref#LinkerKeepStale# Do"
+msgstr ""
+
+# Authorities > Linker
+msgid "authorities.pref#LinkerKeepStale# Do not"
+msgstr ""
+
+# Authorities > Linker
+msgid "authorities.pref#LinkerKeepStale# keep existing links to authority records for headings where the linker is unable to find a match."
+msgstr ""
+
+# Authorities > Linker
+msgid "authorities.pref#LinkerModule# Default"
+msgstr ""
+
+# Authorities > Linker
+msgid "authorities.pref#LinkerModule# First Match"
+msgstr ""
+
+# Authorities > Linker
+msgid "authorities.pref#LinkerModule# Last Match"
+msgstr ""
+
+# Authorities > Linker
+msgid "authorities.pref#LinkerModule# Use the"
+msgstr ""
+
+# Authorities > Linker
+msgid "authorities.pref#LinkerModule# linker module for matching headings to authority records."
+msgstr ""
+
+# Authorities > Linker
+msgid "authorities.pref#LinkerOptions# (separate options with |)"
+msgstr ""
+
+# Authorities > Linker
+msgid "authorities.pref#LinkerOptions# Set the following options for the authority linker"
+msgstr ""
+
+# Authorities > Linker
+msgid "authorities.pref#LinkerRelink# Do"
+msgstr ""
+
+# Authorities > Linker
+msgid "authorities.pref#LinkerRelink# Do not"
+msgstr ""
+
+# Authorities > Linker
+msgid "authorities.pref#LinkerRelink# relink headings that have previously been linked to authority records."
+msgstr ""
+
+# Authorities > General
 msgid "authorities.pref#MARCAuthorityControlField008# Use the following text for the contents of MARC authority control field 008 position 06-39 (fixed length data elements). Do NOT include the date (position 00-05)."
 msgstr ""
 
-# Authorities
+# Authorities > General
 msgid "authorities.pref#UseAuthoritiesForTracings# Don't use"
 msgstr "Не использовать"
 
-# Authorities
+# Authorities > General
 msgid "authorities.pref#UseAuthoritiesForTracings# Use"
 msgstr "Использовать"
 
-# Authorities
+# Authorities > General
 msgid "authorities.pref#UseAuthoritiesForTracings# authority record numbers instead of text strings for searches from subject tracings."
 msgstr "номера авторитетных записей вместо текстовых строк при поисках по отслеживанию тематик."
 
-# Authorities
+# Authorities > General
 msgid "authorities.pref#dontmerge# Do"
 msgstr "Выполнять"
 
-# Authorities
+# Authorities > General
 msgid "authorities.pref#dontmerge# Don't"
 msgstr "Не выполнять"
 
-# Authorities
+# Authorities > General
 msgid "authorities.pref#dontmerge# automatically update attached biblios when changing an authority record. If this is off, please ask your administrator to enable the merge_authority.pl cronjob."
 msgstr ""
 
@@ -796,19 +884,19 @@ msgstr " автоматическое перемещение экземпляр�
 
 # Circulation > Interface
 msgid "circulation.pref#CircAutocompl# Don't try"
-msgstr ""
+msgstr "Не пытаться"
 
 # Circulation > Interface
 msgid "circulation.pref#CircAutocompl# Only returns the first 10 results at a time."
-msgstr ""
+msgstr "Только возвращает первые 10 результатов за раз."
 
 # Circulation > Interface
 msgid "circulation.pref#CircAutocompl# Try"
-msgstr ""
+msgstr "Пытаться"
 
 # Circulation > Interface
 msgid "circulation.pref#CircAutocompl# to guess the patron being entered while typing a patron search on the circulation screen."
-msgstr ""
+msgstr " угадать посетителя при вводе в поле поиска посетителей на экране оборота."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#CircControl# Use the checkout and fines rules of"
@@ -1300,7 +1388,7 @@ msgstr " последних возвращенных экземпляров на
 
 # Circulation > Interface
 msgid "circulation.pref#previousIssuesDefaultSortOrder# Sort previous checkouts on the circulation page from"
-msgstr ""
+msgstr "Сортировать предыдущие выдачи на странице оборота  "
 
 # Circulation > Interface
 msgid "circulation.pref#previousIssuesDefaultSortOrder# due date."
@@ -2064,7 +2152,7 @@ msgstr "Записывать в журнал "
 
 # Logging
 msgid "logs.pref#AuthoritiesLog# changes to authority records."
-msgstr ""
+msgstr " изменения в авторитетных записях."
 
 # Logging
 msgid "logs.pref#BorrowersLog# Don't log"
@@ -2511,6 +2599,18 @@ msgid "opac.pref#OpacAuthorities# patrons to search your authority records."
 msgstr ""
 
 # OPAC > Features
+msgid "opac.pref#OpacBrowseResults# Disable"
+msgstr ""
+
+# OPAC > Features
+msgid "opac.pref#OpacBrowseResults# Enable"
+msgstr ""
+
+# OPAC > Features
+msgid "opac.pref#OpacBrowseResults# browsing and paging search results from the OPAC detail page."
+msgstr ""
+
+# OPAC > Features
 msgid "opac.pref#OpacBrowser# Allow"
 msgstr "Разрешить"
 
@@ -2784,7 +2884,7 @@ msgstr "Запретить"
 
 # OPAC > Features
 msgid "opac.pref#opacbookbag# patrons to store items in a temporary \"Cart\" on the OPAC."
-msgstr ""
+msgstr " посетителям сохранять записи во временной «корзине» в ЭК."
 
 # OPAC > Appearance
 msgid "opac.pref#opaccolorstylesheet# Include the additional CSS stylesheet"
@@ -2820,7 +2920,7 @@ msgstr "Запретить"
 
 # OPAC > Privacy
 msgid "opac.pref#opacreadinghistory# patrons to see what books they have checked out in the past."
-msgstr ""
+msgstr " посетителям видеть, какие книги они брали в прошлом."
 
 # OPAC > Appearance
 msgid "opac.pref#opacsmallimage# Use the image at"
@@ -3068,7 +3168,7 @@ msgstr "Запретить"
 
 # Patrons
 msgid "patrons.pref#intranetreadinghistory# staff to access a patron's checkout history (it is stored regardless)."
-msgstr ""
+msgstr " работникам библиотеки доступ к истории выдач посетителей (она сохраняется независимо от этого выбора)."
 
 # Patrons
 msgid "patrons.pref#memberofinstitution# Do"
@@ -3338,6 +3438,18 @@ msgstr ""
 msgid "searching.pref#TraceSubjectSubdivisions# subdivisions for searches generated by clicking on subject tracings."
 msgstr ""
 
+# Searching > Features
+msgid "searching.pref#UseICU# ICU Zebra indexing. Please note: This setting will not affect Zebra indexing, it should only be used to tell Koha that you have activated ICU indexing if you have actually done so, since there is no way for Koha to figure this out on its own."
+msgstr ""
+
+# Searching > Features
+msgid "searching.pref#UseICU# Not using"
+msgstr ""
+
+# Searching > Features
+msgid "searching.pref#UseICU# Using"
+msgstr ""
+
 # Searching > Results Display
 msgid "searching.pref#defaultSortField# ,"
 msgstr ", "
@@ -3499,19 +3611,19 @@ msgid "serials.pref#StaffSerialIssueDisplayCount# previous issues of a serial on
 msgstr ""
 
 # Serials
-msgid "serials.pref#SubscriptionHistory# When showing the subscription information for a biblio, show"
+msgid "serials.pref#SubscriptionHistory# When showing the subscription information for a bibliographic record, preselect"
 msgstr ""
 
 # Serials
-msgid "serials.pref#SubscriptionHistory# a full list"
+msgid "serials.pref#SubscriptionHistory# brief history"
 msgstr ""
 
 # Serials
-msgid "serials.pref#SubscriptionHistory# a summary"
+msgid "serials.pref#SubscriptionHistory# full history"
 msgstr ""
 
 # Serials
-msgid "serials.pref#SubscriptionHistory# of the serial issues."
+msgid "serials.pref#SubscriptionHistory# view of serial issues."
 msgstr ""
 
 # Serials
