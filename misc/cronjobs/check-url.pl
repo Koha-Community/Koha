@@ -165,7 +165,7 @@ GetOptions(
     'help'          => \$help,
     'host=s'        => \$host,
     'host-pro=s'    => \$host_pro,
-    'agent=s'       => \$agent;
+    'agent=s'       => \$agent,
     'timeout=i',    => \$timeout,
 );
 
