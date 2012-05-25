@@ -1,7 +1,23 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; Search existing records</title>
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
 [% INCLUDE 'greybox.inc' %]
 [% INCLUDE 'doc-head-close.inc' %]
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.min.js"></script>
+[% INCLUDE 'datatables-strings.inc' %]
+<script type="text/javascript" src="[% themelang %]/js/datatables.js"></script>
+<script type="text/javascript">
+//<![CDATA[
+ $(document).ready(function() {
+    var resultst = $("#resultst").dataTable($.extend(true, {}, dataTablesDefaults, {
+        'bPaginate': false,
+        'bFilter': false,
+        'bInfo': false,
+        'bSort': false,
+    } ) );
+ });
+ //]]>
+</script>
 </head>
 <body id="acq_neworderbiblio" class="acq">
 [% INCLUDE 'header.inc' %]
@@ -34,14 +50,18 @@
 
 [% IF ( total ) %]
 <div class="searchresults">
-    <table>
-    <tr>
-       <th>Summary</th>
-       <th>Publisher</th>
-       <th>Copyright</th>
-       <th colspan="2">&nbsp;</th>
-    </tr>
-    [% FOREACH biblio IN resultsloop %]
+    <table id="resultst">
+    <thead>
+      <tr>
+         <th>Summary</th>
+         <th>Publisher</th>
+         <th>Copyright</th>
+         <th>&nbsp;</th>
+         <th>&nbsp;</th>
+      </tr>
+    </thead>
+    <tbody>
+      [% FOREACH biblio IN resultsloop %]
         <tr>
             <td>
                 <p><span class="title">[% biblio.title |html %]</span>
@@ -68,7 +88,8 @@
             </a>
             </td>
         </tr>
-    [% END %]
+      [% END %]
+    </tbody>
     </table>
 </div>
 [% END %]
