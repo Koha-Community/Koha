@@ -249,6 +249,16 @@ our $PERL_DEPS = {
         'required' => '0',
         'min_ver'  => '0.03'
     },
+    'CHI' => {
+        'usage'    => 'Caching',
+        'required' => '0',
+        'min_ver'  => '0.36'
+    },
+    'CHI::Driver::Memcached' => {
+        'usage'    => 'Caching',
+        'required' => '0',
+        'min_ver'  => '0.12'
+    },
     'Net::LDAP::Filter' => {
         'usage'    => 'LDAP Interface Feature',
         'required' => '0',
