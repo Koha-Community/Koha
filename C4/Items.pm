@@ -2482,6 +2482,7 @@ counts Usage of itemnumber in Analytical bibliorecords.
 
 sub GetAnalyticsCount {
     my ($itemnumber) = @_;
+    require C4::Search;
     if (C4::Context->preference('NoZebra')) {
         # Read the index Koha-Auth-Number for this authid and count the lines
         my $result = C4::Search::NZanalyse("hi=$itemnumber");

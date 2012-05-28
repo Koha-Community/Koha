@@ -30,7 +30,6 @@ use C4::XSLT;
 use C4::Branch;
 use C4::Reserves;    # CheckReserves
 use C4::Debug;
-use C4::Items;
 use C4::Charset;
 use YAML;
 use URI::Escape;
@@ -1417,6 +1416,8 @@ sub searchResults {
     my $dbh = C4::Context->dbh;
     my @newresults;
 
+    require C4::Items;
+
     $search_context = 'opac' if !$search_context || $search_context ne 'intranet';
     my ($is_opac, $hidelostitems);
     if ($search_context eq 'opac') {
@@ -1630,9 +1631,9 @@ sub searchResults {
 
 	        # Hidden items
             if ($is_opac) {
-	            my @hi = GetHiddenItemnumbers($item);
-	        $item->{'hideatopac'} = @hi;
-              push @hiddenitems, @hi;
+                my @hi = C4::Items::GetHiddenItemnumbers($item);
+                $item->{'hideatopac'} = @hi;
+                push @hiddenitems, @hi;
             }
 
             my $hbranch     = C4::Context->preference('HomeOrHoldingBranch') eq 'homebranch' ? 'homebranch'    : 'holdingbranch';
