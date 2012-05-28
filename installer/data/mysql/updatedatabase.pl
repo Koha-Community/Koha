@@ -5269,8 +5269,6 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
-
-
 $DBversion = "3.09.00.006";
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     $dbh->do("UPDATE systempreferences SET
@@ -5298,6 +5296,14 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("ALTER TABLE sessions ADD PRIMARY KEY (id);");
     $dbh->do("ALTER TABLE sessions DROP INDEX `id`;");
     print "Upgrade to $DBversion done (redefine the field id as PRIMARY KEY of sessions)\n";
+    SetVersion($DBversion);
+}
+
+$DBversion = "3.09.00.009";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("ALTER TABLE branches ADD PRIMARY KEY (branchcode);");
+    $dbh->do("ALTER TABLE branches DROP INDEX branchcode;");
+    print "Upgrade to $DBversion done (redefine the field branchcode as PRIMARY KEY of branches)\n";
     SetVersion ($DBversion);
 }
 

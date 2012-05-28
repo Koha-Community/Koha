@@ -365,7 +365,7 @@ CREATE TABLE `branches` ( -- information about your libraries or branches are st
   `branchprinter` varchar(100) default NULL, -- unused in Koha
   `branchnotes` mediumtext, -- notes related to your library or branch
   opac_info text, -- HTML that displays in OPAC
-  UNIQUE KEY `branchcode` (`branchcode`)
+  PRIMARY KEY (`branchcode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
