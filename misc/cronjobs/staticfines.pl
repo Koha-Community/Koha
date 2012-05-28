@@ -8,7 +8,7 @@
 #
 #  This script is meant to be run nightly out of cron.
 
-# Copyright 2000-2002 Katipo Communications
+# Copyright 2011-2012 BibLibre
 #
 # This file is part of Koha.
 #
@@ -25,10 +25,7 @@
 # with Koha; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-# FIXME: use FinesMode as described or change syspref description
-use strict;
-
-#use warnings; FIXME - Bug 2505
+use Modern::Perl;
 
 BEGIN {
 
@@ -51,13 +48,13 @@ use List::MoreUtils qw/none/;
 
 my $help    = 0;
 my $verbose = 0;
-my $output_dir;
 my @pcategories;
 my @categories;
 my %catamounts;
 my @libraries;
 my $delay;
 my $useborrowerlibrary;
+my $borrowernumberlimit;
 my $borrowersalreadyapplied; # hashref of borrowers for whom we already applied the fine, so it's only applied once
 my $debug = $ENV{'DEBUG'} || 0;
 my $bigdebug = 0;
@@ -65,11 +62,11 @@ my $bigdebug = 0;
 GetOptions(
     'h|help'      => \$help,
     'v|verbose'   => \$verbose,
-    'o|out:s'     => \$output_dir,
     'c|category:s'=> \@pcategories,
     'l|library:s' => \@libraries,
     'd|delay:i'   => \$delay,
-    'u|use-borrower-library' => \$useborrowerlibrary
+    'u|use-borrower-library' => \$useborrowerlibrary,
+    'b|borrower:i' => \$borrowernumberlimit
 );
 my $usage = << 'ENDUSAGE';
 
@@ -82,15 +79,17 @@ Please note that the fines won't be applied on a holiday.
 
 This script has the following parameters :
     -h --help: this message
-    -o --out:  ouput directory for logs (defaults to env or /tmp if !exist)
     -v --verbose
     -c --category borrower_category,amount (repeatable)
     -l --library (repeatable)
     -d --delay
     -u --use-borrower-library: use borrower's library, regardless of the CircControl syspref
+    -b --borrower borrowernumber: only for one given borrower
 
 ENDUSAGE
 die $usage if $help;
+
+my $dbh = C4::Context->dbh;
 
 # Processing categories
 foreach (@pcategories) {
@@ -122,42 +121,24 @@ INIT {
       "Per overdue: ",     join( ', ', @other_fields ),    "\n",
       "Delimiter: '$delim'\n";
 }
-
-my $data                = Getoverdues();
+$debug and (defined $borrowernumberlimit) and print "--borrower limitation: borrower $borrowernumberlimit\n";
+my $data = (defined $borrowernumberlimit) ? checkoverdues($borrowernumberlimit) : Getoverdues();
 my $overdueItemsCounted = 0;
 my %calendars           = ();
 $today      = C4::Dates->new();
 $today_iso  = $today->output('iso');
 $today_days = Date_to_Days( split( /-/, $today_iso ) );
 
-
-
-if ($output_dir) {
-    $fldir = $output_dir if ( -d $output_dir );
-} else {
-    $fldir = $ENV{TMPDIR} || "/tmp";
-}
-if ( !-d $fldir ) {
-    warn "Could not write to $fldir ... does not exist!";
-}
-$filename = $dbname;
-$filename =~ s/\W//;
-$filename = $fldir . '/' . $filename . '_' . $today_iso . ".log";
-print "writing to $filename\n" if $verbose;
-open my $FILE, ">", $filename or die "Cannot write file $filename: $!";
-print $FILE join $delim, ( @borrower_fields, @item_fields, @other_fields );
-print $FILE "\n";
-
 for ( my $i = 0 ; $i < scalar(@$data) ; $i++ ) {
     my $datedue;
     my $datedue_days;
     eval {
-        $datedue = C4::Dates->new( $data->[$i]->{'date_due'}, 'iso' );
-        $datedue_days = Date_to_Days( split( /-/, $datedue->output('iso') ) );
+    $datedue = C4::Dates->new( $data->[$i]->{'date_due'}, 'iso' );
+    $datedue_days = Date_to_Days( split( /-/, $datedue->output('iso') ) );
     };
     if ($@) {
-        warn "Error on date for borrower " . $data->[$i]->{'borrowernumber'} .  ": $@date_due: " . $data->[$i]->{'date_due'} . "\ndatedue_days: " . $datedue_days . "\nSkipping";
-        next;
+    warn "Error on date for borrower " . $data->[$i]->{'borrowernumber'} .  ": $@date_due: " . $data->[$i]->{'date_due'} . "\ndatedue_days: " . $datedue_days . "\nSkipping";
+    next;
     }
     my $due_str = $datedue->output();
     unless ( defined $data->[$i]->{'borrowernumber'} ) {
@@ -200,9 +181,15 @@ for ( my $i = 0 ; $i < scalar(@$data) ; $i++ ) {
     # Reassign fine's amount if specified in command-line
     $amount = $catamounts{$borrower->{'categorycode'}} if (defined $catamounts{$borrower->{'categorycode'}});
 
+    # We check if there is already a fine for the given borrower
+    my $fine = GetFine($data->[$i]->{'borrowernumber'});
+    if ($fine > 0) {
+        $debug and warn "There is already a fine for borrower " . $data->[$i]->{'borrowernumber'} . ". Nothing to do here. Skipping this borrower";
+        next;
+    }
+
     # FIXME: $type NEVER gets populated by anything.
     ( defined $type ) or $type = '';
-
 
     # Don't update the fine if today is a holiday.
     # This ensures that dropbox mode will remove the correct amount of fine.
@@ -211,22 +198,36 @@ for ( my $i = 0 ; $i < scalar(@$data) ; $i++ ) {
         if($isHoliday) {
             $debug and warn "Today is a holiday. The fine for borrower " . $data->[$i]->{'borrowernumber'} . " will not be applied";
         } else {
-            $debug and warn "Updating fine for borrower " . $data->[$i]->{'borrowernumber'} . " with amount : $amount";
-            UpdateFine( $data->[$i]->{'itemnumber'}, $data->[$i]->{'borrowernumber'}, $amount, $type, $due_str ) if ( $amount > 0 );
+            $debug and warn "Creating fine for borrower " . $data->[$i]->{'borrowernumber'} . " with amount : $amount";
+
+            # We mark this borrower as already processed
             $borrowersalreadyapplied->{$data->[$i]->{'borrowernumber'}} = 1;
+
+            my $borrowernumber = $data->[$i]->{'borrowernumber'};
+            my $itemnumber     = $data->[$i]->{'itemnumber'};
+
+            # And we create the fine
+            my $sth4 = $dbh->prepare( "SELECT title FROM biblio LEFT JOIN items ON biblio.biblionumber=items.biblionumber WHERE items.itemnumber=?" );
+            $sth4->execute($itemnumber);
+            my $title = $sth4->fetchrow;
+
+            my $nextaccntno = C4::Accounts::getnextacctno($borrowernumber);
+            my $desc        = "staticfine";
+            my $query       = "INSERT INTO accountlines
+                        (borrowernumber,itemnumber,date,amount,description,accounttype,amountoutstanding,lastincrement,accountno)
+                                VALUES (?,?,now(),?,?,'F',?,?,?)";
+            my $sth2 = $dbh->prepare($query);
+            $bigdebug and warn "query: $query\nw/ args: $borrowernumber, $itemnumber, $amount, $desc, $amount, $amount, $nextaccntno\n";
+            $sth2->execute( $borrowernumber, $itemnumber, $amount, $desc, $amount, $amount, $nextaccntno );
+
         }
     }
-    my @cells = ();
-    push @cells, map { $borrower->{$_} } @borrower_fields;
-    push @cells, map { $data->[$i]->{$_} } @item_fields;
-    push @cells, $type, $daycounttotal, $amount;
-    print FILE join( $delim, @cells ), "\n";
 }
 
 my $numOverdueItems = scalar(@$data);
 if ($verbose) {
     print <<EOM;
-Fines assessment -- $today_iso -- Saved to $filename
+Fines assessment -- $today_iso
 Number of Overdue Items:
      counted $overdueItemsCounted
     reported $numOverdueItems
@@ -234,4 +235,3 @@ Number of Overdue Items:
 EOM
 }
 
-close FILE;
