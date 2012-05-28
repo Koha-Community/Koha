@@ -714,6 +714,11 @@
         <xsl:if test="marc:datafield[@tag=775]">
         <span class="results_summary other_editions"><span class="label">Other Editions: </span>
         <xsl:for-each select="marc:datafield[@tag=775]">
+            <xsl:variable name="f775">
+                <xsl:call-template name="chopPunctuation"><xsl:with-param name="chopString"><xsl:call-template name="subfieldSelect">
+                <xsl:with-param name="codes">a_t</xsl:with-param>
+                </xsl:call-template></xsl:with-param></xsl:call-template>
+            </xsl:variable>
             <xsl:if test="marc:subfield[@code='i']">
                 <xsl:call-template name="subfieldSelect">
                     <xsl:with-param name="codes">i</xsl:with-param>
@@ -726,11 +731,11 @@
                 <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=Control-number:<xsl:call-template name="extractControlNumber"><xsl:with-param name="subfieldW" select="marc:subfield[@code='w']"/></xsl:call-template></xsl:attribute>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=ti,phr:<xsl:value-of select="translate(marc:subfield[@code='t'], '.', '')"/></xsl:attribute>
+                <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=ti,phr:<xsl:value-of select="translate($f775, '()', '')"/></xsl:attribute>
             </xsl:otherwise>
             </xsl:choose>
             <xsl:call-template name="subfieldSelect">
-                <xsl:with-param name="codes">t</xsl:with-param>
+                <xsl:with-param name="codes">a_t</xsl:with-param>
             </xsl:call-template>
             </a>
             <xsl:choose>
