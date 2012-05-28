@@ -436,6 +436,17 @@
 	</span>
     </xsl:if>
 
+    <xsl:if test="marc:datafield[@tag=773]">
+        <xsl:for-each select="marc:datafield[@tag=773]">
+            <xsl:if test="marc:subfield[@code='t']">
+    <span class="results_summary">
+    <span class="label">Source: </span>
+            <xsl:value-of select="marc:subfield[@code='t']"/>
+    </span>
+            </xsl:if>
+        </xsl:for-each>
+    </xsl:if>
+
     <span class="results_summary">
     <xsl:if test="$typeOf008!=''">
         <span class="label">Type: </span>
