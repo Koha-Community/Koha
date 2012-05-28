@@ -115,7 +115,7 @@ else {
     my @oResult;
     my @errconn;
     my $s = 0;
-    my $query;
+    my $query = '';
     my $nterms;
     if ($isbn || $issn) {
         $term=$isbn if ($isbn);
