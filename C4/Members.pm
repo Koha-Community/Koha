@@ -2279,14 +2279,14 @@ sub IssueSlip {
 
 #   return unless ( C4::Context->boolean_preference('printcirculationslips') );
 
-    my $today       = POSIX::strftime("%Y-%m-%d", localtime);
+    my $now       = POSIX::strftime("%Y-%m-%d", localtime);
 
     my $issueslist = GetPendingIssues($borrowernumber);
     foreach my $it (@$issueslist){
-        if ($it->{'issuedate'} eq $today) {
-            $it->{'today'} = 1;
+        if ((substr $it->{'issuedate'}, 0, 10) eq $now) {
+            $it->{'now'} = 1;
         }
-        elsif ($it->{'date_due'} le $today) {
+        elsif ((substr $it->{'date_due'}, 0, 10) le $now) {
             $it->{'overdue'} = 1;
         }
 
@@ -2302,7 +2302,7 @@ sub IssueSlip {
                 'biblio' => $_,
                 'items'  => $_,
                 'issues' => $_,
-            }, grep { $_->{'today'} } @issues ],
+            }, grep { $_->{'now'} } @issues ],
         );
     }
     else {
