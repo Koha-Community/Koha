@@ -59,6 +59,16 @@ $( document ).ready( function () {
         mark_modified.call(this);
     } );
 
+    $(".set_syspref").click(function() {
+        var s = $(this).attr('data-syspref');
+        var v = $(this).attr('data-value');
+        // populate the input with the value in data-value
+        $("#pref_"+s).val(v);
+        // pass the DOM element to trigger "modified" to enable submit button
+        mark_modified.call($("#pref_"+s)[0]);
+        return false;
+    });
+
     window.onbeforeunload = function () {
         if ( KOHA.Preferences.Modified ) {
             return MSG_MADE_CHANGES;
