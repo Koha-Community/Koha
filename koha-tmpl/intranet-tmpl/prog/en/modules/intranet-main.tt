@@ -41,7 +41,7 @@
                         <a class="icon_general icon_lists" href="/cgi-bin/koha/virtualshelves/shelves.pl">Lists</a>
                     </li>
 
-                    [% IF ( CAN_user_catalogue || CAN_user_editcatalogue ) %]
+                    [% IF ( CAN_user_editcatalogue_edit_catalogue || CAN_user_editcatalogue_edit_items ) %]
                     <li>
                         <a class="icon_general icon_cataloging" href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloging</a>
                     </li>

@@ -16,7 +16,7 @@
                         <div class="bd">
                             <ul>
                             <li><a href="/cgi-bin/koha/virtualshelves/shelves.pl">Lists</a></li>
-                            [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]
+                            [% IF ( CAN_user_editcatalogue_edit_catalogue || CAN_user_editcatalogue_edit_items ) %]
                             <li><a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloging</a></li>
                             [% END %]
                             [% IF ( CAN_user_acquisition ) %]
