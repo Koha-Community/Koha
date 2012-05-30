@@ -945,7 +945,7 @@ sub BuildSummary {
         $summary{type} = $authref->{authtypetext};
         $summary{summary} = $authref->{summary};
     }
-    my $marc21subfields = 'abcdfghjklmnopqrstuvxyz';
+    my $marc21subfields = 'abcdfghjklmnopqrstuvxyz68';
     my %marc21controlrefs = ( 'a' => 'earlier',
         'b' => 'later',
         'd' => 'acronym',
@@ -1023,11 +1023,29 @@ sub BuildSummary {
 # see :
         foreach my $field ($record->field('5..')) {
             if (($field->subfield('5')) && ($field->subfield('a')) && ($field->subfield('5') eq 'g')) {
-                push @seealso, { $field->as_string('abcdefgjxyz'), type => 'broader', field => $field->tag() };
+                push @seealso, {
+                    heading => $field->as_string('abcdefgjxyz'),
+                    type => 'broader',
+                    field => $field->tag(),
+                    search => $field->as_string('abcdefgjxyz'),
+                    authid => $field->subfield('9')
+                };
             } elsif (($field->subfield('5')) && ($field->as_string) && ($field->subfield('5') eq 'h')){
-                push @seealso, { heading => $field->as_string('abcdefgjxyz'), type => 'narrower', field => $field->tag() };
+                push @seealso, {
+                    heading => $field->as_string('abcdefgjxyz'),
+                    type => 'narrower',
+                    field => $field->tag(),
+                    search => $field->as_string('abcdefgjxyz'),
+                    authid => $field->subfield('9')
+                };
             } elsif ($field->subfield('a')) {
-                push @seealso, { heading => $field->as_string('abcdefgxyz'), type => 'seealso', field => $field->tag() };
+                push @seealso, {
+                    heading => $field->as_string('abcdefgxyz'),
+                    type => 'seealso',
+                    field => $field->tag(),
+                    search => $field->as_string('abcdefgjxyz'),
+                    authid => $field->subfield('9')
+                };
             }
         }
 # // form
@@ -1079,28 +1097,40 @@ sub BuildSummary {
         }
         foreach my $field ($record->field('4..')) { #See From
             my $type = 'seefrom';
-            $type = $marc21controlrefs{substr $field->subfield('w'), 0, 1} if ($field->subfield('w'));
+            $type = ($marc21controlrefs{substr $field->subfield('w'), 0, 1} || '') if ($field->subfield('w'));
             if ($type eq 'notapplicable') {
                 $type = substr $field->subfield('w'), 2, 1;
                 $type = 'earlier' if $type && $type ne 'n';
             }
             if ($type eq 'subfi') {
-                push @seefrom, { heading => $field->as_string($marc21subfields), type => $field->subfield('i'), field => $field->tag() };
+                push @seefrom, { heading => $field->as_string($marc21subfields), type => ($field->subfield('i') || ''), field => $field->tag() };
             } else {
                 push @seefrom, { heading => $field->as_string($marc21subfields), type => $type, field => $field->tag() };
             }
         }
         foreach my $field ($record->field('5..')) { #See Also
             my $type = 'seealso';
-            $type = $marc21controlrefs{substr $field->subfield('w'), 0, 1} if ($field->subfield('w'));
+            $type = ($marc21controlrefs{substr $field->subfield('w'), 0, 1} || '') if ($field->subfield('w'));
             if ($type eq 'notapplicable') {
                 $type = substr $field->subfield('w'), 2, 1;
                 $type = 'earlier' if $type && $type ne 'n';
             }
             if ($type eq 'subfi') {
-                push @seealso, { heading => $field->as_string($marc21subfields), type => $field->subfield('i'), field => $field->tag() };
+                push @seealso, {
+                    heading => $field->as_string($marc21subfields),
+                    type => $field->subfield('i'),
+                    field => $field->tag(),
+                    search => $field->as_string($marc21subfields) || '',
+                    authid => $field->subfield('9') || ''
+                };
             } else {
-                push @seealso, { heading => $field->as_string($marc21subfields), type => $type, field => $field->tag() };
+                push @seealso, {
+                    heading => $field->as_string($marc21subfields),
+                    type => $type,
+                    field => $field->tag(),
+                    search => $field->as_string($marc21subfields) || '',
+                    authid => $field->subfield('9') || ''
+                };
             }
         }
         foreach my $field ($record->field('6..')) {

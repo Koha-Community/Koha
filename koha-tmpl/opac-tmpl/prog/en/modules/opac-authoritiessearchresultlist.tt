@@ -57,7 +57,7 @@
             [% ELSE %]
                 <tr>
             [% END %]
-                    <td>[% PROCESS authresult summary=resul.summary %]</td>
+                    <td>[% PROCESS authresult summary=resul.summary link="/cgi-bin/koha/opac-authorities-home.pl?op=do_search&type=opac&operatorc=contains&marclistc=mainentry&and_orc=and&orderby=HeadingAsc&valuec=" %]</td>
                     <td>[% resul.authtype %]</td>
 					[% UNLESS ( resul.isEDITORS ) %]
 						<td>
