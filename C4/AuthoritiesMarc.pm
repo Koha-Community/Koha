@@ -199,7 +199,7 @@ sub SearchAuthorities {
         }
     } else {
         my $query;
-        my $attr;
+        my $attr = '';
             # the marclist may contain "mainentry". In this case, search the tag_to_report, that depends on
             # the authtypecode. Then, search on $a of this tag_to_report
             # also store main entry MARC tag, to extract it at end of search
@@ -230,9 +230,6 @@ sub SearchAuthorities {
                 elsif ( @$tags[$i] eq "mainentry" ) {
                     $attr = " \@attr 1=Heading ";
                 }
-                elsif ( @$tags[$i] eq "any" ) {
-                    $attr = " \@attr 1=Any ";
-                }
                 elsif ( @$tags[$i] eq "match" ) {
                     $attr = " \@attr 1=Match ";
                 }
@@ -244,6 +241,9 @@ sub SearchAuthorities {
                 }
                 elsif ( @$tags[$i] eq "thesaurus" ) {
                     $attr = " \@attr 1=Subject-heading-thesaurus ";
+                }
+                else { # Assume any if no index was specified
+                    $attr = " \@attr 1=Any ";
                 }
                 if ( @$operator[$i] eq 'is' ) {
                     $attr .= " \@attr 4=1  \@attr 5=100 "

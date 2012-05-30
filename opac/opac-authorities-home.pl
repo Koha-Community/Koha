@@ -58,12 +58,12 @@ foreach my $thisauthtype (
 }
 
 if ( $op eq "do_search" ) {
-    my @marclist = ($query->param('marclista'),$query->param('marclistb'),$query->param('marclistc'));
-    my @and_or = ($query->param('and_ora'),$query->param('and_orb'),$query->param('and_orc'));
-    my @excluding = ($query->param('excludinga'),$query->param('excludingb'),$query->param('excludingc'),);
-    my @operator = ($query->param('operatora'),$query->param('operatorb'),$query->param('operatorc'));
+    my @marclist = ($query->param('marclist'));
+    my @and_or = ($query->param('and_or'));
+    my @excluding = ($query->param('excluding'),);
+    my @operator = ($query->param('operator'));
     my $orderby = $query->param('orderby');
-    my @value = ($query->param('valuea') || "",$query->param('valueb') || "",$query->param('valuec') || "",);
+    my @value = ($query->param('value') || "",);
 
     $resultsperpage = $query->param('resultsperpage');
     $resultsperpage = 20 if ( !defined $resultsperpage );
@@ -90,15 +90,7 @@ if ( $op eq "do_search" ) {
         $displaynext = 1;
     }
 
-    my @field_data = ();
-
-    foreach my $letter (qw/a b c/){
-        push @field_data, { term => "marclist$letter" , val => $query->param("marclist$letter") || ''};
-        push @field_data, { term => "and_or$letter" , val => $query->param("and_or$letter") || ''};
-        push @field_data, { term => "excluding$letter" , val => $query->param("excluding$letter") || ''};
-        push @field_data, { term => "operator$letter" , val => $query->param("operator$letter") || ''};
-        push @field_data, { term => "value$letter" , val => $query->param("value$letter") || ''};
-    }
+    my @field_data = ( { term => "marclist" , val => $query->param("marclist") || ''} );
 
     my @numbers = ();
 
