@@ -15,6 +15,7 @@
 [% IF ( facets_loo.type_label_Topics ) %]Topics[% END %]
 [% IF ( facets_loo.type_label_Places ) %]Places[% END %]
 [% IF ( facets_loo.type_label_Series ) %]Series[% END %]
+[% IF ( facets_loo.type_label_ItemTypes ) %]Item types[% END %]
 [% IF ( facets_loo.type_label_Libraries ) %]Libraries[% END %]
 <ul>
         [% FOREACH facet IN facets_loo.facets %]<li><a href="/cgi-bin/koha/catalogue/search.pl?[% query_cgi |html %][% limit_cgi |html %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by %][% END %]&amp;limit=[% facet.type_link_value %]:[% facet.facet_link_value %]" title="[% facet.facet_title_value %]">[% facet.facet_label_value %]</a> [% IF ( displayFacetCount ) %]([% facet.facet_count %])[% END %]</li>[% END %][% IF ( facets_loo.expandable ) %]

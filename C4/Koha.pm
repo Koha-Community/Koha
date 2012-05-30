@@ -760,6 +760,12 @@ sub getFacets {
                 tags  => [ qw/ 440a 490a / ],
                 sep   => ', ',
             },
+            {
+                idx   => 'itype',
+                label => 'ItemTypes',
+                tags  => [ qw/ 952y 942c / ],
+                sep   => ', ',
+            },
             ];
             my $library_facet;
             $library_facet = {

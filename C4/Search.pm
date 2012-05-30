@@ -287,7 +287,7 @@ sub SimpleSearch {
 ( undef, $results_hashref, \@facets_loop ) = getRecords (
 
         $koha_query,       $simple_query, $sort_by_ref,    $servers_ref,
-        $results_per_page, $offset,       $expanded_facet, $branches,
+        $results_per_page, $offset,       $expanded_facet, $branches,$itemtypes,
         $query_type,       $scan
     );
 
@@ -301,7 +301,7 @@ See verbse embedded documentation.
 sub getRecords {
     my (
         $koha_query,       $simple_query, $sort_by_ref,    $servers_ref,
-        $results_per_page, $offset,       $expanded_facet, $branches,
+        $results_per_page, $offset,       $expanded_facet, $branches,$itemtypes,
         $query_type,       $scan
     ) = @_;
 
@@ -554,6 +554,17 @@ sub getRecords {
 								else {
 									$facet_label_value = "*";
 								}
+                            }
+                            # if it's a itemtype, label by the name, not the code,
+                            if ( $link_value =~ /itype/ ) {
+                                if (defined $itemtypes
+                                    && ref($itemtypes) eq "HASH"
+                                    && defined $itemtypes->{$one_facet}
+                                    && ref ($itemtypes->{$one_facet}) eq "HASH")
+                                {
+                                    $facet_label_value =
+                                        $itemtypes->{$one_facet}->{'description'};
+                                }
                             }
 
                             # but we're down with the whole label being in the link's title.
