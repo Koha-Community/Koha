@@ -498,7 +498,8 @@ $template->param(categoryloop => \@category_loop,
                         branchloop => \@branchloop,
                         humanbranch => ($branch ne '*' ? $branches->{$branch}->{branchname} : ''),
                         current_branch => $branch,
-                        definedbranch => scalar(@sorted_row_loop)>0 
+                        definedbranch => scalar(@sorted_row_loop)>0,
+                        DHTMLcalendar_dateformat =>  C4::Dates->DHTMLcalendar()
                         );
 output_html_with_http_headers $input, $cookie, $template->output;
 
