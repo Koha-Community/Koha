@@ -52,6 +52,7 @@ $VERSION = 3.07.00.049;
   &marcxml2marc
   &marc2dcxml
   &marc2modsxml
+  &marc2madsxml
   &marc2bibtex
   &marc2csv
   &changeEncoding
@@ -267,25 +268,52 @@ sub marc2dcxml {
 
 =head2 marc2modsxml - Convert from ISO-2709 to MODS
 
-  my ($error,$modsxml) = marc2modsxml($marc);
+  my $modsxml = marc2modsxml($marc);
 
 Returns a MODS scalar
 
 =cut
 
 sub marc2modsxml {
-	my ($marc) = @_;
-	# grab the XML, run it through our stylesheet, push it out to the browser
-	my $xmlrecord = marc2marcxml($marc);
-	my $xslfile = C4::Context->config('intrahtdocs')."/prog/en/xslt/MARC21slim2MODS3-1.xsl";
-	my $parser = XML::LibXML->new();
-	my $xslt = XML::LibXSLT->new();
-	my $source = $parser->parse_string($xmlrecord);
-	my $style_doc = $parser->parse_file($xslfile);
-	my $stylesheet = $xslt->parse_stylesheet($style_doc);
-	my $results = $stylesheet->transform($source);
-	my $newxmlrecord = $stylesheet->output_string($results);
-	return ($newxmlrecord);
+    my ($marc) = @_;
+    return _transformWithStylesheet($marc, "/prog/en/xslt/MARC21slim2MODS3-1.xsl");
+}
+
+=head2 marc2madsxml - Convert from ISO-2709 to MADS
+
+  my $madsxml = marc2madsxml($marc);
+
+Returns a MADS scalar
+
+=cut
+
+sub marc2madsxml {
+    my ($marc) = @_;
+    return _transformWithStylesheet($marc, "/prog/en/xslt/MARC21slim2MADS.xsl");
+}
+
+=head2 _transformWithStylesheet - Transform a MARC record with a stylesheet
+
+    my $xml = _transformWithStylesheet($marc, $stylesheet)
+
+Returns the XML scalar result of the transformation. $stylesheet should
+contain the path to a stylesheet under intrahtdocs.
+
+=cut
+
+sub _transformWithStylesheet {
+    my ($marc, $stylesheet) = @_;
+    # grab the XML, run it through our stylesheet, push it out to the browser
+    my $xmlrecord = marc2marcxml($marc);
+    my $xslfile = C4::Context->config('intrahtdocs') . $stylesheet;
+    my $parser = XML::LibXML->new();
+    my $xslt = XML::LibXSLT->new();
+    my $source = $parser->parse_string($xmlrecord);
+    my $style_doc = $parser->parse_file($xslfile);
+    my $stylesheet = $xslt->parse_stylesheet($style_doc);
+    my $results = $stylesheet->transform($source);
+    my $newxmlrecord = $stylesheet->output_string($results);
+    return ($newxmlrecord);
 }
 
 sub marc2endnote {
