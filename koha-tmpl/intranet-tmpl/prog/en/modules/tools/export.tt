@@ -2,6 +2,13 @@
 <title>Koha &rsaquo; Tools &rsaquo; MARC export</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
+<script type="text/javascript">
+//<![CDATA[
+$(document).ready(function() {
+    $('#exporttype').tabs();
+});
+//]]>
+</script>
 </head>
 <body id="tools_export" class="tools">
 [% INCLUDE 'header.inc' %]
@@ -15,6 +22,12 @@
 	<div id="yui-main">
 	<div class="yui-b">
 
+<div id="exporttype" class="toptabs">
+<ul>
+<li><a href="#bibs">Export bibliographic records</a></li>
+<li><a href="#auths">Export authority records</a></li>
+</ul>
+<div id="bibs">
 <p>
     <b>Note : The items are exported by this tool unless specified.</b>
 </p>
@@ -110,9 +123,69 @@
         </li></ol>
     </fieldset>
     <input type="hidden" name="op" value="export" />
+    <input type="hidden" name="record_type" value="bibs" />
 
-    <fieldset class="action"><input type="submit" value="Export" class="button" /></fieldset>
+    <fieldset class="action"><input type="submit" value="Export bibliographic records" class="button" /></fieldset>
 </form>
+</div>
+
+<div id="auths">
+<form method="post" action="/cgi-bin/koha/tools/export.pl">
+    <fieldset class="rows">
+    <legend> Select records to export </legend>
+        <ol><li>
+            <label for="start">From authid: </label>
+            <input id="start" type="text" name="starting_authid" size="6" />
+        </li>
+        <li>
+            <label for="end">To authid: </label>
+            <input id="end" type="text" name="ending_authid" size="6" />
+        </li>
+        <li>
+            <label for="authtype">Authority type: </label>
+            <select name="authtype" id="authtype">
+                <option value="">-- All --</option>
+                [% FOREACH authtypeloo IN authtypeloop %]
+                [% IF ( authtypeloo.selected ) %]
+                <option value="[% authtypeloo.value %]" selected="selected">[% authtypeloo.description %]</option>
+[% ELSE %]
+                <option value="[% authtypeloo.value %]">[% authtypeloo.description %]</option>
+[% END %]
+                [% END %]
+            </select>
+        </li>
+        </ol>
+    </fieldset>
+    <fieldset class="rows">
+    <legend>Options</legend>
+        <ol>
+        <li>
+            <label for="dont_export_fields">Don't export fields</label>
+            <input id="dont_export_fields" type="text" name="dont_export_fields" />
+            separate by a blank. (e.g., 100a 200 606)
+        </li></ol>
+    </fieldset>
+    <fieldset class="rows">
+    <legend>Output format</legend>
+        <ol><li>
+            <label for="output_format">File format: </label>
+            <select id="output_format" name="output_format">
+                <option value="marc">marc</option>
+                <option value="xml">xml</option>
+            </select>
+        </li>
+        <li>
+        <label for="filename">File name:</label><input id="filename" type="text" name="filename" value="koha.mrc" />
+        </li></ol>
+    </fieldset>
+    <input type="hidden" name="op" value="export" />
+    <input type="hidden" name="record_type" value="auths" />
+
+    <fieldset class="action"><input type="submit" value="Export authority records" class="button" /></fieldset>
+</form>
+</div>
+
+</div>
 
 </div>
 </div>

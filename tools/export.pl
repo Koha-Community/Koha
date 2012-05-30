@@ -22,6 +22,7 @@ use warnings;
 use C4::Auth;
 use C4::Output;
 use C4::Biblio;  # GetMarcBiblio GetXmlBiblio
+use C4::AuthoritiesMarc; # GetAuthority
 use CGI;
 use C4::Koha;    # GetItemTypes
 use C4::Branch;  # GetBranches
@@ -62,89 +63,136 @@ if ($op eq "export") {
                             -charset => 'utf-8',
                             -attachment=>$filename);
      
-    my $StartingBiblionumber  = $query->param("StartingBiblionumber");
-    my $EndingBiblionumber    = $query->param("EndingBiblionumber");
-    my $output_format         = $query->param("output_format");
-    my $itemtype              = $query->param("itemtype");
-    my $start_callnumber      = $query->param("start_callnumber");
-    my $end_callnumber        = $query->param("end_callnumber");
-    my $start_accession      = ($query->param("start_accession")) ? C4::Dates->new($query->param("start_accession")) : '' ;
-    my $end_accession        = ($query->param("end_accession")) ? C4::Dates->new($query->param("end_accession")) : '' ;
-    my $dont_export_items     = $query->param("dont_export_item");
-    my $strip_nonlocal_items   = $query->param("strip_nonlocal_items");
-    my $dont_export_fields    = $query->param("dont_export_fields");
+    my $record_type        = $query->param("record_type");
+    my $output_format      = $query->param("output_format");
+    my $dont_export_fields = $query->param("dont_export_fields");
     my @sql_params;
-    
-    my $items_filter =
-        $branch || $start_callnumber || $end_callnumber ||  
-        $start_accession || $end_accession || 
-        ($itemtype && C4::Context->preference('item-level_itypes'));
-    my $query = $items_filter ?
-        "SELECT DISTINCT biblioitems.biblionumber
-         FROM biblioitems JOIN items
-         USING (biblionumber) WHERE 1"
-        :
-        "SELECT biblioitems.biblionumber FROM biblioitems WHERE biblionumber >0 ";
-                  
-    if ( $StartingBiblionumber ) {
-        $query .= " AND biblioitems.biblionumber >= ? ";
-        push @sql_params, $StartingBiblionumber;
-    }
-    
-    if ( $EndingBiblionumber ) {
-        $query .= " AND biblioitems.biblionumber <= ? ";
-        push @sql_params, $EndingBiblionumber;    
-    }
+    my $sql_query;
 
-    if ($branch) {
-        $query .= " AND homebranch = ? ";
-        push @sql_params, $branch;
-    }
+    my $StartingBiblionumber = $query->param("StartingBiblionumber");
+    my $EndingBiblionumber   = $query->param("EndingBiblionumber");
+    my $itemtype             = $query->param("itemtype");
+    my $start_callnumber     = $query->param("start_callnumber");
+    my $end_callnumber       = $query->param("end_callnumber");
+    my $start_accession =
+      ( $query->param("start_accession") )
+      ? C4::Dates->new( $query->param("start_accession") )
+      : '';
+    my $end_accession =
+      ( $query->param("end_accession") )
+      ? C4::Dates->new( $query->param("end_accession") )
+      : '';
+    my $dont_export_items    = $query->param("dont_export_item");
+    my $strip_nonlocal_items = $query->param("strip_nonlocal_items");
 
-    if ($start_callnumber) {
-        $query .= " AND itemcallnumber <= ? ";
-        push @sql_params, $start_callnumber;
-    }
+    my $starting_authid = $query->param('starting_authid');
+    my $ending_authid   = $query->param('ending_authid');
+    my $authtype        = $query->param('authtype');
 
-    if ($end_callnumber) {
-        $query .= " AND itemcallnumber >= ? ";
-        push @sql_params, $end_callnumber;
-    }
-    if ($start_accession) {
-        $query .= " AND dateaccessioned >= ? ";
-        push @sql_params, $start_accession->output('iso');
-    }
+    if ( $record_type eq 'bibs' ) {
+        my $items_filter =
+            $branch || $start_callnumber || $end_callnumber ||
+            $start_accession || $end_accession ||
+            ($itemtype && C4::Context->preference('item-level_itypes'));
+        $sql_query = $items_filter ?
+            "SELECT DISTINCT biblioitems.biblionumber
+            FROM biblioitems JOIN items
+            USING (biblionumber) WHERE 1"
+            :
+            "SELECT biblioitems.biblionumber FROM biblioitems WHERE biblionumber >0 ";
 
-    if ($end_accession) {
-        $query .= " AND dateaccessioned <= ? ";
-        push @sql_params, $end_accession->output('iso');
-    }
-    
-    if ( $itemtype ) {
-        $query .= (C4::Context->preference('item-level_itypes')) ? " AND items.itype = ? " : " AND biblioitems.itemtype = ?";
-        push @sql_params, $itemtype;
-    }
-    my $sth = $dbh->prepare($query);
-    $sth->execute(@sql_params);
-    
-    while (my ($biblionumber) = $sth->fetchrow) {
-        my $record = eval{ GetMarcBiblio($biblionumber); };
-        # FIXME: decide how to handle records GetMarcBiblio can't parse or retrieve
-        if ($@) {
-            next;
+        if ( $StartingBiblionumber ) {
+            $sql_query .= " AND biblioitems.biblionumber >= ? ";
+            push @sql_params, $StartingBiblionumber;
         }
-        next if not defined $record;
-        C4::Biblio::EmbedItemsInMarcBiblio($record, $biblionumber) unless $dont_export_items;
-        if ($strip_nonlocal_items || $limit_ind_branch) {
-            my ( $homebranchfield, $homebranchsubfield ) =
-                GetMarcFromKohaField( 'items.homebranch', '' );
-			for my $itemfield ($record->field($homebranchfield)){
-				# if stripping nonlocal items, use loggedinuser's branch if they didn't select one
-				$branch = C4::Context->userenv->{'branch'} unless $branch;
-                $record->delete_field($itemfield) if($itemfield->subfield($homebranchsubfield) ne $branch) ;
+
+        if ( $EndingBiblionumber ) {
+            $sql_query .= " AND biblioitems.biblionumber <= ? ";
+            push @sql_params, $EndingBiblionumber;
+        }
+
+        if ($branch) {
+            $sql_query .= " AND homebranch = ? ";
+            push @sql_params, $branch;
+        }
+
+        if ($start_callnumber) {
+            $sql_query .= " AND itemcallnumber <= ? ";
+            push @sql_params, $start_callnumber;
+        }
+
+        if ($end_callnumber) {
+            $sql_query .= " AND itemcallnumber >= ? ";
+            push @sql_params, $end_callnumber;
+        }
+        if ($start_accession) {
+            $sql_query .= " AND dateaccessioned >= ? ";
+            push @sql_params, $start_accession->output('iso');
+        }
+
+        if ($end_accession) {
+            $sql_query .= " AND dateaccessioned <= ? ";
+            push @sql_params, $end_accession->output('iso');
+        }
+
+        if ( $itemtype ) {
+            $sql_query .= (C4::Context->preference('item-level_itypes')) ? " AND items.itype = ? " : " AND biblioitems.itemtype = ?";
+            push @sql_params, $itemtype;
+        }
+    }
+    elsif ( $record_type eq 'auths' ) {
+        $sql_query =
+          "SELECT DISTINCT auth_header.authid FROM auth_header WHERE 1";
+
+        if ($starting_authid) {
+            $sql_query .= " AND auth_header.authid >= ? ";
+            push @sql_params, $starting_authid;
+        }
+
+        if ($ending_authid) {
+            $sql_query .= " AND auth_header.authid <= ? ";
+            push @sql_params, $ending_authid;
+        }
+
+        if ($authtype) {
+            $sql_query .= " AND auth_header.authtypecode = ? ";
+            push @sql_params, $authtype;
+        }
+    }
+
+    my $sth = $dbh->prepare($sql_query);
+    $sth->execute(@sql_params);
+
+    while ( my ($recordid) = $sth->fetchrow ) {
+        my $record;
+        if ( $record_type eq 'bibs' ) {
+            $record = eval { GetMarcBiblio($recordid); };
+
+     # FIXME: decide how to handle records GetMarcBiblio can't parse or retrieve
+            if ($@) {
+                next;
+            }
+            next if not defined $record;
+            C4::Biblio::EmbedItemsInMarcBiblio( $record, $recordid )
+              unless $dont_export_items;
+            if ( $strip_nonlocal_items || $limit_ind_branch ) {
+                my ( $homebranchfield, $homebranchsubfield ) =
+                  GetMarcFromKohaField( 'items.homebranch', '' );
+                for my $itemfield ( $record->field($homebranchfield) ) {
+
+# if stripping nonlocal items, use loggedinuser's branch if they didn't select one
+                    $branch = C4::Context->userenv->{'branch'} unless $branch;
+                    $record->delete_field($itemfield)
+                      if (
+                        $itemfield->subfield($homebranchsubfield) ne $branch );
+                }
             }
         }
-        
+        elsif ( $record_type eq 'auths' ) {
+            $record = C4::AuthoritiesMarc::GetAuthority($recordid);
+            next if not defined $record;
+        }
+
         if ( $dont_export_fields ) {
             my @fields = split " ", $dont_export_fields;
             foreach ( @fields ) {
@@ -165,12 +213,12 @@ if ($op eq "export") {
             print $record->as_xml_record($marcflavour);
         }
         else {
-            print $record->as_usmarc(); 
+            print $record->as_usmarc();
         }
     }
     exit;
-    
-} # if export
+
+}    # if export
 
 else {
 
@@ -196,11 +244,23 @@ else {
           };
     }
 
+    my $authtypes = getauthtypes;
+    my @authtypesloop;
+    foreach my $thisauthtype ( sort keys %$authtypes ) {
+        next unless $thisauthtype;
+        my %row = (
+            value       => $thisauthtype,
+            description => $authtypes->{$thisauthtype}->{'authtypetext'},
+        );
+        push @authtypesloop, \%row;
+    }
+
     $template->param(
-        branchloop   => \@branchloop,
-        itemtypeloop => \@itemtypesloop,
-		DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
+        branchloop               => \@branchloop,
+        itemtypeloop             => \@itemtypesloop,
+        DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
+        authtypeloop             => \@authtypesloop,
     );
-    
+
     output_html_with_http_headers $query, $cookie, $template->output;
 }
