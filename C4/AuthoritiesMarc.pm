@@ -46,12 +46,12 @@ BEGIN {
     	&DelAuthority
     	&GetAuthority
     	&GetAuthorityXML
-    
+
     	&CountUsage
     	&CountUsageChildren
     	&SearchAuthorities
     
-    	&BuildSummary
+        &BuildSummary
     	&BuildUnimarcHierarchies
     	&BuildUnimarcHierarchy
     
@@ -926,9 +926,9 @@ sub FindDuplicateAuthority {
 
 =head2 BuildSummary
 
-  $text= &BuildSummary( $record, $authid, $authtypecode)
+  $summary= &BuildSummary( $record, $authid, $authtypecode)
 
-return HTML encoded Summary
+Returns a hashref with a summary of the specified record.
 
 Comment : authtypecode can be infered from both record and authid.
 Moreover, authid can also be inferred from $record.
@@ -936,171 +936,176 @@ Would it be interesting to delete those things.
 
 =cut
 
-sub BuildSummary{
-## give this a Marc record to return summary
-  my ($record,$authid,$authtypecode)=@_;
-  my $dbh=C4::Context->dbh;
-  my $summary;
-  # handle $authtypecode is NULL or eq ""
-  if ($authtypecode) {
-  	my $authref = GetAuthType($authtypecode);
-  	$summary = $authref->{summary};
-  }
-  # FIXME: should use I18N.pm
-  my %language;
-  $language{'fre'}="Français";
-  $language{'eng'}="Anglais";
-  $language{'ger'}="Allemand";
-  $language{'ita'}="Italien";
-  $language{'spa'}="Espagnol";
-  my %thesaurus;
-  $thesaurus{'1'}="Peuples";
-  $thesaurus{'2'}="Anthroponymes";
-  $thesaurus{'3'}="Oeuvres";
-  $thesaurus{'4'}="Chronologie";
-  $thesaurus{'5'}="Lieux";
-  $thesaurus{'6'}="Sujets";
-  #thesaurus a remplir
-  my @fields = $record->fields();
-  my $reported_tag;
-  # if the library has a summary defined, use it. Otherwise, build a standard one
-  # FIXME - it appears that the summary field in the authority frameworks
-  #         can work as a display template.  However, this doesn't
-  #         suit the MARC21 version, so for now the "templating"
-  #         feature will be enabled only for UNIMARC for backwards
-  #         compatibility.
-  if ($summary and C4::Context->preference('marcflavour') eq 'UNIMARC') {
-    my @fields = $record->fields();
-    #             $reported_tag = '$9'.$result[$counter];
-	my @stringssummary;
-    foreach my $field (@fields) {
-      my $tag = $field->tag();
-      my $tagvalue = $field->as_string();
-      my $localsummary= $summary;
-	  $localsummary =~ s/\[(.?.?.?.?)$tag\*(.*?)\]/$1$tagvalue$2\[$1$tag$2\]/g;
-      if ($tag<10) {
-        if ($tag eq '001') {
-          $reported_tag.='$3'.$field->data();
-        }
-      } else {
-        my @subf = $field->subfields;
-        for my $i (0..$#subf) {
-          my $subfieldcode = $subf[$i][0];
-          my $subfieldvalue = $subf[$i][1];
-          my $tagsubf = $tag.$subfieldcode;
-          $localsummary =~ s/\[(.?.?.?.?)$tagsubf(.*?)\]/$1$subfieldvalue$2\[$1$tagsubf$2\]/g;
-        }
-      }
-	  push @stringssummary, $localsummary if ($localsummary ne $summary);
+sub BuildSummary {
+    ## give this a Marc record to return summary
+    my ($record,$authid,$authtypecode)=@_;
+    my $dbh=C4::Context->dbh;
+    my %summary;
+    # handle $authtypecode is NULL or eq ""
+    if ($authtypecode) {
+        my $authref = GetAuthType($authtypecode);
+        $summary{authtypecode} = $authref->{authtypecode};
+        $summary{type} = $authref->{authtypetext};
+        $summary{summary} = $authref->{summary};
     }
-	my $resultstring;
-	$resultstring = join(" -- ",@stringssummary);
-    $resultstring =~ s/\[(.*?)\]//g;
-    $resultstring =~ s/\n/<br\/>/g;
-	$summary      =  $resultstring;
-  } else {
-    my $heading = '';
-    my $altheading = '';
-    my $seealso = '';
-    my $broaderterms = '';
-    my $narrowerterms = '';
-    my $see = '';
-    my $seeheading = '';
-    my $notes = '';
+    my $marc21subfields = 'abcdfghjklmnopqrstuvxyz';
+    my %marc21controlrefs = ( 'a' => 'earlier',
+        'b' => 'later',
+        'd' => 'acronym',
+        'f' => 'musical',
+        'g' => 'broader',
+        'h' => 'narrower',
+        'i' => 'subfi',
+        't' => 'parent'
+    );
+    my %thesaurus;
+    $thesaurus{'1'}="Peuples";
+    $thesaurus{'2'}="Anthroponymes";
+    $thesaurus{'3'}="Oeuvres";
+    $thesaurus{'4'}="Chronologie";
+    $thesaurus{'5'}="Lieux";
+    $thesaurus{'6'}="Sujets";
+    #thesaurus a remplir
     my @fields = $record->fields();
-    if (C4::Context->preference('marcflavour') eq 'UNIMARC') {
-    # construct UNIMARC summary, that is quite different from MARC21 one
-      # accepted form
-      foreach my $field ($record->field('2..')) {
-        $heading.= $field->as_string('abcdefghijlmnopqrstuvwxyz');
-      }
-      # rejected form(s)
-      foreach my $field ($record->field('3..')) {
-        $notes.= '<span class="note">'.$field->subfield('a')."</span>\n";
-      }
-      foreach my $field ($record->field('4..')) {
-        if ($field->subfield('2')) {
-            my $thesaurus = "thes. : ".$thesaurus{"$field->subfield('2')"}." : ";
-            $see.= '<span class="UF">'.$thesaurus.$field->as_string('abcdefghijlmnopqrstuvwxyz')."</span> -- \n";
+    my $reported_tag;
+# if the library has a summary defined, use it. Otherwise, build a standard one
+# FIXME - it appears that the summary field in the authority frameworks
+#         can work as a display template.  However, this doesn't
+#         suit the MARC21 version, so for now the "templating"
+#         feature will be enabled only for UNIMARC for backwards
+#         compatibility.
+    if ($summary{summary} and C4::Context->preference('marcflavour') eq 'UNIMARC') {
+        my @fields = $record->fields();
+#             $reported_tag = '$9'.$result[$counter];
+        my @stringssummary;
+        foreach my $field (@fields) {
+            my $tag = $field->tag();
+            my $tagvalue = $field->as_string();
+            my $localsummary= $summary{summary};
+            $localsummary =~ s/\[(.?.?.?.?)$tag\*(.*?)\]/$1$tagvalue$2\[$1$tag$2\]/g;
+            if ($tag<10) {
+                if ($tag eq '001') {
+                    $reported_tag.='$3'.$field->data();
+                }
+            } else {
+                my @subf = $field->subfields;
+                for my $i (0..$#subf) {
+                    my $subfieldcode = $subf[$i][0];
+                    my $subfieldvalue = $subf[$i][1];
+                    my $tagsubf = $tag.$subfieldcode;
+                    $localsummary =~ s/\[(.?.?.?.?)$tagsubf(.*?)\]/$1$subfieldvalue$2\[$1$tagsubf$2\]/g;
+                }
+            }
+            push @stringssummary, $localsummary if ($localsummary ne $summary{summary});
         }
-      }
-      # see :
-      foreach my $field ($record->field('5..')) {
-            
-        if (($field->subfield('5')) && ($field->subfield('a')) && ($field->subfield('5') eq 'g')) {
-          $broaderterms.= '<span class="BT"> '.$field->as_string('abcdefgjxyz')."</span> -- \n";
-        } elsif (($field->subfield('5')) && ($field->as_string) && ($field->subfield('5') eq 'h')){
-          $narrowerterms.= '<span class="NT">'.$field->as_string('abcdefgjxyz')."</span> -- \n";
-        } elsif ($field->subfield('a')) {
-          $seealso.= '<span class="RT">'.$field->as_string('abcdefgxyz')."</a></span> -- \n";
+        my $resultstring;
+        $resultstring = join(" -- ",@stringssummary);
+        $resultstring =~ s/\[(.*?)\]//g;
+        $resultstring =~ s/\n/<br>/g;
+        $summary{summary}      =  $resultstring;
+    } else {
+        my @authorized;
+        my @notes;
+        my @seefrom;
+        my @seealso;
+        my @otherscript;
+        my @fields = $record->fields();
+        if (C4::Context->preference('marcflavour') eq 'UNIMARC') {
+# construct UNIMARC summary, that is quite different from MARC21 one
+# accepted form
+            foreach my $field ($record->field('2..')) {
+                push @authorized, $field->as_string('abcdefghijlmnopqrstuvwxyz');
+            }
+# rejected form(s)
+            foreach my $field ($record->field('3..')) {
+                push @notes, $field->subfield('a');
+            }
+            foreach my $field ($record->field('4..')) {
+                my $thesaurus = $field->subfield('2') ? "thes. : ".$thesaurus{"$field->subfield('2')"}." : " : '';
+                push @seefrom, { heading => $thesaurus . $field->as_string('abcdefghijlmnopqrstuvwxyz'), type => 'seefrom' };
+            }
+# see :
+            foreach my $field ($record->field('5..')) {
+                if (($field->subfield('5')) && ($field->subfield('a')) && ($field->subfield('5') eq 'g')) {
+                    push @seealso, { $field->as_string('abcdefgjxyz'), type => 'broader' };
+                } elsif (($field->subfield('5')) && ($field->as_string) && ($field->subfield('5') eq 'h')){
+                    push @seealso, { heading => $field->as_string('abcdefgjxyz'), type => 'narrower' };
+                } elsif ($field->subfield('a')) {
+                    push @seealso, { heading => $field->as_string('abcdefgxyz'), type => 'seealso' };
+                }
+            }
+# // form
+            foreach my $field ($record->field('7..')) {
+                my $lang = substr($field->subfield('8'),3,3);
+                push @otherscript, { lang => $lang, term => $field->subfield('a') };
+            }
+        } else {
+# construct MARC21 summary
+# FIXME - looping over 1XX is questionable
+# since MARC21 authority should have only one 1XX
+            foreach my $field ($record->field('1..')) {
+                my $tag = $field->tag();
+                next if "152" eq $tag;
+# FIXME - 152 is not a good tag to use
+# in MARC21 -- purely local tags really ought to be
+# 9XX
+                if ($tag eq '100') {
+                    push @authorized, $field->as_string('abcdefghjklmnopqrstvxyz68');
+                } elsif ($tag eq '110') {
+                    push @authorized, $field->as_string('abcdefghklmnoprstvxyz68');
+                } elsif ($tag eq '111') {
+                    push @authorized, $field->as_string('acdefghklnpqstvxyz68');
+                } elsif ($tag eq '130') {
+                    push @authorized, $field->as_string('adfghklmnoprstvxyz68');
+                } elsif ($tag eq '148') {
+                    push @authorized, $field->as_string('abvxyz68');
+                } elsif ($tag eq '150') {
+                    push @authorized, $field->as_string('abvxyz68');
+                } elsif ($tag eq '151') {
+                    push @authorized, $field->as_string('avxyz68');
+                } elsif ($tag eq '155') {
+                    push @authorized, $field->as_string('abvxyz68');
+                } elsif ($tag eq '180') {
+                    push @authorized, $field->as_string('vxyz68');
+                } elsif ($tag eq '181') {
+                    push @authorized, $field->as_string('vxyz68');
+                } elsif ($tag eq '182') {
+                    push @authorized, $field->as_string('vxyz68');
+                } elsif ($tag eq '185') {
+                    push @authorized, $field->as_string('vxyz68');
+                } else {
+                    push @authorized, $field->as_string();
+                }
+            } #See From
+            foreach my $field ($record->field('4..')) {
+                my $type = 'seefrom';
+                $type = $marc21controlrefs{substr $field->subfield('w'), '0'} if ($field->subfield('w'));
+                if ($type eq 'subfi') {
+                    push @seefrom, { heading => $field->as_string($marc21subfields), type => $field->subfield('i') };
+                } else {
+                    push @seefrom, { heading => $field->as_string($marc21subfields), type => $type };
+                }
+            } #See Also
+            foreach my $field ($record->field('5..')) {
+                my $type = 'seealso';
+                $type = $marc21controlrefs{substr $field->subfield('w'), '0'} if ($field->subfield('w'));
+                if ($type eq 'subfi') {
+                    push @seealso, { heading => $field->as_string($marc21subfields), type => $field->subfield('i') };
+                } else {
+                    push @seealso, { heading => $field->as_string($marc21subfields), type => $type };
+                }
+            }
+            foreach my $field ($record->field('6..')) {
+                push @notes, $field->as_string();
+            }
         }
-      }
-      # // form
-      foreach my $field ($record->field('7..')) {
-        my $lang = substr($field->subfield('8'),3,3);
-        $seeheading.= '<span class="langue"> En '.$language{$lang}.' : </span><span class="OT"> '.$field->subfield('a')."</span><br />\n";  
-      }
-            $broaderterms =~s/-- \n$//;
-            $narrowerterms =~s/-- \n$//;
-            $seealso =~s/-- \n$//;
-            $see =~s/-- \n$//;
-      $summary = $heading."<br />".($notes?"$notes <br />":"");
-      $summary.= '<p><div class="label">TG : '.$broaderterms.'</div></p>' if ($broaderterms);
-      $summary.= '<p><div class="label">TS : '.$narrowerterms.'</div></p>' if ($narrowerterms);
-      $summary.= '<p><div class="label">TA : '.$seealso.'</div></p>' if ($seealso);
-      $summary.= '<p><div class="label">EP : '.$see.'</div></p>' if ($see);
-      $summary.= '<p><div class="label">'.$seeheading.'</div></p>' if ($seeheading);
-      } else {
-      # construct MARC21 summary
-          # FIXME - looping over 1XX is questionable
-          # since MARC21 authority should have only one 1XX
-          foreach my $field ($record->field('1..')) {
-              next if "152" eq $field->tag(); # FIXME - 152 is not a good tag to use
-                                              # in MARC21 -- purely local tags really ought to be
-                                              # 9XX
-              if ($record->field('100')) {
-                  $heading.= $field->as_string('abcdefghjklmnopqrstvxyz68');
-              } elsif ($record->field('110')) {
-                                      $heading.= $field->as_string('abcdefghklmnoprstvxyz68');
-              } elsif ($record->field('111')) {
-                                      $heading.= $field->as_string('acdefghklnpqstvxyz68');
-              } elsif ($record->field('130')) {
-                                      $heading.= $field->as_string('adfghklmnoprstvxyz68');
-              } elsif ($record->field('148')) {
-                                      $heading.= $field->as_string('abvxyz68');
-              } elsif ($record->field('150')) {
-                  $heading.= $field->as_string('abvxyz68');
-              #$heading.= $field->as_formatted();
-              my $tag=$field->tag();
-              $heading=~s /^$tag//g;
-              $heading =~s /\_/\$/g;
-              } elsif ($record->field('151')) {
-                                      $heading.= $field->as_string('avxyz68');
-              } elsif ($record->field('155')) {
-                                      $heading.= $field->as_string('abvxyz68');
-              } elsif ($record->field('180')) {
-                                      $heading.= $field->as_string('vxyz68');
-              } elsif ($record->field('181')) {
-                                      $heading.= $field->as_string('vxyz68');
-              } elsif ($record->field('182')) {
-                                      $heading.= $field->as_string('vxyz68');
-              } elsif ($record->field('185')) {
-                                      $heading.= $field->as_string('vxyz68');
-              } else {
-                  $heading.= $field->as_string();
-              }
-          } #See From
-          foreach my $field ($record->field('4..')) {
-              $seeheading.= "<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>used for/see from:</i> ".$field->as_string();
-          } #See Also
-          foreach my $field ($record->field('5..')) {
-              $altheading.= "<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>see also:</i> ".$field->as_string();
-          }
-          $summary .= ": " if $summary;
-          $summary.=$heading.$seeheading.$altheading;
-      }
-  }
-  return $summary;
+        $summary{authorized} = \@authorized;
+        $summary{notes} = \@notes;
+        $summary{seefrom} = \@seefrom;
+        $summary{seealso} = \@seealso;
+        $summary{otherscript} = \@otherscript;
+    }
+    return \%summary;
 }
 
 =head2 BuildUnimarcHierarchies

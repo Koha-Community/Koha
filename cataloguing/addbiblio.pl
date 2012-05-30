@@ -984,7 +984,6 @@ $template->param(
     frameworkcode => $frameworkcode,
     itemtype => $frameworkcode,
     borrowernumber => $loggedinuser, 
-    marcflavour => C4::Context->preference("marcflavour"),
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

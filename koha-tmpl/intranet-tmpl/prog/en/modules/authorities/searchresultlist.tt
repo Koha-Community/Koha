@@ -1,3 +1,4 @@
+[% PROCESS 'authorities-search-results.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Authorities &rsaquo; Authority search results</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -63,7 +64,7 @@ function searchauthority() {
     [% ELSE %]
     <tr>
     [% END %]
-      <td>[% resul.summary %]</td>
+      <td>[% PROCESS authresult summary=resul.summary %]</td>
       <td><a href="detail.pl?authid=[% resul.authid %]">Details</a></td>
   [% UNLESS ( resul.isEDITORS ) %]
       <td>

@@ -66,13 +66,14 @@ if ( $auth_status ne "ok" ) {
 
 print "[";
 my $i = 0;
-    foreach (@$results) {
+    foreach my $result (@$results) {
         if($i > 0){ print ","; }
-        my ($value) = $_->{'summary'};
-            # Removes new lines
-            $value =~ s/<br \/>/ /g;
-            $value =~ s/\n//g;
-            $value = "{\"summary\":\"" . $value . "\"" . "}";
+        my $value = '';
+        my $authorized = $result->{'summary'}->{authorized};
+        foreach my $heading (@$authorized) {
+            $value .= $heading . ' ';
+        }
+        $value = "{\"summary\":\"" . $value . "\"" . "}";
         print nsb_clean($value) . "\n";
         $i++;
     }

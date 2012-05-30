@@ -52,9 +52,8 @@ my $query = new CGI;
 
 my $dbh = C4::Context->dbh;
 
-my $authid       = $query->param('authid');
-my $authtypecode = &GetAuthTypeCode( $authid );
-my $tagslib      = &GetTagsLabels( 1, $authtypecode );
+my $display_hierarchy = C4::Context->preference("AuthDisplayHierarchy");
+my $show_marc = $query->param('marc') || 1; # Currently only MARC view is available
 
 # open template
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -67,8 +66,13 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
+my $authid       = $query->param('authid');
+my $authtypecode = &GetAuthTypeCode( $authid );
+my $tagslib      = &GetTagsLabels( 0, $authtypecode );
+
+
 my $record;
-if (C4::Context->preference("AuthDisplayHierarchy")){
+if ($display_hierarchy){
   my $trees=BuildUnimarcHierarchies($authid);
   my @trees = split /;/,$trees ;
   push @trees,$trees unless (@trees);
@@ -88,7 +92,7 @@ if (C4::Context->preference("AuthDisplayHierarchy")){
     push @loophierarchies, { 'loopelement' =>\@loophierarchy};
   }
   $template->param(
-    'displayhierarchy' =>C4::Context->preference("AuthDisplayHierarchy"),
+    'displayhierarchy' => $display_hierarchy,
     'loophierarchies' =>\@loophierarchies,
   );
 }
@@ -145,15 +149,10 @@ foreach my $field (@fields) {
             my %subfield_data;
             $subfield_data{marc_lib} =
               $tagslib->{ $field->tag() }->{ $subf[$i][0] }->{lib};
-            if ( $tagslib->{ $field->tag() }->{ $subf[$i][0] }->{isurl} ) {
-                $subfield_data{marc_value} =
-                  "<a href=\"$subf[$i][1]\">$subf[$i][1]</a>";
-            }
-            else {
-                $subfield_data{marc_value} = $subf[$i][1];
-            }
             $subfield_data{marc_subfield} = $subf[$i][0];
             $subfield_data{marc_tag}      = $field->tag();
+            $subfield_data{isurl} =  $tagslib->{ $field->tag() }->{ $subf[$i][0] }->{isurl};
+            $subfield_data{marc_value} = $subf[$i][1];
             push( @subfields_data, \%subfield_data );
         }
     }
@@ -186,12 +185,6 @@ $template->param(
     biblio_fields        => $biblio_fields,
     authtypetext         => $authtypes->{$authtypecode}{'authtypetext'},
     authtypesloop        => \@authtypesloop,
-    LibraryName          => C4::Context->preference("LibraryName"),
-    OpacNav              => C4::Context->preference("OpacNav"),
-    opaccredits          => C4::Context->preference("opaccredits"),
-    opacsmallimage       => C4::Context->preference("opacsmallimage"),
-    opaclayoutstylesheet => C4::Context->preference("opaclayoutstylesheet"),
-    opaccolorstylesheet  => C4::Context->preference("opaccolorstylesheet"),
 );
 output_html_with_http_headers $query, $cookie, $template->output;
 
