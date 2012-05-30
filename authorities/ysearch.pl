@@ -62,10 +62,14 @@ if ( $auth_status ne "ok" ) {
     my $startfrom = 0;
 
     my ( $results, $total ) = SearchAuthorities( \@marclist, \@and_or, \@excluding, \@operator, \@value, $startfrom * $resultsperpage, $resultsperpage, $authtypecode, $orderby );
-    foreach (@$results) {
-	my ($value) = $_->{'summary'};
+    foreach my $result (@$results) {
+        my $value = '';
+        my $authorized = $result->{'summary'}->{authorized};
+        foreach my $heading (@$authorized) {
+            $value .= $heading . ' ';
+        }
         # Removes new lines
         $value =~ s/<br \/>/ /g;
         $value =~ s/\n//g;
-	print nsb_clean($value) . "\n";
+        print nsb_clean($value) . "\n";
     }

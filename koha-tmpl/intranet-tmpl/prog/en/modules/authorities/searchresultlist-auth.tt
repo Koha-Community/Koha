@@ -1,3 +1,4 @@
+[% PROCESS 'authorities-search-results.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Cataloging authority plugin</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -67,7 +68,7 @@ function jumpfull(page)
                 </tr>
                 [% FOREACH resul IN result %]
                     <tr>
-                        <td>[% resul.summary %]</td>
+                        <td>[% PROCESS authresult summary=resul.summary %]</td>
                         <td>[% resul.used %] times</td>
                         <td>
                           [% IF resul.repets %]

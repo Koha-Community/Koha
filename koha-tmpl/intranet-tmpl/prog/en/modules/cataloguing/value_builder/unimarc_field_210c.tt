@@ -1,3 +1,4 @@
+[% PROCESS 'authorities-search-results.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>UNIMARC field 210c builder</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -59,7 +60,7 @@
                 </tr>
                 [% FOREACH resul IN result %]
                     <tr>
-                        <td>[% resul.summary %]</td>
+                        <td>[% PROCESS authresult summary=resul.summary %]</td>
                         <td>[% resul.used %] times</td>
                         <td>
                 [% IF ( resul.to_report ) %]

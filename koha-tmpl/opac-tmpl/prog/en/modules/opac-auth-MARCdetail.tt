@@ -66,8 +66,10 @@ function showChildren(mynumber) {
         <p><b>[% Tag0X.tag %]</b></p>
         <ul>
         [% FOREACH subfiel IN Tag0X.subfield %]
-                <p><b>[% subfiel.marc_lib %]:</b> [% subfiel.marc_value %]</p>
-            [% END %]
+            <p><b>[% subfiel.marc_lib %]:</b>
+            [% IF subfiel.isurl %]<a href="[% subfiel.marc_value %]">[% subfiel.marc_value %]</a>
+            [% ELSE %][% subfiel.marc_value %][% END %]</p>
+        [% END %]
         </ul>
         [% END %]
 </div>	
