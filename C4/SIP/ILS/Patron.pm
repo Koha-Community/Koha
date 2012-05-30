@@ -31,13 +31,13 @@ sub new {
 	my ($class, $patron_id) = @_;
     my $type = ref($class) || $class;
     my $self;
-	$kp = GetMember(cardnumber=>$patron_id);
+    $kp = GetMember(cardnumber=>$patron_id) || GetMember(userid=>$patron_id);
 	$debug and warn "new Patron (GetMember): " . Dumper($kp);
     unless (defined $kp) {
 		syslog("LOG_DEBUG", "new ILS::Patron(%s): no such patron", $patron_id);
         return;
 	}
-	$kp = GetMemberDetails(undef,$patron_id);
+    $kp = GetMemberDetails($kp->{borrowernumber});
 	$debug and warn "new Patron (GetMemberDetails): " . Dumper($kp);
 	my $pw        = $kp->{password};  ### FIXME - md5hash -- deal with . 
 	my $flags     = $kp->{flags};     # or warn "Warning: No flags from patron object for '$patron_id'"; 
