@@ -127,6 +127,10 @@ if ( $op eq "do_search" ) {
     else {
         $to = ( ( $startfrom + 1 ) * $resultsperpage );
     }
+    unless (C4::Context->preference('OPACShowUnusedAuthorities')) {
+        my @usedauths = grep { $_->{used} > 0 } @$results;
+        $results = \@usedauths;
+    }
     $template->param( result => $results ) if $results;
     $template->param( FIELDS => \@fields );
     $template->param( orderby => $orderby );
@@ -138,9 +142,11 @@ if ( $op eq "do_search" ) {
         startfromnext  => $startfrom + 1,
         startfromprev  => $startfrom - 1,
         searchdata     => \@field_data,
+        countfuzzy     => !(C4::Context->preference('OPACShowUnusedAuthorities')),
         total          => $total,
         from           => $from,
         to             => $to,
+        resultcount    => scalar @$results,
         numbers        => \@numbers,
         authtypecode   => $authtypecode,
         authtypetext   => $authtypes->{$authtypecode}{'authtypetext'},

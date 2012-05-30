@@ -30,7 +30,11 @@
 		</div>
 		<div id="results">
 			[% IF ( total ) %]
-			<b>Results [% from %] to [% to %] of [% total %]</b>
+                [% IF ( countfuzzy ) %]
+                    <b>Showing [% resultcount %] of about [% total %] results</b>
+                [% ELSE %]
+                    <b>Results [% from %] to [% to %] of [% total %]</b>
+                [% END %]
 			[% ELSE %]
 			No results found.
 			[% END %]
