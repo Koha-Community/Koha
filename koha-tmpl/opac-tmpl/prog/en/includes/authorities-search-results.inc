@@ -30,7 +30,7 @@
     [% IF ( summary.summary ) %][% summary.summary %]:[% END %]
     [% UNLESS ( summary.summaryonly ) %]
         [% FOREACH authorize IN summary.authorized %]
-            <span class="authorizedheading">[% authorize %]</span>
+            <span class="authorizedheading">[% authorize.heading %]</span>
         [% END %]
         [% IF ( marcflavour == 'UNIMARC' ) %]
             [% FOREACH note IN summary.notes %]
