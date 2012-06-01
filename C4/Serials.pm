@@ -566,7 +566,7 @@ sub GetSubscriptions {
             LEFT JOIN biblioitems ON biblio.biblionumber = biblioitems.biblionumber
     );
     my @bind_params;
-    my $sqlwhere;
+    my $sqlwhere = q{};
     if ($biblionumber) {
         $sqlwhere = "   WHERE biblio.biblionumber=?";
         push @bind_params, $biblionumber;
