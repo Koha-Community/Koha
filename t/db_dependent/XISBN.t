@@ -21,7 +21,7 @@ BEGIN {
 # KohaTest::create_test_database();
 
 my $isbn = '0590353403';
-my $isbn2 = '0747554560';
+my $isbn2 = '0684843897';
 
 my $marc_record=MARC::Record->new;
 my $field = MARC::Field->new('020','','','a' => $isbn);
