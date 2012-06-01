@@ -94,7 +94,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user (
 my $branches = GetBranches();
 
 my @failedrenews = $query->param('failedrenew');    # expected to be itemnumbers 
-our %renew_failed;
+our %renew_failed = {};
 for (@failedrenews) { $renew_failed{$_} = 1; }
 
 my $findborrower = $query->param('findborrower');
@@ -417,10 +417,10 @@ if ($borrowernumber) {
 # make the issued books table.
 my $todaysissues = '';
 my $previssues   = '';
-our @todaysissues;
-our @previousissues;
-our @relissues;
-our @relprevissues;
+our @todaysissues   = ();
+our @previousissues = ();
+our @relissues      = ();
+our @relprevissues  = ();
 my $displayrelissues;
 
 our $totalprice = 0;
