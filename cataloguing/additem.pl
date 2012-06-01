@@ -37,7 +37,7 @@ use C4::Search;
 use MARC::File::XML;
 use URI::Escape;
 
-my $dbh = C4::Context->dbh;
+our $dbh = C4::Context->dbh;
 
 sub find_value {
     my ($tagfield,$insubfield,$record) = @_;
