@@ -86,7 +86,7 @@ my $dateto         = $input->param('dateto');
 my $resultsperpage = $input->param('resultsperpage');
 $resultsperpage ||= 20;
 
-my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+our ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {   template_name   => 'acqui/parcels.tmpl',
         query           => $input,
         type            => 'intranet',
