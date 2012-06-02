@@ -325,7 +325,7 @@
     <xsl:when test="marc:datafield[@tag=100] or marc:datafield[@tag=110] or marc:datafield[@tag=111] or marc:datafield[@tag=700] or marc:datafield[@tag=710] or marc:datafield[@tag=711]">
 
     av 
-        <xsl:for-each select="marc:datafield[@tag=100 or @tag=700]">
+        <xsl:for-each select="marc:datafield[(@tag=100 or @tag=700) and @ind1!='z']">
             <xsl:choose>
             <xsl:when test="position()=last()">
                 <xsl:call-template name="nameABCDQ"/>.
@@ -336,7 +336,7 @@
             </xsl:choose>
         </xsl:for-each>
 
-        <xsl:for-each select="marc:datafield[@tag=110 or @tag=710]">
+        <xsl:for-each select="marc:datafield[(@tag=110 or @tag=710) and @ind1!='z']">
             <xsl:choose>
             <xsl:when test="position()=last()">
                 <xsl:call-template name="nameABCDN"/>.
@@ -347,7 +347,7 @@
             </xsl:choose>
         </xsl:for-each>
 
-        <xsl:for-each select="marc:datafield[@tag=111 or @tag=711]">
+        <xsl:for-each select="marc:datafield[(@tag=111 or @tag=711) and @ind1!='z']">
             <xsl:choose>
             <xsl:when test="position()=last()">
                 <xsl:call-template name="nameACDEQ"/>.

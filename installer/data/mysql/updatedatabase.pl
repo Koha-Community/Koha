@@ -5729,6 +5729,13 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.09.00.040";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES ('IncludeSeeFromInSearches','0','','Include see-from references in searches.','YesNo');");
+    print "Upgrade to $DBversion done (Add IncludeSeeFromInSearches system preference)\n";
+    SetVersion ($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

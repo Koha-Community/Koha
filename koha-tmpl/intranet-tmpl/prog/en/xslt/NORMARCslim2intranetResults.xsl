@@ -283,7 +283,7 @@
     <xsl:choose>
     <xsl:when test="marc:datafield[@tag=100] or marc:datafield[@tag=110] or marc:datafield[@tag=111] or marc:datafield[@tag=700] or marc:datafield[@tag=710] or marc:datafield[@tag=711]">
     <p class="author">av
-    <xsl:for-each select="marc:datafield[@tag=100 or @tag=700]">
+    <xsl:for-each select="marc:datafield[(@tag=100 or @tag=700) and @ind1!='z']">
     <a>
     <xsl:choose>
         <xsl:when test="marc:subfield[@code=9] and $UseAuthoritiesForTracings='1'">
@@ -298,7 +298,7 @@
     <xsl:when test="position()=last()"><xsl:text>. </xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
     </xsl:for-each>
 
-    <xsl:for-each select="marc:datafield[@tag=110 or @tag=710]">
+    <xsl:for-each select="marc:datafield[(@tag=110 or @tag=710) and @ind1!='z']">
     <a>
     <xsl:choose>
         <xsl:when test="marc:subfield[@code=9] and $UseAuthoritiesForTracings='1'">
@@ -312,7 +312,7 @@
     <xsl:choose><xsl:when test="position()=last()"><xsl:text> </xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
     </xsl:for-each>
 
-    <xsl:for-each select="marc:datafield[@tag=111 or @tag=711]">
+    <xsl:for-each select="marc:datafield[(@tag=111 or @tag=711) and @ind1!='z']">
         <xsl:choose>
         <xsl:when test="marc:subfield[@code='n']">
            <xsl:text> </xsl:text>

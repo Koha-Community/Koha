@@ -9,6 +9,7 @@ use List::MoreUtils qw(uniq);
 use Koha::SearchEngine::Solr;
 use C4::AuthoritiesMarc;
 use C4::Biblio;
+use Koha::RecordProcessor;
 
 has searchengine => (
     is => 'rw',
@@ -38,6 +39,11 @@ sub index_record {
 
         $record = GetAuthority( $id )  if $recordtype eq "authority";
         $record = GetMarcBiblio( $id ) if $recordtype eq "biblio";
+
+        if ($record_type eq 'biblio' && C4::Context->preference('IncludeSeeFromInSearches')) {
+            my $normalizer = Koha::RecordProcessor->new( { filters => 'EmbedSeeFromHeadings' } );
+            $record = $normalizer->process($record);
+        }
 
         next unless ( $record );
 

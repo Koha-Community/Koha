@@ -10,6 +10,7 @@ use File::Path;
 use C4::Biblio;
 use C4::AuthoritiesMarc;
 use C4::Items;
+use Koha::RecordProcessor;
 
 # 
 # script that checks zebradir structure & create directories & mandatory files if needed
@@ -497,6 +498,9 @@ sub get_corrected_marc_record {
         fix_leader($marc);
         if ($record_type eq 'authority') {
             fix_authority_id($marc, $record_number);
+        } elsif ($record_type eq 'biblio' && C4::Context->preference('IncludeSeeFromInSearches')) {
+            my $normalizer = Koha::RecordProcessor->new( { filters => 'EmbedSeeFromHeadings' } );
+            $marc = $normalizer->process($marc);
         }
         if (C4::Context->preference("marcflavour") eq "UNIMARC") {
             fix_unimarc_100($marc);

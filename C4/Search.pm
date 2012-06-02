@@ -477,7 +477,8 @@ sub getRecords {
                                 # avoid first line
                                 my $tag_num = substr($tag, 0, 3);
                                 my $letters = substr($tag, 3);
-                                my $field_pattern = '\n' . $tag_num . ' ([^\n]+)';
+                                my $field_pattern = '\n' . $tag_num . ' ([^z][^\n]+)';
+                                $field_pattern = '\n' . $tag_num . ' ([^\n]+)' if (int($tag_num) < 10);
                                 my @field_tokens = ( $render_record =~ /$field_pattern/g ) ;
                                 foreach my $field_token (@field_tokens) {
                                     my @subf = ( $field_token =~ /\$([a-zA-Z0-9]) ([^\$]+)/g );

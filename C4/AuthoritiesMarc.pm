@@ -26,6 +26,7 @@ use C4::AuthoritiesMarc::MARC21;
 use C4::AuthoritiesMarc::UNIMARC;
 use C4::Charset;
 use C4::Log;
+use Koha::Authority;
 
 use vars qw($VERSION @ISA @EXPORT);
 
@@ -851,19 +852,8 @@ Returns MARC::Record of the authority passed in parameter.
 
 sub GetAuthority {
     my ($authid)=@_;
-    my $dbh=C4::Context->dbh;
-    my $sth=$dbh->prepare("select authtypecode, marcxml from auth_header where authid=?");
-    $sth->execute($authid);
-    my ($authtypecode, $marcxml) = $sth->fetchrow;
-    my $record=eval {MARC::Record->new_from_xml(StripNonXmlChars($marcxml),'UTF-8',
-        (C4::Context->preference("marcflavour") eq "UNIMARC"?"UNIMARCAUTH":C4::Context->preference("marcflavour")))};
-    return undef if ($@);
-    $record->encoding('UTF-8');
-    if (C4::Context->preference("marcflavour") eq "MARC21") {
-      my ($auth_type_tag, $auth_type_subfield) = get_auth_type_location($authtypecode);
-      C4::AuthoritiesMarc::MARC21::fix_marc21_auth_type_location($record, $auth_type_tag, $auth_type_subfield);
-    }
-    return ($record);
+    my $authority = Koha::Authority->get_from_authid($authid);
+    return ($authority->record);
 }
 
 =head2 GetAuthType 
