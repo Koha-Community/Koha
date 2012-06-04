@@ -528,7 +528,12 @@ our $PERL_DEPS = {
         'usage'    => 'Core',
         'required' => '1',
         'min_ver'  => '0.09',
-      },
+    },
+    'Template::Plugin::HtmlToText' => {
+        'usage'    => 'Core',
+        'required' => '1',
+        'min_ver'  => '0.03',
+    },
 };
 
 1;
