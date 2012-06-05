@@ -5018,7 +5018,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 $DBversion = "3.07.00.035";
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     $dbh->do("ALTER TABLE issues CHANGE date_due date_due datetime");
-    $dhb->do("UPDATE issues SET date_due = CONCAT(SUBSTR(date_due,1,11),'23:59:00')");
+    $dbh->do("UPDATE issues SET date_due = CONCAT(SUBSTR(date_due,1,11),'23:59:00')");
     $dbh->do("ALTER TABLE issues CHANGE returndate returndate datetime");
     $dbh->do("ALTER TABLE issues CHANGE lastreneweddate lastreneweddate datetime");
     $dbh->do("ALTER TABLE issues CHANGE issuedate issuedate datetime");
