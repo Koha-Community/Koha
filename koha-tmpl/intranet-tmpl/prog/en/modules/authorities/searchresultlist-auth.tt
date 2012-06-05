@@ -70,7 +70,13 @@ function jumpfull(page)
                         <td>[% resul.summary %]</td>
                         <td>[% resul.used %] times</td>
                         <td>
-                          <a href="javascript:jumpfull('blinddetail-biblio-search.pl?authid=[% resul.authid %]&amp;index=[% index %]')">choose</a>
+                          [% IF resul.repets %]
+                            [% FOREACH repet IN resul.repets %]
+                            <a href="javascript:jumpfull('blinddetail-biblio-search.pl?authid=[% resul.authid %]&amp;index=[% repet.index %]&amps;repet=[% repet.repet %]')" title="[% repet.value %]">[% repet.repet %]</a>
+                            [% END %]
+                          [% ELSE %]
+                            <a href="javascript:jumpfull('blinddetail-biblio-search.pl?authid=[% resul.authid %]&amp;index=[% index %]')">choose</a>
+                          [% END %]
                         </td>
                         <td><a href="authorities.pl?authid=[% resul.authid %]">Edit authority</a></td>
                     </tr>
