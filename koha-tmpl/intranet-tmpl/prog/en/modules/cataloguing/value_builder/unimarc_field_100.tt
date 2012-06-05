@@ -81,6 +81,12 @@ year</option>
                 <option value="j">j - document with detailed date of publication</option>
             [% END %]
 
+            [% IF ( f2k ) %]
+                <option value="k" selected="selected">k - monograph with both publication date and print date</option>
+            [% ELSE %]
+                <option value="k">k - monograph with both publication date and print date</option>
+            [% END %]
+
             [% IF ( f2u ) %]
                 <option value="u" selected="selected">u - Unknown publication date</option>
             [% ELSE %]
