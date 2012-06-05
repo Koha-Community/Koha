@@ -34,6 +34,9 @@
     [% IF ( CAN_user_tools_delete_anonymize_patrons ) %]
     <li><a href="/cgi-bin/koha/tools/cleanborrowers.pl">Patrons (anonymize, bulk-delete)</a></li>
     [% END %]
+    [% IF ( CAN_user_tools_edit_patrons ) %]
+    <li><a href="/cgi-bin/koha/tools/modborrowers.pl">Batch patron modification</a></li>
+    [% END %]
     [% IF ( CAN_user_tools_moderate_tags ) %]
     <li><a href="/cgi-bin/koha/tags/review.pl">Tag moderation</a></li>
     [% END %]
