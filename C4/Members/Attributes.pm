@@ -77,12 +77,11 @@ sub GetBorrowerAttributes {
                  FROM borrower_attributes
                  JOIN borrower_attribute_types USING (code)
                  LEFT JOIN authorised_values ON (category = authorised_value_category AND attribute = authorised_value)
-                 WHERE 1";
-    $query .= "\nAND borrowernumber = ?" if $borrowernumber;
+                 WHERE borrowernumber = ?";
     $query .= "\nAND opac_display = 1" if $opac_only;
     $query .= "\nORDER BY code, attribute";
     my $sth = $dbh->prepare_cached($query);
-    $sth->execute($borrowernumber ? $borrowernumber : ());
+    $sth->execute($borrowernumber);
     my @results = ();
     while (my $row = $sth->fetchrow_hashref()) {
         push @results, {
