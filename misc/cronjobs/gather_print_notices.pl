@@ -69,6 +69,8 @@ my $today        = C4::Dates->new();
 my @all_messages = @{ GetPrintMessages() };
 exit unless (@all_messages);
 
+my $OUTPUT;
+
 if ($split) {
     my %messages_by_branch;
     foreach my $message (@all_messages) {
@@ -77,7 +79,6 @@ if ($split) {
 
     foreach my $branchcode ( keys %messages_by_branch ) {
         my @messages = @{ $messages_by_branch{$branchcode} };
-
         open $OUTPUT, '>',
           File::Spec->catdir( $output_directory,
             "holdnotices-" . $today->output('iso') . "-$branchcode.html" );
