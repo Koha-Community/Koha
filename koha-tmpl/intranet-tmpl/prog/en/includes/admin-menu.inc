@@ -2,9 +2,10 @@
     $(document).ready(function() {
         var path = location.pathname.substring(1);
         var url = window.location.toString();
-        url.match(/\?(.+)$/);
-        var params = RegExp.$1;
-        if (params) { params = "?" + params; }
+        var params = '';
+        if ( url.match(/\?(.+)$/) ) {
+            params = "?" + RegExp.$1;
+        }
         $('#navmenulist a[href$="/' + path + params + '"]').css('font-weight','bold');
     });
 //]]>
