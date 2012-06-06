@@ -497,6 +497,12 @@ sub AddMember {
         $data{'dateenrolled'} = output_pref( { dt => dt_from_string, dateonly => 1, dateformat => 'iso' } );
     }
 
+    if ( C4::Context->preference("autoMemberNum") ) {
+        if ( not exists $data{cardnumber} or not defined $data{cardnumber} or $data{cardnumber} eq '' ) {
+            $data{cardnumber} = fixup_cardnumber( $data{cardnumber}, C4::Context->userenv->{'branch'}, $data{categorycode} );
+        }
+    }
+
     my $patron_category = $schema->resultset('Category')->find( $data{'categorycode'} );
     $data{'privacy'} =
         $patron_category->default_privacy() eq 'default' ? 1

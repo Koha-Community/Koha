@@ -561,7 +561,12 @@ if ( $op eq "duplicate" ) {
     $data{'cardnumber'} = "";
 }
 
-$data{'cardnumber'}=fixup_cardnumber($data{'cardnumber'}) if ( ( $op eq 'add' ) or ( $op eq 'duplicate' ) );
+if (C4::Context->preference("autoMemberNum")) {
+    $template->param( autoMemberNum => 1);
+} else {
+    $template->param( autoMemberNum => 0);
+}
+
 if(!defined($data{'sex'})){
     $template->param( none => 1);
 } elsif($data{'sex'} eq 'F'){
