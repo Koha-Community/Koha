@@ -129,7 +129,7 @@ $template->param(do_it => 1,
                 results_loop => \@results,
                 );
 
-$template->param( branchloop => GetBranchesLoop(C4::Context->userenv->{'branch'}));
+$template->param( branchloop => GetBranchesLoop(C4::Context->userenv?C4::Context->userenv->{'branch'}:''));
 
 # the index parameter is different for item-level itemtypes
 my $itype_or_itemtype = (C4::Context->preference("item-level_itypes"))?'itype':'itemtype';
