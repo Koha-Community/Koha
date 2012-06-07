@@ -1,26 +1,52 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; [% IF ( date ) %]
             Receipt summary for [% name %] [% IF ( invoice ) %]invoice [% invoice %][% END %] on [% formatteddatereceived %][% ELSE %]Receive orders from [% name %][% END %]</title>
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
 [% INCLUDE 'doc-head-close.inc' %]
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.min.js"></script>
+[% INCLUDE 'datatables-strings.inc' %]
+<script type="text/javascript" src="[% themelang %]/js/datatables.js"></script>
 [% INCLUDE 'greybox.inc' %]
 <script type="text/javascript" src="[% yuipath %]/json/json-min.js"></script>
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
 <script type="text/javascript">
 //<![CDATA[
 
     var rowsToCollapse = 5;
 
-	$.tablesorter.addParser({
-	    id: 'articles',
-	    is: function(s) {return false;  },
-	    format: function(s) { return s.toLowerCase().replace(/^(the|an|a) /,''); },
-	    type: 'text'
-	});
-
     $(document).ready(function(){
-    $("#pendingt").tablesorter({
-		headers: { 2: { sorter: 'articles' },3: { sorter: false },7:{sorter:false}}
-    });
+        var pendingt = $("#pendingt").dataTable($.extend(true, {}, dataTablesDefaults, {
+            "aoColumnDefs": [
+                { "aTargets": [ 3, 7, 8 ], "bSortable": false, "bSearchable": false },
+            ],
+            "aoColumns": [
+                { "sType": "num-html" },
+                { "sType": "num-html" },
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+            ],
+            "sPaginationType": "four_button"
+        } ) );
+        var receivedt = $("#receivedt").dataTable($.extend(true, {}, dataTablesDefaults, {
+            "aoColumnDefs": [
+                { "aTargets": [ 3 ], "bSortable": false, "bSearchable": false },
+            ],
+            "aoColumns": [
+                { "sType": "num-html" },
+                { "sType": "num-html" },
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+            ],
+            "sPaginationType": "four_button"
+        } ) );
 
 	rowCountPending  = $("#pendingt tbody.filterclass tr").length;
 	rowCountReceived = $("#receivedt tbody.filterclass tr").length;
@@ -230,11 +256,7 @@
 		</tfoot>
     <tbody class="filterclass">
         [% FOREACH loop_order IN loop_orders %]
-	[% UNLESS ( loop.odd ) %]
-            <tr class="highlight">
-        [% ELSE %]
             <tr>
-        [% END %]
                 <td class="basketfilterclass"><a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% loop_order.basketno %]">[% loop_order.basketno %]</a></td>
                 <td class="orderfilterclass"><a href="neworderempty.pl?ordernumber=[% loop_order.ordernumber %]&amp;booksellerid=[% loop_order.booksellerid %]">[% loop_order.ordernumber %]</a></td>
                 <td class="summaryfilterclass">
@@ -324,8 +346,8 @@
 		<th>Actual cost</th>
 		<th>TOTAL</th>
 	    </tr>
-	</thead>
-<tfoot>
+    </thead>
+    <tfoot>
 	    <tr>
 		<td colspan="4" class="total">SUBTOTAL</td>
 		<td colspan="2">&nbsp;</td>
@@ -362,11 +384,7 @@
     </tfoot>
 	<tbody class="filterclass">
 	    [% FOREACH loop_receive IN loop_received %]
-        [% UNLESS ( loop.odd ) %]
-            <tr class="highlight">
-        [% ELSE %]
             <tr>
-        [% END %]
                 <td><a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% loop_receive.basketno %]">[% loop_receive.basketno %]</a></td>
                 <td><a href="neworderempty.pl?ordernumber=[% loop_receive.ordernumber %]&amp;booksellerid=[% booksellerid %]">[% loop_receive.ordernumber %]</a></td>
                 <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% loop_receive.biblionumber %]">[% loop_receive.title |html %]</a>
