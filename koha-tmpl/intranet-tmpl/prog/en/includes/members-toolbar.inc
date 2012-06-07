@@ -91,7 +91,7 @@ function update_child() {
 	    [% IF ( adultborrower ) %]new YAHOO.widget.Button("addchild");[% END %]
 	    new YAHOO.widget.Button("editpatron");
 	    new YAHOO.widget.Button("addnote");
-            [% IF CAN_user_staffaccess %]new YAHOO.widget.Button("changepassword");  [% END %]
+            [% IF CAN_user_borrowers %]new YAHOO.widget.Button("changepassword");  [% END %]
 	    new YAHOO.widget.Button("duplicate");
 	    new YAHOO.widget.Button("printslip");
 		new YAHOO.widget.Button("printpage");
@@ -115,7 +115,7 @@ function update_child() {
             [% END %]
         [% END %]
 	[% IF ( adultborrower AND activeBorrowerRelationship ) %]<li><a id="addchild" href="/cgi-bin/koha/members/memberentry.pl?op=add&amp;guarantorid=[% borrowernumber %]&amp;category_type=C">Add child</a></li>[% END %]
-    [% IF CAN_user_staffaccess %]<li><a id="changepassword" href="/cgi-bin/koha/members/member-password.pl?member=[% borrowernumber %]">Change password</a></li> [% END %]
+    [% IF CAN_user_borrowers %]<li><a id="changepassword" href="/cgi-bin/koha/members/member-password.pl?member=[% borrowernumber %]">Change password</a></li> [% END %]
 	<li><a id="duplicate" href="/cgi-bin/koha/members/memberentry.pl?op=duplicate&amp;borrowernumber=[% borrowernumber %]&amp;category_type=[% category_type %]">Duplicate</a></li>
     <li id="printmenuc"><a id="printpage" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]&amp;print=page">Print summary</a></li>
     <li><a id="printslip" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]&amp;print=slip">Print slip</a></li>
