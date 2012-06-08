@@ -308,13 +308,14 @@ function enableCheckboxActions(){
         </tr>[% END %]
 
         <tr>
-            <th scope="row">Location(s)</th>
+            <th scope="row">Location(s)(Status)</th>
             <td>[% IF ( BIBLIO_RESULT.ITEM_RESULTS ) %]<ul>[% FOREACH ITEM_RESULT IN BIBLIO_RESULT.ITEM_RESULTS %]
                             <li>
                                 <strong>[% ITEM_RESULT.homebranch %]</strong>[% IF ( ITEM_RESULT.location_opac ) %], [% ITEM_RESULT.location_opac %][% END %]
                                 [% IF ( ITEM_RESULT.itemcallnumber ) %]
                                     ([% ITEM_RESULT.itemcallnumber %])
                                 [% END %]
+                                ([% INCLUDE 'item-status.inc' item = ITEM_RESULT %])
                             </li>
                             [% END %]</ul>[% ELSE %]This record has no items.[% END %]</td>
         </tr>
@@ -353,7 +354,7 @@ function enableCheckboxActions(){
 	    <th>Title</th>
 	    <th>Author</th>
 	    <th>Year</th>
-	    <th>Location</th>
+        <th>Location(Status)</th>
         </tr></thead>
 
         [% FOREACH BIBLIO_RESULT IN BIBLIO_RESULTS %]
@@ -388,6 +389,7 @@ function enableCheckboxActions(){
                         [% IF ( ITEM_RESULT.itemcallnumber ) %]
                             ([% ITEM_RESULT.itemcallnumber %])
                         [% END %]
+                        ([% INCLUDE 'item-status.inc' item = ITEM_RESULT %])
                     </li>
                     [% END %]</ul>[% ELSE %]This record has no items.[% END %]</td>
             </tr>
