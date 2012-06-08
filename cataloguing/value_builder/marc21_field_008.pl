@@ -47,6 +47,10 @@ sub plugin_parameters {
 }
 
 sub plugin_javascript {
+    my $lang = C4::Context->preference('DefaultLanguageField008' );
+    $lang = "eng" unless $lang;
+    $lang = pack("A3", $lang);
+
     my ($dbh, $record, $tagslib, $field_number, $tabloop) = @_;
     my $function_name = $field_number;
     my $res           = "
@@ -54,11 +58,10 @@ sub plugin_javascript {
 //<![CDATA[
 
 function Focus$function_name(subfield_managed) {
-
 	if ( document.getElementById(\"$field_number\").value ) {
 	}
 	else {
-		document.getElementById(\"$field_number\").value='$dateentered' + 'b        xxu||||| |||| 00| 0 eng d';
+        document.getElementById(\"$field_number\").value='$dateentered' + 'b        xxu||||| |||| 00| 0 $lang d';
 	}
     return 1;
 }
@@ -80,6 +83,10 @@ function Clic$function_name(i) {
 }
 
 sub plugin {
+    my $lang = C4::Context->preference('DefaultLanguageField008' );
+    $lang = "eng" unless $lang;
+    $lang = pack("A3", $lang);
+
     my ($input) = @_;
     my $index   = $input->param('index');
     my $result  = $input->param('result');
@@ -96,7 +103,7 @@ sub plugin {
         }
     );
 
-    $result = "$dateentered" . "b        xxu||||| |||| 00| 0 eng d" unless $result;
+    $result = "$dateentered" . "b        xxu||||| |||| 00| 0 $lang d" unless $result;
     my $errorXml = '';
     # Check if the xml, xsd exists and is validated
     my $dir = C4::Context->config('intrahtdocs') . '/prog/' . $template->{lang} . '/modules/cataloguing/value_builder/';

@@ -44,6 +44,9 @@ sub plugin_parameters {
 }
 
 sub plugin_javascript {
+    my $lang = C4::Context->preference('DefaultLanguageField008' );
+    $lang = "eng" unless $lang;
+    $lang = pack("A3", $lang);
     my ($dbh, $record, $tagslib, $field_number, $tabloop) = @_;
     my $function_name = $field_number;
     my $res           = "
@@ -55,7 +58,7 @@ function Focus$function_name(subfield_managed) {
 	if ( document.getElementById(\"$field_number\").value ) {
 	}
 	else {
-		document.getElementById(\"$field_number\").value='$dateentered' + 't        xxu||||| |||| 00| 0 eng d';
+        document.getElementById(\"$field_number\").value='$dateentered' + 't        xxu||||| |||| 00| 0 $lang d';
 	}
     return 1;
 }
@@ -78,6 +81,9 @@ function Clic$function_name(i) {
 }
 
 sub plugin {
+    my $lang = C4::Context->preference('DefaultLanguageField008' );
+    $lang = "eng" unless $lang;
+    $lang = pack("A3", $lang);
     my ($input) = @_;
     my $index   = $input->param('index');
     my $result  = $input->param('result');
@@ -95,7 +101,7 @@ sub plugin {
     );
 
     #	$result = "      t        xxu           00  0 eng d" unless $result;
-    $result = "$dateentered" . "t        xxu||||| |||| 00| 0 eng d" unless $result;
+    $result = "$dateentered" . "t        xxu||||| |||| 00| 0 $lang d" unless $result;
     my $f1    = substr($result, 0,  6);
     my $f6    = substr($result, 6,  1);
     my $f710  = substr($result, 7,  4);
