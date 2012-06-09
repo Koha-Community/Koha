@@ -3336,9 +3336,10 @@ sub GetOfflineOperation {
 }
 
 sub AddOfflineOperation {
+    my ( $userid, $branchcode, $timestamp, $action, $barcode, $cardnumber, $amount ) = @_;
     my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("INSERT INTO pending_offline_operations (userid, branchcode, timestamp, action, barcode, cardnumber) VALUES(?,?,?,?,?,?)");
-    $sth->execute( @_ );
+    my $sth = $dbh->prepare("INSERT INTO pending_offline_operations (userid, branchcode, timestamp, action, barcode, cardnumber, amount) VALUES(?,?,?,?,?,?,?)");
+    $sth->execute( $userid, $branchcode, $timestamp, $action, $barcode, $cardnumber, $amount );
     return "Added.";
 }
 
@@ -3357,6 +3358,8 @@ sub ProcessOfflineOperation {
         $report = ProcessOfflineReturn( $operation );
     } elsif ( $operation->{action} eq 'issue' ) {
         $report = ProcessOfflineIssue( $operation );
+    } elsif ( $operation->{action} eq 'payment' ) {
+        $report = ProcessOfflinePayment( $operation );
     }
 
     DeleteOfflineOperation( $operation->{operationid} ) if $operation->{operationid};
@@ -3426,6 +3429,16 @@ sub ProcessOfflineIssue {
     }
 }
 
+sub ProcessOfflinePayment {
+    my $operation = shift;
+
+    my $borrower = C4::Members::GetMemberDetails( undef, $operation->{cardnumber} ); # Get borrower from operation cardnumber
+    my $amount = $operation->{amount};
+
+    recordpayment( $borrower->{borrowernumber}, $amount );
+
+    return "Success."
+}
 
 
 =head2 TransferSlip
