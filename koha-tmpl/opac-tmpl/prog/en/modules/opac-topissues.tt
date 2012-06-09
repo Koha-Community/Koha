@@ -52,7 +52,7 @@ function Dopop(link) {
 		<caption>The [% limit %] most checked-out 
         [% IF ( itemtype ) %]
             [% itemtype %]
-        [% ELSE %] titles[% END %]
+        [% END %]
         [% IF ( branch ) %]
         at 
         [% branch %]
@@ -120,7 +120,7 @@ function Dopop(link) {
                         [% END %]
                     </select></li>
 			<li>
-            <label for="timeLimit">Acquired in the last:</label> <select name="timeLimit" id="timeLimit">
+            <label for="timeLimit">of the the last:</label> <select name="timeLimit" id="timeLimit">
                 [% IF ( timeLimit == 3 ) %]<option value="3" selected="selected">3 months</option>[% ELSE %]<option value="3">3 months</option>[% END %]
                  [% IF ( timeLimit == 6 ) %]<option value="6" selected="selected">6 months</option>[% ELSE %]<option value="6">6 months</option>[% END %]
                  [% IF ( timeLimit == 12 ) %]<option value="12" selected="selected">12 months</option>[% ELSE %]<option value="12">12 months</option>[% END %]
