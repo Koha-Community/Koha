@@ -23,9 +23,8 @@ my %fields = (
 sub new {
 	my $class = shift;
 	my $self = $class->SUPER::new();
-	my $element;
 
-	foreach $element (keys %fields) {
+    foreach my $element (keys %fields) {
 		$self->{_permitted}->{$element} = $fields{$element};
 	}
 

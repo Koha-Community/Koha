@@ -14,10 +14,10 @@ use English qw(-no_match_vars);
 
 my @all_koha_dirs = qw( acqui admin authorities basket C4 catalogue cataloguing circ debian errors
 labels members misc offline_circ opac patroncards reports reserve reviews rotating_collections
-serials sms suggestion t tags test tools virtualshelves);
+serials sms suggestion t tags test tools virtualshelves Koha);
 
 my @dirs = qw( acqui admin authorities basket catalogue cataloguing circ debian errors labels
-    offline_circ reserve reviews rotating_collections serials sms virtualshelves );
+    members offline_circ reserve reviews rotating_collections serials sms virtualshelves Koha);
 
 if ( not $ENV{TEST_QA} ) {
     my $msg = 'Author test. Set $ENV{TEST_QA} to a true value to run';

@@ -14,22 +14,18 @@ BEGIN {
 		auth  => [qw(&api_auth)],
 		basic => [qw($datepat $textpat $login_test $sc_status_test
 						$instid $instid2 $currency $server $username $password)],
+    # duplicate user1 and item1 as user2 and item2
+    # w/ tags like $user2_pin instead of $user_pin
 		user1 => [qw($user_barcode  $user_pin  $user_fullname  $user_homeaddr  $user_email
 						$user_phone  $user_birthday  $user_ptype  $user_inet)],
+        user2 => [qw($user2_barcode  $user._pin  $user2_fullname  $user2_homeaddr  $user2_email
+                        $user2_phone  $user2_birthday  $user2_ptype  $user2_inet)],
 		item1 => [qw($item_barcode  $item_title  $item_owner )],
+        item2 => [qw($item2_barcode  $item2_title  $item2_owner )],
+    # we've got item3_* also
+        item3 => [qw($item3_barcode  $item3_title  $item3_owner )],
 		diacritic => [qw($item_diacritic_barcode $item_diacritic_title $item_diacritic_owner)],
 	);
-	# duplicate user1 and item1 as user2 and item2
-	# w/ tags like $user2_pin instead of $user_pin
-	foreach my $tag (qw(user item)) {
-		my @tags = @{$EXPORT_TAGS{$tag.'1'}};	# fresh array avoids side affect in map
-		push @{$EXPORT_TAGS{$tag.'2'}}, map {s/($tag)\_/${1}2_/;$_} @tags;
-	}
-    # we've got item3_* also
-	foreach my $tag (qw(item)) {
-		my @tags = @{$EXPORT_TAGS{$tag.'1'}};	# fresh array avoids side affect in map
-		push @{$EXPORT_TAGS{$tag.'3'}}, map {s/($tag)\_/${1}3_/;$_} @tags;
-	}
 	# From perldoc Exporter
 	# Add all the other ":class" tags to the ":all" class, deleting duplicates
 	my %seen;
@@ -241,7 +237,7 @@ sub one_msg {
     return;
 }
 
-sub api_auth() {
+sub api_auth {
 	# AUTH
 	$ENV{REMOTE_USER} = $username;
 	my $query = CGI->new();

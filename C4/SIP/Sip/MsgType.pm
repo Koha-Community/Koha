@@ -293,11 +293,11 @@ sub new {
     if (!exists($handlers{$msgtag})) {
 		syslog("LOG_WARNING", "new Sip::MsgType: Skipping message of unknown type '%s' in '%s'",
 	       $msgtag, $msg);
-		return(undef);
+        return;
     } elsif (!exists($handlers{$msgtag}->{protocol}->{$protocol_version})) {
 		syslog("LOG_WARNING", "new Sip::MsgType: Skipping message '%s' unsupported by protocol rev. '%d'",
 	       $msgtag, $protocol_version);
-		return(undef);
+        return;
     }
 
     bless $self, $class;
@@ -405,7 +405,7 @@ sub handle {
 	}
 	unless ($self->{handler}) {
 		syslog("LOG_WARNING", "No handler defined for '%s'", $msg);
-		return undef;
+        return;
 	}
     return($self->{handler}->($self, $server));  # FIXME
 	# FIXME: Use of uninitialized value in subroutine entry
@@ -794,8 +794,8 @@ sub handle_request_acs_resend {
     return REQUEST_ACS_RESEND;
 }
 
-sub login_core ($$$) {
-	my $server = shift or return undef;
+sub login_core  {
+    my $server = shift or return;
 	my $uid = shift;
 	my $pwd = shift;
     my $status = 1;		# Assume it all works
