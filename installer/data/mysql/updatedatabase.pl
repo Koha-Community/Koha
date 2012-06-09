@@ -5308,7 +5308,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.09.00.XXX";
+$DBversion = "3.09.00.010";
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('IssueLostItem', 'alert', 'alert|confirm|nothing', 'Defines what should be done when an attempt is made to issue an item that has been marked as lost.', 'Choice')");
     print "Upgrade to $DBversion done (Add system preference issuelostitem ))\n";
