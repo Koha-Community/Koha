@@ -22,9 +22,8 @@ my %fields = (
 sub new {
 	my $class = shift;
 	my $self = $class->SUPER::new();
-	my $element;
 
-	foreach $element (keys %fields) {
+    foreach my $element (keys %fields) {
 		$self->{_permitted}->{$element} = $fields{$element};
 	}
 
@@ -32,7 +31,7 @@ sub new {
 	return bless $self, $class;
 }
 
-sub do_renew_for ($$) {
+sub do_renew_for  {
 	my $self = shift;
 	my $borrower = shift;
 	my ($renewokay,$renewerror) = CanBookBeRenewed($borrower->{borrowernumber},$self->{item}->{itemnumber});
