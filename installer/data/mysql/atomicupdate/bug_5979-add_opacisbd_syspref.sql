@@ -1,0 +1,1 @@
+INSERT INTO `systempreferences` (variable,value,options,explanation,type)  SELECT 'OPACISBD', value, '70|10', 'Allows to define ISBD view in OPAC', 'Textarea' FROM `systempreferences` WHERE variable = 'ISBD';
