@@ -122,8 +122,8 @@ if($timeLimit eq 999){ $timeLimitFinite = 0 };
 
 $template->param(do_it => 1,
                 limit => $limit,
-                branch => $branches->{$branch}->{branchname} || 'all locations',
-                itemtype => $itemtypes->{$itemtype}->{description} || 'item types',
+                branch => $branches->{$branch}->{branchname},
+                itemtype => $itemtypes->{$itemtype}->{description},
                 timeLimit => $timeLimit,
                 timeLimitFinite => $timeLimit,
                 results_loop => \@results,
