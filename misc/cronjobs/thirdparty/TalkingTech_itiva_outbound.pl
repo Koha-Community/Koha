@@ -19,7 +19,9 @@
 
 use strict;
 use warnings;
+
 BEGIN {
+
     # find Koha's Perl modules
     # test carefully before changing this
     use FindBin;
@@ -42,7 +44,9 @@ sub usage {
     exit;
 }
 
-die "TalkingTechItivaPhoneNotification system preference not activated... dying\n" unless (C4::Context->preference("TalkingTechItivaPhoneNotification"));
+die
+  "TalkingTechItivaPhoneNotification system preference not activated... dying\n"
+  unless ( C4::Context->preference("TalkingTechItivaPhoneNotification") );
 
 # Database handle
 my $dbh = C4::Context->dbh;
@@ -57,24 +61,26 @@ my $help;
 my $outfile;
 
 # maps to convert I-tiva terms to Koha terms
-my $type_module_map = { 'PREOVERDUE'  => 'circulation',
-                        'OVERDUE' => 'circulation',
-                        'RESERVE'    => 'reserves',
-                      };
+my $type_module_map = {
+    'PREOVERDUE' => 'circulation',
+    'OVERDUE'    => 'circulation',
+    'RESERVE'    => 'reserves',
+};
 
-my $type_notice_map = { 'PREOVERDUE'  => 'PREDUE_PHONE',
-                        'OVERDUE' => 'OVERDUE_PHONE',
-                        'RESERVE'    => 'HOLD_PHONE',
-                      };
+my $type_notice_map = {
+    'PREOVERDUE' => 'PREDUE_PHONE',
+    'OVERDUE'    => 'OVERDUE_PHONE',
+    'RESERVE'    => 'HOLD_PHONE',
+};
 
 GetOptions(
-  'o|output:s' => \$outfile,
-  'v' => \$verbose,
-  'lang:s' => \$language,
-  'type:s' => \@types,
-  'w|waiting-hold-day:s' => \@holds_waiting_days_to_call,
-  'c|code|library-code:s' => \$library_code,
-  'help|h'   => \$help,
+    'o|output:s'            => \$outfile,
+    'v'                     => \$verbose,
+    'lang:s'                => \$language,
+    'type:s'                => \@types,
+    'w|waiting-hold-day:s'  => \@holds_waiting_days_to_call,
+    'c|code|library-code:s' => \$library_code,
+    'help|h'                => \$help,
 );
 
 $language = uc($language);
@@ -83,58 +89,78 @@ $library_code ||= '';
 pod2usage( -verbose => 1 ) if $help;
 
 # output log or STDOUT
-if (defined $outfile) {
-   open (OUT, ">$outfile") || die ("Cannot open output file");
-} else {
-   print "No output file defined; printing to STDOUT\n" if (defined $verbose);
-   open(OUT, ">&STDOUT") || die ("Couldn't duplicate STDOUT: $!");
+my $OUT;
+if ( defined $outfile ) {
+    open( $OUT, '>', "$outfile" ) || die("Cannot open output file");
+}
+else {
+    print "No output file defined; printing to STDOUT\n"
+      if ( defined $verbose );
+    open( $OUT, '>', "&STDOUT" ) || die("Couldn't duplicate STDOUT: $!");
 }
 
-my $format = 'V'; # format for phone notifications
+my $format = 'V';    # format for phone notifications
 
 foreach my $type (@types) {
-   $type = uc($type); #just in case lower or mixed-case was supplied
-   my $module = $type_module_map->{$type}; #since the module is required to get the letter
-   my $code = $type_notice_map->{$type}; #to get the Koha name of the notice
+    $type = uc($type);    #just in case lower or mixed-case was supplied
+    my $module =
+      $type_module_map->{$type}; #since the module is required to get the letter
+    my $code = $type_notice_map->{$type};    #to get the Koha name of the notice
 
-   my @loop;
-   if ($type eq 'OVERDUE') {
-     @loop = GetOverdueIssues();
-   } elsif ($type eq 'PREOVERDUE') {
-     @loop = GetPredueIssues();
-   } elsif ($type eq 'RESERVE') {
-     @loop = GetWaitingHolds();
-   } else {
-      print "Unknown or unsupported message type $type; skipping...\n" if (defined $verbose);
-      next;
-   }
+    my @loop;
+    if ( $type eq 'OVERDUE' ) {
+        @loop = GetOverdueIssues();
+    }
+    elsif ( $type eq 'PREOVERDUE' ) {
+        @loop = GetPredueIssues();
+    }
+    elsif ( $type eq 'RESERVE' ) {
+        @loop = GetWaitingHolds();
+    }
+    else {
+        print "Unknown or unsupported message type $type; skipping...\n"
+          if ( defined $verbose );
+        next;
+    }
 
-   foreach my $issues (@loop) {
-      my $date = C4::Dates->new($issues->{'date_due'}, 'iso');
-      my $due_date = $date->output('metric');
+    foreach my $issues (@loop) {
+        my $date = C4::Dates->new( $issues->{'date_due'}, 'iso' );
+        my $due_date = $date->output('metric');
 
-      # gets the placeholder message, and enqueues the letter
-      my $letter = getletter($module, $code);
-      die "No letter found for type $type!... dying\n" unless $letter;
-      # covers basic variable parsing in letter
-      $letter = C4::Letters::parseletter($letter, 'borrowers', $issues->{'borrowernumber'});
-      $letter = C4::Letters::parseletter($letter, 'biblio', $issues->{'biblionumber'});
-      $letter = C4::Letters::parseletter($letter, 'biblioitems', $issues->{'biblionumber'});
+        # gets the placeholder message, and enqueues the letter
+        my $letter = getletter( $module, $code );
+        die "No letter found for type $type!... dying\n" unless $letter;
 
-      my $message_id = 0;
-      if ($outfile) {
-         $message_id = C4::Letters::EnqueueLetter( {  letter => $letter,
-                                                      borrowernumber => $issues->{'borrowernumber'},
-                                                      message_transport_type => 'phone',
-                                                   });
-      }
+        # covers basic variable parsing in letter
+        $letter =
+          C4::Letters::parseletter( $letter, 'borrowers',
+            $issues->{'borrowernumber'} );
+        $letter =
+          C4::Letters::parseletter( $letter, 'biblio',
+            $issues->{'biblionumber'} );
+        $letter =
+          C4::Letters::parseletter( $letter, 'biblioitems',
+            $issues->{'biblionumber'} );
 
-      print OUT "\"$format\",\"$language\",\"$type\",\"$issues->{level}\",\"$issues->{cardnumber}\",\"$issues->{patron_title}\",\"$issues->{firstname}\",";
-      print OUT "\"$issues->{surname}\",\"$issues->{phone}\",\"$issues->{email}\",\"$library_code\",";
-      print OUT "\"$issues->{site}\",\"$issues->{site_name}\",\"$issues->{barcode}\",\"$due_date\",\"$issues->{title}\",\"$message_id\"\n";
-   }
+        my $message_id = 0;
+        if ($outfile) {
+            $message_id = C4::Letters::EnqueueLetter(
+                {
+                    letter                 => $letter,
+                    borrowernumber         => $issues->{'borrowernumber'},
+                    message_transport_type => 'phone',
+                }
+            );
+        }
+
+        print $OUT
+"\"$format\",\"$language\",\"$type\",\"$issues->{level}\",\"$issues->{cardnumber}\",\"$issues->{patron_title}\",\"$issues->{firstname}\",";
+        print $OUT
+"\"$issues->{surname}\",\"$issues->{phone}\",\"$issues->{email}\",\"$library_code\",";
+        print $OUT
+"\"$issues->{site}\",\"$issues->{site_name}\",\"$issues->{barcode}\",\"$due_date\",\"$issues->{title}\",\"$message_id\"\n";
+    }
 }
-
 
 =head1 NAME
 
@@ -194,7 +220,8 @@ This field can be blank if all messages are from a single library.
 =cut
 
 sub GetOverdueIssues {
-   my $query = "SELECT borrowers.borrowernumber, borrowers.cardnumber, borrowers.title as patron_title, borrowers.firstname, borrowers.surname,
+    my $query =
+"SELECT borrowers.borrowernumber, borrowers.cardnumber, borrowers.title as patron_title, borrowers.firstname, borrowers.surname,
                 borrowers.phone, borrowers.email, borrowers.branchcode, biblio.biblionumber, biblio.title, items.barcode, issues.date_due,
                 max(overduerules.branchcode) as rulebranch, TO_DAYS(NOW())-TO_DAYS(date_due) as daysoverdue, delay1, delay2, delay3,
                 issues.branchcode as site, branches.branchname as site_name
@@ -209,26 +236,31 @@ sub GetOverdueIssues {
                   OR  (TO_DAYS(NOW())-TO_DAYS(date_due) ) = delay3 )
                 GROUP BY items.itemnumber
                 ";
-   my $sth = $dbh->prepare($query);
-   $sth->execute();
-   my @results;
-   while( my $issue = $sth->fetchrow_hashref() ) {
-      if ( $issue->{'daysoverdue'} == $issue->{'delay1'} ) {
-         $issue->{'level'} = 1;
-      } elsif ( $issue->{'daysoverdue'} == $issue->{'delay2'} ) {
-         $issue->{'level'} = 2;
-      } elsif ( $issue->{'daysoverdue'} == $issue->{'delay3'} ) {
-         $issue->{'level'} = 3;
-      } else {
-      # this shouldn't ever happen, based our SQL criteria
-      }
-      push @results, $issue;
-   }
-   return @results;
+    my $sth = $dbh->prepare($query);
+    $sth->execute();
+    my @results;
+    while ( my $issue = $sth->fetchrow_hashref() ) {
+        if ( $issue->{'daysoverdue'} == $issue->{'delay1'} ) {
+            $issue->{'level'} = 1;
+        }
+        elsif ( $issue->{'daysoverdue'} == $issue->{'delay2'} ) {
+            $issue->{'level'} = 2;
+        }
+        elsif ( $issue->{'daysoverdue'} == $issue->{'delay3'} ) {
+            $issue->{'level'} = 3;
+        }
+        else {
+
+            # this shouldn't ever happen, based our SQL criteria
+        }
+        push @results, $issue;
+    }
+    return @results;
 }
 
 sub GetPredueIssues {
-   my $query = "SELECT borrowers.borrowernumber, borrowers.cardnumber, borrowers.title as patron_title, borrowers.firstname, borrowers.surname,
+    my $query =
+"SELECT borrowers.borrowernumber, borrowers.cardnumber, borrowers.title as patron_title, borrowers.firstname, borrowers.surname,
                 borrowers.phone, borrowers.email, borrowers.branchcode, biblio.biblionumber, biblio.title, items.barcode, issues.date_due,
                 issues.branchcode as site, branches.branchname as site_name
                 FROM borrowers JOIN issues USING (borrowernumber)
@@ -242,18 +274,19 @@ sub GetPredueIssues {
                 AND message_transport_type = 'phone'
                 AND message_name = 'Advance_Notice'
                 ";
-   my $sth = $dbh->prepare($query);
-   $sth->execute();
-   my @results;
-   while( my $issue = $sth->fetchrow_hashref() ) {
-      $issue->{'level'} = 1; # only one level for Predue notifications
-      push @results, $issue;
-   }
-   return @results;
+    my $sth = $dbh->prepare($query);
+    $sth->execute();
+    my @results;
+    while ( my $issue = $sth->fetchrow_hashref() ) {
+        $issue->{'level'} = 1;    # only one level for Predue notifications
+        push @results, $issue;
+    }
+    return @results;
 }
 
 sub GetWaitingHolds {
-   my $query = "SELECT borrowers.borrowernumber, borrowers.cardnumber, borrowers.title as patron_title, borrowers.firstname, borrowers.surname,
+    my $query =
+"SELECT borrowers.borrowernumber, borrowers.cardnumber, borrowers.title as patron_title, borrowers.firstname, borrowers.surname,
                 borrowers.phone, borrowers.email, borrowers.branchcode, biblio.biblionumber, biblio.title, items.barcode, reserves.waitingdate,
                 reserves.branchcode AS site, branches.branchname AS site_name,
                 TO_DAYS(NOW())-TO_DAYS(reserves.waitingdate) AS days_since_waiting
@@ -268,28 +301,48 @@ sub GetWaitingHolds {
                 AND message_transport_type = 'phone'
                 AND message_name = 'Hold_Filled'
                 ";
-   my $pickupdelay = C4::Context->preference("ReservesMaxPickUpDelay");
-   my $sth = $dbh->prepare($query);
-   $sth->execute();
-   my @results;
-   while( my $issue = $sth->fetchrow_hashref() ) {
-      my @waitingdate = split( /-/, $issue->{'waitingdate'} );
-      my @date_due = Add_Delta_Days( $waitingdate[0], $waitingdate[1], $waitingdate[2], $pickupdelay );
-      $issue->{'date_due'} = sprintf( "%04d-%02d-%02d", $date_due[0], $date_due[1], $date_due[2] );
-      $issue->{'level'} = 1; # only one level for Hold Waiting notifications
+    my $pickupdelay = C4::Context->preference("ReservesMaxPickUpDelay");
+    my $sth         = $dbh->prepare($query);
+    $sth->execute();
+    my @results;
+    while ( my $issue = $sth->fetchrow_hashref() ) {
+        my @waitingdate = split( /-/, $issue->{'waitingdate'} );
+        my @date_due =
+          Add_Delta_Days( $waitingdate[0], $waitingdate[1], $waitingdate[2],
+            $pickupdelay );
+        $issue->{'date_due'} =
+          sprintf( "%04d-%02d-%02d", $date_due[0], $date_due[1], $date_due[2] );
+        $issue->{'level'} = 1;   # only one level for Hold Waiting notifications
 
-      my $days_to_subtract = 0;
-      my $calendar = C4::Calendar->new( branchcode => $issue->{'site'} );
-      while( $calendar->isHoliday( reverse( Add_Delta_Days( $waitingdate[0], $waitingdate[1], $waitingdate[2], $days_to_subtract ) ) ) ) {
-        $days_to_subtract++;
-      }
-      $issue->{'days_since_waiting'} = $issue->{'days_since_waiting'} - $days_to_subtract;
+        my $days_to_subtract = 0;
+        my $calendar = C4::Calendar->new( branchcode => $issue->{'site'} );
+        while (
+            $calendar->isHoliday(
+                reverse(
+                    Add_Delta_Days(
+                        $waitingdate[0], $waitingdate[1],
+                        $waitingdate[2], $days_to_subtract
+                    )
+                )
+            )
+          )
+        {
+            $days_to_subtract++;
+        }
+        $issue->{'days_since_waiting'} =
+          $issue->{'days_since_waiting'} - $days_to_subtract;
 
-      if ( ( grep $_ eq $issue->{'days_since_waiting'}, @holds_waiting_days_to_call ) || !scalar( @holds_waiting_days_to_call ) ) {
-          push @results, $issue;
-      }
-   }
-   return @results;
-
+        if (
+            (
+                grep $_ eq $issue->{'days_since_waiting'},
+                @holds_waiting_days_to_call
+            )
+            || !scalar(@holds_waiting_days_to_call)
+          )
+        {
+            push @results, $issue;
+        }
+    }
+    return @results;
 
 }

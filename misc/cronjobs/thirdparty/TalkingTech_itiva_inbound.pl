@@ -19,7 +19,9 @@
 
 use strict;
 use warnings;
+
 BEGIN {
+
     # find Koha's Perl modules
     # test carefully before changing this
     use FindBin;
@@ -36,14 +38,16 @@ sub usage {
     exit;
 }
 
-die "TalkingTechItivaPhoneNotification system preference not activated... dying\n" unless (C4::Context->preference("TalkingTechItivaPhoneNotification"));
+die
+  "TalkingTechItivaPhoneNotification system preference not activated... dying\n"
+  unless ( C4::Context->preference("TalkingTechItivaPhoneNotification") );
 
 # Database handle
 my $dbh = C4::Context->dbh;
 
 # Benchmarking
-my $updated= 0;
-my $total = 0;
+my $updated = 0;
+my $total   = 0;
 
 # Options
 my $verbose;
@@ -51,32 +55,33 @@ my $help;
 my $infile;
 
 GetOptions(
-  'i|input:s' => \$infile,
-  'v' => \$verbose,
-  'help|h'   => \$help,
+    'i|input:s' => \$infile,
+    'v'         => \$verbose,
+    'help|h'    => \$help,
 );
 
 die pod2usage() if $help;
 
 # initialize the input data, either file or query
-if (defined $infile) {
-   open(IN, $infile) || die ("Cannot open input file");
-   print "Opening $infile\n" if (defined $verbose);
+if ( defined $infile ) {
+    my $IN open( $IN, '<', $infile ) || die("Cannot open input file");
+    print "Opening $infile\n" if ( defined $verbose );
 
-   while (<IN>) {
-     # data should take to form "<Transaction ID>","<SUCCESS or FAIL>"
-     s/["\n]//g; # strip quotes and newlines: they're unnecessary
-     my @data = split(/,/);
-     my $result = update_notice(@data);
-     $updated += $result;
-     $total++;
-   }
-} else {
+    while (<$IN>) {
+
+        # data should take to form "<Transaction ID>","<SUCCESS or FAIL>"
+        s/["\n]//g;    # strip quotes and newlines: they're unnecessary
+        my @data   = split(/,/);
+        my $result = update_notice(@data);
+        $updated += $result;
+        $total++;
+    }
+}
+else {
     die pod2usage( -verbose => 1 );
 }
 
-print "$updated of $total results lines processed\n" if (defined $verbose);
-
+print "$updated of $total results lines processed\n" if ( defined $verbose );
 
 =head1 NAME
 
@@ -109,21 +114,24 @@ REQUIRED. Path to incoming results file.
 =cut
 
 sub update_notice {
-   my $message_id = shift;
-   my $status = shift;
+    my $message_id = shift;
+    my $status     = shift;
 
-   if ($status =~ m/SUCCESS/i) {
-      $status = 'sent';
-   } elsif ($status =~ m/FAIL/i) {
-      $status = 'failed';
-   } else {
-      warn "unexpected status $status for message ID $message_id\n";
-      return 0;
-   }
+    if ( $status =~ m/SUCCESS/i ) {
+        $status = 'sent';
+    }
+    elsif ( $status =~ m/FAIL/i ) {
+        $status = 'failed';
+    }
+    else {
+        warn "unexpected status $status for message ID $message_id\n";
+        return 0;
+    }
 
-   my $query = "UPDATE message_queue SET status = ? WHERE message_id = ? and status = 'pending'";
-   my $sth = $dbh->prepare($query);
+    my $query =
+"UPDATE message_queue SET status = ? WHERE message_id = ? and status = 'pending'";
+    my $sth = $dbh->prepare($query);
 
-   my $result = $sth->execute($status,$message_id);
-   return $result;
+    my $result = $sth->execute( $status, $message_id );
+    return $result;
 }
