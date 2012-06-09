@@ -335,6 +335,7 @@ sub get_template_and_user {
     if ( $in->{'type'} eq "intranet" ) {
         $template->param(
             AmazonContent               => C4::Context->preference("AmazonContent"),
+            AmazonAssocTag              => C4::Context->preference("AmazonAssocTag"),
             AmazonCoverImages           => C4::Context->preference("AmazonCoverImages"),
             AmazonEnabled               => C4::Context->preference("AmazonEnabled"),
             AmazonSimilarItems          => C4::Context->preference("AmazonSimilarItems"),
@@ -399,6 +400,7 @@ sub get_template_and_user {
 	}
         $template->param(
             AmazonContent             => "" . C4::Context->preference("AmazonContent"),
+            AmazonAssocTag            => C4::Context->preference("AmazonAssocTag"),
             AnonSuggestions           => "" . C4::Context->preference("AnonSuggestions"),
             AuthorisedValueImages     => C4::Context->preference("AuthorisedValueImages"),
             BranchesLoop              => GetBranchesLoop($opac_name),
