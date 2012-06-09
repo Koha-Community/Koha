@@ -675,8 +675,8 @@ sub HoldItem {
     return { code => 'RecordNotFound' } if $$item{biblionumber} ne $$biblio{biblionumber};
 
     # Check for item disponibility
-    my $canitembereserved = CanItemBeReserved( $borrowernumber, $itemnumber );
-    my $canbookbereserved = CanBookBeReserved( $borrowernumber, $biblionumber );
+    my $canitembereserved = C4::Reserves::CanItemBeReserved( $borrowernumber, $itemnumber );
+    my $canbookbereserved = C4::Reserves::CanBookBeReserved( $borrowernumber, $biblionumber );
     return { code => 'NotHoldable' } unless $canbookbereserved and $canitembereserved;
 
     my $branch;
@@ -700,8 +700,8 @@ sub HoldItem {
     }
 
     # Add the reserve
-    #          $branch, $borrowernumber, $biblionumber, $constraint, $bibitems,  $priority, $notes, $title, $checkitem,  $found
-    AddReserve( $branch, $borrowernumber, $biblionumber, 'a', undef, $rank, undef, $title, $itemnumber, $found );
+    # $branch,$borrowernumber,$biblionumber,$constraint,$bibitems,$priority,$resdate,$expdate,$notes,$title,$checkitem,$found
+    AddReserve( $branch, $borrowernumber, $biblionumber, 'a', undef, $rank, '', '', '', $title, $itemnumber, $found );
 
     # Hashref building
     my $out;
