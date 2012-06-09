@@ -161,7 +161,7 @@ sub raw_transport {
     syslog("LOG_INFO", "raw_transport: shutting down");
 }
 
-sub get_clean_string ($) {
+sub get_clean_string {
 	my $string = shift;
 	if (defined $string) {
 		syslog("LOG_DEBUG", "get_clean_string  pre-clean(length %s): %s", length($string), $string);

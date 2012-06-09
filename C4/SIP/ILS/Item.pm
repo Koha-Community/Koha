@@ -86,7 +86,7 @@ sub new {
 	if (! $item) {
 		syslog("LOG_DEBUG", "new ILS::Item('%s'): not found", $item_id);
 		warn "new ILS::Item($item_id) : No item '$item_id'.";
-		return undef;
+        return;
 	}
     $item->{  'itemnumber'   } = $itemnumber;
     $item->{      'id'       } = $item->{barcode};     # to SIP, the barcode IS the id.
@@ -347,25 +347,26 @@ sub available {
 	return 0;
 }
 
-sub _barcode_to_borrowernumber ($) {
+sub _barcode_to_borrowernumber {
     my $known = shift;
-    (defined($known)) or return undef;
-    my $member = GetMember(cardnumber=>$known) or return undef;
+    return unless defined $known;
+    my $member = GetMember(cardnumber=>$known) or return;
     return $member->{borrowernumber};
 }
-sub barcode_is_borrowernumber ($$$) {    # because hold_queue only has borrowernumber...
+sub barcode_is_borrowernumber {    # because hold_queue only has borrowernumber...
     my $self = shift;   # not really used
     my $barcode = shift;
-    my $number  = shift or return undef;    # can't be zero
-    (defined($barcode)) or return undef;    # might be 0 or 000 or 000000
-    my $converted = _barcode_to_borrowernumber($barcode) or return undef;
-    return ($number eq $converted); # even though both *should* be numbers, eq is safer.
+    my $number  = shift or return;    # can't be zero
+    return unless defined $barcode; # might be 0 or 000 or 000000
+    my $converted = _barcode_to_borrowernumber($barcode);
+    return unless $converted;
+    return ($number == $converted);
 }
-sub fill_reserve ($$) {
+sub fill_reserve {
     my $self = shift;
-    my $hold = shift or return undef;
+    my $hold = shift or return;
     foreach (qw(biblionumber borrowernumber reservedate)) {
-        $hold->{$_} or return undef;
+        $hold->{$_} or return;
     }
     return ModReserveFill($hold);
 }
