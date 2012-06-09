@@ -20,20 +20,24 @@ package Koha::Cache::Memory;
 use strict;
 use warnings;
 use Carp;
-use CHI;
+use Module::Load::Conditional qw(can_load);
 
 use base qw(Koha::Cache);
 
 sub _cache_handle {
     my $class  = shift;
     my $params = shift;
-    return CHI->new(
-        driver    => 'Memory',
-        namespace => $params->{'namespace'} || 'koha',
-        expire_in => 600,
-        max_size  => $params->{'max_size'} || 8192 * 1024,
-        global    => 1,
-    );
+    if ( can_load( modules => { CHI => undef } ) ) {
+        return CHI->new(
+            driver    => 'Memory',
+            namespace => $params->{'namespace'} || 'koha',
+            expire_in => 600,
+            max_size  => $params->{'max_size'} || 8192 * 1024,
+            global    => 1,
+        );
+    } else {
+        return undef;
+    }
 }
 
 1;

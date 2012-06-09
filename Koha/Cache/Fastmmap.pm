@@ -20,19 +20,23 @@ package Koha::Cache::Fastmmap;
 use strict;
 use warnings;
 use Carp;
-use CHI;
+use Module::Load::Conditional qw(can_load);
 
 use base qw(Koha::Cache);
 
 sub _cache_handle {
     my $class  = shift;
     my $params = shift;
-    return CHI->new(
-        driver     => 'FastMmap',
-        namespace  => $params->{'namespace'} || 'koha',
-        expire_in  => 600,
-        cache_size => $params->{'cachesize'} || '1m',
-    );
+    if ( can_load( modules => { CHI => undef } ) ) {
+        return CHI->new(
+            driver     => 'FastMmap',
+            namespace  => $params->{'namespace'} || 'koha',
+            expire_in  => 600,
+            cache_size => $params->{'cachesize'} || '1m',
+        );
+    } else {
+        return undef;
+    }
 }
 
 1;
