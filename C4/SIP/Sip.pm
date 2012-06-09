@@ -8,6 +8,7 @@ use strict;
 use warnings;
 use English;
 use Exporter;
+use Readonly;
 
 use Sys::Syslog qw(syslog);
 use POSIX qw(strftime);
@@ -38,7 +39,16 @@ BEGIN {
 
 our $error_detection = 0;
 our $protocol_version = 1;
-our $field_delimiter = '|'; 	# Protocol Default
+our $field_delimiter = '|'; # Protocol Default
+# The message terminator for a SIP message is '\r' in the standard doc
+# However most sip devices in the wild send a CR LF pair
+# This is required by Telnet if that is your carrier mechanism
+# On raw connections it may also be required because the buffer is
+# only flushed on linefeed and its absence causes enough delay for
+# client machines to go into an error state
+# The below works for almost all machines if however you have one
+# which does not like the additional linefeed change value to $CR
+Readonly my $msg_terminator => $CRLF;
 
 # We need to keep a copy of the last message we sent to the SC,
 # in case there's a transmission error and the SC sends us a
@@ -234,10 +244,10 @@ sub write_msg {
 
     if ($file) {
         $file->autoflush(1);
-        print $file "$msg\r";
+        print $file $msg, $msg_terminator;
     } else {
         STDOUT->autoflush(1);
-        print $msg, "\r";
+        print $msg, $msg_terminator;
         syslog("LOG_INFO", "OUTPUT MSG: '$msg'");
     }
 
