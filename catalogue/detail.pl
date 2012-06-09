@@ -172,6 +172,7 @@ $dat->{'hiddencount'} = scalar @all_items + @hostitems - scalar @items;
 
 my $shelflocations = GetKohaAuthorisedValues('items.location', $fw);
 my $collections    = GetKohaAuthorisedValues('items.ccode'   , $fw);
+my $copynumbers    = GetKohaAuthorisedValues('items.copynumber', $fw);
 my (@itemloop, %itemfields);
 my $norequests = 1;
 my $authvalcode_items_itemlost = GetAuthValCode('items.itemlost',$fw);
@@ -199,10 +200,13 @@ foreach my $item (@items) {
         $item->{itemdamagedloop} = GetAuthorisedValues($authvalcode_items_damaged, $item->{damaged}) if $authvalcode_items_damaged;
     }
     #get shelf location and collection code description if they are authorised value.
+    # same thing for copy number
     my $shelfcode = $item->{'location'};
     $item->{'location'} = $shelflocations->{$shelfcode} if ( defined( $shelfcode ) && defined($shelflocations) && exists( $shelflocations->{$shelfcode} ) );
     my $ccode = $item->{'ccode'};
     $item->{'ccode'} = $collections->{$ccode} if ( defined( $ccode ) && defined($collections) && exists( $collections->{$ccode} ) );
+    my $copynumber = $item->{'copynumber'};
+    $item->{'copynumber'} = $copynumbers->{$copynumber} if ( defined($copynumber) && defined($copynumbers) && exists( $copynumbers->{$copynumber} ) );
     foreach (qw(ccode enumchron copynumber itemnotes uri)) {
         $itemfields{$_} = 1 if ( $item->{$_} );
     }
