@@ -38,6 +38,7 @@ use C4::NewsChannels; #get slip news
 use DateTime;
 use DateTime::Format::DateParse;
 use Koha::DateUtils;
+use Text::Unaccent qw( unac_string );
 
 our ($VERSION,@ISA,@EXPORT,@EXPORT_OK,$debug);
 
@@ -800,6 +801,7 @@ sub Generate_Userid {
     $firstname =~ s/[[:digit:][:space:][:blank:][:punct:][:cntrl:]]//g;
     $surname =~ s/[[:digit:][:space:][:blank:][:punct:][:cntrl:]]//g;
     $newuid = lc(($firstname)? "$firstname.$surname" : $surname);
+    $newuid = unac_string('utf-8',$newuid);
     $newuid .= $offset unless $offset == 0;
     $offset++;
 
