@@ -80,15 +80,6 @@ sub find_service {
     return $self->{listeners}->{$portstr};
 }
 
-#
-# Testing
-#
-
-{
-    no warnings qw(once);
-    eval join('',<main::DATA>) || die $@ unless caller();
-}
-
 1;
 __END__
 

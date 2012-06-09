@@ -36,12 +36,6 @@ sub verify_cksum {
     return (($cksum + $shortsum) & 0xFFFF) == 0;
 }
 
-{
-    no warnings qw(once);
-    eval join('',<main::DATA>) || die $@ unless caller();
-	# FIXME: what the heck is this?
-}
-
 1;
 __END__
 
