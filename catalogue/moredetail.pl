@@ -119,6 +119,7 @@ $data->{'showncount'}=$showncount;
 $data->{'hiddencount'}=$hiddencount;  # can be zero
 
 my $ccodes= GetKohaAuthorisedValues('items.ccode',$fw);
+my $copynumbers = GetKohaAuthorisedValues('items.copynumber',$fw);
 my $itemtypes = GetItemTypes;
 
 $data->{'itemtypename'} = $itemtypes->{$data->{'itemtype'}}->{'description'};
@@ -134,7 +135,15 @@ foreach my $item (@items){
     $item->{'collection'}              = $ccodes->{ $item->{ccode} } if ($ccodes);
     $item->{'itype'}                   = $itemtypes->{ $item->{'itype'} }->{'description'};
     $item->{'replacementprice'}        = sprintf( "%.2f", $item->{'replacementprice'} );
-    $item->{'copyvol'}                 = $item->{'copynumber'};
+    if ( defined $item->{'copynumber'} ) {
+        $item->{'displaycopy'} = 1;
+        if ( defined $copynumbers->{ $item->{'copynumber'} } ) {
+            $item->{'copyvol'} = $copynumbers->{ $item->{'copynumber'} }
+        }
+        else {
+            $item->{'copyvol'} = $item->{'copynumber'};
+        }
+    }
 
     # item has a host number if its biblio number does not match the current bib
     if ($item->{biblionumber} ne $biblionumber){
