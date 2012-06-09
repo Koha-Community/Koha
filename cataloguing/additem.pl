@@ -720,6 +720,7 @@ $template->param(
     item_header_loop => \@header_value_loop,
     item             => \@loop_data,
     itemnumber       => $itemnumber,
+    barcode          => GetBarcodeFromItemnumber($itemnumber),
     itemtagfield     => $itemtagfield,
     itemtagsubfield  => $itemtagsubfield,
     op      => $nextop,
