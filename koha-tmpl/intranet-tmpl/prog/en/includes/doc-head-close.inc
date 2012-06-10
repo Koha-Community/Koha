@@ -29,10 +29,6 @@
 
 <!-- yui js --> 
 <script type="text/javascript" src="[% yuipath %]/utilities/utilities.js"></script> 
-<script type="text/javascript" src="[% yuipath %]/datasource/datasource-min.js"></script>
-[% IF ( CircAutocompl ) %]
-    <script type="text/javascript" src="[% yuipath %]/autocomplete/autocomplete-min.js"></script>
-[% END %]
 <script type="text/javascript" src="[% yuipath %]/button/button-min.js"></script> 
 <script type="text/javascript" src="[% yuipath %]/container/container_core-min.js"></script> 
 <script type="text/javascript" src="[% yuipath %]/menu/menu-min.js"></script> 
