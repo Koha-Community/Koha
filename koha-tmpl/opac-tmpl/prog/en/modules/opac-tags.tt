@@ -90,7 +90,7 @@
 	[% IF ( TAGLOOP ) %]
 	<div id="tagcloud">
 	[% FOREACH TAGLOO IN TAGLOOP %]
-	<span class="tag" id="tag[% loop.count %]" title="[% TAGLOO.cloudweight %]">
+    <span class="tag" id="tag[% loop.count %]">
 		<a href="/cgi-bin/koha/opac-search.pl?tag=[% TAGLOO.term |url %]&amp;q=[% TAGLOO.term |url %]">
 		[% TAGLOO.term |html %]</a>
 			<span class="tagweight">[% TAGLOO.weight_total %]</span>
