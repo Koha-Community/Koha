@@ -616,7 +616,7 @@ sub BatchRevertBibRecords {
             $num_items_deleted += BatchRevertItems($rowref->{'import_record_id'}, $rowref->{'matched_biblionumber'});
             SetImportRecordStatus($rowref->{'import_record_id'}, 'reverted');
         }
-        my $sth2 = $dbh->prepare_cached("UPDATE import_biblios SET matched_biblionumber = NULL WHERE import_record_id = ?");
+        my $sth2 = $dbh->prepare_cached("UPDATE import_biblios LEFT JOIN import_items USING (import_record_id) SET matched_biblionumber = NULL WHERE import_record_id = ? AND status != 'imported'" );
         $sth2->execute($rowref->{'import_record_id'});
     }
 
