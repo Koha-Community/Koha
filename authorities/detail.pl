@@ -241,5 +241,7 @@ $template->param(authid => $authid,
 		authtypetext => $authtypes->{$authtypecode}{'authtypetext'},
 		authtypesloop => \@authtypesloop,
 		);
+
+$template->{VARS}->{marcflavour} = C4::Context->preference("marcflavour");
 output_html_with_http_headers $query, $cookie, $template->output;
 
