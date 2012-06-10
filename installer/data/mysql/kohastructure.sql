@@ -1746,7 +1746,7 @@ CREATE TABLE IF NOT EXISTS `search_history` (
   `userid` int(11) NOT NULL,
   `sessionid` varchar(32) NOT NULL,
   `query_desc` varchar(255) NOT NULL,
-  `query_cgi` varchar(255) NOT NULL,
+  `query_cgi` text NOT NULL,
   `total` int(11) NOT NULL,
   `time` timestamp NOT NULL default CURRENT_TIMESTAMP,
   KEY `userid` (`userid`),
