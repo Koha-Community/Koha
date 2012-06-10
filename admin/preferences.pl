@@ -34,6 +34,7 @@ use File::Spec;
 use IO::File;
 use YAML::Syck qw();
 $YAML::Syck::ImplicitTyping = 1;
+$YAML::Syck::ImplicitUnicode = 1; # force utf-8 for preference encoding
 our $lang;
 
 # use Smart::Comments;

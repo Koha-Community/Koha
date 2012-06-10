@@ -125,7 +125,7 @@ if ( $op eq "do_search" ) {
     # next/previous would not work anymore
 
     # construction of the url of each page
-    my $value_url = uri_escape($value);
+    my $value_url = uri_escape_utf8($value);
     my $base_url = "authorities-home.pl?"
       ."marclist=$marclist"
       ."&amp;and_or=$and_or"
