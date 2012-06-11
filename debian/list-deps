@@ -23,6 +23,16 @@ use warnings;
 
 use C4::Installer::PerlDependencies;
 
+# These are packages that may not be in the apt archive in a way that
+# apt-file can find, e.g. in the Koha repo rather than the regular
+# debian one.
+my %overrides = (
+    'CGI::Session::Driver::memcached' => 'libcgi-session-driver-memcached-perl',
+    'CHI'                             => 'libchi-perl',
+    'CHI::Driver::Memcached'          => 'libchi-driver-memcached-perl',
+    'Template::Plugin::HtmlToText'    => 'libtemplate-plugin-htmltotext-perl',
+);
+
 my $deps = $C4::Installer::PerlDependencies::PERL_DEPS;
 
 my $prefix = "^/usr/((lib|share)/perl5|(lib|share)/perl/[0-9.]+)";
@@ -31,7 +41,7 @@ foreach my $module (keys %$deps) {
     my $ver = $deps->{$module}->{'min_ver'};
     my $subpath = $module;
     $subpath =~ s,::,/,g;
-    my $output = 
+    my $output =
         qx(apt-file -l -x search "$prefix/$subpath.pm\$");
     my @temp = split(/\n/, $output);
     my @lines = ();
@@ -64,6 +74,8 @@ foreach my $module (keys %$deps) {
         # is no reason to be suspicious of this
         # commit.)
         # RM note: suspicious?  me?  always!
+    } elsif (exists $overrides{$module}) {
+        print "$overrides{$module}\n";
     } else {
         print "EEEK: unknown package for $module\n";
     }
