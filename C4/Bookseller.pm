@@ -63,9 +63,12 @@ aqbooksellers table in the Koha database.
 sub GetBookSeller {
     my $searchstring = shift;
     $searchstring = q{%} . $searchstring . q{%};
-    my $query =
-'select aqbooksellers.*, count(*) as basketcount from aqbooksellers left join aqbasket '
-      . 'on aqbasket.booksellerid = aqbooksellers.id where name like ? group by aqbooksellers.id order by name';
+    my $query = "
+        SELECT aqbooksellers.*, count(*) AS basketcount
+        FROM aqbooksellers
+        LEFT JOIN aqbasket ON aqbasket.booksellerid = aqbooksellers.id
+        WHERE name LIKE ? GROUP BY aqbooksellers.id ORDER BY name
+    ";
 
     my $dbh           = C4::Context->dbh;
     my $sth           = $dbh->prepare($query);
