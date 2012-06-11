@@ -308,7 +308,7 @@ function enableCheckboxActions(){
         </tr>[% END %]
 
         <tr>
-            <th scope="row">Location(s)(Status)</th>
+            <th scope="row">Location(s) (Status)</th>
             <td>[% IF ( BIBLIO_RESULT.ITEM_RESULTS ) %]<ul>[% FOREACH ITEM_RESULT IN BIBLIO_RESULT.ITEM_RESULTS %]
                             <li>
                                 <strong>[% ITEM_RESULT.homebranch %]</strong>[% IF ( ITEM_RESULT.location_opac ) %], [% ITEM_RESULT.location_opac %][% END %]
@@ -354,7 +354,7 @@ function enableCheckboxActions(){
 	    <th>Title</th>
 	    <th>Author</th>
 	    <th>Year</th>
-        <th>Location(Status)</th>
+        <th>Location (Status)</th>
         </tr></thead>
 
         [% FOREACH BIBLIO_RESULT IN BIBLIO_RESULTS %]
