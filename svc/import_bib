@@ -41,10 +41,10 @@ unless ($status eq "ok") {
 
 my $xml;
 if ($query->request_method eq "POST") {
-    $xml = $query->param('POSTDATA');
+    $xml = $query->param('xml');
 }
 if ($xml) {
-    my %params = map { $_ => $query->url_param($_) } $query->url_param;
+    my %params = map { $_ => $query->param($_) } $query->param;
     my $result = import_bib($xml, \%params );
     print $query->header(-type => 'text/xml');
     print XMLout($result, NoAttr => 1, RootName => 'response', XMLDecl => 1);
@@ -62,7 +62,7 @@ sub import_bib {
     my $import_mode = delete $params->{import_mode} || '';
     my $framework   = delete $params->{framework}   || '';
 
-    if (my $matcher_code = delete $params->{matcher}) {
+    if (my $matcher_code = delete $params->{match}) {
         $params->{matcher_id} = C4::Matcher::GetMatcherId($matcher_code);
     }
 
@@ -83,19 +83,27 @@ sub import_bib {
 
     my $import_record_id = AddBiblioToBatch($batch_id, 0, $marc_record, "utf8", int(rand(99999)));
     my @import_items_ids = AddItemsToImportBiblio($batch_id, $import_record_id, $marc_record, 'UPDATE COUNTS');
-    my $marcxml = GetImportRecordMarcXML($import_record_id);
-    unless ($marcxml) {
-        $result->{'status'} = "failed";
-        $result->{'error'} = "database write error";
-        return $result;
-    }
-    $marcxml =~ s/<\?xml.*?\?>//i;
+
+    my $matcher = C4::Matcher->new($params->{record_type} || 'biblio');
+    $matcher = C4::Matcher->fetch($params->{matcher_id});
+    my $number_of_matches =  BatchFindBibDuplicates($batch_id, $matcher);
 
     # XXX we are ignoring the result of this;
     BatchCommitBibRecords($batch_id, $framework) if lc($import_mode) eq 'direct';
 
+    my $dbh = C4::Context->dbh();
+    my $sth = $dbh->prepare("SELECT matched_biblionumber FROM import_biblios WHERE import_record_id =?");
+    $sth->execute($import_record_id);
+    my $biblionumber=$sth->fetchrow_arrayref->[0] || '';
+    $sth = $dbh->prepare("SELECT overlay_status FROM import_records WHERE import_record_id =?");
+    $sth->execute($import_record_id);
+    my $match_status = $sth->fetchrow_arrayref->[0] || 'no_match';
+    my $url = 'http://'. C4::Context->preference('staffClientBaseURL') .'/cgi-bin/koha/catalogue/detail.pl?biblionumber='. $biblionumber;
+
     $result->{'status'} = "ok";
-    $result->{'import_batch_id'} =  $batch_id;
-    $result->{'marcxml'} =  $marcxml;
+    $result->{'import_batch_id'} = $batch_id;
+    $result->{'match_status'} = $match_status;
+    $result->{'biblionumber'} = $biblionumber;
+    $result->{'url'} = $url;
     return $result;
 }
