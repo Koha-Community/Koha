@@ -1,16 +1,16 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; Transfer order</title>
 [% INCLUDE 'doc-head-close.inc' %]
+[% IF transferred %]
+    <script type="text/javascript">
+    //<![CDATA[
+        opener.location.reload();
+        window.close();
+    //]]>
+    </script>
+[% END %]
 </head>
 <body>
-[% INCLUDE 'header.inc' %]
-[% INCLUDE 'acquisitions-search.inc' %]
-
-<div id="breadcrumbs">
-    <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-    &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a>
-    &rsaquo; Transfer order
-</div>
 
 <div id="doc3" class="yui-t2">
 <div id="bd">
@@ -32,7 +32,7 @@
                             <td>[% basket.basketname %] (#[% basket.basketno %])</td>
                             <td>[% basket.createdby %]</td>
                             <td>[% basket.creationdate %]</td>
-                            <td><a href="transferorder.pl?basketno=[% basket.basketno %]&ordernumber=[% ordernumber %][% IF (referrer) %]&referrer=[% referrer | uri %][% END %]" onclick="return confirm('Do you want to transfer order [% ordernumber %] from basket [% basketfromname %] ([% booksellerfromname %]) to basket [% basket.basketname %] ([% booksellertoname %]) ?');">Choose</a>
+                            <td><a href="transferorder.pl?basketno=[% basket.basketno %]&ordernumber=[% ordernumber %]" onclick="return confirm('Do you want to transfer order [% ordernumber %] from basket [% basketfromname %] ([% booksellerfromname %]) to basket [% basket.basketname %] ([% booksellertoname %]) ?');">Choose</a>
                           </tr>
                         [% END %]
                     </tbody>
@@ -59,7 +59,7 @@
                             [% IF ( ordersloo.isbn ) %] &ndash; [% ordersloo.isbn %][% END %]
                             [% IF ( ordersloo.publishercode ) %]<br />Publisher :[% ordersloo.publishercode %][% END %]
                         </td>
-                        <td><a href="transferorder.pl?bookselleridfrom=[% ordersloo.bookselleridfrom %]&ordernumber=[% ordersloo.ordernumber %][% IF (referrer) %]&referrer=[% referrer | uri %][% END %]">Transfer</a></td>
+                        <td><a href="transferorder.pl?bookselleridfrom=[% ordersloo.bookselleridfrom %]&ordernumber=[% ordersloo.ordernumber %]">Transfer</a></td>
                       </tr>
                     [% END %]
                 </tbody>
@@ -81,7 +81,7 @@
                         [% FOREACH bookseller IN booksellersloop %]
                           <tr>
                             <td>[% bookseller.name %]</td>
-                            <td><a href="transferorder.pl?[% IF (bookselleridfrom) %]bookselleridto[% ELSE %]bookselleridfrom[% END %]=[% bookseller.id %][% IF (ordernumber) %]&ordernumber=[% ordernumber %][% END %][% IF (referrer) %]&referrer=[% referrer | uri %][% END %]">Choose</a></td>
+                            <td><a href="transferorder.pl?[% IF (bookselleridfrom) %]bookselleridto[% ELSE %]bookselleridfrom[% END %]=[% bookseller.id %][% IF (ordernumber) %]&ordernumber=[% ordernumber %][% END %]">Choose</a></td>
                           </tr>
                         [% END %]
                     </tbody>
@@ -98,7 +98,6 @@
             [% END %]
             <form method="get" action="transferorder.pl">
                 <input type="hidden" name="op" value="do_search" />
-                <input type="hidden" name="referrer" value="[% referrer %]" />
                 [% IF ( ordernumber ) %]
                     <input type="hidden" name="ordernumber" value="[% ordernumber %]" />
                 [% END %]
@@ -113,9 +112,6 @@
     </div>
 </div>
 
-<div class="yui-b">
-    [% INCLUDE 'acquisitions-menu.inc' %]
-</div>
 </div>
 </div>
 [% INCLUDE 'intranet-bottom.inc' %]

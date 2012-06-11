@@ -86,6 +86,13 @@
                     window.location = "addorder.pl?ordernumber="+ordernumber+"&basketno="+basketno+"&quantity=0&biblionumber="+biblionumber+"&delbiblio=1&invoiceid=[% invoiceid %]";
                     }
             }
+
+            function transfer_order_popup(ordernumber) {
+                var url = "/cgi-bin/koha/acqui/transferorder.pl?"
+                    + "ordernumber=" + ordernumber
+                window.open(url, 'TransferOrder');
+            }
+
 //]]>
 </script>
 </head>
@@ -216,7 +223,7 @@
 				<td>
                               <a href="orderreceive.pl?ordernumber=[% loop_order.ordernumber %]&amp;invoiceid=[% invoiceid %]">Receive</a>
                     <br />
-                    <a href="/cgi-bin/koha/acqui/transferorder.pl?ordernumber=[% loop_order.ordernumber %]&amp;referrer=[% "/cgi-bin/koha/acqui/parcel.pl?invoiceid=[% invoiceid %]" | uri %]">Transfer</a>
+                    <a href="#" onclick="transfer_order_popup([% loop_order.ordernumber %]); return false;">Transfer</a>
 				</td>
 				<td>
                         [% IF ( loop_order.left_holds_on_order ) %]

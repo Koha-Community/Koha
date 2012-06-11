@@ -77,9 +77,7 @@ if( $basketno && $ordernumber) {
 
     TransferOrder($ordernumber, $basketno);
 
-    my $referrer = $input->param('referrer');
-    print $input->redirect($referrer);
-    exit;
+    $template->param(transferred => 1)
 } elsif ( $bookselleridto && $ordernumber) {
     # Show open baskets for this bookseller
     my $order = GetOrder( $ordernumber );
@@ -138,7 +136,6 @@ $template->param(
     booksellertoname    => $booksellertoname,
     ordernumber         => $ordernumber,
     basketno            => $basketno,
-    referrer            => $input->param('referrer')
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

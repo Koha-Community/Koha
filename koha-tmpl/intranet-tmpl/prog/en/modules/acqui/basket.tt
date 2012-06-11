@@ -55,12 +55,18 @@
                     window.location = "addorder.pl?ordernumber="+ordernumber+"&basketno=[% basketno %]&quantity=0&biblionumber="+biblionumber;
                 }
             }
-            
+
             function confirm_delete_biblio(ordernumber, biblionumber) {
                 var is_confirmed = confirm(_("Are you sure you want to delete this catalog record and order ?"));
                 if (is_confirmed) {
                     window.location = "addorder.pl?ordernumber="+ordernumber+"&basketno=[% basketno %]&quantity=0&biblionumber="+biblionumber+"&delbiblio=1";
                     }
+            }
+
+            function transfer_order_popup(ordernumber) {
+                var url = "/cgi-bin/koha/acqui/transferorder.pl?"
+                    + "ordernumber=" + ordernumber
+                window.open(url, 'TransferOrder');
             }
 
 //]]>
@@ -366,7 +372,7 @@
                                 <a href="neworderempty.pl?ordernumber=[% books_loo.ordernumber %]&amp;booksellerid=[% booksellerid %]&amp;basketno=[% basketno %]">Modify</a>
                                 [% UNLESS (books_loo.order_received) %]
                                     <br />
-                                    <a href="/cgi-bin/koha/acqui/transferorder.pl?ordernumber=[% books_loo.ordernumber %]&referrer=[% "/cgi-bin/koha/acqui/basket.pl?basketno=$basketno" | uri %]">Transfer</a>
+                                    <a href="#" onclick="transfer_order_popup([% books_loo.ordernumber %]); return false;">Transfer</a>
                                 [% END %]
                             </td>
                             <td>
