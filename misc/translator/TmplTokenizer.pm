@@ -48,21 +48,21 @@ use vars qw( $serial );
 
 ###############################################################################
 
-sub FATAL_P		 {'fatal-p'}
-sub SYNTAXERROR_P	 {'syntaxerror-p'}
+sub FATAL_P		() {'fatal-p'}
+sub SYNTAXERROR_P	() {'syntaxerror-p'}
 
-sub FILENAME		 {'input'}
-#sub HANDLE		{'handle'}
+sub FILENAME		() {'input'}
+#sub HANDLE		() {'handle'}
 
-#sub READAHEAD		 {'readahead'}
-sub LINENUM_START	 {'lc_0'}
-sub LINENUM		 {'lc'}
-sub CDATA_MODE_P	 {'cdata-mode-p'}
-sub CDATA_CLOSE		 {'cdata-close'}
-#sub PCDATA_MODE_P	 {'pcdata-mode-p'}	# additional submode for CDATA
-sub JS_MODE_P		 {'js-mode-p'}	# cdata-mode-p must also be true
+#sub READAHEAD		() {'readahead'}
+sub LINENUM_START	() {'lc_0'}
+sub LINENUM		() {'lc'}
+sub CDATA_MODE_P	() {'cdata-mode-p'}
+sub CDATA_CLOSE		() {'cdata-close'}
+#sub PCDATA_MODE_P	() {'pcdata-mode-p'}	# additional submode for CDATA
+sub JS_MODE_P		() {'js-mode-p'}	# cdata-mode-p must also be true
 
-sub ALLOW_CFORMAT_P	 {'allow-cformat-p'}
+sub ALLOW_CFORMAT_P	() {'allow-cformat-p'}
 
 sub new {
     shift;
@@ -137,10 +137,10 @@ BEGIN {
     # Perl quoting is really screwed up, but this common subexp is way too long
     $js_EscapeSequence = q{\\\\(?:['"\\\\bfnrt]|[^0-7xu]|[0-3]?[0-7]{1,2}|x[\da-fA-F]{2}|u[\da-fA-F]{4})};
 }
-sub parenleft   { '(' }
-sub parenright  { ')' }
+sub parenleft  () { '(' }
+sub parenright () { ')' }
 
-sub _split_js  {
+sub _split_js ($) {
     my ($s0) = @_;
     my @it = ();
     while (length $s0) {
@@ -186,13 +186,13 @@ sub _split_js  {
     return @it;
 }
 
-sub STATE_UNDERSCORE      { 1 }
-sub STATE_PARENLEFT       { 2 }
-sub STATE_STRING_LITERAL  { 3 }
+sub STATE_UNDERSCORE     () { 1 }
+sub STATE_PARENLEFT      () { 2 }
+sub STATE_STRING_LITERAL () { 3 }
 
 # XXX This is a crazy hack. I don't want to write an ECMAScript parser.
 # XXX A scanner is one thing; a parser another thing.
-sub _identify_js_translatables  {
+sub _identify_js_translatables (@) {
     my @input = @_;
     my @output = ();
     # We mark a JavaScript translatable string as in C, i.e., _("literal")
@@ -229,7 +229,7 @@ sub _identify_js_translatables  {
 
 ###############################################################################
 
-sub string_canon ) {
+sub string_canon ($) {
   my $s = shift;
   # Fold all whitespace into single blanks
   $s =~ s/\s+/ /g;
@@ -238,7 +238,7 @@ sub string_canon ) {
 }
 
 # safer version used internally, preserves new lines
-sub string_canon_safe  {
+sub string_canon_safe ($) {
   my $s = shift;
   # fold tabs and spaces into single spaces
   $s =~ s/[\ \t]+/ /gs;
@@ -361,7 +361,7 @@ sub next_token {
 
 # function taken from old version
 # used by tmpl_process3
-sub parametrize  {
+sub parametrize ($$$$) {
     my($fmt_0, $cformat_p, $t, $f) = @_;
     my $it = '';
     if ($cformat_p) {
@@ -454,12 +454,12 @@ sub parametrize  {
 
 # Other simple functions (These are not methods)
 
-sub blank_p  {
+sub blank_p ($) {
     my($s) = @_;
     return $s =~ /^(?:\s|\&nbsp$re_end_entity|$re_tmpl_var|$re_xsl)*$/osi;
 }
 
-sub trim  {
+sub trim ($) {
     my($s0) = @_;
     my $l0 = length $s0;
     my $s = $s0;
@@ -468,7 +468,7 @@ sub trim  {
     return wantarray? (substr($s0, 0, $l1), $s, substr($s0, $l0 - $l2)): $s;
 }
 
-sub quote_po  {
+sub quote_po ($) {
     my($s) = @_;
     # Locale::PO->quote is buggy, it doesn't quote newlines :-/
     $s =~ s/([\\"])/\\\1/gs;
@@ -477,7 +477,7 @@ sub quote_po  {
     return "\"$s\"";
 }
 
-sub charset_canon  {
+sub charset_canon ($) {
     my($charset) = @_;
     $charset = uc($charset);
     $charset = "$1-$2" if $charset =~ /^(ISO|UTF)(\d.*)/i;
@@ -510,7 +510,7 @@ use vars qw( @latin1_utf8 );
     "\303\270", "\303\271", "\303\272", "\303\273", "\303\274", "\303\275",
     "\303\276", "\303\277" );
 
-sub charset_convert {
+sub charset_convert ($$$) {
     my($s, $charset_in, $charset_out) = @_;
     if ($s !~ /[\200-\377]/s) { # FIXME: don't worry about iso2022 for now
 	;
