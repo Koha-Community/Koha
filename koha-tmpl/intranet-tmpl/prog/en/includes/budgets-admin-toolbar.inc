@@ -56,14 +56,12 @@
                             url: "/cgi-bin/koha/admin/aqplan.pl?budget_period_id=[% budget_period_id %]&authcat=ITEMTYPES"
                             [% UNLESS ( CAN_user_acquisition_planning_manage ) %],  id:'disabled' [% END %]
                         },
-           [% IF ( authcat ) %]
-                [% FOREACH auth_cats_loo IN auth_cats_loop %]
-                        { text: _("Plan by [% auth_cats_loo.authcat %]    "),
-                            url: "/cgi-bin/koha/admin/aqplan.pl?budget_period_id=[% auth_cats_loo.budget_period_id %]&authcat=[% auth_cats_loo.authcat %]"
-                            [% UNLESS ( CAN_user_acquisition_planning_manage ) %],  id:'disabled' [% END %]
-                        },
-                [% END %]
-           [% END %]
+        [% FOREACH auth_cats_loo IN auth_cats_loop %]
+            { text: _("Plan by [% auth_cats_loo.authcat %]    "),
+            url: "/cgi-bin/koha/admin/aqplan.pl?budget_period_id=[% budget_period_id %]&authcat=[% auth_cats_loo.authcat %]"
+            [% UNLESS ( CAN_user_acquisition_planning_manage ) %],  id:'disabled' [% END %]
+            },
+        [% END %]
                 ]
 
 	            new YAHOO.widget.Button({
