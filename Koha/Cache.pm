@@ -92,6 +92,7 @@ sub set_in_cache {
     croak "No key" unless $key;
     $ENV{DEBUG} && warn "set_in_cache for $key";
 
+    return unless $self->{cache};
     return unless $self->{have_chi};
 
     if ( defined $expiry ) {
@@ -106,6 +107,7 @@ sub get_from_cache {
     my ( $self, $key ) = @_;
     croak "No key" unless $key;
     $ENV{DEBUG} && warn "get_from_cache for $key";
+    return unless $self->{cache};
     return unless $self->{have_chi};
     return $self->{cache}->get($key);
 }
@@ -113,12 +115,14 @@ sub get_from_cache {
 sub clear_from_cache {
     my ( $self, $key ) = @_;
     croak "No key" unless $key;
+    return unless $self->{cache};
     return unless $self->{have_chi};
     return $self->{cache}->remove($key);
 }
 
 sub flush_all {
     my $self = shift;
+    return unless $self->{cache};
     return unless $self->{have_chi};
     return $self->{cache}->clear();
 }
