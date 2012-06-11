@@ -1,40 +1,40 @@
 # Broken, omitted: acquisitions, emailPurchaseSuggestions
 Acquisitions:
     Policy:
-    -
-        - Create an item when    
-        - pref: AcqCreateItem
-          choices:
-              ordering: placing an order.
-              receiving: receiving an order.
-              cataloguing: cataloging the record.
-    -
-        - When closing or reopening a basket,
-        - pref: BasketConfirmations
-          default: 1
-          choices:
-              1: always ask for confirmation.
-              2: do not ask for confirmation.
-    -
-        - Show baskets
-        - pref: AcqViewBaskets
-          choices:
-              user: created by staff member.
-              branch: from staff member's branch.
-              all: in system, regardless of owner.
-    -
-        - Display currencies using the following format 
-        - pref: CurrencyFormat
-          choices:
-              US: 360,000.00 (US)
-              FR: 360 000,00 (FR)
-    -
-        - The default tax rate is   
-        - pref: gist
-        - (enter in numeric form, 0.12 for 12%)
+        -
+            - Create an item when
+            - pref: AcqCreateItem
+              choices:
+                  ordering: placing an order.
+                  receiving: receiving an order.
+                  cataloguing: cataloging the record.
+        -
+            - When closing or reopening a basket,
+            - pref: BasketConfirmations
+              default: 1
+              choices:
+                  1: always ask for confirmation.
+                  2: do not ask for confirmation.
+        -
+            - Show baskets
+            - pref: AcqViewBaskets
+              choices:
+                  user: created by staff member.
+                  branch: from staff member's library.
+                  all: in system, regardless of owner.
+        -
+            - Display currencies using the following format
+            - pref: CurrencyFormat
+              choices:
+                  US: 360,000.00 (US)
+                  FR: 360 000,00 (FR)
+        -
+            - The default tax rate is
+            - pref: gist
+            - (enter in numeric form, 0.12 for 12%)
 
     Printing:
-    -
-        - Use   
-        - pref: OrderPdfFormat
-        - when printing basket groups. 
+        -
+            - Use
+            - pref: OrderPdfFormat
+            - when printing basket groups.
