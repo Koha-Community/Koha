@@ -1,4 +1,4 @@
-[% INCLUDE 'doc-head-open.inc' %][% LibraryNameTitle or "Koha Online" %] Catalog &rsaquo; Comments on [% title %]
+[% INCLUDE 'doc-head-open.inc' %][% LibraryNameTitle or "Koha online" %] catalog &rsaquo; Comments on [% title %]
 [% INCLUDE 'doc-head-close.inc' %]
 <style type="text/css">
   #custom-doc { width:37.08em;*width:36.16em;min-width:485px; margin:1em auto; text-align:left; }
@@ -9,7 +9,7 @@
 	 	var inject_old = function(comment) {
 			[% IF ( reviewid ) %]
 			[% IF ( cgi_debug ) %]alert(_('injecting OLD comment: ')+comment);[% END %]
-			parent.opener.$('#c[% reviewid %] p').prev("small").prev("h5").html("Your Edited Comment (preview, pending approval)");
+            parent.opener.$('#c[% reviewid %] p').prev("small").prev("h5").html(_("Your edited comment (preview, pending approval)"));
 			parent.opener.$('#c[% reviewid %] p').html(comment);
 			parent.opener.$('#c[% reviewid %] p').append("<a href=\"#comment\" onclick=\"Dopop(\'/cgi-bin/koha/opac-review.pl?biblionumber=[% biblionumber | uri %]&amp;reviewid=[% reviewid | uri%]\');\">Edit<\/a>");
 			[% END %]
@@ -19,7 +19,7 @@
 			[% IF ( cgi_debug ) %]alert(_("injecting NEW comment: ") +comment);[% END %]
 			parent.opener.$('#newcomment').attr("class","yours");
 			parent.opener.$('#newcomment').html(
-				"<h5>Your Comment (preview, pending approval)<\/h5>" +
+                "<h5>" + _("Your comment (preview, pending approval)") + "<\/h5>" +
 				"<p>"+comment+"<\/p>" +
 				"<a href=\"#comment\" onclick=\"Dopop(\'/cgi-bin/koha/opac-review.pl?biblionumber=[% biblionumber |uri%]\');\">Edit<\/a><\/p>"
 			);
