@@ -601,7 +601,7 @@ sub GetSubscriptions {
         my @sqlstrings;
         my @strings_to_search;
         @strings_to_search = map { "$_" } split( / /, $ean );
-        foreach my $index qw(biblioitems.ean) {
+        foreach my $index ( qw(biblioitems.ean) ) {
             push @bind_params, @strings_to_search;
             my $tmpstring = "OR $index = ? " x scalar(@strings_to_search);
             $debug && warn "$tmpstring";
