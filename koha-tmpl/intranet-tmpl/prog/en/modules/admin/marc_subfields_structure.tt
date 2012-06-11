@@ -77,9 +77,9 @@ $(document).ready(function() {
    <ul>
         [% FOREACH loo IN loop %]
             [% IF ( loo.new_subfield ) %]
-                <li><a href="/cgi-bin/koha/admin/marc_subfields_structure.pl#sub[% loo.urisubfieldcode %]field" title="[% loo.liblibrarian %]">New</a></li>
+                <li><a href="#sub[% loo.urisubfieldcode %]field" title="[% loo.liblibrarian %]">New</a></li>
             [% ELSE %]
-                <li><a href="/cgi-bin/koha/admin/marc_subfields_structure.pl#sub[% loo.urisubfieldcode %]field" title="[% loo.liblibrarian %]">
+                <li><a href="#sub[% loo.urisubfieldcode %]field" title="[% loo.liblibrarian %]">
                     [% loo.subfieldcode %]
                </a></li>
             [% END %]
