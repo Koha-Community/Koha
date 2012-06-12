@@ -65,7 +65,6 @@
 			<xsl:when test="not($chopString)"/>
 			<xsl:otherwise><xsl:value-of select="$chopString"/></xsl:otherwise>
 		</xsl:choose>
-<xsl:text> </xsl:text>
 	</xsl:template>
 
 	<!-- Function extractControlNumber is used to extract the control number (record number) from MARC tags 773/80/85 [etc.] subfield $w.
