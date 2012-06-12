@@ -89,7 +89,6 @@ $(document).ready(function(){
 </script>
 
 
-<span id="header_search">
 <form name="f" method="get" action="auth_finder.pl">
             <input type="hidden" name="op" value="do_search" />
             <input type="hidden" name="type" value="intranet" />
@@ -128,11 +127,11 @@ $(document).ready(function(){
                 </li>
 
                 <li>
-                    <label for="marclist">Anywhere</label>
+                    <label for="marclistanywhere">Anywhere</label>
                     <input type="hidden" name="marclist" value="any" />
                     <input type="hidden" name="and_or" value="and" />
                     <input type="hidden" name="excluding" value="" />
-                    <select name="operator" id="marclist">
+                    <select name="operator" id="marclistanywhere">
                         <option value="contains">contains</option>
                         <option value="start">starts with</option>
                         <option value="is">is exactly</option>
@@ -141,11 +140,11 @@ $(document).ready(function(){
                     <div id="yvaluecontainermarclist"></div>
                 </li>
                 <li>
-                    <label for="marclist">Heading match</label>
+                    <label for="marclistheading">Heading match</label>
                     <input type="hidden" name="marclist" value="match" />
                     <input type="hidden" name="and_or" value="and" />
                     <input type="hidden" name="excluding" value="" />
-                    <select name="operator" id="marclist">
+                    <select name="operator" id="marclistheading">
                         <option value="contains">contains</option>
                         <option value="start">starts with</option>
                         <option value="is">is exactly</option>
@@ -162,4 +161,3 @@ $(document).ready(function(){
         </li></ol></fieldset>
             <fieldset class="action"> <input type="submit" value="Start search" class="submit" /> <a class="cancel close" href="#">Cancel</a></fieldset>
 </form>
-</span>
