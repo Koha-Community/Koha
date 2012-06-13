@@ -21,14 +21,26 @@
 
 # Script to perform searching
 # Mostly copied from search.pl, see POD there
-use strict;            # always use
-use warnings;
+use Modern::Perl;
 
 ## STEP 1. Load things that are used in both search page and
 # results page and decide which template to load, operations 
 # to perform, etc.
 ## load Koha modules
 use C4::Context;
+
+my $searchengine = C4::Context->preference("SearchEngine");
+given ( $searchengine ) {
+    when ( /^Solr$/ ) {
+        warn "We use Solr";
+        require 'opac/search.pl';
+        exit;
+    }
+    when ( /^Zebra$/ ) {
+
+    }
+}
+
 use C4::Output;
 use C4::Auth qw(:DEFAULT get_session);
 use C4::Languages qw(getAllLanguages);
