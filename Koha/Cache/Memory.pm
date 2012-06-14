@@ -36,7 +36,7 @@ sub _cache_handle {
             global    => 1,
         );
     } else {
-        return undef;
+        return;
     }
 }
 
