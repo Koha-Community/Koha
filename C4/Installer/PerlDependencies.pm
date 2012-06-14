@@ -628,11 +628,16 @@ our $PERL_DEPS = {
         'usage'    => 'Core',
         'required' => '0',
         'min_ver'  => '1.09',
-      },
+    },
     'String::Random' => {
         'usage'    => 'OpacSelfRegistration',
         'required' => '0',
         'min_ver'  => '0.22',
+    },
+    'File::Find::Rule' => {
+        'usage'    => 'Core',
+        'required' => '1',
+        'min_ver'  => '0.33',
     },
 };
 

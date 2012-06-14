@@ -23,6 +23,7 @@ use strict;
 our $VERSION = 3.07.00.049;
 use C4::Context;
 use C4::Installer::PerlModules;
+use C4::Update::Database;
 
 =head1 NAME
 
@@ -466,7 +467,15 @@ Koha software version.
 
 sub set_version_syspref {
     my $self = shift;
-
+    # get all updatedatabase, and mark them as passed, as it's a fresh install
+    my $versions = C4::Update::Database::list_versions_available();
+    for my $v ( @$versions ) {
+        my $queries;
+        $queries->{queries} = ["initial setup"];
+        $queries->{comments} = ["initial setup"];
+        C4::Update::Database::set_infos($v,$queries,undef,undef);
+    }
+    # mark the "old" 3.6 version number
     my $kohaversion=C4::Context::KOHAVERSION;
     # remove the 3 last . to have a Perl number
     $kohaversion =~ s/(.*\..*)\.(.*)\.(.*)/$1$2$3/;

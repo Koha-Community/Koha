@@ -32,6 +32,7 @@ use C4::Output;
 use C4::Auth;
 use C4::Context;
 use C4::Installer;
+use C4::Update::Database;
 
 #use Smart::Comments '####';
 
@@ -47,7 +48,45 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-my $kohaVersion   = C4::Context::KOHAVERSION;
+my $kohaVersion   = C4::Context->preference("Version");
+# restore ., for display consistency
+$kohaVersion =~ /(.)\.(..)(..)(...)/;
+# transform digits to Perl number, to display 3.6.1.2 instead of 3.06.01.002
+$kohaVersion = ($1+0).".".($2+0).".".($3+0).".".($4+0);
+
+my $dbrev_applied=""; # the list of database revisions
+
+# the $kohaVersion is duplicated since 3.7: the 3.6 (that uses the old mechanism) and the 3.7 (new mechanism).
+# Both versions reflects how the database has been upgraded
+my $already_applied = C4::Update::Database::list_versions_already_applied();
+# $last_known contains the previous DBrev applied number (all . removed). It's used to have a . instead of a number in case of continuous updates
+my $last_known=0;
+# $last_known_sep contains the previous DBrev applied with the separator (used for display)
+my $last_known_sep="";
+for my $v ( @$already_applied ) {
+    my $current = $v->{version};
+    $current =~s/\.//g;
+    # if the current number is the previous one +1, then just add a ., for a better display N.........N+10, for example
+    # (instead of N / N+1 / N+2 / ...)
+    if ($current==$last_known+1) {
+        $dbrev_applied.=".";
+    } else { # we're not N+1, start a new range
+        # if version don't end by a ., no need to add the current loop number
+        # this avoid having N...N (in case of an isolated BDrev number)
+        if ($last_known & $dbrev_applied =~ /\.$/) {
+            $dbrev_applied .= "...".$last_known_sep;
+        }
+        # start a new range
+        $dbrev_applied .= " ".$v->{version};
+    }
+    $last_known= $current;
+    $last_known_sep=$v->{version};
+}
+# add the last DB rev number, we don't want to end with "..."
+if ($dbrev_applied =~ /\.$/) {
+    $dbrev_applied .= "...".$last_known_sep;
+}
+
 my $osVersion     = `uname -a`;
 my $perl_path = $^X;
 if ($^O ne 'VMS') {
@@ -76,6 +115,7 @@ my $warnIsRootUser   = (! $loggedinuser);
 
 $template->param(
     kohaVersion   => $kohaVersion,
+    dbrev_applied => $dbrev_applied,
     osVersion     => $osVersion,
     perlPath      => $perl_path,
     perlVersion   => $perlVersion,

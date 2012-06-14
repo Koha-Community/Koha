@@ -42,6 +42,8 @@ my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
     }
 );
 
+C4::Auth::version_check($query, 'intranet', $cookie);
+
 my $all_koha_news   = &GetNewsToDisplay("koha");
 my $koha_news_count = scalar @$all_koha_news;
 

@@ -1,0 +1,27 @@
+-- This is an example for .sql file
+-- all the comments (ie= what is after --) will be identified as comment
+-- and displayed as such in Koha updatedatabase interface
+-- the .sql is easy: just define a separator if you plan to have multi-line SQL
+-- then, your sql
+
+-- basic example, without delimiter defined:
+UPDATE systempreferences SET value="something" WHERE variable="TestSysprefBasic";
+INSERT INTO itemtypes (itemtype, description) VALUES ('SAMPLE','A description');
+-- End of basic sample
+
+
+-- more complex example, with delimiter defined:
+DELIMITER //
+-- I've defined a delimiter
+-- so I can put SQL on many lines
+-- Note that in this sample, the ; at the end of each query is not required.
+CREATE TABLE `testtable1` (
+                    `entry` varchar(255) NOT NULL default '',
+                    `weight` bigint(20) NOT NULL default 0,
+                    PRIMARY KEY  (`entry`)
+                    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+//
+-- or on a single line, as previously
+-- without ; just for the sample
+INSERT INTO `systempreferences` VALUES ('TestSyspref1','2','set the level of error info sent to the browser. 0=none, 1=some, 2=most','0|1|2','Choice')
+//
