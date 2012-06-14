@@ -40,7 +40,7 @@ use C4::OAI::Sets;
 use vars qw($VERSION @ISA @EXPORT);
 
 BEGIN {
-    $VERSION = 3.07.00.049;
+    $VERSION = 3.08.01.002;
 
     require Exporter;
     @ISA = qw( Exporter );

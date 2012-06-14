@@ -32,7 +32,7 @@ use C4::Letters;
 use List::MoreUtils qw<any>;
 use C4::Dates qw(format_date_in_iso);
 use base qw(Exporter);
-our $VERSION = 3.07.00.049;
+our $VERSION = 3.08.01.002;
 our @EXPORT  = qw<
     ConnectSuggestionAndBiblio
     CountSuggestion

@@ -21,7 +21,7 @@ use constant LOG_SIP => "local6"; # Local alias for the logging facility
 use vars qw(@ISA $VERSION);
 
 BEGIN {
-    $VERSION = 3.07.00.049;
+    $VERSION = 3.08.01.002;
 	@ISA = qw(Net::Server::PreFork);
 }
 

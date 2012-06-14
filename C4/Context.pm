@@ -95,7 +95,7 @@ BEGIN {
     $ismemcached = $memcached->set('ismemcached','1');
     }
 
-    $VERSION = '3.07.00.049';
+    $VERSION = '3.08.01.002';
 }
 
 use DBI;

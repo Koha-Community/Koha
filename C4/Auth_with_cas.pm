@@ -32,7 +32,7 @@ use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $debug);
 
 BEGIN {
 	require Exporter;
-    $VERSION = 3.07.00.049;	# set the version for version checking
+    $VERSION = 3.08.01.002;	# set the version for version checking
 	$debug = $ENV{DEBUG};
 	@ISA    = qw(Exporter);
 	@EXPORT = qw(check_api_auth_cas checkpw_cas login_cas logout_cas login_cas_url);

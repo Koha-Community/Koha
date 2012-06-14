@@ -1,7 +1,7 @@
 package C4::Patroncards;
 
 BEGIN {
-    use version; our $VERSION = qv('3.07.00.049');
+    use version; our $VERSION = qv('3.08.01.002');
     use vars qw(@EXPORT @ISA);
     @ISA = qw(Exporter);
     our @EXPORT = qw(unpack_UTF8

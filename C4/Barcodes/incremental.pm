@@ -23,7 +23,7 @@ use warnings;
 use vars qw($VERSION @ISA);
 
 BEGIN {
-    $VERSION = 3.07.00.049;
+    $VERSION = 3.08.01.002;
     @ISA = qw(C4::Barcodes);
 }
 

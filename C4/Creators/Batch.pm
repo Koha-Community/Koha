@@ -9,7 +9,7 @@ use C4::Context;
 use C4::Debug;
 
 BEGIN {
-    use version; our $VERSION = qv('3.07.00.049');
+    use version; our $VERSION = qv('3.08.01.002');
 }
 
 sub _check_params {

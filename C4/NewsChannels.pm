@@ -26,7 +26,7 @@ use C4::Dates qw(format_date);
 use vars qw($VERSION @ISA @EXPORT);
 
 BEGIN { 
-    $VERSION = 3.07.00.049;	# set the version for version checking
+    $VERSION = 3.08.01.002;	# set the version for version checking
 	@ISA = qw(Exporter);
 	@EXPORT = qw(
 		&GetNewsToDisplay

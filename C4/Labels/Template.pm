@@ -8,7 +8,7 @@ use base qw(C4::Creators::Template);
 use autouse 'Data::Dumper' => qw(Dumper);
 
 BEGIN {
-    use version; our $VERSION = qv('3.07.00.049');
+    use version; our $VERSION = qv('3.08.01.002');
 }
 
 use constant TEMPLATE_TABLE => 'creator_templates';

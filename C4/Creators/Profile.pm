@@ -10,7 +10,7 @@ use C4::Debug;
 use C4::Creators::Lib 1.000000 qw(get_unit_values);
 
 BEGIN {
-    use version; our $VERSION = qv('3.07.00.049');
+    use version; our $VERSION = qv('3.08.01.002');
 }
 
 sub _check_params {

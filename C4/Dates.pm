@@ -31,7 +31,7 @@ use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 use vars qw($debug $cgi_debug);
 
 BEGIN {
-    $VERSION   = 3.07.00.049;
+    $VERSION   = 3.08.01.002;
     @ISA       = qw(Exporter);
     @EXPORT_OK = qw(format_date_in_iso format_date);
 }

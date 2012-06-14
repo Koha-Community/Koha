@@ -29,7 +29,7 @@ our ($csv, $AttributeTypes);
 
 BEGIN {
     # set the version for version checking
-    $VERSION = 3.07.00.049;
+    $VERSION = 3.08.01.002;
     @ISA = qw(Exporter);
     @EXPORT_OK = qw(GetBorrowerAttributes GetBorrowerAttributeValue CheckUniqueness SetBorrowerAttributes
                     extended_attributes_code_value_arrayref extended_attributes_merge

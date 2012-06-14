@@ -34,7 +34,7 @@ use vars qw($debug $cgi_debug);	# from C4::Debug, of course
 use vars qw($max $prefformat);
 
 BEGIN {
-    $VERSION = 3.07.00.049;
+    $VERSION = 3.08.01.002;
 	require Exporter;
     @ISA = qw(Exporter);
     @EXPORT_OK = qw();

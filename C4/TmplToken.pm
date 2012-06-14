@@ -39,7 +39,7 @@ This is a class representing a token scanned from an HTML::Template .tmpl file.
 
 ###############################################################################
 
-$VERSION = 3.07.00.049;
+$VERSION = 3.08.01.002;
 
 @ISA = qw(Exporter);
 @EXPORT_OK = qw();

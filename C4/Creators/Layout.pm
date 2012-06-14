@@ -10,7 +10,7 @@ use C4::Debug;
 use C4::Creators::PDF;
 
 BEGIN {
-    use version; our $VERSION = qv('3.07.00.049');
+    use version; our $VERSION = qv('3.08.01.002');
 }
 
 # FIXME: Consider this style parameter verification instead...

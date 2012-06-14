@@ -22,7 +22,7 @@ use warnings;
 use MARC::Record;
 use MARC::Field;
 
-our $VERSION = 3.07.00.049;
+our $VERSION = 3.08.01.002;
 
 =head1 NAME
 

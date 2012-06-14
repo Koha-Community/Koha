@@ -24,7 +24,7 @@ use UNIVERSAL qw(can);	# make sure this is *after* C4 modules.
 use vars qw(@ISA $VERSION @EXPORT_OK);
 
 BEGIN {
-    $VERSION = 3.07.00.049;
+    $VERSION = 3.08.01.002;
 	@ISA = qw(Exporter);
 	@EXPORT_OK = qw(handle);
 }
