@@ -6,16 +6,16 @@
 use strict;
 use warnings;
 
-use Test::More tests => 15;
+use Test::More tests => 16;
 
 BEGIN {
         use_ok('C4::Creators');
         use_ok('C4::Creators::PDF');
 }
 
-my $pdf_creator = C4::Creators::PDF->new('test.pdf' => '', InitVars => 0);
+my $pdf_creator = C4::Creators::PDF->new(InitVars => 0);
 ok($pdf_creator, "testing new() works");
-if (-e 'test.pdf') {
+if (-e $pdf_creator->{filename}) {
   pass('testing pdf file created');
 }
 else {
@@ -40,6 +40,12 @@ is($pdf_creator->StrWidth("test", "H", 12), '19.344', "testing StrWidth() return
 is($result[0], '10', "testing Text() writes from a given x-value");
 is($result[1], '29.344', "testing Text() writes to the correct x-value");
 
+open(my $fh, '>', 'test.pdf');
+select $fh;
+
 ok($pdf_creator->End(), "testing End() works");
+
+close($fh);
+ok( -s 'test.pdf', 'test.pdf created' );
 
 unlink 'test.pdf';
