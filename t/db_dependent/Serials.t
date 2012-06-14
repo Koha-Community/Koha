@@ -9,7 +9,7 @@ use YAML;
 
 use C4::Serials;
 use C4::Debug;
-use Test::More tests => 33;
+use Test::More tests => 34;
 
 BEGIN {
     use_ok('C4::Serials');
