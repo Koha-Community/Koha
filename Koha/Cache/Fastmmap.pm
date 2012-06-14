@@ -35,7 +35,7 @@ sub _cache_handle {
             cache_size => $params->{'cachesize'} || '1m',
         );
     } else {
-        return undef;
+        return;
     }
 }
 
