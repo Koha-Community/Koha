@@ -58,7 +58,7 @@ my $show_marc = $query->param('marc') || 1; # Currently only MARC view is availa
 # open template
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "opac-authoritiesdetail.tmpl",
+        template_name   => $show_marc ? "opac-auth-MARCdetail.tt" : "opac-auth-detail.tt",
         query           => $query,
         type            => "opac",
         authnotrequired => ( C4::Context->preference("OpacPublic") ? 1 : 0 ),
