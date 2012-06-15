@@ -173,9 +173,9 @@ sub days_between {
     my $dateend_temp = $end_dt->clone();
 
     # start and end should not be closed days
-    my $duration = $dateend_temp->delta_days($datestart_temp);
-    $datestart_temp->truncate( to => 'days' );
-    $dateend_temp->truncate( to => 'days' );
+    $datestart_temp->truncate( to => 'day' );
+    $dateend_temp->truncate( to => 'day' );
+    my $duration = $dateend_temp - $datestart_temp;
     while ( DateTime->compare( $datestart_temp, $dateend_temp ) == -1 ) {
         $datestart_temp->add( days => 1 );
         if ( $self->is_holiday($datestart_temp) ) {
