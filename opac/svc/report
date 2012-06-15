@@ -28,18 +28,24 @@ use CGI;
 use Koha::Cache;
 
 my $query  = CGI->new();
-my $report = $query->param('id');
+my $report_id = $query->param('id');
+my $report_name = $query->param('name');
 
 my $cache;
+my $sql;
+my $type;
+my $notes;
+my $cache_expiry;
+my $public;
 
-my ( $sql, $type, $name, $notes, $cache_expiry, $public ) =
-  get_saved_report($report);
+( $sql, $type, $report_name, $notes, $cache_expiry, $public, $report_id ) =
+  get_saved_report($report_name ? { 'name' => $report_name } : { 'id' => $report_id } );
 die "Sorry this report is not public\n" unless $public;
 
 if (Koha::Cache->is_cache_active) {
     $cache = Koha::Cache->new(
     );
-    my $page = $cache->get_from_cache("opac:report:$report");
+    my $page = $cache->get_from_cache("opac:report:$report_id");
     if ($page) {
         print $query->header;
         print $page;
@@ -48,13 +54,15 @@ if (Koha::Cache->is_cache_active) {
 }
 
 print $query->header;
-my $offset = 0;
-my $limit  = C4::Context->preference("SvcMaxReportRows") || 10;
-my ( $sth, $errors ) = execute_query( $sql, $offset, $limit );
-my $lines     = $sth->fetchall_arrayref;
-my $json_text = to_json($lines);
-print $json_text;
+if ($sql) {
+    my $offset = 0;
+    my $limit  = C4::Context->preference("SvcMaxReportRows") || 10;
+    my ( $sth, $errors ) = execute_query( $sql, $offset, $limit );
+    my $lines     = $sth->fetchall_arrayref;
+    my $json_text = to_json($lines);
+    print $json_text;
 
-if (Koha::Cache->is_cache_active) {
-    $cache->set_in_cache( "opac:report:$report", $json_text, $cache_expiry );
+    if (Koha::Cache->is_cache_active) {
+        $cache->set_in_cache( "opac:report:$report_id", $json_text, $cache_expiry );
+    }
 }

@@ -607,13 +607,31 @@ sub get_saved_reports {
 }
 
 sub get_saved_report {
-    my ($id)  = @_;
     my $dbh   = C4::Context->dbh();
-    my $query = " SELECT * FROM saved_sql WHERE id = ?";
-    my $sth   = $dbh->prepare($query);
-    $sth->execute($id);
+    my $query;
+    my $sth;
+    my $report_arg;
+    if ($#_ == 0 && ref $_[0] ne 'HASH') {
+        ($report_arg) = @_;
+        $query = " SELECT * FROM saved_sql WHERE id = ?";
+    } elsif (ref $_[0] eq 'HASH') {
+        my ($selector) = @_;
+        if ($selector->{name}) {
+            $query = " SELECT * FROM saved_sql WHERE report_name = ?";
+            $report_arg = $selector->{name};
+        } elsif ($selector->{id} || $selector->{id} eq '0') {
+            $query = " SELECT * FROM saved_sql WHERE id = ?";
+            $report_arg = $selector->{id};
+        } else {
+            return;
+        }
+    } else {
+        return;
+    }
+    $sth   = $dbh->prepare($query);
+    $sth->execute($report_arg);
     my $data = $sth->fetchrow_hashref();
-    return ( $data->{'savedsql'}, $data->{'type'}, $data->{'report_name'}, $data->{'notes'}, $data->{'cache_expiry'}, $data->{'public'} );
+    return ( $data->{'savedsql'}, $data->{'type'}, $data->{'report_name'}, $data->{'notes'}, $data->{'cache_expiry'}, $data->{'public'}, $data->{'id'} );
 }
 
 =item create_compound($masterID,$subreportID)
