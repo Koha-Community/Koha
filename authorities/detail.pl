@@ -172,8 +172,7 @@ my ($template, $loggedinuser, $cookie)
 
 my $authid = $query->param('authid');
 
-# Using default authtypecode, so all fields are seen
-my $authtypecode = '';
+my $authtypecode = GetAuthTypeCode($authid);
 $tagslib = &GetTagsLabels(1,$authtypecode);
 
 # Build list of authtypes for showing them
