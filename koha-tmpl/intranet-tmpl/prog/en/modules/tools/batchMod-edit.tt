@@ -14,33 +14,39 @@ var allColumns = new Array([% FOREACH item_header_loo IN item_header_loop %]'[% 
 for( x=0; x<allColumns.length; x++ ){
   allColumns[x] = Number(allColumns[x]) + 2;
 }
-$("#itemst").tablesorter({ widgets : ['zebra'], headers: {0:{sorter: false}} });
-$("#selectallbutton").click(function() {
-    $("#itemst").find("input:checkbox").each(function() {
- $(this).attr("checked", "checked");
-    });
+$(document).ready(function(){
+  $("#itemst").tablesorter({ widgets : ['zebra'], headers: {0:{sorter: false}} });
+  $("#selectallbutton").click(function() {
+      $("#itemst").find("input:checkbox").each(function() {
+   $(this).attr("checked", "checked");
+      });
+  });
+  $("#clearallbutton").click(function() {
+      $("#itemst").find("input:checkbox").each(function() {
+   $(this).removeAttr("checked");
+      });
+  });
+  $("input[name='disable_input']").click(function() {
+      var row = $(this).attr("id");
+      row = row.replace("row","hint");
+      var subfield = $(this).next();
+      if ($(this).is(":checked")){
+          $(this).val($(this).siblings("[name='subfield']").val());
+          $(subfield).attr('disabled',true);
+          $("#"+row).html(_("This subfield will be deleted"));
+      } else {
+          $(subfield).removeAttr('disabled');
+          $("#"+row).html("");
+      }
+  });
 });
-$("#clearallbutton").click(function() {
-    $("#itemst").find("input:checkbox").each(function() {
- $(this).removeAttr("checked");
-    });
-});
-$("input[name='disable_input']").click(function() {
-    if ($(this).is(":checked")){
- $(this).val($(this).siblings("[name='subfield']").val());
- $(this).siblings().attr('disabled',true);
-    }
-    else {
- $(this).siblings().removeAttr('disabled');
-    }
-});
-
 //]]>
 </script>
 <script type="text/javascript" src="[% themelang %]/js/pages/batchMod.js"></script>
 <!--[if IE]>
 <style type="text/css">#selections { display: none; }</style>
 <![endif]-->
+<style type="text/css">input[type=checkbox]{ margin : 0 .5em; }</style>
 <link type="text/css" rel="stylesheet" href="[% themelang %]/css/addbiblio.css" />
 </head>
 <body id="tools_batchMod-edit" class="tools">
@@ -138,17 +144,20 @@ $("input[name='disable_input']").click(function() {
 
 <div id="cataloguing_additem_newitem">
         <h2>Edit Items</h2>
-        <div class="hint">Checking the box right next the subfield label will disable the entry and delete the values of that subfield on all selected items</div>
+        <div class="hint">Checking the box right next the subfield label will disable the entry and delete the subfield on all selected items. Leave fields blank to make no change.</div>
   <fieldset class="rows">
   <ol>
         [% FOREACH ite IN item %]
                <li><div class="subfield_line" style="[% ite.visibility %]" id="subfield[% ite.tag %][% ite.subfield %][% ite.random %]">
-               <label>[% ite.subfield %] - 
-          [% IF ( ite.mandatory ) %]<b>[% END %]
+              [% IF ( ite.mandatory ) %]
+              <label class="required" for="tag_[% ite.tag %]_subfield_[% ite.subfield %]_[% ite.random %]">
+              [% ELSE %]
+              <label for="tag_[% ite.tag %]_subfield_[% ite.subfield %]_[% ite.random %]">
+              [% END %]
+              [% ite.subfield %] -
           [% ite.marc_lib %]
-          [% IF ( ite.mandatory ) %] *</b>[% END %]
          </label>
-                <input type="checkbox" title="check to delete subfield [% ite.subfield %]" name="disable_input" value="[% ite.subfield %]" />
+                [% UNLESS ( ite.mandatory ) %]<input type="checkbox" id="row[% ite.tag %][% ite.subfield %][% ite.random %]" title="Check to delete subfield [% ite.subfield %]" name="disable_input" value="[% ite.subfield %]" />[% ELSE %]<span class="required">Required</span>[% END %]
                 [% ite.marc_value %]
                 <input type="hidden" name="tag"       value="[% ite.tag %]" />
                 <input type="hidden" name="subfield"       value="[% ite.subfield %]" />
@@ -156,7 +165,7 @@ $("input[name='disable_input']").click(function() {
                 [% IF ( ite.repeatable ) %]
                     <span class="buttonPlus" onclick="CloneSubfield('subfield[% ite.tag %][% ite.subfield %][% ite.random %]')">+</span>
                 [% END %]
-   
+                <span class="hint" id="hint[% ite.tag %][% ite.subfield %][% ite.random %]"></span>
             </div></li>
         [% END %]
     </ol>
