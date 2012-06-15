@@ -92,8 +92,7 @@ if ( C4::Context->preference("OPACLocalCoverImages") ) {
 }
 print $data->header(
     -type            => $mimetype,
-    -'Cache-Control' => 'no-store',
-    -expires         => 'now',
+    -expires         => '+30m',
     -Content_Length  => length($image)
 ), $image;
 
