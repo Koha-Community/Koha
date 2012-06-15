@@ -6002,6 +6002,15 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.09.00.XXX";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("UPDATE systempreferences set value=0 WHERE variable='OPACItemsResultsDisplay' AND value='statuses'");
+    $dbh->do("UPDATE systempreferences set value=1 WHERE variable='OPACItemsResultsDisplay' AND value='itemdetails'");
+    $dbh->do("UPDATE systempreferences SET explanation='If No, show only the status of items in result list. If Yes, show full location of items (branchlocation+callnumber) as in staff interface',options=NULL,type='YesNo' WHERE variable='OPACItemsResultsDisplay'");
+    print "Upgrade to $DBversion done (Fixes Bug 5409, Set the syspref value to 1 if it is itemdetails and 0 if it is statuses, leaving it alone if it is already 1 or 0 and change the type of the syspref to YesNo.)\n";
+    SetVersion ($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)
