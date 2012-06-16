@@ -89,7 +89,10 @@
             <p>The subscription expired on [% subscription_LOO.histenddate %]</p>
         [% END %]
 		</p>
-    <h4>[% subscription_LOO.branchname %] [% subscription_LOO.notes %]</h4>
+    <h4>[% subscription_LOO.branchname %]</h4>
+    [% IF ( subscription_LOO.notes ) %]
+        <p>[% subscription_LOO.notes FILTER html_line_break %]</p>
+    [% END %]
   [% IF ( subscription_LOO.recievedlist ) %]
     <h5>Available issues</h5>
     <p>
@@ -105,7 +108,7 @@
     [% IF ( subscription_LOO.opacnote ) %]
         <h5>Issues summary</h5>
         <p>
-            [% subscription_LOO.opacnote %]
+            [% subscription_LOO.opacnote FILTER html_line_break %]
         </p>
     [% END %]
     [% IF ( subscription_LOO.letter ) %]
