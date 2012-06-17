@@ -28,4 +28,3 @@
 </div>
 </div>
 <!-- End Members Resident Search Box -->
-curr
