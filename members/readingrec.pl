@@ -84,7 +84,8 @@ foreach my $issue (@{$issues}){
 	$line{barcode}         = $issue->{'barcode'};
 	$line{volumeddesc}     = $issue->{'volumeddesc'};
 	push(@loop_reading,\%line);
-    if (($input->param('op') eq 'export_barcodes') and ($today eq $issue->{'returndate'})) {
+    my $return_dt = Koha::DateUtils::dt_from_string($issue->{'returndate'}, 'iso');
+    if ( ( $input->param('op') eq 'export_barcodes' ) and ( $today eq $return_dt->ymd() ) ) {
         push( @barcodes, $issue->{'barcode'} );
     }
 }
