@@ -215,10 +215,8 @@ sub build_authorized_values_list {
                         ($class_source eq $default_source);
             push @authorised_values, $class_source;
             $authorised_lib{$class_source} = $class_sources->{$class_source}->{'description'};
-            $value = $class_source unless ($value);
-            $value = $default_source unless ($value);
         }
-        #---- "true" authorised value
+        $value = $default_source unless $value;
     }
     else {
         $authorised_values_sth->execute(
