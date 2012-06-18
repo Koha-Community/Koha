@@ -104,9 +104,10 @@ sub output {
       ( $self->{interface} ne 'intranet' ? '/opac-tmpl' : '/intranet-tmpl' );
     $vars->{theme} = $self->theme;
     $vars->{opaccolorstylesheet} =
-      C4::Context->preference('opaccolorstylesheet');
+        C4::Context->preference('opaccolorstylesheet');
     $vars->{opacsmallimage} = C4::Context->preference('opacsmallimage');
-    $vars->{opacstylesheet} = C4::Context->preference('opacstylesheet');
+    $vars->{opaclayoutstylesheet} =
+        C4::Context->preference('opaclayoutstylesheet');
 
     # add variables set via param to $vars for processing
     # and clean any utf8 mess
@@ -211,7 +212,6 @@ sub _get_template_file {
     my $is_intranet = $interface eq 'intranet';
     my $htdocs = C4::Context->config($is_intranet ? 'intrahtdocs' : 'opachtdocs');
     my ($theme, $lang) = themelanguage($htdocs, $tmplbase, $interface, $query);
-    my $opacstylesheet = C4::Context->preference('opacstylesheet');
 
     # if the template doesn't exist, load the English one as a last resort
     my $filename = "$htdocs/$theme/$lang/modules/$tmplbase";
@@ -227,7 +227,6 @@ sub gettemplate {
     my ( $tmplbase, $interface, $query ) = @_;
     ($query) or warn "no query in gettemplate";
     my $path = C4::Context->preference('intranet_includes') || 'includes';
-    my $opacstylesheet = C4::Context->preference('opacstylesheet');
     $tmplbase =~ s/\.tmpl$/.tt/;
     my ($htdocs, $theme, $lang, $filename)
        =  _get_template_file($tmplbase, $interface, $query);

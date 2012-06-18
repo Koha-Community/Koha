@@ -335,7 +335,6 @@ $tabsysprefs{opaccredits}                = "OPAC";
 $tabsysprefs{opaclayoutstylesheet}       = "OPAC";
 $tabsysprefs{OpacNav}                    = "OPAC";
 $tabsysprefs{opacsmallimage}             = "OPAC";
-$tabsysprefs{opacstylesheet}             = "OPAC";
 $tabsysprefs{opacthemes}                 = "OPAC";
 $tabsysprefs{opacuserjs}                 = "OPAC";
 $tabsysprefs{opacheader}                 = "OPAC";
