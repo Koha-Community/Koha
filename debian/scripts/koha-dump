@@ -44,7 +44,9 @@ mysqlhost="$( xmlstarlet sel -t -v 'yazgfs/config/hostname' $kohaconfig )"
 mysqldb="$( xmlstarlet sel -t -v 'yazgfs/config/database' $kohaconfig )"
 mysqluser="$( xmlstarlet sel -t -v 'yazgfs/config/user' $kohaconfig )"
 mysqlpass="$( xmlstarlet sel -t -v 'yazgfs/config/pass' $kohaconfig )"
-dbdump="/var/spool/koha/$name/$name-$date.sql.gz"
+backupdir="$( xmlstarlet sel -t -v 'yazgfs/config/backupdir' $kohaconfig )"
+[ -z "$backupdir" ] && backupdir="/var/spool/koha/$name"
+dbdump="$backupdir/$name-$date.sql.gz"
 echo "* DB to $dbdump"
 mysqldump --databases --host="$mysqlhost" \
     --user="$mysqluser" --password="$mysqlpass" "$mysqldb" | 
@@ -54,7 +56,7 @@ chmod g+r "$dbdump"
 
 
 # Dump configs, logs, etc.
-metadump="/var/spool/koha/$name/$name-$date.tar.gz"
+metadump="$backupdir/$name-$date.tar.gz"
 echo "* configs, logs to $metadump"
 tar -C / -czf "$metadump" \
     "etc/koha/sites/$name" \

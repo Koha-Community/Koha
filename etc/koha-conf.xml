@@ -282,6 +282,12 @@ __PAZPAR2_TOGGLE_XML_POST__
  <intrahtdocs>__INTRANET_TMPL_DIR__</intrahtdocs>
  <includes>__INTRANET_TMPL_DIR__/prog/en/includes/</includes>
  <logdir>__LOG_DIR__</logdir>
+ <backupdir>__BACKUP_DIR__</backupdir>
+ <!-- Enable the two following to allow superlibrarians to download
+      database and configuration dumps (respectively) from the Export
+      tool -->
+ <backup_db_via_tools>0</backup_db_via_tools>
+ <backup_conf_via_tools>0</backup_conf_via_tools>
  <pazpar2url>http://__PAZPAR2_HOST__:__PAZPAR2_PORT__/search.pz2</pazpar2url>
  <install_log>__MISC_DIR__/koha-install-log</install_log>
  <useldapserver>0</useldapserver><!-- see C4::Auth_with_ldap for extra configs you must add if you want to turn this on -->

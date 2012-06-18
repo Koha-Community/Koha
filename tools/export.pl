@@ -26,6 +26,7 @@ use C4::AuthoritiesMarc; # GetAuthority
 use CGI;
 use C4::Koha;    # GetItemTypes
 use C4::Branch;  # GetBranches
+use Data::Dumper;
 
 my $query = new CGI;
 my $op=$query->param("op") || '';
@@ -33,7 +34,7 @@ my $filename=$query->param("filename");
 my $dbh=C4::Context->dbh;
 my $marcflavour = C4::Context->preference("marcflavour");
 
-my ($template, $loggedinuser, $cookie)
+my ($template, $loggedinuser, $cookie, $flags)
     = get_template_and_user
     (
         {
@@ -57,10 +58,23 @@ my ($template, $loggedinuser, $cookie)
     	$branch = C4::Context->userenv->{'branch'};
 	}
 
+my $backupdir = C4::Context->config('backupdir');
+
 if ($op eq "export") {
+    my $charset  = 'utf-8';
+    my $mimetype = 'application/octet-stream';
     binmode STDOUT, ':encoding(UTF-8)';
-	print $query->header(   -type => 'application/octet-stream', 
-                            -charset => 'utf-8',
+    if ( $filename =~ m/\.gz$/ ) {
+        $mimetype = 'application/x-gzip';
+        $charset = '';
+        binmode STDOUT;
+    } elsif ( $filename =~ m/\.bz2$/ ) {
+        $mimetype = 'application/x-bzip2';
+        binmode STDOUT;
+        $charset = '';
+    }
+    print $query->header(   -type => $mimetype,
+                            -charset => $charset,
                             -attachment=>$filename);
      
     my $record_type        = $query->param("record_type");
@@ -158,6 +172,30 @@ if ($op eq "export") {
             $sql_query .= " AND auth_header.authtypecode = ? ";
             push @sql_params, $authtype;
         }
+    }
+    elsif ( $record_type eq 'db' ) {
+        my $successful_export;
+        if ( $flags->{superlibrarian} && C4::Context->config('backup_db_via_tools') ) {
+            $successful_export = download_backup( { directory => "$backupdir", extension => 'sql', filename => "$filename" } )
+        }
+        unless ( $successful_export ) {
+            warn "A suspicious attempt was made to download the db at '$filename' by someone at " . $query->remote_host() . "\n";
+        }
+        exit;
+    }
+    elsif ( $record_type eq 'conf' ) {
+        my $successful_export;
+        if ( $flags->{superlibrarian} && C4::Context->config('backup_conf_via_tools') ) {
+            $successful_export = download_backup( { directory => "$backupdir", extension => 'tar', filename => "$filename" } )
+        }
+        unless ( $successful_export ) {
+            warn "A suspicious attempt was made to download the configuration at '$filename' by someone at " . $query->remote_host() . "\n";
+        }
+        exit;
+    }
+    else {
+        # Someone is trying to mess us up
+        exit;
     }
 
     my $sth = $dbh->prepare($sql_query);
@@ -259,6 +297,16 @@ else {
         push @authtypesloop, \%row;
     }
 
+    if ( $flags->{superlibrarian} && C4::Context->config('backup_db_via_tools') && $backupdir && -d $backupdir ) {
+        $template->{VARS}->{'allow_db_export'} = 1;
+        $template->{VARS}->{'dbfiles'} = getbackupfilelist( { directory => "$backupdir", extension => 'sql' } );
+    }
+
+    if ( $flags->{superlibrarian} && C4::Context->config('backup_conf_via_tools') && $backupdir && -d $backupdir ) {
+        $template->{VARS}->{'allow_conf_export'} = 1;
+        $template->{VARS}->{'conffiles'} = getbackupfilelist( { directory => "$backupdir", extension => 'tar' } );
+    }
+
     $template->param(
         branchloop               => \@branchloop,
         itemtypeloop             => \@itemtypesloop,
@@ -267,4 +315,39 @@ else {
     );
 
     output_html_with_http_headers $query, $cookie, $template->output;
+}
+
+sub getbackupfilelist {
+    my $args = shift;
+    my $directory = $args->{directory};
+    my $extension = $args->{extension};
+    my @files;
+
+    if ( opendir(my $dir, $directory) ) {
+        while (my $file = readdir($dir)) {
+            next unless ( $file =~ m/\.$extension(\.(gz|bz2|xz))?/ );
+            push @files, $file if ( -f "$backupdir/$file" && -r "$backupdir/$file" );
+        }
+        closedir($dir);
+    }
+    return \@files;
+}
+
+sub download_backup {
+    my $args = shift;
+    my $directory = $args->{directory};
+    my $extension = $args->{extension};
+    my $filename  = $args->{filename};
+
+    return unless ( $directory && -d $directory );
+    return unless ( $filename =~ m/$extension(\.(gz|bz2|xz))?$/ && not $filename =~ m#(^\.\.|/)# );
+    $filename = "$directory/$filename";
+    return unless ( -f $filename && -r $filename );
+    return unless ( open(my $dump, '<', $filename) );
+    binmode $dump;
+    while (read($dump, my $data, 64 * 1024)) {
+        print $data;
+    }
+    close ($dump);
+    return 1;
 }

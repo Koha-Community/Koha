@@ -226,6 +226,10 @@ command-line, e.g., READMEs.
 
 Directory for Apache and Zebra logs produced by Koha.
 
+=item BACKUP_DIR
+
+Directory for backup files produced by Koha.
+
 =item PAZPAR2_CONF_DIR
 
 Directory for PazPar2 configuration files.
@@ -293,6 +297,7 @@ my $target_map = {
   './services'                  => 'INTRANET_CGI_DIR',
   './skel'                      => 'NONE',
   './skel/var/log/koha'         => { target => 'LOG_DIR', trimdir => -1 },
+  './skel/var/spool/koha'       => { target => 'BACKUP_DIR', trimdir => -1 },
   './skel/var/run/koha/zebradb' => { target => 'ZEBRA_RUN_DIR', trimdir => -1 },
   './skel/var/lock/koha/zebradb/authorities' => { target => 'ZEBRA_LOCK_DIR', trimdir => 6 },
   './skel/var/lib/koha/zebradb/authorities/key'  => { target => 'ZEBRA_DATA_DIR', trimdir => 6 },
@@ -548,6 +553,7 @@ my %test_suite_override_dirs = (
     KOHA_CONF_DIR  => ['etc'],
     ZEBRA_CONF_DIR => ['etc', 'zebradb'],
     LOG_DIR        => ['var', 'log'],
+    BACKUP_DIR     => ['var', 'spool'],
     SCRIPT_DIR     => ['bin'],
     ZEBRA_LOCK_DIR => ['var', 'lock', 'zebradb'],
     ZEBRA_DATA_DIR => ['var', 'lib', 'zebradb'],
@@ -1227,6 +1233,7 @@ sub get_target_directories {
         $dirmap{'DOC_DIR'} = File::Spec->catdir(@basedir, $package, 'doc');
         $dirmap{'ZEBRA_LOCK_DIR'} = File::Spec->catdir(@basedir, $package, 'var', 'lock', 'zebradb');
         $dirmap{'LOG_DIR'} =  File::Spec->catdir(@basedir, $package, 'var', 'log');
+        $dirmap{'BACKUP_DIR'} =  File::Spec->catdir(@basedir, $package, 'var', 'spool');
         $dirmap{'ZEBRA_DATA_DIR'} =  File::Spec->catdir(@basedir, $package, 'var', 'lib', 'zebradb');
         $dirmap{'ZEBRA_RUN_DIR'} =  File::Spec->catdir(@basedir, $package, 'var', 'run', 'zebradb');
     } elsif ($mode eq 'dev') {
@@ -1256,6 +1263,7 @@ sub get_target_directories {
         $dirmap{'DOC_DIR'} = File::Spec->catdir(@basedir, $package, 'doc');
         $dirmap{'ZEBRA_LOCK_DIR'} = File::Spec->catdir(@basedir, $package, 'var', 'lock', 'zebradb');
         $dirmap{'LOG_DIR'} =  File::Spec->catdir(@basedir, $package, 'var', 'log');
+        $dirmap{'BACKUP_DIR'} =  File::Spec->catdir(@basedir, $package, 'var', 'spool');
         $dirmap{'ZEBRA_DATA_DIR'} =  File::Spec->catdir(@basedir, $package, 'var', 'lib', 'zebradb');
         $dirmap{'ZEBRA_RUN_DIR'} =  File::Spec->catdir(@basedir, $package, 'var', 'run', 'zebradb');
     } else {
@@ -1277,6 +1285,7 @@ sub get_target_directories {
         $dirmap{'DOC_DIR'} = File::Spec->catdir(@basedir, $package, 'doc');
         $dirmap{'ZEBRA_LOCK_DIR'} = File::Spec->catdir(File::Spec->rootdir(), 'var', 'lock', $package, 'zebradb');
         $dirmap{'LOG_DIR'} =  File::Spec->catdir(File::Spec->rootdir(), 'var', 'log', $package);
+        $dirmap{'BACKUP_DIR'} =  File::Spec->catdir(File::Spec->rootdir(), 'var', 'spool', $package);
         $dirmap{'ZEBRA_DATA_DIR'} =  File::Spec->catdir(File::Spec->rootdir(), 'var', 'lib', $package, 'zebradb');
         $dirmap{'ZEBRA_RUN_DIR'} =  File::Spec->catdir(File::Spec->rootdir(), 'var', 'run', $package, 'zebradb');
     }

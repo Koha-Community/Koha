@@ -17,7 +17,7 @@
 # Daily cron job for koha.
 # - dump all sites, except one called 'demo'
 
-dirname="/var/spool/koha"
+dirname=""
 days="2"
 
 show_help() {
@@ -58,10 +58,15 @@ done
 for name in $(koha-list --enabled | grep -Fxv demo)
 do
     koha-dump "$name" > /dev/null
+    if [ -z "$dirname"]; then
+        backupdir="$( xmlstarlet sel -t -v 'yazgfs/config/backupdir' /etc/koha/sites/$name/koha-conf.xml )";
+    else
+        backupdir="$dirname/$name";
+    fi
 
     # Remove old dump files.
     # FIXME: This could probably be replaced by one line of perl.
-    ls "$dirname/$name/" | 
+    ls "$backupdir/" |
     sed "s:^$name-\([0-9-]*\)\.\(sql\|tar\)\.gz$:\1:" |
     sort -u |
     tac |
@@ -69,8 +74,8 @@ do
     tac |
     while read date
     do
-        tardump="$dirname/$name/$name-$date.tar.gz"
-        sqldump="$dirname/$name/$name-$date.sql.gz"
+        tardump="$backupdir/$name-$date.tar.gz"
+        sqldump="$backupdir/$name-$date.sql.gz"
         if [ -e "$tardump" ] && [ -e "$sqldump" ]
         then
             rm "$tardump"

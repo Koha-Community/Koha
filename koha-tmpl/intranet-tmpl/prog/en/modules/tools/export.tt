@@ -26,6 +26,12 @@ $(document).ready(function() {
 <ul>
 <li><a href="#bibs">Export bibliographic records</a></li>
 <li><a href="#auths">Export authority records</a></li>
+[% IF ( allow_db_export ) %]
+<li><a href="#db">Export database</a></li>
+[% END %]
+[% IF ( allow_conf_export ) %]
+<li><a href="#conf">Export configuration</a></li>
+[% END %]
 </ul>
 <div id="bibs">
 <p>
@@ -184,6 +190,58 @@ $(document).ready(function() {
     <fieldset class="action"><input type="submit" value="Export authority records" class="button" /></fieldset>
 </form>
 </div>
+
+[% IF ( allow_db_export ) %]
+<div id="db">
+<form method="post" action="/cgi-bin/koha/tools/export.pl">
+    <p><b>Note : This export file will be very large, and is generated nightly.</b></p>
+    <fieldset class="rows">
+    <legend> Choose a file </legend>
+    [% IF ( dbfiles && (dbfiles.size > 0) ) %]
+        <ul>
+        [% FOREACH dbfile IN dbfiles %]
+            <li><input type="radio" name="filename" value="[% dbfile %]">[% dbfile %]</input></li>
+        [% END %]
+        </ul>
+    [% ELSE %]
+        <p>Unfortunately, no backups are available.</p>
+    [% END %]
+    </fieldset>
+
+    [% IF ( dbfiles && (dbfiles.size > 0) ) %]
+        <input type="hidden" name="op" value="export" />
+        <input type="hidden" name="record_type" value="db" />
+        <fieldset class="action"><input type="submit" value="Download database" class="button" /></fieldset>
+    [% END %]
+</form>
+</div>
+[% END %]
+
+[% IF ( allow_conf_export ) %]
+<div id="conf">
+<form method="post" action="/cgi-bin/koha/tools/export.pl">
+    <p><b>Note : This export file will be very large, and is generated nightly.</b></p>
+    <fieldset class="rows">
+    <legend> Choose a file </legend>
+    [% IF ( conffiles && (conffiles.size > 0) ) %]
+        <ul>
+        [% FOREACH conffile IN conffiles %]
+            <li><input type="radio" name="filename" value="[% conffile %]">[% conffile %]</input></li>
+        [% END %]
+        </ul>
+    [% ELSE %]
+        <p>Unfortunately, no backups are available.</p>
+    [% END %]
+    </fieldset>
+
+    [% IF ( conffiles && (conffiles.size > 0) ) %]
+        <input type="hidden" name="op" value="export" />
+        <input type="hidden" name="record_type" value="conf" />
+        <fieldset class="action"><input type="submit" value="Download configuration" class="button" /></fieldset>
+    [% END %]
+</form>
+</div>
+[% END %]
 
 </div>
 
