@@ -317,7 +317,7 @@ elsif ( $step && $step == 3 ) {
         my $find = "C4/Context.pm";
         my $path = $INC{$find};
         $path =~ s/\Q$find\E//;
-        $ENV{PERL5LIB} = $path;
+        $ENV{PERL5LIB} = "$path:$path/installer";
         warn "# plack? inserted PERL5LIB $ENV{PERL5LIB}\n";
     }
 
