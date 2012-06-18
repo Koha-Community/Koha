@@ -473,14 +473,14 @@ END_SQL
                 my $titles = "";
                 my @items = ();
                 
-                my $i = 0;
+                my $j = 0;
                 my $exceededPrintNoticesMaxLines = 0;
                 while ( my $item_info = $sth2->fetchrow_hashref() ) {
-                    if ( ( !$email || $nomail ) && $PrintNoticesMaxLines && $i >= $PrintNoticesMaxLines ) {
+                    if ( ( !$email || $nomail ) && $PrintNoticesMaxLines && $j >= $PrintNoticesMaxLines ) {
                       $exceededPrintNoticesMaxLines = 1;
                       last;
                     }
-                    $i++;
+                    $j++;
                     my @item_info = map { $_ =~ /^date|date$/ ? format_date( $item_info->{$_} ) : $item_info->{$_} || '' } @item_content_fields;
                     $titles .= join("\t", @item_info) . "\n";
                     $itemcount++;
@@ -644,7 +644,7 @@ substituted keys and values.
 sub parse_letter {
     my $params = shift;
     foreach my $required (qw( letter_code borrowernumber )) {
-        return unless exists $params->{$required};
+        return unless ( exists $params->{$required} && $params->{$required} );
     }
 
     my $substitute = $params->{'substitute'} || {};
