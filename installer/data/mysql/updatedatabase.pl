@@ -5621,6 +5621,20 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion ="3.09.00.XXX";
+if(C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    my $query = "SELECT value FROM systempreferences WHERE variable='opacstylesheet'";
+    my $remote= $dbh->selectrow_arrayref($query);
+    $dbh->do("DELETE from systempreferences WHERE variable='opacstylesheet'");
+    if($remote && $remote->[0]) {
+        $query="UPDATE systempreferences SET value=? WHERE variable='opaclayoutstylesheet'";
+        $dbh->do($query,undef,$remote->[0]);
+        print "NOTE: The URL of your remote opac css file has been moved to preference opaclayoutstylesheet.\n";
+    }
+    print "Upgrade to $DBversion done (BZ 8263: Make OPAC stylesheet preferences more consistent)\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)
