@@ -24,7 +24,10 @@ for x in HOME PERL5LIB KOHA_CONF ; do
 	fi;
 done;
 unset x;
-cd $PERL5LIB/C4/SIP;
+# you should hard code this if you have multiple directories
+# in your PERL5LIB
+PERL_MODULE_DIR=$PERL5LIB
+cd $PERL_MODULE_DIR/C4/SIP;
 echo;
 
 sipconfig=${1};
@@ -34,8 +37,8 @@ errfile=${3:-$HOME/sip.err};
 if [ $sipconfig ]; then
 	echo "Running with config file located in $sipconfig" ;
 	echo "Calling (backgrounded):";
-	echo "perl -I./ ./SIPServer.pm $sipconfig >>$outfile 2>>$errfile";
-	perl -I./ ./SIPServer.pm $sipconfig >>$outfile 2>>$errfile &
+    echo "perl ./SIPServer.pm $sipconfig >>$outfile 2>>$errfile";
+    perl ./SIPServer.pm $sipconfig >>$outfile 2>>$errfile &
 
 else
 	echo "Please specify a config file and try again."

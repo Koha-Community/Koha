@@ -2,6 +2,8 @@ package SIPServer;
 
 use strict;
 use warnings;
+use FindBin qw($Bin);
+use lib "$Bin";
 # use Exporter;
 use Sys::Syslog qw(syslog);
 use Net::Server::PreFork;
