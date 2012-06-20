@@ -5385,6 +5385,13 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.09.00.017";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES ('OpacNavRight', '', '70|10', 'Show the following HTML in the right hand column of the main page under the main login form', 'Textarea');");
+    print "Upgrade to $DBversion done (Add customizable OpacNavRight region to the OPAC main page)\n";
+    SetVersion ($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

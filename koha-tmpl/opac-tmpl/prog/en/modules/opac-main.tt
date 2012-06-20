@@ -12,17 +12,14 @@
 	<div class="yui-b">
      [% IF ( opacuserlogin ) %]
 	 [% IF ( loggedinusername ) %]
-	     <div id="loggedin" class="yui-g">
-	     <div>
+         <div id="loggedin" class="yui-ge">
 	 [% ELSE %]
-	     <div id="notloggedin" class="yui-ge">
-	     <div class="yui-u first">
+        <div id="notloggedin" class="yui-ge">
          [% END %]
      [% ELSE %]
-         <div id="notloggedin" class="yui-g">
-	 <div>
+        <div id="notloggedin" class="yui-ge">
     [% END %]
-	
+        <div class="yui-u first">
 	[% IF ( koha_news_count ) %]
 <div id="news" class="container">
     <table>
@@ -43,11 +40,12 @@
 
 </div>
 		
-	[% IF ( opacuserlogin ) %]
+    [% IF ( opacuserlogin || OpacNavRight ) %]
+    <div class="yui-u">
+    [% IF ( opacuserlogin ) %]
     [% UNLESS ( loggedinusername ) %]
     [% UNLESS ( casAuthentication ) %]
-    <div class="yui-u">
-	<div id="login" class="container">
+    <div id="login" class="container clearfix">
 	<form action="/cgi-bin/koha/opac-user.pl" method="post" name="auth" id="auth">
     <input type="hidden" name="koha_login_context" value="opac" />
 	<fieldset class="brief">
@@ -60,11 +58,12 @@
 	 </fieldset></fieldset>
 	</form>
 	</div>
-	 </div>
     [% END %]
     [% END %]
-	
-[% END %]
+    [% END %]
+    [% IF ( OpacNavRight ) %]<div id="opacrightsidebar" class="container">[% OpacNavRight %]</div>[% END %]
+    </div>
+    [% END %]
 </div>
 </div>
 </div>
