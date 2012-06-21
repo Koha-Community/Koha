@@ -1,5 +1,5 @@
 RELEASE NOTES FOR KOHA 3.6.6
-14 Jun 2012
+21 Jun 2012
 ========================================================================
 
 Koha is the first free and open source software library automation package 
@@ -24,18 +24,31 @@ Koha 3.6.6 is a bugfix/maintenance release.
 Highlights of 3.6.6
 ======================
 
+7016	blocker		CanBookBeReserved uses GetItemsInfo unnecessarily
+7354	critical	Can't edit local use system preferences
+7528	critical	amount subtracting 1 cent
+7927	critical	library not showing on subscription full history anymore
+2012	major		Add bilio crashes under no zebra
+3969	major		Budget Search Doesn't Work
 5327	major		Unit tests required for all C4 modules
+6496	major		authors appearing incorrectly in OPAC and Staff Client
+6931	major		hardcoded insert incompatible with UNIMARC
 
 
 Bugs fixed in 3.6.6
 ======================
 
 2399	normal		All status fields in the item edit interface offer two blank/null entries per dropdown instead of one
+3337	normal		RSS link is not correct
 3413	normal		repeatable tickbox not sticking 1st time round
 7722	normal		Insidious problem with searching
 7820	normal		Missing packages from install_misc/debian.packages
+7833	normal		unique holiday link broken
+7845	normal		Multiple 260s don't display properly in search results
+7922	normal		Fixing typos and improving translations in German sample data
 8022	normal		Permissions test doesn't check all languages
 8025	normal		Patron attribute not selected if value is zero
+1577	enhancement	installer and language
 7213	enhancement	Document /svc/ HTTP API and provide example command-line client
 7990	enhancement	bad html attribute into aqplan.tt : styl= insted of style=
 
@@ -131,18 +144,23 @@ new features in Koha 3.6:
 We thank the following individuals who contributed patches to
 Koha 3.6.6. 
 
-     1	Jared Camins-Esakov
+     1	Gaetan Boisson
+     3	Jared Camins-Esakov
      1	Colin Campbell
-     2	Chris Cormack
+     1	Galen Charlton
+     3	Chris Cormack
      1	Stéphane Delaune
      1	Jonathan Druart
      1	Magnus Enger
-     4	Katrin Fischer
-     1	Kyle M Hall
+    11	Katrin Fischer
+     2	Kyle M Hall
      1	Dobrica Pavlinusic
-     1	Paul Poulain
+     3	Paul Poulain
+     2	MJ Ray
      1	Adrien Saurat
-     1	Ian Walls
+     2	Robin Sheat
+     2	Ian Walls
+     1	mveron
 
 
 We regret any omissions.  If a contributor has been inadvertantly missed,
