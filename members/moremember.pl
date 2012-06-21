@@ -251,7 +251,7 @@ if ( @borrowernumbers ) {
 }
 my $roaddetails = &GetRoadTypeDetails( $data->{'streettype'} );
 my $today       = DateTime->now( time_zone => C4::Context->tz);
-$today->truncate(to => 'days');
+$today->truncate(to => 'day');
 my @borrowers_with_issues;
 my $overdues_exist = 0;
 my $totalprice = 0;
@@ -494,7 +494,7 @@ sub build_issue_data {
             $row{red} = 1;
         }
         if ($issuedate) {
-            $issuedate->truncate( to => 'days' );
+            $issuedate->truncate( to => 'day' );
             if ( DateTime->compare( $issuedate, $today ) == 0 ) {
                 $row{today} = 1;
             }
