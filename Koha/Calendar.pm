@@ -147,7 +147,7 @@ sub is_holiday {
     if ( $self->{weekly_closed_days}->[$dow] == 1 ) {
         return 1;
     }
-    $dt->truncate( to => 'days' );
+    $dt->truncate( to => 'day' );
     my $day   = $dt->day;
     my $month = $dt->month;
     if ( exists $self->{day_month_closed_days}->{$month}->{$day} ) {
@@ -189,8 +189,8 @@ sub hours_between {
     my $start_dt = $start_date->clone();
     my $end_dt = $end_date->clone();
     my $duration = $end_dt->delta_ms($start_dt);
-    $start_dt->truncate( to => 'days' );
-    $end_dt->truncate( to => 'days' );
+    $start_dt->truncate( to => 'day' );
+    $end_dt->truncate( to => 'day' );
     # NB this is a kludge in that it assumes all days are 24 hours
     # However for hourly loans the logic should be expanded to
     # take into account open/close times then it would be a duration

@@ -239,7 +239,7 @@ if ($noreport) {
 
 
     my $today_dt = DateTime->now(time_zone => C4::Context->tz);
-    $today_dt->truncate(to => 'minutes');
+    $today_dt->truncate(to => 'minute');
     my $todaysdate = $today_dt->strftime('%Y-%m-%d %H:%M');
 
     $bornamefilter =~s/\*/\%/g;
