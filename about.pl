@@ -108,6 +108,13 @@ foreach (@components) {
         $row = [];
     }
 }
+# Processing the last line (if there are any modules left)
+if (scalar(@$row) > 0) {
+    # Extending $row to the table size
+    $$row[3] = '';
+    # Pushing the last line
+    push (@$table, {row => $row});
+}
 ## ## $table
 
 $template->param( table => $table );

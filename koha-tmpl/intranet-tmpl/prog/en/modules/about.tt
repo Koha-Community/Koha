@@ -69,15 +69,22 @@
                     <th scope="row" style="background-color:#FFCB2F;font-weight:normal" title="Module upgrade needed">
                     [% END %]
                     [% ELSE %]
-                    [% IF ( ro.require ) %]
+                    [% IF ( ro.name == '' ) %]
+                    <th>
+                    [% ELSIF ( ro.require ) %]
                     <th scope="row" style="background-color:#FF8A8A;font-weight:bold;" title="Required module missing">
                     [% ELSE %]
                     <th scope="row" style="background-color:#FF8A8A;font-weight:normal" title="Optional module missing">
                     [% END %]
                     [% END %]
-                        [% ro.name %]
+                    [% ro.name %]
                     </th>
-                    [% IF ( ro.version ) %]<td>[% ro.version %][% ELSE %]<td style="font-weight:bold">Not Installed[% END %]</td>
+                    [% IF ( ro.name == '' ) %]
+                    <td>
+                    [% ELSIF ( ro.version ) %]
+                    <td>[% ro.version %]
+                    [% ELSE %]
+                    <td style="font-weight:bold">Not Installed [% END %]</td>
                     [% END %]
                 </tr>
                 [% END %]
