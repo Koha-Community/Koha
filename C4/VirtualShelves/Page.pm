@@ -252,7 +252,7 @@ sub shelfpage {
                 if ( $sortfield eq 'year' ) {
                     $yearsort = 'year';
                 }
-                ( $items, $totitems ) = GetShelfContents( $shelfnumber, $shelflimit, $shelfoffset );
+                ( $items, $totitems ) = GetShelfContents( $shelfnumber, $shelflimit, $shelfoffset, $sortfield eq 'year' ? 'copyrightdate' : $sortfield );
                 for my $this_item (@$items) {
                     my $biblionumber = $this_item->{'biblionumber'};
                     my $record = GetMarcBiblio($biblionumber);
