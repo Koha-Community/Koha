@@ -138,6 +138,9 @@ shift @lines; #remove header row
 
 foreach (@lines) {
     my ( $date, $desc, $tag ) = split(/\t/);
+    if(!$desc && $date=~ /(?<=\d{4})\s+/) {
+        ($date, $desc)= ($`, $');
+    }
     push(
         @rows2,
         {
