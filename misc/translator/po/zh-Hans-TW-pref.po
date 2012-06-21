@@ -1287,6 +1287,30 @@ msgid "circulation.pref#StaticHoldsQueueWeight# in that order."
 msgstr "依既定順序"
 
 # Circulation > Holds Policy
+msgid "circulation.pref#SuspendHoldsIntranet# Allow"
+msgstr "允許"
+
+# Circulation > Holds Policy
+msgid "circulation.pref#SuspendHoldsIntranet# Don't allow"
+msgstr "不允許"
+
+# Circulation > Holds Policy
+msgid "circulation.pref#SuspendHoldsIntranet# holds to be suspended from the intranet."
+msgstr "暫停網路預約"
+
+# Circulation > Holds Policy
+msgid "circulation.pref#SuspendHoldsOpac# Allow"
+msgstr "允許"
+
+# Circulation > Holds Policy
+msgid "circulation.pref#SuspendHoldsOpac# Don't allow"
+msgstr "不允許"
+
+# Circulation > Holds Policy
+msgid "circulation.pref#SuspendHoldsOpac# holds to be suspended from the OPAC."
+msgstr "暫停從線上公用目錄預約"
+
+# Circulation > Holds Policy
 msgid "circulation.pref#TransferWhenCancelAllWaitingHolds# Don't transfer"
 msgstr "不轉移"
 
@@ -1352,7 +1376,7 @@ msgstr "通知"
 
 # Circulation > Interface
 msgid "circulation.pref#WaitingNotifyAtCheckin# librarians of waiting holds for the patron whose items they are checking in."
-msgstr "圖書館員，讀者有待取之預約書"
+msgstr "讀者還書時，圖書館員提醒領取預約到館之書。"
 
 # Circulation > Self Checkout
 msgid "circulation.pref#WebBasedSelfCheck# Don't enable"
@@ -1364,7 +1388,7 @@ msgstr "啟用"
 
 # Circulation > Self Checkout
 msgid "circulation.pref#WebBasedSelfCheck# the web-based self checkout system. (available at: /cgi-bin/koha/sco/sco-main.pl)"
-msgstr "自助借出系統(使用此程式： /cgi-bin/koha/sco/sco-main.pl)"
+msgstr "網頁介面的自助借出系統(使用此程式： /cgi-bin/koha/sco/sco-main.pl)"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#canreservefromotherbranches# Allow"
@@ -1388,7 +1412,7 @@ msgstr "啟用"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#emailLibrarianWhenHoldIsPlaced# sending an email to the Koha administrator email address whenever a hold request is placed."
-msgstr "電子郵件，告知Koha管理者，有人預約館藏。"
+msgstr "送出電子郵件，告知Koha管理者，有人預約館藏。"
 
 # Circulation > Fines Policy
 msgid "circulation.pref#finesCalendar# Calculate fines based on days overdue"
@@ -1456,11 +1480,11 @@ msgstr "讀者最多可以預約"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#maxreserves# holds at once."
-msgstr "預約最大數。"
+msgstr "最多的預約數。"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#noissuescharge# Prevent patrons from checking out books if they have more than"
-msgstr "讀者不能借出，如果超過"
+msgstr "讀者不能借出館藏，如果超過"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#noissuescharge# [% local_currency %] in fines."
@@ -1472,7 +1496,7 @@ msgstr "還入時，顯示最後"
 
 # Circulation > Interface
 msgid "circulation.pref#numReturnedItemsToShow# last returned items on the checkin screen."
-msgstr "上次還入的館藏。"
+msgstr "顯示上次還入的館藏。"
 
 # Circulation > Interface
 msgid "circulation.pref#previousIssuesDefaultSortOrder# Sort previous checkouts on the circulation page from"
@@ -1504,7 +1528,7 @@ msgstr "館員辦理流通時，發出音效。並不支援所有的瀏覽器。
 
 # Circulation > Interface
 msgid "circulation.pref#todaysIssuesDefaultSortOrder# Sort today's checkouts on the circulation page from"
-msgstr "在流通頁面，依今天的借出排序"
+msgstr "在流通頁面，排序今天的借出"
 
 # Circulation > Interface
 msgid "circulation.pref#todaysIssuesDefaultSortOrder# due date."
@@ -1536,7 +1560,7 @@ msgstr "不含閉館日。"
 
 # Creators
 msgid "creators.pref"
-msgstr "建立者"
+msgstr "creators.pref"
 
 # Creators > Patron Cards
 msgid "creators.pref Patron Cards"
@@ -1552,7 +1576,7 @@ msgstr "張照片。"
 
 # Enhanced Content
 msgid "enhanced_content.pref"
-msgstr "強化內容"
+msgstr "enhanced_content.pref"
 
 # Enhanced Content > All
 msgid "enhanced_content.pref All"
@@ -1600,11 +1624,11 @@ msgstr "Syndetics書目中心"
 
 # Enhanced Content > Tagging
 msgid "enhanced_content.pref Tagging"
-msgstr "標籤"
+msgstr "貼標籤"
 
 # Enhanced Content > Amazon
 msgid "enhanced_content.pref#AWSAccessKeyID# (free, at <a href=\"http://aws.amazon.com/\">http://aws.amazon.com/</a>)."
-msgstr "(從<a href=\"http://aws.amazon.com/\">http://aws.amazon.com/</a>) 免費取得。"
+msgstr "(從<a href=\"http://aws.amazon.com/\">http://aws.amazon.com/</a>免費取得。)。"
 
 # Enhanced Content > Amazon
 msgid "enhanced_content.pref#AWSAccessKeyID# Access Amazon content using the access key"
@@ -1612,7 +1636,7 @@ msgstr "以近用鍵取得亞馬遜網站的內容"
 
 # Enhanced Content > Amazon
 msgid "enhanced_content.pref#AWSPrivateKey# (free, at <a href=\"http://aws.amazon.com/\">http://aws.amazon.com/</a>)."
-msgstr "(從<a href=\"http://aws.amazon.com/\">http://aws.amazon.com/</a>) 免費取得。"
+msgstr "(從<a href=\"http://aws.amazon.com/\">http://aws.amazon.com/</a>免費取得)。"
 
 # Enhanced Content > Amazon
 msgid "enhanced_content.pref#AWSPrivateKey# Access Amazon content (other than book jackets) using the private key"
@@ -1796,7 +1820,7 @@ msgstr "來自谷歌圖書的檢索結果與館藏細節，在線上公用目錄
 
 # Enhanced Content > Library Thing
 msgid "enhanced_content.pref#LibraryThingForLibrariesEnabled# <a href=\"http://www.librarything.com/forlibraries/\">sign up</a>, then enter in your ID below."
-msgstr " <a href=\"http://www.librarything.com/forlibraries/\">登入</a>你的帳號。"
+msgstr " <a href=\"http://www.librarything.com/forlibraries/\">登入</a>，然後輸入您的帳號。"
 
 # Enhanced Content > Library Thing
 msgid "enhanced_content.pref#LibraryThingForLibrariesEnabled# Don't show"
@@ -1808,7 +1832,7 @@ msgstr "顯示"
 
 # Enhanced Content > Library Thing
 msgid "enhanced_content.pref#LibraryThingForLibrariesEnabled# reviews, similar items, and tags from Library Thing for Libraries on item detail pages on the OPAC. If you've enabled this, you need to "
-msgstr "來自 Library Thing的評論、相關館藏與標籤，在線上公用目錄。若選擇顯示，需要"
+msgstr "來自 Library Thing的評論、相關館藏與標籤，在線上公用目錄。若選擇顯示，您需要"
 
 # Enhanced Content > Library Thing
 msgid "enhanced_content.pref#LibraryThingForLibrariesID# ."
@@ -1920,7 +1944,7 @@ msgstr "使用"
 
 # Enhanced Content > Amazon
 msgid "enhanced_content.pref#OPACAmazonEnabled# data from Amazon on the OPAC (including reviews and \"Search Inside\" links on item detail pages). This requires that you have signed up for and entered an access key."
-msgstr "得自亞馬遜網站的資訊，在線上公用目錄(包括書評與\"查內文\")。必須登入，並輸入近用值。"
+msgstr "得自亞馬遜網站的資訊，在線上公用目錄(包括書評與\"查內文\")。必須登入，並輸入推廣帳號。"
 
 # Enhanced Content > Amazon
 msgid "enhanced_content.pref#OPACAmazonReviews# Don't show"
@@ -2168,11 +2192,11 @@ msgstr "讀者從線上公用目錄的搜尋結果頁面，輸入標籤。"
 
 # Enhanced Content > Tagging
 msgid "enhanced_content.pref#TagsModeration# Don't require"
-msgstr "不強制"
+msgstr "選用"
 
 # Enhanced Content > Tagging
 msgid "enhanced_content.pref#TagsModeration# Require"
-msgstr "強制"
+msgstr "必備"
 
 # Enhanced Content > Tagging
 msgid "enhanced_content.pref#TagsModeration# that tags submitted by patrons be reviewed by a staff member before being shown."
@@ -2228,7 +2252,7 @@ msgstr "次，若沒有付費，取得 xISBN 的帳號密碼，則保留此數�
 
 # I18N/L10N
 msgid "i18n_l10n.pref"
-msgstr "I18N/L10N"
+msgstr "i18n_l10n.pref"
 
 # I18N/L10N
 msgid "i18n_l10n.pref#CalendarFirstDayOfWeek# Monday"
@@ -2288,11 +2312,11 @@ msgstr "讀者更改其線上公用目錄介面的語文。"
 
 # Local Use
 msgid "local_use.pref"
-msgstr "在地使用"
+msgstr "local_use.pref"
 
 # Logging
 msgid "logs.pref"
-msgstr "記錄檔"
+msgstr "logs.pref"
 
 # Logging
 msgid "logs.pref#AuthoritiesLog# Don't log"
@@ -2340,7 +2364,7 @@ msgstr "登入"
 
 # Logging
 msgid "logs.pref#FinesLog# when overdue fines are charged or automatically forgiven."
-msgstr "，收取逾期罰款或跳過它。"
+msgstr "，收取逾期罰款或自動免除。"
 
 # Logging
 msgid "logs.pref#IssueLog# Don't log"
@@ -2352,7 +2376,7 @@ msgstr "登入"
 
 # Logging
 msgid "logs.pref#IssueLog# when items are checked out."
-msgstr "，借出館藏。"
+msgstr "當借出館藏時。"
 
 # Logging
 msgid "logs.pref#LetterLog# Don't log"
@@ -2392,7 +2416,7 @@ msgstr "，當新增、刪除或修改期刊。"
 
 # OPAC
 msgid "opac.pref"
-msgstr "線上公用目錄"
+msgstr "opac.pref"
 
 # OPAC > Appearance
 msgid "opac.pref Appearance"
@@ -2572,7 +2596,7 @@ msgstr "讀者祗能從線上公用目錄續借，如果罰款少於"
 
 # OPAC > Policy
 msgid "opac.pref#OPACFineNoRenewals# [% local_currency %] in fines (leave blank to disable)."
-msgstr "[% local_currency %] 在罰款 (空白表示停用)。"
+msgstr "[% local_currency %] 的罰款 (空白表示停用)。"
 
 # OPAC > Features
 msgid "opac.pref#OPACFinesTab# Allow"
@@ -2584,7 +2608,7 @@ msgstr "不允許"
 
 # OPAC > Features
 msgid "opac.pref#OPACFinesTab# patrons to access the Fines tab on the My Account page on the OPAC."
-msgstr "從線上公用目錄我的帳號頁面看到自己的罰款。"
+msgstr "從線上公用目錄我的帳號頁面，看到自己的罰款。"
 
 # OPAC > Policy
 msgid "opac.pref#OPACItemHolds# Allow"
@@ -2596,7 +2620,7 @@ msgstr "不允許"
 
 # OPAC > Policy
 msgid "opac.pref#OPACItemHolds# patrons to place holds on specific items in the OPAC. If this is disabled, users can only put a hold on the next available item."
-msgstr "讀者從線上公用目錄預約館藏。若停用此功能，讀者祗能預約第一順位。"
+msgstr "讀者從線上公用目錄預約館藏。若停用此功能，讀者祗能預約可用的館藏。"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACMySummaryHTML# <br />Note: The placeholders {BIBLIONUMBER}, {TITLE}, {ISBN} and {AUTHOR} will be replaced with information from the displayed record."
@@ -2636,7 +2660,7 @@ msgstr "讀者從閱讀記錄裡，設定自己的隱私。此功能需要設定
 
 # OPAC > Appearance
 msgid "opac.pref#OPACResultsSidebar# Include the following HTML under the facets in OPAC search results:"
-msgstr "在線上公用目錄的結果裡，包括下列的 HTML："
+msgstr "在線上公用目錄的搜尋結果裡，包括下列的 HTML："
 
 # OPAC > Appearance
 msgid "opac.pref#OPACSearchForTitleIn# <br />Note: The placeholders {BIBLIONUMBER}, {CONTROLNUMBER}, {TITLE}, {ISBN}, {ISSN} and {AUTHOR} will be replaced with information from the displayed record."
@@ -2672,7 +2696,7 @@ msgstr "借出館藏時，讀者姓名顯示在線上公用目錄。"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACURLOpenInNewWindow# When patrons click on a link to another website from your OPAC (like Amazon or OCLC),"
-msgstr "讀者從線上公用目錄點選連結至其他網頁(亞馬遜網站或OCLC)時，"
+msgstr "讀者從線上公用目錄點選連結至其他網頁(如：亞馬遜網站或OCLC)時，"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACURLOpenInNewWindow# do"
@@ -2700,7 +2724,7 @@ msgstr "顯示"
 
 # OPAC > Policy
 msgid "opac.pref#OPACViewOthersSuggestions# purchase suggestions from other patrons on the OPAC."
-msgstr "其他讀者的採購建議。"
+msgstr "線上公用目錄其他讀者的採購建議。"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACXSLTDetailsDisplay# <br />Options:<br />- leave empty for \"no xslt\"<br />- enter \"default\" for the default one<br />- put a path to define a xslt file<br />- put an URL for an external specific stylesheet.<br />{langcode} will be replaced with current interface language"
@@ -2820,7 +2844,7 @@ msgstr "Unicode/UTF-8 以 MARC 編碼，未使用在地的 -9xx, x9x, xx9- 欄�
 
 # OPAC > Appearance
 msgid "opac.pref#OpacFavicon# Use the image at"
-msgstr "在這裡使用圖片"
+msgstr "在這裡使用照片"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacFavicon# for the OPAC's favicon. (This should be a complete URL, starting with <code>http://</code>.)"
@@ -2888,7 +2912,7 @@ msgstr "不允許"
 
 # OPAC > Features
 msgid "opac.pref#OpacPasswordChange# patrons to change their own password on the OPAC. Note that this must be off to use LDAP authentication."
-msgstr "讀者從線上公用目錄更改密碼，不能使用單一帳號認證。"
+msgstr "讀者不能使用單一帳號認證，從線上公用目錄更改密碼，。"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacPublic# Disable"
@@ -2900,7 +2924,7 @@ msgstr "啟用"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacPublic# Koha OPAC as public. Private OPAC requires authentification before accessing the OPAC."
-msgstr "公開的線上公用目錄。私有線上公用目錄需要認證。"
+msgstr "Koha 的線上公用目錄是公開的，不需認證即可使用；私有的線上公用目錄則需要認證。"
 
 # OPAC > Policy
 msgid "opac.pref#OpacRenewalAllowed# Allow"
@@ -2952,7 +2976,7 @@ msgstr "顯示"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacShowRecentComments# a link to recent comments in the OPAC masthead."
-msgstr "在線上公用目錄的刊頭連結至最近的書評。"
+msgstr "從線上公用目錄的刊頭，連結至最近的書評。"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacStarRatings# Show star-ratings on"
@@ -2968,7 +2992,7 @@ msgstr "祗有詳情"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacStarRatings# pages."
-msgstr "."
+msgstr "頁。"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacStarRatings# results and details"
@@ -3112,7 +3136,7 @@ msgstr "顯示"
 
 # OPAC > Appearance
 msgid "opac.pref#hidelostitems# lost items on search and detail pages."
-msgstr "在搜尋與詳細頁頁顯示遺失的館藏。"
+msgstr "在搜尋與詳細頁面顯示遺失的館藏。"
 
 # OPAC > Features
 msgid "opac.pref#numSearchRSSResults# Display"
@@ -3172,11 +3196,11 @@ msgstr "讀者檢視自己的借出記錄。"
 
 # OPAC > Appearance
 msgid "opac.pref#opacsmallimage# Use the image at"
-msgstr "使用此圖片"
+msgstr "使用此照片"
 
 # OPAC > Appearance
 msgid "opac.pref#opacsmallimage# in the OPAC header, instead of the Koha logo. If this image is a different size than the Koha logo, you will need to customize the CSS. (This should be a complete URL, starting with <code>http://</code>.)"
-msgstr "於線上公用目錄的標題，取代原來的Koha圖示，可以客製化。(必須是完整的網址，以<code>http://</code> 開始。)"
+msgstr "於線上公用目錄的標頭，取代原來的Koha圖示，可以客製化。(必須是完整的網址，以<code>http://</code> 開始。)"
 
 # OPAC > Appearance
 msgid "opac.pref#opacstylesheet# Use the remote CSS stylesheet"
@@ -3288,7 +3312,7 @@ msgstr "其他"
 
 # Patrons
 msgid "patrons.pref#AutoEmailPrimaryAddress# cardnumber as"
-msgstr "die Ausweisnummer"
+msgstr "讀者號"
 
 # Patrons
 msgid "patrons.pref#AutoEmailPrimaryAddress# first valid"
@@ -3308,7 +3332,7 @@ msgstr "工作"
 
 # Patrons
 msgid "patrons.pref#BorrowerMandatoryField# (separate columns with |)"
-msgstr "(以此直線標點|區隔各欄)"
+msgstr "(以此直線 | 區隔各欄)"
 
 # Patrons
 msgid "patrons.pref#BorrowerMandatoryField# The following <a href='http://schema.koha-community.org/tables/borrowers.html' target='blank'>database columns</a> must be filled in on the patron entry screen:"
@@ -3324,11 +3348,11 @@ msgstr "現在日期。"
 
 # Patrons
 msgid "patrons.pref#BorrowerRenewalPeriodBase# current membership expiry date."
-msgstr "現在讀者證到期日。"
+msgstr "讀者證到期日。"
 
 # Patrons
 msgid "patrons.pref#BorrowerUnwantedField# (separate columns with |)"
-msgstr "(以此直線標點|區隔各欄)"
+msgstr "(以此直線 | 區隔各欄)"
 
 # Patrons
 msgid "patrons.pref#BorrowerUnwantedField# The following <a href='http://schema.koha-community.org/tables/borrowers.html' target='blank'>database columns</a> will not appear on the patron entry screen:"
@@ -3336,7 +3360,7 @@ msgstr "以下 <a href='http://schema.koha-community.org/tables/borrowers.html' 
 
 # Patrons
 msgid "patrons.pref#BorrowersTitles# (separate multiple choices with |)"
-msgstr "(以此直線標點|區隔各欄)"
+msgstr "(以此直線 | 區隔各欄)"
 
 # Patrons
 msgid "patrons.pref#BorrowersTitles# Borrowers can have the following titles:"
@@ -3376,7 +3400,7 @@ msgstr " [% local_currency %]"
 
 # Patrons
 msgid "patrons.pref#NotifyBorrowerDeparture# Show a notice that a patron is about to expire"
-msgstr "顯示讀者證到期前的訊息"
+msgstr "顯示訊息，告知讀者證將到期"
 
 # Patrons
 msgid "patrons.pref#NotifyBorrowerDeparture# days beforehand."
@@ -3456,7 +3480,7 @@ msgstr "讀者與所屬機構連結(必須是機構的員工)。"
 
 # Patrons
 msgid "patrons.pref#minPasswordLength# Login passwords for staff and patrons must be at least"
-msgstr "館員與讀者的密碼長度，至少能有"
+msgstr "館員與讀者的密碼長度，至少應有"
 
 # Patrons
 msgid "patrons.pref#minPasswordLength# characters long."
@@ -3532,7 +3556,7 @@ msgstr "使用"
 
 # Searching > Features
 msgid "searching.pref#NoZebra# the Zebra search engine.  It is recommended to use Zebra; the option to not use Zebra is deprecated and is not guaranteed to work."
-msgstr "Zebra搜尋引擎，建議使用Zebra；停用 Zebra 時，不保證能順利運作。"
+msgstr "Zebra搜尋引擎。建議使用Zebra；停用 Zebra 時，不保證能順利運作。"
 
 # Searching > Results Display
 msgid "searching.pref#OPACItemsResultsDisplay# Don't show"
@@ -3860,7 +3884,7 @@ msgstr "若在傳閱清單內，則將收到的期刊列入預約。"
 
 # Serials
 msgid "serials.pref#RoutingListNote# Include following note on all routing lists:"
-msgstr "所有的傳閱清單包括以下說明："
+msgstr "所有的傳閱清單，包括以下說明："
 
 # Serials
 msgid "serials.pref#RoutingSerials# Add"
@@ -3972,7 +3996,7 @@ msgstr "讀者姓名，當借出或預約館藏時，在詳情頁面或 \"預約
 
 # Staff Client > Appearance
 msgid "staff_client.pref#IntranetFavicon# Use the image at"
-msgstr "使用此網址的圖案"
+msgstr "使用此網址的圖片"
 
 # Staff Client > Appearance
 msgid "staff_client.pref#IntranetFavicon# for the Staff Client's favicon. (This should be a complete URL, starting with <code>http://</code>.)"
@@ -4044,7 +4068,7 @@ msgstr "顯示"
 
 # Staff Client > Options
 msgid "staff_client.pref#intranetbookbag# the cart option in the staff client."
-msgstr "借書籃選項，在館員介面。"
+msgstr "借出籃選項，在館員介面。"
 
 # Staff Client > Appearance
 msgid "staff_client.pref#intranetcolorstylesheet# Include the stylesheet <code><!-- TMPL_VAR NAME=\"themelang\" -->/css/</code>"
@@ -4064,7 +4088,7 @@ msgstr "館員介面的所有頁面，不用預設值。(必須是完整的網�
 
 # Staff Client > Appearance
 msgid "staff_client.pref#intranetuserjs# Include the following JavaScript on all pages in the staff client:"
-msgstr "Verwende das folgende Javascript auf allen Seiten der Dienstoberfläche:"
+msgstr "在館員介面的所有頁面裡，包括以下的 Javascript："
 
 # Staff Client > Appearance
 msgid "staff_client.pref#staffClientBaseURL# ."
@@ -4080,7 +4104,7 @@ msgstr "館員介面使用"
 
 # Staff Client > Appearance
 msgid "staff_client.pref#template# theme on the staff interface."
-msgstr "此模版。"
+msgstr "館員介面的模版。"
 
 # Staff Client > Options
 msgid "staff_client.pref#viewISBD# Allow"
@@ -4120,7 +4144,7 @@ msgstr "館員從館員介面瀏覽純機讀編目格式。"
 
 # Staff Client > Appearance
 msgid "staff_client.pref#yuipath# Use the Yahoo UI libraries"
-msgstr "以雅虎UI圖書館時，"
+msgstr "使用雅虎UI圖書館時，"
 
 # Staff Client > Appearance
 msgid "staff_client.pref#yuipath# from Yahoo's own servers (less demand on your servers)."
@@ -4140,7 +4164,7 @@ msgstr "整合圖書館系統發掘介面 Integrated Library System Discovery In
 
 # Web Services > OAI-PMH
 msgid "web_services.pref OAI-PMH"
-msgstr "擷取後設資料之開放檔案近用協議"
+msgstr "擷取後設資料之開放檔案近用協議 OAI－PMH"
 
 # Web Services > ILS-DI
 msgid "web_services.pref#ILS-DI# Disable"
@@ -4188,7 +4212,7 @@ msgstr "新增或更新書目記錄時，自動更新OAI-PMH內容"
 
 # Web Services > OAI-PMH
 msgid "web_services.pref#OAI-PMH:MaxCount# Only return"
-msgstr "ListRecords 或 ListIdentifiers 搜尋時，每次祗送回"
+msgstr "祗送回"
 
 # Web Services > OAI-PMH
 msgid "web_services.pref#OAI-PMH:MaxCount# records at a time in response to a ListRecords or ListIdentifiers query."
@@ -4196,7 +4220,7 @@ msgstr "筆記錄，回應ListRecords 或 ListIdentifiers搜尋時，同時回�
 
 # Web Services > OAI-PMH
 msgid "web_services.pref#OAI-PMH:archiveID# : ."
-msgstr ":"
+msgstr ":。"
 
 # Web Services > OAI-PMH
 msgid "web_services.pref#OAI-PMH:archiveID# Identify records at this site with the prefix"
