@@ -145,7 +145,10 @@ sub checkpw_cas {
             $debug and warn "User $userid is not a valid Koha user";
 
         } else {
-            $debug and warn "Invalid session ticket : $ticket";
+            $debug and warn "Problem when validating ticket : $ticket";
+            $debug and warn "Authen::CAS::Client::Response::Error: " . $val->error() if $val->is_error();
+            $debug and warn "Authen::CAS::Client::Response::Failure: " . $val->message() if $val->is_failure();
+            $debug and warn Data::Dumper::Dumper($@) if $val->is_error() or $val->is_failure();
             return 0;
         }
     }
