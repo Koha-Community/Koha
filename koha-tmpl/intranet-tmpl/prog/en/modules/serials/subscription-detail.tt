@@ -274,6 +274,7 @@ $(document).ready(function() {
             <th>Issue number</th>
             <th>Planned date</th>
             <th>Published date</th>
+            <th>Published date (text)</th>
             <th>Status</th>
         </tr>
         [% FOREACH serialslis IN serialslist %]
@@ -294,6 +295,9 @@ $(document).ready(function() {
                     [% ELSE %]
                       Unknown
                     [% END %]
+                </td>
+                <td>
+                    [% serialslis.publisheddatetext || serialslis.publisheddate %]
                 </td>
                 <td>
                     [% IF ( serialslis.status1 ) %]Expected[% END %]

@@ -82,6 +82,8 @@ my @serialids       = $query->param('serialid');
 my @serialseqs      = $query->param('serialseq');
 my @planneddates    = $query->param('planneddate');
 my @publisheddates  = $query->param('publisheddate');
+my @publisheddates  = $query->param('publisheddate');
+my @publisheddatetexts = $query->param('publisheddatetext');
 my @status          = $query->param('status');
 my @notes           = $query->param('notes');
 my @subscriptionids = $query->param('subscriptionid');
@@ -231,6 +233,7 @@ if ( $op and $op eq 'serialchangestatus' ) {
                     $status[$i],
                     $plan_date,
                     $pub_date,
+                    $publisheddatetexts[$i],
                     $notes[$i]
                 );
             }
@@ -241,6 +244,7 @@ if ( $op and $op eq 'serialchangestatus' ) {
                 $serialseqs[$i],
                 $plan_date,
                 $pub_date,
+                $publisheddatetexts[$i],
                 $status[$i],
                 $notes[$i]
             );

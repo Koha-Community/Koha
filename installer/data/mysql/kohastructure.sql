@@ -1941,6 +1941,7 @@ CREATE TABLE `serial` ( -- issues related to subscriptions
   `planneddate` date default NULL, -- date expected
   `notes` text, -- notes
   `publisheddate` date default NULL, -- date published
+  publisheddatetext varchar(100) default NULL, -- date published (descriptive)
   `claimdate` date default NULL, -- date claimed
   claims_count int(11) default 0, -- number of claims made related to this issue
   `routingnotes` text, -- notes from the routing list

@@ -55,8 +55,12 @@ my $subscriptions;
 
 if($op eq 'gennext' && @subscriptionid){
     my $subscriptionid = $subscriptionid[0];
-    my $sth = $dbh->prepare("SELECT publisheddate, serialid, serialseq, planneddate
-							FROM serial WHERE status = 1 AND subscriptionid = ?");
+    my $sth = $dbh->prepare("
+        SELECT publisheddate, publisheddatetext, serialid, serialseq,
+            planneddate
+        FROM serial
+        WHERE status = 1 AND subscriptionid = ?
+    ");
     my $status = defined( $nbissues ) ? 2 : 3;
     $nbissues ||= 1;
     for ( my $i = 0; $i < $nbissues; $i++ ){
@@ -65,7 +69,7 @@ if($op eq 'gennext' && @subscriptionid){
         if ( my $issue = $sth->fetchrow_hashref ) {
             ModSerialStatus( $issue->{serialid}, $issue->{serialseq},
                     $issue->{planneddate}, $issue->{publisheddate},
-                    $status, "" );
+                    $issue->{publisheddatetext}, $status, "" );
         } else {
             require C4::Serials::Numberpattern;
             my $subscription = GetSubscription($subscriptionid);

@@ -205,6 +205,8 @@ $(document).ready(function() {
 [% END %]
                 <th class="title-string">Date published
                 </th>
+                <th class="title-string">Date published (text)
+                </th>
                 <th class="title-string">Date received
                 </th>
                 <th>Number
@@ -244,6 +246,18 @@ $(document).ready(function() {
                 <td>
                     <span title="[% serial.publisheddate %]">
                       [% IF serial.publisheddate %]
+                        [% serial.publisheddate | $KohaDates %]
+                      [% ELSE %]
+                        Unknown
+                      [% END %]
+                    </span>
+                </td>
+                <td>
+                    [% publisheddatetext = serial.publisheddatetext || serial.publisheddate %]
+                    <span title="[% publisheddatetext %]">
+                      [% IF serial.publisheddatetext %]
+                        [% publisheddatetext %]
+                      [% ELSIF serial.publisheddate %]
                         [% serial.publisheddate | $KohaDates %]
                       [% ELSE %]
                         Unknown

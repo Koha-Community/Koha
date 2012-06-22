@@ -131,7 +131,7 @@ while ( my $issue = $sth->fetchrow_hashref ) {
             {
                 $confirm
                   and ModSerialStatus( $issue->{serialid}, $issue->{serialseq},
-                    $issue->{planneddate}, $issue->{publisheddate},
+                    $issue->{planneddate}, $issue->{publisheddate}, $issue->{publisheddatetext},
                     3, $note );
                 $verbose
                   and print "Serial issue with id=" . $issue->{serialid} . " updated\n";
