@@ -101,7 +101,7 @@ if ( $delay and not $delay =~ /^\d{1,3}$/ ) {
 }
 
 if ($op and $op eq "send_alert"){
-    my @ordernums = $input->param("claim_for");# FIXME: Fallback values?
+    my @ordernums = $input->param("ordernumber");# FIXME: Fallback values?
     my $err;
     eval {
         $err = SendAlerts( 'claimacquisition', \@ordernums, $input->param("letter_code") );    # FIXME: Fallback value?
@@ -109,6 +109,7 @@ if ($op and $op eq "send_alert"){
             AddClaim ( $_ ) for @ordernums;
         }
     };
+
     if ( $@ ) {
         $template->param(error_claim => $@);
     } elsif ( ref $err and exists $err->{error} and $err->{error} eq "no_email" ) {

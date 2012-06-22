@@ -41,7 +41,7 @@
 		}
 		
 		// Building the url from currently checked boxes
-		var url = '/cgi-bin/koha/serials/lateissues-excel.pl?supplierid=&amp;op=claims';
+		var url = '/cgi-bin/koha/serials/lateissues-export.pl?supplierid=&amp;op=claims';
 		for (var i = 0; i < selected.length; i++) {
 		    url += '&amp;serialid=' + selected[i].value;
 		}

@@ -338,7 +338,7 @@ sub GetBasketAsCSV {
 
 =head3 GetBasketGroupAsCSV
 
-=over 4
+=over
 
 &GetBasketGroupAsCSV($basketgroupid);
 
@@ -966,17 +966,43 @@ C<$order> are fields from the biblio, biblioitems, aqorders tables of the Koha d
 sub GetOrder {
     my ($ordernumber) = @_;
     my $dbh      = C4::Context->dbh;
-    my $query = "
-        SELECT biblioitems.*, biblio.*, aqorders.*
-        FROM   aqorders
-        LEFT JOIN biblio on           biblio.biblionumber=aqorders.biblionumber
-        LEFT JOIN biblioitems on       biblioitems.biblionumber=aqorders.biblionumber
-        WHERE aqorders.ordernumber=?
-
-    ";
+    my $query = qq{SELECT
+                aqorders.*,
+                biblio.title,
+                biblio.author,
+                aqbasket.basketname,
+                borrowers.branchcode,
+                biblioitems.publicationyear,
+                biblio.copyrightdate,
+                biblioitems.editionstatement,
+                biblioitems.isbn,
+                biblioitems.ean,
+                biblio.seriestitle,
+                biblioitems.publishercode,
+                aqorders.rrp              AS unitpricesupplier,
+                aqorders.ecost            AS unitpricelib,
+                aqorders.claims_count     AS claims_count,
+                aqorders.claimed_date     AS claimed_date,
+                aqbudgets.budget_name     AS budget,
+                aqbooksellers.name        AS supplier,
+                aqbooksellers.id          AS supplierid,
+                biblioitems.publishercode AS publisher,
+                ADDDATE(aqbasket.closedate, INTERVAL aqbooksellers.deliverytime DAY) AS estimateddeliverydate,
+                DATE(aqbasket.closedate)  AS orderdate,
+                aqorders.quantity - COALESCE(aqorders.quantityreceived,0)                 AS quantity_to_receive,
+                (aqorders.quantity - COALESCE(aqorders.quantityreceived,0)) * aqorders.rrp AS subtotal,
+                DATEDIFF(CURDATE( ),closedate) AS latesince
+                FROM aqorders LEFT JOIN biblio ON biblio.biblionumber = aqorders.biblionumber
+                LEFT JOIN biblioitems ON biblioitems.biblionumber = biblio.biblionumber
+                LEFT JOIN aqbudgets ON aqorders.budget_id = aqbudgets.budget_id,
+                aqbasket LEFT JOIN borrowers  ON aqbasket.authorisedby = borrowers.borrowernumber
+                LEFT JOIN aqbooksellers       ON aqbasket.booksellerid = aqbooksellers.id
+                WHERE aqorders.basketno = aqbasket.basketno
+                    AND ordernumber=?};
     my $sth= $dbh->prepare($query);
     $sth->execute($ordernumber);
     my $data = $sth->fetchrow_hashref;
+    $data->{orderdate} = format_date( $data->{orderdate} );
     $sth->finish;
     return $data;
 }
@@ -2252,7 +2278,7 @@ sub GetContract {
 
 =head3 AddClaim
 
-=over 4
+=over
 
 &AddClaim($ordernumber);
 
@@ -2261,6 +2287,7 @@ Add a claim for an order
 =back
 
 =cut
+
 sub AddClaim {
     my ($ordernumber) = @_;
     my $dbh          = C4::Context->dbh;
