@@ -3022,7 +3022,7 @@ my $DBversion = "3.00.00.000";
         next if $table->{Name} eq 'auth_subfield_table';
         if ($table->{Engine} ne 'InnoDB') {
             print "moving $table->{Name} to InnoDB\n";
-            $dbh->do("ALTER TABLE $table->{Name} TYPE = innodb");
+            $dbh->do("ALTER TABLE $table->{Name} ENGINE = innodb");
         }
         unless ($table->{Collation} =~ /^utf8/) {
             print "moving $table->{Name} to utf8\n";
