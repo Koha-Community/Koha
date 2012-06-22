@@ -30,7 +30,7 @@ use Modern::Perl;
 use C4::Context;
 
 my $searchengine = C4::Context->preference("SearchEngine");
-given ( $searchengine ) {
+for ( $searchengine ) {
     when ( /^Solr$/ ) {
         warn "We use Solr";
         require 'opac/search.pl';

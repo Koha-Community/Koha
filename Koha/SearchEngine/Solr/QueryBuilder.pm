@@ -43,7 +43,7 @@ sub build_advanced_query {
         # And others
         $index_name = @$indexes[$i] if @$indexes[$i];
         my $operator = defined @$operators[$i-1] ? @$operators[$i-1] : 'AND';
-        given ( uc ( $operator ) ) {
+        for ( uc ( $operator ) ) {
             when ('OR'){
                 $q .= BuildTokenString($index_name, $kw, 'OR');
             }
