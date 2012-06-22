@@ -4,7 +4,6 @@
 <script type="text/javascript" src="[% themelang %]/js/background-job-progressbar.js"></script>
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/pages/batchMod.css" />
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
-<script src="[% themelang %]/lib/yui/cookie/cookie-min.js"></script>
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
 <script type="text/javascript">
 //<![CDATA[
@@ -12,7 +11,6 @@
 // Prepare array of all column headers, incrementing each index by
 // two to accomodate control and title columns
 var allColumns = new Array([% FOREACH item_header_loo IN item_header_loop %]'[% loop.count %]'[% UNLESS ( loop.last ) %],[% END %][% END %]);
-console.log(allColumns);
 for( x=0; x<allColumns.length; x++ ){
   allColumns[x] = Number(allColumns[x]) + 2;
 }
