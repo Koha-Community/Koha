@@ -26,6 +26,7 @@
         <ul>
         <li><a href="#about">Server Information</a></li>
         <li><a href="#perl">Perl modules</a></li>
+        <li><a href="#sysinfo">System information</a></li>
         <li><a href="#team">Koha Team</a></li>
         <li><a href="#licenses">Licenses</a></li>
         <li><a href="#translations">Translations</a></li>
@@ -48,6 +49,11 @@
             <tr><th scope="row">MySQL version: </th><td>[% mysqlVersion |html %]</td></tr>
             <tr><th scope="row">Apache version: </th><td>[% apacheVersion |html %]</td></tr>
             <tr><th scope="row">Zebra version: </th><td>[% zebraVersion |html %]</td></tr>
+            [% IF (errZebraConnection == 10000) %]
+            <tr><th scope="row"><b>Error</b> </th><td>Zebra server seems not to be available. Is it started?</td></tr>
+            [% ELSIF (errZebraConnection) %]
+            <tr><th scope="row"><b>Warning</b> </th><td>Error message from Zebra: [% ( errZebraConnection ) %] </td></tr>
+            [% END %]
         </table>
         </div>
         <div id="perl">
@@ -90,6 +96,27 @@
                 [% END %]
             </table>
         </div>
+
+        <div id="sysinfo">
+            <h2>Warnings regarding the system configuration</h2>
+        [% IF ( (prefNoZebra) || (warnPrefBiblioAddsAuthorities) || warnPrefEasyAnalyticalRecords ) %]
+        <table>
+            <caption>Preferences</caption>
+            [% IF (prefNoZebra) %]
+            <tr><th scope="row"><b>Warning</b> </th><td>System preference 'nozebra' set. Deprectated!</td></tr>
+            [% END %]
+            [% IF (warnPrefBiblioAddsAuthorities) %]
+            <tr><th scope="row"><b>Warning</b> </th><td>System preference 'AutoCreateAuthorities' set, but needs 'BiblioAddsAuthorities' set as well.</td></tr>
+            [% END %]
+            [% IF (warnPrefEasyAnalyticalRecords) %]
+            <tr><th scope="row"><b>Warning</b> </th><td>System preference 'EasyAnalyticalRecords' set, but UseControlNumber preference is set to 'Use'. Set it to 'Don't use' or else the 'Show analytics' links in the staff client and the OPAC will be broken.</td></tr>
+            [% END %]
+        </table>
+        [% ELSE %]
+            <p>No warnings</p>
+        [% END %]
+        </div>
+
         <div id="team">
             <h2>Special thanks to the following organizations</h2>
             <ul>

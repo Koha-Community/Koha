@@ -60,6 +60,18 @@ $apacheVersion = `httpd2 -v` unless $apacheVersion;
 $apacheVersion = (`/usr/sbin/apache2 -V`)[0] unless $apacheVersion;
 my $zebraVersion = `zebraidx -V`;
 
+# Additional system information for warnings
+my $prefNoZebra = C4::Context->preference('nozebra');
+my $prefAutoCreateAuthorities = C4::Context->preference('AutoCreateAuthorities');
+my $prefBiblioAddsAuthorities = C4::Context->preference('BiblioAddsAuthorities');
+my $warnPrefBiblioAddsAuthorities = ( $prefAutoCreateAuthorities && ( !$prefBiblioAddsAuthorities) );
+
+my $prefEasyAnalyticalRecords  = C4::Context->preference('EasyAnalyticalRecords');
+my $prefUseControlNumber  = C4::Context->preference('UseControlNumber');
+my $warnPrefEasyAnalyticalRecords  = ( $prefEasyAnalyticalRecords  && $prefUseControlNumber );
+
+my $errZebraConnection = C4::Context->Zconn("biblioserver",0)->errcode();
+
 $template->param(
     kohaVersion   => $kohaVersion,
     osVersion     => $osVersion,
@@ -69,6 +81,12 @@ $template->param(
     mysqlVersion  => $mysqlVersion,
     apacheVersion => $apacheVersion,
     zebraVersion  => $zebraVersion,
+    prefNoZebra   => $prefNoZebra,
+    prefBiblioAddsAuthorities => $prefBiblioAddsAuthorities,
+    prefAutoCreateAuthorities => $prefAutoCreateAuthorities,
+    warnPrefBiblioAddsAuthorities => $warnPrefBiblioAddsAuthorities,
+    warnPrefEasyAnalyticalRecords  => $warnPrefEasyAnalyticalRecords,
+    errZebraConnection => $errZebraConnection,
 );
 
 my @components = ();
