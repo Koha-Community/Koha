@@ -207,16 +207,18 @@ sub SearchAuthorities {
             # also store main entry MARC tag, to extract it at end of search
         my $mainentrytag;
         ##first set the authtype search and may be multiple authorities
-        my $n=0;
-        my @authtypecode;
-        my @auths=split / /,$authtypecode ;
-        foreach my  $auth (@auths){
-            $query .=" \@attr 1=authtype \@attr 5=100 ".$auth; ##No truncation on authtype
-            push @authtypecode ,$auth;
-            $n++;
-        }
-        if ($n>1){
-            while ($n>1){$query= "\@or ".$query;$n--;}
+        if ($authtypecode) {
+            my $n=0;
+            my @authtypecode;
+            my @auths=split / /,$authtypecode ;
+            foreach my  $auth (@auths){
+                $query .=" \@attr 1=authtype \@attr 5=100 ".$auth; ##No truncation on authtype
+                    push @authtypecode ,$auth;
+                $n++;
+            }
+            if ($n>1){
+                while ($n>1){$query= "\@or ".$query;$n--;}
+            }
         }
         
         my $dosearch;

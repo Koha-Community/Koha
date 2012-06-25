@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 use strict;
-#use warnings; FIXME - Bug 2505
+use warnings;
 BEGIN {
     # find Koha's Perl modules
     # test carefully before changing this
@@ -18,11 +18,13 @@ $| = 1;
 # command-line parameters
 my $batch_number = "";
 my $list_batches = 0;
+my $revert = 0;
 my $want_help = 0;
 
 my $result = GetOptions(
     'batch-number:s' => \$batch_number,
     'list-batches'   => \$list_batches,
+    'revert'         => \$revert,
     'h|help'         => \$want_help
 );
 
@@ -45,9 +47,15 @@ $dbh->{AutoCommit} = 0;
 if ($batch_number =~ /^\d+$/ and $batch_number > 0) {
     my $batch = GetImportBatch($batch_number);
     die "$0: import batch $batch_number does not exist in database\n" unless defined $batch;
-    die "$0: import batch $batch_number status is '" . $batch->{'import_status'} . "', and therefore cannot be imported\n"
-        unless $batch->{'import_status'} eq "staged" or $batch->{'import_status'} eq "reverted";
-    process_batch($batch_number);
+    if ($revert) {
+        die "$0: import batch $batch_number status is '" . $batch->{'import_status'} . "', and therefore cannot be imported\n"
+            unless $batch->{'import_status'} eq "imported";
+        revert_batch($batch_number);
+    } else {
+        die "$0: import batch $batch_number status is '" . $batch->{'import_status'} . "', and therefore cannot be imported\n"
+            unless $batch->{'import_status'} eq "staged" or $batch->{'import_status'} eq "reverted";
+        process_batch($batch_number);
+    }
     $dbh->commit();
 } else {
     die "$0: please specify a numeric batch ID\n";
@@ -74,8 +82,8 @@ sub process_batch {
     my ($import_batch_id) = @_;
 
     print "... importing MARC records -- please wait\n";
-    my ($num_added, $num_updated, $num_items_added, $num_items_errored, $num_ignored) = 
-        BatchCommitBibRecords($import_batch_id, '', 100, \&print_progress_and_commit);
+    my ($num_added, $num_updated, $num_items_added, $num_items_errored, $num_ignored) =
+        BatchCommitRecords($import_batch_id, '', 100, \&print_progress_and_commit);
     print "... finished importing MARC records\n";
 
     print <<_SUMMARY_;
@@ -83,16 +91,39 @@ sub process_batch {
 MARC record import report
 ----------------------------------------
 Batch number:                    $import_batch_id
-Number of new bibs added:        $num_added
-Number of bibs replaced:         $num_updated
-Number of bibs ignored:          $num_ignored
+Number of new records added:     $num_added
+Number of records replaced:      $num_updated
+Number of records ignored:       $num_ignored
 Number of items added:           $num_items_added
 Number of items ignored:         $num_items_errored
 
-Note: an item is ignored if its barcode is a 
+Note: an item is ignored if its barcode is a
 duplicate of one already in the database.
 _SUMMARY_
 }
+
+sub revert_batch {
+    my ($import_batch_id) = @_;
+
+    print "... reverting batch -- please wait\n";
+    my ($num_deleted, $num_errors, $num_reverted, $num_items_deleted, $num_ignored) =
+        BatchRevertRecords($import_batch_id, 100, \&print_progress_and_commit);
+    print "... finished reverting batch\n";
+
+    print <<_SUMMARY_;
+
+MARC record import report
+----------------------------------------
+Batch number:                    $import_batch_id
+Number of records deleted:       $num_deleted
+Number of errors:                $num_errors
+Number of records reverted:      $num_reverted
+Number of records ignored:       $num_ignored
+Number of items added:           $num_items_deleted
+
+_SUMMARY_
+}
+
 
 sub print_progress_and_commit {
     my $recs = shift;
@@ -106,7 +137,7 @@ $0: import a batch of staged MARC records into database.
 
 Use this batch job to complete the import of a batch of
 MARC records that was staged either by the batch job
-stage_biblios_file.pl or by the Koha Tools option
+stage_file.pl or by the Koha Tools option
 "Stage MARC Records for Import".
 
 Parameters:
@@ -114,6 +145,7 @@ Parameters:
                          to import
     --list-batches       print a list of record batches
                          available to commit
-    --help or -h            show this message.
+    --revert             revert a batch instead of importing it
+    --help or -h         show this message.
 _USAGE_
 }

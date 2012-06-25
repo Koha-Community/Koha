@@ -1009,7 +1009,7 @@ set_userenv is called in Auth.pm
 #'
 sub set_userenv {
     my ($usernum, $userid, $usercnum, $userfirstname, $usersurname, $userbranch, $branchname, $userflags, $emailaddress, $branchprinter)= @_;
-    my $var=$context->{"activeuser"};
+    my $var=$context->{"activeuser"} || '';
     my $cell = {
         "number"     => $usernum,
         "id"         => $userid,

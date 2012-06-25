@@ -1,3 +1,22 @@
+[% BLOCK final_match_link %]
+    [% IF ( record.record_type == 'biblio' ) %]
+        <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% record.final_match_id %]">[% record.final_match_id %]</a>
+    [% ELSIF ( record.record_type == 'auth' ) %]
+        <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% record.final_match_id %]">[% record.final_match_id %]</a>
+    [% END %]
+[% END %]
+[% BLOCK match_link %]
+    [% IF ( record_lis.match_id ) %]
+        <tr>
+            <td />
+            [% IF ( record.record_type == 'biblio' ) %]
+                <td class="highlight" colspan="4">Matches biblio [% record_lis.match_id %] (score = [% record_lis.match_score %]): <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% record_lis.match_id %]">[% record_lis.match_citation %]</a></td>
+            [% ELSIF ( record.record_type == 'auth' ) %]
+                <td class="highlight" colspan="4">Matches authority [% record_lis.match_id %] (score = [% record_lis.match_score %]): <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% record_lis.match_id %]">[% record_lis.match_citation %]</a></td>
+            [% END %]
+        </tr>
+    [% END %]
+[% END %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Manage staged MARC records
 [% IF ( import_batch_id ) %]
@@ -107,7 +126,8 @@ $(document).ready(function(){
 <fieldset class="rows" id="staged-record-matching-rules">
   <ol>
     <li><span class="label">File name:</span> [% file_name %]</li>
-    <li><span class="label">Comments:</span> [% IF ( comments ) %][% comments %](none)[% END %]</li>
+    <li><span class="label">Comments:</span> [% IF ( comments ) %][% comments %][% ELSE %](none)[% END %]</li>
+    <li><span class="label">Type:</span> [% IF ( record_type == 'auth' ) %]Authority records[% ELSE %]Bibliographic records[% END %]</li>
     <li><span class="label">Staged:</span> [% upload_timestamp %]</li>
     <li><span class="label">Status:</span> [% import_status %]</li>
     <li> 
@@ -218,9 +238,10 @@ Page
     <th>#</th>
     <th>File name</th>
     <th>Comments</th>
+    <th>Type</th>
     <th>Status</th>
     <th>Staged</th>
-    <th># Bibs</th>
+    <th># Records</th>
     <th># Items</th>
     <th>Action</th>
   </tr>
@@ -229,9 +250,10 @@ Page
     <td>[% batch_lis.import_batch_id %]</td>
     <td><a href="[% batch_lis.script_name %]?import_batch_id=[% batch_lis.import_batch_id %]">[% batch_lis.file_name %]</a></td>
     <td>[% batch_lis.comments %]</td>
+    <td>[% IF ( batch_lis.record_type == 'auth' ) %]Authority[% ELSE %]Bibliographic[% END %]</td>
     <td>[% batch_lis.import_status %]</td>
     <td>[% batch_lis.upload_timestamp %]</td>
-    <td>[% batch_lis.num_biblios %]</td>
+    <td>[% batch_lis.num_records %]</td>
     <td>[% batch_lis.num_items %][% IF ( batch_lis.num_items ) %] <a href="[% batch_lis.script_name %]?import_batch_id=[% batch_lis.import_batch_id %]&amp;op=create_labels">(Create label batch)</a>[% END %]</td>
     <td>[% IF ( batch_lis.can_clean ) %]
           <form method="post" action="[% batch_lis.script_name %]" name="clean_batch_[% batch_lis.import_batch_id %]" id="clean_batch_[% batch_lis.import_batch_id %]" >
@@ -258,7 +280,7 @@ Page
   [% END %]
 [% END %]
 
-[% IF ( biblio_list ) %]
+[% IF ( record_list ) %]
   [% IF ( pages ) %]
 <div class="pages">
 Page 
@@ -277,26 +299,21 @@ Page
     <th>Citation</th>
     <th>Status</th>
     <th>Match?</th>
-    <th>Bib</th>
+    <th>Record</th>
 
   </tr>
-  [% FOREACH biblio_lis IN biblio_list %]
+  [% FOREACH record_lis IN record_list %]
   [% UNLESS ( loop.odd ) %]<tr class="highlight">[% ELSE %]<tr>[% END %]
-    <td>[% biblio_lis.record_sequence %]</td>
-    <td><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% biblio_lis.import_record_id %]" rel="gb_page_center[600,500]">[% biblio_lis.citation %]</a></td>
-    <td>[% biblio_lis.status %]</td>
-    <td>[% biblio_lis.overlay_status %]</td>
-    <td>[% IF ( biblio_lis.final_match_biblionumber ) %]
-        <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblio_lis.final_match_biblionumber %]">[% biblio_lis.final_match_biblionumber %]</a>
+    <td>[% record_lis.record_sequence %]</td>
+    <td><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% record_lis.import_record_id %]" rel="gb_page_center[600,500]">[% record_lis.citation %]</a></td>
+    <td>[% record_lis.status %]</td>
+    <td>[% record_lis.overlay_status %]</td>
+    <td>[% IF ( record_lis.final_match_id ) %]
+        [% PROCESS final_match_link record=record_lis %]
         [% END %]
     </td>
   </tr>
-    [% IF ( biblio_lis.match_biblionumber ) %]
-    <tr>
-      <td />
-      <td class="highlight" colspan="4">Matches biblio [% biblio_lis.match_biblionumber %] (score = [% biblio_lis.match_score %]): <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblio_lis.match_biblionumber %]">[% biblio_lis.match_citation %]</a></td>
-    </tr>
-    [% END %]
+    [% PROCESS match_link record=record_lis %]
   [% END %]
 </table>
   [% IF ( pages ) %]

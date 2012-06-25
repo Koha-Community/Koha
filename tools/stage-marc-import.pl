@@ -55,6 +55,7 @@ my $nomatch_action = $input->param('nomatch_action');
 my $parse_items = $input->param('parse_items');
 my $item_action = $input->param('item_action');
 my $comments = $input->param('comments');
+my $record_type = $input->param('record_type');
 my $encoding = $input->param('encoding');
 my ($template, $loggedinuser, $cookie)
 	= get_template_and_user({template_name => "tools/stage-marc-import.tmpl",
@@ -115,7 +116,7 @@ if ($completedJobID) {
             # close STDOUT to signal to Apache that
             # we're now running in the background
             close STDOUT;
-            close STDERR;
+            # close STDERR; # there is no good reason to close STDERR
         } else {
             # fork failed, so exit immediately
             warn "fork failed while attempting to run $ENV{'SCRIPT_NAME'} as a background job";

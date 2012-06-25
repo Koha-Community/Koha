@@ -205,7 +205,7 @@ sub AddImportBatch {
     my (@fields, @vals);
     foreach (qw( matcher_id template_id branchcode
                  overlay_action nomatch_action item_action
-                 import_status batch_type file_name comments )) {
+                 import_status batch_type file_name comments record_type )) {
         if (exists $params->{$_}) {
             push @fields, $_;
             push @vals, $params->{$_};
@@ -328,7 +328,7 @@ sub  BatchStageMarcRecords {
     my $branch_code = shift;
     my $parse_items = shift;
     my $leave_as_staging = shift;
-   
+
     # optional callback to monitor status 
     # of job
     my $progress_interval = 0;
@@ -346,6 +346,7 @@ sub  BatchStageMarcRecords {
             batch_type => 'batch',
             file_name => $file_name,
             comments => $comments,
+            record_type => $record_type,
         } );
     if ($parse_items) {
         SetImportBatchItemAction($batch_id, 'always_add');
@@ -584,7 +585,7 @@ sub BatchCommitRecords {
                     $num_items_errored += $bib_items_errored;
                 }
             } else {
-                my $authid = AddAuthority($marc_record, undef, GuessAuthTypeCode($marc_record));
+                $recordid = AddAuthority($marc_record, undef, GuessAuthTypeCode($marc_record));
                 $query = "UPDATE import_auths SET matched_authid = ? WHERE import_record_id = ?";
             }
             my $sth = $dbh->prepare_cached($query);
@@ -616,7 +617,7 @@ sub BatchCommitRecords {
                     $num_items_errored += $bib_items_errored;
                 }
             } else {
-                my $oldxml = GetAuthorityXML($recordid);
+                $oldxml = GetAuthorityXML($recordid);
 
                 ModAuthority($recordid, $marc_record, GuessAuthTypeCode($marc_record));
                 $query = "UPDATE import_auths SET matched_authid = ? WHERE import_record_id = ?";
@@ -1350,9 +1351,9 @@ sub _add_auth_fields {
     if ($marc_record->field('001')) {
         $controlnumber = $marc_record->field('001')->data();
     }
-    my $authorized_heading = GetAuthorizedHeading($marc_record);
+    my $authorized_heading = GetAuthorizedHeading({ record => $marc_record });
     my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("INSERT INTO import_auths (import_record_id, controlnumber, authorized_heading) VALUES (?, ?, ?)");
+    my $sth = $dbh->prepare("INSERT INTO import_auths (import_record_id, control_number, authorized_heading) VALUES (?, ?, ?)");
     $sth->execute($import_record_id, $controlnumber, $authorized_heading);
     $sth->finish();
 }
@@ -1403,8 +1404,7 @@ sub _update_batch_record_counts {
                                         num_records = (
                                             SELECT COUNT(*)
                                             FROM import_records
-                                            WHERE import_batch_id = import_batches.import_batch_id
-                                            AND record_type = 'biblio'),
+                                            WHERE import_batch_id = import_batches.import_batch_id),
                                         num_items = (
                                             SELECT COUNT(*)
                                             FROM import_records

@@ -924,7 +924,7 @@ CREATE TABLE `import_auths` (
   `original_source` varchar(25) default NULL,
   CONSTRAINT `import_auths_ibfk_1` FOREIGN KEY (`import_record_id`)
              REFERENCES `import_records` (`import_record_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  KEY `matched_authid` (`matched_authid`),
+  KEY `matched_authid` (`matched_authid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --

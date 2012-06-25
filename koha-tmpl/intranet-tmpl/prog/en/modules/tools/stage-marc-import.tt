@@ -11,6 +11,13 @@
 //<![CDATA[
 $(document).ready(function(){
 	$("#processfile").hide();
+    $("#record_type").change(function() {
+        if ($(this).val() == 'auth') {
+            $('#items').hide();
+        } else {
+            $('#items').show();
+        }
+    });
 });
 function CheckForm(f) {
     if ($("#fileToUpload").value == '') {
@@ -40,6 +47,12 @@ function CheckForm(f) {
 [% IF ( uploadmarc ) %]
 <p>MARC staging results :</p>
 <ul>
+    [% SWITCH (record_type) %]
+    [% CASE 'biblio' %]
+        <li>Processing bibliographic records</li>
+    [% CASE 'auth' %]
+        <li>Processing authority records</li>
+    [% END %]
 	<li>[% total %]  records in file</li>
 	<li>[% import_errors %] records not staged because of MARC error</li>
 	<li>[% staged %] records staged</li>
@@ -62,8 +75,8 @@ function CheckForm(f) {
 </ul>
 [% ELSE %]
 <ul>
-	<li>Select a MARC file to stage in the import reservoir.  It will be parsed, and each valid record staged for later import into the catalog.</li>
-	<li>You can enter a name for this import. It may be useful, when creating a biblio, to remember where the suggested MARC data comes from!</li>
+    <li>Select a MARC file to stage in the import reservoir.  It will be parsed, and each valid record staged for later import into the catalog.</li>
+    <li>You can enter a name for this import. It may be useful, when creating a record, to remember where the suggested MARC data comes from!</li>
 </ul>
 <form method="post" action="[% SCRIPT_NAME %]" id="uploadfile" enctype="multipart/form-data">
 <fieldset class="rows" id="uploadform">
@@ -92,6 +105,13 @@ function CheckForm(f) {
 		<input type="text" id="comments" name="comments" />
 		
 	</li>
+    <li>
+        <label for='record_type'>Record type:</label>
+        <select name='record_type' id='record_type'>
+            <option value='biblio' selected='selected'>Bibliographic</option>
+            <option value='auth'>Authority</option>
+        </select>
+    </li>
 	<li>
 		<label for="encoding">Character encoding: </label>
             <select name="encoding" id="encoding"><option value="utf8" selected="selected">UTF-8 (Default)</option><option value="MARC-8">MARC 8</option><option value="ISO_5426">ISO 5426</option><option value="ISO_6937">ISO 6937</option><option value=ISO_8859-1">ISO 8859-1</option><option value="EUC-KR">EUC-KR</option></select>
@@ -108,7 +128,7 @@ function CheckForm(f) {
        [% END %]
     </select>
     </li>
-      <li><label for="overlay_action">Action if matching bibliographic record found: </label>
+      <li><label for="overlay_action">Action if matching record found: </label>
            [% INCLUDE 'tools-overlay-action.inc' %]
       </li>
       <li><label for="nomatch_action">Action if no match is found: </label>
@@ -116,7 +136,7 @@ function CheckForm(f) {
       </li>
     </ol>
   </fieldset>
-  <fieldset class="rows">
+  <fieldset class="rows" id="items">
     <legend>Check for embedded item record data?</legend>
     <ol>
       <li class="radio">
