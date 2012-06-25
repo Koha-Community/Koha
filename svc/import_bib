@@ -89,7 +89,7 @@ sub import_bib {
     my $number_of_matches =  BatchFindBibDuplicates($batch_id, $matcher);
 
     # XXX we are ignoring the result of this;
-    BatchCommitBibRecords($batch_id, $framework) if lc($import_mode) eq 'direct';
+    BatchCommitRecords($batch_id, $framework) if lc($import_mode) eq 'direct';
 
     my $dbh = C4::Context->dbh();
     my $sth = $dbh->prepare("SELECT matched_biblionumber FROM import_biblios WHERE import_record_id =?");

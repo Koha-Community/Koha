@@ -1,6 +1,6 @@
 package C4::Matcher;
 
-# Copyright (C) 2007 LibLime
+# Copyright (C) 2007 LibLime, 2012 C & P Bibliography Services
 #
 # This file is part of Koha.
 #
@@ -22,8 +22,6 @@ use warnings;
 
 use C4::Context;
 use MARC::Record;
-use C4::Search;
-use C4::Biblio;
 
 use vars qw($VERSION);
 
@@ -384,6 +382,20 @@ sub delete {
     $sth->execute($matcher_id); # relying on cascading deletes to clean up everything
 }
 
+=head2 record_type
+
+  $matcher->record_type('biblio');
+  my $record_type = $matcher->record_type();
+
+Accessor method.
+
+=cut
+
+sub record_type {
+    my $self = shift;
+    @_ ? $self->{'record_type'} = shift : $self->{'record_type'};
+}
+
 =head2 threshold
 
   $matcher->threshold(1000);
@@ -582,7 +594,7 @@ sub add_simple_required_check {
     );
 }
 
-=head2 find_matches
+=head2 get_matches
 
   my @matches = $matcher->get_matches($marc_record, $max_matches);
   foreach $match (@matches) {
@@ -618,9 +630,37 @@ sub get_matches {
         my @source_keys = _get_match_keys($source_record, $matchpoint);
         next if scalar(@source_keys) == 0;
         # build query
-        my $query = join(" or ", map { "$matchpoint->{'index'}=$_" } @source_keys);
-        # FIXME only searching biblio index at the moment
-        my ($error, $searchresults, $total_hits) = SimpleSearch($query, 0, $max_matches);
+        my $query;
+        my $error;
+        my $searchresults;
+        my $total_hits;
+        if ($self->{'record_type'} eq 'biblio') {
+            $query = join(" or ", map { "$matchpoint->{'index'}=$_" } @source_keys);
+# FIXME only searching biblio index at the moment
+            require C4::Search;
+            ($error, $searchresults, $total_hits) = C4::Search::SimpleSearch($query, 0, $max_matches);
+        } elsif ($self->{'record_type'} eq 'authority') {
+            my $authresults;
+            my @marclist;
+            my @and_or;
+            my @excluding = [];
+            my @operator;
+            my @value;
+            foreach my $key (@source_keys) {
+                push @marclist, $matchpoint->{'index'};
+                push @and_or, 'or';
+                push @operator, 'exact';
+                push @value, $key;
+            }
+            require C4::AuthoritiesMarc;
+            ($authresults, $total_hits) = C4::AuthoritiesMarc::SearchAuthorities(
+                    \@marclist, \@and_or, \@excluding, \@operator,
+                    \@value, 0, 20, undef, 'AuthidAsc', 1
+            );
+            foreach my $result (@$authresults) {
+                push @$searchresults, $result->{'authid'};
+            }
+        }
 
         if (defined $error ) {
             warn "search failed ($query) $error";
@@ -636,16 +676,23 @@ sub get_matches {
 
     # get rid of any that don't meet the required checks
     %matches = map { _passes_required_checks($source_record, $_, $self->{'required_checks'}) ?  ($_ => $matches{$_}) : () } 
-                keys %matches;
+                keys %matches unless ($self->{'record_type'} eq 'auth');
 
     my @results = ();
-    foreach my $marcblob (keys %matches) {
-        my $target_record = MARC::Record->new_from_usmarc($marcblob);
-        my $result = TransformMarcToKoha(C4::Context->dbh, $target_record, '');
-        # FIXME - again, bibliospecific
-        # also, can search engine be induced to give just the number in the first place?
-        my $record_number = $result->{'biblionumber'};
-        push @results, { 'record_id' => $record_number, 'score' => $matches{$marcblob} };
+    if ($self->{'record_type'} eq 'biblio') {
+        require C4::Biblio;
+        foreach my $marcblob (keys %matches) {
+            my $target_record = MARC::Record->new_from_usmarc($marcblob);
+            my $record_number;
+            my $result = C4::Biblio::TransformMarcToKoha(C4::Context->dbh, $target_record, '');
+            $record_number = $result->{'biblionumber'};
+            push @results, { 'record_id' => $record_number, 'score' => $matches{$marcblob} };
+        }
+    } elsif ($self->{'record_type'} eq 'authority') {
+        require C4::AuthoritiesMarc;
+        foreach my $authid (keys %matches) {
+            push @results, { 'record_id' => $authid, 'score' => $matches{$authid} };
+        }
     }
     @results = sort { $b->{'score'} cmp $a->{'score'} } @results;
     if (scalar(@results) > $max_matches) {
@@ -673,6 +720,7 @@ sub dump {
     $result->{'matcher_id'} = $self->{'id'};
     $result->{'code'} = $self->{'code'};
     $result->{'description'} = $self->{'description'};
+    $result->{'record_type'} = $self->{'record_type'};
 
     $result->{'matchpoints'} = [];
     foreach my $matchpoint (@{ $self->{'matchpoints'} }) {

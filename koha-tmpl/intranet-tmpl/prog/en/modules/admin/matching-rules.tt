@@ -220,6 +220,17 @@ function CheckRuleForm(f) {
            <input type="text" id="threshold" name="threshold" size="5" maxlength="5" 
                   value="[% threshold |html %]" /> <span class="required">Required</span>
        </li>
+       <li><label for="record_type" class="required">Record type: </label>
+           <select id="record_type" name="record_type">
+               [% IF ( record_type == "authority" ) %]
+                   <option value="biblio">Bibliographic record</option>
+                   <option value="authority" selected="selected">Authority record</option>
+               [% ELSE %]
+                   <option value="biblio" selected="selected">Bibliographic record</option>
+                   <option value="authority">Authority record</option>
+               [% END %]
+           </select><span class="required">Required</span>
+       </li>
     </ol>
   </fieldset>
 

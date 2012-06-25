@@ -130,7 +130,7 @@ if ($completedJobID) {
     }
 
     # FIXME branch code
-    my ($batch_id, $num_valid, $num_items, @import_errors) = BatchStageMarcRecords($encoding, $marcrecord, $filename, $comments, '', $parse_items, 0, 50, staging_progress_callback($job, $dbh));
+    my ($batch_id, $num_valid, $num_items, @import_errors) = BatchStageMarcRecords($record_type, $encoding, $marcrecord, $filename, $comments, '', $parse_items, 0, 50, staging_progress_callback($job, $dbh));
 
     $dbh->commit();
 
@@ -143,7 +143,7 @@ if ($completedJobID) {
         if (defined $matcher) {
             $checked_matches = 1;
             $matcher_code = $matcher->code();
-            $num_with_matches = BatchFindBibDuplicates($batch_id, $matcher, 
+            $num_with_matches = BatchFindDuplicates($batch_id, $matcher,
                                                        10, 50, matching_progress_callback($job, $dbh));
             SetImportBatchMatcher($batch_id, $matcher_id);
             SetImportBatchOverlayAction($batch_id, $overlay_action);

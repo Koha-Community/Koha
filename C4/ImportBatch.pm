@@ -1,6 +1,6 @@
 package C4::ImportBatch;
 
-# Copyright (C) 2007 LibLime
+# Copyright (C) 2007 LibLime, 2012 C & P Bibliography Services
 #
 # This file is part of Koha.
 #
@@ -25,6 +25,7 @@ use C4::Koha;
 use C4::Biblio;
 use C4::Items;
 use C4::Charset;
+use C4::AuthoritiesMarc;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -40,21 +41,23 @@ BEGIN {
     GetImportRecordMarcXML
     AddImportBatch
     GetImportBatch
+    AddAuthToBatch
     AddBiblioToBatch
     AddItemsToImportBiblio
+    ModAuthorityInBatch
     ModBiblioInBatch
 
     BatchStageMarcRecords
-    BatchFindBibDuplicates
-    BatchCommitBibRecords
-    BatchRevertBibRecords
+    BatchFindDuplicates
+    BatchCommitRecords
+    BatchRevertRecords
     CleanBatch
 
     GetAllImportBatches
     GetStagedWebserviceBatches
     GetImportBatchRangeDesc
     GetNumberOfNonZ3950ImportBatches
-    GetImportBibliosRange
+    GetImportRecordsRange
 	GetItemNumbersFromImportBatch
     
     GetImportBatchStatus
@@ -272,10 +275,44 @@ sub ModBiblioInBatch {
 
 }
 
+=head2 AddAuthToBatch
+
+  my $import_record_id = AddAuthToBatch($batch_id, $record_sequence,
+                $marc_record, $encoding, $z3950random, $update_counts);
+
+=cut
+
+sub AddAuthToBatch {
+    my $batch_id = shift;
+    my $record_sequence = shift;
+    my $marc_record = shift;
+    my $encoding = shift;
+    my $z3950random = shift;
+    my $update_counts = @_ ? shift : 1;
+
+    my $import_record_id = _create_import_record($batch_id, $record_sequence, $marc_record, 'auth', $encoding, $z3950random);
+    _add_auth_fields($import_record_id, $marc_record);
+    _update_batch_record_counts($batch_id) if $update_counts;
+    return $import_record_id;
+}
+
+=head2 ModAuthInBatch
+
+  ModAuthInBatch($import_record_id, $marc_record);
+
+=cut
+
+sub ModAuthInBatch {
+    my ($import_record_id, $marc_record) = @_;
+
+    _update_import_record_marc($import_record_id, $marc_record);
+
+}
+
 =head2 BatchStageMarcRecords
 
   ($batch_id, $num_records, $num_items, @invalid_records) = 
-    BatchStageMarcRecords($encoding, $marc_records, $file_name, 
+    BatchStageMarcRecords($record_type, $encoding, $marc_records, $file_name,
                           $comments, $branch_code, $parse_items,
                           $leave_as_staging, 
                           $progress_interval, $progress_callback);
@@ -283,6 +320,7 @@ sub ModBiblioInBatch {
 =cut
 
 sub  BatchStageMarcRecords {
+    my $record_type = shift;
     my $encoding = shift;
     my $marc_records = shift;
     my $file_name = shift;
@@ -338,10 +376,14 @@ sub  BatchStageMarcRecords {
             push @invalid_records, $marc_blob;
         } else {
             $num_valid++;
-            $import_record_id = AddBiblioToBatch($batch_id, $rec_num, $marc_record, $encoding, int(rand(99999)), 0);
-            if ($parse_items) {
-                my @import_items_ids = AddItemsToImportBiblio($batch_id, $import_record_id, $marc_record, 0);
-                $num_items += scalar(@import_items_ids);
+            if ($record_type eq 'biblio') {
+                $import_record_id = AddBiblioToBatch($batch_id, $rec_num, $marc_record, $encoding, int(rand(99999)), 0);
+                if ($parse_items) {
+                    my @import_items_ids = AddItemsToImportBiblio($batch_id, $import_record_id, $marc_record, 0);
+                    $num_items += scalar(@import_items_ids);
+                }
+            } elsif ($record_type eq 'auth') {
+                $import_record_id = AddAuthToBatch($batch_id, $rec_num, $marc_record, $encoding, int(rand(99999)), 0);
             }
         }
     }
@@ -392,9 +434,9 @@ sub AddItemsToImportBiblio {
     return @import_items_ids;
 }
 
-=head2 BatchFindBibDuplicates
+=head2 BatchFindDuplicates
 
-  my $num_with_matches = BatchFindBibDuplicates($batch_id, $matcher, 
+  my $num_with_matches = BatchFindDuplicates($batch_id, $matcher,
              $max_matches, $progress_interval, $progress_callback);
 
 Goes through the records loaded in the batch and attempts to 
@@ -412,7 +454,7 @@ singular argument.
 
 =cut
 
-sub BatchFindBibDuplicates {
+sub BatchFindDuplicates {
     my $batch_id = shift;
     my $matcher = shift;
     my $max_matches = @_ ? shift : 10;
@@ -430,9 +472,8 @@ sub BatchFindBibDuplicates {
 
     my $dbh = C4::Context->dbh;
 
-    my $sth = $dbh->prepare("SELECT import_record_id, marc
+    my $sth = $dbh->prepare("SELECT import_record_id, record_type, marc
                              FROM import_records
-                             JOIN import_biblios USING (import_record_id)
                              WHERE import_batch_id = ?");
     $sth->execute($batch_id);
     my $num_with_matches = 0;
@@ -460,15 +501,15 @@ sub BatchFindBibDuplicates {
     return $num_with_matches;
 }
 
-=head2 BatchCommitBibRecords
+=head2 BatchCommitRecords
 
-  my ($num_added, $num_updated, $num_items_added, $num_items_errored, 
-      $num_ignored) = BatchCommitBibRecords($batch_id, $framework,
-                      $progress_interval, $progress_callback);
+  my ($num_added, $num_updated, $num_items_added, $num_items_errored, $num_ignored) =
+        BatchCommitRecords($batch_id, $framework,
+        $progress_interval, $progress_callback);
 
 =cut
 
-sub BatchCommitBibRecords {
+sub BatchCommitRecords {
     my $batch_id = shift;
     my $framework = shift;
 
@@ -483,25 +524,29 @@ sub BatchCommitBibRecords {
         $progress_interval = 0 unless 'CODE' eq ref $progress_callback;
     }
 
+    my $record_type;
     my $num_added = 0;
     my $num_updated = 0;
     my $num_items_added = 0;
     my $num_items_errored = 0;
     my $num_ignored = 0;
     # commit (i.e., save, all records in the batch)
-    # FIXME biblio only at the moment
     SetImportBatchStatus('importing');
     my $overlay_action = GetImportBatchOverlayAction($batch_id);
     my $nomatch_action = GetImportBatchNoMatchAction($batch_id);
     my $item_action = GetImportBatchItemAction($batch_id);
+    my $item_tag;
+    my $item_subfield;
     my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("SELECT import_record_id, status, overlay_status, marc, encoding
+    my $sth = $dbh->prepare("SELECT import_records.import_record_id, record_type, status, overlay_status, marc, encoding
                              FROM import_records
-                             JOIN import_biblios USING (import_record_id)
+                             LEFT JOIN import_auths ON (import_records.import_record_id=import_auths.import_record_id)
+                             LEFT JOIN import_biblios ON (import_records.import_record_id=import_biblios.import_record_id)
                              WHERE import_batch_id = ?");
     $sth->execute($batch_id);
     my $rec_num = 0;
     while (my $rowref = $sth->fetchrow_hashref) {
+        $record_type = $rowref->{'record_type'};
         $rec_num++;
         if ($progress_interval and (0 == ($rec_num % $progress_interval))) {
             &$progress_callback($rec_num);
@@ -513,67 +558,87 @@ sub BatchCommitBibRecords {
 
         my $marc_record = MARC::Record->new_from_usmarc($rowref->{'marc'});
 
-        # remove any item tags - rely on BatchCommitItems
-        my ($item_tag,$item_subfield) = &GetMarcFromKohaField("items.itemnumber",'');
-        foreach my $item_field ($marc_record->field($item_tag)) {
-            $marc_record->delete_field($item_field);
+        if ($record_type eq 'biblio') {
+            # remove any item tags - rely on BatchCommitItems
+            ($item_tag,$item_subfield) = &GetMarcFromKohaField("items.itemnumber",'');
+            foreach my $item_field ($marc_record->field($item_tag)) {
+                $marc_record->delete_field($item_field);
+            }
         }
 
-        # decide what what to do with the bib and item records
-        my ($bib_result, $item_result, $bib_match) = 
+        my ($record_result, $item_result, $record_match) =
             _get_commit_action($overlay_action, $nomatch_action, $item_action, 
-                               $rowref->{'overlay_status'}, $rowref->{'import_record_id'});
+                               $rowref->{'overlay_status'}, $rowref->{'import_record_id'}, $record_type);
 
-        if ($bib_result eq 'create_new') {
+        my $recordid;
+        my $query;
+        if ($record_result eq 'create_new') {
             $num_added++;
-            my ($biblionumber, $biblioitemnumber) = AddBiblio($marc_record, $framework);
-            my $sth = $dbh->prepare_cached("UPDATE import_biblios SET matched_biblionumber = ? WHERE import_record_id = ?");
-            $sth->execute($biblionumber, $rowref->{'import_record_id'});
-            $sth->finish();
-            if ($item_result eq 'create_new') {
-                my ($bib_items_added, $bib_items_errored) = BatchCommitItems($rowref->{'import_record_id'}, $biblionumber);
-                $num_items_added += $bib_items_added;
-                $num_items_errored += $bib_items_errored;
+            if ($record_type eq 'biblio') {
+                my $biblioitemnumber;
+                ($recordid, $biblioitemnumber) = AddBiblio($marc_record, $framework);
+                $query = "UPDATE import_biblios SET matched_biblionumber = ? WHERE import_record_id = ?";
+                if ($item_result eq 'create_new') {
+                    my ($bib_items_added, $bib_items_errored) = BatchCommitItems($rowref->{'import_record_id'}, $recordid);
+                    $num_items_added += $bib_items_added;
+                    $num_items_errored += $bib_items_errored;
+                }
+            } else {
+                my $authid = AddAuthority($marc_record, undef, GuessAuthTypeCode($marc_record));
+                $query = "UPDATE import_auths SET matched_authid = ? WHERE import_record_id = ?";
             }
+            my $sth = $dbh->prepare_cached($query);
+            $sth->execute($recordid, $rowref->{'import_record_id'});
+            $sth->finish();
             SetImportRecordStatus($rowref->{'import_record_id'}, 'imported');
-        } elsif ($bib_result eq 'replace') {
+        } elsif ($record_result eq 'replace') {
             $num_updated++;
-            my $biblionumber = $bib_match;
-            my $oldbiblio = GetBiblio($biblionumber);
-            my $oldxml = GetXmlBiblio($biblionumber);
+            $recordid = $record_match;
+            my $oldxml;
+            if ($record_type eq 'biblio') {
+                my ($count, $oldbiblio) = GetBiblio($recordid);
+                $oldxml = GetXmlBiblio($recordid);
 
-            # remove item fields so that they don't get
-            # added again if record is reverted
-            my $old_marc = MARC::Record->new_from_xml(StripNonXmlChars($oldxml), 'UTF-8', $rowref->{'encoding'});
-            foreach my $item_field ($old_marc->field($item_tag)) {
-                $old_marc->delete_field($item_field);
+                # remove item fields so that they don't get
+                # added again if record is reverted
+                my $old_marc = MARC::Record->new_from_xml(StripNonXmlChars($oldxml), 'UTF-8', $rowref->{'encoding'});
+                foreach my $item_field ($old_marc->field($item_tag)) {
+                    $old_marc->delete_field($item_field);
+                }
+                $oldxml = $old_marc->as_xml();
+
+                ModBiblio($marc_record, $recordid, $oldbiblio->{'frameworkcode'});
+                $query = "UPDATE import_biblios SET matched_biblionumber = ? WHERE import_record_id = ?";
+
+                if ($item_result eq 'create_new') {
+                    my ($bib_items_added, $bib_items_errored) = BatchCommitItems($rowref->{'import_record_id'}, $recordid);
+                    $num_items_added += $bib_items_added;
+                    $num_items_errored += $bib_items_errored;
+                }
+            } else {
+                my $oldxml = GetAuthorityXML($recordid);
+
+                ModAuthority($recordid, $marc_record, GuessAuthTypeCode($marc_record));
+                $query = "UPDATE import_auths SET matched_authid = ? WHERE import_record_id = ?";
             }
-
-            ModBiblio($marc_record, $biblionumber, $oldbiblio->{'frameworkcode'});
             my $sth = $dbh->prepare_cached("UPDATE import_records SET marcxml_old = ? WHERE import_record_id = ?");
-            $sth->execute($old_marc->as_xml(), $rowref->{'import_record_id'});
+            $sth->execute($oldxml, $rowref->{'import_record_id'});
             $sth->finish();
-            my $sth2 = $dbh->prepare_cached("UPDATE import_biblios SET matched_biblionumber = ? WHERE import_record_id = ?");
-            $sth2->execute($biblionumber, $rowref->{'import_record_id'});
+            my $sth2 = $dbh->prepare_cached($query);
+            $sth2->execute($recordid, $rowref->{'import_record_id'});
             $sth2->finish();
-            if ($item_result eq 'create_new') {
-                my ($bib_items_added, $bib_items_errored) = BatchCommitItems($rowref->{'import_record_id'}, $biblionumber);
-                $num_items_added += $bib_items_added;
-                $num_items_errored += $bib_items_errored;
-            }
             SetImportRecordOverlayStatus($rowref->{'import_record_id'}, 'match_applied');
             SetImportRecordStatus($rowref->{'import_record_id'}, 'imported');
-        } elsif ($bib_result eq 'ignore') {
+        } elsif ($record_result eq 'ignore') {
             $num_ignored++;
-            my $biblionumber = $bib_match;
-            if (defined $biblionumber and $item_result eq 'create_new') {
-                my ($bib_items_added, $bib_items_errored) = BatchCommitItems($rowref->{'import_record_id'}, $biblionumber);
+            if ($record_type eq 'biblio' and defined $recordid and $item_result eq 'create_new') {
+                my ($bib_items_added, $bib_items_errored) = BatchCommitItems($rowref->{'import_record_id'}, $recordid);
                 $num_items_added += $bib_items_added;
                 $num_items_errored += $bib_items_errored;
                 # still need to record the matched biblionumber so that the
                 # items can be reverted
                 my $sth2 = $dbh->prepare_cached("UPDATE import_biblios SET matched_biblionumber = ? WHERE import_record_id = ?");
-                $sth2->execute($biblionumber, $rowref->{'import_record_id'});
+                $sth2->execute($recordid, $rowref->{'import_record_id'});
                 SetImportRecordOverlayStatus($rowref->{'import_record_id'}, 'match_applied');
             }
             SetImportRecordStatus($rowref->{'import_record_id'}, 'ignored');
@@ -632,63 +697,84 @@ sub BatchCommitItems {
     return ($num_items_added, $num_items_errored);
 }
 
-=head2 BatchRevertBibRecords
+=head2 BatchRevertRecords
 
   my ($num_deleted, $num_errors, $num_reverted, $num_items_deleted, 
-      $num_ignored) = BatchRevertBibRecords($batch_id);
+      $num_ignored) = BatchRevertRecords($batch_id);
 
 =cut
 
-sub BatchRevertBibRecords {
+sub BatchRevertRecords {
     my $batch_id = shift;
 
+    my $record_type;
     my $num_deleted = 0;
     my $num_errors = 0;
     my $num_reverted = 0;
-    my $num_items_deleted = 0;
     my $num_ignored = 0;
+    my $num_items_deleted = 0;
     # commit (i.e., save, all records in the batch)
-    # FIXME biblio only at the moment
     SetImportBatchStatus('reverting');
     my $overlay_action = GetImportBatchOverlayAction($batch_id);
     my $nomatch_action = GetImportBatchNoMatchAction($batch_id);
     my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("SELECT import_record_id, status, overlay_status, marcxml_old, encoding, matched_biblionumber
+    my $sth = $dbh->prepare("SELECT import_records.import_record_id, record_type, status, overlay_status, marcxml_old, encoding, matched_biblionumber, matched_authid
                              FROM import_records
-                             JOIN import_biblios USING (import_record_id)
+                             LEFT JOIN import_auths ON (import_records.import_record_id=import_auths.import_record_id)
+                             LEFT JOIN import_biblios ON (import_records.import_record_id=import_biblios.import_record_id)
                              WHERE import_batch_id = ?");
     $sth->execute($batch_id);
     while (my $rowref = $sth->fetchrow_hashref) {
+        $record_type = $rowref->{'record_type'};
         if ($rowref->{'status'} eq 'error' or $rowref->{'status'} eq 'reverted') {
             $num_ignored++;
             next;
         }
 
-        my $bib_result = _get_revert_action($overlay_action, $rowref->{'overlay_status'}, $rowref->{'status'});
+        my $record_result = _get_revert_action($overlay_action, $rowref->{'overlay_status'}, $rowref->{'status'});
 
-        if ($bib_result eq 'delete') {
-            $num_items_deleted += BatchRevertItems($rowref->{'import_record_id'}, $rowref->{'matched_biblionumber'});
-            my $error = DelBiblio($rowref->{'matched_biblionumber'});
+        if ($record_result eq 'delete') {
+            my $error = undef;
+            if  ($record_type eq 'biblio') {
+                $num_items_deleted += BatchRevertItems($rowref->{'import_record_id'}, $rowref->{'matched_biblionumber'});
+                $error = DelBiblio($rowref->{'matched_biblionumber'});
+            } else {
+                my $deletedauthid = DelAuthority($rowref->{'matched_authid'});
+            }
             if (defined $error) {
                 $num_errors++;
             } else {
                 $num_deleted++;
                 SetImportRecordStatus($rowref->{'import_record_id'}, 'reverted');
             }
-        } elsif ($bib_result eq 'restore') {
+        } elsif ($record_result eq 'restore') {
             $num_reverted++;
             my $old_record = MARC::Record->new_from_xml(StripNonXmlChars($rowref->{'marcxml_old'}), 'UTF-8', $rowref->{'encoding'});
-            my $biblionumber = $rowref->{'matched_biblionumber'};
-            my $oldbiblio = GetBiblio($biblionumber);
-            $num_items_deleted += BatchRevertItems($rowref->{'import_record_id'}, $rowref->{'matched_biblionumber'});
-            ModBiblio($old_record, $biblionumber, $oldbiblio->{'frameworkcode'});
+            if ($record_type eq 'biblio') {
+                my $biblionumber = $rowref->{'matched_biblionumber'};
+                my ($count, $oldbiblio) = GetBiblio($biblionumber);
+                $num_items_deleted += BatchRevertItems($rowref->{'import_record_id'}, $rowref->{'matched_biblionumber'});
+                ModBiblio($old_record, $biblionumber, $oldbiblio->{'frameworkcode'});
+            } else {
+                my $authid = $rowref->{'matched_authid'};
+                ModAuthority($authid, $old_record, GuessAuthTypeCode($old_record));
+            }
             SetImportRecordStatus($rowref->{'import_record_id'}, 'reverted');
-        } elsif ($bib_result eq 'ignore') {
-            $num_items_deleted += BatchRevertItems($rowref->{'import_record_id'}, $rowref->{'matched_biblionumber'});
+        } elsif ($record_result eq 'ignore') {
+            if ($record_type eq 'biblio') {
+                $num_items_deleted += BatchRevertItems($rowref->{'import_record_id'}, $rowref->{'matched_biblionumber'});
+            }
             SetImportRecordStatus($rowref->{'import_record_id'}, 'reverted');
         }
-        # remove matched_biblionumber only if there is no 'imported' item left
-        my $sth2 = $dbh->prepare_cached("UPDATE import_biblios SET matched_biblionumber = NULL WHERE import_record_id = ?  AND NOT EXISTS (SELECT * FROM import_items WHERE import_items.import_record_id=import_biblios.import_record_id and status='imported')" );
+        my $query;
+        if ($record_type eq 'biblio') {
+            # remove matched_biblionumber only if there is no 'imported' item left
+            $query = "UPDATE import_biblios SET matched_biblionumber = NULL WHERE import_record_id = ?";
+            $query = "UPDATE import_biblios SET matched_biblionumber = NULL WHERE import_record_id = ?  AND NOT EXISTS (SELECT * FROM import_items WHERE import_items.import_record_id=import_biblios.import_record_id and status='imported')";
+        } else {
+            $query = "UPDATE import_auths SET matched_authid = NULL WHERE import_record_id = ?";
+        }
+        my $sth2 = $dbh->prepare_cached($query);
         $sth2->execute($rowref->{'import_record_id'});
     }
 
@@ -862,24 +948,26 @@ sub GetNumberOfNonZ3950ImportBatches {
     return $count;
 }
 
-=head2 GetImportBibliosRange
+=head2 GetImportRecordsRange
 
-  my $results = GetImportBibliosRange($batch_id, $offset, $results_per_group);
+  my $results = GetImportRecordsRange($batch_id, $offset, $results_per_group);
 
 Returns a reference to an array of hash references corresponding to
-import_biblios/import_records rows for a given batch
+import_biblios/import_auths/import_records rows for a given batch
 starting at the given offset.
 
 =cut
 
-sub GetImportBibliosRange {
+sub GetImportRecordsRange {
     my ($batch_id, $offset, $results_per_group, $status) = @_;
 
     my $dbh = C4::Context->dbh;
-    my $query = "SELECT title, author, isbn, issn, import_record_id, record_sequence,
-                                           status, overlay_status, matched_biblionumber
+    my $query = "SELECT title, author, isbn, issn, authorized_heading, import_records.import_record_id,
+                                           record_sequence, status, overlay_status,
+                                           matched_biblionumber, matched_authid, record_type
                                     FROM   import_records
-                                    JOIN   import_biblios USING (import_record_id)
+                                    LEFT JOIN import_auths ON (import_records.import_record_id=import_auths.import_record_id)
+                                    LEFT JOIN import_biblios ON (import_records.import_record_id=import_biblios.import_record_id)
                                     WHERE  import_batch_id = ?";
     my @params;
     push(@params, $batch_id);
@@ -1181,16 +1269,21 @@ sub GetImportRecordMatches {
 
     my $dbh = C4::Context->dbh;
     # FIXME currently biblio only
-    my $sth = $dbh->prepare_cached("SELECT title, author, biblionumber, score
+    my $sth = $dbh->prepare_cached("SELECT title, author, biblionumber,
+                                    candidate_match_id, score, record_type
                                     FROM import_records
                                     JOIN import_record_matches USING (import_record_id)
-                                    JOIN biblio ON (biblionumber = candidate_match_id)
+                                    LEFT JOIN biblio ON (biblionumber = candidate_match_id)
                                     WHERE import_record_id = ?
                                     ORDER BY score DESC, biblionumber DESC");
     $sth->bind_param(1, $import_record_id);
     my $results = [];
     $sth->execute();
     while (my $row = $sth->fetchrow_hashref) {
+        if ($row->{'record_type'} eq 'auth') {
+            $row->{'authorized_heading'} = GetAuthorizedHeading( { authid => $row->{'candidate_match_id'} } );
+        }
+        next if ($row->{'record_type'} eq 'biblio' && not $row->{'biblionumber'});
         push @$results, $row;
         last if $best_only;
     }
@@ -1250,6 +1343,20 @@ sub _update_import_record_marc {
     $sth->finish();
 }
 
+sub _add_auth_fields {
+    my ($import_record_id, $marc_record) = @_;
+
+    my $controlnumber;
+    if ($marc_record->field('001')) {
+        $controlnumber = $marc_record->field('001')->data();
+    }
+    my $authorized_heading = GetAuthorizedHeading($marc_record);
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare("INSERT INTO import_auths (import_record_id, controlnumber, authorized_heading) VALUES (?, ?, ?)");
+    $sth->execute($import_record_id, $controlnumber, $authorized_heading);
+    $sth->finish();
+}
+
 sub _add_biblio_fields {
     my ($import_record_id, $marc_record) = @_;
 
@@ -1293,7 +1400,7 @@ sub _update_batch_record_counts {
 
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare_cached("UPDATE import_batches SET
-                                        num_biblios = (
+                                        num_records = (
                                             SELECT COUNT(*)
                                             FROM import_records
                                             WHERE import_batch_id = import_batches.import_batch_id
@@ -1311,26 +1418,45 @@ sub _update_batch_record_counts {
 }
 
 sub _get_commit_action {
-    my ($overlay_action, $nomatch_action, $item_action, $overlay_status, $import_record_id) = @_;
+    my ($overlay_action, $nomatch_action, $item_action, $overlay_status, $import_record_id, $record_type) = @_;
     
-    my ($bib_result, $bib_match, $item_result);
+    if ($record_type eq 'biblio') {
+        my ($bib_result, $bib_match, $item_result);
 
-    if ($overlay_status ne 'no_match') {
-        $bib_match = GetBestRecordMatch($import_record_id);
-        if ($overlay_action eq 'replace') {
-            $bib_result  = defined($bib_match) ? 'replace' : 'create_new';
-        } elsif ($overlay_action eq 'create_new') {
-            $bib_result  = 'create_new';
-        } elsif ($overlay_action eq 'ignore') {
-            $bib_result  = 'ignore';
-        } 
-        $item_result = ($item_action eq 'always_add' or $item_action eq 'add_only_for_matches') ? 'create_new' : 'ignore';
-    } else {
-        $bib_result = $nomatch_action;
-        $item_result = ($item_action eq 'always_add' or $item_action eq 'add_only_for_new')     ? 'create_new' : 'ignore';
+        if ($overlay_status ne 'no_match') {
+            $bib_match = GetBestRecordMatch($import_record_id);
+            if ($overlay_action eq 'replace') {
+                $bib_result  = defined($bib_match) ? 'replace' : 'create_new';
+            } elsif ($overlay_action eq 'create_new') {
+                $bib_result  = 'create_new';
+            } elsif ($overlay_action eq 'ignore') {
+                $bib_result  = 'ignore';
+            }
+            $item_result = ($item_action eq 'always_add' or $item_action eq 'add_only_for_matches') ? 'create_new' : 'ignore';
+        } else {
+            $bib_result = $nomatch_action;
+            $item_result = ($item_action eq 'always_add' or $item_action eq 'add_only_for_new')     ? 'create_new' : 'ignore';
+        }
+        return ($bib_result, $item_result, $bib_match);
+    } else { # must be auths
+        my ($auth_result, $auth_match);
+
+        if ($overlay_status ne 'no_match') {
+            $auth_match = GetBestRecordMatch($import_record_id);
+            if ($overlay_action eq 'replace') {
+                $auth_result  = defined($auth_match) ? 'replace' : 'create_new';
+            } elsif ($overlay_action eq 'create_new') {
+                $auth_result  = 'create_new';
+            } elsif ($overlay_action eq 'ignore') {
+                $auth_result  = 'ignore';
+            }
+        } else {
+            $auth_result = $nomatch_action;
+        }
+
+        return ($auth_result, undef, $auth_match);
+
     }
-
-    return ($bib_result, $item_result, $bib_match);
 }
 
 sub _get_revert_action {

@@ -156,7 +156,7 @@ if ($op eq ""){
 
     # retrieve the file you want to import
     my $import_batch_id = $cgiparams->{'import_batch_id'};
-    my $biblios = GetImportBibliosRange($import_batch_id);
+    my $biblios = GetImportRecordsRange($import_batch_id);
     for my $biblio (@$biblios){
         # 1st insert the biblio, or find it through matcher
         my ( $marcblob, $encoding ) = GetImportRecordMarc( $biblio->{'import_record_id'} );
@@ -330,7 +330,7 @@ sub import_batches_list {
     foreach my $batch (@$batches) {
         if ($batch->{'import_status'} eq "staged") {
             # check if there is at least 1 line still staged
-            my $stagedList=GetImportBibliosRange($batch->{'import_batch_id'}, undef, undef, 'staged');
+            my $stagedList=GetImportRecordsRange($batch->{'import_batch_id'}, undef, undef, 'staged');
             if (scalar @$stagedList) {
                 my ($staged_date, $staged_hour) = split (/ /, $batch->{'upload_timestamp'});
                 push @list, {
@@ -357,7 +357,7 @@ sub import_batches_list {
 sub import_biblios_list {
     my ($template, $import_batch_id) = @_;
     my $batch = GetImportBatch($import_batch_id,'staged');
-    my $biblios = GetImportBibliosRange($import_batch_id,'','','staged');
+    my $biblios = GetImportRecordsRange($import_batch_id,'','','staged');
     my @list = ();
 
     foreach my $biblio (@$biblios) {
