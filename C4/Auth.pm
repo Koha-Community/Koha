@@ -146,14 +146,15 @@ sub get_template_and_user {
     my $borrowernumber;
     my $insecure = C4::Context->preference('insecure');
     if ($user or $insecure) {
+        require C4::Members;
         # It's possible for $user to be the borrowernumber if they don't have a
         # userid defined (and are logging in through some other method, such
         # as SSL certs against an email address)
         $borrowernumber = getborrowernumber($user) if defined($user);
         if (!defined($borrowernumber) && defined($user)) {
-		my $borrower = GetMember(borrowernumber => $user);
-		if ($borrower) {
-		$borrowernumber = $user;
+            my $borrower = C4::Members::GetMember(borrowernumber => $user);
+            if ($borrower) {
+                $borrowernumber = $user;
                 # A bit of a hack, but I don't know there's a nicer way
                 # to do it.
                 $user = $borrower->{firstname} . ' ' . $borrower->{surname};
@@ -172,7 +173,6 @@ sub get_template_and_user {
             barshelvesloop  => $barshelves,
         );
 
-        require C4::Members;
         my ( $borr ) = C4::Members::GetMemberDetails( $borrowernumber );
         my @bordat;
         $bordat[0] = $borr;
