@@ -45,6 +45,19 @@ authority-zebra-indexdefs.xsl`
   <kohaidx:index_control_field tag="008" offset="16" length="1">
     <kohaidx:target_index>Heading-use-series-added-entry:w</kohaidx:target_index>
   </kohaidx:index_control_field>
+
+  <!-- 010 LC Number -->
+  <kohaidx:index_subfields tag="010" subfields="az">
+    <kohaidx:target_index>LC-card-number:w</kohaidx:target_index>
+    <kohaidx:target_index>LC-card-number:p</kohaidx:target_index>
+  </kohaidx:index_subfields>
+
+  <!-- 040 cataloging agencies -->
+  <kohaidx:index_subfields tag="040" subfields="acd">
+    <kohaidx:target_index>Record-source:w</kohaidx:target_index>
+    <kohaidx:target_index>Record-source:p</kohaidx:target_index>
+  </kohaidx:index_subfields>
+
   
   <!-- Personal name headings -->
   <kohaidx:index_subfields tag="100" subfields="abcdefghjklmnopqrstvxyz">
@@ -346,6 +359,9 @@ authority-zebra-indexdefs.xsl`
     <kohaidx:target_index>See-from:p</kohaidx:target_index>
     <kohaidx:target_index>See-from:s</kohaidx:target_index>
   </kohaidx:index_heading>
+  <kohaidx:index_heading_conditional tag="450" test="substring(marc:subfield[@code='w']/text(), 2, 1)" subfields="abvxyz" subdivisions="vxyz">
+    <kohaidx:target_index>Previous-heading-see-from:p</kohaidx:target_index>
+  </kohaidx:index_heading_conditional>
   <kohaidx:index_match_heading tag="450" subfields="abvxyz" subdivisions="vxyz">
     <kohaidx:target_index>Match:w</kohaidx:target_index>
     <kohaidx:target_index>Match:p</kohaidx:target_index>

@@ -16,6 +16,7 @@
     <xsl:key name="index_subfields_tag" match="kohaidx:index_subfields" use="@tag"/>
     <xsl:key name="index_heading_tag"   match="kohaidx:index_heading"   use="@tag"/>
     <xsl:key name="index_data_field_tag"   match="kohaidx:index_data_field"   use="@tag"/>
+    <xsl:key name="index_heading_conditional_tag" match="kohaidx:index_heading_conditional" use="@tag"/>
     <xsl:key name="index_match_heading_tag" match="kohaidx:index_match_heading" use="@tag"/>
 
     <xsl:template match="kohaidx:index_defs">
@@ -33,6 +34,7 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
             <xslo:template match="text()" mode="index_subfields"/>
             <xslo:template match="text()" mode="index_data_field"/>
             <xslo:template match="text()" mode="index_heading"/>
+            <xslo:template match="text()" mode="index_heading_conditional"/>
             <xslo:template match="text()" mode="index_match_heading"/>
             <xslo:template match="text()" mode="index_subject_thesaurus"/>
             <xslo:template match="/">
@@ -54,6 +56,7 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
                     <xslo:apply-templates mode="index_subfields"/>
                     <xslo:apply-templates mode="index_data_field"/>
                     <xslo:apply-templates mode="index_heading"/>
+                    <xslo:apply-templates mode="index_heading_conditional"/>
                     <xslo:apply-templates mode="index_match_heading"/>
                     <xslo:apply-templates mode="index_subject_thesaurus"/>
                 </z:record>
@@ -64,6 +67,7 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
             <xsl:call-template name="handle-index-subfields"/>
             <xsl:call-template name="handle-index-data-field"/>
             <xsl:call-template name="handle-index-heading"/>
+            <xsl:call-template name="handle-index-heading-conditional"/>
             <xsl:call-template name="handle-index-match-heading"/>
             <xsl:apply-templates/>
             <xslo:template match="*">
@@ -275,6 +279,19 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
                 <xsl:for-each select="key('index_data_field_tag', @tag)">
                     <xsl:call-template name="handle-one-data-field"/>
                 </xsl:for-each>
+            </xslo:template>
+        </xsl:for-each>
+    </xsl:template>
+
+    <xsl:template name="handle-index-heading-conditional">
+        <xsl:for-each select="//kohaidx:index_heading_conditional[generate-id() = generate-id(key('index_heading_conditional_tag', @tag)[1])]">
+            <xslo:template mode="index_heading_conditional">
+                <xslo:if>
+                    <xsl:attribute name="test"><xsl:value-of select="@test"/></xsl:attribute>
+                    <xsl:for-each select="key('index_heading_conditional_tag', @tag)">
+                        <xsl:call-template name="handle-one-index-heading"/>
+                    </xsl:for-each>
+                </xslo:if>
             </xslo:template>
         </xsl:for-each>
     </xsl:template>

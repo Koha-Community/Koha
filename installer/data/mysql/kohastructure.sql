@@ -855,7 +855,7 @@ CREATE TABLE `import_batches` ( -- information about batches of marc records tha
   `matcher_id` int(11) default NULL, -- the id of the match rule used (matchpoints.matcher_id)
   `template_id` int(11) default NULL,
   `branchcode` varchar(10) default NULL,
-  `num_biblios` int(11) NOT NULL default 0, -- number of bib records in the file
+  `num_records` int(11) NOT NULL default 0, -- number of records in the file
   `num_items` int(11) NOT NULL default 0, -- number of items in the file
   `upload_timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP, -- date and time the file was uploaded
   `overlay_action` enum('replace', 'create_new', 'use_template', 'ignore') NOT NULL default 'create_new', -- how to handle duplicate records
@@ -863,6 +863,7 @@ CREATE TABLE `import_batches` ( -- information about batches of marc records tha
   `item_action` enum('always_add', 'add_only_for_matches', 'add_only_for_new', 'ignore') NOT NULL default 'always_add', -- what to do with item records
   `import_status` enum('staging', 'staged', 'importing', 'imported', 'reverting', 'reverted', 'cleaned') NOT NULL default 'staging', -- the status of the imported file
   `batch_type` enum('batch', 'z3950', 'webservice') NOT NULL default 'batch', -- where this batch has come from
+  `record_type` enum('biblio', 'auth', 'holdings') NOT NULL default 'biblio', -- type of record in the batch
   `file_name` varchar(100), -- the name of the file uploaded
   `comments` mediumtext, -- any comments added when the file was uploaded
   PRIMARY KEY (`import_batch_id`),
@@ -908,6 +909,22 @@ CREATE TABLE `import_record_matches` ( -- matches found when importing a batch o
   CONSTRAINT `import_record_matches_ibfk_1` FOREIGN KEY (`import_record_id`)
              REFERENCES `import_records` (`import_record_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   KEY `record_score` (`import_record_id`, `score`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Table structure for table `import_auths`
+--
+
+DROP TABLE IF EXISTS `import_auths`;
+CREATE TABLE `import_auths` (
+  `import_record_id` int(11) NOT NULL,
+  `matched_authid` int(11) default NULL,
+  `control_number` varchar(25) default NULL,
+  `authorized_heading` varchar(128) default NULL,
+  `original_source` varchar(25) default NULL,
+  CONSTRAINT `import_auths_ibfk_1` FOREIGN KEY (`import_record_id`)
+             REFERENCES `import_records` (`import_record_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  KEY `matched_authid` (`matched_authid`),
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --

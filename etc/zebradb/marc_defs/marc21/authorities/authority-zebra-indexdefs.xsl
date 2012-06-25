@@ -13,6 +13,7 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
   <xslo:template match="text()" mode="index_subfields"/>
   <xslo:template match="text()" mode="index_data_field"/>
   <xslo:template match="text()" mode="index_heading"/>
+  <xslo:template match="text()" mode="index_heading_conditional"/>
   <xslo:template match="text()" mode="index_match_heading"/>
   <xslo:template match="text()" mode="index_subject_thesaurus"/>
   <xslo:template match="/">
@@ -35,6 +36,7 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
       <xslo:apply-templates mode="index_subfields"/>
       <xslo:apply-templates mode="index_data_field"/>
       <xslo:apply-templates mode="index_heading"/>
+      <xslo:apply-templates mode="index_heading_conditional"/>
       <xslo:apply-templates mode="index_match_heading"/>
       <xslo:apply-templates mode="index_subject_thesaurus"/>
     </z:record>
@@ -68,6 +70,24 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
     <z:index name="Heading-use-series-added-entry:w">
       <xslo:value-of select="substring(., 17, 1)"/>
     </z:index>
+  </xslo:template>
+  <xslo:template mode="index_subfields" match="marc:datafield[@tag='010']">
+    <xslo:for-each select="marc:subfield">
+      <xslo:if test="contains('az', @code)">
+        <z:index name="LC-card-number:w LC-card-number:p">
+          <xslo:value-of select="."/>
+        </z:index>
+      </xslo:if>
+    </xslo:for-each>
+  </xslo:template>
+  <xslo:template mode="index_subfields" match="marc:datafield[@tag='040']">
+    <xslo:for-each select="marc:subfield">
+      <xslo:if test="contains('acd', @code)">
+        <z:index name="Record-source:w Record-source:p">
+          <xslo:value-of select="."/>
+        </z:index>
+      </xslo:if>
+    </xslo:for-each>
   </xslo:template>
   <xslo:template mode="index_subfields" match="marc:datafield[@tag='100']">
     <xslo:for-each select="marc:subfield">
@@ -1101,6 +1121,30 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
       </xslo:variable>
       <xslo:value-of select="normalize-space($raw_heading)"/>
     </z:index>
+  </xslo:template>
+  <xslo:template mode="index_heading_conditional" match="marc:datafield[@tag='450']">
+    <xslo:if test="substring(marc:subfield[@code='w']/text(), 2, 1)">
+      <z:index name="Previous-heading-see-from:p">
+        <xslo:variable name="raw_heading">
+          <xslo:for-each select="marc:subfield">
+            <xslo:if test="contains('abvxyz', @code)" name="Previous-heading-see-from:p">
+              <xslo:if test="position() &gt; 1">
+                <xslo:choose>
+                  <xslo:when test="contains('vxyz', @code)">
+                    <xslo:text>--</xslo:text>
+                  </xslo:when>
+                  <xslo:otherwise>
+                    <xslo:value-of select="substring(' ', 1, 1)"/>
+                  </xslo:otherwise>
+                </xslo:choose>
+              </xslo:if>
+              <xslo:value-of select="."/>
+            </xslo:if>
+          </xslo:for-each>
+        </xslo:variable>
+        <xslo:value-of select="normalize-space($raw_heading)"/>
+      </z:index>
+    </xslo:if>
   </xslo:template>
   <xslo:template mode="index_match_heading" match="marc:datafield[@tag='100']">
     <z:index name="Match:w Match:p Match-heading:p Match-heading:s">
