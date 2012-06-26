@@ -67,9 +67,11 @@ sub NetworkPrint {
     # set the queue to "file" (or " file", if real queues aren't allowed
     # to have spaces in them). Or perhaps if $queue eq "" and
     # $env->{file} ne "", then that should mean "print to $env->{file}".
+
+    my $fh;
     if ( $queue eq "" || $queue eq 'nulllp' ) {
         return;
-	#open( PRINTER, ">/tmp/kohaiss" );
+	#open( $fh, ">/tmp/kohaiss" );
     }
     else {
 
@@ -77,15 +79,15 @@ sub NetworkPrint {
         # This is a reasonable assumption, but only because every other
         # printing package has a wrapper script called 'lpr'. It'd still
         # be better to be able to customize this.
-        open( PRINTER, "| lpr -P $queue > /dev/null" )
+        open( $fh, "-|", "lpr -P $queue > /dev/null" )
           or die "Couldn't write to queue:$queue!\n";
     }
 
     #  print $queue;
     #open (FILE,">/tmp/$file");
-    print PRINTER $text;
-    print PRINTER "\r\n" x 7 ;
-    close PRINTER;
+    print $fh $text;
+    print $fh "\r\n" x 7 ;
+    close $fh;
 
     #system("lpr /tmp/$file");
 }
