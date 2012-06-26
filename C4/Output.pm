@@ -125,7 +125,7 @@ This function returns HTML, without any language dependency.
 =cut
 
 sub pagination_bar {
-	my $base_url = (@_ ? shift : $ENV{SCRIPT_NAME} . $ENV{QUERY_STRING}) or return undef;
+	my $base_url = (@_ ? shift : $ENV{SCRIPT_NAME} . $ENV{QUERY_STRING}) or return;
     my $nb_pages       = (@_) ? shift : 1;
     my $current_page   = (@_) ? shift : undef;	# delay default until later
     my $startfrom_name = (@_) ? shift : 'page';
@@ -267,7 +267,7 @@ $status is an HTTP status message, like '403 Authentication Required'. It defaul
 
 =cut
 
-sub output_with_http_headers($$$$;$) {
+sub output_with_http_headers {
     my ( $query, $cookie, $data, $content_type, $status ) = @_;
     $status ||= '200 OK';
 
@@ -305,7 +305,7 @@ sub output_with_http_headers($$$$;$) {
     print $query->header($options), $data;
 }
 
-sub output_html_with_http_headers ($$$;$) {
+sub output_html_with_http_headers {
     my ( $query, $cookie, $data, $status ) = @_;
     output_with_http_headers( $query, $cookie, $data, 'html', $status );
 }
