@@ -106,7 +106,7 @@ sub find {
     if (@$msgs) {
         return $class->new($msgs->[0]);
     } else {
-        return undef;
+        return;
     }
 }
 
@@ -142,7 +142,7 @@ sub find_last_message {
     if (@$msgs) {
         return $class->new($msgs->[0]);
     } else {
-        return undef;
+        return;
     }
 }
 
@@ -316,7 +316,7 @@ sub append {
     }
     if (not $self->metadata) {
         carp "Can't append to messages that don't have metadata.";
-        return undef;
+        return;
     }
     my $metadata = $self->metadata;
     push @{$metadata->{body}}, $item;
