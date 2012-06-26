@@ -42,7 +42,7 @@ INIT {
 # Generates barcode where hb = home branch Code, yymm = year/month catalogued, incr = incremental number,
 # 	increment resets yearly -fbcit
 
-sub db_max ($;$) {
+sub db_max {
 	my $self = shift;
 	my $query = "SELECT MAX(SUBSTRING(barcode,-$width)), barcode FROM items WHERE barcode REGEXP ? GROUP BY barcode";
 	$debug and print STDERR "(hbyymmincr) db_max query: $query\n";
@@ -71,14 +71,14 @@ sub db_max ($;$) {
 	return ($max || 0);
 }
 
-sub initial () {
+sub initial {
 	my $self = shift;
 	# FIXME: populated branch?
 	my $iso = C4::Dates->new->output('iso'); 	# like "2008-07-02"
 	return $self->branch . substr($iso,2,2) . substr($iso,5,2) . sprintf('%' . "$width.$width" . 'd',1);
 }
 
-sub parse ($;$) {   # return 3 parts of barcode: non-incrementing, incrementing, non-incrementing
+sub parse {   # return 3 parts of barcode: non-incrementing, incrementing, non-incrementing
 	my $self = shift;
 	my $barcode = (@_) ? shift : $self->value;
 	my $branch = $self->branch;
@@ -90,17 +90,17 @@ sub parse ($;$) {   # return 3 parts of barcode: non-incrementing, incrementing,
 	return ($1,$2,'');  # the third part is in anticipation of barcodes that include checkdigits
 }
 
-sub branch ($;$) {
+sub branch {
 	my $self = shift;
 	(@_) and $self->{branch} = shift;
 	return $self->{branch};
 }
-sub width ($;$) {
+sub width {
 	my $self = shift;
 	(@_) and $width = shift;	# hitting the class variable.
 	return $width;
 }
-sub process_head($$;$$) {	# (self,head,whole,specific)
+sub process_head {	# (self,head,whole,specific)
 	my ($self,$head,$whole,$specific) = @_;
 	$specific and return $head;	# if this is built off an existing barcode, just return the head unchanged.
 	$head =~ s/\d{4}$//;		# else strip the old yymm
