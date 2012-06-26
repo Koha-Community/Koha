@@ -112,7 +112,7 @@ sub slashifyDate {
 }
 
 # FIXME.. this should be moved to a MARC-specific module
-sub subfield_is_koha_internal_p ($) {
+sub subfield_is_koha_internal_p {
     my ($subfield) = @_;
 
     # We could match on 'lib' and 'tab' (and 'mandatory', & more to come!)
@@ -471,7 +471,7 @@ sub getitemtypeimagesrc {
 	}
 }
 
-sub getitemtypeimagelocation($$) {
+sub getitemtypeimagelocation {
 	my ( $src, $image ) = @_;
 
 	return '' if ( !$image );
@@ -630,7 +630,7 @@ sub GetPrinters {
 
 =cut
 
-sub GetPrinter ($$) {
+sub GetPrinter {
     my ( $query, $printers ) = @_;    # get printer for this query from printers
     my $printer = $query->param('printer');
     my %cookie = $query->cookie('userenv');
@@ -1127,7 +1127,7 @@ sub GetKohaAuthorisedValues {
    	}
    	return \%values;
   } else {
-  	return undef;
+	return;
   }
 }
 
@@ -1158,7 +1158,7 @@ sub GetKohaAuthorisedValuesFromField {
    	}
    	return \%values;
   } else {
-  	return undef;
+	return;
   }
 }
 
@@ -1260,7 +1260,7 @@ sub GetNormalizedISBN {
         $isbn =~ s/(.*)( \| )(.*)/$1/;
         return _isbn_cleanup($isbn);
     }
-    return undef unless $record;
+    return unless $record;
 
     if ($marcflavour eq 'UNIMARC') {
         @fields = $record->field('010');
@@ -1269,7 +1269,7 @@ sub GetNormalizedISBN {
             if ($isbn) {
                 return _isbn_cleanup($isbn);
             } else {
-                return undef;
+                return;
             }
         }
     }
@@ -1280,7 +1280,7 @@ sub GetNormalizedISBN {
             if ($isbn) {
                 return _isbn_cleanup($isbn);
             } else {
-                return undef;
+                return;
             }
         }
     }
@@ -1325,7 +1325,7 @@ sub GetNormalizedOCLCNumber {
                 $oclc =~ s/\(OCoLC\)//;
                 return $oclc;
             } else {
-                return undef;
+                return;
             }
         }
     }
