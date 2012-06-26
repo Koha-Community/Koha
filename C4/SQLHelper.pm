@@ -248,7 +248,7 @@ Get the Primary Key field names of the table
 
 =cut
 
-sub GetPrimaryKeys($) {
+sub GetPrimaryKeys {
 	my $tablename=shift;
 	my $hash_columns=_get_columns($tablename);
 	return  grep { $hash_columns->{$_}->{'Key'} =~/PRI/i}  keys %$hash_columns;
@@ -284,7 +284,7 @@ With
 
 =cut
 
-sub _get_columns($) {
+sub _get_columns {
     my ($tablename) = @_;
     unless ( exists( $hashref->{$tablename} ) ) {
         my $dbh = C4::Context->dbh;
@@ -314,7 +314,7 @@ If it is not for research purpose, filter primary keys
 
 =cut
 
-sub _filter_columns ($$;$) {
+sub _filter_columns {
 	my ($tablename,$research, $filtercolumns)=@_;
 	if ($filtercolumns){
 		return (@$filtercolumns);
