@@ -167,7 +167,7 @@ sub create {
             return $class->new($self);
         } else {
             carp $dbh->errstr;
-            return undef;
+            return;
         }
     }
 }
@@ -404,7 +404,7 @@ sub AUTOLOAD {
     if (exists $self->{$attr}) {
         return $self->{$attr};
     } else {
-        return undef;
+        return;
     }
 }
 
