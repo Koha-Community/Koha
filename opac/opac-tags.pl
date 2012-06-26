@@ -38,7 +38,7 @@ use CGI::Cookie; # need to check cookies before having CGI parse the POST reques
 use C4::Auth qw(:DEFAULT check_cookie_auth);
 use C4::Context;
 use C4::Debug;
-use C4::Output 3.02 qw(:html :ajax pagination_bar);
+use C4::Output qw(:html :ajax pagination_bar);
 use C4::Dates qw(format_date);
 use C4::Scrubber;
 use C4::Biblio;
