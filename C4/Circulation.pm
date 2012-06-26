@@ -1174,7 +1174,7 @@ sub AddIssue {
     }
 	if ($borrower and $barcode and $barcodecheck ne '0'){#??? wtf
 		# find which item we issue
-		my $item = GetItem('', $barcode) or return undef;	# if we don't get an Item, abort.
+		my $item = GetItem('', $barcode) or return;	# if we don't get an Item, abort.
 		my $branch = _GetCircControlBranch($item,$borrower);
 		
 		# get actual issuing if there is one
@@ -1449,7 +1449,7 @@ sub GetIssuingRule {
     return $irule if defined($irule) ;
 
     # if no rule matches,
-    return undef;
+    return;
 }
 
 =head2 GetBranchBorrowerCircRule
@@ -2328,7 +2328,7 @@ tables issues and the firstname,surname & cardnumber from borrowers.
 
 sub GetBiblioIssues {
     my $biblionumber = shift;
-    return undef unless $biblionumber;
+    return unless $biblionumber;
     my $dbh   = C4::Context->dbh;
     my $query = "
         SELECT issues.*,items.barcode,biblio.biblionumber,biblio.title, biblio.author,borrowers.cardnumber,borrowers.surname,borrowers.firstname
@@ -2506,13 +2506,13 @@ from the book's item type.
 =cut
 
 sub AddRenewal {
-    my $borrowernumber  = shift or return undef;
-    my $itemnumber      = shift or return undef;
+    my $borrowernumber  = shift or return;
+    my $itemnumber      = shift or return;
     my $branch          = shift;
     my $datedue         = shift;
     my $lastreneweddate = shift || DateTime->now(time_zone => C4::Context->tz)->ymd();
-    my $item   = GetItem($itemnumber) or return undef;
-    my $biblio = GetBiblioFromItemNumber($itemnumber) or return undef;
+    my $item   = GetItem($itemnumber) or return;
+    my $biblio = GetBiblioFromItemNumber($itemnumber) or return;
 
     my $dbh = C4::Context->dbh;
     # Find the issues record for this book
@@ -2533,7 +2533,7 @@ sub AddRenewal {
     # based on the value of the RenewalPeriodBase syspref.
     unless ($datedue) {
 
-        my $borrower = C4::Members::GetMember( borrowernumber => $borrowernumber ) or return undef;
+        my $borrower = C4::Members::GetMember( borrowernumber => $borrowernumber ) or return;
         my $itemtype = (C4::Context->preference('item-level_itypes')) ? $biblio->{'itype'} : $biblio->{'itemtype'};
 
         $datedue = (C4::Context->preference('RenewalPeriodBase') eq 'date_due') ?
