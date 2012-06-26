@@ -55,7 +55,7 @@ sub initial {
 	return '0000001';
 }
 sub width {
-	return undef;
+	return;
 }
 sub process_head {	# (self,head,whole,specific)
 	my $self = shift;
@@ -129,7 +129,7 @@ sub next_value {
 	my ($head,$incr,$tail) = $self->parse($max);	# for incremental, you'd get ('',the_whole_barcode,'')
 	unless (defined $incr) {
 		warn "No incrementing part of barcode ($max) returned by parse.";
-		return undef;
+		return;
 	}
 	my $x = length($incr);		# number of digits
 	$incr =~ /^9+$/ and $x++;	# if they're all 9's, we need an extra.
@@ -145,17 +145,17 @@ sub next_value {
 	return $next_value;
 }
 sub next {
-	my $self = shift or return undef;
+	my $self = shift or return;
 	(@_) and $self->{next} = shift;
 	return $self->{next};
 }
 sub previous {
-	my $self = shift or return undef;
+	my $self = shift or return;
 	(@_) and $self->{previous} = shift;
 	return $self->{previous};
 }
 sub serial {
-	my $self = shift or return undef;
+	my $self = shift or return;
 	(@_) and $self->{serial} = shift;
 	return $self->{serial};
 }
@@ -192,11 +192,11 @@ sub new {
 	$autoBarcodeType =~ s/^.*:://;	# in case we get C4::Barcodes::incremental, we just want 'incremental'
 	unless ($autoBarcodeType) {
 		carp "No autoBarcode format found.";
-		return undef;
+		return;
 	}
 	unless (defined $types->{$autoBarcodeType}) {
 		carp "The autoBarcode format '$autoBarcodeType' is unrecognized.";
-		return undef;
+		return;
 	}
 	carp "autoBarcode format = $autoBarcodeType" if $debug;
 	my $self;
@@ -227,7 +227,7 @@ sub new {
 		return $self;
 	}
 	carp "Failed new C4::Barcodes::$autoBarcodeType";
-	return undef;
+	return;
 }
 
 sub new_object {
