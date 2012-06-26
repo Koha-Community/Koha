@@ -231,7 +231,7 @@ if the job status is not 'completed'.
 
 sub results {
     my $self = shift;
-    return undef unless $self->{'status'} eq 'completed';
+    return unless $self->{'status'} eq 'completed';
     return $self->{'results'};
 }
 
@@ -253,7 +253,7 @@ sub fetch {
     my $session = get_session($sessionID);
     my $prefix = "job_$jobID";
     unless (defined $session->param($prefix)) {
-        return undef;
+        return;
     }
     my $self = $session->param($prefix);
     bless $self, $class;
