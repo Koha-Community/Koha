@@ -880,7 +880,7 @@ sub _get_column_defs {
     my ($theme, $lang, $availablethemes) = C4::Templates::themelanguage($htdocs, 'about.tt', $section, $cgi);
 
     my $full_path_to_columns_def_file="$htdocs/$theme/$lang/$columns_def_file";
-    open (my $fh, $full_path_to_columns_def_file);
+    open (my $fh, '<', $full_path_to_columns_def_file);
     while ( my $input = <$fh> ){
         chomp $input;
         if ( $input =~ m|<field name="(.*)">(.*)</field>| ) {
