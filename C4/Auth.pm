@@ -18,7 +18,7 @@ package C4::Auth;
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 use strict;
-#use warnings; FIXME - Bug 2505
+use warnings;
 use Digest::MD5 qw(md5_base64);
 use Storable qw(thaw freeze);
 use URI::Escape;
@@ -129,6 +129,7 @@ my $SEARCH_HISTORY_INSERT_SQL =<<EOQ;
 INSERT INTO search_history(userid, sessionid, query_desc, query_cgi, total, time            )
 VALUES                    (     ?,         ?,          ?,         ?,          ?, FROM_UNIXTIME(?))
 EOQ
+
 sub get_template_and_user {
     my $in       = shift;
     my $template =
@@ -546,7 +547,7 @@ has authenticated.
 
 =cut
 
-sub _version_check ($$) {
+sub _version_check {
     my $type = shift;
     my $query = shift;
     my $version;
@@ -591,9 +592,9 @@ sub _version_check ($$) {
 
 sub _session_log {
     (@_) or return 0;
-    open L, ">>/tmp/sessionlog" or warn "ERROR: Cannot append to /tmp/sessionlog";
-    printf L join("\n",@_);
-    close L;
+    open my $fh, '>>', "/tmp/sessionlog" or warn "ERROR: Cannot append to /tmp/sessionlog";
+    printf $fh join("\n",@_);
+    close $fh;
 }
 
 sub checkauth {
