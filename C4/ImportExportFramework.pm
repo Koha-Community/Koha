@@ -515,7 +515,7 @@ sub _createTmpDir
         mkdir $tempdir;
     };
     if ($@) {
-        return undef;
+        return;
     } else {
         return $tempdir;
     }
@@ -547,27 +547,28 @@ sub createODS
         $tempdir = _createTmpDir($tmp);
     }
     if ($tempdir) {
+        my $fh;
         # populate tempdir directory with the ods elements
         eval {
-            if (open(OUT, "> $tempdir/content.xml")) {
-                print OUT $strContent;
-                close(OUT);
+            if (open($fh, '>',  "$tempdir/content.xml")) {
+                print {$fh} $strContent;
+                close($fh);
             }
-            if (open(OUT, "> $tempdir/mimetype")) {
-                print OUT 'application/vnd.oasis.opendocument.spreadsheet';
-                close(OUT);
+            if (open($fh, '>', "$tempdir/mimetype")) {
+                print {$fh} 'application/vnd.oasis.opendocument.spreadsheet';
+                close($fh);
             }
-            if (open(OUT, "> $tempdir/meta.xml")) {
-                print OUT _getMeta($lang);
-                close(OUT);
+            if (open($fh, '>', "$tempdir/meta.xml")) {
+                print {$fh} _getMeta($lang);
+                close($fh);
             }
-            if (open(OUT, "> $tempdir/styles.xml")) {
-                print OUT ODS_STYLES_STR;
-                close(OUT);
+            if (open($fh, '>', "$tempdir/styles.xml")) {
+                print {$fh} ODS_STYLES_STR;
+                close($fh);
             }
-            if (open(OUT, "> $tempdir/settings.xml")) {
-                print OUT ODS_SETTINGS_STR;
-                close(OUT);
+            if (open($fh, '>', "$tempdir/settings.xml")) {
+                print {$fh} ODS_SETTINGS_STR;
+                close($fh);
             }
             mkdir($tempdir.'/META-INF/');
             mkdir($tempdir.'/Configurations2/');
@@ -579,9 +580,10 @@ sub createODS
             mkdir($tempdir.'/Configurations2/menubar/');
             mkdir($tempdir.'/Configurations2/progressbar/');
             mkdir($tempdir.'/Configurations2/toolbar/');
-            if (open(OUT, "> $tempdir/META-INF/manifest.xml")) {
-                print OUT ODS_MANIFEST_STR;
-                close(OUT);
+
+            if (open($fh, '>', "$tempdir/META-INF/manifest.xml")) {
+                print {$fh} ODS_MANIFEST_STR;
+                close($fh);
             }
         };
         if ($@) {
@@ -604,13 +606,13 @@ sub createODS
             my $ok = 0;
             # read ods file and return as a string
             if (-f "$tempdir/new.ods") {
-                if (open (MYFILE, "$tempdir/new.ods")) {
-                    binmode MYFILE;
+                if (open ($fh, '<', "$tempdir/new.ods")) {
+                    binmode $fh;
                     my $buffer;
-                    while (read (MYFILE, $buffer, 65536)) {
+                    while (read ($fh, $buffer, 65536)) {
                         $$strODSRef .= $buffer;
                     }
-                    close(MYFILE);
+                    close($fh);
                     $ok = 1;
                 }
             }
