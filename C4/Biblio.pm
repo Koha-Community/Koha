@@ -491,10 +491,10 @@ sub BiblioAutoLink {
 
     my $linker_module =
       "C4::Linker::" . ( C4::Context->preference("LinkerModule") || 'Default' );
-    eval { eval "require $linker_module"; };
+    eval { eval {require $linker_module}; };
     if ($@) {
         $linker_module = 'C4::Linker::Default';
-        eval "require $linker_module";
+        eval {require $linker_module};
     }
     if ($@) {
         return 0, 0;
@@ -890,7 +890,7 @@ Return the ISBD view which can be included in opac and intranet
 sub GetISBDView {
     my ( $biblionumber, $template ) = @_;
     my $record   = GetMarcBiblio($biblionumber, 1);
-    return undef unless defined $record;
+    return unless defined $record;
     my $itemtype = &GetFrameworkCode($biblionumber);
     my ( $holdingbrtagf, $holdingbrtagsubf ) = &GetMarcFromKohaField( "items.holdingbranch", $itemtype );
     my $tagslib = &GetMarcStructure( 1, $itemtype );
@@ -1145,7 +1145,7 @@ C<$frameworkcode> is the framework code.
 
 =cut
 
-sub GetUsedMarcStructure($) {
+sub GetUsedMarcStructure {
     my $frameworkcode = shift || '';
     my $query = qq/
         SELECT *
@@ -1210,7 +1210,7 @@ sub GetMarcBiblio {
 
         return $record;
     } else {
-        return undef;
+        return;
     }
 }
 
@@ -3458,7 +3458,7 @@ sub _koha_delete_biblio {
         $sth2->finish;
     }
     $sth->finish;
-    return undef;
+    return;
 }
 
 =head2 _koha_delete_biblioitems
@@ -3507,7 +3507,7 @@ sub _koha_delete_biblioitems {
         $sth2->finish;
     }
     $sth->finish;
-    return undef;
+    return;
 }
 
 =head1 UNEXPORTED FUNCTIONS
