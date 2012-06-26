@@ -530,7 +530,7 @@ sub ModItem {
         $item->{'more_subfields_xml'} = _get_unlinked_subfields_xml($unlinked_item_subfields);
     };
 
-    $item->{'itemnumber'} = $itemnumber or return undef;
+    $item->{'itemnumber'} = $itemnumber or return;
 
     $item->{onloan} = undef if $item->{itemlost};
 
@@ -2293,7 +2293,7 @@ sub _koha_delete_item {
     # delete from items table
     $sth = $dbh->prepare("DELETE FROM items WHERE itemnumber=?");
     $sth->execute($itemnum);
-    return undef;
+    return;
 }
 
 =head2 _marc_from_item_hash
@@ -2668,7 +2668,10 @@ sub PrepareItemrecordDisplay {
                 if (   ( $tagslib->{$tag}->{$subfield}->{kohafield} eq 'items.location' )
                     && $defaultvalues
                     && $defaultvalues->{'location'} ) {
-                    my $temp = $itemrecord->field($subfield) if ($itemrecord);
+
+                    my $temp; # make perlcritic happy :)
+                    $temp = $itemrecord->field($subfield) if ($itemrecord);
+
                     unless ($temp) {
                         $defaultvalue = $defaultvalues->{location} if $defaultvalues;
                     }
