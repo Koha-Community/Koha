@@ -50,26 +50,26 @@ sub initialize {
 			#"Mozilla/4.76 [en] (Win98; U)",	#  if for some reason you want to go stealth, you might prefer this
 }
 
-sub image_url (;$) {
-	($user and $pass) or return undef;
+sub image_url {
+	($user and $pass) or return;
 	my $isbn = (@_ ? shift : '');
 	$isbn =~ s/(p|-)//g;	# sanitize
 	return $image_url . $isbn;
 }
-sub link_url (;$) {
+sub link_url {
 	my $isbn = (@_ ? shift : '');
 	$isbn =~ s/(p|-)//g;	# sanitize
-	$link_url or return undef;
+	$link_url or return;
 	return $link_url . $isbn;
 }
-sub content_cafe_url ($) {
-	($user and $pass) or return undef;
+sub content_cafe_url {
+	($user and $pass) or return;
 	my $isbn = (@_ ? shift : '');
 	$isbn =~ s/(p|-)//g;	# sanitize
 	return "http://contentcafe2.btol.com/ContentCafeClient/ContentCafe.aspx?UserID=$user&Password=$pass&Options=Y&ItemKey=$isbn";
 }
-sub http_jacket_link ($) {
-	my $isbn = shift or return undef;
+sub http_jacket_link {
+	my $isbn = shift or return;
 	$isbn =~ s/(p|-)//g;	# sanitize
 	my $image = availability($isbn);
 	my $alt = "Buy this book";
@@ -79,9 +79,9 @@ sub http_jacket_link ($) {
 	return sprintf qq(<a class="btlink" href="%s">%s</a>),$link,($image||$alt);
 }
 
-sub availability ($) {
-	my $isbn = shift or return undef;
-	($user and $pass) or return undef;
+sub availability {
+	my $isbn = shift or return;
+	($user and $pass) or return;
 	$isbn =~ s/(p|-)//g;	# sanitize
 	my $url = "http://contentcafe2.btol.com/ContentCafe/InventoryAvailability.asmx/CheckInventory?UserID=$user&Password=$pass&Value=$isbn";
 	$debug and warn __PACKAGE__ . " request:\n$url\n";
