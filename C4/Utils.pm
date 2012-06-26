@@ -35,12 +35,12 @@ BEGIN {
 }
 
 
-sub maxwidth (@) {
+sub maxwidth {
 	(@_) or return 0;
 	return (sort {$a <=> $b} map {length} @_)[-1];
 }
 
-sub hashdump ($$) {
+sub hashdump {
 	my $pre = shift;
 	my $val  = shift;
 	if (ref($val) =~ /HASH/) {
