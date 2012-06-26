@@ -79,7 +79,7 @@ our @months = qw(Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec);
 
 our @days = qw(Sun Mon Tue Wed Thu Fri Sat);
 
-sub regexp ($;$) {
+sub regexp {
     my $self   = shift;
     my $delim  = qr/:?\:|\/|-/;                                                                  # "non memory" cluster: no backreference
     my $format = (@_) ? _recognize_format(shift) : ( $self->{'dateformat'} || _prefformat() );
@@ -97,15 +97,15 @@ sub regexp ($;$) {
     return qr/^(\d{1,2})$delim(\d{1,2})$delim(\d{4})(?:\s{1}(\d{1,2})\:?(\d{1,2})\:?(\d{1,2}))?/;    # everything else
 }
 
-sub dmy_map ($$) {
+sub dmy_map {
     my $self    = shift;
-    my $val     = shift or return undef;
-    my $dformat = $self->{'dateformat'} or return undef;
+    my $val     = shift or return;
+    my $dformat = $self->{'dateformat'} or return;
     my $re      = $self->regexp();
     my $xsub    = $dmy_subs{$dformat};
     $debug and print STDERR "xsub: $xsub \n";
     if ( $val =~ /$re/ ) {
-        my $aref = eval $xsub;
+        my $aref = eval {$xsub};
         if ($dformat eq 'rfc822') {
             $aref = _abbr_to_numeric($aref, $dformat);
             pop(@{$aref}); #pop off tz offset because we are not setup to handle tz conversions just yet
@@ -123,7 +123,9 @@ sub dmy_map ($$) {
 sub _abbr_to_numeric {
     my $aref    = shift;
     my $dformat = shift;
-    my ($month_abbr, $day_abbr) = ($aref->[4], $aref->[3]) if $dformat eq 'rfc822';
+
+    my ($month_abbr, $day_abbr); # keep perlcritic happy ;)
+    ($month_abbr, $day_abbr) = ($aref->[4], $aref->[3]) if $dformat eq 'rfc822';
 
     for( my $i = 0; $i < scalar(@months); $i++ ) {
         if ( $months[$i] =~ /$month_abbr/ ) {
@@ -171,7 +173,7 @@ sub new {
     return $self->init(@_);
 }
 
-sub init ($;$$) {
+sub init {
     my $self = shift;
     my $dformat;
     $self->{'dateformat'} = $dformat = ( scalar(@_) >= 2 ) ? $_[1] : _prefformat();
@@ -181,27 +183,27 @@ sub init ($;$$) {
     return $self;
 }
 
-sub output ($;$) {
+sub output {
     my $self = shift;
     my $newformat = (@_) ? _recognize_format(shift) : _prefformat();
     return ( eval { POSIX::strftime( $posix_map{$newformat}, @{ $self->{'dmy_arrayref'} } ) } || undef );
 }
 
-sub today ($;$) {    # NOTE: sets date value to today (and returns it in the requested or current format)
+sub today {    # NOTE: sets date value to today (and returns it in the requested or current format)
     my $class = shift;
     $class = ref($class) || $class;
     my $format = (@_) ? _recognize_format(shift) : _prefformat();
     return $class->new()->output($format);
 }
 
-sub _recognize_format($) {
+sub _recognize_format {
     my $incoming = shift;
     ( $incoming eq 'syspref' ) and return _prefformat();
     ( scalar grep ( /^$incoming$/, keys %format_map ) == 1 ) or croak "The format you asked for ('$incoming') is unrecognized.";
     return $incoming;
 }
 
-sub DHTMLcalendar ($;$) {    # interface to posix_map
+sub DHTMLcalendar {    # interface to posix_map
     my $class = shift;
     my $format = (@_) ? shift : _prefformat();
     return $posix_map{$format};
