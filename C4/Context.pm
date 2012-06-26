@@ -276,7 +276,7 @@ sub memcached {
     if ($ismemcached) {
       return $memcached;
     } else {
-      return undef;
+      return;
     }
 }
 
@@ -293,7 +293,7 @@ sub db_scheme2dbi {
         if (/Postgres|Pg|PostgresSQL/) { return("Pg"); }
         if (/oracle/) { return("Oracle"); }
     }
-    return undef;         # Just in case
+    return;         # Just in case
 }
 
 sub import {
@@ -358,7 +358,7 @@ sub new {
             $conf_fname = CONFIG_FNAME;
         } else {
             warn "unable to locate Koha configuration file koha-conf.xml";
-            return undef;
+            return;
         }
     }
     
@@ -376,7 +376,7 @@ sub new {
 
     $self->{"config_file"} = $conf_fname;
     warn "read_config_file($conf_fname) returned undef" if !defined($self->{"config"});
-    return undef if !defined($self->{"config"});
+    return if !defined($self->{"config"});
 
     $self->{"dbh"} = undef;        # Database handle
     $self->{"Zconn"} = undef;    # Zebra Connections
@@ -480,10 +480,10 @@ C<C4::Config-E<gt>new> will not return it.
 
 =cut
 
-sub _common_config ($$) {
+sub _common_config {
 	my $var = shift;
 	my $term = shift;
-    return undef if !defined($context->{$term});
+    return if !defined($context->{$term});
        # Presumably $self->{$term} might be
        # undefined if the config file given to &new
        # didn't exist, and the caller didn't bother
@@ -545,7 +545,7 @@ END_SQL
     return $sysprefs{$var};
 }
 
-sub boolean_preference ($) {
+sub boolean_preference {
     my $self = shift;
     my $var = shift;        # The system preference to return
     my $it = preference($self, $var);
@@ -1027,19 +1027,19 @@ sub set_userenv {
     return $cell;
 }
 
-sub set_shelves_userenv ($$) {
-	my ($type, $shelves) = @_ or return undef;
-	my $activeuser = $context->{activeuser} or return undef;
+sub set_shelves_userenv {
+	my ($type, $shelves) = @_ or return;
+	my $activeuser = $context->{activeuser} or return;
 	$context->{userenv}->{$activeuser}->{barshelves} = $shelves if $type eq 'bar';
 	$context->{userenv}->{$activeuser}->{pubshelves} = $shelves if $type eq 'pub';
 	$context->{userenv}->{$activeuser}->{totshelves} = $shelves if $type eq 'tot';
 }
 
-sub get_shelves_userenv () {
+sub get_shelves_userenv {
 	my $active;
 	unless ($active = $context->{userenv}->{$context->{activeuser}}) {
 		$debug and warn "get_shelves_userenv cannot retrieve context->{userenv}->{context->{activeuser}}";
-		return undef;
+		return;
 	}
 	my $totshelves = $active->{totshelves} or undef;
 	my $pubshelves = $active->{pubshelves} or undef;
