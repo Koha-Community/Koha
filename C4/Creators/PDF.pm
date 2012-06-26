@@ -168,7 +168,7 @@ sub prAltJpeg
 {  my ($iData, $iWidth, $iHeight, $iFormat,$aiData, $aiWidth, $aiHeight, $aiFormat) = @_;
    my ($namnet, $utrad);
    if (! $PDF::Reuse::pos)                    # If no output is active, it is no use to continue
-   {   return undef;
+   {   return;
    }
    prJpegBlob($aiData, $aiWidth, $aiHeight, $aiFormat);
    my $altObjNr = $PDF::Reuse::objNr;
@@ -198,7 +198,7 @@ sub prJpegBlob
 {  my ($iData, $iWidth, $iHeight, $iFormat, $altArrayObjNr) = @_;
    my ($iLangd, $namnet, $utrad);
    if (! $PDF::Reuse::pos)                    # If no output is active, it is no use to continue
-   {   return undef;
+   {   return;
    }
    my $checkidOld = $PDF::Reuse::checkId;
    if (!$iFormat)
@@ -209,16 +209,16 @@ sub prJpegBlob
           $namnet = 'Ig' . $PDF::Reuse::imageNr;
           $PDF::Reuse::objNr++;
           $PDF::Reuse::objekt[$PDF::Reuse::objNr] = $PDF::Reuse::pos;
-          open (BILDFIL, "<$iFile") || errLog("Couldn't open $iFile, $!, aborts");
-          binmode BILDFIL;
+          open (my $fh, '<', "$iFile") || errLog("Couldn't open $iFile, $!, aborts");
+          binmode $fh;
           my $iStream;
-          sysread BILDFIL, $iStream, $iLangd;
+          sysread $fh, $iStream, $iLangd;
           $utrad = "$PDF::Reuse::objNr 0 obj\n<</Type/XObject/Subtype/Image/Name/$namnet" .
                     "/Width $iWidth /Height $iHeight /BitsPerComponent 8 " .
                     ($altArrayObjNr ? "/Alternates $altArrayObjNr 0 R " : "") .
                     "/Filter/DCTDecode/ColorSpace/DeviceRGB"
                     . "/Length $iLangd >>stream\n$iStream\nendstream\nendobj\n";
-          close BILDFIL;
+          close $fh;
           $PDF::Reuse::pos += syswrite $PDF::Reuse::UTFIL, $utrad;
           if ($PDF::Reuse::runfil)
           {  $PDF::Reuse::log .= "Cid~$PDF::Reuse::checkId\n";
