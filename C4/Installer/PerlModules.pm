@@ -68,7 +68,7 @@ sub version_info {
     my %params = @_;
     if ($params{'module'}) {
         return -1 unless grep {m/$params{'module'}/} keys(%$PERL_DEPS);
-        eval "require $params{'module'}";
+        eval {require $params{'module'}};
         if ($@) {
             return {$params{'module'} => {cur_ver => 0, min_ver => $PERL_DEPS->{$_}->{'min_ver'}, upgrade => 0, required => $PERL_DEPS->{$_}->{'required'}, usage => $PERL_DEPS->{$_}->{'usage'}}};
         }
@@ -82,7 +82,7 @@ sub version_info {
     else {
         for (sort keys(%{$PERL_DEPS})) {
             my $pkg = $_;  #  $_ holds the string
-            eval "require $pkg";
+            eval {require $pkg};
             if ($@) {
                 push (@{$self->{'missing_pm'}}, {$_ => {cur_ver => 0, min_ver => $PERL_DEPS->{$_}->{'min_ver'}, required => $PERL_DEPS->{$_}->{'required'}, usage => $PERL_DEPS->{$_}->{'usage'}}});
             }
