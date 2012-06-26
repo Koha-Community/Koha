@@ -180,11 +180,16 @@ sub GetNearbyItems {
     my @prev_items = reverse GetShelfInfo($sth_prev_items, $marcflavour);
     my @next_items = GetShelfInfo($sth_next_items, $marcflavour);
 
-    my $next_itemnumber = $next_items[-1]->{itemnumber} if @next_items;
-    my $next_biblionumber = $next_items[-1]->{biblionumber} if @next_items;
+    my (
+        $next_itemnumber, $next_biblionumber,
+        $prev_itemnumber, $prev_biblionumber
+    );
 
-    my $prev_itemnumber = $prev_items[0]->{itemnumber} if @prev_items;
-    my $prev_biblionumber = $prev_items[0]->{biblionumber} if @prev_items;
+    $next_itemnumber = $next_items[-1]->{itemnumber} if @next_items;
+    $next_biblionumber = $next_items[-1]->{biblionumber} if @next_items;
+
+    $prev_itemnumber = $prev_items[0]->{itemnumber} if @prev_items;
+    $prev_biblionumber = $prev_items[0]->{biblionumber} if @prev_items;
 
     my %result = (
         next                => \@next_items,
