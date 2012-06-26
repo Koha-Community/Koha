@@ -160,7 +160,7 @@ After this function, don't forget to execute it by using $sth->execute($subscrip
 
 =cut
 
-sub GetSubscriptionHistoryFromSubscriptionId() {
+sub GetSubscriptionHistoryFromSubscriptionId {
     my $dbh   = C4::Context->dbh;
     my $query = qq|
         SELECT *
@@ -180,7 +180,7 @@ $sth = $dbh->prepare($query).
 
 =cut
 
-sub GetSerialStatusFromSerialId() {
+sub GetSerialStatusFromSerialId {
     my $dbh   = C4::Context->dbh;
     my $query = qq|
         SELECT status
@@ -1179,7 +1179,7 @@ $nextexepected = {
 
 =cut
 
-sub GetNextExpected($) {
+sub GetNextExpected {
     my ($subscriptionid) = @_;
     my $dbh              = C4::Context->dbh;
     my $sth              = $dbh->prepare('SELECT serialid, planneddate FROM serial WHERE subscriptionid=? AND status=?');
@@ -1214,7 +1214,7 @@ returns 0
 
 =cut
 
-sub ModNextExpected($$) {
+sub ModNextExpected {
     my ( $subscriptionid, $date ) = @_;
     my $dbh = C4::Context->dbh;
 
@@ -2295,7 +2295,7 @@ Return 0 if periodicity==0
 
 =cut
 
-sub GetNextDate(@) {
+sub GetNextDate {
     my ( $planneddate, $subscription ) = @_;
     my @irreg = split( /\,/, $subscription->{irregularity} );
 
