@@ -5392,7 +5392,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-$DBversion = "XXX";
+$DBversion = "3.09.00.018";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("DROP TABLE IF EXISTS aqbudgetborrowers");
     $dbh->do("
