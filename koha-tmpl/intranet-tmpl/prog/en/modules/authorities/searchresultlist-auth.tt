@@ -11,6 +11,18 @@ function jumpfull(page)
 {	
     window.open(page,'','fullscreen,scrollbars');
 }
+
+function doauth(authid, index, repet)
+{
+[% IF source == 'auth' %]
+    var e = document.getElementById("relationship");
+    var relationship = e.options[e.selectedIndex].value;
+
+    jumpfull('blinddetail-biblio-search.pl?authid=' + authid + '&index=' + index + '&repet=' + repet + '&relationship=' + relationship);
+[% ELSE %]
+    jumpfull('blinddetail-biblio-search.pl?authid=' + authid + '&index=' + index + '&repet=' + repet);
+[% END %]
+}
 </script>
 </head>
 <body id="auth_searchresultlist_auth" class="auth">
@@ -63,10 +75,10 @@ function jumpfull(page)
                         <td>
                           [% IF resul.repets %]
                             [% FOREACH repet IN resul.repets %]
-                            <a href="javascript:jumpfull('blinddetail-biblio-search.pl?authid=[% resul.authid %]&amp;index=[% repet.index %]&amps;repet=[% repet.repet %]')" title="[% repet.value %]">[% repet.repet %]</a>
+                            <a href="javascript:doauth('[% resul.authid %]', '[% repet.index %]', '[% repet.repet %]')" title="[% repet.value %]">[% repet.repet %]</a>
                             [% END %]
                           [% ELSE %]
-                            <a href="javascript:jumpfull('blinddetail-biblio-search.pl?authid=[% resul.authid %]&amp;index=[% index %]')">Choose</a>
+                            <a href="javascript:doauth('[% resul.authid %]', '[% index %]', '')">choose</a>
                           [% END %]
                         </td>
                         <td><a href="authorities.pl?authid=[% resul.authid %]">Edit authority</a></td>

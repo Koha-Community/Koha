@@ -35,6 +35,7 @@ my $authtypecode = $query->param('authtypecode');
 my $index        = $query->param('index');
 my $tagid        = $query->param('tagid');
 my $resultstring = $query->param('result');
+my $relationship = $query->param('relationship');
 my $dbh          = C4::Context->dbh;
 
 my $startfrom = $query->param('startfrom');
@@ -191,6 +192,9 @@ $template->param(
     authtypesloop => \@authtypesloop,
     authtypecode  => $authtypecode,
 );
+
+$template->{VARS}->{source} = $query->param('source') || '';
+$template->{VARS}->{relationship} = $query->param('relationship') || '';
 
 # Print the page
 output_html_with_http_headers $query, $cookie, $template->output;
