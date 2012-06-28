@@ -469,12 +469,33 @@ function validate1(date) {
         [% END %]
 
         [% IF ( UNKNOWN_BARCODE ) %]
-            <li>The barcode was not found [% barcode |html %]</li>
+            <li>The barcode was not found [% barcode |html %]
 	    [% IF ( fast_cataloging ) %]
 	        [% IF ( CAN_user_editcatalogue_fast_cataloging ) %]
             <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?frameworkcode=FA&amp;barcode=[% barcode |uri %]&amp;circborrowernumber=[% borrowernumber %]&amp;branch=[% branch %]&amp;duedatespec=[% duedatespec %]&amp;stickyduedate=[% stickyduedate %]">Fast cataloging</a>
 		[% END %]
 	    [% END %]
+
+        [% IF ( FALLBACK ) %]
+            [% IF options %]
+                <br />The following items were found by searching:
+                [% FOREACH book IN options %]
+                    <br />
+                    <form method="post" action="/cgi-bin/koha/circ/circulation.pl" autocomplete="off">
+                        <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
+                        <input type="hidden" name="duedatespec" value="[% duedatespec %]" />
+                        <input type="hidden" name="stickyduedate" value="[% stickyduedate %]" />
+                        <input type="hidden" name="branch" value="[% branch %]" />
+                        <input type="hidden" name="barcode" value="[% book.barcode %]" />
+                        <input type="submit" name="x" value="Check out [% book.barcode %]: [% book.title %]" />
+                    </form>
+                [% END %]
+            [% ELSE %]
+                <br />No items were found by searching.
+            [% END %]
+        [% END %]
+
+     </li>
         [% END %]
 
         [% IF ( NOT_FOR_LOAN ) %]

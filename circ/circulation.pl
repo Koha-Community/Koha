@@ -5,6 +5,7 @@
 # Copyright 2000-2002 Katipo Communications
 # copyright 2010 BibLibre
 # Copyright 2011 PTFS-Europe Ltd.
+# Copyright 2012 software.coop and MJ Ray
 #
 # This file is part of Koha.
 #
@@ -34,6 +35,8 @@ use C4::Circulation;
 use C4::Overdues qw/CheckBorrowerDebarred/;
 use C4::Members;
 use C4::Biblio;
+use C4::Search;
+use MARC::Record;
 use C4::Reserves;
 use C4::Context;
 use CGI::Session;
@@ -291,6 +294,34 @@ if ($barcode) {
     $template->param(
         authvalcode_notforloan => C4::Koha::GetAuthValCode('items.notforloan', $getmessageiteminfo->{'frameworkcode'}),
     );
+    # Fix for bug 7494: optional checkout-time fallback search for a book
+
+    if ( $error->{'UNKNOWN_BARCODE'}
+        && C4::Context->preference("itemBarcodeFallbackSearch") )
+    {
+     $template->param( FALLBACK => 1 );
+
+        my $query = "kw=" . $barcode;
+        my ( $searcherror, $results, $total_hits ) = SimpleSearch($query);
+
+        # if multiple hits, offer options to librarian
+        if ( $total_hits > 0 ) {
+            my @options = ();
+            foreach my $hit ( @{$results} ) {
+                my $chosen =
+                  TransformMarcToKoha( C4::Context->dbh,
+                    MARC::Record->new_from_usmarc($hit) );
+
+                # offer all barcodes individually
+                foreach my $barcode ( sort split(/\s*\|\s*/, $chosen->{barcode}) ) {
+                    my %chosen_single = %{$chosen};
+                    $chosen_single{barcode} = $barcode;
+                    push( @options, \%chosen_single );
+                }
+            }
+            $template->param( options => \@options );
+        }
+    }
 
     delete $question->{'DEBT'} if ($debt_confirmed);
     foreach my $impossible ( keys %$error ) {

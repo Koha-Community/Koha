@@ -7058,6 +7058,15 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.13.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(
+"INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('itemBarcodeFallbackSearch','','If set, uses scanned item barcodes as a catalogue search if not found as barcodes',NULL,'YesNo')"
+    );
+    print "Upgrade to $DBversion done (Bug 7494: Add itemBarcodeFallbackSearch syspref)\n";
+    # SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)
