@@ -5566,6 +5566,50 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.09.00.028";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    unless ( C4::Context->preference('marcflavour') eq 'UNIMARC' ) {
+        my %referencetypes = (  '00' => 'PERSO_CODE',
+                                '10' => 'ORGO_CODE',
+                                '11' => 'MEETI_NAME',
+                                '30' => 'UNIF_TITLE',
+                                '48' => 'CHRON_TERM',
+                                '50' => 'TOPIC_TERM',
+                                '51' => 'GEOGR_NAME',
+                                '55' => 'GENRE/FORM'
+                );
+        my $query = q{SELECT DISTINCT authtypecode, tagfield
+                    FROM auth_subfield_structure
+                    WHERE (tagfield BETWEEN '400' AND '455' OR
+                    tagfield BETWEEN '500' and '555') AND tagsubfield='a' AND
+                    frameworkcode = '' AND ROW(authtypecode, tagfield) NOT IN
+                    (SELECT authtypecode, tagfield FROM auth_subfield_structure
+                    WHERE tagsubfield ='9' )};
+        $sth = $dbh->prepare($query);
+        $sth->execute;
+        my $sth2 = $dbh->prepare(q{INSERT INTO auth_subfield_structure
+                (authtypecode, tagfield, tagsubfield, liblibrarian, libopac,
+                 repeatable, mandatory, tab, authorised_value, value_builder,
+                 seealso, isurl, hidden, linkid, kohafield, frameworkcode)
+                VALUES (?, ?, '9', '9 (RLIN)', '9 (RLIN)', 0, 0, ?, NULL, NULL,
+                    NULL, 0, 1, '', '', '')});
+        my $sth3 = $dbh->prepare(q{UPDATE auth_subfield_structure SET
+                                    frameworkcode = ? WHERE authtypecode = ? AND
+                                    tagfield = ? AND tagsubfield = 'a'});
+        while (my $row = $sth->fetchrow_arrayref()) {
+            my ($authtypecode, $field) = @$row;
+            $sth2->execute($authtypecode, $field, substr($field, 0, 1));
+            my $authtypemarker = substr $field, 1, 2;
+            if ($authtypemarker && $referencetypes{$authtypemarker}) {
+                $sth3->execute($referencetypes{$authtypemarker}, $authtypecode, $field);
+            }
+        }
+    }
+
+    print "Upgrade to $DBversion done (Add thesaurus links for MARC21/NORMARC)\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)
