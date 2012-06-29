@@ -8,10 +8,14 @@
 [% END %]
 
 <script language="javascript">
-    function printThenClose() {
-        window.print();
-        window.close();
-    }
+[% IF ( IntranetSlipPrinterJS ) %]
+    [% IntranetSlipPrinterJS %]
+[% ELSE %]
+     function printThenClose() {
+         window.print();
+         window.close();
+     }
+[% END %]
 </script>
 </head>
 <body id="circ_printslip" class="circ" onload="printThenClose();">
