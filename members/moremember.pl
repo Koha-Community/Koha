@@ -421,7 +421,6 @@ $template->param(
     relissueloop    => @relissuedata,
     overdues_exist  => $overdues_exist,
     error           => $error,
-    $error          => 1,
     StaffMember     => ($category_type eq 'S'),
     is_child        => ($category_type eq 'C'),
 #   reserveloop     => \@reservedata,
@@ -433,6 +432,7 @@ $template->param(
     AutoResumeSuspendedHolds => C4::Context->preference('AutoResumeSuspendedHolds'),
     SuspendHoldsIntranet => C4::Context->preference('SuspendHoldsIntranet'),
 );
+$template->param( $error => 1 ) if $error;
 
 output_html_with_http_headers $input, $cookie, $template->output;
 
