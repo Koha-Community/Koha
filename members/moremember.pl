@@ -463,7 +463,6 @@ $template->param(
     relissuecount   => $relissuecount,
     overdues_exist  => $overdues_exist,
     error           => $error,
-    $error          => 1,
     StaffMember     => ($category_type eq 'S'),
     is_child        => ($category_type eq 'C'),
 #   reserveloop     => \@reservedata,
@@ -472,6 +471,7 @@ $template->param(
     samebranch     => $samebranch,
     quickslip		  => $quickslip,
 );
+$template->param( $error => 1 ) if $error;
 
 #Get the slip news items
 my $all_koha_news   = &GetNewsToDisplay("slip");
