@@ -555,6 +555,7 @@ my $subtitle         = GetRecordValue('subtitle', $record, GetFrameworkCode($bib
                      MARCAUTHORS             => $marcauthorsarray,
                      MARCSERIES              => $marcseriesarray,
                      MARCURLS                => $marcurlsarray,
+                     MARCISBNS               => $marcisbnsarray,
                      MARCHOSTS               => $marchostsarray,
                      norequests              => $norequests,
                      RequestOnOpac           => C4::Context->preference("RequestOnOpac"),
