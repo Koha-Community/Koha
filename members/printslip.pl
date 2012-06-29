@@ -89,4 +89,6 @@ $template->param(
     error           => $error,
 );
 
+$template->param( IntranetSlipPrinterJS => C4::Context->preference('IntranetSlipPrinterJS' ) );
+
 output_html_with_http_headers $input, $cookie, $template->output;

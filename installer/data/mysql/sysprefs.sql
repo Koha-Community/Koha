@@ -374,4 +374,4 @@ INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('
 INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES ('OPACShowUnusedAuthorities','1','','Show authorities that are not being used in the OPAC.','YesNo');
 INSERT INTO systempreferences (variable,value,explanation,type) VALUES('EnableBorrowerFiles','0','If enabled, allows librarians to upload and attach arbitrary files to a borrower record.','YesNo');
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('UpdateTotalIssuesOnCirc','0','Whether to update the totalissues field in the biblio on each circ.',NULL,'YesNo');
-
+INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('IntranetSlipPrinterJS','','Use this JavaScript for printing slips. Define at least function printThenClose(). For use e.g. with Firefox PlugIn jsPrintSetup, see http://jsprintsetup.mozdev.org/','','Free');
