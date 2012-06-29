@@ -1344,7 +1344,7 @@ sub handle_renew {
     $patron = $status->patron;
     $item   = $status->item;
 
-    if ($status->ok) {
+    if ($status->renewal_ok) {
 	$resp .= '1';
 	$resp .= $status->renewal_ok ? 'Y' : 'N';
 	if ($ils->supports('magnetic media')) {
@@ -1357,7 +1357,11 @@ sub handle_renew {
 	$resp .= add_field(FID_PATRON_ID, $patron->id);
 	$resp .= add_field(FID_ITEM_ID,  $item->id);
 	$resp .= add_field(FID_TITLE_ID, $item->title_id);
-	$resp .= add_field(FID_DUE_DATE, Sip::timestamp($item->due_date));
+    if ($item->due_date) {
+        $resp .= add_field(FID_DUE_DATE, Sip::timestamp($item->due_date));
+    } else {
+        $resp .= add_field(FID_DUE_DATE, q{});
+    }
 	if ($ils->supports('security inhibit')) {
 	    $resp .= add_field(FID_SECURITY_INHIBIT,
 			       $status->security_inhibit);
