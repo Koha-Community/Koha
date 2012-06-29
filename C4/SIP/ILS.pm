@@ -428,17 +428,12 @@ sub renew {
     if (!defined($item)) {
 		$trans->screen_msg("Item not checked out to " . $patron->name);     # not checked out to $patron_id
         $trans->ok(0);
-    } elsif (!$item->available($patron_id)) {
-		$trans->screen_msg("Item unavailable due to outstanding holds");
-        $trans->ok(0);
     } else {
-		$trans->renewal_ok(1);
-		$trans->desensitize(0);	# It's already checked out
-		$trans->do_renew();
-		syslog("LOG_DEBUG", "done renew (ok:%s): %s renews %s", $trans->renewal_ok, $patron_id, $item_id);
-
-#		$item->{due_date} = $nb_due_date if $no_block eq 'Y';
-#		$item->{sip_item_properties} = $item_props if $item_props;
+        $trans->do_renew();
+        if ($trans->renewal_ok()) {
+            $item->{due_date} = $trans->{due};
+            $trans->desensitize(0);
+        }
     }
 
     return $trans;
