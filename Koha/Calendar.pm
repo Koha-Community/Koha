@@ -93,7 +93,7 @@ sub addDate {
     Readonly::Scalar my $return_by_hour => 10;
     my $day_dur = DateTime::Duration->new( days => 1 );
     if ( $add_duration->is_negative() ) {
-        $day_dur->inverse();
+        $day_dur = DateTime::Duration->new( days => -1 );
     }
     if ( $days_mode eq 'Datedue' ) {
 
