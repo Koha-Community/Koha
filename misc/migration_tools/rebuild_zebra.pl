@@ -24,6 +24,7 @@ my $directory;
 my $nosanitize;
 my $skip_export;
 my $keep_export;
+my $skip_index;
 my $reset;
 my $biblios;
 my $authorities;
@@ -44,6 +45,7 @@ my $result = GetOptions(
     'r|reset'       => \$reset,
     's'             => \$skip_export,
     'k'             => \$keep_export,
+    'I|skip-index'    => \$skip_index,
     'nosanitize'    => \$nosanitize,
     'b'             => \$biblios,
     'noxml'         => \$noxml,
@@ -134,13 +136,13 @@ if ($do_munge) {
 }
 
 if ($authorities) {
-    index_records('authority', $directory, $skip_export, $process_zebraqueue, $as_xml, $noxml, $nosanitize, $do_not_clear_zebraqueue, $verbose_logging, $zebraidx_log_opt, $authorityserverdir);
+    index_records('authority', $directory, $skip_export, $skip_index, $process_zebraqueue, $as_xml, $noxml, $nosanitize, $do_not_clear_zebraqueue, $verbose_logging, $zebraidx_log_opt, $authorityserverdir);
 } else {
     print "skipping authorities\n" if ( $verbose_logging );
 }
 
 if ($biblios) {
-    index_records('biblio', $directory, $skip_export, $process_zebraqueue, $as_xml, $noxml, $nosanitize, $do_not_clear_zebraqueue, $verbose_logging, $zebraidx_log_opt, $biblioserverdir);
+    index_records('biblio', $directory, $skip_export, $skip_index, $process_zebraqueue, $as_xml, $noxml, $nosanitize, $do_not_clear_zebraqueue, $verbose_logging, $zebraidx_log_opt, $biblioserverdir);
 } else {
     print "skipping biblios\n" if ( $verbose_logging );
 }
@@ -191,7 +193,7 @@ sub check_zebra_dirs {
 }	# ----------  end of subroutine check_zebra_dirs  ----------
 
 sub index_records {
-    my ($record_type, $directory, $skip_export, $process_zebraqueue, $as_xml, $noxml, $nosanitize, $do_not_clear_zebraqueue, $verbose_logging, $zebraidx_log_opt, $server_dir) = @_;
+    my ($record_type, $directory, $skip_export, $skip_index, $process_zebraqueue, $as_xml, $noxml, $nosanitize, $do_not_clear_zebraqueue, $verbose_logging, $zebraidx_log_opt, $server_dir) = @_;
 
     my $num_records_exported = 0;
     my $records_deleted;
@@ -230,24 +232,32 @@ sub index_records {
             }
         }
     }
-    
+
     #
     # and reindexing everything
     #
-    if ( $verbose_logging ) {
-        print "====================\n";
-        print "REINDEXING zebra\n";
-        print "====================\n";
-    }
-	my $record_fmt = ($as_xml) ? 'marcxml' : 'iso2709' ;
-    if ($process_zebraqueue) {
-        do_indexing($record_type, 'delete', "$directory/del_$record_type", $reset, $noshadow, $record_fmt, $zebraidx_log_opt) 
-            if %$records_deleted;
-        do_indexing($record_type, 'update', "$directory/upd_$record_type", $reset, $noshadow, $record_fmt, $zebraidx_log_opt)
-            if $num_records_exported;
+    if ($skip_index) {
+        if ($verbose_logging) {
+            print "====================\n";
+            print "SKIPPING $record_type indexing\n";
+            print "====================\n";
+        }
     } else {
-        do_indexing($record_type, 'update', "$directory/$record_type", $reset, $noshadow, $record_fmt, $zebraidx_log_opt)
-            if ($num_records_exported or $skip_export);
+        if ( $verbose_logging ) {
+            print "====================\n";
+            print "REINDEXING zebra\n";
+            print "====================\n";
+        }
+        my $record_fmt = ($as_xml) ? 'marcxml' : 'iso2709' ;
+        if ($process_zebraqueue) {
+            do_indexing($record_type, 'delete', "$directory/del_$record_type", $reset, $noshadow, $record_fmt, $zebraidx_log_opt)
+                if %$records_deleted;
+            do_indexing($record_type, 'update', "$directory/upd_$record_type", $reset, $noshadow, $record_fmt, $zebraidx_log_opt)
+                if $num_records_exported;
+        } else {
+            do_indexing($record_type, 'update', "$directory/$record_type", $reset, $noshadow, $record_fmt, $zebraidx_log_opt)
+                if ($num_records_exported or $skip_export);
+        }
     }
 }
 
