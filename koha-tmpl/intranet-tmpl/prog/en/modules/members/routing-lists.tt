@@ -1,0 +1,80 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Subscription Routing Lists for [% INCLUDE 'patron-title.inc' %]</title>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'patron-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>  &rsaquo; Subscription Routing Lists for [% INCLUDE 'patron-title.inc' %]</div>
+
+<div id="doc3" class="yui-t2">
+    <div id="bd">
+    <div id="yui-main">
+    <div class="yui-b">
+[% INCLUDE 'circ-toolbar.inc' %]
+
+<!-- Search Bar -->
+<p class="tip">Search Subscriptions:</p>
+<form action="/cgi-bin/koha/serials/serials-home.pl" method="get">[% IF ( routing ) %]<input type="hidden" name="routing" value="[% routing %]" />[% END %]<input type="hidden" name="searched" value="1" /> <label for="ISSN_filter">ISSN:</label> <input type="text" size="10" maxlength="11" name="ISSN_filter" id="ISSN_filter" value="[% ISSN_filter %]" /> <label for="title_filter">Title:</label> <input type="text" size="20" maxlength="40" name="title_filter" id="title_filter" value="[% title_filter %]" /><input type="submit" value="Search" class="submit" />
+</form>
+<!-- Search Bar End -->
+
+<h1>
+[% IF ( countSubscrip ) %]
+[% countSubscrip %] Subscription Routing List(s)
+[% ELSE %]
+0 Subscription Routing Lists
+[% END %]
+</h1>
+
+<div id="subscriptions">
+[% IF ( subscripLoop ) %]
+<table id="subscriptiont">
+              <thead>
+                <tr>
+                  <th>Subscription Title</th>
+                  <th>Routing List</th>
+                </tr>
+              </thead>
+              <tbody>
+[% FOREACH subscripLoop IN subscripLoop %]
+<tr>
+    <td>
+    <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscripLoop.subscriptionid %]"><strong>
+    [% subscripLoop.title %]
+    </strong>
+                    </a>
+                  </td>
+                  <td>
+                    <a href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% subscripLoop.subscriptionid %]"><strong>
+                    Edit Routing List
+                      </strong>
+                    </a>
+                    <input type="hidden" name="biblionumber" value="[% biblionumber %]" />
+                    <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
+                  </td>
+                </tr>
+                [% END %]
+                </tbody>
+            </table>
+            </form>
+          [% ELSE %]
+          <p>Patron does not belong to any subscription routing lists.</p>
+          <input type="hidden" name="biblionumber" value="[% biblionumber %]" />
+                    <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
+                    [% END %]
+
+</div>
+
+
+
+
+</div>
+</div>
+
+<div class="yui-b">
+[% INCLUDE 'circ-menu.inc' %]
+</div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]
