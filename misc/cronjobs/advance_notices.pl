@@ -373,7 +373,7 @@ sub get_branch_info {
     my ( $borrowernumber ) = @_;
 
     ## Get branch info for borrowers home library.
-    my $borrower_details = C4::Members::GetMemberDetails( $borrowernumber );
+    my $borrower_details = C4::Members::GetMember( borrowernumber => $borrowernumber );
     my $borrower_branchcode = $borrower_details->{'branchcode'};
     my $branch = C4::Branch::GetBranchDetail( $borrower_branchcode );
     my %branch_info;
