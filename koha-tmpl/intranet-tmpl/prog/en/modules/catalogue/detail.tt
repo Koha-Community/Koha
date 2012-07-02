@@ -37,6 +37,7 @@ function verify_images() {
 }
      $(document).ready(function() {
         $('#bibliodetails > ul').tabs();
+        $('#search-form').focus();
      });
      [% IF ( AmazonEnabled ) %]$(window).load(function() {
         verify_images();
@@ -45,7 +46,7 @@ function verify_images() {
 </script>
 </head>
 
-<body id="catalog_detail" class="catalog" onload="document.getElementById('search-form').focus();">
+<body id="catalog_detail" class="catalog">
 
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
