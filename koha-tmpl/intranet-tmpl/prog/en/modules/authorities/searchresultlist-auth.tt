@@ -66,6 +66,16 @@ function jumpfull(page)
                     </td>
                     <td>&nbsp;</td>
                 </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>
+                        <a href="javascript:jumpfull('authorities.pl?index=[% index %]&authtypecode=[% authtypecode %]')" class="button">
+                            Create new
+                        </a>
+                    </td>
+                    <td>&nbsp;</td>
+                </tr>
                 [% FOREACH resul IN result %]
                     <tr>
                         <td>[% PROCESS authresult summary=resul.summary %]</td>

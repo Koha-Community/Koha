@@ -604,7 +604,11 @@ if ($op eq "add") {
         } else {
             ($authid) = AddAuthority($record,$authid,$authtypecode);
         }
-        print $input->redirect("detail.pl?authid=$authid");
+        if ($myindex) {
+            print $input->redirect("blinddetail-biblio-search.pl?authid=$authid&index=$myindex");
+        } else {
+            print $input->redirect("detail.pl?authid=$authid");
+        }
         exit;
     } else {
     # it may be a duplicate, warn the user and do nothing
