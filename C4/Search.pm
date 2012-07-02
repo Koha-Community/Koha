@@ -1792,7 +1792,7 @@ sub searchResults {
         # XSLT processing of some stuff
 	use C4::Charset;
 	SetUTF8Flag($marcrecord);
-	$debug && warn $marcrecord->as_formatted;
+        warn $marcrecord->as_formatted if $DEBUG;
 	my $interface = $search_context eq 'opac' ? 'OPAC' : '';
 	if (!$scan && C4::Context->preference($interface . "XSLTResultsDisplay")) {
             $oldbiblio->{XSLTResultsRecord} = XSLTParse4Display($oldbiblio->{biblionumber}, $marcrecord, $interface."XSLTResultsDisplay", 1, \@hiddenitems);
