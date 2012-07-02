@@ -65,7 +65,8 @@ if ( $email_add ) {
         To   => $email_add,
         From => $email_from,
     'Reply-To' => $email_replyto,
-    'X-Orig-IP' => $ENV{'REMOTE_ADDR'},
+#    'X-Orig-IP' => $ENV{'REMOTE_ADDR'},
+#    FIXME Commented out for now: discussion on privacy issue
     'X-Abuse-Report' => C4::Context->preference('KohaAdminEmailAddress'),
     );
 
