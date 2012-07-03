@@ -210,7 +210,11 @@ if ($op eq "export") {
             }
         }
         if ( $output_format eq "xml" ) {
-            print $record->as_xml_record($marcflavour);
+            if ($marcflavour eq 'UNIMARC' && $record_type eq 'auths') {
+                print $record->as_xml_record('UNIMARCAUTH');
+            } else {
+                print $record->as_xml_record($marcflavour);
+            }
         }
         else {
             print $record->as_usmarc();
