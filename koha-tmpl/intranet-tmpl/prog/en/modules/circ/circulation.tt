@@ -82,6 +82,16 @@ var allcheckboxes = $(".checkboxed");
 		$(allcheckboxes).unCheckCheckboxes(":input[name*=barcodes]"); return false;
 	});
 
+    $("#CheckAllexports").click(function(){
+        $(".checkboxed").checkCheckboxes(":input[name*=biblionumbers]");
+        $(".checkboxed").unCheckCheckboxes(":input[name*=items]");
+        return false;
+    });
+    $("#CheckNoexports").click(function(){
+        $(".checkboxed").unCheckCheckboxes(":input[name*=biblionumbers]");
+        return false;
+    });
+
     $("#relrenew_all").click(function(){
         $(allcheckboxes).checkCheckboxes(":input[name*=items]");
         $(allcheckboxes).unCheckCheckboxes(":input[name*=barcodes]");
@@ -144,9 +154,12 @@ var allcheckboxes = $(".checkboxed");
 		$("#add_message_form").show();
 	 });
 
-     $("input.radio").click(function(){
+    $("input.radio").click(function(){
         radioCheckBox($(this));
-     });
+    });
+    $("#exportmenuc").empty();
+    initExportButton();
+
     $("#newduedate").datepicker({ minDate: 1 }); // require that renewal date is after today
     $("#duedatespec").datetimepicker({
         onSelect: function(dateText, inst) { $("#barcode").focus(); },
@@ -155,6 +168,56 @@ var allcheckboxes = $(".checkboxed");
     });
 
  });
+
+function initExportButton() {
+    var exportmenu = [
+        { text: _("ISO2709 with items"), onclick: {fn: function(){export_submit("iso2709_995")}} },
+        { text: _("ISO2709 without items"), onclick: {fn: function(){export_submit("iso2709")}} },
+        { text: _("CSV"), onclick: {fn: function(){export_submit("csv")}} },
+    ];
+    new YAHOO.widget.Button({
+        type: "menu",
+        label: _("Export"),
+        name: "exportmenubutton",
+        menu: exportmenu,
+        container: "exportmenuc"
+    });
+}
+
+function export_submit(format) {
+    if ($("input:checkbox[name='biblionumbers'][checked]").length < 1){
+        alert(_("You must select a checkout to export"));
+        return;
+    }
+
+    $("input:checkbox[name='biblionumbers']").each( function(){
+        var input_item = $(this).siblings("input:checkbox");
+        if ( $(this).is(":checked") ) {
+            $(input_item).attr("checked", "checked");
+        } else {
+            $(input_item).attr("checked", "");
+        }
+    } );
+
+    if (format == 'iso2709_995') {
+        format = 'iso2709';
+        $("#dont_export_item").val(0);
+    } else if (format == 'iso2709') {
+        $("#dont_export_item").val(1);
+    } else {
+        [% UNLESS ( export_with_csv_profile ) %]
+            alert(_("You must defined a csv profile for export (in tools>CSV export profiles) and filled the ExportWithCsvProfile system preference"));
+            return false;
+        [% END %]
+    }
+    document.issues.action="/cgi-bin/koha/tools/export.pl";
+    document.getElementById("export_format").value = format;
+    document.issues.submit();
+
+    /* Reset form action to its initial value */
+    document.issues.action="/cgi-bin/koha/reserve/renewscript.pl";
+
+};
 
 function validate1(date) {
     var today = new Date();
@@ -683,7 +746,7 @@ No patron matched <span class="ex">[% message %]</span>
 <!-- SUMMARY : TODAY & PREVIOUS ISSUES -->
 <div id="checkouts">
 [% IF ( issuecount ) %]
-    <form action="/cgi-bin/koha/reserve/renewscript.pl" method="post" class="checkboxed">
+    <form name="issues" action="/cgi-bin/koha/reserve/renewscript.pl" method="post" class="checkboxed">
     <input type="hidden" value="circ" name="destination" />
     <input type="hidden" name="cardnumber" value="[% cardnumber %]" />
     <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
@@ -700,6 +763,7 @@ No patron matched <span class="ex">[% message %]</span>
         <th scope="col">Price</th>
         <th scope="col">Renew <p class="column-tool"><a href="#" id="CheckAllitems">select all</a> | <a href="#" id="CheckNoitems">none</a></p></th>
         <th scope="col">Check in <p class="column-tool"><a href="#" id="CheckAllreturns">select all</a> | <a href="#" id="CheckNoreturns">none</a></p></th>
+        <th scope="col">Export <p class="column-tool"><a href="#" id="CheckAllexports">select all</a> | <a href="#" id="CheckNoexports">none</a></p></th>
     </tr>
 [% IF ( todayissues ) %]</thead>
 [% INCLUDE 'checkouts-table-footer.inc' %]
@@ -756,9 +820,9 @@ No patron matched <span class="ex">[% message %]</span>
         [% END %]
         </td>
         [% END %]
-  [% IF ( todayissue.return_failed ) %]
+        [% IF ( todayissue.return_failed ) %]
             <td class="problem">Checkin failed</td>
-      [% ELSE %]
+        [% ELSE %]
             [% IF ( todayissue.renew_error_on_reserve ) %]
                <td><a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% todayissue.biblionumber %]">On hold</a>
                 <input type="checkbox" name="all_barcodes[]" value="[% todayissue.barcode %]" checked="checked" style="display: none;" />
@@ -768,13 +832,17 @@ No patron matched <span class="ex">[% message %]</span>
                 <input type="checkbox" name="all_barcodes[]" value="[% todayissue.barcode %]" checked="checked" style="display: none;" />
             </td>
             [% END %]
-      [% END %]
+        [% END %]
+        <td style="text-align:center;">
+            <input type="checkbox" id="export_[% todayissue.biblionumber %]" name="biblionumbers" value="[% todayissue.biblionumber %]" />
+            <input type="checkbox" name="itemnumbers" value="[% todayissue.itemnumber %]" style="visibility:hidden;" />
+        </td>
     </tr>
     [% END %] <!-- /loop todayissues -->
     <!-- /if todayissues -->[% END %]
 [% IF ( previssues ) %]
-[% IF ( todayissues ) %]<tr><th colspan="10"><a name="previous" id="previous"></a>Previous checkouts</th></tr>[% ELSE %]
-<tr><th class="{sorter: false}" colspan="10"><a name="previous" id="previous"></a>Previous checkouts</th></tr></thead>
+[% IF ( todayissues ) %]<tr><th colspan="11"><a name="previous" id="previous"></a>Previous checkouts</th></tr>[% ELSE %]
+<tr><th class="{sorter: false}" colspan="11"><a name="previous" id="previous"></a>Previous checkouts</th></tr></thead>
 [% INCLUDE 'checkouts-table-footer.inc' %]
 	<tbody>
 [% END %]
@@ -843,7 +911,11 @@ No patron matched <span class="ex">[% message %]</span>
                 <input type="checkbox" name="all_barcodes[]" value="[% previssue.barcode %]" checked="checked" style="display: none;" />
             </td>
             [% END %]
-      [% END %]
+        [% END %]
+        <td style="text-align:center;">
+            <input type="checkbox" id="export_[% previssue.biblionumber %]" name="biblionumbers" value="[% previssue.biblionumber %]" />
+            <input type="checkbox" name="itemnumbers" value="[% previssue.itemnumber %]" style="visibility:hidden;" />
+        </td>
     </tr>
     <!-- /loop previssues -->[% END %]
 <!--/if previssues -->[% END %]
@@ -859,7 +931,14 @@ No patron matched <span class="ex">[% message %]</span>
         [% END %]
         <input type="submit" name="renew_checked" value="Renew or Return checked items" />
         <input type="submit" id="renew_all" name="renew_all" value="Renew all" />
-        </fieldset>
+        <br/><br/>
+        Don't export fields : <input type="text" id="export_remove_fields" name="export_remove_fields" value="[% export_remove_fields %]" title="Use for iso2709 exports" />
+        <span id="exportmenuc">Export</span>
+        <input type="hidden" name="op" value="export" />
+        <input type="hidden" id="export_format" name="format" value="iso2709" />
+        <input type="hidden" id="dont_export_item" name="dont_export_item" value="0" />
+        <input type="hidden" id="record_type" name="record_type" value="bibs" />
+    </fieldset>
     [% END %]
     </form>
 [% ELSE %]
@@ -906,7 +985,7 @@ No patron matched <span class="ex">[% message %]</span>
     [% END %] <!-- /loop relissues -->
     <!-- /if relissues -->[% END %]
 [% IF ( relprevissues ) %]
-<tr><th class="{sorter: false}" colspan="10"><a name="relprevious" id="relprevious"></a>Previous checkouts</th></tr>
+<tr><th class="{sorter: false}" colspan="11"><a name="relprevious" id="relprevious"></a>Previous checkouts</th></tr>
     [% FOREACH relprevissue IN relprevissues %]
     [% IF ( loop.odd ) %]
         <tr>

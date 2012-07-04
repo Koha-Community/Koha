@@ -110,6 +110,12 @@ Circulation:
                   yes: Do
                   no: "Do not"
             - update a bibliographic record's total issues count whenever an item is issued (WARNING! This increases server load significantly; if performance is a concern, use the update_totalissues.pl cron job to update the total issues count).
+        -
+            - pref: ExportRemoveFields
+            - choices:
+                yes: Export
+                no: "Don't export"
+            - fields for csv or iso2709 export
     Checkout Policy:
         -
             - pref: AllowNotForLoanOverride

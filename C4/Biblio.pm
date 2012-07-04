@@ -2791,16 +2791,17 @@ sub GetNoZebraIndexes {
 
 =head2 EmbedItemsInMarcBiblio
 
-    EmbedItemsInMarcBiblio($marc, $biblionumber);
+    EmbedItemsInMarcBiblio($marc, $biblionumber, $itemnumbers);
 
 Given a MARC::Record object containing a bib record,
 modify it to include the items attached to it as 9XX
 per the bib's MARC framework.
+if $itemnumbers is defined, only specified itemnumbers are embedded
 
 =cut
 
 sub EmbedItemsInMarcBiblio {
-    my ($marc, $biblionumber) = @_;
+    my ($marc, $biblionumber, $itemnumbers) = @_;
     croak "No MARC record" unless $marc;
 
     my $frameworkcode = GetFrameworkCode($biblionumber);
@@ -2813,6 +2814,7 @@ sub EmbedItemsInMarcBiblio {
     my @item_fields;
     my ( $itemtag, $itemsubfield ) = GetMarcFromKohaField( "items.itemnumber", $frameworkcode );
     while (my ($itemnumber) = $sth->fetchrow_array) {
+        next if $itemnumbers and not grep { $_ == $itemnumber } @$itemnumbers;
         require C4::Items;
         my $item_marc = C4::Items::GetMarcItem($biblionumber, $itemnumber);
         push @item_fields, $item_marc->field($itemtag);

@@ -5736,6 +5736,24 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.09.00.XXX";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do(qq{
+        INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES('ExportRemoveFields','','List of fields for non export in circulation.pl (separated by a space)','','');
+    });
+    print "Upgrade to $DBversion done (Add system preference ExportRemoveFields)\n";
+    SetVersion($DBversion);
+}
+
+$DBversion = "3.09.00.XXX";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do(qq{
+        INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES('ExportWithCsvProfile','','Set a profile name for CSV export','','');
+    });
+    print "Upgrade to $DBversion done (Adds New System preference ExportWithCsvProfile)\n";
+    SetVersion($DBversion)
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

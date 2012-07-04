@@ -358,7 +358,7 @@ sub marc2endnote {
 
 =head2 marc2csv - Convert several records from UNIMARC to CSV
 
-  my ($csv) = marc2csv($biblios, $csvprofileid);
+  my ($csv) = marc2csv($biblios, $csvprofileid, $itemnumbers);
 
 Pre and postprocessing can be done through a YAML file
 
@@ -368,10 +368,12 @@ C<$biblio> - a list of biblionumbers
 
 C<$csvprofileid> - the id of the CSV profile to use for the export (see export_format.export_format_id and the GetCsvProfiles function in C4::Csv)
 
+C<$itemnumbers> - a list of itemnumbers to export
+
 =cut
 
 sub marc2csv {
-    my ($biblios, $id) = @_;
+    my ($biblios, $id, $itemnumbers) = @_;
     my $output;
     my $csv = Text::CSV::Encoded->new();
 
@@ -386,9 +388,17 @@ sub marc2csv {
     eval $preprocess if ($preprocess);
 
     my $firstpass = 1;
-    foreach my $biblio (@$biblios) {
-	$output .= marcrecord2csv($biblio, $id, $firstpass, $csv, $fieldprocessing) ;
-	$firstpass = 0;
+    if ( $itemnumbers ) {
+        for my $itemnumber ( @$itemnumbers) {
+            my $biblionumber = GetBiblionumberFromItemnumber $itemnumber;
+            $output .= marcrecord2csv( $biblionumber, $id, $firstpass, $csv, $fieldprocessing, [$itemnumber] );
+            $firstpass = 0;
+        }
+    } else {
+        foreach my $biblio (@$biblios) {
+            $output .= marcrecord2csv( $biblio, $id, $firstpass, $csv, $fieldprocessing );
+            $firstpass = 0;
+        }
     }
 
     # Postprocessing
@@ -411,16 +421,21 @@ C<$header> - true if the headers are to be printed (typically at first pass)
 
 C<$csv> - an already initialised Text::CSV object
 
+C<$fieldprocessing>
+
+C<$itemnumbers> a list of itemnumbers to export
+
 =cut
 
 
 sub marcrecord2csv {
-    my ($biblio, $id, $header, $csv, $fieldprocessing) = @_;
+    my ($biblio, $id, $header, $csv, $fieldprocessing, $itemnumbers) = @_;
     my $output;
 
     # Getting the record
-    my $record = GetMarcBiblio($biblio, 1);
+    my $record = GetMarcBiblio($biblio);
     next unless $record;
+    C4::Biblio::EmbedItemsInMarcBiblio( $record, $biblio, $itemnumbers );
     # Getting the framework
     my $frameworkcode = GetFrameworkCode($biblio);
 
@@ -527,18 +542,28 @@ sub marcrecord2csv {
 	    my @fields = ($record->field($marcfield));
 	    my $authvalues = GetKohaAuthorisedValuesFromField($marcfield, undef, $frameworkcode, undef);
 
-	    my @valuesarray;
-	    foreach (@fields) {
-		my $value;
+        my @valuesarray;
+        foreach (@fields) {
+            my $value;
 
-		# Getting authorised value
-		$value = defined $authvalues->{$_->as_string} ? $authvalues->{$_->as_string} : $_->as_string;
+            # If it is a control field
+            if ($_->is_control_field) {
+                $value = defined $authvalues->{$_->as_string} ? $authvalues->{$_->as_string} : $_->as_string;
+            } else {
+                # If it is a field, we gather all subfields, joined by the subfield separator
+                my @subvaluesarray;
+                my @subfields = $_->subfields;
+                foreach my $subfield (@subfields) {
+                    push (@subvaluesarray, defined $authvalues->{$subfield->[1]} ? $authvalues->{$subfield->[1]} : $subfield->[1]);
+                }
+                $value = join ($subfieldseparator, @subvaluesarray);
+            }
 
-		# Field processing
-		eval $fieldprocessing if ($fieldprocessing);
+            # Field processing
+            eval $fieldprocessing if ($fieldprocessing);
 
-		push @valuesarray, $value;
-	    }
+            push @valuesarray, $value;
+        }
 	    push (@fieldstab, join($fieldseparator, @valuesarray)); 
 	 }
     };
