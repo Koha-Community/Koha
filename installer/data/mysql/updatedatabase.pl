@@ -5452,7 +5452,7 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.09.00.XXX";
+$DBversion = "3.09.00.022";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("ALTER TABLE search_history MODIFY COLUMN query_cgi text NOT NULL");
     print "Upgrade to $DBversion done (Change search_history.query_cgi type to text. bug 5981)\n";
