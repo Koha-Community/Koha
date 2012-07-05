@@ -31,20 +31,24 @@ use C4::Acquisition;
 use C4::Koha;    # XXX subfield_is_koha_internal_p
 use C4::Biblio;
 
-my $query        = new CGI;
-my $op           = $query->param('op');
+my $query = new CGI;
+my $op    = $query->param('op');
 $op ||= q{};
 my $authtypecode = $query->param('authtypecode');
 $authtypecode ||= q{};
-my $dbh          = C4::Context->dbh;
+my $dbh = C4::Context->dbh;
 
 my $authid = $query->param('authid');
 my ( $template, $loggedinuser, $cookie );
 
 my $authtypes = getauthtypes;
 my @authtypesloop;
-foreach my $thisauthtype ( sort { $authtypes->{$a}{'authtypetext'} cmp $authtypes->{$b}{'authtypetext'} }
-    keys %$authtypes )
+foreach my $thisauthtype (
+    sort {
+        $authtypes->{$a}{'authtypetext'} cmp $authtypes->{$b}{'authtypetext'}
+    }
+    keys %$authtypes
+  )
 {
     my %row = (
         value        => $thisauthtype,
@@ -115,19 +119,19 @@ if ( $op eq "do_search" ) {
     # next/previous would not work anymore
     my @marclist_ini = $query->param('marclist');
     for ( my $i = 0 ; $i <= $#marclist ; $i++ ) {
-        if ($value[$i]){   
-          push @field_data, { term => "marclist",  val => $marclist_ini[$i] };
-          if (!defined $and_or[$i]) {
-              $and_or[$i] = q{};
-          }
-          push @field_data, { term => "and_or",    val => $and_or[$i] };
-          if (!defined $excluding[$i]) {
-              $excluding[$i] = q{};
-          }
-          push @field_data, { term => "excluding", val => $excluding[$i] };
-          push @field_data, { term => "operator",  val => $operator[$i] };
-          push @field_data, { term => "value",     val => $value[$i] };
-        }    
+        if ( $value[$i] ) {
+            push @field_data, { term => "marclist", val => $marclist_ini[$i] };
+            if ( !defined $and_or[$i] ) {
+                $and_or[$i] = q{};
+            }
+            push @field_data, { term => "and_or", val => $and_or[$i] };
+            if ( !defined $excluding[$i] ) {
+                $excluding[$i] = q{};
+            }
+            push @field_data, { term => "excluding", val => $excluding[$i] };
+            push @field_data, { term => "operator",  val => $operator[$i] };
+            push @field_data, { term => "value",     val => $value[$i] };
+        }
     }
 
     # construction of the url of each page
@@ -148,7 +152,7 @@ if ( $op eq "do_search" ) {
 
     my $from = ( $startfrom - 1 ) * $resultsperpage + 1;
     my $to;
-    if (!defined $total) {
+    if ( !defined $total ) {
         $total = 0;
     }
 
@@ -187,9 +191,7 @@ if ( $op eq '' ) {
 
 }
 
-$template->param(
-    authtypesloop => \@authtypesloop,
-);
+$template->param( authtypesloop => \@authtypesloop, );
 
 $template->{VARS}->{marcflavour} = C4::Context->preference("marcflavour");
 
