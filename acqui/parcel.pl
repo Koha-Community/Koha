@@ -78,59 +78,16 @@ my $invoice=$input->param('invoice') || '';
 my $freight=$input->param('freight');
 my $input_gst = ($input->param('gst') eq '' ? undef : $input->param('gst'));
 my $gst= $input_gst // $bookseller->{gstrate} // C4::Context->preference("gist") // 0;
-my $datereceived =  ($input->param('op') eq 'new') ? C4::Dates->new($input->param('datereceived')) 
-					:  C4::Dates->new($input->param('datereceived'), 'iso')   ;
+my $datereceived =  ($input->param('op') eq ('new' or "search")) ? C4::Dates->new($input->param('datereceived'))
+					:  C4::Dates->new($input->param('datereceived'), 'iso');
 $datereceived = C4::Dates->new() unless $datereceived;
 my $code            = $input->param('code');
 my @rcv_err         = $input->param('error');
 my @rcv_err_barcode = $input->param('error_bc');
-
 my $startfrom=$input->param('startfrom');
 my $resultsperpage = $input->param('resultsperpage');
 $resultsperpage = 20 unless ($resultsperpage);
 $startfrom=0 unless ($startfrom);
-
-if($input->param('format') eq "json"){
-    my ($template, $loggedinuser, $cookie)
-        = get_template_and_user({template_name => "acqui/ajax.tmpl",
-                 query => $input,
-				 type => "intranet",
-                 authnotrequired => 0,
-                 flagsrequired => {acquisition => 'order_receive'},
-                 debug => 1,
-    });
-       
-    my @datas;
-    my $search   = $input->param('search') || '';
-    my $supplier = $input->param('booksellerid') || '';
-    my $basketno = $input->param('basketno') || '';
-    my $orderno  = $input->param('orderno') || '';
-
-    my $orders = SearchOrder($orderno, $search, $supplier, $basketno);
-    foreach my $order (@$orders){
-        if($order->{quantityreceived} < $order->{quantity}){
-            my $data = {};
-            
-            $data->{basketno} = $order->{basketno};
-            $data->{ordernumber} = $order->{ordernumber};
-            $data->{title} = $order->{title};
-            $data->{author} = $order->{author};
-            $data->{isbn} = $order->{isbn};
-            $data->{booksellerid} = $order->{booksellerid};
-            $data->{biblionumber} = $order->{biblionumber};
-            $data->{freight} = $order->{freight};
-            $data->{quantity} = $order->{quantity};
-            $data->{ecost} = $order->{ecost};
-            $data->{ordertotal} = sprintf("%.2f",$order->{ecost}*$order->{quantity});
-            push @datas, $data;
-        }
-    }
-    
-    my $json_text = to_json(\@datas);
-    $template->param(return => $json_text);
-    output_html_with_http_headers $input, $cookie, $template->output;
-    exit;
-}
 
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "acqui/parcel.tmpl",
@@ -195,7 +152,19 @@ for (my $i = 0 ; $i < $countlines ; $i++) {
     $tototal       += $total;
 }
 
-my $pendingorders = GetPendingOrders($booksellerid);
+# We get the pending orders either all or filtered
+my $pendingorders;
+if($input->param('op') eq "search"){
+    my $search   = $input->param('summaryfilter') || '';
+    my $ean      = $input->param('eanfilter') || '';
+    my $basketno = $input->param('basketfilter') || '';
+    my $orderno  = $input->param('orderfilter') || '';
+    my $grouped;
+    my $owner;
+    $pendingorders = GetPendingOrders($booksellerid,$grouped,$owner,$basketno,$orderno,$search,$ean);
+}else{
+    $pendingorders = GetPendingOrders($booksellerid);
+}
 my $countpendings = scalar @$pendingorders;
 
 # pending orders totals
@@ -251,7 +220,7 @@ for (my $i = 0 ; $i < $countpendings ; $i++) {
     $line{left_subscription}    = 1 if scalar @subscriptions >= 1;
     $line{subscriptions}        = scalar @subscriptions;
     $line{left_holds}           = 1 if $holds >= 1;
-    $line{left_holds_on_order}  = 1 if $line{left_holds}==1 && ($line{items} == 0 || $itemholds );
+    $line{left_holds_on_order}  = 1 if $line{left_holds} == 1 && ($line{items} == 0 || $itemholds );
     $line{holds}                = $holds;
     $line{holds_on_order}       = $itemholds?$itemholds:$holds if $line{left_holds_on_order};
     
@@ -259,7 +228,6 @@ for (my $i = 0 ; $i < $countpendings ; $i++) {
     push @loop_orders, \%line if ($i >= $startfrom and $i < $startfrom + $resultsperpage);
 }
 $freight = $totalfreight unless $freight;
-
 my $count = $countpendings;
 
 if ($count>$resultsperpage){

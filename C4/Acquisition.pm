@@ -717,29 +717,23 @@ sub GetBasketgroups {
 
 =head3 GetPendingOrders
 
-  $orders = &GetPendingOrders($booksellerid, $grouped, $owner);
+$orders = &GetPendingOrders($supplierid,$grouped,$owner,$basketno,$ordernumber,$search,$ean);
 
 Finds pending orders from the bookseller with the given ID. Ignores
 completed and cancelled orders.
 
 C<$booksellerid> contains the bookseller identifier
-C<$grouped> contains 0 or 1. 0 means returns the list, 1 means return the total
 C<$owner> contains 0 or 1. 0 means any owner. 1 means only the list of orders entered by the user itself.
-
-C<$orders> is a reference-to-array; each element is a
-reference-to-hash with the following fields:
 C<$grouped> is a boolean that, if set to 1 will group all order lines of the same basket
 in a single result line
+C<$orders> is a reference-to-array; each element is a reference-to-hash.
 
-=over
+Used also by the filter in parcel.pl
+I have added:
 
-=item C<authorizedby>
-
-=item C<entrydate>
-
-=item C<basketno>
-
-=back
+C<$ordernumber>
+C<$search>
+C<$ean>
 
 These give the value of the corresponding field in the aqorders table
 of the Koha database.
@@ -749,41 +743,55 @@ Results are ordered from most to least recent.
 =cut
 
 sub GetPendingOrders {
-    my ($supplierid,$grouped,$owner,$basketno) = @_;
+    my ($supplierid,$grouped,$owner,$basketno,$ordernumber,$search,$ean) = @_;
     my $dbh = C4::Context->dbh;
     my $strsth = "
-        SELECT    ".($grouped?"count(*),":"")."aqbasket.basketno,
-                    surname,firstname,biblio.*,biblioitems.isbn,
-                    aqbasket.closedate, aqbasket.creationdate, aqbasket.basketname,
-                    aqorders.*
-        FROM      aqorders
+        SELECT ".($grouped?"count(*),":"")."aqbasket.basketno,
+               surname,firstname,biblio.*,biblioitems.isbn,
+               aqbasket.closedate, aqbasket.creationdate, aqbasket.basketname,
+               aqorders.*
+        FROM aqorders
         LEFT JOIN aqbasket ON aqbasket.basketno=aqorders.basketno
         LEFT JOIN borrowers ON aqbasket.authorisedby=borrowers.borrowernumber
         LEFT JOIN biblio ON biblio.biblionumber=aqorders.biblionumber
         LEFT JOIN biblioitems ON biblioitems.biblionumber=biblio.biblionumber
-        WHERE booksellerid=?
-            AND (quantity > quantityreceived OR quantityreceived is NULL)
-            AND datecancellationprinted IS NULL";
-    my @query_params = ( $supplierid );
+        WHERE (quantity > quantityreceived OR quantityreceived is NULL)
+        AND datecancellationprinted IS NULL";
+    my @query_params;
     my $userenv = C4::Context->userenv;
     if ( C4::Context->preference("IndependantBranches") ) {
         if ( ($userenv) && ( $userenv->{flags} != 1 ) ) {
-            $strsth .= " and (borrowers.branchcode = ?
+            $strsth .= " AND (borrowers.branchcode = ?
                         or borrowers.branchcode  = '')";
             push @query_params, $userenv->{branch};
         }
     }
-    if ($owner) {
-        $strsth .= " AND aqbasket.authorisedby=? ";
-        push @query_params, $userenv->{'number'};
+    if ($supplierid) {
+        $strsth .= " AND aqbasket.booksellerid = ?";
+        push @query_params, $supplierid;
+    }
+    if($ordernumber){
+        $strsth .= " AND (aqorders.ordernumber=?)";
+        push @query_params, $ordernumber;
+    }
+    if($search){
+        $strsth .= " AND (biblio.title like ? OR biblio.author LIKE ? OR biblioitems.isbn like ?)";
+        push @query_params, ("%$search%","%$search%","%$search%");
+    }
+    if ($ean) {
+        $strsth .= " AND biblioitems.ean = ?";
+        push @query_params, $ean;
     }
     if ($basketno) {
         $strsth .= " AND aqbasket.basketno=? ";
         push @query_params, $basketno;
     }
+    if ($owner) {
+        $strsth .= " AND aqbasket.authorisedby=? ";
+        push @query_params, $userenv->{'number'};
+    }
     $strsth .= " group by aqbasket.basketno" if $grouped;
     $strsth .= " order by aqbasket.basketno";
-
     my $sth = $dbh->prepare($strsth);
     $sth->execute( @query_params );
     my $results = $sth->fetchall_arrayref({});
