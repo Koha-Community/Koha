@@ -97,68 +97,6 @@
 	$("#receivedt").before("<p id=\"receivedcollapserow\">" + _("All ") + rowCountReceived + _(" items are displayed.") + "<a href=\"javascript:receivedCollapse();\">" + _("Click here to show only the first ") + rowsToCollapse + _(" items") + "<\/a>.<\/p>");
     }
 
-    // Launch filtering
-    function filter() {
-
-    var summaryStatus = jQuery.trim($("#summaryfilter").val());
-	var basketStatus  = $("#basketfilter").val();
-	var orderStatus   = $("#orderfilter").val();
-    var eanStatus     = $("#eanfilter").val() || '';
-
-    if (summaryStatus == '' && basketStatus == '' && orderStatus == '' && eanStatus == '') { clearFilters(); return false; }
-
-	var filtered = "table#pendingt tbody.filterclass tr";
-
-	// We hide everything
-	$("#nothingfoundrow").remove();
-	$(filtered).hide();
-
-	// Do the search
-	var callback =  {
-		success: function(o) {
-			var jsonString = o.responseText;
-			var gst = "[% gst %]";
-			try {
-				var orders = YAHOO.lang.JSON.parse(jsonString);
-				var foundCount = orders.length;
-
-				for( i = 0 ; i < orders.length ; i++){
-					order = orders[i];
-					$('<tr class="orderfound">'
-                       + '<td class="basketfilterclass"><a href="/cgi-bin/koha/acqui/basket.pl?basketno=' + order.basketno + '">' + order.basketno + '</a></td>'
-                       + '<td class="orderfilterclass"> <a href="neworderempty.pl?ordernumber=' + order.ordernumber + '&booksellerid=' + order.booksellerid + '">' + order.ordernumber + ' </a></td>'
-                       + '<td class="summaryfilterclass">'
-                       + '<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=' + order.biblionumber + '">' + order.title + '</a>' + _(" by ") + order.author + '&nbsp;&ndash;&nbsp;' + order.isbn + '</td>'
-                       + '<td><a href="/cgi-bin/koha/catalogue/showmarc.pl?id=' + order.biblionumber + '" title="MARC" rel="gb_page_center[600,500]">MARC</a> | <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;id=' + order.biblionumber + '" title="MARC" rel="gb_page_center[600,500]">Card</a></td>'
-                       + '<td>' + order.quantity + '</td>'
-                       + '<td>' + order.ecost + '</td>'
-                       + '<td>' + order.ordertotal + '</td>'
-                       + '<td>'
-                       + '<a href="orderreceive.pl?ordernumber=' + order.ordernumber + '&amp;datereceived=[% invoicedatereceived %]&amp;invoice=[% invoice %]&amp;gst=' + gst + '&amp;freight=' + order.freight + '&amp;booksellerid=[% booksellerid %]">Receive</a> /'
-                       + '<a href="parcel.pl?type=intra&amp;ordernumber=' + order.ordernumber + '&amp;biblionumber=' + order.biblionumber + '&amp;action=cancelorder&amp;booksellerid=[% booksellerid %]&amp;datereceived=[% invoicedatereceived %]&amp;invoice=[% invoice %]" onclick="return confirm(\'' + _('Are you sure you want to cancel this order?') + '\');">Cancel</a>'
-                       + '</td></tr>').appendTo("table#pendingt");
-				}
-
-				// If nothing has been found, we tell the user so
-				if (orders.length == 0) {
-				    $("<tr><td id=\"nothingfoundrow\" colspan=\"8\">No items match your criteria.<\/tr>").appendTo("#pendingt");
-				}
-			}catch(e){alert(e);}
-		}
-	}
-    var transaction = YAHOO.util.Connect.asyncRequest('GET', '/cgi-bin/koha/acqui/parcel.pl?booksellerid=[% booksellerid %]&search='+summaryStatus+'&basketno='+basketStatus+'&orderno='+orderStatus+'&ean='+eanStatus+'&format=json', callback, null);
-
-	return false;
-    }
-
-    // Clear already applied filters
-    function clearFilters() {
-	$("#nothingfoundrow").remove();
-        $("#pendingt tbody.filterclass tr").show();
-        //$("#pendingt tbody.filterclass tr.orderfound").remove();
-	pendingExpand();
-    }
-
 //]]>
 </script>
 <script type="text/javascript">
@@ -170,16 +108,14 @@
                 }
             }
             
-            function confirm_delete_biblio(ordernumber, biblionumber) {
+            function confirm_delete_biblio(ordernumber, basketno, biblionumber) {
                 var is_confirmed = confirm(_('Are you sure you want to delete this catalog record and order ?'));
                 if (is_confirmed) {
                     window.location = "addorder.pl?ordernumber="+ordernumber+"&basketno="+basketno+"&quantity=0&biblionumber="+biblionumber+"&delbiblio=1";
                     }
             }
-
 //]]>
 </script>
-
 </head>
 <body id="acq_parcel" class="acq">
 [% INCLUDE 'header.inc' %]
@@ -238,7 +174,7 @@
             <th>Basket</th>
             <th>Order line</th>
             <th>Summary</th>
-        <th>View record</th>
+            <th>View record</th>
             <th>Quantity</th>
             <th>Unit cost</th>
             <th>Order cost</th>
@@ -422,7 +358,7 @@
 </div>
 </div>
 <div class="yui-b">
-<form action="/cgi-bin/koha/acqui/parcel.pl" id="filterform" onsubmit="return filter();">
+<form action="/cgi-bin/koha/acqui/parcel.pl" id="filterform" method="post">
         <fieldset class="brief">
 
             <h4>Filter</h4>
@@ -431,28 +367,32 @@
 
 		<li>
 		    <label for="summaryfilter">ISBN, author or title :</label>
-		    <input type="text" name="summaryfilter" id="summaryfilter" />
+            <input type="text" name="summaryfilter" id="summaryfilter" value="[% summaryfilter %]"/>
 		</li>
 
 		<li>
 		    <label for="basketfilter">Basket :</label>
-		    <input type="text" name="basketfilter" id="basketfilter" />
+            <input type="text" name="basketfilter" id="basketfilter" value="[% basketfilter %]"/>
 		</li>
 
 		<li>
             <label for="orderfilter">Order line :</label>
-		    <input type="text" name="orderfilter" id="orderfilter" />
+            <input type="text" name="orderfilter" id="orderfilter" value="[% orderfilter %]"/>
 		</li>
                 [% IF (UNIMARC) %]
         <li>
             <label for="eanfilter">EAN :</label>
-            <input type="text" name="eanfilter" id="eanfilter" />
+            <input type="text" name="eanfilter" id="eanfilter" value="[% eanfilter %]"/>
         </li>
                 [% END %]
 	    </ol>
 		<fieldset class="action">
-		    <input type="submit" value="Filter" />
-		    <a href="#" onclick="clearFilters();">Clear</a>
+        <input type="hidden" value="search" name="op" />
+        <input type="hidden" value="[% booksellerid %]" name="booksellerid" />
+        <input type="hidden" value="[% invoice %]" name="invoice" />
+        <input type="hidden" value="[% invoicedatereceived %]" name="datereceived" />
+        <input type="submit" value="Filter" />
+        <a href="/cgi-bin/koha/acqui/parcel.pl?booksellerid=[% booksellerid %]&invoice=[% invoice %]&op=new&datereceived=[% formatteddatereceived %]">Clear</a>
 		</fieldset>
 
 
