@@ -48,7 +48,6 @@
         new YAHOO.widget.Button({
             type: "menu",
             label: _("Save"),
-            id: "savemenuc",
             name: "savemenubutton",
             menu: savemenu,
             container: "savemenuc"

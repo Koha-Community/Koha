@@ -6,6 +6,8 @@
     <xsl:include href="http://www.loc.gov/marcxml/xslt/MARC21slimUtils.xsl"/>
     <xsl:output method="xml" indent="yes" encoding="UTF-8"/>
     <xsl:strip-space elements="*"/>
+    <!-- Stylesheet copyright (c) 2011 Library of Congress
+    -->
 
     <!--
 2.10    fixed type=other and type=otherType for mads:related                                tmee 09/16/2011
