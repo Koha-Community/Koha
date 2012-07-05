@@ -54,6 +54,21 @@ foreach my $thisauthtype ( sort { $authtypes->{$a}{'authtypetext'} cmp $authtype
     push @authtypesloop, \%row;
 }
 
+if ( $op eq "delete" ) {
+    ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+        {
+            template_name   => "authorities/authorities-home.tmpl",
+            query           => $query,
+            type            => 'intranet',
+            authnotrequired => 0,
+            flagsrequired   => { catalogue => 1 },
+            debug           => 1,
+        }
+    );
+    &DelAuthority( $authid, 1 );
+
+    $op = "do_search";
+}
 if ( $op eq "do_search" ) {
     my @marclist  = $query->param('marclist');
     my @and_or    = $query->param('and_or');
@@ -69,7 +84,7 @@ if ( $op eq "do_search" ) {
       SearchAuthorities( \@marclist, \@and_or, \@excluding, \@operator, \@value,
         ( $startfrom - 1 ) * $resultsperpage,
         $resultsperpage, $authtypecode, $orderby );
-#     use Data::Dumper; warn Data::Dumper::Dumper(@$results);
+
     ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         {
             template_name   => "authorities/searchresultlist.tmpl",
@@ -79,6 +94,18 @@ if ( $op eq "do_search" ) {
             flagsrequired   => { catalogue => 1 },
             debug           => 1,
         }
+    );
+
+    $template->param(
+        marclist       => $query->param('marclist'),
+        and_or         => $query->param('and_or'),
+        excluding      => $query->param('excluding'),
+        operator       => $query->param('operator'),
+        orderby        => $query->param('orderby'),
+        value          => $query->param('value'),
+        authtypecode   => $query->param('authtypecode'),
+        startfrom      => $startfrom,
+        resultsperpage => $resultsperpage,
     );
 
     my @field_data = ();
@@ -146,20 +173,7 @@ if ( $op eq "do_search" ) {
     );
 
 }
-elsif ( $op eq "delete" ) {
-    ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-        {
-            template_name   => "authorities/authorities-home.tmpl",
-            query           => $query,
-            type            => 'intranet',
-            authnotrequired => 0,
-            flagsrequired   => { catalogue => 1 },
-            debug           => 1,
-        }
-    );
-    &DelAuthority( $authid, 1 );
-}
-else {
+if ( $op eq '' ) {
     ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         {
             template_name   => "authorities/authorities-home.tmpl",
