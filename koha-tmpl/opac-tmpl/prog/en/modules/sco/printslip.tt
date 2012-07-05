@@ -1,0 +1,26 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>[% title %]</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="shortcut icon" href="[% IF ( IntranetFavicon ) %][% IntranetFavicon %][% ELSE %][% themelang %]/includes/favicon.ico[% END %]" type="image/x-icon" />
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/print.css" />
+[% IF stylesheet %]
+<link rel="stylesheet" type="text/css" href="[% stylesheet %]" />
+[% END %]
+
+<script language="javascript">
+    function printThenClose() {
+        window.print();
+        window.close();
+    }
+</script>
+</head>
+<body id="circ_printslip" class="circ" onload="printThenClose();">
+<div id="receipt">
+
+[% IF plain %]
+<pre>
+[% slip %]
+</pre>
+[% ELSE %]
+[% slip %]
+[% END %]

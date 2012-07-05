@@ -239,6 +239,7 @@ if ($borrower->{cardnumber}) {
         patronlogin => $patronlogin,
         patronpw => $patronpw,
         noitemlinks => 1 ,
+    borrowernumber => $borrower->{'borrowernumber'},
     );
     my $inputfocus = ($return_only      == 1) ? 'returnbook' :
                      ($confirm_required == 1) ? 'confirm'    : 'barcode' ;
