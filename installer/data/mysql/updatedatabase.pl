@@ -5459,7 +5459,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.07.00.023";
+$DBversion = "3.09.00.023";
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     $dbh->do("INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type) VALUES('SearchEngine','Zebra','Solr|Zebra','Search Engine','Choice')");
     print "Upgrade to $DBversion done (Add system preference SearchEngine )\n";
