@@ -3293,7 +3293,7 @@ sub ReturnLostItem{
 
 
 sub LostItem{
-    my ($itemnumber, $mark_returned, $charge_fee) = @_;
+    my ($itemnumber, $mark_returned) = @_;
 
     my $dbh = C4::Context->dbh();
     my $sth=$dbh->prepare("SELECT issues.*,items.*,biblio.title 
@@ -3305,14 +3305,22 @@ sub LostItem{
     my $issues=$sth->fetchrow_hashref();
     $sth->finish;
 
-    # if a borrower lost the item, add a replacement cost to the their record
+    # If a borrower lost the item, add a replacement cost to the their record
     if ( my $borrowernumber = $issues->{borrowernumber} ){
         my $borrower = C4::Members::GetMemberDetails( $borrowernumber );
 
-        C4::Accounts::chargelostitem($borrowernumber, $itemnumber, $issues->{'replacementprice'}, "Lost Item $issues->{'title'} $issues->{'barcode'}")
-          if $charge_fee;
-        #FIXME : Should probably have a way to distinguish this from an item that really was returned.
-        #warn " $issues->{'borrowernumber'}  /  $itemnumber ";
+        if (C4::Context->preference('WhenLostForgiveFine')){
+            my $exemptfine=1;
+            my $dropbox=0;
+            my $fix = _FixOverduesOnReturn($borrowernumber, $itemnumber, $exemptfine, $dropbox);
+            defined($fix) or warn "_FixOverduesOnReturn($borrowernumber, $itemnumber...) failed!";  # zero is OK, check defined
+        }
+        if (C4::Context->preference('WhenLostChargeReplacementFee')){
+            C4::Accounts::chargelostitem($borrowernumber, $itemnumber, $issues->{'replacementprice'}, "Lost Item $issues->{'title'} $issues->{'barcode'}");
+            #FIXME : Should probably have a way to distinguish this from an item that really was returned.
+            #warn " $issues->{'borrowernumber'}  /  $itemnumber ";
+        }
+
         MarkIssueReturned($borrowernumber,$itemnumber,undef,undef,$borrower->{'privacy'}) if $mark_returned;
     }
 }

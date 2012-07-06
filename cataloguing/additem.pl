@@ -27,6 +27,7 @@ use C4::Output;
 use C4::Biblio;
 use C4::Items;
 use C4::Context;
+use C4::Circulation;
 use C4::Koha; # XXX subfield_is_koha_internal_p
 use C4::Branch; # XXX subfield_is_koha_internal_p
 use C4::ClassSource;
@@ -605,6 +606,12 @@ if ($op eq "additem") {
     } else {
         ModItemFromMarc($itemtosave,$biblionumber,$itemnumber);
         $itemnumber="";
+    }
+  my $item = GetItem( $itemnumber );
+    my $olditemlost =  $item->{'itemlost'};
+    my $newitemlost = $itemtosave->subfield('952','1');
+    if (($olditemlost eq '0' or $olditemlost eq '' ) and $newitemlost ge '1'){
+  LostItem($itemnumber,'MARK RETURNED');
     }
     $nextop="additem";
 } elsif ($op eq "delinkitem"){

@@ -7130,6 +7130,15 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+
+$DBversion = "3.13.00.XXX";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES('WhenLostForgiveFine','0',NULL,'If ON, Forgives the fines on an item when it is lost.','YesNo')");
+    $dbh->do("INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES('WhenLostChargeReplacementFee','1',NULL,'If ON, Charge the replacement price when a patron loses an item.','YesNo')");
+    print "Upgrade to $DBversion done (Bug 7639: Added sysprefs WhenLostForgiveFine and WhenLostChargeReplacementFee)\n";
+    SetVersion ($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

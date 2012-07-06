@@ -409,6 +409,8 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('virtualshelves','1','','If ON, enables Lists management','YesNo'),
 ('WaitingNotifyAtCheckin','0',NULL,'If ON, notify librarians of waiting holds for the patron whose items they are checking in.','YesNo'),
 ('WebBasedSelfCheck','0',NULL,'If ON, enables the web-based self-check system','YesNo'),
+('WhenLostChargeReplacementFee','1',NULL,'If ON, Charge the replacement price when a patron loses an item.','YesNo'),
+('WhenLostForgiveFine','0',NULL,'If ON, Forgives the fines on an item when it is lost.','YesNo'),
 ('XISBN','0','','Use with FRBRizeEditions. If ON, Koha will use the OCLC xISBN web service in the Editions tab on the detail pages. See: http://www.worldcat.org/affiliate/webservices/xisbn/app.jsp','YesNo'),
 ('XISBNDailyLimit','999','','The xISBN Web service is free for non-commercial use when usage does not exceed 1000 requests per day','Integer'),
 ('XSLTDetailsDisplay','default','','Enable XSL stylesheet control over details page display on intranet','Free'),

@@ -507,6 +507,18 @@ Circulation:
                   yes: Include
                   no: "Don't include"
             - the grace period when calculating the fine for an overdue item.
+        -
+            - pref: WhenLostForgiveFine
+              choices:
+                  yes: Forgive
+                  no: "Don't Forgive"
+            - the fines on an item when it is lost.
+        -
+            - pref: WhenLostChargeReplacementFee
+              choices:
+                  yes: Charge
+                  no: "Don't Charge"
+            - the replacement price when a patron loses an item.
     Self Checkout:
         -
             - "Include the following JavaScript on all pages in the web-based self checkout:"

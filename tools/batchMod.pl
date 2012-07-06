@@ -189,7 +189,7 @@ if ($op eq "action") {
 			UpdateMarcWith( $marcitem, $localmarcitem );
 			eval{
                             if ( my $item = ModItemFromMarc( $localmarcitem, $itemdata->{biblionumber}, $itemnumber ) ) {
-                                LostItem($itemnumber, 'MARK RETURNED', 'CHARGE FEE') if $item->{itemlost};
+                                LostItem($itemnumber, 'MARK RETURNED') if $item->{itemlost};
                             }
                         };
 		    }

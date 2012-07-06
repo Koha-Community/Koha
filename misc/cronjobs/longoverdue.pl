@@ -165,7 +165,7 @@ foreach my $startrange (sort keys %$lost) {
             printf ("Due %s: item %5s from borrower %5s to lost: %s\n", $row->{date_due}, $row->{itemnumber}, $row->{borrowernumber}, $lostvalue) if($verbose);
             if($confirm) {
                 ModItem({ itemlost => $lostvalue }, $row->{'biblionumber'}, $row->{'itemnumber'});
-                LostItem($row->{'itemnumber'}, $mark_returned, 'CHARGE FEE') if( $charge && $charge eq $lostvalue);
+                LostItem($row->{'itemnumber'}, $mark_returned) if( $charge && $charge eq $lostvalue);
             }
             $count++;
         }
