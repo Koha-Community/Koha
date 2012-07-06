@@ -57,7 +57,8 @@ ok( !@files_with_directive_in_tag, "TT syntax: not using TT directive within HTM
        );
 
 my $testtoken = 0;
-C4::TTParser::unshift_token($testtoken);
+my $ttparser = C4::TTParser->new();
+$ttparser->unshift_token($testtoken);
 my $testtokenagain = C4::TTParser::next_token();
 is( $testtoken, $testtokenagain, "Token received same as original put on stack");
 
