@@ -30,7 +30,7 @@ if ( $op eq "export" ) {
         my $marc = GetAuthority($authid);
 
         if ( $format =~ /marcxml/ ) {
-            $marc = marc2marcxml($marc);
+            $marc = marc2marcxml($marc, 'UTF-8', C4::Context->preference("marcflavour") eq 'UNIMARC' ? 'UNIMARCAUTH' : 'MARC21' );
         }
         elsif ($format=~ /mads/) {
             $marc = marc2madsxml($marc);
