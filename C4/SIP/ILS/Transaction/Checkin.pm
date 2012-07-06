@@ -17,7 +17,7 @@ use C4::Reserves qw( ModReserveAffect );
 use C4::Items qw( ModItemTransfer );
 use C4::Debug;
 
-our @ISA = qw(ILS::Transaction);
+use parent qw(ILS::Transaction);
 
 my %fields = (
     magnetic => 0,

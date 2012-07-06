@@ -12,7 +12,7 @@ use ILS;
 use C4::Circulation;
 use C4::Members;
 
-use base qw(ILS::Transaction);
+use parent qw(ILS::Transaction);
 
 my %fields = (
     renewal_ok => 0,

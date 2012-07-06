@@ -23,13 +23,7 @@ use C4::Reserves;
 use C4::Branch qw(GetBranchName);
 use Digest::MD5 qw(md5_base64);
 
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK);
-
-BEGIN {
-    $VERSION = 3.07.00.049;
-	@ISA = qw(Exporter);
-	@EXPORT_OK = qw(invalid_patron);
-}
+our $VERSION = 3.07.00.049;
 
 our $kp;	# koha patron
 
@@ -253,7 +247,7 @@ sub drop_hold {
 # from the SIP request.  Note those incoming values are 1-indexed, not 0-indexed.
 #
 sub x_items {
-    my $self      = shift or return;
+    my $self      = shift;
     my $array_var = shift or return;
     my ($start, $end) = @_;
 	$self->{$array_var} or return [];
@@ -268,28 +262,28 @@ sub x_items {
 # List of outstanding holds placed
 #
 sub hold_items {
-    my $self = shift or return;
+    my $self = shift;
     return $self->x_items('hold_items', @_);
 }
 
 sub overdue_items {
-    my $self = shift or return;
+    my $self = shift;
     return $self->x_items('overdue_items', @_);
 }
 sub charged_items {
-    my $self = shift or return;
+    my $self = shift;
     return $self->x_items('items', @_);
 }
 sub fine_items {
-    my $self = shift or return;
+    my $self = shift;
     return $self->x_items('fine_items', @_);
 }
 sub recall_items {
-    my $self = shift or return;
+    my $self = shift;
     return $self->x_items('recall_items', @_);
 }
 sub unavail_holds {
-    my $self = shift or return;
+    my $self = shift;
     return $self->x_items('unavail_holds', @_);
 }
 
@@ -321,16 +315,16 @@ sub inet_privileges {
 }
 
 sub fee_limit {
-    # my $self = shift;
+    my $self = shift;
     return C4::Context->preference("noissuescharge") || 5;
 }
 
 sub excessive_fees {
-    my $self = shift or return;
+    my $self = shift;
     return ($self->fee_amount and $self->fee_amount > $self->fee_limit);
 }
 sub excessive_fines {
-    my $self = shift or return;
+    my $self = shift;
     return $self->excessive_fees;   # excessive_fines is the same thing as excessive_fees for Koha
 }
     
@@ -346,10 +340,12 @@ sub library_name {
 #
 
 sub invalid_patron {
+    my $self = shift;
     return "Please contact library staff";
 }
 
 sub charge_denied {
+    my $self = shift;
     return "Please contact library staff";
 }
 

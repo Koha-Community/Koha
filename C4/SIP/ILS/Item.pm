@@ -22,14 +22,7 @@ use C4::Circulation;
 use C4::Members;
 use C4::Reserves;
 
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK);
-
-BEGIN {
-    $VERSION = 3.07.00.049;
-	require Exporter;
-	@ISA = qw(Exporter);
-	@EXPORT_OK = qw();
-}
+our $VERSION = 3.07.00.049;
 
 =head1 EXAMPLE
 
@@ -140,7 +133,7 @@ my %fields = (
 );
 
 sub next_hold {
-    my $self = shift or return;
+    my $self = shift;
     # use Data::Dumper; warn "next_hold() hold_shelf: " . Dumper($self->{hold_shelf}); warn "next_hold() pending_queue: " . $self->{pending_queue};
     foreach (@{$self->hold_shelf}) {    # If this item was taken from the hold shelf, then that reserve still governs
         next unless ($_->{itemnumber} and $_->{itemnumber} == $self->{itemnumber});
@@ -168,7 +161,7 @@ sub hold_patron_id {
 
 }
 sub hold_patron_name {
-    my $self = shift or return;
+    my $self = shift;
     my $borrowernumber = (@_ ? shift: $self->hold_patron_id()) or return;
     my $holder = GetMember(borrowernumber=>$borrowernumber);
     unless ($holder) {
@@ -186,7 +179,7 @@ sub hold_patron_name {
 }
 
 sub hold_patron_bcode {
-    my $self = shift or return;
+    my $self = shift;
     my $borrowernumber = (@_ ? shift: $self->hold_patron_id()) or return;
     my $holder = GetMember(borrowernumber => $borrowernumber);
     if ($holder) {
@@ -257,9 +250,11 @@ sub sip_circulation_status {
 }
 
 sub sip_security_marker {
+    my $self = shift;
     return '02';	# FIXME? 00-other; 01-None; 02-Tattle-Tape Security Strip (3M); 03-Whisper Tape (3M)
 }
 sub sip_fee_type {
+    my $self = shift;
     return '01';    # FIXME? 01-09 enumerated in spec.  We just use O1-other/unknown.
 }
 
@@ -354,7 +349,7 @@ sub _barcode_to_borrowernumber {
     return $member->{borrowernumber};
 }
 sub barcode_is_borrowernumber {    # because hold_queue only has borrowernumber...
-    my $self = shift;   # not really used
+    my $self = shift;
     my $barcode = shift;
     my $number  = shift or return;    # can't be zero
     return unless defined $barcode; # might be 0 or 000 or 000000

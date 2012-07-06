@@ -12,7 +12,7 @@ use ILS::Item;
 
 use C4::Members qw( GetMember );
 
-use base qw(ILS::Transaction::Renew);
+use parent qw(ILS::Transaction::Renew);
 
 my %fields = (
     renewed   => [],

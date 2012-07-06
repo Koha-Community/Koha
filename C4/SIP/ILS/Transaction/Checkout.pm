@@ -20,13 +20,11 @@ use C4::Circulation;
 use C4::Members;
 use C4::Reserves qw(ModReserveFill);
 use C4::Debug;
+use parent qw(ILS::Transaction);
 
-use vars qw($VERSION @ISA $debug);
+our $debug;
 
-BEGIN {
-    $VERSION = 3.07.00.049;
-	@ISA = qw(ILS::Transaction);
-}
+our $VERSION = 3.07.00.049;
 
 # Most fields are handled by the Transaction superclass
 my %fields = (

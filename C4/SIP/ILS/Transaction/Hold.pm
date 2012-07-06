@@ -12,13 +12,10 @@ use ILS::Transaction;
 use C4::Reserves;	# AddReserve
 use C4::Members;	# GetMember
 use C4::Biblio;		# GetBiblioFromItemNumber GetBiblioItemByBiblioNumber
+use parent qw(ILS::Transaction);
 
-use vars qw($VERSION @ISA);
 
-BEGIN {
-    $VERSION = 3.07.00.049;
-	    @ISA = qw(ILS::Transaction);
-}
+our $VERSION = 3.07.00.049;
 
 my %fields = (
 	expiration_date => 0,
