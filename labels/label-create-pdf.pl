@@ -90,6 +90,7 @@ sub _print_text {
     foreach my $text_line (@$label_text) {
         my $pdf_font = $pdf->Font($text_line->{'font'});
         my $line = "BT /$pdf_font $text_line->{'font_size'} Tf $text_line->{'text_llx'} $text_line->{'text_lly'} Td ($text_line->{'line'}) Tj ET";
+    utf8::decode($line);
         $pdf->Add($line);
     }
 }
