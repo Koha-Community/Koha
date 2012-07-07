@@ -31,6 +31,7 @@ use Data::Dumper;
 my $query = new CGI;
 my $op=$query->param("op") || '';
 my $filename=$query->param("filename");
+$filename =~ s/(\r|\n)//;
 my $dbh=C4::Context->dbh;
 my $marcflavour = C4::Context->preference("marcflavour");
 
@@ -179,7 +180,9 @@ if ($op eq "export") {
             $successful_export = download_backup( { directory => "$backupdir", extension => 'sql', filename => "$filename" } )
         }
         unless ( $successful_export ) {
-            warn "A suspicious attempt was made to download the db at '$filename' by someone at " . $query->remote_host() . "\n";
+            my $remotehost = $query->remote_host();
+            $remotehost =~ s/(\n|\r)//;
+            warn "A suspicious attempt was made to download the db at '$filename' by someone at " . $remotehost . "\n";
         }
         exit;
     }
@@ -189,7 +192,9 @@ if ($op eq "export") {
             $successful_export = download_backup( { directory => "$backupdir", extension => 'tar', filename => "$filename" } )
         }
         unless ( $successful_export ) {
-            warn "A suspicious attempt was made to download the configuration at '$filename' by someone at " . $query->remote_host() . "\n";
+            my $remotehost = $query->remote_host();
+            $remotehost =~ s/(\n|\r)//;
+            warn "A suspicious attempt was made to download the configuration at '$filename' by someone at " . $remotehost . "\n";
         }
         exit;
     }
@@ -340,7 +345,7 @@ sub download_backup {
     my $filename  = $args->{filename};
 
     return unless ( $directory && -d $directory );
-    return unless ( $filename =~ m/$extension(\.(gz|bz2|xz))?$/ && not $filename =~ m#(^\.\.|/)# );
+    return unless ( $filename =~ m/$extension(\.(gz|bz2|xz))?$/ && not $filename =~ m#|# );
     $filename = "$directory/$filename";
     return unless ( -f $filename && -r $filename );
     return unless ( open(my $dump, '<', $filename) );

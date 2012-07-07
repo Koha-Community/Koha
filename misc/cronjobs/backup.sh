@@ -13,7 +13,11 @@ mysqldump --single-transaction -u koha -ppassword koha | gzip -9 > $KOHA_BACKUP
 # Makes the compressed dump file property of the kohaadmin user.
 # Make sure that you replace kohaadmin with a real user.
 
-[ -f $KOHA_BACKUP] && echo "$KOHA_BACKUP was successfully created." | mail kohaadmin -s $KOHA_BACKUP ||
+if [ -f $KOHA_BACKUP ] ; then
+echo "$KOHA_BACKUP was successfully created." | mail kohaadmin -s $KOHA_BACKUP
+else
 echo "$KOHA_BACKUP was NOT successfully created." | mail kohaadmin -s $KOHA_BACKUP
+fi
+
 # Notifies kohaadmin of (un)successful backup creation
 # EOF
