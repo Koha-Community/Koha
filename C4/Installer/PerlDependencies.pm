@@ -519,6 +519,10 @@ our $PERL_DEPS = {
         'required' => '1',
         'min_ver'  => '0.03',
     },
+    'Test::Strict' => {
+        'usage'    => 'Core',
+        'required' => '0.14',
+    }
 };
 
 1;
