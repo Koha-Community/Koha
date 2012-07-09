@@ -168,7 +168,7 @@
 			[% END %]
 			[% IF ( ERROR_age_limitations ) %]
 				<li id="ERROR_age_limitations">Patron's age is incorrect for their category.  
-					Ages allowed are [% ERROR_age_limitations %].</li>
+                    Ages allowed are [% age_low %]-[% age_high %].</li>
 			[% END %]
 			[% IF ( ERROR_branch ) %]
 				<li id="ERROR_branch">Library is invalid.</li>
