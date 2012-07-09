@@ -64,7 +64,7 @@ die pod2usage() if $help;
 
 # initialize the input data, either file or query
 if ( defined $infile ) {
-    my $IN open( $IN, '<', $infile ) || die("Cannot open input file");
+    open( my $IN, '<', $infile ) || die("Cannot open input file");
     print "Opening $infile\n" if ( defined $verbose );
 
     while (<$IN>) {
