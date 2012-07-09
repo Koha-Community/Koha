@@ -93,7 +93,7 @@ sub printorders {
             $arrbasket = undef;
             push( @$arrbasket, 
                 $basket->{basketno}, 
-                @$line[3]." / ".@$line[2].(@$line[0]?" ISBN : ".@$line[0]:'').(@$line[10]?" EN : ".@$line[10]:'').", ".@$line[1].(@$line[4]?' publié par '.@$line[4]:''), 
+                @$line[3]." / ".@$line[2].(@$line[0]?" ISBN : ".@$line[0]:'').(@$line[10]?" EN : ".@$line[10]:'').", ".@$line[1].(@$line[4]?' published by '.@$line[4]:''),
                 @$line[5],
                 $num->format_price(@$line[6]),
                 $num->format_price(@$line[8]).'%',
