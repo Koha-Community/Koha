@@ -612,7 +612,7 @@ if ($op eq "add") {
         build_hidden_data;
         $template->param(authid =>$authid,
                         duplicateauthid     => $duplicateauthid,
-                        duplicateauthvalue  => $duplicateauthvalue,
+                        duplicateauthvalue  => $duplicateauthvalue->{authorized}->[0],
                         );
     }
 } elsif ($op eq "delete") {
