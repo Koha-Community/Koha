@@ -42,7 +42,7 @@ sub debug_dump ($) { # for testing only
 	my($kind, $t, $attr) = ($s->type, $s->string, $s->attributes);
 	printf "%s [line %d]:\n", $kind->to_string, $s->line_number;
 	printf "%4dH%s\n", length($t), underline($t);
-	if ($kind == TmplTokenType::TAG && %$attr) {
+    if ($kind == TmplTokenType::TAG() && %$attr) {
 	    printf "Attributes:\n";
 	    for my $a (keys %$attr) {
 		my($key, $val, $val_orig, $order) = @{$attr->{$a}};
@@ -50,7 +50,7 @@ sub debug_dump ($) { # for testing only
 		$val_orig;
 	    }
 	}
-	if ($kind == TmplTokenType::TEXT_PARAMETRIZED) {
+    if ($kind == TmplTokenType::TEXT_PARAMETRIZED()) {
 	    printf "Form (c-format string):\n";
 	    printf "%dH%s\n", length $s->form, underline $s->form;
 	    printf "Parameters:\n";
@@ -79,10 +79,10 @@ sub text_extract ($) {
 	my $s = TmplTokenizer::next_token $h;
     last unless defined $s;
 	my($kind, $t, $attr) = ($s->type, $s->string, $s->attributes);
-	if ($kind == TmplTokenType::TEXT) {
+    if ($kind == TmplTokenType::TEXT()) {
 	    $t = TmplTokenizer::trim $t;
 	    $text{$t} = 1 if $t =~ /\S/s;
-	} elsif ($kind == TmplTokenType::TAG && %$attr) {
+    } elsif ($kind == TmplTokenType::TAG() && %$attr) {
 	    # value [tag=input], meta
 	    my $tag = lc($1) if $t =~ /^<(\S+)/s;
 	    for my $a ('alt', 'content', 'title', 'value') {
