@@ -2,6 +2,11 @@
 //<![CDATA[
 
 $(document).ready(function(){
+
+    var searchButton = new YAHOO.widget.Button("search");
+    var cancelButton = new YAHOO.widget.Button("cancel");
+    var clearButton = new YAHOO.widget.Button("clear");
+    var newButton = new YAHOO.widget.Button("createnew");
     // marclist
     $( "#value_any" ).autocomplete({
         source: function(request, response) {
@@ -85,6 +90,11 @@ $(document).ready(function(){
     });
 });
 
+function finderjumpfull(page)
+{
+    window.open(page,'','fullscreen,scrollbars');
+}
+
 //]]>
 </script>
 
@@ -159,5 +169,10 @@ $(document).ready(function(){
             <option value="HeadingDsc">Heading descendant</option>
         </select>
         </li></ol></fieldset>
-            <fieldset class="action"> <input type="submit" value="Start search" class="submit" /> <a class="cancel close" href="#">Cancel</a></fieldset>
+            <fieldset class="action"> <input type="submit" value="Start search" class="submit" id="search" /> <a id="cancel" class="cancel close" href="#">Cancel</a>
+            <span id="authfinderops">
+            <a href="javascript:finderjumpfull('blinddetail-biblio-search.pl?authid=0&amp;index=[% index %]')" id="clear" class="button">Clear field</a>
+            <a href="javascript:finderjumpfull('authorities.pl?index=[% index %]&authtypecode=[% authtypecode %]')" id="createnew" class="button">Create new</a>
+            </span>
+            </fieldset>
 </form>

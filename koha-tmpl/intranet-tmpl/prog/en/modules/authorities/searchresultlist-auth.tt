@@ -56,26 +56,6 @@ function jumpfull(page)
                     <th>Get it!</th>
                     <th>Other action</th>
                 </tr>
-                <tr>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>
-                        <a href="javascript:jumpfull('blinddetail-biblio-search.pl?authid=0&amp;index=[% index %]')" class="button">
-                            Clear
-                        </a>
-                    </td>
-                    <td>&nbsp;</td>
-                </tr>
-                <tr>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>
-                        <a href="javascript:jumpfull('authorities.pl?index=[% index %]&authtypecode=[% authtypecode %]')" class="button">
-                            Create new
-                        </a>
-                    </td>
-                    <td>&nbsp;</td>
-                </tr>
                 [% FOREACH resul IN result %]
                     <tr>
                         <td>[% PROCESS authresult summary=resul.summary %]</td>
@@ -86,7 +66,7 @@ function jumpfull(page)
                             <a href="javascript:jumpfull('blinddetail-biblio-search.pl?authid=[% resul.authid %]&amp;index=[% repet.index %]&amps;repet=[% repet.repet %]')" title="[% repet.value %]">[% repet.repet %]</a>
                             [% END %]
                           [% ELSE %]
-                            <a href="javascript:jumpfull('blinddetail-biblio-search.pl?authid=[% resul.authid %]&amp;index=[% index %]')">choose</a>
+                            <a href="javascript:jumpfull('blinddetail-biblio-search.pl?authid=[% resul.authid %]&amp;index=[% index %]')">Choose</a>
                           [% END %]
                         </td>
                         <td><a href="authorities.pl?authid=[% resul.authid %]">Edit authority</a></td>
