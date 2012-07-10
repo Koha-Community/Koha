@@ -187,7 +187,7 @@ sub XSLTParse4Display {
                               OPACBaseURL TraceCompleteSubfields UseICU
                               UseAuthoritiesForTracings TraceSubjectSubdivisions
                               Display856uAsImage OPACDisplay856uAsImage 
-                              UseControlNumber
+                              UseControlNumber IntranetBiblioDefaultView BiblioDefaultView
                               AlternateHoldingsField AlternateHoldingsSeparator / )
     {
         my $sp = C4::Context->preference( $syspref );
