@@ -40,6 +40,18 @@ BEGIN {
     );
 }
 
+
+our $fields = get_fields();
+
+sub get_fields {
+    my $r = C4::Context->preference('StatisticsFields') || 'location|itype|ccode';
+    unless ( $r =~ m/^(\w|\d|\||-)+$/) {
+        warn "Members/Statistics : Bad value for syspref StatisticsFields" if $debug;
+        $r = 'location|itype|ccode';
+    }
+    return $r;
+}
+
 =head2 construct_query
   Build a sql query from a subquery
   Adds statistics fields to the select and the group by clause
@@ -47,10 +59,9 @@ BEGIN {
 sub construct_query {
     my $count    = shift;
     my $subquery = shift;
-    my $fields = C4::Context->preference('StatisticsFields') || 'location|itype|ccode';
     my @select_fields = split '\|', $fields;
-    my $query = "SELECT COUNT(*) as count_$count";
-    $query .= ", " . C4::Context->dbh->quote( $_ ) for @select_fields;
+    my $query = "SELECT COUNT(*) as count_$count,";
+    $query .= join ',', @select_fields;
 
     $query .= " " . $subquery;
 
