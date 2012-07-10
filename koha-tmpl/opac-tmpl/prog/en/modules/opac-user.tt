@@ -103,7 +103,7 @@ $.tablesorter.addParser({
             [% IF ( renewal_blocked_fines ) && ( OpacRenewalAllowed ) %]
                 <span id="renewal_blocked_fines"><li><strong>Please note: </strong> Since you have <a href="/cgi-bin/koha/opac-account.pl">more than <span id="renewal_blocked_fines_amount">[% renewal_blocked_fines %]</span></a> in fines, you cannot renew your books online. Please pay your fines if you wish to renew your books.</li></span>
             [% ELSIF ( renewal_blocked_fines ) %]
-        <span id="renewal_blocked_fines"><li><strong>Please note: </strong> You have <a href="/cgi-bin/koha/opac-account.pl">more than <span id="renewal_blocked_fines_amount">[% renewal_blocked_fines %]</span></a> in fines. </li></span>
+                <span id="renewal_blocked_fines"><li><strong>Please note: </strong> You currently owe <a href="/cgi-bin/koha/opac-account.pl"><span id="renewal_blocked_fines_amount">[% renewal_blocked_fines %] in fines.</span></a></li></span>
             [% END %]
         </ul></div>
         [% END %]
