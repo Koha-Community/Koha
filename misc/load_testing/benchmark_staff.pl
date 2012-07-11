@@ -18,6 +18,7 @@ use Data::Dumper;
 use HTTP::Cookies;
 use C4::Context;
 use C4::Debug;
+use URI::Escape;
 
 my ($help, $steps, $baseurl, $max_tries, $user, $password,$short_print);
 GetOptions(
@@ -241,7 +242,7 @@ if ($steps=~ /4/) {
     my $b2 = HTTPD::Bench::ApacheBench->new;
     $b2->concurrency( $concurrency );
     unless ($short_print) {
-        print "Step 5: patron detail page         ";
+        print "Step 4: patron detail page         ";
     }
     my $run2 = HTTPD::Bench::ApacheBench::Run->new
         ({ urls => \@borrowers,
@@ -324,7 +325,7 @@ if ($steps=~ /6/) {
         until ($rand_barcode) {
             my $rand_itemnumber = int(rand($itemnumber_max)+1);
             $sth->execute($rand_itemnumber);
-            ($rand_barcode) = $sth->fetchrow();
+            ($rand_barcode) = uri_escape_utf8($sth->fetchrow());
         }
         push @issues,"$baseurl/circ/circulation.pl?borrowernumber=$rand_borrowernumber&barcode=$rand_barcode&issueconfirmed=1";
         push @returns,"$baseurl/circ/returns.pl?barcode=$rand_barcode";
