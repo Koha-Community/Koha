@@ -118,7 +118,7 @@ function verify_images() {
         [% IF ( holdcount ) %]<span class="results_summary"><span class="label">Holds:</span> <span class="holdcount"><a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% biblionumber %]">[% holdcount %]</a></span></span>[% ELSE %][% END %]
 
         [% IF ( AmazonEnabled ) %][% IF ( AmazonCoverImages ) %]</div><div class="yui-u" id="bookcoverimg">
-        <a href="http://www.amazon[% AmazonTld %]/gp/reader/[% normalized_isbn %][% IF AmazonAssocTag %]?tag=[% AmazonAssocTag %][% END %]"><img border="0" src="http://images.amazon.com/images/P/[% normalized_isbn %].01.MZZZZZZZ.jpg" alt="" /></a></div>[% END %][% END %]
+        <a href="http://www.amazon[% AmazonTld %]/gp/reader/[% normalized_isbn %]/ref=sib_dp_pt/002-7879865-0184864#reader-link"><img border="0" src="http://images.amazon.com/images/P/[% normalized_isbn %].01.MZZZZZZZ.jpg" alt="" /></a>[% END %][% END %]
     [% ELSE %]
 
     <h3>[% title |html %]</h3>
@@ -522,7 +522,7 @@ function verify_images() {
 [% IF ( FRBRizeEditions ) %][% IF ( XISBNS ) %]
 <div id="editions"><h4>Editions</h4>
 <table>
-[% FOREACH XISBN IN XISBNS %]<tr>[% IF ( XISBN.AmazonEnabled ) %]<td><a href="http://www.amazon.com/gp/reader/[% XISBN.normalized_isbn %][% IF XISBN.AmazonAssocTag %]?tag=[% XISBN.AmazonAssocTag %][% END %]"><img src="http://images.amazon.com/images/P/[% XISBN.normalized_isbn %].01._AA75_PU_PU-5_.jpg" /></a></td>[% END %]<td>[% IF noItemTypeImages %][% description %][% ELSE %]<img src="[% imageurl %]" alt="[% description %]" title="[% description %]">[% END %]</td><td>
+[% FOREACH XISBN IN XISBNS %]<tr>[% IF ( XISBN.AmazonEnabled ) %]<td><a href="http://www.amazon.com/gp/reader/[% XISBN.normalized_isbn %]/ref=sib_dp_pt/002-7879865-0184864#reader-link"><img src="http://images.amazon.com/images/P/[% XISBN.normalized_isbn %].01._AA75_PU_PU-5_.jpg" /></a></td>[% END %]
 [% UNLESS ( item_level_itypes ) %]<td>[% IF ( noItemTypeImages ) %][% XISBN.description %][% ELSE %]<img src="[% XISBN.imageurl %]" alt="[% XISBN.description %]" title="[% XISBN.description %]">[% END %]</td>[% END %]
 <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% XISBN.biblionumber %]">[% XISBN.title |html %]</a> by [% XISBN.author %] &copy;[% XISBN.copyrightdate %]
   [% IF ( XISBN.publishercode ) %]
