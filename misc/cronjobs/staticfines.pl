@@ -176,7 +176,7 @@ for ( my $i = 0 ; $i < scalar(@$data) ; $i++ ) {
     ( $datedue_days <= $today_days ) or next;    # or it's not overdue, right?
 
     $overdueItemsCounted++;
-    my ( $amount, $type, $daycounttotal, $daycount ) = CalcFine( $data->[$i], $borrower->{'categorycode'}, $branchcode, undef, undef, $datedue, $today );
+    my ( $amount, $type, $unitcounttotal, $unitcount ) = CalcFine( $data->[$i], $borrower->{'categorycode'}, $branchcode, undef, undef, $datedue, $today );
 
     # Reassign fine's amount if specified in command-line
     $amount = $catamounts{$borrower->{'categorycode'}} if (defined $catamounts{$borrower->{'categorycode'}});

@@ -1623,7 +1623,7 @@ sub AddReturn {
 
         if ($borrowernumber) {
         if($issue->{'overdue'}){
-                my ( $amount, $type, $daycounttotal ) = C4::Overdues::CalcFine( $item, $borrower->{categorycode},$branch, $datedue, $today );
+                my ( $amount, $type, $unitcounttotal ) = C4::Overdues::CalcFine( $item, $borrower->{categorycode},$branch, $datedue, $today );
                 $type ||= q{};
         if ( $amount > 0 && ( C4::Context->preference('finesMode') eq 'production' )) {
           C4::Overdues::UpdateFine(

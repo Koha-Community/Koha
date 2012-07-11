@@ -62,7 +62,7 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 -- this is selected by the web installer now
 -- INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('marcflavour','MARC21','Define global MARC flavor (MARC21 or UNIMARC) used for character encoding','MARC21|UNIMARC','Choice');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('MARCOrgCode','OSt','Define MARC Organization Code - http://www.loc.gov/marc/organizations/orgshome.html','','free');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('MaxFine',9999,'Maximum fine a patron can have for a single late return','','Integer');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('MaxFine',NULL,'Maximum fine a patron can have for all late returns at one moment. Single item caps are specified in the circulation rules matrix.','','Integer');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('maxoutstanding',5,'maximum amount withstanding to be able make holds','','Integer');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('maxreserves',50,'Define maximum number of holds a patron can place','','Integer');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('maxItemsInSearchResults',20,'Specify the maximum number of items to display for each result on a page of results',NULL,'free');

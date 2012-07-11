@@ -72,6 +72,7 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
                 <th>Fine amount</th>
                 <th>Fine charging interval</th>
                 <th>Fine grace period (day)</th>
+                <th>Overdue Fines Cap ($)</th>
                 <th>Suspension in days (day)</th>
                 <th>Renewals allowed (count)</th>
                 <th>Holds allowed (count)</th>
@@ -116,6 +117,7 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
 							<td>[% rule.fine %]</td>
 							<td>[% rule.chargeperiod %]</td>
 							<td>[% rule.firstremind %]</td>
+                            <td>[% rule.overduefinescap FILTER format("%.2f") %]</td>
 							<td>[% rule.finedays %]</td>
 							<td>[% rule.renewalsallowed %]</td>
 							<td>[% rule.reservesallowed %]</td>
@@ -161,6 +163,7 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
                     <td><input name="fine" size="4" /></td>
                     <td><input name="chargeperiod" size="2" /></td>
                     <td><input name="firstremind" size="2" /> </td>
+                    <td><input name="overduefinescap" size="6" /> </td>
                     <td><input name="finedays" size="3" /> </td>
                     <td><input name="renewalsallowed" size="2" /></td>
                     <td><input name="reservesallowed" size="2" /></td>

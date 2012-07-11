@@ -241,8 +241,8 @@ C<$amount> is the fine owed by the patron (see above).
 C<$chargename> is the chargename field from the applicable record in
 the categoryitem table, whatever that is.
 
-C<$daycount> is the number of days between start and end dates, Calendar adjusted (where needed), 
-minus any applicable grace period.
+C<$unitcount> is the number of chargeable units (days between start and end dates, Calendar adjusted where needed,
+minus any applicable grace period, or hours)
 
 FIXME - What is chargename supposed to be ?
 
@@ -268,10 +268,9 @@ sub CalcFine {
     } else {
         # a zero (or null)  chargeperiod means no charge.
     }
-    if(C4::Context->preference('maxFine') && ( $amount > C4::Context->preference('maxFine'))) {
-        $amount = C4::Context->preference('maxFine');
-    }
-    return ($amount, $data->{chargename}, $units_minus_grace);
+    $amount = $data->{overduefinescap} if $data->{overduefinescap} && $amount > $data->{overduefinescap};
+    $debug and warn sprintf("CalcFine returning (%s, %s, %s, %s)", $amount, $data->{'chargename'}, $units_minus_grace, $chargeable_units);
+    return ($amount, $data->{'chargename'}, $units_minus_grace, $chargeable_units);
     # FIXME: chargename is NEVER populated anywhere.
 }
 
@@ -521,14 +520,39 @@ sub UpdateFine {
 	#   "REF" is Cash Refund
     my $sth = $dbh->prepare(
         "SELECT * FROM accountlines
-		WHERE itemnumber=?
-		AND   borrowernumber=?
-		AND   accounttype IN ('FU','O','F','M')
-		AND   description like ? "
+        WHERE borrowernumber=?
+        AND   accounttype IN ('FU','O','F','M')"
     );
-    $sth->execute( $itemnum, $borrowernumber, "%$due%" );
+    $sth->execute( $borrowernumber );
+    my $data;
+    my $total_amount_other = 0.00;
+    my $due_qr = qr/$due/;
+    # Cycle through the fines and
+    # - find line that relates to the requested $itemnum
+    # - accumulate fines for other items
+    # so we can update $itemnum fine taking in account fine caps
+    while (my $rec = $sth->fetchrow_hashref) {
+        if ($rec->{itemnumber} == $itemnum && $rec->{description} =~ /$due_qr/) {
+            if ($data) {
+                warn "Not a unique accountlines record for item $itemnum borrower $borrowernumber";
+            } else {
+                $data = $rec;
+                next;
+            }
+        }
+        $total_amount_other += $rec->{'amount'};
+    }
+    if (my $maxfine = C4::Context->preference('MaxFine')) {
+        if ($total_amount_other + $amount > $maxfine) {
+            my $new_amount = $maxfine - $total_amount_other;
+            warn "Reducing fine for item $itemnum borrower $borrowernumber from $amount to $new_amount - MaxFine reached";
+            return if $new_amount <= 0.00;
 
-    if ( my $data = $sth->fetchrow_hashref ) {
+            $amount = $new_amount;
+        }
+    }
+
+    if ( $data ) {
 
 		# we're updating an existing fine.  Only modify if amount changed
         # Note that in the current implementation, you cannot pay against an accruing fine

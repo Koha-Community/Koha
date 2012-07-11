@@ -110,7 +110,7 @@ for my $overdue ( @{$overdues} ) {
     }
     ++$counted;
 
-    my ( $amount, $type, $daycounttotal ) =
+    my ( $amount, $type, $unitcounttotal ) =
       CalcFine( $overdue, $borrower->{categorycode},
         $branchcode, $datedue, $today );
 
@@ -131,7 +131,7 @@ for my $overdue ( @{$overdues} ) {
     push @cells,
       map { defined $borrower->{$_} ? $borrower->{$_} : q{} } @borrower_fields;
     push @cells, map { $overdue->{$_} } @item_fields;
-    push @cells, $type, $daycounttotal, $amount;
+    push @cells, $type, $unitcounttotal, $amount;
     say {$fh} join $delim, @cells;
 }
 close $fh;

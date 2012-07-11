@@ -5536,9 +5536,6 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
-
-
-
 $DBversion = "3.09.00.026";
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     $dbh->do("INSERT INTO permissions (module_bit, code, description) VALUES
@@ -5554,6 +5551,19 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
         FROM borrowers WHERE flags & (1 << 3)");
     print "Upgrade to $DBversion done (Added parameters subpermissions)\n";
     SetVersion($DBversion);
+}
+
+$DBversion = '3.09.00.027';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("ALTER TABLE issuingrules ADD overduefinescap decimal DEFAULT NULL");
+    my $maxfine = C4::Context->preference('MaxFine');
+    if ($maxfine && $maxfine < 900) { # an arbitrary value that tells us it's not "some huge value"
+      $dbh->do("UPDATE issuingrules SET overduefinescap=?",undef,$maxfine);
+      $dbh->do("UPDATE systempreferences SET value = NULL WHERE variable = 'MaxFine'");
+    }
+    $dbh->do("UPDATE systempreferences SET explanation = 'Maximum fine a patron can have for all late returns at one moment. Single item caps are specified in the circulation rules matrix.' WHERE variable = 'MaxFine'");
+    print "Upgrade to $DBversion done (Bug 7420 add overduefinescap to circulation matrix)\n";
+    SetVersion ($DBversion);
 }
 
 =head1 FUNCTIONS

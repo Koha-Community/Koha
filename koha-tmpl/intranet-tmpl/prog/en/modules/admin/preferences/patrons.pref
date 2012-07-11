@@ -74,10 +74,11 @@ Patrons:
                no: "Don't allow"
          - "staff to access a patron's checkout history (it is stored regardless)."
      -
-         - The late fine for a specific checkout will only go up to
+         - The late fine for all checkouts will only go up to
          - pref: MaxFine
            class: currency
          - '[% local_currency %].'
+         - Empty value means no limit. Single item caps are specified in the circulation rules matrix.
      -
          - pref: memberofinstitution
            choices:
