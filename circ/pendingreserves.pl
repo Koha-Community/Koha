@@ -142,6 +142,7 @@ if ( $run_report ) {
     AND items.itemnumber NOT IN (SELECT itemnumber FROM branchtransfers where datearrived IS NULL)
     AND issues.itemnumber IS NULL
     AND reserves.priority <> 0 
+    AND reserves.suspend = 0
     AND notforloan = 0 AND damaged = 0 AND itemlost = 0 AND wthdrawn = 0
     ";
     # GROUP BY reserves.biblionumber allows only items that are not checked out, else multiples occur when 
