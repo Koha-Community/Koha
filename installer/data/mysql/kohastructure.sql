@@ -2784,10 +2784,10 @@ CREATE TABLE `aqorders` ( --information related to the basket line items
 --
 
 DROP TABLE IF EXISTS `aqorders_items`;
-CREATE TABLE `aqorders_items` (
-  `ordernumber` int(11) NOT NULL,
-  `itemnumber` int(11) NOT NULL,
-  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+CREATE TABLE `aqorders_items` ( -- information on items entered in the acquisitions process
+  `ordernumber` int(11) NOT NULL, -- the order this item is attached to (aqorders.ordernumber)
+  `itemnumber` int(11) NOT NULL, -- the item number for this item (items.itemnumber)
+  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- the date and time this order item was last touched
   PRIMARY KEY  (`itemnumber`),
   KEY `ordernumber` (`ordernumber`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
