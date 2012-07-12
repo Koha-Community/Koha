@@ -2734,42 +2734,42 @@ CREATE TABLE `aqorderdelivery` (
 --
 
 DROP TABLE IF EXISTS `aqorders`;
-CREATE TABLE `aqorders` (
-  `ordernumber` int(11) NOT NULL auto_increment,
-  `biblionumber` int(11) default NULL,
-  `entrydate` date default NULL,
-  `quantity` smallint(6) default NULL,
-  `currency` varchar(3) default NULL,
-  `listprice` decimal(28,6) default NULL,
-  `totalamount` decimal(28,6) default NULL,
-  `datereceived` date default NULL,
-  `booksellerinvoicenumber` mediumtext,
-  `freight` decimal(28,6) default NULL,
-  `unitprice` decimal(28,6) default NULL,
-  `quantityreceived` smallint(6) NOT NULL default 0,
-  `cancelledby` varchar(10) default NULL,
-  `datecancellationprinted` date default NULL,
-  `notes` mediumtext,
-  `supplierreference` mediumtext,
-  `purchaseordernumber` mediumtext,
-  `subscription` tinyint(1) default NULL,
-  `serialid` varchar(30) default NULL,
-  `basketno` int(11) default NULL,
-  `biblioitemnumber` int(11) default NULL,
-  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
-  `rrp` decimal(13,2) default NULL,
-  `ecost` decimal(13,2) default NULL,
-  `gst` decimal(13,2) default NULL,
-  `budget_id` int(11) NOT NULL,
-  `budgetgroup_id` int(11) NOT NULL,
-  `budgetdate` date default NULL,
-  `sort1` varchar(80) default NULL,
-  `sort2` varchar(80) default NULL,
+CREATE TABLE `aqorders` ( --information related to the basket line items
+  `ordernumber` int(11) NOT NULL auto_increment, -- primary key and unique identifier assigned by Koha to each line
+  `biblionumber` int(11) default NULL, -- links the order to the biblio being ordered (biblio.biblionumber)
+  `entrydate` date default NULL, -- the date the bib was added to the basket
+  `quantity` smallint(6) default NULL, -- the quantity ordered
+  `currency` varchar(3) default NULL, -- the currency used for the purchase
+  `listprice` decimal(28,6) default NULL, -- the vendor price for this line item
+  `totalamount` decimal(28,6) default NULL, -- not used? always NULL
+  `datereceived` date default NULL, -- the date this order was received
+  `booksellerinvoicenumber` mediumtext, -- the invoice number this line item was received on
+  `freight` decimal(28,6) default NULL, -- shipping costs (not used)
+  `unitprice` decimal(28,6) default NULL, -- the actual cost entered when receiving this line item
+  `quantityreceived` smallint(6) NOT NULL default 0, -- the quantity that have been received so far
+  `cancelledby` varchar(10) default NULL, -- not used? always NULL
+  `datecancellationprinted` date default NULL, -- the date the line item was deleted
+  `notes` mediumtext, -- notes related to this order line
+  `supplierreference` mediumtext, -- not used? always NULL
+  `purchaseordernumber` mediumtext, -- not used? always NULL
+  `subscription` tinyint(1) default NULL, -- not used? always NULL
+  `serialid` varchar(30) default NULL, -- not used? always NULL
+  `basketno` int(11) default NULL, -- links this order line to a specific basket (aqbasket.basketno)
+  `biblioitemnumber` int(11) default NULL, -- links this order line the biblioitems table (biblioitems.biblioitemnumber)
+  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- the date and time this order line was last modified
+  `rrp` decimal(13,2) default NULL, -- the replacement cost for this line item
+  `ecost` decimal(13,2) default NULL, -- the estimated cost for this line item
+  `gst` decimal(13,2) default NULL, -- the tax rate for this line item
+  `budget_id` int(11) NOT NULL, -- the fund this order goes against (aqbudgets.budget_id)
+  `budgetgroup_id` int(11) NOT NULL, -- not used? always zero
+  `budgetdate` date default NULL, -- not used? always NULL
+  `sort1` varchar(80) default NULL, -- statistical field
+  `sort2` varchar(80) default NULL, -- second statistical field
   `sort1_authcat` varchar(10) default NULL,
   `sort2_authcat` varchar(10) default NULL,
-  `uncertainprice` tinyint(1),
-  `claims_count` int(11) default 0,
-  `claimed_date` date default NULL,
+  `uncertainprice` tinyint(1), -- was this price uncertain (1 for yes, 0 for no)
+  `claims_count` int(11) default 0, -- count of claim letters generated
+  `claimed_date` date default NULL, -- last date a claim was generated
   PRIMARY KEY  (`ordernumber`),
   KEY `basketno` (`basketno`),
   KEY `biblionumber` (`biblionumber`),
