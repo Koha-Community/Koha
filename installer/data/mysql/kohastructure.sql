@@ -316,11 +316,11 @@ CREATE TABLE `borrower_attributes` ( -- values of custom patron fields known as 
 --
 
 DROP TABLE IF EXISTS `branch_item_rules`;
-CREATE TABLE `branch_item_rules` (
-  `branchcode` varchar(10) NOT NULL,
-  `itemtype` varchar(10) NOT NULL,
-  `holdallowed` tinyint(1) default NULL,
-  `returnbranch` varchar(15) default NULL,
+CREATE TABLE `branch_item_rules` ( -- information entered in the circulation and fine rules under 'Holds policy by item type'
+  `branchcode` varchar(10) NOT NULL, -- the branch this rule is for (branches.branchcode)
+  `itemtype` varchar(10) NOT NULL, -- the item type this rule applies to (items.itype)
+  `holdallowed` tinyint(1) default NULL, -- the number of holds allowed
+  `returnbranch` varchar(15) default NULL, -- the branch the item returns to (homebranch, holdingbranch, noreturn)
   PRIMARY KEY  (`itemtype`,`branchcode`),
   KEY `branch_item_rules_ibfk_2` (`branchcode`),
   CONSTRAINT `branch_item_rules_ibfk_1` FOREIGN KEY (`itemtype`) REFERENCES `itemtypes` (`itemtype`)
