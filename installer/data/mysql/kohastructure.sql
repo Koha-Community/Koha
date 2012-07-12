@@ -2627,22 +2627,22 @@ CREATE TABLE `aqbooksellers` ( -- information about the vendors listed in acquis
 --
 
 DROP TABLE IF EXISTS `aqbudgets`;
-CREATE TABLE `aqbudgets` (
-  `budget_id` int(11) NOT NULL auto_increment,
-  `budget_parent_id` int(11) default NULL,
-  `budget_code` varchar(30) default NULL,
-  `budget_name` varchar(80) default NULL,
-  `budget_branchcode` varchar(10) default NULL,
-  `budget_amount` decimal(28,6) NULL default '0.00',
-  `budget_encumb` decimal(28,6) NULL default '0.00',
-  `budget_expend` decimal(28,6) NULL default '0.00',
-  `budget_notes` mediumtext,
-  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
-  `budget_period_id` int(11) default NULL,
-  `sort1_authcat` varchar(80) default NULL,
-  `sort2_authcat` varchar(80) default NULL,
-  `budget_owner_id` int(11) default NULL,
-  `budget_permission` int(1) default '0',
+CREATE TABLE `aqbudgets` ( -- information related to Funds
+  `budget_id` int(11) NOT NULL auto_increment, -- primary key and unique number assigned to each fund by Koha
+  `budget_parent_id` int(11) default NULL, -- if this fund is a child of another this will include the parent id (aqbudgets.budget_id)
+  `budget_code` varchar(30) default NULL, -- code assigned to the fund by the user
+  `budget_name` varchar(80) default NULL, -- name assigned to the fund by the user
+  `budget_branchcode` varchar(10) default NULL, -- branch that this fund belongs to (branches.branchcode)
+  `budget_amount` decimal(28,6) NULL default '0.00', -- total amount for this fund
+  `budget_encumb` decimal(28,6) NULL default '0.00', -- not used in the code
+  `budget_expend` decimal(28,6) NULL default '0.00', -- not used in the code
+  `budget_notes` mediumtext, -- notes related to this fund
+  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- date and time this fund was last touched (created or modified)
+  `budget_period_id` int(11) default NULL, -- id of the budget that this fund belongs to (aqbudgetperiods.budget_period_id)
+  `sort1_authcat` varchar(80) default NULL, -- statistical category for this fund
+  `sort2_authcat` varchar(80) default NULL, -- second statistical category for this fund
+  `budget_owner_id` int(11) default NULL, -- borrowernumber of the person who owns this fund (borrowers.borrowernumber)
+  `budget_permission` int(1) default '0', -- level of permission for this fund (used only by the owner, only by the library, or anyone)
   PRIMARY KEY  (`budget_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -2669,16 +2669,16 @@ CREATE TABLE aqbudgetborrowers (
 
 
 DROP TABLE IF EXISTS `aqbudgetperiods`;
-CREATE TABLE `aqbudgetperiods` (
-  `budget_period_id` int(11) NOT NULL auto_increment,
-  `budget_period_startdate` date NOT NULL,
-  `budget_period_enddate` date NOT NULL,
-  `budget_period_active` tinyint(1) default '0',
-  `budget_period_description` mediumtext,
-  `budget_period_total` decimal(28,6),
-  `budget_period_locked` tinyint(1) default NULL,
-  `sort1_authcat` varchar(10) default NULL,
-  `sort2_authcat` varchar(10) default NULL,
+CREATE TABLE `aqbudgetperiods` ( -- information related to Budgets
+  `budget_period_id` int(11) NOT NULL auto_increment, -- primary key and unique number assigned by Koha
+  `budget_period_startdate` date NOT NULL, -- date when the budget starts
+  `budget_period_enddate` date NOT NULL, -- date when the budget ends
+  `budget_period_active` tinyint(1) default '0', -- whether this budget is active or not (1 for yes, 0 for no)
+  `budget_period_description` mediumtext, -- description assigned to this budget
+  `budget_period_total` decimal(28,6), -- total amount available in this budget
+  `budget_period_locked` tinyint(1) default NULL, -- whether this budget is locked or not (1 for yes, 0 for no)
+  `sort1_authcat` varchar(10) default NULL, -- statistical category for this budget
+  `sort2_authcat` varchar(10) default NULL, -- second statistical category for this budget
   PRIMARY KEY  (`budget_period_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
