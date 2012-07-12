@@ -26,8 +26,8 @@ use Text::CSV_XS;
 use Data::Dumper;
 
 use C4::Debug;
-use C4::Creators 1.000000;
-use C4::Labels 1.000000;
+use C4::Creators;
+use C4::Labels;
 
 my $cgi = new CGI;
 

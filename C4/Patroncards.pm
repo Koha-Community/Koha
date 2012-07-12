@@ -13,12 +13,12 @@ BEGIN {
                      get_image
                      rm_image
     );
-    use C4::Patroncards::Batch 1.000000;
-    use C4::Patroncards::Layout 1.000000;
-    use C4::Patroncards::Lib 1.000000;
-    use C4::Patroncards::Patroncard 1.000000;
-    use C4::Patroncards::Profile 1.000000;
-    use C4::Patroncards::Template 1.000000;
+    use C4::Patroncards::Batch;
+    use C4::Patroncards::Layout;
+    use C4::Patroncards::Lib;
+    use C4::Patroncards::Patroncard;
+    use C4::Patroncards::Profile;
+    use C4::Patroncards::Template;
 }
 
 1;

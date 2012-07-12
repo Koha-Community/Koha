@@ -24,8 +24,8 @@ use warnings;
 use CGI;
 use C4::Auth;
 use C4::Debug;
-use C4::Creators 1.000000;
-use C4::Labels 1.000000;
+use C4::Creators;
+use C4::Labels;
 
 my $cgi = new CGI;
 
