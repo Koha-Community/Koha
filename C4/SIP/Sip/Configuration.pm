@@ -7,7 +7,6 @@
 package Sip::Configuration;
 
 use strict;
-use English;
 use warnings;
 use XML::Simple qw(:strict);
 
