@@ -2555,18 +2555,18 @@ CREATE TABLE `aqbasketgroups` (
 --
 
 DROP TABLE IF EXISTS `aqbasket`;
-CREATE TABLE `aqbasket` (
-  `basketno` int(11) NOT NULL auto_increment,
-  `basketname` varchar(50) default NULL,
-  `note` mediumtext,
-  `booksellernote` mediumtext,
-  `contractnumber` int(11),
-  `creationdate` date default NULL,
-  `closedate` date default NULL,
-  `booksellerid` int(11) NOT NULL default 1,
-  `authorisedby` varchar(10) default NULL,
-  `booksellerinvoicenumber` mediumtext,
-  `basketgroupid` int(11),
+CREATE TABLE `aqbasket` ( -- stores data about baskets in acquisitions
+  `basketno` int(11) NOT NULL auto_increment, -- primary key, Koha defined number
+  `basketname` varchar(50) default NULL, -- name given to the basket at creation
+  `note` mediumtext, -- the internal note added at basket creation
+  `booksellernote` mediumtext, -- the vendor note added at basket creation
+  `contractnumber` int(11), -- links this basket to the aqcontract table (aqcontract.contractnumber)
+  `creationdate` date default NULL, -- the date the basket was created
+  `closedate` date default NULL, -- the date the basket was closed
+  `booksellerid` int(11) NOT NULL default 1, -- the Koha assigned ID for the vendor (aqbooksellers.id)
+  `authorisedby` varchar(10) default NULL, -- the borrowernumber of the person who created the basket
+  `booksellerinvoicenumber` mediumtext, -- appears to always be NULL
+  `basketgroupid` int(11), -- links this basket to its group (aqbasketgroups.id)
   PRIMARY KEY  (`basketno`),
   KEY `booksellerid` (`booksellerid`),
   KEY `basketgroupid` (`basketgroupid`),
