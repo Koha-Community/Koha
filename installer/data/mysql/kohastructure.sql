@@ -389,13 +389,13 @@ CREATE TABLE `branchrelations` ( -- this table links libraries/branches to group
 --
 
 DROP TABLE IF EXISTS `branchtransfers`;
-CREATE TABLE `branchtransfers` (
-  `itemnumber` int(11) NOT NULL default 0,
-  `datesent` datetime default NULL,
-  `frombranch` varchar(10) NOT NULL default '',
-  `datearrived` datetime default NULL,
-  `tobranch` varchar(10) NOT NULL default '',
-  `comments` mediumtext,
+CREATE TABLE `branchtransfers` ( -- information for items that are in transit between branches
+  `itemnumber` int(11) NOT NULL default 0, -- the itemnumber that it is in transit (items.itemnumber)
+  `datesent` datetime default NULL, -- the date the transfer was initialized
+  `frombranch` varchar(10) NOT NULL default '', -- the branch the transfer is coming from
+  `datearrived` datetime default NULL, -- the date the transfer arrived at its destination
+  `tobranch` varchar(10) NOT NULL default '', -- the branch the transfer was going to
+  `comments` mediumtext, -- any comments related to the transfer
   KEY `frombranch` (`frombranch`),
   KEY `tobranch` (`tobranch`),
   KEY `itemnumber` (`itemnumber`),
