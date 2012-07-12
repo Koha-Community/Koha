@@ -2843,10 +2843,10 @@ CREATE TABLE IF NOT EXISTS `social_data` (
 --
 
 DROP TABLE IF EXISTS ratings;
-CREATE TABLE ratings (
-    borrowernumber int(11) NOT NULL, -- the borrower this rating is for
-    biblionumber int(11) NOT NULL, -- the biblio it's for
-    rating_value tinyint(1) NOT NULL, -- the rating, from 1-5
+CREATE TABLE ratings ( -- information related to the star ratings in the OPAC
+    borrowernumber int(11) NOT NULL, -- the borrowernumber of the patron who left this rating (borrowers.borrowernumber)
+    biblionumber int(11) NOT NULL, -- the biblio this rating is for (biblio.biblionumber)
+    rating_value tinyint(1) NOT NULL, -- the rating, from 1 to 5
     timestamp timestamp NOT NULL default CURRENT_TIMESTAMP,
     PRIMARY KEY  (borrowernumber,biblionumber),
     CONSTRAINT ratings_ibfk_1 FOREIGN KEY (borrowernumber) REFERENCES borrowers (borrowernumber) ON DELETE CASCADE ON UPDATE CASCADE,
