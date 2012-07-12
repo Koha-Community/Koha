@@ -135,9 +135,9 @@ CREATE TABLE `biblio` ( -- table that stores bibliographic information
 --
 
 DROP TABLE IF EXISTS `biblio_framework`;
-CREATE TABLE `biblio_framework` (
-  `frameworkcode` varchar(4) NOT NULL default '',
-  `frameworktext` varchar(255) NOT NULL default '',
+CREATE TABLE `biblio_framework` ( -- information about MARC frameworks
+  `frameworkcode` varchar(4) NOT NULL default '', -- the unique code assigned to the framework
+  `frameworktext` varchar(255) NOT NULL default '', -- the description/name given to the framework
   PRIMARY KEY  (`frameworkcode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
