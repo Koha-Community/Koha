@@ -302,7 +302,7 @@ DROP TABLE IF EXISTS `borrower_attributes`;
 CREATE TABLE `borrower_attributes` ( -- values of custom patron fields known as extended patron attributes linked to patrons/borrowers
   `borrowernumber` int(11) NOT NULL, -- foreign key from the borrowers table, defines which patron/borrower has this attribute
   `code` varchar(10) NOT NULL, -- foreign key from the borrower_attribute_types table, defines which custom field this value was entered for
-  `attribute` varchar(64) default NULL, -- custom patron field value
+  `attribute` varchar(255) default NULL, -- custom patron field value
   `password` varchar(64) default NULL, -- password associated with this field
   KEY `borrowernumber` (`borrowernumber`),
   KEY `code_attribute` (`code`, `attribute`),
