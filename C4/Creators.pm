@@ -38,8 +38,8 @@ BEGIN {
                      get_unit_values
                      html_table
     );
-    use C4::Creators::Lib 1.000000;
-    use C4::Creators::PDF 1.000000;
+    use C4::Creators::Lib;
+    use C4::Creators::PDF;
 }
 
 1;

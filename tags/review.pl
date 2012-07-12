@@ -32,7 +32,7 @@ use C4::Dates qw(format_date format_date_in_iso);
 # use C4::Koha;
 use C4::Output qw(:html :ajax pagination_bar);
 use C4::Debug;
-use C4::Tags 0.03 qw(get_tags get_approval_rows approval_counts whitelist blacklist is_approved);
+use C4::Tags qw(get_tags get_approval_rows approval_counts whitelist blacklist is_approved);
 
 my $script_name = "/cgi-bin/koha/tags/review.pl";
 my $needed_flags = { tools => 'moderate_tags' };	# FIXME: replace when more specific permission is created.

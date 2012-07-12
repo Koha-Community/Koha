@@ -24,9 +24,9 @@ use autouse 'Data::Dumper' => qw(Dumper);
 use Text::Wrap qw(wrap);
 #use Font::TTFMetrics;
 
-use C4::Creators::Lib 1.000000 qw(get_font_types);
-use C4::Creators::PDF 1.000000 qw(StrWidth);
-use C4::Patroncards::Lib 1.000000 qw(unpack_UTF8 text_alignment leading box get_borrower_attributes);
+use C4::Creators::Lib qw(get_font_types);
+use C4::Creators::PDF qw(StrWidth);
+use C4::Patroncards::Lib qw(unpack_UTF8 text_alignment leading box get_borrower_attributes);
 
 BEGIN {
     use version; our $VERSION = qv('3.08.01.002');
