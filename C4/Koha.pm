@@ -1061,13 +1061,14 @@ by the passed category and code
 =cut
 
 sub GetAuthorisedValueByCode {
-    my ( $category, $authvalcode ) = @_;
+    my ( $category, $authvalcode, $opac ) = @_;
 
+    my $field = $opac ? 'lib_opac' : 'lib';
     my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("SELECT lib FROM authorised_values WHERE category=? AND authorised_value =?");
+    my $sth = $dbh->prepare("SELECT $field FROM authorised_values WHERE category=? AND authorised_value =?");
     $sth->execute( $category, $authvalcode );
     while ( my $data = $sth->fetchrow_hashref ) {
-        return $data->{'lib'};
+        return $data->{ $field };
     }
 }
 
