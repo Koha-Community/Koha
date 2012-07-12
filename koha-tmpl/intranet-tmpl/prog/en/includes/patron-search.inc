@@ -21,7 +21,7 @@
 
     <label for="orderby">Order by:</label>
     <select name="orderby" id="searchorderby">
-    <option value="surname,0">Surname</option>
+    <option value="">Surname, Firstname</option>
     <option value="cardnumber,0">Cardnumber</option>
     </select>
     <input value="Search" class="submit" type="submit" />
