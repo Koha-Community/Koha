@@ -1,3 +1,5 @@
+[% USE KohaAuthorisedValues %]
+
 [% IF ( item.datedue ) %]
     [% IF ( OPACShowCheckoutName ) %]
         Checked out to [% item.cardnumber %] [% item.firstname %] [% item.surname %]
@@ -12,10 +14,14 @@
 [% ELSIF ( item.wthdrawn ) %]
     Item withdrawn
 [% ELSIF ( item.itemlost ) %]
-    [% IF ( item.lostimageurl ) %]
-        <img src="[% item.lostimageurl %]" alt="[% item.lostimagelabel %]" title="[% item.lostimagelabel %]">
+    [% IF KohaAuthorisedValues.GetByCode( 'LOST', item.itemlost, 1 ) %]
+        [% KohaAuthorisedValues.GetByCode( 'LOST', item.itemlost, 1 ) %]
     [% ELSE %]
-        Item lost
+        [% IF ( item.lostimageurl ) %]
+            <img src="[% item.lostimageurl %]" alt="[% item.lostimagelabel %]" title="[% item.lostimagelabel %]">
+        [% ELSE %]
+            Item lost
+        [% END %]
     [% END %]
 [% ELSIF ( item.itemnotforloan ) %]
     [% IF ( item.notforloanvalue ) %]
@@ -26,7 +32,11 @@
 [% ELSIF ( item.notforloan_per_itemtype ) %]
     Not for loan [% IF ( item.restrictedopac ) %]<span class="restricted">([% item.restrictedopac %])</span>[% END %]
 [% ELSIF ( item.damaged ) %]
-    Item damaged
+    [% IF KohaAuthorisedValues.GetByCode( 'DAMAGED', item.damaged, 1 ) %]
+        [% KohaAuthorisedValues.GetByCode( 'DAMAGED', item.damaged, 1 ) %]
+    [% ELSE %]
+        Item damaged
+    [% END %]
 [% ELSE %]
     Available [% IF ( item.restrictedopac ) %]<span class="restricted">([% item.restrictedopac %])</span>[% END %]
 [% END %]
