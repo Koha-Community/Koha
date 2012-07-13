@@ -485,8 +485,8 @@ CREATE TABLE `branch_borrower_circ_rules` ( -- includes default circulation rule
 --
 
 DROP TABLE IF EXISTS `default_borrower_circ_rules`;
-CREATE TABLE `default_borrower_circ_rules` (
-  `categorycode` VARCHAR(10) NOT NULL,
+CREATE TABLE `default_borrower_circ_rules` ( -- default checkout rules found under "Default checkout, hold and return policy"
+  `categorycode` VARCHAR(10) NOT NULL, -- patron category this rul
   `maxissueqty` int(4) default NULL,
   PRIMARY KEY (`categorycode`),
   CONSTRAINT `borrower_borrower_circ_rules_ibfk_1` FOREIGN KEY (`categorycode`) REFERENCES `categories` (`categorycode`)
@@ -978,26 +978,26 @@ CREATE TABLE `issues` ( -- information related to check outs or issues
 --
 
 DROP TABLE IF EXISTS `issuingrules`;
-CREATE TABLE `issuingrules` (
-  `categorycode` varchar(10) NOT NULL default '',
-  `itemtype` varchar(10) NOT NULL default '',
-  `restrictedtype` tinyint(1) default NULL,
-  `rentaldiscount` decimal(28,6) default NULL,
+CREATE TABLE `issuingrules` ( -- circulation and fine rules
+  `categorycode` varchar(10) NOT NULL default '', -- patron category this rule is for (categories.categorycode)
+  `itemtype` varchar(10) NOT NULL default '', -- item type this rule is for (itemtypes.itemtype)
+  `restrictedtype` tinyint(1) default NULL, -- not used? always NULL
+  `rentaldiscount` decimal(28,6) default NULL, -- percent discount on the rental charge for this item
   `reservecharge` decimal(28,6) default NULL,
-  `fine` decimal(28,6) default NULL,
-  `finedays` int(11) default NULL,
-  `firstremind` int(11) default NULL,
-  `chargeperiod` int(11) default NULL,
-  `accountsent` int(11) default NULL,
-  `chargename` varchar(100) default NULL,
-  `maxissueqty` int(4) default NULL,
-  `issuelength` int(4) default NULL,
-  `lengthunit` varchar(10) default 'days',
-  `hardduedate` date default NULL,
-  `hardduedatecompare` tinyint NOT NULL default "0",
-  `renewalsallowed` smallint(6) NOT NULL default "0",
-  `reservesallowed` smallint(6) NOT NULL default "0",
-  `branchcode` varchar(10) NOT NULL default '',
+  `fine` decimal(28,6) default NULL, -- fine amount
+  `finedays` int(11) default NULL, -- suspension in days
+  `firstremind` int(11) default NULL, -- fine grace period
+  `chargeperiod` int(11) default NULL, -- how often the fine amount is charged
+  `accountsent` int(11) default NULL, -- not used? always NULL
+  `chargename` varchar(100) default NULL, -- not used? always NULL
+  `maxissueqty` int(4) default NULL, -- total number of checkouts allowed
+  `issuelength` int(4) default NULL, -- length of checkout in the unit set in issuingrules.lengthunit
+  `lengthunit` varchar(10) default 'days', -- unit of checkout length (days, hours)
+  `hardduedate` date default NULL, -- hard due date
+  `hardduedatecompare` tinyint NOT NULL default "0", -- type of hard due date (1 = after, 0 = on, -1 = before)
+  `renewalsallowed` smallint(6) NOT NULL default "0", -- how many renewals are allowed
+  `reservesallowed` smallint(6) NOT NULL default "0", -- how many holds are allowed
+  `branchcode` varchar(10) NOT NULL default '', -- the branch this rule is for (branches.branchcode)
   PRIMARY KEY  (`branchcode`,`categorycode`,`itemtype`),
   KEY `categorycode` (`categorycode`),
   KEY `itemtype` (`itemtype`)
