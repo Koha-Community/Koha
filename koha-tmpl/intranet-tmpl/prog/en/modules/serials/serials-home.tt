@@ -1,4 +1,5 @@
 [% INCLUDE 'doc-head-open.inc' %]
+[% USE KohaDates %]
 <title>Koha &rsaquo; Serials [% biblionumber %]</title>
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
 [% INCLUDE 'doc-head-close.inc' %]
@@ -83,9 +84,9 @@ Serials updated :
             <th>ISSN</th>
             <th>Title</th>
             <th> Notes </th>
-            <th>
-                Library (callnumber)
-            </th>
+            <th>Library</th>
+            <th>Call number</th>
+            <th>Expiration date</th>
             [% IF ( routing && CAN_user_serials_routing ) %]
               <th>Routing list</th>
             [% END %]        
@@ -99,6 +100,8 @@ Serials updated :
             <td><input type="text" class="filter" data-column_num="1" placeholder="Search title" /></td>
             <td><input type="text" class="filter" data-column_num="2" placeholder="Search notes" /></td>
             <td><input type="text" class="filter" data-column_num="3" placeholder="Search library" /></td>
+            <td><input type="text" class="filter" data-column_num="4" placeholder="Search callnumber" /></td>
+            <td><input type="text" class="filter" data-column_num="5" placeholder="Search expiration date" /></td>
             [% IF ( routing && CAN_user_serials_routing ) %]<td></td>[% END %]
             <td></td>
             <td></td>
@@ -117,8 +120,13 @@ Serials updated :
                 [% IF ( subscription.internalnotes ) %]([% subscription.internalnotes %])[% END %]
                 </td>
                 <td>
-                [% IF ( subscription.branchname ) %][% subscription.branchname %][% END %]
-                [% IF ( subscription.callnumber ) %]([% subscription.callnumber %])[% END %]
+                  [% IF ( subscription.branchname ) %][% subscription.branchname %][% END %]
+                </td>
+                <td>
+                  [% IF ( subscription.callnumber ) %][% subscription.callnumber %][% END %]
+                </td>
+                <td>
+                  [% IF ( subscription.enddate ) %][% subscription.enddate | $KohaDates %][% END %]
                 </td>
                 [% IF ( routing && CAN_user_serials_routing ) %]
                 <td>
@@ -127,6 +135,7 @@ Serials updated :
                     [% ELSE %]
                         [% IF ( subscription.routingedit ) %]
                             <a href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% subscription.subscriptionid %]">Edit</a>
+                            ([% routingedit %])
                         [% ELSE %]
                             <a href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% subscription.subscriptionid %]&amp;op=new">New</a>
                         [% END %]
