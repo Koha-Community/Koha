@@ -120,7 +120,9 @@ my %letter;
 sub getletter {
     my ( $module, $code, $branchcode ) = @_;
 
-    if (C4::Context->preference('IndependantBranches') && $branchcode){
+    if ( C4::Context->preference('IndependantBranches')
+            and $branchcode
+            and C4::Context->userenv ) {
         $branchcode = C4::Context->userenv->{'branch'};
     }
 
