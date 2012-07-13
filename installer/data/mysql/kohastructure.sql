@@ -469,10 +469,10 @@ CREATE TABLE collections_tracking (
 --
 
 DROP TABLE IF EXISTS `branch_borrower_circ_rules`;
-CREATE TABLE `branch_borrower_circ_rules` (
-  `branchcode` VARCHAR(10) NOT NULL,
-  `categorycode` VARCHAR(10) NOT NULL,
-  `maxissueqty` int(4) default NULL,
+CREATE TABLE `branch_borrower_circ_rules` ( -- includes default circulation rules for patron categories found under "Checkout limit by patron category"
+  `branchcode` VARCHAR(10) NOT NULL, -- the branch this rule applies to (branches.branchcode)
+  `categorycode` VARCHAR(10) NOT NULL, -- the patron category this rule applies to (categories.categorycode)
+  `maxissueqty` int(4) default NULL, -- the maximum number of checkouts this patron category can have at this branch
   PRIMARY KEY (`categorycode`, `branchcode`),
   CONSTRAINT `branch_borrower_circ_rules_ibfk_1` FOREIGN KEY (`categorycode`) REFERENCES `categories` (`categorycode`)
     ON DELETE CASCADE ON UPDATE CASCADE,
