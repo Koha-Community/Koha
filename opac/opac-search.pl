@@ -602,17 +602,17 @@ for (my $i=0;$i<@servers;$i++) {
 
             # Adding the new search if needed
             my $path_info = $cgi->url(-path_info=>1);
-            $query_cgi = $cgi->url(-query=>1);
-            $query_cgi =~ s/^$path_info\?//;
-            $query_cgi =~ s/;/&/g;
-            $query_desc .= ", $limit_desc";
+            my $query_cgi_history = $cgi->url(-query=>1);
+            $query_cgi_history =~ s/^$path_info\?//;
+            $query_cgi_history =~ s/;/&/g;
+            my $query_desc_history = "$query_desc, $limit_desc";
 
             if (!$borrowernumber || $borrowernumber eq '') {
                 # To a cookie (the user is not logged in)
                 if (($params->{'offset'}||'') eq '') {
                     push @recentSearches, {
-                                "query_desc" => $query_desc || "unknown",
-                                "query_cgi"  => $query_cgi  || "unknown",
+                                "query_desc" => $query_desc_history || "unknown",
+                                "query_cgi"  => $query_cgi_history  || "unknown",
                                 "time"       => time(),
                                 "total"      => $total
                               };
