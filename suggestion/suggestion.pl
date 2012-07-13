@@ -209,20 +209,13 @@ if ($op=~/else/) {
                 my $bud = GetBudget( $suggestion->{budgetid} );
                 $suggestion->{budget_name} = $bud->{budget_name} if $bud;
             }
-            foreach my $date qw(suggesteddate manageddate accepteddate) {
-                if ($suggestion->{$date} and $suggestion->{$date} ne "0000-00-00" && $suggestion->{$date} ne "" ) {
+            foreach my $date (qw(suggesteddate manageddate accepteddate)) {
+                if ($suggestion->{$date} and $suggestion->{$date} ne "0000-00-00") {
                     $suggestion->{$date} = format_date( $suggestion->{$date} );
                 } else {
                     $suggestion->{$date} = "";
                 }
             }
-            foreach my $date ( qw(suggesteddate manageddate accepteddate) ){
-                if ($suggestion->{$date} ne "0000-00-00" && $suggestion->{$date} ne "" ){
-                $suggestion->{$date}=format_date($suggestion->{$date}) ;
-                } else {
-                $suggestion->{$date}="" ;
-                }             
-            }    
         }
         push @allsuggestions,{
                             "suggestiontype"=>$criteriumvalue||"suggest",
