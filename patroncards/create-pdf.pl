@@ -30,8 +30,8 @@ use autouse 'Data::Dumper' => qw(Dumper);
 use C4::Debug;
 use C4::Context;
 use autouse 'C4::Members' => qw(GetPatronImage GetMember);
-use C4::Creators 1.000000;
-use C4::Patroncards 1.000000;
+use C4::Creators;
+use C4::Patroncards;
 
 my $cgi = new CGI;
 

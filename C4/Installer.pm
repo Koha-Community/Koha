@@ -22,7 +22,7 @@ use strict;
 
 our $VERSION = 3.07.00.049;
 use C4::Context;
-use C4::Installer::PerlModules 1.000000;
+use C4::Installer::PerlModules;
 
 =head1 NAME
 

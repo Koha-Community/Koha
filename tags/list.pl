@@ -27,7 +27,7 @@ use C4::Context;
 use C4::Dates qw(format_date);
 use C4::Items;
 use C4::Koha;
-use C4::Tags 0.03 qw(get_tags remove_tag get_tag_rows);
+use C4::Tags qw(get_tags remove_tag get_tag_rows);
 use C4::Output;
 
 my $needed_flags = { tools => 'moderate_tags'
