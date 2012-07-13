@@ -1536,10 +1536,10 @@ CREATE TABLE `patroncards` (
 --
 
 DROP TABLE IF EXISTS `patronimage`;
-CREATE TABLE `patronimage` (
-  `cardnumber` varchar(16) NOT NULL,
-  `mimetype` varchar(15) NOT NULL,
-  `imagefile` mediumblob NOT NULL,
+CREATE TABLE `patronimage` ( -- information related to patron images
+  `cardnumber` varchar(16) NOT NULL, -- the cardnumber of the patron this image is attached to (borrowers.cardnumber)
+  `mimetype` varchar(15) NOT NULL, -- the format of the image (png, jpg, etc)
+  `imagefile` mediumblob NOT NULL, -- the image
   PRIMARY KEY  (`cardnumber`),
   CONSTRAINT `patronimage_fk1` FOREIGN KEY (`cardnumber`) REFERENCES `borrowers` (`cardnumber`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
