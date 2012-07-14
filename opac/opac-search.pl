@@ -632,7 +632,7 @@ for (my $i=0;$i<@servers;$i++) {
             else {
                 # To the session (the user is logged in)
                 if (($params->{'offset'}||'') eq '') {
-                    AddSearchHistory($borrowernumber, $cgi->cookie("CGISESSID"), $query_desc, $query_cgi, $total);
+                    AddSearchHistory($borrowernumber, $cgi->cookie("CGISESSID"), $query_desc_history, $query_cgi_history, $total);
                     $template->param(ShowOpacRecentSearchLink => 1);
                 }
             }
