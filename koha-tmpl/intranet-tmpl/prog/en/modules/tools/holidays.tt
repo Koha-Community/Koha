@@ -197,7 +197,9 @@
 			$(this).parent().find(".hint").toggle(); return false;
 		});
         $("#dateofrange").datepicker();
+        $("#datecancelrange").datepicker();
 		$("#dateofrange").each(function () { this.value = "" });
+        $("#datecancelrange").each(function () { this.value = "" });
         $("#jcalendar-container").datepicker({
           beforeShowDay: function(thedate) {
             var day = thedate.getDate();
@@ -276,7 +278,7 @@ td.repeatableyearly a.ui-state-default, .repeatableyearly {  background:  #FFFF9
 				<input type="hidden" id="showBranchName" name="showBranchName" />
 			</li>
 			<li>
-				<strong>Date:</strong>
+				<strong>From Date:</strong>
 				<span id="showDaynameOutput"></span>, 
 				
 				[% IF ( dateformat_us ) %]<span id="showMonthOutput"></span>/<span id="showDayOutput"></span>/<span id="showYearOutput"></span>[% ELSIF ( dateformat_metric ) %]<span id="showDayOutput"></span>/<span id="showMonthOutput"></span>/<span id="showYearOutput"></span>[% ELSE %]<span id="showYearOutput"></span>/<span id="showMonthOutput"></span>/<span id="showDayOutput"></span>[% END %]
@@ -287,6 +289,10 @@ td.repeatableyearly a.ui-state-default, .repeatableyearly {  background:  #FFFF9
 				<input type="hidden" id="showMonth" name="showMonth" />
 				<input type="hidden" id="showYear" name="showYear" />
 			</li>
+            <li class="dateinsert">
+                <b>To Date : </b>
+                <input type="text" id="datecancelrange" name="datecancelrange" size="20" value="[% datecancelrange %]" class="datepicker"/>
+            </li>
 			<li><label for="showTitle">Title: </label><input type="text" name="showTitle" id="showTitle" size="35" /></li>
 		    <!-- showTitle is necessary for exception radio button to work properly --> 
 				<label for="showDescription">Description:</label>
@@ -297,13 +303,29 @@ td.repeatableyearly a.ui-state-default, .repeatableyearly {  background:  #FFFF9
 				<a href="#" class="helptext">[?]</a>
 				<div class="hint">You can make an exception for this holiday rule. This means that you will be able to say that for a repeatable holiday there is one day which is going to be an exception.</div>
 			</div></li>
+            <li class="radio"><input type="radio" name="showOperation" id="showOperationExcRange" value="exceptionrange" />
+                <label for="newOperationFieldException">Generate exceptions on a range of dates.</label>
+                <a href="#" class="helptext">[?]</a>
+                <div class="hint">You can make an exception on a range of dates repeated yearly.</div>
+            </li>
 			<li class="radio"><input type="radio" name="showOperation" id="showOperationDel" value="delete" /> <label for="showOperationDel" id="showOperationDelLabel">Delete this holiday</label>
 				<a href="#" class="helptext">[?]</a>
-				<div class="hint">This will delete this holiday rule. If it is a repeatable holiday, this option checks for posible exceptions. If an exception exists, this option will remove the exception and set the date to a regular holiday.</div></li>
+				<div class="hint">This will delete this holiday rule. If it is a repeatable holiday, this option checks for possible exceptions. If an exception exists, this option will remove the exception and set the date to a regular holiday.</div></li>
+            <li class="radio"><input type="radio" name="showOperation" id="showOperationDelRange" value="deleterange" /> <label for="showOperationDelRange" id="showOperationDelLabelRange">Delete the single holidays on a range</label>.
+                <a href="#" class="helptext">[?]</a>
+                <div class="hint">This will delete the single holidays rules only. The repeatable holidays and exceptions will not be deleted.</div>
+            </li>
+            <li class="radio"><input type="radio" name="showOperation" id="showOperationDelRangeRepeat" value="deleterangerepeat" /> <label for="showOperationDelRangeRepeat" id="showOperationDelLabelRangeRepeat">Delete the repeated holidays on a range</label>.
+                <a href="#" class="helptext">[?]</a>
+                <div class="hint">This will delete the repeated holidays rules only. The repeatable holidays will be deleted but not the exceptions.</div>
+            </li>
+            <li class="radio"><input type="radio" name="showOperation" id="showOperationDelRangeRepeatExcept" value="deleterangerepeatexcept" /> <label for="showOperationDelRangeRepeatExcept" id="showOperationDelLabelRangeRepeatExcept">Delete the exceptions on a range</label>.
+                <a href="#" class="helptext">[?]</a>
+                <div class="hint">This will delete the exceptions inside a given range. Be careful about your scope range if it is oversized you could slow down Koha.</div>
+            </li>
 			<li class="radio"><input type="radio" name="showOperation" id="showOperationEdit" value="edit" checked="checked" /> <label for="showOperationEdit">Edit this holiday</label>
-						<a href="#" class="helptext">[?]</a>
-						<div class="hint">This will save changes to the holiday's title and description. If the information for a repeatable holiday is modified, it affects all of the dates on which the holiday is repeated.</div></li>
-
+                <a href="#" class="helptext">[?]</a>
+                <div class="hint">This will save changes to the holiday's title and description. If the information for a repeatable holiday is modified, it affects all of the dates on which the holiday is repeated.</div></li>
 			</ol>
 			<fieldset class="action">
 				<input type="submit" name="submit" value="Save" />
@@ -363,12 +385,12 @@ td.repeatableyearly a.ui-state-default, .repeatableyearly {  background:  #FFFF9
             <li class="radio"><input type="radio" name="newOperation" id="newOperationField" value="holidayrange" />
                             <label for="newOperationField">Holidays on a range</label>.
                             <a href="#" class="helptext">[?]</a>
-                            <div class="hint">Make a single holiday on a range. For example, selecting August 1st, 2012  and August 10st, 2012 will make all days between 1st and 10st holiday, but will not affect August 1st-10st in other years.</div>
+                            <div class="hint">Make a single holiday on a range. For example, selecting August 1st, 2012  and August 10st, 2012 will make all days between 1st and 10st holiday, but will not affect August 1-10 in other years.</div>
                             </li>
             <li class="radio"><input type="radio" name="newOperation" id="newOperationFieldyear" value="holidayrangerepeat" />
                             <label for="newOperationFieldyear">Holidays repeated yearly on a range</label>.
                             <a href="#" class="helptext">[?]</a>
-                            <div class="hint">Make a single holiday on a range repeated yearly. For example, selecting August 1st, 2012  and August 10st, 2012 will make all days between 1st and 10st holiday, and will affect August 1st-10st in other years.</div>
+                            <div class="hint">Make a single holiday on a range repeated yearly. For example, selecting August 1st, 2012  and August 10st, 2012 will make all days between 1st and 10st holiday, and will affect August 1-10 in other years.</div>
                             </li>
 				<li class="radio">
 				<input type="checkbox" name="allBranches" id="allBranches" />

@@ -514,6 +514,78 @@ sub delete_holiday {
     }
     return $self;
 }
+=head2 delete_holiday_range
+
+    delete_holiday_range(day => $day,
+                   month => $month,
+                   year => $year);
+
+Delete a holiday range of dates for $self->{branchcode}.
+
+C<$day> Is the day month to make the date to delete.
+
+C<$month> Is month to make the date to delete.
+
+C<$year> Is year to make the date to delete.
+
+=cut
+
+sub delete_holiday_range {
+    my $self = shift;
+    my %options = @_;
+
+    my $dbh = C4::Context->dbh();
+    my $sth = $dbh->prepare("DELETE FROM special_holidays WHERE (branchcode = ?) AND (day = ?) AND (month = ?) AND (year = ?)");
+    $sth->execute($self->{branchcode}, $options{day}, $options{month}, $options{year});
+}
+
+=head2 delete_holiday_range_repeatable
+
+    delete_holiday_range_repeatable(day => $day,
+                   month => $month);
+
+Delete a holiday for $self->{branchcode}.
+
+C<$day> Is the day month to make the date to delete.
+
+C<$month> Is month to make the date to delete.
+
+=cut
+
+sub delete_holiday_range_repeatable {
+    my $self = shift;
+    my %options = @_;
+
+    my $dbh = C4::Context->dbh();
+    my $sth = $dbh->prepare("DELETE FROM repeatable_holidays WHERE (branchcode = ?) AND (day = ?) AND (month = ?)");
+    $sth->execute($self->{branchcode}, $options{day}, $options{month});
+}
+
+=head2 delete_exception_holiday_range
+
+    delete_exception_holiday_range(weekday => $weekday
+                   day => $day,
+                   month => $month,
+                   year => $year);
+
+Delete a holiday for $self->{branchcode}.
+
+C<$day> Is the day month to make the date to delete.
+
+C<$month> Is month to make the date to delete.
+
+C<$year> Is year to make the date to delete.
+
+=cut
+
+sub delete_exception_holiday_range {
+    my $self = shift;
+    my %options = @_;
+
+    my $dbh = C4::Context->dbh();
+    my $sth = $dbh->prepare("DELETE FROM special_holidays WHERE (branchcode = ?) AND (isexception = 1) AND (day = ?) AND (month = ?) AND (year = ?)");
+    $sth->execute($self->{branchcode}, $options{day}, $options{month}, $options{year});
+}
 
 =head2 isHoliday
 

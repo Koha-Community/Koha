@@ -56,6 +56,20 @@ if ($description) {
 	$description = '';
 }
 
+# We make an array with holiday's days
+my @holiday_list;
+if ($year1 && $month1 && $day1){
+            my $first_dt = DateTime->new(year => $year, month  => $month,  day => $day);
+            my $end_dt   = DateTime->new(year => $year1, month  => $month1,  day => $day1);
+
+            for (my $dt = $first_dt->clone();
+                $dt <= $end_dt;
+                $dt->add(days => 1) )
+                {
+                push @holiday_list, $dt->clone();
+                }
+}
+
 if($allbranches) {
 	my $branch;
 	my @branchcodes = split(/\|/, $input->param('branchCodes')); 
@@ -100,50 +114,30 @@ sub add_holiday {
 		}
 
 	} elsif ( $newoperation eq 'holidayrange' ) {
-        #Make an array with holiday's days
-        my $first_dt = DateTime->new(year => $year, month  => $month,  day => $day);
-        my $end_dt   = DateTime->new(year => $year1, month  => $month1,  day => $day1);
-        my @holiday_list = ();
-
-        for (my $dt = $first_dt->clone();
-            $dt <= $end_dt;
-            $dt->add(days => 1) )
-            {
-            push @holiday_list, $dt->clone();
-            }
-
-        foreach my $date (@holiday_list){
-            unless ( $calendar->isHoliday( $date->{local_c}->{day}, $date->{local_c}->{month}, $date->{local_c}->{year} ) ) {
-            $calendar->insert_single_holiday(
-                day         => $date->{local_c}->{day},
-                month       => $date->{local_c}->{month},
-                year        => $date->{local_c}->{year},
-                title       => $title,
-                description => $description
-                );
+        if (@holiday_list){
+            foreach my $date (@holiday_list){
+                unless ( $calendar->isHoliday( $date->{local_c}->{day}, $date->{local_c}->{month}, $date->{local_c}->{year} ) ) {
+                    $calendar->insert_single_holiday(
+                        day         => $date->{local_c}->{day},
+                        month       => $date->{local_c}->{month},
+                        year        => $date->{local_c}->{year},
+                        title       => $title,
+                        description => $description
+                    );
+                }
             }
         }
     } elsif ( $newoperation eq 'holidayrangerepeat' ) {
-        #Make an array with holiday's days
-        my $first_dt = DateTime->new(year => $year, month  => $month,  day => $day);
-        my $end_dt   = DateTime->new(year => $year1, month  => $month1,  day => $day1);
-        my @holiday_list = ();
-
-        for (my $dt = $first_dt->clone();
-            $dt <= $end_dt;
-            $dt->add(days => 1) )
-            {
-            push @holiday_list, $dt->clone();
-            }
-
-        foreach my $date (@holiday_list){
-            unless ( $calendar->isHoliday( $date->{local_c}->{day}, $date->{local_c}->{month}, $date->{local_c}->{year} ) ) {
-            $calendar->insert_day_month_holiday(
-                day         => $date->{local_c}->{day},
-                month       => $date->{local_c}->{month},
-                title       => $title,
-                description => $description
-                );
+        if (@holiday_list){
+            foreach my $date (@holiday_list){
+                unless ( $calendar->isHoliday( $date->{local_c}->{day}, $date->{local_c}->{month}, $date->{local_c}->{year} ) ) {
+                    $calendar->insert_day_month_holiday(
+                        day         => $date->{local_c}->{day},
+                        month       => $date->{local_c}->{month},
+                        title       => $title,
+                        description => $description
+                    );
+                }
             }
         }
     }
