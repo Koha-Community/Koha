@@ -58,7 +58,7 @@ use C4::Bookseller qw/GetBookSellerFromId/;
 use C4::Branch qw/GetBranches/;
 use C4::Members qw/GetMember/;
 
-my $input=new CGI;
+our $input=new CGI;
 
 our ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "acqui/basketgroup.tmpl",
