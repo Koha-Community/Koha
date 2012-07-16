@@ -52,7 +52,7 @@
 	rowCountPending  = $("#pendingt tbody.filterclass tr").length;
 	rowCountReceived = $("#receivedt tbody.filterclass tr").length;
 	if (rowCountPending  > rowsToCollapse && $.cookie("pendingKeepExpanded") != 1 ) { pendingCollapse(); }
-	if (rowCountReceived > rowsToCollapse && $.cookie("receivedKeepExpanded") != 1 ) { receivedCollapse(); } else { receivedExpand(); }
+	if (rowCountReceived > rowsToCollapse ) { if ( $.cookie("receivedKeepExpanded") != 1 ) { receivedCollapse(); } else { receivedExpand(); } }
     });
 
      // Case-insensitive version of jquery's contains function
