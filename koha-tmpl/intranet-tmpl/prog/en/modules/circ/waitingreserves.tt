@@ -45,26 +45,28 @@ $.tablesorter.addParser({
             [% END %]
         </h2>
     [% IF ( cancel_result ) %]
-        [% IF ( cancel_result.messagetransfert ) %]
-            <div>
-                <h2>Hold find for ([% nextreservtitle %]), must be transferred</h2>
-                <p>This hold placed by : <b> [% nextreservsurname %] [% nextreservfirstname %]</b> at the library : <b> [% branchname %] </b>, Please transfer this hold.
-                </p>
-                <form name="cancelReservewithtransfert" action="waitingreserves.pl" method="post">
-                    <input type="submit" class="button" />
-                </form>
-            </div>
-        [% END %]
-        [% IF ( cancel_result.waiting ) %]
-            <div id="bloc25">
-                <h2>This hold is waiting</h2>
-                <p>This hold ([% nextreservtitle %]) was placed by <b> : [% nextreservsurname %] [% nextreservfirstname %]</b>,
-                Please retain this hold.
-                </p>
-                <form name="cancelReservewithwaiting" action="waitingreserves.pl" method="post">
-                    <input type="submit" />
-                </form>
-            </div>
+        [% FOREACH cancel_result %]
+            [% IF ( messagetransfert ) %]
+                <div>
+                    <h2>Hold find for ([% nextreservtitle %]), must be transferred</h2>
+                    <p>This hold placed by : <b> [% nextreservsurname %] [% nextreservfirstname %]</b> at the library : <b> [% branchname %] </b>, Please transfer this hold.
+                    </p>
+                    <form name="cancelReservewithtransfert" action="waitingreserves.pl" method="post">
+                        <input type="submit" class="button" />
+                    </form>
+                </div>
+            [% END %]
+            [% IF ( waiting ) %]
+                <div id="bloc25">
+                    <h2>This hold is waiting</h2>
+                    <p>This hold ([% nextreservtitle %]) was placed by <b> : [% nextreservsurname %] [% nextreservfirstname %]</b>,
+                    Please retain this hold.
+                    </p>
+                    <form name="cancelReservewithwaiting" action="waitingreserves.pl" method="post">
+                        <input type="submit" />
+                    </form>
+                </div>
+            [% END %]
         [% END %]
     [% ELSE %]
         <div id="resultlist" class="toptabs">
