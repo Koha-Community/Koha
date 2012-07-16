@@ -59,4 +59,4 @@ my $dt = $cal->addDate( $saturday, 1, 'days' );
 is( $dt->day_of_week, 1, 'addDate skips closed Sunday' );
 
 $dt = $cal->addDate( $bloomsday, -1 );
-cmp_ok( $dt->ymd(), 'cmp', '2011-06-15', 'Negative call to addDate' );
+is( $dt->ymd(), '2011-06-15', 'Negative call to addDate' );
