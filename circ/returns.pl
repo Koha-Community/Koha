@@ -250,7 +250,7 @@ if ($barcode) {
     );
 
     if ($returned) {
-        my $time_now = DateTime->now( time_zone => C4::Context->tz )->truncate( to => 'minutes');
+        my $time_now = DateTime->now( time_zone => C4::Context->tz )->truncate( to => 'minute');
         my $duedate = $issueinformation->{date_due}->strftime('%Y-%m-%d %H:%M');
         $returneditems{0}      = $barcode;
         $riborrowernumber{0}   = $borrower->{'borrowernumber'};

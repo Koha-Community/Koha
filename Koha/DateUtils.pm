@@ -158,7 +158,7 @@ sub format_sqldatetime {
     my $force_pref = shift;    # if testing we want to override Context
     if ( defined $str && $str =~ m/^\d{4}-\d{2}-\d{2}/ ) {
         my $dt = dt_from_string( $str, 'sql' );
-        $dt->truncate( to => 'minutes' );
+        $dt->truncate( to => 'minute' );
         return output_pref( $dt, $force_pref );
     }
     return q{};
@@ -178,7 +178,7 @@ sub format_sqlduedatetime {
     my $force_pref = shift;    # if testing we want to override Context
     if ( defined $str && $str =~ m/^\d{4}-\d{2}-\d{2}/ ) {
         my $dt = dt_from_string( $str, 'sql' );
-        $dt->truncate( to => 'minutes' );
+        $dt->truncate( to => 'minute' );
         return output_pref_due( $dt, $force_pref );
     }
     return q{};

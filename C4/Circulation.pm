@@ -701,7 +701,7 @@ sub CanBookBeIssued {
     }
     if ($duedate) {
         my $today = $now->clone();
-        $today->truncate( to => 'minutes');
+        $today->truncate( to => 'minute');
         if (DateTime->compare($duedate,$today) == -1 ) { # duedate cannot be before now
             $needsconfirmation{INVALID_DATE} = output_pref($duedate);
         }
@@ -738,8 +738,8 @@ sub CanBookBeIssued {
                 day   => $d,
                 time_zone => C4::Context->tz,
             );
-            $expiry_dt->truncate( to => 'days');
-            my $today = $now->clone()->truncate(to => 'days');
+            $expiry_dt->truncate( to => 'day');
+            my $today = $now->clone()->truncate(to => 'day');
             if (DateTime->compare($today, $expiry_dt) == 1) {
                 $issuingimpossible{EXPIRED} = 1;
             }
@@ -1051,7 +1051,7 @@ sub AddIssue {
             $datedue = CalcDateDue( $issuedate, $itype, $branch, $borrower );
 
         }
-        $datedue->truncate( to => 'minutes');
+        $datedue->truncate( to => 'minute');
         $sth->execute(
             $borrower->{'borrowernumber'},      # borrowernumber
             $item->{'itemnumber'},              # itemnumber
@@ -2084,10 +2084,10 @@ sub GetItemIssue {
     my $data = $sth->fetchrow_hashref;
     return unless $data;
     $data->{issuedate} = dt_from_string($data->{issuedate}, 'sql');
-    $data->{issuedate}->truncate(to => 'minutes');
+    $data->{issuedate}->truncate(to => 'minute');
     $data->{date_due} = dt_from_string($data->{date_due}, 'sql');
-    $data->{date_due}->truncate(to => 'minutes');
-    my $dt = DateTime->now( time_zone => C4::Context->tz)->truncate( to => 'minutes');
+    $data->{date_due}->truncate(to => 'minute');
+    my $dt = DateTime->now( time_zone => C4::Context->tz)->truncate( to => 'minute');
     $data->{'overdue'} = DateTime->compare($data->{'date_due'}, $dt ) == -1 ? 1 : 0;
     return $data;
 }
@@ -2132,7 +2132,7 @@ sub GetItemIssues {
     my ( $itemnumber, $history ) = @_;
     
     my $today = DateTime->now( time_zome => C4::Context->tz);  # get today date
-    $today->truncate( to => 'minutes' );
+    $today->truncate( to => 'minute' );
     my $sql = "SELECT * FROM issues
               JOIN borrowers USING (borrowernumber)
               JOIN items     USING (itemnumber)
@@ -2154,7 +2154,7 @@ sub GetItemIssues {
     my $results = $sth->fetchall_arrayref({});
     foreach (@$results) {
         my $date_due = dt_from_string($_->{date_due},'sql');
-        $date_due->truncate( to => 'minutes' );
+        $date_due->truncate( to => 'minute' );
 
         $_->{overdue} = (DateTime->compare($date_due, $today) == -1) ? 1 : 0;
     }
