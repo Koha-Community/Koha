@@ -36,7 +36,7 @@ use Date::Calc qw/Today Add_Delta_YMD/;
 my $input = new CGI;
 my $startdate=$input->param('from');
 my $enddate=$input->param('to');
-my $run_report=$input->param('run_report');
+my $run_report = ( not defined $input->param('run_report') ) ? 1 : $input->param('run_report');
 
 my $theme = $input->param('theme');    # only used if allowthemeoverride is set
 
