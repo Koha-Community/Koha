@@ -719,7 +719,7 @@ sub _detect_truncation {
 sub _build_stemmed_operand {
     my ($operand,$lang) = @_;
     require Lingua::Stem::Snowball ;
-    my $stemmed_operand;
+    my $stemmed_operand=q{};
 
     # If operand contains a digit, it is almost certainly an identifier, and should
     # not be stemmed.  This is particularly relevant for ISBNs and ISSNs, which
