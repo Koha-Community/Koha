@@ -7678,7 +7678,7 @@ if ( CheckVersion($DBversion) ) {
     ");
     $dbh->do("
         INSERT INTO permissions (module_bit, code, description)
-        VALUES (11, 'order_manage_all', 'Manage all orders & baskets')
+        VALUES (11, 'order_manage_all', 'Manage all orders and baskets, regardless of restrictions on them')
     ");
 
     print "Upgrade to $DBversion done (Add branch and users list to baskets. "

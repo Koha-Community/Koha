@@ -16,7 +16,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (11, 'budget_modify', 'Konten verändern (keine Neuen anlegen, aber Bestehende ändern)'),
    (11, 'planning_manage', 'Etatplanung verwalten'),
    (11, 'order_manage', 'Bestellungen verwalten'),
-   (11, 'order_manage_all', 'Manage all orders & baskets'),
+   (11, 'order_manage_all', 'Manage all orders and baskets, regardless of restrictions on them'),
    (11, 'group_manage', 'Bestellgruppen vewalten'),
    (11, 'order_receive', 'Lieferungen verwalten'),
    (11, 'budget_add_del', 'Konten hinzufügen/ändern, aber bestehende nicht ändern'),

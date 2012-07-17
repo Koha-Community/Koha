@@ -242,7 +242,7 @@
                 [% IF ( deliveryplace ) %]<li><span class="label">Delivery place:</span> [% deliveryplace %]</li>[% END %]
                 [% IF ( billingplace ) %]<li><span class="label">Billing place:</span> [% billingplace %]</li>[% END %]
                 [% IF ( authorisedbyname ) %]<li><span class="label">Created by:</span>  [% authorisedbyname %]</li>[% END %]
-                <li>
+                <li id="managedby">
                     <form action="" method="post">
                         <span class="label">Managed by:</span>
                         <div style="float:left">
@@ -262,23 +262,30 @@
                         </div>
                     </form>
                 </li>
-                <li>
-                    <form action="" method="post">
-                        <span class="label">Branch:</span>
-                        <select id="branch" name="branch">
-                            <option value="">No branch</option>
-                            [% FOREACH branch IN branches_loop %]
-                                [% IF (branch.selected) %]
-                                    <option selected="selected" value="[% branch.branchcode %]"> [% branch.branchname %]</option>
-                                [% ELSE %]
-                                    <option value="[% branch.branchcode %]"> [% branch.branchname %]</option>
+                <li id="branch">
+                    <span class="label">Branch:</span>
+                    [% IF basketbranchname %]
+                        [% basketbranchname %]
+                    [% ELSE %]
+                        No branch
+                    [% END %]
+                    [% IF branches_loop.size %]
+                        <form action="" method="post">
+                            <select id="branch" name="branch">
+                                <option value="">(no branch)</option>
+                                [% FOREACH branch IN branches_loop %]
+                                    [% IF (branch.selected) %]
+                                        <option selected="selected" value="[% branch.branchcode %]"> [% branch.branchname %]</option>
+                                    [% ELSE %]
+                                        <option value="[% branch.branchcode %]"> [% branch.branchname %]</option>
+                                    [% END %]
                                 [% END %]
-                            [% END %]
-                        </select>
-                        <input type="hidden" id="basketno" name="basketno" value="[% basketno %]" />
-                        <input type="hidden" id="op" name="op" value="mod_branch" />
-                        <input type="submit" value="Save" />
-                    </form>
+                            </select>
+                            <input type="hidden" id="basketno" name="basketno" value="[% basketno %]" />
+                            <input type="hidden" id="op" name="op" value="mod_branch" />
+                            <input type="submit" value="Change" />
+                        </form>
+                    [% END %]
                 </li>
                 [% IF ( creationdate ) %]<li><span class="label">Opened on:</span>  [% creationdate | $KohaDates %]</li>[% END %]
                 [% IF ( closedate ) %]<li><span class="label">Closed on:</span> [% closedate | $KohaDates %]</li>[% END %]

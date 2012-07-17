@@ -1,15 +1,15 @@
 #!/usr/bin/perl
 
 use Modern::Perl;
-use Test::MockModule;
 use Test::More tests => 42;
 
 use C4::Acquisition;
 
-my $C4_Acquisition_module = new Test::MockModule('C4::Acquisition');
-$C4_Acquisition_module->mock('GetBasketUsers', \&Mock_GetBasketUsers);
-my $C4_Context_module = new Test::MockModule('C4::Context');
-$C4_Context_module->mock('preference', \&Mock_preference);
+# Avoid "redefined subroutine" warnings
+local $SIG{__WARN__} = sub { warn $_[0] unless $_[0] =~ /redefined/ };
+
+*C4::Acquisition::GetBasketUsers = \&Mock_GetBasketUsers;
+*C4::Context::preference = \&Mock_preference;
 
 my $AcqViewBaskets;
 my %basketusers = (

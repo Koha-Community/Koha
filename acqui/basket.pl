@@ -217,6 +217,7 @@ if ( $op eq 'delete_confirm' ) {
     print $query->redirect("/cgi-bin/koha/acqui/basket.pl?basketno=$basketno");
     exit;
 } else {
+    my @branches_loop;
     # get librarian branch...
     if ( C4::Context->preference("IndependentBranches") ) {
         my $userenv = C4::Context->userenv;
@@ -230,16 +231,32 @@ if ( $op eq 'delete_confirm' ) {
                 exit 1;
             }
         }
-    }
-    # get branches
-    my $branches = C4::Branch::GetBranches;
-    my @branches_loop;
-    foreach my $branch (sort keys %$branches) {
-        push @branches_loop, {
-            branchcode => $branch,
-            branchname => $branches->{$branch}->{branchname},
-            selected => (defined $basket->{branch} and $branch eq $basket->{branch}) ? 1 : 0
-        };
+        if (!defined $basket->{branch} or $basket->{branch} eq $userenv->{branch}) {
+            push @branches_loop, {
+                branchcode => $userenv->{branch},
+                branchname => $userenv->{branchname},
+                selected => 1,
+            };
+        }
+    } else {
+        # get branches
+        my $branches = C4::Branch::GetBranches;
+        my @branchcodes = sort {
+            $branches->{$a}->{branchname} cmp $branches->{$b}->{branchname}
+        } keys %$branches;
+        foreach my $branch (@branchcodes) {
+            my $selected = 0;
+            if (defined $basket->{branch}) {
+                $selected = 1 if $branch eq $basket->{branch};
+            } else {
+                $selected = 1 if $branch eq C4::Context->userenv->{branch};
+            }
+            push @branches_loop, {
+                branchcode => $branch,
+                branchname => $branches->{$branch}->{branchname},
+                selected => $selected
+            };
+        }
     }
 
 #if the basket is closed,and the user has the permission to edit basketgroups, display a list of basketgroups
@@ -351,6 +368,7 @@ if ( $op eq 'delete_confirm' ) {
     $template->param(
         basketno             => $basketno,
         basketname           => $basket->{'basketname'},
+        basketbranchname     => C4::Branch::GetBranchName($basket->{branch}),
         basketnote           => $basket->{note},
         basketbooksellernote => $basket->{booksellernote},
         basketcontractno     => $basket->{contractnumber},
