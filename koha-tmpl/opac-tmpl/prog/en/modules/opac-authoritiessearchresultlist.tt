@@ -58,7 +58,7 @@
                 <tr>
             [% END %]
                     <td>[% PROCESS authresult summary=resul.summary %]</td>
-                    <td>[% authtypetext %]</td>
+                    <td>[% resul.authtype %]</td>
 					[% UNLESS ( resul.isEDITORS ) %]
 						<td>
 							 <a href="/cgi-bin/koha/opac-search.pl?type=opac&amp;op=do_search&amp;q=an=[% resul.authid %]">[% resul.used %] biblios</a>
