@@ -25,6 +25,8 @@ use strict;
 use warnings;
 use CGI;
 use C4::Circulation;
+use C4::Context;
+use C4::Items;
 use C4::Auth;
 use URI::Escape;
 use C4::Dates qw/format_date_in_iso/;
@@ -91,6 +93,26 @@ foreach my $itemno (@data) {
 my $failedreturn = q{};
 foreach my $barcode (@barcodes) {
     # check status before renewing issue
+
+    #System Preference Handling During Check-in In Patron Module
+    my $itemnumber;
+    $itemnumber = GetItemnumberFromBarcode($barcode);
+    if ($itemnumber) {
+        if ( C4::Context->preference("InProcessingToShelvingCart") ) {
+            my $item = GetItem( $itemnumber );
+            if ( $item->{'location'} eq 'PROC' ) {
+                $item->{'location'} = 'CART';
+                ModItem( $item, $item->{'biblionumber'}, $item->{'itemnumber'} );
+            }
+        }
+
+        if ( C4::Context->preference("ReturnToShelvingCart") ) {
+            my $item = GetItem( $itemnumber );
+            $item->{'location'} = 'CART';
+            ModItem( $item, $item->{'biblionumber'}, $item->{'itemnumber'} );
+        }
+    }
+
    my ( $returned, $messages, $issueinformation, $borrower ) = 
     AddReturn($barcode, $branch, $exemptfine);
    $failedreturn.="&failedreturn=$barcode" unless ($returned);
