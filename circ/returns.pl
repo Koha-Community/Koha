@@ -285,15 +285,6 @@ if ($barcode) {
         $input{duedate}   = 0;
         $returneditems{0} = $barcode;
         $riduedate{0}     = 0;
-        if ( $messages->{'wthdrawn'} ) {
-            $input{withdrawn}      = 1;
-            $input{borrowernumber} = 'Item Cancelled';  # FIXME: should be in display layer ?
-            $riborrowernumber{0}   = 'Item Cancelled';
-        }
-        else {
-            $input{borrowernumber} = '&nbsp;';  # This seems clearly bogus.
-            $riborrowernumber{0}   = '&nbsp;';
-        }
         push( @inputloop, \%input );
     }
 }
@@ -438,7 +429,7 @@ foreach my $code ( keys %$messages ) {
     }
     elsif ( $code eq 'wthdrawn' ) {
         $err{withdrawn} = 1;
-        $exit_required_p = 1;
+        $exit_required_p = 1 if C4::Context->preference("BlockReturnOfWithdrawnItems");
     }
     elsif ( ( $code eq 'IsPermanent' ) && ( not $messages->{'ResFound'} ) ) {
         if ( $messages->{'IsPermanent'} ne $userenv_branch ) {
@@ -610,6 +601,7 @@ $template->param(
     dropboxdate    => output_pref($dropboxdate),
     overduecharges => $overduecharges,
     soundon        => C4::Context->preference("SoundOn"),
+    BlockReturnOfWithdrawnItems => C4::Context->preference("BlockReturnOfWithdrawnItems"),
 );
 
 ### Comment out rotating collections for now to allow it a little more time to bake

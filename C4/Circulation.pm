@@ -1745,7 +1745,7 @@ sub AddReturn {
 
     if ( $item->{'wthdrawn'} ) { # book has been cancelled
         $messages->{'wthdrawn'} = 1;
-        $doreturn = 0;
+        $doreturn = 0 if C4::Context->preference("BlockReturnOfWithdrawnItems");
     }
 
     # case of a return of document (deal with issues and holdingbranch)
@@ -1833,7 +1833,7 @@ sub AddReturn {
 
     # find reserves.....
     # if we don't have a reserve with the status W, we launch the Checkreserves routine
-    my ($resfound, $resrec, undef) = C4::Reserves::CheckReserves( $item->{'itemnumber'} );
+    my ($resfound, $resrec, undef) = C4::Reserves::CheckReserves( $item->{'itemnumber'} ) unless ( $item->{'wthdrawn'} );
     if ($resfound) {
           $resrec->{'ResFound'} = $resfound;
         $messages->{'ResFound'} = $resrec;

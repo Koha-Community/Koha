@@ -285,6 +285,13 @@ Circulation:
                   alert: "display a message"
                   nothing : "do nothing"
             - .
+    Checkin Policy:
+        -
+            - pref: BlockReturnOfWithdrawnItems
+              choices:
+                  yes: Block
+                  no: "Don't block"
+            - returning of items that have been withdrawn.
     Holds Policy:
         -
             - pref: AllowHoldPolicyOverride

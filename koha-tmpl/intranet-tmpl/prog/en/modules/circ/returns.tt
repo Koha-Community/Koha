@@ -334,7 +334,12 @@ $(document).ready(function () {
                         <p class="problem">Item was lost, now found.</p>
                     [% END %]
                     [% IF ( errmsgloo.withdrawn ) %]
-                        <p class="problem">Item is withdrawn.</p>
+                        [% IF BlockReturnOfWithdrawnItems %]
+                           <h3>Cannot Check In</h3>
+                           <p class="problem">Item is withdrawn. <strong>NOT CHECKED IN</strong></p>
+                        [% ELSE %]
+                           <p class="problem">Item is withdrawn.</p>
+                        [% END %]
                     [% END %]
                     [% IF ( errmsgloo.debarred ) %]
                         <p class="problem"><a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% errmsgloo.debarborrowernumber %]">[% errmsgloo.debarname %]([% errmsgloo.debarcardnumber %])</a> is now debarred until [% errmsgloo.debarred | $KohaDates %] </p>
