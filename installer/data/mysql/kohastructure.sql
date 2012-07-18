@@ -2004,13 +2004,13 @@ CREATE TABLE `tags` (
 --
 
 DROP TABLE IF EXISTS `tags_all`;
-CREATE TABLE `tags_all` (
-  `tag_id`         int(11) NOT NULL auto_increment,
-  `borrowernumber` int(11) NOT NULL,
-  `biblionumber`   int(11) NOT NULL,
-  `term`      varchar(255) NOT NULL,
-  `language`       int(4) default NULL,
-  `date_created` datetime  NOT NULL,
+CREATE TABLE `tags_all` ( -- all of the tags
+  `tag_id`         int(11) NOT NULL auto_increment, -- unique id and primary key
+  `borrowernumber` int(11) NOT NULL, -- the patron who added the tag (borrowers.borrowernumber)
+  `biblionumber`   int(11) NOT NULL, -- the bib record this tag was left on (biblio.biblionumber)
+  `term`      varchar(255) NOT NULL, -- the tag
+  `language`       int(4) default NULL, -- the language the tag was left in
+  `date_created` datetime  NOT NULL, -- the date the tag was added
   PRIMARY KEY  (`tag_id`),
   KEY `tags_borrowers_fk_1` (`borrowernumber`),
   KEY `tags_biblionumber_fk_1` (`biblionumber`),
@@ -2025,12 +2025,12 @@ CREATE TABLE `tags_all` (
 --
 
 DROP TABLE IF EXISTS `tags_approval`;
-CREATE TABLE `tags_approval` (
-  `term`   varchar(255) NOT NULL,
-  `approved`     int(1) NOT NULL default '0',
-  `date_approved` datetime       default NULL,
-  `approved_by` int(11)          default NULL,
-  `weight_total` int(9) NOT NULL default '1',
+CREATE TABLE `tags_approval` ( -- approved tags
+  `term`   varchar(255) NOT NULL, -- the tag
+  `approved`     int(1) NOT NULL default '0', -- whether the tag is approved or not (1=yes, 0=pending, -1=rejected)
+  `date_approved` datetime       default NULL, -- the date this tag was approved
+  `approved_by` int(11)          default NULL, -- the librarian who approved the tag (borrowers.borrowernumber)
+  `weight_total` int(9) NOT NULL default '1', -- the total number of times this tag was used
   PRIMARY KEY  (`term`),
   KEY `tags_approval_borrowers_fk_1` (`approved_by`),
   CONSTRAINT `tags_approval_borrowers_fk_1` FOREIGN KEY (`approved_by`)
@@ -2042,10 +2042,10 @@ CREATE TABLE `tags_approval` (
 --
 
 DROP TABLE IF EXISTS `tags_index`;
-CREATE TABLE `tags_index` (
-  `term`    varchar(255) NOT NULL,
-  `biblionumber` int(11) NOT NULL,
-  `weight`        int(9) NOT NULL default '1',
+CREATE TABLE `tags_index` ( -- a weighted list of all tags and where they are used
+  `term`    varchar(255) NOT NULL, -- the tag
+  `biblionumber` int(11) NOT NULL, -- the bib record this tag was used on (biblio.biblionumber)
+  `weight`        int(9) NOT NULL default '1', -- the number of times this term was used on this bib record
   PRIMARY KEY  (`term`,`biblionumber`),
   KEY `tags_index_biblionumber_fk_1` (`biblionumber`),
   CONSTRAINT `tags_index_term_fk_1` FOREIGN KEY (`term`)
