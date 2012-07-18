@@ -5547,6 +5547,8 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     $dbh->do("INSERT INTO user_permissions (borrowernumber, module_bit, code)
         SELECT borrowernumber, 3, 'parameters_remaining_permissions'
         FROM borrowers WHERE flags & (1 << 3)");
+    # Give new subpermissions to all users that have 'parameters' permission flag (bit 3) set
+    # see userflags table
     $dbh->do("INSERT INTO user_permissions (borrowernumber, module_bit, code)
         SELECT borrowernumber, 3, 'manage_circ_rules'
         FROM borrowers WHERE flags & (1 << 3)");
