@@ -38,7 +38,8 @@ sub search {
               )
             : ( "recordid", "id" );
 
-    my $recordtype = ref($filters->{recordtype}) eq 'ARRAY'
+    my $recordtype;
+    $recordtype = ref($filters->{recordtype}) eq 'ARRAY'
                     ? $filters->{recordtype}[0]
                     : $filters->{recordtype}
                 if defined $filters && defined $filters->{recordtype};
