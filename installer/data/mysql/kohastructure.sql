@@ -848,21 +848,21 @@ CREATE TABLE hold_fill_targets (
 --
 
 DROP TABLE IF EXISTS `import_batches`;
-CREATE TABLE `import_batches` (
-  `import_batch_id` int(11) NOT NULL auto_increment,
-  `matcher_id` int(11) default NULL,
+CREATE TABLE `import_batches` ( -- information about batches of marc records that have been imported
+  `import_batch_id` int(11) NOT NULL auto_increment, -- unique identifier and primary key
+  `matcher_id` int(11) default NULL, -- the id of the match rule used (matchpoints.matcher_id)
   `template_id` int(11) default NULL,
   `branchcode` varchar(10) default NULL,
-  `num_biblios` int(11) NOT NULL default 0,
-  `num_items` int(11) NOT NULL default 0,
-  `upload_timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP,
-  `overlay_action` enum('replace', 'create_new', 'use_template', 'ignore') NOT NULL default 'create_new',
-  `nomatch_action` enum('create_new', 'ignore') NOT NULL default 'create_new',
-  `item_action` enum('always_add', 'add_only_for_matches', 'add_only_for_new', 'ignore') NOT NULL default 'always_add',
-  `import_status` enum('staging', 'staged', 'importing', 'imported', 'reverting', 'reverted', 'cleaned') NOT NULL default 'staging',
-  `batch_type` enum('batch', 'z3950', 'webservice') NOT NULL default 'batch',
-  `file_name` varchar(100),
-  `comments` mediumtext,
+  `num_biblios` int(11) NOT NULL default 0, -- number of bib records in the file
+  `num_items` int(11) NOT NULL default 0, -- number of items in the file
+  `upload_timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP, -- date and time the file was uploaded
+  `overlay_action` enum('replace', 'create_new', 'use_template', 'ignore') NOT NULL default 'create_new', -- how to handle duplicate records
+  `nomatch_action` enum('create_new', 'ignore') NOT NULL default 'create_new', -- how to handle records where no match is found
+  `item_action` enum('always_add', 'add_only_for_matches', 'add_only_for_new', 'ignore') NOT NULL default 'always_add', -- what to do with item records
+  `import_status` enum('staging', 'staged', 'importing', 'imported', 'reverting', 'reverted', 'cleaned') NOT NULL default 'staging', -- the status of the imported file
+  `batch_type` enum('batch', 'z3950', 'webservice') NOT NULL default 'batch', -- where this batch has come from
+  `file_name` varchar(100), -- the name of the file uploaded
+  `comments` mediumtext, -- any comments added when the file was uploaded
   PRIMARY KEY (`import_batch_id`),
   KEY `branchcode` (`branchcode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
