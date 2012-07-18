@@ -10726,6 +10726,27 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do("
+        INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type)
+        VALUES('uploadPath','','Sets the upload path for the upload.pl plugin','','');
+    ");
+
+    $dbh->do("
+        CREATE TABLE uploaded_files (
+            id CHAR(40) NOT NULL PRIMARY KEY,
+            filename TEXT NOT NULL,
+            dir TEXT NOT NULL
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+    ");
+
+    print "Upgrade to $DBversion done (Bug 6874: New cataloging plugin upload.pl)\n";
+    print "This plugin comes with a new syspref (uploadPath) and a new table (uploaded_files)\n";
+    print "To use it, set 'uploadPath' and 'OPACBaseURL' system preferences and link this plugin to a subfield (856\$u for instance)\n";
+    SetVersion($DBversion);
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.

@@ -3361,6 +3361,17 @@ CREATE TABLE IF NOT EXISTS `borrower_modifications` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
+-- Table structure for table uploaded_files
+--
+
+DROP TABLE IF EXISTS uploaded_files
+CREATE TABLE uploaded_files (
+    id CHAR(40) NOT NULL PRIMARY KEY,
+    filename TEXT NOT NULL,
+    dir TEXT NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
 -- Table structure for table linktracker
 -- This stores clicks to external links
 --

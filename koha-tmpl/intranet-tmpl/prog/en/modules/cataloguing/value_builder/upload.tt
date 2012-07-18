@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Upload plugin</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script type="text/javascript" src="[% themelang %]/lib/jquery/jquery.js"></script>
+    <link rel="stylesheet" type="text/css" href="[% themelang %]/css/staff-global.css" />
+
+</head>
+<body>
+[% IF ( success ) %]
+
+    <script type="text/javascript">
+        function report() {
+            var doc   = opener.document;
+            var field = doc.getElementById("[% index %]");
+            field.value =  "[% return %]";
+        }
+        $(document).ready(function() {
+            report();
+        });
+    </script>
+
+
+    The file [% uploaded_file | html %] has been successfully uploaded.
+    <p><input type="button" value="close" onclick="window.close();" /></p>
+
+[% ELSE %]
+
+    [% IF ( error ) %]
+        <p>Error: Failed to upload file. See logs for details.</p>
+        <input type="button" value="close" onclick="window.close();" />
+    [% ELSE %]
+        [%# This block display recursively a directory tree in variable 'dirs' %]
+        [% BLOCK list_dirs %]
+            [% IF dirs.size %]
+                <ul>
+                    [% FOREACH dir IN dirs %]
+                        <li style="list-style-type:none">
+                            <input type="radio" name="dir" id="[% dir.value %]" value="[% dir.value %]">
+                                <label for="[% dir.value %]">
+                                    [% IF (dir.name == '/') %]
+                                        <em>(root)</em>
+                                    [% ELSE %]
+                                        [% dir.name %]
+                                    [% END %]
+                                </label>
+                            </input>
+                            [% INCLUDE list_dirs dirs=dir.dirs %]
+                        </li>
+                    [% END %]
+                </ul>
+            [% END %]
+        [% END %]
+
+        <h2>Please select the file to upload : </h2>
+        <form method="post" enctype="multipart/form-data" action="/cgi-bin/koha/cataloguing/plugin_launcher.pl">
+            [% filefield %]
+            <h3>Choose where to upload file</h3>
+            [% INCLUDE list_dirs dirs = dirs_tree %]
+            <input type="hidden" name="plugin_name" value="upload.pl" />
+            <input type="hidden" name="index" value="[% index %]" />
+            <input type="submit">
+        </form>
+    [% END %]
+
+[% END %]
+
+</body>
+</html>
