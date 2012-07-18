@@ -899,10 +899,10 @@ CREATE TABLE `import_records` (
 -- Table structure for `import_record_matches`
 --
 DROP TABLE IF EXISTS `import_record_matches`;
-CREATE TABLE `import_record_matches` (
-  `import_record_id` int(11) NOT NULL,
-  `candidate_match_id` int(11) NOT NULL,
-  `score` int(11) NOT NULL default 0,
+CREATE TABLE `import_record_matches` ( -- matches found when importing a batch of records
+  `import_record_id` int(11) NOT NULL, -- the id given to the imported bib record (import_records.import_record_id)
+  `candidate_match_id` int(11) NOT NULL, -- the biblio the imported record matches (biblio.biblionumber)
+  `score` int(11) NOT NULL default 0, -- the match score
   CONSTRAINT `import_record_matches_ibfk_1` FOREIGN KEY (`import_record_id`)
              REFERENCES `import_records` (`import_record_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   KEY `record_score` (`import_record_id`, `score`)
