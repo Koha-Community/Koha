@@ -27,7 +27,6 @@ use Carp;
 use Mail::Sendmail;
 use MIME::QuotedPrint;
 use MIME::Base64;
-use HTML::FormatText;
 use C4::Biblio;
 use C4::Items;
 use C4::Auth;
