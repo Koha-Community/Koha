@@ -491,8 +491,14 @@ our $PERL_DEPS = {
     },
     'Test::Strict' => {
         'usage'    => 'Core',
-        'required' => '0.14',
-    }
+        'required' => '0',
+        'min_ver'  => '0.14',
+    },
+    'HTML::FormatText' => {
+        'usage'    => 'Core',
+        'required' => '1',
+        'min_ver'  => '1.23',
+    },
 };
 
 1;
@@ -515,7 +521,7 @@ end of the outer hash and follow the key/value pattern used in the other depende
 =head2 Debian
 
 If you change the list of dependencies, and you use Debian, please also
-run the debian/update-control script and commit the modifed version of
+run the debian/update-control script and commit the modified version of
 debian/control into git as well. If you're not running Debian, don't
 worry about it.
 
