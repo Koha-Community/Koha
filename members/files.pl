@@ -103,7 +103,7 @@ else {
         files => Koha::Borrower::Files->new( borrowernumber => $borrowernumber )
           ->GetFilesInfo(),
 
-        errors => %errors
+        errors => \%errors
     );
     output_html_with_http_headers $cgi, $cookie, $template->output;
 }
