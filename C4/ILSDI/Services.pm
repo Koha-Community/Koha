@@ -418,6 +418,10 @@ sub GetPatronInfo {
     # Issues management
     if ( $cgi->param('show_loans') eq "1" ) {
         my $issues = GetPendingIssues($borrowernumber);
+        foreach my $issue ( @$issues ){
+            $issue->{'issuedate'} = $issue->{'issuedate'}->strftime('%Y-%m-%d %H:%M');
+            $issue->{'date_due'} = $issue->{'date_due'}->strftime('%Y-%m-%d %H:%M');
+        }
         $borrower->{'loans'}->{'loan'} = $issues;
     }
 
