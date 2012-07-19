@@ -22,6 +22,7 @@ use warnings;
 use PDF::Reuse;
 use PDF::Reuse::Barcode;
 use File::Temp;
+use List::Util qw/first/;
 
 BEGIN {
     use version; our $VERSION = qv('3.07.00.049');
@@ -55,8 +56,7 @@ sub new {
 
 sub End {
     my $self = shift;
-    # if the pdf stream is utf8, explicitly set it to utf8; this avoids at lease some wide character errors -chris_n
-    utf8::encode($PDF::Reuse::stream) if utf8::is_utf8($PDF::Reuse::stream);
+
     prEnd();
 
     # slurp temporary filename and print it out for plack to pick up
@@ -112,6 +112,17 @@ sub Field {
 sub Font {
     my $self = shift;
     my $fontName = shift;
+
+    my $ttf = C4::Context->config('ttf');
+
+    if ( $ttf ) {
+        my $ttf_path = first { $_->{type} eq $fontName } @{ $ttf->{font} };
+        if ( -e $ttf_path->{content} ) {
+            return prTTFont($ttf_path->{content});
+        } else {
+            warn "ERROR in koha-conf.xml -- missing <font type=\"$fontName\">/path/to/font.ttf</font>";
+        }
+    }
     return prFont($fontName);
 }
 

@@ -88,10 +88,9 @@ sub _calc_next_label_pos {
 sub _print_text {
     my $label_text = shift;
     foreach my $text_line (@$label_text) {
-        my $pdf_font = $pdf->Font($text_line->{'font'});
-        my $line = "BT /$pdf_font $text_line->{'font_size'} Tf $text_line->{'text_llx'} $text_line->{'text_lly'} Td ($text_line->{'line'}) Tj ET";
-    utf8::decode($line);
-        $pdf->Add($line);
+        $pdf->Font($text_line->{'font'});
+        $pdf->FontSize( $text_line->{'font_size'} );
+        $pdf->Text( $text_line->{'text_llx'}, $text_line->{'text_lly'}, $text_line->{'line'} );
     }
 }
 
