@@ -1179,13 +1179,13 @@ CREATE TABLE `creator_templates` (
 
 DROP TABLE IF EXISTS `letter`;
 CREATE TABLE `letter` ( -- table for all notice templates in Koha
-  `module` varchar(20) NOT NULL default '', -- Koha module that triggers this notice
-  `code` varchar(20) NOT NULL default '', -- unique identifier for this notice
-  `branchcode` varchar(10) default NULL, -- foreign key, linking to the branches table for the location the item was checked out
-  `name` varchar(100) NOT NULL default '', -- plain text name for this notice
-  `is_html` tinyint(1) default 0,
+  `module` varchar(20) NOT NULL default '', -- Koha module that triggers this notice or slip
+  `code` varchar(20) NOT NULL default '', -- unique identifier for this notice or slip
+  `branchcode` varchar(10) default NULL, -- the branch this notice or slip is used at (branches.branchcode)
+  `name` varchar(100) NOT NULL default '', -- plain text name for this notice or slip
+  `is_html` tinyint(1) default 0, -- does this notice or slip use HTML (1 for yes, 0 for no)
   `title` varchar(200) NOT NULL default '', -- subject line of the notice
-  `content` text, -- body text for the notice
+  `content` text, -- body text for the notice or slip
   PRIMARY KEY  (`module`,`code`, `branchcode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
