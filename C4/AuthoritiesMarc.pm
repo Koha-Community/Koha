@@ -263,6 +263,9 @@ sub SearchAuthorities {
                 else {
                     $attr .= " \@attr 5=1 \@attr 4=6 "
                       ;    ## Word list, right truncated, anywhere
+                      if ($sortby eq 'Relevance') {
+                          $attr .= "\@attr 2=102 ";
+                      }
                 }
                 @$value[$i] =~ s/"/\\"/g; # Escape the double-quotes in the search value
                 $attr =$attr."\"".@$value[$i]."\"";

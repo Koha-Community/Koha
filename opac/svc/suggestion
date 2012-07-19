@@ -1,0 +1,101 @@
+#!/usr/bin/perl
+
+# Copyright 2012 C & P Bibliography Services
+#
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 2 of the License, or (at your option) any later
+# version.
+#
+# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with Koha; if not, write to the Free Software Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+=head1 NAME
+
+opac-suggestion.pl : script to render suggestions for the OPAC
+
+=head1 SYNOPSIS
+
+=cut
+
+=head1 DESCRIPTION
+
+This script produces suggestions for the OPAC given a search string.
+
+It takes the following parameters:
+
+=over 8
+
+=item I<q>
+
+Required. Query string.
+
+=item I<render>
+
+If set to 'stub' render a stub HTML page suitable for inclusion into a
+div via AJAX. If set to 'standalone', return a full page instead of the stub.
+If not set, return JSON.
+
+=item I<count>
+
+Number of suggestions to display. Defaults to 4 in stub mode, 20 otherwise.
+
+=back
+
+=cut
+
+use strict;
+use warnings;
+
+use C4::Auth;
+use C4::Context;
+use C4::Output;
+use CGI;
+use JSON;
+use Koha::SuggestionEngine;
+
+my $query = new CGI;
+
+my $dbh = C4::Context->dbh;
+
+my $search = $query->param('q')      || '';
+my $render = $query->param('render') || '';
+my $count  = $query->param('count')  || ( $render eq 'stub' ? 4 : 20 );
+
+# open template
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+    {
+        template_name   => "svc/suggestion.tt",
+        query           => $query,
+        type            => "opac",
+        authnotrequired => ( C4::Context->preference("OpacPublic") ? 1 : 0 ),
+        debug           => 1,
+    }
+);
+
+unless ( C4::Context->preference('DidYouMeanFromAuthorities') ) {
+    print $query->header;
+    exit;
+}
+
+my $suggestor = Koha::SuggestionEngine->new( { plugins => ('AuthorityFile') } );
+
+my $suggestions =
+  $suggestor->get_suggestions( { search => $search, count => $count } );
+
+if ($render) {
+    $template->{VARS}->{render} = $render;
+    $template->{VARS}->{suggestions} = $suggestions if $suggestions;
+    output_html_with_http_headers $query, $cookie, $template->output;
+}
+else {
+    print $query->header;
+    print to_json($suggestions);
+}

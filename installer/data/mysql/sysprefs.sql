@@ -372,3 +372,4 @@ INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('SubfieldsToUseWhenPrefill','','Define a list of subfields to use when prefilling items (separated by space)','','Free');
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('AgeRestrictionMarker','','Markers for age restriction indication, e.g. FSK|PEGI|Age|',NULL,'free');
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('AgeRestrictionOverride',0,'Allow staff to check out an item with age restriction.',NULL,'YesNo');
+INSERT INTO systempreferences (variable,value,explanation,type) VALUES('DidYouMeanFromAuthorities','0','Suggest searches based on authority file.','YesNo');

@@ -5722,6 +5722,13 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion ="3.09.00.039";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,type) VALUES('DidYouMeanFromAuthorities','0','Suggest searches based on authority file.','YesNo');");
+    print "Upgrade to $DBversion done (Add system preference DidYouMeanFromAuthorities)\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

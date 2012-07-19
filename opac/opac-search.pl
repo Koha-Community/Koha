@@ -369,6 +369,8 @@ if ($indexes[0] && !$indexes[1]) {
 my @operands;
 @operands = split("\0",$params->{'q'}) if $params->{'q'};
 
+$template->{VARS}->{querystring} = join(' ', @operands);
+
 # if a simple search, display the value in the search box
 if ($operands[0] && !$operands[1]) {
     $template->param(ms_value => $operands[0]);
@@ -825,6 +827,8 @@ my $content_type = ($format eq 'rss' or $format eq 'atom') ? $format : 'html';
 if (C4::Context->preference('GoogleIndicTransliteration')) {
         $template->param('GoogleIndicTransliteration' => 1);
 }
+
+$template->{VARS}->{DidYouMeanFromAuthorities} = C4::Context->preference('DidYouMeanFromAuthorities');
 
     $template->param( borrowernumber    => $borrowernumber);
 output_with_http_headers $cgi, $cookie, $template->output, $content_type;

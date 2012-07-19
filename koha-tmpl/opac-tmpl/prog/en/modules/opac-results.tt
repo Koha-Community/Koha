@@ -263,6 +263,13 @@ $(document).ready(function(){
     [% IF OpenLibraryCovers %]KOHA.OpenLibrary.GetCoverFromIsbn();[% END %]
     [% IF OPACLocalCoverImages %]KOHA.LocalCover.GetCoverFromBibnumber(false);[% END %]
     [% IF ( GoogleJackets ) %]KOHA.Google.GetCoverFromIsbn();[% END %]
+
+    $('#didyoumean').load('/cgi-bin/koha/svc/suggestion?render=stub&q=[% querystring | uri %]',
+        function() {
+            $('.searchsuggestion').parent().parent().css({
+                'border-color': '#F4ECBE',
+                'background-color': '#FFFBEA'});
+            } );
 });
 
 //]]>
@@ -278,16 +285,9 @@ $(document).ready(function(){
     <div id="yui-main">
     <div class="yui-b">
     <div id="userresults" class="container">
-  [% IF ( koha_spsuggest ) %]
-    Did you mean:
-    <ul style="list-style: none;">
-        [% FOREACH SPELL_SUGGES IN SPELL_SUGGEST %]
-        <li>
-            <a href="/cgi-bin/koha/opac-search.pl?q=[% SPELL_SUGGES.spsuggestion %]">[% SPELL_SUGGES.spsuggestion %]</a>
-        </li>
-        [% END %]
-    </ul>
-[% END %]
+    [% IF ( DidYouMeanFromAuthorities ) %]
+        <div id='didyoumean'>Not what you expected? Check for <a href='/cgi-bin/koha/svc/suggestion?render=standalone&q=[% querystring | uri %]'>suggestions</a></div>
+    [% END %]
 
 [% IF ( query_error ) %]
 <div class="dialog alert">
