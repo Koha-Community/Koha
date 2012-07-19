@@ -429,7 +429,7 @@ $(document).ready(function () {
 [% IF ( riloop ) %]
     <h2>Checked-in items</h2>
     <table>
-    <tr><th>Due date</th><th>Title</th>	<th>Author</th>	<th>Barcode</th><th>Shelving location</th><th>Call number</th><th>Type</th>	<th>Patron</th><th>Note</th></tr>
+    <tr><th>Due date</th><th>Title</th>	<th>Author</th>	<th>Barcode</th><th>Home Branch</th><th>Holding Branch</th><th>Shelving location</th><th>Call number</th><th>Type</th>	<th>Patron</th><th>Note</th></tr>
 
         [% FOREACH riloo IN riloop %]
             <tr>
@@ -445,6 +445,8 @@ $(document).ready(function () {
                     [% riloo.itemtitle |html %]</a></td>
 			<td>[% riloo.itemauthor %]</td>
             <td><a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% riloo.itembiblionumber %]&amp;itemnumber=[% riloo.itemnumber %]#item[% riloo.itemnumber %]">[% riloo.barcode %]</a></td>
+            <td>[% riloo.homebranch %]</td>
+            <td>[% riloo.holdingbranch %]</td>
             <td>[% riloo.location %]</td>
             <td>[% riloo.itemcallnumber %]</td>
             <td>[% riloo.itemtype %] [% riloo.ccode %]</td>
