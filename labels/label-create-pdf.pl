@@ -58,9 +58,9 @@ print $cgi->header( -type       => 'application/pdf',
                     -attachment => "$pdf_file.pdf",
                   );
 
-my $pdf = C4::Creators::PDF->new(InitVars => 0);
+our $pdf = C4::Creators::PDF->new(InitVars => 0);
 my $batch = C4::Labels::Batch->retrieve(batch_id => $batch_id);
-my $template = C4::Labels::Template->retrieve(template_id => $template_id, profile_id => 1);
+our $template = C4::Labels::Template->retrieve(template_id => $template_id, profile_id => 1);
 my $layout = C4::Labels::Layout->retrieve(layout_id => $layout_id);
 
 sub _calc_next_label_pos {
@@ -205,7 +205,7 @@ foreach my $item (@{$items}) {
 
 $pdf->End();
 
-exit(1);
+__END__
 
 =head1 NAME
 

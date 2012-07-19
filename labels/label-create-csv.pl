@@ -72,7 +72,6 @@ else {
 
 my $csv = Text::CSV_XS->new();
 
-CSV_ITEMS:
 foreach my $item (@$items) {
     my $label = C4::Labels::Label->new(
                                     batch_id            => $batch_id,
@@ -85,11 +84,10 @@ foreach my $item (@$items) {
     }
     else {
         warn sprintf('Text::CSV_XS->combine() returned the following error: %s', $csv->error_input);
-        next CSV_ITEMS;
     }
 }
 
-exit(1);
+__END__
 
 =head1 NAME
 
@@ -122,3 +120,4 @@ Fifth Floor, Boston, MA 02110-1301 USA.
 Koha is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
 A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
+=cut

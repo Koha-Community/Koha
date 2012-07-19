@@ -74,7 +74,6 @@ my $xml_data = {'label' => []};
 
 my $item_count = 0;
 
-XML_ITEMS:
 foreach my $item (@$items) {
     push(@{$xml_data->{'label'}}, {'item_number' => $item->{'item_number'}});
     my $label = C4::Labels::Label->new(
@@ -98,7 +97,7 @@ my $xml_out = $xml->XMLout($xml_data);
 #die "XML OUT:\n" . Dumper($xml_out);
 print $xml_out;
 
-exit(1);
+__END__
 
 =head1 NAME
 
@@ -132,3 +131,4 @@ Fifth Floor, Boston, MA 02110-1301 USA.
 Koha is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
 A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
+=cut
