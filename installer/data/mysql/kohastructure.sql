@@ -1464,9 +1464,9 @@ CREATE TABLE `old_reserves` ( -- this table holds all holds/reserves that have b
   `itemnumber` int(11) default NULL, -- foreign key from the items table defining the specific item the patron has placed on hold or the item this hold was filled with
   `waitingdate` date default NULL, -- the date the item was marked as waiting for the patron at the library
   `expirationdate` DATE DEFAULT NULL, -- the date the hold expires (usually the date entered by the patron to say they don't need the hold after a certain date)
-  `lowestPriority` tinyint(1) NOT NULL,
-  `suspend` BOOLEAN NOT NULL DEFAULT 0,
-  `suspend_until` DATETIME NULL DEFAULT NULL,
+  `lowestPriority` tinyint(1) NOT NULL, -- has this hold been pinned to the lowest priority in the holds queue (1 for yes, 0 for no)
+  `suspend` BOOLEAN NOT NULL DEFAULT 0, -- in this hold suspended (1 for yes, 0 for no)
+  `suspend_until` DATETIME NULL DEFAULT NULL, -- the date this hold is suspended until (NULL for infinitely)
   PRIMARY KEY (`reserve_id`),
   KEY `old_reserves_borrowernumber` (`borrowernumber`),
   KEY `old_reserves_biblionumber` (`biblionumber`),
