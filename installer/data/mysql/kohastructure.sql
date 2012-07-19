@@ -1710,16 +1710,16 @@ CREATE TABLE `roadtype` ( -- road types defined in administration and used in pa
 --
 
 DROP TABLE IF EXISTS `saved_sql`;
-CREATE TABLE saved_sql (
-   `id` int(11) NOT NULL auto_increment,
-   `borrowernumber` int(11) default NULL,
-   `date_created` datetime default NULL,
-   `last_modified` datetime default NULL,
-   `savedsql` text,
+CREATE TABLE saved_sql ( -- saved sql reports
+   `id` int(11) NOT NULL auto_increment, -- unique id and primary key assigned by Koha
+   `borrowernumber` int(11) default NULL, -- the staff member who created this report (borrowers.borrowernumber)
+   `date_created` datetime default NULL, -- the date this report was created
+   `last_modified` datetime default NULL, -- the date this report was last edited
+   `savedsql` text, -- the SQL for this report
    `last_run` datetime default NULL,
-   `report_name` varchar(255) default NULL,
-   `type` varchar(255) default NULL,
-   `notes` text,
+   `report_name` varchar(255) default NULL, -- the name of this report
+   `type` varchar(255) default NULL, -- always 1 for tabular
+   `notes` text, -- the notes or description given to this report
    `cache_expiry` int NOT NULL default 300,
    `public` boolean NOT NULL default FALSE,
    PRIMARY KEY  (`id`),
