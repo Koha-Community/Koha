@@ -52,20 +52,22 @@ do
     fi
 
     echo "Removing Koha instance $name"
-
+    mysql_hostname="localhost"
     if [ "$keepmysql" != "1" ]
     then
     # The grant creates the user in case it isn't, we don't want our loop to fail if it has already being deleted.
     mysql --defaults-extra-file=/etc/mysql/koha-common.cnf <<eof
 GRANT USAGE ON \`koha_$name\`.* TO \`koha_$name\`@\`%\`;
-DROP USER \`koha_$name\`;
+GRANT USAGE ON \`koha_$name\`.* TO \`koha_$name\`@\`$mysql_hostname\`;
+DROP USER \`koha_$name\`@\`%\`;
+DROP USER \`koha_$name\`@\`$mysql_hostname\`;
 DROP DATABASE IF EXISTS \`koha_$name\`;
 FLUSH PRIVILEGES;
 eof
     fi #`
     
     # If the daemon is not running already, we don't want to fail this loop. So bin the result code if this fails.
-    koha-stop-zebra $name | /bin/true
+    koha-stop-zebra $name || /bin/true
     [ -f "/etc/apache2/sites-available/$name" ]  && \
         rm "/etc/apache2/sites-available/$name"
     [ -f "/etc/koha/sites/$name/koha-conf.xml" ] && \
@@ -89,7 +91,7 @@ eof
         rm -r "/var/run/koha/$name"
     getent passwd "$name-koha" > /dev/null && deluser --quiet "$name-koha"
     # in case the site has already been disabled, we don't want to break the loop now.
-    a2dissite "$name" | /bin/true
+    a2dissite "$name" || /bin/true
 done
 
 service apache2 restart
