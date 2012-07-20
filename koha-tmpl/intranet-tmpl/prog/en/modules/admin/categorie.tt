@@ -306,7 +306,7 @@ Confirm Deletion of Category [% categorycode |html %][% END %]</legend>
 			<tr>
                         <td>[% loo.categorycode |html %]</td>
                         <td>
-                            <a href="[% loo.script_name %]?op=add_form&amp;categorycode=[% loo.categorycode |url %]">[% loo.description |html %]</a>
+                            <a href="[% loo.script_name %]?op=add_form&amp;categorycode=[% loo.categorycode |uri %]">[% loo.description |html %]</a>
                         </td>
                         <td>
                             [% IF ( loo.type_A ) %]Adult[% END %]
@@ -353,8 +353,8 @@ Confirm Deletion of Category [% categorycode |html %][% END %]</legend>
                             [% END %]
                         </td>
                         [% END %]
-                        <td><a href="[% loo.script_name %]?op=add_form&amp;categorycode=[% loo.categorycode |url %]">Edit</a></td>
-						<td><a href="[% loo.script_name %]?op=delete_confirm&amp;categorycode=[% loo.categorycode |url %]">Delete</a></td>
+                        <td><a href="[% loo.script_name %]?op=add_form&amp;categorycode=[% loo.categorycode |uri %]">Edit</a></td>
+                        <td><a href="[% loo.script_name %]?op=delete_confirm&amp;categorycode=[% loo.categorycode |uri %]">Delete</a></td>
 		</tr>
 		[% END %]
 	</table>
