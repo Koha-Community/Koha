@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zh-Hans-TW-i-opac-t-prog-v-3000000\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-14 16:44+0200\n"
+"POT-Creation-Date: 2012-07-16 09:36+0200\n"
 "PO-Revision-Date: 2012-05-23 20:57+0800\n"
 "Last-Translator: 毛慶禎 <mao@lins.fju.edu.tw>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
@@ -267,7 +267,7 @@ msgstr ""
 #: opac-tmpl/prog/en/modules/opac-results.tt:603
 #: opac-tmpl/prog/en/modules/opac-results.tt:604
 #: opac-tmpl/prog/en/modules/opac-results.tt:606
-#: opac-tmpl/prog/en/modules/opac-showmarc.tt:5
+#: opac-tmpl/prog/en/modules/opac-showmarc.tt:6
 #: opac-tmpl/prog/en/modules/opac-authoritiesdetail.tt:48
 #: opac-tmpl/prog/en/modules/opac-authoritiesdetail.tt:53
 #: opac-tmpl/prog/en/modules/opac-authoritiesdetail.tt:66
@@ -695,6 +695,9 @@ msgstr "%s"
 #: opac-tmpl/prog/en/includes/opac-bottom.inc:4
 #: opac-tmpl/prog/en/includes/opac-bottom.inc:23
 #: opac-tmpl/prog/en/includes/opac-bottom.inc:35
+#: opac-tmpl/prog/en/includes/opac-bottom.inc:51
+#: opac-tmpl/prog/en/includes/opac-bottom.inc:53
+#: opac-tmpl/prog/en/includes/opac-bottom.inc:55
 #: opac-tmpl/prog/en/includes/masthead.inc:1
 #: opac-tmpl/prog/en/includes/masthead.inc:3
 #: opac-tmpl/prog/en/includes/masthead.inc:13
@@ -1703,7 +1706,7 @@ msgstr "%s %s"
 #: opac-tmpl/prog/en/includes/resort_form.inc:50
 #: opac-tmpl/prog/en/includes/resort_form.inc:62
 #: opac-tmpl/prog/en/includes/item-status.inc:31
-#: opac-tmpl/prog/en/includes/opac-bottom.inc:53
+#: opac-tmpl/prog/en/includes/opac-bottom.inc:58
 #: opac-tmpl/prog/en/includes/masthead.inc:5
 #: opac-tmpl/prog/en/includes/masthead.inc:7
 #: opac-tmpl/prog/en/includes/masthead.inc:42
@@ -3209,8 +3212,8 @@ msgid ""
 "entered incorrectly. If this problem persists, please ask a librarian to re-"
 "set your password for you. %s "
 msgstr ""
-"%s 密碼錯誤，請重新輸入新密碼。 %s %s 新密碼至少應有 %s 字元 %s %s 您現在的密碼"
-"不對。還有問題，請洽圖書館員協助。 %s "
+"%s 密碼錯誤，請重新輸入新密碼。 %s %s 新密碼至少應有 %s 字元 %s %s 您現在的密"
+"碼不對。還有問題，請洽圖書館員協助。 %s "
 
 #. %1$s:  END 
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:144
@@ -3904,8 +3907,7 @@ msgstr "%s%s%s%s%s"
 msgid ""
 "%s%s%s%s%sKoha online%s%sKoha online%s catalog &rsaquo; Your messaging "
 "settings %s "
-msgstr ""
-"%s%s%s%s%s Koha 線上%s%sKoha 線上%s 目錄 &rsaquo; 您的訊息設定 %s "
+msgstr "%s%s%s%s%s Koha 線上%s%sKoha 線上%s 目錄 &rsaquo; 您的訊息設定 %s "
 
 #. %1$s:  INCLUDE 'doc-head-open.inc' 
 #. %2$s:  IF ( LibraryNameTitle ) 
@@ -4625,10 +4627,9 @@ msgid "%sLimit to "
 msgstr "%s限制範圍"
 
 #. %1$s:  INCLUDE 'doc-head-open.inc' 
-#. %2$s:  INCLUDE 'doc-head-close.inc' 
 #: opac-tmpl/prog/en/modules/opac-showmarc.tt:1
-#, c-format
-msgid "%sMARC view%s "
+#, fuzzy, c-format
+msgid "%sMARC view "
 msgstr "%s檢視機讀編目格式%s "
 
 #. %1$s:  IF ( ERROR.scrubbed ) 
@@ -4647,8 +4648,8 @@ msgid ""
 "comment. Please add content or cancel.%s "
 msgstr ""
 "%s說明：您的評論有不適用的語法，已經被標示為移除；然後，您可以再編輯或取消"
-"它。%s %s錯誤！您的評論完全不適用，沒有加入。%s %s錯誤！不能有空白的評論，"
-"請加入內容或取消它。%s "
+"它。%s %s錯誤！您的評論完全不適用，沒有加入。%s %s錯誤！不能有空白的評論，請"
+"加入內容或取消它。%s "
 
 #. %1$s:  ELSIF ( OVERDUE.onreserve ) 
 #. %2$s:  ELSE 
@@ -6378,7 +6379,6 @@ msgid "According to our records, we don't have up-to-date %s"
 msgstr "根據我們的記錄，還沒有更新 %s"
 
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:36
-#: opac-tmpl/prog/en/modules/opac-topissues.tt:123
 #, c-format
 msgid "Acquired in the last:"
 msgstr "最近採訪的館藏："
@@ -9149,8 +9149,8 @@ msgid ""
 "which can be imported into personal bibliographic software like EndNote, "
 "Reference Manager or ProCite. "
 msgstr ""
-"嗨，%s %s，這是由虛擬書架寄送之線上目錄：%s。請注意附檔是機讀編目格式檔案，"
-"適用於個人書目管理軟體，例如 EndNote, Reference Manager 或是 ProCite。"
+"嗨，%s %s，這是由虛擬書架寄送之線上目錄：%s。請注意附檔是機讀編目格式檔案，適"
+"用於個人書目管理軟體，例如 EndNote, Reference Manager 或是 ProCite。"
 
 #: opac-tmpl/prog/en/modules/opac-basket.tt:148
 #, c-format
@@ -9634,7 +9634,8 @@ msgstr "工具書"
 msgid "Klikk her for tilgang "
 msgstr "Klikk her for tilgang "
 
-#: opac-tmpl/prog/en/includes/opac-bottom.inc:52
+#: opac-tmpl/prog/en/includes/opac-bottom.inc:53
+#: opac-tmpl/prog/en/includes/opac-bottom.inc:55
 #, c-format
 msgid "Koha"
 msgstr "Koha"
@@ -10977,11 +10978,11 @@ msgid "Only items currently available for loan or reference"
 msgstr "祗限可借出或參考的館藏"
 
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:78
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "Only the title is required, but the more information you enter the easier it "
-"will be for the librarians to find title you're requesting. The \"Notes\" "
-"field can be used to provide any additional information."
+"will be for the librarians to find the title you're requesting. The \"Notes"
+"\" field can be used to provide any additional information."
 msgstr ""
 "題名是必備的，請儘量填寫其他的資料，有助於館員幫您找到資料。\"附註\"可填寫任"
 "何資料。"
@@ -11387,7 +11388,8 @@ msgid ""
 "which can be imported into personal bibliographic software like EndNote, "
 "Reference Manager or ProCite."
 msgstr ""
-"請注意附檔是機讀編目格式檔案，適用於個人書目管理軟體，例如 EndNote, Reference Manager 或是 ProCite。"
+"請注意附檔是機讀編目格式檔案，適用於個人書目管理軟體，例如 EndNote, "
+"Reference Manager 或是 ProCite。"
 
 #: opac-tmpl/prog/en/modules/opac-user.tt:86
 #: opac-tmpl/prog/en/modules/opac-user.tt:95
@@ -11445,7 +11447,7 @@ msgstr "發表或是編輯您對這個館藏的書評。"
 msgid "Postkort"
 msgstr "Postkort"
 
-#: opac-tmpl/prog/en/includes/opac-bottom.inc:52
+#: opac-tmpl/prog/en/includes/opac-bottom.inc:50
 #, c-format
 msgid "Powered by "
 msgstr "使用"
@@ -12072,8 +12074,8 @@ msgid ""
 "item. The checked-out item should appear in your checkouts list. The Submit "
 "button only needs to be clicked if you enter the barcode manually."
 msgstr ""
-"掃瞄每一個館藏，進入下個館藏之前，需等待頁面重置。借出的館藏應該出現在您的借出"
-"清單上。手動輸入登錄號時，才需要點選送出。"
+"掃瞄每一個館藏，進入下個館藏之前，需等待頁面重置。借出的館藏應該出現在您的借"
+"出清單上。手動輸入登錄號時，才需要點選送出。"
 
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:115
 #: opac-tmpl/prog/en/modules/opac-results.tt:277
@@ -12514,8 +12516,7 @@ msgstr "顯示更多"
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1173
 msgid ""
 "Show pagination list ([% indexPag %]-[% indexPagEnd %] / [% totalPag %])"
-msgstr ""
-"顯示頁碼 ([% indexPag %]-[% indexPagEnd %] / [% totalPag %])"
+msgstr "顯示頁碼 ([% indexPag %]-[% indexPagEnd %] / [% totalPag %])"
 
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:5
 #: opac-tmpl/prog/en/modules/opac-topissues.tt:90
@@ -13233,20 +13234,19 @@ msgstr "此訂閱的最新 %s 期："
 #. %1$s:  limit 
 #. %2$s:  IF ( itemtype ) 
 #. %3$s:  itemtype 
-#. %4$s:  ELSE 
-#. %5$s:  END 
-#. %6$s:  IF ( branch ) 
-#. %7$s:  branch 
-#. %8$s:  END 
-#. %9$s:  IF ( timeLimitFinite ) 
-#. %10$s:  timeLimitFinite 
-#. %11$s:  ELSE 
-#. %12$s:  END 
+#. %4$s:  END 
+#. %5$s:  IF ( branch ) 
+#. %6$s:  branch 
+#. %7$s:  END 
+#. %8$s:  IF ( timeLimitFinite ) 
+#. %9$s:  timeLimitFinite 
+#. %10$s:  ELSE 
+#. %11$s:  END 
 #: opac-tmpl/prog/en/modules/opac-topissues.tt:52
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"The %s most checked-out %s %s %s titles%s %s at %s %s %s in the past %s "
-"months %s of all time%s "
+"The %s most checked-out %s %s %s %s at %s %s %s in the past %s months %s of "
+"all time%s "
 msgstr ""
 " %s 是最熱門的借出館藏 %s %s %s 題名 %s %s 在 %s %s %s 過去 %s 月內 %s 過去的"
 "時間裡 %s "
@@ -14333,6 +14333,11 @@ msgstr "借出籃是空的。"
 msgid "Your comment "
 msgstr "您的書評"
 
+#. SCRIPT
+#: opac-tmpl/prog/en/modules/opac-review.tt:6
+msgid "Your comment (preview, pending approval)"
+msgstr ""
+
 #: opac-tmpl/prog/en/modules/opac-user.tt:82
 #, c-format
 msgid ""
@@ -14345,6 +14350,11 @@ msgstr "您的修正資料已經送出，館員將盡速幫您處理。"
 #, c-format
 msgid "Your download should begin automatically."
 msgstr "您的下載將自動開始。"
+
+#. SCRIPT
+#: opac-tmpl/prog/en/modules/opac-review.tt:6
+msgid "Your edited comment (preview, pending approval)"
+msgstr ""
 
 #: opac-tmpl/prog/en/modules/opac-user.tt:101
 #, c-format
@@ -16093,6 +16103,11 @@ msgstr "副題名，"
 msgid "of summary, "
 msgstr "摘要，"
 
+#: opac-tmpl/prog/en/modules/opac-topissues.tt:123
+#, c-format
+msgid "of the the last:"
+msgstr ""
+
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:152
 #, c-format
 msgid "of title page, "
@@ -16735,6 +16750,7 @@ msgstr "活頁裝"
 #. META http-equiv=Content-Type
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:2
 #: opac-tmpl/prog/en/modules/opac-basket.tt:4
+#: opac-tmpl/prog/en/modules/opac-showmarc.tt:2
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:3
 #: opac-tmpl/prog/en/modules/sco/help.tt:2
 msgid "text/html; charset=utf-8"
@@ -17113,4 +17129,3 @@ msgstr ""
 #, c-format
 msgid "• "
 msgstr "• "
-

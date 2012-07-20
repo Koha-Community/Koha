@@ -2,8 +2,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Improved German Koha Translation\n"
-"POT-Creation-Date: 2012-06-14 16:36+0200\n"
-"PO-Revision-Date: 2012-06-14 21:19+0200\n"
+"POT-Creation-Date: 2012-07-16 09:32+0200\n"
+"PO-Revision-Date: 2012-07-16 13:32+0200\n"
 "Last-Translator: Katrin <katrin.fischer@bsz-bw.de>\n"
 "Language-Team: Koha Translation Team <koha-translate@lists.koha-"
 "community.org>\n"
@@ -265,7 +265,7 @@ msgstr ""
 #: opac-tmpl/prog/en/modules/opac-results.tt:603
 #: opac-tmpl/prog/en/modules/opac-results.tt:604
 #: opac-tmpl/prog/en/modules/opac-results.tt:606
-#: opac-tmpl/prog/en/modules/opac-showmarc.tt:5
+#: opac-tmpl/prog/en/modules/opac-showmarc.tt:6
 #: opac-tmpl/prog/en/modules/opac-authoritiesdetail.tt:48
 #: opac-tmpl/prog/en/modules/opac-authoritiesdetail.tt:53
 #: opac-tmpl/prog/en/modules/opac-authoritiesdetail.tt:66
@@ -693,6 +693,9 @@ msgstr "%s"
 #: opac-tmpl/prog/en/includes/opac-bottom.inc:4
 #: opac-tmpl/prog/en/includes/opac-bottom.inc:23
 #: opac-tmpl/prog/en/includes/opac-bottom.inc:35
+#: opac-tmpl/prog/en/includes/opac-bottom.inc:51
+#: opac-tmpl/prog/en/includes/opac-bottom.inc:53
+#: opac-tmpl/prog/en/includes/opac-bottom.inc:55
 #: opac-tmpl/prog/en/includes/masthead.inc:1
 #: opac-tmpl/prog/en/includes/masthead.inc:3
 #: opac-tmpl/prog/en/includes/masthead.inc:13
@@ -1701,7 +1704,7 @@ msgstr "%s %s"
 #: opac-tmpl/prog/en/includes/resort_form.inc:50
 #: opac-tmpl/prog/en/includes/resort_form.inc:62
 #: opac-tmpl/prog/en/includes/item-status.inc:31
-#: opac-tmpl/prog/en/includes/opac-bottom.inc:53
+#: opac-tmpl/prog/en/includes/opac-bottom.inc:58
 #: opac-tmpl/prog/en/includes/masthead.inc:5
 #: opac-tmpl/prog/en/includes/masthead.inc:7
 #: opac-tmpl/prog/en/includes/masthead.inc:42
@@ -4647,11 +4650,10 @@ msgid "%sLimit to "
 msgstr "%sEingrenzen auf "
 
 #. %1$s:  INCLUDE 'doc-head-open.inc' 
-#. %2$s:  INCLUDE 'doc-head-close.inc' 
 #: opac-tmpl/prog/en/modules/opac-showmarc.tt:1
 #, c-format
-msgid "%sMARC view%s "
-msgstr "%sMARC%s "
+msgid "%sMARC view "
+msgstr "%sMARC "
 
 #. %1$s:  IF ( ERROR.scrubbed ) 
 #. %2$s:  END 
@@ -6415,7 +6417,6 @@ msgid "According to our records, we don't have up-to-date %s"
 msgstr "Nach unseren Unterlagen haben wir keine aktuellen %s"
 
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:36
-#: opac-tmpl/prog/en/modules/opac-topissues.tt:123
 #, c-format
 msgid "Acquired in the last:"
 msgstr "Erworben in den letzten:"
@@ -9724,7 +9725,8 @@ msgstr "Medienkombination"
 msgid "Klikk her for tilgang "
 msgstr "Klikk her for tilgang "
 
-#: opac-tmpl/prog/en/includes/opac-bottom.inc:52
+#: opac-tmpl/prog/en/includes/opac-bottom.inc:53
+#: opac-tmpl/prog/en/includes/opac-bottom.inc:55
 #, c-format
 msgid "Koha"
 msgstr "Koha"
@@ -11084,10 +11086,10 @@ msgstr "Nur aktuell verfügbare Exemplare"
 #, c-format
 msgid ""
 "Only the title is required, but the more information you enter the easier it "
-"will be for the librarians to find title you're requesting. The \"Notes\" "
-"field can be used to provide any additional information."
+"will be for the librarians to find the title you're requesting. The \"Notes"
+"\" field can be used to provide any additional information."
 msgstr ""
-"Es ist nur der Titel erforderlich, aber je mehr Informationen Sie eingeben, "
+"Nur der Titel ist ein Pflichtfeld, aber je mehr Informationen Sie eingeben, "
 "um so leichter wird es für die Bibliothek den Titel zu finden, den Sie "
 "vorgeschlagen haben. Das Notizfeld kann verwendet werden um zusätzliche "
 "Informationen anzugeben."
@@ -11567,7 +11569,7 @@ msgstr "Verfassen oder bearbeiten Sie Kommentare zu diesem Titel. "
 msgid "Postkort"
 msgstr "Postkort"
 
-#: opac-tmpl/prog/en/includes/opac-bottom.inc:52
+#: opac-tmpl/prog/en/includes/opac-bottom.inc:50
 #, c-format
 msgid "Powered by "
 msgstr "Powered by "
@@ -13371,23 +13373,22 @@ msgstr "Die letzten %s Hefte für dieses Abonnement:"
 #. %1$s:  limit 
 #. %2$s:  IF ( itemtype ) 
 #. %3$s:  itemtype 
-#. %4$s:  ELSE 
-#. %5$s:  END 
-#. %6$s:  IF ( branch ) 
-#. %7$s:  branch 
-#. %8$s:  END 
-#. %9$s:  IF ( timeLimitFinite ) 
-#. %10$s:  timeLimitFinite 
-#. %11$s:  ELSE 
-#. %12$s:  END 
+#. %4$s:  END 
+#. %5$s:  IF ( branch ) 
+#. %6$s:  branch 
+#. %7$s:  END 
+#. %8$s:  IF ( timeLimitFinite ) 
+#. %9$s:  timeLimitFinite 
+#. %10$s:  ELSE 
+#. %11$s:  END 
 #: opac-tmpl/prog/en/modules/opac-topissues.tt:52
 #, c-format
 msgid ""
-"The %s most checked-out %s %s %s titles%s %s at %s %s %s in the past %s "
-"months %s of all time%s "
+"The %s most checked-out %s %s %s %s at %s %s %s in the past %s months %s of "
+"all time%s "
 msgstr ""
-"Die %s am häufigsten entliehenen %s %s %s Titel%s %s in %s %s %s der "
-"vergangenen %s Monate %s aller Zeiten%s "
+"Die %s meist entliehenen %s %s %s %s in %s %s %s der vergangenen %s Monate %"
+"s seit Aufzeichnung%s "
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -14517,6 +14518,11 @@ msgstr "Ihre Korb ist leer."
 msgid "Your comment "
 msgstr "Ihr Kommentar "
 
+#. SCRIPT
+#: opac-tmpl/prog/en/modules/opac-review.tt:6
+msgid "Your comment (preview, pending approval)"
+msgstr "Ihr Kommentar (Vorschau, wartet auf Moderation)"
+
 #: opac-tmpl/prog/en/modules/opac-user.tt:82
 #, c-format
 msgid ""
@@ -14531,6 +14537,11 @@ msgstr ""
 #, c-format
 msgid "Your download should begin automatically."
 msgstr "Der Download sollte automatisch beginnen."
+
+#. SCRIPT
+#: opac-tmpl/prog/en/modules/opac-review.tt:6
+msgid "Your edited comment (preview, pending approval)"
+msgstr "Ihr bearbeiteter Kommentar (Vorschau, wartet auf Moderation)"
 
 #: opac-tmpl/prog/en/modules/opac-user.tt:101
 #, c-format
@@ -16294,6 +16305,11 @@ msgstr "der Untertitel, "
 msgid "of summary, "
 msgstr "der Übersicht, "
 
+#: opac-tmpl/prog/en/modules/opac-topissues.tt:123
+#, c-format
+msgid "of the the last:"
+msgstr "der letzten:"
+
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:152
 #, c-format
 msgid "of title page, "
@@ -16946,6 +16962,7 @@ msgstr "Text im Loseblatthefter "
 #. META http-equiv=Content-Type
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:2
 #: opac-tmpl/prog/en/modules/opac-basket.tt:4
+#: opac-tmpl/prog/en/modules/opac-showmarc.tt:2
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:3
 #: opac-tmpl/prog/en/modules/sco/help.tt:2
 msgid "text/html; charset=utf-8"

@@ -8,7 +8,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: nn-NO-i-opac-t-prog-v-3000000\n"
-"POT-Creation-Date: 2012-06-14 16:50+0200\n"
+"POT-Creation-Date: 2012-07-16 09:41+0200\n"
 "PO-Revision-Date: 2011-11-04 08:45+0200\n"
 "Last-Translator: gangagiri <amsvrama@gmail.com>\n"
 "Language-Team: Norwegian bokmål <i18n-nb@lister.pping.uio.no>\n"
@@ -268,7 +268,7 @@ msgstr ""
 #: opac-tmpl/prog/en/modules/opac-results.tt:603
 #: opac-tmpl/prog/en/modules/opac-results.tt:604
 #: opac-tmpl/prog/en/modules/opac-results.tt:606
-#: opac-tmpl/prog/en/modules/opac-showmarc.tt:5
+#: opac-tmpl/prog/en/modules/opac-showmarc.tt:6
 #: opac-tmpl/prog/en/modules/opac-authoritiesdetail.tt:48
 #: opac-tmpl/prog/en/modules/opac-authoritiesdetail.tt:53
 #: opac-tmpl/prog/en/modules/opac-authoritiesdetail.tt:66
@@ -696,6 +696,9 @@ msgstr "%s,"
 #: opac-tmpl/prog/en/includes/opac-bottom.inc:4
 #: opac-tmpl/prog/en/includes/opac-bottom.inc:23
 #: opac-tmpl/prog/en/includes/opac-bottom.inc:35
+#: opac-tmpl/prog/en/includes/opac-bottom.inc:51
+#: opac-tmpl/prog/en/includes/opac-bottom.inc:53
+#: opac-tmpl/prog/en/includes/opac-bottom.inc:55
 #: opac-tmpl/prog/en/includes/masthead.inc:1
 #: opac-tmpl/prog/en/includes/masthead.inc:3
 #: opac-tmpl/prog/en/includes/masthead.inc:13
@@ -1704,7 +1707,7 @@ msgstr "%s, %s"
 #: opac-tmpl/prog/en/includes/resort_form.inc:50
 #: opac-tmpl/prog/en/includes/resort_form.inc:62
 #: opac-tmpl/prog/en/includes/item-status.inc:31
-#: opac-tmpl/prog/en/includes/opac-bottom.inc:53
+#: opac-tmpl/prog/en/includes/opac-bottom.inc:58
 #: opac-tmpl/prog/en/includes/masthead.inc:5
 #: opac-tmpl/prog/en/includes/masthead.inc:7
 #: opac-tmpl/prog/en/includes/masthead.inc:42
@@ -4613,10 +4616,9 @@ msgid "%sLimit to "
 msgstr "Avgrensa til:"
 
 #. %1$s:  INCLUDE 'doc-head-open.inc' 
-#. %2$s:  INCLUDE 'doc-head-close.inc' 
 #: opac-tmpl/prog/en/modules/opac-showmarc.tt:1
 #, fuzzy, c-format
-msgid "%sMARC view%s "
+msgid "%sMARC view "
 msgstr "MARC-vising"
 
 #. %1$s:  IF ( ERROR.scrubbed ) 
@@ -6129,7 +6131,6 @@ msgid "According to our records, we don't have up-to-date %s"
 msgstr ""
 
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:36
-#: opac-tmpl/prog/en/modules/opac-topissues.tt:123
 #, c-format
 msgid "Acquired in the last:"
 msgstr "Skaffa siste:"
@@ -9419,7 +9420,8 @@ msgstr "Sett"
 msgid "Klikk her for tilgang "
 msgstr ""
 
-#: opac-tmpl/prog/en/includes/opac-bottom.inc:52
+#: opac-tmpl/prog/en/includes/opac-bottom.inc:53
+#: opac-tmpl/prog/en/includes/opac-bottom.inc:55
 #, fuzzy, c-format
 msgid "Koha"
 msgstr "Bibliotekkatalogen på nettet"
@@ -10780,8 +10782,8 @@ msgstr "Berre eksemplar som er tilgjengelege no"
 #, fuzzy, c-format
 msgid ""
 "Only the title is required, but the more information you enter the easier it "
-"will be for the librarians to find title you're requesting. The \"Notes\" "
-"field can be used to provide any additional information."
+"will be for the librarians to find the title you're requesting. The \"Notes"
+"\" field can be used to provide any additional information."
 msgstr ""
 "Ingen av felta er obligatoriske. Skriv inn den informasjonen du har. Bruk "
 "merknadsfeltet til tilleggsinformasjon."
@@ -11254,7 +11256,7 @@ msgstr "Legg inn eller rediger kommentarane dine til dette dokumentet."
 msgid "Postkort"
 msgstr ""
 
-#: opac-tmpl/prog/en/includes/opac-bottom.inc:52
+#: opac-tmpl/prog/en/includes/opac-bottom.inc:50
 #, fuzzy, c-format
 msgid "Powered by "
 msgstr "Utgjeve av"
@@ -13062,20 +13064,19 @@ msgstr "Dei tre siste nummera av dette abonnementet:"
 #. %1$s:  limit 
 #. %2$s:  IF ( itemtype ) 
 #. %3$s:  itemtype 
-#. %4$s:  ELSE 
-#. %5$s:  END 
-#. %6$s:  IF ( branch ) 
-#. %7$s:  branch 
-#. %8$s:  END 
-#. %9$s:  IF ( timeLimitFinite ) 
-#. %10$s:  timeLimitFinite 
-#. %11$s:  ELSE 
-#. %12$s:  END 
+#. %4$s:  END 
+#. %5$s:  IF ( branch ) 
+#. %6$s:  branch 
+#. %7$s:  END 
+#. %8$s:  IF ( timeLimitFinite ) 
+#. %9$s:  timeLimitFinite 
+#. %10$s:  ELSE 
+#. %11$s:  END 
 #: opac-tmpl/prog/en/modules/opac-topissues.tt:52
 #, c-format
 msgid ""
-"The %s most checked-out %s %s %s titles%s %s at %s %s %s in the past %s "
-"months %s of all time%s "
+"The %s most checked-out %s %s %s %s at %s %s %s in the past %s months %s of "
+"all time%s "
 msgstr ""
 
 #. %1$s:  IF ( LibraryNameTitle ) 
@@ -14185,6 +14186,11 @@ msgstr "Korga er tom."
 msgid "Your comment "
 msgstr "Kommentar:"
 
+#. SCRIPT
+#: opac-tmpl/prog/en/modules/opac-review.tt:6
+msgid "Your comment (preview, pending approval)"
+msgstr ""
+
 #: opac-tmpl/prog/en/modules/opac-user.tt:82
 #, c-format
 msgid ""
@@ -14198,6 +14204,11 @@ msgstr ""
 #: opac-tmpl/prog/en/modules/opac-downloadshelf.tt:13
 #, c-format
 msgid "Your download should begin automatically."
+msgstr ""
+
+#. SCRIPT
+#: opac-tmpl/prog/en/modules/opac-review.tt:6
+msgid "Your edited comment (preview, pending approval)"
 msgstr ""
 
 #: opac-tmpl/prog/en/modules/opac-user.tt:101
@@ -15961,6 +15972,11 @@ msgstr "10 titlar"
 msgid "of summary, "
 msgstr "Oversikt"
 
+#: opac-tmpl/prog/en/modules/opac-topissues.tt:123
+#, c-format
+msgid "of the the last:"
+msgstr ""
+
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:152
 #, c-format
 msgid "of title page, "
@@ -16609,6 +16625,7 @@ msgstr ""
 #. META http-equiv=Content-Type
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:2
 #: opac-tmpl/prog/en/modules/opac-basket.tt:4
+#: opac-tmpl/prog/en/modules/opac-showmarc.tt:2
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:3
 #: opac-tmpl/prog/en/modules/sco/help.tt:2
 #, fuzzy
