@@ -163,7 +163,7 @@ opacdomain="$OPACPREFIX$name$OPACSUFFIX$DOMAIN"
 intradomain="$INTRAPREFIX$name$INTRASUFFIX$DOMAIN"
 
 
-if [ `cat $PASSWDFILE | grep "^$name:"` ]
+if [ -f $PASSWDFILE ] && [ `cat $PASSWDFILE | grep "^$name:"` ]
 then
     passwdline=`cat $PASSWDFILE | grep "^$name:"`
     mysqluser=`echo $passwdline | cut -d ":" -f 2`
@@ -221,11 +221,15 @@ then
 
     # Generate Zebra database password.
     zebrapwd="$(pwgen -s 12 1)"
+    # Future enhancement: make this configurable for when your db is on
+    # another server.
+    mysql_hostname="localhost"
     # Set up MySQL database for this instance.
     if [ "$op" = create ]
     then
         mysql --defaults-extra-file=/etc/mysql/koha-common.cnf <<eof
 CREATE DATABASE \`$mysqldb\`;
+CREATE USER \`$mysqluser\`@'$mysql_hostname' IDENTIFIED BY '$mysqlpwd';
 CREATE USER \`$mysqluser\`@'%' IDENTIFIED BY '$mysqlpwd';
 GRANT ALL PRIVILEGES ON \`$mysqldb\`.* TO \`$mysqluser\`;
 FLUSH PRIVILEGES;
@@ -235,6 +239,7 @@ eof
     if [ "$op" = use ]
     then
         mysql --defaults-extra-file=/etc/mysql/koha-common.cnf --force <<eof
+CREATE USER \`$mysqluser\`@'$mysql_hostname' IDENTIFIED BY '$mysqlpwd';
 CREATE USER \`$mysqluser\`@'%' IDENTIFIED BY '$mysqlpwd';
 GRANT ALL PRIVILEGES ON \`$mysqldb\`.* TO \`$mysqluser\`;
 FLUSH PRIVILEGES;
