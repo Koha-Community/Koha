@@ -147,22 +147,20 @@ foreach my $biblioNumber (@biblionumbers) {
         $itemInfoHash{$itemInfo->{itemnumber}} = $itemInfo;
     }
 
-    if ($show_holds_count) {
-        # Compute the priority rank.
-        my ( $rank, $reserves ) = GetReservesFromBiblionumber($biblioNumber,1);
-        $biblioData->{reservecount} = 1; # new reserve
-        foreach my $res (@$reserves) {
-            my $found = $res->{'found'};
-            if ( $found && ($found eq 'W') ) {
-                $rank--;
-            }
-            else {
-                $biblioData->{reservecount}++;
-            }
+    # Compute the priority rank.
+    my ( $rank, $reserves ) =
+      GetReservesFromBiblionumber( $biblioNumber, 1 );
+    $biblioData->{reservecount} = 1;    # new reserve
+    foreach my $res (@{$reserves}) {
+        my $found = $res->{found};
+        if ( $found && $found eq 'W' ) {
+            $rank--;
         }
-        $rank++;
-        $biblioData->{rank} = $rank;
+        else {
+            $biblioData->{reservecount}++;
+        }
     }
+    $biblioData->{rank} = $rank + 1;
 }
 
 #
