@@ -4688,7 +4688,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.06.05.001";
+$DBversion = "3.06.06.001";
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     unless(C4::Context->preference('ReservesControlBranch')){
         $dbh->do("INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES ('ReservesControlBranch','PatronLibrary','ItemHomeLibrary|PatronLibrary','Branch checked for members reservations rights.','Choice')");
@@ -4696,6 +4696,13 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     print "Upgrade to $DBversion done (Insert ReservesControlBranch systempreference into systempreferences table )\n";
     SetVersion($DBversion);
 }
+
+$DBversion = "3.06.07.000";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    print "Upgrade to $DBversion done (Incrementing version for 3.6.7 release. See release notes for details.) \n";
+    SetVersion ($DBversion);
+}
+
 
 =head1 FUNCTIONS
 
