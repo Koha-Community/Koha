@@ -1,0 +1,212 @@
+RELEASE NOTES FOR KOHA 3.6.7
+21 Jul 2012
+========================================================================
+
+Koha is the first free and open source software library automation package 
+(ILS). Development is sponsored by libraries of varying types and sizes, 
+volunteers, and support companies from around the world.  
+The website for the Koha project is 
+
+    http://koha-community.org/
+
+Koha 3.6.7 can be downloaded from:
+
+    http://download.koha-community.org/koha-3.06.07.tar.gz
+
+Installation instructions can be found at:
+
+    http://wiki.koha-community.org/wiki/Installation_Documentation
+    
+    OR in the INSTALL files that come in the tarball
+
+Koha 3.6.7 is a bugfix/maintenance release.
+
+Highlights of 3.6.7
+======================
+
+7894	blocker		Broken detail page for first link on page 2 from search result page in OPAC
+8140	blocker		Error when exporting label xml
+8144	critical	775 tag in the MARC record causes display issue
+8082	major		The:  IssuingInProcess  configuration setting is working in reverse.
+8201	major		can't change receive date
+
+
+Bugs fixed in 3.6.7
+======================
+
+3638	normal		Status of hold not changed when item checked in via SIP2 Interface
+4330	normal		Copyright statements out of date
+5795	normal		Missing ReservesControlBranch system pref in database installer
+7548	normal		Missing arguments in the pagination of receptions
+7599	normal		Cart JavaScript contains untranslatable English strings
+7604	normal		Link on basket group name for closed basket groups is broken
+8111	normal		Language chooser display problem in self-checkout
+8116	normal		z3950 empty search causes silent warning in koha-error_log
+8176	normal		$sqlwhere is undefined in C4::Serials in GetSubscriptions
+7948	minor	Printing transfer slip loses barcode field focus
+3521	trivial	Items table in catalogue/detail.pl and cataloguing/additem.pl is sorted nonsensically
+7496	trivial	Personally identifying information sent in opac user TITLE
+6684	enhancement	koha-remove should check the number of arguments it gets
+7847	enhancement	OPAC search dies with plack
+8001	enhancement	Add some styling to the tags to allow them to be distinctive
+8080	enhancement	login and password is pre-filled by the browser when creating a new patron
+8489	enhancement	Revised ubuntu-pkg-check.sh, renamed ubuntu package files, tweaked 12.04 package file, copied 12.04 package file to ubuntu.packages
+
+
+New sysprefs in 3.6.7
+======================
+
+  * ReservesControlBranch
+
+
+System requirements
+======================
+
+    Important notes:
+    
+    * Perl 5.10 is required
+    * Zebra is required
+
+
+Documentation
+======================
+
+As of Koha 3.2, the Koha manual is now maintained in DocBook.  The
+home page for Koha documentation is 
+
+    http://koha-community.org/documentation/
+
+As of the date of these release notes, only the English version of the
+Koha manual is available:
+
+    http://manual.koha-community.org/3.6/en/
+
+The Git repository for the Koha manual can be found at
+
+    http://git.koha-community.org/gitweb/?p=kohadocs.git;a=summary
+
+Translations
+======================
+
+Complete or near-complete translations of the OPAC and staff
+interface are available in this release for the following languages:
+
+  * Arabic (51%)
+  * Chinese (China) (96%)
+  * Chinese (Taiwan) (99%)
+  * Danish (99%)
+  * English (New Zealand) (97%)
+  * English (USA)
+  * English (United Kingdom) (64%)
+  * French (99%)
+  * French (Canada) (95%)
+  * German (100%)
+  * Greek (94%)
+  * Italian (100%)
+  * Norwegian Bokmål (62%)
+  * Portuguese (Brazil) (99%)
+  * Spanish (100%)
+  * Tetun (52%)
+
+Partial translations are available for various other languages.
+
+The Koha team welcomes additional translations; please see
+
+    http://wiki.koha-community.org/wiki/Translating_Koha
+
+for information about translating Koha, and join the koha-translate 
+list to volunteer:
+
+    http://lists.koha-community.org/cgi-bin/mailman/listinfo/koha-translate
+
+The most up-to-date translations can be found at:
+
+    http://translate.koha-community.org/
+
+Release Team
+======================
+
+The release team for Koha 3.6 is
+
+Release Manager:        Chris Cormack <chrisc@catalyst.net.nz>
+Documentation Manager:  Nicole C Engard <nengard@gmail.com>
+Translation Manager:    Frédéric Demians <frederic@tamil.fr>
+QA Manager:             Ian Walls <ian.walls@bywatersolutions.com>
+Bug Wranglers:          MJ Ray, Marcel de Rooy, Paul Poulain, Mason James
+
+Past Release Maintainer (3.6.x):
+                        Chris Nighswonger <cnighswonger@foundations.edu>
+Release Maintainer (3.6.x):
+                        Jared Camins-Esakov <jcamins@cpbibliography.com>
+
+Credits
+======================
+
+
+We thank the following libraries who are known to have sponsored
+new features in Koha 3.6:
+  * Arcadia Public Library
+  * Athens County Public Libraries
+  * East Brunswick Public Library
+  * Halton Borough Council
+  * Horowhenua Library Trust
+  * Los Gatos Public Library
+  * NEKLS
+  * South Taranaki District Council
+
+We thank the following individuals who contributed patches to Koha 3.6.7.
+     4	Jared Camins-Esakov
+     3	Colin Campbell
+     7	Chris Cormack
+     1	Frédéric Demians
+     4	Katrin Fischer
+     1	Amit Gupta
+     4	Kyle M Hall
+     1	Piotr Kowalski
+     3	Owen Leonard
+     3	Paul Poulain
+     1	MJ Ray
+     1	Robin Sheat
+     1	Simon Story
+     1	Mark Tompsett
+
+
+We also especially thank the following individuals who tested patches
+for Koha 3.6.7.
+
+     39 Jared Camins-Esakov
+     33 Chris Cormack
+      3 Jonathan Druart
+      2 Magnus Enger
+     23 Paul Poulain
+      2 MJ Ray
+      5 Liz Rea
+      1 Marc Veron
+
+We regret any omissions.  If a contributor has been inadvertantly missed,
+please send a patch against these release notes to 
+koha-patches@lists.koha-community.org.
+
+Revision control notes
+======================
+
+The Koha project uses Git for version control.  The current development 
+version of Koha can be retrieved by checking out the master branch of 
+
+    git://git.koha-community.org/koha.git
+
+The branch for this version of Koha and future bugfixes in this release
+line is 3.6.x.
+
+The last Koha release was 3.8.0, which was released on April 22, 2012.
+
+Bugs and feature requests
+======================
+
+Bug reports and feature requests can be filed at the Koha bug
+tracker at
+
+    http://bugs.koha-community.org/
+
+
+Ehara taku toa i te toa takitahi, engari he toa takitini 
