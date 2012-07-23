@@ -11,8 +11,9 @@
 <script type="text/javascript">
 //<![CDATA[
 
-    var rowsToCollapse = 5;
+    dt_overwrite_html_sorting_localeCompare();
 
+    var rowsToCollapse = 5;
     $(document).ready(function(){
         var pendingt = $("#pendingt").dataTable($.extend(true, {}, dataTablesDefaults, {
             "aoColumnDefs": [
@@ -21,7 +22,7 @@
             "aoColumns": [
                 { "sType": "num-html" },
                 { "sType": "num-html" },
-                null,
+                { "sType": "html" },
                 null,
                 null,
                 null,
@@ -38,7 +39,7 @@
             "aoColumns": [
                 { "sType": "num-html" },
                 { "sType": "num-html" },
-                null,
+                { "sType": "html" },
                 null,
                 null,
                 null,
