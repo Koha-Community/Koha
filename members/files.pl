@@ -73,7 +73,7 @@ else {
             my $filename = $cgi->param('uploadfile');
             my $mimetype = $cgi->uploadInfo($filename)->{'Content-Type'};
 
-            $errors{'empty_upload'} = 1 unless ( length($uploaded_file) > 0 );
+            $errors{'empty_upload'} = 1 if ( -z $uploaded_file );
 
             if (%errors) {
                 $template->param( errors => %errors );
@@ -103,7 +103,7 @@ else {
         files => Koha::Borrower::Files->new( borrowernumber => $borrowernumber )
           ->GetFilesInfo(),
 
-        errors => %errors
+        errors => \%errors
     );
     output_html_with_http_headers $cgi, $cookie, $template->output;
 }

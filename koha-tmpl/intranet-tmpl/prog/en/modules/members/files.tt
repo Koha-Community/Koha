@@ -17,49 +17,58 @@
 
                 <h1>Files</h1>
 
+                [% IF errors %]
+                    <div class="dialog alert">
+                        [% IF errors.empty_upload %]The file you are attempting to upload has no contents.[% END %]
+                        [% IF errors.no_file %]You did not select a file to upload.[% END %]
+                    </div>
+                [% END %]
+
+                [% IF ( files ) %]
                 <table>
                     <thead>
-                        <th>Name</th>
-                        <th>Type</th>
-                        <th>Description</th>
-                        <th>Uploaded</th>
-                        [% IF CAN_user_borrowers %]<th>&nbsp;</th>[% END %]
+                        <tr>
+                            <th>Name</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                            <th>Uploaded</th>
+                            [% IF CAN_user_borrowers %]<th>&nbsp;</th>[% END %]
+                        </tr>
                     </thead>
 
                     <tbody>
-                        [% IF errors %]
-                            <div class="error warn">
-                                [% IF errors.empty_upload %]The file you are attempting to upload has no contents.[% END %]
-                                [% IF errors.no_file %]You did not select a file to upload.[% END %]
-                            </div>
-                        [% END %]
-
                         [% FOREACH f IN files %]
                             <tr>
-                                 <td><a href="?borrowernumber=[% borrowernumber %]&op=download&file_id=[% f.file_id %]">[% f.file_name %]</a></td>
+                                 <td><a href="?borrowernumber=[% borrowernumber %]&amp;op=download&amp;file_id=[% f.file_id %]">[% f.file_name %]</a></td>
                                  <td>[% f.file_type %]</td>
                                  <td>[% f.file_description %]</td>
                                  <td>[% f.date_uploaded | $KohaDates %]</td>
-                                 [% IF CAN_user_borrowers %]<td><a href="?borrowernumber=[% borrowernumber %]&op=delete&file_id=[% f.file_id %]">Delete</a></td>[% END %]
+                                 [% IF CAN_user_borrowers %]<td><a href="?borrowernumber=[% borrowernumber %]&amp;op=delete&amp;file_id=[% f.file_id %]">Delete</a></td>[% END %]
                             </tr>
                         [% END %]
                     </tbody>
                 </table>
+                [% ELSE %]
+                <div class="dialog message">
+                    <p>This patron has no files attached.</p>
+                </div>
+                [% END %]
 
-                <form method="post" enctype="multipart/form-data">
-                    <fieldset>
+                <form method="post" action="/cgi-bin/koha/members/files.pl" enctype="multipart/form-data">
+                    <fieldset class="rows">
                         <legend>Upload New File</legend>
-
-                        <input type="hidden" name="op" value="upload" />
+                        <ol>
+                        <li><input type="hidden" name="op" value="upload" />
                         <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
                         <input type="hidden" name="MAX_FILE_SIZE" value="2000000" />
 
                         <label for="description">Description:</label>
-                        <input name="description" type="text" />
+                        <input name="description" id="description" type="text" /></li>
 
-                        <input name="uploadfile" type="file" id="uploadfile" />
+                        <li><label for="uploadfile">File:</label><input name="uploadfile" type="file" id="uploadfile" /></li>
 
-                        <input name="upload" type="submit" id="upload" value="Upload File" />
+                        </ol>
+                        <fieldset class="action"><input name="upload" type="submit" id="upload" value="Upload File" /></fieldset>
                     </fieldset>
                 </form>
 
@@ -70,5 +79,4 @@
             [% INCLUDE 'circ-menu.inc' %]
         </div>
     </div>
-</div>
 [% INCLUDE 'intranet-bottom.inc' %]
