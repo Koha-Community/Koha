@@ -5539,7 +5539,7 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
 
 
 
-$DBversion = "3.09.00.XXX";
+$DBversion = "3.09.00.026";
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     $dbh->do("INSERT INTO permissions (module_bit, code, description) VALUES
         ( 3, 'parameters_remaining_permissions', 'Remaining system parameters permissions'),
