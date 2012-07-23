@@ -366,3 +366,4 @@ INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES (
 INSERT INTO systempreferences (variable,value,explanation,type) VALUES('EnableBorrowerFiles','0','If enabled, allows librarians to upload and attach arbitrary files to a borrower record.','YesNo');
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('UpdateTotalIssuesOnCirc','0','Whether to update the totalissues field in the biblio on each circ.',NULL,'YesNo');
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('IntranetSlipPrinterJS','','Use this JavaScript for printing slips. Define at least function printThenClose(). For use e.g. with Firefox PlugIn jsPrintSetup, see http://jsprintsetup.mozdev.org/','','Free');
+INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('OpacSuppressionByIPRange','','Restrict the suppression to IP adresses outside of the IP range','','free');

@@ -5657,6 +5657,13 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = '3.09.00.033';
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+   $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('OpacSuppressionByIPRange','','Restrict the suppression to IP adresses outside of the IP range','','free');");
+   print "Upgrade to $DBversion done (Add OpacSuppressionByIPRange syspref)\n";
+   SetVersion ($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

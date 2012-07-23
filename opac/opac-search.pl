@@ -449,7 +449,17 @@ my @limit_inputs = $limit_cgi ? _input_cgi_parse($limit_cgi) : ();
 #
 # add OPAC suppression - requires at least one item indexed with Suppress
 if (C4::Context->preference('OpacSuppression')) {
-    $query = "($query) not Suppress=1";
+    # OPAC suppression by IP address
+    if (C4::Context->preference('OpacSuppressionByIPRange')) {
+        my $IPAddress = $ENV{'REMOTE_ADDR'};
+        my $IPRange = C4::Context->preference('OpacSuppressionByIPRange');
+        if ($IPAddress !~ /^$IPRange/)  {
+            $query = "($query) not Suppress=1";
+        }
+    }
+    else {
+        $query = "($query) not Suppress=1";
+    }
 }
 
 $template->param ( LIMIT_INPUTS => \@limit_inputs );
