@@ -2734,7 +2734,7 @@ CREATE TABLE `aqorderdelivery` (
 --
 
 DROP TABLE IF EXISTS `aqorders`;
-CREATE TABLE `aqorders` ( --information related to the basket line items
+CREATE TABLE `aqorders` ( -- information related to the basket line items
   `ordernumber` int(11) NOT NULL auto_increment, -- primary key and unique identifier assigned by Koha to each line
   `biblionumber` int(11) default NULL, -- links the order to the biblio being ordered (biblio.biblionumber)
   `entrydate` date default NULL, -- the date the bib was added to the basket
