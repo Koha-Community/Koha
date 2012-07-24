@@ -539,7 +539,7 @@ sub BatchCommitBibRecords {
         } elsif ($bib_result eq 'replace') {
             $num_updated++;
             my $biblionumber = $bib_match;
-            my ($count, $oldbiblio) = GetBiblio($biblionumber);
+            my $oldbiblio = GetBiblio($biblionumber);
             my $oldxml = GetXmlBiblio($biblionumber);
 
             # remove item fields so that they don't get
@@ -679,7 +679,7 @@ sub BatchRevertBibRecords {
             $num_reverted++;
             my $old_record = MARC::Record->new_from_xml(StripNonXmlChars($rowref->{'marcxml_old'}), 'UTF-8', $rowref->{'encoding'});
             my $biblionumber = $rowref->{'matched_biblionumber'};
-            my ($count, $oldbiblio) = GetBiblio($biblionumber);
+            my $oldbiblio = GetBiblio($biblionumber);
             $num_items_deleted += BatchRevertItems($rowref->{'import_record_id'}, $rowref->{'matched_biblionumber'});
             ModBiblio($old_record, $biblionumber, $oldbiblio->{'frameworkcode'});
             SetImportRecordStatus($rowref->{'import_record_id'}, 'reverted');

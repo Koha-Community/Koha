@@ -61,10 +61,10 @@ if ($itemnumber){
 	);
 } else {
 	$issues = GetBiblioIssues($biblionumber);
-	my (undef,@biblio)=GetBiblio($biblionumber);
+        my $biblio = GetBiblio($biblionumber);
 	my $total  = scalar @$issues;
 	$template->param(
-		%{$biblio[0]},
+               %{$biblio},
 	);
 } 
 foreach (@{$issues}){

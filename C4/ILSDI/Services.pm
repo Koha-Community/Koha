@@ -411,7 +411,7 @@ sub GetPatronInfo {
             # Add additional fields
             $reserve->{'item'}       = $item;
             $reserve->{'branchname'} = $branchname;
-            $reserve->{'title'}      = ( GetBiblio( $reserve->{'biblionumber'} ) )[1]->{'title'};
+            $reserve->{'title'}      = GetBiblio( $reserve->{'biblionumber'} )->{'title'};
         }
         $borrower->{'holds'}->{'hold'} = \@reserves;
     }
@@ -601,7 +601,7 @@ sub HoldTitle {
 
     # Get the biblio record, or return an error code
     my $biblionumber = $cgi->param('bib_id');
-    my ( $count, $biblio ) = GetBiblio( $biblionumber );
+    my $biblio = GetBiblio( $biblionumber );
     return { code => 'RecordNotFound' } unless $$biblio{biblionumber};
     
     my $title = $$biblio{title};
@@ -666,7 +666,7 @@ sub HoldItem {
 
     # Get the biblio or return an error code
     my $biblionumber = $cgi->param('bib_id');
-    my ( $count, $biblio ) = GetBiblio($biblionumber);
+    my $biblio = GetBiblio($biblionumber);
     return { code => 'RecordNotFound' } unless $$biblio{biblionumber};
 
     my $title = $$biblio{title};

@@ -999,7 +999,7 @@ sub GetISBDView {
 
 =head2 GetBiblio
 
-  ( $count, @results ) = &GetBiblio($biblionumber);
+  my $biblio = &GetBiblio($biblionumber);
 
 =cut
 
@@ -1010,12 +1010,10 @@ sub GetBiblio {
     my $count          = 0;
     my @results;
     $sth->execute($biblionumber);
-    while ( my $data = $sth->fetchrow_hashref ) {
-        $results[$count] = $data;
-        $count++;
-    }    # while
-    $sth->finish;
-    return ( $count, @results );
+    if ( my $data = $sth->fetchrow_hashref ) {
+        return $data;
+    }
+    return;
 }    # sub GetBiblio
 
 =head2 GetBiblioItemInfosOf
