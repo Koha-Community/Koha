@@ -36,8 +36,8 @@
     });
 
     function clear_entry(node) {
-        var original = node.parentNode;
-        $("input[type=text]", original).attr('value', '');
+        var original = node.parentNode.parentNode;
+        $("textarea", original).attr('value', '');
         $("select", original).attr('value', '');
     }
 
@@ -1360,11 +1360,9 @@
                             </select>
                         [% ELSE %]
                             [% IF ( opduplicate ) %]
-                            <input type="text" maxlength="64" value="[% patron_attribute.value %]"
-                                   id="[% patron_attribute.form_id %]" name="[% patron_attribute.form_id %]" onclick="this.value=''" />
+                            <textarea rows="2" cols="30" id="[% patron_attribute.form_id %]" name="[% patron_attribute.form_id %]" onclick="this.value=''" >[% patron_attribute.value %]</textarea>
                             [% ELSE %]
-                            <input type="text" maxlength="64" value="[% patron_attribute.value %]"
-                                   id="[% patron_attribute.form_id %]" name="[% patron_attribute.form_id %]" />
+                            <textarea rows="2" cols="30" id="[% patron_attribute.form_id %]" name="[% patron_attribute.form_id %]">[% patron_attribute.value %]</textarea>
                             [% END %]
                         [% END %]
                         [% IF ( patron_attribute.password_allowed ) %]
