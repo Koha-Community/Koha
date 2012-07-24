@@ -312,7 +312,7 @@ $tag = $params->{tag} if $params->{tag};
 my $pasarParams = '';
 my $j = 0;
 for (keys %$params) {
-    my @pasarParam = split("\0", $params->{$_});
+    my @pasarParam = $cgi->param($_);
     for my $paramValue(@pasarParam) {
         $pasarParams .= '&amp;' if ($j > 0);
         $pasarParams .= $_ . '=' . $paramValue;
@@ -333,7 +333,7 @@ if (   C4::Context->preference('OPACdefaultSortField')
 }
 
 my @allowed_sortby = qw /acqdate_asc acqdate_dsc author_az author_za call_number_asc call_number_dsc popularity_asc popularity_dsc pubdate_asc pubdate_dsc relevance title_az title_za/; 
-@sort_by = split("\0",$params->{'sort_by'}) if $params->{'sort_by'};
+@sort_by = $cgi->param('sort_by');
 $sort_by[0] = $default_sort_by if !$sort_by[0] && defined($default_sort_by);
 foreach my $sort (@sort_by) {
     if ( $sort ~~ @allowed_sortby ) {
@@ -343,8 +343,7 @@ foreach my $sort (@sort_by) {
 $template->param('sort_by' => $sort_by[0]);
 
 # Use the servers defined, or just search our local catalog(default)
-my @servers;
-@servers = split("\0",$params->{'server'}) if $params->{'server'};
+my @servers = $cgi->param('server');
 unless (@servers) {
     #FIXME: this should be handled using Context.pm
     @servers = ("biblioserver");
@@ -353,21 +352,18 @@ unless (@servers) {
 
 # operators include boolean and proximity operators and are used
 # to evaluate multiple operands
-my @operators;
-@operators = split("\0",$params->{'op'}) if $params->{'op'};
+my @operators = $cgi->param('op');
 
 # indexes are query qualifiers, like 'title', 'author', etc. They
 # can be single or multiple parameters separated by comma: kw,right-Truncation 
-my @indexes;
-@indexes = split("\0",$params->{'idx'}) if $params->{'idx'};
+my @indexes = $cgi->param('idx');
 
 # if a simple index (only one)  display the index used in the top search box
 if ($indexes[0] && !$indexes[1]) {
     $template->param("ms_".$indexes[0] => 1);
 }
 # an operand can be a single term, a phrase, or a complete ccl query
-my @operands;
-@operands = split("\0",$params->{'q'}) if $params->{'q'};
+my @operands = $cgi->param('q');
 
 $template->{VARS}->{querystring} = join(' ', @operands);
 
@@ -377,8 +373,7 @@ if ($operands[0] && !$operands[1]) {
 }
 
 # limits are use to limit to results to a pre-defined category such as branch or language
-my @limits;
-@limits = split("\0",$params->{'limit'}) if $params->{'limit'};
+my @limits = $cgi->param('limit');
 
 if($params->{'multibranchlimit'}) {
     push @limits, '('.join( " or ", map { "branch: $_ " } @{ GetBranchesInCategory( $params->{'multibranchlimit'} ) } ).')';
