@@ -314,9 +314,7 @@ function yuiToolbar() {
 					<td>
 							<form action="/cgi-bin/koha/acqui/basketgroup.pl" method="get"><input type="hidden" name="op" value="reopen" /><input type="hidden" name="booksellerid" value="[% basketgroup.booksellerid %]" /><input type="hidden" name="basketgroupid" value="[% basketgroup.id %]" /><input type="submit" value="Reopen" /></form>
 							<form action="/cgi-bin/koha/acqui/basketgroup.pl" method="get"><input type="hidden" name="op" value="print" /><input type="hidden" name="basketgroupid" value="[% basketgroup.id %]" /><input type="submit" value="Print" /></form>
-						</td>
-                    <td>
-                        <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="get"><input type="hidden" name="op" value="export" /><input type="hidden" name="basketgroupid" value="[% basketgroup.id %]" /><input type="submit" value="Export as CSV" /></form>
+                                                        <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="get"><input type="hidden" name="op" value="export" /><input type="hidden" name="basketgroupid" value="[% basketgroup.id %]" /><input type="submit" value="Export as CSV" /></form>
                     </td>
 				</tr>
 				[% END %]
