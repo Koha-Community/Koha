@@ -117,30 +117,15 @@ if ($do_it) {
 }
 else {
     my $dbh = C4::Context->dbh;
-    my @select;
-    my %select;
     my $req;
     $req = $dbh->prepare("SELECT distinctrow id,name FROM aqbooksellers ORDER BY name");
     $req->execute;
-    push @select, "";
-    $select{''} = "All Suppliers";
-    while ( my ( $value, $desc ) = $req->fetchrow ) {
-        push @select, $desc;
-        $select{$value}=$desc;
-    }
-    my $CGIBookSellers = CGI::scrolling_list(
-        -name   => 'Filter',
-        -id     => 'supplier',
-        -values => \@select,
-        -labels   => \%select,
-        -size     => 1,
-        -multiple => 0
-    );
+    my $booksellers = $req->fetchall_arrayref({});
 
     $req = $dbh->prepare("SELECT DISTINCTROW itemtype,description FROM itemtypes ORDER BY description");
     $req->execute;
-    undef @select;
-    undef %select;
+    my @select;
+    my %select;
     push @select, "";
     $select{''} = "All Item Types";
     while ( my ( $value, $desc ) = $req->fetchrow ) {
@@ -256,7 +241,7 @@ else {
     }
 
     $template->param(
-        CGIBookSeller => $CGIBookSellers,
+        booksellers   => $booksellers,
         CGIItemType   => $CGIItemTypes,
         CGIBudget     => $CGIBudget,
         hassort1      => $hassort1,
@@ -305,20 +290,7 @@ sub calculate {
             } else {
                 $cell{filter} = format_date(@$filters[$i]);
             }
-            given ($i) {
-                when (0)  { $cell{crit} = "Placed On From" }
-                when (1)  { $cell{crit} = "Placed On To" }
-                when (2)  { $cell{crit} = "Received On From" }
-                when (3)  { $cell{crit} = "Received On To" }
-                when (4)  { $cell{crit} = "Bookseller" }
-                when (5)  { $cell{crit} = "Home branch" }
-                when (6)  { $cell{crit} = "Collection" }
-                when (7)  { $cell{crit} = "Doc Type" }
-                when (8)  { $cell{crit} = "Budget" }
-                when (9)  { $cell{crit} = "Sort1" }
-                when (10) { $cell{crit} = "Sort2" }
-                default   { $cell{crit} = "" }
-            }
+            $cell{crit} = $i;
             push @loopfilter, \%cell;
         }
     }
