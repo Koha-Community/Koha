@@ -148,8 +148,6 @@ if($duedatespec_allow){
     if ($duedatespec) {
         if ($duedatespec =~ C4::Dates->regexp('syspref')) {
                 $datedue = dt_from_string($duedatespec);
-                $datedue->set_hour(23);
-                $datedue->set_minute(59);
         } else {
             $invalidduedate = 1;
             $template->param(IMPOSSIBLE=>1, INVALID_DATE=>$duedatespec);

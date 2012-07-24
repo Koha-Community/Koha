@@ -5,6 +5,7 @@
 [% INCLUDE 'calendar.inc' %]
 [% IF ( UseTablesortForCirc ) %]<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>[% END %]
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery-ui-timepicker-addon.js"></script>
 <script type="text/javascript">
 //<![CDATA[
 [% IF ( borrowernumber ) %]if($.cookie("holdfor") != [% borrowernumber %]){ $.cookie("holdfor",null, { path: "/", expires: 0 }); }[% ELSE %]$.cookie("holdfor",null, { path: "/", expires: 0 });[% END %]
@@ -16,6 +17,7 @@
 });[% END %]
 [% UNLESS ( borrowernumber ) %][% UNLESS ( CGIselectborrower ) %]window.onload=function(){ $('#findborrower').focus(); };[% END %][% END %]
 	 $(document).ready(function() {
+
         $('#patronlists').tabs();
 		[% IF ( UseTablesortForCirc ) %]$.tablesorter.defaults.widgets = ['zebra'];
 		$("#issuest").tablesorter({[% IF ( dateformat_metric ) %]
@@ -142,8 +144,10 @@ var allcheckboxes = $(".checkboxed");
         radioCheckBox($(this));
      });
     $("#newduedate").datepicker({ minDate: 1 }); // require that renewal date is after today
-    $("#duedatespec").datepicker({
-        onSelect: function(dateText, inst) { $("#barcode").focus(); }
+    $("#duedatespec").datetimepicker({
+        onSelect: function(dateText, inst) { $("#barcode").focus(); },
+        hour: 23,
+        minute: 59,
     });
 
  });
@@ -313,7 +317,7 @@ function validate1(date) {
     [% IF ( DEBT ) %]<input type="hidden" name="debt_confirmed" value="1" />[% END %]
     [% IF ( INVALID_DATE ) %]
     <p>
-    <input type="text" size="10" id="duedatespec" name="duedatespec" value="[% duedatespec %]" />
+    <input type="text" size="13" id="duedatespec" name="duedatespec" value="[% duedatespec %]" />
     <label for="duedatespec">Due date</label>
     </p>
     [% ELSE %]
@@ -487,7 +491,7 @@ No patron matched <span class="ex">[% message %]</span>
 
     [% IF ( SpecifyDueDate ) %]<div class="date-select">
         <div class="hint">Specify due date [% INCLUDE 'date-format.inc' %]: </div>
-		[% IF ( duedatespec ) %]<input type="text" size="10" id="duedatespec" name="duedatespec" value="[% duedatespec %]" />[% ELSE %]<input type="text" size="10" id="duedatespec" name="duedatespec" value="" />
+        [% IF ( duedatespec ) %]<input type="text" size="13" id="duedatespec" name="duedatespec" value="[% duedatespec %]" />[% ELSE %]<input type="text" size="13" id="duedatespec" name="duedatespec" value="" />
 [% END %]
           <label for="stickyduedate"> Remember for session:</label>
 [% IF ( stickyduedate ) %]
