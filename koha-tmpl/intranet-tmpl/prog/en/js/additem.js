@@ -189,7 +189,7 @@ function check_additem(unique_item_fields) {
             continue;
         }
         var values = new Array();
-        $("[name='kohafield'][value=items."+ fieldname +"]").each(function(){
+        $("[name='kohafield'][value='items."+ fieldname +"']").each(function(){
             var input = $(this).prevAll("input[name='field_value']")[0];
             if($(input).val()) {
                 values.push($(input).val());
