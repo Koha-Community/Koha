@@ -113,7 +113,6 @@ for my $overdue ( @{$overdues} ) {
     my ( $amount, $type, $unitcounttotal ) =
       CalcFine( $overdue, $borrower->{categorycode},
         $branchcode, $datedue, $today );
-
     $type ||= q{};
 
     # Don't update the fine if today is a holiday.
@@ -138,8 +137,8 @@ close $fh;
 
 if ($verbose) {
     my $overdue_items = @{$overdues};
-    print <<'EOM';
-Fines assessment -- $today->ymd() -- Saved to $filename
+    print <<"EOM";
+Fines assessment -- $today -- Saved to $filename
 Number of Overdue Items:
      counted $overdue_items
     reported $counted
