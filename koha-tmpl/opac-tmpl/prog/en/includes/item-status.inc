@@ -14,8 +14,9 @@
 [% ELSIF ( item.wthdrawn ) %]
     Item withdrawn
 [% ELSIF ( item.itemlost ) %]
-    [% IF KohaAuthorisedValues.GetByCode( 'LOST', item.itemlost, 1 ) %]
-        [% KohaAuthorisedValues.GetByCode( 'LOST', item.itemlost, 1 ) %]
+    [% av_lib_include = KohaAuthorisedValues.GetByCode( 'LOST', item.itemlost, 1 ) %]
+    [% IF ( av_lib_include ) %]
+        [% av_lib_include %]
     [% ELSE %]
         [% IF ( item.lostimageurl ) %]
             <img src="[% item.lostimageurl %]" alt="[% item.lostimagelabel %]" title="[% item.lostimagelabel %]">
@@ -32,8 +33,9 @@
 [% ELSIF ( item.notforloan_per_itemtype ) %]
     Not for loan [% IF ( item.restrictedopac ) %]<span class="restricted">([% item.restrictedopac %])</span>[% END %]
 [% ELSIF ( item.damaged ) %]
-    [% IF KohaAuthorisedValues.GetByCode( 'DAMAGED', item.damaged, 1 ) %]
-        [% KohaAuthorisedValues.GetByCode( 'DAMAGED', item.damaged, 1 ) %]
+    [% av_lib_include = KohaAuthorisedValues.GetByCode( 'DAMAGED', item.damaged, 1 ) %]
+    [% IF av_lib_include %]
+        [% av_lib_include %]
     [% ELSE %]
         Item damaged
     [% END %]
