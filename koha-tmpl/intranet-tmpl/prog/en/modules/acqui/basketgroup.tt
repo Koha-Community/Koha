@@ -203,6 +203,7 @@ function yuiToolbar() {
 							<input type="text" name="basketgroupname" id="basketgroupname" value="[% name %]" /></li>
                         <li><label for="billingplace">Billing place:</label>
 							<select name="billingplace" id="billingplace" style="width:13em;">
+                                <option value="">--</option>
 								[% FOREACH billingplaceloo IN billingplaceloop %]
 	                                [% IF ( billingplaceloo.selected ) %]<option value="[% billingplaceloo.value %]" selected="selected">[% billingplaceloo.branchname %]</option>
 	                                [% ELSE %]<option value="[% billingplaceloo.value %]">[% billingplaceloo.branchname %]</option>[% END%]

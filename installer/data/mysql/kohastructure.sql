@@ -2594,6 +2594,8 @@ CREATE TABLE `aqbasket` ( -- stores data about baskets in acquisitions
   `authorisedby` varchar(10) default NULL, -- the borrowernumber of the person who created the basket
   `booksellerinvoicenumber` mediumtext, -- appears to always be NULL
   `basketgroupid` int(11), -- links this basket to its group (aqbasketgroups.id)
+  `deliveryplace` varchar(10) default NULL, -- basket delivery place
+  `billingplace` varchar(10) default NULL, -- basket billing place
   PRIMARY KEY  (`basketno`),
   KEY `booksellerid` (`booksellerid`),
   KEY `basketgroupid` (`basketgroupid`),

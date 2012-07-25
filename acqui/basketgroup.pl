@@ -328,30 +328,11 @@ if ( $op eq "add" ) {
         my $borrower = GetMember( ( 'borrowernumber' => $loggedinuser ) );
         $billingplace  = $billingplace  || $borrower->{'branchcode'};
         $deliveryplace = $deliveryplace || $borrower->{'branchcode'};
-        
-        my $branches = GetBranches;
-        
-        # Build the combobox to select the billing place
-        my @billingplaceloop;
-        for (sort keys %$branches) {
-            push @billingplaceloop, {
-                value      => $_,
-                selected   => $_ eq $billingplace,
-                branchname => $branches->{$_}->{branchname},
-            };
-        }
-        $template->param( billingplaceloop => \@billingplaceloop );
-        
-        # Build the combobox to select the delivery place
-        my @deliveryplaceloop;
-        for (sort keys %$branches) {
-            push @deliveryplaceloop, {
-                value      => $_,
-                selected   => $_ eq $deliveryplace,
-                branchname => $branches->{$_}->{branchname},
-            };
-        }
-        $template->param( deliveryplaceloop => \@deliveryplaceloop );
+
+        my $branches = C4::Branch::GetBranchesLoop( $billingplace );
+        $template->param( billingplaceloop => $branches );
+        $branches = C4::Branch::GetBranchesLoop( $deliveryplace );
+        $template->param( deliveryplaceloop => $branches );
 
         $template->param( booksellerid => $booksellerid );
     }

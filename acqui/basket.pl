@@ -130,6 +130,8 @@ if ( $op eq 'delete_confirm' ) {
         authorisedby         => $basket->{authorisedby},
         authorisedbyname     => $basket->{authorisedbyname},
         closedate            => $basket->{closedate},
+        deliveryplace        => $basket->{deliveryplace},
+        billingplace         => $basket->{billingplace},
         active               => $bookseller->{'active'},
         booksellerid         => $bookseller->{'id'},
         name                 => $bookseller->{'name'},
@@ -283,6 +285,15 @@ if ( $op eq 'delete_confirm' ) {
     my $contract = &GetContract($basket->{contractnumber});
     my @orders = GetOrders($basketno);
 
+    if ($basket->{basketgroupid}){
+        my $basketgroup = GetBasketgroup($basket->{basketgroupid});
+        for my $key (keys %$basketgroup ){
+            $basketgroup->{"basketgroup$key"} = delete $basketgroup->{$key};
+        }
+        $basketgroup->{basketgroupdeliveryplace} = C4::Branch::GetBranchName( $basketgroup->{basketgroupdeliveryplace} );
+        $basketgroup->{basketgroupbillingplace} = C4::Branch::GetBranchName( $basketgroup->{basketgroupbillingplace} );
+        $template->param(%$basketgroup);
+    }
     my $borrower= GetMember('borrowernumber' => $loggedinuser);
     my $budgets = GetBudgetHierarchy;
     my $has_budgets = 0;
@@ -313,6 +324,8 @@ if ( $op eq 'delete_confirm' ) {
         authorisedbyname     => $basket->{authorisedbyname},
         closedate            => $basket->{closedate},
         estimateddeliverydate=> $estimateddeliverydate,
+        deliveryplace        => C4::Branch::GetBranchName( $basket->{deliveryplace} ),
+        billingplace         => C4::Branch::GetBranchName( $basket->{billingplace} ),
         active               => $bookseller->{'active'},
         booksellerid         => $bookseller->{'id'},
         name                 => $bookseller->{'name'},

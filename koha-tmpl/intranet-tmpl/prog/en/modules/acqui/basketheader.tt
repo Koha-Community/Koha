@@ -125,6 +125,28 @@ li.list2 {
                     <label for="basketname" class="required">Basket name</label> &nbsp;
                         <input type="text" name="basketname" id="basketname" size="40" maxlength="80" value="[% basketname %]" />
                 </li>
+                 <li>
+                    <label for="billingplace">Billing Place:</label>
+                    <select name="billingplace" id="billingplace">
+                        <option value="">--</option>
+                        [% FOREACH billingplace IN billingplaceloop %]
+                            <option value="[% billingplace.value %]"[% IF ( billingplace.selected ) %] selected="selected"[% END %]>
+                                [% billingplace.branchname %]
+                            </option>
+                        [% END %]
+                    </select>
+                </li>
+                <li>
+                    <label for="deliveryplace">Delivery  Place:</label>
+                    <select name="deliveryplace" id="deliveryplace">
+                        <option value="">--</option>
+                        [% FOREACH deliveryplace IN deliveryplaceloop %]
+                            <option value="[% deliveryplace.value %]"[% IF ( deliveryplace.selected ) %] selected="selected"[% END %]>
+                                [% deliveryplace.branchname %]
+                            </option>
+                        [% END %]
+                    </select>
+                </li>
                 <li>
                     <label for="basketbooksellerid">Vendor</label> &nbsp;
                     <select name="basketbooksellerid" id="basketbooksellerid">

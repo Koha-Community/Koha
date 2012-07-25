@@ -173,7 +173,7 @@ sub GetBasket {
 =head3 NewBasket
 
   $basket = &NewBasket( $booksellerid, $authorizedby, $basketname, 
-      $basketnote, $basketbooksellernote, $basketcontractnumber );
+      $basketnote, $basketbooksellernote, $basketcontractnumber, $deliveryplace, $billingplace );
 
 Create a new basket in aqbasket table
 
@@ -189,10 +189,8 @@ The other parameters are optional, see ModBasketHeader for more info on them.
 
 =cut
 
-# FIXME : this function seems to be unused.
-
 sub NewBasket {
-    my ( $booksellerid, $authorisedby, $basketname, $basketnote, $basketbooksellernote, $basketcontractnumber ) = @_;
+    my ( $booksellerid, $authorisedby, $basketname, $basketnote, $basketbooksellernote, $basketcontractnumber, $deliveryplace, $billingplace ) = @_;
     my $dbh = C4::Context->dbh;
     my $query = "
         INSERT INTO aqbasket
@@ -203,7 +201,7 @@ sub NewBasket {
     $dbh->do($query);
 #find & return basketno MYSQL dependant, but $dbh->last_insert_id always returns null :-(
     my $basket = $dbh->{'mysql_insertid'};
-    ModBasketHeader($basket, $basketname || '', $basketnote || '', $basketbooksellernote || '', $basketcontractnumber || undef, $booksellerid);
+    ModBasketHeader($basket, $basketname || '', $basketnote || '', $basketbooksellernote || '', $basketcontractnumber || undef, $booksellerid, $deliveryplace || undef, $billingplace || undef );
     return $basket;
 }
 
@@ -265,8 +263,8 @@ sub GetBasketAsCSV {
             notes => $order->{'notes'},
             quantity => $order->{'quantity'},
             rrp => $order->{'rrp'},
-            deliveryplace => $basket->{'deliveryplace'},
-            billingplace => $basket->{'billingplace'}
+            deliveryplace => C4::Branch::GetBranchName( $basket->{'deliveryplace'} ),
+            billingplace => C4::Branch::GetBranchName( $basket->{'billingplace'} ),
         };
         foreach(qw(
             contractname author title publishercode collectiontitle notes
@@ -315,6 +313,7 @@ sub GetBasketGroupAsCSV {
         my @orders     = GetOrders( $$basket{basketno} );
         my $contract   = GetContract( $$basket{contractnumber} );
         my $bookseller = GetBookSellerFromId( $$basket{booksellerid} );
+        my $basketgroup = GetBasketgroup( $$basket{basketgroupid} );
 
         foreach my $order (@orders) {
             my $bd = GetBiblioData( $order->{'biblionumber'} );
@@ -339,6 +338,10 @@ sub GetBasketGroupAsCSV {
                 booksellerpostal => $bookseller->{postal},
                 contractnumber => $contract->{contractnumber},
                 contractname => $contract->{contractname},
+                basketgroupdeliveryplace => C4::Branch::GetBranchName( $basketgroup->{deliveryplace} ) || C4::Branch::GetBranchName( $basketgroup->{freedeliveryplace} ),
+                basketgroupbillingplace => C4::Branch::GetBranchName( $basketgroup->{billingplace} ),
+                basketdeliveryplace => C4::Branch::GetBranchName( $basket->{deliveryplace} ),
+                basketbillingplace => C4::Branch::GetBranchName( $basket->{billingplace} ),
             };
             foreach(qw(
                 basketname author title publishercode collectiontitle notes
@@ -486,17 +489,25 @@ Modifies a basket's header.
 
 =item C<$booksellerid> is the id (foreign) key in the "aqbooksellers" table for the vendor.
 
+=item C<$deliveryplace> is the "deliveryplace" field in the aqbasket table.
+
+=item C<$billingplace> is the "billingplace" field in the aqbasket table.
+
 =back
 
 =cut
 
 sub ModBasketHeader {
-    my ($basketno, $basketname, $note, $booksellernote, $contractnumber, $booksellerid) = @_;
+    my ($basketno, $basketname, $note, $booksellernote, $contractnumber, $booksellerid, $deliveryplace, $billingplace) = @_;
+    my $query = qq{
+        UPDATE aqbasket
+        SET basketname=?, note=?, booksellernote=?, booksellerid=?, deliveryplace=?, billingplace=?
+        WHERE basketno=?
+    };
 
-    my $query = "UPDATE aqbasket SET basketname=?, note=?, booksellernote=?, booksellerid=? WHERE basketno=?";
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare($query);
-    $sth->execute($basketname,$note,$booksellernote,$booksellerid,$basketno);
+    $sth->execute($basketname, $note, $booksellernote, $booksellerid, $deliveryplace, $billingplace, $basketno);
 
     if ( $contractnumber ) {
         my $query2 ="UPDATE aqbasket SET contractnumber=? WHERE basketno=?";

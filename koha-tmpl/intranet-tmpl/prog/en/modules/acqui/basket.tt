@@ -175,11 +175,13 @@
                         // YUI Toolbar Functions
                         function yuiToolbar() {
                             new YAHOO.widget.Button("reopenbutton");
+                            new YAHOO.widget.Button("exportbutton");
                         }
                         //]]>
                     </script>
                         <ul id="toolbar-list" class="toolbar">
                             <li><a href="javascript:confirm_reopen([% skip_confirm_reopen %]);" class="button" id="reopenbutton">Reopen this basket</a></li>
+                            <li><a href="[% script_name %]?op=export&amp;basketno=[% basketno %]&amp;booksellerid=[% booksellerid %]" class="button" id="exportbutton">Export this basket as CSV</a></li>
                         </ul>
                 </div>
                 [% END %]
@@ -218,6 +220,8 @@
                 [% IF ( basketcontractno ) %]
                     <li><span class="label">Contract name:</span> <a href="../admin/aqcontract.pl?op=add_form&amp;contractnumber=[% basketcontractno %]&amp;booksellerid=[% booksellerid %]">[% basketcontractname %]</a></li>
                 [% END %]
+                [% IF ( deliveryplace ) %]<li><span class="label">Delivery place:</span> [% deliveryplace %]</li>[% END %]
+                [% IF ( billingplace ) %]<li><span class="label">Billing place:</span> [% billingplace %]</li>[% END %]
                 [% IF ( authorisedbyname ) %]<li><span class="label">Managed by:</span>  [% authorisedbyname %]</li>[% END %]
                 [% IF ( creationdate ) %]<li><span class="label">Opened on:</span>  [% creationdate | $KohaDates %]</li>[% END %]
                 [% IF ( closedate ) %]<li><span class="label">Closed on:</span> [% closedate | $KohaDates %]</li>[% END %]
@@ -247,6 +251,8 @@
                         <input type="submit" value="Change basket group" /></p>
 
                     </form>
+                    [% IF ( basketgroupdeliveryplace ) %]<p>Basketgroup Delivery place: [% basketgroupdeliveryplace %]</p>[% END %]
+                    [% IF ( basketgroupbillingplace ) %]<p>Basketgroup Billing place: [% basketgroupbillingplace %]</p>[% END %]
                 </div>
                 [% END %]
             </div>
