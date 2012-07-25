@@ -562,13 +562,16 @@ if ( C4::Context->preference('EasyAnalyticalRecords') ) {
         $analyticfield = '461';
     }
     foreach my $hostfield ($temp->field($analyticfield)){
-	if ($hostfield->subfield('0')){
-            my $hostrecord = GetMarcBiblio($hostfield->subfield('0'), 1);
-	    my ($itemfield, undef) = GetMarcFromKohaField( 'items.itemnumber', GetFrameworkCode($hostfield->subfield('0')) );
-	    foreach my $hostitem ($hostrecord->field($itemfield)){
-		if ($hostitem->subfield('9') eq $hostfield->subfield('9')){
-		    push (@fields, $hostitem);
-                    push (@hostitemnumbers, $hostfield->subfield('9'));
+        my $hostbiblionumber = $hostfield->subfield('0');
+        if ($hostbiblionumber){
+            my $hostrecord = GetMarcBiblio($hostbiblionumber, 1);
+            if ($hostrecord) {
+                my ($itemfield, undef) = GetMarcFromKohaField( 'items.itemnumber', GetFrameworkCode($hostbiblionumber) );
+                foreach my $hostitem ($hostrecord->field($itemfield)){
+                    if ($hostitem->subfield('9') eq $hostfield->subfield('9')){
+                        push (@fields, $hostitem);
+                        push (@hostitemnumbers, $hostfield->subfield('9'));
+                    }
                 }
             }
         }
