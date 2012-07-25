@@ -1680,62 +1680,67 @@ The subjects are stored in different fields depending on MARC flavour
 
 sub GetMarcSubjects {
     my ( $record, $marcflavour ) = @_;
-    my ( $mintag, $maxtag );
+    my ( $mintag, $maxtag, $fields_filter );
     if ( $marcflavour eq "UNIMARC" ) {
         $mintag = "600";
         $maxtag = "611";
-    } else {    # assume marc21 if not unimarc
+        $fields_filter = '6..';
+    } else { # marc21/normarc
         $mintag = "600";
         $maxtag = "699";
+        $fields_filter = '6..';
     }
 
     my @marcsubjects;
-    my $subject  = "";
-    my $subfield = "";
-    my $marcsubject;
 
     my $subject_limit = C4::Context->preference("TraceCompleteSubfields") ? 'su,complete-subfield' : 'su';
+    my $authoritysep = C4::Context->preference('authoritysep');
 
-    foreach my $field ( $record->field('6..') ) {
-        next unless $field->tag() >= $mintag && $field->tag() <= $maxtag;
+    foreach my $field ( $record->field($fields_filter) ) {
+        next unless ($field->tag() >= $mintag && $field->tag() <= $maxtag);
         my @subfields_loop;
         my @subfields = $field->subfields();
-        my $counter   = 0;
         my @link_loop;
 
-        # if there is an authority link, build the link with an= subfield9
-        my $found9 = 0;
+        # if there is an authority link, build the links with an= subfield9
+        my $subfield9 = $field->subfield('9');
+        if ($subfield9) {
+            my $linkvalue = $subfield9;
+            $linkvalue =~ s/(\(|\))//g;
+            @link_loop = ( { limit => 'an', 'link' => $linkvalue } );
+        }
+
+        # other subfields
         for my $subject_subfield (@subfields) {
+            next if ( $subject_subfield->[0] eq '9' );
 
             # don't load unimarc subfields 3,4,5
             next if ( ( $marcflavour eq "UNIMARC" ) and ( $subject_subfield->[0] =~ /2|3|4|5/ ) );
-
             # don't load MARC21 subfields 2 (FIXME: any more subfields??)
             next if ( ( $marcflavour eq "MARC21" ) and ( $subject_subfield->[0] =~ /2/ ) );
+
             my $code      = $subject_subfield->[0];
             my $value     = $subject_subfield->[1];
             my $linkvalue = $value;
             $linkvalue =~ s/(\(|\))//g;
-            my $operator;
-            if ( $counter != 0 ) {
-                $operator = ' and ';
+            # if no authority link, build a search query
+            unless ($subfield9) {
+                push @link_loop, {
+                    limit    => $subject_limit,
+                    'link'   => $linkvalue,
+                    operator => (scalar @link_loop) ? ' and ' : undef
+                };
             }
-            if ( $code eq 9 ) {
-                $found9 = 1;
-                @link_loop = ( { 'limit' => 'an', link => "$linkvalue" } );
-            }
-            if ( not $found9 ) {
-                push @link_loop, { 'limit' => $subject_limit, link => $linkvalue, operator => $operator };
-            }
-            my $separator;
-            if ( $counter != 0 ) {
-                $separator = C4::Context->preference('authoritysep');
-            }
-
-            # ignore $9
             my @this_link_loop = @link_loop;
-            push @subfields_loop, { code => $code, value => $value, link_loop => \@this_link_loop, separator => $separator } unless ( $subject_subfield->[0] eq 9 || $subject_subfield->[0] eq '0' );
-            $counter++;
+            # do not display $0
+            unless ( $code eq '0' ) {
+                push @subfields_loop, {
+                    code      => $code,
+                    value     => $value,
+                    link_loop => \@this_link_loop,
+                    separator => (scalar @subfields_loop) ? $authoritysep : ''
+                };
+            }
         }
 
         push @marcsubjects, { MARCSUBJECT_SUBFIELDS_LOOP => \@subfields_loop };
@@ -1755,7 +1760,7 @@ The authors are stored in different fields depending on MARC flavour
 
 sub GetMarcAuthors {
     my ( $record, $marcflavour ) = @_;
-    my ( $mintag, $maxtag );
+    my ( $mintag, $maxtag, $fields_filter );
 
     # tagslib useful for UNIMARC author reponsabilities
     my $tagslib =
@@ -1763,15 +1768,17 @@ sub GetMarcAuthors {
     if ( $marcflavour eq "UNIMARC" ) {
         $mintag = "700";
         $maxtag = "712";
-    } elsif ( $marcflavour eq "MARC21" || $marcflavour eq "NORMARC" ) { # assume marc21 or normarc if not unimarc
+        $fields_filter = '7..';
+    } else { # marc21/normarc
         $mintag = "700";
         $maxtag = "720";
-    } else {
-        return;
+        $fields_filter = '7..';
     }
-    my @marcauthors;
 
-    foreach my $field ( $record->fields ) {
+    my @marcauthors;
+    my $authoritysep = C4::Context->preference('authoritysep');
+
+    foreach my $field ( $record->field($fields_filter) ) {
         next unless $field->tag() >= $mintag && $field->tag() <= $maxtag;
         my @subfields_loop;
         my @link_loop;
@@ -1780,46 +1787,47 @@ sub GetMarcAuthors {
 
         # if there is an authority link, build the link with Koha-Auth-Number: subfield9
         my $subfield9 = $field->subfield('9');
+        if ($subfield9) {
+            my $linkvalue = $subfield9;
+            $linkvalue =~ s/(\(|\))//g;
+            @link_loop = ( { 'limit' => 'an', 'link' => $linkvalue } );
+        }
+
+        # other subfields
         for my $authors_subfield (@subfields) {
+            next if ( $authors_subfield->[0] eq '9' );
 
             # don't load unimarc subfields 3, 5
             next if ( $marcflavour eq 'UNIMARC' and ( $authors_subfield->[0] =~ /3|5/ ) );
-            my $subfieldcode = $authors_subfield->[0];
+
+            my $code = $authors_subfield->[0];
             my $value        = $authors_subfield->[1];
             my $linkvalue    = $value;
             $linkvalue =~ s/(\(|\))//g;
-            my $operator;
-            if ( $count_auth != 0 ) {
-                $operator = ' and ';
+            # UNIMARC author responsibility
+            if ( $marcflavour eq 'UNIMARC' and $code eq '4' ) {
+                $value = GetAuthorisedValueDesc( $field->tag(), $code, $value, '', $tagslib );
+                $linkvalue = "($value)";
             }
-
-            # if we have an authority link, use that as the link, otherwise use standard searching
-            if ($subfield9) {
-                @link_loop = ( { 'limit' => 'an', link => "$subfield9" } );
-            } else {
-
-                # reset $linkvalue if UNIMARC author responsibility
-                if ( $marcflavour eq 'UNIMARC' and ( $authors_subfield->[0] eq "4" ) ) {
-                    $linkvalue = "(" . GetAuthorisedValueDesc( $field->tag(), $authors_subfield->[0], $authors_subfield->[1], '', $tagslib ) . ")";
-                }
-                push @link_loop, { 'limit' => 'au', link => $linkvalue, operator => $operator };
+            # if no authority link, build a search query
+            unless ($subfield9) {
+                push @link_loop, {
+                    limit    => 'au',
+                    'link'   => $linkvalue,
+                    operator => (scalar @link_loop) ? ' and ' : undef
+                };
             }
-            $value = GetAuthorisedValueDesc( $field->tag(), $authors_subfield->[0], $authors_subfield->[1], '', $tagslib )
-              if ( $marcflavour eq 'UNIMARC' and ( $authors_subfield->[0] =~ /4/ ) );
             my @this_link_loop = @link_loop;
-            my $separator;
-            if ( $count_auth != 0 ) {
-                $separator = C4::Context->preference('authoritysep');
+            # do not display $0
+            unless ( $code eq '0') {
+                push @subfields_loop, {
+                    tag       => $field->tag(),
+                    code      => $code,
+                    value     => $value,
+                    link_loop => \@this_link_loop,
+                    separator => (scalar @subfields_loop) ? $authoritysep : ''
+                };
             }
-            push @subfields_loop,
-              { tag       => $field->tag(),
-                code      => $subfieldcode,
-                value     => $value,
-                link_loop => \@this_link_loop,
-                separator => $separator
-              }
-              unless ( $authors_subfield->[0] eq '9' || $authors_subfield->[0] eq '0');
-            $count_auth++;
         }
         push @marcauthors, { MARCAUTHOR_SUBFIELDS_LOOP => \@subfields_loop };
     }
@@ -1892,76 +1900,63 @@ The series are stored in different fields depending on MARC flavour
 
 sub GetMarcSeries {
     my ( $record, $marcflavour ) = @_;
-    my ( $mintag, $maxtag );
+    my ( $mintag, $maxtag, $fields_filter );
     if ( $marcflavour eq "UNIMARC" ) {
         $mintag = "600";
         $maxtag = "619";
-    } else {    # assume marc21 if not unimarc
+        $fields_filter = '6..';
+    } else {    # marc21/normarc
         $mintag = "440";
         $maxtag = "490";
+        $fields_filter = '4..';
     }
 
     my @marcseries;
-    my $subjct   = "";
-    my $subfield = "";
-    my $marcsubjct;
+    my $authoritysep = C4::Context->preference('authoritysep');
 
-    foreach my $field ( $record->field('440'), $record->field('490') ) {
+    foreach my $field ( $record->field($fields_filter) ) {
+        next unless $field->tag() >= $mintag && $field->tag() <= $maxtag;
         my @subfields_loop;
-
-        #my $value = $field->subfield('a');
-        #$marcsubjct = {MARCSUBJCT => $value,};
         my @subfields = $field->subfields();
-
-        #warn "subfields:".join " ", @$subfields;
-        my $counter = 0;
         my @link_loop;
+
         for my $series_subfield (@subfields) {
+
+            # ignore $9, used for authority link
+            next if ( $series_subfield->[0] eq '9' );
+
             my $volume_number;
-            undef $volume_number;
-
-            # see if this is an instance of a volume
-            if ( $series_subfield->[0] eq 'v' ) {
-                $volume_number = 1;
-            }
-
             my $code      = $series_subfield->[0];
             my $value     = $series_subfield->[1];
             my $linkvalue = $value;
             $linkvalue =~ s/(\(|\))//g;
-            if ( $counter != 0 ) {
-                push @link_loop, { link => $linkvalue, operator => ' and ', };
-            } else {
-                push @link_loop, { link => $linkvalue, operator => undef, };
+
+            # see if this is an instance of a volume
+            if ( $code eq 'v' ) {
+                $volume_number = 1;
             }
-            my $separator;
-            if ( $counter != 0 ) {
-                $separator = C4::Context->preference('authoritysep');
-            }
+
+            push @link_loop, {
+                'link' => $linkvalue,
+                operator => (scalar @link_loop) ? ' and ' : undef
+            };
+
             if ($volume_number) {
                 push @subfields_loop, { volumenum => $value };
             } else {
-                if ( $series_subfield->[0] ne '9' ) {
-                    push @subfields_loop, {
-                        code      => $code,
-                        value     => $value,
-                        link_loop => \@link_loop,
-                        separator => $separator,
-                        volumenum => $volume_number,
-                    };
+                push @subfields_loop, {
+                    code      => $code,
+                    value     => $value,
+                    link_loop => \@link_loop,
+                    separator => (scalar @subfields_loop) ? $authoritysep : '',
+                    volumenum => $volume_number,
                 }
             }
-            $counter++;
         }
         push @marcseries, { MARCSERIES_SUBFIELDS_LOOP => \@subfields_loop };
 
-        #$marcsubjct = {MARCSUBJCT => $field->as_string(),};
-        #push @marcsubjcts, $marcsubjct;
-        #$subjct = $value;
-
     }
-    my $marcseriessarray = \@marcseries;
-    return $marcseriessarray;
+    return \@marcseries;
 }    #end getMARCseriess
 
 =head2 GetMarcHosts

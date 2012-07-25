@@ -13,24 +13,6 @@
         }
 
         var field_start = whichfield.parentNode.parentNode;
-      
-        // browse all its subfields (clear and $9)
-        var subfields = field_start.getElementsByTagName('input');
-        var re = /^tag_\d*_code_/;
-        for(var i=0, len = subfields.length ; i< len ; i++) { // browse all subfields
-            if(subfields[i].getAttribute('name').match(re)){ // it s a subfield
-                var code     = subfields[i];   // code is the first input 
-                var subfield = subfields[i+1]; // subfield the second
-
-            [% IF ( clear ) %]
-                if (subfield){subfield.value="" ;}
-            [% ELSE %]
-                if(code.value=='9'){
-                    subfield.value = "[% authid |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]";
-                }
-            [% END %]
-            }
-        }
 
         // Sets the good number of form fields for the specified subfield
         // Returns false if the cloning failed
@@ -90,6 +72,7 @@
             });
         }
 
+        [% UNLESS ( clear ) %]
         [% FOREACH SUBFIELD_LOO IN SUBFIELD_LOOP %]
             SetSubfieldValues(
                 "[% tag_number |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %][% SUBFIELD_LOO.marc_subfield |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]"
@@ -98,6 +81,26 @@
             [% END %]
             );
         [% END %]
+        [% END %]
+
+        // browse all its subfields (clear and $9)
+        var subfields = field_start.getElementsByTagName('input');
+        var re = /^tag_\d*_code_/;
+        for(var i=0, len = subfields.length ; i< len ; i++) { // browse all subfields
+            if(subfields[i].getAttribute('name').match(re)){ // it s a subfield
+                var code     = subfields[i];   // code is the first input
+                var subfield = subfields[i+1]; // subfield the second
+
+            [% IF ( clear ) %]
+                if (subfield){subfield.value="" ;}
+            [% ELSE %]
+                if(code.value=='9'){
+                    subfield.value = "[% authid |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]";
+                    break;
+                }
+            [% END %]
+            }
+        }
 
       	opener.close();
        	window.close();
