@@ -227,9 +227,11 @@ function changeFramework(fw) {
 </form>
 [% ELSE %]
 [% IF ( errors ) %]
+    <div class="dialog alert">
     [% FOREACH error IN errors %]
-	<div class="error">[% error.error %]</div>
+        <p>[% error.error %]</p>
     [% END %]
+    </div>
 [% ELSE %]
 <form id="mergeform" action="/cgi-bin/koha/cataloguing/merge.pl" method="post" onsubmit="return mergeformsubmit()">
 
