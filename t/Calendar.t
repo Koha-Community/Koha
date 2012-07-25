@@ -91,7 +91,7 @@ cmp_ok( $daycount->in_units('days'),
 
 my $ret = $cal->addDate( $test_dt, 1, 'days' );
 
-cmp_ok( $ret->ymd(), 'eq', '2012-07-24', 'Simple Single Day Add (Calendar)`' );
+cmp_ok( $ret->ymd(), 'eq', '2012-07-24', 'Simple Single Day Add (Calendar)' );
 
 $ret = $cal->addDate( $test_dt, 7, 'days' );
 cmp_ok( $ret->ymd(), 'eq', '2012-07-31', 'Add 7 days Calendar mode' );
