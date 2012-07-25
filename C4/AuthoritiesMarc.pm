@@ -1410,12 +1410,13 @@ sub merge {
         foreach my $tagfield (@tags_using_authtype){
 #             warn "tagfield : $tagfield ";
             foreach my $field ($marcrecord->field($tagfield)){
+                # biblio is linked to authority with $9 subfield containing authid
                 my $auth_number=$field->subfield("9");
                 my $tag=$field->tag();          
                 if ($auth_number==$mergefrom) {
                 my $field_to=MARC::Field->new(($tag_to?$tag_to:$tag),$field->indicator(1),$field->indicator(2),"9"=>$mergeto);
 		my $exclude='9';
-                foreach my $subfield (@record_to) {
+                foreach my $subfield (grep {$_->[0] ne '9'} @record_to) {
                     $field_to->add_subfields($subfield->[0] =>$subfield->[1]);
 		    $exclude.= $subfield->[0];
                 }

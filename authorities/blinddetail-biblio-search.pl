@@ -85,6 +85,7 @@ if ($authid) {
     # Get all values for each distinct subfield
     my %subfields;
     for ( $field->subfields ) {
+        next if $_->[0] == "9"; # $9 will be set with authid value
         my $letter = $_->[0];
         next if defined $subfields{$letter};
         my @values = $field->subfield($letter);
