@@ -80,6 +80,7 @@ sub dt_from_string {
             } elsif ( $date_format eq 'sql' ) {
                 $date_string =~
 s/(\d{4})(\d{2})(\d{2})\s+(\d{2})(\d{2})(\d{2})/$1-$2-$3T$4:$5:$6/;
+                return if ($date_string =~ /^0000-00-00/);
                 $date_string =~ s/00T/01T/;
             }
         }
@@ -162,6 +163,7 @@ sub format_sqldatetime {
     my $force_pref = shift;    # if testing we want to override Context
     if ( defined $str && $str =~ m/^\d{4}-\d{2}-\d{2}/ ) {
         my $dt = dt_from_string( $str, 'sql' );
+        return q{} unless $dt;
         $dt->truncate( to => 'minute' );
         return output_pref( $dt, $force_pref );
     }
