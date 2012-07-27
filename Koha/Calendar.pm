@@ -79,6 +79,7 @@ sub _init {
     }
     $self->{single_holidays} = DateTime::Set->from_datetimes( dates => $dates );
     $self->{days_mode} = C4::Context->preference('useDaysMode');
+    $self->{test} = 0;
     return;
 }
 
@@ -100,7 +101,6 @@ sub addDate {
         my $dt = $base_date + $add_duration;
         while ( $self->is_holiday($dt) ) {
 
-            # TODOP if hours set to 10 am
             $dt->add_duration($day_dur);
             if ( $unit eq 'hours' ) {
                 $dt->set_hour($return_by_hour);    # Staffs specific
@@ -169,25 +169,25 @@ sub days_between {
     my $start_dt = shift;
     my $end_dt   = shift;
 
-    my $datestart_temp = $start_dt->clone();
-    my $dateend_temp = $end_dt->clone();
 
     # start and end should not be closed days
-    my $duration = $dateend_temp->delta_days($datestart_temp);
-    $datestart_temp->truncate( to => 'days' );
-    $dateend_temp->truncate( to => 'days' );
-    while ( DateTime->compare( $datestart_temp, $dateend_temp ) == -1 ) {
-        $datestart_temp->add( days => 1 );
-        if ( $self->is_holiday($datestart_temp) ) {
-            $duration->subtract( days => 1 );
+    my $days = $start_dt->delta_days($end_dt)->delta_days;
+    for (my $dt = $start_dt->clone();
+        $dt <= $end_dt;
+        $dt->add(days => 1)
+    ) {
+        if ($self->is_holiday($dt)) {
+            $days--;
         }
     }
-    return $duration;
+    return DateTime::Duration->new( days => $days );
 
 }
 
 sub hours_between {
-    my ($self, $start_dt, $end_dt) = @_;
+    my ($self, $start_date, $end_date) = @_;
+    my $start_dt = $start_date->clone();
+    my $end_dt = $end_date->clone();
     my $duration = $end_dt->delta_ms($start_dt);
     $start_dt->truncate( to => 'days' );
     $end_dt->truncate( to => 'days' );
@@ -195,12 +195,19 @@ sub hours_between {
     # However for hourly loans the logic should be expanded to
     # take into account open/close times then it would be a duration
     # of library open hours
-    while ( DateTime->compare( $start_dt, $end_dt ) == -1 ) {
-        $start_dt->add( days => 1 );
-        if ( $self->is_holiday($start_dt) ) {
-            $duration->subtract( hours => 24 );
+    my $skipped_days = 0;
+    for (my $dt = $start_dt->clone();
+        $dt <= $end_dt;
+        $dt->add(days => 1)
+    ) {
+        if ($self->is_holiday($dt)) {
+            ++$skipped_days;
         }
     }
+    if ($skipped_days) {
+        $duration->subtract_duration(DateTime::Duration->new( hours => 24 * $skipped_days));
+    }
+
     return $duration;
 
 }
@@ -221,6 +228,35 @@ sub _mockinit {
     push @{$dates}, $special;
     $self->{single_holidays} = DateTime::Set->from_datetimes( dates => $dates );
     $self->{days_mode} = 'Calendar';
+    $self->{test} = 1;
+    return;
+}
+
+sub set_daysmode {
+    my ( $self, $mode ) = @_;
+
+    # if not testing this is a no op
+    if ( $self->{test} ) {
+        $self->{days_mode} = $mode;
+    }
+
+    return;
+}
+
+sub clear_weekly_closed_days {
+    my $self = shift;
+    $self->{weekly_closed_days} = [ 0, 0, 0, 0, 0, 0, 0 ];    # Sunday only
+    return;
+}
+
+sub add_holiday {
+    my $self = shift;
+    my $new_dt = shift;
+    my @dt = $self->{exception_holidays}->as_list;
+    push @dt, $new_dt;
+    $self->{exception_holidays} =
+      DateTime::Set->from_datetimes( dates => \@dt );
+
     return;
 }
 
@@ -287,7 +323,24 @@ passed at DateTime object returns 1 if it is a closed day
 $duration = $calendar->days_between($start_dt, $end_dt);
 
 Passed two dates returns a DateTime::Duration object measuring the length between them
-ignoring closed days
+ignoring closed days. Always returns a positive number irrespective of the
+relative order of the parameters
+
+=head2 set_daysmode
+
+For testing only allows the calling script to change days mode
+
+=head2 clear_weekly_closed_days
+
+In test mode changes the testing set of closed days to a new set with
+no closed days. TODO passing an array of closed days to this would
+allow testing of more configurations
+
+=head2 add_holiday
+
+Passed a datetime object this will add it to the calendar's list of
+closed days. This is for testing so that we can alter the Calenfar object's
+list of specified dates
 
 =head1 DIAGNOSTICS
 
