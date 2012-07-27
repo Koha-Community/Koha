@@ -967,7 +967,6 @@ sub BuildSummary {
     $thesaurus{'5'}="Lieux";
     $thesaurus{'6'}="Sujets";
     #thesaurus a remplir
-    my @fields = $record->fields();
     my $reported_tag;
 # if the library has a summary defined, use it. Otherwise, build a standard one
 # FIXME - it appears that the summary field in the authority frameworks
@@ -1010,7 +1009,6 @@ sub BuildSummary {
     my @seefrom;
     my @seealso;
     my @otherscript;
-    my @fields = $record->fields();
     if (C4::Context->preference('marcflavour') eq 'UNIMARC') {
 # construct UNIMARC summary, that is quite different from MARC21 one
 # accepted form
