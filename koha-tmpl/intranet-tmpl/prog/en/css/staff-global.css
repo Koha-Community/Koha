@@ -634,8 +634,9 @@ fieldset.rows label, fieldset.rows span.label {
 }
 
 fieldset.rows fieldset {
+    background-color: #FFF;
 	border-width : 1px;
-	margin : 0 0 .5em 0;
+    margin : 1em;
 	padding : .3em;
 }
 
@@ -732,6 +733,10 @@ fieldset.action, div.action {
   margin: 0;
      padding: .4em .4em .4em .1em;
   width: auto;
+}
+
+div.rows+div.rows {
+    margin-top : .6em;
 }
 
 div.rows {
@@ -1182,6 +1187,16 @@ div.alert strong {
 
 .dialog li {
     list-style-position:inside;
+}
+
+a.clear-field {
+    background : transparent url("../../img/clear-field.png") center left no-repeat;
+    padding-left : 16px;
+}
+
+a.clone-field {
+    background : transparent url("../../img/clone-field.png") center left no-repeat;
+    padding-left : 20px;
 }
 
 a.document {

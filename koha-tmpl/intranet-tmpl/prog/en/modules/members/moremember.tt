@@ -290,32 +290,24 @@ function validate1(date) {
 <h3>Additional attributes and identifiers</h3>
 [% FOREACH attribute IN attributes_loop %]
     [% IF attribute.class %]
-        <h4>[% attribute.lib %]</h4>
-        <table id="aai_[% attribute.class %]">
+        <div id="aai_[% attribute.class %]" class="rows">
     [% ELSE %]
-        <table id="aai">
+        <div id="aai" class="rows">
     [% END %]
-        <thead>
-            <tr>
-                <th>Type</th>
-                <th>Description</th>
-                <th>Value</th>
-            </tr>
-        </thead>
-        <tbody>
+        <h4>[% attribute.lib %]</h4>
+        <ol>
         [% FOREACH item IN attribute.items %]
-            <tr>
-                <td>[% item.code %]</td>
-                <td>[% item.description %]</td>
-                <td>[% item.value %]
-                    [% IF ( item.value_description ) %]
-                        ([% item.value_description %])
-                    [% END %]
-                </td>
-            </tr>
+            <li>
+                <span class="label">[% item.description %]: </span>
+                [% IF ( item.value_description ) %]
+                    [% item.value_description %]
+                [% ELSE %]
+                    [% item.value %]
+                [% END %]
+            </li>
         [% END %]
-        </tbody>
-    </table>
+        </ol>
+    </div>
 [% END %]
 </div>
 <div class="action"><a href="memberentry.pl?op=modify&amp;borrowernumber=[% borrowernumber %]&amp;step=4">Edit</a></div>

@@ -36,49 +36,39 @@
     });
 
     function clear_entry(node) {
-        var original = node.parentNode.parentNode;
+        var original = node.parentNode;
         $("input[type=text]", original).attr('value', '');
         $("select", original).attr('value', '');
     }
 
     function clone_entry(node) {
-        var original = node.parentNode.parentNode;
-        var clone = original.cloneNode(true);
+        var original = $(node).parent();
+        var clone = original.clone();
+
         var newId = 50 + parseInt(Math.random() * 100000);
-        $("input", clone).attr('id', function() {
+        $("input,select,textarea", clone).attr('id', function() {
             return this.id.replace(/patron_attr_\d+/, 'patron_attr_' + newId);
         });
-        $("input", clone).attr('name', function() {
+        $("input,select,textarea", clone).attr('name', function() {
             return this.name.replace(/patron_attr_\d+/, 'patron_attr_' + newId);
         });
-        $("select", clone).attr('id', function() {
-            return this.id.replace(/patron_attr_\d+/, 'patron_attr_' + newId);
-        });
-        $("select", clone).attr('name', function() {
-            return this.name.replace(/patron_attr_\d+/, 'patron_attr_' + newId);
+        $("label", clone).attr('for', function() {
+            return $(this).attr("for").replace(/patron_attr_\d+/, 'patron_attr_' + newId);
         });
         $("input#patron_attr_" + newId, clone).attr('value','');
         $("select#patron_attr_" + newId, clone).attr('value','');
-        original.parentNode.insertBefore(clone, original.nextSibling);
+        $(original).after(clone);
+        return false;
     }
 
     function update_category_code(category_code) {
         if ( $(category_code).is("select") ) {
             category_code = $("#categorycode").find("option:selected").val();
         }
-        var mytables = $(".attributes_table>tbody");
-
-        mytables.find("tr").each(function(){
-            $(this).hide()
-        });
-
-        mytables.find("tr[data-category_code="+category_code+"]").each(function(){
-            $(this).show();
-        });
-        mytables.find("tr[data-category_code='']").each(function(){
-            $(this).show();
-        });
-
+        var mytables = $(".attributes_table");
+        $(mytables).find("li").hide();
+        $(mytables).find(" li[data-category_code="+category_code+"]").show();
+        $(mytables).find(" li[data-category_code='']").show();
     }
 
 		var MSG_SEPARATOR = _("Separator must be / in field ");
@@ -1345,24 +1335,13 @@
     <legend>Additional attributes and identifiers</legend>
     [% FOREACH pa_loo IN patron_attributes %]
         [% IF pa_loo.class %]
-            <table id="aai_[% pa_loo.class %]" class="attributes_table">
-            <caption>[% pa_loo.lib %]</caption>
-        [% ELSE %]
-            <table id="aai" class="attributes_table">
+            <fieldset id="aai_[% pa_loo.class %]">
+            <legend>[% pa_loo.lib %]</legend>
         [% END %]
-        <thead>
-            <tr>
-                <th>Type</th>
-                <th colspan="2">Value</th>
-            </tr>
-        </thead>
-        <tbody>
+        <ol class="attributes_table">
             [% FOREACH patron_attribute IN pa_loo.items %]
-                <tr data-category_code="[% patron_attribute.category_code %]">
-                    <td>
-                        [% patron_attribute.code %] ([% patron_attribute.description %])
-                    </td>
-                    <td>
+                <li data-category_code="[% patron_attribute.category_code %]">
+                    <label for="[% patron_attribute.form_id %]">[% patron_attribute.description %]: </label>
                         <input type="hidden" id="[% patron_attribute.form_id %]_code" name="[% patron_attribute.form_id %]_code" value="[% patron_attribute.code |html %]" />
                         [% IF ( patron_attribute.use_dropdown ) %]
                             <select id="[% patron_attribute.form_id %]" name="[% patron_attribute.form_id %]">
@@ -1389,20 +1368,17 @@
                             [% END %]
                         [% END %]
                         [% IF ( patron_attribute.password_allowed ) %]
-                            (Password: <input type="password" maxlength="64" value="[% patron_attribute.password %]"
+                            (<label class="yesno" for="[% patron_attribute.form_id %]_password">Password:</label> <input type="password" maxlength="64" value="[% patron_attribute.password %]"
                                    id="[% patron_attribute.form_id %]_password" name="[% patron_attribute.form_id %]_password" />)
                         [% END %]
-                    </td>
-                    <td>
-                        <a href="#" onclick="clear_entry(this); return false;">Clear</a>
+                        <a href="#" class="clear-field" onclick="clear_entry(this); return false;">Clear</a>
                         [% IF ( patron_attribute.repeatable ) %]
-                        <a href="#" onclick="clone_entry(this); return false;">New</a>
+                        <a href="#" class="clone-field" onclick="clone_entry(this); return false;">New</a>
                         [% END %]
-                    </td>
-                </tr>
+                </li>
             [% END %]
-        </tbody>
-        </table>
+        </ol>
+        [% IF pa_loo.class %]</fieldset>[% END %]
     [% END %]
   </fieldset>
 [% END %][% END %][% END %]
