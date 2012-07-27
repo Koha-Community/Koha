@@ -16,6 +16,7 @@
           <option value='email,emailpro,B_email,'>Email</option>
           <option value='borrowernumber'>Borrower number</option>
           <option value='phone,phonepro,B_phone,altcontactphone,mobile'>Phone number</option>
+          <option value='streettype,address,address2,city,state,zipcode,country'>Street Address</option>
       </select>
 
     <label for="orderby">Order by:</label>
