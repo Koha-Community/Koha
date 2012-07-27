@@ -22,11 +22,10 @@
   <xsl:variable name="DisplayOPACiconsXSLT" select="marc:sysprefs/marc:syspref[@name='DisplayOPACiconsXSLT']"/>
   <xsl:variable name="OPACURLOpenInNewWindow" select="marc:sysprefs/marc:syspref[@name='OPACURLOpenInNewWindow']"/>
   <xsl:variable name="URLLinkText" select="marc:sysprefs/marc:syspref[@name='URLLinkText']"/>
-  <xsl:variable name="ShowISBD" select="marc:sysprefs/marc:syspref[@name='viewISBD']"/>
 
   <xsl:if test="marc:datafield[@tag=200]">
     <xsl:for-each select="marc:datafield[@tag=200]">
-      <h1>
+      <h1 class="title">
         <xsl:call-template name="addClassRtl" />
         <xsl:for-each select="marc:subfield">
           <xsl:choose>
@@ -66,23 +65,6 @@
       </h1>
     </xsl:for-each>
   </xsl:if>
-
-  <div id="views">
-    <span class="view">
-      <span id="Normalview">Normal View</span>
-    </span>
-    <span class="view">
-      <a id="MARCviewPop" href="/cgi-bin/koha/opac-showmarc.pl?id={marc:datafield[@tag=090]/marc:subfield[@code='a']}" title="MARC" rel="gb_page_center[600,500]">MARC View</a>
-    </span>
-    <span class="view">
-      <a id="MARCview" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber={marc:datafield[@tag=090]/marc:subfield[@code='a']}" title="MARC">Expanded MARC View</a>
-    </span>
-    <xsl:if test="$ShowISBD!='0'">
-        <span class="view">
-          <a id="ISBDview" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber={marc:datafield[@tag=090]/marc:subfield[@code='a']}">Card View (ISBD)</a>
-        </span>
-    </xsl:if>
-  </div>
 
   <xsl:call-template name="tag_title">
     <xsl:with-param name="tag">454</xsl:with-param>
