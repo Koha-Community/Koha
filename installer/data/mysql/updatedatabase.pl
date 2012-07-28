@@ -5239,7 +5239,7 @@ $DBversion = "3.08.01.002";
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('SuspendHoldsIntranet', '1', NULL , 'Allow holds to be suspended from the intranet.', 'YesNo')");
     $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('SuspendHoldsOpac', '1', NULL , 'Allow holds to be suspended from the OPAC.', 'YesNo')");
-    print "Upgrade to $DBversion done (Add system preference OpacBrowseResults ))\n";
+    print "Upgrade to $DBversion done (Add system preferences SuspendHoldsIntranet and SuspendHoldsOpac ))\n";
     SetVersion($DBversion);
 }
 
