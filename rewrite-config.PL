@@ -101,6 +101,7 @@ $prefix = $ENV{'INSTALL_BASE'} || "/usr";
   "__KOHA_GROUP__" => "koha",
   "__ZEBRA_PASS__" => "zebrastripes",
   "__ZEBRA_USER__" => "kohauser",
+  '__BACKUP_DIR__' => "$prefix/var/spool",
   '__INTRANET_CGI_DIR__' => "$prefix/intranet/cgi-bin",
   '__INTRANET_TMPL_DIR__' => "$prefix/intranet/templates",
   '__INTRANET_WWW_DIR__' => "$prefix/intranet/www",
