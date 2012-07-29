@@ -157,7 +157,7 @@ elsif ( $op eq "checkout" ) {
             hide_main                 => 1,
         );
         if ($issue_error eq 'DEBT') {
-            $template->param(amount => $impossible->{DEBT});
+            $template->param(amount => C4::Budgets->GetCurrency()->{symbol}.$impossible->{DEBT});
         }
         #warn "issue_error: " . $issue_error ;
         if ( $issue_error eq "NO_MORE_RENEWALS" ) {
@@ -189,6 +189,9 @@ elsif ( $op eq "checkout" ) {
             "circ_error_$issue_error" => 1,
             hide_main                 => 1,
         );
+        if ($issue_error eq 'DEBT') {
+            $template->param(amount => C4::Budgets->GetCurrency()->{symbol}.$needconfirm->{DEBT});
+        }
     } else {
         if ( $confirmed || $issuenoconfirm ) {    # we'll want to call getpatroninfo again to get updated issues.
             # warn "issuing book?";
