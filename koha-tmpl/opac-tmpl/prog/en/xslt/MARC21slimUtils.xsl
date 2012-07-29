@@ -40,6 +40,26 @@
 		<xsl:value-of select="substring($str,1,string-length($str)-string-length($delimeter))"/>
 	</xsl:template>
 
+    <xsl:template name="subfieldSelectSpan">
+        <xsl:param name="codes"/>
+        <xsl:param name="delimeter"><xsl:text> </xsl:text></xsl:param>
+        <xsl:param name="subdivCodes"/>
+        <xsl:param name="subdivDelimiter"/>
+        <xsl:param name="prefix"/>
+        <xsl:param name="suffix"/>
+            <xsl:for-each select="marc:subfield">
+                <xsl:if test="contains($codes, @code)">
+                    <span>
+                        <xsl:attribute name="class"><xsl:value-of select="@code"/></xsl:attribute>
+                        <xsl:if test="contains($subdivCodes, @code)">
+                            <xsl:value-of select="$subdivDelimiter"/>
+                        </xsl:if>
+                        <xsl:value-of select="$prefix"/><xsl:value-of select="text()"/><xsl:value-of select="$suffix"/><xsl:if test="position()!=last()"><xsl:value-of select="$delimeter"/></xsl:if>
+                    </span>
+                </xsl:if>
+            </xsl:for-each>
+    </xsl:template>
+
 	<xsl:template name="buildSpaces">
 		<xsl:param name="spaces"/>
 		<xsl:param name="char"><xsl:text> </xsl:text></xsl:param>
