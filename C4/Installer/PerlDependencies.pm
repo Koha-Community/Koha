@@ -574,6 +574,11 @@ our $PERL_DEPS = {
         'required' => '0',
         'min_ver'  => '1.7',
     },
+    'DBD::Mock' => {
+        'usage'    => 'Core',
+        'required' => '0',
+        'min_ver'  => '1.39'
+    },
     'Test::MockModule' => {
         'usage'    => 'Core',
         'required' => '0',
