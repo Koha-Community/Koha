@@ -244,7 +244,18 @@
                 <xsl:text>/cgi-bin/koha/opac-search.pl?q=an:</xsl:text>
                 <xsl:value-of select="."/>
               </xsl:attribute>
-              <xsl:value-of select="$display"/>
+              <xsl:choose>
+                <xsl:when test="string-length($display) &gt; 0">
+                  <xsl:call-template name="chopPunctuation">
+                    <xsl:with-param name="chopString">
+                      <xsl:value-of select="$display"/>
+                    </xsl:with-param>
+                  </xsl:call-template>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:value-of select="."/>
+                </xsl:otherwise>
+              </xsl:choose>
             </a>
             <xsl:variable name="ncommas"
                  select="string-length($ends) - string-length(translate($ends, ',', ''))" />
@@ -254,7 +265,7 @@
           </xsl:if>
         </xsl:for-each>
       </xsl:when>
-      <xsl:otherwise>
+      <xsl:when test="marc:subfield[@code=a]">
         <a>
           <xsl:attribute name="href">
             <xsl:text>/cgi-bin/koha/opac-search.pl?q=su:</xsl:text>
@@ -270,7 +281,8 @@
             </xsl:with-param>
           </xsl:call-template>
         </a>
-      </xsl:otherwise>
+      </xsl:when>
+      <xsl:otherwise/>
     </xsl:choose>
     <xsl:if test="not(position()=last())">
       <xsl:text> | </xsl:text>
