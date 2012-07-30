@@ -1,4 +1,4 @@
-<div id="header" class="gradient">
+<div class="gradient">
 <h1 id="logo"><a href="/cgi-bin/koha/mainpage.pl">[% LibraryName %]</a></h1><!-- Begin Cities Resident Search Box -->
 <div id="header_search">
 	<div id="city_search" class="residentsearch">
