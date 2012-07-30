@@ -27,6 +27,12 @@
             <li><a class="addtocart cart[% biblionumber %]" href="#" onclick="addRecord('[% biblionumber %]'); return false;">Add to your cart</a>  <a style="display:none;" class="cartRemove cartR[% biblionumber %]" href="#" onclick="delSingleRecord('[% biblionumber %]'); return false;">(remove)</a></li>
         [% END %]
     [% END %]
+    [% IF ( OpacHighlightedWords && query_desc ) %]
+    <li>
+        <a href="#" class="highlight_toggle" id="highlight_toggle_off">Unhighlight</a>
+        <a href="#" class="highlight_toggle" id="highlight_toggle_on">Highlight</a>
+    </li>
+    [% END %]
     <li style="display:none;"><a href="#" id="furthersearches">More searches</a></li>
 </ul>
 

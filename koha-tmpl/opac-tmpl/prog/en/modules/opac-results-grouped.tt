@@ -15,6 +15,12 @@ href="/cgi-bin/koha/opac-rss.pl?[% query_cgi %][% limit_cgi |html %]" />
 var q_array = new Array();  // will hold the search terms, if possible
 
 $(document).ready(function(){
+    [% IF ( OpacHighlightedWords ) %]
+        $('a.title').each(function() {
+            $(this).attr('href', $(this).attr('href') + '&query_desc=[% query_desc | url %]');
+        });
+    [% END %]
+
 	$('#sortsubmit').hide();
     $('#sort_by').change(function() {
         $('#bookbag_form').submit();

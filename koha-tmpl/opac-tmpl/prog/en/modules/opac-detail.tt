@@ -12,6 +12,7 @@
 [% IF ( OpacStarRatings != 'disable' ) %]<script type="text/javascript" src="/opac-tmpl/prog/en/lib/jquery/plugins/jquery.rating.js"></script>
 <link rel="stylesheet" type="text/css" href="/opac-tmpl/prog/en/css/jquery.rating.css" />[% END %]
 
+[% IF ( OpacHighlightedWords ) %]<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.highlight-3.js"></script>[% END %]
 <script type="text/JavaScript" language="JavaScript">
 //<![CDATA[
 
@@ -25,6 +26,23 @@
         [% END %]
     [% END %]
 
+    [% IF ( OpacHighlightedWords ) %]
+        var q_array = new Array();  // holds search terms if available
+
+        function highlightOff() {
+            $("#catalogue_detail_biblio").removeHighlight();
+            $(".highlight_toggle").toggle();
+        }
+        function highlightOn() {
+            var x;
+            for (x in q_array) {
+                $(".title").highlight(q_array[x]);
+                $(".author").highlight(q_array[x]);
+                $(".results_summary").highlight(q_array[x]);
+            }
+            $(".highlight_toggle").toggle();
+        }
+    [% END %]
 
      $(document).ready(function() { 
         $('#bibliodescriptions').tabs();
@@ -45,6 +63,11 @@
             widgets : ['zebra'],
             sortList: [[0,0]]
         });
+        [% IF ( query_desc ) %][% IF ( OpacHighlightedWords ) %]var query_desc = "[% query_desc |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]";
+            q_array = query_desc.split(" ");
+            highlightOn();
+            $("#highlight_toggle_on" ).hide().click(function() {highlightOn() ;});
+            $("#highlight_toggle_off").show().click(function() {highlightOff();});[% END %][% END %]
 	[% IF ( GoogleJackets ) %]
         KOHA.Google.GetCoverFromIsbn([% covernewwindow %]);
 	[% END %]

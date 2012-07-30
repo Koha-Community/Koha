@@ -961,4 +961,8 @@ if (C4::Context->preference('OPACLocalCoverImages') == 1) {
     $template->{VARS}->{localimages} = \@images;
 }
 
+if (C4::Context->preference('OpacHighlightedWords')) {
+    $template->{VARS}->{query_desc} = $query->param('query_desc');
+}
+
 output_html_with_http_headers $query, $cookie, $template->output;
