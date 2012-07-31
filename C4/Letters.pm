@@ -540,6 +540,9 @@ sub GetProcessedLetter {
        }
     }
 
+    my $OPACBaseURL = C4::Context->preference('OPACBaseURL');
+    $letter->{content} =~ s/<<OPACBaseURL>>/$OPACBaseURL/go;
+
     if ($want_librarian) {
         # parsing librarian name
         my $userenv = C4::Context->userenv;
@@ -638,18 +641,19 @@ sub _parseletter_sth {
     # check cache first
     (defined $handles{$table}) and return $handles{$table};
     my $query = 
-    ($table eq 'biblio'       ) ? "SELECT * FROM $table WHERE   biblionumber = ?"                                 :
-    ($table eq 'biblioitems'  ) ? "SELECT * FROM $table WHERE   biblionumber = ?"                                 :
-    ($table eq 'items'        ) ? "SELECT * FROM $table WHERE     itemnumber = ?"                                 :
-    ($table eq 'issues'       ) ? "SELECT * FROM $table WHERE     itemnumber = ?"                                 :
-    ($table eq 'old_issues'   ) ? "SELECT * FROM $table WHERE     itemnumber = ? ORDER BY timestamp DESC LIMIT 1" :
-    ($table eq 'reserves'     ) ? "SELECT * FROM $table WHERE borrowernumber = ? and biblionumber = ?"            :
-    ($table eq 'borrowers'    ) ? "SELECT * FROM $table WHERE borrowernumber = ?"                                 :
-    ($table eq 'branches'     ) ? "SELECT * FROM $table WHERE     branchcode = ?"                                 :
-    ($table eq 'suggestions'  ) ? "SELECT * FROM $table WHERE   suggestionid = ?"                                 :
-    ($table eq 'aqbooksellers') ? "SELECT * FROM $table WHERE             id = ?"                                 :
-    ($table eq 'aqorders'     ) ? "SELECT * FROM $table WHERE    ordernumber = ?"                                 :
-    ($table eq 'opac_news'    ) ? "SELECT * FROM $table WHERE          idnew = ?"                                 :
+    ($table eq 'biblio'       ) ? "SELECT * FROM $table WHERE   biblionumber = ?"                                  :
+    ($table eq 'biblioitems'  ) ? "SELECT * FROM $table WHERE   biblionumber = ?"                                  :
+    ($table eq 'items'        ) ? "SELECT * FROM $table WHERE     itemnumber = ?"                                  :
+    ($table eq 'issues'       ) ? "SELECT * FROM $table WHERE     itemnumber = ?"                                  :
+    ($table eq 'old_issues'   ) ? "SELECT * FROM $table WHERE     itemnumber = ? ORDER BY timestamp DESC LIMIT 1"  :
+    ($table eq 'reserves'     ) ? "SELECT * FROM $table WHERE borrowernumber = ? and biblionumber = ?"             :
+    ($table eq 'borrowers'    ) ? "SELECT * FROM $table WHERE borrowernumber = ?"                                  :
+    ($table eq 'branches'     ) ? "SELECT * FROM $table WHERE     branchcode = ?"                                  :
+    ($table eq 'suggestions'  ) ? "SELECT * FROM $table WHERE   suggestionid = ?"                                  :
+    ($table eq 'aqbooksellers') ? "SELECT * FROM $table WHERE             id = ?"                                  :
+    ($table eq 'aqorders'     ) ? "SELECT * FROM $table WHERE    ordernumber = ?"                                  :
+    ($table eq 'opac_news'    ) ? "SELECT * FROM $table WHERE          idnew = ?"                                  :
+    ($table eq 'borrower_modifications') ? "SELECT * FROM $table WHERE borrowernumber = ? OR verification_token =?":
     undef ;
     unless ($query) {
         warn "ERROR: No _parseletter_sth query for table '$table'";
@@ -756,7 +760,7 @@ sub EnqueueLetter {
     my $params = shift or return;
 
     return unless exists $params->{'letter'};
-    return unless exists $params->{'borrowernumber'};
+#   return unless exists $params->{'borrowernumber'};
     return unless exists $params->{'message_transport_type'};
 
     my $content = $params->{letter}->{content};

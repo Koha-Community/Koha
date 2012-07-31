@@ -527,3 +527,37 @@ OPAC:
                   yes: Use
                   no: "Don't use"
             - "the item collection code when finding items for the shelf browser."      
+
+    Self Registration:
+        -
+            - pref: PatronSelfRegistration
+              choices:
+                  yes: Allow
+                  no: "Don't allow"
+            - "library patrons to register an account via the OPAC."
+        -
+            - pref: PatronSelfRegistrationVerifyByEmail
+              choices:
+                  yes: Require
+                  no: "Don't require"
+            - "that a self-registering patron verify his or herself via email."
+        -
+            - "Use the patron category code"
+            - pref: PatronSelfRegistrationDefaultCategory
+              class: short
+            - "as the default patron category for patrons registered via the OPAC."
+        -
+            - "Delete patrons registered via the OPAC, but not yet verified after"
+            - pref: PatronSelfRegistrationExpireTemporaryAccountsDelay
+              class: integer
+            - "days."
+        -
+            - "The following <a href='http://schema.koha-community.org/tables/borrowers.html' target='blank'>database columns</a> must be filled in on the patron entry screen:"
+            - pref: PatronSelfRegistrationBorrowerMandatoryField
+              class: multi
+            - (separate columns with |)
+        -
+            - "The following <a href='http://schema.koha-community.org/tables/borrowers.html' target='blank'>database columns</a> will not appear on the patron entry screen:"
+            - pref: PatronSelfRegistrationBorrowerUnwantedField
+              class: multi
+            - (separate columns with |)

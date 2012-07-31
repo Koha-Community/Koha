@@ -73,6 +73,7 @@ sub logaction {
     # the scalar '0'.
     my $userenv = C4::Context->userenv();
     my $usernumber = (ref($userenv) eq 'HASH') ? $userenv->{'number'} : 0;
+    $usernumber ||= 0;
 
     my $dbh = C4::Context->dbh;
     my $sth=$dbh->prepare("Insert into action_logs (timestamp,user,module,action,object,info) values (now(),?,?,?,?,?)");

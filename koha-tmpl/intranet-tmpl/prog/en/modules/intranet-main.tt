@@ -107,6 +107,7 @@
 <div class="yui-g">
             [% IF ( ( CAN_user_tools_moderate_comments  && pendingcomments ) 
                     || ( CAN_user_tools_moderate_tags && pendingtags )
+                    || ( CAN_user_borrowers && pending_borrower_modifications )
                     || ( CAN_user_acquisition && pendingsuggestions ) ) %]
                 <div id="area-pending">
                     [% IF ( CAN_user_acquisition && pendingsuggestions ) %]
@@ -130,9 +131,18 @@
                         <span class="pending-number-link">[% pendingtags %]</span>
                     </div>
                     [% END %]
-                </div>
-            [% END %]
 
+
+                    [% IF ( CAN_user_borrowers && pending_borrower_modifications ) %]
+                    <div class="pending-info">
+                        <a href="/cgi-bin/koha/members/members-update.pl">Patrons requesting modifications</a>:
+                        <span class="pending-number-link">[% pending_borrower_modifications %]</span>
+                    </div>
+                    [% END %]
+
+                </div>
+
+            [% END %]
 
 </div>
             [% IF ( IntranetmainUserblock ) %]

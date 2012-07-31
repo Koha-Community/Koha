@@ -1,0 +1,30 @@
+[% INCLUDE 'doc-head-open.inc' %]
+[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+<body id="opac-main">
+[% IF ( OpacNav ) %]<div id="doc3" class="yui-t1">[% ELSE %]<div id="doc3" class="yui-t7">[% END %]
+   <div id="bd">
+[% INCLUDE 'masthead.inc' %]
+
+<div id="yui-main">
+    <div class="yui-b">
+        <div id="loggedin" class="yui-ge">
+            <div class="yui-u first">
+                <h1>Registration invalid!</h1>
+
+                <p>There were problems processing your registration. Please contact your library for help.</p>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+[% IF ( OpacNav ) %]<div class="yui-b">
+    <div id="opacnav" class="container">
+        [% INCLUDE 'navigation.inc' %]
+    </div>
+[% END %]
+
+</div>
+[% INCLUDE 'opac-bottom.inc' %]

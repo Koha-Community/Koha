@@ -105,3 +105,15 @@ Date due: <<issues.date_due>><br />
    <li><<items.barcode>></li>
    <li><<items.itemcallnumber>></li>
 </ul>', 1);
+
+
+INSERT INTO `letter` (`module`,`code`,`branchcode`,`name`,`is_html`,`title`,`content`)
+VALUES (
+'members',  'OPAC_REG_VERIFY',  '',  'Opac Self-Registration Verification Email',  '1',  'Verify Your Account',  'Hello!
+
+Your library account has been created. Please verify your email address by clicking this link to complete the signup process:
+
+http://<<OPACBaseURL>>/cgi-bin/koha/opac-registration-verify.pl?token=<<borrower_modifications.verification_token>>
+
+If you did not initiate this request, you may safely ignore this one-time message. The request will expire shortly.'
+);

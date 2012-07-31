@@ -1,0 +1,140 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Patrons [% IF ( searching ) %]&rsaquo; Search results[% END %]</title>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+<body id="pat_member" class="pat">
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'patron-search.inc' %]
+
+[%
+    SET field_display_names = {
+        surname         => "Surname"
+        firstname       => "First name"
+        title           => "Title"
+        othernames      => "Other names"
+        initials        => "Initials"
+        streetnumber    => "Street number"
+        streettype      => "Street type"
+        address         => "Address"
+        address2        => "Address 2"
+        city            => "City"
+        state           => "State"
+        zipcode         => "Zip code"
+        country         => "Country"
+        email           => "Email"
+        phone           => "Primary Phone"
+        mobile          => "Primary Mobile Phone"
+        fax             => "Fax"
+        emailpro        => "Secondary email"
+        phonepro        => "Secondary phone"
+        B_streetnumber  => "Alternate address - street number"
+        B_streettype    => "Alternate address - street type"
+        B_address       => "Alternate address"
+        B_address2      => "Alternate address 2"
+        B_city          => "Alternate address - city"
+        B_state         => "Alternate address - state"
+        B_zipcode       => "Alternate address - zip code"
+        B_email         => "Alternate address - email"
+        B_phone         => "Alertnate address - phone"
+        dateofbirth     => "Date of birth"
+        contactname     => "Contact - last name"
+        contactfirstname=> "Contact - first name"
+        contacttitle    => "Contact - title"
+        relationship    => "Contact - relationship"
+        ethnicity       => "Ethnicity"
+        ethnotes        => "Ethnicity notes"
+        sex             => "Sex"
+        altcontactfirstname => "Alternate contact - first name"
+        altcontactsurname   => "Alternate contact - surname"
+        altcontactaddress1  => "Alternate contact - address"
+        altcontactaddress2  => "Alternate contact - address 2"
+        altcontactaddress3  => "Alternate contact - city"
+        altcontactstate     => "Alternate contact - state"
+        altcontactzipcode   => "Alternate contact - zip code"
+        altcontactcounty    => "Alternate contact - county"
+        altcontactphone     => "Alternate contact - phone"
+        smsalertnumber      => "SMS alert number"
+    }
+%]
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; Patrons &rsaquo; Modifications</div>
+
+<div id="doc2" class="yui-t7">
+
+   <div id="bd">
+        <div id="yui-main">
+            <div class="yui-b">
+                <div class="yui-g">
+                    [% IF PendingModifications %]
+                        <form method="post" action="members-update-do.pl">
+
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th colspan="3">Action</th>
+                                        <th rowspan="2">Patron</th>
+                                        <th rowspan="2">Changes</th>
+                                    </tr>
+
+                                    <tr>
+                                        <th>Approve</th>
+                                        <th>Deny</th>
+                                        <th>Ignore</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    [% FOREACH pm IN PendingModifications %]
+                                        [% SET borrowernumber = pm.borrowernumber %]
+                                        <tr>
+                                            <td>
+                                                <input type="radio" name="modify_[% pm.borrowernumber %]" value="approve" />
+                                            </td>
+                                            <td>
+                                                <input type="radio" name="modify_[% pm.borrowernumber %]" value="deny" />
+                                            </td>
+                                            <td>
+                                                <input type="radio" name="modify_[% pm.borrowernumber %]" value="ignore" checked="checked"/>
+                                            </td>
+
+                                            <td>
+                                                [% borrowers.$borrowernumber.firstname %] [% borrowers.$borrowernumber.surname %]
+                                            </td>
+
+                                            <td>
+                                                <table>
+                                                    <tr>
+                                                        <th>Field</th>
+                                                        <th>From</th>
+                                                        <th>To</th>
+                                                    </tr>
+
+
+                                                    [% FOREACH key IN pm.keys %]
+                                                        [% IF field_display_names.$key %]
+                                                            [% IF ( ( pm.$key OR borrowers.$borrowernumber.$key ) && ( pm.$key != borrowers.$borrowernumber.$key ) ) %]
+                                                                <tr>
+                                                                    <td>[% field_display_names.$key %]</td>
+                                                                    <td>[% borrowers.$borrowernumber.$key %]</td>
+                                                                    <td>[% pm.$key %]</td>
+                                                                </tr>
+                                                            [% END %]
+                                                        [% END %]
+                                                    [% END %]
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    [% END %]
+                                </tbody>
+                            </table>
+
+                            <p><input type="submit" /></p>
+
+                        </form>
+                    [% ELSE %]
+                        <p>There are no pending patron modifications.</p>
+                    [% END %]
+                </div>
+            </div>
+        </div>
+    </div>
+[% INCLUDE 'intranet-bottom.inc' %]

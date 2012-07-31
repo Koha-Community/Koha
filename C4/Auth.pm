@@ -462,6 +462,8 @@ sub get_template_and_user {
             SyndeticsSeries              => C4::Context->preference("SyndeticsSeries"),
             SyndeticsCoverImageSize      => C4::Context->preference("SyndeticsCoverImageSize"),
             OPACLocalCoverImages         => C4::Context->preference("OPACLocalCoverImages"),
+            PatronSelfRegistration       => C4::Context->preference("PatronSelfRegistration"),
+            PatronSelfRegistrationDefaultCategory => C4::Context->preference("PatronSelfRegistrationDefaultCategory"),
         );
 
         $template->param(OpacPublic => '1') if ($user || C4::Context->preference("OpacPublic"));
@@ -967,10 +969,9 @@ sub checkauth {
         OpacAuthorities      => C4::Context->preference("OpacAuthorities"),
         OpacBrowser          => C4::Context->preference("OpacBrowser"),
         opacheader           => C4::Context->preference("opacheader"),
-        TagsEnabled                  => C4::Context->preference("TagsEnabled"),
+        TagsEnabled          => C4::Context->preference("TagsEnabled"),
         OPACUserCSS           => C4::Context->preference("OPACUserCSS"),
-        intranetcolorstylesheet =>
-								C4::Context->preference("intranetcolorstylesheet"),
+        intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
         intranetstylesheet => C4::Context->preference("intranetstylesheet"),
         intranetbookbag    => C4::Context->preference("intranetbookbag"),
         IntranetNav        => C4::Context->preference("IntranetNav"),
@@ -978,7 +979,9 @@ sub checkauth {
         intranetuserjs     => C4::Context->preference("intranetuserjs"),
         IndependantBranches=> C4::Context->preference("IndependantBranches"),
         AutoLocation       => C4::Context->preference("AutoLocation"),
-		wrongip            => $info{'wrongip'},
+        wrongip            => $info{'wrongip'},
+        PatronSelfRegistration => C4::Context->preference("PatronSelfRegistration"),
+        PatronSelfRegistrationDefaultCategory => C4::Context->preference("PatronSelfRegistrationDefaultCategory"),
     );
 
     $template->param( OpacPublic => C4::Context->preference("OpacPublic"));

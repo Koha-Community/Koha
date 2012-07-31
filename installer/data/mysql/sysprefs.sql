@@ -388,3 +388,10 @@ INSERT INTO systempreferences (variable, value, options, explanation, type) VALU
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('HoldsToPullStartDate','2','Set the default start date for the Holds to pull list to this many days ago',NULL,'Integer');
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('alphabet','A B C D E F G H I J K L M N O P Q R S T U V W X Y Z','Alphabet than can be expanded into browse links, e.g. on Home > Patrons',NULL,'free');
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('RefundLostItemFeeOnReturn', '1', 'If enabled, the lost item fee charged to a borrower will be refunded when the lost item is returned.', NULL, 'YesNo');
+INSERT INTO systempreferences (`variable`, `value`, `options`, `explanation`, `type`) VALUES
+('PatronSelfRegistration', '0', NULL, 'If enabled, patrons will be able to register themselves via the OPAC.', 'YesNo'),
+('PatronSelfRegistrationVerifyByEmail', '0', NULL, 'If enabled, any patron attempting to register themselves via the OPAC will be required to verify themselves via email to activate his or her account.', 'YesNo'),
+('PatronSelfRegistrationDefaultCategory', '', '', 'A patron registered via the OPAC will receive a borrower category code set in this system preference.', 'free'),
+('PatronSelfRegistrationExpireTemporaryAccountsDelay', '0', NULL, 'If PatronSelfRegistrationDefaultCategory is enabled, this system preference controls how long a patron can have a temporary status before the account is deleted automatically. It is an integer value representing a number of days to wait before deleting a temporary patron account. Setting it to 0 disables the deleting of temporary accounts.', 'Integer'),
+('PatronSelfRegistrationBorrowerMandatoryField',  'surname|firstname', NULL ,  'Choose the mandatory fields for a patron''s account, when registering via the OPAC.',  'free'),
+('PatronSelfRegistrationBorrowerUnwantedField',  '', NULL ,  'Name the fields you don''t want to display when registering a new patron via the OPAC.',  'free');

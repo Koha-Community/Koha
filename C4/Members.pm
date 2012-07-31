@@ -25,6 +25,7 @@ use strict;
 use C4::Context;
 use C4::Dates qw(format_date_in_iso format_date);
 use Digest::MD5 qw(md5_base64);
+use String::Random qw( random_string );
 use Date::Calc qw/Today Add_Delta_YM check_date Date_to_Days/;
 use C4::Log; # logaction
 use C4::Overdues;
@@ -118,6 +119,7 @@ BEGIN {
     #Insert data
     push @EXPORT, qw(
         &AddMember
+        &AddMember_Opac
         &add_member_orgs
         &MoveMemberToDeleted
         &ExtendMemberSubscriptionTo
@@ -751,11 +753,25 @@ Returns as undef upon any db error without further processing
 sub AddMember {
     my (%data) = @_;
     my $dbh = C4::Context->dbh;
-	# generate a proper login if none provided
-	$data{'userid'} = Generate_Userid($data{'borrowernumber'}, $data{'firstname'}, $data{'surname'}) if $data{'userid'} eq '';
-	# create a disabled account if no password provided
-	$data{'password'} = ($data{'password'})? md5_base64($data{'password'}) : '!';
-	$data{'borrowernumber'}=InsertInTable("borrowers",\%data);	
+
+    # generate a proper login if none provided
+    $data{'userid'} = Generate_Userid($data{'borrowernumber'}, $data{'firstname'}, $data{'surname'}) if $data{'userid'} eq '';
+
+    # add expiration date if it isn't already there
+    unless ( $data{'dateexpiry'} ) {
+        $data{'dateexpiry'} = GetExpiryDate( $data{'categorycode'}, C4::Dates->new()->output("iso") );
+    }
+
+    # add enrollment date if it isn't already there
+    unless ( $data{'dateenrolled'} ) {
+        $data{'dateenrolled'} = C4::Dates->new()->output("iso");
+    }
+
+    # create a disabled account if no password provided
+    $data{'password'} = ($data{'password'})? md5_base64($data{'password'}) : '!';
+    $data{'borrowernumber'}=InsertInTable("borrowers",\%data);
+
+
     # mysql_insertid is probably bad.  not necessarily accurate and mysql-specific at best.
     logaction("MEMBERS", "CREATE", $data{'borrowernumber'}, "") if C4::Context->preference("BorrowersLog");
     
@@ -2379,6 +2395,22 @@ sub GetBorrowersWithEmail {
     return @result;
 }
 
+sub AddMember_Opac {
+    my ( %borrower ) = @_;
+
+    $borrower{'categorycode'} = C4::Context->preference('PatronSelfRegistrationDefaultCategory');
+
+    my $sr = new String::Random;
+    $sr->{'A'} = [ 'A'..'Z', 'a'..'z' ];
+    my $password = $sr->randpattern("AAAAAAAAAA");
+    $borrower{'password'} = $password;
+
+    $borrower{'cardnumber'} = fixup_cardnumber();
+
+    my $borrowernumber = AddMember(%borrower);
+
+    return ( $borrowernumber, $password );
+}
 
 END { }    # module clean-up code here (global destructor)
 

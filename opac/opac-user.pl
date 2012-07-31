@@ -368,7 +368,7 @@ $template->param(
 $template->param( DHTMLcalendar_dateformat  => C4::Dates->DHTMLcalendar() );
 $template->param(
     SuspendHoldsOpac => C4::Context->preference('SuspendHoldsOpac'),
-    AutoResumeSuspendedHolds => C4::Context->preference('AutoResumeSuspendedHolds') ,
+    AutoResumeSuspendedHolds => C4::Context->preference('AutoResumeSuspendedHolds'),
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;

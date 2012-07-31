@@ -1,7 +1,7 @@
 [% IF ( opaccredits ) %]
 	<div class="ft">
-        [% opaccredits %]
-    </div>
+            [% opaccredits %]
+        </div>
 [% END %]
 </div>
 

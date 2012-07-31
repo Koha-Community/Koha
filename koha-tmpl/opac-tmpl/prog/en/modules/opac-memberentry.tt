@@ -1,0 +1,736 @@
+[% USE KohaDates %]
+[% SET userupdateview = 1 %]
+
+    [% INCLUDE 'doc-head-open.inc' %]
+        [% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Your fines and charges
+    [% INCLUDE 'doc-head-close.inc' %]
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            [% IF action == 'edit' && !OPACPatronDetails %]
+                $("#memberentry-form :input").attr('readonly', true);
+                $("#borrower_branchcode").attr('disabled',true);
+                $("#borrower_title").attr('disabled',true);
+                $('#memberentry-form :radio').attr('disabled',true);
+                $('span.required').remove();
+                $('label.required').removeClass('required');
+            [% ELSE %]
+                $( "#borrower_dateofbirth" ).datepicker({ yearRange: "c-120:c" });
+            [% END %]
+        });
+    </script>
+</head>
+
+<body id="opac-account">
+    <div id="doc3" class="yui-t1">
+        <div id="bd">
+            [% INCLUDE 'masthead.inc' %]
+
+            <div id="yui-main">
+                <div class="yui-b">
+                    <div class="yui-g">
+                        <div id="useraccount" class="container">
+                            [% UNLESS OPACPatronDetails %]
+                                <div>To make changes to your record please contact the library.</div>
+                            [% END %]
+
+                            [% IF empty_mandatory_fields %]
+                                <div class="dialog alert">You have not filled out all required fields. Please fill in all missing fields and resubmit.</div>
+                            [% END %]
+
+                            [% IF failed_captcha %]
+                                <div class="dialog alert">You typed in the wrong characters in the box before submitting. Please try again.</div>
+                            [% END %]
+
+                            <form method="post" id="memberentry-form">
+
+                                [% UNLESS
+                                    hidden.defined('branchcode')
+                                %]
+
+                                <fieldset class="rows" id="memberentry_library">
+
+                                    <legend id="library_legend">Library</legend>
+                                        <ol>
+                                            [% UNLESS hidden.defined('branchcode') %]
+                                                <li>
+                                                    [% IF mandatory.defined('branchcode') %]
+                                                        <label for="borrower_branchcode" class="required">
+                                                    [% ELSE %]
+                                                        <label for="borrower_branchcode">
+                                                    [% END %]
+                                                    Home Library:</label>
+
+                                                    <select id="borrower_branchcode" name="borrower_branchcode">
+                                                        [% FOREACH b IN branches %]
+                                                            [% IF b.value == borrower.branchcode %]
+                                                                <option value="[% b.value %]" selected="selected">[% b.branchname %]</option>
+                                                            [% ELSE %]
+                                                                <option value="[% b.value %]">[% b.branchname %]</option>
+                                                            [% END %]
+                                                        [% END %]
+                                                    </select>
+                                                </li>
+                                            [% END %]
+                                        </ol>
+                                    </fieldset>
+                                [% END %]
+
+                                [% UNLESS
+                                    hidden.defined('title') && hidden.defined('surname') && hidden.defined('firstname') &&
+                                    hidden.defined('dateofbirth') && hidden.defined('initials') && hidden.defined('othernames') &&
+                                    hidden.defined('sex')
+                                %]
+                                    <fieldset class="rows" id="memberentry_identity">
+                                        <legend id="identity_legend">Identity</legend>
+
+                                        <ol>
+                                            [% UNLESS hidden.defined('title') %]
+                                                <li>
+                                                    [% IF mandatory.defined('title') %]
+                                                        <label for="borrower_title" class="required">
+                                                    [% ELSE %]
+                                                        <label for="borrower_title">
+                                                    [% END %]
+                                                    Salutation:</label>
+
+                                                    <select id="borrower_title" name="borrower_title">
+                                                        <option value="">&nbsp;</option>
+                                                        [% FOREACH mt IN member_titles %]
+                                                            [% IF mt == borrower.title %]
+                                                                <option value="[% mt %]" selected="selected">[% mt %]</option>
+                                                            [% ELSE %]
+                                                                <option value="[% mt %]">[% mt %]</option>
+                                                            [% END %]
+                                                        [% END %]
+                                                    </select>
+                                                </li>
+                                            [% END %]
+
+                                            [% UNLESS hidden.defined('surname') %]
+                                                <li>
+                                                    [% IF mandatory.defined('surname') %]
+                                                        <label for="borrower_surname" class="required">
+                                                    [% ELSE %]
+                                                        <label for="borrower_surname">
+                                                    [% END %]
+                                                    Surname:</label>
+
+                                                    <input type="text" id="borrower_surname" name="borrower_surname" value="[% borrower.surname %]" />
+                                                    [% IF mandatory.defined('surname') %]<span class="required">Required</span>[% END %]
+                                                </li>
+                                            [% END %]
+
+                                            [% UNLESS hidden.defined('firstname') %]
+                                                <li>
+                                                    [% IF mandatory.defined('firstname') %]
+                                                        <label for="borrower_firstname" class="required">
+                                                    [% ELSE %]
+                                                        <label for="borrower_firstname">
+                                                    [% END %]
+                                                    First name:</label>
+
+                                                    <input type="text" id="borrower_firstname" name="borrower_firstname" value="[% borrower.firstname %]" />
+                                                    [% IF mandatory.defined('firstname') %]<span class="required">Required</span>[% END %]
+                                                </li>
+                                            [% END %]
+
+                                            [% UNLESS hidden.defined('dateofbirth') %]
+                                                <li>
+                                                    [% IF mandatory.defined('dateofbirth') %]
+                                                        <label for="borrower_dateofbirth" class="required">
+                                                    [% ELSE %]
+                                                        <label for="borrower_dateofbirth">
+                                                    [% END %]
+                                                    Date of birth:</label>
+
+                                                    <input type="text" id="borrower_dateofbirth" name="borrower_dateofbirth" value="[% borrower.dateofbirth | $KohaDates %]" size="10" />
+
+                                                    [% UNLESS action == 'edit' && !OPACPatronDetails %]
+                                                        <a href="#" style="font-size:85%;text-decoration:none;" onclick="document.getElementById('borrower_dateofbirth').value='';return false;">Clear date</a><p></p>
+                                                    [% END %]
+
+                                                    [% IF mandatory.defined('dateofbirth') %]<span class="required">Required</span>[% END %]
+                                                </li>
+                                            [% END %]
+
+                                            [% UNLESS hidden.defined('initials') %]
+                                                <li>
+                                                    [% IF mandatory.defined('initials') %]
+                                                        <label for="borrower_initials" class="required">
+                                                    [% ELSE %]
+                                                        <label for="borrower_initials">
+                                                    [% END %]
+                                                    Initials:</label>
+
+                                                    <input type="text" id="borrower_initials" name="borrower_initials" value="[% borrower.initials %]" />
+                                                    [% IF mandatory.defined('initials') %]<span class="required">Required</span>[% END %]
+                                                </li>
+                                            [% END %]
+
+                                            [% UNLESS hidden.defined('othernames') %]
+                                                <li>
+                                                    [% IF mandatory.defined('othernames') %]
+                                                        <label for="borrower_othernames" class="required">
+                                                    [% ELSE %]
+                                                        <label for="borrower_othernames">
+                                                    [% END %]
+                                                    Other names:</label>
+
+                                                    <input type="text" id="borrower_othernames" name="borrower_othernames" value="[% borrower.othernames %]" />
+                                                    [% IF mandatory.defined('othernames') %]<span class="required">Required</span>[% END %]
+                                                </li>
+                                            [% END %]
+
+                                            [% UNLESS hidden.defined('sex') %]
+                                                <li class="radio">
+                                                    <label for="sex-female">Female:</label>
+                                                    [% IF borrower.sex == 'F' %]
+                                                        <input type="radio" name="borrower_sex" id="sex-female" value="F" checked="checked" />
+                                                    [% ELSE %]
+                                                        <input type="radio" name="borrower_sex" id="sex-female" value="F" />
+                                                    [% END %]
+
+                                                    <label for="sex-male">Male:</label>
+                                                    [% IF borrower.sex == 'M' %]
+                                                        <input type="radio" name="borrower_sex" id="sex-male" value="M" checked="checked" />
+                                                    [% ELSE %]
+                                                        <input type="radio" name="borrower_sex" id="sex-male" value="M" />
+                                                    [% END %]
+
+                                                    <label for="sex-none">N/A:</label>
+                                                    [% IF borrower.sex == '' %]
+                                                        <input type="radio" name="borrower_sex" id="sex-none" value="" checked="checked" />
+                                                    [% ELSE %]
+                                                        <input type="radio" name="borrower_sex" id="sex-none" value="" />
+                                                    [% END %]
+
+                                                    [% IF mandatory.defined('sex') %]<span class="required">Required</span>[% END %]
+                                                </li>
+                                            [% END %]
+                                        </ol>
+                                    </fieldset>
+                                [% END %]
+
+                                [% UNLESS
+                                    hidden.defined('streetnumber') && hidden.defined('address') && hidden.defined('address2') &&
+                                    hidden.defined('city') && hidden.defined('state') && hidden.defined('zipcode') &&
+                                    hidden.defined('country')
+                                %]
+                                    <fieldset class="rows" id="memberentry_mainaddress">
+                                        <legend id="mainaddress_legend">Main address</legend>
+
+                                        <ol>
+                                            [% UNLESS hidden.defined('streetnumber') %]
+                                                <li>
+                                                    [% IF mandatory.defined('streetnumber') %]
+                                                        <label for="borrower_streetnumber" class="required">
+                                                    [% ELSE %]
+                                                        <label for="borrower_streetnumber">
+                                                    [% END %]
+                                                    Street number:</label>
+
+                                                    <input type="text" id="borrower_streetnumber" name="borrower_streetnumber" value="[% borrower.streetnumber %]" />
+                                                    [% IF mandatory.defined('streetnumber') %]<span class="required">Required</span>[% END %]
+                                                </li>
+                                            [% END %]
+
+                                            [% UNLESS hidden.defined('address') %]
+                                                <li>
+                                                    [% IF mandatory.defined('address') %]
+                                                        <label for="borrower_address" class="required">
+                                                    [% ELSE %]
+                                                        <label for="borrower_address">
+                                                    [% END %]
+                                                    Address:</label>
+
+                                                    <input type="text" id="borrower_address" name="borrower_address" value="[% borrower.address %]" />
+                                                    [% IF mandatory.defined('address') %]<span class="required">Required</span>[% END %]
+                                                </li>
+                                            [% END %]
+
+                                            [% UNLESS hidden.defined('address2') %]
+                                                <li>
+                                                    [% IF mandatory.defined('address2') %]
+                                                        <label for="borrower_address2" class="required">
+                                                    [% ELSE %]
+                                                        <label for="borrower_address2">
+                                                    [% END %]
+                                                    Address 2:</label>
+
+                                                    <input type="text" id="borrower_address2" name="borrower_address2" value="[% borrower.address2 %]" />
+                                                    [% IF mandatory.defined('address2') %]<span class="required">Required</span>[% END %]
+                                                </li>
+                                            [% END %]
+
+                                            [% UNLESS hidden.defined('city') %]
+                                                <li>
+                                                    [% IF mandatory.defined('city') %]
+                                                        <label for="borrower_city" class="required">
+                                                    [% ELSE %]
+                                                        <label for="borrower_city">
+                                                    [% END %]
+                                                    City:</label>
+
+                                                    <input type="text" id="borrower_city" name="borrower_city" value="[% borrower.city %]" />
+                                                    [% IF mandatory.defined('city') %]<span class="required">Required</span>[% END %]
+                                                </li>
+                                            [% END %]
+
+                                            [% UNLESS hidden.defined('state') %]
+                                                <li>
+                                                    [% IF mandatory.defined('state') %]
+                                                        <label for="borrower_state" class="required">
+                                                    [% ELSE %]
+                                                        <label for="borrower_state">
+                                                    [% END %]
+                                                    State:</label>
+
+                                                    <input type="text" id="borrower_state" name="borrower_state" value="[% borrower.state %]" />
+                                                    [% IF mandatory.defined('state') %]<span class="required">Required</span>[% END %]
+                                                </li>
+                                            [% END %]
+
+                                            [% UNLESS hidden.defined('zipcode') %]
+                                                <li>
+                                                    [% IF mandatory.defined('zipcode') %]
+                                                        <label for="borrower_zipcode" class="required">
+                                                    [% ELSE %]
+                                                        <label for="borrower_zipcode">
+                                                    [% END %]
+                                                    Zip/Postal code:</label>
+
+                                                    <input type="text" id="borrower_zipcode" name="borrower_zipcode" value="[% borrower.zipcode %]" />
+                                                    [% IF mandatory.defined('zipcode') %]<span class="required">Required</span>[% END %]
+                                                </li>
+                                            [% END %]
+
+                                            [% UNLESS hidden.defined('country') %]
+                                                <li>
+                                                    [% IF mandatory.defined('country') %]
+                                                        <label for="borrower_country" class="required">
+                                                    [% ELSE %]
+                                                        <label for="borrower_country">
+                                                    [% END %]
+                                                    Country:</label>
+
+                                                    <input type="text" id="borrower_country" name="borrower_country" value="[% borrower.country %]" />
+                                                    [% IF mandatory.defined('country') %]<span class="required">Required</span>[% END %]
+                                                </li>
+                                            [% END %]
+
+                                        </ol>
+                                    </fieldset>
+                                [% END %]
+
+                                [% UNLESS
+                                    hidden.defined('phone') && hidden.defined('phonepro') && hidden.defined('mobile') &&
+                                    hidden.defined('email') && hidden.defined('emailpro') && hidden.defined('fax')
+                                %]
+                                    <fieldset class="rows" id="memberentry_contact">
+                                        <legend id="contact_legend">Contact information</legend>
+
+                                        <ol>
+                                            [% UNLESS hidden.defined('phone') %]
+                                                <li>
+                                                    [% IF mandatory.defined('phone') %]
+                                                        <label for="borrower_phone" class="required">
+                                                    [% ELSE %]
+                                                        <label for="borrower_phone">
+                                                    [% END %]
+                                                    Primary phone:</label>
+
+                                                    <input type="text" id="borrower_phone" name="borrower_phone" value="[% borrower.phone %]" />
+                                                    [% IF mandatory.defined('phone') %]<span class="required">Required</span>[% END %]
+                                                </li>
+                                            [% END %]
+
+                                            [% UNLESS hidden.defined('phonepro') %]
+                                                <li>
+                                                    [% IF mandatory.defined('phonepro') %]
+                                                        <label for="borrower_phonepro" class="required">
+                                                    [% ELSE %]
+                                                        <label for="borrower_phonepro">
+                                                    [% END %]
+                                                    Secondary phone:</label>
+
+                                                    <input type="text" id="borrower_phonepro" name="borrower_phonepro" value="[% borrower.phonepro %]" />
+                                                    [% IF mandatory.defined('phonepro') %]<span class="required">Required</span>[% END %]
+                                                </li>
+                                            [% END %]
+
+                                            [% UNLESS hidden.defined('mobile') %]
+                                                <li>
+                                                    [% IF mandatory.defined('mobile') %]
+                                                        <label for="borrower_mobile" class="required">
+                                                    [% ELSE %]
+                                                        <label for="borrower_mobile">
+                                                    [% END %]
+                                                    Mobile phone:</label>
+
+                                                    <input type="text" id="borrower_mobile" name="borrower_mobile" value="[% borrower.mobile %]" />
+                                                    [% IF mandatory.defined('mobile') %]<span class="required">Required</span>[% END %]
+                                                </li>
+                                            [% END %]
+
+                                            [% UNLESS hidden.defined('email') %]
+                                                <li>
+                                                    [% IF mandatory.defined('email') %]
+                                                        <label for="borrower_email" class="required">
+                                                    [% ELSE %]
+                                                        <label for="borrower_email">
+                                                    [% END %]
+                                                    Primary email:</label>
+
+                                                    <input type="text" id="borrower_email" name="borrower_email" value="[% borrower.email %]" />
+                                                    [% IF mandatory.defined('email') %]<span class="required">Required</span>[% END %]
+                                                </li>
+                                            [% END %]
+
+                                            [% UNLESS hidden.defined('emailpro') %]
+                                                <li>
+                                                    [% IF mandatory.defined('emailpro') %]
+                                                        <label for="borrower_emailpro" class="required">
+                                                    [% ELSE %]
+                                                        <label for="borrower_emailpro">
+                                                    [% END %]
+                                                    Secondary email:</label>
+
+                                                    <input type="text" id="borrower_emailpro" name="borrower_emailpro" value="[% borrower.emailpro %]" />
+                                                    [% IF mandatory.defined('emailpro') %]<span class="required">Required</span>[% END %]
+                                                </li>
+                                            [% END %]
+
+                                            [% UNLESS hidden.defined('fax') %]
+                                                <li>
+                                                    [% IF mandatory.defined('fax') %]
+                                                        <label for="borrower_fax" class="required">
+                                                    [% ELSE %]
+                                                        <label for="borrower_fax">
+                                                    [% END %]
+                                                    Fax:</label>
+
+                                                    <input type="text" id="borrower_fax" name="borrower_fax" value="[% borrower.fax %]" />
+                                                    [% IF mandatory.defined('fax') %]<span class="required">Required</span>[% END %]
+                                                </li>
+                                            [% END %]
+                                        </ol>
+                                    </fieldset>
+                                [% END %]
+
+                                [% UNLESS
+                                    hidden.defined('B_address') && hidden.defined('B_address2') && hidden.defined('B_city') &&
+                                    hidden.defined('B_state') && hidden.defined('B_zipcode') && hidden.defined('B_county') &&
+                                    hidden.defined('B_phone') && hidden.defined('B_email') && hidden.defined('contactnote')
+                                %]
+                                    <fieldset class="rows" id="memberentry_alternateaddress">
+                                        <legend id="alternateaddress_legend">Alternate address</legend>
+
+                                        <ol>
+                                            [% UNLESS hidden.defined('B_address') %]
+                                                <li>
+                                                    [% IF mandatory.defined('B_address') %]
+                                                        <label for="borrower_B_address" class="required">
+                                                    [% ELSE %]
+                                                        <label for="borrower_B_address">
+                                                    [% END %]
+                                                    Address:</label>
+
+                                                    <input type="text" id="borrower_B_address" name="borrower_B_address" value="[% borrower.B_address %]" />
+                                                    [% IF mandatory.defined('B_address') %]<span class="required">Required</span>[% END %]
+                                                </li>
+                                            [% END %]
+
+                                            [% UNLESS hidden.defined('B_address2') %]
+                                                <li>
+                                                    [% IF mandatory.defined('B_address2') %]
+                                                        <label for="borrower_B_address2" class="required">
+                                                    [% ELSE %]
+                                                        <label for="borrower_B_address2">
+                                                    [% END %]
+                                                    Address 2:</label>
+
+                                                    <input type="text" id="borrower_B_address2" name="borrower_B_address2" value="[% borrower.B_address2 %]" />
+                                                    [% IF mandatory.defined('B_address2') %]<span class="required">Required</span>[% END %]
+                                                </li>
+                                            [% END %]
+
+                                            [% UNLESS hidden.defined('B_city') %]
+                                                <li>
+                                                    [% IF mandatory.defined('B_city') %]
+                                                        <label for="borrower_B_city" class="required">
+                                                    [% ELSE %]
+                                                        <label for="borrower_B_city">
+                                                    [% END %]
+                                                    City:</label>
+
+                                                    <input type="text" id="borrower_B_city" name="borrower_B_city" value="[% borrower.B_city %]" />
+                                                    [% IF mandatory.defined('B_city') %]<span class="required">Required</span>[% END %]
+                                                </li>
+                                            [% END %]
+
+                                            [% UNLESS hidden.defined('B_state') %]
+                                                <li>
+                                                    [% IF mandatory.defined('B_state') %]
+                                                        <label for="borrower_B_state" class="required">
+                                                    [% ELSE %]
+                                                        <label for="borrower_B_state">
+                                                    [% END %]
+                                                    State:</label>
+
+                                                    <input type="text" id="borrower_B_state" name="borrower_B_state" value="[% borrower.B_state %]" />
+                                                    [% IF mandatory.defined('B_state') %]<span class="required">Required</span>[% END %]
+                                                </li>
+                                            [% END %]
+
+                                            [% UNLESS hidden.defined('B_zipcode') %]
+                                                <li>
+                                                    [% IF mandatory.defined('B_zipcode') %]
+                                                        <label for="borrower_B_zipcode" class="required">
+                                                    [% ELSE %]
+                                                        <label for="borrower_B_zipcode">
+                                                    [% END %]
+                                                    Zip/Postal code:</label>
+
+                                                    <input type="text" id="borrower_B_zipcode" name="borrower_B_zipcode" value="[% borrower.B_zipcode %]" />
+                                                    [% IF mandatory.defined('B_zipcode') %]<span class="required">Required</span>[% END %]
+                                                </li>
+                                            [% END %]
+
+                                            [% UNLESS hidden.defined('B_country') %]
+                                                <li>
+                                                    [% IF mandatory.defined('B_country') %]
+                                                        <label for="borrower_B_country" class="required">
+                                                    [% ELSE %]
+                                                        <label for="borrower_B_country">
+                                                    [% END %]
+                                                    Country:</label>
+
+                                                    <input type="text" id="borrower_B_country" name="borrower_B_country" value="[% borrower.B_country %]" />
+                                                    [% IF mandatory.defined('B_country') %]<span class="required">Required</span>[% END %]
+                                                </li>
+                                            [% END %]
+
+                                            [% UNLESS hidden.defined('B_phone') %]
+                                                <li>
+                                                    [% IF mandatory.defined('B_phone') %]
+                                                        <label for="borrower_B_phone" class="required">
+                                                    [% ELSE %]
+                                                        <label for="borrower_B_phone">
+                                                    [% END %]
+                                                    Phone:</label>
+
+                                                    <input type="text" id="borrower_B_phone" name="borrower_B_phone" value="[% borrower.B_phone %]" />
+                                                    [% IF mandatory.defined('B_phone') %]<span class="required">Required</span>[% END %]
+                                                </li>
+                                            [% END %]
+
+                                            [% UNLESS hidden.defined('B_email') %]
+                                                <li>
+                                                    [% IF mandatory.defined('B_email') %]
+                                                        <label for="borrower_B_email" class="required">
+                                                    [% ELSE %]
+                                                        <label for="borrower_B_email">
+                                                    [% END %]
+                                                    Email:</label>
+
+                                                    <input type="text" id="borrower_B_email" name="borrower_B_email" value="[% borrower.B_email %]" />
+                                                    [% IF mandatory.defined('B_email') %]<span class="required">Required</span>[% END %]
+                                                </li>
+                                            [% END %]
+
+                                            [% UNLESS hidden.defined('contactnote') %]
+                                                <li>
+                                                    [% IF mandatory.defined('contactnote') %]
+                                                        <label for="borrower_contactnote" class="required">
+                                                    [% ELSE %]
+                                                        <label for="borrower_contactnote">
+                                                    [% END %]
+                                                    Contact Note:</label>
+
+                                                    <textarea id="borrower_contactnote" name="borrower_contactnote" cols="40" rows="2">[% borrower.contactnote %]</textarea>
+                                                    [% IF mandatory.defined('contactnote') %]<span class="required">Required</span>[% END %]
+                                                </li>
+                                            [% END %]
+
+                                        </ol>
+                                    </fieldset>
+                                [% END %]
+
+                                [% UNLESS
+                                    hidden.defined('altcontactsurname') && hidden.defined('altcontactfirstname') && hidden.defined('altcontactaddress1') &&
+                                    hidden.defined('altcontactaddress2') && hidden.defined('altcontactaddress3') && hidden.defined('altcontactstate') &&
+                                    hidden.defined('altcontactzipcode') && hidden.defined('altcontactcountry') && hidden.defined('altcontactphone')
+                                %]
+                                    <fieldset class="rows" id="memberentry_alternatecontact">
+                                        <legend id="alternatecontact_legend">Alternate contact</legend>
+
+                                        <ol>
+                                            [% UNLESS hidden.defined('altcontactsurname') %]
+                                                <li>
+                                                    [% IF mandatory.defined('altcontactsurname') %]
+                                                        <label for="borrower_altcontactsurname" class="required">
+                                                    [% ELSE %]
+                                                        <label for="borrower_altcontactsurname">
+                                                    [% END %]
+                                                    Surname:</label>
+
+                                                    <input type="text" id="borrower_altcontactsurname" name="borrower_altcontactsurname" value="[% borrower.altcontactsurname %]" />
+                                                    [% IF mandatory.defined('altcontactsurname') %]<span class="required">Required</span>[% END %]
+                                                </li>
+                                            [% END %]
+
+                                            [% UNLESS hidden.defined('altcontactfirstname') %]
+                                                <li>
+                                                    [% IF mandatory.defined('altcontactfirstname') %]
+                                                        <label for="borrower_altcontactfirstname" class="required">
+                                                    [% ELSE %]
+                                                        <label for="borrower_altcontactfirstname">
+                                                    [% END %]
+                                                    First name:</label>
+
+                                                    <input type="text" id="borrower_altcontactfirstname" name="borrower_altcontactfirstname" value="[% borrower.altcontactfirstname %]" />
+                                                    [% IF mandatory.defined('altcontactfirstname') %]<span class="required">Required</span>[% END %]
+                                                </li>
+                                            [% END %]
+
+                                            [% UNLESS hidden.defined('altcontactaddress1') %]
+                                                <li>
+                                                    [% IF mandatory.defined('altcontactaddress1') %]
+                                                        <label for="borrower_altcontactaddress1" class="required">
+                                                    [% ELSE %]
+                                                        <label for="borrower_altcontactaddress1">
+                                                    [% END %]
+                                                    Address:</label>
+
+                                                    <input type="text" id="borrower_altcontactaddress1" name="borrower_altcontactaddress1" value="[% borrower.altcontactaddress1 %]" />
+                                                    [% IF mandatory.defined('altcontactaddress1') %]<span class="required">Required</span>[% END %]
+                                                </li>
+                                            [% END %]
+
+                                            [% UNLESS hidden.defined('altcontactaddress2') %]
+                                                <li>
+                                                    [% IF mandatory.defined('altcontactaddress2') %]
+                                                        <label for="borrower_altcontactaddress2" class="required">
+                                                    [% ELSE %]
+                                                        <label for="borrower_altcontactaddress2">
+                                                    [% END %]
+                                                    Address 2:</label>
+
+                                                    <input type="text" id="borrower_altcontactaddress2" name="borrower_altcontactaddress2" value="[% borrower.altcontactaddress2 %]" />
+                                                    [% IF mandatory.defined('altcontactaddress2') %]<span class="required">Required</span>[% END %]
+                                                </li>
+                                            [% END %]
+
+                                            [% UNLESS hidden.defined('altcontactaddress3') %]
+                                                <li>
+                                                    [% IF mandatory.defined('altcontactaddress3') %]
+                                                        <label for="borrower_altcontactaddress3" class="required">
+                                                    [% ELSE %]
+                                                        <label for="borrower_altcontactaddress3">
+                                                    [% END %]
+                                                    City:</label>
+
+                                                    <input type="text" id="borrower_altcontactaddress3" name="borrower_altcontactaddress3" value="[% borrower.altcontactaddress3 %]" />
+                                                    [% IF mandatory.defined('altcontactaddress3') %]<span class="required">Required</span>[% END %]
+                                                </li>
+                                            [% END %]
+
+                                            [% UNLESS hidden.defined('altcontactstate') %]
+                                                <li>
+                                                    [% IF mandatory.defined('altcontactstate') %]
+                                                        <label for="borrower_altcontactstate" class="required">
+                                                    [% ELSE %]
+                                                        <label for="borrower_altcontactstate">
+                                                    [% END %]
+                                                    State:</label>
+
+                                                    <input type="text" id="borrower_altcontactstate" name="borrower_altcontactstate" value="[% borrower.altcontactstate %]" />
+                                                    [% IF mandatory.defined('altcontactstate') %]<span class="required">Required</span>[% END %]
+                                                </li>
+                                            [% END %]
+
+                                            [% UNLESS hidden.defined('altcontactzipcode') %]
+                                                <li>
+                                                    [% IF mandatory.defined('altcontactzipcode') %]
+                                                        <label for="borrower_altcontactzipcode" class="required">
+                                                    [% ELSE %]
+                                                        <label for="borrower_altcontactzipcode">
+                                                    [% END %]
+                                                    Zip/Postal code:</label>
+
+                                                    <input type="text" id="borrower_altcontactzipcode" name="borrower_altcontactzipcode" value="[% borrower.altcontactzipcode %]" />
+                                                    [% IF mandatory.defined('altcontactzipcode') %]<span class="required">Required</span>[% END %]
+                                                </li>
+                                            [% END %]
+
+                                            [% UNLESS hidden.defined('altcontactcountry') %]
+                                                <li>
+                                                    [% IF mandatory.defined('altcontactcountry') %]
+                                                        <label for="borrower_altcontactcountry" class="required">
+                                                    [% ELSE %]
+                                                        <label for="borrower_altcontactcountry">
+                                                    [% END %]
+                                                    Country:</label>
+
+                                                    <input type="text" id="borrower_altcontactcountry" name="borrower_altcontactcountry" value="[% borrower.altcontactcountry %]" />
+                                                    [% IF mandatory.defined('altcontactcountry') %]<span class="required">Required</span>[% END %]
+                                                </li>
+                                            [% END %]
+
+                                            [% UNLESS hidden.defined('altcontactphone') %]
+                                                <li>
+                                                    [% IF mandatory.defined('altcontactphone') %]
+                                                        <label for="borrower_altcontactphone" class="required">
+                                                    [% ELSE %]
+                                                        <label for="borrower_altcontactphone">
+                                                    [% END %]
+                                                    Phone:</label>
+
+                                                    <input type="text" id="borrower_altcontactphone" name="borrower_altcontactphone" value="[% borrower.altcontactphone %]" />
+                                                    [% IF mandatory.defined('altcontactphone') %]<span class="required">Required</span>[% END %]
+                                                </li>
+                                            [% END %]
+                                        </ol>
+                                    </fieldset>
+                                [% END %]
+
+                                [% UNLESS action == 'edit' %]
+                                    <fieldset class="rows" id="memberentry_captcha">
+                                        <ol>
+                                            <li>
+                                                <label for="borrower_altcontactphone" class="required">Verification</label>
+
+                                                <input type="text" name="captcha" id="captcha" />
+                                                <input type="hidden" name="captcha_digest" value="[% captcha_digest %]" />
+
+                                                <span class="required">Please type this following characters into the preceding box: <strong>[% captcha %]</strong></span>
+                                            </li>
+                                        </ol>
+                                    </fieldset>
+                                [% END %]
+
+                                [% IF action == 'edit' %]
+                                    [% IF OPACPatronDetails %]
+                                        <input type="hidden" name="action" value="update" />
+                                        <input type="submit" value="Submit Update Request" />
+                                    [% END %]
+                                [% ELSE %]
+                                    <input type="hidden" name="action" value="create" />
+                                    <input type="submit" value="Submit" />
+                                [% END %]
+
+                            </form>
+
+                        </div><!--/div id="useraccount" -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="yui-b">
+                <div id="leftmenus" class="container">
+                    [% INCLUDE 'navigation.inc' IsPatronPage=1 %]
+                </div>
+            </div>
+        </div>
+[% INCLUDE 'opac-bottom.inc' %]

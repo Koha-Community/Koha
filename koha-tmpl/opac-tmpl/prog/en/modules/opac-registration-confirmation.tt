@@ -1,0 +1,70 @@
+[% INCLUDE 'doc-head-open.inc' %]
+[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+<body id="opac-main">
+[% IF ( OpacNav ) %]<div id="doc3" class="yui-t1">[% ELSE %]<div id="doc3" class="yui-t7">[% END %]
+   <div id="bd">
+[% INCLUDE 'masthead.inc' %]
+
+<div id="yui-main">
+    <div class="yui-b">
+        <div id="loggedin" class="yui-ge">
+            <div class="yui-u first">
+                <h1>Registration Complete!</h1>
+
+                <p>You have successfully registered your new account. To log in, use the following credentials:</p>
+
+                <p>
+                    Username: [% borrower.userid %]
+                    <br/>
+                    Password: [% password_cleartext %]
+                </p>
+
+                <p>For your convenience, the login box on this page has been pre-filled with this data. Please log in[% IF OpacPasswordChange %] and change your password[% END %].</p>
+
+                <div id="PatronSelfRegistrationAdditionalInstructions">[% PatronSelfRegistrationAdditionalInstructions %]</div>
+            </div>
+
+            [% IF ( opacuserlogin || OpacNavRight ) %]
+                <div class="yui-u">
+                    [% IF ( opacuserlogin ) %]
+                        [% UNLESS ( loggedinusername ) %]
+                            [% UNLESS ( casAuthentication ) %]
+                                <div id="login" class="container clearfix">
+                                    <form action="/cgi-bin/koha/opac-user.pl" method="post" name="auth" id="auth">
+                                        <input type="hidden" name="koha_login_context" value="opac" />
+
+                                        <fieldset class="brief">
+                                            <legend>Log in to your account:</legend>
+
+                                            <ol>
+                                                <li><label for="userid">Login:</label><input type="text" id="userid" size="10" name="userid" value="[% borrower.userid %]" /></li>
+                                                <li><label for="password">Password:</label><input type="password" id="password" size="10" name="password" value="[% password_cleartext %]" /></li>
+                                            </ol>
+
+                                            <fieldset class="action">
+                                                <input type="submit" value="Log In" class="submit" />
+                                            </fieldset>
+                                        </fieldset>
+                                    </form>
+                                </div>
+                            [% END %]
+                        [% END %]
+                    [% END %]
+
+                    [% IF ( OpacNavRight ) %]<div id="opacrightsidebar" class="container">[% OpacNavRight %]</div>[% END %]
+                </div>
+            [% END %]
+        </div>
+    </div>
+</div>
+
+[% IF ( OpacNav ) %]<div class="yui-b">
+    <div id="opacnav" class="container">
+        [% INCLUDE 'navigation.inc' %]
+    </div>
+[% END %]
+
+</div>
+[% INCLUDE 'opac-bottom.inc' %]
