@@ -18,6 +18,8 @@ my $installed = 0;
 my $upgrade = 0;
 my $all = 0;
 my $color = 0;
+my $brief = 0;
+my $req = 0;
 
 GetOptions(
             'h|help|?'    => \$help,
@@ -25,6 +27,8 @@ GetOptions(
             'i|installed' => \$installed,
             'u|upgrade'   => \$upgrade,
             'a|all'       => \$all,
+            'b|brief'     => \$brief,
+            'r|required'  => \$req,
             'c|color'     => \$color,
           );
 
@@ -39,12 +43,14 @@ push @pm, 'missing_pm' if $missing || $all;
 push @pm, 'upgrade_pm' if $upgrade || $all;
 push @pm, 'current_pm' if $installed || $all;
 
-print color 'bold blue' if $color;
-print"
+if (!$brief) {
+    print color 'bold blue' if $color;
+    print"
                                               Installed         Required          Module is
 Module Name                                   Version           Version            Required
 --------------------------------------------------------------------------------------------
 ";
+}
 
 my $count = 0;
 foreach my $type (@pm) {
@@ -60,28 +66,40 @@ foreach my $type (@pm) {
             my $required = ($_->{$pm}->{'required'}?'Yes':'No');
             my $current_version = ($color ? $_->{$pm}->{'cur_ver'} :
                                    $type eq 'missing_pm' || $type eq 'upgrade_pm' ? $_->{$pm}->{'cur_ver'}." *" : $_->{$pm}->{'cur_ver'});
+            if (!$brief) {
+                if (($req && $required eq 'Yes') || !$req) {
 format =
 @<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< @<<<<<<<<<<<<<<<< @<<<<<<<<<<<<<<<<       @<<<<<
 $pm,                                          $current_version, $_->{$pm}->{'min_ver'},  $required
 .
 write;
+                }
+            }
+            else {
+                if (($req && $required eq 'Yes') || !$req) {
+                    print "$pm\n";
+                }
+            }
         }
     }
 }
-print color 'bold blue' if $color;
-my $footer = "
+
+if (!$brief) {
+    print color 'bold blue' if $color;
+    my $footer = "
 --------------------------------------------------------------------------------------------
 Total modules reported: $count                      ";
 
-if ($color) {
-    $footer .= "\n\n";
-}
-else {
-    $footer .= "* Module is missing or requires an upgrade.\n\n";
-}
+    if ($color) {
+        $footer .= "\n\n";
+    }
+    else {
+        $footer .= "* Module is missing or requires an upgrade.\n\n";
+    }
 
-print $footer;
-print color 'reset' if $color;
+    print $footer;
+    print color 'reset' if $color;
+}
 
 1;
 
@@ -93,7 +111,12 @@ koha_perl_deps.pl
 
 =head1 SYNOPSIS
 
-./koha_perl_deps.pl -m
+ At least one of -a, -m, -i, or -u flags must specified to not trigger help.
+ ./koha_perl_deps.pl -m [-b] [-r] [-c]
+ ./koha_perl_deps.pl -u [-b] [-r] [-c]
+ ./koha_perl_deps.pl -i [-b] [-r] [-c]
+ ./koha_perl_deps.pl -a [-b] [-r] [-c]
+ ./koha_perl_deps.pl [-[h?]]
 
 =head1 OPTIONS
 
@@ -113,7 +136,16 @@ lists all perl modules needing to be upgraded relative to Koha
 
 =item B<-a|--all>
 
-lists all koha perl dependencies
+ lists all koha perl dependencies
+ This is equivalent to '-m -i -u'.
+
+=item B<-b|--brief>
+
+lists only the perl dependency name.
+
+=item B<-r|--required>
+
+filters list to only required perl dependencies.
 
 =item B<-c|--color>
 
