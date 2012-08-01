@@ -106,24 +106,24 @@ $cal->set_daysmode('Calendar');
 # example tests for bug report
 $cal->clear_weekly_closed_days();
 
-$daycount = $cal->days_between( dt_from_string('2012-01-10'),
-    dt_from_string("2012-05-05") )->in_units('days');
+$daycount = $cal->days_between( dt_from_string('2012-01-10','iso'),
+    dt_from_string("2012-05-05",'iso') )->in_units('days');
 cmp_ok( $daycount, '==', 116, 'test larger intervals' );
-$daycount = $cal->days_between( dt_from_string("2012-01-01"),
-    dt_from_string("2012-05-05") )->in_units('days');
+$daycount = $cal->days_between( dt_from_string("2012-01-01",'iso'),
+    dt_from_string("2012-05-05",'iso') )->in_units('days');
 cmp_ok( $daycount, '==', 125, 'test positive intervals' );
-my $daycount2 = $cal->days_between( dt_from_string("2012-05-05"),
-    dt_from_string("2012-01-01") )->in_units('days');
+my $daycount2 = $cal->days_between( dt_from_string("2012-05-05",'iso'),
+    dt_from_string("2012-01-01",'iso') )->in_units('days');
 cmp_ok( $daycount2, '==', $daycount, 'test parameter order not relevant' );
-$daycount = $cal->days_between( dt_from_string("2012-07-01"),
-    dt_from_string("2012-07-15") )->in_units('days');
+$daycount = $cal->days_between( dt_from_string("2012-07-01",'iso'),
+    dt_from_string("2012-07-15",'iso') )->in_units('days');
 cmp_ok( $daycount, '==', 14, 'days_between calculates correctly' );
-$cal->add_holiday( dt_from_string('2012-07-06') );
-$daycount = $cal->days_between( dt_from_string("2012-07-01"),
-    dt_from_string("2012-07-15") )->in_units('days');
+$cal->add_holiday( dt_from_string('2012-07-06','iso') );
+$daycount = $cal->days_between( dt_from_string("2012-07-01",'iso'),
+    dt_from_string("2012-07-15",'iso') )->in_units('days');
 cmp_ok( $daycount, '==', 13, 'holiday correctly recognized' );
 
-$cal->add_holiday( dt_from_string('2012-07-07') );
-$daycount = $cal->days_between( dt_from_string("2012-07-01"),
-    dt_from_string("2012-07-15") )->in_units('days');
+$cal->add_holiday( dt_from_string('2012-07-07','iso') );
+$daycount = $cal->days_between( dt_from_string("2012-07-01",'iso'),
+    dt_from_string("2012-07-15",'iso') )->in_units('days');
 cmp_ok( $daycount, '==', 12, 'multiple holidays correctly recognized' );
