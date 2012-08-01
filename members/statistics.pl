@@ -58,7 +58,7 @@ foreach my $key ( keys %$borrower ) {
 }
 
 # Construct column names
-my $fields = C4::Context->preference('StatisticsFields') || 'location|itype|ccode';
+my $fields = C4::Members::Statistics::get_fields();
 our @statistic_column_names = split '\|', $fields;
 our @value_column_names = ( 'count_precedent_state', 'count_total_issues_today', 'count_total_issues_returned_today' );
 our @column_names = ( @statistic_column_names, @value_column_names );
@@ -70,6 +70,7 @@ my $total_issues_returned_today = GetTotalIssuesReturnedTodayByBorrower( $borrow
 my $r = merge (
     @$precedent_state, @$total_issues_today, @$total_issues_returned_today
 );
+
 add_actual_state( $r );
 my ( $total, $datas ) = build_array( $r );
 
@@ -194,7 +195,7 @@ sub merge {
         for my $ch ( @r ) {
             $exists = 1;
             for my $cn ( @statistic_column_names ) {
-                if ( not $ch->{$cn} eq $h->{$cn} ) {
+                if ( $ch->{$cn} and not $ch->{$cn} eq $h->{$cn} ) {
                     $exists = 0;
                     last;
                 }
