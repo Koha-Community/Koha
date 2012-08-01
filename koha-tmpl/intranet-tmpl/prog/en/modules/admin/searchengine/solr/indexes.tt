@@ -129,19 +129,51 @@
                   [% IF ( index.mandatory ) %]
                     <input type="hidden" name="type" value="[% index.type %]" />
                   [% END %]
-                  <select name="type"[% IF ( index.mandatory ) %] disabled="disabled"[% END %]>
-                    <option [% IF ( index.type == 'str' ) %] selected="selected"[% END %] value="str">String</option>
-                    <option [% IF ( index.type == 'ste' ) %] selected="selected"[% END %] value="ste">Simple Text</option>
-                    <option [% IF ( index.type == 'txt' ) %] selected="selected"[% END %] value="txt">Text</option>
-                    <option [% IF ( index.type == 'int' ) %] selected="selected"[% END %] value="int">Integer</option>
-                    <option [% IF ( index.type == 'date') %] selected="selected"[% END %] value="date">Date</option>
+                  [% IF ( index.mandatory ) %]
+                    <select name="type" disabled="disabled">
+                  [% ELSE %]
+                    <select name="type">
+                  [% END %]
+                    [% IF ( index.type == 'str' ) %]
+                        <option value="str" selected="selected">String</option>
+                    [% ELSE %]
+                        <option value="str">String</option>
+                    [% END %]
+                    [% IF ( index.type == 'ste' ) %]
+                        <option value="ste" selected="selected">Simple Text</option>
+                    [% ELSE %]
+                        <option value="ste">Simple Text</option>
+                    [% END %]
+                    [% IF ( index.type == 'txt' ) %]
+                        <option value="txt" selected="selected">Text</option>
+                    [% ELSE %]
+                        <option value="txt">Text</option>
+                    [% END %]
+                    [% IF ( index.type == 'int' ) %]
+                        <option value="int" selected="selected">Integer</option>
+                    [% ELSE %]
+                        <option value="int">Integer</option>
+                    [% END %]
+                    [% IF ( index.type == 'date' ) %]
+                        <option value="date" selected="selected">Date</option>
+                    [% ELSE %]
+                        <option value="date">Date</option>
+                    [% END %]
                   </select>
                 </td>
                 <td>
-                  <input name="sortable" type="checkbox" [% IF ( index.sortable ) %]checked="checked"[% END %] value="[% index.code %]" />
+                  [% IF ( index.sortable ) %]
+                    <input name="sortable" type="checkbox" checked="checked" value="[% index.code %]" />
+                  [% ELSE %]
+                    <input name="sortable" type="checkbox" value="[% index.code %]" />
+                  [% END %]
                 </td>
                 <td>
-                  <input name="facetable" type="checkbox" [% IF ( index.facetable ) %]checked="checked"[% END %] value="[% index.code %]" />
+                  [% IF ( index.facetable ) %]
+                    <input name="facetable" type="checkbox" checked="checked" value="[% index.code %]" />
+                  [% ELSE %]
+                    <input name="facetable" type="checkbox" value="[% index.code %]" />
+                  [% END %]
                 </td>
                 <td>
                     <textarea name="mappings" class="contentEditable">[% FOREACH m IN index.mappings %][% m %]
