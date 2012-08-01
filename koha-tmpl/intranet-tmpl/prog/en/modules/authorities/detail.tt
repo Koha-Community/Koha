@@ -1,3 +1,4 @@
+[% PROCESS 'authorities.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Authorities &rsaquo;
     [% IF ( unknownauthid ) %]
@@ -7,12 +8,27 @@
     [% END %]
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
+[% IF ( displayhierarchy ) %]
+<script language="javascript" type="text/javascript" src="/intranet-tmpl/lib/jquery/plugins/jquery.jstree.js"></script>
+[% END %]
 <script type="text/javascript">
 
 //<![CDATA[
 
 	 $(document).ready(function() {
     $('#authoritiestabs').tabs();
+    [% IF ( displayhierarchy ) %]
+        var current_nodes = [];
+        $('.currentauth').each(function() {
+            current_nodes.push('#' + $(this).parent().parents('li:first').attr('id'));
+            });
+        $('#hierarchies').jstree({
+                "plugins": [ "themes", "html_data"],
+                "themes": { "theme": "classic",
+                            "icons": false },
+                "core": { "initially_open": current_nodes }
+            });
+    [% END %]
 	 });
 
 function confirm_deletion() {
@@ -26,29 +42,7 @@ function Dopop(link) {
 }
 //]]>
 </script>
-[% IF ( displayhierarchy ) %]
-<link rel="stylesheet" type="text/css" href="[% themelang %]/css/hierarchy.css" />
 <script type="text/javascript">
-function showParents(mynumber) {
-  var parents=document.getElementsByName(mynumber+'p')
-  for(i=0;i<parents.length;i++){
-    if (parents[i].style.display == "none") {
-      parents[i].style.display ="block";
-    } else {
-      parents[i].style.display ="none";
-    }
-  } 
-}
-function showChildren(mynumber) {
-  var children=document.getElementsByName(mynumber+'c')
-  for(i=0;i<children.length;i++){
-    if (children[i].style.display == "none") {
-      children[i].style.display = "block";
-    } else {
-      children[i].style.display = "none";
-    }
-  }
-}
 function Help() {
     newin=window.open("/cgi-bin/koha/help.pl","KohaHelp",'width=600,height=600,toolbar=false,scrollbars=yes');
 }
@@ -63,7 +57,6 @@ function searchauthority() {
     window.location="/cgi-bin/koha/authorities/authorities-home.pl?op=do_search&type=intranet&authtypecode="+X+"&value="+Y+"&marclist=&and_or=and&excluding=&operator=contains";
 }
 </script>
- [% END %]
 </head>
 <body id="auth_detail" class="auth">
 [% INCLUDE 'header.inc' %]
@@ -85,33 +78,8 @@ function searchauthority() {
     [% INCLUDE 'authorities-toolbar.inc' %]
 	
 [% IF ( displayhierarchy ) %]
-
-<div class="hierarchies">
-[% FOREACH loophierarchie IN loophierarchies %]
-  <div class="hierarchy">
-  [% FOREACH loopelemen IN loophierarchie.loopelement %]
-    <div id="[% loopelemen.loopauthid %]" class="[% loopelemen.class %]">
-    [% IF ( loopelemen.ifparents ) %]
-      [% FOREACH loopparent IN loopelemen.loopparents %]
-        <div name="[% loopparent.loopauthid %]p" class="parent"> <a href="detail.pl?authid=[% loopparent.parentauthid %]">[% loopparent.parentvalue %]</a></div>
-      [% END %]
-    [% END %]
-    [% IF ( loopelemen.current_value ) %]
-        [% loopelemen.value %]
-    [% ELSE %]
-        <a href="detail.pl?authid=[% loopelemen.loopauthid %]" title="Term">[% loopelemen.value %]</a>
-    [% END %]
-    [% IF ( loopelemen.ifchildren ) %]
-      <sub><a class="parents" title="Narrower terms" href="JavaScript:showChildren('[% loopelemen.loopauthid %]');">+</a></sub><br />
-      [% FOREACH loopchildre IN loopelemen.loopchildren %]
-        <div name="[% loopchildre.loopauthid %]c" class="child"> <a href="detail.pl?authid=[% loopchildre.childauthid %]">[% loopchildre.childvalue %]</a></div>
-      [% END %]
-    [% END %]
-    </div>
-  [% END %]
-    
-  </div>
-[% END %]
+<div id="hierarchies">
+[% PROCESS showhierarchy trees = loophierarchies %]
 </div>
 [% END %]
 

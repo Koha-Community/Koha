@@ -382,3 +382,4 @@ INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('OpacMainUserBlockMobile','','Show the following HTML in its own column on the main page of the OPAC (mobile version):',NULL,'free');
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('OpacShowLibrariesPulldownMobile','1','Show the libraries pulldown on the mobile version of the OPAC.',NULL,'YesNo');
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('OpacShowFiltersPulldownMobile','1','Show the search filters pulldown on the mobile version of the OPAC.',NULL,'YesNo');
+INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES('AuthDisplayHierarchy','0','Display authority hierarchies','','YesNo');
