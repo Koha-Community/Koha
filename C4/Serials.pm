@@ -1335,7 +1335,7 @@ get the list of irregularities for a subscription
 sub GetSubscriptionIrregularities {
     my $subscriptionid = shift;
 
-    return undef unless $subscriptionid;
+    return unless $subscriptionid;
 
     my $dbh = C4::Context->dbh;
     my $query = qq{

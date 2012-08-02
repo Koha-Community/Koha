@@ -653,7 +653,11 @@ $(document).ready(function() {
                                         <select name="frequency" size="1" id="frequency">
                                             <option value="">-- please choose --</option>
                                             [% FOREACH frequency IN frequencies %]
-                                                <option value="[% frequency.id %]" [% IF (frequency.selected) %] selected="selected" [% END %]>
+                                                [% IF (frequency.selected) %]
+                                                    <option value="[% frequency.id %]" selected="selected">
+                                                [% ELSE %]
+                                                    <option value="[% frequency.id %]">
+                                                [% END %]
                                                     [% frequency.label %]
                                                 </option>
                                             [% END %]
@@ -663,7 +667,11 @@ $(document).ready(function() {
                                         <label for="subtype">Subscription length:</label>
                                         <select name="subtype" id="subtype">
                                             [% FOREACH subt IN subtype %]
-                                                <option value="[% subt.name %]" [% IF (subt.selected) %] selected="selected" [% END %] >
+                                                [% IF (subt.selected) %]
+                                                    <option value="[% subt.name %]" selected="selected">
+                                                [% ELSE %]
+                                                    <option value="[% subt.name %]">
+                                                [% END %]
                                                     [% subt.name %]
                                                 </option>
                                             [% END %]
@@ -684,7 +692,13 @@ $(document).ready(function() {
                                         <select name="numbering_pattern" size="1" id="numberpattern">
                                             <option value="">-- please choose --</option>
                                             [% FOREACH numberpattern IN numberpatterns %]
-                                                <option value="[% numberpattern.id %]" [% IF (numberpattern.selected) %] selected="selected" [% END %]>[% numberpattern.label %]</option>
+                                                [% IF (numberpattern.selected) %]
+                                                    <option value="[% numberpattern.id %]">
+                                                [% ELSE %]
+                                                    <option value="[% numberpattern.id %]">
+                                                [% END %]
+                                                    [% numberpattern.label %]
+                                                </option>
                                             [% END %]
                                         </select>
                                     </li>
