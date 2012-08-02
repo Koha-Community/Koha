@@ -135,7 +135,7 @@ Serials updated :
                     [% ELSE %]
                         [% IF ( subscription.routingedit ) %]
                             <a href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% subscription.subscriptionid %]">Edit</a>
-                            ([% routingedit %])
+                            ([% subscription.routingedit %])
                         [% ELSE %]
                             <a href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% subscription.subscriptionid %]&amp;op=new">New</a>
                         [% END %]
