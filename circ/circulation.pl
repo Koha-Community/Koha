@@ -97,6 +97,10 @@ my @failedrenews = $query->param('failedrenew');    # expected to be itemnumbers
 our %renew_failed = {};
 for (@failedrenews) { $renew_failed{$_} = 1; }
 
+my @failedreturns = $query->param('failedreturn');
+our %return_failed = {};
+for (@failedreturns) { $return_failed{$_} = 1; }
+
 my $findborrower = $query->param('findborrower');
 $findborrower =~ s|,| |g;
 my $borrowernumber = $query->param('borrowernumber');
@@ -460,6 +464,7 @@ sub build_issue_data {
         $it->{'od'} = $it->{'overdue'};
         ($it->{'author'} eq '') and $it->{'author'} = ' ';
         $it->{'renew_failed'} = $renew_failed{$it->{'itemnumber'}};
+        $it->{'return_failed'} = $return_failed{$it->{'itemnumber'}};
 
         if ( $it->{'issuedate'} gt $todaysdate or $it->{'lastreneweddate'} gt $todaysdate ) {
             (!$relatives) ? push @todaysissues, $it : push @relissues, $it;

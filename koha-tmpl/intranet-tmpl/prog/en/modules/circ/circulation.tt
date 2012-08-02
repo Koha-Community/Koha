@@ -900,7 +900,7 @@ No patron matched <span class="ex">[% message %]</span>
         </td>
         [% END %]
 		  [% IF ( previssue.return_failed ) %]
-            <td class="problem">Checkin failed</td>
+            <td class="problem">Check-in failed</td>
         [% ELSE %]
             [% IF ( previssue.renew_error_on_reserve ) %]
                <td><a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% previssue.biblionumber %]">On hold</a>
