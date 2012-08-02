@@ -14,8 +14,8 @@ $(document).ready(function(){
 	        $(".checkboxed").unCheckCheckboxes();
 	        return false;
 	    });
-[% IF ( offset ) %]$("#markseen").before("<input type=\"submit\" value=\"&lt;&lt; Mark seen and continue\" id=\"markback\" />");[% END %]
-[% IF ( nextoffset ) %]$("#markseen").after("<input type=\"submit\" id=\"marknext\" value=\"Mark seen and continue &gt;&gt;\" />");[% END %]
+[% IF ( offset ) %]$("#markseen").before("<input type=\"submit\" value=\"&lt;&lt; " + _("Mark seen and continue") + "\" id=\"markback\" /> ");[% END %]
+[% IF ( nextoffset ) %]$("#markseen").after(" <input type=\"submit\" id=\"marknext\" value=\"" + _("Mark seen and continue") + " &gt;&gt;\" />");[% END %]
 	$("#markback").click(function(){
 		$(".checkboxed").find("input").filter("[name=offset]").attr("value","[% prevoffset %]");
 		return true;
