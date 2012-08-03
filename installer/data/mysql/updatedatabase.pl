@@ -5621,7 +5621,7 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion ="3.09.00.XXX";
+$DBversion ="3.09.00.030";
 if(C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     my $query = "SELECT value FROM systempreferences WHERE variable='opacstylesheet'";
     my $remote= $dbh->selectrow_arrayref($query);
