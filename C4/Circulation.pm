@@ -3047,10 +3047,12 @@ sub ReturnLostItem{
 
     MarkIssueReturned( $borrowernumber, $itemnum );
     my $borrower = C4::Members::GetMember( 'borrowernumber'=>$borrowernumber );
+    my $item = C4::Items::GetItem( $itemnum );
+    my $old_note = ($item->{'paidfor'} && ($item->{'paidfor'} ne q{})) ? $item->{'paidfor'}.' / ' : q{};
     my @datearr = localtime(time);
     my $date = ( 1900 + $datearr[5] ) . "-" . ( $datearr[4] + 1 ) . "-" . $datearr[3];
     my $bor = "$borrower->{'firstname'} $borrower->{'surname'} $borrower->{'cardnumber'}";
-    ModItem({ paidfor =>  "Paid for by $bor $date" }, undef, $itemnum);
+    ModItem({ paidfor =>  $old_note."Paid for by $bor $date" }, undef, $itemnum);
 }
 
 
