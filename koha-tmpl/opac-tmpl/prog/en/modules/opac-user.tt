@@ -101,9 +101,9 @@ $.tablesorter.addParser({
                 <span id="lost"><li><strong>Please note: </strong> Your library card has been marked as lost or stolen. If this is an error, please contact the library.</li></span>
             [% END %]
             [% IF ( renewal_blocked_fines ) && ( OpacRenewalAllowed ) %]
-                <span id="renewal_blocked_fines"><li><strong>Please note: </strong> Since you have <a href="/cgi-bin/koha/opac-account.pl">more than <span id="renewal_blocked_fines_amount">[% renewal_blocked_fines %]</span></a> in fines, you cannot renew your books online. Please pay your fines if you wish to renew your books.</li></span>
+                <span id="renewal_blocked_fines"><li><strong>Please note: </strong> Since you have <a href="/cgi-bin/koha/opac-account.pl">[% IF renewal_blocked_fines != "0.00" %] more than <span id="renewal_blocked_fines_amount">[% renewal_blocked_fines %]</span> in [% END %] fines</a>, you cannot renew your books online. Please pay your fines if you wish to renew your books.</li></span>
             [% ELSIF ( renewal_blocked_fines ) %]
-                <span id="renewal_blocked_fines"><li><strong>Please note: </strong> You currently owe <a href="/cgi-bin/koha/opac-account.pl"><span id="renewal_blocked_fines_amount">[% renewal_blocked_fines %] in fines.</span></a></li></span>
+                <span id="renewal_blocked_fines"><li><strong>Please note: </strong> You currently owe <a href="/cgi-bin/koha/opac-account.pl"><span id="renewal_blocked_fines_amount">[% renewal_blocked_fines_amountoutstanding %] in fines.</span></a></li></span>
             [% END %]
         </ul></div>
         [% END %]
