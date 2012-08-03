@@ -31,7 +31,6 @@ use Getopt::Long;
 
 my $query = new CGI;
 
-my $commandline = 0;
 my $op;
 my $filename;
 my $dbh         = C4::Context->dbh;
@@ -45,7 +44,9 @@ my $record_type;
 my $help;
 
 # Checks if the script is called from commandline
-if ( scalar @ARGV > 0 ) {
+my $commandline = not defined $ENV{GATEWAY_INTERFACE};
+
+if ( $commandline ) {
 
     # Getting parameters
     $op = 'export';
@@ -59,8 +60,6 @@ if ( scalar @ARGV > 0 ) {
         'record-type=s' => \$record_type,
         'help|?' => \$help
     );
-    $commandline = 1;
-
 
     if ($help) {
         print <<_USAGE_;
@@ -449,7 +448,7 @@ sub getbackupfilelist {
     if ( opendir(my $dir, $directory) ) {
         while (my $file = readdir($dir)) {
             next unless ( $file =~ m/\.$extension(\.(gz|bz2|xz))?/ );
-            push @files, $file if ( -f "$backupdir/$file" && -r "$backupdir/$file" );
+            push @files, $file if ( -f "$directory/$file" && -r "$directory/$file" );
         }
         closedir($dir);
     }
