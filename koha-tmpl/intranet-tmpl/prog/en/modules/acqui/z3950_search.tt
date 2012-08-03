@@ -16,7 +16,7 @@
         "aoColumnDefs": [
             { "aTargets": [ -1, -2 ], "bSortable": false, "bSearchable": false },
         ],
-        "sPaginationType": "four_button"
+        "bPaginate": false
     } ) );
 
     $("#CheckAll").click(function(){
@@ -50,6 +50,24 @@
             row.addClass("selected");
         });
 });
+
+[% IF ( total_pages ) %]
+function validate_goto_page(){
+    var page = $('#goto_page').val();
+    if(isNaN(page)) {
+        alert(_("The page entered is not a number."));
+        return false;
+    }
+    else if(page < 1 || page > [% total_pages %] ) {
+        alert(_("The page should be a number between 1 and ") + [% total_pages %] + ".");
+        return false;
+    }
+    else {
+        return true;
+    }
+}
+[% END %]
+
 //]]>
 </script>
 <style type="text/css">
@@ -156,6 +174,36 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
         [% END %]
     [% END %]</tbody>
 </table>
+
+    <form method="post" action="z3950_search.pl" id="page_form" name="page_form" class="checkboxed">
+        <input type="hidden" name="op" id="op" value="do_search" />
+        <input type="hidden" name="current_page" id="current_page" value="[% current_page %]" />
+        <input type="hidden" id="searchtitle"  name="title" value="[% title |html %]" />
+        <input type="hidden" id="isbn" name="isbn" value="[% isbn %]" />
+        <input type="hidden" id="lccall" name="lccall" value="[% lccall %]" />
+        <input type="hidden" id="author" name="author" value="[% author %]" />
+        <input type="hidden" id="subject" name="subject" value="[% subject %]" />
+        <input type="hidden" id="dewey" name="dewey" value="[% dewey %]" />
+        <input type="hidden" name="frameworkcode" value="[% frameworkcode %]" />
+        <input type="hidden" name="biblionumber" value="[% biblionumber %]" />
+        <input type="hidden" name="controlnumber" value="[% controlnumber %]" />
+        <input type="hidden" name="basketno" value="[% basketno %]" />
+        <input type="hidden" name="booksellerid" value="[% booksellerid %]" />
+
+        [% FOREACH server IN servers %]
+        <input type="hidden" name="id" id="z3950_[% server.id %]" value="[% server.id %]" />
+        [% END %]
+
+        [% IF ( show_prevbutton ) %]
+            <input type="button" name="changepage_prev" value="Previous Page" onclick="$('#current_page').val([% current_page %]-1);$('#page_form').submit();" />
+        [% END %]
+        Page [% current_page %] / [% total_pages %]
+        [% IF ( show_nextbutton ) %]
+            <input type="button" name="changepage_next" value="Next Page" onclick="$('#current_page').val([% current_page %]+1);$('#page_form').submit();" />
+        [% END %]
+        <br />Go to page : <input id="goto_page" name="goto_page" value="[% current_page %]" size="4" /><input type="submit" name="changepage_goto" onclick="return validate_goto_page();" value="Go" />
+    </form>
+
     [% ELSE %]
         [% IF ( emptyserverlist ) %]
             <div class="dialog alert">You didn't select any Z39.50 target.</div>

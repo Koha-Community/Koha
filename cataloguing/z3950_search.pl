@@ -49,6 +49,12 @@ my $stdid			= $input->param('stdid');
 my $srchany			= $input->param('srchany');
 my $random        = $input->param('random') || rand(1000000000); # this var is not useful anymore just kept for rel2_2 compatibility
 my $op            = $input->param('op');
+
+my $page            = $input->param('current_page') || 1;
+$page = $input->param('goto_page') if $input->param('changepage_goto');
+my $show_next = 0;
+my $total_pages = 0;
+
 my $numberpending;
 my $attr = '';
 my $term;
@@ -80,24 +86,28 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
 });
 
 $template->param( frameworkcode => $frameworkcode, );
+$template->param(
+    isbn         => $isbn,
+    issn         => $issn,
+    lccn         => $lccn,
+    lccall       => $lccall,
+    title        => $title,
+    author       => $author,
+    controlnumber=> $controlnumber,
+    stdid		 => $stdid,
+    srchany		 => $srchany,
+    biblionumber => $biblionumber,
+    dewey        => $dewey,
+    subject      => $subject,
+);
 
 if ( $op ne "do_search" ) {
     my $sth = $dbh->prepare("SELECT id,host,name,checked FROM z3950servers ORDER BY rank, name");
     $sth->execute();
     my $serverloop = $sth->fetchall_arrayref( {} );
     $template->param(
-        isbn         => $isbn,
-        issn         => $issn,
-        lccn         => $lccn,
-        lccall       => $lccall,
-        title        => $title,
-        author       => $author,
-        controlnumber=> $controlnumber,
-        stdid			=> $stdid,
-        srchany		=> $srchany,
         serverloop   => $serverloop,
         opsearch     => "search",
-        biblionumber => $biblionumber,
     );
     output_html_with_http_headers $input, $cookie, $template->output;
 }
@@ -235,8 +245,10 @@ warn "query ".$query  if $DEBUG;
             my $numresults = $oResult[$k]->size();
             my $i;
             my $result = '';
-            if ( $numresults > 0 ) {
-                for ($i = 0; $i < (($numresults < 20) ? $numresults : 20); $i++) {
+            if ( $numresults > 0  and $numresults >= (($page-1)*20)) {
+                $show_next = 1 if $numresults >= ($page*20);
+                $total_pages = int($numresults/20)+1 if $total_pages < ($numresults/20);
+                for ($i = ($page-1)*20; $i < (($numresults < ($page*20)) ? $numresults : ($page*20)); $i++) {
                     my $rec = $oResult[$k]->record($i);
                     if ($rec) {
                         my $marcrecord;
@@ -288,13 +300,24 @@ warn "query ".$query  if $DEBUG;
         }
     }    # if $k !=0
     $numberpending = $nremaining - 1;
+
+    my @servers = ();
+    foreach my $id (@id) {
+        push(@servers,{id => $id});
+    }
+
     $template->param(
         breeding_loop => \@breeding_loop,
         server        => $servername[$k],
         numberpending => $numberpending,
         biblionumber  => $biblionumber,
-        errconn       => \@errconn
+        errconn       => \@errconn,
+        current_page => $page,
+        servers => \@servers,
+        total_pages => $total_pages,
     );
+    $template->param(show_nextbutton=>1) if $show_next;
+    $template->param(show_prevbutton=>1) if $page != 1;
     
     output_html_with_http_headers $input, $cookie, $template->output if $numberpending == 0;
 

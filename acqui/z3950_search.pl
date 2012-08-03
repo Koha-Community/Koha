@@ -63,6 +63,12 @@ my $controlnumber	= $input->param('controlnumber');
 my $op            = $input->param('op');
 my $booksellerid = $input->param('booksellerid');
 my $basketno = $input->param('basketno');
+
+my $page = $input->param('current_page') || 1;
+$page = $input->param('goto_page') if $input->param('changepage_goto');
+my $show_next = 0;
+my $total_pages = 0;
+
 my $noconnection;
 my $attr = '';
 my $term;
@@ -112,22 +118,26 @@ $template->param( frameworkcode => $frameworkcode,
                                     );
                                     
 
+$template->param(
+    isbn         => $isbn,
+    issn         => $issn,
+    lccn         => $lccn,
+    lccall       => $lccall,
+    title        => $title,
+    author       => $author,
+    controlnumber=> $controlnumber,
+    biblionumber => $biblionumber,
+    dewey        => $dewey,
+    subject      => $subject,
+);
 
 if ( $op ne "do_search" ) {
     my $sth = $dbh->prepare("select id,host,name,checked from z3950servers  order by host");
     $sth->execute();
     my $serverloop = $sth->fetchall_arrayref( {} );
     $template->param(
-        isbn         => $isbn,
-        issn         => $issn,
-        lccn         => $lccn,
-        lccall       => $lccall,
-        title        => $title,
-        author       => $author,
-        controlnumber=> $controlnumber,
         serverloop   => $serverloop,
         opsearch     => "search",
-        biblionumber => $biblionumber,
     );
     output_html_with_http_headers $input, $cookie, $template->output;
     exit;
@@ -262,13 +272,10 @@ warn "query ".$query  if $DEBUG;
             warn "numresults = $numresults" if $DEBUG;
             my $i;
             my $result = '';
-            if ( $numresults > 0 ) {
-                for (
-                    $i = 0 ;
-                    $i < ( ( $numresults < 20 ) ? ($numresults) : (20) ) ;
-                    $i++
-                  )
-                {
+            if ( $numresults > 0  and $numresults >= (($page-1)*20)) {
+                $show_next = 1 if $numresults >= ($page*20);
+                $total_pages = int($numresults/20)+1 if $total_pages < ($numresults/20);
+                for ($i = ($page-1)*20; $i < (($numresults < ($page*20)) ? $numresults : ($page*20)); $i++) {
                     my $rec = $oResult[$k]->record($i);
                     if ($rec) {
                         my $marcrecord;
@@ -317,7 +324,25 @@ warn "query ".$query  if $DEBUG;
             }    #$numresults
         }
     }    # if $k !=0
-    #   print  $template->output  if $firstresult !=1;
+    my $numberpending = $nremaining - 1;
+
+    my @servers = ();
+    foreach my $id (@id) {
+        push(@servers,{id => $id});
+    }
+
+    $template->param(
+        breeding_loop => \@breeding_loop,
+        server        => $servername[$k],
+        numberpending => $numberpending,
+        current_page => $page,
+        servers => \@servers,
+        total_pages => $total_pages,
+    );
+    $template->param(show_nextbutton=>1) if $show_next;
+    $template->param(show_prevbutton=>1) if $page != 1;
+
+    #  	print  $template->output  if $firstresult !=1;
     $firstresult++;
 
   } # while nremaining
