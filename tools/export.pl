@@ -93,7 +93,7 @@ _USAGE_
     $record_type       ||= "bibs";
 
     # Redirect stdout
-    open STDOUT, ">$filename" if $filename;
+    open STDOUT, '>', $filename if $filename;
 
 } else {
 
