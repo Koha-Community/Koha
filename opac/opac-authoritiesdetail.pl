@@ -67,9 +67,14 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 my $authid       = $query->param('authid');
+my $record = GetAuthority( $authid );
+if ( ! $record ) {
+    print $query->redirect("/cgi-bin/koha/errors/404.pl"); # escape early
+    exit;
+}
+
 my $authtypecode = &GetAuthTypeCode( $authid );
 
-my $record;
 if ($display_hierarchy){
   my $trees=BuildUnimarcHierarchies($authid);
   my @trees = split /;/,$trees ;
@@ -83,7 +88,6 @@ if ($display_hierarchy){
     foreach my $element (@tree){
       my $cell;
       my $elementdata = GetAuthority($element);
-      $record= $elementdata if ($authid==$element);
       push @loophierarchy, BuildUnimarcHierarchy($elementdata,"child".$cnt, $authid);
       $cnt++;
     }
@@ -93,9 +97,6 @@ if ($display_hierarchy){
     'displayhierarchy' => $display_hierarchy,
     'loophierarchies' =>\@loophierarchies,
   );
-}
-else {
-    $record = GetAuthority( $authid );
 }
 my $count = CountUsage($authid);
 
