@@ -505,6 +505,12 @@
                 </xsl:with-param>
             </xsl:call-template>
             </a>
+            <xsl:if test="marc:subfield[@code=9]">
+                <a class='authlink'>
+                    <xsl:attribute name="href">/cgi-bin/koha/opac-authoritiesdetail.pl?authid=<xsl:value-of select="marc:subfield[@code=9]"/></xsl:attribute>
+                    <img style="vertical-align:middle" height="15" width="15" src="/opac-tmpl/prog/images/filefind.png"/>
+                </a>
+            </xsl:if>
             <xsl:choose>
             <xsl:when test="position()=last()"></xsl:when>
             <xsl:otherwise> | </xsl:otherwise>
@@ -912,6 +918,12 @@
                     <xsl:text>]</xsl:text>
                 </xsl:if>
             </a>
+            <xsl:if test="marc:subfield[@code=9]">
+                <a class='authlink'>
+                    <xsl:attribute name="href">/cgi-bin/koha/opac-authoritiesdetail.pl?authid=<xsl:value-of select="marc:subfield[@code=9]"/></xsl:attribute>
+                    <img style="vertical-align:middle" height="15" width="15" src="/opac-tmpl/prog/images/filefind.png"/>
+                </a>
+            </xsl:if>
         </xsl:for-each>
         <xsl:text>.</xsl:text>
     </xsl:template>
