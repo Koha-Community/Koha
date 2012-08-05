@@ -19,6 +19,7 @@
     <xsl:template match="marc:record">
 
     <xsl:variable name="DisplayOPACiconsXSLT" select="marc:sysprefs/marc:syspref[@name='DisplayOPACiconsXSLT']"/>
+    <xsl:variable name="singleBranchMode" select="marc:sysprefs/marc:syspref[@name='singleBranchMode']"/>
 
         <xsl:variable name="leader" select="marc:leader"/>
         <xsl:variable name="leader6" select="substring($leader,7,1)"/>
@@ -712,8 +713,18 @@
                    <xsl:when test="count(key('item-by-status', 'available'))>0">
                    <span class="available">
                        <b><xsl:text>Copies available for loan: </xsl:text></b>
-                       <xsl:variable name="available_items"
-                           select="key('item-by-status', 'available')"/>
+                       <xsl:variable name="available_items" select="key('item-by-status', 'available')"/>
+               <xsl:choose>
+               <xsl:when test="$singleBranchMode=1">
+               <xsl:for-each select="$available_items[generate-id() = generate-id(key('item-by-status-and-branch', concat(items:status, ' ', items:homebranch))[1])]">
+                 <xsl:if test="items:itemcallnumber != '' and items:itemcallnumber"> [<xsl:value-of select="items:itemcallnumber"/>]</xsl:if>
+               <xsl:text> (</xsl:text>
+               <xsl:value-of select="count(key('item-by-status-and-branch', concat(items:status, ' ', items:homebranch)))"/>
+                <xsl:text>)</xsl:text>
+                <xsl:choose><xsl:when test="position()=last()"><xsl:text>. </xsl:text></xsl:when><xsl:otherwise><xsl:text>, </xsl:text></xsl:otherwise></xsl:choose>
+            </xsl:for-each>
+            </xsl:when>
+               <xsl:otherwise>
                        <xsl:for-each select="$available_items[generate-id() = generate-id(key('item-by-status-and-branch', concat(items:status, ' ', items:homebranch))[1])]">
                            <xsl:value-of select="items:homebranch"/>
 						   <xsl:if test="items:itemcallnumber != '' and items:itemcallnumber"> [<xsl:value-of select="items:itemcallnumber"/>]</xsl:if>
@@ -723,6 +734,8 @@
                            <xsl:text>)</xsl:text>
 <xsl:choose><xsl:when test="position()=last()"><xsl:text>. </xsl:text></xsl:when><xsl:otherwise><xsl:text>, </xsl:text></xsl:otherwise></xsl:choose>
                        </xsl:for-each>
+               </xsl:otherwise>
+               </xsl:choose>
                    </span>
                    </xsl:when>
 
