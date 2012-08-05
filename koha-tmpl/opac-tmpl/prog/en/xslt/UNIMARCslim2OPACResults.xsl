@@ -27,6 +27,7 @@
    select="marc:datafield[@tag=010]/marc:subfield[@code='a']"/>
 
   <xsl:variable name="hidelostitems" select="marc:sysprefs/marc:syspref[@name='hidelostitems']"/>
+  <xsl:variable name="singleBranchMode" select="marc:sysprefs/marc:syspref[@name='singleBranchMode']"/>
 
   <xsl:if test="marc:datafield[@tag=200]">
     <xsl:for-each select="marc:datafield[@tag=200]">
@@ -131,6 +132,17 @@
         <span class="available">
           <b><xsl:text>Copies available for loan: </xsl:text></b>
           <xsl:variable name="available_items" select="key('item-by-status', 'available')"/>
+      <xsl:choose>
+      <xsl:when test="$singleBranchMode=1">
+      <xsl:for-each select="$available_items[generate-id() = generate-id(key('item-by-status-and-branch', concat(items:status, ' ', items:homebranch))[1])]">
+        <xsl:if test="items:itemcallnumber != '' and items:itemcallnumber"> [<xsl:value-of select="items:itemcallnumber"/>]</xsl:if>
+          <xsl:text> (</xsl:text>
+          <xsl:value-of select="count(key('item-by-status-and-branch', concat(items:status, ' ', items:homebranch)))"/>
+          <xsl:text>)</xsl:text>
+          <xsl:choose><xsl:when test="position()=last()"><xsl:text>. </xsl:text></xsl:when><xsl:otherwise><xsl:text>, </xsl:text></xsl:otherwise></xsl:choose>
+      </xsl:for-each>
+      </xsl:when>
+      <xsl:otherwise>
           <xsl:for-each select="$available_items[generate-id() = generate-id(key('item-by-status-and-branch', concat(items:status, ' ', items:homebranch))[1])]">
             <xsl:value-of select="items:homebranch"/>
   			    <xsl:if test="items:itemcallnumber != '' and items:itemcallnumber">[<xsl:value-of select="items:itemcallnumber"/>]
@@ -147,6 +159,8 @@
               </xsl:otherwise>
             </xsl:choose>
           </xsl:for-each>
+      </xsl:otherwise>
+      </xsl:choose>
         </span>
       </xsl:when>
     </xsl:choose>
