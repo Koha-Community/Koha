@@ -56,7 +56,7 @@ my ($tagfield,$biblionumtagsubfield) = &GetMarcFromKohaField("biblio.biblionumbe
 
 my $i=0;
 while ( my $record = $batch->next() ) {
-	my $biblionumber=$record->field($tagfield)->subfield($biblionumtagsubfield);
+	my $biblionumber = ($tagfield < 10) ? $record->field($tagfield)->data : $record->subfield($tagfield, $biblionumtagsubfield);
 	$i++;
 	$sth2->execute($record->as_usmarc,$biblionumber) if $biblionumber;
 	print "$biblionumber \n";
