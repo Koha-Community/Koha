@@ -565,7 +565,12 @@ sub GetBasketsInfosByBookseller {
         SELECT aqbasket.*,
           SUM(aqorders.quantity) AS total_items,
           COUNT(DISTINCT aqorders.biblionumber) AS total_biblios,
-          SUM(IF(aqorders.datereceived IS NULL, aqorders.quantity, 0)) AS expected_items
+          SUM(
+            IF(aqorders.datereceived IS NULL
+              AND aqorders.datecancellationprinted IS NULL
+            , aqorders.quantity
+            , 0)
+          ) AS expected_items
         FROM aqbasket
           LEFT JOIN aqorders ON aqorders.basketno = aqbasket.basketno
         WHERE booksellerid = ?
