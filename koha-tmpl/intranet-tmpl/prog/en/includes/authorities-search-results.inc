@@ -26,7 +26,7 @@
         [% CASE 'broader' %](Broader heading)
         [% CASE 'narrower' %](Narrower heading)
         [% CASE 'parent' %](Immediate parent body)
-        [% CASE %]([% type | html %])
+        [% CASE %][% IF type %]([% type | html %])[% END %]
         [% END %]</span>[% END %]
     [% END %]
 [% END %]
