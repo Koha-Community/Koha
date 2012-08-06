@@ -1356,7 +1356,7 @@ sub merge {
             my $marcdata = $rec->raw();
             my $marcrecordzebra= MARC::Record->new_from_xml($marcdata,"utf8",C4::Context->preference("marcflavour"));
             my ( $biblionumbertagfield, $biblionumbertagsubfield ) = &GetMarcFromKohaField( "biblio.biblionumber", '' );
-            my $i = $marcrecordzebra->subfield($biblionumbertagfield, $biblionumbertagsubfield);
+            my $i = ($biblionumbertagfield < 10) ? $marcrecordzebra->field($biblionumbertagfield)->data : $marcrecordzebra->subfield($biblionumbertagfield, $biblionumbertagsubfield);
             my $marcrecorddb=GetMarcBiblio($i);
             push @reccache, $marcrecorddb;
             $z++;
