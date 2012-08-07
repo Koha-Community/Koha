@@ -3102,7 +3102,7 @@ sub _koha_marc_update_bib_ids {
     my ( $biblio_tag,     $biblio_subfield )     = GetMarcFromKohaField( "biblio.biblionumber",          $frameworkcode );
     die qq{No biblionumber tag for framework "$frameworkcode"} unless $biblio_tag;
     my ( $biblioitem_tag, $biblioitem_subfield ) = GetMarcFromKohaField( "biblioitems.biblioitemnumber", $frameworkcode );
-    die qq{No biblioitemnumber tag for framework "$frameworkcode"} unless $biblio_tag;
+    die qq{No biblioitemnumber tag for framework "$frameworkcode"} unless $biblioitem_tag;
 
     if ( $biblio_tag == $biblioitem_tag ) {
 
