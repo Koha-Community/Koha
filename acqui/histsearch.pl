@@ -65,6 +65,7 @@ my $isbn                    = $input->param('isbn');
 my $name                    = $input->param( 'name' );
 my $ean                     = $input->param('ean');
 my $basket                  = $input->param( 'basket' );
+my $basketgroupname             = $input->param('basketgroupname');
 my $booksellerinvoicenumber = $input->param( 'booksellerinvoicenumber' );
 my $do_search               = $input->param('do_search') || 0;
 my $from_placed_on          = C4::Dates->new($input->param('from'));
@@ -108,6 +109,7 @@ if ($do_search) {
         to_placed_on => $to_iso,
         basket => $basket,
         booksellerinvoicenumber => $booksellerinvoicenumber,
+        basketgroupname => $basketgroupname,
     );
 }
 
@@ -127,6 +129,7 @@ $template->param(
     name                    => $name,
     basket                  => $basket,
     booksellerinvoicenumber => $booksellerinvoicenumber,
+    basketgroupname         => $basketgroupname,
     from_placed_on          => $from_date,
     to_placed_on            => $to_date,
     DHTMLcalendar_dateformat=> C4::Dates->DHTMLcalendar(),

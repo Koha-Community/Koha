@@ -1761,6 +1761,7 @@ sub GetHistory {
     my $to_placed_on = $params{to_placed_on};
     my $basket = $params{basket};
     my $booksellerinvoicenumber = $params{booksellerinvoicenumber};
+    my $basketgroupname = $params{basketgroupname};
     my @order_loop;
     my $total_qty         = 0;
     my $total_qtyreceived = 0;
@@ -1848,6 +1849,11 @@ sub GetHistory {
     if ($booksellerinvoicenumber) {
         $query .= " AND (aqorders.booksellerinvoicenumber LIKE ? OR aqbasket.booksellerinvoicenumber LIKE ?)";
         push @query_params, "%$booksellerinvoicenumber%", "%$booksellerinvoicenumber%";
+    }
+
+    if ($basketgroupname) {
+        $query .= " AND aqbasketgroups.name LIKE ? ";
+        push @query_params, "%$basketgroupname%";
     }
 
     if ( C4::Context->preference("IndependantBranches") ) {
