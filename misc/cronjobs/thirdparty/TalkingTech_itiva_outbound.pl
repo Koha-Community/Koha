@@ -127,20 +127,17 @@ foreach my $type (@types) {
         my $date = C4::Dates->new( $issues->{'date_due'}, 'iso' );
         my $due_date = $date->output('metric');
 
-        # gets the placeholder message, and enqueues the letter
-        my $letter = getletter( $module, $code );
-        die "No letter found for type $type!... dying\n" unless $letter;
+        my $letter = C4::Letters::GetPreparedLetter(
+            module      => $module,
+            letter_code => $code,
+            tables      => {
+                borrowers   => $issues->{'borrowernumber'},
+                biblio      => $issues->{'biblionumber'},
+                biblioitems => $issues->{'biblionumber'}
+            },
+        );
 
-        # covers basic variable parsing in letter
-        $letter =
-          C4::Letters::parseletter( $letter, 'borrowers',
-            $issues->{'borrowernumber'} );
-        $letter =
-          C4::Letters::parseletter( $letter, 'biblio',
-            $issues->{'biblionumber'} );
-        $letter =
-          C4::Letters::parseletter( $letter, 'biblioitems',
-            $issues->{'biblionumber'} );
+        die "No letter found for type $type!... dying\n" unless $letter;
 
         my $message_id = 0;
         if ($outfile) {
