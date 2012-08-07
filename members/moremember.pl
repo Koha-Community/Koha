@@ -457,6 +457,7 @@ sub build_issue_data {
         $issue->{date_due}  = output_pref( $issue->{date_due} );
         $issue->{issuedate} = output_pref( $issue->{issuedate} ) if defined $issue->{issuedate};
         my $biblionumber = $issue->{biblionumber};
+        $issue->{issuingbranchname} = GetBranchName($issue->{branchcode});
         my %row          = %{$issue};
         $totalprice += $issue->{replacementprice};
 
