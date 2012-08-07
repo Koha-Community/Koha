@@ -69,9 +69,9 @@ my $i = 0;
     foreach my $result (@$results) {
         if($i > 0){ print ","; }
         my $value = '';
-        my $authorized = $result->{'summary'}->{authorized};
+        my $authorized = $result->{'summary'}->{'authorized'};
         foreach my $heading (@$authorized) {
-            $value .= $heading . ' ';
+            $value .= $heading->{'heading'} . ' ';
         }
         $value = "{\"summary\":\"" . $value . "\"" . "}";
         print nsb_clean($value) . "\n";
