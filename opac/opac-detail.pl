@@ -157,8 +157,7 @@ if ($session->param('busc')) {
         for (my $i=0;$i<@servers;$i++) {
             my $server = $servers[$i];
             $hits = $results_hashref->{$server}->{"hits"};
-            my @records = $results_hashref->{$server}->{"RECORDS"};
-            @newresults = searchResults('opac', '', $hits, $results_per_page, $offset, $arrParamsBusc->{'scan'}, \@records,, C4::Context->preference('hidelostitems'));
+            @newresults = searchResults('opac', '', $hits, $results_per_page, $offset, $arrParamsBusc->{'scan'}, $results_hashref->{$server}->{"RECORDS"});
         }
         return \@newresults;
     }#searchAgain
