@@ -111,14 +111,14 @@
                     [% END %]
 
                     [% IF ( CAN_user_tools_moderate_comments  && pendingcomments ) %]
-                    <div class="pending-info">
+                    <div class="pending-info" id="comments_pending">
                         <a href="/cgi-bin/koha/reviews/reviewswaiting.pl">Comments pending approval</a>:
                         <span class="pending-number-link">[% pendingcomments %]</span>
                     </div>
                     [% END %]
 
                     [% IF ( CAN_user_tools_moderate_tags && pendingtags ) %]
-                    <div class="pending-info">
+                    <div class="pending-info" id="tags_pending">
                         <a href="/cgi-bin/koha/tags/review.pl">Tags pending approval</a>:
                         <span class="pending-number-link">[% pendingtags %]</span>
                     </div>
