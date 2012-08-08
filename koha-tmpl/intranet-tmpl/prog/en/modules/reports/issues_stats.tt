@@ -26,11 +26,32 @@
             <p>Filtered on:</p>
             <ul>
             [% FOREACH loopfilte IN mainloo.loopfilter %]
-                [% IF ( loopfilte.err ) %]<li class="error">Error:
-				[% ELSIF ( loopfilte.sql ) %]<li class="sql">
-				[% ELSE %]<li>
-				[% END %]
-					[% loopfilte.crit %] [% loopfilte.filter %]
+                [% IF ( loopfilte.err ) %]
+                    <li class="error">Error:
+                [% ELSIF ( loopfilte.sql ) %]
+                    <li class="sql">
+                [% ELSE %]
+                    <li>
+                [% END %]
+                [% SWITCH loopfilte.crit %]
+                    [% CASE 0 %]Period From
+                    [% CASE 1 %]Period To
+                    [% CASE 2 %]Patron Category =
+                    [% CASE 3 %]Item Type =
+                    [% CASE 4 %]Library =
+                    [% CASE 5 %]Collection =
+                    [% CASE 6 %]Location =
+                    [% CASE 7 %]Item callnumber &gt;=
+                    [% CASE 8 %]Item callnumber &lt;
+                    [% CASE 9 %]sort1 =
+                    [% CASE 10 %]sort2 =
+                    [% CASE 11 %]Home branch =
+                    [% CASE 12 %]Holding branch =
+                    [% CASE 13 %]Patron branch =
+                    [% CASE 14 %]Issuing branch =
+                    [% CASE %]A[% loopfilter.crit %]A
+                [% END %]
+                [% loopfilte.filter %]
 				</li>
             [% END %]
             </ul>
@@ -94,6 +115,7 @@
                     </select></td>
                 <td colspan="2"><label for="DisplayBy">group by</label> <select name="DisplayBy" id="DisplayBy">
                     <option value="">None</option>
+                    <option value ="4">Hour</option>
                     <option value ="1">Day of week</option>
                     <option value ="2">Month</option>
                     <option value ="3">Year</option>
@@ -236,12 +258,76 @@
                 </select>
             </td>
         </tr>
+        <tr>
+            <td>Patron branch</td>
+            <td><input type="radio" name="Line" value="borrowers.branchcode" /></td>
+            <td><input type="radio" name="Column" value="borrowers.branchcode" /></td>
+            <td>
+                <select name="Filter" id="patronbranch">
+                    <option value="">&nbsp;</option>
+                    [% FOREACH branch IN branchloop %]
+                        <option value="[% branch.value %]">
+                            [% branch.branchname %]
+                        </option>
+                    [% END %]
+                </select>
+            </td>
+        </tr>
+        [% IF (attribute_types_by_class.keys.size) %]
+            <tr>
+                <th colspan="4">Patron attributes</th>
+            </tr>
+            [% FOREACH class IN attribute_types_by_class.keys.sort %]
+                [% IF (class) %]
+                <tr>
+                    <th>[% class %]</th>
+                    <th colspan="3"></th>
+                </tr>
+                [% END %]
+                [% FOREACH attr_type IN attribute_types_by_class.$class %]
+                    <tr>
+                        <td>[% attr_type.description %]</td>
+                        <td><input type="radio" name="Line" value="borrower_attributes.[% attr_type.code %]" /> </td>
+                        <td><input type="radio" name="Column" value="borrower_attributes.[% attr_type.code %]" /> </td>
+                        <td>
+                            [% IF attr_type.authorised_value_category %]
+                                <select name="Filter_borrower_attributes.[% attr_type.code %]">
+                                    <option value="">&nbsp;</option>
+                                    [% FOREACH av IN attr_type.authorised_values %]
+                                        <option value="[% av.authorised_value %]">
+                                            [% av.lib %]
+                                        </option>
+                                    [% END %]
+                                </select>
+                            [% ELSE %]
+                                <input type="text" name="Filter_borrower_attributes.[% attr_type.code %]" />
+                            [% END %]
+                        </td>
+                    </tr>
+                [% END %]
+            [% END %]
+        [% END %]
 
         </tbody>
     </table><br /></fieldset>
 
-<fieldset class="rows"><legend>Cell value </legend><ol><li><label for="cellvalue1">Count total items:</label> <input type="radio" name="Cellvalue" value="1" id="cellvalue1" checked="checked" /> </li>
-            <li><label for="cellvalue3">Count unique items:</label> <input type="radio" name="Cellvalue" id="cellvalue3" value="3" /> </li></ol></fieldset>
+<fieldset class="rows">
+    <legend>Cell value</legend>
+    <ol>
+        <li>
+            <label for="cellvalue1">Count total items:</label>
+            <input type="radio" name="Cellvalue" value="1" id="cellvalue1" checked="checked" />
+        </li>
+        <li>
+            <label for="cellvalue3">Count unique items:</label>
+            <input type="radio" name="Cellvalue" id="cellvalue3" value="3" />
+        </li>
+        <li>
+            <label for="cellvalue5">Count unique biblios:</label>
+            <input type="radio" name="Cellvalue" id="cellvalue5" value="5" />
+        </li>
+    </ol>
+</fieldset>
 			
 	<fieldset class="rows">
 	<legend>Output</legend>
