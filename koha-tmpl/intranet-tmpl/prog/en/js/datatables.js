@@ -313,10 +313,10 @@ $.fn.dataTableExt.oPagination.four_button = {
         nNext = document.createElement( 'span' );
         nLast = document.createElement( 'span' );
 
-/*        nFirst.appendChild( document.createTextNode( oSettings.oLanguage.oPaginate.sFirst ) );
+        nFirst.appendChild( document.createTextNode( oSettings.oLanguage.oPaginate.sFirst ) );
         nPrevious.appendChild( document.createTextNode( oSettings.oLanguage.oPaginate.sPrevious ) );
         nNext.appendChild( document.createTextNode( oSettings.oLanguage.oPaginate.sNext ) );
-        nLast.appendChild( document.createTextNode( oSettings.oLanguage.oPaginate.sLast ) );*/
+        nLast.appendChild( document.createTextNode( oSettings.oLanguage.oPaginate.sLast ) );
 
         nFirst.className = "paginate_button first";
         nPrevious.className = "paginate_button previous";
@@ -376,24 +376,24 @@ $.fn.dataTableExt.oPagination.four_button = {
             var buttons = an[i].getElementsByTagName('span');
             if ( oSettings._iDisplayStart === 0 )
             {
-                buttons[0].className = "paginate_disabled_first";
+                buttons[0].className = "paginate_disabled_previous";
                 buttons[1].className = "paginate_disabled_previous";
             }
             else
             {
-                buttons[0].className = "paginate_enabled_first";
+                buttons[0].className = "paginate_enabled_previous";
                 buttons[1].className = "paginate_enabled_previous";
             }
 
             if ( oSettings.fnDisplayEnd() == oSettings.fnRecordsDisplay() )
             {
                 buttons[2].className = "paginate_disabled_next";
-                buttons[3].className = "paginate_disabled_last";
+                buttons[3].className = "paginate_disabled_next";
             }
             else
             {
                 buttons[2].className = "paginate_enabled_next";
-                buttons[3].className = "paginate_enabled_last";
+                buttons[3].className = "paginate_enabled_next";
             }
         }
     }
