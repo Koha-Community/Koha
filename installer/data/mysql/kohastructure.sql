@@ -2773,6 +2773,7 @@ CREATE TABLE `aqorders` ( -- information related to the basket line items
   `uncertainprice` tinyint(1), -- was this price uncertain (1 for yes, 0 for no)
   `claims_count` int(11) default 0, -- count of claim letters generated
   `claimed_date` date default NULL, -- last date a claim was generated
+  parent_ordernumber int(11) default NULL, -- ordernumber of parent order line, or same as ordernumber if no parent
   PRIMARY KEY  (`ordernumber`),
   KEY `basketno` (`basketno`),
   KEY `biblionumber` (`biblionumber`),

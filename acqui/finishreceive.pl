@@ -58,6 +58,20 @@ my $note = $input->param("note");
 
 #need old recievedate if we update the order, parcel.pl only shows the right parcel this way FIXME
 if ($quantityrec > $origquantityrec ) {
+    my @received_items = ();
+    if(C4::Context->preference('AcqCreateItem') eq 'ordering') {
+        @received_items = $input->param('items_to_receive');
+    }
+
+    my $new_ordernumber = $ordernumber;
+    # save the quantity received.
+    if ( $quantityrec > 0 ) {
+        ($datereceived, $new_ordernumber) = ModReceiveOrder(
+            $biblionumber, $ordernumber, $quantityrec, $user, $unitprice,
+            $invoiceno, $freight, $replacement, undef, $datereceived,
+            \@received_items);
+    }
+
     # now, add items if applicable
     if (C4::Context->preference('AcqCreateItem') eq 'receiving') {
 
@@ -91,17 +105,9 @@ if ($quantityrec > $origquantityrec ) {
                                           $itemhash{$item}->{'indicator'},'ITEM');
             my $record=MARC::Record::new_from_xml($xml, 'UTF-8');
             my (undef,$bibitemnum,$itemnumber) = AddItemFromMarc($record,$biblionumber);
-            NewOrderItem($itemnumber, $ordernumber);
+            NewOrderItem($itemnumber, $new_ordernumber);
         }
     }
-
-    my @received_items = ();
-    if(C4::Context->preference('AcqCreateItem') eq 'ordering') {
-        @received_items = $input->param('items_to_receive');
-    }
-
-    # save the quantity received.
-    $datereceived = ModReceiveOrder($biblionumber,$ordernumber, $quantityrec ,$user,$unitprice,$invoiceno,$freight,$replacement,undef,$datereceived, \@received_items);
 }
 
 update_item( $_ ) foreach GetItemnumbersFromOrder( $ordernumber );

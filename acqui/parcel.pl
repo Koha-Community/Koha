@@ -78,8 +78,10 @@ my $invoice=$input->param('invoice') || '';
 my $freight=$input->param('freight');
 my $input_gst = ($input->param('gst') eq '' ? undef : $input->param('gst'));
 my $gst= $input_gst // $bookseller->{gstrate} // C4::Context->preference("gist") // 0;
-my $datereceived =  ($input->param('op') eq ('new' or "search")) ? C4::Dates->new($input->param('datereceived'))
-                    :  C4::Dates->new($input->param('datereceived'), 'iso');
+my $op = $input->param('op') // '';
+my $datereceived = ( $op eq ('new' or 'search' ) )
+    ? C4::Dates->new($input->param('datereceived'))
+    :  C4::Dates->new($input->param('datereceived'), 'iso');
 $datereceived = C4::Dates->new() unless $datereceived;
 my $code            = $input->param('code');
 my @rcv_err         = $input->param('error');
@@ -97,6 +99,14 @@ my ($template, $loggedinuser, $cookie)
                  flagsrequired => {acquisition => 'order_receive'},
                  debug => 1,
 });
+
+if($op eq 'cancelreceipt') {
+    my $ordernumber = $input->param('ordernumber');
+    my $parent_ordernumber = CancelReceipt($ordernumber);
+    unless($parent_ordernumber) {
+        $template->param(error_cancelling_receipt => 1);
+    }
+}
 
 # If receiving error, report the error (coming from finishrecieve.pl(sic)).
 if( scalar(@rcv_err) ) {

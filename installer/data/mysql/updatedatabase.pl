@@ -5754,6 +5754,21 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion)
 }
 
+$DBversion = "3.09.00.043";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do("
+        ALTER TABLE aqorders
+        ADD parent_ordernumber int(11) DEFAULT NULL
+    ");
+    $dbh->do("
+        UPDATE aqorders
+        SET parent_ordernumber = ordernumber;
+    ");
+    print "Upgrade to $DBversion done (Adding parent_ordernumber in aqorders)\n";
+    SetVersion($DBversion);
+}
+
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

@@ -165,6 +165,20 @@
 	[% END %]
     [% END %]
 
+    [% IF (error_cancelling_receipt) %]
+      <div class="error">
+      Cannot cancel receipt. Possible reasons :
+      <ul>
+        <li>
+          You are trying to cancel the receipt of an order line whose parent
+          order line is already received. Cancel this parent order line and
+          retry.
+        </li>
+        <li>Parent order line has been deleted.</li>
+      </ul>
+      </div>
+    [% END %]
+
 <div id="acqui_receive_summary">
 <p><strong>Invoice number:</strong> [% invoice %] <strong>Received by:</strong> [% loggedinusername %] <strong>On:</strong> [% formatteddatereceived %]</p>
 	<!-- TODO: Add date picker, change rcv date. -->
@@ -273,6 +287,7 @@
 <div id="acqui_receive_receivelist">
     <h3>Already received</h3>
 
+
    [% IF ( loop_received ) %]
    <form action="/cgi-bin/koha/acqui/parcel.pl" method="get" name="orderform">
     <table id="receivedt">
@@ -286,6 +301,7 @@
 		<th>Est cost</th>
 		<th>Actual cost</th>
 		<th>TOTAL</th>
+        <th></th>
 	    </tr>
     </thead>
     <tfoot>
@@ -294,6 +310,7 @@
 		<td colspan="2">&nbsp;</td>
 		<td>[% totalprice %]</td>
 		<td>[% tototal %]</td>
+        <td></td>
 	    </tr>
 	      
 	      [% IF ( totalfreight ) %]
@@ -321,6 +338,7 @@
 		<td>[% totalquantity %]</td>
 		<td colspan="2">&nbsp;</td>
 		<td>[% grandtot %]</td>
+        <td></td>
 	    </tr>
     </tfoot>
 	<tbody class="filterclass">
@@ -343,6 +361,7 @@
                 <td>[% loop_receive.ecost %]</td>
                 <td>[% loop_receive.unitprice %]</td>
                 <td>[% loop_receive.total %]</td>
+                <td><a href="/cgi-bin/koha/acqui/parcel.pl?invoice=[% loop_receive.invoice %]&booksellerid=[% booksellerid %]&datereceived=[% datereceived %]&op=cancelreceipt&ordernumber=[% loop_receive.ordernumber %]">Cancel receipt</a></td>
             </tr>
 	    [% END %]
 	</tbody>
