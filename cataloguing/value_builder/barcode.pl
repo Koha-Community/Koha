@@ -86,6 +86,27 @@ sub plugin_javascript {
     elsif ($autoBarcodeType eq 'hbyymmincr') {      # Generates a barcode where hb = home branch Code, yymm = year/month catalogued, incr = incremental number, reset yearly -fbcit
         ($nextnum, $scr) = C4::Barcodes::ValueBuilder::hbyymmincr::get_barcode(\%args);
     }
+    elsif ($autoBarcodeType eq 'EAN13') {
+        # not the best, two catalogers could add the same barcode easily this way :/
+        my $query = "select max(abs(barcode)) from items";
+        my $sth = $dbh->prepare($query);
+        $sth->execute();
+        while (my ($last)= $sth->fetchrow_array) {
+            $nextnum = $last;
+        }
+        my $ean = CheckDigits('ean');
+        if ( $ean->is_valid($nextnum) ) {
+            my $next = $ean->basenumber( $nextnum ) + 1;
+            $nextnum = $ean->complete( $next );
+            $nextnum = '0' x ( 13 - length($nextnum) ) . $nextnum; # pad zeros
+        } else {
+            warn "ERROR: invalid EAN-13 $nextnum, using increment";
+            $nextnum++;
+        }
+    }
+    else {
+        warn "ERROR: unknown autoBarcode: $autoBarcodeType";
+    }
 
     # default js body (if not filled by hbyymmincr)
     $scr or $scr = <<END_OF_JS;
