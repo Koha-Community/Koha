@@ -91,7 +91,7 @@ sub plugin_javascript {
 
 # default js body (if not filled by hbyymmincr)
     $scr or $scr = <<END_OF_JS;
-    if (\$('#' + id).val() == '' || force) {
+    if (\$('#' + id).val() == '') {
         \$('#' + id).val('$nextnum');
     }
 END_OF_JS

@@ -64,7 +64,7 @@ sub get_barcode {
                 fnum = i;
             }
         }
-    if (\$('#' + id).val() == '' || force) {
+    if (\$('#' + id).val() == '') {
         \$('#' + id).val(document.f.field_value[fnum].value + '$nextnum');
     }
     ";
