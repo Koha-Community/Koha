@@ -90,7 +90,7 @@ sub plugin_javascript {
     }
     elsif ($autoBarcodeType eq 'EAN13') {
         # not the best, two catalogers could add the same barcode easily this way :/
-        $query = "select max(abs(barcode)) from items";
+        my $query = "select max(abs(barcode)) from items";
         my $sth = $dbh->prepare($query);
         $sth->execute();
         while (my ($last)= $sth->fetchrow_array) {
