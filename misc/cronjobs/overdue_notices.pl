@@ -388,7 +388,7 @@ foreach my $branchcode (@branches) {
 
     $verbose and warn sprintf "branchcode : '%s' using %s\n", $branchcode, $admin_email_address;
 
-    my $sth2 = $dbh->prepare( <<'END_SQL' );
+    my $sth2 = $dbh->prepare( <<"END_SQL" );
 SELECT biblio.*, items.*, issues.*, biblioitems.itemtype, TO_DAYS($date)-TO_DAYS(date_due) AS days_overdue
   FROM issues,items,biblio, biblioitems
   WHERE items.itemnumber=issues.itemnumber
@@ -455,10 +455,10 @@ END_SQL
             }
             $borrower_sql .= '  AND categories.overduenoticerequired=1 ';
             if($triggered) {
-                $borrower_sql .= ' AND TO_DAYS($date)-TO_DAYS(date_due) = ?';
+                $borrower_sql .= " AND TO_DAYS($date)-TO_DAYS(date_due) = ?";
                 push @borrower_parameters, $mindays;
             } else {
-                $borrower_sql .= ' AND TO_DAYS($date)-TO_DAYS(date_due) BETWEEN ? and ? ' ;
+                $borrower_sql .= " AND TO_DAYS($date)-TO_DAYS(date_due) BETWEEN ? and ? " ;
                 push @borrower_parameters, $mindays, $maxdays;
             }
 
