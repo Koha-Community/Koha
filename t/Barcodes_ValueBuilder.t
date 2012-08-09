@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 use DBI;
-use Test::More tests => 15;
+use Test::More tests => 10;
 use Test::MockModule;
 
 BEGIN {
@@ -40,7 +40,7 @@ my ($nextnum, $scr, $history);
 
 ($nextnum, $scr) = C4::Barcodes::ValueBuilder::incremental::get_barcode(\%args);
 is($nextnum, 33333074344564, 'incremental barcode');
-ok(length($scr) == 0, 'incremental javascript');
+is($scr, undef, 'incremental javascript');
 
 # This should run exactly one query so we can test
 $history = $dbh->{mock_all_history};
@@ -70,7 +70,7 @@ $dbh->{mock_add_resultset} = $annualdata;
 $dbh->{mock_clear_history} = 1;
 ($nextnum, $scr) = C4::Barcodes::ValueBuilder::annual::get_barcode(\%args);
 is($nextnum, '2012-0035', 'annual barcode');
-ok(length($scr) == 0, 'annual javascript');
+is($scr, undef, 'annual javascript');
 
 # This should run exactly one query so we can test
 $history = $dbh->{mock_all_history};
