@@ -43,26 +43,29 @@
                   <li>[% TOTAL %] directorie(s) scanned.</li>
                     <li>[% HANDLED %] directorie(s) processed.</li>
                 </ul>
+
                 [% FOREACH COUNT IN COUNTS %]
-	            <ul class="data">
+                    <ul class="data">
                         [% IF ( COUNT.TCOUNTS ) %]<li>[% COUNT.TCOUNTS %] image(s) moved into the database:</li>[% END %]
-                        [% FOREACH filename IN COUNT.filenames %]
-                            <li>[% filename.source %] - Cardnumber: [% filename.cardnumber %]
-                                    [% IF ( filename.filerrors ) %]<br /> <b>WARNING:</b> This image <i>not</i> imported because 
+                            [% FOREACH filename IN COUNT.filenames %]
+                                <li>[% filename.source %] - Cardnumber: [% filename.cardnumber %]
+                                [% IF ( filename.filerrors ) %]
                                     [% FOREACH filerror IN filename.filerrors %]
-                                        [% IF ( filerror.DBERR ) %]the database returned an error. Please refer to the error log for more details.</li>
-                                        [% ELSIF ( filerror.IMGEXISTS ) %]this patron does not exist in the database.</li>
-                                        [% ELSIF ( filerror.MIMERR ) %]the image format is unrecognized.</li>
-                                        [% ELSIF ( filerror.CORERR ) %]the image file is corrupted.</li>
-                                        [% ELSIF ( filerror.OPNERR ) %]Koha was unable to open the image for reading.</li>
-                                        [% ELSIF ( filerror.OVRSIZ ) %]the image file is too big.</li>
-                                        [% ELSIF ( filerror.CRDFIL ) %]the [% filerror.CRDFIL %] is missing.</li>
-                                        [% ELSE %]of an unknown error. Please refer to the error log for more details.</li>[% END %]
+                                        [% IF ( filerror.DBERR ) %]<br /><b>ERROR:</b> Image not imported because the database returned an error. Please refer to the error log for more details.
+                                        [% ELSIF ( filerror.IMGEXISTS ) %]<br /><b>ERROR:</b> Image not imported because this patron does not exist in the database.
+                                        [% ELSIF ( filerror.MIMERR ) %]<br /><b>ERROR:</b> Image not imported because the image format is unrecognized.
+                                        [% ELSIF ( filerror.CORERR ) %]<br /><b>ERROR:</b> Image not imported because the image file is corrupted.
+                                        [% ELSIF ( filerror.OPNERR ) %]<br /><b>ERROR:</b> Image not imported because Koha was unable to open the image for reading.
+                                        [% ELSIF ( filerror.OVRSIZ ) %]<br /><b>ERROR:</b> Image not imported because the image file is too big (see online help for maximum size).
+                                        [% ELSIF ( filerror.CRDFIL ) %]<br /><b>ERROR:</b> Image not imported ([% filerror.CRDFIL %] missing).
+                                        [% ELSE %]<br /><b>ERROR:</b> Image not imported because of an unknown error. Please refer to the error log for more details.
+                                        [% END %]
                                     [% END %]
-                                        [% ELSE %] imported successfully.</li>
-                                    [% END %]
+                                [% ELSE %] imported successfully.
+                                [% END %]
+                                </li>
                         [% END %]
-                        </ul>
+                    </ul>
                 [% END %]
 
 				</div>
