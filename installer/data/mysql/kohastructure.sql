@@ -178,6 +178,7 @@ CREATE TABLE `biblioitems` ( -- information related to bibliographic records in 
   `cn_item` varchar(10) default NULL,
   `cn_suffix` varchar(10) default NULL,
   `cn_sort` varchar(30) default NULL,
+  `agerestriction` varchar(255) default NULL,
   `totalissues` int(10),
   `marcxml` longtext NOT NULL, -- full bibliographic MARC record in MARCXML
   PRIMARY KEY  (`biblioitemnumber`),
@@ -650,6 +651,7 @@ CREATE TABLE `deletedbiblioitems` ( -- information about bibliographic records t
   `cn_item` varchar(10) default NULL,
   `cn_suffix` varchar(10) default NULL,
   `cn_sort` varchar(30) default NULL,
+  `agerestriction` varchar(255) default NULL,
   `totalissues` int(10),
   `marcxml` longtext NOT NULL, -- full bibliographic MARC record in MARCXML
   PRIMARY KEY  (`biblioitemnumber`),

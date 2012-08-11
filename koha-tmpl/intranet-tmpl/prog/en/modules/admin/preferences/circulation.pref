@@ -215,6 +215,15 @@ Circulation:
                   no: "Prevent"
             - patrons from checking out an item whose rental charge would take them over the limit.
         -
+            - pref: AgeRestrictionMarker
+            - "E.g. FSK|PEGI|Age| (No white space near |). Entry in MARC field (e.g. 521a) as defined for agerestriction in Koha to MARC mapping. Entry in MARC field like FSK 12 or PEGI 12 would mean: Borrower must be 12 years old. (Empty: Do not apply age restriction.)"
+        -
+            - pref: AgeRestrictionOverride
+              choices:
+                  yes: Allow
+                  no: "Don't allow"
+            - staff to check out an item with age restriction.
+        -
             - Prevent patrons from checking out books if they have more than
             - pref: noissuescharge
               class: integer

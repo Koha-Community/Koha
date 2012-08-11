@@ -250,6 +250,10 @@ function validate1(date) {
 <h3>Please confirm checkout</h3>
 
 <ul>
+[%IF ( AGE_RESTRICTION ) %]
+    <li>Age restriction [% AGE_RESTRICTION %]. Check out anyway?</li>
+[% END %]
+
 [% IF ( DEBT ) %]
     <li>The patron has a debt of [% DEBT %]</li>
 [% END %]
@@ -399,6 +403,10 @@ function validate1(date) {
 
         [% IF ( NO_MORE_RENEWALS ) %]
             <li>No more renewals possible</li>
+        [% END %]
+
+        [%IF ( AGE_RESTRICTION ) %]
+            <li>Age restriction [% AGE_RESTRICTION %].</li>
         [% END %]
 
         [% IF ( EXPIRED ) %]

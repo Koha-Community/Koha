@@ -44,7 +44,15 @@ use Data::Dumper;
 use Koha::DateUtils;
 use Koha::Calendar;
 use Carp;
-
+use Date::Calc qw(
+  Today
+  Today_and_Now
+  Add_Delta_YM
+  Add_Delta_DHMS
+  Date_to_Days
+  Day_of_Week
+  Add_Delta_Days
+);
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
 BEGIN {
@@ -937,6 +945,62 @@ sub CanBookBeIssued {
                     $needsconfirmation{'resborrowernumber'} = $resborrower->{'borrowernumber'};
                     $needsconfirmation{'resbranchname'} = $branchname;
                     $needsconfirmation{'resreservedate'} = format_date($res->{'reservedate'});
+                }
+            }
+        }
+    }
+    #
+    # CHECK AGE RESTRICTION
+    #
+
+    # get $marker from preferences. Could be something like "FSK|PEGI|Alter|Age:"
+    my $markers = C4::Context->preference('AgeRestrictionMarker' );
+    my $bibvalues = $biblioitem->{'agerestriction'};
+    if (($markers)&&($bibvalues))
+    {
+        # Split $bibvalues to something like FSK 16 or PEGI 6
+        my @values = split ' ', $bibvalues;
+
+        # Search first occurence of one of the markers
+        my @markers = split /\|/, $markers;
+        my $index = 0;
+        my $take = -1;
+        for my $value (@values) {
+            $index ++;
+            for my $marker (@markers) {
+                $marker =~ s/^\s+//; #remove leading spaces
+                $marker =~ s/\s+$//; #remove trailing spaces
+                if (uc($marker) eq uc($value)) {
+                    $take = $index;
+                    last;
+                }
+            }
+            if ($take > -1) {
+                last;
+            }
+        }
+        # Index points to the next value
+        my $restrictionyear = 0;
+        if (($take <= $#values) && ($take >= 0)){
+            $restrictionyear += @values[$take];
+        }
+
+        if ($restrictionyear > 0) {
+            if ( $borrower->{'dateofbirth'}  ) {
+                my @alloweddate =  split /-/,$borrower->{'dateofbirth'} ;
+                @alloweddate[0] += $restrictionyear;
+                #Prevent runime eror on leap year (invalid date)
+                if ((@alloweddate[1] == 2) && (@alloweddate[2] == 29)) {
+                    @alloweddate[2] = 28;
+                }
+
+                if ( Date_to_Days(Today) <  Date_to_Days(@alloweddate) -1  ) {
+                    if (C4::Context->preference('AgeRestrictionOverride' )) {
+                        $needsconfirmation{AGE_RESTRICTION} = "$bibvalues";
+                    }
+                    else {
+                        $issuingimpossible{AGE_RESTRICTION} = "$bibvalues";
+                    }
                 }
             }
         }

@@ -5681,6 +5681,18 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     "INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('SubfieldsToUseWhenPrefill','','Define a list of subfields to use when prefilling items (separated by space)','','Free');
     ");
     print "Upgrade to $DBversion done (Adding PrefillItem and SubfieldsToUseWhenPrefill sysprefs)\n";
+}
+
+$DBversion = "3.09.00.036";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    # biblioitems changes
+    $dbh->do("ALTER TABLE biblioitems ADD COLUMN agerestriction VARCHAR(255) DEFAULT NULL AFTER cn_sort");
+    $dbh->do("ALTER TABLE deletedbiblioitems ADD COLUMN agerestriction VARCHAR(255) DEFAULT NULL AFTER cn_sort");
+    # preferences changes
+    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('AgeRestrictionMarker','','Markers for age restriction indication, e.g. FSK|PEGI|Age|. See: http://wiki.koha-community.org/wiki/Age_restriction',NULL,'free')");
+    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('AgeRestrictionOverride',0,'Allow staff to check out an item with age restriction.',NULL,'YesNo')");
+
+    print "Upgrade to $DBversion done (Add colum agerestriction to biblioitems and deletedbiblioitems, add system preferences AgeRestrictionMarker and AgeRestrictionOverride)\n";
     SetVersion($DBversion);
 }
 
@@ -5766,4 +5778,3 @@ sub SetVersion {
     C4::Context::clear_syspref_cache(); # invalidate cached preferences
 }
 exit;
-

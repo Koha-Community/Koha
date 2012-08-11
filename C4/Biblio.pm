@@ -3319,7 +3319,8 @@ sub _koha_modify_biblioitem_nonmarc {
         cn_suffix       = ?,
         cn_sort         = ?,
         totalissues     = ?,
-    ean             = ?
+        ean             = ?,
+        agerestriction  = ?
         where biblioitemnumber = ?
         ";
     my $sth = $dbh->prepare($query);
@@ -3331,8 +3332,7 @@ sub _koha_modify_biblioitem_nonmarc {
         $biblioitem->{'pages'},            $biblioitem->{'bnotes'},           $biblioitem->{'size'},                  $biblioitem->{'place'},
         $biblioitem->{'lccn'},             $biblioitem->{'url'},              $biblioitem->{'biblioitems.cn_source'}, $biblioitem->{'cn_class'},
         $biblioitem->{'cn_item'},          $biblioitem->{'cn_suffix'},        $cn_sort,                               $biblioitem->{'totalissues'},
-    $biblioitem->{'ean'},
-        $biblioitem->{'biblioitemnumber'}
+        $biblioitem->{'ean'},              $biblioitem->{'agerestriction'},   $biblioitem->{'biblioitemnumber'}
     );
     if ( $dbh->errstr ) {
         $error .= "ERROR in _koha_modify_biblioitem_nonmarc $query" . $dbh->errstr;
@@ -3384,7 +3384,8 @@ sub _koha_add_biblioitem {
         cn_suffix       = ?,
         cn_sort         = ?,
         totalissues     = ?,
-    ean             = ?
+        ean             = ?,
+        agerestriction  = ?
         ";
     my $sth = $dbh->prepare($query);
     $sth->execute(
@@ -3395,7 +3396,7 @@ sub _koha_add_biblioitem {
         $biblioitem->{'pages'},            $biblioitem->{'bnotes'},           $biblioitem->{'size'},                  $biblioitem->{'place'},
         $biblioitem->{'lccn'},             $biblioitem->{'marc'},             $biblioitem->{'url'},                   $biblioitem->{'biblioitems.cn_source'},
         $biblioitem->{'cn_class'},         $biblioitem->{'cn_item'},          $biblioitem->{'cn_suffix'},             $cn_sort,
-        $biblioitem->{'totalissues'},      $biblioitem->{'ean'}
+        $biblioitem->{'totalissues'},      $biblioitem->{'ean'},              $biblioitem->{'agerestriction'}
     );
     my $bibitemnum = $dbh->{'mysql_insertid'};
 
