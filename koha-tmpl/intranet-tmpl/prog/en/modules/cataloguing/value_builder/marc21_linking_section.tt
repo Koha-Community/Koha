@@ -112,7 +112,7 @@
 <h3>Plugin to build links between records</h3>
     [% IF ( Search ) %]
             <div id="MARC21_Linking_section_search">
-               <h2> Cerca su </h2>
+               <h2>Search for</h2>
             <form name="f" method="post" action="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=marc21_linking_section.pl">
 
                      <p>
@@ -146,17 +146,17 @@
 
            <h2>Search results</h2>
                 <div id="MARC21_Linking_section__resultnumber">
-                        <p>[% IF ( displayprev ) %] <a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=marc21_linking_section.pl&amp;index=[% index %]&amp;startfrom=[% startfromprev %]&amp;search=[% search %]&amp;resultsperpage=[% resultsperpage %]&amp;type=intranet&amp;op=do_search">&lt;&lt; Precedente</a>[% END %]
+                        <p>[% IF ( displayprev ) %] <a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=marc21_linking_section.pl&amp;index=[% index %]&amp;startfrom=[% startfromprev %]&amp;search=[% search %]&amp;resultsperpage=[% resultsperpage %]&amp;type=intranet&amp;op=do_search">&lt;&lt; Previous</a>[% END %]
                               [% FOREACH number IN numbers %]
                                 [% IF ( number.highlight ) %] <span class="highlight">[% number.number %]</span>
                                 [% ELSE %] <a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=marc21_linking_section.pl&amp;index=[% index %]&amp;startfrom=[% number.startfrom %]&amp;search=[% number.search |url %]&amp;resultsperpage=[% number.resultsperpage %]&amp;type=intranet&amp;op=do_search">[% number.number %]</a>
                                 [% END %]
                                 [% END %]
                                 [% IF ( displaynext ) %]
-                                  <a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=marc21_linking_section.pl&amp;index=[% index %]&amp;startfrom=[% startfromnext %]&amp;search=[% search %]&amp;resultsperpage=[% resultsperpage %]&amp;type=intranet&amp;op=do_search">Prossimo&gt;&gt;</a>
+                                  <a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=marc21_linking_section.pl&amp;index=[% index %]&amp;startfrom=[% startfromnext %]&amp;search=[% search %]&amp;resultsperpage=[% resultsperpage %]&amp;type=intranet&amp;op=do_search">Next&gt;&gt;</a>
                                 [% END %]</p>
                   <p class="resultcount">
-                          [% IF ( total ) %]Results [% from %] a [% to %] di [% total %]
+                          [% IF ( total ) %]Results [% from %] to [% to %] of [% total %]
                           [% ELSE %]No results found
                           [% END %]</p></div>
             <div id="resultlist">
