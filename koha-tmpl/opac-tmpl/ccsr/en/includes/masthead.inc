@@ -77,7 +77,7 @@
 <div id="opac-main-search" class="yui-g">
 
 <a class="logo" href="/cgi-bin/koha/opac-main.pl">
-    <img src="/opac-tmpl/prog/images/logo-koha.png" alt="Koha Online Catalog" />
+    <img src="/opac-tmpl/ccsr/images/logo-koha.png" alt="Koha Online Catalog" />
 </a>
 
 <div id="fluid">
@@ -244,12 +244,12 @@
 [% IF ( total ) %]<strong>Your search returned [% total |html %] results.</strong>
 [% IF ( related ) %] (related searches: [% FOREACH relate IN related %][% relate.related_search %][% END %]). [% END %]
 <a href="[% OPACBaseURL %]/cgi-bin/koha/opac-search.pl?[% query_cgi |html %][% limit_cgi |html %]&amp;count=[% countrss |html %]&amp;sort_by=acqdate_dsc&amp;format=rss2" class="rsssearchlink">
-<img src="/opac-tmpl/prog/images/feed-icon-16x16.png" alt="Subscribe to this search" title="Subscribe to this search" border="0" class="rsssearchicon"/></a>
+<img src="/opac-tmpl/ccsr/images/feed-icon-16x16.png" alt="Subscribe to this search" title="Subscribe to this search" border="0" class="rsssearchicon"/></a>
 [% ELSE %]
 <strong>No results found!</strong>
 <p>
     [% IF ( searchdesc ) %]
-    No results found for that in [% LibraryName %] catalog. <a href="[% OPACBaseURL %]/cgi-bin/koha/opac-search.pl?[% query_cgi |html %][% limit_cgi |html %]&amp;format=rss2" class="rsssearchlink"><img src="/opac-tmpl/prog/images/feed-icon-16x16.png" alt="Subscribe to this search" title="Subscribe to this search" border="0" class="rsssearchicon"/></a>
+    No results found for that in [% LibraryName %] catalog. <a href="[% OPACBaseURL %]/cgi-bin/koha/opac-search.pl?[% query_cgi |html %][% limit_cgi |html %]&amp;format=rss2" class="rsssearchlink"><img src="/opac-tmpl/ccsr/images/feed-icon-16x16.png" alt="Subscribe to this search" title="Subscribe to this search" border="0" class="rsssearchicon"/></a>
     [% ELSE %]
     You did not specify any search criteria.
     [% END %]
