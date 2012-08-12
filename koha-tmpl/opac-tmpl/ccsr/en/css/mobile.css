@@ -1,0 +1,622 @@
+/*
+    Mobile stylesheet
+    Frédérick Capovilla, 2012 - Libéo
+*/
+
+/* Hidden elements */
+
+body#opac-main #login,
+body#opac-main #login~div,
+body#opac-main #opacnav,
+body#opac-main #news,
+body#results #facetcontainer,
+body#opac-detail #ulactioncontainer>:not(#action),
+body#opac-detail #ulactioncontainer #action a:not(.reserve),
+body#opac-detail #shelfbrowser,
+body#opac-detail #views,
+body#opac-detail div#bibliodescriptions>ul>li:nth-of-type(n+3),
+body#results #userresults .pages:nth-of-type(1),
+body#results #userresults>br,
+body#results td.select.selectcol,
+body#results span.results_summary.actions>:not(.hold),
+body#results span.addto,
+body#results span#placehold,
+body#results span.checkall,
+body#results span.clearall,
+body#results .searchresults td.resultscontrol,
+body#advsearch form div.yui-g:nth-last-of-type(-n+4),
+body#opac-readingrecord ul.ui-tabs-nav li,
+body#opac-login-page #opac-main-search div#libraryname,
+#leftmenus>:not(#menu),
+#top-bar #menu-left,
+#members>ul>li:nth-child(2),
+#moresearches,
+#breadcrumbs>p:nth-of-type(1),
+#main_footer .colleft,
+#opac-main-search a.logo {
+    display:none !important;
+}
+
+
+/* General */
+
+body{
+    min-width: 100px;
+}
+
+#doc, #doc2, #doc3, #doc4, .yui-t1, .yui-t2, .yui-t3, .yui-t4, .yui-t5, .yui-t6, .yui-t7 {
+    min-width: 100px;
+}
+
+.yui-ge div.first, .yui-gf .yui-g, .yui-gf .yui-u{
+    width: 100%;
+}
+
+#bd:after, .yui-g:after, .yui-gb:after, .yui-gc:after, .yui-gd:after, .yui-ge:after, .yui-gf:after {
+    content: "";
+}
+
+#container{
+    border-radius: 0;
+    margin: 0;
+    padding: 0;
+    padding-bottom: 10px;
+    border: 0;
+}
+
+#container #ctn_lt {
+    padding: 0 10px;
+    padding-left: auto;
+}
+
+#doc3{
+    margin: 0;
+    width: 100%;
+}
+
+#opac-main-search {
+    margin: 0 !important;
+    padding: 0;
+}
+
+#main_footer{
+    margin-bottom: 0;
+}
+
+#yui-main .yui-b {
+    margin: 0 !important;
+}
+
+#breadcrumbs{
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+body#results #breadcrumbs>*{
+    padding: 20px !important;
+}
+
+
+/* Main */
+
+body#opac-main #opacmainuserblock {
+    padding: 0
+}
+
+body#opac-main #container #ctn_lt{
+    padding: 15px;
+}
+
+
+/* Results */
+
+body#results div#userresults {
+    padding: 0;
+    border: 0;
+}
+
+body#results .yui-t1 #yui-main .yui-b {
+    margin: 0;
+}
+
+body#results #container #ctn_lt{
+    padding: 0;
+}
+
+body#results .searchresults td.resultscontrol{
+    border-radius: 0;
+}
+
+body#results .searchresults .resort{
+    width: 50%;
+    float:right;
+}
+
+body#results .searchresults #sort_by{
+    width: 100%;
+}
+
+body#results .searchresults .cartlist{
+    width:50%;
+}
+
+body#results .results_summary.actions .hold {
+    font-size: 140%;
+    font-weight: bold;
+    margin-left: 0;
+}
+
+
+/* Cancel highlighting */
+
+a .term {
+    text-decoration: inherit;
+}
+
+.term {
+    background-color: inherit;
+    color: inherit;
+}
+
+
+/* Details */
+
+body#opac-detail #ctn_lt,
+body#opac-marcdetail #ctn_lt,
+body#opac-isbddetail #ctn_lt{
+    margin: 10px;
+    padding: 0;
+}
+
+body#opac-detail #opac-detail-yui-ge {
+    padding-top: 15px;
+}
+
+#views>span {
+    display:block;
+}
+
+body#opac-detail #ulactioncontainer{
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+body#opac-detail #container {
+    position: relative;
+}
+
+body#opac-detail #ulactioncontainer ul{
+    margin-top: 0;
+    padding: 5px;
+}
+
+body#opac-detail #ulactioncontainer li{
+    margin: 0;
+    padding: 0;
+}
+
+/* Logo in the footer */
+
+#opac-main-search div#libraryname {
+    display: block;
+    position: absolute;
+    bottom: -116px;
+    left: 0;
+    padding: 0 20px;
+}
+
+#opac-main-search div#libraryname img {
+    display: block;
+}
+
+#doc3{
+    position: relative;
+}
+
+#main_footer {
+    padding-top: 29px;
+}
+
+#main_footer .colright,
+#main_footer .colleft{
+    float: none;
+}
+
+#main_footer .colright .koha{
+    float: right;
+    overflow: hidden;
+    text-indent: -5000em;
+    width: 92px;
+    height: 80px;
+    background-position: center;
+}
+
+
+/* Login bar */
+
+div#top-bar {
+    display: block;
+    position: absolute;
+    left: 0;
+    bottom: -29px;
+    top: auto;
+    overflow: hidden;
+    z-index: auto;
+}
+
+#members ul{
+    margin: 0;
+}
+
+
+/* Search bar */
+
+form#searchform {
+    border-radius: 0;
+    padding-top: 50px;
+}
+
+form.single-library #filters .jqTransformSelectWrapper {
+    position: relative;
+    width: 100% !important;
+    left: 0;
+    top: 0;
+    border-radius: 3px;
+}
+
+form.multi-libraries #filters .jqTransformSelectWrapper{
+    position: relative;
+    width: 49% !important;
+    float: left;
+    top: 0px;
+    left: 0px;
+    border-radius: 3px;
+}
+
+form.multi-libraries #libraries .jqTransformSelectWrapper{
+    position: relative;
+    width: 49% !important;
+    float: right;
+    top: 0px;
+    left: 0px;
+    border-radius: 3px;
+}
+
+form.multi-libraries .input-wrapper{
+    margin: 0;
+}
+
+form#searchform .input-wrapper input[type="text"]{
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    border-radius: 3px;
+}
+
+form#searchform .input-wrapper{
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    position: absolute;
+    top: 15px;
+    left: 0;
+    width: 100%;
+    padding: 0 10px;
+    padding-right: 46px;
+}
+
+form#searchform input[type="submit"]{
+    position: absolute;
+    border-radius: 0;
+    top: 15px;
+    right: 10px;
+}
+
+.jqTransformSelectWrapper{
+    margin: 0;
+}
+
+.jqTransformSelectWrapper div{
+    overflow: hidden;
+}
+
+.jqTransformSelectWrapper div span{
+    white-space:nowrap;
+}
+
+.jqTransformSelectWrapper div a{
+    border-left: 5px solid #FFF;
+    border-right: 5px solid #FFF;
+    background-color: white;
+    box-shadow: -3px 0 5px #FFF;
+    right: 0px;
+    border-radius: 8px;
+}
+
+.jqTransformSelectWrapper ul li a{
+    padding: 10px 0;
+}
+
+#opac-main-search #fluid {
+    display: block;
+}
+
+
+/* Login screen */
+
+#holds, #opac-auth {
+    min-width: 0;
+    width: auto;
+}
+
+
+/* User */
+
+body#opac-user .yui-b,
+body#opac-passwd .yui-b,
+body#opac-search-history .yui-b,
+body#opac-readingrecord .yui-b,
+body#opac-userupdate .yui-b,
+body#opac-account .yui-b{
+    width: auto;
+    float: none;
+}
+
+body#opac-user #yui-main ,
+body#opac-passwd #yui-main ,
+body#opac-search-history #yui-main ,
+body#opac-readingrecord #yui-main ,
+body#opac-userupdate #yui-main ,
+body#opac-account #yui-main {
+    float: none;
+    margin: 0;
+}
+
+body#opac-userupdate .yui-g .yui-u{
+    width: 100%;
+}
+
+body#opac-passwd fieldset,
+body#opac-userupdate fieldset{
+    margin: 1em 0;
+}
+
+.renewals {
+    display: inline;
+}
+
+
+/* Tables */
+
+body#opac-user #checkoutst td.links,
+body#opac-user thead,
+body#opac-holds div:not(.calendar) table>tbody>tr:nth-child(1),
+body#opac-readingrecord #readingrec tr:nth-child(1),
+body#opac-detail #holdingst thead,
+body#opac-detail #holdingst td.call_no a{
+    display: none !important;
+}
+
+body#opac-detail table#holdingst,
+body#opac-readingrecord table,
+body#opac-holds div:not(.calendar) table,
+body#opac-user table#holdst,
+body#opac-user table#checkoutst{
+    border-right: none;
+    border-top: none;
+    border: none;
+    counter-reset: item;
+}
+
+body#opac-detail #holdingst tr,
+body#opac-readingrecord tr,
+body#opac-holds div:not(.calendar) tr,
+body#opac-user #holdst tr,
+body#opac-user #checkoutst tr{
+    border: none;
+    display: block;
+    position: relative;
+    margin-left: 10px;
+    margin-bottom: 10px;
+}
+
+body#opac-detail #holdingst td,
+body#opac-readingrecord td,
+body#opac-holds div:not(.calendar) td,
+body#opac-user #holdst td,
+body#opac-user #checkoutst td{
+    display: block;
+    border: 1px solid #DDD;
+    position: relative;
+}
+
+body#opac-user #checkoutst caption {
+    display: block;
+}
+
+body#opac-detail #holdingst tr:before,
+body#opac-readingrecord tr:before,
+body#opac-holds div:not(.calendar) tr:not(.copiesrow):before,
+body#opac-user #holdst tr:before,
+body#opac-user #checkoutst tr:before {
+    font-weight: bold;
+    content: counter(item) ". ";
+    counter-increment: item;
+    display: block;
+    position: absolute;
+    left: -13px;
+    top: 4px;
+}
+
+body#opac-detail #holdingst td:before,
+body#opac-readingrecord td:before,
+body#opac-holds div:not(.calendar) td:before,
+body#opac-user #holdst td:before,
+body#opac-user #checkoutst td:before {
+    font-weight: bold;
+}
+
+body#opac-detail #holdingst td.itype:before {content: "Item type : ";}
+body#opac-detail #holdingst td.location:before {content: "Location : ";}
+body#opac-detail #holdingst td.collection:before {content: "Collection : ";}
+body#opac-detail #holdingst td.call_no:before {content: "Call Number : ";}
+body#opac-detail #holdingst td.vol_info:before {content: "Vol Info : ";}
+body#opac-detail #holdingst td.url:before {content: "URL : ";}
+body#opac-detail #holdingst td.copynumber:before {content: "Copy Number : ";}
+body#opac-detail #holdingst td.status:before {content: "Status : ";}
+body#opac-detail #holdingst td.notes:before {content: "Notes : ";}
+body#opac-detail #holdingst td.date_due:before {content: "Date Due : ";}
+body#opac-detail #holdingst td.barcode:before {content: "Barcode : ";}
+body#opac-detail #holdingst td.holds_count:before {content: "Item holds : ";}
+
+body#opac-user #checkoutst td.date_due:before {content: "Date due : ";}
+body#opac-user #checkoutst td.call_no:before {content: "Call No. : ";}
+body#opac-user #checkoutst td.fines:before {content: "Fines : ";}
+
+body#opac-user #holdst td.reservedate:before {content: "Placed On : ";}
+body#opac-user #holdst td.expirationdate:before {content: "Expires On : ";}
+body#opac-user #holdst td.branch:before {content: "Pick Up Location : ";}
+body#opac-user #holdst td.priority:before {content: "Priority : ";}
+body#opac-user #holdst td.status:before {content: "Status : ";}
+
+body#opac-readingrecord #readingrec td:nth-child(3):before {content: "Item Type : ";}
+body#opac-readingrecord #readingrec td:nth-child(4):before {content: "Call No. : ";}
+body#opac-readingrecord #readingrec td:nth-child(5):before {content: "Date : ";}
+
+body#opac-holds #bibitemloop>tbody>tr:not(.copiesrow) td.hold:before {content: "Hold : ";}
+body#opac-holds #bibitemloop>tbody>tr:not(.copiesrow) td.itype:before {content: "Item Type : ";}
+body#opac-holds #bibitemloop>tbody>tr:not(.copiesrow) td.priority:before {content: "Priority : ";}
+body#opac-holds #bibitemloop>tbody>tr:not(.copiesrow) td.reserve_date:before {content: "Hold Starts On Date : ";}
+body#opac-holds #bibitemloop>tbody>tr:not(.copiesrow) td.expiration_date:before {content: "Hold Not Needed After : ";}
+body#opac-holds #bibitemloop>tbody>tr:not(.copiesrow) td.place_on_type:before {content: "Place On : ";}
+body#opac-holds #bibitemloop>tbody>tr:not(.copiesrow) td.branch:before {content: "Pickup Location : ";}
+
+body#opac-holds #bibitemloop table td.copy:before {content: "Copy : ";}
+body#opac-holds #bibitemloop table td.itype:before {content: "Item Type : ";}
+body#opac-holds #bibitemloop table td.barcode:before {content: "Barcode : ";}
+body#opac-holds #bibitemloop table td.homebranch:before {content: "Home Library : ";}
+body#opac-holds #bibitemloop table td.holdingbranch:before {content: "Last Location : ";}
+body#opac-holds #bibitemloop table td.call_no:before {content: "Call Number : ";}
+body#opac-holds #bibitemloop table td.vol_info:before {content: "Vol Info : ";}
+body#opac-holds #bibitemloop table td.information:before {content: "Information : ";}
+
+
+/* Holds */
+
+body#opac-holds tr.copiesrow {
+    margin-left: 25px;
+}
+
+body#opac-holds tr.copiesrow>td:nth-child(1) {
+    display: none;
+}
+
+body#opac-holds #bibitemloop tr {
+    margin-bottom: 0;
+}
+
+
+/* User Fines table */
+
+body#opac-account #useraccount th:nth-child(3),
+body#opac-account #useraccount td:nth-child(3) {
+    display: none !important;
+}
+
+body#opac-account #useraccount table {
+    position: relative;
+    margin-bottom: 50px;
+}
+
+body#opac-account #useraccount tfoot {
+    display: block;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    bottom: -23px;
+}
+
+body#opac-account #useraccount thead th {
+    padding: 2px 10px;
+}
+
+body#opac-account #useraccount tbody td:nth-child(1) {
+    min-width: 70px;
+}
+
+body#opac-account #useraccount tbody td:nth-child(4) {
+    text-align: right;
+}
+
+body#opac-account #useraccount tfoot th {
+    display: none;
+}
+
+body#opac-account #useraccount tfoot td {
+    border-right: 1px solid #DDD;
+}
+
+body#opac-account #useraccount tfoot td:before {
+    content: "Total due : "
+}
+
+
+/* User menu */
+
+#leftmenus>#menu ul li.messaging,
+#leftmenus>#menu ul li.suggestions,
+#leftmenus>#menu ul li.privateshelves,
+#leftmenus>#menu {
+    display: none;
+}
+
+.mobile_only {
+    display: block;
+}
+
+body.mobile_menu form#searchform .input-wrapper{
+    padding-left: 90px;
+}
+
+body.mobile_menu_opened #doc3>div,
+body.mobile_menu_opened #main_footer>div {
+    position: relative;
+    left: 200px;
+}
+
+body.mobile_menu_opened #main_footer {
+    display: none;
+}
+
+body.mobile_menu_opened #doc3 {
+    overflow: hidden;
+    min-height: 380px;
+}
+
+body.mobile_menu_opened #ctn_rb>.ctn_in>.yui-b {
+    position: static;
+}
+
+body.mobile_menu_opened #leftmenus>#menu {
+    display: block;
+    position: absolute;
+    width: 200px;
+    height: 100%;
+    top: 0;
+    left: -201px;
+    padding: 0;
+    z-index: 999;
+}
+
+#mobile_menu_button {
+    position: absolute;
+    cursor: pointer;
+    background: url(../../images/mobile-menu-button.png) no-repeat scroll 50% 50%;
+    border: 0px;
+    font-size: 0;
+    width: 76px;
+    height: 38px;
+    top: 13px;
+    left: 6px;
+}

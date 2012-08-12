@@ -48,6 +48,24 @@ $(document).ready(function(){
             return true;
         }
     });
+
+
+     // Add the mobile menu button if we are in some sections of the opac
+   if($('body#opac-user, body#opac-passwd, body#opac-search-history, body#opac-readingrecord, body#opac-userupdate, body#opac-usersuggestions, body#opac-account, body#opac-privacy, body#opac-usertags').length != 0) {
+          $('body').addClass('mobile_menu');
+
+            var button = $('<input type="button" id="mobile_menu_button" value="">').addClass('mobile_only');
+              $('#searchform').append(button);
+
+              button.click(function() {
+                      if($('body').hasClass('mobile_menu_opened')){
+                          $('body').removeClass('mobile_menu_opened');
+                   }
+                      else {
+                         $('body').addClass('mobile_menu_opened');
+                      }
+              });
+    }
 });
 
 // build Change Language menus

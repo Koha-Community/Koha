@@ -2,13 +2,12 @@
 
 <div id="top-bar">
 <ul id="menu-left">
-
-    [% IF ( opacbookbag ) %]
+    <!-- [% IF ( opacbookbag ) %] -->
         <li>
             <span id="cmspan"></span>
             <div id="cartDetails">Your cart is empty.</div>
         </li>
-    [% END %]
+    <!-- [% END %] -->
 
     [% IF ( virtualshelves ) %]
 

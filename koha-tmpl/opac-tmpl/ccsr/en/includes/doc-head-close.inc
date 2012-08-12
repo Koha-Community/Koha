@@ -20,6 +20,8 @@
     <link rel="stylesheet" type="text/css" href="[% themelang %]/css/[% opac_css_override %]" />
 [% END %]
 <link rel="stylesheet" type="text/css" media="print" href="[% themelang %]/css/print.css" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+<link rel="stylesheet" type="text/css" media="screen and (max-width:700px)" href="[% themelang %]/css/mobile.css" />
 [% IF ( OPACUserCSS ) %]<style type="text/css">[% OPACUserCSS %]</style>[% END %]
 <!-- yui js -->
 <script type="text/javascript" src="[% yuipath %]/utilities/utilities.js"></script>
@@ -32,7 +34,7 @@
 [% IF ( OPACAmazonCoverImages ) %]
 <script type="text/javascript" language="javascript">//<![CDATA[
     var NO_AMAZON_IMAGE = _("No cover image available");
-    //]]>
+//]]>
 </script>
 <script type="text/javascript" language="javascript" src="[% themelang %]/js/amazonimages.js"></script>
 [% END %]
@@ -49,7 +51,7 @@
 </script>
 
 <script type="text/javascript" language="javascript">
-    //<![CDATA[
+//<![CDATA[
     [% IF ( opacbookbag ) %]var MSG_BASKET_EMPTY = _("Your cart is currently empty");
     var MSG_RECORD_IN_BASKET = _("This item is already in your cart");
     var MSG_RECORD_ADDED = _("This item has been added to your cart");
@@ -83,8 +85,8 @@
         verify_images();
     });[% END %]
     [% IF ( SyndeticsCoverImages ) %]$(window).load(function() {
-        verify_images();
-    });[% END %]
+            verify_images();
+         });[% END %]
 //]]>
 [% IF ( opacbookbag ) %]</script><script type="text/javascript" language="javascript" src="[% themelang %]/js/basket.js">
 [% ELSIF ( virtualshelves ) %]</script><script type="text/javascript" language="javascript" src="[% themelang %]/js/basket.js">

@@ -85,5 +85,7 @@ $(function() {
 
 </script>
 
+<!-- /ADD JQUERY PLUGIN JQTRANSFORM - LIBÉO -->
+
 </body>
 </html>
