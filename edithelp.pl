@@ -67,7 +67,7 @@ sub _get_filepath ($;$) {
     $referer =~ /koha\/(.*)\.pl/;
     my $from = "help/$1.tt";
     my $htdocs = C4::Context->config('intrahtdocs');
-    my ($theme, $lang) = C4::Templates::themelanguage( $htdocs, $from, "intranet", $input );
+    my ($theme, $lang, $availablethemes) = C4::Templates::themelanguage( $htdocs, $from, "intranet", $input );
 	$debug and print STDERR "help filepath: $htdocs/$theme/$lang/modules/$from";
 	return "$htdocs/$theme/$lang/modules/$from";
 }

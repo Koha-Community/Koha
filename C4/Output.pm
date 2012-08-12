@@ -42,13 +42,13 @@ BEGIN {
 
  @ISA    = qw(Exporter);
     @EXPORT_OK = qw(&is_ajax ajax_fail); # More stuff should go here instead
-    %EXPORT_TAGS = ( all =>[qw(&themelanguage &gettemplate setlanguagecookie pagination_bar &gettemplate
+    %EXPORT_TAGS = ( all =>[qw(setlanguagecookie pagination_bar
                                 &output_with_http_headers &output_ajax_with_http_headers &output_html_with_http_headers)],
                     ajax =>[qw(&output_with_http_headers &output_ajax_with_http_headers is_ajax)],
                     html =>[qw(&output_with_http_headers &output_html_with_http_headers)]
                 );
     push @EXPORT, qw(
-        &themelanguage &gettemplate setlanguagecookie getlanguagecookie pagination_bar &gettemplate
+        setlanguagecookie getlanguagecookie pagination_bar
     );
     push @EXPORT, qw(
         &output_html_with_http_headers &output_ajax_with_http_headers &output_with_http_headers FormatData FormatNumber

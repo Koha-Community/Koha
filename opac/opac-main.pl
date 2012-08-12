@@ -46,7 +46,7 @@ $template->param(
 
 # display news
 # use cookie setting for language, bug default to syspref if it's not set
-my ($theme, $news_lang) = C4::Templates::themelanguage(C4::Context->config('opachtdocs'),'opac-main.tt','opac',$input);
+my ($theme, $news_lang, $availablethemes) = C4::Templates::themelanguage(C4::Context->config('opachtdocs'),'opac-main.tt','opac',$input);
 
 my $all_koha_news   = &GetNewsToDisplay($news_lang);
 my $koha_news_count = scalar @$all_koha_news;

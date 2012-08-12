@@ -140,35 +140,35 @@ sub XSLTParse4Display {
     my ( $biblionumber, $orig_record, $xslsyspref, $fixamps, $hidden_items ) = @_;
     my $xslfilename = C4::Context->preference($xslsyspref);
     if ( $xslfilename =~ /^\s*"?default"?\s*$/i ) {
+        my $htdocs;
+        my $theme;
+        my $lang = C4::Templates::_current_language();
+        my $xslfile;
         if ($xslsyspref eq "XSLTDetailsDisplay") {
-            $xslfilename = C4::Context->config('intrahtdocs') .
-                        '/' . C4::Context->preference("template") .
-                        '/' . C4::Templates::_current_language() .
-                        '/xslt/' .
-                        C4::Context->preference('marcflavour') .
-                        "slim2intranetDetail.xsl";
+            $htdocs  = C4::Context->config('intrahtdocs');
+            $theme   = C4::Context->preference("template");
+            $xslfile = C4::Context->preference('marcflavour') .
+                       "slim2intranetDetail.xsl";
         } elsif ($xslsyspref eq "XSLTResultsDisplay") {
-            $xslfilename = C4::Context->config('intrahtdocs') .
-                        '/' . C4::Context->preference("template") .
-                        '/' . C4::Templates::_current_language() .
-                        '/xslt/' .
-                        C4::Context->preference('marcflavour') .
+            $htdocs  = C4::Context->config('intrahtdocs');
+            $theme   = C4::Context->preference("template");
+            $xslfile = C4::Context->preference('marcflavour') .
                         "slim2intranetResults.xsl";
         } elsif ($xslsyspref eq "OPACXSLTDetailsDisplay") {
-            $xslfilename = C4::Context->config('opachtdocs') .
-                        '/' . C4::Context->preference("opacthemes") .
-                        '/' . C4::Templates::_current_language() .
-                        '/xslt/' .
-                        C4::Context->preference('marcflavour') .
-                        "slim2OPACDetail.xsl";
+            $htdocs  = C4::Context->config('opachtdocs');
+            $theme   = C4::Context->preference("opacthemes");
+            $xslfile = C4::Context->preference('marcflavour') .
+                       "slim2OPACDetail.xsl";
         } elsif ($xslsyspref eq "OPACXSLTResultsDisplay") {
-            $xslfilename = C4::Context->config('opachtdocs') .
-                        '/' . C4::Context->preference("opacthemes") .
-                        '/' . C4::Templates::_current_language() .
-                        '/xslt/' .
-                        C4::Context->preference('marcflavour') .
-                        "slim2OPACResults.xsl";
+            $htdocs  = C4::Context->config('opachtdocs');
+            $theme   = C4::Context->preference("opacthemes");
+            $xslfile = C4::Context->preference('marcflavour') .
+                       "slim2OPACResults.xsl";
         }
+        $xslfilename = "$htdocs/$theme/$lang/xslt/$xslfile";
+        $xslfilename = "$htdocs/$theme/en/xslt/$xslfile" unless ( $lang ne 'en' && !-f $xslfilename );
+        $xslfilename = "$htdocs/prog/$lang/xslt/$xslfile" unless ( !-f $xslfilename );
+        $xslfilename = "$htdocs/prog/en/xslt/$xslfile" unless ( $lang ne 'en' && !-f $xslfilename );
     }
 
     if ( $xslfilename =~ m/\{langcode\}/ ) {

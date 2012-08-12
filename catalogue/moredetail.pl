@@ -28,7 +28,7 @@ use C4::Items;
 use C4::Branch;
 use C4::Acquisition;
 use C4::Bookseller qw(GetBookSellerFromId);
-use C4::Output;             # contains gettemplate
+use C4::Output;
 use C4::Auth;
 use C4::Serials;
 use C4::Circulation;  # to use itemissues
