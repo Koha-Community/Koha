@@ -3,90 +3,156 @@ Your cart
 <END_SUBJECT>
 
 [% USE HtmlToText %]
-[% myhtml FILTER html2text(leftmargin => 0, rightmargin => 50) %]
+[% myhtml FILTER html2text(leftmargin => 0, rightmargin => 0) %]
 [% myhtmltext | html2text %]
 
 <HEADER>
-[% FILTER html2text %]
-<p>Hi,
-</p>
-<p>[% firstname %] [% surname %] sent you a cart from our online catalog.</p>
 
-<p>Please note that the attached file is a MARC bibliographic records file
-which can be imported into personal bibliographic software like EndNote,
-Reference Manager or ProCite.</p>
+[% FILTER html2text %]
+    <p>Hi,</p>
+
+    <p>[% firstname %] [% surname %] sent you a cart from our online catalog.</p>
+
+    <p>Please note that the attached file is a MARC bibliographic records file
+    which can be imported into personal bibliographic software like EndNote,
+    Reference Manager or ProCite.</p>
+    <hr/>
 [% END %]
 <END_HEADER>
 
 <MESSAGE>
 [% FILTER html2text %]
-<hr/>
 
-[% IF comment %]
-<p>[% comment %]</p>
-<hr/>
-[% END %]
+    [% IF comment %]
+        <p>[% comment %]</p>
+        <hr/>
+    [% END %]
+    <ol>
+    [% FOREACH BIBLIO_RESULT IN BIBLIO_RESULTS %]
+        <li>
+            <span>
+                [% BIBLIO_RESULT.title %]
+                [% IF ( BIBLIO_RESULT.subtitle ) %] [% BIBLIO_RESULT.subtitle %][% END %]
+            </span>
 
-<ol>
-[% FOREACH BIBLIO_RESULT IN BIBLIO_RESULTS %]
-<li>
-<a href="[% OPACBaseURL %]/cgi-bin/koha/opac-detail.pl?biblionumber= [% BIBLIO_RESULT.biblionumber %]">[% BIBLIO_RESULT.title %]</a>
-[% IF ( BIBLIO_RESULT.subtitle ) %] [% BIBLIO_RESULT.subtitle %][% END %]
-<ul>
-[% IF ( BIBLIO_RESULT.HASAUTHORS ) %]
-<li>Author(s): [% IF ( BIBLIO_RESULT.author ) %][% BIBLIO_RESULT.author %][% END %][% IF ( BIBLIO_RESULT.MARCAUTHORS ) %][% IF ( BIBLIO_RESULT.author ) %]; [% END %][% FOREACH MARCAUTHOR IN BIBLIO_RESULT.MARCAUTHORS %][% FOREACH MARCAUTHOR_SUBFIELDS_LOO IN MARCAUTHOR.MARCAUTHOR_SUBFIELDS_LOOP %][% MARCAUTHOR_SUBFIELDS_LOO.separator %][% MARCAUTHOR_SUBFIELDS_LOO.value %][% END %][% UNLESS ( loop.last ) %]; [% ELSE %][% END %][% END %][% END %][% END %]</li>
-[% IF ( BIBLIO_RESULT.ISBN ) %]
-<li>ISBN: [% BIBLIO_RESULT.ISBN %]</li>
-[% END %]
-[% IF BIBLIO_RESULT.publishercode %]
-<li>
-Published by: [% BIBLIO_RESULT.publishercode %][% IF ( BIBLIO_RESULT.publicationyear ) %] in [% BIBLIO_RESULT.publicationyear %][% END %][% IF ( BIBLIO_RESULT.pages ) %], [% BIBLIO_RESULT.pages %][% END %][% IF BIBLIO_RESULT.size %], [% BIBLIO_RESULT.size %][% END %]
-</li>
-[% END %]
-[% IF BIBLIO_RESULT.collection %]
-<li>Collection: [% BIBLIO_RESULT.seriestitle %]</li>
-[% END %]
-[% IF ( BIBLIO_RESULT.subject ) %]
-<li>Subject: [% BIBLIO_RESULT.subject %]<li>
-[% END %]
-[% IF ( BIBLIO_RESULT.copyrightdate ) %]
-<li>Copyright year: [% BIBLIO_RESULT.copyrightdate %]</li>
-[% END %]
-[% IF ( BIBLIO_RESULT.notes ) %]
-<li>Notes : [% BIBLIO_RESULT.notes %]</li>
-[% END %]
-[% IF ( BIBLIO_RESULT.unititle ) %]
-<li>Unified title: [% BIBLIO_RESULT.unititle %]</li>
-[% END %]
-[% IF ( BIBLIO_RESULT.serial ) %]
-<li>Serial: [% BIBLIO_RESULT.serial %]</li>
-[% END %]
-[% IF ( BIBLIO_RESULT.dewey ) %]
-<li>Dewey: [% BIBLIO_RESULT.dewey %]</li>
-[% END %]
-[% IF ( BIBLIO_RESULT.classification ) %]
-<li>Classification: [% BIBLIO_RESULT.classification %]</li>
-[% END %]
-[% IF ( BIBLIO_RESULT.lccn ) %]
-<li>LCCN: [% BIBLIO_RESULT.lccn %]</li>
-[% END %]
-[% IF ( BIBLIO_RESULT.url ) %]
-<li>URL : [% BIBLIO_RESULT.url %]</li>
-[% END %]
-<li>Items:
-<ul>
-[% FOREACH ITEM_RESULT IN BIBLIO_RESULT.ITEM_RESULTS %]
-<li>
-[% ITEM_RESULT.branchname %]
-[% ITEM_RESULT.location %]
-[% IF ITEM_RESULT.itemcallnumber %]([% ITEM_RESULT.itemcallnumber %])[% END %]
-[% ITEM_RESULT.barcode %]
-</li>
-[% END %]
-</ul>
-</ul>
-</li>
-[% END %]
-</ol>
+            <p>
+            [% IF ( BIBLIO_RESULT.HASAUTHORS ) %]
+            <span>Author(s): [% IF ( BIBLIO_RESULT.author ) %][% BIBLIO_RESULT.author %][% END %]
+
+            [% IF ( BIBLIO_RESULT.MARCAUTHORS ) %]
+                [% IF ( BIBLIO_RESULT.author ) %]; [% END %]
+                [% FOREACH MARCAUTHOR IN BIBLIO_RESULT.MARCAUTHORS %]
+                    [% FOREACH MARCAUTHOR_SUBFIELDS_LOO IN MARCAUTHOR.MARCAUTHOR_SUBFIELDS_LOOP %]
+                        [% MARCAUTHOR_SUBFIELDS_LOO.separator %][% MARCAUTHOR_SUBFIELDS_LOO.value %]
+                    [% END %]
+                    [% UNLESS ( loop.last ) %];[% END %]
+                [% END %]
+            [% END %]
+            </span><br/>
+            [% END %]
+
+            [% IF ( BIBLIO_RESULT.ISBN ) %]
+            <span>
+                ISBN: [% BIBLIO_RESULT.ISBN %]
+            </span><br/>
+            [% END %]
+
+            [% IF BIBLIO_RESULT.publishercode %]
+            <span>
+                Published by: [% BIBLIO_RESULT.publishercode %]
+                [% IF ( BIBLIO_RESULT.publicationyear ) %]
+                    in [% BIBLIO_RESULT.publicationyear %]
+                [% END %]
+                [% IF ( BIBLIO_RESULT.pages ) %]
+                    , [% BIBLIO_RESULT.pages %]
+                [% END %]
+                [% IF BIBLIO_RESULT.size %]
+                , [% BIBLIO_RESULT.size %]
+                [% END %]
+            </span><br/>
+            [% END %]
+
+            [% IF BIBLIO_RESULT.collection %]
+            <span>
+                Collection: [% BIBLIO_RESULT.seriestitle %]
+            </span><br/>
+            [% END %]
+
+            [% IF ( BIBLIO_RESULT.subject ) %]
+            <span>
+                Subject: [% BIBLIO_RESULT.subject %]
+            <span><br/>
+            [% END %]
+
+            [% IF ( BIBLIO_RESULT.copyrightdate ) %]
+            <span>
+                Copyright year: [% BIBLIO_RESULT.copyrightdate %]
+            </span><br/>
+            [% END %]
+
+            [% IF ( BIBLIO_RESULT.notes ) %]
+            <span>
+                Notes : [% BIBLIO_RESULT.notes %]
+            </span><br/>
+            [% END %]
+
+            [% IF ( BIBLIO_RESULT.unititle ) %]
+            <span>
+                Unified title: [% BIBLIO_RESULT.unititle %]
+            </span><br/>
+            [% END %]
+
+            [% IF ( BIBLIO_RESULT.serial ) %]
+            <span>
+                Serial: [% BIBLIO_RESULT.serial %]
+            </span><br/>
+            [% END %]
+
+            [% IF ( BIBLIO_RESULT.dewey ) %]
+            <span>
+                Dewey: [% BIBLIO_RESULT.dewey %]
+            </span><br/>
+            [% END %]
+
+            [% IF ( BIBLIO_RESULT.classification ) %]
+            <span>
+                Classification: [% BIBLIO_RESULT.classification %]
+            </span><br/>
+            [% END %]
+
+            [% IF ( BIBLIO_RESULT.lccn ) %]
+            <span>
+                LCCN: [% BIBLIO_RESULT.lccn %]
+            </span><br/>
+            [% END %]
+            [% IF ( BIBLIO_RESULT.url ) %]
+            <span>
+                URL: [% BIBLIO_RESULT.url |url %]
+            </span>
+            [% END %]
+            </p>
+
+            [% IF ( OPACBaseURL ) %]
+            <p>
+                In online catalog: [% OPACBaseURL %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% BIBLIO_RESULT.biblionumber %]
+            </p>
+            [% END %]
+            [% IF ( BIBLIO_RESULT.ITEM_RESULTS.size ) %]
+            <p>Items:
+            <ul>
+                [% FOREACH ITEM_RESULT IN BIBLIO_RESULT.ITEM_RESULTS %]<li>
+                    [% ITEM_RESULT.branchname %]
+                    [% ITEM_RESULT.location %]
+                    [% IF ITEM_RESULT.itemcallnumber %]([% ITEM_RESULT.itemcallnumber %])[% END %]
+                    [% ITEM_RESULT.barcode %]
+                </li>[% END %]
+            </ul>
+            </p>
+            [% END %]
+            <hr/>
+        </li>
+    [% END %]
+    </ol>
+
 [% END %]
 <END_MESSAGE>
