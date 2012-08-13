@@ -1704,10 +1704,12 @@ sub GetMarcSubjects {
 
         # if there is an authority link, build the links with an= subfield9
         my $subfield9 = $field->subfield('9');
+        my $authoritylink;
         if ($subfield9) {
             my $linkvalue = $subfield9;
             $linkvalue =~ s/(\(|\))//g;
             @link_loop = ( { limit => 'an', 'link' => $linkvalue } );
+            $authoritylink = $linkvalue
         }
 
         # other subfields
@@ -1743,7 +1745,10 @@ sub GetMarcSubjects {
             }
         }
 
-        push @marcsubjects, { MARCSUBJECT_SUBFIELDS_LOOP => \@subfields_loop };
+        push @marcsubjects, {
+            MARCSUBJECT_SUBFIELDS_LOOP => \@subfields_loop,
+            authoritylink => $authoritylink,
+        };
 
     }
     return \@marcsubjects;
@@ -1829,7 +1834,10 @@ sub GetMarcAuthors {
                 };
             }
         }
-        push @marcauthors, { MARCAUTHOR_SUBFIELDS_LOOP => \@subfields_loop };
+        push @marcauthors, {
+            MARCAUTHOR_SUBFIELDS_LOOP => \@subfields_loop,
+            authoritylink => $subfield9,
+        };
     }
     return \@marcauthors;
 }
