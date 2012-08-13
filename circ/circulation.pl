@@ -464,7 +464,7 @@ sub build_issue_data {
         $it->{'od'} = $it->{'overdue'};
         ($it->{'author'} eq '') and $it->{'author'} = ' ';
         $it->{'renew_failed'} = $renew_failed{$it->{'itemnumber'}};
-        $it->{'return_failed'} = $return_failed{$it->{'itemnumber'}};
+        $it->{'return_failed'} = $return_failed{$it->{'barcode'}};
 
         if ( $it->{'issuedate'} gt $todaysdate or $it->{'lastreneweddate'} gt $todaysdate ) {
             (!$relatives) ? push @todaysissues, $it : push @relissues, $it;
