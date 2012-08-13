@@ -54,40 +54,54 @@ Sort number. 1 or 2 for the moment.
 my $input = new CGI;
 
 my $budget_id = $input->param('budget_id');
-my $sort_id   = $input->param('sort');
+my $sort_nb   = $input->param('sort');
+die "sort parameter can only be 1 or 2" unless ($sort_nb == 1 || $sort_nb == 2);
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {   template_name   => "acqui/ajax.tmpl",
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,
-        flagsrequired => {editcatalogue => 'edit_catalogue'},
+        flagsrequired => {acquisition => 'order_manage'},
         debug => 0,
     }
 );
 
+my $ret_html;
+my $name = 'sort'.$sort_nb;
+my $authcat_field = 'sort'.$sort_nb.'_authcat';
+
 my $budget = GetBudget($budget_id);
-my $dropbox_values = GetAuthvalueDropbox( $budget->{'sort'.$sort_id.'_authcat'}, '' );
 
-my @authorised_values;
-my %authorised_lib;
+if ( $budget && $budget->{$authcat_field} ) {
+    # with custom  Asort* planning values
+    my $dropbox_values = GetAuthvalueDropbox( $budget->{$authcat_field}, '' );
 
-foreach ( @$dropbox_values) {
-    push @authorised_values, $_->{value};
-    $authorised_lib{$_->{value}} = $_->{label};
+    my @authorised_values;
+    my %authorised_lib;
+    my $default_value;
+
+    foreach ( @$dropbox_values) {
+        push @authorised_values, $_->{value};
+        $authorised_lib{$_->{value}} = $_->{label};
+        $default_value = $_->{value} if $_->{'default'};
+    }
+
+    $ret_html = CGI::scrolling_list(
+        -values   => \@authorised_values,
+        -labels   => \%authorised_lib,
+        -default  => $default_value,
+        -override => 1,
+        -size     => 1,
+        -multiple => 0,
+        -name     => $name,
+        -id       => $name,
+    );
+
+} else {
+    # free input
+    $ret_html = '<input type="text" size="20" name="'.$name.'" id="'.$name.'" />';
 }
 
-my $budget_authvalue_dropbox = CGI::scrolling_list(
-    -values   => \@authorised_values,
-    -labels   => \%authorised_lib,
-    -default  => $authorised_values[0],
-);
-
-
-# strip off select tags
-$budget_authvalue_dropbox =~ s/^\<select.*?\"\>//;
-$budget_authvalue_dropbox =~ s/\<\/select\>$//;
-chomp $budget_authvalue_dropbox;
-
-$template->param( return => $budget_authvalue_dropbox );
+$template->param( 'return' => $ret_html );
 output_html_with_http_headers $input, $cookie, $template->output;

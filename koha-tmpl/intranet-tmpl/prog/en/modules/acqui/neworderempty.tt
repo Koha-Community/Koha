@@ -508,7 +508,7 @@ $(document).ready(function()
             </li>
             <li><div class="hint">The 2 following fields are available for your own usage. They can be useful for statistical purposes</div>
                 <label for="sort1">Statistic 1: </label>
-
+                <span id="sort1_zone">
                 [% IF CGIsort1 %]
                     <select id="sort1" size="1" name="sort1">
                     [% FOREACH sort_opt IN CGIsort1 %]
@@ -520,13 +520,13 @@ $(document).ready(function()
                     [% END %]
                     </select>
                 [% ELSE %]
-
                     <input type="text" id="sort1" size="20" name="sort1" value="[% sort1 %]" />
                 [% END %]
+                </span>
             </li>
             <li>
                 <label for="sort2">Statistic 2: </label>
-
+                <span id="sort2_zone">
                 [% IF CGIsort2 %]
                     <select id="sort2" size="1" name="sort2">
                     [% FOREACH sort_opt IN CGIsort2 %]
@@ -540,6 +540,7 @@ $(document).ready(function()
                 [% ELSE %]
                     <input type="text" id="sort2" size="20" name="sort2" value="[% sort2 %]" />
                 [% END %]
+                </span>
             </li>
 </ol>
     </fieldset>
