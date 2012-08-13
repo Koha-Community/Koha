@@ -74,7 +74,7 @@ at your option, any later version of Perl 5 you may have available.
 =cut
 
 sub copy_field {
-  my ( $record, $fromFieldName, $fromSubfieldName, $toFieldName, $toSubfieldName, $regex, $n ) = @_;
+  my ( $record, $fromFieldName, $fromSubfieldName, $toFieldName, $toSubfieldName, $regex, $n, $dont_erase ) = @_;
   C4::Koha::Log( "C4::SimpleMARC::copy_field( '$record', '$fromFieldName', '$fromSubfieldName', '$toFieldName', '$toSubfieldName', '$regex', '$n' )" ) if $debug;
 
   if ( ! ( $record && $fromFieldName && $toFieldName ) ) { return; }
@@ -90,7 +90,7 @@ sub copy_field {
     }
   }
 
-  update_field( $record, $toFieldName, $toSubfieldName, @values );
+  update_field( $record, $toFieldName, $toSubfieldName, @values, $dont_erase );
 
 }
 
@@ -109,7 +109,7 @@ sub copy_field {
 =cut
 
 sub update_field {
-  my ( $record, $fieldName, $subfieldName, @values ) = @_;
+  my ( $record, $fieldName, $subfieldName, @values, $dont_erase ) = @_;
   C4::Koha::Log( "C4::SimpleMARC::update_field( $record, $fieldName, $subfieldName, @values )" ) if $debug;
 
   if ( ! ( $record && $fieldName ) ) { return; }
@@ -123,8 +123,17 @@ sub update_field {
   my $field;
   if ( $subfieldName ) {
     if ( my @fields = $record->field( $fieldName ) ) {
-      foreach my $field ( @fields ) {
-        $field->update( "$subfieldName" => $values[$i++] );
+      unless ( $dont_erase ) {
+        foreach my $field ( @fields ) {
+          $field->update( "$subfieldName" => $values[$i++] );
+        }
+      }
+      if ( $i <= scalar @values - 1 ) {
+        foreach my $field ( @fields ) {
+          foreach my $j ( $i .. scalar( @values ) - 1) {
+            $field->add_subfields( "$subfieldName" => $values[$j] );
+          }
+        }
       }
     } else {
       ## Field does not exist, create it.
@@ -253,7 +262,7 @@ sub field_equals {
 sub move_field {
   my ( $record, $fromFieldName, $fromSubfieldName, $toFieldName, $toSubfieldName, $regex, $n ) = @_;
   C4::Koha::Log( "C4::SimpleMARC::move_field( '$record', '$fromFieldName', '$fromSubfieldName', '$toFieldName', '$toSubfieldName', '$regex', '$n' )" ) if $debug;
-  copy_field( $record, $fromFieldName, $fromSubfieldName, $toFieldName, $toSubfieldName, $regex, $n );
+  copy_field( $record, $fromFieldName, $fromSubfieldName, $toFieldName, $toSubfieldName, $regex, $n , "don't_erase");
   delete_field( $record, $fromFieldName, $fromSubfieldName, $n );
 }
 
