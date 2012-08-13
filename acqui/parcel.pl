@@ -142,7 +142,6 @@ for (my $i = 0 ; $i < $countlines ; $i++) {
     $line{gst}     = $gst;
     $line{total} = sprintf($cfstr, $total);
     $line{booksellerid} = $booksellerid;
-    push @loop_received, \%line;
     $totalprice += $parcelitems[$i]->{'unitprice'};
     $line{unitprice} = sprintf($cfstr, $parcelitems[$i]->{'unitprice'});
 
@@ -151,6 +150,15 @@ for (my $i = 0 ; $i < $countlines ; $i++) {
     $line{surnamesuggestedby}   = $suggestion->{surnamesuggestedby};
     $line{firstnamesuggestedby} = $suggestion->{firstnamesuggestedby};
 
+    if ( $line{parent_ordernumber} != $line{ordernumber} ) {
+        if ( grep { $_->{ordernumber} == $line{parent_ordernumber} }
+            @parcelitems )
+        {
+            $line{cannot_cancel} = 1;
+        }
+    }
+
+    push @loop_received, \%line;
     #double FIXME - totalfreight is redefined later.
 
 # FIXME - each order in a  parcel holds the freight for the whole parcel. This means if you receive a parcel with items from multiple budgets, you'll see the freight charge in each budget..

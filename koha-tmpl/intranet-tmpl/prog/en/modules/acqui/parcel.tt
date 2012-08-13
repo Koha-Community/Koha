@@ -170,11 +170,15 @@
       Cannot cancel receipt. Possible reasons :
       <ul>
         <li>
-          You are trying to cancel the receipt of an order line whose parent
-          order line is already received. Cancel this parent order line and
-          retry.
+          The order line you trying to cancel was created from a partial receipt
+          of another order line which is already received. Try to cancel this
+          one first and retry.
         </li>
-        <li>Parent order line has been deleted.</li>
+        <li>
+          The order line you trying to cancel was created from a partial receipt
+          of another order line which has been deleted. Cancellation is not
+          possible.
+        </li>
       </ul>
       </div>
     [% END %]
@@ -361,7 +365,22 @@
                 <td>[% loop_receive.ecost %]</td>
                 <td>[% loop_receive.unitprice %]</td>
                 <td>[% loop_receive.total %]</td>
-                <td><a href="/cgi-bin/koha/acqui/parcel.pl?invoice=[% loop_receive.invoice %]&booksellerid=[% booksellerid %]&datereceived=[% datereceived %]&op=cancelreceipt&ordernumber=[% loop_receive.ordernumber %]">Cancel receipt</a></td>
+                <td>
+                    [% IF (loop_receive.cannot_cancel) %]
+                        [% span_title = BLOCK %]
+                            Cannot cancel receipt of this order line because it
+                            was created from a partial receipt of order line no.
+                            [% loop_receive.parent_ordernumber %], which is
+                            already received. Try cancelling this one first and
+                            retry.
+                        [% END %]
+                        <span title="[% span_title | collapse %]">
+                            Can't cancel receipt
+                        </span>
+                    [% ELSE %]
+                        <a href="/cgi-bin/koha/acqui/parcel.pl?invoice=[% loop_receive.invoice %]&booksellerid=[% booksellerid %]&datereceived=[% datereceived %]&op=cancelreceipt&ordernumber=[% loop_receive.ordernumber %]">Cancel receipt</a>
+                    [% END %]
+                </td>
             </tr>
 	    [% END %]
 	</tbody>
