@@ -288,6 +288,17 @@ $(document).ready(function(){
     [% IF ( DidYouMeanFromAuthorities ) %]
         <div id='didyoumean'>Not what you expected? Check for <a href='/cgi-bin/koha/svc/suggestion?render=standalone&q=[% querystring | uri %]'>suggestions</a></div>
     [% END %]
+    [% INCLUDE 'page-numbers.inc' %]<br />
+  [% IF ( koha_spsuggest ) %]
+    Did you mean:
+    <ul style="list-style: none;">
+        [% FOREACH SPELL_SUGGES IN SPELL_SUGGEST %]
+        <li>
+            <a href="/cgi-bin/koha/opac-search.pl?q=[% SPELL_SUGGES.spsuggestion %]">[% SPELL_SUGGES.spsuggestion %]</a>
+        </li>
+        [% END %]
+    </ul>
+[% END %]
 
 [% IF ( query_error ) %]
 <div class="dialog alert">

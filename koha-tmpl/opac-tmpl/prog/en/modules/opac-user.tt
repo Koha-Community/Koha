@@ -171,28 +171,28 @@ $.tablesorter.addParser({
 
 </td>[% END %]
 
-                <td><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% ISSUE.biblionumber %]">[% ISSUE.title |html %]</a><span class="item-details">
+                <td class="title"><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% ISSUE.biblionumber %]">[% ISSUE.title |html %]</a><span class="item-details">
                         [% ISSUE.author %]
                     </span></td>
                 [% IF ( ISSUE.overdue ) %]
-                    <td class="overdue">[% ISSUE.date_due | $KohaDates %]</td>
+                    <td class="date_due overdue">[% ISSUE.date_due | $KohaDates %]</td>
                 [% ELSE %]
-                    <td>[% ISSUE.date_due | $KohaDates %]</td>
+                    <td class="date_due">[% ISSUE.date_due | $KohaDates %]</td>
                 [% END %]
-                [% UNLESS ( item_level_itypes ) %]<td>[% IF ( ISSUE.imageurl ) %]<img src="[% ISSUE.imageurl %]" title="[% ISSUE.description %]" alt="[% ISSUE.description %]" />[% END %] [% ISSUE.description %]</td>[% END %]
-                [% IF ( show_barcode ) %]<td>[% ISSUE.barcode %]</td>[% END %]
-                <td>[% ISSUE.itemcallnumber %]</td>
+                [% UNLESS ( item_level_itypes ) %]<td class="itype">[% IF ( ISSUE.imageurl ) %]<img src="[% ISSUE.imageurl %]" title="[% ISSUE.description %]" alt="[% ISSUE.description %]" />[% END %] [% ISSUE.description %]</td>[% END %]
+                [% IF ( show_barcode ) %]<td class="barcode">[% ISSUE.barcode %]</td>[% END %]
+                <td class="call_no">[% ISSUE.itemcallnumber %]</td>
                 [% IF ( OpacRenewalAllowed ) %]
-                    <td>[% IF ( ISSUE.status ) %][% IF ( canrenew ) %]<input type="checkbox" name="item" value="[% ISSUE.itemnumber %]"/> <a href="/cgi-bin/koha/opac-renew.pl?from=opac_user&amp;item=[% ISSUE.itemnumber %]&amp;borrowernumber=[% ISSUE.borrowernumber %]">Renew</a>[% END %] <span class="renewals">([% ISSUE.renewsleft %] of [% ISSUE.renewsallowed %] renewals remaining)</span>
+                    <td class="renew">[% IF ( ISSUE.status ) %][% IF ( canrenew ) %]<input type="checkbox" name="item" value="[% ISSUE.itemnumber %]"/> <a href="/cgi-bin/koha/opac-renew.pl?from=opac_user&amp;item=[% ISSUE.itemnumber %]&amp;borrowernumber=[% ISSUE.borrowernumber %]">Renew</a>[% END %] <span class="renewals">([% ISSUE.renewsleft %] of [% ISSUE.renewsallowed %] renewals remaining)</span>
                         [% ELSE %]
                         Not renewable[% IF ( ISSUE.too_many ) %] <span class="renewals">([% ISSUE.renewsleft %] of [% ISSUE.renewsallowed %] renewals remaining)</span>[% ELSE %][% IF ( ISSUE.on_reserve ) %] <span class="renewals">(On hold)</span>[% END %][% END %] 
                         [% END %]</td>
                 [% END %]
 [% IF ( OPACFinesTab ) %]
-                <td>[% IF ( ISSUE.charges ) %]Yes[% ELSE %]No[% END %]</td>
+                <td class="fines">[% IF ( ISSUE.charges ) %]Yes[% ELSE %]No[% END %]</td>
 [% END %]
             [% IF ( OPACMySummaryHTML ) %]
-                <td>[% ISSUE.MySummaryHTML %]</td>
+                <td class="links">[% ISSUE.MySummaryHTML %]</td>
             [% END %]
             </tr>
         [% END %]</tbody>
@@ -372,16 +372,16 @@ $.tablesorter.addParser({
                     [% ELSE %]
                             <tr>
                     [% END %]
-                <td><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% RESERVE.biblionumber %]">[% RESERVE.reserves_title %]</a>
+                <td class="title"><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% RESERVE.biblionumber %]">[% RESERVE.reserves_title %]</a>
                     [% RESERVE.author %]
                 </td>
-                <td>[% RESERVE.reservedate | $KohaDates %]</td>
-        <td>[% IF ( RESERVE.expirationdate ) %][% RESERVE.expirationdate | $KohaDates %][% ELSE %]Never expires[% END %]</td>
-                <td>[% RESERVE.branch %]</td>
+                <td class="reservedate">[% RESERVE.reservedate | $KohaDates %]</td>
+        <td class="expirationdate">[% IF ( RESERVE.expirationdate ) %][% RESERVE.expirationdate | $KohaDates %][% ELSE %]Never expires[% END %]</td>
+                <td class="branch">[% RESERVE.branch %]</td>
 				[% IF ( showpriority ) %]
-				<td>[% RESERVE.priority %] </td>
+                             <td class="priority">[% RESERVE.priority %] </td>
 				[% END %]
-                <td>
+                <td class="status">
                     [% IF ( RESERVE.wait ) %]
                         [% IF ( RESERVE.atdestination ) %]
                             [% IF ( RESERVE.found ) %]
@@ -404,7 +404,7 @@ $.tablesorter.addParser({
                             [% END %]
                     [% END %]
                 </td>
-		<td>
+              <td class="modify">
 		[% IF ( RESERVE.cancelable ) %]
 			<form action="/cgi-bin/koha/opac-modrequest.pl" method="post">
 			<input type="hidden" name="biblionumber" value="[% RESERVE.biblionumber %]" />

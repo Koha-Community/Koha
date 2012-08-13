@@ -265,7 +265,7 @@
                 [% FOREACH bibitemloo IN bibitemloop %]
                   <tr>
                       [% IF ( bibitemloo.holdable ) %]
-					  <td>
+                                    <td class="hold">
                       <input class="reserve_mode" name="reserve_mode" type="hidden" value="single"/>
                       <input class="single_bib" name="single_bib" type="hidden" value="[% bibitemloo.biblionumber %]"/>
                         <span class="confirmjs_hold" title="[% bibitemloo.biblionumber %]"></span>
@@ -278,9 +278,9 @@
                         </span>
 					</td>
                       [% ELSE %]
-					  [% UNLESS ( none_available ) %]<td>&nbsp;</td>[% END %]
+                                      [% UNLESS ( none_available ) %]<td class="hold">&nbsp;</td>[% END %]
                       [% END %]
-                    [% IF ( bibitemloo.holdable ) %]<td>[% ELSE %]<td colspan="5">[% END %]
+                    [% IF ( bibitemloo.holdable ) %]<td class="title">[% ELSE %]<td class="title" colspan="5">[% END %]
                       <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% bibitemloo.biblionumber %]">[% bibitemloo.title |html %][% IF ( bibitemloo.subtitle ) %] [% FOREACH subtitl IN bibitemloo.subtitle %][% subtitl.subfield %][% END %][% END %]</a>
                       [% IF ( bibitemloo.author ) %],  by [% bibitemloo.author %][% END %]
 
@@ -303,20 +303,20 @@
                     [% IF ( bibitemloo.holdable ) %]
             <!-- HOLDABLE -->
                         [% UNLESS ( item_level_itypes ) %]
-                        <td>
+                        <td class="itype">
                             [% IF ( bibitemloo.imageurl ) %]<img src="[% bibitemloo.imageurl %]" alt="" />[% END %]
                             [% bibitemloo.description %]
                         </td>
                         [% END %]
                         [% IF showholds || showpriority %]
-                        <td>
+                        <td class="priority">
                         [% IF showpriority %] [% bibitemloo.rank %] [% END %]
                         [% IF showholds && showpriority %] out of [% END %]
                         [% IF showholds %] [% bibitemloo.reservecount %] [% END %]
                         </td>
                         [% END %]
                 [% IF ( reserve_in_future ) %]
-                        <td>
+                        <td class="reserve_date">
               <input name="reserve_date_[% bibitemloo.biblionumber %]" id="from" size="10" class="datepickerfrom"/>
               <script language="JavaScript" type="text/javascript">
               //<![CDATA[
@@ -328,7 +328,7 @@
                 </td>[% END %]
 
 		    [% END %]
-	[% IF ( bibitemloo.holdable ) %]<td>
+        [% IF ( bibitemloo.holdable ) %]<td class="expiration_date">
         <input name="expiration_date_[% bibitemloo.biblionumber %]" id="to" size="10" readonly="readonly" class="datepickerto" />
       <p style="margin:.3em 2em;">
       <a href="#" style="font-size:85%;text-decoration:none;" onclick="document.getElementById('expiration_date_[% bibitemloo.biblionumber %]').value='';return false;">Clear date</a></p>
@@ -382,7 +382,7 @@
                     [% UNLESS ( singleBranchMode ) %]
                         [% IF ( bibitemloo.holdable ) %]
 			    [% IF ( choose_branch ) %]
-			                   <td>
+                                          <td class="branch">
                          [% UNLESS ( bibitemloo.holdable ) %]
                             <select name="branch" id="branch_[% bibitemloo.biblionumber %]" disabled="disabled">
                               [% FOREACH branchChoicesLoo IN bibitemloo.branchChoicesLoop %]
@@ -436,7 +436,7 @@
 
                           [% FOREACH itemLoo IN bibitemloo.itemLoop %]
                             <tr class="[% itemLoo.backgroundcolor %]">
-                              <td>
+                              <td class="copy">
                                 [% IF ( itemLoo.available ) %]
                                   <input type="radio" class="checkitem checkitem_[% bibitemloo.biblionumber %]" name="checkitem_[% bibitemloo.biblionumber %]"
                                          value="[% itemLoo.itemnumber %]" />
@@ -446,23 +446,23 @@
                                 [% END %] [% IF ( itemLoo.copynumber ) %][% itemLoo.copynumber %][% END %]
                               </td>
                               [% IF ( item_level_itypes ) %]
-                                <td>
+                                <td class="itype">
                                   [% UNLESS ( noItemTypeImages ) %]
                                   [% IF ( itemLoo.imageurl ) %]<img src="[% itemLoo.imageurl %]" alt="" />[% END %]
                                   [% END %]
 								[% itemLoo.description %]
                                 </td>
                               [% END %]
-                              <td>[% itemLoo.barcode %]</td>
+                              <td class="barcode">[% itemLoo.barcode %]</td>
                               [% UNLESS ( singleBranchMode ) %]
-                                <td>[% itemLoo.homeBranchName %]</td>
-                                <td>[% itemLoo.holdingBranchName %]</td>
+                                <td class="homebranch">[% itemLoo.homeBranchName %]</td>
+                                <td class="holdingbranch">[% itemLoo.holdingBranchName %]</td>
                               [% END %]
-                              <td>[% itemLoo.callNumber %]</td>
+                              <td class="call_no">[% itemLoo.callNumber %]</td>
                               [% IF ( itemLoo.itemdata_enumchron ) %]<!-- test -->
-                                <td>[% itemLoo.enumchron %]</td>
+                                <td class="vol_info">[% itemLoo.enumchron %]</td>
                               [% END %]
-                              <td>
+                              <td class="information">
                                 [% IF ( itemLoo.dateDue ) %]
                                   <span class="checkedout">Due [% itemLoo.dateDue %]</span>
                                 [% ELSIF ( itemLoo.transfertwhen ) %]
