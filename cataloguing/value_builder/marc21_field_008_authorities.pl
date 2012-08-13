@@ -101,73 +101,22 @@ sub plugin {
 			     debug => 1,
 			     });
 	$result = "$dateentered$defaultval" unless $result;
-	my $f1 = substr($result,0,6);
-	my $f6 = substr($result,6,1);
-	my $f7 = substr($result,7,1);
-	my $f8 = substr($result,8,1);
-	my $f9 = substr($result,9,1);
-	my $f10 = substr($result,10,1);
-	my $f11 = substr($result,11,1);
-	my $f12 = substr($result,12,1);
-	my $f13 = substr($result,13,1);
-	my $f14 = substr($result,14,1);
-	my $f15 = substr($result,15,1);
-	my $f16 = substr($result,16,1);
-	my $f17 = substr($result,17,1);
-	my $f28 = substr($result,28,1);
-	my $f29 = substr($result,29,1);
-	my $f31 = substr($result,31,1);
-	my $f32 = substr($result,32,1);
-	my $f33 = substr($result,33,1);
-	my $f38 = substr($result,38,1);
-	my $f39 = substr($result,39,1);
+    my @f;
+    for(0,6..17,28,29,31..33,38,39) {
+        $f[$_]=substr($result,$_,$_==0?6:1);
+    }
+    $template->param(index => $index);
 
-if ((!$f1) ||($f1 =~ m/ /)){
-	$f1=$dateentered;
-}
+    $f[0]= $dateentered if !$f[0] || $f[0]=~/\s/;
+    $template->param(f1 => $f[0]);
 
-	$template->param(				index => $index,
-							f1 => $f1,
-							f6 => $f6,
-							"f6$f6" => $f6,
-                            f7 => $f7,
-                            "f7$f7" => $f7,
-                            f8 => $f8,
-                            "f8$f8" => $f8,
-                            f9 => $f9,
-                            "f9$f9" => $f9,
-                            f10 => $f10,
-                            "f10$f10" => $f10,
-                            f11 => $f11,
-                            "f11$f11" => $f11,
-                            f12 => $f12,
-                            "f12$f12" => $f12,
-                            f13 => $f13,
-                            "f13$f13" => $f13,
-                            f14 => $f14,
-                            "f14$f14" => $f14,
-                            f15 => $f15,
-                            "f15$f15" => $f15,
-                            f16 => $f16,
-                            "f16$f16" => $f16,
-                            f17 => $f17,
-                            "f17$f17" => $f17,
-                            f28 => $f28,
-                            "f28$f28" => $f28,
-                            f29 => $f29,
-                            "f29$f29" => $f29,
-                            f31 => $f31,
-                            "f31$f31" => $f31,
-                            f32 => $f32,
-                            "f32$f32" => $f32,
-                            f33 => $f33,
-                            "f33$f33" => $f33,
-                            f38 => $f38,
-                            "f38$f38" => $f38,
-                            f39 => $f39,
-                            "f39$f39" => $f39,
-					);
-        output_html_with_http_headers $input, $cookie, $template->output;
+    for(6..17,28,29,31..33,38,39) {
+        $template->param(
+            "f$_" => $f[$_],
+            "f$_".($f[$_] eq '|'? 'pipe': $f[$_]) => $f[$_],
+        );
+    }
+    output_html_with_http_headers $input, $cookie, $template->output;
 }
 
 sub Field008 {
