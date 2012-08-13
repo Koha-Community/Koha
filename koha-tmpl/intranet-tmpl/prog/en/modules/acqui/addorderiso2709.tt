@@ -184,7 +184,7 @@
                         </li>
                         <li><div class="hint">The 2 following fields are available for your own usage. They can be useful for statistical purposes</div>
                             <label for="sort1">Planning value1: </label>
-
+                            <span id="sort1_zone">
                             [% IF CGIsort1 %]
                                 <select id="sort1" size="1" name="sort1">
                                 [% FOREACH sort_opt IN CGIsort1 %]
@@ -198,23 +198,25 @@
                             [% ELSE %]
                                 <input type="text" id="sort1" size="20" name="sort1" value="[% sort1 %]" />
                             [% END %]
+                            </span>
                         </li>
                         <li>
                             <label for="sort2">Planning value2: </label>
-
-                        [% IF CGIsort2 %]
-                            <select id="sort2" size="1" name="sort1">
-                            [% FOREACH sort_opt IN CGIsort2 %]
-                                [% IF sort_opt.default %]
-                                    <option value="[% sort_opt.id %]" selected="selected">[% sort_opt.label %]</option>
-                                [% ELSE %]
-                                    <option value="[% sort_opt.id %]">[% sort_opt.label %]</option>
+                            <span id="sort2_zone">
+                            [% IF CGIsort2 %]
+                                <select id="sort2" size="1" name="sort1">
+                                [% FOREACH sort_opt IN CGIsort2 %]
+                                    [% IF sort_opt.default %]
+                                        <option value="[% sort_opt.id %]" selected="selected">[% sort_opt.label %]</option>
+                                    [% ELSE %]
+                                        <option value="[% sort_opt.id %]">[% sort_opt.label %]</option>
+                                    [% END %]
                                 [% END %]
+                                </select>
+                            [% ELSE %]
+                                 <input type="text" id="sort2" size="20" name="sort2" value="[% sort2 %]" />
                             [% END %]
-                            </select>
-                        [% ELSE %]
-                             <input type="text" id="sort2" size="20" name="sort2" value="[% sort2 %]" />
-                        [% END %]
+                            </span>
                         </li>
                         <li>
                             

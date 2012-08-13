@@ -280,8 +280,6 @@ if ($budget) {    # its a mod ..
     }
 } elsif(@{$budgets}){
     $CGIsort1 = GetAuthvalueDropbox(  @$budgets[0]->{'sort1_authcat'}, '' );
-}else{
-    $CGIsort1 = GetAuthvalueDropbox( '', '' );
 }
 
 # if CGIsort is successfully fetched, the use it
@@ -299,8 +297,6 @@ if ($budget) {
     }
 } elsif(@{$budgets}) {
     $CGIsort2 = GetAuthvalueDropbox(  @$budgets[0]->{sort2_authcat}, '' );
-}else{
-    $CGIsort2 = GetAuthvalueDropbox( '', '' );
 }
 
 if ($CGIsort2) {

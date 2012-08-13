@@ -296,10 +296,7 @@ if ($budget) {    # its a mod ..
     }
 } elsif ( scalar(@$budgets) ) {
     $CGIsort1 = GetAuthvalueDropbox(  @$budgets[0]->{'sort1_authcat'}, '' );
-} else {
-    $CGIsort1 = GetAuthvalueDropbox(  '', '' );
 }
-
 # if CGIsort is successfully fetched, the use it
 # else - failback to plain input-field
 if ($CGIsort1) {
@@ -315,10 +312,7 @@ if ($budget) {
     }
 } elsif ( scalar(@$budgets) ) {
     $CGIsort2 = GetAuthvalueDropbox(  @$budgets[0]->{sort2_authcat}, '' );
-} else {
-    $CGIsort2 = GetAuthvalueDropbox( '', '' );
 }
-
 if ($CGIsort2) {
     $template->param( CGIsort2 => $CGIsort2 );
 } else {

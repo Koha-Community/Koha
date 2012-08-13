@@ -751,7 +751,7 @@ function fetchSortDropbox(f) {
 
 for (i=1;i<=2;i++) {
 
-    var sort_dropbox = document.getElementById('sort'+i);
+    var sort_zone = document.getElementById('sort'+i+'_zone');
     var url = '../acqui/fetch_sort_dropbox.pl?sort='+i+'&budget_id='+budgetId;
 
     var xmlhttp = null;
@@ -771,7 +771,13 @@ for (i=1;i<=2;i++) {
         }
     };
     // rc =  eval ( xmlhttp.responseText );
-    sort_dropbox.innerHTML  =  xmlhttp.responseText;
+    var retRootType = xmlhttp.responseXML.firstChild.nodeName;
+    var existingInputs = sort_zone.getElementsByTagName('input');
+    if (existingInputs.length > 0 && retRootType == 'input') {
+        // when sort is already an input, do not override to preseve value
+        return;
+    }
+    sort_zone.innerHTML = xmlhttp.responseText;
 }
 }
 
