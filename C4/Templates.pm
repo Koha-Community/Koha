@@ -102,7 +102,7 @@ sub output {
     $vars->{themelang} .= '/' . $self->preferredtheme . '/' . $self->lang;
     $vars->{yuipath} =
       ( C4::Context->preference("yuipath") eq "local"
-        ? $vars->{themelang} . "/lib/yui"
+        ? ( $self->interface eq 'intranet' ? $vars->{themelang} . "/lib/yui" : "/opac-tmpl/lib/yui" )
         : C4::Context->preference("yuipath") );
     $vars->{interface} =
       ( $self->{interface} ne 'intranet' ? '/opac-tmpl' : '/intranet-tmpl' );
