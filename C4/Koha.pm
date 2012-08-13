@@ -674,6 +674,7 @@ sub getallthemes {
     opendir D, "$htdocs";
     my @dirlist = readdir D;
     foreach my $directory (@dirlist) {
+        next if $directory eq 'lib';
         -d "$htdocs/$directory/en" and push @themes, $directory;
     }
     return @themes;
