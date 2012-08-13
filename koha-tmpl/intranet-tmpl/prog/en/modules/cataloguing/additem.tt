@@ -39,7 +39,7 @@ function Check(f) {
         if($(this).val() == 1){
             var mandatory_field = $("input[name='field_value'],select[name='field_value']").eq(i);
             if(mandatory_field.val() == ''){
-                mandatory_field.css("background-color","#FFFFCC");
+                mandatory_field.addClass("missing");
                 total_errors++;
             }
         }
