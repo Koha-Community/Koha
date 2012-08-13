@@ -38,48 +38,50 @@ use C4::Bookseller qw/GetBookSeller/;
 use C4::Branch;
 
 my $input = new CGI;
-my ($template, $loggedinuser, $cookie, $flags) = get_template_and_user( {
-    template_name   => 'acqui/invoices.tmpl',
-    query           => $input,
-    type            => 'intranet',
-    authnotrequired => 0,
-    flagsrequired   => { 'acquisition' => '*' },
-    debug           => 1,
-} );
+my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
+    {
+        template_name   => 'acqui/invoices.tmpl',
+        query           => $input,
+        type            => 'intranet',
+        authnotrequired => 0,
+        flagsrequired   => { 'acquisition' => '*' },
+        debug           => 1,
+    }
+);
 
-my $invoicenumber   = $input->param('invoicenumber');
-my $supplier        = $input->param('supplier');
+my $invoicenumber    = $input->param('invoicenumber');
+my $supplier         = $input->param('supplier');
 my $shipmentdatefrom = $input->param('shipmentdatefrom');
-my $shipmentdateto  = $input->param('shipmentdateto');
-my $billingdatefrom = $input->param('billingdatefrom');
-my $billingdateto   = $input->param('billingdateto');
-my $isbneanissn     = $input->param('isbneanissn');
-my $title           = $input->param('title');
-my $author          = $input->param('author');
-my $publisher       = $input->param('publisher');
-my $publicationyear = $input->param('publicationyear');
-my $branch          = $input->param('branch');
-my $op              = $input->param('op');
+my $shipmentdateto   = $input->param('shipmentdateto');
+my $billingdatefrom  = $input->param('billingdatefrom');
+my $billingdateto    = $input->param('billingdateto');
+my $isbneanissn      = $input->param('isbneanissn');
+my $title            = $input->param('title');
+my $author           = $input->param('author');
+my $publisher        = $input->param('publisher');
+my $publicationyear  = $input->param('publicationyear');
+my $branch           = $input->param('branch');
+my $op               = $input->param('op');
 
 my @results_loop = ();
-if($op and $op eq "do_search") {
+if ( $op and $op eq "do_search" ) {
     my $shipmentdatefrom_iso = C4::Dates->new($shipmentdatefrom)->output("iso");
-    my $shipmentdateto_iso = C4::Dates->new($shipmentdateto)->output("iso");
-    my $billingdatefrom_iso = C4::Dates->new($billingdatefrom)->output("iso");
-    my $billingdateto_iso = C4::Dates->new($billingdateto)->output("iso");
-    my @invoices = GetInvoices(
-        invoicenumber => $invoicenumber,
-        suppliername => $supplier,
+    my $shipmentdateto_iso   = C4::Dates->new($shipmentdateto)->output("iso");
+    my $billingdatefrom_iso  = C4::Dates->new($billingdatefrom)->output("iso");
+    my $billingdateto_iso    = C4::Dates->new($billingdateto)->output("iso");
+    my @invoices             = GetInvoices(
+        invoicenumber    => $invoicenumber,
+        suppliername     => $supplier,
         shipmentdatefrom => $shipmentdatefrom_iso,
-        shipmentdateto => $shipmentdateto_iso,
-        billingdatefrom => $billingdatefrom_iso,
-        billingdateto => $billingdateto_iso,
-        isbneanissn => $isbneanissn,
-        title => $title,
-        author => $author,
-        publisher => $publisher,
-        publicationyear => $publicationyear,
-        branchcode => $branch
+        shipmentdateto   => $shipmentdateto_iso,
+        billingdatefrom  => $billingdatefrom_iso,
+        billingdateto    => $billingdateto_iso,
+        isbneanissn      => $isbneanissn,
+        title            => $title,
+        author           => $author,
+        publisher        => $publisher,
+        publicationyear  => $publicationyear,
+        branchcode       => $branch
     );
     foreach (@invoices) {
         my %row = (
@@ -90,21 +92,20 @@ if($op and $op eq "do_search") {
             receivedbiblios => $_->{receivedbiblios},
             receiveditems   => $_->{receiveditems},
             subscriptionid  => $_->{subscriptionid},
-            closedate => $_->{closedate},
+            closedate       => $_->{closedate},
         );
         push @results_loop, \%row;
     }
 }
 
-
 # Build suppliers list
-my @suppliers = GetBookSeller(undef);
+my @suppliers      = GetBookSeller(undef);
 my @suppliers_loop = ();
 my $suppliername;
 foreach (@suppliers) {
     my $selected = 0;
-    if ($supplier && $supplier == $_->{'id'}) {
-        $selected = 1;
+    if ( $supplier && $supplier == $_->{'id'} ) {
+        $selected     = 1;
         $suppliername = $_->{'name'};
     }
     my %row = (
@@ -116,13 +117,13 @@ foreach (@suppliers) {
 }
 
 # Build branches list
-my $branches = GetBranches();
+my $branches      = GetBranches();
 my @branches_loop = ();
 my $branchname;
-foreach (sort keys %$branches) {
+foreach ( sort keys %$branches ) {
     my $selected = 0;
-    if ($branch && $branch eq $_) {
-        $selected = 1;
+    if ( $branch && $branch eq $_ ) {
+        $selected   = 1;
         $branchname = $branches->{$_}->{'branchname'};
     }
     my %row = (
@@ -134,22 +135,22 @@ foreach (sort keys %$branches) {
 }
 
 $template->param(
-    do_search       => ($op and $op eq "do_search") ? 1 : 0,
-    results_loop    => \@results_loop,
-    invoicenumber   => $invoicenumber,
-    supplier        => $supplier,
-    suppliername    => $suppliername,
-    billingdatefrom => $billingdatefrom,
-    billingdateto   => $billingdateto,
-    isbneanissn     => $isbneanissn,
-    title           => $title,
-    author          => $author,
-    publisher       => $publisher,
-    publicationyear => $publicationyear,
-    branch          => $branch,
-    branchname      => $branchname,
-    suppliers_loop  => \@suppliers_loop,
-    branches_loop   => \@branches_loop,
+    do_search => ( $op and $op eq "do_search" ) ? 1 : 0,
+    results_loop             => \@results_loop,
+    invoicenumber            => $invoicenumber,
+    supplier                 => $supplier,
+    suppliername             => $suppliername,
+    billingdatefrom          => $billingdatefrom,
+    billingdateto            => $billingdateto,
+    isbneanissn              => $isbneanissn,
+    title                    => $title,
+    author                   => $author,
+    publisher                => $publisher,
+    publicationyear          => $publicationyear,
+    branch                   => $branch,
+    branchname               => $branchname,
+    suppliers_loop           => \@suppliers_loop,
+    branches_loop            => \@branches_loop,
     DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
 );
 
