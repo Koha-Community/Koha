@@ -44,63 +44,63 @@ my $dateentered = substr($year,2,2).sprintf ("%0.2d", $mon).sprintf ("%0.2d",$md
 my $defaultval = Field008();
 
 sub plugin_parameters {
-	my ($dbh,$record,$tagslib,$i,$tabloop) = @_;
-	return "";
+    my ($dbh,$record,$tagslib,$i,$tabloop) = @_;
+    return "";
 }
 
 sub plugin_javascript {
-	my ($dbh,$record,$tagslib,$field_number,$tabloop) = @_;
-	my $function_name= $field_number;
-	my $res="
+    my ($dbh,$record,$tagslib,$field_number,$tabloop) = @_;
+    my $function_name= $field_number;
+    my $res="
 <script type=\"text/javascript\">
 //<![CDATA[
 
 function Focus$function_name(subfield_managed) {
     if (!document.getElementById(\"$field_number\").value) {
-	var authtype=document.forms['f'].elements['authtypecode'].value;
-	var fieldval='$dateentered$defaultval';
-	if(authtype && (authtype == 'TOPIC_TERM' || authtype == 'GENRE/FORM' || authtype == 'CHRON_TERM')) {
-	  fieldval= fieldval.substr(0,14)+'b'+fieldval.substr(15);
-	}
+    var authtype=document.forms['f'].elements['authtypecode'].value;
+    var fieldval='$dateentered$defaultval';
+    if(authtype && (authtype == 'TOPIC_TERM' || authtype == 'GENRE/FORM' || authtype == 'CHRON_TERM')) {
+      fieldval= fieldval.substr(0,14)+'b'+fieldval.substr(15);
+    }
         document.getElementById(\"$field_number\").value=fieldval;
     }
     return 1;
 }
 
 function Blur$function_name(subfield_managed) {
-	return 1;
+    return 1;
 }
 
 function Clic$function_name(i) {
-	var authtype=document.forms['f'].elements['authtypecode'].value;
-	defaultvalue=document.getElementById(\"$field_number\").value;
-	newin=window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=marc21_field_008_authorities.pl&index=$field_number&result=\"+defaultvalue+\"&authtypecode=\"+authtype,\"tag_editor\",'width=1000,height=600,toolbar=false,scrollbars=yes');
+    var authtype=document.forms['f'].elements['authtypecode'].value;
+    defaultvalue=document.getElementById(\"$field_number\").value;
+    newin=window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=marc21_field_008_authorities.pl&index=$field_number&result=\"+defaultvalue+\"&authtypecode=\"+authtype,\"tag_editor\",'width=1000,height=600,toolbar=false,scrollbars=yes');
 
 }
 //]]>
 </script>
 ";
 
-	return ($function_name,$res);
+    return ($function_name,$res);
 }
 sub plugin {
-	my ($input) = @_;
-	my $index= $input->param('index');
-	my $result= $input->param('result');
-	my $authtype= $input->param('authtypecode')||'';
-	substr($defaultval,14-6,1)='b' if $authtype=~ /TOPIC_TERM|GENRE.FORM|CHRON_TERM/;
+    my ($input) = @_;
+    my $index= $input->param('index');
+    my $result= $input->param('result');
+    my $authtype= $input->param('authtypecode')||'';
+    substr($defaultval,14-6,1)='b' if $authtype=~ /TOPIC_TERM|GENRE.FORM|CHRON_TERM/;
 
-	my $dbh = C4::Context->dbh;
+    my $dbh = C4::Context->dbh;
 
-	my ($template, $loggedinuser, $cookie)
+    my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "cataloguing/value_builder/marc21_field_008_authorities.tmpl",
-			     query => $input,
-			     type => "intranet",
-			     authnotrequired => 0,
-			     flagsrequired => {editcatalogue => '*'},
-			     debug => 1,
-			     });
-	$result = "$dateentered$defaultval" unless $result;
+                 query => $input,
+                 type => "intranet",
+                 authnotrequired => 0,
+                 flagsrequired => {editcatalogue => '*'},
+                 debug => 1,
+                 });
+    $result = "$dateentered$defaultval" unless $result;
     my @f;
     for(0,6..17,28,29,31..33,38,39) {
         $f[$_]=substr($result,$_,$_==0?6:1);
