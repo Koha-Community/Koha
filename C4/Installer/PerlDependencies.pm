@@ -249,6 +249,11 @@ our $PERL_DEPS = {
         'required' => '0',
         'min_ver'  => '0.03'
     },
+    'Cache::Memcached::Fast' => {
+        'usage'    => 'Caching',
+        'required' => '0',
+        'min_ver'  => '0.17'
+    },
     'CHI' => {
         'usage'    => 'Caching',
         'required' => '0',
@@ -579,6 +584,11 @@ our $PERL_DEPS = {
         'required' => '0',
         'min_ver'  => '0.14',
 
+    },
+    'Test::YAML::Valid' => {
+        'usage'    => 'Core',
+        'required' => '0',
+        'min_ver'  => '0.04',
     },
     'Text::Unaccent' => {
         'usage'    => 'Core',
