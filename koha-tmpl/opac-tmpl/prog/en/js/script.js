@@ -11,7 +11,7 @@ $.datepicker.setDefaults({
         showOn: "both",
         changeMonth: true,
         changeYear: true,
-        buttonImage: '/opac-tmpl/prog/famfamfam/silk/calendar.png',
+        buttonImage: '/opac-tmpl/lib/famfamfam/silk/calendar.png',
         buttonImageOnly: true,
         showButtonPanel: true
     });

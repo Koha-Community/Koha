@@ -378,12 +378,12 @@
         <span class="label">Type: </span>
         
             <xsl:choose>
-                <xsl:when test="$typeOf008='Mon'"><img src="/opac-tmpl/prog/famfamfam/silk/book.png" alt="Bok" title="Bok"/> Bok</xsl:when>
-                <xsl:when test="$typeOf008='Per'"><img src="/opac-tmpl/prog/famfamfam/silk/newspaper.png" alt="Periodika" title="Periodika"/> Periodika</xsl:when>      
-                <xsl:when test="$typeOf008='Fil'"><img src="/opac-tmpl/prog/famfamfam/silk/computer_link.png" alt="Fil" title="Fil"/> Fil</xsl:when>
-                <xsl:when test="$typeOf008='Kar'"><img src="/opac-tmpl/prog/famfamfam/silk/map.png" alt="Kart" title="Kart"/> Kart</xsl:when>
-                <xsl:when test="$typeOf008='FV'"><img src="/opac-tmpl/prog/famfamfam/silk/film.png" alt="Film og video" title="Film og video"/> Film og video</xsl:when>
-                <xsl:when test="$typeOf008='Mus'"><img src="/opac-tmpl/prog/famfamfam/silk/sound.png" alt="Musikktrykk og lydopptak" title="Musikktrykk og lydopptak"/> Musikk</xsl:when>
+                <xsl:when test="$typeOf008='Mon'"><img src="/opac-tmpl/lib/famfamfam/silk/book.png" alt="Bok" title="Bok"/> Bok</xsl:when>
+                <xsl:when test="$typeOf008='Per'"><img src="/opac-tmpl/lib/famfamfam/silk/newspaper.png" alt="Periodika" title="Periodika"/> Periodika</xsl:when>
+                <xsl:when test="$typeOf008='Fil'"><img src="/opac-tmpl/lib/famfamfam/silk/computer_link.png" alt="Fil" title="Fil"/> Fil</xsl:when>
+                <xsl:when test="$typeOf008='Kar'"><img src="/opac-tmpl/lib/famfamfam/silk/map.png" alt="Kart" title="Kart"/> Kart</xsl:when>
+                <xsl:when test="$typeOf008='FV'"><img src="/opac-tmpl/lib/famfamfam/silk/film.png" alt="Film og video" title="Film og video"/> Film og video</xsl:when>
+                <xsl:when test="$typeOf008='Mus'"><img src="/opac-tmpl/lib/famfamfam/silk/sound.png" alt="Musikktrykk og lydopptak" title="Musikktrykk og lydopptak"/> Musikk</xsl:when>
                 <xsl:when test="$typeOf008='gra'"> Grafisk materiale</xsl:when>
                 <xsl:when test="$typeOf008='kom'"> Kombidokumenter</xsl:when>
                 <xsl:when test="$typeOf008='trd'"> Tre-dimensjonale gjenstander</xsl:when>
