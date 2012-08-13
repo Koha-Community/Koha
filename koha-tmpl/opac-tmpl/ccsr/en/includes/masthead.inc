@@ -84,14 +84,26 @@
 
 [% IF ( OpacPublic ) %]
 <div id="fluid-offset">
-[% UNLESS ( advsearch ) %]<form name="searchform" method="get" action="/cgi-bin/koha/opac-search.pl" id="searchform" class="[% IF ( OpacAddMastheadLibraryPulldown ) %]multi-libraries[% ELSE %]single-library[% END %]">
+[% UNLESS ( advsearch ) %]
+[% IF ( OpacAddMastheadLibraryPulldown ) %]
+    [% IF ( OpacShowFiltersPulldownMobile and not OpacShowLibrariesPulldownMobile ) or ( not OpacShowFiltersPulldownMobile and OpacShowLibrariesPulldownMobile ) %]
+        <form name="searchform" method="get" action="/cgi-bin/koha/opac-search.pl" id="searchform" class="multi-libraries single-field-mobile">
+    [% ELSE %]
+        <form name="searchform" method="get" action="/cgi-bin/koha/opac-search.pl" id="searchform" class="multi-libraries">
+    [% END %]
+[% ELSE %]
+    <form name="searchform" method="get" action="/cgi-bin/koha/opac-search.pl" id="searchform" class="single-library">
+[% END %]
     <label for="masthead_search" class="left"> Search
     [% UNLESS ( OpacAddMastheadLibraryPulldown ) %]
             [% IF ( mylibraryfirst ) %] (in [% mylibraryfirst %] only)[% END %]
     [% END %]
     </label>
-
-    <div id="filters">
+    [% IF ( OpacShowFiltersPulldownMobile ) %]
+        <div id="filters">
+    [% ELSE %]
+        <div id="filters" class="mobile-hidden">
+    [% END %]
     <select name="idx" id="masthead_search" class="left">
     [% IF ( ms_kw ) %]
         <option selected="selected" value="">Library catalog</option>
@@ -139,7 +151,11 @@
 </div>
 
    [% IF ( OpacAddMastheadLibraryPulldown ) %]
-    <div id="libraries">
+        [% IF ( OpacShowLibrariesPulldownMobile ) %]
+            <div id="libraries">
+        [% ELSE %]
+            <div id="libraries" class="mobile-hidden">
+        [% END %]
       <select name="limit" id="select_library" class="left">
          <option value="">All libraries</option>
          [% FOREACH BranchesLoo IN BranchesLoop %]
@@ -168,14 +184,25 @@
 
     </form>
 [% ELSE %] <!--advsearch -->
-<form name="searchform" method="get" action="/cgi-bin/koha/opac-search.pl" id="searchform" class="[% IF ( OpacAddMastheadLibraryPulldown ) %]multi-libraries[% ELSE %]single-library[% END %]">
+    [% IF ( OpacAddMastheadLibraryPulldown ) %]
+        [% IF ( OpacShowFiltersPulldownMobile and not OpacShowLibrariesPulldownMobile ) or ( not OpacShowFiltersPulldownMobile and OpacShowLibrariesPulldownMobile ) %]
+            <form name="searchform" method="get" action="/cgi-bin/koha/opac-search.pl" id="searchform" class="multi-libraries single-field-mobile">
+        [% ELSE %]
+            <form name="searchform" method="get" action="/cgi-bin/koha/opac-search.pl" id="searchform" class="multi-libraries">
+        [% END %]
+    [% ELSE %]
+        <form name="searchform" method="get" action="/cgi-bin/koha/opac-search.pl" id="searchform" class="single-library">
+    [% END %]
     <label for="masthead_search" class="left"> Search
     [% UNLESS ( OpacAddMastheadLibraryPulldown ) %]
             [% IF ( mylibraryfirst ) %] (in [% mylibraryfirst %] only)[% END %]
     [% END %]
     </label>
-
-    <div id="filters" class="transparent">
+    [% IF ( OpacShowFiltersPulldownMobile ) %]
+        <div id="filters" class="transparent">
+    [% ELSE %]
+        <div id="filters" class="transparent mobile-hidden">
+    [% END %]
         <select name="idx" id="masthead_search" class="left" disabled="disabled">
             <option selected="selected" value="">Library Catalog</option>
         </select>
@@ -186,7 +213,11 @@
 </div>
 
    [% IF ( OpacAddMastheadLibraryPulldown ) %]
-        <div id="libraries">
+        [% IF ( OpacShowLibrariesPulldownMobile ) %]
+            <div id="libraries">
+        [% ELSE %]
+            <div id="libraries" class="mobile-hidden">
+        [% END %]
           <select name="limit" id="select_library" class="left transparent">
              <option value="">All Libraries</option>
           </select>

@@ -5,9 +5,11 @@
 
 /* Hidden elements */
 
+.mobile-hidden,
 body#opac-main #login,
 body#opac-main #login~div,
 body#opac-main #opacnav,
+body#opac-main #opacmainuserblock,
 body#opac-main #news,
 body#results #facetcontainer,
 body#opac-detail #ulactioncontainer>:not(#action),
@@ -99,13 +101,14 @@ body#results #breadcrumbs>*{
 
 /* Main */
 
-body#opac-main #opacmainuserblock {
-    padding: 0
-}
-
 body#opac-main #container #ctn_lt{
     padding: 15px;
 }
+
+body#opac-main #opacmainuserblockmobile {
+    display: block;
+}
+
 
 
 /* Results */
@@ -257,30 +260,29 @@ form#searchform {
     padding-top: 50px;
 }
 
-form.single-library #filters .jqTransformSelectWrapper {
+form#searchform #filters .jqTransformSelectWrapper,
+form#searchform #libraries .jqTransformSelectWrapper {
     position: relative;
-    width: 100% !important;
     left: 0;
     top: 0;
     border-radius: 3px;
 }
 
 form.multi-libraries #filters .jqTransformSelectWrapper{
-    position: relative;
     width: 49% !important;
     float: left;
-    top: 0px;
-    left: 0px;
-    border-radius: 3px;
 }
 
 form.multi-libraries #libraries .jqTransformSelectWrapper{
-    position: relative;
     width: 49% !important;
     float: right;
-    top: 0px;
-    left: 0px;
-    border-radius: 3px;
+}
+
+form.single-library #filters .jqTransformSelectWrapper,
+form.multi-libraries.single-field-mobile #filters .jqTransformSelectWrapper,
+form.multi-libraries.single-field-mobile #libraries .jqTransformSelectWrapper{
+    width: 100% !important;
+    float:left;
 }
 
 form.multi-libraries .input-wrapper{

@@ -163,10 +163,32 @@ OPAC:
               type: textarea
               class: code
         -
+            - "Include the following CSS for the mobile view on all pages in the OPAC:"
+            - pref: OPACMobileUserCSS
+              type: textarea
+              class: code
+        -
             - "Show the following HTML in its own column on the main page of the OPAC:"
             - pref: OpacMainUserBlock
               type: textarea
               class: code
+        -
+            - "Show the following HTML in its own column on the main page of the OPAC (mobile version):"
+            - pref: OpacMainUserBlockMobile
+              type: textarea
+              class: code
+        -
+            - pref: OpacShowLibrariesPulldownMobile
+              choices:
+                  yes: Show
+                  no: "Don't show"
+            - the libraries pulldown on the mobile version of the OPAC.
+        -
+            - pref: OpacShowFiltersPulldownMobile
+              choices:
+                  yes: Show
+                  no: "Don't show"
+            - the search filters pulldown on the mobile version of the OPAC.
         -
             - "Show the following HTML on the left hand column of the main page and patron account on the OPAC (generally navigation links):"
             - pref: OpacNav

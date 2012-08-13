@@ -402,6 +402,7 @@ sub get_template_and_user {
             OpacShowRecentComments    => C4::Context->preference("OpacShowRecentComments"),
             OPACURLOpenInNewWindow    => "" . C4::Context->preference("OPACURLOpenInNewWindow"),
             OPACUserCSS               => "". C4::Context->preference("OPACUserCSS"),
+            OPACMobileUserCSS         => "". C4::Context->preference("OPACMobileUserCSS"),
             OPACViewOthersSuggestions => "" . C4::Context->preference("OPACViewOthersSuggestions"),
             OpacAuthorities           => C4::Context->preference("OpacAuthorities"),
             OPACBaseURL               => ($in->{'query'}->https() ? "https://" : "http://") . $ENV{'SERVER_NAME'} .
@@ -413,6 +414,9 @@ sub get_template_and_user {
             OpacCloud                 => C4::Context->preference("OpacCloud"),
             OpacKohaUrl               => C4::Context->preference("OpacKohaUrl"),
             OpacMainUserBlock         => "" . C4::Context->preference("OpacMainUserBlock"),
+            OpacMainUserBlockMobile   => "" . C4::Context->preference("OpacMainUserBlockMobile"),
+            OpacShowFiltersPulldownMobile => C4::Context->preference("OpacShowFiltersPulldownMobile"),
+            OpacShowLibrariesPulldownMobile => C4::Context->preference("OpacShowLibrariesPulldownMobile"),
             OpacNav                   => "" . C4::Context->preference("OpacNav"),
             OpacNavRight              => "" . C4::Context->preference("OpacNavRight"),
             OpacNavBottom             => "" . C4::Context->preference("OpacNavBottom"),
