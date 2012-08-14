@@ -134,7 +134,7 @@ if ( $email_add ) {
 
     my $email_header = "";
     if ( $template_res =~ /<HEADER>\n(.*)\n?<END_HEADER>/s ) {
-        $email_header = $1;
+        $email_header = encode_qp($1);
     }
 
     my $email_file = "basket.txt";
@@ -143,7 +143,7 @@ if ( $email_add ) {
     }
 
     if ( $template_res =~ /<MESSAGE>\n(.*)\n?<END_MESSAGE>/s ) {
-        $body = $1;
+        $body = encode_qp($1);
     }
 
     my $boundary = "====" . time() . "====";
