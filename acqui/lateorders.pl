@@ -43,8 +43,7 @@ To know on which branch this script have to display late order.
 
 =cut
 
-use strict;
-use warnings;
+use Modern::Perl;
 use CGI;
 use C4::Bookseller qw( GetBooksellersWithLateOrders );
 use C4::Auth;
@@ -54,6 +53,7 @@ use C4::Context;
 use C4::Acquisition;
 use C4::Letters;
 use C4::Branch; # GetBranches
+use Koha::DateUtils;
 
 my $input = new CGI;
 my ($template, $loggedinuser, $cookie) = get_template_and_user({
@@ -66,9 +66,30 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user({
 });
 
 my $booksellerid = $input->param('booksellerid') || undef; # we don't want "" or 0
-my $delay      = $input->param('delay');
+my $delay        = $input->param('delay');
+
+# Get the "date from" param if !defined is today
 my $estimateddeliverydatefrom = $input->param('estimateddeliverydatefrom');
 my $estimateddeliverydateto   = $input->param('estimateddeliverydateto');
+
+my $estimateddeliverydatefrom_dt =
+  $estimateddeliverydatefrom
+  ? dt_from_string($estimateddeliverydatefrom)
+  : undef;
+
+# Get the "date to" param. If it is not defined and $delay is not defined too, it is the today's date.
+my $estimateddeliverydateto_dt = dt_from_string($estimateddeliverydateto);
+
+# Format the output of "date from" and "date to"
+if ($estimateddeliverydatefrom) {
+    $estimateddeliverydatefrom = output_pref($estimateddeliverydatefrom_dt);
+    $estimateddeliverydatefrom =~ s/ \d\d:\d\d$//;
+}
+if ($estimateddeliverydateto) {
+    $estimateddeliverydateto = output_pref($estimateddeliverydateto_dt);
+    $estimateddeliverydateto =~ s/ \d\d:\d\d$//;
+}
+
 my $branch     = $input->param('branch');
 my $op         = $input->param('op');
 
@@ -95,12 +116,17 @@ if ($op and $op eq "send_alert"){
     }
 }
 
-my %supplierlist = GetBooksellersWithLateOrders(
-    $delay,
-    $branch,
-    C4::Dates->new($estimateddeliverydatefrom)->output("iso"),
-    C4::Dates->new($estimateddeliverydateto)->output("iso")
-);
+my @parameters = ( $delay, $branch );
+if ($estimateddeliverydatefrom_dt) {
+    push @parameters, $estimateddeliverydatefrom_dt->ymd();
+}
+else {
+    push @parameters, undef;
+}
+if ($estimateddeliverydateto_dt) {
+    push @parameters, $estimateddeliverydateto_dt->ymd();
+}
+my %supplierlist = GetBooksellersWithLateOrders(@parameters);
 
 my (@sloopy);	# supplier loop
 foreach (keys %supplierlist){
@@ -113,13 +139,18 @@ $template->param(SUPPLIER_LOOP => \@sloopy);
 $template->param(Supplier=>$supplierlist{$booksellerid}) if ($booksellerid);
 $template->param(booksellerid=>$booksellerid) if ($booksellerid);
 
-my @lateorders = GetLateOrders(
-    $delay,
-    $booksellerid,
-    $branch,
-    C4::Dates->new($estimateddeliverydatefrom)->output("iso"),
-    C4::Dates->new($estimateddeliverydateto)->output("iso")
-);
+@parameters =
+  ( $delay, $booksellerid, $branch );
+if ($estimateddeliverydatefrom_dt) {
+    push @parameters, $estimateddeliverydatefrom_dt->ymd();
+}
+else {
+    push @parameters, undef;
+}
+if ($estimateddeliverydateto_dt) {
+    push @parameters, $estimateddeliverydateto_dt->ymd();
+}
+my @lateorders = GetLateOrders( @parameters );
 
 my $total;
 foreach (@lateorders){

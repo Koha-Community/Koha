@@ -1828,16 +1828,19 @@ sub GetLateOrders {
         $from .= ' AND borrowers.branchcode LIKE ? ';
         push @query_params, $branch;
     }
+
+    if ( defined $estimateddeliverydatefrom or defined $estimateddeliverydateto ) {
+        $from .= ' AND aqbooksellers.deliverytime IS NOT NULL ';
+    }
     if ( defined $estimateddeliverydatefrom ) {
-        $from .= '
-            AND aqbooksellers.deliverytime IS NOT NULL
-            AND ADDDATE(aqbasket.closedate, INTERVAL aqbooksellers.deliverytime DAY) >= ?';
+        $from .= ' AND ADDDATE(aqbasket.closedate, INTERVAL aqbooksellers.deliverytime DAY) >= ?';
         push @query_params, $estimateddeliverydatefrom;
     }
-    if ( defined $estimateddeliverydatefrom and defined $estimateddeliverydateto ) {
+    if ( defined $estimateddeliverydateto ) {
         $from .= ' AND ADDDATE(aqbasket.closedate, INTERVAL aqbooksellers.deliverytime DAY) <= ?';
         push @query_params, $estimateddeliverydateto;
-    } elsif ( defined $estimateddeliverydatefrom ) {
+    }
+    if ( defined $estimateddeliverydatefrom and not defined $estimateddeliverydateto ) {
         $from .= ' AND ADDDATE(aqbasket.closedate, INTERVAL aqbooksellers.deliverytime DAY) <= CAST(now() AS date)';
     }
     if (C4::Context->preference("IndependantBranches")
