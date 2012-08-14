@@ -56,6 +56,9 @@ $(document).ready(function(){
     positionFixed: false,
     size:          20
   });
+  // redefine the datepicker's default because reports require ISO
+  // http://jqueryui.com/demos/datepicker/#option-dateFormat
+  $( ".datepicker" ).datepicker( "option", "dateFormat", "yy-mm-dd" );
 });
 //]]>
 </script>
