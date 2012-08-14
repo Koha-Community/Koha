@@ -1195,53 +1195,16 @@ Get the Hard Due Date and it's comparison for an itemtype, a borrower type and a
 
 sub GetHardDueDate {
     my ( $borrowertype, $itemtype, $branchcode ) = @_;
-    my $dbh = C4::Context->dbh;
-    my $sth =
-      $dbh->prepare(
-"select hardduedate, hardduedatecompare from issuingrules where categorycode=? and itemtype=? and branchcode=?"
-      );
-    $sth->execute( $borrowertype, $itemtype, $branchcode );
-    my $results = $sth->fetchrow_hashref;
-    return (dt_from_string($results->{hardduedate}, 'iso'),$results->{hardduedatecompare})
-      if defined($results) && $results->{hardduedate};
 
-    $sth->execute( $borrowertype, "*", $branchcode );
-    $results = $sth->fetchrow_hashref;
-    return (dt_from_string($results->{hardduedate}, 'iso'),$results->{hardduedatecompare})
-      if defined($results) && $results->{hardduedate};
+    my $rule = GetIssuingRule( $borrowertype, $itemtype, $branchcode );
 
-    $sth->execute( "*", $itemtype, $branchcode );
-    $results = $sth->fetchrow_hashref;
-    return (dt_from_string($results->{hardduedate}, 'iso'),$results->{hardduedatecompare})
-      if defined($results) && $results->{hardduedate};
-
-    $sth->execute( "*", "*", $branchcode );
-    $results = $sth->fetchrow_hashref;
-    return (dt_from_string($results->{hardduedate}, 'iso'),$results->{hardduedatecompare})
-      if defined($results) && $results->{hardduedate};
-
-    $sth->execute( $borrowertype, $itemtype, "*" );
-    $results = $sth->fetchrow_hashref;
-    return (dt_from_string($results->{hardduedate}, 'iso'),$results->{hardduedatecompare})
-      if defined($results) && $results->{hardduedate};
-
-    $sth->execute( $borrowertype, "*", "*" );
-    $results = $sth->fetchrow_hashref;
-    return (dt_from_string($results->{hardduedate}, 'iso'),$results->{hardduedatecompare})
-      if defined($results) && $results->{hardduedate};
-
-    $sth->execute( "*", $itemtype, "*" );
-    $results = $sth->fetchrow_hashref;
-    return (dt_from_string($results->{hardduedate}, 'iso'),$results->{hardduedatecompare})
-      if defined($results) && $results->{hardduedate};
-
-    $sth->execute( "*", "*", "*" );
-    $results = $sth->fetchrow_hashref;
-    return (dt_from_string($results->{hardduedate}, 'iso'),$results->{hardduedatecompare})
-      if defined($results) && $results->{hardduedate};
-
-    # if no rule is set => return undefined
-    return (undef, undef);
+    if ( defined( $rule ) ) {
+        if ( $rule->{hardduedate} ) {
+            return (dt_from_string($rule->{hardduedate}, 'iso'),$rule->{hardduedatecompare});
+        } else {
+            return (undef, undef);
+        }
+    }
 }
 
 =head2 GetIssuingRule
