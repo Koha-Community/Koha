@@ -45,7 +45,7 @@ sub _init {
     $repeat_sth->execute( $branch, 1 );
     $self->{day_month_closed_days} = {};
     while ( my $tuple = $repeat_sth->fetchrow_hashref ) {
-        $self->{day_month_closed_days}->{ $tuple->{day} }->{ $tuple->{month} } =
+        $self->{day_month_closed_days}->{ $tuple->{month} }->{ $tuple->{day} } =
           1;
     }
 
