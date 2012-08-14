@@ -72,6 +72,8 @@ my $warnPrefEasyAnalyticalRecords  = ( $prefEasyAnalyticalRecords  && $prefUseCo
 
 my $errZebraConnection = C4::Context->Zconn("biblioserver",0)->errcode();
 
+my $warnIsRootUser   = (! $loggedinuser);
+
 $template->param(
     kohaVersion   => $kohaVersion,
     osVersion     => $osVersion,
@@ -87,6 +89,7 @@ $template->param(
     warnPrefBiblioAddsAuthorities => $warnPrefBiblioAddsAuthorities,
     warnPrefEasyAnalyticalRecords  => $warnPrefEasyAnalyticalRecords,
     errZebraConnection => $errZebraConnection,
+    warnIsRootUser => $warnIsRootUser,
 );
 
 my @components = ();
