@@ -1457,12 +1457,7 @@ sub searchResults {
     }
 
     #search item field code
-    my $sth =
-      $dbh->prepare(
-"SELECT tagfield FROM marc_subfield_structure WHERE kohafield LIKE 'items.itemnumber'"
-      );
-    $sth->execute;
-    my ($itemtag) = $sth->fetchrow;
+    my ($itemtag, undef) = &GetMarcFromKohaField( "items.itemnumber", "" );
 
     ## find column names of items related to MARC
     my $sth2 = $dbh->prepare("SHOW COLUMNS FROM items");
