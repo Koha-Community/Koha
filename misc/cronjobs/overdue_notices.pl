@@ -432,6 +432,12 @@ END_SQL
                 next PERIOD;
             }
 
+            my $letter_template = C4::Letters::GetLetter (
+                module => 'circulation',
+                letter_code => $overdue_rules->{"letter$i"},
+                branchcode => $branchcode
+            );
+
             # $letter->{'content'} is the text of the mail that is sent.
             # this text contains fields that are replaced by their value. Those fields must be written between brackets
             # The following fields are available :
@@ -503,6 +509,7 @@ END_SQL
 
                 my $letter = parse_letter(
                     {   letter_code     => $overdue_rules->{"letter$i"},
+                        letter          => $letter_template,
                         borrowernumber  => $borrowernumber,
                         branchcode      => $branchcode,
                         items           => \@items,
@@ -602,11 +609,12 @@ END_SQL
             
         my $attachment = {
             filename => defined $csvfilename ? 'attachment.csv' : 'attachment.txt',
-            type => 'text/plain',
+            type => 'text/plain; charset="utf-8"',
             content => $content, 
         };
 
         my $letter = {
+            'content-type' => 'text/plain; charset="utf-8"',
             title   => 'Overdue Notices',
             content => 'These messages were not sent directly to the patrons.',
         };
@@ -671,7 +679,7 @@ sub parse_letter {
     my $currency_format;
     if ($params->{'letter'}->{'content'} =~ m/<fine>(.*)<\/fine>/o) { # process any fine tags...
         $currency_format = $1;
-        $params->{'letter'}->{'content'} =~ s/<fine>.*<\/fine>/<<item.fine>>/o;
+        $params->{'letter'}->{'content'} =~ s/<fine>.*<\/fine>/<<items.fine>>/o;
     }
 
     my @item_tables;
@@ -696,13 +704,14 @@ sub parse_letter {
         }
     }
 
-    return C4::Letters::GetPreparedLetter (
+    return C4::Letters::GetProcessedLetter (
         module => 'circulation',
         letter_code => $params->{'letter_code'},
+        letter => $params->{'letter'},
         branchcode => $params->{'branchcode'},
         tables => \%tables,
         substitute => $substitute,
-        repeat => { item => \@item_tables },
+        repeat => { item => \@item_tables }
     );
 }
 
