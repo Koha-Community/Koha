@@ -21,6 +21,7 @@ use File::Find;
 use Test::Warn;
 use File::Temp qw/ tempdir /;
 use File::Path;
+use DBI;
 
 my $datadir = tempdir();
 system(dirname(__FILE__) . "/zebra_config.pl $datadir");
