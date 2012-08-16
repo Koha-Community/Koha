@@ -8,10 +8,22 @@ use File::Basename;
 use File::Spec;
 
 my $source = File::Spec->rel2abs('.');
-my $destination = File::Spec->rel2abs('.') . "/t/db_dependent/data";
+my $destination = $ARGV[0];
 
 make_path("$destination/var/lock/zebradb");
+make_path("$destination/var/lock/zebradb/biblios");
+make_path("$destination/var/lock/zebradb/authorities");
 make_path("$destination/var/lib/zebradb");
+make_path("$destination/var/lib/zebradb/biblios");
+make_path("$destination/var/lib/zebradb/biblios/key");
+make_path("$destination/var/lib/zebradb/biblios/register");
+make_path("$destination/var/lib/zebradb/biblios/shadow");
+make_path("$destination/var/lib/zebradb/biblios/tmp");
+make_path("$destination/var/lib/zebradb/authorities");
+make_path("$destination/var/lib/zebradb/authorities/key");
+make_path("$destination/var/lib/zebradb/authorities/register");
+make_path("$destination/var/lib/zebradb/authorities/shadow");
+make_path("$destination/var/lib/zebradb/authorities/tmp");
 make_path("$destination/var/run/zebradb");
 
 $ENV{'INSTALL_BASE'} = $destination;

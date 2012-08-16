@@ -19,9 +19,12 @@ use File::Spec;
 use File::Basename;
 use File::Find;
 use Test::Warn;
+use File::Temp qw/ tempdir /;
+use File::Path;
 
-system(dirname(__FILE__) . "/zebra_config.pl");
-my $datadir = dirname(__FILE__) . "/data";
+my $datadir = tempdir();
+system(dirname(__FILE__) . "/zebra_config.pl $datadir");
+my $sourcedir = dirname(__FILE__) . "/data";
 
 my $QueryStemming = 0;
 my $QueryAutoTruncate = 0;
@@ -197,7 +200,7 @@ my %itemtypes = (
 
 unlink("$datadir/zebra.log");
 system("zebraidx -c $datadir/etc/koha/zebradb/zebra-biblios.cfg  -v none,fatal,warn  -g iso2709 -d biblios init");
-system("zebraidx -c $datadir/etc/koha/zebradb/zebra-biblios.cfg  -v none,fatal,warn   -g iso2709 -d biblios update $datadir/zebraexport/biblio");
+system("zebraidx -c $datadir/etc/koha/zebradb/zebra-biblios.cfg  -v none,fatal,warn   -g iso2709 -d biblios update $sourcedir/zebraexport/biblio");
 system("zebraidx -c $datadir/etc/koha/zebradb/zebra-biblios.cfg  -v none,fatal,warn  -g iso2709 -d biblios commit");
 
 my $child = fork();
@@ -507,10 +510,7 @@ END {
         kill 9, $child;
 
         # Clean up the Zebra files since the child process was just shot
-
-        find(sub { unlink($_) if ( -f $_ && m/\.(mf|pid|LCK)$/ ); }, "$datadir");
-        unlink("$datadir/var/run/zebradb/authoritysocket");
-        unlink("$datadir/var/run/zebradb/bibliosocket");
+        rmtree $datadir;
     }
 }
 
