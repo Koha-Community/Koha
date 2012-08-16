@@ -59,6 +59,9 @@ You have never borrowed anything from this library.
 <th>Item type</th>
 <th>Call no.</th>
 <th>Date</th>
+[% IF ( OPACMySummaryHTML ) %]
+<th>Links</th>
+[% END %]
 </tr>
 
 [% FOREACH READING_RECOR IN READING_RECORD %]
@@ -85,6 +88,9 @@ You have never borrowed anything from this library.
 <td>[% UNLESS ( noItemTypeImages ) %][% IF ( READING_RECOR.imageurl ) %]<img src="[% READING_RECOR.imageurl %]" alt="" />[% END %][% END %] [% READING_RECOR.description %]</td>
 <td>[% READING_RECOR.itemcallnumber %]</td>
 <td>[% IF ( READING_RECOR.returndate ) %][% READING_RECOR.returndate | $KohaDates %][% ELSE %]<em>(Checked out)</em>[% END %]</td>
+[% IF ( OPACMySummaryHTML ) %]
+<td>[% READING_RECOR.MySummaryHTML %]</td>
+[% END %]
 </tr>
 
 [% END %]

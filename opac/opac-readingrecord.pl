@@ -97,6 +97,16 @@ foreach my $issue (@{$issues} ) {
         $line{'description'}   = $itemtypes->{ $issue->{'itemtype'} }->{'description'};
         $line{imageurl}        = getitemtypeimagelocation( 'opac', $itemtypes->{ $issue->{'itemtype'}  }->{'imageurl'} );
     }
+    # My Summary HTML
+    if (my $my_summary_html = C4::Context->preference('OPACMySummaryHTML')){
+        $line{author} ? $my_summary_html =~ s/{AUTHOR}/$line{author}/g : $my_summary_html =~ s/{AUTHOR}//g;
+        $line{title} =~ s/\/+$//; # remove trailing slash
+        $line{title} =~ s/\s+$//; # remove trailing space
+        $line{title} ? $my_summary_html =~ s/{TITLE}/$line{title}/g : $my_summary_html =~ s/{TITLE}//g;
+        $line{normalized_isbn} ? $my_summary_html =~ s/{ISBN}/$line{normalized_isbn}/g : $my_summary_html =~ s/{ISBN}//g;
+        $line{biblionumber} ? $my_summary_html =~ s/{BIBLIONUMBER}/$line{biblionumber}/g : $my_summary_html =~ s/{BIBLIONUMBER}//g;
+        $line{MySummaryHTML} = $my_summary_html;
+    }
     push( @loop_reading, \%line );
     $line{subtitle} = GetRecordValue('subtitle', $record, GetFrameworkCode($issue->{'biblionumber'}));
 }
@@ -130,6 +140,7 @@ $template->param(
     showfulllink   => 1,
 	readingrecview => 1,
 	count          => scalar @loop_reading,
+    OPACMySummaryHTML => (C4::Context->preference("OPACMySummaryHTML")) ? 1 : 0,
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;
