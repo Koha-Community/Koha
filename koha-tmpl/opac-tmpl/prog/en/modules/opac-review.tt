@@ -11,7 +11,7 @@
 			[% IF ( cgi_debug ) %]alert(_('injecting OLD comment: ')+comment);[% END %]
             parent.opener.$('#c[% reviewid %] p').prev("small").prev("h5").html(_("Your edited comment (preview, pending approval)"));
 			parent.opener.$('#c[% reviewid %] p').html(comment);
-			parent.opener.$('#c[% reviewid %] p').append("<a href=\"#comment\" onclick=\"Dopop(\'/cgi-bin/koha/opac-review.pl?biblionumber=[% biblionumber | uri %]&amp;reviewid=[% reviewid | uri%]\');\">Edit<\/a>");
+            parent.opener.$('#c[% reviewid %] p').append(" <a href=\"#comment\" onclick=\"Dopop(\'/cgi-bin/koha/opac-review.pl?biblionumber=[% biblionumber | uri %]&amp;reviewid=[% reviewid | uri%]\');\">"+_("Edit")+"<\/a>");
 			[% END %]
 			return 1;
 		};
@@ -21,7 +21,7 @@
 			parent.opener.$('#newcomment').html(
                 "<h5>" + _("Your comment (preview, pending approval)") + "<\/h5>" +
 				"<p>"+comment+"<\/p>" +
-				"<a href=\"#comment\" onclick=\"Dopop(\'/cgi-bin/koha/opac-review.pl?biblionumber=[% biblionumber |uri%]\');\">Edit<\/a><\/p>"
+                "<a href=\"#comment\" onclick=\"Dopop(\'/cgi-bin/koha/opac-review.pl?biblionumber=[% biblionumber |uri%]\');\">"+_("Edit")+"<\/a><\/p>"
 			);
 			parent.opener.$("#addcomment").prev("p").remove();
 			parent.opener.$("#addcomment").remove();
@@ -41,7 +41,6 @@
 				window.close();
 			[% END %]
 		[% END %]
-		// $('#reviewf').submit(function() {});
 	});
 //]]>
 </script>
@@ -67,6 +66,7 @@
 [% END %]
 <form id="reviewf" action="/cgi-bin/koha/opac-review.pl[% IF ( cgi_debug ) %]?debug=1[% END %]" method="post">
     <input type="hidden" name="biblionumber" value="[% biblionumber | html%]" />
+    [% IF ( reviewid ) %]<input type="hidden" name="reviewid" value="[% reviewid | html%]" />[% END %]
 	<fieldset class="brief">
 	<legend>Comments on <i>[% title |html %] [% subtitle %]</i>[% IF ( author ) %]by [% author %][% END %]</legend>
             <ol><li><textarea id="review" name="review" cols="60" rows="8">[% review %]</textarea></li></ol>
