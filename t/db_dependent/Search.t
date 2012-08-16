@@ -10,7 +10,7 @@ use utf8;
 use YAML;
 
 use C4::Debug;
-use C4::Context;
+require C4::Context;
 
 use Test::More tests => 57;
 use Test::MockModule;
@@ -21,25 +21,7 @@ use File::Find;
 use Test::Warn;
 
 system(dirname(__FILE__) . "/zebra_config.pl");
-
 my $datadir = dirname(__FILE__) . "/data";
-
-use_ok('C4::Search');
-
-foreach my $string ("Leçon","modèles") {
-    my @results=C4::Search::_remove_stopwords($string,"kw");
-    $debug && warn "$string ",Dump(@results);
-    ok($results[0] eq $string,"$string is not modified");
-}
-
-foreach my $string ("A book about the stars") {
-    my @results=C4::Search::_remove_stopwords($string,"kw");
-    $debug && warn "$string ",Dump(@results);
-    ok($results[0] ne $string,"$results[0] from $string");
-}
-
-my $indexes = C4::Search::getIndexes();
-is(scalar(grep(/^ti$/, @$indexes)), 1, "Title index supported");
 
 my $QueryStemming = 0;
 my $QueryAutoTruncate = 0;
@@ -123,6 +105,26 @@ $contextmodule->mock('marcfromkohafield', sub {
         );
         return \%hash;
 });
+my $context = new C4::Context("$datadir/etc/koha-conf.xml");
+$context->set_context();
+
+use_ok('C4::Search');
+
+foreach my $string ("Leçon","modèles") {
+    my @results=C4::Search::_remove_stopwords($string,"kw");
+    $debug && warn "$string ",Dump(@results);
+    ok($results[0] eq $string,"$string is not modified");
+}
+
+foreach my $string ("A book about the stars") {
+    my @results=C4::Search::_remove_stopwords($string,"kw");
+    $debug && warn "$string ",Dump(@results);
+    ok($results[0] ne $string,"$results[0] from $string");
+}
+
+my $indexes = C4::Search::getIndexes();
+is(scalar(grep(/^ti$/, @$indexes)), 1, "Title index supported");
+
 my $bibliomodule = new Test::MockModule('C4::Biblio');
 $bibliomodule->mock('_get_inverted_marc_field_map', sub {
     my %hash = (
@@ -224,9 +226,6 @@ $record->add_fields(
         );
 ($biblionumber,undef,$title) = FindDuplicate($record);
 is($biblionumber, 203, 'Found duplicate with author/title');
-
-my $context = new C4::Context("$datadir/etc/koha-conf.xml");
-$context->set_context();
 
 # Testing SimpleSearch
 
