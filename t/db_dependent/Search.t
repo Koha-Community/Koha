@@ -502,12 +502,16 @@ warning_like {( undef, $results_hashref, $facets_loop ) =
     $results_hashref->{'biblioserver'}->{"RECORDS"});
 is($newresults[0]->{'alternateholdings_count'}, 1, 'Alternate holdings filled in correctly');
 
-kill 9, $child;
+END {
+    if ($child) {
+        kill 9, $child;
 
-# Clean up the Zebra files since the child process was just shot
+        # Clean up the Zebra files since the child process was just shot
 
-find(sub { unlink($_) if ( -f $_ && m/\.(mf|pid|LCK)$/ ); }, "$datadir");
-unlink("$datadir/var/run/zebradb/authoritysocket");
-unlink("$datadir/var/run/zebradb/bibliosocket");
+        find(sub { unlink($_) if ( -f $_ && m/\.(mf|pid|LCK)$/ ); }, "$datadir");
+        unlink("$datadir/var/run/zebradb/authoritysocket");
+        unlink("$datadir/var/run/zebradb/bibliosocket");
+    }
+}
 
 1;
