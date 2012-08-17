@@ -407,6 +407,22 @@ Circulation:
                   yes: Allow
                   no: "Don't allow"
             - holds to be suspended from the OPAC.
+        -
+            - pref: decreaseLoanHighHolds
+              choices:
+                  yes: Enable
+                  no:  "Don't enable"
+            - the reduction of loan period for items with number of holds above the threshold specified in decreaseLoanHighHoldsValue
+        -
+            - A loan should be reduced by
+            - pref: decreaseLoanHighHoldsDuration
+              class: integer
+            - days, when decreaseLoanHighHoldsValue threshold is reached (if decreaseLoanHighHolds is enabled)
+        -
+            - A loan should be reduced by decreaseLoanHighHoldsDuration when
+            - pref: decreaseLoanHighHoldsValue
+              class: integer
+            - holds have been places (if decreaseLoanHighHolds is enables)
     Fines Policy:
         -
             - Calculate fines based on days overdue

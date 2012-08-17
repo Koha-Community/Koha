@@ -1005,6 +1005,22 @@ sub CanBookBeIssued {
             }
         }
     }
+
+## check for high holds decreasing loan period
+    my $decrease_loan = C4::Context->preference('decreaseLoanHighHolds');
+    if ( $decrease_loan && $decrease_loan == 1 ) {
+        my ( $reserved, $num, $duration, $returndate ) =
+          checkHighHolds( $item, $borrower );
+
+        if ( $num >= C4::Context->preference('decreaseLoanHighHoldsValue') ) {
+            $needsconfirmation{HIGHHOLDS} = {
+                num_holds  => $num,
+                duration   => $duration,
+                returndate => output_pref($returndate),
+            };
+        }
+    }
+
     return ( \%issuingimpossible, \%needsconfirmation, \%alerts );
 }
 
@@ -1055,6 +1071,50 @@ sub CanBookBeReturned {
   }
 
   return ($allowed, $message);
+}
+
+=head2 CheckHighHolds
+
+    used when syspref decreaseLoanHighHolds is active. Returns 1 or 0 to define whether the minimum value held in
+    decreaseLoanHighHoldsValue is exceeded, the total number of outstanding holds, the number of days the loan
+    has been decreased to (held in syspref decreaseLoanHighHoldsValue), and the new due date
+
+=cut
+
+sub checkHighHolds {
+    my ( $item, $borrower ) = @_;
+    my $biblio = GetBiblioFromItemNumber( $item->{itemnumber} );
+    my $branch = _GetCircControlBranch( $item, $borrower );
+    my $dbh    = C4::Context->dbh;
+    my $sth    = $dbh->prepare(
+'select count(borrowernumber) as num_holds from reserves where biblionumber=?'
+    );
+    $sth->execute( $item->{'biblionumber'} );
+    my ($holds) = $sth->fetchrow_array;
+    if ($holds) {
+        my $issuedate = DateTime->now( time_zone => C4::Context->tz() );
+
+        my $calendar = Koha::Calendar->new( branchcode => $branch );
+
+        my $itype =
+          ( C4::Context->preference('item-level_itypes') )
+          ? $biblio->{'itype'}
+          : $biblio->{'itemtype'};
+        my $orig_due =
+          C4::Circulation::CalcDateDue( $issuedate, $itype, $branch,
+            $borrower );
+
+        my $reduced_datedue =
+          $calendar->addDate( $issuedate,
+            C4::Context->preference('decreaseLoanHighHoldsDuration') );
+
+        if ( DateTime->compare( $reduced_datedue, $orig_due ) == -1 ) {
+            return ( 1, $holds,
+                C4::Context->preference('decreaseLoanHighHoldsDuration'),
+                $reduced_datedue );
+        }
+    }
+    return ( 0, 0, 0, undef );
 }
 
 =head2 AddIssue

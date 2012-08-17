@@ -364,8 +364,19 @@ function validate1(date) {
 [% IF ( ITEM_LOST ) %]
     <li>This item has been lost with a status of "[% ITEM_LOST %]". Check out anyway?</li>
 [% END %]
+
+[% IF  HIGHHOLDS %]
+	<li>High demand item. Loan period shortened to [% HIGHHOLDS.duration %] days (due [% HIGHHOLDS.returndate %]). Check out anyway?</li>
+[% END %]
 </ul>
 
+[% IF HIGHHOLDS %]
+	<script language="JavaScript" type="text/javascript">
+	$(document).ready(function() {
+		$("input[name=duedatespec]:hidden").val('[% HIGHHOLDS.returndate %]');
+	});
+	</script>
+[% END %]
 <form method="post" action="/cgi-bin/koha/circ/circulation.pl" autocomplete="off">
 
 [% IF ( RESERVED ) %]
