@@ -1,6 +1,7 @@
 package C4::ClassSortRoutine::LCC;
 
 # Copyright (C) 2007 LibLime
+# Copyright (C) 2012 Equinox Software, Inc.
 # 
 # This file is part of Koha.
 #
@@ -19,6 +20,7 @@ package C4::ClassSortRoutine::LCC;
 
 use strict;
 use warnings;
+use Library::CallNumber::LC;
 
 use vars qw($VERSION);
 
@@ -50,19 +52,10 @@ sub get_class_sort_key {
 
     $cn_class = '' unless defined $cn_class;
     $cn_item  = '' unless defined $cn_item;
-    my $key = uc "$cn_class $cn_item";
-    $key =~ s/^\s+//;
-    $key =~ s/\s+$//;
-    $key =~ s/^[^\p{IsAlnum}\s.]//g;
-    $key =~ s/^([A-Z]+)/$1 /;
-    $key =~ s/(\.[A-Z])/ $1/g;
-    # handle first digit group
-    $key =~ s/(\d+)/sprintf("%-05.5d", $1)/xe;
-    $key =~ s/\s+/_/g;
-    $key =~ s/\./_/g;
-    $key =~ s/__/_/g;
-    $key =~ s/[^\p{IsAlnum}_]//g;
-
+    my $call_number = Library::CallNumber::LC->new(uc "$cn_class $cn_item");
+    return '' unless defined $call_number;
+    my $key = $call_number->normalize();
+    $key = '' unless defined $key;
     return $key;
 
 }
