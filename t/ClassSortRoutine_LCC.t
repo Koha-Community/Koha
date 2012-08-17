@@ -14,17 +14,17 @@ BEGIN {
 
 #Obvious cases
 is(C4::ClassSortRoutine::LCC::get_class_sort_key(), "", "No arguments returns an empty string");
-is(C4::ClassSortRoutine::LCC::get_class_sort_key('a','b'), "A_B", "Arguments 'a','b' return 'A_B'");
+is(C4::ClassSortRoutine::LCC::get_class_sort_key('a','b'), "A B", "Arguments 'a','b' return 'A B'");
 
 #spaces in arguements
-is(C4::ClassSortRoutine::LCC::get_class_sort_key(' ','b'), "B_", "Arguments ' ','b' return 'B_'");
-is(C4::ClassSortRoutine::LCC::get_class_sort_key('a',' '), "A_", "Arguments 'a',' ' return 'A_'");
+is(C4::ClassSortRoutine::LCC::get_class_sort_key(' ','b'), "B", "Arguments ' ','b' return 'B'");
+is(C4::ClassSortRoutine::LCC::get_class_sort_key('a',' '), "A", "Arguments 'a',' ' return 'A'");
 is(C4::ClassSortRoutine::LCC::get_class_sort_key(' ','    '), "", "Arguments ' ','    ' return ''");
 
 #'funky cases' based on regex in code
-is(C4::ClassSortRoutine::LCC::get_class_sort_key('.','b'), "_B", "Arguments '.','b' return '_B'");
-is(C4::ClassSortRoutine::LCC::get_class_sort_key('....','........'), "_______", "Arguments '....','........' return '_______'");
-is(C4::ClassSortRoutine::LCC::get_class_sort_key('.','.'), "__", "Arguments '.','.' return '__'");
+is(C4::ClassSortRoutine::LCC::get_class_sort_key('.','b'), "", "Arguments '.','b' return ''");
+is(C4::ClassSortRoutine::LCC::get_class_sort_key('....','........'), "", "Arguments '....','........' return ''");
+is(C4::ClassSortRoutine::LCC::get_class_sort_key('.','.'), "", "Arguments '.','.' return ''");
 
 # list of example call numbers -- these
 # are intentionally in the _reverse_ of
