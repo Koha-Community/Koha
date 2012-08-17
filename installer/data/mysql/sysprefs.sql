@@ -153,10 +153,10 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('SelfCheckHelpMessage','','Enter HTML to include under the basic Web-based Self Checkout instructions on the Help page','70|10','Textarea');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('numSearchResults',20,'Specify the maximum number of results to display on a page of results',NULL,'Integer');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OPACnumSearchResults',20,'Specify the maximum number of results to display on a page of results',NULL,'Integer');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('defaultSortField',NULL,'Specify the default field used for sorting','relevance|popularity|call_number|pubdate|acqdate|title|author','Choice');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('defaultSortOrder',NULL,'Specify the default sort order','asc|dsc|az|za','Choice');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OPACdefaultSortField',NULL,'Specify the default field used for sorting','relevance|popularity|call_number|pubdate|acqdate|title|author','Choice');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OPACdefaultSortOrder',NULL,'Specify the default sort order','asc|dsc|za|az','Choice');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('defaultSortField','relevance','Specify the default field used for sorting','relevance|popularity|call_number|pubdate|acqdate|title|author','Choice');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('defaultSortOrder','dsc','Specify the default sort order','asc|dsc|az|za','Choice');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OPACdefaultSortField','relevance','Specify the default field used for sorting','relevance|popularity|call_number|pubdate|acqdate|title|author','Choice');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OPACdefaultSortOrder','dsc','Specify the default sort order','asc|dsc|za|az','Choice');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('FacetLabelTruncationLength',20,'Specify the facet max length in OPAC',NULL,'Integer');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('staffClientBaseURL','','Specify the base URL of the staff client',NULL,'free');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('minPasswordLength',3,'Specify the minimum length of a patron/staff password',NULL,'free');
