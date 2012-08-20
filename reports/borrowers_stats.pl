@@ -30,6 +30,7 @@ use C4::Acquisition;
 use C4::Output;
 use C4::Reports;
 use C4::Circulation;
+use C4::Members::AttributeTypes;
 use C4::Dates qw/format_date format_date_in_iso/;
 use Date::Calc qw(
   Today
@@ -180,6 +181,25 @@ sub calculate {
 # extract parameters
 	my $dbh = C4::Context->dbh;
 
+    # check parameters
+    my @valid_names = qw(categorycode zipcode branchcode sex sort1 sort2);
+    my @attribute_types = C4::Members::AttributeTypes::GetAttributeTypes;
+    if ($line =~ /^patron_attr\.(.*)/) {
+        my $attribute_type = $1;
+        return unless (grep {$attribute_type eq $_->{code}} @attribute_types);
+    } else {
+        return unless (grep /^$line$/, @valid_names);
+    }
+    if ($column =~ /^patron_attr\.(.*)/) {
+        my $attribute_type = $1;
+        return unless (grep {$attribute_type eq $_->{code}} @attribute_types);
+    } else {
+        return unless (grep /^$column$/, @valid_names);
+    }
+    return if ($digits and $digits !~ /^\d+$/);
+    return if ($status and (grep /^$status$/, qw(debarred gonenoaddress lost)) == 0);
+    return if ($activity and (grep /^$activity$/, qw(active nonactive)) == 0);
+
     # Filters
     my $linefilter;
     given ($line) {
@@ -206,7 +226,7 @@ sub calculate {
     }
 
     my @loopfilter;
-    for (my $i = 0; $i <= scalar @$filters; $i++) {
+    foreach my $i (0 .. scalar @$filters) {
         my %cell;
         if ( @$filters[$i] ) {
             if ($i == 3 or $i == 4) {
@@ -248,7 +268,7 @@ sub calculate {
 	my $linefield;
 
     my $line_attribute_type;
-    if ($line  =~/^patron_attr.(.*)$/) {
+    if ($line  =~/^patron_attr\.(.*)$/) {
         $line_attribute_type = $1;
         $line = 'borrower_attributes.attribute';
     }
@@ -304,11 +324,11 @@ sub calculate {
         $column = 'borrower_attributes.attribute';
     }
 
-	if (($column =~/zipcode/) and ($digits)) {
-		$colfield = "left($column,$digits)";
-	} else {
-		$colfield = $column;
-	}
+    if (($column =~/zipcode/) and ($digits)) {
+        $colfield = "left($column,$digits)";
+    } else {
+        $colfield = $column;
+    }
 
     my $strsth2;
     my @strparams2; # bind parameters for the query
