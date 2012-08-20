@@ -70,9 +70,11 @@ sub new {
     $self->{cp}              = `which cp`;
     $self->{msgmerge}        = `which msgmerge`;
     $self->{xgettext}        = `which xgettext`;
+    $self->{sed}             = `which sed`;
     chomp $self->{cp};
     chomp $self->{msgmerge};
     chomp $self->{xgettext};
+    chomp $self->{sed};
 
     # Get all .pref file names
     opendir my $fh, $self->{path_pref_en};
@@ -415,6 +417,7 @@ sub create_tmpl {
 sub create_messages {
     my $self = shift;
 
+    print "Create messages ($self->{lang})\n" if $self->{verbose};
     system
         "$self->{cp} $self->{domain}.pot " .
         "$self->{path_po}/$self->{lang}-$self->{domain}.po";
@@ -423,10 +426,13 @@ sub create_messages {
 sub update_messages {
     my $self = shift;
 
-    system
-        "$self->{msgmerge} -U " .
-        "$self->{path_po}/$self->{lang}-$self->{domain}.po " .
-        "$self->{domain}.pot";
+    my $pofile = "$self->{path_po}/$self->{lang}-$self->{domain}.po";
+    print "Update messages ($self->{lang})\n" if $self->{verbose};
+    if ( not -f $pofile ) {
+        print "File $pofile does not exist\n" if $self->{verbose};
+        $self->create_messages();
+    }
+    system "$self->{msgmerge} -U $pofile $self->{domain}.pot";
 }
 
 sub extract_messages {
@@ -458,6 +464,19 @@ sub extract_messages {
     if (system($xgettext_cmd) != 0) {
         die "system call failed: $xgettext_cmd";
     }
+
+    if ( -f "$Bin/$self->{domain}.pot" ) {
+        my $replace_charset_cmd = "$self->{sed} --in-place " .
+            "$Bin/$self->{domain}.pot " .
+            "--expression='s/charset=CHARSET/charset=UTF-8/'";
+        if (system($replace_charset_cmd) != 0) {
+            die "system call failed: $replace_charset_cmd";
+        }
+    } else {
+        print "No messages found\n" if $self->{verbose};
+        return;
+    }
+    return 1;
 }
 
 sub remove_pot {
@@ -486,14 +505,14 @@ sub get_all_langs {
 sub update {
     my ($self, $files) = @_;
     my @langs = $self->{lang} ? ($self->{lang}) : $self->get_all_langs();
-    $self->extract_messages();
+    my $extract_ok = $self->extract_messages();
     for my $lang ( @langs ) {
         $self->set_lang( $lang );
         $self->update_tmpl($files) unless $self->{pref_only};
         $self->update_prefs();
-        $self->update_messages();
+        $self->update_messages() if $extract_ok;
     }
-    $self->remove_pot();
+    $self->remove_pot() if $extract_ok;
 }
 
 
@@ -502,9 +521,10 @@ sub create {
     return unless $self->{lang};
     $self->create_tmpl($files) unless $self->{pref_only};
     $self->create_prefs();
-    $self->extract_messages();
-    $self->create_messages();
-    $self->remove_pot();
+    if ($self->extract_messages()) {
+        $self->create_messages();
+        $self->remove_pot();
+    }
 }
 
 
