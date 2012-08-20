@@ -48,13 +48,13 @@ sub _init {
         $self->{day_month_closed_days}->{ $tuple->{day} }->{ $tuple->{month} } =
           1;
     }
+
     my $special = $dbh->prepare(
-'SELECT day, month, year, title, description FROM special_holidays WHERE ( branchcode = ? ) AND (isexception = ?)'
+'SELECT day, month, year FROM special_holidays WHERE branchcode = ? AND isexception = ?'
     );
     $special->execute( $branch, 1 );
     my $dates = [];
-    while ( my ( $day, $month, $year, $title, $description ) =
-        $special->fetchrow ) {
+    while ( my ( $day, $month, $year ) = $special->fetchrow ) {
         push @{$dates},
           DateTime->new(
             day       => $day,
@@ -65,10 +65,10 @@ sub _init {
     }
     $self->{exception_holidays} =
       DateTime::Set->from_datetimes( dates => $dates );
-    $special->execute( $branch, 1 );
+
+    $special->execute( $branch, 0 );
     $dates = [];
-    while ( my ( $day, $month, $year, $title, $description ) =
-        $special->fetchrow ) {
+    while ( my ( $day, $month, $year ) = $special->fetchrow ) {
         push @{$dates},
           DateTime->new(
             day       => $day,
@@ -78,8 +78,8 @@ sub _init {
           )->truncate( to => 'day' );
     }
     $self->{single_holidays} = DateTime::Set->from_datetimes( dates => $dates );
-    $self->{days_mode} = C4::Context->preference('useDaysMode');
-    $self->{test} = 0;
+    $self->{days_mode}       = C4::Context->preference('useDaysMode');
+    $self->{test}            = 0;
     return;
 }
 
