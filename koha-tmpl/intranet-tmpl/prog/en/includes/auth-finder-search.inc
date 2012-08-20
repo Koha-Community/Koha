@@ -179,17 +179,17 @@ function finderjumpfull(page)
                 <label for="relationship">Special relationship: </label>
                 <select name="relationship" id="relationship">
                     [% selected=relationship %]
-                    [% PROCESS selectoption value='' text='None specified' %]
-                    [% PROCESS selectoption value='a' text='a - Earlier heading' %]
-                    [% PROCESS selectoption value='b' text='b - Later heading' %]
-                    [% PROCESS selectoption value='d' text='d - Acronym' %]
-                    [% PROCESS selectoption value='f' text='f - Musical composition' %]
-                    [% PROCESS selectoption value='g' text='g - Broader term' %]
-                    [% PROCESS selectoption value='h' text='h - Narrower term' %]
-                    [% PROCESS selectoption value='i' text='i - Reference instruction phrase in subfield $i' %]
-                    [% PROCESS selectoption value='n' text='n - Not applicable' %]
-                    [% PROCESS selectoption value='r' text='r - Relationship designation in $i or $4' %]
-                    [% PROCESS selectoption value='t' text='t - Immediate parent body' %]
+                    [% PROCESS selectoptionopen value='' %]None specified</option>
+                    [% PROCESS selectoptionopen value='a' %]a - Earlier heading</option>
+                    [% PROCESS selectoptionopen value='b' %]b - Later heading</option>
+                    [% PROCESS selectoptionopen value='d' %]d - Acronym</option>
+                    [% PROCESS selectoptionopen value='f' %]f - Musical composition</option>
+                    [% PROCESS selectoptionopen value='g' %]g - Broader term</option>
+                    [% PROCESS selectoptionopen value='h' %]h - Narrower term</option>
+                    [% PROCESS selectoptionopen value='i' %]i - Reference instruction phrase in subfield $i</option>
+                    [% PROCESS selectoptionopen value='n' %]n - Not applicable</option>
+                    [% PROCESS selectoptionopen value='r' %]r - Relationship designation in $i or $4</option>
+                    [% PROCESS selectoptionopen value='t' %]t - Immediate parent body</option>
                 </select>
             </li>
             </ol>
