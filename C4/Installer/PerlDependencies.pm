@@ -709,6 +709,16 @@ our $PERL_DEPS = {
         required   => 1,
         min_ver    => '2.125',
     },
+    'Locale::Maketext' => {
+        'usage'    => 'Core',
+        'required' => '1',
+        'min_ver'  => '1.19',
+    },
+    'Locale::Maketext::Lexicon' => {
+        'usage'    => 'Core',
+        'required' => '1',
+        'min_ver'  => '0.91',
+    },
 };
 
 1;
