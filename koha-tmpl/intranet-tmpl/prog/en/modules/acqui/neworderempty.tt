@@ -134,13 +134,16 @@ $(document).ready(function()
         });
         [% END %]
         
+        //keep a copy of all budgets before removing the inactives
+        disabledBudgetsCopy = $('#budget_id').html();
+        $('#budget_id .b_inactive').remove();
+
         $('#showallbudgets').click(function() {
-            if ( $('#budget_id .b_inactive').is(":visible") )
-            {
-            $('#budget_id .b_inactive').hide();
+            if ($(this).is(":checked")) {
+                $('#budget_id').html(disabledBudgetsCopy); //Puts back all the funds
             }
             else {
-            $('#budget_id .b_inactive').show();
+                $('#budget_id .b_inactive').remove();
             }
         });
     });
@@ -388,7 +391,7 @@ $(document).ready(function()
                         <option value="[% budget_loo.b_id %]" selected="selected">[% budget_loo.b_txt %]</option>
                     [% ELSE %]
                         [% IF ( budget_loo.b_active ) %]<option value="[% budget_loo.b_id %]">[% budget_loo.b_txt %]</option>
-                        [% ELSE %]<option value="[% budget_loo.b_id %]" class="b_inactive" style="display : none;">[% budget_loo.b_txt %]</option>    
+                        [% ELSE %]<option value="[% budget_loo.b_id %]" class="b_inactive">[% budget_loo.b_txt %]</option>
                         [% END %]
                     [% END %]
                 [% END %]
