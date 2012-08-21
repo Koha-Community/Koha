@@ -770,7 +770,7 @@ CREATE TABLE `deleteditems` (
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- date and time this item was last altered
   `location` varchar(80) default NULL, -- authorized value for the shelving location for this item (MARC21 952$c)
   `permanent_location` varchar(80) default NULL, -- linked to the CART and PROC temporary locations feature, stores the permanent shelving location
-  `onloan` date default NULL, -- defines if this item is currently checked out (1 for yes, 0 for no)
+  `onloan` date default NULL, -- defines if item is checked out (NULL for not checked out, and checkout date for checked out)
   `cn_source` varchar(10) default NULL, -- classification source used on this item (MARC21 952$2)
   `cn_sort` varchar(30) default NULL, -- normalized form of the call number (MARC21 952$o) used for sorting
   `ccode` varchar(10) default NULL, -- authorized value for the collection code associated with this item (MARC21 952$8)
@@ -1038,7 +1038,7 @@ CREATE TABLE `items` ( -- holdings/item information
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- date and time this item was last altered
   `location` varchar(80) default NULL, -- authorized value for the shelving location for this item (MARC21 952$c)
   `permanent_location` varchar(80) default NULL, -- linked to the CART and PROC temporary locations feature, stores the permanent shelving location
-  `onloan` date default NULL, -- defines if this item is currently checked out (1 for yes, 0 for no)
+  `onloan` date default NULL, -- defines if item is checked out (NULL for not checked out, and checkout date for checked out)
   `cn_source` varchar(10) default NULL, -- classification source used on this item (MARC21 952$2)
   `cn_sort` varchar(30) default NULL,  -- normalized form of the call number (MARC21 952$o) used for sorting
   `ccode` varchar(10) default NULL, -- authorized value for the collection code associated with this item (MARC21 952$8)
