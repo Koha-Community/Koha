@@ -63,7 +63,9 @@ $.tablesorter.addParser({
             .click(function(){
               $("#myform").submit();
               return false;
-            });[% END %]
+            });
+            enableCheckboxActions();
+            [% END %]
        });
 
       function Check(f) {
