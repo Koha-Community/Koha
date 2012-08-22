@@ -206,13 +206,14 @@ if ( $op eq 'delete_confirm' ) {
         }
     }
 #if the basket is closed,and the user has the permission to edit basketgroups, display a list of basketgroups
-    my $basketgroups;
+    my ($basketgroup, $basketgroups);
     my $member = GetMember(borrowernumber => $loggedinuser);
     if ($basket->{closedate} && haspermission({ acquisition => 'group_manage'} )) {
         $basketgroups = GetBasketgroups($basket->{booksellerid});
         for my $bg ( @{$basketgroups} ) {
             if ($basket->{basketgroupid} && $basket->{basketgroupid} == $bg->{id}){
                 $bg->{default} = 1;
+                $basketgroup = $bg;
             }
         }
         my %emptygroup = ( id   =>   undef,
@@ -339,6 +340,7 @@ if ( $op eq 'delete_confirm' ) {
         currency             => $cur->{'currency'},
         listincgst           => $bookseller->{listincgst},
         basketgroups         => $basketgroups,
+        basketgroup          => $basketgroup,
         grouped              => $basket->{basketgroupid},
         unclosable           => @orders ? 0 : 1, 
         has_budgets          => $has_budgets,
