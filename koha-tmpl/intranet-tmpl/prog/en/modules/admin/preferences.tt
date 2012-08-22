@@ -6,8 +6,12 @@
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/humanmsg.css" />
 <script src="[% themelang %]/lib/jquery/plugins/humanmsg.js" type="text/javascript"></script>
 <script src="[% themelang %]/js/ajax.js" type="text/javascript"></script>
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.fixFloat.js"></script>
 <script type="text/javascript">
 //<![CDATA[
+    [% UNLESS ( searchfield ) %]$(document).ready(function(){
+            $('#toolbar').fixFloat();
+        });[% END %]
     // This is here because of its dependence on template variables, everything else should go in js/pages/preferences.js - jpw
     var to_highlight = "[% searchfield |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]";
     var search_jumped = [% IF ( search_jumped ) %]true[% ELSE %]false[% END %];
@@ -49,6 +53,7 @@
     <div class="prefs-tab">
     <h2>[% TAB.tab_title %] preferences</h2>
     <form action="/cgi-bin/koha/admin/preferences.pl" method="post">
+        [% UNLESS ( searchfield ) %]<div id="toolbar"><button class="save-all submit" type="submit">Save all [% TAB.tab_title %] preferences</button></div>[% END %]
         <input type="hidden" name="op" value="save" />
         <input type="hidden" name="tab" value="[% TAB.tab %]" />
 
