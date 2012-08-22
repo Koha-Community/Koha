@@ -1,0 +1,231 @@
+RELEASE NOTES FOR KOHA 3.6.8
+22 Aug 2012
+========================================================================
+
+Koha is the first free and open source software library automation package 
+(ILS). Development is sponsored by libraries of varying types and sizes, 
+volunteers, and support companies from around the world.  
+The website for the Koha project is 
+
+    http://koha-community.org/
+
+Koha 3.6.8 can be downloaded from:
+
+    http://download.koha-community.org/koha-3.06.08.tar.gz
+
+Installation instructions can be found at:
+
+    http://wiki.koha-community.org/wiki/Installation_Documentation
+    
+    OR in the INSTALL files that come in the tarball
+
+Koha 3.6.8 is a bugfix/maintenance release.
+
+Highlights of 3.6.8
+======================
+
+7329	critical	The "undo import into catalog" command deletes items onloan without checking
+7834	critical	order search at the top of acq does nothing
+8289	critical	Upgrading from 2.2 does not work anymore
+2505	major		enable Perl warnings in all modules and scripts
+8315	major		fix 'C4::Output 3.02' errors in Koha
+
+
+Bugs fixed in 3.6.8
+======================
+
+4838	normal		Repeated authority headings break biblio record data entry form
+6634	normal		manager_id not populated when paying fines
+6720	normal		Saved authorities always show as 'Default'
+7586	normal		Search: Language restriction does  NOT show expected results (no items shown)
+7807	normal		GetSuggestionFromBiblionumber takes only one parameter
+7886	normal		C4/ShelfBrowser slow SQL performance
+7900	normal		Link to vendor from subscription details is broken
+7952	normal		PDF::Reuse under plack writes to console STDOUT instead to browser
+8136	normal		Changes the expected lenght of 100$a in rebuild_zebra.pl
+8171	normal		Improper escaping of quotes during z39.50 queries leads to broken html
+8197	normal		Software error when you have cleaned cookies in your browser and try to past the url to opac-topissues.pl
+8226	normal		'OpacFooter' markup/css improvements
+8282	normal		Bug in modules list in about.pl
+5312	minor	XHTML correction in authority summary
+6141	minor	html glitches causing problems to translator
+6679	minor	Fixing code so it passes basic Perl::Critic tests
+7815	minor	Order pickup library list by name rather than by code
+8009	minor	Item descriptive data not populated on pay.pl
+8166	minor	Adding new currencies & exchange rates if not fill any field it save blank record
+8191	minor	New value for 8 position in coded data field 100 in unimarc
+8232	minor	Comments in OPAC contain untranslatable javascript messages
+6350	trivial	Bug for tracking updates to the history file
+7143	trivial	Bug for tracking changes to the about page
+7367	trivial	General OPAC typo omnibus
+7368	trivial	General staff client typo omnibus
+7994	trivial	Syntax error in yaml (syspref) files
+8222	trivial	The zip code field is mandatory by default
+8138	enhancement	Add 773$t field to xslt
+8216	enhancement	Enable critic tests on SIP modules
+
+
+New sysprefs in 3.6.8
+======================
+
+  * BorrowerMandatoryField
+
+
+System requirements
+======================
+
+    Important notes:
+    
+    * Perl 5.10 is required
+    * Zebra is required
+
+
+Documentation
+======================
+
+As of Koha 3.2, the Koha manual is now maintained in DocBook.  The
+home page for Koha documentation is 
+
+    http://koha-community.org/documentation/
+
+As of the date of these release notes, only the English version of the
+Koha manual is available:
+
+    http://manual.koha-community.org/3.6/en/
+
+The Git repository for the Koha manual can be found at
+
+    http://git.koha-community.org/gitweb/?p=kohadocs.git;a=summary
+
+Translations
+======================
+
+Complete or near-complete translations of the OPAC and staff
+interface are available in this release for the following languages:
+
+  * Arabic (51%)
+  * Chinese (China) (96%)
+  * Chinese (Taiwan) (99%)
+  * Danish (100%)
+  * English (New Zealand) (100%)
+  * English (USA)
+  * English (United Kingdom) (64%)
+  * French (99%)
+  * French (Canada) (95%)
+  * German (100%)
+  * Greek (94%)
+  * Italian (100%)
+  * Norwegian Bokmål (62%)
+  * Portuguese (Brazil) (99%)
+  * Spanish (100%)
+  * Tetun (52%)
+
+Partial translations are available for various other languages.
+
+The Koha team welcomes additional translations; please see
+
+    http://wiki.koha-community.org/wiki/Translating_Koha
+
+for information about translating Koha, and join the koha-translate 
+list to volunteer:
+
+    http://lists.koha-community.org/cgi-bin/mailman/listinfo/koha-translate
+
+The most up-to-date translations can be found at:
+
+    http://translate.koha-community.org/
+
+Release Team
+======================
+
+The release team for Koha 3.6 is
+
+Release Manager:        Chris Cormack <chrisc@catalyst.net.nz>
+Documentation Manager:  Nicole C Engard <nengard@gmail.com>
+Translation Manager:    Frédéric Demians <frederic@tamil.fr>
+QA Manager:             Ian Walls <ian.walls@bywatersolutions.com>
+Bug Wranglers:          MJ Ray, Marcel de Rooy, Paul Poulain, Mason James
+
+Past Release Maintainer (3.6.x):
+                        Chris Nighswonger <cnighswonger@foundations.edu>
+Release Maintainer (3.6.x):
+                        Jared Camins-Esakov <jcamins@cpbibliography.com>
+
+Credits
+======================
+
+
+We thank the following individuals who contributed patches to Koha 3.6.8.
+     1	D Ruth Bavousett
+     3	Jared Camins-Esakov
+     3	Colin Campbell
+     4	Chris Cormack
+     1	Christophe Croullebois
+     2	Frédéric Demians
+     1	Jonathan Druart
+     3	Katrin Fischer
+     1	Amit Gupta
+     1	Kyle M Hall
+     2	Claire Hernandez
+     2	Mason James
+     1	Srdjan Jankovic
+     1	Owen Leonard
+     1	Julian Maurice
+     1	Matthias Meusburger
+     4	Sophie Meynieux
+     3	Dobrica Pavlinusic
+     1	Maxime Pelletier
+     4	Paul Poulain
+     3	Marcel de Rooy
+     1	Fridolyn SOMERS
+     1	Robin Sheat
+     1	Marc Veron
+     2	christophe croullebois
+
+
+We also especially thank the following individuals who tested patches
+for Koha 3.6.8.
+
+     51 Jared Camins-Esakov
+      1 François Charbonnier
+     41 Chris Cormack
+      2 Michael Davis
+      5 Katrin Fischer
+      1 Marijana Glavica
+      3 Kyle M Hall
+      1 Owen Leonard
+      1 Sophie Meynieux
+     31 Paul Poulain
+      2 Martin Renvoize
+      3 Marcel de Rooy
+      1 Robin Sheat
+      2 Marc Veron
+      1 Stacey Walker
+
+We regret any omissions.  If a contributor has been inadvertantly missed,
+please send a patch against these release notes to 
+koha-patches@lists.koha-community.org.
+
+Revision control notes
+======================
+
+The Koha project uses Git for version control.  The current development 
+version of Koha can be retrieved by checking out the master branch of 
+
+    git://git.koha-community.org/koha.git
+
+The branch for this version of Koha and future bugfixes in this release
+line is 3.6.x.
+
+The last Koha release was 3.8.2, which was released on June 22, 2012.
+
+Bugs and feature requests
+======================
+
+Bug reports and feature requests can be filed at the Koha bug
+tracker at
+
+    http://bugs.koha-community.org/
+
+
+Ehara taku toa i te toa takitahi, engari he toa takitini 
