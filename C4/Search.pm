@@ -1101,7 +1101,8 @@ sub buildQuery {
         my $q=$';
         # This is needed otherwise ccl= and &limit won't work together, and
         # this happens when selecting a subject on the opac-detail page
-        if (@limits) {
+        @limits = grep {!/^$/} @limits;
+        if ( @limits ) {
             $q .= ' and '.join(' and ', @limits);
         }
         return ( undef, $q, $q, "q=ccl=$q", $q, '', '', '', '', 'ccl' );
@@ -1318,6 +1319,7 @@ sub buildQuery {
     my %group_OR_limits;
     my $availability_limit;
     foreach my $this_limit (@limits) {
+        next unless $this_limit;
         if ( $this_limit =~ /available/ ) {
 #
 ## 'available' is defined as (items.onloan is NULL) and (items.itemlost = 0)
