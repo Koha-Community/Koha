@@ -47,6 +47,7 @@ use warnings;
 use CGI qw ( -utf8 );
 use C4::Auth;
 use C4::Serials; # GetExpirationDate
+use C4::Branch;
 use C4::Output;
 use C4::Context;
 use C4::Dates qw/format_date format_date_in_iso/;
@@ -54,7 +55,7 @@ use Date::Calc qw/Today Date_to_Days/;
 
 my $query = new CGI;
 
-my ( $template, $loggedinuser, $cookie ) = get_template_and_user (
+my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user (
     {
         template_name   => "serials/checkexpiration.tt",
         query           => $query,
@@ -67,6 +68,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user (
 
 my $title = $query->param('title');
 my $issn  = $query->param('issn');
+my $branch = $query->param('branch');
 my $date  = format_date_in_iso($query->param('date'));
 
 if ($date) {
@@ -76,12 +78,18 @@ if ($date) {
     foreach my $subscription ( @subscriptions ) {
         my $subscriptionid = $subscription->{'subscriptionid'};
         my $expirationdate = GetExpirationDate($subscriptionid);
-
         $subscription->{expirationdate} = $expirationdate;
         next if $expirationdate !~ /\d{4}-\d{2}-\d{2}/; # next if not in ISO format.
         next if $subscription->{closed};
+        if (   ( ref $flags->{serials} and $flags->{serials}->{superserials} )
+            or ( !ref $flags->{serials} and $flags->{serials} == 1 ) )
+        {
+            $subscription->{cannotedit} = 0;
+        }
+        next if $subscription->{cannotedit};
         if ( Date_to_Days(split "-",$expirationdate) < Date_to_Days(split "-",$date) &&
-			 Date_to_Days(split "-",$expirationdate) > Date_to_Days(&Today) ) {
+             Date_to_Days(split "-",$expirationdate) > Date_to_Days(&Today) &&
+             ( !$branch || ($subscription->{'branchcode'} eq $branch) ) ) {
             $subscription->{expirationdate}=format_date($subscription->{expirationdate});
             push @subscriptions_loop,$subscription;
         }
@@ -96,7 +104,33 @@ if ($date) {
         "BiblioDefaultView".C4::Context->preference("BiblioDefaultView") => 1,
     );
 }
+
+my $branchname;
+my @branches_loop;
+if (   $flags->{superlibrarian}
+    or ( ref $flags->{serials}  and $flags->{serials}->{superserials} )
+    or ( !ref $flags->{serials} and $flags->{serials} == 1 ) )
+{
+    my $branches = GetBranches();
+    foreach my $b (sort keys %$branches) {
+        my $selected = 0;
+        if( $branch and $branch eq $b ){
+            $selected = 1;
+            $branchname = $branches->{$b}->{branchname};
+        }
+        push @branches_loop, {
+            branchcode => $b,
+            branchname => $branches->{$b}->{branchname},
+            selected   => $selected,
+        };
+    }
+}
+
 $template->param (
-    (uc(C4::Context->preference("marcflavour"))) => 1
+    (uc(C4::Context->preference("marcflavour"))) => 1,
+    branches_loop   => \@branches_loop,
+    branchcode      => $branch,
+    branchname      => $branchname,
 );
+
 output_html_with_http_headers $query, $cookie, $template->output;

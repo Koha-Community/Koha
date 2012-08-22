@@ -51,6 +51,22 @@
 
         <li><label for="issn">ISSN:</label>
         <input id="issn" type="text" name="issn" size="15" value="[% issn %]" /></li>
+        [% IF (branches_loop.size) %]
+        <li><label for="branch">Branch:</label>
+        <select id="branch" name="branch">
+            <option value="">All</option>
+            [% FOREACH branch IN branches_loop %]
+                [% IF branch.selected %]
+                    <option selected="selected" value="[% branch.branchcode %]">
+                [% ELSE %]
+                    <option value="[% branch.branchcode %]">
+                [% END %]
+                    [% branch.branchname %]
+                </option>
+            [% END %]
+        </select>
+        </li>
+        [% END %]
 
         <li><label for="date" class="required" title="Required field">Expiring before:</label>
         <input id="date" type="text" name="date" size="10" value="[% date %]" class="focus datepicker" />
