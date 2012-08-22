@@ -23,7 +23,9 @@
 
         var manageorders = [
             [% IF ( CAN_user_acquisition_order_manage ) %]
+              [% IF (active) %]
                 { text: _("New basket"), url: "/cgi-bin/koha/acqui/basketheader.pl?booksellerid=[% booksellerid %]&op=add_form"},
+              [% END %]
                 { text: _("Baskets"), url: "/cgi-bin/koha/acqui/booksellers.pl?booksellerid=[% booksellerid %]"},
                 { text: _("Basket groups"), url: "/cgi-bin/koha/acqui/basketgroup.pl?booksellerid=[% booksellerid %]"},
             [% END %]
@@ -52,7 +54,7 @@
                 [% END %]
                 <li><a id="newcontract" href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&amp;booksellerid=[% booksellerid %]">New contract</a></li>
                 <li><a id="editcontracts" href="/cgi-bin/koha/admin/aqcontract.pl?booksellerid=[% booksellerid %]">Contracts</a></li>
-                [% UNLESS ( basketcount ) %]
+                [% IF (active && !basketcount) %]
                     <li><a id="newbasket" href="/cgi-bin/koha/acqui/basketheader.pl?booksellerid=[% booksellerid %]&amp;op=add_form">New basket</a></li>
                 [% END %]
             [% END %]
