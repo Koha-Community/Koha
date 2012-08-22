@@ -179,6 +179,7 @@ $(document).ready(function() {
 <h1>Serial edition <i>[% bibliotitle %]</i>
 	[% IF location %] ( [% location %] ) [% END %]
     [% IF ( callnumber ) %] callnumber: [% callnumber %][% END %]</h1>
+[% IF internalnotes %]<p>Nonpublic note: [% internalnotes %]</p>[% END %]
 <form method="post" name="f" action="serials-edit.pl" id="serials_edit">
 <!--onsubmit="return barcode_check()">-->
 
