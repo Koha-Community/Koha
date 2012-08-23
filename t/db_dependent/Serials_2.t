@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use Modern::Perl;
 
-use Test::More tests => 36;
+use Test::More tests => 46;
 
 use MARC::Record;
 
@@ -65,6 +65,7 @@ my $subscriptionid_from_another_branch = NewSubscription(
 
 my $subscription_from_my_branch = GetSubscription( $subscriptionid_from_my_branch );
 is( C4::Serials::can_edit_subscription($subscription_from_my_branch), 0, "cannot edit a subscription without userenv set");
+is( C4::Serials::can_claim_subscription($subscription_from_my_branch), 0, "cannot edit a subscription without userenv set");
 
 my $userid = 'my_userid';
 my $borrowernumber = C4::Members::AddMember(
@@ -80,6 +81,7 @@ $userenv = { flags => 1, id => $borrowernumber, branch => '' };
 # Can edit a subscription
 
 is( C4::Serials::can_edit_subscription($subscription_from_my_branch), 1, "User can edit a subscription with an empty branchcode");
+is( C4::Serials::can_claim_subscription($subscription_from_my_branch), 1, "User can edit a subscription with an empty branchcode");
 
 my $subscription_from_another_branch = GetSubscription( $subscriptionid_from_another_branch );
 
@@ -101,6 +103,13 @@ is( C4::Serials::can_show_subscription($subscription_from_my_branch), 1,
 is( C4::Serials::can_show_subscription($subscription_from_another_branch), 1,
 "With IndependentBranches, superlibrarian can show a subscription from another branch"
 );
+is( C4::Serials::can_claim_subscription($subscription_from_my_branch), 1,
+"With IndependentBranches, superlibrarian can claim a subscription from his branch"
+);
+is( C4::Serials::can_claim_subscription($subscription_from_another_branch), 1,
+"With IndependentBranches, superlibrarian can claim a subscription from another branch"
+);
+
 
 set_flags( 'superserials', $borrowernumber );
 is( C4::Serials::can_edit_subscription($subscription_from_my_branch), 1,
@@ -115,6 +124,13 @@ is( C4::Serials::can_show_subscription($subscription_from_my_branch), 1,
 is( C4::Serials::can_show_subscription($subscription_from_another_branch), 1,
 "With IndependentBranches, superserials can show a subscription from another branch"
 );
+is( C4::Serials::can_claim_subscription($subscription_from_my_branch), 1,
+"With IndependentBranches, superserials can claim a subscription from his branch"
+);
+is( C4::Serials::can_claim_subscription($subscription_from_another_branch), 1,
+"With IndependentBranches, superserials can claim a subscription from another branch"
+);
+
 
 
 set_flags( 'edit_subscription', $borrowernumber );
@@ -130,6 +146,13 @@ is( C4::Serials::can_show_subscription($subscription_from_my_branch), 1,
 is( C4::Serials::can_show_subscription($subscription_from_another_branch), 0,
 "With IndependentBranches, show_subscription cannot show a subscription from another branch"
 );
+is( C4::Serials::can_claim_subscription($subscription_from_my_branch), 0,
+"With IndependentBranches, claim_subscription cannot claim a subscription from his branch with the edit_subscription permission"
+);
+is( C4::Serials::can_claim_subscription($subscription_from_another_branch), 0,
+"With IndependentBranches, claim_subscription cannot claim a subscription from another branch"
+);
+
 
 set_flags( 'renew_subscription', $borrowernumber );
 is( C4::Serials::can_edit_subscription($subscription_from_my_branch), 0,
@@ -145,6 +168,13 @@ is( C4::Serials::can_show_subscription($subscription_from_another_branch), 0,
 "With IndependentBranches, renew_subscription cannot show a subscription from another branch"
 );
 
+set_flags( 'claim_serials', $borrowernumber );
+is( C4::Serials::can_claim_subscription($subscription_from_my_branch), 1,
+"With IndependentBranches, claim_subscription can claim a subscription from his branch with the edit_subscription permission"
+);
+is( C4::Serials::can_claim_subscription($subscription_from_another_branch), 0,
+"With IndependentBranches, claim_subscription cannot claim a subscription from another branch"
+);
 
 # Branches are not independent
 t::lib::Mocks::mock_preference( "IndependentBranches", 0 );

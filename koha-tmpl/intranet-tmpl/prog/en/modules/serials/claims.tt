@@ -230,7 +230,11 @@
                 </tfoot>
                 <tbody>[% FOREACH missingissue IN missingissues %]
                     <tr>
-                        <td><input type="checkbox" name="serialid" value="[% missingissue.serialid %]" /></td>
+                        <td>
+                          [% UNLESS missingissue.cannot_claim %]
+                            <input type="checkbox" name="serialid" value="[% missingissue.serialid %]" />
+                          [% END %]
+                        </td>
                         <td>[% missingissue.name %]</td>
                         <td>
                             <span class="branch-[% missingissue.branchcode %]">[% Branches.GetName( missingissue.branchcode ) %]</span>

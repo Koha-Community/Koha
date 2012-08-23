@@ -2718,6 +2718,19 @@ sub subscriptionCurrentlyOnOrder {
     return $sth->fetchrow_array;
 }
 
+=head2 can_claim_subscription
+
+    $can = can_claim_subscription( $subscriptionid[, $userid] );
+
+Return 1 if the subscription can be claimed by the current logged user (or a given $userid), else 0.
+
+=cut
+
+sub can_claim_subscription {
+    my ( $subscription, $userid ) = @_;
+    return _can_do_on_subscription( $subscription, $userid, 'claim_serials' );
+}
+
 =head2 can_edit_subscription
 
     $can = can_edit_subscription( $subscriptionid[, $userid] );

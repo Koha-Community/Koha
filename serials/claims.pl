@@ -94,6 +94,10 @@ my $letters = GetLetters({ module => 'claimissues' });
 my @missingissues;
 if ($supplierid) {
     @missingissues = GetLateOrMissingIssues($supplierid);
+    foreach my $issue (@missingissues) {
+        $issue->{cannot_claim} = 1
+          unless C4::Serials::can_claim_subscription($issue);
+    }
 }
 
 $template->param(
