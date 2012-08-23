@@ -92,8 +92,8 @@
 	}
 	// Filter by date
 	function filterByDate() {
-	    var beginDate = Date_from_syspref($("#begindate").val()).getTime();
-	    var endDate   = Date_from_syspref($("#enddate").val()).getTime();
+        var beginDate = Date_from_syspref($("#from").val()).getTime();
+        var endDate   = Date_from_syspref($("#to").val()).getTime();
 	    
 	    // Checks if the beginning date is valid
 	    if (!parseInt(beginDate)) {

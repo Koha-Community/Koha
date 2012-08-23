@@ -22,8 +22,8 @@ function Check(ff) {
         ok=1;
         _alertString += _("- Name missing") + "\n";
     }
-    var startDate = Date_from_syspref($("#contractstartdate").val());
-    var endDate   = Date_from_syspref($("#contractenddate").val());
+    var startDate = Date_from_syspref($("#from").val());
+    var endDate   = Date_from_syspref($("#to").val());
     if (!parseInt(startDate.getTime())) {
         ok=1;
         _alertString += _("- Start date missing or invalid.") + "\n";
