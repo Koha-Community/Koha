@@ -125,7 +125,7 @@ sub GetBooksellersWithLateOrders {
             )
             AND aqorders.rrp <> 0
             AND aqorders.ecost <> 0
-            AND aqorders.quantity - IFNULL(aqorders.quantityreceived,0) <> 0
+            AND aqorders.quantity - COALESCE(aqorders.quantityreceived,0) <> 0
             AND aqbasket.closedate IS NOT NULL
     ";
     if ( defined $delay ) {

@@ -1795,8 +1795,8 @@ sub GetLateOrders {
     my $having = "";
     if ($dbdriver eq "mysql") {
         $select .= "
-        aqorders.quantity - IFNULL(aqorders.quantityreceived,0)                 AS quantity,
-        (aqorders.quantity - IFNULL(aqorders.quantityreceived,0)) * aqorders.rrp AS subtotal,
+        aqorders.quantity - COALESCE(aqorders.quantityreceived,0)                 AS quantity,
+        (aqorders.quantity - COALESCE(aqorders.quantityreceived,0)) * aqorders.rrp AS subtotal,
         DATEDIFF(CAST(now() AS date),closedate) AS latesince
         ";
         if ( defined $delay ) {
