@@ -47,23 +47,24 @@ $.tablesorter.addParser({
     [% IF ( cancel_result ) %]
         [% FOREACH cancel_result %]
             [% IF ( messagetransfert ) %]
-                <div>
-                    <h2>Hold find for ([% nextreservtitle %]), must be transferred</h2>
-                    <p>This hold placed by : <b> [% nextreservsurname %] [% nextreservfirstname %]</b> at the library : <b> [% branchname %] </b>, Please transfer this hold.
+                <div class="dialog message">
+                    <h2>This item is on hold for pick-up at another library</h2>
+                    <p><strong>[% nextreservtitle %]</strong> is on hold for <strong> [% nextreservsurname %], [% nextreservfirstname %]</strong>.
+                    Please retain this item and check it in to process the hold.
                     </p>
                     <form name="cancelReservewithtransfert" action="waitingreserves.pl" method="post">
-                        <input type="submit" class="button" />
+                        <input type="submit" class="submit" value="OK" />
                     </form>
                 </div>
             [% END %]
             [% IF ( waiting ) %]
-                <div id="bloc25">
-                    <h2>This hold is waiting</h2>
-                    <p>This hold ([% nextreservtitle %]) was placed by <b> : [% nextreservsurname %] [% nextreservfirstname %]</b>,
-                    Please retain this hold.
+                <div class="dialog message">
+                    <h2>This item is on hold for pick-up at your library</h2>
+                    <p><strong>[% nextreservtitle %]</strong> is on hold for <strong>[% nextreservsurname %], [% nextreservfirstname %]</strong>.
+                    Please retain this item and check it in to process the hold.
                     </p>
                     <form name="cancelReservewithwaiting" action="waitingreserves.pl" method="post">
-                        <input type="submit" />
+                        <input type="submit" class="submit" value="OK"/>
                     </form>
                 </div>
             [% END %]
