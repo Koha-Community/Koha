@@ -576,7 +576,7 @@
             <xsl:when test="@ind1=1">
                 <span class="label">Incomplete contents:</span>
             </xsl:when>
-            <xsl:when test="@ind1=1">
+            <xsl:when test="@ind1=2">
                 <span class="label">Partial contents:</span>
             </xsl:when>
             <xsl:otherwise>
