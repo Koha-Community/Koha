@@ -73,20 +73,24 @@
 					[% END %]
 			    </select>
 			</li><li>
-		    	<label for="branch">
+                <label for="branchcode">
 					Library:
 		    	</label>
 		    	<select name="branchcode"  id="branchcode">
 				<option value="">Any library</option>
-    				[% FOREACH branche IN branches %]
-						<option value="[% branche.branchcode %]">[% branche.branchname %]</option>
+                    [% FOREACH branche IN branches %]
+                        [% IF ( branche.selected ) %]
+                            <option value="[% branche.value %]" selected="selected">[% branche.branchname %]</option>
+                        [% ELSE %]
+                            <option value="[% branche.value %]">[% branche.branchname %]</option>
+                        [% END %]
 					[% END %]
 		    	</select>
 
 		    </li>
 		    <li>
 		    	<label for="expired">Include expired subscriptions: </label>
-		    	<input type="checkbox" name="expired" />
+                <input type="checkbox" name="expired" id="expired" />
 		    </li>
 		</ol>
 	</fieldset>
