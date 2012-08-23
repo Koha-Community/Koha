@@ -67,8 +67,11 @@
         <select name="idx">
             <option value="kw">Keyword</option>
             <option value="su,wrdl">Subject</option>
-[% IF ( search_boxes_loo.expanded_options ) %]
+[% IF ( expanded_options ) %]
             <option value="su,phr">&nbsp;&nbsp;&nbsp;&nbsp; Subject phrase</option>
+            <option value="su-br">&nbsp;&nbsp;&nbsp;&nbsp; Subject and broader terms</option>
+            <option value="su-na">&nbsp;&nbsp;&nbsp;&nbsp; Subject and narrower terms</option>
+            <option value="su-rl">&nbsp;&nbsp;&nbsp;&nbsp; Subject and related terms</option>
 [% END %]
             <option value="ti">Title</option>
 [% IF ( expanded_options ) %]

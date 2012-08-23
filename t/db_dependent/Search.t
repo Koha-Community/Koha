@@ -12,7 +12,7 @@ use YAML;
 use C4::Debug;
 require C4::Context;
 
-use Test::More tests => 57;
+use Test::More tests => 78;
 use Test::MockModule;
 use MARC::Record;
 use File::Spec;
@@ -513,6 +513,84 @@ END {
         # Clean up the Zebra files since the child process was just shot
         rmtree $datadir;
     }
+}
+
+# Testing exploding indexes
+my $term;
+my $searchmodule = new Test::MockModule('C4::Search');
+$searchmodule->mock('SimpleSearch', sub {
+    my $query = shift;
+
+    is($query, "Heading,wrdl=$term", "Searching for expected term '$term' for exploding") or return '', [], 0;
+
+    my $record = MARC::Record->new;
+    if ($query =~ m/Arizona/) {
+        $record->add_fields(
+            [ '001', '1234' ],
+            [ '151', ' ', ' ', a => 'Arizona' ],
+            [ '551', ' ', ' ', a => 'United States', w => 'g' ],
+            [ '551', ' ', ' ', a => 'Maricopa County', w => 'h' ],
+            [ '551', ' ', ' ', a => 'Navajo County', w => 'h' ],
+            [ '551', ' ', ' ', a => 'Pima County', w => 'h' ],
+            [ '551', ' ', ' ', a => 'New Mexico' ],
+            );
+    }
+    return '', [ $record->as_usmarc() ], 1;
+});
+
+$term = 'Arizona';
+( $error, $query, $simple_query, $query_cgi,
+$query_desc, $limit, $limit_cgi, $limit_desc,
+$stopwords_removed, $query_type ) = buildQuery([], [ $term ], [ 'su-br' ], [  ], [], 0, 'en');
+matchesExplodedTerms("Advanced search for broader subjects", $query, 'Arizona', 'United States');
+
+( $error, $query, $simple_query, $query_cgi,
+$query_desc, $limit, $limit_cgi, $limit_desc,
+$stopwords_removed, $query_type ) = buildQuery([], [ $term ], [ 'su-na' ], [  ], [], 0, 'en');
+matchesExplodedTerms("Advanced search for narrower subjects", $query, 'Arizona', 'Maricopa County', 'Navajo County', 'Pima County');
+
+( $error, $query, $simple_query, $query_cgi,
+$query_desc, $limit, $limit_cgi, $limit_desc,
+$stopwords_removed, $query_type ) = buildQuery([], [ $term ], [ 'su-rl' ], [  ], [], 0, 'en');
+matchesExplodedTerms("Advanced search for related subjects", $query, 'Arizona', 'United States', 'Maricopa County', 'Navajo County', 'Pima County');
+
+( $error, $query, $simple_query, $query_cgi,
+$query_desc, $limit, $limit_cgi, $limit_desc,
+$stopwords_removed, $query_type ) = buildQuery([], [ "$term", 'history' ], [ 'su-rl', 'kw' ], [  ], [], 0, 'en');
+matchesExplodedTerms("Advanced search for related subjects and keyword 'history' searches related subjects", $query, 'Arizona', 'United States', 'Maricopa County', 'Navajo County', 'Pima County');
+like($query, qr/history/, "Advanced search for related subjects and keyword 'history' searches for 'history'");
+
+( $error, $query, $simple_query, $query_cgi,
+$query_desc, $limit, $limit_cgi, $limit_desc,
+$stopwords_removed, $query_type ) = buildQuery([], [ 'history', "$term" ], [ 'kw', 'su-rl' ], [  ], [], 0, 'en');
+matchesExplodedTerms("Order of terms doesn't matter for advanced search", $query, 'Arizona', 'United States', 'Maricopa County', 'Navajo County', 'Pima County');
+like($query, qr/history/, "Order of terms doesn't matter for advanced search");
+
+( $error, $query, $simple_query, $query_cgi,
+$query_desc, $limit, $limit_cgi, $limit_desc,
+$stopwords_removed, $query_type ) = buildQuery([], [ "su-br:$term" ], [  ], [  ], [], 0, 'en');
+matchesExplodedTerms("Simple search for broader subjects", $query, 'Arizona', 'United States');
+
+( $error, $query, $simple_query, $query_cgi,
+$query_desc, $limit, $limit_cgi, $limit_desc,
+$stopwords_removed, $query_type ) = buildQuery([], [ "su-na:$term" ], [  ], [  ], [], 0, 'en');
+matchesExplodedTerms("Simple search for narrower subjects", $query, 'Arizona', 'Maricopa County', 'Navajo County', 'Pima County');
+
+( $error, $query, $simple_query, $query_cgi,
+$query_desc, $limit, $limit_cgi, $limit_desc,
+$stopwords_removed, $query_type ) = buildQuery([], [ "su-rl:$term" ], [  ], [  ], [], 0, 'en');
+matchesExplodedTerms("Simple search for related subjects", $query, 'Arizona', 'United States', 'Maricopa County', 'Navajo County', 'Pima County');
+
+( $error, $query, $simple_query, $query_cgi,
+$query_desc, $limit, $limit_cgi, $limit_desc,
+$stopwords_removed, $query_type ) = buildQuery([], [ "history and su-rl:$term" ], [  ], [  ], [], 0, 'en');
+matchesExplodedTerms("Simple search for related subjects and keyword 'history' searches related subjects", $query, 'Arizona', 'United States', 'Maricopa County', 'Navajo County', 'Pima County');
+like($query, qr/history/, "Simple search for related subjects and keyword 'history' searches for 'history'");
+
+sub matchesExplodedTerms {
+    my ($message, $query, @terms) = @_;
+    my $match = "(( or )?\\((" . join ('|', map { "su=\"$_\"" } @terms) . ")\\)){" . scalar(@terms) . "}";
+    like($query, qr/$match/, $message);
 }
 
 1;

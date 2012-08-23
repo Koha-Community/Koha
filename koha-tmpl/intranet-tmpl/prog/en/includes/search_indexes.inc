@@ -13,6 +13,11 @@
     <option value="se">&nbsp;&nbsp;&nbsp;&nbsp; Series title</option>
     <option value="su">Subject</option>
     <option value="su,phr">&nbsp;&nbsp;&nbsp;&nbsp; Subject as phrase</option>
+    [% IF ( expanded_options ) %]
+        <option value="su-br">&nbsp;&nbsp;&nbsp;&nbsp; Subject and broader terms</option>
+        <option value="su-na">&nbsp;&nbsp;&nbsp;&nbsp; Subject and narrower terms</option>
+        <option value="su-rl">&nbsp;&nbsp;&nbsp;&nbsp; Subject and related terms</option>
+    [% END %]
     <option value="bc">Barcode</option>
     <option value="location">Shelving location</option>
     <option value="sn">Standard number</option>

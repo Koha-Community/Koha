@@ -34,6 +34,8 @@ use C4::Charset;
 use YAML;
 use URI::Escape;
 use Business::ISBN;
+use MARC::Record;
+use MARC::Field;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $DEBUG);
 
@@ -1029,6 +1031,104 @@ sub getIndexes{
     return \@indexes;
 }
 
+=head2 _handle_exploding_index
+
+    my $query = _handle_exploding_index($index, $term)
+
+Callback routine to generate the search for "exploding" indexes (i.e.
+those indexes which are turned into multiple or-connected searches based
+on authority data).
+
+=cut
+
+sub _handle_exploding_index {
+    my ( $index, $term ) = @_;
+
+    return unless ($index =~ m/(su-br|su-na|su-rl)/ && $term);
+
+    my $marcflavour = C4::Context->preference('marcflavour');
+
+    my $codesubfield = $marcflavour eq 'UNIMARC' ? '5' : 'w';
+    my $wantedcodes = '';
+    my @subqueries = ( "(su=\"$term\")");
+    my ($error, $results, $total_hits) = SimpleSearch( "Heading,wrdl=$term", undef, undef, [ "authorityserver" ] );
+    foreach my $auth (@$results) {
+        my $record = MARC::Record->new_from_usmarc($auth);
+        my @references = $record->field('5..');
+        if (@references) {
+            if ($index eq 'su-br') {
+                $wantedcodes = 'g';
+            } elsif ($index eq 'su-na') {
+                $wantedcodes = 'h';
+            } elsif ($index eq 'su-rl') {
+                $wantedcodes = '';
+            }
+            foreach my $reference (@references) {
+                my $codes = $reference->subfield($codesubfield);
+                push @subqueries, '(su="' . $reference->as_string('abcdefghijlmnopqrstuvxyz') . '")' if (($codes && $codes eq $wantedcodes) || !$wantedcodes);
+            }
+        }
+    }
+    return join(' or ', @subqueries);
+}
+
+=head2 parseQuery
+
+    ( $operators, $operands, $indexes, $limits,
+      $sort_by, $scan, $lang ) =
+            buildQuery ( $operators, $operands, $indexes, $limits, $sort_by, $scan, $lang);
+
+Shim function to ease the transition from buildQuery to a new QueryParser.
+This function is called at the beginning of buildQuery, and modifies
+buildQuery's input. If it can handle the input, it returns a query that
+buildQuery will not try to parse.
+=cut
+
+sub parseQuery {
+    my ( $operators, $operands, $indexes, $limits, $sort_by, $scan, $lang) = @_;
+
+    my @operators = $operators ? @$operators : ();
+    my @indexes   = $indexes   ? @$indexes   : ();
+    my @operands  = $operands  ? @$operands  : ();
+    my @limits    = $limits    ? @$limits    : ();
+    my @sort_by   = $sort_by   ? @$sort_by   : ();
+
+    my $query = $operands[0];
+    my $index;
+    my $term;
+
+# TODO: once we are using QueryParser, all this special case code for
+#       exploded search indexes will be replaced by a callback to
+#       _handle_exploding_index
+    if ( $query =~ m/^(.*)\b(su-br|su-na|su-rl)[:=](\w.*)$/ ) {
+        $query = $1;
+        $index = $2;
+        $term  = $3;
+    } else {
+        $query = '';
+        for ( my $i = 0 ; $i <= @operands ; $i++ ) {
+            if ($operands[$i] && $indexes[$i] =~ m/(su-br|su-na|su-rl)/) {
+                $index = $indexes[$i];
+                $term = $operands[$i];
+            } elsif ($operands[$i]) {
+                $query .= $operators[$i] eq 'or' ? ' or ' : ' and ' if ($query);
+                $query .= "($indexes[$i]:$operands[$i])";
+            }
+        }
+    }
+
+    if ($index) {
+        my $queryPart = _handle_exploding_index($index, $term);
+        if ($queryPart) {
+            $query .= "($queryPart)";
+        }
+        $operators = ();
+        $operands[0] = "ccl=$query";
+    }
+
+    return ( $operators, \@operands, $indexes, $limits, $sort_by, $scan, $lang);
+}
+
 =head2 buildQuery
 
 ( $error, $query,
@@ -1049,6 +1149,8 @@ sub buildQuery {
     my ( $operators, $operands, $indexes, $limits, $sort_by, $scan, $lang) = @_;
 
     warn "---------\nEnter buildQuery\n---------" if $DEBUG;
+
+    ( $operators, $operands, $indexes, $limits, $sort_by, $scan, $lang) = parseQuery($operators, $operands, $indexes, $limits, $sort_by, $scan, $lang);
 
     # dereference
     my @operators = $operators ? @$operators : ();
