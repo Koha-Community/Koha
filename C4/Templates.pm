@@ -360,7 +360,7 @@ sub getlanguage {
     }
 
     # cookie
-    if ( $query->cookie('KohaOpacLanguage') ) {
+    if ($query and $query->cookie('KohaOpacLanguage') ) {
         $lang = $query->cookie('KohaOpacLanguage');
         $lang =~ s/[^a-zA-Z_-]*//; # sanitize cookie
     }

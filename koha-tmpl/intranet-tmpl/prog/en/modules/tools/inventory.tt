@@ -1,30 +1,72 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Inventory</title>
 [% INCLUDE 'doc-head-close.inc' %]
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="[% themelang %]/js/datatables.js"></script>
 [% INCLUDE 'calendar.inc' %]
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
 <script type="text/javascript">
 //<![CDATA[
 $(document).ready(function(){
-	$(".checkall").click(function(){
-	        $(".checkboxed").checkCheckboxes();
-	        return false;
-		});
-	$(".clearall").click(function(){
-	        $(".checkboxed").unCheckCheckboxes();
-	        return false;
-	    });
+
+        inventorydt = $('#inventoryt').dataTable($.extend(true, {}, dataTablesDefaults, {
+            'sPaginationType': 'full_numbers',
+            "aoColumnDefs": [ { "bSortable": false, "aTargets": [ 0 ] } ]
+        } ));
+
+
+    $("#continuewithoutmarkingbutton").click(function(){
+                inventorydt.fnPageChange( 'next' );
+            return false;
+        });
+
+        $("#markseenandcontinuebutton").click(function(){
+            var param = '';
+            $("input:checked").each(function() {
+                param += "|" + $(this).attr('name');
+            });
+            $.post('/cgi-bin/koha/tools/ajax-inventory.pl', { seen: param });
+            inventorydt.fnPageChange( 'next' );
+            return false;
+        });
+
+        $("#markseenandquit").click(function(){
+            var param = '';
+            $("input:checked").each(function() {
+                param += "|" + $(this).attr('name');
+            });
+            $.ajax({
+              type: 'POST',
+              url: '/cgi-bin/koha/tools/ajax-inventory.pl',
+              data: { seen: param},
+              async: false
+            });
+            document.location.href = '/cgi-bin/koha/tools/inventory.pl';
+            return false;
+        });
+
+
+
+    $(".checkall").click(function(){
+            $(".checkboxed").checkCheckboxes();
+            return false;
+        });
+    $(".clearall").click(function(){
+            $(".checkboxed").unCheckCheckboxes();
+            return false;
+        });
 [% IF ( offset ) %]$("#markseen").before("<input type=\"submit\" value=\"&lt;&lt; " + _("Mark seen and continue") + "\" id=\"markback\" /> ");[% END %]
 [% IF ( nextoffset ) %]$("#markseen").after(" <input type=\"submit\" id=\"marknext\" value=\"" + _("Mark seen and continue") + " &gt;&gt;\" />");[% END %]
-	$("#markback").click(function(){
-		$(".checkboxed").find("input").filter("[name=offset]").attr("value","[% prevoffset %]");
-		return true;
-	});
-	$("#marknext").click(function(){
-		$(".checkboxed").find("input").filter("[name=offset]").attr("value","[% nextoffset %]");
-		return true;
-	});
-	});
+    $("#markback").click(function(){
+        $(".checkboxed").find("input").filter("[name=offset]").attr("value","[% prevoffset %]");
+        return true;
+    });
+    $("#marknext").click(function(){
+        $(".checkboxed").find("input").filter("[name=offset]").attr("value","[% nextoffset %]");
+        return true;
+    });
+    });
 //]]>
 </script>
 </head>
@@ -32,34 +74,33 @@ $(document).ready(function(){
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; [% IF ( loop ) %]<a href="/cgi-bin/koha/tools/inventory.pl">Inventory</a> &rsaquo; Results[% ELSE %]Inventory[% END %]</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; [% IF (loop) %]<a href="/cgi-bin/koha/tools/inventory.pl">Inventory</a> &rsaquo; Results[% ELSE %]Inventory[% END %]</div>
 
 <div id="doc3" class="yui-t2">
-   
+
    <div id="bd">
-	<div id="yui-main">
-	<div class="yui-b">
+    <div id="yui-main">
+    <div class="yui-b">
     <h1>Inventory/Stocktaking</h1>
-    [% IF ( Number ) %]<div class="dialog message">[% Number %] items modified : datelastseen set to [% date %]</div>[% END %]
-    [% IF ( errorfile ) %]<div class="dialog alert">[% errorfile %] can't be opened</div>[% END %]
-    [% FOREACH errorloo IN errorloop %]
+    [% IF (moddatecount) %]<div class="dialog message">[% moddatecount %] items modified : datelastseen set to [% date %]</div>[% END %]
+    [% IF (errorfile) %]<div class="dialog alert">[% errorfile %] can't be opened</div>[% END %]
+    [% FOREACH error IN errorloop %]
         <div class="dialog alert">
-            [% errorloo.barcode %]
-            [% IF ( errorloo.ERR_BARCODE ) %]: barcode not found[% END %]
-            [% IF ( errorloo.ERR_WTHDRAWN ) %]: item withdrawn[% END %]
-            [% IF ( errorloo.ERR_ONLOAN_RET ) %]: item was on loan. It was returned before marked as seen[% END %]
-            [% IF ( errorloo.ERR_ONLOAN_NOT_RET ) %]: item was on loan. couldn't be returned.[% END %]
+            [% error.barcode %]
+            [% IF (error.ERR_BARCODE) %]: barcode not found[% END %]
+            [% IF (error.ERR_WTHDRAWN) %]: item withdrawn[% END %]
+            [% IF (error.ERR_ONLOAN_RET) %]: item was on loan. It was returned before marked as seen[% END %]
+            [% IF (error.ERR_ONLOAN_NOT_RET) %]: item was on loan. couldn't be returned.[% END %]
         </div>
     [% END %]
-	[% UNLESS ( loop ) %]
-	<div class="yui-g">
+       [% UNLESS op %]
+    <div class="yui-g">
     <form method="post" action="/cgi-bin/koha/tools/inventory.pl" enctype="multipart/form-data">
         <fieldset class="rows">
             <legend>Use a barcode file</legend>
-	 <ol>
+     <ol>
             <li><label for="uploadbarcodes">Barcode file: </label> <input type="file" id="uploadbarcodes" name="uploadbarcodes" /></li>
-            <li><label for="setdate">Set inventory date to:</label> <input type="text" id="setdate" name="setdate" value="[% today %]" class="datepicker" />
-			<div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+            <li><label for="setdate">Set inventory date to:</label> <input type="text" id="setdate" name="setdate" value="[% today %]" class="datepickerfrom" />
             </li>
           </ol>
         </fieldset>
@@ -81,43 +122,43 @@ $(document).ready(function(){
         [% END %]
         </select>
         </li>
-        [% IF ( authorised_values ) %]
+        [% IF (authorised_values) %]
         <li>
             <label for="locationloop">Shelving location (items.location) is: </label>
         <select id="locationloop" name="location">
                 <option value="">Filter location</option>
-        [% FOREACH authorised_value IN authorised_values %]
-            [% IF ( authorised_value.selected ) %]
-                <option value="[% authorised_value.authorised_value %]" selected="selected">[% authorised_value.lib %]</option>
+        [% FOREACH value IN authorised_values %]
+            [% IF (value.selected) %]
+                <option value="[% value.authorised_value %]" selected="selected">[% value.lib %]</option>
             [% ELSE %]
-                <option value="[% authorised_value.authorised_value %]">[% authorised_value.lib %]</option>
+                <option value="[% value.authorised_value %]">[% value.lib %]</option>
             [% END %]
         [% END %]
         </select>        </li>
         [% END %]
         <li>
-            <label for="minlocation">Item call number between: </label>
+            <label for="minlocation">Item callnumber between: </label>
                 <input type="text" name="minlocation" id="minlocation" value="[% minlocation %]" /> (items.itemcallnumber)  </li>
            <li><label for="maxlocation">...and: </label>
                 <input type="text" name="maxlocation" id="maxlocation" value="[% maxlocation %]" />
         </li>
-        [% IF ( statuses ) %]
-	</ol>
-	</fieldset>
+        [% IF (statuses) %]
+    </ol>
+    </fieldset>
             <fieldset class="rows">
             <legend>Item statuses</legend>
             <div name="statuses" style="display: block;">
-                  [% FOREACH statuse IN statuses %]
-                      [% IF ( statuse.values ) %]
+                  [% FOREACH status IN statuses %]
+                      [% IF (status.values) %]
                           <fieldset style="float: left; padding: 5px; margin: 5px;text-align:right">
-                              <legend>[% statuse.fieldname %]</legend>
-                              <ul id="statuses-[% statuse.fieldname %]" style="display: inline;">
-                              [% FOREACH value IN statuse.values %]
-                                  [% IF ( value.lib ) %]<li>
+                              <legend>[% status.fieldname %]</legend>
+                              <ul id="statuses-[% fieldname %]" style="display: inline;">
+                              [% FOREACH value IN status.values %]
+                                  [% IF (value.lib) %]<li>
                                     <label for="[% value.id %]">
                                       [% value.lib %]
                                     </label>
-                                    <input type="checkbox" name="status-[% value.fieldname %]-[% value.id %]" id="[% value.id %]" />
+                                    <input type="checkbox" name="status-[% status.fieldname %]-[% value.authorised_value %]" id="[% value.authorised_value %]" />
                                   </li>[% END %]
                               [% END %]
                               </ul>
@@ -126,25 +167,19 @@ $(document).ready(function(){
                   [% END %]
                 </div>
             </fieldset>
-		<fieldset class="rows">
+        <fieldset class="rows">
           <ol>
         [% END %]
 
         <li><label for="datelastseen">Inventory date:</label>
-            <input type="text" id="datelastseen" name="datelastseen" value="[% datelastseen %]" class="datepicker"/>
-			<div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+            <input type="text" id="datelastseen" name="datelastseen" value="[% datelastseen %]" class="datepickerfrom" />
         </li>
         <li><label for="ignoreissued">Skip copies on loan: </label>
-            [% IF ( ignoreissued ) %]
+            [% IF (ignoreissued) %]
             <input type="checkbox" id="ignoreissued" name="ignoreissued" checked="checked" /></li>
             [% ELSE %]
             <input type="checkbox" id="ignoreissued" name="ignoreissued" /></li>
             [% END %]
-        <li><label for="pagesize">Show: </label>
-            <input type="text" id="pagesize" name="pagesize" value="[% pagesize %]" maxlength="5" size="5" /> items</li>
-          <li><label for="offset">Beginning at offset: </label>
-            <input type="text" id="offset" name="offset" value="[% offset %]" size="5" maxlength="5" />
-        </li>
         <li>
            <label for="CSVexport">Export to CSV file: </label>
            <input type="checkbox" name="CSVexport" id="CSVexport" />
@@ -158,10 +193,10 @@ $(document).ready(function(){
             <input type="hidden" name="op" value="do_it" />
             <fieldset class="action"><input type="submit" value="Submit" class="button" /></fieldset>
     </form>
-	</div>
-	</div>
-	[% END %]
-    [% IF ( loop ) %]
+    </div>
+    </div>
+    [% END %]
+    [% IF (op) %]
     <form method="post" action="/cgi-bin/koha/tools/inventory.pl" class="checkboxed">
     <input type="hidden" name="markseen" value="1" />
     <input type="hidden" name="minlocation" value="[% minlocation %]" />
@@ -171,74 +206,65 @@ $(document).ready(function(){
     <input type="hidden" name="datelastseen" value="[% datelastseen %]" />
     <input type="hidden" name="pagesize" value="[% pagesize %]" />
     <input type="hidden" name="offset" value="[% offset %]" />
-    <div style="padding : .3em 0"><a href="#" class="checkall">[Select all]</a> <a href="#" class="clearall">[Clear all]</a></div>
-    <table>
+    <div><a href="#" class="checkall">[Select All]</a> <a href="#" class="clearall">[Clear All]</a></div>
+    <table id="inventoryt">
+    <thead>
         <tr>
             <th>Seen</th>
             <th>Barcode</th>
+            <th>Location</th>
             <th>Title</th>
+            <th>Status</th>
+            <th>Lost</th>
+            <th>Damaged</th>
             <th>Unseen since</th>
             <th>Problems</th>
         </tr>
-    [% FOREACH loo IN loop %]
+    </thead>
+    <tbody>
+    [% FOREACH result IN loop %]
         <tr>
             <td>
-                <input type="checkbox" name="SEEN-[% loo.itemnumber %]" value="1" />
+            <input type="checkbox" name="SEEN-[% result.itemnumber %]" value="1" />
             </td>
             <td>
-                [% loo.barcode %]
+            [% result.barcode | html %]
             </td>
             <td>
-                <p><b>[% loo.itemcallnumber %]</b> - <a href="#" onclick="window.open('/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% loo.biblionumber %]','marcview','width=800,height=600,toolbar=0,scrollbars=1');">[% loo.title |html %]</a></p>
-                <p>[% loo.author %]</p>
+            [% result.homebranch | html %] [% result.location | html %] [[% result.itemcallnumber | html %]]
             </td>
             <td>
-                <p>[% loo.datelastseen %]</p>
+            <p><a href="#" onclick="window.open('/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% result.biblionumber %]','marcview','width=800,height=600,toolbar=0,scrollbars=1');">[% result.title | html %]</a></p><p>[% result.author | html %]</p>
             </td>
             <td>
-                 [% IF ( loo.notfoundbarcode ) %]
-                     <p style="background: red;">Not found among barcodes in barcodes file.</p>
-                 [% ELSIF ( loo.notfoundkoha ) %]
-                     <p style="background: red;">Not found in Koha.</p>
-                 [% ELSE %]
-                     <p style="background: green;">None</p>
-                 [% END %]
+            [% result.notforloan | html %]
+            </td>
+            <td>
+            [% result.itemlost | html %]
+            </td>
+            <td>
+            [% result.damaged | html %]
+            </td>
+            <td>
+            [% result.datelastseen | html %]
+            </td>
+            <td>
+            [% IF (result.wrongplace) %]<p>Item should not have been scanned</p>[% ELSIF (result.missingitem) %]<p>Item missing</p>[% ELSIF (result.changestatus) %]<p>Change item status</p>[% END %]
             </td>
         </tr>
     [% END %]
+    </tbody>
     </table>
-    <div style="padding : .3em 0"><a href="#" class="checkall">[Select all]</a> <a href="#" class="clearall">[Clear all]</a></div>
-     <input type="submit" id="markseen" value="Mark seen" />
+    <div class="spacer"></div>
+      <p style="display:block;"><span class="exportSelected"></span></p>
+    <div style="padding : .3em 0"><a href="#" class="checkall">[Select All]</a> <a href="#" class="clearall">[Clear All]</a></div>
+     <input type="submit" id="markseenandquit" value="Mark seen and quit" />
+     <input type="submit" value="Mark Seen and Continue &gt;&gt;" id="markseenandcontinuebutton" />
+     <input type="submit" value="Continue without Marking &gt;&gt;" id="continuewithoutmarkingbutton" class="submit" />
     </form>
-    [% IF ( offset ) %]
-    <form method="post" action="/cgi-bin/koha/tools/inventory.pl">
-        <input type="hidden" name="branch" value="[% branch %]" />
-        <input type="hidden" name="minlocation" value="[% minlocation %]" />
-        <input type="hidden" name="maxlocation" value="[% maxlocation %]" />
-        <input type="hidden" name="location" value="[% location %]" />
-        <input type="hidden" name="branchcode" value="[% branchcode %]" />
-        <input type="hidden" name="datelastseen" value="[% datelastseen %]" />
-        <input type="hidden" name="pagesize" value="[% pagesize %]" />
-        <input type="hidden" name="offset" value="[% prevoffset %]" />
-        <input type="hidden" name="op" value="do_it" />
-        <input type="submit" value="&lt;&lt; Continue without marking" class="submit" />
-    </form>
-    [% END %]
-    [% IF ( nextoffset ) %]
-    <form method="post">
-        <input type="hidden" name="branch" value="[% branch %]" />
-        <input type="hidden" name="location" value="[% location %]" />
-        <input type="hidden" name="branchcode" value="[% branchcode %]" />
-        <input type="hidden" name="minlocation" value="[% minlocation %]" />
-        <input type="hidden" name="maxlocation" value="[% maxlocation %]" />
-        <input type="hidden" name="datelastseen" value="[% datelastseen %]" />
-        <input type="hidden" name="pagesize" value="[% pagesize %]" />
-        <input type="hidden" name="offset" value="[% nextoffset %]" />
-        <input type="hidden" name="op" value="do_it" />
-        <input type="submit" value="Continue without marking &gt;&gt;" class="submit" />
-    </form>
+
     </div>
-    [% END %]
+
     [% END %]
 </div>
 <div class="yui-b">
