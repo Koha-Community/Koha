@@ -5569,8 +5569,8 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 $DBversion = "3.09.00.028";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     unless ( C4::Context->preference('marcflavour') eq 'UNIMARC' ) {
-        my %referencetypes = (  '00' => 'PERSO_CODE',
-                                '10' => 'ORGO_CODE',
+        my %referencetypes = (  '00' => 'PERSO_NAME',
+                                '10' => 'CORPO_NAME',
                                 '11' => 'MEETI_NAME',
                                 '30' => 'UNIF_TITLE',
                                 '48' => 'CHRON_TERM',
@@ -5662,6 +5662,14 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('OpacSuppressionByIPRange','','Restrict the suppression to IP adresses outside of the IP range','','free');");
    print "Upgrade to $DBversion done (Add OpacSuppressionByIPRange syspref)\n";
    SetVersion ($DBversion);
+}
+
+$DBversion ="3.09.00.034";
+if(C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do("UPDATE auth_subfield_structure SET frameworkcode = 'PERSO_NAME' WHERE frameworkcode = 'PERSO_CODE'");
+    $dbh->do("UPDATE auth_subfield_structure SET frameworkcode = 'CORPO_NAME' WHERE frameworkcode = 'ORGO_CODE'");
+    print "Upgrade to $DBversion done (Bug 8207: correct typo in authority types)\n";
+    SetVersion($DBversion);
 }
 
 =head1 FUNCTIONS
