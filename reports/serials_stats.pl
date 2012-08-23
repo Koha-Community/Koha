@@ -140,19 +140,7 @@ if($do_it){
     while(my $row = $sth->fetchrow_hashref){
         push(@booksellers,$row)
     }
-   
-    ## We generate branchlist
-    my $branches=GetBranches();
-	my @branchloop;
-	foreach (sort {$branches->{$a}->{'branchname'} cmp $branches->{$b}->{'branchname'}} keys %$branches) {
-		my $thisbranch = ''; # FIXME: populate $thisbranch to preselect one
-		my %row = (branchcode => $_,
-			selected => ($thisbranch eq $_ ? 1 : 0),
-			branchname => $branches->{$_}->{'branchname'},
-		);
-		push @branchloop, \%row;
-	} 
-    
+
 	my $CGIextChoice=CGI::scrolling_list(
 				-name => 'MIME',
 				-id => 'MIME',
@@ -164,7 +152,7 @@ if($do_it){
 		CGIextChoice => $CGIextChoice,
 		CGIsepChoice => $CGIsepChoice,
         booksellers  => \@booksellers,
-        branches     => \@branchloop);
+        branches     => GetBranchesLoop(C4::Context->userenv->{'branch'}));
 }
 
 output_html_with_http_headers $input, $cookie, $template->output;
