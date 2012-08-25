@@ -104,7 +104,7 @@ $template->param(
     branches_loop => \@branches_loop,
     done_searched => $searched,
     routing       => $routing,
-    (uc(C4::Context->preference("marcflavour"))) => 1
+    marcflavour   => (uc(C4::Context->preference("marcflavour")))
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;

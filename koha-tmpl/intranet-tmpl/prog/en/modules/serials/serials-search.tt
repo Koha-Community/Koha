@@ -37,11 +37,11 @@
 
       <div id="advsearch">
         <form action="/cgi-bin/koha/serials/serials-search.pl" method="get">
-          <fieldset class="brief">
+          <fieldset class="rows">
+          <legend onclick="$('#advsearch_form').slideToggle(400);">
+              <a id="unfold_advsearch" style="cursor:pointer">Search subscriptions</a>
+          </legend>
             [% IF ( done_searched ) %]
-              <div onclick="$('#advsearch_form').slideToggle(400);" style="width:100%;">
-                <a id="unfold_advsearch" style="cursor:pointer">Advanced search</a>
-              </div>
               <div id="advsearch_form" style="display:none">
             [% ELSE %]
               <div>
@@ -55,10 +55,12 @@
                   <label for="title">Title:</label>
                   <input type="text" id="title" name="title_filter" value="[% title_filter %]" />
                 </li>
+                [% IF ( marcflavour == "UNIMARC" ) %]
                 <li>
                   <label for="ean">EAN:</label>
                   <input type="text" id="ean" name="EAN_filter" value="[% EAN_filter %]" />
                 </li>
+                [% END %]
                 <li>
                   <label for="publisher">Publisher:</label>
                   <input type="text" id="publisher" name="publisher_filter" value="[% publisher_filter %]" />
