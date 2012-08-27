@@ -334,10 +334,7 @@ sub get_template_and_user {
 
     if ( $in->{'type'} eq "intranet" ) {
         $template->param(
-            AmazonContent               => C4::Context->preference("AmazonContent"),
             AmazonCoverImages           => C4::Context->preference("AmazonCoverImages"),
-            AmazonEnabled               => C4::Context->preference("AmazonEnabled"),
-            AmazonSimilarItems          => C4::Context->preference("AmazonSimilarItems"),
             AutoLocation                => C4::Context->preference("AutoLocation"),
             "BiblioDefaultView".C4::Context->preference("IntranetBiblioDefaultView") => 1,
             CalendarFirstDayOfWeek      => (C4::Context->preference("CalendarFirstDayOfWeek") eq "Sunday")?0:1,
@@ -390,7 +387,6 @@ sub get_template_and_user {
         }
         $template->param(
             opaccolorstylesheet       => C4::Context->preference("opaccolorstylesheet"),
-            AmazonContent             => "" . C4::Context->preference("AmazonContent"),
             AnonSuggestions           => "" . C4::Context->preference("AnonSuggestions"),
             AuthorisedValueImages     => C4::Context->preference("AuthorisedValueImages"),
             BranchesLoop              => GetBranchesLoop($opac_name),
@@ -398,10 +394,7 @@ sub get_template_and_user {
             LibraryName               => "" . C4::Context->preference("LibraryName"),
             LibraryNameTitle          => "" . $LibraryNameTitle,
             LoginBranchname           => C4::Context->userenv?C4::Context->userenv->{"branchname"}:"",
-            OPACAmazonEnabled         => C4::Context->preference("OPACAmazonEnabled"),
-            OPACAmazonSimilarItems    => C4::Context->preference("OPACAmazonSimilarItems"),
             OPACAmazonCoverImages     => C4::Context->preference("OPACAmazonCoverImages"),
-            OPACAmazonReviews         => C4::Context->preference("OPACAmazonReviews"),
             OPACFRBRizeEditions       => C4::Context->preference("OPACFRBRizeEditions"),
             OpacHighlightedWords       => C4::Context->preference("OpacHighlightedWords"),
             OPACItemHolds             => C4::Context->preference("OPACItemHolds"),

@@ -325,7 +325,7 @@ foreach ( keys %{$dat} ) {
 
 # does not work: my %views_enabled = map { $_ => 1 } $template->query(loop => 'EnableViews');
 # method query not found?!?!
-
+$template->param( AmazonTld => get_amazon_tld() ) if ( C4::Context->preference("AmazonCoverImages"));
 $template->param(
     itemloop        => \@itemloop,
     biblionumber        => $biblionumber,
@@ -351,45 +351,6 @@ if (C4::Context->preference("FRBRizeEditions")==1) {
         );
     };
     if ($@) { warn "XISBN Failed $@"; }
-}
-if ( C4::Context->preference("AmazonEnabled") == 1 ) {
-    $template->param( AmazonTld => get_amazon_tld() );
-    my $amazon_reviews  = C4::Context->preference("AmazonReviews");
-    my $amazon_similars = C4::Context->preference("AmazonSimilarItems");
-    my @services;
-    if ( $amazon_reviews ) {
-        $template->param( AmazonReviews => 1 );
-        push( @services, 'EditorialReview' );
-    }
-    if ( $amazon_similars ) {
-        $template->param( AmazonSimilarItems => 1 );
-        push( @services, 'Similarities' );
-    }
-    my $amazon_details = &get_amazon_details( $isbn, $record, $marcflavour, \@services );
-    if ( $amazon_similars ) {
-        my $similar_products_exist;
-        my @similar_products;
-        for my $similar_product (@{$amazon_details->{Items}->{Item}->[0]->{SimilarProducts}->{SimilarProduct}}) {
-            # do we have any of these isbns in our collection?
-            my $similar_biblionumbers = get_biblionumber_from_isbn($similar_product->{ASIN});
-            # verify that there is at least one similar item
-		    if (scalar(@$similar_biblionumbers)){            
-			    $similar_products_exist++ if ($similar_biblionumbers && $similar_biblionumbers->[0]);
-                push @similar_products, +{ similar_biblionumbers => $similar_biblionumbers, title => $similar_product->{Title}, ASIN => $similar_product->{ASIN}  };
-            }
-        }
-        $template->param( AmazonSimilarItems       => $similar_products_exist );
-        $template->param( AMAZON_SIMILAR_PRODUCTS  => \@similar_products      );
-    }
-    if ( $amazon_reviews ) {
-        my $item = $amazon_details->{Items}->{Item}->[0];
-        my $editorial_reviews = \@{ $item->{EditorialReviews}->{EditorialReview} };
-        #my $customer_reviews  = \@{$amazon_details->{Items}->{Item}->[0]->{CustomerReviews}->{Review}};
-        #my $average_rating = $amazon_details->{Items}->{Item}->[0]->{CustomerReviews}->{AverageRating} || 0;
-        #$template->param( amazon_average_rating    => $average_rating * 20    );
-        #$template->param( AMAZON_CUSTOMER_REVIEWS  => $customer_reviews       );
-        $template->param( AMAZON_EDITORIAL_REVIEWS => $editorial_reviews      );
-    }
 }
 
 if ( C4::Context->preference("LocalCoverImages") == 1 ) {

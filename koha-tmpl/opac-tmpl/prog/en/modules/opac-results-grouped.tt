@@ -198,7 +198,7 @@ function highlightOn() {
             [% ELSE %]
                 <tr>
             [% END %]
-                    <td>[% IF ( OPACAmazonEnabled ) %]
+                    <td>[% IF ( OPACAmazonCoverImages ) %]
                         <a class="p1" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% GROUP_RESULT.biblionumber |url %]">[% IF ( GROUP_RESULT.isbn ) %]<img src="http://images.amazon.com/images/P/[% GROUP_RESULT.isbn %].01.TZZZZZZZ.jpg" alt="" class="thumbnail" />[% ELSE %]<img src="http://g-images.amazon.com/images/G/01/x-site/icons/no-img-sm.gif" alt="" class="thumbnail" />[% END %]
                         </a>
                         [% ELSE %]

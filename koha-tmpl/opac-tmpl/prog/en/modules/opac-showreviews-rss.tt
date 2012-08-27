@@ -13,7 +13,7 @@
        <title>New comment on [% review.title |html %] [% FOREACH subtitl IN review.subtitle %], [% subtitl.subfield |html %][% END %]</title>
        <link>[% OPACBaseURL %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% review.biblionumber %]#comments</link>
        <description><![CDATA[
-[% IF ( OPACAmazonEnabled ) %][% IF ( OPACAmazonCoverImages ) %][% IF ( review.normalized_isbn ) %]<img src="http://images.amazon.com/images/P/[% review.normalized_isbn %].01.TZZZZZZZ.jpg" alt="" />[% END %][% END %][% END %]
+[% IF ( OPACAmazonCoverImages ) %][% IF ( review.normalized_isbn ) %]<img src="http://images.amazon.com/images/P/[% review.normalized_isbn %].01.TZZZZZZZ.jpg" alt="" />[% END %][% END %]
 
 [% IF ( SyndeticsEnabled ) %][% IF ( SyndeticsCoverImages ) %][% IF ( review.content_identifier_exists ) %][% IF ( using_https ) %]<img src="https://secure.syndetics.com/index.aspx?isbn=[% review.normalized_isbn %]/SC.GIF&amp;client=[% SyndeticsClientCode %]&amp;type=xw10&amp;upc=[% review.normalized_upc %]&amp;oclc=[% review.normalized_oclc %]" alt="" />
 [% ELSE %]

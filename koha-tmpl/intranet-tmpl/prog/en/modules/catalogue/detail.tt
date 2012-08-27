@@ -39,7 +39,7 @@ function verify_images() {
         $('#bibliodetails').tabs();
         $('#search-form').focus();
      });
-     [% IF ( AmazonEnabled ) %]$(window).load(function() {
+     [% IF ( AmazonCoverImages ) %]$(window).load(function() {
         verify_images();
      });[% END %]
 //]]>
@@ -74,7 +74,7 @@ function verify_images() {
         <span class="Z3988" title="[% ocoins %]"></span>
     [% END %]
 
-    [% IF ( AmazonEnabled ) %]
+    [% IF ( AmazonCoverImages ) %]
         [% IF ( XSLTDetailsDisplay ) %]
             <div class="yui-gc">
             <div id="catalogue_detail_biblio" class="yui-u first">
@@ -117,8 +117,8 @@ function verify_images() {
         [% END %]
         [% IF ( holdcount ) %]<span class="results_summary"><span class="label">Holds:</span> <span class="holdcount"><a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% biblionumber %]">[% holdcount %]</a></span></span>[% ELSE %][% END %]
 
-        [% IF ( AmazonEnabled ) %][% IF ( AmazonCoverImages ) %]</div><div class="yui-u" id="bookcoverimg">
-        <a href="http://www.amazon[% AmazonTld %]/gp/reader/[% normalized_isbn %]/ref=sib_dp_pt/002-7879865-0184864#reader-link"><img border="0" src="http://images.amazon.com/images/P/[% normalized_isbn %].01.MZZZZZZZ.jpg" alt="" /></a>[% END %][% END %]
+        [% IF ( AmazonCoverImages ) %]</div><div class="yui-u" id="bookcoverimg">
+        <a href="http://www.amazon[% AmazonTld %]/gp/reader/[% normalized_isbn %]/ref=sib_dp_pt/002-7879865-0184864#reader-link"><img border="0" src="http://images.amazon.com/images/P/[% normalized_isbn %].01.MZZZZZZZ.jpg" alt="" /></a>[% END %]
     [% ELSE %]
 
     <h3>[% title |html %]</h3>
@@ -177,8 +177,8 @@ function verify_images() {
         </ul>
         </div>
        
-[% IF ( AmazonEnabled ) %][% IF ( AmazonCoverImages ) %]<div class="yui-u" id="bookcoverimg">
-<a href="http://www.amazon[% AmazonTld %]/gp/reader/[% normalized_isbn %]/ref=sib_dp_pt/002-7879865-0184864#reader-link"><img border="0" src="http://images.amazon.com/images/P/[% normalized_isbn %].01.MZZZZZZZ.jpg" alt="" /></a></div>[% END %][% END %]
+[% IF ( AmazonCoverImages ) %]<div class="yui-u" id="bookcoverimg">
+<a href="http://www.amazon[% AmazonTld %]/gp/reader/[% normalized_isbn %]/ref=sib_dp_pt/002-7879865-0184864#reader-link"><img border="0" src="http://images.amazon.com/images/P/[% normalized_isbn %].01.MZZZZZZZ.jpg" alt="" /></a></div>[% END %]
         
         <div class="yui-u" style="margin-top: 1em;">
         <ul>
@@ -260,7 +260,6 @@ function verify_images() {
 <li><a href="#description">Descriptions</a></li>
 [% IF ( subscriptionsnumber ) %]<li><a href="#subscriptions">Subscriptions</a></li>[% END %]
 [% IF ( FRBRizeEditions ) %][% IF ( XISBNS ) %]<li><a href="#editions">Editions</a></li>[% END %][% END %]
-[% IF ( AmazonSimilarItems ) %]<li><a href="#related">Related titles</a></li>[% END %]
 [% IF ( LocalCoverImages ) %][% IF ( localimages || CAN_user_tools_upload_local_cover_images ) %]<li><a href="#images">Images</a></li>[% END %][% END %]
  </ul>
 
@@ -449,14 +448,6 @@ function verify_images() {
     
 <div id="description">
 <div class="content_set">
-[% IF ( AmazonEnabled ) %]
-[% FOREACH AMAZON_EDITORIAL_REVIEW IN AMAZON_EDITORIAL_REVIEWS %]
-    [% IF ( AMAZON_EDITORIAL_REVIEW.Content ) %]
-    <h4>From [% AMAZON_EDITORIAL_REVIEW.Source %]:</h4>
-    <p>[% AMAZON_EDITORIAL_REVIEW.Content %]</p>
-    [% END %]
-[% END %]
-[% END %]
 
 [% IF ( MARCNOTES ) %]
     [% FOREACH MARCNOTE IN MARCNOTES %]
@@ -522,7 +513,7 @@ function verify_images() {
 [% IF ( FRBRizeEditions ) %][% IF ( XISBNS ) %]
 <div id="editions"><h4>Editions</h4>
 <table>
-[% FOREACH XISBN IN XISBNS %]<tr>[% IF ( XISBN.AmazonEnabled ) %]<td><a href="http://www.amazon.com/gp/reader/[% XISBN.normalized_isbn %]/ref=sib_dp_pt/002-7879865-0184864#reader-link"><img src="http://images.amazon.com/images/P/[% XISBN.normalized_isbn %].01._AA75_PU_PU-5_.jpg" /></a></td>[% END %]
+[% FOREACH XISBN IN XISBNS %]<tr>[% IF ( AmazonCoverImages ) %]<td><a href="http://www.amazon.com/gp/reader/[% XISBN.normalized_isbn %]/ref=sib_dp_pt/002-7879865-0184864#reader-link"><img src="http://images.amazon.com/images/P/[% XISBN.normalized_isbn %].01._AA75_PU_PU-5_.jpg" /></a></td>[% END %]
 [% UNLESS ( item_level_itypes ) %]<td>[% IF ( noItemTypeImages ) %][% XISBN.description %][% ELSE %]<img src="[% XISBN.imageurl %]" alt="[% XISBN.description %]" title="[% XISBN.description %]">[% END %]</td>[% END %]
 <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% XISBN.biblionumber %]">[% XISBN.title |html %]</a> by [% XISBN.author %] &copy;[% XISBN.copyrightdate %]
   [% IF ( XISBN.publishercode ) %]
@@ -535,19 +526,6 @@ function verify_images() {
 [% END %]
 </table></div>[% END %]
 [% END %]
-
-[% IF ( AmazonEnabled ) %][% IF ( AmazonSimilarItems ) %]
-<div id="related">
-<h4>Similar Items</h4>
-<ul>
-[% FOREACH AMAZON_SIMILAR_PRODUCT IN AMAZON_SIMILAR_PRODUCTS %]
-[% FOREACH similar_biblionumber IN AMAZON_SIMILAR_PRODUCT.similar_biblionumbers %]
-<li><img alt="" src="http://images.amazon.com/images/P/[% similar_biblionumber.ASIN %].01._SS50_.jpg" /> <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% similar_biblionumber.biblionumber %]">[% similar_biblionumber.title |html %]</a> </li>
-[% END %]
-[% END %]
-</ul>
-</div>
-[% END %][% END %]
 
 [% IF ( LocalCoverImages ) %]
 <div id="images">

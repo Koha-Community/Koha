@@ -1232,7 +1232,7 @@ sub GetNormalizedUPC {
 }
 
 # Normalizes and returns the first valid ISBN found in the record
-# ISBN13 are converted into ISBN10. This is required to get Amazon cover book.
+# ISBN13 are converted into ISBN10. This is required to get some book cover images.
 sub GetNormalizedISBN {
     my ($isbn,$record,$marcflavour) = @_;
     my @fields;

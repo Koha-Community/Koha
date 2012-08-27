@@ -747,46 +747,6 @@ if (C4::Context->preference("OPACLocalCoverImages")){
 		$template->param(OPACLocalCoverImages => 1);
 }
 
-# Amazon.com Stuff
-if ( C4::Context->preference("OPACAmazonEnabled") ) {
-    $template->param( AmazonTld => get_amazon_tld() );
-    my $amazon_reviews  = C4::Context->preference("OPACAmazonReviews");
-    my $amazon_similars = C4::Context->preference("OPACAmazonSimilarItems");
-    my @services;
-    if ( $amazon_reviews ) {
-        push( @services, 'EditorialReview', 'Reviews' );
-    }
-    if ( $amazon_similars ) {
-        push( @services, 'Similarities' );
-    }
-    my $amazon_details = &get_amazon_details( $isbn, $record, $marcflavour, \@services );
-    my $similar_products_exist;
-    if ( $amazon_reviews ) {
-        my $item = $amazon_details->{Items}->{Item}->[0];
-        my $customer_reviews = \@{ $item->{CustomerReviews}->{Review} };
-        my $editorial_reviews = \@{ $item->{EditorialReviews}->{EditorialReview} };
-        my $average_rating = $item->{CustomerReviews}->{AverageRating} || 0;
-        $template->param( amazon_average_rating    => $average_rating * 20);
-        $template->param( AMAZON_CUSTOMER_REVIEWS  => $customer_reviews );
-        $template->param( AMAZON_EDITORIAL_REVIEWS => $editorial_reviews );
-    }
-    if ( $amazon_similars ) {
-        my $item = $amazon_details->{Items}->{Item}->[0];
-        my @similar_products;
-        for my $similar_product (@{ $item->{SimilarProducts}->{SimilarProduct} }) {
-            # do we have any of these isbns in our collection?
-            my $similar_biblionumbers = get_biblionumber_from_isbn($similar_product->{ASIN});
-            # verify that there is at least one similar item
-            if (scalar(@$similar_biblionumbers)){
-                $similar_products_exist++ if ($similar_biblionumbers && $similar_biblionumbers->[0]);
-                push @similar_products, +{ similar_biblionumbers => $similar_biblionumbers, title => $similar_product->{Title}, ASIN => $similar_product->{ASIN}  };
-            }
-        }
-        $template->param( OPACAmazonSimilarItems => $similar_products_exist );
-        $template->param( AMAZON_SIMILAR_PRODUCTS => \@similar_products );
-    }
-}
-
 my $syndetics_elements;
 
 if ( C4::Context->preference("SyndeticsEnabled") ) {
@@ -906,6 +866,8 @@ if (C4::Context->preference("OPACShelfBrowser")) {
         );
     }
 }
+
+$template->param( AmazonTld => get_amazon_tld() ) if ( C4::Context->preference("OPACAmazonCoverImages"));
 
 if (C4::Context->preference("BakerTaylorEnabled")) {
 	$template->param(

@@ -266,18 +266,10 @@ $tabsysprefs{AdvancedSearchTypes}     = "Searching";
 $tabsysprefs{DisplayMultiPlaceHold}   = "Searching";
 
 # EnhancedContent
-$tabsysprefs{AmazonEnabled}          = "EnhancedContent";
-$tabsysprefs{OPACAmazonEnabled}      = "EnhancedContent";
 $tabsysprefs{AmazonCoverImages}      = "EnhancedContent";
 $tabsysprefs{OPACAmazonCoverImages}  = "EnhancedContent";
-$tabsysprefs{AWSAccessKeyID}         = "EnhancedContent";
-$tabsysprefs{AWSPrivateKey}          = "EnhancedContent";
 $tabsysprefs{AmazonLocale}           = "EnhancedContent";
 $tabsysprefs{AmazonAssocTag}         = "EnhancedContent";
-$tabsysprefs{AmazonSimilarItems}     = "EnhancedContent";
-$tabsysprefs{OPACAmazonSimilarItems} = "EnhancedContent";
-$tabsysprefs{AmazonReviews}          = "EnhancedContent";
-$tabsysprefs{OPACAmazonReviews}      = "EnhancedContent";
 
 # Babelthèque
 $tabsysprefs{Babeltheque}            = "EnhancedContent";

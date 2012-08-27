@@ -5635,6 +5635,20 @@ if(C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.09.00.XXX";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("DELETE FROM systempreferences WHERE variable='AmazonReviews'");
+    $dbh->do("DELETE FROM systempreferences WHERE variable='AmazonSimilarItems'");
+    $dbh->do("DELETE FROM systempreferences WHERE variable='AWSAccessKeyID'");
+    $dbh->do("DELETE FROM systempreferences WHERE variable='AWSPrivateKey'");
+    $dbh->do("DELETE FROM systempreferences WHERE variable='OPACAmazonReviews'");
+    $dbh->do("DELETE FROM systempreferences WHERE variable='OPACAmazonSimilarItems'");
+    $dbh->do("DELETE FROM systempreferences WHERE variable='AmazonEnabled'");
+    $dbh->do("DELETE FROM systempreferences WHERE variable='OPACAmazonEnabled'");
+    print "Upgrade to $DBversion done ('Remove preferences controlling broken Amazon features (Bug 8679')\n";
+    SetVersion ($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

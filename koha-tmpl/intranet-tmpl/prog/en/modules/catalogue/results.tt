@@ -6,7 +6,7 @@
 var MSG_NO_ITEM_SELECTED = _("Nothing is selected.");
 var MSG_NON_RESERVES_SELECTED = _("One or more selected items cannot be placed on hold.");
 var q_array = new Array();  // will hold search terms, if present
-[% IF ( AmazonEnabled ) %]
+[% IF ( AmazonCoverImages ) %]
 // http://www.oreillynet.com/pub/a/javascript/2003/10/21/amazonhacks.html
 function verify_images() {
     $("img").each(function(i){
@@ -440,20 +440,20 @@ YAHOO.util.Event.onContentReady("searchheader", function () {
                     <!-- TABLE RESULTS START -->
                 <table>
                     <tr>
-                        [% IF ( AmazonEnabled ) %][% IF ( AmazonCoverImages ) %]<th>&nbsp;</th>[% END %][% END %]
+                        [% IF ( AmazonCoverImages ) %]<th>&nbsp;</th>[% END %]
                         <th colspan="2">Results</th>
                         <th>Location</th>
                     </tr>
                         <!-- Actual Search Results -->
                         [% FOREACH SEARCH_RESULT IN SEARCH_RESULTS %]
                          [% IF ( loop.odd ) %]<tr>[% ELSE %]<tr class="highlight">[% END %]
-                            [% IF ( AmazonEnabled ) %][% IF ( AmazonCoverImages ) %]
+                            [% IF ( AmazonCoverImages ) %]
                                 <td>
                                     <a class="p1" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% SEARCH_RESULT.biblionumber |url %]">
 									
                                         <img src="[% IF ( SEARCH_RESULT.normalized_isbn ) %]http://images.amazon.com/images/P/[% SEARCH_RESULT.normalized_isbn %].01.TZZZZZZZ.jpg[% ELSE %]http://g-images.amazon.com/images/G/01/x-site/icons/no-img-sm.gif[% END %]" alt="" class="thumbnail" />
                                     </a></td>
-                            [% END %][% END %]
+                            [% END %]
                             <td>
                                 <input type="checkbox" class="selection" id="bib[% SEARCH_RESULT.biblionumber %]" name="biblionumber" value="[% SEARCH_RESULT.biblionumber %]" style="display:none" />
                             </td>

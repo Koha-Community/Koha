@@ -1823,8 +1823,6 @@ sub searchResults {
         $oldbiblio->{intransitcount}       = $item_in_transit_count;
         $oldbiblio->{onholdcount}          = $item_onhold_count;
         $oldbiblio->{orderedcount}         = $ordered_count;
-        # deleting - in isbn to enable amazon content
-        $oldbiblio->{isbn} =~ s/-//g;
 
         if (C4::Context->preference("AlternateHoldingsField") && $items_count == 0) {
             my $fieldspec = C4::Context->preference("AlternateHoldingsField");

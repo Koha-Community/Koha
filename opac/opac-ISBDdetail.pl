@@ -54,7 +54,6 @@ use C4::Review;
 use C4::Serials;    # uses getsubscriptionfrom biblionumber
 use C4::Koha;
 use C4::Members;    # GetMember
-use C4::External::Amazon;
 
 my $query = CGI->new();
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -190,42 +189,6 @@ if (my $search_for_title = C4::Context->preference('OPACSearchForTitleIn')){
     $marccontrolnumber ? $search_for_title =~ s/{CONTROLNUMBER}/$marccontrolnumber/g : $search_for_title =~ s/{CONTROLNUMBER}//g;
     $search_for_title =~ s/{BIBLIONUMBER}/$biblionumber/g;
  $template->param('OPACSearchForTitleIn' => $search_for_title);
-}
-
-## Amazon.com stuff
-#not used unless preference set
-if ( C4::Context->preference("OPACAmazonEnabled") == 1 ) {
-
-    my $amazon_details = &get_amazon_details( $isbn, $record, $marcflavour );
-
-    foreach my $result ( @{ $amazon_details->{Details} } ) {
-        $template->param( item_description => $result->{ProductDescription} );
-        $template->param( image            => $result->{ImageUrlMedium} );
-        $template->param( list_price       => $result->{ListPrice} );
-        $template->param( amazon_url       => $result->{url} );
-    }
-
-    my @products;
-    my @reviews;
-    for my $details ( @{ $amazon_details->{Details} } ) {
-        next unless $details->{SimilarProducts};
-        for my $product ( @{ $details->{SimilarProducts}->{Product} } ) {
-            push @products, +{ Product => $product };
-        }
-        next unless $details->{Reviews};
-        for my $product ( @{ $details->{Reviews}->{AvgCustomerRating} } ) {
-            $template->param( rating => $product * 20 );
-        }
-        for my $reviews ( @{ $details->{Reviews}->{CustomerReview} } ) {
-            push @reviews,
-              +{
-                Summary => $reviews->{Summary},
-                Comment => $reviews->{Comment},
-              };
-        }
-    }
-    $template->param( SIMILAR_PRODUCTS => \@products );
-    $template->param( AMAZONREVIEWS    => \@reviews );
 }
 
 output_html_with_http_headers $query, $cookie, $template->output;
