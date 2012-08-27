@@ -45,6 +45,7 @@ use C4::Biblio;
 use C4::Debug;            # supplying $debug and $cgi_debug
 use Getopt::Long;
 use List::MoreUtils qw/none/;
+use Koha::DateUtils;
 
 my $help    = 0;
 my $verbose = 0;
@@ -122,12 +123,19 @@ INIT {
       "Delimiter: '$delim'\n";
 }
 $debug and (defined $borrowernumberlimit) and print "--borrower limitation: borrower $borrowernumberlimit\n";
-my $data = (defined $borrowernumberlimit) ? checkoverdues($borrowernumberlimit) : Getoverdues();
+my ($numOverdueItems, $data);
+if (defined $borrowernumberlimit) {
+    ($numOverdueItems, $data) = checkoverdues($borrowernumberlimit);
+} else {
+    $data = Getoverdues();
+    $numOverdueItems = scalar @$data;
+}
 my $overdueItemsCounted = 0;
 my %calendars           = ();
 $today      = C4::Dates->new();
 $today_iso  = $today->output('iso');
-$today_days = Date_to_Days( split( /-/, $today_iso ) );
+my ($tyear, $tmonth, $tday) = split( /-/, $today_iso );
+$today_days = Date_to_Days( $tyear, $tmonth, $tday );
 
 for ( my $i = 0 ; $i < scalar(@$data) ; $i++ ) {
     my $datedue;
@@ -167,7 +175,7 @@ for ( my $i = 0 ; $i < scalar(@$data) ; $i++ ) {
         $calendars{$branchcode} = C4::Calendar->new( branchcode => $branchcode );
     }
     $calendar = $calendars{$branchcode};
-    my $isHoliday = $calendar->isHoliday( split '/', $today->output('metric') );
+    my $isHoliday = $calendar->isHoliday( $tday, $tmonth, $tyear );
 
     # Reassing datedue_days if -delay specified in commandline
     $bigdebug and warn "Using commandline supplied delay : $delay" if ($delay);
@@ -176,7 +184,13 @@ for ( my $i = 0 ; $i < scalar(@$data) ; $i++ ) {
     ( $datedue_days <= $today_days ) or next;    # or it's not overdue, right?
 
     $overdueItemsCounted++;
-    my ( $amount, $type, $unitcounttotal, $unitcount ) = CalcFine( $data->[$i], $borrower->{'categorycode'}, $branchcode, undef, undef, $datedue, $today );
+    my ( $amount, $type, $unitcounttotal, $unitcount ) = CalcFine(
+        $data->[$i],
+        $borrower->{'categorycode'},
+        $branchcode,
+        dt_from_string($datedue->output('iso')),
+        dt_from_string($today->output('iso')),
+    );
 
     # Reassign fine's amount if specified in command-line
     $amount = $catamounts{$borrower->{'categorycode'}} if (defined $catamounts{$borrower->{'categorycode'}});
@@ -224,7 +238,6 @@ for ( my $i = 0 ; $i < scalar(@$data) ; $i++ ) {
     }
 }
 
-my $numOverdueItems = scalar(@$data);
 if ($verbose) {
     print <<EOM;
 Fines assessment -- $today_iso
