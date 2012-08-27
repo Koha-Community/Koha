@@ -21,6 +21,7 @@ use strict;
 use warnings;
 
 use CGI;
+use URI::Escape;
 use C4::Auth;
 
 use C4::Context;
@@ -32,13 +33,11 @@ use C4::Koha;    # XXX subfield_is_koha_internal_p
 use C4::Biblio;
 
 my $query = new CGI;
-my $op    = $query->param('op');
-$op ||= q{};
-my $authtypecode = $query->param('authtypecode');
-$authtypecode ||= q{};
-my $dbh = C4::Context->dbh;
+my $dbh   = C4::Context->dbh;
+my $op           = $query->param('op')           || '';
+my $authtypecode = $query->param('authtypecode') || '';
+my $authid       = $query->param('authid')       || '';
 
-my $authid = $query->param('authid');
 my ( $template, $loggedinuser, $cookie );
 
 my $authtypes = getauthtypes;
@@ -71,23 +70,32 @@ if ( $op eq "delete" ) {
     );
     &DelAuthority( $authid, 1 );
 
-    $op = "do_search";
+    if ( $query->param('operator') ) {
+        # query contains search params so perform search
+        $op = "do_search";
+    }
+    else {
+        $op = '';
+    }
 }
 if ( $op eq "do_search" ) {
-    my @marclist  = $query->param('marclist');
-    my @and_or    = $query->param('and_or');
-    my @excluding = $query->param('excluding');
-    my @operator  = $query->param('operator');
-    my $orderby   = $query->param('orderby');
-    my @value     = $query->param('value');
+    my $marclist  = $query->param('marclist')  || '';
+    my $and_or    = $query->param('and_or')    || '';
+    my $excluding = $query->param('excluding') || '';
+    my $operator  = $query->param('operator')  || '';
+    my $orderby   = $query->param('orderby')   || '';
+    my $value     = $query->param('value')     || '';
 
     my $startfrom      = $query->param('startfrom')      || 1;
     my $resultsperpage = $query->param('resultsperpage') || 20;
 
-    my ( $results, $total ) =
-      SearchAuthorities( \@marclist, \@and_or, \@excluding, \@operator, \@value,
-        ( $startfrom - 1 ) * $resultsperpage,
-        $resultsperpage, $authtypecode, $orderby );
+    my ( $results, $total ) = SearchAuthorities(
+        [$marclist],  [$and_or],
+        [$excluding], [$operator],
+        [$value], ( $startfrom - 1 ) * $resultsperpage,
+        $resultsperpage, $authtypecode,
+        $orderby
+    );
 
     ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         {
@@ -101,54 +109,34 @@ if ( $op eq "do_search" ) {
     );
 
     $template->param(
-        marclist       => $query->param('marclist'),
-        and_or         => $query->param('and_or'),
-        excluding      => $query->param('excluding'),
-        operator       => $query->param('operator'),
-        orderby        => $query->param('orderby'),
-        value          => $query->param('value'),
-        authtypecode   => $query->param('authtypecode'),
+        marclist       => $marclist,
+        and_or         => $and_or,
+        excluding      => $excluding,
+        operator       => $operator,
+        orderby        => $orderby,
+        value          => $value,
+        authtypecode   => $authtypecode,
         startfrom      => $startfrom,
         resultsperpage => $resultsperpage,
     );
 
-    my @field_data = ();
-
     # we must get parameters once again. Because if there is a mainentry, it
     # has been replaced by something else during the search, thus the links
     # next/previous would not work anymore
-    my @marclist_ini = $query->param('marclist');
-    for ( my $i = 0 ; $i <= $#marclist ; $i++ ) {
-        if ( $value[$i] ) {
-            push @field_data, { term => "marclist", val => $marclist_ini[$i] };
-            if ( !defined $and_or[$i] ) {
-                $and_or[$i] = q{};
-            }
-            push @field_data, { term => "and_or", val => $and_or[$i] };
-            if ( !defined $excluding[$i] ) {
-                $excluding[$i] = q{};
-            }
-            push @field_data, { term => "excluding", val => $excluding[$i] };
-            push @field_data, { term => "operator",  val => $operator[$i] };
-            push @field_data, { term => "value",     val => $value[$i] };
-        }
-    }
 
     # construction of the url of each page
-    my $base_url =
-        'authorities-home.pl?'
-      . join( '&amp;', map { $_->{term} . '=' . $_->{val} } @field_data )
-      . '&amp;'
-      . join(
-        '&amp;',
-        map { $_->{term} . '=' . $_->{val} } (
-            { term => 'resultsperpage', val => $resultsperpage },
-            { term => 'type',           val => 'intranet' },
-            { term => 'op',             val => 'do_search' },
-            { term => 'authtypecode',   val => $authtypecode },
-            { term => 'orderby',        val => $orderby },
-        )
-      );
+    my $value_url = uri_escape($value);
+    my $base_url = "authorities-home.pl?"
+      ."marclist=$marclist"
+      ."&amp;and_or=$and_or"
+      ."&amp;excluding=$excluding"
+      ."&amp;operator=$operator"
+      ."&amp;value=$value_url"
+      ."&amp;resultsperpage=$resultsperpage"
+      ."&amp;type=intranet"
+      ."&amp;op=do_search"
+      ."&amp;authtypecode=$authtypecode"
+      ."&amp;orderby=$orderby";
 
     my $from = ( $startfrom - 1 ) * $resultsperpage + 1;
     my $to;
@@ -191,7 +179,10 @@ if ( $op eq '' ) {
 
 }
 
-$template->param( authtypesloop => \@authtypesloop, );
+$template->param(
+    authtypesloop => \@authtypesloop,
+    op            => $op,
+);
 
 $template->{VARS}->{marcflavour} = C4::Context->preference("marcflavour");
 

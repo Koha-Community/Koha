@@ -1,6 +1,22 @@
 <div class="gradient">
 <h1 id="logo"><a href="/cgi-bin/koha/mainpage.pl">[% LibraryName %]</a></h1>
 <!-- Begin Authorities Resident Search Box -->
+<script type="text/javascript">
+//<![CDATA[
+    $(document).ready(function() {
+        var searchType = '[% marclist %]';
+        if (searchType) {
+            if ('mainentry' == searchType) {
+                $("#header_search").tabs( "option", "selected", 0 );
+            } else if ('match' == searchType) {
+                $("#header_search").tabs( "option", "selected", 1 );
+            } else if ('all' == searchType) {
+                $("#header_search").tabs( "option", "selected", 2 );
+            }
+        }
+    });
+//]]>
+</script>
 <div id="header_search" class="residentsearch">
     <div id="main_heading" class="residentsearch">
     <p class="tip">Enter authorized heading:</p>
@@ -21,15 +37,39 @@
         <input type="hidden" name="and_or" value="and" />
         <input type="hidden" name="excluding" value="" />
         <select name="operator">
+            [% IF ( operator == 'contains' ) %]
+            <option value="contains" selected="selected">contains</option>
+            [% ELSE %]
             <option value="contains">contains</option>
+            [% END %]
+            [% IF ( operator == 'start' ) %]
+            <option value="start" selected="selected">starts with</option>
+            [% ELSE %]
             <option value="start">starts with</option>
+            [% END %]
+            [% IF ( operator == 'is' ) %]
+            <option value="is" selected="selected">is exactly</option>
+            [% ELSE %]
             <option value="is">is exactly</option>
+            [% END %]
         </select>
         <input id="value_mainentry" type="text" name="value" value="[% value %]" />
         <select name="orderby">
-            <option value="">None</option>
+            [% IF ( orderby == 'HeadingAsc' ) %]
             <option value="HeadingAsc" selected="selected">Heading A-Z</option>
+            [% ELSE %]
+            <option value="HeadingAsc">Heading A-Z</option>
+            [% END %]
+            [% IF ( orderby == 'HeadingDsc' ) %]
+            <option value="HeadingDsc" selected="selected">Heading Z-A</option>
+            [% ELSE %]
             <option value="HeadingDsc">Heading Z-A</option>
+            [% END %]
+            [% IF ( orderby == '' && op ) %]
+            <option value="" selected="selected">None</option>
+            [% ELSE %]
+            <option value="">None</option>
+            [% END %]
         </select>
         <input type="submit" class="submit" value="Submit" />
     </form>
@@ -51,15 +91,39 @@
         </select>
         <input type="hidden" name="marclist" value="match" />
         <select name="operator">
+            [% IF ( operator == 'contains' ) %]
+            <option value="contains" selected="selected">contains</option>
+            [% ELSE %]
             <option value="contains">contains</option>
+            [% END %]
+            [% IF ( operator == 'start' ) %]
+            <option value="start" selected="selected">starts with</option>
+            [% ELSE %]
             <option value="start">starts with</option>
+            [% END %]
+            [% IF ( operator == 'is' ) %]
+            <option value="is" selected="selected">is exactly</option>
+            [% ELSE %]
             <option value="is">is exactly</option>
+            [% END %]
         </select>
         <input id="value_matchheading" type="text" name="value" value="[% value %]" />
         <select name="orderby">
-            <option value="">None</option>
+            [% IF ( orderby == 'HeadingAsc' ) %]
             <option value="HeadingAsc" selected="selected">Heading A-Z</option>
+            [% ELSE %]
+            <option value="HeadingAsc">Heading A-Z</option>
+            [% END %]
+            [% IF ( orderby == 'HeadingDsc' ) %]
+            <option value="HeadingDsc" selected="selected">Heading Z-A</option>
+            [% ELSE %]
             <option value="HeadingDsc">Heading Z-A</option>
+            [% END %]
+            [% IF ( orderby == '' && op ) %]
+            <option value="" selected="selected">None</option>
+            [% ELSE %]
+            <option value="">None</option>
+            [% END %]
          </select>
          <input type="submit" class="submit" value="Submit" />
     </form>
@@ -83,15 +147,39 @@
         <input type="hidden" name="and_or" value="and" />
         <input type="hidden" name="excluding" value="" />
         <select name="operator">
+            [% IF ( operator == 'contains' ) %]
+            <option value="contains" selected="selected">contains</option>
+            [% ELSE %]
             <option value="contains">contains</option>
+            [% END %]
+            [% IF ( operator == 'start' ) %]
+            <option value="start" selected="selected">starts with</option>
+            [% ELSE %]
             <option value="start">starts with</option>
+            [% END %]
+            [% IF ( operator == 'is' ) %]
+            <option value="is" selected="selected">is exactly</option>
+            [% ELSE %]
             <option value="is">is exactly</option>
+            [% END %]
         </select>
         <input id="value_anywhere" type="text" name="value" value="[% value %]" />
         <select name="orderby">
-            <option value="">None</option>
+            [% IF ( orderby == 'HeadingAsc' ) %]
             <option value="HeadingAsc" selected="selected">Heading A-Z</option>
+            [% ELSE %]
+            <option value="HeadingAsc">Heading A-Z</option>
+            [% END %]
+            [% IF ( orderby == 'HeadingDsc' ) %]
+            <option value="HeadingDsc" selected="selected">Heading Z-A</option>
+            [% ELSE %]
             <option value="HeadingDsc">Heading Z-A</option>
+            [% END %]
+            [% IF ( orderby == '' && op ) %]
+            <option value="" selected="selected">None</option>
+            [% ELSE %]
+            <option value="">None</option>
+            [% END %]
         </select>
         <input type="submit" class="submit" value="Submit" />
     </form>
