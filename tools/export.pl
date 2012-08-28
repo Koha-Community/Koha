@@ -462,7 +462,8 @@ sub download_backup {
     my $filename  = $args->{filename};
 
     return unless ( $directory && -d $directory );
-    return unless ( $filename =~ m/$extension(\.(gz|bz2|xz))?$/ && not $filename =~ m#|# );
+    return unless ( $filename =~ m/\.$extension(\.(gz|bz2|xz))?$/ );
+    return if ( $filename =~ m#/# );
     $filename = "$directory/$filename";
     return unless ( -f $filename && -r $filename );
     return unless ( open(my $dump, '<', $filename) );
