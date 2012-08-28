@@ -211,6 +211,10 @@ function CloneField(index, hideMarc, advancedMARCEditor) {
 
         } else { // it's a indicator div
             if(divs[i].getAttribute('id').match(/^div_indicator/)){
+
+                // setting a new id for the indicator div
+                divs[i].setAttribute('id',divs[i].getAttribute('id')+new_key);
+
                 var inputs = divs[i].getElementsByTagName('input');
                 inputs[0].setAttribute('id',inputs[0].getAttribute('id')+new_key);
                 inputs[1].setAttribute('id',inputs[1].getAttribute('id')+new_key);
