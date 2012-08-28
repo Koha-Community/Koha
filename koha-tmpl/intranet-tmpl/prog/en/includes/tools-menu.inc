@@ -51,7 +51,7 @@
 	<li><a href="/cgi-bin/koha/tools/batchMod.pl">Batch item modification</a></li>
     [% END %]
     [% IF ( CAN_user_tools_export_catalog ) %]
-	<li><a href="/cgi-bin/koha/tools/export.pl">Export bibs/holdings</a></li>
+    <li><a href="/cgi-bin/koha/tools/export.pl">Export data</a></li>
     [% END %]
     [% IF ( CAN_user_tools_inventory ) %]
 	<li><a href="/cgi-bin/koha/tools/inventory.pl">Inventory/stocktaking</a></li>
