@@ -169,7 +169,10 @@ foreach my $biblioNumber (@biblionumbers) {
 #
 if ( $query->param('place_reserve') ) {
     my $notes = $query->param('notes');
-	my $canreserve=0;
+    my $reserve_cnt = 0;
+    if ($MAXIMUM_NUMBER_OF_RESERVES) {
+        $reserve_cnt = GetReservesFromBorrowernumber( $borrowernumber );
+    }
 
     # List is composed of alternating biblio/item/branch
     my $selectedItems = $query->param('selecteditems');
@@ -200,55 +203,74 @@ if ( $query->param('place_reserve') ) {
     while (@selectedItems) {
         my $biblioNum = shift(@selectedItems);
         my $itemNum   = shift(@selectedItems);
-        my $branch    = shift(@selectedItems); # i.e., branch code, not name
+        my $branch    = shift(@selectedItems);    # i.e., branch code, not name
+
+        my $canreserve = 0;
 
         my $singleBranchMode = C4::Context->preference("singleBranchMode");
-        if ($singleBranchMode || ! $OPACChooseBranch) { # single branch mode or disabled user choosing
+        if ( $singleBranchMode || !$OPACChooseBranch )
+        {    # single branch mode or disabled user choosing
             $branch = $borr->{'branchcode'};
         }
 
-	#item may belong to a host biblio, if yes change biblioNum to hosts bilbionumber
-	if ($itemNum ne '') {
-		my $hostbiblioNum = GetBiblionumberFromItemnumber($itemNum);
-		if ($hostbiblioNum ne $biblioNum) {
-			$biblioNum = $hostbiblioNum;
-		}
-	}
+#item may belong to a host biblio, if yes change biblioNum to hosts bilbionumber
+        if ( $itemNum ne '' ) {
+            my $hostbiblioNum = GetBiblionumberFromItemnumber($itemNum);
+            if ( $hostbiblioNum ne $biblioNum ) {
+                $biblioNum = $hostbiblioNum;
+            }
+        }
 
         my $biblioData = $biblioDataHash{$biblioNum};
         my $found;
 
-	# Check for user supplied reserve date
-	my $startdate;
-	if (
-	    C4::Context->preference( 'AllowHoldDateInFuture' ) &&
-	    C4::Context->preference( 'OPACAllowHoldDateInFuture' )
-	    ) {
-	    $startdate = $query->param("reserve_date_$biblioNum");
-	}
-	
-	my $expiration_date = $query->param("expiration_date_$biblioNum");
+        # Check for user supplied reserve date
+        my $startdate;
+        if (   C4::Context->preference('AllowHoldDateInFuture')
+            && C4::Context->preference('OPACAllowHoldDateInFuture') )
+        {
+            $startdate = $query->param("reserve_date_$biblioNum");
+        }
 
-        # If a specific item was selected and the pickup branch is the same as the
-        # holdingbranch, force the value $rank and $found.
+        my $expiration_date = $query->param("expiration_date_$biblioNum");
+
+      # If a specific item was selected and the pickup branch is the same as the
+      # holdingbranch, force the value $rank and $found.
         my $rank = $biblioData->{rank};
-        if ($itemNum ne ''){
-        	$canreserve = 1 if CanItemBeReserved($borrowernumber,$itemNum);
+        if ( $itemNum ne '' ) {
+            $canreserve = 1 if CanItemBeReserved( $borrowernumber, $itemNum );
             $rank = '0' unless C4::Context->preference('ReservesNeedReturns');
             my $item = GetItem($itemNum);
-            if ( $item->{'holdingbranch'} eq $branch ){
-                $found = 'W' unless C4::Context->preference('ReservesNeedReturns');
+            if ( $item->{'holdingbranch'} eq $branch ) {
+                $found = 'W'
+                  unless C4::Context->preference('ReservesNeedReturns');
             }
         }
         else {
-        	$canreserve = 1 if CanBookBeReserved($borrowernumber,$biblioNum);
+            $canreserve = 1 if CanBookBeReserved( $borrowernumber, $biblioNum );
+
             # Inserts a null into the 'itemnumber' field of 'reserves' table.
             $itemNum = undef;
         }
 
+        if (   $MAXIMUM_NUMBER_OF_RESERVES
+            && $reserve_cnt >= $MAXIMUM_NUMBER_OF_RESERVES )
+        {
+            $canreserve = 0;
+        }
+
         # Here we actually do the reserveration. Stage 3.
-        AddReserve($branch, $borrowernumber, $biblioNum, 'a', [$biblioNum], $rank, $startdate, $expiration_date, $notes,
-                   $biblioData->{'title'}, $itemNum, $found) if ($canreserve);
+        if ($canreserve) {
+            AddReserve(
+                $branch,      $borrowernumber,
+                $biblioNum,   'a',
+                [$biblioNum], $rank,
+                $startdate,   $expiration_date,
+                $notes,       $biblioData->{title},
+                $itemNum,     $found
+            );
+            ++$reserve_cnt;
+        }
     }
 
     print $query->redirect("/cgi-bin/koha/opac-user.pl#opac-user-holds");
@@ -269,14 +291,14 @@ if ( $borr->{'amountoutstanding'} && ($borr->{'amountoutstanding'} > $maxoutstan
     $noreserves = 1;
     $template->param( too_much_oweing => $amount );
 }
-if ( $borr->{gonenoaddress} && ($borr->{gonenoaddress} eq 1) ) {
+if ( $borr->{gonenoaddress} && ($borr->{gonenoaddress} == 1) ) {
     $noreserves = 1;
     $template->param(
                      message => 1,
                      GNA     => 1
                     );
 }
-if ( $borr->{lost} && ($borr->{lost} eq 1) ) {
+if ( $borr->{lost} && ($borr->{lost} == 1) ) {
     $noreserves = 1;
     $template->param(
                      message => 1,
