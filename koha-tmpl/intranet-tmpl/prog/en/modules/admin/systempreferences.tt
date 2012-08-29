@@ -75,7 +75,7 @@
 </head>
 <body id="admin_systempreferences" class="admin">
 [% INCLUDE 'header.inc' %]
-[% INCLUDE 'sysprefs-admin-search.inc' %]
+[% INCLUDE 'prefs-admin-search.inc' %]
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; [% IF ( add_form ) %] <a href="/cgi-bin/koha/admin/systempreferences.pl">System preferences</a> &rsaquo; [% IF ( modify ) %]Modify system preference '[% searchfield %]'[% ELSE %]Add a system preference[% END %][% END %][% IF ( add_validate ) %] <a href="/cgi-bin/koha/admin/systempreferences.pl">System preferences</a> &rsaquo; Data added[% END %]
 [% IF ( delete_confirm ) %] <a href="/cgi-bin/koha/admin/systempreferences.pl">System Preferences</a> &rsaquo; <a href="/cgi-bin/koha/admin/systempreferences.pl?op=add_form&amp;searchfield=[% searchfield %]">[% searchfield %]</a> &rsaquo; Confirm deletion of parameter '[% searchfield %]'[% END %][% IF ( delete_confirmed ) %] <a href="/cgi-bin/koha/admin/systempreferences.pl">System preferences</a> &rsaquo; Parameter deleted[% END %][% IF ( else ) %]System preferences[% END %]</div>
