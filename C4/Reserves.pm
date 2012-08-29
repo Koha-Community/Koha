@@ -2079,9 +2079,9 @@ sub ReserveSlip {
         tables => {
             'reserves'    => $reserve,
             'branches'    => $reserve->{branchcode},
-            'borrowers'   => $reserve,
-            'biblio'      => $reserve,
-            'items'       => $reserve,
+            'borrowers'   => $reserve->{borrowernumber},
+            'biblio'      => $reserve->{biblionumber},
+            'items'       => $reserve->{itemnumber},
         },
     );
 }
