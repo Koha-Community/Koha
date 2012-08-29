@@ -5635,7 +5635,7 @@ if(C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.09.00.XXX";
+$DBversion = "3.09.00.031";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("DELETE FROM systempreferences WHERE variable='AmazonReviews'");
     $dbh->do("DELETE FROM systempreferences WHERE variable='AmazonSimilarItems'");
