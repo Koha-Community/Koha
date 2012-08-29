@@ -529,6 +529,11 @@ our $PERL_DEPS = {
         'required' => '1',
         'min_ver'  => '1.23',
     },
+    'Test::YAML::Valid' => {
+        'usage'    => 'Core',
+        'required' => '0',
+        'min_ver'  => '0.04',
+    }
 };
 
 1;
