@@ -185,16 +185,16 @@ sub BreedingSearch {
         $query .= "z3950random = ?";
         @bind=($z3950random);
     } else {
-        $search =~ s/(\s+)/\%/g;
         @bind=();
-    if ($search) {
+        if (defined($search) && length($search)>0) {
+            $search =~ s/(\s+)/\%/g;
             $query .= "title like ? OR author like ?";
             push(@bind,"%$search%", "%$search%");
         }
-        if ($search && $isbn) {
+        if ($#bind!=-1 && defined($isbn) && length($isbn)>0) {
             $query .= " and ";
         }
-        if ($isbn) {
+        if (defined($isbn) && length($isbn)>0) {
             $query .= "isbn like ?";
             push(@bind,"$isbn%");
         }
