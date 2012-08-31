@@ -465,7 +465,7 @@ sub ShelfPossibleAction {
     $sth->execute($user, $shelfnumber);
     my $shelf= $sth->fetchrow_hashref;
 
-    return 0 unless $shelf && ($shelf->{category}==2 || $shelf->{owner}==$user || $shelf->{borrowernumber}==$user);
+    return 0 unless $shelf && ($shelf->{category}==2 || $shelf->{owner}==$user || ($user && $shelf->{borrowernumber}==$user));
     if($action eq 'view') {
         #already handled in the above condition
         return 1;
