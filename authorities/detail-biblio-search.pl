@@ -93,7 +93,7 @@ my @fields = $record->fields();
 			my @subf=$field->subfields;
 	# loop through each subfield
 			for my $i (0..$#subf) {
-				$subf[$i][0] = "@" unless $subf[$i][0];
+				$subf[$i][0] = "@" unless defined $subf[$i][0];
 # 				next if ($tagslib->{$field->tag()}->{$subf[$i][0]}->{tab}  ne $tabloop);
 				next if ($tagslib->{$field->tag()}->{$subf[$i][0]}->{hidden});
 				my %subfield_data;

@@ -156,7 +156,7 @@ if ($show_marc) {
 
 # loop through each subfield
             for my $i ( 0 .. $#subf ) {
-                $subf[$i][0] = "@" unless $subf[$i][0];
+                $subf[$i][0] = "@" unless defined $subf[$i][0];
                 next if ( $tagslib->{ $field->tag() }->{ $subf[$i][0] }->{hidden} );
 # skip useless subfields (for patrons)
                 next if $subf[$i][0] =~ /7|8|9/;
