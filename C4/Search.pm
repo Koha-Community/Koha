@@ -1404,7 +1404,7 @@ sub buildQuery {
 
   my @search_results = searchResults($search_context, $searchdesc, $hits, 
                                      $results_per_page, $offset, $scan, 
-                                     @marcresults, $hidelostitems);
+                                     @marcresults);
 
 Format results in a form suitable for passing to the template
 
