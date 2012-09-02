@@ -263,7 +263,7 @@ foreach my $item (@items) {
 		$analytics_flag=1;
 		$item->{countanalytics} = $countanalytics;
 	}
-    if ($item->{'materials'} ne ''){
+    if (defined($item->{'materials'}) && $item->{'materials'} =~ /\S/){
 	$materials_flag = 1;
     }
     push @itemloop, $item;
