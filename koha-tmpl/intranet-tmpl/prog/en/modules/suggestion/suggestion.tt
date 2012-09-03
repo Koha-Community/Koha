@@ -392,8 +392,8 @@ $(document).ready(function() { calcNewsuggTotal(); });
         <thead>
             <tr><th>&nbsp;</th>
             <th>Suggestion</th>
-            <th>Suggested by /on</th>
-            <th>Managed by /on</th>
+            <th>Suggested by - on</th>
+            <th>Managed by - on</th>
             <th>Library</th>
             <th>Budget</th>
             <th>Status</th></tr>
@@ -415,11 +415,11 @@ $(document).ready(function() { calcNewsuggTotal(); });
                 </td>
                 <td>
                     [% IF ( suggestions_loo.emailsuggestedby ) %]<a href="mailto:[% suggestions_loo.emailsuggestedby %]">[% END %][% suggestions_loo.surnamesuggestedby %][% IF ( suggestions_loo.firstnamesuggestedby ) %], [% suggestions_loo.firstnamesuggestedby %][% END %] [% IF ( suggestions_loo.emailsuggestedby ) %]</a>[% END %]
-                    [% IF ( suggestions_loo.suggesteddate ) %] / [% suggestions_loo.suggesteddate %][% END %]
+                    [% IF ( suggestions_loo.suggesteddate ) %] - [% suggestions_loo.suggesteddate %][% END %]
                 </td>
                 <td>
                     [% IF ( suggestions_loo.emailmanagedby ) %]<a href="mailto:[% suggestions_loo.emailmanagedby %]">[% END %][% suggestions_loo.surnamemanagedby %][% IF ( suggestions_loo.firstnamemanagedby ) %], [% suggestions_loo.firstnamemanagedby %][% END %] [% IF ( suggestions_loo.emailmanagedby ) %]</a>[% END %]
-                    [% IF ( suggestions_loo.manageddate ) %], [% suggestions_loo.manageddate %][% END %]
+                    [% IF ( suggestions_loo.manageddate ) %] - [% suggestions_loo.manageddate %][% END %]
                 </td>
                 <td>
                     [% suggestions_loo.branchcode %]
