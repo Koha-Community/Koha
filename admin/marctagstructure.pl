@@ -267,7 +267,7 @@ if ($op eq 'add_form') {
 			$row_data{delete}        = "$script_name?op=delete_confirm&amp;searchfield="      .$results[$i]->{'mts_tagfield'}."&amp;frameworkcode=".$frameworkcode;
 			$j=$i;
 			my @internal_loop = ();
-			while ( ( $results[$i]->{'tagfield'} == $results[$j]->{'tagfield'} ) and ( $j < $cnt ) ) {
+			while ( ( $j < $cnt ) and ( $results[$i]->{'tagfield'} == $results[$j]->{'tagfield'} ) ) {
 				my %subfield_data;
 				$subfield_data{tagsubfield}      = $results[$j]->{'tagsubfield'};
 				$subfield_data{liblibrarian}     = $results[$j]->{'liblibrarian'};
