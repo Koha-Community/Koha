@@ -1129,7 +1129,7 @@ sub AddIssue {
         }
     }
 
-    logaction("CIRCULATION", "ISSUE", $borrower->{'borrowernumber'}, $biblio->{'biblionumber'})
+    logaction("CIRCULATION", "ISSUE", $borrower->{'borrowernumber'}, $biblio->{'itemnumber'})
         if C4::Context->preference("IssueLog");
   }
   return ($datedue);	# not necessarily the same as when it came in!
@@ -1693,7 +1693,7 @@ sub AddReturn {
         });
     }
     
-    logaction("CIRCULATION", "RETURN", $borrowernumber, $item->{'biblionumber'})
+    logaction("CIRCULATION", "RETURN", $borrowernumber, $item->{'itemnumber'})
         if C4::Context->preference("ReturnLog");
     
     # FIXME: make this comment intelligible.
