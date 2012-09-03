@@ -432,21 +432,21 @@ sub patronflags {
     my %flags;
     my ( $patroninformation) = @_;
     my $dbh=C4::Context->dbh;
-    my ($amount) = GetMemberAccountRecords( $patroninformation->{'borrowernumber'});
-    if ( $amount > 0 ) {
+    my ($ballance, $owing) = GetMemberAccountBallance( $patroninformation->{'borrowernumber'});
+    if ( $owing > 0 ) {
         my %flaginfo;
         my $noissuescharge = C4::Context->preference("noissuescharge") || 5;
-        $flaginfo{'message'} = sprintf "Patron owes \$%.02f", $amount;
-        $flaginfo{'amount'}  = sprintf "%.02f", $amount;
-        if ( $amount > $noissuescharge && !C4::Context->preference("AllowFineOverride") ) {
+        $flaginfo{'message'} = sprintf "Patron owes \$%.02f", $owing;
+        $flaginfo{'amount'}  = sprintf "%.02f", $owing;
+        if ( $owing > $noissuescharge && !C4::Context->preference("AllowFineOverride") ) {
             $flaginfo{'noissues'} = 1;
         }
         $flags{'CHARGES'} = \%flaginfo;
     }
-    elsif ( $amount < 0 ) {
+    elsif ( $ballance < 0 ) {
         my %flaginfo;
-        $flaginfo{'message'} = sprintf "Patron has credit of \$%.02f", -$amount;
-        $flaginfo{'amount'}  = sprintf "%.02f", $amount;
+        $flaginfo{'message'} = sprintf "Patron has credit of \$%.02f", -$ballance;
+        $flaginfo{'amount'}  = sprintf "%.02f", $ballance;
         $flags{'CREDITS'} = \%flaginfo;
     }
     if (   $patroninformation->{'gonenoaddress'}
@@ -1128,9 +1128,8 @@ total amount outstanding for all of the account lines.
 
 =cut
 
-#'
 sub GetMemberAccountRecords {
-    my ($borrowernumber,$date) = @_;
+    my ($borrowernumber) = @_;
     my $dbh = C4::Context->dbh;
     my @acctlines;
     my $numlines = 0;
@@ -1138,14 +1137,10 @@ sub GetMemberAccountRecords {
                         SELECT * 
                         FROM accountlines 
                         WHERE borrowernumber=?);
-    my @bind = ($borrowernumber);
-    if ($date && $date ne ''){
-            $strsth.=" AND date < ? ";
-            push(@bind,$date);
-    }
     $strsth.=" ORDER BY date desc,timestamp DESC";
     my $sth= $dbh->prepare( $strsth );
-    $sth->execute( @bind );
+    $sth->execute( $borrowernumber );
+
     my $total = 0;
     while ( my $data = $sth->fetchrow_hashref ) {
         if ( $data->{itemnumber} ) {
@@ -1159,6 +1154,42 @@ sub GetMemberAccountRecords {
     }
     $total /= 1000;
     return ( $total, \@acctlines,$numlines);
+}
+
+=head2 GetMemberAccountBallance
+
+  ($total_ballance, $non_issue_ballance, $other_charges) = &GetMemberAccountBallance($borrowernumber);
+
+Calculates amount immediately owing by the patron - non-issue charges.
+Based on GetMemberAccountRecords.
+Charges exempt from non-issue are:
+* Res (reserves)
+* Rent (rental) if RentalsInNoissueCharges syspref is set to false
+* Manual invoices if ManInvInNoissueCharges syspref is set to false
+
+=cut
+
+my $ACCOUNT_TYPE_LENGTH = 5; # this is plain ridiculous...
+
+my @not_fines = ('Res');
+push @not_fines, 'Rent' unless C4::Context->preference('RentalsInNoissueCharges');
+unless ( C4::Context->preference('ManInvInNoissueCharges') ) {
+    my $dbh = C4::Context->dbh;
+    my $man_inv_types = $dbh->selectcol_arrayref(qq{SELECT authorised_value FROM authorised_values WHERE category = 'MANUAL_INV'});
+    push @not_fines, map substr($_, 0, $ACCOUNT_TYPE_LENGTH), @$man_inv_types;
+}
+my %not_fine = map {$_ => 1} @not_fines;
+
+sub GetMemberAccountBallance {
+    my ($borrowernumber) = @_;
+
+    my ($total, $acctlines) = GetMemberAccountRecords($borrowernumber);
+    my $other_charges = 0;
+    foreach (@$acctlines) {
+        $other_charges += $_->{amountoutstanding} if $not_fine{ substr($_->{accounttype}, 0, $ACCOUNT_TYPE_LENGTH) };
+    }
+
+    return ( $total, $total - $other_charges, $other_charges);
 }
 
 =head2 GetBorNotifyAcctRecord

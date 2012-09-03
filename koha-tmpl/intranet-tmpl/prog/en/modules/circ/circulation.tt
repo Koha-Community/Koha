@@ -315,6 +315,10 @@ function validate1(date) {
     <div class="dialog message">This item has been lost with a status of "[% alert.ITEM_LOST %]".</div>
 [% END %]
 
+[% IF ( alert.OTHER_CHARGES ) %]
+    <div class="dialog message">The patron has unpaid charges for reserves, rentals etc of [% alert.OTHER_CHARGES %]</div>
+[% END %]
+
 [% IF ( NEEDSCONFIRMATION ) %]
 <div class="yui-g">
 

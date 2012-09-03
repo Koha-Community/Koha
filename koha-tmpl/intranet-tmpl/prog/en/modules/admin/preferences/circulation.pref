@@ -265,6 +265,18 @@ Circulation:
               class: integer
             - '[% local_currency %] in fines.'
         -
+            - pref: RentalsInNoissueCharges
+              choices:
+                  yes: Include
+                  no: "Don't include"
+            - rental charges when summing up charges for NoissueCharge.
+        -
+            - pref: ManInvInNoissueCharges
+              choices:
+                  yes: Include
+                  no: "Don't include"
+            - MAN_INV charges when summing up charges for NoissueCharge.
+        -
             - pref: ReturnBeforeExpiry
               choices:
                   yes: Require
