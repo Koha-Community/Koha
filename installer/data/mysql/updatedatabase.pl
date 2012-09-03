@@ -5675,7 +5675,7 @@ if(C4::Context->preference("Version") < TransformToNum($DBversion) ) {
 $DBversion = "3.09.00.035";
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     $dbh->do("
-    INSERT IGNORE INTO `systempreferences` (variable,value,explanation,options,type) VALUES('PrefillItem','0','When a new item is added, should it be prefilled with last created item values?','','YesNo');
+    INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES('PrefillItem','0','When a new item is added, should it be prefilled with last created item values?','','YesNo');
     ");
     $dbh->do(
     "INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('SubfieldsToUseWhenPrefill','','Define a list of subfields to use when prefilling items (separated by space)','','Free');
