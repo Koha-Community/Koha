@@ -1,3 +1,4 @@
+[% PROCESS 'form-blocks.inc' %]
 <script type="text/javascript">
 //<![CDATA[
 
@@ -100,10 +101,12 @@ function finderjumpfull(page)
 
 
 <form name="f" method="get" action="auth_finder.pl">
+            <input type="hidden" name="source" value="[% source %]" />
             <input type="hidden" name="op" value="do_search" />
             <input type="hidden" name="type" value="intranet" />
             <input type="hidden" name="index" value="[% index %]" />
-                <fieldset class="rows"><ol><li>
+                <fieldset class="rows"><legend>Search options</legend>
+                <ol><li>
                     <span class="label">Authority type</span>
                     [% authtypecode %]
                     <input type="hidden" name="authtypecode" value="[% authtypecode %]" />
@@ -169,10 +172,33 @@ function finderjumpfull(page)
             <option value="HeadingDsc">Heading descendant</option>
         </select>
         </li></ol></fieldset>
-            <fieldset class="action"> <input type="submit" value="Start search" class="submit" id="search" /> <a id="cancel" class="cancel close" href="#">Cancel</a>
-            <span id="authfinderops">
-            <a href="javascript:finderjumpfull('blinddetail-biblio-search.pl?authid=0&amp;index=[% index %]')" id="clear" class="button">Clear field</a>
-            <a href="javascript:finderjumpfull('authorities.pl?index=[% index %]&authtypecode=[% authtypecode %]')" id="createnew" class="button">Create new</a>
-            </span>
-            </fieldset>
+        [% IF source == 'auth' %]
+        <fieldset class="rows"><legend>Relationship information</legend>
+            <ol>
+            <li>
+                <label for="relationship">Special relationship: </label>
+                <select name="relationship" id="relationship">
+                    [% selected=relationship %]
+                    [% PROCESS selectoptionopen value='' %]None specified</option>
+                    [% PROCESS selectoptionopen value='a' %]a - Earlier heading</option>
+                    [% PROCESS selectoptionopen value='b' %]b - Later heading</option>
+                    [% PROCESS selectoptionopen value='d' %]d - Acronym</option>
+                    [% PROCESS selectoptionopen value='f' %]f - Musical composition</option>
+                    [% PROCESS selectoptionopen value='g' %]g - Broader term</option>
+                    [% PROCESS selectoptionopen value='h' %]h - Narrower term</option>
+                    [% PROCESS selectoptionopen value='i' %]i - Reference instruction phrase in subfield $i</option>
+                    [% PROCESS selectoptionopen value='n' %]n - Not applicable</option>
+                    [% PROCESS selectoptionopen value='r' %]r - Relationship designation in $i or $4</option>
+                    [% PROCESS selectoptionopen value='t' %]t - Immediate parent body</option>
+                </select>
+            </li>
+            </ol>
+        </fieldset>
+        [% END %]
+        <fieldset class="action"> <input type="submit" value="Start search" class="submit" id="search" /> <a id="cancel" class="cancel close" href="#">Cancel</a>
+        <span id="authfinderops">
+        <a href="javascript:finderjumpfull('blinddetail-biblio-search.pl?authid=0&amp;index=[% index %]')" id="clear" class="button">Clear field</a>
+        <a href="javascript:finderjumpfull('authorities.pl?index=[% index %]&authtypecode=[% authtypecode %]')" id="createnew" class="button">Create new</a>
+        </span>
+        </fieldset>
 </form>

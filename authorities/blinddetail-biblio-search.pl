@@ -54,6 +54,7 @@ my $dbh = C4::Context->dbh;
 my $authid       = $query->param('authid');
 my $index        = $query->param('index');
 my $tagid        = $query->param('tagid');
+my $relationship = $query->param('relationship');
 my $authtypecode = &GetAuthTypeCode($authid);
 my $tagslib      = &GetTagsLabels( 1, $authtypecode );
 
@@ -95,6 +96,8 @@ if ($authid) {
         my $letter = $_ || '@';
         push( @subfield_loop, {marc_subfield => $letter, marc_values => $subfields{$_}} );
     }
+
+    push( @subfield_loop, { marc_subfield => 'w', marc_values => $relationship } ) if ( $relationship );
 }
 else {
     # authid is empty => the user want to empty the entry.
