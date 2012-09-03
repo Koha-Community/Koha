@@ -31,7 +31,7 @@ my $framework = $query->param('framework') || "";
 my $field         = $query->param('fieldname');
 my $fieldcode     = $query->param('marcfield');
 my $subfieldcode  = $query->param('marcsubfield');
-my $op            = $query->param('op');
+my $op            = $query->param('op') || q{};
 my $id            = $query->param('id');
 
 my ($template, $loggedinuser, $cookie)
