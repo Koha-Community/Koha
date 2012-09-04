@@ -591,7 +591,7 @@ for (my $i=0;$i<@servers;$i++) {
             # Adding the new search if needed
             if (!$borrowernumber || $borrowernumber eq '') {
                 # To a cookie (the user is not logged in)
-                if (($params->{'offset'}||'') eq '') {
+                if (!$offset) {
                     push @recentSearches, {
                                 "query_desc" => $query_desc || "unknown",
                                 "query_cgi"  => $query_cgi  || "unknown",
@@ -613,7 +613,7 @@ for (my $i=0;$i<@servers;$i++) {
             }
             else {
                 # To the session (the user is logged in)
-                if (($params->{'offset'}||'') eq '') {
+                if (!$offset) {
                     AddSearchHistory($borrowernumber, $cgi->cookie("CGISESSID"), $query_desc, $query_cgi, $total);
                     $template->param(ShowOpacRecentSearchLink => 1);
                 }
