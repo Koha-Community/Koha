@@ -471,6 +471,8 @@ function verify_images() {
 	    [% IF ( subscription.branchname ) %]<h3>At library: [% subscription.branchname %]</h3>[% ELSE %]
 	    [% IF ( subscription.branchcode ) %]<h3>At library: [% subscription.branchcode %]</h3>[% END %][% END %]
             [% IF ( subscription.subscriptionnotes ) %]<p>[% subscription.subscriptionnotes FILTER html_line_break %] </p>[% END %]
+            [% IF ( subscription.missinglist ) %]<p>Missing issues: [% subscription.missinglist %] </p>[% END %]
+            [% IF ( subscription.librariannote ) %]<p>([% subscription.librariannote %])</p>[% END %]
             [% IF ( subscription.latestserials ) %]
             <p> The [% subscription.staffdisplaycount %] latest issues related to this subscription:</p>
             <table>
