@@ -251,7 +251,7 @@ sub shelfpage {
                 my $authorsort;
                 my $yearsort;
                 my $tag_quantity;
-                my $sortfield = ( $query->param('sortfield') ? $query->param('sortfield') : 'title' );
+                my $sortfield = ( $sorton ? $sorton : 'title' );
                 if ( $sortfield eq 'author' ) {
                     $authorsort = 'author';
                 }
