@@ -1,18 +1,6 @@
 Searching:
     Features:
         -
-            - pref: NoZebra
-              choices:
-                  yes: "Don't use"
-                  no: Use
-            - the Zebra search engine.  It is recommended to use Zebra; the option to not use Zebra is deprecated and is not guaranteed to work.
-        -
-            - When Zebra is not in use, translate the following MARC fields to the following indexes (each line should look something like <code>'indexname' =&gt; '100a,245a,500*',</code>)
-            - pref: NoZebraIndexes
-              type: textarea
-              class: list
-            -
-        -
             - Perform wildcard searching (where, for example, <cite>Har</cite> would match <cite>Harry</cite> and <cite>harp</cite>)
             - pref: QueryAutoTruncate
               type: boolean
@@ -27,13 +15,6 @@ Searching:
                   yes: Try
                   no: "Don't try"
             - to match similarly spelled words in a search (for example, a search for <cite>flang</cite> would also match <cite>flange</cite> and <cite>fang</cite>; REQUIRES ZEBRA).
-        -
-            - pref: QueryRemoveStopwords
-              type: boolean
-              choices:
-                  yes: Ignore
-                  no: "Don't ignore"
-            - stopwords specified in Koha when searching. (Only applies when Zebra is off).
         -
             - pref: QueryStemming
               type: boolean

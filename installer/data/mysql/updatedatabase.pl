@@ -6011,6 +6011,14 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = 'XXX';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+   $dbh->do("UPDATE systempreferences SET value=0 WHERE variable='NoZebra'");
+   $dbh->do("UPDATE systempreferences SET value=0 WHERE variable='QueryRemoveStopwords'");
+   print "Upgrade to $DBversion done (Disable obsolete NoZebra and QueryRemoveStopwords sysprefs)\n";
+   SetVersion ($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)
