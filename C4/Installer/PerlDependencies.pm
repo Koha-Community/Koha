@@ -55,10 +55,10 @@ our $PERL_DEPS = {
         'min_ver'  => '1.53'
     },
     'DBIx::Class::Schema::Loader' => {
-  'usage'    => 'Core',
+        'usage'    => 'Core',
         'required' => '1',
         'min_ver'  => '0.07000'
-     },
+    },
     'Net::Z3950::ZOOM' => {
         'usage'    => 'Core',
         'required' => '1',

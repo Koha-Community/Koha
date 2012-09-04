@@ -1012,8 +1012,9 @@ sub _new_schema {
     my $db_port   = $context->config("port") || '';
     my $db_user   = $context->config("user");
     my $db_passwd = $context->config("pass");
-    my $schema= Koha::Schema->connect("DBI:$db_driver:dbname=$db_name;host=$db_host;port=$db_port",
-                                            $db_user, $db_passwd);
+    my $schema = Koha::Schema->connect(
+        "DBI:$db_driver:dbname=$db_name;host=$db_host;port=$db_port",
+        $db_user, $db_passwd );
     return $schema;
 }
 
@@ -1036,7 +1037,7 @@ sub schema {
     my $self = shift;
     my $sth;
 
-    if (defined($context->{"schema"}) && $context->{"schema"}->ping()) {
+    if ( defined( $context->{"schema"} ) && $context->{"schema"}->ping() ) {
         return $context->{"schema"};
     }
 
