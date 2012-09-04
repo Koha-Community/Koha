@@ -149,7 +149,7 @@ foreach my $subscription (@subscriptions) {
     my %cell;
 	my $serials_to_display;
     $cell{subscriptionid}    = $subscription->{subscriptionid};
-    $cell{subscriptionnotes} = $subscription->{notes};
+    $cell{subscriptionnotes} = $subscription->{internalnotes};
     $cell{branchcode}        = $subscription->{branchcode};
     $cell{branchname}        = GetBranchName($subscription->{branchcode});
     $cell{hasalert}          = $subscription->{hasalert};
