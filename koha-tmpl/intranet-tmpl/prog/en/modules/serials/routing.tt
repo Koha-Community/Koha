@@ -57,7 +57,7 @@ function search_member(subscriptionid){
         [% FOREACH member IN m_loop %]
         <tr><td>[% member.name %]</td>
             <td>
-                <select name="itemrank" onchange="reorder_item([%- subscriptionid -%], [%- member.routingid -%], this.option[this.selectedIndex].value)">
+                <select name="itemrank" onchange="reorder_item([%- subscriptionid -%], [%- member.routingid -%], this.value)">
                 [% rankings = [1 .. m_loop.size] %]
                 [% FOREACH r IN rankings %]
                     [% IF r == member.ranking %]
