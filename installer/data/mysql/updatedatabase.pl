@@ -5696,6 +5696,28 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion($DBversion);
 }
 
+
+
+
+$DBversion = "3.09.00.XXX";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('UseTransportCostMatrix',0,'Use Transport Cost Matrix when filling holds','','YesNo')");
+
+ $dbh->do("CREATE TABLE `transport_cost` (
+              `frombranch` varchar(10) NOT NULL,
+              `tobranch` varchar(10) NOT NULL,
+              `cost` decimal(6,2) NOT NULL,
+              `disable_transfer` tinyint(1) NOT NULL DEFAULT 0,
+              CHECK ( `frombranch` <> `tobranch` ), -- a dud check, mysql does not support that
+              PRIMARY KEY (`frombranch`, `tobranch`),
+              CONSTRAINT `transport_cost_ibfk_1` FOREIGN KEY (`frombranch`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE,
+              CONSTRAINT `transport_cost_ibfk_2` FOREIGN KEY (`tobranch`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE
+          ) ENGINE=InnoDB DEFAULT CHARSET=utf8");
+
+    print "Upgrade to $DBversion done (creating `transport_cost` table; adding UseTransportCostMatrix systempref, in circulation)\n";
+    SetVersion ($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

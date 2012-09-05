@@ -1,0 +1,131 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Administration &rsaquo; Transport Cost Matrix</title>
+[% INCLUDE 'doc-head-close.inc' %]
+
+<script type="text/javascript">
+//<![CDATA[
+function check_transport_cost(e) {
+    var val = e.value;
+    if (val && val != '' && !isNaN(parseFloat(val)) && val >= 0.0) {
+        return;
+    }
+    alert("Cost must be expressed as a decimal number >= 0");
+}
+function disable_transport_cost_chg(e, cost_id) {
+    disable_transport_cost(cost_id, e.checked);
+}
+function disable_transport_cost(cost_id, disable) {
+    if (disable) {
+        $('#celldiv_'+cost_id).find('input[type=text]').attr("disabled","disabled").addClass('disabled-transfer');
+    } else {
+        $('#celldiv_'+cost_id).find('input:disabled').removeAttr("disabled").removeClass('disabled-transfer');
+    }
+}
+function enable_cost_input(cost_id) {
+    var cell = $('#celldiv_'+cost_id);
+    var cost = $(cell).text();
+    var disabled = $(cell).hasClass('disabled-transfer');
+    $(cell).removeClass('disabled-transfer');
+
+    $('#celldiv_'+cost_id).html(
+        '<input type="text" name="cost_'+cost_id+'" onblur="check_transport_cost(this);" size="4" value="'+$.trim(cost)+'" />'+
+        '<br/>Disable <input name="disable_'+cost_id+'" value="1" onchange="disable_transport_cost_chg(this, \''+cost_id+'\');" type="checkbox" '+(disabled ? 'checked' : '')+' />'
+    );
+    disable_transport_cost(cost_id, disabled);
+}
+
+function form_submit (f) {
+    $(f).find('input:disabled').removeAttr("disabled");
+    return true;
+}
+
+$(document).ready(function() {
+    show_transport_cost_matrix([% IF UseTransportCostMatrix %]true[% ELSE %]false[% END %]);
+});
+//]]>
+</script>
+<style type="text/css">
+.disabled-transfer {
+    background-color: red;
+}
+.errors {
+    color: red;
+}
+</style>
+
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'cat-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; Transport Cost Matrix</div>
+
+<div id="doc3" class="yui-t1">
+
+<div id="bd">
+    <div id="yui-main">
+    <div class="yui-b">
+    <h1 class="parameters">
+            Defining transport costs between libraries
+    </h1>
+[% IF ( WARNING_transport_cost_matrix_off ) %]
+<div class="dialog message">Because the "UseTransportCostMatrix" system preference is currently not enabled, Transport Cost Matrix is not being used.  Go <a href="/cgi-bin/koha/admin/preferences.pl?op=search&amp;searchfield=UseTransportCostMatrix">here</a> if you wish to enable this feature.</div>
+[% END %]
+
+    <div class="container">
+        <form method="post" action="?" onSubmit="return form_submit(this);">
+            <input type="hidden" name="op" value="set-cost-matrix" />
+            <div id="transport-cost-matrix">
+                <div class="help">
+                    <p>Costs are decimal values 0 to some arbitrarymax value (1 or 100), 0 being minimum (no) cost.</p>
+                    <p>Red cells signify no transfer allowed</p>
+                    <p>Click on the cell to edit</p>
+                </div>
+                <ul class="errors" %]>
+                [% FOR e IN errors %]
+                    <li>[% e %]</li>
+                [% END %]
+                </ul>
+                <table>
+                    <tr>
+                        <th>From \ To</th>
+                [% FOR b IN branchloop %]
+                        <th>[% b.name %]</th>
+                [% END %]
+                    <tr>
+                [% FOR bf IN branchfromloop %]
+                    <tr>
+                        <th>[% bf.name %]</th>
+                    [% FOR bt IN bf.branchtoloop %]
+                        <td>
+                        [% IF bt.skip %]
+                            &nbsp;
+                        [% ELSE %]
+                            [% IF bt.disabled %]
+                            <div id="celldiv_[% bt.id %]" class="disabled-transfer">
+                            [% ELSE %]
+                            <div id="celldiv_[% bt.id %]">
+                            [% END %]
+                            <div onclick="enable_cost_input('[% bt.id %]');">[% bt.disabled ? '&nbsp;' : bt.value %]</div>
+                            <input type="hidden" name="cost_[% bt.id %]" value="[% bt.value %]" />
+                            [% IF bt.disabled %]
+                            <input type="hidden" name="disable_[% bt.id %]" value="1" />
+                            [% END %]
+                            </div>
+                        [% END %]
+                        </td>
+                    [% END %]
+                    </tr>
+                [% END %]
+                </table>
+            </div>
+            <input type="submit" value="Save" class="submit" />
+        </form>
+    </div>
+    </div>
+    </div>
+<div class="yui-b">
+[% INCLUDE 'admin-menu.inc' %]
+</div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

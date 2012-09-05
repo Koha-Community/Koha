@@ -1477,7 +1477,8 @@ sub GetBranchItemRule {
 
     foreach my $attempt (@attempts) {
         my ($query, @bind_params) = @{$attempt};
-        my $search_result = $dbh->selectrow_hashref ( $query , {}, @bind_params );
+        my $search_result = $dbh->selectrow_hashref ( $query , {}, @bind_params )
+          or next;
 
         # Since branch/category and branch/itemtype use the same per-branch
         # defaults tables, we have to check that the key we want is set, not

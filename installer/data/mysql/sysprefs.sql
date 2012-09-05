@@ -317,6 +317,7 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OpacHiddenItems','','This syspref allows to define custom rules for hiding specific items at opac. See docs/opac/OpacHiddenItems.txt for more informations.','','Textarea');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('numSearchRSSResults',50,'Specify the maximum number of results to display on a RSS page of results',NULL,'Integer');
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('OpacRenewalBranch','checkoutbranch','Choose how the branch for an OPAC renewal is recorded in statistics','itemhomebranch|patronhomebranch|checkoutbranch|null','Choice');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('UseTransportCostMatrix',0,"Use Transport Cost Matrix when filling holds",'','YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('BasketConfirmations', '1', 'When closing or reopening a basket,', 'always ask for confirmation.|do not ask for confirmation.', 'Choice');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('MARCAuthorityControlField008', '|| aca||aabn           | a|a     d', NULL, NULL, 'Textarea');
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('OpenLibraryCovers',0,'If ON Openlibrary book covers will be show',NULL,'YesNo');

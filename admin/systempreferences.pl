@@ -203,6 +203,7 @@ $tabsysprefs{DisplayClearScreenButton}       = "Circulation";
 $tabsysprefs{AllowAllMessageDeletion}        = "Circulation";
 $tabsysprefs{OverdueNoticeBcc}               = "Circulation";
 $tabsysprefs{OverduesBlockCirc}              = "Circulation";
+$tabsysprefs{UseTransportCostMatrix}         = "Circulation";
 
 
 # Staff Client
