@@ -26,7 +26,7 @@ cmp_ok($item_bibitemnum, '==', $bibitemnum, "New item is linked to correct bibli
 # Get item.
 my $getitem = GetItem($itemnumber);
 cmp_ok($getitem->{'itemnumber'}, '==', $itemnumber, "Retrieved item has correct itemnumber.");
-cmp_ok($getitem->{'biblioitemnumber'}, '==', $item_bibnum, "Retrieved item has correct biblioitemnumber.");
+cmp_ok($getitem->{'biblioitemnumber'}, '==', $item_bibitemnum, "Retrieved item has correct biblioitemnumber.");
 
 # Modify item; setting barcode.
 ModItem({ barcode => '987654321' }, $bibnum, $itemnumber);
