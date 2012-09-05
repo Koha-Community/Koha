@@ -5,9 +5,9 @@ usage() {
     cat <<EOF
 $scriptname
 
-Index Koha records by chunks. It is useful when some record causes errors and
-stop the indexation process. With this script, if indexation of one chunk fails,
-chunk is splitted in two or more chunks, and indexation continue on these chunks.
+Index Koha records by chunks. It is useful when a record causes errors and
+stops the indexing process. With this script, if indexing of one chunk fails,
+that chunk is split into two or more chunks, and indexing continues on these chunks.
 rebuild_zebra.pl is called only once to export records. Splitting and indexing
 is handled by this script (using yaz-marcdump and zebraidx).
 
