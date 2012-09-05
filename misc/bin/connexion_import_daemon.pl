@@ -87,12 +87,16 @@ use IO::Socket::INET;
 use IO::Select;
 use POSIX;
 use HTTP::Status qw(:constants);
+use strict;
+use warnings;
 
 use LWP::UserAgent;
 use XML::Simple;
+use MARC::Record;
+use MARC::File::XML;
 
 use constant CLIENT_READ_TIMEOUT     => 5;
-use constant CLIENT_READ_BUFFER_SIZE => 4 * 1024;
+use constant CLIENT_READ_BUFFER_SIZE => 100000;
 use constant AUTH_URI       => "/cgi-bin/koha/mainpage.pl";
 use constant IMPORT_SVC_URI => "/cgi-bin/koha/svc/import_bib";
 
@@ -222,7 +226,7 @@ sub _ua {
 sub read_request {
     my ( $self, $io ) = @_;
 
-    my ($in, @in, $timeout);
+    my ($in, @in_arr, $timeout, $bad_marc);
     my $select = IO::Select->new($io) ;
     while ( "FOREVER" ) {
         if ( $select->can_read(CLIENT_READ_TIMEOUT) ){
@@ -231,22 +235,27 @@ sub read_request {
 
             # XXX ignore after NULL
             if ( $in =~ m/^(.*)\000/so ) { # null received, EOT
-                push @in, $1;
+                push @in_arr, $1;
                 last;
             }
-            push @in, $in;
+            push @in_arr, $in;
         }
         else {
-            $timeout = 1;
             last;
         }
     }
 
-    $in = join '', @in;
+    $in = join '', @in_arr;
 
+    $in =~ m/(.)$/;
+    my $lastchar = $1;
     my ($xml, $user, $password, $local_user);
     my $data = $in; # copy for diagmostic purposes
-    while ( my $first = substr( $data, 0, 1 ) ) {
+    while () {
+        my $first = substr( $data, 0, 1 );
+        if (!defined $first) {
+           last;
+        }
         $first eq 'U' && do {
             ($user, $data) = _trim_identifier($data);
             next;
@@ -256,26 +265,36 @@ sub read_request {
             next;
         };
         $first eq 'P' && do {
-            ($password,, $data) = _trim_identifier($data);
+            ($password, $data) = _trim_identifier($data);
             next;
         };
         $first eq ' ' && do {
             $data = substr( $data, 1 ); # trim
             next;
         };
-        $first eq '<' && do {
-            $xml = $data;
+        $data =~ m/^[0-9]/ && do {
+            # What we have here might be a MARC record...
+            my $marc_record;
+            eval { $marc_record = MARC::Record->new_from_usmarc($data); };
+            if ($@) {
+                $bad_marc = 1;
+            }
+            else {
+               $xml = $marc_record->as_xml();
+            }
             last;
         };
-
         last; # unexpected input
     }
 
     my @details;
     push @details, "Timeout" if $timeout;
+    push @details, "Bad MARC" if $bad_marc;
     push @details, "User: $user" if $user;
     push @details, "Password: " . ( $self->{debug} ? $password : ("x" x length($password)) ) if $password;
     push @details, "Local user: $local_user" if $local_user;
+    push @details, "XML: $xml" if $xml;
+    push @details, "Remaining data: $data" if ($data && !$xml);
     unless ($xml) {
         $self->log("Invalid request", $in, @details);
         return;
@@ -287,9 +306,14 @@ sub read_request {
 }
 
 sub _trim_identifier {
-    my ($a, $len) = unpack "cc", substr( $_[0], 0, 2 );
-
-    return ( substr( $_[0], 2, $len ), substr( $_[0], 2 + $len ) );
+    #my ($a, $len) = unpack "cc", substr( $_[0], 0, 2 );
+    my $len=ord(substr ($_[0], 1, 1)) - 64;
+    if ($len <0) {  #length is numeric, and thus comes from the web client, not the desktop client.
+       $_[0] =~ m/.(\d+)/;
+       $len = $1;
+       return ( substr( $_[0], length($len)+1 , $len ), substr( $_[0], length($len) + 1 + $len ) );
+    }
+    return ( substr( $_[0], 2 , $len ), substr( $_[0], 2 + $len ) );
 }
 
 sub handle_request {
@@ -309,13 +333,28 @@ sub handle_request {
     }
 
     my $base_url = $self->{koha};
-    my $resp = $ua->post( $base_url.IMPORT_SVC_URI, $self->{params}, 'Content-Type' => 'text/plain', Content => $data );
+    my $resp = $ua->post( $base_url.IMPORT_SVC_URI,
+                              {'nomatch_action' => $self->{params}->{nomatch_action},
+                               'overlay_action' => $self->{params}->{overlay_action},
+                               'match'          => $self->{params}->{match},
+                               'import_mode'    => $self->{params}->{import_mode},
+                               'framework'      => $self->{params}->{framework},
+                               'item_action'    => $self->{params}->{item_action},
+                               'xml'            => $data});
+
     my $status = $resp->code;
     if ($status == HTTP_UNAUTHORIZED || $status == HTTP_FORBIDDEN) {
         my $user = $self->{user};
         my $password = $self->{password};
         $resp = $ua->post( $base_url.AUTH_URI, { userid => $user, password => $password } );
-        $resp = $ua->post( $base_url.IMPORT_SVC_URI, $self->{params}, 'Content-Type' => 'text/plain', Content => $data )
+        $resp = $ua->post( $base_url.IMPORT_SVC_URI,
+                              {'nomatch_action' => $self->{params}->{nomatch_action},
+                               'overlay_action' => $self->{params}->{overlay_action},
+                               'match'          => $self->{params}->{match},
+                               'import_mode'    => $self->{params}->{import_mode},
+                               'framework'      => $self->{params}->{framework},
+                               'item_action'    => $self->{params}->{item_action},
+                               'xml'            => $data})
           if $resp->is_success;
     }
     unless ($resp->is_success) {
@@ -323,11 +362,14 @@ sub handle_request {
         return $self->error_response("Unsuccessful request");
     }
 
-    my ($koha_status, $bib, $batch_id, $error);
+    my ($koha_status, $bib, $overlay, $batch_id, $error, $url);
     if ( my $r = eval { XMLin($resp->content) } ) {
         $koha_status = $r->{status};
         $batch_id    = $r->{import_batch_id};
         $error       = $r->{error};
+        $bib         = $r->{biblionumber};
+        $overlay     = $r->{match_status};
+        $url         = $r->{url};
     }
     else {
         $koha_status = "error";
@@ -336,7 +378,12 @@ sub handle_request {
     }
 
     if ($koha_status eq "ok") {
-        return $self->response( sprintf( "Success. Import batch id: %s", $batch_id ) );
+        my $response_string = sprintf( "Success.  Batch number %s - biblio record number %s",
+                                        $batch_id,$bib);
+        $response_string .= $overlay eq 'no_match' ? ' added to Koha.' : ' overlaid by import.';
+        $response_string .= "\n\n$url";
+
+        return $self->response( $response_string );
     }
 
     return $self->error_response( sprintf( "%s.  Please contact administrator.", $error ) );
