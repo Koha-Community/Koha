@@ -62,7 +62,7 @@
 							<td>[% resultsloo.cardnumber %]</td>
                             <td style="white-space: nowrap;">
                             <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% resultsloo.borrowernumber %]">
-                            [% INCLUDE 'patron-title.inc' category_type = resultsloo.category_type firstname = resultsloo.firstname surname = resultsloo.surname othernames = resultsloo.othernames cardnumber = resultsloo.cardnumber invert_name = 1%]
+                            [% INCLUDE 'patron-title.inc' borrowernumber = resultsloo.borrowernumber category_type = resultsloo.category_type firstname = resultsloo.firstname surname = resultsloo.surname othernames = resultsloo.othernames cardnumber = resultsloo.cardnumber invert_name = 1%]
                             </a> <br />
                             [% IF ( resultsloo.streetnumber ) %][% resultsloo.streetnumber %] [% END %][% resultsloo.address %][% IF ( resultsloo.address2 ) %]<br />[% resultsloo.address2 %][% END %][% IF ( resultsloo.city ) %]<br />[% resultsloo.city %][% IF ( resultsloo.state ) %],[% END %][% END %][% IF ( resultsloo.state ) %] [% resultsloo.state %][% END %] [% IF ( resultsloo.zipcode ) %]  [% resultsloo.zipcode %][% END %][% IF ( resultsloo.country ) %], [% resultsloo.country %][% END %]</td>
 							<td>[% resultsloo.category_description %] ([% resultsloo.category_type %])</td>
