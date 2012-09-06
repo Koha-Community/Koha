@@ -8712,6 +8712,13 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.17.00.XXX";
+if(C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do("INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES ('ExpireReservesOnHolidays', '1', NULL, 'If false, reserves at a library will not be canceled on days the library is not open.', 'YesNo')");
+    print "Upgrade to $DBversion done (Add syspref ExpireReservesOnHolidays\n";
+    SetVersion ($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

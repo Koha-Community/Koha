@@ -36,6 +36,7 @@ use C4::Members qw();
 use C4::Letters;
 use C4::Branch qw( GetBranchDetail );
 use C4::Dates qw( format_date_in_iso );
+use C4::Calendar;
 
 use Koha::DateUtils;
 
@@ -979,17 +980,32 @@ sub CancelExpiredReserves {
     if ( C4::Context->preference("ExpireReservesMaxPickUpDelay") ) {
         my $max_pickup_delay = C4::Context->preference("ReservesMaxPickUpDelay");
         my $charge = C4::Context->preference("ExpireReservesMaxPickUpDelayCharge");
+        my $cancel_on_holidays = C4::Context->preference('ExpireReservesOnHolidays');
+
+        my $today = C4::Dates->new();
 
         my $query = "SELECT * FROM reserves WHERE TO_DAYS( NOW() ) - TO_DAYS( waitingdate ) > ? AND found = 'W' AND priority = 0";
         $sth = $dbh->prepare( $query );
         $sth->execute( $max_pickup_delay );
 
-        while (my $res = $sth->fetchrow_hashref ) {
-            if ( $charge ) {
-                manualinvoice($res->{'borrowernumber'}, $res->{'itemnumber'}, 'Hold waiting too long', 'F', $charge);
+        while ( my $res = $sth->fetchrow_hashref ) {
+            my $do_cancel = 1;
+            unless ( $cancel_on_holidays ) {
+                my $calendar = C4::Calendar->new( branchcode => $res->{'branchcode'} );
+                my $is_holiday = $calendar->isHoliday( split( '/', $today->output('metric') ) );
+
+                if ( $is_holiday ) {
+                    $do_cancel = 0;
+                }
             }
 
-            CancelReserve({ reserve_id => $res->{'reserve_id'} });
+            if ( $do_cancel ) {
+                if ( $charge ) {
+                    manualinvoice($res->{'borrowernumber'}, $res->{'itemnumber'}, 'Hold waiting too long', 'F', $charge);
+                }
+
+                CancelReserve({ reserve_id => $res->{'reserve_id'} });
+            }
         }
     }
 
