@@ -256,8 +256,8 @@ CREATE TABLE `borrowers` ( -- this table includes information about your patrons
   `altcontactsurname` varchar(255) default NULL, -- surname or last name of the alternate contact for the patron/borrower
   `altcontactaddress1` varchar(255) default NULL, -- the first address line for the alternate contact for the patron/borrower
   `altcontactaddress2` varchar(255) default NULL, -- the second address line for the alternate contact for the patron/borrower
-  `altcontactaddress3` varchar(255) default NULL, -- the third address line for the alternate contact for the patron/borrower
-  `altcontactstate` text default NULL, -- the city and state for the alternate contact for the patron/borrower
+  `altcontactaddress3` varchar(255) default NULL, -- the city for the alternate contact for the patron/borrower
+  `altcontactstate` text default NULL, -- the state for the alternate contact for the patron/borrower
   `altcontactzipcode` varchar(50) default NULL, -- the zipcode for the alternate contact for the patron/borrower
   `altcontactcountry` text default NULL, -- the country for the alternate contact for the patron/borrower
   `altcontactphone` varchar(50) default NULL, -- the phone number for the alternate contact for the patron/borrower
@@ -727,8 +727,8 @@ CREATE TABLE `deletedborrowers` ( -- stores data related to the patrons/borrower
   `altcontactsurname` varchar(255) default NULL, -- surname or last name of the alternate contact for the patron/borrower
   `altcontactaddress1` varchar(255) default NULL, -- the first address line for the alternate contact for the patron/borrower
   `altcontactaddress2` varchar(255) default NULL, -- the second address line for the alternate contact for the patron/borrower
-  `altcontactaddress3` varchar(255) default NULL, -- the third address line for the alternate contact for the patron/borrower
-  `altcontactstate` text default NULL, -- the city and state for the alternate contact for the patron/borrower
+  `altcontactaddress3` varchar(255) default NULL, -- the city for the alternate contact for the patron/borrower
+  `altcontactstate` text default NULL, -- the state for the alternate contact for the patron/borrower
   `altcontactzipcode` varchar(50) default NULL, -- the zipcode for the alternate contact for the patron/borrower
   `altcontactcountry` text default NULL, -- the country for the alternate contact for the patron/borrower
   `altcontactphone` varchar(50) default NULL, -- the phone number for the alternate contact for the patron/borrower
