@@ -56,17 +56,16 @@ sub get_link {
 
         if ( !defined $authid && $self->{'broader_headings'} ) {
             my $field     = $heading->field();
-            my @subfields = $field->subfields();
+            my @subfields = grep { $_->[0] ne '9' } $field->subfields();
             if ( scalar @subfields > 1 ) {
                 pop @subfields;
-                $field->replace_with(
+                $field =
                     MARC::Field->new(
                         $field->tag,
                         $field->indicator(1),
                         $field->indicator(2),
-                        map { $_[0] => $_[1] } @subfields
-                    )
-                );
+                        map { $_->[0] => $_->[1] } @subfields
+                    );
                 ( $authid, $fuzzy ) =
                   $self->get_link( C4::Heading->new_from_bib_field($field),
                     $behavior );
