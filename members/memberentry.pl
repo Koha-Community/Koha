@@ -433,9 +433,10 @@ if ($op eq "modify")  {
 if ( $op eq "duplicate" ) {
     $template->param( updtype => 'I' );
     $template->param( step_1 => 1, step_2 => 1, step_3 => 1, step_4 => 1, step_5 => 1, step_6 => 1 ) unless $step;
+    $data{'cardnumber'} = "";
 }
 
-$data{'cardnumber'}=fixup_cardnumber($data{'cardnumber'}) if $op eq 'add';
+$data{'cardnumber'}=fixup_cardnumber($data{'cardnumber'}) if ( ( $op eq 'add' ) or ( $op eq 'duplicate' ) );
 if(!defined($data{'sex'})){
     $template->param( none => 1);
 } elsif($data{'sex'} eq 'F'){
