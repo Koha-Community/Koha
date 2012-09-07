@@ -969,6 +969,7 @@ sub checkauth {
         intranetstylesheet => C4::Context->preference("intranetstylesheet"),
         intranetbookbag    => C4::Context->preference("intranetbookbag"),
         IntranetNav        => C4::Context->preference("IntranetNav"),
+        IntranetFavicon    => C4::Context->preference("IntranetFavicon"),
         intranetuserjs     => C4::Context->preference("intranetuserjs"),
         IndependantBranches=> C4::Context->preference("IndependantBranches"),
         AutoLocation       => C4::Context->preference("AutoLocation"),
