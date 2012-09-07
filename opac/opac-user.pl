@@ -109,7 +109,8 @@ if ( $borr->{amountoutstanding} > $no_renewal_amt ) {
     $borr->{'flagged'} = 1;
     $canrenew = 0;
     $template->param(
-        renewal_blocked_fines => sprintf( '%.02f', $borr->{amountoutstanding} ),
+        renewal_blocked_fines => sprintf( '%.02f', $no_renewal_amt ),
+        renewal_blocked_fines_amountoutstanding => sprintf( '%.02f', $borr->{amountoutstanding} ),
     );
 }
 
