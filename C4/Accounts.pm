@@ -760,7 +760,7 @@ sub makepartialpayment {
     .  'description, accounttype, amountoutstanding, itemnumber, manager_id) '
     . ' VALUES (?, ?, now(), ?, ?, ?, 0, ?, ?)';
 
-    $dbh->do(  $insert, undef, $borrowernumber, $nextaccntno, $amount,
+    $dbh->do(  $insert, undef, $borrowernumber, $nextaccntno, 0 - $amount,
         "Payment, thanks - $user", 'Pay', $data->{'itemnumber'}, $manager_id);
 
     UpdateStats( $user, 'payment', $amount, '', '', '', $borrowernumber, $accountno );
