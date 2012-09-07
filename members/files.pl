@@ -23,8 +23,10 @@ use warnings;
 use CGI;
 
 use C4::Auth;
+use C4::Branch;
 use C4::Output;
 use C4::Members;
+use C4::Members::Attributes qw(GetBorrowerAttributes);
 use C4::Debug;
 
 use Koha::DateUtils;
@@ -98,6 +100,22 @@ else {
     } elsif ( $op eq 'delete' ) {
         $bf->DelFile( id => $cgi->param('file_id') );
     }
+
+    $template->param(
+        categoryname    => $data->{'description'},
+        branchname      => GetBranchName($data->{'branchcode'}),
+    );
+
+    if (C4::Context->preference('ExtendedPatronAttributes')) {
+        my $attributes = GetBorrowerAttributes($borrowernumber);
+        $template->param(
+            ExtendedPatronAttributes => 1,
+            extendedattributes => $attributes
+        );
+    }
+
+    my ($picture, $dberror) = GetPatronImage($data->{'cardnumber'});
+    $template->param( picture => 1 ) if $picture;
 
     $template->param(
         files => Koha::Borrower::Files->new( borrowernumber => $borrowernumber )

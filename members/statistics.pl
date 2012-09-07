@@ -29,6 +29,7 @@ use C4::Branch;
 use C4::Context;
 use C4::Members;
 use C4::Members::Statistics;
+use C4::Members::Attributes qw(GetBorrowerAttributes);
 use C4::Output;
 
 my $input = new CGI;
@@ -56,7 +57,10 @@ if ( not defined $borrower ) {
 foreach my $key ( keys %$borrower ) {
     $template->param( $key => $borrower->{$key} );
 }
-
+$template->param(
+    categoryname    => $borrower->{'description'},
+    branchname      => GetBranchName($borrower->{'branchcode'}),
+);
 # Construct column names
 my $fields = C4::Members::Statistics::get_fields();
 our @statistic_column_names = split '\|', $fields;
@@ -79,6 +83,17 @@ my $count_total_precedent_state = $total->{count_precedent_state} || 0;
 my $count_total_issues = $total->{count_total_issues_today} || 0;
 my $count_total_issues_returned = $total->{count_total_issues_returned_today} || 0;
 my $count_total_actual_state = ($count_total_precedent_state - $count_total_issues_returned + $count_total_issues);
+
+if (C4::Context->preference('ExtendedPatronAttributes')) {
+    my $attributes = GetBorrowerAttributes($borrowernumber);
+    $template->param(
+        ExtendedPatronAttributes => 1,
+        extendedattributes => $attributes
+    );
+}
+
+my ($picture, $dberror) = GetPatronImage($borrower->{'cardnumber'});
+$template->param( picture => 1 ) if $picture;
 
 $template->param(
     statisticsview => 1,
