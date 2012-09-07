@@ -6526,6 +6526,7 @@ if ( CheckVersion($DBversion) ) {
 $DBversion = "3.11.00.100";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     print "Upgrade to $DBversion done (3.12-alpha release)\n";
+   SetVersion ($DBversion);
 }
 
 $DBversion = "3.11.00.101";
@@ -6697,6 +6698,18 @@ if ( CheckVersion($DBversion) ) {
         $sth_update->execute($row->{content}, $row->{module}, $row->{code}, $row->{branchcode});
     }
     print "Upgrade to $DBversion done (use new <<items.fine>> syntax in notices)\n";
+    SetVersion($DBversion);
+}
+
+$DBversion = "3.11.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(qq{
+        ALTER TABLE issuingrules ADD COLUMN renewalperiod int(4) DEFAULT NULL AFTER renewalsallowed
+    });
+    $dbh->do(qq{
+        UPDATE issuingrules SET renewalperiod = issuelength
+    });
+    print "Upgrade to $DBversion done (Bug 8365: Add colum issuingrules.renewalperiod)\n";
     SetVersion ($DBversion);
 }
 

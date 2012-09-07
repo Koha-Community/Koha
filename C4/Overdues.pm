@@ -72,10 +72,6 @@ BEGIN {
 	push @EXPORT, qw(
         &GetIssuesIteminfo
 	);
-    #
-	# &GetIssuingRules - delete.
-	# use C4::Circulation::GetIssuingRule instead.
-	
 	# subs to move to Members.pm
 	push @EXPORT, qw(
         &CheckBorrowerDebarred
@@ -695,41 +691,6 @@ sub GetFine {
     }
     return 0;
 }
-
-
-=head2 GetIssuingRules
-
-FIXME - This sub should be deprecated and removed.
-It ignores branch and defaults.
-
-    $data = &GetIssuingRules($itemtype,$categorycode);
-
-Looks up for all issuingrules an item info 
-
-C<$itemnumber> is a reference-to-hash whose keys are all of the fields
-from the borrowers and categories tables of the Koha database. Thus,
-
-C<$categorycode> contains  information about borrowers category 
-
-C<$data> contains all information about both the borrower and
-category he or she belongs to.
-=cut 
-
-sub GetIssuingRules {
-	warn "GetIssuingRules is deprecated: use GetIssuingRule from C4::Circulation instead.";
-   my ($itemtype,$categorycode)=@_;
-   my $dbh   = C4::Context->dbh();    
-   my $query=qq|SELECT *
-        FROM issuingrules
-        WHERE issuingrules.itemtype=?
-            AND issuingrules.categorycode=?
-        |;
-    my $sth = $dbh->prepare($query);
-    #  print $query;
-    $sth->execute($itemtype,$categorycode);
-    return $sth->fetchrow_hashref;
-}
-
 
 sub ReplacementCost2 {
     my ( $itemnum, $borrowernumber ) = @_;

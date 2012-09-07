@@ -23,7 +23,6 @@ sub methods : Test( 1 ) {
                        BorType 
                        ReplacementCost 
                        GetFine 
-                       GetIssuingRules 
                        ReplacementCost2 
                        GetNextIdNotify 
                        NumberNotifyId
