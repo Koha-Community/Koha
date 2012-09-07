@@ -988,11 +988,7 @@
       <label for="cardnumber">
     [% END %] 
     Card number: </label>
-    [% IF ( opduplicate ) %]
-		<input type="text" id="cardnumber" name="cardnumber" size="20" />
-    [% ELSE %]
-		<input type="text" id="cardnumber" name="cardnumber" size="20" value="[% cardnumber %]" />
-    [% END %]
+	<input type="text" id="cardnumber" name="cardnumber" size="20" value="[% cardnumber %]" />
 	  [% IF ( mandatorycardnumber ) %]<span class="required">Required</span>[% END %]</li>
         [% END %]
         [% UNLESS nobranchcode %]
