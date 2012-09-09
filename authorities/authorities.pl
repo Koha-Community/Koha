@@ -194,9 +194,8 @@ sub create_input {
             id=\"".$subfield_data{id}."\"
             name=\"".$subfield_data{id}."\"
             value=\"$value\"
-            class=\"input_marceditor readonly\"
-            tabindex=\"1\"
-            readonly=\"readonly\" \/>
+            class=\"input_marceditor\"
+            tabindex=\"1\" \/>
         <a href=\"#\" class=\"buttonDot\"
         onclick=\"openAuth(this.parentNode.getElementsByTagName('input')[1].id,'".$tagslib->{$tag}->{$subfield}->{authtypecode}."'); return false;\" tabindex=\"1\" title=\"Tag Editor\">...</a>
     ";
