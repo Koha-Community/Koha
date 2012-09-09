@@ -1301,8 +1301,8 @@ sub merge {
     } else {
         #zebra connection  
         my $oConnection=C4::Context->Zconn("biblioserver",0);
-        my $oldSyntax = $oConnection->option("preferredRecordSyntax");
-        $oConnection->option("preferredRecordSyntax"=>"XML");
+        # We used to use XML syntax here, but that no longer works.
+        # Thankfully, we don't need it.
         my $query;
         $query= "an=".$mergefrom;
         my $oResult = $oConnection->search(new ZOOM::Query::CCL2RPN( $query, $oConnection ));
@@ -1315,7 +1315,7 @@ sub merge {
             my $rec;
             $rec=$oResult->record($z);
             my $marcdata = $rec->raw();
-            my $marcrecordzebra= MARC::Record->new_from_xml($marcdata,"utf8",C4::Context->preference("marcflavour"));
+            my $marcrecordzebra= MARC::Record->new_from_usmarc($marcdata);
             my ( $biblionumbertagfield, $biblionumbertagsubfield ) = &GetMarcFromKohaField( "biblio.biblionumber", '' );
             my $i = ($biblionumbertagfield < 10) ? $marcrecordzebra->field($biblionumbertagfield)->data : $marcrecordzebra->subfield($biblionumbertagfield, $biblionumbertagsubfield);
             my $marcrecorddb=GetMarcBiblio($i);
@@ -1323,7 +1323,6 @@ sub merge {
             $z++;
         }
         $oResult->destroy();
-        $oConnection->option("preferredRecordSyntax"=>$oldSyntax);
     }
     #warn scalar(@reccache)." biblios to update";
     # Get All candidate Tags for the change 
