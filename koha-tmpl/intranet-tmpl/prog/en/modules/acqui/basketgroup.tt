@@ -95,6 +95,12 @@ fieldset.various li {
 //<![CDATA[
 	YAHOO.util.Event.onDOMReady(DDApp.init, DDApp, true);
 
+var MSG_CONFIRM_CLOSE_BASKETGROUP = _("Are you sure you want to close this basketgroup?");
+var MSG_CLOSE_EMPTY_BASKET = _("Why close an empty basket?");
+var MSG_SAVE_BEFORE_PRINTING = _("You need to save the page before printing");
+var MSG_REOPEN_BASKETGROUP = _("reopen basketgroup");
+var MSG_FILE_DOWNLOAD_ERROR = _("Error downloading the file");
+
 function submitForm(form) {
     if (form.close.checked == true) {
 	var input = document.createElement("input");
