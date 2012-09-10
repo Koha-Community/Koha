@@ -24,6 +24,25 @@
 
 <script type="text/javascript">
 //<![CDATA[
+var group_subgroups = {};
+var no_subgroup_label = _( "(None)" );
+function load_group_subgroups () {
+    var group = $("#group").val();
+    var sg = $("#subgroup");
+    var has_subgroups = false;
+    $(sg).empty().append('<option value="">' + no_subgroup_label + '</option>');
+    if (group) {
+        $.each( group_subgroups[group], function(index, value) {
+                has_subgroups = true;
+            $('<option value="' + value[0] + '">' + value[1] + '</option>').appendTo(sg);
+        } );
+    }
+    if (has_subgroups) {
+        $(sg).show();
+    } else {
+        $(sg).hide();
+    }
+}
 $(document).ready(function(){
 [% IF ( showsql ) %]
     $("#sql").focus(function() {
@@ -138,6 +157,9 @@ canned reports and writing custom SQL reports.</p>
   <th>ID</th>
   <th>Report name</th>
   <th>Type</th>
+  <th>Area</th>
+  <th>Group</th>
+  <th>Subgroup</th>
   <th>Notes</th>
   <th>Author</th>
   <th>Creation date</th>
@@ -155,6 +177,9 @@ canned reports and writing custom SQL reports.</p>
 <td>[% savedreport.id %]</td>
 <td>[% savedreport.report_name %]</td>
 <td>[% savedreport.type %]</td>
+<td>[% savedreport.areaname %]</td>
+<td>[% savedreport.groupname %]</td>
+<td>[% savedreport.subgroupname %]</td>
 <td>[% savedreport.notes %]</td>
 <td>[% savedreport.borrowersurname %][% IF ( savedreport.borrowerfirstname ) %], [% savedreport.borrowerfirstname %][% END %] ([% savedreport.borrowernumber %])</td>
 <td>[% savedreport.date_created %]</td>
@@ -219,7 +244,7 @@ canned reports and writing custom SQL reports.</p>
 <form action="/cgi-bin/koha/reports/guided_reports.pl">
 <fieldset class="rows">
 <legend>Step 1 of 6: Choose a module to report on,[% IF (usecache) %] Set cache expiry, [% END %] and Choose report visibility </legend>
-<ol><li><label for="areas">Choose: </label><select name="areas" id="areas">
+<ol><li><label for="area">Choose: </label><select name="area" id="area">
 [% FOREACH area IN areas %]
 <option value="[% area.id %]">[% area.name %]</option>
 [% END %]
@@ -485,12 +510,38 @@ canned reports and writing custom SQL reports.</p>
 <form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
 <input type="hidden" name="sql" value="[% sql |html %]" />
 <input type="hidden" name="type" value="[% type %]" />
+<input type="hidden" name="area" value="[% area %]" />
 <input type="hidden" name="public" value="[% public %]" />
 <input type="hidden" name="cache_expiry" value="[% cache_expiry %]" />
 <fieldset class="rows">
 <legend>Save your custom report</legend>
 <ol>
     <li><label for="reportname">Report name: </label><input type="text" id="reportname" name="reportname" /></li>
+    [% IF groups_with_subgroups %]
+    <li><label for="group">Report group: </label><select name="group" id="group" onChange="load_group_subgroups();">
+        [% FOR g IN groups_with_subgroups %]
+            [% IF g.selected %]
+    <option value="[% g.id %]" selected>[% g.name %]</option>
+            [% ELSE %]
+    <option value="[% g.id %]">[% g.name %]</option>
+            [% END %]
+    <script type="text/javascript">
+        var g_sg = new Array();
+            [% FOR sg IN g.subgroups %]
+        g_sg.push(["[% sg.id %]", "[% sg.name %]"]);
+                [% IF sg.selected %]
+        $(document).ready(function() {
+            $("#subgroup").val("[% sg.id %]");
+        });
+                [% END %]
+            [% END %]
+        group_subgroups["[% g.id %]"] = g_sg;
+    </script>
+        [% END %]
+    </select></li>
+    <li><label for="subgroup">Report subgroup: </label><select name="subgroup" id="subgroup">
+    </select></li>
+    [% END %]
     <li><label for="notes">Notes:</label> <textarea name="notes" id="notes"></textarea></li>
 </ol></fieldset>
 <fieldset class="action"><input type="hidden" name="phase" value="Save Report" />
@@ -553,6 +604,11 @@ canned reports and writing custom SQL reports.</p>
 [% END %]
 
 [% IF ( create ) %]
+<script type="text/javascript">
+$(document).ready(function() {
+    load_group_subgroups();
+});
+</script>
 <form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
 <fieldset class="rows">
 <legend>Create report from SQL</legend>
@@ -561,6 +617,31 @@ canned reports and writing custom SQL reports.</p>
         [% IF ( reportname ) %]<input type="text" id="reportname" name="reportname" value="[% reportname %]" />
         [% ELSE %]<input type="text" id="reportname" name="reportname" />[% END %] 
     </li>
+    [% IF groups_with_subgroups %]
+    <li><label for="group">Report group: </label><select name="group" id="group" onChange="load_group_subgroups();">
+        [% FOR g IN groups_with_subgroups %]
+            [% IF g.selected %]
+    <option value="[% g.id %]" selected>[% g.name %]</option>
+            [% ELSE %]
+    <option value="[% g.id %]">[% g.name %]</option>
+            [% END %]
+    <script type="text/javascript">
+        var g_sg = new Array();
+            [% FOR sg IN g.subgroups %]
+        g_sg.push(["[% sg.id %]", "[% sg.name %]"]);
+                [% IF sg.selected %]
+        $(document).ready(function() {
+            $("#subgroup").val("[% sg.id %]");
+        });
+                [% END %]
+            [% END %]
+        group_subgroups["[% g.id %]"] = g_sg;
+    </script>
+        [% END %]
+    </select></li>
+    <li><label for="subgroup">Report subgroup: </label><select name="subgroup" id="subgroup">
+    </select></li>
+    [% END %]
 [% IF (public) %]
   <li><label for="public">Report is public:</label><select id="public" name="public"> <option value="0">No (default)</option> <option value="1" selected="selected">Yes</public> </select></li>
 [% ELSE %]
@@ -645,6 +726,11 @@ Sub report:<select name="subreport">
 [% END %]
 
 [% IF ( editsql ) %]
+<script type="text/javascript">
+$(document).ready(function() {
+    load_group_subgroups();
+});
+</script>
 <form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
 <input type="hidden" name="phase" value="Update SQL" />
 <input type="hidden" name="id" value="[% id %]"/>
@@ -652,6 +738,31 @@ Sub report:<select name="subreport">
 <legend>Edit SQL report</legend>
 <ol>
 <li><label for="reportname">Report name:</label><input type="text" id="reportname" name="reportname" value="[% reportname %]" size="50" /></li>
+    [% IF groups_with_subgroups %]
+    <li><label for="group">Report group: </label><select name="group" id="group" onChange="load_group_subgroups();">
+        [% FOR g IN groups_with_subgroups %]
+            [% IF g.selected %]
+    <option value="[% g.id %]" selected>[% g.name %]</option>
+            [% ELSE %]
+    <option value="[% g.id %]">[% g.name %]</option>
+            [% END %]
+    <script type="text/javascript">
+        var g_sg = new Array();
+            [% FOR sg IN g.subgroups %]
+        g_sg.push(["[% sg.id %]", "[% sg.name %]"]);
+                [% IF sg.selected %]
+        $(document).ready(function() {
+            $("#subgroup").val("[% sg.id %]");
+        });
+                [% END %]
+            [% END %]
+        group_subgroups["[% g.id %]"] = g_sg;
+    </script>
+        [% END %]
+    </select></li>
+    <li><label for="subgroup">Report subgroup: </label><select name="subgroup" id="subgroup">
+    </select></li>
+    [% END %]
 [% IF (public) %]
   <li><label for="public">Report is public:</label><select id="public" name="public"> <option value="0">No (default)</option> <option value="1" selected="selected">Yes</public> </select></li>
 [% ELSE %]
@@ -719,12 +830,43 @@ Sub report:<select name="subreport">
 
 [% IF ( saved1 ) %]
 <div id="saved-reports-filter">
+<script type="text/javascript">
+$(document).ready(function() {
+    no_subgroup_label = _( "-- All --" );
+    load_group_subgroups();
+});
+</script>
 <form action="/cgi-bin/koha/reports/guided_reports.pl" method="get">
   <input type="hidden" name="phase" value="Use saved" />
   <input type="hidden" name="filter_set" value="1" />
   <fieldset class="brief">
   <h3>Filter</h3>
   <ol>
+    <li><label for="group">Choose Group and Subgroup: </label>
+    <select name="group" id="group" onChange="load_group_subgroups();">
+        <option value="">-- All --</option>
+    [% FOR g IN groups_with_subgroups %]
+        [% IF g.selected %]
+        <option value="[% g.id %]" selected>[% g.name %]</option>
+        [% ELSE %]
+        <option value="[% g.id %]">[% g.name %]</option>
+        [% END %]
+        <script type="text/javascript">
+            var g_sg = new Array();
+        [% FOR sg IN g.subgroups %]
+            g_sg.push(["[% sg.id %]", "[% sg.name %]"]);
+            [% IF sg.selected %]
+            $(document).ready(function() {
+                $("#subgroup").val("[% sg.id %]");
+            });
+            [% END %]
+        [% END %]
+            group_subgroups["[% g.id %]"] = g_sg;
+        </script>
+    [% END %]
+    </select>
+    <select name="subgroup" id="subgroup"></select>
+    </li>
     <li><label for="filter_date">Date:</label> <input type="text" id="filter_date" name="filter_date" size="10" value="[% filter_date %]" class="datepicker" />
     <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
 

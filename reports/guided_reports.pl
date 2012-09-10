@@ -18,14 +18,15 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 use strict;
-#use warnings; FIXME - Bug 2505
+use warnings;
+
 use CGI;
 use Text::CSV;
 use URI::Escape;
 use C4::Reports::Guided;
 use C4::Auth qw/:DEFAULT get_session/;
 use C4::Output;
-use C4::Dates;
+use C4::Dates qw/format_date/;
 use C4::Debug;
 use C4::Branch; # XXX subfield_is_koha_internal_p
 
@@ -68,7 +69,7 @@ my $session = $cookie ? get_session($cookie->value) : undef;
 my $filter;
 if ( $input->param("filter_set") ) {
     $filter = {};
-    $filter->{$_} = $input->param("filter_$_") foreach qw/date author keyword/;
+    $filter->{$_} = $input->param("filter_$_") foreach qw/date author keyword group subgroup/;
     $session->param('report_filter', $filter) if $session;
     $template->param( 'filter_set' => 1 );
 }
@@ -85,21 +86,27 @@ if ( !$phase ) {
 elsif ( $phase eq 'Build new' ) {
     # build a new report
     $template->param( 'build1' => 1 );
-    $template->param( 'areas' => get_report_areas(), 'usecache' => $usecache, 'cache_expiry' => 300, 'public' => '0' );
-}
-elsif ( $phase eq 'Use saved' ) {
+    my $areas = get_report_areas();
+    $template->param(
+        'areas' => [map { id => $_->[0], name => $_->[1] }, @$areas],
+        'usecache' => $usecache,
+        'cache_expiry' => 300,
+        'public' => '0',
+    );
+} elsif ( $phase eq 'Use saved' ) {
+
     # use a saved report
     # get list of reports and display them
+    my $group = $input->param('group');
+    my $subgroup = $input->param('subgroup');
+    $filter->{group} = $group;
+    $filter->{subgroup} = $subgroup;
     $template->param(
         'saved1' => 1,
         'savedreports' => get_saved_reports($filter),
         'usecache' => $usecache,
+        'groups_with_subgroups'=> groups_with_subgroups($group, $subgroup),
     );
-    if ($filter) {
-        while ( my ($k, $v) = each %$filter ) {
-            $template->param( "filter_$k" => $v ) if $v;
-        }
-    }
 }
 
 elsif ( $phase eq 'Delete Saved') {
@@ -113,30 +120,33 @@ elsif ( $phase eq 'Delete Saved') {
 
 elsif ( $phase eq 'Show SQL'){
 	
-	my $id = $input->param('reports');
-    my ($sql,$type,$reportname,$notes) = get_saved_report($id);
-	$template->param(
+    my $id = $input->param('reports');
+    my $report = get_saved_report($id);
+    $template->param(
         'id'      => $id,
-        'reportname' => $reportname,
-        'notes'      => $notes,
-		'sql'     => $sql,
-		'showsql' => 1,
+        'reportname' => $report->{report_name},
+        'notes'      => $report->{notes},
+	'sql'     => $report->{savedsql},
+	'showsql' => 1,
     );
 }
 
 elsif ( $phase eq 'Edit SQL'){
 	
     my $id = $input->param('reports');
-    my ($sql,$type,$reportname,$notes, $cache_expiry, $public) = get_saved_report($id);
+    my $report = get_saved_report($id);
+    my $group = $report->{report_group};
+    my $subgroup  = $report->{report_subgroup};
     $template->param(
-	    'sql'        => $sql,
-	    'reportname' => $reportname,
-        'notes'      => $notes,
+        'sql'        => $report->{savedsql},
+        'reportname' => $report->{report_name},
+        'groups_with_subgroups' => groups_with_subgroups($group, $subgroup),
+        'notes'      => $report->{notes},
         'id'         => $id,
-        'cache_expiry' => $cache_expiry,
-        'public' => $public,
+        'cache_expiry' => $report->{cache_expiry},
+        'public' => $report->{public},
         'usecache' => $usecache,
-	    'editsql'    => 1,
+        'editsql'    => 1,
     );
 }
 
@@ -144,6 +154,8 @@ elsif ( $phase eq 'Update SQL'){
     my $id         = $input->param('id');
     my $sql        = $input->param('sql');
     my $reportname = $input->param('reportname');
+    my $group      = $input->param('group');
+    my $subgroup   = $input->param('subgroup');
     my $notes      = $input->param('notes');
     my $cache_expiry = $input->param('cache_expiry');
     my $cache_expiry_units = $input->param('cache_expiry_units');
@@ -177,16 +189,22 @@ elsif ( $phase eq 'Update SQL'){
             'errors'    => \@errors,
             'sql'       => $sql,
         );
-    }
-    else {
-        update_sql( $id, $sql, $reportname, $notes, $cache_expiry, $public );
+    } else {
+        update_sql( $id, {
+                sql => $sql,
+                name => $reportname,
+                group => $group,
+                subgroup => $subgroup,
+                notes => $notes,
+                cache_expiry => $cache_expiry,
+                public => $public,
+        } );
         $template->param(
             'save_successful'       => 1,
             'reportname'            => $reportname,
             'id'                    => $id,
         );
     }
-    
 }
 
 elsif ($phase eq 'retrieve results') {
@@ -228,7 +246,7 @@ elsif ( $phase eq 'Report on this Area' ) {
       # they have choosen a new report and the area to report on
       $template->param(
           'build2' => 1,
-          'area'   => $input->param('areas'),
+          'area'   => $input->param('area'),
           'types'  => get_report_types(),
           'cache_expiry' => $cache_expiry,
           'public' => $input->param('public'),
@@ -275,42 +293,42 @@ elsif ( $phase eq 'Choose these criteria' ) {
     my $area     = $input->param('area');
     my $type     = $input->param('type');
     my $column   = $input->param('column');
-	my @definitions = $input->param('definition');
-	my $definition = join (',',@definitions);
+    my @definitions = $input->param('definition');
+    my $definition = join (',',@definitions);
     my @criteria = $input->param('criteria_column');
-	my $query_criteria;
+    my $query_criteria;
     foreach my $crit (@criteria) {
         my $value = $input->param( $crit . "_value" );
-	
-	# If value is not defined, then it may be range values
-	if (!defined $value) {
 
-	    my $fromvalue = $input->param( "from_" . $crit . "_value" );
-	    my $tovalue   = $input->param( "to_"   . $crit . "_value" );
-	    
-	    # If the range values are dates
-	    if ($fromvalue =~ C4::Dates->regexp('syspref') && $tovalue =~ C4::Dates->regexp('syspref')) { 
-		$fromvalue = C4::Dates->new($fromvalue)->output("iso");
-		$tovalue = C4::Dates->new($tovalue)->output("iso");
-	    }
+        # If value is not defined, then it may be range values
+        if (!defined $value) {
 
-	    if ($fromvalue && $tovalue) {
-		$query_criteria .= " AND $crit >= '$fromvalue' AND $crit <= '$tovalue'";
-	    }
+            my $fromvalue = $input->param( "from_" . $crit . "_value" );
+            my $tovalue   = $input->param( "to_"   . $crit . "_value" );
 
-	} else {
+            # If the range values are dates
+            if ($fromvalue =~ C4::Dates->regexp('syspref') && $tovalue =~ C4::Dates->regexp('syspref')) {
+                $fromvalue = C4::Dates->new($fromvalue)->output("iso");
+                $tovalue = C4::Dates->new($tovalue)->output("iso");
+            }
 
-	    # If value is a date
-	    if ($value =~ C4::Dates->regexp('syspref')) { 
-		$value = C4::Dates->new($value)->output("iso");
-	    }
-        # don't escape runtime parameters, they'll be at runtime
-        if ($value =~ /<<.*>>/) {
-            $query_criteria .= " AND $crit=$value";
+            if ($fromvalue && $tovalue) {
+                $query_criteria .= " AND $crit >= '$fromvalue' AND $crit <= '$tovalue'";
+            }
+
         } else {
-            $query_criteria .= " AND $crit='$value'";
+
+            # If value is a date
+            if ($value =~ C4::Dates->regexp('syspref')) {
+                $value = C4::Dates->new($value)->output("iso");
+            }
+            # don't escape runtime parameters, they'll be at runtime
+            if ($value =~ /<<.*>>/) {
+                $query_criteria .= " AND $crit=$value";
+            } else {
+                $query_criteria .= " AND $crit='$value'";
+            }
         }
-	}
     }
     $template->param(
         'build5'         => 1,
@@ -412,6 +430,7 @@ elsif ( $phase eq 'Build report' ) {
       build_query( \@columns, $query_criteria, $query_orderby, $area, $totals, $definition );
     $template->param(
         'showreport' => 1,
+        'area'       => $area,
         'sql'        => $sql,
         'type'       => $type,
         'cache_expiry' => $input->param('cache_expiry'),
@@ -420,23 +439,29 @@ elsif ( $phase eq 'Build report' ) {
 }
 
 elsif ( $phase eq 'Save' ) {
-	# Save the report that has just been built
+    # Save the report that has just been built
+    my $area           = $input->param('area');
     my $sql  = $input->param('sql');
     my $type = $input->param('type');
     $template->param(
         'save' => 1,
+        'area'  => $area,
         'sql'  => $sql,
         'type' => $type,
         'cache_expiry' => $input->param('cache_expiry'),
         'public' => $input->param('public'),
+        'groups_with_subgroups' => groups_with_subgroups($area), # in case we have a report group that matches area
     );
 }
 
 elsif ( $phase eq 'Save Report' ) {
-    # save the sql pasted in by a user 
-    my $sql  = $input->param('sql');
-    my $name = $input->param('reportname');
-    my $type = $input->param('types');
+    # save the sql pasted in by a user
+    my $area  = $input->param('area');
+    my $group = $input->param('group');
+    my $subgroup = $input->param('subgroup');
+    my $sql   = $input->param('sql');
+    my $name  = $input->param('reportname');
+    my $type  = $input->param('types');
     my $notes = $input->param('notes');
     my $cache_expiry = $input->param('cache_expiry');
     my $cache_expiry_units = $input->param('cache_expiry_units');
@@ -454,7 +479,7 @@ elsif ( $phase eq 'Save Report' ) {
       }
     }
     # check $cache_expiry isnt too large, Memcached::set requires it to be less than 30 days or it will be treated as if it were an absolute time stamp
-    if( $cache_expiry >= 2592000 ){
+    if( $cache_expiry && $cache_expiry >= 2592000 ){
       push @errors, {cache_expiry => $cache_expiry};
     }
     ## FIXME this is AFTER entering a name to save the report under
@@ -462,7 +487,7 @@ elsif ( $phase eq 'Save Report' ) {
         push @errors, {sqlerr => $1};
     }
     elsif ($sql !~ /^(SELECT)/i) {
-        push @errors, {queryerr => 1};
+        push @errors, {queryerr => "No SELECT"};
     }
     if (@errors) {
         $template->param(
@@ -476,161 +501,174 @@ elsif ( $phase eq 'Save Report' ) {
         );
     }
     else {
-        my $id = save_report( $borrowernumber, $sql, $name, $type, $notes, $cache_expiry, $public );
-        $template->param(
-            'save_successful'       => 1,
-            'reportname'            => $name,
-            'id'                    => $id,
-        );
+        save_report( {
+                borrowernumber => $borrowernumber,
+                sql            => $sql,
+                name           => $name,
+                area           => $area,
+                group          => $group,
+                subgroup       => $subgroup,
+                type           => $type,
+                notes          => $notes,
+                cache_expiry   => $cache_expiry,
+                public         => $public,
+            } );
+        $template->param( 'save_successful' => 1, );
     }
 }
 
 elsif ($phase eq 'Run this report'){
     # execute a saved report
-    my $limit  = 20;    # page size. # TODO: move to DB or syspref?
-    my $offset = 0;
-    my $report = $input->param('reports');
+    my $limit      = 20; # page size. # TODO: move to DB or syspref?
+    my $offset     = 0;
+    my $report_id  = $input->param('reports');
     my @sql_params = $input->param('sql_params');
     # offset algorithm
     if ($input->param('page')) {
         $offset = ($input->param('page') - 1) * $limit;
     }
-    my ($sql,$type,$name,$notes) = get_saved_report($report);
-    unless ($sql) {
-        push @errors, {no_sql_for_id=>$report};   
-    } 
-    my @rows = ();
-    # if we have at least 1 parameter, and it's not filled, then don't execute but ask for parameters
-    if ($sql =~ /<</ && !@sql_params) {
-        # split on ??. Each odd (2,4,6,...) entry should be a parameter to fill
-        my @split = split /<<|>>/,$sql;
-        my @tmpl_parameters;
-        for(my $i=0;$i<($#split/2);$i++) {
-            my ($text,$authorised_value) = split /\|/,$split[$i*2+1];
-            my $input;
-            my $labelid;
-            if ($authorised_value eq "date") {
-               $input = 'date';
-            }
-            elsif ($authorised_value) {
-                my $dbh=C4::Context->dbh;
-                my @authorised_values;
-                my %authorised_lib;
-                # builds list, depending on authorised value...
-                if ( $authorised_value eq "branches" ) {
-                    my $branches = GetBranchesLoop();
-                    foreach my $thisbranch (@$branches) {
-                        push @authorised_values, $thisbranch->{value};
-                        $authorised_lib{$thisbranch->{value}} = $thisbranch->{branchname};
-                    }
-                }
-                elsif ( $authorised_value eq "itemtypes" ) {
-                    my $sth = $dbh->prepare("SELECT itemtype,description FROM itemtypes ORDER BY description");
-                    $sth->execute;
-                    while ( my ( $itemtype, $description ) = $sth->fetchrow_array ) {
-                        push @authorised_values, $itemtype;
-                        $authorised_lib{$itemtype} = $description;
-                    }
-                }
-                elsif ( $authorised_value eq "cn_source" ) {
-                    my $class_sources = GetClassSources();
-                    my $default_source = C4::Context->preference("DefaultClassificationSource");
-                    foreach my $class_source (sort keys %$class_sources) {
-                        next unless $class_sources->{$class_source}->{'used'} or
-                                    ($class_source eq $default_source);
-                        push @authorised_values, $class_source;
-                        $authorised_lib{$class_source} = $class_sources->{$class_source}->{'description'};
-                    }
-                }
-                elsif ( $authorised_value eq "categorycode" ) {
-                    my $sth = $dbh->prepare("SELECT categorycode, description FROM categories ORDER BY description");
-                    $sth->execute;
-                    while ( my ( $categorycode, $description ) = $sth->fetchrow_array ) {
-                        push @authorised_values, $categorycode;
-                        $authorised_lib{$categorycode} = $description;
-                    }
 
-                    #---- "true" authorised value
+    my ( $sql, $type, $name, $notes );
+    if (my $report = get_saved_report($report_id)) {
+        $sql   = $report->{savedsql};
+        $name  = $report->{report_name};
+        $notes = $report->{notes};
+
+        my @rows = ();
+        # if we have at least 1 parameter, and it's not filled, then don't execute but ask for parameters
+        if ($sql =~ /<</ && !@sql_params) {
+            # split on ??. Each odd (2,4,6,...) entry should be a parameter to fill
+            my @split = split /<<|>>/,$sql;
+            my @tmpl_parameters;
+            for(my $i=0;$i<($#split/2);$i++) {
+                my ($text,$authorised_value) = split /\|/,$split[$i*2+1];
+                my $input;
+                my $labelid;
+                if ($authorised_value eq "date") {
+                   $input = 'date';
                 }
-                else {
-                    my $authorised_values_sth = $dbh->prepare("SELECT authorised_value,lib FROM authorised_values WHERE category=? ORDER BY lib");
-
-                    $authorised_values_sth->execute( $authorised_value);
-
-                    while ( my ( $value, $lib ) = $authorised_values_sth->fetchrow_array ) {
-                        push @authorised_values, $value;
-                        $authorised_lib{$value} = $lib;
-                        # For item location, we show the code and the libelle
-                        $authorised_lib{$value} = $lib;
+                elsif ($authorised_value) {
+                    my $dbh=C4::Context->dbh;
+                    my @authorised_values;
+                    my %authorised_lib;
+                    # builds list, depending on authorised value...
+                    if ( $authorised_value eq "branches" ) {
+                        my $branches = GetBranchesLoop();
+                        foreach my $thisbranch (@$branches) {
+                            push @authorised_values, $thisbranch->{value};
+                            $authorised_lib{$thisbranch->{value}} = $thisbranch->{branchname};
+                        }
                     }
-                }
-                $labelid = $text;
-                $labelid =~ s/\W//g;
-                $input =CGI::scrolling_list(      # FIXME: factor out scrolling_list
-                    -name     => "sql_params",
-                    -id       => "sql_params_".$labelid,
-                    -values   => \@authorised_values,
+                    elsif ( $authorised_value eq "itemtypes" ) {
+                        my $sth = $dbh->prepare("SELECT itemtype,description FROM itemtypes ORDER BY description");
+                        $sth->execute;
+                        while ( my ( $itemtype, $description ) = $sth->fetchrow_array ) {
+                            push @authorised_values, $itemtype;
+                            $authorised_lib{$itemtype} = $description;
+                        }
+                    }
+                    elsif ( $authorised_value eq "cn_source" ) {
+                        my $class_sources = GetClassSources();
+                        my $default_source = C4::Context->preference("DefaultClassificationSource");
+                        foreach my $class_source (sort keys %$class_sources) {
+                            next unless $class_sources->{$class_source}->{'used'} or
+                                        ($class_source eq $default_source);
+                            push @authorised_values, $class_source;
+                            $authorised_lib{$class_source} = $class_sources->{$class_source}->{'description'};
+                        }
+                    }
+                    elsif ( $authorised_value eq "categorycode" ) {
+                        my $sth = $dbh->prepare("SELECT categorycode, description FROM categories ORDER BY description");
+                        $sth->execute;
+                        while ( my ( $categorycode, $description ) = $sth->fetchrow_array ) {
+                            push @authorised_values, $categorycode;
+                            $authorised_lib{$categorycode} = $description;
+                        }
+
+                        #---- "true" authorised value
+                    }
+                    else {
+                        my $authorised_values_sth = $dbh->prepare("SELECT authorised_value,lib FROM authorised_values WHERE category=? ORDER BY lib");
+
+                        $authorised_values_sth->execute( $authorised_value);
+
+                        while ( my ( $value, $lib ) = $authorised_values_sth->fetchrow_array ) {
+                            push @authorised_values, $value;
+                            $authorised_lib{$value} = $lib;
+                            # For item location, we show the code and the libelle
+                            $authorised_lib{$value} = $lib;
+                        }
+                    }
+                    $labelid = $text;
+                    $labelid =~ s/\W//g;
+                    $input =CGI::scrolling_list(      # FIXME: factor out scrolling_list
+                        -name     => "sql_params",
+                        -id       => "sql_params_".$labelid,
+                        -values   => \@authorised_values,
 #                     -default  => $value,
-                    -labels   => \%authorised_lib,
-                    -override => 1,
-                    -size     => 1,
-                    -multiple => 0,
-                    -tabindex => 1,
-                );
-
-            } else {
-                $input = "text";
+                        -labels   => \%authorised_lib,
+                        -override => 1,
+                        -size     => 1,
+                        -multiple => 0,
+                        -tabindex => 1,
+                    );
+                } else {
+                    $input = "text";
+                }
+                push @tmpl_parameters, {'entry' => $text, 'input' => $input, 'labelid' => $labelid };
             }
-            push @tmpl_parameters, {'entry' => $text, 'input' => $input, 'labelid' => $labelid };
-        }
-        $template->param('sql'         => $sql,
-                        'name'         => $name,
-                        'sql_params'   => \@tmpl_parameters,
-                        'enter_params' => 1,
-                        'reports'      => $report,
-                        );
-    } else {
-        # OK, we have parameters, or there are none, we run the report
-        # if there were parameters, replace before running
-        # split on ??. Each odd (2,4,6,...) entry should be a parameter to fill
-        my @split = split /<<|>>/,$sql;
-        my @tmpl_parameters;
-        for(my $i=0;$i<$#split/2;$i++) {
-            my $quoted = C4::Context->dbh->quote($sql_params[$i]);
-            # if there are special regexp chars, we must \ them
-            $split[$i*2+1] =~ s/(\||\?|\.|\*|\(|\)|\%)/\\$1/g;
-            $sql =~ s/<<$split[$i*2+1]>>/$quoted/;
-        }
-        my ($sth, $errors) = execute_query($sql, $offset, $limit);
-        my $total = nb_rows($sql) || 0;
-        unless ($sth) {
-            die "execute_query failed to return sth for report $report: $sql";
+            $template->param('sql'         => $sql,
+                            'name'         => $name,
+                            'sql_params'   => \@tmpl_parameters,
+                            'enter_params' => 1,
+                            'reports'      => $report_id,
+                            );
         } else {
-            my $headref = $sth->{NAME} || [];
-            my @headers = map { +{ cell => $_ } } @$headref;
-            $template->param(header_row => \@headers);
-            while (my $row = $sth->fetchrow_arrayref()) {
-                my @cells = map { +{ cell => $_ } } @$row;
-                push @rows, { cells => \@cells };
+            # OK, we have parameters, or there are none, we run the report
+            # if there were parameters, replace before running
+            # split on ??. Each odd (2,4,6,...) entry should be a parameter to fill
+            my @split = split /<<|>>/,$sql;
+            my @tmpl_parameters;
+            for(my $i=0;$i<$#split/2;$i++) {
+                my $quoted = C4::Context->dbh->quote($sql_params[$i]);
+                # if there are special regexp chars, we must \ them
+                $split[$i*2+1] =~ s/(\||\?|\.|\*|\(|\)|\%)/\\$1/g;
+                $sql =~ s/<<$split[$i*2+1]>>/$quoted/;
             }
-        }
+            my ($sth, $errors) = execute_query($sql, $offset, $limit);
+            my $total = nb_rows($sql) || 0;
+            unless ($sth) {
+                die "execute_query failed to return sth for report $report_id: $sql";
+            } else {
+                my $headref = $sth->{NAME} || [];
+                my @headers = map { +{ cell => $_ } } @$headref;
+                $template->param(header_row => \@headers);
+                while (my $row = $sth->fetchrow_arrayref()) {
+                    my @cells = map { +{ cell => $_ } } @$row;
+                    push @rows, { cells => \@cells };
+                }
+            }
 
-        my $totpages = int($total/$limit) + (($total % $limit) > 0 ? 1 : 0);
-        my $url = "/cgi-bin/koha/reports/guided_reports.pl?reports=$report&amp;phase=Run%20this%20report";
-        if (@sql_params) {
-            $url = join('&amp;sql_params=', $url, map { URI::Escape::uri_escape($_) } @sql_params);
+            my $totpages = int($total/$limit) + (($total % $limit) > 0 ? 1 : 0);
+            my $url = "/cgi-bin/koha/reports/guided_reports.pl?reports=$report_id&amp;phase=Run%20this%20report";
+            if (@sql_params) {
+                $url = join('&amp;sql_params=', $url, map { URI::Escape::uri_escape($_) } @sql_params);
+            }
+            $template->param(
+                'results' => \@rows,
+                'sql'     => $sql,
+                'id'      => $report_id,
+                'execute' => 1,
+                'name'    => $name,
+                'notes'   => $notes,
+                'errors'  => $errors,
+                'pagination_bar'  => pagination_bar($url, $totpages, $input->param('page')),
+                'unlimited_total' => $total,
+            );
         }
-        $template->param(
-            'results' => \@rows,
-            'sql'     => $sql,
-            'id'      => $report,
-            'execute' => 1,
-            'name'    => $name,
-            'notes'   => $notes,
-            'errors'  => $errors,
-            'pagination_bar'  => pagination_bar($url, $totpages, $input->param('page')),
-            'unlimited_total' => $total,
-        );
+    }
+    else {
+        push @errors, { no_sql_for_id => $report_id };
     }
 }
 
@@ -680,16 +718,26 @@ elsif ($phase eq 'Export'){
     );
 }
 
-elsif ($phase eq 'Create report from SQL') {
-	# allow the user to paste in sql
-    if ($input->param('sql')) {
+elsif ( $phase eq 'Create report from SQL' ) {
+
+    my ($group, $subgroup);
+    # allow the user to paste in sql
+    if ( $input->param('sql') ) {
+        $group = $input->param('report_group');
+        $subgroup  = $input->param('report_subgroup');
         $template->param(
             'sql'           => $input->param('sql'),
             'reportname'    => $input->param('reportname'),
             'notes'         => $input->param('notes'),
         );
     }
-        $template->param('create' => 1, 'public' => '0', 'cache_expiry' => 300, 'usecache' => $usecache);
+    $template->param(
+        'create' => 1,
+        'groups_with_subgroups' => groups_with_subgroups($group, $subgroup),
+        'public' => '0',
+        'cache_expiry' => 300,
+        'usecache' => $usecache,
+    );
 }
 
 elsif ($phase eq 'Create Compound Report'){
@@ -728,3 +776,29 @@ $template->param(   'referer' => $input->referer(),
                 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
+
+sub groups_with_subgroups {
+    my ($group, $subgroup) = @_;
+
+    my $groups_with_subgroups = get_report_groups();
+    my @g_sg;
+    while (my ($g_id, $v) = each %$groups_with_subgroups) {
+        my @subgroups;
+        if (my $sg = $v->{subgroups}) {
+            while (my ($sg_id, $n) = each %$sg) {
+                push @subgroups, {
+                    id => $sg_id,
+                    name => $n,
+                    selected => ($group && $g_id eq $group && $subgroup && $sg_id eq $subgroup ),
+                };
+            }
+        }
+        push @g_sg, {
+            id => $g_id,
+            name => $v->{name},
+            selected => ($group && $g_id eq $group),
+            subgroups => \@subgroups,
+        };
+    }
+    return \@g_sg;
+}

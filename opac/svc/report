@@ -31,38 +31,34 @@ my $query  = CGI->new();
 my $report_id = $query->param('id');
 my $report_name = $query->param('name');
 
-my $cache;
-my $sql;
-my $type;
-my $notes;
-my $cache_expiry;
-my $public;
+my $report_rec = get_saved_report( $report_name ? { 'name' => $report_name } : { 'id' => $report_id } );
+die "Sorry this report is not public\n" unless $report_rec->{public};
 
-( $sql, $type, $report_name, $notes, $cache_expiry, $public, $report_id ) =
-  get_saved_report($report_name ? { 'name' => $report_name } : { 'id' => $report_id } );
-die "Sorry this report is not public\n" unless $public;
 
-if (Koha::Cache->is_cache_active) {
-    $cache = Koha::Cache->new(
-    );
-    my $page = $cache->get_from_cache("opac:report:$report_id");
-    if ($page) {
-        print $query->header;
-        print $page;
-        exit;
+my $cache_active = Koha::Cache->is_cache_active;
+my ($cache_key, $cache, $json_text);
+if ($cache_active) {
+    $cache_key = "opac:report:".($report_name ? "name:$report_name" : "id:$report_id");
+    $cache = Koha::Cache->new();
+    $json_text = $cache->get_from_cache($cache_key);
+}
+
+unless ($json_text) {
+    my $offset = 0;
+    my $limit  = C4::Context->preference("SvcMaxReportRows") || 10;
+    my ( $sth, $errors ) = execute_query( $report_rec->{savedsql}, $offset, $limit );
+    if ($sth) {
+        my $lines     = $sth->fetchall_arrayref;
+        $json_text = to_json($lines);
+
+        if ($cache_active) {
+            $cache->set_in_cache( $cache_key, $json_text, $report_rec->{cache_expiry} );
+        }
+    }
+    else {
+        $json_text = to_json($errors);
     }
 }
 
 print $query->header;
-if ($sql) {
-    my $offset = 0;
-    my $limit  = C4::Context->preference("SvcMaxReportRows") || 10;
-    my ( $sth, $errors ) = execute_query( $sql, $offset, $limit );
-    my $lines     = $sth->fetchall_arrayref;
-    my $json_text = to_json($lines);
-    print $json_text;
-
-    if (Koha::Cache->is_cache_active) {
-        $cache->set_in_cache( "opac:report:$report_id", $json_text, $cache_expiry );
-    }
-}
+print $json_text;

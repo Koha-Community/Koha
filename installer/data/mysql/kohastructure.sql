@@ -97,7 +97,7 @@ CREATE TABLE `auth_types` (
 DROP TABLE IF EXISTS `authorised_values`;
 CREATE TABLE `authorised_values` ( -- stores values for authorized values categories and values
   `id` int(11) NOT NULL auto_increment, -- unique key, used to identify the authorized value
-  `category` varchar(10) NOT NULL default '', -- key used to identify the authorized value category
+  `category` varchar(16) NOT NULL default '', -- key used to identify the authorized value category
   `authorised_value` varchar(80) NOT NULL default '', -- code use to identify the authorized value
   `lib` varchar(200) default NULL, -- authorized value description as printed in the staff client
   `lib_opac` varchar(200) default NULL, -- authorized value description as printed in the OPAC
@@ -1626,8 +1626,9 @@ CREATE TABLE reports_dictionary ( -- definitions (or snippets of SQL) stored for
    `date_created` datetime default NULL, -- date and time this definition was created
    `date_modified` datetime default NULL, -- date and time this definition was last modified
    `saved_sql` text, -- SQL snippet for us in reports
-   `area` int(11) default NULL, -- Koha module this definition is for (1 = Circulation, 2 = Catalog, 3 = Patrons, 4 = Acquistions, 5 = Accounts)
-   PRIMARY KEY  (`id`)
+   report_area varchar(6) DEFAULT NULL, -- Koha module this definition is for Circulation, Catalog, Patrons, Acquistions, Accounts)
+   PRIMARY KEY  (id),
+   KEY dictionary_area_idx (report_area)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -1725,7 +1726,11 @@ CREATE TABLE saved_sql ( -- saved sql reports
    `notes` text, -- the notes or description given to this report
    `cache_expiry` int NOT NULL default 300,
    `public` boolean NOT NULL default FALSE,
+    report_area varchar(6) default NULL,
+    report_group varchar(80) default NULL,
+    report_subgroup varchar(80) default NULL,
    PRIMARY KEY  (`id`),
+   KEY sql_area_group_idx (report_group, report_subgroup),
    KEY boridx (`borrowernumber`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

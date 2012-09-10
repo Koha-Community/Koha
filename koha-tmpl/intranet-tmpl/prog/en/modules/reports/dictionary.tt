@@ -33,7 +33,7 @@
 		<form action="/cgi-bin/koha/reports/dictionary.pl" method="post">
         <input type="hidden" name="phase" value="View Dictionary" />
 		[% IF ( areas ) %]
-			Filter by area <select name="areas">
+			Filter by area <select name="area">
 			<option value="">All</option>
 			[% FOREACH area IN areas %]
 			    [% IF ( area.selected ) %]
@@ -103,7 +103,7 @@
 <ol><li><input type="hidden" name="phase" value="New Term step 3" />
 <input type="hidden" name="definition_name" value="[% definition_name %]" />
 <input type="hidden" name="definition_description" value="[% definition_description %]" />
-<label for="areas">Select table </label><select name="areas" id="areas">
+<label for="area">Select table </label><select name="area" id="area">
 [% FOREACH area IN areas %]     
 <option value="[% area.id %]">[% area.name %]</option>                  
 [% END %]                

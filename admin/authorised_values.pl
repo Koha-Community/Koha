@@ -188,17 +188,18 @@ output_html_with_http_headers $input, $cookie, $template->output;
 exit 0;
 
 sub default_form {
-	# build categories list
-	my $sth = $dbh->prepare("select distinct category from authorised_values");
-	$sth->execute;
-	my @category_list;
-	my %categories;     # a hash, to check that some hardcoded categories exist.
-	while ( my ($category) = $sth->fetchrow_array) {
-		push(@category_list,$category);
-		$categories{$category} = 1;
-	}
-	# push koha system categories
-    foreach (qw(Asort1 Asort2 Bsort1 Bsort2 SUGGEST DAMAGED LOST)) {
+    # build categories list
+    my $sth = $dbh->prepare("select distinct category from authorised_values");
+    $sth->execute;
+    my @category_list;
+    my %categories;    # a hash, to check that some hardcoded categories exist.
+    while ( my ($category) = $sth->fetchrow_array ) {
+        push( @category_list, $category );
+        $categories{$category} = 1;
+    }
+
+    # push koha system categories
+    foreach (qw(Asort1 Asort2 Bsort1 Bsort2 SUGGEST DAMAGED LOST REPORT_GROUP REPORT_SUBGROUP)) {
         push @category_list, $_ unless $categories{$_};
     }
 

@@ -5827,6 +5827,38 @@ if(C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
+
+
+$DBversion = "3.09.00.XXX";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("ALTER TABLE authorised_values MODIFY category varchar(16) NOT NULL DEFAULT '';");
+    $dbh->do("INSERT INTO authorised_values (category, authorised_value, lib) VALUES
+              ('REPORT_GROUP', 'CIRC', 'Circulation'),
+              ('REPORT_GROUP', 'CAT', 'Catalog'),
+              ('REPORT_GROUP', 'PAT', 'Patrons'),
+              ('REPORT_GROUP', 'ACQ', 'Acquisitions'),
+              ('REPORT_GROUP', 'ACC', 'Accounts');");
+
+    $dbh->do("ALTER TABLE reports_dictionary ADD report_area varchar(6) DEFAULT NULL;");
+    $dbh->do("UPDATE reports_dictionary SET report_area = CASE area
+                  WHEN 1 THEN 'CIRC'
+                  WHEN 2 THEN 'CAT'
+                  WHEN 3 THEN 'PAT'
+                  WHEN 4 THEN 'ACQ'
+                  WHEN 5 THEN 'ACC'
+                  END;");
+    $dbh->do("ALTER TABLE reports_dictionary DROP area;");
+    $dbh->do("ALTER TABLE reports_dictionary ADD KEY dictionary_area_idx (report_area);");
+
+    $dbh->do("ALTER TABLE saved_sql ADD report_area varchar(6) DEFAULT NULL;");
+    $dbh->do("ALTER TABLE saved_sql ADD report_group varchar(80) DEFAULT NULL;");
+    $dbh->do("ALTER TABLE saved_sql ADD report_subgroup varchar(80) DEFAULT NULL;");
+    $dbh->do("ALTER TABLE saved_sql ADD KEY sql_area_group_idx (report_group, report_subgroup);");
+
+    print "Upgrade to $DBversion done saved_sql new fields report_group and report_area; authorised_values.category 16 char \n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

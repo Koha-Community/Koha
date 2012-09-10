@@ -186,14 +186,26 @@ unless (scalar(@ARGV)) {
 ($verbose) and print scalar(@ARGV), " argument(s) after options: " . join(" ", @ARGV) . "\n";
 
 
-foreach my $report (@ARGV) {
-    my ($sql, $type) = get_saved_report($report);
-    unless ($sql) {
-        carp "ERROR: No saved report $report found";
+foreach my $report_id (@ARGV) {
+    my $report = get_saved_report($report_id);
+    unless ($report) {
+        warn "ERROR: No saved report $report_id found";
         next;
     }
+    my $sql         => $report->{savedsql};
+    my $report_name => $report->{report_name};
+    my $type        => $report->{type};
+
     $verbose and print "SQL: $sql\n\n";
-    # my $results = execute_query($sql, undef, 0, 99999, $format, $report); 
+    if (defined($report_name) and $report_name ne "")
+    {
+        $subject = $report_name ;
+    }
+    else
+    {
+        $subject = 'Koha Saved Report';
+    }
+    # my $results = execute_query($sql, undef, 0, 99999, $format, $report_id);
     my ($sth) = execute_query($sql);
     # execute_query(sql, , 0, 20, , )
     my $count = scalar($sth->rows);
