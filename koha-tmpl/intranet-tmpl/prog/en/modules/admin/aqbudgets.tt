@@ -1,6 +1,13 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; Funds[% IF ( add_form ) %] &rsaquo; [% IF ( budget_id ) %]Modify fund[% IF ( budget_name ) %] '[% budget_name %]'[% END %][% ELSE %]Add fund [% END %][% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
+<script type="text/javascript">
+//<![CDATA[
+var MSG_BUDGET_PARENT_ALLOCATION = _("- Fund amount exceeds parent allocation\n");
+var MSG_PARENT_BENEATH_BUDGET = _("- New budget-parent is beneath budget\n");
+//]]>
+</script>
+
 <script type="text/javascript" src="[% themelang %]/js/acq.js"></script>
 
 [% IF ( add_form ) %]
