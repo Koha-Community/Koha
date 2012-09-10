@@ -13,7 +13,6 @@ use C4::Items;
 use Koha::RecordProcessor;
 use XML::LibXML;
 
-# 
 # script that checks zebradir structure & create directories & mandatory files if needed
 #
 #
@@ -40,6 +39,9 @@ my $do_not_clear_zebraqueue;
 my $length;
 my $where;
 my $offset;
+my $run_as_root;
+my $run_user = (getpwuid($<))[0];
+
 my $verbose_logging = 0;
 my $zebraidx_log_opt = " -v none,fatal,warn ";
 my $result = GetOptions(
@@ -47,7 +49,7 @@ my $result = GetOptions(
     'r|reset'       => \$reset,
     's'             => \$skip_export,
     'k'             => \$keep_export,
-    'I|skip-index'    => \$skip_index,
+    'I|skip-index'  => \$skip_index,
     'nosanitize'    => \$nosanitize,
     'b'             => \$biblios,
     'noxml'         => \$noxml,
@@ -62,12 +64,19 @@ my $result = GetOptions(
     'length:i'        => \$length,
     'offset:i'      => \$offset,
     'v+'             => \$verbose_logging,
+    'run-as-root'    => \$run_as_root,
 );
-
 
 if (not $result or $want_help) {
     print_usage();
     exit 0;
+}
+
+if( not defined $run_as_root and $run_user eq 'root') {
+    my $msg = "Warning: You are running this script as the user 'root'.\n";
+    $msg   .= "If this is intentional you must explicitly specify this using the -run-as-root switch\n";
+    $msg   .= "Please do '$0 --help' to see usage.\n";
+    die $msg;
 }
 
 if (not $biblios and not $authorities) {
@@ -678,6 +687,7 @@ Use this batch job to reindex all biblio or authority
 records in your Koha database.
 
 Parameters:
+
     -b                      index bibliographic records
 
     -a                      index authority records
@@ -737,6 +747,9 @@ Parameters:
 
     --munge-config          Deprecated option to try
                             to fix Zebra config files.
+
+    --run-as-root           explicitily allow script to run as 'root' user
+
     --help or -h            show this message.
 _USAGE_
 }
