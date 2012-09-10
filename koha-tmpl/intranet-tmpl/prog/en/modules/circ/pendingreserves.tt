@@ -12,7 +12,34 @@ $(document).ready(function() {
   var holdst = $("#holdst").dataTable($.extend(true, {}, dataTablesDefaults, {
   }));
   holdst.fnAddFilters("filter");
+  [%# add separateData function to cleanse jQuery select lists by breaking apart strings glued with BR tags and then de-duplicating any repeated library codes %]
+  function separateData ( ColumnData ){
+    var cD = ColumnData;
+    var new_array = new Array();
+    for ( j=0 ; j<cD.length ; j++ ) {
+        var strMatch = cD[j].match(/<br>/gi);
+        if (strMatch) {
+            var split_array = cD[j].split(/<br>/gi);
+            for ( k=0 ; k<split_array.length ; k++ ){
+                var check_array = $.inArray(split_array[k], new_array);
+                if (check_array == -1) {
+                new_array.push(split_array[k]);
+                }
+            }
+        }
+        else {
+            var check_array = $.inArray(cD[j], new_array);
+            if (check_array == -1) {
+                new_array.push(cD[j]);
+            }
+        }
+    }
+    new_array.sort();
+    return new_array;
+  }
+  [%# add SeparateData function into createSelect function, so that it does the createSelect on clean data %]
   function createSelect( data ) {
+      data = separateData(data);
       var r='<select style="width:99%"><option value="">None</option>', i, len=data.length;
       for ( i=0 ; i<len ; i++ ) {
           r += '<option value="'+data[i]+'">'+data[i]+'</option>';
