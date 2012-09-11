@@ -264,7 +264,8 @@
 <!-- AVAILABILITY LIMITS -->
     [% UNLESS ( singleBranchMode ) %]
     <div id="location" class="container"><fieldset><legend>Location and availability: </legend>
-        
+
+        <label for="branchloop">Library:</label>
         <select name="limit" id="branchloop">
         <option value="">All libraries</option>
         [% FOREACH BranchesLoo IN BranchesLoop %]
@@ -291,8 +292,8 @@
 </div>
 <div class="yui-u">
 <!-- RANK LIMITS -->
-    <div id="sortby" class="container"><fieldset><legend>Sort by: </legend>
-        <select id="sort_by" name="sort_by">
+    <div id="sortby" class="container"><fieldset><legend>Sorting: </legend>
+        <label for="sort_by">Sort by:</label> <select id="sort_by" name="sort_by">
 [% INCLUDE 'resort_form.inc' %]
 </select></fieldset></div>
 <!-- RANK LIMITS -->
