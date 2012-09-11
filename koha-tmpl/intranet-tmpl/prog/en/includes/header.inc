@@ -44,7 +44,7 @@
                 </li>
             </ul>
         </div>
-    <div id="login">
+    <div id="login_controls">
         [% IF ( AutoLocation ) %]
             <strong>
             [% LoginBranchname %]
