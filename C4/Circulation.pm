@@ -982,16 +982,16 @@ sub CanBookBeIssued {
         # Index points to the next value
         my $restrictionyear = 0;
         if (($take <= $#values) && ($take >= 0)){
-            $restrictionyear += @values[$take];
+            $restrictionyear += $values[$take];
         }
 
         if ($restrictionyear > 0) {
             if ( $borrower->{'dateofbirth'}  ) {
                 my @alloweddate =  split /-/,$borrower->{'dateofbirth'} ;
-                @alloweddate[0] += $restrictionyear;
+                $alloweddate[0] += $restrictionyear;
                 #Prevent runime eror on leap year (invalid date)
-                if ((@alloweddate[1] == 2) && (@alloweddate[2] == 29)) {
-                    @alloweddate[2] = 28;
+                if (($alloweddate[1] == 2) && ($alloweddate[2] == 29)) {
+                    $alloweddate[2] = 28;
                 }
 
                 if ( Date_to_Days(Today) <  Date_to_Days(@alloweddate) -1  ) {
