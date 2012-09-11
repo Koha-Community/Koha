@@ -412,24 +412,6 @@ $(document).ready(function () {
     </form>
 </div>
 
-[% IF ( returned ) %]
-<div class="yui-g">    <table>
-        <tr><th>Item information</th><th>Patron information</th></tr>
-        <tr>
-            <td>[% title |html %]</td>
-            <td>
-
-                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% riborrowernumber %]">[% riborsurname %], [% ribortitle %] [% riborfirstname %]</a> ([% riborcnum %])
-                [% IF ( flagset ) %]
-                ([% FOREACH flagloo IN flagloop %]
-                [% flagloo.flag %]
-		[% IF ( flagloo.charges ) %] of [% flagloo.chargeamount %] [% END %]
-		,
-                [% END %])[% END %]
-            </td>
-        </tr>
-    </table>
-[% END %]
 [% IF ( riloop ) %]
     <h2>Checked-in items</h2>
     <table>
