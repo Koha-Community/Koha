@@ -5807,6 +5807,15 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.09.00.XXX";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("ALTER TABLE authorised_values MODIFY lib varchar(200)");
+    $dbh->do("ALTER TABLE authorised_values MODIFY lib_opac varchar(200)");
+
+    print "Upgrade to $DBversion done (Raise the length of Authorised Values descriptions)\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

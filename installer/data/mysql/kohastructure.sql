@@ -99,8 +99,8 @@ CREATE TABLE `authorised_values` ( -- stores values for authorized values catego
   `id` int(11) NOT NULL auto_increment, -- unique key, used to identify the authorized value
   `category` varchar(10) NOT NULL default '', -- key used to identify the authorized value category
   `authorised_value` varchar(80) NOT NULL default '', -- code use to identify the authorized value
-  `lib` varchar(80) default NULL, -- authorized value description as printed in the staff client
-  `lib_opac` VARCHAR(80) default NULL, -- authorized value description as printed in the OPAC
+  `lib` varchar(200) default NULL, -- authorized value description as printed in the staff client
+  `lib_opac` varchar(200) default NULL, -- authorized value description as printed in the OPAC
   `imageurl` varchar(200) default NULL, -- authorized value URL
   PRIMARY KEY  (`id`),
   KEY `name` (`category`),
