@@ -1349,6 +1349,8 @@ sub _add_destdir {
 sub display_configuration {
     my $config = shift;
     my $dirmap = shift;
+    my @version = grep /\/usr\/share\/perl\//, @INC;
+    push @version, ('/usr/share/perl/5.10') if !$version[0];
     print "\n\nKoha will be installed with the following configuration parameters:\n\n";
     foreach my $key (sort keys %$config) {
         print sprintf("%-25.25s%s\n", $key, $config->{$key});
@@ -1361,7 +1363,7 @@ sub display_configuration {
     print "\n\nTo change any configuration setting, please run\n";
     print "perl Makefile.PL again.  To override one of the target\n";
     print "directories, you can do so on the command line like this:\n";
-    print "\nperl Makefile.PL PERL_MODULE_DIR=/usr/share/perl/5.8\n\n";
+    print "\nperl Makefile.PL PERL_MODULE_DIR=$version[0]\n\n";
     print "You can also set different default values for parameters\n";
     print "or override directory locations by using environment variables.\n";
     print "\nFor example:\n\n";
