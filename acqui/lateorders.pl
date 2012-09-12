@@ -78,16 +78,18 @@ my $estimateddeliverydatefrom_dt =
   : undef;
 
 # Get the "date to" param. If it is not defined and $delay is not defined too, it is the today's date.
-my $estimateddeliverydateto_dt = dt_from_string($estimateddeliverydateto);
+my $estimateddeliverydateto_dt = $estimateddeliverydateto
+    ? dt_from_string($estimateddeliverydateto)
+    : ( not defined $delay and not defined $estimateddeliverydatefrom)
+        ? dt_from_string()
+        : undef;
 
 # Format the output of "date from" and "date to"
-if ($estimateddeliverydatefrom) {
-    $estimateddeliverydatefrom = output_pref($estimateddeliverydatefrom_dt);
-    $estimateddeliverydatefrom =~ s/ \d\d:\d\d$//;
+if ($estimateddeliverydatefrom_dt) {
+    $estimateddeliverydatefrom = output_pref($estimateddeliverydatefrom_dt, undef, 1);
 }
-if ($estimateddeliverydateto) {
-    $estimateddeliverydateto = output_pref($estimateddeliverydateto_dt);
-    $estimateddeliverydateto =~ s/ \d\d:\d\d$//;
+if ($estimateddeliverydateto_dt) {
+    $estimateddeliverydateto = output_pref($estimateddeliverydateto_dt, undef, 1);
 }
 
 my $branch     = $input->param('branch');
@@ -117,15 +119,14 @@ if ($op and $op eq "send_alert"){
 }
 
 my @parameters = ( $delay, $branch );
-if ($estimateddeliverydatefrom_dt) {
-    push @parameters, $estimateddeliverydatefrom_dt->ymd();
-}
-else {
-    push @parameters, undef;
-}
-if ($estimateddeliverydateto_dt) {
-    push @parameters, $estimateddeliverydateto_dt->ymd();
-}
+push @parameters, $estimateddeliverydatefrom_dt
+    ? $estimateddeliverydatefrom_dt->ymd()
+    : undef;
+
+push @parameters, $estimateddeliverydateto_dt
+    ? $estimateddeliverydateto_dt->ymd()
+    : undef;
+
 my %supplierlist = GetBooksellersWithLateOrders(@parameters);
 
 my (@sloopy);	# supplier loop

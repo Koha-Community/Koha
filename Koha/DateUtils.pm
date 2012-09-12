@@ -101,11 +101,15 @@ or C<undef> if C<undef> was provided.
 A second parameter allows overriding of the syspref value. This is for testing only
 In usage use the DateTime objects own methods for non standard formatting
 
+A third parameter allows to specify if the output format contains the hours and minutes.
+If it is not defined, the default value is 0;
+
 =cut
 
 sub output_pref {
     my $dt         = shift;
-    my $force_pref = shift;    # if testing we want to override Context
+    my $force_pref = shift;         # if testing we want to override Context
+    my $dateonly   = shift || 0;    # if you don't want the hours and minutes
 
     return unless defined $dt;
 
@@ -113,16 +117,24 @@ sub output_pref {
       defined $force_pref ? $force_pref : C4::Context->preference('dateformat');
     given ($pref) {
         when (/^iso/) {
-            return $dt->strftime('%Y-%m-%d %H:%M');
+            return $dateonly
+                ? $dt->strftime('%Y-%m-%d')
+                : $dt->strftime('%Y-%m-%d %H:%M');
         }
         when (/^metric/) {
-            return $dt->strftime('%d/%m/%Y %H:%M');
+            return $dateonly
+                ? $dt->strftime('%d/%m/%Y')
+                : $dt->strftime('%d/%m/%Y %H:%M');
         }
         when (/^us/) {
-            return $dt->strftime('%m/%d/%Y %H:%M');
+            return $dateonly
+                ? $dt->strftime('%m/%d/%Y')
+                : $dt->strftime('%m/%d/%Y %H:%M');
         }
         default {
-            return $dt->strftime('%Y-%m-%d %H:%M');
+            return $dateonly
+                ? $dt->strftime('%Y-%m-%d')
+                : $dt->strftime('%Y-%m-%d %H:%M');
         }
 
     }
