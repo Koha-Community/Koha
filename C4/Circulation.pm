@@ -1644,8 +1644,8 @@ sub AddReturn {
     }
 
     # case of a return of document (deal with issues and holdingbranch)
-    if ($doreturn) {
     my $today = DateTime->now( time_zone => C4::Context->tz() );
+    if ($doreturn) {
     my $datedue = $issue->{date_due};
         $borrower or warn "AddReturn without current borrower";
 		my $circControlBranch;
@@ -1655,7 +1655,6 @@ sub AddReturn {
             # FIXME: check issuedate > returndate, factoring in holidays
             #$circControlBranch = _GetCircControlBranch($item,$borrower) unless ( $item->{'issuedate'} eq C4::Dates->today('iso') );;
             $circControlBranch = _GetCircControlBranch($item,$borrower);
-        my $datedue = $issue->{date_due};
         $issue->{'overdue'} = DateTime->compare($issue->{'date_due'}, $today ) == -1 ? 1 : 0;
         }
 
@@ -1719,9 +1718,12 @@ sub AddReturn {
         my $fix = _FixOverduesOnReturn($borrowernumber, $item->{itemnumber}, $exemptfine, $dropbox);
         defined($fix) or warn "_FixOverduesOnReturn($borrowernumber, $item->{itemnumber}...) failed!";  # zero is OK, check defined
         
-        # fix fine days
-        my $debardate = _FixFineDaysOnReturn( $borrower, $item, $issue->{date_due} );
-        $messages->{'Debarred'} = $debardate if ($debardate);
+        if ( $issue->{overdue} && $issue->{date_due} ) {
+# fix fine days
+            my $debardate =
+              _debar_user_on_return( $borrower, $item, $issue->{date_due}, $today );
+            $messages->{Debarred} = $debardate if ($debardate);
+        }
     }
 
     # find reserves.....
@@ -1846,26 +1848,27 @@ sub MarkIssueReturned {
     $sth_del->execute($borrowernumber, $itemnumber);
 }
 
-=head2 _FixFineDaysOnReturn
+=head2 _debar_user_on_return
 
-    &_FixFineDaysOnReturn($borrower, $item, $datedue);
+    _debar_user_on_return($borrower, $item, $datedue, today);
 
 C<$borrower> borrower hashref
 
 C<$item> item hashref
 
-C<$datedue> date due
+C<$datedue> date due DateTime object
 
-Internal function, called only by AddReturn that calculate and update the user fine days, and debars him
+C<$today> DateTime object representing the return time
+
+Internal function, called only by AddReturn that calculates and updates
+ the user fine days, and debars him if necessary.
+
+Should only be called for overdue returns
 
 =cut
 
-sub _FixFineDaysOnReturn {
-    my ( $borrower, $item, $datedue ) = @_;
-    return unless ($datedue);
-    
-    my $dt_due =  dt_from_string( $datedue );
-    my $dt_today = DateTime->now( time_zone => C4::Context->tz() );
+sub _debar_user_on_return {
+    my ( $borrower, $item, $dt_due, $dt_today ) = @_;
 
     my $branchcode = _GetCircControlBranch( $item, $borrower );
     my $calendar = Koha::Calendar->new( branchcode => $branchcode );
@@ -1874,35 +1877,41 @@ sub _FixFineDaysOnReturn {
     my $deltadays = $calendar->days_between( $dt_due, $dt_today );
 
     my $circcontrol = C4::Context::preference('CircControl');
-    my $issuingrule = GetIssuingRule( $borrower->{categorycode}, $item->{itype}, $branchcode );
-    my $finedays    = $issuingrule->{finedays};
-    my $unit        = $issuingrule->{lengthunit};
+    my $issuingrule =
+      GetIssuingRule( $borrower->{categorycode}, $item->{itype}, $branchcode );
+    my $finedays = $issuingrule->{finedays};
+    my $unit     = $issuingrule->{lengthunit};
 
-    # exit if no finedays defined
-    return unless $finedays;
-    # finedays is in days, so hourly loans must multiply by 24
-    # thus 1 hour late equals 1 day suspension * finedays rate
-    $finedays       = $finedays * 24 if ($unit eq 'hours');
+    if ($finedays) {
 
-    # grace period is measured in the same units as the loan
-    my $grace = DateTime::Duration->new( $unit => $issuingrule->{firstremind} );
+        # finedays is in days, so hourly loans must multiply by 24
+        # thus 1 hour late equals 1 day suspension * finedays rate
+        $finedays = $finedays * 24 if ( $unit eq 'hours' );
 
-    if ( ( $deltadays - $grace )->is_positive ) { # you can't compare DateTime::Durations with logical operators
-        my $new_debar_dt = $dt_today->clone()->add_duration( $deltadays * $finedays );
-        my $borrower_debar_dt = dt_from_string( $borrower->{debarred} );
-        # check to see if the current debar date is a valid date
-        if ( $borrower->{debarred} && $borrower_debar_dt ) {
-        # if so, is it before the new date?  update only if true
-            if ( DateTime->compare( $borrower_debar_dt, $new_debar_dt ) == -1 ) {
-                C4::Members::DebarMember( $borrower->{borrowernumber}, $new_debar_dt->ymd() );
-                return $new_debar_dt->ymd();
+        # grace period is measured in the same units as the loan
+        my $grace =
+          DateTime::Duration->new( $unit => $issuingrule->{firstremind} );
+        if ( $deltadays->subtract($grace)->is_positive() ) {
+
+            my $new_debar_dt =
+              $dt_today->clone()->add_duration( $deltadays * $finedays );
+            if ( $borrower->{debarred} ) {
+                my $borrower_debar_dt = dt_from_string( $borrower->{debarred} );
+
+                # Update patron only if new date > old
+                if ( DateTime->compare( $borrower_debar_dt, $new_debar_dt ) !=
+                    -1 )
+                {
+                    return;
+                }
+
             }
-        # if the borrower's debar date is not set or valid, debar them
-        } else {
-            C4::Members::DebarMember( $borrower->{borrowernumber}, $new_debar_dt->ymd() );
+            C4::Members::DebarMember( $borrower->{borrowernumber},
+                $new_debar_dt->ymd() );
             return $new_debar_dt->ymd();
         }
     }
+    return;
 }
 
 =head2 _FixOverduesOnReturn
