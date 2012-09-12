@@ -18,9 +18,7 @@ package C4::Context;
 
 use strict;
 use warnings;
-use vars qw($VERSION $AUTOLOAD $context @context_stack);
-
-use Koha::Cache;
+use vars qw($VERSION $AUTOLOAD $context @context_stack $servers $memcached $ismemcached);
 
 BEGIN {
 	if ($ENV{'HTTP_USER_AGENT'})	{
@@ -80,6 +78,22 @@ BEGIN {
 			$main::SIG{__DIE__} = \&CGI::Carp::confess;
 		}
     }  	# else there is no browser to send fatals to!
+
+    # Check if there are memcached servers set
+    $servers = $ENV{'MEMCACHED_SERVERS'};
+    if ($servers) {
+        # Load required libraries and create the memcached object
+        require Cache::Memcached;
+        $memcached = Cache::Memcached->new({
+        servers => [ $servers ],
+        debug   => 0,
+        compress_threshold => 10_000,
+        expire_time => 600,
+        namespace => $ENV{'MEMCACHED_NAMESPACE'} || 'koha'
+    });
+        # Verify memcached available (set a variable and test the output)
+    $ismemcached = $memcached->set('ismemcached','1');
+    }
 
     $VERSION = '3.07.00.049';
 }
@@ -234,12 +248,36 @@ Returns undef in case of error.
 sub read_config_file {		# Pass argument naming config file to read
     my $koha = XMLin(shift, keyattr => ['id'], forcearray => ['listen', 'server', 'serverinfo'], suppressempty => '');
 
-    if (Koha::Cache->is_cache_active()) {
-        my $cache = Koha::Cache->new();
-        $cache->set_in_cache('kohaconf', $koha) if defined $cache;
+    if ($ismemcached) {
+      $memcached->set('kohaconf',$koha);
     }
 
     return $koha;			# Return value: ref-to-hash holding the configuration
+}
+
+=head2 ismemcached
+
+Returns the value of the $ismemcached variable (0/1)
+
+=cut
+
+sub ismemcached {
+    return $ismemcached;
+}
+
+=head2 memcached
+
+If $ismemcached is true, returns the $memcache variable.
+Returns undef otherwise
+
+=cut
+
+sub memcached {
+    if ($ismemcached) {
+      return $memcached;
+    } else {
+      return undef;
+    }
 }
 
 # db_scheme2dbi
@@ -285,8 +323,9 @@ Allocates a new context. Initializes the context from the specified
 file, which defaults to either the file given by the C<$KOHA_CONF>
 environment variable, or F</etc/koha/koha-conf.xml>.
 
-It saves the koha-conf.xml values in the cache (if configured) and uses
-those values until them expire and re-reads them.
+It saves the koha-conf.xml values in the declared memcached server(s)
+if currently available and uses those values until them expire and
+re-reads them.
 
 C<&new> does not set this context as the new default context; for
 that, use C<&set_context>.
@@ -323,14 +362,15 @@ sub new {
         }
     }
     
-    if (Koha::Cache->is_cache_active()) {
-        # retrieve from cache
-        my $cache = Koha::Cache->new();
-        $self = $cache->get_from_cache('kohaconf') if defined $cache;
-        $self = { };
-    }
-    if (!keys %$self) {
-        # not cached yet
+    if ($ismemcached) {
+        # retreive from memcached
+        $self = $memcached->get('kohaconf');
+        if (not defined $self) {
+            # not in memcached yet
+            $self = read_config_file($conf_fname);
+        }
+    } else {
+        # non-memcached env, read from file
         $self = read_config_file($conf_fname);
     }
 
@@ -487,18 +527,9 @@ my %sysprefs;
 sub preference {
     my $self = shift;
     my $var  = lc(shift);                          # The system preference to return
-    my $cache;
 
     if (exists $sysprefs{$var}) {
         return $sysprefs{$var};
-    }
-
-    if (Koha::Cache->is_cache_active()) {
-        $cache = Koha::Cache->new();
-        if (defined $cache) {
-            $sysprefs{$var} = $cache->get_from_cache("syspref:$var");
-            return $sysprefs{$var} if (defined $sysprefs{$var});
-        }
     }
 
     my $dbh  = C4::Context->dbh or return 0;
@@ -511,9 +542,6 @@ sub preference {
         LIMIT    1
 END_SQL
     $sysprefs{$var} = $dbh->selectrow_array( $sql, {}, $var );
-    if (Koha::Cache->is_cache_active() && defined $cache) {
-        $cache->set_in_cache("syspref:$var");
-    }
     return $sysprefs{$var};
 }
 
@@ -536,10 +564,6 @@ will not be seen by this process.
 
 sub clear_syspref_cache {
     %sysprefs = ();
-    if (Koha::Cache->is_cache_active()) {
-        my $cache = Koha::Cache->new();
-        $cache->flush_all() if defined $cache; # Sorry, this is unpleasant
-    }
 }
 
 =head2 set_preference
@@ -570,10 +594,6 @@ sub set_preference {
     " );
 
     if($sth->execute( $var, $value )) {
-        if (Koha::Cache->is_cache_active()) {
-            my $cache = Koha::Cache->new();
-            $cache->set_in_cache("syspref:$var", $value) if defined $cache;
-        }
         $sysprefs{$var} = $value;
     }
     $sth->finish;

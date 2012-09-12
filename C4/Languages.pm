@@ -23,8 +23,18 @@ use strict;
 #use warnings; FIXME - Bug 2505
 use Carp;
 use C4::Context;
-use Koha::Cache;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $DEBUG);
+
+eval {
+    if (C4::Context->ismemcached) {
+        require Memoize::Memcached;
+        import Memoize::Memcached qw(memoize_memcached);
+
+        memoize_memcached('getTranslatedLanguages', memcached => C4::Context->memcached);
+        memoize_memcached('getFrameworkLanguages' , memcached => C4::Context->memcached);
+        memoize_memcached('getAllLanguages',        memcached => C4::Context->memcached);
+    }
+};
 
 BEGIN {
     $VERSION = 3.07.00.049;
@@ -67,15 +77,6 @@ Returns a reference to an array of hashes:
 =cut
 
 sub getFrameworkLanguages {
-
-    my $cache;
-    if (Koha::Cache->is_cache_active()) {
-        $cache = Koha::Cache->new();
-        if (defined $cache) {
-            my $cached = $cache->get_from_cache("getFrameworkLanguages");
-            return $cached if $cached;
-        }
-    }
     # get a hash with all language codes, names, and locale names
     my $all_languages = getAllLanguages();
     my @languages;
@@ -97,9 +98,6 @@ sub getFrameworkLanguages {
                     'native_descrition'=>$language_set->{language_native_description} }
             }
         }
-    }
-    if (Koha::Cache->is_cache_active() && defined $cache) {
-        $cache->set_in_cache("getFrameworkLanguages",\@languages,1000)
     }
     return \@languages;
 }
@@ -181,17 +179,6 @@ Returns a reference to an array of hashes:
 =cut
 
 sub getAllLanguages {
-    # retrieve from cache if applicable
-    my $cache;
-    if (Koha::Cache->is_cache_active()) {
-        $cache = Koha::Cache->new();
-        if (defined $cache) {
-            my $cached = $cache->get_from_cache("getAllLanguages");
-            if ($cached) {
-                return $cached;
-            }
-        }
-    }
     my @languages_loop;
     my $dbh=C4::Context->dbh;
     my $current_language = shift || 'en';
@@ -225,9 +212,6 @@ sub getAllLanguages {
             }
         }
         push @languages_loop, $language_subtag_registry;
-    }
-    if (Koha::Cache->is_cache_active() && defined $cache) {
-        $cache->set_in_cache("getAllLanguages",\@languages_loop,1000);
     }
     return \@languages_loop;
 }
