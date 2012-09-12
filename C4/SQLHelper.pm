@@ -24,9 +24,25 @@ use List::MoreUtils qw(first_value any);
 use C4::Context;
 use C4::Dates qw(format_date_in_iso);
 use C4::Debug;
-use Koha::Cache;
 require Exporter;
 use vars qw($VERSION @ISA @EXPORT_OK %EXPORT_TAGS);
+
+eval {
+    my $servers = C4::Context->config('memcached_servers');
+    if ($servers) {
+        require Memoize::Memcached;
+        import Memoize::Memcached qw(memoize_memcached);
+
+        my $memcached = {
+            servers     => [$servers],
+            key_prefix  => C4::Context->config('memcached_namespace') || 'koha',
+            expire_time => 600
+        };    # cache for 10 mins
+
+        memoize_memcached( '_get_columns',   memcached => $memcached );
+        memoize_memcached( 'GetPrimaryKeys', memcached => $memcached );
+    }
+};
 
 BEGIN {
 	# set the version for version checking
@@ -220,7 +236,7 @@ sub DeleteInTable{
    		my $result;
     	eval{$result=$sth->execute(@$values)}; 
 		warn $@ if ($@ && $debug);
-        return $result;
+    	return $result;
 	}
 }
 
@@ -234,22 +250,8 @@ Get the Primary Key field names of the table
 
 sub GetPrimaryKeys($) {
 	my $tablename=shift;
-    my $result;
-    my $cache;
-    if (Koha::Cache->is_cache_active()) {
-        $cache = Koha::Cache->new();
-        if (defined $cache) {
-            $result = $cache->get_from_cache("sqlhelper:GetPrimaryKeys:$tablename");
-        }
-    }
-    unless (defined $result) {
-        my $hash_columns=_get_columns($tablename);
-        $result = grep { $hash_columns->{$_}->{'Key'} =~/PRI/i}  keys %$hash_columns;
-        if (Koha::Cache->is_cache_active() && defined $cache) {
-            $cache->set_in_cache("sqlhelper:GetPrimaryKeys:$tablename", $result);
-        }
-    }
-    return $result;
+	my $hash_columns=_get_columns($tablename);
+	return  grep { $hash_columns->{$_}->{'Key'} =~/PRI/i}  keys %$hash_columns;
 }
 
 
@@ -284,25 +286,12 @@ With
 
 sub _get_columns($) {
     my ($tablename) = @_;
-    my $cache;
-    if ( exists( $hashref->{$tablename} ) ) {
-        return $hashref->{$tablename};
-    }
-    if (Koha::Cache->is_cache_active()) {
-        $cache = Koha::Cache->new();
-        if (defined $cache) {
-            $hashref->{$tablename} = $cache->get_from_cache("sqlhelper:_get_columns:$tablename");
-        }
-    }
-    unless ( defined $hashref->{$tablename}  ) {
+    unless ( exists( $hashref->{$tablename} ) ) {
         my $dbh = C4::Context->dbh;
         my $sth = $dbh->prepare_cached(qq{SHOW COLUMNS FROM $tablename });
         $sth->execute;
         my $columns = $sth->fetchall_hashref(qw(Field));
         $hashref->{$tablename} = $columns;
-        if (Koha::Cache->is_cache_active() && defined $cache) {
-            $cache->set_in_cache("sqlhelper:_get_columns:$tablename", $hashref->{$tablename});
-        }
     }
     return $hashref->{$tablename};
 }
