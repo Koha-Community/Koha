@@ -336,7 +336,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
     </span>
 
     [% IF ( MARCAUTHORS ) %]
-    <span class="results_summary"><span class="label">Authors:</span>
+    <span class="results_summary"><span class="label">Additional authors:</span>
                 [% FOREACH MARCAUTHOR IN MARCAUTHORS %]
                 [% FOREACH MARCAUTHOR_SUBFIELDS_LOO IN MARCAUTHOR.MARCAUTHOR_SUBFIELDS_LOOP %][% MARCAUTHOR_SUBFIELDS_LOO.separator %]<a title="‡[% MARCAUTHOR_SUBFIELDS_LOO.code %] [% MARCAUTHOR_SUBFIELDS_LOO.value %]" href="/cgi-bin/koha/opac-search.pl?q=[% FOREACH link_loo IN MARCAUTHOR_SUBFIELDS_LOO.link_loop %][% link_loo.operator |url %][% link_loo.limit |url %]:[% link_loo.link |url %][% END %]">[% MARCAUTHOR_SUBFIELDS_LOO.value %]</a>[% END %] 
         [% UNLESS ( loop.last ) %]|
