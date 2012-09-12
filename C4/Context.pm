@@ -487,18 +487,9 @@ my %sysprefs;
 sub preference {
     my $self = shift;
     my $var  = lc(shift);                          # The system preference to return
-    my $cache;
 
     if (exists $sysprefs{$var}) {
         return $sysprefs{$var};
-    }
-
-    if (Koha::Cache->is_cache_active()) {
-        $cache = Koha::Cache->new();
-        if (defined $cache) {
-            $sysprefs{$var} = $cache->get_from_cache("syspref:$var");
-            return $sysprefs{$var} if (defined $sysprefs{$var});
-        }
     }
 
     my $dbh  = C4::Context->dbh or return 0;
@@ -511,9 +502,6 @@ sub preference {
         LIMIT    1
 END_SQL
     $sysprefs{$var} = $dbh->selectrow_array( $sql, {}, $var );
-    if (Koha::Cache->is_cache_active() && defined $cache) {
-        $cache->set_in_cache("syspref:$var");
-    }
     return $sysprefs{$var};
 }
 
@@ -536,10 +524,6 @@ will not be seen by this process.
 
 sub clear_syspref_cache {
     %sysprefs = ();
-    if (Koha::Cache->is_cache_active()) {
-        my $cache = Koha::Cache->new();
-        $cache->flush_all() if defined $cache; # Sorry, this is unpleasant
-    }
 }
 
 =head2 set_preference
@@ -570,10 +554,6 @@ sub set_preference {
     " );
 
     if($sth->execute( $var, $value )) {
-        if (Koha::Cache->is_cache_active()) {
-            my $cache = Koha::Cache->new();
-            $cache->set_in_cache("syspref:$var", $value) if defined $cache;
-        }
         $sysprefs{$var} = $value;
     }
     $sth->finish;
