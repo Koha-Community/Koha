@@ -99,7 +99,7 @@ sub getFrameworkLanguages {
         }
     }
     if (Koha::Cache->is_cache_active() && defined $cache) {
-        $cache->set_in_cache("getFrameworkLanguages",\@languages,1000)
+        $cache->set_in_cache("getFrameworkLanguages",\@languages,10000)
     }
     return \@languages;
 }
