@@ -1,6 +1,5 @@
 #!/usr/bin/perl
 #
-# This Koha test module is a stub!
 # Add more tests here!!!
 
 use strict;
@@ -33,7 +32,15 @@ my $itemtypes = [
     [ 'CD', 'CDRom', 0, 0, '', '' ]
 ];
 
+my $itemtypes_empty = [
+    [
+        'itemtype', 'description', 'rentalcharge', 'notforloan',
+        'imageurl', 'summary'
+    ],
+];
+
 my $dbh = C4::Context->dbh();
+$dbh->{mock_add_resultset} = $itemtypes_empty;
 
 my @itemtypes = C4::ItemType->all();
 is( @itemtypes, 0, 'Testing all itemtypes is empty' );
