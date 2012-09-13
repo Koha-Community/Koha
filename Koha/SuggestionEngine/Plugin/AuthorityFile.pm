@@ -80,7 +80,7 @@ sub get_suggestions {
           {
             'search'  => "an=$auth->{'authid'}",
             relevance => $count--,
-            label     => $auth->{summary}->{mainentry}
+            label     => $auth->{summary}->{authorized}->[0]
           };
     }
     return \@results;
