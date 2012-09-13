@@ -20,20 +20,11 @@ $(document).ready(function() {
     var cD = ColumnData;
     var new_array = new Array();
     for ( j=0 ; j<cD.length ; j++ ) {
-        var strMatch = cD[j].match(/<br>/gi);
-        if (strMatch) {
-            var split_array = cD[j].split(/<br>/gi);
-            for ( k=0 ; k<split_array.length ; k++ ){
-                var check_array = $.inArray(split_array[k], new_array);
-                if (check_array == -1) {
-                new_array.push(split_array[k]);
-                }
-            }
-        }
-        else {
-            var check_array = $.inArray(cD[j], new_array);
+        var split_array = cD[j].split(/<br>/gi);
+        for ( k=0 ; k<split_array.length ; k++ ){
+            var check_array = $.inArray(split_array[k], new_array);
             if (check_array == -1) {
-                new_array.push(cD[j]);
+                new_array.push(split_array[k]);
             }
         }
     }
