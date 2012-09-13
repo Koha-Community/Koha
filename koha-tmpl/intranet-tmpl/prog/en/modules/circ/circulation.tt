@@ -177,7 +177,7 @@ function initExportButton() {
     ];
     new YAHOO.widget.Button({
         type: "menu",
-        label: _("Export"),
+        label: _("Export checkouts"),
         name: "exportmenubutton",
         menu: exportmenu,
         container: "exportmenuc"
@@ -206,7 +206,7 @@ function export_submit(format) {
         $("#dont_export_item").val(1);
     } else {
         [% UNLESS ( export_with_csv_profile ) %]
-            alert(_("You must defined a csv profile for export (in tools>CSV export profiles) and filled the ExportWithCsvProfile system preference"));
+            alert(_("You must define a csv profile for export (in tools>CSV export profiles) and fill the ExportWithCsvProfile system preference"));
             return false;
         [% END %]
     }
