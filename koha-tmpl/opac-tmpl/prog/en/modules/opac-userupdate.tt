@@ -89,9 +89,9 @@
     [% FOREACH patron_attribute IN BORROWER_INF.patron_attributes %]
         <li><label>[% patron_attribute.description %]</label>
         [% IF ( patron_attribute.value_description ) %]
-            <input type="text"  disabled="disabled" readonly="readonly" value="[% patron_attribute.value_description %]" />
+            [% patron_attribute.value_description %]"
         [% ELSE %]
-            <input type="text"  disabled="disabled" readonly="readonly" value="[% patron_attribute.value %]" />
+            [% patron_attribute.value |html_line_break %]
         [% END %]
         </li>
     [% END %]

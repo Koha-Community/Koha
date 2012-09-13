@@ -302,7 +302,7 @@ function validate1(date) {
                 [% IF ( item.value_description ) %]
                     [% item.value_description %]
                 [% ELSE %]
-                    [% item.value %]
+                    [% item.value| html_line_break %]
                 [% END %]
             </li>
         [% END %]
