@@ -5717,7 +5717,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 
 $DBversion ="3.09.00.038";
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
-    $dbh->do("ALTER TABLE  `borrower_attributes` CHANGE  `attribute`  `attribute` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL");
+    $dbh->do("ALTER TABLE borrower_attributes CHANGE  attribute  attribute VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL");
     print "Upgrade to $DBversion done (Increase the maximum size of a borrower attribute value)\n";
     SetVersion($DBversion);
 }
