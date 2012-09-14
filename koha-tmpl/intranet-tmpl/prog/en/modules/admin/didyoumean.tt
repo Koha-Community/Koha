@@ -1,0 +1,104 @@
+[% BLOCK pluginlist %]
+<div class="pluginlist">
+[% FOREACH plugin IN plugins %]
+    <div class="plugin">
+        <div class="pluginname">
+            [% IF plugin.enabled %]<input type="checkbox" checked="checked" id="checkbox_[% plugin.name %]">[% ELSE %]<input type="checkbox" id="checkbox_[% plugin.name %]">[% END %]
+            <label class='pluginlabel' for="checkbox_[% plugin.name %]">[% plugin.name %]</label></div>
+        <div class="plugindesc">
+        [% SWITCH plugin.name %]
+        [% CASE 'AuthorityFile' %]
+            Suggest authorities which are relevant to the term the user searched for.
+        [% CASE 'ExplodedTerms' %]
+            Suggest that patrons expand their searches to include
+            broader/narrower/related terms.
+        [% END %]
+        </div>
+    </div>
+[% END %]
+</div>
+[% END %]
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Administration &rsaquo; Did you mean?</title>
+[% INCLUDE 'doc-head-close.inc' %]
+<script>
+    $(document).ready(function() {
+        $( ".pluginlist" ).sortable();
+        $( ".plugin" ).addClass( "ui-widget ui-widget-content ui-helper-clearfix ui-corner-all" )
+            .find( ".pluginname" )
+                    .addClass( "ui-widget-header ui-corner-all" )
+                    .end()
+            .find( ".plugindesc" );
+    });
+
+    function yesimeant() {
+        var OPACdidyoumean = serialize_plugins('opac');
+        var INTRAdidyoumean = serialize_plugins('intranet');
+
+        var data = "pref_OPACdidyoumean=" + encodeURIComponent(OPACdidyoumean) + "&pref_INTRAdidyoumean=" + encodeURIComponent(INTRAdidyoumean);
+
+        $.ajax({
+            data: data,
+            type: 'POST',
+            url: '/cgi-bin/koha/svc/config/systempreferences/',
+            success: function () { alert("Successfully saved configuration"); },
+        });
+        return false;
+    }
+
+    function serialize_plugins(interface) {
+        var serializedconfig = '[';
+        $('#didyoumean' + interface + ' .pluginlist .plugin').each(function(index) {
+            var name = $(this).find('.pluginlabel').text();
+            var enabled = $(this).find('#checkbox_' + name).attr('checked') == 'checked' ?
+                          ', "enabled": 1' : '';
+            serializedconfig += '{ "name": "' + name + '"' + enabled + '}, ';
+            });
+            serializedconfig = serializedconfig.substring(0, serializedconfig.length - 2);
+            serializedconfig += ']';
+            return serializedconfig;
+    }
+</script>
+</head>
+<body id="admin_didyoumean" class="admin">
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'cat-search.inc' %]
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; Did you mean?</div>
+
+<div id="doc3" class="yui-t2">
+
+    <div id="bd">
+    <div id="yui-main">
+    <div class="yui-b">
+        <h3>Did you mean?</h3>
+        <noscript><div class="dialog alert"><strong>Please enable Javascript:</strong>
+            Configuring <em>Did you mean?</em> plugins requires Javascript. If
+            you are unable to use Javascript, you may be able to enter the
+            configuration (which is stored in JSON in the OPACdidyoumean and
+            INTRAdidyoumean system preferences) in the Local Preferences tab in
+            the system preference editor, but this is unsupported, not
+            recommended, and likely will not work.</div></noscript>
+        <div id="didyoumeanlegend">
+            Please put the <em>Did you mean?</em> plugins in order by significance, from
+            most significant to least significant, and check the box to enable those
+            plugins that you want to use.
+        </div>
+        <form action="/cgi-bin/koha/admin/didyoumean.pl" method="post">
+            <fieldset id="didyoumeanopac">
+                <legend>OPAC</legend>
+                [% PROCESS pluginlist plugins=OPACpluginlist %]
+            </fieldset>
+            <fieldset id="didyoumeanintranet">
+                <legend>Intranet</legend>
+                [% PROCESS pluginlist plugins=INTRApluginlist %]
+            </fieldset>
+            <fieldset class="action"><button class="save-all submit" onclick="yesimeant();return false;" type="submit">Save configuration</button> <a href="#" onclick="window.location.reload(true);" class="cancel">Cancel</a></fieldset>
+        </form>
+
+        </div>
+        </div>
+<div class="yui-b">
+[% INCLUDE 'admin-menu.inc' %]
+</div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

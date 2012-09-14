@@ -285,7 +285,7 @@ $(document).ready(function(){
     <div id="yui-main">
     <div class="yui-b">
     <div id="userresults" class="container">
-    [% IF ( DidYouMeanFromAuthorities ) %]
+    [% IF ( DidYouMean ) %]
         <div id='didyoumean'>Not what you expected? Check for <a href='/cgi-bin/koha/svc/suggestion?render=standalone&q=[% querystring | uri %]'>suggestions</a></div>
     [% END %]
     [% INCLUDE 'page-numbers.inc' %]<br />

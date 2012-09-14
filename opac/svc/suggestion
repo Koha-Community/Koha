@@ -80,12 +80,20 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-unless ( C4::Context->preference('DidYouMeanFromAuthorities') ) {
+my @plugins = ();
+
+my $pluginsconfig = from_json(C4::Context->preference('OPACdidyoumean') || '[]');
+
+foreach my $plugin (@$pluginsconfig) {
+    push @plugins, $plugin->{name} if ($plugin->{enabled});
+}
+
+unless ( @plugins ) {
     print $query->header;
     exit;
 }
 
-my $suggestor = Koha::SuggestionEngine->new( { plugins => ('AuthorityFile') } );
+my $suggestor = Koha::SuggestionEngine->new( { plugins => \@plugins } );
 
 my $suggestions =
   $suggestor->get_suggestions( { search => $search, count => $count } );

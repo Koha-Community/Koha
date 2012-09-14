@@ -823,7 +823,7 @@ if (C4::Context->preference('GoogleIndicTransliteration')) {
         $template->param('GoogleIndicTransliteration' => 1);
 }
 
-$template->{VARS}->{DidYouMeanFromAuthorities} = C4::Context->preference('DidYouMeanFromAuthorities');
+$template->{VARS}->{DidYouMean} = C4::Context->preference('OPACdidyoumean') =~ m/enable/;
 
     $template->param( borrowernumber    => $borrowernumber);
 output_with_http_headers $cgi, $cookie, $template->output, $content_type;

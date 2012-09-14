@@ -87,7 +87,7 @@ sub new {
     my $options = $param->{options} || '';
     my @plugins = ();
 
-    foreach my $plugin ( $param->{plugins} ) {
+    foreach my $plugin ( @{$param->{plugins}} ) {
         next unless $plugin;
         my $plugin_module =
             $plugin =~ m/:/
@@ -141,15 +141,18 @@ sub get_suggestions {
 
     my %suggestions;
 
+    my $index = scalar @{ $self->plugins };
+
     foreach my $pluginobj ( @{ $self->plugins } ) {
         next unless $pluginobj;
         my $pluginres = $pluginobj->get_suggestions($param);
         foreach my $suggestion (@$pluginres) {
             $suggestions{ $suggestion->{'search'} }->{'relevance'} +=
-              $suggestion->{'relevance'};
+              $suggestion->{'relevance'} * $index;
             $suggestions{ $suggestion->{'search'} }->{'label'} |=
               $suggestion->{'label'};
         }
+        $index--;
     }
 
     my @results = ();

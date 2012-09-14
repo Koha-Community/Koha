@@ -5768,7 +5768,6 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
-
 $DBversion = '3.09.00.044';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("ALTER TABLE statistics ADD COLUMN ccode VARCHAR ( 10 ) NULL AFTER associatedborrower");
@@ -5951,7 +5950,6 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-
 $DBversion = "3.09.00.054";
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     $dbh->do("ALTER TABLE aqorders CHANGE COLUMN gst gstrate DECIMAL(6,4)  DEFAULT NULL");
@@ -5979,6 +5977,14 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     $dbh->do("ALTER TABLE aqbasket ADD deliveryplace VARCHAR(10) default NULL AFTER basketgroupid;");
     $dbh->do("ALTER TABLE aqbasket ADD billingplace VARCHAR(10) default NULL AFTER deliveryplace;");
     print "Upgrade to $DBversion done (Bug 5356: Added billingplace, deliveryplace to the aqbasket table)\n";
+    SetVersion($DBversion);
+}
+
+$DBversion ="3.09.00.058";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,type) VALUES('OPACdidyoumean',NULL,'Did you mean? configuration for the OPAC. Do not change, as this is controlled by /cgi-bin/koha/admin/didyoumean.pl.','Free');");
+    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,type) VALUES('INTRAdidyoumean',NULL,'Did you mean? configuration for the Intranet. Do not change, as this is controlled by /cgi-bin/koha/admin/didyoumean.pl.','Free');");
+    print "Upgrade to $DBversion done (Add Did You Mean? configuration)\n";
     SetVersion($DBversion);
 }
 

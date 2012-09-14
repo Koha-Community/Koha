@@ -60,8 +60,6 @@ use base qw(Class::Accessor);
 
 __PACKAGE__->mk_ro_accessors(qw( name version ));
 __PACKAGE__->mk_accessors(qw( params ));
-our $NAME    = 'Base';
-our $VERSION = '1.0';
 
 =head2 new
 
@@ -123,6 +121,48 @@ sub get_suggestions {
     my $self  = shift;
     my $param = shift;
     return;
+}
+
+=head2 NAME
+
+    my $name = $plugin->NAME;
+
+Getter function for plugin names.
+
+=cut
+
+sub NAME {
+    my $self = shift;
+    my $package = ref $self || $self;
+    return eval '$' . $package . '::NAME';
+}
+
+=head2 VERSION
+
+    my $version = $plugin->VERSION;
+
+Getter function for plugin versions.
+
+=cut
+
+sub VERSION {
+    my $self = shift;
+    my $package = ref $self || $self;
+    return eval '$' . $package . '::VERSION';
+}
+
+=head2 DESCRIPTION
+
+    my $description = $plugin->DESCRIPTION;
+
+Getter function for plugin descriptions.
+
+=cut
+
+sub DESCRIPTION {
+    my $self = shift;
+    my $package = ref $self || $self;
+    return eval '$' . $package . '::DESCRIPTION';
 }
 
 1;
