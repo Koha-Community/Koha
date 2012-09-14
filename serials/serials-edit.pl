@@ -82,7 +82,6 @@ my @serialids       = $query->param('serialid');
 my @serialseqs      = $query->param('serialseq');
 my @planneddates    = $query->param('planneddate');
 my @publisheddates  = $query->param('publisheddate');
-my @publisheddates  = $query->param('publisheddate');
 my @publisheddatetexts = $query->param('publisheddatetext');
 my @status          = $query->param('status');
 my @notes           = $query->param('notes');
