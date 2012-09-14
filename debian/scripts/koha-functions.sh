@@ -108,6 +108,19 @@ is_zebra_running()
     fi
 }
 
+is_indexer_running()
+{
+    local instancename=$1
+
+    if daemon --name="$instancename-koha-indexer" \
+            --user="$instancename-koha.$instancename-koha" \
+            --running ; then
+        return 0
+    else
+        return 1
+    fi
+}
+
 get_instances()
 {
     find /etc/koha/sites -mindepth 1 -maxdepth 1\

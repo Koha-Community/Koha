@@ -16,6 +16,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# Read configuration variable file if it is present
+[ -r /etc/default/koha-common ] && . /etc/default/koha-common
 
 set -e
 
@@ -642,6 +644,11 @@ then
 
     # Start Zebra.
     koha-start-zebra "$name"
+
+    if [ "$USE_INDEXER_DAEMON" = "yes" ]; then
+        # Start Indexer daemon
+        koha-indexer --start "$name"
+    fi
 fi
 
 

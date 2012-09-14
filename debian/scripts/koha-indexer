@@ -1,0 +1,233 @@
+#!/bin/bash
+#
+# koha-indexer - Manage Indexer Daemons for Koha instances
+# Copyright 2014 Tomás Cohen Arazi @ Universidad Nacional de Córdoba
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+set -e
+
+. /lib/lsb/init-functions
+
+# Read configuration variable file if it is present
+[ -r /etc/default/koha-common ] && . /etc/default/koha-common
+
+# include helper functions
+if [ -f "/usr/share/koha/bin/koha-functions.sh" ]; then
+    . "/usr/share/koha/bin/koha-functions.sh"
+else
+    echo "Error: /usr/share/koha/bin/koha-functions.sh not present." 1>&2
+    exit 1
+fi
+
+usage()
+{
+    local scriptname=$(basename $0)
+
+    cat <<EOF
+$scriptname
+
+This script lets you manage the indexer daemon for your Koha instances.
+
+Usage:
+$scriptname [--start|--stop|--restart] [--quiet|-q] instancename1 [instancename2...]
+$scriptname -h|--help
+
+    --start               Start the indexer daemon for the specified instances
+    --stop                Stop the indexer daemon for the specified instances
+    --restart             Restart the indexer daemon for the specified instances
+    --quiet|-q            Make the script quiet about non existent instance names
+                          (useful for calling from another scripts).
+    --help|-h             Display this help message
+
+EOF
+}
+
+start_indexer()
+{
+    local name=$1
+
+    if ! is_indexer_running $name; then
+        export KOHA_CONF="/etc/koha/sites/$name/koha-conf.xml"
+
+        DAEMONOPTS="--name=$name-koha-indexer \
+            --errlog=/var/log/koha/$name/indexer-error.log \
+            --stdout=/var/log/koha/$name/indexer.log \
+            --output=/var/log/koha/$name/indexer-output.log \
+            --verbose=1 --respawn --delay=30 \
+            --user=$name-koha.$name-koha"
+
+        log_daemon_msg "Starting Koha indexing daemon for $name"
+
+        if daemon $DAEMONOPTS -- $INDEXER_DAEMON $INDEXER_PARAMS; then
+            log_end_msg 0
+        else
+            log_end_msg 1
+        fi
+    else
+        log_daemon_msg "Error: Indexer already running for $name"
+        log_end_msg 1
+    fi
+}
+
+stop_indexer()
+{
+    local name=$1
+
+    if is_indexer_running $name; then
+        export KOHA_CONF="/etc/koha/sites/$name/koha-conf.xml"
+
+        DAEMONOPTS="--name=$name-koha-indexer \
+            --errlog=/var/log/koha/$name/indexer-error.log \
+            --stdout=/var/log/koha/$name/indexer.log \
+            --output=/var/log/koha/$name/indexer-output.log \
+            --verbose=1 --respawn --delay=30 \
+            --user=$name-koha.$name-koha"
+
+        log_daemon_msg "Stopping Koha indexing daemon for $name"
+
+        if daemon $DAEMONOPTS --stop -- $INDEXER_DAEMON $INDEXER_PARAMS; then
+            log_end_msg 0
+        else
+            log_end_msg 1
+        fi
+    else
+        log_daemon_msg "Error: Indexer not running for $name"
+        log_end_msg 1
+    fi
+}
+
+restart_indexer()
+{
+    local name=$1
+
+    if is_indexer_running $name; then
+        export KOHA_CONF="/etc/koha/sites/$name/koha-conf.xml"
+
+        DAEMONOPTS="--name=$name-koha-indexer \
+            --errlog=/var/log/koha/$name/indexer-error.log \
+            --stdout=/var/log/koha/$name/indexer.log \
+            --output=/var/log/koha/$name/indexer-output.log \
+            --verbose=1 --respawn --delay=30 \
+            --user=$name-koha.$name-koha"
+
+        log_daemon_msg "Stopping Koha indexing daemon for $name"
+
+        if daemon $DAEMONOPTS --restart -- $INDEXER_DAEMON $INDEXER_PARAMS; then
+            log_end_msg 0
+        else
+            log_end_msg 1
+        fi
+    else
+        log_daemon_msg "Error: Indexer not running for $name"
+        log_end_msg 1
+    fi
+}
+
+set_action()
+{
+    if [ "$op" = "" ]; then
+        op=$1
+    else
+        die "Error: only one action can be specified."
+    fi
+}
+
+op=""
+quiet="no"
+
+# Read command line parameters
+while [ $# -gt 0 ]; do
+
+    case "$1" in
+        -h|--help)
+            usage ; exit 0 ;;
+        -q|--quiet)
+            quiet="yes"
+            shift ;;
+        --start)
+            set_action "start"
+            shift ;;
+        --stop)
+            set_action "stop"
+            shift ;;
+        --restart)
+            set_action "restart"
+            shift ;;
+        -*)
+            die "Error: invalid option switch ($1)" ;;
+        *)
+            # We expect the remaining stuff are the instance names
+            break ;;
+    esac
+
+done
+
+# Check if an alternate indexer has been set
+if [ -z $ALTERNATE_INDEXER_DAEMON ]; then
+    INDEXER_DAEMON="$ALTERNATE_INDEXER_DAEMON"
+else
+    # We default to rebuild_zebra.pl if no alternate indexer set
+    INDEXER_DAEMON="${KOHA_HOME}/bin/migration_tools/rebuild_zebra.pl"
+fi
+
+if [ $INDEXER_TIMEOUT -lt 1 ]; then
+    # Something's wrong, default to 5 seconds
+    INDEXER_TIMEOUT=5
+fi
+
+if [ -z $INDEXER_PARAMS ]; then
+    # Default to the parameters required by rebuild_zebra.pl
+    INDEXER_PARAMS="-daemon -x -sleep $INDEXER_TIMEOUT"
+fi
+
+if [ -z $PERL5LIB ]; then
+    PERL5LIB="/usr/share/koha/lib"
+fi
+
+export PERL5LIB
+
+if [ $# -gt 0 ]; then
+    # We have at least one instance name
+    for name in "$@"; do
+
+        if is_instance $name; then
+
+            case $op in
+                "start")
+                    start_indexer $name
+                    ;;
+                "stop")
+                    stop_indexer $name
+                    ;;
+                "restart")
+                    restart_indexer $name
+                    ;;
+            esac
+
+        else
+            if [ "$quiet" = "no" ]; then
+                log_daemon_msg "Error: Invalid instance name $name"
+                log_end_msg 1
+            fi
+        fi
+
+    done
+else
+    if [ "$quiet" = "no" ]; then
+        warn "Error: you must provide at least one instance name"
+    fi
+fi
+
+exit 0

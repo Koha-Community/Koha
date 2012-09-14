@@ -1,0 +1,86 @@
+<article xmlns='http://docbook.org/ns/docbook'>
+<title>koha-indexer</title>
+<info>
+<productname>Koha</productname> is the first free software library automation package.
+<author>
+  <orgname>The Koha Community</orgname>
+  <uri>http://koha-community.org/</uri>
+</author>
+</info>
+
+<refentry xml:id="koha-indexer">
+
+  <refmeta>
+    <refentrytitle>koha-indexer</refentrytitle>
+    <manvolnum>8</manvolnum>
+  </refmeta>
+
+  <refnamediv>
+    <refname>koha-indexer</refname>
+    <refpurpose>Manage the indexer daemon for Koha instances.</refpurpose>
+    <refclass>UNIX/Linux</refclass>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <cmdsynopsis>
+      <command>koha-indexer</command>
+      <arg choice="req"><option>--start</option>|<option>--stop</option>|<option>--restart</option>|<option>--help</option>|<option>-h</option>|<option>--quiet</option>|<option>-q</option></arg>
+      <arg choice="req" rep="repeat"><replaceable>instancename</replaceable></arg>
+    </cmdsynopsis>
+  </refsynopsisdiv>
+
+  <refsect1><title>Options</title>
+
+  <variablelist>
+
+    <varlistentry>
+      <term><option>--start</option></term>
+      <listitem>
+        <para>Start the indexer daemon for the desired Koha instances.</para>
+      </listitem>
+    </varlistentry>
+
+    <varlistentry>
+      <term><option>--stop</option></term>
+      <listitem>
+        <para>Stop the indexer daemon for the desired Koha instances.</para>
+      </listitem>
+    </varlistentry>
+
+    <varlistentry>
+      <term><option>--restart</option></term>
+      <listitem>
+        <para>Restart the indexer daemon for the desired Koha instances.</para>
+      </listitem>
+    </varlistentry>
+
+    <varlistentry>
+      <term><option>--quiet|-q</option></term>
+      <listitem>
+        <para>Make the script quiet about non existent instance names. Useful when calling <command>koha-indexer</command> from another scripts.</para>
+      </listitem>
+    </varlistentry>
+
+    <varlistentry>
+      <term><option>--help|-h</option></term>
+      <listitem>
+        <para>Show usage information.</para>
+      </listitem>
+    </varlistentry>
+
+  </variablelist>
+  </refsect1>
+
+  <refsect1><title>Description</title>
+    <para>The <command>koha-indexer</command> script lets you manage your Koha instances indexer daemon.</para>
+  </refsect1>
+
+  <refsect1><title>See also</title>
+  <simplelist type="inline">
+    <member><command>/etc/default/koha-common</command></member>
+  </simplelist>
+  </refsect1>
+
+</refentry>
+
+</article>

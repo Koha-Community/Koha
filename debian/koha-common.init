@@ -49,6 +49,10 @@ do_start()
     koha-create-dirs $(koha-list)
     koha-start-zebra $(koha-list --enabled)
     koha-start-sip $(koha-list --enabled)
+
+    if [ "$USE_INDEXER_DAEMON" = "yes" ]; then
+        koha-indexer --start --quiet $(koha-list --enabled)
+    fi
 }
 
 #
@@ -59,6 +63,10 @@ do_stop()
     # We stop everything, including disabled ones.
     koha-stop-zebra $(koha-list) || true
     koha-stop-sip $(koha-list) || true
+
+    if [ "$USE_INDEXER_DAEMON" = "yes" ]; then
+        koha-indexer --stop --quiet $(koha-list --enabled)
+    fi
 }
 
 #
@@ -68,6 +76,10 @@ do_reload() {
     koha-restart-zebra $(koha-list --enabled)
     koha-stop-sip $(koha-list) || true
     koha-start-sip $(koha-list --enabled)
+
+    if [ "$USE_INDEXER_DAEMON" = "yes" ]; then
+        koha-indexer --restart --quiet $(koha-list --enabled)
+    fi
 }
 
 #
