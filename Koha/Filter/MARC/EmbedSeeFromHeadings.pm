@@ -54,7 +54,7 @@ sub filter {
     my $record = shift;
     my $newrecord;
 
-    return undef unless defined $record;
+    return unless defined $record;
 
     if (ref $record eq 'ARRAY') {
         my @recarray;

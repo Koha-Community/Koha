@@ -77,7 +77,7 @@ sub get_from_authid {
     my ($authtypecode, $marcxml) = $sth->fetchrow;
     my $record=eval {MARC::Record->new_from_xml(StripNonXmlChars($marcxml),'UTF-8',
         (C4::Context->preference("marcflavour") eq "UNIMARC"?"UNIMARCAUTH":C4::Context->preference("marcflavour")))};
-    return undef if ($@);
+    return if ($@);
     $record->encoding('UTF-8');
 
     my $self = $class->SUPER::new( { authid => $authid,
