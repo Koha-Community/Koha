@@ -1613,7 +1613,7 @@ Return the ordernumber of created order.
 sub TransferOrder {
     my ($ordernumber, $basketno) = @_;
 
-    return unless $ordernumber or $basketno;
+    return unless ($ordernumber and $basketno);
 
     my $order = GetOrder( $ordernumber );
     return if $order->{datereceived};
