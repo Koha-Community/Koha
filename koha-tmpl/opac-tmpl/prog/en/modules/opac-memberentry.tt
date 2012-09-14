@@ -2,10 +2,11 @@
 [% SET userupdateview = 1 %]
 
     [% INCLUDE 'doc-head-open.inc' %]
-        [% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Your fines and charges
+        [% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; [% IF action == 'edit' %]Update your personal details[% ELSE %]Register a new account[% END %]
     [% INCLUDE 'doc-head-close.inc' %]
 
     <script type="text/javascript">
+        //<![CDATA[
         $(document).ready(function() {
             [% IF action == 'edit' && !OPACPatronDetails %]
                 $("#memberentry-form :input").attr('readonly', true);
@@ -18,10 +19,14 @@
                 $( "#borrower_dateofbirth" ).datepicker({ yearRange: "c-120:c" });
             [% END %]
         });
+    //]]>
     </script>
 </head>
-
-<body id="opac-account">
+[% IF action == 'edit' %]
+<body id="opac-patron-update">
+[% ELSE %]
+<body id="opac-patron-registration">
+[% END %]
     <div id="doc3" class="yui-t1">
         <div id="bd">
             [% INCLUDE 'masthead.inc' %]
@@ -29,9 +34,21 @@
             <div id="yui-main">
                 <div class="yui-b">
                     <div class="yui-g">
-                        <div id="useraccount" class="container">
+                        [% IF action == 'edit' %]
+                        <div id="update-account" class="container">
+                        [% ELSE %]
+                        <div id="add-account" class="container">
+                        [% END %]
+                        [% IF action == 'edit' %]
+                            <h3><a href="/cgi-bin/koha/opac-user.pl">[% borrower.firstname %] [% borrower.surname %]'s account</a> &#8674; Personal details</h3>
+                        [% ELSE %]
+                            <h3>Register a new account</h3>
+                        [% END %]
+
+                            [% IF action == 'edit' %]
                             [% UNLESS OPACPatronDetails %]
-                                <div>To make changes to your record please contact the library.</div>
+                                <div class="dialog message">To make changes to your record please contact the library.</div>
+                            [% END %]
                             [% END %]
 
                             [% IF empty_mandatory_fields %]
@@ -42,7 +59,7 @@
                                 <div class="dialog alert">You typed in the wrong characters in the box before submitting. Please try again.</div>
                             [% END %]
 
-                            <form method="post" id="memberentry-form">
+                            <form method="post" action="/cgi-bin/koha/opac-memberentry.pl" id="memberentry-form">
 
                                 [% UNLESS
                                     hidden.defined('branchcode')
@@ -699,12 +716,12 @@
                                     <fieldset class="rows" id="memberentry_captcha">
                                         <ol>
                                             <li>
-                                                <label for="borrower_altcontactphone" class="required">Verification</label>
+                                                <label for="captcha" class="required">Verification:</label>
 
                                                 <input type="text" name="captcha" id="captcha" />
                                                 <input type="hidden" name="captcha_digest" value="[% captcha_digest %]" />
 
-                                                <span class="required">Please type this following characters into the preceding box: <strong>[% captcha %]</strong></span>
+                                                <span class="hint">Please type this following characters into the preceding box: <strong>[% captcha %]</strong></span>
                                             </li>
                                         </ol>
                                     </fieldset>
@@ -712,17 +729,21 @@
 
                                 [% IF action == 'edit' %]
                                     [% IF OPACPatronDetails %]
-                                        <input type="hidden" name="action" value="update" />
-                                        <input type="submit" value="Submit Update Request" />
+                                        <fieldset class="action">
+                                            <input type="hidden" name="action" value="update" />
+                                            <input type="submit" value="Submit update request" />
+                                        </fieldset>
                                     [% END %]
                                 [% ELSE %]
-                                    <input type="hidden" name="action" value="create" />
-                                    <input type="submit" value="Submit" />
+                                    <fieldset class="action">
+                                        <input type="hidden" name="action" value="create" />
+                                        <input type="submit" value="Submit" />
+                                    </fieldset>
                                 [% END %]
 
                             </form>
 
-                        </div><!--/div id="useraccount" -->
+                        </div><!--/div id="update-account" -->
                     </div>
                 </div>
             </div>

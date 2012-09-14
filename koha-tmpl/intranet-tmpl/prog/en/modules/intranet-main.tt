@@ -134,7 +134,7 @@
 
 
                     [% IF ( CAN_user_borrowers && pending_borrower_modifications ) %]
-                    <div class="pending-info">
+                    <div class="pending-info" id="patron_updates_pending">
                         <a href="/cgi-bin/koha/members/members-update.pl">Patrons requesting modifications</a>:
                         <span class="pending-number-link">[% pending_borrower_modifications %]</span>
                     </div>

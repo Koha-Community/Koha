@@ -86,7 +86,7 @@ please choose against which one you would like to authenticate: </p>
 <input type="submit" value="Log In" class="submit" />
 <div id="nologininstructions">
     <h5>Don't have a password yet?</h5><p> If you don't have a password yet, stop by the circulation desk the next time you're in the library. We'll happily set one up for you.</p>
-    <h5>Don't have a library card?</h5><p> If you don't have a library card, stop by your local library to sign up[% IF PatronSelfRegistration && PatronSelfRegistrationDefaultCategory %] or  <a href="/cgi-bin/koha/opac-memberentry.pl">register here</a>[% END %].</p>
+    <h5>Don't have a library card?</h5><p> If you don't have a library card, stop by your local library to sign up[% IF PatronSelfRegistration && PatronSelfRegistrationDefaultCategory %]<span id="registrationinstructions"> or  <a href="/cgi-bin/koha/opac-memberentry.pl">register here</a></span>[% END %].  </p>
 </div>
 </form>
 

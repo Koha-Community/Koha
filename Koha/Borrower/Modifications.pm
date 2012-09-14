@@ -191,7 +191,7 @@ sub GetPendingModifications {
         $query .= " AND borrowers.branchcode = ? ";
         push( @params, $branchcode );
     }
-
+    $query .= " ORDER BY borrowers.surname, borrowers.firstname";
     my $sth = $dbh->prepare($query);
     $sth->execute(@params);
 

@@ -1,24 +1,21 @@
 [% INCLUDE 'doc-head-open.inc' %]
-[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog
+[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Please confirm your registration
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
-<body id="opac-main">
+<body id="opac-confirmation-pending">
 [% IF ( OpacNav ) %]<div id="doc3" class="yui-t1">[% ELSE %]<div id="doc3" class="yui-t7">[% END %]
    <div id="bd">
 [% INCLUDE 'masthead.inc' %]
 
 <div id="yui-main">
     <div class="yui-b">
-        <div id="loggedin" class="yui-ge">
-            <div class="yui-u first">
-                <h1>Please Confirm Registration</h1>
+        <div id="confirmation-pending" class="dialog message">
+            <h1>Please confirm your registration</h1>
 
-                <p>A confirmation email has been sent to the email address <strong>[% email %]</strong>.</p>
+                        <p>A confirmation email has been sent to the email address <strong>[% email %]</strong>.</p>
 
-                <p>Your account will not be activated until you follow the link provided in the confirmation email.</p>
-            </div>
+                        <p>Your account will not be activated until you follow the link provided in the confirmation email.</p></div>
         </div>
-    </div>
 </div>
 
 [% IF ( OpacNav ) %]<div class="yui-b">

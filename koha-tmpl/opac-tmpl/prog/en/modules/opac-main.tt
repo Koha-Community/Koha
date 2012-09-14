@@ -56,7 +56,8 @@
 		<li><label for="password">Password:</label><input type="password" id="password" size="10" name="password" /></li>
 		</ol>	 <fieldset class="action">
 	 <input type="submit" value="Log In" class="submit" />
-        [% IF PatronSelfRegistration && PatronSelfRegistrationDefaultCategory %]<div>Don't have an account? <a href="/cgi-bin/koha/opac-memberentry.pl">Register here.</a></div>[% END %]
+
+        [% IF PatronSelfRegistration && PatronSelfRegistrationDefaultCategory %]<div id="patronregistration">Don't have an account? <a href="/cgi-bin/koha/opac-memberentry.pl">Register here.</a></div>[% END %]
 
 	 </fieldset></fieldset>
 	</form>

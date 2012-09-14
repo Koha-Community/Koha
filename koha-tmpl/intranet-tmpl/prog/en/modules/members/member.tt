@@ -29,6 +29,12 @@
 							[% END %]
 						</div>
 
+                    [% IF ( CAN_user_borrowers && pending_borrower_modifications ) %]
+                        <div class="pending-info" id="patron_updates_pending">
+                            <a href="/cgi-bin/koha/members/members-update.pl">Patrons requesting modifications</a>:
+                            <span class="holdcount"><a href="/cgi-bin/koha/members/members-update.pl">[% pending_borrower_modifications %]</a></span>
+                        </div>
+                    [% END %]
 
 						[% IF ( resultsloop ) %]
 						<div id="searchheader"> <h3>Results [% from %] to [% to %] of [% numresults %] found for [% IF ( member ) %]'<span class="ex">[% member %]</span>'[% END %][% IF ( surname ) %]'<span class="ex">[% surname %]</span>'[% END %]</h3></div>

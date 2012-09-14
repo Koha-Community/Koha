@@ -189,6 +189,9 @@ elsif ( $action eq 'update' ) {
 
         $m->DelModifications;
         $m->AddModifications(%borrower_changes);
+        $template->param(
+            borrower => GetMember( borrowernumber => $borrowernumber ),
+        );
     }
 }
 elsif ( $action eq 'edit' ) {    #Display logged in borrower's data

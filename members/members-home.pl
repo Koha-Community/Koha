@@ -26,6 +26,7 @@ use C4::Context;
 use C4::Members;
 use C4::Branch;
 use C4::Category;
+use Koha::Borrower::Modifications;
 
 my $query = new CGI;
 my $branch = $query->param('branchcode');
@@ -76,9 +77,14 @@ else {
     $template->param(categories=>\@categories);
 }
 
+
+my $pending_borrower_modifications =
+  Koha::Borrower::Modifications->GetPendingModificationsCount( $branch );
+
 $template->param( 
         "AddPatronLists_".C4::Context->preference("AddPatronLists")=> "1",
         no_add => $no_add,
+        pending_borrower_modifications => $pending_borrower_modifications,
             );
 $template->param( 'alphabet' => C4::Context->preference('alphabet') || join ' ', 'A' .. 'Z' );
 
