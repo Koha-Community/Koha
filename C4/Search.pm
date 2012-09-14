@@ -246,7 +246,7 @@ sub SimpleSearch {
                   . $@->code() . ") "
                   . $@->addinfo() . " "
                   . $@->diagset();
-                warn $error;
+                warn $error." for query: $query";
                 return ( $error, undef, undef );
             }
         }
