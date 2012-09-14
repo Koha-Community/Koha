@@ -255,7 +255,7 @@ sub AddBiblioToBatch {
     my $z3950random = shift;
     my $update_counts = @_ ? shift : 1;
 
-    my $import_record_id = _create_import_record($batch_id, $record_sequence, $marc_record, 'biblio', $encoding, $z3950random);
+    my $import_record_id = _create_import_record($batch_id, $record_sequence, $marc_record, 'biblio', $encoding, $z3950random, C4::Context->preference('marcflavour'));
     _add_biblio_fields($import_record_id, $marc_record);
     _update_batch_record_counts($batch_id) if $update_counts;
     return $import_record_id;
@@ -270,7 +270,7 @@ sub AddBiblioToBatch {
 sub ModBiblioInBatch {
     my ($import_record_id, $marc_record) = @_;
 
-    _update_import_record_marc($import_record_id, $marc_record);
+    _update_import_record_marc($import_record_id, $marc_record, C4::Context->preference('marcflavour'));
     _update_biblio_fields($import_record_id, $marc_record);
 
 }
@@ -278,7 +278,7 @@ sub ModBiblioInBatch {
 =head2 AddAuthToBatch
 
   my $import_record_id = AddAuthToBatch($batch_id, $record_sequence,
-                $marc_record, $encoding, $z3950random, $update_counts);
+                $marc_record, $encoding, $z3950random, $update_counts, [$marc_type]);
 
 =cut
 
@@ -289,8 +289,11 @@ sub AddAuthToBatch {
     my $encoding = shift;
     my $z3950random = shift;
     my $update_counts = @_ ? shift : 1;
+    my $marc_type = shift || C4::Context->preference('marcflavour');
 
-    my $import_record_id = _create_import_record($batch_id, $record_sequence, $marc_record, 'auth', $encoding, $z3950random);
+    $marc_type = 'UNIMARCAUTH' if $marc_type eq 'UNIMARC';
+
+    my $import_record_id = _create_import_record($batch_id, $record_sequence, $marc_record, 'auth', $encoding, $z3950random, $marc_type);
     _add_auth_fields($import_record_id, $marc_record);
     _update_batch_record_counts($batch_id) if $update_counts;
     return $import_record_id;
@@ -305,7 +308,8 @@ sub AddAuthToBatch {
 sub ModAuthInBatch {
     my ($import_record_id, $marc_record) = @_;
 
-    _update_import_record_marc($import_record_id, $marc_record);
+    my $marcflavour = C4::Context->preference('marcflavour');
+    _update_import_record_marc($import_record_id, $marc_record, $marcflavour eq 'UNIMARC' ? 'UNIMARCAUTH' : 'USMARC');
 
 }
 
@@ -354,6 +358,8 @@ sub  BatchStageMarcRecords {
         SetImportBatchItemAction($batch_id, 'ignore');
     }
 
+    my $marc_type = C4::Context->preference('marcflavour');
+    $marc_type .= 'AUTH' if ($marc_type eq 'UNIMARC' && $record_type eq 'auth');
     my @invalid_records = ();
     my $num_valid = 0;
     my $num_items = 0;
@@ -368,7 +374,7 @@ sub  BatchStageMarcRecords {
             &$progress_callback($rec_num);
         }
         my ($marc_record, $charset_guessed, $char_errors) =
-            MarcToUTF8Record($marc_blob, C4::Context->preference("marcflavour"), $encoding);
+            MarcToUTF8Record($marc_blob, $marc_type, $encoding);
 
         $encoding = $charset_guessed unless $encoding;
 
@@ -384,7 +390,7 @@ sub  BatchStageMarcRecords {
                     $num_items += scalar(@import_items_ids);
                 }
             } elsif ($record_type eq 'auth') {
-                $import_record_id = AddAuthToBatch($batch_id, $rec_num, $marc_record, $encoding, int(rand(99999)), 0);
+                $import_record_id = AddAuthToBatch($batch_id, $rec_num, $marc_record, $encoding, int(rand(99999)), 0, $marc_type);
             }
         }
     }
@@ -430,7 +436,7 @@ sub AddItemsToImportBiblio {
 
     if ($#import_items_ids > -1) {
         _update_batch_record_counts($batch_id) if $update_counts;
-        _update_import_record_marc($import_record_id, $marc_record);
+        _update_import_record_marc($import_record_id, $marc_record, C4::Context->preference('marcflavour'));
     }
     return @import_items_ids;
 }
@@ -545,6 +551,7 @@ sub BatchCommitRecords {
                              LEFT JOIN import_biblios ON (import_records.import_record_id=import_biblios.import_record_id)
                              WHERE import_batch_id = ?");
     $sth->execute($batch_id);
+    my $marcflavour = C4::Context->preference('marcflavour');
     my $rec_num = 0;
     while (my $rowref = $sth->fetchrow_hashref) {
         $record_type = $rowref->{'record_type'};
@@ -557,6 +564,14 @@ sub BatchCommitRecords {
             next;
         }
 
+        my $marc_type;
+        if ($marcflavour eq 'UNIMARC' && $record_type eq 'auth') {
+            $marc_type = 'UNIMARCAUTH';
+        } elsif ($marcflavour eq 'UNIMARC') {
+            $marc_type = 'UNIMARC';
+        } else {
+            $marc_type = 'USMARC';
+        }
         my $marc_record = MARC::Record->new_from_usmarc($rowref->{'marc'});
 
         if ($record_type eq 'biblio') {
@@ -602,11 +617,11 @@ sub BatchCommitRecords {
 
                 # remove item fields so that they don't get
                 # added again if record is reverted
-                my $old_marc = MARC::Record->new_from_xml(StripNonXmlChars($oldxml), 'UTF-8', $rowref->{'encoding'});
+                my $old_marc = MARC::Record->new_from_xml(StripNonXmlChars($oldxml), 'UTF-8', $rowref->{'encoding'}, $marc_type);
                 foreach my $item_field ($old_marc->field($item_tag)) {
                     $old_marc->delete_field($item_field);
                 }
-                $oldxml = $old_marc->as_xml();
+                $oldxml = $old_marc->as_xml($marc_type);
 
                 ModBiblio($marc_record, $recordid, $oldbiblio->{'frameworkcode'});
                 $query = "UPDATE import_biblios SET matched_biblionumber = ? WHERE import_record_id = ?";
@@ -725,11 +740,20 @@ sub BatchRevertRecords {
                              LEFT JOIN import_biblios ON (import_records.import_record_id=import_biblios.import_record_id)
                              WHERE import_batch_id = ?");
     $sth->execute($batch_id);
+    my $marc_type;
+    my $marcflavour = C4::Context->preference('marcflavour');
     while (my $rowref = $sth->fetchrow_hashref) {
         $record_type = $rowref->{'record_type'};
         if ($rowref->{'status'} eq 'error' or $rowref->{'status'} eq 'reverted') {
             $num_ignored++;
             next;
+        }
+        if ($marcflavour eq 'UNIMARC' && $record_type eq 'auth') {
+            $marc_type = 'UNIMARCAUTH';
+        } elsif ($marcflavour eq 'UNIMARC') {
+            $marc_type = 'UNIMARC';
+        } else {
+            $marc_type = 'USMARC';
         }
 
         my $record_result = _get_revert_action($overlay_action, $rowref->{'overlay_status'}, $rowref->{'status'});
@@ -750,7 +774,7 @@ sub BatchRevertRecords {
             }
         } elsif ($record_result eq 'restore') {
             $num_reverted++;
-            my $old_record = MARC::Record->new_from_xml(StripNonXmlChars($rowref->{'marcxml_old'}), 'UTF-8', $rowref->{'encoding'});
+            my $old_record = MARC::Record->new_from_xml(StripNonXmlChars($rowref->{'marcxml_old'}), 'UTF-8', $rowref->{'encoding'}, $marc_type);
             if ($record_type eq 'biblio') {
                 my $biblionumber = $rowref->{'matched_biblionumber'};
                 my ($count, $oldbiblio) = GetBiblio($biblionumber);
@@ -1321,13 +1345,13 @@ sub SetImportRecordMatches {
 # internal functions
 
 sub _create_import_record {
-    my ($batch_id, $record_sequence, $marc_record, $record_type, $encoding, $z3950random) = @_;
+    my ($batch_id, $record_sequence, $marc_record, $record_type, $encoding, $z3950random, $marc_type) = @_;
 
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare("INSERT INTO import_records (import_batch_id, record_sequence, marc, marcxml, 
                                                          record_type, encoding, z3950random)
                                     VALUES (?, ?, ?, ?, ?, ?, ?)");
-    $sth->execute($batch_id, $record_sequence, $marc_record->as_usmarc(), $marc_record->as_xml(),
+    $sth->execute($batch_id, $record_sequence, $marc_record->as_usmarc(), $marc_record->as_xml($marc_type),
                   $record_type, $encoding, $z3950random);
     my $import_record_id = $dbh->{'mysql_insertid'};
     $sth->finish();
@@ -1335,12 +1359,12 @@ sub _create_import_record {
 }
 
 sub _update_import_record_marc {
-    my ($import_record_id, $marc_record) = @_;
+    my ($import_record_id, $marc_record, $marc_type) = @_;
 
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare("UPDATE import_records SET marc = ?, marcxml = ?
                              WHERE  import_record_id = ?");
-    $sth->execute($marc_record->as_usmarc(), $marc_record->as_xml(C4::Context->preference('marcflavour')), $import_record_id);
+    $sth->execute($marc_record->as_usmarc(), $marc_record->as_xml($marc_type), $import_record_id);
     $sth->finish();
 }
 

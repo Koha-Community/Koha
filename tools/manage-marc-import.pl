@@ -60,7 +60,7 @@ my ($template, $loggedinuser, $cookie)
                  });
 
 my %cookies = parse CGI::Cookie($cookie);
-my $sessionID = $cookies{'CGISESSID'}->value;
+our $sessionID = $cookies{'CGISESSID'}->value;
 our $dbh = C4::Context->dbh;
 
 # Frameworks selection loop
