@@ -51,7 +51,7 @@
     [% IF ( reverse_col ) %]
       <td>
 	[% IF ( account.payment ) %]
-		<a href="boraccount.pl?action=reverse&amp;borrowernumber=[% account.borrowernumber %]&amp;accountno=[% account.accountno %]">Reverse</a>
+		<a href="boraccount.pl?action=reverse&amp;accountlines_id=[% account.accountlines_id %]&amp;borrowernumber=[% account.borrowernumber %]">Reverse</a>
 	[% ELSE %]
 		&nbsp;
 	[% END %]
@@ -59,9 +59,9 @@
 	[% END %]
 <td>
 	[% IF ( account.payment ) %]
-		<a target="_blank" href="printfeercpt.pl?action=print&amp;borrowernumber=[% account.borrowernumber %]&amp;accountno=[% account.accountno %]">Print</a>
+		<a target="_blank" href="printfeercpt.pl?action=print&amp;accountlines_id=[% account.accountlines_id %]&amp;borrowernumber=[% account.borrowernumber %]">Print</a>
 	[% ELSE %]
-		<a target="_blank" href="printinvoice.pl?action=print&amp;borrowernumber=[% account.borrowernumber %]&amp;accountno=[% account.accountno %]">Print</a>
+		<a target="_blank" href="printinvoice.pl?action=print&amp;accountlines_id=[% account.accountlines_id %]&amp;borrowernumber=[% account.borrowernumber %]">Print</a>
 	[% END %]
       </td>
     </tr>

@@ -48,6 +48,7 @@ my ($template, $loggedinuser, $cookie)
 my $borrowernumber=$input->param('borrowernumber');
 my $action = $input->param('action') || '';
 my $accountno = $input->param('accountno');
+my $accountlines_id = $input->param('accountlines_id');
 
 #get borrower details
 my $data=GetMember('borrowernumber' => $borrowernumber);

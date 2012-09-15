@@ -1953,7 +1953,7 @@ sub _FixOverduesOnReturn {
     return 0 unless $data;    # no warning, there's just nothing to fix
 
     my $uquery;
-    my @bind = ($borrowernumber, $item, $data->{'accountno'});
+    my @bind = ($data->{'accountlines_id'});
     if ($exemptfine) {
         $uquery = "update accountlines set accounttype='FFOR', amountoutstanding=0";
         if (C4::Context->preference("FinesLog")) {
@@ -1973,7 +1973,7 @@ sub _FixOverduesOnReturn {
     } else {
         $uquery = "update accountlines set accounttype='F' ";
     }
-    $uquery .= " where (borrowernumber = ?) and (itemnumber = ?) and (accountno = ?)";
+    $uquery .= " where (accountlines_id = ?)";
     my $usth = $dbh->prepare($uquery);
     return $usth->execute(@bind);
 }
@@ -2016,9 +2016,8 @@ sub _FixAccountForLostAndReturned {
         $amountleft = $data->{'amountoutstanding'} - $amount;   # Um, isn't this the same as ZERO?  We just tested those two things are ==
     }
     my $usth = $dbh->prepare("UPDATE accountlines SET accounttype = 'LR',amountoutstanding='0'
-        WHERE (borrowernumber = ?)
-        AND (itemnumber = ?) AND (accountno = ?) ");
-    $usth->execute($data->{'borrowernumber'},$itemnumber,$acctno);      # We might be adjusting an account for some OTHER borrowernumber now.  Not the one we passed in.  
+        WHERE (accountlines_id = ?)");
+    $usth->execute($data->{'accountlines_id'});      # We might be adjusting an account for some OTHER borrowernumber now.  Not the one we passed in.
     #check if any credit is left if so writeoff other accounts
     my $nextaccntno = getnextacctno($data->{'borrowernumber'});
     $amountleft *= -1 if ($amountleft < 0);
@@ -2037,12 +2036,11 @@ sub _FixAccountForLostAndReturned {
                 $newamtos = $accdata->{'amountoutstanding'} - $amountleft;
                 $amountleft = 0;
             }
-            my $thisacct = $accdata->{'accountno'};
+            my $thisacct = $accdata->{'accountlines_id'};
             # FIXME: move prepares outside while loop!
             my $usth = $dbh->prepare("UPDATE accountlines SET amountoutstanding= ?
-                    WHERE (borrowernumber = ?)
-                    AND (accountno=?)");
-            $usth->execute($newamtos,$data->{'borrowernumber'},'$thisacct');    # FIXME: '$thisacct' is a string literal!
+                    WHERE (accountlines_id = ?)");
+            $usth->execute($newamtos,'$thisacct');    # FIXME: '$thisacct' is a string literal!
             $usth = $dbh->prepare("INSERT INTO accountoffsets
                 (borrowernumber, accountno, offsetaccount,  offsetamount)
                 VALUES
