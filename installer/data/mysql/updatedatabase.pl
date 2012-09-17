@@ -5801,7 +5801,7 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     # to preserve default behaviour as best as possible, set this new preference differently depending on whether IndependantBranches is set or not
     my $prefvalue = 'anywhere';
     if (C4::Context->preference("IndependantBranches")) { $prefvalue = 'homeorholdingbranch';}
-    $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AllowReturnToBranch', '$prefvalue', 'Where an item may be returned', 'anywhere|homebranch|holdingbranch|homeorholdingbranch', 'Choice');");
+    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('AllowReturnToBranch', '$prefvalue', 'Where an item may be returned', 'anywhere|homebranch|holdingbranch|homeorholdingbranch', 'Choice');");
 
     print "Upgrade to $DBversion done: adding AllowReturnToBranch syspref (bug 6151)";
     SetVersion($DBversion);
