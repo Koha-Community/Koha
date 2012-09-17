@@ -38,10 +38,10 @@ $(document).ready(function() {
             <li>same library, same patron type, all item types</li>
             <li>same library, all patron types, same item type</li>
             <li>same library, all patron types, all item types</li>
-            <li>all libraries, same patron type, same item type</li>
-            <li>all libraries, same patron type, all item types</li>
-            <li>all libraries, all patron types, same item type</li>
-            <li>all libraries, all patron types, all item types</li>
+            <li>default (all libraries), same patron type, same item type</li>
+            <li>default (all libraries), same patron type, all item types</li>
+            <li>default (all libraries), all patron types, same item type</li>
+            <li>default (all libraries), all patron types, all item types</li>
         </ul>
         <p>To modify a rule, create a new one with the same patron type and item type.</p>
     </div>
@@ -174,7 +174,7 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
         </form>
     </div>
     <div id="defaults-for-this-library" class="container">
-    <h3>Default checkout, hold and return policy for [% IF ( humanbranch ) %][% humanbranch %][% ELSE %]all libraries[% END %]</h3>
+    <h3>Default checkout, hold and return policy[% IF ( humanbranch ) %] for [% humanbranch %][% END %]</h3>
         <p>You can set a default maximum number of checkouts, hold policy and return policy that will be used if none is defined below for a particular item type or category.</p>
         <form method="post" action="/cgi-bin/koha/admin/smart-rules.pl">
             <input type="hidden" name="op" value="set-branch-defaults" />
@@ -251,7 +251,7 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
     </div>
     [% IF ( show_branch_cat_rule_form ) %]
     <div id="holds-policy-by-patron-category" class="container">
-    <h3>Checkout limit by patron category for [% IF ( humanbranch ) %][% humanbranch %][% ELSE %]all libraries[% END %]</h3>
+    <h3>[% IF humanbranch %]Checkout limit by patron category for [% humanbranch %][% ELSE %]Default checkout limit by patron category[% END %]</h3>
         <p>For this library, you can specify the maximum number of loans that
             a patron of a given category can make, regardless of the item type.
         </p>
@@ -306,7 +306,7 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
     </div>
     [% END %]
     <div id="holds-policy-by-item-type" class="container">
-    <h3>Holds policy by item type for [% IF ( humanbranch ) %][% humanbranch %][% ELSE %]all libraries[% END %]</h3>
+    <h3>[% IF humanbranch %]Holds policy by item type for [% humanbranch %][% ELSE %]Default holds policy by item type[% END %]</h3>
         <p>
             For this library, you can edit rules for given itemtypes, regardless
             of the patron's category.
