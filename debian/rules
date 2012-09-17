@@ -20,6 +20,9 @@ override_dh_auto_install:
 	rm -r $(TMP)/var/run
 	rm -r $(TMP)/var/lock
 	rm $(TMP)/var/log/koha/README
+	rm $(TMP)/etc/koha/searchengine/solr/config.yaml
+	rm $(TMP)/etc/koha/searchengine/solr/indexes.yaml
+	rm $(TMP)/etc/koha/solr/indexes.yaml
 #	rm $(TMP)/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/lib/jquery/jquery.js
 #	ln -s /usr/share/javascript/jquery/jquery.js \
 #	   $(TMP)/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/lib/jquery/jquery.js
