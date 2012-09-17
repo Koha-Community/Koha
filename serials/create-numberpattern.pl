@@ -37,6 +37,6 @@ if($rv == 0) {
     ModSubscriptionNumberpattern($numberpattern);
 }
 
-binmode STDOUT, ":utf8";
+binmode STDOUT, ":encoding(UTF-8)";
 print $input->header(-type => 'text/plain', -charset => 'UTF-8');
 print "{\"numberpatternid\":\"$numberpatternid\"}";

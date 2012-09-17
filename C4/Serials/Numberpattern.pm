@@ -143,7 +143,7 @@ sub AddSubscriptionNumberpattern {
       && defined $numberpattern->{'numberingmethod'}
       && $numberpattern->{'numberingmethod'} ne ''
     ) {
-        return undef;
+        return;
     }
 
     my @keys;
@@ -206,7 +206,7 @@ sub ModSubscriptionNumberpattern {
         || !defined $numberpattern->{'numberingmethod'}
       )
     ) {
-        return undef;
+        return;
     }
 
     my @keys;

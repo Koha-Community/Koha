@@ -14,6 +14,6 @@ if ($auth_status ne "ok") {
     exit 0;
 }
 my $frequencyrecord=GetSubscriptionFrequency($frqid);
-binmode STDOUT, ":utf8";
+binmode STDOUT, ":encoding(UTF-8)";
 print $input->header(-type => 'text/plain', -charset => 'UTF-8');
 print "{".join (",",map { "\"$_\":\"".uri_escape($frequencyrecord->{$_})."\"" }sort keys %$frequencyrecord)."}";

@@ -129,7 +129,7 @@ sub AddSubscriptionFrequency {
     my $frequency = shift;
 
     unless(ref($frequency) eq 'HASH' && defined $frequency->{'description'} && $frequency->{'description'} ne '') {
-        return undef;
+        return;
     }
 
     my @keys;
@@ -201,7 +201,7 @@ sub ModSubscriptionFrequency {
         || !defined $frequency->{'description'}
       )
     ) {
-        return undef;
+        return;
     }
 
     my @keys;
