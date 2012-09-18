@@ -5829,7 +5829,7 @@ if(C4::Context->preference("Version") < TransformToNum($DBversion) ) {
 
 
 
-$DBversion = "3.09.00.XXX";
+$DBversion = "3.09.00.050";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("ALTER TABLE authorised_values MODIFY category varchar(16) NOT NULL DEFAULT '';");
     $dbh->do("INSERT INTO authorised_values (category, authorised_value, lib) VALUES
