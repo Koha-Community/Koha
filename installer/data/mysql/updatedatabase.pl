@@ -5697,16 +5697,6 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
    SetVersion ($DBversion);
 }
 
-$DBversion ="XXX";
-if(C4::Context->preference("Version") < TransformToNum($DBversion) ) {
-    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('OPACMobileUserCSS','','Include the following CSS for the mobile view on all pages in the OPAC:',NULL,'free');");
-    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('OpacMainUserBlockMobile','','Show the following HTML in its own column on the main page of the OPAC (mobile version):',NULL,'free');");
-    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('OpacShowLibrariesPulldownMobile','1','Show the libraries pulldown on the mobile version of the OPAC.',NULL,'YesNo');");
-    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('OpacShowFiltersPulldownMobile','1','Show the search filters pulldown on the mobile version of the OPAC.',NULL,'YesNo');");
-    print "Upgrade to $DBversion done (Add OPACMobileUserCSS, OpacMainUserBlockMobile, OpacShowLibrariesPulldownMobile and OpacShowFiltersPulldownMobile sysprefs)\n";
-    SetVersion($DBversion);
-}
-
 $DBversion = "3.09.00.037";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('UseTransportCostMatrix',0,'Use Transport Cost Matrix when filling holds','','YesNo')");
@@ -5824,6 +5814,16 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("ALTER TABLE authorised_values MODIFY lib_opac varchar(200)");
 
     print "Upgrade to $DBversion done (Raise the length of Authorised Values descriptions)\n";
+    SetVersion($DBversion);
+}
+
+$DBversion ="3.09.00.049";
+if(C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('OPACMobileUserCSS','','Include the following CSS for the mobile view on all pages in the OPAC:',NULL,'free');");
+    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('OpacMainUserBlockMobile','','Show the following HTML in its own column on the main page of the OPAC (mobile version):',NULL,'free');");
+    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('OpacShowLibrariesPulldownMobile','1','Show the libraries pulldown on the mobile version of the OPAC.',NULL,'YesNo');");
+    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('OpacShowFiltersPulldownMobile','1','Show the search filters pulldown on the mobile version of the OPAC.',NULL,'YesNo');");
+    print "Upgrade to $DBversion done (Add OPACMobileUserCSS, OpacMainUserBlockMobile, OpacShowLibrariesPulldownMobile and OpacShowFiltersPulldownMobile sysprefs)\n";
     SetVersion($DBversion);
 }
 
