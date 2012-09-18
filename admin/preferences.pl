@@ -297,7 +297,10 @@ my @TABS;
 if ( $op eq 'search' ) {
     my $searchfield = $input->param( 'searchfield' );
 
-    $searchfield =~ s/[^a-zA-Z0-9_ -]//g;
+    $searchfield =~ s/\p{IsC}//g;
+    $searchfield =~ s/\s+/ /;
+    $searchfield =~ s/^\s+//;
+    $searchfield =~ s/\s+$//;
 
     $template->param( searchfield => $searchfield );
 
