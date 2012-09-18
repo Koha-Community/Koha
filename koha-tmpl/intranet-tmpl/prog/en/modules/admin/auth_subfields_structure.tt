@@ -26,8 +26,12 @@ function displayMoreConstraint(numlayer){
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo;
-  [% IF ( else ) %]Authority MARC subfield structure
-  [% ELSE %]<a href="/cgi-bin/koha/admin/auth_subfields_structure.pl?tagfield=[% tagfield %]&amp;tagsubfield=[% tagsubfield %]&amp;authtypecode=[% authtypecode %]">Authority MARC subfield structure</a> &rsaquo;
+  <a href="/cgi-bin/koha/admin/authtypes.pl">Authority types</a> &rsaquo;
+  [% IF ( authtypecode ) %]<a href="/cgi-bin/koha/admin/auth_tag_structure.pl?authtypecode=[% authtypecode %]">[% authtypecode %] framework</a> &rsaquo;
+  [% ELSE %]<a href="/cgi-bin/koha/admin/auth_tag_structure.pl">Default framework</a> &rsaquo;
+  [% END %]
+  [% IF ( else ) %]Authority MARC subfield structure for [% tagfield %]
+  [% ELSE %]<a href="/cgi-bin/koha/admin/auth_subfields_structure.pl?tagfield=[% tagfield %]&amp;tagsubfield=[% tagsubfield %]&amp;authtypecode=[% authtypecode %]">Authority MARC subfield structure for [% tagfield %]</a> &rsaquo;
   [% END %]
   [% IF ( delete_confirm ) %]Confirm deletion of subfield [% tagsubfield %]?[% END %]
   [% IF ( delete_confirmed ) %]Data deleted[% END %]
