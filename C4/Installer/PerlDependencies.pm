@@ -202,7 +202,7 @@ our $PERL_DEPS = {
     'DateTime::TimeZone' => {
         'usage'    => 'Core',
         'required' => '1',
-        'min_ver'  => '1.26'
+        'min_ver'  => '1.20'
     },
     'DateTime::Format::DateParse' => {
         'usage'    => 'Core',
