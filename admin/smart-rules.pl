@@ -44,7 +44,7 @@ my ($template, $loggedinuser, $cookie)
 
 my $type=$input->param('type');
 my $branch = $input->param('branch') || ( C4::Branch::onlymine() ? ( C4::Branch::mybranch() || '*' ) : '*' );
-my $op = $input->param('op');
+my $op = $input->param('op') || q{};
 
 if ($op eq 'delete') {
     my $itemtype     = $input->param('itemtype');
