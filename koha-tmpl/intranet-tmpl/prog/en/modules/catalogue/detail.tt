@@ -476,6 +476,8 @@ function verify_images() {
     [% FOREACH subscription IN subscriptions %]
 	    [% IF ( subscription.branchname ) %]<h3>At library: [% subscription.branchname %]</h3>[% ELSE %]
 	    [% IF ( subscription.branchcode ) %]<h3>At library: [% subscription.branchcode %]</h3>[% END %][% END %]
+            [% IF ( subscription.closed ) %]<p>This subscription is closed.</p>[% END %]
+            [% IF ( subscription.callnumber ) %]<p>Callnumber: [% subscription.callnumber %] </p>[% END %]
             [% IF ( subscription.subscriptionnotes ) %]<p>[% subscription.subscriptionnotes FILTER html_line_break %] </p>[% END %]
             [% IF ( subscription.missinglist ) %]<p>Missing issues: [% subscription.missinglist %] </p>[% END %]
             [% IF ( subscription.librariannote ) %]<p>([% subscription.librariannote %])</p>[% END %]
@@ -492,20 +494,16 @@ function verify_images() {
                 <tr>
                     <td>[% latestserial.serialseq %]</td>
                     <td>[% latestserial.planneddate %]</td>
-                    <td>[% IF ( latestserial.status1 ) %]Expected
-                        [% ELSE %]
-                            [% IF ( latestserial.status2 ) %]Arrived
-                            [% ELSE %]
-                                [% IF ( latestserial.status3 ) %]Late
-                                [% ELSE %]
-                                    [% IF ( latestserial.status4 ) %]Missing
-                                    [% ELSE %]
-                                        [% IF ( latestserial.status5 ) %]Not issued
-                                        [% END %]
-                                    [% END %]
-                                [% END %]
-                            [% END %]
-                        [% END %]</td>
+                    <td>
+                      [% IF ( latestserial.status1 ) %]Expected[% END %]
+                      [% IF ( latestserial.status2 ) %]Arrived[% END %]
+                      [% IF ( latestserial.status3 ) %]Late[% END %]
+                      [% IF ( latestserial.status4 ) %]Missing[% END %]
+                      [% IF ( latestserial.status5 ) %]Not issued[% END %]
+                      [% IF ( latestserial.status6 ) %]Delete[% END %]
+                      [% IF ( latestserial.status7 ) %]Claimed[% END %]
+                      [% IF ( latestserial.status8 ) %]Stopped[% END %]
+                    </td>
                     <td>[% latestserial.notes %]</td>
                 </tr>
             [% END %]

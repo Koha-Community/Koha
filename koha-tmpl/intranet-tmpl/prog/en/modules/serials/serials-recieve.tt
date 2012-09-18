@@ -137,6 +137,9 @@ function barcode_check(){
 					[% ELSE %]
 						<option value="6">Delete</option>
 					[% END %]
+                    [% IF serialslis.status8 %]
+                        <option value="8" selected="selected">Stopped</option>
+                    [% END %]
 				</select>
 			[% IF ( serialslis.serialadditems ) %]
 				<br /><br />

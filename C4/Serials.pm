@@ -93,7 +93,13 @@ sub GetSuppliersWithLateIssues {
     FROM            subscription
     LEFT JOIN       serial ON serial.subscriptionid=subscription.subscriptionid
     LEFT JOIN aqbooksellers ON subscription.aqbooksellerid = aqbooksellers.id
-    WHERE id > 0 AND ((planneddate < now() AND serial.status=1) OR serial.STATUS = 3 OR serial.STATUS = 4) ORDER BY name|;
+    WHERE id > 0
+        AND (
+            (planneddate < now() AND serial.status=1)
+            OR serial.STATUS = 3 OR serial.STATUS = 4
+        )
+        AND subscription.closed = 0
+    ORDER BY name|;
     return $dbh->selectall_arrayref($query, { Slice => {} });
 }
 
@@ -122,6 +128,7 @@ sub GetLateIssues {
             LEFT JOIN  aqbooksellers ON subscription.aqbooksellerid = aqbooksellers.id
             WHERE      ((planneddate < now() AND serial.STATUS =1) OR serial.STATUS = 3)
             AND        subscription.aqbooksellerid=?
+            AND        subscription.closed = 0
             ORDER BY   title
         |;
         $sth = $dbh->prepare($query);
@@ -134,6 +141,7 @@ sub GetLateIssues {
             LEFT JOIN  biblio ON biblio.biblionumber = subscription.biblionumber
             LEFT JOIN  aqbooksellers ON subscription.aqbooksellerid = aqbooksellers.id
             WHERE      ((planneddate < now() AND serial.STATUS =1) OR serial.STATUS = 3)
+            AND        subscription.closed = 0
             ORDER BY   title
         |;
         $sth = $dbh->prepare($query);
@@ -662,8 +670,16 @@ sub SearchSubscriptions {
         push @where_args, $args->{biblionumber};
     }
     if( $args->{title} ){
-        push @where_strs, "biblio.title LIKE ?";
-        push @where_args, "%$args->{title}%";
+        my @words = split / /, $args->{title};
+        my (@strs, @args);
+        foreach my $word (@words) {
+            push @strs, "biblio.title LIKE ?";
+            push @args, "%$word%";
+        }
+        if (@strs) {
+            push @where_strs, '(' . join (' AND ', @strs) . ')';
+            push @where_args, @args;
+        }
     }
     if( $args->{issn} ){
         push @where_strs, "biblioitems.issn LIKE ?";
@@ -685,7 +701,10 @@ sub SearchSubscriptions {
         push @where_strs, "subscription.branchcode = ?";
         push @where_args, "$args->{branch}";
     }
-
+    if( defined $args->{closed} ){
+        push @where_strs, "subscription.closed = ?";
+        push @where_args, "$args->{closed}";
+    }
     if(@where_strs){
         $query .= " WHERE " . join(" AND ", @where_strs);
     }
@@ -2463,6 +2482,54 @@ sub is_barcode_in_use {
     );
 
     return @{$occurences};
+}
+
+=head2 CloseSubscription
+Close a subscription given a subscriptionid
+=cut
+sub CloseSubscription {
+    my ( $subscriptionid ) = @_;
+    return unless $subscriptionid;
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare( qq{
+        UPDATE subscription
+        SET closed = 1
+        WHERE subscriptionid = ?
+    } );
+    $sth->execute( $subscriptionid );
+
+    # Set status = missing when status = stopped
+    $sth = $dbh->prepare( qq{
+        UPDATE serial
+        SET status = 8
+        WHERE subscriptionid = ?
+        AND status = 1
+    } );
+    $sth->execute( $subscriptionid );
+}
+
+=head2 ReopenSubscription
+Reopen a subscription given a subscriptionid
+=cut
+sub ReopenSubscription {
+    my ( $subscriptionid ) = @_;
+    return unless $subscriptionid;
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare( qq{
+        UPDATE subscription
+        SET closed = 0
+        WHERE subscriptionid = ?
+    } );
+    $sth->execute( $subscriptionid );
+
+    # Set status = expected when status = stopped
+    $sth = $dbh->prepare( qq{
+        UPDATE serial
+        SET status = 1
+        WHERE subscriptionid = ?
+        AND status = 8
+    } );
+    $sth->execute( $subscriptionid );
 }
 
 1;

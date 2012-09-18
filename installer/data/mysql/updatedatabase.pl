@@ -6012,7 +6012,6 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-
 $DBversion = "3.09.00.062";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
    $dbh->do("UPDATE systempreferences SET value=0 WHERE variable='NoZebra'");
@@ -6101,6 +6100,16 @@ $DBversion = "3.11.00.003";
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('RefundLostItemFeeOnReturn', '1', 'If enabled, the lost item fee charged to a borrower will be refunded when the lost item is returned.', NULL, 'YesNo')");
     print "Upgrade to $DBversion done (Bug 7189: Add system preference RefundLostItemFeeOnReturn)\n";
+    SetVersion($DBversion);
+}
+
+$DBversion = "3.11.00.XXX";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do(qq{
+        ALTER TABLE subscription ADD COLUMN closed INT(1) NOT NULL DEFAULT 0 AFTER enddate;
+    });
+
+    print "Upgrade to $DBversion done (Bug 8782: Add field subscription.closed)\n";
     SetVersion($DBversion);
 }
 

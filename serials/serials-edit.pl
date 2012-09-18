@@ -151,6 +151,7 @@ foreach my $serialid (@serialids) {
             )
             || $serinfo->{'cannotedit'}
         );
+        $serinfo->{editdisable} ||= ($serinfo->{status8} and $serinfo->{closed});
         push @serialdatalist, $serinfo;
         $processedserialid{$serialid} = 1;
     }

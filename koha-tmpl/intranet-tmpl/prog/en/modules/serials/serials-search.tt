@@ -9,14 +9,25 @@
 <script type="text/javascript">
 //<![CDATA[
  $(document).ready(function() {
-    var srlt = $("#srlt").dataTable($.extend(true, {}, dataTablesDefaults, {
+    var osrlt = $("#osrlt").dataTable($.extend(true, {}, dataTablesDefaults, {
         "aoColumnDefs": [
             { "aTargets": [ -1, -2, -3 ], "bSortable": false, "bSearchable": false },
         ],
         "sPaginationType": "four_button"
     } ) );
 
-    srlt.fnAddFilters("filter", 750);
+    var csrlt = $("#csrlt").dataTable($.extend(true, {}, dataTablesDefaults, {
+        "aoColumnDefs": [
+            { "aTargets": [ -1, -2 ], "bSortable": false, "bSearchable": false },
+        ],
+        "sPaginationType": "four_button"
+    } ) );
+
+    osrlt.fnAddFilters("filter", 750);
+    csrlt.fnAddFilters("filter", 750);
+
+    $('#serialstabs').tabs();
+
  });
  //]]>
 </script>
@@ -33,9 +44,9 @@
       <div class="yui-b">
       [% INCLUDE 'serials-toolbar.inc' %]
 
-      <h2>Serials subscriptions</h2>
+      <h2>Serials subscriptions ([% total %] found)</h2>
       [% UNLESS ( done_searched ) %]
-      <div id="advsearch">
+      <div id="advsearch" style="padding-bottom:3em;">
         <form action="/cgi-bin/koha/serials/serials-search.pl" method="get">
           <fieldset class="rows">
           <legend>Search subscriptions</legend>
@@ -85,86 +96,160 @@
       </div>
       [% END %]
       [% IF ( done_searched ) %]
-        [% IF ( subscriptions ) %]
-          <table id="srlt">
-            <thead>
-              <tr>
-                  <th>ISSN</th>
-                  <th>Title</th>
-                  <th> Notes </th>
-                  <th>Library</th>
-                  <th>Call number</th>
-                  <th>Expiration date</th>
-                  [% IF ( routing && CAN_user_serials_routing ) %]
-                    <th>Routing list</th>
-                  [% END %]
-                  <th>&nbsp;</th>
-                  <th>&nbsp;</th>
-              </tr>
-            </thead>
-            <tfoot>
-              <tr>
-                <td><input type="text" class="filter" data-column_num="0" placeholder="Search ISSN" /></td>
-                <td><input type="text" class="filter" data-column_num="1" placeholder="Search title" /></td>
-                <td><input type="text" class="filter" data-column_num="2" placeholder="Search notes" /></td>
-                <td><input type="text" class="filter" data-column_num="3" placeholder="Search library" /></td>
-                <td><input type="text" class="filter" data-column_num="4" placeholder="Search callnumber" /></td>
-                <td><input type="text" class="filter" data-column_num="5" placeholder="Search expiration date" /></td>
-                [% IF ( routing && CAN_user_serials_routing ) %]<td></td>[% END %]
-                <td></td>
-                <td></td>
-              </tr>
-            </tfoot>
-            <tbody>
-              [% FOREACH subscription IN subscriptions %]
-                <tr>
-                  <td>
-                  [% IF ( subscription.issn ) %][% subscription.issn %]
-                  [% END %]
-                  </td>
-                  <td><a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscription.subscriptionid %]" class="button" title="subscription detail">[% subscription.title |html %]</a>
-                  </td>
-                  <td>[% IF ( subscription.notes ) %][% subscription.notes %][% END %]
-                  [% IF ( subscription.internalnotes ) %]([% subscription.internalnotes %])[% END %]
-                  </td>
-                  <td>
-                    [% IF ( subscription.branchname ) %][% subscription.branchname %][% END %]
-                  </td>
-                  <td>
-                    [% IF ( subscription.callnumber ) %][% subscription.callnumber %][% END %]
-                  </td>
-                  <td>
-                    [% IF ( subscription.enddate ) %][% subscription.enddate | $KohaDates %][% END %]
-                  </td>
-                  [% IF ( routing && CAN_user_serials_routing ) %]
-                  <td>
-                    [% IF ( subscription.cannotedit ) %]
-                      &nbsp;
-                    [% ELSE %]
-                      [% IF ( subscription.routingedit ) %]
-                        <a href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% subscription.subscriptionid %]">Edit</a>
-                        ([% subscription.routingedit %])
-                      [% ELSE %]
-                        <a href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% subscription.subscriptionid %]&amp;op=new">New</a>
-                      [% END %]
+        [% IF ( total ) %]
+          <div id="serialstabs" class="toptabs" style="clear:both;">
+            <ul class="ui-tabs-nav">
+              <li><a href="#opened">Opened ([% openedsubscriptions.size || 0 %])</a></li>
+              <li><a href="#closed">Closed ([% closedsubscriptions.size || 0 %])</a></li>
+            </ul>
+            <div id="opened">
+              [% IF openedsubscriptions %]
+                <table id="osrlt">
+                  <thead>
+                    <tr>
+                        <th>ISSN</th>
+                        <th>Title</th>
+                        <th> Notes </th>
+                        <th>Library</th>
+                        <th>Call number</th>
+                        <th>Expiration date</th>
+                        [% IF ( routing && CAN_user_serials_routing ) %]
+                          <th>Routing list</th>
+                        [% END %]
+                        <th>&nbsp;</th>
+                        <th>&nbsp;</th>
+                    </tr>
+                  </thead>
+                  <tfoot>
+                    <tr>
+                      <td><input type="text" class="filter" data-column_num="0" placeholder="Search ISSN" /></td>
+                      <td><input type="text" class="filter" data-column_num="1" placeholder="Search title" /></td>
+                      <td><input type="text" class="filter" data-column_num="2" placeholder="Search notes" /></td>
+                      <td><input type="text" class="filter" data-column_num="3" placeholder="Search library" /></td>
+                      <td><input type="text" class="filter" data-column_num="4" placeholder="Search callnumber" /></td>
+                      <td><input type="text" class="filter" data-column_num="5" placeholder="Search expiration date" /></td>
+                      [% IF ( routing && CAN_user_serials_routing ) %]<td></td>[% END %]
+                      <td></td>
+                      <td></td>
+                    </tr>
+                  </tfoot>
+                  <tbody>
+                    [% FOREACH subscription IN openedsubscriptions %]
+                      <tr>
+                        <td>
+                        [% IF ( subscription.issn ) %][% subscription.issn %]
+                        [% END %]
+                        </td>
+                        <td><a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscription.subscriptionid %]" class="button" title="subscription detail">[% subscription.title |html %]</a>
+                        </td>
+                        <td>[% IF ( subscription.notes ) %][% subscription.notes %][% END %]
+                        [% IF ( subscription.internalnotes ) %]([% subscription.internalnotes %])[% END %]
+                        </td>
+                        <td>
+                          [% IF ( subscription.branchname ) %][% subscription.branchname %][% END %]
+                        </td>
+                        <td>
+                          [% IF ( subscription.callnumber ) %][% subscription.callnumber %][% END %]
+                        </td>
+                        <td>
+                          [% IF ( subscription.enddate ) %][% subscription.enddate | $KohaDates %][% END %]
+                        </td>
+                        [% IF ( routing && CAN_user_serials_routing ) %]
+                        <td>
+                          [% IF ( subscription.cannotedit ) %]
+                            &nbsp;
+                          [% ELSE %]
+                            [% IF ( subscription.routingedit ) %]
+                              <a href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% subscription.subscriptionid %]">Edit</a>
+                              ([% subscription.routingedit %])
+                            [% ELSE %]
+                              <a href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% subscription.subscriptionid %]&amp;op=new">New</a>
+                            [% END %]
+                          [% END %]
+                        </td>
+                        [% END %]
+                        <td><a href="/cgi-bin/koha/serials/serials-collection.pl?subscriptionid=[% subscription.subscriptionid %]">Issue history</a>
+                        </td>
+                        <td>
+                        [% IF ( subscription.cannotedit ) %]
+                          &nbsp;
+                        [% ELSE %]
+                          [% IF ( CAN_user_serials_receive_serials ) %]<a href="/cgi-bin/koha/serials/serials-edit.pl?subscriptionid=[% subscription.subscriptionid %]&amp;serstatus=1,3,7">Serial receive</a>[% END %]
+                        [% END %]
+                        </td>
+                      </tr>
                     [% END %]
-                  </td>
-                  [% END %]
-                  <td><a href="/cgi-bin/koha/serials/serials-collection.pl?subscriptionid=[% subscription.subscriptionid %]">Issue history</a>
-                  </td>
-                  <td>
-                  [% IF ( subscription.cannotedit ) %]
-                    &nbsp;
-                  [% ELSE %]
-                    [% IF ( CAN_user_serials_receive_serials ) %]<a href="/cgi-bin/koha/serials/serials-edit.pl?subscriptionid=[% subscription.subscriptionid %]&amp;serstatus=1,3,7">Serial receive</a>[% END %]
-                  [% END %]
-                  </td>
-                </tr>
+                  </tbody>
+                </table>
+              [% ELSE %]
+                There is no opened subscription for your search.
               [% END %]
-            </tbody>
-          </table>
-        [% ELSE %]
-          There is no subscription for your search.
+            </div>
+            <div id="closed">
+              [% IF closedsubscriptions %]
+                <table id="csrlt">
+                  <thead>
+                    <tr>
+                        <th>ISSN</th>
+                        <th>Title</th>
+                        <th> Notes </th>
+                        <th>Library</th>
+                        <th>Call number</th>
+                        <th>&nbsp;</th>
+                        <th>&nbsp;</th>
+                    </tr>
+                  </thead>
+                  <tfoot>
+                    <tr>
+                      <td><input type="text" class="filter" data-column_num="0" placeholder="Search ISSN" /></td>
+                      <td><input type="text" class="filter" data-column_num="1" placeholder="Search title" /></td>
+                      <td><input type="text" class="filter" data-column_num="2" placeholder="Search notes" /></td>
+                      <td><input type="text" class="filter" data-column_num="3" placeholder="Search library" /></td>
+                      <td><input type="text" class="filter" data-column_num="4" placeholder="Search callnumber" /></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                  </tfoot>
+                  <tbody>
+                    [% FOREACH subscription IN closedsubscriptions %]
+                      <tr>
+                        <td>
+                          [% IF ( subscription.issn ) %]
+                            [% subscription.issn %]
+                          [% END %]
+                        </td>
+                        <td>
+                          <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscription.subscriptionid %]" class="button" title="subscription detail">[% subscription.title |html %]</a>
+                        </td>
+                        <td>
+                          [% IF ( subscription.notes ) %][% subscription.notes %][% END %]
+                          [% IF ( subscription.internalnotes ) %]([% subscription.internalnotes %])[% END %]
+                        </td>
+                        <td>
+                          [% IF ( subscription.branchname ) %][% subscription.branchname %][% END %]
+                        </td>
+                        <td>
+                          [% IF ( subscription.callnumber ) %][% subscription.callnumber %][% END %]
+                        </td>
+                        <td>
+                          [% UNLESS subscription.cannotedit %]
+                            <a href="/cgi-bin/koha/serials/serials-search.pl?subscriptionid=[% subscription.subscriptionid %]&amp;op=reopen&routing=[% subscription.routing %]&amp;searched=1&amp;title_filter=[% title_filter %]&amp;ISSN_filter=[% ISSN_filter %]&amp;EAN_filter=[% EAN_filter %]&amp;published_filter=[% publisher_filter %]&amp;bookseller_filter=[% bookseller_filter %]&amp;branch_filter=[% branch_filter %]" onclick="return confirm(_('Are you sure you want to reopen this subscription?'));">Reopen</a>
+                          [% ELSE %]
+                            Cannot edit
+                          [% END %]
+                        </td>
+                        <td>
+                          <a href="/cgi-bin/koha/serials/serials-collection.pl?subscriptionid=[% subscription.subscriptionid %]">Issue history</a>
+                        </td>
+                      </tr>
+                    [% END %]
+                  </tbody>
+                </table>
+              [% ELSE %]
+                There is no closed subscription for your search.
+              [% END %]
+            </div>
+          </div>
         [% END %]
       [% END %]
     </div>

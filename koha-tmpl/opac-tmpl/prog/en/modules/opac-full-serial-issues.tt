@@ -200,12 +200,15 @@ function showlayer(numlayer){
 		    </td>
 		    <td>    [% serial.serialseq %]
 		    </td>
-		    <td>    [% IF ( serial.status1 ) %]Waiting[% END %]
-			[% IF ( serial.status2 ) %]Arrived[% END %]
-			[% IF ( serial.status3 ) %]Late[% END %]
-			[% IF ( serial.status4 ) %]Missing[% END %]
-            [% IF ( serial.status5 ) %]Not available[% END %]
-			[% IF ( serial.status7 ) %]Claimed[% END %]
+            <td>
+              [% IF ( serial.status1 ) %]Expected[% END %]
+              [% IF ( serial.status2 ) %]Arrived[% END %]
+              [% IF ( serial.status3 ) %]Late[% END %]
+              [% IF ( serial.status4 ) %]Missing[% END %]
+              [% IF ( serial.status5 ) %]Not available[% END %]
+              [% IF ( serial.status6 ) %]Delete[% END %]
+              [% IF ( serial.status7 ) %]Claimed[% END %]
+              [% IF ( serial.status8 ) %]Stopped[% END %]
 		    </td>
 		    <td class="subscriptionidfilterclass">    [% serial.subscriptionid %]
 		    </td>

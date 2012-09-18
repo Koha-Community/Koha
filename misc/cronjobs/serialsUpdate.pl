@@ -60,6 +60,7 @@ my $sth = $dbh->prepare("
      WHERE serial.status = 1 
        AND periodicity <> 32
        AND DATE_ADD(planneddate, INTERVAL CAST(graceperiod AS SIGNED) DAY) < NOW()
+       AND subscription.closed = 0
      ");
 $sth->execute();
 

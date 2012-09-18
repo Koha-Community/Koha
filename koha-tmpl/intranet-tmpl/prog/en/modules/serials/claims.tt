@@ -208,6 +208,7 @@
 		<option>Late</option>
 		<option>Missing</option>
 		<option>Claimed</option>
+        <option>Stopped</option>
 	    </select>
 	</li>
 	
@@ -284,6 +285,7 @@
                             [% IF ( missingissue.status3 ) %]Late[% END %]
                             [% IF ( missingissue.status4 ) %]Missing[% END %]
                             [% IF ( missingissue.status7 ) %]Claimed[% END %]
+                            [% IF ( missingissue.status8 ) %]Stopped[% END %]
                         </td>
                         <td class="planneddate">
                         [% missingissue.planneddate %]

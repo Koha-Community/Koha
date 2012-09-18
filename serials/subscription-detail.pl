@@ -34,6 +34,13 @@ my $issueconfirmed = $query->param('issueconfirmed');
 my $dbh = C4::Context->dbh;
 my ($template, $loggedinuser, $cookie, $hemisphere);
 my $subscriptionid = $query->param('subscriptionid');
+
+if ( $op and $op eq "close" ) {
+    C4::Serials::CloseSubscription( $subscriptionid );
+} elsif ( $op and $op eq "reopen" ) {
+    C4::Serials::ReopenSubscription( $subscriptionid );
+}
+
 my $subs = GetSubscription($subscriptionid);
 
 $subs->{enddate} = GetExpirationDate($subscriptionid);

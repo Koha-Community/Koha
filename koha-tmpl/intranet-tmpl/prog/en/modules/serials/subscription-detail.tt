@@ -55,8 +55,12 @@ $(document).ready(function() {
 	<div class="yui-b">
 	[% INCLUDE 'serials-toolbar.inc' %]
 
-    <h1>Subscription for [% bibliotitle %] </h1>
-    [% IF ( abouttoexpire ) %]<div class="dialog message">Subscription will expire [% enddate %]. <a href="#" id="renewsub">Renew this subscription</a>.</div>[% END %]
+    <h1>Subscription for [% bibliotitle%] [% IF closed %](closed)[% END %]</h1>
+    [% IF ( abouttoexpire ) %]
+      [% UNLESS closed %]
+        <div class="dialog message">Subscription will expire [% enddate %]. <a href="#" id="renewsub">Renew this subscription</a>.</div>
+      [% END %]
+    [% END %]
     [% IF ( NEEDSCONFIRMATION ) %]
     <div id="circ_needsconfirmation" class="dialog alert">
 			<h3>Please Confirm Subscription deletion</h3>
@@ -374,27 +378,19 @@ $(document).ready(function() {
                     [% serialslis.publisheddate %]
                 </td>
                 <td>
-                        [% IF ( serialslis.status1 ) %]
-                            Expected
-                        [% END %]
-                        [% IF ( serialslis.status2 ) %]
-                            Arrived
-                        [% END %]
-                        [% IF ( serialslis.status3 ) %]
-                            Late
-                        [% END %]
-                        [% IF ( serialslis.status4 ) %]
-                            Missing
-                        [% END %]
-                        [% IF ( serialslis.status5 ) %]
-                            Not available
-                        [% END %]
-                        [% IF ( serialslis.status7 ) %]
-                            Claimed
-                             [% IF ( serialslis.claimdate ) %]
-                             [% serialslis.claimdate %]
-                             [% END %]
-                        [% END %]
+                    [% IF ( serialslis.status1 ) %]Expected[% END %]
+                    [% IF ( serialslis.status2 ) %]Arrived[% END %]
+                    [% IF ( serialslis.status3 ) %]Late[% END %]
+                    [% IF ( serialslis.status4 ) %]Missing[% END %]
+                    [% IF ( serialslis.status5 ) %]Not issued[% END %]
+                    [% IF ( serialslis.status6 ) %]Delete[% END %]
+                    [% IF ( serialslis.status7 ) %]
+                      Claimed
+                      [% IF ( serialslis.claimdate ) %]
+                        [% serialslis.claimdate %]
+                      [% END %]
+                    [% END %]
+                    [% IF ( serialslis.status8 ) %]Stopped[% END %]
                 </td>
             </tr>
         [% END %]

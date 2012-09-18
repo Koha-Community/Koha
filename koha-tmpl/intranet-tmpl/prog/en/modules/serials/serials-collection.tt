@@ -176,22 +176,33 @@ $(document).ready(function() {
                 [% END %]</td>
             <td> [% subscription.branchcode %]</td>
             <td> [% subscription.callnumber %]</td>
-        <td> [% subscription.notes %]        [% IF ( subscription.subscriptionexpired ) %]<br /><span class="problem"> Subscription expired</span>
-        [% END %]
+        <td> [% subscription.notes %]
+            [% UNLESS subscription.closed %]
+                [% IF ( subscription.subscriptionexpired ) %]
+                    <br /><span class="problem"> Subscription expired</span>
+                [% END %]
+            [% ELSE %]
+                <br /> Subscription closed
+            [% END %]
         </td>
         [% IF ( routing && CAN_user_serials_routing ) %]
         <td>
-            <a href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% subscription.subscriptionid %]">Edit routing list</a>
+            [% UNLESS subscription.closed %]
+                <a href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% subscription.subscriptionid %]">Edit routing list</a>
+            [% END %]
         </td>
         [% END %]
-        [% IF ( subscription.abouttoexpire ) %]<td class="problem"> <a href="/cgi-bin/koha/serials/subscription-renew.pl?subscriptionid=[% subscription.subscriptionid %]" onclick="popup([% subscription.subscriptionid %]); return false;">Renew</a></td>
+        [% UNLESS subscription.closed %]
+            [% IF ( subscription.abouttoexpire ) %]<td class="problem"> <a href="/cgi-bin/koha/serials/subscription-renew.pl?subscriptionid=[% subscription.subscriptionid %]" onclick="popup([% subscription.subscriptionid %]); return false;">Renew</a></td>
+            [% ELSE %]
+                [% IF ( subscription.subscriptionexpired ) %]<td class="problem"> <a href="/cgi-bin/koha/serials/subscription-renew.pl?subscriptionid=[% subscription.subscriptionid %]" onclick="popup([% subscription.subscriptionid %]); return false;">Renew</a></td>
+                [% ELSE %]
+                    <td> &nbsp;</td>
+                [% END %]
+            [% END %]
         [% ELSE %]
-        [% IF ( subscription.subscriptionexpired ) %]<td class="problem"> <a href="/cgi-bin/koha/serials/subscription-renew.pl?subscriptionid=[% subscription.subscriptionid %]" onclick="popup([% subscription.subscriptionid %]); return false;">Renew</a></td>
-        [% ELSE %]
-        <td> &nbsp;</td>
+            <td> &nbsp;</td>
         [% END %]
-        [% END %]
-
       </tr>
 [% END %]
 [% IF ( subscr ) %]
@@ -219,8 +230,10 @@ $(document).ready(function() {
     [% IF ( CAN_user_serials_receive_serials ) %]
         <p>
             <input type="submit" value="Edit serials" />&nbsp;
-            <input type="button" value="Generate Next" onclick="javascript:generateNext([% subscriptionidlist %])" />
-            [% IF ( subscriptions.size == 1 and !serialsadditems ) %]&nbsp;<input type="button" value="Multi receiving" onclick="javascript:generateReceive([% subscriptionidlist %])" />[% END %]
+            [% UNLESS subscription.closed %]
+                <input type="button" value="Generate Next" onclick="javascript:generateNext([% subscriptionidlist %])" />
+                [% IF ( subscriptions.size == 1 and !serialsadditems ) %]&nbsp;<input type="button" value="Multi receiving" onclick="javascript:generateReceive([% subscriptionidlist %])" />[% END %]
+            [% END %]
         </p>
     [% END %]
       <span class="checkall">
@@ -284,7 +297,14 @@ $(document).ready(function() {
                     [% serial.serialseq %]
                 </td>
                 <td>
-                    [% IF ( serial.status1 ) %]Expected[% END %][% IF ( serial.status2 ) %]Arrived[% END %][% IF ( serial.status3 ) %]Late[% END %][% IF ( serial.status4 ) %]Missing[% END %][% IF ( serial.status5 ) %]Not Available[% END %][% IF ( serial.status7 ) %]Claimed[% END %]
+                    [% IF ( latestserial.status1 ) %]Expected[% END %]
+                    [% IF ( latestserial.status2 ) %]Arrived[% END %]
+                    [% IF ( latestserial.status3 ) %]Late[% END %]
+                    [% IF ( latestserial.status4 ) %]Missing[% END %]
+                    [% IF ( latestserial.status5 ) %]Not issued[% END %]
+                    [% IF ( latestserial.status6 ) %]Delete[% END %]
+                    [% IF ( latestserial.status7 ) %]Claimed[% END %]
+                    [% IF ( latestserial.status8 ) %]Stopped[% END %]
                 </td>
                 <td>
                     [% serial.notes %]

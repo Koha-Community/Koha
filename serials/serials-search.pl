@@ -46,6 +46,8 @@ my $biblionumber  = $query->param('biblionumber') || '';
 my $branch        = $query->param('branch_filter') || '';
 my $routing       = $query->param('routing') || C4::Context->preference("RoutingSerials");
 my $searched      = $query->param('searched') || 0;
+my @subscriptionids = $query ->param('subscriptionid');
+my $op            = $query->param('op');
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
@@ -57,6 +59,16 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         debug           => 1,
     }
 );
+
+if ( $op and $op eq "close" ) {
+    for my $subscriptionid ( @subscriptionids ) {
+        C4::Serials::CloseSubscription( $subscriptionid );
+    }
+} elsif ( $op and $op eq "reopen" ) {
+    for my $subscriptionid ( @subscriptionids ) {
+        C4::Serials::ReopenSubscription( $subscriptionid );
+    }
+}
 
 my @subscriptions;
 if ($searched){
@@ -81,6 +93,15 @@ if ($routing) {
     }
 }
 
+my (@openedsubscriptions, @closedsubscriptions);
+for my $sub ( @subscriptions ) {
+    unless ( $sub->{closed} ) {
+        push @openedsubscriptions, $sub;
+    } else {
+        push @closedsubscriptions, $sub;
+    }
+}
+
 my $branches = GetBranches();
 my @branches_loop;
 foreach (sort keys %$branches){
@@ -94,7 +115,9 @@ foreach (sort keys %$branches){
 }
 
 $template->param(
-    subscriptions => \@subscriptions,
+    openedsubscriptions => \@openedsubscriptions,
+    closedsubscriptions => \@closedsubscriptions,
+    total         => @openedsubscriptions + @closedsubscriptions,
     title_filter  => $title,
     ISSN_filter   => $ISSN,
     EAN_filter    => $EAN,

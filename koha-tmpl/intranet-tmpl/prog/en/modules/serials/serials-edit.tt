@@ -168,7 +168,7 @@ $(document).ready(function() {
         </td>
         <td>
             [% IF ( serialslis.editdisable ) %]
-              <input type="hidden" name="status" id="status[% serialslis.serialid %]" value="1">
+              <input type="hidden" name="status" id="status[% serialslis.serialid %]" value="[% serialslis.serstatus %]">
               <select name="status" size="1"  disabled="disabled">
             [% ELSE %]
               [% IF ( serialslis.serialsadditems ) %]
@@ -177,39 +177,42 @@ $(document).ready(function() {
               <select name="status" size="1" id="status[% serialslis.serialid %]" onchange="if (this.value==2 || this.value==7){changeDate(this, '[% serialslis.arriveddate %]')} else {changeDate(this, '[% serialslis.planneddate %]')}" >
                [% END %] 
             [% END %]
-  [% IF ( serialslis.status1 ) %]
-                    <option value="1" selected="selected">Expected</option>
-  [% END %]
-  [% IF ( serialslis.status2 ) %]
-                    <option value="2" selected="selected">Arrived</option>
-  [% ELSE %]
-                    <option value="2">Arrived</option>
-  [% END %]
-  [% IF ( serialslis.status3 ) %]
-                    <option value="3" selected="selected">Late</option>
-  [% ELSE %]
-                    <option value="3">Late</option>
-  [% END %]
-  [% IF ( serialslis.status4 ) %]
-                    <option value="4" selected="selected">Missing</option>
-  [% ELSE %]
-                    <option value="4">Missing</option>
-  [% END %]
-  [% IF ( serialslis.status7 ) %]
-                    <option value="7" selected="selected">Claimed</option>
-  [% ELSE %]
-                    <option value="7">Claimed</option>
-  [% END %]
-  [% IF ( serialslis.status5 ) %]
-                    <option value="5" selected="selected">Not available</option>
-  [% ELSE %]
-                    <option value="5">Not available</option>
-  [% END %]
-  [% IF ( serialslis.status6 ) %]
-                    <option value="6" selected="selected">Delete</option>
-  [% ELSE %]
-                    <option value="6">Delete</option>
-  [% END %]
+            [% IF ( serialslis.status1 ) %]
+              <option value="1" selected="selected">Expected</option>
+            [% END %]
+            [% IF ( serialslis.status2 ) %]
+              <option value="2" selected="selected">Arrived</option>
+            [% ELSE %]
+              <option value="2">Arrived</option>
+            [% END %]
+            [% IF ( serialslis.status3 ) %]
+              <option value="3" selected="selected">Late</option>
+            [% ELSE %]
+              <option value="3">Late</option>
+            [% END %]
+            [% IF ( serialslis.status4 ) %]
+              <option value="4" selected="selected">Missing</option>
+            [% ELSE %]
+              <option value="4">Missing</option>
+            [% END %]
+            [% IF ( serialslis.status7 ) %]
+              <option value="7" selected="selected">Claimed</option>
+            [% ELSE %]
+              <option value="7">Claimed</option>
+            [% END %]
+            [% IF ( serialslis.status5 ) %]
+              <option value="5" selected="selected">Not available</option>
+            [% ELSE %]
+              <option value="5">Not available</option>
+            [% END %]
+            [% IF ( serialslis.status6 ) %]
+              <option value="6" selected="selected">Delete</option>
+            [% ELSE %]
+              <option value="6">Delete</option>
+            [% END %]
+            [% IF serialslis.status8 %]
+              <option value="8" selected="selected">Stopped</option>
+            [% END %]
             </select>
 
         </td>
@@ -284,39 +287,42 @@ $(document).ready(function() {
             <select name="status" size="1" id="addstatus[% newserialloo.serialid %]" onchange="if (this.value==2){unHideItems('items'+'[% newserialloo.subscriptionid %][% newserialloo.serialid %]','label[% newserialloo.subscriptionid %][% newserialloo.serialid %]','[% newserialloo.serialid %]'); changeDate2('[% newserialloo.arriveddate %]')} else if (this.value==7){changeDate('[% newserialloo.arriveddate %]')} else { HideItems('items'+'[% newserialloo.subscriptionid %]'+[% newserialloo.serialid %],'label[% serialslis.subscriptionid %][% serialslis.serialid %]'); changeDate2('[% serialslis.planneddate %]')}" >
 
                     <option value="">----</option>
-  [% IF ( newserialloo.status1 ) %]
+                  [% IF ( newserialloo.status1 ) %]
                     <option value="1" selected="selected">Expected</option>
-  [% END %]
-  [% IF ( newserialloo.status2 ) %]
+                  [% END %]
+                  [% IF ( newserialloo.status2 ) %]
                     <option value="2" selected="selected">Arrived</option>
-  [% ELSE %]
+                  [% ELSE %]
                     <option value="2">Arrived</option>
-  [% END %]
-  [% IF ( newserialloo.status3 ) %]
+                  [% END %]
+                  [% IF ( newserialloo.status3 ) %]
                     <option value="3" selected="selected">Late</option>
-  [% ELSE %]
+                  [% ELSE %]
                     <option value="3">Late</option>
-  [% END %]
-  [% IF ( newserialloo.status4 ) %]
+                  [% END %]
+                  [% IF ( newserialloo.status4 ) %]
                     <option value="4" selected="selected">Missing</option>
-  [% ELSE %]
+                  [% ELSE %]
                     <option value="4">Missing</option>
-  [% END %]
-  [% IF ( newserialloo.status7 ) %]
+                  [% END %]
+                  [% IF ( newserialloo.status7 ) %]
                     <option value="7" selected="selected">Claimed</option>
-  [% ELSE %]
+                  [% ELSE %]
                     <option value="7">Claimed</option>
-  [% END %]
-  [% IF ( newserialloo.status5 ) %]
+                  [% END %]
+                  [% IF ( newserialloo.status5 ) %]
                     <option value="5" selected="selected">Not available</option>
-  [% ELSE %]
+                  [% ELSE %]
                     <option value="5">Not available</option>
-  [% END %]
-  [% IF ( newserialloo.status6 ) %]
+                  [% END %]
+                  [% IF ( newserialloo.status6 ) %]
                     <option value="6" selected="selected">Delete</option>
-  [% ELSE %]
+                  [% ELSE %]
                     <option value="6">Delete</option>
-  [% END %]
+                  [% END %]
+                  [% IF newserialloo.status8 %]
+                    <option value="8" selected="selected">Stopped</option>
+                  [% END %]
             </select>
 
         </td>
@@ -387,7 +393,9 @@ $(document).ready(function() {
         <li><a href="serials-collection.pl?subscriptionid=[% subscription.subscriptionid %]" title="serial collection for [% subscription.bibliotitle %]">Serial collection #[% subscription.subscriptionid %]</a></li>
         <li><a href="subscription-detail.pl?subscriptionid=[% subscription.subscriptionid %]" title="detail of the subscription">Subscription #[% subscription.subscriptionid %]</a></li>
         [% IF ( subscription.abouttoexpire ) %]
+          [% UNLESS subscription.closed %]
             <li><a href="#" onclick="javascript:popup([% subscription.subscriptionid %])">Renew #[% subscription.subscriptionid %]</a></li>
+          [% END %]
         [% END %]
     [% END %]
     <li><a href="/cgi-bin/koha/catalogue/[% default_bib_view %].pl?biblionumber=[% biblionumber %]" title="go to [% bibliotitle %]">Show biblio</a></li></ul>

@@ -96,9 +96,19 @@ if($do_it){
     while(my $row = $sth->fetchrow_hashref){
         $row->{'enddate'} = format_date(GetExpirationDate($row->{'subscriptionid'}));
         $row->{'startdate'} = format_date($row->{'startdate'});
-        push @datas, $row if ($expired || (not $expired && not HasSubscriptionExpired($row->{subscriptionid})) );
+        $row->{expired} = HasSubscriptionExpired($row->{subscriptionid});
+        push @datas, $row if (
+            $expired
+            or (
+                not $expired
+                and (
+                    not $row->{expired}
+                    and not $row->{closed}
+                )
+            )
+        );
     }
-    
+
     if($output eq 'screen'){
         $template->param(datas => \@datas,
                          do_it => 1);
