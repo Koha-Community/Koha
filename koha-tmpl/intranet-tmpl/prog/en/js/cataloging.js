@@ -33,7 +33,8 @@ function getTagInputnameFilter(tagsubfieldid){
     return tagsubfield;
 }
 
-function openAuth(tagsubfieldid,authtype) {
+// if source is "auth", we are editing an authority otherwise it is a biblio
+function openAuth(tagsubfieldid,authtype,source) {
     // let's take the base of tagsubfield information (removing the indexes and the codes
     var element=document.getElementById(tagsubfieldid);
     var tagsubfield=getTagInputnameFilter(tagsubfieldid);
@@ -50,7 +51,7 @@ function openAuth(tagsubfieldid,authtype) {
             }
         }
     }
-    newin=window.open("../authorities/auth_finder.pl?authtypecode="+  authtype+ "&index="+tagsubfieldid+"&value_mainstr="+encodeURI(mainmainstring)+"&value_main="+encodeURI(mainstring), "_blank",'width=700,height=550,toolbar=false,scrollbars=yes');
+    newin=window.open("../authorities/auth_finder.pl?source="+source+"&authtypecode="+authtype+"&index="+tagsubfieldid+"&value_mainstr="+encodeURI(mainmainstring)+"&value_main="+encodeURI(mainstring), "_blank",'width=700,height=550,toolbar=false,scrollbars=yes');
 }
 
 function ExpandField(index) {

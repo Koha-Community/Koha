@@ -199,7 +199,7 @@ sub create_input {
             class=\"input_marceditor\"
             tabindex=\"1\" \/>
         <a href=\"#\" class=\"buttonDot\"
-        onclick=\"openAuth(this.parentNode.getElementsByTagName('input')[1].id,'".$tagslib->{$tag}->{$subfield}->{authtypecode}."'); return false;\" tabindex=\"1\" title=\"Tag Editor\">...</a>
+        onclick=\"openAuth(this.parentNode.getElementsByTagName('input')[1].id,'".$tagslib->{$tag}->{$subfield}->{authtypecode}."','auth'); return false;\" tabindex=\"1\" title=\"Tag Editor\">...</a>
     ";
     # it's a plugin field
     }

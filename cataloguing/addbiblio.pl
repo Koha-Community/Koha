@@ -372,7 +372,8 @@ sub create_input {
     # it's a thesaurus / authority field
     }
     elsif ( $tagslib->{$tag}->{$subfield}->{authtypecode} ) {
-     if (C4::Context->preference("BiblioAddsAuthorities")) {
+        # when authorities auto-creation is allowed, do not set readonly
+        my $is_readonly = !C4::Context->preference("BiblioAddsAuthorities");
         $subfield_data{marc_value} =
             "<input type=\"text\"
                     id=\"".$subfield_data{id}."\"
@@ -381,26 +382,12 @@ sub create_input {
                     class=\"input_marceditor readonly\"
                     tabindex=\"1\"
                     size=\"67\"
-                    maxlength=\"".$subfield_data{maxlength}."\"
-                    \/>
+                    maxlength=\"".$subfield_data{maxlength}."\"".
+                    ($is_readonly ? "readonly=\"readonly\"" : "").
+                    "\/>
                     <span class=\"subfield_controls\"><a href=\"#\" class=\"buttonDot\"
-                       onclick=\"openAuth(this.parentNode.parentNode.getElementsByTagName('input')[1].id,'".$tagslib->{$tag}->{$subfield}->{authtypecode}."'); return false;\" tabindex=\"1\" title=\"Tag Editor\"><img src=\"/intranet-tmpl/prog/img/edit-tag.png\" alt=\"Tag Editor\" /></a></span>
+                       onclick=\"openAuth(this.parentNode.parentNode.getElementsByTagName('input')[1].id,'".$tagslib->{$tag}->{$subfield}->{authtypecode}."','biblio'); return false;\" tabindex=\"1\" title=\"Tag Editor\"><img src=\"/intranet-tmpl/prog/img/edit-tag.png\" alt=\"Tag Editor\" /></a></span>
             ";
-      } else {
-        $subfield_data{marc_value} =
-            "<input type=\"text\"
-                    id=\"".$subfield_data{id}."\"
-                    name=\"".$subfield_data{id}."\"
-                    value=\"$value\"
-                    class=\"input_marceditor readonly\"
-                    tabindex=\"1\"
-                    size=\"67\"
-                    maxlength=\"".$subfield_data{maxlength}."\"
-                    readonly=\"readonly\"
-                    \/><span class=\"subfield_controls\"><a href=\"#\" class=\"buttonDot\"
-                        onclick=\"openAuth(this.parentNode.parentNode.getElementsByTagName('input')[1].id,'".$tagslib->{$tag}->{$subfield}->{authtypecode}."'); return false;\" tabindex=\"1\" title=\"Tag Editor\"><img src=\"/intranet-tmpl/prog/img/edit-tag.png\" alt=\"Tag Editor\" /></a></span>
-            ";
-      }
     # it's a plugin field
     }
     elsif ( $tagslib->{$tag}->{$subfield}->{'value_builder'} ) {
