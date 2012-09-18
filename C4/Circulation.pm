@@ -1030,6 +1030,8 @@ Returns:
 
 =item C<$message> is the branchcode where the item SHOULD be returned, if the return is not allowed
 
+=back
+
 =cut
 
 sub CanBookBeReturned {
