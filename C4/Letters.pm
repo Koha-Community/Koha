@@ -148,7 +148,7 @@ my %letter;
 sub getletter {
     my ( $module, $code, $branchcode ) = @_;
 
-    $branchcode |= '';
+    $branchcode ||= '';
 
     if ( C4::Context->preference('IndependantBranches')
             and $branchcode
