@@ -5859,7 +5859,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion($DBversion);
 }
 
-$DBversion = "XXX";
+$DBversion = "3.09.00.051";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("
         CREATE TABLE aqinvoices (
