@@ -665,9 +665,6 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 [% IF ( OPACAmazonEnabled ) %][% IF ( OPACAmazonReviews ) %]
     <li id="tab_amazonreviews"><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]#amazonreviews">Amazon reviews</a></li>
 [% END %][% END %]
-[% IF ( Babeltheque ) %]
-    <li id="tab_babeltheque"><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]#babeltheque">Babelthèque</a></li>
-[% END %]
 
 [% IF ( serialcollection ) %]
     [% IF ( defaulttab == 'serialcollection' ) %]<li id="tab_serialcollection" class="ui-tabs-selected">[% ELSE %]<li id="tab_serialcollection">[% END %]
