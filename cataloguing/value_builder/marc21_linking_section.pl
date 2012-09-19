@@ -226,7 +226,7 @@ sub plugin {
                       my $record = MARC::Record::new_from_usmarc( $results->[$i] );
                   my $rechash = TransformMarcToKoha( $dbh, $record );
                     my $pos;
-                       my $countitems = 1 if ( $rechash->{itemnumber} );
+                       my $countitems = $rechash->{itembumber} ? 1 : 0;
                       while ( index( $rechash->{itemnumber}, '|', $pos ) > 0 ) {
                              $countitems += 1;
                               $pos = index( $rechash->{itemnumber}, '|', $pos ) + 1;
