@@ -5918,6 +5918,15 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.09.00.052";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES ('decreaseLoanHighHolds', NULL, '', 'Decreases the loan period for items with number of holds above the threshold specified in decreaseLoanHighHoldsValue', 'YesNo');");
+    $dbh->do("INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES ('decreaseLoanHighHoldsValue', NULL, '', 'Specifies a threshold for the minimum number of holds needed to trigger a reduction in loan duration (used with decreaseLoanHighHolds)', 'Integer');");
+    $dbh->do("INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES ('decreaseLoanHighHoldsDuration', NULL, '', 'Specifies a number of days that a loan is reduced to when used in conjunction with decreaseLoanHighHolds', 'Integer');");
+    print "Upgrade to $DBversion done (Add systempreferences to decrease loan length on high demand items decreaseLoanHighHolds, decreaseLoanHighHoldsValue and decreaseLoanHighHoldsDuration) \n";
+    SetVersion ($DBversion);
+}
+
 
 =head1 FUNCTIONS
 
