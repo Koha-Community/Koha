@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+    <title>GreyBox - Examples</title>
+
+    <script type="text/javascript">
+        var GB_ROOT_DIR = "./greybox/";
+    </script>
+
+    <script type="text/javascript" src="greybox/AJS.js"></script>
+    <script type="text/javascript" src="greybox/AJS_fx.js"></script>
+    <script type="text/javascript" src="greybox/gb_scripts.js"></script>
+    <link href="greybox/gb_styles.css" rel="stylesheet" type="text/css" media="all" />
+
+    <script type="text/javascript" src="static_files/help.js"></script>
+    <link href="static_files/help.css" rel="stylesheet" type="text/css" media="all" />
+</head>
+<body>
+
+<script>
+    insertHeader();
+    insertMenu('examples');
+</script>
+
+
+<h3>One website</h3>
+<ul>
+    <li>
+        <a href="http://google.com/" title="Google" rel="gb_page_center[640, 480]">Launch google.com in a 640x480 window</a>
+    </li>
+    <li>
+        <a href="http://google.com/" title="Google" rel="gb_page_fs[]">Launch google.com in fullscreen window</a>
+    </li>
+</ul>
+
+<h3>Website gallery</h3>
+<ul>
+    <li>
+        <a href="http://google.com/" title="Google" rel="gb_pageset[search_sites]">Launch Google search</a>
+    </li>
+    <li>
+        <a href="http://search.yahoo.com/" rel="gb_pageset[search_sites]">Launch Yahoo search</a>
+    </li>
+    <li>
+        <a href="http://www.koders.com/" rel="gb_pageset[search_sites]">Launch Koders search</a>
+    </li>
+</ul>
+
+<h3>Image gallery</h3>
+<script type="text/javascript">
+var image_set = [{'caption': 'Flower', 'url': 'http://static.flickr.com/119/294309231_a3d2a339b9.jpg'},
+                 {'caption': 'Nice waterfall', 'url': 'http://www.widerange.org/images/large/plitvicka.jpg'}];
+</script>
+
+<ul>
+    <li>
+        <a href="#" onclick="return GB_showImageSet(image_set, 1)">Launch gallery</a>
+    </li>
+
+    <li>
+        <a href="static_files/night_valley.jpg" rel="gb_imageset[nice_pics]" title="Night valley">
+            <img src="static_files/night_valley_thumb.jpg" />
+        </a>
+    </li>
+
+    <li>
+        <a href="static_files/salt.jpg" rel="gb_imageset[nice_pics]" title="Salt flats in Chile">
+            <img src="static_files/salt_thumb.gif" />
+        </a>
+    </li>
+</ul>
+
+<h3>Without loading</h3>
+<script type="text/javascript">
+GB_myShow = function(caption, url, /* optional */ height, width, callback_fn) {
+    var options = {
+        caption: caption,
+        height: height || 500,
+        width: width || 500,
+        fullscreen: false,
+        show_loading: false,
+        callback_fn: callback_fn
+    }
+    var win = new GB_Window(options);
+    return win.show(url);
+}
+</script>
+<ul>
+    <li>
+        <a href="http://google.com/" onclick="return GB_myShow('Google', this.href)">Visit Google without loading</a>
+    </li>
+</ul>
+
+</body>
+</html>
