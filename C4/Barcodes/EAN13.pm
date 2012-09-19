@@ -24,6 +24,7 @@ use C4::Context;
 use C4::Debug;
 
 use Algorithm::CheckDigits;
+use Carp;
 
 use vars qw($VERSION @ISA);
 use vars qw($debug $cgi_debug);	# from C4::Debug, of course
@@ -40,7 +41,8 @@ sub parse {
     if ( $ean->is_valid($barcode) ) {
         return ( '', $ean->basenumber($barcode), $ean->checkdigit($barcode) );
     } else {
-        die "$barcode not valid EAN-13 barcode";
+        carp "$barcode not valid EAN-13 barcode";
+        return ( '', $barcode, '' );
     }
 }
 
