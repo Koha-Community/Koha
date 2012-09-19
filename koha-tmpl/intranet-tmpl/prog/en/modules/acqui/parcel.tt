@@ -192,7 +192,6 @@
 
 <div id="acqui_receive_summary">
 <p><strong>Invoice number:</strong> [% invoice %] <strong>Received by:</strong> [% loggedinusername %] <strong>On:</strong> [% formatteddatereceived %]</p>
-<p><a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% invoiceid %]">Go to invoice details</a></p>
 </div>
 [% UNLESS (invoiceclosedate) %]
 <div id="acqui_receive_search">
@@ -405,8 +404,8 @@
 </div>
 
 <!--<form action="/cgi-bin/koha/acqui/parcels.pl?booksellerid=[% booksellerid %]" method="post">-->
-<form action="parcels.pl?booksellerid=[% booksellerid %]" method="post">
-    <input type="hidden" name="booksellerid" value="[% booksellerid %]" />
+<form action="/cgi-bin/koha/acqui/invoice.pl" method="get">
+    <input type="hidden" name="invoiceid" value="[% invoiceid %]" />
     <fieldset class="action">
         <input type="submit" value="Finish receiving" />
     </fieldset>

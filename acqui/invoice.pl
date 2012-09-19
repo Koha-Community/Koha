@@ -79,6 +79,11 @@ elsif ( $op && $op eq 'mod' ) {
         shipmentcost          => $shipmentcost,
         shipmentcost_budgetid => $shipment_budget_id
     );
+    if ($input->param('reopen')) {
+        ReopenInvoice($invoiceid);
+    } elsif ($input->param('close')) {
+        CloseInvoice($invoiceid);
+    }
     $template->param( modified => 1 );
 }
 
