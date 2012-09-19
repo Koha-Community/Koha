@@ -270,8 +270,8 @@
 <div id="ctn_rb">
 
 <div id="breadcrumbs" class="yui-g">
-<p><a href="/cgi-bin/koha/opac-main.pl" title="Accueil">Accueil</a>
-[% IF ( searchdesc ) %]<span class="rsaquo"> &rsaquo; </span><a href="/cgi-bin/koha/opac-search.pl" title="rechercher">Recherche</a><span class="rsaquo"> &rsaquo; </span>
+<p><a href="/cgi-bin/koha/opac-main.pl" title="Home">Home</a>
+[% IF ( searchdesc ) %]<span class="rsaquo"> &rsaquo; </span><a href="/cgi-bin/koha/opac-search.pl" title="Search">Search</a><span class="rsaquo"> &rsaquo; </span>
 [% IF ( total ) %]<strong>Your search returned [% total |html %] results.</strong>
 [% IF ( related ) %] (related searches: [% FOREACH relate IN related %][% relate.related_search %][% END %]). [% END %]
 <a href="[% OPACBaseURL %]/cgi-bin/koha/opac-search.pl?[% query_cgi |html %][% limit_cgi |html %]&amp;count=[% countrss |html %]&amp;sort_by=acqdate_dsc&amp;format=rss2" class="rsssearchlink">
