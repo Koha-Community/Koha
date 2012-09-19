@@ -270,8 +270,9 @@ $results = GetBudgetPeriods(
     {budget_period_active => 0},
     [{budget_period_enddate => 1}]
 );
-my $first = ( $inactivepage - 1 ) * $inactivepagesize;
-my $last = min( $first + $inactivepagesize - 1, scalar @{$results} - 1, );
+
+$first = ( $inactivepage - 1 ) * $inactivepagesize;
+$last = min( $first + $inactivepagesize - 1, scalar @{$results} - 1, );
 my @period_inactive_loop;
 foreach my $result ( @{$results}[ $first .. $last ] ) {
     my $budgetperiod = $result;
