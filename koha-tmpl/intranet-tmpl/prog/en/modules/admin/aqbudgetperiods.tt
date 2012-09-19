@@ -84,7 +84,7 @@
         [% IF ( tab ) %]
             tabs.tabs('select', [% tab %]);
         [% END %]
-        $("table").dataTable($.extend(true, {}, dataTablesDefaults, {
+        $("#activeperiodst,#inactiveperiodst").dataTable($.extend(true, {}, dataTablesDefaults, {
             "aoColumnDefs": [
                 {
                     [% IF ( dateformat == 'metric' ) %]
