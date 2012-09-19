@@ -48,6 +48,22 @@ BEGIN {
     );
 }
 
+=head1 NAME
+
+C4::Reports::Guided - Module for generating guided reports 
+
+=head1 SYNOPSIS
+
+  use C4::Reports::Guided;
+
+=head1 DESCRIPTION
+
+=cut
+
+=head1 METHODS
+
+=over 2
+
 =item get_report_areas()
 
 This will return a list of all the available report areas
@@ -112,24 +128,6 @@ if ( C4::Context->preference('item-level_itypes') ) {
     unshift @{ $criteria{'CIRC'} }, 'biblioitems.itemtype';
     unshift @{ $criteria{'CAT'} }, 'biblioitems.itemtype';
 }
-
-=head1 NAME
-
-C4::Reports::Guided - Module for generating guided reports 
-
-=head1 SYNOPSIS
-
-  use C4::Reports::Guided;
-
-=head1 DESCRIPTION
-
-=cut
-
-=head1 METHODS
-
-=over 2
-
-=cut
 
 =item get_report_types()
 
