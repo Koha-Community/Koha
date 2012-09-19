@@ -532,9 +532,10 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
     <span class="results_summary"><span class="label">Additional authors:</span>
         <div class="authorSearch" id="authorSearch">
             <span><b>Select the item(s) to search :</b></span>
+            <br />
+            <input type="checkbox" onchange="checkAll(this, '#authorsList')"> <b>all</b>
+            <hr />
             <ul id="authorsList">
-                <li><input type="checkbox" onchange="checkAll(this, '#authorsList')"> <b>all</b></li>
-                <li><hr /></li>
                 [% FOREACH MARCAUTHOR IN MARCAUTHORS %]
                     <li>
                         [% IF (MARCAUTHOR.authoritylink) %]
