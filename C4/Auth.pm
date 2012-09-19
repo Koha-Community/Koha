@@ -589,6 +589,7 @@ sub _version_check ($$) {
 	if (C4::Context->preference('OpacMaintenance') && $type eq 'opac') {
         warn "OPAC Install required, redirecting to maintenance";
         print $query->redirect("/cgi-bin/koha/maintenance.pl");
+        safe_exit;
     }
     unless ( $version = C4::Context->preference('Version') ) {    # assignment, not comparison
         if ( $type ne 'opac' ) {
