@@ -17,8 +17,7 @@ package LangInstaller;
 # with Koha; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-use strict;
-use warnings;
+use Modern::Perl;
 
 use C4::Context;
 # WARNING: Any other tested YAML library fails to work properly in this
@@ -28,6 +27,7 @@ use Locale::PO;
 use FindBin qw( $Bin );
 
 $YAML::Syck::ImplicitTyping = 1;
+
 
 sub set_lang {
     my ($self, $lang) = @_;
@@ -63,21 +63,34 @@ sub new {
     # Get all available language codes
     opendir $fh, $self->{path_po};
     my @langs =  map { ($_) =~ /(.*)-i-opac/ } 
-        grep { $_ =~ /.*-opac-/ } readdir($fh);
+        grep { $_ =~ /.*-opac-t-prog/ } readdir($fh);
     closedir $fh;
     $self->{langs} = \@langs;
 
     # Map for both interfaces opac/intranet
-    $self->{interface} = {
-        opac => {
-            dir    => $context->config('opachtdocs') . '/prog',
+    my $opachtdocs = $context->config('opachtdocs');
+    $self->{interface} = [
+        {
+            name   => 'OPAC prog',
+            dir    => "$opachtdocs/prog",
             suffix => '-i-opac-t-prog-v-3006000.po',
         },
-        intranet => {
+        {
+            name   => 'Intranet prog',
             dir    => $context->config('intrahtdocs') . '/prog',
             suffix => '-i-staff-t-prog-v-3006000.po',
-        }
-    };
+        },
+    ];
+
+    # Alternate opac themes
+    opendir $fh, $context->config('opachtdocs');
+    for ( grep { not /^\.|\.\.|prog|lib$/ } readdir($fh) ) {
+        push @{$self->{interface}}, {
+            name   => "OPAC $_",
+            dir    => "$opachtdocs/$_",
+            suffix => "-opac-$_.po",
+        };
+    }
 
     bless $self, $class;
 }
@@ -211,7 +224,7 @@ sub save_po {
     my $self = shift;
     # Write .po entries into a file put in Koha standard po directory
     Locale::PO->save_file_fromhash( $self->po_filename, $self->{po} );
-    print "Saved in file: ", $self->po_filename, "\n" if $self->{verbose};
+    say "Saved in file: ", $self->po_filename if $self->{verbose};
 }
 
 
@@ -291,21 +304,21 @@ sub install_prefs {
 
 sub install_tmpl {
     my $self = shift;
-    print "Install templates\n" if $self->{verbose};
-    while ( my ($interface, $tmpl) = each %{$self->{interface}} ) {
+    say "Install templates" if $self->{verbose};
+    for my $trans ( @{$self->{interface}} ) {
         print
-            "  Install templates '$interface\n",
-            "    From: $tmpl->{dir}/en/\n",
-            "    To  : $tmpl->{dir}/$self->{lang}\n",
-            "    With: $self->{path_po}/$self->{lang}$tmpl->{suffix}\n"
+            "  Install templates '$trans->{name}'\n",
+            "    From: $trans->{dir}/en/\n",
+            "    To  : $trans->{dir}/$self->{lang}\n",
+            "    With: $self->{path_po}/$self->{lang}$trans->{suffix}\n"
                 if $self->{verbose};
-        my $lang_dir = "$tmpl->{dir}/$self->{lang}";
+        my $lang_dir = "$trans->{dir}/$self->{lang}";
         mkdir $lang_dir unless -d $lang_dir;
         system
             "$self->{process} install " .
-            "-i $tmpl->{dir}/en/ " .
-            "-o $tmpl->{dir}/$self->{lang} ".
-            "-s $self->{path_po}/$self->{lang}$tmpl->{suffix} -r"
+            "-i $trans->{dir}/en/ " .
+            "-o $trans->{dir}/$self->{lang} ".
+            "-s $self->{path_po}/$self->{lang}$trans->{suffix} -r"
     }
 }
 
@@ -313,19 +326,19 @@ sub install_tmpl {
 sub update_tmpl {
     my $self = shift;
 
-    print "Update templates\n" if $self->{verbose};
-    while ( my ($interface, $tmpl) = each %{$self->{interface}} ) {
+    say "Update templates" if $self->{verbose};
+    for my $trans ( @{$self->{interface}} ) {
         print
-            "  Update templates '$interface'\n",
-            "    From: $tmpl->{dir}/en/\n",
-            "    To  : $self->{path_po}/$self->{lang}$tmpl->{suffix}\n"
+            "  Update templates '$trans->{name}'\n",
+            "    From: $trans->{dir}/en/\n",
+            "    To  : $self->{path_po}/$self->{lang}$trans->{suffix}\n"
                 if $self->{verbose};
-        my $lang_dir = "$tmpl->{dir}/$self->{lang}";
+        my $lang_dir = "$trans->{dir}/$self->{lang}";
         mkdir $lang_dir unless -d $lang_dir;
         system
             "$self->{process} update " .
-            "-i $tmpl->{dir}/en/ " .
-            "-s $self->{path_po}/$self->{lang}$tmpl->{suffix} -r"
+            "-i $trans->{dir}/en/ " .
+            "-s $self->{path_po}/$self->{lang}$trans->{suffix} -r"
     }
 }
 
@@ -333,6 +346,10 @@ sub update_tmpl {
 sub create_prefs {
     my $self = shift;
 
+    if ( -e $self->po_filename ) {
+        say "Preferences .po file already exists. Delete it if you want to recreate it.";
+        return;
+    }
     $self->get_po_from_prefs();
     $self->save_po();
 }
@@ -341,17 +358,17 @@ sub create_prefs {
 sub create_tmpl {
     my $self = shift;
 
-    print "Create templates\n" if $self->{verbose};
-    while ( my ($interface, $tmpl) = each %{$self->{interface}} ) {
+    say "Create templates\n" if $self->{verbose};
+    for my $trans ( @{$self->{interface}} ) {
         print
-            "  Create templates .po files for '$interface'\n",
-            "    From: $tmpl->{dir}/en/\n",
-            "    To  : $self->{path_po}/$self->{lang}$tmpl->{suffix}\n"
+            "  Create templates .po files for '$trans->{name}'\n",
+            "    From: $trans->{dir}/en/\n",
+            "    To  : $self->{path_po}/$self->{lang}$trans->{suffix}\n"
                 if $self->{verbose};
         system
             "$self->{process} create " .
-            "-i $tmpl->{dir}/en/ " .
-            "-s $self->{path_po}/$self->{lang}$tmpl->{suffix} -r"
+            "-i $trans->{dir}/en/ " .
+            "-s $self->{path_po}/$self->{lang}$trans->{suffix} -r"
     }
 }
 
