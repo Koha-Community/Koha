@@ -24,3 +24,4 @@ UPDATE systempreferences SET value = 'Ma bibliothèque' WHERE variable = 'Librar
 UPDATE systempreferences SET value = 'fr-FR' WHERE variable = 'opaclanguages';
 UPDATE systempreferences SET value = 1 WHERE variable = 'opaclanguagesdisplay';
 UPDATE systempreferences SET value = 'Bienvenue dans Koha...\r\n<hr>' WHERE variable = 'OpacMainUserBlock';
+UPDATE systempreferences SET value = 'bibtex|dc|marcxml|marc8|utf8|marcstd|ris' WHERE variable = 'OpacExportOptions';
