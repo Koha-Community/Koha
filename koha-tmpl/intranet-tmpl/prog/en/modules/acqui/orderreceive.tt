@@ -322,7 +322,8 @@
 
 </div>
 </div><div class="yui-g"><fieldset class="action">
-        <input type="submit"  value="Save" />
+        <input type="submit" onclick="return false;" style="display: none;" id="phony_submit" value="phony_submit" name="phony_submit" />
+        <input type="submit"  value="Save" class="button" accesskey="w" />
         <a class="cancel" href="/cgi-bin/koha/acqui/parcel.pl?invoiceid=[% invoiceid %]">Cancel</a>
 </fieldset></div>    </form>
 [% ELSE %]
