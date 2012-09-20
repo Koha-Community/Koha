@@ -9,7 +9,7 @@ BEGIN {
         use_ok('Koha::SuggestionEngine');
 }
 
-my $suggestor = Koha::SuggestionEngine->new( { plugins => ( 'ExplodedTerms' ) } );
+my $suggestor = Koha::SuggestionEngine->new( { plugins => [ 'ExplodedTerms' ] } );
 is(ref($suggestor), 'Koha::SuggestionEngine', 'Created suggestion engine');
 
 my $result = $suggestor->get_suggestions({search => 'Cookery'});

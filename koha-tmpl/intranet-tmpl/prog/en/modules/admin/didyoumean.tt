@@ -3,8 +3,8 @@
 [% FOREACH plugin IN plugins %]
     <div class="plugin">
         <div class="pluginname">
-            [% IF plugin.enabled %]<input type="checkbox" checked="checked" id="checkbox_[% plugin.name %]">[% ELSE %]<input type="checkbox" id="checkbox_[% plugin.name %]">[% END %]
-            <label class='pluginlabel' for="checkbox_[% plugin.name %]">[% plugin.name %]</label></div>
+            [% IF plugin.enabled %]<input type="checkbox" checked="checked" id="checkbox_[% type %][% plugin.name %]">[% ELSE %]<input type="checkbox" id="checkbox_[% type %][% plugin.name %]">[% END %]
+            <label class='pluginlabel' for="checkbox_[% type %][% plugin.name %]">[% plugin.name %]</label></div>
         <div class="plugindesc">
         [% SWITCH plugin.name %]
         [% CASE 'AuthorityFile' %]
@@ -81,16 +81,17 @@
         <div id="didyoumeanlegend">
             Please put the <em>Did you mean?</em> plugins in order by significance, from
             most significant to least significant, and check the box to enable those
-            plugins that you want to use.
+            plugins that you want to use. (NOTE: <em>Did you mean?</em> functionality
+            is not yet enabled on the staff client)
         </div>
         <form action="/cgi-bin/koha/admin/didyoumean.pl" method="post">
             <fieldset id="didyoumeanopac">
                 <legend>OPAC</legend>
-                [% PROCESS pluginlist plugins=OPACpluginlist %]
+                [% PROCESS pluginlist plugins=OPACpluginlist type='opac' %]
             </fieldset>
             <fieldset id="didyoumeanintranet">
                 <legend>Intranet</legend>
-                [% PROCESS pluginlist plugins=INTRApluginlist %]
+                [% PROCESS pluginlist plugins=INTRApluginlist type='intranet' %]
             </fieldset>
             <fieldset class="action"><button class="save-all submit" onclick="yesimeant();return false;" type="submit">Save configuration</button> <a href="#" onclick="window.location.reload(true);" class="cancel">Cancel</a></fieldset>
         </form>

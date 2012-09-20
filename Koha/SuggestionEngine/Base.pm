@@ -34,9 +34,9 @@ B<get_suggestions (\%param)> - get suggestions for the search described
 in $param->{'search'}, and return them in a hashref with the suggestions
 as keys and relevance as values.
 
-The following variables must be defined in each filter:
-  our $NAME ='Filter';
-  our $VERSION = '1.0';
+B<NAME> - return a string with the name of the plugin.
+
+B<VERSION> - return a string with the version of the plugin.
 
 These methods may be overriden:
 
@@ -121,48 +121,6 @@ sub get_suggestions {
     my $self  = shift;
     my $param = shift;
     return;
-}
-
-=head2 NAME
-
-    my $name = $plugin->NAME;
-
-Getter function for plugin names.
-
-=cut
-
-sub NAME {
-    my $self = shift;
-    my $package = ref $self || $self;
-    return eval '$' . $package . '::NAME';
-}
-
-=head2 VERSION
-
-    my $version = $plugin->VERSION;
-
-Getter function for plugin versions.
-
-=cut
-
-sub VERSION {
-    my $self = shift;
-    my $package = ref $self || $self;
-    return eval '$' . $package . '::VERSION';
-}
-
-=head2 DESCRIPTION
-
-    my $description = $plugin->DESCRIPTION;
-
-Getter function for plugin descriptions.
-
-=cut
-
-sub DESCRIPTION {
-    my $self = shift;
-    my $package = ref $self || $self;
-    return eval '$' . $package . '::DESCRIPTION';
 }
 
 1;

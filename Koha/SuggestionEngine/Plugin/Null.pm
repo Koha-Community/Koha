@@ -36,8 +36,24 @@ use warnings;
 use Carp;
 
 use base qw(Koha::SuggestionEngine::Base);
-our $NAME    = 'Null';
-our $VERSION = '1.0';
+
+=head2 NAME
+    my $name = $plugin->NAME;
+
+=cut
+
+sub NAME {
+    return 'Null';
+}
+
+=head2 VERSION
+    my $version = $plugin->VERSION;
+
+=cut
+
+sub VERSION {
+    return '1.1';
+}
 
 =head2 get_suggestions
 
@@ -58,3 +74,5 @@ sub get_suggestions {
 
     return \@result;
 }
+
+1;

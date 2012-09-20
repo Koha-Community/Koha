@@ -20,15 +20,15 @@ foreach my $plugin (@installed_plugins) {
     ok(grep($plugin, @available_plugins), "Found plugin $plugin");
 }
 
-my $suggestor = Koha::SuggestionEngine->new( { plugins => ( 'ABCD::EFGH::IJKL' ) } );
+my $suggestor = Koha::SuggestionEngine->new( { plugins => [ 'ABCD::EFGH::IJKL' ] } );
 
 is(ref($suggestor), 'Koha::SuggestionEngine', 'Created suggestion engine with invalid plugin');
 is(scalar @{ $suggestor->get_suggestions({ 'search' => 'books' }) }, 0 , 'Request suggestions with empty suggestor');
 
-$suggestor = Koha::SuggestionEngine->new( { plugins => ( 'Null' ) } );
+$suggestor = Koha::SuggestionEngine->new( { plugins => [ 'Null' ] } );
 is(ref($suggestor->plugins->[0]), 'Koha::SuggestionEngine::Plugin::Null', 'Created record suggestor with implicitly scoped Null filter');
 
-$suggestor = Koha::SuggestionEngine->new( { plugins => ( 'Koha::SuggestionEngine::Plugin::Null' ) } );
+$suggestor = Koha::SuggestionEngine->new( { plugins => [ 'Koha::SuggestionEngine::Plugin::Null' ] } );
 is(ref($suggestor->plugins->[0]), 'Koha::SuggestionEngine::Plugin::Null', 'Created record suggestor with explicitly scoped Null filter');
 
 my $suggestions = $suggestor->get_suggestions({ 'search' => 'books' });
@@ -38,7 +38,7 @@ is_deeply($suggestions->[0], { 'search' => 'book', label => 'Book!', relevance =
 $suggestions = $suggestor->get_suggestions({ 'search' => 'silliness' });
 
 eval {
-    $suggestor = Koha::SuggestionEngine->new( { plugins => ( 'Koha::SuggestionEngine::Plugin::Null' ) } );
+    $suggestor = Koha::SuggestionEngine->new( { plugins => [ 'Koha::SuggestionEngine::Plugin::Null' ] } );
     undef $suggestor;
 };
 ok(!$@, 'Destroyed suggestor successfully');

@@ -37,8 +37,24 @@ use Carp;
 use C4::Templates qw(gettemplate); # This is necessary for translatability
 
 use base qw(Koha::SuggestionEngine::Base);
-our $NAME    = 'ExplodedTerms';
-our $VERSION = '1.0';
+
+=head2 NAME
+    my $name = $plugin->NAME;
+
+=cut
+
+sub NAME {
+    return 'ExplodedTerms';
+}
+
+=head2 VERSION
+    my $version = $plugin->VERSION;
+
+=cut
+
+sub VERSION {
+    return '1.0';
+}
 
 =head2 get_suggestions
 
@@ -85,3 +101,5 @@ sub get_suggestions {
         };
     } return \@results;
 }
+
+1;
