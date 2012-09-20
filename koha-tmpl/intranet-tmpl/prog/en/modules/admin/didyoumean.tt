@@ -50,7 +50,7 @@
         var serializedconfig = '[';
         $('#didyoumean' + interface + ' .pluginlist .plugin').each(function(index) {
             var name = $(this).find('.pluginlabel').text();
-            var enabled = $(this).find('#checkbox_' + name).attr('checked') == 'checked' ?
+            var enabled = $(this).find('input:checkbox:checked').length ?
                           ', "enabled": 1' : '';
             serializedconfig += '{ "name": "' + name + '"' + enabled + '}, ';
             });
