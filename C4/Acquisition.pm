@@ -2204,11 +2204,11 @@ sub GetInvoices {
     }
     if($args{shipmentdatefrom}) {
         push @bind_strs, " aqinvoices.shipementdate >= ? ";
-        push @bind_args, $args{shipementdatefrom};
+        push @bind_args, $args{shipmentdatefrom};
     }
     if($args{shipmentdateto}) {
         push @bind_strs, " aqinvoices.shipementdate <= ? ";
-        push @bind_args, $args{shipementdateto};
+        push @bind_args, $args{shipmentdateto};
     }
     if($args{billingdatefrom}) {
         push @bind_strs, " aqinvoices.billingdate >= ? ";

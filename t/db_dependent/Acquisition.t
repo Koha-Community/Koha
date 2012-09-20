@@ -47,7 +47,7 @@ SKIP: {
     my @expectedfields = qw( basketno
                              biblioitemnumber
                              biblionumber
-                             booksellerinvoicenumber
+                             invoiceid
                              budgetdate
                              cancelledby
                              closedate

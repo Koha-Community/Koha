@@ -192,7 +192,6 @@
 
 <div id="acqui_receive_summary">
 <p><strong>Invoice number:</strong> [% invoice %] <strong>Received by:</strong> [% loggedinusername %] <strong>On:</strong> [% formatteddatereceived %]</p>
-<p><a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% invoiceid %]">Go to invoice details</a></p>
 </div>
 [% UNLESS (invoiceclosedate) %]
 <div id="acqui_receive_search">
@@ -298,7 +297,7 @@
     </div>
 [% ELSE %]
     <p>
-        Invoice is close, so you can't receive orders.
+        Invoice is closed, so you can't receive orders anymore.
         <a href="/cgi-bin/koha/acqui/invoice.pl?op=reopen&invoiceid=[% invoiceid %]&referer=/cgi-bin/koha/acqui/parcel.pl%3Finvoiceid=[% invoiceid %]">Reopen it</a>.
     </p>
 [% END %]
@@ -405,12 +404,16 @@
 </div>
 
 <!--<form action="/cgi-bin/koha/acqui/parcels.pl?booksellerid=[% booksellerid %]" method="post">-->
-<form action="parcels.pl?booksellerid=[% booksellerid %]" method="post">
-    <input type="hidden" name="booksellerid" value="[% booksellerid %]" />
-    <fieldset class="action">
-        <input type="submit" value="Finish receiving" />
-    </fieldset>
-</form>
+[% IF (invoiceclosedate) %]
+    <a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% invoiceid %]">View invoice</a>
+[% ELSE %]
+    <form action="/cgi-bin/koha/acqui/invoice.pl" method="get">
+        <input type="hidden" name="invoiceid" value="[% invoiceid %]" />
+        <fieldset class="action">
+            <input type="submit" value="Finish receiving" />
+        </fieldset>
+    </form>
+[% END %]
 
 </div>
 </div>
