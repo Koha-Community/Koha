@@ -1312,7 +1312,7 @@ sub BuildAuthHierarchy{
     my $record = shift @_;
     my $class = shift @_;
     my $authid_constructed = shift @_;
-    return undef unless ($record && $record->field('001'));
+    return unless ($record && $record->field('001'));
     my $authid=$record->field('001')->data();
     my %cell;
     my $parents=""; my $children="";
