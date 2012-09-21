@@ -65,6 +65,8 @@ for( x=0; x<allColumns.length; x++ ){
 
 
 <form name="f" action="batchMod.pl" method="post">
+     <input type="hidden" name="src" id="src" value="[% src %]" />
+     <input type="hidden" name="biblionumber" id="biblionumber" value="[% biblionumber %]" />
      <input type="hidden" name="op" value="[% op %]" />
      <input type="hidden" name="uploadedfileid" id="uploadedfileid" value="" />
      <input type="hidden" name="completedJobID" id="completedJobID" value="" />
@@ -175,7 +177,13 @@ for( x=0; x<allColumns.length; x++ ){
 	</div>
 	[% END %]
 
-	<p><a href="/cgi-bin/koha/tools/batchMod.pl?del=1">Return to batch item deletion</a></p>
+    <p>
+        [% IF ( src == 'CATALOGUING') %]
+           <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber %]">Done</a>
+        [% ELSE %]
+           <a href="/cgi-bin/koha/tools/batchMod.pl?del=1">Return to batch item deletion</a>
+        [% END %]
+    </p>
 [% END %]
     </div>
     </div>

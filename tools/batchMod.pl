@@ -460,6 +460,7 @@ foreach my $error (@errors) {
     $template->param($error => 1);
 }
 $template->param(src => $src);
+$template->param(biblionumber => $biblionumber);
 output_html_with_http_headers $input, $cookie, $template->output;
 exit;
 
