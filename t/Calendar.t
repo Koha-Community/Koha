@@ -3,7 +3,8 @@
 use strict;
 use warnings;
 use DateTime;
-use Test::More tests => 23;
+use DateTime::Duration;
+use Test::More tests => 22;
 use Koha::DateUtils;
 
 BEGIN {
@@ -89,18 +90,8 @@ my $daycount = $cal->days_between( $test_dt, $later_dt );
 cmp_ok( $daycount->in_units('days'),
     '==', 48, 'days_between calculates correctly' );
 
-my $ret = $cal->addDate( $test_dt, 1, 'days' );
+my $ret;
 
-cmp_ok( $ret->ymd(), 'eq', '2012-07-24', 'Simple Single Day Add (Calendar)' );
-
-$ret = $cal->addDate( $test_dt, 7, 'days' );
-cmp_ok( $ret->ymd(), 'eq', '2012-07-31', 'Add 7 days Calendar mode' );
-$cal->set_daysmode('Datedue');
-$ret = $cal->addDate( $test_dt, 7, 'days' );
-cmp_ok( $ret->ymd(), 'eq', '2012-07-30', 'Add 7 days Datedue mode' );
-$cal->set_daysmode('Days');
-$ret = $cal->addDate( $test_dt, 7, 'days' );
-cmp_ok( $ret->ymd(), 'eq', '2012-07-30', 'Add 7 days Days mode' );
 $cal->set_daysmode('Calendar');
 
 # see bugzilla #8966
@@ -131,3 +122,61 @@ $cal->add_holiday( dt_from_string('2012-07-07','iso') );
 $daycount = $cal->days_between( dt_from_string("2012-07-01",'iso'),
     dt_from_string("2012-07-15",'iso') )->in_units('days');
 cmp_ok( $daycount, '==', 12, 'multiple holidays correctly recognized' );
+
+my $one_day_dur = DateTime::Duration->new( days => 1 );
+my $two_day_dur = DateTime::Duration->new( days => 2 );
+my $seven_day_dur = DateTime::Duration->new( days => 7 );
+
+subtest '\'Datedue\' tests' => sub {
+    my $cal = Koha::Calendar->new( TEST_MODE => 1 ,
+                                   days_mode => 'Datedue');
+
+    $cal->add_holiday( dt_from_string('2012-07-04','iso') );
+    $dt = dt_from_string( '2012-07-03','iso' );
+
+    is($cal->addDate( $dt, $one_day_dur, 'days' ),
+        dt_from_string('2012-07-05','iso'),
+        'Single day add (Datedue, matches holiday, shift)' );
+
+    is($cal->addDate( $dt, $two_day_dur, 'days' ),
+        dt_from_string('2012-07-05','iso'),
+        'Two days add, skips holiday (Datedue)' );
+
+    cmp_ok($cal->addDate( $test_dt, $seven_day_dur, 'days' ), 'eq',
+        '2012-07-30T11:53:00',
+        'Add 7 days (Datedue)' );
+};
+
+
+subtest '\'Calendar\' tests' => sub {
+    my $cal = Koha::Calendar->new( TEST_MODE => 1,
+                                   days_mode => 'Calendar' );
+
+    $cal->add_holiday( dt_from_string('2012-07-04','iso') );
+    $dt = dt_from_string('2012-07-03','iso');
+
+    is($cal->addDate( $dt, $one_day_dur, 'days' ),
+        dt_from_string('2012-07-05','iso'),
+        'Single day add (Calendar)' );
+
+    cmp_ok($cal->addDate( $test_dt, $seven_day_dur, 'days' ), 'eq',
+       '2012-07-31T11:53:00',
+       'Add 7 days (Calendar)' );
+};
+
+
+subtest '\'Days\' tests' => sub {
+    my $cal = Koha::Calendar->new( TEST_MODE => 1,
+                                   days_mode => 'Days' );
+
+    $cal->add_holiday( dt_from_string('2012-07-04','iso') );
+    $dt = dt_from_string('2012-07-03','iso');
+
+    is($cal->addDate( $dt, $one_day_dur, 'days' ),
+        dt_from_string('2012-07-04','iso'),
+        'Single day add (Days)' );
+
+    cmp_ok($cal->addDate( $test_dt, $seven_day_dur, 'days' ),'eq',
+        '2012-07-30T11:53:00',
+        'Add 7 days (Days)' );
+};

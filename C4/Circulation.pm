@@ -3014,13 +3014,14 @@ sub CalcDateDue {
               ->truncate( to => 'minute' );
             if ( $loanlength->{lengthunit} eq 'hours' ) {
                 $dt->add( hours => $loanlength->{issuelength} );
-                return $dt;
             } else {    # days
                 $dt->add( days => $loanlength->{issuelength} );
                 $dt->set_hour(23);
                 $dt->set_minute(59);
-                return $dt;
             }
+            # break
+            return $dt;
+
         } else {
             my $dur;
             if ($loanlength->{lengthunit} eq 'hours') {
