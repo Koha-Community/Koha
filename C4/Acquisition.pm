@@ -338,7 +338,7 @@ sub GetBasketGroupAsCSV {
                 booksellerpostal => $bookseller->{postal},
                 contractnumber => $contract->{contractnumber},
                 contractname => $contract->{contractname},
-                basketgroupdeliveryplace => C4::Branch::GetBranchName( $basketgroup->{deliveryplace} ) || C4::Branch::GetBranchName( $basketgroup->{freedeliveryplace} ),
+                basketgroupdeliveryplace => C4::Branch::GetBranchName( $basketgroup->{deliveryplace} ),
                 basketgroupbillingplace => C4::Branch::GetBranchName( $basketgroup->{billingplace} ),
                 basketdeliveryplace => C4::Branch::GetBranchName( $basket->{deliveryplace} ),
                 basketbillingplace => C4::Branch::GetBranchName( $basket->{billingplace} ),
