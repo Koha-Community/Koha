@@ -407,7 +407,7 @@ sub get_template_and_user {
         my $opac_search_limit = $ENV{'OPAC_SEARCH_LIMIT'};
         my $opac_limit_override = $ENV{'OPAC_LIMIT_OVERRIDE'};
         my $opac_name = '';
-        if (($opac_search_limit =~ /branch:(\w+)/ && $opac_limit_override) || $in->{'query'}->param('limit') =~ /branch:(\w+)/){
+        if (($opac_search_limit && $opac_search_limit =~ /branch:(\w+)/ && $opac_limit_override) || ($in->{'query'}->param('limit') && $in->{'query'}->param('limit') =~ /branch:(\w+)/)){
             $opac_name = $1;   # opac_search_limit is a branch, so we use it.
         } elsif (C4::Context->preference("SearchMyLibraryFirst") && C4::Context->userenv && C4::Context->userenv->{'branch'}) {
             $opac_name = C4::Context->userenv->{'branch'};
@@ -739,7 +739,7 @@ sub checkauth {
         else {
             $cookie = $query->cookie( CGISESSID => $session->id );
             $session->param('lasttime',time());
-            unless ( $sessiontype eq 'anon' ) { #if this is an anonymous session, we want to update the session, but not behave as if they are logged in...
+            unless ( $sessiontype && $sessiontype eq 'anon' ) { #if this is an anonymous session, we want to update the session, but not behave as if they are logged in...
                 $flags = haspermission($userid, $flagsrequired);
                 if ($flags) {
                     $loggedin = 1;
