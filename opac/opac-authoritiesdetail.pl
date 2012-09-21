@@ -66,7 +66,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-my $authid       = $query->param('authid');
+my $authid = $query->param('authid');
 my $record = GetAuthority( $authid );
 if ( ! $record ) {
     print $query->redirect("/cgi-bin/koha/errors/404.pl"); # escape early
@@ -76,28 +76,10 @@ if ( ! $record ) {
 my $authtypecode = &GetAuthTypeCode( $authid );
 
 if ($display_hierarchy){
-  my $trees=BuildUnimarcHierarchies($authid);
-  my @trees = split /;/,$trees ;
-  push @trees,$trees unless (@trees);
-  my @loophierarchies;
-  foreach my $tree (@trees){
-    my @tree=split /,/,$tree;
-    push @tree,$tree unless (@tree);
-    my $cnt=0;
-    my @loophierarchy;
-    foreach my $element (@tree){
-      my $cell;
-      my $elementdata = GetAuthority($element);
-      push @loophierarchy, BuildUnimarcHierarchy($elementdata,"child".$cnt, $authid);
-      $cnt++;
-    }
-    push @loophierarchies, { 'loopelement' =>\@loophierarchy};
-  }
-  $template->param(
-    'displayhierarchy' => $display_hierarchy,
-    'loophierarchies' =>\@loophierarchies,
-  );
+    $template->{VARS}->{'displayhierarchy'} = $display_hierarchy;
+    $template->{VARS}->{'loophierarchies'} = GenerateHierarchy($authid);
 }
+
 my $count = CountUsage($authid);
 
 
@@ -188,4 +170,3 @@ if ($show_marc) {
 }
 
 output_html_with_http_headers $query, $cookie, $template->output;
-

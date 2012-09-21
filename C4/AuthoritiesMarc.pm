@@ -53,9 +53,9 @@ BEGIN {
     	&SearchAuthorities
     
         &BuildSummary
-    	&BuildUnimarcHierarchies
-    	&BuildUnimarcHierarchy
-        &GetAuthorizedHeading
+        &BuildAuthHierarchies
+        &BuildAuthHierarchy
+        &GenerateHierarchy
     
     	&merge
     	&FindDuplicateAuthority
@@ -1231,9 +1231,9 @@ sub GetAuthorizedHeading {
     return;
 }
 
-=head2 BuildUnimarcHierarchies
+=head2 BuildAuthHierarchies
 
-  $text= &BuildUnimarcHierarchies( $authid, $force)
+  $text= &BuildAuthHierarchies( $authid, $force)
 
 return text containing trees for hierarchies
 for them to be stored in auth_header
@@ -1243,54 +1243,59 @@ Example of text:
 
 =cut
 
-sub BuildUnimarcHierarchies{
-  my $authid = shift @_;
+sub BuildAuthHierarchies{
+    my $authid = shift @_;
 #   warn "authid : $authid";
-  my $force = shift @_;
-  my @globalresult;
-  my $dbh=C4::Context->dbh;
-  my $hierarchies;
-  my $data = GetHeaderAuthority($authid);
-  if ($data->{'authtrees'} and not $force){
-    return $data->{'authtrees'};
+    my $force = shift @_ || (C4::Context->preference('marcflavour') eq 'UNIMARC' ? 0 : 1);
+    my @globalresult;
+    my $dbh=C4::Context->dbh;
+    my $hierarchies;
+    my $data = GetHeaderAuthority($authid);
+    if ($data->{'authtrees'} and not $force){
+        return $data->{'authtrees'};
 #  } elsif ($data->{'authtrees'}){
 #    $hierarchies=$data->{'authtrees'};
-  } else {
-    my $record = GetAuthority($authid);
-    my $found;
-    return unless $record;
-    foreach my $field ($record->field('5..')){
-      if ($field->subfield('5') && $field->subfield('5') eq 'g'){
-		my $subfauthid=_get_authid_subfield($field);
-        next if ($subfauthid eq $authid);
-        my $parentrecord = GetAuthority($subfauthid);
-        my $localresult=$hierarchies;
-        my $trees;
-        $trees = BuildUnimarcHierarchies($subfauthid);
-        my @trees;
-        if ($trees=~/;/){
-           @trees = split(/;/,$trees);
-        } else {
-           push @trees, $trees;
+    } else {
+        my $record = GetAuthority($authid);
+        my $found;
+        return unless $record;
+        foreach my $field ($record->field('5..')){
+            my $broader = 0;
+            $broader = 1 if (
+                    (C4::Context->preference('marcflavour') eq 'UNIMARC' && $field->subfield('5') && $field->subfield('5') eq 'g') ||
+                    (C4::Context->preference('marcflavour') ne 'UNIMARC' && $field->subfield('w') && substr($field->subfield('w'), 0, 1) eq 'g'));
+            if ($broader) {
+                my $subfauthid=_get_authid_subfield($field) || '';
+                next if ($subfauthid eq $authid);
+                my $parentrecord = GetAuthority($subfauthid);
+                next unless $parentrecord;
+                my $localresult=$hierarchies;
+                my $trees;
+                $trees = BuildAuthHierarchies($subfauthid);
+                my @trees;
+                if ($trees=~/;/){
+                    @trees = split(/;/,$trees);
+                } else {
+                    push @trees, $trees;
+                }
+                foreach (@trees){
+                    $_.= ",$authid";
+                }
+                @globalresult = (@globalresult,@trees);
+                $found=1;
+            }
+            $hierarchies=join(";",@globalresult);
         }
-        foreach (@trees){
-          $_.= ",$authid";
-        }
-        @globalresult = (@globalresult,@trees);
-        $found=1;
-      }
-      $hierarchies=join(";",@globalresult);
+#Unless there is no ancestor, I am alone.
+        $hierarchies="$authid" unless ($hierarchies);
     }
-    #Unless there is no ancestor, I am alone.
-    $hierarchies="$authid" unless ($hierarchies);
-  }
-  AddAuthorityTrees($authid,$hierarchies);
-  return $hierarchies;
+    AddAuthorityTrees($authid,$hierarchies);
+    return $hierarchies;
 }
 
-=head2 BuildUnimarcHierarchy
+=head2 BuildAuthHierarchy
 
-  $ref= &BuildUnimarcHierarchy( $record, $class,$authid)
+  $ref= &BuildAuthHierarchy( $record, $class,$authid)
 
 return a hashref in order to display hierarchy for record and final Authid $authid
 
@@ -1301,42 +1306,101 @@ return a hashref in order to display hierarchy for record and final Authid $auth
 "current_value"
 "value"
 
-"ifparents"  
-"ifchildren" 
-Those two latest ones should disappear soon.
+=cut
+
+sub BuildAuthHierarchy{
+    my $record = shift @_;
+    my $class = shift @_;
+    my $authid_constructed = shift @_;
+    return unless ($record && $record->field('001'));
+    my $authid=$record->field('001')->data();
+    my %cell;
+    my $parents=""; my $children="";
+    my (@loopparents,@loopchildren);
+    my $marcflavour = C4::Context->preference('marcflavour');
+    my $relationshipsf = $marcflavour eq 'UNIMARC' ? '5' : 'w';
+    foreach my $field ($record->field('5..')){
+        my $subfauthid=_get_authid_subfield($field);
+        if ($subfauthid && $field->subfield($relationshipsf) && $field->subfield('a')){
+            my $relationship = substr($field->subfield($relationshipsf), 0, 1);
+            if ($relationship eq 'h'){
+                push @loopchildren, { "authid"=>$subfauthid,"value"=>$field->subfield('a')};
+            }
+            elsif ($relationship eq 'g'){
+                push @loopparents, { "authid"=>$subfauthid,"value"=>$field->subfield('a')};
+            }
+# brothers could get in there with an else
+        }
+    }
+    $cell{"parents"}=\@loopparents;
+    $cell{"children"}=\@loopchildren;
+    $cell{"class"}=$class;
+    $cell{"authid"}=$authid;
+    $cell{"current_value"} =1 if ($authid eq $authid_constructed);
+    $cell{"value"}=C4::Context->preference('marcflavour') eq 'UNIMARC' ? $record->subfield('2..',"a") : $record->subfield('1..', 'a');
+    return \%cell;
+}
+
+=head2 BuildAuthHierarchyBranch
+
+  $branch = &BuildAuthHierarchyBranch( $tree, $authid[, $cnt])
+
+Return a data structure representing an authority hierarchy
+given a list of authorities representing a single branch in
+an authority hierarchy tree. $authid is the current node in
+the tree (which may or may not be somewhere in the middle).
+$cnt represents the level of the upper-most item, and is only
+used when BuildAuthHierarchyBranch is called recursively (i.e.,
+don't ever pass in anything but zero to it).
 
 =cut
 
-sub BuildUnimarcHierarchy{
-  my $record = shift @_;
-  my $class = shift @_;
-  my $authid_constructed = shift @_;
-  return undef unless ($record);
-  my $authid=$record->field('001')->data();
-  my %cell;
-  my $parents=""; my $children="";
-  my (@loopparents,@loopchildren);
-  foreach my $field ($record->field('5..')){
-      my $subfauthid=_get_authid_subfield($field);
-      if ($subfauthid && $field->subfield('5') && $field->subfield('a')){
-          if ($field->subfield('5') eq 'h'){
-              push @loopchildren, { "childauthid"=>$field->subfield('3'),"childvalue"=>$field->subfield('a')};
-	  }
-	  elsif ($field->subfield('5') eq 'g'){
-	      push @loopparents, { "parentauthid"=>$field->subfield('3'),"parentvalue"=>$field->subfield('a')};
-	  }
-          # brothers could get in there with an else
-      }
-  }
-  $cell{"ifparents"}=1 if (scalar(@loopparents)>0);
-  $cell{"ifchildren"}=1 if (scalar(@loopchildren)>0);
-  $cell{"loopparents"}=\@loopparents if (scalar(@loopparents)>0);
-  $cell{"loopchildren"}=\@loopchildren if (scalar(@loopchildren)>0);
-  $cell{"class"}=$class;
-  $cell{"loopauthid"}=$authid;
-  $cell{"current_value"} =1 if $authid eq $authid_constructed;
-  $cell{"value"}=$record->subfield('2..',"a");
-  return \%cell;
+sub BuildAuthHierarchyBranch {
+    my ($tree, $authid, $cnt) = @_;
+    $cnt |= 0;
+    my $elementdata = GetAuthority(shift @$tree);
+    my $branch = BuildAuthHierarchy($elementdata,"child".$cnt, $authid);
+    if (scalar @$tree > 0) {
+        my $nextBranch = BuildAuthHierarchyBranch($tree, $authid, ++$cnt);
+        my $nextAuthid = $nextBranch->{authid};
+        my $found;
+        # If we already have the next branch listed as a child, let's
+        # replace the old listing with the new one. If not, we will add
+        # the branch at the end.
+        foreach my $cell (@{$branch->{children}}) {
+            if ($cell->{authid} eq $nextAuthid) {
+                $cell = $nextBranch;
+                $found = 1;
+                last;
+            }
+        }
+        push @{$branch->{children}}, $nextBranch unless $found;
+    }
+    return $branch;
+}
+
+=head2 GenerateHierarchy
+
+  $hierarchy = &GenerateHierarchy($authid);
+
+Return an arrayref holding one or more "trees" representing
+authority hierarchies.
+
+=cut
+
+sub GenerateHierarchy {
+    my ($authid) = @_;
+    my $trees    = BuildAuthHierarchies($authid);
+    my @trees    = split /;/,$trees ;
+    push @trees,$trees unless (@trees);
+    my @loophierarchies;
+    foreach my $tree (@trees){
+        my @tree=split /,/,$tree;
+        push @tree, $tree unless (@tree);
+        my $branch = BuildAuthHierarchyBranch(\@tree, $authid);
+        push @loophierarchies, [ $branch ];
+    }
+    return \@loophierarchies;
 }
 
 sub _get_authid_subfield{

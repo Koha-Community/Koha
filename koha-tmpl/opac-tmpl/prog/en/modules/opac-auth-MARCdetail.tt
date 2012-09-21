@@ -1,30 +1,25 @@
+[% PROCESS 'opac-authorities.inc' %]
 [% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo;  Entry
 [% INCLUDE 'doc-head-close.inc' %]
-[% IF ( displayhierarchy ) %]
-<link rel="stylesheet" type="text/css" href="[% themelang %]/css/hierarchy.css">
-<script language="JavaScript" type="text/javascript">
-function showParents(mynumber) {
-  var parents=document.getElementsByName(mynumber+'p')
-  for(i=0;i<parents.length;i++){
-    if (parents[i].style.display == "none") {
-      parents[i].style.display ="block";
-    } else {
-      parents[i].style.display ="none";
-    }
-  } 
-}
-function showChildren(mynumber) {
-  var children=document.getElementsByName(mynumber+'c')
-  for(i=0;i<children.length;i++){
-    if (children[i].style.display == "none") {
-      children[i].style.display = "block";
-    } else {
-      children[i].style.display = "none";
-    }
-  }
-}
+<script language="javascript" type="text/javascript" src="/opac-tmpl/lib/jquery/plugins/jquery.jstree.js"></script>
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+$(document).ready(function() {
+    [% IF ( displayhierarchy ) %]
+        var current_nodes = [];
+        $('.currentauth').each(function() {
+            current_nodes.push('#' + $(this).parent().parents('li:first').attr('id'));
+            });
+        $('#hierarchies').jstree({
+                "plugins": [ "themes", "html_data"],
+                "themes": { "theme": "classic",
+                            "icons": false },
+                "core": { "initially_open": current_nodes }
+            });
+    [% END %]
+});
+//]]>
 </script>
-[% END %]
 </head>
 <body id="opac-authoritiesdetail">
 
@@ -38,30 +33,11 @@ function showChildren(mynumber) {
     <div id="views"><span class="view"><a id="MARCview" href="/cgi-bin/koha/opac-authoritiesdetail.pl?authid=[% authid %]">Normal view</a></span> <span class="view"><span id="MARCview">MARC view</span></span></div>
 
 [% IF ( displayhierarchy ) %]
-
-<div class="hierarchies">
-[% FOREACH loophierarchie IN loophierarchies %]
-  <div class="hierarchy">
-  [% FOREACH loopelemen IN loophierarchie.loopelement %]
-    <div id="[% loopelemen.loopauthid %]" class="[% loopelemen.class %]">
-    [% IF ( loopelemen.current_value ) %]
-        [% loopelemen.value %]
-    [% ELSE %]
-        <a href="opac-authoritiesdetail.pl?authid=[% loopelemen.loopauthid %]" title="Term">[% loopelemen.value %]</a>
-    [% END %]
-    [% IF ( loopelemen.ifchildren ) %]
-      <sub><a class="parents" title="Narrower terms" href="JavaScript:showChildren('[% loopelemen.loopauthid %]');">+</a></sub><br/>
-      [% FOREACH loopchildre IN loopelemen.loopchildren %]
-        <div name="[% loopchildre.loopauthid %]c" class="child"> <a href="opac-authoritiesdetail.pl?authid=[% loopchildre.childauthid %]">[% loopchildre.childvalue %]</a></div>
-      [% END %]
-    [% END %]
-    </div>
-  [% END %]
-    
-  </div>
-[% END %]
+<div id="hierarchies">
+[% PROCESS showhierarchy trees = loophierarchies %]
 </div>
 [% END %]
+
 <h1>Entry [% authtypetext %]</h1>
 	<p>Used in <a href="opac-search.pl?type=opac&amp;q=[% authid %]&amp;idx=an,phr">[% count %] records</a></p>
         [% FOREACH Tag0X IN Tab0XX %]
