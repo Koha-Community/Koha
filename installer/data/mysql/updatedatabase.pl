@@ -5927,6 +5927,21 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "XXX";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("
+        INSERT INTO systempreferences (variable,value,explanation,options,type)
+        VALUES('SeparateHoldings', '0', 'Separate current branch holdings from other holdings', NULL, 'YesNo');
+    ");
+    $dbh->do("
+        INSERT INTO systempreferences (variable,value,explanation,options,type)
+        VALUES('OpacSeparateHoldings', '0', 'Separate current branch holdings from other holdings (OPAC)', NULL, 'YesNo');
+    ");
+
+    print "Upgrade to $DBversion done (Add systempreferences SeparateHoldings and OpacSeparateHoldings) \n";
+    SetVersion ($DBversion);
+}
+
 
 $DBversion = "3.09.00.053";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {

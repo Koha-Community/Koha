@@ -177,15 +177,20 @@ $dat->{'hiddencount'} = scalar @all_items + @hostitems - scalar @items;
 my $shelflocations = GetKohaAuthorisedValues('items.location', $fw);
 my $collections    = GetKohaAuthorisedValues('items.ccode'   , $fw);
 my $copynumbers    = GetKohaAuthorisedValues('items.copynumber', $fw);
-my (@itemloop, %itemfields);
+my (@itemloop, @otheritemloop, %itemfields);
 my $norequests = 1;
 my $authvalcode_items_itemlost = GetAuthValCode('items.itemlost',$fw);
 my $authvalcode_items_damaged  = GetAuthValCode('items.damaged', $fw);
 
 my $analytics_flag;
 my $materials_flag; # set this if the items have anything in the materials field
+my $currentbranch = C4::Context->userenv ? C4::Context->userenv->{branch} : undef;
+if ($currentbranch and C4::Context->preference('SeparateHoldings')) {
+    $template->param(SeparateHoldings => 1);
+}
 foreach my $item (@items) {
 
+    my $homebranchcode = $item->{homebranch};
     $item->{homebranch}        = GetBranchName($item->{homebranch});
 
     # can place holds defaults to yes
@@ -267,8 +272,16 @@ foreach my $item (@items) {
 	}
     if (defined($item->{'materials'}) && $item->{'materials'} =~ /\S/){
 	$materials_flag = 1;
+
+    if ($currentbranch and $currentbranch ne "NO_LIBRARY_SET" and C4::Context->preference('SeparateHoldings')) {
+        if ($homebranchcode and $homebranchcode eq $currentbranch) {
+            push @itemloop, $item;
+        } else {
+            push @otheritemloop, $item;
+        }
+    } else {
+        push @itemloop, $item;
     }
-    push @itemloop, $item;
 }
 
 $template->param( norequests => $norequests );
@@ -332,6 +345,7 @@ foreach ( keys %{$dat} ) {
 $template->param( AmazonTld => get_amazon_tld() ) if ( C4::Context->preference("AmazonCoverImages"));
 $template->param(
     itemloop        => \@itemloop,
+    otheritemloop   => \@otheritemloop,
     biblionumber        => $biblionumber,
     ($analyze? 'analyze':'detailview') =>1,
     subscriptions       => \@subs,

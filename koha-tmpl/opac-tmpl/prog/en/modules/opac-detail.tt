@@ -654,9 +654,12 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 <div id="bibliodescriptions" class="toptabs">
 
 <ul>   
-[% IF ( defaulttab == 'holdings' ) %]<li id="tab_holdings" class="ui-tabs-selected">[% ELSE %]<li id="tab_holdings">[% END %]
-    <a href="#holdings">Holdings ( [% count %] )</a>
-</li>
+    [% IF ( defaulttab == 'holdings' ) %]<li id="tab_holdings" class="ui-tabs-selected">[% ELSE %]<li id="tab_holdings">[% END %]
+        <a href="#holdings">[% IF SeparateHoldings %][% LoginBranchname %] holdings[% ELSE %]Holdings[% END %] ( [% itemloop.size || 0 %] )</a>
+    </li>
+    [% IF (SeparateHoldings) %]
+        <li><a href="#otherholdings">Other holdings ( [% otheritemloop.size || 0 %] )</a></li>
+    [% END %]
 <li id="tab_descriptions"> <a href="#descriptions">Title notes</a></li>
 [% IF ( SYNDETICS_TOC ) %]
     <li id="tab_toc"> <a href="#toc">TOC</a></li>
@@ -740,11 +743,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 </div>
 [% END %]
 
-<div id="holdings">
-[% IF ( count ) %]
-    [% IF ( lotsofitems ) %]
-	<p>This record has many physical items. <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]&amp;viewallitems=1#holdings">Click here to view them all.</a></p>
-    [% ELSE %]
+[% BLOCK items_table %]
     <table id="holdingst">
         <thead><tr>
             [% IF ( item_level_itypes ) %]<th id="item_itemtype">Item type</th>[% END %]
@@ -764,7 +763,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
             <th>Item hold queue priority</th>
         [% END %]
         </tr></thead>
-	    <tbody>[% FOREACH ITEM_RESULT IN ITEM_RESULTS %]
+	    <tbody>[% FOREACH ITEM_RESULT IN items %]
       <tr>[% IF ( item_level_itypes ) %]<td class="itype">[% UNLESS ( noItemTypeImages ) %][% IF ( ITEM_RESULT.imageurl ) %]<img src="[% ITEM_RESULT.imageurl %]" title="[% ITEM_RESULT.description %]" alt="[% ITEM_RESULT.description %]" />[% END %][% END %] [% ITEM_RESULT.description %]</td>[% END %]
              <td class="location">
     [% UNLESS ( singleBranchMode ) %]
@@ -803,6 +802,14 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 	    </tr>
 	    [% END %]</tbody>
 	</table>
+[% END %][%# end of items_table block %]
+
+<div id="holdings">
+[% IF ( itemloop.size ) %]
+    [% IF ( lotsofitems ) %]
+	<p>This record has many physical items. <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]&amp;viewallitems=1#holdings">Click here to view them all.</a></p>
+    [% ELSE %]
+        [% PROCESS items_table items=itemloop %]
     [% END %]
     [% IF holds_count.defined || priority %]
     <div id="bib_holds">
@@ -887,6 +894,15 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 <br clear="all" />
 </div>
 
+[% IF (SeparateHoldings) %]
+    <div id="otherholdings">
+        [% IF (otheritemloop.size) %]
+            [% PROCESS items_table items=otheritemloop %]
+        [% ELSE %]
+            No other items.
+        [% END %]
+    </div>
+[% END %]
 
 <div id="descriptions">
 <div class="content_set">

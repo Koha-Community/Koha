@@ -484,13 +484,6 @@ foreach my $subscription (@subscriptions) {
 
 $dat->{'count'} = scalar(@items);
 
-# If there is a lot of items, and the user has not decided
-# to view them all yet, we first warn him
-# TODO: The limit of 50 could be a syspref
-my $viewallitems = $query->param('viewallitems');
-if ($dat->{'count'} >= 50 && !$viewallitems) {
-    $template->param('lotsofitems' => 1);
-}
 
 my $biblio_authorised_value_images = C4::Items::get_authorised_value_images( C4::Biblio::get_biblio_authorised_values( $biblionumber, $record ) );
 
@@ -519,6 +512,11 @@ $template->param( show_priority => $has_hold ) ;
 my $norequests = 1;
 my $branches = GetBranches();
 my %itemfields;
+my (@itemloop, @otheritemloop);
+my $currentbranch = C4::Context->userenv ? C4::Context->userenv->{branch} : undef;
+if ($currentbranch and C4::Context->preference('OpacSeparateHoldings')) {
+    $template->param(SeparateHoldings => 1);
+}
 for my $itm (@items) {
     $itm->{holds_count} = $item_reserves{ $itm->{itemnumber} };
     $itm->{priority} = $priority{ $itm->{itemnumber} };
@@ -569,6 +567,24 @@ for my $itm (@items) {
         $itm->{transfertfrom} = $branches->{$transfertfrom}{branchname};
         $itm->{transfertto}   = $branches->{$transfertto}{branchname};
      }
+    my $homebranch = $itm->{homebranch};
+    if ($currentbranch and C4::Context->preference('OpacSeparateHoldings')) {
+        if ($homebranch and $homebranch eq $currentbranch) {
+            push @itemloop, $itm;
+        } else {
+            push @otheritemloop, $itm;
+        }
+    } else {
+        push @itemloop, $itm;
+    }
+}
+
+# If there is a lot of items, and the user has not decided
+# to view them all yet, we first warn him
+# TODO: The limit of 50 could be a syspref
+my $viewallitems = $query->param('viewallitems');
+if (scalar(@itemloop) >= 50 && !$viewallitems) {
+    $template->param('lotsofitems' => 1);
 }
 
 ## get notes and subjects from MARC record
@@ -697,7 +713,8 @@ if(C4::Context->preference("ISBD")) {
 }
 
 $template->param(
-    ITEM_RESULTS        => \@items,
+    itemloop            => \@itemloop,
+    otheritemloop       => \@otheritemloop,
     subscriptionsnumber => $subscriptionsnumber,
     biblionumber        => $biblionumber,
     subscriptions       => \@subs,
@@ -960,7 +977,7 @@ my $defaulttab =
         ? 'subscriptions' :
     $opac_serial_default eq 'serialcollection' && @serialcollections > 0
         ? 'serialcollection' :
-    $opac_serial_default eq 'holdings' && $dat->{'count'} > 0
+    $opac_serial_default eq 'holdings' && scalar (@itemloop) > 0
         ? 'holdings' :
     $subscriptionsnumber
         ? 'subscriptions' :
