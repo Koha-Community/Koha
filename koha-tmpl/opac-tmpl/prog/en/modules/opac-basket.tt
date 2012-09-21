@@ -23,10 +23,28 @@
 	//<![CDATA[
 
 var MSG_NO_RECORD_SELECTED = _("Please select one or more items");
+
+$.tablesorter.addParser({
+    // set a unique id
+    id: 'links',
+    is: function(s)
+    {
+        // return false so this parser is not auto detected
+        return false;
+    },
+    format: function(s)
+    {
+        // format your data for normalization
+        return s.replace(new RegExp(/<.*?>/),"");
+    },
+    // set type, either numeric or text
+    type: 'text'
+});
+
 $(document).ready(function()
     {
         $("#itemst").tablesorter({
-                        headers: { 0: { sorter: false },4:{sorter:false}}
+                        headers: { 0: { sorter: false }, 1: {sorter: 'links'}, 4:{sorter:false}}
                 });
     $(".cb").click(function(){
       enableCheckboxActions();
@@ -367,9 +385,7 @@ function enableCheckboxActions(){
 
                 </td> [% END %]
             <td>
-		<a href="#" onclick="openBiblio('[% BIBLIO_RESULT.dest %]',[% BIBLIO_RESULT.biblionumber %])">
-                        [% BIBLIO_RESULT.title |html %][% IF ( BIBLIO_RESULT.subtitle ) %] [% FOREACH subtitl IN BIBLIO_RESULT.subtitle %][% subtitl.subfield |html %][% END %][% END %]
-                </a>
+		<a href="#" onclick="openBiblio('[% BIBLIO_RESULT.dest %]',[% BIBLIO_RESULT.biblionumber %])">[% BIBLIO_RESULT.title |html %][% IF ( BIBLIO_RESULT.subtitle ) %] [% FOREACH subtitl IN BIBLIO_RESULT.subtitle %][% subtitl.subfield |html %][% END %][% END %]</a>
                 <!-- COinS / Openurl -->
 		    <span class="Z3988" title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.au=[% BIBLIO_RESULT.author %]&amp;rft.btitle=[% BIBLIO_RESULT.title |url %]&amp;rft.date=[% BIBLIO_RESULT.publicationyear %]&amp;rft.tpages=[% BIBLIO_RESULT.size %]&amp;rft.isbn=[% BIBLIO_RESULT.isbn |url %]&amp;rft.aucorp=&amp;rft.place=[% BIBLIO_RESULT.place %]&amp;rft.pub=[% BIBLIO_RESULT.publisher |url %]&amp;rft.edition=[% BIBLIO_RESULT.edition %]&amp;rft.series=[% BIBLIO_RESULT.series %]&amp;rft.genre="></span>
 		    [% IF ( opacuserlogin ) %][% IF ( loggedinusername ) %][% IF ( TagsEnabled ) %]<div id="newtag[% BIBLIO_RESULT.biblionumber %]_status" class="tagstatus results_summary" style="display:none">Tag status here.</div>[% END %][% END %][% END %]
