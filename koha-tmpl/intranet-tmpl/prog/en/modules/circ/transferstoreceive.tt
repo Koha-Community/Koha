@@ -13,7 +13,7 @@ $.tablesorter.addParser({
 $(document).ready(function() {
     [% FOREACH branchesloo IN branchesloop %]
     $.tablesorter.defaults.widgets = ['zebra'];
-    $("#transferst[% branchesloo.branchcode %]").tablesorter({[% IF ( branchesloo.dateformat_metric ) %]
+    $("#transferst[% branchesloo.branchcode %]").tablesorter({[% IF ( dateformat_metric ) %]
         dateFormat: 'uk',[% END %]
         sortList: [[0,0]],
         headers: { 1: { sorter: 'articles' }}
