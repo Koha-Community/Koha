@@ -5966,7 +5966,7 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion ="3.09.00.XXX";
+$DBversion ="3.09.00.056";
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     $dbh->do("INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES('AuthDisplayHierarchy','0','Display authority hierarchies','','YesNo')");
     print "Upgrade to $DBversion done (Add system preference AuthDisplayHierarchy)\n";
