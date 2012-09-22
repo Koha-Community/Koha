@@ -5251,7 +5251,7 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
 
 $DBversion = "3.08.04.000";
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
-    print "Upgrade to $DBversion (3.8.3 release) done\n";
+    print "Upgrade to $DBversion (3.8.4 release) done\n";
     SetVersion($DBversion);
 }
 
@@ -5269,6 +5269,14 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     print "Upgrade to $DBversion done. (Bug 8002: Update patron attribute types table from varchar(1) to varchar(10) category_code)\nWarning to Koha System Administrators: If you use borrower attributes defined by borrower categories, you have to check your configuration. A bug may have removed your attribute links to borrower categories.\nPlease check, and fix it if necessary.";
     SetVersion($DBversion);
 }
+
+$DBversion = "3.08.05.000";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    print "Upgrade to $DBversion (3.8.5 release) done\n";
+    SetVersion($DBversion);
+}
+
+
 
 =head1 FUNCTIONS
 
