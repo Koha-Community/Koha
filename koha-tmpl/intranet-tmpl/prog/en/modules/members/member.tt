@@ -66,7 +66,7 @@
                             </a> <br />
                             [% IF ( resultsloo.streetnumber ) %][% resultsloo.streetnumber %] [% END %][% resultsloo.address %][% IF ( resultsloo.address2 ) %]<br />[% resultsloo.address2 %][% END %][% IF ( resultsloo.city ) %]<br />[% resultsloo.city %][% IF ( resultsloo.state ) %],[% END %][% END %][% IF ( resultsloo.state ) %] [% resultsloo.state %][% END %] [% IF ( resultsloo.zipcode ) %]  [% resultsloo.zipcode %][% END %][% IF ( resultsloo.country ) %], [% resultsloo.country %][% END %]</td>
 							<td>[% resultsloo.category_description %] ([% resultsloo.category_type %])</td>
-							<td>[% resultsloo.branchcode %]</td>
+							<td>[% resultsloo.branchname %]</td>
 							<td>[% resultsloo.dateexpiry %]</td>
 							<td>[% IF ( resultsloo.overdues ) %]<span class="overdue"><strong>[% resultsloo.overdues %]</strong></span>[% ELSE %][% resultsloo.overdues %][% END %]/[% resultsloo.issues %]</td>
 							<td>[% IF ( resultsloo.fines < 0 ) %]<span class="credit">[% resultsloo.fines %]</span> [% ELSIF resultsloo.fines > 0 %] <span class="debit"><strong>[% resultsloo.fines %]</strong></span> [% ELSE %] [% resultsloo.fines %] [% END %]</td>

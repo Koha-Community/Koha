@@ -141,6 +141,7 @@ foreach my $borrower(@$results[$from..$to-1]){
     issues => $issue,
     odissue => "$od/$issue",
     fines =>  sprintf("%.2f",$fines),
+    branchname => $branches->{$borrower->{branchcode}}->{branchname},
     );
   push(@resultsdata, \%row);
 }
