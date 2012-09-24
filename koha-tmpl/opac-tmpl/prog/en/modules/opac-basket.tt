@@ -311,7 +311,7 @@ function enableCheckboxActions(){
             <th scope="row">Location(s) (Status)</th>
             <td>[% IF ( BIBLIO_RESULT.ITEM_RESULTS ) %]<ul>[% FOREACH ITEM_RESULT IN BIBLIO_RESULT.ITEM_RESULTS %]
                             <li>
-                                <strong>[% ITEM_RESULT.homebranch %]</strong>[% IF ( ITEM_RESULT.location_opac ) %], [% ITEM_RESULT.location_opac %][% END %]
+                                <strong>[% ITEM_RESULT.branchname %]</strong>[% IF ( ITEM_RESULT.location_opac ) %], [% ITEM_RESULT.location_opac %][% END %]
                                 [% IF ( ITEM_RESULT.itemcallnumber ) %]
                                     ([% ITEM_RESULT.itemcallnumber %])
                                 [% END %]
@@ -385,7 +385,7 @@ function enableCheckboxActions(){
 	    </td>
                 <td>[% IF ( BIBLIO_RESULT.ITEM_RESULTS ) %]<ul>[% FOREACH ITEM_RESULT IN BIBLIO_RESULT.ITEM_RESULTS %]
                     <li>
-                        [% ITEM_RESULT.homebranch %][% IF ( ITEM_RESULT.location_opac ) %], [% ITEM_RESULT.location_opac %][% END %]
+                        [% ITEM_RESULT.branchname %][% IF ( ITEM_RESULT.location_opac ) %], [% ITEM_RESULT.location_opac %][% END %]
                         [% IF ( ITEM_RESULT.itemcallnumber ) %]
                             ([% ITEM_RESULT.itemcallnumber %])
                         [% END %]
