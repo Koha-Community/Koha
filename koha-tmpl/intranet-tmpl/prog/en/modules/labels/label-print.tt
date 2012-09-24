@@ -74,7 +74,7 @@
                 <fieldset class="rows">
                     <ol>
                         <li>
-                            <label for="template_id" style="width:9em">Select a template to be applied: </label>
+                            <label for="template_id" style="width:20em">Select a template to be applied: </label>
                             <select name="template_id" id="template_id">
                                     [% FOREACH template IN templates %]
                                     <option value="[% template.template_id %]">[% template.template_code %]</option>
@@ -82,7 +82,7 @@
                                 </select>
                         </li>
                         <li>
-                            <label for="layout_id" style="width:9em">Select a layout to be applied: </label>
+                            <label for="layout_id" style="width:20em">Select a layout to be applied: </label>
                             <select name="layout_id" id="layout_id">
                                     [% FOREACH layout IN layouts %]
                                     <option value="[% layout.layout_id %]">[% layout.layout_name %]</option>
@@ -90,7 +90,7 @@
                                 </select>
                         </li>
                         <li>
-                            <label for="start_label" style="width:9em">Enter starting label number: </label>
+                            <label for="start_label" style="width:20em">Enter starting label position (for PDF): </label>
                             <input type="text" size="5" id="start_label" name="start_label" class="focus" title="Starting label number" value="1"/>
                         </li>
                     </ol>
