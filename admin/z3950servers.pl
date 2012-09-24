@@ -53,13 +53,12 @@ sub StringSearch  {
         $sth->execute;
     }
 
-	my @results;
-	while (my $data=$sth->fetchrow_hashref) {
-	    push(@results,$data);
-	}
-	$sth->finish;
-	$dbh->disconnect;
-	return (scalar(@results),\@results);
+    my @results;
+    while (my $data=$sth->fetchrow_hashref) {
+        push(@results,$data);
+    }
+    $sth->finish;
+    return (scalar(@results),\@results);
 }
 
 my $input = new CGI;
