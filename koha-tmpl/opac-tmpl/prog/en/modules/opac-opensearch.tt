@@ -19,7 +19,7 @@
    <channel>
      <title><![CDATA[[% LibraryName |html %] Search [% IF ( query_desc ) %]for '[% query_desc |html %]'[% END %][% IF ( limit_desc ) %] with limit(s): '[% limit_desc |html %]'[% END %]]]></title>
      <link>[% OPACBaseURL %]/cgi-bin/koha/opac-search.pl?[% query_cgi |html %][% limit_cgi |html %]&amp;format=rss2</link>
-     <atom:link rel="self" type="application/rss+xml" href="[% OPACBaseurl %]/cgi-bin/koha/opac-search.pl?[% query_cgi |html %][% limit_cgi |html %]&amp;sort_by=[% sort_by |html %]&amp;format=rss2"/>
+     <atom:link rel="self" type="application/rss+xml" href="[% OPACBaseURL %]/cgi-bin/koha/opac-search.pl?[% query_cgi |html %][% limit_cgi |html %]&amp;sort_by=[% sort_by |html %]&amp;format=rss2"/>
      <description><![CDATA[ Search results [% IF ( query_desc ) %]for '[% query_desc |html %]'[% END %][% IF ( limit_desc ) %] with limit(s): '[% limit_desc |html %]'[% END %] at [% LibraryName |html %]]]></description>
      <opensearch:totalResults>[% total %]</opensearch:totalResults>
      <opensearch:startIndex>[% offset %]</opensearch:startIndex>
@@ -29,7 +29,7 @@
        <opensearch:itemsPerPage>20</opensearch:itemsPerPage>
      [% END %]
 	 [% FOREACH SEARCH_RESULT IN SEARCH_RESULTS %]
-     <atom:link rel="search" type="application/opensearchdescription+xml" href="[% SEARCH_RESULT.OPACBaseurl %]/cgi-bin/koha/opac-search.pl?[% SEARCH_RESULT.query_cgi |html %][% SEARCH_RESULT.limit_cgi |html %]&amp;sort_by=[% SEARCH_RESULT.sort_by |html %]&amp;format=opensearchdescription"/>
+     <atom:link rel="search" type="application/opensearchdescription+xml" href="[% OPACBaseURL %]/cgi-bin/koha/opac-search.pl?[% SEARCH_RESULT.query_cgi |html %][% SEARCH_RESULT.limit_cgi |html %]&amp;sort_by=[% SEARCH_RESULT.sort_by |html %]&amp;format=opensearchdescription"/>
      <opensearch:Query role="request" searchTerms="[% SEARCH_RESULT.query_desc |url %][% SEARCH_RESULT.limit_desc |url %]" startPage="[% SEARCH_RESULT.page %]" />
      <item>
        <title>[% SEARCH_RESULT.title |html %] [% FOREACH subtitl IN SEARCH_RESULT.subtitle %], [% subtitl.subfield |html %][% END %]</title>
@@ -51,7 +51,7 @@
                         [% IF ( SEARCH_RESULT.size ) %] [% SEARCH_RESULT.size |html %]. [% END %]
                         [% IF ( SEARCH_RESULT.isbn ) %] [% SEARCH_RESULT.isbn |html %][% END %] </p><p>
 [% IF ( RequestOnOpac ) %]
-<a href="[% SEARCH_RESULT.OPACBaseurl %]/cgi-bin/koha/opac-reserve.pl?biblionumber=[% SEARCH_RESULT.biblionumber %]">Place Hold on <i>[% SEARCH_RESULT.title %]</i></a></p>
+<a href="[% OPACBaseURL %]/cgi-bin/koha/opac-reserve.pl?biblionumber=[% SEARCH_RESULT.biblionumber %]">Place Hold on <i>[% SEARCH_RESULT.title %]</i></a></p>
 [% END %]
 						]]></description>
        <guid>[% OPACBaseURL %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% SEARCH_RESULT.biblionumber %]</guid>
@@ -80,12 +80,12 @@
      <opensearch:itemsPerPage>20</opensearch:itemsPerPage>
    [% END %]
    <opensearch:Query role="request" searchTerms="[% query_desc |html %] [% limit_desc |html %]" startPage="[% page |html %]" />
-   <link rel="alternate" href="[% OPACBaseurl %]/cgi-bin/koha/opac-search.pl?[% query_cgi %][% limit_cgi %]pw=[% page %]&amp;format=atom" type="application/atom+xml"/>
+   <link rel="alternate" href="[% OPACBaseURL %]/cgi-bin/koha/opac-search.pl?[% query_cgi %][% limit_cgi %]pw=[% page %]&amp;format=atom" type="application/atom+xml"/>
    <link rel="self" href="[% OPACBaseURL %]/cgi-bin/koha/opac-search.pl?[% query_cgi %][% limit_cgi %]&amp;format=atom" type="application/atom+xml"/>
    <link rel="first" href="[% OPACBaseURL %]/cgi-bin/koha/opac-search.pl?[% query_cgi %][% limit_cgi %]pw=1&amp;format=atom" type="application/atom+xml"/>
    <link rel="previous" href="[% OPACBaseURL %]/cgi-bin/koha/opac-search.pl?[% query_cgi %][% limit_cgi %]pw=2&amp;format=atom" type="application/atom+xml"/>
    <link rel="next" href="[% OPACBaseURL %]/cgi-bin/koha/opac-search.pl?[% query_cgi %][% limit_cgi %]pw=4&amp;format=atom" type="application/atom+xml"/>
-   <link rel="last" href="[% OPACBaseurl %]/cgi-bin/koha/opac-search.pl?[% query_cgi %][% limit_cgi %]pw=42299&amp;format=atom" type="application/atom+xml"/>
+   <link rel="last" href="[% OPACBaseURL %]/cgi-bin/koha/opac-search.pl?[% query_cgi %][% limit_cgi %]pw=42299&amp;format=atom" type="application/atom+xml"/>
    <link rel="search" type="application/opensearchdescription+xml" href="[% OPACBaseURL %]/cgi-bin/koha/opac-search.pl?format=opensearchdescription"/>
 
    [% FOREACH SEARCH_RESULT IN SEARCH_RESULTS %]
