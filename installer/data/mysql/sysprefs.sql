@@ -408,3 +408,6 @@ INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('NotesBlacklist','','List of notes fields that should not appear in the title notes/description separator of details',NULL,'free');
 INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES ('SCOUserCSS', '', NULL, 'Add CSS to be included in the SCO module in an embedded <style> tag.', 'free');
 INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES ('SCOUserJS', '', NULL, 'Define custom javascript for inclusion in the SCO module', 'free');
+INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES('IDreamBooksReviews','0','Display book review snippets from IDreamBooks.com','','YesNo');
+INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES('IDreamBooksReadometer','0','Display Readometer from IDreamBooks.com','','YesNo');
+INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES('IDreamBooksResults','0','Display IDreamBooks.com rating in search results','','YesNo');

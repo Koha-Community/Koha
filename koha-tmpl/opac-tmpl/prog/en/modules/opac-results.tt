@@ -109,6 +109,39 @@ $(document).ready(function(){
         });
     [% END %]
 
+    [% IF ( IDreamBooksResults ) %]
+        $('.idbresult').each(function() {
+            var isbn = $(this).children('a').text().replace(/\s*/,'');
+            var element = this;
+
+            if ($.browser.msie && parseInt($.browser.version, 10) >= 8 && window.XDomainRequest) {
+            // Use Microsoft XDR for IE version 8 or above
+                var xdr = new XDomainRequest();
+                xdr.open("get", "http://idreambooks.com/newbooks/api.json?q="+encodeURIComponent(isbn)+"&key=8bf66516232d1b72f3e47df939653e1e");
+                xdr.onload = function() {
+                    json = 'json = '+xdr.responseText; // the string now looks like..  json = { ... };
+                    eval(json); // json is now a regular JSON object
+                    if(json.total_results > 0 && json.book.rating > 0){
+                        $(element).children('a').html("<img src='"+json.book.to_read_or_not_small+"' alt='"+json.book.title+" by "+json.book.author+"' title='Rating based on reviews of "+json.book.title+"'>"+json.book.rating+"%");
+                        $(element).show();
+                    } else {
+                        $(element).remove();
+                    }
+                }
+                xdr.send();
+            } else {
+                $.getJSON("http://idreambooks.com/newbooks/api.json?q="+encodeURIComponent(isbn)+"&key=8bf66516232d1b72f3e47df939653e1e", function(json){
+                    if(json.total_results > 0 && json.book.rating > 0){
+                        $(element).children('a').html("<img src='"+json.book.to_read_or_not_small+"' alt='"+json.book.title+" by "+json.book.author+"' title='Rating based on reviews of "+json.book.title+"'>"+json.book.rating+"%");
+                        $(element).show();
+                    } else {
+                        $(element).remove();
+                    }
+                });
+            }
+        });
+    [% END %]
+
     [% IF ( opacbookbag ) %]$(".addtocart").show();[% END %]
 
 [% IF ( opacbookbag ) %]
@@ -650,6 +683,14 @@ $(document).ready(function(){
         [% IF OpenLibraryCovers %][% IF SEARCH_RESULT.normalized_isbn %]<span style="block" title="[% SEARCH_RESULT.biblionumber %]" class="[% SEARCH_RESULT.normalized_isbn %]" id="openlibrary-thumbnail[% loop.count %]"></span>[% ELSE %]<span class="no-image">No cover image available</span>[% END %][% END %]
                 </a>
                 [% IF ( BakerTaylorEnabled ) %][% IF ( SEARCH_RESULT.normalized_isbn ) %]<a href="https://[% BakerTaylorBookstoreURL |html %][% SEARCH_RESULT.normalized_isbn %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL |html %][% SEARCH_RESULT.normalized_isbn %]" /></a>[% ELSE %]<span class="no-image">No cover image available</span>[% END %][% END %]
+                [% IF ( IDreamBooksResults ) %][% IF ( SEARCH_RESULT.normalized_isbn ) %]<div class="idbresult" style="display: none;">
+                    [% IF ( IDreamBooksReviews ) %]
+                        <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% SEARCH_RESULT.biblionumber %]#idb_critic_reviews">
+                    [% ELSE %]
+                        <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% SEARCH_RESULT.biblionumber %]">
+                    [% END %]
+                    [% SEARCH_RESULT.normalized_isbn %]</a></div>
+                [% END %][% END %]
                 </td>
                 </tr>
                 [% END %]

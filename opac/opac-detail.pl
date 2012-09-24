@@ -998,6 +998,10 @@ if (C4::Context->preference('OPACLocalCoverImages') == 1) {
     $template->{VARS}->{localimages} = \@images;
 }
 
+$template->{VARS}->{IDreamBooksReviews} = C4::Context->preference('IDreamBooksReviews');
+$template->{VARS}->{IDreamBooksReadometer} = C4::Context->preference('IDreamBooksReadometer');
+$template->{VARS}->{IDreamBooksResults} = C4::Context->preference('IDreamBooksResults');
+
 if (C4::Context->preference('OpacHighlightedWords')) {
     $template->{VARS}->{query_desc} = $query->param('query_desc');
 }
