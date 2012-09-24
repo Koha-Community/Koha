@@ -17,15 +17,14 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use strict;
-use warnings;
-
-use List::MoreUtils qw(any);
+use Modern::Perl;
 
 use C4::ILSDI::Services;
 use C4::Auth;
 use C4::Output;
 use C4::Context;
+
+use List::MoreUtils qw(any);
 use XML::Simple;
 use CGI qw ( -utf8 );
 
@@ -217,7 +216,7 @@ if ( $service and any { $service eq $_ } @services ) {
 
             # Variable functions
             my $sub = do {
-                no strict 'refs';
+#                no strict 'refs';
                 my $symbol = 'C4::ILSDI::Services::' . $service;
                 \&{"$symbol"};
             };
