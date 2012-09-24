@@ -46,7 +46,6 @@ sub string_search {
         $u++;
     }
     $sth->finish;
-    $dbh->disconnect;
     return ( $cnt, \@results );
 }
 
