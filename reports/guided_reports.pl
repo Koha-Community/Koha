@@ -501,7 +501,7 @@ elsif ( $phase eq 'Save Report' ) {
         );
     }
     else {
-        save_report( {
+        my $id = save_report( {
                 borrowernumber => $borrowernumber,
                 sql            => $sql,
                 name           => $name,
@@ -513,7 +513,11 @@ elsif ( $phase eq 'Save Report' ) {
                 cache_expiry   => $cache_expiry,
                 public         => $public,
             } );
-        $template->param( 'save_successful' => 1, );
+        $template->param(
+            'save_successful' => 1,
+            'reportname'      => $name,
+            'id'              => $id,
+        );
     }
 }
 
