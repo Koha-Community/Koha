@@ -18,6 +18,7 @@ use Pod::Usage;
 use Data::Dumper;
 use Time::HiRes qw/time/;
 use POSIX qw/strftime ceil/;
+use Module::Load::Conditional qw(can_load);
 
 sub usage {
     pod2usage( -verbose => 2 );
@@ -53,13 +54,11 @@ if ( not $result or $want_help ) {
 
 my $linker_module =
   "C4::Linker::" . ( C4::Context->preference("LinkerModule") || 'Default' );
-eval { eval "require $linker_module"; };
-if ($@) {
+unless ( can_load( modules => { $linker_module => undef } ) ) {
     $linker_module = 'C4::Linker::Default';
-    eval "require $linker_module";
-}
-if ($@) {
-    die "Unable to load linker module. Aborting.";
+    unless ( can_load( modules => { $linker_module => undef } ) ) {
+        die "Unable to load linker module. Aborting.";
+    }
 }
 
 my $linker = $linker_module->new(

@@ -28,6 +28,7 @@ use MARC::Record;
 use MARC::File::USMARC;
 use MARC::File::XML;
 use POSIX qw(strftime);
+use Module::Load::Conditional qw(can_load);
 
 use C4::Koha;
 use C4::Dates qw/format_date/;
@@ -491,13 +492,11 @@ sub BiblioAutoLink {
 
     my $linker_module =
       "C4::Linker::" . ( C4::Context->preference("LinkerModule") || 'Default' );
-    eval { eval {require $linker_module}; };
-    if ($@) {
+    unless ( can_load( modules => { $linker_module => undef } ) ) {
         $linker_module = 'C4::Linker::Default';
-        eval {require $linker_module};
-    }
-    if ($@) {
-        return 0, 0;
+        unless ( can_load( modules => { $linker_module => undef } ) ) {
+            return 0, 0;
+        }
     }
 
     my $linker = $linker_module->new(
