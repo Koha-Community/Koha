@@ -80,7 +80,7 @@ if ( ($op eq 'Upload') && $uploadfile ) {       # Case is important in these ope
     $debug and warn "dirname = $dirname";
     my $filesuffix;
     if ( $uploadfilename =~ m/(\..+)$/i ) {
-        my $filesuffix = $1;
+        $filesuffix = $1;
     }
     ( $tfh, $tempfile ) = File::Temp::tempfile( SUFFIX => $filesuffix, UNLINK => 1 );
     $debug and warn "tempfile = $tempfile";
