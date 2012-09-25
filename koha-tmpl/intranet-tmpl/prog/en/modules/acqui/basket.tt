@@ -251,8 +251,8 @@
                         <input type="submit" value="Change basket group" /></p>
 
                     </form>
-                    [% IF ( basketgroupdeliveryplace ) %]<p>Basketgroup Delivery place: [% basketgroupdeliveryplace %]</p>[% END %]
-                    [% IF ( basketgroupbillingplace ) %]<p>Basketgroup Billing place: [% basketgroupbillingplace %]</p>[% END %]
+                    [% IF ( basketgroupdeliveryplace ) %]<p>Basket group delivery place: [% basketgroupdeliveryplace %]</p>[% END %]
+                    [% IF ( basketgroupbillingplace ) %]<p>Basket group billing place: [% basketgroupbillingplace %]</p>[% END %]
                 </div>
                 [% END %]
             </div>
@@ -261,12 +261,12 @@
 
         [% UNLESS ( delete_confirm ) %]
         <div id="acqui_basket_content" class="yui-g">
+        [% IF ( books_loop ) %]
+        <h2>Orders</h2>
         <label for="show_all_details">
             <input type="checkbox" style="vertical-align: middle;" id="show_all_details" />
             Show all details
         </label>
-        <h2>Order Details</h2>
-        [% IF ( books_loop ) %]
             <table id="orders">
                 <thead>
                     <tr>
@@ -394,10 +394,6 @@
                 [% END %]
                 </tbody>
             </table>
-        [% ELSE %]
-            <table>
-                <tr><td>Basket empty</td></tr>
-            </table>
         [% END %]
         [% IF ( listincgst ) %]<small class="highlight">** Vendor's listings already include tax.</small>
         [% END %]
@@ -478,8 +474,8 @@
             <input type="hidden" name="booksellerid" value="[% booksellerid %]" />
             <input type="hidden" name="confirm" value="1" />
             <input type="hidden" name="basketgroupname" value="[% basketgroupname %]" />
-            <input type="submit" class="approve" value="Yes, Close (Y)" accesskey="y" />
-            <input type="submit" class="deny" value="No, Don't Close (N)" accesskey="n" onclick="javascript:window.location='/cgi-bin/koha/acqui/basket.pl?basketno=[% basketno %]';return false;" />
+            <input type="submit" class="approve" value="Yes, close (Y)" accesskey="y" />
+            <input type="submit" class="deny" value="No, don't close (N)" accesskey="n" onclick="javascript:window.location='/cgi-bin/koha/acqui/basket.pl?basketno=[% basketno %]';return false;" />
         </form>
         </div>
     [% END %]
