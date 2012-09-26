@@ -3,8 +3,8 @@
 <meta name="generator" content="Koha [% Version %]" /> <!-- leave this for stats -->
 <link rel="shortcut icon" href="[% IF ( OpacFavicon ) %][% OpacFavicon %][% ELSE %][% themelang %]/includes/favicon.ico[% END %]" type="image/x-icon" />
 <link rel="stylesheet" type="text/css" href="[% themelang %]/lib/jquery/jquery-ui.css" />
-<link rel="stylesheet" type="text/css" href="[% yuipath %]/reset-fonts-grids.css" />
-<link rel="stylesheet" type="text/css" href="[% yuipath %]/skin.css" />
+<link rel="stylesheet" type="text/css" href="/opac-tmpl/lib/yui/reset-fonts-grids.css" />
+<link rel="stylesheet" type="text/css" href="/opac-tmpl/lib/yui/skin.css" />
 [% SET opaclayoutstylesheet='opac.css' UNLESS opaclayoutstylesheet %]
 [% IF (opaclayoutstylesheet.match('^https?:|^\/')) %]
     <link rel="stylesheet" type="text/css" href="[% opaclayoutstylesheet %]" />
