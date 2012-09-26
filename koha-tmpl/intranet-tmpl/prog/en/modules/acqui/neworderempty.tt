@@ -453,10 +453,10 @@ $(document).ready(function()
             [% END %]
             <li>
                 [% IF ( close ) %]
-                    <span class="label">gstrate: </span>
+                    <span class="label">Tax rate: </span>
                     <input type="hidden" size="20" name="gstrate" id="gstrate" value="[% gstrate %]" />[% gstrate %]%
                 [% ELSE %]
-                    <label for="gst">gstrate: </label>
+                    <label for="gst">Tax rate: </label>
                     <select name="gstrate" id="gstrate" onchange="updateCosts();">
                     [% FOREACH gst IN gst_values %]
                       [% IF ( gst.option == gstrate ) %]
