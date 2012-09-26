@@ -1306,7 +1306,7 @@ sub GetImportRecordMatches {
     $sth->execute();
     while (my $row = $sth->fetchrow_hashref) {
         if ($row->{'record_type'} eq 'auth') {
-            $row->{'authorized_heading'} = GetAuthorizedHeading( { authid => $row->{'candidate_match_id'} } );
+            $row->{'authorized_heading'} = C4::AuthoritiesMarc::GetAuthorizedHeading( { authid => $row->{'candidate_match_id'} } );
         }
         next if ($row->{'record_type'} eq 'biblio' && not $row->{'biblionumber'});
         push @$results, $row;
@@ -1375,7 +1375,7 @@ sub _add_auth_fields {
     if ($marc_record->field('001')) {
         $controlnumber = $marc_record->field('001')->data();
     }
-    my $authorized_heading = GetAuthorizedHeading({ record => $marc_record });
+    my $authorized_heading = C4::AuthoritiesMarc::GetAuthorizedHeading({ record => $marc_record });
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare("INSERT INTO import_auths (import_record_id, control_number, authorized_heading) VALUES (?, ?, ?)");
     $sth->execute($import_record_id, $controlnumber, $authorized_heading);

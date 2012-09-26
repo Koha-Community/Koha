@@ -657,7 +657,7 @@ sub checkauth {
             $ip       = $session->param('ip');
             $lasttime = $session->param('lasttime');
             $userid   = $session->param('id');
-			$sessiontype = $session->param('sessiontype');
+            $sessiontype = $session->param('sessiontype') || '';
         }
         if ( ( ($query->param('koha_login_context')) && ($query->param('userid') ne $session->param('id')) )
           || ( $cas && $query->param('ticket') ) ) {
@@ -1495,7 +1495,13 @@ sub getuserflags {
     my $userid  = shift;
     my $dbh     = @_ ? shift : C4::Context->dbh;
     my $userflags;
-    $flags = 0 unless $flags;
+    {
+        # I don't want to do this, but if someone logs in as the database
+        # user, it would be preferable not to spam them to death with
+        # numeric warnings. So, we make $flags numeric.
+        no warnings 'numeric';
+        $flags += 0;
+    }
     my $sth = $dbh->prepare("SELECT bit, flag, defaulton FROM userflags");
     $sth->execute;
 
