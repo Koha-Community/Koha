@@ -567,21 +567,27 @@ sub LinkBibHeadingsToAuthorities {
                 $results{'fuzzy'}->{ $heading->display_form() }++;
             }
             elsif ( C4::Context->preference('AutoCreateAuthorities') ) {
-                my $authtypedata =
-                  C4::AuthoritiesMarc::GetAuthType( $heading->auth_type() );
-                my $marcrecordauth = MARC::Record->new();
-                if ( C4::Context->preference('marcflavour') eq 'MARC21' ) {
-                    $marcrecordauth->leader('     nz  a22     o  4500');
-                    SetMarcUnicodeFlag( $marcrecordauth, 'MARC21' );
+                if ( _check_valid_auth_link( $current_link, $field ) ) {
+                    $results{'linked'}->{ $heading->display_form() }++;
                 }
-                my $authfield =
-                  MARC::Field->new( $authtypedata->{auth_tag_to_report},
-                    '', '', "a" => "" . $field->subfield('a') );
-                map {
-                    $authfield->add_subfields( $_->[0] => $_->[1] )
-                      if ( $_->[0] =~ /[A-z]/ && $_->[0] ne "a" )
-                } $field->subfields();
-                $marcrecordauth->insert_fields_ordered($authfield);
+                else {
+                    my $authtypedata =
+                      C4::AuthoritiesMarc::GetAuthType( $heading->auth_type() );
+                    my $marcrecordauth = MARC::Record->new();
+                    if ( C4::Context->preference('marcflavour') eq 'MARC21' ) {
+                        $marcrecordauth->leader('     nz  a22     o  4500');
+                        SetMarcUnicodeFlag( $marcrecordauth, 'MARC21' );
+                    }
+                    $field->delete_subfield( code => '9' )
+                      if defined $current_link;
+                    my $authfield =
+                      MARC::Field->new( $authtypedata->{auth_tag_to_report},
+                        '', '', "a" => "" . $field->subfield('a') );
+                    map {
+                        $authfield->add_subfields( $_->[0] => $_->[1] )
+                          if ( $_->[0] =~ /[A-z]/ && $_->[0] ne "a" )
+                    } $field->subfields();
+                    $marcrecordauth->insert_fields_ordered($authfield);
 
 # bug 2317: ensure new authority knows it's using UTF-8; currently
 # only need to do this for MARC21, as MARC::Record->as_xml_record() handles
@@ -590,41 +596,47 @@ sub LinkBibHeadingsToAuthorities {
 # use UTF-8, but as of 2008-08-05, did not want to introduce that kind
 # of change to a core API just before the 3.0 release.
 
-                if ( C4::Context->preference('marcflavour') eq 'MARC21' ) {
-                    $marcrecordauth->insert_fields_ordered(
-                        MARC::Field->new(
-                            '667', '', '',
-                            'a' => "Machine generated authority record."
-                        )
-                    );
-                    my $cite =
-                        $bib->author() . ", "
-                      . $bib->title_proper() . ", "
-                      . $bib->publication_date() . " ";
-                    $cite =~ s/^[\s\,]*//;
-                    $cite =~ s/[\s\,]*$//;
-                    $cite =
-                        "Work cat.: ("
-                      . C4::Context->preference('MARCOrgCode') . ")"
-                      . $bib->subfield( '999', 'c' ) . ": "
-                      . $cite;
-                    $marcrecordauth->insert_fields_ordered(
-                        MARC::Field->new( '670', '', '', 'a' => $cite ) );
-                }
+                    if ( C4::Context->preference('marcflavour') eq 'MARC21' ) {
+                        $marcrecordauth->insert_fields_ordered(
+                            MARC::Field->new(
+                                '667', '', '',
+                                'a' => "Machine generated authority record."
+                            )
+                        );
+                        my $cite =
+                            $bib->author() . ", "
+                          . $bib->title_proper() . ", "
+                          . $bib->publication_date() . " ";
+                        $cite =~ s/^[\s\,]*//;
+                        $cite =~ s/[\s\,]*$//;
+                        $cite =
+                            "Work cat.: ("
+                          . C4::Context->preference('MARCOrgCode') . ")"
+                          . $bib->subfield( '999', 'c' ) . ": "
+                          . $cite;
+                        $marcrecordauth->insert_fields_ordered(
+                            MARC::Field->new( '670', '', '', 'a' => $cite ) );
+                    }
 
            #          warn "AUTH RECORD ADDED : ".$marcrecordauth->as_formatted;
 
-                $authid =
-                  C4::AuthoritiesMarc::AddAuthority( $marcrecordauth, '',
-                    $heading->auth_type() );
-                $field->add_subfields( '9', $authid );
-                $num_headings_changed++;
-                $results{'added'}->{ $heading->display_form() }++;
+                    $authid =
+                      C4::AuthoritiesMarc::AddAuthority( $marcrecordauth, '',
+                        $heading->auth_type() );
+                    $field->add_subfields( '9', $authid );
+                    $num_headings_changed++;
+                    $results{'added'}->{ $heading->display_form() }++;
+                }
             }
             elsif ( defined $current_link ) {
-                $field->delete_subfield( code => '9' );
-                $num_headings_changed++;
-                $results{'unlinked'}->{ $heading->display_form() }++;
+                if ( _check_valid_auth_link( $current_link, $field ) ) {
+                    $results{'linked'}->{ $heading->display_form() }++;
+                }
+                else {
+                    $field->delete_subfield( code => '9' );
+                    $num_headings_changed++;
+                    $results{'unlinked'}->{ $heading->display_form() }++;
+                }
             }
             else {
                 $results{'unlinked'}->{ $heading->display_form() }++;
@@ -633,6 +645,30 @@ sub LinkBibHeadingsToAuthorities {
 
     }
     return $num_headings_changed, \%results;
+}
+
+=head2 _check_valid_auth_link
+
+    if ( _check_valid_auth_link($authid, $field) ) {
+        ...
+    }
+
+Check whether the specified heading-auth link is valid without reference
+to Zebra/Solr. Ideally this code would be in C4::Heading, but that won't be
+possible until we have de-cycled C4::AuthoritiesMarc, so this is the
+safest place.
+
+=cut
+
+sub _check_valid_auth_link {
+    my ( $authid, $field ) = @_;
+
+    require C4::AuthoritiesMarc;
+
+    my $authorized_heading =
+      C4::AuthoritiesMarc::GetAuthorizedHeading( { 'authid' => $authid } );
+
+   return ($field->as_string('abcdefghijklmnopqrstuvwxyz') eq $authorized_heading);
 }
 
 =head2 GetRecordValue
