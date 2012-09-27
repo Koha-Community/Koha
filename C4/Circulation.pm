@@ -1982,7 +1982,7 @@ sub _debar_user_on_return {
     # $deltadays is a DateTime::Duration object
     my $deltadays = $calendar->days_between( $dt_due, $dt_today );
 
-    my $circcontrol = C4::Context::preference('CircControl');
+    my $circcontrol = C4::Context->preference('CircControl');
     my $issuingrule =
       GetIssuingRule( $borrower->{categorycode}, $item->{itype}, $branchcode );
     my $finedays = $issuingrule->{finedays};
