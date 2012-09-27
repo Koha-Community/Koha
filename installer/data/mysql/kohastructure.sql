@@ -177,8 +177,8 @@ CREATE TABLE `biblioitems` ( -- information related to bibliographic records in 
   `cn_class` varchar(30) default NULL,
   `cn_item` varchar(10) default NULL,
   `cn_suffix` varchar(10) default NULL,
-  `cn_sort` varchar(30) default NULL,
-  `agerestriction` varchar(255) default NULL,
+  `cn_sort` varchar(30) default NULL, -- normalized version of the call number used for sorting
+  `agerestriction` varchar(255) default NULL, -- target audience/age restriction from the bib record (MARC21 521$a)
   `totalissues` int(10),
   `marcxml` longtext NOT NULL, -- full bibliographic MARC record in MARCXML
   PRIMARY KEY  (`biblioitemnumber`),
@@ -650,8 +650,8 @@ CREATE TABLE `deletedbiblioitems` ( -- information about bibliographic records t
   `cn_class` varchar(30) default NULL,
   `cn_item` varchar(10) default NULL,
   `cn_suffix` varchar(10) default NULL,
-  `cn_sort` varchar(30) default NULL,
-  `agerestriction` varchar(255) default NULL,
+  `cn_sort` varchar(30) default NULL, -- normalized version of the call number used for sorting
+  `agerestriction` varchar(255) default NULL, -- target audience/age restriction from the bib record (MARC21 521$a)
   `totalissues` int(10),
   `marcxml` longtext NOT NULL, -- full bibliographic MARC record in MARCXML
   PRIMARY KEY  (`biblioitemnumber`),
