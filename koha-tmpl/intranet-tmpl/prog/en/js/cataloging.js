@@ -87,13 +87,11 @@ function CloneField(index, hideMarc, advancedMARCEditor) {
 
     var divs = clone.getElementsByTagName('div');
 
-    if(hideMarc == '0') {
-        // No indicator if hide_marc
-        // setting a new name for the new indicator
-        for(var i=0; i < 2; i++) {
-            var indicator = clone.getElementsByTagName('input')[i];
-            indicator.setAttribute('name',indicator.getAttribute('name')+new_key);
-        }
+    // if hide_marc, indicators are hidden fields
+    // setting a new name for the new indicator
+    for(var i=0; i < 2; i++) {
+        var indicator = clone.getElementsByTagName('input')[i];
+        indicator.setAttribute('name',indicator.getAttribute('name')+new_key);
     }
 
     // settings all subfields
