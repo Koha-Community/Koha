@@ -94,7 +94,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user (
 my $branches = GetBranches();
 
 my @failedrenews = $query->param('failedrenew');    # expected to be itemnumbers 
-our %renew_failed = {};
+our %renew_failed = ();
 for (@failedrenews) { $renew_failed{$_} = 1; }
 
 my @failedreturns = $query->param('failedreturn');
