@@ -21,6 +21,7 @@ use Modern::Perl;
 
 use Template::Plugin;
 use base qw( Template::Plugin );
+use Encode qw{encode decode};
 
 use C4::Koha;
 
@@ -31,7 +32,7 @@ sub GetName {
     my $sth   = C4::Context->dbh->prepare($query);
     $sth->execute($branchcode);
     my $b = $sth->fetchrow_hashref();
-    return $b->{'branchname'};
+    return encode('UTF-8', $b->{'branchname'});
 }
 
 1;

@@ -21,6 +21,7 @@ use Modern::Perl;
 
 use Template::Plugin;
 use base qw( Template::Plugin );
+use Encode qw{encode decode};
 
 use C4::Koha;
 
@@ -31,7 +32,7 @@ sub GetDescription {
     my $sth   = C4::Context->dbh->prepare($query);
     $sth->execute($itemtype);
     my $d = $sth->fetchrow_hashref();
-    return $d->{'description'};
+    return encode('UTF-8', $d->{'description'});
 
 }
 
