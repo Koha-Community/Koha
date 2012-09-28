@@ -2877,6 +2877,7 @@ sub CalcDateDue {
     # if ReturnBeforeExpiry ON the datedue can't be after borrower expirydate
     if ( C4::Context->preference('ReturnBeforeExpiry') ) {
         my $expiry_dt = dt_from_string( $borrower->{dateexpiry}, 'iso' );
+        $expiry_dt->set( hour => 23, minute => 59);
         if ( DateTime->compare( $datedue, $expiry_dt ) == 1 ) {
             $datedue = $expiry_dt->clone;
         }
