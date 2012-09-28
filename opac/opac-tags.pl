@@ -41,7 +41,7 @@ use C4::Debug;
 use C4::Output qw(:html :ajax pagination_bar);
 use C4::Scrubber;
 use C4::Biblio;
-use C4::Tags qw(add_tag get_approval_rows get_tag_rows remove_tag);
+use C4::Tags qw(add_tag get_approval_rows get_tag_rows remove_tag stratify_tags);
 
 use Data::Dumper;
 
@@ -263,34 +263,9 @@ if ($add_op) {
 		$arghash->{biblionumber} = $arg;
 	}
 	$results = get_approval_rows($arghash);
-
+    stratify_tags(10, $results); # work out the differents sizes for things
 	my $count = scalar @$results;
 	$template->param(TAGLOOP_COUNT => $count, mine => $mine);
-	# Here we make a halfhearted attempt to separate the tags into "strata" based on weight_total
-	# FIXME: code4lib probably has a better algorithm, iirc
-	# FIXME: when we get a better algorithm, move to C4
-	my $maxstrata = 5;
-	my $strata = 1;
-	my $previous = 0;
-	my $chunk = ($count/$maxstrata)/2;
-	my $total = 0;
-	my %cloud;
-	foreach (reverse @$results) {
-		my $current = $_->{weight_total};
-		$total++;
-		$cloud{$strata}++;
-		if ($current == $previous) {
-			$_->{cloudweight} = $strata;
-			next;
-		} 
-		if ($strata < $maxstrata and 
-			($cloud{$strata} > $chunk or 
-			$count-$total <= $maxstrata-$strata)) {
-			$strata++;
-		}
-		$_->{cloudweight} = $strata;
-		$previous = $current;
-	}
 }
 (scalar @errors  ) and $template->param(ERRORS  => \@errors);
 my @orderedresult = sort { uc($a->{'term'}) cmp uc($b->{'term'}) } @$results;

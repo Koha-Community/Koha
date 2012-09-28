@@ -21,26 +21,6 @@
 </style>
 <script type="text/javascript">
 //<![CDATA[
-	var fontsizes = new Array (12,14,16,18,20,22,24,26,28,30);
-	var fontcount = fontsizes.length;
-	var maxcloudweight = 1;
-	$(document).ready(function() {
-		// $('#tagcloud').css('background-color','lightgrey');
-		// $('#tagcloud .tag').css('border','1px solid black');
-		$('#tagcloud .tag').each(function() {
-			if (maxcloudweight < this.title) { maxcloudweight = this.title; }
-			// have to run through the set of tags once to get the max: cannot be combined w/ 2nd pass
-		});
-		$('#tagcloud .tag').each(function(i) {
-			var pos = this.id;
-			var weight = this.title;	// "cloudweight"
-			weight = (! weight) ? 1 : (weight > maxcloudweight) ? maxcloudweight : weight ;
-			var index = Math.round(fontcount * weight/maxcloudweight) - 1;
-			index  = (! index ) ? 0 : ( index > fontcount     ) ? fontcount      : index  ;
-			var newsize = fontsizes[index];
-			// alert(pos+ " (" +i+ ") weight = " +weight+ " of " +maxcloudweight+ ", fontsize[" +index+ " of " +fontcount+ "] = " +newsize);
-			$('#' + pos).css({"font-size":(newsize + 'px'), display:"inline"});
-		});
 		$("#mytagst").tablesorter({[% IF ( dateformat == 'metric' ) %]
     dateFormat: 'uk',[% END %]
             widgets : ['zebra'],
@@ -90,7 +70,7 @@
 	[% IF ( TAGLOOP ) %]
 	<div id="tagcloud">
 	[% FOREACH TAGLOO IN TAGLOOP %]
-    <span class="tag" id="tag[% loop.count %]">
+        <span class="tag tagweight[% TAGLOO.stratum %]" id="tag[% loop.count %]" style="display:inline;">
 		<a href="/cgi-bin/koha/opac-search.pl?tag=[% TAGLOO.term |url %]&amp;q=[% TAGLOO.term |url %]">
 		[% TAGLOO.term |html %]</a>
 			<span class="tagweight">[% TAGLOO.weight_total %]</span>
