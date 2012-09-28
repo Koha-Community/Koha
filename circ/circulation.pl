@@ -98,7 +98,7 @@ our %renew_failed = ();
 for (@failedrenews) { $renew_failed{$_} = 1; }
 
 my @failedreturns = $query->param('failedreturn');
-our %return_failed = {};
+our %return_failed = ();
 for (@failedreturns) { $return_failed{$_} = 1; }
 
 my $findborrower = $query->param('findborrower');
