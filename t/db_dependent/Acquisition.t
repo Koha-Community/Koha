@@ -59,7 +59,7 @@ SKIP: {
                              entrydate
                              firstname
                              freight
-                             gst
+                             gstrate
                              listprice
                              notes
                              ordernumber
