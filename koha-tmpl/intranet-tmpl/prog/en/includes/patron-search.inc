@@ -8,7 +8,6 @@
 	<span class="filteraction" id="filteraction_off"> <a href="#" onclick="$('#filters').toggle();$('.filteraction').toggle();">[-]</a></span>
 	<span class="filteraction" id="filteraction_on"> <a href="#" onclick="$('#filters').toggle();$('.filteraction').toggle();">[+]</a></span>
 
-
     <input value="Search" class="submit" type="submit" />
 
   <div id="filters">
@@ -19,6 +18,7 @@
                 <option value='borrowernumber'>Borrower number</option>
                 <option value='phone,phonepro,B_phone,altcontactphone,mobile'>Phone number</option>
                 <option value='streettype,address,address2,city,state,zipcode,country'>Street Address</option>
+                <option value='dateofbirth'>Date of birth</option>
             </select></p>
         <p><label for="searchtype">Search type:</label>
                 <select name="searchtype" id="searchtype">
