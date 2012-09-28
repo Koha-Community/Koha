@@ -24,7 +24,7 @@ use CGI;
 use C4::Auth;
 use C4::Koha;
 use C4::Output;
-use Koha::MarcModificationTemplates;
+use C4::MarcModificationTemplates;
 
 my $cgi = new CGI;
 

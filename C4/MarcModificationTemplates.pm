@@ -1,4 +1,4 @@
-package Koha::MarcModificationTemplates;
+package C4::MarcModificationTemplates;
 
 # Copyright 2010 Kyle M Hall <kyle.m.hall@gmail.com>
 #
@@ -58,7 +58,7 @@ BEGIN {
 
 =head1 NAME
 
-Koha::MarcModificationTemplates - Module to manage MARC Modification Templates
+C4::MarcModificationTemplates - Module to manage MARC Modification Templates
 
 =head1 DESCRIPTION
 
@@ -79,8 +79,8 @@ files telling Koha what fields to insert data into.
 
 sub GetModificationTemplates {
   my ( $template_id ) = @_;
-  C4::Koha::Log("Koha::MarcModificationTemplates::GetModificationTemplates( $template_id )") if DEBUG;
-  warn("Koha::MarcModificationTemplates::GetModificationTemplates( $template_id )") if DEBUG;
+  C4::Koha::Log("C4::MarcModificationTemplates::GetModificationTemplates( $template_id )") if DEBUG;
+  warn("C4::MarcModificationTemplates::GetModificationTemplates( $template_id )") if DEBUG;
 
   my $dbh = C4::Context->dbh;
   my $sth = $dbh->prepare("SELECT * FROM marc_modification_templates");
@@ -187,8 +187,8 @@ sub GetModificationTemplateAction {
 sub GetModificationTemplateActions {
   my ( $template_id ) = @_;
 
-  C4::Koha::Log( "Koha::MarcModificationTemplates::GetModificationTemplateActions( $template_id )" ) if DEBUG;
-  warn( "Koha::MarcModificationTemplates::GetModificationTemplateActions( $template_id )" ) if DEBUG;
+  C4::Koha::Log( "C4::MarcModificationTemplates::GetModificationTemplateActions( $template_id )" ) if DEBUG;
+  warn( "C4::MarcModificationTemplates::GetModificationTemplateActions( $template_id )" ) if DEBUG;
 
   my $dbh = C4::Context->dbh;
   my $sth = $dbh->prepare("SELECT * FROM marc_modification_template_actions WHERE template_id = ? ORDER BY ordering");
@@ -241,11 +241,11 @@ sub AddModificationTemplateAction {
     $description
   ) = @_;
 
-  C4::Koha::Log( "Koha::MarcModificationTemplates::AddModificationTemplateAction( $template_id, $action,
+  C4::Koha::Log( "C4::MarcModificationTemplates::AddModificationTemplateAction( $template_id, $action,
                     $field_number, $from_field, $from_subfield, $field_value, $to_field, $to_subfield,
                     $to_regex, $conditional, $conditional_field, $conditional_subfield, $conditional_comparison,
                     $conditional_value, $conditional_regex, $description )" ) if DEBUG;
-  warn( "Koha::MarcModificationTemplates::AddModificationTemplateAction( $template_id, $action,
+  warn( "C4::MarcModificationTemplates::AddModificationTemplateAction( $template_id, $action,
                     $field_number, $from_field, $from_subfield, $field_value, $to_field, $to_subfield,
                     $to_regex, $conditional, $conditional_field, $conditional_subfield, $conditional_comparison,
                     $conditional_value, $conditional_regex, $description )" ) if DEBUG;
@@ -475,8 +475,8 @@ sub MoveModificationTemplateAction {
 
 sub ModifyRecordsWithTemplate {
   my ( $template_id, $batch ) = @_;
-  C4::Koha::Log( "Koha::MarcModificationTemplates::ModifyRecordsWithTemplate( $template_id, $batch )" ) if DEBUG;
-  warn( "Koha::MarcModificationTemplates::ModifyRecordsWithTemplate( $template_id, $batch )" ) if DEBUG;
+  C4::Koha::Log( "C4::MarcModificationTemplates::ModifyRecordsWithTemplate( $template_id, $batch )" ) if DEBUG;
+  warn( "C4::MarcModificationTemplates::ModifyRecordsWithTemplate( $template_id, $batch )" ) if DEBUG;
 
   while ( my $record = $batch->next() ) {
     ModifyRecordWithTemplate( $template_id, $record );
@@ -494,8 +494,8 @@ sub ModifyRecordsWithTemplate {
 
 sub ModifyRecordWithTemplate {
   my ( $template_id, $record ) = @_;
-  C4::Koha::Log( "Koha::MarcModificationTemplates::ModifyRecordWithTemplate( $template_id, $record )" ) if DEBUG;
-  warn( "Koha::MarcModificationTemplates::ModifyRecordWithTemplate( $template_id, $record )" ) if DEBUG;
+  C4::Koha::Log( "C4::MarcModificationTemplates::ModifyRecordWithTemplate( $template_id, $record )" ) if DEBUG;
+  warn( "C4::MarcModificationTemplates::ModifyRecordWithTemplate( $template_id, $record )" ) if DEBUG;
   C4::Koha::Log( "Unmodified Record:\n" . $record->as_formatted() ) if DEBUG >= 10;
   warn( "Unmodified Record:\n" . $record->as_formatted() ) if DEBUG >= 10;
 

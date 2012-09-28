@@ -41,7 +41,7 @@ use C4::ImportBatch;
 use C4::Matcher;
 use C4::UploadedFile;
 use C4::BackgroundJob;
-use Koha::MarcModificationTemplates;
+use C4::MarcModificationTemplates;
 
 my $input = new CGI;
 my $dbh = C4::Context->dbh;
