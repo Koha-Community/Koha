@@ -41,6 +41,7 @@ BEGIN {
         SetMarcUnicodeFlag
         StripNonXmlChars
         nsb_clean
+        SanitizeRecord
     );
 }
 
@@ -422,6 +423,69 @@ sub nsb_clean {
     return($string) ;
 }
 
+
+=head2 SanitizeRecord
+
+SanitizeRecord($marcrecord);
+
+Sanitize a record
+This routine is called in the maintenance script misc/maintenance/batch_sanitize_records.pl.
+It cleans any string with '&amp;amp;...', replacing it by '&'
+
+=cut
+
+sub SanitizeRecord {
+    my ( $record, $biblionumber ) = @_;
+    my $string;
+    my $record_modified = 0;
+    my $frameworkcode   = C4::Biblio::GetFrameworkCode($biblionumber);
+    my ( $url_field, $url_subfield ) =
+      C4::Biblio::GetMarcFromKohaField( 'biblioitems.url', $frameworkcode );
+    foreach my $field ( $record->fields() ) {
+        if ( $field->is_control_field() ) {
+            my $value           = $field->data();
+            my $sanitized_value = _entity_clean($value);
+            $record_modified = 1 if $sanitized_value ne $value;
+            $field->update($sanitized_value);
+        }
+        else {
+            my @subfields = $field->subfields();
+            my @new_subfields;
+            foreach my $subfield (@subfields) {
+                next
+                  if $url_field eq $field->tag()
+                      and $url_subfield eq $subfield->[0];
+                my $value           = $subfield->[1];
+                my $sanitized_value = _entity_clean($value);
+                push @new_subfields, $subfield->[0] => $sanitized_value;
+                $record_modified = 1 if $sanitized_value ne $value;
+            }
+            if ( scalar(@new_subfields) > 0 ) {
+                my $new_field = eval {
+                    MARC::Field->new(
+                        $field->tag(),        $field->indicator(1),
+                        $field->indicator(2), @new_subfields
+                    );
+                };
+                if ($@) {
+                    warn "error : $@";
+                }
+                else {
+                    $field->replace_with($new_field);
+                }
+
+            }
+        }
+    }
+
+    return $record, $record_modified;
+}
+
+sub _entity_clean {
+    my ($string) = @_;
+    $string =~ s/(&)(amp;)+/$1/g;
+    return $string;
+}
 
 =head1 INTERNAL FUNCTIONS
 
