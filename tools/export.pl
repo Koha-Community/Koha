@@ -538,12 +538,12 @@ sub construct_query {
             }
 
             if ($start_callnumber) {
-                $sql_query .= " AND itemcallnumber <= ? ";
+                $sql_query .= " AND itemcallnumber >= ? ";
                 push @sql_params, $start_callnumber;
             }
 
             if ($end_callnumber) {
-                $sql_query .= " AND itemcallnumber >= ? ";
+                $sql_query .= " AND itemcallnumber <= ? ";
                 push @sql_params, $end_callnumber;
             }
             if ($start_accession) {
