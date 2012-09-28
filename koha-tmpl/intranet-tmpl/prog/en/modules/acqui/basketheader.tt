@@ -130,7 +130,11 @@ li.list2 {
                     <select name="billingplace" id="billingplace">
                         <option value="">--</option>
                         [% FOREACH billingplace IN billingplaceloop %]
-                            <option value="[% billingplace.value %]"[% IF ( billingplace.selected ) %] selected="selected"[% END %]>
+                            [% IF ( billingplace.selected ) %]
+                                <option value="[% billingplace.value %]" selected="selected">
+                            [% ELSE %]
+                                <option value="[% billingplace.value %]">
+                            [% END %]
                                 [% billingplace.branchname %]
                             </option>
                         [% END %]
@@ -141,7 +145,11 @@ li.list2 {
                     <select name="deliveryplace" id="deliveryplace">
                         <option value="">--</option>
                         [% FOREACH deliveryplace IN deliveryplaceloop %]
-                            <option value="[% deliveryplace.value %]"[% IF ( deliveryplace.selected ) %] selected="selected"[% END %]>
+                            [% IF ( deliveryplace.selected ) %]
+                                <option value="[% deliveryplace.value %]" selected="selected">
+                            [% ELSE %]
+                                <option value="[% deliveryplace.value %]">
+                            [% END %]
                                 [% deliveryplace.branchname %]
                             </option>
                         [% END %]
