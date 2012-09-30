@@ -1,0 +1,69 @@
+<article xmlns='http://docbook.org/ns/docbook'>
+<title>koha-run-backups</title>
+<info>
+<productname>Koha</productname> is the first free software library automation package.
+<author>
+  <orgname>The Koha Communnity</orgname>
+  <uri>http://koha-community.org/</uri>
+</author>
+</info>
+
+<refentry xml:id="koha-run-backups">
+
+  <refmeta>
+    <refentrytitle>koha-run-backups</refentrytitle>
+    <manvolnum>8</manvolnum>
+  </refmeta>
+
+  <refnamediv>
+    <refname>koha-run-backups</refname>
+    <refpurpose>Performs backups of the koha installations on the system, except an instance called 'demo'.</refpurpose>
+    <refclass>UNIX/Linux</refclass>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <cmdsynopsis>
+      <command>koha-run-backups</command>
+      <arg><option>--output</option> /some/path</arg>
+      <arg><option>--days</option> 2</arg>
+    </cmdsynopsis>
+  </refsynopsisdiv>
+
+  <refsect1><title>Options</title>
+  <variablelist>
+
+    <varlistentry>
+      <term><option>--output</option></term>
+      <listitem>
+        <para>The directory that the resulting files will be placed into (default: /var/spool/koha).</para>
+      </listitem>
+    </varlistentry>
+
+    <varlistentry>
+      <term><option>--days</option></term>
+      <listitem>
+        <para>The number of days to keep backups around for (default: 2).</para>
+      </listitem>
+    </varlistentry>
+
+  </variablelist>
+  </refsect1>
+
+  <refsect1><title>Description</title>
+    <para><command>koha-run-backups</command> allows automation of backing up the koha data and configuration to the filesystem. It will keep the past so many backups, discarding older ones. This script uses <command>koha-dump</command> to do the actual backup.</para>
+    <para>If there is an instance called 'demo', it will be skipped by this script.</para>
+    <para>Note: backups produced using this tool can be restored using <command>koha-restore</command>.</para>
+  </refsect1>
+
+  <refsect1><title>See also</title>
+
+  <simplelist type="inline">
+    <member><command>koha-dump(8)</command></member>
+    <member><command>koha-restore(8)</command></member>
+  </simplelist>
+
+  </refsect1>
+
+</refentry>
+
+</article>
