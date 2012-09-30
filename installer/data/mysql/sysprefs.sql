@@ -97,6 +97,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('BatchCheckoutsValidCategories','',NULL,'Patron categories allowed to checkout in a batch','Free'),
 ('BiblioAddsAuthorities','0',NULL,'If ON, adding a new biblio will check for an existing authority record and create one on the fly if one doesn\'t exist','YesNo'),
 ('BiblioDefaultView','normal','normal|marc|isbd','Choose the default detail view in the catalog; choose between normal, marc or isbd','Choice'),
+('BiblioItemtypeInfo','0','0','Control which itemtype info displays for biblio level itemtypes','YesNo'),
 ('BibtexExportAdditionalFields',  '', NULL ,  'Define additional BibTex tags to export from MARC records in YAML format as an associative array with either a marc tag/subfield combination as the value, or a list of tag/subfield combinations.',  'textarea'),
 ('BlockExpiredPatronOpacActions','1',NULL,'Set whether an expired patron can perform opac actions such as placing holds or renew books, can be overridden on a per patron-type basis','YesNo'),
 ('BlockReturnOfLostItems','0','0','If enabled, items that are marked as lost cannot be returned.','YesNo'),

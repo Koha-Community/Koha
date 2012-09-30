@@ -463,7 +463,7 @@
                                             </td>
 
                                             <td>
-                                                [% UNLESS ( item_level_itypes ) %]
+                                                [% IF ( !item_level_itypes ) || Koha.Preference('BiblioItemtypeInfo') %]
                                                     <div class="result-biblio-itemtype">
                                                         [% IF !noItemTypeImages && SEARCH_RESULT.imageurl %]
                                                             <img src="[% SEARCH_RESULT.imageurl | html %]" alt="[%  SEARCH_RESULT.description | html %]" />

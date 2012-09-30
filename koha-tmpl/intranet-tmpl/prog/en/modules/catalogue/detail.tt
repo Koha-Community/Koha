@@ -114,6 +114,18 @@
                     </span>
         [% END %]
         <span id="catalogue_detail_marc_preview" class="results_summary"><span class="label">MARC preview:</span> <a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% biblionumber | uri %]&amp;viewas=html" title="MARC" class="previewMARC">Show</a></span>
+        [% IF !item_level_itypes ||  Koha.Preference("BiblioItemtypeInfo") %]
+           <span class="results_summary itemtype"><span class="label">Itemtype:</span>
+          [% IF ( !noItemTypeImages && imageurl ) %]
+              <img src="[% imageurl | html %]" alt="" />
+          [% END %]
+          [% IF ( description ) %]
+            [% description | html %]
+          [% ELSE %]
+            [% itemtype | html %]
+          [% END %]
+          </span>
+        [% END %]
 
         [% IF ( holdcount ) %]
             <span class="results_summary">
@@ -825,7 +837,7 @@ Note that permanent location is a code, and location may be an authval.
 <div id="editions"><h4>Editions</h4>
 <table>
 [% FOREACH XISBN IN XISBNS %]<tr>[% IF ( AmazonCoverImages ) %]<td><a href="http://www.amazon.com/gp/reader/[% XISBN.normalized_isbn | uri %][% AmazonAssocTag | uri %]#reader-link"><img src="https://images-na.ssl-images-amazon.com/images/P/[% XISBN.normalized_isbn | html %].01._AA75_PU_PU-5_.jpg" /></a></td>[% END %]
-[% UNLESS ( item_level_itypes ) %]<td>[% IF ( noItemTypeImages ) %][% XISBN.description | html %][% ELSE %]<img src="[% XISBN.imageurl | html %]" alt="[% XISBN.description | html %]" title="[% XISBN.description | html %]">[% END %]</td>[% END %]
+[% IF ( !item_level_itypes || Koha.Preference('BiblioItemtypeInfo') ) %]<td>[% IF ( noItemTypeImages ) %][% XISBN.description | html %][% ELSE %]<img src="[% XISBN.imageurl | html %]" alt="[% XISBN.description | html %]" title="[% XISBN.description | html %]">[% END %]</td>[% END %]
 <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% XISBN.biblionumber | uri %]">[% XISBN.title | html %]</a> by [% XISBN.author | html %] &copy;[% XISBN.copyrightdate | html %]
   [% IF ( XISBN.publishercode ) %]
 [% XISBN.publishercode | html %] [% IF ( XISBN.place ) %]([% XISBN.place | html %])[% END %] [% IF ( XISBN.publicationyear ) %], [% XISBN.publicationyear | html %][% END %] [% IF ( XISBN.editionstatement ) %][% XISBN.editionstatement | html %][% END %] [% IF ( XISBN.editionresponsibility ) %][% XISBN.editionresponsibility | html %][% END %]

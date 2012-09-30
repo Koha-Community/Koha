@@ -133,16 +133,10 @@
                         <h2 class="title">[% INCLUDE 'biblio-title.inc' %]</h2>
                         [% IF ( author ) %]<span class="results_summary author h3">by <a class="contributors" href="/cgi-bin/koha/opac-search.pl?q=au:[% author |url %]">[% author | html %]</a></span>[% END %]
 
-                        <span class="results_summary">[% UNLESS ( item_level_itypes ) %]
-                            [
-                            [% IF ( description ) %]
-                                [% description | html %]
-                            [% ELSE %]
-                                [% itemtype | html %]
-                            [% END %]
-                            ] [% END %]
-                            [% IF ( unititle ) %], [% unititle | html %][% END %]
-                        </span>
+                         <span class="results_summary">
+                             [% IF ( unititle ) %], [% unititle | html %][% END %]
+                         </span>
+
 
                         [% IF ( MARCAUTHORS ) %]
                             <div class="results_summary">
@@ -252,11 +246,11 @@
                             <span class="results_summary year"><span class="label">Year: </span>[% copyrightdate | html %]</span>
                         [% END %]
 
-                        [% UNLESS ( item_level_itypes ) %]
-                            [% IF ( imgeurl && !Koha.Preference('OpacNoItemTypeImages') ) %]
-                                <img src="[% imageurl | html %]" alt="" />
-                            [% END %]
+                        [% IF ( !item_level_itypes || Koha.Preference('BiblioItemtypeInfo') ) %]
                             <span class="results_summary itemtype"><span class="label">Item type: </span>
+                                [% IF ( imageurl && !Koha.Preference('OpacNoItemTypeImages') ) %]
+                                    <img src="[% imageurl | html %]" alt="" />
+                                [% END %]
                                 [% IF ( description ) %]
                                     [% description | html %]
                                 [% ELSE %]

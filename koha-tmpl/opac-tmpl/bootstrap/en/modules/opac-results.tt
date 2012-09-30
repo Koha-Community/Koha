@@ -266,8 +266,7 @@
                                                     [% SEARCH_RESULT.result_number | html %].
                                                 [% END %]
                                             </td>
-
-                                            [% IF ( !item_level_itypes && !Koha.Preference('OpacNoItemTypeImages') ) %]
+                                            [% IF ( !item_level_itypes || Koha.Preference('BiblioItemtypeInfo') ) && !Koha.Preference('OpacNoItemTypeImages') %]
                                                 [% # Cell 3: Show item type image %]
                                                 <td class="itypecol">
                                                     [% IF ( SEARCH_RESULT.imageurl ) %]

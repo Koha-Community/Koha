@@ -512,7 +512,6 @@ if ( (C4::Context->preference("HTML5MediaEnabled") eq 'both') or (C4::Context->p
 }
 
 # Displaying tags
-
 my $tag_quantity;
 if (C4::Context->preference('TagsEnabled') and $tag_quantity = C4::Context->preference('TagsShowOnDetail')) {
     $template->param(
