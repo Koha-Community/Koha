@@ -22,7 +22,7 @@ $module->mock('SearchAuthorities', sub {
                     'reported_tag' => undef,
                     'even' => 0,
                     'summary' => {
-                        'authorized' => [ 'Cooking' ],
+                        'authorized' => [ { 'heading' => 'Cooking' } ],
                         'otherscript' => [],
                         'seefrom' => [ 'Cookery' ],
                         'notes' => [ 'Your quintessential poor heading selection' ],
