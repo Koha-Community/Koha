@@ -149,7 +149,7 @@ if ($op eq 'add_form') {
 	my $repeatable       = $input->param('repeatable') ? 1 : 0;
 	my $mandatory        = $input->param('mandatory')  ? 1 : 0;
 	my $authorised_value = $input->param('authorised_value');
-    unless (C4::Context->config('demo') == 1) {
+    unless (C4::Context->config('demo')) {
         if ($input->param('modif')) {
             $sth = $dbh->prepare(
             "UPDATE marc_tag_structure SET liblibrarian=? ,libopac=? ,repeatable=? ,mandatory=? ,authorised_value=? WHERE frameworkcode=? AND tagfield=?"
@@ -194,7 +194,7 @@ if ($op eq 'add_form') {
 ################## DELETE_CONFIRMED ##################################
 # called by delete_confirm, used to effectively confirm deletion of data in DB
 } elsif ($op eq 'delete_confirmed') {
-	unless (C4::Context->config('demo') == 1) {
+	unless (C4::Context->config('demo')) {
         my $sth1 = $dbh->prepare("DELETE FROM marc_tag_structure      WHERE tagfield=? AND frameworkcode=?");
         my $sth2 = $dbh->prepare("DELETE FROM marc_subfield_structure WHERE tagfield=? AND frameworkcode=?");
         $sth1->execute($searchfield, $frameworkcode);
