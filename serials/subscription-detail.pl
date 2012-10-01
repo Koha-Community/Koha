@@ -121,30 +121,31 @@ if (! $subs->{periodicity}) {
 my $default_bib_view = get_default_view();
 
 my ( $order, $bookseller, $tmpl_infos );
-if ( defined $subscriptionid ) {
-    my $lastOrderNotReceived = GetLastOrderNotReceivedFromSubscriptionid $subscriptionid;
-    my $lastOrderReceived = GetLastOrderReceivedFromSubscriptionid $subscriptionid;
-    if ( defined $lastOrderNotReceived ) {
-        my $basket = GetBasket $lastOrderNotReceived->{basketno};
-        my $bookseller = GetBookSellerFromId $basket->{booksellerid};
-        ( $tmpl_infos->{valuegsti_ordered}, $tmpl_infos->{valuegste_ordered} ) = get_value_with_gst_params ( $lastOrderNotReceived->{ecost}, $lastOrderNotReceived->{gstrate}, $bookseller );
-        $tmpl_infos->{valuegsti_ordered} = sprintf( "%.2f", $tmpl_infos->{valuegsti_ordered} );
-        $tmpl_infos->{valuegste_ordered} = sprintf( "%.2f", $tmpl_infos->{valuegste_ordered} );
-        $tmpl_infos->{budget_name_ordered} = GetBudgetName $lastOrderNotReceived->{budget_id};
-        $tmpl_infos->{basketno} = $lastOrderNotReceived->{basketno};
-        $tmpl_infos->{ordered_exists} = 1;
-    }
-    if ( defined $lastOrderReceived ) {
-        my $basket = GetBasket $lastOrderReceived->{basketno};
-        my $bookseller = GetBookSellerFromId $basket->{booksellerid};
-        ( $tmpl_infos->{valuegsti_spent}, $tmpl_infos->{valuegste_spent} ) = get_value_with_gst_params ( $lastOrderReceived->{unitprice}, $lastOrderReceived->{gstrate}, $bookseller );
-        $tmpl_infos->{valuegsti_spent} = sprintf( "%.2f", $tmpl_infos->{valuegsti_spent} );
-        $tmpl_infos->{valuegste_spent} = sprintf( "%.2f", $tmpl_infos->{valuegste_spent} );
-        $tmpl_infos->{budget_name_spent} = GetBudgetName $lastOrderReceived->{budget_id};
-        $tmpl_infos->{invoicenumber} = $lastOrderReceived->{booksellerinvoicenumber};
-        $tmpl_infos->{spent_exists} = 1;
-    }
-}
+# FIXME = see http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=5335#c52
+#if ( defined $subscriptionid ) {
+#    my $lastOrderNotReceived = GetLastOrderNotReceivedFromSubscriptionid $subscriptionid;
+#    my $lastOrderReceived = GetLastOrderReceivedFromSubscriptionid $subscriptionid;
+#    if ( defined $lastOrderNotReceived ) {
+#        my $basket = GetBasket $lastOrderNotReceived->{basketno};
+#        my $bookseller = GetBookSellerFromId $basket->{booksellerid};
+#        ( $tmpl_infos->{valuegsti_ordered}, $tmpl_infos->{valuegste_ordered} ) = get_value_with_gst_params ( $lastOrderNotReceived->{ecost}, $lastOrderNotReceived->{gstrate}, $bookseller );
+#        $tmpl_infos->{valuegsti_ordered} = sprintf( "%.2f", $tmpl_infos->{valuegsti_ordered} );
+#        $tmpl_infos->{valuegste_ordered} = sprintf( "%.2f", $tmpl_infos->{valuegste_ordered} );
+#        $tmpl_infos->{budget_name_ordered} = GetBudgetName $lastOrderNotReceived->{budget_id};
+#        $tmpl_infos->{basketno} = $lastOrderNotReceived->{basketno};
+#        $tmpl_infos->{ordered_exists} = 1;
+#    }
+#    if ( defined $lastOrderReceived ) {
+#        my $basket = GetBasket $lastOrderReceived->{basketno};
+#        my $bookseller = GetBookSellerFromId $basket->{booksellerid};
+#        ( $tmpl_infos->{valuegsti_spent}, $tmpl_infos->{valuegste_spent} ) = get_value_with_gst_params ( $lastOrderReceived->{unitprice}, $lastOrderReceived->{gstrate}, $bookseller );
+#        $tmpl_infos->{valuegsti_spent} = sprintf( "%.2f", $tmpl_infos->{valuegsti_spent} );
+#        $tmpl_infos->{valuegste_spent} = sprintf( "%.2f", $tmpl_infos->{valuegste_spent} );
+#        $tmpl_infos->{budget_name_spent} = GetBudgetName $lastOrderReceived->{budget_id};
+#        $tmpl_infos->{invoicenumber} = $lastOrderReceived->{booksellerinvoicenumber};
+#        $tmpl_infos->{spent_exists} = 1;
+#    }
+#}
 
 $template->param(
 	subscriptionid => $subscriptionid,
