@@ -62,7 +62,7 @@ BEGIN {
 
 =head1 C4::Tags.pm - Support for user tagging of biblios.
 
-More verose debugging messages are sent in the presence of non-zero $ENV{"DEBUG"}.
+More verbose debugging messages are sent in the presence of non-zero $ENV{"DEBUG"}.
 
 =cut
 
