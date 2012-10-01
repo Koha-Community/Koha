@@ -1833,7 +1833,8 @@ sub AddReturn {
 
     # find reserves.....
     # if we don't have a reserve with the status W, we launch the Checkreserves routine
-    my ($resfound, $resrec, undef) = C4::Reserves::CheckReserves( $item->{'itemnumber'} ) unless ( $item->{'wthdrawn'} );
+    my ($resfound, $resrec);
+    ($resfound, $resrec, undef) = C4::Reserves::CheckReserves( $item->{'itemnumber'} ) unless ( $item->{'wthdrawn'} );
     if ($resfound) {
           $resrec->{'ResFound'} = $resfound;
         $messages->{'ResFound'} = $resrec;
