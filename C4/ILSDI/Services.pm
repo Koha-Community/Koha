@@ -26,7 +26,7 @@ use C4::Circulation;
 use C4::Branch;
 use C4::Accounts;
 use C4::Biblio;
-use C4::Reserves qw(AddReserve CancelReserve GetReservesFromBiblionumber GetReservesFromBorrowernumber);
+use C4::Reserves qw(AddReserve CancelReserve GetReservesFromBiblionumber GetReservesFromBorrowernumber CanBookBeReserved);
 use C4::Context;
 use C4::AuthoritiesMarc;
 use C4::ILSDI::Utility;
