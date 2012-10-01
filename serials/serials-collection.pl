@@ -165,9 +165,10 @@ $template->param(
           routing => C4::Context->preference("RoutingSerials"),
           subscr=>$query->param('subscriptionid'),
           subscriptioncount => $subscriptioncount,
-    location	       => $locationlib,
-    callnumber	       => $callnumber,
-    uc(C4::Context->preference("marcflavour")) => 1
+          location	       => $locationlib,
+          callnumber	       => $callnumber,
+          uc(C4::Context->preference("marcflavour")) => 1,
+          serialsadditems   => $subscriptiondescs->[0]{'serialsadditems'},
           );
 
 output_html_with_http_headers $query, $cookie, $template->output;

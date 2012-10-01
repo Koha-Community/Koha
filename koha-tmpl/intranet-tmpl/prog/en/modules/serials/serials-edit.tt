@@ -3,6 +3,12 @@
 [% INCLUDE 'doc-head-close.inc' %]
 <script language="JavaScript" type="text/javascript">
 //<![CDATA[
+function generateReceive() {
+    var subscriptionid =  document.getElementsByName("subscriptionid")[0].value;
+    if(nbissues=prompt(_("How many issues do you want to receive ?"))){
+        document.location = 'serials-collection.pl?op=gennext&subscriptionid='+subscriptionid+'&nbissues='+nbissues;
+    }
+}
 function popup(subscriptionid) {
 	window.open("subscription-renew.pl?subscriptionid="+subscriptionid,"subscription_renewal",'width=700,height=400,toolbar=false,scrollbars=yes');
 }
@@ -423,6 +429,7 @@ $(document).ready(function() {
 
 </table>
     <fieldset class="action"><input type="submit" value="Save"  class="button" accesskey="w" />
+    [% UNLESS ( serialsadditems ) %]&nbsp;&nbsp;<input type="button" onclick="javascript:generateReceive()" value="Multi receiving">[% END %]
 </form>
 
 </div>
