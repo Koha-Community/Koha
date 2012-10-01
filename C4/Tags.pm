@@ -60,6 +60,12 @@ BEGIN {
 	}
 }
 
+=head1 C4::Tags.pm - Support for user tagging of biblios.
+
+More verose debugging messages are sent in the presence of non-zero $ENV{"DEBUG"}.
+
+=cut
+
 INIT {
     $ext_dict and $Lingua::Ispell::path = $ext_dict;
     $debug and print STDERR "\$Lingua::Ispell::path = $Lingua::Ispell::path\n";
@@ -605,10 +611,6 @@ sub stratify_tags {
 
 1;
 __END__
-
-=head1 C4::Tags.pm - Support for user tagging of biblios.
-
-More verose debugging messages are sent in the presence of non-zero $ENV{"DEBUG"}.
 
 =head2 add_tag(biblionumber,term[,borrowernumber])
 
