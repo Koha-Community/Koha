@@ -1,3 +1,4 @@
+[% USE Koha %]
 <div class="gradient">
 <h1 id="logo"><a href="/cgi-bin/koha/mainpage.pl">[% LibraryName %]</a></h1><!-- Begin Patrons Resident Search Box -->
 <div id="header_search">
@@ -19,7 +20,31 @@
                 <option value='phone,phonepro,B_phone,altcontactphone,mobile'>Phone number</option>
                 <option value='streettype,address,address2,city,state,zipcode,country'>Street Address</option>
                 <option value='dateofbirth'>Date of birth</option>
-            </select></p>
+            </select>
+            <script type="text/javascript">
+                [% SET dateformat = Koha.Preference('dateformat') %]
+                $("#searchfields").change(function() {
+                    if ( $(this).val() == 'dateofbirth' ) {
+                        [% IF dateformat == 'us' %]
+                            [% SET format = 'MM/DD/YYYY' %]
+                        [% ELSIF dateformat == 'iso' %]
+                            [% SET format = 'YYYY-MM-DD' %]
+                        [% ELSIF dateformat == 'metric' %]
+                            [% SET format = 'DD/MM/YYYY' %]
+                        [% END %]
+
+                        $('#searchmember').qtip({
+                            content: 'Dates of birth should be entered in the format "[% format %]"',
+                            style: {
+                                tip: 'topLeft'
+                            }
+                        })
+                    } else {
+                        $('#searchmember').qtip('destroy');
+                    }
+                });
+            </script>
+        </p>
         <p><label for="searchtype">Search type:</label>
                 <select name="searchtype" id="searchtype">
                     <option selected="selected" value=''>Starts with</option>
