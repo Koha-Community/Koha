@@ -22,8 +22,8 @@ use Pod::Usage;
 use Getopt::Long;
 use C4::Context;
 use C4::Biblio;
-use AnyEvent;
-use AnyEvent::HTTP;
+eval { require AnyEvent }       or die "This script requires AnyEvent perl library. Use check-url.pl if you can't install AnyEvent" ;
+eval { require AnyEvent::HTTP } or die "This script requires AnyEvent::HTTP perl library. Use check-url.pl if you can't install AnyEvent::HTTP" ;
 
 my ( $verbose, $help, $html ) = ( 0, 0, 0 );
 my ( $host,    $host_intranet ) = ( '', '' );
