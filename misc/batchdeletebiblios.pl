@@ -16,9 +16,10 @@ pod2usage(1) if $help or not @ARGV;
 
 for my $file ( @ARGV ) {
     say "Find biblionumber in file $file";
-    open(FD, $file) or say "Error: '$file' $!" and next;
+    my $fh;
+    open($fh, '<', $file) or say "Error: '$file' $!" and next;
 
-    while ( <FD> ) {
+    while ( <$fh> ) {
         my $biblionumber = $_;
         $biblionumber =~ s/$1/\n/g if $biblionumber =~ m/(\r\n?|\n\r?)/;
         chomp $biblionumber;
