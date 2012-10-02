@@ -52,6 +52,7 @@ my $template_flag;
 if (!defined $op) {
     $template_name = "tools/batchMod.tmpl";
     $template_flag = { tools => '*' };
+    $op = q{};
 } else {
     $template_name = ($del) ? "tools/batchMod-del.tmpl" : "tools/batchMod-edit.tmpl";
     $template_flag = ($del) ? { tools => 'items_batchdel' }   : { tools => 'items_batchmod' };
@@ -433,8 +434,8 @@ foreach my $tag (sort keys %{$tagslib}) {
 $template->param(%$items_display_hashref) if $items_display_hashref;
 $template->param(
     op      => $nextop,
-    $op => 1,
 );
+$template->param( $op => 1 ) if $op;
 
 if ($op eq "action") {
 
@@ -450,7 +451,7 @@ if ($op eq "action") {
 }
 
 foreach my $error (@errors) {
-    $template->param($error => 1);
+    $template->param($error => 1) if $error;
 }
 output_html_with_http_headers $input, $cookie, $template->output;
 exit;
