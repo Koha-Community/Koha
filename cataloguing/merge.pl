@@ -81,7 +81,7 @@ if ($merge) {
     # If some items could not be moved :
     if (scalar(@notmoveditems) > 0) {
 		my $itemlist = join(' ',@notmoveditems);
-		push @errors, "The following items could not be moved from the old record to the new one: $itemlist";
+		push @errors, { code => "CANNOT_MOVE", value => $itemlist };
     }
 
     # Moving subscriptions from the other record to the reference record
@@ -123,7 +123,7 @@ if ($merge) {
     my $biblionumber = $input->param('biblionumber');
 
     if (scalar(@biblionumber) != 2) {
-        push @errors, "An unexpected number of records was provided for merging. Currently only two records at a time can be merged.";
+        push @errors, { code => "WRONG_COUNT", value => scalar(@biblionumber) };
     }
     else {
         my $data1 = GetBiblioData($biblionumber[0]);
@@ -206,8 +206,7 @@ if ($merge) {
 
 if (@errors) {
     # Errors
-    my @errors_loop  = map{{error => $_}}@errors;
-    $template->param( errors  => \@errors_loop );
+    $template->param( errors  => \@errors );
 }
 
 output_html_with_http_headers $input, $cookie, $template->output;
