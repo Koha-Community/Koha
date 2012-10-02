@@ -597,6 +597,15 @@ sub _session_log {
     close $fh;
 }
 
+sub _timeout_syspref {
+    my $timeout = C4::Context->preference('timeout') || 600;
+    # value in days, convert in seconds
+    if ($timeout =~ /(\d+)[dD]/) {
+        $timeout = $1 * 86400;
+    };
+    return $timeout;
+}
+
 sub checkauth {
     my $query = shift;
 	$debug and warn "Checking Auth";
@@ -607,12 +616,7 @@ sub checkauth {
     $type = 'opac' unless $type;
 
     my $dbh     = C4::Context->dbh;
-    my $timeout = C4::Context->preference('timeout');
-    # days
-    if ($timeout =~ /(\d+)[dD]/) {
-        $timeout = $1 * 86400;
-    };
-    $timeout = 600 unless $timeout;
+    my $timeout = _timeout_syspref();
 
     _version_check($type,$query);
     # state variables
@@ -1059,8 +1063,7 @@ sub check_api_auth {
     my $flagsrequired = shift;
 
     my $dbh     = C4::Context->dbh;
-    my $timeout = C4::Context->preference('timeout');
-    $timeout = 600 unless $timeout;
+    my $timeout = _timeout_syspref();
 
     unless (C4::Context->preference('Version')) {
         # database has not been installed yet
@@ -1292,8 +1295,7 @@ sub check_cookie_auth {
     my $flagsrequired = shift;
 
     my $dbh     = C4::Context->dbh;
-    my $timeout = C4::Context->preference('timeout');
-    $timeout = 600 unless $timeout;
+    my $timeout = _timeout_syspref();
 
     unless (C4::Context->preference('Version')) {
         # database has not been installed yet
