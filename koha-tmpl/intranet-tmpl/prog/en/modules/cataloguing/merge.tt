@@ -183,14 +183,23 @@ function changeFramework(fw) {
 <h1>Merging records</h1>
 [% IF ( result ) %]
     [% IF ( errors ) %]
+
 	[% FOREACH error IN errors %]
-	    <div class="dialog alert">[% error.error %].<br />Therefore, the record to be merged has not been deleted.</div>
+	    <div class="dialog alert">
+
+                [% IF error.code == 'CANNOT_MOVE' %]
+                    The following items could not be moved from the old record to the new one: [% error.value %]
+                [% ELSE %]
+                    [% error %]
+                [% END %]
+
+            <br />Therefore, the record to be merged has not been deleted.</div>
 	[% END %]
 
-	[% ELSE %]
-	<script type="text/javascript">window.location.href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% biblio1 %]"</script>	
-	<p>The merging was successful. <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% biblio1 %]">Click here to see the merged record.</a></p>
-	[% END %]
+    [% ELSE %]
+        <script type="text/javascript">window.location.href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% biblio1 %]"</script>
+        <p>The merging was successful. <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% biblio1 %]">Click here to see the merged record.</a></p>
+    [% END %]
 
 [% ELSE %]
 
@@ -227,9 +236,18 @@ function changeFramework(fw) {
 </form>
 [% ELSE %]
 [% IF ( errors ) %]
-    [% FOREACH error IN errors %]
-	<div class="error">[% error.error %]</div>
-    [% END %]
+    <div class="dialog alert">
+	[% FOREACH error IN errors %]
+	    <p>
+                [% IF error.code == 'WRONG_COUNT' %]
+                    Number of records provided for merging: [% error.value %]. Currently only 2 records can be merged at a time.
+                [% ELSE %]
+                    [% error %]
+                [% END %]
+
+            </p>
+	[% END %]
+    </div>
 [% ELSE %]
 <form id="mergeform" action="/cgi-bin/koha/cataloguing/merge.pl" method="post" onsubmit="return mergeformsubmit()">
 
