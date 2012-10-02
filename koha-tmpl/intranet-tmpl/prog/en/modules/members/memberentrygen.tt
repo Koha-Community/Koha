@@ -36,7 +36,7 @@
     });
 
     function clear_entry(node) {
-        var original = node.parentNode.parentNode;
+        var original = $(node).parent();
         $("textarea", original).attr('value', '');
         $("select", original).attr('value', '');
     }
