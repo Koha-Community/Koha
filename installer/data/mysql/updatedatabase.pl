@@ -5026,7 +5026,8 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     $dbh->do("ALTER TABLE old_issues CHANGE returndate returndate datetime");
     $dbh->do("ALTER TABLE old_issues CHANGE lastreneweddate lastreneweddate datetime");
     $dbh->do("ALTER TABLE old_issues CHANGE issuedate issuedate datetime");
-    print "Upgrade to $DBversion done (Setting up issues tables for hourly loans)\n";
+    $dbh->do("UPDATE accountlines SET description = CONCAT(description,' 23:59') WHERE accounttype='F' OR accounttype='FU'"); #BUG-8253
+    print "Upgrade to $DBversion done (Setting up issues and accountlines tables for hourly loans)\n";
     SetVersion($DBversion);
 }
 
