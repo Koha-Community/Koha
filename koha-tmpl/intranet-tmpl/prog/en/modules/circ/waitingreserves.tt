@@ -48,7 +48,7 @@ $.tablesorter.addParser({
         [% FOREACH cancel_result %]
             [% IF ( messagetransfert ) %]
                 <div class="dialog message">
-                    <h2>This item is on hold for pick-up at another library</h2>
+                    <h2>This item is on hold for pick-up at [% branchname %]</h2>
                     <p><strong>[% nextreservtitle %]</strong> is on hold for <strong> [% nextreservsurname %], [% nextreservfirstname %]</strong>.
                     Please retain this item and check it in to process the hold.
                     </p>
