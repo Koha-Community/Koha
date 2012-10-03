@@ -1063,34 +1063,37 @@ sub CancelReserve {
     my $dbh = C4::Context->dbh;
 
     my $reserve = GetReserve( $reserve_id );
+    if ($reserve) {
+        my $query = "
+            UPDATE reserves
+            SET    cancellationdate = now(),
+                   found            = Null,
+                   priority         = 0
+            WHERE  reserve_id = ?
+        ";
+        my $sth = $dbh->prepare($query);
+        $sth->execute( $reserve_id );
 
-    my $query = "
-        UPDATE reserves
-        SET    cancellationdate = now(),
-               found            = Null,
-               priority         = 0
-        WHERE  reserve_id = ?
-    ";
-    my $sth = $dbh->prepare($query);
-    $sth->execute( $reserve_id );
+        $query = "
+            INSERT INTO old_reserves
+            SELECT * FROM reserves
+            WHERE  reserve_id = ?
+        ";
+        $sth = $dbh->prepare($query);
+        $sth->execute( $reserve_id );
 
-    $query = "
-        INSERT INTO old_reserves
-        SELECT * FROM reserves
-        WHERE  reserve_id = ?
-    ";
-    $sth = $dbh->prepare($query);
-    $sth->execute( $reserve_id );
+        $query = "
+            DELETE FROM reserves
+            WHERE  reserve_id = ?
+        ";
+        $sth = $dbh->prepare($query);
+        $sth->execute( $reserve_id );
 
-    $query = "
-        DELETE FROM reserves
-        WHERE  reserve_id = ?
-    ";
-    $sth = $dbh->prepare($query);
-    $sth->execute( $reserve_id );
+        # now fix the priority on the others....
+        _FixPriority({ biblionumber => $reserve->{biblionumber} });
+    }
 
-    # now fix the priority on the others....
-    _FixPriority({ biblionumber => $reserve->{biblionumber} });
+    return $reserve;
 }
 
 =head2 ModReserve

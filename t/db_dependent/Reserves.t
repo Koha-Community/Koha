@@ -2,8 +2,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 35;
-
+use Test::More tests => 43;
 use MARC::Record;
 use DateTime::Duration;
 
@@ -256,6 +255,26 @@ is( $messages->{ResFound}->{borrowernumber},
 is( $messages->{ResFound}->{borrowernumber},
     $requesters{'RPL'},
     'for generous library, its items fill first hold request in line (bug 10272)');
+
+my $reserves = GetReservesFromBiblionumber({biblionumber => $biblionumber});
+isa_ok($reserves, 'ARRAY');
+is(scalar @$reserves, 1, "Only one reserves for this biblio");
+my $reserve_id = $reserves->[0]->{reserve_id};
+
+$reserve = GetReserve($reserve_id);
+isa_ok($reserve, 'HASH', "GetReserve return");
+is($reserve->{biblionumber}, $biblionumber);
+
+$reserve = CancelReserve({reserve_id => $reserve_id});
+isa_ok($reserve, 'HASH', "CancelReserve return");
+is($reserve->{biblionumber}, $biblionumber);
+
+$reserve = GetReserve($reserve_id);
+is($reserve, undef, "GetReserve returns undef after deletion");
+
+$reserve = CancelReserve({reserve_id => $reserve_id});
+is($reserve, undef, "CancelReserve return undef if reserve does not exist");
+
 
 # Tests for bug 9761 (ConfirmFutureHolds): new CheckReserves lookahead parameter, and corresponding change in AddReturn
 # Note that CheckReserve uses its lookahead parameter and does not check ConfirmFutureHolds pref (it should be passed if needed like AddReturn does)

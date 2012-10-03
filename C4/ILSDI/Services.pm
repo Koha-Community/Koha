@@ -26,7 +26,7 @@ use C4::Circulation;
 use C4::Branch;
 use C4::Accounts;
 use C4::Biblio;
-use C4::Reserves qw(AddReserve CancelReserve GetReservesFromBiblionumber GetReservesFromBorrowernumber CanBookBeReserved CanItemBeReserved);
+use C4::Reserves qw(AddReserve GetReservesFromBiblionumber GetReservesFromBorrowernumber CanBookBeReserved CanItemBeReserved);
 use C4::Context;
 use C4::AuthoritiesMarc;
 use XML::Simple;
@@ -722,9 +722,9 @@ Cancels an active reserve request for the borrower.
 Parameters:
 
   - patron_id (Required)
-	a borrowernumber
+        a borrowernumber
   - item_id (Required)
-	an itemnumber 
+        a reserve_id
 
 =cut
 
@@ -736,25 +736,13 @@ sub CancelHold {
     my $borrower = GetMemberDetails( $borrowernumber );
     return { code => 'PatronNotFound' } unless $$borrower{borrowernumber};
 
-    # Get the item or return an error code
-    my $itemnumber = $cgi->param('item_id');
-    my $item = GetItem( $itemnumber );
-    return { code => 'RecordNotFound' } unless $$item{itemnumber};
+    # Get the reserve or return an error code
+    my $reserve_id = $cgi->param('item_id');
+    my $reserve = C4::Reserves::GetReserve($reserve_id);
+    return { code => 'RecordNotFound' } unless $reserve;
+    return { code => 'RecordNotFound' } unless ($reserve->{borrowernumber} == $borrowernumber);
 
-    # Get borrower's reserves
-    my @reserves = GetReservesFromBorrowernumber( $borrowernumber, undef );
-    my @reserveditems;
-
-    # ...and loop over it to build an array of reserved itemnumbers
-    foreach my $reserve (@reserves) {
-        push @reserveditems, $reserve->{'itemnumber'};
-    }
-
-    # if the item was not reserved by the borrower, returns an error code
-    return { code => 'NotCanceled' } unless any { $itemnumber eq $_ } @reserveditems;
-
-    # Cancel the reserve
-    CancelReserve({ itemnumber => $itemnumber, borrowernumber => $borrowernumber });
+    C4::Reserves::CancelReserve({reserve_id => $reserve_id});
 
     return { code => 'Canceled' };
 }
