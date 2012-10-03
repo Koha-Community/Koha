@@ -243,13 +243,13 @@ borrower number.
 
 #'
 # FIXME - Okay, so what does the above actually _mean_?
-sub getnextacctno ($) {
-    my ($borrowernumber) = shift or return undef;
+sub getnextacctno {
+    my ($borrowernumber) = shift or return;
     my $sth = C4::Context->dbh->prepare(
         "SELECT accountno+1 FROM accountlines
-         WHERE    (borrowernumber = ?)
-         ORDER BY accountno DESC
-		 LIMIT 1"
+            WHERE    (borrowernumber = ?)
+            ORDER BY accountno DESC
+            LIMIT 1"
     );
     $sth->execute($borrowernumber);
     return ($sth->fetchrow || 1);
