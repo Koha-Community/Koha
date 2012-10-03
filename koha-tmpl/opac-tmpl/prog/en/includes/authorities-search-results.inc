@@ -2,15 +2,13 @@
     [% IF marcflavour == 'UNIMARC' %]
         [% SWITCH type %]
         [% CASE 'broader' %]
-            <span class="BT">[% heading | html %]</span> --
+            <span class="BT">BT: [% heading | html %]</span>
         [% CASE 'narrower' %]
-            <span class="NT">[% heading | html %]</span> --
-        [% CASE 'narrower' %]
-            <span class="NT">[% heading | html %]</span> --
+            <span class="NT">NT: [% heading | html %]</span>
         [% CASE 'seefrom' %]
-            <span class="UF">[% heading | html %]</span> --
+            <span class="UF">UF: [% heading | html %]</span>
         [% CASE 'seealso' %]
-            <span class="RT">[% heading | html %]</span> --
+            <span class="RT">RT: [% heading | html %]</span>
         [% END %]
     [% ELSE %]
         [% IF ( label ) %]<span class="label">[% label | html %]</span>[% END %]
@@ -33,15 +31,35 @@
 [% BLOCK authresult %]
     [% IF ( summary.summary ) %][% summary.summary | html %]:[% END %]
     [% UNLESS ( summary.summaryonly ) %]
-        [% FOREACH authorize IN summary.authorized %]
+        <div class="authorizedheading">
+          [% FOREACH authorize IN summary.authorized %]
             <span class="authorizedheading">[% authorize.heading | html %]</span>
-        [% END %]
+          [% END %]
+        </div>
         [% IF ( marcflavour == 'UNIMARC' ) %]
-            [% FOREACH note IN summary.notes %]
-                <span class="note">[% note | html %]</span>
+            [% IF summary.notes %]
+             <div class="authres_notes">
+             [% FOREACH note IN summary.notes %]
+               [% note.note | html %]</span>
+             [% END %]
+             </div>
             [% END %]
-            [% FOREACH seefro IN summary.seefrom %]
-                [% PROCESS showreference heading=seefro.heading label="" type=seefro.type search='' %]
+            [% IF summary.seealso %]
+              <div class="authres_seealso">
+              [% FOREACH see IN summary.seealso %]
+                 [% PROCESS showreference heading=see.heading label="" type=see.type search='' %]
+                 [% IF ! loop.last %] ; [% END %]
+              [% END %]
+              </div>
+            [% END %]
+            [% IF summary.otherscript %]
+              <div class="authres_otherscript">
+              [% FOREACH other IN summary.otherscript %]
+                [% PROCESS language lang=other.lang | trim %]:
+                [% other.term %]
+                [% IF ! loop.last %] ; [% END %]
+              [% END %]
+              </div>
             [% END %]
         [% ELSE %]
             [% IF ( summary.seefrom ) %]

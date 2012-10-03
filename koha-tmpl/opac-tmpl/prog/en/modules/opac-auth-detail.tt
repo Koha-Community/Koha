@@ -42,7 +42,7 @@ $(document).ready(function() {
 </div>
 [% END %]
 
-<h1>[% summary.mainentry %][% IF authtypetext %]([% authtypetext %])[% END %]</h1>
+<h1>[% summary.mainentry %][% IF authtypetext %] ([% authtypetext %])[% END %]</h1>
 <div class="usedin">Used in <a href="opac-search.pl?type=opac&amp;q=[% authid %]&amp;idx=an,phr">[% count %] records</a></div>
 <div class="authstanza">
 [% FOREACH authorize IN summary.authorized %]
@@ -76,13 +76,17 @@ $(document).ready(function() {
     </div>
 [% END %]
 [% IF marcflavour == 'UNIMARC' && summary.otherscript %]
-    <div class="authstanza">
+  <div class="authstanza">
+    <div class="authstanzaheading">Other forms:</div>
+    <ul>
     [% FOREACH otherscrip IN summary.otherscript %]
-        <div class="heading otherscript auth[% otherscrip.field %]"><span class="label">See also[% PROCESS language lang=otherscript.lang | trim %] term:</span>
+      <li>
+        [% PROCESS language lang=otherscrip.lang | trim %]:
         <span class="otherscript">[% otherscrip.term %]</span>
-        </div>
+      </li>
     [% END %]
-    </div>
+    </ul>
+  </div>
 [% END %]
 <div id="authdescriptions" class="toptabs">
 <ul>

@@ -54,3 +54,13 @@
     [% ELSE %][% heading %]
     [% END %]
 [% END %]
+[% BLOCK language %]
+  [% SWITCH lang %]
+   [% CASE ['en', 'eng'] %]English
+   [% CASE ['fr', 'fre'] %]French
+   [% CASE ['it', 'ita'] %]Italian
+   [% CASE ['de', 'ger', 'deu'] %]German
+   [% CASE ['es', 'spa'] %]Spanish
+   [% CASE %][% lang %]
+  [% END %]
+[% END %]

@@ -959,6 +959,11 @@ sub BuildSummary {
         'i' => 'subfi',
         't' => 'parent'
     );
+    my %unimarc_relation_from_code = (
+        g => 'broader',
+        h => 'narrower',
+        a => 'seealso',
+    );
     my %thesaurus;
     $thesaurus{'1'}="Peuples";
     $thesaurus{'2'}="Anthroponymes";
@@ -1023,39 +1028,28 @@ sub BuildSummary {
             my $thesaurus = $field->subfield('2') ? "thes. : ".$thesaurus{"$field->subfield('2')"}." : " : '';
             push @seefrom, { heading => $thesaurus . $field->as_string('abcdefghijlmnopqrstuvwxyz'), type => 'seefrom', field => $field->tag() };
         }
-# see :
-        foreach my $field ($record->field('5..')) {
-            if (($field->subfield('5')) && ($field->subfield('a')) && ($field->subfield('5') eq 'g')) {
-                push @seealso, {
-                    heading => $field->as_string('abcdefgjxyz'),
-                    type => 'broader',
-                    field => $field->tag(),
-                    search => $field->as_string('abcdefgjxyz'),
-                    authid => $field->subfield('9')
-                };
-            } elsif (($field->subfield('5')) && ($field->as_string) && ($field->subfield('5') eq 'h')){
-                push @seealso, {
-                    heading => $field->as_string('abcdefgjxyz'),
-                    type => 'narrower',
-                    field => $field->tag(),
-                    search => $field->as_string('abcdefgjxyz'),
-                    authid => $field->subfield('9')
-                };
-            } elsif ($field->subfield('a')) {
-                push @seealso, {
-                    heading => $field->as_string('abcdefgxyz'),
-                    type => 'seealso',
-                    field => $field->tag(),
-                    search => $field->as_string('abcdefgjxyz'),
-                    authid => $field->subfield('9')
-                };
+
+        # see :
+        @seealso = map {
+            my $type = $unimarc_relation_from_code{$_->subfield('5') || 'a'};
+            my $heading = $_->as_string('abcdefgjxyz');
+            {
+                field   => $_->tag,
+                type    => $type,
+                heading => $heading,
+                search  => $heading,
+                authid  => $_->subfield('9'),
             }
-        }
-# // form
-        foreach my $field ($record->field('7..')) {
-            my $lang = substr($field->subfield('8'),3,3);
-            push @otherscript, { lang => $lang, term => $field->subfield('a'), direction => 'ltr', field => $field->tag() };
-        }
+        } $record->field('5..');
+
+        # Other forms
+        @otherscript = map { {
+            lang      => $_->subfield('8') || '',
+            term      => $_->subfield('a'),
+            direction => 'ltr',
+            field     => $_->tag,
+        } } $record->field('7..');
+
     } else {
 # construct MARC21 summary
 # FIXME - looping over 1XX is questionable
