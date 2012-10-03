@@ -5995,7 +5995,7 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "XXX";
+$DBversion = "3.09.00.060";
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('HoldsToPullStartDate','2','Set the default start date for the Holds to pull list to this many days ago',NULL,'Integer')");
     print "Upgrade to $DBversion done (Added HoldsToPullStartDate syspref)\n";

@@ -385,3 +385,4 @@ INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) V
 INSERT INTO systempreferences (variable,value,explanation,type) VALUES('OPACdidyoumean',NULL,'Did you mean? configuration for the OPAC. Do not change, as this is controlled by /cgi-bin/koha/admin/didyoumean.pl.','Free');
 INSERT INTO systempreferences (variable,value,explanation,type) VALUES('INTRAdidyoumean',NULL,'Did you mean? configuration for the Intranet. Do not change, as this is controlled by /cgi-bin/koha/admin/didyoumean.pl.','Free');
 INSERT INTO systempreferences (variable, value, options, explanation, type) VALUES ('BlockReturnOfWithdrawnItems', '1', '0', 'If enabled, items that are marked as withdrawn cannot be returned.', 'YesNo');
+INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('HoldsToPullStartDate','2','Set the default start date for the Holds to pull list to this many days ago',NULL,'Integer');
