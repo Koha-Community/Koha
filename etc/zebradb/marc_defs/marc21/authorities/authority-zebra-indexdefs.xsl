@@ -26,10 +26,10 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
     </xslo:if>
   </xslo:template>
   <xslo:template match="marc:record">
-    <xslo:variable name="controlField001" select="normalize-space(marc:controlfield[@tag='001'])"/>
+    <xslo:variable name="idfield" select="normalize-space(marc:controlfield[@tag='001'])"/>
     <z:record type="update">
       <xslo:attribute name="z:id">
-        <xslo:value-of select="$controlField001"/>
+        <xslo:value-of select="$idfield"/>
       </xslo:attribute>
       <xslo:apply-templates/>
       <xslo:apply-templates mode="index_subfields"/>
@@ -1101,6 +1101,30 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
       </xslo:variable>
       <xslo:value-of select="normalize-space($raw_heading)"/>
     </z:index>
+  </xslo:template>
+  <xslo:template mode="index_heading_conditional">
+    <xslo:if test="substring(marc:subfield[@code='w']/text(), 2, 1)">
+      <z:index name="Previous-heading-see-from:p">
+        <xslo:variable name="raw_heading">
+          <xslo:for-each select="marc:subfield">
+            <xslo:if test="contains('abvxyz', @code)" name="Previous-heading-see-from:p">
+              <xslo:if test="position() &gt; 1">
+                <xslo:choose>
+                  <xslo:when test="contains('vxyz', @code)">
+                    <xslo:text>--</xslo:text>
+                  </xslo:when>
+                  <xslo:otherwise>
+                    <xslo:value-of select="substring(' ', 1, 1)"/>
+                  </xslo:otherwise>
+                </xslo:choose>
+              </xslo:if>
+              <xslo:value-of select="."/>
+            </xslo:if>
+          </xslo:for-each>
+        </xslo:variable>
+        <xslo:value-of select="normalize-space($raw_heading)"/>
+      </z:index>
+    </xslo:if>
   </xslo:template>
   <xslo:template mode="index_match_heading" match="marc:datafield[@tag='100']">
     <z:index name="Match:w Match:p Match-heading:p Match-heading:s">

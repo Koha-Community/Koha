@@ -47,9 +47,11 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
             </xslo:template>
 
             <xslo:template match="marc:record">
-                <xslo:variable name="controlField001" select="normalize-space(marc:controlfield[@tag='001'])"/>
+                <xslo:variable name="idfield">
+                    <xsl:attribute name="select">normalize-space(<xsl:value-of select="//id"/>)</xsl:attribute>
+                </xslo:variable>
                 <z:record type="update">
-                    <xslo:attribute name="z:id"><xslo:value-of select="$controlField001"/></xslo:attribute>
+                    <xslo:attribute name="z:id"><xslo:value-of select="$idfield"/></xslo:attribute>
                     <xslo:apply-templates/>
                     <xslo:apply-templates mode="index_subfields"/>
                     <xslo:apply-templates mode="index_data_field"/>
