@@ -2008,7 +2008,7 @@ sub MoveReserve {
         }
 
         if ( $cancelreserve eq 'revert' ) { ## Revert waiting reserve to priority 1
-            RevertWaitingStatus( itemnumber => $itemnumber );
+            RevertWaitingStatus({ itemnumber => $itemnumber });
         }
         elsif ( $cancelreserve eq 'cancel' || $cancelreserve ) { # cancel reserves on this item
             CancelReserve(0, $res->{'itemnumber'}, $res->{'borrowernumber'});
@@ -2063,7 +2063,7 @@ sub MergeHolds {
 
 =head2 RevertWaitingStatus
 
-  $success = RevertWaitingStatus( itemnumber => $itemnumber );
+  $success = RevertWaitingStatus({ itemnumber => $itemnumber });
 
   Reverts a 'waiting' hold back to a regular hold with a priority of 1.
 
@@ -2076,8 +2076,8 @@ sub MergeHolds {
 =cut
 
 sub RevertWaitingStatus {
-    my ( %params ) = @_;
-    my $itemnumber = $params{'itemnumber'};
+    my ( $params ) = @_;
+    my $itemnumber = $params->{'itemnumber'};
 
     return unless ( $itemnumber );
 
