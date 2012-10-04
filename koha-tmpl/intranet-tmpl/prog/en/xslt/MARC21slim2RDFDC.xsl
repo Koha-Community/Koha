@@ -2,7 +2,7 @@
 <!DOCTYPE stylesheet [<!ENTITY nbsp "&#160;" >]>
 <xsl:stylesheet version="1.0" xmlns:marc="http://www.loc.gov/MARC21/slim" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" exclude-result-prefixes="marc">
 	<xsl:import href="MARC21slimUtils.xsl"/>
-	<xsl:output method="xml" indent="yes"/>
+    <xsl:output method="xml" indent="yes" encoding="UTF-8"/>
 	
 	<xsl:template match="/">
 			<xsl:apply-templates/>

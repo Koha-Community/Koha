@@ -7,7 +7,7 @@
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   exclude-result-prefixes="marc">
 	<xsl:import href="MARC21slimUtils.xsl"/>
-	<xsl:output method="xml" indent="yes"/>
+    <xsl:output method="xml" indent="yes" encoding="UTF-8"/>
 	
 	<xsl:template match="/">
 			<xsl:apply-templates/>

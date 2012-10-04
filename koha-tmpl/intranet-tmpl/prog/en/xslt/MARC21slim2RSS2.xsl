@@ -4,7 +4,7 @@
 
 <xsl:stylesheet version="1.0" xmlns:marc="http://www.loc.gov/MARC21/slim" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" exclude-result-prefixes="marc">
 	<xsl:import href="MARC21slimUtils2.xsl"/>
-	<xsl:output method="xml" indent="yes"/>
+    <xsl:output method="xml" indent="yes" encoding="UTF-8"/>
 	
 	<!--Added ISBN and deleted attributes 6/04 jer-->
 	
