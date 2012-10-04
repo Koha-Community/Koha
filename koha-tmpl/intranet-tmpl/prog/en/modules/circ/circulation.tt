@@ -774,7 +774,9 @@ No patron matched <span class="ex">[% message %]</span>
         <th scope="col">Price</th>
         <th scope="col">Renew <p class="column-tool"><a href="#" id="CheckAllitems">select all</a> | <a href="#" id="CheckNoitems">none</a></p></th>
         <th scope="col">Check in <p class="column-tool"><a href="#" id="CheckAllreturns">select all</a> | <a href="#" id="CheckNoreturns">none</a></p></th>
-        <th scope="col">Export <p class="column-tool"><a href="#" id="CheckAllexports">select all</a> | <a href="#" id="CheckNoexports">none</a></p></th>
+        [% IF export_remove_fields OR export_with_csv_profile %]
+          <th scope="col">Export <p class="column-tool"><a href="#" id="CheckAllexports">select all</a> | <a href="#" id="CheckNoexports">none</a></p></th>
+        [% END %]
     </tr>
 [% IF ( todayissues ) %]</thead>
 [% INCLUDE 'checkouts-table-footer.inc' %]
@@ -844,10 +846,12 @@ No patron matched <span class="ex">[% message %]</span>
             </td>
             [% END %]
         [% END %]
-        <td style="text-align:center;">
+        [% IF export_remove_fields OR export_with_csv_profile %]
+          <td style="text-align:center;">
             <input type="checkbox" id="export_[% todayissue.biblionumber %]" name="biblionumbers" value="[% todayissue.biblionumber %]" />
             <input type="checkbox" name="itemnumbers" value="[% todayissue.itemnumber %]" style="visibility:hidden;" />
-        </td>
+          </td>
+        [% END %]
     </tr>
     [% END %] <!-- /loop todayissues -->
     <!-- /if todayissues -->[% END %]
@@ -923,10 +927,12 @@ No patron matched <span class="ex">[% message %]</span>
             </td>
             [% END %]
         [% END %]
-        <td style="text-align:center;">
+        [% IF export_remove_fields OR export_with_csv_profile %]
+          <td style="text-align:center;">
             <input type="checkbox" id="export_[% previssue.biblionumber %]" name="biblionumbers" value="[% previssue.biblionumber %]" />
             <input type="checkbox" name="itemnumbers" value="[% previssue.itemnumber %]" style="visibility:hidden;" />
-        </td>
+          </td>
+        [% END %]
     </tr>
     <!-- /loop previssues -->[% END %]
 <!--/if previssues -->[% END %]
@@ -942,13 +948,15 @@ No patron matched <span class="ex">[% message %]</span>
         [% END %]
         <input type="submit" name="renew_checked" value="Renew or Return checked items" />
         <input type="submit" id="renew_all" name="renew_all" value="Renew all" />
-        <br/><br/>
-        Don't export fields : <input type="text" id="export_remove_fields" name="export_remove_fields" value="[% export_remove_fields %]" title="Use for iso2709 exports" />
-        <span id="exportmenuc">Export</span>
-        <input type="hidden" name="op" value="export" />
-        <input type="hidden" id="export_format" name="format" value="iso2709" />
-        <input type="hidden" id="dont_export_item" name="dont_export_item" value="0" />
-        <input type="hidden" id="record_type" name="record_type" value="bibs" />
+        [% IF export_remove_fields OR export_with_csv_profile %]
+            <br/><br/>
+            Don't export fields : <input type="text" id="export_remove_fields" name="export_remove_fields" value="[% export_remove_fields %]" title="Use for iso2709 exports" />
+            <span id="exportmenuc">Export</span>
+            <input type="hidden" name="op" value="export" />
+            <input type="hidden" id="export_format" name="format" value="iso2709" />
+            <input type="hidden" id="dont_export_item" name="dont_export_item" value="0" />
+            <input type="hidden" id="record_type" name="record_type" value="bibs" />
+        [% END %]
     </fieldset>
     [% END %]
     </form>
