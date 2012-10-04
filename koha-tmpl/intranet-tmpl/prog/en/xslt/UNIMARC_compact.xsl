@@ -7,7 +7,7 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns:marc="http://www.loc.gov/MARC21/slim" 
   version="1.0">
-  <xsl:output method="html" doctype-public="-//W3C/DTD html 4.01 Transitional//EN" doctype-system="http://www.w3.org/TR/html4/strict.dtd" />    
+  <xsl:output method="html" doctype-public="-//W3C/DTD html 4.01 Transitional//EN" doctype-system="http://www.w3.org/TR/html4/strict.dtd" encoding="UTF-8"/>
       <xsl:template match="/">
         <html>
           <head>
