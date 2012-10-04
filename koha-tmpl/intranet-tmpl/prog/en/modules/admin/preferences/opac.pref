@@ -296,6 +296,12 @@ OPAC:
                   no: "Don't allow"
             - patrons to browse subject authorities on OPAC (run misc/cronjobs/build_browser_and_cloud.pl to create the browser list)
         -
+            - pref: OpacCloud
+              choices:
+                  yes: Show
+                  no: "Don't show"
+            - a subject cloud on OPAC (run misc/cronjobs/build_browser_and_cloud.pl to build)
+        -
             - pref: OpacAuthorities
               choices:
                   yes: Allow
