@@ -27,8 +27,6 @@
 use strict;
 use warnings;
 
-use open OUT=> ":encoding(UTF-8)", ':std';
-
 # standard or CPAN modules used
 use CGI;
 use Encode;
@@ -45,29 +43,20 @@ use XML::LibXML;
 my $input       = new CGI;
 my $biblionumber = $input->param('id');
 $biblionumber   = int($biblionumber);
-my $importid	= $input->param('importid');
-my $view		= $input->param('viewas') || 'marc';
+my $importid= $input->param('importid');
+my $view= $input->param('viewas') || 'marc';
 
-my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
-        template_name   => "opac-showmarc.tmpl",
-        query           => $input,
-        type            => "opac",
-        authnotrequired => ( C4::Context->preference("OpacPublic") ? 1 : 0 ),
-        debug           => 1,
-});
-
-$template->param( SCRIPT_NAME => $ENV{'SCRIPT_NAME'}, );
-my ($record, $xmlrecord);
+my $record;
 if ($importid) {
-	my ($marc,$encoding) = GetImportRecordMarc($importid);
-	$record = MARC::Record->new_from_usmarc($marc) ;
- 	if($view eq 'card') {
-		$xmlrecord = $record->as_xml();
-	}
+    my ($marc) = GetImportRecordMarc($importid);
+    $record = MARC::Record->new_from_usmarc($marc);
+}
+else {
+    $record =GetMarcBiblio($biblionumber);
 }
 
 if ($view eq 'card' || $view eq 'html') {
-    $xmlrecord = GetXmlBiblio($biblionumber) unless $xmlrecord;
+    my $xmlrecord= $importid? $record->as_xml(): GetXmlBiblio($biblionumber);
     my $xslfile;
     my $themelang = '/' . C4::Context->preference("opacthemes") .  '/' . C4::Templates::_current_language();
 
@@ -84,10 +73,16 @@ if ($view eq 'card' || $view eq 'html') {
     my $stylesheet = $xslt->parse_stylesheet($style_doc);
     my $results = $stylesheet->transform($source);
     my $newxmlrecord = $stylesheet->output_string($results);
-    $newxmlrecord = Encode::decode_utf8($newxmlrecord) unless utf8::is_utf8($newxmlrecord);
-    print $input->header(-charset => 'UTF-8'), $newxmlrecord;
-} else {
-    $record =GetMarcBiblio($biblionumber) unless $record; 
+    print $input->header(-charset => 'UTF-8'), Encode::encode_utf8($newxmlrecord);
+}
+else { #view eq marc
+    my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
+        template_name   => "opac-showmarc.tmpl",
+        query           => $input,
+        type            => "opac",
+        authnotrequired => ( C4::Context->preference("OpacPublic") ? 1 : 0 ),
+        debug           => 1,
+    });
     $template->param( MARC_FORMATTED => $record->as_formatted );
     output_html_with_http_headers $input, $cookie, $template->output;
 }
