@@ -1,0 +1,88 @@
+#!/usr/bin/perl
+# koha-shell -- put you in a shell with a koha environment set up
+# Copyright 2012  Catalyst IT, Ltd
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+use Getopt::Long;
+use Modern::Perl;
+
+Getopt::Long::Configure("bundling");
+
+my %opts;
+my $res = GetOptions( \%opts, "command|c=s", "help|h", "login|l", "shell|s=s",
+    "preserve-environment|p|m", "verbose|v" );
+
+if ( !$res || $opts{help} ) {
+    show_help( !$res );
+    exit( !$res );
+}
+
+if ( !@ARGV ) {
+    show_help( 1, "An instance name must be supplied." );
+    exit(1);
+}
+my $instance = shift @ARGV;
+if ( !-e "/etc/koha/sites/$instance" ) {
+    show_help( 1, "The instance doesn't exist: $instance" );
+    exit(1);
+}
+my $shell = $opts{shell} || $ENV{SHELL} || '/bin/sh';
+
+# Now we're set up, build the 'su' command
+my @su_args;
+push @su_args, '/bin/su';
+push @su_args, '--preserve-environment' if $opts{'preserve-environment'};
+push @su_args, '--login' if $opts{login};
+push @su_args, '--command',
+    "env "
+  . "KOHA_CONF=/etc/koha/sites/$instance/koha-conf.xml "
+  . "PERL5LIB=/usr/share/koha/lib $shell"
+  . ( $opts{command} ? " -c '$opts{command}'" : '' );
+push @su_args, "$instance-koha";
+
+print "Command: '".join("' '",@su_args)."'\n" if $opts{verbose};
+system(@su_args);
+if ( $? == -1 ) {
+    print STDERR "failed to execute: $!\n";
+}
+elsif ( $? & 127 ) {
+    printf STDERR "child died with signal %d, %s coredump\n",
+      ( $? & 127 ), ( $? & 128 ) ? 'with' : 'without';
+}
+
+sub show_help {
+    my ( $err, $msg ) = @_;
+
+    my $fh = $err ? *STDERR : *STDOUT;
+    say $fh "Error: " . $msg if $msg;
+    print $fh $_ while <DATA>;
+}
+
+__DATA__
+koha-shell -- gives you a shell with your Koha environment set up
+
+Usage: koha-shell [options] [instance name]
+
+Options:
+    -c, --command COMMAND   pass COMMAND to the invoked shell
+    -h, --help              show this help and quit
+    -l, --login             make the shell a login shell
+    -m, -p,
+    --preserve-environment  do not reset environment variables
+    -s, --shell SHELL       use SHELL instead of the one from your environment
+    -v, --verbose           output the full command that will be executed
+
+The default shell is the one currently in use. Refer to su(1) for more detail
+on these options.
