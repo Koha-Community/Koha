@@ -1,0 +1,112 @@
+<article xmlns='http://docbook.org/ns/docbook'>
+    <title>koha-shell</title>
+    <info>
+        <productname>Koha</productname> is the first free software library automation package.
+        <author>
+            <personname>
+                <firstname>Robin</firstname>
+                <surname>Sheat</surname>
+            </personname>
+            <affiliation>
+                <orgname>Catalyst IT</orgname>
+                <uri>http://www.catalyst.net.nz</uri>
+            </affiliation>
+            <contrib>Author</contrib>
+        </author>
+    </info>
+
+    <refentry xml:id="koha-shell">
+
+        <refmeta>
+            <refentrytitle>koha-shell</refentrytitle>
+            <manvolnum>8</manvolnum>
+        </refmeta>
+
+        <refnamediv>
+            <refname>koha-shell</refname>
+            <refpurpose>Gives you a shell with the user and environment set to make it easy to do koha operations.</refpurpose>
+            <refclass>UNIX/Linux</refclass>
+        </refnamediv>
+
+        <refsynopsisdiv>
+            <cmdsynopsis>
+                <command>koha-shell</command>
+                <arg><option>--command|-c</option> COMMAND</arg>
+                <arg><option>--help|-h</option></arg>
+                <arg><option>--login|-l</option></arg>
+                <arg><option>--preserve-environment|-p|-m</option></arg>
+                <arg><option>--shell|-s</option> SHELL</arg>
+                <arg><option>--verbose|-v</option></arg>
+                <arg choice="req" rep="norepeat"><replaceable>instancename</replaceable></arg>
+            </cmdsynopsis>
+        </refsynopsisdiv>
+
+        <refsect1><title>Options</title>
+            <variablelist>
+                <varlistentry>
+                    <term><option>--command</option></term>
+                    <listitem>
+                        <para>Run the specified command rather than launching a shell.</para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term><option>--help</option></term>
+                    <listitem>
+                        <para>Show a usage synopsis.</para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term><option>--login</option></term>
+                    <listitem>
+                        <para>Make the shell a login shell.</para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term><option>--preserve-environment</option></term>
+                    <listitem>
+                        <para>Preserve the current environment (note that if you run it through 'sudo', this may not work as you'd expect.)</para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term><option>--shell</option></term>
+                    <listitem>
+                        <para>Run the specified shell. The default is the shell of the current environment, followed by /bin/sh.</para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term><option>--verbose</option></term>
+                    <listitem>
+                        <para>Show the command that is going to be run.</para>
+                    </listitem>
+                </varlistentry>
+            </variablelist>
+        </refsect1>
+
+        <refsect1><title>Description</title>
+            <para>This launches a shell with the user and required environment variables set in such a way that running any Koha commands will
+                work correctly. With the use of '-c', it can be used to easily run commands in the correct environment.</para>
+            <para>It behaves mostly as a wrapper for <command>su(1)</command>, so a deeper discussion of the options can be found in there.</para>
+        </refsect1>
+
+        <refsect1>
+            <title>Examples</title>
+            <para>
+                To get a shell:
+            </para>
+            <para><command>$ sudo koha-shell library</command></para>
+            <para>
+                To run a command:
+            </para>
+            <para><command>$ sudo koha-shell -c "/usr/share/koha/bin/migration_tools/bulkmarcimport.pl -b -file data.marc" library</command></para>
+        </refsect1>
+
+        <refsect1><title>See also</title>
+            <simplelist type="inline">
+                <member><command>koha-foreach(8)</command></member>
+                <member><command>su(1)</command></member>
+            </simplelist>
+        </refsect1>
+
+    </refentry>
+
+</article>
