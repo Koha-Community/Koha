@@ -36,9 +36,9 @@ override_dh_auto_install:
 	ln -s /usr/share/javascript/yui \
 		$(TMP)/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/lib/yui
 	rm -r \
-		$(TMP)/usr/share/koha/opac/htdocs/opac-tmpl/prog/en/lib/yui
+              $(TMP)/usr/share/koha/opac/htdocs/opac-tmpl/lib/yui
 	ln -s /usr/share/javascript/yui \
-		$(TMP)/usr/share/koha/opac/htdocs/opac-tmpl/prog/en/lib/yui
+         $(TMP)/usr/share/koha/opac/htdocs/opac-tmpl/lib/yui
 	install -d $(TMP)/etc/apache2/sites-available
 	install -d $(TMP)/etc/apache2/sites-enabled
 	install -d $(TMP)/etc/apache2/conf.d
@@ -51,11 +51,11 @@ override_dh_auto_install:
 	sed -i $(TMP)/usr/share/koha/koha-conf.xml.in \
 		-e '/^ <user>/s/>.*</>_DBC_DBUSER_</' \
 		-e '/^ <pass>/s/>.*</>_DBC_DBPASS_</'
-	install -m 0644 koha-tmpl/opac-tmpl/prog/en/lib/yui/skin.css \
-		koha-tmpl/opac-tmpl/prog/en/lib/yui/reset-fonts-grids.css \
+	install -m 0644 koha-tmpl/opac-tmpl/lib/yui/skin.css \
+         koha-tmpl/opac-tmpl/lib/yui/reset-fonts-grids.css \
 		$(TMP)/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/css
-	install -m 0644 koha-tmpl/opac-tmpl/prog/en/lib/yui/skin.css \
-		koha-tmpl/opac-tmpl/prog/en/lib/yui/reset-fonts-grids.css \
+	install -m 0644 koha-tmpl/opac-tmpl/lib/yui/skin.css \
+         koha-tmpl/opac-tmpl/lib/yui/reset-fonts-grids.css \
 		$(TMP)/usr/share/koha/opac/htdocs/opac-tmpl/prog/en/css
 	install -m 0644 koha-tmpl/intranet-tmpl/prog/en/lib/yui/menu-button-arrow-disabled.png \
 		$(TMP)/usr/share/koha/opac/htdocs/opac-tmpl/prog/en/css
