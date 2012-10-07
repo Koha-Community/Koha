@@ -216,12 +216,10 @@ sub SearchPrefs {
 
                 foreach my $piece ( @$line ) {
                     if ( ref( $piece ) eq 'HASH' ) {
-                        if ( !$piece->{'pref'} ){ next; }
-                        if ( $piece->{'pref'} =~ /^$searchfield$/i ) {
-                            my ( undef, $LINES ) = TransformPrefsToHTML( $data, $searchfield );
-
-                            return { search_jumped => 1, tab => $tab_name, tab_title => $title, LINES => $LINES };
-                        } elsif ( matches( $piece->{'pref'}, \@terms) ) {
+                        if ( !$piece->{'pref'} ){
+                            next;
+                        }
+                        if ( matches( $piece->{'pref'}, \@terms) ) {
                             $matched = 1;
                         } elsif ( ref( $piece->{'choices'} ) eq 'HASH' && grep( { $_ && matches( $_, \@terms ) } values( %{ $piece->{'choices'} } ) ) ) {
                             $matched = 1;
