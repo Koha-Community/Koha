@@ -6002,7 +6002,7 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.09.00.XXX";
+$DBversion = "3.09.00.061";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("UPDATE systempreferences set value=0 WHERE variable='OPACItemsResultsDisplay' AND value='statuses'");
     $dbh->do("UPDATE systempreferences set value=1 WHERE variable='OPACItemsResultsDisplay' AND value='itemdetails'");
