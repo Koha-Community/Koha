@@ -532,9 +532,9 @@ sub getRecords {
                             || ( $facets_info->{$link_value}->{'expanded'} ) )
                         {
 
-                      # Sanitize the link value ), ( will cause errors with CCL,
+                      # Sanitize the link value : parenthesis, question and exclamation mark will cause errors with CCL
                             my $facet_link_value = $one_facet;
-                            $facet_link_value =~ s/(\(|\))/ /g;
+                            $facet_link_value =~ s/[()!?¡¿؟]/ /g;
 
                             # fix the length that will display in the label,
                             my $facet_label_value = $one_facet;
