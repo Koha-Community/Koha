@@ -158,7 +158,7 @@ $(function() {
                      </div>
                     [% END %]
                     [% IF ( paramsloo.nopermission ) %]
-                      <div class="dialog alert">ERROR: You do not have adequate permission for that action on list [% paramsloo.nopermission %].</div>
+                      <div class="dialog alert">ERROR: You do not have adequate permission for that action on list [% paramsloo.nopermission |html%].</div>
                     [% END %]
                     [% IF ( paramsloo.failgetitem ) %]
                       <div class="dialog alert">ERROR: No item found with barcode [% paramsloo.failgetitem %].</div>
