@@ -29,10 +29,10 @@ KOHA_CRON_PATH = /usr/share/koha/bin/cronjobs
 # by manipulating those variables in the command.
 #
 # For example, on the same codebase:
-# */10 * * * *    KOHA_CONF=/etc/koha/koha-conf.xml /usr/share/koha/bin/migration_tools/rebuild_zebra.pl -b -a -z >/dev/null
+# */10 * * * *    __KOHA_USER__  KOHA_CONF=/etc/koha/koha-conf.xml /usr/share/koha/bin/migration_tools/rebuild_zebra.pl -b -a -z >/dev/null
 #
 # For example, on a separate codebase:
-# */10 * * * *    KOHA_CONF=/etc/koha/koha-conf.xml PERL5LIB=/home/koha/kohaclone /home/koha/kohaclone/misc/migration_tools/rebuild_zebra.pl -b -a -z >/dev/null
+# */10 * * * *    __KOHA_USER__  KOHA_CONF=/etc/koha/koha-conf.xml PERL5LIB=/home/koha/kohaclone /home/koha/kohaclone/misc/migration_tools/rebuild_zebra.pl -b -a -z >/dev/null
 # 
 # ADDITIONAL INFO:
 # See the perldoc of individual scripts to determine what other options
@@ -43,42 +43,42 @@ KOHA_CRON_PATH = /usr/share/koha/bin/cronjobs
 # Cron/crontab will choke without it.
 #
 # SCHEDULED JOBS:
-# m h  dom mon dow   command
+# m h  dom mon dow   user command
 
 # OVERDUE NOTICES
-0    1 * * *  $KOHA_CRON_PATH/overdue_notices.pl -t
+0    1 * * *  __KOHA_USER__  $KOHA_CRON_PATH/overdue_notices.pl -t
 
 # FINES
-5    1 * * *  $KOHA_CRON_PATH/fines.pl
+5    1 * * *  __KOHA_USER__  $KOHA_CRON_PATH/fines.pl
 
 # ADVANCE NOTICES
-10   1 * * *  $KOHA_CRON_PATH/advance_notices.pl -c
+10   1 * * *  __KOHA_USER__  $KOHA_CRON_PATH/advance_notices.pl -c
 
 # PROCESS LONG OVERDUES
 # updates item status from available to longoverdue for items long overdue
-# 19 1 * * *  $KOHA_CRON_PATH/longoverdue.pl --lost 90=1 --confirm
+# 19 1 * * *  __KOHA_USER__  $KOHA_CRON_PATH/longoverdue.pl --lost 90=1 --confirm
 
 # SEND EMAILS
-15   * * * *  $KOHA_CRON_PATH/process_message_queue.pl
+15   * * * *  __KOHA_USER__  $KOHA_CRON_PATH/process_message_queue.pl
 
 # Hourly holds queue updated
-52   * * * *  $KOHA_CRON_PATH/holds/build_holds_queue.pl >/dev/null 2>&1
+52   * * * *  __KOHA_USER__  $KOHA_CRON_PATH/holds/build_holds_queue.pl >/dev/null 2>&1
 
 # Cancel expired holds
-0 1 * * *  $KOHA_CRON_PATH/holds/cancel_expired_holds.pl >/dev/null 2>&1
+0 1 * * *  __KOHA_USER__ $KOHA_CRON_PATH/holds/cancel_expired_holds.pl >/dev/null 2>&1
 
 # Update popularity counts for biblio records
-0 2 * * *  $KOHA_CRON_PATH/update_totalissues.pl --commit=1000 --use-stats --incremental --interval=1d >/dev/null 2>&1
+0 2 * * *  __KOHA_USER__ $KOHA_CRON_PATH/update_totalissues.pl --commit=1000 --use-stats --incremental --interval=1d >/dev/null 2>&1
 
 # ZEBRA INDEX UPDATES with -z option, incremental index updates throughout the day
 # for both authorities and bibs
-*/10 * * * *  $KOHA_CRON_PATH/../migration_tools/rebuild_zebra.pl -b -a -z >/dev/null
+*/10 * * * *  __KOHA_USER__  $KOHA_CRON_PATH/../migration_tools/rebuild_zebra.pl -b -a -z >/dev/null
 
 # services_throttle -- resets the xISBN service
-59 23 * * *  $KOHA_CRON_PATH/services_throttle.pl > /dev/null 2>&1
+59 23 * * *  __KOHA_USER__ $KOHA_CRON_PATH/services_throttle.pl > /dev/null 2>&1
 
 # clean up databases nightly.  Be sure not to run this with --sessions during a time when the system is in use!
-16 1 * * * $KOHA_CRON_PATH/cleanup_database.pl --sessions --zebraqueue 10
+16 1 * * * __KOHA_USER__ $KOHA_CRON_PATH/cleanup_database.pl --sessions --zebraqueue 10
 
 # delete old purchase suggestions weekly. Replace XX with a number to define the age of suggestions to delete.
-@weekly	$KOHA_CRON_PATH/purge_suggestions.pl --days XX > /dev/null 2>&1
+@weekly	__KOHA_USER__  $KOHA_CRON_PATH/purge_suggestions.pl --days XX > /dev/null 2>&1
