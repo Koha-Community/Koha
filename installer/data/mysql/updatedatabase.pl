@@ -4311,7 +4311,7 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
 $DBversion = "3.03.00.050";
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     $dbh->do("
-	INSERT IGNORE INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OpacHiddenItems','','This syspref allows to define custom rules for hiding specific items at opac. See docs/opac/OpacHiddenItems.txt for more informations.','','Textarea');
+	INSERT IGNORE INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OpacHiddenItems','','This syspref allows to define custom rules for hiding specific items at opac. See http://manual.koha-community.org/3.8/en/administration.html#OpacHiddenItems for more informations.','','Textarea');
 	");
     print "Upgrade to $DBversion done (Adding OpacHiddenItems syspref)\n";
     SetVersion($DBversion);
