@@ -81,7 +81,7 @@
         });
 [% END %]
 
-        $("#holdingst").tablesorter({[% IF ( dateformat == 'metric' ) %]
+        $(".holdingst").tablesorter({[% IF ( dateformat == 'metric' ) %]
     dateFormat: 'uk',[% END %]
             widgets : ['zebra'],
             sortList: [[0,0]]
@@ -743,73 +743,13 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 </div>
 [% END %]
 
-[% BLOCK items_table %]
-    <table id="holdingst">
-        <thead><tr>
-            [% IF ( item_level_itypes ) %]<th id="item_itemtype">Item type</th>[% END %]
-            <th id="item_location">Location</th>
-            [% IF ( itemdata_ccode ) %]<th id="item_ccode">Collection</th>[% END %]
-            <th id="item_callnumber">Call number</th>
-            [% IF ( itemdata_enumchron ) %]<th id="item_enumchron">Vol info</th>[% END %]
-            [% IF ( itemdata_uri ) %]<th id="item_url">url</th>[% END %]
-            [% IF ( itemdata_copynumber ) %]<th id="item_copy">Copy</th>[% END %]
-            <th id="item_status">Status</th>
-            [% IF ( itemdata_itemnotes ) %]<th id="item_notes">Notes</th>[% END %]
-            <th id="item_datedue">Date due</th>
-            [% IF ( OPACShowBarcode ) %]<th>Barcode</th>[% END %]
-        [% IF holds_count.defined %]
-            <th>Item holds</th>
-        [% ELSIF show_priority %]
-            <th>Item hold queue priority</th>
-        [% END %]
-        </tr></thead>
-	    <tbody>[% FOREACH ITEM_RESULT IN items %]
-      <tr>[% IF ( item_level_itypes ) %]<td class="itype">[% UNLESS ( noItemTypeImages ) %][% IF ( ITEM_RESULT.imageurl ) %]<img src="[% ITEM_RESULT.imageurl %]" title="[% ITEM_RESULT.description %]" alt="[% ITEM_RESULT.description %]" />[% END %][% END %] [% ITEM_RESULT.description %]</td>[% END %]
-             <td class="location">
-    [% UNLESS ( singleBranchMode ) %]
-        <span class="[% ITEM_RESULT.branch_opac_info ? 'branch-info-tooltip-trigger' : '' %]">
-        [% IF ( ITEM_RESULT.branchurl ) %]
-        <a href="[% ITEM_RESULT.branchurl %]">[% ITEM_RESULT.branchname %]</a>
-        [% ELSE %]
-        [% ITEM_RESULT.branchname %]
-        [% END %]
-        </span>
-        <div class="branch-info-tooltip">[% ITEM_RESULT.branch_opac_info %]</div>
-    [% END %]
-    <span class="shelvingloc">[% ITEM_RESULT.location_description %]</span>
-    </td>
-            [% IF ( itemdata_ccode ) %]<td class="collection">[% ITEM_RESULT.ccode %]</td>[% END %]
-        <td class="call_no">[% IF ( ITEM_RESULT.itemcallnumber ) %] [% ITEM_RESULT.itemcallnumber %][% IF ( OPACShelfBrowser ) %] (<a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% ITEM_RESULT.biblionumber %]&amp;shelfbrowse_itemnumber=[% ITEM_RESULT.itemnumber %]#shelfbrowser">Browse shelf</a>)[% END %][% END %]</td>
-            [% IF ( itemdata_enumchron ) %]<td class="vol_info">[% ITEM_RESULT.enumchron %]</td>[% END %]
-          [% IF ( itemdata_uri ) %]<td class="url"><a href="[% ITEM_RESULT.uri %]">[% ITEM_RESULT.uri %]</a></td>[% END %]
-               [% IF ( itemdata_copynumber ) %]<td class="copynumber">[% ITEM_RESULT.copynumber %]</td>[% END %]
-              <td class="status">[% INCLUDE 'item-status.inc' item = ITEM_RESULT %]</td>
-             [% IF ( itemdata_itemnotes ) %]<td class="notes">[% ITEM_RESULT.itemnotes %]</td>[% END %]
-        <td class="date_due">[% ITEM_RESULT.datedue | $KohaDates %]</td>
-        [% IF ( OPACShowBarcode ) %]<td class="barcode">[% ITEM_RESULT.barcode %]</td>[% END %]
-        [% IF holds_count.defined || show_priority %]
-        <td class="holds_count">
-            [% IF holds_count.defined %] [% ITEM_RESULT.holds_count %] [% END %]
-            [% IF ITEM_RESULT.priority %]
-                [% IF holds_count.defined %]
-                (priority [% ITEM_RESULT.priority %])
-                [% ELSE %]
-                [% ITEM_RESULT.priority %]
-                [% END %]
-            [% END %]
-                </td>
-        [% END %]
-	    </tr>
-	    [% END %]</tbody>
-	</table>
-[% END %][%# end of items_table block %]
 
 <div id="holdings">
 [% IF ( itemloop.size ) %]
     [% IF ( lotsofitems ) %]
 	<p>This record has many physical items. <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]&amp;viewallitems=1#holdings">Click here to view them all.</a></p>
     [% ELSE %]
-        [% PROCESS items_table items=itemloop %]
+        [% INCLUDE items_table items=itemloop tab="holdings" %]
     [% END %]
     [% IF holds_count.defined || priority %]
     <div id="bib_holds">
@@ -835,72 +775,18 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
     [% END %]
 [% END %]
 
-[% IF ( OpenOPACShelfBrowser ) %]
-<div id="shelfbrowser">
-<h5 style="text-align: center;">[% IF ( starting_homebranch ) %]Browsing [% starting_homebranch %] Shelves[% END %][% IF ( starting_location ) %], Shelving location: [% starting_location %][% END %][% IF ( starting_ccode ) %], Collection code: [% starting_ccode %][% END %] <a style="font-size: 75%;" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]">Close shelf browser</a></h5>
-
-        
-        <table><tr>
-        <td rowspan="2" style="width:20px;"><div id="browser_previous"><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% IF ( shelfbrowser_prev_biblionumber ) %][% shelfbrowser_prev_biblionumber %][% ELSE %][% biblionumber %][% END %]&amp;shelfbrowse_itemnumber=[% shelfbrowser_prev_itemnumber %]#shelfbrowser">Previous</a></div></td>
-[% FOREACH PREVIOUS_SHELF_BROWS IN PREVIOUS_SHELF_BROWSE %]
-        <td><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% PREVIOUS_SHELF_BROWS.biblionumber %]&amp;shelfbrowse_itemnumber=[% PREVIOUS_SHELF_BROWS.itemnumber %]#shelfbrowser">
-    [% IF ( OPACAmazonCoverImages ) %][% IF ( PREVIOUS_SHELF_BROWS.browser_normalized_isbn ) %]<img border="0" src="http://images.amazon.com/images/P/[% PREVIOUS_SHELF_BROWS.browser_normalized_isbn %].01._AA75_PU_PU-5_.jpg" alt="" />[% ELSE %]<span class="no-image">No cover image available</span>[% END %][% END %]
-    [% IF ( SyndeticsEnabled ) %][% IF ( SyndeticsCoverImages ) %][% IF ( content_identifier_exists ) %]
-    [% IF ( using_https ) %]
-    <img border="0" src="https://secure.syndetics.com/index.aspx?isbn=[% PREVIOUS_SHELF_BROWS.browser_normalized_isbn %]/SC.GIF&amp;client=[% SyndeticsClientCode %][% IF ( PREVIOUS_SHELF_BROWS.browser_normalized_upc ) %]&amp;upc=[% PREVIOUS_SHELF_BROWS.browser_normalized_upc %][% END %][% IF ( PREVIOUS_SHELF_BROWS.browser_normalized_oclc ) %]&amp;oclc=[% PREVIOUS_SHELF_BROWS.browser_normalized_oclc %][% END %]&amp;type=xw10" alt="" />
-    [% ELSE %]<img border="0" src="http://www.syndetics.com/index.aspx?isbn=[% PREVIOUS_SHELF_BROWS.browser_normalized_isbn %]/SC.GIF&amp;client=[% SyndeticsClientCode %][% IF ( PREVIOUS_SHELF_BROWS.browser_normalized_upc ) %]&amp;upc=[% PREVIOUS_SHELF_BROWS.browser_normalized_upc %][% END %][% IF ( PREVIOUS_SHELF_BROWS.browser_normalized_oclc ) %]&amp;oclc=[% PREVIOUS_SHELF_BROWS.browser_normalized_oclc %][% END %]&amp;type=xw10" alt="" />[% END %]
-    [% ELSE %]<span class="no-image">No cover image available</span>[% END %][% END %][% END %]
-    [% IF ( GoogleJackets ) %][% IF ( PREVIOUS_SHELF_BROWS.browser_normalized_isbn ) %]<div style="block" title="[% PREVIOUS_SHELF_BROWS.biblionumber |url %]" class="[% PREVIOUS_SHELF_BROWS.browser_normalized_isbn %]" id="gbs-thumbnail-preview[% loop.count %]"></div>[% ELSE %]<span class="no-image">No cover image available</span>[% END %][% END %]
-    [% IF ( BakerTaylorEnabled ) %][% IF ( PREVIOUS_SHELF_BROWS.browser_normalized_isbn ) %]
-    <img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL |html %][% PREVIOUS_SHELF_BROWS.browser_normalized_isbn %]" />[% ELSE %]<span class="no-image">No cover image available</span>[% END %][% END %]
-
-</a></td>
-[% END %]
-
-[% FOREACH NEXT_SHELF_BROWS IN NEXT_SHELF_BROWSE %]
-       <td><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% NEXT_SHELF_BROWS.biblionumber %]&amp;shelfbrowse_itemnumber=[% NEXT_SHELF_BROWS.itemnumber %]#shelfbrowser">
-
-    [% IF ( OPACAmazonCoverImages ) %][% IF ( NEXT_SHELF_BROWS.browser_normalized_isbn ) %]
-    <img border="0" src="http://images.amazon.com/images/P/[% NEXT_SHELF_BROWS.browser_normalized_isbn %].01._AA75_PU_PU-5_.jpg" alt="" />[% ELSE %]<span class="no-image">No cover image available</span>[% END %][% END %]
-
-	[% IF ( SyndeticsEnabled ) %][% IF ( SyndeticsCoverImages ) %][% IF ( content_identifier_exists ) %]
-    [% IF ( using_https ) %]
-    <img border="0" src="https://secure.syndetics.com/index.aspx?isbn=[% NEXT_SHELF_BROWS.browser_normalized_isbn %]/SC.GIF&amp;client=[% SyndeticsClientCode %][% IF ( NEXT_SHELF_BROWS.browser_normalized_upc ) %]&amp;upc=[% NEXT_SHELF_BROWS.browser_normalized_upc %][% END %][% IF ( NEXT_SHELF_BROWS.browser_normalized_oclc ) %]&amp;oclc=[% NEXT_SHELF_BROWS.browser_normalized_oclc %][% END %]&amp;type=xw10" alt="" />
-    [% ELSE %]<img border="0" src="http://www.syndetics.com/index.aspx?isbn=[% NEXT_SHELF_BROWS.browser_normalized_isbn %]/SC.GIF&amp;client=[% SyndeticsClientCode %][% IF ( NEXT_SHELF_BROWS.browser_normalized_upc ) %]&amp;upc=[% NEXT_SHELF_BROWS.browser_normalized_upc %][% END %][% IF ( NEXT_SHELF_BROWS.browser_normalized_oclc ) %]&amp;oclc=[% NEXT_SHELF_BROWS.browser_normalized_oclc %][% END %]&amp;type=xw10" alt="" />[% END %]
-    [% ELSE %]<span class="no-image">No cover image available</span>[% END %][% END %][% END %]
-
-    [% IF ( GoogleJackets ) %][% IF ( NEXT_SHELF_BROWS.browser_normalized_isbn ) %]<div style="block" title="[% NEXT_SHELF_BROWS.biblionumber |url %]" class="[% NEXT_SHELF_BROWS.browser_normalized_isbn %]" id="gbs-thumbnail-preview[% loop.count %]"></div>[% ELSE %]<span class="no-image">No cover image available</span>[% END %][% END %]
-    [% IF ( BakerTaylorEnabled ) %][% IF ( NEXT_SHELF_BROWS.browser_normalized_isbn ) %]
-    <img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL |html %][% NEXT_SHELF_BROWS.browser_normalized_isbn %]" />[% ELSE %]<span class="no-image">No cover image available</span>[% END %][% END %]
-
-</a></td>
-[% END %]
-<td rowspan="2"><div id="browser_next"><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% IF ( shelfbrowser_next_biblionumber ) %][% shelfbrowser_next_biblionumber %][% ELSE %][% biblionumber %][% END %]&amp;shelfbrowse_itemnumber=[% shelfbrowser_next_itemnumber %]#shelfbrowser">Next</a></div></td>
-</tr>
-
-<tr>
-[% FOREACH PREVIOUS_SHELF_BROWS IN PREVIOUS_SHELF_BROWSE %]
-<td class="top">[% PREVIOUS_SHELF_BROWS.itemcallnumber %]<a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% PREVIOUS_SHELF_BROWS.biblionumber %]&amp;shelfbrowse_itemnumber=[% PREVIOUS_SHELF_BROWS.itemnumber %]#shelfbrowser">[% PREVIOUS_SHELF_BROWS.title |html %]</a></td>
-[% END %]
-
-[% FOREACH NEXT_SHELF_BROWS IN NEXT_SHELF_BROWSE %]
-       <td class="top" style="width:20px;">[% NEXT_SHELF_BROWS.itemcallnumber %]<a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% NEXT_SHELF_BROWS.biblionumber %]&amp;shelfbrowse_itemnumber=[% NEXT_SHELF_BROWS.itemnumber %]#shelfbrowser">[% NEXT_SHELF_BROWS.title |html %]</a></td>
-[% END %]
-</tr>
-</table>
-        
-</div>
-[% END %]
+[% INCLUDE shelfbrowser tab='holdings' %]
 <br clear="all" />
 </div>
 
 [% IF (SeparateHoldings) %]
     <div id="otherholdings">
         [% IF (otheritemloop.size) %]
-            [% PROCESS items_table items=otheritemloop %]
+            [% INCLUDE items_table items=otheritemloop tab="otherholdings" %]
         [% ELSE %]
             No other items.
         [% END %]
+        [% INCLUDE shelfbrowser tab='otherholdings' %]
     </div>
 [% END %]
 
@@ -1281,3 +1167,196 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 [% END %]
 
 [% INCLUDE 'opac-bottom.inc' %]
+
+[%# End of template %]
+
+[% BLOCK items_table %]
+    <table class="holdingst">
+        <thead><tr>
+            [% IF ( item_level_itypes ) %]<th id="item_itemtype">Item type</th>[% END %]
+            <th id="item_location">Location</th>
+            [% IF ( itemdata_ccode ) %]<th id="item_ccode">Collection</th>[% END %]
+            <th id="item_callnumber">Call number</th>
+            [% IF ( itemdata_enumchron ) %]<th id="item_enumchron">Vol info</th>[% END %]
+            [% IF ( itemdata_uri ) %]<th id="item_url">url</th>[% END %]
+            [% IF ( itemdata_copynumber ) %]<th id="item_copy">Copy</th>[% END %]
+            <th id="item_status">Status</th>
+            [% IF ( itemdata_itemnotes ) %]<th id="item_notes">Notes</th>[% END %]
+            <th id="item_datedue">Date due</th>
+            [% IF ( OPACShowBarcode ) %]<th>Barcode</th>[% END %]
+        [% IF holds_count.defined %]
+            <th>Item holds</th>
+        [% ELSIF show_priority %]
+            <th>Item hold queue priority</th>
+        [% END %]
+        </tr></thead>
+	    <tbody>[% FOREACH ITEM_RESULT IN items %]
+      <tr>[% IF ( item_level_itypes ) %]<td class="itype">[% UNLESS ( noItemTypeImages ) %][% IF ( ITEM_RESULT.imageurl ) %]<img src="[% ITEM_RESULT.imageurl %]" title="[% ITEM_RESULT.description %]" alt="[% ITEM_RESULT.description %]" />[% END %][% END %] [% ITEM_RESULT.description %]</td>[% END %]
+             <td class="location">
+    [% UNLESS ( singleBranchMode ) %]
+        <span class="[% ITEM_RESULT.branch_opac_info ? 'branch-info-tooltip-trigger' : '' %]">
+        [% IF ( ITEM_RESULT.branchurl ) %]
+        <a href="[% ITEM_RESULT.branchurl %]">[% ITEM_RESULT.branchname %]</a>
+        [% ELSE %]
+        [% ITEM_RESULT.branchname %]
+        [% END %]
+        </span>
+        <div class="branch-info-tooltip">[% ITEM_RESULT.branch_opac_info %]</div>
+    [% END %]
+    <span class="shelvingloc">[% ITEM_RESULT.location_description %]</span>
+    </td>
+            [% IF ( itemdata_ccode ) %]<td class="collection">[% ITEM_RESULT.ccode %]</td>[% END %]
+        <td class="call_no">[% IF ( ITEM_RESULT.itemcallnumber ) %] [% ITEM_RESULT.itemcallnumber %][% IF ( OPACShelfBrowser ) %] (<a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% ITEM_RESULT.biblionumber %]&amp;shelfbrowse_itemnumber=[% ITEM_RESULT.itemnumber %]#[% tab %]">Browse shelf</a>)[% END %][% END %]</td>
+            [% IF ( itemdata_enumchron ) %]<td class="vol_info">[% ITEM_RESULT.enumchron %]</td>[% END %]
+          [% IF ( itemdata_uri ) %]<td class="url"><a href="[% ITEM_RESULT.uri %]">[% ITEM_RESULT.uri %]</a></td>[% END %]
+               [% IF ( itemdata_copynumber ) %]<td class="copynumber">[% ITEM_RESULT.copynumber %]</td>[% END %]
+              <td class="status">[% INCLUDE 'item-status.inc' item = ITEM_RESULT %]</td>
+             [% IF ( itemdata_itemnotes ) %]<td class="notes">[% ITEM_RESULT.itemnotes %]</td>[% END %]
+        <td class="date_due">[% ITEM_RESULT.datedue | $KohaDates %]</td>
+        [% IF ( OPACShowBarcode ) %]<td class="barcode">[% ITEM_RESULT.barcode %]</td>[% END %]
+        [% IF holds_count.defined || show_priority %]
+        <td class="holds_count">
+            [% IF holds_count.defined %] [% ITEM_RESULT.holds_count %] [% END %]
+            [% IF ITEM_RESULT.priority %]
+                [% IF holds_count.defined %]
+                (priority [% ITEM_RESULT.priority %])
+                [% ELSE %]
+                [% ITEM_RESULT.priority %]
+                [% END %]
+            [% END %]
+                </td>
+        [% END %]
+	    </tr>
+	    [% END %]</tbody>
+	</table>
+[% END %][%# end of items_table block %]
+
+[% BLOCK shelfbrowser %]
+    [% IF ( OpenOPACShelfBrowser and shelfbrowser_tab == tab) %]
+        [% tab %]
+        [% shelfbrowser_tab %]
+        <div id="shelfbrowser">
+            <h5 style="text-align: center;">
+                [% IF ( starting_homebranch ) %]Browsing [% starting_homebranch %] Shelves[% END %]
+                [% IF ( starting_location ) %], Shelving location: [% starting_location %][% END %]
+                [% IF ( starting_ccode ) %], Collection code: [% starting_ccode %][% END %]
+                <a style="font-size: 75%;" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]">Close shelf browser</a>
+            </h5>
+
+            <table>
+                <tr>
+                    <td rowspan="2" style="width:20px;">
+                        <div id="browser_previous">
+                            <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% IF ( shelfbrowser_prev_biblionumber ) %][% shelfbrowser_prev_biblionumber %][% ELSE %][% biblionumber %][% END %]&amp;shelfbrowse_itemnumber=[% shelfbrowser_prev_itemnumber %]#shelfbrowser">Previous</a>
+                        </div>
+                    </td>
+                    [% FOREACH PREVIOUS_SHELF_BROWS IN PREVIOUS_SHELF_BROWSE %]
+                        <td>
+                            <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% PREVIOUS_SHELF_BROWS.biblionumber %]&amp;shelfbrowse_itemnumber=[% PREVIOUS_SHELF_BROWS.itemnumber %]#shelfbrowser">
+                                [% IF ( OPACAmazonCoverImages ) %]
+                                    [% IF ( PREVIOUS_SHELF_BROWS.browser_normalized_isbn ) %]
+                                        <img border="0" src="http://images.amazon.com/images/P/[% PREVIOUS_SHELF_BROWS.browser_normalized_isbn %].01._AA75_PU_PU-5_.jpg" alt="" />
+                                    [% ELSE %]
+                                        <span class="no-image">No cover image available</span>
+                                    [% END %]
+                                [% END %]
+                                [% IF ( SyndeticsEnabled ) %]
+                                    [% IF ( SyndeticsCoverImages ) %]
+                                        [% IF ( content_identifier_exists ) %]
+                                            [% IF ( using_https ) %]
+                                                <img border="0" src="https://secure.syndetics.com/index.aspx?isbn=[% PREVIOUS_SHELF_BROWS.browser_normalized_isbn %]/SC.GIF&amp;client=[% SyndeticsClientCode %][% IF ( PREVIOUS_SHELF_BROWS.browser_normalized_upc ) %]&amp;upc=[% PREVIOUS_SHELF_BROWS.browser_normalized_upc %][% END %][% IF ( PREVIOUS_SHELF_BROWS.browser_normalized_oclc ) %]&amp;oclc=[% PREVIOUS_SHELF_BROWS.browser_normalized_oclc %][% END %]&amp;type=xw10" alt="" />
+                                            [% ELSE %]
+                                                <img border="0" src="http://www.syndetics.com/index.aspx?isbn=[% PREVIOUS_SHELF_BROWS.browser_normalized_isbn %]/SC.GIF&amp;client=[% SyndeticsClientCode %][% IF ( PREVIOUS_SHELF_BROWS.browser_normalized_upc ) %]&amp;upc=[% PREVIOUS_SHELF_BROWS.browser_normalized_upc %][% END %][% IF ( PREVIOUS_SHELF_BROWS.browser_normalized_oclc ) %]&amp;oclc=[% PREVIOUS_SHELF_BROWS.browser_normalized_oclc %][% END %]&amp;type=xw10" alt="" />
+                                            [% END %]
+                                        [% ELSE %]
+                                            <span class="no-image">No cover image available</span>
+                                        [% END %]
+                                    [% END %]
+                                [% END %]
+                                [% IF ( GoogleJackets ) %]
+                                    [% IF ( PREVIOUS_SHELF_BROWS.browser_normalized_isbn ) %]
+                                        <div style="block" title="[% PREVIOUS_SHELF_BROWS.biblionumber |url %]" class="[% PREVIOUS_SHELF_BROWS.browser_normalized_isbn %]" id="gbs-thumbnail-preview[% loop.count %]"></div>
+                                    [% ELSE %]
+                                        <span class="no-image">No cover image available</span>
+                                    [% END %]
+                                [% END %]
+                                [% IF ( BakerTaylorEnabled ) %]
+                                    [% IF ( PREVIOUS_SHELF_BROWS.browser_normalized_isbn ) %]
+                                        <img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL |html %][% PREVIOUS_SHELF_BROWS.browser_normalized_isbn %]" />
+                                    [% ELSE %]
+                                        <span class="no-image">No cover image available</span>
+                                    [% END %]
+                                [% END %]
+                            </a>
+                        </td>
+                    [% END %]
+
+                    [% FOREACH NEXT_SHELF_BROWS IN NEXT_SHELF_BROWSE %]
+                        <td>
+                            <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% NEXT_SHELF_BROWS.biblionumber %]&amp;shelfbrowse_itemnumber=[% NEXT_SHELF_BROWS.itemnumber %]#shelfbrowser">
+                                [% IF ( OPACAmazonCoverImages ) %]
+                                    [% IF ( NEXT_SHELF_BROWS.browser_normalized_isbn ) %]
+                                        <img border="0" src="http://images.amazon.com/images/P/[% NEXT_SHELF_BROWS.browser_normalized_isbn %].01._AA75_PU_PU-5_.jpg" alt="" />
+                                    [% ELSE %]
+                                        <span class="no-image">No cover image available</span>
+                                    [% END %]
+                                [% END %]
+
+                                [% IF ( SyndeticsEnabled ) %]
+                                    [% IF ( SyndeticsCoverImages ) %]
+                                        [% IF ( content_identifier_exists ) %]
+                                            [% IF ( using_https ) %]
+                                                <img border="0" src="https://secure.syndetics.com/index.aspx?isbn=[% NEXT_SHELF_BROWS.browser_normalized_isbn %]/SC.GIF&amp;client=[% SyndeticsClientCode %][% IF ( NEXT_SHELF_BROWS.browser_normalized_upc ) %]&amp;upc=[% NEXT_SHELF_BROWS.browser_normalized_upc %][% END %][% IF ( NEXT_SHELF_BROWS.browser_normalized_oclc ) %]&amp;oclc=[% NEXT_SHELF_BROWS.browser_normalized_oclc %][% END %]&amp;type=xw10" alt="" />
+                                            [% ELSE %]
+                                                <img border="0" src="http://www.syndetics.com/index.aspx?isbn=[% NEXT_SHELF_BROWS.browser_normalized_isbn %]/SC.GIF&amp;client=[% SyndeticsClientCode %][% IF ( NEXT_SHELF_BROWS.browser_normalized_upc ) %]&amp;upc=[% NEXT_SHELF_BROWS.browser_normalized_upc %][% END %][% IF ( NEXT_SHELF_BROWS.browser_normalized_oclc ) %]&amp;oclc=[% NEXT_SHELF_BROWS.browser_normalized_oclc %][% END %]&amp;type=xw10" alt="" />
+                                            [% END %]
+                                        [% ELSE %]
+                                            <span class="no-image">No cover image available</span>
+                                        [% END %]
+                                    [% END %]
+                                [% END %]
+
+                                [% IF ( GoogleJackets ) %]
+                                    [% IF ( NEXT_SHELF_BROWS.browser_normalized_isbn ) %]
+                                        <div style="block" title="[% NEXT_SHELF_BROWS.biblionumber |url %]" class="[% NEXT_SHELF_BROWS.browser_normalized_isbn %]" id="gbs-thumbnail-preview[% loop.count %]"></div>
+                                    [% ELSE %]
+                                        <span class="no-image">No cover image available</span>
+                                    [% END %]
+                                [% END %]
+                                [% IF ( BakerTaylorEnabled ) %]
+                                    [% IF ( NEXT_SHELF_BROWS.browser_normalized_isbn ) %]
+                                        <img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL |html %][% NEXT_SHELF_BROWS.browser_normalized_isbn %]" />
+                                    [% ELSE %]
+                                        <span class="no-image">No cover image available</span>
+                                    [% END %]
+                                [% END %]
+                            </a>
+                        </td>
+                    [% END %]
+
+                    <td rowspan="2">
+                        <div id="browser_next">
+                            <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% IF ( shelfbrowser_next_biblionumber ) %][% shelfbrowser_next_biblionumber %][% ELSE %][% biblionumber %][% END %]&amp;shelfbrowse_itemnumber=[% shelfbrowser_next_itemnumber %]#shelfbrowser">Next</a>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    [% FOREACH PREVIOUS_SHELF_BROWS IN PREVIOUS_SHELF_BROWSE %]
+                        <td class="top">
+                            [% PREVIOUS_SHELF_BROWS.itemcallnumber %]
+                            <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% PREVIOUS_SHELF_BROWS.biblionumber %]&amp;shelfbrowse_itemnumber=[% PREVIOUS_SHELF_BROWS.itemnumber %]#shelfbrowser">[% PREVIOUS_SHELF_BROWS.title |html %]</a>
+                        </td>
+                    [% END %]
+
+                    [% FOREACH NEXT_SHELF_BROWS IN NEXT_SHELF_BROWSE %]
+                        <td class="top" style="width:20px;">
+                            [% NEXT_SHELF_BROWS.itemcallnumber %]
+                            <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% NEXT_SHELF_BROWS.biblionumber %]&amp;shelfbrowse_itemnumber=[% NEXT_SHELF_BROWS.itemnumber %]#shelfbrowser">[% NEXT_SHELF_BROWS.title |html %]</a>
+                        </td>
+                    [% END %]
+                </tr>
+            </table>
+        </div>
+    [% END %]
+[% END %][%# end of shelfbrowser block %]

@@ -874,8 +874,7 @@ if ( C4::Context->preference( "SocialNetworks" ) ) {
 
 # Shelf Browser Stuff
 if (C4::Context->preference("OPACShelfBrowser")) {
-    # pick the first itemnumber unless one was selected by the user
-    my $starting_itemnumber = $query->param('shelfbrowse_itemnumber'); # || $items[0]->{itemnumber};
+    my $starting_itemnumber = $query->param('shelfbrowse_itemnumber');
     if (defined($starting_itemnumber)) {
         $template->param( OpenOPACShelfBrowser => 1) if $starting_itemnumber;
         my $nearby = GetNearbyItems($starting_itemnumber,3);
@@ -892,6 +891,13 @@ if (C4::Context->preference("OPACShelfBrowser")) {
             PREVIOUS_SHELF_BROWSE => $nearby->{prev},
             NEXT_SHELF_BROWSE => $nearby->{next},
         );
+
+        # in which tab shelf browser should open ?
+        if (grep { $starting_itemnumber == $_->{itemnumber} } @itemloop) {
+            $template->param(shelfbrowser_tab => 'holdings');
+        } else {
+            $template->param(shelfbrowser_tab => 'otherholdings');
+        }
     }
 }
 
