@@ -17,10 +17,10 @@
     @import url([% themelang %]/css/print.css);
 </style>
     [% ELSE %][% INCLUDE 'doc-head-close.inc' %]
-	<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
-	<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
-	<script type="text/javascript">
-	//<![CDATA[
+    <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
+    <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+    <script type="text/javascript">
+    //<![CDATA[
 
 var MSG_NO_RECORD_SELECTED = _("Please select one or more items");
 
@@ -95,27 +95,27 @@ function tagAdded() {
     return false;
 }
 [% END %][% END %][% END %]
-	$(document).ready(function(){
-		$("#CheckAll").click(function(){
-		var checked = [];
-		$(".checkboxed").checkCheckboxes("*", true).each(
-		    function() {
-				selRecord(this.value,true);
-			}
-		);
+    $(document).ready(function(){
+        $("#CheckAll").click(function(){
+            var checked = [];
+            $(".checkboxed").checkCheckboxes("*", true).each(
+                function() {
+                    selRecord(this.value,true);
+                }
+            );
+            enableCheckboxActions();
+            return false;
+        });
+        $("#CheckNone").click(function(){
+        var checked = [];
+        $(".checkboxed").unCheckCheckboxes("*",true).each(
+            function() {
+                selRecord(this.value,false);
+            }
+        );
         enableCheckboxActions();
-	        return false;
-	    });
-	    $("#CheckNone").click(function(){
-	    var checked = [];
-		$(".checkboxed").unCheckCheckboxes("*",true).each(
-		    function() {
-				selRecord(this.value,false);
-			}
-		);
-        enableCheckboxActions();
-	        return false;
-	    });
+            return false;
+        });
 
 [% IF ( opacuserlogin ) %][% IF ( loggedinusername ) %][% IF ( TagsEnabled ) %]
           $("#tagsel_button").click(function(){
@@ -123,7 +123,7 @@ function tagAdded() {
               return false;
           });
 [% END %][% END %][% END %]
-	});
+    });
 [% IF ( opacuserlogin ) %][% IF ( RequestOnOpac ) %]
     function holdSel() {
         var items = document.getElementById('records').value;
@@ -145,9 +145,9 @@ function enableCheckboxActions(){
       $("#selections-toolbar .links a").addClass("disabled");
     }
 }
-	//]]>
-	</script>
-	[% END %]
+    //]]>
+    </script>
+    [% END %]
 </head>
 <body id="basket">
 
@@ -159,9 +159,9 @@ function enableCheckboxActions(){
 <div id="toolbar">
 <ul>
     <li>[% IF ( verbose ) %]<a href="opac-basket.pl" class="brief" onclick="showLess(); return false;">Brief display</a>[% ELSE %]<a href="opac-basket.pl" class="detail" onclick="showMore(); return false;">More details</a>[% END %]</li>
-	[% IF ( opacuserlogin ) %]<li><a class="send" href="opac-basket.pl" onclick="sendBasket(); return false;">Send</a></li>[% END %]
-	<li><a class="download" href="opac-basket.pl" onclick="downloadBasket(); return false;">Download</a></li>
-	<li><a class="print" href="opac-basket.pl" onclick="printBasket(); return false;">Print</a></li>
+    [% IF ( opacuserlogin ) %]<li><a class="send" href="opac-basket.pl" onclick="sendBasket(); return false;">Send</a></li>[% END %]
+    <li><a class="download" href="opac-basket.pl" onclick="downloadBasket(); return false;">Download</a></li>
+    <li><a class="print" href="opac-basket.pl" onclick="printBasket(); return false;">Print</a></li>
     <li><a class="empty" href="opac-basket.pl" onclick="delBasket(); return false;">Empty and close</a></li>
     <li><a class="hide close" href="opac-basket.pl">Hide window</a></li>
 </ul>
@@ -169,7 +169,7 @@ function enableCheckboxActions(){
         [% END %]
 
 [% IF ( verbose ) %]
-	[% UNLESS ( print_basket ) %]<div id="selections-toolbar"><a id="CheckAll" href="#">Select all</a> <a id="CheckNone" href="#">Clear all</a> <span class="sep">|</span> <span class="links"><span id="selections">Select titles to: </span>
+    [% UNLESS ( print_basket ) %]<div id="selections-toolbar"><a id="CheckAll" href="#">Select all</a> <a id="CheckNone" href="#">Clear all</a> <span class="sep">|</span> <span class="links"><span id="selections">Select titles to: </span>
 <span id="tag_hides">
 <a href="#" class="deleteshelf disabled" onclick="delSelRecords(); return false;">Remove</a>
 [% IF ( opacuserlogin ) %]
@@ -204,7 +204,7 @@ function enableCheckboxActions(){
                 [% IF ( BIBLIO_RESULT.author ) %] [% BIBLIO_RESULT.author |html %][% END %]
         [% END %]
     </h3>
-	    <!-- COinS / Openurl -->
+        <!-- COinS / Openurl -->
     <span class="Z3988" title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.au=[% BIBLIO_RESULT.author %]&amp;rft.btitle=[% BIBLIO_RESULT.title |url %]&amp;rft.date=[% BIBLIO_RESULT.publicationyear %]&amp;rft.tpages=[% BIBLIO_RESULT.size %]&amp;rft.isbn=[% BIBLIO_RESULT.isbn |url %]&amp;rft.aucorp=&amp;rft.place=[% BIBLIO_RESULT.place %]&amp;rft.pub=[% BIBLIO_RESULT.publisher |url %]&amp;rft.edition=[% BIBLIO_RESULT.edition %]&amp;rft.series=[% BIBLIO_RESULT.series %]&amp;rft.genre="></span>
     <table>
         [% IF ( BIBLIO_RESULT.isbn ) %]
@@ -230,7 +230,7 @@ function enableCheckboxActions(){
                        </p>
                        [% END %]
                    [% END %]
-	    </td>
+        </td>
         </tr>
         [% END %]
 
@@ -316,13 +316,17 @@ function enableCheckboxActions(){
         <tr>
             <th scope="row">URL(s)</th>
             <td>
-	   [% FOREACH MARCurl IN BIBLIO_RESULT.MARCurlS %]
-		<p>[% IF ( MARCurl.part ) %][% MARCurl.part %]
-			<br />[% END %]
+               [% FOREACH MARCurl IN BIBLIO_RESULT.MARCurlS %]
+                    <p>
+                    [% IF ( MARCurl.part ) %][% MARCurl.part %]
+                        <br />
+                    [% END %]
 
-		[% MARCurl.MARCurl %]
-			[% IF ( MARCurl.notes ) %][% FOREACH note IN MARCurl.notes %][% note.note %]<br />[% END %][% END %]
-            [% END %]</p></td>
+                    [% MARCurl.MARCurl %]
+                        [% IF ( MARCurl.notes ) %][% FOREACH note IN MARCurl.notes %][% note.note %]<br />[% END %][% END %]
+                    [% END %]
+                    </p>
+            </td>
         </tr>[% END %]
 
         <tr>
@@ -367,13 +371,15 @@ function enableCheckboxActions(){
 </div>
 [% END %]
     <table id="itemst">
-	<thead><tr>
-	    [% UNLESS ( print_basket ) %]<th>&nbsp;</th>[% END %]
-	    <th>Title</th>
-	    <th>Author</th>
-	    <th>Year</th>
-        <th>Location (Status)</th>
-        </tr></thead>
+    <thead>
+        <tr>
+            [% UNLESS ( print_basket ) %]<th>&nbsp;</th>[% END %]
+            <th>Title</th>
+            <th>Author</th>
+            <th>Year</th>
+            <th>Location (Status)</th>
+        </tr>
+    </thead>
 
         [% FOREACH BIBLIO_RESULT IN BIBLIO_RESULTS %]
             [% IF ( BIBLIO_RESULT.even ) %]
@@ -386,29 +392,30 @@ function enableCheckboxActions(){
 
                 </td> [% END %]
             <td>
-		<a href="#" onclick="openBiblio('[% BIBLIO_RESULT.dest %]',[% BIBLIO_RESULT.biblionumber %])">[% BIBLIO_RESULT.title |html %][% IF ( BIBLIO_RESULT.subtitle ) %] [% FOREACH subtitl IN BIBLIO_RESULT.subtitle %][% subtitl.subfield |html %][% END %][% END %]</a>
+                <a href="#" onclick="openBiblio('[% BIBLIO_RESULT.dest %]',[% BIBLIO_RESULT.biblionumber %])">[% BIBLIO_RESULT.title |html %][% IF ( BIBLIO_RESULT.subtitle ) %] [% FOREACH subtitl IN BIBLIO_RESULT.subtitle %][% subtitl.subfield |html %][% END %][% END %]</a>
                 <!-- COinS / Openurl -->
-		    <span class="Z3988" title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.au=[% BIBLIO_RESULT.author %]&amp;rft.btitle=[% BIBLIO_RESULT.title |url %]&amp;rft.date=[% BIBLIO_RESULT.publicationyear %]&amp;rft.tpages=[% BIBLIO_RESULT.size %]&amp;rft.isbn=[% BIBLIO_RESULT.isbn |url %]&amp;rft.aucorp=&amp;rft.place=[% BIBLIO_RESULT.place %]&amp;rft.pub=[% BIBLIO_RESULT.publisher |url %]&amp;rft.edition=[% BIBLIO_RESULT.edition %]&amp;rft.series=[% BIBLIO_RESULT.series %]&amp;rft.genre="></span>
-		    [% IF ( opacuserlogin ) %][% IF ( loggedinusername ) %][% IF ( TagsEnabled ) %]<div id="newtag[% BIBLIO_RESULT.biblionumber %]_status" class="tagstatus results_summary" style="display:none">Tag status here.</div>[% END %][% END %][% END %]
-    	    </td>
-	    <td>[% BIBLIO_RESULT.author %]</td>
-	    <td>
-		[% IF ( BIBLIO_RESULT.publicationyear ) %]
-		    [% BIBLIO_RESULT.publicationyear %]
+                <span class="Z3988" title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.au=[% BIBLIO_RESULT.author %]&amp;rft.btitle=[% BIBLIO_RESULT.title |url %]&amp;rft.date=[% BIBLIO_RESULT.publicationyear %]&amp;rft.tpages=[% BIBLIO_RESULT.size %]&amp;rft.isbn=[% BIBLIO_RESULT.isbn |url %]&amp;rft.aucorp=&amp;rft.place=[% BIBLIO_RESULT.place %]&amp;rft.pub=[% BIBLIO_RESULT.publisher |url %]&amp;rft.edition=[% BIBLIO_RESULT.edition %]&amp;rft.series=[% BIBLIO_RESULT.series %]&amp;rft.genre="></span>
+                [% IF ( opacuserlogin ) %][% IF ( loggedinusername ) %][% IF ( TagsEnabled ) %]<div id="newtag[% BIBLIO_RESULT.biblionumber %]_status" class="tagstatus results_summary" style="display:none">Tag status here.</div>[% END %][% END %][% END %]
+            </td>
+            <td>[% BIBLIO_RESULT.author %]</td>
+            <td>
+                [% IF ( BIBLIO_RESULT.publicationyear ) %]
+                    [% BIBLIO_RESULT.publicationyear %]
                 [% ELSE %]
-		    [% BIBLIO_RESULT.copyrightdate %]
+                    [% BIBLIO_RESULT.copyrightdate %]
                 [% END %]
-	    </td>
-                <td>[% IF ( BIBLIO_RESULT.ITEM_RESULTS ) %]<ul>[% FOREACH ITEM_RESULT IN BIBLIO_RESULT.ITEM_RESULTS %]
-                    <li>
-                        [% ITEM_RESULT.branchname %][% IF ( ITEM_RESULT.location_opac ) %], [% ITEM_RESULT.location_opac %][% END %]
-                        [% IF ( ITEM_RESULT.itemcallnumber ) %]
-                            ([% ITEM_RESULT.itemcallnumber %])
-                        [% END %]
-                        ([% INCLUDE 'item-status.inc' item = ITEM_RESULT %])
-                    </li>
-                    [% END %]</ul>[% ELSE %]This record has no items.[% END %]</td>
-            </tr>
+            </td>
+            <td>[% IF ( BIBLIO_RESULT.ITEM_RESULTS ) %]<ul>[% FOREACH ITEM_RESULT IN BIBLIO_RESULT.ITEM_RESULTS %]
+                <li>
+                    [% ITEM_RESULT.branchname %][% IF ( ITEM_RESULT.location_opac ) %], [% ITEM_RESULT.location_opac %][% END %]
+                    [% IF ( ITEM_RESULT.itemcallnumber ) %]
+                        ([% ITEM_RESULT.itemcallnumber %])
+                    [% END %]
+                    ([% INCLUDE 'item-status.inc' item = ITEM_RESULT %])
+                </li>
+                [% END %]</ul>[% ELSE %]This record has no items.[% END %]
+            </td>
+        </tr>
         [% END %]
     </table></form>
 [% END %]
