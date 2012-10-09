@@ -46,28 +46,28 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 
-my $dbh          = C4::Context->dbh;
-my $error        = $input->param('error');
-my $biblionumber = $input->param('biblionumber');
-$biblionumber = 0 unless $biblionumber;
-my $frameworkcode = $input->param('frameworkcode');
-my $title         = $input->param('title');
-my $author        = $input->param('author');
-my $isbn          = $input->param('isbn');
-my $issn          = $input->param('issn');
-my $lccn          = $input->param('lccn');
+my $dbh             = C4::Context->dbh;
+my $error           = $input->param('error');
+my $biblionumber    = $input->param('biblionumber');
+$biblionumber       = 0 unless $biblionumber;
+my $frameworkcode   = $input->param('frameworkcode');
+my $title           = $input->param('title');
+my $author          = $input->param('author');
+my $isbn            = $input->param('isbn');
+my $issn            = $input->param('issn');
+my $lccn            = $input->param('lccn');
 my $lccall          = $input->param('lccall');
-my $subject= $input->param('subject');
-my $dewey = $input->param('dewey');
-my $controlnumber	= $input->param('controlnumber');
-my $op            = $input->param('op');
-my $booksellerid = $input->param('booksellerid');
-my $basketno = $input->param('basketno');
+my $subject         = $input->param('subject');
+my $dewey           = $input->param('dewey');
+my $controlnumber   = $input->param('controlnumber');
+my $op              = $input->param('op');
+my $booksellerid    = $input->param('booksellerid');
+my $basketno        = $input->param('basketno');
 
-my $page = $input->param('current_page') || 1;
-$page = $input->param('goto_page') if $input->param('changepage_goto');
-my $show_next = 0;
-my $total_pages = 0;
+my $page            = $input->param('current_page') || 1;
+$page               = $input->param('goto_page') if $input->param('changepage_goto');
+my $show_next       = 0;
+my $total_pages     = 0;
 
 my $noconnection;
 my $attr = '';
@@ -342,7 +342,7 @@ warn "query ".$query  if $DEBUG;
     $template->param(show_nextbutton=>1) if $show_next;
     $template->param(show_prevbutton=>1) if $page != 1;
 
-    #  	print  $template->output  if $firstresult !=1;
+    #  print  $template->output  if $firstresult !=1;
     $firstresult++;
 
   } # while nremaining
