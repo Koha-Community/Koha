@@ -5,7 +5,7 @@ use DateTime;
 use DateTime::TimeZone;
 
 use C4::Context;
-use Test::More tests => 25;
+use Test::More tests => 28;
 
 BEGIN { use_ok('Koha::DateUtils'); }
 
@@ -26,12 +26,21 @@ $dt->set_minute(0);
 my $date_string = output_pref( $dt, 'iso' );
 cmp_ok $date_string, 'eq', '2011-06-16 12:00', 'iso output';
 
+my $date_string = output_pref( $dt, 'iso',1 );
+cmp_ok $date_string, 'eq', '2011-06-16', 'iso output (date only)';
+
 $date_string = output_pref( $dt, 'us' );
 cmp_ok $date_string, 'eq', '06/16/2011 12:00', 'us output';
+
+$date_string = output_pref( $dt, 'us', 1 );
+cmp_ok $date_string, 'eq', '06/16/2011', 'us output (date only)';
 
 # metric should return the French Revolutionary Calendar Really
 $date_string = output_pref( $dt, 'metric' );
 cmp_ok $date_string, 'eq', '16/06/2011 12:00', 'metric output';
+
+$date_string = output_pref( $dt, 'metric',1 );
+cmp_ok $date_string, 'eq', '16/06/2011', 'metric output (date only)';
 
 $date_string = output_pref_due( $dt, 'metric' );
 cmp_ok $date_string, 'eq', '16/06/2011 12:00',
