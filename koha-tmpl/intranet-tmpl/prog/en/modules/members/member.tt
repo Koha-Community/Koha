@@ -24,8 +24,8 @@
 
 						<div class="browse">
 							Browse by last name:
-							[% FOREACH letter IN letters %]
-								<a href="/cgi-bin/koha/members/member.pl?quicksearch=1&amp;surname=[% letter.letter %]">[% letter.letter %]</a>
+                            [% FOREACH letter IN alphabet.split(' ') %]
+                                <a href="/cgi-bin/koha/members/member.pl?quicksearch=1&amp;surname=[% letter %]">[% letter %]</a>
 							[% END %]
 						</div>
 
