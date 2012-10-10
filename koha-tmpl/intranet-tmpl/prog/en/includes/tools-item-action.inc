@@ -17,6 +17,12 @@
                 <option value="add_only_for_new">
             [% END %]
                 Add items only if no matching bib was found</option>
+            [% IF ( item_action_replace ) %]
+                <option value="replace" selected="selected">
+            [% ELSE %]
+                <option value="replace">
+            [% END %]
+                Replace items if matching bib was found (only for existing items)</option>
             [% IF ( item_action_ignore ) %]
                 <option value="ignore" selected="selected">
             [% ELSE %]

@@ -240,7 +240,7 @@ sub commit_batch {
         $job = put_in_background($import_batch_id);
         $callback = progress_callback($job, $dbh);
     }
-    my ($num_added, $num_updated, $num_items_added, $num_items_errored, $num_ignored) = 
+    my ($num_added, $num_updated, $num_items_added, $num_items_replaced, $num_items_errored, $num_ignored) =
         BatchCommitRecords($import_batch_id, $framework, 50, $callback);
     $dbh->commit();
 
@@ -249,6 +249,7 @@ sub commit_batch {
         num_added => $num_added,
         num_updated => $num_updated,
         num_items_added => $num_items_added,
+        num_items_replaced => $num_items_replaced,
         num_items_errored => $num_items_errored,
         num_ignored => $num_ignored
     };
