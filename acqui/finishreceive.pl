@@ -93,7 +93,7 @@ if ($quantityrec > $origquantityrec ) {
             $user,
             $order->{unitprice},
             $order->{ecost},
-            $invoiceno,
+            $invoiceid,
             $order->{rrp},
             undef,
             $datereceived,
