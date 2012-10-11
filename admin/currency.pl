@@ -162,15 +162,16 @@ sub add_form {
     $template->param( add_form => 1 );
 
     #---- if primkey exists, it's a modify action, so read values to modify...
+    my $date;
     if ($curr) {
         my $curr_rec =
           $dbh->selectrow_hashref( 'select * from currency where currency=?',
             {}, $curr );
         for ( keys %{$curr_rec} ) {
+            if($_ eq "timestamp"){ $date = $curr_rec->{$_}; }
             $template->param( $_ => $curr_rec->{$_} );
         }
     }
-    my $date = $template->param('timestamp');
     if ($date) {
         $template->param( 'timestamp' => format_date($date) );
     }
