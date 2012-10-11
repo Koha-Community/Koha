@@ -1,13 +1,13 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Admin &rsaquo; OAI sets</title>
+<title>Koha &rsaquo; Administration &rsaquo; [% IF ( op_new ) %]OAI sets configuration &rsaquo; Add a new OAI set[% ELSE %]OAI sets configuration[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <script type="text/javascript">
 //<![CDATA[
 function newDescField() {
-    $("#descriptionlist").append(
-        '<li>' +
-        '<textarea style="vertical-align:middle" name="description"></textarea>' +
-        '<a style="cursor:pointer" onclick="delDescField(this)">&nbsp;&times;</a>' +
+    $("#adddescription").before(
+        '<li><label>setDescription: </label>' +
+        '<textarea style="vertical-align:middle" rows="2" cols="30" name="description"></textarea>' +
+        '<a onclick="delDescField(this); return false;" class="clear-field" href="#">Remove</a>' +
         '</li>'
     );
 }
@@ -18,7 +18,7 @@ function delDescField(minusButton) {
 }
 
 $(document).ready(function() {
-    // Some JS
+    new YAHOO.widget.Button("newoaiset");
 });
 //]]>
 </script>
@@ -28,67 +28,56 @@ $(document).ready(function() {
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Admin</a> &rsaquo; OAI sets</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; [% IF ( op_new ) %]<a href="http://localhost:8888/cgi-bin/koha/admin/oai_sets.pl">OAI sets configuration</a> &rsaquo; Add a new OAI set[% ELSIF ( op_mod ) %]<a href="http://localhost:8888/cgi-bin/koha/admin/oai_sets.pl">OAI sets configuration</a> &rsaquo; Modify OAI set '[% spec %]'[% ELSE %] OAI sets configuration[% END %]</div>
 
 <div id="doc3" class="yui-t2">
 
 <div id="bd">
   <div id="yui-main">
     <div class="yui-b">
-      <h1>OAI sets configuration</h1>
-
-        [% IF op_new %]
-            <h2>Add a new set</h2>
+        [% IF ( op_new || op_mod ) %]
             <form method="post" action="/cgi-bin/koha/admin/oai_sets.pl">
+            [% IF ( op_new ) %]
+                <h2>Add a new OAI set</h2>
                 <input type="hidden" name="op" value="savenew" />
-                <fieldset>
-                    <label for="spec">setSpec</label>
-                    <input type="text" id="spec" name="spec" />
-                    <br />
-                    <label for="name">setName</label>
-                    <input type="text" id="name" name="name" />
-                    <br />
-                    <label>setDescriptions</label>
-                    <ul id="descriptionlist">
-                    </ul>
-                    <a style="cursor:pointer" onclick='newDescField()'>Add description</a>
-                </fieldset>
-                <input type="submit" value="Save" />
-                <input type="button" value="Cancel" onclick="window.location.href = '/cgi-bin/koha/admin/oai_sets.pl'" />
-            </form>
-        [% ELSE %][% IF op_mod %]
-            <h2>Modify set '[% spec %]'</h2>
-            <form method="post" action="/cgi-bin/koha/admin/oai_sets.pl">
-                <input type="hidden" name="op" value="savemod" />
-                <input type="hidden" name="id" value="[% id %]" />
-                <fieldset>
-                    <label for="spec">setSpec</label>
-                    <input type="text" id="spec" name="spec" value="[% spec %]" />
-                    <br />
-                    <label for="name">setName</label>
-                    <input type="text" id="name" name="name" value="[% name %]" />
-                    <br />
-                    <label>setDescriptions</label>
-                    <ul id="descriptionlist">
+            [% ELSIF ( op_mod ) %]
+                <h2>Modify OAI set '[% spec %]'</h2>
+                    <input type="hidden" name="op" value="savemod" />
+                    <input type="hidden" name="id" value="[% id %]" />
+            [% END %]
+                <fieldset id="oaidetails" class="rows">
+                    <ol>
+                        <li>
+                            <label for="spec" class="required">setSpec: </label>
+                            <input type="text" id="spec" name="spec" value="[% spec %]" />
+                        </li>
+                        <li>
+                            <label for="name" class="required">setName: </label>
+                            <input type="text" id="name" name="name" value="[% name %]" />
+                        </li>
                         [% FOREACH desc IN descriptions %]
                             <li>
-                                <textarea style="vertical-align:middle" name="description">[% desc.description %]</textarea>
-                                <a style="cursor:pointer" onclick="delDescField(this)">&nbsp;&times;</a>
+                                <label>setDescription: </label>
+                                <textarea style="vertical-align:middle" rows="2" cols="30" name="description">[% desc.description %]</textarea>
+                                <a onclick="delDescField(this); return false;" class="clear-field" href="#">Remove</a>
                             </li>
                         [% END %]
-                    </ul>
-                    <a style="cursor:pointer" onclick='newDescField()'>Add description</a>
-                </fieldset>
-                <input type="submit" value="Save" />
-                <input type="button" value="Cancel" onclick="window.location.href = '/cgi-bin/koha/admin/oai_sets.pl'" />
-            </form>
-        [% END %]
-        [% END %]
+                        <li id="adddescription"><span class="label">&nbsp;</span><a class="clone-field" href="#" onclick='newDescField(); return false;'>Add description</a></li>
 
-        <h2>List of sets</h2>
-        [% UNLESS ( op_new ) %]
-            <a href="/cgi-bin/koha/admin/oai_sets.pl?op=new">Add a new set</a>
-        [% END %]
+                    </ol>
+                </fieldset>
+                <fieldset class="action">
+                    <input type="submit" value="Save" /> <a class="cancel" href="/cgi-bin/koha/admin/oai_sets.pl">Cancel</a>
+                </fieldset>
+            </form>
+        [% ELSE %]
+
+        <div id="toolbar">
+            <ul class="toolbar">
+            <li><a id="newoaiset" href="/cgi-bin/koha/admin/oai_sets.pl?op=new">New set</a></li>
+        </ul></div>
+
+        <h2>OAI sets</h2>
         [% IF sets_loop %]
             <table>
                 <thead>
@@ -127,9 +116,9 @@ $(document).ready(function() {
                 </tbody>
             </table>
         [% ELSE %]
-            <p>There is no set defined.</p>
+            <div class="dialog message"><p>There are no sets defined.</p></div>
         [% END %]
-
+        [% END %]
 
     </div>
   </div>
