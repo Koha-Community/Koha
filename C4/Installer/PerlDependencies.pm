@@ -583,7 +583,11 @@ our $PERL_DEPS = {
         'usage'    => 'Core',
         'required' => '0',
         'min_ver'  => '0.14',
-
+    },
+    'Test::Deep' => {
+        'usage'    => 'Core',
+        'required' => '0',
+        'min_ver'  => '0.106',
     },
     'Test::YAML::Valid' => {
         'usage'    => 'Core',
