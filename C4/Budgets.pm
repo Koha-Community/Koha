@@ -613,16 +613,13 @@ sub GetBudgetHierarchy {
         $r->{'budget_spent'}       = GetBudgetSpent( $r->{'budget_id'} );
         $r->{budget_ordered} = GetBudgetOrdered( $r->{budget_id} );
 
-        $r->{'budget_amount_total'} =  $r->{'budget_amount'};
-
+        $r->{budget_spent_sublevels} = 0;
+        $r->{budget_ordered_sublevels} = 0;
         # foreach sub-levels
-        my $unalloc_count ;
-
 		foreach my $sub (@subs_arr) {
 			my $sub_budget = GetBudget($sub);
-
-			$r->{budget_spent_sublevel} +=    GetBudgetSpent( $sub_budget->{'budget_id'} );
-			$unalloc_count +=   $sub_budget->{'budget_amount'};
+            $r->{budget_spent_sublevels} += GetBudgetSpent( $sub_budget->{'budget_id'} );
+            $r->{budget_ordered_sublevels} += GetBudgetOrdered($sub);
 		}
 	}
 	return \@sort;
