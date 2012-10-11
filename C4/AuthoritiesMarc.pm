@@ -856,6 +856,7 @@ Returns MARC::Record of the authority passed in parameter.
 sub GetAuthority {
     my ($authid)=@_;
     my $authority = Koha::Authority->get_from_authid($authid);
+    return unless $authority;
     return ($authority->record);
 }
 
