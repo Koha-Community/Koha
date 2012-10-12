@@ -1826,6 +1826,7 @@ CREATE TABLE `statistics` ( -- information related to transactions (circulation 
   `itemtype` varchar(10) default NULL, -- foreign key from the itemtypes table, links transaction to a specific item type
   `borrowernumber` int(11) default NULL, -- foreign key from the borrowers table, links transaction to a specific borrower
   `associatedborrower` int(11) default NULL,
+  `ccode` int(11) default NULL, -- foreign key from the items table, links transaction to a specific collection code
   KEY `timeidx` (`datetime`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
