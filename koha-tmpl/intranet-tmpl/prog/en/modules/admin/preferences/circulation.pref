@@ -425,17 +425,13 @@ Circulation:
               choices:
                   yes: Enable
                   no:  "Don't enable"
-            - the reduction of loan period for items with number of holds above the threshold specified in decreaseLoanHighHoldsValue
-        -
-            - A loan should be reduced by
+            - the reduction of loan period by
             - pref: decreaseLoanHighHoldsDuration
               class: integer
-            - days, when decreaseLoanHighHoldsValue threshold is reached (if decreaseLoanHighHolds is enabled)
-        -
-            - A loan should be reduced by decreaseLoanHighHoldsDuration when
+            - days for items with more than
             - pref: decreaseLoanHighHoldsValue
               class: integer
-            - holds have been places (if decreaseLoanHighHolds is enables)
+            - holds.
     Fines Policy:
         -
             - Calculate fines based on days overdue
