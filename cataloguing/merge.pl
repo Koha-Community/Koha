@@ -1,4 +1,4 @@
-#!/usr/bin/perl 
+#!/usr/bin/perl
 
 
 # Copyright 2009 BibLibre
@@ -71,27 +71,27 @@ if ($merge) {
     # Moving items from the other record to the reference record
     my $itemnumbers = get_itemnumbers_of($frombiblio);
     foreach my $itloop ($itemnumbers->{$frombiblio}) {
-	foreach my $itemnumber (@$itloop) {
-	    my $res = MoveItemFromBiblio($itemnumber, $frombiblio, $tobiblio);
-	    if (not defined $res) {
-		push @notmoveditems, $itemnumber;
-	    }
-	}
+    foreach my $itemnumber (@$itloop) {
+        my $res = MoveItemFromBiblio($itemnumber, $frombiblio, $tobiblio);
+        if (not defined $res) {
+            push @notmoveditems, $itemnumber;
+        }
+    }
     }
     # If some items could not be moved :
     if (scalar(@notmoveditems) > 0) {
-		my $itemlist = join(' ',@notmoveditems);
-		push @errors, { code => "CANNOT_MOVE", value => $itemlist };
+        my $itemlist = join(' ',@notmoveditems);
+        push @errors, { code => "CANNOT_MOVE", value => $itemlist };
     }
 
     # Moving subscriptions from the other record to the reference record
     my $subcount = CountSubscriptionFromBiblionumber($frombiblio);
     if ($subcount > 0) {
-	$sth = $dbh->prepare("UPDATE subscription SET biblionumber = ? WHERE biblionumber = ?");
-	$sth->execute($tobiblio, $frombiblio);
+    $sth = $dbh->prepare("UPDATE subscription SET biblionumber = ? WHERE biblionumber = ?");
+    $sth->execute($tobiblio, $frombiblio);
 
-	$sth = $dbh->prepare("UPDATE subscriptionhistory SET biblionumber = ? WHERE biblionumber = ?");
-	$sth->execute($tobiblio, $frombiblio);
+    $sth = $dbh->prepare("UPDATE subscriptionhistory SET biblionumber = ? WHERE biblionumber = ?");
+    $sth->execute($tobiblio, $frombiblio);
 
     }
 
@@ -103,16 +103,16 @@ if ($merge) {
 
     # Deleting the other record
     if (scalar(@errors) == 0) {
-	# Move holds
-	MergeHolds($dbh,$tobiblio,$frombiblio);
-	my $error = DelBiblio($frombiblio);
-	push @errors, $error if ($error); 
+    # Move holds
+    MergeHolds($dbh,$tobiblio,$frombiblio);
+    my $error = DelBiblio($frombiblio);
+    push @errors, $error if ($error);
     }
 
     # Parameters
     $template->param(
-	result => 1,
-	biblio1 => $input->param('biblio1')
+    result => 1,
+    biblio1 => $input->param('biblio1')
     );
 
 #-------------------------
@@ -227,48 +227,48 @@ sub _createMarcHash {
 
 
     foreach my $field (@fields) {
-	my $fieldtag = $field->tag();
-	if ($fieldtag < 10) {
-	    if ($tagslib->{$fieldtag}->{'@'}->{'tab'} >= 0) {
-		push @array, { 
-			field => [ 
-				    {
-					tag => $fieldtag, 
-					key => createKey(), 
-					value => $field->data(),
-				    }
-				]
-			    };    
-	    }
-	} else {
-	    my @subfields = $field->subfields();
-	    my @subfield_array;
-	    foreach my $subfield (@subfields) {
-		if ($tagslib->{$fieldtag}->{@$subfield[0]}->{'tab'} >= 0) {
-		    push @subfield_array, {  
-                                        subtag => @$subfield[0],
-					subkey => createKey(), 
-                                        value => @$subfield[1],
-                                      };
-		}
+    my $fieldtag = $field->tag();
+    if ($fieldtag < 10) {
+        if ($tagslib->{$fieldtag}->{'@'}->{'tab'} >= 0) {
+        push @array, {
+            field => [
+                    {
+                    tag => $fieldtag,
+                    key => createKey(),
+                    value => $field->data(),
+                    }
+                ]
+                };
+        }
+    } else {
+        my @subfields = $field->subfields();
+        my @subfield_array;
+        foreach my $subfield (@subfields) {
+        if ($tagslib->{$fieldtag}->{@$subfield[0]}->{'tab'} >= 0) {
+            push @subfield_array, {
+                                    subtag => @$subfield[0],
+                                    subkey => createKey(),
+                                    value => @$subfield[1],
+                                  };
+        }
 
-	    }
+        }
 
-	    if ($tagslib->{$fieldtag}->{'tab'} >= 0 && $fieldtag ne '995') {
-		push @array, {
-			field => [  
-				    {
-					tag => $fieldtag, 
-					key => createKey(), 
-					indicator1 => $field->indicator(1), 
-					indicator2 => $field->indicator(2), 
-					subfield   => [@subfield_array], 
-				    }
-				]
-			    }; 	
-	    }
+        if ($tagslib->{$fieldtag}->{'tab'} >= 0 && $fieldtag ne '995') {
+        push @array, {
+            field => [
+                {
+                    tag => $fieldtag,
+                    key => createKey(),
+                    indicator1 => $field->indicator(1),
+                    indicator2 => $field->indicator(2),
+                    subfield   => [@subfield_array],
+                }
+            ]
+            };
+        }
 
-	}
+    }
     }
     return [@array];
 
@@ -284,5 +284,3 @@ sub createKey {
     return int(rand(1000000));
 }
 
-
-    
