@@ -87,7 +87,8 @@ my $supplier_count = @suppliers;
 if ( $supplier_count == 1 ) {
     $template->param(
         supplier_name => $suppliers[0]->{'name'},
-        booksellerid  => $suppliers[0]->{'booksellerid'}
+        booksellerid  => $suppliers[0]->{'id'},
+        basketcount   => $suppliers[0]->{'basketcount'}
     );
 }
 

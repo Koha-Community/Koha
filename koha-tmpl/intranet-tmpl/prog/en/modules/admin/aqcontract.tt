@@ -83,9 +83,13 @@ function Check(ff) {
     [% IF ( else ) %]Contracts[% END %]
 </div>
 
-<div id="doc" class="yui-t7">
+<div id="doc3" class="yui-t2">
+
     <div id="bd">
-        <div id="yui-main">
+    <div id="yui-main">
+    <div class="yui-b">
+
+[% INCLUDE 'acquisitions-toolbar.inc' %]
                 [% IF ( add_form ) %]
                     <form name="Aform" action="[% script_name %]" method="post">
                         <input type="hidden" name="op" value="add_validate" />
@@ -161,23 +165,6 @@ function Check(ff) {
                 </form>
             [% END %]
             [% IF ( else ) %]
-                <div id="toolbar">
-                    <script type="text/javascript">
-                        //<![CDATA[
-                        // prepare DOM for YUI Toolbar
-                        $(document).ready(function() {
-                        yuiToolbar();
-                        });
-                        // YUI Toolbar Functions
-                        function yuiToolbar() {
-                        new YAHOO.widget.Button("newcontract");
-                        }
-                        //]]>
-                    </script>
-                    <ul class="toolbar">
-                        <li><a id="newcontract" href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&amp;booksellerid=[% booksellerid %]">New contract</a></li>
-                    </ul>
-                </div>
                 <h2>Contract(s) of [% booksellername %]</h2>
                 [% IF ( loop ) %]
                     <table>
@@ -202,9 +189,13 @@ function Check(ff) {
                     [% END %]
                 </table>
                 [% ELSE %]
-                <div class="dialog message">There are no contracts with this vendor.</div>
+                <div class="dialog message">There are no contracts with this vendor. <a href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&amp;booksellerid=[% booksellerid %]">Add a contract</a>.</div>
                 [% END %]
             [% END %]
-        </div>
+</div>
+</div>
+<div class="yui-b">
+[% INCLUDE 'vendor-menu.inc' %]
+</div>
 </div>
 [% INCLUDE 'intranet-bottom.inc' %]

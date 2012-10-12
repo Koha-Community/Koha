@@ -51,6 +51,8 @@ $template->param(
     contractnumber => $contractnumber,
     booksellerid   => $booksellerid,
     booksellername => $bookseller->{name},
+    basketcount   => $bookseller->{'basketcount'},
+    subscriptioncount   => $bookseller->{'subscriptioncount'},
 );
 
 #ADD_FORM: called if $op is 'add_form'. Used to create form to add or  modify a record

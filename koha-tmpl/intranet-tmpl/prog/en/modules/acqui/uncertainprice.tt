@@ -1,5 +1,5 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Orders with uncertain prices for Vendor [% booksellername %]</title>
+<title>Koha &rsaquo; Acquisitions &rsaquo; [% IF ( booksellername ) %]Orders with uncertain prices for vendor [% booksellername %][% ELSE %]Orders with uncertain prices[% END %]</title>
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
 [% INCLUDE 'doc-head-close.inc' %]
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.min.js"></script>
@@ -30,41 +30,48 @@ function check(form) {
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'acquisitions-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo;<a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]">[% booksellername %]</a> &rsaquo; Uncertain prices for vendor: [% booksellername %]</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; [% IF ( booksellername ) %]<a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]">[% booksellername %]</a> &rsaquo; Uncertain prices for vendor [% booksellername %][% ELSE %]Uncertain prices[% END %]</div>
 
-<div id="doc" class="yui-t7">
-   <div id="bd">
-        <div id="yui-main">
+<div id="doc3" class="yui-t2">
+
+    <div id="bd">
+    <div id="yui-main">
+    <div class="yui-b">
+
+[% INCLUDE 'acquisitions-toolbar.inc' %]
         [% IF ( validate ) %]
             <META HTTP-EQUIV=Refresh CONTENT="0; url=[% scriptname %]?booksellerid=[% booksellerid %]">
         [% ELSE %]
-        <h1>Orders with uncertain prices for vendor <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]">[% booksellername %]</a> <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]&amp;op=enter">(edit)</a></h1>
-        <h2>Contact information</h2>
-        <p><strong>Address: </strong>
-            [% booksellerpostal %]
-            [% bookselleraddress1 %]
-            [% bookselleraddress2 %]
-            [% bookselleraddress3 %]
-            [% bookselleraddress4 %]
-            <a href="[% booksellerurl %]">[% booksellerurl %]</a>
-        </p>
-        <p><strong>Phone: </strong>
-            [% booksellerphone %] / Fax:
-            [% booksellerfax %]</p>
-        <dl>
-            <dt><strong>Contact: </strong></dt>
-            <dd>[% booksellercontact %]
-            [% booksellercontpos %]
-            [% booksellercontphone %]
-            [% booksellercontaltphone %]
-            [% booksellercontemail %]
-            [% booksellercontnotes %]
-            </dd>
-        </dl>
-        [% IF ( booksellernotes ) %]
-        <p><strong>Notes: </strong>
-            [% booksellernotes %]</p>
+        [% IF ( booksellername ) %]
+            <h1>Orders with uncertain prices for vendor <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]">[% booksellername %]</a></h1>
+            <h2>Contact information</h2>
+            <p><strong>Address: </strong>
+                [% booksellerpostal %]
+                [% bookselleraddress1 %]
+                [% bookselleraddress2 %]
+                [% bookselleraddress3 %]
+                [% bookselleraddress4 %]
+                <a href="[% booksellerurl %]">[% booksellerurl %]</a>
+            </p>
+            <p><strong>Phone: </strong>
+                [% booksellerphone %] / Fax:
+                [% booksellerfax %]</p>
+            <dl>
+                <dt><strong>Contact: </strong></dt>
+                <dd>[% booksellercontact %]
+                [% booksellercontpos %]
+                [% booksellercontphone %]
+                [% booksellercontaltphone %]
+                [% booksellercontemail %]
+                [% booksellercontnotes %]
+                </dd>
+            </dl>
+            [% IF ( booksellernotes ) %]
+            <p><strong>Notes: </strong>
+                [% booksellernotes %]</p>
+            [% END %]
         [% END %]
+
         <h2>Orders with uncertain prices</h2>
         <form action="[% scriptname %]" method="post" name="uncertainprices">
         <input type="hidden" name="booksellerid" value="[% booksellerid %]" />
@@ -86,12 +93,12 @@ function check(form) {
         <table id="uncertainpricet">
         <thead>
 	    <tr>
-            <th>basket</th>
-	        <th>order</th>
-            <th>by</th>
-            <th>uncertain</th>
-	        <th>price</th>
-	        <th>quantity</th>
+            <th>Basket</th>
+           <th>Order</th>
+            <th>By</th>
+            <th>Uncertain</th>
+            <th>Price</th>
+            <th>Quantity</th>
 	    </tr>
         </thead>
         <tbody>
@@ -128,5 +135,11 @@ function check(form) {
 	<fieldset class="action"><input type="button" value="Save" onclick="check(this.form)" /></fieldset>
 	</form>
 	[% END %]
+
 </div>
-</div>[% INCLUDE 'intranet-bottom.inc' %]
+</div>
+<div class="yui-b">
+[% INCLUDE 'vendor-menu.inc' %]
+</div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

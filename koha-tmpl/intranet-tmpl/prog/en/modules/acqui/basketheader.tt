@@ -1,8 +1,8 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo;
+<title>Koha &rsaquo; Acquisitions &rsaquo;
 [% IF ( add_form ) %]
     [% IF ( basketno ) %]Edit basket '[% basketname %]'
-        [% ELSE %]add a basket to [% booksellername %]
+        [% ELSE %]Add a basket to [% booksellername %]
     [% END %]
 [% END %]
 </title>
@@ -28,61 +28,6 @@ function Check(ff) {
 }
 //]]>
 </script>
-<style type="text/css">
-
-div.workarea { padding:10px; float:left }
-
-ul.draglist { 
-    position: relative;
-    width: 200px; 
-    height:240px;
-    background: #f7f7f7;
-    border: 1px solid gray;
-    list-style: none;
-    margin:0;
-    padding:0;
-}
-
-ul.draglist li {
-    margin: 1px;
-    cursor: move;
-    zoom: 1;
-}
-
-ul.draglist_alt { 
-    position: relative;
-    width: 200px; 
-    list-style: none;
-    margin:0;
-    padding:0;
-    /*
-       The bottom padding provides the cushion that makes the empty 
-       list targetable.  Alternatively, we could leave the padding 
-       off by default, adding it when we detect that the list is empty.
-    */
-    padding-bottom:20px;
-}
-
-ul.draglist_alt li {
-    margin: 1px;
-    cursor: move; 
-}
-
-
-li.list1 {
-    background-color: #D1E6EC;
-    border:1px solid #7EA6B2;
-}
-
-li.list2 {
-    background-color: #D8D4E2;
-    border:1px solid #6B4C86;
-}
-
-#user_actions { float: right; }
-
-</style>
-
 </head>
 <body id="acq_basketheader" class="acq">
 [% INCLUDE 'header.inc' %]
@@ -94,18 +39,16 @@ li.list2 {
     <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]">[% booksellername %]</a> &rsaquo;
     [% IF ( add_form ) %]
         [% IF ( basketno ) %]Edit basket '[% basketname %]'
-        [% ELSE %]add a basket to [% booksellername %]
+        [% ELSE %]Add a basket to [% booksellername %]
         [% END %]
     [% END %]
 </div>
 
-<div id="doc3" class="yui-t2">
+<div id="doc" class="yui-t7">
     <div id="bd">
-    
+
     <div id="yui-main">
-    
-    <div class="yui-b">
-    
+
     [% IF ( add_form ) %]
         [% IF ( basketno ) %]
             <h1>Edit basket [% basketname %]</h1>
@@ -126,7 +69,7 @@ li.list2 {
                         <input type="text" name="basketname" id="basketname" size="40" maxlength="80" value="[% basketname %]" />
                 </li>
                  <li>
-                    <label for="billingplace">Billing Place:</label>
+                    <label for="billingplace">Billing place:</label>
                     <select name="billingplace" id="billingplace">
                         <option value="">--</option>
                         [% FOREACH billingplace IN billingplaceloop %]
@@ -141,7 +84,7 @@ li.list2 {
                     </select>
                 </li>
                 <li>
-                    <label for="deliveryplace">Delivery  Place:</label>
+                    <label for="deliveryplace">Delivery place:</label>
                     <select name="deliveryplace" id="deliveryplace">
                         <option value="">--</option>
                         [% FOREACH deliveryplace IN deliveryplaceloop %]
@@ -194,13 +137,10 @@ li.list2 {
         <fieldset class="action">
             <input type="hidden" name="op" value="add_validate" />
             <input type="button" value="Save" onclick="Check(this.form);" />
+            <a class="cancel" href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]">Cancel</a>
         </fieldset>
     </form>
     [% END %]
-</div>
-</div>
-<div class="yui-b">
-    [% INCLUDE 'acquisitions-menu.inc' %]
 </div>
 </div>
 

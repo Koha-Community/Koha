@@ -47,9 +47,7 @@ $(document).ready(function() {
     <div class="yui-b">
     
 [% INCLUDE 'acquisitions-toolbar.inc' %]
-[% IF ( count == 1 ) %]	
-<h1> [% supplier_name %] </h1>
-[% ELSE %]
+[% UNLESS ( count == 1 ) %]
 <h1>You searched on <b>vendor [% supplier %],</b> [% count %] results found</h1>
 [% END %]
 [% IF ( loop_suppliers.size ) %]
@@ -139,6 +137,9 @@ $(document).ready(function() {
 </div>
 </div>
 <div class="yui-b">
+[% IF ( booksellerid ) %]
+[% INCLUDE 'vendor-menu.inc' %]
+[% END %]
 [% INCLUDE 'acquisitions-menu.inc' %]
 </div>
 </div>

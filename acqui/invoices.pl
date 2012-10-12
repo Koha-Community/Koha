@@ -50,7 +50,7 @@ my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
 );
 
 my $invoicenumber    = $input->param('invoicenumber');
-my $supplier         = $input->param('supplier');
+my $supplierid       = $input->param('supplierid');
 my $shipmentdatefrom = $input->param('shipmentdatefrom');
 my $shipmentdateto   = $input->param('shipmentdateto');
 my $billingdatefrom  = $input->param('billingdatefrom');
@@ -71,7 +71,7 @@ if ( $op and $op eq "do_search" ) {
     my $billingdateto_iso    = C4::Dates->new($billingdateto)->output("iso");
     my @invoices             = GetInvoices(
         invoicenumber    => $invoicenumber,
-        suppliername     => $supplier,
+        supplierid       => $supplierid,
         shipmentdatefrom => $shipmentdatefrom_iso,
         shipmentdateto   => $shipmentdateto_iso,
         billingdatefrom  => $billingdatefrom_iso,
@@ -89,6 +89,7 @@ if ( $op and $op eq "do_search" ) {
             billingdate     => $_->{billingdate},
             invoicenumber   => $_->{invoicenumber},
             suppliername    => $_->{suppliername},
+            booksellerid      => $_->{booksellerid},
             receivedbiblios => $_->{receivedbiblios},
             receiveditems   => $_->{receiveditems},
             subscriptionid  => $_->{subscriptionid},
@@ -104,13 +105,13 @@ my @suppliers_loop = ();
 my $suppliername;
 foreach (@suppliers) {
     my $selected = 0;
-    if ( $supplier && $supplier == $_->{'id'} ) {
+    if ( $supplierid && $supplierid == $_->{'id'} ) {
         $selected     = 1;
         $suppliername = $_->{'name'};
     }
     my %row = (
         suppliername => $_->{'name'},
-        supplierid   => $_->{'id'},
+        booksellerid   => $_->{'id'},
         selected     => $selected,
     );
     push @suppliers_loop, \%row;
@@ -138,7 +139,7 @@ $template->param(
     do_search => ( $op and $op eq "do_search" ) ? 1 : 0,
     results_loop             => \@results_loop,
     invoicenumber            => $invoicenumber,
-    supplier                 => $supplier,
+    booksellerid             => $supplierid,
     suppliername             => $suppliername,
     billingdatefrom          => $billingdatefrom,
     billingdateto            => $billingdateto,

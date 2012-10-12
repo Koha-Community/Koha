@@ -127,6 +127,8 @@ $template->param( uncertainpriceorders => \@orders,
                                    booksellercontemail => $bookseller->{'contemail'},
                                    booksellercontnotes => $bookseller->{'contnotes'},
                                    booksellernotes => $bookseller->{'notes'},
+                                   basketcount   => $bookseller->{'basketcount'},
+                                   subscriptioncount   => $bookseller->{'subscriptioncount'},
                                    owner => $owner,
                                    scriptname => "/cgi-bin/koha/acqui/uncertainprice.pl");
 output_html_with_http_headers $input, $cookie, $template->output;
