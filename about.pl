@@ -55,8 +55,8 @@ if ($^O ne 'VMS') {
 }
 my $perlVersion   = $];
 my $mysqlVersion  = `mysql -V`;
-my $apacheVersion = `httpd -v`;
-$apacheVersion = `httpd2 -v` unless $apacheVersion;
+my $apacheVersion = `httpd -v 2> /dev/null`;
+$apacheVersion = `httpd2 -v 2> /dev/null` unless $apacheVersion;
 $apacheVersion = (`/usr/sbin/apache2 -V`)[0] unless $apacheVersion;
 my $zebraVersion = `zebraidx -V`;
 
