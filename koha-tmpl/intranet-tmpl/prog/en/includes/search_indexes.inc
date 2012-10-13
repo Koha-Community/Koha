@@ -26,7 +26,9 @@
     <option value="callnum">&nbsp;&nbsp;&nbsp;&nbsp; Call number</option>
     <option value="ln,rtrn">Language</option>
     <option value="nt">Notes/Comments</option>
-    <option value="curriculum">Curriculum</option>
+    [% IF (marcflavour != 'UNIMARC' ) %]
+        <option value="curriculum">Curriculum</option>
+    [% END %]
     <option value="pb">Publisher</option>
     <option value="pl">Publisher location</option>
     <option value="yr">Publication date (yyyy)</option>

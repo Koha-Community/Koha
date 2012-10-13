@@ -92,7 +92,9 @@
 [% END %]
 [% IF ( expanded_options ) %]
             <option value="nt">Notes/Comments</option>
+    [% IF (marcflavour != 'UNIMARC') %]
             <option value="curriculum">Curriculum</option>
+    [% END %]
 [% END %]
             <option value="pb,wrdl">Publisher</option>
             <option value="pl,wrdl">Publisher location</option>
