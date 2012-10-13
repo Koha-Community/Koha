@@ -115,11 +115,10 @@ Circulation:
             - pref: ExportWithCsvProfile
             - CSV profile when exporting patron checkout history (enter CSV Profile name)
         -
+            - The following fields should be excluded from the patron checkout history CSV or iso2709 export
             - pref: ExportRemoveFields
-            - choices:
-                yes: Export
-                no: "Don't export"
-            - fields for csv or iso2709 export
+            - (separate fields with space, e.g. 100a 200b 300c)
+
     Checkout Policy:
         -
             - pref: AllowNotForLoanOverride
