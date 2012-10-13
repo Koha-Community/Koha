@@ -359,9 +359,9 @@ sub SearchAuthorities {
                     }
                 }
                 my $thisauthtype = GetAuthType(GetAuthTypeCode($authid));
+                $thisauthtype |= GetAuthType($authtypecode) if $authtypecode;
                 $newline{authtype}     = defined ($thisauthtype) ?
-                                            $thisauthtype->{'authtypetext'} :
-                                            (GetAuthType($authtypecode) ? $_->{'authtypetext'} : '');
+                                            $thisauthtype->{'authtypetext'} : '';
                 $newline{summary}      = $summary;
                 $newline{even}         = $counter % 2;
                 $newline{reported_tag} = $reported_tag;
