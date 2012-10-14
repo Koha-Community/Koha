@@ -716,7 +716,19 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
             <br />[% END %] 
         <!-- here you might do a tmpl_if name="toc" and use greybox or equivalent for table of contents -->
         
-        [% IF ( OPACURLOpenInNewWindow ) %]<a href="[% MARCurl.MARCURL %]" title="[% MARCurl.MARCURL %]" target="_blank">[% ELSE %]<a href="[% MARCurl.MARCURL %]" title="[% MARCurl.MARCURL %]">[% END %]
+        [% IF ( OPACurlOpenInNewWindow ) %]
+	  [% IF trackclicks == 'track' || trackclicks == 'anonymous' %]
+	    <a href="/cgi-bin/koha/tracklinks.pl?uri=[% MARCurl.MARCURL |url%]" title="[% MARCurl.MARCURL %]" target="_blank">
+	  [% ELSE %]
+	    <a href="[% MARCurl.MARCURL %]" title="[% MARCurl.MARCURL %]" target="_blank">
+	  [% END %]
+	[% ELSE %]
+	  [% IF trackclicks == 'track' || trackclicks == 'anonymous' %]
+	    <a href="/cgi-bin/koha/tracklinks.pl?uri=[% MARCurl.MARCURL |url%]" title="[% MARCurl.MARCURL %]">
+	  [% ELSE %]
+	    <a href="[% MARCurl.MARCURL %]" title="[% MARCurl.MARCURL %]">
+	  [% END %]
+	[% END %]
         
         [% MARCurl.linktext %]</a>
             [% IF ( MARCurl.notes ) %]<ul>[% FOREACH note IN MARCurl.notes %]<li>[% note.note %]</li>[% END %]</ul>[% END %]</li>
@@ -1476,6 +1488,13 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
             [% IF ( itemdata_ccode ) %]<td class="collection">[% ITEM_RESULT.ccode %]</td>[% END %]
         <td class="call_no">[% IF ( ITEM_RESULT.itemcallnumber ) %] [% ITEM_RESULT.itemcallnumber %][% IF ( OPACShelfBrowser ) %] (<a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% ITEM_RESULT.biblionumber %]&amp;shelfbrowse_itemnumber=[% ITEM_RESULT.itemnumber %]#[% tab %]">Browse shelf</a>)[% END %][% END %]</td>
             [% IF ( itemdata_enumchron ) %]<td class="vol_info">[% ITEM_RESULT.enumchron %]</td>[% END %]
+	    [% IF ( itemdata_uri ) %]<td class="url">
+	      [% IF trackclicks == 'track' || trackclicks == 'anonymous' %]
+	        <a href="/cgi-bin/koha/tracklinks.pl?uri=[% ITEM_RESULT.uri | url %]"> Link to resource </a>
+	      [% ELSE %]
+	        <a href="[% ITEM_RESULT.uri %]">[% ITEM_RESULT.uri %]</a>
+	      [% END %]
+            [% END %]
           [% IF ( itemdata_uri ) %]<td class="url"><a href="[% ITEM_RESULT.uri %]">[% ITEM_RESULT.uri %]</a></td>[% END %]
                [% IF ( itemdata_copynumber ) %]<td class="copynumber">[% ITEM_RESULT.copynumber %]</td>[% END %]
               <td class="status">[% INCLUDE 'item-status.inc' item = ITEM_RESULT %]</td>
