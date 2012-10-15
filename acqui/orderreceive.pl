@@ -38,8 +38,6 @@ It permit to write a new order as 'received'.
 
 to know on what supplier this script has to display receive order.
 
-=item receive
-
 =item invoiceid
 
 the id of this invoice.
@@ -88,12 +86,12 @@ my $booksellerid   = $invoice->{booksellerid};
 my $freight      = $invoice->{shipmentcost};
 my $datereceived = $invoice->{shipmentdate};
 my $ordernumber  = $input->param('ordernumber');
-my $search       = $input->param('receive');
 
 $datereceived = $datereceived ? C4::Dates->new($datereceived, 'iso') : C4::Dates->new();
 
 my $bookseller = GetBookSellerFromId($booksellerid);
-my $results = SearchOrder($ordernumber,$search);
+my $results;
+$results = SearchOrder($ordernumber) if $ordernumber;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
@@ -106,148 +104,129 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-my $count = scalar @$results;
+unless ( $results and @$results) {
+    output_html_with_http_headers $input, $cookie, $template->output;
+    exit;
+}
+
 # prepare the form for receiving
-if ( $count == 1 ) {
-    my $order = $results->[0];
+my $order = $results->[0];
 
-    # Check if ACQ framework exists
-    my $acq_fw = GetMarcStructure(1, 'ACQ');
-    unless($acq_fw) {
-        $template->param('NoACQframework' => 1);
-    }
+# Check if ACQ framework exists
+my $acq_fw = GetMarcStructure(1, 'ACQ');
+unless($acq_fw) {
+    $template->param('NoACQframework' => 1);
+}
 
-    my $AcqCreateItem = C4::Context->preference('AcqCreateItem');
-    if ($AcqCreateItem eq 'receiving') {
-        $template->param(
-            AcqCreateItemReceiving => 1,
-            UniqueItemFields => C4::Context->preference('UniqueItemFields'),
-        );
-    } elsif ($AcqCreateItem eq 'ordering') {
-        my $fw = ($acq_fw) ? 'ACQ' : '';
-        my @itemnumbers = GetItemnumbersFromOrder($order->{ordernumber});
-        my @items;
-        foreach (@itemnumbers) {
-            my $item = GetItem($_);
-            if($item->{homebranch}) {
-                $item->{homebranchname} = GetBranchName($item->{homebranch});
-            }
-            if($item->{holdingbranch}) {
-                $item->{holdingbranchname} = GetBranchName($item->{holdingbranch});
-            }
-            if(my $code = GetAuthValCode("items.notforloan", $fw)) {
-                $item->{notforloan} = GetKohaAuthorisedValueLib($code, $item->{notforloan});
-            }
-            if(my $code = GetAuthValCode("items.restricted", $fw)) {
-                $item->{restricted} = GetKohaAuthorisedValueLib($code, $item->{restricted});
-            }
-            if(my $code = GetAuthValCode("items.location", $fw)) {
-                $item->{location} = GetKohaAuthorisedValueLib($code, $item->{location});
-            }
-            if(my $code = GetAuthValCode("items.ccode", $fw)) {
-                $item->{collection} = GetKohaAuthorisedValueLib($code, $item->{ccode});
-            }
-            if(my $code = GetAuthValCode("items.materials", $fw)) {
-                $item->{materials} = GetKohaAuthorisedValueLib($code, $item->{materials});
-            }
-            my $itemtype = getitemtypeinfo($item->{itype});
-            $item->{itemtype} = $itemtype->{description};
-            push @items, $item;
+my $AcqCreateItem = C4::Context->preference('AcqCreateItem');
+if ($AcqCreateItem eq 'receiving') {
+    $template->param(
+        AcqCreateItemReceiving => 1,
+        UniqueItemFields => C4::Context->preference('UniqueItemFields'),
+    );
+} elsif ($AcqCreateItem eq 'ordering') {
+    my $fw = ($acq_fw) ? 'ACQ' : '';
+    my @itemnumbers = GetItemnumbersFromOrder($order->{ordernumber});
+    my @items;
+    foreach (@itemnumbers) {
+        my $item = GetItem($_);
+        if($item->{homebranch}) {
+            $item->{homebranchname} = GetBranchName($item->{homebranch});
         }
-        $template->param(items => \@items);
-    }
-
-    $order->{quantityreceived} = '' if $order->{quantityreceived} == 0;
-    $order->{unitprice} = '' if $order->{unitprice} == 0;
-
-    my $rrp;
-    my $ecost;
-    my $unitprice;
-    if ( $bookseller->{listincgst} ) {
-        if ( $bookseller->{invoiceincgst} ) {
-            $rrp = $order->{rrp};
-            $ecost = $order->{ecost};
-            $unitprice = $order->{unitprice};
-        } else {
-            $rrp = $order->{rrp} / ( 1 + $order->{gstrate} );
-            $ecost = $order->{ecost} / ( 1 + $order->{gstrate} );
-            $unitprice = $order->{unitprice} / ( 1 + $order->{gstrate} );
+        if($item->{holdingbranch}) {
+            $item->{holdingbranchname} = GetBranchName($item->{holdingbranch});
         }
+        if(my $code = GetAuthValCode("items.notforloan", $fw)) {
+            $item->{notforloan} = GetKohaAuthorisedValueLib($code, $item->{notforloan});
+        }
+        if(my $code = GetAuthValCode("items.restricted", $fw)) {
+            $item->{restricted} = GetKohaAuthorisedValueLib($code, $item->{restricted});
+        }
+        if(my $code = GetAuthValCode("items.location", $fw)) {
+            $item->{location} = GetKohaAuthorisedValueLib($code, $item->{location});
+        }
+        if(my $code = GetAuthValCode("items.ccode", $fw)) {
+            $item->{collection} = GetKohaAuthorisedValueLib($code, $item->{ccode});
+        }
+        if(my $code = GetAuthValCode("items.materials", $fw)) {
+            $item->{materials} = GetKohaAuthorisedValueLib($code, $item->{materials});
+        }
+        my $itemtype = getitemtypeinfo($item->{itype});
+        $item->{itemtype} = $itemtype->{description};
+        push @items, $item;
+    }
+    $template->param(items => \@items);
+}
+
+$order->{quantityreceived} = '' if $order->{quantityreceived} == 0;
+$order->{unitprice} = '' if $order->{unitprice} == 0;
+
+my $rrp;
+my $ecost;
+my $unitprice;
+if ( $bookseller->{listincgst} ) {
+    if ( $bookseller->{invoiceincgst} ) {
+        $rrp = $order->{rrp};
+        $ecost = $order->{ecost};
+        $unitprice = $order->{unitprice};
     } else {
-        if ( $bookseller->{invoiceincgst} ) {
-            $rrp = $order->{rrp} * ( 1 + $order->{gstrate} );
-            $ecost = $order->{ecost} * ( 1 + $order->{gstrate} );
-            $unitprice = $order->{unitprice} * ( 1 + $order->{gstrate} );
-        } else {
-            $rrp = $order->{rrp};
-            $ecost = $order->{ecost};
-            $unitprice = $order->{unitprice};
-        }
-     }
-
-    my $suggestion = GetSuggestionInfoFromBiblionumber($order->{biblionumber});
-
-    my $authorisedby = $order->{authorisedby};
-    my $member = GetMember( borrowernumber => $authorisedby );
-
-    my $budget = GetBudget( $order->{budget_id} );
-
-    $template->param(
-        AcqCreateItem         => $AcqCreateItem,
-        count                 => 1,
-        biblionumber          => $order->{'biblionumber'},
-        ordernumber           => $order->{'ordernumber'},
-        biblioitemnumber      => $order->{'biblioitemnumber'},
-        booksellerid          => $order->{'booksellerid'},
-        freight               => $freight,
-        gstrate               => $order->{gstrate} || $bookseller->{gstrate} || C4::Context->preference("gist") || 0,
-        name                  => $bookseller->{'name'},
-        date                  => format_date($order->{entrydate}),
-        title                 => $order->{'title'},
-        author                => $order->{'author'},
-        copyrightdate         => $order->{'copyrightdate'},
-        isbn                  => $order->{'isbn'},
-        seriestitle           => $order->{'seriestitle'},
-        bookfund              => $budget->{budget_name},
-        quantity              => $order->{'quantity'},
-        quantityreceivedplus1 => $order->{'quantityreceived'} + 1,
-        quantityreceived      => $order->{'quantityreceived'},
-        rrp                   => sprintf( "%.2f", $rrp ),
-        ecost                 => sprintf( "%.2f", $ecost ),
-        unitprice             => sprintf( "%.2f", $unitprice),
-        memberfirstname       => $member->{firstname} || "",
-        membersurname         => $member->{surname} || "",
-        invoiceid             => $invoice->{invoiceid},
-        invoice               => $invoice->{invoicenumber},
-        datereceived          => $datereceived->output(),
-        datereceived_iso      => $datereceived->output('iso'),
-        notes                 => $order->{notes},
-        suggestionid          => $suggestion->{suggestionid},
-        surnamesuggestedby    => $suggestion->{surnamesuggestedby},
-        firstnamesuggestedby  => $suggestion->{firstnamesuggestedby},
-    );
-}
-else {
-    my @loop;
-    for ( my $i = 0 ; $i < $count ; $i++ ) {
-        my %line = %{ @$results[$i] };
-
-        $line{invoice}      = $invoice->{invoicenumber};
-        $line{datereceived} = $datereceived->output();
-        $line{freight}      = $freight;
-        $line{gstrate}      = @$results[$i]->{'gstrate'} || $bookseller->{gstrate} || C4::Context->preference("gist") || 0;
-        $line{title}        = @$results[$i]->{'title'};
-        $line{author}       = @$results[$i]->{'author'};
-        $line{booksellerid} = $booksellerid;
-        push @loop, \%line;
+        $rrp = $order->{rrp} / ( 1 + $order->{gstrate} );
+        $ecost = $order->{ecost} / ( 1 + $order->{gstrate} );
+        $unitprice = $order->{unitprice} / ( 1 + $order->{gstrate} );
     }
+} else {
+    if ( $bookseller->{invoiceincgst} ) {
+        $rrp = $order->{rrp} * ( 1 + $order->{gstrate} );
+        $ecost = $order->{ecost} * ( 1 + $order->{gstrate} );
+        $unitprice = $order->{unitprice} * ( 1 + $order->{gstrate} );
+    } else {
+        $rrp = $order->{rrp};
+        $ecost = $order->{ecost};
+        $unitprice = $order->{unitprice};
+    }
+ }
 
-    $template->param(
-        loop         => \@loop,
-        booksellerid => $booksellerid,
-        invoiceid    => $invoice->{invoiceid},
-    );
-}
+my $suggestion = GetSuggestionInfoFromBiblionumber($order->{biblionumber});
+
+my $authorisedby = $order->{authorisedby};
+my $member = GetMember( borrowernumber => $authorisedby );
+
+my $budget = GetBudget( $order->{budget_id} );
+
+$template->param(
+    AcqCreateItem         => $AcqCreateItem,
+    count                 => 1,
+    biblionumber          => $order->{'biblionumber'},
+    ordernumber           => $order->{'ordernumber'},
+    biblioitemnumber      => $order->{'biblioitemnumber'},
+    booksellerid          => $order->{'booksellerid'},
+    freight               => $freight,
+    name                  => $bookseller->{'name'},
+    date                  => format_date($order->{entrydate}),
+    title                 => $order->{'title'},
+    author                => $order->{'author'},
+    copyrightdate         => $order->{'copyrightdate'},
+    isbn                  => $order->{'isbn'},
+    seriestitle           => $order->{'seriestitle'},
+    bookfund              => $budget->{budget_name},
+    quantity              => $order->{'quantity'},
+    quantityreceivedplus1 => $order->{'quantityreceived'} + 1,
+    quantityreceived      => $order->{'quantityreceived'},
+    rrp                   => sprintf( "%.2f", $rrp ),
+    ecost                 => sprintf( "%.2f", $ecost ),
+    unitprice             => sprintf( "%.2f", $unitprice),
+    memberfirstname       => $member->{firstname} || "",
+    membersurname         => $member->{surname} || "",
+    invoiceid             => $invoice->{invoiceid},
+    invoice               => $invoice->{invoicenumber},
+    datereceived          => $datereceived->output(),
+    datereceived_iso      => $datereceived->output('iso'),
+    notes                 => $order->{notes},
+    suggestionid          => $suggestion->{suggestionid},
+    surnamesuggestedby    => $suggestion->{surnamesuggestedby},
+    firstnamesuggestedby  => $suggestion->{firstnamesuggestedby},
+);
+
 my $op = $input->param('op');
 if ($op and $op eq 'edit'){
     $template->param(edit   =>   1);

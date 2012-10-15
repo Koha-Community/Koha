@@ -327,28 +327,7 @@
         <a class="cancel" href="/cgi-bin/koha/acqui/parcel.pl?invoiceid=[% invoiceid %]">Cancel</a>
 </fieldset></div>    </form>
 [% ELSE %]
-<div id="acqui_acquire_orderlist">
-    <table>
-    <tr>
-        <th>Basket</th>
-        <th>ISBN</th>
-        <th>Title</th>
-        <th>Author</th>
-        <th>Qty</th>
-        <th>Received</th>
-    </tr>
-    [% FOREACH loo IN loop %]
-        <tr>
-            <td>[% loo.basketno %]</td>
-            <td>[% loo.isbn %]</td>
-         <td><a href="orderreceive.pl?ordernumber=[% loo.ordernumber %]&amp;invoiceid=[% invoiceid %]">[% loo.title |html %]</a></td>
-            <td>[% loo.author %]</td>
-            <td>[% loo.quantity %]</td>
-            <td>[% loo.quantityreceived %]</td>
-        </tr>
-    [% END %]
-    </table>
-</div>
+    This ordernumber does not exist.
 [% END %]
 
 </div>
