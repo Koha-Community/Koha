@@ -286,9 +286,9 @@ $(document).ready(function(){
     <div class="yui-b">
     <div id="userresults" class="container">
     [% IF ( DidYouMean ) %]
-        <div id='didyoumean'>Not what you expected? Check for <a href='/cgi-bin/koha/svc/suggestion?render=standalone&q=[% querystring | uri %]'>suggestions</a></div>
+        <div id='didyoumean'>Not what you expected? Check for <a href='/cgi-bin/koha/svc/suggestion?render=standalone&amp;q=[% querystring | uri %]'>suggestions</a></div>
     [% END %]
-    [% INCLUDE 'page-numbers.inc' %]<br />
+    <div id="top-pages">[% INCLUDE 'page-numbers.inc' %]</div>
   [% IF ( koha_spsuggest ) %]
     Did you mean:
     <ul style="list-style: none;">
@@ -654,7 +654,7 @@ $(document).ready(function(){
     </form>
         </div>
     [% END %]
-    [% INCLUDE 'page-numbers.inc' %]
+    <div id="bottom-pages">[% INCLUDE 'page-numbers.inc' %]</div>
 
     [% ELSE %]
     [% END %]
