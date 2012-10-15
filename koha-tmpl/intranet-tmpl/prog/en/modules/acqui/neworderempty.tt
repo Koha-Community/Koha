@@ -451,23 +451,27 @@ $(document).ready(function()
                 [% END %]
             </li>
             [% END %]
-            <li>
-                [% IF ( close ) %]
-                    <span class="label">Tax rate: </span>
-                    <input type="hidden" size="20" name="gstrate" id="gstrate" value="[% gstrate %]" />[% gstrate %]%
-                [% ELSE %]
-                    <label for="gst">Tax rate: </label>
-                    <select name="gstrate" id="gstrate" onchange="updateCosts();">
-                    [% FOREACH gst IN gst_values %]
-                      [% IF ( gst.option == gstrate ) %]
-                        <option value="[% gst.option %]" selected="selected">[% gst.option * 100 | format("%.1f") %]%</option>
-                      [% ELSE %]
-                        <option value="[% gst.option %]">[% gst.option * 100 | format("%.1f") %]%</option>
-                      [% END %]
+            [% IF ( gst_values ) %]
+                <li>
+                    [% IF ( close ) %]
+                        <span class="label">Tax rate: </span>
+                        <input type="hidden" size="20" name="gstrate" id="gstrate" value="[% gstrate %]" />[% gstrate %]%
+                    [% ELSE %]
+                        <label for="gst">Tax rate: </label>
+                        <select name="gstrate" id="gstrate" onchange="updateCosts();">
+                        [% FOREACH gst IN gst_values %]
+                          [% IF ( gst.option == gstrate ) %]
+                            <option value="[% gst.option %]" selected="selected">[% gst.option * 100 | format("%.1f") %]%</option>
+                          [% ELSE %]
+                            <option value="[% gst.option %]">[% gst.option * 100 | format("%.1f") %]%</option>
+                          [% END %]
+                        [% END %]
+                        </select>
                     [% END %]
-                    </select>
-                [% END %]
-            </li>
+                [% ELSE %]
+                    <input type="hidden" name="gstrate" value="0" />
+                </li>
+            [% END %]
             <li>
                 <label for="discount">Discount: </label>
                 [% IF ( close ) %]

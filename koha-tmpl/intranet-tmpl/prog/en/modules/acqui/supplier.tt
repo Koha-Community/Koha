@@ -156,8 +156,9 @@ if (f.company.value == "") {
                     <label for="invoice_gstno">Don't include tax</label> <input type="radio" id="invoice_gstno" name="invoice_gst" value="0" checked="checked" />
                 [% END %]</li>
             </ol>
-             <ol>
-                <li>
+            [% IF gst_values %]
+                <ol>
+                  <li>
                     <label for="gst">Tax rate</label>
                     <select name="gstrate" id="gstrate">
                     [% FOREACH gst IN gst_values %]
@@ -168,8 +169,11 @@ if (f.company.value == "") {
                       [% END %]
                     [% END %]
                     </select>
-                </li>
-            </ol>
+                  </li>
+                </ol>
+            [% ELSE %]
+                <input type="hidden" name="gstrate" value="0" />
+            [% END %]
             <ol>
             <li><label for="discount">Discount</label>
                 <input type="text" size="6" id="discount" name="discount" value="[% discount %]" />%</li>

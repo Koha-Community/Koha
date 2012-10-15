@@ -6020,6 +6020,27 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
    SetVersion ($DBversion);
 }
 
+$DBversion = "3.09.00.XXX";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    my $gst_booksellers = $dbh->selectcol_arrayref("SELECT DISTINCT(gstrate) FROM aqbooksellers");
+    my $gist_syspref = C4::Context->preference("gist");
+    # remove the undef values and construct and array with the syspref and the supplier values
+    my @gstrates = map { defined $_ ? $_ : () } @$gst_booksellers;
+    push @gstrates, split ('\|', $gist_syspref);
+    # we want to compare integer (or float)
+    $_ = $_ + 0 for @gstrates;
+    use List::MoreUtils qw/uniq/;
+    # remove duplicate values
+    @gstrates = uniq sort @gstrates;
+    my $new_syspref_value = join '|', @gstrates;
+    # update the syspref with the new values
+    my $sth = $dbh->prepare("UPDATE systempreferences set value=? WHERE variable='gist'");
+    $sth->execute( $new_syspref_value );
+
+    print "Upgrade to $DBversion done (Bug 8832, Set the syspref gist with the existing values)\n";
+    SetVersion ($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)
