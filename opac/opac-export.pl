@@ -32,6 +32,7 @@ my $query = new CGI;
 my $op=$query->param("op")||''; #op=export is currently the only use
 my $format=$query->param("format")||'utf8';
 my $biblionumber = $query->param("bib")||0;
+$biblionumber = int($biblionumber);
 my ($marc, $error)= ('','');
 
 $marc = GetMarcBiblio($biblionumber, 1) if $biblionumber;
@@ -41,18 +42,23 @@ if(!$marc) {
 }
 elsif ($format =~ /endnote/) {
     $marc = marc2endnote($marc);
+    $format = 'endnote';
 }
 elsif ($format =~ /marcxml/) {
     $marc = marc2marcxml($marc);
+    $format = 'marcxml';
 }
 elsif ($format=~ /mods/) {
     $marc = marc2modsxml($marc);
+    $format = 'mods';
 }
 elsif ($format =~ /ris/) {
     $marc = marc2ris($marc);
+    $format = 'ris';
 }
 elsif ($format =~ /bibtex/) {
     $marc = marc2bibtex(C4::Biblio::GetMarcBiblio($biblionumber),$biblionumber);
+    $format = 'bibtex';
 }
 elsif ($format =~ /dc/) {
     ($error,$marc) = marc2dcxml($marc,1);
@@ -61,14 +67,17 @@ elsif ($format =~ /dc/) {
 elsif ($format =~ /marc8/) {
     ($error,$marc) = changeEncoding($marc,"MARC","MARC21","MARC-8");
     $marc = $marc->as_usmarc() unless $error;
+    $format = 'marc8';
 }
 elsif ($format =~ /utf8/) {
     C4::Charset::SetUTF8Flag($marc,1);
     $marc = $marc->as_usmarc();
+    $format = 'utf8';
 }
 elsif ($format =~ /marcstd/) {
     C4::Charset::SetUTF8Flag($marc,1);
     ($error,$marc) = marc2marc($marc, 'marcstd', C4::Context->preference('marcflavour'));
+    $format = 'marcstd';
 }
 else {
     $error= "Format $format is not supported.";
@@ -78,7 +87,7 @@ if ($error){
     print $query->header();
     print $query->start_html();
     print "<h1>An error occurred </h1>";
-    print $error;
+    print $query->escapeHTML("$error");
     print $query->end_html();
 }
 else {
