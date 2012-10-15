@@ -623,8 +623,11 @@ sub HoldTitle {
     }
 
     # Add the reserve
-    #          $branch, $borrowernumber, $biblionumber, $constraint, $bibitems,  $priority, $notes, $title, $checkitem,  $found
-    AddReserve( $branch, $borrowernumber, $biblionumber, 'a', undef, 0, undef, $title, undef, undef );
+    #    $branch,    $borrowernumber, $biblionumber,
+    #    $constraint, $bibitems,  $priority, $resdate, $expdate, $notes,
+    #    $title,      $checkitem, $found
+    my $priority= C4::Reserves::CalculatePriority( $biblionumber );
+    AddReserve( $branch, $borrowernumber, $biblionumber, 'a', undef, $priority, undef, undef, undef, $title, undef, undef );
 
     # Hashref building
     my $out;
@@ -686,9 +689,8 @@ sub HoldItem {
     my $canbookbereserved = C4::Reserves::CanBookBeReserved( $borrowernumber, $biblionumber );
     return { code => 'NotHoldable' } unless $canbookbereserved and $canitembereserved;
 
-    my $branch;
-
     # Pickup branch management
+    my $branch;
     if ( $cgi->param('pickup_location') ) {
         $branch = $cgi->param('pickup_location');
         my $branches = GetBranches();
@@ -697,18 +699,12 @@ sub HoldItem {
         $branch = $$borrower{branchcode};
     }
 
-    my $rank;
-    my $found;
-
-    # Get rank and found
-    $rank = '0' unless C4::Context->preference('ReservesNeedReturns');
-    if ( $item->{'holdingbranch'} eq $branch ) {
-        $found = 'W' unless C4::Context->preference('ReservesNeedReturns');
-    }
-
     # Add the reserve
-    # $branch,$borrowernumber,$biblionumber,$constraint,$bibitems,$priority,$resdate,$expdate,$notes,$title,$checkitem,$found
-    AddReserve( $branch, $borrowernumber, $biblionumber, 'a', undef, $rank, '', '', '', $title, $itemnumber, $found );
+    #    $branch,    $borrowernumber, $biblionumber,
+    #    $constraint, $bibitems,  $priority, $resdate, $expdate, $notes,
+    #    $title,      $checkitem, $found
+    my $priority= C4::Reserves::CalculatePriority( $biblionumber );
+    AddReserve( $branch, $borrowernumber, $biblionumber, 'a', undef, $priority, undef, undef, undef, $title, $itemnumber, undef );
 
     # Hashref building
     my $out;
