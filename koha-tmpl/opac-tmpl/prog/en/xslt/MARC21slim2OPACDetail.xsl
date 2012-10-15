@@ -26,6 +26,8 @@
     <xsl:variable name="UseAuthoritiesForTracings" select="marc:sysprefs/marc:syspref[@name='UseAuthoritiesForTracings']"/>
     <xsl:variable name="TraceSubjectSubdivisions" select="marc:sysprefs/marc:syspref[@name='TraceSubjectSubdivisions']"/>
     <xsl:variable name="Show856uAsImage" select="marc:sysprefs/marc:syspref[@name='OPACDisplay856uAsImage']"/>
+    <xsl:variable name="OPACTrackClicks" select="marc:sysprefs/marc:syspref[@name='TrackClicks']"/>
+    <xsl:variable name="biblionumber" select="marc:datafield[@tag=999]/marc:subfield[@code='c']"/>
     <xsl:variable name="TracingQuotesLeft">
       <xsl:choose>
         <xsl:when test="marc:sysprefs/marc:syspref[@name='UseICU']='1'">{</xsl:when>
@@ -550,7 +552,18 @@
         <span class="results_summary online_resources"><span class="label">Online resources: </span>
         <xsl:for-each select="marc:datafield[@tag=856]">
             <xsl:variable name="SubqText"><xsl:value-of select="marc:subfield[@code='q']"/></xsl:variable>
-            <a><xsl:attribute name="href"><xsl:value-of select="marc:subfield[@code='u']"/></xsl:attribute>
+	    <a>
+	    <xsl:choose>
+	      <xsl:when test="$OPACTrackClicks='track'">
+	        <xsl:attribute name="href">/cgi-bin/koha/tracklinks.pl?uri=<xsl:value-of select="marc:subfield[@code='u']"/>;biblionumber=<xsl:value-of select="$biblionumber"/></xsl:attribute>
+	      </xsl:when>
+	      <xsl:when test="$OPACTrackClicks='anonymous'">
+	        <xsl:attribute name="href">/cgi-bin/koha/tracklinks.pl?uri=<xsl:value-of select="marc:subfield[@code='u']"/>;biblionumber=<xsl:value-of select="$biblionumber"/></xsl:attribute>
+	      </xsl:when>
+	      <xsl:otherwise>
+                <xsl:attribute name="href"><xsl:value-of select="marc:subfield[@code='u']"/></xsl:attribute>
+	      </xsl:otherwise>
+	    </xsl:choose>
             <xsl:if test="$OPACURLOpenInNewWindow='1'">
                 <xsl:attribute name="target">_blank</xsl:attribute>
             </xsl:if>

@@ -718,13 +718,13 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
         
         [% IF ( OPACurlOpenInNewWindow ) %]
 	  [% IF trackclicks == 'track' || trackclicks == 'anonymous' %]
-	    <a href="/cgi-bin/koha/tracklinks.pl?uri=[% MARCurl.MARCURL |url%]" title="[% MARCurl.MARCURL %]" target="_blank">
+	    <a href="/cgi-bin/koha/tracklinks.pl?uri=[% MARCurl.MARCURL |url%]&biblionumber=[% biblionumber | url %]" title="[% MARCurl.MARCURL %]" target="_blank">
 	  [% ELSE %]
 	    <a href="[% MARCurl.MARCURL %]" title="[% MARCurl.MARCURL %]" target="_blank">
 	  [% END %]
 	[% ELSE %]
 	  [% IF trackclicks == 'track' || trackclicks == 'anonymous' %]
-	    <a href="/cgi-bin/koha/tracklinks.pl?uri=[% MARCurl.MARCURL |url%]" title="[% MARCurl.MARCURL %]">
+	    <a href="/cgi-bin/koha/tracklinks.pl?uri=[% MARCurl.MARCURL |url%]&biblionumber=[% biblionumber | url %]" title="[% MARCurl.MARCURL %]">
 	  [% ELSE %]
 	    <a href="[% MARCurl.MARCURL %]" title="[% MARCurl.MARCURL %]">
 	  [% END %]
@@ -1490,11 +1490,12 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
             [% IF ( itemdata_enumchron ) %]<td class="vol_info">[% ITEM_RESULT.enumchron %]</td>[% END %]
 	    [% IF ( itemdata_uri ) %]<td class="url">
 	      [% IF trackclicks == 'track' || trackclicks == 'anonymous' %]
-	        <a href="/cgi-bin/koha/tracklinks.pl?uri=[% ITEM_RESULT.uri | url %]"> Link to resource </a>
+	        <a href="/cgi-bin/koha/tracklinks.pl?uri=[% ITEM_RESULT.uri | url %]&biblionumber=[% biblionumber |url %]&itemnumber=[% ITEM_RESULT.itemnumber | url %]"> Link to resource </a>
 	      [% ELSE %]
 	        <a href="[% ITEM_RESULT.uri %]">[% ITEM_RESULT.uri %]</a>
 	      [% END %]
-            [% END %]
+	      </td>
+	    [% END %]
           [% IF ( itemdata_uri ) %]<td class="url"><a href="[% ITEM_RESULT.uri %]">[% ITEM_RESULT.uri %]</a></td>[% END %]
                [% IF ( itemdata_copynumber ) %]<td class="copynumber">[% ITEM_RESULT.copynumber %]</td>[% END %]
               <td class="status">[% INCLUDE 'item-status.inc' item = ITEM_RESULT %]</td>
