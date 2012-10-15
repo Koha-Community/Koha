@@ -65,6 +65,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 );
 
 my $biblionumber = $query->param('biblionumber') || $query->param('bib');
+$biblionumber = int($biblionumber);
 
 my $record       = GetMarcBiblio($biblionumber);
 if ( ! $record ) {

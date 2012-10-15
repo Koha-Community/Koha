@@ -57,10 +57,11 @@ my $query = new CGI;
 
 my $dbh = C4::Context->dbh;
 
-my $biblionumber = $query->param('biblionumber');
+my $biblionumber = $query->param('biblionumber') || $query->param('bib');
 my $itemtype     = &GetFrameworkCode($biblionumber);
 my $tagslib      = &GetMarcStructure( 0, $itemtype );
 my $biblio = GetBiblioData($biblionumber);
+$biblionumber = $biblio->{biblionumber};
 my $record = GetMarcBiblio($biblionumber, 1);
 if ( ! $record ) {
     print $query->redirect("/cgi-bin/koha/errors/404.pl");

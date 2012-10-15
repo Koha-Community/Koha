@@ -44,6 +44,7 @@ use XML::LibXML;
 
 my $input       = new CGI;
 my $biblionumber = $input->param('id');
+$biblionumber   = int($biblionumber);
 my $importid	= $input->param('importid');
 my $view		= $input->param('viewas') || 'marc';
 

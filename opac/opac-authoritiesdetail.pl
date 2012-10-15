@@ -52,7 +52,8 @@ my $query = new CGI;
 
 my $dbh = C4::Context->dbh;
 
-my $authid       = $query->param('authid');
+my $authid = $query->param('authid');
+$authid = int($authid);
 my $authtypecode = &GetAuthTypeCode( $authid );
 my $tagslib      = &GetTagsLabels( 1, $authtypecode );
 
@@ -94,6 +95,10 @@ if (C4::Context->preference("AuthDisplayHierarchy")){
 }
 else {
     $record = GetAuthority( $authid );
+}
+if ( ! $record ) {
+    print $query->redirect("/cgi-bin/koha/errors/404.pl"); # escape early
+    exit;
 }
 my $count = CountUsage($authid);
 
