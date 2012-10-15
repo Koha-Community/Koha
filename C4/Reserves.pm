@@ -2249,6 +2249,42 @@ sub GetReservesControlBranch {
     return $branchcode;
 }
 
+=head2 CalculatePriority
+
+    my $p = CalculatePriority($biblionumber, $resdate);
+
+Calculate priority for a new reserve on biblionumber.
+The reserve date parameter is optional. Plays a role if the preference
+AllowHoldDateInFuture is set.
+After calculation of this priority, it is recommended to call
+_ShiftPriorityByDateAndPriority. Note that this is currently done in
+AddReserves.
+
+=cut
+
+sub  CalculatePriority {
+    my ( $biblionumber, $resdate ) = @_;
+
+    my $sql = qq{
+        SELECT COUNT(*) FROM reserves
+        WHERE biblionumber=? AND priority>0 AND
+            (found IS NULL or found='')
+    };
+        #skip found==W or found==T (waiting or transit holds)
+    if( $resdate ) {
+        $sql.= ' AND ( reservedate<=? )';
+    }
+    else {
+        $sql.= ' AND ( reservedate < NOW() )';
+    }
+    my $dbh = C4::Context->dbh();
+    my @row= $dbh->selectrow_array( $sql, undef, $resdate?
+        ($biblionumber, $resdate): ($biblionumber) );
+
+    return @row? $row[0]+1: 1;
+        #if @row does not contain anything, something went wrong..
+}
+
 =head1 AUTHOR
 
 Koha Development Team <http://koha-community.org/>
