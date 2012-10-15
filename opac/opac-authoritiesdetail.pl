@@ -66,7 +66,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-my $authid       = $query->param('authid');
+my $authid = $query->param('authid');
 my $record = GetAuthority( $authid );
 if ( ! $record ) {
     print $query->redirect("/cgi-bin/koha/errors/404.pl"); # escape early
