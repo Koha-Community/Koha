@@ -93,6 +93,7 @@ sub printorders {
         $text->translate(20/mm,  ($height-15)/mm);
         $text->text("Order N°".$basketgroup->{'id'}.". Basket N° ".$basket->{basketno}.". ".$basket->{booksellernote});
         $text->translate(20/mm,  ($height-20)/mm);
+        $text->font( $pdf->corefont("Times", -encoding => "utf8"), 4/mm );
         $text->text( ( $basket->{billingplace} ? "Billing at " . C4::Branch::GetBranchName( $basket->{billingplace} ) : "" )
             . ( $basket->{billingplace} and $basket->{deliveryplace} ? " and " : "" )
             . ( $basket->{deliveryplace} ? "delivery at " . C4::Branch::GetBranchName( $basket->{deliveryplace}) : "" )
