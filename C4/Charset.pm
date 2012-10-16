@@ -131,23 +131,26 @@ But since it handles charset, and MARC::Record, it finds its way in that package
 =cut
 
 sub SetUTF8Flag{
-	my ($record, $nfd)=@_;
-	return unless ($record && $record->fields());
-	foreach my $field ($record->fields()){
-		if ($field->tag()>=10){
-			my @subfields;
-			foreach my $subfield ($field->subfields()){
-				push @subfields,($$subfield[0],NormalizeString($$subfield[1],$nfd));
-			}
-			my $newfield=MARC::Field->new(
-							$field->tag(),
-							$field->indicator(1),
-							$field->indicator(2),
-							@subfields
-						);
-			$field->replace_with($newfield);
-		}
-	}
+    my ($record, $nfd)=@_;
+    return unless ($record && $record->fields());
+    foreach my $field ($record->fields()){
+        if ($field->tag()>=10){
+            my @subfields;
+            foreach my $subfield ($field->subfields()){
+                push @subfields,($$subfield[0],NormalizeString($$subfield[1],$nfd));
+            }
+            eval {
+                my $newfield=MARC::Field->new(
+                            $field->tag(),
+                            $field->indicator(1),
+                            $field->indicator(2),
+                            @subfields
+                        );
+                $field->replace_with($newfield);
+            };
+            warn "ERROR occurred in SetUTF8Flag $@" if $@;
+        }
+    }
 }
 
 =head2 NormalizeString

@@ -26,7 +26,7 @@ use C4::Biblio;
 use C4::Items;
 use C4::Charset;
 use C4::AuthoritiesMarc;
-use Koha::MarcModificationTemplates;
+use C4::MarcModificationTemplates;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -324,7 +324,7 @@ sub ModAuthInBatch {
 
 =cut
 
-sub  BatchStageMarcRecords {
+sub BatchStageMarcRecords {
     my $record_type = shift;
     my $encoding = shift;
     my $marc_records = shift;
