@@ -48,8 +48,6 @@ BEGIN {
      );
 }
 
-# XXX This is not safe in a persistant environment
-my $dbh   = C4::Context->dbh;
 
 =head1 FUNCTIONS
 
@@ -62,6 +60,7 @@ Returns Transport Cost Matrix as a hashref <to branch code> => <from branch code
 =cut
 
 sub TransportCostMatrix {
+    my $dbh   = C4::Context->dbh;
     my $transport_costs = $dbh->selectall_arrayref("SELECT * FROM transport_cost",{ Slice => {} });
 
     my %transport_cost_matrix;
@@ -86,6 +85,7 @@ Records: { frombranch => <code>, tobranch => <code>, cost => <figure>, disable_t
 
 sub UpdateTransportCostMatrix {
     my ($records) = @_;
+    my $dbh   = C4::Context->dbh;
 
     my $sth = $dbh->prepare("INSERT INTO transport_cost (frombranch, tobranch, cost, disable_transfer) VALUES (?, ?, ?, ?)");
 
@@ -116,6 +116,7 @@ Returns hold queue for a holding branch. If branch is omitted, then whole queue 
 
 sub GetHoldsQueueItems {
     my ($branchlimit) = @_;
+    my $dbh   = C4::Context->dbh;
 
     my @bind_params = ();
     my $query = q/SELECT tmp_holdsqueue.*, biblio.author, items.ccode, items.location, items.enumchron, items.cn_sort, biblioitems.publishercode,biblio.copyrightdate,biblioitems.publicationyear,biblioitems.pages,biblioitems.size,biblioitems.publicationyear,biblioitems.isbn,items.copynumber
@@ -154,6 +155,7 @@ Top level function that turns reserves into tmp_holdsqueue and hold_fill_targets
 =cut
 
 sub CreateQueue {
+    my $dbh   = C4::Context->dbh;
 
     $dbh->do("DELETE FROM tmp_holdsqueue");  # clear the old table for new info
     $dbh->do("DELETE FROM hold_fill_targets");
