@@ -19,7 +19,7 @@ package Koha::Borrower::Files;
 
 use Modern::Perl;
 
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
+use vars qw($VERSION);
 
 use C4::Context;
 use C4::Output;
@@ -30,13 +30,6 @@ BEGIN {
 
     # set the version for version checking
     $VERSION = 0.01;
-    require Exporter;
-    @ISA    = qw(Exporter);
-    @EXPORT = qw(
-
-    );
-
-    my $debug = C4::Context->preference("DebugLevel");
 }
 
 =head1 NAME
