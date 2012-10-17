@@ -38,18 +38,11 @@ function form_submit (f) {
     $(f).find('input:disabled').removeAttr("disabled");
     return true;
 }
-
-$(document).ready(function() {
-    show_transport_cost_matrix([% IF UseTransportCostMatrix %]true[% ELSE %]false[% END %]);
-});
 //]]>
 </script>
 <style type="text/css">
 .disabled-transfer {
-    background-color: red;
-}
-.errors {
-    color: red;
+    background-color: #FF8888;
 }
 </style>
 
@@ -69,30 +62,34 @@ $(document).ready(function() {
             Defining transport costs between libraries
     </h1>
 [% IF ( WARNING_transport_cost_matrix_off ) %]
-<div class="dialog message">Because the "UseTransportCostMatrix" system preference is currently not enabled, Transport Cost Matrix is not being used.  Go <a href="/cgi-bin/koha/admin/preferences.pl?op=search&amp;searchfield=UseTransportCostMatrix">here</a> if you wish to enable this feature.</div>
+<div class="dialog message">Because the "UseTransportCostMatrix" system preference is currently not enabled, the transport cost matrix is not being used.  Go <a href="/cgi-bin/koha/admin/preferences.pl?op=search&amp;searchfield=UseTransportCostMatrix">here</a> if you wish to enable this feature.</div>
 [% END %]
 
-    <div class="container">
-        <form method="post" action="?" onSubmit="return form_submit(this);">
+    [% IF ( errors ) %]<div class="dialog alert">
+        <h4>There were problems with your submission</h4>
+        <ul>
+            [% FOR e IN errors %]
+                <li>[% e %]</li>
+            [% END %]
+        </ul>
+    </div>[% END %]
+
+        <form method="post" action="?" onsubmit="return form_submit(this);">
             <input type="hidden" name="op" value="set-cost-matrix" />
-            <div id="transport-cost-matrix">
+            <fieldset id="transport-cost-matrix">
                 <div class="help">
                     <p>Costs are decimal values between some arbitrary maximum value (e.g. 1 or 100) and 0 which is the minimum (no) cost.</p>
                     <p>Red cells signify no transfer allowed.</p>
                     <p>Click on individual cells to edit.</p>
                 </div>
-                <ul class="errors" %]>
-                [% FOR e IN errors %]
-                    <li>[% e %]</li>
-                [% END %]
-                </ul>
+
                 <table>
                     <tr>
                         <th>From \ To</th>
-                [% FOR b IN branchloop %]
+                        [% FOR b IN branchloop %]
                         <th>[% b.name %]</th>
-                [% END %]
-                    <tr>
+                        [% END %]
+                    </tr>
                 [% FOR bf IN branchfromloop %]
                     <tr>
                         <th>[% bf.name %]</th>
@@ -118,10 +115,11 @@ $(document).ready(function() {
                     </tr>
                 [% END %]
                 </table>
-            </div>
-            <input type="submit" value="Save" class="submit" />
+            </fieldset>
+            <fieldset class="action">
+                <input type="submit" value="Save" class="submit" /> <a href="/cgi-bin/koha/admin/transport-cost-matrix.pl" class="cancel">Cancel</a>
+            </fieldset>
         </form>
-    </div>
     </div>
     </div>
 <div class="yui-b">
