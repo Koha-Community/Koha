@@ -49,9 +49,10 @@
                         [% IF ( SEARCH_RESULT.pages ) %]. [% SEARCH_RESULT.pages |html %][% END %]
                         [% IF ( SEARCH_RESULT.notes ) %], [% SEARCH_RESULT.notes |html %][% END %]
                         [% IF ( SEARCH_RESULT.size ) %] [% SEARCH_RESULT.size |html %]. [% END %]
-                        [% IF ( SEARCH_RESULT.isbn ) %] [% SEARCH_RESULT.isbn |html %][% END %] </p><p>
+                        [% IF ( SEARCH_RESULT.isbn ) %] [% SEARCH_RESULT.isbn |html %][% END %]
+       </p>
 [% IF ( RequestOnOpac ) %]
-<a href="[% OPACBaseURL %]/cgi-bin/koha/opac-reserve.pl?biblionumber=[% SEARCH_RESULT.biblionumber %]">Place Hold on <i>[% SEARCH_RESULT.title %]</i></a></p>
+<p><a href="[% OPACBaseURL %]/cgi-bin/koha/opac-reserve.pl?biblionumber=[% SEARCH_RESULT.biblionumber %]">Place Hold on <i>[% SEARCH_RESULT.title %]</i></a></p>
 [% END %]
 						]]></description>
        <guid>[% OPACBaseURL %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% SEARCH_RESULT.biblionumber %]</guid>
