@@ -198,7 +198,7 @@ $(document).ready(function(){
 [% END %]
     $("#holdDetails").hide();
 
-[% IF ( query_desc ) %][% IF ( OpacHighlightedWords ) %]var query_desc = "[% query_desc |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]";
+[% IF ( query_desc ) %][% IF ( OpacHighlightedWords ) %]var query_desc = "[% query_desc |replace("'", "\'") |replace('\n', '\\n') |replace('\r', '\\r') |html %]";
         q_array = query_desc.split(" ");
         // ensure that we don't have "" at the end of the array, which can
         // break the highlighter
