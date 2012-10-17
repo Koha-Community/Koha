@@ -56,7 +56,7 @@ $(document).ready(function(){
         return false;
     });
     [% IF ( query_desc ) %]
-    var query_desc = "[% query_desc |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]";
+    var query_desc = "[% query_desc |replace("'", "\'") |replace('\n', '\\n') |replace('\r', '\\r') |html %]";
     q_array = query_desc.split(" ");
     // ensure that we don't have "" at the end of the array, which can
     // break the highlighter
