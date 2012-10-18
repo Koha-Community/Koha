@@ -60,7 +60,7 @@
 
         <!-- Tittel og ansvarsopplysninger -->
         <xsl:if test="marc:datafield[@tag=245]">
-        <h1>
+        <h1 class="title">
             <xsl:for-each select="marc:datafield[@tag=245]">
                     <xsl:call-template name="subfieldSelect">
                         <xsl:with-param name="codes">a</xsl:with-param>
