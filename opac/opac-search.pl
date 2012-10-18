@@ -715,6 +715,40 @@ for (my $i=0;$i<@servers;$i++) {
             $template->param(results_per_page =>  $results_per_page);
             my $hide = C4::Context->preference('OpacHiddenItems');
             $hide = ($hide =~ m/\S/) if $hide; # Just in case it has some spaces/new lines
+
+            my $branch = C4::Context->userenv->{branch};
+            if ( C4::Context->preference('HighlightOwnItemsOnOPAC') ) {
+                if (
+                    ( ( C4::Context->preference('HighlightOwnItemsOnOPACWhich') eq 'PatronBranch' ) && $branch )
+                    ||
+                    C4::Context->preference('HighlightOwnItemsOnOPACWhich') eq 'OpacURLBranch'
+                ) {
+                    my $branchname;
+                    if ( C4::Context->preference('HighlightOwnItemsOnOPACWhich') eq 'PatronBranch' ) {
+                        $branchname = $branches->{$branch}->{'branchname'};
+                    }
+                    elsif (  C4::Context->preference('HighlightOwnItemsOnOPACWhich') eq 'OpacURLBranch' ) {
+                        $branchname = $branches->{ $ENV{'BRANCHCODE'} }->{'branchname'};
+                    }
+
+                    foreach my $res ( @newresults ) {
+                        my @new_loop;
+                        my @top_loop;
+                        my @old_loop = @{$res->{'available_items_loop'}};
+                        foreach my $item ( @old_loop ) {
+                            if ( $item->{'branchname'} eq $branchname ) {
+                                $item->{'this_branch'} = 1;
+                                push( @top_loop, $item );
+                            } else {
+                                push( @new_loop, $item );
+                            }
+                        }
+                        my @complete_loop = ( @top_loop, @new_loop );
+                        $res->{'available_items_loop'} = \@complete_loop;
+                    }
+                }
+            }
+
             $template->param(
                 SEARCH_RESULTS => \@newresults,
                 OPACItemsResultsDisplay => (C4::Context->preference("OPACItemsResultsDisplay")),

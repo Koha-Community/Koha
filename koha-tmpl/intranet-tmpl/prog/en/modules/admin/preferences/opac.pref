@@ -22,6 +22,17 @@ OPAC:
                   no: Disable
             - "Koha OPAC as public. Private OPAC requires authentification before accessing the OPAC."
         -
+            - pref: HighlightOwnItemsOnOPAC
+              choices:
+                  yes: Emphasize
+                  no: "Don't emphasize"
+            - "results from the "
+            - pref: HighlightOwnItemsOnOPACWhich
+              choices:
+                  PatronBranch: "patron's home branch"
+                  OpacURLBranch: "OPAC's branch via the URL"
+            - " by moving the results to the front and increasing the size or highlighting the rows for those results."
+        -
             - "Show star-ratings on"
             - pref: OpacStarRatings
               choices:
