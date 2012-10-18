@@ -723,7 +723,7 @@ input.deleteshelf:active {
 
 #tagslist li { display : inline; }
 
-a.tag_results_add {
+a.tag_add {
     background-image: url(../../images/tag-small.png);
     background-position : -1px center;
     background-repeat : no-repeat;
@@ -742,7 +742,6 @@ a.tag_results_add {
 
 .tag_results_input {
     background-color: #EEE;
-    display: none;
     margin-left: 1em;
     padding: 0.3em;
 }
@@ -1443,9 +1442,19 @@ padding-left : .4em;
     padding-left:20px
 }
 
-.searchresults .tagstatus {
-        display: block;
-        color: #707070;
+.tagstatus {
+    color: #707070;
+    padding: 0 4px 0 4px;
+    margin-left: 5px;
+    border: 1px solid #bcbcbc;
+    background-color: #ffffcc;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+
+.results_summary.tagstatus {
+    display: inline;
 }
 
 .results_summary .label {
@@ -1456,8 +1465,12 @@ padding-left : .4em;
         font-weight: normal;
 }
 
-.actions a {
-   margin-left : 1em;
+.actions a.hold,
+.actions a.addtocart,
+.actions a.addtoshelf,
+.actions a.addtolist,
+.actions a.tag_add {
+     margin-left : 1em;
      text-decoration : none;
 }
 
