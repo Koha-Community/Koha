@@ -83,7 +83,8 @@
     var MSG_TAGS_ADDED = _("Tags added: ");
     var MSG_TAGS_DELETED = _("Tags added: ");
     var MSG_TAGS_ERRORS = _("Errors: ");
-    var MSG_MULTI_ADD_TAG_FAILED = _("Unable to add one or more tags.");[% END %][% END %]
+    var MSG_MULTI_ADD_TAG_FAILED = _("Unable to add one or more tags.");
+    var MSG_NO_TAG_SPECIFIED = _("No tag was specified.");[% END %][% END %]
     [% IF ( OPACAmazonCoverImages ) %]$(window).load(function() {
         verify_images();
     });[% END %]
