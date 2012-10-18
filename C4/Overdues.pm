@@ -263,10 +263,10 @@ sub CalcFine {
     my $chargeable_units = _get_chargeable_units($fine_unit, $start_date, $end_date, $branchcode);
     my $units_minus_grace = $chargeable_units - $data->{firstremind};
     my $amount = 0;
-    if ($data->{'chargeperiod'}  && $units_minus_grace  ) {
+    if ($data->{'chargeperiod'}  && ($units_minus_grace > 0)  ) {
         $amount = int($chargeable_units / $data->{'chargeperiod'}) * $data->{'fine'};# TODO fine calc should be in cents
     } else {
-        # a zero (or null)  chargeperiod means no charge.
+        # a zero (or null) chargeperiod or negative units_minus_grace value means no charge.
     }
     if(C4::Context->preference('maxFine') && ( $amount > C4::Context->preference('maxFine'))) {
         $amount = C4::Context->preference('maxFine');
