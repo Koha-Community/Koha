@@ -23,9 +23,13 @@
 
 <p style="background-color: #ffe599"><strong>Tip</strong> If the checked out time is listed as 00:00 then the item is a daily loan item. The due time for daily checkouts will show 23:59 which is the last minute of the day.</p>
 
+<p>If you have set your ExportWithCsvProfile preference, you will also see the option to export the patron's current checkout information using a CSV Profile or ISO2709 (MARC21) format.</p>
+
 <p>Also at the bottom of the page is the list of items the patron has on hold</p>
 
-<p>From the holds list you can suspend or resume patrons holds using the options at the bottom of the list.</p>
+<p>From the holds list you can suspend or resume patrons holds using the options at the bottom of the list if you have the SuspendHoldsIntranet preference set to 'allow.'</p>
+
+<p>Note: If you have your AutoResumeSuspendedHolds preference set to "Don't allow" then you will not have the option to put an end date on the hold suspension.</p>
 
 <p>If there are notes on the patron record these will appear to the right of the checkout box</p>
 
@@ -41,7 +45,7 @@
 
 <p>If you choose 'Print slip' it will print all of the items the patron has checked out, including those they checked out at an earlier date. Choosing 'Print quick slip' will print only the items that were checked out today.</p>
 
-<p>What prints on the slips can be customized by altering the slip templates under the Notices Slips tool.</p>
+<p>What prints on the slips can be customized by altering the slip templates under the Notices & Slips tool.</p>
 
 <h3>Clear Patron Information</h3>
 
@@ -100,6 +104,13 @@
     <li>Learn more about fast cataloging later in this manual.</li>
 </ul>
 </li>
+    <li>Item being checked out is marked as 'lost'
+<ul>
+    <li>Depending on the value in your IssueLostItem preference, you may just see a warning or a confirmation box</li>
+</ul>
+</li>
+    <li>Item being checked out is not recommended for a patron of this age</li>
+    <li>Item being checked out meets the decreaseLoanHighHolds system preference criteria</li>
 </ul>
 
 <h2>Fast Add Cataloging</h2>
@@ -138,6 +149,6 @@
 
 <p>Circulation messages meant for the patron will appear when they log into the OPAC.</p>
 
-<p><strong>See the full documentation for Checking Out in the <a href="http://manual.koha-community.org/3.8/en/circulation.html#checkingout">manual</a> (online).</strong></p>
+<p><strong>See the full documentation for Checking Out in the <a href="http://manual.koha-community.org/3.10/en/circulation.html#checkingout">manual</a> (online).</strong></p>
 
 [% INCLUDE 'help-bottom.inc' %]
