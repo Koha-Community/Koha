@@ -6,7 +6,10 @@
 
 <h2>Existing Values</h2>
 
-<p>Koha installs with pre-defined values that your library is likely to use, for instance, 'Lost.'</p> By default, this includes:
+<p>Koha installs with pre-defined values that your library is likely to use, for instance, 'Lost.'</p>
+
+<p>By default, this includes:</p>
+
 <ul>
     <li>'Asort1,' for acquisitions statistical purposes.</li>
     <li>'Asort2,' used for acquisitions statistical purposes.</li>
@@ -22,10 +25,16 @@
     <li>'HINGS_RD' is for General Holdings: Retention Designator, a data element that specifies the retention policy for the unit at the time of the holdings report.</li>
     <li>'HINGS_UT' is for General Holdings: Type of Unit Designator.</li>
     <li>'LOC' is for the shelving location and usually appears when adding or editing an item.</li>
-    <li>'LOST' is for descriptions for items marked as lost. It appears when adding or editing an item. Values given to lost statuses should be numeric (not alphabetical) in order for statuses to appear properly.</li>
+    <li>'LOST' is for descriptions for items marked as lost. It appears when adding or editing an item. Values given to lost statuses should be numeric (not alphabetical) in order for statuses to appear properly.
+<ul>
+    <li style="color: #990000;">Important: Values given to lost statuses should be numeric and not alphabetical in order for statuses to appear properly</li>
+</ul>
+</li>
     <li>'MANUAL_INV' includes values for manual invoicing.</li>
     <li>'NOT_LOAN' is used to list reasons why a title is not for loan.</li>
     <li>'PROC' is for the location to be used for NewItemsDefaultLocation (change description as desired), also the location expected by InProcessingToShelvingCart.</li>
+    <li>'REPORT_GROUP' provides a way to sort and filter your reports, the default values in this category include the Koha modules (Accounts, Acquitisions, Catalog, Circulation, Patrons)</li>
+    <li>'REPORT_SUBGROUP' can be used to further sort and filter your reports. This category is empty by default. Values here need to include the authorized value code from REPORT_GROUP in the Description (OPAC) field to link the subgroup to the appropriate group.</li>
     <li>'RESTRICTED' is used for the restricted status of an item</li>
     <li>'SUGGEST' is for a list of reasons to accept or reject patron suggestions. It appears when managing suggestions.</li>
     <li>'WITHDRAWN' is for a description of a withdrawn item. It appears when adding or editing an item.</li>
@@ -60,6 +69,6 @@
     <li>The new value will appear in the list along with existing values.</li>
 </ul>
 
-<p><strong>See the full documentation for Authorized Values in the <a href="http://manual.koha-community.org/3.8/en/basicparams.html#authorizedvalues">manual</a> (online).</strong></p>
+<p><strong>See the full documentation for Authorized Values in the <a href="http://manual.koha-community.org/3.10/en/basicparams.html#authorizedvalues">manual</a> (online).</strong></p>
 
 [% INCLUDE 'help-bottom.inc' %]

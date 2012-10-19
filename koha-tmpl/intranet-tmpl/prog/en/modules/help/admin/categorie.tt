@@ -44,7 +44,7 @@
 <p>To add a new patron category click 'New Category' at the top of the page</p>
 
 <ul>
-      <li>The 'Category Code' is an identifier for your new code.
+    <li>The 'Category Code' is an identifier for your new code.
 <ul>
 	<li style="color: #990000;">Important: The category code is limited to 10 characters (numbers and letters)</li>
 </ul>
@@ -55,8 +55,16 @@
 	<li style="color: #990000;">Important: You cannot enter both a month limit and a date until. Choose to enter either one or the other.</li>
 </ul>
 </li>
-	<li>Some patron categories can have a minimum age (in years) requirement associated with them, enter this age in the 'Age required'</li>
-	<li>Patron categories can also have a maximum age (in years) associated with them (such as children), enter this age in the 'Upperage limit'</li>
+    <li>Some patron categories can have a minimum age (in years) requirement associated with them, enter this age in the 'Age required'
+<ul>
+    <li style="color: #990000;">Important: This value will only be checked if BorrowerMandatoryField defines the dateofbirth as a required field on the patron record</li>
+</ul>
+</li>
+    <li>Patron categories can also have a maximum age (in years) associated with them (such as children), enter this age in the 'Upperage limit'
+<ul>
+    <li style="color: #990000;">Important: This value will only be checked if BorrowerMandatoryField defines the dateofbirth as a required field on the patron record</li>
+</ul>
+</li>
 	<li>If you charge a membership fee for your patrons (such as those who live in another region) you can enter that in the 'Enrollment fee' field.
 <ul>
 	<li style="color: #990000;">Important: Only enter numbers and decimals in this field</li>
@@ -77,6 +85,6 @@
 </li>
 </ul>
 
-<p><strong>See the full documentation for Patron Categories in the <a href="http://manual.koha-community.org/3.8/en/patscirc.html#patcats">manual</a> (online).</strong></p>
+<p><strong>See the full documentation for Patron Categories in the <a href="http://manual.koha-community.org/3.10/en/patscirc.html#patcats">manual</a> (online).</strong></p>
 
 [% INCLUDE 'help-bottom.inc' %]
