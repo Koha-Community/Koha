@@ -14,10 +14,11 @@
 </li>
 </ul>
 </li>
-    <li>If you allow patrons to make purchase suggestions (learn more in the Managing Suggestions section of this manual), then you can place orders from those suggestions.
+    <li>If you allow patrons to make purchase suggestions (learn more in the Managing Suggestions section of this manual), then you can place orders from those suggestions.</li>
+    <li>From the results, click 'Order' next to the item you want to order and you will be presented with the order form including a link to the suggestion
+<ul>
     <li>From this form you can make changes to the Catalog Details if necessary.</li>
-</ul>
-</li>
+    <li>When the item appears in your basket it will include a link to the suggestion.</li>
 </ul>
 </li>
     <li>To order from a record that can't be found anywhere else, choose the 'From a new (empty) record.'
@@ -38,42 +39,65 @@
 </li>
     <li>The final option for ordering is to order from a staged record (learn more about staging records).
 <ul>
-    <li>From the list of files with which you are presented, choose the 'Add orders' link.
+    <li>From the list of files you are presented with, choose the 'Add orders' link.
 <ul>
     <li>From the list of records, click 'Add order' next to the item that you want to add to your order.
 <ul>
     <li>From the order form, you will not be able to edit the catalog details.</li>
 </ul>
 </li>
+    <li>The other option is to import all records from the staged file by scrolling below the list of records in the staged file and filling in the item information.
+<ul>
+    <li>If you choose this option the Koha will look in the 020$c and grab the pricing information from that field and put that on each order line.</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
 </li>
 </ul>
 
-<p/>
+<p>After bringing in the bib information, if your AcqCreateItem system preference is set to add an item when ordering you will enter the item info next. You need to fill out at least one item record and then click the 'Add' button at the bottom left of the item form.</p>
+
+<p>After clicking add the item will appear above the form and then you can enter your next item the same way (if ordering more than one item).</p>
+
 <p>Once you have entered the info about the item, you need to enter the Accounting information.</p>
 
 <ul>
     <li>Quantity is populated by the number of items you've added to the order above.</li>
 	<li>The list of funds is populated by the funds you have assigned in the Acquisitions Administration area.</li>
-    <li>The vendor price will be used to calculate the rest of the amount fields below.</li>
+    <li>The currency pull down will have the currencies you set up in the Acquisitions Administration area.</li>
+    <li>The vendor price is the price before any taxes or discounts are applied.</li>
 	<li>If the price is uncertain, check the uncertain price box.
 <ul>
     <li>A basket with at least one uncertain price can't be closed.</li>
 </ul>
 </li>
+    <li>If you are charged sales tax, choose that from the gstrate field</li>
+    <li>Enter the percentage discount you're receiving on this order, once you enter this, hit tab and Koha will populate the rest of the cost fields below.</li>
     <li>If you added Planning Values when creating the Fund, those values will appear in the two Planning Value fields.</li>
 </ul>
 
-<p/>
-<p>Once an item is added to the basket you will be presented with a basket summary. From here, you can edit or remove the items that you have added.</p>
+<p>Once an item is added to the basket you will be presented with a basket summary.</p>
+
+<p>If you would like to see more details you can check the 'Show all details' checkbox.</p>
+
+<p>From here, you can edit or remove the items that you have added.</p>
+
+<ul>
+    <li>Choosing to 'Delete the order' will delete the order line but leave the record in the catalog.</li>
+    <li>Choosing to 'Delete order and catalog record' removes both the order line and the record in the catalog.
+<ul>
+    <li>The catalog record cannot always be deleted. You might see notes explaining why.</li>
+</ul>
+</li>
+</ul>
+
 <p>On the summary page, you also have the option to edit the information that you entered about the basket by clicking the 'Edit basket header information' button, to delete the basket altogether by clicking the 'Delete this basket' button, or to export your basket as a CSV file by clicking the 'Export this basket as CSV' button.</p>
 
 <p>Once you're sure your basket is complete, you can click 'Close this basket' button to indicate that this basket is complete and has been sent to the vendor.</p>
 
 <p style="color: #ff0000">Important: A basket with at least one item marked as 'uncertain price' will not be able to be closed</p>
-
 
 <p>Clicking the 'Uncertain Prices' button will call up a list of items with uncertain prices to quick editing.</p>
 
@@ -87,6 +111,6 @@
 
 <p>Clicking 'Print' below your order will generate a PDF for printing, which will have all of your library information followed by the items in your order.</p>
 
-<p><strong>See the full documentation for Ordering in the <a href="http://manual.koha-community.org/3.8/en/placingacqorder.html#createacqbasket">manual</a> (online).</strong></p>
+<p><strong>See the full documentation for Ordering in the <a href="http://manual.koha-community.org/3.10/en/placingacqorder.html#createacqbasket">manual</a> (online).</strong></p>
 
 [% INCLUDE 'help-bottom.inc' %]
