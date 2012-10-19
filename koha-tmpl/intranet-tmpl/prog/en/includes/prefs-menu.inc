@@ -15,7 +15,6 @@
 [% IF ( searching ) %]<li class="active">[% ELSE %]<li>[% END %]<a title="Searching" href="/cgi-bin/koha/admin/preferences.pl?tab=searching">Searching</a></li>
 [% IF ( serials ) %]<li class="active">[% ELSE %]<li>[% END %]<a title="Serials" href="/cgi-bin/koha/admin/preferences.pl?tab=serials">Serials</a></li>
 [% IF ( staff_client ) %]<li class="active">[% ELSE %]<li>[% END %]<a title="Staff client" href="/cgi-bin/koha/admin/preferences.pl?tab=staff_client">Staff client</a></li>
-[% IF ( tools ) %]<li class="active">[% ELSE %]<li>[% END %]<a title="Tools" href="/cgi-bin/koha/admin/preferences.pl?tab=tools">Tools</a></li>
 [% IF ( web_services ) %]<li class="active">[% ELSE %]<li>[% END %]<a title="Web services" href="/cgi-bin/koha/admin/preferences.pl?tab=web_services">Web services</a></li>
 </ul>
 </div>
