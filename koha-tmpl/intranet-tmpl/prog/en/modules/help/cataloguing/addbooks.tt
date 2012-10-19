@@ -1,17 +1,36 @@
 [% INCLUDE 'help-top.inc' %]
 
-<h1>Cataloging help</h1><h2>How to edit a bibliographic record?</h2>
+<h1>Cataloging</h1>
 
-<p>To edit a bibliographic record, use the cataloging search to find the record. This can be done either via the cataloging interface or the catalog search. A search with in the Cataloging module will search the catalog and the reservoir (see below).</p>
+<p>Before you start cataloging in Koha you're going to want to do some basic setup. Refer to the Implementation Checklist for a full list of these things. Most importantly you're going to want to make sure that your Frameworks are all defined the way you want. Once in the cataloging module you will not be able to add or remove fields and subfields so your frameworks must be ready before you start cataloging.</p>
 
-<h2>How to add a new bibliographic record?</h2>
+<p>From here you can add new bibliographic records to Koha.</p>
 
-<p>Use the &quot;New Record&quot; button to add a new record. Choose the framework that you will use to shape the bibliographic record. Frameworks are cataloging templates that can be created and edited under &quot;System Admininstration&quot;.</p>
+<p>Records can be added to Koha via original or copy cataloging. If you would like to catalog a record using a blank template</p>
 
-<h2>How to add new items to a record?</h2>
+<ul>
+    <li>Click 'New Record'</li>
+    <li>Choose the framework you would like to base your record off of</li>
+</ul>
 
-<p>A bibliographic record needs items or holdings for it to show in the OPAC. There are two ways to add new items to a bibliographic record:</p><ol><li><strong>Through Cataloging</strong>. After adding the new bibliographic record, you will be given the option to add items to the record. One record can have many items. </li><li><strong>Through Acquisitions</strong>.&nbsp; Items can be added to orders in acquisitions. Item details are added upon receiving the item. Using the acquisitions module for adding items allows you to track the libraries spend against funds and budgets. </li></ol><h2>What is the reservoir?</h2>
+<p>If you want to catalog a record based on an existing record at another library</p>
 
-<p>The reservoir is a holding area for bibilographic records that are not yet used in the library catalog.&nbsp; When an item arrives that matches a record in the reservoir, the two can be matched and the bibliographic pulled from the reservoir into the main catalog.</p><p>The reservoir can be populated with MARC records through the &quot;Stage MARC Records for Import&quot; under Tools.</p> 
+<ul>
+    <li>Click 'z39.50 Search'</li>
+    <li>Search for the item you would like to catalog</li>
+    <li>Tip: If no results are found, try searching for fewer fields, not all Z39.50 targets can search all of the fields above.</li>
+    <li>Search targets can be altered by using the Z39.50 Admin area.</li>
+    <li>From the results you can view the MARC or Card view for the records or choose to Import them into Koha
+<ul>
+    <li>In addition to the Import link to the right of each title, you can click on the title you're interested in and a menu will pop up with links to preview the record and import it</li>
+</ul>
+</li>
+    <li>If you don't find the title you need in your Z39.50 search results you can click the 'Try Another Search' button at the bottom left of your results</li>
+</ul>
+
+<p>Once you've opened a blank framework or imported a record via Z39.50 you will be presented with the form to continue cataloging</p>
+
+<p><strong>See the full documentation for Cataloging in the <a href="http://manual.koha-community.org/3.10/en/cataloging.html">manual</a> (online).</strong></p>
+
 [% INCLUDE 'help-bottom.inc' %]
 
