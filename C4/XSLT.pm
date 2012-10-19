@@ -166,9 +166,9 @@ sub XSLTParse4Display {
                        "slim2OPACResults.xsl";
         }
         $xslfilename = "$htdocs/$theme/$lang/xslt/$xslfile";
-        $xslfilename = "$htdocs/$theme/en/xslt/$xslfile" unless ( $lang ne 'en' && !-f $xslfilename );
-        $xslfilename = "$htdocs/prog/$lang/xslt/$xslfile" unless ( !-f $xslfilename );
-        $xslfilename = "$htdocs/prog/en/xslt/$xslfile" unless ( $lang ne 'en' && !-f $xslfilename );
+        $xslfilename = "$htdocs/$theme/en/xslt/$xslfile" unless ( $lang ne 'en' && -f $xslfilename );
+        $xslfilename = "$htdocs/prog/$lang/xslt/$xslfile" unless ( -f $xslfilename );
+        $xslfilename = "$htdocs/prog/en/xslt/$xslfile" unless ( $lang ne 'en' && -f $xslfilename );
     }
 
     if ( $xslfilename =~ m/\{langcode\}/ ) {
