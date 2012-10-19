@@ -1,0 +1,25 @@
+[% INCLUDE 'help-top.inc' %]
+
+<h1>Offline Circulation</h1>
+
+<p>From this page you can manage offline circulation actions tracked in the Firefox plugin found at: <a class="ulink" href="https://addons.mozilla.org/en/firefox/addon/koct/" target="_top">https://addons.mozilla.org/en/firefox/addon/koct/</a></p>
+
+<p>When you use the 'Commit to Koha' option in the offline circulation plugin you will come to this page to manage the data.</p>
+
+<p>Once all of the logs from all of the circulation computers are loaded you will be able to check them all or select just those you want to process into Koha.</p>
+
+<ul>
+    <li>Click on the Process button and Koha will record every sorted transaction one by one. For each transaction, the status will change to:
+<ul>
+    <li>"Success." if the transaction was processed correctly</li>
+    <li>"Borrower not found." if the borrower card number is incorrect</li>
+    <li>"Item not found." if the item barcode is wrong</li>
+    <li>"Item not issued." if you checked in an available item</li>
+</ul>
+</li>
+    <li>Once finished you will have a summary of all of your transactions</li>
+</ul>
+
+<p><strong>See the full documentation for Offline Circulation in the <a href="http://manual.koha-community.org/3.10/en/offlinecirc.html#firefoxofflinecirc">manual</a> (online).</strong></p>
+
+[% INCLUDE 'help-bottom.inc' %]
