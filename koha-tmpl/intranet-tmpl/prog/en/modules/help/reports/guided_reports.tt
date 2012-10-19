@@ -38,7 +38,7 @@
 
 <ul><li>This is optional, if you want the results to come out as they are in the table, just leave this section blank.</li></ul>
 
-<h1>Edit Reports</h1>
+<h2>Edit Reports</h2>
 
 <p>Custom reports can be edited in their entirety from the Saved Guided Reports page.</p>
 
@@ -51,52 +51,47 @@
 
 <h2>Report from SQL</h2>
 
-<p>In addition to the report wizard, you have the option to write your own queries using SQL. To find reports written by other Koha users, visit the Koha Wiki: <a href="http://wiki.koha-community.org/wiki/SQL_Reports_Library">http://wiki.koha-community.org/wiki/SQL_Reports_Library</a>. You can also find your database structure in /installer/data/mysql/kohastructure.sql or online at: <a href="http://schema.koha-community.org">http://schema.koha-community.org</a>.</p>
+<p>In addition to the report wizard, you have the option to write your own queries using SQL. To find reports written by other Koha users, visit the Koha Wiki: <a href="http://wiki.koha-community.org/wiki/SQL_Reports_Library" target="_top">http://wiki.koha-community.org/wiki/SQL_Reports_Library</a>. You can also find your database structure in /installer/data/mysql/kohastructure.sql or online at: <a href="http://schema.koha-community.org/" target="_top">http://schema.koha-community.org</a>.</p>
 
 <p>To add your query, click the link to 'Create from SQL' on the main reports module or the New button at the top of the Saved Reports page.</p>
 
 <p>Fill in the form presented</p>
 <ul>
-    <li>The name is what will appear on the Saved Reports page to help you identify the report later. It will also be searchable using the filters found the left of the Saved Reports page.</li>
-    <li>Notes will also appear on the Saved Reports page, this can be used to provide more details about the report or tips on how to enter values when it runs</li>
-    <li>The type should always be 'Tabular' at this time since the other formats have not been implemented</li>
-    <li>In the SQL box you will type or paste the SQL for the report</li>
-    <li>If you feel that your report might be too resource intensive you might want to consider using runtime parameters to your query. Runtime parameters basically make a filter appear before the report is run to save your system resources.
+    <li>The 'Name' is what will appear on the Saved Reports page to help you identify the report later. It will also be searchable using the filters found the left of the Saved Reports page.</li>
+    <li>You can use the 'Report group' to organize your reports so that you can easily filter reports by groups. Report groups are set in the REPORT_GROUP authorized value category.</li>
+    <li>You can use 'Report subgroup' to further organize your reports so that you can easily filter reports by groups and subgroups. Report subgroups are set in the REPORT_SUBGROUP authorized value category.</li>
+    <li>'Report is public' should be left to the default of 'No' in most cases. A report can be made public if you intend to allow access to it through the JSON webservice interface. This is a system that can be used by developers to make custom presentations of the data from the report, for example displaying it using a graphing API. To learn more speak to your local developer.
 <ul>
-    <li><strong>Note:</strong> There is a limit of 10,000 records put on SQL statements entered in Koha. To get around this you want to add 'LIMIT 100000' to the end of your SQL statement (or any other number above 10,000.</li>
-    <li>There is a specific syntax that Koha will understand as 'ask for values when running the report'. The syntax is &lt;&lt;Question to ask|authorized_value&gt;&gt;.</li>
+    <li>A public report is accessible via a URL that looks like this: http://MYOPAC/cgi-bin/koha/svc/report?id=REPORTID</li>
+</ul>
+</li>
+    <li>'Notes' will also appear on the Saved Reports page, this can be used to provide more details about the report or tips on how to enter values when it runs</li>
+    <li>The type should always be 'Tabular' at this time since theother formats have not been implemented</li>
+    <li>In the 'SQL' box you will type or paste the SQL for the report</li>
+    <li>If you feel that your report might be too resource intensive you might want to consider using runtime parameters to your query. Runtime parameters basically make a filter appear before the report is run to save your system resources.There is a specific syntax that Koha will understand as 'ask for values when running the report'. The syntax is &lt;&lt;Question to ask|authorized_value&gt;&gt;.
+<ul>
     <li>The &lt;&lt; and &gt;&gt; are just delimiters. You must put &lt;&lt; at the beginning and &gt;&gt; at the end of your parameter</li>
     <li>The 'Question to ask' will be displayed on the left of the string to enter.</li>
     <li>The authorized_value can be omitted if not applicable. If it contains an authorized value category, or branches or itemtype or categorycode, a list with the Koha authorized values will be displayed instead of a free field Note that you can have more than one parameter in a given SQL Note that entering nothing at run time won't probably work as you expect. It will be considered as "value empty" not as "ignore this parameter". For example entering nothing for : "title=&lt;&lt;Enter title&gt;&gt;" will display results with title='' (no title). If you want to have to have something not mandatory, use "title like &lt;&lt;Enter title&gt;&gt;" and enter a % at run time instead of nothing</li>
 </ul>
-
 <p>Examples:</p>
-
 <ul>
     <li>SELECT surname, firstname<br />
-    FROM borrowers<br />
-    WHERE branchcode=&lt;&lt;Enter patrons library|branches&gt;&gt; AND surname like &lt;&lt;Enter filter for patron surname (% if none)&gt;&gt;</li>
-    <li>SELECT *<br />
-    FROM items<br />
-    WHERE homebranch = &lt;&lt;Pick your branch|branches&gt;&gt; and barcode like &lt;&lt;Partial barcode value here (use % for wildcard)&gt;&gt;</li>
+FROM borrowers <br />
+WHERE branchcode=&lt;&lt;Enter patrons library|branches&gt;&gt; AND surname like &lt;&lt;Enter filter for patron surname (% if none)&gt;&gt;</li>
+    <li>SELECT * <br />
+FROM items <br />
+WHERE homebranch = &lt;&lt;Pick your branch|branches&gt;&gt; AND barcode like &lt;&lt;Partial barcode value here&gt;&gt;</li>
 </ul>
 </li>
-    <li style="background-color: #ffe599;">Tip: To generate a date picker calendar to the right of the field when running a report you can use the 'date' keyword like this: &lt;&lt;Enter Date|date&gt;&gt;</li>
-    <li style="background-color: #ffe599;">Tip: You have to put "%" in a text box to 'leave it blank'. Otherwise, it literally looks for "" (empty string) as the value for the field.</li>
-    <li style="color: #990000;">Important: In addition to using any authorized value code to generate a dropdown, you can use the following values as well: Branches (branches), Item Types (itemtypes) and Patron Categories (categorycode). For example a branch pull down would be generated like this &lt;&lt;Branch|branches&gt;&gt;</li>
+    <li>Tip: To generate a date picker calendar to the right of the field when running a report you can use the 'date' keyword like this: &lt;&lt;Enter Date|date&gt;&gt;</li>
+    <li>Tip: You have to put "%" in a text box to 'leave it blank'. Otherwise, it literally looks for "" (empty string) as the value for the field.</li>
+    <li style="color: #990000">Important: In addition to using any authorized value code to generate a dropdown, you can use the following values as well: Branches (branches), Item Types (itemtypes) and Patron Categories (categorycode). For example a branch pull down would be generated like this &lt;&lt;Branch|branches&gt;&gt;</li>
 </ul>
+
+<p>Note: There is a limit of 10,000 records put on SQL statements entered in Koha. To get around this you want to add 'LIMIT 100000' to the end of your SQL statement (or any other number above 10,000.</p>
 
 <p>Once everything is entered click the 'Save Report' button and you'll be presented with options to run it. Once a report is saved you do not have to recreate it you can simply find it on the Saved Reports page and run or edit it.</p>
-
-<h1>Questions</h1>
-
-<p><strong>What are duration and visibility?</strong></p>
-<p>The duration field may be visible or not, don't worry if you don't see it. If you see it, it says how long a report run is kept in Koha and, any subsequent re-run will in fact display the result run the 1st time</p>
-<p>The visibility field specify if your report is accessible <strong>without authentication</strong> from the OPAC. Reports can be retrieved from the following URLs:
-<ul><li> opac: http://localhost/cgi-bin/koha/svc/report?id=1</li>
-<li>intranet: http://localhost:8080/cgi-bin/koha/svc/report?id=1</li>
-</ul>
-<p>(replace localhost and localhost:8080 with the appropriate URLs)</p>
 
 <p><strong>Is there a repository for reports?</strong></p>
 
@@ -104,6 +99,6 @@
 
 <p>NEKLS also has a great page (<a href="http://www.nexpresslibrary.org/training/reports-training/" target="_new">http://www.nexpresslibrary.org/training/reports-training/</a>) with a list of reports they have written.</p>
 
-<p><strong>See the full documentation for Custom Reports in the <a href="http://manual.koha-community.org/3.8/en/reports.html#customreports">manual</a> (online).</strong></p>
+<p><strong>See the full documentation for Custom Reports in the <a href="http://manual.koha-community.org/3.10/en/reports.html#customreports">manual</a> (online).</strong></p>
 
 [% INCLUDE 'help-bottom.inc' %]
