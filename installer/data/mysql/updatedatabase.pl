@@ -6011,7 +6011,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-$DBversion = 'XXX';
+$DBversion = "3.09.00.062";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
    $dbh->do("UPDATE systempreferences SET value=0 WHERE variable='NoZebra'");
    $dbh->do("UPDATE systempreferences SET value=0 WHERE variable='QueryRemoveStopwords'");
