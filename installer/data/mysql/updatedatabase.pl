@@ -5276,6 +5276,12 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.08.06.000";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    print "Upgrade to $DBversion (3.8.6 release) done\n";
+    SetVersion($DBversion);
+}
+
 
 
 =head1 FUNCTIONS
