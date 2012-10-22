@@ -22,6 +22,7 @@ use warnings;
 
 use CGI;
 use Mail::Sendmail;
+use Encode;
 
 use C4::Auth;    # checkauth, getborrowernumber.
 use C4::Context;
@@ -103,7 +104,7 @@ EOF
     my $B_address2 = $borr->{'B_address2'} || '';
 
     foreach my $field (@fields) {
-        my $newfield = $query->param($field) || '';
+        my $newfield = decode('utf-8',$query->param($field)) || '';
         my $borrowerfield = '';
         if($borr->{$field}) {
             $borrowerfield = $borr->{$field};
@@ -124,8 +125,8 @@ EOF
         To      => $updateemailaddress,
         From    => $patronemail,
         Subject => "User Request for update of Record.",
-        Message => $message,
-        'Content-Type' => 'text/plain; charset="utf8"',
+        Message => encode('utf-8', $message), # Mail::Sendmail doesn't like wide characters
+        'Content-Type' => 'text/plain; charset="utf-8"',
     );
 
     if ( sendmail %mail ) {
