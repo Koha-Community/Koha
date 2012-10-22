@@ -7,10 +7,10 @@
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.pager.js"></script>
 <script type="text/javascript" id="js">$(document).ready(function() {
-	$("#table_authtagstructure").tablesorter({
-		sortList: [[0,0]],
-		headers: { 5: { sorter: false},6: { sorter: false},7: { sorter: false}}
-	}).tablesorterPager({container: $("#pagertable_authtagstructure"),positionFixed: false,size: 20});
+    $("#table_authtagstructure").tablesorter({
+        sortList: [[0,0]],
+        headers: { 5: { sorter: false},6: { sorter: false},7: { sorter: false}}
+    }).tablesorterPager({container: $("#pagertable_authtagstructure"),positionFixed: false,size: 20});
 }); </script>
 <script type="text/javascript">
 //<![CDATA[
@@ -70,48 +70,48 @@ return false;
 [% INCLUDE 'cat-search.inc' %]
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo;
-	<a href="/cgi-bin/koha/admin/authtypes.pl">Authority types</a> &rsaquo;
-	[% IF ( add_form ) %]
-		[% IF ( use_heading_flags_p ) %]
-			[% IF ( heading_modify_tag_p ) %]
-				[% IF ( authtypecode ) %]<a href="/cgi-bin/koha/admin/auth_tag_structure.pl?authtypecode=[% authtypecode %]">[% authtypecode %] Framework</a>
-				[% ELSE %]<a href="/cgi-bin/koha/admin/auth_tag_structure.pl">Default framework</a>
-				[% END %] &rsaquo; Modify tag
-			[% END %]
-			[% IF ( heading_add_tag_p ) %]
-				[% IF ( authtypecode ) %]<a href="/cgi-bin/koha/admin/auth_tag_structure.pl?authtypecode=[% authtypecode %]">[% authtypecode %] framework</a>
-				[% ELSE %]<a href="/cgi-bin/koha/admin/auth_tag_structure.pl">Default framework</a>
-				[% END %] &rsaquo; New tag
-			[% END %]
-		[% ELSE %]
-			[% IF ( authtypecode ) %]<a href="/cgi-bin/koha/admin/auth_tag_structure.pl?authtypecode=[% authtypecode %]">[% authtypecode %] Framework</a>
-			[% ELSE %]<a href="/cgi-bin/koha/admin/auth_tag_structure.pl">Default framework</a>
-			[% END %] &rsaquo; [% action %]
-		[% END %]
-	[% ELSE %]
-		[% IF ( delete_confirm ) %]
-			[% IF ( authtypecode ) %]<a href="/cgi-bin/koha/admin/auth_tag_structure.pl?authtypecode=[% authtypecode %]">[% authtypecode %] framework</a>
-			[% ELSE %]<a href="/cgi-bin/koha/admin/auth_tag_structure.pl">Default framework</a>
-			[% END %] &rsaquo; Confirm deletion
-		[% ELSE %]
-			[% IF ( delete_confirmed ) %]
-				[% IF ( authtypecode ) %]<a href="/cgi-bin/koha/admin/auth_tag_structure.pl?authtypecode=[% authtypecode %]">[% authtypecode %] framework</a>
-				[% ELSE %]<a href="/cgi-bin/koha/admin/auth_tag_structure.pl">Default framework</a>
-				[% END %] &rsaquo; Data deleted
-			[% ELSE %]
-				[% IF ( authtypecode ) %][% authtypecode %] Framework</a>
-				[% ELSE %]Default framework
-				[% END %]
-			[% END %]
-		[% END %]
+    <a href="/cgi-bin/koha/admin/authtypes.pl">Authority types</a> &rsaquo;
+    [% IF ( add_form ) %]
+        [% IF ( use_heading_flags_p ) %]
+            [% IF ( heading_modify_tag_p ) %]
+                [% IF ( authtypecode ) %]<a href="/cgi-bin/koha/admin/auth_tag_structure.pl?authtypecode=[% authtypecode %]">[% authtypecode %] Framework</a>
+                [% ELSE %]<a href="/cgi-bin/koha/admin/auth_tag_structure.pl">Default framework</a>
+                [% END %] &rsaquo; Modify tag
+            [% END %]
+            [% IF ( heading_add_tag_p ) %]
+                [% IF ( authtypecode ) %]<a href="/cgi-bin/koha/admin/auth_tag_structure.pl?authtypecode=[% authtypecode %]">[% authtypecode %] framework</a>
+                [% ELSE %]<a href="/cgi-bin/koha/admin/auth_tag_structure.pl">Default framework</a>
+                [% END %] &rsaquo; New tag
+            [% END %]
+        [% ELSE %]
+            [% IF ( authtypecode ) %]<a href="/cgi-bin/koha/admin/auth_tag_structure.pl?authtypecode=[% authtypecode %]">[% authtypecode %] Framework</a>
+            [% ELSE %]<a href="/cgi-bin/koha/admin/auth_tag_structure.pl">Default framework</a>
+            [% END %] &rsaquo; [% action %]
+        [% END %]
+    [% ELSE %]
+        [% IF ( delete_confirm ) %]
+            [% IF ( authtypecode ) %]<a href="/cgi-bin/koha/admin/auth_tag_structure.pl?authtypecode=[% authtypecode %]">[% authtypecode %] framework</a>
+            [% ELSE %]<a href="/cgi-bin/koha/admin/auth_tag_structure.pl">Default framework</a>
+            [% END %] &rsaquo; Confirm deletion
+        [% ELSE %]
+            [% IF ( delete_confirmed ) %]
+                [% IF ( authtypecode ) %]<a href="/cgi-bin/koha/admin/auth_tag_structure.pl?authtypecode=[% authtypecode %]">[% authtypecode %] framework</a>
+                [% ELSE %]<a href="/cgi-bin/koha/admin/auth_tag_structure.pl">Default framework</a>
+                [% END %] &rsaquo; Data deleted
+            [% ELSE %]
+                [% IF ( authtypecode ) %][% authtypecode %] Framework</a>
+                [% ELSE %]Default framework
+                [% END %]
+            [% END %]
+        [% END %]
     [% END %]
 </div>
 
 <div id="doc3" class="yui-t2">
    
    <div id="bd">
-	<div id="yui-main">
-	<div class="yui-b">
+    <div id="yui-main">
+    <div class="yui-b">
 
 <h1>Authority MARC framework for [% IF ( authtypecode ) %][% authtypecode %][% ELSE %]default framework[% END %]</h1>
 
@@ -129,7 +129,7 @@ return false;
         [% IF ( heading_modify_tag_p ) %]<input type="hidden" name="modif" value="1" />[% END %]
         <input type="hidden" name="authtypecode" value="[% authtypecode %]" />
         <fieldset class="rows"><ol>
-		<li><span class="label">Tag</span>[% searchfield %]</li>
+        <li><span class="label">Tag</span>[% searchfield %]</li>
         <li><label for="liblibrarian">Text for librarians</label><input type="text" name="liblibrarian" id="liblibrarian" value="[% liblibrarian |html %]" size="40" maxlength="100" /></li>
         <li><label for="libopac">Text for opac</label><input type="text" name="libopac" id="libopac" value="[% libopac |html %]" size="40" maxlength="100" /></li>
         <li><label for="repeatable">Repeatable</label>
@@ -154,18 +154,18 @@ return false;
 
 
 [% IF ( delete_confirm ) %]
-		<div class="dialog alert">
+        <div class="dialog alert">
         <h3>Confirm deletion</h3>
-		<form action="[% script_name %]" method="post">
-		<table>
-			<tr><th scope="row">Tag: </th><td>[% searchfield %] [% liblibrarian %]</td></tr>
-		</table>
+        <form action="[% script_name %]" method="post">
+        <table>
+            <tr><th scope="row">Tag: </th><td>[% searchfield %] [% liblibrarian %]</td></tr>
+        </table>
         <input type="hidden" name="op" value="delete_confirmed" />
         <input type="hidden" name="authtypecode" value="[% authtypecode %]" />
         <input type="hidden" name="searchfield" value="[% searchfield %]" />
         <input type="submit" value="Yes, delete" class="approve"></form>
         <form action="[% script_name %]" method="get"><input type="submit" class="deny" value="No, do not delete" /></form>
-		</div>
+        </div>
 [% END %]
 
 [% IF ( delete_confirmed ) %]
@@ -197,18 +197,18 @@ return false;
 [% IF ( else ) %]
 
 <div id="toolbar">
-	<script type="text/javascript">
-	//<![CDATA[
-	// prepare DOM for YUI Toolbar
-	 $(document).ready(function() {
-	    yuiToolbar();
-	 });
-	// YUI Toolbar Functions
-	function yuiToolbar() {
-	    new YAHOO.widget.Button("newtag");
-	}	//]]>
-	</script>
-	<ul class="toolbar">
+    <script type="text/javascript">
+    //<![CDATA[
+    // prepare DOM for YUI Toolbar
+     $(document).ready(function() {
+        yuiToolbar();
+     });
+    // YUI Toolbar Functions
+    function yuiToolbar() {
+        new YAHOO.widget.Button("newtag");
+    }    //]]>
+    </script>
+    <ul class="toolbar">
     <li><a id="newtag" href="/cgi-bin/koha/admin/auth_tag_structure.pl?op=add_form&amp;authtypecode=[% authtypecode %]">New tag</a></li>
 </ul></div>
 
@@ -217,11 +217,11 @@ return false;
     <select name="authtypecode">
         <option value="">Default</option>
     [% FOREACH authtypeloo IN authtypeloop %]
-		[% IF ( authtypeloo.selected ) %]
+        [% IF ( authtypeloo.selected ) %]
         <option value="[% authtypeloo.value %]" selected="selected">[% authtypeloo.authtypetext %]</option>
-		[% ELSE %]
+        [% ELSE %]
         <option value="[% authtypeloo.value %]">[% authtypeloo.authtypetext %]</option>
-		[% END %]
+        [% END %]
             
     [% END %]
     </select>
@@ -241,13 +241,13 @@ return false;
         <th>Subfields</th>
         <th>Edit</th>
         <th>Delete</th>
-	</thead>
+    </thead>
     [% FOREACH loo IN loop %]
-	[% UNLESS ( loop.odd ) %]
-	<tr class="highlight">
-	[% ELSE %]
-	<tr>
-	[% END %]
+    [% UNLESS ( loop.odd ) %]
+    <tr class="highlight">
+    [% ELSE %]
+    <tr>
+    [% END %]
         <td><b>[% loo.tagfield %]</b></td>
         <td>[% loo.liblibrarian %]</td>
         <td>[% IF ( loo.repeatable ) %]Yes[% ELSE %]No[% END %]</td>

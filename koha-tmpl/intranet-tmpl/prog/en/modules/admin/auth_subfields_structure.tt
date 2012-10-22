@@ -4,9 +4,9 @@
 <script type="text/javascript">
 //<![CDATA[
 
-	 $(document).ready(function() {
+     $(document).ready(function() {
         $('#subfieldtabs').tabs();
-	 });
+     });
 
 function displayMoreConstraint(numlayer){
     var thisdiv = document.getElementById(numlayer);
@@ -75,7 +75,7 @@ function displayMoreConstraint(numlayer){
 
         [% FOREACH loo IN loop %]
         <div id="sub[% loo.tagsubfield %]field">
-			<fieldset class="rows"><ol>
+            <fieldset class="rows"><ol>
 
                     [% IF ( loo.new_subfield ) %]
                 <li><label for="tagsubfieldinput[% loo.row %]">Subfield code: </label>[% loo.tagsubfieldinput %]&nbsp;</li>
@@ -101,7 +101,7 @@ function displayMoreConstraint(numlayer){
                 </li>
                 <li><label for="isurl[% loo.row %]">Is a URL:</label>[% loo.isurl %] (if checked, it means that the subfield is a URL and can be clicked)</li>
                 <li>
-                    <fieldset><legend>Help input</legend>	
+                    <fieldset><legend>Help input</legend>    
                         <ol>
                             <li><label for="authorised_value[% loo.row %]">Authorized value:</label> [% loo.authorised_value %]</li>
                             <li><label for="frameworkcode[% loo.row %]">Thesaurus:</label> [% loo.frameworkcode %]</li>
@@ -127,14 +127,14 @@ function displayMoreConstraint(numlayer){
         <input type="hidden" name="tagsubfield" value="[% tagsubfield %]" />
         <input type="hidden" name="authtypecode" value="[% authtypecode %]" />
         <input type="submit" class="approve" value="Yes, Delete this Subfield" />
-		</form>
-		<form action="[% delete_link %]" method="get">
-		 <input type="hidden" name="searchfield" value="[% searchfield %]" />
+        </form>
+        <form action="[% delete_link %]" method="get">
+         <input type="hidden" name="searchfield" value="[% searchfield %]" />
         <input type="hidden" name="tagfield" value="[% tagfield %]" />
         <input type="hidden" name="tagsubfield" value="[% tagsubfield %]" />
         <input type="hidden" name="authtypecode" value="[% authtypecode %]" />
         <input type="submit" class="deny" value="No, Do Not Delete" />
-		</form>
+        </form>
     </form></div>
 [% END %]
 
@@ -200,13 +200,13 @@ function displayMoreConstraint(numlayer){
     [% END %]
 </table>
 
-	<form action="[% script_name %]" method="get">
-	<fieldset class="action"><input type="hidden" name="op" value="add_form" />
-	<input type="hidden" name="tagfield" value="[% edit_tagfield %]" />
-	<input type="hidden" name="authtypecode" value="[% edit_authtypecode %]" />
-	<input type="submit" value="Edit subfields" />
-	<a class="cancel" href="auth_tag_structure.pl?searchfield=[% tagfield %]&amp;authtypecode=[% authtypecode %]">Cancel</a></fieldset>
-	</form>
+    <form action="[% script_name %]" method="get">
+    <fieldset class="action"><input type="hidden" name="op" value="add_form" />
+    <input type="hidden" name="tagfield" value="[% edit_tagfield %]" />
+    <input type="hidden" name="authtypecode" value="[% edit_authtypecode %]" />
+    <input type="submit" value="Edit subfields" />
+    <a class="cancel" href="auth_tag_structure.pl?searchfield=[% tagfield %]&amp;authtypecode=[% authtypecode %]">Cancel</a></fieldset>
+    </form>
 
     [% IF ( previous ) %]
     <input type="image" src="[% interface %]/[% theme %]/images/1leftarrow.png" title="previous" alt="previous" border="0" />
