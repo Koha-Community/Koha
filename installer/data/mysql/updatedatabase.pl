@@ -9893,7 +9893,7 @@ if ( CheckVersion($DBversion) ) {
         ALTER TABLE search_history ADD COLUMN id INT(11) NOT NULL AUTO_INCREMENT FIRST, ADD PRIMARY KEY(id);
     |);
     print "Upgrade to $DBversion done (Bug 11430: Add primary key for search_history)\n";
-    SetVersion($DBversion);
+    SetVersion ($DBversion);
 }
 
 $DBversion = "3.19.00.016";
@@ -11449,6 +11449,56 @@ if ( CheckVersion($DBversion) ) {
     print "Upgrade to $DBversion done (Bug 11569 - Typo in userpermissions.sql)\n";
     SetVersion($DBversion);
 }
+$DBversion = "XXX";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+   $dbh->do("
+       ALTER TABLE serial
+        ADD serialseq_x VARCHAR( 100 ) NULL DEFAULT NULL AFTER serialseq,
+        ADD serialseq_y VARCHAR( 100 ) NULL DEFAULT NULL AFTER serialseq_x,
+        ADD serialseq_z VARCHAR( 100 ) NULL DEFAULT NULL AFTER serialseq_y
+   ");
+
+    my $schema        = Koha::Database->new()->schema();
+    my @subscriptions = $schema->resultset('Subscription')->all();
+
+    foreach my $subscription (@subscriptions) {
+        my $number_pattern = $subscription->numberpattern();
+
+        my @splits = split( /\{[XYZ]\}/, $number_pattern->numberingmethod() );
+
+        my @serials =
+          $schema->resultset('Serial')
+          ->search( { subscriptionid => $subscription->subscriptionid() } );
+
+        foreach my $serial (@serials) {
+            my $serialseq = $serial->serialseq();
+            my ( $x, $y, $z );
+
+            ## We cannot split on multiple values at once,
+            ## so let's replace each of those values with __SPLIT__
+            if (@splits) {
+                map( $serialseq =~ s/$_/__SPLIT__/, @splits );
+                ( undef, $x, $y, $z ) = split( /__SPLIT__/, $serialseq );
+            }
+            else
+            {    ## Nothing to split on means the only thing in serialseq is {X}
+                $x = $serialseq;
+            }
+
+            $serial->update(
+                {
+                    serialseq_x => $x,
+                    serialseq_y => $y,
+                    serialseq_z => $z,
+                }
+            );
+        }
+    }
+
+    print "Upgrade to $DBversion done ( Bug 8956 - Split serials enumeration data into separate fields )\n";
+    SetVersion($DBversion);
+}
+
 
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
