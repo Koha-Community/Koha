@@ -687,19 +687,19 @@ sub getFacets {
             {
                 idx   => 'su-to',
                 label => 'Topics',
-                tags  => [ qw/ 600a 601a 602a 603a 604a 605a 606ax 610a/ ],
+                tags  => [ qw/ 600ab 601ab 602a 604at 605a 606ax 610a / ],
                 sep   => ' - ',
             },
             {
                 idx   => 'su-geo',
                 label => 'Places',
-                tags  => [ qw/ 651a / ],
+                tags  => [ qw/ 607a / ],
                 sep   => ' - ',
             },
             {
                 idx   => 'su-ut',
                 label => 'Titles',
-                tags  => [ qw/ 500a 501a 502a 503a 504a / ],
+                tags  => [ qw/ 500a 501a 503a / ],
                 sep   => ', ',
             },
             {
