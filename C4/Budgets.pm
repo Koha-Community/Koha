@@ -41,6 +41,7 @@ BEGIN {
         &DelBudget
         &GetBudgetSpent
         &GetBudgetOrdered
+        &GetBudgetName
         &GetPeriodsCount
         &GetChildBudgetsSpent
 
@@ -354,6 +355,28 @@ sub GetBudgetOrdered {
     $sum += $shipmentcost_sum;
 
 	return $sum;
+}
+
+=head2 GetBudgetName
+
+  my $budget_name = &GetBudgetName($budget_id);
+
+get the budget_name for a given budget_id
+
+=cut
+
+sub GetBudgetName {
+    my ( $budget_id ) = @_;
+    my $dbh         = C4::Context->dbh;
+    my $sth         = $dbh->prepare(
+        qq|
+        SELECT budget_name
+        FROM aqbudgets
+        WHERE budget_id = ?
+    |);
+
+    $sth->execute($budget_id);
+    return $sth->fetchrow_array;
 }
 
 # -------------------------------------------------------------------

@@ -52,7 +52,6 @@ my $invoiceno        = $invoice->{invoicenumber};
 my $datereceived     = $invoice->{shipmentdate};
 my $booksellerid     = $input->param('booksellerid');
 my $cnt              = 0;
-my $error_url_str;
 my $ecost            = $input->param('ecost');
 my $rrp              = $input->param('rrp');
 my $note             = $input->param("note");

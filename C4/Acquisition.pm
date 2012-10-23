@@ -58,7 +58,7 @@ BEGIN {
         &SearchOrder &GetHistory &GetRecentAcqui
         &ModReceiveOrder &CancelReceipt &ModOrderBiblioitemNumber
         &GetCancelledOrders
-
+        &GetLastOrderNotReceivedFromSubscriptionid &GetLastOrderReceivedFromSubscriptionid
         &NewOrderItem &ModOrderItem &ModItemOrder
 
         &GetParcels &GetParcel
@@ -1006,6 +1006,67 @@ sub GetOrder {
     $sth->finish;
     return $data;
 }
+
+=head3 GetLastOrderNotReceivedFromSubscriptionid
+
+  $order = &GetLastOrderNotReceivedFromSubscriptionid($subscriptionid);
+
+Returns a reference-to-hash describing the last order not received for a subscription.
+
+=cut
+
+sub GetLastOrderNotReceivedFromSubscriptionid {
+    my ( $subscriptionid ) = @_;
+    my $dbh                = C4::Context->dbh;
+    my $query              = qq|
+        SELECT * FROM aqorders
+        LEFT JOIN subscription
+            ON ( aqorders.subscriptionid = subscription.subscriptionid )
+        WHERE aqorders.subscriptionid = ?
+            AND aqorders.datereceived IS NULL
+        LIMIT 1
+    |;
+    my $sth = $dbh->prepare( $query );
+    $sth->execute( $subscriptionid );
+    my $order = $sth->fetchrow_hashref;
+    return $order;
+}
+
+=head3 GetLastOrderReceivedFromSubscriptionid
+
+  $order = &GetLastOrderReceivedFromSubscriptionid($subscriptionid);
+
+Returns a reference-to-hash describing the last order received for a subscription.
+
+=cut
+
+sub GetLastOrderReceivedFromSubscriptionid {
+    my ( $subscriptionid ) = @_;
+    my $dbh                = C4::Context->dbh;
+    my $query              = qq|
+        SELECT * FROM aqorders
+        LEFT JOIN subscription
+            ON ( aqorders.subscriptionid = subscription.subscriptionid )
+        WHERE aqorders.subscriptionid = ?
+            AND aqorders.datereceived =
+                (
+                    SELECT MAX( aqorders.datereceived )
+                    FROM aqorders
+                    LEFT JOIN subscription
+                        ON ( aqorders.subscriptionid = subscription.subscriptionid )
+                        WHERE aqorders.subscriptionid = ?
+                            AND aqorders.datereceived IS NOT NULL
+                )
+        ORDER BY ordernumber DESC
+        LIMIT 1
+    |;
+    my $sth = $dbh->prepare( $query );
+    $sth->execute( $subscriptionid, $subscriptionid );
+    my $order = $sth->fetchrow_hashref;
+    return $order;
+
+}
+
 
 #------------------------------------------------------------#
 

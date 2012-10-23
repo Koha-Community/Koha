@@ -1945,6 +1945,7 @@ CREATE TABLE `subscription` (
   `graceperiod` int(11) NOT NULL default '0',
   `enddate` date default NULL,
   `closed` INT(1) NOT NULL DEFAULT 0,
+  `reneweddate` date default NULL,
   PRIMARY KEY  (`subscriptionid`),
   CONSTRAINT subscription_ibfk_1 FOREIGN KEY (periodicity) REFERENCES subscription_frequencies (id) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT subscription_ibfk_2 FOREIGN KEY (numberpattern) REFERENCES subscription_numberpatterns (id) ON DELETE SET NULL ON UPDATE CASCADE
@@ -2811,8 +2812,6 @@ CREATE TABLE `aqorders` ( -- information related to the basket line items
   `notes` mediumtext, -- notes related to this order line
   `supplierreference` mediumtext, -- not used? always NULL
   `purchaseordernumber` mediumtext, -- not used? always NULL
-  `subscription` tinyint(1) default NULL, -- not used? always NULL
-  `serialid` varchar(30) default NULL, -- not used? always NULL
   `basketno` int(11) default NULL, -- links this order line to a specific basket (aqbasket.basketno)
   `biblioitemnumber` int(11) default NULL, -- links this order line the biblioitems table (biblioitems.biblioitemnumber)
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- the date and time this order line was last modified
@@ -2830,6 +2829,7 @@ CREATE TABLE `aqorders` ( -- information related to the basket line items
   `uncertainprice` tinyint(1), -- was this price uncertain (1 for yes, 0 for no)
   `claims_count` int(11) default 0, -- count of claim letters generated
   `claimed_date` date default NULL, -- last date a claim was generated
+  `subscriptionid` int(11) default NULL, -- links this order line to a subscription (subscription.subscriptionid)
   parent_ordernumber int(11) default NULL, -- ordernumber of parent order line, or same as ordernumber if no parent
   PRIMARY KEY  (`ordernumber`),
   KEY `basketno` (`basketno`),
@@ -2837,7 +2837,8 @@ CREATE TABLE `aqorders` ( -- information related to the basket line items
   KEY `budget_id` (`budget_id`),
   CONSTRAINT `aqorders_ibfk_1` FOREIGN KEY (`basketno`) REFERENCES `aqbasket` (`basketno`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `aqorders_ibfk_2` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE SET NULL ON UPDATE CASCADE,
-  CONSTRAINT aqorders_ibfk_3 FOREIGN KEY (invoiceid) REFERENCES aqinvoices (invoiceid) ON DELETE SET NULL ON UPDATE CASCADE
+  CONSTRAINT aqorders_ibfk_3 FOREIGN KEY (invoiceid) REFERENCES aqinvoices (invoiceid) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `aqorders_subscriptionid` FOREIGN KEY (`subscriptionid`) REFERENCES `subscription` (`subscriptionid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 

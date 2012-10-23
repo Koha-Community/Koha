@@ -361,46 +361,48 @@ $(document).ready(function()
         </fieldset>
     [% END %]
 
-    [% IF (AcqCreateItemOrdering) %]
+    [% UNLESS subscriptionid %][% # it is a suggestion, we have not items %]
+      [% IF (AcqCreateItemOrdering) %]
 
-    <div id="items_list" style="display:none">
-        <p><b>Items list</b></p>
-        <div style="width:100%;overflow:auto;">
-            <table>
-                <thead>
-                    <tr>
-                        <th>&nbsp;</th>
-                        <th>&nbsp;</th>
-                        <th>Barcode</th>
-                        <th>Home library</th>
-                        <th>Holding library</th>
-                        <th>Not for loan</th>
-                        <th>Restricted</th>
-                        <th>Location</th>
-                        <th>Call number</th>
-                        <th>Copy number</th>
-                        <th>Stock number</th>
-                        <th>Collection code</th>
-                        <th>Item type</th>
-                        <th>Materials</th>
-                        <th>Notes</th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
-        </div>
-    </div>
+      <div id="items_list" style="display:none">
+          <p><b>Items list</b></p>
+          <div style="width:100%;overflow:auto;">
+              <table>
+                  <thead>
+                      <tr>
+                          <th>&nbsp;</th>
+                          <th>&nbsp;</th>
+                          <th>Barcode</th>
+                          <th>Home library</th>
+                          <th>Holding library</th>
+                          <th>Not for loan</th>
+                          <th>Restricted</th>
+                          <th>Location</th>
+                          <th>Call number</th>
+                          <th>Copy number</th>
+                          <th>Stock number</th>
+                          <th>Collection code</th>
+                          <th>Item type</th>
+                          <th>Materials</th>
+                          <th>Notes</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+              </table>
+          </div>
+      </div>
 
-    <fieldset class="rows" id="itemfieldset">
-        <legend>Item</legend>
-        [% IF ( NoACQframework ) %]
-            <div class="dialog message">No ACQ framework, using default. You should create a framework with code ACQ, the items framework would be used</div>
-        [% END %]
+      <fieldset class="rows" id="itemfieldset">
+          <legend>Item</legend>
+          [% IF ( NoACQframework ) %]
+              <div class="dialog message">No ACQ framework, using default. You should create a framework with code ACQ, the items framework would be used</div>
+          [% END %]
 
-        <div id="outeritemblock"></div>
+          <div id="outeritemblock"></div>
 
-    </fieldset>
+      </fieldset>
+      [% END %][%# UNLESS subscriptionid %]
     [% END %][%# IF (AcqCreateItemOrdering) %]
     <fieldset class="rows">
         <legend>Accounting Details</legend>
@@ -412,9 +414,17 @@ $(document).ready(function()
                 [% ELSE %]
                     <label class="required" for="quantity">Quantity: </label>
                     [% IF (AcqCreateItemOrdering) %]
-                        <input type="text" readonly="readonly" size="20" id="quantity" name="quantity" value="0" />
+                        [% IF subscriptionid %]
+                            <input type="text" readonly="readonly" size="20" id="quantity" name="quantity" value="1" />
+                        [% ELSE %]
+                            <input type="text" readonly="readonly" size="20" id="quantity" name="quantity" value="0" />
+                        [% END %]
                     [% ELSE %]
-                        <input type="text" size="20" id="quantity" name="quantity" value="[% quantityrec %]" onchange="updateCosts();" />
+                        [% IF subscriptionid %]
+                            <input type="text" readonly="readonly" size="20" id="quantity" name="quantity" value="1" />
+                        [% ELSE %]
+                            <input type="text" size="20" id="quantity" name="quantity" value="[% quantityrec %]" onchange="updateCosts();" />
+                        [% END %]
                     [% END %]
                 [% END %]
                 <!-- origquantityrec only here for javascript compatibility (additem.js needs it, useless here, usefull when receiveing an order -->
@@ -586,14 +596,19 @@ $(document).ready(function()
                 [% END %]
                 </span>
             </li>
-</ol>
+        </ol>
     </fieldset>
     <fieldset class="action">
+        <input type="hidden" name="subscriptionid" value="[% subscriptionid %]" />
         <input type="submit" value="Save" />
         [% IF (suggestionid) %]
             <a class="cancel" href="/cgi-bin/koha/acqui/newordersuggestion.pl?booksellerid=[% booksellerid %]&amp;basketno=[% basketno %]">Cancel</a>
         [% ELSE %]
-            <a class="cancel" href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basketno %]">Cancel</a>
+            [% IF subscriptionid %]
+                <a class="cancel" href="/cgi-bin/koha/acqui/newordersubscription.pl?booksellerid=[% booksellerid %]&amp;basketno=[% basketno %]">Cancel</a>
+            [% ELSE %]
+                <a class="cancel" href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basketno %]">Cancel</a>
+            [% END %]
         [% END %]
     </fieldset>
 </form>

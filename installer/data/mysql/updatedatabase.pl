@@ -6984,6 +6984,17 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.11.00.XXX";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do(q{ALTER TABLE aqorders DROP COLUMN serialid;});
+    $dbh->do(q{ALTER TABLE aqorders DROP COLUMN subscription;});
+    $dbh->do(q{ALTER TABLE aqorders ADD COLUMN subscriptionid INT(11) DEFAULT NULL;});
+    $dbh->do(q{ALTER TABLE aqorders ADD CONSTRAINT aqorders_subscriptionid FOREIGN KEY (subscriptionid) REFERENCES subscription (subscriptionid) ON DELETE CASCADE ON UPDATE CASCADE;});
+    $dbh->do(q{ALTER TABLE subscription ADD COLUMN reneweddate DATE DEFAULT NULL;});
+    print "Upgrade to $DBversion done (Bug 5343: table aqorders: DROP serialid and subscription fields and ADD subscriptionid, table subscription: ADD reneweddate)\n";
+    SetVersion ($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

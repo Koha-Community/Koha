@@ -106,7 +106,7 @@ my $branches = GetBranches();
 my @branches_loop;
 foreach (sort keys %$branches){
     my $selected = 0;
-    $selected = 1 if( $branch eq $_ );
+    $selected = 1 if( defined $branch and $branch eq $_ );
     push @branches_loop, {
         branchcode  => $_,
         branchname  => $branches->{$_}->{'branchname'},
