@@ -609,7 +609,10 @@ if ($op eq "additem") {
     }
   my $item = GetItem( $itemnumber );
     my $olditemlost =  $item->{'itemlost'};
-    my $newitemlost = $itemtosave->subfield('952','1');
+
+   my ($lost_tag,$lost_subfield) = GetMarcFromKohaField("items.itemlost",'');
+
+   my $newitemlost = $itemtosave->subfield( $lost_tag, $lost_subfield );
     if (($olditemlost eq '0' or $olditemlost eq '' ) and $newitemlost ge '1'){
   LostItem($itemnumber,'MARK RETURNED');
     }
