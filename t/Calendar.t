@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 use DateTime;
-use Test::More tests => 21;
+use Test::More tests => 23;
 use Koha::DateUtils;
 
 BEGIN {
@@ -102,6 +102,10 @@ $cal->set_daysmode('Days');
 $ret = $cal->addDate( $test_dt, 7, 'days' );
 cmp_ok( $ret->ymd(), 'eq', '2012-07-30', 'Add 7 days Days mode' );
 $cal->set_daysmode('Calendar');
+
+# see bugzilla #8966
+is( $cal->is_holiday($later_dt), 0, 'is holiday for the next test' );
+cmp_ok( $later_dt, 'eq', '2012-09-17T17:30:00', 'Date should be the same after is_holiday' );
 
 # example tests for bug report
 $cal->clear_weekly_closed_days();
