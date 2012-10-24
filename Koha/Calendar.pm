@@ -140,16 +140,17 @@ sub addDate {
 
 sub is_holiday {
     my ( $self, $dt ) = @_;
-    my $dow = $dt->day_of_week;
+    my $localdt = $dt->clone();
+    my $dow = $localdt->day_of_week;
     if ( $dow == 7 ) {
         $dow = 0;
     }
     if ( $self->{weekly_closed_days}->[$dow] == 1 ) {
         return 1;
     }
-    $dt->truncate( to => 'day' );
-    my $day   = $dt->day;
-    my $month = $dt->month;
+    $localdt->truncate( to => 'day' );
+    my $day   = $localdt->day;
+    my $month = $localdt->month;
     if ( exists $self->{day_month_closed_days}->{$month}->{$day} ) {
         return 1;
     }
