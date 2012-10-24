@@ -91,14 +91,13 @@ $template->param(AllowSelfCheckReturns => $allowselfcheckreturns);
 
 
 my $issuerid = $loggedinuser;
-my ($op, $patronid, $patronlogin, $patronpw, $barcode, $confirmed, $timedout) = (
+my ($op, $patronid, $patronlogin, $patronpw, $barcode, $confirmed) = (
     $query->param("op")         || '',
     $query->param("patronid")   || '',
     $query->param("patronlogin")|| '',
     $query->param("patronpw")   || '',
     $query->param("barcode")    || '',
     $query->param("confirmed")  || '',
-    $query->param("timedout")   || '', #not actually using this...
 );
 
 my $issuenoconfirm = 1; #don't need to confirm on issue.

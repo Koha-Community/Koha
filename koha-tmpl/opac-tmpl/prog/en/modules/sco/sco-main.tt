@@ -11,10 +11,8 @@
 <script type="text/javascript" src="[% themelang %]/lib/jquery/jquery-ui.js"></script>
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
 <script type="text/javascript">//<![CDATA[
-function sco_init(valid_session) {
-    if (valid_session == 1) {
-        setTimeout("location.href='/cgi-bin/koha/sco/sco-main.pl?op=logout';",[% SelfCheckTimeout %]); 
-    }
+function sco_init() {
+    setTimeout("location.href='/cgi-bin/koha/sco/sco-main.pl?op=logout';",[% SelfCheckTimeout %]);
 }
 function dofocus() {    // named function req'd for body onload event by some FF and IE7 security models
     // alert("dofocus called");
@@ -33,13 +31,6 @@ function checkout_confirm(patronid) {
     if (barcode == "__KOHA_NEW_CIRC__") {   // magic barcode 
         window.location.href='/cgi-bin/koha/sco/sco-main.pl?op=logout';
         return false;
-    }
-    if (this.valid_session == 0) {
-        // probably should force logout like above ? --atz 6/09
-        if (confirm('Session has expired.  Click \'OK\' to continue processing this item.  Click Cancel if you are not ' + patronid)){
-            this.op.value='logout';
-            this.patronid.value='';
-        }
     }
     return true;
 }
@@ -81,9 +72,8 @@ $.tablesorter.addParser({
 });
 
 $(document).ready(function() {
-    [% IF ( patronid ) %] sco_init(1);
-    [% ELSIF ( timedout ) %] sco_init(1);
-    [% END %]
+    dofocus();
+    [% IF ( patronid ) %]sco_init();[% END %]
     $("#loanTable").tablesorter({
         [% IF ( dateformat_metric ) %]
             dateFormat: 'uk',
@@ -130,7 +120,7 @@ $(document).ready(function(){
    [% IF ( circ_error_UNKNOWN_BARCODE ) %]
     <em>MESSAGE 1:</em> The system does not recognize this barcode.
    [% ELSIF ( circ_error_TOO_MANY ) %]
-    <em>MESSAGE 2:</em> You have borrowed too many items and can't check out any more.
+    <em>MESSAGE 2:</em> You have checked out too many items and can't check out any more.
    [% ELSIF ( circ_error_ISSUED_TO_ANOTHER ) %]
     <em>MESSAGE 3:</em> This item is checked out to someone else.
    [% ELSIF ( circ_error_NO_MORE_RENEWALS ) %]
@@ -138,13 +128,13 @@ $(document).ready(function(){
    [% ELSIF ( circ_error_NOT_FOR_LOAN ) %]
     <em>MESSAGE 5:</em> This item is not for loan.
    [% ELSIF ( circ_error_DEBT ) %]
-    <em>MESSAGE 6:</em> You owe the library [% amount %] and cannot borrow.
+    <em>MESSAGE 6:</em> You owe the library [% amount %] and cannot check out.
    [% ELSIF ( circ_error_WTHDRAWN ) %]
     <em>MESSAGE 7:</em> This item has been withdrawn from the collection.
    [% ELSIF ( circ_error_RESTRICTED ) %]
     <em>MESSAGE 8:</em>
    [% ELSIF ( circ_error_RESERVED ) %]
-    <em>MESSAGE 9:</em> This item is reserved for another patron.
+    <em>MESSAGE 9:</em> This item is on hold for another patron.
    [% ELSIF ( circ_error_ITEMNOTSAMEBRANCH ) %]
     <em>MESSAGE 10:</em>
    [% ELSIF ( circ_error_EXPIRED ) %]
@@ -160,44 +150,67 @@ $(document).ready(function(){
    [% END %]
    Please see a member of the library staff.
 </p>
-<form action="/cgi-bin/koha/sco/sco-main.pl" name="errorForm" method="post">
-<input type="hidden" name="op" value="login" />
-<input type="hidden" name="patronid" value="[% patronid %]" />
 [% IF ( returnitem ) %]
 [% IF ( AllowSelfCheckReturns ) %]
-<input type="hidden" name="barcode" value="[% barcode %]" />
-<input type="button" name="returnbook" value="Return this item" class="return" onclick="this.form.op.value='returnbook';this.form.submit();"  />
-[% END %]
-[% END %]
-<input type="submit" name= "confirm" value="Return to Account Summary" class="back focus" />
+<form action="/cgi-bin/koha/sco/sco-main.pl" name="errorForm" class="inline" method="post">
+    <input type="hidden" name="op" value="returnbook" />
+    <input type="hidden" name="patronid" value="[% patronid %]" />
+    <input type="hidden" name="barcode" value="[% barcode %]" />
+    <input type="submit" name="returnbook" value="Return this item" class="return" />
 </form>
+<form action="/cgi-bin/koha/sco/sco-main.pl" name="errorForm" class="inline" method="post">
+    <input type="hidden" name="op" value="" />
+    <input type="hidden" name="patronid" value="[% patronid %]" />
+    <input type="hidden" name="barcode" value="[% barcode %]" />
+    <input type="submit" name= "confirm" value="Return to account summary" class="back focus" />
+</form>
+[% END %]
+[% END %]
 [% END %]
 [% IF ( confirm ) %]<!-- We need to confirm the issue.. -->
 <div class="dialog alert"><h3>Please confirm the checkout:</h3>
 <p>[% IF ( confirm_renew_issue ) %]This item is already checked out to you.[% END %]</p>
 
-<form action="/cgi-bin/koha/sco/sco-main.pl" name="confirmForm" method="post">
-<input type="hidden" name="op" value="checkout" />
-<input type="hidden" name="patronid" value="[% patronid %]" />
-<input type="hidden" name="barcode" value="[% barcode %]" />
-<input type="hidden" name="confirmed" value="" />
 [% IF ( renew ) %]
 [% IF ( AllowSelfCheckReturns ) %]
-<input type="button" value="Return item" name="confirm" class="return" onclick="this.form.op.value='returnbook';this.form.submit();"  />
+    <form action="/cgi-bin/koha/sco/sco-main.pl" name="confirmForm" class="inline" method="post">
+        <input type="hidden" name="op" value="returnbook" />
+        <input type="hidden" name="patronid" value="[% patronid %]" />
+        <input type="hidden" name="barcode" value="[% barcode %]" />
+        <input type="hidden" name="confirmed" value="" />
+        <input type="submit" value="Return item" name="confirm" class="return" />
+    </form>
 [% END %]
 [% END %]
-[% UNLESS ( renew ) %]<input type="button" value="Renew item" name="confirm" class="renew" onclick="this.form.confirmed.value='1';this.form.submit();" />
-[% ELSE %]<input type="button" value="Renew item" class="renew" onclick="this.form.confirmed.value='1';this.form.submit();" />[% END %]
-<input type="button" value="Cancel" class="cancel" onclick="this.form.op.value='';this.form.submit();return true;"  />
-</form>
+
+[% UNLESS ( renew ) %]
+    <form action="/cgi-bin/koha/sco/sco-main.pl" name="confirmForm" class="inline" method="post">
+        <input type="hidden" name="op" value="checkout" />
+        <input type="hidden" name="patronid" value="[% patronid %]" />
+        <input type="hidden" name="barcode" value="[% barcode %]" />
+        <input type="hidden" name="confirmed" value="1" />
+        <input type="submit" value="Renew item" name="confirm" class="renew" />
+      </form>
+[% ELSE %]
+    <form action="/cgi-bin/koha/sco/sco-main.pl" name="confirmForm" class="inline" method="post">
+        <input type="hidden" name="op" value="checkout" />
+        <input type="hidden" name="patronid" value="[% patronid %]" />
+        <input type="hidden" name="barcode" value="[% barcode %]" />
+        <input type="hidden" name="confirmed" value="1" />
+        <input type="submit" value="Renew item" class="renew" />
+    </form>
+[% END %]
+    <form action="/cgi-bin/koha/sco/sco-main.pl" name="confirmForm" class="inline" method="post">
+      <input type="hidden" name="op" value="" />
+      <input type="hidden" name="patronid" value="[% patronid %]" />
+      <input type="submit" value="Cancel" class="cancel" />
+    </form>
 </div>
 [% END %]
 
 [% IF ( nopermission ) %]<!-- This is what is displayed if user doesnt have permission --><div class="dialog alert"><h3>Access denied</h3>
 Sorry, this self-checkout station has lost authentication.  Please contact the administrator to resolve this problem. </div>
 [% END %]
-[% IF ( timed_out ) %]<!-- This is what is displayed if login has timed out -->
-<div class="dialog alert"><h3>Session timed out</h3>Sorry, your session has timed out, please log in again.</div>[% END %]
 [% IF ( different_ip ) %]<!-- This is what is displayed if user doesnt have permission --><div class="dialog alert"><h3>Session lost</h3>You are accessing self-checkout from a different IP address! please log in again.</div>[% END %]
 [% IF ( invalid_username_or_password ) %]
 <!-- This is what is displayed if user doesnt have permission --><div class="dialog alert"><h3>Record not found</h3><p>Your userid was not found in the database.  Please try again.</p></div>[% END %]
@@ -224,20 +237,15 @@ Sorry, this self-checkout station has lost authentication.  Please contact the a
 	[% END %]
 	[% END %]
 
-	[% IF ( timedout ) %]
-	<div class="dialog message"><h4>Sorry</h4><p>Your session has timed out due to inactivity.  Please sign in.</p></div>
-	<br />
-	[% END %]
 	[% IF ( validuser ) %]
   [% IF ( display_patron_image ) %]<div class="yui-ge"><div class="yui-u first">[% END %]
 	<div id="newcheckout" class="sco_entry">
 	<form id="scan_form" name="scan_form" method="post" action="/cgi-bin/koha/sco/sco-main.pl" onsubmit="return checkout_confirm('[% patronid %]');">
 	<fieldset><legend> Check out[% IF ( AllowSelfCheckReturns ) %], return[% END %] or renew an item: </legend>
 	<label for="barcode">Scan a new item or enter its barcode:</label>
-	<input id="barcode" name="barcode" size="20" class="focus" />
+    <input id="barcode" name="barcode" size="20" class="focus" autocomplete="off" />
 	<input type="hidden" name="op" value="checkout" />
 	<input type="hidden" name="patronid" value="[% patronid %]" />
-	<input type="hidden" name="valid_session" value="1" />
 	<input type="submit" value="Submit" class="submit" /></fieldset>
 	</form>
     <div><form method="post" action="#" id="logout_form"><input type="submit" value="Finish" class="finish" /></form></div>
@@ -305,7 +313,7 @@ Sorry, this self-checkout station has lost authentication.  Please contact the a
 	<input type="password" id="patronpw" size="20" name="patronpw" />
        [% ELSE %]
 	<fieldset class="checkout"><label for="patronid">Please enter your card number:</label> 
-	<input type="text" id="patronid" class="focus" size="20" name="patronid" />
+    <input type="text" id="patronid" class="focus" size="20" name="patronid" autocomplete="off" />
 	[% END %]
 
  	[% FOREACH INPUT IN INPUTS %]<input type="hidden" name="[% INPUT.name |html %]" value="[% INPUT.value |html %]">[% END %]
