@@ -61,6 +61,7 @@ my $biblionumber = $query->param('biblionumber');
 my $itemtype     = &GetFrameworkCode($biblionumber);
 my $tagslib      = &GetMarcStructure( 0, $itemtype );
 my $biblio = GetBiblioData($biblionumber);
+$biblionumber = $biblio->{biblionumber};
 my $record = GetMarcBiblio($biblionumber, 1);
 if ( ! $record ) {
     print $query->redirect("/cgi-bin/koha/errors/404.pl");

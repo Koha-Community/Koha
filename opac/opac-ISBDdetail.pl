@@ -67,6 +67,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 my $biblionumber = $query->param('biblionumber');
+$biblionumber = int($biblionumber);
 
 # get biblionumbers stored in the cart
 my @cart_list;

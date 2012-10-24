@@ -63,7 +63,7 @@
             widgets : ['zebra'],
             sortList: [[0,0]]
         });
-        [% IF ( query_desc ) %][% IF ( OpacHighlightedWords ) %]var query_desc = "[% query_desc |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]";
+        [% IF ( query_desc ) %][% IF ( OpacHighlightedWords ) %]var query_desc = "[% query_desc |replace("'", "\'") |replace('\n', '\\n') |replace('\r', '\\r') |html %]";
             q_array = query_desc.split(" ");
             highlightOn();
             $("#highlight_toggle_on" ).hide().click(function() {highlightOn() ; return false;});
