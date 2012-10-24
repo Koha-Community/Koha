@@ -624,6 +624,11 @@ our $PERL_DEPS = {
         'required' => '0',
         'min_ver'  => '2.13',
     },
+    'Moose' => {
+        'usage'    => 'Core',
+        'required' => '0',
+        'min_ver'  => '1.09',
+      },
 };
 
 1;
