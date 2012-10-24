@@ -80,6 +80,6 @@ $template->param(
         "AddPatronLists_".C4::Context->preference("AddPatronLists")=> "1",
         no_add => $no_add,
             );
-$template->param( 'alphabet' => C4::Context->preference('alphabet') );
+$template->param( 'alphabet' => C4::Context->preference('alphabet') || join ' ', 'A' .. 'Z' );
 
 output_html_with_http_headers $query, $cookie, $template->output;
