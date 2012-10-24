@@ -17,6 +17,11 @@
     [% END %]
 [% END %]
 
+[% IF ( using_https ) %]
+    [% SET protocol = "https://" %]
+[% ELSE %]
+    [% SET protocol = "http://" %]
+[% END %]
 [% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Details for: [% title |html %][% FOREACH subtitl IN subtitle %], [% subtitl.subfield |html %][% END %]
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'datatables.inc' %]
@@ -1481,10 +1486,10 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 [% IF ( SocialNetworks ) %]
     <div id="social_networks">
         <span>Share</span>
-        <div><a id="facebook" href="http://www.facebook.com/sharer.php?u=[% current_url |url %]&amp;t=[% title |url %]" title="Share on Facebook">Facebook</a></div>
-        <div><a id="linkedin" href="http://www.linkedin.com/shareArticle?mini=true&amp;url=[% current_url |url %]&amp;title=[% title |url %]" title="Share on LinkedIn">LinkedIn</a></div>
-        <div><a id="delicious" href="http://www.delicious.com/save?url=[% current_url |url %]&amp;title=[% title |url %]" title="Share on Delicious">Delicious</a></div>
-        <div><a id="email" href="mailto:?subject=[% title |url %]&amp;body=[% title |url %] ([% current_url |url %])" title="Share by email">Email</a></div>
+        <div><a id="facebook" href="http://www.facebook.com/sharer.php?u=[% protocol %][% current_url |url %]&amp;t=[% title |url %]" title="Share on Facebook">Facebook</a></div>
+        <div><a id="linkedin" href="http://www.linkedin.com/shareArticle?mini=true&amp;url=[% protocol %][% current_url |url %]&amp;title=[% title |url %]" title="Share on LinkedIn">LinkedIn</a></div>
+        <div><a id="delicious" href="http://www.delicious.com/save?url=[% protocol %][% current_url |url %]&amp;title=[% title |url %]" title="Share on Delicious">Delicious</a></div>
+        <div><a id="email" href="mailto:?subject=[% title |url %]&amp;body=[% title |url %] ([% protocol %][% current_url |url %])" title="Share by email">Email</a></div>
         <div><g:plusone size="small" annotation="none"></g:plusone></div>
         <div><a id="twitter" href="https://twitter.com/share" class="twitter-share-button" data-count="none" data-text="[% title %]" data-lang="[% lang %]">Tweet</a></div>
     </div>
