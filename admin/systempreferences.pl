@@ -422,7 +422,7 @@ sub StringSearch {
                 while ( my $data = $sth->fetchrow_hashref ) {
                     unless (defined $data->{value}) { $data->{value} = "";}
                     $data->{shortvalue} = $data->{value};
-                    $data->{shortvalue} = substr( $data->{value}, 0, 60 ) . "..." if defined( $data->{value} ) and length( $data->{value} ) > 60;
+                    $data->{shortvalue} = substr( $data->{value}, 0, 60 ) . "..." if length( $data->{value} ) > 60;
                     push( @results, $data );
                     $cnt++;
                 }
