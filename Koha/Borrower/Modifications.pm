@@ -53,7 +53,7 @@ sub new {
     return $self;
 }
 
-=head AddModifications
+=head2 AddModifications
 
 Koha::Borrower::Modifications->AddModifications( %data );
 
@@ -105,7 +105,7 @@ sub AddModifications {
     }
 }
 
-=head Verify
+=head2 Verify
 
 $verified = Koha::Borrower::Modifications->Verify( $verification_token );
 
@@ -136,7 +136,7 @@ sub Verify {
     return $result->{'count'};
 }
 
-=head GetPendingModificationsCount
+=head2 GetPendingModificationsCount
 
 $count = Koha::Borrower::Modifications->GetPendingModificationsCount();
 
@@ -167,7 +167,7 @@ sub GetPendingModificationsCount {
     return $result->{'count'};
 }
 
-=head GetPendingModifications
+=head2 GetPendingModifications
 
 $arrayref = Koha::Borrower::Modifications->GetPendingModifications();
 
@@ -207,7 +207,7 @@ sub GetPendingModifications {
     return \@m;
 }
 
-=head ApproveModifications
+=head2 ApproveModifications
 
 Koha::Borrower::Modifications->ApproveModifications( $borrowernumber );
 
@@ -233,7 +233,7 @@ sub ApproveModifications {
     }
 }
 
-=head DenyModifications
+=head2 DenyModifications
 
 Koha::Borrower::Modifications->DenyModifications( $borrowernumber );
 
@@ -255,7 +255,7 @@ sub DenyModifications {
     return $self->DelModifications( borrowernumber => $borrowernumber );
 }
 
-=head DelModifications
+=head2 DelModifications
 
 Koha::Borrower::Modifications->DelModifications(
   [ borrowernumber => $borrowernumber ],
@@ -307,7 +307,7 @@ sub DelModifications {
     return $sth->execute($value);
 }
 
-=head GetModifications
+=head2 GetModifications
 
 $hashref = Koha::Borrower::Modifications->GetModifications(
   [ borrowernumber => $borrowernumber ],

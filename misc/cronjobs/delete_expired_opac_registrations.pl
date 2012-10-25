@@ -25,7 +25,7 @@ BEGIN {
     # find Koha's Perl modules
     # test carefully before changing this
     use FindBin;
-    eval { require "$FindBin::Bin/../kohalib.pl" };
+    eval { my $lib = "$FindBin::Bin/../kohalib.pl"; require $lib };
 }
 
 use C4::Context;
