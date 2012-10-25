@@ -23,8 +23,7 @@
 	function addToCart() { addRecord('[% biblionumber %]'); }
 	function addToShelf() {	window.open('/cgi-bin/koha/virtualshelves/addbybiblionumber.pl?biblionumber=[% biblionumber %]','Add_to_virtualshelf','width=500,height=400,toolbar=false,scrollbars=yes');
 	}
-	function printBiblio() {window.open('/cgi-bin/koha/catalogue/detailprint.pl?biblionumber=[% biblionumber %]','Print_Biblio','width=700,height=500,toolbar=false,scrollbars=yes');
-	}
+    function printBiblio() {window.print(); }
 [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]
 function confirm_deletion() {
 		var count = [% count %];
