@@ -1102,7 +1102,7 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
       <xslo:value-of select="normalize-space($raw_heading)"/>
     </z:index>
   </xslo:template>
-  <xslo:template mode="index_heading_conditional">
+  <xslo:template mode="index_heading_conditional" match="marc:datafield[@tag='450']">
     <xslo:if test="substring(marc:subfield[@code='w']/text(), 2, 1)">
       <z:index name="Previous-heading-see-from:p">
         <xslo:variable name="raw_heading">
