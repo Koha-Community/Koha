@@ -288,6 +288,7 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
     <xsl:template name="handle-index-heading-conditional">
         <xsl:for-each select="//kohaidx:index_heading_conditional[generate-id() = generate-id(key('index_heading_conditional_tag', @tag)[1])]">
             <xslo:template mode="index_heading_conditional">
+                <xsl:attribute name="match">marc:datafield[@tag='<xsl:value-of select="@tag"/>']</xsl:attribute>
                 <xslo:if>
                     <xsl:attribute name="test"><xsl:value-of select="@test"/></xsl:attribute>
                     <xsl:for-each select="key('index_heading_conditional_tag', @tag)">
