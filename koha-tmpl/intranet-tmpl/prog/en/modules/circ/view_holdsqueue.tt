@@ -6,13 +6,21 @@
 <body id="circ_view_holdsqueue" class="circ">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
-
-<script type="text/javascript" src="[% ( themelang ) %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/intranet-tmpl/prog/en/css/datatables.css" />
+<script type="text/javascript" src="/intranet-tmpl/prog/en/lib/jquery/plugins/jquery.dataTables.min.js"></script>
+[% INCLUDE 'datatables-strings.inc' %]
+<script type="text/javascript" src="/intranet-tmpl/prog/en/js/datatables.js"></script>
 <script type="text/javascript">//<![CDATA[
 $(document).ready(function() {
-        $("#holdst").tablesorter({
-                sortList: [[6,0]],
-        });
+    $("#holdst").dataTable({
+        "aaSorting": [[ 2, "asc" ]],
+        "bPaginate": false,
+        "bLengthChange": false,
+        "bFilter": false,
+        "bSort": true,
+        "bInfo": false,
+        "bAutoWidth": false
+    });
 });
 //]]>
 </script>
