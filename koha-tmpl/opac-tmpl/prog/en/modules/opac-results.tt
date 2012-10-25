@@ -117,7 +117,7 @@ $(document).ready(function(){
     [% END %]
     param1 += "<\/select> <input type=\"submit\" class=\"submit\" value=\""+_("Save")+"\" />";
     [% ELSE %]
-        var param1 = "<a id=\"addto\" class=\"addtocart\" href=\"#\">Add to cart<\/a>";
+        var param1 = "<a id=\"addto\" class=\"addtocart\" href=\"#\">" + _("Add to cart") + "<\/a>";
     [% END %]
 [% ELSE %]
         var param1 = "<label for=\"addto\">"+_("Add to list: ")+"<\/label><select name=\"addto\" id=\"addto\"><option value=\"\"><\/option>";
