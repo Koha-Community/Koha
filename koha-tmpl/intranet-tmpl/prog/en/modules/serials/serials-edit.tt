@@ -3,6 +3,7 @@
 [% INCLUDE 'doc-head-close.inc' %]
 <script type="text/javascript" src="[% themelang %]/js/cataloging.js"></script>
 <script type="text/javascript" src="[% themelang %]/js/prevent_submit.js"></script>
+[% INCLUDE 'calendar.inc' %]
 <script language="JavaScript" type="text/javascript">
 //<![CDATA[
 function generateReceive() {
@@ -92,6 +93,8 @@ $(document).ready(function() {
         }
         return true;
     });
+
+    $(".datepicker").datepicker();
 });
 //]]>
 </script>
@@ -160,10 +163,10 @@ $(document).ready(function() {
             Issue <input type="text" name="serialseq" id="serialseq[% serialslis.serialid %]" value="[% serialslis.serialseq %]" size="20" maxlength="100" />
         </td>
         <td>
-            <input type="text" name="publisheddate" value="[% serialslis.publisheddate %]" size="10" maxlength="15" />
+            <input type="text" name="publisheddate" value="[% serialslis.publisheddate %]" size="10" maxlength="15" class="datepicker" />
         </td>
         <td>
-            <input type="text" id="expecteddate" name="planneddate" value="[% serialslis.planneddate %]" size="10" maxlength="15" />
+            <input type="text" id="expecteddate" name="planneddate" value="[% serialslis.planneddate %]" size="10" maxlength="15" class="datepicker" />
         </td>
         <td>
             [% IF ( serialslis.editdisable ) %]
@@ -302,10 +305,10 @@ $(document).ready(function() {
             Supplemental issue <input type="text" name="serialseq" id="serialseq[% newserialloo.serialid %]" value="" size="20" maxlength="100" onchange="if (this.value!=''){unHideItems('items[% newserialloo.subscriptionid %][% newserialloo.serialid %]','label[% newserialloo.subscriptionid %][% newserialloo.serialid %]', '[% newserialloo.serialid %]')} else {HideItems('items[% newserialloo.subscriptionid %][% newserialloo.serialid %]','label[% newserialloo.subscriptionid %][% newserialloo.serialid %]')}" />
         </td>
         <td>
-            <input type="text" name="publisheddate" value="[% newserialloo.publisheddate %]" size="10" maxlength="15" />
+            <input type="text" name="publisheddate" value="[% newserialloo.publisheddate %]" size="10" maxlength="15"  class="datepicker" readonly="readonly"/>
         </td>
         <td>
-            <input type="text" name="planneddate" id="supexpecteddate" value="[% newserialloo.planneddate %]" size="10" maxlength="15" />
+            <input type="text" name="planneddate" id="supexpecteddate" value="[% newserialloo.planneddate %]" size="10" maxlength="15" class="datepicker" readonly="readonly"/>
         </td>
         <td>
             <select name="status" size="1" id="addstatus[% newserialloo.serialid %]" onchange="if (this.value==2){unHideItems('items'+'[% newserialloo.subscriptionid %][% newserialloo.serialid %]','label[% newserialloo.subscriptionid %][% newserialloo.serialid %]','[% newserialloo.serialid %]'); changeDate2('[% newserialloo.arriveddate %]')} else if (this.value==7){changeDate('[% newserialloo.arriveddate %]')} else { HideItems('items'+'[% newserialloo.subscriptionid %]'+[% newserialloo.serialid %],'label[% serialslis.subscriptionid %][% serialslis.serialid %]'); changeDate2('[% serialslis.planneddate %]')}" >
