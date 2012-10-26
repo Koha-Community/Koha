@@ -712,9 +712,9 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
     </li>
 [% END %]
 
-[% IF ( OPACLocalCoverImages ) %][% IF ( localimages ) %]
+[% IF ( OPACLocalCoverImages && localimages.size ) %]
     <li id="tab_images"><a href="#images">Images</a></li>
-[% END %][% END %]
+[% END %]
 </ul>
 
 [% IF ( serialcollection ) %]
@@ -1149,7 +1149,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 </table>
 </div>[% END %][% END %]
 
-[% IF ( OPACLocalCoverImages ) %]
+[% IF ( OPACLocalCoverImages && localimages.size ) %]
 <div id="images">
 <p>Click on an image to view it in the image viewer</p>
 [% FOREACH image IN localimages %]

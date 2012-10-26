@@ -131,16 +131,10 @@ sub ListImagesForBiblio {
     my $query = 'SELECT imagenumber FROM biblioimages WHERE biblionumber = ?';
     my $sth   = $dbh->prepare($query);
     $sth->execute($biblionumber);
-    warn "Database error!" if $sth->errstr;
-    if ( !$sth->errstr && $sth->rows > 0 ) {
-        while ( my $row = $sth->fetchrow_hashref ) {
-            push @imagenumbers, $row->{'imagenumber'};
-        }
-        return @imagenumbers;
+    while ( my $row = $sth->fetchrow_hashref ) {
+        push @imagenumbers, $row->{'imagenumber'};
     }
-    else {
-        return undef;
-    }
+    return @imagenumbers;
 }
 
 =head2 DelImage
