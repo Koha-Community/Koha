@@ -1218,7 +1218,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
         <div><a id="twitter" href="http://twitter.com/share" title="Share on Twitter">Twitter</a></div>
         <div><a id="linkedin" href="http://www.linkedin.com/shareArticle?mini=true&amp;url=[% current_url |url %]&amp;title=[% title |url %]" title="Share on LinkedIn">LinkedIn</a></div>
         <div><a id="delicious" href="http://www.delicious.com/save?url=[% current_url |url %]&amp;title=[% title |url %]" title="Share on Delicious">Delicious</a></div>
-        <div><a id="email" href="mailto:?subject=[% title %]&amp;body=[% title %] ([% current_url |url %])" title="Share by email">Email</a></div>
+        <div><a id="email" href="mailto:?subject=[% title |url %]&amp;body=[% title |url %] ([% current_url |url %])" title="Share by email">Email</a></div>
         <div><g:plusone size="small"></g:plusone></div>
     </div>
 [% END %]
