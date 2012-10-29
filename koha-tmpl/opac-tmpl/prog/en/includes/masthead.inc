@@ -178,7 +178,7 @@
 		[% ELSE %]
 			<ul class="first-of-type">
         <li>No private lists</li>
-        <li class="yuimenuitem"><a class="yuimenuitemlabel" href="/cgi-bin/koha/opac-shelves.pl?display=privateshelves">[New list]</a></li></ul>
+        <li class="yuimenuitem"><a class="yuimenuitemlabel" href="/cgi-bin/koha/opac-shelves.pl?display=privateshelves">[Create new list]</a></li></ul>
 		[% END %]
 	[% ELSE %]
         <ul class="first-of-type"><li><a href="/cgi-bin/koha/opac-user.pl">Log in to create your own lists</a></li></ul>
