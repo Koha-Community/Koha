@@ -254,7 +254,7 @@ sub calculate {
         ( $line =~ /datetime/ )     ? @$filters[0]
       : ( $line =~ /category/ )     ? @$filters[2]
       : ( $line =~ /itemtype/ )     ? @$filters[3]
-      : ( $line =~ /branch/ )       ? @$filters[4]
+      : ( $line =~ /^branch/ )      ? @$filters[4]
       : ( $line =~ /ccode/ )        ? @$filters[5]
       : ( $line =~ /location/ )     ? @$filters[6]
       : ( $line =~ /sort1/ )        ? @$filters[9]
@@ -514,7 +514,7 @@ sub calculate {
       if ( $linefield =~ /^items\./
         or $colfield =~ /^items\./
         or $process == 5
-        or ( $colsource eq 'items' ) || @$filters[5] || @$filters[6] || @$filters[7] || @$filters[8] );
+        or ( $colsource eq 'items' ) || @$filters[5] || @$filters[6] || @$filters[7] || @$filters[8] || @$filters[9] || @$filters[10] || @$filters[11] || @$filters[12] || @$filters[13] );
 
     $strcalc .= "WHERE 1=1 ";
     @$filters = map { defined($_) and s/\*/%/g; $_ } @$filters;
