@@ -1066,7 +1066,7 @@
         [% END %]
 	</ol>
   </fieldset>
-    [% UNLESS nodateenrolled && nodateexpiry &&  noopacnote && noborrowernotes %]
+    [% UNLESS nodateenrolled &&  noopacnote && noborrowernotes %]
 	<fieldset class="rows" id="memberentry_subscription">
 	<legend id="library_setup_lgd">Library set-up</legend><ol>
         [% UNLESS nodateenrolled %]
@@ -1089,6 +1089,9 @@
         [% END %]
         [% UNLESS nodateexpiry %]
 		<li>
+        [% ELSE %]
+                <li style="display:none">
+        [% END %]
 			[% IF ( mandatorydateexpiry ) %]
             <label for="to" class="required">
 			[% ELSE %]
@@ -1112,7 +1115,6 @@
 		[% IF ( ERROR_dateexpiry ) %]<span class="required">(Error)</span>[% END %]
 		<div class="hint">[% INCLUDE 'date-format.inc' %]</div>
 		</li>
-        [% END %]
         [% UNLESS noopacnote %]
 		<li>
 			[% IF ( mandatoryopacnote ) %]
