@@ -152,6 +152,9 @@ if ($show_marc) {
             $subfield_data{marc_tag}      = $field->tag();
             push( @subfields_data, \%subfield_data );
         }
+        elsif ( C4::Context->preference('MarcFlavour') eq 'MARC21' && $field->tag() eq 667 ) {
+            # tagfield 667 is a nonpublic general note in MARC21, which shouldn't be shown in the OPAC
+        }
         else {
             my @subf = $field->subfields;
 
