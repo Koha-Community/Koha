@@ -237,7 +237,32 @@
                                     <ol>
                                         [% FOREACH field IN fields %]
                                         <li>
-                                            <label style="width:20em;">[% field.lib %]</label>
+                                            <label style="width:20em;">
+                                            [% SWITCH ( field.name ) %]
+                                                [% CASE 'surname' %]
+                                                Surname:
+                                                [% CASE 'firstname' %]
+                                                First name:
+                                                [% CASE 'branchcode' %]
+                                                Library:
+                                                [% CASE 'categorycode' %]
+                                                Category
+                                                [% CASE 'sort1' %]
+                                                Sort 1:
+                                                [% CASE 'sort2' %]
+                                                Sort 2:
+                                                [% CASE 'dateenrolled' %]
+                                                Registration date:
+                                                [% CASE 'dateexpiry' %]
+                                                Expiry date:
+                                                [% CASE 'debarred' %]
+                                                Restricted:
+                                                [% CASE 'debarredcomment' %]
+                                                Restriction comment:
+                                                [% CASE 'borrowernotes' %]
+                                                Circulation note:
+                                            [% END %]
+                                            </label>
                                             [% IF field.mandatory %]
                                                 <input type="checkbox" title="This field is mandatory" name="disable_input" value="[% field.name %]" readonly="readonly" onclick="return false;" />
                                             [% ELSE %]
@@ -265,7 +290,7 @@
                                         [% END %]
                                         [% IF ( patron_attributes_codes ) %]
                                             <li class="attributes">
-                                                <label style="width:20em;">Attribute
+                                                <label style="width:20em;">Attribute:
                                                     <select name="patron_attributes">
                                                         [% FOREACH pac IN patron_attributes_codes %]
                                                             <option value="[% pac.attribute_code %]" data-type="[% pac.type %]" data-category="[% pac.category_lib %]">[% pac.attribute_lib %]</option>

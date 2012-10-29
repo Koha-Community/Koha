@@ -155,21 +155,18 @@ if ( $op eq 'show' ) {
     my @fields = (
         {
             name => "surname",
-            lib  => "Surname",
             type => "text",
             mandatory => ( grep /surname/, @mandatoryFields ) ? 1 : 0
         }
         ,
         {
             name => "firstname",
-            lib  => "Firstname",
             type => "text",
             mandatory => ( grep /surname/, @mandatoryFields ) ? 1 : 0,
         }
         ,
         {
             name => "branchcode",
-            lib  => "Branchname",
             type => "select",
             option => \@branches_option,
             mandatory => ( grep /branchcode/, @mandatoryFields ) ? 1 : 0,
@@ -177,7 +174,6 @@ if ( $op eq 'show' ) {
         ,
         {
             name => "categorycode",
-            lib  => "Category",
             type => "select",
             option => \@categories_option,
             mandatory => ( grep /categorycode/, @mandatoryFields ) ? 1 : 0,
@@ -185,7 +181,6 @@ if ( $op eq 'show' ) {
         ,
         {
             name => "sort1",
-            lib  => "Sort 1",
             type => @sort1_option ? "select" : "text",
             option => \@sort1_option,
             mandatory => ( grep /sort1/, @mandatoryFields ) ? 1 : 0,
@@ -193,7 +188,6 @@ if ( $op eq 'show' ) {
         ,
         {
             name => "sort2",
-            lib  => "Sort 2",
             type => @sort2_option ? "select" : "text",
             option => \@sort2_option,
             mandatory => ( grep /sort2/, @mandatoryFields ) ? 1 : 0,
@@ -201,35 +195,30 @@ if ( $op eq 'show' ) {
         ,
         {
             name => "dateenrolled",
-            lib  => "Date enrolled",
             type => "date",
             mandatory => ( grep /dateenrolled/, @mandatoryFields ) ? 1 : 0,
         }
         ,
         {
             name => "dateexpiry",
-            lib  => "Date expiry",
             type => "date",
             mandatory => ( grep /dateexpiry/, @mandatoryFields ) ? 1 : 0,
         }
         ,
         {
             name => "debarred",
-            lib  => "Debarred",
             type => "date",
             mandatory => ( grep /debarred/, @mandatoryFields ) ? 1 : 0,
         }
         ,
         {
             name => "debarredcomment",
-            lib  => "Debarred comment",
             type => "text",
             mandatory => ( grep /debarredcomment/, @mandatoryFields ) ? 1 : 0,
         }
         ,
         {
             name => "borrowernotes",
-            lib  => "Borrower Notes",
             type => "text",
             mandatory => ( grep /borrowernotes/, @mandatoryFields ) ? 1 : 0,
         }
