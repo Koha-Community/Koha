@@ -81,8 +81,10 @@ $(document).ready(function(){
         [% END %]
     </tbody>
       </table>
-      [% UNLESS ( too_many_items ) %]
-      <h4>The following barcodes were found: </h4>
+      [% IF ( item_loop ) %]
+          [% UNLESS ( too_many_items ) %]
+          <h4>The following barcodes were found: </h4>
+          [% END %]
       [% END %]
   [% END %] <!-- /notfoundbarcodes -->
 
@@ -143,6 +145,7 @@ $(document).ready(function(){
     [% END %]
 [% END %]<!-- /too_many_items -->
 
+[% IF ( item_loop ) %]
 <div id="cataloguing_additem_newitem">
         <h2>Edit Items</h2>
         <div class="hint">Checking the box right next the subfield label will disable the entry and delete the subfield on all selected items. Leave fields blank to make no change.</div>
@@ -182,6 +185,9 @@ $(document).ready(function(){
          <a href="/cgi-bin/koha/tools/batchMod.pl" class="cancel" onclick="history.back();return false;">Cancel</a>
     </fieldset>
 </div>
+[% ELSE %]
+    <p><a href="/cgi-bin/koha/tools/batchMod.pl">Return to batch item modification</a></p>
+[% END %]
 [% ELSE %] <!-- // show -->
 <fieldset class="action">
 [% IF ( src == 'CATALOGUING') %]
