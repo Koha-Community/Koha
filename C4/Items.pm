@@ -1277,13 +1277,14 @@ sub GetItemsInfo {
 
         # get notforloan complete status if applicable
         if ( my $code = C4::Koha::GetAuthValCode( 'items.notforloan', $data->{frameworkcode} ) ) {
-            $data->{notforloanvalue} = C4::Koha::GetAuthorisedValueByCode( $code, $data->{itemnotforloan} );
+            $data->{notforloanvalue}     = C4::Koha::GetKohaAuthorisedValueLib( $code, $data->{itemnotforloan} );
+            $data->{notforloanvalueopac} = C4::Koha::GetKohaAuthorisedValueLib( $code, $data->{itemnotforloan}, 1 );
         }
 
         # get restricted status and description if applicable
         if ( my $code = C4::Koha::GetAuthValCode( 'items.restricted', $data->{frameworkcode} ) ) {
             $data->{restricted}     = C4::Koha::GetKohaAuthorisedValueLib( $code, $data->{restricted} );
-            $data->{restrictedopac} = C4::Koha::GetKohaAuthorisedValueLib( $code, $data->{restricted}, 'opac' );
+            $data->{restrictedopac} = C4::Koha::GetKohaAuthorisedValueLib( $code, $data->{restricted}, 1 );
         }
 
         # my stack procedures
