@@ -523,7 +523,6 @@ if ($config{'INSTALL_ZEBRA'} eq "yes") {
     push @{ $pl_files->{'rewrite-config.PL'} }, (
         'blib/SCRIPT_DIR/koha-zebra-ctl.sh',
         'blib/SCRIPT_DIR/koha-pazpar2-ctl.sh',
-        'blib/SCRIPT_DIR/koha-zebraqueue-ctl.sh',
     );
     if ($config{'INSTALL_PAZPAR2'} eq 'yes') {
         push @{ $pl_files->{'rewrite-config.PL'} }, (

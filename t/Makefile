@@ -29,7 +29,7 @@ REAL_REWRITE_SCRIPT = ../rewrite-config.PL
 ZEBRA_CONF_DIR = run/etc/zebradb
 ZEBRA_CONF_FILES = $(ZEBRA_CONF_DIR)/etc/passwd $(ZEBRA_CONF_DIR)/zebra-biblios.cfg $(ZEBRA_CONF_DIR)/zebra-authorities.cfg $(ZEBRA_CONF_DIR)/zebra-authorities-dom.cfg $(ZEBRA_CONF_DIR)/explain-authorities.xml $(ZEBRA_CONF_DIR)/explain-biblios.xml $(ZEBRA_CONF_DIR)/retrieval-info-auth-grs1.xml $(ZEBRA_CONF_DIR)/retrieval-info-auth-dom.xml $(ZEBRA_CONF_DIR)/ccl.properties $(ZEBRA_CONF_DIR)/cql.properties $(ZEBRA_CONF_DIR)/pqf.properties
 
-SCRIPTS = koha-zebra-ctl.sh koha-pazpar2-ctl.sh koha-zebraqueue-ctl.sh zebraqueue_daemon.pl
+SCRIPTS = koha-zebra-ctl.sh koha-pazpar2-ctl.sh
 SRC_SCRIPT_DIR = ../misc/bin
 TEST_SCRIPT_DIR = run/bin
 

@@ -818,7 +818,7 @@ sub stop_zebrasrv {
 
 sub start_zebraqueue_daemon {
 
-    my $command = q(run/bin/koha-zebraqueue-ctl.sh start);
+    my $command = q(echo "zebraqueue_daemon is deprecated");
     diag $command;
     my $started = system( $command );
     diag "started: $started";
@@ -832,7 +832,7 @@ sub start_zebraqueue_daemon {
 
 sub stop_zebraqueue_daemon {
 
-    my $command = q(run/bin/koha-zebraqueue-ctl.sh stop);
+    my $command = q(echo "zebraqueue_daemon is deprecated");
     diag $command;
     my $started = system( $command );
     diag "started: $started";

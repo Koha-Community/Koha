@@ -523,8 +523,6 @@ a2ensite koha
 invoke-rc.d apache2 reload
 
 koha_script=`makefile_value KOHA_DEST_SCRIPT_DIR`
-ln -s "$koha_script"/koha-zebraqueue-ctl.sh  /etc/init.d/koha-zebraqueue-daemon
-update-rc.d koha-zebraqueue-daemon defaults
 
 # TODO:
 # - add translator
