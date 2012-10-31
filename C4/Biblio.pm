@@ -1200,13 +1200,14 @@ sub GetUsedMarcStructure($) {
   ($MARCfield,$MARCsubfield)=GetMarcFromKohaField($kohafield,$frameworkcode);
 
 Returns the MARC fields & subfields mapped to the koha field 
-for the given frameworkcode
+for the given frameworkcode or default framework if $frameworkcode is missing
 
 =cut
 
 sub GetMarcFromKohaField {
-    my ( $kohafield, $frameworkcode ) = @_;
-    return (0, undef) unless $kohafield and defined $frameworkcode;
+    my $kohafield = shift;
+    my $frameworkcode = shift || '';
+    return (0, undef) unless $kohafield;
     my $relations = C4::Context->marcfromkohafield;
     if ( my $mf = $relations->{$frameworkcode}->{$kohafield} ) {
         return @$mf;
