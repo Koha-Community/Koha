@@ -56,7 +56,7 @@ $langModule->mock('getTranslatedLanguages', sub {
 my $tmplModule = new Test::MockModule('C4::Templates');
 $tmplModule->mock('_get_template_file', sub {
     my ($tmplbase, $interface, $query) = @_;
-    my $opactmpl = File::Spec->rel2abs(dirname(__FILE__) . '/../koha-tmpl/opac-tmpl');
+    my $opactmpl = File::Spec->rel2abs(dirname(__FILE__) . '/../../koha-tmpl/opac-tmpl');
     return ($opactmpl, 'prog', 'en', "$opactmpl/prog/en/modules/$tmplbase");
 });
 my $contextModule = new Test::MockModule('C4::Context');
