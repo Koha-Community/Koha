@@ -51,7 +51,7 @@
       [% ELSE %]
       <td>-</td>
       [% END %]
-      [% IF ( messaging_preference.transport_sms ) %]
+
       [% IF ( SMSSendDriver ) %]<td>
           [% IF ( messaging_form_inactive ) %]
               [% IF ( messaging_preference.transports_sms ) %]
@@ -79,9 +79,6 @@
               [% END %]
           [% END %]
       </td>[% END %]
-      [% ELSE %]
-      <td>-</td>
-      [% END %]
 
       [% IF ( messaging_preference.transport_email ) %]
       <td>
