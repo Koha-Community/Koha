@@ -1678,7 +1678,7 @@ sub searchResults {
             else {
 
                 # item is on order
-                if ( $item->{notforloan} == -1 ) {
+                if ( $item->{notforloan} < 0 ) {
                     $ordered_count++;
                 }
 
@@ -1716,7 +1716,7 @@ sub searchResults {
                 if (   $item->{wthdrawn}
                     || $item->{itemlost}
                     || $item->{damaged}
-                    || $item->{notforloan} > 0
+                    || $item->{notforloan}
 		    || $reservestatus eq 'Waiting'
                     || ($transfertwhen ne ''))
                 {
