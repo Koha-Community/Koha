@@ -94,7 +94,7 @@ fi
 
 [ $# -ge 2 ] && [ $# -le 16 ] || die $usage
 
-TEMP=`getopt -o crpm:l:d:f:a: -l create-db,request-db,populate-db,use-db,marcflavor:,zebralang:,defaultsql:,configfile:,passwdfile:,adminuser: \
+TEMP=`getopt -o crpm:l:d:f:b:a: -l create-db,request-db,populate-db,use-db,marcflavor:,zebralang:,defaultsql:,configfile:,passwdfile:,database:,adminuser: \
      -n "$0" -- "$@"`
 
 # Note the quotes around `$TEMP': they are essential!
