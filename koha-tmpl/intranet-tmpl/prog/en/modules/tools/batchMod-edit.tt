@@ -2,6 +2,7 @@
 <title>Koha &rsaquo; Tools &rsaquo; Batch item modification</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <script type="text/javascript" src="[% themelang %]/js/background-job-progressbar.js"></script>
+<script type="text/javascript" src="[% themelang %]/js/cataloging.js"></script>
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/pages/batchMod.css" />
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
@@ -163,7 +164,9 @@ $(document).ready(function(){
                 <input type="hidden" name="subfield"       value="[% ite.subfield %]" />
                 <input type="hidden" name="mandatory"       value="[% ite.mandatory %]" />
                 [% IF ( ite.repeatable ) %]
-                    <span class="buttonPlus" onclick="CloneSubfield('subfield[% ite.tag %][% ite.subfield %][% ite.random %]')">+</span>
+                    <a href="#" class="buttonPlus" onclick="CloneItemSubfield(this.parentNode); return false;">
+                        <img src="/intranet-tmpl/prog/img/clone-subfield.png" alt="Clone" title="Clone this subfield" />
+                    </a>
                 [% END %]
                 <span class="hint" id="hint[% ite.tag %][% ite.subfield %][% ite.random %]"></span>
             </div></li>

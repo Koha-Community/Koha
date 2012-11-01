@@ -31,7 +31,7 @@
             // Try to add as many clones as needed
             try {
                 for(var i=0; i<nb-subfields.length; i++) {
-                    window.opener.opener.CloneSubfield(subfields[0].getAttribute('id'));
+                    window.opener.opener.CloneSubfield(subfields[0].getAttribute('id'),'[% advancedMARCEditor %]');
                 }
             }
             catch(err) {

@@ -2,36 +2,21 @@
 <title>Koha &rsaquo; Authorities &rsaquo; [% IF ( authid ) %]Modify authority #[% authid %] ([% authtypetext %])[% ELSE %]Adding authority ([% authtypetext %])[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <script type="text/javascript" src="[% themelang %]/lib/yui/plugins/bubbling-min.js"></script>
+<script type="text/javascript" src="[% themelang %]/js/cataloging.js"></script>
 
 <script type="text/javascript">
 //<![CDATA[
 
-     var fields_in_use = {};
 	 $(document).ready(function() {
         $('#authoritytabs').tabs();
-        $('.tag').each(function() {
-            var field_id = this.getAttribute('id').substring(0, 7);
-            if (field_id in fields_in_use) {
-                fields_in_use[field_id]++;
-            } else {
-                fields_in_use[field_id] = 1;
-            }
-        });
-        $('.subfield_line').each(function() {
-            var field_id = this.getAttribute('id').substring(0, 12);
-            if (field_id in fields_in_use) {
-                fields_in_use[field_id]++;
-            } else {
-                fields_in_use[field_id] = 1;
-            }
-        });
+
 		$("#f").submit(function(){
 			return $(this).Check();
 		});
 	 });
 
 /**
- * check if mandatory subfields are writed
+ * check if mandatory subfields are written
  */
 function AreMandatoriesNotOk(){
     var mandatories = new Array();
@@ -75,7 +60,6 @@ function AreMandatoriesNotOk(){
 	    	for(var j=0,len2=eleminputs.length; j<len2; j++){
 	
 	    		if(eleminputs[j].name.match(varegexp) && eleminputs[j].value){
-					/* tag_801_subfield_c_841304_545657 */
 					inputregexp = new RegExp("^tag_" + arr[0] + "_subfield_" + eleminputs[j].value + "_" + arr[2]);
 					
 					for( var k=0; k<len2; k++){
@@ -118,378 +102,11 @@ function Check(){
     }
 }
 
-
-// returns the subfieldcode based upon subfieldid writing
-function getSubfieldcode(tagsubfieldid){
-    // 3 : tag +3 : tagnumber +4 : number of _ +8 subfield -1 begins at 0  
-    return tagsubfieldid.substr(3+3+4+8-1,1);
-}
-
-// Take the base of tagsubfield information (removing the subfieldcodes and subfieldindexes)
-// returns the filter
-function getTagInputnameFilter(tagsubfieldid){
-    var tagsubfield=tagsubfieldid.substr(0,tagsubfieldid.lastIndexOf("_"));  
-    var tagcode=tagsubfield.substr(tagsubfield.lastIndexOf("_"));
-    tagsubfield=tagsubfield.substr(0,tagsubfield.lastIndexOf("_"));
-    tagsubfield=tagsubfield.substr(0,tagsubfield.lastIndexOf("_"));
-    tagsubfield=tagsubfield+"_."+tagcode;
-    return tagsubfield;  
-}
-
-function openAuth(tagsubfieldid,authtype) {
-    // let's take the base of tagsubfield information (removing the indexes and the codes
-    var element=document.getElementById(tagsubfieldid);
-    var tagsubfield=getTagInputnameFilter(tagsubfieldid);
-    var elementsubfcode=getSubfieldcode(element.name);
-    var mainmainstring=element.value;
-    var mainstring="";  
-    var inputs = element.parentNode.parentNode.getElementsByTagName("input");
-
-    for (var myindex =0; myindex<inputs.length;myindex++){
-        if (inputs[myindex].name && inputs[myindex].name.match(tagsubfield)){
-            var subfieldcode=getSubfieldcode(inputs[myindex].name);
-            if (isNaN(parseInt(subfieldcode)) && inputs[myindex].value != "" && subfieldcode!=elementsubfcode){
-                mainstring=inputs[myindex].value+" "+mainstring;
-            }      
-        }
-    }           
-    newin=window.open("../authorities/auth_finder.pl?source=auth&authtypecode="+  authtype+ "&index="+tagsubfieldid+"&value_mainstr="+encodeURI(mainmainstring)+"&value_main="+encodeURI(mainstring), "_blank",'width=700,height=550,toolbar=false,scrollbars=yes');
-}
-
 function AddField(field,cntrepeatfield) {
     document.forms['f'].op.value = "addfield";
     document.forms['f'].addfield_field.value=field;
     document.forms['f'].repeat_field.value=cntrepeatfield;
     document.f.submit();
-}
-
-
-function ExpandField(index) {
-    var original = document.getElementById(index); //original <div>
-    var divs = original.getElementsByTagName('div');
-    for(var i=0,divslen = divs.length ; i<divslen ; i++){      // foreach div
-        if(divs[i].getAttribute("name") == 'line'){  // if it s a subfield
-            if (divs[i].style.display == 'block') {
-                divs[i].style.display = 'none';
-            } else {
-                divs[i].style.display = 'block';
-            }
-        }
-    }
-}
-
-/**
- * To clone a field or a subfield by clickink on '+' button
- */ 
-function CloneField(index) {
-    var original = document.getElementById(index); //original <div>
-    fields_in_use[index.substr(0, 7)]++;
-    var clone = original.cloneNode(true);
-    var new_key = CreateKey();
-    var new_id  = original.getAttribute('id')+new_key;
-    
-    clone.setAttribute('id',new_id); // setting a new id for the parent div
-    
-    var divs = clone.getElementsByTagName('div');
-    
-    [% UNLESS ( hide_marc ) %] // No indicator if hide_marc
-        // setting a new name for the new indicator
-        for(var i=0; i < 2; i++) {
-            var indicator = clone.getElementsByTagName('input')[i];
-            indicator.setAttribute('name',indicator.getAttribute('name')+new_key);
-        }
-    [% END %]
-        
-    // settings all subfields
-    for(var i=0,divslen = divs.length ; i<divslen ; i++){      // foreach div
-        if(divs[i].getAttribute("name") == 'line'){  // if it s a subfield
-            
-            // set the attribute for the new 'div' subfields
-            divs[i].setAttribute('id',divs[i].getAttribute('id')+new_key);
-            
-            var inputs   = divs[i].getElementsByTagName('input');
-            var id_input = "";
-            
-            inputs[0].setAttribute('id',inputs[0].getAttribute('id')+new_key);
-            inputs[0].setAttribute('name',inputs[0].getAttribute('name')+new_key);
-            var id_input;
-            try {
-              id_input = inputs[1].getAttribute('id')+new_key;
-                inputs[1].setAttribute('id',id_input);
-                inputs[1].setAttribute('name',inputs[1].getAttribute('name')+new_key);
-            } catch(e) {
-              try{ // it s a select if it is not an input
-                    var selects = divs[i].getElementsByTagName('select');
-                    id_input = selects[0].getAttribute('id')+new_key;
-                    selects[0].setAttribute('id',id_input);
-                    selects[0].setAttribute('name',selects[0].getAttribute('name')+new_key);
-                }catch(e2){ // it is a textarea if it s not a select or an input
-                  var textaeras = divs[i].getElementsByTagName('textarea');
-                  id_input = textaeras[0].getAttribute('id')+new_key;
-                  textaeras[0].setAttribute('id',id_input);
-                    textaeras[0].setAttribute('name',textaeras[0].getAttribute('name')+new_key);
-                }
-            }
-            
-            [% UNLESS ( advancedMARCEditor ) %]
-            // when cloning a subfield, re set its label too.
-            var labels = divs[i].getElementsByTagName('label');
-            labels[0].setAttribute('for',id_input);
-            [% END %]
-            
-            [% UNLESS ( hide_marc ) %]
-                // updating javascript parameters on button up
-                var imgs = divs[i].getElementsByTagName('img');
-                imgs[0].setAttribute('onclick',"upSubfield(\'"+divs[i].getAttribute('id')+"\');");
-            [% END %]
-            
-            // setting its '+' and '-' buttons
-            try {
-                var spans = divs[i].getElementsByTagName('span');
-                for (var j = 0; j < spans.length; j++) {
-                    if(spans[j].getAttribute('class') == 'buttonPlus'){
-                        spans[j].setAttribute('onclick',"CloneSubfield('" + divs[i].getAttribute('id') + "')");
-                    } else if (spans[j].getAttribute('class') == 'buttonMinus') {
-                        spans[j].setAttribute('onclick',"UnCloneField('" + divs[i].getAttribute('id') + "')");
-                    }
-                }
-            }
-            catch(e){
-                // do nothig if ButtonPlus & CloneButtonPlus don t exist.
-            }
-            
-            // button ...
-            var spans=0;
-            try {
-                spans = divs[i].getElementsByTagName('span');
-            } catch(e) {
-                // no spans
-            }
-            if(spans){
-                var buttonDot;
-                if(!CloneButtonPlus){ // it s impossible to have  + ... (buttonDot AND buttonPlus)
-                    buttonDot = spans[0];
-                    if(buttonDot){
-                        // 2 possibilities :
-                        try{
-                            var buttonDotOnClick = buttonDot.getAttribute('onclick');
-                            if(buttonDotOnClick.match('Clictag')){   // -1- It s a plugin
-                                var re = /\('.*'\)/i;
-                                buttonDotOnClick = buttonDotOnClick.replace(re,"('"+inputs[1].getAttribute('id')+"')");
-                                if(buttonDotOnClick){
-                                    buttonDot.setAttribute('onclick',buttonDotOnClick);
-                                }
-                            } else {
-                                if(buttonDotOnClick.match('Dopop')) {  // -2- It's a auth value
-                                    
-                                    var re1 = /&index=.*',/;
-                                    var re2 = /,.*\)/;
-
-                                    buttonDotOnClick = buttonDotOnClick.replace(re1,"&index="+inputs[1].getAttribute('id')+"',");
-                                    buttonDotOnClick = buttonDotOnClick.replace(re2,",'"+inputs[1].getAttribute('id')+"')");
-                                    
-                                    if(buttonDotOnClick){
-                                            buttonDot.setAttribute('onclick',buttonDotOnClick);
-                                    }
-                                }
-                            }
-                            try {
-                              // do not copy the script section.
-                              var script = spans[0].getElementsByTagName('script')[0];
-                              spans[0].removeChild(script);
-                            } catch(e) {
-                              // do nothing if there is no script
-                            }
-                      }catch(e){}
-                  }
-                }
-            }
-            [% UNLESS ( hide_marc ) %]
-                var buttonUp = divs[i].getElementsByTagName('img')[0];
-                buttonUp.setAttribute('onclick',"upSubfield('" + divs[i].getAttribute('id') + "')");
-            [% END %]
-            
-        } else { // it's a indicator div
-            if(divs[i].getAttribute('name') == 'div_indicator'){
-                var inputs = divs[i].getElementsByTagName('input');
-                inputs[0].setAttribute('id',inputs[0].getAttribute('id')+new_key);
-                inputs[1].setAttribute('id',inputs[1].getAttribute('id')+new_key);
-                
-                var CloneButtonPlus;
-                try {
-                    var anchors = divs[i].getElementsByTagName('span');
-                    for (var j = 0; j < anchors.length; j++) {
-                        if (anchors[j].getAttribute('class') == 'buttonPlus') {
-                            anchors[j].setAttribute('onclick',"CloneField('" + new_id + "')");
-                        } else if (anchors[j].getAttribute('class') == 'buttonMinus') {
-                            anchors[j].setAttribute('onclick',"UnCloneField('" + new_id + "')");
-                        }
-                    }
-                }
-                catch(e){
-                    // do nothig CloneButtonPlus doesn't exist.
-                }
-                
-                // setting its 'Expand' property
-                var ExpandFieldA=0;
-                try {
-                    ExpandFieldA = divs[i].getElementsByTagName('a')[0];
-                    ExpandFieldA.setAttribute('onclick',"ExpandField('" + divs[i].parentNode.getAttribute('id') + "')");
-                }
-                catch(e){
-                    // do nothig if ButtonPlus & CloneButtonPlus don t exist.
-                }
-                
-            }
-        }
-    }
-    
-    // insert this line on the page
-    original.parentNode.insertBefore(clone,original.nextSibling);
-}
-
-function CloneSubfield(index){
-    var original = document.getElementById(index); //original <div>
-    fields_in_use[index.substr(0, 12)]++;
-    var clone = original.cloneNode(true);
-    var new_key = CreateKey();
-    var new_id  = original.getAttribute('id')+new_key;
-    
-    // set the attribute for the new 'div' subfields
-    var inputs     = clone.getElementsByTagName('input');
-    var selects    = clone.getElementsByTagName('select');
-    var textareas  = clone.getElementsByTagName('textarea');
-        
-    // input
-    var id_input = "";
-    for(var i=0,len=inputs.length; i<len ; i++ ){
-        id_input = inputs[i].getAttribute('id')+new_key;
-        inputs[i].setAttribute('id',id_input);
-        inputs[i].setAttribute('name',inputs[i].getAttribute('name')+new_key);
-    }
-    
-    // select 
-    for(var i=0,len=selects.length; i<len ; i++ ){
-        id_input = selects[i].getAttribute('id')+new_key;
-        selects[i].setAttribute('id',selects[i].getAttribute('id')+new_key);
-        selects[i].setAttribute('name',selects[i].getAttribute('name')+new_key);
-    }
-    
-    // textarea
-    for(var i=0,len=textareas.length; i<len ; i++ ){
-        id_input = textareas[i].getAttribute('id')+new_key;
-        textareas[i].setAttribute('id',textareas[i].getAttribute('id')+new_key);
-        textareas[i].setAttribute('name',textareas[i].getAttribute('name')+new_key);
-    }
-    
-    [% UNLESS ( advancedMARCEditor ) %]
-    // when cloning a subfield, reset its label too.
-    var label = clone.getElementsByTagName('label')[0];
-    label.setAttribute('for',id_input);
-    [% END %]
-    
-    // setting a new if for the parent div
-    clone.setAttribute('id',new_id);
-    
-    try {
-      var buttonUp = clone.getElementsByTagName('img')[0];
-      buttonUp.setAttribute('onclick',"upSubfield('" + new_id + "')");
-      var spans = clone.getElementsByTagName('span');
-      if(spans.length){
-          for(var i = 0 ,lenspans = spans.length ; i < lenspans ; i++){
-            if(spans[i].getAttribute('class') == 'buttonPlus'){
-                    spans[i].setAttribute('onclick',"CloneSubfield('" + new_id + "')");
-                } else if (spans[i].getAttribute('class') == 'buttonMinus') {
-                    spans[i].setAttribute('onclick',"UnCloneField('" + new_id + "')");
-                }
-            }
-        }
-    }
-    catch(e){
-        // do nothig if ButtonPlus & CloneButtonPlus don't exist.
-    }
-    // insert this line on the page
-    original.parentNode.insertBefore(clone,original.nextSibling);
-}
-
- /**
- * This function removes or clears unwanted subfields
- */
-function UnCloneField(index) {
-    var original = document.getElementById(index);
-    var field_id;
-    if (index.match("tag")) {
-        field_id = index.substr(0, 7);
-    } else {
-        field_id = index.substr(0, 12);
-    }
-    if (1 == fields_in_use[field_id]) {
-        // clear inputs, but don't delete
-        $(":input.input_marceditor", original).each(function(){
-            // thanks to http://www.learningjquery.com/2007/08/clearing-form-data for
-            // hint about clearing selects correctly
-            var type = this.type;
-            var tag = this.tagName.toLowerCase();
-            if (type == 'text' || type == 'password' || tag == 'textarea') {
-                this.value = "";
-            } else if (type == 'checkbox' || type == 'radio') {
-                this.checked = false;
-            } else if (tag == 'select') {
-                this.selectedIndex = -1;
-            }
-        });
-        $(":input.indicator", original).val("");
-    } else {
-        original.parentNode.removeChild(original);
-        fields_in_use[field_id]--;
-    }
-}
-
-
-/**
- * This function create a random number
- */
-function CreateKey(){
-    return parseInt(Math.random() * 100000);
-}
-
-/**
- * This function allows to move a subfield up by clickink on the 'up' button .
- */
-function upSubfield(index) {
-    try{
-        var line = document.getElementById(index); // get the line where the user has clicked.
-    } catch(e) {
-        return; // this line doesn't exist...
-    }
-    var tag = line.parentNode; // get the dad of this line. (should be "<div id='tag_...'>")
-    
-    // getting all subfields for this tag
-    var subfields = tag.getElementsByTagName('div');
-    var subfieldsLength = subfields.length;
-    
-    if(subfieldsLength<=1) return; // nothing to do if there is just one subfield.
-    
-    // among all subfields 
-    for(var i=0;i<subfieldsLength;i++){ 
-        if(subfields[i].getAttribute('id') == index){ //looking for the subfield which is clicked :
-            if(i==1){ // if the clicked subfield is on the top
-                tag.appendChild(subfields[1]);
-                return;
-            } else {
-                var lineAbove = subfields[i-1];
-                tag.insertBefore(line,lineAbove);
-                return;
-            }
-        }
-    }
-}
-
-function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
-    subfield = document.getElementById(index);
-    subfield.style.display = 'block';
-    label = document.getElementById(labelindex);
-    label.style.display='none'; 
 }
 
 function addauthority() {
@@ -591,150 +208,161 @@ function searchauthority() {
 	<ul class="toolbar"><li id="addauthc"><input id="addauth" type="submit" value="Save" accesskey="w" /></li></ul></div>
 
 <div id="authoritytabs" class="toptabs numbered">
-       <ul> [% FOREACH BIG_LOO IN BIG_LOOP %]
-            <li>[% IF ( BIG_LOO.number ) %]
-                <a href="#tab[% BIG_LOO.number %]XX">[% BIG_LOO.number %]</a>
-            [% ELSE %]
-                <a href="#tab[% BIG_LOO.number %]XX">[% BIG_LOO.number %]</a>
-            [% END %]</li>
-        [% END %]</ul>
+    <ul>
+        [% FOREACH BIG_LOO IN BIG_LOOP %]
+        <li><a href="#tab[% BIG_LOO.number %]XX">[% BIG_LOO.number %]</a></li>
+        [% END %]
+    </ul>
 
 [% FOREACH BIG_LOO IN BIG_LOOP %]
-    <!-- hide every tab except the 1st -->
-            [% IF ( BIG_LOO.number ) %]
-                <div id="tab[% BIG_LOO.number %]XX">
-            [% ELSE %]
-                <div id="tab[% BIG_LOO.number %]XX">
-            [% END %]
-        
-        [% FOREACH innerloo IN BIG_LOO.innerloop %]
-            [% IF ( innerloo.tag ) %]
-                <div class="tag" id="tag_[% innerloo.tag %]_[% innerloo.index %][% innerloo.random %]">
-                <div class="tag_title" name="div_indicator">
-                [% UNLESS ( innerloo.hide_marc ) %]
-		    [% IF ( innerloo.advancedMARCEditor ) %]
-                    <a class="tagnum" onclick="ExpandField('tag_[% innerloo.tag %]_[% innerloo.index %][% innerloo.random %]')">[% innerloo.tag %]</a>
-		    [% ELSE %]
-                    <span title="[% innerloo.tag_lib %]">[% innerloo.tag %]</span>
-		    [% END %]
-                    [% IF ( innerloo.fixedfield ) %]
-                    <input class="indicator flat"
-                                type="text"
-                                style="display:none;"
-                                name="tag_[% innerloo.tag %]_indicator1_[% innerloo.index %][% innerloo.random %]"
-                                size="1"
-                                maxlength="1"
-                                value="[% innerloo.indicator1 %]" />
-                    <input class="indicator flat"
-                                type="text"
-                                style="display:none;"
-                                name="tag_[% innerloo.tag %]_indicator2_[% innerloo.index %][% innerloo.random %]"
-                                size="1"
-                                maxlength="1"
-                                value="[% innerloo.indicator2 %]" />
-                    [% ELSE %]
-                    <input class="indicator flat"
-                                type="text"
-                                name="tag_[% innerloo.tag %]_indicator1_[% innerloo.index %][% innerloo.random %]"
-                                size="1"
-                                maxlength="1"
-                                value="[% innerloo.indicator1 %]" />
-                    <input class="indicator flat"
-                                type="text"
-                                name="tag_[% innerloo.tag %]_indicator2_[% innerloo.index %][% innerloo.random %]"
-                                size="1"
-                                maxlength="1"
-                                value="[% innerloo.indicator2 %]" />
-                    [% END %] -
-                [% ELSE %]
-                    [% IF ( innerloo.fixedfield ) %]
-                        <input type="hidden"
-                            name="tag_[% innerloo.tag %]_indicator1_[% innerloo.index %]"
-                            value="[% innerloo.indicator1 %][% innerloo.random %]" />
-                        <input type="hidden"
-                            name="tag_[% innerloo.tag %]_indicator2_[% innerloo.index %]"
-                            value="[% innerloo.indicator2 %][% innerloo.random %]" />
-                    [% ELSE %]
-                        <input type="hidden"
-                            name="tag_[% innerloo.tag %]_indicator1_[% innerloo.index %]"
-                            value="[% innerloo.indicator1 %][% innerloo.random %]" />
-                        <input type="hidden"
-                            name="tag_[% innerloo.tag %]_indicator2_[% innerloo.index %]"
-                            value="[% innerloo.indicator2 %][% innerloo.random %]" />
-                    [% END %]
-                [% END %]
-    
-                [% UNLESS ( innerloo.advancedMARCEditor ) %]
-                    <a onclick="ExpandField('tag_[% innerloo.tag %]_[% innerloo.index %][% innerloo.random %]')">[% innerloo.tag_lib %]</a>
-                [% END %]
-                [% IF ( innerloo.repeatable ) %]
-                    <span class="buttonPlus" onclick="CloneField('tag_[% innerloo.tag %]_[% innerloo.index %][% innerloo.random %]')">+</span>
-                [% END %]
-                [% UNLESS ( innerloo.mandatory ) %]
-                    <span class="buttonMinus" onclick="UnCloneField('tag_[% innerloo.tag %]_[% innerloo.index %][% innerloo.random %]')">&#8722;</span>
-                [% END %]
-                
-            </div>
-    
-            [% FOREACH subfield_loo IN innerloo.subfield_loop %]
-                <!--  One line on the marc editor -->
-                <div name="line" class="subfield_line" style="[% subfield_loo.visibility %];" id="subfield[% subfield_loo.tag %][% subfield_loo.subfield %]">
-                
-                    [% UNLESS ( subfield_loo.advancedMARCEditor ) %]
-                        [% IF ( subfield_loo.fixedfield ) %]<label for="tag_[% subfield_loo.tag %]_subfield_[% subfield_loo.subfield %]_[% subfield_loo.index %]_[% subfield_loo.index_subfield %]" style="display:none;" class="labelsubfield" >
-                        [% ELSE %] <label for="tag_[% subfield_loo.tag %]_subfield_[% subfield_loo.subfield %]_[% subfield_loo.index %]_[% subfield_loo.index_subfield %]" class="labelsubfield" >[% END %]
-                    [% END %] 
-                    
-                    [% UNLESS ( subfield_loo.hide_marc ) %]
-                    [% IF ( subfield_loo.fixedfield ) %]
-                        <img class="buttonUp" style="display:none;" src="[% themelang %]/../img/up.png" onclick="upSubfield('subfield[% subfield_loo.tag %][% subfield_loo.subfield %]')" alt="Move Up" title="Move Up" />
-                    [% ELSE %]
-                        <img class="buttonUp"  src="[% themelang %]/../img/up.png" onclick="upSubfield('subfield[% subfield_loo.tag %][% subfield_loo.subfield %]')" alt="Move Up" title="Move Up" />
-                        [% END %]
-                            <input title="[% subfield_loo.marc_lib_plain %]"
-                                style=" [% IF ( subfield_loo.fixedfield ) %]display:none; [% END %]border:0;" type="text"
-                                name="tag_[% subfield_loo.tag %]_code_[% subfield_loo.subfield %]_[% subfield_loo.index %]_[% subfield_loo.index_subfield %]"
-                                value="[% subfield_loo.subfield %]"
-                                size="1"
-                                maxlength="1"
-                                class="flat"
-                                tabindex="0" />
-                    [% ELSE %]
-                        <input type="hidden"
-                            name="tag_[% subfield_loo.tag %]_code_[% subfield_loo.subfield %]_[% subfield_loo.index %]_[% subfield_loo.index_subfield %]"
-                            value="[% subfield_loo.subfield %]"/>
-                    [% END %]
-                
-                    [% UNLESS ( subfield_loo.advancedMARCEditor ) %]
-                        [% IF ( subfield_loo.mandatory ) %]<span class="subfield_mandatory">[% END %]
-                            [% subfield_loo.marc_lib %]
-                        [% IF ( subfield_loo.mandatory ) %]</span>[% END %]
-                        </label>
-                    [% END %]
-                    
-                    [% subfield_loo.marc_value %]
-                    
-                    [% IF ( subfield_loo.repeatable ) %]
-                        <a href="#" onclick="CloneSubfield('subfield[% subfield_loo.tag %][% subfield_loo.subfield %]'); return false;"><img src="/intranet-tmpl/prog/img/clone-subfield.png" alt="Clone" title="Clone this subfield" /></a>
-                    [% END %]
-                    [% UNLESS ( subfield_loo.mandatory ) %]
-                        <a href="#" onclick="UnCloneField('subfield[% subfield_loo.tag %][% subfield_loo.subfield %][% subfield_loo.random %]'); return false;"><img src="/intranet-tmpl/prog/img/delete-subfield.png" alt="Delete" title="Delete this subfield" /></a>
-                    [% END %]
-                    
-                </div>
-                <!-- End of the line -->
-                
-            [% END %]
-            </div>
-            [% END %]<!-- tag -->
-        [% END %]
-        </div>
-[% END %]
+    <div id="tab[% BIG_LOO.number %]XX">
 
-[% UNLESS ( singletab ) %]
-    </div>	
-[% END %]
-</div>
+    [% FOREACH innerloo IN BIG_LOO.innerloop %]
+    [% IF ( innerloo.tag ) %]
+    <div class="tag" id="tag_[% innerloo.tag %]_[% innerloo.index %][% innerloo.random %]">
+        <div class="tag_title" id="div_indicator_tag_[% innerloo.tag %]_[% innerloo.index %][% innerloo.random %]">
+        [% UNLESS hide_marc %]
+            [% IF advancedMARCEditor %]
+                <a href="#" tabindex="1" class="tagnum" title="[% innerloo.tag_lib %] - Click to Expand this Tag" onclick="ExpandField('tag_[% innerloo.tag %]_[% innerloo.index %][% innerloo.random %]'); return false;">[% innerloo.tag %]</a>
+            [% ELSE %]
+                <span title="[% innerloo.tag_lib %]">[% innerloo.tag %]</span>
+            [% END %]
+                [% IF ( innerloo.fixedfield ) %]
+                    <input type="text"
+                        tabindex="1"
+                        class="indicator flat"
+                        style="display:none;"
+                        name="tag_[% innerloo.tag %]_indicator1_[% innerloo.index %][% innerloo.random %]"
+                        size="1"
+                        maxlength="1"
+                        value="[% innerloo.indicator1 %]" />
+                    <input type="text"
+                        tabindex="1"
+                        class="indicator flat"
+                        style="display:none;"
+                        name="tag_[% innerloo.tag %]_indicator2_[% innerloo.index %][% innerloo.random %]"
+                        size="1"
+                        maxlength="1"
+                        value="[% innerloo.indicator2 %]" />
+                [% ELSE %]
+                    <input type="text"
+                        tabindex="1"
+                        class="indicator flat"
+                        name="tag_[% innerloo.tag %]_indicator1_[% innerloo.index %][% innerloo.random %]"
+                        size="1"
+                        maxlength="1"
+                        value="[% innerloo.indicator1 %]" />
+                    <input type="text"
+                        tabindex="1"
+                        class="indicator flat"
+                        name="tag_[% innerloo.tag %]_indicator2_[% innerloo.index %][% innerloo.random %]"
+                        size="1"
+                        maxlength="1"
+                        value="[% innerloo.indicator2 %]" />
+                [% END %] -
+        [% ELSE %]
+                [% IF ( innerloo.fixedfield ) %]
+                    <input type="hidden"
+                        tabindex="1"
+                        name="tag_[% innerloo.tag %]_indicator1_[% innerloo.index %][% innerloo.random %]"
+                        value="[% innerloo.indicator1 %]" />
+                    <input type="hidden"
+                        tabindex="1"
+                        name="tag_[% innerloo.tag %]_indicator2_[% innerloo.index %][% innerloo.random %]"
+                        value="[% innerloo.indicator2 %]" />
+                [% ELSE %]
+                    <input type="hidden"
+                        tabindex="1"
+                        name="tag_[% innerloo.tag %]_indicator1_[% innerloo.index %][% innerloo.random %]"
+                        value="[% innerloo.indicator1 %]" />
+                    <input type="hidden"
+                        tabindex="1"
+                        name="tag_[% innerloo.tag %]_indicator2_[% innerloo.index %][% innerloo.random %]"
+                        value="[% innerloo.indicator2 %]" />
+                [% END %]
+        [% END %]
+
+            [% UNLESS advancedMARCEditor %]
+                <a href="#" tabindex="1" class="expandfield" onclick="ExpandField('tag_[% innerloo.tag %]_[% innerloo.index %][% innerloo.random %]'); return false;" title="Click to Expand this Tag">[% innerloo.tag_lib %]</a>
+            [% END %]
+                <span class="field_controls">
+                [% IF ( innerloo.repeatable ) %]
+                    <a href="#" tabindex="1" class="buttonPlus" onclick="CloneField('tag_[% innerloo.tag %]_[% innerloo.index %][% innerloo.random %]','[% hide_marc %]','[% advancedMARCEditor %]'); return false;" title="Repeat this Tag">
+                        <img src="/intranet-tmpl/prog/img/repeat-tag.png" alt="Repeat this Tag" />
+                    </a>
+                [% END %]
+                    <a href="#" tabindex="1" class="buttonMinus" onclick="UnCloneField('tag_[% innerloo.tag %]_[% innerloo.index %][% innerloo.random %]'); return false;" title="Delete this Tag">
+                        <img src="/intranet-tmpl/prog/img/delete-tag.png" alt="Delete this Tag" />
+                    </a>
+                </span>
+
+        </div>
+
+        [% FOREACH subfield_loo IN innerloo.subfield_loop %]
+            <!--  One line on the marc editor -->
+            <div class="subfield_line" style="[% subfield_loo.visibility %]" id="subfield[% subfield_loo.tag %][% subfield_loo.subfield %][% subfield_loo.random %]">
+
+                [% UNLESS advancedMARCEditor %]
+                    [% IF ( subfield_loo.fixedfield ) %]<label for="tag_[% subfield_loo.tag %]_subfield_[% subfield_loo.subfield %]_[% subfield_loo.index %]_[% subfield_loo.index_subfield %]" style="display:none;" class="labelsubfield">
+                    [% ELSE %]<label for="tag_[% subfield_loo.tag %]_subfield_[% subfield_loo.subfield %]_[% subfield_loo.index %]_[% subfield_loo.index_subfield %]" class="labelsubfield">
+                    [% END %]
+                [% END %]
+                
+                [% UNLESS hide_marc %]
+                <span class="subfieldcode">
+                    [% IF ( subfield_loo.fixedfield ) %]
+                        <img class="buttonUp" style="display:none;" src="/intranet-tmpl/prog/img/up.png" onclick="upSubfield('subfield[% subfield_loo.tag %][% subfield_loo.subfield %][% subfield_loo.random %]')" alt="Move Up" title="Move Up" />
+                    [% ELSE %]
+                        <img class="buttonUp" src="/intranet-tmpl/prog/img/up.png" onclick="upSubfield('subfield[% subfield_loo.tag %][% subfield_loo.subfield %][% subfield_loo.random %]')" alt="Move Up" title="Move Up" />
+                    [% END %]
+                        <input type="text"
+                            title="[% subfield_loo.marc_lib_plain %]"
+                            style=" [% IF ( subfield_loo.fixedfield ) %]display:none; [% END %]border:0;"
+                            name="tag_[% subfield_loo.tag %]_code_[% subfield_loo.subfield %]_[% subfield_loo.index %]_[% subfield_loo.index_subfield %]"
+                            value="[% subfield_loo.subfield %]"
+                            size="1"
+                            maxlength="1"
+                            class="flat"
+                            tabindex="0" />
+                </span>
+                [% ELSE %]
+                    <input type="hidden"
+                        name="tag_[% subfield_loo.tag %]_code_[% subfield_loo.subfield %]_[% subfield_loo.index %]_[% subfield_loo.index_subfield %]"
+                        value="[% subfield_loo.subfield %]" />
+                [% END %]
+
+                [% UNLESS advancedMARCEditor %]
+                    [% IF ( subfield_loo.mandatory ) %]<span class="subfield subfield_mandatory">[% ELSE %]<span class="subfield">[% END %]
+                        [% subfield_loo.marc_lib_plain %]
+                        [% IF ( subfield_loo.mandatory ) %]<span class="mandatory_marker" title="This field is mandatory">*</span>[% END %]
+                    </span>
+                    </label>
+                [% END %]
+                
+                [% subfield_loo.marc_value %]
+
+                <span class="subfield_controls">
+                [% IF ( subfield_loo.repeatable ) %]
+                    <a href="#" class="buttonPlus" tabindex="1" onclick="CloneSubfield('subfield[% subfield_loo.tag %][% subfield_loo.subfield %][% subfield_loo.random %]','[% advancedMARCEditor %]'); return false;">
+                        <img src="/intranet-tmpl/prog/img/clone-subfield.png" alt="Clone" title="Clone this subfield" />
+                    </a>
+                    <a href="#" class="buttonMinus" tabindex="1" onclick="UnCloneField('subfield[% subfield_loo.tag %][% subfield_loo.subfield %][% subfield_loo.random %]'); return false;">
+                        <img src="/intranet-tmpl/prog/img/delete-subfield.png" alt="Delete" title="Delete this subfield" />
+                    </a>
+                [% END %]
+                </span>
+                
+            </div>
+            <!-- End of the line -->
+        [% END %]
+
+    </div>
+    [% END %]<!-- if innerloo.tag -->
+    [% END %]<!-- BIG_LOO.innerloop -->
+    </div>
+[% END %]<!-- BIG_LOOP -->
+
+</div><!-- tabs -->
 
 <div name="hidden" id="hidden" class="tab">
 [% FOREACH hidden_loo IN hidden_loop %]
@@ -756,10 +384,14 @@ function searchauthority() {
     <input type="hidden" name="subfield" value="[% oldauthtypetagsubfield %]" />
     <input type="hidden" name="field_value" value="[% authtypecode %]" />
 [% END %]
+
 <fieldset class="action">
         <input type="button" id="addauth2" value="Save" onclick="Check(this.form)" accesskey="w" />
 </fieldset>
+
 </form>
+
+</div>
 </div>
 </div>
 
