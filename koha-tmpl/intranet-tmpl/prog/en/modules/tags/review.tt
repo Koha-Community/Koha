@@ -209,7 +209,7 @@ td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
 	<tr>
 	    <td class="count">[% offset + loop.count %]
 	    </td>
-        [% IF ( approved == 0 ) %]<td><span><input type="checkbox" value="[% tagloo.term %]" name="tags" class="pending" /></span>
+        [% IF ( tagloo.approved == 0 ) %]<td><span><input type="checkbox" value="[% tagloo.term %]" name="tags" class="pending" /></span>
         [% ELSE %]<td><span><input type="checkbox" value="[% tagloo.term %]" name="tags" /></span>[% END %]
 	    </td>
 	    [% IF ( tagloo.approved == -1 ) %]<td class="red">rejected
@@ -223,7 +223,7 @@ td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
 	    </td>
 		[% IF ( tagloo.approved ) %]
 	    <td><span class="ajax_buttons" style="visibility:hidden">
-			[% IF ( approved == -1 ) %]
+            [% IF ( tagloo.approved == -1 ) %]
 			<input class="ok"  type="submit" title="[% tagloo.term %]" value="Approve" name="approve" />
 			<input class="rej" disabled="disabled" type="submit" title="[% tagloo.term %]" value="Rejected" name="reject" />
 			[% ELSE %]
