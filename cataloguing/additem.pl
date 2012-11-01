@@ -247,7 +247,7 @@ sub generate_subfield_form {
 		    my $change = index($javascript, 'function Change') > -1 ?
 		        "return Change$function_name($subfield_data{random}, '$subfield_data{id}');" :
 		        'return 1;';
-                    $subfield_data{marc_value} = qq[<input $attributes
+                    $subfield_data{marc_value} = qq[<input type="text" $attributes
                         onfocus="Focus$function_name($subfield_data{random}, '$subfield_data{id}');"
 			onchange=" $change"
                          onblur=" Blur$function_name($subfield_data{random}, '$subfield_data{id}');" />
@@ -255,7 +255,7 @@ sub generate_subfield_form {
                         $javascript];
                 } else {
                     warn "Plugin Failed: $plugin";
-                    $subfield_data{marc_value} = "<input $attributes />"; # supply default input form
+                    $subfield_data{marc_value} = "<input type=\"text\" $attributes />"; # supply default input form
                 }
         }
         elsif ( $tag eq '' ) {       # it's an hidden field
@@ -274,7 +274,7 @@ sub generate_subfield_form {
             $subfield_data{marc_value} = "<textarea $attributes_no_value>$value</textarea>\n";
         } else {
            # it's a standard field
-           $subfield_data{marc_value} = "<input $attributes />";
+           $subfield_data{marc_value} = "<input type=\"text\" $attributes />";
         }
         
         return \%subfield_data;

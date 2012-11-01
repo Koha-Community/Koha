@@ -394,14 +394,14 @@ foreach my $tag (sort keys %{$tagslib}) {
 			my $temp;
             my $extended_param = plugin_parameters( $dbh, $temp, $tagslib, $subfield_data{id}, \@loop_data );
             my ( $function_name, $javascript ) = plugin_javascript( $dbh, $temp, $tagslib, $subfield_data{id}, \@loop_data );
-            $subfield_data{marc_value} = qq[<input $attributes
+            $subfield_data{marc_value} = qq[<input type="text" $attributes
                 onfocus="Focus$function_name($subfield_data{random}, '$subfield_data{id}');"
                  onblur=" Blur$function_name($subfield_data{random}, '$subfield_data{id}');" />
                 <a href="#" class="buttonDot" onclick="Clic$function_name('$subfield_data{id}'); return false;" title="Tag Editor">...</a>
                 $javascript];
         } else {
             warn "Plugin Failed: $plugin";
-            $subfield_data{marc_value} = "<input $attributes />"; # supply default input form
+            $subfield_data{marc_value} = "<input type=\"text\" $attributes />"; # supply default input form
         }
     }
     elsif ( $tag eq '' ) {       # it's an hidden field
@@ -420,7 +420,7 @@ foreach my $tag (sort keys %{$tagslib}) {
         $subfield_data{marc_value} = "<textarea $attributes_no_value>$value</textarea>\n";
     } else {
         # it's a standard field
-         $subfield_data{marc_value} = "<input $attributes />";
+         $subfield_data{marc_value} = "<input type=\"text\" $attributes />";
     }
 #   $subfield_data{marc_value}="<input type=\"text\" name=\"field_value\">";
     push (@loop_data, \%subfield_data);

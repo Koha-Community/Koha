@@ -1,6 +1,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Cataloging &rsaquo; [% title |html %] [% IF ( author ) %] by [% author %][% END %] (Record #[% biblionumber %]) &rsaquo; Items</title>
 [% INCLUDE 'doc-head-close.inc' %]
+<script type="text/javascript" src="[% themelang %]/js/cataloging.js"></script>
 <script type="text/javascript">
 //<![CDATA[
 $(document).ready(function(){
@@ -82,78 +83,6 @@ function confirm_deletion(biblionumber,itemnumber) {
 	} else {
 	$("#row"+itemnumber).attr("class","");
     }
-}
-
-function CloneSubfield(index){
-    var original = document.getElementById(index); //original <div>
-    var clone = original.cloneNode(true);
-    var new_key = CreateKey();
-    var old_id =  original.getAttribute('id');
-    old_id=old_id.substr(12);
-    var new_id  = old_id+new_key;
-
-    // set the attribute for the new 'div' subfields
-    var inputs     = clone.getElementsByTagName('input');
-    var selects    = clone.getElementsByTagName('select');
-    var textareas  = clone.getElementsByTagName('textarea');
-
-    // input
-    var id_input = "";
-    for(var i=0,len=inputs.length; i<len ; i++ ){
-        id_input = inputs[i].getAttribute('id')+new_key;
-        inputs[i].setAttribute('id',id_input);
-        inputs[i].setAttribute('name',inputs[i].getAttribute('name'));
-    }
-
-    // select
-    for(var i=0,len=selects.length; i<len ; i++ ){
-        id_input = selects[i].getAttribute('id')+new_key;
-        selects[i].setAttribute('id',selects[i].getAttribute('id')+new_key);
-        selects[i].setAttribute('name',selects[i].getAttribute('name'));
-    }
-
-    // textarea
-    for(var i=0,len=textareas.length; i<len ; i++ ){
-        id_input = textareas[i].getAttribute('id')+new_key;
-        textareas[i].setAttribute('id',textareas[i].getAttribute('id')+new_key);
-        textareas[i].setAttribute('name',textareas[i].getAttribute('name'));
-    }
-
-    [% UNLESS ( advancedMARCEditor ) %]
-    // when cloning a subfield, reset its label too.
-    var label = clone.getElementsByTagName('label')[0];
-    label.setAttribute('for',id_input);
-    [% END %]
-
-    // setting a new if for the parent div
-    clone.setAttribute('id',new_id);
-
-    var CloneButtonPlus;
-    try {
-      var spans = clone.getElementsByTagName('span');
-      if(spans.length){
-          for(var i = 0 ,lenspans = spans.length ; i < lenspans ; i++){
-            if(spans[i].getAttribute('class') == 'buttonPlus'){
-                    CloneButtonPlus = spans[i];
-                    CloneButtonPlus.setAttribute('onclick',"CloneSubfield('" + new_id + "')");
-                    var buttonUp = clone.getElementsByTagName('img')[0];
-                    buttonUp.setAttribute('onclick',"upSubfield('" + new_id + "')");
-                }
-            }
-        }
-    }
-    catch(e){
-        // do nothing if ButtonPlus & CloneButtonPlus don't exist.
-    }
-    // insert this line on the page
-    original.parentNode.insertBefore(clone,original.nextSibling);
-}
-
-/**
- * This function creates a random number
- */
-function CreateKey(){
-    return parseInt(Math.random() * 100000);
 }
 
 $(document).ready(function() {
@@ -247,7 +176,9 @@ $(document).ready(function() {
                 <input type="hidden" name="subfield"  value="[% ite.subfield %]" />
                 <input type="hidden" name="mandatory" value="[% ite.mandatory %]" />
                 [% IF ( ite.repeatable ) %]
-                    <span class="buttonPlus" onclick="CloneSubfield('subfield[% ite.tag %][% ite.subfield %][% ite.random %]')">+</span>
+                    <a href="#" class="buttonPlus" onclick="CloneItemSubfield(this.parentNode); return false;">
+                        <img src="/intranet-tmpl/prog/img/clone-subfield.png" alt="Clone" title="Clone this subfield" />
+                    </a>
                 [% END %]
                 [% IF ( ite.mandatory ) %] <span class="required">Required</span>[% END %]
             </div></li>
