@@ -4,7 +4,7 @@
 
 <p>CSV Profiles are created to define how you would like your cart or list to export.</p>
 
-<h2>Add CSV Profiles</h2>
+<h3>Add CSV Profiles</h3>
 
 <p>To add a CSV Profile</p>
 
@@ -12,11 +12,12 @@
 	<li>Click 'CSV Profiles' from the Tools menu
 <ul>
 	<li>The 'Profile name' will appear on the export pull down list when choosing 'Download' from your cart or list</li>
-	<li>The 'Profile description' is for your own benefit</li>
+    <li>The 'Profile description' is for your own benefit, but will also appear in the OPAC when patrons download content, so make sure it's clear to your patrons as well</li>
 	<li>The 'CSV separator' is the character used to separate values and value groups</li>
+    <li><strong>Tip:</strong> The most common option here is comma because most spreadsheet applications know how to open files split by commas.</li>
 	<li>The 'Field separator' is the character used to separate duplicate fields
 <ul>
-	<li>Example: You may have multiple 650 fields</li>
+    <li>Example: You may have multiple 650 fields and this is the character that will appear in between each one in the column</li>
 </ul>
 </li>
 	<li>The 'Subfield separator' is the character used to separate duplicate subfields
@@ -25,29 +26,32 @@
 </ul>
 </li>
 	<li>The 'Encoding' field lets you define the encoding used when saving the file</li>
-	<li>Finally format your CSV file using the 'Profile marcfields' fields
+    <li>Finally format your CSV file using the 'Profile MARC fields' fields
 <ul>
-	<li>Define which fields or subfields you want to export, separated by pipes. Example : 200|210$a|301</li>
-	<li style="background-color: #ffe599;">Tip: You can also use your own headers (instead of the ones from Koha) by prefixing the field number with an header, followed by the equal sign. Example : Personal name=200|Entry element=210$a|300|009</li>
+    <li>Define which fields or subfields you want to export, separated by pipes. Example :200|210$a|301</li>
+    <li><strong>Tip:</strong> You can also use your own headers (instead of the ones from Koha) by prefixing the field number with an header, followed by the equal sign. Example : Personal name=100|title=245$a|300</li>
 </ul>
 </li>
 </ul>
 </li>
 </ul>
 
-<h2>Modify CSV Profiles</h2>
+<p>When you have entered in all of the information for you profile, simply click 'Submit' and you will be presented with a confirmation that your profile has been saved.</p>
+
+<h3>Modify CSV Profiles</h3>
 
 <p>Once you have created at least one CSV Profile an 'Edit profile' tab will appear next to the 'New profile' button.</p>
 
 <ul>
-	<li>Choose the profile you would like to edit and alter the necessary fields.</li>
-	<li>To delete a profile, check the 'Delete selected profile' option before clicking 'Submit Query'</li>
+    <li>Choose the profile you would like to edit and alter the necessary fields.</li>
+    <li>After submitting your changes you will be presented with a confirmation message at the top of the screen</li>
+    <li>To delete a profile, check the 'Delete selected profile' option before clicking 'Submit Query'</li>
 </ul>
 
-<h2>Using CSV Profiles</h2>
+<h3>Using CSV Profiles</h3>
 
-<p>Your CSV Profiles will appear on the export list or cart menu under the 'Download' button</p>
+<p>Your CSV Profiles will appear on the export list or cart menu under the 'Download' button in both the staff client and the OPAC</p>
 
-<p><strong>See the full documentation for CSV Profiles in the <a href="http://manual.koha-community.org/3.8/en/csvprofiles.html">manual</a> (online).</strong></p>
+<p><strong>See the full documentation for CSV Profiles in the <a href="http://manual.koha-community.org/3.10/en/csvprofiles.html">manual</a> (online).</strong></p>
 
 [% INCLUDE 'help-bottom.inc' %]
