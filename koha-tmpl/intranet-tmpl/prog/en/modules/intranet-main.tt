@@ -16,7 +16,14 @@
    <div id="bd" role="main">
     <div id="yui-main">
     <div class="yui-b"><div class="yui-g">
+    [% IF adminWarning %]
+        <div id="adminwarning"i class="alert">
+            <p>Warning: you're logged-in with the admin login. This a a bad idea, and you are likely to encounter problems.</p>
+            <p>You should <a href="/cgi-bin/koha/members/memberentry.pl?op=add">create a patron</a> and give it superlibrarian permissions.</p>
+        </div>
+    [% END %]
     <div class="yui-u first">
+
             <div id="area-list-left">
                 <ul class="biglinks-list">
                     [% IF ( CAN_user_circulate ) %]
