@@ -264,14 +264,16 @@ foreach my $item (@items) {
 	$item->{hosttitle} = GetBiblioData($item->{biblionumber})->{title};
     }
 	
-	#count if item is used in analytical bibliorecords
-	my $countanalytics= GetAnalyticsCount($item->{itemnumber});
-	if ($countanalytics > 0){
-		$analytics_flag=1;
-		$item->{countanalytics} = $countanalytics;
-	}
+    #count if item is used in analytical bibliorecords
+    my $countanalytics= GetAnalyticsCount($item->{itemnumber});
+    if ($countanalytics > 0){
+        $analytics_flag=1;
+        $item->{countanalytics} = $countanalytics;
+    }
+
     if (defined($item->{'materials'}) && $item->{'materials'} =~ /\S/){
 	$materials_flag = 1;
+    }
 
     if ($currentbranch and $currentbranch ne "NO_LIBRARY_SET"
     and C4::Context->preference('SeparateHoldings')) {
