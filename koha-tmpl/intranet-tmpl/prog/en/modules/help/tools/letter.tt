@@ -51,11 +51,13 @@
 
 <p>An example of using these two tags in a notice template might be like:</p>
 
-<pre class="programlisting">   The following item(s) is/are currently overdue:
+<pre>The following item(s) is/are currently overdue:
 
    &lt;item&gt;"&lt;&lt;biblio.title&gt;&gt;" by &lt;&lt;biblio.author&gt;&gt;, &lt;&lt;items.itemcallnumber&gt;&gt;, Barcode: &lt;&lt;items.barcode&gt;&gt; Fine: &lt;fine&gt;GBP&lt;/fine&gt;&lt;/item&gt;</pre>
-Which, assuming two items were overdue, would result in a notice like:
-<pre class="programlisting">   The following item(s) is/are currently overdue:
+
+<p>Which, assuming two items were overdue, would result in a notice like:</p>
+
+<pre>The following item(s) is/are currently overdue:
 
    "A Short History of Western Civilization" by Harrison, John B, 909.09821 H2451, Barcode: 08030003 Fine: £3.50
    "History of Western Civilization" by Hayes, Carlton Joseph Huntley, 909.09821 H3261 v.1, Barcode: 08030004 Fine: £3.50</pre>
@@ -73,23 +75,22 @@ Which, assuming two items were overdue, would result in a notice like:
 	<li>ACQCLAIM (Acquisition Claim)
 <ul>
 	<li>Used in the claim acquisition module</li>
-    <li><span class="emphasis"><em>Get there:</em></span> More &gt; Acquisitions &gt; Late issues</li>
+    <li><em>Get there:</em> More &gt; Acquisitions &gt; Late issues</li>
 </ul>
 </li>
 	<li>HOLD (Hold Available for Pickup)
 <ul>
 	<li>This notice is used if two criteria are met:
-<div class="orderedlist">
 <ol type="1">
-    <li>The <span class="link">EnhancedMessagingPreferences</span> is set to 'Allow'</li>
+    <li>The EnhancedMessagingPreferences is set to 'Allow'</li>
 	<li>The patron has requested to receive this notice
 <ul>
-    <li><span class="emphasis"><em>Get there: </em></span>OPAC &gt; Login &gt; my messaging</li>
-    <li><span class="emphasis"><em>Get there: </em></span>Staff Client &gt; Patron Record &gt; Notices</li>
+    <li><em>Get there: </em>OPAC &gt; Login &gt; my messaging</li>
+    <li><em>Get there: </em>Staff Client &gt; Patron Record &gt; Notices</li>
 </ul>
 </li>
 </ol>
-</div></li>
+</li>
     <li>When this notice references the branches table it is referring to the pickup branch information.</li>
 </ul>
 </li>
@@ -108,15 +109,15 @@ Which, assuming two items were overdue, would result in a notice like:
 	<li>ODUE (Overdue Notice)
 <ul>
 	<li>This notice is used to send Overdue Notices to Patrons</li>
-    <li>See a <span class="link">Sample Overdue Notice</span></li>
-    <li>Requires that you set <span class="link">Overdue Notice/Status Triggers</span></li>
+    <li>See a Sample Overdue Notice</li>
+    <li>Requires that you set Overdue Notice/Status Triggers</li>
 </ul>
 </li>
 	<li>RLIST (Routing List)
 <ul>
 	<li>Used in the serials module to notify patrons/staff of new issues of a serial
 <ul>
-    <li><span class="emphasis"><em>Get there:</em></span> More &gt; Serials &gt; <span class="link">New Subscription</span></li>
+    <li><em>Get there:</em> More &gt; Serials &gt; New Subscription</li>
 </ul>
 </li>
 	<li>You have the option to select the 'Routing List' notice when creating a new subscription (Choose from the 'Patron notification' drop down).</li>
@@ -125,7 +126,7 @@ Which, assuming two items were overdue, would result in a notice like:
 </li>
 </ul>
 
-<p>There are also a set of predefined slips (or receipts) listed on this page. All of these slips can be customized by altering their text via the Notices &amp; Slips tool and their style using the <span class="link">SlipCSS</span> preference to define a stylesheet.</p>
+<p>There are also a set of predefined slips (or receipts) listed on this page. All of these slips can be customized by altering their text via the Notices &amp; Slips tool and their style using the SlipCSS preference to define a stylesheet.</p>
 
 <p>Here is what those slips are used for:</p>
 
@@ -156,6 +157,6 @@ Which, assuming two items were overdue, would result in a notice like:
 </li>
 </ul>
 
-<p><strong>See the full documentation for Notices in the <a href="http://manual.koha-community.org/3.8/en/notices.html">manual</a> (online).</strong></p>
+<p><strong>See the full documentation for Notices in the <a href="http://manual.koha-community.org/3.10/en/notices.html">manual</a> (online).</strong></p>
 
 [% INCLUDE 'help-bottom.inc' %]
