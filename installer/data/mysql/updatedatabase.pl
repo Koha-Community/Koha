@@ -5927,22 +5927,6 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-$DBversion = "XXX";
-if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-    $dbh->do("
-        INSERT INTO systempreferences (variable,value,explanation,options,type)
-        VALUES('SeparateHoldings', '0', 'Separate current branch holdings from other holdings', NULL, 'YesNo');
-    ");
-    $dbh->do("
-        INSERT INTO systempreferences (variable,value,explanation,options,type)
-        VALUES('OpacSeparateHoldings', '0', 'Separate current branch holdings from other holdings (OPAC)', NULL, 'YesNo');
-    ");
-
-    print "Upgrade to $DBversion done (Add systempreferences SeparateHoldings and OpacSeparateHoldings) \n";
-    SetVersion ($DBversion);
-}
-
-
 $DBversion = "3.09.00.053";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do(
@@ -6128,6 +6112,7 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
+<<<<<<< HEAD
 $DBversion = "3.11.00.005";
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     $dbh->do(qq{CREATE TABLE borrower_attribute_types_branches(bat_code VARCHAR(10), b_branchcode VARCHAR(10),FOREIGN KEY (bat_code) REFERENCES borrower_attribute_types(code) ON DELETE CASCADE,FOREIGN KEY (b_branchcode) REFERENCES branches(branchcode) ON DELETE CASCADE ) ENGINE=INNODB DEFAULT CHARSET=utf8;});
@@ -6299,6 +6284,21 @@ if (CheckVersion($DBversion)) {
     print "Upgrade to $DBversion done (Bug 7067: Add Patron Self Registration)\n";
     SetVersion ($DBversion);
 }
+
+$DBversion = "3.11.00.XXX";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("
+        INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES
+        ('SeparateHoldings', '0', 'Separate current branch holdings from other holdings', NULL, 'YesNo'),
+        ('SeparateHoldingsBranch', 'homebranch', 'Branch used to separate holdings', 'homebranch|holdingbranch', 'Choice'),
+        ('OpacSeparateHoldings', '0', 'Separate current branch holdings from other holdings (OPAC)', NULL, 'YesNo'),
+        ('OpacSeparateHoldingsBranch', 'homebranch', 'Branch used to separate holdings (OPAC)', 'homebranch|holdingbranch', 'Choice')
+    ");
+
+    print "Upgrade to $DBversion done (Add systempreferences SeparateHoldings, SeparateHoldingsBranch, OpacSeparateHoldings and OpacSeparateHoldingsBranch) \n";
+    SetVersion ($DBversion);
+}
+
 
 =head1 FUNCTIONS
 

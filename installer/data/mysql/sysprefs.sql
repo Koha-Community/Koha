@@ -396,4 +396,6 @@ INSERT INTO systempreferences (`variable`, `value`, `options`, `explanation`, `t
 ('PatronSelfRegistrationBorrowerMandatoryField',  'surname|firstname', NULL ,  'Choose the mandatory fields for a patron''s account, when registering via the OPAC.',  'free'),
 ('PatronSelfRegistrationBorrowerUnwantedField',  '', NULL ,  'Name the fields you don''t want to display when registering a new patron via the OPAC.',  'free');
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('SeparateHoldings', '0', 'Separate current branch holdings from other holdings', NULL, 'YesNo');
+INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('SeparateHoldingsBranch', 'homebranch', 'Branch used to separate holdings', 'homebranch|holdingbranch', 'Choice');
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('OpacSeparateHoldings', '0', 'Separate current branch holdings from other holdings (OPAC)', NULL, 'YesNo');
+INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('OpacSeparateHoldingsBranch', 'homebranch', 'Branch used to separate holdings (OPAC)', 'homebranch|holdingbranch', 'Choice');

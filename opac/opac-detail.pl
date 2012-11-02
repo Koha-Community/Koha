@@ -517,6 +517,7 @@ my $currentbranch = C4::Context->userenv ? C4::Context->userenv->{branch} : unde
 if ($currentbranch and C4::Context->preference('OpacSeparateHoldings')) {
     $template->param(SeparateHoldings => 1);
 }
+my $separatebranch = C4::Context->preference('OpacSeparateHoldingsBranch');
 for my $itm (@items) {
     $itm->{holds_count} = $item_reserves{ $itm->{itemnumber} };
     $itm->{priority} = $priority{ $itm->{itemnumber} };
@@ -567,9 +568,9 @@ for my $itm (@items) {
         $itm->{transfertfrom} = $branches->{$transfertfrom}{branchname};
         $itm->{transfertto}   = $branches->{$transfertto}{branchname};
      }
-    my $homebranch = $itm->{homebranch};
+    my $itembranch = $itm->{$separatebranch};
     if ($currentbranch and C4::Context->preference('OpacSeparateHoldings')) {
-        if ($homebranch and $homebranch eq $currentbranch) {
+        if ($itembranch and $itembranch eq $currentbranch) {
             push @itemloop, $itm;
         } else {
             push @otheritemloop, $itm;

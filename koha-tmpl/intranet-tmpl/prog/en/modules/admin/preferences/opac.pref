@@ -258,6 +258,17 @@ OPAC:
             - '<br />Note: Available options are: BIBTEX (<code>bibtex</code>), Dublin Core (<code>dc</code>),'
             - 'MARCXML (<code>marcxml</code>), MARC-8 encoded MARC (<code>marc8</code>), Unicode/UTF-8 encoded MARC (<code>utf8</code>),'
             - 'Unicode/UTF-8 encoded MARC without local use -9xx, x9x, xx9- fields and subfields (<code>marcstd</code>), MODS (<code>mods</code>), RIS (<code>ris</code>)'
+        -
+            - pref: OpacSeparateHoldings
+              choices:
+                  yes: Separate
+                  no: Don't separate
+            - 'items display into two tabs. First tab contains items whose'
+            - pref: OpacSeparateHoldingsBranch
+              choices:
+                homebranch: 'home branch'
+                holdingbranch: 'holding branch'
+            - 'is the branch of user logged in. The other tab contains other items.'
     Features:
         -
             - pref: opacuserlogin

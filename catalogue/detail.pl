@@ -188,9 +188,9 @@ my $currentbranch = C4::Context->userenv ? C4::Context->userenv->{branch} : unde
 if ($currentbranch and C4::Context->preference('SeparateHoldings')) {
     $template->param(SeparateHoldings => 1);
 }
+my $separatebranch = C4::Context->preference('SeparateHoldingsBranch') || 'homebranch';
 foreach my $item (@items) {
-
-    my $homebranchcode = $item->{homebranch};
+    my $itembranchcode = $item->{$separatebranch};
     $item->{homebranch}        = GetBranchName($item->{homebranch});
 
     # can place holds defaults to yes
@@ -273,8 +273,9 @@ foreach my $item (@items) {
     if (defined($item->{'materials'}) && $item->{'materials'} =~ /\S/){
 	$materials_flag = 1;
 
-    if ($currentbranch and $currentbranch ne "NO_LIBRARY_SET" and C4::Context->preference('SeparateHoldings')) {
-        if ($homebranchcode and $homebranchcode eq $currentbranch) {
+    if ($currentbranch and $currentbranch ne "NO_LIBRARY_SET"
+    and C4::Context->preference('SeparateHoldings')) {
+        if ($itembranchcode and $itembranchcode eq $currentbranch) {
             push @itemloop, $item;
         } else {
             push @otheritemloop, $item;
