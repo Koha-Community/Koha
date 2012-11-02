@@ -1849,13 +1849,23 @@ sub searchResults {
                     $item->{status} = $item->{wthdrawn} . "-" . $item->{itemlost} . "-" . $item->{damaged} . "-" . $item->{notforloan};
 
                     # can place hold on item ?
-                    if ((!$item->{damaged} || C4::Context->preference('AllowHoldsOnDamagedItems'))
-                      && !$item->{itemlost}
-                      && !$item->{withdrawn}
-                    ) {
-                        $can_place_holds = 1;
+                    if ( !$item->{itemlost} ) {
+                        if ( !$item->{wthdrawn} ){
+                            if ( $item->{damaged} ){
+                                if ( C4::Context->preference('AllowHoldsOnDamagedItems') ){
+                                    # can place a hold on a damaged item if AllowHoldsOnDamagedItems is true
+                                    if ( ( !$item->{notforloan} || $item->{notforloan} < 0 ) ){
+                                        # item is either for loan or has notforloan < 0
+                                        $can_place_holds = 1;
+                                    }
+                                }
+                            } elsif ( $item->{notforloan} < 0 ) {
+                                # item is not damaged and notforloan is < 0
+                                $can_place_holds = 1;
+                            }
+                        }
                     }
-                    
+
                     $other_count++;
 
                     my $key = $prefix . $item->{status};
