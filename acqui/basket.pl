@@ -65,7 +65,7 @@ the supplier this script have to display the basket.
 =cut
 
 my $query        = new CGI;
-my $basketno     = $query->param('basketno');
+our $basketno     = $query->param('basketno');
 my $booksellerid = $query->param('booksellerid');
 
 my ( $template, $loggedinuser, $cookie, $userflags ) = get_template_and_user(
