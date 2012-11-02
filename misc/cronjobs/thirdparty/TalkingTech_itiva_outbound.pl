@@ -291,23 +291,16 @@ sub GetWaitingHolds {
     $sth->execute();
     my @results;
     while ( my $issue = $sth->fetchrow_hashref() ) {
-        my $calendar = Koha::Calendar->new( branchcode => $issue->{'site'} );
-
-        my $waiting_date = dt_from_string( $issue->{waitingdate}, 'sql' );
-        my $pickup_date = $waiting_date->clone->add( days => $pickupdelay );
-        if ( $calendar->is_holiday($pickup_date) ) {
-            $pickup_date = $calendar->next_open_day( $pickup_date );
-        }
-
-        $issue->{'date_due'} = output_pref({dt => $pickup_date, dateformat => 'iso' });
+        my @waitingdate = split( /-/, $issue->{'waitingdate'} );
+        my @date_due = Add_Delta_Days( $waitingdate[0], $waitingdate[1], $waitingdate[2], $pickupdelay );
+        $issue->{'date_due'} = sprintf( "%04d-%02d-%02d", $date_due[0], $date_due[1], $date_due[2] );
         $issue->{'level'} = 1;    # only one level for Hold Waiting notifications
 
         my $days_to_subtract = 0;
-        if ( $calendar->is_holiday($waiting_date) ) {
-            my $next_open_day = $calendar->next_open_day( $waiting_date );
-            $days_to_subtract = $calendar->days_between($waiting_date, $next_open_day)->days;
+        my $calendar = C4::Calendar->new( branchcode => $issue->{'site'} );
+        while ( $calendar->isHoliday( reverse( Add_Delta_Days( $waitingdate[0], $waitingdate[1], $waitingdate[2], $days_to_subtract ) ) ) ) {
+            $days_to_subtract++;
         }
-
         $issue->{'days_since_waiting'} = $issue->{'days_since_waiting'} - $days_to_subtract;
 
         if ( ( grep $_ eq $issue->{'days_since_waiting'}, @holds_waiting_days_to_call )
