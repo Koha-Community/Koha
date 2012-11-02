@@ -26,18 +26,18 @@
         </p></div>
     [% END %]
     
-    [% IF ( Ask_data ) %]
-        [% IF ( OpacPasswordChange ) %]
+    [% IF ( OpacPasswordChange ) %]
+        [% IF ( Ask_data ) %]
         <form action="/cgi-bin/koha/opac-passwd.pl" name="mainform" id="mainform" method="post"><fieldset class="brief">
 			[% UNLESS ( ShortPass ) %]<div class="hint">Your password must be at least [% minpasslen %] characters long.</div>[% END %]
           <ol>  <li><label for="Oldkey">Current password:</label> <input type="password" id="Oldkey" size="25"  name="Oldkey" /></li>
             <li><label for="Newkey">New password:</label> <input type="password" id="Newkey"  size="25"  name="Newkey" /></li>
             <li><label for="Confirm">Re-type new password:</label> <input type="password"  id="Confirm" size="25" name="Confirm" /></li></ol></fieldset>
             <fieldset class="action"><input type="submit" value="Submit changes" class="submit" /> <a href="/cgi-bin/koha/opac-user.pl" class="cancel">Cancel</a></fieldset>
-    </form>
-        [% ELSE %]
-            <div class="dialog alert">You can't change your password.</div>
+        </form>
         [% END %]
+    [% ELSE %]
+        <div class="dialog alert">You can't change your password.</div>
     [% END %]
     
     [% IF ( password_updated ) %]
