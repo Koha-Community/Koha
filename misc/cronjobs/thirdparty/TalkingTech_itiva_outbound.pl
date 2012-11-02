@@ -288,14 +288,20 @@ sub GetWaitingHolds {
     $sth->execute();
     my @results;
     while ( my $issue = $sth->fetchrow_hashref() ) {
-        my @waitingdate = split( /-/, $issue->{'waitingdate'} );
-        my @date_due = Add_Delta_Days( $waitingdate[0], $waitingdate[1], $waitingdate[2], $pickupdelay );
-        $issue->{'date_due'} = sprintf( "%04d-%02d-%02d", $date_due[0], $date_due[1], $date_due[2] );
+        my $calendar = C4::Calendar->new( branchcode => $issue->{'site'} );
+
+        my ( $waiting_year, $waiting_month, $waiting_day ) = split( /-/, $issue->{'waitingdate'} );
+        my ( $pickup_year, $pickup_month, $pickup_day ) = Add_Delta_Days( $waiting_year, $waiting_month, $waiting_day, $pickupdelay );
+
+        while ( $calendar->isHoliday( $pickup_day, $pickup_month, $pickup_year ) ) {
+            ( $pickup_year, $pickup_month, $pickup_day ) = Add_Delta_Days( $pickup_year, $pickup_month, $pickup_day, 1 );
+        }
+
+        $issue->{'date_due'} = sprintf( "%04d-%02d-%02d", $pickup_year, $pickup_month, $pickup_day );
         $issue->{'level'} = 1;    # only one level for Hold Waiting notifications
 
         my $days_to_subtract = 0;
-        my $calendar = C4::Calendar->new( branchcode => $issue->{'site'} );
-        while ( $calendar->isHoliday( reverse( Add_Delta_Days( $waitingdate[0], $waitingdate[1], $waitingdate[2], $days_to_subtract ) ) ) ) {
+        while ( $calendar->isHoliday( reverse( Add_Delta_Days( $waiting_year, $waiting_month, $waiting_day, $days_to_subtract ) ) ) ) {
             $days_to_subtract++;
         }
         $issue->{'days_since_waiting'} = $issue->{'days_since_waiting'} - $days_to_subtract;
