@@ -15,19 +15,19 @@ use DateTime;
 my $input               = new CGI;
 my $dbh                 = C4::Context->dbh();
 
-my $branchcode          = $input->param('newBranchName');
+our $branchcode          = $input->param('newBranchName');
 my $originalbranchcode  = $branchcode;
-my $weekday             = $input->param('newWeekday');
-my $day                 = $input->param('newDay');
-my $month               = $input->param('newMonth');
-my $year                = $input->param('newYear');
+our $weekday             = $input->param('newWeekday');
+our $day                 = $input->param('newDay');
+our $month               = $input->param('newMonth');
+our $year                = $input->param('newYear');
 my $day1;
 my $month1;
 my $year1;
 my $dateofrange         = $input->param('dateofrange');
-my $title               = $input->param('newTitle');
-my $description         = $input->param('newDescription');
-my $newoperation        = $input->param('newOperation');
+our $title               = $input->param('newTitle');
+our $description         = $input->param('newDescription');
+our $newoperation        = $input->param('newOperation');
 my $allbranches         = $input->param('allBranches');
 
 my $calendardate        = sprintf("%04d-%02d-%02d", $year, $month, $day);
@@ -57,7 +57,7 @@ if ($description) {
 }
 
 # We make an array with holiday's days
-my @holiday_list;
+our @holiday_list;
 if ($year1 && $month1 && $day1){
             my $first_dt = DateTime->new(year => $year, month  => $month,  day => $day);
             my $end_dt   = DateTime->new(year => $year1, month  => $month1,  day => $day1);
