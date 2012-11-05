@@ -263,4 +263,9 @@ if ($borrower->{cardnumber}) {
     );
 }
 
+$template->param(
+    SCOUserJS  => C4::Context->preference('SCOUserJS'),
+    SCOUserCSS => C4::Context->preference('SCOUserCSS'),
+);
+
 output_html_with_http_headers $query, $cookie, $template->output;

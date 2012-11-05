@@ -404,3 +404,5 @@ INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('HTML5MediaExtensions','webm|ogg|ogv|oga|vtt','Media file extensions','','free');
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('AllowHoldsOnPatronsPossessions', '1', 'Allow holds on records that patron have items of it',NULL,'YesNo');
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('NotesBlacklist','','List of notes fields that should not appear in the title notes/description separator of details',NULL,'free');
+INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES ('SCOUserCSS', '', NULL, 'Add CSS to be included in the SCO module in an embedded <style> tag.', 'free');
+INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES ('SCOUserJS', '', NULL, 'Define custom javascript for inclusion in the SCO module', 'free');
