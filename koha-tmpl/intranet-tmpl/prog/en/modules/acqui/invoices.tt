@@ -9,7 +9,7 @@
 <script type="text/javascript">
 //<![CDATA[
 $(document).ready(function() {
-    $("#resultst").dataTable($.extend(true, {}, dataTablesDefaults, {
+    var resultst = $("#resultst").dataTable($.extend(true, {}, dataTablesDefaults, {
         sDom: "t",
         bPaginate: false,
         bFilter: false,
@@ -18,9 +18,20 @@ $(document).ready(function() {
             null,null,null,{ "sType": "title-string" },null,null,null,null
         ],
         aoColumnDefs: [
-            { "bSortable": false, "aTargets": [0, 7] }
+            { "bSortable": false, "aTargets": [1, 8] },
+            { "bVisible": false, "aTargets": [0] }
         ]
     }));
+
+    $("#show_only_subscription").attr("checked", false);
+
+    $("#show_only_subscription").click(function(){
+        if ( $(this).attr("checked") ) {
+            resultst.fnFilter( "[0-9]+", 0, true );
+        } else {
+            resultst.fnFilter( '', 0 );
+        }
+    });
 
     $('#merge').click(function (ev) {
         var booksellerid;
@@ -89,9 +100,14 @@ $(document).ready(function() {
       <h1>Invoices</h1>
       [% IF ( do_search ) %]
         [% IF invoices %]
+          <label for="show_only_subscription">
+            <input type="checkbox" style="vertical-align: middle;" id="show_only_subscription" />
+            Show only subscriptions
+          </label>
           <table id="resultst">
             <thead>
               <tr>
+                <th>&nbsp;</th>
                 <th>&nbsp;</th>
                 <th>Invoice no.</th>
                 <th>Vendor</th>
@@ -105,6 +121,7 @@ $(document).ready(function() {
             <tbody>
               [% FOREACH invoice IN invoices %]
                 <tr data-invoiceid="[% invoice.invoiceid %]" data-booksellerid="[% invoice.booksellerid %]" data-shipmentdate="[% invoice.shipmentdate | $KohaDates %]" data-billingdate="[% invoice.billingdate | $KohaDates %]" data-shipmentcost="[% invoice.shipmentcost %]" data-shipment_budgetid="[% invoice.shipmentcost_budgetid %]" data-closedate="[% invoice.closedate | $KohaDates %]">
+                  <td>[% invoice.subscriptionid %]</td>
                   <td><input type="checkbox" class="select-invoice" value="[% invoice.invoiceid %]"></input></td>
                   <td><a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% invoice.invoiceid %]">[% invoice.invoicenumber %]</a></td>
                   <td><a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% invoice.booksellerid %]">[% invoice.suppliername %]</a></td>
