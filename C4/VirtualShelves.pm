@@ -266,11 +266,12 @@ sub GetShelfContents {
         ($sortfield) = $sth2->fetchrow_array;
     }
     my $query =
-       " SELECT vc.biblionumber, vc.shelfnumber, vc.dateadded, itemtypes.*,
+       " SELECT DISTINCT vc.biblionumber, vc.shelfnumber, vc.dateadded, itemtypes.*,
             biblio.*, biblioitems.itemtype, biblioitems.publicationyear as year, biblioitems.publishercode, biblioitems.place, biblioitems.size, biblioitems.pages
          FROM   virtualshelfcontents vc
          JOIN biblio      ON      vc.biblionumber =      biblio.biblionumber
          LEFT JOIN biblioitems ON  biblio.biblionumber = biblioitems.biblionumber
+         LEFT JOIN items ON items.biblionumber=vc.biblionumber
          LEFT JOIN itemtypes   ON biblioitems.itemtype = itemtypes.itemtype
          WHERE  vc.shelfnumber=? ";
     my @params = ($shelfnumber);

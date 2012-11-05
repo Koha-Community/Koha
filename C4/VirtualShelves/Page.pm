@@ -304,6 +304,7 @@ sub shelfpage {
                     viewshelf           => $shelfnumber,
                     authorsort          => $authorsort,
                     yearsort            => $yearsort,
+                    itemcallnumbersort  => $sortfield eq 'itemcallnumber',
                     manageshelf         => $manageshelf,
                     allowremovingitems  => ShelfPossibleAction( $loggedinuser, $shelfnumber, 'delete'),
                     allowaddingitem     => ShelfPossibleAction( $loggedinuser, $shelfnumber, 'add'),
@@ -418,6 +419,8 @@ sub shelfpage {
                 $shelflist->{$element}->{"authorsort"} = 'author';
             } elsif ( $sortfield eq 'year' ) {
                 $shelflist->{$element}->{"yearsort"} = 'year';
+            } elsif ( $sortfield eq 'itemcallnumber' ) {
+                $shelflist->{$element}->{"itemcallnumbersort"} = 'itemcallnumber';
             }
         }
         $shelflist->{$element}->{"viewcategory$category"} = 1;
