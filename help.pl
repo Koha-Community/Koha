@@ -43,6 +43,16 @@ my $query = new CGI;
 our $refer = $query->param('url');
 $refer = $query->referer()  if !$refer || $refer eq 'undefined';
 my $from = _help_template_file_of_url($refer);
+my $htdocs = C4::Context->config('intrahtdocs');
+
+#
+# checking that the help file exist, otherwise, display nohelp.tt page
+#
+my ( $theme, $lang ) = C4::Templates::themelanguage( $htdocs, $from, "intranet", $query );
+unless ( -e "$htdocs/$theme/$lang/modules/$from" ) {
+    $from = "help/nohelp.tt";
+    ( $theme, $lang ) = C4::Templates::themelanguage( $htdocs, $from, "intranet", $query );
+}
 
 my $template = C4::Templates::gettemplate($from, 'intranet', $query);
 $template->param( referer => $refer );
