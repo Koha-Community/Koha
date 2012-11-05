@@ -1,3 +1,4 @@
+[% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Catalog &rsaquo; Item details for [% title %] [% FOREACH subtitl IN subtitle %] [% subtitl.subfield %][% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -216,6 +217,9 @@
 
                 <li><span class="label">Last seen:</span>[% IF ( ITEM_DAT.datelastseen ) %][% ITEM_DAT.datelastseen | $KohaDates %] [%END %]&nbsp;</li>
                 <li><span class="label">Last borrowed:</span>[% IF (ITEM_DAT.datelastborrowed ) %][% ITEM_DAT.datelastborrowed | $KohaDates %][% END %]&nbsp;</li>
+                [% IF Koha.Preference('StoreLastBorrower') && ITEM_DAT.object.last_returned_by %]
+                    <li><span class="label">Last returned by:</span> <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% ITEM_DAT.object.last_returned_by.borrowernumber %]">[% ITEM_DAT.object.last_returned_by.cardnumber %]</a>&nbsp;</li>
+                [% END %]
                 [% IF ( ITEM_DAT.card0 ) %]<li><span class="label">Last borrower:</span> <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% ITEM_DAT.borrower0 %]">[% ITEM_DAT.card0 %]</a>&nbsp;</li>[% END %]
                 [% IF ( ITEM_DAT.card1 ) %]<li><span class="label">Previous borrower:</span> <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% ITEM_DAT.borrower1 %]">[% ITEM_DAT.card1 %]</a>&nbsp;</li>[% END %]
                 [% IF ( ITEM_DAT.card2 ) %]<li><span class="label">Previous borrower:</span> <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% ITEM_DAT.borrower2 %]">[% ITEM_DAT.card2 %]</a>&nbsp;</li>[% END %]

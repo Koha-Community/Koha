@@ -47,6 +47,8 @@ use Algorithm::CheckDigits;
 use Data::Dumper;
 use Koha::DateUtils;
 use Koha::Calendar;
+use Koha::Items;
+use Koha::Borrowers;
 use Koha::Borrower::Debarments;
 use Koha::Database;
 use Carp;
@@ -2178,6 +2180,12 @@ sub MarkIssueReturned {
     $sth_del->execute($borrowernumber, $itemnumber);
 
     ModItem( { 'onloan' => undef }, undef, $itemnumber );
+
+    if ( C4::Context->preference('StoreLastBorrower') ) {
+        my $item = Koha::Items->find( $itemnumber );
+        my $patron = Koha::Borrowers->find( $borrowernumber );
+        $item->last_returned_by( $patron );
+    }
 }
 
 =head2 _debar_user_on_return

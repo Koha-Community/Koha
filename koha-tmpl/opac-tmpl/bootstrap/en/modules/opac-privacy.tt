@@ -96,6 +96,7 @@
                             <p>Whatever your privacy rule you choose, you can delete all your reading history immediately by clicking here. <b>BE CAREFUL</b>. Once you've confirmed the deletion, no one can retrieve the list!</p>
                             <input type="submit" value="Immediate deletion" class="btn btn-danger" onclick="return confirmDelete(MSG_CONFIRM_AGAIN);" />
                         </form>
+                        [% IF Koha.Preference('StoreLastBorrower') %]<p id="store-last-borrower-msg">Please note, the last person to return an item is tracked for the management of items returned damaged.</p>[% END %]
                     [% END # / IF Ask_data %]
                 </div> <!-- / .userprivacy -->
             </div> <!-- / .span10 -->

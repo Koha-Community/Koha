@@ -563,6 +563,13 @@ OPAC:
 
     Privacy:
         -
+            - pref: StoreLastBorrower
+              default: 0
+              choices:
+                  yes: Store
+                  no: "Don't store"
+            - the last patron to return an item. This setting is independent of opacreadinghistory/AnonymousPatron.
+        -
             - pref: AnonSuggestions
               choices:
                   yes: Allow
@@ -623,7 +630,6 @@ OPAC:
             - pref: RestrictedPageTitle
               class: long
             - "as title of your restricted page (appears in the breadcrumb and on the top of the restricted page)"
-
     Shelf Browser:
         -
             - pref: OPACShelfBrowser

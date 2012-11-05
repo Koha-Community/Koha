@@ -18,11 +18,13 @@
 
 use Modern::Perl;
 
-use Test::More tests => 3;
+use Test::More tests => 4;
 
 use C4::Context;
 use C4::Circulation;
+
 use Koha::Database;
+use Koha::Items;
 
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -159,6 +161,86 @@ subtest 'AnonymousPatron is not defined' => sub {
         SELECT borrowernumber FROM old_issues where itemnumber = ?
     |, undef, $item->{itemnumber});
     is( $borrowernumber_used_to_anonymised, undef, 'With AnonymousPatron is not defined, the issue should have been anonymised anyway' );
+};
+
+subtest 'Test StoreLastBorrower' => sub {
+    plan tests => 4;
+
+    t::lib::Mocks::mock_preference( 'StoreLastBorrower', '1' );
+
+    my $patron = $builder->build(
+        {
+            source => 'Borrower',
+            value  => { privacy => 1, }
+        }
+    );
+
+    my $item = $builder->build(
+        {
+            source => 'Item',
+            value  => {
+                itemlost  => 0,
+                withdrawn => 0,
+            },
+        }
+    );
+
+    my $issue = $builder->build(
+        {
+            source => 'Issue',
+            value  => {
+                borrowernumber => $patron->{borrowernumber},
+                itemnumber     => $item->{itemnumber},
+            },
+        }
+    );
+
+    my $item_object   = Koha::Items->find( $item->{itemnumber} );
+    my $patron_object = $item_object->last_returned_by();
+    is( $patron_object, undef, 'Koha::Item::last_returned_by returned undef' );
+
+    my ( $returned, undef, undef ) = C4::Circulation::AddReturn( $item->{barcode}, undef, undef, undef, '2010-10-10' );
+
+    $item_object   = Koha::Items->find( $item->{itemnumber} );
+    $patron_object = $item_object->last_returned_by();
+    is( ref($patron_object), 'Koha::Borrower', 'Koha::Item::last_returned_by returned Koha::Borrower' );
+
+    $patron = $builder->build(
+        {
+            source => 'Borrower',
+            value  => { privacy => 1, }
+        }
+    );
+
+    $issue = $builder->build(
+        {
+            source => 'Issue',
+            value  => {
+                borrowernumber => $patron->{borrowernumber},
+                itemnumber     => $item->{itemnumber},
+            },
+        }
+    );
+
+    ( $returned, undef, undef ) = C4::Circulation::AddReturn( $item->{barcode}, undef, undef, undef, '2010-10-10' );
+
+    $item_object   = Koha::Items->find( $item->{itemnumber} );
+    $patron_object = $item_object->last_returned_by();
+    is( $patron_object->id, $patron->{borrowernumber}, 'Second patron to return item replaces the first' );
+
+    $patron = $builder->build(
+        {
+            source => 'Borrower',
+            value  => { privacy => 1, }
+        }
+    );
+    $patron_object = Koha::Borrowers->find( $patron->{borrowernumber} );
+
+    $item_object->last_returned_by($patron_object);
+    $item_object = Koha::Items->find( $item->{itemnumber} );
+    my $patron_object2 = $item_object->last_returned_by();
+    is( $patron_object->id, $patron_object2->id,
+        'Calling last_returned_by with Borrower object sets last_returned_by to that borrower' );
 };
 
 $schema->storage->txn_rollback;
