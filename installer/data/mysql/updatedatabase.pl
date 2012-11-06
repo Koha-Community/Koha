@@ -6336,7 +6336,6 @@ if ( CheckVersion($DBversion) ) {
    $dbh->do("INSERT INTO systempreferences ( variable, value, explanation, type ) VALUES ( 'SCOUserCSS', '', 'Add CSS to be included in the SCO module in an embedded <style> tag.', 'free' )");
    $dbh->do("INSERT INTO systempreferences ( variable, value, explanation, type ) VALUES ( 'SCOUserJS', '', 'Define custom javascript for inclusion in the SCO module', 'free' )");
    print "Upgrade to $DBversion done (Bug 9009: Add SCOUserCSS and SCOUserJS sysprefs)\n";
-   SetVersion ($DBversion);
 }
 
 $DBversion = "3.11.00.015";
@@ -6654,6 +6653,14 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     print "Upgrade to $DBversion done (Bug 7804: Added plugin system.)\n";
     SetVersion($DBversion);
 }
+
+$DBversion = "3.11.00.XXX";
+if ( CheckVersion($DBversion) ) {
+   $dbh->do("INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES ('TimeFormat','24hr','12hr|24hr','Defines the global time format for visual output.','Choice')");
+   print "Upgrade to $DBversion done (Bug 9014: Add syspref TimeFormat)\n";
+   SetVersion ($DBversion);
+}
+
 
 =head1 FUNCTIONS
 

@@ -5,7 +5,7 @@ use DateTime;
 use DateTime::TimeZone;
 
 use C4::Context;
-use Test::More tests => 28;
+use Test::More tests => 30;
 
 BEGIN { use_ok('Koha::DateUtils'); }
 
@@ -23,32 +23,38 @@ cmp_ok( $dt->ymd(), 'eq', $testdate_iso, 'Returned object matches input' );
 $dt->set_hour(12);
 $dt->set_minute(0);
 
-my $date_string = output_pref( $dt, 'iso' );
+my $date_string = output_pref( $dt, 'iso', '24hr' );
 cmp_ok $date_string, 'eq', '2011-06-16 12:00', 'iso output';
 
-my $date_string = output_pref( $dt, 'iso',1 );
+$date_string = output_pref( $dt, 'iso', '12hr' );
+cmp_ok $date_string, 'eq', '2011-06-16 12:00 PM', 'iso output 12hr';
+
+$date_string = output_pref( $dt, 'iso', undef, 1 );
 cmp_ok $date_string, 'eq', '2011-06-16', 'iso output (date only)';
 
-$date_string = output_pref( $dt, 'us' );
+$date_string = output_pref( $dt, 'us', '24hr' );
 cmp_ok $date_string, 'eq', '06/16/2011 12:00', 'us output';
 
-$date_string = output_pref( $dt, 'us', 1 );
+$date_string = output_pref( $dt, 'us', '12hr' );
+cmp_ok $date_string, 'eq', '06/16/2011 12:00 PM', 'us output 12hr';
+
+$date_string = output_pref( $dt, 'us', undef, 1 );
 cmp_ok $date_string, 'eq', '06/16/2011', 'us output (date only)';
 
 # metric should return the French Revolutionary Calendar Really
-$date_string = output_pref( $dt, 'metric' );
+$date_string = output_pref( $dt, 'metric', '24hr' );
 cmp_ok $date_string, 'eq', '16/06/2011 12:00', 'metric output';
 
-$date_string = output_pref( $dt, 'metric',1 );
+$date_string = output_pref( $dt, 'metric', undef, 1 );
 cmp_ok $date_string, 'eq', '16/06/2011', 'metric output (date only)';
 
-$date_string = output_pref_due( $dt, 'metric' );
+$date_string = output_pref_due( $dt, 'metric', '24hr' );
 cmp_ok $date_string, 'eq', '16/06/2011 12:00',
   'output_pref_due preserves non midnight HH:SS';
 
 $dt->set_hour(23);
 $dt->set_minute(59);
-$date_string = output_pref_due( $dt, 'metric' );
+$date_string = output_pref_due( $dt, 'metric', '24hr' );
 cmp_ok $date_string, 'eq', '16/06/2011',
   'output_pref_due truncates HH:SS at midnight';
 
@@ -87,20 +93,20 @@ cmp_ok( $dt0->ymd(), 'eq', $ymd, 'Returned object corrects iso day 0' );
 $dt0 = dt_from_string( '0000-00-00', 'iso' );
 is( $dt0, undef, "undefined returned for 0 iso date" );
 
-my $formatted = format_sqldatetime( '2011-06-16 12:00:07', 'metric' );
+my $formatted = format_sqldatetime( '2011-06-16 12:00:07', 'metric', '24hr' );
 cmp_ok( $formatted, 'eq', '16/06/2011 12:00', 'format_sqldatetime conversion' );
 
 $formatted = format_sqldatetime( undef, 'metric' );
 cmp_ok( $formatted, 'eq', q{},
     'format_sqldatetime formats undef as empty string' );
 
-$formatted = format_sqlduedatetime( '2011-06-16 12:00:07', 'metric' );
+$formatted = format_sqlduedatetime( '2011-06-16 12:00:07', 'metric', '24hr' );
 cmp_ok(
     $formatted, 'eq',
     '16/06/2011 12:00',
     'format_sqlduedatetime conversion for hourly loans'
 );
 
-$formatted = format_sqlduedatetime( '2011-06-16 23:59:07', 'metric' );
+$formatted = format_sqlduedatetime( '2011-06-16 23:59:07', 'metric', '24hr' );
 cmp_ok( $formatted, 'eq', '16/06/2011',
     'format_sqlduedatetime conversion for daily loans' );

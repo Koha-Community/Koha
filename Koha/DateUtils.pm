@@ -93,7 +93,7 @@ s/(\d{4})(\d{2})(\d{2})\s+(\d{2})(\d{2})(\d{2})/$1-$2-$3T$4:$5:$6/;
 
 =head2 output_pref
 
-$date_string = output_pref($dt, [$format] );
+$date_string = output_pref($dt, [$date_format], [$time_format] );
 
 Returns a string containing the time & date formatted as per the C4::Context setting,
 or C<undef> if C<undef> was provided.
@@ -101,7 +101,9 @@ or C<undef> if C<undef> was provided.
 A second parameter allows overriding of the syspref value. This is for testing only
 In usage use the DateTime objects own methods for non standard formatting
 
-A third parameter allows to specify if the output format contains the hours and minutes.
+A third parameter allows overriding of the TimeFormat syspref value
+
+A fourth parameter allows to specify if the output format contains the hours and minutes.
 If it is not defined, the default value is 0;
 
 =cut
@@ -109,32 +111,40 @@ If it is not defined, the default value is 0;
 sub output_pref {
     my $dt         = shift;
     my $force_pref = shift;         # if testing we want to override Context
+    my $force_time = shift;
     my $dateonly   = shift || 0;    # if you don't want the hours and minutes
 
     return unless defined $dt;
 
+    $dt->set_time_zone( C4::Context->tz );
+
     my $pref =
       defined $force_pref ? $force_pref : C4::Context->preference('dateformat');
+
+    my $time_format = $force_time || C4::Context->preference('TimeFormat');
+    my $time = ( $time_format eq '12hr' ) ? '%I:%M %p' : '%H:%M';
+
     given ($pref) {
         when (/^iso/) {
             return $dateonly
-                ? $dt->strftime('%Y-%m-%d')
-                : $dt->strftime('%Y-%m-%d %H:%M');
+                ? $dt->strftime("%Y-%m-%d")
+                : $dt->strftime("%Y-%m-%d $time");
         }
         when (/^metric/) {
             return $dateonly
-                ? $dt->strftime('%d/%m/%Y')
-                : $dt->strftime('%d/%m/%Y %H:%M');
+                ? $dt->strftime("%d/%m/%Y")
+                : $dt->strftime("%d/%m/%Y $time");
         }
         when (/^us/) {
+
             return $dateonly
-                ? $dt->strftime('%m/%d/%Y')
-                : $dt->strftime('%m/%d/%Y %H:%M');
+                ? $dt->strftime("%m/%d/%Y")
+                : $dt->strftime("%m/%d/%Y $time");
         }
         default {
             return $dateonly
-                ? $dt->strftime('%Y-%m-%d')
-                : $dt->strftime('%Y-%m-%d %H:%M');
+                ? $dt->strftime("%Y-%m-%d")
+                : $dt->strftime("%Y-%m-%d $time");
         }
 
     }
@@ -173,11 +183,14 @@ with output_pref as it is a frequent activity in scripts
 sub format_sqldatetime {
     my $str        = shift;
     my $force_pref = shift;    # if testing we want to override Context
+    my $force_time = shift;
+    my $dateonly   = shift;
+
     if ( defined $str && $str =~ m/^\d{4}-\d{2}-\d{2}/ ) {
         my $dt = dt_from_string( $str, 'sql' );
         return q{} unless $dt;
         $dt->truncate( to => 'minute' );
-        return output_pref( $dt, $force_pref );
+        return output_pref( $dt, $force_pref, $force_time, $dateonly );
     }
     return q{};
 }
@@ -194,10 +207,13 @@ with output_pref_due as it is a frequent activity in scripts
 sub format_sqlduedatetime {
     my $str        = shift;
     my $force_pref = shift;    # if testing we want to override Context
+    my $force_time = shift;
+    my $dateonly   = shift;
+
     if ( defined $str && $str =~ m/^\d{4}-\d{2}-\d{2}/ ) {
         my $dt = dt_from_string( $str, 'sql' );
         $dt->truncate( to => 'minute' );
-        return output_pref_due( $dt, $force_pref );
+        return output_pref_due( $dt, $force_pref, $force_time, $dateonly );
     }
     return q{};
 }
