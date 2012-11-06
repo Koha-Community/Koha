@@ -46,7 +46,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 
 my $params = $cgi->Vars; # NOTE: Multivalue parameters NOT allowed!!
 
-print $cgi->header('application/json');
+print $cgi->header('application/json; charset=utf-8');
 
 if ($params->{'action'} eq 'add') {
     my $sth = $dbh->prepare('INSERT INTO quotes (source, text) VALUES (?, ?);');
