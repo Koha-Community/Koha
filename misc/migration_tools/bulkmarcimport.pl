@@ -35,6 +35,7 @@ my ( $input_marc_file, $number, $offset) = ('',0,0);
 my ($version, $delete, $test_parameter, $skip_marc8_conversion, $char_encoding, $verbose, $commit, $fk_off,$format,$biblios,$authorities,$keepids,$match, $isbn_check, $logfile);
 my $cleanisbn = 1;
 my ($sourcetag,$sourcesubfield,$idmapfl, $dedup_barcode);
+my $framework = '';
 
 $|=1;
 
@@ -62,6 +63,7 @@ GetOptions(
     'idmap:s' => \$idmapfl,
     'cleanisbn!'     => \$cleanisbn,
     'dedupbarcode' => \$dedup_barcode,
+    'framework=s' => \$framework,
 );
 $biblios=!$authorities||$biblios;
 
@@ -154,7 +156,7 @@ if ($authorities){
 }
 else {
    ( $tagid, $subfieldid ) =
-            GetMarcFromKohaField( "biblio.biblionumber", '' );
+            GetMarcFromKohaField( "biblio.biblionumber", $framework );
 	$tagid||="001";
 }
 
@@ -308,7 +310,7 @@ RECORD: while (  ) {
 			}
 			else 
 			{
-                eval { ( $biblionumber, $biblioitemnumber ) = AddBiblio($record, '', { defer_marc_save => 1 }) };
+                eval { ( $biblionumber, $biblioitemnumber ) = AddBiblio($record, $framework, { defer_marc_save => 1 }) };
             }
             if ( $@ ) {
                 warn "ERROR: Adding biblio $biblionumber failed: $@\n";
@@ -326,7 +328,7 @@ RECORD: while (  ) {
             C4::Biblio::_strip_item_fields($clone_record, '');
             # This sets the marc fields if there was an error, and also calls
             # defer_marc_save.
-            ModBiblioMarc( $clone_record, $biblionumber, '' );
+            ModBiblioMarc( $clone_record, $biblionumber, $framework );
             if ( $error_adding ) {
                 warn "ERROR: Adding items to bib $biblionumber failed: $error_adding";
 				printlog({id=>$id||$originalid||$biblionumber, op=>"insertitem",status=>"ERROR"}) if ($logfile);
@@ -339,7 +341,7 @@ RECORD: while (  ) {
 			}
             if ($dedup_barcode && grep { exists $_->{error_code} && $_->{error_code} eq 'duplicate_barcode' } @$errors_ref) {
                 # Find the record called 'barcode'
-                my ($tag, $sub) = C4::Biblio::GetMarcFromKohaField('items.barcode', '');
+                my ($tag, $sub) = C4::Biblio::GetMarcFromKohaField('items.barcode', $framework);
                 # Now remove any items that didn't have a duplicate_barcode error,
                 # erase the barcodes on items that did, and re-add those items.
                 my %dupes;
@@ -372,7 +374,7 @@ RECORD: while (  ) {
                     printlog({id=>$id||$originalid||$biblionumber, op=>"insertitem",status=>"ERROR"}) if ($logfile);
                     # if we failed because of an exception, assume that
                     # the MARC columns in biblioitems were not set.
-                    ModBiblioMarc( $record, $biblionumber, '' );
+                    ModBiblioMarc( $record, $biblionumber, $framework );
                     next RECORD;
                 } else {
                     printlog({id=>$id||$originalid||$biblionumber, op=>"insert",status=>"ok"}) if ($logfile);
@@ -593,6 +595,12 @@ If set, whenever a duplicate barcode is detected, it is removed and the attempt
 to add the record is retried, thereby giving the record a blank barcode. This
 is useful when something has set barcodes to be a biblio ID, or similar
 (usually other software.)
+
+=item B<-framework>
+
+This is the code for the framework that the requested records will have attached
+to them when they are created. If not specified, then the default framework
+will be used.
 
 =back
 
