@@ -190,10 +190,22 @@ if ($op=~/else/) {
     
     $displayby||="STATUS";
     delete $$suggestion_ref{'branchcode'} if($displayby eq "branchcode");
+    # distinct values of display by
     my $criteria_list=GetDistinctValues("suggestions.".$displayby);
+    my (@criteria_dv, $criteria_has_empty);
+    foreach (@$criteria_list) {
+        if ($_->{value}) {
+            push @criteria_dv, $_->{value};
+        } else {
+            $criteria_has_empty = 1;
+        }
+    }
+    # agregate null and empty values under empty value
+    push @criteria_dv, '' if $criteria_has_empty;
+
     my @allsuggestions;
     my $reasonsloop = GetAuthorisedValues("SUGGEST");
-    foreach my $criteriumvalue ( map { $$_{'value'} } @$criteria_list ) {
+    foreach my $criteriumvalue ( @criteria_dv ) {
         # By default, display suggestions from current working branch
         if(not defined $branchfilter) {
             $$suggestion_ref{'branchcode'} = C4::Context->userenv->{'branch'};
@@ -356,15 +368,18 @@ $template->param(
 	total            => sprintf("%.2f", $$suggestion_ref{'total'}||0),
 );
 
+# lists of distinct values (without empty) for filters
 my %hashlists;
 foreach my $field ( qw(managedby acceptedby suggestedby budgetid) ) {
     my $values_list;
     $values_list = GetDistinctValues( "suggestions." . $field );
     my @codes_list = map {
         {   'code' => $$_{'value'},
-            'desc' => GetCriteriumDesc( $$_{'value'}, $field ),
+            'desc' => GetCriteriumDesc( $$_{'value'}, $field ) || $$_{'value'},
             'selected' => ($$suggestion_ref{$field}) ? $$_{'value'} eq $$suggestion_ref{$field} : 0,
         }
+    } grep {
+        $$_{'value'}
     } @$values_list;
     $hashlists{ lc($field) . "_loop" } = \@codes_list;
 }

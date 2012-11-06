@@ -121,7 +121,7 @@ sub SearchSuggestion  {
         push @sql_params,'%'.$s.'%'; 
         " and suggestions.$_ like ? ";
         } else { () }
-    } qw( title author isbn publishercode collectiontitle )
+    } qw( title author isbn publishercode copyrightdate collectiontitle )
     );
 
     my $userenv = C4::Context->userenv;
@@ -137,7 +137,7 @@ sub SearchSuggestion  {
     foreach my $field (grep { my $fieldname=$_;
         any {$fieldname eq $_ } qw<
     STATUS branchcode itemtype suggestedby managedby acceptedby
-    bookfundid biblionumber
+    budgetid biblionumber
     >} keys %$suggestion
     ) {
         if ($$suggestion{$field}){
@@ -155,7 +155,7 @@ sub SearchSuggestion  {
         my $from = $_ . "_from";
         my $to = $_ . "_to";
         if ($$suggestion{$from} || $$suggestion{$to}) {
-            push @query, " AND suggestions.suggesteddate BETWEEN '" 
+            push @query, " AND suggestions.$_ BETWEEN '"
                 . (format_date_in_iso($$suggestion{$from}) || 0000-00-00) . "' AND '" . (format_date_in_iso($$suggestion{$to}) || $today) . "'";
         } 
     }
