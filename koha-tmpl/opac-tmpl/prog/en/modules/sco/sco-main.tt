@@ -114,12 +114,12 @@ $(document).ready(function(){
 <div id="bd">
 
 [% IF ( impossible ) %]<!-- We tried to issue, but failed. -->
-<div class="dialog alert"><h3>Item cannot be checked out.</h3><p>Sorry, This item cannot be checked out at this station.  </p>
+<div class="dialog alert"><h3>Item cannot be checked out.</h3><p>Sorry, this item cannot be checked out at this station.  </p>
 [% IF ( title ) %]<p>Title: <em>[% title |html %]</em> </p>[% END %]
 <p>
    [% IF ( circ_error_UNKNOWN_BARCODE ) %]
     <em>MESSAGE 1:</em> The system does not recognize this barcode.
-   [% ELSIF ( circ_error_TOO_MANY ) %]
+   [% ELSIF ( circ_error_max_loans_allowed ) %]
     <em>MESSAGE 2:</em> You have checked out too many items and can't check out any more.
    [% ELSIF ( circ_error_ISSUED_TO_ANOTHER ) %]
     <em>MESSAGE 3:</em> This item is checked out to someone else.
@@ -158,14 +158,14 @@ $(document).ready(function(){
     <input type="hidden" name="barcode" value="[% barcode %]" />
     <input type="submit" name="returnbook" value="Return this item" class="return" />
 </form>
+[% END %]
+[% END %]
 <form action="/cgi-bin/koha/sco/sco-main.pl" name="errorForm" class="inline" method="post">
     <input type="hidden" name="op" value="" />
     <input type="hidden" name="patronid" value="[% patronid %]" />
     <input type="hidden" name="barcode" value="[% barcode %]" />
     <input type="submit" name= "confirm" value="Return to account summary" class="back focus" />
 </form>
-[% END %]
-[% END %]
 [% END %]
 [% IF ( confirm ) %]<!-- We need to confirm the issue.. -->
 <div class="dialog alert"><h3>Please confirm the checkout:</h3>
@@ -276,19 +276,21 @@ Sorry, this self-checkout station has lost authentication.  Please contact the a
 	[% IF ( ISSUE.overdue ) %]<td class="overdue">[% ISSUE.date_due | $KohaDates %]</td>[% ELSE %]<td>[% ISSUE.date_due | $KohaDates %]</td>[% END %]
 	<td>
     <form action="/cgi-bin/koha/sco/sco-main.pl" method="post">
-    <input type="hidden" name="op" value="checkout" />
     <input type="hidden" name="patronid" value="[% patronid %]" />
     <input type="hidden" name="barcode" value="[% ISSUE.barcode %]" />
-    <input type="hidden" name="confirmed" value=""  />
         [% IF ( ISSUE.norenew ) %]
-          [% IF ( ISSUE.AllowSelfCheckReturns ) %]
-          <input type="button" value="Return Item" name="confirm" class="return" onclick="this.form.op.value='returnbook';this.form.submit();"  />
+          [% IF ( AllowSelfCheckReturns ) %]
+            <input type="submit" value="Check in item" name="confirm" class="return" />
+            <input type="hidden" name="op" value="returnbook" />
+            <input type="hidden" name="confirmed" value=""  />
           [% ELSE %]
-          <span>No renewals allowed</span>
+            <span>No renewals allowed</span>
           [% END %]
         [% ELSE %]
-            [% UNLESS ( ISSUE.renew ) %]<input type="button" value="Renew Item"  name="confirm" class="renew" onclick="this.form.confirmed.value='1';this.form.submit();" />
-            [% ELSE %]<input type="button" value="Renew Item" class="renew" onclick="this.form.confirmed.value='1';this.form.submit();" />[% END %]
+            <input type="hidden" name="op" value="checkout" />
+            <input type="hidden" name="confirmed" value="1" />
+            [% UNLESS ( ISSUE.renew ) %]<input type="submit" value="Renew item"  name="confirm" class="renew" />
+            [% ELSE %]<input type="submit" value="Renew item" class="renew" />[% END %]
         [% END %]
     </form>
 	</td>
