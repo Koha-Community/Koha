@@ -6341,9 +6341,9 @@ if ( CheckVersion($DBversion) ) {
 
 $DBversion = "3.11.00.XXX";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('RentalsInNoissueCharges', '1', 'Include rental charges when summing up charges for NoissueCharge.',NULL,'YesNo');");
-    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('ManInvInNoissueCharges', '1', 'Include MAN_INV charges when summing up charges for NoissueCharge.',NULL,'YesNo');");
-    print "Upgrade to $DBversion done (Add sysprefs RentalsInNoissueCharges and ManInvInNoissueCharges.)\n";
+    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('RentalsInNoissuesCharge', '1', 'Rental charges block checkouts (added to noissuescharge).',NULL,'YesNo');");
+    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('ManInvInNoissuesCharge', '1', 'MANUAL_INV charges block checkouts (added to noissuescharge).',NULL,'YesNo');");
+    print "Upgrade to $DBversion done (Add sysprefs RentalsInNoissuesCharge and ManInvInNoissuesCharge.)\n";
     SetVersion($DBversion);
 }
 

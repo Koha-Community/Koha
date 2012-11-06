@@ -432,7 +432,7 @@ sub patronflags {
     my %flags;
     my ( $patroninformation) = @_;
     my $dbh=C4::Context->dbh;
-    my ($ballance, $owing) = GetMemberAccountBallance( $patroninformation->{'borrowernumber'});
+    my ($balance, $owing) = GetMemberAccountBalance( $patroninformation->{'borrowernumber'});
     if ( $owing > 0 ) {
         my %flaginfo;
         my $noissuescharge = C4::Context->preference("noissuescharge") || 5;
@@ -443,10 +443,10 @@ sub patronflags {
         }
         $flags{'CHARGES'} = \%flaginfo;
     }
-    elsif ( $ballance < 0 ) {
+    elsif ( $balance < 0 ) {
         my %flaginfo;
-        $flaginfo{'message'} = sprintf "Patron has credit of \$%.02f", -$ballance;
-        $flaginfo{'amount'}  = sprintf "%.02f", $ballance;
+        $flaginfo{'message'} = sprintf "Patron has credit of \$%.02f", -$balance;
+        $flaginfo{'amount'}  = sprintf "%.02f", $balance;
         $flags{'CREDITS'} = \%flaginfo;
     }
     if (   $patroninformation->{'gonenoaddress'}
@@ -1156,31 +1156,31 @@ sub GetMemberAccountRecords {
     return ( $total, \@acctlines,$numlines);
 }
 
-=head2 GetMemberAccountBallance
+=head2 GetMemberAccountBalance
 
-  ($total_ballance, $non_issue_ballance, $other_charges) = &GetMemberAccountBallance($borrowernumber);
+  ($total_balance, $non_issue_balance, $other_charges) = &GetMemberAccountBalance($borrowernumber);
 
 Calculates amount immediately owing by the patron - non-issue charges.
 Based on GetMemberAccountRecords.
 Charges exempt from non-issue are:
 * Res (reserves)
-* Rent (rental) if RentalsInNoissueCharges syspref is set to false
-* Manual invoices if ManInvInNoissueCharges syspref is set to false
+* Rent (rental) if RentalsInNoissuesCharge syspref is set to false
+* Manual invoices if ManInvInNoissuesCharge syspref is set to false
 
 =cut
 
 my $ACCOUNT_TYPE_LENGTH = 5; # this is plain ridiculous...
 
 my @not_fines = ('Res');
-push @not_fines, 'Rent' unless C4::Context->preference('RentalsInNoissueCharges');
-unless ( C4::Context->preference('ManInvInNoissueCharges') ) {
+push @not_fines, 'Rent' unless C4::Context->preference('RentalsInNoissuesCharge');
+unless ( C4::Context->preference('ManInvInNoissuesCharge') ) {
     my $dbh = C4::Context->dbh;
     my $man_inv_types = $dbh->selectcol_arrayref(qq{SELECT authorised_value FROM authorised_values WHERE category = 'MANUAL_INV'});
     push @not_fines, map substr($_, 0, $ACCOUNT_TYPE_LENGTH), @$man_inv_types;
 }
 my %not_fine = map {$_ => 1} @not_fines;
 
-sub GetMemberAccountBallance {
+sub GetMemberAccountBalance {
     my ($borrowernumber) = @_;
 
     my ($total, $acctlines) = GetMemberAccountRecords($borrowernumber);
