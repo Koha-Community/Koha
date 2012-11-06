@@ -21,9 +21,7 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 use strict;
-#use warnings; FIXME - Bug 2505
-
-use open OUT=>":encoding(UTF-8)", ':std';
+use warnings;
 
 # standard or CPAN modules used
 use CGI qw(:standard);
@@ -39,35 +37,23 @@ use C4::ImportBatch;
 use XML::LibXSLT;
 use XML::LibXML;
 
-my $input       = new CGI;
-my $biblionumber = $input->param('id');
-my $importid		=	$input->param('importid');
-my $view		= $input->param('viewas');
+my $input= new CGI;
+my $biblionumber= $input->param('id');
+my $importid= $input->param('importid');
+my $view= $input->param('viewas')||'';
 
-my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-    {
-        template_name   => "catalogue/showmarc.tmpl",
-        query           => $input,
-        type            => "intranet",
-        authnotrequired => 0,
-        flagsrequired   => { catalogue => 1  },
-        debug           => 1,
-    }
-);
-
-$template->param( SCRIPT_NAME => $ENV{'SCRIPT_NAME'}, );
-my ($record, $xmlrecord);
-if($importid) {
-	my ($marc,$encoding) = GetImportRecordMarc($importid);
-		$record = MARC::Record->new_from_usmarc($marc) ;
- 	if($view eq 'card') {
-		$xmlrecord = $record->as_xml();
-	} 
+my $record;
+if ($importid) {
+    my ($marc) = GetImportRecordMarc($importid);
+    $record = MARC::Record->new_from_usmarc($marc);
+}
+else {
+    $record =GetMarcBiblio($biblionumber);
 }
 
 if($view eq 'card') {
     my $themelang = '/' . C4::Context->preference("opacthemes") .  '/' . C4::Templates::_current_language();
-    $xmlrecord = GetXmlBiblio($biblionumber) unless $xmlrecord;
+    my $xmlrecord= $importid? $record->as_xml(): GetXmlBiblio($biblionumber);
     my $xslfile =
       C4::Context->config('intrahtdocs') . $themelang . "/xslt/compact.xsl";
     my $parser       = XML::LibXML->new();
@@ -77,18 +63,19 @@ if($view eq 'card') {
     my $stylesheet   = $xslt->parse_stylesheet($style_doc);
     my $results      = $stylesheet->transform($source);
     my $newxmlrecord = $stylesheet->output_string($results);
-    $newxmlrecord = Encode::decode_utf8($newxmlrecord)
-      unless utf8::is_utf8($newxmlrecord)
-    ;    #decode only if not in perl internal format
-    print $input->header( -charset => 'UTF-8' ), $newxmlrecord;
+    print $input->header(-charset => 'UTF-8'), Encode::encode_utf8($newxmlrecord);
 }
 else {
-    $record =GetMarcBiblio($biblionumber) unless $record;
-
-    my $formatted = $record->as_formatted;
-    $template->param( MARC_FORMATTED => $formatted );
-
-    my $output= $template->output;
-    $output=Encode::decode_utf8($output) unless utf8::is_utf8($output);
-    output_html_with_http_headers $input, $cookie, $output;
+    my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+      {
+        template_name   => "catalogue/showmarc.tmpl",
+        query           => $input,
+        type            => "intranet",
+        authnotrequired => 0,
+        flagsrequired   => { catalogue => 1  },
+        debug           => 1,
+      }
+    );
+    $template->param( MARC_FORMATTED => $record->as_formatted );
+    output_html_with_http_headers $input, $cookie, $template->output;
 }
