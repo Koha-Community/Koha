@@ -16,3 +16,93 @@ VALUES ('circulation','ODUE','Mahnung','Mahnung','Liebe/r <<borrowers.firstname>
 ('suggestions','AVAILABLE','Vorgeschlagenes Medium verfügbar', 'Das vorgeschlagene Medium ist jetzt verfügbar','Liebe(r) <<borrowers.firstname>> <<borrowers.surname>>,\n\nSie haben der Bibliothek folgendes Medium zur Anschaffung vorgeschlagen: <<suggestions.title>> von <<suggestions.author>>.\n\nWir freuen uns Ihnen mitteilen zu können, dass dieser Titel jetzt im Bestand der Bibliothek verfügbar ist.\n\nWenn Sie Fragen haben, richten Sie Ihre Mail bitte an: <<branches.branchemail>>.\n\nVielen Dank,\n\n<<branches.branchname>>'),
 ('suggestions','ORDERED','Vorgeschlagenes Medium bestellt', 'Das vorgeschlagene Medium wurde im Buchhandel bestellt','Liebe(r) <<borrowers.firstname>> <<borrowers.surname>>,\n\nSie haben der Bibliothek folgendes Medium zur Anschaffung vorgeschlaten: <<suggestions.title>> von <<suggestions.author>>.\n\nWir freuen uns Ihnen mitteilen zu können, dass dieser Titel jetzt im Buchhandel bestellt wurde. Nach Eintreffen wird er in unseren Bestand eingearbeitet.\n\nSie erhalten Nachricht, sobald das Medium verfügbar ist.\n\nBei Nachfragen erreichen Sie uns unter der Emailadresse <<branches.branchemail>>.\n\nVielen Dank,\n\n<<branches.branchname>>'),
 ('suggestions','REJECTED','Anschaffungsvorschlag nicht angenommen', 'Ihr Anschaffungsvorschlag wurde nicht angenommen','Liebe(r) <<borrowers.firstname>> <<borrowers.surname>>,\n\nSie haven der Bibliothek folgendes Medium zur Anschaffung vorgeschlagen: <<suggestions.title>> von <<suggestions.author>>.\n\nDie Bibliothek hat diesen Titel heute recherchiert und sich gegen eine Anschaffung entschieden.\n\nBegründung: <<suggestions.reason>>\n\nWenn Sie Fragen haben, richten Sie Ihre Mail bitte an: <<branches.branchemail>>.\n\nVielen Dank,\n\n<<branches.branchname>>');
+
+INSERT INTO `letter` (module, code, name, title, content, is_html)
+VALUES ('circulation','ISSUESLIP','Ausleihquittung (Quittungsdruck)','Ausleihquittung (Quittungsdruck)', '<h3><<branches.branchname>></h3>
+Ausleihe an: <<borrowers.firstname>> <<borrowers.initials>> <<borrowers.surname>> <br />
+(<<borrowers.cardnumber>>) <br />
+
+<<today>><br />
+
+<h4>Ausleihen</h4>
+<checkedout>
+<p>
+<<biblio.title>> <br />
+Barcode: <<items.barcode>><br />
+Fällig am: <<issues.date_due>><br />
+</p>
+</checkedout>
+
+<h4>Überfällig</h4>
+<overdue>
+<p>
+<<biblio.title>> <br />
+Barcode: <<items.barcode>><br />
+Fällig am: <<issues.date_due>><br />
+</p>
+</overdue>
+
+<hr>
+
+<h4 style="text-align: center; font-style:italic;">News</h4>
+<news>
+<div class="newsitem">
+<h5 style="margin-bottom: 1px; margin-top: 1px"><b><<opac_news.title>></b></h5>
+<p style="margin-bottom: 1px; margin-top: 1px"><<opac_news.new>></p>
+<p class="newsfooter" style="font-size: 8pt; font-style:italic; margin-bottom: 1px; margin-top: 1px">Posted on <<opac_news.timestamp>></p>
+<hr />
+</div>
+</news>', 1),
+('circulation','ISSUEQSLIP','Kurzquittung','Kurzquittung', '<h3><<branches.branchname>></h3>
+Ausleihe an: <<borrowers.firstname>> <<borrowers.initials>> <<borrowers.surname>> <br />
+(<<borrowers.cardnumber>>) <br />
+
+<<today>><br />
+
+<h4>Heutige Ausleihen</h4>
+<checkedout>
+<p>
+<<biblio.title>> <br />
+Barcode: <<items.barcode>><br />
+Fällig am: <<issues.date_due>><br />
+</p>
+</checkedout>', 1),
+('circulation','RESERVESLIP','Vormerkquittung','Vormerkquittung', '<h5>Datum: <<today>></h5>
+
+<h3> Bereitstellung in <<branches.branchname>></h3>
+
+<h3><<borrowers.surname>>, <<borrowers.firstname>></h3>
+
+<ul>
+    <li><<borrowers.cardnumber>></li>
+    <li><<borrowers.phone>></li>
+    <li> <<borrowers.address>><br />
+         <<borrowers.address2>><br />
+         <<borrowers.city >>  <<borrowers.zipcode>>
+    </li>
+    <li><<borrowers.email>></li>
+</ul>
+<br />
+<h3>VORMERKUNG</h3>
+<h4><<biblio.title>></h4>
+<h5><<biblio.author>></h5>
+<ul>
+   <li><<items.barcode>></li>
+   <li><<items.itemcallnumber>></li>
+   <li><<reserves.waitingdate>></li>
+</ul>
+<p>Notiz:
+<pre><<reserves.reservenotes>></pre>
+</p>
+', 1),
+('circulation','TRANSFERSLIP','Transportquittung','Transportquittung', '<h5>Datum: <<today>></h5>
+
+<h3>Transport nach <<branches.branchname>></h3>
+
+<h3>EXEMPLAR</h3>
+<h4><<biblio.title>></h4>
+<h5><<biblio.author>></h5>
+<ul>
+   <li><<items.barcode>></li>
+   <li><<items.itemcallnumber>></li>
+</ul>', 1);
