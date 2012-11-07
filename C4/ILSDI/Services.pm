@@ -197,6 +197,12 @@ sub GetRecords {
             $biblioitem->{code} = "RecordNotFound";
         }
 
+        my $embed_items = 1;
+        my $record = GetMarcBiblio($biblionumber, $embed_items);
+        if ($record) {
+            $biblioitem->{marcxml} = $record->as_xml_record();
+        }
+
         # We don't want MARC to be displayed
         delete $biblioitem->{'marc'};
 
