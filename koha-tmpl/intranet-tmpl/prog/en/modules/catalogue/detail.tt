@@ -45,6 +45,25 @@ function verify_images() {
      });[% END %]
 //]]>
 </script>
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.columnFilter.js"></script>
+[% INCLUDE 'datatables-strings.inc' %]
+<script type="text/javascript" src="[% themelang %]/js/datatables.js"></script>
+<script type="text/javascript">
+//<![CDATA[
+    $(document).ready(function() {
+        for (id in {holdings:0, otherholdings:0}) {
+            $("#"+ id +" > table").dataTable($.extend(true, {}, dataTablesDefaults, {
+                'sDom': 't',
+                'bPaginate': false
+            })).columnFilter({
+                'sPlaceHolder': 'head:after'
+            });
+        }
+    });
+//]]>
+</script>
 </head>
 
 <body id="catalog_detail" class="catalog">
@@ -278,24 +297,27 @@ function verify_images() {
 [% BLOCK items_table %]
     <table>
         <thead>
-            <tr>
-                [% IF ( item_level_itypes ) %]<th>Item type</th>[% END %]
-                <th>Current location</th>
-                <th>Home Library</th>
-                [% IF ( itemdata_ccode ) %]<th>Collection</th>[% END %]
-                <th>Call number</th>
-                <th>Status</th>
-                <th>Last seen</th>
-                <th>Barcode</th>
-                [% IF ( volinfo ) %]<th>Publication details</th>[% END %]
-                [% IF ( itemdata_uri ) %]<th>url</th>[% END %]
-                [% IF ( itemdata_copynumber ) %]<th>Copy no.</th>[% END %]
-                [% IF materials %]<th>Materials specified</th>[% END %]
-                [% IF ( itemdata_itemnotes ) %]<th>Public notes</th>[% END %]
-                [% IF ( SpineLabelShowPrintOnBibDetails ) %]<th>Spine label</th>[% END %]
-                [% IF ( hostrecords ) %]<th>Host records</th>[% END %]
-                [% IF ( analyze ) %]<th>Used in</th><th></th>[% END %]
-            </tr>
+            [%# duplicate the header row for columnFilter %]
+            [% FOREACH i IN [1,2] %]
+                <tr>
+                    [% IF ( item_level_itypes ) %]<th>Item type</th>[% END %]
+                    <th>Current location</th>
+                    <th>Home Library</th>
+                    [% IF ( itemdata_ccode ) %]<th>Collection</th>[% END %]
+                    <th>Call number</th>
+                    <th>Status</th>
+                    <th>Last seen</th>
+                    <th>Barcode</th>
+                    [% IF ( volinfo ) %]<th>Publication details</th>[% END %]
+                    [% IF ( itemdata_uri ) %]<th>url</th>[% END %]
+                    [% IF ( itemdata_copynumber ) %]<th>Copy no.</th>[% END %]
+                    [% IF materials %]<th>Materials specified</th>[% END %]
+                    [% IF ( itemdata_itemnotes ) %]<th>Public notes</th>[% END %]
+                    [% IF ( SpineLabelShowPrintOnBibDetails ) %]<th>Spine label</th>[% END %]
+                    [% IF ( hostrecords ) %]<th>Host records</th>[% END %]
+                    [% IF ( analyze ) %]<th>Used in</th><th></th>[% END %]
+                </tr>
+            [% END %]
         </thead>
         <tbody>
             [% FOREACH item IN items %]
