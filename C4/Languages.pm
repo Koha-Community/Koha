@@ -179,19 +179,35 @@ Returns a reference to an array of hashes:
 =cut
 
 sub getAllLanguages {
+    my $lang = shift;
+# if no parameter is passed to the function, it returns english languages names
+# if a $lang parameter conforming to RFC4646 syntax is passed, the function returns languages names translated in $lang
+# if a language name is not translated in $lang in database, the function returns english language name
     my @languages_loop;
     my $dbh=C4::Context->dbh;
-    my $current_language = shift || 'en';
+    my $default_language = 'en';
+    my $current_language = $default_language;
+    if ($lang) {
+        $current_language = regex_lang_subtags($lang)->{'language'};
+    }
     my $sth = $dbh->prepare('SELECT * FROM language_subtag_registry WHERE type=\'language\'');
     $sth->execute();
     while (my $language_subtag_registry = $sth->fetchrow_hashref) {
-
-        # pull out all the script descriptions for each language
+        my $desc;
+        # check if language name is stored in current language
+        my $sth4= $dbh->prepare("SELECT description FROM language_descriptions WHERE type='language' AND subtag =? AND lang = ?");
+        $sth4->execute($language_subtag_registry->{subtag},$current_language);
+        while (my $language_desc = $sth4->fetchrow_hashref) {
+             $desc=$language_desc->{description};
+        }
         my $sth2= $dbh->prepare("SELECT * FROM language_descriptions LEFT JOIN language_rfc4646_to_iso639 on language_rfc4646_to_iso639.rfc4646_subtag = language_descriptions.subtag WHERE type='language' AND subtag =? AND language_descriptions.lang = ?");
-        $sth2->execute($language_subtag_registry->{subtag},$current_language);
-
+        if ($desc) {
+            $sth2->execute($language_subtag_registry->{subtag},$current_language);
+        }
+        else {
+            $sth2->execute($language_subtag_registry->{subtag},$default_language);
+        }
         my $sth3 = $dbh->prepare("SELECT description FROM language_descriptions WHERE type='language' AND subtag=? AND lang=?");
-
         # add the correct description info
         while (my $language_descriptions = $sth2->fetchrow_hashref) {
             $sth3->execute($language_subtag_registry->{subtag},$language_subtag_registry->{subtag});

@@ -158,7 +158,7 @@ use CGI qw('-no_undef_params');
 my $cgi = new CGI;
 
 my ($template,$borrowernumber,$cookie);
-
+my $lang = C4::Templates::getlanguage($cgi, 'intranet');
 # decide which template to use
 my $template_name;
 my $template_type;
@@ -334,7 +334,7 @@ if ( $template_type eq 'advsearch' ) {
                       search_boxes_loop => \@search_boxes_array);
 
     # load the language limits (for search)
-    my $languages_limit_loop = getAllLanguages();
+    my $languages_limit_loop = getAllLanguages($lang);
     $template->param(search_languages_loop => $languages_limit_loop,);
 
     # Expanded search options in advanced search:
@@ -477,7 +477,6 @@ my ( $error,$query,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit
 my @results;
 
 ## I. BUILD THE QUERY
-my $lang = C4::Templates::getlanguage($cgi, 'intranet');
 ( $error,$query,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit_desc,$stopwords_removed,$query_type) = buildQuery(\@operators,\@operands,\@indexes,\@limits,\@sort_by,$scan,$lang);
 
 ## parse the query_cgi string and put it into a form suitable for <input>s
