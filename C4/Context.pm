@@ -523,12 +523,13 @@ with this method.
 # flushing the caching mechanism.
 
 my %sysprefs;
+my $use_syspref_cache = 1;
 
 sub preference {
     my $self = shift;
     my $var  = lc(shift);                          # The system preference to return
 
-    if (exists $sysprefs{$var}) {
+    if ($use_syspref_cache && exists $sysprefs{$var}) {
         return $sysprefs{$var};
     }
 
@@ -550,6 +551,35 @@ sub boolean_preference {
     my $var = shift;        # The system preference to return
     my $it = preference($self, $var);
     return defined($it)? C4::Boolean::true_p($it): undef;
+}
+
+=head2 enable_syspref_cache
+
+  C4::Context->enable_syspref_cache();
+
+Enable the in-memory syspref cache used by C4::Context. This is the
+default behavior.
+
+=cut
+
+sub enable_syspref_cache {
+    my ($self) = @_;
+    $use_syspref_cache = 1;
+}
+
+=head2 disable_syspref_cache
+
+  C4::Context->disable_syspref_cache();
+
+Disable the in-memory syspref cache used by C4::Context. This should be
+used with Plack and other persistent environments.
+
+=cut
+
+sub disable_syspref_cache {
+    my ($self) = @_;
+    $use_syspref_cache = 0;
+    $self->clear_syspref_cache();
 }
 
 =head2 clear_syspref_cache
