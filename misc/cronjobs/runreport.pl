@@ -29,6 +29,7 @@ use Mail::Sendmail;
 use Text::CSV_XS;
 use CGI;
 use Carp;
+use Encode;
 
 use vars qw($VERSION);
 
@@ -245,8 +246,8 @@ foreach my $report_id (@ARGV) {
         my %mail = (
             To      => $to,
             From    => $from,
-            Subject => $subject,
-            Message => $message 
+            Subject => encode('utf8', $subject ),
+            Message => encode('utf8', $message )
         );
         sendmail(%mail) or carp 'mail not sent:' . $Mail::Sendmail::error;
     } else {
