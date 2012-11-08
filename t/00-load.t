@@ -45,6 +45,7 @@ find(
             $m =~ s{^.*/Koha/}{Koha/};
             $m =~ s{/}{::}g;
             return if $m =~ /Koha::SearchEngine::/; # Koha::SearchEngine::* are experimental
+            return if $m =~ /Koha::Cache::Memcached/; # optional dependency
             use_ok($m) || BAIL_OUT("***** PROBLEMS LOADING FILE '$m'");
         },
     },
