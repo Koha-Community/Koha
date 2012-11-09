@@ -56,7 +56,8 @@ function verify_images() {
         for (id in {holdings:0, otherholdings:0}) {
             $("#"+ id +" > table").dataTable($.extend(true, {}, dataTablesDefaults, {
                 'sDom': 't',
-                'bPaginate': false
+                'bPaginate': false,
+                'bAutoWidth': false
             })).columnFilter({
                 'sPlaceHolder': 'head:after'
             });
