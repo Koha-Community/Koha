@@ -381,8 +381,8 @@ if ( C4::Context->preference("LocalCoverImages") == 1 ) {
 }
 
 # HTML5 Media
-if ( (C4::Context->preference("HTML5MediaEnabled") eq 'staff') || (C4::Context->preference("HTML5MediaEnabled") eq 'both') ) {
-    $template = C4::HTML5Media->gethtml5media($template,$record);
+if ( (C4::Context->preference("HTML5MediaEnabled") eq 'both') or (C4::Context->preference("HTML5MediaEnabled") eq 'staff') ) {
+    $template->param( C4::HTML5Media->gethtml5media($record));
 }
 
 

@@ -1062,7 +1062,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 [% IF ( HTML5MediaEnabled ) %]
 <div id="html5media">
         <p>
-        <[% HTML5MediaParent %][% HTML5MediaWidth %] controls preload=none>
+        <[% HTML5MediaParent %] controls preload=none>
           [% FOREACH HTML5MediaSet IN HTML5MediaSets %]
             <[% HTML5MediaSet.child  %] src="[% HTML5MediaSet.srcblock %]"[% HTML5MediaSet.typeblock %] />
           [% END %]

@@ -36,13 +36,12 @@ This module gets the relevant data from field 856 (MARC21/UNIMARC) to create a H
 
 =head2 gethtml5media
 
-Get all relevant data from field 856. Takes $template and $record in the subroutine call, sets appropriate params.
+Get all relevant data from field 856. Takes a $record in the subroutine call, sets appropriate params.
 
 =cut
 
 sub gethtml5media {
     my $self = shift;
-    my $template = shift;
     my $record = shift;
     my @HTML5Media_sets = ();
     my @HTML5Media_fields = $record->field(856);
@@ -189,38 +188,36 @@ sub gethtml5media {
         }
     }
     # parent element
-    for my $i ( 0 .. $#HTML5Media_sets ) {
-        if ( ($HTML5Media_sets[$i]{mime}) && ($HTML5Media_sets[$i]{mime} =~ /audio/) ) {
+    for my $media ( @HTML5Media_sets ) {
+        if ( ($media->{mime}) && ($media->{mime} =~ /audio/) ) {
             if ( $HTML5MediaParent ne 'video' ) {
                 $HTML5MediaParent = 'audio';
                 $HTML5MediaWidth = '';
             }
         }
-        elsif ( ($HTML5Media_sets[$i]{mime}) && ($HTML5Media_sets[$i]{mime} =~ /video/) ) {
+        elsif ( ($media->{mime}) && ($media->{mime} =~ /video/) ) {
             $HTML5MediaParent = 'video';
             $HTML5MediaWidth = ' width="480"';
         }
     }
     # child element
-    for my $j ( 0 .. $#HTML5Media_sets ) {
-        if ( ($HTML5Media_sets[$j]{type}) && ( ($HTML5Media_sets[$j]{type} eq 'video') || ($HTML5Media_sets[$j]{type} eq 'audio') ) ) {
-            if ( $HTML5Media_sets[$j]{type} eq $HTML5MediaParent ) {
-                $HTML5Media_sets[$j]{child} = 'source';
+    for my $media ( @HTML5Media_sets ) {
+        if ( ($media->{type}) && ( ($media->{type} eq 'video') || ($media->{type} eq 'audio') ) ) {
+            if ( $media->{type} eq $HTML5MediaParent ) {
+                $media->{child} = 'source';
             }
         }
         else {
-            $HTML5Media_sets[$j]{child} = $HTML5Media_sets[$j]{type};
+            $media->{child} = $media->{type};
         }
     }
-    # template parameters
-    if ( (scalar(@HTML5Media_sets) > 0) && ($HTML5MediaParent) ) {
-        $template->param(
-            HTML5MediaEnabled  => 1,
-            HTML5MediaSets     => \@HTML5Media_sets,
-            HTML5MediaParent   => $HTML5MediaParent,
-            HTML5MediaWidth    => $HTML5MediaWidth);
-    }
-    return $template;
+
+    return (
+        HTML5MediaEnabled  => ( (scalar(@HTML5Media_sets) > 0) && ($HTML5MediaParent) ),
+        HTML5MediaSets     => \@HTML5Media_sets,
+        HTML5MediaParent   => $HTML5MediaParent,
+        HTML5MediaWidth    => $HTML5MediaWidth,
+    );
 }
 
 1;

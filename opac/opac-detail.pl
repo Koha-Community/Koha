@@ -778,8 +778,8 @@ if (C4::Context->preference("OPACLocalCoverImages")){
 }
 
 # HTML5 Media
-if ( (C4::Context->preference("HTML5MediaEnabled") eq 'opac') || (C4::Context->preference("HTML5MediaEnabled") eq 'both') ) {
-    $template = C4::HTML5Media->gethtml5media($template,$record);
+if ( (C4::Context->preference("HTML5MediaEnabled") eq 'both') or (C4::Context->preference("HTML5MediaEnabled") eq 'opac') ) {
+    $template->param( C4::HTML5Media->gethtml5media($record));
 }
 
 my $syndetics_elements;
