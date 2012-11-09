@@ -22,7 +22,8 @@ BEGIN {
     # find Koha's Perl modules
     # test carefully before changing this
     use FindBin;
-    eval { require "$FindBin::Bin/../kohalib.pl" };
+    my $lib = "$FindBin::Bin/../kohalib.pl";
+    eval { require $lib };
 }
 
 use Getopt::Long;
@@ -61,11 +62,8 @@ sub fix_mysql_constraints {
             AND CONSTRAINT_TYPE != 'PRIMARY KEY' ")};
 
     my $base_dir = C4::Context->config('intranetdir');
-    open my $fh, "<", "$base_dir/installer/data/mysql/kohastructure.sql";
-    unless ($fh) {
-        say "Unable to open kohastructure.sql file";
-        exit;
-    }
+    open my $fh, "<", "$base_dir/installer/data/mysql/kohastructure.sql"
+        or die "Unable to open kohastructure.sql file";
 
     my $table_name;
     my $engine_altered;
@@ -159,7 +157,7 @@ Prints this help
 
 Alter tables effectively, otherwise just display the ALTER TABLE directives.
 
-=item B<--alterengine
+=item B<--alterengine>
 
 Prior to add missing constraints, alter table engine to InnoDB.
 
