@@ -37,14 +37,20 @@ $basename
     It prints to standard output. Use redirection to save CSV in a file.
 
 Usage:
-$0 [--field=FIELD [--field=FIELD [...]]] [--show-header]
+$0 [--field=FIELD [--field=FIELD [...]]] [--separator=CHAR] [--show-header] [--where=CONDITION]
 $0 -h
 
     -f, --field=FIELD       Field to export. It is repeatable and has to match
                             keys returned by the GetMemberDetails function.
                             If no field is specified, then all fields will be
                             exported.
+    -s, --separator=CHAR    This character will be used to separate fields.
+                            Some characters like | or ; will need to be escaped
+                            in the parameter setting, like -s=\\| or -s=\\;
+                            If no separator is specifield, a comma will be used.
     -H, --show-header       Print field names on first row
+    -w, --where=CONDITION   Condition to filter borrowers to export
+                            (SQL where clause)
     -h, --help              Show this help
 
 USAGE
@@ -52,12 +58,16 @@ USAGE
 
 # Getting parameters
 my @fields;
+my $separator;
 my $show_header;
+my $where;
 my $help;
 
 GetOptions(
     'field|f=s'     => \@fields,
+    'separator|s=s' => \$separator,
     'show-header|H' => \$show_header,
+    'where|w=s'       => \$where,
     'help|h'        => \$help
 ) or print_usage, exit 1;
 
@@ -68,11 +78,13 @@ if ($help) {
 
 # Getting borrowers
 my $dbh   = C4::Context->dbh;
-my $query = "SELECT borrowernumber FROM borrowers ORDER BY borrowernumber";
+my $query = "SELECT borrowernumber FROM borrowers";
+$query .= " WHERE $where" if ($where);
+$query .= " ORDER BY borrowernumber";
 my $sth   = $dbh->prepare($query);
 $sth->execute;
 
-my $csv = Text::CSV->new( { binary => 1 } );
+my $csv = Text::CSV->new( { sep_char => $separator, binary => 1 } );
 
 # If the user did not specify any field to export, we assume he wants them all
 # We retrieve the first borrower informations to get field names
