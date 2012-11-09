@@ -7146,7 +7146,6 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-
 $DBversion = "3.13.00.022";
 if ( CheckVersion($DBversion) ) {
     $dbh->do("DELETE from auth_tag_structure WHERE tagfield IN ('68a','68b')");
@@ -7624,6 +7623,16 @@ INSERT IGNORE INTO systempreferences (variable,value,explanation,type) VALUES
     });
 
     print "Upgrade to $DBversion done (Bug 2720 - Overdues which debar automatically should undebar automatically when returned)\n";
+    SetVersion($DBversion);
+}
+
+$DBversion = "XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(qq{
+        INSERT INTO systempreferences (variable, value, explanation, options, type)
+        VALUES ('StaffDetailItemSelection', '0', 'Enable item selection in record detail page', NULL, 'YesNo')
+    });
+    print "Upgrade to $DBversion done (Add system preference StaffDetailItemSelection)\n";
     SetVersion($DBversion);
 }
 

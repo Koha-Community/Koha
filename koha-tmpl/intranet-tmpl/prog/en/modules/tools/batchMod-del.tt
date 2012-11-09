@@ -180,8 +180,8 @@ for( x=0; x<allColumns.length; x++ ){
 	[% END %]
 
     <p>
-        [% IF ( src == 'CATALOGUING') %]
-           <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber %]">Done</a>
+        [% IF src %]
+           <a href="[% src %]">Done</a>
         [% ELSE %]
            <a href="/cgi-bin/koha/tools/batchMod.pl?del=1">Return to batch item deletion</a>
         [% END %]

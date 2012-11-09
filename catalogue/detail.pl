@@ -49,7 +49,7 @@ my $query = CGI->new();
 
 my $analyze = $query->param('analyze');
 
-my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
+my ( $template, $borrowernumber, $cookie, $flags ) = get_template_and_user(
     {
     template_name   =>  'catalogue/detail.tmpl',
         query           => $query,
@@ -411,5 +411,23 @@ if (C4::Context->preference('TagsEnabled') and $tag_quantity = C4::Context->pref
 
 my ( $holdcount, $holds ) = C4::Reserves::GetReservesFromBiblionumber($biblionumber,1);
 $template->param( holdcount => $holdcount, holds => $holds );
+my $StaffDetailItemSelection = C4::Context->preference('StaffDetailItemSelection');
+if ($StaffDetailItemSelection) {
+    # Only enable item selection if user can execute at least one action
+    if (
+        $flags->{superlibrarian}
+        || (
+            ref $flags->{tools} eq 'HASH' && (
+                $flags->{tools}->{items_batchmod}       # Modify selected items
+                || $flags->{tools}->{items_batchdel}    # Delete selected items
+            )
+        )
+        || ( ref $flags->{tools} eq '' && $flags->{tools} )
+      )
+    {
+        $template->param(
+            StaffDetailItemSelection => $StaffDetailItemSelection );
+    }
+}
 
 output_html_with_http_headers $query, $cookie, $template->output;

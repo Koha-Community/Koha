@@ -70,7 +70,42 @@ function verify_images() {
 
     }
 
-    $(document).ready(function() {
+    [% IF StaffDetailItemSelection %]
+        function selectAllItems(div) {
+            $("input[name='itemnumber'][type='checkbox']", div).attr('checked', 'checked');
+        }
+
+        function deselectAllItems(div) {
+            $("input[name='itemnumber'][type='checkbox']", div).removeAttr('checked');
+        }
+
+        function itemSelectionExecuteAction(div) {
+            var itemnumbers = new Array();
+            $("input[name='itemnumber'][type='checkbox']:checked", div).each(function() {
+                itemnumbers.push($(this).val());
+            });
+            if (itemnumbers.length > 0) {
+                var action = $('select[name="itemselection_action"]', div).val();
+                var del = (action == 'delete') ? 1 : 0;
+                var url = '/cgi-bin/koha/tools/batchMod.pl?op=show';
+                if (action == 'delete') {
+                    url += '&del=1';
+                }
+                url += '&itemnumber=' + itemnumbers.join('&itemnumber=');
+                url += '&src=' + '[% "/cgi-bin/koha/catalogue/detail.pl?biblionumber=$biblionumber" |uri %]';
+                new_window = $("input[name='new_window']", div).attr('checked');
+                if (new_window) {
+                    window.open(url);
+                } else {
+                    window.location.href = url;
+                }
+            } else {
+                alert(_("Please select at least one item."));
+            }
+        }
+    [% END %]
+
+     $(document).ready(function() {
         $('#bibliodetails').tabs();
         $('#search-form').focus();
         $('.thumbnails > li > a > span.remove').click(function() {
@@ -402,9 +437,28 @@ function verify_images() {
 </ul>
 
 [% BLOCK items_table %]
+    [% IF (StaffDetailItemSelection) %]
+        <a href="#" onclick="selectAllItems($(this).parent()); return false;">Select all</a> |
+        <a href="#" onclick="deselectAllItems($(this).parent()); return false;">Deselect all</a> |
+        <form onsubmit="itemSelectionExecuteAction($(this).parent()); return false;">
+            <label>Action:</label>
+            <select name="itemselection_action">
+                [% IF CAN_user_tools_items_batchdel %]
+                    <option value="delete">Delete selected items</option>
+                [% END %]
+                [% IF CAN_user_tools_items_batchmod %]
+                    <option value="modify">Modify selected items</option>
+                [% END %]
+            </select>
+            <input type="submit" value="Go" />
+            <input type="checkbox" name="new_window" />
+            <label>Open in new window</label>
+        </form>
+    [% END %]
     <table>
         <thead>
             <tr>
+                [% IF (StaffDetailItemSelection) %]<th></th>[% END %]
                 [% IF ( item_level_itypes ) %]<th>Item type</th>[% END %]
                 <th>Current location</th>
                 <th>Home library</th>
@@ -427,6 +481,11 @@ function verify_images() {
         <tbody>
             [% FOREACH item IN items %]
                 <tr>
+                [% IF (StaffDetailItemSelection) %]
+                    <td style="text-align:center;vertical-align:middle">
+                        <input type="checkbox" value="[% item.itemnumber %]" name="itemnumber" />
+                    </td>
+                [% END %]
                     [% IF ( item_level_itypes ) %]
                         <td class="itype">
                             [% IF !noItemTypeImages && item.imageurl %]
