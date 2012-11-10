@@ -94,6 +94,10 @@ if ($process_zebraqueue and $do_not_clear_zebraqueue) {
     die $msg;
 }
 
+if ($reset) {
+    $noshadow = 1;
+}
+
 if ($noshadow) {
     $noshadow = ' -n ';
 }
@@ -686,7 +690,7 @@ Parameters:
                             or -s.
 
     -r                      clear Zebra index before
-                            adding records to index
+                            adding records to index. Implies -w.
 
     -d                      Temporary directory for indexing.
                             If not specified, one is automatically
