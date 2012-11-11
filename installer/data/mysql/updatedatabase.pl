@@ -6131,6 +6131,53 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
         UPDATE virtualshelves SET sortfield="copyrightdate" where sortfield="year";
     });
     print "Upgrade to $DBversion done (Bug 9167: Update the virtualshelves.sortfield column with 'copyrightdate' if needed)\n";
+    SetVersion($DBversion);
+}
+
+$DBversion = "XXX";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    print "Upgrade to $DBversion done (Bug 9056: add German and a couple of French translations to language_descriptions";
+    $dbh->do("INSERT INTO language_descriptions (subtag, type, lang, description) VALUES( 'ar', 'language', 'de', 'Arabisch')");
+    $dbh->do("INSERT INTO language_descriptions (subtag, type, lang, description) VALUES( 'hy', 'language', 'de', 'Armenisch')");
+    $dbh->do("INSERT INTO language_descriptions (subtag, type, lang, description) VALUES( 'bg', 'language', 'de', 'Bulgarisch')");
+    $dbh->do("INSERT INTO language_descriptions (subtag, type, lang, description) VALUES( 'zh', 'language', 'de', 'Chinesisch')");
+    $dbh->do("INSERT INTO language_descriptions (subtag, type, lang, description) VALUES( 'cs', 'language', 'de', 'Tschechisch')");
+    $dbh->do("INSERT INTO language_descriptions (subtag, type, lang, description) VALUES( 'da', 'language', 'de', 'Dänisch')");
+    $dbh->do("INSERT INTO language_descriptions (subtag, type, lang, description) VALUES( 'nl', 'language', 'de', 'Niederländisch')");
+    $dbh->do("INSERT INTO language_descriptions (subtag, type, lang, description) VALUES( 'en', 'language', 'de', 'Englisch')");
+    $dbh->do("INSERT INTO language_descriptions (subtag, type, lang, description) VALUES( 'fi', 'language', 'de', 'Finnisch')");
+    $dbh->do("INSERT INTO language_descriptions (subtag, type, lang, description) VALUES( 'fr', 'language', 'de', 'Französisch')");
+    $dbh->do("INSERT INTO language_descriptions (subtag, type, lang, description) VALUES( 'lo', 'language', 'fr', 'Laotien')");
+    $dbh->do("INSERT INTO language_descriptions (subtag, type, lang, description) VALUES( 'lo', 'language', 'de', 'Laotisch')");
+    $dbh->do("INSERT INTO language_descriptions (subtag, type, lang, description) VALUES( 'el', 'language', 'de', 'Griechisch (Nach 1453)')");
+    $dbh->do("INSERT INTO language_descriptions (subtag, type, lang, description) VALUES( 'he', 'language', 'de', 'Hebräisch')");
+    $dbh->do("INSERT INTO language_descriptions (subtag, type, lang, description) VALUES( 'hi', 'language', 'de', 'Hindi')");
+    $dbh->do("INSERT INTO language_descriptions (subtag, type, lang, description) VALUES( 'hu', 'language', 'de', 'Ungarisch')");
+    $dbh->do("INSERT INTO language_descriptions (subtag, type, lang, description) VALUES( 'id', 'language', 'de', 'Indonesisch')");
+    $dbh->do("INSERT INTO language_descriptions (subtag, type, lang, description) VALUES( 'it', 'language', 'de', 'Italienisch')");
+    $dbh->do("INSERT INTO language_descriptions (subtag, type, lang, description) VALUES( 'ja', 'language', 'de', 'Japanisch')");
+    $dbh->do("INSERT INTO language_descriptions (subtag, type, lang, description) VALUES( 'ko', 'language', 'de', 'Koreanisch')");
+    $dbh->do("INSERT INTO language_descriptions (subtag, type, lang, description) VALUES( 'la', 'language', 'de', 'Latein')");
+    $dbh->do("INSERT INTO language_descriptions (subtag, type, lang, description) VALUES( 'gl', 'language', 'fr', 'Galicien')");
+    $dbh->do("INSERT INTO language_descriptions (subtag, type, lang, description) VALUES( 'gl', 'language', 'de', 'Galizisch')");
+    $dbh->do("INSERT INTO language_descriptions (subtag, type, lang, description) VALUES( 'nb', 'language', 'de', 'Norwegisch bokm&#229;l')");
+    $dbh->do("INSERT INTO language_descriptions (subtag, type, lang, description) VALUES( 'nn', 'language', 'de', 'Norwegisch nynorsk')");
+    $dbh->do("INSERT INTO language_descriptions (subtag, type, lang, description) VALUES( 'fa', 'language', 'de', 'Persisch')");
+    $dbh->do("INSERT INTO language_descriptions (subtag, type, lang, description) VALUES( 'pl', 'language', 'de', 'Polnisch')");
+    $dbh->do("INSERT INTO language_descriptions (subtag, type, lang, description) VALUES( 'pt', 'language', 'de', 'Portugiesisch')");
+    $dbh->do("INSERT INTO language_descriptions (subtag, type, lang, description) VALUES( 'ro', 'language', 'de', 'Rumänisch')");
+    $dbh->do("INSERT INTO language_descriptions (subtag, type, lang, description) VALUES( 'ru', 'language', 'de', 'Russisch')");
+    $dbh->do("INSERT INTO language_descriptions (subtag, type, lang, description) VALUES( 'sr', 'language', 'fr', 'Serbe')");
+    $dbh->do("INSERT INTO language_descriptions (subtag, type, lang, description) VALUES( 'sr', 'language', 'de', 'Serbisch')");
+    $dbh->do("INSERT INTO language_descriptions (subtag, type, lang, description) VALUES( 'es', 'language', 'de', 'Spanisch')");
+    $dbh->do("INSERT INTO language_descriptions (subtag, type, lang, description) VALUES( 'sv', 'language', 'de', 'Schwedisch')");
+    $dbh->do("INSERT INTO language_descriptions (subtag, type, lang, description) VALUES( 'tet', 'language', 'fr', 'Tétoum')");
+    $dbh->do("INSERT INTO language_descriptions (subtag, type, lang, description) VALUES( 'tet', 'language', 'de', 'Tetum')");
+    $dbh->do("INSERT INTO language_descriptions (subtag, type, lang, description) VALUES( 'th', 'language', 'de', 'Thailändisch')");
+    $dbh->do("INSERT INTO language_descriptions (subtag, type, lang, description) VALUES( 'tr', 'language', 'de', 'Türkisch')");
+    $dbh->do("INSERT INTO language_descriptions (subtag, type, lang, description) VALUES( 'uk', 'language', 'de', 'Ukrainisch')");
+    $dbh->do("INSERT INTO language_descriptions (subtag, type, lang, description) VALUES( 'ur', 'language', 'fr', 'Ourdou')");
+    $dbh->do("INSERT INTO language_descriptions (subtag, type, lang, description) VALUES( 'ur', 'language', 'de', 'Urdu')");
     SetVersion ($DBversion);
 }
 
