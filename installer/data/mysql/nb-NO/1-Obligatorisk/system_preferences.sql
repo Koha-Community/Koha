@@ -25,5 +25,5 @@ UPDATE systempreferences SET value = 'nb-NO' WHERE variable = 'language';
 UPDATE systempreferences SET value = 'nb-NO' WHERE variable = 'opaclanguages';
 UPDATE systempreferences SET value = '<p>Velkommen til Koha...</p><hr />' WHERE variable = 'OpacMainUserBlock';
 UPDATE systempreferences SET value = '<p>Viktige lenker kan plasseres her</p>' WHERE variable = 'OpacNav';
-
 UPDATE systempreferences SET value = '<li><a href="http://worldcat.org/search?q={TITLE}" target="_blank">Andre bibliotek (WorldCat)</a></li><li><a href="http://www.scholar.google.com/scholar?q={TITLE}" target="_blank">Andre databaser (Google Scholar)</a></li><li><a href="http://www.bookfinder.com/search/?author={AUTHOR}&amp;title={TITLE}&amp;st=xl&amp;ac=qr" target="_blank">Nettbutikker (Bookfinder.com)</a></li>' WHERE variable = 'OPACSearchForTitleIn';
+UPDATE systempreferences SET value = 'Monday' WHERE variable = 'CalendarFirstDayOfWeek';
