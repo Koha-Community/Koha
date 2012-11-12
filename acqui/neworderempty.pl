@@ -91,7 +91,7 @@ use C4::Search qw/FindDuplicate/;
 #needed for z3950 import:
 use C4::ImportBatch qw/GetImportRecordMarc SetImportRecordStatus/;
 
-my $input           = new CGI;
+our $input           = new CGI;
 my $booksellerid    = $input->param('booksellerid');	# FIXME: else ERROR!
 my $budget_id       = $input->param('budget_id') || 0;
 my $title           = $input->param('title');
@@ -99,8 +99,8 @@ my $author          = $input->param('author');
 my $publicationyear = $input->param('publicationyear');
 my $bookseller      = GetBookSellerFromId($booksellerid);	# FIXME: else ERROR!
 my $ordernumber          = $input->param('ordernumber') || '';
-my $biblionumber    = $input->param('biblionumber');
-my $basketno        = $input->param('basketno');
+our $biblionumber    = $input->param('biblionumber');
+our $basketno        = $input->param('basketno');
 my $suggestionid    = $input->param('suggestionid');
 my $close           = $input->param('close');
 my $uncertainprice  = $input->param('uncertainprice');
@@ -110,7 +110,7 @@ my $new = 'no';
 
 my $budget_name;
 
-my ( $template, $loggedinuser, $cookie, $userflags ) = get_template_and_user(
+our ( $template, $loggedinuser, $cookie, $userflags ) = get_template_and_user(
     {
         template_name   => "acqui/neworderempty.tmpl",
         query           => $input,
@@ -121,18 +121,18 @@ my ( $template, $loggedinuser, $cookie, $userflags ) = get_template_and_user(
     }
 );
 
-my $marcflavour = C4::Context->preference('marcflavour');
+our $marcflavour = C4::Context->preference('marcflavour');
 
 if(!$basketno) {
     my $order = GetOrder($ordernumber);
     $basketno = $order->{'basketno'};
 }
 
-my $basket = GetBasket($basketno);
+our $basket = GetBasket($basketno);
 my $contract = &GetContract($basket->{contractnumber});
 
 #simple parameters reading (all in one :-)
-my $params = $input->Vars;
+our $params = $input->Vars;
 my $listprice=0; # the price, that can be in MARC record if we have one
 if ( $ordernumber eq '' and defined $params->{'breedingid'}){
 #we want to import from the breeding reservoir (from a z3950 search)
