@@ -160,11 +160,15 @@ var allcheckboxes = $(".checkboxed");
     $("#exportmenuc").empty();
     initExportButton();
 
-    $("#newduedate").datepicker({ minDate: 1 }); // require that renewal date is after today
-    $("#duedatespec").datetimepicker({
-        onSelect: function(dateText, inst) { $("#barcode").focus(); },
+    $("#newduedate").datetimepicker({
+        minDate: 1, // require that renewal date is after today
         hour: 23,
-        minute: 59,
+        minute: 59
+    });
+    $("#duedatespec").datetimepicker({
+        onClose: function(dateText, inst) { $("#barcode").focus(); },
+        hour: 23,
+        minute: 59
     });
 
  });
@@ -399,7 +403,7 @@ function validate1(date) {
     [% IF ( DEBT ) %]<input type="hidden" name="debt_confirmed" value="1" />[% END %]
     [% IF ( INVALID_DATE ) %]
     <p>
-    <input type="text" size="13" id="duedatespec" name="duedatespec" value="[% duedatespec %]" />
+    <input type="text" size="13" id="duedatespec" name="duedatespec" readonly="readonly" value="[% duedatespec %]" />
     <label for="duedatespec">Due date</label>
     </p>
     [% ELSE %]
@@ -577,7 +581,7 @@ No patron matched <span class="ex">[% message %]</span>
 
     [% IF ( SpecifyDueDate ) %]<div class="date-select">
         <div class="hint">Specify due date [% INCLUDE 'date-format.inc' %]: </div>
-        [% IF ( duedatespec ) %]<input type="text" size="13" id="duedatespec" name="duedatespec" value="[% duedatespec %]" />[% ELSE %]<input type="text" size="13" id="duedatespec" name="duedatespec" value="" />
+        [% IF ( duedatespec ) %]<input type="text" size="13" id="duedatespec" name="duedatespec" value="[% duedatespec %]" readonly="readonly" />[% ELSE %]<input type="text" size="13" id="duedatespec" name="duedatespec" value="" readonly="readonly" />
 [% END %]
           <label for="stickyduedate"> Remember for session:</label>
 [% IF ( stickyduedate ) %]
