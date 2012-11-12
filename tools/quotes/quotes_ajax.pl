@@ -46,7 +46,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 
 my $params = $cgi->Vars; # NOTE: Multivalue parameters NOT allowed!!
 
-print $cgi->header('application/json');
+print $cgi->header('application/json; charset=utf-8');
 
 if ($params->{'action'} eq 'add') {
     my $sth = $dbh->prepare('INSERT INTO quotes (source, text) VALUES (?, ?);');
@@ -58,10 +58,11 @@ if ($params->{'action'} eq 'add') {
     my $new_quote_id = $dbh->{q{mysql_insertid}}; # ALERT: mysqlism here
     $sth = $dbh->prepare('SELECT * FROM quotes WHERE id = ?;');
     $sth->execute($new_quote_id);
-    print to_json($sth->fetchall_arrayref);
+    print to_json($sth->fetchall_arrayref, {utf8 =>1});
     exit 1;
 }
 elsif ($params->{'action'} eq 'edit') {
+    my $aaData = [];
     my $editable_columns = [qw(source text)]; # pay attention to element order; these columns match the quotes table columns
     my $sth = $dbh->prepare("UPDATE quotes SET $editable_columns->[$params->{'column'}-1]  = ? WHERE id = ?;");
     $sth->execute($params->{'value'}, $params->{'id'});
@@ -71,7 +72,9 @@ elsif ($params->{'action'} eq 'edit') {
     }
     $sth = $dbh->prepare("SELECT $editable_columns->[$params->{'column'}-1] FROM quotes WHERE id = ?;");
     $sth->execute($params->{'id'});
-    print $sth->fetchrow_array();
+    $aaData = $sth->fetchrow_array();
+    print Encode::encode('utf8', $aaData);
+
     exit 1;
 }
 elsif ($params->{'action'} eq 'delete') {
@@ -106,5 +109,5 @@ else {
                     iTotalDisplayRecords=>  $iTotalDisplayRecords,
                     sEcho               =>  $params->{'sEcho'},
                     aaData              =>  $aaData,
-                  });
+                  }, {utf8 =>1});
 }
