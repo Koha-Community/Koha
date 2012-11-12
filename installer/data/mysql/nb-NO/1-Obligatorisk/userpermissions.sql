@@ -72,6 +72,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (15, 'receive_serials', 'Heftemottak'),
    (15, 'renew_subscription', 'Fornye abonnementer'),
    (15, 'routing', 'Sirkulasjon'),
+   (15, 'superserials', 'Manage subscriptions from any branch (only applies when IndependantBranches is used)'),
    (16, 'execute_reports', 'Kjøre SQL-rapporter'),
    (16, 'create_reports', 'Opprette SQL-rapporter'),
    (18, 'manage_courses', 'Add, edit and delete courses'),

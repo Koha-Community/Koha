@@ -7646,6 +7646,12 @@ INSERT IGNORE INTO message_transport_types (message_transport_type) values ('pho
     SetVersion($DBversion);
 }
 
+$DBversion = "3.13.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do("INSERT INTO permissions (module_bit, code, description) VALUES(15, 'superserials', 'Manage subscriptions from any branch (only applies when IndependentBranches is used)')");
+    print "Upgrade to $DBversion done (Bug 8435: Add superserials permission)\n";
+    SetVersion($DBversion);
+}
 
 =head1 FUNCTIONS
 

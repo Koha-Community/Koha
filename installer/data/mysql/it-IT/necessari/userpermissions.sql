@@ -54,6 +54,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (15, 'receive_serials', 'Ricevi fascicoli'),
    (15, 'renew_subscription', 'Rinnova un abbonamento'),
    (15, 'routing', 'Crea/Manipola liste di distribuzione dei fascicoli ( routing list)'),
+   (15, 'superserials', 'Manage subscriptions from any branch (only applies when IndependantBranches is used)'),
    (16, 'execute_reports', 'Esegui reports SQL'),
    (16, 'create_reports', 'Crea reports SQL'),
    (18, 'manage_courses', 'Add, edit and delete courses'),

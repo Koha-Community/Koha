@@ -69,7 +69,8 @@ if ($op eq 'modify' || $op eq 'dup' || $op eq 'modsubscription') {
 
     my $subscriptionid = $query->param('subscriptionid');
     $subs = GetSubscription($subscriptionid);
-## FIXME : Check rights to edit if mod. Could/Should display an error message.
+
+    ## FIXME : Check rights to edit if mod. Could/Should display an error message.
     if ($subs->{'cannotedit'} && $op eq 'modify'){
       carp "Attempt to modify subscription $subscriptionid by ".C4::Context->userenv->{'id'}." not allowed";
       print $query->redirect("/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=$subscriptionid");
@@ -124,10 +125,16 @@ if ($op eq 'modify' || $op eq 'dup' || $op eq 'modsubscription') {
     }
 }
 
-my $onlymine=C4::Context->preference('IndependentBranches') &&
-             C4::Context->userenv &&
-             C4::Context->userenv->{flags} % 2 !=1 &&
-             C4::Context->userenv->{branch};
+my $userenv = C4::Context->userenv;
+my $onlymine =
+     C4::Context->preference('IndependentBranches')
+  && $userenv
+  && $userenv->{flags} % 2 != 1
+  && (
+    not C4::Auth::haspermission( $userenv->{id}, { serials => 'superserials' } )
+  )
+  && $userenv->{branch};
+
 my $branches = GetBranches($onlymine);
 my $branchloop;
 for my $thisbranch (sort { $branches->{$a}->{branchname} cmp $branches->{$b}->{branchname} } keys %{$branches}) {

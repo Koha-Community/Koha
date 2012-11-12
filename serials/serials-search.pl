@@ -96,9 +96,11 @@ if ($routing) {
 my (@openedsubscriptions, @closedsubscriptions);
 for my $sub ( @subscriptions ) {
     unless ( $sub->{closed} ) {
-        push @openedsubscriptions, $sub;
+        push @openedsubscriptions, $sub
+            unless $sub->{cannotdisplay};
     } else {
-        push @closedsubscriptions, $sub;
+        push @closedsubscriptions, $sub
+            unless $sub->{cannotdisplay};
     }
 }
 

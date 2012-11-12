@@ -52,6 +52,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (15, 'receive_serials', 'Zugang von Heften'),
    (15, 'renew_subscription', 'Abonnements verlängern'),
    (15, 'routing', 'Umlauflisten verwalten'),
+   (15, 'superserials', 'Manage subscriptions from any branch (only applies when IndependantBranches is used)'),
    (16, 'execute_reports', 'SQL-Reports ausführen'),
    (16, 'create_reports', 'SQL-Reports erstellen'),
    (18, 'manage_courses', 'Add, edit and delete courses'),

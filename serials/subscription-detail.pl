@@ -34,7 +34,6 @@ my $query = new CGI;
 my $op = $query->param('op') || q{};
 my $issueconfirmed = $query->param('issueconfirmed');
 my $dbh = C4::Context->dbh;
-my ($template, $loggedinuser, $cookie, $hemisphere);
 my $subscriptionid = $query->param('subscriptionid');
 
 if ( $op and $op eq "close" ) {
@@ -43,29 +42,13 @@ if ( $op and $op eq "close" ) {
     C4::Serials::ReopenSubscription( $subscriptionid );
 }
 
-my $subs = GetSubscription($subscriptionid);
-
-$subs->{enddate} = GetExpirationDate($subscriptionid);
-
-if ($op && $op eq 'del') {
-	if ($subs->{'cannotedit'}){
-		carp "Attempt to delete subscription $subscriptionid by ".C4::Context->userenv->{'id'}." not allowed";
-		print $query->redirect("/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=$subscriptionid");
-	}
-	DelSubscription($subscriptionid);
-	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=serials-home.pl\"></html>";
-	exit;
-}
-
-my ($totalissues,@serialslist) = GetSerials($subscriptionid);
-$totalissues-- if $totalissues; # the -1 is to have 0 if this is a new subscription (only 1 issue)
 # the subscription must be deletable if there is NO issues for a reason or another (should not happend, but...)
 
 # Permission needed if it is a deletion (del) : delete_subscription
 # Permission needed otherwise : *
 my $permission = ($op eq "del") ? "delete_subscription" : "*";
 
-($template, $loggedinuser, $cookie)
+my ($template, $loggedinuser, $cookie)
 = get_template_and_user({template_name => "serials/subscription-detail.tmpl",
                 query => $query,
                 type => "intranet",
@@ -74,7 +57,12 @@ my $permission = ($op eq "del") ? "delete_subscription" : "*";
                 debug => 1,
                 });
 
-$$subs{enddate} ||= GetExpirationDate($subscriptionid);
+
+my $subs = GetSubscription($subscriptionid);
+$subs->{enddate} ||= GetExpirationDate($subscriptionid);
+
+my ($totalissues,@serialslist) = GetSerials($subscriptionid);
+$totalissues-- if $totalissues; # the -1 is to have 0 if this is a new subscription (only 1 issue)
 
 if ($op eq 'del') {
 	if ($$subs{'cannotedit'}){
@@ -155,12 +143,7 @@ $template->param(
     hasRouting  => $hasRouting,
     routing => C4::Context->preference("RoutingSerials"),
     totalissues => $totalissues,
-    hemisphere => $hemisphere,
-    cannotedit =>(C4::Context->preference('IndependentBranches') &&
-                C4::Context->userenv &&
-                C4::Context->userenv->{flags} % 2 !=1  &&
-                C4::Context->userenv->{branch} && $subs->{branchcode} &&
-                (C4::Context->userenv->{branch} ne $subs->{branchcode})),
+    cannotedit => (not C4::Serials::can_edit_subscription( $subs )),
     frequency => $frequency,
     numberpattern => $numberpattern,
     has_X           => ($numberpattern->{'numberingmethod'} =~ /{X}/) ? 1 : 0,

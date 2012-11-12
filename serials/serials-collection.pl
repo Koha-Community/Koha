@@ -37,8 +37,7 @@ my $op = $query->param('op') || q{};
 my $nbissues=$query->param('nbissues');
 my $dbh = C4::Context->dbh;
 
-my ($template, $loggedinuser, $cookie);
-($template, $loggedinuser, $cookie)
+my ($template, $loggedinuser, $cookie)
   = get_template_and_user({template_name => "serials/serials-collection.tmpl",
                             query => $query,
                             type => "intranet",
@@ -107,6 +106,7 @@ if (@subscriptionid){
    foreach my $subscriptionid (@subscriptionid){
     my $subs= GetSubscription($subscriptionid);
     $closed = 1 if $subs->{closed};
+
     $subs->{opacnote}     =~ s/\n/\<br\/\>/g;
     $subs->{missinglist}  =~ s/\n/\<br\/\>/g;
     $subs->{recievedlist} =~ s/\n/\<br\/\>/g;

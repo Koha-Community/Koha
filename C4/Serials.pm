@@ -20,6 +20,7 @@ package C4::Serials;
 
 use Modern::Perl;
 
+use C4::Context;
 use C4::Dates qw(format_date format_date_in_iso);
 use Date::Calc qw(:all);
 use POSIX qw(strftime setlocale LC_TIME);
@@ -228,15 +229,7 @@ sub GetSerialInformation {
     my ($serialid) = @_;
     my $dbh        = C4::Context->dbh;
     my $query      = qq|
-        SELECT serial.*, serial.notes as sernotes, serial.status as serstatus,subscription.*,subscription.subscriptionid as subsid |;
-    if (   C4::Context->preference('IndependentBranches')
-        && C4::Context->userenv
-        && C4::Context->userenv->{'flags'} != 1
-        && C4::Context->userenv->{'branch'} ) {
-        $query .= "
-      , ((subscription.branchcode <>\"" . C4::Context->userenv->{'branch'} . "\") and subscription.branchcode <>\"\" and subscription.branchcode IS NOT NULL) as cannotedit ";
-    }
-    $query .= qq|             
+        SELECT serial.*, serial.notes as sernotes, serial.status as serstatus,subscription.*,subscription.subscriptionid as subsid
         FROM   serial LEFT JOIN subscription ON subscription.subscriptionid=serial.subscriptionid
         WHERE  serialid = ?
     |;
@@ -275,6 +268,7 @@ sub GetSerialInformation {
     $data->{ "status" . $data->{'serstatus'} } = 1;
     $data->{'subscriptionexpired'} = HasSubscriptionExpired( $data->{'subscriptionid'} ) && $data->{'status'} == 1;
     $data->{'abouttoexpire'} = abouttoexpire( $data->{'subscriptionid'} );
+    $data->{cannotedit} = not can_edit_subscription( $data );
     return $data;
 }
 
@@ -339,15 +333,7 @@ sub GetSubscription {
                 subscriptionhistory.*,
                 aqbooksellers.name AS aqbooksellername,
                 biblio.title AS bibliotitle,
-                subscription.biblionumber as bibnum);
-    if (   C4::Context->preference('IndependentBranches')
-        && C4::Context->userenv
-        && C4::Context->userenv->{'flags'} != 1
-        && C4::Context->userenv->{'branch'} ) {
-        $query .= "
-      , ((subscription.branchcode <>\"" . C4::Context->userenv->{'branch'} . "\") and subscription.branchcode <>\"\" and subscription.branchcode IS NOT NULL) as cannotedit ";
-    }
-    $query .= qq(             
+                subscription.biblionumber as bibnum
        FROM subscription
        LEFT JOIN subscriptionhistory ON subscription.subscriptionid=subscriptionhistory.subscriptionid
        LEFT JOIN aqbooksellers ON subscription.aqbooksellerid=aqbooksellers.id
@@ -355,16 +341,12 @@ sub GetSubscription {
        WHERE subscription.subscriptionid = ?
     );
 
-    #     if (C4::Context->preference('IndependentBranches') &&
-    #         C4::Context->userenv &&
-    #         C4::Context->userenv->{'flags'} != 1){
-    # #       $debug and warn "flags: ".C4::Context->userenv->{'flags'};
-    #       $query.=" AND subscription.branchcode IN ('".C4::Context->userenv->{'branch'}."',\"\")";
-    #     }
     $debug and warn "query : $query\nsubsid :$subscriptionid";
     my $sth = $dbh->prepare($query);
     $sth->execute($subscriptionid);
-    return $sth->fetchrow_hashref;
+    my $subscription = $sth->fetchrow_hashref;
+    $subscription->{cannotedit} = not can_edit_subscription( $subscription );
+    return $subscription;
 }
 
 =head2 GetFullSubscription
@@ -391,15 +373,7 @@ sub GetFullSubscription {
             aqbooksellers.name as aqbooksellername,
             biblio.title as bibliotitle,
             subscription.branchcode AS branchcode,
-            subscription.subscriptionid AS subscriptionid |;
-    if (   C4::Context->preference('IndependentBranches')
-        && C4::Context->userenv
-        && C4::Context->userenv->{'flags'} != 1
-        && C4::Context->userenv->{'branch'} ) {
-        $query .= "
-      , ((subscription.branchcode <>\"" . C4::Context->userenv->{'branch'} . "\") and subscription.branchcode <>\"\" and subscription.branchcode IS NOT NULL) as cannotedit ";
-    }
-    $query .= qq|
+            subscription.subscriptionid AS subscriptionid
   FROM      serial 
   LEFT JOIN subscription ON 
           (serial.subscriptionid=subscription.subscriptionid )
@@ -413,7 +387,11 @@ sub GetFullSubscription {
     $debug and warn "GetFullSubscription query: $query";
     my $sth = $dbh->prepare($query);
     $sth->execute($subscriptionid);
-    return $sth->fetchall_arrayref( {} );
+    my $subscriptions = $sth->fetchall_arrayref( {} );
+    for my $subscription ( @$subscriptions ) {
+        $subscription->{cannotedit} = not can_edit_subscription( $subscription );
+    }
+    return $subscriptions;
 }
 
 =head2 PrepareSerialsData
@@ -514,13 +492,6 @@ sub GetSubscriptionsFromBiblionumber {
         $subs->{ "periodicity" . $subs->{periodicity} }     = 1;
         $subs->{ "numberpattern" . $subs->{numberpattern} } = 1;
         $subs->{ "status" . $subs->{'status'} }             = 1;
-        $subs->{'cannotedit'} =
-          (      C4::Context->preference('IndependentBranches')
-              && C4::Context->userenv
-              && C4::Context->userenv->{flags} % 2 != 1
-              && C4::Context->userenv->{branch}
-              && $subs->{branchcode}
-              && ( C4::Context->userenv->{branch} ne $subs->{branchcode} ) );
 
         if ( $subs->{enddate} eq '0000-00-00' ) {
             $subs->{enddate} = '';
@@ -529,6 +500,7 @@ sub GetSubscriptionsFromBiblionumber {
         }
         $subs->{'abouttoexpire'}       = abouttoexpire( $subs->{'subscriptionid'} );
         $subs->{'subscriptionexpired'} = HasSubscriptionExpired( $subs->{'subscriptionid'} );
+        $subs->{cannotedit} = not can_edit_subscription( $subs );
         push @res, $subs;
     }
     return \@res;
@@ -554,16 +526,7 @@ sub GetFullSubscriptionsFromBiblionumber {
             year(IF(serial.publisheddate="00-00-0000",serial.planneddate,serial.publisheddate)) as year,
             biblio.title as bibliotitle,
             subscription.branchcode AS branchcode,
-            subscription.subscriptionid AS subscriptionid|;
-    if (   C4::Context->preference('IndependentBranches')
-        && C4::Context->userenv
-        && C4::Context->userenv->{'flags'} != 1
-        && C4::Context->userenv->{'branch'} ) {
-        $query .= "
-      , ((subscription.branchcode <>\"" . C4::Context->userenv->{'branch'} . "\") and subscription.branchcode <>\"\" and subscription.branchcode IS NOT NULL) as cannotedit ";
-    }
-
-    $query .= qq|      
+            subscription.subscriptionid AS subscriptionid
   FROM      serial 
   LEFT JOIN subscription ON 
           (serial.subscriptionid=subscription.subscriptionid)
@@ -576,7 +539,11 @@ sub GetFullSubscriptionsFromBiblionumber {
           |;
     my $sth = $dbh->prepare($query);
     $sth->execute($biblionumber);
-    return $sth->fetchall_arrayref( {} );
+    my $subscriptions = $sth->fetchall_arrayref( {} );
+    for my $subscription ( @$subscriptions ) {
+        $subscription->{cannotedit} = not can_edit_subscription( $subscription );
+    }
+    return $subscriptions;
 }
 
 =head2 GetSubscriptions
@@ -651,19 +618,11 @@ sub GetSubscriptions {
     $debug and warn "GetSubscriptions query: $sql params : ", join( " ", @bind_params );
     $sth = $dbh->prepare($sql);
     $sth->execute(@bind_params);
-    my @results;
-
-    while ( my $line = $sth->fetchrow_hashref ) {
-        $line->{'cannotedit'} =
-          (      C4::Context->preference('IndependentBranches')
-              && C4::Context->userenv
-              && C4::Context->userenv->{flags} % 2 != 1
-              && C4::Context->userenv->{branch}
-              && $line->{branchcode}
-              && ( C4::Context->userenv->{branch} ne $line->{branchcode} ) );
-        push @results, $line;
+    my $subscriptions = $sth->fetchall_arrayref( {} );
+    for my $subscription ( @$subscriptions ) {
+        $subscription->{cannotedit} = not can_edit_subscription( $subscription );
     }
-    return @results;
+    return @$subscriptions;
 }
 
 =head2 SearchSubscriptions
@@ -747,6 +706,13 @@ sub SearchSubscriptions {
     $sth->execute(@where_args);
     my $results = $sth->fetchall_arrayref( {} );
     $sth->finish;
+
+    for my $subscription ( @$results ) {
+        $subscription->{cannotedit} = not can_edit_subscription( $subscription );
+        $subscription->{cannotdisplay} =
+            ( C4::Context->preference("IndependentBranches")
+                and $subscription->{branchcode} ne C4::Context->userenv->{'branch'} ) ? 1 : 0;
+    }
 
     return @$results;
 }
@@ -2826,6 +2792,24 @@ sub subscriptionCurrentlyOnOrder {
     my $sth = $dbh->prepare( $query );
     $sth->execute($subscriptionid);
     return $sth->fetchrow_array;
+}
+
+sub can_edit_subscription {
+    my ( $subscription, $userid ) = @_;
+    my $flags = C4::Context->userenv->{flags};
+    $userid ||= C4::Context->userenv->{'id'};
+    my $independent_branches = C4::Context->preference('IndependentBranches');
+    return 1 unless $independent_branches;
+    if( $flags % 2 == 1 # superlibrarian
+        or C4::Auth::haspermission( $userid, {serials => 'superserials'}),
+        or C4::Auth::haspermission( $userid, {serials => 'edit_subscription'}),
+        or not defined $subscription->{branchcode}
+        or $subscription->{branchcode} eq ''
+        or $subscription->{branchcode} eq C4::Context->userenv->{'branch'}
+    ) {
+        return 1;
+    }
+     return 0;
 }
 
 1;

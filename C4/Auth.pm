@@ -1615,7 +1615,6 @@ sub getuserflags {
             $userflags->{$flag} = 0;
         }
     }
-
     # get subpermissions and merge with top-level permissions
     my $user_subperms = get_user_subpermissions($userid);
     foreach my $module (keys %$user_subperms) {
@@ -1711,7 +1710,8 @@ sub haspermission {
     my ($userid, $flagsrequired) = @_;
     my $sth = C4::Context->dbh->prepare("SELECT flags FROM borrowers WHERE userid=?");
     $sth->execute($userid);
-    my $flags = getuserflags($sth->fetchrow(), $userid);
+    my $row = $sth->fetchrow();
+    my $flags = getuserflags($row, $userid);
     if ( $userid eq C4::Context->config('user') ) {
         # Super User Account from /etc/koha.conf
         $flags->{'superlibrarian'} = 1;
