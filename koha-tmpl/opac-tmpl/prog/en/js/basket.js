@@ -354,7 +354,7 @@ function sendBasket() {
 
     var loc = CGIBIN + "opac-sendbasket.pl?" + strCookie;
 
-    var optWin="dependent=yes,scrollbars=yes,resizable=yes,height=600,width=900,top=50,left=100";
+    var optWin="scrollbars=yes,resizable=yes,height=600,width=900,top=50,left=100";
     var win_form = open(loc,"win_form",optWin);
 }
 
