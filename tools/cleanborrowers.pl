@@ -53,6 +53,8 @@ my $params = $cgi->Vars;
 
 my $filterdate1;               # the date which filter on issue history.
 my $filterdate2;               # the date which filter on borrowers last issue.
+my $borrower_dateexpiry;
+my $borrower_categorycode;
 
 # getting the template
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -68,12 +70,15 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 if ( $params->{'step2'} ) {
     $filterdate1 = format_date_in_iso($params->{'filterdate1'});
     $filterdate2 = format_date_in_iso($params->{'filterdate2'});
+    $borrower_dateexpiry = format_date_in_iso($params->{'borrower_dateexpiry'});
+    $borrower_categorycode = $params->{'borrower_categorycode'};
+
     my %checkboxes = map { $_ => 1 } split /\0/, $params->{'checkbox'};
 
     my $totalDel;
     my $membersToDelete;
     if ($checkboxes{borrower}) {
-        $membersToDelete = GetBorrowersWhoHaveNotBorrowedSince($filterdate1, 1);
+        $membersToDelete = GetBorrowersWhoHaveNotBorrowedSince({ not_borrowered_since => $filterdate1, expired_before => $borrower_dateexpiry, category_code => $borrower_categorycode });
         $totalDel = scalar @$membersToDelete;
             
     }
@@ -93,10 +98,11 @@ if ( $params->{'step2'} ) {
         memberstoanonymize_list => $membersToAnonymize,    
         filterdate1      => format_date($filterdate1),
         filterdate2      => format_date($filterdate2),
+        borrower_dateexpiry => $borrower_dateexpiry,
+        borrower_categorycode => $borrower_categorycode,
     );
-### TODO : Use GetBorrowersNamesAndLatestIssue function in order to get the borrowers to delete or anonymize.
-### Now, we are only using total, which is not enough imlo
-    #writing the template
+
+    ### TODO : Use GetBorrowersNamesAndLatestIssue function in order to get the borrowers to delete or anonymize.
     output_html_with_http_headers $cgi, $cookie, $template->output;
     exit;
 }
@@ -104,6 +110,9 @@ if ( $params->{'step2'} ) {
 if ( $params->{'step3'} ) {
     $filterdate1 = format_date_in_iso($params->{'filterdate1'});
     $filterdate2 = format_date_in_iso($params->{'filterdate2'});
+    $borrower_dateexpiry = format_date_in_iso($params->{'borrower_dateexpiry'});
+    $borrower_categorycode = $params->{'borrower_categorycode'};
+
     my $do_delete = $params->{'do_delete'};
     my $do_anonym = $params->{'do_anonym'};
 
@@ -111,7 +120,7 @@ if ( $params->{'step3'} ) {
     
     # delete members
     if ($do_delete) {
-        my $membersToDelete = GetBorrowersWhoHaveNotBorrowedSince($filterdate1, 1);
+        my $membersToDelete = GetBorrowersWhoHaveNotBorrowedSince({ not_borrowered_since => $filterdate1, expired_before => $borrower_dateexpiry, category_code => $borrower_categorycode });
         $totalDel = scalar(@$membersToDelete);
         $radio    = $params->{'radio'};
         if ( $radio eq 'trash' ) {
@@ -154,16 +163,12 @@ if ( $params->{'step3'} ) {
     exit;
 }
 
-#default value set to the template are the 'CNIL' value.
-my ( $year, $month, $day ) = &Today();
-$filterdate1 = format_date(sprintf("%-04.4d-%-02.2d-%02.2d", Add_Delta_YM($year, $month, $day, -1, 0)));
-$filterdate2 = format_date(sprintf("%-04.4d-%-02.2d-%02.2d", Add_Delta_YM($year, $month, $day, 0, -3)));
-
 $template->param(
     step1       => '1',
     filterdate1 => $filterdate1,
     filterdate2 => $filterdate2,
     DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
+    borrower_categorycodes => GetBorrowercategoryList(),
 );
 
 #writing the template

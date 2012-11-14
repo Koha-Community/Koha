@@ -1940,50 +1940,63 @@ WHERE roadtypeid=?|;
 
 =head2 GetBorrowersWhoHaveNotBorrowedSince
 
-  &GetBorrowersWhoHaveNotBorrowedSince($date)
+  $borrowers = &GetBorrowersWhoHaveNotBorrowedSince(
+      not_borrowered_since => $not_borrowered_since,
+      expired_before       => $expired_before,
+      category_code        => $category_code,
+      branchcode           => $branchcode
+  );
 
-this function get all borrowers who haven't borrowed since the date given on input arg.
+  This function get all borrowers based on the given criteria.
 
 =cut
 
 sub GetBorrowersWhoHaveNotBorrowedSince {
-    my $filterdate = shift||POSIX::strftime("%Y-%m-%d",localtime());
-    my $filterexpiry = shift;
-    my $filterbranch = shift || 
+    my $params = shift;
+
+    my $filterdate     = $params->{'not_borrowered_since'};
+    my $filterexpiry   = $params->{'expired_before'};
+    my $filtercategory = $params->{'category_code'};
+    my $filterbranch   = $params->{'branchcode'} ||
                         ((C4::Context->preference('IndependantBranches') 
                              && C4::Context->userenv 
                              && C4::Context->userenv->{flags} % 2 !=1 
                              && C4::Context->userenv->{branch})
                          ? C4::Context->userenv->{branch}
                          : "");  
+
     my $dbh   = C4::Context->dbh;
     my $query = "
         SELECT borrowers.borrowernumber,
-               max(old_issues.timestamp) as latestissue,
-               max(issues.timestamp) as currentissue
+               MAX(old_issues.timestamp) AS latestissue,
+               MAX(issues.timestamp) AS currentissue
         FROM   borrowers
         JOIN   categories USING (categorycode)
         LEFT JOIN old_issues USING (borrowernumber)
         LEFT JOIN issues USING (borrowernumber) 
         WHERE  category_type <> 'S'
-        AND borrowernumber NOT IN (SELECT guarantorid FROM borrowers WHERE guarantorid IS NOT NULL AND guarantorid <> 0) 
+        AND borrowernumber NOT IN (SELECT guarantorid FROM borrowers WHERE guarantorid IS NOT NULL AND guarantorid <> 0)
    ";
     my @query_params;
-    if ($filterbranch && $filterbranch ne ""){ 
-        $query.=" AND borrowers.branchcode= ?";
-        push @query_params,$filterbranch;
+    if ( $filterbranch && $filterbranch ne "" ) {
+        $query.= " AND borrowers.branchcode = ? ";
+        push( @query_params, $filterbranch );
     }
-    if($filterexpiry){
+    if ( $filterexpiry ) {
         $query .= " AND dateexpiry < ? ";
-        push @query_params,$filterdate;
+        push( @query_params, $filterexpiry );
     }
-    $query.=" GROUP BY borrowers.borrowernumber";
-    if ($filterdate){ 
-        $query.=" HAVING (latestissue < ? OR latestissue IS NULL) 
-                  AND currentissue IS NULL";
+    if ( $filtercategory ) {
+        $query .= " AND categorycode = ? ";
+        push( @query_params, $filtercategory );
+    }
+    $query.=" GROUP BY borrowers.borrowernumber HAVING currentissue IS NULL ";
+    if ( $filterdate ) {
+        $query.=" AND ( latestissue < ? OR latestissue IS NULL ) ";
         push @query_params,$filterdate;
     }
     warn $query if $debug;
+
     my $sth = $dbh->prepare($query);
     if (scalar(@query_params)>0){  
         $sth->execute(@query_params);
