@@ -85,7 +85,9 @@ my $quickslip = 0;
 my $flagsrequired;
 if ($print eq "page") {
     $template_name = "members/moremember-print.tmpl";
-    $flagsrequired = { borrowers => 1 };
+    # circ staff who process checkouts but can't edit
+    # patrons still need to be able to access print view
+    $flagsrequired = { circulate => "circulate_remaining_permissions" };
 } elsif ($print eq "slip") {
     $template_name = "members/moremember-receipt.tmpl";
     # circ staff who process checkouts but can't edit
