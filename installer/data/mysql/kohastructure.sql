@@ -762,6 +762,7 @@ CREATE TABLE `deleteditems` (
   `itemlost` tinyint(1) NOT NULL default 0, -- authorized value defining this item as lost (MARC21 952$1)
   `wthdrawn` tinyint(1) NOT NULL default 0, -- authorized value defining this item as withdrawn (MARC21 952$0)
   `itemcallnumber` varchar(255) default NULL, -- call number for this item (MARC21 952$o)
+  `coded_location_qualifier` varchar(10) default NULL, -- coded location qualifier(MARC21 952$f)
   `issues` smallint(6) default NULL, -- number of times this item has been checked out
   `renewals` smallint(6) default NULL, -- number of times this item has been renewed
   `reserves` smallint(6) default NULL, -- number of times this item has been placed on hold/reserved
