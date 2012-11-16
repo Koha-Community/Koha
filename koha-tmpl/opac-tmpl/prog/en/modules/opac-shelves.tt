@@ -452,7 +452,7 @@ $(function() {
 
             
             [% IF ( edit ) %]
-                <h3><a href="/cgi-bin/koha/opac-shelves.pl">Lists</a> <img src="[% themelang %]/../images/caret.gif" width="16" height="16" alt="&gt;" border="0" /> <a href="/cgi-bin/koha/opac-shelves.pl?viewshelf=[% shelfnumber %]"><em>[% shelfname |html %]</em></a> <img src="[% themelang %]/../images/caret.gif" width="16" height="16" alt="&gt;" border="0" /> Editing</h3>
+                <h3><a href="/cgi-bin/koha/opac-shelves.pl">Lists</a> &#8674; <a href="/cgi-bin/koha/opac-shelves.pl?viewshelf=[% shelfnumber %]"><em>[% shelfname |html %]</em></a> &#8674; Editing</h3>
                 <form method="post" action="/cgi-bin/koha/opac-shelves.pl">
                   <input type="hidden" name="op" value="modifsave" />
                   <input type="hidden" name="display" value="[% display %]" />
