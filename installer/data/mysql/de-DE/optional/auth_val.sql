@@ -50,3 +50,10 @@ INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('BOR_N
 -- OPAC Suggestions reasons
 INSERT INTO authorised_values (category,authorised_value,lib,lib_opac) VALUES ('OPAC_SUG','damaged','Vorhandenes Exemplar ist beschädigt','Vorhandenes Exemplar ist beschädigt');
 INSERT INTO authorised_values (category,authorised_value,lib,lib_opac) VALUES ('OPAC_SUG','bestseller','Neuerscheinung von bekanntem Verfasser','Neuerscheinung von bekanntem Verfasser');
+
+-- Report groups
+INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('REPORT_GROUP', 'CIRC', 'Ausleihe');
+INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('REPORT_GROUP', 'CAT', 'Katalog');
+INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('REPORT_GROUP', 'PAT', 'Benutzer');
+INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('REPORT_GROUP', 'ACQ', 'Erwerbung');
+INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('REPORT_GROUP', 'ACC', 'Gebühren');
