@@ -633,13 +633,15 @@ sub checkauth {
     if ( $userid = $ENV{'REMOTE_USER'} ) {
         # Using Basic Authentication, no cookies required
         $cookie = $query->cookie(
-            -name    => 'CGISESSID',
-            -value   => '',
-            -expires => ''
+            -name     => 'CGISESSID',
+            -value    => '',
+            -expires  => '',
+            -HttpOnly => 1,
         );
         $loggedin = 1;
     }
-    elsif ( $sessionID = $query->cookie("CGISESSID")) {     # assignment, not comparison
+    elsif ( $sessionID = $query->cookie("CGISESSID") )
+    {    # assignment, not comparison
         my $session = get_session($sessionID);
         C4::Context->_new_userenv($sessionID);
         my ($ip, $lasttime, $sessiontype);
@@ -705,8 +707,12 @@ sub checkauth {
             $userid    = undef;
         }
         else {
-            $cookie = $query->cookie( CGISESSID => $session->id );
-            $session->param('lasttime',time());
+            $cookie = $query->cookie(
+                -name     => 'CGISESSID',
+                -value    => $session->id,
+                -HttpOnly => 1
+            );
+            $session->param( 'lasttime', time() );
             unless ( $sessiontype && $sessiontype eq 'anon' ) { #if this is an anonymous session, we want to update the session, but not behave as if they are logged in...
                 $flags = haspermission($userid, $flagsrequired);
                 if ($flags) {
@@ -722,8 +728,12 @@ sub checkauth {
         my $session = get_session("") or die "Auth ERROR: Cannot get_session()";
         my $sessionID = $session->id;
         C4::Context->_new_userenv($sessionID);
-        $cookie = $query->cookie( CGISESSID => $sessionID );
-        $userid = $query->param('userid');
+        $cookie = $query->cookie(
+            -name     => 'CGISESSID',
+            -value    => $session->id,
+            -HttpOnly => 1
+        );
+    $userid = $query->param('userid');
         if (   ( $cas && $query->param('ticket') )
             || $userid
             || ( my $pki_field = C4::Context->preference('AllowPKIAuth') ) ne
@@ -914,7 +924,11 @@ sub checkauth {
     {
         # successful login
         unless ($cookie) {
-            $cookie = $query->cookie( CGISESSID => '' );
+            $cookie = $query->cookie(
+                -name     => 'CGISESSID',
+                -value    => '',
+                -HttpOnly => 1
+            );
         }
         return ( $userid, $cookie, $sessionID, $flags );
     }
