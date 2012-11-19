@@ -33,7 +33,7 @@ BEGIN {
     $VERSION = 3.07.00.049;
 	require Exporter;
 	@ISA = qw(Exporter);
-	@EXPORT = qw(&ImportBreeding &BreedingSearch);
+    @EXPORT = qw(&ImportBreeding &BreedingSearch &Z3950Search);
 }
 
 =head1 NAME
@@ -212,6 +212,265 @@ sub BreedingSearch {
     $sth->finish;
     return($count, @results);
 } # sub breedingsearch
+
+
+=head2 Z3950Search
+
+Z3950Search($pars, $template);
+
+Parameters for Z3950 search are all passed via the $pars hash. It may contain isbn, title, author, dewey, subject, lccall, controlnumber, stdid, srchany.
+Also it should contain an arrayref id that points to a list of id's of the z3950 targets to be queried (see z3950servers table).
+This code is used in acqui/z3950_search and cataloging/z3950_search.
+The second parameter $template is a Template object. The routine uses this parameter to store the found values into the template.
+
+=cut
+
+sub Z3950Search {
+    my ($pars, $template)= @_;
+
+    my $dbh   = C4::Context->dbh;
+    my @id= @{$pars->{id}};
+    my $random= $pars->{random};
+    my $page= $pars->{page};
+    my $biblionumber= $pars->{biblionumber};
+
+    my $isbn= $pars->{isbn};
+    my $issn= $pars->{issn};
+    my $title= $pars->{title};
+    my $author= $pars->{author};
+    my $dewey= $pars->{dewey};
+    my $subject= $pars->{subject};
+    my $lccn= $pars->{lccn};
+    my $lccall= $pars->{lccall};
+    my $controlnumber= $pars->{controlnumber};
+
+
+my $show_next       = 0;
+my $total_pages     = 0;
+
+my $noconnection;
+my $attr = '';
+my $term;
+my $host;
+my $server;
+my $database;
+my $port;
+my $marcdata;
+my @encoding;
+my @results;
+my $count;
+my $toggle;
+my $record;
+my $oldbiblio;
+my $errmsg;
+my @serverhost;
+my @servername;
+my @breeding_loop = ();
+
+
+    my @oConnection;
+    my @oResult;
+    my @errconn;
+    my $s = 0;
+    my $query;
+    my $nterms=0;
+    if ($isbn) {
+        $term=$isbn;
+        $query .= " \@attr 1=7 \@attr 5=1 \"$term\" ";
+        $nterms++;
+    }
+    if ($issn) {
+        $term=$issn;
+        $query .= " \@attr 1=8 \@attr 5=1 \"$term\" ";
+        $nterms++;
+    }
+    if ($title) {
+        utf8::decode($title);
+        $query .= " \@attr 1=4 \"$title\" ";
+        $nterms++;
+    }
+    if ($author) {
+        utf8::decode($author);
+        $query .= " \@attr 1=1003 \"$author\" ";
+        $nterms++;
+    }
+    if ($dewey) {
+        $query .= " \@attr 1=16 \"$dewey\" ";
+        $nterms++;
+    }
+    if ($subject) {
+        utf8::decode($subject);
+        $query .= " \@attr 1=21 \"$subject\" ";
+        $nterms++;
+    }
+    if ($lccn) {
+        $query .= " \@attr 1=9 $lccn ";
+        $nterms++;
+    }
+    if ($lccall) {
+        $query .= " \@attr 1=16 \@attr 2=3 \@attr 3=1 \@attr 4=1 \@attr 5=1 \@attr 6=1 \"$lccall\" ";
+        $nterms++;
+    }
+    if ($controlnumber) {
+        $query .= " \@attr 1=12 \"$controlnumber\" ";
+        $nterms++;
+    }
+for my $i (1..$nterms-1) {
+    $query = "\@and " . $query;
+}
+warn "query ".$query  if $DEBUG;
+
+    foreach my $servid (@id) {
+        my $sth = $dbh->prepare("select * from z3950servers where id=?");
+        $sth->execute($servid);
+        while ( $server = $sth->fetchrow_hashref ) {
+            warn "serverinfo ".join(':',%$server) if $DEBUG;
+            my $option1      = new ZOOM::Options();
+            $option1->option( 'async' => 1 );
+            $option1->option( 'elementSetName', 'F' );
+            $option1->option( 'databaseName',   $server->{db} );
+            $option1->option( 'user', $server->{userid} ) if $server->{userid};
+            $option1->option( 'password', $server->{password} )
+              if $server->{password};
+            $option1->option( 'preferredRecordSyntax', $server->{syntax} );
+            $oConnection[$s] = create ZOOM::Connection($option1)
+              || $DEBUG
+              && warn( "" . $oConnection[$s]->errmsg() );
+            warn( "server data", $server->{name}, $server->{port} ) if $DEBUG;
+            $oConnection[$s]->connect( $server->{host}, $server->{port} )
+              || $DEBUG
+              && warn( "" . $oConnection[$s]->errmsg() );
+            $serverhost[$s] = $server->{host};
+            $servername[$s] = $server->{name};
+            $encoding[$s]   = ($server->{encoding}?$server->{encoding}:"iso-5426");
+            $s++;
+        }    ## while fetch
+    }    # foreach
+    my $nremaining  = $s;
+    my $firstresult = 1;
+
+    for ( my $z = 0 ; $z < $s ; $z++ ) {
+        warn "doing the search" if $DEBUG;
+        $oResult[$z] = $oConnection[$z]->search_pqf($query)
+          || $DEBUG
+          && warn( "somthing went wrong: " . $oConnection[$s]->errmsg() );
+
+        # $oResult[$z] = $oConnection[$z]->search_pqf($query);
+    }
+
+  warn "# nremaining = $nremaining\n" if $DEBUG;
+
+  while ( $nremaining-- ) {
+
+    my $k;
+    my $event;
+    while ( ( $k = ZOOM::event( \@oConnection ) ) != 0 ) {
+        $event = $oConnection[ $k - 1 ]->last_event();
+        warn( "connection ", $k - 1, ": event $event (",
+            ZOOM::event_str($event), ")\n" )
+          if $DEBUG;
+        last if $event == ZOOM::Event::ZEND;
+    }
+
+    if ( $k != 0 ) {
+        $k--;
+        warn "event from $k server = ",$serverhost[$k] if $DEBUG;
+        my ( $error, $errmsg, $addinfo, $diagset ) =
+          $oConnection[$k]->error_x();
+        if ($error) {
+            if ($error =~ m/^(10000|10007)$/ ) {
+                push(@errconn, {'server' => $serverhost[$k]});
+            }
+            $DEBUG and warn "$k $serverhost[$k] error $query: $errmsg ($error) $addinfo\n";
+        }
+        else {
+            my $numresults = $oResult[$k]->size();
+            warn "numresults = $numresults" if $DEBUG;
+            my $i;
+            my $result = '';
+            if ( $numresults > 0  and $numresults >= (($page-1)*20)) {
+                $show_next = 1 if $numresults >= ($page*20);
+                $total_pages = int($numresults/20)+1 if $total_pages < ($numresults/20);
+                for ($i = ($page-1)*20; $i < (($numresults < ($page*20)) ? $numresults : ($page*20)); $i++) {
+                    my $rec = $oResult[$k]->record($i);
+                    if ($rec) {
+                        my $marcrecord;
+                        $marcdata   = $rec->raw();
+
+                        my ($charset_result, $charset_errors);
+                        ($marcrecord, $charset_result, $charset_errors) =
+                          MarcToUTF8Record($marcdata, C4::Context->preference('marcflavour'), $encoding[$k]);
+####WARNING records coming from Z3950 clients are in various character sets MARC8,UTF8,UNIMARC etc
+## In HEAD i change everything to UTF-8
+# In rel2_2 i am not sure what encoding is so no character conversion is done here
+##Add necessary encoding changes to here -TG
+
+                        # Normalize the record so it doesn't have separated diacritics
+                        SetUTF8Flag($marcrecord);
+
+                        my $oldbiblio = TransformMarcToKoha( $dbh, $marcrecord, "" );
+                        $oldbiblio->{isbn}   =~ s/ |-|\.//g if $oldbiblio->{isbn};
+                        # pad | and ( with spaces to allow line breaks in the HTML
+                        $oldbiblio->{isbn} =~ s/\|/ \| /g if $oldbiblio->{isbn};
+                        $oldbiblio->{isbn} =~ s/\(/ \(/g if $oldbiblio->{isbn};
+
+                        $oldbiblio->{issn} =~ s/ |-|\.//g if $oldbiblio->{issn};
+                        # pad | and ( with spaces to allow line breaks in the HTML
+                        $oldbiblio->{issn} =~ s/\|/ \| /g if $oldbiblio->{issn};
+                        $oldbiblio->{issn} =~ s/\(/ \(/g if $oldbiblio->{issn};
+                          my (
+                            $notmarcrecord, $alreadyindb, $alreadyinfarm,
+                            $imported,      $breedingid
+                          )
+                          = ImportBreeding( $marcdata, 2, $serverhost[$k], $encoding[$k], $random, 'z3950' );
+                        my %row_data;
+                        $row_data{server}       = $servername[$k];
+                        $row_data{isbn}         = $oldbiblio->{isbn};
+                        $row_data{lccn}         = $oldbiblio->{lccn};
+                        $row_data{title}        = $oldbiblio->{title};
+                        $row_data{author}       = $oldbiblio->{author};
+                        $row_data{breedingid}   = $breedingid;
+                        $row_data{biblionumber} = $biblionumber;
+                        push( @breeding_loop, \%row_data );
+
+                    } else {
+                        push(@breeding_loop,{'server'=>$servername[$k],'title'=>join(': ',$oConnection[$k]->error_x()),'breedingid'=>-1,'biblionumber'=>-1});
+                    } # $rec
+                }    # upto 5 results
+            }    #$numresults
+        }
+    }    # if $k !=0
+    my $numberpending = $nremaining - 1;
+
+    my @servers = ();
+    foreach my $id (@id) {
+        push(@servers,{id => $id});
+    }
+
+    $template->param(
+        breeding_loop => \@breeding_loop,
+        server        => $servername[$k],
+        numberpending => $numberpending,
+        current_page => $page,
+        servers => \@servers,
+        total_pages => $total_pages,
+    );
+    $template->param(show_nextbutton=>1) if $show_next;
+    $template->param(show_prevbutton=>1) if $page != 1;
+
+    #  print  $template->output  if $firstresult !=1;
+    $firstresult++;
+
+  } # while nremaining
+
+    $template->param(
+        breeding_loop => \@breeding_loop,
+        #server        => $servername[$k],
+        numberpending => $nremaining > 0 ? $nremaining : 0,
+        errconn       => \@errconn
+    );
+
+}
 
 1;
 __END__

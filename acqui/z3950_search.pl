@@ -25,13 +25,13 @@ use CGI;
 
 use C4::Auth;
 use C4::Output;
-use C4::Biblio;
+#use C4::Biblio;
 use C4::Context;
 use C4::Breeding;
 use C4::Koha;
-use C4::Charset;
+#use C4::Charset;
 use C4::Bookseller qw/ GetBookSellerFromId /;
-use ZOOM;
+#use ZOOM;
 
 my $input        = new CGI;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -47,10 +47,8 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 
 my $dbh             = C4::Context->dbh;
-my $error           = $input->param('error');
-my $biblionumber    = $input->param('biblionumber');
-$biblionumber       = 0 unless $biblionumber;
-my $frameworkcode   = $input->param('frameworkcode');
+my $biblionumber    = $input->param('biblionumber')||0;
+my $frameworkcode   = $input->param('frameworkcode')||'';
 my $title           = $input->param('title');
 my $author          = $input->param('author');
 my $isbn            = $input->param('isbn');
@@ -60,40 +58,12 @@ my $lccall          = $input->param('lccall');
 my $subject         = $input->param('subject');
 my $dewey           = $input->param('dewey');
 my $controlnumber   = $input->param('controlnumber');
-my $op              = $input->param('op');
+my $op              = $input->param('op')||'';
 my $booksellerid    = $input->param('booksellerid');
 my $basketno        = $input->param('basketno');
 
 my $page            = $input->param('current_page') || 1;
 $page               = $input->param('goto_page') if $input->param('changepage_goto');
-my $show_next       = 0;
-my $total_pages     = 0;
-
-my $noconnection;
-my $attr = '';
-my $term;
-my $host;
-my $server;
-my $database;
-my $port;
-my $marcdata;
-my @encoding;
-my @results;
-my $count;
-my $toggle;
-my $record;
-my $oldbiblio;
-my $errmsg;
-my @serverhost;
-my @servername;
-my @breeding_loop = ();
-my $random        = $input->param('random');
-unless ($random)
-{    # this var is not useful anymore just kept to keep rel2_2 compatibility
-    $random = rand(1000000000);
-}
-
-my $DEBUG = $ENV{DEBUG} || 0;    # if set to 1, many debug message are send on syslog.
 
 # get framework list
 my $frameworks = getframeworks;
@@ -114,23 +84,19 @@ $template->param( frameworkcode => $frameworkcode,
                                     frameworkcodeloop => \@frameworkcodeloop,
                                     booksellerid => $booksellerid,
                                     basketno => $basketno,
-                                    name => $vendor->{'name'}
+                                    name => $vendor->{'name'},
+        isbn         => $isbn,
+        issn         => $issn,
+        lccn         => $lccn,
+        lccall       => $lccall,
+        title        => $title,
+        author       => $author,
+        controlnumber=> $controlnumber,
+        biblionumber => $biblionumber,
+        dewey        => $dewey,
+        subject      => $subject,
                                     );
                                     
-
-$template->param(
-    isbn         => $isbn,
-    issn         => $issn,
-    lccn         => $lccn,
-    lccall       => $lccall,
-    title        => $title,
-    author       => $author,
-    controlnumber=> $controlnumber,
-    biblionumber => $biblionumber,
-    dewey        => $dewey,
-    subject      => $subject,
-);
-
 if ( $op ne "do_search" ) {
     my $sth = $dbh->prepare("select id,host,name,checked from z3950servers  order by host");
     $sth->execute();
@@ -143,214 +109,27 @@ if ( $op ne "do_search" ) {
     exit;
 }
 
-    my @id = $input->param('id');
-
-    if ( not @id ) {
-        # empty server list -> report and exit
-        $template->param( emptyserverlist => 1 );
-        output_html_with_http_headers $input, $cookie, $template->output;
-        exit;
-    }
-
-    my @oConnection;
-    my @oResult;
-    my @errconn;
-    my $s = 0;
-    my $query;
-    my $nterms;
-    if ($isbn) {
-        $term=$isbn;
-        $query .= " \@attr 1=7 \@attr 5=1 \"$term\" ";
-        $nterms++;
-    }
-    if ($issn) {
-        $term=$issn;
-        $query .= " \@attr 1=8 \@attr 5=1 \"$term\" ";
-        $nterms++;
-    }
-    if ($title) {
-        utf8::decode($title);
-        $query .= " \@attr 1=4 \"$title\" ";
-        $nterms++;
-    }
-    if ($author) {
-        utf8::decode($author);
-        $query .= " \@attr 1=1003 \"$author\" ";
-        $nterms++;
-    }
-    if ($dewey) {
-        $query .= " \@attr 1=16 \"$dewey\" ";
-        $nterms++;
-    }
-    if ($subject) {
-        utf8::decode($subject);
-        $query .= " \@attr 1=21 \"$subject\" ";
-        $nterms++;
-    }
-    if ($lccn) {
-        $query .= " \@attr 1=9 $lccn ";
-        $nterms++;
-    }
-    if ($lccall) {
-        $query .= " \@attr 1=16 \@attr 2=3 \@attr 3=1 \@attr 4=1 \@attr 5=1 \@attr 6=1 \"$lccall\" ";
-        $nterms++;
-    }
-    if ($controlnumber) {
-        $query .= " \@attr 1=12 \"$controlnumber\" ";
-        $nterms++;
-    }
-for my $i (1..$nterms-1) {
-    $query = "\@and " . $query;
+my @id = $input->param('id');
+if (@id==0) {
+    $template->param( emptyserverlist => 1 );
+    output_html_with_http_headers $input, $cookie, $template->output;
+    exit;
 }
-warn "query ".$query  if $DEBUG;
 
-    foreach my $servid (@id) {
-        my $sth = $dbh->prepare("select * from z3950servers where id=?");
-        $sth->execute($servid);
-        while ( $server = $sth->fetchrow_hashref ) {
-            warn "serverinfo ".join(':',%$server) if $DEBUG;
-            my $option1      = new ZOOM::Options();
-            $option1->option( 'async' => 1 );
-            $option1->option( 'elementSetName', 'F' );
-            $option1->option( 'databaseName',   $server->{db} );
-            $option1->option( 'user', $server->{userid} ) if $server->{userid};
-            $option1->option( 'password', $server->{password} )
-              if $server->{password};
-            $option1->option( 'preferredRecordSyntax', $server->{syntax} );
-            $oConnection[$s] = create ZOOM::Connection($option1)
-              || $DEBUG
-              && warn( "" . $oConnection[$s]->errmsg() );
-            warn( "server data", $server->{name}, $server->{port} ) if $DEBUG;
-            $oConnection[$s]->connect( $server->{host}, $server->{port} )
-              || $DEBUG
-              && warn( "" . $oConnection[$s]->errmsg() );
-            $serverhost[$s] = $server->{host};
-            $servername[$s] = $server->{name};
-            $encoding[$s]   = ($server->{encoding}?$server->{encoding}:"iso-5426");
-            $s++;
-        }    ## while fetch
-    }    # foreach
-    my $nremaining  = $s;
-    my $firstresult = 1;
-
-    for ( my $z = 0 ; $z < $s ; $z++ ) {
-        warn "doing the search" if $DEBUG;
-        $oResult[$z] = $oConnection[$z]->search_pqf($query)
-          || $DEBUG
-          && warn( "somthing went wrong: " . $oConnection[$s]->errmsg() );
-
-        # $oResult[$z] = $oConnection[$z]->search_pqf($query);
-    }
-
-  warn "# nremaining = $nremaining\n" if $DEBUG;
-
-  while ( $nremaining-- ) {
-
-    my $k;
-    my $event;
-    while ( ( $k = ZOOM::event( \@oConnection ) ) != 0 ) {
-        $event = $oConnection[ $k - 1 ]->last_event();
-        warn( "connection ", $k - 1, ": event $event (",
-            ZOOM::event_str($event), ")\n" )
-          if $DEBUG;
-        last if $event == ZOOM::Event::ZEND;
-    }
-
-    if ( $k != 0 ) {
-        $k--;
-        warn "event from $k server = ",$serverhost[$k] if $DEBUG;
-        my ( $error, $errmsg, $addinfo, $diagset ) =
-          $oConnection[$k]->error_x();
-        if ($error) {
-            if ($error =~ m/^(10000|10007)$/ ) {
-                push(@errconn, {'server' => $serverhost[$k]});
-            }
-            $DEBUG and warn "$k $serverhost[$k] error $query: $errmsg ($error) $addinfo\n";
-        }
-        else {
-            my $numresults = $oResult[$k]->size();
-            warn "numresults = $numresults" if $DEBUG;
-            my $i;
-            my $result = '';
-            if ( $numresults > 0  and $numresults >= (($page-1)*20)) {
-                $show_next = 1 if $numresults >= ($page*20);
-                $total_pages = int($numresults/20)+1 if $total_pages < ($numresults/20);
-                for ($i = ($page-1)*20; $i < (($numresults < ($page*20)) ? $numresults : ($page*20)); $i++) {
-                    my $rec = $oResult[$k]->record($i);
-                    if ($rec) {
-                        my $marcrecord;
-                        $marcdata   = $rec->raw();
-
-                        my ($charset_result, $charset_errors);
-                        ($marcrecord, $charset_result, $charset_errors) = 
-                          MarcToUTF8Record($marcdata, C4::Context->preference('marcflavour'), $encoding[$k]);
-####WARNING records coming from Z3950 clients are in various character sets MARC8,UTF8,UNIMARC etc
-## In HEAD i change everything to UTF-8
-# In rel2_2 i am not sure what encoding is so no character conversion is done here
-##Add necessary encoding changes to here -TG
-
-                        # Normalize the record so it doesn't have separated diacritics
-                        SetUTF8Flag($marcrecord);
-
-                        my $oldbiblio = TransformMarcToKoha( $dbh, $marcrecord, "" );
-                        $oldbiblio->{isbn}   =~ s/ |-|\.//g if $oldbiblio->{isbn};
-                        # pad | and ( with spaces to allow line breaks in the HTML
-                        $oldbiblio->{isbn} =~ s/\|/ \| /g if $oldbiblio->{isbn};
-                        $oldbiblio->{isbn} =~ s/\(/ \(/g if $oldbiblio->{isbn};
-
-                        $oldbiblio->{issn} =~ s/ |-|\.//g if $oldbiblio->{issn};
-                        # pad | and ( with spaces to allow line breaks in the HTML
-                        $oldbiblio->{issn} =~ s/\|/ \| /g if $oldbiblio->{issn};
-                        $oldbiblio->{issn} =~ s/\(/ \(/g if $oldbiblio->{issn};
-                          my (
-                            $notmarcrecord, $alreadyindb, $alreadyinfarm,
-                            $imported,      $breedingid
-                          )
-                          = ImportBreeding( $marcdata, 2, $serverhost[$k], $encoding[$k], $random, 'z3950' );
-                        my %row_data;
-                        $row_data{server}       = $servername[$k];
-                        $row_data{isbn}         = $oldbiblio->{isbn};
-                        $row_data{lccn}         = $oldbiblio->{lccn};
-                        $row_data{title}        = $oldbiblio->{title};
-                        $row_data{author}       = $oldbiblio->{author};
-                        $row_data{breedingid}   = $breedingid;
-                        $row_data{biblionumber} = $biblionumber;
-                        push( @breeding_loop, \%row_data );
-
-                    } else {
-                        push(@breeding_loop,{'server'=>$servername[$k],'title'=>join(': ',$oConnection[$k]->error_x()),'breedingid'=>-1,'biblionumber'=>-1});
-                    } # $rec
-                }    # upto 5 results
-            }    #$numresults
-        }
-    }    # if $k !=0
-    my $numberpending = $nremaining - 1;
-
-    my @servers = ();
-    foreach my $id (@id) {
-        push(@servers,{id => $id});
-    }
-
-    $template->param(
-        breeding_loop => \@breeding_loop,
-        server        => $servername[$k],
-        numberpending => $numberpending,
-        current_page => $page,
-        servers => \@servers,
-        total_pages => $total_pages,
-    );
-    $template->param(show_nextbutton=>1) if $show_next;
-    $template->param(show_prevbutton=>1) if $page != 1;
-
-    #  print  $template->output  if $firstresult !=1;
-    $firstresult++;
-
-  } # while nremaining
-
-$template->param(
-breeding_loop => \@breeding_loop,
-#server        => $servername[$k],
-numberpending => $nremaining > 0 ? $nremaining : 0,
-errconn       => \@errconn
-);
+my $pars= {
+        random => $input->param('random') || rand(1000000000),
+        biblionumber => $biblionumber,
+        page => $page,
+        id => \@id,
+        isbn => $isbn,
+        title => $title,
+        author => $author,
+        dewey => $dewey,
+        subject => $subject,
+        lccall => $lccall,
+        controlnumber => $controlnumber,
+        stdid => 0,
+        srchany => 0,
+};
+Z3950Search($pars, $template);
 output_html_with_http_headers $input, $cookie, $template->output;

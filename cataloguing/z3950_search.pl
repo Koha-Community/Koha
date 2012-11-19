@@ -19,17 +19,17 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 use strict;
-#use warnings; FIXME - Bug 2505
+use warnings;
 use CGI;
 
 use C4::Auth;
 use C4::Output;
-use C4::Biblio;
+#use C4::Biblio;
 use C4::Context;
 use C4::Breeding;
 use C4::Koha;
-use C4::Charset;
-use ZOOM;
+#use C4::Charset;
+#use ZOOM;
 
 my $input        = new CGI;
 my $dbh          = C4::Context->dbh;
@@ -47,34 +47,10 @@ my $dewey         = $input->param('dewey');
 my $controlnumber	= $input->param('controlnumber');
 my $stdid			= $input->param('stdid');
 my $srchany			= $input->param('srchany');
-my $random        = $input->param('random') || rand(1000000000); # this var is not useful anymore just kept for rel2_2 compatibility
-my $op            = $input->param('op');
+my $op            = $input->param('op')||'';
 
 my $page            = $input->param('current_page') || 1;
 $page = $input->param('goto_page') if $input->param('changepage_goto');
-my $show_next = 0;
-my $total_pages = 0;
-
-my $numberpending;
-my $attr = '';
-my $term;
-my $host;
-my $server;
-my $database;
-my $port;
-my $marcdata;
-my @encoding;
-my @results;
-my $count;
-my $record;
-my $oldbiblio;
-my $errmsg;
-my @serverloop = ();
-my @serverhost;
-my @servername;
-my @breeding_loop = ();
-
-my $DEBUG = 0;    # if set to 1, many debug message are send on syslog.
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
         template_name   => "cataloguing/z3950_search.tmpl",
@@ -110,222 +86,31 @@ if ( $op ne "do_search" ) {
         opsearch     => "search",
     );
     output_html_with_http_headers $input, $cookie, $template->output;
+    exit;
 }
-else {
-    my @id = $input->param('id');
 
-    if ( not defined @id ) {
+my @id = $input->param('id');
+if ( @id==0 ) {
         # empty server list -> report and exit
         $template->param( emptyserverlist => 1 );
         output_html_with_http_headers $input, $cookie, $template->output;
         exit;
-    }
-
-    my @oConnection;
-    my @oResult;
-    my @errconn;
-    my $s = 0;
-    my $query = '';
-    my $nterms;
-    if ($isbn) {
-        $term=$isbn;
-        $query .= " \@attr 1=7 \@attr 5=1 \"$term\" ";
-        $nterms++;
-    }
-    if ($issn) {
-        $term=$issn;
-        $query .= " \@attr 1=8 \@attr 5=1 \"$term\" ";
-        $nterms++;
-    }
-    if ($title) {
-        utf8::decode($title);
-        $query .= " \@attr 1=4 \"$title\" ";
-        $nterms++;
-    }
-    if ($author) {
-        utf8::decode($author);
-        $query .= " \@attr 1=1003 \"$author\" ";
-        $nterms++;
-    }
-    if ($dewey) {
-        $query .= " \@attr 1=16 \"$dewey\" ";
-        $nterms++;
-    }
-    if ($subject) {
-        utf8::decode($subject);
-        $query .= " \@attr 1=21 \"$subject\" ";
-        $nterms++;
-    }
-	if ($lccn) {	
-        $query .= " \@attr 1=9 $lccn ";
-        $nterms++;
-    }
-    if ($lccall) {
-        $query .= " \@attr 1=16 \@attr 2=3 \@attr 3=1 \@attr 4=1 \@attr 5=1 \@attr 6=1 \"$lccall\" ";
-        $nterms++;
-    }
-    if ($controlnumber) {
-        $query .= " \@attr 1=12 \"$controlnumber\" ";
-        $nterms++;
-    }
-    if ($stdid) {
-        $query .= " \@attr 1=1007 \"$stdid\" ";
-        $nterms++;
-    }
-    if ($srchany) {
-        $query .= " \@attr 1=1016 \"$srchany\" ";
-        $nterms++;
-    }
-for my $i (1..$nterms-1) {
-    $query = "\@and " . $query;
 }
-warn "query ".$query  if $DEBUG;
 
-    foreach my $servid (@id) {
-        my $sth = $dbh->prepare("SELECT * FROM z3950servers WHERE id=? ORDER BY rank, name");
-        $sth->execute($servid);
-        while ( $server = $sth->fetchrow_hashref ) {
-            warn "serverinfo ".join(':',%$server) if $DEBUG;
-            my $option1      = new ZOOM::Options();
-            $option1->option('async' => 1);
-            $option1->option('elementSetName', 'F');
-            $option1->option('databaseName', $server->{db});
-            $option1->option('user',         $server->{userid}  ) if $server->{userid};
-            $option1->option('password',     $server->{password}) if $server->{password};
-            $option1->option('preferredRecordSyntax', $server->{syntax});
-            $option1->option( 'timeout', $server->{timeout} ) if ($server->{timeout});
-            $oConnection[$s] = create ZOOM::Connection($option1)
-              || $DEBUG
-              && warn( "" . $oConnection[$s]->errmsg() );
-            warn( "server data", $server->{name}, $server->{port} ) if $DEBUG;
-            $oConnection[$s]->connect( $server->{host}, $server->{port} )
-              || $DEBUG
-              && warn( "" . $oConnection[$s]->errmsg() );
-            $serverhost[$s] = $server->{host};
-            $servername[$s] = $server->{name};
-            $encoding[$s]   = ($server->{encoding}?$server->{encoding}:"iso-5426");
-            $s++;
-        }    ## while fetch
-    }    # foreach
-    my $nremaining  = $s;
-    my $firstresult = 1;
-
-    for ( my $z = 0 ; $z < $s ; $z++ ) {
-        warn "doing the search" if $DEBUG;
-        $oResult[$z] = $oConnection[$z]->search_pqf($query)
-          || $DEBUG
-          && warn( "somthing went wrong: " . $oConnection[$s]->errmsg() );
-
-        # $oResult[$z] = $oConnection[$z]->search_pqf($query);
-    }
-
-  AGAIN:
-    my $k;
-    my $event;
-    while ( ( $k = ZOOM::event( \@oConnection ) ) != 0 ) {
-        $event = $oConnection[ $k - 1 ]->last_event();
-        warn( "connection ", $k - 1, ": event $event (",
-            ZOOM::event_str($event), ")\n" )
-          if $DEBUG;
-        last if $event == ZOOM::Event::ZEND;
-    }
-
-    if ( $k != 0 ) {
-        $k--;
-        warn $serverhost[$k] if $DEBUG;
-        my ( $error, $errmsg, $addinfo, $diagset ) =
-          $oConnection[$k]->error_x();
-        if ($error) {
-            if ($error =~ m/^(10000|10007)$/ ) {
-                push(@errconn, {'server' => $serverhost[$k], 'error' => $error});
-            }
-            $DEBUG and warn "$k $serverhost[$k] error $query: $errmsg ($error) $addinfo\n";
-        }
-        else {
-            my $numresults = $oResult[$k]->size();
-            my $i;
-            my $result = '';
-            if ( $numresults > 0  and $numresults >= (($page-1)*20)) {
-                $show_next = 1 if $numresults >= ($page*20);
-                $total_pages = int($numresults/20)+1 if $total_pages < ($numresults/20);
-                for ($i = ($page-1)*20; $i < (($numresults < ($page*20)) ? $numresults : ($page*20)); $i++) {
-                    my $rec = $oResult[$k]->record($i);
-                    if ($rec) {
-                        my $marcrecord;
-                        $marcdata   = $rec->raw();
-
-                        my ($charset_result, $charset_errors);
-                        ($marcrecord, $charset_result, $charset_errors) = 
-                          MarcToUTF8Record($marcdata, C4::Context->preference('marcflavour'), $encoding[$k]);
-####WARNING records coming from Z3950 clients are in various character sets MARC8,UTF8,UNIMARC etc
-## In HEAD i change everything to UTF-8
-# In rel2_2 i am not sure what encoding is so no character conversion is done here
-##Add necessary encoding changes to here -TG
-
-                        # Normalize the record so it doesn't have separated diacritics
-                        SetUTF8Flag($marcrecord);
-
-                        my $oldbiblio = TransformMarcToKoha( $dbh, $marcrecord, "" );
-                        $oldbiblio->{isbn}   =~ s/ |-|\.//g if $oldbiblio->{isbn};
-                        # pad | and ( with spaces to allow line breaks in the HTML
-                        $oldbiblio->{isbn} =~ s/\|/ \| /g if $oldbiblio->{isbn};
-                        $oldbiblio->{isbn} =~ s/\(/ \(/g if $oldbiblio->{isbn};
-
-                        $oldbiblio->{issn} =~ s/ |-|\.//g if $oldbiblio->{issn};
-                        # pad | and ( with spaces to allow line breaks in the HTML
-                        $oldbiblio->{issn} =~ s/\|/ \| /g if $oldbiblio->{issn};
-                        $oldbiblio->{issn} =~ s/\(/ \(/g if $oldbiblio->{issn};
-                          my (
-                            $notmarcrecord, $alreadyindb, $alreadyinfarm,
-                            $imported,      $breedingid
-                          )
-                          = ImportBreeding( $marcdata, 2, $serverhost[$k], $encoding[$k], $random, 'z3950' );
-                        my %row_data;
-                        $row_data{server}       = $servername[$k];
-                        $row_data{isbn}         = $oldbiblio->{isbn};
-                        $row_data{lccn}         = $oldbiblio->{lccn};
-                        $row_data{title}        = $oldbiblio->{title};
-                        $row_data{author}       = $oldbiblio->{author};
-                        $row_data{date}         = $oldbiblio->{copyrightdate};
-                        $row_data{edition}      = $oldbiblio->{editionstatement};
-                        $row_data{breedingid}   = $breedingid;
-                        $row_data{biblionumber} = $biblionumber;
-                        push( @breeding_loop, \%row_data );
-		            
-                    } else {
-                        push(@breeding_loop,{'server'=>$servername[$k],'title'=>join(': ',$oConnection[$k]->error_x()),'breedingid'=>-1,'biblionumber'=>-1});
-                    } # $rec
-                }
-            }    #$numresults
-        }
-    }    # if $k !=0
-    $numberpending = $nremaining - 1;
-
-    my @servers = ();
-    foreach my $id (@id) {
-        push(@servers,{id => $id});
-    }
-
-    $template->param(
-        breeding_loop => \@breeding_loop,
-        server        => $servername[$k],
-        numberpending => $numberpending,
-        biblionumber  => $biblionumber,
-        errconn       => \@errconn,
-        current_page => $page,
-        servers => \@servers,
-        total_pages => $total_pages,
-    );
-    $template->param(show_nextbutton=>1) if $show_next;
-    $template->param(show_prevbutton=>1) if $page != 1;
-    
-    output_html_with_http_headers $input, $cookie, $template->output if $numberpending == 0;
-
-    #  	print  $template->output  if $firstresult !=1;
-    $firstresult++;
-
-  MAYBE_AGAIN:
-    if ( --$nremaining > 0 ) {
-        goto AGAIN;
-    }
-}    ## if op=search
+my $pars= {
+        random => $input->param('random') || rand(1000000000),
+        biblionumber => $biblionumber,
+        page => $page,
+        id => \@id,
+        isbn => $isbn,
+        title => $title,
+        author => $author,
+        dewey => $dewey,
+        subject => $subject,
+        lccall => $lccall,
+        controlnumber => $controlnumber,
+        stdid => 0,
+        srchany => 0,
+};
+Z3950Search($pars, $template);
+output_html_with_http_headers $input, $cookie, $template->output;
