@@ -15,6 +15,9 @@
 <script type="text/javascript" src="[% themelang %]/js/acq.js"></script>
 <script type="text/JavaScript">
 //<![CDATA[
+    [% IF (dateformat == 'metric') %]
+        dt_add_type_uk_date();
+    [% END %]
     $(document).ready(function() {
         var srlt = $("#files").dataTable($.extend(true, {}, dataTablesDefaults, {
             "aoColumnDefs": [

@@ -7,6 +7,9 @@
 [% INCLUDE 'datatables-strings.inc' %]
 <script type="text/javascript" id="js">
 $(document).ready(function() {
+    [% IF (dateformat == 'metric') %]
+        dt_add_type_uk_date();
+    [% END %]
     $("#table_issues").dataTable($.extend(true, {}, dataTablesDefaults, {
             "aaSorting": [[ 4, "desc" ]]
         })

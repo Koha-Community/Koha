@@ -9,7 +9,11 @@
 <script type="text/javascript">
 //<![CDATA[
  $(document).ready(function() {
+    [% IF (dateformat == 'metric') %]
+        dt_add_type_uk_date();
+    [% END %]
     var osrlt = $("#osrlt").dataTable($.extend(true, {}, dataTablesDefaults, {
+
         "aoColumnDefs": [
             { "aTargets": [ -1, -2, -3 ], "bSortable": false, "bSearchable": false },
         ],

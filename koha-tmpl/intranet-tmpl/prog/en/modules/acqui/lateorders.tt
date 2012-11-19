@@ -11,6 +11,9 @@
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
 <script type="text/javascript">
 //<![CDATA[
+[% IF (dateformat == 'metric') %]
+    dt_add_type_uk_date();
+[% END %]
 $(document).ready(function() {
     var late_orderst = $("#late_orders").dataTable($.extend(true, {}, dataTablesDefaults, {
         "aoColumnDefs": [

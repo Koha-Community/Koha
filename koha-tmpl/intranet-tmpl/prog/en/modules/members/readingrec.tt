@@ -6,13 +6,18 @@
 <script type="text/javascript" src="/intranet-tmpl/prog/en/lib/jquery/plugins/jquery.dataTables.min.js"></script>
 [% INCLUDE 'datatables-strings.inc' %]
 <script type="text/javascript" src="/intranet-tmpl/prog/en/js/datatables.js"></script>
-<script type="text/javascript" id="js">$(document).ready(function() {
+<script type="text/javascript" id="js">
+//<![CDATA[
  $(document).ready(function() {
+    [% IF (dateformat == 'metric') %]
+        dt_add_type_uk_date();
+    [% END %]
     $("#table_readingrec").dataTable($.extend(true, {}, dataTablesDefaults, {
         "sPaginationType": "four_button",
     }));
  });
-}); </script>
+//]]>
+</script>
 </head>
 <body id="pat_readingrec" class="pat">
 [% INCLUDE 'header.inc' %]
