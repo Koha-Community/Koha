@@ -9,24 +9,26 @@
         var patron_attributes_lib = new Array();
         var patron_attributes_values = new Array();
         $(document).ready(function() {
-            $("#borrowerst").tablesorter({
-                [% IF ( op == 'show' ) %]headers: { 0: { sorter: false}},[% END %]
-                widgets : ['zebra'],
-                sortList: [[1,0]]
-            });
+            [% IF borrowers %]
+                $("#borrowerst").tablesorter({
+                    headers: { 0: { sorter: false}},
+                    widgets : ['zebra'],
+                    sortList: [[1,0]]
+                });
 
-            $("#selectallbutton").click(function() {
-                $("#borrowerst").find("input:checkbox").each(function() {
-                    $(this).attr("checked", true);
+                $("#selectallbutton").click(function() {
+                    $("#borrowerst").find("input:checkbox").each(function() {
+                        $(this).attr("checked", true);
+                    });
+                    return false;
                 });
-                return false;
-            });
-            $("#clearallbutton").click(function() {
-                $("#borrowerst").find("input:checkbox").each(function() {
-                    $(this).attr("checked", false);
+                $("#clearallbutton").click(function() {
+                    $("#borrowerst").find("input:checkbox").each(function() {
+                        $(this).attr("checked", false);
+                    });
+                    return false;
                 });
-                return false;
-            });
+            [% END %]
 
             var values = new Array();
             var lib = new Array();
@@ -187,6 +189,7 @@
                             <div id="toolbar"><a id="selectallbutton" href="#">Select All</a> | <a id="clearallbutton" href="#">Clear All</a></div>
                         [% END %]
                     [% END %]
+                        [% IF borrowers %]
                             <div id="cataloguing_additem_itemlist">
                                 <div style="overflow:auto">
                                     <table id="borrowerst">
@@ -323,6 +326,7 @@
                             </div>
                         </form>
                         [% END %]
+                    [% END %]
                 [% END %]
                 [% IF ( op == 'show_results' ) %]
                 <p>
