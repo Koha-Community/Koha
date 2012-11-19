@@ -1,4 +1,4 @@
-[% INCLUDE 'doc-head-open.inc' %][% LibraryNameTitle or "Koha online" %] catalog &rsaquo; Comments on [% title %]
+[% INCLUDE 'doc-head-open.inc' %][% LibraryNameTitle or "Koha online" %] catalog &rsaquo; Comments on [% title |html %]
 [% INCLUDE 'doc-head-close.inc' %]
 <style type="text/css">
   #custom-doc { width:37.08em;*width:36.16em;min-width:485px; margin:1em auto; text-align:left; }
@@ -68,7 +68,7 @@
 <form id="reviewf" action="/cgi-bin/koha/opac-review.pl[% IF ( cgi_debug ) %]?debug=1[% END %]" method="post">
     <input type="hidden" name="biblionumber" value="[% biblionumber | html%]" />
 	<fieldset class="brief">
-	<legend>Comments on <i>[% title |html %] [% subtitle %]</i>[% IF ( author ) %]by [% author %][% END %]</legend>
+    <legend>Comments on <i>[% title |html %] [% subtitle |html %]</i>[% IF ( author ) %]by [% author |html %][% END %]</legend>
             <ol><li><textarea id="review" name="review" cols="60" rows="8">[% review %]</textarea></li></ol>
 		</fieldset>
     <p>Note: Your comment must be approved by a librarian. </p>
