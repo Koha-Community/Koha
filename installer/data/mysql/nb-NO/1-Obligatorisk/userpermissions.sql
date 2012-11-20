@@ -1,6 +1,5 @@
 -- 
--- Default classification sources and filing rules
--- for Koha.
+-- Permissions for Koha.
 --
 -- Copyright (C) 2011 Magnus Enger Libriotech
 --
@@ -22,8 +21,8 @@
 INSERT INTO permissions (module_bit, code, description) VALUES
    ( 1, 'circulate_remaining_permissions', 'Øvrige rettigheter for sirkulasjon'),
    ( 1, 'override_renewals', 'Overstyre blokkerte fornyinger'),
-   ( 3, 'parameters_remaining_permissions', 'Remaining system parameters permissions'),
-   ( 3, 'manage_circ_rules', 'manage circulation rules'),
+   ( 3, 'parameters_remaining_permissions', 'Øvrige rettigheter knyttet til systempreferanser'),
+   ( 3, 'manage_circ_rules', 'Endre sirkulasjonsregler'),
    ( 6, 'place_holds', 'Foreta reservering for lånere'),
    ( 6, 'modify_holds_priority', 'Endre rekkefølge på reserveringer'),
    ( 9, 'edit_catalogue', 'Endre katalogen (Endre bibliografiske poster og eksemplaropplysninger)'),
@@ -39,21 +38,21 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (11, 'group_manage', 'Administrere bestillinger og kurv-grupper'),
    (11, 'order_receive', 'Administrere bestillinger og kurver'),
    (11, 'budget_add_del', 'Legge til og slette budsjetter (men ikke endre budsjetter)'),
-   (11, 'budget_manage_all', 'Manage all budgets'),
+   (11, 'budget_manage_all', 'Administrere alle budsjetter'),
    (13, 'edit_news', 'Legge ut nyhter i OPACen og det interne grensesnittet'),
    (13, 'label_creator', 'Lage etiketter og strekkoder basert på bibliografiske poster og lånerdata'),
    (13, 'edit_calendar', 'Definere dager da biblioteket er stengt'),
    (13, 'moderate_comments', 'Behandle kommentarer fra lånere'),
    (13, 'edit_notices', 'Definere meldinger'),
    (13, 'edit_notice_status_triggers', 'Definere utløsere for meldinger og statusenderinger for for sent leverte dokumenter'),
-   (13, 'edit_quotes', 'Edit quotes for quote-of-the-day feature'),
+   (13, 'edit_quotes', 'Endre sitater for dagens sitat-funksjonen'),
    (13, 'view_system_logs', 'Se Koha sine logger'),
    (13, 'inventory', 'Foreta varetelling'),
    (13, 'stage_marc_import', 'Importere MARC-poster til brønnen'),
    (13, 'manage_staged_marc', 'Behandle lagrede MARC-poster, inkludert ferdigstilling og reversering av importer'),
    (13, 'export_catalog', 'Eksportere bibliografiske data og beholdningsdata'),
    (13, 'import_patrons', 'Importere låneropplysninger'),
-   (13, 'edit_patrons', 'Perform batch modification of patrons'),
+   (13, 'edit_patrons', 'Utføre satsvise endringer av lånere'),
    (13, 'delete_anonymize_patrons', 'Slette utgåtte lånere og anonymisere lånehistorikk'),
    (13, 'batch_upload_patron_images', 'Laste opp bilder av lånere enkeltvis eller en masse'),
    (13, 'schedule_tasks', 'Planlegge oppgaver som skal kjøres'),
