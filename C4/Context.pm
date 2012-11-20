@@ -787,8 +787,23 @@ sub _new_dbh
     my $db_user   = $context->config("user");
     my $db_passwd = $context->config("pass");
     # MJR added or die here, as we can't work without dbh
-    my $dbh= DBI->connect("DBI:$db_driver:dbname=$db_name;host=$db_host;port=$db_port",
+    my $dbh = DBI->connect("DBI:$db_driver:dbname=$db_name;host=$db_host;port=$db_port",
     $db_user, $db_passwd, {'RaiseError' => $ENV{DEBUG}?1:0 }) or die $DBI::errstr;
+
+    # Check for the existence of a systempreference table; if we don't have this, we don't
+    # have a valid database and should not set RaiseError in order to allow the installer
+    # to run; installer will not run otherwise since we raise all db errors
+
+    eval {
+                local $dbh->{PrintError} = 0;
+                local $dbh->{RaiseError} = 1;
+                $dbh->do(qq{SELECT * FROM systempreferences WHERE 1 = 0 });
+    };
+
+    if ($@) {
+        $dbh->{RaiseError} = 0;
+    }
+
 	my $tz = $ENV{TZ};
     if ( $db_driver eq 'mysql' ) { 
         # Koha 3.0 is utf-8, so force utf8 communication between mySQL and koha, whatever the mysql default config.
