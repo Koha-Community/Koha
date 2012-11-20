@@ -28,7 +28,7 @@ $(document).ready(function() {
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; [% IF ( op_new ) %]<a href="http://localhost:8888/cgi-bin/koha/admin/oai_sets.pl">OAI sets configuration</a> &rsaquo; Add a new OAI set[% ELSIF ( op_mod ) %]<a href="http://localhost:8888/cgi-bin/koha/admin/oai_sets.pl">OAI sets configuration</a> &rsaquo; Modify OAI set '[% spec %]'[% ELSE %] OAI sets configuration[% END %]</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; [% IF ( op_new ) %]<a href="/cgi-bin/koha/admin/oai_sets.pl">OAI sets configuration</a> &rsaquo; Add a new OAI set[% ELSIF ( op_mod ) %]<a href="/cgi-bin/koha/admin/oai_sets.pl">OAI sets configuration</a> &rsaquo; Modify OAI set '[% spec %]'[% ELSE %] OAI sets configuration[% END %]</div>
 
 <div id="doc3" class="yui-t2">
 
