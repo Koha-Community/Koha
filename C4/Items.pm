@@ -2632,52 +2632,39 @@ sub PrepareItemrecordDisplay {
                 $defaultvalue = $tagslib->{$tag}->{$subfield}->{defaultvalue} unless $defaultvalue;
                 if ( !defined $defaultvalue ) {
                     $defaultvalue = q||;
+                } else {
+                    $defaultvalue =~ s/"/&quot;/g;
                 }
-                $defaultvalue =~ s/"/&quot;/g;
 
                 # search for itemcallnumber if applicable
                 if ( $tagslib->{$tag}->{$subfield}->{kohafield} eq 'items.itemcallnumber'
                     && C4::Context->preference('itemcallnumber') ) {
                     my $CNtag      = substr( C4::Context->preference('itemcallnumber'), 0, 3 );
                     my $CNsubfield = substr( C4::Context->preference('itemcallnumber'), 3, 1 );
-                    if ($itemrecord) {
-                        my $temp = $itemrecord->field($CNtag);
-                        if ($temp) {
-                            $defaultvalue = $temp->subfield($CNsubfield);
-                        }
+                    if ( $itemrecord and my $field = $itemrecord->field($CNtag) ) {
+                        $defaultvalue = $field->subfield($CNsubfield);
                     }
                 }
                 if (   $tagslib->{$tag}->{$subfield}->{kohafield} eq 'items.itemcallnumber'
                     && $defaultvalues
                     && $defaultvalues->{'callnumber'} ) {
-                    my $temp;
-                    if ($itemrecord) {
-                        $temp = $itemrecord->field($subfield);
-                    }
-                    unless ($temp) {
-                        $defaultvalue = $defaultvalues->{'callnumber'} if $defaultvalues;
+                    if( $itemrecord and $defaultvalues and not $itemrecord->field($subfield) ){
+                        $defaultvalue = $defaultvalues->{callnumber};
                     }
                 }
                 if (   ( $tagslib->{$tag}->{$subfield}->{kohafield} eq 'items.holdingbranch' || $tagslib->{$tag}->{$subfield}->{kohafield} eq 'items.homebranch' )
                     && $defaultvalues
                     && $defaultvalues->{'branchcode'} ) {
-                    my $temp;
-                    if ($itemrecord) {
-                        $temp = $itemrecord->field($subfield);
-                    }
-                    unless ($temp) {
-                        $defaultvalue = $defaultvalues->{branchcode} if $defaultvalues;
+                    if ( $itemrecord and $defaultvalues and not $itemrecord->field($subfield) ) {
+                        $defaultvalue = $defaultvalues->{branchcode};
                     }
                 }
                 if (   ( $tagslib->{$tag}->{$subfield}->{kohafield} eq 'items.location' )
                     && $defaultvalues
                     && $defaultvalues->{'location'} ) {
 
-                    my $temp; # make perlcritic happy :)
-                    $temp = $itemrecord->field($subfield) if ($itemrecord);
-
-                    unless ($temp) {
-                        $defaultvalue = $defaultvalues->{location} if $defaultvalues;
+                    if ( $itemrecord and $defaultvalues and not $itemrecord->field($subfield) ) {
+                        $defaultvalue = $defaultvalues->{location};
                     }
                 }
                 if ( $tagslib->{$tag}->{$subfield}->{authorised_value} ) {
@@ -2755,9 +2742,8 @@ sub PrepareItemrecordDisplay {
                         # opening plugin
                         my $plugin = C4::Context->intranetdir . "/cataloguing/value_builder/" . $tagslib->{$tag}->{$subfield}->{'value_builder'};
                         if (do $plugin) {
-                            my $temp;
-                            my $extended_param = plugin_parameters( $dbh, $temp, $tagslib, $subfield_data{id}, undef );
-                            my ( $function_name, $javascript ) = plugin_javascript( $dbh, $temp, $tagslib, $subfield_data{id}, undef );
+                            my $extended_param = plugin_parameters( $dbh, undef, $tagslib, $subfield_data{id}, undef );
+                            my ( $function_name, $javascript ) = plugin_javascript( $dbh, undef, $tagslib, $subfield_data{id}, undef );
                             $subfield_data{random}     = int(rand(1000000));    # why do we need 2 different randoms?
                             $subfield_data{marc_value} = qq[<input tabindex="1" id="$subfield_data{id}" name="field_value" class="input_marceditor" size="67" maxlength="255"
                                 onfocus="Focus$function_name($subfield_data{random}, '$subfield_data{id}');"
