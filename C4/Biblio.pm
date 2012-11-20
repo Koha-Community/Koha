@@ -2841,6 +2841,8 @@ sub EmbedItemsInMarcBiblio {
     my ($marc, $biblionumber, $itemnumbers) = @_;
     croak "No MARC record" unless $marc;
 
+    $itemnumbers = [] unless defined $itemnumbers;
+
     my $frameworkcode = GetFrameworkCode($biblionumber);
     _strip_item_fields($marc, $frameworkcode);
 
@@ -2851,7 +2853,7 @@ sub EmbedItemsInMarcBiblio {
     my @item_fields;
     my ( $itemtag, $itemsubfield ) = GetMarcFromKohaField( "items.itemnumber", $frameworkcode );
     while (my ($itemnumber) = $sth->fetchrow_array) {
-        next if $itemnumbers and not grep { $_ == $itemnumber } @$itemnumbers;
+        next if @$itemnumbers and not grep { $_ == $itemnumber } @$itemnumbers;
         require C4::Items;
         my $item_marc = C4::Items::GetMarcItem($biblionumber, $itemnumber);
         push @item_fields, $item_marc->field($itemtag);
