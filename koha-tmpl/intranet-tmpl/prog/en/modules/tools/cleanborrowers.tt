@@ -12,14 +12,12 @@
               if((form.checkbox[0].checked)){
                   if ( (!form.date1.value) && (!form.borrower_dateexpiry.value) && (!form.borrower_categorycode.value) ){
                     alert(_("Please enter at least one criterion for deletion!"));
-                    document.form.date1.focus();
                     return false;
                   }
               }
               if((form.checkbox[1].checked)){
                   if(!(form.date2.value)){
                       alert(_("please enter a date !"));
-                      document.form.date2.focus();
                       return false;
                   }
               }
@@ -57,9 +55,9 @@
     <form name="f1" onsubmit="return checkForm(this);" action="/cgi-bin/koha/tools/cleanborrowers.pl" method="post">
     <fieldset>
     <legend>What do you want to do ?</legend>
-        <h3><input id="checkborrower" type="checkbox" name="checkbox" value="borrower" /> Delete borrowers</h3>
+        <h3><input id="checkborrower" type="checkbox" name="checkbox" value="borrower" /><label for="checkborrower"> Delete borrowers</label></h3>
 
-        <label for="checkborrower">Who have not borrowed since:</label>
+        <label for="date1">Who have not borrowed since:</label>
         <input size="10" id="date1" name="filterdate1" type="text" class="datepicker" />
         <span class="hint">[% INCLUDE 'date-format.inc' %]</span></p>
 
@@ -77,8 +75,8 @@
             [% END %]
         </select>
 
-        <h3><input id="checkissue" type="checkbox" name="checkbox" value="issue" /> Anonymize history</h3>
-        <label for="checkissue">Anonymize check-out history older than</label>
+        <h3><input id="checkissue" type="checkbox" name="checkbox" value="issue" /><label for="checkissue"> Anonymize history</label></h3>
+        <label for="date2">Anonymize check-out history older than</label>
         <input size="10" id="date2" name="filterdate2" type="text" class="datepicker" />
         <span class="hint">[% INCLUDE 'date-format.inc' %]</span></p>
 
