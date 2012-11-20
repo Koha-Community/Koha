@@ -101,7 +101,7 @@ my @failedreturns = $query->param('failedreturn');
 our %return_failed = ();
 for (@failedreturns) { $return_failed{$_} = 1; }
 
-my $findborrower = $query->param('findborrower');
+my $findborrower = $query->param('findborrower') || q{};
 $findborrower =~ s|,| |g;
 my $borrowernumber = $query->param('borrowernumber');
 
@@ -122,7 +122,7 @@ if (C4::Context->preference("UseTablesortForCirc")) {
     $template->param(UseTablesortForCirc => 1);
 }
 
-my $barcode        = $query->param('barcode') || '';
+my $barcode        = $query->param('barcode') || q{};
 $barcode =~  s/^\s*|\s*$//g; # remove leading/trailing whitespace
 
 $barcode = barcodedecode($barcode) if( $barcode && C4::Context->preference('itemBarcodeInputFilter'));
@@ -131,7 +131,7 @@ my $duedatespec    = $query->param('duedatespec')   || $session->param('stickydu
 my $issueconfirmed = $query->param('issueconfirmed');
 my $cancelreserve  = $query->param('cancelreserve');
 my $organisation   = $query->param('organisations');
-my $print          = $query->param('print');
+my $print          = $query->param('print') || q{};
 my $newexpiry      = $query->param('dateexpiry');
 my $debt_confirmed = $query->param('debt_confirmed') || 0; # Don't show the debt error dialog twice
 
