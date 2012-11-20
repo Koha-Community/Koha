@@ -355,10 +355,8 @@ $template->param(
     patronupdate => $patronupdate,
     OpacRenewalAllowed => C4::Context->preference("OpacRenewalAllowed"),
     userview => 1,
-    dateformat    => C4::Context->preference("dateformat"),
 );
 
-$template->param( DHTMLcalendar_dateformat  => C4::Dates->DHTMLcalendar() );
 $template->param(
     SuspendHoldsOpac => C4::Context->preference('SuspendHoldsOpac'),
     AutoResumeSuspendedHolds => C4::Context->preference('AutoResumeSuspendedHolds'),

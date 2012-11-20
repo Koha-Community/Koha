@@ -185,7 +185,6 @@ $template->param(
     to              => $enddate,
     ratio           => $ratio,
     reserveloop     => \@reservedata,
-    DHTMLcalendar_dateformat =>  C4::Dates->DHTMLcalendar(),
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

@@ -221,7 +221,6 @@ $template->param(
     borname => $bornamefilter,
     order => $order,
     showall => $showall,
-    DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
     dateduefrom => $input->param( 'dateduefrom' ) || '',
     datedueto   => $input->param( 'datedueto' ) || '',
 );

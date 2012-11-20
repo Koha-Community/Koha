@@ -124,7 +124,6 @@ elsif ( $phase eq 'New Term step 4' ) {
 		'definition_description' => $definition_description,
 		'columns' => \@column_loop,
 		'columnstring' => $columnstring,
-                'DHTMLcalendar_dateformat' => C4::Dates->DHTMLcalendar(),
 	);
 }
 

@@ -148,7 +148,6 @@ $template->param(
     loop_suppliers => $loop_suppliers,
     supplier       => ( $booksellerid || $supplier ),
     count          => $supplier_count,
-    dateformat     => C4::Context->preference('dateformat'),
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;

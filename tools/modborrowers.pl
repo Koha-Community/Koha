@@ -228,7 +228,6 @@ if ( $op eq 'show' ) {
     $template->param('patron_attributes_values', \@patron_attributes_values);
 
     $template->param( fields => \@fields );
-    $template->param( DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar() );
 }
 
 # Process modifications

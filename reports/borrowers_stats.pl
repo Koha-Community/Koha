@@ -140,7 +140,6 @@ if ($do_it) {
 	$template->param(
 		CGIextChoice => $CGIextChoice,
 		CGIsepChoice => $CGIsepChoice,
-		DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
     );
 
 }

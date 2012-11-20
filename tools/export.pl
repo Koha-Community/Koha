@@ -466,7 +466,6 @@ else {
     $template->param(
         branchloop               => \@branchloop,
         itemtypeloop             => \@itemtypesloop,
-        DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
         authtypeloop             => \@authtypesloop,
         export_remove_fields     => C4::Context->preference("ExportRemoveFields"),
     );

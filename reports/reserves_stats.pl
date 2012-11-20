@@ -78,7 +78,6 @@ my ($template, $borrowernumber, $cookie) = get_template_and_user({
 our $sep     = $input->param("sep") || '';
 $sep = "\t" if ($sep eq 'tabulation');
 $template->param(do_it => $do_it,
-	DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
 );
 
 my $itemtypes = GetItemTypes();

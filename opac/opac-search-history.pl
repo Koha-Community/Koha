@@ -45,8 +45,6 @@ my ($template, $loggedinuser, $cookie)
                                 debug => 1,
                                 });
 
-$template->param(dateformat => C4::Context->preference("dateformat"));
-
 # If the user is not logged in, we deal with the cookie
 if (!$loggedinuser) {
 

@@ -158,7 +158,6 @@ if (!$advanced_search_types or $advanced_search_types eq 'itemtypes') {
 
 $template->param(
                  itemtypeloop =>\@itemtypesloop,
-                 dateformat    => C4::Context->preference("dateformat"),
                 );
 output_html_with_http_headers $input, $cookie, $template->output;
 

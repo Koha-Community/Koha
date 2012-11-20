@@ -155,7 +155,6 @@ $template->param(
     overloop    => \@overloop,
     overcount   => $overcount,
     show_date   => format_date(C4::Dates->today('iso')),
-    dateformat  => C4::Context->preference("dateformat"),
     ReservesMaxPickUpDelay => C4::Context->preference('ReservesMaxPickUpDelay')
 );
 

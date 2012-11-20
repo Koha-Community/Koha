@@ -51,8 +51,6 @@ $template->param(
     contractnumber => $contractnumber,
     booksellerid   => $booksellerid,
     booksellername => $bookseller->{name},
-    DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
-    dateformat     => C4::Context->preference("dateformat"),
 );
 
 #ADD_FORM: called if $op is 'add_form'. Used to create form to add or  modify a record
@@ -70,7 +68,6 @@ if ( $op eq 'add_form' ) {
             contractdescription => $contract->{contractdescription},
             contractstartdate => format_date( $contract->{contractstartdate} ),
             contractenddate   => format_date( $contract->{contractenddate} ),
-            DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar,
         );
     } else {
         $template->param(
@@ -79,7 +76,6 @@ if ( $op eq 'add_form' ) {
             contractdescription      => undef,
             contractstartdate        => undef,
             contractenddate          => undef,
-            DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar,
         );
     }
 

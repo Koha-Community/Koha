@@ -245,7 +245,7 @@ if ($borrower->{cardnumber}) {
     $template->param(
         inputfocus => $inputfocus,
         nofines => 1,
-        "dateformat_" . C4::Context->preference('dateformat') => 1,
+
     );
     if (C4::Context->preference('ShowPatronImageInWebBasedSelfCheck')) {
         my ($image, $dberror) = GetPatronImage($borrower->{cardnumber});

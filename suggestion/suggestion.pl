@@ -264,7 +264,6 @@ foreach my $element ( qw(managedby suggestedby acceptedby) ) {
 $template->param(
     %$suggestion_ref,  
     "op_$op"                => 1,
-    dateformat    => C4::Context->preference("dateformat"),
     "op"             =>$op,
 );
 
@@ -384,5 +383,4 @@ foreach my $field ( qw(managedby acceptedby suggestedby budgetid) ) {
     $hashlists{ lc($field) . "_loop" } = \@codes_list;
 }
 $template->param(%hashlists);
-$template->param(DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),);
 output_html_with_http_headers $input, $cookie, $template->output;

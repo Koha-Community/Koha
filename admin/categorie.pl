@@ -130,7 +130,6 @@ if ($op eq 'add_form') {
 				reservefee              => sprintf("%.2f",$data->{'reservefee'}),
                                 hidelostitems           => $data->{'hidelostitems'},
 				category_type           => $data->{'category_type'},
-				DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
                 SMSSendDriver => C4::Context->preference("SMSSendDriver"),
                 TalkingTechItivaPhone => C4::Context->preference("TalkingTechItivaPhoneNotification"),
 				"type_".$data->{'category_type'} => 1,

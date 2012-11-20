@@ -58,7 +58,6 @@ if ( $run_report ) {
         total      => scalar @$items,
         itemsloop  => $items,
         run_report => $run_report,
-        dateformat => C4::Context->preference("dateformat"),
     );
 }
 

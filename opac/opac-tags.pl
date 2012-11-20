@@ -236,8 +236,7 @@ if ($loggedinuser) {
 	}
 }
 
-$template->param(tagsview => 1,
-dateformat => C4::Context->preference("dateformat"));
+$template->param(tagsview => 1);
 
 if ($add_op) {
 	my $adds = 0;

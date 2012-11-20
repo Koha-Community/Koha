@@ -704,7 +704,6 @@ $template->param( debug  => $debug  ) if $debug;
 $template->param(
   BorrowerMandatoryField => C4::Context->preference("BorrowerMandatoryField"),#field to test with javascript
   category_type => $category_type,#to know the category type of the borrower
-  DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
   select_city => $select_city,
   "$category_type"  => 1,# associate with step to know where u are
   destination   => $destination,#to know wher u come from and wher u must go in redirect

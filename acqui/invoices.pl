@@ -151,7 +151,6 @@ $template->param(
     branchname               => $branchname,
     suppliers_loop           => \@suppliers_loop,
     branches_loop            => \@branches_loop,
-    DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

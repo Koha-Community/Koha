@@ -65,7 +65,6 @@ my ($template, $borrowernumber, $cookie)
 our $sep     = $input->param("sep");
 $sep = "\t" if ($sep eq 'tabulation');
 $template->param(do_it => $do_it,
-        DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
         );
 if ($do_it) {
 # Displaying results
