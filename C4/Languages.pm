@@ -119,7 +119,6 @@ Returns a reference to an array of hashes:
 sub getTranslatedLanguages {
     my ($interface, $theme, $current_language, $which) = @_;
     my $htdocs;
-    my $all_languages = getAllLanguages();
     my @languages;
     my @enabled_languages;
  
@@ -161,7 +160,7 @@ sub getTranslatedLanguages {
         $seen{$_}++ for @languages;
         @languages = keys %seen;
     }
-    return _build_languages_arrayref($all_languages,\@languages,$current_language,\@enabled_languages);
+    return _build_languages_arrayref(\@languages,$current_language,\@enabled_languages);
 }
 
 =head2 getAllLanguages
@@ -276,7 +275,7 @@ FIXME: this could be rewritten and simplified using map
 =cut
 
 sub _build_languages_arrayref {
-        my ($all_languages,$translated_languages,$current_language,$enabled_languages) = @_;
+        my ($translated_languages,$current_language,$enabled_languages) = @_;
         my @translated_languages = @$translated_languages;
         my @languages_loop; # the final reference to an array of hashrefs
         my @enabled_languages = @$enabled_languages;
