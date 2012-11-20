@@ -14,15 +14,6 @@
 	<script type="text/javascript">
 	//<![CDATA[
 
-$(document).ready(function()
-    {
-        $("#itemst").tablesorter({
-                        headers: { 0: { sorter: false }}
-                });
-    }
-);
-
-
 function placeHold () {
     var checkedItems = $("input:checkbox:checked");
     if ($(checkedItems).size() == 0) {
@@ -72,9 +63,30 @@ function placeHold () {
 	    });
         $(".holdsep").text("| ");
         $(".hold").text(_("Place Hold"));
+        $("#downloadcartc").empty();
+        yuiToolbar();
+        $("#itemst").tablesorter({
+            headers: { 0: { sorter: false }}
+        });
 	});
 
-
+function yuiToolbar() {
+    var downloadmenu = [
+    { text: _("iso2709"), url: "/cgi-bin/koha/basket/downloadcart.pl?format=iso2709&bib_list=[% bib_list %]" },
+    { text: _("RIS"), url: "/cgi-bin/koha/basket/downloadcart.pl?format=ris&bib_list=[% bib_list %]" },
+    { text: _("BibTex"), url: "/cgi-bin/koha/basket/downloadcart.pl?format=bibtex&bib_list=[% bib_list %]" },
+[% FOREACH csv_profile IN csv_profiles %]
+    { text: _("CSV - [% csv_profile.profile %]"), url: "/cgi-bin/koha/basket/downloadcart.pl?format=[% csv_profile.export_format_id %]&bib_list=[% bib_list %]" },
+[% END %]
+    ];
+    new YAHOO.widget.Button({
+        type: "menu",
+        label: _("Download"),
+        name: "downloadmenubutton",
+        menu: downloadmenu,
+        container: "downloadcartc"
+    });
+}
 	//]]>
 	</script>
 	[% END %]
@@ -98,11 +110,9 @@ function placeHold () {
 		<a class="send" href="basket.pl" onclick="sendBasket(); return false;">Send</a>
 	    </span></span>
 	</li>
-	<li>
-	    <span id="savemenuc" class="yui-button yui-link-button"><span class="first-child">
-		<a class="download" href="basket.pl" onclick="downloadBasket(); return false;">Download</a>
-	    </span></span>
-	</li>
+    <li id="downloadcartc">
+        <a href="#" id="downloadcart">Download</a>
+    </li>
 	<li>
 	    <span id="printmenuc" class="yui-button yui-link-button"><span class="first-child">
 		<a class="print" href="basket.pl" onclick="printBasket(); return false;">Print</a>
