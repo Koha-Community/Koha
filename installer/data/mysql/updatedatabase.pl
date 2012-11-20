@@ -6055,7 +6055,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
    SetVersion ($DBversion);
 }
 
-$DBversion = "XXX";
+$DBversion = "3.09.00.066";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
    $dbh->do("DELETE FROM systempreferences WHERE variable='DidYouMeanFromAuthorities'");
    print "Upgrade to $DBversion done (Bug 9107: remove DidYouMeanFromAuthorities syspref)\n";
