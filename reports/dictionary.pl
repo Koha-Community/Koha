@@ -108,7 +108,7 @@ elsif ( $phase eq 'New Term step 4' ) {
         if ( $type eq 'DATE' || $type eq 'DATETIME' ) {
             $tmp_hash{'date'} = 1;
         }
-        if ( $type eq 'TEXT' ) {
+        if ($type eq 'TEXT' || $type eq 'MEDIUMTEXT'){
             $tmp_hash{'text'} = 1;
         }
 
