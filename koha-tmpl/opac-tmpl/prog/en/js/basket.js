@@ -80,7 +80,7 @@ function openBasket() {
     if ( strCookie ) {
         var iW = 820;
         var iH = 450;
-        var optWin = "dependant=yes,status=yes,scrollbars=yes,resizable=yes,toolbar=no,location=yes,height="+iH+",width="+iW;
+        var optWin = "status=yes,scrollbars=yes,resizable=yes,toolbar=no,location=yes,height="+iH+",width="+iW;
         var loc = CGIBIN + "opac-basket.pl?" + strCookie;
         var basket = open(loc, "basket", optWin);
         if (window.focus) {basket.focus()}
@@ -365,7 +365,7 @@ function downloadBasket() {
 
     var loc = CGIBIN + "opac-downloadcart.pl?" + strCookie;
 
-    open(loc,"win_form",'dependant=yes,scrollbars=no,resizable=no,height=300,width=450,top=50,left=100');
+    open(loc,"win_form",'scrollbars=no,resizable=no,height=300,width=450,top=50,left=100');
 }
 
 function printBasket() {

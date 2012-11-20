@@ -15,11 +15,11 @@
 	 });
 	 
 	[% IF ( viewshelf ) %] function sendList(){
-		open(CGIBIN+'virtualshelves/sendshelf.pl?shelfid=[% shelfnumber %]','win_form','dependant=yes,scrollbars=no,resizable=no,height=300,width=450,top=50,left=100');
+        open(CGIBIN+'virtualshelves/sendshelf.pl?shelfid=[% shelfnumber %]','win_form','scrollbars=no,resizable=no,height=300,width=450,top=50,left=100');
 	 }
 	 
 	 function downloadList(){
-		open(CGIBIN+'virtualshelves/downloadshelf.pl?shelfid=[% shelfnumber %]','win_form','dependant=yes,scrollbars=no,resizable=no,height=300,width=450,top=50,left=100');
+        open(CGIBIN+'virtualshelves/downloadshelf.pl?shelfid=[% shelfnumber %]','win_form','scrollbars=no,resizable=no,height=300,width=450,top=50,left=100');
 	 }[% END %]
 
 	// YUI Toolbar Functions
