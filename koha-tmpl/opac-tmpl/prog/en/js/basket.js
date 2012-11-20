@@ -397,6 +397,16 @@ function showLess() {
     document.location = loc;
 }
 
+function holdSel() {
+    var items = document.getElementById('records').value;
+    if (items) {
+        parent.opener.document.location = "/cgi-bin/koha/opac-reserve.pl?biblionumbers=" + items;
+        window.close();
+    } else {
+        alert(MSG_NO_RECORD_SELECTED);
+    }
+}
+
 function updateBasket(updated_value,target) {
 	if(target){
 	target.$('#basketcount').html("<span>"+updated_value+"</span>");

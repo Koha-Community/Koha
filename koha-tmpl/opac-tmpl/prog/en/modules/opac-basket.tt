@@ -124,16 +124,7 @@ function tagAdded() {
           });
 [% END %][% END %][% END %]
     });
-[% IF ( opacuserlogin ) %][% IF ( RequestOnOpac ) %]
-    function holdSel() {
-        var items = document.getElementById('records').value;
-        if (items) {
-            document.location = "/cgi-bin/koha/opac-reserve.pl?biblionumbers=" + items;
-        } else {
-            alert(MSG_NO_RECORD_SELECTED);
-        }
-    }
-[% END %][% END %]
+
 function enableCheckboxActions(){
     // Enable/disable controls if checkboxes are checked
     var checkedBoxes = $(".checkboxed input:checkbox:checked");
