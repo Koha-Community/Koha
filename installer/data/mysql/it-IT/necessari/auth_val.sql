@@ -79,4 +79,11 @@ INSERT INTO authorised_values (category, authorised_value, lib) VALUES
 ('LANG', 'fre', 'francese'),
 ('LANG', 'lat', 'latino');
 
+-- Raggruppamenti di esempio per i reports
+INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('REPORT_GROUP', 'CIRC', 'Circulation');
+INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('REPORT_GROUP', 'CAT', 'Catalog');
+INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('REPORT_GROUP', 'PAT', 'Patrons');
+INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('REPORT_GROUP', 'ACQ', 'Acquisitions');
+INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('REPORT_GROUP', 'ACC', 'Accounts');
+
 SET FOREIGN_KEY_CHECKS=1;
