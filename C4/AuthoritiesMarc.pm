@@ -292,9 +292,9 @@ sub SearchAuthorities {
         } elsif ($sortby eq 'HeadingDsc') {
             $orderstring = '@attr 7=2 @attr 1=Heading 0';
         } elsif ($sortby eq 'AuthidAsc') {
-            $orderstring = '@attr 7=1 @attr 1=Local-Number 0';
+            $orderstring = '@attr 7=1 @attr 4=109 @attr 1=Local-Number 0';
         } elsif ($sortby eq 'AuthidDsc') {
-            $orderstring = '@attr 7=2 @attr 1=Local-Number 0';
+            $orderstring = '@attr 7=2 @attr 4=109 @attr 1=Local-Number 0';
         }
         $query=($query?$query:"\@attr 1=_ALLRECORDS \@attr 2=103 ''");
         $query="\@or $orderstring $query" if $orderstring;
