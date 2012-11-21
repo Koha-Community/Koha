@@ -13,7 +13,6 @@
 
     dt_overwrite_html_sorting_localeCompare();
 
-    var rowsToCollapse = 5;
     $(document).ready(function(){
         var pendingt = $("#pendingt").dataTable($.extend(true, {}, dataTablesDefaults, {
             "aoColumnDefs": [
@@ -56,10 +55,6 @@
     });
 */
 
-	rowCountPending  = $("#pendingt tbody.filterclass tr").length;
-	rowCountReceived = $("#receivedt tbody.filterclass tr").length;
-	if (rowCountPending > rowsToCollapse ) { if ( $.cookie("pendingKeepExpanded") != 1 ) { pendingCollapse(); } else { pendingExpand(); } }
-	if (rowCountReceived > rowsToCollapse ) { if ( $.cookie("receivedKeepExpanded") != 1 ) { receivedCollapse(); } else { receivedExpand(); } }
     });
 
      // Case-insensitive version of jquery's contains function
@@ -71,42 +66,6 @@
      jQuery.extend(jQuery.expr[':'], {
           containsExactly: "$(a).text() == m[3]"
      });
-
-
-    // Collapse pending items table
-    function pendingCollapse() {
-        $.cookie("pendingKeepExpanded", 0, { path: "/", expires: 9999 });
-	$("#pendingcollapserow").remove();
-    $("#pendingt tr").show();
-	$("#pendingt tbody.filterclass tr:gt(" + (rowsToCollapse-1) + ")").hide();
-	$("#pendingt").before("<p id=\"pendingcollapserow\">" + _("Only the first ")  + rowsToCollapse +  _(" items are displayed.") + " <a href=\"javascript:pendingExpand();\">" + _("Click here to show all ")  + rowCountPending + _(" items") + "<\/a>.<\/p>");
-
-    }
-
-    // Expend pending items table
-    function pendingExpand() {
-        $.cookie("pendingKeepExpanded", 1, { path: "/", expires: 9999 });
-	$("#pendingcollapserow").remove();
-	$("#pendingt tr").show();
-    $("#pendingt tbody.filterclass tr.orderfound").remove();
-	$("#pendingt").before("<p id=\"pendingcollapserow\">" + rowCountPending + _(" items are displayed.") + " <a href=\"javascript:pendingCollapse();\">" + _("Click here to show only the first ") + rowsToCollapse + _(" items") + "<\/a>.<\/p>");
-    }
-
-    // Collapse already received items table
-    function receivedCollapse() {
-        $.cookie("receivedKeepExpanded", 0, { path: "/", expires: 9999 });
-	$("#receivedcollapserow").remove();
-	$("#receivedt tbody.filterclass tr:gt(" + (rowsToCollapse-1) + ")").hide();
-	$("#receivedt").before("<p id=\"receivedcollapserow\">" + _("Only the first ") + rowsToCollapse + _(" items are displayed.") + " <a href=\"javascript:receivedExpand();\">" + _("Click here to show all ") + rowCountReceived + _(" items") + "<\/a>.<\/p>");
-    }
-
-    // Expand already received items table
-    function receivedExpand() {
-        $.cookie("receivedKeepExpanded", 1, { path: "/", expires: 9999 });
-	$("#receivedcollapserow").remove();
-	$("#receivedt tr").show();
-	$("#receivedt").before("<p id=\"receivedcollapserow\">" + _("All ") + rowCountReceived + _(" items are displayed.") + " <a href=\"javascript:receivedCollapse();\">" + _("Click here to show only the first ") + rowsToCollapse + _(" items") + "<\/a>.<\/p>");
-    }
 
 //]]>
 </script>
