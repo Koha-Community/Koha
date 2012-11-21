@@ -24,12 +24,9 @@ use CGI;
 
 use C4::Auth;
 use C4::Output;
-#use C4::Biblio;
 use C4::Context;
 use C4::Breeding;
 use C4::Koha;
-#use C4::Charset;
-#use ZOOM;
 
 my $input        = new CGI;
 my $dbh          = C4::Context->dbh;
@@ -44,9 +41,9 @@ my $lccn          = $input->param('lccn');
 my $lccall        = $input->param('lccall');
 my $subject       = $input->param('subject');
 my $dewey         = $input->param('dewey');
-my $controlnumber	= $input->param('controlnumber');
-my $stdid			= $input->param('stdid');
-my $srchany			= $input->param('srchany');
+my $controlnumber = $input->param('controlnumber');
+my $stdid         = $input->param('stdid');
+my $srchany       = $input->param('srchany');
 my $op            = $input->param('op')||'';
 
 my $page            = $input->param('current_page') || 1;
@@ -58,11 +55,10 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
         type            => "intranet",
         authnotrequired => 1,
         flagsrequired   => { catalogue => 1 },
-        debug           => 1,
 });
 
-$template->param( frameworkcode => $frameworkcode, );
 $template->param(
+    frameworkcode => $frameworkcode,
     isbn         => $isbn,
     issn         => $issn,
     lccn         => $lccn,

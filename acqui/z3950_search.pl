@@ -25,27 +25,12 @@ use CGI;
 
 use C4::Auth;
 use C4::Output;
-#use C4::Biblio;
 use C4::Context;
 use C4::Breeding;
 use C4::Koha;
-#use C4::Charset;
 use C4::Bookseller qw/ GetBookSellerFromId /;
-#use ZOOM;
 
-my $input        = new CGI;
-my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-    {
-        template_name   => "acqui/z3950_search.tmpl",
-        query           => $input,
-        type            => "intranet",
-        authnotrequired => 1,
-        flagsrequired   => { acquisition => 'order_manage' },
-        debug           => 1,
-    }
-);
-
-
+my $input           = new CGI;
 my $dbh             = C4::Context->dbh;
 my $biblionumber    = $input->param('biblionumber')||0;
 my $frameworkcode   = $input->param('frameworkcode')||'';
@@ -61,7 +46,6 @@ my $controlnumber   = $input->param('controlnumber');
 my $op              = $input->param('op')||'';
 my $booksellerid    = $input->param('booksellerid');
 my $basketno        = $input->param('basketno');
-
 my $page            = $input->param('current_page') || 1;
 $page               = $input->param('goto_page') if $input->param('changepage_goto');
 
@@ -80,11 +64,22 @@ foreach my $thisframeworkcode ( keys %$frameworks ) {
 }
 
 my $vendor = GetBookSellerFromId($booksellerid);
-$template->param( frameworkcode => $frameworkcode, 
-                                    frameworkcodeloop => \@frameworkcodeloop,
-                                    booksellerid => $booksellerid,
-                                    basketno => $basketno,
-                                    name => $vendor->{'name'},
+
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+    {
+        template_name   => "acqui/z3950_search.tmpl",
+        query           => $input,
+        type            => "intranet",
+        authnotrequired => 1,
+        flagsrequired   => { acquisition => 'order_manage' },
+    }
+);
+$template->param(
+        frameworkcode => $frameworkcode,
+        frameworkcodeloop => \@frameworkcodeloop,
+        booksellerid => $booksellerid,
+        basketno     => $basketno,
+        name         => $vendor->{'name'},
         isbn         => $isbn,
         issn         => $issn,
         lccn         => $lccn,
@@ -95,8 +90,8 @@ $template->param( frameworkcode => $frameworkcode,
         biblionumber => $biblionumber,
         dewey        => $dewey,
         subject      => $subject,
-                                    );
-                                    
+);
+
 if ( $op ne "do_search" ) {
     my $sth = $dbh->prepare("select id,host,name,checked from z3950servers  order by host");
     $sth->execute();
