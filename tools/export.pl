@@ -102,12 +102,12 @@ if ($op eq "export") {
     }
 
     if ($start_callnumber) {
-        $query .= " AND itemcallnumber <= ? ";
+        $query .= " AND itemcallnumber >= ? ";
         push @sql_params, $start_callnumber;
     }
 
     if ($end_callnumber) {
-        $query .= " AND itemcallnumber >= ? ";
+        $query .= " AND itemcallnumber <= ? ";
         push @sql_params, $end_callnumber;
     }
     if ($start_accession) {
