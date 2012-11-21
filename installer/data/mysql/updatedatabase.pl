@@ -6062,6 +6062,13 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
    SetVersion ($DBversion);
 }
 
+$DBversion = "3.09.00.XXX";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+   $dbh->do("ALTER TABLE statistics CHANGE COLUMN ccode ccode varchar(10) NULL");
+   print "Upgrade to $DBversion done (Bug 9064: statistics.ccode potentially wrongly defined)\n";
+   SetVersion ($DBversion);
+}
+
 
 =head1 FUNCTIONS
 
