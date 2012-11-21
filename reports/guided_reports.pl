@@ -425,6 +425,7 @@ elsif ($phase eq 'Run this report'){
         for(my $i=0;$i<($#split/2);$i++) {
             my ($text,$authorised_value) = split /\|/,$split[$i*2+1];
             my $input;
+            my $labelid;
             if ($authorised_value eq "date") {
                $input = 'date';
             }
@@ -480,8 +481,11 @@ elsif ($phase eq 'Run this report'){
                         $authorised_lib{$value} = $lib;
                     }
                 }
+                $labelid = $text;
+                $labelid =~ s/\W//g;
                 $input =CGI::scrolling_list(      # FIXME: factor out scrolling_list
                     -name     => "sql_params",
+                    -id       => "sql_params_".$labelid,
                     -values   => \@authorised_values,
 #                     -default  => $value,
                     -labels   => \%authorised_lib,
@@ -492,9 +496,9 @@ elsif ($phase eq 'Run this report'){
                 );
 
             } else {
-                $input = "<input type='text' name='sql_params'/>";
+                $input = "text";
             }
-            push @tmpl_parameters, {'entry' => $text, 'input' => $input };
+            push @tmpl_parameters, {'entry' => $text, 'input' => $input, 'labelid' => $labelid };
         }
         $template->param('sql'         => $sql,
                         'name'         => $name,
