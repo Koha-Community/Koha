@@ -46,7 +46,7 @@ authority-zebra-indexdefs.xsl` (substituting the appropriate file names).
     </z:index>
   </xslo:template>
   <xslo:template match="marc:controlfield[@tag='001']">
-    <z:index name="Local-Number:w Local-Number:s">
+    <z:index name="Local-Number:w Local-Number:n Local-Number:s">
       <xslo:value-of select="."/>
     </z:index>
   </xslo:template>
