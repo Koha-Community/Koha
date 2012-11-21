@@ -329,9 +329,9 @@ sub clear_weekly_closed_days {
 sub add_holiday {
     my $self = shift;
     my $new_dt = shift;
-    my @dt = $self->{exception_holidays}->as_list;
+    my @dt = $self->{single_holidays}->as_list;
     push @dt, $new_dt;
-    $self->{exception_holidays} =
+    $self->{single_holidays} =
       DateTime::Set->from_datetimes( dates => \@dt );
 
     return;
