@@ -315,7 +315,7 @@ canned reports and writing custom SQL reports.</p>
                             <a href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% savedreport.id %]&amp;phase=Show%20SQL">Show</a>
                             [% IF ( CAN_user_reports_create_reports ) %]
                                 <a href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% savedreport.id %]&amp;phase=Edit%20SQL">Edit</a>
-                                <a title="Duplicate this saved report" href="/cgi-bin/koha/reports/guided_reports.pl?phase=Create report from SQL&sql=[% savedreport.savedsql |uri %]&reportname=[% savedreport.report_name |uri %]&notes=[% savedreport.notes |uri %]">Duplicate</a>
+                                <a title="Duplicate this saved report" href="/cgi-bin/koha/reports/guided_reports.pl?phase=Create report from SQL&amp;sql=[% savedreport.savedsql |uri %]&amp;reportname=[% savedreport.report_name |uri %]&amp;notes=[% savedreport.notes |uri %]">Duplicate</a>
                             [% END %]
                         </td>
                         <td>
@@ -375,9 +375,9 @@ canned reports and writing custom SQL reports.</p>
 [% END %]
 </select></li>
 [% IF (public) %]
-  <li><label for="public">Report is public:</label><select id="public" name="public"> <option value="0">No (default)</option> <option value="1" selected="selected">Yes</public> </select></li>
+  <li><label for="public">Report is public:</label><select id="public" name="public"> <option value="0">No (default)</option> <option value="1" selected="selected">Yes</option> </select></li>
 [% ELSE %]
-  <li><label for="public">Report is public:</label><select id="public" name="public"> <option value="0" selected="selected">No (default)</option> <option value="1">Yes</public> </select></li>
+  <li><label for="public">Report is public:</label><select id="public" name="public"> <option value="0" selected="selected">No (default)</option> <option value="1">Yes</option> </select></li>
 [% END %]
 [% IF (usecache) %] <li>
 <label for="cache_expiry">Cache expiry:</label><input type="text" id="cache_expiry" name="cache_expiry" value="[% cache_expiry %]"></input>
@@ -389,7 +389,7 @@ canned reports and writing custom SQL reports.</p>
 </select>
 </li>[% END %]
 </ol>
-<ofieldset>
+</fieldset>
 <fieldset class="action">
 <input type="hidden" name="phase" value="Report on this Area" />
 <input type="submit" name="submit" value="Next &gt;&gt;" />
@@ -537,11 +537,13 @@ canned reports and writing custom SQL reports.</p>
     </fieldset>
 
 [% IF ( definitions ) %]
-<fieldset><legend>Dictionary definitions</legend><table>
+<fieldset><legend>Dictionary definitions</legend>
+<table>
 [% FOREACH definition IN definitions %]
     <tr><td><input type="checkbox" name="definition" value="[% definition.id %]" /> [% definition.name %]</td></tr>
 [% END %]
 </table>
+</fieldset>
 [% END %]
 
 <fieldset class="action"><input type="hidden" name="phase" value="Choose these criteria" />
@@ -741,9 +743,9 @@ $(document).ready(function() {
     [% PROCESS group_and_subgroup_selection %]
 
 [% IF (public) %]
-  <li><label for="public">Report is public:</label><select id="public" name="public"> <option value="0">No (default)</option> <option value="1" selected="selected">Yes</public> </select></li>
+  <li><label for="public">Report is public:</label><select id="public" name="public"> <option value="0">No (default)</option> <option value="1" selected="selected">Yes</option> </select></li>
 [% ELSE %]
-  <li><label for="public">Report is public:</label><select id="public" name="public"> <option value="0" selected="selected">No (default)</option> <option value="1">Yes</public> </select></li>
+  <li><label for="public">Report is public:</label><select id="public" name="public"> <option value="0" selected="selected">No (default)</option> <option value="1">Yes</option> </select></li>
 [% END %]
 [% IF (usecache) %] <li>
 <label for="cache_expiry">Cache expiry:</label><input type="text" id="cache_expiry" name="cache_expiry" value="[% cache_expiry %]"></input>
@@ -833,9 +835,9 @@ Sub report:<select name="subreport">
 <li><label for="reportname">Report name:</label><input type="text" id="reportname" name="reportname" value="[% reportname %]" size="50" /></li>
 [% PROCESS group_and_subgroup_selection %]
 [% IF (public) %]
-  <li><label for="public">Report is public:</label><select id="public" name="public"> <option value="0">No (default)</option> <option value="1" selected="selected">Yes</public> </select></li>
+  <li><label for="public">Report is public:</label><select id="public" name="public"> <option value="0">No (default)</option> <option value="1" selected="selected">Yes</option> </select></li>
 [% ELSE %]
-  <li><label for="public">Report is public:</label><select id="public" name="public"> <option value="0" selected="selelcted">No (default)</option> <option value="1">Yes</public> </select></li>
+  <li><label for="public">Report is public:</label><select id="public" name="public"> <option value="0" selected="selelcted">No (default)</option> <option value="1">Yes</option> </select></li>
 [% END %]
 [% IF (usecache) %] <li>
 <label for="cache_expiry">Cache expiry:</label><input type="text" id="cache_expiry" name="cache_expiry" value="[% cache_expiry %]"></input>
@@ -912,6 +914,7 @@ Sub report:<select name="subreport">
     <li><label for="filter_author">Author:</label> <input type="text" id="filter_author" name="filter_author" value="[% filter_author %]" /></li>
     <li><label for="filter_keyword">Keyword:</label> <input type="text" id="filter_keyword" name="filter_keyword" value="[% filter_keyword %]" /></li>
   </ol>
+  </fieldset>
   <fieldset class="action"><input type="submit" value="Apply filter" /></fieldset>
 </form>
 </div>
