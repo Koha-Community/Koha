@@ -289,7 +289,9 @@ canned reports and writing custom SQL reports.</p>
                     <th>Saved results</th>
                     <th>Saved SQL</th>
                     <th>&nbsp;</th>
-                    <th>&nbsp;</th>
+                    [% IF ( CAN_user_reports_create_reports ) %]
+                        <th>&nbsp;</th>
+                    [% END %]
                 </tr>
             </thead>
             <tbody>
@@ -837,7 +839,7 @@ Sub report:<select name="subreport">
 [% IF (public) %]
   <li><label for="public">Report is public:</label><select id="public" name="public"> <option value="0">No (default)</option> <option value="1" selected="selected">Yes</option> </select></li>
 [% ELSE %]
-  <li><label for="public">Report is public:</label><select id="public" name="public"> <option value="0" selected="selelcted">No (default)</option> <option value="1">Yes</option> </select></li>
+  <li><label for="public">Report is public:</label><select id="public" name="public"> <option value="0" selected="selected">No (default)</option> <option value="1">Yes</option> </select></li>
 [% END %]
 [% IF (usecache) %] <li>
 <label for="cache_expiry">Cache expiry:</label><input type="text" id="cache_expiry" name="cache_expiry" value="[% cache_expiry %]"></input>
