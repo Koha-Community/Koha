@@ -1,0 +1,331 @@
+RELEASE NOTES FOR KOHA 3.8.7
+22 Nov 2012
+========================================================================
+
+Koha is the first free and open source software library automation package 
+(ILS). Development is sponsored by libraries of varying types and sizes, 
+volunteers, and support companies from around the world.  
+The website for the Koha project is 
+
+    http://koha-community.org/
+
+Koha 3.8.7 can be downloaded from:
+
+    http://download.koha-community.org/koha-3.08.07.tar.gz
+
+Installation instructions can be found at:
+
+    http://wiki.koha-community.org/wiki/Installation_Documentation
+    
+    OR in the INSTALL files that come in the tarball
+
+Koha 3.8.7 is a bugfix/maintenance release.
+
+
+Major fixes in 3.8.7
+======================
+
+Acquisitions
+----------
+	7921	major	Software error while placing order
+
+Architecture, internals, and plumbing
+----------
+	9085	major	Installer will not run with DEBUG set
+
+Cataloging
+----------
+	8665	critical	DOM indexing fails to index some bib records
+
+Circulation
+----------
+	8253	critical	fix fine doubling, when upgrading from 3.6 to 3.8 (or later)
+	8966	critical	Koha::Calendar::is_holiday truncates the date
+	8213	major	"Cancel All" button on holds over tab cancels both holds over and holds waiting
+	8939	major	Fines Charged During Grace Period
+
+OPAC
+----------
+	8953	critical	opac-userupdate encoding issues
+
+Searching
+----------
+	8805	major	Add a biblio-zebra-indexdefs.xsl for NORMARC
+
+Templates
+----------
+	3652	critical	XSS vulnerabilities
+
+
+Bugs fixed in 3.8.7
+======================
+
+About
+----------
+	8910	minor	silent warnings triggered in about.pl
+
+Architecture, internals, and plumbing
+----------
+	8804	normal	Quiet errors in the log from Auth.pm
+
+Authentication
+----------
+	8787	minor	If OpacMaintenance is on the requested page is loaded
+
+Cataloging
+----------
+	8823	normal	CatalogModuleRelink Creates Multiple Links between Bib and Auth record  ($9 RLIN)
+	8862	normal	merge.pl contains untranslatable strings
+
+Circulation
+----------
+	8834	normal	Call to C4::Context::preference fails to pass $self in Circulation.pm
+	8841	normal	Duedates set by Returnbeforeexpiry lack HH:MM
+	8234	minor	Dates are not well sorted on Transfers to receive
+	8826	minor	Initialization of hash triggers error log entries.
+
+Documentation
+----------
+	8568	minor	Fix some errors in docs for scripts provided by the Debian packages
+
+I18N/L10N
+----------
+	8872	minor	Improve encoding for xslt files, showmarc and opac-showmarc
+
+Installation and upgrade (command-line installer)
+----------
+	8749	trivial	Missing Ubuntu library files in ubuntu.packages and ubuntu.12.04.packages
+
+Installation and upgrade (web-based installer)
+----------
+	9058	normal	Norwegian default for CalendarFirstDayOfWeek
+
+OPAC
+----------
+	8792	normal	Babeltheque tab is useless
+	8888	normal	question marks in series title facet links
+	8941	normal	Make title display properly for NORMARC OPAC detail view
+	8973	normal	HTML and URL escape missing in OPAC templates
+	8936	minor	Search RSS  feeds does not show there items when subscribing in Firefox
+	8988	minor	item status uses authorized value description for intranet
+
+Reports
+----------
+	8987	normal	"New report button" broken
+
+Searching
+----------
+	8958	normal	Facets are not fully UNIMARC compliant
+
+Staff Client
+----------
+	8996	normal	In result page items with negative notforloan are available
+
+System Administration
+----------
+	4177	normal	opaccloud missing from the system preferences interface
+	8907	minor	Last updated date does not appear on currency edit form
+	8849	trivial	Error log generated when not a demo system
+
+Templates
+----------
+	8898	minor	Remove unused mainmenu include and related styles in the staff client
+	8912	minor	Remove unused hold-menu.inc
+
+translate.koha-community.org
+----------
+	8968	normal	JavaScript String not translatable
+
+
+Enhancements in 3.8.7
+======================
+
+Lists
+----------
+	7805	Exposing the new list permissions in opac and staff
+
+
+
+System requirements
+======================
+
+    Important notes:
+    
+    * Perl 5.10 is required
+    * Zebra is required
+
+
+Documentation
+======================
+
+As of Koha 3.2, the Koha manual is now maintained in DocBook.  The
+home page for Koha documentation is 
+
+    http://koha-community.org/documentation/
+
+As of the date of these release notes, only the English version of the
+Koha manual is available:
+
+    http://manual.koha-community.org/3.8.7/en/
+
+The Git repository for the Koha manual can be found at
+
+    http://git.koha-community.org/gitweb/?p=kohadocs.git;a=summary
+
+
+Translations
+======================
+
+Complete or near-complete translations of the OPAC and staff
+interface are available in this release for the following languages:
+
+
+  * English (USA)
+  * Arabic (99%)
+  * Armenian (100%)
+  * Basque (76%)
+  * Chinese (Taiwan) (76%)
+  * Danish (75%)
+  * English (New Zealand) (100%)
+  * French (100%)
+  * French (Canada) (76%)
+  * German (100%)
+  * German (Switzerland) (99%)
+  * Greek (68%)
+  * Italian (100%)
+  * Norwegian Bokmål (68%)
+  * Portuguese (Brazil) (99%)
+  * Slovak (100%)
+  * Spanish (100%)
+  * Turkish (100%)
+
+
+Partial translations are available for various other languages.
+
+The Koha team welcomes additional translations; please see
+
+    http://wiki.koha-community.org/wiki/Translating_Koha
+
+for information about translating Koha, and join the koha-translate 
+list to volunteer:
+
+    http://lists.koha-community.org/cgi-bin/mailman/listinfo/koha-translate
+
+The most up-to-date translations can be found at:
+
+    http://translate.koha-community.org/
+
+
+Release Team
+======================
+
+The release team for Koha 3.8.7 is
+
+  Release Manager:       Paul Poulain <paul.poulain@biblibre.com>
+  Documentation Manager: Nicole C Engard <nengard@gmail.com>
+  Translation Manager:   Frédéric Demians <frederic@tamil.fr>
+  QA Manager:            Ian Walls <koha.sekjal@gmail.com>
+  QA team:               Marcel de Rooy <M.de.Rooy@rijksmuseum.nl>,
+                         Jonathan Druart <jonathan.druart@biblibre.com>
+			 Mason James <mason@kohaaloha.com>
+  Bug Wranglers:         Katrin Fischer, Magnus Enger
+
+  Release Maintainer (3.4.x): Chris Nighswonger <cnighswonger@foundations.edu>
+  Release Maintainer (3.6.x): Jared Camins-Esakov <jcamins@cpbibliography.com>
+  Release Maintainer (3.8.x): Chris Cormack <chrisc@catalyst.net.nz>
+
+
+Credits
+======================
+
+We thank the following libraries who are known to have sponsored
+new features in Koha 3.8.7:
+
+We thank the following individuals who contributed patches to Koha 3.8.7.
+  *      3	Jared Camins-Esakov
+  *      1	Colin Campbell
+  *      2	Chris Cormack
+  *      1	Frédéric Demians
+  *      2	Jonathan Druart
+  *      4	Magnus Enger
+  *      3	Kyle M Hall
+  *      1	Mason James
+  *      4	Owen Leonard
+  *      1	Chris Nighswonger
+  *      1	Dobrica Pavlinusic
+  *      1	Maxime Pelletier
+  *      2	Paul Poulain
+  *      6	Marcel de Rooy
+  *      5	Fridolyn SOMERS
+  *      1	Mathieu Saby
+  *      1	Adrien Saurat
+  *      1	Lyon3 Team
+  *      1	Mirko Tietgen
+  *      5	Mark Tompsett
+  *      1	Robert Williams
+
+We thank the following companies who contributed patches to Koha 3.8.7
+  *       4 ACPL                                                                                          
+  *       1 Amigos Library Services
+  *      10 Biblibre                                                                                    
+  *       3 ByWater-Solutions                                                                   
+  *       3 C & P Bibliography                                                                    
+  *       2 Catalyst                                                                                 
+  *       1 Foundations                                                                              
+  *       1 KohaAloha                                                                                  
+  *       1 Libeo                                                                                          
+  *       4 Libriotech                                                                                 
+  *       1 PTFS-Europe                                                                              
+  *       6 Rijksmuseum                                                                               
+  *       1 Tamil                                                                                           
+  *       1 Université Jean Moulin Lyon 3
+  *       1 Université Rennes 2
+  *       1 abunchofthings.net
+  *       1 rot13.org                                                                                      
+  *       5 unidentified
+
+We also especially thank the following individuals who tested patches
+for Koha 3.8.7.
+  *       2 Tomas Cohen Arazi
+  *      19 Jared Camins-Esakov
+  *      50 Chris Cormack
+  *       2 Elliott Davis
+  *       3 Frédéric Demians
+  *       1 Katrin Fischer
+  *       6 Kyle M Hall
+  *       5 Owen Leonard
+  *       1 Julian Maurice
+  *       3 Melia Meggs
+  *      26 Paul Poulain
+  *       2 Mirko Tietgen
+  *       2 Marc Veron
+  *       3 wajasu
+
+We regret any omissions.  If a contributor has been inadvertantly missed,
+please send a patch against these release notes to 
+koha-patches@lists.koha-community.org.
+
+
+Revision control notes
+======================
+
+The Koha project uses Git for version control.  The current development 
+version of Koha can be retrieved by checking out the master branch of 
+
+    git://git.koha-community.org/koha.git
+
+The branch for this version of Koha and future bugfixes in this release line is 3.8.x.
+
+The last Koha release was 3.8.6, which was released on October 22, 2012.
+
+
+Bugs and feature requests
+======================
+
+Bug reports and feature requests can be filed at the Koha bug
+tracker at
+
+    http://bugs.koha-community.org/
+
+
+Ehara taku toa i te toa takitahi, engari he toa takitini 
