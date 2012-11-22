@@ -193,9 +193,9 @@ foreach my $report_id (@ARGV) {
         warn "ERROR: No saved report $report_id found";
         next;
     }
-    my $sql         => $report->{savedsql};
-    my $report_name => $report->{report_name};
-    my $type        => $report->{type};
+    my $sql         = $report->{savedsql};
+    my $report_name = $report->{report_name};
+    my $type        = $report->{type};
 
     $verbose and print "SQL: $sql\n\n";
     if (defined($report_name) and $report_name ne "")
