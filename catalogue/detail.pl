@@ -40,6 +40,7 @@ use C4::VirtualShelves;
 use C4::XSLT;
 use C4::Images;
 use Koha::DateUtils;
+use C4::HTML5Media;
 
 # use Smart::Comments;
 
@@ -378,6 +379,12 @@ if ( C4::Context->preference("LocalCoverImages") == 1 ) {
     my @images = ListImagesForBiblio($biblionumber);
     $template->{VARS}->{localimages} = \@images;
 }
+
+# HTML5 Media
+if ( (C4::Context->preference("HTML5MediaEnabled") eq 'staff') || (C4::Context->preference("HTML5MediaEnabled") eq 'both') ) {
+    $template = C4::HTML5Media->gethtml5media($template,$record);
+}
+
 
 # Get OPAC URL
 if (C4::Context->preference('OPACBaseURL')){

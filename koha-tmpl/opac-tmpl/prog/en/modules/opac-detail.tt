@@ -16,6 +16,7 @@
 <link rel="stylesheet" type="text/css" href="/opac-tmpl/prog/en/css/jquery.rating.css" />[% END %]
 
 [% IF ( OpacHighlightedWords ) %]<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.highlight-3.js"></script>[% END %]
+
 <script type="text/JavaScript" language="JavaScript">
 //<![CDATA[
 
@@ -718,6 +719,11 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 [% IF ( OPACLocalCoverImages && localimages.size ) %]
     <li id="tab_images"><a href="#images">Images</a></li>
 [% END %]
+
+[% IF ( HTML5MediaEnabled ) %][% IF ( HTML5MediaSets ) %]
+    <li id="tab_html5media"><a href="#html5media">Play media</a></li>
+[% END %][% END %]
+
 </ul>
 
 [% IF ( serialcollection ) %]
@@ -1052,6 +1058,19 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 [% END %]
 </table>
 </div>[% END %][% END %]
+
+[% IF ( HTML5MediaEnabled ) %]
+<div id="html5media">
+        <p>
+        <[% HTML5MediaParent %][% HTML5MediaWidth %] controls preload=none>
+          [% FOREACH HTML5MediaSet IN HTML5MediaSets %]
+            <[% HTML5MediaSet.child  %] src="[% HTML5MediaSet.srcblock %]"[% HTML5MediaSet.typeblock %] />
+          [% END %]
+            [[% HTML5MediaParent %] tag not supported by your browser.]
+        </[% HTML5MediaParent %]>
+        </p>
+</div>
+[% END %]
 
 [% IF ( OPACLocalCoverImages && localimages.size ) %]
 <div id="images">

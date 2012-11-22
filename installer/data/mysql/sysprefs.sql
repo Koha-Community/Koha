@@ -400,3 +400,5 @@ INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('OpacSeparateHoldings', '0', 'Separate current branch holdings from other holdings (OPAC)', NULL, 'YesNo');
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('OpacSeparateHoldingsBranch', 'homebranch', 'Branch used to separate holdings (OPAC)', 'homebranch|holdingbranch', 'Choice');
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('RenewalSendNotice','0', NULL, '', 'YesNo');
+INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('HTML5MediaEnabled','not','Show a tab with a HTML5 media player for files catalogued in field 856','not|opac|staff|both','Choice');
+INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('HTML5MediaExtensions','webm|ogg|ogv|oga|vtt','Media file extensions','','free');

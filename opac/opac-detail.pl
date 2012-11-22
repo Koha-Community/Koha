@@ -49,6 +49,7 @@ use MARC::Field;
 use List::MoreUtils qw/any none/;
 use C4::Images;
 use Koha::DateUtils;
+use C4::HTML5Media;
 
 BEGIN {
 	if (C4::Context->preference('BakerTaylorEnabled')) {
@@ -774,6 +775,11 @@ if (scalar(@serialcollections) > 0) {
 # Local cover Images stuff
 if (C4::Context->preference("OPACLocalCoverImages")){
 		$template->param(OPACLocalCoverImages => 1);
+}
+
+# HTML5 Media
+if ( (C4::Context->preference("HTML5MediaEnabled") eq 'opac') || (C4::Context->preference("HTML5MediaEnabled") eq 'both') ) {
+    $template = C4::HTML5Media->gethtml5media($template,$record);
 }
 
 my $syndetics_elements;
