@@ -359,8 +359,10 @@ sub SearchAuthorities {
                     }
                 }
                 my $thisauthtype = GetAuthType(GetAuthTypeCode($authid));
-                $thisauthtype |= GetAuthType($authtypecode) if $authtypecode;
-                $newline{authtype}     = defined ($thisauthtype) ?
+                unless (defined $thisauthtype) {
+                    $thisauthtype = GetAuthType($authtypecode) if $authtypecode;
+                }
+                $newline{authtype}     = defined($thisauthtype) ?
                                             $thisauthtype->{'authtypetext'} : '';
                 $newline{summary}      = $summary;
                 $newline{even}         = $counter % 2;
