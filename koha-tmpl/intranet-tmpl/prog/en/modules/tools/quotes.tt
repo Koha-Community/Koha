@@ -6,7 +6,6 @@
     <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.min.js"></script>
     <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/dataTables.fnReloadAjax.js"></script>
     [% INCLUDE 'datatables-strings.inc' %]
-    </script>
     <script type="text/javascript" src="[% themelang %]/js/datatables.js"></script>
     <script type="text/javascript" src="[% themelang %]/js/jquery.jeditable.mini.js"></script>
     <script type="text/javascript">
@@ -29,7 +28,21 @@
                                             { "sWidth": "11%" },
                                           ],
                    "oLanguage"          : {
-                                            "sEmptyTable": sEmptyTable,
+                                            "oPaginate": {
+                                                           "sFirst": MSG_DT_FIRST,
+                                                           "sLast": MSG_DT_LAST,
+                                                           "sNext": MSG_DT_NEXT,
+                                                           "sPrevious": MSG_DT_PREVIOUS,
+                                                         },
+                                            "sEmptyTable": MSG_DT_EMPTY_TABLE,
+                                            "sInfo": MSG_DT_INFO,
+                                            "sInfoEmpty": MSG_DT_INFO_EMPTY,
+                                            "sInfoFiltered": MSG_DT_INFO_FILTERED,
+                                            "sLengthMenu": MSG_DT_LENGTH_MENU,
+                                            "sLoadingRecords": MSG_DT_LOADING_RECORDS,
+                                            "sProcessing": MSG_DT_PROCESSING,
+                                            "sSearch": MSG_DT_SEARCH,
+                                            "sZeroRecords": MSG_DT_ZERO_RECORDS,
                                           },
                    "fnPreDrawCallback": function(oSettings) {
                         return true;
