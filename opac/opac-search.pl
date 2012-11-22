@@ -71,7 +71,7 @@ BEGIN {
 }
 
 my ($template,$borrowernumber,$cookie);
-
+my $lang = C4::Templates::getlanguage($cgi, 'opac');
 # decide which template to use
 my $template_name;
 my $template_type = 'basic';
@@ -178,7 +178,7 @@ $template->param(
 );
 
 # load the language limits (for search)
-my $languages_limit_loop = getAllLanguages();
+my $languages_limit_loop = getAllLanguages($lang);
 $template->param(search_languages_loop => $languages_limit_loop,);
 
 # load the Type stuff
@@ -418,7 +418,6 @@ my ($error,$query,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit_
 my @results;
 
 ## I. BUILD THE QUERY
-my $lang = C4::Templates::getlanguage($cgi, 'opac');
 ( $error,$query,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit_desc,$stopwords_removed,$query_type) = buildQuery(\@operators,\@operands,\@indexes,\@limits,\@sort_by, 0, $lang);
 
 sub _input_cgi_parse {
