@@ -244,11 +244,9 @@ sub Z3950Search {
     my $lccall= $pars->{lccall};
     my $controlnumber= $pars->{controlnumber};
 
-
     my $show_next       = 0;
     my $total_pages     = 0;
 
-    my $noconnection;
     my $attr = '';
     my $term;
     my $host;
@@ -259,7 +257,6 @@ sub Z3950Search {
     my @encoding;
     my @results;
     my $count;
-    my $toggle;
     my $record;
     my $oldbiblio;
     my @serverhost;
@@ -329,6 +326,7 @@ sub Z3950Search {
             $option1->option( 'password', $server->{password} )
               if $server->{password};
             $option1->option( 'preferredRecordSyntax', $server->{syntax} );
+            $option1->option( 'timeout', $server->{timeout} ) if $server->{timeout};
             $oConnection[$s] = create ZOOM::Connection($option1);
             $oConnection[$s]->connect( $server->{host}, $server->{port} );
             $serverhost[$s] = $server->{host};
@@ -338,7 +336,6 @@ sub Z3950Search {
         }    ## while fetch
     }    # foreach
     my $nremaining  = $s;
-    my $firstresult = 1;
 
     for ( my $z = 0 ; $z < $s ; $z++ ) {
         $oResult[$z] = $oConnection[$z]->search_pqf($query);
@@ -392,6 +389,8 @@ sub Z3950Search {
                             $row_data{lccn}         = $oldbiblio->{lccn};
                             $row_data{title}        = $oldbiblio->{title};
                             $row_data{author}       = $oldbiblio->{author};
+                            $row_data{date}         = $oldbiblio->{copyrightdate};
+                            $row_data{edition}      = $oldbiblio->{editionstatement};
                             $row_data{breedingid}   = $breedingid;
                             $row_data{biblionumber} = $biblionumber;
                             push( @breeding_loop, \%row_data );
@@ -403,29 +402,23 @@ sub Z3950Search {
                 }    #if $numresults
             }
         }    # if $k !=0
-        my $numberpending = $nremaining - 1;
-
-        my @servers = ();
-        foreach my $id (@id) {
-            push(@servers,{id => $id});
-        }
 
         $template->param(
-            breeding_loop => \@breeding_loop,
-            server        => $servername[$k],
-            numberpending => $numberpending,
+            numberpending => $nremaining,
             current_page => $page,
-            servers => \@servers,
             total_pages => $total_pages,
             show_nextbutton => $show_next?1:0,
             show_prevbutton => $page!=1,
         );
-        $firstresult++;
     } # while nremaining
 
+    my @servers = ();
+    foreach my $id (@id) {
+        push @servers, {id => $id};
+    }
     $template->param(
         breeding_loop => \@breeding_loop,
-        numberpending => $nremaining > 0 ? $nremaining : 0,
+        servers => \@servers,
         errconn       => \@errconn
     );
 }
