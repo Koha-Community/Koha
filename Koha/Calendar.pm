@@ -177,22 +177,31 @@ sub addDays {
 sub is_holiday {
     my ( $self, $dt ) = @_;
     my $localdt = $dt->clone();
+    my $day   = $localdt->day;
+    my $month = $localdt->month;
+
+    $localdt->truncate( to => 'day' );
+
+    if ( $self->{exception_holidays}->contains($localdt) ) {
+        # exceptions are not holidays
+        return 0;
+    }
+
     my $dow = $localdt->day_of_week;
+    # Representation fix
+    # TODO: Shouldn't we shift the rest of the $dow also?
     if ( $dow == 7 ) {
         $dow = 0;
     }
+
     if ( $self->{weekly_closed_days}->[$dow] == 1 ) {
         return 1;
     }
-    $localdt->truncate( to => 'day' );
-    my $day   = $localdt->day;
-    my $month = $localdt->month;
+
     if ( exists $self->{day_month_closed_days}->{$month}->{$day} ) {
         return 1;
     }
-    if ( $self->{exception_holidays}->contains($localdt) ) {
-        return 1;
-    }
+
     if ( $self->{single_holidays}->contains($localdt) ) {
         return 1;
     }
@@ -320,9 +329,9 @@ sub clear_weekly_closed_days {
 sub add_holiday {
     my $self = shift;
     my $new_dt = shift;
-    my @dt = $self->{exception_holidays}->as_list;
+    my @dt = $self->{single_holidays}->as_list;
     push @dt, $new_dt;
-    $self->{exception_holidays} =
+    $self->{single_holidays} =
       DateTime::Set->from_datetimes( dates => \@dt );
 
     return;
