@@ -80,7 +80,6 @@ $template->param(
         "AddPatronLists_".C4::Context->preference("AddPatronLists")=> "1",
         no_add => $no_add,
             );
-my @letters = map { {letter => $_} } ( 'A' .. 'Z');
-$template->param( letters => \@letters );
+$template->param( 'alphabet' => C4::Context->preference('alphabet') );
 
 output_html_with_http_headers $query, $cookie, $template->output;
