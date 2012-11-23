@@ -60,4 +60,11 @@ $template->param(
     pendingsuggestions => $pendingsuggestions
 );
 
+#
+# warn user if he is using mysql/admin login
+#
+unless ($loggedinuser) {
+    $template->param(adminWarning => 1);
+}
+
 output_html_with_http_headers $query, $cookie, $template->output;
