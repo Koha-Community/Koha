@@ -26,9 +26,11 @@ use Exporter;
 use C4::Context;
 use C4::Debug;
 #use Data::Dumper;
+use constant TAG_FIELDS => qw(tag_id borrowernumber biblionumber term language date_created);
+use constant TAG_SELECT => "SELECT " . join(',', TAG_FIELDS) . "\n FROM   tags_all\n";
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
-use vars qw($ext_dict $select_all @fields);
+our $ext_dict;
 
 BEGIN {
     $VERSION = 3.07.00.049;
@@ -70,8 +72,6 @@ More verose debugging messages are sent in the presence of non-zero $ENV{"DEBUG"
 INIT {
     $ext_dict and $Lingua::Ispell::path = $ext_dict;
     $debug and print STDERR "\$Lingua::Ispell::path = $Lingua::Ispell::path\n";
-	@fields = qw(tag_id borrowernumber biblionumber term language date_created);
-	$select_all = "SELECT " . join(',',@fields) . "\n FROM   tags_all\n";
 }
 
 sub get_filters {
@@ -181,7 +181,7 @@ sub delete_tag_rows_by_ids {
 
 sub get_tag_rows {
 	my $hash = shift || {};
-	my @ok_fields = @fields;
+    my @ok_fields = TAG_FIELDS;
 	push @ok_fields, 'limit';	# push the limit! :)
 	my $wheres;
 	my $limit  = "";
@@ -208,7 +208,7 @@ sub get_tag_rows {
 			push @exe_args, $hash->{$key};
 		}
 	}
-	my $query = $select_all . ($wheres||'') . $limit;
+    my $query = TAG_SELECT . ($wheres||'') . $limit;
 	$debug and print STDERR "get_tag_rows query:\n $query\n",
 							"get_tag_rows query args: ", join(',', @exe_args), "\n";
 	my $sth = C4::Context->dbh->prepare($query);
@@ -491,7 +491,7 @@ sub add_tag_index {
 
 sub get_tag {		# by tag_id
 	(@_) or return;
-	my $sth = C4::Context->dbh->prepare("$select_all WHERE tag_id = ?");
+    my $sth = C4::Context->dbh->prepare(TAG_SELECT . "WHERE tag_id = ?");
 	$sth->execute(shift);
 	return $sth->fetchrow_hashref;
 }
