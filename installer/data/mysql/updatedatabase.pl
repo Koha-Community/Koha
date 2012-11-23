@@ -64,6 +64,7 @@ GetOptions(
 my $dbh = C4::Context->dbh;
 $|=1; # flushes output
 
+local $dbh->{RaiseError} = 0;
 
 # Record the version we are coming from
 
