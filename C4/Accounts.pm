@@ -768,13 +768,13 @@ sub makepartialpayment {
     return;
 }
 
-=head2 WriteOff
+=head2 WriteOffFee
 
-  WriteOff( $borrowernumber, $accountnum, $itemnum, $accounttype, $amount, $branch );
+  WriteOff( $borrowernumber, $accountline_id, $itemnum, $accounttype, $amount, $branch );
 
 Write off a fine for a patron.
 C<$borrowernumber> is the patron's borrower number.
-C<$accountnum> is the accountnumber of the fee to write off.
+C<$accountline_id> is the accountline_id of the fee to write off.
 C<$itemnum> is the itemnumber of of item whose fine is being written off.
 C<$accounttype> is the account type of the fine being written off.
 C<$amount> is a floating-point number, giving the amount that is being written off.
@@ -783,7 +783,7 @@ C<$branch> is the branchcode of the library where the writeoff occurred.
 =cut
 
 sub WriteOffFee {
-    my ( $borrowernumber, $accountnum, $itemnum, $accounttype, $amount, $branch ) = @_;
+    my ( $borrowernumber, $accountline_id, $itemnum, $accounttype, $amount, $branch ) = @_;
     $branch ||= C4::Context->userenv->{branch};
     my $manager_id = 0;
     $manager_id = C4::Context->userenv->{'number'} if C4::Context->userenv;
@@ -796,10 +796,10 @@ sub WriteOffFee {
 
     $query = "
         UPDATE accountlines SET amountoutstanding = 0
-        WHERE accountno = ? AND borrowernumber = ?
+        WHERE accountlines_id = ? AND borrowernumber = ?
     ";
     $sth = $dbh->prepare( $query );
-    $sth->execute( $accountnum, $borrowernumber );
+    $sth->execute( $accountline_id, $borrowernumber );
 
     $query ="
         INSERT INTO accountlines
