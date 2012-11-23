@@ -1,3 +1,6 @@
+[% SET TagsShowEnabled = ( TagsEnabled && TagsShowOnList ) %]
+[% SET TagsInputEnabled = ( opacuserlogin && TagsEnabled && TagsInputOnList ) %]
+
 [% INCLUDE 'doc-head-open.inc' %]
 [% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo;
 [% IF ( searchdesc ) %]
@@ -38,9 +41,9 @@ function holdBiblioNums(numList) {
     // numList: biblio numbers separated by "/"
     $("#hold_form_biblios").attr("value", numList);
     $("#hold_form").submit();
-}[% END %]
+}[% END %][% END %]
 
-[% IF ( TagsEnabled ) %]
+[% IF ( TagsInputEnabled && loggedinusername ) %]
 function tagSelected() {
     var checkedBoxes = $(".searchresults :checkbox:checked");
     if ($(checkedBoxes).size() == 0) {
@@ -56,6 +59,8 @@ function tagCanceled() {
     $("#tagsel_form").hide();
     $("#tagsel_tag").show();
     $("#sort_by").show();
+    $("#tagsel_new").val("");
+    $("#tagsel_status, .tagstatus").empty().hide();
 }
 
 function tagAdded() {
@@ -67,6 +72,7 @@ function tagAdded() {
 
     var tag = $("#tagsel_new").val();
     if (!tag || (tag == "")) {
+        alert(MSG_NO_TAG_SPECIFIED);
         return false;
     }
 
@@ -78,7 +84,7 @@ function tagAdded() {
 
     KOHA.Tags.add_multitags_button(bibs, tag);
     return false;
-}[% END %][% END %]
+}[% END %]
 [% IF ( OpacHighlightedWords ) %]
 var q_array = new Array();  // holds search terms if available
 
@@ -161,7 +167,6 @@ $(document).ready(function(){
     });
     [% END %]
 [% END %]
-    [% IF ( opacuserlogin ) %][% IF ( TagsEnabled ) %]$("#tagsel_span").html("<input id=\"tagsel_tag\" class=\"submit\" type=\"submit\" value=\"Tag\"/>");[% END %][% END %]
 
     function cartList(){
         if($("#addto").find("option:selected").attr("value") == "addtolist"){
@@ -218,10 +223,7 @@ $(document).ready(function(){
         $("#highlight_toggle_on" ).hide().click(function() {highlightOn() ;});
         $("#highlight_toggle_off").show().click(function() {highlightOff();});[% END %][% END %]
 
-[% IF ( opacuserlogin ) %]    [% IF ( TagsEnabled ) %]
-        $(".tagbutton").click(KOHA.Tags.add_tag_button);
-        [% IF ( TagsInputOnList ) %]
-        [% IF ( loggedinusername ) %]
+[% IF ( TagsInputEnabled && loggedinusername ) %]
             $("#tagsel_tag").click(function(){
                 tagSelected();
                 return false;
@@ -235,31 +237,35 @@ $(document).ready(function(){
                 return false;
             });
 
-            $(".tag_results_add").click(function(){
+            $(".tag_add").click(function(){
                 var thisid = $(this).attr("id");
                 thisid = thisid.replace("tag_add","");
                 $(this).hide();
                 $("#tagform"+thisid).show();
                 $("#newtag"+thisid).focus();
+                $("#newtag"+thisid+"_status").empty().hide();
                 return false;
-            })
-
+            });
             $(".cancel_tag_add").click(function(){
                 var thisid = $(this).attr("id");
                 thisid = thisid.replace("cancel","");
-                $(this).parent().hide();
+                $("#tagform"+thisid).hide();
                 $("#tag_add"+thisid).show();
-                return false;
-            })
-
-        [% ELSE %]
-            $("#tagsel_tag").click(function(){
-                window.location = "/cgi-bin/koha/opac-user.pl";
+                $("#newtag"+thisid).val("");
+                $("#newtag"+thisid+"_status").empty().hide();
                 return false;
             });
-        [% END %]
-        [% END %]
-    [% END %][% END %]
+            $(".tagbutton").click(function(){
+                var thisid = $(this).attr("title");
+                var tag = $("#newtag"+thisid).val();
+                if (!tag || (tag == "")) {
+                    alert(MSG_NO_TAG_SPECIFIED);
+                    return false;
+                }
+                KOHA.Tags.add_tag_button(thisid, tag);
+                return false;
+            });
+[% END %]
     [% IF OpenLibraryCovers %]KOHA.OpenLibrary.GetCoverFromIsbn();[% END %]
     [% IF OPACLocalCoverImages %]KOHA.LocalCover.GetCoverFromBibnumber(false);[% END %]
     [% IF ( GoogleJackets ) %]KOHA.Google.GetCoverFromIsbn();[% END %]
@@ -395,22 +401,20 @@ $(document).ready(function(){
             <span id="placehold"><!-- input class="submit" type="submit" value="Place Hold"/ --></span>
             <div id="holdDetails"></div>
 
-            [% IF ( opacuserlogin ) %][% IF ( loggedinusername ) %][% IF ( TagsEnabled ) %]
-                        [% IF ( TagsInputOnList ) %]
-                            <span id="tagsel_span"></span>
-                          [% IF ( loggedinusername ) %]
+            [% IF ( TagsInputEnabled && loggedinusername ) %]
+                            <span id="tagsel_span">
+                              <input id="tagsel_tag" class="submit" type="submit" value="Tag"/>
+                            </span>
                             <span id="tagsel_form" style="display:none">
                               <label for="tagsel_new">New tag:</label>
                               <input name="tagsel_new" id="tagsel_new" maxlength="100" />
-                              <input id="tagsel_button" name="tagsel_button" class="input tagsel_button" title="tagsel_button" type="submit" value="Add" />
-                              <a href="#" id="tagsel_cancel">Cancel</a>
+                              <input id="tagsel_button" name="tagsel_button" class="input tagsel_button" title="Add" type="submit" value="Add" />
+                              <a href="#" id="tagsel_cancel">(done)</a>
                             </span>
                             <span id="tagsel_status" class="tagsel_tatus" style="display:none;">
                               Tag status here.
                             </span>
-                          [% END %]
-                        [% END %]
-                [% END %][% END %][% END %]
+            [% END %]
         </div>
 
         </td></tr>
@@ -542,18 +546,15 @@ $(document).ready(function(){
                 [% END %]
 
                 [% IF ( LibraryThingForLibrariesID ) %]<div class="ltfl_reviews"></div>[% END %]
-                [% IF ( opacuserlogin ) %][% IF ( TagsEnabled ) %]
-                                [% IF ( TagsShowOnList ) %]
+                [% IF ( TagsShowEnabled ) %]
                                 [% IF ( SEARCH_RESULT.TagLoop.size ) %]
                                         <div class="results_summary"><span class="label">Tags:</span>
                                         <ul style="display: inline; list-style: none;">[% FOREACH TagLoo IN SEARCH_RESULT.TagLoop %]<li style="display: inline; list-style: none;"><a href="/cgi-bin/koha/opac-search.pl?tag=[% TagLoo.term |url %]&amp;q=[% TagLoo.term |url %]">[% TagLoo.term %]</a> <span class="weight">([% TagLoo.weight_total %])</span></li>
                                             [% END %]
                                         </ul>
-                                   [% END %]
-                                    [% IF ( SEARCH_RESULT.TagLoop.size ) %]
-                                    </div>[% END %]
+                                        </div>
                                 [% END %]
-                                [% END %][% END %]
+                [% END %]
                 [% IF ( SEARCH_RESULT.searchhighlightblob ) %]<span class="results_summary"><span class="label">Match:</span> [% SEARCH_RESULT.searchhighlightblob %]</span>[% END %]
 
 
@@ -598,14 +599,18 @@ $(document).ready(function(){
                     [% END %]
                 [% END %]
 
-                [% IF ( TagsInputOnList ) %]
+                [% IF ( TagsInputEnabled ) %]
                     [% IF ( loggedinusername ) %]
-                        <a class="tag_results_add" id="tag_add[% SEARCH_RESULT.biblionumber %]" href="#">Add tag</a>
-                        <span id="tagform[% SEARCH_RESULT.biblionumber %]" class="tag_results_input"><label for="newtag[% SEARCH_RESULT.biblionumber %]">New tag(s):</label><input name="newtag[% SEARCH_RESULT.biblionumber %]" id="newtag[% SEARCH_RESULT.biblionumber %]" maxlength="100" />
-                        <input name="tagbutton" class="tagbutton" title="[% SEARCH_RESULT.biblionumber %]" type="submit" value="Add" /> <a class="cancel_tag_add" id="cancel[% SEARCH_RESULT.biblionumber %]" href="#">Cancel</a>
+                        <a class="tag_add" id="tag_add[% SEARCH_RESULT.biblionumber %]" href="#">Add tag</a>
+                        <span id="tagform[% SEARCH_RESULT.biblionumber %]" class="tag_results_input" style="display:none;">
+                          <label for="newtag[% SEARCH_RESULT.biblionumber %]">New tag(s):</label>
+                          <input name="newtag[% SEARCH_RESULT.biblionumber %]" id="newtag[% SEARCH_RESULT.biblionumber %]" maxlength="100" />
+                          <input name="tagbutton" class="tagbutton" title="[% SEARCH_RESULT.biblionumber %]" type="submit" value="Add" />
+                          <a class="cancel_tag_add" id="cancel[% SEARCH_RESULT.biblionumber %]" href="#">(done)</a>
+                        </span>
                         <span id="newtag[% SEARCH_RESULT.biblionumber %]_status" class="tagstatus" style="display:none;">
-                        Tag status here.
-                        </span></span>
+                          Tag status here.
+                        </span>
                     [% ELSIF ( loop.first ) %]<span id="login4tags">Log in to add tags.</span>
                     [% END %]
                 [% END %]

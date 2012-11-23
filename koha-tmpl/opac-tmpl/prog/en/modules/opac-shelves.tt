@@ -1,12 +1,13 @@
+[% SET TagsShowEnabled = ( TagsEnabled && TagsShowOnList ) %]
+[% SET TagsInputEnabled = ( opacuserlogin && TagsEnabled && TagsInputOnList ) %]
+
 [% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo;   [% IF ( viewshelf ) %]Contents of [% shelfname |html %][% ELSE %]Your lists[% END %][% INCLUDE 'doc-head-close.inc' %]
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
 <script type="text/javascript">
 //<![CDATA[
-var MSG_NO_TAG_SPECIFIED = _("No tag was specified.");
 var MSG_REMOVE_FROM_LIST = _("Are you sure you want to remove these items from the list?");
 var MSG_CONFIRM_DELETE_LIST = _("Are you sure you want to delete this list?");
-var MSG_NO_RECORD_SELECTED = _("Please select one or more items");
 
 [% IF ( opacuserlogin ) %][% IF ( RequestOnOpac ) %]
 function holdSelections() {
@@ -24,7 +25,8 @@ function holdSelections() {
     }
 }
 [% END %][% END %]
-[% IF ( opacuserlogin ) %][% IF ( loggedinusername ) %][% IF ( TagsEnabled ) %]function tagSelected() {
+[% IF ( TagsInputEnabled && loggedinusername ) %]
+function tagSelected() {
     var checkedBoxes = $("input:checkbox:checked");
     if ($(checkedBoxes).size()) {
         $("#tagsel_tag").hide();
@@ -39,6 +41,8 @@ function tagCanceled() {
     $("#tagsel_form").hide();
     $("#tagsel_tag").show();
     $(".tag_hides").show();
+    $("#tagsel_new").val("");
+    $(".tagstatus").empty().hide();
 }
 
 function tagAdded() {
@@ -62,7 +66,7 @@ function tagAdded() {
 
     KOHA.Tags.add_multitags_button(bibs, tag);
     return false;
-}[% END %][% END %][% END %]
+}[% END %]
 
 function enableCheckboxActions(){
     // Enable/disable controls if checkboxes are checked
@@ -102,35 +106,51 @@ $(function() {
     $(".cb").click(function(){
       enableCheckboxActions();
     });
+    enableCheckboxActions();
 
-    [% IF ( opacuserlogin ) %][% IF ( loggedinusername ) %][% IF ( TagsEnabled ) %]
-          $("#addtags").click(function(){
+[% IF ( TagsInputEnabled && loggedinusername ) %]
+        $("#tagsel_tag").click(function(){
             tagSelected();
             return false;
-          });
-          $("#addtags").html("<a id=\"tagsel_tag\" href=\"#\" class=\"disabled\">"+_("Tag")+"<\/a> ");
+        });
+        $("#tagsel_cancel").click(function(){
+            tagCanceled();
+            return false;
+        });
+        $("#tagsel_button").click(function(){
+            tagAdded();
+            return false;
+        });
 
-        $(".tagbutton").click(KOHA.Tags.add_tag_button);
-      [% IF ( loggedinusername ) %]
-            $("#tagsel_tag").click(function(){
-                tagSelected();
-                return false;
-            });
-            $("#tagsel_cancel").click(function(){
-                tagCanceled();
-                return false;
-            });
-            $("#tagsel_button").click(function(){
-                tagAdded();
-                return false;
-            });
-        [% ELSE %]
-            $("#tagsel_tag").click(function(){
-                window.location = "/cgi-bin/koha/opac-user.pl";
-                return false;
-            });
-        [% END %]
-        [% END %][% END %][% END %]
+        $(".tag_add").click(function(){
+            var thisid = $(this).attr("id");
+            thisid = thisid.replace("tag_add","");
+            $(this).hide();
+            $("#tagform"+thisid).show();
+            $("#newtag"+thisid).focus();
+            $("#newtag"+thisid+"_status").empty().hide();
+            return false;
+        });
+        $(".cancel_tag_add").click(function(){
+            var thisid = $(this).attr("id");
+            thisid = thisid.replace("cancel","");
+            $("#tagform"+thisid).hide();
+            $("#tag_add"+thisid).show();
+            $("#newtag"+thisid).val("");
+            $("#newtag"+thisid+"_status").empty().hide();
+            return false;
+        });
+        $(".tagbutton").click(function(){
+          var thisid = $(this).attr("title");
+          var tag = $("#newtag"+thisid).val();
+          if (!tag || (tag == "")) {
+              alert(MSG_NO_TAG_SPECIFIED);
+              return false;
+          }
+          KOHA.Tags.add_tag_button(thisid, tag);
+          return false;
+        });
+[% END %]
   [% IF ( loggedinusername && allowremovingitems ) %]
   $("#myform").submit(function(){
     var checkedBoxes = $(".checkboxed input:checkbox:checked");
@@ -285,16 +305,16 @@ $(function() {
                                       [% IF ( RequestOnOpac ) %]
                                         <span id="placehold"></span>
                                       [% END %]
-                                      [% IF ( loggedinusername ) %]
-                                        [% IF ( TagsEnabled ) %]
-                                          <span id="addtags"></span>
-                                          <span id="tagsel_form" style="display:none">
-                                          <label for="tagsel_new" style="display:inline">New&nbsp;tag:</label>
-                                          <input name="tagsel_new" id="tagsel_new" maxlength="100" style="display:inline"/>
-                                          <input id="tagsel_button" name="tagsel_button" class="input tagsel_button" title="tagsel_button" type="submit" value="Add" style="display:inline" />
-                                          <a href="#" id="tagsel_cancel" onclick="tagCanceled(); return false;" style="display:inline">Cancel</a>
-                                          </span>
-                                        [% END %]
+                                      [% IF ( TagsInputEnabled && loggedinusername ) %]
+                                        <span id="addtags">
+                                          <a id="tagsel_tag" href="#" class="disabled">Tag</a>
+                                        </span>
+                                        <span id="tagsel_form" style="display:none">
+                                          <label for="tagsel_new">New tag:</label>
+                                          <input name="tagsel_new" id="tagsel_new" maxlength="100" />
+                                          <input id="tagsel_button" name="tagsel_button" class="input tagsel_button" title="tagsel_button" type="submit" value="Add" />
+                                          <a href="#" id="tagsel_cancel">Cancel</a>
+                                        </span>
                                       [% END %]
                     [% IF ( loggedinusername && allowremovingitems ) %]<span id="removeitems"></span>[% END %]</span>
                   </div>
@@ -352,8 +372,7 @@ $(function() {
           [% END %]
           [% END %][% ELSE %]This record has no items.[% END %]</span>
             [% END %]
-        [% IF ( TagsEnabled ) %]
-          [% IF ( TagsShowOnList ) %]
+          [% IF ( TagsShowEnabled ) %]
             [% IF ( itemsloo.TagLoop.size ) %]
               <div class="results_summary">
               <span class="label">Tags:</span>
@@ -363,24 +382,27 @@ $(function() {
               </div>
             [% END %]
           [% END %]
-                [% IF ( TagsInputOnList ) %]
-          [% IF ( loggedinusername ) %]
-                        <label for="newtag[% itemsloo.biblionumber %]">New tag:</label>
+
+    <span class="results_summary actions">
+        <span class="label">Actions:</span>
+
+        [% IF ( TagsInputEnabled ) %]
+              [% IF ( loggedinusername ) %]
+                    <a class="tag_add" id="tag_add[% itemsloo.biblionumber %]" href="#">Add tag</a>
+                    <span id="tagform[% itemsloo.biblionumber %]" class="tag_results_input" style="display:none;">
+                        <label for="newtag[% itemsloo.biblionumber %]">New tag(s):</label>
                         <input name="newtag[% itemsloo.biblionumber %]" id="newtag[% itemsloo.biblionumber %]" maxlength="100" />
                         <input name="tagbutton" class="tagbutton" title="[% itemsloo.biblionumber %]" type="submit" value="Add" />
+                        <a class="cancel_tag_add" id="cancel[% itemsloo.biblionumber %]" href="#">(done)</a>
+                    </span>
                     <span id="newtag[% itemsloo.biblionumber %]_status" class="tagstatus" style="display:none;">
                         Tag status here.
                     </span>
-                    [% ELSIF ( loop.first ) %]<span class="tagstatus" id="login4tags">Log in to add tags.</span>
-                  [% END %]
-                [% ELSE %]
-            [% IF ( loggedinusername ) %]
-              <span id="newtag[% itemsloo.biblionumber %]_status" class="tagstatus results_summary" style="display:none;">Tag status here.</span>
-            [% END %]
-                [% END %]
-        [% END %]
+              [% ELSIF ( loop.first ) %]
+                    <span class="tagstatus" id="login4tags">Log in to add tags.</span>
+              [% END %]
+          [% END %]
 
-<span class="results_summary actions"><span class="label">Actions:</span>
       [% IF ( RequestOnOpac ) %]
           [% UNLESS ( itemsloo.norequests ) %]
             [% IF ( opacuserlogin ) %]
@@ -395,7 +417,7 @@ $(function() {
           [% END %]
         [% END %]
 
-        [% IF ( opacuserlogin ) %][% IF ( loggedinusername ) %][% IF ( virtualshelves ) %]<a class="addtolist" href="/cgi-bin/koha/opac-addbybiblionumber.pl?biblionumber=[% itemsloo.biblionumber %]" onclick="Dopop('opac-addbybiblionumber.pl?biblionumber=[% itemsloo.biblionumber %]'); return false;">Save to another list</a>
+        [% IF ( opacuserlogin ) %][% IF ( loggedinusername ) %][% IF ( virtualshelves ) %]<a class="addtoshelf" href="/cgi-bin/koha/opac-addbybiblionumber.pl?biblionumber=[% itemsloo.biblionumber %]" onclick="Dopop('opac-addbybiblionumber.pl?biblionumber=[% itemsloo.biblionumber %]'); return false;">Save to another list</a>
           [% END %][% END %][% END %]
           [% IF ( opacbookbag ) %]
               [% IF ( itemsloo.incart ) %]

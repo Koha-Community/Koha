@@ -26,12 +26,11 @@ if (typeof(readCookie) == "undefined") {
    }
 }
 KOHA.Tags = {
-      add_tag_button: function(){
-            var mybibnum = $(this).attr("title");
-          var mynewtag = "newtag" + mybibnum;
+      add_tag_button: function(bibnum, tag){
+          var mynewtag = "newtag" + bibnum;
             var mytagid = "#" + mynewtag;
           var mydata = {CGISESSID: readCookie('CGISESSID')};	// Someday this should be OPACSESSID
-                mydata[mynewtag] = $(mytagid).val();	// need [bracket] for variable property id
+                mydata[mynewtag] = tag;	// need [bracket] for variable property id
                 var response;	// AJAX from server will assign value to response.
                $.post(
                         "/cgi-bin/koha/opac-tags.pl",
@@ -61,11 +60,14 @@ KOHA.Tags = {
       },
      set_tag_status : function(tagid, newstatus) {
           $(tagid).html(newstatus);
-              $(tagid).css({display:"inline"});
+              $(tagid).show();
       },
      append_tag_status : function(tagid, newstatus) {
                $(tagid).append(newstatus);
-            $(tagid).css({display:"inline"});
+            $(tagid).show();
+      },
+     clear_all_tag_status : function() {
+          $(".tagstatus").empty().hide();
       },
 
     tag_message: {
@@ -73,8 +75,8 @@ KOHA.Tags = {
     scrubbed_all_bad : function(arg) {return (MSG_TAG_ALL_BAD);},
   badparam : function(arg) {return (MSG_ILLEGAL_PARAMETER+" "+arg);},
     scrubbed : function(arg) {return (MSG_TAG_SCRUBBED+" "+arg);},
-    failed_add_tag : function(arg) {return (MSG_ADD_TAG_FAILED+ " "+arg+" "+MSG_ADD_TAG_FAILED_NOTE);},
-    failed_delete  : function(arg) {return (MSG_DELETE_TAG_FAILED+ " "+arg+" "+MSG_DELETE_TAG_FAILED_NOTE);},
+    failed_add_tag : function(arg) {return (MSG_ADD_TAG_FAILED+ " '"+arg+"'. \n"+MSG_ADD_TAG_FAILED_NOTE);},
+    failed_delete  : function(arg) {return (MSG_DELETE_TAG_FAILED+ " '"+arg+"'. \n"+MSG_DELETE_TAG_FAILED_NOTE);},
    login : function(arg) {return (MSG_LOGIN_REQUIRED);}
    },
 
@@ -92,7 +94,7 @@ KOHA.Tags = {
                   mydata,
                         function(data){
                                 eval(data);
-                $(".tagstatus").empty();
+                KOHA.Tags.clear_all_tag_status();
                 var bibErrors = false;
 
                 // Display the status for each tagged bib

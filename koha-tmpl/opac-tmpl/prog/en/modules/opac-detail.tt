@@ -1,4 +1,6 @@
 [% USE KohaDates %]
+[% SET TagsShowEnabled = ( TagsEnabled && TagsShowOnDetail ) %]
+[% SET TagsInputEnabled = ( opacuserlogin && TagsEnabled && TagsInputOnDetail ) %]
 
 [% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Details for: [% title |html %][% FOREACH subtitl IN subtitle %], [% subtitl.subfield |html %][% END %]
 [% INCLUDE 'doc-head-close.inc' %]
@@ -47,18 +49,38 @@
 
      $(document).ready(function() { 
         $('#bibliodescriptions').tabs();
-[% IF ( opacuserlogin ) %][% IF ( loggedinusername ) %][% IF ( TagsEnabled ) %]$("#tagform").hide();
-        $("#addtagl").show();
-        $("#addtagl a").click(function(){
-            $("#addtagl").hide();
-            $("#tagform, #tagform a").show();
+
+[% IF ( TagsInputEnabled && loggedinusername ) %]
+        $(".tag_add").click(function(){
+            var thisid = $(this).attr("id");
+            thisid = thisid.replace("tag_add","");
+            $(this).hide();
+            $("#tagform"+thisid).show();
+            $("#newtag"+thisid).focus();
+            $("#newtag"+thisid+"_status").empty().hide();
             return false;
         });
-        $("#tagform a").click(function(){
-            $("#addtagl").show();
-            $("#tagform").hide();
+        $(".cancel_tag_add").click(function(){
+            var thisid = $(this).attr("id");
+            thisid = thisid.replace("cancel","");
+            $("#tagform"+thisid).hide();
+            $("#tag_add"+thisid).show();
+            $("#newtag"+thisid).val("");
+            $("#newtag"+thisid+"_status").empty().hide();
             return false;
-        });[% END %][% END %][% END %]
+        });
+        $(".tagbutton").click(function(){
+            var thisid = $(this).attr("title");
+            var tag = $("#newtag"+thisid).val();
+            if (!tag || (tag == "")) {
+                alert(MSG_NO_TAG_SPECIFIED);
+                return false;
+            }
+            KOHA.Tags.add_tag_button(thisid, tag);
+            return false;
+        });
+[% END %]
+
         $("#holdingst").tablesorter({[% IF ( dateformat == 'metric' ) %]
     dateFormat: 'uk',[% END %]
             widgets : ['zebra'],
@@ -81,9 +103,6 @@
         [% IF ( NovelistSelectProfile ) %]
         novSelect.loadContentForISBN('[% normalized_isbn %]','[% NovelistSelectProfile %]', '[% NovelistSelectPassword %]', function(d){});
         [% END %]
-	[% IF ( opacuserlogin ) %][% IF ( loggedinusername ) %][% IF ( TagsEnabled ) %]
-        $(".tagbutton").click(KOHA.Tags.add_tag_button);[% END %][% END %][% END %]
-
 
     [% IF ( OpacBrowseResults && busc ) %]
         if (arrPagination.length > 0) {
@@ -293,9 +312,6 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
  });
 //]]>
 </script>
-[% IF ( opacuserlogin ) %][% IF ( loggedinusername ) %][% IF ( TagsEnabled ) %]<style type="text/css">
-    #addtagl { display: none; }
-</style>[% END %][% END %][% END %]
 <style type="text/css">
 .branch-info-tooltip {
   display: none;
@@ -503,8 +519,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 	</span>
 [% END %]
 
-[% IF ( TagsEnabled ) %]
-    [% IF ( TagsShowOnDetail ) %]
+[% IF ( TagsShowEnabled ) %]
         <div class="results_summary">
         [% IF ( TagLoop ) %]
         <span class="label">Tags from this library:</span>
@@ -515,28 +530,23 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
     [% END %]
         </div>
 [% END %]
-[% IF ( opacuserlogin ) %]
-  [% IF ( loggedinusername ) %]
-   [% IF ( TagsEnabled ) %]
-      [% IF ( TagsInputOnDetail ) %]
+[% IF ( TagsInputEnabled ) %]
       <div class="results_summary">
-        <span class="label" id="addtagl"><a href="#">Add</a></span>
-         <form name="tagform[% biblionumber %]" method="post" action="/cgi-bin/koha/opac-tags.pl" id="tagform">
-                <label for="newtag[% biblionumber %]">New:</label><input name="newtag[% biblionumber %]" id="newtag[% biblionumber %]" maxlength="100" />
+        [% IF ( loggedinusername ) %]
+            <a class="tag_add" id="tag_add[% biblionumber %]" href="#">Add</a>
+            <form id="tagform[% biblionumber %]" method="post" action="/cgi-bin/koha/opac-tags.pl" style="display:none;">
+                <label for="newtag[% biblionumber %]">New tag(s):</label>
+                <input name="newtag[% biblionumber %]" id="newtag[% biblionumber %]" maxlength="100" type="text"/>
                 <input name="tagbutton" class="input tagbutton" title="[% biblionumber %]" type="submit" value="Add" />
-                <a href="#">Cancel</a>
+                <a class="cancel_tag_add" id="cancel[% biblionumber %]" href="#">(done)</a>
             </form>
             <span id="newtag[% biblionumber %]_status" class="tagstatus" style="display:none;">
                 Tag status here.
             </span>
-            <br />
-            [% ELSE %]
-                <span id="login4tags" class="tagstatus">Log in to add tags.</span>
-            [% END %]
+        [% ELSE %]
+            <span id="login4tags">Log in to add tags.</span>
         [% END %]
         </div>
-    [% END %]
-   [% END %]
 [% END %]
 
         [% IF ( SyndeticsEnabled ) %][% IF ( SyndeticsSeries ) %][% IF ( SyndeticsSERIES1Exists ) %]
