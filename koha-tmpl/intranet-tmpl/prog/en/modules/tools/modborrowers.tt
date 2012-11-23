@@ -1,28 +1,34 @@
 [% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc'%]
-<title>Koha &rsaquo; Tools &rsaquo; [% IF ( del ) %]Batch item deletion[% ELSE %]Batch item modification[% END %] </title>
+<title>Koha &rsaquo; Tools &rsaquo; Batch patron modification</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
-<script type="text/JavaScript" language="JavaScript">
+<script type="text/JavaScript">
 //<![CDATA[
         var patron_attributes_lib = new Array();
         var patron_attributes_values = new Array();
         $(document).ready(function() {
-            $("#borrowerst").tablesorter();
+            [% IF borrowers %]
+                $("#borrowerst").tablesorter({
+                    headers: { 0: { sorter: false}},
+                    widgets : ['zebra'],
+                    sortList: [[1,0]]
+                });
 
-            $("#selectallbutton").click(function() {
-                $("#borrowerst").find("input:checkbox").each(function() {
-                    $(this).attr("checked", true);
+                $("#selectallbutton").click(function() {
+                    $("#borrowerst").find("input:checkbox").each(function() {
+                        $(this).attr("checked", true);
+                    });
+                    return false;
                 });
-                return false;
-            });
-            $("#clearallbutton").click(function() {
-                $("#borrowerst").find("input:checkbox").each(function() {
-                    $(this).attr("checked", false);
+                $("#clearallbutton").click(function() {
+                    $("#borrowerst").find("input:checkbox").each(function() {
+                        $(this).attr("checked", false);
+                    });
+                    return false;
                 });
-                return false;
-            });
+            [% END %]
 
             var values = new Array();
             var lib = new Array();
@@ -53,7 +59,7 @@
             var information_category_node = $(select_attr).parent().parent().find('span.information_category');
             information_category_node.html("");
             if ( category.length > 0 ) {
-                information_category_node.html('This attribute will be only applied to the borrower\'s category "' + category + '"');
+                information_category_node.html(_("This attribute will be only applied to the patron\'s category") +' "' + category + '"');
             }
             if ( type == 'select' ) {
                 var options = '<option value = ""></option>';
@@ -70,7 +76,7 @@
             var li_node = $("li.attributes:last");
             var li_clone = $(li_node).clone();
             if ( $(li_clone).find("a.delete").length == 0 ) {
-                $(li_clone).append('[<a href="#" title="Delete" class="delete" onclick="del_attributes(this);return false;">X</a>]');
+                $(li_clone).append('<a href="#" title="Delete" class="delete clear-field" onclick="del_attributes(this);return false;">Delete</a>');
             }
             $(li_clone).find('select[name="patron_attributes"]').change(function() {
                 updateAttrValues(this);
@@ -106,7 +112,7 @@
 <div id="breadcrumbs">
     <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
     <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo;
-    <a href="/cgi-bin/koha/tools/modborrowers.pl">Patrons modification</a>
+    <a href="/cgi-bin/koha/tools/modborrowers.pl">Batch patron modification</a>
 </div>
 
 <div id="doc3" class="yui-t2">
@@ -114,17 +120,19 @@
         <div id="yui-main">
             <div class="yui-b">
                 [% IF ( op == 'show_form' ) %]
-                <h1>Batch patrons modification</h1>
+                <h1>Batch patron modification</h1>
                 <form method="post" enctype="multipart/form-data" action="/cgi-bin/koha/tools/modborrowers.pl">
                     <fieldset class="rows">
                     <legend>Use a file</legend>
-                    <label for="uploadfile">File: </label> <input type="file" id="uploadfile" name="uploadfile" />
+                    <ol>
+                    <li><label for="uploadfile">File: </label> <input type="file" id="uploadfile" name="uploadfile" /></li>
+                    </ol>
                     </fieldset>
                     <fieldset class="rows">
                         <legend>Or list cardnumbers one by one</legend>
                         <ol>
                             <li>
-                              <label for="cardnumberlist">Carnumber list (one cardnumber per line): </label>
+                              <label for="cardnumberlist">Card number list (one cardnumber per line): </label>
                               <textarea rows="10" cols="30" id="cardnumberlist" name="cardnumberlist">[% cardnumberlist %]</textarea>
                             </li>
                         </ol>
@@ -159,18 +167,19 @@
 
                     [% IF ( op == 'show_results' ) %]
                         [% IF ( errors ) %]
-                            Errors occured :
+                            <div class="dialog alert">
+                            <h4>Errors occured:</h4>
                             <ul class="warnings">
                             [% FOREACH error IN errors %]
                                 [% IF ( error.error == 'can_not_update' ) %]
-                                    <li>Can not update borrower with borrowernumber [% error.borrowernumber %]</li>
+                                    <li>Can not update patron with borrowernumber [% error.borrowernumber %]</li>
                                 [% ELSE %]
                                     <li>[% error.error %]</li>
                                 [% END %]
                             [% END %]
                             </ul>
+                            </div>
                         [% END %]
-                        <br/>
                     [% END %]
 
                     [% IF ( op == 'show' ) %]
@@ -180,6 +189,7 @@
                             <div id="toolbar"><a id="selectallbutton" href="#">Select All</a> | <a id="clearallbutton" href="#">Clear All</a></div>
                         [% END %]
                     [% END %]
+                        [% IF borrowers %]
                             <div id="cataloguing_additem_itemlist">
                                 <div style="overflow:auto">
                                     <table id="borrowerst">
@@ -188,14 +198,14 @@
                                                 [% IF ( op == 'show' ) %]
                                                     <th>&nbsp;</th>
                                                 [% END %]
+                                                <th>Card number</th>
                                                 <th>Surname</th>
                                                 <th>Firstname</th>
-                                                <th>Branchname</th>
-                                                <th>Categorycode</th>
-                                                <th>Cardnumber</th>
-                                                <th>dateenrolled</th>
-                                                <th>dateexpiry</th>
-                                                <th>debarred</th>
+                                                <th>Library</th>
+                                                <th>Category</th>
+                                                <th>Registration date</th>
+                                                <th>Expiry date</th>
+                                                <th>Restricted</th>
                                                 [% FOREACH attrh IN attributes_header %]
                                                     <th>[% attrh.attribute %]</th>
                                                 [% END %]
@@ -207,11 +217,11 @@
                                                     [% IF ( op == 'show' ) %]
                                                         <td><input type="checkbox" name="borrowernumber" value="[% borrower.borrowernumber %]" checked="checked" /></td>
                                                     [% END %]
+                                                    <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrower.borrowernumber %]">[% borrower.cardnumber %]</a></td>
                                                     <td>[% borrower.surname %]</td>
                                                     <td>[% borrower.firstname %]</td>
                                                     <td>[% borrower.branchname %]</td>
                                                     <td>[% borrower.categorycode %]</td>
-                                                    <td>[% borrower.cardnumber %]</td>
                                                     <td>[% borrower.dateenrolled | $KohaDates %]</td>
                                                     <td>[% borrower.dateexpiry | $KohaDates %]</td>
                                                     <td>[% borrower.debarred | $KohaDates %]</td>
@@ -237,7 +247,11 @@
                                     <ol>
                                         [% FOREACH field IN fields %]
                                         <li>
-                                            <label style="width:20em;">
+                                            [% IF ( field.mandatory ) %]
+                                            <label for="[% field.name %]" class="required">
+                                            [% ELSE %]
+                                            <label for="[% field.name %]">
+                                            [% END %]
                                             [% SWITCH ( field.name ) %]
                                                 [% CASE 'surname' %]
                                                 Surname:
@@ -284,13 +298,13 @@
                                             [% END %]
                                             [% IF ( field.type == 'date' ) %]
                                                 <input type="text" name="[% field.name %]" id="[% field.name %]" value="" size="10" maxlength="10" readonly="readonly" class="datepicker" />
-                                                <a href="#" onclick="clearDate('[% field.name %]');return false;">X</a>
+                                                <a href="#" class="clear-field" onclick="clearDate('[% field.name %]');return false;">Clear</a>
                                                 [% END %]
                                         </li>
                                         [% END %]
                                         [% IF ( patron_attributes_codes ) %]
                                             <li class="attributes">
-                                                <label style="width:20em;">Attribute:
+                                                <label style="width:auto;">Attribute:
                                                     <select name="patron_attributes">
                                                         [% FOREACH pac IN patron_attributes_codes %]
                                                             <option value="[% pac.attribute_code %]" data-type="[% pac.type %]" data-category="[% pac.category_lib %]">[% pac.attribute_lib %]</option>
@@ -299,8 +313,8 @@
                                                 </label>
                                                 <input type="checkbox" title="check to delete this field" name="disable_input" value="attr0_value" />
                                                 <span class="patron_attributes_value"></span>
-                                                <a href="#" title="Add an attribute" onclick="add_attributes(); return false;">+</a>
-                                                <span class="information_category"></span>
+                                                <a href="#" class="clone-field" title="Add an attribute" onclick="add_attributes(); return false;">New</a>
+                                                <span class="information_category hint" style="width:25%;float:right;"></span>
                                             </li>
                                         [% END %]
                                     </ol>
@@ -312,10 +326,12 @@
                             </div>
                         </form>
                         [% END %]
+                    [% END %]
                 [% END %]
                 [% IF ( op == 'show_results' ) %]
-                    <br/>
-                    <a href="/cgi-bin/koha/tools/modborrowers.pl" title="new Batch patrons modification">new Batch patrons modification</a>
+                <p>
+                    <a href="/cgi-bin/koha/tools/modborrowers.pl" title="New batch patrons modification">New batch patron modification</a>
+                </p>
                 [% END %]
             </div>
             </div>
