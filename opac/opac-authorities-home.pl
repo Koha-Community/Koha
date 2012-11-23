@@ -90,7 +90,13 @@ if ( $op eq "do_search" ) {
         $displaynext = 1;
     }
 
-    my @field_data = ( { term => "marclist" , val => $query->param("marclist") || ''} );
+    my @field_data = (
+        { term => "marclist",  val => $marclist[0] },
+        { term => "and_or",    val => $and_or[0] },
+        { term => "excluding", val => $excluding[0] },
+        { term => "operator",  val => $operator[0] },
+        { term => "value",     val => $value[0] },
+    );
 
     my @numbers = ();
 
