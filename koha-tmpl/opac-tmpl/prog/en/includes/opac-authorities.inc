@@ -50,7 +50,7 @@
 [% END %]
 [% BLOCK authheadingdisplay %]
     [% IF authid %]<a href="/cgi-bin/koha/opac-authoritiesdetail.pl?authid=[% authid %]">[% heading %]</a>
-    [% ELSIF search %]<a href="/cgi-bin/koha/opac-authorities-home.pl?op=do_search&type=opac&operator=contains&marclist=mainentry&and_ora=and&orderby=HeadingAsc&value=[% search %]">[% heading %]</a>
+    [% ELSIF search %]<a href="/cgi-bin/koha/opac-authorities-home.pl?op=do_search&type=opac&operator=contains&marclist=mainentry&and_or=and&orderby=HeadingAsc&value=[% search %]">[% heading %]</a>
     [% ELSE %][% heading %]
     [% END %]
 [% END %]
