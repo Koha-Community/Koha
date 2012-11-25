@@ -24,6 +24,7 @@ use C4::Biblio;
 use C4::Items;
 use C4::Auth;
 use C4::Output;
+use C4::Csv;
 
 my $query = new CGI;
 
@@ -120,6 +121,8 @@ my $resultsarray = \@results;
 
 $template->param(
     BIBLIO_RESULTS => $resultsarray,
+    csv_profiles => GetCsvProfilesLoop(),
+    bib_list => $bib_list,
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;
