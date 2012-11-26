@@ -187,7 +187,7 @@ RECORD: while (  ) {
     last unless ( $record );
     $i++;
     print ".";
-    print "\r$i" unless $i % 100;
+    print "\n$i" unless $i % 100;
     
     # transcode the record to UTF8 if needed & applicable.
     if ($record->encoding() eq 'MARC-8' and not $skip_marc8_conversion) {
