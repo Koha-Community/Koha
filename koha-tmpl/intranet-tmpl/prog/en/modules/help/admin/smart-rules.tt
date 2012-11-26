@@ -17,13 +17,13 @@
 	<li>all libraries, all patron types, all item types</li>
 </ul>
 
-<p>Tip: If you are a single library system choose your branch name before creating rules (sometimes having only rules for the 'all libraries' option can cause issues with holds)</p>
+<p>Tip: If you are a single library system choose your library name before creating rules (sometimes having only rules for the 'all libraries' option can cause issues with holds)</p>
 
 <p style="color: #990000;">Important: At the very least you will need to set a default circulation rule. This rule should be set for all item types, all libraries and all patron categories. That will catch all instances that do not match a specific rule. When checking out if you do not have a rule for all libraries, all item types and all patron types then you may see patrons getting blocked from placing holds. You will also want a rule for your specific library set for all item types and all patron types to avoid this holds issue. Koha needs to know what rule to fall back on.</p>
 
 <h4>Default Circulation Rules</h4>
 
-<p>Using the issuing rules matrix you can define rules that depend on patron/item typecombos. To set your rules, choose a library from the pull down (or 'all libraries' if you want to apply these rules to all branches)</p>
+<p>Using the issuing rules matrix you can define rules that depend on patron/item typecombos. To set your rules, choose a library from the pull down (or 'all libraries' if you want to apply these rules to all libraries)</p>
 
 <p>From the matrix you can choose any combination of patron categories and item types to apply the rules to</p>
 
@@ -84,7 +84,7 @@
     <li>Control where the item returns to once it is checked in
 <ul>
     <li>Item returns home</li>
-    <li>Item returns to issuing branch</li>
+    <li>Item returns to issuing library</li>
     <li>Item floats
 <ul>
     <li>When an item floats it stays where it was checked in and does not ever return 'home'</li>
@@ -115,7 +115,7 @@
 
 <p style="color: #990000;">Important: Note that if the system preference AllowHoldPolicyOverrideset to 'allow', these policies can be overridden by your circulation staff.</p>
 
-<p style="color: #990000;">Important: These policies are based on the patron's home branch, not the branch that the reserving staff member is from.</p>
+<p style="color: #990000;">Important: These policies are based on the patron's home library, not the library that the reserving staff member is from.</p>
 
 <p>The various Return Policies have the following effects:</p>
 
@@ -125,12 +125,12 @@
     <li style="color: #990000;">Important: If the AutomaticItemReturnpreference is set to automatically transfer the items home, then a prompt will not appear</li>
 </ul>
 </li>
-    <li>Item returns to issuing branch: The item will prompt the librarian to transfer the item back to the library where it was checked out
+    <li>Item returns to issuing library: The item will prompt the librarian to transfer the item back to the library where it was checked out
 <ul>
     <li style="color: #990000;">Important: If the AutomaticItemReturnpreference is set to automatically transfer the items home, then a prompt will not appear</li>
 </ul>
 </li>
-    <li>Item floats: The item will not be transferred from the branch it was checked in at, instead it will remain there until transferred manually or checked in at another branch</li>
+    <li>Item floats: The item will not be transferred from the library it was checked in at, instead it will remain there until transferred manually or checked in at another library</li>
 </ul>
 
 <p><strong>See the full documentation for Circulation and Fine Rules in the <a href="http://manual.koha-community.org/3.10/en/patscirc.html#circfinerules">manual</a> (online).</strong></p>
