@@ -167,11 +167,15 @@ Item Types Administration
      </li>
   [% ELSE %]
       <li>
-          <label for="itemtype">Item type</label> <input type="text" id="itemtype" name="itemtype" size="10" maxlength="10" onblur="toUC(this)" />
+          <label for="itemtype">Item type</label> <input type="text" id="itemtype" name="itemtype" size="10" maxlength="10" onblur="toUC(this)" class="focus" />
       </li>
   [% END %]
       <li>
-          <label for="description">Description</label><input type="text" id="description" name="description" size="48" value="[% description |html %]" />      </li>
+      [% IF ( itemtype ) %]
+          <label for="description">Description</label><input type="text" id="description" name="description" size="48" value="[% description |html %]" class="focus" /></li>
+      [% ELSE %]
+          <label for="description">Description</label><input type="text" id="description" name="description" size="48" value="[% description |html %]" /></li>
+      [% END %]
      [% IF ( noItemTypeImages ) %]
 	 <li><span class="label">Image: </span>Item type images are disabled. To enable them, turn off the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&amp;searchfield=noItemTypeImages">noItemTypeImages system preference</a></li></ol>
 	 [% ELSE %]</ol>
