@@ -60,7 +60,7 @@
         <fieldset class="rows"><ol>
         <li>
 			 [% IF ( action_add_category ) %]<label for="category">Category</label>
-		<input type="text" name="category"  id="category" size="10" maxlength="10" />
+            <input type="text" name="category"  id="category" size="10" maxlength="10" class="focus" />
 			 [% ELSE %]<span class="label">Category</span>
 		<input type="hidden" name="category" value="[% category %]" />	 [% category %]
 			 [% END %]
@@ -68,7 +68,11 @@
         <li>
             <label for="authorised_value">Authorized value</label>
      [% IF ( action_modify ) %]<input type="hidden" id="id" name="id" value="[% id %]" />[% END %]
+            [% IF ( action_add_category ) %]
             <input type="text" id="authorised_value" name="authorised_value" value="[% authorised_value %]" maxlength="80" />
+            [% ELSE %]
+            <input type="text" id="authorised_value" name="authorised_value" value="[% authorised_value %]" maxlength="80" class="focus" />
+            [% END %]
         </li>
         <li>
             <label for="lib">Description</label>
