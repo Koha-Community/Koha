@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use DateTime;
 use DateTime::Duration;
-use Test::More tests => 22;
+use Test::More tests => 26;
 use Koha::DateUtils;
 
 BEGIN {
@@ -127,9 +127,9 @@ my $one_day_dur = DateTime::Duration->new( days => 1 );
 my $two_day_dur = DateTime::Duration->new( days => 2 );
 my $seven_day_dur = DateTime::Duration->new( days => 7 );
 
-subtest '\'Datedue\' tests' => sub {
-    my $cal = Koha::Calendar->new( TEST_MODE => 1 ,
-                                   days_mode => 'Datedue');
+    ## 'Datedue' tests
+    $cal = Koha::Calendar->new( TEST_MODE => 1 ,
+                                days_mode => 'Datedue');
 
     $cal->add_holiday( dt_from_string('2012-07-04','iso') );
     $dt = dt_from_string( '2012-07-03','iso' );
@@ -145,12 +145,12 @@ subtest '\'Datedue\' tests' => sub {
     cmp_ok($cal->addDate( $test_dt, $seven_day_dur, 'days' ), 'eq',
         '2012-07-30T11:53:00',
         'Add 7 days (Datedue)' );
-};
 
 
-subtest '\'Calendar\' tests' => sub {
-    my $cal = Koha::Calendar->new( TEST_MODE => 1,
-                                   days_mode => 'Calendar' );
+
+    ## 'Calendar' tests'
+    $cal = Koha::Calendar->new( TEST_MODE => 1,
+                                days_mode => 'Calendar' );
 
     $cal->add_holiday( dt_from_string('2012-07-04','iso') );
     $dt = dt_from_string('2012-07-03','iso');
@@ -162,12 +162,12 @@ subtest '\'Calendar\' tests' => sub {
     cmp_ok($cal->addDate( $test_dt, $seven_day_dur, 'days' ), 'eq',
        '2012-07-31T11:53:00',
        'Add 7 days (Calendar)' );
-};
 
 
-subtest '\'Days\' tests' => sub {
-    my $cal = Koha::Calendar->new( TEST_MODE => 1,
-                                   days_mode => 'Days' );
+
+    ## 'Days' tests
+    $cal = Koha::Calendar->new( TEST_MODE => 1,
+                                days_mode => 'Days' );
 
     $cal->add_holiday( dt_from_string('2012-07-04','iso') );
     $dt = dt_from_string('2012-07-03','iso');
@@ -179,4 +179,3 @@ subtest '\'Days\' tests' => sub {
     cmp_ok($cal->addDate( $test_dt, $seven_day_dur, 'days' ),'eq',
         '2012-07-30T11:53:00',
         'Add 7 days (Days)' );
-};
