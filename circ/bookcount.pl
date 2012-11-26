@@ -89,7 +89,7 @@ $template->param(
     biblioitemnumber        => $bi,
     homebranch              => $homebranch,
     holdingbranch           => $holdingbranch,
-    lastdate                => $lastdate ?  format_date($lastdate) : $message,
+    lastdate                => $lastdate ?  format_date($lastdate) : 0,
     count                   => $count,
     branchloop              => $branchloop,
 );
@@ -112,13 +112,13 @@ sub lastmove {
     );
     $sth->execute($itemnumber);
     my ($date) = $sth->fetchrow_array;
-    return ( 0, "Item has no branch transfers record" ) if not $date;
+    return ( 0, 1 ) if not $date;
     $sth = $dbh->prepare(
 "SELECT * FROM branchtransfers WHERE branchtransfers.itemnumber=? and branchtransfers.datearrived=?"
     );
     $sth->execute( $itemnumber, $date );
     my ($data) = $sth->fetchrow_hashref;
-    return ( 0, "Item has no branch transfers record" ) if not $data;
+    return ( 0, 1 ) if not $data;
     return ( $data, "" );
 }
 
