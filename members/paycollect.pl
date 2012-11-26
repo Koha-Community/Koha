@@ -97,8 +97,8 @@ if ( $individual || $writeoff ) {
 if ( $total_paid and $total_paid ne '0.00' ) {
     if ( $total_paid < 0 or $total_paid > $total_due ) {
         $template->param(
-            error => sprintf( 'You must pay a value less than or equal to %f.2',
-                $total_due )
+            error_over => 1,
+            total_due => $total_due
         );
     } else {
         if ($individual) {
