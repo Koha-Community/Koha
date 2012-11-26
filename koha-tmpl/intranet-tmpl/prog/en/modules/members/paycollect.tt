@@ -84,9 +84,9 @@ function moneyFormat(textObj) {
     </li>
 </ul>
 <div class="tabs-container">
-[% IF ( error ) %]
+[% IF ( error_over ) %]
     <div id="error_message" class="dialog alert">
-    [% error %]
+    You must pay a value less than or equal to [% total_due | format('%.2f') %].
     </div>
 [% END %]
 
