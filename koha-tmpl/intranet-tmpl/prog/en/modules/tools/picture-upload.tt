@@ -17,26 +17,27 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'patron-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; Upload patron images </div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; [% IF ( TOTAL ) %]<a href="/cgi-bin/koha/tools/picture-upload.pl">Upload patron images</a> &rsaquo; Results[% ELSE %]Upload patron images[% END %] </div>
 
 <div id="doc3" class="yui-t2">
     <div id="bd">
         <div id="yui-main">
 [% IF ( TOTAL ) %]
     <div class="yui-b">
-        <div class="yui-g">
-            <div class="yui-u first">
             [% IF ( ERRORS ) %]
 				[% IF ( TCOUNTS ) %]
 					<div class="dialog alert">
-                    <h3>Patron Image(s) Uploaded with some errors</h3>
+                    <h3>Patron image(s) uploaded with some errors</h3>
+                    </div>
 				[% ELSE %]
 					<div class="dialog alert">
                     <h3>Patron image failed to upload</h3>
+                    </div>
 				[% END %]
             [% ELSE %]
                 <div class="dialog message">
                 <h3>Patron image(s) successfully uploaded</h3>
+                </div>
             [% END %]
 	        <ul class="data">
 	            <li>Unpacking completed</li>
@@ -45,41 +46,49 @@
                 </ul>
 
                 [% FOREACH COUNT IN COUNTS %]
-                    <ul class="data">
+                <div class="container">
+                    <table>
+                        <caption>Results</caption>
+                        <thead>
+                            <tr><th>File name</th><th>Card number</th><th>Result</th></tr>
+                        </thead>
+                        <tbody>
                         [% IF ( COUNT.TCOUNTS ) %]<li>[% COUNT.TCOUNTS %] image(s) moved into the database:</li>[% END %]
                             [% FOREACH filename IN COUNT.filenames %]
-                                <li>[% filename.source %] - Cardnumber: [% filename.cardnumber %]
-                                [% IF ( filename.filerrors ) %]
+                                <tr>
+                                <td>[% filename.source %]</td>
+                                <td><a href="/cgi-bin/koha/circ/circulation.pl?findborrower=[% filename.cardnumber %]">[% filename.cardnumber %]</a></td>
+                                <td>
+                                    [% IF ( filename.filerrors ) %]
                                     [% FOREACH filerror IN filename.filerrors %]
-                                        [% IF ( filerror.DBERR ) %]<br /><b>ERROR:</b> Image not imported because the database returned an error. Please refer to the error log for more details.
-                                        [% ELSIF ( filerror.IMGEXISTS ) %]<br /><b>ERROR:</b> Image not imported because this patron does not exist in the database.
-                                        [% ELSIF ( filerror.MIMERR ) %]<br /><b>ERROR:</b> Image not imported because the image format is unrecognized.
-                                        [% ELSIF ( filerror.CORERR ) %]<br /><b>ERROR:</b> Image not imported because the image file is corrupted.
-                                        [% ELSIF ( filerror.OPNERR ) %]<br /><b>ERROR:</b> Image not imported because Koha was unable to open the image for reading.
-                                        [% ELSIF ( filerror.OVRSIZ ) %]<br /><b>ERROR:</b> Image not imported because the image file is too big (see online help for maximum size).
-                                        [% ELSIF ( filerror.CRDFIL ) %]<br /><b>ERROR:</b> Image not imported ([% filerror.CRDFIL %] missing).
-                                        [% ELSE %]<br /><b>ERROR:</b> Image not imported because of an unknown error. Please refer to the error log for more details.
+                                        [% IF ( filerror.DBERR ) %]<b>ERROR:</b> Image not imported because the database returned an error. Please refer to the error log for more details.
+                                        [% ELSIF ( filerror.IMGEXISTS ) %]<b>ERROR:</b> Image not imported because this patron does not exist in the database.
+                                        [% ELSIF ( filerror.MIMERR ) %]<b>ERROR:</b> Image not imported because the image format is unrecognized.
+                                        [% ELSIF ( filerror.CORERR ) %]<b>ERROR:</b> Image not imported because the image file is corrupted.
+                                        [% ELSIF ( filerror.OPNERR ) %]<b>ERROR:</b> Image not imported because Koha was unable to open the image for reading.
+                                        [% ELSIF ( filerror.OVRSIZ ) %]<b>ERROR:</b> Image not imported because the image file is too big (see online help for maximum size).
+                                        [% ELSIF ( filerror.CRDFIL ) %]<b>ERROR:</b> Image not imported ([% filerror.CRDFIL %] missing).
+                                        [% ELSE %]<b>ERROR:</b> Image not imported because of an unknown error. Please refer to the error log for more details.
                                         [% END %]
                                     [% END %]
                                 [% ELSE %] imported successfully.
-                                [% END %]
-                                </li>
+                                    [% END %]</td>
+                                </tr>
                         [% END %]
-                    </ul>
+                        </tbody>
+                    </table>
+                    </div>
                 [% END %]
-
-				</div>
-				[% IF ( borrowernumber ) %]
-                    <a id="member" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">Return to patron detail</a>
-				[% ELSE %]
-                    <a id="uploadmore" href="/cgi-bin/koha/tools/picture-upload.pl">Upload more images</a>
-                    <a id="doneupload" href="/cgi-bin/koha/tools/tools-home.pl">Return to tools</a>
-            	[% END %]
+<ul>
+                [% IF ( borrowernumber ) %]
+                    <li><a id="member" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">Return to patron detail</a></li>
+                [% ELSE %]
+                    <li><a id="uploadmore" href="/cgi-bin/koha/tools/picture-upload.pl">Upload more images</a></li>
+                    <li><a id="doneupload" href="/cgi-bin/koha/tools/tools-home.pl">Return to tools</a></li>
+                [% END %]</ul>
             </div>
 [% ELSE %]
     <div class="yui-b">
-        <div class="yui-g">
-            <div class="yui-u first">
                 <h1>Upload patron images</h1>
                 [% IF ( ERRORS ) %]
                 <div class="dialog alert">
@@ -122,8 +131,6 @@
 	
             </div>	
 [% END %]
-        </div>
-    </div>
 </div>
 <div class="yui-b noprint">
     [% INCLUDE 'tools-menu.inc' %]
