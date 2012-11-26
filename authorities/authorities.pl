@@ -583,17 +583,6 @@ if ($op eq "add") {
     my @ind_tag = $input->param('ind_tag');
     my @indicator = $input->param('indicator');
     my $record = TransformHtmlToMarc($input);
-    if  (C4::Context->preference("marcflavour") eq "UNIMARC"){
-        unless ($record->field('100')){
-        use POSIX qw(strftime);
-        my $string = strftime( "%Y%m%d", localtime(time) );
-        # set 50 to position 26 is biblios, 13 if authorities
-        my $pos=13;
-        $string = sprintf( "%-*s", 35, $string );
-        substr( $string, $pos , 2, "50" );
-        $record->append_fields(MARC::Field->new('100','','',"a"=>$string));
-        }    
-    }
 
     my ($duplicateauthid,$duplicateauthvalue);
      ($duplicateauthid,$duplicateauthvalue) = FindDuplicateAuthority($record,$authtypecode) if ($op eq "add") && (!$is_a_modif);
