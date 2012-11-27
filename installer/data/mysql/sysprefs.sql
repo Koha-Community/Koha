@@ -399,3 +399,4 @@ INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('SeparateHoldingsBranch', 'homebranch', 'Branch used to separate holdings', 'homebranch|holdingbranch', 'Choice');
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('OpacSeparateHoldings', '0', 'Separate current branch holdings from other holdings (OPAC)', NULL, 'YesNo');
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('OpacSeparateHoldingsBranch', 'homebranch', 'Branch used to separate holdings (OPAC)', 'homebranch|holdingbranch', 'Choice');
+INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('RenewalSendNotices','0', NULL, '', 'YesNo');

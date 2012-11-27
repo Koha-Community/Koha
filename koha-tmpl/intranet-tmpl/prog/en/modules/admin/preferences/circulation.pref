@@ -227,6 +227,12 @@ Circulation:
               choices:
                   date_due: the old due date of the checkout.
                   now: the current date.
+	-
+	    - pref: RenewalSendNotice
+              choices:
+                  yes: Send
+                  no: "Don't send"
+            - a renewal notice according to patron checkout alert preferences.
         -
             - Prevent patrons from making holds on the OPAC if they owe more than
             - pref: maxoutstanding

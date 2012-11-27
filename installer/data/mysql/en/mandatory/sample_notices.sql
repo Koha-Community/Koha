@@ -106,7 +106,6 @@ Date due: <<issues.date_due>><br />
    <li><<items.itemcallnumber>></li>
 </ul>', 1);
 
-
 INSERT INTO `letter` (`module`,`code`,`branchcode`,`name`,`is_html`,`title`,`content`)
 VALUES (
 'members',  'OPAC_REG_VERIFY',  '',  'Opac Self-Registration Verification Email',  '1',  'Verify Your Account',  'Hello!
@@ -117,3 +116,5 @@ http://<<OPACBaseURL>>/cgi-bin/koha/opac-registration-verify.pl?token=<<borrower
 
 If you did not initiate this request, you may safely ignore this one-time message. The request will expire shortly.'
 );
+
+INSERT INTO `letter` (module, code, name, title, content) VALUES ('circulation','RENEWAL','Item Renewal','Renewals','The following items have been renew:\r\n----\r\n<<biblio.title>>\r\n----\r\nThank you for visiting <<branches.branchname>>.');

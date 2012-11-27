@@ -2582,22 +2582,24 @@ sub AddRenewal {
             'Rent', $charge, $itemnumber );
     }
 
-    # Send a renewal slip according to checkout alert preference
-    my $borrower = C4::Members::GetMemberDetails( $borrowernumber, 0 );
-    my $circulation_alert = 'C4::ItemCirculationAlertPreference';
-    my %conditions = (
-        branchcode   => $branch,
-        categorycode => $borrower->{categorycode},
-        item_type    => $item->{itype},
-        notification => 'CHECKOUT',
-    );
-    if ($circulation_alert->is_enabled_for(\%conditions)) {
-        SendCirculationAlert({
-            type     => 'RENEWAL',
-            item     => $item,
-            borrower => $borrower,
-            branch   => $branch,
-        });
+    # Send a renewal slip according to checkout alert preferencei
+    if ( C4::Context->preference('RenewalSendNotice') eq '1') {
+	my $borrower = C4::Members::GetMemberDetails( $borrowernumber, 0 );
+	my $circulation_alert = 'C4::ItemCirculationAlertPreference';
+	my %conditions = (
+		branchcode   => $branch,
+		categorycode => $borrower->{categorycode},
+		item_type    => $item->{itype},
+		notification => 'CHECKOUT',
+	);
+	if ($circulation_alert->is_enabled_for(\%conditions)) {
+		SendCirculationAlert({
+			type     => 'RENEWAL',
+			item     => $item,
+		borrower => $borrower,
+		branch   => $branch,
+		});
+	}
     }
 
     # Log the renewal

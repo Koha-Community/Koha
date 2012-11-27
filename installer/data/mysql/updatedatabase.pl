@@ -6309,6 +6309,14 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "XXXX";
+if ( C4::Context->preference('Version') < TransformToNum($DBversion) ) {
+    $dbh->do("INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES('RenewalSendNotice', '0', '', NULL, 'YesNo')");
+    print "Upgrade to $DBversion done (Bug 9151 - System preference to controll the renewal notice sending)\n";
+    SetVersion($DBversion);
+}
+
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

@@ -106,3 +106,4 @@ Fällig am: <<issues.date_due>><br />
    <li><<items.barcode>></li>
    <li><<items.itemcallnumber>></li>
 </ul>', 1);
+INSERT INTO `letter` (module, code, name, title, content) VALUES ('circulation','RENEWAL','Item Renewal','Renewals','The following items have been renew:\r\n----\r\n<<biblio.title>>\r\n----\r\nThank you for visiting <<branches.branchname>>.');
