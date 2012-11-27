@@ -2581,6 +2581,25 @@ sub AddRenewal {
             "Renewal of Rental Item $item->{'title'} $item->{'barcode'}",
             'Rent', $charge, $itemnumber );
     }
+
+    # Send a renewal slip according to checkout alert preference
+    my $borrower = C4::Members::GetMemberDetails( $borrowernumber, 0 );
+    my $circulation_alert = 'C4::ItemCirculationAlertPreference';
+    my %conditions = (
+        branchcode   => $branch,
+        categorycode => $borrower->{categorycode},
+        item_type    => $item->{itype},
+        notification => 'CHECKOUT',
+    );
+    if ($circulation_alert->is_enabled_for(\%conditions)) {
+        SendCirculationAlert({
+            type     => 'RENEWAL',
+            item     => $item,
+            borrower => $borrower,
+            branch   => $branch,
+        });
+    }
+
     # Log the renewal
     UpdateStats( $branch, 'renew', $charge, '', $itemnumber, $item->{itype}, $borrowernumber, undef, $item->{'ccode'});
 	return $datedue;
@@ -2902,12 +2921,13 @@ sub SendCirculationAlert {
     my %message_name = (
         CHECKIN  => 'Item_Check_in',
         CHECKOUT => 'Item_Checkout',
+	RENEWAL  => 'Item_Checkout',
     );
     my $borrower_preferences = C4::Members::Messaging::GetMessagingPreferences({
         borrowernumber => $borrower->{borrowernumber},
         message_name   => $message_name{$type},
     });
-    my $issues_table = ( $type eq 'CHECKOUT' ) ? 'issues' : 'old_issues';
+    my $issues_table = ( $type eq 'CHECKOUT' || $type eq 'RENEWAL' ) ? 'issues' : 'old_issues';
     my $letter =  C4::Letters::GetPreparedLetter (
         module => 'circulation',
         letter_code => $type,

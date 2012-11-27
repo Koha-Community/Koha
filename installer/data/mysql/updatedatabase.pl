@@ -6299,6 +6299,16 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 }
 
 
+$DBversion = "XXXX";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do(q{
+        INSERT INTO `letter` (`module`, `code`, `name`, `title`, `content`) VALUES
+        ('circulation','RENEWAL','Item Renewal','Renewals','The following items have been renew:\r\n----\r\n<<biblio.title>>\r\n----\r\nThank you for visiting <<branches.branchname>>.');
+    });
+    print "Upgrade to $DBversion done (Bug 9151 - Renewal notice according to patron alert preferences)\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)
