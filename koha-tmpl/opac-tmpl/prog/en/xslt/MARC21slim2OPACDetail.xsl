@@ -182,9 +182,9 @@
                                 </xsl:call-template>
                             </xsl:with-param>
                         </xsl:call-template>
-			</a>
-                    <xsl:text> </xsl:text><xsl:call-template name="part"/>
-            <xsl:choose><xsl:when test="position()=last()"><xsl:text>.</xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
+            </a>
+            <xsl:call-template name="part"/>
+            <xsl:choose><xsl:when test="position()=last()"><xsl:text>. </xsl:text></xsl:when><xsl:otherwise><xsl:text> ; </xsl:text></xsl:otherwise></xsl:choose>
         </xsl:for-each>
 
         <!-- 490 Series not traced, Ind1 = 0 -->
