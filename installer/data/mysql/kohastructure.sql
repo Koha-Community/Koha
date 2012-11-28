@@ -2824,7 +2824,8 @@ CREATE TABLE `aqorders_items` ( -- information on items entered in the acquisiti
   `itemnumber` int(11) NOT NULL, -- the item number for this item (items.itemnumber)
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- the date and time this order item was last touched
   PRIMARY KEY  (`itemnumber`),
-  KEY `ordernumber` (`ordernumber`)
+  KEY `ordernumber` (`ordernumber`),
+  CONSTRAINT aqorders_items_ibfk_1 FOREIGN KEY (ordernumber) REFERENCES aqorders (ordernumber) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 

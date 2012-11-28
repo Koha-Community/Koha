@@ -6083,6 +6083,20 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.11.00.002";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do(q{
+        DELETE from aqorders_items where ordernumber NOT IN (SELECT ordernumber FROM aqorders);
+    });
+    $dbh->do(q{
+        ALTER TABLE aqorders_items
+        ADD CONSTRAINT aqorders_items_ibfk_1 FOREIGN KEY (ordernumber) REFERENCES aqorders (ordernumber)
+        ON DELETE CASCADE ON UPDATE CASCADE;
+    });
+    print "Upgrade to $DBversion done (Bug 9030: Add constraint on aqorders_items.ordernumber)\n";
+    SetVersion ($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)
