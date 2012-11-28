@@ -28,6 +28,8 @@
 <script type="text/javascript" src="[% themelang %]/js/background-job-progressbar.js"></script>
 <script type="text/JavaScript" language="JavaScript">
 //<![CDATA[
+var MSG_CONFIRM_CLEAN = _("Clear all reservoir records staged in this batch?  This cannot be undone.");
+
 $(document).ready(function(){
   $("#staged-record-matching-rules select").change(function(){
       var str = $(this).attr("id");
@@ -291,7 +293,7 @@ Page
           <form method="post" action="[% batch_lis.script_name %]" name="clean_batch_[% batch_lis.import_batch_id %]" id="clean_batch_[% batch_lis.import_batch_id %]" >
             <input type="hidden" name="import_batch_id" value="[% batch_lis.import_batch_id %]" />
             <input type="hidden" name="op" value="clean-batch" />
-            <input type="submit" class="button" value="Clean" onclick="return confirm(_('Clear all reservoir records staged in this batch?  This cannot be undone.'));" />
+            <input type="submit" class="button" value="Clean" onclick="return confirm(MSG_CONFIRM_CLEAN);" />
           </form>
         [% END %]
     </td>

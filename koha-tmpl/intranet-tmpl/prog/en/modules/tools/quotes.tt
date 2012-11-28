@@ -10,6 +10,8 @@
     <script type="text/javascript" src="[% themelang %]/js/jquery.jeditable.mini.js"></script>
     <script type="text/javascript">
     //<![CDATA[
+    var MSG_ID_HELP = _("Click on the quote's id to select or deselect the quote. Multiple quotes may be selected.");
+
     var oTable; /* oTable needs to be global */
     var sEmptyTable = _("No quotes available. Please use the \"Add quote\" button to add a quote."); /* override the default message in datatables-strings.inc */
     $(document).ready(function() {
@@ -204,7 +206,7 @@
                 <table id="quotes_editor">
                 <thead>
                     <tr>
-                        <th><span style="cursor: help" onclick="event.stopPropagation();alert(_('Click on the quote\'s id to select or deselect the quote. Multiple quotes may be selected.'));">ID</span></th>
+                        <th><span style="cursor: help" onclick="event.stopPropagation();alert(MSG_ID_HELP);">ID</span></th>
                         <th>Source</th>
                         <th>Text</th>
                         <th>Last displayed</th>

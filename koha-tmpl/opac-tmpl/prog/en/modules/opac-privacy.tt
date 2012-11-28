@@ -55,7 +55,7 @@
         <form action="/cgi-bin/koha/opac-privacy.pl" method="post" id="opac-privacy-delete-form">
             <input type="hidden" name="op" value="delete_record" />
             <p>Whatever your privacy rule you choose, you can delete all your reading history immediately by clicking here. <b>BE CAREFUL</b>. Once you've confirmed the deletion, no one can retrieve the list!</p>
-            <input type="submit" value="Immediate deletion" onclick="return confirmDelete(_('Warning: Cannot be undone. Please confirm once again'));" />
+            <input type="submit" value="Immediate deletion" onclick="return confirmDelete(MSG_CONFIRM_AGAIN);" />
         </form>
     [% END %]
     </div>
