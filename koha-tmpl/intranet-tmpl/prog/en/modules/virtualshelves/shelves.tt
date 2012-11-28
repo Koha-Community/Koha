@@ -6,6 +6,8 @@
 //<![CDATA[ 
 
 var MSG_NO_ITEM_SELECTED = _("Nothing is selected.");
+var MSG_REMOVE_FROM_LIST = _("Are you sure you want to remove these records from the shelf?");
+var MSG_CONFIRM_DELETE_LIST = _("Are you sure you want to remove this list?");
 
 $(document).ready(function(){
 	$("#addbarcode").focus();
@@ -247,7 +249,7 @@ function placeHold () {
     </table><fieldset class="action">
         [% IF ( itemsloop ) %]
             <input type="button" id="placehold" style="display:none" onclick="placeHold(); return false;" value="Place holds" />
-            [% IF ( allowremovingitems ) %]<input type="submit" value="Remove selected records" onclick="return confirm(_('Are you sure you want to remove these records from the shelf?'));" />[% END %]
+            [% IF ( allowremovingitems ) %]<input type="submit" value="Remove selected records" onclick="return confirm(MSG_REMOVE_FROM_LIST);" />[% END %]
             <input type="submit" value="Merge selected records" onclick="return MergeItems();" />
         [% END %]
  </fieldset>
@@ -410,7 +412,7 @@ function placeHold () {
 					<input type="hidden" name="CONFIRM-[% shelveslooppri.confirm %]" value="1" />
 					<input type="submit" class="approve" value="Confirm" />
 					[% ELSE %]
-                    <input type="submit" class="deleteshelf" onclick="return confirmDelete(_('Are you sure you want to remove this list?'));" value="Delete" />
+                    <input type="submit" class="deleteshelf" onclick="return confirmDelete(MSG_CONFIRM_DELETE_LIST);" value="Delete" />
 					[% END %]
 				</form>
 			[% ELSE %]
@@ -458,7 +460,7 @@ function placeHold () {
 					<input type="hidden" name="CONFIRM-[% shelvesloo.confirm %]" value="1" />
 					<input type="submit" class="approve" value="Confirm" />
 					[% ELSE %]
-                    <input type="submit" class="deleteshelf" onclick="return confirmDelete(_('Are you sure you want to remove this list?'));" value="Delete" />
+                    <input type="submit" class="deleteshelf" onclick="return confirmDelete(MSG_CONFIRM_DELETE_LIST);" value="Delete" />
 					[% END %]
 				</form>
 			[% ELSE %]

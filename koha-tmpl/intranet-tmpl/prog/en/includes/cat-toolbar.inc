@@ -10,6 +10,11 @@
 			window.open("/cgi-bin/koha/cataloguing/z3950_search.pl?biblionumber=[% biblionumber %]"+strQuery,"z3950search",'width=740,height=450,location=yes,toolbar=no,scrollbars=yes,resize=yes');
 		} 
 	}
+    function PopupZ3950Confirmed() {
+        if (confirm(_("Please note that this Z39.50 search could replace the current record."))){
+            PopupZ3950();
+        }
+    }
 
 	/* provide Z3950 search points */
 	function GetZ3950Terms(){
@@ -237,7 +242,7 @@ function confirm_items_deletion() {
 	[% IF ( CAN_user_reserveforothers ) %]
     [% UNLESS ( norequests ) %]<li><a id="placehold" href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% biblionumber %]">Place hold</a></li>[% END %]
 	[% END %]
-	[% IF ( CAN_user_editcatalogue_edit_catalogue ) %]<li id="z3950searchc"><input type="button" id="z3950search" value="Z39.50 Search" onclick="if (confirm(_('Please note that this Z39.50 search could replace the current record.'))){ PopupZ3950(); } return false;" /></li>[% END %]
+	[% IF ( CAN_user_editcatalogue_edit_catalogue ) %]<li id="z3950searchc"><input type="button" id="z3950search" value="Z39.50 Search" onclick="PopupZ3950Confirmed(); return false;" /></li>[% END %]
     </ul>
 </form>
 </div>
