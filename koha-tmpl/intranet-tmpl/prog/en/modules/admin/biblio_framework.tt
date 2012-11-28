@@ -81,7 +81,7 @@ $(document).ready(function() {
             var filename = $(this).val();
             if ( ! /(?:\.csv|\.sql|\.ods|\.xml)$/.test(filename)) {
                 $(this).css("background-color","yellow");
-                alert(_('Please select an ods or xml file'));
+                alert(_("Please select an ods or xml file"));
                 $(this).val("");
                 $(this).css("background-color","white");
             }
@@ -109,7 +109,7 @@ $(document).ready(function() {
                     return false;
             }
             obj.css("background-color","yellow");
-            alert(_('Please select an spreadsheet (csv, ods, xml) or sql file'));
+            alert(_("Please select an spreadsheet (csv, ods, xml) or sql file"));
             obj.val("");
             obj.css("background-color","white");
             return false;

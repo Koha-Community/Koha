@@ -9,8 +9,8 @@ var MSG_NO_ITEM_SELECTED = _("Nothing is selected.");
 
 $(document).ready(function(){
 	$("#addbarcode").focus();
-    $("span.clearall").html("<a id=\"CheckNone\" href=\"/cgi-bin/koha/shelves.pl\">"+_('Clear all')+"<\/a>");
-    $("span.checkall").html("<a id=\"CheckAll\" href=\"/cgi-bin/koha/shelves.pl\">"+_('Select all')+"<\/a>");
+    $("span.clearall").html("<a id=\"CheckNone\" href=\"/cgi-bin/koha/shelves.pl\">"+_("Clear all")+"<\/a>");
+    $("span.checkall").html("<a id=\"CheckAll\" href=\"/cgi-bin/koha/shelves.pl\">"+_("Select all")+"<\/a>");
     $("#CheckAll").click(function(){
         $(".checkboxed").checkCheckboxes();
         return false;
@@ -37,7 +37,7 @@ $(document).ready(function(){
 	var checkboxes = $("input:checkbox:checked");
         var nbCheckbox = checkboxes.length;
 	if (nbCheckbox != 2) {
-	    alert(_('Two records must be selected for merging.'));
+	    alert(_("Two records must be selected for merging."));
 	} else {
 	    location.href='/cgi-bin/koha/cataloguing/merge.pl?biblionumber=' + checkboxes[0].value + '&amp;biblionumber=' + checkboxes[1].value;
 	}

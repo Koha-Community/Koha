@@ -97,16 +97,16 @@ function checkMultiHold() {
         var msg = '';
 
         switch (override_items[itemnumber].holdallowed) {
-            case 0: msg = _( 'This item normally cannot be put on hold.' ); break;
-            case 1: msg = _( 'This item normally cannot be put on hold except for patrons from ' ) + override_items[itemnumber].homebranch + '.'; break;
+            case 0: msg = _("This item normally cannot be put on hold."); break;
+            case 1: msg = _("This item normally cannot be put on hold except for patrons from ") + override_items[itemnumber].homebranch + "."; break;
         }
 
-        msg += "\n\n" + _( 'Place hold on this item?' );
+        msg += "\n\n" + _("Place hold on this item?");
 
         return confirm(msg);
     });
     $("input.warning").click(function() {
-        return confirm( _( 'None of these items can normally be put on hold for this patron.' ) + "\n\n" + _( 'Place hold?' ) );
+        return confirm( _("None of these items can normally be put on hold for this patron.") + "\n\n" + _("Place hold?") );
     });
  	$("#requestany").click(function() {
 		if(this.checked){

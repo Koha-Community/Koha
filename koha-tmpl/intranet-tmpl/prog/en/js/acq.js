@@ -384,7 +384,7 @@ function closeandprint(bg){
 	if(document.location = '/cgi-bin/koha/acqui/basketgroup.pl?op=closeandprint&amp;basketgroupid=' + bg ){
 		setTimeout("window.location.reload();",3000);
 	}else{
-		alert(_('Error downloading the file'));
+		alert(_("Error downloading the file"));
 	}
 }
 

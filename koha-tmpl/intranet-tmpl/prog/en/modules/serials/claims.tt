@@ -37,7 +37,7 @@
 		var selected = $("input:checked");
 
 		if (selected.length == 0) {
-			alert(_('Please select at least one item to export.'));
+			alert(_("Please select at least one item to export."));
 			return false;
 		}
 		
@@ -63,7 +63,7 @@
 	// Checks if the form can be sent (at least one checkbox must be checked)
 	function checkForm() {
 	    if ($("input:checked").length == 0) {
-		alert(_('Please select at least one item.'));
+		alert(_("Please select at least one item."));
 		return false;
 	    }
 	}
@@ -96,13 +96,13 @@
 	    
 	    // Checks if the beginning date is valid
 	    if (!parseInt(beginDate)) {
-		alert(_('The beginning date is missing or invalid.'));
+		alert(_("The beginning date is missing or invalid."));
 		return false;
 	    }
 
 	    // Checks if the ending date is valid
 	    if (!parseInt(endDate)) {
-		alert(_('The ending date is missing or invalid.'));
+		alert(_("The ending date is missing or invalid."));
 		return false;
 	    }
 

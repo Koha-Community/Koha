@@ -108,7 +108,7 @@ function Check(ff) {
 
     [% IF (AcqCreateItemOrdering) %]
         if(check_additem('[% UniqueItemFields %]') == false) {
-            alert(_('Duplicate values detected. Please correct the errors and resubmit.') );
+            alert(_("Duplicate values detected. Please correct the errors and resubmit.") );
             if(tobedeleted) {
                 $(lastitemblock).appendTo('#outeritemblock');
             }
