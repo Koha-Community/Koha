@@ -1719,15 +1719,19 @@ sub GetMarcNotes {
     my $note = "";
     my $tag  = "";
     my $marcnote;
+    my %blacklist = map { $_ => 1 } split(/,/,C4::Context->preference('NotesBlacklist'));
     foreach my $field ( $record->field($scope) ) {
-        my $value = $field->as_string();
-        if ( $note ne "" ) {
-            $marcnote = { marcnote => $note, };
-            push @marcnotes, $marcnote;
-            $note = $value;
-        }
-        if ( $note ne $value ) {
-            $note = $note . " " . $value;
+        my $tag = $field->tag();
+        if (!$blacklist{$tag}) {
+            my $value = $field->as_string();
+            if ( $note ne "" ) {
+                $marcnote = { marcnote => $note, };
+                push @marcnotes, $marcnote;
+                $note = $value;
+            }
+            if ( $note ne $value ) {
+                $note = $note . " " . $value;
+            }
         }
     }
 
