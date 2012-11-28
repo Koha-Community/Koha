@@ -56,16 +56,16 @@
 		$('#showHolidayType').val(holidayType);
 
 		if (holidayType == 'exception') {
-			$("#showOperationDelLabel").html(_('Delete this exception.'));
+			$("#showOperationDelLabel").html(_("Delete this exception."));
 			$("#holtype").attr("class","key exception").html(_("Holiday exception"));
 		} else if(holidayType == 'weekday') {
-			$("#showOperationDelLabel").html(_('Delete this holiday.'));
+			$("#showOperationDelLabel").html(_("Delete this holiday."));
 			$("#holtype").attr("class","key repeatableweekly").html(_("Holiday repeating weekly"));
 		} else if(holidayType == 'daymonth') {
-			$("#showOperationDelLabel").html(_('Delete this holiday.'));
+			$("#showOperationDelLabel").html(_("Delete this holiday."));
 			$("#holtype").attr("class","key repeatableyearly").html(_("Holiday repeating yearly"));
 		} else {
-			$("#showOperationDelLabel").html(_('Delete this holiday.'));
+			$("#showOperationDelLabel").html(_("Delete this holiday."));
 			$("#holtype").attr("class","key holiday").html(_("Unique holiday"));
 		}
 		

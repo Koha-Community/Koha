@@ -8,7 +8,7 @@
 	 $(document).ready(function() {
 	 	var inject_old = function(comment) {
 			[% IF ( reviewid ) %]
-			[% IF ( cgi_debug ) %]alert(_('injecting OLD comment: ')+comment);[% END %]
+			[% IF ( cgi_debug ) %]alert(_("injecting OLD comment: ")+comment);[% END %]
             parent.opener.$('#c[% reviewid %] p').prev("small").prev("h5").html(_("Your edited comment (preview, pending approval)"));
 			parent.opener.$('#c[% reviewid %] p').html(comment);
             parent.opener.$('#c[% reviewid %] p').append(" <a href=\"#comment\" onclick=\"Dopop(\'/cgi-bin/koha/opac-review.pl?biblionumber=[% biblionumber | uri %]&amp;reviewid=[% reviewid | uri%]\');\">"+_("Edit")+"<\/a>");
