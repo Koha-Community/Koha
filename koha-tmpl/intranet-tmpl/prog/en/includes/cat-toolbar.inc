@@ -29,7 +29,7 @@ function confirm_deletion() {
 		var count = [% count %];
         var is_confirmed;
 	if (count>0){
-		    is_confirmed= alert(_('There are [ '+ count +' ] item(s) attached to this record \n You must delete all items before deleting this record.'));
+		    is_confirmed= alert(count + " " +_("item(s) are attached to this record.\nYou must delete all items before deleting this record."));
 		    } else{
 		    is_confirmed= confirm(_("Are you sure you want to delete this record? "));
 	}
@@ -49,7 +49,7 @@ function confirm_deletion() {
 function confirm_items_deletion() {
         var count = [% count %];
         if(count > 0){
-            if(confirm(_('Are you sure you want to delete the ' + count + ' attached items? '))){
+            if(confirm(_("Are you sure you want to delete the") + " " + count + " " + _("attached items?"))){
                 window.location="/cgi-bin/koha/cataloguing/additem.pl?op=delallitems&amp;biblionumber=[% biblionumber %]";
             }else{
                 return false;
