@@ -30,9 +30,11 @@ use Pod::Usage;
 my $verbose     = 0;
 my $pref        = 0;
 my $all         = 0;
+my @files;
 GetOptions(
     'v|verbose' => \$verbose,
     'p'         => \$pref,
+    'f:s'       => \@files,
     'a|all'     => \$all,
 );
 
@@ -57,11 +59,11 @@ if ( $cmd =~ /create|install|update/ ) {
         usage() if $cmd eq 'create';
         for my $lang ( @{$installer->{langs}} ) {
             $installer->set_lang( $lang );
-            $installer->$cmd();
+            $installer->$cmd(\@files);
         }
     }
     else {
-        $installer->$cmd();
+        $installer->$cmd(\@files);
     }
 }
 else {
@@ -79,6 +81,7 @@ translate - Handle templates and preferences translation
   translate create fr-FR
   translate update fr-FR
   translate install fr-FR
+  translate install fr-FR -f search -f memberentry
   translate -p install fr-FR
   translate install
 
@@ -127,12 +130,15 @@ Update .po files in F<po> directory, named F<lang>-*.po. Without F<lang>, all
 available languages are updated. With -p option, only preferences .po file is
 updated.
 
-=item translate [-p] install F<lang>
+=item translate [-p|-f] install F<lang>
 
 Use .po files to translate the english version of templates and preferences files
 and copy those files in the appropriate directory. Without F<lang>, all
 available languages are installed. With -p option, only preferences .po file is
 updated.
+
+With -f parameter (repeatable) you can specify specific files to translate. For
+example, -f search will translate all templates containing 'search'.
 
 =back
 

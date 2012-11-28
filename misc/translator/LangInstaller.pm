@@ -321,7 +321,7 @@ sub install_prefs {
 
 
 sub install_tmpl {
-    my $self = shift;
+    my ($self, $files) = @_;
     say "Install templates" if $self->{verbose};
     for my $trans ( @{$self->{interface}} ) {
         print
@@ -336,13 +336,18 @@ sub install_tmpl {
             "$self->{process} install " .
             "-i $trans->{dir}/en/ " .
             "-o $trans->{dir}/$self->{lang} ".
-            "-s $self->{path_po}/$self->{lang}$trans->{suffix} -r"
+            "-s $self->{path_po}/$self->{lang}$trans->{suffix} -r " .
+            (
+                $files
+                    ? '-f ' . join ' -f ', @$files
+                    : ''
+            )
     }
 }
 
 
 sub update_tmpl {
-    my $self = shift;
+    my ($self, $files) = @_;
 
     say "Update templates" if $self->{verbose};
     for my $trans ( @{$self->{interface}} ) {
@@ -356,7 +361,12 @@ sub update_tmpl {
         system
             "$self->{process} update " .
             "-i $trans->{dir}/en/ " .
-            "-s $self->{path_po}/$self->{lang}$trans->{suffix} -r"
+            "-s $self->{path_po}/$self->{lang}$trans->{suffix} -r " .
+            (
+                $files
+                    ? '-f ' . join ' -f ', @$files
+                    : ''
+            )
     }
 }
 
@@ -374,7 +384,7 @@ sub create_prefs {
 
 
 sub create_tmpl {
-    my $self = shift;
+    my ($self, $files) = @_;
 
     say "Create templates\n" if $self->{verbose};
     for my $trans ( @{$self->{interface}} ) {
@@ -386,15 +396,20 @@ sub create_tmpl {
         system
             "$self->{process} create " .
             "-i $trans->{dir}/en/ " .
-            "-s $self->{path_po}/$self->{lang}$trans->{suffix} -r"
+            "-s $self->{path_po}/$self->{lang}$trans->{suffix} -r " .
+            (
+                $files
+                    ? '-f ' . join ' -f ', @$files
+                    : ''
+            )
     }
 }
 
 
 sub install {
-    my $self = shift;
+    my ($self, $files) = @_;
     return unless $self->{lang};
-    $self->install_tmpl() unless $self->{pref_only};
+    $self->install_tmpl($files) unless $self->{pref_only};
     $self->install_prefs();
 }
 
@@ -409,20 +424,20 @@ sub get_all_langs {
 
 
 sub update {
-    my $self = shift;
+    my ($self, $files) = @_;
     my @langs = $self->{lang} ? ($self->{lang}) : $self->get_all_langs();
     for my $lang ( @langs ) {
         $self->set_lang( $lang );
-        $self->update_tmpl() unless $self->{pref_only};
+        $self->update_tmpl($files) unless $self->{pref_only};
         $self->update_prefs();
     }
 }
 
 
 sub create {
-    my $self = shift;
+    my ($self, $files) = @_;
     return unless $self->{lang};
-    $self->create_tmpl() unless $self->{pref_only};
+    $self->create_tmpl($files) unless $self->{pref_only};
     $self->create_prefs();
 }
 
