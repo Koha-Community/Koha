@@ -2007,7 +2007,10 @@ sub MoveReserve {
             ModReserveFill($borr_res);
         }
 
-        if ($cancelreserve) { # cancel reserves on this item
+        if ( $cancelreserve eq 'revert' ) { ## Revert waiting reserve to priority 1
+            RevertWaitingStatus({ itemnumber => $itemnumber });
+        }
+        elsif ( $cancelreserve eq 'cancel' || $cancelreserve ) { # cancel reserves on this item
             CancelReserve(0, $res->{'itemnumber'}, $res->{'borrowernumber'});
             CancelReserve($res->{'biblionumber'}, 0, $res->{'borrowernumber'});
         }
@@ -2056,6 +2059,66 @@ sub MergeHolds {
             $priority++;
         }
     }
+}
+
+=head2 RevertWaitingStatus
+
+  $success = RevertWaitingStatus({ itemnumber => $itemnumber });
+
+  Reverts a 'waiting' hold back to a regular hold with a priority of 1.
+
+  Caveat: Any waiting hold fixed with RevertWaitingStatus will be an
+          item level hold, even if it was only a bibliolevel hold to
+          begin with. This is because we can no longer know if a hold
+          was item-level or bib-level after a hold has been set to
+          waiting status.
+
+=cut
+
+sub RevertWaitingStatus {
+    my ( $params ) = @_;
+    my $itemnumber = $params->{'itemnumber'};
+
+    return unless ( $itemnumber );
+
+    my $dbh = C4::Context->dbh;
+
+    ## Get the waiting reserve we want to revert
+    my $query = "
+        SELECT * FROM reserves
+        WHERE itemnumber = ?
+        AND found IS NOT NULL
+    ";
+    my $sth = $dbh->prepare( $query );
+    $sth->execute( $itemnumber );
+    my $reserve = $sth->fetchrow_hashref();
+
+    ## Increment the priority of all other non-waiting
+    ## reserves for this bib record
+    $query = "
+        UPDATE reserves
+        SET
+          priority = priority + 1
+        WHERE
+          biblionumber =  ?
+        AND
+          priority > 0
+    ";
+    $sth = $dbh->prepare( $query );
+    $sth->execute( $reserve->{'biblionumber'} );
+
+    ## Fix up the currently waiting reserve
+    $query = "
+    UPDATE reserves
+    SET
+      priority = 1,
+      found = NULL,
+      waitingdate = NULL
+    WHERE
+      reserve_id = ?
+    ";
+    $sth = $dbh->prepare( $query );
+    return $sth->execute( $reserve->{'reserve_id'} );
 }
 
 =head2 ReserveSlip
