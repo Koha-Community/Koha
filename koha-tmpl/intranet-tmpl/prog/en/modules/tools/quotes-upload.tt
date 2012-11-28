@@ -237,12 +237,12 @@
         var fileSizeInK = Math.round(evt.target.files[0].size/1024);
 
         if (!fileType.match(/comma-separated-values|csv|excel/i)) {
-            alert(_('Uploads limited to csv. Incorrect filetype: ')+fileType);
+            alert(_("Uploads limited to csv. Incorrect filetype: ")+fileType);
             parent.location='quotes-upload.pl';
             return;
         }
         if (fileSizeInK > 512) {
-            if (!confirm(evt.target.files[0].name+' '+fileSizeInK+_(' KB Do you really want to upload this file?'))) {
+            if (!confirm(evt.target.files[0].name+' '+fileSizeInK+_(" KB Do you really want to upload this file?"))) {
                 parent.location='quotes-upload.pl';
                 return;
             }
@@ -268,11 +268,11 @@
             success     : function(){
                             var response = JSON.parse(jqXHR.responseText);
                             if (response.success) {
-                                alert(response.records+_(' quotes saved.'));
+                                alert(response.records+_(" quotes saved."));
                                 window.location.reload(true);   // is this the best route?
                             }
                             else {
-                                alert(response.records+_(' quotes saved, but an error has occurred. Please ask your administrator to check the server log for more details.'));
+                                alert(response.records+_(" quotes saved, but an error has occurred. Please ask your administrator to check the server log for more details."));
                                 window.location.reload(true);   // is this the best route?
                             }
                           },
@@ -284,9 +284,9 @@
               return this.id;
         }).get().join(', ');
         if (!idsToDelete) {
-            alert(_('Please select a quote(s) by clicking the quote id(s) you desire to delete.'));
+            alert(_("Please select a quote(s) by clicking the quote id(s) you desire to delete."));
         }
-        else if (confirm(_('Are you sure you wish to delete quote(s) ')+idsToDelete+'?')) {
+        else if (confirm(_("Are you sure you wish to delete quote(s) ")+idsToDelete+"?")) {
             oTable.$('.selected').each(function(){
                 oTable.fnDeleteRow(this);
             });

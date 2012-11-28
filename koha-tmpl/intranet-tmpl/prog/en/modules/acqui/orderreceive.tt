@@ -62,6 +62,14 @@ function IEEventHandler_KeyDown() {
             if(tobedeleted){
                 $(lastitemblock).remove();
             }
+
+            if(check_additem('[% UniqueItemFields %]') == false){
+                alert(_("Duplicate values detected. Please correct the errors and resubmit.") );
+                if(tobedeleted) {
+                    $(lastitemblock).appendTo("#outeritemblock");
+                }
+                return false;
+            };
         [% END %]
 
         return true;

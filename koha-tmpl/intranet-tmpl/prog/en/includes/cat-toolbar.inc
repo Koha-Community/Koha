@@ -31,7 +31,7 @@ function confirm_deletion() {
 	if (count>0){
 		    is_confirmed= alert(_('There are [ '+ count +' ] item(s) attached to this record \n You must delete all items before deleting this record.'));
 		    } else{
-		    is_confirmed= confirm(_('Are you sure you want to delete this record? '));
+		    is_confirmed= confirm(_("Are you sure you want to delete this record? "));
 	}
 
      if (is_confirmed) {

@@ -82,11 +82,11 @@ function enableCheckboxActions(){
 
 $(function() {
     [% IF ( opacbookbag ) %]$(".addtocart").show();[% END %]
-    $("span.clearall").html("<a id=\"CheckNone\" href=\"#\">"+_('Clear all')+"<\/a>");
-    $("span.checkall").html("<a id=\"CheckAll\" href=\"#\">"+_('Select all')+"<\/a>");
+    $("span.clearall").html("<a id=\"CheckNone\" href=\"#\">"+_("Clear all")+"<\/a>");
+    $("span.checkall").html("<a id=\"CheckAll\" href=\"#\">"+_("Select all")+"<\/a>");
   $("a.print").show();
 
-    [% IF ( opacuserlogin ) %][% IF ( RequestOnOpac ) %]$("#placehold").html("<a href=\"#\" class=\"hold tag_hides disabled\">"+_('Place hold')+"<\/a>");
+    [% IF ( opacuserlogin ) %][% IF ( RequestOnOpac ) %]$("#placehold").html("<a href=\"#\" class=\"hold tag_hides disabled\">"+_("Place hold")+"<\/a>");
       $("#selections-toolbar a.hold").click(function(){
          holdSelections();
          return false;
