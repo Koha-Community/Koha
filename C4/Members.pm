@@ -1374,20 +1374,35 @@ to category descriptions.
 
 #'
 sub GetborCatFromCatType {
-    my ( $category_type, $action ) = @_;
-	# FIXME - This API  seems both limited and dangerous. 
+    my ( $category_type, $action, $no_branch_limit ) = @_;
+
+    my $branch_limit = $no_branch_limit
+        ? 0
+        : C4::Context->userenv ? C4::Context->userenv->{"branch"} : "";
+
+    # FIXME - This API  seems both limited and dangerous.
     my $dbh     = C4::Context->dbh;
-    my $request = qq|   SELECT categorycode,description 
-            FROM categories 
-            $action
-            ORDER BY categorycode|;
+
+    my $request = qq{
+        SELECT categories.categorycode, categories.description
+        FROM categories
+    };
+    $request .= qq{
+        LEFT JOIN categories_branches ON categories.categorycode = categories_branches.categorycode
+    } if $branch_limit;
+    if($action) {
+        $request .= " $action ";
+        $request .= " AND (branchcode = ? OR branchcode IS NULL) GROUP BY description" if $branch_limit;
+    } else {
+        $request .= " WHERE branchcode = ? OR branchcode IS NULL GROUP BY description" if $branch_limit;
+    }
+    $request .= " ORDER BY categorycode";
+
     my $sth = $dbh->prepare($request);
-	if ($action) {
-        $sth->execute($category_type);
-    }
-    else {
-        $sth->execute();
-    }
+    $sth->execute(
+        $action ? $category_type : (),
+        $branch_limit ? $branch_limit : ()
+    );
 
     my %labels;
     my @codes;
@@ -1396,6 +1411,7 @@ sub GetborCatFromCatType {
         push @codes, $data->{'categorycode'};
         $labels{ $data->{'categorycode'} } = $data->{'description'};
     }
+    $sth->finish;
     return ( \@codes, \%labels );
 }
 
@@ -1454,16 +1470,21 @@ If no category code provided, the function returns all the categories.
 =cut
 
 sub GetBorrowercategoryList {
+    my $no_branch_limit = @_ ? shift : 0;
+    my $branch_limit = $no_branch_limit
+        ? 0
+        : C4::Context->userenv ? C4::Context->userenv->{"branch"} : "";
     my $dbh       = C4::Context->dbh;
-    my $sth       =
-    $dbh->prepare(
-    "SELECT * 
-    FROM categories 
-    ORDER BY description"
-        );
-    $sth->execute;
-    my $data =
-    $sth->fetchall_arrayref({});
+    my $query = "SELECT * FROM categories";
+    $query .= qq{
+        LEFT JOIN categories_branches ON categories.categorycode = categories_branches.categorycode
+        WHERE branchcode = ? OR branchcode IS NULL GROUP BY description
+    } if $branch_limit;
+    $query .= " ORDER BY description";
+    my $sth = $dbh->prepare( $query );
+    $sth->execute( $branch_limit ? $branch_limit : () );
+    my $data = $sth->fetchall_arrayref( {} );
+    $sth->finish;
     return $data;
 }    # sub getborrowercategory
 

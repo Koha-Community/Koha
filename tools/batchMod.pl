@@ -266,7 +266,13 @@ if ($op eq "show"){
 # now, build the item form for entering a new item
 my @loop_data =();
 my $i=0;
-my $authorised_values_sth = $dbh->prepare("SELECT authorised_value,lib FROM authorised_values WHERE category=? ORDER BY lib");
+my $branch_limit = C4::Context->userenv ? C4::Context->userenv->{"branch"} : "";
+my $query = qq{SELECT authorised_value, lib FROM authorised_values};
+$query  .= qq{ LEFT JOIN authorised_values_branches ON ( id = av_id ) } if $branch_limit;
+$query  .= qq{ WHERE category = ?};
+$query  .= qq{ AND ( branchcode = ? OR branchcode IS NULL ) } if $branch_limit;
+$query  .= qq{ GROUP BY lib ORDER BY lib, lib_opac};
+my $authorised_values_sth = $dbh->prepare( $query );
 
 my $branches = GetBranchesLoop();  # build once ahead of time, instead of multiple times later.
 
@@ -359,7 +365,7 @@ foreach my $tag (sort keys %{$tagslib}) {
       }
       else {
           push @authorised_values, ""; # unless ( $tagslib->{$tag}->{$subfield}->{mandatory} );
-          $authorised_values_sth->execute( $tagslib->{$tag}->{$subfield}->{authorised_value} );
+          $authorised_values_sth->execute( $tagslib->{$tag}->{$subfield}->{authorised_value}, $branch_limit ? $branch_limit : () );
           while ( my ( $value, $lib ) = $authorised_values_sth->fetchrow_array ) {
               push @authorised_values, $value;
               $authorised_lib{$value} = $lib;
@@ -427,6 +433,8 @@ foreach my $tag (sort keys %{$tagslib}) {
     $i++
   }
 } # -- End foreach tag
+$authorised_values_sth->finish;
+
 
 
     # what's the next op ? it's what we are not in : an add if we're editing, otherwise, and edit.

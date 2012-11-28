@@ -107,8 +107,7 @@ sub generate_subfield_form {
   
   my $frameworkcode = &GetFrameworkCode($biblionumber);
         my %subfield_data;
-        my $dbh = C4::Context->dbh;        
-        my $authorised_values_sth = $dbh->prepare("SELECT authorised_value,lib FROM authorised_values WHERE category=? ORDER BY lib");
+        my $dbh = C4::Context->dbh;
         
         my $index_subfield = int(rand(1000000)); 
         if ($subfieldtag eq '@'){
@@ -203,11 +202,11 @@ sub generate_subfield_form {
                   #---- "true" authorised value
             }
             else {
-                  push @authorised_values, "" unless ( $subfieldlib->{mandatory} );
-                  $authorised_values_sth->execute( $subfieldlib->{authorised_value} );
-                  while ( my ( $value, $lib ) = $authorised_values_sth->fetchrow_array ) {
-                      push @authorised_values, $value;
-                      $authorised_lib{$value} = $lib;
+                  push @authorised_values, qq{} unless ( $subfieldlib->{mandatory} );
+                  my $av = GetAuthorisedValues( $subfieldlib->{authorised_value} );
+                  for my $r ( @$av ) {
+                      push @authorised_values, $r->{authorised_value};
+                      $authorised_lib{$r->{authorised_value}} = $r->{lib};
                   }
             }
 

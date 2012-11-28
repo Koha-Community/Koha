@@ -1036,28 +1036,50 @@ C<$opac> If set to a true value, displays OPAC descriptions rather than normal o
 =cut
 
 sub GetAuthorisedValues {
-    my ($category,$selected,$opac) = @_;
+    my ( $category, $selected, $opac ) = @_;
+    my $branch_limit = C4::Context->userenv ? C4::Context->userenv->{"branch"} : "";
     my @results;
     my $dbh      = C4::Context->dbh;
-    my $query    = "SELECT * FROM authorised_values";
-    $query .= " WHERE category = '" . $category . "'" if $category;
-    $query .= " ORDER BY category, lib, lib_opac";
+    my $query = qq{
+        SELECT *
+        FROM authorised_values
+    };
+    $query .= qq{
+          LEFT JOIN authorised_values_branches ON ( id = av_id )
+    } if $branch_limit;
+    my @where_strings;
+    my @where_args;
+    if($category) {
+        push @where_strings, "category = ?";
+        push @where_args, $category;
+    }
+    if($branch_limit) {
+        push @where_strings, "( branchcode = ? OR branchcode IS NULL )";
+        push @where_args, $branch_limit;
+    }
+    if(@where_strings > 0) {
+        $query .= " WHERE " . join(" AND ", @where_strings);
+    }
+    $query .= " GROUP BY lib ORDER BY category, lib, lib_opac";
+
     my $sth = $dbh->prepare($query);
-    $sth->execute;
+
+    $sth->execute( @where_args );
     while (my $data=$sth->fetchrow_hashref) {
-        if ( (defined($selected)) && ($selected eq $data->{'authorised_value'}) ) {
-            $data->{'selected'} = 1;
+        if ( defined $selected and $selected eq $data->{authorised_value} ) {
+            $data->{selected} = 1;
         }
         else {
-            $data->{'selected'} = 0;
+            $data->{selected} = 0;
         }
-        if ($opac && $data->{'lib_opac'}) {
-            $data->{'lib'} = $data->{'lib_opac'};
+
+        if ($opac && $data->{lib_opac}) {
+            $data->{lib} = $data->{lib_opac};
         }
         push @results, $data;
     }
-    #my $data = $sth->fetchall_arrayref({});
-    return \@results; #$data;
+    $sth->finish;
+    return \@results;
 }
 
 =head2 GetAuthorisedValueCategories

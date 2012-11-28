@@ -219,8 +219,11 @@ sub build_authorized_values_list {
         $value = $default_source unless $value;
     }
     else {
+        my $branch_limit = C4::Context->userenv ? C4::Context->userenv->{"branch"} : "";
         $authorised_values_sth->execute(
-            $tagslib->{$tag}->{$subfield}->{authorised_value} );
+            $tagslib->{$tag}->{$subfield}->{authorised_value},
+            $branch_limit ? $branch_limit : (),
+        );
 
         push @authorised_values, ""
           unless ( $tagslib->{$tag}->{$subfield}->{mandatory} );
@@ -230,6 +233,7 @@ sub build_authorized_values_list {
             $authorised_lib{$value} = $lib;
         }
     }
+    $authorised_values_sth->finish;
     return CGI::scrolling_list(
         -name     => "tag_".$tag."_subfield_".$subfield."_".$index_tag."_".$index_subfield,
         -values   => \@authorised_values,
@@ -508,12 +512,15 @@ sub build_tabs {
     my @loop_data = ();
     my $tag;
 
-    my $authorised_values_sth = $dbh->prepare(
-        "select authorised_value,lib
-        from authorised_values
-        where category=? order by lib"
-    );
-    
+    my $branch_limit = C4::Context->userenv ? C4::Context->userenv->{"branch"} : "";
+    my $query = "SELECT authorised_value, lib
+                FROM authorised_values";
+    $query .= qq{ LEFT JOIN authorised_values_branches ON ( id = av_id )} if $branch_limit;
+    $query .= " WHERE category = ?";
+    $query .= " AND ( branchcode = ? OR branchcode IS NULL )" if $branch_limit;
+    $query .= " GROUP BY lib ORDER BY lib, lib_opac";
+    my $authorised_values_sth = $dbh->prepare( $query );
+
     # in this array, we will push all the 10 tabs
     # to avoid having 10 tabs in the template : they will all be in the same BIG_LOOP
     my @BIG_LOOP;
@@ -698,6 +705,7 @@ sub build_tabs {
             };
         }
     }
+    $authorised_values_sth->finish;
     $template->param( BIG_LOOP => \@BIG_LOOP );
 }
 

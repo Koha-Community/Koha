@@ -19,12 +19,13 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
-use strict;
-use warnings;
+use Modern::Perl;
+
 use CGI;
 use List::MoreUtils qw/uniq/;
 
 use C4::Auth;
+use C4::Branch;
 use C4::Context;
 use C4::Output;
 use C4::Koha;
@@ -82,10 +83,20 @@ exit 0;
 sub add_attribute_type_form {
     my $template = shift;
 
+    my $branches = GetBranches;
+    my @branches_loop;
+    foreach my $branch (sort keys %$branches) {
+        push @branches_loop, {
+            branchcode => $$branches{$branch}{branchcode},
+            branchname => $$branches{$branch}{branchname},
+        };
+    }
+
     $template->param(
         attribute_type_form => 1,
         confirm_op => 'add_attribute_type_confirmed',
         categories => GetBorrowercategoryList,
+        branches_loop => \@branches_loop,
     );
     authorised_value_category_list($template);
     pa_classes($template);
@@ -162,6 +173,8 @@ sub add_update_attribute_type {
     $attr_type->display_checkout($display_checkout);
     $attr_type->category_code($input->param('category_code'));
     $attr_type->class($input->param('class'));
+    my @branches = $input->param('branches');
+    $attr_type->branches( \@branches );
 
     if ($op eq 'edit') {
         $template->param(edited_attribute_type => $attr_type->code());
@@ -244,6 +257,20 @@ sub edit_attribute_type_form {
     authorised_value_category_list($template, $attr_type->authorised_value_category());
     pa_classes( $template, $attr_type->class );
 
+
+    my $branches = GetBranches;
+    my @branches_loop;
+    my $selected_branches = $attr_type->branches;
+    foreach my $branch (sort keys %$branches) {
+        my $selected = ( grep {$$_{branchcode} eq $branch} @$selected_branches ) ? 1 : 0;
+        push @branches_loop, {
+            branchcode => $branches->{$branch}{branchcode},
+            branchname => $branches->{$branch}{branchname},
+            selected => $selected,
+        };
+    }
+    $template->param( branches_loop => \@branches_loop );
+
     $template->param ( category_code => $attr_type->category_code );
     $template->param ( category_description => $attr_type->category_description );
 
@@ -259,21 +286,26 @@ sub edit_attribute_type_form {
 sub patron_attribute_type_list {
     my $template = shift;
 
-    my @attr_types = C4::Members::AttributeTypes::GetAttributeTypes();
-    my @classes = uniq( map {$_->{class}} @attr_types );
+    my @attr_types = C4::Members::AttributeTypes::GetAttributeTypes( 1, 1 );
+
+    my @classes = uniq( map { $_->{class} } @attr_types );
     @classes = sort @classes;
 
     my @attributes_loop;
     for my $class (@classes) {
-        my @items;
+        my ( @items, $branches );
         for my $attr (@attr_types) {
-            push @items, $attr if $attr->{class} eq $class
+            next if $attr->{class} ne $class;
+            my $attr_type = C4::Members::AttributeTypes->fetch($attr->{code});
+            $attr->{branches} = $attr_type->branches;
+            push @items, $attr;
         }
         my $lib = GetAuthorisedValueByCode( 'PA_CLASS', $class ) || $class;
         push @attributes_loop, {
             class => $class,
             items => \@items,
             lib   => $lib,
+            branches => $branches,
         };
     }
     $template->param(available_attribute_types => \@attributes_loop);

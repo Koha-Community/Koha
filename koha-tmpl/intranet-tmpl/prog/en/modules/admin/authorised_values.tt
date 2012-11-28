@@ -13,7 +13,10 @@
 		sortList: [[1,0]],
 		headers: { 4: { sorter: false}, 5: { sorter: false}}
 		   		}).tablesorterPager({container: $("#pagertable_authorized_values"),positionFixed: false,size: 50});
-	
+
+    if ( $("#branches option:selected").length < 1 ) {
+        $("#branches option:first").attr("selected", "selected");
+    }
 }); </script>
 
 <script type="text/JavaScript" language="JavaScript">
@@ -82,6 +85,21 @@
             <label for="lib_opac">Description (OPAC)</label>
             <input type="text" name="lib_opac" id="lib_opac" value="[% lib_opac %]" maxlength="200" />
         </li>
+        <li><label for="branches">Branches limitation: </label>
+            <select id="branches" name="branches" multiple size="10">
+                <option value="">All branches</option>
+                [% FOREACH branch IN branches_loop %]
+                  [% IF ( branch.selected ) %]
+                    <option selected="selected" value="[% branch.branchcode %]">[% branch.branchname %]</option>
+                  [% ELSE %]
+                    <option value="[% branch.branchcode %]">[% branch.branchname %]</option>
+                  [% END %]
+                [% END %]
+            </select>
+            <span>Select All if this authorised value must to be displayed all the time. Otherwise select librairies you want to associate with this value.
+            </span>
+        </li>
+
 		</ol>
         <div id="icons" class="toptabs" style="clear:both">
         <h5 style="margin-left:10px;">Choose an icon:</h5>
@@ -235,6 +253,7 @@
 	<th>Description</th>
 	<th>Description (OPAC)</th>
 	<th>Icon</th>
+    <th>Branches limitations</th>
 	<th>Edit</th>
 	<th>Delete</th>
 	</tr>
@@ -249,6 +268,17 @@
 	<td>[% loo.lib %]</td>
 	<td>[% loo.lib_opac %]</td>
 	<td>[% IF ( loo.imageurl ) %]<img src="[% loo.imageurl %]" alt=""/>[% ELSE %]&nbsp;[% END %]</td>
+    <td>
+        [% IF loo.branches.size > 0 %]
+            [% branches_str = "" %]
+            [% FOREACH branch IN loo.branches %]
+                [% branches_str = branches_str _ " " _ branch.branchname _ "(" _ branch.branchcode _ ")" %]
+            [% END %]
+            <span href="#" title="[% branches_str %]">[% loo.branches.size %] branches limitations</span>
+        [% ELSE %]
+            No limitation
+        [% END %]
+    </td>
 	<td><a href="[% loo.edit %]">Edit</a></td>
 	<td><a href="[% loo.delete %]">Delete</a></td>
 </tr>

@@ -2940,6 +2940,44 @@ CREATE TABLE `quotes` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Table structure for table categories_branches
+--
+
+DROP TABLE IF EXISTS categories_branches;
+CREATE TABLE categories_branches( -- association table between categories and branches
+    categorycode VARCHAR(10),
+    branchcode VARCHAR(10),
+    FOREIGN KEY (categorycode) REFERENCES categories(categorycode) ON DELETE CASCADE,
+    FOREIGN KEY (branchcode) REFERENCES branches(branchcode) ON DELETE CASCADE
+) ENGINE=INNODB DEFAULT CHARSET=utf8;
+
+--
+-- Table structure for table authorised_values_branches
+--
+
+DROP TABLE IF EXISTS authorised_values_branches;
+CREATE TABLE authorised_values_branches( -- association table between authorised_values and branches
+    av_id INTEGER,
+    branchcode VARCHAR(10),
+    FOREIGN KEY (av_id) REFERENCES authorised_values(id) ON DELETE CASCADE,
+    FOREIGN KEY (branchcode) REFERENCES branches(branchcode) ON DELETE CASCADE
+) ENGINE=INNODB DEFAULT CHARSET=utf8;
+
+
+--
+-- Table structure for table borrower_attribute_types_branches
+--
+
+DROP TABLE IF EXISTS borrower_attribute_types_branches;
+CREATE TABLE borrower_attribute_types_branches( -- association table between borrower_attribute_types and branches
+    bat_code VARCHAR(10),
+    b_branchcode VARCHAR(10),
+    FOREIGN KEY (bat_code) REFERENCES borrower_attribute_types(code) ON DELETE CASCADE,
+    FOREIGN KEY (b_branchcode) REFERENCES branches(branchcode) ON DELETE CASCADE
+) ENGINE=INNODB DEFAULT CHARSET=utf8;
+
+
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

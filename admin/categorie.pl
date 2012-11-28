@@ -36,11 +36,12 @@
 # with Koha; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-use strict;
-#use warnings; FIXME - Bug 2505
+use Modern::Perl;
+
 use CGI;
 use C4::Context;
 use C4::Auth;
+use C4::Branch;
 use C4::Output;
 use C4::Dates;
 use C4::Form::MessagingPreferences;
@@ -90,15 +91,33 @@ if ($op eq 'add_form') {
 	
 	#---- if primkey exists, it's a modify action, so read values to modify...
 	my $data;
+    my @selected_branches;
 	if ($categorycode) {
 		my $dbh = C4::Context->dbh;
 		my $sth=$dbh->prepare("select categorycode,description,enrolmentperiod,enrolmentperioddate,upperagelimit,dateofbirthrequired,enrolmentfee,issuelimit,reservefee,hidelostitems,overduenoticerequired,category_type from categories where categorycode=?");
 		$sth->execute($categorycode);
 		$data=$sth->fetchrow_hashref;
-		$sth->finish;
-	}
+
+        $sth = $dbh->prepare("SELECT b.branchcode, b.branchname FROM categories_branches AS cb, branches AS b WHERE cb.branchcode = b.branchcode AND cb.categorycode = ?");
+        $sth->execute( $categorycode );
+        while ( my $branch = $sth->fetchrow_hashref ) {
+            push @selected_branches, $branch;
+        }
+        $sth->finish;
+    }
 
     $data->{'enrolmentperioddate'} = undef if ($data->{'enrolmentperioddate'} eq '0000-00-00');
+
+    my $branches = GetBranches;
+    my @branches_loop;
+    foreach my $branch (sort keys %$branches) {
+        my $selected = ( grep {$$_{branchcode} eq $branch} @selected_branches ) ? 1 : 0;
+        push @branches_loop, {
+            branchcode => $$branches{$branch}{branchcode},
+            branchname => $$branches{$branch}{branchname},
+            selected => $selected,
+        };
+    }
 
 	$template->param(description        => $data->{'description'},
 				enrolmentperiod         => $data->{'enrolmentperiod'},
@@ -115,6 +134,7 @@ if ($op eq 'add_form') {
                 SMSSendDriver => C4::Context->preference("SMSSendDriver"),
                 TalkingTechItivaPhone => C4::Context->preference("TalkingTechItivaPhoneNotification"),
 				"type_".$data->{'category_type'} => 1,
+                branches_loop           => \@branches_loop,
 				);
     if (C4::Context->preference('EnhancedMessagingPreferences')) {
         C4::Form::MessagingPreferences::set_form_values({ categorycode => $categorycode } , $template);
@@ -133,6 +153,22 @@ if ($op eq 'add_form') {
 	if ($is_a_modif) {
             my $sth=$dbh->prepare("UPDATE categories SET description=?,enrolmentperiod=?, enrolmentperioddate=?,upperagelimit=?,dateofbirthrequired=?,enrolmentfee=?,reservefee=?,hidelostitems=?,overduenoticerequired=?,category_type=? WHERE categorycode=?");
             $sth->execute(map { $input->param($_) } ('description','enrolmentperiod','enrolmentperioddate','upperagelimit','dateofbirthrequired','enrolmentfee','reservefee','hidelostitems','overduenoticerequired','category_type','categorycode'));
+            my @branches = $input->param("branches");
+            if ( @branches ) {
+                $sth = $dbh->prepare("DELETE FROM categories_branches WHERE categorycode = ?");
+                $sth->execute( $input->param( "categorycode" ) );
+                $sth = $dbh->prepare(
+                    "INSERT INTO categories_branches
+                                ( categorycode, branchcode )
+                                VALUES ( ?, ? )"
+                );
+                for my $branchcode ( @branches ) {
+                    next if not $branchcode;
+                    $sth->bind_param( 1, $input->param( "categorycode" ) );
+                    $sth->bind_param( 2, $branchcode );
+                    $sth->execute;
+                }
+            }
             $sth->finish;
         } else {
             my $sth=$dbh->prepare("INSERT INTO categories  (categorycode,description,enrolmentperiod,enrolmentperioddate,upperagelimit,dateofbirthrequired,enrolmentfee,reservefee,hidelostitems,overduenoticerequired,category_type) values (?,?,?,?,?,?,?,?,?,?,?)");
@@ -197,7 +233,14 @@ if ($op eq 'add_form') {
 	$template->param(else => 1);
 	my @loop;
 	my ($count,$results)=StringSearch($searchfield,'web');
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare("SELECT b.branchcode, b.branchname FROM categories_branches AS cb, branches AS b WHERE cb.branchcode = b.branchcode AND cb.categorycode = ?");
 	for (my $i=0; $i < $count; $i++){
+        $sth->execute( $results->[$i]{'categorycode'} );
+        my @selected_branches;
+        while ( my $branch = $sth->fetchrow_hashref ) {
+            push @selected_branches, $branch;
+        }
 		my %row = (
 		        categorycode            => $results->[$i]{'categorycode'},
 				description             => $results->[$i]{'description'},
@@ -211,7 +254,9 @@ if ($op eq 'add_form') {
 				reservefee              => sprintf("%.2f",$results->[$i]{'reservefee'}),
                                 hidelostitems           => $results->[$i]{'hidelostitems'},
 				category_type           => $results->[$i]{'category_type'},
-				"type_".$results->[$i]{'category_type'} => 1);
+                "type_".$results->[$i]{'category_type'} => 1,
+                branches                => \@selected_branches,
+        );
         if (C4::Context->preference('EnhancedMessagingPreferences')) {
             my $brief_prefs = _get_brief_messaging_prefs($results->[$i]{'categorycode'});
             $row{messaging_prefs} = $brief_prefs if @$brief_prefs;
@@ -220,8 +265,7 @@ if ($op eq 'add_form') {
 	}
 	$template->param(loop => \@loop);
 	# check that I (institution) and C (child) exists. otherwise => warning to the user
-	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("select category_type from categories where category_type='C'");
+    $sth=$dbh->prepare("select category_type from categories where category_type='C'");
 	$sth->execute;
 	my ($categoryChild) = $sth->fetchrow;
 	$template->param(categoryChild => $categoryChild);

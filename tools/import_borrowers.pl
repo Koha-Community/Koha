@@ -304,7 +304,7 @@ if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
 } else {
     if ($extended) {
         my @matchpoints = ();
-        my @attr_types = C4::Members::AttributeTypes::GetAttributeTypes();
+        my @attr_types = C4::Members::AttributeTypes::GetAttributeTypes(undef, 1);
         foreach my $type (@attr_types) {
             my $attr_type = C4::Members::AttributeTypes->fetch($type->{code});
             if ($attr_type->unique_id()) {

@@ -69,12 +69,24 @@ If $all_fields is true, then each hashref also contains the other fields from bo
 =cut
 
 sub GetAttributeTypes {
-    my ($all) = @_;
-    my $select = $all ? '*' : 'code, description, class';
+    my $all    = @_   ? shift : 0;
+    my $no_branch_limit = @_ ? shift : 0;
+    my $branch_limit = $no_branch_limit
+        ? 0
+        : C4::Context->userenv ? C4::Context->userenv->{"branch"} : 0;
+    my $select = $all ? '*'   : 'DISTINCT(code), description';
+
     my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("SELECT $select FROM borrower_attribute_types ORDER by code");
-    $sth->execute();
+    my $query = "SELECT $select FROM borrower_attribute_types";
+    $query .= qq{
+        LEFT JOIN borrower_attribute_types_branches ON bat_code = code
+        WHERE b_branchcode = ? OR b_branchcode IS NULL
+    } if $branch_limit;
+    $query .= " ORDER BY code";
+    my $sth    = $dbh->prepare($query);
+    $sth->execute( $branch_limit ? $branch_limit : () );
     my $results = $sth->fetchall_arrayref({});
+    $sth->finish;
     return @$results;
 }
 
@@ -166,6 +178,13 @@ sub fetch {
     $self->{'category_description'}      = $row->{'category_description'};
     $self->{'class'}                     = $row->{'class'};
 
+    $sth = $dbh->prepare("SELECT branchcode, branchname FROM borrower_attribute_types_branches, branches WHERE b_branchcode = branchcode AND bat_code = ?;");
+    $sth->execute( $code );
+    while ( my $data = $sth->fetchrow_hashref ) {
+        push @{ $self->{branches} }, $data;
+    }
+    $sth->finish();
+
     bless $self, $class;
     return $self;
 }
@@ -219,6 +238,22 @@ sub store {
     $sth->bind_param(11, $self->{'code'});
     $sth->execute;
 
+    if ( defined $$self{branches} ) {
+        $sth = $dbh->prepare("DELETE FROM borrower_attribute_types_branches WHERE bat_code = ?");
+        $sth->execute( $$self{code} );
+        $sth = $dbh->prepare(
+            "INSERT INTO borrower_attribute_types_branches
+                        ( bat_code, b_branchcode )
+                        VALUES ( ?, ? )"
+        );
+        for my $branchcode ( @{$$self{branches}} ) {
+            next if not $branchcode;
+            $sth->bind_param( 1, $$self{code} );
+            $sth->bind_param( 2, $branchcode );
+            $sth->execute;
+        }
+    }
+    $sth->finish;
 }
 
 =head2 code
@@ -248,6 +283,20 @@ Accessor.
 sub description {
     my $self = shift;
     @_ ? $self->{'description'} = shift : $self->{'description'};
+}
+
+=head2 branches
+
+my $branches = $attr_type->branches();
+$attr_type->branches($branches);
+
+Accessor.
+
+=cut
+
+sub branches {
+    my $self = shift;
+    @_ ? $self->{branches} = shift : $self->{branches};
 }
 
 =head2 repeatable
@@ -324,12 +373,8 @@ sub staff_searchable {
 
 =head2 display_checkout
 
-=over 4
-
 my $display_checkout = $attr_type->display_checkout();
 $attr_type->display_checkout($display_checkout);
-
-=back
 
 Accessor.  The C<$display_checkout> argument
 is interpreted as a Perl boolean.
@@ -357,12 +402,8 @@ sub authorised_value_category {
 
 =head2 category_code
 
-=over 4
-
 my $category_code = $attr_type->category_code();
 $attr_type->category_code($category_code);
-
-=back
 
 Accessor.
 
@@ -375,12 +416,8 @@ sub category_code {
 
 =head2 category_description
 
-=over 4
-
 my $category_description = $attr_type->category_description();
 $attr_type->category_description($category_description);
-
-=back
 
 Accessor.
 
@@ -393,12 +430,8 @@ sub category_description {
 
 =head2 class
 
-=over 4
-
 my $class = $attr_type->class();
 $attr_type->class($class);
-
-=back
 
 Accessor.
 
@@ -432,6 +465,7 @@ sub delete {
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare_cached("DELETE FROM borrower_attribute_types WHERE code = ?");
     $sth->execute($code);
+    $sth->finish;
 }
 
 =head2 num_patrons

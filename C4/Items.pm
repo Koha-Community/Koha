@@ -2602,7 +2602,20 @@ sub PrepareItemrecordDisplay {
         $itemrecord = C4::Items::GetMarcItem( $bibnum, $itemnum );
     }
     my @loop_data;
-    my $authorised_values_sth = $dbh->prepare( "SELECT authorised_value,lib FROM authorised_values WHERE category=? ORDER BY lib" );
+
+    my $branch_limit = C4::Context->userenv ? C4::Context->userenv->{"branch"} : "";
+    my $query = qq{
+        SELECT authorised_value,lib FROM authorised_values
+    };
+    $query .= qq{
+        LEFT JOIN authorised_values_branches ON ( id = av_id )
+    } if $branch_limit;
+    $query .= qq{
+        WHERE category = ?
+    };
+    $query .= qq{ AND ( branchcode = ? OR branchcode IS NULL )} if $branch_limit;
+    $query .= qq{ ORDER BY lib};
+    my $authorised_values_sth = $dbh->prepare( $query );
     foreach my $tag ( sort keys %{$tagslib} ) {
         my $previous_tag = '';
         if ( $tag ne '' ) {
@@ -2734,7 +2747,10 @@ sub PrepareItemrecordDisplay {
 
                         #---- "true" authorised value
                     } else {
-                        $authorised_values_sth->execute( $tagslib->{$tag}->{$subfield}->{authorised_value} );
+                        $authorised_values_sth->execute(
+                            $tagslib->{$tag}->{$subfield}->{authorised_value},
+                            $branch_limit ? $branch_limit : ()
+                        );
                         push @authorised_values, ""
                           unless ( $tagslib->{$tag}->{$subfield}->{mandatory} );
                         while ( my ( $value, $lib ) = $authorised_values_sth->fetchrow_array ) {

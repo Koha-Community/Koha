@@ -71,6 +71,7 @@ marked for OPAC display are returned.
 sub GetBorrowerAttributes {
     my $borrowernumber = shift;
     my $opac_only = @_ ? shift : 0;
+    my $branch_limit = @_ ? shift : 0;
 
     my $dbh = C4::Context->dbh();
     my $query = "SELECT code, description, attribute, lib, password, display_checkout, category_code, class
@@ -95,6 +96,7 @@ sub GetBorrowerAttributes {
             class             => $row->{'class'},
         }
     }
+    $sth->finish;
     return \@results;
 }
 

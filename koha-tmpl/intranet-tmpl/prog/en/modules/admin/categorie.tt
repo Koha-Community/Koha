@@ -14,6 +14,10 @@
 		headers: { 11: { sorter: false}}
 	}).tablesorterPager({container: $("#pagertable_categorie"),positionFixed: false,size: 20});
     $( "#enrolmentperioddate" ).datepicker({ minDate: 1 }); // Require that "until date" be in the future
+
+    if ( $("#branches option:selected").length < 1 ) {
+        $("#branches option:first").attr("selected", "selected");
+    }
 }); </script>
 <script type="text/javascript">
 //<![CDATA[
@@ -179,7 +183,22 @@
 					[% IF ( type_P ) %]<option value="P" selected="selected">Professional</option>[% ELSE %]<option value="P">Professional</option>[% END %]
 					[% IF ( type_X ) %]<option value="X" selected="selected">Statistical</option>[% ELSE %]<option value="X">Statistical</option>[% END %]
 					</select>
-	</li></ol>
+    </li>
+    <li><label for="branches">Branches limitation: </label>
+        <select id="branches" name="branches" multiple size="10">
+            <option value="">All branches</option>
+            [% FOREACH branch IN branches_loop %]
+              [% IF ( branch.selected ) %]
+                <option selected="selected" value="[% branch.branchcode %]">[% branch.branchname %]</option>
+              [% ELSE %]
+                <option value="[% branch.branchcode %]">[% branch.branchname %]</option>
+              [% END %]
+            [% END %]
+        </select>
+        <span>Select All if this category type must to be displayed all the time. Otherwise select librairies you want to associate with this value.
+        </span>
+    </li>
+    </ol>
 </fieldset>
 
     [% IF ( EnhancedMessagingPreferences ) %]
@@ -292,6 +311,7 @@ Confirm deletion of category [% categorycode |html %][% END %]</legend>
             [% IF ( EnhancedMessagingPreferences ) %]
             <th scope="col">Messaging</th>
             [% END %]
+            <th scope="col">Branches limitations</th>
 			<th scope="col" colspan="2">&nbsp; </th>
 		</thead>
 		[% FOREACH loo IN loop %]
@@ -345,6 +365,17 @@ Confirm deletion of category [% categorycode |html %][% END %]</legend>
                             [% END %]
                         </td>
                         [% END %]
+                        <td>
+                            [% IF loo.branches.size > 0 %]
+                                [% branches_str = "" %]
+                                [% FOREACH branch IN loo.branches %]
+                                    [% branches_str = branches_str _ " " _ branch.branchname _ "(" _ branch.branchcode _ ")" %]
+                                [% END %]
+                                <span title="[% branches_str %]">[% loo.branches.size %] branches limitations</span>
+                            [% ELSE %]
+                                No limitation
+                            [% END %]
+                        </td>
                         <td><a href="[% loo.script_name %]?op=add_form&amp;categorycode=[% loo.categorycode |uri %]">Edit</a></td>
                         <td><a href="[% loo.script_name %]?op=delete_confirm&amp;categorycode=[% loo.categorycode |uri %]">Delete</a></td>
 		</tr>
