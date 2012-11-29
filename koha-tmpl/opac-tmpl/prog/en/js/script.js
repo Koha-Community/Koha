@@ -7,35 +7,12 @@ function Dopop(link) {
 	newin=window.open(link,'popup','width=500,height=400,toolbar=false,scrollbars=yes,resizeable=yes');
 }
 
-$.datepicker.setDefaults({
-        showOn: "both",
-        changeMonth: true,
-        changeYear: true,
-        buttonImage: '/opac-tmpl/lib/famfamfam/silk/calendar.png',
-        buttonImageOnly: true,
-        showButtonPanel: true
-    });
-
 $(document).ready(function(){
 	$(".close").click(function(){
 		window.close();
 	});
 	$(".focus").focus();
-    $( ".datepicker" ).datepicker();
-    // http://jqueryui.com/demos/datepicker/#date-range
-    var dates = $( ".datepickerfrom, .datepickerto" ).datepicker({
-        changeMonth: true,
-        numberOfMonths: 1,
-        onSelect: function( selectedDate ) {
-            var option = this.id == "from" ? "minDate" : "maxDate",
-                instance = $( this ).data( "datepicker" );
-                date = $.datepicker.parseDate(
-                    instance.settings.dateFormat ||
-                    $.datepicker._defaults.dateFormat,
-                    selectedDate, instance.settings );
-            dates.not( this ).datepicker( "option", option, date );
-        }
-    });
+
 	// clear the basket when user logs out
 	$("#logout").click(function(){
 		var nameCookie = "bib_list";
