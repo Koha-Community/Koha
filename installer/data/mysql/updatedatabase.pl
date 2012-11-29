@@ -1,3 +1,4 @@
+
 #!/usr/bin/perl
 
 # Database Updater
@@ -6414,6 +6415,12 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.11.00.XXX";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('UNIMARCField100Language', 'fre','UNIMARC field 100 default language',NULL,'short')");
+    print "Upgrade to $DBversion done (Bug 8347 - Koha forces UNIMARC 100 field code language to 'fre')\n";
+    SetVersion($DBversion);
+}
 
 =head1 FUNCTIONS
 
