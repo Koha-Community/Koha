@@ -293,9 +293,30 @@ sub exists_local {
 	return 0;
 }
 
+# This function performs a password update, given the userid, borrowerid,
+# and digested password. It will verify that things are correct and return the
+# borrowers cardnumber. The idea is that it is used to keep the local
+# passwords in sync with the LDAP passwords.
+#
+#   $cardnum = _do_changepassword($userid, $borrowerid, $digest)
+#
+# Note: if the LDAP config has the update_password tag set to a false value,
+# then this will not update the password, it will simply return the cardnumber.
 sub _do_changepassword {
     my ($userid, $borrowerid, $password) = @_;
 
+    if ( exists( $ldap->{update_password} ) && !$ldap->{update_password} ) {
+
+        # We don't store the password in the database
+        my $sth = C4::Context->dbh->prepare(
+            'SELECT cardnumber FROM borrowers WHERE borrowernumber=?');
+        $sth->execute($borrowerid);
+        die
+"Unable to access borrowernumber with userid=$userid, borrowernumber=$borrowerid"
+          if !$sth->rows;
+        my ($cardnum) = $sth->fetchrow;
+        return $cardnum;
+    }
     my $digest = hash_password($password);
 
     $debug and print STDERR "changing local password for borrowernumber=$borrowerid to '$digest'\n";
@@ -455,7 +476,8 @@ Example XML stanza for LDAP configuration in KOHA_CONF.
     <principal_name>%s@my_domain.com</principal_name>
                                    <!-- optional, for auth_by_bind: a printf format to make userPrincipalName from koha userid.
                                         Not used with anonymous_bind. -->
-
+    <update_password>1</update_password> <!-- set to 0 if you don't want LDAP passwords
+                                              synced to the local database -->
     <mapping>                  <!-- match koha SQL field names to your LDAP record field names -->
       <firstname    is="givenname"      ></firstname>
       <surname      is="sn"             ></surname>
@@ -512,6 +534,14 @@ Even though the userPrincipalName is one intended target, any uniquely identifyi
 attribute that the server allows to be used for binding could be used.
 
 Currently, principal_name only operates when auth_by_bind is enabled.
+
+=head2 update_password
+
+If this tag is left out or set to a true value, then the user's LDAP password
+will be stored (hashed) in the local Koha database. If you don't want this
+to happen, then set the value of this to '0'. Note that if passwords are not
+stored locally, and the connection to the LDAP system fails, then the users
+will not be able to log in at all.
 
 =head2 Active Directory 
 
