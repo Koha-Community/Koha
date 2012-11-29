@@ -1144,6 +1144,69 @@ sub BuildSummary {
     return \%summary;
 }
 
+=head2 GetAuthorizedHeading
+
+  $heading = &GetAuthorizedHeading({ record => $record, authid => $authid })
+
+Takes a MARC::Record object describing an authority record or an authid, and
+returns a string representation of the first authorized heading. This routine
+should be considered a temporary shim to ease the future migration of authority
+data from C4::AuthoritiesMarc to the object-oriented Koha::*::Authority.
+
+=cut
+
+sub GetAuthorizedHeading {
+    my $args = shift;
+    my $record;
+    unless ($record = $args->{record}) {
+        return unless $args->{authid};
+        $record = GetAuthority($args->{authid});
+    }
+    if (C4::Context->preference('marcflavour') eq 'UNIMARC') {
+# construct UNIMARC summary, that is quite different from MARC21 one
+# accepted form
+        foreach my $field ($record->field('2..')) {
+            return $field->as_string('abcdefghijlmnopqrstuvwxyz');
+        }
+    } else {
+        foreach my $field ($record->field('1..')) {
+            my $tag = $field->tag();
+            next if "152" eq $tag;
+# FIXME - 152 is not a good tag to use
+# in MARC21 -- purely local tags really ought to be
+# 9XX
+            if ($tag eq '100') {
+                return $field->as_string('abcdefghjklmnopqrstvxyz68');
+            } elsif ($tag eq '110') {
+                return $field->as_string('abcdefghklmnoprstvxyz68');
+            } elsif ($tag eq '111') {
+                return $field->as_string('acdefghklnpqstvxyz68');
+            } elsif ($tag eq '130') {
+                return $field->as_string('adfghklmnoprstvxyz68');
+            } elsif ($tag eq '148') {
+                return $field->as_string('abvxyz68');
+            } elsif ($tag eq '150') {
+                return $field->as_string('abvxyz68');
+            } elsif ($tag eq '151') {
+                return $field->as_string('avxyz68');
+            } elsif ($tag eq '155') {
+                return $field->as_string('abvxyz68');
+            } elsif ($tag eq '180') {
+                return $field->as_string('vxyz68');
+            } elsif ($tag eq '181') {
+                return $field->as_string('vxyz68');
+            } elsif ($tag eq '182') {
+                return $field->as_string('vxyz68');
+            } elsif ($tag eq '185') {
+                return $field->as_string('vxyz68');
+            } else {
+                return $field->as_string();
+            }
+        }
+    }
+    return;
+}
+
 =head2 BuildUnimarcHierarchies
 
   $text= &BuildUnimarcHierarchies( $authid, $force)
