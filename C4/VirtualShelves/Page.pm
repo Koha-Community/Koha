@@ -262,7 +262,7 @@ sub shelfpage {
                     #$this_item->{imageurl} = $imgdir."/".$itemtypes->{ $this_item->{itemtype}  }->{'imageurl'};
                     #$this_item->{'description'} = $itemtypes->{ $this_item->{itemtype} }->{'description'};
                     $this_item->{'dateadded'} = format_date( $this_item->{'dateadded'} );
-                    $this_item->{'imageurl'}  = getitemtypeinfo( $this_item->{'itemtype'} )->{'imageurl'};
+                    $this_item->{'imageurl'}  = getitemtypeinfo( $this_item->{'itemtype'}, $type )->{'imageurl'};
                     $this_item->{'coins'}     = GetCOinSBiblio( $record );
                     $this_item->{'subtitle'} = GetRecordValue('subtitle', $record, GetFrameworkCode($this_item->{'biblionumber'}));
                     $this_item->{'normalized_upc'}  = GetNormalizedUPC(       $record,$marcflavour);
