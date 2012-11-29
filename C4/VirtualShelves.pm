@@ -460,7 +460,7 @@ sub ShelfPossibleAction {
 
     my $dbh = C4::Context->dbh;
     my $query = qq/
-        SELECT IFNULL(owner,0) AS owner, category, allow_add, allow_delete_own, allow_delete_other, IFNULL(sh.borrowernumber,0) AS borrowernumber
+        SELECT COALESCE(owner,0) AS owner, category, allow_add, allow_delete_own, allow_delete_other, COALESCE(sh.borrowernumber,0) AS borrowernumber
         FROM virtualshelves vs
         LEFT JOIN virtualshelfshares sh ON sh.shelfnumber=vs.shelfnumber
         AND sh.borrowernumber=?
