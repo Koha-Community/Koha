@@ -5717,110 +5717,6 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion($DBversion);
 }
 
-$DBversion = '3.09.00.XXX';
-if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-    $dbh->do("
-        CREATE TABLE IF NOT EXISTS `borrower_modifications` (
-          `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-          `verification_token` varchar(255) NOT NULL DEFAULT '',
-          `borrowernumber` int(11) NOT NULL DEFAULT '0',
-          `cardnumber` varchar(16) DEFAULT NULL,
-          `surname` mediumtext,
-          `firstname` text,
-          `title` mediumtext,
-          `othernames` mediumtext,
-          `initials` text,
-          `streetnumber` varchar(10) DEFAULT NULL,
-          `streettype` varchar(50) DEFAULT NULL,
-          `address` mediumtext,
-          `address2` text,
-          `city` mediumtext,
-          `state` text,
-          `zipcode` varchar(25) DEFAULT NULL,
-          `country` text,
-          `email` mediumtext,
-          `phone` text,
-          `mobile` varchar(50) DEFAULT NULL,
-          `fax` mediumtext,
-          `emailpro` text,
-          `phonepro` text,
-          `B_streetnumber` varchar(10) DEFAULT NULL,
-          `B_streettype` varchar(50) DEFAULT NULL,
-          `B_address` varchar(100) DEFAULT NULL,
-          `B_address2` text,
-          `B_city` mediumtext,
-          `B_state` text,
-          `B_zipcode` varchar(25) DEFAULT NULL,
-          `B_country` text,
-          `B_email` text,
-          `B_phone` mediumtext,
-          `dateofbirth` date DEFAULT NULL,
-          `branchcode` varchar(10) DEFAULT NULL,
-          `categorycode` varchar(10) DEFAULT NULL,
-          `dateenrolled` date DEFAULT NULL,
-          `dateexpiry` date DEFAULT NULL,
-          `gonenoaddress` tinyint(1) DEFAULT NULL,
-          `lost` tinyint(1) DEFAULT NULL,
-          `debarred` date DEFAULT NULL,
-          `debarredcomment` varchar(255) DEFAULT NULL,
-          `contactname` mediumtext,
-          `contactfirstname` text,
-          `contacttitle` text,
-          `guarantorid` int(11) DEFAULT NULL,
-          `borrowernotes` mediumtext,
-          `relationship` varchar(100) DEFAULT NULL,
-          `ethnicity` varchar(50) DEFAULT NULL,
-          `ethnotes` varchar(255) DEFAULT NULL,
-          `sex` varchar(1) DEFAULT NULL,
-          `password` varchar(30) DEFAULT NULL,
-          `flags` int(11) DEFAULT NULL,
-          `userid` varchar(75) DEFAULT NULL,
-          `opacnote` mediumtext,
-          `contactnote` varchar(255) DEFAULT NULL,
-          `sort1` varchar(80) DEFAULT NULL,
-          `sort2` varchar(80) DEFAULT NULL,
-          `altcontactfirstname` varchar(255) DEFAULT NULL,
-          `altcontactsurname` varchar(255) DEFAULT NULL,
-          `altcontactaddress1` varchar(255) DEFAULT NULL,
-          `altcontactaddress2` varchar(255) DEFAULT NULL,
-          `altcontactaddress3` varchar(255) DEFAULT NULL,
-          `altcontactstate` text,
-          `altcontactzipcode` varchar(50) DEFAULT NULL,
-          `altcontactcountry` text,
-          `altcontactphone` varchar(50) DEFAULT NULL,
-          `smsalertnumber` varchar(50) DEFAULT NULL,
-          `privacy` int(11) DEFAULT NULL,
-          PRIMARY KEY (`verification_token`,`borrowernumber`),
-          KEY `verification_token` (`verification_token`),
-          KEY `borrowernumber` (`borrowernumber`)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-");
-
-    $dbh->do("
-        INSERT INTO systempreferences (`variable`, `value`, `options`, `explanation`, `type`) VALUES
-        ('PatronSelfRegistration', '0', NULL, 'If enabled, patrons will be able to register themselves via the OPAC.', 'YesNo'),
-        ('PatronSelfRegistrationVerifyByEmail', '0', NULL, 'If enabled, any patron attempting to register themselves via the OPAC will be required to verify themselves via email to activate his or her account.', 'YesNo'),
-        ('PatronSelfRegistrationDefaultCategory', '', '', 'A patron registered via the OPAC will receive a borrower category code set in this system preference.', 'free'),
-        ('PatronSelfRegistrationExpireTemporaryAccountsDelay', '0', NULL, 'If PatronSelfRegistrationDefaultCategory is enabled, this system preference controls how long a patron can have a temporary status before the account is deleted automatically. It is an integer value representing a number of days to wait before deleting a temporary patron account. Setting it to 0 disables the deleting of temporary accounts.', 'Integer'),
-        ('PatronSelfRegistrationBorrowerMandatoryField',  'surname|firstname', NULL ,  'Choose the mandatory fields for a patron''s account, when registering via the OPAC.',  'free'),
-        ('PatronSelfRegistrationBorrowerUnwantedField',  '', NULL ,  'Name the fields you don''t want to display when registering a new patron via the OPAC.',  'free');
-    ");
-
-    $dbh->do("
-    INSERT INTO  letter ( `module`, `code`, `branchcode`, `name`, `is_html`, `title`, `content` )
-    VALUES ( 'members', 'OPAC_REG_VERIFY', '', 'Opac Self-Registration Verification Email', '1', 'Verify Your Account', 'Hello!
-
-    Your library account has been created. Please verify your email address by clicking this link to complete the signup process:
-
-    http://<<OPACBaseURL>>/cgi-bin/koha/opac-registration-verify.pl?token=<<borrower_modifications.verification_token>>
-
-    If you did not initiate this request, you may safely ignore this one-time message. The request will expire shortly.'
-    )");
-
-    print "Upgrade to $DBversion done (Add Patron Self Registration)\n";
-    SetVersion ($DBversion);
-}
-
 $DBversion ="3.09.00.038";
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     $dbh->do("ALTER TABLE borrower_attributes CHANGE  attribute  attribute VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL");
@@ -6282,6 +6178,110 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("INSERT INTO language_descriptions (subtag, type, lang, description) VALUES( 'uk', 'language', 'de', 'Ukrainisch')");
     $dbh->do("INSERT INTO language_descriptions (subtag, type, lang, description) VALUES( 'ur', 'language', 'fr', 'Ourdou')");
     $dbh->do("INSERT INTO language_descriptions (subtag, type, lang, description) VALUES( 'ur', 'language', 'de', 'Urdu')");
+    SetVersion ($DBversion);
+}
+
+$DBversion = '3.11.00.XXX';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("
+        CREATE TABLE IF NOT EXISTS `borrower_modifications` (
+          `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+          `verification_token` varchar(255) NOT NULL DEFAULT '',
+          `borrowernumber` int(11) NOT NULL DEFAULT '0',
+          `cardnumber` varchar(16) DEFAULT NULL,
+          `surname` mediumtext,
+          `firstname` text,
+          `title` mediumtext,
+          `othernames` mediumtext,
+          `initials` text,
+          `streetnumber` varchar(10) DEFAULT NULL,
+          `streettype` varchar(50) DEFAULT NULL,
+          `address` mediumtext,
+          `address2` text,
+          `city` mediumtext,
+          `state` text,
+          `zipcode` varchar(25) DEFAULT NULL,
+          `country` text,
+          `email` mediumtext,
+          `phone` text,
+          `mobile` varchar(50) DEFAULT NULL,
+          `fax` mediumtext,
+          `emailpro` text,
+          `phonepro` text,
+          `B_streetnumber` varchar(10) DEFAULT NULL,
+          `B_streettype` varchar(50) DEFAULT NULL,
+          `B_address` varchar(100) DEFAULT NULL,
+          `B_address2` text,
+          `B_city` mediumtext,
+          `B_state` text,
+          `B_zipcode` varchar(25) DEFAULT NULL,
+          `B_country` text,
+          `B_email` text,
+          `B_phone` mediumtext,
+          `dateofbirth` date DEFAULT NULL,
+          `branchcode` varchar(10) DEFAULT NULL,
+          `categorycode` varchar(10) DEFAULT NULL,
+          `dateenrolled` date DEFAULT NULL,
+          `dateexpiry` date DEFAULT NULL,
+          `gonenoaddress` tinyint(1) DEFAULT NULL,
+          `lost` tinyint(1) DEFAULT NULL,
+          `debarred` date DEFAULT NULL,
+          `debarredcomment` varchar(255) DEFAULT NULL,
+          `contactname` mediumtext,
+          `contactfirstname` text,
+          `contacttitle` text,
+          `guarantorid` int(11) DEFAULT NULL,
+          `borrowernotes` mediumtext,
+          `relationship` varchar(100) DEFAULT NULL,
+          `ethnicity` varchar(50) DEFAULT NULL,
+          `ethnotes` varchar(255) DEFAULT NULL,
+          `sex` varchar(1) DEFAULT NULL,
+          `password` varchar(30) DEFAULT NULL,
+          `flags` int(11) DEFAULT NULL,
+          `userid` varchar(75) DEFAULT NULL,
+          `opacnote` mediumtext,
+          `contactnote` varchar(255) DEFAULT NULL,
+          `sort1` varchar(80) DEFAULT NULL,
+          `sort2` varchar(80) DEFAULT NULL,
+          `altcontactfirstname` varchar(255) DEFAULT NULL,
+          `altcontactsurname` varchar(255) DEFAULT NULL,
+          `altcontactaddress1` varchar(255) DEFAULT NULL,
+          `altcontactaddress2` varchar(255) DEFAULT NULL,
+          `altcontactaddress3` varchar(255) DEFAULT NULL,
+          `altcontactstate` text,
+          `altcontactzipcode` varchar(50) DEFAULT NULL,
+          `altcontactcountry` text,
+          `altcontactphone` varchar(50) DEFAULT NULL,
+          `smsalertnumber` varchar(50) DEFAULT NULL,
+          `privacy` int(11) DEFAULT NULL,
+          PRIMARY KEY (`verification_token`,`borrowernumber`),
+          KEY `verification_token` (`verification_token`),
+          KEY `borrowernumber` (`borrowernumber`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+");
+
+    $dbh->do("
+        INSERT INTO systempreferences (`variable`, `value`, `options`, `explanation`, `type`) VALUES
+        ('PatronSelfRegistration', '0', NULL, 'If enabled, patrons will be able to register themselves via the OPAC.', 'YesNo'),
+        ('PatronSelfRegistrationVerifyByEmail', '0', NULL, 'If enabled, any patron attempting to register themselves via the OPAC will be required to verify themselves via email to activate his or her account.', 'YesNo'),
+        ('PatronSelfRegistrationDefaultCategory', '', '', 'A patron registered via the OPAC will receive a borrower category code set in this system preference.', 'free'),
+        ('PatronSelfRegistrationExpireTemporaryAccountsDelay', '0', NULL, 'If PatronSelfRegistrationDefaultCategory is enabled, this system preference controls how long a patron can have a temporary status before the account is deleted automatically. It is an integer value representing a number of days to wait before deleting a temporary patron account. Setting it to 0 disables the deleting of temporary accounts.', 'Integer'),
+        ('PatronSelfRegistrationBorrowerMandatoryField',  'surname|firstname', NULL ,  'Choose the mandatory fields for a patron''s account, when registering via the OPAC.',  'free'),
+        ('PatronSelfRegistrationBorrowerUnwantedField',  '', NULL ,  'Name the fields you don''t want to display when registering a new patron via the OPAC.',  'free');
+    ");
+
+    $dbh->do("
+    INSERT INTO  letter ( `module`, `code`, `branchcode`, `name`, `is_html`, `title`, `content` )
+    VALUES ( 'members', 'OPAC_REG_VERIFY', '', 'Opac Self-Registration Verification Email', '1', 'Verify Your Account', 'Hello!
+
+    Your library account has been created. Please verify your email address by clicking this link to complete the signup process:
+
+    http://<<OPACBaseURL>>/cgi-bin/koha/opac-registration-verify.pl?token=<<borrower_modifications.verification_token>>
+
+    If you did not initiate this request, you may safely ignore this one-time message. The request will expire shortly.'
+    )");
+
+    print "Upgrade to $DBversion done (Add Patron Self Registration)\n";
     SetVersion ($DBversion);
 }
 
