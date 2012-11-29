@@ -72,7 +72,7 @@
 <ul>
     <li>The &lt;&lt; and &gt;&gt; are just delimiters. You must put &lt;&lt; at the beginning and &gt;&gt; at the end of your parameter</li>
     <li>The 'Question to ask' will be displayed on the left of the string to enter.</li>
-    <li>The authorized_value can be omitted if not applicable. If it contains an authorized value category, or branches or itemtype or categorycode, a list with the Koha authorized values will be displayed instead of a free field Note that you can have more than one parameter in a given SQL Note that entering nothing at run time won't probably work as you expect. It will be considered as "value empty" not as "ignore this parameter". For example entering nothing for : "title=&lt;&lt;Enter title&gt;&gt;" will display results with title='' (no title). If you want to have to have something not mandatory, use "title like &lt;&lt;Enter title&gt;&gt;" and enter a % at run time instead of nothing</li>
+    <li>The authorized_value can be omitted if not applicable. If it contains an authorized value category, or libraries or itemtype or categorycode, a list with the Koha authorized values will be displayed instead of a free field Note that you can have more than one parameter in a given SQL Note that entering nothing at run time won't probably work as you expect. It will be considered as "value empty" not as "ignore this parameter". For example entering nothing for : "title=&lt;&lt;Enter title&gt;&gt;" will display results with title='' (no title). If you want to have to have something not mandatory, use "title like &lt;&lt;Enter title&gt;&gt;" and enter a % at run time instead of nothing</li>
 </ul>
 <p>Examples:</p>
 <ul>
@@ -81,12 +81,12 @@ FROM borrowers <br />
 WHERE branchcode=&lt;&lt;Enter patrons library|branches&gt;&gt; AND surname like &lt;&lt;Enter filter for patron surname (% if none)&gt;&gt;</li>
     <li>SELECT * <br />
 FROM items <br />
-WHERE homebranch = &lt;&lt;Pick your branch|branches&gt;&gt; AND barcode like &lt;&lt;Partial barcode value here&gt;&gt;</li>
+WHERE homebranch = &lt;&lt;Pick your library|branches&gt;&gt; AND barcode like &lt;&lt;Partial barcode value here&gt;&gt;</li>
 </ul>
 </li>
     <li>Tip: To generate a date picker calendar to the right of the field when running a report you can use the 'date' keyword like this: &lt;&lt;Enter Date|date&gt;&gt;</li>
     <li>Tip: You have to put "%" in a text box to 'leave it blank'. Otherwise, it literally looks for "" (empty string) as the value for the field.</li>
-    <li style="color: #990000">Important: In addition to using any authorized value code to generate a dropdown, you can use the following values as well: Branches (branches), Item Types (itemtypes) and Patron Categories (categorycode). For example a branch pull down would be generated like this &lt;&lt;Branch|branches&gt;&gt;</li>
+    <li style="color: #990000">Important: In addition to using any authorized value code to generate a dropdown, you can use the following values as well: Libraries (branches), Item Types (itemtypes) and Patron Categories (categorycode). For example a library pull down would be generated like this &lt;&lt;Library|branches&gt;&gt;</li>
 </ul>
 
 <p>Note: There is a limit of 10,000 records put on SQL statements entered in Koha. To get around this you want to add 'LIMIT 100000' to the end of your SQL statement (or any other number above 10,000.</p>
