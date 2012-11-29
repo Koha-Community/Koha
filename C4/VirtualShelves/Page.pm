@@ -214,7 +214,6 @@ sub shelfpage {
                 my $member = GetMember( 'borrowernumber' => $owner );
                 my $ownername = defined($member) ? $member->{firstname} . " " . $member->{surname} : '';
                 $edit = 1;
-                $sortfield='' unless $sortfield;
                 $template->param(
                     edit                => 1,
                     display             => $displaymode,
@@ -224,7 +223,7 @@ sub shelfpage {
                     ownername           => $ownername,
                     "category$category" => 1,
                     category            => $category,
-                    "sort_$sortfield"   => 1,
+                    sortfield           => $sortfield,
                     allow_add           => $allow_add,
                     allow_delete_own    => $allow_delete_own,
                     allow_delete_other  => $allow_delete_other,
@@ -248,17 +247,9 @@ sub shelfpage {
             #check that the user can view the shelf
             if ( ShelfPossibleAction( $loggedinuser, $shelfnumber, 'view' ) ) {
                 my $items;
-                my $authorsort;
-                my $yearsort;
                 my $tag_quantity;
                 my $sortfield = ( $sorton ? $sorton : 'title' );
-                if ( $sortfield eq 'author' ) {
-                    $authorsort = 'author';
-                }
-                if ( $sortfield eq 'year' ) {
-                    $yearsort = 'year';
-                }
-                ( $items, $totitems ) = GetShelfContents( $shelfnumber, $shelflimit, $shelfoffset, $sortfield eq 'year' ? 'copyrightdate' : $sortfield );
+                ( $items, $totitems ) = GetShelfContents( $shelfnumber, $shelflimit, $shelfoffset, $sortfield );
                 for my $this_item (@$items) {
                     my $biblionumber = $this_item->{'biblionumber'};
                     my $record = GetMarcBiblio($biblionumber);
@@ -302,9 +293,7 @@ sub shelfpage {
                     shelfname           => $shelfname,
                     shelfnumber         => $shelfnumber,
                     viewshelf           => $shelfnumber,
-                    authorsort          => $authorsort,
-                    yearsort            => $yearsort,
-                    itemcallnumbersort  => $sortfield eq 'itemcallnumber',
+                    sortfield           => $sortfield,
                     manageshelf         => $manageshelf,
                     allowremovingitems  => ShelfPossibleAction( $loggedinuser, $shelfnumber, 'delete'),
                     allowaddingitem     => ShelfPossibleAction( $loggedinuser, $shelfnumber, 'add'),
@@ -413,16 +402,6 @@ sub shelfpage {
         my $category  = $shelflist->{$element}->{'category'};
         my $owner     = $shelflist->{$element}->{'owner'}||0;
         my $canmanage = ShelfPossibleAction( $loggedinuser, $element, 'manage' );
-        my $sortfield = $shelflist->{$element}->{'sortfield'};
-        if ( $sortfield ){
-            if ( $sortfield eq 'author' ) {
-                $shelflist->{$element}->{"authorsort"} = 'author';
-            } elsif ( $sortfield eq 'year' ) {
-                $shelflist->{$element}->{"yearsort"} = 'year';
-            } elsif ( $sortfield eq 'itemcallnumber' ) {
-                $shelflist->{$element}->{"itemcallnumbersort"} = 'itemcallnumber';
-            }
-        }
         $shelflist->{$element}->{"viewcategory$category"} = 1;
         $shelflist->{$element}->{manageshelf} = $canmanage;
         if($canmanage || ($loggedinuser && $owner==$loggedinuser)) {

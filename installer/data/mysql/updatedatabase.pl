@@ -6125,6 +6125,15 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.11.00.XXX";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do(q{
+        UPDATE virtualshelves SET sortfield="copyrightdate" where sortfield="year";
+    });
+    print "Upgrade to $DBversion done (Bug 9167: Update the virtualshelves.sortfield column with 'copyrightdate' if needed)\n";
+    SetVersion ($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)
