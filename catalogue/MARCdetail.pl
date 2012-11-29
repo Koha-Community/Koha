@@ -82,7 +82,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-my $record = GetMarcBiblio($biblionumber);
+my $record = GetMarcBiblio($biblionumber, 1);
 
 if ( not defined $record ) {
     # biblionumber invalid -> report and exit
