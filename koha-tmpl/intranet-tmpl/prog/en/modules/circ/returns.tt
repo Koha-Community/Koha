@@ -332,6 +332,11 @@ $(document).ready(function () {
                     [% END %]
                     [% IF ( errmsgloo.waslost ) %]
                         <p class="problem">Item was lost, now found.</p>
+                        [% IF ( LostItemFeeRefunded ) %]
+                            <p class="problem">A refund has been applied to the borrowing patron's account.</p>
+                        [% ELSE %]
+                            <p class="problem">Any lost item fees for this item will remain on the patron's account</p>
+                        [% END %]
                     [% END %]
                     [% IF ( errmsgloo.withdrawn ) %]
                         [% IF BlockReturnOfWithdrawnItems %]

@@ -452,6 +452,12 @@ Circulation:
                   test: Calculate (but only for mailing to the admin)
                   production: Calculate and charge
             - fines (when <code>misc/cronjobs/fines.pl</code> is being run).
+        -
+            - pref: RefundLostItemFeeOnReturn
+              choices:
+                  yes: Refund
+                  no: "Don't refund"
+            - lost item fees charged to a borrower when the lost item is returned.
     Self Checkout:
         -
             - pref: ShowPatronImageInWebBasedSelfCheck
