@@ -6103,7 +6103,7 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.11.00.XXX";
+$DBversion = "3.11.00.004";
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     $dbh->do(qq{
         ALTER TABLE subscription ADD COLUMN closed INT(1) NOT NULL DEFAULT 0 AFTER enddate;
