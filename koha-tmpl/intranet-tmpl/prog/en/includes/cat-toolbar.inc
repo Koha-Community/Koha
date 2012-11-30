@@ -234,7 +234,7 @@ function confirm_items_deletion() {
 	[% END %]	
 
 	<li><a id="addtoshelf" href="/cgi-bin/koha/virtualshelves/addbybiblionumber.pl?biblionumber=[% biblionumber %]">Add to shelf</a></li>
-	<li><a id="printbiblio" href="/cgi-bin/koha/catalogue/detailprint.pl?biblionumber=[% biblionumber %]">Print</a></li>
+    <li><span id="printbiblio"></span></li>
 	[% IF ( CAN_user_reserveforothers ) %]
     [% UNLESS ( norequests ) %]<li><a id="placehold" href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% biblionumber %]">Place hold</a></li>[% END %]
 	[% END %]
