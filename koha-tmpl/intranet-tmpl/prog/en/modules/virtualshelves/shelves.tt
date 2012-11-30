@@ -210,6 +210,7 @@ function placeHold () {
                 <th>Title</th>
                 <th>Author</th>
                 <th>Date added</th>
+                <th>Call number</th>
                 <th>&nbsp;</th>
             </tr>
 		[% FOREACH itemsloo IN itemsloop %]
@@ -238,6 +239,9 @@ function placeHold () {
 			<td>[% itemsloo.author %]</td>
 			<td>[% itemsloo.dateadded %]</td>
 			<td>
+                [% FOREACH result IN itemsloo.ITEM_RESULTS %][% result.itemcallnumber %][% UNLESS loop.last %], [% END %][% END %]
+            </td>
+            <td>
 			[% UNLESS ( itemsloo.notforloan ) %]
 			<a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% itemsloo.biblionumber %]">Holds</a>
 			[% END %]
@@ -299,6 +303,7 @@ function placeHold () {
 		[% IF ( sort_title ) %]<option value="title" selected="selected">Title</option>[% ELSE %]<option value="title">Title</option>[% END %]
 		[% IF ( sort_author ) %]<option value="author" selected="selected">Author</option>[% ELSE %]<option value="author">Author</option>[% END %]
 		[% IF ( sort_copyrightdate ) %]<option value="copyrightdate" selected="selected">Copyrightdate</option>[% ELSE %]<option value="copyrightdate">Copyrightdate</option>[% END %]
+        [% IF ( sort_itemcallnumber ) %]<option value="itemcallnumber" selected="selected">Call number</option>[% ELSE %]<option value="itemcallnumber">Call number</option>[% END %]
 		</select></li>
         <li><label for="category">Category: </label>
 			<select name="category" id="category">
@@ -322,6 +327,7 @@ function placeHold () {
 		[% IF ( sort_title ) %]<option value="title" selected="selected">Title</option>[% ELSE %]<option value="title">Title</option>[% END %]
 		[% IF ( sort_author ) %]<option value="author" selected="selected">Author</option>[% ELSE %]<option value="author">Author</option>[% END %]
 		[% IF ( sort_copyrightdate ) %]<option value="copyrightdate" selected="selected">Copyrightdate</option>[% ELSE %]<option value="copyrightdate">Copyrightdate</option>[% END %]
+        [% IF ( sort_itemcallnumber ) %]<option value="itemcallnumber" selected="selected">Call number</option>[% ELSE %]<option value="itemcallnumber">Call number</option>[% END %]
 		</select></li>
 		<li><label for="category">Category: </label>
 			<select id="category" name="category">
@@ -386,7 +392,7 @@ function placeHold () {
                     [% IF ( shelveslooppri.toggle ) %]<tr class="highlight">[% ELSE %]<tr>[% END %]
         <td><a href="shelves.pl?[% IF ( shelveslooppri.showprivateshelves ) %]display=privateshelves&amp;[% END %]viewshelf=[% shelveslooppri.shelf %]&amp;shelfoff=[% shelfoff %]">[% shelveslooppri.shelfname |html %]</a></td>
         <td>[% shelveslooppri.count %] item(s)</td>
-        <td>[% IF ( shelveslooppri.authorsort ) %]Author[% ELSIF ( shelveslooppri.yearsort ) %]Year[% ELSE %]Title[% END %]</td>
+        <td>[% IF ( shelveslooppri.authorsort ) %]Author[% ELSIF ( shelveslooppri.yearsort ) %]Year[% ELSIF (shelveslooppri.itemcallnumbersort) %]Call number[% ELSE %]Title[% END %]</td>
         <td>[% IF ( shelveslooppri.viewcategory1 ) %]Private[% END %]
 			[% IF ( shelveslooppri.viewcategory2 ) %]Public[% END %]
 		</td>
@@ -439,7 +445,7 @@ function placeHold () {
 		<td><a href="shelves.pl?viewshelf=[% shelvesloo.shelf %]">[% shelvesloo.shelfname |html %]</a></td>
         <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% shelvesloo.owner %]">[% shelvesloo.ownername %]</td>
 		<td>[% shelvesloo.count %] item(s)</td>
-        <td>[% IF ( shelvesloo.authorsort ) %]Author[% ELSIF ( shelvesloo.yearsort ) %]Year[% ELSE %]Title[% END %]</td>
+        <td>[% IF ( shelvesloo.authorsort ) %]Author[% ELSIF ( shelvesloo.yearsort ) %]Year[% ELSIF (shelvesloo.itemcallnumbersort) %]Call number[% ELSE %]Title[% END %]</td>
         <td>[% IF ( shelvesloo.viewcategory1 ) %]Private[% END %]
 			[% IF ( shelvesloo.viewcategory2 ) %]Public[% END %]
 		</td>
