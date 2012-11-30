@@ -344,6 +344,10 @@ sub getlanguage {
         return $lang;
     }
 
+    # Pick the first selected syspref language
+    $lang = shift @languages;
+    return $lang if $lang;
+
     # Fall back to English if necessary
     return 'en';
 }
