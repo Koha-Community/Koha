@@ -254,28 +254,29 @@ sub SimpleSearch {
                 return ( $error, undef, undef );
             }
         }
-        while ( ( my $i = ZOOM::event( \@zconns ) ) != 0 ) {
-            my $event = $zconns[ $i - 1 ]->last_event();
-            if ( $event == ZOOM::Event::ZEND ) {
 
-                my $first_record = defined( $offset ) ? $offset+1 : 1;
+        _ZOOM_event_loop(
+            \@zconns,
+            \@tmpresults,
+            sub {
+                my ($i, $size) = @_;
+                my $first_record = defined($offset) ? $offset + 1 : 1;
                 my $hits = $tmpresults[ $i - 1 ]->size();
                 $total_hits += $hits;
                 my $last_record = $hits;
                 if ( defined $max_results && $offset + $max_results < $hits ) {
-                    $last_record  = $offset + $max_results;
+                    $last_record = $offset + $max_results;
                 }
 
-                for my $j ( $first_record..$last_record ) {
-                    my $record = $tmpresults[ $i - 1 ]->record( $j-1 )->raw(); # 0 indexed
+                for my $j ( $first_record .. $last_record ) {
+                    my $record =
+                      $tmpresults[ $i - 1 ]->record( $j - 1 )->raw()
+                      ;    # 0 indexed
                     push @{$results}, $record;
                 }
             }
-        }
+        );
 
-        foreach my $result (@tmpresults) {
-            $result->destroy();
-        }
         foreach my $zoom_query (@zoom_queries) {
             $zoom_query->destroy();
         }
@@ -410,12 +411,11 @@ sub getRecords {
     }    # finished looping through servers
 
     # The big moment: asynchronously retrieve results from all servers
-    while ( ( my $i = ZOOM::event( \@zconns ) ) != 0 ) {
-        my $ev = $zconns[ $i - 1 ]->last_event();
-        if ( $ev == ZOOM::Event::ZEND ) {
-            next unless $results[ $i - 1 ];
-            my $size = $results[ $i - 1 ]->size();
-            if ( $size > 0 ) {
+        _ZOOM_event_loop(
+            \@zconns,
+            \@results,
+            sub {
+                my ( $i, $size ) = @_;
                 my $results_hash;
 
                 # loop through the results
@@ -444,16 +444,26 @@ sub getRecords {
                         my $tmpauthor;
 
                 # the minimal record in author/title (depending on MARC flavour)
-                        if (C4::Context->preference("marcflavour") eq "UNIMARC") {
-                            $tmptitle = MARC::Field->new('200',' ',' ', a => $term, f => $occ);
+                        if ( C4::Context->preference("marcflavour") eq
+                            "UNIMARC" )
+                        {
+                            $tmptitle = MARC::Field->new(
+                                '200', ' ', ' ',
+                                a => $term,
+                                f => $occ
+                            );
                             $tmprecord->append_fields($tmptitle);
-                        } else {
-                            $tmptitle  = MARC::Field->new('245',' ',' ', a => $term,);
-                            $tmpauthor = MARC::Field->new('100',' ',' ', a => $occ,);
+                        }
+                        else {
+                            $tmptitle =
+                              MARC::Field->new( '245', ' ', ' ', a => $term, );
+                            $tmpauthor =
+                              MARC::Field->new( '100', ' ', ' ', a => $occ, );
                             $tmprecord->append_fields($tmptitle);
                             $tmprecord->append_fields($tmpauthor);
                         }
-                        $results_hash->{'RECORDS'}[$j] = $tmprecord->as_usmarc();
+                        $results_hash->{'RECORDS'}[$j] =
+                          $tmprecord->as_usmarc();
                     }
 
                     # not an index scan
@@ -467,143 +477,179 @@ sub getRecords {
                 }
                 $results_hashref->{ $servers[ $i - 1 ] } = $results_hash;
 
-                # Fill the facets while we're looping, but only for the biblioserver and not for a scan
+# Fill the facets while we're looping, but only for the biblioserver and not for a scan
                 if ( !$scan && $servers[ $i - 1 ] =~ /biblioserver/ ) {
 
-                    my $jmax = $size>$facets_maxrecs? $facets_maxrecs: $size;
-                    for my $facet ( @$facets ) {
-		                for ( my $j = 0 ; $j < $jmax ; $j++ ) {
-		                    my $render_record = $results[ $i - 1 ]->record($j)->render();
+                    my $jmax =
+                      $size > $facets_maxrecs ? $facets_maxrecs : $size;
+                    for my $facet (@$facets) {
+                        for ( my $j = 0 ; $j < $jmax ; $j++ ) {
+                            my $render_record =
+                              $results[ $i - 1 ]->record($j)->render();
                             my @used_datas = ();
-                            foreach my $tag ( @{$facet->{tags}} ) {
+                            foreach my $tag ( @{ $facet->{tags} } ) {
+
                                 # avoid first line
-                                my $tag_num = substr($tag, 0, 3);
-                                my $letters = substr($tag, 3);
-                                my $field_pattern = '\n' . $tag_num . ' ([^z][^\n]+)';
-                                $field_pattern = '\n' . $tag_num . ' ([^\n]+)' if (int($tag_num) < 10);
-                                my @field_tokens = ( $render_record =~ /$field_pattern/g ) ;
+                                my $tag_num = substr( $tag, 0, 3 );
+                                my $letters = substr( $tag, 3 );
+                                my $field_pattern =
+                                  '\n' . $tag_num . ' ([^z][^\n]+)';
+                                $field_pattern = '\n' . $tag_num . ' ([^\n]+)'
+                                  if ( int($tag_num) < 10 );
+                                my @field_tokens =
+                                  ( $render_record =~ /$field_pattern/g );
                                 foreach my $field_token (@field_tokens) {
-                                    my @subf = ( $field_token =~ /\$([a-zA-Z0-9]) ([^\$]+)/g );
+                                    my @subf = ( $field_token =~
+                                          /\$([a-zA-Z0-9]) ([^\$]+)/g );
                                     my @values;
-                                    for (my $i = 0; $i < @subf; $i += 2) {
+                                    for ( my $i = 0 ; $i < @subf ; $i += 2 ) {
                                         if ( $letters =~ $subf[$i] ) {
-                                             my $value = $subf[$i+1];
-                                             $value =~ s/^ *//;
-                                             $value =~ s/ *$//;
-                                             push @values, $value;
+                                            my $value = $subf[ $i + 1 ];
+                                            $value =~ s/^ *//;
+                                            $value =~ s/ *$//;
+                                            push @values, $value;
                                         }
                                     }
-                                    my $data = join($facet->{sep}, @values);
+                                    my $data = join( $facet->{sep}, @values );
                                     unless ( $data ~~ @used_datas ) {
-                                        $facets_counter->{ $facet->{idx} }->{$data}++;
+                                        $facets_counter->{ $facet->{idx} }
+                                          ->{$data}++;
                                         push @used_datas, $data;
                                     }
-                                } # fields
-                            } # field codes
-                        } # records
-                        $facets_info->{ $facet->{idx} }->{label_value} = $facet->{label};
-                        $facets_info->{ $facet->{idx} }->{expanded} = $facet->{expanded};
-                    } # facets
+                                }    # fields
+                            }    # field codes
+                        }    # records
+                        $facets_info->{ $facet->{idx} }->{label_value} =
+                          $facet->{label};
+                        $facets_info->{ $facet->{idx} }->{expanded} =
+                          $facet->{expanded};
+                    }    # facets
                 }
-            }
 
-            # warn "connection ", $i-1, ": $size hits";
-            # warn $results[$i-1]->record(0)->render() if $size > 0;
+                # warn "connection ", $i-1, ": $size hits";
+                # warn $results[$i-1]->record(0)->render() if $size > 0;
 
-            # BUILD FACETS
-            if ( $servers[ $i - 1 ] =~ /biblioserver/ ) {
-                for my $link_value (
-                    sort { $facets_counter->{$b} <=> $facets_counter->{$a} }
-                        keys %$facets_counter )
-                {
-                    my $expandable;
-                    my $number_of_facets;
-                    my @this_facets_array;
-                    for my $one_facet (
-                        sort {
-                             $facets_counter->{$link_value}->{$b}
-                         <=> $facets_counter->{$link_value}->{$a}
-                        } keys %{ $facets_counter->{$link_value} }
+                # BUILD FACETS
+                if ( $servers[ $i - 1 ] =~ /biblioserver/ ) {
+                    for my $link_value (
+                        sort { $facets_counter->{$b} <=> $facets_counter->{$a} }
+                        keys %$facets_counter
                       )
                     {
-                        $number_of_facets++;
-                        if (   ( $number_of_facets < 6 )
-                            || ( $expanded_facet eq $link_value )
-                            || ( $facets_info->{$link_value}->{'expanded'} ) )
+                        my $expandable;
+                        my $number_of_facets;
+                        my @this_facets_array;
+                        for my $one_facet (
+                            sort {
+                                $facets_counter->{$link_value}
+                                  ->{$b} <=> $facets_counter->{$link_value}
+                                  ->{$a}
+                            } keys %{ $facets_counter->{$link_value} }
+                          )
                         {
+                            $number_of_facets++;
+                            if (   ( $number_of_facets < 6 )
+                                || ( $expanded_facet eq $link_value )
+                                || ( $facets_info->{$link_value}->{'expanded'} )
+                              )
+                            {
 
-                      # Sanitize the link value : parenthesis, question and exclamation mark will cause errors with CCL
-                            my $facet_link_value = $one_facet;
-                            $facet_link_value =~ s/[()!?¡¿؟]/ /g;
+# Sanitize the link value : parenthesis, question and exclamation mark will cause errors with CCL
+                                my $facet_link_value = $one_facet;
+                                $facet_link_value =~ s/[()!?¡¿؟]/ /g;
 
-                            # fix the length that will display in the label,
-                            my $facet_label_value = $one_facet;
-                            my $facet_max_length =
-                                C4::Context->preference('FacetLabelTruncationLength') || 20;
-                            $facet_label_value =
-                              substr( $one_facet, 0, $facet_max_length ) . "..."
-                                if length($facet_label_value) > $facet_max_length;
+                                # fix the length that will display in the label,
+                                my $facet_label_value = $one_facet;
+                                my $facet_max_length  = C4::Context->preference(
+                                    'FacetLabelTruncationLength')
+                                  || 20;
+                                $facet_label_value =
+                                  substr( $one_facet, 0, $facet_max_length )
+                                  . "..."
+                                  if length($facet_label_value) >
+                                      $facet_max_length;
 
                             # if it's a branch, label by the name, not the code,
-                            if ( $link_value =~ /branch/ ) {
-								if (defined $branches
-									&& ref($branches) eq "HASH"
-									&& defined $branches->{$one_facet}
-									&& ref ($branches->{$one_facet}) eq "HASH")
-								{
-                                	$facet_label_value =
-                                  		$branches->{$one_facet}->{'branchname'};
-								}
-								else {
-									$facet_label_value = "*";
-								}
-                            }
-                            # if it's a itemtype, label by the name, not the code,
-                            if ( $link_value =~ /itype/ ) {
-                                if (defined $itemtypes
-                                    && ref($itemtypes) eq "HASH"
-                                    && defined $itemtypes->{$one_facet}
-                                    && ref ($itemtypes->{$one_facet}) eq "HASH")
-                                {
-                                    $facet_label_value =
-                                        $itemtypes->{$one_facet}->{'description'};
+                                if ( $link_value =~ /branch/ ) {
+                                    if (   defined $branches
+                                        && ref($branches) eq "HASH"
+                                        && defined $branches->{$one_facet}
+                                        && ref( $branches->{$one_facet} ) eq
+                                        "HASH" )
+                                    {
+                                        $facet_label_value =
+                                          $branches->{$one_facet}
+                                          ->{'branchname'};
+                                    }
+                                    else {
+                                        $facet_label_value = "*";
+                                    }
                                 }
-                            }
 
-                            # also, if it's a location code, use the name instead of the code
-                            if ( $link_value =~ /location/ ) {
-                                $facet_label_value = GetKohaAuthorisedValueLib('LOC', $one_facet, $opac);
-                            }
+                          # if it's a itemtype, label by the name, not the code,
+                                if ( $link_value =~ /itype/ ) {
+                                    if (   defined $itemtypes
+                                        && ref($itemtypes) eq "HASH"
+                                        && defined $itemtypes->{$one_facet}
+                                        && ref( $itemtypes->{$one_facet} ) eq
+                                        "HASH" )
+                                    {
+                                        $facet_label_value =
+                                          $itemtypes->{$one_facet}
+                                          ->{'description'};
+                                    }
+                                }
 
-                            # but we're down with the whole label being in the link's title.
-                            push @this_facets_array, {
-                                facet_count       => $facets_counter->{$link_value}->{$one_facet},
-                                facet_label_value => $facet_label_value,
-                                facet_title_value => $one_facet,
-                                facet_link_value  => $facet_link_value,
-                                type_link_value   => $link_value,
-                            } if ( $facet_label_value );
+               # also, if it's a location code, use the name instead of the code
+                                if ( $link_value =~ /location/ ) {
+                                    $facet_label_value =
+                                      GetKohaAuthorisedValueLib( 'LOC',
+                                        $one_facet, $opac );
+                                }
+
+                # but we're down with the whole label being in the link's title.
+                                push @this_facets_array,
+                                  {
+                                    facet_count =>
+                                      $facets_counter->{$link_value}
+                                      ->{$one_facet},
+                                    facet_label_value => $facet_label_value,
+                                    facet_title_value => $one_facet,
+                                    facet_link_value  => $facet_link_value,
+                                    type_link_value   => $link_value,
+                                  }
+                                  if ($facet_label_value);
+                            }
                         }
-                    }
 
-                    # handle expanded option
-                    unless ( $facets_info->{$link_value}->{'expanded'} ) {
-                        $expandable = 1
-                          if ( ( $number_of_facets > 6 )
-                            && ( $expanded_facet ne $link_value ) );
+                        # handle expanded option
+                        unless ( $facets_info->{$link_value}->{'expanded'} ) {
+                            $expandable = 1
+                              if ( ( $number_of_facets > 6 )
+                                && ( $expanded_facet ne $link_value ) );
+                        }
+                        push @facets_loop,
+                          {
+                            type_link_value => $link_value,
+                            type_id         => $link_value . "_id",
+                            "type_label_"
+                              . $facets_info->{$link_value}->{'label_value'} =>
+                              1,
+                            facets     => \@this_facets_array,
+                            expandable => $expandable,
+                            expand     => $link_value,
+                          }
+                          unless (
+                            (
+                                $facets_info->{$link_value}->{'label_value'} =~
+                                /Libraries/
+                            )
+                            and ( C4::Context->preference('singleBranchMode') )
+                          );
                     }
-                    push @facets_loop, {
-                        type_link_value => $link_value,
-                        type_id         => $link_value . "_id",
-                        "type_label_" . $facets_info->{$link_value}->{'label_value'} => 1,
-                        facets     => \@this_facets_array,
-                        expandable => $expandable,
-                        expand     => $link_value,
-                    } unless ( ($facets_info->{$link_value}->{'label_value'} =~ /Libraries/) and (C4::Context->preference('singleBranchMode')) );
                 }
             }
-        }
-    }
+        );
     return ( undef, $results_hashref, \@facets_loop );
 }
 
@@ -2816,22 +2862,51 @@ sub GetDistinctValues {
 		}
 		# The big moment: asynchronously retrieve results from all servers
 		my @elements;
-		while ( ( my $i = ZOOM::event( \@zconns ) ) != 0 ) {
-			my $ev = $zconns[ $i - 1 ]->last_event();
-			if ( $ev == ZOOM::Event::ZEND ) {
-				next unless $results[ $i - 1 ];
-				my $size = $results[ $i - 1 ]->size();
-				if ( $size > 0 ) {
-                      for (my $j=0;$j<$size;$j++){
-						my %hashscan;
-						@hashscan{qw(value cnt)}=$results[ $i - 1 ]->display_term($j);
-						push @elements, \%hashscan;
-					  }
-				}
-			}
-		}
+        _ZOOM_event_loop(
+            \@zconns,
+            \@results,
+            sub {
+                my ( $i, $size ) = @_;
+                for ( my $j = 0 ; $j < $size ; $j++ ) {
+                    my %hashscan;
+                    @hashscan{qw(value cnt)} =
+                      $results[ $i - 1 ]->display_term($j);
+                    push @elements, \%hashscan;
+                }
+            }
+        );
 		return \@elements;
    }
+}
+
+=head2 _ZOOM_event_loop
+
+    _ZOOM_event_loop(\@zconns, \@results, sub {
+        my ( $i, $size ) = @_;
+        ....
+    } );
+
+Processes a ZOOM event loop and passes control to a closure for
+processing the results, and destroying the resultsets.
+
+=cut
+
+sub _ZOOM_event_loop {
+    my ($zconns, $results, $callback) = @_;
+    while ( ( my $i = ZOOM::event( $zconns ) ) != 0 ) {
+        my $ev = $zconns->[ $i - 1 ]->last_event();
+        if ( $ev == ZOOM::Event::ZEND ) {
+            next unless $results->[ $i - 1 ];
+            my $size = $results->[ $i - 1 ]->size();
+            if ( $size > 0 ) {
+                $callback->($i, $size);
+            }
+        }
+    }
+
+    foreach my $result (@$results) {
+        $result->destroy();
+    }
 }
 
 
