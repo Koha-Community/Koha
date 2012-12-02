@@ -51,10 +51,26 @@
 [% IF ( do_it ) %]
 	[% FOREACH mainloo IN mainloop %]
 		<h1>Acquisitions statistics </h1>
-     		[% IF ( mainloo.loopfilter ) %]
-			<p><b>Filtered on:</b></p>
-			[% FOREACH loopfilte IN mainloo.loopfilter %]
-					<p>[% loopfilte.crit %]: [% loopfilte.filter %]</p>
+        [% IF ( mainloo.loopfilter.size ) %]
+            <p><b>Filtered on:</b></p>
+            [% FOREACH loopfilte IN mainloo.loopfilter %]
+                <p>
+                    [% SWITCH loopfilte.crit %]
+                        [% CASE '0' %] Placed on (from)
+                        [% CASE '1' %] Placed on (to)
+                        [% CASE '2' %] Received on (from)
+                        [% CASE '3' %] Received on (to)
+                        [% CASE '4' %] Supplier
+                        [% CASE '5' %] Home branch
+                        [% CASE '6' %] Collection
+                        [% CASE '7' %] Item type
+                        [% CASE '8' %] Budget
+                        [% CASE '9' %] Sort1
+                        [% CASE '10' %] Sort2
+                        [% CASE %] Unknown filter
+                    [% END %]
+                    : [% loopfilte.filter %]
+                </p>
 			[% END %]
 		[% END %]
 
@@ -155,8 +171,51 @@
 				<td>Vendor</td>
 				<td><input type="radio" checked="checked" name="Line" value="aqbooksellers.name" /></td>
 				<td><input type="radio" name="Column" value="aqbooksellers.name" /></td>
-				<td>[% CGIBookSeller %]</td>
-			</tr>
+                <td>
+                    <select name="Filter">
+                        <option value="">All suppliers</option>
+                        [% FOREACH bookseller IN booksellers %]
+                            <option value="[% bookseller.name %]">[% bookseller.name %]</option>
+                        [% END %]
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Home branch</td>
+                <td><input type="radio" name="Line" value="items.homebranch" /></td>
+                <td><input type="radio" name="Column" value="items.homebranch" /></td>
+                <td>
+                    <select name="Filter">
+                        <option value="" selected="selected">All branches</option>
+                        [% FOREACH branch IN branches %]
+                            <option value="[% branch.branchcode %]">[% branch.branchname %]</option>
+                        [% END %]
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    [% IF ccode_label %]
+                        [% ccode_label %]
+                    [% ELSE %]
+                        Collection
+                    [% END %]
+                </td>
+                <td><input type="radio" name="Line" value="items.ccode" /></td>
+                <td><input type="radio" name="Column" value="items.ccode" /></td>
+                <td>
+                    [% IF ccode_avlist.size %]
+                        <select name="Filter">
+                            <option value="" selected="selected">All</option>
+                            [% FOREACH ccode_av IN ccode_avlist %]
+                                <option value="[% ccode_av.value %]">[% ccode_av.lib %]</option>
+                            [% END %]
+                        </select>
+                    [% ELSE %]
+                        <input type="text" name="Filter" />
+                    [% END %]
+                </td>
+            </tr>
 			<tr>
 				<td>Item Type</td>
 				<td><input type="radio" name="Line" value="biblioitems.itemtype" /></td>
@@ -191,9 +250,26 @@
 	</table><br />
 	</fieldset>
 
-<fieldset class="rows">		<legend> Cell value </legend>
-			<ol><li><label for="cellvalue1">Count items</label><input type="radio" name="Cellvalue" id="cellvalue1" value="1" checked="checked" /> </li>
-			<li><label for="cellvalue2">Amount</label><input type="radio" name="Cellvalue" id="cellvalue2" value="2" /> </li></ol></fieldset>
+<fieldset class="rows">
+    <legend> Cell value </legend>
+    <ol>
+        <li>
+            <label for="cellvalue1">Count items</label><input type="radio" name="Cellvalue" id="cellvalue1" value="1" checked="checked" />
+        </li>
+        <li>
+            <label for="cellvalue2">Count unique biblios</label><input type="radio" name="Cellvalue" id="cellvalue2" value="2" />
+        </li>
+        <li>
+            <label for="cellvalue3">Amount</label><input type="radio" name="Cellvalue" id="cellvalue3" value="3" />
+        </li>
+        <li>
+            <label for="cellvalue4">Ordered amount</label><input type="radio" name="Cellvalue" id="cellvalue4" value="4" />
+        </li>
+        <li>
+            <label for="cellvalue5">Spent amount</label><input type="radio" name="Cellvalue" id="cellvalue5" value="5" />
+        </li>
+    </ol>
+</fieldset>
 
 	<fieldset class="rows">
 	<legend>Output</legend>
