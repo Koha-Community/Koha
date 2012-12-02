@@ -87,8 +87,8 @@ function confirm_deletion(biblionumber,itemnumber) {
 
 $(document).ready(function() {
     $("#cataloguing_additem_itemlist  tr").hover(
-        function () {$(this).attr("class","highlight");},
-        function () {$(this).attr("class",""         );}
+        function () {$(this).addClass("highlight");},
+        function () {$(this).removeClass("highlight");}
     );
 });
 //]]>
@@ -131,7 +131,11 @@ $(document).ready(function() {
                 [% END %]
             </tr>
                 [% FOREACH item_loo IN item_loop %]
+                [% IF ( item_loo.itemnumber == itemnumber) %]
+                <tr id="row[% item_loo.itemnumber %]" class="active">
+                [% ELSE %]
                 <tr id="row[% item_loo.itemnumber %]">
+                [% END %]
                     [% IF ( item_loo.nomod ) %] <td colspan="2">&nbsp;</td>[% ELSE %][% IF ( item_loo.hostitemflag ) %]<td><a href="additem.pl?op=edititem&amp;biblionumber=[% item_loo.hostbiblionumber %]&amp;itemnumber=[% item_loo.itemnumber %]#edititem">Edit in host</a></td>
 <td><a class="delete" href="/cgi-bin/koha/cataloguing/additem.pl?op=delinkitem&amp;biblionumber=[% biblionumber %]&amp;hostitemnumber=[% item_loo.itemnumber %]">Delink</a></td>
 [% ELSE %]<td><a href="additem.pl?op=edititem&amp;biblionumber=[% biblionumber %]&amp;itemnumber=[% item_loo.itemnumber %]#edititem">Edit</a></td>
@@ -197,8 +201,8 @@ $(document).ready(function() {
     -->
 
     <input type="submit" name="add_submit" value="Add item" onclick="return Check(this.form)" />
-    <input type="submit" name="add_duplicate_submit" value="Add &amp; Duplicate" onclick="return Check(this.form)" />
-    <input type="submit" name="add_multiple_copies" value="Add Multiple Copies" onclick="javascript:this.nextSibling.style.visibility='visible';document.f.number_of_copies.focus(); return false;" /><span id="add_multiple_copies_span" style="visibility:hidden">
+    <input type="submit" name="add_duplicate_submit" value="Add &amp; duplicate" onclick="return Check(this.form)" />
+    <input type="submit" name="add_multiple_copies" value="Add multiple copies" onclick="javascript:this.nextSibling.style.visibility='visible';document.f.number_of_copies.focus(); return false;" /><span id="add_multiple_copies_span" style="visibility:hidden">
 	<label for="number_of_copies">Number of copies to add : </label>
 	<input type="text" id="number_of_copies" name="number_of_copies" value="" size="2" />
 	<input type="submit" id="add_multiple_copies_submit" name="add_multiple_copies_submit" value="Add" onclick="javascript:return Check(this.form) &amp;&amp; CheckMultipleAdd(this.form.number_of_copies.value);" />
@@ -208,7 +212,7 @@ $(document).ready(function() {
     <input type="hidden" name="tag" value="[% itemtagfield %]" />
     <input type="hidden" name="subfield" value="[% itemtagsubfield %]" />
     <input type="hidden" name="field_value" value="[% itemnumber %]" />
-    <input type="submit" value="Save Changes" onclick="return Check(this.form)" />
+    <input type="submit" value="Save changes" onclick="return Check(this.form)" />
     [% END %]</fieldset>
     
     <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
