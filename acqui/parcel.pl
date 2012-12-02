@@ -333,7 +333,6 @@ $template->param(
     booksellerid          => $bookseller->{id},
     countreceived         => $countlines,
     loop_received         => \@loop_received,
-    booksellerid          => $booksellerid,
     loop_orders           => \@loop_orders,
     book_foot_loop        => \@book_foot_loop,
     totalprice            => sprintf($cfstr, $totalprice),
