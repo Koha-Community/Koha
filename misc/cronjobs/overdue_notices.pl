@@ -436,7 +436,7 @@ END_SQL
             # this text contains fields that are replaced by their value. Those fields must be written between brackets
             # The following fields are available :
 	    # itemcount is interpreted here as the number of items in the overdue range defined by the current notice or all overdues < max if(-list-all).
-            # <date> <itemcount> <firstname> <lastname> <address1> <address2> <address3> <city> <postcode>
+            # <date> <itemcount> <firstname> <lastname> <address1> <address2> <address3> <city> <postcode> <country>
 
             my $borrower_sql = <<'END_SQL';
 SELECT distinct(issues.borrowernumber), firstname, surname, address, address2, city, zipcode, country, email
@@ -544,6 +544,7 @@ END_SQL
                             address2       => $address2,
                             city           => $city,
                             postcode       => $postcode,
+                            country        => $country,
                             email          => $email,
                             itemcount      => $itemcount,
                             titles         => $titles,
@@ -572,6 +573,7 @@ END_SQL
                                 address2       => $address2,
                                 city           => $city,
                                 postcode       => $postcode,
+                                country        => $country,
                                 email          => $email,
                                 itemcount      => $itemcount,
                                 titles         => $titles,
@@ -597,7 +599,7 @@ END_SQL
                 print @output_chunks;
         }
         # Generate the content of the csv with headers
-        my $content = join(";", qw(title name surname address1 address2 zipcode city email itemcount itemsinfo due_date issue_date)) . "\n";
+        my $content = join(";", qw(title name surname address1 address2 zipcode city country email itemcount itemsinfo due_date issue_date)) . "\n";
         $content .= join( "\n", @output_chunks );
             
         my $attachment = {
@@ -737,7 +739,7 @@ sub prepare_letter_for_printing {
     if ( exists $params->{'outputformat'} && $params->{'outputformat'} eq 'csv' ) {
         if ($csv->combine(
                 $params->{'firstname'}, $params->{'lastname'}, $params->{'address1'},  $params->{'address2'}, $params->{'postcode'},
-                $params->{'city'},      $params->{'email'},    $params->{'itemcount'}, $params->{'titles'}
+                $params->{'city'}, $params->{'country'}, $params->{'email'}, $params->{'itemcount'}, $params->{'titles'}
             )
           ) {
             return $csv->string, "\n";
