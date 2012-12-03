@@ -52,6 +52,10 @@ $verbose and print "================================\n";
 $date_created_marc = '099c' unless $date_created_marc;
 my ( $c_field, $c_subfield ) = _read_marc_code($date_created_marc);
 die "date-created-marc '$date_created_marc' is not correct." unless $c_field;
+die "date-created-marc field is greated that 009, it should have a subfield."
+  if ( $c_field > 9 && !defined $c_subfield );
+die "date-created-marc field is lower that 010, it should not have a subfield."
+  if ( $c_field < 10 && defined $c_subfield );
 if ($verbose) {
     print "Date created on $c_field";
     print $c_subfield if defined $c_subfield;    # use of defined to allow 0
@@ -62,6 +66,10 @@ if ($verbose) {
 $date_modified_marc = '099d' unless $date_modified_marc;
 my ( $m_field, $m_subfield ) = _read_marc_code($date_modified_marc);
 die "date-modified-marc '$date_modified_marc' is not correct." unless $m_field;
+die "date-modified-marc field is greated that 009, it should have a subfield."
+  if ( $m_field > 9 && !defined $m_subfield );
+die "date-modified-marc field is lower that 010, it should not have a subfield."
+  if ( $m_field < 10 && defined $m_subfield );
 die
 "When date-created-marc and date-modified-marc are on same field, they should have distinct subfields"
   if ( $c_field eq $m_field )
@@ -133,7 +141,16 @@ sub updateMarc {
 
     # date created field
     unless ($c_marc_field) {
-        $biblio->add_fields( new MARC::Field( $c_field, '', '' ) );
+        if ( defined $c_subfield ) {
+            $biblio->add_fields(
+                new MARC::Field(
+                    $c_field, ' ', ' ', $c_subfield => $c_db_value
+                )
+            );
+        }
+        else {
+            $biblio->add_fields( new MARC::Field( $c_field, $c_db_value ) );
+        }
         $debug and warn "[WARN] $c_field did not exist.";
         $c_marc_field = $biblio->field($c_field);
 
@@ -142,24 +159,38 @@ sub updateMarc {
             $m_marc_field = $c_marc_field;
         }
     }
-    if ( defined $c_subfield ) {
-        $c_marc_field->update( $c_subfield, $c_db_value );
-    }
     else {
-        $c_marc_field->update($c_db_value);
+        if ( defined $c_subfield ) {
+            $c_marc_field->update( $c_subfield, $c_db_value );
+        }
+        else {
+            $c_marc_field->update($c_db_value);
+        }
     }
 
     # date last modified field
     unless ($m_marc_field) {
-        $biblio->add_fields( new MARC::Field( $m_field, '', '' ) );
+        if ( defined $m_subfield ) {
+            $biblio->add_fields(
+                new MARC::Field(
+                    $m_field, ' ', ' ', $m_subfield => $m_db_value
+                )
+            );
+        }
+        else {
+            $biblio->add_fields( new MARC::Field( $m_field, $m_db_value ) );
+        }
+
         $debug and warn "[WARN] $m_field did not exist.";
         $m_marc_field = $biblio->field($m_field);
     }
-    if ( defined $m_subfield ) {
-        $m_marc_field->update( $m_subfield, $m_db_value );
-    }
     else {
-        $m_marc_field->update($m_db_value);
+        if ( defined $m_subfield ) {
+            $m_marc_field->update( $m_subfield, $m_db_value );
+        }
+        else {
+            $m_marc_field->update($m_db_value);
+        }
     }
 
     # apply to databse
@@ -222,7 +253,7 @@ UNIMARC specific.
 Parameters:
     --help or -h                show this message
     --verbose or -v             verbose logging
-    --run                       run the command else modifications will not be applyed to database
+    --run                       run the command else modifications will not be applied to database
     --where                     (optional) use this to limit execution to some biblios :
                                 write a SQL where clause using biblio and/or biblioitems fields
     --date-created-marc or c    (optional) date created MARC field and optional subfield,
