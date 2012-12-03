@@ -51,7 +51,6 @@ our $dbh = C4::Context->dbh;
 
 sub get_versions_path {
     return C4::Context->config('intranetdir') . '/installer/data/mysql/versions';
-
 }
 
 =head2 get_filepath
