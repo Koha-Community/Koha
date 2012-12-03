@@ -46,7 +46,3 @@ INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('MANUA
 
 -- custom borrower notes
 INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('BOR_NOTES','ADDR','Adresse kontrollieren');
-
--- OPAC Suggestions reasons
-INSERT INTO authorised_values (category,authorised_value,lib,lib_opac) VALUES ('OPAC_SUG','damaged','Vorhandenes Exemplar ist beschädigt','Vorhandenes Exemplar ist beschädigt');
-INSERT INTO authorised_values (category,authorised_value,lib,lib_opac) VALUES ('OPAC_SUG','bestseller','Neuerscheinung von bekanntem Verfasser','Neuerscheinung von bekanntem Verfasser');
