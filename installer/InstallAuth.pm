@@ -262,7 +262,11 @@ sub checkauth {
                 $session->param('emailaddress'),
                 $session->param('branchprinter')
             );
-            $cookie   = $query->cookie( CGISESSID => $session->id );
+            $cookie = $query->cookie(
+                -name     => 'CGISESSID',
+                -value    => $session->id,
+                -HttpOnly => 1,
+            );
             $loggedin = 1;
             $userid   = $session->param('cardnumber');
         }
@@ -298,7 +302,11 @@ sub checkauth {
             # printf L "%20s from %16s logged in  at %30s.\n", $userid,
             #  $ENV{'REMOTE_ADDR'}, $time;
             # close L;
-            $cookie = $query->cookie( CGISESSID => $sessionID );
+            $cookie = $query->cookie(
+                -name     => 'CGISESSID',
+                -value    => $sessionID,
+                -HttpOnly => 1,
+            );
             if ( $return == 2 ) {
 
            #Only superlibrarian should have access to this page.
@@ -342,6 +350,7 @@ sub checkauth {
             $cookie = $query->cookie(
                 -name    => 'CGISESSID',
                 -value   => '',
+                -HttpOnly => 1,
                 -expires => ''
             );
         }
@@ -382,6 +391,7 @@ sub checkauth {
     $cookie = $query->cookie(
         -name    => 'CGISESSID',
         -value   => $sessionID,
+        -HttpOnly => 1,
         -expires => ''
     );
     print $query->header(
