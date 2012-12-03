@@ -23,6 +23,11 @@ ok($koha = C4::Context->new,  'C4::Context->new');
 ok($dbh = C4::Context->dbh(), 'Getting dbh from C4::Context');
 ok($ret = C4::Context->KOHAVERSION, '  (function)  KOHAVERSION = ' . ($ret||''));
 ok($ret =       $koha->KOHAVERSION, '       $koha->KOHAVERSION = ' . ($ret||''));
+ok(
+    TransformVersionToNum( C4::Context->final_linear_version ) <=
+      TransformVersionToNum( C4::Context->KOHAVERSION ),
+    'Final linear version is less than or equal to kohaversion.pl'
+);
 my @keys = keys %$koha;
 diag("Number of keys in \%\$koha: " . scalar @keys); 
 our $width = 0;
@@ -104,4 +109,16 @@ is(scalar(@{$history}), 0, 'Did not retrieve syspref from database');
 
 done_testing();
 
+sub TransformVersionToNum {
+    my $version = shift;
+
+    # remove the 3 last . to have a Perl number
+    $version =~ s/(.*\..*)\.(.*)\.(.*)/$1$2$3/;
+
+    # three X's at the end indicate that you are testing patch with dbrev
+    # change it into 999
+    # prevents error on a < comparison between strings (should be: lt)
+    $version =~ s/XXX$/999/;
+    return $version;
+}
 1;

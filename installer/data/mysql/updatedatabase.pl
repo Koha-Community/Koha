@@ -6181,6 +6181,17 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+if ( CheckVersion($DBversion) ) {
+    print "Upgrade to $DBversion done (Bug 9191: You shouldn't see this)\n";
+    SetVersion($DBversion);
+}
+
+$DBversion = "3.11.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    print "Upgrade to $DBversion done (Bug 9191: You should see this)\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)
@@ -6262,4 +6273,33 @@ sub SetVersion {
     }
     C4::Context::clear_syspref_cache(); # invalidate cached preferences
 }
+
+=head2 CheckVersion
+
+Check whether a given update should be run when passed the proposed version
+number. The update will always be run if the proposed version is greater
+than the current database version and less than or equal to the version in
+kohaversion.pl. The update is also run if the version contains XXX, though
+this behavior will be changed following the adoption of non-linear updates
+as implemented in bug 7167.
+
+=cut
+
+sub CheckVersion {
+    my ($proposed_version) = @_;
+    my $version_number = TransformToNum($proposed_version);
+
+    # The following line should be deleted when bug 7167 is pushed
+    return 1 if ( $proposed_version =~ m/XXX/ );
+
+    if ( C4::Context->preference("Version") < $version_number
+        && $version_number <= TransformToNum( C4::Context->final_linear_version ) )
+    {
+        return 1;
+    }
+    else {
+        return 0;
+    }
+}
+
 exit;

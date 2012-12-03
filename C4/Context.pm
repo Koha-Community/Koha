@@ -220,6 +220,18 @@ sub KOHAVERSION {
     do $cgidir."/kohaversion.pl" || die "NO $cgidir/kohaversion.pl";
     return kohaversion();
 }
+
+=head2 final_linear_version
+
+Returns the version number of the final update to run in updatedatabase.pl.
+This number is equal to the version in kohaversion.pl
+
+=cut
+
+sub final_linear_version {
+    return KOHAVERSION;
+}
+
 =head2 read_config_file
 
 Reads the specified Koha config file. 
