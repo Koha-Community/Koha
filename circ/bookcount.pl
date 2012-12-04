@@ -45,12 +45,11 @@ my $data  = GetBiblioItemData($bi);
 my $homebranch    = $branches->{ $idata->{'homebranch'}    }->{'branchname'};
 my $holdingbranch = $branches->{ $idata->{'holdingbranch'} }->{'branchname'};
 
-my ( $lastmove, $message ) = lastmove($itm);
+my $lastmove = lastmove($itm);
 
 my $lastdate;
 my $count;
 if ( not $lastmove ) {
-#    $lastdate = $message;
     $count = issuessince( $itm, 0 );
 } else {
     $lastdate = $lastmove->{'datearrived'};
@@ -78,8 +77,6 @@ foreach (@$branchloop) {
     $_->{seen}       = $datechunk;
     $_->{seentime}   = $timechunk;
 }
-
-### $lastdate
 
 $template->param(
     biblionumber            => $biblionumber,
@@ -112,14 +109,14 @@ sub lastmove {
     );
     $sth->execute($itemnumber);
     my ($date) = $sth->fetchrow_array;
-    return ( 0, 1 ) if not $date;
+    return 0 unless $date;
     $sth = $dbh->prepare(
 "SELECT * FROM branchtransfers WHERE branchtransfers.itemnumber=? and branchtransfers.datearrived=?"
     );
     $sth->execute( $itemnumber, $date );
     my ($data) = $sth->fetchrow_hashref;
-    return ( 0, 1 ) if not $data;
-    return ( $data, "" );
+    return 0 unless $data;
+    return $data;
 }
 
 sub issuessince {
@@ -165,7 +162,7 @@ sub lastseenat {
     "SELECT MAX(transfer) FROM (SELECT max(datearrived) AS transfer FROM branchtransfers WHERE itemnumber=? AND tobranch = ?
      UNION ALL
      SELECT max(datesent) AS transfer FROM branchtransfers WHERE itemnumber=? AND frombranch = ?
-	) tmp"
+    ) tmp"
     );
     $sth->execute( $itm, $brc, $itm, $brc );
     my ($date2) = $sth->fetchrow_array;
@@ -179,7 +176,6 @@ sub lastseenat {
 sub slashdate {
     my ($date) = @_;
     $date or return;
-    # warn "slashdate($date)...";
     return (
         format_date($date),
         substr($date,11,5)
