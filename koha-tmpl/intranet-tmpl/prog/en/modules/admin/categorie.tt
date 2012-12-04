@@ -371,7 +371,13 @@ Confirm deletion of category [% categorycode |html %][% END %]</legend>
                                 [% FOREACH branch IN loo.branches %]
                                     [% branches_str = branches_str _ " " _ branch.branchname _ "(" _ branch.branchcode _ ")" %]
                                 [% END %]
-                                <span title="[% branches_str %]">[% loo.branches.size %] branches limitations</span>
+                                <span title="[% branches_str %]">
+                                    [% IF loo.branches.size > 1 %]
+                                        [% loo.branches.size %] branches limitations
+                                    [% ELSE %]
+                                        [% loo.branches.size %] branch limitation
+                                    [% END %]
+                                </span>
                             [% ELSE %]
                                 No limitation
                             [% END %]

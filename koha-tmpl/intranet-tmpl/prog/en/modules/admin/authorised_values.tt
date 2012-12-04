@@ -274,7 +274,12 @@
             [% FOREACH branch IN loo.branches %]
                 [% branches_str = branches_str _ " " _ branch.branchname _ "(" _ branch.branchcode _ ")" %]
             [% END %]
-            <span href="#" title="[% branches_str %]">[% loo.branches.size %] branches limitations</span>
+            <span href="#" title="[% branches_str %]">
+                [% IF loo.branches.size > 1 %]
+                    [% loo.branches.size %] branches limitations
+                [% ELSE %]
+                    [% loo.branches.size %] branch limitation
+                [% END %]
         [% ELSE %]
             No limitation
         [% END %]

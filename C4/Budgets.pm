@@ -400,11 +400,11 @@ sub GetAuthvalueDropbox {
 
     my $option_list = [];
     my @authorised_values = ( q{} );
-    while (my ($value, $lib) = $sth->fetchrow_array) {
+    while (my $av = $sth->fetchrow_hashref) {
         push @{$option_list}, {
-            value => $value,
-            label => $lib,
-            default => ($default eq $value),
+            value => $av->{authorised_value},
+            label => $av->{lib},
+            default => ($default eq $av->{authorised_value}),
         };
     }
 

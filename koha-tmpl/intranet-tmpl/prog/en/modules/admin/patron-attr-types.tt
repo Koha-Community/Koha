@@ -315,12 +315,18 @@ function CheckAttributeTypeForm(f) {
             <td>[% item.code |html %]</td>
             <td>[% item.description %]</td>
             <td>
-                [% IF item.branches > 0 %]
+                [% IF item.branches.size > 0 %]
                     [% branches_str = "" %]
                     [% FOREACH branch IN item.branches %]
                         [% branches_str = branches_str _ " " _ branch.branchname _ "(" _ branch.branchcode _ ")" %]
                     [% END %]
-                    <span title="[% branches_str %]">[% item.branches.size %] branches limitations</span>
+                    <span title="[% branches_str %]">
+                        [% IF item.branches.size > 1 %]
+                            [% item.branches.size %] branches limitations
+                        [% ELSE %]
+                            [% item.branches.size %] branch limitation
+                        [% END %]
+                    </span>
                 [% ELSE %]
                     No limitation
                 [% END %]
