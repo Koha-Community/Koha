@@ -15,6 +15,9 @@
 
     $(document).ready(function(){
         var pendingt = $("#pendingt").dataTable($.extend(true, {}, dataTablesDefaults, {
+            "bStateSave": true,
+            "iCookieDuration": 60*60*24*1000, // 1000 days
+            "aLengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
             "aoColumnDefs": [
                 { "aTargets": [ 3, 8, 9 ], "bSortable": false, "bSearchable": false },
             ],
@@ -33,6 +36,9 @@
             "sPaginationType": "four_button"
         } ) );
         var receivedt = $("#receivedt").dataTable($.extend(true, {}, dataTablesDefaults, {
+            "bStateSave": true,
+            "iCookieDuration": 60*60*24*1000, // 1000 days
+            "aLengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
             "aoColumnDefs": [
                 { "aTargets": [ 3, -1 ], "bSortable": false, "bSearchable": false },
             ],
