@@ -6477,6 +6477,16 @@ if ( CheckVersion($DBversion) ) {
 }
 
 
+$DBversion = "3.11.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(qq{
+        ALTER TABLE import_records ADD INDEX batch_id_record_type ( import_batch_id, record_type );
+    });
+    print "Upgrade to $DBversion done (Bug 9207: Add new index batch_id_record_type to import_records)\n";
+    SetVersion($DBversion);
+}
+
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)
