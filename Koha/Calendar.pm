@@ -33,28 +33,31 @@ sub _init {
     my $self       = shift;
     my $branch     = $self->{branchcode};
     my $dbh        = C4::Context->dbh();
-    my $repeat_sth = $dbh->prepare(
-'SELECT * from repeatable_holidays WHERE branchcode = ? AND ISNULL(weekday) = ?'
+    my $weekly_closed_days_sth = $dbh->prepare(
+'SELECT weekday FROM repeatable_holidays WHERE branchcode = ? AND weekday IS NOT NULL'
     );
-    $repeat_sth->execute( $branch, 0 );
+    $weekly_closed_days_sth->execute( $branch );
     $self->{weekly_closed_days} = [ 0, 0, 0, 0, 0, 0, 0 ];
     Readonly::Scalar my $sunday => 7;
-    while ( my $tuple = $repeat_sth->fetchrow_hashref ) {
+    while ( my $tuple = $weekly_closed_days_sth->fetchrow_hashref ) {
         $self->{weekly_closed_days}->[ $tuple->{weekday} ] = 1;
     }
-    $repeat_sth->execute( $branch, 1 );
+    my $day_month_closed_days_sth = $dbh->prepare(
+'SELECT day, month FROM repeatable_holidays WHERE branchcode = ? AND weekday IS NULL'
+    );
+    $day_month_closed_days_sth->execute( $branch );
     $self->{day_month_closed_days} = {};
-    while ( my $tuple = $repeat_sth->fetchrow_hashref ) {
+    while ( my $tuple = $day_month_closed_days_sth->fetchrow_hashref ) {
         $self->{day_month_closed_days}->{ $tuple->{month} }->{ $tuple->{day} } =
           1;
     }
 
-    my $special = $dbh->prepare(
-'SELECT day, month, year FROM special_holidays WHERE branchcode = ? AND isexception = ?'
+    my $exception_holidays_sth = $dbh->prepare(
+'SELECT day, month, year FROM special_holidays WHERE branchcode = ? AND isexception = 1'
     );
-    $special->execute( $branch, 1 );
+    $exception_holidays_sth->execute( $branch );
     my $dates = [];
-    while ( my ( $day, $month, $year ) = $special->fetchrow ) {
+    while ( my ( $day, $month, $year ) = $exception_holidays_sth->fetchrow ) {
         push @{$dates},
           DateTime->new(
             day       => $day,
@@ -66,9 +69,12 @@ sub _init {
     $self->{exception_holidays} =
       DateTime::Set->from_datetimes( dates => $dates );
 
-    $special->execute( $branch, 0 );
+    my $single_holidays_sth = $dbh->prepare(
+'SELECT day, month, year FROM special_holidays WHERE branchcode = ? AND isexception = 0'
+    );
+    $single_holidays_sth->execute( $branch );
     $dates = [];
-    while ( my ( $day, $month, $year ) = $special->fetchrow ) {
+    while ( my ( $day, $month, $year ) = $single_holidays_sth->fetchrow ) {
         push @{$dates},
           DateTime->new(
             day       => $day,
