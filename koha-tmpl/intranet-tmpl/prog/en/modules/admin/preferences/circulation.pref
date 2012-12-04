@@ -441,6 +441,12 @@ Circulation:
             - pref: decreaseLoanHighHoldsValue
               class: integer
             - holds.
+        -
+            - pref: AllowHoldsOnPatronsPossessions
+              choices:
+                  yes: Allow
+                  no: "Don't allow"
+            - patrons to place holds on records that he already have any item of it in his possession.
     Fines Policy:
         -
             - Calculate fines based on days overdue

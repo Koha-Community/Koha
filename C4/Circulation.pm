@@ -3445,6 +3445,27 @@ sub TransferSlip {
     );
 }
 
+=head2 CheckIfIssuedToPatron
+
+  CheckIfIssuedToPatron($borrowernumber, $biblionumber)
+
+  Return 1 if any record item is issued to patron, otherwise return 0
+
+=cut
+
+sub CheckIfIssuedToPatron {
+        my ($borrowernumber, $biblionumber) = @_;
+        my $isissued = 0;
+
+        my $items = GetItemsByBiblioitemnumber($biblionumber);
+
+        foreach my $item (@{$items}) {
+                $isissued = 1 if ($item->{borrowernumber} && $item->{borrowernumber} eq $borrowernumber);
+        }
+
+        return $isissued;
+}
+
 
 1;
 

@@ -247,6 +247,11 @@ foreach my $biblionumber (@biblionumbers) {
  		$warnings = 1;
         $maxreserves = 1;
     }
+    if (not C4::Context->preference('AllowHoldsOnPatronsPossessions') and CheckIfIssuedToPatron($borrowerinfo->{borrowernumber},$biblionumber)) {
+        $warnings = 1;
+        $alreadypossession = 1;
+    }
+
     # get existing reserves .....
     my ( $count, $reserves ) = GetReservesFromBiblionumber($biblionumber,1);
     my $totalcount = $count;
@@ -268,7 +273,8 @@ foreach my $biblionumber (@biblionumbers) {
     $template->param( alreadyreserved => $alreadyreserved,
                       messages => $messages,
                       warnings => $warnings,
-					  maxreserves=>$maxreserves
+                 maxreserves=>$maxreserves,
+                     alreadypossession => $alreadypossession,
 					  );
 
 

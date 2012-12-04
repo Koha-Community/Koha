@@ -537,6 +537,11 @@ foreach my $biblioNum (@biblionumbers) {
         $biblioLoopIter{holdable} = undef;
         $anyholdable = undef;
     }
+    if(not C4::Context->preference('AllowHoldsOnPatronsPossessions') and CheckIfIssuedToPatron($borrowernumber,$biblioNum)) {
+        $biblioLoopIter{holdable} = undef;
+        $biblioLoopIter{already_patron_possession} = 1;
+        $anyholdable = undef;
+    }
 
     push @$biblioLoop, \%biblioLoopIter;
 }
