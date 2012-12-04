@@ -890,7 +890,8 @@ CREATE TABLE `import_records` (
   CONSTRAINT `import_records_ifbk_1` FOREIGN KEY (`import_batch_id`)
              REFERENCES `import_batches` (`import_batch_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   KEY `branchcode` (`branchcode`),
-  KEY `batch_sequence` (`import_batch_id`, `record_sequence`)
+  KEY `batch_sequence` (`import_batch_id`, `record_sequence`),
+  KEY `batch_id_record_type` (`import_batch_id`,`record_type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
