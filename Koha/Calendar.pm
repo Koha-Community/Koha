@@ -241,6 +241,13 @@ sub days_between {
     my $start_dt = shift;
     my $end_dt   = shift;
 
+    if ( $start_dt->compare($end_dt) > 0 ) {
+        # swap dates
+        my $int_dt = $end_dt;
+        $end_dt = $start_dt;
+        $start_dt = $int_dt;
+    }
+
 
     # start and end should not be closed days
     my $days = $start_dt->delta_days($end_dt)->delta_days;
