@@ -82,7 +82,6 @@ my $returnsuggestedby = $input->param('returnsuggestedby');
 my $returnsuggested = $input->param('returnsuggested');
 my $managedby       = $input->param('managedby');
 my $displayby       = $input->param('displayby') || '';
-my $branchfilter    = ($displayby ne "branchcode") ? $input->param('branchcode') : '';
 my $tabcode         = $input->param('tabcode');
 
 # filter informations which are not suggestion related.
@@ -207,7 +206,7 @@ if ($op=~/else/) {
     my $reasonsloop = GetAuthorisedValues("SUGGEST");
     foreach my $criteriumvalue ( @criteria_dv ) {
         # By default, display suggestions from current working branch
-        if(not defined $branchfilter) {
+        unless ( exists $$suggestion_ref{'branchcode'} ) {
             $$suggestion_ref{'branchcode'} = C4::Context->userenv->{'branch'};
         }
         my $definedvalue = defined $$suggestion_ref{$displayby} && $$suggestion_ref{$displayby} ne "";
@@ -276,6 +275,7 @@ if(defined($returnsuggested) and $returnsuggested ne "noone")
 ## Initializing selection lists
 
 #branch display management
+my $branchfilter = ($displayby ne "branchcode") ? $input->param('branchcode') : '';
 my $onlymine=C4::Context->preference('IndependantBranches') && 
             C4::Context->userenv && 
             C4::Context->userenv->{flags}!=1 && 
