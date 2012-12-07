@@ -74,7 +74,7 @@ sub GetAttributeTypes {
     my $branch_limit = $no_branch_limit
         ? 0
         : C4::Context->userenv ? C4::Context->userenv->{"branch"} : 0;
-    my $select = $all ? '*'   : 'DISTINCT(code), description';
+    my $select = $all ? '*'   : 'DISTINCT(code), description, class';
 
     my $dbh = C4::Context->dbh;
     my $query = "SELECT $select FROM borrower_attribute_types";

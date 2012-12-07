@@ -37,7 +37,7 @@ my $dbh = C4::Context->dbh();
 
 $dbh->{mock_add_resultset} = $members_attributetypes;
 
-my @members_attributetypes = C4::Members::AttributeTypes::GetAttributeTypes();
+my @members_attributetypes = C4::Members::AttributeTypes::GetAttributeTypes(undef, 1);
 
 is( $members_attributetypes[0]->{'code'}, 'one', 'First code value is one' );
 
