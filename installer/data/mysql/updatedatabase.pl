@@ -6298,24 +6298,16 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-
-$DBversion = "XXXX";
+$DBversion = "3.11.00.XXX";
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do("INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES('RenewalSendNotice', '0', '', NULL, 'YesNo')");
     $dbh->do(q{
         INSERT INTO `letter` (`module`, `code`, `name`, `title`, `content`) VALUES
-        ('circulation','RENEWAL','Item Renewal','Renewals','The following items have been renew:\r\n----\r\n<<biblio.title>>\r\n----\r\nThank you for visiting <<branches.branchname>>.');
+        ('circulation','RENEWAL','Item Renewals','Item Renewals','The following items have been renewed:\r\n----\r\n<<biblio.title>>\r\n----\r\nThank you for visiting <<branches.branchname>>.');
     });
     print "Upgrade to $DBversion done (Bug 9151 - Renewal notice according to patron alert preferences)\n";
     SetVersion($DBversion);
 }
-
-$DBversion = "XXXX";
-if ( C4::Context->preference('Version') < TransformToNum($DBversion) ) {
-    $dbh->do("INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES('RenewalSendNotice', '0', '', NULL, 'YesNo')");
-    print "Upgrade to $DBversion done (Bug 9151 - System preference to controll the renewal notice sending)\n";
-    SetVersion($DBversion);
-}
-
 
 =head1 FUNCTIONS
 
