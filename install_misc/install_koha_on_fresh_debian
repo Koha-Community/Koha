@@ -523,6 +523,8 @@ a2ensite koha
 invoke-rc.d apache2 reload
 
 koha_script=`makefile_value KOHA_DEST_SCRIPT_DIR`
+ln -s "$koha_script"/koha-index-daemon-ctl.sh  /etc/init.d/koha-index-daemon
+update-rc.d koha-index-daemon defaults
 
 # TODO:
 # - add translator
