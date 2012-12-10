@@ -55,7 +55,7 @@ if ( $m->Verify() ) {
     ( $borrowernumber, $password ) = AddMember_Opac(%$borrower);
 
     if ($borrowernumber) {
-        $m->DelModifications();
+        Koha::Borrower::Modifications->DelModifications({ verification_token => $token });
 
         $template->param( password_cleartext => $password );
         $template->param(

@@ -28,34 +28,15 @@ use C4::Context;
 use C4::Debug;
 use C4::SQLHelper qw(InsertInTable UpdateInTable);
 
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
-
-BEGIN {
-
-    # set the version for version checking
-    $VERSION = 0.01;
-    require Exporter;
-    @ISA    = qw(Exporter);
-    @EXPORT = qw(
-
-    );
-
-    my $debug = C4::Context->preference("DebugLevel");
-}
-
 sub new {
     my ( $class, %args ) = @_;
-    my $self = bless( {}, $class );
 
-    $self->{'verification_token'} = $args{'verification_token'};
-    $self->{'borrowernumber'}     = $args{'borrowernumber'};
-
-    return $self;
+    return bless( \%args, $class );
 }
 
 =head2 AddModifications
 
-Koha::Borrower::Modifications->AddModifications( %data );
+Koha::Borrower::Modifications->AddModifications( $data );
 
 Adds or updates modifications for a borrower.
 
@@ -65,13 +46,13 @@ to be part of the passed in hash.
 =cut
 
 sub AddModifications {
-    my ( $self, %data ) = @_;
+    my ( $self, $data ) = @_;
 
     if ( $self->{'borrowernumber'} ) {
-        delete $data{'borrowernumber'};
+        delete $data->{'borrowernumber'};
 
-        if ( keys %data ) {
-            $data{'borrowernumber'} = $self->{'borrowernumber'};
+        if ( keys %$data ) {
+            $data->{'borrowernumber'} = $self->{'borrowernumber'};
             my $dbh = C4::Context->dbh;
 
             my $query = "
@@ -85,20 +66,20 @@ sub AddModifications {
             my $result = $sth->fetchrow_hashref();
 
             if ( $result->{'count'} ) {
-                $data{'verification_token'} = q{};
-                return UpdateInTable( "borrower_modifications", \%data );
+                $data->{'verification_token'} = q{};
+                return UpdateInTable( "borrower_modifications", $data );
             }
             else {
-                return InsertInTable( "borrower_modifications", \%data );
+                return InsertInTable( "borrower_modifications", $data );
             }
         }
 
     }
     elsif ( $self->{'verification_token'} ) {
-        delete $data{'borrowernumber'};
-        $data{'verification_token'} = $self->{'verification_token'};
+        delete $data->{'borrowernumber'};
+        $data->{'verification_token'} = $self->{'verification_token'};
 
-        return InsertInTable( "borrower_modifications", \%data );
+        return InsertInTable( "borrower_modifications", $data );
     }
     else {
         return;
@@ -116,12 +97,10 @@ Returns true if the passed in token is valid.
 sub Verify {
     my ( $self, $verification_token ) = @_;
 
-    if ( ref($self) ) {
-        $verification_token =
-          ($verification_token)
-          ? $verification_token
-          : $self->{'verification_token'};
-    }
+    $verification_token =
+      ($verification_token)
+      ? $verification_token
+      : $self->{'verification_token'};
 
     my $dbh   = C4::Context->dbh;
     my $query = "
@@ -219,17 +198,15 @@ them from the modifications table.
 sub ApproveModifications {
     my ( $self, $borrowernumber ) = @_;
 
-    if ( ref($self) ) {
-        $borrowernumber =
-          ($borrowernumber) ? $borrowernumber : $self->{'borrowernumber'};
-    }
+    $borrowernumber =
+      ($borrowernumber) ? $borrowernumber : $self->{'borrowernumber'};
 
     return unless $borrowernumber;
 
-    my $data = $self->GetModifications( borrowernumber => $borrowernumber );
+    my $data = $self->GetModifications({ borrowernumber => $borrowernumber });
 
     if ( UpdateInTable( "borrowers", $data ) ) {
-        $self->DelModifications( borrowernumber => $borrowernumber );
+        $self->DelModifications({ borrowernumber => $borrowernumber });
     }
 }
 
@@ -245,50 +222,37 @@ without commiting the changes to the borrower record.
 sub DenyModifications {
     my ( $self, $borrowernumber ) = @_;
 
-    if ( ref($self) ) {
-        $borrowernumber =
-          ($borrowernumber) ? $borrowernumber : $self->{'borrowernumber'};
-    }
+    $borrowernumber =
+      ($borrowernumber) ? $borrowernumber : $self->{'borrowernumber'};
 
     return unless $borrowernumber;
 
-    return $self->DelModifications( borrowernumber => $borrowernumber );
+    return $self->DelModifications({ borrowernumber => $borrowernumber });
 }
 
 =head2 DelModifications
 
-Koha::Borrower::Modifications->DelModifications(
+Koha::Borrower::Modifications->DelModifications({
   [ borrowernumber => $borrowernumber ],
   [ verification_token => $verification_token ]
-);
+});
 
 Deletes the modifications for the given borrowernumber or verification token.
 
 =cut
 
 sub DelModifications {
-    my ( $self, %params ) = @_;
+    my ( $self, $params ) = @_;
 
     my ( $field, $value );
 
-    if ( $params{'borrowernumber'} ) {
+    if ( $params->{'borrowernumber'} ) {
         $field = 'borrowernumber';
-        $value = $params{'borrowernumber'};
+        $value = $params->{'borrowernumber'};
     }
-    elsif ( $params{'verification_token'} ) {
+    elsif ( $params->{'verification_token'} ) {
         $field = 'verification_token';
-        $value = $params{'verification_token'};
-    }
-
-    if ( ref($self) && !$value ) {
-        if ( $self->{'borrowernumber'} ) {
-            $field = 'borrowernumber';
-            $value = $self->{'borrowernumber'};
-        }
-        elsif ( $self->{'verification_token'} ) {
-            $field = 'verification_token';
-            $value = $self->{'verification_token'};
-        }
+        $value = $params->{'verification_token'};
     }
 
     return unless $value;
@@ -309,38 +273,27 @@ sub DelModifications {
 
 =head2 GetModifications
 
-$hashref = Koha::Borrower::Modifications->GetModifications(
+$hashref = Koha::Borrower::Modifications->GetModifications({
   [ borrowernumber => $borrowernumber ],
   [ verification_token => $verification_token ]
-);
+});
 
 Gets the modifications for the given borrowernumber or verification token.
 
 =cut
 
 sub GetModifications {
-    my ( $self, %params ) = @_;
+    my ( $self, $params ) = @_;
 
     my ( $field, $value );
 
-    if ( $params{'borrowernumber'} ) {
+    if ( defined( $params->{'borrowernumber'} ) ) {
         $field = 'borrowernumber';
-        $value = $params{'borrowernumber'};
+        $value = $params->{'borrowernumber'};
     }
-    elsif ( $params{'verification_token'} ) {
+    elsif ( defined( $params->{'verification_token'} ) ) {
         $field = 'verification_token';
-        $value = $params{'verification_token'};
-    }
-
-    if ( ref($self) && !$value ) {
-        if ( $self->{'borrowernumber'} ) {
-            $field = 'borrowernumber';
-            $value = $self->{'borrowernumber'};
-        }
-        elsif ( $self->{'verification_token'} ) {
-            $field = 'verification_token';
-            $value = $self->{'verification_token'};
-        }
+        $value = $params->{'verification_token'};
     }
 
     return unless $value;

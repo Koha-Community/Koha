@@ -107,7 +107,7 @@ if ( $action eq 'create' ) {
 
             Koha::Borrower::Modifications->new(
                 verification_token => $verification_token )
-              ->AddModifications(%borrower);
+              ->AddModifications(\%borrower);
 
             #Send verification email
             my $letter = C4::Letters::GetPreparedLetter(
@@ -188,7 +188,7 @@ elsif ( $action eq 'update' ) {
             borrowernumber => $borrowernumber );
 
         $m->DelModifications;
-        $m->AddModifications(%borrower_changes);
+        $m->AddModifications(\%borrower_changes);
         $template->param(
             borrower => GetMember( borrowernumber => $borrowernumber ),
         );
