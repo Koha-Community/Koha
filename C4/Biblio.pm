@@ -1255,7 +1255,7 @@ sub GetMarcBiblio {
   my $marcxml = GetXmlBiblio($biblionumber);
 
 Returns biblioitems.marcxml of the biblionumber passed in parameter.
-The XML contains both biblio & item datas
+The XML should only contain biblio information (item information is no longer stored in marcxml field)
 
 =cut
 
