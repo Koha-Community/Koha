@@ -45,6 +45,7 @@ do_start()
     # We insure all required directories exist, including disabled ones.
     koha-create-dirs $(koha-list)
     koha-start-zebra $(koha-list --enabled)
+    koha-start-sip $(koha-list --enabled)
 }
 
 #
@@ -54,6 +55,7 @@ do_stop()
 {
     # We stop everything, including disabled ones.
     koha-stop-zebra $(koha-list) || true
+    koha-stop-sip $(koha-list) || true
 }
 
 #
@@ -61,6 +63,8 @@ do_stop()
 #
 do_reload() {
     koha-restart-zebra $(koha-list --enabled)
+    koha-stop-sip $(koha-list) || true
+    koha-start-sip $(koha-list --enabled)
 }
 
 case "$1" in
