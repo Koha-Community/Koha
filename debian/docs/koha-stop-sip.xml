@@ -1,0 +1,52 @@
+<article xmlns='http://docbook.org/ns/docbook'>
+<title>koha-stop-sip</title>
+<info>
+    <productname>Koha</productname> is the first free software library automation package.
+    <author>
+        <personname>
+            <firstname>Robin</firstname>
+            <surname>Sheat</surname>
+        </personname>
+        <affiliation>
+            <orgname>Catalyst IT</orgname>
+            <uri>http://www.catalyst.net.nz</uri>
+        </affiliation>
+        <contrib>Author</contrib>
+    </author>
+</info>
+
+<refentry xml:id="koha-stop-sip">
+
+    <refmeta>
+        <refentrytitle>koha-stop-sip</refentrytitle>
+        <manvolnum>8</manvolnum>
+    </refmeta>
+
+    <refnamediv>
+        <refname>koha-stop-sip</refname>
+        <refpurpose>Stops the SIP daemon for the specified Koha instances.</refpurpose>
+        <refclass>UNIX/Linux</refclass>
+    </refnamediv>
+
+    <refsynopsisdiv>
+        <cmdsynopsis>
+            <command>koha-stop-sip</command>
+            <arg choice="req" rep="repeat"><replaceable>instancename</replaceable></arg>
+        </cmdsynopsis>
+    </refsynopsisdiv>
+
+    <refsect1><title>Description</title>
+        <para>This will stop the SIP daemon for the Koha instance specified by <arg>instancename</arg>.</para>
+        <para>If it's not running, an note will be displayed.</para>
+    </refsect1>
+
+  <refsect1><title>See also</title>
+  <simplelist type="inline">
+    <member><command>koha-start-sip(8)</command></member>
+    <member><command>koha-enable-sip(8)</command></member>
+  </simplelist>
+  </refsect1>
+
+</refentry>
+
+</article>
