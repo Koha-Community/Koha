@@ -354,7 +354,7 @@ sub calculate {
     $sth2->execute(@strparams2);
  	while (my ($celvalue) = $sth2->fetchrow) {
  		my %cell;
-		if ($celvalue) {
+             if (defined $celvalue) {
 			$cell{coltitle} = $celvalue;
 			# $cell{coltitle_display} = ($colfield eq 'branchcode') ? $branches->{$celvalue}->{branchname} : $celvalue;
 			$cell{coltitle_display} = $cathash{$celvalue} if ($column eq 'categorycode');
