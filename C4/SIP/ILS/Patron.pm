@@ -25,24 +25,24 @@ use Digest::MD5 qw(md5_base64);
 
 our $VERSION = 3.07.00.049;
 
-our $kp;	# koha patron
+our $kp;    # koha patron
 
 sub new {
-	my ($class, $patron_id) = @_;
+    my ($class, $patron_id) = @_;
     my $type = ref($class) || $class;
     my $self;
     $kp = GetMember(cardnumber=>$patron_id) || GetMember(userid=>$patron_id);
-	$debug and warn "new Patron (GetMember): " . Dumper($kp);
+    $debug and warn "new Patron (GetMember): " . Dumper($kp);
     unless (defined $kp) {
-		syslog("LOG_DEBUG", "new ILS::Patron(%s): no such patron", $patron_id);
+        syslog("LOG_DEBUG", "new ILS::Patron(%s): no such patron", $patron_id);
         return;
-	}
+    }
     $kp = GetMemberDetails($kp->{borrowernumber});
-	$debug and warn "new Patron (GetMemberDetails): " . Dumper($kp);
-	my $pw        = $kp->{password};  ### FIXME - md5hash -- deal with . 
-	my $flags     = $kp->{flags};     # or warn "Warning: No flags from patron object for '$patron_id'"; 
-	my $debarred  = $kp->{debarred};  # 1 if ($kp->{flags}->{DBARRED}->{noissues});
-	$debug and warn sprintf("Debarred = %s : ", ($debarred||'undef')) . Dumper(%{$kp->{flags}});
+    $debug and warn "new Patron (GetMemberDetails): " . Dumper($kp);
+    my $pw        = $kp->{password};  ### FIXME - md5hash -- deal with .
+    my $flags     = $kp->{flags};     # or warn "Warning: No flags from patron object for '$patron_id'";
+    my $debarred  = $kp->{debarred};  # 1 if ($kp->{flags}->{DBARRED}->{noissues});
+    $debug and warn sprintf("Debarred = %s : ", ($debarred||'undef')) . Dumper(%{$kp->{flags}});
     my ($day, $month, $year) = (localtime)[3,4,5];
     my $today    = sprintf '%04d-%02d-%02d', $year+1900, $month+1, $day;
     my $expired  = ($today gt $kp->{dateexpiry}) ? 1 : 0;
@@ -52,18 +52,18 @@ sub new {
         }
         $kp->{opacnote} .= 'PATRON EXPIRED';
     }
-	my %ilspatron;
-	my $adr     = $kp->{streetnumber} || '';
-	my $address = $kp->{address}      || ''; 
+    my %ilspatron;
+    my $adr     = $kp->{streetnumber} || '';
+    my $address = $kp->{address}      || '';
     my $dob     = $kp->{dateofbirth};
     $dob and $dob =~ s/-//g;    # YYYYMMDD
     my $dexpiry     = $kp->{dateexpiry};
     $dexpiry and $dexpiry =~ s/-//g;    # YYYYMMDD
-	$adr .= ($adr && $address) ? " $address" : $address;
+    $adr .= ($adr && $address) ? " $address" : $address;
     my $fines_amount = $flags->{CHARGES}->{amount};
     $fines_amount = ($fines_amount and $fines_amount > 0) ? $fines_amount : 0;
     {
-	no warnings;	# any of these $kp->{fields} being concat'd could be undef
+    no warnings;    # any of these $kp->{fields} being concat'd could be undef
     %ilspatron = (
         getmemberdetails_object => $kp,
         name => $kp->{firstname} . " " . $kp->{surname},
@@ -103,24 +103,24 @@ sub new {
     );
     }
     $debug and warn "patron fines: $ilspatron{fines} ... amountoutstanding: $kp->{amountoutstanding} ... CHARGES->amount: $flags->{CHARGES}->{amount}";
-	for (qw(EXPIRED CHARGES CREDITS GNA LOST DBARRED NOTES)) {
-		($flags->{$_}) or next;
+    for (qw(EXPIRED CHARGES CREDITS GNA LOST DBARRED NOTES)) {
+        ($flags->{$_}) or next;
         if ($_ ne 'NOTES' and $flags->{$_}->{message}) {
             $ilspatron{screen_msg} .= " -- " . $flags->{$_}->{message};  # show all but internal NOTES
         }
-		if ($flags->{$_}->{noissues}) {
-			foreach my $toggle (qw(charge_ok renew_ok recall_ok hold_ok inet)) {
-				$ilspatron{$toggle} = 0;    # if we get noissues, disable everything
-			}
-		}
-	}
+        if ($flags->{$_}->{noissues}) {
+            foreach my $toggle (qw(charge_ok renew_ok recall_ok hold_ok inet)) {
+                $ilspatron{$toggle} = 0;    # if we get noissues, disable everything
+            }
+        }
+    }
 
     # FIXME: populate fine_items recall_items
 #   $ilspatron{hold_items}    = (GetReservesFromBorrowernumber($kp->{borrowernumber},'F'));
-	$ilspatron{unavail_holds} = [(GetReservesFromBorrowernumber($kp->{borrowernumber}))];
-	$ilspatron{items} = GetPendingIssues($kp->{borrowernumber});
-	$self = \%ilspatron;
-	$debug and warn Dumper($self);
+    $ilspatron{unavail_holds} = [(GetReservesFromBorrowernumber($kp->{borrowernumber}))];
+    $ilspatron{items} = GetPendingIssues($kp->{borrowernumber});
+    $self = \%ilspatron;
+    $debug and warn Dumper($self);
     syslog("LOG_DEBUG", "new ILS::Patron(%s): found patron '%s'", $patron_id,$self->{id});
     bless $self, $type;
     return $self;
@@ -178,24 +178,24 @@ sub AUTOLOAD {
     $name =~ s/.*://;
 
     unless (exists $fields{$name}) {
-		croak "Cannot access '$name' field of class '$class'";
+        croak "Cannot access '$name' field of class '$class'";
     }
 
-	if (@_) {
+    if (@_) {
         $fields{$name} or croak "Field '$name' of class '$class' is READ ONLY.";
-		return $self->{$name} = shift;
-	} else {
-		return $self->{$name};
-	}
+        return $self->{$name} = shift;
+    } else {
+        return $self->{$name};
+    }
 }
 
 sub check_password {
     my ($self, $pwd) = @_;
-	my $md5pwd = $self->{password};
-	# warn sprintf "check_password for %s: '%s' vs. '%s'",($self->{name}||''),($self->{password}||''),($pwd||'');
-	(defined $pwd   ) or return 0;		# you gotta give me something (at least ''), or no deal
-	(defined $md5pwd) or return($pwd eq '');	# if the record has a NULL password, accept '' as match
-	return (md5_base64($pwd) eq $md5pwd);
+    my $md5pwd = $self->{password};
+    # warn sprintf "check_password for %s: '%s' vs. '%s'",($self->{name}||''),($self->{password}||''),($pwd||'');
+    (defined $pwd   ) or return 0;        # you gotta give me something (at least ''), or no deal
+    (defined $md5pwd) or return($pwd eq '');    # if the record has a NULL password, accept '' as match
+    return (md5_base64($pwd) eq $md5pwd);
 }
 
 # A few special cases, not in AUTOLOADed %fields
@@ -229,17 +229,17 @@ sub expired {
 sub drop_hold {
     my ($self, $item_id) = @_;
     return if !$item_id;
-	my $result = 0;
-	foreach (qw(hold_items unavail_holds)) {
-		$self->{$_} or next;
-		for (my $i = 0; $i < scalar @{$self->{$_}}; $i++) {
-			my $held_item = $self->{$_}[$i]->{item_id} or next;
-			if ($held_item eq $item_id) {
-				splice @{$self->{$_}}, $i, 1;
-				$result++;
-			}
-		}
-	}
+    my $result = 0;
+    foreach (qw(hold_items unavail_holds)) {
+        $self->{$_} or next;
+        for (my $i = 0; $i < scalar @{$self->{$_}}; $i++) {
+            my $held_item = $self->{$_}[$i]->{item_id} or next;
+            if ($held_item eq $item_id) {
+                splice @{$self->{$_}}, $i, 1;
+                $result++;
+            }
+        }
+    }
     return $result;
 }
 
@@ -250,7 +250,7 @@ sub x_items {
     my $self      = shift;
     my $array_var = shift or return;
     my ($start, $end) = @_;
-	$self->{$array_var} or return [];
+    $self->{$array_var} or return [];
     $start = 1 unless defined($start);
     $end   = scalar @{$self->{$array_var}} unless defined($end);
     # syslog("LOG_DEBUG", "$array_var: start = %d, end = %d; items(%s)", $start, $end, join(', ', @{$self->{items}}));
@@ -290,7 +290,7 @@ sub unavail_holds {
 sub block {
     my ($self, $card_retained, $blocked_card_msg) = @_;
     foreach my $field ('charge_ok', 'renew_ok', 'recall_ok', 'hold_ok', 'inet') {
-		$self->{$field} = 0;
+        $self->{$field} = 0;
     }
     $self->{screen_msg} = "Block feature not implemented";  # $blocked_card_msg || "Card Blocked.  Please contact library staff";
     # TODO: not really affecting patron record
@@ -300,11 +300,11 @@ sub block {
 sub enable {
     my $self = shift;
     foreach my $field ('charge_ok', 'renew_ok', 'recall_ok', 'hold_ok', 'inet') {
-		$self->{$field} = 1;
+        $self->{$field} = 1;
     }
     syslog("LOG_DEBUG", "Patron(%s)->enable: charge: %s, renew:%s, recall:%s, hold:%s",
-	   $self->{id}, $self->{charge_ok}, $self->{renew_ok},
-	   $self->{recall_ok}, $self->{hold_ok});
+       $self->{id}, $self->{charge_ok}, $self->{renew_ok},
+       $self->{recall_ok}, $self->{hold_ok});
     $self->{screen_msg} = "Enable feature not implemented."; # "All privileges restored.";   # TODO: not really affecting patron record
     return $self;
 }
@@ -355,35 +355,35 @@ __END__
 =head1 EXAMPLES
 
   our %patron_example = (
-		  djfiander => {
-		      name => "David J. Fiander",
-		      id => 'djfiander',
-		      password => '6789',
-		      ptype => 'A', # 'A'dult.  Whatever.
-		      birthdate => '19640925',
-		      address => '2 Meadowvale Dr. St Thomas, ON',
-		      home_phone => '(519) 555 1234',
-		      email_addr => 'djfiander@hotmail.com',
-		      charge_ok => 1,
-		      renew_ok => 1,
-		      recall_ok => 0,
-		      hold_ok => 1,
-		      card_lost => 0,
-		      claims_returned => 0,
-		      fines => 100,
-		      fees => 0,
-		      recall_overdue => 0,
-		      items_billed => 0,
-		      screen_msg => '',
-		      print_line => '',
-		      items => [],
-		      hold_items => [],
-		      overdue_items => [],
-		      fine_items => ['Computer Time'],
-		      recall_items => [],
-		      unavail_holds => [],
-		      inet => 1,
-		  },
+          djfiander => {
+              name => "David J. Fiander",
+              id => 'djfiander',
+              password => '6789',
+              ptype => 'A', # 'A'dult.  Whatever.
+              birthdate => '19640925',
+              address => '2 Meadowvale Dr. St Thomas, ON',
+              home_phone => '(519) 555 1234',
+              email_addr => 'djfiander@hotmail.com',
+              charge_ok => 1,
+              renew_ok => 1,
+              recall_ok => 0,
+              hold_ok => 1,
+              card_lost => 0,
+              claims_returned => 0,
+              fines => 100,
+              fees => 0,
+              recall_overdue => 0,
+              items_billed => 0,
+              screen_msg => '',
+              print_line => '',
+              items => [],
+              hold_items => [],
+              overdue_items => [],
+              fine_items => ['Computer Time'],
+              recall_items => [],
+              unavail_holds => [],
+              inet => 1,
+          },
   );
 
  From borrowers table:
@@ -463,26 +463,26 @@ __END__
 
  $flags->{KEY}
  {CHARGES}
-	{message}     Message showing patron's credit or debt
-	{noissues}    Set if patron owes >$5.00
- {GNA}         	Set if patron gone w/o address
-	{message}     "Borrower has no valid address"
-	{noissues}    Set.
- {LOST}        	Set if patron's card reported lost
-	{message}     Message to this effect
-	{noissues}    Set.
- {DBARRED}     	Set if patron is debarred
-	{message}     Message to this effect
-	{noissues}    Set.
- {NOTES}       	Set if patron has notes
-	{message}     Notes about patron
- {ODUES}       	Set if patron has overdue books
-	{message}     "Yes"
-	{itemlist}    ref-to-array: list of overdue books
-	{itemlisttext}    Text list of overdue items
- {WAITING}     	Set if there are items available that the patron reserved
-	{message}     Message to this effect
-	{itemlist}    ref-to-array: list of available items
+    {message}     Message showing patron's credit or debt
+    {noissues}    Set if patron owes >$5.00
+ {GNA}             Set if patron gone w/o address
+    {message}     "Borrower has no valid address"
+    {noissues}    Set.
+ {LOST}            Set if patron's card reported lost
+    {message}     Message to this effect
+    {noissues}    Set.
+ {DBARRED}         Set if patron is debarred
+    {message}     Message to this effect
+    {noissues}    Set.
+ {NOTES}           Set if patron has notes
+    {message}     Notes about patron
+ {ODUES}           Set if patron has overdue books
+    {message}     "Yes"
+    {itemlist}    ref-to-array: list of overdue books
+    {itemlisttext}    Text list of overdue items
+ {WAITING}         Set if there are items available that the patron reserved
+    {message}     Message to this effect
+    {itemlist}    ref-to-array: list of available items
 
 =cut
 
