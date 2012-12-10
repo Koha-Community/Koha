@@ -431,7 +431,8 @@ sub handle {
 # information will be returned to the terminal.
 # 
 sub build_patron_status {
-    my ($patron, $lang, $fields)= @_;
+    my ($patron, $lang, $fields, $server)= @_;
+
     my $patron_pwd = $fields->{(FID_PATRON_PWD)};
     my $resp = (PATRON_STATUS_RESP);
 
@@ -451,7 +452,10 @@ sub build_patron_status {
 	    $resp .= maybe_add(FID_FEE_AMT, $patron->fee_amount);
 	}
 
-	$resp .= maybe_add(FID_SCREEN_MSG, $patron->screen_msg);
+    $resp .= maybe_add( FID_SCREEN_MSG, $patron->screen_msg );
+    $resp .= maybe_add( FID_SCREEN_MSG, $patron->{branchcode} )
+      if ( $server->{account}->{send_patron_home_library_in_af} );
+
 	$resp .= maybe_add(FID_PRINT_LINE, $patron->print_line);
     } else {
 	# Invalid patron id.  Report that the user has no privs.,
@@ -485,7 +489,7 @@ sub handle_patron_status {
 	#warn $fields->{(FID_INST_ID)};
     $ils->check_inst_id($fields->{(FID_INST_ID)}, "handle_patron_status");
     $patron = $ils->find_patron($fields->{(FID_PATRON_ID)});
-    $resp = build_patron_status($patron, $lang, $fields);
+    $resp = build_patron_status($patron, $lang, $fields, $server );
     $self->write_msg($resp,undef,$server->{account}->{terminator});
     return (PATRON_STATUS_REQ);
 }
@@ -993,7 +997,10 @@ sub handle_patron_info {
         # Custom protocol extension to report patron internet privileges
         $resp .= maybe_add(FID_INET_PROFILE,     $patron->inet_privileges);
 
-        $resp .= maybe_add(FID_SCREEN_MSG,       $patron->screen_msg);
+        $resp .= maybe_add( FID_SCREEN_MSG, $patron->screen_msg );
+        $resp .= maybe_add( FID_SCREEN_MSG, $patron->{branchcode} )
+          if ( $server->{account}->{send_patron_home_library_in_af} );
+
         $resp .= maybe_add(FID_PRINT_LINE,       $patron->print_line);
     } else {
         # Invalid patron ID:
