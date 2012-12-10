@@ -335,6 +335,14 @@ tinyMCE.init({
             [% END %]
             </select>
 		</li>
+        <li>
+            <label for="show_in_pulldown">Show in search pulldown: </label>
+            [% IF ( show_in_pulldown ) %]
+                <input type="checkbox" name="show_in_pulldown" id="show_in_pulldown" checked="checked"/>
+            [% ELSE %]
+                <input type="checkbox" name="show_in_pulldown" id="show_in_pulldown" />
+            [% END %]
+        </li>
 		</ol>
     </fieldset>
 	<fieldset class="action"><input type="submit" value="Update" /></fieldset>

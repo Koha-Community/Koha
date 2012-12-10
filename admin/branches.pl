@@ -168,6 +168,8 @@ elsif ( $op eq 'addcategory_validate' ) {
     $template->param( else => 1 );
     # confirm settings change...
     my $params = $input->Vars;
+    $params->{'show_in_pulldown'} = ( $params->{'show_in_pulldown'} eq 'on' ) ? 1 : 0;
+
     unless ( $params->{'categorycode'} && $params->{'categoryname'} ) {
         default("MESSAGE4",$template);
     }
@@ -294,6 +296,7 @@ sub editcatform {
             categorycode    => $data->{'categorycode'},
             categoryname    => $data->{'categoryname'},
             codedescription => $data->{'codedescription'},
+            show_in_pulldown => $data->{'show_in_pulldown'},
 		);
     }
 	for my $ctype (GetCategoryTypes()) {

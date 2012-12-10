@@ -168,13 +168,28 @@
         [% ELSE %]
             <div id="libraries" class="mobile-hidden">
         [% END %]
-      <select name="limit" id="select_library" class="left">
-         <option value="">All libraries</option>
-         [% FOREACH BranchesLoo IN BranchesLoop %]
-            [% IF ( BranchesLoo.selected ) %]<option selected="selected" value="branch:[% BranchesLoo.value %]">[% BranchesLoo.branchname %]</option>
-            [% ELSE %]<option value="branch:[% BranchesLoo.value %]">[% BranchesLoo.branchname %]</option>[% END %]
-         [% END %]
-      </select>
+
+        <select name="branch_group_limit" id="select_library" class="left">
+           <option value="">All libraries</option>
+           <optgroup label="Libraries">
+               [% FOREACH BranchesLoo IN BranchesLoop %]
+                  [% IF ( BranchesLoo.selected ) %]<option selected="selected" value="branch:[% BranchesLoo.value %]">[% BranchesLoo.branchname %]</option>
+                  [% ELSE %]<option value="branch:[% BranchesLoo.value %]">[% BranchesLoo.branchname %]</option>[% END %]
+               [% END %]
+           </optgroup>
+           [% IF BranchCategoriesLoop %]
+               <optgroup label="Groups">
+                   [% FOREACH bc IN BranchCategoriesLoop %]
+                       [% IF ( bc.selected ) %]
+                           <option selected="selected" value="multibranchlimit-[% bc.categorycode %]">[% bc.categoryname %]</option>
+                       [% ELSE %]
+                           <option value="multibranchlimit-[% bc.categorycode %]">[% bc.categoryname %]</option>
+                       [% END %]
+                   [% END %]
+               </optgroup>
+           [% END %]
+        </select>
+
     </div>
    [% ELSE %]
       [% IF ( opac_limit_override ) %]

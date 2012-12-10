@@ -6713,6 +6713,16 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.11.00.XXX";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do(q{
+        ALTER TABLE branchcategories ADD show_in_pulldown BOOLEAN NOT NULL DEFAULT '0',
+        ADD INDEX ( show_in_pulldown )
+    });
+    print "Upgrade to $DBversion done (Bug 9257 - Add groups to normal search pulldown)\n";
+    SetVersion ($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)
