@@ -621,6 +621,7 @@ sub BatchCommitRecords {
 
                 # remove item fields so that they don't get
                 # added again if record is reverted
+                # FIXME: GetXmlBiblio output should not contain item info any more! So the next foreach should not be needed. Does not hurt either; may remove old 952s that should not have been there anymore.
                 my $old_marc = MARC::Record->new_from_xml(StripNonXmlChars($oldxml), 'UTF-8', $rowref->{'encoding'}, $marc_type);
                 foreach my $item_field ($old_marc->field($item_tag)) {
                     $old_marc->delete_field($item_field);
