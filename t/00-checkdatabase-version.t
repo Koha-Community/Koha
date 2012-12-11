@@ -38,7 +38,12 @@ foreach my $file (@files){
        $line++;
        if (/XXX/i) {
            #two lines are an exception for updatedatabase (routine SetVersion and TransferToNum)
-           next if $file=~ /updatedatabase/ && ( /s\/XXX\$\/999\/;/ || /\$_\[0\]=~ \/XXX\$\/;/ );
+           next
+               if $file =~ /updatedatabase/
+                  && (   /s\/XXX\$\/999\/;/
+                      || /\$_\[0\]=~ \/XXX\$\/;/
+                      || /version contains XXX/
+                      || /\$proposed_version =~ m\/XXX\// );
            $xxx_found = 1;
           last;
        }

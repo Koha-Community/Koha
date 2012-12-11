@@ -6181,17 +6181,6 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-if ( CheckVersion($DBversion) ) {
-    print "Upgrade to $DBversion done (Bug 9191: You shouldn't see this)\n";
-    SetVersion($DBversion);
-}
-
-$DBversion = "3.11.00.XXX";
-if ( CheckVersion($DBversion) ) {
-    print "Upgrade to $DBversion done (Bug 9191: You should see this)\n";
-    SetVersion($DBversion);
-}
-
 =head1 FUNCTIONS
 
 =head2 TableExists($table)
