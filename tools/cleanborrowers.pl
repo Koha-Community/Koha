@@ -78,7 +78,7 @@ if ( $params->{'step2'} ) {
     my $membersToDelete;
     if ( $checkboxes{borrower} ) {
         $membersToDelete =
-          GetBorrowersWhoHaveNotBorrowedSince( { not_borrowered_since => $filterdate1, expired_before => $borrower_dateexpiry, category_code => $borrower_categorycode } );
+          GetBorrowersToExpunge( { not_borrowered_since => $filterdate1, expired_before => $borrower_dateexpiry, category_code => $borrower_categorycode } );
         $totalDel = scalar @$membersToDelete;
 
     }
@@ -120,7 +120,7 @@ if ( $params->{'step3'} ) {
     # delete members
     if ($do_delete) {
         my $membersToDelete =
-          GetBorrowersWhoHaveNotBorrowedSince( { not_borrowered_since => $filterdate1, expired_before => $borrower_dateexpiry, category_code => $borrower_categorycode } );
+          GetBorrowersToExpunge( { not_borrowered_since => $filterdate1, expired_before => $borrower_dateexpiry, category_code => $borrower_categorycode } );
         $totalDel = scalar(@$membersToDelete);
         $radio    = $params->{'radio'};
         if ( $radio eq 'trash' ) {

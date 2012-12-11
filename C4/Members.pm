@@ -89,7 +89,7 @@ BEGIN {
         GetBorrowerCategorycode
         &GetBorrowercategoryList
 
-        &GetBorrowersWhoHaveNotBorrowedSince
+        &GetBorrowersToExpunge
         &GetBorrowersWhoHaveNeverBorrowed
         &GetBorrowersWithIssuesHistoryOlderThan
 
@@ -1938,9 +1938,9 @@ WHERE roadtypeid=?|;
     return ($roadtype);
 }
 
-=head2 GetBorrowersWhoHaveNotBorrowedSince
+=head2 GetBorrowersToExpunge
 
-  $borrowers = &GetBorrowersWhoHaveNotBorrowedSince(
+  $borrowers = &GetBorrowersToExpunge(
       not_borrowered_since => $not_borrowered_since,
       expired_before       => $expired_before,
       category_code        => $category_code,
@@ -1951,7 +1951,7 @@ WHERE roadtypeid=?|;
 
 =cut
 
-sub GetBorrowersWhoHaveNotBorrowedSince {
+sub GetBorrowersToExpunge {
     my $params = shift;
 
     my $filterdate     = $params->{'not_borrowered_since'};
