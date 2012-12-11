@@ -32,6 +32,7 @@ my $QueryAutoTruncate = 0;
 my $QueryWeightFields = 0;
 my $QueryFuzzy = 0;
 my $QueryRemoveStopwords = 0;
+my $UseQueryParser = 0;
 my $contextmodule = new Test::MockModule('C4::Context');
 $contextmodule->mock('_new_dbh', sub {
     my $dbh = DBI->connect( 'DBI:Mock:', '', '' )
@@ -53,6 +54,8 @@ $contextmodule->mock('preference', sub {
         return $QueryFuzzy;
     } elsif ($pref eq 'QueryRemoveStopwords') {
         return $QueryRemoveStopwords;
+    } elsif ($pref eq 'UseQueryParser') {
+        return $UseQueryParser;
     } elsif ($pref eq 'maxRecordsForFacets') {
         return 20;
     } elsif ($pref eq 'FacetLabelTruncationLength') {
@@ -108,6 +111,11 @@ $contextmodule->mock('marcfromkohafield', sub {
             }
         );
         return \%hash;
+});
+$contextmodule->mock('queryparser', sub {
+    my $QParser     = Koha::QueryParser::Driver::PQF->new();
+    $QParser->load_config("$datadir/etc/searchengine/queryparser.yaml");
+    return $QParser;
 });
 my $context = new C4::Context("$datadir/etc/koha-conf.xml");
 $context->set_context();
@@ -521,7 +529,7 @@ my $searchmodule = new Test::MockModule('C4::Search');
 $searchmodule->mock('SimpleSearch', sub {
     my $query = shift;
 
-    is($query, "Heading,wrdl=$term", "Searching for expected term '$term' for exploding") or return '', [], 0;
+    is($query, "he:$term", "Searching for expected term '$term' for exploding") or return '', [], 0;
 
     my $record = MARC::Record->new;
     if ($query =~ m/Arizona/) {
@@ -538,6 +546,7 @@ $searchmodule->mock('SimpleSearch', sub {
     return '', [ $record->as_usmarc() ], 1;
 });
 
+$UseQueryParser = 1;
 $term = 'Arizona';
 ( $error, $query, $simple_query, $query_cgi,
 $query_desc, $limit, $limit_cgi, $limit_desc,
@@ -568,28 +577,28 @@ like($query, qr/history/, "Order of terms doesn't matter for advanced search");
 
 ( $error, $query, $simple_query, $query_cgi,
 $query_desc, $limit, $limit_cgi, $limit_desc,
-$stopwords_removed, $query_type ) = buildQuery([], [ "su-br:$term" ], [  ], [  ], [], 0, 'en');
+$stopwords_removed, $query_type ) = buildQuery([], [ "su-br($term)" ], [  ], [  ], [], 0, 'en');
 matchesExplodedTerms("Simple search for broader subjects", $query, 'Arizona', 'United States');
 
 ( $error, $query, $simple_query, $query_cgi,
 $query_desc, $limit, $limit_cgi, $limit_desc,
-$stopwords_removed, $query_type ) = buildQuery([], [ "su-na:$term" ], [  ], [  ], [], 0, 'en');
+$stopwords_removed, $query_type ) = buildQuery([], [ "su-na($term)" ], [  ], [  ], [], 0, 'en');
 matchesExplodedTerms("Simple search for narrower subjects", $query, 'Arizona', 'Maricopa County', 'Navajo County', 'Pima County');
 
 ( $error, $query, $simple_query, $query_cgi,
 $query_desc, $limit, $limit_cgi, $limit_desc,
-$stopwords_removed, $query_type ) = buildQuery([], [ "su-rl:$term" ], [  ], [  ], [], 0, 'en');
+$stopwords_removed, $query_type ) = buildQuery([], [ "su-rl($term)" ], [  ], [  ], [], 0, 'en');
 matchesExplodedTerms("Simple search for related subjects", $query, 'Arizona', 'United States', 'Maricopa County', 'Navajo County', 'Pima County');
 
 ( $error, $query, $simple_query, $query_cgi,
 $query_desc, $limit, $limit_cgi, $limit_desc,
-$stopwords_removed, $query_type ) = buildQuery([], [ "history and su-rl:$term" ], [  ], [  ], [], 0, 'en');
+$stopwords_removed, $query_type ) = buildQuery([], [ "history && su-rl($term)" ], [  ], [  ], [], 0, 'en');
 matchesExplodedTerms("Simple search for related subjects and keyword 'history' searches related subjects", $query, 'Arizona', 'United States', 'Maricopa County', 'Navajo County', 'Pima County');
 like($query, qr/history/, "Simple search for related subjects and keyword 'history' searches for 'history'");
 
 sub matchesExplodedTerms {
     my ($message, $query, @terms) = @_;
-    my $match = "(( or )?\\((" . join ('|', map { "su=\"$_\"" } @terms) . ")\\)){" . scalar(@terms) . "}";
+    my $match = '(' . join ('|', map { " \@attr 1=Subject \@attr 4=1 \"$_\"" } @terms) . "){" . scalar(@terms) . "}";
     like($query, qr/$match/, $message);
 }
 

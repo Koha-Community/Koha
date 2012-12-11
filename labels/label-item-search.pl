@@ -66,10 +66,12 @@ my $display_columns = [ {_add                   => {label => "Add Item", link_fi
                       ];
 
 if ( $op eq "do_search" ) {
+    my $QParser;
+    $QParser = C4::Context->queryparser if (C4::Context->preference('UseQueryParser'));
     $idx         = $query->param('idx');
     $ccl_textbox = $query->param('ccl_textbox');
     if ( $ccl_textbox && $idx ) {
-        $ccl_query = "$idx=$ccl_textbox";
+        $ccl_query = "$idx:$ccl_textbox";
     }
 
     $datefrom = $query->param('datefrom');
@@ -77,15 +79,26 @@ if ( $op eq "do_search" ) {
 
     if ($datefrom) {
         $datefrom = C4::Dates->new($datefrom);
-        $ccl_query .= ' and ' if $ccl_textbox;
-        $ccl_query .=
-          "acqdate,st-date-normalized,ge=" . $datefrom->output("iso");
+        if ($QParser) {
+            $ccl_query .= ' && ' if $ccl_textbox;
+            $ccl_query .=
+                "acqdate(" . $datefrom->output("iso") . '-)';
+        } else {
+            $ccl_query .= ' and ' if $ccl_textbox;
+            $ccl_query .=
+                "acqdate,st-date-normalized,ge=" . $datefrom->output("iso");
+        }
     }
 
     if ($dateto) {
         $dateto = C4::Dates->new($dateto);
-        $ccl_query .= ' and ' if ( $ccl_textbox || $datefrom );
-        $ccl_query .= "acqdate,st-date-normalized,le=" . $dateto->output("iso");
+        if ($QParser) {
+            $ccl_query .= ' && ' if ( $ccl_textbox || $datefrom );
+            $ccl_query .= "acqdate(-" . $dateto->output("iso") . ')';
+        } else {
+            $ccl_query .= ' and ' if ( $ccl_textbox || $datefrom );
+            $ccl_query .= "acqdate,st-date-normalized,le=" . $datefrom->output("iso");
+        }
     }
 
     my $offset = $startfrom > 1 ? $startfrom - 1 : 0;

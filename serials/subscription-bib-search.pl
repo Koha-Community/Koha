@@ -90,11 +90,19 @@ if ($op eq "do_search" && $query) {
     # add the itemtype limit if applicable
     my $itemtypelimit = $input->param('itemtypelimit');
     if ( $itemtypelimit ) {
-	if (!$advanced_search_types or $advanced_search_types eq 'itemtypes') {
-	    $query .= " AND $itype_or_itemtype=$itemtypelimit";
-	} else {
-	    $query .= " AND $advanced_search_types=$itemtypelimit";
-	}
+        my $QParser;
+        $QParser = C4::Context->queryparser if (C4::Context->preference('UseQueryParser'));
+        my $op;
+        if ($QParser) {
+            $op = '&&';
+        } else {
+            $op = 'and';
+        }
+        if (!$advanced_search_types or $advanced_search_types eq 'itemtypes') {
+            $query .= " $op $itype_or_itemtype:$itemtypelimit";
+        } else {
+            $query .= " $op $advanced_search_types:$itemtypelimit";
+        }
     }
     $debug && warn $query;
     $resultsperpage= $input->param('resultsperpage');

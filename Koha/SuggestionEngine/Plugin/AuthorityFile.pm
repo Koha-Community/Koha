@@ -85,7 +85,7 @@ sub get_suggestions {
     # FIXME: calling into C4
     require C4::AuthoritiesMarc;
     my ( $searchresults, $count ) = C4::AuthoritiesMarc::SearchAuthorities(
-        \@marclist,  \@and_or, \@excluding,       \@operator,
+        @marclist,  @and_or, @excluding,       @operator,
         @value,      0,        $param->{'count'}, '',
         'Relevance', 0
     );

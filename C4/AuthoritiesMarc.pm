@@ -201,6 +201,9 @@ sub SearchAuthorities {
         }
     } else {
         my $query;
+        my $qpquery = '';
+        my $QParser;
+        $QParser = C4::Context->queryparser if (C4::Context->preference('UseQueryParser'));
         my $attr = '';
             # the marclist may contain "mainentry". In this case, search the tag_to_report, that depends on
             # the authtypecode. Then, search on $a of this tag_to_report
@@ -218,6 +221,9 @@ sub SearchAuthorities {
             }
             if ($n>1){
                 while ($n>1){$query= "\@or ".$query;$n--;}
+            }
+            if ($QParser) {
+                $qpquery .= '(authtype:' . join('|| authtype:', @auths) . ')';
             }
         }
         
@@ -276,6 +282,9 @@ sub SearchAuthorities {
                 $q2 .=$attr;
                 $dosearch=1;
                 ++$attr_cnt;
+                if ($QParser) {
+                    $qpquery .= " $tags->[$i]:$value->[$i]";
+                }
             }#if value
         }
         ##Add how many queries generated
@@ -296,8 +305,21 @@ sub SearchAuthorities {
         } elsif ($sortby eq 'AuthidDsc') {
             $orderstring = '@attr 7=2 @attr 4=109 @attr 1=Local-Number 0';
         }
-        $query=($query?$query:"\@attr 1=_ALLRECORDS \@attr 2=103 ''");
-        $query="\@or $orderstring $query" if $orderstring;
+        if ($QParser) {
+            $qpquery .= ' all:all' unless $value->[0];
+
+            if ( $value->[0] =~ m/^qp=(.*)$/ ) {
+                $qpquery = $1;
+            }
+
+            $qpquery .= " #$sortby";
+
+            $QParser->parse( $qpquery );
+            $query = $QParser->target_syntax('authorityserver');
+        } else {
+            $query=($query?$query:"\@attr 1=_ALLRECORDS \@attr 2=103 ''");
+            $query="\@or $orderstring $query" if $orderstring;
+        }
 
         $offset=0 unless $offset;
         my $counter = $offset;
@@ -406,7 +428,7 @@ sub CountUsage {
     } else {
         ### ZOOM search here
         my $query;
-        $query= "an=".$authid;
+        $query= "an:".$authid;
   		my ($err,$res,$result) = C4::Search::SimpleSearch($query,0,10);
         if ($err) {
             warn "Error: $err from search $query";
@@ -911,11 +933,19 @@ sub FindDuplicateAuthority {
     $sth->finish;
 #     warn "record :".$record->as_formatted."  auth_tag_to_report :$auth_tag_to_report";
     # build a request for SearchAuthorities
-    my $query='at='.$authtypecode.' ';
+    my $QParser;
+    $QParser = C4::Context->queryparser if (C4::Context->preference('UseQueryParser'));
+    my $op;
+    if ($QParser) {
+        $op = '&&';
+    } else {
+        $op = 'and';
+    }
+    my $query='at:'.$authtypecode.' ';
     my $filtervalues=qr([\001-\040\!\'\"\`\#\$\%\&\*\+,\-\./:;<=>\?\@\(\)\{\[\]\}_\|\~]);
     if ($record->field($auth_tag_to_report)) {
       foreach ($record->field($auth_tag_to_report)->subfields()) {
-        $_->[1]=~s/$filtervalues/ /g; $query.= " and he,wrdl=\"".$_->[1]."\"" if ($_->[0]=~/[A-z]/);
+        $_->[1]=~s/$filtervalues/ /g; $query.= " $op he:\"".$_->[1]."\"" if ($_->[0]=~/[A-z]/);
       }
     }
     my ($error, $results, $total_hits) = C4::Search::SimpleSearch( $query, 0, 1, [ "authorityserver" ] );

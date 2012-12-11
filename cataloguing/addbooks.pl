@@ -70,10 +70,16 @@ if ($query) {
 
     # build query
     my @operands = $query;
-    my ( $builterror,$builtquery,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit_desc,$stopwords_removed,$query_type) = buildQuery(undef,\@operands);
+
+    my $QParser;
+    $QParser = C4::Context->queryparser if (C4::Context->preference('UseQueryParser'));
+    unless ($QParser) {
+        my ( $builterror,$builtquery,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit_desc,$stopwords_removed,$query_type) = buildQuery(undef,\@operands);
+        $query = $builtquery;
+    }
 
     # find results
-    my ( $error, $marcresults, $total_hits ) = SimpleSearch($builtquery, $results_per_page * ($page - 1), $results_per_page);
+    my ( $error, $marcresults, $total_hits ) = SimpleSearch($query, $results_per_page * ($page - 1), $results_per_page);
 
     if ( defined $error ) {
         $template->param( error => $error );

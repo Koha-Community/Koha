@@ -432,7 +432,15 @@ sub build_query {
 	  my $string = build_simplequery($matchingpoint,$record);
 	  push @searchstrings,$string if (length($string)>0);
         }
-	return join(" and ",@searchstrings);
+    my $QParser;
+    $QParser = C4::Context->queryparser if (C4::Context->preference('UseQueryParser'));
+    my $op;
+    if ($QParser) {
+        $op = '&&';
+    } else {
+        $op = 'and';
+    }
+    return join(" $op ",@searchstrings);
 }
 sub build_simplequery {
 	my $element=shift;
@@ -442,10 +450,18 @@ sub build_simplequery {
         my @searchstrings;
         foreach my $field ($record->field($tag)){
 		  if (length($field->as_string("$subfields"))>0){
-          	push @searchstrings,"$index,wrdl=\"".$field->as_string("$subfields")."\"";
+              push @searchstrings,"$index:\"".$field->as_string("$subfields")."\"";
 		  }
         }
-	return join(" and ",@searchstrings);
+    my $QParser;
+    $QParser = C4::Context->queryparser if (C4::Context->preference('UseQueryParser'));
+    my $op;
+    if ($QParser) {
+        $op = '&&';
+    } else {
+        $op = 'and';
+    }
+    return join(" $op ",@searchstrings);
 }
 sub report_item_errors {
     my $biblionumber = shift;
