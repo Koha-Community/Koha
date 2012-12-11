@@ -296,6 +296,7 @@ h4.local_collapse a { font-size : 80%; text-decoration: none; } fieldset.brief o
     <div class="yui-b">
 [% IF ( op_save ) %]
     <form id="add_edit" action="suggestion.pl" method="post">
+    <input type="hidden" name="redirect" id="redirect" value="[% redirect %]" />
     [% IF ( suggestionid ) %]
         <h1>Edit purchase suggestion #[% suggestionid %]</h1>
         <input type="hidden" name="suggestionid" value="[% suggestionid %]"/>

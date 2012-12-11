@@ -1,0 +1,107 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Patrons &rsaquo;
+[% IF ( unknowuser ) %]
+    Patron does not exist
+[% ELSE %]
+    Purchase suggestions for [% INCLUDE 'patron-title.inc' %]
+[% END %]
+</title>
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
+[% INCLUDE 'doc-head-close.inc' %]
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.min.js"></script>
+[% INCLUDE 'datatables-strings.inc' %]
+<script type="text/javascript" src="[% themelang %]/js/datatables.js"></script>
+[% INCLUDE 'calendar.inc' %]
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#suggestions").dataTable($.extend(true, {}, dataTablesDefaults, {
+            'bPaginate': false,
+            'bFilter': false,
+            'bInfo': false,
+        } ));
+
+        new YAHOO.widget.Button("newsuggestion");
+    });
+</script>
+</head>
+
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'patron-search.inc' %]
+
+<div id="breadcrumbs">
+         <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+&rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>
+&rsaquo; [% IF ( unknowuser ) %]Patron does not exist[% ELSE %]Purchase suggestions for [% firstname %] [% surname %] ([% cardnumber %])[% END %]
+</div>
+
+<div id="doc3" class="yui-t1">
+
+   <div id="bd">
+    <div id="yui-main">
+        <div class="yui-b">
+            <div class="yui-g">
+                <h2>Purchase suggestions</h2>
+
+                <div id="toolbar">
+                    <ul class="toolbar">
+                        <li><a id="newsuggestion" href="/cgi-bin/koha/suggestion/suggestion.pl?op=add&suggestedby=[% borrowernumber %]&redirect=[% borrowernumber %]">New purchase suggestion</a></li>
+                    </ul>
+                </div>
+
+                <table id="suggestions">
+                    <thead>
+                        <tr>
+                          <th>Summary</th>
+                          <th>Note</th>
+                          <th>Managed by</th>
+                          <th>Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        [% FOREACH s IN suggestions %]
+                            <tr>
+                                <td>
+                                    <p><strong>[% s.title |html %]</strong></p>
+                                    <p>
+                                        [% IF ( s.author ) %][% s.author %],[% END %]
+                                        [% IF ( s.copyrightdate ) %] - [% s.copyrightdate %],[% END %]
+                                        [% IF ( s.publishercode ) %] - [% s.publishercode %][% END %]
+                                        [% IF ( s.place ) %]([% s.place %])[% END %]
+                                        [% IF ( s.collectiontitle ) %] , [% s.collectiontitle %][% END %]
+                                        [% IF ( s.itemtype ) %] - [% s.itemtype %][% END %]
+                                    </p>
+                                </td>
+                                <td>[% s.note %]
+                                <td>
+                                    [% IF ( s.surnamemanagedby ) %]
+                                        [% s.surnamemanagedby %]
+                                        [% IF ( s.firstnamemanagedby ) %],[% END %]
+                                        [% s.firstnamemanagedby %]
+                                    [% ELSE %]
+                                        &nbsp;
+                                    [% END %]
+                                </td>
+                                <td>
+                                    [% IF ( s.ASKED ) %]Requested[% END %]
+                                    [% IF ( s.CHECKED ) %]Checked by the library[% END %]
+                                    [% IF ( s.ACCEPTED ) %]Accepted by the library[% END %]
+                                    [% IF ( s.ORDERED ) %]Ordered by the library[% END %]
+                                    [% IF ( s.REJECTED ) %]Suggestion declined [% END %]
+                                    [% IF ( s.AVAILABLE ) %]Available in the library[% END %]
+                                    [% IF ( s.reason ) %]([% s.reason %])[% END %]
+                                </td>
+                            </tr>
+                        [% END %]
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+<div class="yui-b">
+[% INCLUDE 'circ-menu.inc' %]
+</div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

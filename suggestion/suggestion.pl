@@ -77,6 +77,7 @@ sub GetCriteriumDesc{
 }
 
 my $input           = CGI->new;
+my $redirect  = $input->param('redirect');
 my $suggestedbyme   = (defined $input->param('suggestedbyme')? $input->param('suggestedbyme'):1);
 my $op              = $input->param('op')||'else';
 my @editsuggestions = $input->param('edit_field');
@@ -132,6 +133,11 @@ if ( $op =~ /save/i ) {
     }  
     map{delete $$suggestion_ref{$_}} keys %$suggestion_ref;
     $op = 'else';
+
+    if( $redirect ) {
+        print $input->redirect("/cgi-bin/koha/members/purchase-suggestions.pl?borrowernumber=$redirect");
+    }
+
 }
 elsif ($op=~/add/) {
     #Adds suggestion  
@@ -362,10 +368,8 @@ for ( my $i = 0 ; $i < $count ; $i++ ) {
 	$line{selected} = 1 if ($line{'currcode'} eq $selected_currency);
     push @loop_currency, \%line;
 }
-
-$template->param(loop_currency => \@loop_currency);
-
 $template->param(
+        loop_currency => \@loop_currency,
 	price        => sprintf("%.2f", $$suggestion_ref{'price'}||0),
 	total            => sprintf("%.2f", $$suggestion_ref{'total'}||0),
 );
@@ -386,7 +390,11 @@ foreach my $field ( qw(managedby acceptedby suggestedby budgetid) ) {
     $hashlists{ lc($field) . "_loop" } = \@codes_list;
 }
 $template->param(%hashlists);
+
 $template->param(
+    %hashlists,
+    DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
+    borrowernumber           => $input->param('borrowernumber'),
     SuggestionStatuses       => GetAuthorisedValues('SUGGEST_STATUS'),
 );
 output_html_with_http_headers $input, $cookie, $template->output;
