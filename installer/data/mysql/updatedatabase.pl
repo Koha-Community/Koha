@@ -6134,7 +6134,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion($DBversion);
 }
 
-$DBversion = "XXX";
+$DBversion = "3.11.00.007";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     print "Upgrade to $DBversion done (Bug 9056: add German and a couple of French translations to language_descriptions";
     $dbh->do("INSERT INTO language_descriptions (subtag, type, lang, description) VALUES( 'ar', 'language', 'de', 'Arabisch')");
