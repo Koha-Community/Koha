@@ -55,15 +55,11 @@ my $sublength = $input->param('sublength');
 my $custompattern = $input->param('custompattern');
 
 
-my %val = (
-    locale          => $input->param('locale') // '',
+my %pattern = (
     numberingmethod => $input->param('numberingmethod') // '',
     numbering1      => $input->param('numbering1') // '',
     numbering2      => $input->param('numbering2') // '',
     numbering3      => $input->param('numbering3') // '',
-    lastvalue1      => $input->param('lastvalue1') // '',
-    lastvalue2      => $input->param('lastvalue2') // '',
-    lastvalue3      => $input->param('lastvalue3') // '',
     add1            => $input->param('add1') // '',
     add2            => $input->param('add2') // '',
     add3            => $input->param('add3') // '',
@@ -76,9 +72,6 @@ my %val = (
     every1          => $input->param('every1') // '',
     every2          => $input->param('every2') // '',
     every3          => $input->param('every3') // '',
-    innerloop1      => $input->param('innerloop1') // '',
-    innerloop2      => $input->param('innerloop2') // '',
-    innerloop3      => $input->param('innerloop3') // '',
 );
 
 if(!defined $firstacquidate || $firstacquidate eq ''){
@@ -100,6 +93,13 @@ if($nextacquidate) {
 my $date = $nextacquidate;
 
 my %subscription = (
+    locale      => $input->param('locale') // '',
+    lastvalue1      => $input->param('lastvalue1') // '',
+    lastvalue2      => $input->param('lastvalue2') // '',
+    lastvalue3      => $input->param('lastvalue3') // '',
+    innerloop1      => $input->param('innerloop1') // '',
+    innerloop2      => $input->param('innerloop2') // '',
+    innerloop3      => $input->param('innerloop3') // '',
     irregularity    => '',
     periodicity     => $frequencyid,
     countissuesperunit  => 1,
@@ -114,7 +114,7 @@ if(defined $subscriptionid) {
 }
 
 my @predictions_loop;
-my ($calculated) = GetSeq(\%val);
+my ($calculated) = GetSeq(\%subscription, \%pattern);
 push @predictions_loop, {
     number => $calculated,
     publicationdate => $date,
@@ -159,7 +159,7 @@ while( $i < 1000 ) {
         last;
     }
 
-    ($calculated, $val{'lastvalue1'}, $val{'lastvalue2'}, $val{'lastvalue3'}, $val{'innerloop1'}, $val{'innerloop2'}, $val{'innerloop3'}) = GetNextSeq(\%val);
+    ($calculated, $subscription{'lastvalue1'}, $subscription{'lastvalue2'}, $subscription{'lastvalue3'}, $subscription{'innerloop1'}, $subscription{'innerloop2'}, $subscription{'innerloop3'}) = GetNextSeq(\%subscription, \%pattern);
     $issuenumber++;
     $line{'number'} = $calculated;
     $line{'issuenumber'} = $issuenumber;

@@ -61,38 +61,40 @@ if($op eq 'gennext' && @subscriptionid){
     my $status = defined( $nbissues ) ? 2 : 3;
     $nbissues ||= 1;
     for ( my $i = 0; $i < $nbissues; $i++ ){
-	$sth->execute($subscriptionid);
-	# modify actual expected issue, to generate the next
-	if ( my $issue = $sth->fetchrow_hashref ) {
-		ModSerialStatus( $issue->{serialid}, $issue->{serialseq},
-                $issue->{planneddate}, $issue->{publisheddate},
-                $status, "" );
-	}else{
+        $sth->execute($subscriptionid);
+        # modify actual expected issue, to generate the next
+        if ( my $issue = $sth->fetchrow_hashref ) {
+            ModSerialStatus( $issue->{serialid}, $issue->{serialseq},
+                    $issue->{planneddate}, $issue->{publisheddate},
+                    $status, "" );
+        } else {
+            require C4::Serials::Numberpattern;
             my $subscription = GetSubscription($subscriptionid);
+            my $pattern = C4::Serials::Numberpattern::GetSubscriptionNumberpattern($subscription->{numberpattern});
             my $expected = GetNextExpected($subscriptionid);
-	    my (
-	         $newserialseq,  $newlastvalue1, $newlastvalue2, $newlastvalue3,
-             $newinnerloop1, $newinnerloop2, $newinnerloop3
-            ) = GetNextSeq($subscription);
+            my (
+                 $newserialseq,  $newlastvalue1, $newlastvalue2, $newlastvalue3,
+                 $newinnerloop1, $newinnerloop2, $newinnerloop3
+            ) = GetNextSeq($subscription, $pattern, $expected->{publisheddate});
 
-	     ## We generate the next publication date
-	     my $nextpublisheddate = GetNextDate( $expected->{planneddate}->output('iso'), $subscription );
-	     ## Creating the new issue
-	     NewIssue( $newserialseq, $subscriptionid, $subscription->{'biblionumber'},
-	             1, $nextpublisheddate, $nextpublisheddate );
+             ## We generate the next publication date
+             my $nextpublisheddate = GetNextDate($subscription, $expected->{publisheddate}, 1);
+             ## Creating the new issue
+             NewIssue( $newserialseq, $subscriptionid, $subscription->{'biblionumber'},
+                     1, $nextpublisheddate, $nextpublisheddate );
 
-	     ## Updating the subscription seq status
-	     my $squery = "UPDATE subscription SET lastvalue1=?, lastvalue2=?, lastvalue3=?, innerloop1=?, innerloop2=?, innerloop3=?
-	                 WHERE  subscriptionid = ?";
-	     my $seqsth = $dbh->prepare($squery);
-	     $seqsth->execute(
-	         $newlastvalue1, $newlastvalue2, $newlastvalue3, $newinnerloop1,
-	         $newinnerloop2, $newinnerloop3, $subscriptionid
-	         );
+             ## Updating the subscription seq status
+             my $squery = "UPDATE subscription SET lastvalue1=?, lastvalue2=?, lastvalue3=?, innerloop1=?, innerloop2=?, innerloop3=?
+                         WHERE  subscriptionid = ?";
+             my $seqsth = $dbh->prepare($squery);
+             $seqsth->execute(
+                 $newlastvalue1, $newlastvalue2, $newlastvalue3, $newinnerloop1,
+                 $newinnerloop2, $newinnerloop3, $subscriptionid
+                 );
 
-	}
-	last if $nbissues == 1;
-	last if HasSubscriptionExpired($subscriptionid) > 0;
+        }
+        last if $nbissues == 1;
+        last if HasSubscriptionExpired($subscriptionid) > 0;
     }
     print $query->redirect('/cgi-bin/koha/serials/serials-collection.pl?subscriptionid='.$subscriptionid);
 }

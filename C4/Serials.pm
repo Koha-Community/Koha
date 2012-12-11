@@ -889,26 +889,32 @@ sub GetDistributedTo {
 
 =head2 GetNextSeq
 
-GetNextSeq($val)
-$val is a hashref containing all the attributes of the table 'subscription'
+    my (
+        $nextseq,       $newlastvalue1, $newlastvalue2, $newlastvalue3,
+        $newinnerloop1, $newinnerloop2, $newinnerloop3
+    ) = GetNextSeq( $subscription, $pattern, $planneddate );
+
+$subscription is a hashref containing all the attributes of the table
+'subscription'.
+$pattern is a hashref containing all the attributes of the table
+'subscription_numberpatterns'.
+$planneddate is a C4::Dates object.
 This function get the next issue for the subscription given on input arg
-return:
-a list containing all the input params updated.
 
 =cut
 
 sub GetNextSeq {
-    my ($val, $planneddate) = @_;
+    my ($subscription, $pattern, $planneddate) = @_;
     my ( $calculated, $newlastvalue1, $newlastvalue2, $newlastvalue3,
     $newinnerloop1, $newinnerloop2, $newinnerloop3 );
     my $count = 1;
 
-    if($val->{'skip_serialseq'}) {
-        my @irreg = split /;/, $val->{'irregularity'};
+    if ($subscription->{'skip_serialseq'}) {
+        my @irreg = split /;/, $subscription->{'irregularity'};
         if(@irreg > 0) {
             my $irregularities = {};
             $irregularities->{$_} = 1 foreach(@irreg);
-            my $issueno = GetFictiveIssueNumber($val, $planneddate) + 1;
+            my $issueno = GetFictiveIssueNumber($subscription, $planneddate) + 1;
             while($irregularities->{$issueno}) {
                 $count++;
                 $issueno++;
@@ -916,62 +922,62 @@ sub GetNextSeq {
         }
     }
 
-    my $pattern = $val->{numberpattern};
-    $calculated    = $val->{numberingmethod};
-    my $locale = $val->{locale};
-    $newlastvalue1 = $val->{lastvalue1} || 0;
-    $newlastvalue2 = $val->{lastvalue2} || 0;
-    $newlastvalue3 = $val->{lastvalue3} || 0;
-    $newinnerloop1 = $val->{innerloop1} || 0;
-    $newinnerloop2 = $val->{innerloop2} || 0;
-    $newinnerloop3 = $val->{innerloop3} || 0;
+    my $numberingmethod = $pattern->{numberingmethod};
+    $calculated    = $numberingmethod;
+    my $locale = $subscription->{locale};
+    $newlastvalue1 = $subscription->{lastvalue1} || 0;
+    $newlastvalue2 = $subscription->{lastvalue2} || 0;
+    $newlastvalue3 = $subscription->{lastvalue3} || 0;
+    $newinnerloop1 = $subscription->{innerloop1} || 0;
+    $newinnerloop2 = $subscription->{innerloop2} || 0;
+    $newinnerloop3 = $subscription->{innerloop3} || 0;
     my %calc;
     foreach(qw/X Y Z/) {
-        $calc{$_} = 1 if ($val->{'numberingmethod'} =~ /\{$_\}/);
+        $calc{$_} = 1 if ($numberingmethod =~ /\{$_\}/);
     }
 
     for(my $i = 0; $i < $count; $i++) {
         if($calc{'X'}) {
             # check if we have to increase the new value.
             $newinnerloop1 += 1;
-            if ($newinnerloop1 >= $val->{every1}) {
+            if ($newinnerloop1 >= $pattern->{every1}) {
                 $newinnerloop1  = 0;
-                $newlastvalue1 += $val->{add1};
+                $newlastvalue1 += $pattern->{add1};
             }
             # reset counter if needed.
-            $newlastvalue1 = $val->{setto1} if ($newlastvalue1 > $val->{whenmorethan1});
+            $newlastvalue1 = $pattern->{setto1} if ($newlastvalue1 > $pattern->{whenmorethan1});
         }
         if($calc{'Y'}) {
             # check if we have to increase the new value.
             $newinnerloop2 += 1;
-            if ($newinnerloop2 >= $val->{every2}) {
+            if ($newinnerloop2 >= $pattern->{every2}) {
                 $newinnerloop2  = 0;
-                $newlastvalue2 += $val->{add2};
+                $newlastvalue2 += $pattern->{add2};
             }
             # reset counter if needed.
-            $newlastvalue2 = $val->{setto2} if ($newlastvalue2 > $val->{whenmorethan2});
+            $newlastvalue2 = $pattern->{setto2} if ($newlastvalue2 > $pattern->{whenmorethan2});
         }
         if($calc{'Z'}) {
             # check if we have to increase the new value.
             $newinnerloop3 += 1;
-            if ($newinnerloop3 >= $val->{every3}) {
+            if ($newinnerloop3 >= $pattern->{every3}) {
                 $newinnerloop3  = 0;
-                $newlastvalue3 += $val->{add3};
+                $newlastvalue3 += $pattern->{add3};
             }
             # reset counter if needed.
-            $newlastvalue3 = $val->{setto3} if ($newlastvalue3 > $val->{whenmorethan3});
+            $newlastvalue3 = $pattern->{setto3} if ($newlastvalue3 > $pattern->{whenmorethan3});
         }
     }
     if($calc{'X'}) {
-        my $newlastvalue1string = _numeration( $newlastvalue1, $val->{numbering1}, $locale );
+        my $newlastvalue1string = _numeration( $newlastvalue1, $pattern->{numbering1}, $locale );
         $calculated =~ s/\{X\}/$newlastvalue1string/g;
     }
     if($calc{'Y'}) {
-        my $newlastvalue2string = _numeration( $newlastvalue2, $val->{numbering2}, $locale );
+        my $newlastvalue2string = _numeration( $newlastvalue2, $pattern->{numbering2}, $locale );
         $calculated =~ s/\{Y\}/$newlastvalue2string/g;
     }
     if($calc{'Z'}) {
-        my $newlastvalue3string = _numeration( $newlastvalue3, $val->{numbering3}, $locale );
+        my $newlastvalue3string = _numeration( $newlastvalue3, $pattern->{numbering3}, $locale );
         $calculated =~ s/\{Z\}/$newlastvalue3string/g;
     }
 
@@ -982,31 +988,31 @@ sub GetNextSeq {
 
 =head2 GetSeq
 
-$calculated = GetSeq($val)
-$val is a hashref containing all the attributes of the table 'subscription'
+$calculated = GetSeq($subscription, $pattern)
+$subscription is a hashref containing all the attributes of the table 'subscription'
+$pattern is a hashref containing all the attributes of the table 'subscription_numberpatterns'
 this function transforms {X},{Y},{Z} to 150,0,0 for example.
 return:
-the sequence in integer format
+the sequence in string format
 
 =cut
 
 sub GetSeq {
-    my ($val) = @_;
-    my $locale = $val->{locale};
+    my ($subscription, $pattern) = @_;
+    my $locale = $subscription->{locale};
 
-    my $pattern = $val->{numberpattern};
-    my $calculated = $val->{numberingmethod};
+    my $calculated = $pattern->{numberingmethod};
 
-    my $newlastvalue1 = $val->{'lastvalue1'} || 0;
-    $newlastvalue1 = _numeration($newlastvalue1, $val->{numbering1}, $locale) if ($val->{numbering1}); # reset counter if needed.
+    my $newlastvalue1 = $subscription->{'lastvalue1'} || 0;
+    $newlastvalue1 = _numeration($newlastvalue1, $pattern->{numbering1}, $locale) if ($pattern->{numbering1}); # reset counter if needed.
     $calculated =~ s/\{X\}/$newlastvalue1/g;
 
-    my $newlastvalue2 = $val->{'lastvalue2'} || 0;
-    $newlastvalue2 = _numeration($newlastvalue2, $val->{numbering2}, $locale) if ($val->{numbering2}); # reset counter if needed.
+    my $newlastvalue2 = $subscription->{'lastvalue2'} || 0;
+    $newlastvalue2 = _numeration($newlastvalue2, $pattern->{numbering2}, $locale) if ($pattern->{numbering2}); # reset counter if needed.
     $calculated =~ s/\{Y\}/$newlastvalue2/g;
 
-    my $newlastvalue3 = $val->{'lastvalue3'} || 0;
-    $newlastvalue3 = _numeration($newlastvalue3, $val->{numbering3}, $locale) if ($val->{numbering3}); # reset counter if needed.
+    my $newlastvalue3 = $subscription->{'lastvalue3'} || 0;
+    $newlastvalue3 = _numeration($newlastvalue3, $pattern->{numbering3}, $locale) if ($pattern->{numbering3}); # reset counter if needed.
     $calculated =~ s/\{Z\}/$newlastvalue3/g;
     return $calculated;
 }
@@ -1205,34 +1211,29 @@ sub ModSerialStatus {
 
     # create new waited entry if needed (ie : was a "waited" and has changed)
     if ( $oldstatus == 1 && $status != 1 ) {
-        my $query = qq{
-            SELECT subscription.*, subscription_numberpatterns.*,
-                   subscription_frequencies.*
-            FROM subscription
-            LEFT JOIN subscription_numberpatterns ON subscription.numberpattern = subscription_numberpatterns.id
-            LEFT JOIN subscription_frequencies ON subscription.periodicity = subscription_frequencies.id
-            WHERE subscriptionid = ?
-        };
-        $sth = $dbh->prepare($query);
-        $sth->execute($subscriptionid);
-        my $val = $sth->fetchrow_hashref;
+        my $subscription = GetSubscription($subscriptionid);
+        my $pattern = C4::Serials::Numberpattern::GetSubscriptionNumberpattern($subscription->{numberpattern});
 
         # next issue number
-        my ( $newserialseq, $newlastvalue1, $newlastvalue2, $newlastvalue3, $newinnerloop1, $newinnerloop2, $newinnerloop3 ) = GetNextSeq($val, $publisheddate);
+        my (
+            $newserialseq,  $newlastvalue1, $newlastvalue2, $newlastvalue3,
+            $newinnerloop1, $newinnerloop2, $newinnerloop3
+          )
+          = GetNextSeq( $subscription, $pattern, $publisheddate );
 
         # next date (calculated from actual date & frequency parameters)
-        my $nextpublisheddate = GetNextDate($val, $publisheddate, 1);
+        my $nextpublisheddate = GetNextDate($subscription, $publisheddate, 1);
         my $nextpubdate = $nextpublisheddate;
-        NewIssue( $newserialseq, $subscriptionid, $val->{'biblionumber'}, 1, $nextpubdate, $nextpubdate );
+        NewIssue( $newserialseq, $subscriptionid, $subscription->{'biblionumber'}, 1, $nextpubdate, $nextpubdate );
         $query = "UPDATE subscription SET lastvalue1=?, lastvalue2=?, lastvalue3=?, innerloop1=?, innerloop2=?, innerloop3=?
                     WHERE  subscriptionid = ?";
         $sth = $dbh->prepare($query);
         $sth->execute( $newlastvalue1, $newlastvalue2, $newlastvalue3, $newinnerloop1, $newinnerloop2, $newinnerloop3, $subscriptionid );
 
         # check if an alert must be sent... (= a letter is defined & status became "arrived"
-        if ( $val->{letter} && $status == 2 && $oldstatus != 2 ) {
+        if ( $subscription->{letter} && $status == 2 && $oldstatus != 2 ) {
             require C4::Letters;
-            C4::Letters::SendAlerts( 'issue', $val->{subscriptionid}, $val->{letter} );
+            C4::Letters::SendAlerts( 'issue', $subscription->{subscriptionid}, $subscription->{letter} );
         }
     }
 
@@ -1275,7 +1276,7 @@ sub GetNextExpected {
             SELECT *
             FROM serial
             WHERE subscriptionid = ?
-            ORDER BY planneddate DESC
+            ORDER BY publisheddate DESC
             LIMIT 1
         };
         $sth = $dbh->prepare($query);
@@ -1475,18 +1476,11 @@ sub NewSubscription {
     $sth->execute( $biblionumber, $subscriptionid, $startdate, $notes, $internalnotes );
 
     # reread subscription to get a hash (for calculation of the 1st issue number)
-    $query = qq(
-        SELECT *
-        FROM   subscription
-        LEFT JOIN subscription_numberpatterns ON subscription.numberpattern = subscription_numberpatterns.id
-        WHERE  subscriptionid = ?
-    );
-    $sth = $dbh->prepare($query);
-    $sth->execute($subscriptionid);
-    my $val = $sth->fetchrow_hashref;
+    my $subscription = GetSubscription($subscriptionid);
+    my $pattern = C4::Serials::Numberpattern::GetSubscriptionNumberpattern($subscription->{numberpattern});
 
     # calculate issue number
-    my $serialseq = GetSeq($val);
+    my $serialseq = GetSeq($subscription, $pattern);
     $query = qq|
         INSERT INTO serial
             (serialseq,subscriptionid,biblionumber,status, planneddate, publisheddate)
