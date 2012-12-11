@@ -656,7 +656,9 @@ sub parse_letter {
     }
 
     my $currency_format;
-    if ($params->{'letter'}->{'content'} =~ m/<fine>(.*)<\/fine>/o) { # process any fine tags...
+    if ( defined $params->{'letter'}->{'content'}
+        and $params->{'letter'}->{'content'} =~ m/<fine>(.*)<\/fine>/o )
+    {    # process any fine tags...
         $currency_format = $1;
         $params->{'letter'}->{'content'} =~ s/<fine>.*<\/fine>/<<item.fine>>/o;
     }
@@ -666,7 +668,7 @@ sub parse_letter {
         my $item_format = '';
         foreach my $item (@$i) {
             my $fine = GetFine($item->{'itemnumber'}, $params->{'borrowernumber'});
-            if (!$item_format) {
+            if ( !$item_format and defined $params->{'letter'}->{'content'} ) {
                 $params->{'letter'}->{'content'} =~ m/(<item>.*<\/item>)/;
                 $item_format = $1;
             }
