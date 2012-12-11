@@ -58,7 +58,7 @@ done
 for name in $(koha-list --enabled | grep -Fxv demo)
 do
     koha-dump "$name" > /dev/null
-    if [ -z "$dirname"]; then
+    if [ -z "$dirname" ]; then
         backupdir="$( xmlstarlet sel -t -v 'yazgfs/config/backupdir' /etc/koha/sites/$name/koha-conf.xml )";
     else
         backupdir="$dirname/$name";
