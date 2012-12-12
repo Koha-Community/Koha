@@ -224,8 +224,6 @@ if ($op eq 'add_form') {
 	my $id = $input->param('id');
 	my $sth=$dbh->prepare("delete from authorised_values where id=?");
 	$sth->execute($id);
-    $sth = $dbh->prepare("DELETE FROM authorised_values_branches WHERE id = ?");
-    $sth->execute($id);
 	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=authorised_values.pl?searchfield=$searchfield&offset=$offset\"></html>";
 	exit;
 													# END $OP eq DELETE_CONFIRMED
