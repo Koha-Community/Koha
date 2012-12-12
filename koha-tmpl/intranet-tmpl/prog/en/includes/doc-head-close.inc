@@ -40,7 +40,7 @@
     //]]>
     </script>
 [% END %]
-<script type="text/javascript" language="javascript">
+<script type="text/javascript">
     //<![CDATA[
     [% IF ( intranetbookbag ) %]var MSG_BASKET_EMPTY = _("Your cart is currently empty");
         var MSG_RECORD_IN_BASKET = _("This item is already in your cart");
@@ -57,11 +57,11 @@
     //]]>
     </script>
     [% IF ( virtualshelves || intranetbookbag ) %]
-        <script type="text/javascript" language="javascript" src="[% themelang %]/js/basket.js"></script>
+        <script type="text/javascript" src="[% themelang %]/js/basket.js"></script>
     [% END %]
 [% IF LocalCoverImages %]
-<script type="text/javascript" language="javascript" src="[% themelang %]/js/localcovers.js"></script>
-<script type="text/javascript" language="javascript">
+<script type="text/javascript" src="[% themelang %]/js/localcovers.js"></script>
+<script type="text/javascript">
 //<![CDATA[
 var NO_LOCAL_JACKET = _("No cover image available");
 //]]>
