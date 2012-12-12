@@ -594,18 +594,40 @@ C<$id> - an id for the BibTex record (might be the biblionumber)
 sub marc2bibtex {
     my ($record, $id) = @_;
     my $tex;
+    my $marcflavour = C4::Context->preference("marcflavour");
 
     # Authors
-    my $marcauthors = GetMarcAuthors($record,C4::Context->preference("marcflavour"));
     my $author;
-    for my $authors ( map { map { @$_ } values %$_  } @$marcauthors  ) {  
-	$author .= " and " if ($author && $$authors{value});
-	$author .= $$authors{value} if ($$authors{value}); 
+    my @texauthors;
+    my ( $mintag, $maxtag, $fields_filter );
+    if ( $marcflavour eq "UNIMARC" ) {
+        $mintag        = "700";
+        $maxtag        = "712";
+        $fields_filter = '7..';
     }
+    else {
+        $mintag        = "700";
+        $maxtag        = "720";
+        $fields_filter = '7..';
+    }
+    foreach my $field ( $record->field($fields_filter) ) {
+        next unless $field->tag() >= $mintag && $field->tag() <= $maxtag;
+        # author formatted surname, firstname
+        my $texauthor = '';
+        if ( $marcflavour eq "UNIMARC" ) {
+            $texauthor = join ', ',
+              ( $field->subfield('a'), $field->subfield('b') );
+        }
+        else {
+            $texauthor = $field->subfield('a');
+        }
+        push @texauthors, $texauthor if $texauthor;
+    }
+    $author = join ' and ', @texauthors;
 
     # Defining the conversion hash according to the marcflavour
     my %bh;
-    if (C4::Context->preference("marcflavour") eq "UNIMARC") {
+    if ( $marcflavour eq "UNIMARC" ) {
 	
 	# FIXME, TODO : handle repeatable fields
 	# TODO : handle more types of documents
