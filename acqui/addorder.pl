@@ -261,6 +261,8 @@ my $basketno=$$orderinfo{basketno};
 my $booksellerid=$$orderinfo{booksellerid};
 if (my $import_batch_id=$$orderinfo{import_batch_id}) {
     print $input->redirect("/cgi-bin/koha/acqui/addorderiso2709.pl?import_batch_id=$import_batch_id&basketno=$basketno&booksellerid=$booksellerid");
+} elsif ( defined $orderinfo->{invoiceid} ) {
+    print $input->redirect("/cgi-bin/koha/acqui/parcel.pl?invoiceid=" . $orderinfo->{invoiceid});
 } else {
     print $input->redirect("/cgi-bin/koha/acqui/basket.pl?basketno=$basketno");
 }
