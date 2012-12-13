@@ -407,7 +407,7 @@ sub calculate {
         }
     }
 	$strcalc .= " AND borrowernumber in (select distinct(borrowernumber) from old_issues where issuedate > '" . $newperioddate . "')" if ($activity eq 'active');
-	$strcalc .= " AND borrowernumber not in (select distinct(borrowernumber) from old_issues where issuedate > '" . $newperioddate . "')" if ($activity eq 'nonactive');
+	$strcalc .= " AND borrowernumber not in (select distinct(borrowernumber) from old_issues where issuedate > '" . $newperioddate . "' AND borrowernumber IS NOT NULL)" if ($activity eq 'nonactive');
 	$strcalc .= " AND $status='1' " if ($status);
 
     $strcalc .= " GROUP BY ";
