@@ -60,7 +60,7 @@ if($op && $op eq "save") {
     my @mappings;
     my $i = 0;
     while($i < @marcfields and $i < @marcsubfields and $i < @marcvalues) {
-        if($marcfields[$i] and $marcsubfields[$i] and $marcvalues[$i]) {
+        if($marcfields[$i] and $marcsubfields[$i]) {
             push @mappings, {
                 marcfield    => $marcfields[$i],
                 marcsubfield => $marcsubfields[$i],
