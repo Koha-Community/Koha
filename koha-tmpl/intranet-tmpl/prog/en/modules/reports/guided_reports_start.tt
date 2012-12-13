@@ -487,24 +487,30 @@ canned reports and writing custom SQL reports.</p>
         <input type='hidden' name='reports' value="[% reports %]" />
         <h1>Enter parameters for report [% name %]:</h1>
         [% IF ( notes ) %]<p>[% notes %]</p>[% END %]
+        <fieldset class="rows">
+            <ol>
         [% FOREACH sql_param IN sql_params %]
             [% IF sql_param.input == 'date' %]
-                <p>
-                [% sql_param.entry %]: <input id="date_[% sql_param_entry %]" type="text" value="" size="10" name="sql_params">
-                <img id="date_picker_[% sql_param_entry %]" alt="Show calendar" src="/intranet-tmpl/prog/en/lib/calendar/cal.gif">
+                <li><label for="date_[% sql_param_entry %][% loop.count %]">
+                [% sql_param.entry %]:</label> <input id="date_[% sql_param_entry %][% loop.count %]" type="text" value="" size="10" name="sql_params" />
+                <img id="date_picker_[% sql_param_entry %][% loop.count %]" alt="Show calendar" src="/intranet-tmpl/prog/en/lib/calendar/cal.gif" />
                 <script type="text/javascript">
                       Calendar.setup( {
-                         inputField : "date_[% sql_param_entry %]",
+                         inputField : "date_[% sql_param_entry %][% loop.count %]",
                          ifFormat : "%Y-%m-%d",
-                         button : "date_picker_[% sql_param_entry %]"
+                         button : "date_picker_[% sql_param_entry %][% loop.count %]"
                       } );
                 </script>
-                </p>
+                </li>
+            [% ELSIF ( sql_param.input == 'text' ) %]
+                <li><label for="sql_params[% loop.count %]">[% sql_param.entry %]: </label><input id="sql_params[% loop.count %]" type="text" name="sql_params" /></li>
             [% ELSE %]
-                <p>[% sql_param.entry %]: [% sql_param.input %]</p>
+                <li><label for="sql_params_[% sql_param.labelid %]">[% sql_param.entry %]:</label> [% sql_param.input %]</li>
             [% END %]
         [% END %]
-        <input type='submit' value='Run the report'/>
+        </ol>
+        </fieldset>
+        <fieldset class="action"><input type="submit" value="Run the report"/></fieldset>
     </form>
 [% END %]
 
