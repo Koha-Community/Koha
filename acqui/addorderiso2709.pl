@@ -188,7 +188,7 @@ if ($op eq ""){
             SetImportRecordStatus( $biblio->{'import_record_id'}, 'imported' );
         }
         # 3rd add order
-        my $patron = C4::Members->GetMember( borrowernumber => $loggedinuser );
+        my $patron = C4::Members::GetMember( borrowernumber => $loggedinuser );
         my $branch = C4::Branch->GetBranchDetail( $patron->{branchcode} );
         my ($invoice);
         # get quantity in the MARC record (1 if none)
