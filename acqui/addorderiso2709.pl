@@ -222,12 +222,8 @@ if ($op eq ""){
             my $basket     = GetBasket( $orderinfo{basketno} );
             my $bookseller = GetBookSellerFromId( $basket->{booksellerid} );
             $orderinfo{gstrate} = $bookseller->{gstrate};
-            if ( $bookseller->{listincgst} ) {
-                $orderinfo{ecost} = $price;
-            } else {
-                $orderinfo{ecost} = $price * ( 1 + $orderinfo{gstrate} );
-            }
-            $orderinfo{rrp} = ( $orderinfo{ecost} * 100 ) / ( 100 - $bookseller->{discount} );
+            $orderinfo{rrp}   = $price;
+            $orderinfo{ecost} = $orderinfo{rrp} * ( 1 - $bookseller->{discount} / 100 );
             $orderinfo{listprice} = $orderinfo{rrp};
             $orderinfo{unitprice} = $orderinfo{ecost};
             $orderinfo{total} = $orderinfo{ecost};
