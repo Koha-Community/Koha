@@ -99,12 +99,11 @@ $(document).ready(function() {
 });
 //]]>
 $(document).ready(function(){
-    $("#logout_form input.finish").click(function(){
-    if(confirm("Would you like to print a receipt?")){
-        window.open("/cgi-bin/koha/sco/printslip.pl?borrowernumber=[% borrowernumber %]&amp;print=qslip");
-    }
-    $(this).parent().attr("action", "/cgi-bin/koha/sco/sco-main.pl?op=logout");
-    $(this).parent().submit();
+    $("#logout_form").submit(function(){
+        if(confirm("Would you like to print a receipt?")){
+            window.open("/cgi-bin/koha/sco/printslip.pl?borrowernumber=[% borrowernumber %]&amp;print=qslip");
+        }
+        return true;
     });
 });
 </script>
