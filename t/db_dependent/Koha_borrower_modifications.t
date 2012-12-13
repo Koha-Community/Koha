@@ -63,11 +63,11 @@ ok(
 
 ## Check GetPendingModifications
 my $pending = Koha::Borrower::Modifications->GetPendingModifications();
-ok( $pending->[0]->{'firstname'} eq 'Kyle', 'Test GetPendingModifications()' );
 ok(
-    $pending->[1]->{'firstname'} eq 'Sandy',
+    $pending->[0]->{'firstname'} eq 'Sandy',
     'Test GetPendingModifications() again'
 );
+ok( $pending->[1]->{'firstname'} eq 'Kyle', 'Test GetPendingModifications()' );
 
 ## This should delete the row from the table
 Koha::Borrower::Modifications->DenyModifications('3');
