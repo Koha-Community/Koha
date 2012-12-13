@@ -29,18 +29,22 @@ This script allows ajax call for dynamic authorities search
 
 use CGI;
 use Modern::Perl;
+use JSON;
+
 use C4::Context;
 use C4::Charset;
 use C4::AuthoritiesMarc;
 use C4::Auth qw/check_cookie_auth/;
+use C4::Output;
 
 my $query = new CGI;
 
-binmode STDOUT, ':encoding(UTF-8)';
-print $query->header( -type => 'text/plain', -charset => 'UTF-8' );
+my ( $auth_status, $sessionID ) = check_cookie_auth( $query->cookie('CGISESSID'), { catalogue => 1 } );
 
-my ( $auth_status, $sessionID ) = check_cookie_auth( $query->cookie('CGISESSID'), { } );
 if ( $auth_status ne "ok" ) {
+    # send empty response
+    my $reply = CGI->new("");
+    print $reply->header(-type => 'text/html');
     exit 0;
 }
 
@@ -64,17 +68,26 @@ if ( $auth_status ne "ok" ) {
 
     my ( $results, $total ) = SearchAuthorities( \@marclist, \@and_or, \@excluding, \@operator, \@value, $startfrom * $resultsperpage, $resultsperpage, $authtypecode, $orderby );
 
-print "[";
-my $i = 0;
+    my %used_summaries; # hash to avoid duplicates
+    my @summaries;
     foreach my $result (@$results) {
-        if($i > 0){ print ","; }
-        my $value = '';
         my $authorized = $result->{'summary'}->{'authorized'};
-        foreach my $heading (@$authorized) {
-            $value .= $heading->{'heading'} . ' ';
+        my $summary    = join(
+            ' ',
+            map {
+                ( $searchtype eq 'mainmainentry' )
+                  ? $_->{'hemain'}
+                  : $_->{'heading'}
+              } @$authorized
+        );
+        $summary =~ s/^\s+//;
+        $summary =~ s/\s+$//;
+        $summary = nsb_clean($summary);
+        # test if already added ignoring case
+        unless ( exists $used_summaries{ lc($summary) } ) {
+            push @summaries, { 'summary' => $summary };
+            $used_summaries{ lc($summary) } = 1;
         }
-        $value = "{\"summary\":\"" . $value . "\"" . "}";
-        print nsb_clean($value) . "\n";
-        $i++;
     }
-print "]";
+
+output_with_http_headers $query, undef, to_json(\@summaries, { utf8 => 1 }), 'json';

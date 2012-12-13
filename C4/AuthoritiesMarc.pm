@@ -953,7 +953,11 @@ sub BuildSummary {
 # construct UNIMARC summary, that is quite different from MARC21 one
 # accepted form
         foreach my $field ($record->field('2..')) {
-            push @authorized, { heading => $field->as_string('abcdefghijlmnopqrstuvwxyz'), field => $field->tag() };
+            push @authorized, {
+                heading => $field->as_string('abcdefghijlmnopqrstuvwxyz'),
+                hemain  => $field->subfield('a'),
+                field   => $field->tag(),
+            };
         }
 # rejected form(s)
         foreach my $field ($record->field('3..')) {
@@ -961,7 +965,12 @@ sub BuildSummary {
         }
         foreach my $field ($record->field('4..')) {
             my $thesaurus = $field->subfield('2') ? "thes. : ".$thesaurus{"$field->subfield('2')"}." : " : '';
-            push @seefrom, { heading => $thesaurus . $field->as_string('abcdefghijlmnopqrstuvwxyz'), type => 'seefrom', field => $field->tag() };
+            push @seefrom, {
+                heading => $thesaurus . $field->as_string('abcdefghijlmnopqrstuvwxyz'),
+                hemain  => $field->subfield('a'),
+                type    => 'seefrom',
+                field   => $field->tag(),
+            };
         }
 
         # see :
@@ -972,6 +981,7 @@ sub BuildSummary {
                 field   => $_->tag,
                 type    => $type,
                 heading => $heading,
+                hemain  => $_->subfield('a'),
                 search  => $heading,
                 authid  => $_->subfield('9'),
             }
@@ -1022,9 +1032,17 @@ sub BuildSummary {
                 $subfields_to_report = 'vxyz';
             }
             if ($subfields_to_report) {
-                push @authorized, { heading => $field->as_string($subfields_to_report), field => $tag };
+                push @authorized, {
+                    heading => $field->as_string($subfields_to_report),
+                    hemain  => $field->subfield( substr($subfields_to_report, 0, 1) ),
+                    field   => $tag,
+                };
             } else {
-                push @authorized, { heading => $field->as_string(), field => $tag };
+                push @authorized, {
+                    heading => $field->as_string(),
+                    hemain  => $field->subfield('a'),
+                    field   => $tag,
+                };
             }
         }
         foreach my $field ($record->field('4..')) { #See From
@@ -1035,9 +1053,19 @@ sub BuildSummary {
                 $type = 'earlier' if $type && $type ne 'n';
             }
             if ($type eq 'subfi') {
-                push @seefrom, { heading => $field->as_string($marc21subfields), type => ($field->subfield('i') || ''), field => $field->tag() };
+                push @seefrom, {
+                    heading => $field->as_string($marc21subfields),
+                    hemain  => $field->subfield( substr($marc21subfields, 0, 1) ),
+                    type    => ($field->subfield('i') || ''),
+                    field   => $field->tag(),
+                };
             } else {
-                push @seefrom, { heading => $field->as_string($marc21subfields), type => $type, field => $field->tag() };
+                push @seefrom, {
+                    heading => $field->as_string($marc21subfields),
+                    hemain  => $field->subfield( substr($marc21subfields, 0, 1) ),
+                    type    => $type,
+                    field   => $field->tag(),
+                };
             }
         }
         foreach my $field ($record->field('5..')) { #See Also
@@ -1050,18 +1078,20 @@ sub BuildSummary {
             if ($type eq 'subfi') {
                 push @seealso, {
                     heading => $field->as_string($marc21subfields),
-                    type => $field->subfield('i'),
-                    field => $field->tag(),
-                    search => $field->as_string($marc21subfields) || '',
-                    authid => $field->subfield('9') || ''
+                    hemain  => $field->subfield( substr($marc21subfields, 0, 1) ),
+                    type    => $field->subfield('i'),
+                    field   => $field->tag(),
+                    search  => $field->as_string($marc21subfields) || '',
+                    authid  => $field->subfield('9') || ''
                 };
             } else {
                 push @seealso, {
                     heading => $field->as_string($marc21subfields),
-                    type => $type,
-                    field => $field->tag(),
-                    search => $field->as_string($marc21subfields) || '',
-                    authid => $field->subfield('9') || ''
+                    hemain  => $field->subfield( substr($marc21subfields, 0, 1) ),
+                    type    => $type,
+                    field   => $field->tag(),
+                    search  => $field->as_string($marc21subfields) || '',
+                    authid  => $field->subfield('9') || ''
                 };
             }
         }
@@ -1089,6 +1119,7 @@ sub BuildSummary {
         }
     }
     $summary{mainentry} = $authorized[0]->{heading};
+    $summary{mainmainentry} = $authorized[0]->{hemain};
     $summary{authorized} = \@authorized;
     $summary{notes} = \@notes;
     $summary{seefrom} = \@seefrom;
