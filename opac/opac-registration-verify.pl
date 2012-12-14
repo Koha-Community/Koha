@@ -49,7 +49,7 @@ if ( $m->Verify() ) {
     $template->param(
         OpacPasswordChange => C4::Context->preference('OpacPasswordChange') );
 
-    my $borrower = $m->GetModifications();
+    my $borrower = Koha::Borrower::Modifications->GetModifications({ verification_token => $token });
 
     my $password;
     ( $borrowernumber, $password ) = AddMember_Opac(%$borrower);
