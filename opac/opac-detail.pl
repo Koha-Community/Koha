@@ -529,11 +529,6 @@ for my $itm (@items) {
 		 && (not $itemtypes->{$itm->{'itype'}}->{notforloan} )
          && ($itm->{'itemnumber'} ) );
 
-    if ( defined $itm->{'publictype'} ) {
-        # I can't actually find any case in which this is defined. --amoore 2008-12-09
-        $itm->{ $itm->{'publictype'} } = 1;
-    }
-
     # get collection code description, too
     my $ccode = $itm->{'ccode'};
     $itm->{'ccode'} = $collections->{$ccode} if ( defined($collections) && exists( $collections->{$ccode} ) );

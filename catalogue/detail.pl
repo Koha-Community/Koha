@@ -197,10 +197,6 @@ foreach my $item (@items) {
     # can place holds defaults to yes
     $norequests = 0 unless ( ( $item->{'notforloan'} > 0 ) || ( $item->{'itemnotforloan'} > 0 ) );
 
-    # format some item fields for display
-    if ( defined $item->{'publictype'} ) {
-        $item->{ $item->{'publictype'} } = 1;
-    }
     $item->{imageurl} = defined $item->{itype} ? getitemtypeimagelocation('intranet', $itemtypes->{ $item->{itype} }{imageurl})
                                                : '';
 
