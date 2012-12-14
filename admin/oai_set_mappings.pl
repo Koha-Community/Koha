@@ -55,6 +55,7 @@ my $op = $input->param('op');
 if($op && $op eq "save") {
     my @marcfields = $input->param('marcfield');
     my @marcsubfields = $input->param('marcsubfield');
+    my @operators = $input->param('operator');
     my @marcvalues = $input->param('marcvalue');
 
     my @mappings;
@@ -64,6 +65,7 @@ if($op && $op eq "save") {
             push @mappings, {
                 marcfield    => $marcfields[$i],
                 marcsubfield => $marcsubfields[$i],
+                operator     => $operators[$i],
                 marcvalue    => $marcvalues[$i]
             };
         }

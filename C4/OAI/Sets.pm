@@ -290,11 +290,12 @@ sub AddOAISet {
 GetOAISetsMappings returns mappings for all OAI Sets.
 
 Mappings define how biblios are categorized in sets.
-A mapping is defined by three properties:
+A mapping is defined by four properties:
 
     {
         marcfield => 'XXX',     # the MARC field to check
         marcsubfield => 'Y',    # the MARC subfield to check
+        operator => 'A',        # the operator 'equal' or 'notequal'; 'equal' if ''
         marcvalue => 'zzzz',    # the value to check
     }
 
@@ -311,6 +312,7 @@ The first hashref keys are the sets IDs, so it looks like this:
             {
                 marcfield => 'XXX',
                 marcsubfield => 'Y',
+                operator => 'A',
                 marcvalue => 'zzzz'
             },
             {
@@ -337,6 +339,7 @@ sub GetOAISetsMappings {
         push @{ $mappings->{$result->{'set_id'}} }, {
             marcfield => $result->{'marcfield'},
             marcsubfield => $result->{'marcsubfield'},
+            operator => $result->{'operator'},
             marcvalue => $result->{'marcvalue'}
         };
     }
@@ -371,6 +374,7 @@ sub GetOAISetMappings {
         push @mappings, {
             marcfield => $result->{'marcfield'},
             marcsubfield => $result->{'marcsubfield'},
+            operator => $result->{'operator'},
             marcvalue => $result->{'marcvalue'}
         };
     }
@@ -384,6 +388,7 @@ sub GetOAISetMappings {
         {
             marcfield => 'XXX',
             marcsubfield => 'Y',
+            operator => 'A',
             marcvalue => 'zzzz'
         },
         ...
@@ -409,12 +414,12 @@ sub ModOAISetMappings {
 
     if(scalar @$mappings > 0) {
         $query = qq{
-            INSERT INTO oai_sets_mappings (set_id, marcfield, marcsubfield, marcvalue)
-            VALUES (?,?,?,?)
+            INSERT INTO oai_sets_mappings (set_id, marcfield, marcsubfield, operator, marcvalue)
+            VALUES (?,?,?,?,?)
         };
         $sth = $dbh->prepare($query);
         foreach (@$mappings) {
-            $sth->execute($set_id, $_->{'marcfield'}, $_->{'marcsubfield'}, $_->{'marcvalue'});
+            $sth->execute($set_id, $_->{'marcfield'}, $_->{'marcsubfield'}, $_->{'operator'}, $_->{'marcvalue'});
         }
     }
 }
@@ -491,12 +496,20 @@ sub CalcOAISetsBiblio {
             next if not $mapping;
             my $field = $mapping->{'marcfield'};
             my $subfield = $mapping->{'marcsubfield'};
+            my $operator = $mapping->{'operator'};
             my $value = $mapping->{'marcvalue'};
-
             my @subfield_values = $record->subfield($field, $subfield);
-            if(0 < grep /^$value$/, @subfield_values) {
-                push @biblio_sets, $set_id;
-                last;
+            if ($operator eq 'notequal') {
+                if(0 == grep /^$value$/, @subfield_values) {
+                    push @biblio_sets, $set_id;
+                    last;
+                }
+            }
+            else {
+                if(0 < grep /^$value$/, @subfield_values) {
+                    push @biblio_sets, $set_id;
+                    last;
+                }
             }
         }
     }

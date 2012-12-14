@@ -7169,6 +7169,13 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.13.00.XXX";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+   $dbh->do("ALTER TABLE oai_sets_mappings ADD COLUMN operator varchar(8) NOT NULL default 'equal' AFTER marcsubfield;");
+   print "Upgrade to $DBversion done (Bug 9295: OAI notequal: add operator column to OAI mappings table)\n";
+   SetVersion ($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

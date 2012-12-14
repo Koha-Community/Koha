@@ -1523,6 +1523,7 @@ CREATE TABLE `oai_sets_mappings` (
   `set_id` int(11) NOT NULL,
   `marcfield` char(3) NOT NULL,
   `marcsubfield` char(1) NOT NULL,
+  `operator` varchar(8) NOT NULL default 'equal',
   `marcvalue` varchar(80) NOT NULL,
   CONSTRAINT `oai_sets_mappings_ibfk_1` FOREIGN KEY (`set_id`) REFERENCES `oai_sets` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
