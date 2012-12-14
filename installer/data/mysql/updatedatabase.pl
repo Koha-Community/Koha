@@ -6182,7 +6182,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 }
 
 $DBversion = '3.11.00.XXX';
-if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+if (CheckVersion($DBversion)) {
     $dbh->do("
         CREATE TABLE IF NOT EXISTS `borrower_modifications` (
           `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -6281,7 +6281,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     If you did not initiate this request, you may safely ignore this one-time message. The request will expire shortly.'
     )");
 
-    print "Upgrade to $DBversion done (Add Patron Self Registration)\n";
+    print "Upgrade to $DBversion done (Bug 7067: Add Patron Self Registration)\n";
     SetVersion ($DBversion);
 }
 
