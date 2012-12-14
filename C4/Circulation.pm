@@ -83,6 +83,7 @@ BEGIN {
 		&GetBiblioIssues
 		&GetOpenIssue
 		&AnonymiseIssueHistory
+		&CheckIfIssuedToPatron
 	);
 
 	# subs to deal with returns

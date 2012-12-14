@@ -247,6 +247,8 @@ foreach my $biblionumber (@biblionumbers) {
  		$warnings = 1;
         $maxreserves = 1;
     }
+
+    my $alreadypossession;
     if (not C4::Context->preference('AllowHoldsOnPatronsPossessions') and CheckIfIssuedToPatron($borrowerinfo->{borrowernumber},$biblionumber)) {
         $warnings = 1;
         $alreadypossession = 1;
