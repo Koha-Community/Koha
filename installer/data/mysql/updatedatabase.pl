@@ -6136,7 +6136,6 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 
 $DBversion = "3.11.00.007";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-    print "Upgrade to $DBversion done (Bug 9056: add German and a couple of French translations to language_descriptions";
     $dbh->do("INSERT INTO language_descriptions (subtag, type, lang, description) VALUES( 'ar', 'language', 'de', 'Arabisch')");
     $dbh->do("INSERT INTO language_descriptions (subtag, type, lang, description) VALUES( 'hy', 'language', 'de', 'Armenisch')");
     $dbh->do("INSERT INTO language_descriptions (subtag, type, lang, description) VALUES( 'bg', 'language', 'de', 'Bulgarisch')");
@@ -6178,6 +6177,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("INSERT INTO language_descriptions (subtag, type, lang, description) VALUES( 'uk', 'language', 'de', 'Ukrainisch')");
     $dbh->do("INSERT INTO language_descriptions (subtag, type, lang, description) VALUES( 'ur', 'language', 'fr', 'Ourdou')");
     $dbh->do("INSERT INTO language_descriptions (subtag, type, lang, description) VALUES( 'ur', 'language', 'de', 'Urdu')");
+    print "Upgrade to $DBversion done (Bug 9056: add German and a couple of French translations to language_descriptions)\n";
     SetVersion ($DBversion);
 }
 
