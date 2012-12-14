@@ -169,11 +169,6 @@ if ($issues){
         }
         $issue->{'charges'} = $charges;
 
-        # get publictype for icon
-
-        my $publictype = $issue->{'publictype'};
-        $issue->{$publictype} = 1;
-
         # check if item is renewable
         my ($status,$renewerror) = CanBookBeRenewed( $borrowernumber, $issue->{'itemnumber'} );
         ($issue->{'renewcount'},$issue->{'renewsallowed'},$issue->{'renewsleft'}) = GetRenewCount($borrowernumber, $issue->{'itemnumber'});
@@ -254,8 +249,6 @@ foreach my $res (@reserves) {
       $res->{'expirationdate'} = '';
     }
 
-    my $publictype = $res->{'publictype'};
-    $res->{$publictype} = 1;
     $res->{'waiting'} = 1 if $res->{'found'} eq 'W';
     $res->{'branch'} = $branches->{ $res->{'branchcode'} }->{'branchname'};
     my $biblioData = GetBiblioData($res->{'biblionumber'});
