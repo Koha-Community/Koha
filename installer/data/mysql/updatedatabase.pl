@@ -6181,7 +6181,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-$DBversion = '3.11.00.XXX';
+$DBversion = "3.11.00.008";
 if (CheckVersion($DBversion)) {
     $dbh->do("
         CREATE TABLE IF NOT EXISTS `borrower_modifications` (
