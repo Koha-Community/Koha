@@ -6284,7 +6284,7 @@ if (CheckVersion($DBversion)) {
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.11.00.XXX";
+$DBversion = "3.11.00.009";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("
         INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES
@@ -6294,7 +6294,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
         ('OpacSeparateHoldingsBranch', 'homebranch', 'Branch used to separate holdings (OPAC)', 'homebranch|holdingbranch', 'Choice')
     ");
 
-    print "Upgrade to $DBversion done (Add systempreferences SeparateHoldings, SeparateHoldingsBranch, OpacSeparateHoldings and OpacSeparateHoldingsBranch) \n";
+    print "Upgrade to $DBversion done (Bug 7674: Add systempreferences SeparateHoldings, SeparateHoldingsBranch, OpacSeparateHoldings and OpacSeparateHoldingsBranch) \n";
     SetVersion ($DBversion);
 }
 
