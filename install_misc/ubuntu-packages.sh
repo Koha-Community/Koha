@@ -141,16 +141,19 @@ for PACKAGE in $UBUNTU_PACKAGES; do
     # Test if the package is installed
     PACKAGE_INSTALLED=`packageInstalled $PACKAGE`
 
+    # Determine the package version if it is installed.
+    if [ "$PACKAGE_INSTALLED" == "yes" ]; then
+        PACKAGE_VERSION=`getPackageVersion $PACKAGE`
+
+    # otherwise default to 'none'.
+    else
+        PACKAGE_VERSION="none"
+        MISSING_PACKAGES="$PACKAGE $MISSING_PACKAGES"
+    fi
+
     # If we are supposed to report...
     if [ "$CHECK" == "yes" ]; then
 
-        # Determine the package version if it is installed.
-        if [ "$PACKAGE_INSTALLED" == "yes" ]; then
-            PACKAGE_VERSION=`getPackageVersion $PACKAGE`
-        # otherwise default to 'none'.
-        else
-            PACKAGE_VERSION="none"
-        fi
 
         # report the package name and version number.
         echo "$PACKAGE = $PACKAGE_VERSION"
@@ -163,7 +166,7 @@ for PACKAGE in $UBUNTU_PACKAGES; do
 done
 
 # If we aren't reporting, then the last echo didn't have a newline.
-if [ "$CHECK" != "yes" ]; then
+if [ ! "$CHECK" == "yes" ]; then
     echo
 fi
 
