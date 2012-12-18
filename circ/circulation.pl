@@ -46,6 +46,7 @@ use C4::Members::Attributes qw(GetBorrowerAttributes);
 use Koha::Borrower::Debarments qw(GetDebarments IsDebarred);
 use Koha::DateUtils;
 use Koha::Database;
+use Koha::Borrower::Modifications;
 
 use Date::Calc qw(
   Today
@@ -635,6 +636,7 @@ $template->param(
     debarments                => GetDebarments({ borrowernumber => $borrowernumber }),
     todaysdate                => output_pref( { dt => dt_from_string()->set(hour => 23)->set(minute => 59), dateformat => 'sql' } ),
     nopermission              => $query->param('nopermission'),
+    modifications             => Koha::Borrower::Modifications->GetModifications({ borrowernumber => $borrowernumber }),
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;
