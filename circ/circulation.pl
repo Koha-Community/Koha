@@ -51,6 +51,7 @@ use Koha::Patron::Messages;
 use Koha::Patron::Images;
 use Koha::SearchEngine;
 use Koha::SearchEngine::Search;
+use Koha::Patron::Modifications;
 
 use Date::Calc qw(
   Today
@@ -663,6 +664,7 @@ $template->param(
     canned_bor_notes_loop     => $canned_notes,
     debarments                => GetDebarments({ borrowernumber => $borrowernumber }),
     todaysdate                => output_pref( { dt => dt_from_string()->set(hour => 23)->set(minute => 59), dateformat => 'sql' } ),
+    modifications             => Koha::Patron::Modifications->GetModifications({ borrowernumber => $borrowernumber }),
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;

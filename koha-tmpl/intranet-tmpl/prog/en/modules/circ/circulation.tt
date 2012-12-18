@@ -730,6 +730,14 @@ No patron matched <span class="ex">[% message %]</span>
 
 		<ul>
 
+                   [% IF ( modifications ) %]
+                    <li><span class="circ-hlt">Pending modifications:</span> Patron has pending modifications.
+                            [% IF ( CAN_user_borrowers ) %]
+                                    <a href="/cgi-bin/koha/members/members-update.pl">View all pending patron modifications</a>
+                            [% END %]
+                   </li>
+                  [% END %]
+
 			[% IF ( warndeparture ) %]
 			<li><span class="circ-hlt">Expiration:</span> Patron's card will expire soon.
             Patron's card expires on [% expiry | $KohaDates %] <a href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% borrowernumber %]&amp;destination=circ&amp;reregistration=y">Renew</a> or <a href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;destination=circ&amp;borrowernumber=[% borrowernumber %]&amp;categorycode=[% categorycode %]">Edit Details</a>
