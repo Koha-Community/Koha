@@ -259,7 +259,7 @@ td.repeatableyearly a.ui-state-default {  background:  #FFFF99 none; color :  Bl
 				<strong>From Date:</strong>
 				<span id="showDaynameOutput"></span>, 
 				
-				[% IF ( dateformat_us ) %]<span id="showMonthOutput"></span>/<span id="showDayOutput"></span>/<span id="showYearOutput"></span>[% ELSIF ( dateformat_metric ) %]<span id="showDayOutput"></span>/<span id="showMonthOutput"></span>/<span id="showYearOutput"></span>[% ELSE %]<span id="showYearOutput"></span>/<span id="showMonthOutput"></span>/<span id="showDayOutput"></span>[% END %]
+                                [% IF ( dateformat == "us" ) %]<span id="showMonthOutput"></span>/<span id="showDayOutput"></span>/<span id="showYearOutput"></span>[% ELSIF ( dateformat == "metric" ) %]<span id="showDayOutput"></span>/<span id="showMonthOutput"></span>/<span id="showYearOutput"></span>[% ELSE %]<span id="showYearOutput"></span>/<span id="showMonthOutput"></span>/<span id="showDayOutput"></span>[% END %]
 
 				<input type="hidden" id="showDayname" name="showDayname" />
 				<input type="hidden" id="showWeekday" name="showWeekday" />
@@ -329,7 +329,7 @@ td.repeatableyearly a.ui-state-default {  background:  #FFFF99 none; color :  Bl
                 <strong>From date:</strong>
 				<span id="newDaynameOutput"></span>, 
 
-				[% IF ( dateformat_us ) %]<span id="newMonthOutput"></span>/<span id="newDayOutput"></span>/<span id="newYearOutput"></span>[% ELSIF ( dateformat_metric ) %]<span id="newDayOutput"></span>/<span id="newMonthOutput"></span>/<span id="newYearOutput"></span>[% ELSE %]<span id="newYearOutput"></span>/<span id="newMonthOutput"></span>/<span id="newDayOutput"></span>[% END %]
+                         [% IF ( dateformat == "us" ) %]<span id="newMonthOutput"></span>/<span id="newDayOutput"></span>/<span id="newYearOutput"></span>[% ELSIF ( dateformat == "metric" ) %]<span id="newDayOutput"></span>/<span id="newMonthOutput"></span>/<span id="newYearOutput"></span>[% ELSE %]<span id="newYearOutput"></span>/<span id="newMonthOutput"></span>/<span id="newDayOutput"></span>[% END %]
 
 				<input type="hidden" id="newDayname" name="showDayname" />
 				<input type="hidden" id="newWeekday" name="newWeekday" />
@@ -483,7 +483,7 @@ td.repeatableyearly a.ui-state-default {  background:  #FFFF99 none; color :  Bl
 <table id="holidaysyearlyrepeatable">
 <thead>
 <tr>
-  [% IF ( dateformat_metric ) %]
+  [% IF ( dateformat == "metric" ) %]
   <th class="repeatableyearly">Day/Month</th>
   [% ELSE %]
   <th class="repeatableyearly">Month/Day</th>

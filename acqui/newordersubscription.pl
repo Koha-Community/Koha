@@ -102,6 +102,5 @@ $template->param(
     basketno         => $basket->{basketno},
     basketname       => $basket->{basketname},
     booksellername   => $bookseller->{name},
-    dateformat       => C4::Context->preference("dateformat"),
 );
 output_html_with_http_headers $query, $cookie, $template->output;

@@ -217,7 +217,6 @@ if ($op eq 'add_form') {
     # if no buget_id is passed then its an add
     $template->param(
         add_validate                  => 1,
-        dateformat                => C4::Dates->new()->visual(),
         budget_parent_id    		  => $budget_parent->{'budget_id'},
         budget_parent_name    		  => $budget_parent->{'budget_name'},
         branchloop_select         => \@branchloop_select,
