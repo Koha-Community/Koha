@@ -274,12 +274,12 @@
                 <label for="dateofbirth">
                 [% END %]
                 Date of birth: </label>
-				
-	[% IF ( metric ) %]			
+
+        [% IF ( dateformat == "metric" ) %]
                 <input type="text" id="dateofbirth" name="dateofbirth" size="20" onchange="CheckDate(document.form.dateofbirth);" value="[% IF ( opduplicate ) %][% ELSE %][% dateofbirth %][% END %]" />
-[% ELSE %]
+        [% ELSE %]
                 <input type="text" id="dateofbirth" name="dateofbirth" size="20" value="[% IF ( opduplicate ) %][% ELSE %][% dateofbirth %][% END %]" />
-[% END %]
+        [% END %]
 
         [% IF ( mandatorydateofbirth ) %]<span class="required">Required</span>[% END %]
         [% IF ( ERROR_dateofbirth ) %]<span class="required">(Error)</span>[% END %]
@@ -1087,11 +1087,11 @@
             <label for="from">
 			[% END %]
 			Registration date: </label>
-			[% IF ( metric ) %]
+            [% IF ( dateformat == "metric" ) %]
                 <input type="text" id="from" name="dateenrolled"  maxlength="10" size="10" onchange="CheckDate(document.form.dateenrolled);check_manip_date('verify');" value="[% dateenrolled %]" class="datepickerfrom" />
-			[% ELSE %]
+            [% ELSE %]
                 <input type="text" id="from" name="dateenrolled"  maxlength="10" size="10" value="[% dateenrolled %]" class="datepickerfrom" />
-			[% END %]
+            [% END %]
 		[% IF ( mandatorydateenrolled ) %]<span class="required">Required</span>[% END %]
 		[% IF ( ERROR_dateenrolled ) %]<span class="required">(Error)</span>[% END %]
 		<div class="hint">[% INCLUDE 'date-format.inc' %]</div>
@@ -1108,7 +1108,7 @@
             <label for="to">
 			[% END %]
 			Expiry date (leave blank for auto calc) </label>
-			[% IF ( metric ) %]
+            [% IF ( dateformat == "metric" ) %]
 				[% UNLESS ( opadd ) %]
                     <input type="text" id="to" name="dateexpiry" maxlength="10"  size="10" onchange="CheckDate(document.form.dateexpiry);check_manip_date('verify');" value="[% dateexpiry %]" class="datepickerto" />
 				[% ELSE %]

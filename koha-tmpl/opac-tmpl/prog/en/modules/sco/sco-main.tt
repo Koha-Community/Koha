@@ -75,7 +75,7 @@ $(document).ready(function() {
     dofocus();
     [% IF ( patronid ) %]sco_init();[% END %]
     $("#loanTable").tablesorter({
-        [% IF ( dateformat_metric ) %]
+        [% IF ( dateformat == "metric" ) %]
             dateFormat: 'uk',
         [% END %]
         widgets:   ['zebra'],

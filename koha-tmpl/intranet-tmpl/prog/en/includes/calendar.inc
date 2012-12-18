@@ -37,7 +37,7 @@ jQuery(function($){
         dayNamesShort: [_("Sun"), _("Mon"), _("Tue"), _("Wed"), _("Thu"), _("Fri"), _("Sat")],
         dayNamesMin: [_("Su"),_("Mo"),_("Tu"),_("We"),_("Th"),_("Fr"),_("Sa")],
         weekHeader: _("Wk"),
-        dateFormat: '[% IF ( dateformat_us ) %]mm/dd/yy[% ELSIF ( dateformat_metric ) %]dd/mm/yy[% ELSE %]yy-mm-dd[% END %]',
+        dateFormat: "[% IF ( dateformat == "us" ) %]mm/dd/yy[% ELSIF ( dateformat == "metric" ) %]dd/mm/yy[% ELSE %]yy-mm-dd[% END %]",
         firstDay: [% CalendarFirstDayOfWeek %],
         isRTL: [% IF ( bidi ) %]true[% ELSE %]false[% END %],
         showMonthAfterYear: false,

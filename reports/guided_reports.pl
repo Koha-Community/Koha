@@ -105,7 +105,6 @@ elsif ( $phase eq 'Build new' ) {
         'savedreports' => get_saved_reports($filter),
         'usecache' => $usecache,
         'groups_with_subgroups'=> groups_with_subgroups($group, $subgroup),
-        dateformat => C4::Context->preference('dateformat'),
     );
 }
 
