@@ -102,7 +102,7 @@ if ( $action eq 'create' ) {
         );
     }
     elsif (
-        md5_base64( $cgi->param('captcha') ) ne $cgi->param('captcha_digest') )
+        md5_base64( uc( $cgi->param('captcha') ) ) ne $cgi->param('captcha_digest') )
     {
         $template->param(
             failed_captcha => 1,
