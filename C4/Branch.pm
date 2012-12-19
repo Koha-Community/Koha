@@ -160,11 +160,12 @@ sub GetBranchesLoop {  # since this is what most pages want anyway
     my $onlymine = @_ ? shift : onlymine();
     my $branches = GetBranches($onlymine);
     my @loop;
-    foreach ( sort { uc($branches->{$a}->{branchname}) cmp uc($branches->{$b}->{branchname}) } keys %$branches ) {
+    foreach my $branchcode ( sort { uc($branches->{$a}->{branchname}) cmp uc($branches->{$b}->{branchname}) } keys %$branches ) {
         push @loop, {
-            value => $_,
-            selected => ($_ eq $branch) ? 1 : 0, 
-            branchname => $branches->{$_}->{branchname},
+            value      => $branchcode,
+            branchcode => $branchcode,
+            selected   => ($branchcode eq $branch) ? 1 : 0,
+            branchname => $branches->{$branchcode}->{branchname},
         };
     }
     return \@loop;

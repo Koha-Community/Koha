@@ -934,17 +934,11 @@ sub checkauth {
         my $value = $query->param($name);
         push @inputs, { name => $name, value => $value };
     }
-    # get the branchloop, which we need for authentication
-    my $branches = GetBranches();
-    my @branch_loop;
-    for my $branch_hash (sort keys %$branches) {
-		push @branch_loop, {branchcode => "$branch_hash", branchname => $branches->{$branch_hash}->{'branchname'}, };
-    }
 
     my $template_name = ( $type eq 'opac' ) ? 'opac-auth.tmpl' : 'auth.tmpl';
     my $template = C4::Templates::gettemplate($template_name, $type, $query );
     $template->param(
-        branchloop           => \@branch_loop,
+        branchloop           => GetBranchesLoop(),
         opaccolorstylesheet  => C4::Context->preference("opaccolorstylesheet"),
         opaclayoutstylesheet => C4::Context->preference("opaclayoutstylesheet"),
         login                => 1,
