@@ -478,7 +478,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
             <br />[% END %] 
         <!-- here you might do a tmpl_if name="toc" and use greybox or equivalent for table of contents -->
         
-        [% IF ( MARCurl.OPACurlOpenInNewWindow ) %]<a href="[% MARCurl.MARCURL %]" title="[% MARCurl.MARCURL %]" target="_blank">[% ELSE %]<a href="[% MARCurl.MARCURL %]" title="[% MARCurl.MARCURL %]">[% END %]
+        [% IF ( OPACURLOpenInNewWindow ) %]<a href="[% MARCurl.MARCURL %]" title="[% MARCurl.MARCURL %]" target="_blank">[% ELSE %]<a href="[% MARCurl.MARCURL %]" title="[% MARCurl.MARCURL %]">[% END %]
         
         [% MARCurl.linktext %]</a>
             [% IF ( MARCurl.notes ) %]<ul>[% FOREACH note IN MARCurl.notes %]<li>[% note.note %]</li>[% END %]</ul>[% END %]</li>
