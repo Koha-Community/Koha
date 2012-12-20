@@ -1,3 +1,4 @@
+[% USE KohaAuthorisedValues %]
 [% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo;
 [% IF ( op_add ) %]Enter a new purchase suggestion[% END %]
 [% IF ( op_else ) %]Purchase Suggestions[% END %]
@@ -216,12 +217,14 @@ $.tablesorter.addParser({
 					[% IF ( suggestions_loo.surnamemanagedby ) %][% suggestions_loo.surnamemanagedby %][% IF ( suggestions_loo.firstnamemanagedby ) %],[% END %] [% suggestions_loo.firstnamemanagedby %][% ELSE %]&nbsp;[% END %]
                 </td>
                 <td>
-                    [% IF ( suggestions_loo.ASKED ) %]Requested[% END %]
-                    [% IF ( suggestions_loo.CHECKED ) %]Checked by the library[% END %]
-                    [% IF ( suggestions_loo.ACCEPTED ) %]Accepted by the library[% END %]
-                    [% IF ( suggestions_loo.ORDERED ) %]Ordered by the library[% END %]
-                    [% IF ( suggestions_loo.REJECTED ) %]Suggestion declined [% END %]
-                    [% IF ( suggestions_loo.AVAILABLE ) %]Available in the library[% END %]
+                    [% IF    ( suggestions_loo.ASKED ) %]Requested
+                    [% ELSIF ( suggestions_loo.CHECKED ) %]Checked by the library
+                    [% ELSIF ( suggestions_loo.ACCEPTED ) %]Accepted by the library
+                    [% ELSIF ( suggestions_loo.ORDERED ) %]Ordered by the library
+                    [% ELSIF ( suggestions_loo.REJECTED ) %]Suggestion declined
+                    [% ELSIF ( suggestions_loo.AVAILABLE ) %]Available in the library
+                    [% ELSE %] [% KohaAuthorisedValues.GetByCode( 'SUGGEST_STATUS', suggestions_loo.STATUS, 1 ) %] [% END %]
+
                     [% IF ( suggestions_loo.reason ) %]([% suggestions_loo.reason %])[% END %]
                 </td>
             </tr>

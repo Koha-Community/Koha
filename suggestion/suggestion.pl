@@ -58,6 +58,9 @@ sub Init{
 
 sub GetCriteriumDesc{
     my ($criteriumvalue,$displayby)=@_;
+    unless ( grep { /$criteriumvalue/ } qw(ASKED ACCEPTED REJECTED CHECKED) ) {
+        return GetAuthorisedValueByCode('SUGGEST_STATUS', $criteriumvalue ) || "Unknown";
+    }
     return ($criteriumvalue eq 'ASKED'?"Pending":ucfirst(lc( $criteriumvalue))) if ($displayby =~/status/i);
     return (GetBranchName($criteriumvalue)) if ($displayby =~/branchcode/);
     return (GetSupportName($criteriumvalue)) if ($displayby =~/itemtype/);
@@ -383,4 +386,8 @@ foreach my $field ( qw(managedby acceptedby suggestedby budgetid) ) {
     $hashlists{ lc($field) . "_loop" } = \@codes_list;
 }
 $template->param(%hashlists);
+$template->param(
+    DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
+    SuggestionStatuses       => GetAuthorisedValues('SUGGEST_STATUS'),
+);
 output_html_with_http_headers $input, $cookie, $template->output;
