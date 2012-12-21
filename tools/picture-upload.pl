@@ -19,8 +19,7 @@
 #
 #
 
-#use strict;
-#use warnings; FIXME - Bug 2505
+use Modern::Perl;
 
 use File::Temp;
 use File::Copy;
@@ -73,7 +72,7 @@ Files greater than 100K will be refused. Images should be 140x200 pixels. If the
 
 $debug and warn "Operation requested: $op";
 
-my ( $total, $handled, @counts, $tempfile, $tfh );
+my ( $total, $handled, @counts, $tempfile, $tfh, %errors );
 
 if ( ($op eq 'Upload') && $uploadfile ) {       # Case is important in these operational values as the template must use case to be visually pleasing!
     my $dirname = File::Temp::tempdir( CLEANUP => 1);
@@ -84,15 +83,17 @@ if ( ($op eq 'Upload') && $uploadfile ) {       # Case is important in these ope
     }
     ( $tfh, $tempfile ) = File::Temp::tempfile( SUFFIX => $filesuffix, UNLINK => 1 );
     $debug and warn "tempfile = $tempfile";
-    my ( @directories, $errors );
+    my ( @directories, $results );
 
     $errors{'NOTZIP'} = 1 if ( $uploadfilename !~ /\.zip$/i && $filetype =~ m/zip/i );
     $errors{'NOWRITETEMP'} = 1 unless ( -w $dirname );
     $errors{'EMPTYUPLOAD'} = 1 unless ( length( $uploadfile ) > 0 );
 
     if ( %errors ) {
-	$template->param( ERRORS => [ \%errors ] );
-    } else {
+        $template->param( ERRORS => [ \%errors ] );
+        output_html_with_http_headers $input, $cookie, $template->output;
+        exit;
+    }
 	while ( <$uploadfile> ) {
 	    print $tfh $_;
         }
@@ -105,15 +106,14 @@ if ( ($op eq 'Upload') && $uploadfile ) {       # Case is important in these ope
                 exit;
             }
             push @directories, "$dirname";
-            foreach $recursive_dir ( @directories ) {
-                opendir $dir, $recursive_dir;
-                while ( my $entry = readdir $dir ) {
+            foreach my $recursive_dir ( @directories ) {
+                opendir RECDIR, $recursive_dir;
+                while ( my $entry = readdir RECDIR ) {
 	        push @directories, "$recursive_dir/$entry" if ( -d "$recursive_dir/$entry" and $entry !~ /^\./ );
                 $debug and warn "$recursive_dir/$entry";
                 }
-                closedir $dir;
+                closedir RECDIR;
             }
-            my $results;
             foreach my $dir ( @directories ) {
                 $results = handle_dir( $dir, $filesuffix, $template );
                 $handled++ if $results == 1;
@@ -126,7 +126,7 @@ if ( ($op eq 'Upload') && $uploadfile ) {       # Case is important in these ope
         }
 
         if ( %$results || %errors ) {
-            $template->param( ERRORS => [ \%$results ] );
+            $template->param( ERRORS => [ $results ] );
         } else {
 			my $filecount;
 			map {$filecount += $_->{count}} @counts;
@@ -140,7 +140,6 @@ if ( ($op eq 'Upload') && $uploadfile ) {       # Case is important in these ope
             );
 			$template->param( borrowernumber => $borrowernumber ) if $borrowernumber;
         }
-    }
 } elsif ( ($op eq 'Upload') && !$uploadfile ) {
     warn "Problem uploading file or no file uploaded.";
     $template->param(cardnumber => $cardnumber);
@@ -150,7 +149,7 @@ if ( ($op eq 'Upload') && $uploadfile ) {       # Case is important in these ope
 	$debug and warn "Patron image deleted for $cardnumber";
     warn "Database returned $dberror" if $dberror;
 }
-if ( $borrowernumber && !$errors && !$template->param('ERRORS') ) {
+if ( $borrowernumber && !%errors && !$template->param('ERRORS') ) {
     print $input->redirect ("/cgi-bin/koha/members/moremember.pl?borrowernumber=$borrowernumber");
 } else {
     output_html_with_http_headers $input, $cookie, $template->output;
@@ -158,19 +157,20 @@ if ( $borrowernumber && !$errors && !$template->param('ERRORS') ) {
 
 sub handle_dir {
     my ( $dir, $suffix, $template, $cardnumber, $source ) = @_;
+    my ( %counts, %direrrors );
     $debug and warn "Entering sub handle_dir; passed \$dir=$dir, \$suffix=$suffix";
     if ($suffix =~ m/zip/i) {     # If we were sent a zip file, process any included data/idlink.txt files
         my ( $file, $filename );
         undef $cardnumber;
         $debug and warn "Passed a zip file.";
-        opendir my $dirhandle, $dir;
-        while ( my $filename = readdir $dirhandle ) {
+        opendir DIR, $dir;
+        while ( my $filename = readdir DIR ) {
             $file = "$dir/$filename" if ($filename =~ m/datalink\.txt/i || $filename =~ m/idlink\.txt/i);
         }
         unless (open (FILE, $file)) {
 		warn "Opening $dir/$file failed!";
-                $errors{'OPNLINK'} = $file;
-		return $errors; # This error is fatal to the import of this directory contents, so bail and return the error to the caller
+                $direrrors{'OPNLINK'} = $file;
+		return \%direrrors; # This error is fatal to the import of this directory contents, so bail and return the error to the caller
         };
 
         while (my $line = <FILE>) {
@@ -181,8 +181,8 @@ sub handle_dir {
             $debug and warn "Delimeter is \'$delim\'";
             unless ( $delim eq "," || $delim eq "\t" ) {
                 warn "Unrecognized or missing field delimeter. Please verify that you are using either a ',' or a 'tab'";
-                $errors{'DELERR'} = 1;      # This error is fatal to the import of this directory contents, so bail and return the error to the caller
-                return $errors;
+                $direrrors{'DELERR'} = 1;      # This error is fatal to the import of this directory contents, so bail and return the error to the caller
+                return \%direrrors;
             }
 	    ($cardnumber, $filename) = split $delim, $line;
 	    $cardnumber =~ s/[\"\r\n]//g;  # remove offensive characters
@@ -192,7 +192,7 @@ sub handle_dir {
             %counts = handle_file($cardnumber, $source, $template, %counts);
         }
         close FILE;
-        closedir ($dirhandle);
+        closedir DIR;
     } else {
         %counts = handle_file($cardnumber, $source, $template, %counts);
     }
@@ -205,14 +205,14 @@ sub handle_file {
     $debug and warn "Entering sub handle_file; passed \$cardnumber=$cardnumber, \$source=$source";
     $count{filenames} = () if !$count{filenames};
     $count{source} = $source if !$count{source};
+    my %filerrors;
+    my $filename;
+    if ($filetype eq 'image') {
+        $filename = $uploadfilename;
+    } else {
+        $filename = $1 if ($source && $source =~ /\/([^\/]+)$/);
+    }
     if ($cardnumber && $source) {     # Now process any imagefiles
-        my %filerrors;
-        my $filename;
-        if ($filetype eq 'image') {
-            $filename = $uploadfilename;
-        } else {
-            $filename = $1 if ($source =~ /\/([^\/]+)$/);
-        }
         $debug and warn "Source: $source";
         my $size = (stat($source))[7];
             if ($size > 550000) {    # This check is necessary even with image resizing to avoid possible security/performance issues...
@@ -227,6 +227,7 @@ sub handle_file {
             $srcimage = GD::Image->new(*IMG);
             close (IMG);
 			if (defined $srcimage) {
+				my $imgfile;
 				my $mimetype = 'image/png';	# GD autodetects three basic image formats: PNG, JPEG, XPM; we will convert all to PNG which is lossless...
 				# Check the pixel size of the image we are about to import...
 				my ($width, $height) = $srcimage->getBounds();
@@ -285,7 +286,7 @@ sub handle_file {
 				$template->param( ERRORS => 1 );
 			}
 		} else {
-			warn "Opening $dir/$filename failed!";
+			warn "Opening $source failed!";
 			$filerrors{'OPNERR'} = 1;
 			push my @filerrors, \%filerrors;
 			push @{ $count{filenames} }, { filerrors => \@filerrors, source => $filename, cardnumber => $cardnumber };
