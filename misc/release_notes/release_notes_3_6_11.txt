@@ -1,0 +1,206 @@
+RELEASE NOTES FOR KOHA 3.6.11
+26 Dec 2012
+========================================================================
+
+Koha is the first free and open source software library automation package 
+(ILS). Development is sponsored by libraries of varying types and sizes, 
+volunteers, and support companies from around the world.  
+The website for the Koha project is 
+
+    http://koha-community.org/
+
+Koha 3.6.11 can be downloaded from:
+
+    http://download.koha-community.org/koha-3.06.11.tar.gz
+
+Installation instructions can be found at:
+
+    http://wiki.koha-community.org/wiki/Installation_Documentation
+    
+    OR in the INSTALL files that come in the tarball
+
+Koha 3.6.11 is a bugfix/maintenance release.
+
+Highlights of 3.6.11
+======================
+
+9135	blocker		updatedatabase.pl fails when DEBUG is set
+8953	critical	opac-userupdate encoding issues
+9106	critical	Filtering list of uncertain price list by owner empties order information
+5801	major		C4::Circulation::_GetCircControlBranch should not be used in opac-reserve.pl
+7921	major		Software error while placing order
+
+
+Bugs fixed in 3.6.11
+======================
+
+4177	normal		opaccloud missing from the system preferences interface
+5521	normal		item edit form appears if no items found
+7129	normal		actual cost showing too many zeros
+8792	normal		Babeltheque tab is useless
+8804	normal		Quiet errors in the log from Auth.pm
+8862	normal		merge.pl contains untranslatable strings
+8954	normal		Languages list in advanced search always in english
+8973	normal		HTML and URL escape missing in OPAC templates
+9024	normal		Add additional sample data to German installer
+9073	normal		Download option from the cart should match the menu button in lists
+9123	normal		Authorities search ordered by authid does not work
+8234	minor	Dates are not well sorted on Transfers to receive
+8787	minor	If OpacMaintenance is on the requested page is loaded
+8820	minor	Don't show orders table if there are no orders
+8910	minor	silent warnings triggered in about.pl
+8936	minor	Search RSS  feeds does not show there items when subscribing in Firefox
+8946	minor	Wrong label and missing values in UNIMARC coded fields advanced search
+8983	minor	Typo error in UNIMARCslim2OPACResults.xsl
+9137	enhancement	Focus when editing/adding new itemtypes/authorised values
+
+
+System requirements
+======================
+
+    Important notes:
+    
+    * Perl 5.10 is required
+    * Zebra is required
+
+
+Documentation
+======================
+
+As of Koha 3.2, the Koha manual is now maintained in DocBook.  The
+home page for Koha documentation is 
+
+    http://koha-community.org/documentation/
+
+As of the date of these release notes, only the English version of the
+Koha manual is available:
+
+    http://manual.koha-community.org/3.6/en/
+
+The Git repository for the Koha manual can be found at
+
+    http://git.koha-community.org/gitweb/?p=kohadocs.git;a=summary
+
+Translations
+======================
+
+Complete or near-complete translations of the OPAC and staff
+interface are available in this release for the following languages:
+
+  * Basque (86%)
+  * Chinese (China) (95%)
+  * Chinese (Taiwan) (99%)
+  * Danish (100%)
+  * English (New Zealand) (100%)
+  * English (USA)
+  * English (United Kingdom) (63%)
+  * French (99%)
+  * French (Canada) (94%)
+  * German (100%)
+  * Greek (93%)
+  * Italian (100%)
+  * Norwegian Bokmål (62%)
+  * Portuguese (Brazil) (98%)
+  * Slovak (100%)
+  * Spanish (99%)
+  * Tetun (52%)
+
+Partial translations are available for various other languages.
+
+The Koha team welcomes additional translations; please see
+
+    http://wiki.koha-community.org/wiki/Translating_Koha
+
+for information about translating Koha, and join the koha-translate 
+list to volunteer:
+
+    http://lists.koha-community.org/cgi-bin/mailman/listinfo/koha-translate
+
+The most up-to-date translations can be found at:
+
+    http://translate.koha-community.org/
+
+Release Team
+======================
+
+The release team for Koha 3.6 is
+
+Release Manager:        Chris Cormack <chrisc@catalyst.net.nz>
+Documentation Manager:  Nicole C Engard <nengard@gmail.com>
+Translation Manager:    Frédéric Demians <frederic@tamil.fr>
+QA Manager:             Ian Walls <ian.walls@bywatersolutions.com>
+Bug Wranglers:          MJ Ray, Marcel de Rooy, Paul Poulain, Mason James
+
+Past Release Maintainer (3.6.x):
+                        Chris Nighswonger <cnighswonger@foundations.edu>
+Past Release Maintainer (3.6.x):
+                        Jared Camins-Esakov <jcamins@cpbibliography.com>
+Release Maintainer (3.6.x):
+			Liz Rea <liz@catalyst.net.nz>
+
+Credits
+======================
+
+
+We thank the following individuals who contributed patches to Koha 3.6.11.
+     1	Jared Camins-Esakov
+     2	Liz Rea
+     2	Jonathan Druart
+     2	Katrin Fischer
+     2	Kyle M Hall
+     8	Owen Leonard
+     1	Dobrica Pavlinusic
+     1	Paul Poulain
+     4	Fridolyn SOMERS
+     2	Mathieu Saby
+     1	Adrien Saurat
+     2	Mirko Tietgen
+     1	Mark Tompsett
+
+
+We also especially thank the following individuals who tested patches
+for Koha 3.6.11.
+
+     15 Jared Camins-Esakov
+     15 Liz Rea
+     28 Chris Cormack
+      1 Frédéric Demians
+      1 Jonathan Druart
+      1 Nicole C. Engard
+      7 Katrin Fischer
+      5 Kyle M Hall
+      1 Mason James
+      3 Melia Meggs
+     12 Paul Poulain
+      1 Marcel de Rooy
+      3 Mirko Tietgen
+      3 Marc Veron
+
+We regret any omissions.  If a contributor has been inadvertantly missed,
+please send a patch against these release notes to 
+koha-patches@lists.koha-community.org.
+
+Revision control notes
+======================
+
+The Koha project uses Git for version control.  The current development 
+version of Koha can be retrieved by checking out the master branch of 
+
+    git://git.koha-community.org/koha.git
+
+The branch for this version of Koha and future bugfixes in this release
+line is 3.6.x.
+
+The last Koha release was 3.6.10, which was released on 2012-10-23.
+
+Bugs and feature requests
+======================
+
+Bug reports and feature requests can be filed at the Koha bug
+tracker at
+
+    http://bugs.koha-community.org/
+
+
+Ehara taku toa i te toa takitahi, engari he toa takitini 
+##### Autogenerated release notes updated last on 26 Dec 2012 20:55:18 Z #####
