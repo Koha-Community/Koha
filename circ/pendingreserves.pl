@@ -140,6 +140,7 @@ if ( $run_report ) {
     $sqldatewhere
     AND (reserves.itemnumber IS NULL OR reserves.itemnumber = items.itemnumber)
     AND items.itemnumber NOT IN (SELECT itemnumber FROM branchtransfers where datearrived IS NULL)
+    AND items.itemnumber NOT IN (select itemnumber FROM reserves where found='W')
     AND issues.itemnumber IS NULL
     AND reserves.priority <> 0 
     AND reserves.suspend = 0
