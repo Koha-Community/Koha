@@ -83,7 +83,7 @@ BEGIN {
 		&GetBiblioIssues
 		&GetOpenIssue
 		&AnonymiseIssueHistory
-		&CheckIfIssuedToPatron
+        &CheckIfIssuedToPatron
 	);
 
 	# subs to deal with returns
@@ -3455,16 +3455,15 @@ sub TransferSlip {
 =cut
 
 sub CheckIfIssuedToPatron {
-        my ($borrowernumber, $biblionumber) = @_;
-        my $isissued = 0;
+    my ($borrowernumber, $biblionumber) = @_;
 
-        my $items = GetItemsByBiblioitemnumber($biblionumber);
+    my $items = GetItemsByBiblioitemnumber($biblionumber);
 
-        foreach my $item (@{$items}) {
-                $isissued = 1 if ($item->{borrowernumber} && $item->{borrowernumber} eq $borrowernumber);
-        }
+    foreach my $item (@{$items}) {
+        return 1 if ($item->{borrowernumber} && $item->{borrowernumber} eq $borrowernumber);
+    }
 
-        return $isissued;
+    return;
 }
 
 

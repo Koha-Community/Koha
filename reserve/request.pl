@@ -244,7 +244,7 @@ foreach my $biblionumber (@biblionumbers) {
     my $dat          = GetBiblioData($biblionumber);
 
     unless ( CanBookBeReserved($borrowerinfo->{borrowernumber}, $biblionumber) ) {
- 		$warnings = 1;
+		$warnings = 1;
         $maxreserves = 1;
     }
 

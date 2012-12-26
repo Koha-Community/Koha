@@ -293,12 +293,12 @@
                           [% UNLESS ( bibitemloo.bib_available ) %]
                             <div class="bibmessage">No available items.</div>
                           [% ELSE %]
-				[% IF ( bibitemloo.already_patron_possession ) %]
-                                        <div class="bibmessage">This title cannot be requested because it's already in your possession.</div>
-                                [% ELSE %]
-                                        <div class="bibmessage">This title cannot be requested.</div>
-                                [% END %]
-                    [% END %]
+                            [% IF ( bibitemloo.already_patron_possession ) %]
+                                <div class="bibmessage">This title cannot be requested because it's already in your possession.</div>
+                            [% ELSE %]
+                                <div class="bibmessage">This title cannot be requested.</div>
+                            [% END %]
+                          [% END %]
                         [% END %]
 
 
