@@ -6309,7 +6309,7 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = 'XXX';
+$DBversion = "3.11.00.011";
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('HTML5MediaEnabled','not','Show a HTML5 media player in a tab on opac-detail.pl for media files catalogued in field 856.','not|opac|staff|both','Choice');");
    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('HTML5MediaExtensions','webm|ogg|ogv|oga|vtt','Media file extensions','','free');");
