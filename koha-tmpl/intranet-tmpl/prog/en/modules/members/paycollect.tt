@@ -3,6 +3,13 @@
 [% INCLUDE 'doc-head-close.inc' %]
 <script type= "text/javascript">
 //<![CDATA[
+$(document).ready(function() {
+    $('#payindivfine, #woindivfine, #payfine').preventDoubleFormSubmit();
+});
+//]]>
+</script>
+<script type= "text/javascript">
+//<![CDATA[
 function moneyFormat(textObj) {
     var newValue = textObj.value;
     var decAmount = "";
@@ -91,7 +98,7 @@ function moneyFormat(textObj) {
 [% END %]
 
 [% IF ( pay_individual ) %]
-    <form name="payindivfine" onsubmit="return validatePayment(this);" method="post" action="/cgi-bin/koha/members/paycollect.pl">
+    <form name="payindivfine" id="payindivfine" onsubmit="return validatePayment(this);" method="post" action="/cgi-bin/koha/members/paycollect.pl">
     <input type="hidden" name="borrowernumber" id="borrowernumber" value="[% borrower.borrowernumber %]" />
     <input type="hidden" name="pay_individual" id="pay_individual" value="[% pay_individual %]" />
     <input type="hidden" name="itemnumber" id="itemnumber" value="[% itemnumber %]" />
@@ -145,7 +152,7 @@ function moneyFormat(textObj) {
         <a class="cancel" href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% borrower.borrowernumber %]">Cancel</a></div>
     </form>
 [% ELSIF ( writeoff_individual ) %]
-    <form name="woindivfine" action="/cgi-bin/koha/members/pay.pl" method="post" >
+    <form name="woindivfine" id="woindivfine" action="/cgi-bin/koha/members/pay.pl" method="post" >
     <fieldset class="rows">
     <legend>Write off an individual fine</legend>
     <input type="hidden" name="borrowernumber" id="borrowernumber" value="[% borrower.borrowernumber %]" />
@@ -185,7 +192,7 @@ function moneyFormat(textObj) {
     </form>
 [% ELSE %]
 
-    <form name="payfine" onsubmit="return validatePayment(this);" method="post" action="/cgi-bin/koha/members/paycollect.pl">
+    <form name="payfine" id="payfine" onsubmit="return validatePayment(this);" method="post" action="/cgi-bin/koha/members/paycollect.pl">
     <input type="hidden" name="borrowernumber" id="borrowernumber" value="[% borrower.borrowernumber %]" />
     <input type="hidden" name="selected_accts" id="selected_accts" value="[% selected_accts %]" />
     <input type="hidden" name="total" id="total" value="[% total %]" />
