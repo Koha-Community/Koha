@@ -2083,27 +2083,6 @@ CREATE TABLE `tags_index` ( -- a weighted list of all tags and where they are us
         REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
---
--- Table structure for database updates
---
-CREATE TABLE`updatedb_error` (
-    `version` varchar(32) DEFAULT NULL,
-    `error` text
-) ENGINE=InnoDB CHARSET=utf8;
-
-CREATE TABLE `updatedb_query` (
-    `version` varchar(32) DEFAULT NULL,
-    `query` text
-) ENGINE=InnoDB CHARSET=utf8;
-
-CREATE TABLE `updatedb_report` (
-    `version` text,
-    `md5` varchar(50) DEFAULT NULL,
-    `comment` text,
-    `status` int(1) DEFAULT NULL
-) ENGINE=InnoDB CHARSET=utf8;
-
 --
 -- Table structure for table `userflags`
 --

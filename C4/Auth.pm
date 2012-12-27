@@ -28,7 +28,6 @@ require Exporter;
 use C4::Context;
 use C4::Templates;    # to get the template
 use C4::Branch; # GetBranches
-use C4::Update::Database;
 use C4::VirtualShelves;
 use POSIX qw/strftime/;
 use List::MoreUtils qw/ any /;
@@ -135,9 +134,9 @@ sub get_template_and_user {
     my $in       = shift;
     my $template =
       C4::Templates::gettemplate( $in->{'template_name'}, $in->{'type'}, $in->{'query'} );
-    my ( $user, $cookie, $sessionID, $flags, $new_session );
+    my ( $user, $cookie, $sessionID, $flags );
     if ( $in->{'template_name'} !~m/maintenance/ ) {
-        ( $user, $cookie, $sessionID, $flags, $new_session ) = checkauth(
+        ( $user, $cookie, $sessionID, $flags ) = checkauth(
             $in->{'query'},
             $in->{'authnotrequired'},
             $in->{'flagsrequired'},
@@ -469,12 +468,6 @@ sub get_template_and_user {
 
         $template->param(OpacPublic => '1') if ($user || C4::Context->preference("OpacPublic"));
     }
-
-    if ( $new_session ) {
-        # Check the version and redirect if DB is not up-to-date
-        version_check($in->{query}, $in->{'type'}, $cookie);
-    }
-
     return ( $template, $borrowernumber, $cookie, $flags);
 }
 
@@ -556,6 +549,50 @@ has authenticated.
 
 =cut
 
+sub _version_check {
+    my $type = shift;
+    my $query = shift;
+    my $version;
+    # If Version syspref is unavailable, it means Koha is beeing installed,
+    # and so we must redirect to OPAC maintenance page or to the WebInstaller
+	# also, if OpacMaintenance is ON, OPAC should redirect to maintenance
+	if (C4::Context->preference('OpacMaintenance') && $type eq 'opac') {
+        warn "OPAC Install required, redirecting to maintenance";
+        print $query->redirect("/cgi-bin/koha/maintenance.pl");
+        safe_exit;
+    }
+    unless ( $version = C4::Context->preference('Version') ) {    # assignment, not comparison
+        if ( $type ne 'opac' ) {
+            warn "Install required, redirecting to Installer";
+            print $query->redirect("/cgi-bin/koha/installer/install.pl");
+        } else {
+            warn "OPAC Install required, redirecting to maintenance";
+            print $query->redirect("/cgi-bin/koha/maintenance.pl");
+        }
+        safe_exit;
+    }
+
+    # check that database and koha version are the same
+    # there is no DB version, it's a fresh install,
+    # go to web installer
+    # there is a DB version, compare it to the code version
+    my $kohaversion=C4::Context::KOHAVERSION;
+    # remove the 3 last . to have a Perl number
+    $kohaversion =~ s/(.*\..*)\.(.*)\.(.*)/$1$2$3/;
+    $debug and print STDERR "kohaversion : $kohaversion\n";
+    if ($version < $kohaversion){
+        my $warning = "Database update needed, redirecting to %s. Database is $version and Koha is $kohaversion";
+        if ($type ne 'opac'){
+            warn sprintf($warning, 'Installer');
+            print $query->redirect("/cgi-bin/koha/installer/install.pl?step=3");
+        } else {
+            warn sprintf("OPAC: " . $warning, 'maintenance');
+            print $query->redirect("/cgi-bin/koha/maintenance.pl");
+        }
+        safe_exit;
+    }
+}
+
 sub _session_log {
     (@_) or return 0;
     open my $fh, '>>', "/tmp/sessionlog" or warn "ERROR: Cannot append to /tmp/sessionlog";
@@ -572,38 +609,6 @@ sub _timeout_syspref {
     return $timeout;
 }
 
-sub version_check {
-    my ( $query, $type, $cookie ) = @_;
-    # check we have a Version. Otherwise => go to installer
-    unless ( C4::Context->preference('Version') ) {
-        if ( $type ne 'opac' ) {
-            $debug && warn "Install required, redirecting to Installer";
-            print $query->redirect("/cgi-bin/koha/installer/install.pl");
-        } else {
-            $debug && warn "OPAC Install required, redirecting to maintenance";
-            print $query->redirect("/cgi-bin/koha/maintenance.pl");
-        }
-        safe_exit;
-    }
-
-    # check if you're uptodate, and if you're not, head to updater
-    my $koha39 = "3.0900028";
-
-    # Old updatedatabase method
-    if (C4::Context->preference('Version') < $koha39) {
-        print $query->redirect("/cgi-bin/koha/installer/install.pl?step=3");
-        safe_exit;
-    }
-
-    # New updatedatabase method
-    unless ( C4::Update::Database::is_uptodate() ) {
-        # not up-to-date, redirect to updatedatabase page
-        warn "redirect to updatedatabase";
-        print $query->redirect(-location => "/cgi-bin/koha/admin/updatedatabase.pl", -cookie => $cookie);
-        safe_exit;
-    }
-}
-
 sub checkauth {
     my $query = shift;
 	$debug and warn "Checking Auth";
@@ -612,16 +617,11 @@ sub checkauth {
     my $flagsrequired   = shift;
     my $type            = shift;
     $type = 'opac' unless $type;
-    my $new_session = 0;
 
     my $dbh     = C4::Context->dbh;
     my $timeout = _timeout_syspref();
-    # days
-    if ($timeout =~ /(\d+)[dD]/) {
-        $timeout = $1 * 86400;
-    };
-    $timeout = 600 unless $timeout;
 
+    _version_check($type,$query);
     # state variables
     my $loggedin = 0;
     my %info;
@@ -725,7 +725,6 @@ sub checkauth {
         my $sessionID = $session->id;
         C4::Context->_new_userenv($sessionID);
         $cookie = $query->cookie( CGISESSID => $sessionID );
-
         $userid = $query->param('userid');
         if (   ( $cas && $query->param('ticket') )
             || $userid
@@ -740,7 +739,6 @@ sub checkauth {
                   checkpw( $dbh, $userid, $password, $query );
                 $userid = $retuserid;
                 $info{'invalidCasLogin'} = 1 unless ($return);
-                $new_session = 1;
             }
             elsif (
                 ( $pki_field eq 'Common Name' && $ENV{'SSL_CLIENT_S_DN_CN'} )
@@ -779,7 +777,6 @@ sub checkauth {
                 ( $return, $cardnumber, $retuserid ) =
                   checkpw( $dbh, $userid, $password, $query );
                 $userid = $retuserid if ( $retuserid ne '' );
-                $new_session = 1;
             }
 		if ($return) {
                #_session_log(sprintf "%20s from %16s logged in  at %30s.\n", $userid,$ENV{'REMOTE_ADDR'},(strftime '%c', localtime));
@@ -921,7 +918,7 @@ sub checkauth {
         unless ($cookie) {
             $cookie = $query->cookie( CGISESSID => '' );
         }
-        return ( $userid, $cookie, $sessionID, $flags, $new_session );
+        return ( $userid, $cookie, $sessionID, $flags );
     }
 
 #
@@ -1065,6 +1062,19 @@ sub check_api_auth {
 
     my $dbh     = C4::Context->dbh;
     my $timeout = _timeout_syspref();
+
+    unless (C4::Context->preference('Version')) {
+        # database has not been installed yet
+        return ("maintenance", undef, undef);
+    }
+    my $kohaversion=C4::Context::KOHAVERSION;
+    $kohaversion =~ s/(.*\..*)\.(.*)\.(.*)/$1$2$3/;
+    if (C4::Context->preference('Version') < $kohaversion) {
+        # database in need of version update; assume that
+        # no API should be called while databsae is in
+        # this condition.
+        return ("maintenance", undef, undef);
+    }
 
     # FIXME -- most of what follows is a copy-and-paste
     # of code from checkauth.  There is an obvious need
@@ -1284,6 +1294,19 @@ sub check_cookie_auth {
 
     my $dbh     = C4::Context->dbh;
     my $timeout = _timeout_syspref();
+
+    unless (C4::Context->preference('Version')) {
+        # database has not been installed yet
+        return ("maintenance", undef);
+    }
+    my $kohaversion=C4::Context::KOHAVERSION;
+    $kohaversion =~ s/(.*\..*)\.(.*)\.(.*)/$1$2$3/;
+    if (C4::Context->preference('Version') < $kohaversion) {
+        # database in need of version update; assume that
+        # no API should be called while databsae is in
+        # this condition.
+        return ("maintenance", undef);
+    }
 
     # FIXME -- most of what follows is a copy-and-paste
     # of code from checkauth.  There is an obvious need

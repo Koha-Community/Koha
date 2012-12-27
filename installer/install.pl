@@ -312,24 +312,29 @@ elsif ( $step && $step == 3 ) {
         # Not 1st install, the only sub-step : update database
         #
         #Do updatedatabase And report
-        if ( ! defined $ENV{PERL5LIB} ) {
-            my $find = "C4/Context.pm";
-            my $path = $INC{$find};
-            $path =~ s/\Q$find\E//;
-            $ENV{PERL5LIB} = "$path:$path/installer";
-            warn "# plack? inserted PERL5LIB $ENV{PERL5LIB}\n";
+
+    if ( ! defined $ENV{PERL5LIB} ) {
+        my $find = "C4/Context.pm";
+        my $path = $INC{$find};
+        $path =~ s/\Q$find\E//;
+        $ENV{PERL5LIB} = "$path:$path/installer";
+        warn "# plack? inserted PERL5LIB $ENV{PERL5LIB}\n";
+    }
+
+        my $cmd = C4::Context->config("intranetdir") . "/installer/data/$info{dbms}/updatedatabase.pl";
+        my ($success, $error_code, $full_buf, $stdout_buf, $stderr_buf) = IPC::Cmd::run(command => $cmd, verbose => 0);
+
+        if (@$stdout_buf) {
+            $template->param(update_report => [ map { { line => $_ } } split(/\n/, join('', @$stdout_buf)) ] );
+            $template->param(has_update_succeeds => 1);
+        }
+        if (@$stderr_buf) {
+            $template->param(update_errors => [ map { { line => $_ } } split(/\n/, join('', @$stderr_buf)) ] );
+            $template->param(has_update_errors => 1);
+            warn "The following errors were returned while attempting to run the updatedatabase.pl script:\n";
+            foreach my $line (@$stderr_buf) {warn "$line\n";}
         }
 
-        my $koha39 = "3.0900028";
-        my $cmd;
-        # Old updatedatabase method
-        my $current_version = C4::Context->preference('Version');
-        if ( $current_version < $koha39 ) {
-            $cmd = C4::Context->config("intranetdir") . "/installer/data/$info{dbms}/updatedatabase.pl";
-            my ($success, $error_code, $full_buf, $stdout_buf, $stderr_buf) = IPC::Cmd::run(command => $cmd, verbose => 0);
-            print_std( "updatedatabase.pl", $stdout_buf, $stderr_buf );
-            $current_version= $koha39;
-        }
         $template->param( $op => 1 );
     }
     else {
@@ -401,20 +406,4 @@ else {
         }
     }
 }
-
-sub print_std {
-    my ( $script, $stdout_buf, $stderr_buf ) = @_;
-    if (@$stdout_buf) {
-        $template->param(update_report => [ map { { line => $_ } } split(/\n/, join('', @$stdout_buf)) ] );
-        $template->param(has_update_succeeds => 1);
-    }
-    if (@$stderr_buf) {
-        $template->param(update_errors => [ map { { line => $_ } } split(/\n/, join('', @$stderr_buf)) ] );
-        $template->param(has_update_errors => 1);
-        warn "The following errors were returned while attempting to run the $script script:\n";
-        foreach my $line (@$stderr_buf) {warn "$line\n";}
-    }
-}
-
-
 output_html_with_http_headers $query, $cookie, $template->output;
