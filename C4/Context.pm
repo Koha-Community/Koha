@@ -229,7 +229,7 @@ This number is equal to the version in kohaversion.pl
 =cut
 
 sub final_linear_version {
-    return '3.11.00.014';
+    return KOHAVERSION;
 }
 
 =head2 read_config_file
