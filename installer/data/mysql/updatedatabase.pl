@@ -3333,7 +3333,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
             'Email address to Bcc outgoing notices sent by email',
             'free')
          ");
-v	print "Upgrade to $DBversion done (added OverdueNoticeBcc system preferences)\n";
+	print "Upgrade to $DBversion done (added OverdueNoticeBcc system preferences)\n";
     SetVersion ($DBversion);
 }
 $DBversion = "3.01.00.102";
@@ -4734,7 +4734,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 
 $DBversion = "3.06.11.000";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-    print "Upgrade to $DBversion done (Incrementing version for 3.6.10 release. See release notes for de$
+    print "Upgrade to $DBversion done (Incrementing version for 3.6.10 release. See release notes for details.) \n";
     SetVersion ($DBversion);
 }
 
