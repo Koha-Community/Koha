@@ -5,6 +5,7 @@
 <script type= "text/javascript">
 //<![CDATA[
     $(document).ready(function(){
+ $('#pay-fines-form').preventDoubleFormSubmit();
         $("#woall").click(function(event){
             var answer = confirm(_("Are you sure you want to write off [% total | format('%.2f') %] in outstanding fines? This cannot be undone!"));
                 if (!answer){
@@ -41,7 +42,7 @@
 <div class="tabs-container">
 
 [% IF ( accounts ) %]
-    <form action="/cgi-bin/koha/members/pay.pl" method="post">
+    <form action="/cgi-bin/koha/members/pay.pl" method="post" id="pay-fines-form">
 	<input type="hidden" name="borrowernumber" id="borrowernumber" value="[% borrower.borrowernumber %]" />
 <p><span class="checkall"><a id="CheckAll" href="#">Select all</a></span> | <span class="clearall"><a id="CheckNone" href="#">Clear all</a></span></p>
 <table id="finest">
