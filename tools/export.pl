@@ -22,7 +22,7 @@ use Getopt::Long;
 use CGI;
 use C4::Auth;
 use C4::AuthoritiesMarc;    # GetAuthority
-use C4::Biblio;             # GetMarcBiblio GetXmlBiblio
+use C4::Biblio;             # GetMarcBiblio
 use C4::Branch;             # GetBranches
 use C4::Csv;
 use C4::Koha;               # GetItemTypes
