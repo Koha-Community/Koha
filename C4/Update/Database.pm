@@ -41,18 +41,12 @@ C4::Update::Database.pm
 
 =cut
 
-our $dbh = C4::Context->dbh;
+my $VERSIONS_PATH = C4::Context->config('intranetdir') . '/installer/data/mysql/versions';
 
-=head2 get_versions_path
+my $version;
+my $list;
 
-    return the path to the version files
-
-=cut
-
-sub get_versions_path {
-    return C4::Context->config('intranetdir') . '/installer/data/mysql/versions';
-
-}
+my $dbh = C4::Context->dbh;
 
 =head2 get_filepath
 
@@ -63,7 +57,7 @@ sub get_versions_path {
 
 sub get_filepath {
     my ( $version ) = @_;
-    my @files = File::Find::Rule->file->name( "$version.sql", "$version.pl" ) ->in( ( get_versions_path() ) );
+    my @files = File::Find::Rule->file->name( "$version.sql", "$version.pl" ) ->in( ( $VERSIONS_PATH ) );
 
     if ( scalar @files != 1 ) {
         die "This version ($version) returned has ".scalar @files." corresponding, need only 1";
@@ -175,7 +169,7 @@ sub execute_version {
 sub list_versions_available {
     my @versions;
 
-    my @files = File::Find::Rule->file->name( "*.sql", "*.pl" ) ->in( ( get_versions_path() ) );
+    my @files = File::Find::Rule->file->name( "*.sql", "*.pl" ) ->in( ( $VERSIONS_PATH ) );
 
     for my $f ( @files ) {
         my @file_infos = fileparse( $f, qr/\.[^.]*/ );
