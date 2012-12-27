@@ -587,7 +587,8 @@ sub version_check {
     }
 
     # check if you're uptodate, and if you're not, head to updater
-    my $koha39 = "3.1100001";
+    my $koha39 = C4::Context->final_linear_version;
+    $koha39 =~ s/(.*\..*)\.(.*)\.(.*)/$1$2$3/;
 
     # Old updatedatabase method
     if (C4::Context->preference('Version') < $koha39) {
