@@ -1,5 +1,6 @@
 [% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %]
+[% SET destination = "circ" %]
 <title>Koha &rsaquo; Circulation
 [% IF borrowernumber %]
   &rsaquo; Checking out to [% INCLUDE 'patron-title.inc' invert_name = 1 %]
@@ -261,7 +262,7 @@ function validate1(date) {
 [% END %]
 
 [% IF ( borrowernumber ) %]
-[% INCLUDE 'circ-toolbar.inc' %]
+[% INCLUDE 'members-toolbar.inc' %]
 [% END %]
 
 <!--  INITIAL BLOC : PARAMETERS & BORROWER INFO -->
