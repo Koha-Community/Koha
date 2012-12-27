@@ -5,6 +5,7 @@
 //<![CDATA[
 $(document).ready(function(){
 	$("fieldset.rows input").keydown(function(e){ return checkEnter(e); });
+        $('#mancredit').preventDoubleFormSubmit();
 });
 //]]>
 </script>
@@ -32,7 +33,7 @@ $(document).ready(function(){
 </ul>
 <div class="tabs-container">
 
-<form action="/cgi-bin/koha/members/mancredit.pl" method="post">
+<form action="/cgi-bin/koha/members/mancredit.pl" method="post" id="mancredit">
 <input type="hidden" name="borrowernumber" id="borrowernumber" value="[% borrowernumber %]" />
 
 <fieldset class="rows">

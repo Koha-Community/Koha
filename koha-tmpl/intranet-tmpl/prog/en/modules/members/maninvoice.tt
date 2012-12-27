@@ -5,6 +5,7 @@
 //<![CDATA[
 $(document).ready(function(){
 	$("fieldset.rows input").keydown(function(e){ return checkEnter(e); });
+        $('#maninvoice').preventDoubleFormSubmit();
 });
 //]]>
 </script>
@@ -37,7 +38,7 @@ $(document).ready(function(){
   ERROR an invalid itemnumber was entered, please hit back and try again
 [% END %]
 [% ELSE %]
-<form action="/cgi-bin/koha/members/maninvoice.pl" method="post"><input type="hidden" name="borrowernumber" id="borrowernumber" value="[% borrowernumber %]" />
+<form action="/cgi-bin/koha/members/maninvoice.pl" method="post" id="maninvoice"><input type="hidden" name="borrowernumber" id="borrowernumber" value="[% borrowernumber %]" />
 	<fieldset class="rows">
 	<legend>Manual Invoice</legend>
 	<ol>
