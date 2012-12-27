@@ -320,7 +320,7 @@ elsif ( $step && $step == 3 ) {
             warn "# plack? inserted PERL5LIB $ENV{PERL5LIB}\n";
         }
 
-        my $koha39 = "3.1100002";
+        my $koha39 = "3.0900028";
         my $cmd;
         # Old updatedatabase method
         my $current_version = C4::Context->preference('Version');
