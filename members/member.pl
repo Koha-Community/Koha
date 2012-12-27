@@ -31,6 +31,7 @@ use CGI;
 use C4::Members;
 use C4::Branch;
 use C4::Category;
+use Koha::DateUtils;
 use File::Basename;
 
 my $input = new CGI;
@@ -95,25 +96,22 @@ else {
 	@orderby = ({surname=>0},{firstname=>0});
 }
 
-my $searchfields = $input->param('searchfields');
-my @searchfields = $searchfields ? split( ',', $searchfields ) : ( "firstname", "surname", "othernames", "cardnumber", "userid", "email" );
-
 $member =~ s/,//g;   #remove any commas from search string
 $member =~ s/\*/%/g;
-
-my $searchtype = $input->param('searchtype');
-my %searchtype_ok = ( 'contain' => 1 );
-if ( !defined($searchtype_ok{$searchtype}) ) {
-    undef $searchtype;
-}
 
 my $from = ( $startfrom - 1 ) * $resultsperpage;
 my $to   = $from + $resultsperpage;
 
 my ($count,$results);
 if ($member || keys %$patron) {
-    #($results)=Search($member || $patron,{surname=>1,firstname=>1},[$from,$to],undef,["firstname","surname","email","othernames"]  );
-    my $search_scope = $searchtype || ( $quicksearch ? "field_start_with" : "start_with" );
+    my $searchfields = $input->param('searchfields');
+    my @searchfields = $searchfields ? split( ',', $searchfields ) : ( "firstname", "surname", "othernames", "cardnumber", "userid", "email" );
+
+    if ( $searchfields eq "dateofbirth" ) {
+        $member = output_pref(dt_from_string($member), 'iso', 1);
+    }
+
+    my $search_scope = ( $quicksearch ? "field_start_with" : "start_with" );
     ($results) = Search( $member || $patron, \@orderby, undef, undef, \@searchfields, $search_scope );
 }
 
