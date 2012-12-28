@@ -17,7 +17,7 @@ function confirm_updatechild() {
 }
 
 function confirm_reregistration() {
-    var is_confirmed = window.confirm(_('Are you sure you want to renew this patron\'s registration?'));
+    var is_confirmed = window.confirm(_("Are you sure you want to renew this patron's registration?"));
     if (is_confirmed) {
     window.location='/cgi-bin/koha/members/moremember.pl?reregistration=y&borrowernumber=[% borrowernumber %]';
     }
