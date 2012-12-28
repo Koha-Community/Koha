@@ -92,6 +92,12 @@ $.tablesorter.addParser({
         </div>
         [% END %]
 
+        [% IF ( BORROWER_INF.warnexpired ) %]
+        <div class="dialog alert" id="warnexpired">
+            <strong>Please note:</strong><span> Your card has expired. Please contact the library for more information.</span>
+        </div>
+        [% END %]
+
         [% IF ( patron_flagged ) %]
 		<div class="dialog alert">
         <ul>
