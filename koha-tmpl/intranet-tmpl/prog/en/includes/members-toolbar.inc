@@ -25,7 +25,7 @@ function update_child() {
 }[% ELSE %][% END %]
 
 function confirm_reregistration() {
-    var is_confirmed = window.confirm(_('Are you sure you want to renew this patron\'s registration?'));
+    var is_confirmed = window.confirm(_("Are you sure you want to renew this patron's registration?"));
     if (is_confirmed) {
        window.location = '/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% borrowernumber %]&amp;cardnumber=[% cardnumber %]&amp;destination=[% destination %]&amp;reregistration=y';
     }
