@@ -37,6 +37,10 @@ $module_context->mock(
     }
 );
 
+SKIP: {
+
+skip "DBD::Mock is too old", 33
+  unless $DBD::Mock::VERSION >= 1.45;
 
 my $holidays_session = DBD::Mock::Session->new('holidays_session' => (
     { # weekly holidays
@@ -320,3 +324,5 @@ my $day_after_christmas = DateTime->new(
                 '==', 40, 'Test parameter order not relevant (Days)' );
 
 }
+
+} # End SKIP block
