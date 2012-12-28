@@ -31,7 +31,6 @@ use C4::SMS;
 use C4::Debug;
 use Date::Calc qw( Add_Delta_Days );
 use Encode;
-use Unicode::Normalize;
 use Carp;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
@@ -115,33 +114,6 @@ sub GetLetters {
         $letters{ $letter->{'code'} } = $letter->{'name'};
     }
     return \%letters;
-}
-
-=head2 GetLetter( %params )
-
-    retrieves the letter template
-
-    %params hash:
-      module => letter module, mandatory
-      letter_code => letter code, mandatory
-      branchcode => for letter selection, if missing default system letter taken
-    Return value:
-      letter fields hashref (title & content useful)
-
-=cut
-
-sub GetLetter {
-    my %params = @_;
-
-    my $module      = $params{module} or croak "No module";
-    my $letter_code = $params{letter_code} or croak "No letter_code";
-    my $branchcode  = $params{branchcode} || '';
-
-    my $letter = getletter( $module, $letter_code, $branchcode )
-        or warn( "No $module $letter_code letter"),
-            return;
-
-    return $letter;
 }
 
 my %letter;
@@ -440,8 +412,6 @@ sub SendAlerts {
 
 =head2 GetPreparedLetter( %params )
 
-    retrieves letter template and performs substituion processing
-
     %params hash:
       module => letter module, mandatory
       letter_code => letter code, mandatory
@@ -469,65 +439,14 @@ sub GetPreparedLetter {
     my $module      = $params{module} or croak "No module";
     my $letter_code = $params{letter_code} or croak "No letter_code";
     my $branchcode  = $params{branchcode} || '';
-    my $tables = $params{tables};
-    my $substitute = $params{substitute};
-    my $repeat = $params{repeat};
 
     my $letter = getletter( $module, $letter_code, $branchcode )
         or warn( "No $module $letter_code letter"),
             return;
 
-    my $prepared_letter = GetProcessedLetter(
-        module => $module,
-        letter_code => $letter_code,
-        letter => $letter,
-        branchcode => $branchcode,
-        tables => $tables,
-        substitute => $substitute,
-        repeat => $repeat
-    );
-
-    return $prepared_letter;
-}
-
-=head2 GetProcessedLetter( %params )
-
-    given a letter, with possible pre-processing do standard processing
-    allows one to perform letter template processing beforehand
-
-    %params hash:
-      module => letter module, mandatory
-      letter_code => letter code, mandatory
-      letter => letter, mandatory
-      branchcode => for letter selection, if missing default system letter taken
-      tables => a hashref with table names as keys. Values are either:
-        - a scalar - primary key value
-        - an arrayref - primary key values
-        - a hashref - full record
-      substitute => custom substitution key/value pairs
-      repeat => records to be substituted on consecutive lines:
-        - an arrayref - tries to guess what needs substituting by
-          taking remaining << >> tokensr; not recommended
-        - a hashref token => @tables - replaces <token> << >> << >> </token>
-          subtemplate for each @tables row; table is a hashref as above
-      want_librarian => boolean,  if set to true triggers librarian details
-        substitution from the userenv
-    Return value:
-      letter fields hashref (title & content useful)
-
-=cut
-
-sub GetProcessedLetter {
-    my %params = @_;
-
-    my $module      = $params{module} or croak "No module";
-    my $letter_code = $params{letter_code} or croak "No letter_code";
-    my $letter = $params{letter} or croak "No letter";
-    my $branchcode  = $params{branchcode} || '';
     my $tables = $params{tables};
     my $substitute = $params{substitute};
     my $repeat = $params{repeat};
-
     $tables || $substitute || $repeat
       or carp( "ERROR: nothing to substitute - both 'tables' and 'substitute' are empty" ),
          return;
@@ -770,12 +689,6 @@ sub EnqueueLetter {
         return;
     }
 
-    # It was found that the some utf8 codes, cause the text to be truncated from that point onward when stored,
-    # so we normalize utf8 with NFC so that mysql will store 'all' of the content in its TEXT column type
-    # Note: It is also done in _add_attachments accordingly.
-    $params->{'letter'}->{'title'} = NFC($params->{'letter'}->{'title'});     # subject
-    $params->{'letter'}->{'content'} = NFC($params->{'letter'}->{'content'});
-
     # If we have any attachments we should encode then into the body.
     if ( $params->{'attachments'} ) {
         $params->{'letter'} = _add_attachments(
@@ -946,17 +859,11 @@ sub _add_attachments {
     $message->attach(
         Type => $letter->{'content-type'} || 'TEXT',
         Data => $letter->{'is_html'}
-            ? _wrap_html($letter->{'content'}, NFC($letter->{'title'}))
-            : NFC($letter->{'content'}),
+            ? _wrap_html($letter->{'content'}, $letter->{'title'})
+            : $letter->{'content'},
     );
 
     foreach my $attachment ( @$attachments ) {
-
-        if ($attachment->{'content'} =~ m/text/o) { # NFC normailze any "text" related  content-type attachments
-            $attachment->{'content'} = NFC($attachment->{'content'});
-        }
-        $attachment->{'filename'} = NFC($attachment->{'filename'});
-
         $message->attach(
             Type     => $attachment->{'type'},
             Data     => $attachment->{'content'},
