@@ -690,6 +690,17 @@
         </xsl:for-each>
         </xsl:if>
 
+        <xsl:for-each select="marc:datafield[@tag=511]">
+            <span class="results_summary summary">
+                <span class="label">
+                    <xsl:if test="@ind1=1"><xsl:text>Cast: </xsl:text></xsl:if>
+                </span>
+                <xsl:call-template name="subfieldSelect">
+                    <xsl:with-param name="codes">a</xsl:with-param>
+                </xsl:call-template>
+            </span>
+        </xsl:for-each>
+
         <xsl:for-each select="marc:datafield[@tag=520]">
         <span class="results_summary summary"><span class="label">
         <xsl:choose>
