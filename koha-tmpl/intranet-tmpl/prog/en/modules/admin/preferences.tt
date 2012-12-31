@@ -3,9 +3,6 @@
 [% INCLUDE 'doc-head-close.inc' %]
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/preferences.css" />
-<link rel="stylesheet" type="text/css" href="[% themelang %]/css/humanmsg.css" />
-<script src="[% themelang %]/lib/jquery/plugins/humanmsg.js" type="text/javascript"></script>
-<script src="[% themelang %]/js/ajax.js" type="text/javascript"></script>
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.fixFloat.js"></script>
 <script type="text/javascript">
 //<![CDATA[
@@ -21,8 +18,16 @@
     var MSG_MADE_CHANGES = _("You have made changes to system preferences.");
     var MSG_CLICK_TO_EXPAND = _("Click to expand this section");
     var MSG_CLICK_TO_COLLAPSE = _("Click to collapse this section");
+    var MSG_INTERNAL_SERVER_ERROR = _( "Internal Server Error, please reload the page" );
+    var MSG_SESSION_TIMED_OUT = _( 'You need to log in again, your session has timed out' );
+    var MSG_DATA_NOT_SAVED = _( 'Error; your data might not have been saved' );
+    var MSG_LOADING = _( 'Loading...' );
+
 //]]>
 </script>
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/humanmsg.css" />
+<script src="[% themelang %]/lib/jquery/plugins/humanmsg.js" type="text/javascript"></script>
+<script src="[% themelang %]/js/ajax.js" type="text/javascript"></script>
 <script src="[% themelang %]/js/pages/preferences.js" type="text/javascript"></script>
 <script src="[% themelang %]/lib/jquery/plugins/jquery.highlight-3.js" type="text/javascript"></script>
 </head>
