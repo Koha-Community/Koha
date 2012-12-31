@@ -84,9 +84,9 @@ var humanMsg = {
 			.unbind('click', humanMsg.removeMsg)
 			.unbind('keypress', humanMsg.removeMsg)
 
-		// If message is fully transparent, fade it out
-		if (jQuery('#'+humanMsg.msgID).css('opacity') == humanMsg.msgOpacity)
-			jQuery('#'+humanMsg.msgID).animate({ opacity: 0 }, 500, function() { jQuery(this).hide() })
+                // If message is fully transparent, fade it out
+                if ( Math.abs(jQuery('#'+humanMsg.msgID).css('opacity') - humanMsg.msgOpacity ) < 0.00001 )
+                        jQuery('#'+humanMsg.msgID).animate({ opacity: 0 }, 500, function() { jQuery(this).hide() })
 	}
 };
 
