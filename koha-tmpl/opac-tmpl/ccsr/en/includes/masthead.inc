@@ -77,7 +77,19 @@
 <div id="opac-main-search" class="yui-g">
 
 <a class="logo" href="/cgi-bin/koha/opac-main.pl">
+  [% UNLESS ( opacsmallimage ) %]
+      [% UNLESS ( LibraryName ) %]
     <img src="/opac-tmpl/ccsr/images/logo-koha.png" alt="Koha Online Catalog" />
+      [% ELSE %]
+    <img src="/opac-tmpl/ccsr/images/logo-koha.png" alt="[% LibraryName %] Online Catalog" />
+      [% END %]
+  [% ELSE %]
+      [% UNLESS ( LibraryName ) %]
+    <img src="[% opacsmallimage %]" alt="Koha Online Catalog" />
+      [% ELSE %]
+    <img src="[% opacsmallimage %]" alt="[% LibraryName %] Online Catalog" />
+      [% END %]
+  [% END %]
 </a>
 
 <div id="fluid">
