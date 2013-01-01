@@ -425,7 +425,7 @@ sub getframeworkinfo {
 
 =head2 getitemtypeinfo
 
-  $itemtype = &getitemtype($itemtype, [$interface]);
+  $itemtype = &getitemtypeinfo($itemtype, [$interface]);
 
 Returns information about an itemtype. The optional $interface argument
 sets which interface ('opac' or 'intranet') to return the imageurl for.
@@ -440,7 +440,7 @@ sub getitemtypeinfo {
     $sth->execute($itemtype);
     my $res = $sth->fetchrow_hashref;
 
-    $res->{imageurl} = getitemtypeimagelocation( ( $interface eq 'opac' ? 'opac' : 'intranet' ), $res->{imageurl} );
+    $res->{imageurl} = getitemtypeimagelocation( ( ( defined $interface && $interface eq 'opac' ) ? 'opac' : 'intranet' ), $res->{imageurl} );
 
     return $res;
 }
