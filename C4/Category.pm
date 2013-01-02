@@ -79,7 +79,7 @@ sub all {
     my $dbh = C4::Context->dbh;
     # The categories table is small enough for
     # `SELECT *` to be harmless.
-    my $query = "SELECT * FROM categories";
+    my $query = "SELECT categories.* FROM categories";
     $query .= qq{
         LEFT JOIN categories_branches ON categories_branches.categorycode = categories.categorycode
         WHERE categories_branches.branchcode = ? OR categories_branches.branchcode IS NULL

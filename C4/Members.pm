@@ -1491,7 +1491,7 @@ sub GetBorrowercategoryList {
         ? 0
         : C4::Context->userenv ? C4::Context->userenv->{"branch"} : "";
     my $dbh       = C4::Context->dbh;
-    my $query = "SELECT * FROM categories";
+    my $query = "SELECT categories.* FROM categories";
     $query .= qq{
         LEFT JOIN categories_branches ON categories.categorycode = categories_branches.categorycode
         WHERE branchcode = ? OR branchcode IS NULL GROUP BY description
