@@ -125,6 +125,7 @@ $(document).ready(function()
                 alert(_("You can't add a new item, please create a new order line"));
                 // and we replace the original value
                 $(this).val([% quantityrec %])
+                updateCosts(); // blur is invoked after change which updated values
                 return false;
             }
         });
@@ -146,7 +147,7 @@ $(document).ready(function()
 //]]>
 </script>
 </head>
-<body id="acq_neworderempty" class="acq" onload="updateCosts()">
+<body id="acq_neworderempty" class="acq">
 
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'acquisitions-search.inc' %]
@@ -230,7 +231,10 @@ $(document).ready(function()
         <input type="hidden" name="invoiceincgst" id="invoiceincgst" value="[% invoiceincgst %]" />
         <input type="hidden" name="suggestionid" value="[% suggestionid %]" />
         <input type="hidden" name="import_batch_id" value="[% import_batch_id %]" />
-        <input type="hidden" name="currency_rate" id="currency_rate" value="[% currency_rate %]" />
+
+        [% FOREACH loop_currencie IN loop_currencies %]
+            <input type="hidden" id="currency_rate_[% loop_currencie.currcode %]"  name="[% loop_currencie.currcode %]" value="[% loop_currencie.rate %]" />
+        [% END %]
 
         <ol><li>
             [% IF ( biblionumber ) %]
