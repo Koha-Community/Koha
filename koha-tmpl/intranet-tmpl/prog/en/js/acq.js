@@ -644,7 +644,8 @@ function updateCosts(){
     var discount = new Number($("#discount").val());
     var applygst = new Number ($("#applygst").val());
     var listprice   =  new Number($("#listprice").val());
-    var exchangerate =  new Number($("#currency_rate").val());
+    var currcode = new String($("#currency").val());
+    var exchangerate =  new Number($("#currency_rate_"+currcode).val());
     var gst_on=false;
 
     var rrp   = new Number(listprice*exchangerate);
@@ -669,7 +670,7 @@ function calcNewsuggTotal(){
 //    var currency = f.currency.value;
     var currcode = new String(document.getElementById('currency').value);
     var price   =  new Number(document.getElementById('price').value);
-    var exchangerate =  new Number(document.getElementById(currcode).value);
+    var exchangerate =  new Number(document.getElementById('currency_rate_'+currcode).value);
 
     var total =  new Number(quantity*price*exchangerate);
 
