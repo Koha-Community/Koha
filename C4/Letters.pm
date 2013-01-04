@@ -29,6 +29,8 @@ use C4::Branch;
 use C4::Log;
 use C4::SMS;
 use C4::Debug;
+use Koha::DateUtils;
+
 use Date::Calc qw( Add_Delta_Days );
 use Encode;
 use Carp;
@@ -596,17 +598,15 @@ my %columns = ();
 sub _parseletter {
     my ( $letter, $table, $values ) = @_;
 
-    # TEMPORARY hack until the expirationdate column is added to reserves
     if ( $table eq 'reserves' && $values->{'waitingdate'} ) {
         my @waitingdate = split /-/, $values->{'waitingdate'};
 
-        $values->{'expirationdate'} = C4::Dates->new(
-            sprintf(
-                '%04d-%02d-%02d',
-                Add_Delta_Days( @waitingdate, C4::Context->preference( 'ReservesMaxPickUpDelay' ) )
-            ),
-            'iso'
-        )->output();
+        my $dt = dt_from_string();
+        $dt->add( days => C4::Context->preference('ReservesMaxPickUpDelay') );
+        $values->{'expirationdate'} = output_pref( $dt, undef, 1 );
+
+        $values->{'waitingdate'} = output_pref( dt_from_string( $values->{'waitingdate'} ), undef, 1 );
+
     }
 
     if ($letter->{content} && $letter->{content} =~ /<<today>>/) {
@@ -614,13 +614,6 @@ sub _parseletter {
         my $todaysdate = "$da[2]:$da[1]  " . C4::Dates->today();
         $letter->{content} =~ s/<<today>>/$todaysdate/go;
     }
-
-    # and get all fields from the table
-#   my $columns = $columns{$table};
-#   unless ($columns) {
-#       $columns = $columns{$table} =  C4::Context->dbh->selectcol_arrayref("SHOW COLUMNS FROM $table");
-#   }
-#   foreach my $field (@$columns) {
 
     while ( my ($field, $val) = each %$values ) {
         my $replacetablefield = "<<$table.$field>>";
