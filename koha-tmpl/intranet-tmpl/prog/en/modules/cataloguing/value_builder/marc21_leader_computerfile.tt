@@ -270,10 +270,15 @@
 				[% ELSE %]
 					<option value="a">a- AACR 2</option>
 				[% END %]
-				[% IF ( f18i ) %]
-					<option value="i" selected="selected">i- ISBD</option>
+				[% IF ( f18c ) %]
+					<option value="c" selected="selected">c- ISBD punctuation omitted</option>
 				[% ELSE %]
-					<option value="i">i- ISBD</option>
+					<option value="c">c- ISBD punctuation omitted</option>
+				[% END %]
+				[% IF ( f18i ) %]
+					<option value="i" selected="selected">i- ISBD punctuation included</option>
+				[% ELSE %]
+					<option value="i">i- ISBD punctuation included</option>
 				[% END %]
 				[% IF ( f18u ) %]
 					<option value="u" selected="selected">u- Unknown</option>
