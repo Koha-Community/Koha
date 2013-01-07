@@ -412,6 +412,12 @@ sub Z3950Search {
         );
     } # while nremaining
 
+    #close result sets and connections
+    foreach(0..$s-1) {
+        $oResult[$_]->destroy();
+        $oConnection[$_]->destroy();
+    }
+
     my @servers = ();
     foreach my $id (@id) {
         push @servers, {id => $id};
