@@ -39,6 +39,7 @@ use C4::Charset;
 use Date::Calc qw(Today);
 use MARC::File::USMARC;
 use MARC::File::XML;
+use URI::Escape;
 
 if ( C4::Context->preference('marcflavour') eq 'UNIMARC' ) {
     MARC::File::XML->default_record_format('UNIMARC');
@@ -730,8 +731,13 @@ my $redirect      = $input->param('redirect');
 my $dbh           = C4::Context->dbh;
 my $hostbiblionumber = $input->param('hostbiblionumber');
 my $hostitemnumber = $input->param('hostitemnumber');
+# fast cataloguing datas in transit
+my $fa_circborrowernumber = $input->param('circborrowernumber');
+my $fa_barcode            = $input->param('barcode');
+my $fa_branch             = $input->param('branch');
+my $fa_stickyduedate      = $input->param('stickyduedate');
+my $fa_duedatespec        = $input->param('duedatespec');
 
-    
 my $userflags = 'edit_catalogue';
 if ($frameworkcode eq 'FA'){
     $userflags = 'fast_cataloging';
@@ -753,11 +759,13 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 if ($frameworkcode eq 'FA'){
     # We need to grab and set some variables in the template for use on the additems screen
-    $template->{VARS}->{'circborrowernumber'} = $input->param('borrowernumber');
-    $template->{VARS}->{'barcode'} = $input->param('barcode');
-    $template->{VARS}->{'branch'} = $input->param('branch');
-    $template->{VARS}->{'stickyduedate'} = $input->param('stickyduedate');
-    $template->{VARS}->{'duedatespec'} = $input->param('duedatespec');
+    $template->param(
+        'circborrowernumber' => $fa_circborrowernumber,
+        'barcode'            => $fa_barcode,
+        'branch'             => $fa_branch,
+        'stickyduedate'      => $fa_stickyduedate,
+        'duedatespec'        => $fa_duedatespec,
+    );
 }
 
 # Getting the list of all frameworks
@@ -870,13 +878,15 @@ if ( $op eq "addbiblio" ) {
         }
         if ($redirect eq "items" || ($mode ne "popup" && !$is_a_modif && $redirect ne "view")){
 	    if ($frameworkcode eq 'FA'){
-		my $borrowernumber = $input->param('circborrowernumber');
-		my $barcode = $input->param('barcode');
-		my $branch = $input->param('branch');
-		my $stickyduedate = $input->param('stickyduedate');
-		my $duedatespec = $input->param('duedatespec');
 		print $input->redirect(
-                "/cgi-bin/koha/cataloguing/additem.pl?biblionumber=$biblionumber&frameworkcode=$frameworkcode&borrowernumber=$borrowernumber&branch=$branch&barcode=$barcode&stickyduedate=$stickyduedate&duedatespec=$duedatespec"
+            '/cgi-bin/koha/cataloguing/additem.pl?'
+            .'biblionumber='.$biblionumber
+            .'&frameworkcode='.$frameworkcode
+            .'&circborrowernumber='.$fa_circborrowernumber
+            .'&branch='.$fa_branch
+            .'&barcode='.uri_escape($fa_barcode)
+            .'&stickyduedate='.$fa_stickyduedate
+            .'&duedatespec='.$fa_duedatespec
 		);
 		exit;
 	    }
