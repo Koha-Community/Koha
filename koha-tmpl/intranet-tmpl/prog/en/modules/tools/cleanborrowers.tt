@@ -10,16 +10,14 @@
          */
           function checkForm(form) {
               if((form.checkbox[0].checked)){
-                  if(!(form.date1.value)){
-                    alert(_("please enter a date !"));
-                    document.form.date1.focus();
+                  if ( (!form.date1.value) && (!form.borrower_dateexpiry.value) && (!form.borrower_categorycode.value) ){
+                    alert(_("Please enter at least one criterion for deletion!"));
                     return false;
                   }
               }
               if((form.checkbox[1].checked)){
                   if(!(form.date2.value)){
                       alert(_("please enter a date !"));
-                      document.form.date2.focus();
                       return false;
                   }
               }
@@ -57,14 +55,29 @@
     <form name="f1" onsubmit="return checkForm(this);" action="/cgi-bin/koha/tools/cleanborrowers.pl" method="post">
     <fieldset>
     <legend>What do you want to do ?</legend>
-        <p><input id="checkborrower" type="checkbox" name="checkbox" value="borrower" checked="checked" />
-        <label for="checkborrower">Delete borrower who has not borrowed since:</label>
-        <input size="10" id="date1" name="filterdate1" value="[% filterdate1 %]" type="text" class="datepicker" />
+        <h3><input id="checkborrower" type="checkbox" name="checkbox" value="borrower" /><label for="checkborrower"> Delete borrowers</label></h3>
+
+        <label for="date1">Who have not borrowed since:</label>
+        <input size="10" id="date1" name="filterdate1" type="text" class="datepicker" />
         <span class="hint">[% INCLUDE 'date-format.inc' %]</span></p>
 
-        <p><input id="checkissue" type="checkbox" name="checkbox" value="issue" checked="checked" />
-        <label for="checkissue">Anonymize check-out history older than</label>
-        <input size="10" id="date2" name="filterdate2" value="[% filterdate2 %]" type="text" class="datepicker" />
+        <label for="borrower_dateexpiry">Whose expiration date is before:</label>
+        <input size="10" id=borrower_dateexpiry" name="borrower_dateexpiry" type="text" class="datepicker" />
+        <span class="hint">[% INCLUDE 'date-format.inc' %]</span></p>
+
+        <label for="borrower_categorycode">Whose patron category is:</label>
+        <select id="borrower_categorycode" name="borrower_categorycode">
+            <option value="" selected="selected">Any</option>
+            [% FOREACH bc IN borrower_categorycodes %]
+                [% UNLESS bc.categorycode == 'S' %]
+                    <option value="[% bc.categorycode %]">[% bc.description %]</option>
+                [% END %]
+            [% END %]
+        </select>
+
+        <h3><input id="checkissue" type="checkbox" name="checkbox" value="issue" /><label for="checkissue"> Anonymize history</label></h3>
+        <label for="date2">Anonymize check-out history older than</label>
+        <input size="10" id="date2" name="filterdate2" type="text" class="datepicker" />
         <span class="hint">[% INCLUDE 'date-format.inc' %]</span></p>
 
             <!-- hidden here -->
@@ -108,6 +121,8 @@
             <input type="hidden" name="step3" value="1" />
             <input type="hidden" name="filterdate1" value="[% filterdate1 %]" />
             <input type="hidden" name="filterdate2" value="[% filterdate2 %]" />
+            <input type="hidden" name="borrower_dateexpiry" value="[% borrower_dateexpiry %]" />
+            <input type="hidden" name="borrower_categorycode" value="[% borrower_categorycode %]" />
     </fieldset>
 	<fieldset class="action"><input type="submit" value="Finish" /> <a class="cancel" href="/cgi-bin/koha/tools/cleanborrowers.pl">Cancel</a></fieldset>
         </form>
