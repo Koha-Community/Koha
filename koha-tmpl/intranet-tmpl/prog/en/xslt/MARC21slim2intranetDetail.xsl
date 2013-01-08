@@ -395,6 +395,31 @@
         </span>
         </xsl:if>
 
+        <xsl:if test="marc:datafield[@tag=013]">
+            <span class="results_summary patent_info">
+                <span class="label">Patent information: </span>
+                <xsl:for-each select="marc:datafield[@tag=013]">
+                    <xsl:call-template name="subfieldSelect">
+                        <xsl:with-param name="codes">acdef</xsl:with-param>
+                        <xsl:with-param name="delimeter">, </xsl:with-param>
+                    </xsl:call-template>
+                <xsl:choose><xsl:when test="position()=last()"><xsl:text></xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
+                </xsl:for-each>
+            </span>
+        </xsl:if>
+
+        <xsl:if test="marc:datafield[@tag=088]">
+            <span class="results_summary report_number">
+                <span class="label">Report number: </span>
+                <xsl:for-each select="marc:datafield[@tag=088]">
+                    <xsl:call-template name="subfieldSelect">
+                        <xsl:with-param name="codes">a</xsl:with-param>
+                    </xsl:call-template>
+                <xsl:choose><xsl:when test="position()=last()"><xsl:text></xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
+                </xsl:for-each>
+            </span>
+        </xsl:if>
+
         <!-- Other Title  Statement: Alternate Graphic Representation (MARC 880) -->
         <xsl:if test="$display880">
             <xsl:call-template name="m880Select">
