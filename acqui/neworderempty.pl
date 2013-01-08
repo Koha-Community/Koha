@@ -336,8 +336,6 @@ my @gst_values = map {
     option => $_
 }, split( '\|', C4::Context->preference("gist") );
 
-my $cur = GetCurrency();
-
 $template->param(
     existing         => $biblionumber,
     ordernumber           => $ordernumber,
@@ -371,7 +369,6 @@ $template->param(
     cur_active_sym   => $active_currency->{'symbol'},
     cur_active       => $active_currency->{'currency'},
     loop_currencies  => \@loop_currency,
-    currency_rate    => $cur->{rate},
     orderexists      => ( $new eq 'yes' ) ? 0 : 1,
     title            => $data->{'title'},
     author           => $data->{'author'},
