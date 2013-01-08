@@ -736,15 +736,29 @@ sub GetReservesForBranch {
 }
 
 sub GetReserveStatus {
-    my ($itemnumber) = @_;
-    
+    my ($itemnumber, $biblionumber) = @_;
+
     my $dbh = C4::Context->dbh;
-    
-    my $itemstatus = $dbh->prepare("SELECT found FROM reserves WHERE itemnumber = ?");
-    
-    $itemstatus->execute($itemnumber);
-    my ($found) = $itemstatus->fetchrow_array;
-    return $found;
+
+    my ($sth, $found, $priority);
+    if ( $itemnumber ) {
+        $sth = $dbh->prepare("SELECT found, priority FROM reserves WHERE itemnumber = ? order by priority LIMIT 1");
+        $sth->execute($itemnumber);
+        ($found, $priority) = $sth->fetchrow_array;
+    }
+
+    if ( $biblionumber and not defined $found and not defined $priority ) {
+        $sth = $dbh->prepare("SELECT found, priority FROM reserves WHERE biblionumber = ? order by priority LIMIT 1");
+        $sth->execute($biblionumber);
+    } else {
+        return;
+    }
+    ($found, $priority) = $sth->fetchrow_array;
+
+    return 'Waiting'  if $found eq 'W' and $priority == 0;
+    return 'Finished' if $found eq 'F';
+    return 'Reserved' if $priority > 0;
+    return;
 }
 
 =head2 CheckReserves
@@ -1441,7 +1455,8 @@ sub IsAvailableForItemLevelRequest {
     if (C4::Context->preference('AllowOnShelfHolds')) {
         return $available_per_item;
     } else {
-        return ($available_per_item and ($item->{onloan} or GetReserveStatus($itemnumber) eq "W")); 
+        my $status = GetReserveStatus($itemnumber);
+        return ($available_per_item and ($item->{onloan} or $status eq "Waiting" or $status = "Reserved"));
     }
 }
 

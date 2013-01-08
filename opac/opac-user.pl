@@ -158,7 +158,7 @@ my $issues = GetPendingIssues($borrowernumber);
 if ($issues){
     foreach my $issue ( sort { $b->{date_due}->datetime() cmp $a->{date_due}->datetime() } @{$issues} ) {
         # check for reserves
-        my ( $restype, $res, undef ) = CheckReserves( $issue->{'itemnumber'} );
+        my $restype = GetReserveStatus( $issue->{'itemnumber'} );
         if ( $restype ) {
             $issue->{'reserved'} = 1;
         }

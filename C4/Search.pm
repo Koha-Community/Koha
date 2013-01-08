@@ -28,7 +28,7 @@ use C4::Dates qw(format_date);
 use C4::Members qw(GetHideLostItemsPreference);
 use C4::XSLT;
 use C4::Branch;
-use C4::Reserves;    # CheckReserves
+use C4::Reserves;    # GetReserveStatus
 use C4::Debug;
 use C4::Charset;
 use YAML;
@@ -1852,8 +1852,7 @@ sub searchResults {
                 my ($transfertfrom, $transfertto);
 
                 # is item on the reserve shelf?
-		my $reservestatus = '';
-		my $reserveitem;
+                my $reservestatus = '';
 
                 unless ($item->{wthdrawn}
                         || $item->{itemlost}
@@ -1874,7 +1873,7 @@ sub searchResults {
                     #        should map transit status to record indexed in Zebra.
                     #
                     ($transfertwhen, $transfertfrom, $transfertto) = C4::Circulation::GetTransfers($item->{itemnumber});
-		    ($reservestatus, $reserveitem, undef) = C4::Reserves::CheckReserves($item->{itemnumber});
+                    $reservestatus = C4::Reserves::GetReserveStatus( $item->{itemnumber}, $oldbiblio->{biblionumber} );
                 }
 
                 # item is withdrawn, lost, damaged, not for loan, reserved or in transit
@@ -1882,14 +1881,14 @@ sub searchResults {
                     || $item->{itemlost}
                     || $item->{damaged}
                     || $item->{notforloan}
-		    || $reservestatus eq 'Waiting'
+                    || $reservestatus eq 'Waiting'
                     || ($transfertwhen ne ''))
                 {
                     $wthdrawn_count++        if $item->{wthdrawn};
                     $itemlost_count++        if $item->{itemlost};
                     $itemdamaged_count++     if $item->{damaged};
                     $item_in_transit_count++ if $transfertwhen ne '';
-		    $item_onhold_count++     if $reservestatus eq 'Waiting';
+                    $item_onhold_count++     if $reservestatus eq 'Waiting';
                     $item->{status} = $item->{wthdrawn} . "-" . $item->{itemlost} . "-" . $item->{damaged} . "-" . $item->{notforloan};
 
                     # can place hold on item ?

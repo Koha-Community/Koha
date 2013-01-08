@@ -2481,12 +2481,11 @@ sub CanBookBeRenewed {
 			$error="too_many";
 		}
 		
-        my ( $resfound, $resrec, undef ) = C4::Reserves::CheckReserves($itemnumber);
-        if ($resfound) {
+        my $resstatus = C4::Reserves::GetReserveStatus($itemnumber);
+        if ( $resstatus eq "Waiting" or $resstatus eq "Reserved" ) {
             $renewokay = 0;
-			$error="on_reserve"
+            $error->{message} = "on_reserve";
         }
-
     }
     return ($renewokay,$error);
 }
