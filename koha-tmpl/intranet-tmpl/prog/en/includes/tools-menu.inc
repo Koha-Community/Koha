@@ -33,7 +33,7 @@
     <li><a href="/cgi-bin/koha/patroncards/home.pl">Patron card creator</a></li>
     [% END %]
     [% IF ( CAN_user_tools_delete_anonymize_patrons ) %]
-    <li><a href="/cgi-bin/koha/tools/cleanborrowers.pl">Patrons (anonymize, bulk-delete)</a></li>
+    <li><a href="/cgi-bin/koha/tools/cleanborrowers.pl">Batch patron deletion/anonymization</a></li>
     [% END %]
     [% IF ( CAN_user_tools_edit_patrons ) %]
     <li><a href="/cgi-bin/koha/tools/modborrowers.pl">Batch patron modification</a></li>
