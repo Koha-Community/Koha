@@ -11,6 +11,7 @@ use C4::Biblio;
 use C4::AuthoritiesMarc;
 use C4::Items;
 use Koha::RecordProcessor;
+use XML::LibXML;
 
 # 
 # script that checks zebradir structure & create directories & mandatory files if needed
@@ -135,6 +136,8 @@ if ( $verbose_logging ) {
 if ($do_munge) {
     munge_config();
 }
+
+my $tester = XML::LibXML->new();
 
 if ($authorities) {
     index_records('authority', $directory, $skip_export, $skip_index, $process_zebraqueue, $as_xml, $noxml, $nosanitize, $do_not_clear_zebraqueue, $verbose_logging, $zebraidx_log_opt, $authorityserverdir);
@@ -373,8 +376,18 @@ sub export_marc_records_from_sth {
                         substr($itemsxml, index($itemsxml, "</leader>\n", 0) + 10);
                 }
             }
+            # extra test to ensure that result is valid XML; otherwise
+            # Zebra won't parse it in DOM mode
+            eval {
+                my $doc = $tester->parse_string($marcxml);
+            };
+            if ($@) {
+                warn "Error exporting record $record_number ($record_type): $@\n";
+                next;
+            }
             if ( $marcxml ) {
-                print {$fh} $marcxml if $marcxml;
+                $marcxml =~ s!<\?xml version="1.0" encoding="UTF-8"\?>\n!!;
+                print {$fh} $marcxml;
                 $num_exported++;
             }
             next;
@@ -385,6 +398,12 @@ sub export_marc_records_from_sth {
                 my $rec;
                 if ($as_xml) {
                     $rec = $marc->as_xml_record(C4::Context->preference('marcflavour'));
+                    eval {
+                        my $doc = $tester->parse_string($rec);
+                    };
+                    if ($@) {
+                        die "invalid XML: $@";
+                    }
                     $rec =~ s!<\?xml version="1.0" encoding="UTF-8"\?>\n!!;
                 } else {
                     $rec = $marc->as_usmarc();
@@ -393,7 +412,8 @@ sub export_marc_records_from_sth {
                 $num_exported++;
             };
             if ($@) {
-              warn "Error exporting record $record_number ($record_type) ".($noxml ? "not XML" : "XML");
+                warn "Error exporting record $record_number ($record_type) ".($noxml ? "not XML" : "XML");
+                warn "... specific error is $@" if $verbose_logging;
             }
         }
     }
