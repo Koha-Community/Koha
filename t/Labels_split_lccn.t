@@ -34,6 +34,7 @@ BEGIN {
             'BS2545.E8 H39 1996'   => [qw(BS 2545 .E8 H39 1996)],
             'NX512.S85 A4 2006'    => [qw(NX 512 .S85 A4 2006)],
             'QH541.15.C6 C25 2012' => [qw(QH 541.15 .C6 C25 2012)],
+            '123 ABC FOO BAR'      => [qw(123 ABC FOO BAR)],
         };
     }
     my $test_num = 1;
