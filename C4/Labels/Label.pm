@@ -7,6 +7,7 @@ use Text::Wrap;
 use Algorithm::CheckDigits;
 use Text::CSV_XS;
 use Data::Dumper;
+use Library::CallNumber::LC;
 
 use C4::Context;
 use C4::Debug;
@@ -113,18 +114,10 @@ sub _split_lccn {
     my ($lccn) = @_;
     $_ = $lccn;
     # lccn examples: 'HE8700.7 .P6T44 1983', 'BS2545.E8 H39 1996';
-    my (@parts) = m/
-        ^([a-zA-Z]+)      # HE          # BS
-        (\d+(?:\.\d)*)    # 8700.7      # 2545
-        \s*
-        (\.*\D+\d*)       # .P6         # .E8
-        \s*
-        (.*)              # T44 1983    # H39 1996   # everything else (except any bracketing spaces)
-        \s*
-        /x;
-    unless (scalar @parts)  {
+    my @parts = Library::CallNumber::LC->new($lccn)->components();
+    unless (scalar @parts && defined $parts[0])  {
         warn sprintf('regexp failed to match string: %s', $_);
-        push @parts, $_;     # if no match, just push the whole string.
+        @parts = $_;     # if no match, just use the whole string.
     }
     push @parts, split /\s+/, pop @parts;   # split the last piece into an arbitrary number of pieces at spaces
     $debug and warn "split_lccn array: ", join(" | ", @parts), "\n";
