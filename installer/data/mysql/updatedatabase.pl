@@ -6310,6 +6310,73 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.10.09.XXX";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    if ( C4::Context->preference("marcflavour") eq 'MARC21' ) {
+        $sth = $dbh->prepare(
+"SELECT frameworkcode FROM marc_tag_structure WHERE tagfield = '029'"
+        );
+        $sth->execute;
+        my $frameworkcodes = $sth->fetchall_hashref('frameworkcode');
+
+        for my $frameworkcode ( keys %$frameworkcodes ) {
+            $dbh->do( "
+    INSERT IGNORE INTO marc_subfield_structure (tagfield, tagsubfield, liblibrarian,
+    libopac, repeatable, mandatory, kohafield, tab, authorised_value, authtypecode,
+    value_builder, isurl, hidden, frameworkcode, seealso, link, defaultvalue) VALUES
+    ('029', 'a', 'OCLC library identifier', 'OCLC library identifier', 0, 0, '', 0, '', '', '', 0, -6, '$frameworkcode', '', '', NULL),
+    ('029', 'b', 'System control number', 'System control number', 0, 0, '', 0, '', '', '', 0, -6, '$frameworkcode', '', '', NULL),
+    ('029', 'c', 'OAI set name', 'OAI set name', 0, 0, '', 0, '', '', '', 0, -6, '$frameworkcode', '', '', NULL),
+    ('029', 't', 'Content type identifier', 'Content type identifier', 0, 0, '', 0, '', '', '', 0, -6, '$frameworkcode', '', '', NULL)
+   " );
+        }
+
+        for my $tag ( '863', '864', '865' ) {
+            $sth = $dbh->prepare(
+"SELECT frameworkcode FROM marc_tag_structure WHERE tagfield = '$tag'"
+            );
+            $sth->execute;
+            my $frameworkcodes = $sth->fetchall_hashref('frameworkcode');
+
+            for my $frameworkcode ( keys %$frameworkcodes ) {
+                $dbh->do( "
+     INSERT IGNORE INTO marc_subfield_structure (tagfield, tagsubfield, liblibrarian,
+     libopac, repeatable, mandatory, kohafield, tab, authorised_value, authtypecode,
+     value_builder, isurl, hidden, frameworkcode, seealso, link, defaultvalue) VALUES
+     ('$tag', '6', 'Linkage', 'Linkage', 0, 0, '', 8, '', '', '', NULL, 5, '$frameworkcode', '', '', NULL),
+     ('$tag', '8', 'Field link and sequence number', 'Field link and sequence number', 0, 0, '', 8, '', '', '', NULL, 5, '$frameworkcode', '', '', NULL),
+     ('$tag', 'a', 'First level of enumeration', 'First level of enumeration', 0, 0, '', 8, '', '', '', 0, 5, '$frameworkcode', '', '', NULL),
+     ('$tag', 'b', 'Second level of enumeration', 'Second level of enumeration', 0, 0, '', 8, '', '', '', 0, 5, '$frameworkcode', '', '', NULL),
+     ('$tag', 'c', 'Third level of enumeration', 'Third level of enumeration', 0, 0, '', 8, '', '', '', 0, 5, '$frameworkcode', '', '', NULL),
+     ('$tag', 'd', 'Fourth level of enumeration', 'Fourth level of enumeration', 0, 0, '', 8, '', '', '', 0, 5, '$frameworkcode', '', '', NULL),
+     ('$tag', 'e', 'Fifth level of enumeration', 'Fifth level of enumeration', 0, 0, '', 8, '', '', '', 0, 5, '$frameworkcode', '', '', NULL),
+     ('$tag', 'f', 'Sixth level of enumeration', 'Sixth level of enumeration', 0, 0, '', 8, '', '', '', 0, 5, '$frameworkcode', '', '', NULL),
+     ('$tag', 'g', 'Alternative numbering scheme, first level of enumeration', 'Alternative numbering scheme, first level of enumeration', 0, 0, '', 8, '', '', '', 0, 5, '$frameworkcode', '', '', NULL),
+     ('$tag', 'h', 'Alternative numbering scheme, second level of enumeration', 'Alternative numbering scheme, second level of enumeration', 0, 0, '', 8, '', '', '', 0, 5, '$frameworkcode', '', '', NULL),
+     ('$tag', 'i', 'First level of chronology', 'First level of chronology', 0, 0, '', 8, '', '', '', 0, 5, '$frameworkcode', '', '', NULL),
+     ('$tag', 'j', 'Second level of chronology', 'Second level of chronology', 0, 0, '', 8, '', '', '', 0, 5, '$frameworkcode', '', '', NULL),
+     ('$tag', 'k', 'Third level of chronology', 'Third level of chronology', 0, 0, '', 8, '', '', '', 0, 5, '$frameworkcode', '', '', NULL),
+     ('$tag', 'l', 'Fourth level of chronology', 'Fourth level of chronology', 0, 0, '', 8, '', '', '', 0, 5, '$frameworkcode', '', '', NULL),
+     ('$tag', 'm', 'Alternative numbering scheme, chronology', 'Alternative numbering scheme, chronology', 0, 0, '', 8, '', '', '', 0, 5, '$frameworkcode', '', '', NULL),
+     ('$tag', 'n', 'Converted Gregorian year', 'Converted Gregorian year', 0, 0, '', 8, '', '', '', 0, 5, '$frameworkcode', '', '', NULL),
+     ('$tag', 'o', 'Type of unit', 'Type of unit', 1, 0, '', 8, '', '', '', 0, 5, '$frameworkcode', '', '', NULL),
+     ('$tag', 'p', 'Piece designation', 'Piece designation', 0, 0, '', 8, '', '', '', 0, 5, '$frameworkcode', '', '', NULL),
+     ('$tag', 'q', 'Piece physical condition', 'Piece physical condition', 0, 0, '', 8, '', '', '', 0, 5, '$frameworkcode', '', '', NULL),
+     ('$tag', 's', 'Copyright article-fee code', 'Copyright article-fee code', 1, 0, '', 8, '', '', '', 0, 5, '$frameworkcode', '', '', NULL),
+     ('$tag', 't', 'Copy number', 'Copy number', 0, 0, '', 8, '', '', '', 0, 5, '$frameworkcode', '', '', NULL),
+     ('$tag', 'v', 'Issuing date', 'Issuing date', 1, 0, '', 8, '', '', '', 0, 5, '$frameworkcode', '', '', NULL),
+     ('$tag', 'w', 'Break indicator', 'Break indicator', 0, 0, '', 8, '', '', '', 0, 5, '$frameworkcode', '', '', NULL),
+     ('$tag', 'x', 'Nonpublic note', 'Nonpublic note', 1, 0, '', 8, '', '', '', 0, 5, '$frameworkcode', '', '', NULL),
+     ('$tag', 'z', 'Public note', 'Public note', 1, 0, '', 8, '', '', '', 0, 5, '$frameworkcode', '', '', NULL)
+    " );
+            }
+        }
+    }
+    print "Upgrade to $DBversion done (Bug 9353: Missing subfields on MARC21 frameworks)\n";
+    SetVersion($DBversion);
+}
+
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)
