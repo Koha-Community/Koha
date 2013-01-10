@@ -576,6 +576,14 @@ for my $itm (@items) {
     }
 }
 
+# Display only one tab if one items list is empty
+if (scalar(@itemloop) == 0 || scalar(@otheritemloop) == 0) {
+    $template->param(SeparateHoldings => 0);
+    if (scalar(@itemloop) == 0) {
+        @itemloop = @otheritemloop;
+    }
+}
+
 # If there is a lot of items, and the user has not decided
 # to view them all yet, we first warn him
 # TODO: The limit of 50 could be a syspref
