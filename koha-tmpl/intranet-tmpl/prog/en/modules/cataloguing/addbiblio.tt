@@ -665,7 +665,12 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
         <div id="yui-main">
         <div class="yui-g">
 
-<h1>[% IF ( biblionumber ) %]Editing <em>[% title |html %]</em> (Record number [% biblionumber %])</h1>[% ELSE %]Add MARC record</h1>[% END %]
+<h1>
+[% IF ( biblionumber ) %]Editing <em>[% title |html %]</em> (Record number [% biblionumber %])
+[% ELSE %]Add MARC record [% IF (circborrowernumber) %]<em>(fast cataloging)</em>[% END %]
+[% END %]
+</h1>
+
 [% IF marcflavour != 'NORMARC' %]
 <div><input type="checkbox" name="marcDocsSelect" id="marcDocsSelect" checked="true" /> Show MARC tag documentation links<br/></div>
 [% END %]
@@ -743,6 +748,15 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
 
 	function yuiToolbar() {
 [% IF ( CAN_user_editcatalogue_edit_items ) %]
+    [% IF (circborrowernumber) %][%# fast cataloging must lead to items %]
+        new YAHOO.widget.Button({
+            id: "addbiblio",
+            type: "button",
+            label: _("Save"),
+            container: "savebutton",
+            onclick: {fn:function(){redirect("items");}}
+        });
+    [% ELSE %]
         var savesplitmenu = new YAHOO.widget.Button({
             type: "split",
             label: _("Save"),
@@ -751,8 +765,8 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
             menu: savemenu,
             container: "savebutton"
          });
-
-        savesplitmenu.on("click", onOption); 
+        savesplitmenu.on("click", onOption);
+    [% END %]
 [% ELSE %]
         new YAHOO.widget.Button({
             id: "addbiblio",
@@ -776,6 +790,7 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
 
 		<ul class="toolbar">
 			<li id="savebutton"><input id="addbiblio" type="submit" value="Save" /></li>
+            [% UNLESS (circborrowernumber) %][%# Hide in fast cataloging %]
 			<li id="z3950searchc"><input type="button" id="z3950search" value="Z39.50 Search" onclick="PopupZ3950(); return false;" /></li>
 			<li id="changeframework"><label for="Frameworks">Change framework: </label>
 			<select name="frameworkcode" id="Frameworks" onchange="Changefwk(this);">
@@ -790,13 +805,15 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
                                  </option>                          
 					        [% END %]
 			</select> 
-<input type="hidden" name="op" value="addbiblio" /></li>
+            </li>
+            [% END %]
 		</ul>
 </div>
 
 [% IF ( popup ) %]
         <input type="hidden" name="mode" value="popup" />
 [% END %]
+        <input type="hidden" name="op" value="addbiblio" />
         <input type="hidden" name="frameworkcode" value="[% frameworkcode %]" />
         <input type="hidden" name="biblionumber" value="[% biblionumber %]" />
         <input type="hidden" name="breedingid" value="[% breedingid %]" />
@@ -909,13 +926,13 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
 
 </div><!-- tabs -->
 
-[%# Fields for fast cataloguing %]
+[%# Fields for fast cataloging %]
 <input type="hidden" name="barcode" value="[% barcode %]" />
 <input type="hidden" name="branch" value="[% branch %]" />
 <input type="hidden" name="circborrowernumber" value="[% circborrowernumber %]" />
 <input type="hidden" name="stickyduedate" value="[% stickyduedate %]" />
 <input type="hidden" name="duedatespec" value="[% duedatespec %]" />
-[%# End of fields for fast cataloguing %]
+[%# End of fields for fast cataloging %]
 
 </form>
 
