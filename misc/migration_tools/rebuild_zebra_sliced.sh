@@ -9,7 +9,7 @@ Index Koha records by chunks. It is useful when a record causes errors and
 stops the indexing process. With this script, if indexing of one chunk fails,
 that chunk is split into two or more chunks, and indexing continues on these chunks.
 rebuild_zebra.pl is called only once to export records. Splitting and indexing
-is handled by this script (using yaz-marcdump and zebraidx).
+is handled by this script (using zebraidx for indexing).
 
 Usage:
 $scriptname [-t type] [-l X] [-o X] [-s X] [-d /export/dir] [-L /log/dir] [-r] [-f] [--reset-index]
@@ -41,6 +41,7 @@ splitfile() {
     local prefix=$2
     local size=$3
     local script='
+        my $indexmode = '"$INDEXMODE"';
         my $prefix = '"\"$prefix\""';
         my $size = '"$size"';
         my ($i,$count) = (0,0);
@@ -52,10 +53,16 @@ splitfile() {
             if ($closed) {
                 open($out, ">", sprintf("$prefix%02d", $i));
                 $closed = 0;
+                if ($indexmode == "dom" && $line !~ /<collection>/) {
+                    print $out "<collection>";
+                }
             }
             print $out $line;
             $count++ if ($line =~ m|^</record>|);
             if ($count == $size) {
+                if ($indexmode == "dom" && $line !~ m|</collection>|) {
+                    print $out "</collection>";
+                }
                 $count = 0;
                 $i++;
                 close($out);
@@ -88,7 +95,8 @@ indexfile() {
             $ZEBRAIDX_CMD >$logfile 2>&1
             grep "Records: $size" $logfile >/dev/null 2>&1
             if [ $? -ne 0 ]; then
-                echo "Indexing failed. Split file and continue..."
+                echo "Indexing failed. See log file $logfile"
+                echo "Split file and continue..."
                 indexfile $chunkfile $(($chunkssize/2))
             else
                 ZEBRAIDX_CMD="$ZEBRAIDX -c $CONFIGFILE -d $TYPE -g marcxml commit"
@@ -274,16 +282,27 @@ EXPORTFILE=
 case $TYPE in
     biblios )
         EXPORTFILE="$EXPORTDIR/biblio/exported_records"
+        indexmode_config_name="zebra_bib_index_mode"
         ;;
     authorities )
         EXPORTFILE="$EXPORTDIR/authority/exported_records"
+        indexmode_config_name="zebra_auth_index_mode"
         ;;
     * )
         echo "Error: TYPE '$TYPE' is not supported"
         exit 1
 esac
 
-CONFIGFILE="$(dirname $KOHA_CONF)/zebradb/zebra-$TYPE.cfg"
+INDEXMODE=$(perl -e '
+    use C4::Context;
+    print C4::Context->config('"$indexmode_config_name"');
+')
+
+CONFIGFILE=$(perl -e '
+    use C4::Context;
+    my $zebra_server = ('"$TYPE"' eq "biblios") ? "biblioserver" : "authorityserver";
+    print C4::Context->zebraconfig($zebra_server)->{config};
+')
 
 if [ $RESETINDEX = "yes" ]; then
     RESETINDEX_CMD="$ZEBRAIDX -c $CONFIGFILE init"
