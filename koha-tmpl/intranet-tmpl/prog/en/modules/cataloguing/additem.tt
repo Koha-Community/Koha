@@ -158,7 +158,7 @@ $(document).ready(function() {
     [% END %]
     <input type="hidden" name="biblionumber" value="[% biblionumber %]" />
     [% IF ( opisadd ) %]
-        <h2 id="additema">Add item</h2>
+        <h2 id="additema">Add item [% IF (circborrowernumber) %]<em>(fast cataloging)</em>[% END %]</h2>
     [% ELSE %]
         <h2 id="edititem">Edit Item #[% itemnumber %][% IF ( barcode ) %] / Barcode [% barcode %][% END %]</h2>
     [% END %]
@@ -211,12 +211,12 @@ $(document).ready(function() {
     <input type="submit" value="Save Changes" onclick="return Check(this.form)" />
     [% END %]</fieldset>
     
-    [%# Fields for fast cataloguing %]
+    [%# Fields for fast cataloging %]
     <input type="hidden" name="circborrowernumber" value="[% circborrowernumber %]" />
     <input type="hidden" name="stickyduedate" value="[% stickyduedate %]" />
     <input type="hidden" name="barcode" value="[% barcode %]" />
     <input type="hidden" name="duedatespec" value="[% duedatespec %]" />
-    [%# End fields for fast cataloguing %]
+    [%# End fields for fast cataloging %]
 
 
     </form>
