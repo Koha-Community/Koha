@@ -6,7 +6,6 @@ package Sip;
 
 use strict;
 use warnings;
-use English;
 use Exporter;
 use Readonly;
 

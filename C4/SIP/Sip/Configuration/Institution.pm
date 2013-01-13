@@ -7,8 +7,6 @@ package Sip::Configuration::Institution;
 
 use strict;
 use warnings;
-use English;
-# use Exporter;
 
 sub new {
     my ($class, $obj) = @_;
