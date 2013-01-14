@@ -26,8 +26,6 @@ use C4::Context;
 use C4::Output;
 
 BEGIN {
-    die('Plugins not enabled in config') unless ( C4::Context->config("enable_plugins") );
-
     push @INC, C4::Context->config("pluginsdir");
 }
 
@@ -39,6 +37,8 @@ Koha::Plugins - Module for loading and managing plugins.
 
 sub new {
     my ( $class, $args ) = @_;
+
+    die('Plugins not enabled in config') unless ( C4::Context->config("enable_plugins") || $args->{'enable_plugins'} );
 
     $args->{'pluginsdir'} = C4::Context->config("pluginsdir");
 

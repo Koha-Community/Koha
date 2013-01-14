@@ -26,8 +26,6 @@ use Module::Load::Conditional qw(can_load);
 use C4::Context;
 
 BEGIN {
-    die('Plugins not enabled in config') unless ( C4::Context->config("enable_plugins") );
-
     push @INC, C4::Context->config("pluginsdir");
 }
 
@@ -52,6 +50,9 @@ Runs a plugin
 
 sub run {
     my ( $class, $args ) = @_;
+
+    die('Plugins not enabled in config') unless ( C4::Context->config("enable_plugins") || $args->{'enable_plugins'} );
+
     my $plugin_class  = $args->{'class'};
     my $plugin_method = $args->{'method'};
     my $cgi           = $args->{'cgi'};
