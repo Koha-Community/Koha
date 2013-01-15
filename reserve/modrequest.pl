@@ -41,23 +41,24 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-my @rank=$query->param('rank-request');
-my @biblionumber=$query->param('biblionumber');
-my @borrower=$query->param('borrowernumber');
-my @branch=$query->param('pickup');
-my @itemnumber=$query->param('itemnumber');
+my @reserve_id = $query->param('reserve_id');
+my @rank = $query->param('rank-request');
+my @biblionumber = $query->param('biblionumber');
+my @borrower = $query->param('borrowernumber');
+my @branch = $query->param('pickup');
+my @itemnumber = $query->param('itemnumber');
 my @suspend_until=$query->param('suspend_until');
 my $multi_hold = $query->param('multi_hold');
 my $biblionumbers = $query->param('biblionumbers');
 my $count=@rank;
 
-my $CancelBiblioNumber=$query->param('CancelBiblioNumber');
-my $CancelBorrowerNumber=$query->param('CancelBorrowerNumber');
-my $CancelItemnumber=$query->param('CancelItemnumber');
+my $CancelBiblioNumber = $query->param('CancelBiblioNumber');
+my $CancelBorrowerNumber = $query->param('CancelBorrowerNumber');
+my $CancelItemnumber = $query->param('CancelItemnumber');
 
 # 2 possibilitys : cancel an item reservation, or modify or cancel the queded list
 
-# 1) cancel an item reservation by fonction ModReserveCancelAll (in reserves.pm)
+# 1) cancel an item reservation by function ModReserveCancelAll (in reserves.pm)
 if ($CancelBorrowerNumber) {
     ModReserveCancelAll($CancelItemnumber, $CancelBorrowerNumber);
     $biblionumber[0] = $CancelBiblioNumber,
@@ -67,9 +68,16 @@ if ($CancelBorrowerNumber) {
 else {
     for (my $i=0;$i<$count;$i++){
         undef $itemnumber[$i] unless $itemnumber[$i] ne '';
-        ModReserve($rank[$i],$biblionumber[$i],$borrower[$i],$branch[$i],$itemnumber[$i],$suspend_until[$i]); #from C4::Reserves
+        ModReserve({
+            rank => $rank[$i],
+            reserve_id => $reserve_id[$i],
+            branchcode => $branch[$i],
+            itemnumber => $itemnumber[$i],
+            suspend_until => $suspend_until[$i]
+        });
     }
 }
+
 my $from=$query->param('from');
 $from ||= q{};
 if ( $from eq 'borrower'){

@@ -762,7 +762,7 @@ sub CancelHold {
     return { code => 'NotCanceled' } unless any { $itemnumber eq $_ } @reserveditems;
 
     # Cancel the reserve
-    CancelReserve( $itemnumber, undef, $borrowernumber );
+    CancelReserve({ itemnumber => $itemnumber, borrowernumber => $borrowernumber });
 
     return { code => 'Canceled' };
 }

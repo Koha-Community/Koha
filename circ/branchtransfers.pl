@@ -80,7 +80,10 @@ my $ignoreRs = 0;
 # Deal with the requests....
 if ( $request eq "KillWaiting" ) {
     my $item = $query->param('itemnumber');
-    CancelReserve( 0, $item, $borrowernumber );
+    CancelReserve({
+        itemnumber     => $item,
+        borrowernumber => $borrowernumber
+    });
     $cancelled   = 1;
     $reqmessage  = 1;
 }
@@ -93,7 +96,10 @@ elsif ( $request eq "SetWaiting" ) {
 }
 elsif ( $request eq 'KillReserved' ) {
     my $biblio = $query->param('biblionumber');
-    CancelReserve( $biblio, 0, $borrowernumber );
+    CancelReserve({
+        biblionumber   => $biblio,
+        borrowernumber => $borrowernumber
+    });
     $cancelled   = 1;
     $reqmessage  = 1;
 }

@@ -30,6 +30,7 @@ use C4::Output;
 use C4::Reserves;
 use C4::Auth;
 my $query = new CGI;
+
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {   
         template_name   => "opac-account.tmpl",
@@ -41,8 +42,10 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     }
 );
 
-my $biblionumber = $query->param('biblionumber');
-if ($biblionumber and $borrowernumber) {
-	CancelReserve($biblionumber, '', $borrowernumber);
+my $reserve_id = $query->param('reserve_id');
+
+if ($reserve_id && $borrowernumber) {
+  CancelReserve({ reserve_id => $reserve_id });
 }
+
 print $query->redirect("/cgi-bin/koha/opac-user.pl#opac-user-holds");

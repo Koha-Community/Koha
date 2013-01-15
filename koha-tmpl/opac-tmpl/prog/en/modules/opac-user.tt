@@ -418,7 +418,7 @@ $.tablesorter.addParser({
 		[% IF ( RESERVE.cancelable ) %]
 			<form action="/cgi-bin/koha/opac-modrequest.pl" method="post">
 			<input type="hidden" name="biblionumber" value="[% RESERVE.biblionumber %]" />
-		<input type="hidden" name="reservenumber" value="[% RESERVE.reservenumber %]" />
+          <input type="hidden" name="reserve_id" value="[% RESERVE.reserve_id %]" />
 			<input type="submit" name="submit" class="icon delete cancel" value="Cancel" onclick="return confirmDelete(MSG_CONFIRM_DELETE_HOLD);" /></form>
 		[% ELSE %]
 		[% END %]

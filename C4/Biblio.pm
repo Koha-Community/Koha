@@ -438,7 +438,7 @@ sub DelBiblio {
     require C4::Reserves;
     my ($count, $reserves) = C4::Reserves::GetReservesFromBiblionumber($biblionumber);
     foreach my $res ( @$reserves ) {
-        C4::Reserves::CancelReserve( $res->{'biblionumber'}, $res->{'itemnumber'}, $res->{'borrowernumber'} );
+        C4::Reserves::CancelReserve({ reserve_id => $res->{'reserve_id'} });
     }
 
     # Delete in Zebra. Be careful NOT to move this line after _koha_delete_biblio

@@ -87,7 +87,12 @@ if($ok){
             my $reserve = $sth->fetchrow_hashref;
 
             if($routing->{borrowernumber} == $reserve->{borrowernumber}){
-                ModReserve($routing->{ranking},$biblio,$routing->{borrowernumber},$branch);
+                ModReserve({
+                    rank           => $routing->{ranking},
+                    biblionumber   => $biblio,
+                    borrowernumber => $routing->{borrowernumber},
+                    branchcode     => $branch
+                });
             } else {
                 AddReserve($branch,$routing->{borrowernumber},$biblio,$const,\@bibitems,$routing->{ranking}, undef, undef, $notes,$title);
         }
