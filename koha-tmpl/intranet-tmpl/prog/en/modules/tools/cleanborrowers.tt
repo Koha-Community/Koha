@@ -1,5 +1,5 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Tools &rsaquo; Clean patron records [% IF ( step2 ) %]&rsaquo; Confirm[% END %][% IF ( step3 ) %]&rsaquo; Finished[% END %]</title>
+<title>Koha &rsaquo; Tools &rsaquo; Batch patron deletion/anonymization [% IF ( step2 ) %]&rsaquo; Confirm[% END %][% IF ( step3 ) %]&rsaquo; Finished[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
 <script type="text/javascript">
@@ -42,47 +42,63 @@
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a>  &rsaquo; [% IF ( step1 ) %]Clean Patron Records[% ELSE %]<a href="/cgi-bin/koha/tools/cleanborrowers.pl">Clean patron records</a> &rsaquo; [% END %][% IF ( step2 ) %]Confirm[% END %][% IF ( step3 ) %]Finished[% END %]</div>
 
 <div id="doc3" class="yui-t2">
-   
+
    <div id="bd">
-	<div id="yui-main">
-	<div class="yui-b">
+    <div id="yui-main">
+    <div class="yui-b">
 
-<h1>Delete some old patrons/Anonymize some check-out history</h1>
-
+<h1>Batch patron deletion/anonymization</h1>
+<div class="help">
+    <p>This tool allows you to delete patrons and anonymize checkout history. For deleting patrons, any combination of limits can be used.</p>
+</div>
 [% IF ( step1 ) %]
 <!-- step 1 START -->
 <div id="step1">
     <form name="f1" onsubmit="return checkForm(this);" action="/cgi-bin/koha/tools/cleanborrowers.pl" method="post">
     <fieldset>
-    <legend>What do you want to do ?</legend>
-        <h3><input id="checkborrower" type="checkbox" name="checkbox" value="borrower" /><label for="checkborrower"> Delete borrowers</label></h3>
-
-        <label for="date1">Who have not borrowed since:</label>
-        <input size="10" id="date1" name="filterdate1" type="text" class="datepicker" />
-        <span class="hint">[% INCLUDE 'date-format.inc' %]</span></p>
-
-        <label for="borrower_dateexpiry">Whose expiration date is before:</label>
-        <input size="10" id=borrower_dateexpiry" name="borrower_dateexpiry" type="text" class="datepicker" />
-        <span class="hint">[% INCLUDE 'date-format.inc' %]</span></p>
-
-        <label for="borrower_categorycode">Whose patron category is:</label>
-        <select id="borrower_categorycode" name="borrower_categorycode">
-            <option value="" selected="selected">Any</option>
-            [% FOREACH bc IN borrower_categorycodes %]
-                [% UNLESS bc.categorycode == 'S' %]
-                    <option value="[% bc.categorycode %]">[% bc.description %]</option>
-                [% END %]
-            [% END %]
-        </select>
-
-        <h3><input id="checkissue" type="checkbox" name="checkbox" value="issue" /><label for="checkissue"> Anonymize history</label></h3>
-        <label for="date2">Anonymize check-out history older than</label>
-        <input size="10" id="date2" name="filterdate2" type="text" class="datepicker" />
-        <span class="hint">[% INCLUDE 'date-format.inc' %]</span></p>
+    <legend>Delete patrons</legend>
+        <h3><input id="checkborrower" type="checkbox" name="checkbox" value="borrower" /><label for="checkborrower"> Verify you want to delete patrons</label></h3>
+        <br />
+        <h5>Delete patrons who meet the following criteria:</h5>
+        <ul>
+                <li>
+                    <label for="date1">who have not borrowed since:</label>
+                    <input size="10" id="date1" name="filterdate1" type="text" class="datepicker" />
+                    <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
+                </li>
+                <li>
+                    <label for="borrower_dateexpiry">whose expiration date is before:</label>
+                    <input size="10" id="borrower_dateexpiry" name="borrower_dateexpiry" type="text" class="datepicker" />
+                    <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
+                </li>
+                <li>
+                    <label for="borrower_categorycode">whose patron category is:</label>
+                    <select id="borrower_categorycode" name="borrower_categorycode">
+                        <option value="" selected="selected">Any</option>
+                        [% FOREACH bc IN borrower_categorycodes %]
+                            [% UNLESS bc.categorycode == 'S' %]
+                                <option value="[% bc.categorycode %]">[% bc.description %]</option>
+                            [% END %]
+                        [% END %]
+                    </select>
+                </li>
+            </ul>
+        </fieldset>
+        <fieldset>
+        <legend>Anonymize checkout history</legend>
+        <h3><input id="checkissue" type="checkbox" name="checkbox" value="issue" /><label for="checkissue"> Verify you want to anonymize patron checkout history</label></h3>
+        <br />
+        <ul>
+            <li>
+                <label for="date2">Permanently delete checkout history older than</label>
+                <input size="10" id="date2" name="filterdate2" type="text" class="datepicker" />
+                <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
+            </li>
+        </ul>
 
             <!-- hidden here -->
             <input type="hidden" name="step2" value="1" />
-			</fieldset>
+            </fieldset>
             <fieldset class="action"><input type="submit" value="Next &gt;&gt;" /></fieldset>
     </form>
 </div>
@@ -95,36 +111,34 @@
         <form name="f2" action="/cgi-bin/koha/tools/cleanborrowers.pl" method="post" onsubmit="return checkForm2(this);">
     <fieldset>
         <legend>Warnings</legend>
-
-        	<ul>
-        		<li>[% IF ( totalToDelete ) %][% totalToDelete %] [% ELSE %]0 [% END %] patrons will be deleted</li>
-        		<li>[% IF ( totalToAnonymize ) %][% totalToAnonymize %] [% ELSE %]0 [% END %] check-out history will be anonymized</li>
-        	</ul>
+        <ul>
+            <li>[% IF ( totalToDelete ) %][% totalToDelete %] [% ELSE %]0 [% END %] patrons will be deleted</li>
+            <li>[% IF ( totalToAnonymize ) %][% totalToAnonymize %] [% ELSE %]0 [% END %] checkout history will be anonymized</li>
+        </ul>
 
         <br />
             [% IF ( totalToDelete ) %]
                 <fieldset><legend>What do you want to do for deleted patrons?</legend>
                 <label for="delete">Permanently delete these patrons</label>
                 <input id="delete" type="radio" name="radio" value="delete" checked="checked" />
-                
+
                 <label for="trash">Move these patrons to the trash</label>
                 <input id="trash" type="radio" name="radio" value="trash" />
                 <input type="hidden" name="do_delete" value="[% totalToDelete %]" /></fieldset>
 
             [% END %]
             [% IF ( totalToAnonymize ) %]
-
-                Check-out history for [% totalToAnonymize %] patrons will be anonymized
+                Checkout history for [% totalToAnonymize %] patrons will be anonymized
                 <input type="hidden" name="do_anonym" value="[% totalToAnonymize %]" />
             [% END %]
-               
+
             <input type="hidden" name="step3" value="1" />
             <input type="hidden" name="filterdate1" value="[% filterdate1 %]" />
             <input type="hidden" name="filterdate2" value="[% filterdate2 %]" />
             <input type="hidden" name="borrower_dateexpiry" value="[% borrower_dateexpiry %]" />
             <input type="hidden" name="borrower_categorycode" value="[% borrower_categorycode %]" />
     </fieldset>
-	<fieldset class="action"><input type="submit" value="Finish" /> <a class="cancel" href="/cgi-bin/koha/tools/cleanborrowers.pl">Cancel</a></fieldset>
+    <fieldset class="action"><input type="submit" value="Finish" /> <a class="cancel" href="/cgi-bin/koha/tools/cleanborrowers.pl">Cancel</a></fieldset>
         </form>
 </div>
 <!-- STEP 2 END -->
@@ -135,20 +149,20 @@
 
     <div id="step3">
 
-          [% IF ( do_delete ) %]
-                [% IF ( trash ) %]
-                    <h4>[% TotalDel %] patrons have been successfully moved to trash</h4>
-                [% ELSE %]
-                    <h4>[% TotalDel %] patrons have been successfully deleted</h4>
-                [% END %]
-			[% ELSE %]
-				<h4>No patron records have been removed</h4>
+        [% IF ( do_delete ) %]
+            [% IF ( trash ) %]
+                <h4>[% TotalDel %] patrons have been successfully moved to trash</h4>
+            [% ELSE %]
+                <h4>[% TotalDel %] patrons have been successfully deleted</h4>
             [% END %]
-            [% IF ( do_anonym ) %]
-                <h4>All patrons with checkouts older than [% filterdate1 %] have been anonymized</h4>
-			[% ELSE %]
-				<h4>No patron records have been anonymized</h4>
-            [% END %]
+        [% ELSE %]
+            <h4>No patron records have been removed</h4>
+        [% END %]
+        [% IF ( do_anonym ) %]
+            <h4>All patrons with checkouts older than [% filterdate1 %] have been anonymized</h4>
+        [% ELSE %]
+            <h4>No patron records have been anonymized</h4>
+        [% END %]
 
     </div>
 <!-- Step 3 END -->
