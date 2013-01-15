@@ -129,8 +129,24 @@ $(document).ready(function(){
     <li><span class="label">Comments:</span> [% IF ( comments ) %][% comments %][% ELSE %](none)[% END %]</li>
     <li><span class="label">Type:</span> [% IF ( record_type == 'auth' ) %]Authority records[% ELSE %]Bibliographic records[% END %]</li>
     <li><span class="label">Staged:</span> [% upload_timestamp %]</li>
-    <li><span class="label">Status:</span> [% import_status %]</li>
-    <li> 
+    <li><span class="label">Status:</span>
+      [% IF ( import_status == 'cleaned' ) %]
+         Cleaned
+      [% ELSIF ( import_status == 'imported' ) %]
+        Imported
+      [% ELSIF ( import_status == 'importing' ) %]
+        Importing
+      [% ELSIF ( import_status == 'reverted' ) %]
+         Reverted
+      [% ELSIF ( import_status == 'reverting' ) %]
+         Reverting
+      [% ELSIF ( import_status == 'staged' ) %]
+          Staged
+      [% ELSE %]
+          [% import_status %]
+      [% END %]
+      </li>
+    <li>
 [% IF ( can_commit ) %]<label for="new_matcher_id">Matching rule applied:</label><select name="new_matcher_id" id="new_matcher_id">
        <option value="">Do not look for matching records</option> 
        [% FOREACH available_matcher IN available_matchers %]
@@ -251,7 +267,23 @@ Page
     <td><a href="[% batch_lis.script_name %]?import_batch_id=[% batch_lis.import_batch_id %]">[% batch_lis.file_name %]</a></td>
     <td>[% batch_lis.comments %]</td>
     <td>[% IF ( batch_lis.record_type == 'auth' ) %]Authority[% ELSE %]Bibliographic[% END %]</td>
-    <td>[% batch_lis.import_status %]</td>
+    <td>
+      [% IF ( batch_lis.import_status == 'cleaned' ) %]
+         Cleaned
+      [% ELSIF ( batch_lis.import_status == 'imported' ) %]
+        Imported
+      [% ELSIF ( batch_lis.import_status == 'importing' ) %]
+        Importing
+      [% ELSIF ( batch_lis.import_status == 'reverted' ) %]
+         Reverted
+      [% ELSIF ( batch_lis.import_status == 'reverting' ) %]
+         Reverting
+      [% ELSIF ( batch_lis.import_status == 'staged' ) %]
+          Staged
+      [% ELSE %]
+          [% batch_lis.import_status %]
+      [% END %]
+    </td>
     <td>[% batch_lis.upload_timestamp %]</td>
     <td>[% batch_lis.num_records %]</td>
     <td>[% batch_lis.num_items %][% IF ( batch_lis.num_items ) %] <a href="[% batch_lis.script_name %]?import_batch_id=[% batch_lis.import_batch_id %]&amp;op=create_labels">(Create label batch)</a>[% END %]</td>
