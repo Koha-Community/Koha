@@ -4,6 +4,25 @@
 [% INCLUDE 'additem.js.inc' %]
 <script type="text/javascript" src="[% themelang %]/js/additem.js"> </script>
 <script type="text/javascript">
+
+var nav = window.Event ? true : false;
+if (nav) {
+	window.captureEvents(Event.KEYDOWN);
+	window.onkeydown = NetscapeEventHandler_KeyDown;
+} else {
+	document.onkeydown = IEEventHandler_KeyDown;
+}
+
+function NetscapeEventHandler_KeyDown(e) {
+	if (e.which == 13 && e.target.type != 'textarea' && e.target.type != 'submit') { return false; }
+	return true;
+}
+
+function IEEventHandler_KeyDown() {
+	if (event.keyCode == 13 && event.srcElement.type != 'textarea' && event.srcElement.type != 'submit')
+		return false;
+	return true;
+}
 //<![CDATA[
     function Check(form) {
         [% IF (AcqCreateItemReceiving) %]
@@ -316,7 +335,6 @@
 
 </div>
 </div><div class="yui-g"><fieldset class="action">
-        <input type="submit" onclick="return false;" style="display: none;" id="phony_submit" value="phony_submit" name="phony_submit" />
         <input type="submit"  value="Save" class="button" accesskey="w" />
         <a class="cancel" href="/cgi-bin/koha/acqui/parcel.pl?invoiceid=[% invoiceid %]">Cancel</a>
 </fieldset></div>    </form>
