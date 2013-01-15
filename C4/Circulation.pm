@@ -831,8 +831,7 @@ sub CanBookBeIssued {
     #
     # ITEM CHECKING
     #
-    if (   $item->{'notforloan'}
-        && $item->{'notforloan'} > 0 )
+    if ( $item->{'notforloan'} )
     {
         if(!C4::Context->preference("AllowNotForLoanOverride")){
             $issuingimpossible{NOT_FOR_LOAN} = 1;
@@ -842,7 +841,7 @@ sub CanBookBeIssued {
             $needsconfirmation{item_notforloan} = $item->{'notforloan'};
         }
     }
-    elsif ( !$item->{'notforloan'} ){
+    else {
         # we have to check itemtypes.notforloan also
         if (C4::Context->preference('item-level_itypes')){
             # this should probably be a subroutine
