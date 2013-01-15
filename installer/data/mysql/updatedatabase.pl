@@ -6142,6 +6142,14 @@ $DBversion = "3.10.03.000";
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     print "Upgrade to $DBversion done (3.10.3 release)\n";
     SetVersion($DBversion);
+}    
+
+$DBversion = "3.10.03.001";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+   $dbh->do("INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES ('OPACNumbersPreferPhrase','0', NULL, 'Control the use of phr operator in callnumber and standard number OPAC searches', 'YesNo')");
+   $dbh->do("INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES ('IntranetNumbersPreferPhrase','0', NULL, 'Control the use of phr operator in callnumber and standard number staff client searches', 'YesNo')");
+   print "Upgrade to $DBversion done (Bug 9395: Problem with callnumber and standard number search in OPAC and Staff Client)\n";
+   SetVersion ($DBversion);
 }
 
 =head1 FUNCTIONS

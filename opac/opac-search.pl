@@ -293,6 +293,11 @@ if ( $template_type && $template_type eq 'advsearch' ) {
             $template->param( expanded_options => $cgi->param('expanded_options'));
         }
     }
+
+    if (C4::Context->preference('OPACNumbersPreferPhrase')) {
+        $template->param('numbersphr' => 1);
+    }
+
     output_html_with_http_headers $cgi, $cookie, $template->output;
     exit;
 }
