@@ -18,16 +18,18 @@
                 }
             });
 
-            var alertString;
-            if (total_errors==0) {
-                return true;
-            } else {
-                alertString  = _("Form not submitted because of the following problem(s)");
+            if (total_errors != 0) {
+                var alertString = _("Form not submitted because of the following problem(s)");
                 alertString += "\n------------------------------------------------------------------------------------\n";
                 alertString += "\n- "+ total_errors+_(" mandatory fields empty (highlighted)");
                 alert(alertString);
                 return false;
             }
+
+            if(check_additem('[% UniqueItemFields %]') == false){
+                alert(_('Duplicate values detected. Please correct the errors and resubmit.') );
+                return false;
+            };
 
             // Remove last itemblock if it is not in items_list
             var lastitemblock = $("#outeritemblock > div:last");
@@ -41,14 +43,6 @@
             if(tobedeleted){
                 $(lastitemblock).remove();
             }
-
-            if(check_additem('[% UniqueItemFields %]') == false){
-                alert(_('Duplicate values detected. Please correct the errors and resubmit.') );
-                if(tobedeleted) {
-                    $(lastitemblock).appendTo("#outeritemblock");
-                }
-                return false;
-            };
         [% END %]
 
         return true;
