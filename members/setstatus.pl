@@ -56,13 +56,13 @@ if ( $reregistration eq 'y' ) {
 
 if($destination eq "circ"){
 	if($dateexpiry){
-		print $input->redirect("/cgi-bin/koha/circ/circulation.pl?findborrower=$cardnumber&dateexpiry=$dateexpiry");
+        print $input->redirect("/cgi-bin/koha/circ/circulation.pl?findborrower=$cardnumber&was_renewed=1");
 	} else {
 		print $input->redirect("/cgi-bin/koha/circ/circulation.pl?findborrower=$cardnumber");
 	}
 } else {
 	if($dateexpiry){
-        print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$borrowernumber&dateexpiry=$dateexpiry");
+        print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$borrowernumber&was_renewed=1");
 	} else {
         print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$borrowernumber");
 	}

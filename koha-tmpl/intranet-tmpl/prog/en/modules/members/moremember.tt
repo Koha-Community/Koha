@@ -181,7 +181,7 @@ function validate1(date) {
 [% IF ( unknowuser ) %]
    <div class="dialog message">This patron does not exist.</div>
 [% ELSE %]
-    [% IF ( reregistration ) %]<div class="dialog message">Patron's account has been renewed until [% dateexpiry %]</div>[% END %]
+    [% IF ( was_renewed ) %]<div class="dialog message">Patron's account has been renewed until [% dateexpiry %]</div>[% END %]
 
     [% IF ( flagged ) %]
     <div id="circmessages" class="circmessage attention">
@@ -358,7 +358,7 @@ function validate1(date) {
     <li><span class="label">Registration date: </span>[% dateenrolled %]</li>
     
     <li><span class="label">Expiration date: </span>
-    [% IF ( reregistration ) %]
+    [% IF ( was_renewed ) %]
             <strong class="reregistrinfo">[% dateexpiry %]</strong>
     [% ELSE %]
             [% dateexpiry %]
