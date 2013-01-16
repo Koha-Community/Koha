@@ -62,6 +62,12 @@ YAHOO.util.Event.onContentReady("header_search", function() {
           <option value='phone,phonepro,B_phone,altcontactphone,mobile'>Phone number</option>
       </select>
 
+      <label for="searchtype">Search type:</label>
+      <select name="searchtype" id="searchtype">
+          <option selected="selected" value=''>Starts with</option>
+          <option value='contain'>Contains</option>
+      </select>
+
     <label for="orderby">Order by:</label>
     <select name="orderby" id="searchorderby">
     <option value="surname,0">Surname</option>
