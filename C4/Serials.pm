@@ -307,7 +307,7 @@ $subs = GetSubscription($subscriptionid)
 this function returns the subscription which has $subscriptionid as id.
 return :
 a hashref. This hash containts
-subscription, subscriptionhistory, aqbudget.bookfundid, biblio.title
+subscription, subscriptionhistory, aqbooksellers.name, biblio.title
 
 =cut
 
