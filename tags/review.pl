@@ -41,7 +41,7 @@ sub ajax_auth_cgi ($) {		# returns CGI object
 	my $needed_flags = shift;
 	my %cookies = fetch CGI::Cookie;
 	my $input = CGI->new;
-	my $sessid = $cookies{'CGISESSID'}->value || $input->param('CGISESSID');
+    my $sessid = $cookies{'CGISESSID'}->value;
 	my ($auth_status, $auth_sessid) = check_cookie_auth($sessid, $needed_flags);
 	$debug and
 	print STDERR "($auth_status, $auth_sessid) = check_cookie_auth($sessid," . Dumper($needed_flags) . ")\n";
