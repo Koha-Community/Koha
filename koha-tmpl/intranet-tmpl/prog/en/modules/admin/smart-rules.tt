@@ -9,6 +9,50 @@ $(document).ready(function() {
         $('#branch').change(function() {
                 $('#selectlibrary').submit();
         });
+        $(".editrule").click(function(){
+            $(this).parent().parent().find("td").each(function (i) {
+                itm = $(this).text();
+                itm = itm.replace(/^\s*|\s*$/g,'');
+                var current = $("#default-circulation-rules tr:last td:eq("+i+")");
+                if ( i != 5 ) {
+                    $(current).find("input").val(itm);
+                    // select the corresponding option
+                    $(current).find("select option").each(function(){
+                        if ( $(this).text().toLowerCase() == itm.toLowerCase() ) {
+                            $(this).attr('selected', 'selected');
+                        }
+                    });
+                    if ( i == 0 || i == 1 ) {
+                        // Disable the 2 first columns, we cannot update them.
+                        var val = $(current).find("select option:selected").val();
+                        var name = "categorycode";
+                        if ( i == 1 ) {
+                            name="itemtype";
+                        }
+                        // Remove potential previous input added
+                        $(current).find("input").remove();
+                        $(current).append("<input type='hidden' name='"+name+"' value='"+val+"' />");
+                    }
+                } else {
+                    // specific processing for the Hard due date column
+                    var s = itm.split(' ');
+                    var select_value;
+                    if ( s[0] == "before" ) {
+                        select_value = -1
+                    } else if ( s[0] == "on" ) {
+                        select_value = 0
+                    } else if ( s[0] == "after" ) {
+                        select_value = 1
+                    }
+                    $(current).find("input").val(s[1]);
+                    $(current).find("select").val(select_value);
+                }
+            });
+            $("#default-circulation-rules tr:last td:eq(0) select").attr('disabled', 'disabled');
+            $("#default-circulation-rules tr:last td:eq(1) select").attr('disabled', 'disabled');
+            $("#default-circulation-rules tr:last td:last input").val(_("Save"));
+            return false;
+        });
 });
 //]]>
 </script>
@@ -57,11 +101,12 @@ $(document).ready(function() {
         </form>
 [% IF ( definedbranch ) %]<form action="/cgi-bin/koha/admin/clone-rules.pl" method="post"><label 
 for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidden" name="frombranch" value="[% current_branch %]" />
-            <select name="tobranch" id="tobranch">[% FOREACH branchloo IN branchloop %]<option value="[% branchloo.value %]">[% branchloo.branchname %]</option>[% END %]</select> <input type="submit" value="Clone" /></form>[% END %]</fieldset>
+            <select name="tobranch" id="tobranch">[% FOREACH branchloo IN branchloop %]<option value="[% branchloo.value %]">[% branchloo.branchname %]</option>[% END %]</select> <input type="submit" value="Clone" /></form>[% END %]
 
         <form method="post" action="/cgi-bin/koha/admin/smart-rules.pl">
             <input type="hidden" name="op" value="add" />
-            <table>
+            <input type="hidden" name="branch" value="[% branch %]"/>
+            <table id="default-circulation-rules">
             <tr>
                 <th>Patron category</th>
                 <th>Item type</th>
@@ -76,8 +121,8 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
                 <th>Suspension in days (day)</th>
                 <th>Renewals allowed (count)</th>
                 <th>Holds allowed (count)</th>
-		<th>Rental discount (%)</th>
-				<th>&nbsp;</th>
+                <th>Rental discount (%)</th>
+                <th colspan="2">&nbsp;</th>
             </tr>
 				[% FOREACH rule IN rules %]
 					[% UNLESS ( loop.odd ) %]
@@ -122,6 +167,7 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
 							<td>[% rule.renewalsallowed %]</td>
 							<td>[% rule.reservesallowed %]</td>
 							<td>[% rule.rentaldiscount %]</td>
+                            <td><a href="#" class="editrule">Edit</a></td>
 							<td>
 								<a class="button" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete&amp;itemtype=[% rule.itemtype %]&amp;categorycode=[% rule.categorycode %]&amp;branch=[% rule.current_branch %]">Delete</a>
 							</td>
@@ -129,7 +175,7 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
             	[% END %]
                 <tr>
                     <td>
-                        <select name="categorycode">
+                        <select name="categorycode" id="categorycode">
                             <option value="*">All</option>
                         [% FOREACH categoryloo IN categoryloop %]
                             <option value="[% categoryloo.categorycode %]">[% categoryloo.description %]</option>
@@ -137,22 +183,23 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
                         </select>
                     </td>
                     <td>
-                        <select name="itemtype" style="width:13em;">
+                        <select name="itemtype" id="matrixitemtype" style="width:13em;">
                             <option value="*">All</option>
                         [% FOREACH itemtypeloo IN itemtypeloop %]
                             <option value="[% itemtypeloo.itemtype %]">[% itemtypeloo.description %]</option>
                         [% END %]
                         </select>
                     </td>
-                    <td><input name="maxissueqty" size="3" /></td>
-                    <td><input name="issuelength" size="3" /> </td>
+                    <td><input name="maxissueqty" id="maxissueqty" size="3" /></td>
+                    <td><input name="issuelength" id="issuelength" size="3" /> </td>
                     <td>
-		      <select name="lengthunit">
-			<option value="days" selected>Days</option>
-			<option value="hours">Hours</option>
-		      </select>
-		    </td>
-                    <td><select name="hardduedatecompare">
+                      <select name="lengthunit" id="lengthunit">
+                        <option value="days" selected>Days</option>
+                        <option value="hours">Hours</option>
+                      </select>
+                    </td>
+                    <td>
+                        <select name="hardduedatecompare" id="hardduedatecompare">
                            <option value="-1">Before</option>
                            <option value="0">Exactly on</option>
                            <option value="1">After</option>
@@ -160,15 +207,18 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
                         <input type="text" size="10" id="hardduedate" name="hardduedate" value="[% hardduedate %]" class="datepicker" />
                         <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
                     </td>
-                    <td><input name="fine" size="4" /></td>
-                    <td><input name="chargeperiod" size="2" /></td>
-                    <td><input name="firstremind" size="2" /> </td>
-                    <td><input name="overduefinescap" size="6" /> </td>
-                    <td><input name="finedays" size="3" /> </td>
-                    <td><input name="renewalsallowed" size="2" /></td>
-                    <td><input name="reservesallowed" size="2" /></td>
-		    <td><input name="rentaldiscount" size="2" /></td>
-                    <td><input type="hidden" name="branch" value="[% current_branch %]"/><input type="submit" value="Add" class="submit" /></td>
+                    <td><input name="fine" id="fine" size="4" /></td>
+                    <td><input name="chargeperiod" id="chargeperiod" size="2" /></td>
+                    <td><input name="firstremind" id="firstremind" size="2" /> </td>
+                    <td><input name="overduefinescap" id="overduefinescap" size="6" /> </td>
+                    <td><input name="finedays" id="fined" size="3" /> </td>
+                    <td><input name="renewalsallowed" id="renewalsallowed" size="2" /></td>
+                    <td><input name="reservesallowed" id="reservesallowed" size="2" /></td>
+                    <td><input name="rentaldiscount" id="rentaldiscount" size="2" /></td>
+                    <td colspan="2">
+                        <input type="hidden" name="branch" value="[% current_branch %]"/>
+                        <input type="submit" value="Save" class="submit" />
+                    </td>
                 </tr>
             </table>
         </form>
