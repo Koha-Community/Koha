@@ -47,7 +47,7 @@ my $cardnumber     = $input->param('cardnumber');
 my $uploadfilename = $input->param('uploadfile');
 my $uploadfile     = $input->upload('uploadfile');
 my $borrowernumber = $input->param('borrowernumber');
-my $op             = $input->param('op');
+my $op             = $input->param('op') || '';
 
 #FIXME: This code is really in the rough. The variables need to be re-scoped as the two subs depend on global vars to operate.
 #       Other parts of this code could be optimized as well, I think. Perhaps the file upload could be done with YUI's upload
@@ -227,6 +227,7 @@ sub handle_file {
     $debug and warn "Entering sub handle_file; passed \$cardnumber=$cardnumber, \$source=$source";
     $count{filenames} = ()      if !$count{filenames};
     $count{source}    = $source if !$count{source};
+    $count{count}     = 0       unless exists $count{count};
     my %filerrors;
     my $filename;
     if ( $filetype eq 'image' ) {
