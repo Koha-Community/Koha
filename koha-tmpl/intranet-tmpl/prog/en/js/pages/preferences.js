@@ -98,7 +98,7 @@ $( document ).ready( function () {
         var words = to_highlight.split( ' ' );
         $( '.prefs-tab table' ).find( 'td, th' ).not( '.name-cell' ).each( function ( i, td ) {
             $.each( words, function ( i, word ) { $( td ).highlight( word ) } );
-        } ).find( 'option' ).removeHighlight();
+        } ).find( 'option, textarea' ).removeHighlight();
     }
 
     if ( search_jumped ) {
