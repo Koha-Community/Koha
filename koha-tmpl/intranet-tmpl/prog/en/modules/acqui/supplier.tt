@@ -176,7 +176,7 @@ if (f.company.value == "") {
             [% END %]
             <ol>
             <li><label for="discount">Discount</label>
-                <input type="text" size="6" id="discount" name="discount" value="[% discount %]" />%</li>
+                <input type="text" size="6" id="discount" name="discount" value="[% discount | format ("%.1f") %]" />%</li>
             <li>
                 <label for="deliverytime">Delivery time</label>
                 <input type="text" size="2" id="deliverytime" name="deliverytime" value="[% deliverytime %]" /> days
@@ -238,9 +238,9 @@ if (f.company.value == "") {
             <p><strong>Invoice item price includes tax: </strong>
                     [% IF ( invoiceincgst ) %]Yes[% ELSE %]No[% END %]</p>[% END %]
             <p><strong>Discount: </strong>
-                [% discount %] %</p>
+                [% discount | format("%.1f") %] %</p>
             <p><strong>Tax rate: </strong>
-                [% 0 + gstrate * 100 | format("%.1f") %]%</p>
+                [% 0 + gstrate * 100 | format("%.1f") %] %</p>
             [% IF deliverytime.defined %]
                 <p><strong>Delivery time: </strong>
                     [% deliverytime %] days</p>
