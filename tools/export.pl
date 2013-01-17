@@ -17,6 +17,7 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use Modern::Perl;
+use MARC::File::XML;
 use List::MoreUtils qw(uniq);
 use Getopt::Long;
 use CGI;
@@ -309,6 +310,7 @@ if ( $op eq "export" ) {
             } @{ $sth->fetchall_arrayref };
         }
 
+        my $xml_header_written = 0;
         for my $recordid ( uniq @recordids ) {
             if ($deleted_barcodes) {
                 my $q = "
@@ -374,19 +376,30 @@ if ( $op eq "export" ) {
                 }
                 RemoveAllNsb($record) if ($clean);
                 if ( $output_format eq "xml" ) {
-                    if ( $marcflavour eq 'UNIMARC' && $record_type eq 'auths' )
-                    {
-                        print $record->as_xml_record('UNIMARCAUTH');
+                    unless ($xml_header_written) {
+                        MARC::File::XML->default_record_format(
+                            (
+                                     $marcflavour eq 'UNIMARC'
+                                  && $record_type eq 'auths'
+                            ) ? 'UNIMARCAUTH' : $marcflavour
+                        );
+                        print MARC::File::XML::header();
+                        print "\n";
+                        $xml_header_written = 1;
                     }
-                    else {
-                        print $record->as_xml_record($marcflavour);
-                    }
+                    print MARC::File::XML::record($record);
+                    print "\n";
                 }
                 else {
                     print $record->as_usmarc();
                 }
             }
         }
+        if ($xml_header_written) {
+            print MARC::File::XML::footer();
+            print "\n";
+        }
+
         exit;
     }
     elsif ( $format eq "csv" ) {
