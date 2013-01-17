@@ -115,7 +115,9 @@ $(".addtocart").show();
 function highlightOn() {
     var x;
     for (x in q_array) {
-        toHighlight.highlight(q_array[x]);
+        if ( q_array[x].length > 0 ) {
+            toHighlight.highlight(q_array[x]);
+        }
     }
     $(".highlight_toggle").toggle();
 }[% END %]
