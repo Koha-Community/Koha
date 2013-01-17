@@ -231,7 +231,7 @@ $(document).ready(function() {
         <p>
             <input type="submit" value="Edit serials" />&nbsp;
             [% UNLESS subscription.closed %]
-                <input type="button" value="Generate Next" onclick="javascript:generateNext([% subscriptionidlist %])" />
+                <input type="button" value="Generate next" onclick="javascript:generateNext([% subscriptionidlist %])" />
                 [% IF ( subscriptions.size == 1 and !serialsadditems ) %]&nbsp;<input type="button" value="Multi receiving" onclick="javascript:generateReceive([% subscriptionidlist %])" />[% END %]
             [% END %]
         </p>
