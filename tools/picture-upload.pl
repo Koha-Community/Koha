@@ -115,12 +115,12 @@ if ( ($op eq 'Upload') && $uploadfile ) {       # Case is important in these ope
             }
             my $results;
             foreach my $dir ( @directories ) {
-                $results = handle_dir( $dir, $filesuffix );
+                $results = handle_dir( $dir, $filesuffix, $template );
                 $handled++ if $results == 1;
             }
             $total = scalar @directories;
         } else {       #if ($filetype eq 'zip' )
-            $results = handle_dir( $dirname, $filesuffix );
+            $results = handle_dir( $dirname, $filesuffix, $template, $cardnumber, $tempfile );
             $handled = 1;
             $total = 1;
         }
@@ -157,11 +157,11 @@ if ( $borrowernumber && !$errors && !$template->param('ERRORS') ) {
 }
 
 sub handle_dir {
-    my ( $dir, $suffix ) = @_;
-    my $source;
+    my ( $dir, $suffix, $template, $cardnumber, $source ) = @_;
     $debug and warn "Entering sub handle_dir; passed \$dir=$dir, \$suffix=$suffix";
     if ($suffix =~ m/zip/i) {     # If we were sent a zip file, process any included data/idlink.txt files
-        my ( $file, $filename, $cardnumber );
+        my ( $file, $filename );
+        undef $cardnumber;
         $debug and warn "Passed a zip file.";
         opendir my $dirhandle, $dir;
         while ( my $filename = readdir $dirhandle ) {
@@ -189,20 +189,19 @@ sub handle_dir {
 	    $filename   =~ s/[\"\r\n\s]//g;
             $debug and warn "Cardnumber: $cardnumber Filename: $filename";
             $source = "$dir/$filename";
-            %counts = handle_file($cardnumber, $source, %counts);
+            %counts = handle_file($cardnumber, $source, $template, %counts);
         }
         close FILE;
         closedir ($dirhandle);
     } else {
-        $source = $tempfile;
-        %counts = handle_file($cardnumber, $source, %counts);
+        %counts = handle_file($cardnumber, $source, $template, %counts);
     }
 push @counts, \%counts;
 return 1;
 }
 
 sub handle_file {
-    my ($cardnumber, $source, %count) = @_;
+    my ($cardnumber, $source, $template, %count) = @_;
     $debug and warn "Entering sub handle_file; passed \$cardnumber=$cardnumber, \$source=$source";
     $count{filenames} = () if !$count{filenames};
     $count{source} = $source if !$count{source};
