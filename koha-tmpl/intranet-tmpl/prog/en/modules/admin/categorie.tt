@@ -5,23 +5,30 @@
 [% IF ( delete_confirmed ) %]Category deleted[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.pager.js"></script>
-<script type="text/javascript" id="js">$(document).ready(function() {
-	$("#table_categorie").tablesorter({
-		sortList: [[0,0]],
-		widgets: ['zebra'],
-		headers: { 11: { sorter: false}}
-	}).tablesorterPager({container: $("#pagertable_categorie"),positionFixed: false,size: 20});
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.min.js"></script>
+[% INCLUDE 'datatables-strings.inc' %]
+<script type="text/javascript" src="[% themelang %]/js/datatables.js"></script>
+<script type="text/javascript" id="js">
+//<![CDATA[
+    $(document).ready(function() {
+        $("#table_categorie").dataTable($.extend(true, {}, dataTablesDefaults, {
+            "aoColumnDefs": [
+                { "aTargets": [ -1, -2 ], "bSortable": false, "bSearchable": false },
+                { "aTargets": [ 3,4,5 ], "sType": "natural" },
+            ],
+            "aaSorting": [[ 1, "asc" ]],
+            "aLengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]],
+            "iDisplayLength": 20,
+            "sPaginationType": "four_button"
+        }));
+
     $( "#enrolmentperioddate" ).datepicker({ minDate: 1 }); // Require that "until date" be in the future
 
     if ( $("#branches option:selected").length < 1 ) {
         $("#branches option:first").attr("selected", "selected");
     }
-}); </script>
-<script type="text/javascript">
-//<![CDATA[
-	//
+});
 	function isNotNull(f,noalert) {
 		if (f.value.length ==0) {
    return false;
@@ -276,10 +283,10 @@ Confirm deletion of category [% categorycode |html %][% END %]</legend>
 	[% END %]
 [% IF ( loop ) %]
 <div id="pagertable_categorie">
-[% INCLUDE 'table-pager.inc' perpage='20' %]
 </div>
         <table id="table_categorie">
 		<thead>
+        <tr>
 			<th scope="col">Code</th>
 			<th scope="col">Category name</th>
 			<th scope="col">Type</th>
@@ -294,8 +301,11 @@ Confirm deletion of category [% categorycode |html %][% END %]</legend>
             <th scope="col">Messaging</th>
             [% END %]
             <th scope="col">Branches limitations</th>
-			<th scope="col" colspan="2">&nbsp; </th>
+            <th scope="col">&nbsp; </th>
+            <th scope="col">&nbsp; </th>
+        </tr>
 		</thead>
+        <tbody>
 		[% FOREACH loo IN loop %]
 			<tr>
                         <td>[% loo.categorycode |html %]</td>
@@ -368,6 +378,7 @@ Confirm deletion of category [% categorycode |html %][% END %]</legend>
                         <td><a href="[% loo.script_name %]?op=delete_confirm&amp;categorycode=[% loo.categorycode |uri %]">Delete</a></td>
 		</tr>
 		[% END %]
+        </tbody>
 	</table>
 [% ELSE %]
 	<div class="dialog alert">No categories have been defined. <a href="/cgi-bin/koha/admin/categorie.pl?op=add_form">Create a new category</a>.</div>
