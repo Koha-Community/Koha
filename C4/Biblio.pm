@@ -956,6 +956,10 @@ sub GetISBDView {
             #         warn "ERROR IN ISBD DEFINITION at : $isbdfield" unless $fieldvalue;
             #             warn "FV : $fieldvalue";
             if ( $subfvalue ne "" ) {
+                # OPAC hidden subfield
+                next
+                  if ( ( $template eq 'opac' )
+                    && ( $tagslib->{$fieldvalue}->{$subfvalue}->{'hidden'} || 0 ) > 0 );
                 foreach my $field (@fieldslist) {
                     foreach my $subfield ( $field->subfield($subfvalue) ) {
                         my $calculated = $analysestring;
@@ -991,6 +995,10 @@ sub GetISBDView {
                         for my $i ( 0 .. $#subf ) {
                             my $valuecode     = $subf[$i][1];
                             my $subfieldcode  = $subf[$i][0];
+                            # OPAC hidden subfield
+                            next
+                              if ( ( $template eq 'opac' )
+                                && ( $tagslib->{$fieldvalue}->{$subfieldcode}->{'hidden'} || 0 ) > 0 );
                             my $subfieldvalue = GetAuthorisedValueDesc( $tag, $subf[$i][0], $subf[$i][1], '', $tagslib );
                             my $tagsubf       = $tag . $subfieldcode;
 
