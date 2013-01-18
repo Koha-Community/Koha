@@ -631,7 +631,6 @@ foreach my $biblionumber (@biblionumbers) {
 
 $template->param( biblioloop => \@biblioloop );
 $template->param( biblionumbers => $biblionumbers );
-$template->param( DHTMLcalendar_dateformat  => C4::Dates->DHTMLcalendar() );
 
 if ($multihold) {
     $template->param( multi_hold => 1 );

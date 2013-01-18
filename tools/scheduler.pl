@@ -109,8 +109,6 @@ $template->param( JOBS           => \@jobloop );
 my $time = localtime(time);
 $template->param( 'time' => $time );
 $template->param(
-    DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
-    dateformat               => C4::Dates->new()->format(),
     debug                    => $debug,
 );
 output_html_with_http_headers $input, $cookie, $template->output;

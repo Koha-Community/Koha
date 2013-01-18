@@ -105,7 +105,6 @@ if ( $op eq 'display' ) {
         basketcount   => $supplier->{'basketcount'},
         subscriptioncount   => $supplier->{'subscriptioncount'},
         contracts     => $contracts,
-        dateformat    => C4::Context->preference("dateformat"),
     );
 } elsif ( $op eq 'delete' ) {
     # no further message needed for the user

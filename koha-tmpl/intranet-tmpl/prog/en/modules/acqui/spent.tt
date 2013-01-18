@@ -9,6 +9,9 @@
 <script type="text/javascript">
 //<![CDATA[
  $(document).ready(function() {
+    [% IF (dateformat == 'metric') %]
+        dt_add_type_uk_date();
+    [% END %]
     var spent = $("#spent").dataTable($.extend(true, {}, dataTablesDefaults, {
         "sPaginationType": "four_button"
     } ) );

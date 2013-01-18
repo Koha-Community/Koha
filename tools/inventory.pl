@@ -125,7 +125,6 @@ $statussth =~ s, and $,,g;
  
 $template->param(branchloop => \@branch_loop,
                 authorised_values=>\@authorised_value_list,   
-                DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
                 today			=>	C4::Dates->today(),
                 minlocation => $minlocation,
                 maxlocation => $maxlocation,

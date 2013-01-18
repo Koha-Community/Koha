@@ -120,7 +120,6 @@ foreach my $br ( keys %$branches ) {
 $template->param(
     branchesloop => \@branchesloop,
     show_date    => format_date(C4::Dates->today('iso')),
-	'dateformat_' . (C4::Context->preference("dateformat") || '') => 1,
 	TransfersMaxDaysWarning => C4::Context->preference('TransfersMaxDaysWarning'),
 	latetransfers => $latetransfers ? 1 : 0,
 );

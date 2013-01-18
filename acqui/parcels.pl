@@ -175,7 +175,6 @@ $template->param(
     dateto                   => $dateto,
     resultsperpage           => $resultsperpage,
     name                     => $bookseller->{'name'},
-    DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
     shipmentdate_today       => C4::Dates->new()->output(),
     booksellerid             => $booksellerid,
     GST                      => C4::Context->preference('gist'),

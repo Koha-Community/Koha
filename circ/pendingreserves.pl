@@ -201,8 +201,6 @@ $template->param(
     run_report          => $run_report,
     reserveloop         => \@reservedata,
     "BiblioDefaultView".C4::Context->preference("BiblioDefaultView") => 1,
-    DHTMLcalendar_dateformat    =>  C4::Dates->DHTMLcalendar(),
-    dateformat                  => C4::Context->preference("dateformat"),
     HoldsToPullStartDate        => (C4::Context->preference('HoldsToPullStartDate')?C4::Context->preference('HoldsToPullStartDate'):2),
 );
 

@@ -133,7 +133,6 @@ if ( $op eq 'add_form' ) {
 			%$budgetperiod_hash
         );
     } # IF-MOD
-    $template->param( DHTMLcalendar_dateformat 	=> C4::Dates->DHTMLcalendar(),);
 }
 
 elsif ( $op eq 'add_validate' ) {
@@ -175,7 +174,6 @@ elsif ( $op eq 'delete_confirmed' ) {
 # display the form for duplicating
 elsif ( $op eq 'duplicate_form'){
     $template->param(
-        DHTMLcalendar_dateformat 	=> C4::Dates->DHTMLcalendar(),
         'duplicate_form' => '1',
         'budget_period_id' => $budget_period_id,
     );
@@ -291,7 +289,6 @@ $template->param(
     active_pagination_bar   => $active_pagination_bar,
     inactive_pagination_bar => $inactive_pagination_bar,
     tab                     => $tab,
-    dateformat              => C4::Context->preference('dateformat'),
 );
 
 $template->param($op=>1);

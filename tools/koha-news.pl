@@ -118,8 +118,4 @@ else {
         opac_news_count => $opac_news_count,
 		);
 }
-$template->param(
-				DHTMLcalendar_dateformat =>  C4::Dates->DHTMLcalendar(),
-				dateformat    => C4::Context->preference("dateformat"),
-		);
 output_html_with_http_headers $cgi, $cookie, $template->output;

@@ -300,6 +300,7 @@ sub get_template_and_user {
  	}
 
     if(C4::Context->preference('dateformat')){
+        $template->param( dateformat => C4::Context->preference('dateformat') );
         if(C4::Context->preference('dateformat') eq "metric"){
             $template->param(dateformat_metric => 1);
         } elsif(C4::Context->preference('dateformat') eq "us"){

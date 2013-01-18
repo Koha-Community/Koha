@@ -100,10 +100,8 @@ if ($src eq 'circ') {   # if we were called from circulation, use the circulatio
 }
 
 $template->param(
-	DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
-	              dateformat => C4::Dates->new()->format(),
-				       debug => $debug,
-	C4::Search::enabled_staff_search_views,
+    debug => $debug,
+    C4::Search::enabled_staff_search_views,
 );
 
 if ($do_it) {

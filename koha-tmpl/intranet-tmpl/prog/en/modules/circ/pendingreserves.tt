@@ -9,6 +9,9 @@
 <script type="text/JavaScript" language="JavaScript">
 //<![CDATA[
 $(document).ready(function() {
+  [% IF (dateformat == 'metric') %]
+      dt_add_type_uk_date();
+  [% END %]
   var holdst = $("#holdst").dataTable($.extend(true, {}, dataTablesDefaults, {
   }));
   holdst.fnAddFilters("filter");

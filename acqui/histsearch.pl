@@ -132,8 +132,6 @@ $template->param(
     basketgroupname         => $basketgroupname,
     from_placed_on          => $from_date,
     to_placed_on            => $to_date,
-    DHTMLcalendar_dateformat=> C4::Dates->DHTMLcalendar(),
-    dateformat              => C4::Dates->new()->format(),
     debug                   => $debug || $input->param('debug') || 0,
     uc(C4::Context->preference("marcflavour")) => 1
 );

@@ -195,7 +195,6 @@ $template->param(
     total_quantity   => $total_quantity,
     invoiceincgst    => $bookseller->{invoiceincgst},
     currency         => $bookseller->{listprice},
-    DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
     budgets_loop             => \@budgets_loop,
 );
 

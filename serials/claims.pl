@@ -98,8 +98,6 @@ $template->param(
         claimletter => $claimletter,
         supplierloop => \@supplierinfo,
         branchloop   => $branchloop,
-        dateformat    => C4::Context->preference("dateformat"),
-    	DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
         (uc(C4::Context->preference("marcflavour"))) => 1
         );
 output_html_with_http_headers $input, $cookie, $template->output;

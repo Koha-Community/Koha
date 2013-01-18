@@ -166,7 +166,6 @@ $template->param(
     step1                    => '1',
     filterdate1              => $filterdate1,
     filterdate2              => $filterdate2,
-    DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
     borrower_categorycodes   => GetBorrowercategoryList(),
 );
 

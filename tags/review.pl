@@ -207,7 +207,6 @@ $qstring = "limit=$pagesize" . ($qstring ? '&amp;' . $qstring : '');
 $debug and print STDERR "number of approval_rows: " . scalar(@$tagloop) . "rows\n";
 (scalar @errors) and $template->param(message_loop=>\@errors);
 $template->param(
-	DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
 	offset => $offset,	# req'd for EXPR
 	op => $op,
 	op_count => scalar(@tags),

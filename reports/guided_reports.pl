@@ -776,7 +776,6 @@ foreach (1..6) {
      $template->{VARS}->{'build' . $_} and $template->{VARS}->{'buildx' . $_} and last;
 }
 $template->param(   'referer' => $input->referer(),
-                    'DHTMLcalendar_dateformat' => C4::Dates->DHTMLcalendar(),
                 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

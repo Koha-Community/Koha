@@ -148,7 +148,6 @@ $template->param(
     keydate                  => $keydate,
     branchcodes              => $branchcodes,
     branch                   => $branch,
-    DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
     branchname               => $branchname,
     branch                   => $branch,
 );

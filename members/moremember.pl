@@ -408,7 +408,6 @@ $template->param( $data->{'categorycode'} => 1 );
 $template->param(
     detailview => 1,
     AllowRenewalLimitOverride => C4::Context->preference("AllowRenewalLimitOverride"),
-    DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
     CANDELETEUSER    => $candeleteuser,
     roaddetails     => $roaddetails,
     borrowernumber  => $borrowernumber,
@@ -427,8 +426,6 @@ $template->param(
     StaffMember     => ($category_type eq 'S'),
     is_child        => ($category_type eq 'C'),
 #   reserveloop     => \@reservedata,
-    dateformat      => C4::Context->preference("dateformat"),
-    "dateformat_" . (C4::Context->preference("dateformat") || '') => 1,
     samebranch     => $samebranch,
     quickslip		  => $quickslip,
     activeBorrowerRelationship => (C4::Context->preference('borrowerRelationship') ne ''),

@@ -735,8 +735,6 @@ $template->param(
     SpecifyDueDate            => $duedatespec_allow,
     CircAutocompl             => C4::Context->preference("CircAutocompl"),
 	AllowRenewalLimitOverride => C4::Context->preference("AllowRenewalLimitOverride"),
-    dateformat                => C4::Context->preference("dateformat"),
-    DHTMLcalendar_dateformat  => C4::Dates->DHTMLcalendar(),
     export_remove_fields      => C4::Context->preference("ExportRemoveFields"),
     export_with_csv_profile   => C4::Context->preference("ExportWithCsvProfile"),
     canned_bor_notes_loop     => $canned_notes,
