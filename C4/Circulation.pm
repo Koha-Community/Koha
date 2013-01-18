@@ -36,7 +36,11 @@ use C4::Message;
 use C4::Debug;
 use C4::Branch; # GetBranches
 use C4::Log; # logaction
-use C4::Koha qw(GetAuthorisedValueByCode);
+use C4::Koha qw(
+    GetAuthorisedValueByCode
+    GetAuthValCode
+    GetKohaAuthorisedValueLib
+);
 use C4::Overdues qw(CalcFine UpdateFine);
 use Algorithm::CheckDigits;
 
@@ -832,8 +836,10 @@ sub CanBookBeIssued {
     {
         if(!C4::Context->preference("AllowNotForLoanOverride")){
             $issuingimpossible{NOT_FOR_LOAN} = 1;
+            $issuingimpossible{item_notforloan} = $item->{'notforloan'};
         }else{
             $needsconfirmation{NOT_FOR_LOAN_FORCING} = 1;
+            $needsconfirmation{item_notforloan} = $item->{'notforloan'};
         }
     }
     elsif ( !$item->{'notforloan'} ){
@@ -847,16 +853,20 @@ sub CanBookBeIssued {
             if ($notforloan->{'notforloan'}) {
                 if (!C4::Context->preference("AllowNotForLoanOverride")) {
                     $issuingimpossible{NOT_FOR_LOAN} = 1;
+                    $issuingimpossible{itemtype_notforloan} = $item->{'itype'};
                 } else {
                     $needsconfirmation{NOT_FOR_LOAN_FORCING} = 1;
+                    $needsconfirmation{itemtype_notforloan} = $item->{'itype'};
                 }
             }
         }
         elsif ($biblioitem->{'notforloan'} == 1){
             if (!C4::Context->preference("AllowNotForLoanOverride")) {
                 $issuingimpossible{NOT_FOR_LOAN} = 1;
+                $issuingimpossible{itemtype_notforloan} = $biblioitem->{'itemtype'};
             } else {
                 $needsconfirmation{NOT_FOR_LOAN_FORCING} = 1;
+                $needsconfirmation{itemtype_notforloan} = $biblioitem->{'itemtype'};
             }
         }
     }

@@ -1,4 +1,5 @@
 [% USE KohaDates %]
+[% USE KohaAuthorisedValues %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Circulation
 [% IF borrowernumber %]
@@ -358,7 +359,15 @@ function validate1(date) {
 [% END %]
 
 [% IF ( NOT_FOR_LOAN_FORCING ) %]
-    <li>Item is normally not for loan.  Check out anyway?</li>
+    <li>
+    [% IF ( itemtype_notforloan ) %]
+        Item type is normally not for loan.
+    [% ELSIF ( item_notforloan ) %]
+        [% item_notforloan_lib = KohaAuthorisedValues.GetByCode( authvalcode_notforloan, item_notforloan, 0 ) %]
+        Item is normally not for loan [% IF (item_notforloan_lib) %]([% item_notforloan_lib %])[% END %].
+    [% END %]
+        Check out anyway?
+    </li>
 [% END %]
 
 [% IF ( USERBLOCKEDOVERDUE ) %]
@@ -462,7 +471,14 @@ function validate1(date) {
         [% END %]
 
         [% IF ( NOT_FOR_LOAN ) %]
-            <li>Item not for loan</li>
+            <li>
+            [% IF ( itemtype_notforloan ) %]
+                Item type not for loan.
+            [% ELSIF ( item_notforloan ) %]
+                [% item_notforloan_lib = KohaAuthorisedValues.GetByCode( authvalcode_notforloan, item_notforloan, 0 ) %]
+                Item not for loan [% IF (item_notforloan_lib) %]([% item_notforloan_lib %])[% END %].
+            [% END %]
+            </li>
         [% END %]
 
         [% IF ( WTHDRAWN ) %]
