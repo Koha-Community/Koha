@@ -5,27 +5,32 @@
 [% IF ( delete_confirm ) %] &rsaquo; Confirm deletion[% END %]
 [% IF ( else ) %]Authorized values[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.pager.js"></script>
-<script type="text/javascript" id="js">$(document).ready(function() {
-	// call the tablesorter plugin
-	$("#table_authorized_values").tablesorter({
-		sortList: [[1,0]],
-		headers: { 4: { sorter: false}, 5: { sorter: false}}
-		   		}).tablesorterPager({container: $("#pagertable_authorized_values"),positionFixed: false,size: 50});
+
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.min.js"></script>
+[% INCLUDE 'datatables-strings.inc' %]
+<script type="text/javascript" src="[% themelang %]/js/datatables.js"></script>
+<script type="text/javascript">
+//<![CDATA[
+ $(document).ready(function() {
+    $("#table_authorized_values").dataTable($.extend(true, {}, dataTablesDefaults, {
+        "aoColumnDefs": [
+            { "aTargets": [ -1, -2 ], "bSortable": false, "bSearchable": false },
+        ],
+        "aaSorting": [[ 1, "asc" ]],
+        "iDisplayLength": 20,
+        "aLengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]],
+        "sPaginationType": "four_button"
+    }));
 
     if ( $("#branches option:selected").length < 1 ) {
         $("#branches option:first").attr("selected", "selected");
     }
-}); </script>
-
-<script type="text/JavaScript" language="JavaScript">
-//<![CDATA[
-     $(document).ready(function() {
-        $('#icons').tabs();
-     });
+    $('#icons').tabs();
+});
 //]]>
 </script>
+
 [% IF ( else ) %]
 <script type="text/javascript">
 //<![CDATA[
@@ -234,7 +239,6 @@ $(document).ready(function() {
 <h3>Authorized values for category [% category %]:</h3>
 
 [% IF ( loop ) %]<div id="pagertable_authorized_values">
-[% INCLUDE 'table-pager.inc' perpage='50' %]
 </div>[% END %]
 
 [% IF ( loop ) %]<table id="table_authorized_values" class="tablesorter">
