@@ -1,15 +1,16 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; Library checkin and transfer policy</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.pager.js"></script>
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.min.js"></script>
+[% INCLUDE 'datatables-strings.inc' %]
+<script type="text/javascript" src="[% themelang %]/js/datatables.js"></script>
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
 <script type="text/javascript">
 //<![CDATA[
 	$(document).ready(function(){
-		$("#CheckAll").click(function(){ $("#transferlimit_tabs").checkCheckboxes();});
-		$("#UncheckAll").click(function(){ $("#transferlimit_tabs").unCheckCheckboxes();});
-		$("#SwapAll").click(function(){ $("#transferlimit_tabs").toggleCheckboxes();});
+        $("#CheckAll").click(function(){ $("#transferlimit_tabs").checkCheckboxes(); return false; });
+        $("#UncheckAll").click(function(){ $("#transferlimit_tabs").unCheckCheckboxes(); return false; });
         $('#transferlimit_tabs').tabs();
 
 		 $('#branchselect').change(function() {
@@ -32,14 +33,18 @@
 			$("#"+tid).unCheckCheckboxes();
 			return false;
 		});
-		$(".sorted").tablesorter({
-			sortList: [[0,0]],
-			headers: { 1: { sorter: false}}
-		}).tablesorterPager({container: $(".pager"),positionFixed: false,size: 10});
+        $(".sorted").dataTable($.extend(true, {}, dataTablesDefaults, {
+            "aoColumnDefs": [
+                { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
+            ],
+            "iDisplayLength": 20,
+            "aLengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]],
+            "sPaginationType": "four_button"
+        }));
 	});
 //]]>
 </script>
-<style type="text/css">td { text-align: center; }</style>
+<style type="text/css">td { text-align: center; } .sorted { min-width: 50%; }</style>
 </head>
 <body id="admin_branch_transfer_limits" class="admin">
 [% INCLUDE 'header.inc' %]
@@ -84,9 +89,6 @@
 		<h4>Policy for [% codes_loo.limit_phrase %]: [% codes_loo.code %]</h4>
     <p><a id="CheckAll[% codes_loo.code %]table" class="checkall" href="#">Check all</a> | <a id="UncheckAll[% codes_loo.code %]table" class="uncheckall" href="#">Uncheck all</a></p>
 	
-	<div id="pager[% codes_loo.code %]table">
-	[% INCLUDE 'table-pager.inc' perpage='20' %]
-	</div>
 		<table id="[% codes_loo.code %]table" class="sorted">
 			<thead>
 				<tr>
