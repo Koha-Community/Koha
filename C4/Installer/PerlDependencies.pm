@@ -254,15 +254,15 @@ our $PERL_DEPS = {
         'required' => '0',
         'min_ver'  => '0.17'
     },
-    'CHI' => {
+    'Cache::FastMmap' => {
         'usage'    => 'Caching',
         'required' => '0',
-        'min_ver'  => '0.36'
+        'min_ver'  => '1.34'
     },
-    'CHI::Driver::Memcached' => {
+    'Cache::Memory' => {
         'usage'    => 'Caching',
         'required' => '0',
-        'min_ver'  => '0.12'
+        'min_ver'  => '2.04'
     },
     'Net::LDAP::Filter' => {
         'usage'    => 'LDAP Interface Feature',
