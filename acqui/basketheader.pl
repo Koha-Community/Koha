@@ -148,7 +148,6 @@ if ( $op eq 'add_form' ) {
             $input->param('basketnote'),
             $input->param('basketbooksellernote'),
             $input->param('basketcontractnumber') || undef,
-            undef,
             $input->param('deliveryplace'),
             $input->param('billingplace'),
         );
