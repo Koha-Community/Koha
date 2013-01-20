@@ -1,15 +1,10 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; [% IF ( add_form ) %]Cities &rsaquo; [% IF ( cityid ) %] Modify city[% ELSE %] New city[% END %][% ELSE %][% IF ( delete_confirm ) %]Cities &rsaquo; Confirm deletion of city[% ELSE %] Cities[% END %][% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.pager.js"></script>
-<script type="text/javascript" id="js">$(document).ready(function() {
-	$.tablesorter.defaults.widgets = ['zebra'];
-	$("#table_cities").tablesorter({
-		sortList: [[1,0]],
-		headers: { 5: { sorter: false},6: { sorter: false}}
-	}).tablesorterPager({container: $("#pagertable_cities"),positionFixed: false,size: 20});
-}); </script>
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.min.js"></script>
+[% INCLUDE 'datatables-strings.inc' %]
+<script type="text/javascript" src="[% themelang %]/js/datatables.js"></script>
 <script type="text/javascript">
 //<![CDATA[
     function Check(f) {
@@ -19,6 +14,16 @@
             document.Aform.submit();
         }
     }
+    $(document).ready(function() {
+        $("#table_cities").dataTable($.extend(true, {}, dataTablesDefaults, {
+            "aoColumnDefs": [
+                { "aTargets": [ -1, -2 ], "bSortable": false, "bSearchable": false },
+            ],
+            "aaSorting": [[ 1, "asc" ]],
+            "iDisplayLength": 10,
+            "aLengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]],
+        }));
+    });
 //]]>
 </script>
 </head>
@@ -125,9 +130,6 @@
 	[% END %]
 
 [% IF ( loop ) %]
-<div id="pagertable_cities">
-[% INCLUDE 'table-pager.inc' perpage='20' %]
-</div>
 <table id="table_cities">
 		<thead>
 			<th>City ID</th>
