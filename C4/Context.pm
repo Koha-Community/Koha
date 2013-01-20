@@ -19,6 +19,8 @@ package C4::Context;
 use strict;
 use warnings;
 use vars qw($VERSION $AUTOLOAD $context @context_stack $servers $memcached $ismemcached);
+use Koha::Cache;
+use Carp;
 
 BEGIN {
 	if ($ENV{'HTTP_USER_AGENT'})	{
@@ -535,28 +537,55 @@ with this method.
 # FIXME: running this under mod_perl will require a means of
 # flushing the caching mechanism.
 
-my %sysprefs;
+my $sysprefs;
 my $use_syspref_cache = 1;
+my $cache;
 
 sub preference {
     my $self = shift;
     my $var  = lc(shift);                          # The system preference to return
 
-    if ($use_syspref_cache && exists $sysprefs{$var}) {
-        return $sysprefs{$var};
+    unless (defined $sysprefs) {
+        unless ($cache) {
+            $cache = Koha::Cache->new();
+        }
+        $sysprefs = $cache->create_hash(
+            {
+                'key'         => 'syspref',
+                'allowupdate' => 1,
+                'cache_type' => $use_syspref_cache ? '' : 'null',
+                'preload'     => sub {
+                    my $dbh      = C4::Context->dbh or return {};
+                    my $vars = $dbh->selectall_arrayref("SELECT variable, value FROM systempreferences");
+                    my %sysprefs = ();
+                    foreach my $row (@$vars) {
+                        $sysprefs{$row->[0]} = $row->[1];
+                    }
+                    return \%sysprefs;
+                },
+                'constructor' => sub {
+
+                    # Look up systempreferences.variable==$var
+                    my $var      = pop;
+                    my $sysprefs = pop || {};
+                    my $dbh      = C4::Context->dbh or return 0;
+                    my $sql =
+"SELECT value FROM systempreferences WHERE variable=? LIMIT 1";
+                    $ENV{DEBUG} && carp "Retrieving syspref $var from database";
+                    my $sth = $dbh->prepare_cached($sql);
+                    $sth->execute($var);
+                    my $res = $sth->fetchrow_hashref;
+                    if ($res && $res->{'value'}) {
+                        $sysprefs->{$var} = $res->{'value'};
+                    } else {
+                        $sysprefs->{$var} = '';
+                    }
+                    return $sysprefs;
+                },
+            }
+        );
     }
-
-    my $dbh  = C4::Context->dbh or return 0;
-
-    # Look up systempreferences.variable==$var
-    my $sql = <<'END_SQL';
-        SELECT    value
-        FROM    systempreferences
-        WHERE    variable=?
-        LIMIT    1
-END_SQL
-    $sysprefs{$var} = $dbh->selectrow_array( $sql, {}, $var );
-    return $sysprefs{$var};
+    return $sysprefs->{$var};
 }
 
 sub boolean_preference {
@@ -592,7 +621,7 @@ used with Plack and other persistent environments.
 sub disable_syspref_cache {
     my ($self) = @_;
     $use_syspref_cache = 0;
-    $self->clear_syspref_cache();
+    $self->clear_syspref_cache() if defined($sysprefs);
 }
 
 =head2 clear_syspref_cache
@@ -606,7 +635,8 @@ will not be seen by this process.
 =cut
 
 sub clear_syspref_cache {
-    %sysprefs = ();
+    %{$sysprefs} = ();
+    return;
 }
 
 =head2 set_preference
@@ -637,7 +667,7 @@ sub set_preference {
     " );
 
     if($sth->execute( $var, $value )) {
-        $sysprefs{$var} = $value;
+        $sysprefs->{$var} = $value;
     }
     $sth->finish;
 }
