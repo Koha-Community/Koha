@@ -80,14 +80,14 @@
             function confirm_delete_item(ordernumber, basketno, biblionumber) {
                 var is_confirmed = confirm(_('Are you sure you want to delete this order ?'));
                 if (is_confirmed) {
-                    window.location = "addorder.pl?ordernumber="+ordernumber+"&basketno="+basketno+"&quantity=0&biblionumber="+biblionumber;
+                    window.location = "addorder.pl?ordernumber="+ordernumber+"&basketno="+basketno+"&quantity=0&biblionumber="+biblionumber+"&invoiceid=[% invoiceid %]";
                 }
             }
             
             function confirm_delete_biblio(ordernumber, basketno, biblionumber) {
                 var is_confirmed = confirm(_('Are you sure you want to delete this catalog record and order ?'));
                 if (is_confirmed) {
-                    window.location = "addorder.pl?ordernumber="+ordernumber+"&basketno="+basketno+"&quantity=0&biblionumber="+biblionumber+"&delbiblio=1";
+                    window.location = "addorder.pl?ordernumber="+ordernumber+"&basketno="+basketno+"&quantity=0&biblionumber="+biblionumber+"&delbiblio=1&invoiceid=[% invoiceid %]";
                     }
             }
 //]]>
@@ -217,10 +217,10 @@
                         [% IF ( loop_order.left_holds_on_order ) %]
                         <span class="button" title="Can't delete order, ([% loop_order.holds_on_order %]) holds are linked with this order cancel holds first">Can't delete order</span><br>
                         [% ELSE %]
-                        <a href="javascript:confirm_delete_item([% loop_order.ordernumber %],[% loop_order.biblionumber %])" class="button">Delete order</a><br>
+                        <a href="javascript:confirm_delete_item([% loop_order.ordernumber %], [% loop_order.basketno %], [% loop_order.biblionumber %])" class="button">Delete order</a><br>
                         [% END %]
                         [% IF ( loop_order.can_del_bib ) %]
-                        <a href="javascript:confirm_delete_biblio([% loop_order.ordernumber %],[% loop_order.biblionumber %])" class="button">Delete order and catalog record</a><br>
+                        <a href="javascript:confirm_delete_biblio([% loop_order.ordernumber %], [% loop_order.basketno %], [% loop_order.biblionumber %])" class="button">Delete order and catalog record</a><br>
                         [% ELSE %]
                         <span class="button" title="Can't delete catalog record, see constraints below">Can't delete order and catalog record</span><br>
                         [% END %]
