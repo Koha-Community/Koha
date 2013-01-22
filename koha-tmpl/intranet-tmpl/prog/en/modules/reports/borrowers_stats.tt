@@ -181,6 +181,8 @@
 					</select>
 				</td>
 				</tr>
+            [% ELSE %]
+                <input type="hidden" name="Filter" />
 			[% END %]
 			[% IF ( SORT2_LOOP ) %]
                 [% UNLESS ( SORT1_LOOP ) %]<tr class="highlight">
@@ -197,9 +199,57 @@
 					</select>
 				</td>
 				</tr>
+            [% ELSE %]
+                <input type="hidden" name="Filter" />
 			[% END %]
-		</tbody>
-	</table><br /></fieldset>
+            [% IF ( ExtendedPatronAttributes ) %]
+                <tr>
+                    <th colspan="4">Patron attributes</th>
+                </tr>
+            [% FOREACH pa_loo IN patron_attributes %]
+                [% IF (pa_loo.class) %]
+                    <tr>
+                        <th>[% pa_loo.class %] ([% pa_loo.lib %])</th>
+                        <th colspan="3"></th>
+                    </tr>
+                [% END %]
+            [% FOREACH patron_attribute IN pa_loo.items %]
+                <tr data-category_code="[% patron_attribute.category_code %]">
+                    <td>
+                        [% patron_attribute.code %]
+                        ([% patron_attribute.description %])
+                    </td>
+                    <td>
+                        <input type="radio" name="Line"
+                            value="patron_attr.[% patron_attribute.code %]" />
+                    </td>
+                    <td>
+                        <input type="radio" name="Column"
+                            value="patron_attr.[% patron_attribute.code %]" />
+                    </td>
+                    <td>
+                        [% IF ( patron_attribute.use_dropdown ) %]
+                            <select name="Filter_patron_attr.[% patron_attribute.code %]"  >
+                                <option value="" />
+                                [% FOREACH auth_val_loo IN patron_attribute.auth_val_loop %]
+                                    <option value="[% auth_val_loo.authorised_value %]" >
+                                        [% auth_val_loo.lib %]
+                                    </option>
+                                [% END %]
+                            </select>
+                        [% ELSE %]
+                            <input type="text" maxlength="64"
+                                   name="Filter_patron_attr.[% patron_attribute.code %]" />
+                        [% END %]
+                    </td>
+                </tr>
+            [% END %]
+            [% END %]
+            [% END %]
+        </tbody>
+    </table>
+    </fieldset>
+
 	
 	<fieldset class="rows">
 	<legend>Output</legend>
