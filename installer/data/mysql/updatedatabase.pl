@@ -6214,6 +6214,13 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.10.05.001";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do("ALTER TABLE action_logs CHANGE timestamp timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;");
+    $dbh->do("UPDATE action_logs SET info=(SELECT itemnumber FROM items WHERE biblionumber= action_logs.info LIMIT 1) WHERE module='CIRCULATION' AND action in ('ISSUE','RETURN');");
+    print "Upgrade to $DBversion done (Bug 7241: Changing timestamp autoupdate on action_logs; setting items to circulation logs where missing)\n";
+    SetVersion($DBversion);
+}
 
 =head1 FUNCTIONS
 
