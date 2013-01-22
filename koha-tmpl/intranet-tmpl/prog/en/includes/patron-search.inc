@@ -19,6 +19,12 @@
           <option value='streettype,address,address2,city,state,zipcode,country'>Street Address</option>
       </select>
 
+      <label for="searchtype">Search type:</label>
+      <select name="searchtype" id="searchtype">
+          <option selected="selected" value=''>Starts with</option>
+          <option value='contain'>Contains</option>
+      </select>
+
     <label for="orderby">Order by:</label>
     <select name="orderby" id="searchorderby">
     <option value="">Surname, Firstname</option>
