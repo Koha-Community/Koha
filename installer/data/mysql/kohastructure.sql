@@ -1877,7 +1877,7 @@ CREATE TABLE saved_sql ( -- saved sql reports
    `last_modified` datetime default NULL, -- the date this report was last edited
    `savedsql` text, -- the SQL for this report
    `last_run` datetime default NULL,
-   `report_name` varchar(255) default NULL, -- the name of this report
+   `report_name` varchar(255) NOT NULL default '', -- the name of this report
    `type` varchar(255) default NULL, -- always 1 for tabular
    `notes` text, -- the notes or description given to this report
    `cache_expiry` int NOT NULL default 300,

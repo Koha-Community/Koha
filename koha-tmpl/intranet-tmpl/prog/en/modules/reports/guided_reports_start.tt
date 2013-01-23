@@ -683,7 +683,7 @@ canned reports and writing custom SQL reports.</p>
 [% END %]
 
 [% IF ( save ) %]
-<form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
+<form action="/cgi-bin/koha/reports/guided_reports.pl" method="post" class="validated">
 <input type="hidden" name="sql" value="[% sql |html %]" />
 <input type="hidden" name="type" value="[% type %]" />
 <input type="hidden" name="area" value="[% area %]" />
@@ -692,7 +692,7 @@ canned reports and writing custom SQL reports.</p>
 <fieldset class="rows">
 <legend>Save your custom report</legend>
 <ol>
-    <li><label for="reportname">Report name: </label><input type="text" id="reportname" name="reportname" /></li>
+    <li><label for="reportname" class="required">Report name: </label><input type="text" id="reportname" name="reportname" class="required" required="required" /> <span class="required">Required</span></li>
     [% PROCESS group_and_subgroup_selection %]
     <li><label for="notes">Notes:</label> <textarea name="notes" id="notes"></textarea></li>
 </ol></fieldset>
@@ -851,13 +851,13 @@ $(document).ready(function() {
     load_group_subgroups();
 });
 </script>
-<form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
+<form action="/cgi-bin/koha/reports/guided_reports.pl" method="post" class="validated">
 <fieldset class="rows">
 <legend>Create report from SQL</legend>
 <ol>
-    <li><label for="reportname">Report name:</label>
-        [% IF ( reportname ) %]<input type="text" id="reportname" name="reportname" value="[% reportname %]" />
-        [% ELSE %]<input type="text" id="reportname" name="reportname" />[% END %] 
+    <li><label for="reportname" class="required">Report name:</label>
+        [% IF ( reportname ) %]<input type="text" class="required" required="required" id="reportname" name="reportname" value="[% reportname %]" />
+        [% ELSE %]<input type="text" class="required" required="required" id="reportname" name="reportname" />[% END %] <span class="required">Required</span>
     </li>
     [% PROCESS group_and_subgroup_selection %]
 
@@ -888,7 +888,7 @@ $(document).ready(function() {
 <fieldset class="rows">
 <legend>SQL:</legend>
 <div style="margin:1em;">
-<textarea  id="sql" name="sql" cols="50" rows="10">[% sql %]</textarea>
+<textarea id="sql" name="sql" class="required" required="required" cols="50" rows="10">[% sql %]</textarea> <span class="required">Required</span>
 </div>
 </fieldset>
 
