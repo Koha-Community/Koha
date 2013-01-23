@@ -801,14 +801,12 @@ Returns a reference to the array of all the basketgroups of bookseller $booksell
 
 sub GetBasketgroups {
     my $booksellerid = shift;
-    die "bookseller id is required to edit a basketgroup" unless $booksellerid;
-    my $query = "SELECT * FROM aqbasketgroups WHERE booksellerid=? ORDER BY `id` DESC";
+    die 'bookseller id is required to edit a basketgroup' unless $booksellerid;
+    my $query = 'SELECT * FROM aqbasketgroups WHERE booksellerid=? ORDER BY id DESC';
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare($query);
     $sth->execute($booksellerid);
-    my $results = $sth->fetchall_arrayref({});
-    $sth->finish;
-    return $results
+    return $sth->fetchall_arrayref({});
 }
 
 #------------------------------------------------------------#
