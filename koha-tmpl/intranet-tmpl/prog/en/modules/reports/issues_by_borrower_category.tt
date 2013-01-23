@@ -51,19 +51,35 @@
 	</table>
 [% END %]
 [% ELSE %]
-	<form method="post" action="/cgi-bin/koha/reports/manager.pl">
-		<fieldset class="rows">
-		<legend>Checkouts by patron category</legend>
-		<ol><li><label for="borrowercategory">Select a borrower category</label><select name="value" id="borrowercategory"><option value="" > Any Category code</option>
-    [% FOREACH loopcategorie IN loopcategories %]
-        <option value="[% loopcategorie.value %]" >[% loopcategorie.description %] </option>  
-     [% END %] 
-    </select></li>
-		<li><label for="branch">Select a library:</label> [% CGIbranch %]</li></ol></fieldset>
-		<fieldset class="action"><input type="submit" value="Submit" />
-		<input type="hidden" name="report_name" value="[% report_name %]" />
-		<input type="hidden" name="do_it" value="1" /></fieldset>
-	</form>
+        <form method="post" action="/cgi-bin/koha/reports/manager.pl">
+          <fieldset class="rows">
+            <legend>Checkouts by patron category</legend>
+            <ol>
+              <li>
+                <label for="borrowercategory">Select a borrower category</label>
+                <select name="value" id="borrowercategory">
+                  <option value="">Any Category code</option>
+                [%- FOREACH loopcategorie IN loopcategories %]
+                  <option value="[% loopcategorie.value %]" >[% loopcategorie.description %]</option>
+                [%- END %]
+                </select>
+              </li>
+              <li>
+                <label for="branch">Select a library:</label>
+                <select name="value" size="1" id="branch">
+                  <option value=""></option>
+                [%- FOREACH branchloo IN branchloop %]
+                  <option value="[% branchloo.branchcode %]">[% branchloo.branchname %]</option>
+                [%- END %]
+               </select>
+              </li>
+            </ol>
+          </fieldset>
+          <fieldset class="action"><input type="submit" value="Submit" />
+            <input type="hidden" name="report_name" value="[% report_name %]" />
+            <input type="hidden" name="do_it" value="1" />
+          </fieldset>
+        </form>
 [% END %]
 
 </div>

@@ -65,23 +65,7 @@ my $showallitems = $input->param('showallitems');
 my $branches = GetBranches();
 my $itemtypes = GetItemTypes();
 
-my $default = C4::Context->userenv->{branch};
-my @values;
-my %label_of;
-
-foreach my $branchcode ( sort { $branches->{$a}->{branchname} cmp $branches->{$b}->{branchname} } keys %$branches ) {
-    push @values, $branchcode;
-    $label_of{$branchcode} = $branches->{$branchcode}->{branchname};
-}
-my $CGIbranch = CGI::scrolling_list(
-                                    -name     => 'pickup',
-                                    -id          => 'pickup',
-                                    -values   => \@values,
-                                    -default  => $default,
-                                    -labels   => \%label_of,
-                                    -size     => 1,
-                                    -multiple => 0,
-                                   );
+my $userbranch = C4::Context->userenv->{branch};
 
 # Select borrowers infos
 my $findborrower = $input->param('findborrower');
@@ -590,8 +574,7 @@ foreach my $biblionumber (@biblionumbers) {
     my $time = time();
 
     $template->param(
-                     CGIbranch   => $CGIbranch,
-
+                     branchloop  => GetBranchesLoop($userbranch),
                      time        => $time,
                      fixedRank   => $fixedRank,
                     );

@@ -32,29 +32,11 @@ use C4::Branch; # GetBranches
 
 sub set_parameters {
 	my ($template) = @_;
-	my $dbh = C4::Context->dbh;
-	my $branches=GetBranches();
-	my @branches;
-	my $default;
-	my @select_branch;
-	my %select_branches;
-	push @select_branch,"";
-	$select_branches{""} = "";
-	for my $branch (sort { $branches->{$a}->{branchname} cmp $branches->{$b}->{branchname} } keys %$branches) {
-		push @select_branch, $branch;
-		$select_branches{$branch} = $branches->{$branch}->{'branchname'};
-		$default = C4::Context->userenv->{'branch'} if (C4::Context->userenv && C4::Context->userenv->{'branch'});
-	}
-	my $CGIbranch=CGI::scrolling_list( -name     => 'value',
-				-id => 'value',
-				-values   => \@select_branch,
-				-labels   => \%select_branches,
-				-size     => 1,
-				-multiple => 0,
-				-default => $default, );
-	$template->param(CGIbranch => $CGIbranch);
+    my $userbranch = C4::Context->userenv->{'branch'};
+     $template->param( branchloop => GetBranchesLoop($userbranch) );
 	return $template;
 }
+
 sub calculate {
 	my ($parameters) = @_;
 	my @results =();

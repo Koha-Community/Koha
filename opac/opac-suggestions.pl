@@ -131,8 +131,8 @@ if ( C4::Context->preference("AllowPurchaseSuggestionBranchChoice") ) {
     my $branch = $input->param('branch') || $borr->{'branchcode'} || C4::Context->userenv->{branch} || '' ;
 
 # make branch selection options...
-    my $CGIbranchloop = GetBranchesLoop($branch);
-    $template->param( branch_loop => $CGIbranchloop );
+    my $branchloop = GetBranchesLoop($branch);
+    $template->param( branchloop => $branchloop );
 }
 
 $template->param(

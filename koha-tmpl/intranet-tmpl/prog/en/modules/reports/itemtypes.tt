@@ -57,14 +57,31 @@ $(document).ready(function(){
 	</table>
 [% END %]
 [% ELSE %]
-	<h3>View a count of items held at your library grouped by item type</h3>
-	<form method="post" action="/cgi-bin/koha/reports/manager.pl?report_name=itemtypes">
-		<fieldset class="rows"><ol><li><label for="value">Select a library</label> [% CGIbranch %]
-		<span class="tip">Select none to see all libraries</span></li></ol></fieldset>
-		<fieldset class="action"><input type="submit" value="Submit" />
-		<input type="hidden" name="report_name" value="[% report_name %]" />
-		<input type="hidden" name="do_it" value="1" /></fieldset>
-	</form>
+        <h3>View a count of items held at your library grouped by item type</h3>
+        <form method="post" action="/cgi-bin/koha/reports/manager.pl?report_name=itemtypes">
+          <fieldset class="rows">
+            <ol>
+              <li>
+                <label for="value">Select a library</label>
+                <select name="value" size="1" id="value">
+                  <option value=""></option>
+                [%- FOREACH branchloo IN branchloop %]
+                 [% IF ( branchloo.selected ) -%]
+                  <option value="[% branchloo.branchcode %]" selected="selected">[% branchloo.branchname %]</option>
+                 [%- ELSE -%]
+                  <option value="[% branchloo.branchcode %]">[% branchloo.branchname %]</option>
+                 [%- END -%]
+                [%- END %]
+                </select>
+                <span class="tip">Select none to see all libraries</span>
+              </li>
+            </ol>
+          </fieldset>
+          <fieldset class="action"><input type="submit" value="Submit" />
+            <input type="hidden" name="report_name" value="[% report_name %]" />
+            <input type="hidden" name="do_it" value="1" />
+          </fieldset>
+        </form>
 [% END %]
 
 </div>

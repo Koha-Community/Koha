@@ -164,7 +164,13 @@
 				<td>Library</td>
 				<td><input type="radio" name="Line" value="branchcode" /></td>
 				<td><input type="radio" name="Column" value="branchcode" /></td>
-				<td>[% CGIBranch %]</td>
+                           <td><select name="Filter" size="1" id="branch">
+                                    <option value=""></option>
+                                [%- FOREACH branchloo IN branchloop %]
+                                    <option value="[% branchloo.value %]">[% branchloo.branchname %]</option>
+                                [%- END %]
+                                    </select>
+                                </td>
 			</tr>
 <!-- Modified according to statistics table
 			<tr>
