@@ -190,18 +190,21 @@ The other parameters are optional, see ModBasketHeader for more info on them.
 =cut
 
 sub NewBasket {
-    my ( $booksellerid, $authorisedby, $basketname, $basketnote, $basketbooksellernote, $basketcontractnumber, $deliveryplace, $billingplace ) = @_;
+    my ( $booksellerid, $authorisedby, $basketname, $basketnote,
+        $basketbooksellernote, $basketcontractnumber, $deliveryplace,
+        $billingplace ) = @_;
     my $dbh = C4::Context->dbh;
-    my $query = "
-        INSERT INTO aqbasket
-                (creationdate,booksellerid,authorisedby)
-        VALUES  (now(),'$booksellerid','$authorisedby')
-    ";
-    my $sth =
-    $dbh->do($query);
-#find & return basketno MYSQL dependant, but $dbh->last_insert_id always returns null :-(
-    my $basket = $dbh->{'mysql_insertid'};
-    ModBasketHeader($basket, $basketname || '', $basketnote || '', $basketbooksellernote || '', $basketcontractnumber || undef, $booksellerid, $deliveryplace || undef, $billingplace || undef );
+    my $query =
+        'INSERT INTO aqbasket (creationdate,booksellerid,authorisedby) '
+      . 'VALUES  (now(),?,?)';
+    $dbh->do( $query, {}, $booksellerid, $authorisedby );
+
+    my $basket = $dbh->{mysql_insertid};
+    $basketname           ||= q{}; # default to empty strings
+    $basketnote           ||= q{};
+    $basketbooksellernote ||= q{};
+    ModBasketHeader( $basket, $basketname, $basketnote, $basketbooksellernote,
+        $basketcontractnumber, $booksellerid, $deliveryplace, $billingplace );
     return $basket;
 }
 
