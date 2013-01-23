@@ -12,14 +12,12 @@
 [% INCLUDE 'datatables-strings.inc' %]
 <script type="text/javascript" src="[% themelang %]/js/datatables.js"></script>
 [% INCLUDE 'calendar.inc' %]
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
         $("#statistics").dataTable($.extend(true, {}, dataTablesDefaults, {
-            'bPaginate': false,
-            'bFilter': false,
-            'bInfo': false,
-        } ));
+            "sDom": 't',
+            "bPaginate": false
+        }));
     });
 </script>
 </head>
