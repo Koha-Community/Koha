@@ -1,14 +1,22 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Reports &rsaquo; Catalog by item types</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+[% IF ( do_it ) %]
+<link rel="stylesheet" type="text/css" href="/intranet-tmpl/prog/en/css/datatables.css" />
+<script type="text/javascript" src="/intranet-tmpl/prog/en/lib/jquery/plugins/jquery.dataTables.min.js"></script>
+[% INCLUDE 'datatables-strings.inc' %]
+<script type="text/javascript" src="/intranet-tmpl/prog/en/js/datatables.js"></script>
 <script type="text/javascript">
 //<![CDATA[
-$(document).ready(function() {
-	$("#itemtypest").tablesorter();
+$(document).ready(function(){
+    $("#itemtypest").dataTable($.extend(true, {}, dataTablesDefaults, {
+        "sDom": 't',
+        "bPaginate": false
+    }));
 });
 //]]>
 </script>
+[% END %]
 </head>
 <body id="rep_itemtypes" class="rep">
 [% INCLUDE 'header.inc' %]
