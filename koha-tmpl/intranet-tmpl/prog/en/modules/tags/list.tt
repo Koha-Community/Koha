@@ -1,15 +1,12 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Tags &rsaquo; [% IF ( do_it ) %]Review &rsaquo; [% ELSE %]Review tags[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/intranet-tmpl/prog/en/css/datatables.css" />
+<script type="text/javascript" src="/intranet-tmpl/prog/en/lib/jquery/plugins/jquery.dataTables.min.js"></script>
+[% INCLUDE 'datatables-strings.inc' %]
+<script type="text/javascript" src="/intranet-tmpl/prog/en/js/datatables.js"></script>
 <script type="text/javascript">
 //<![CDATA[
-    $.tablesorter.addParser({
-        id: 'articles',
-        is: function(s) {return false;  },
-        format: function(s) { return s.toLowerCase().replace(/^(the|an|a) /,''); },
-        type: 'text'
-    });
     $(document).ready(function() {
         $(".delete").click(function (event) {
             $(this).parent().parent().parent().addClass("selected");
@@ -19,10 +16,15 @@
                     event.preventDefault();
                 }
         });
-        $("#itemst").tablesorter({
-            sortList: [[0,0]],
-            headers: { 0: { sorter: 'articles' },1: { sorter: false },2:{sorter:false}}
-        });
+        $("#itemst").dataTable($.extend(true, {}, dataTablesDefaults, {
+            "aoColumnDefs": [
+                { "aTargets": [ -1, -2 ], "bSortable": false, "bSearchable": false },
+            ],
+            "aaSorting": [[ 0, "asc" ]],
+            "aLengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]],
+            "iDisplayLength": 20,
+            "sPaginationType": "four_button"
+        }));
     });
 //]]>
 </script>
