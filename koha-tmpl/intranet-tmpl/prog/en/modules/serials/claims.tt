@@ -2,26 +2,26 @@
     <title>Koha &rsaquo; Serials &rsaquo; Claims</title>
     [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.uitablefilter.js"></script>
-<script type="text/JavaScript" language="JavaScript">
+<link rel="stylesheet" type="text/css" href="/intranet-tmpl/prog/en/css/datatables.css" />
+<script type="text/javascript" src="/intranet-tmpl/prog/en/lib/jquery/plugins/jquery.dataTables.min.js"></script>
+[% INCLUDE 'datatables-strings.inc' %]
+<script type="text/javascript" src="/intranet-tmpl/prog/en/js/datatables.js"></script>
+<script type="text/javascript">
 //<![CDATA[
+    [% IF (dateformat == 'metric') %]dt_add_type_uk_date();[% END %]
 	 $(document).ready(function() {
-		[% UNLESS ( preview ) %]$("#claimst").tablesorter({[% IF ( dateformat == 'metric' ) %]
-			dateFormat: 'uk',[% END %]
-			headers: { 0: { sorter: false },1:{sorter:false}}
-		});[% END %]
+        [% UNLESS ( preview ) %]
+         var sTable = $("#claimst").dataTable($.extend(true, {}, dataTablesDefaults, {
+            "sDom": 't',
+            "aoColumnDefs": [
+                { "aTargets": [ 0,1,-1 ], "bSortable": false, "bSearchable": false }
+            ],
+            "bPaginate": false
+        }));
+        [% END %]
 	    $('#supplierid').change(function() {
     	    $('#claims').submit();
 	    });
-
-	    // Case-insensitive version of jquery's contains function
-	    jQuery.extend(
-		jQuery.expr[':'], { 
-		    icontains : "jQuery(a).text().toUpperCase().indexOf(m[3].toUpperCase())>=0" 
-		}
-	    );
-
 
 	    // Checkboxes : Select All / None
 	    $("span.checkall").html("<input type=\"checkbox\" name=\"CheckAll\"> "+_("Check All")+"</input>");
@@ -52,12 +52,12 @@
 		return false;
 	    });	
 
-        $("#titlefilter").keyup(function() {
-            $.uiTableFilter($("#claimst"), $("#titlefilter").val())
-	    });
+        $("#titlefilter").keyup( function () {
+            sTable.fnFilter( this.value, 3 ); // 3 is position of title column
+        } );
 
         $("#branchfilter").keyup(function() {
-            $.uiTableFilter($("#claimst"), $("#branchfilter").val())
+            sTable.fnFilter( this.value, 2 ); // 2 is the position of the author column
 	    });
 	 });
 
@@ -214,7 +214,9 @@
 	
 	<li>
 	    <label for="titlefilter">Title : </label>
-	    <input id="titlefilter" type="text" />
+        <input id="titlefilter" type="text" />
+    </li>
+    <li>
 	    <label for="branchfilter">Library: </label>
 	    <select id="branchfilter" onchange="filterByBranch();">
             [% FOREACH branchloo IN branchloop %]
@@ -228,9 +230,9 @@
 	</li>
 	
 	<li>
-        <label for="from">From</label>
+        <label for="from">From:</label>
         <input type="text" name="begindate" id="from" value="[% begindate %]" size="10" maxlength="10" class="datepickerfrom" />
-        <label for="to" style="float:none;">To</label>
+        <label for="to" style="float:none;">To:</label>
         <input type="text" name="enddate" id="to" value="[% enddate %]" size="10" maxlength="10" class="datepickerto" />
         <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
 	    <input type="button" value="OK" onclick="filterByDate();" />
