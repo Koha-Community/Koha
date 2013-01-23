@@ -1,14 +1,20 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Choose Adult category</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/intranet-tmpl/prog/en/css/datatables.css" />
+<script type="text/javascript" src="/intranet-tmpl/prog/en/lib/jquery/plugins/jquery.dataTables.min.js"></script>
+[% INCLUDE 'datatables-strings.inc' %]
+<script type="text/javascript" src="/intranet-tmpl/prog/en/js/datatables.js"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
-		$.tablesorter.defaults.widgets = ['zebra'];
-		$("#catst").tablesorter({
-			sortList: [[2,0]],
-			headers: { 0: { sorter: false }}
-		});
+        $("#catst").dataTable($.extend(true, {}, dataTablesDefaults, {
+            "sDom": 't',
+            "aaSorting": [[ 2, "asc" ]],
+            "aoColumnDefs": [
+                { "aTargets": [ 0 ], "bSortable": false, "bSearchable": false }
+            ],
+            "bPaginate": false
+        }));
 	});
 </script>
 <style type="text/css"> 
