@@ -258,7 +258,9 @@ sub shelfpage {
                 if ( $sortfield eq 'year' ) {
                     $yearsort = 'year';
                 }
-                ( $items, $totitems ) = GetShelfContents( $shelfnumber, $shelflimit, $shelfoffset, $sortfield eq 'year' ? 'copyrightdate' : $sortfield );
+                $sortfield = $query->param('sort') || $sortfield; ## Passed in sorting overrides default sorting
+                my $direction = $query->param('direction');
+                ( $items, $totitems ) = GetShelfContents( $shelfnumber, $shelflimit, $shelfoffset, $sortfield, $direction );
                 for my $this_item (@$items) {
                     my $biblionumber = $this_item->{'biblionumber'};
                     my $record = GetMarcBiblio($biblionumber);
@@ -438,7 +440,7 @@ sub shelfpage {
 
     my $url = $type eq 'opac' ? "/cgi-bin/koha/opac-shelves.pl" : "/cgi-bin/koha/virtualshelves/shelves.pl";
     my %qhash = ();
-    foreach (qw(display viewshelf sortfield)) {
+    foreach (qw(display viewshelf sortfield sort direction)) {
         $qhash{$_} = $query->param($_) if $query->param($_);
     }
     ( scalar keys %qhash ) and $url .= '?' . join '&', map { "$_=$qhash{$_}" } keys %qhash;
@@ -478,6 +480,8 @@ sub shelfpage {
             barshelvesloop => $barshelves,
             pubshelves     => $total->{pubtotal},
             pubshelvesloop => $pubshelves,
+            sort           => $query->param('sort'),
+            direction      => $query->param('direction'),
     );
 
     output_html_with_http_headers $query, $cookie, $template->output;
