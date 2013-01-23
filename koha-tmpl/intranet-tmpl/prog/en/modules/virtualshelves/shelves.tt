@@ -204,15 +204,44 @@ function placeHold () {
      <span class="clearall"></span></p>
  [% END %]
 	
+ [% IF direction == 'asc' %][% direction = 'desc' %][% ELSE %][% direction = 'asc' %][% END %]
  <div class="pages">[% pagination_bar %]</div>
     <table>
             <tr>
                 [% IF ( itemsloop ) %]<th class="checkall">&nbsp;</th>[% END %]
+
                 [% UNLESS ( item_level_itypes ) %]<th>Item type</th>[% END %]
-                <th>Title</th>
-                <th>Author</th>
+                <th>
+                    <a href="/cgi-bin/koha/virtualshelves/shelves.pl?viewshelf=[% shelfnumber %]&sort=title&direction=[% direction %]">Title</a>
+                    [% IF sort == 'title' %]
+                        [% IF direction == 'asc' %]
+                            <img src="/intranet-tmpl/prog/img/asc.gif" />
+                        [% ELSIF direction == 'desc' %]
+                            <img src="/intranet-tmpl/prog/img/desc.gif" />
+                        [% END %]
+                    [% END %]
+                </th>
+                <th>
+                    <a href="/cgi-bin/koha/virtualshelves/shelves.pl?viewshelf=[% shelfnumber %]&sort=author&direction=[% direction %]">Author</a>
+                   [% IF sort == 'author' %]
+                        [% IF direction == 'asc' %]
+                            <img src="/intranet-tmpl/prog/img/asc.gif" />
+                        [% ELSIF direction == 'desc' %]
+                            <img src="/intranet-tmpl/prog/img/desc.gif" />
+                        [% END %]
+                    [% END %]
+                 </th>
                 <th>Date added</th>
-                <th>Call number</th>
+                <th>
+                    <a href="/cgi-bin/koha/virtualshelves/shelves.pl?viewshelf=[% shelfnumber %]&sort=itemcallnumber&direction=[% direction %]">Call number</a>
+                   [% IF sort == 'itemcallnumber' %]
+                        [% IF direction == 'asc' %]
+                            <img src="/intranet-tmpl/prog/img/asc.gif" />
+                        [% ELSIF direction == 'desc' %]
+                            <img src="/intranet-tmpl/prog/img/desc.gif" />
+                        [% END %]
+                    [% END %]
+                 </th>
                 <th>&nbsp;</th>
             </tr>
 		[% FOREACH itemsloo IN itemsloop %]

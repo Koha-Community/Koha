@@ -255,7 +255,7 @@ from C4::Circulation.
 =cut
 
 sub GetShelfContents {
-    my ($shelfnumber, $row_count, $offset, $sortfield) = @_;
+    my ($shelfnumber, $row_count, $offset, $sortfield, $sort_direction ) = @_;
     my $dbh=C4::Context->dbh();
     my $sth1 = $dbh->prepare("SELECT count(*) FROM virtualshelfcontents WHERE shelfnumber = ?");
     $sth1->execute($shelfnumber);
@@ -277,7 +277,7 @@ sub GetShelfContents {
     my @params = ($shelfnumber);
     if($sortfield) {
         $query .= " ORDER BY " . $sortfield;
-        $query .= " DESC " if ($sortfield eq 'copyrightdate');
+        $query .= " DESC " if ( ( $sortfield eq 'copyrightdate' ) || ( $sort_direction eq 'desc' ) );
     }
     if($row_count){
        $query .= " LIMIT ?, ? ";
