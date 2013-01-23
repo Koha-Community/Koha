@@ -2,15 +2,12 @@
 <title>Koha &rsaquo; Circulation &rsaquo; Hold ratios</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.min.js"></script>
+[% INCLUDE 'datatables-strings.inc' %]
+<script type="text/javascript" src="[% themelang %]/js/datatables.js"></script>
 <script type="text/javascript">
 //<![CDATA[
-$.tablesorter.addParser({
-    id: 'articles', 
-    is: function(s) {return false;  }, 
-    format: function(s) { return s.toLowerCase().replace(/^(the|an|a) /,''); }, 
-    type: 'text' 
-});
 	 $(document).ready(function() {
 	 	$("th a").hide();
 	 	$(".ratiolimit").click(function () {
@@ -20,11 +17,14 @@ $.tablesorter.addParser({
             function () { $(this).toggleClass("ulined") },
             function () { $(this).toggleClass("ulined") }
         );
-		$.tablesorter.defaults.widgets = ['zebra']; 
-		$("#holdst:has(tbody tr)").tablesorter({    // only add sort if the table has a body and rows
-			sortList: [[0,1]],
-			headers: { 1: { sorter: 'articles' }}
-        });
+        $("#holdst").dataTable($.extend(true, {}, dataTablesDefaults, {
+            "aoColumnDefs": [
+                { "aTargets": [ 8 ], "sType": "natural" }
+            ],
+            "aLengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]],
+            "iDisplayLength": 20,
+            "sPaginationType": "four_button"
+        }));
 	 });
 //]]>
 </script>
