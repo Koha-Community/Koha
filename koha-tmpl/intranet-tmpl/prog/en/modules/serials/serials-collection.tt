@@ -297,14 +297,14 @@ $(document).ready(function() {
                     [% serial.serialseq %]
                 </td>
                 <td>
-                    [% IF ( latestserial.status1 ) %]Expected[% END %]
-                    [% IF ( latestserial.status2 ) %]Arrived[% END %]
-                    [% IF ( latestserial.status3 ) %]Late[% END %]
-                    [% IF ( latestserial.status4 ) %]Missing[% END %]
-                    [% IF ( latestserial.status5 ) %]Not issued[% END %]
-                    [% IF ( latestserial.status6 ) %]Delete[% END %]
-                    [% IF ( latestserial.status7 ) %]Claimed[% END %]
-                    [% IF ( latestserial.status8 ) %]Stopped[% END %]
+                    [% IF ( serial.status1 ) %]Expected[% END %]
+                    [% IF ( serial.status2 ) %]Arrived[% END %]
+                    [% IF ( serial.status3 ) %]Late[% END %]
+                    [% IF ( serial.status4 ) %]Missing[% END %]
+                    [% IF ( serial.status5 ) %]Not issued[% END %]
+                    [% IF ( serial.status6 ) %]Delete[% END %]
+                    [% IF ( serial.status7 ) %]Claimed[% END %]
+                    [% IF ( serial.status8 ) %]Stopped[% END %]
                 </td>
                 <td>
                     [% serial.notes %]
