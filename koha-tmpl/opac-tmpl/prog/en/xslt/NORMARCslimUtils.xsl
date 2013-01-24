@@ -68,6 +68,25 @@
 <xsl:text> </xsl:text>
 	</xsl:template>
 
+	<!-- Function extractControlNumber is used to extract the control number (record number) from MARC tags 773/80/85 [etc.] subfield $w.
+	     Parameter: control number string.
+	     Assumes LOC convention: (OrgCode)recordNumber.
+	     If OrgCode is not present, return full string.
+	     Additionally, handle various brackets/parentheses. Chop leading and trailing spaces.
+	-->
+	<xsl:template name="extractControlNumber">
+	    <xsl:param name="subfieldW"/>
+	    <xsl:variable name="tranW" select="translate($subfieldW,']})&gt;','))))')"/>
+	    <xsl:choose>
+	      <xsl:when test="contains($tranW,')')">
+	        <xsl:value-of select="normalize-space(translate(substring-after($tranW,')'),'[]{}()&lt;&gt;',''))"/>
+	      </xsl:when>
+	      <xsl:otherwise>
+	        <xsl:value-of select="normalize-space($subfieldW)"/>
+	      </xsl:otherwise>
+	    </xsl:choose>
+	</xsl:template>
+
 <xsl:template name="nameABCDQ">
 <xsl:call-template name="chopPunctuation">
 <xsl:with-param name="chopString">

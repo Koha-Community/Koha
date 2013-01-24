@@ -6,7 +6,7 @@
   xmlns:items="http://www.koha-community.org/items"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   exclude-result-prefixes="marc items">
-    <xsl:import href="MARC21slimUtils.xsl"/>
+    <xsl:import href="NORMARCslimUtils.xsl"/>
     <xsl:output method = "html" indent="yes" omit-xml-declaration = "yes" encoding="UTF-8"/>
     <xsl:key name="item-by-status" match="items:item" use="items:status"/>
     <xsl:key name="item-by-status-and-branch" match="items:item" use="concat(items:status, ' ', items:homebranch)"/>
@@ -16,6 +16,7 @@
     </xsl:template>
     <xsl:template match="marc:record">
 
+        <xsl:variable name="UseControlNumber" select="marc:sysprefs/marc:syspref[@name='UseControlNumber']"/>
         <xsl:variable name="hidelostitems" select="marc:sysprefs/marc:syspref[@name='hidelostitems']"/>
         <xsl:variable name="URLLinkText" select="marc:sysprefs/marc:syspref[@name='URLLinkText']"/>
         <xsl:variable name="Show856uAsImage" select="marc:sysprefs/marc:syspref[@name='Display856uAsImage']"/>
@@ -381,6 +382,71 @@
             </xsl:for-each>
 	</span>
     </xsl:if>
+
+        <!-- Analytics -->
+        <xsl:if test="$leader7='s' or $leader7='c'">
+        <span class="results_summary analytics"><span class="label">Analytics: </span>
+            <a>
+            <xsl:choose>
+            <xsl:when test="$UseControlNumber = '1' and marc:controlfield[@tag=001]">
+                <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=rcn:<xsl:value-of select="marc:controlfield[@tag=001]"/>+and+(bib-level:a+or+bib-level:b)</xsl:attribute>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=Host-item:<xsl:value-of select="translate(marc:datafield[@tag=245]/marc:subfield[@code='a'], '/', '')"/></xsl:attribute>
+            </xsl:otherwise>
+            </xsl:choose>
+            <xsl:text>Show analytics</xsl:text>
+            </a>
+        </span>
+        </xsl:if>
+
+        <!-- 773 - Links from child to parent -->
+        <xsl:if test="marc:datafield[@tag=773]">
+        <xsl:for-each select="marc:datafield[@tag=773]">
+        <xsl:if test="@ind1=0">
+        <span class="results_summary in"><span class="label">
+        <xsl:choose>
+        <xsl:when test="@ind2=' '">
+            In:
+        </xsl:when>
+        <xsl:when test="@ind2=8">
+            <xsl:if test="marc:subfield[@code='i']">
+                <xsl:value-of select="marc:subfield[@code='i']"/>
+            </xsl:if>
+        </xsl:when>
+        </xsl:choose>
+        </span>
+                <xsl:variable name="f773">
+                    <xsl:call-template name="chopPunctuation"><xsl:with-param name="chopString"><xsl:call-template name="subfieldSelect">
+                        <xsl:with-param name="codes">at</xsl:with-param>
+                    </xsl:call-template></xsl:with-param></xsl:call-template>
+                </xsl:variable>
+            <xsl:choose>
+                <xsl:when test="$UseControlNumber = '1' and marc:subfield[@code='w']">
+                    <a><xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=Control-number:<xsl:call-template name="extractControlNumber"><xsl:with-param name="subfieldW" select="marc:subfield[@code='w']"/></xsl:call-template></xsl:attribute>
+                        <xsl:value-of select="translate($f773, '()', '')"/>
+                    </a>
+                    <xsl:if test="marc:subfield[@code='g']"><xsl:text> </xsl:text><xsl:value-of select="marc:subfield[@code='g']"/></xsl:if>
+                </xsl:when>
+                <xsl:when test="marc:subfield[@code='0']">
+                    <a><xsl:attribute name="href">/cgi-bin/koha/catalogue/detail.pl?biblionumber=<xsl:value-of select="marc:subfield[@code='0']"/></xsl:attribute>
+                        <xsl:value-of select="$f773"/>
+                    </a>
+                </xsl:when>
+                <xsl:otherwise>
+                    <a><xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=ti,phr:<xsl:value-of select="translate($f773, '()', '')"/></xsl:attribute>
+                        <xsl:value-of select="$f773"/>
+                    </a>
+                    <xsl:if test="marc:subfield[@code='g']"><xsl:text> </xsl:text><xsl:value-of select="marc:subfield[@code='g']"/></xsl:if>
+                </xsl:otherwise>
+            </xsl:choose>
+        </span>
+        <xsl:if test="marc:subfield[@code='n']">
+            <span class="results_summary"><xsl:value-of select="marc:subfield[@code='n']"/></span>
+        </xsl:if>
+        </xsl:if>
+        </xsl:for-each>
+        </xsl:if>
 
     <span class="results_summary">
     <xsl:if test="$typeOf008!=''">
