@@ -1,16 +1,20 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Notices[% IF ( add_form ) %][% IF ( modify ) %] &rsaquo; Modify notice[% ELSE %] &rsaquo; Add notice[% END %][% END %][% IF ( add_validate ) %] &rsaquo; Notice added[% END %][% IF ( delete_confirm ) %] &rsaquo; Confirm deletion[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
-	<script type="text/javascript">
-	//<![CDATA[
+<link rel="stylesheet" type="text/css" href="/intranet-tmpl/prog/en/css/datatables.css" />
+<script type="text/javascript" src="/intranet-tmpl/prog/en/lib/jquery/plugins/jquery.dataTables.min.js"></script>
+[% INCLUDE 'datatables-strings.inc' %]
+<script type="text/javascript" src="/intranet-tmpl/prog/en/js/datatables.js"></script>
+<script type="text/javascript">
+//<![CDATA[
 $(document).ready(function() {
-	$("#lettert:has(tbody tr)").tablesorter({
-		widgets : ['zebra'],
-		sortList: [[0,0]],
-        headers: { 4: {sorter:false},5: { sorter: false },6: { sorter: false }}
-	}); 
-
+    $("#lettert:has(tbody tr)").dataTable($.extend(true, {}, dataTablesDefaults, {
+        "sDom": 't',
+        "aoColumnDefs": [
+            { "aTargets": [ -1,-2, -3 ], "bSortable": false, "bSearchable": false }
+        ],
+        "bPaginate": false
+    }));
     $('#branch').change(function() {
             $('#op').val("");
             $('#selectlibrary').submit();
@@ -184,7 +188,7 @@ $(document).ready(function() {
 				<td>[% lette.module %]</td>
 				<td>[% lette.code %]</td>
 				<td>[% lette.name %]</td>
-				<td>
+				<td style="white-space: nowrap">
         [% IF !independant_branch || !lette.branchcode %]
                     <form method="post" action="/cgi-bin/koha/tools/letter.pl">
                         <input type="hidden" name="op" value="copy" />
