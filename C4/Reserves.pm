@@ -213,6 +213,7 @@ sub AddReserve {
                 'branches'  => $branch_details,
                 'borrowers' => $borrower,
                 'biblio'    => $biblionumber,
+                'items'     => $checkitem,
             },
         ) ) {
 
