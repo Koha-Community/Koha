@@ -8,10 +8,6 @@ use warnings;
 use Test::MockModule;
 use Test::More tests => 2;
 
-BEGIN {
-    use_ok('C4::Letters');
-}
-
 my $module = new Test::MockModule('C4::Context');
 $module->mock(
     '_new_dbh',
@@ -26,6 +22,8 @@ my $mock_letters = [
     [ 'blah',   'ISBN', 'NBSI',       'book', 1,         'green', 'blahblah' ],
     [ 'bleh',   'ISSN', 'NSSI',       'page', 0,         'blue',  'blehbleh' ]
 ];
+
+use_ok('C4::Letters');
 
 my $dbh = C4::Context->dbh();
 
