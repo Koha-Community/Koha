@@ -10,7 +10,9 @@ $(document).ready(function() {
                 $('#selectlibrary').submit();
         });
         $(".editrule").click(function(){
+            $('#default-circulation-rules td').removeClass('highlighted-row');
             $(this).parent().parent().find("td").each(function (i) {
+                $(this).addClass('highlighted-row');
                 itm = $(this).text();
                 itm = itm.replace(/^\s*|\s*$/g,'');
                 var current = $("#default-circulation-rules tr:last td:eq("+i+")");
