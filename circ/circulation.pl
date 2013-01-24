@@ -190,8 +190,7 @@ if ( $print eq 'yes' && $borrowernumber ne '' ) {
 my $borrowerslist;
 my $message;
 if ($findborrower) {
-    my $borrowers = Search($findborrower, 'cardnumber');
-    my @borrowers = @$borrowers;
+    my $borrowers = Search($findborrower, 'cardnumber') || [];
     if (C4::Context->preference("AddPatronLists")) {
         $template->param(
             "AddPatronLists_".C4::Context->preference("AddPatronLists")=> "1",
@@ -202,17 +201,17 @@ if ($findborrower) {
             $template->param(categories=>$categories);
         }
     }
-    if ( $#borrowers == -1 ) {
+    if ( @$borrowers == 0 ) {
         $query->param( 'findborrower', '' );
         $message = "'$findborrower'";
     }
-    elsif ( $#borrowers == 0 ) {
-        $query->param( 'borrowernumber', $borrowers[0]->{'borrowernumber'} );
+    elsif ( @$borrowers == 1 ) {
+        $borrowernumber = $borrowers->[0]->{'borrowernumber'};
+        $query->param( 'borrowernumber', $borrowernumber );
         $query->param( 'barcode',           '' );
-        $borrowernumber = $borrowers[0]->{'borrowernumber'};
     }
     else {
-        $borrowerslist = \@borrowers;
+        $borrowerslist = $borrowers;
     }
 }
 
@@ -541,7 +540,6 @@ foreach my $flag ( sort keys %$flags ) {
     $flags->{$flag}->{'message'} =~ s#\n#<br />#g;
     if ( $flags->{$flag}->{'noissues'} ) {
         $template->param(
-            flagged  => 1,
             noissues => 'true',
         );
         if ( $flag eq 'GNA' ) {
@@ -573,7 +571,6 @@ foreach my $flag ( sort keys %$flags ) {
         if ( $flag eq 'CHARGES' ) {
             $template->param(
                 charges    => 'true',
-                flagged    => 1,
                 chargesmsg => $flags->{'CHARGES'}->{'message'},
                 chargesamount => $flags->{'CHARGES'}->{'amount'},
             );
@@ -588,7 +585,6 @@ foreach my $flag ( sort keys %$flags ) {
         elsif ( $flag eq 'ODUES' ) {
             $template->param(
                 odues    => 'true',
-                flagged  => 1,
                 oduesmsg => $flags->{'ODUES'}->{'message'}
             );
 
@@ -600,7 +596,6 @@ foreach my $flag ( sort keys %$flags ) {
         elsif ( $flag eq 'NOTES' ) {
             $template->param(
                 notes    => 'true',
-                flagged  => 1,
                 notesmsg => $flags->{'NOTES'}->{'message'}
             );
         }

@@ -5658,6 +5658,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+
 $DBversion = '3.09.00.033';
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('OpacSuppressionByIPRange','','Restrict the suppression to IP adresses outside of the IP range','','free');");
@@ -5971,7 +5972,6 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     print "Upgrade to $DBversion done (Add system preference AuthDisplayHierarchy)\n";
     SetVersion($DBversion);
 }
-
 
 $DBversion = "3.09.00.057";
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
@@ -6337,6 +6337,14 @@ if ( CheckVersion($DBversion) ) {
    $dbh->do("INSERT INTO systempreferences ( variable, value, explanation, type ) VALUES ( 'SCOUserJS', '', 'Define custom javascript for inclusion in the SCO module', 'free' )");
    print "Upgrade to $DBversion done (Bug 9009: Add SCOUserCSS and SCOUserJS sysprefs)\n";
    SetVersion ($DBversion);
+}
+
+$DBversion = "3.11.00.XXX";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('RentalsInNoissuesCharge', '1', 'Rental charges block checkouts (added to noissuescharge).',NULL,'YesNo');");
+    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('ManInvInNoissuesCharge', '1', 'MANUAL_INV charges block checkouts (added to noissuescharge).',NULL,'YesNo');");
+    print "Upgrade to $DBversion done (Add sysprefs RentalsInNoissuesCharge and ManInvInNoissuesCharge.)\n";
+    SetVersion($DBversion);
 }
 
 =head1 FUNCTIONS

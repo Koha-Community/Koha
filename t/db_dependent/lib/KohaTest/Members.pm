@@ -27,6 +27,7 @@ sub methods : Test( 1 ) {
                       GetPendingIssues 
                       GetAllIssues 
                       GetMemberAccountRecords 
+                      GetMemberAccountBalance
                       GetBorNotifyAcctRecord 
                       checkuniquemember 
                       checkcardnumber 

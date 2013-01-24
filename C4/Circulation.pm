@@ -772,28 +772,31 @@ sub CanBookBeIssued {
     #
 
     # DEBTS
-    my ($amount) =
-      C4::Members::GetMemberAccountRecords( $borrower->{'borrowernumber'}, '' && $duedate->ymd() );
+    my ($balance, $non_issue_charges, $other_charges) =
+      C4::Members::GetMemberAccountBalance( $borrower->{'borrowernumber'} );
     my $amountlimit = C4::Context->preference("noissuescharge");
     my $allowfineoverride = C4::Context->preference("AllowFineOverride");
     my $allfinesneedoverride = C4::Context->preference("AllFinesNeedOverride");
     if ( C4::Context->preference("IssuingInProcess") ) {
-        if ( $amount > $amountlimit && !$inprocess && !$allowfineoverride) {
-            $issuingimpossible{DEBT} = sprintf( "%.2f", $amount );
-        } elsif ( $amount > $amountlimit && !$inprocess && $allowfineoverride) {
-            $needsconfirmation{DEBT} = sprintf( "%.2f", $amount );
-        } elsif ( $allfinesneedoverride && $amount > 0 && $amount <= $amountlimit && !$inprocess ) {
-            $needsconfirmation{DEBT} = sprintf( "%.2f", $amount );
+        if ( $non_issue_charges > $amountlimit && !$inprocess && !$allowfineoverride) {
+            $issuingimpossible{DEBT} = sprintf( "%.2f", $non_issue_charges );
+        } elsif ( $non_issue_charges > $amountlimit && !$inprocess && $allowfineoverride) {
+            $needsconfirmation{DEBT} = sprintf( "%.2f", $non_issue_charges );
+        } elsif ( $allfinesneedoverride && $non_issue_charges > 0 && $non_issue_charges <= $amountlimit && !$inprocess ) {
+            $needsconfirmation{DEBT} = sprintf( "%.2f", $non_issue_charges );
         }
     }
     else {
-        if ( $amount > $amountlimit && $allowfineoverride ) {
-            $needsconfirmation{DEBT} = sprintf( "%.2f", $amount );
-        } elsif ( $amount > $amountlimit && !$allowfineoverride) {
-            $issuingimpossible{DEBT} = sprintf( "%.2f", $amount );
-        } elsif ( $amount > 0 && $allfinesneedoverride ) {
-            $needsconfirmation{DEBT} = sprintf( "%.2f", $amount );
+        if ( $non_issue_charges > $amountlimit && $allowfineoverride ) {
+            $needsconfirmation{DEBT} = sprintf( "%.2f", $non_issue_charges );
+        } elsif ( $non_issue_charges > $amountlimit && !$allowfineoverride) {
+            $issuingimpossible{DEBT} = sprintf( "%.2f", $non_issue_charges );
+        } elsif ( $non_issue_charges > 0 && $allfinesneedoverride ) {
+            $needsconfirmation{DEBT} = sprintf( "%.2f", $non_issue_charges );
         }
+    }
+    if ($balance > 0 && $other_charges > 0) {
+        $alerts{OTHER_CHARGES} = sprintf( "%.2f", $other_charges );
     }
 
     my ($blocktype, $count) = C4::Members::IsMemberBlocked($borrower->{'borrowernumber'});
