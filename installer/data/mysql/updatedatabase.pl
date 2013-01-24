@@ -6339,7 +6339,7 @@ if ( CheckVersion($DBversion) ) {
    SetVersion ($DBversion);
 }
 
-$DBversion = "3.11.00.XXX";
+$DBversion = "3.11.00.015";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('RentalsInNoissuesCharge', '1', 'Rental charges block checkouts (added to noissuescharge).',NULL,'YesNo');");
     $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('ManInvInNoissuesCharge', '1', 'MANUAL_INV charges block checkouts (added to noissuescharge).',NULL,'YesNo');");
