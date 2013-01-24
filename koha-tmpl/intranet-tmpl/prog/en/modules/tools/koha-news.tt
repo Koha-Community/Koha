@@ -2,19 +2,27 @@
 <title>Koha &rsaquo; Tools &rsaquo; News</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
-<script type="text/javascript">//<![CDATA[
-$(document).ready(function() {
-	$("#newst").tablesorter({[% IF ( dateformat == 'metric' ) %]
-		dateFormat: 'uk',[% END %]
-		sortList: [[2,0]],
-		headers: { 0: {sorter:false},6: { sorter: false },7: { sorter: false }}
-	}); 
-}); 
-//]]>
-</script>
+[% IF ( opac_news_count ) %]
+    <link rel="stylesheet" type="text/css" href="/intranet-tmpl/prog/en/css/datatables.css" />
+    <script type="text/javascript" src="/intranet-tmpl/prog/en/lib/jquery/plugins/jquery.dataTables.min.js"></script>
+    [% INCLUDE 'datatables-strings.inc' %]
+    <script type="text/javascript" src="/intranet-tmpl/prog/en/js/datatables.js"></script>
+    <script type="text/javascript">//<![CDATA[
+    [% IF (dateformat == 'metric') %]dt_add_type_uk_date();[% END %]
+    $(document).ready(function() {
+        $("#newst").dataTable($.extend(true, {}, dataTablesDefaults, {
+            "sDom": 't',
+            "aoColumnDefs": [
+                { "aTargets": [ 0,-1,-2 ], "bSortable": false, "bSearchable": false }
+            ],
+            "bPaginate": false
+        }));
+    });
+    //]]>
+    </script>
+[% END %]
 <script type="text/javascript" src="[% themelang %]/js/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
-<script type="text/javascript">
+<script type="text/javascript">//<![CDATA[
 tinyMCE.init({
     mode : "textareas",
     theme : "advanced",
@@ -32,6 +40,7 @@ tinyMCE.init({
     apply_source_formatting : true,
     height : "300",
     width : "700"
+//]]>
 });
 </script>
 </head>
