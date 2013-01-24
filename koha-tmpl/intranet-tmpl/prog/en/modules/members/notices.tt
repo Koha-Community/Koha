@@ -1,3 +1,4 @@
+[% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Sent notices for [% INCLUDE 'patron-title.inc' %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -72,7 +73,7 @@
             [% ELSIF ( QUEUED_MESSAGE.status == 'deleted' ) %]deleted
             [% ELSE %][% QUEUED_MESSAGE.status %][% END %]
         </td>
-		<td>[% QUEUED_MESSAGE.time_queued %]</td>
+        <td>[% QUEUED_MESSAGE.time_queued | $KohaDates with_hours => 1 %]</td>
 	    </tr>
 	    [% END %]
 	</tbody>
