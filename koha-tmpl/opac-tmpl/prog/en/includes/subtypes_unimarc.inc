@@ -8,7 +8,7 @@
       <option value="aud:b">pre-primary (0-5)</option>
       <option value="aud:c">primary (5-8)</option>
       <option value="aud:d">children (9-14)</option>
-      <option value="aud:e">young Adult</option>
+      <option value="aud:e">young adult</option>
       <option value="aud:k">adult, serious</option>
       <option value="aud:m">adult, General</option>
       <option value="aud:u">unknown</option>
@@ -105,7 +105,7 @@
             <option value="ctype:r" >literature surveys/reviews</option>
             <option value="ctype:s" >treaties</option>
             <option value="ctype:t" >cartoons or comic strips</option>
-            <option value="ctype:v" >dissertation or thesis (revised)</option>v
+            <option value="ctype:v" >dissertation or thesis (revised)</option>
             <option value="ctype:w" >religious text</option>
             <option value="ctype:z" >other</option>
     </select>
