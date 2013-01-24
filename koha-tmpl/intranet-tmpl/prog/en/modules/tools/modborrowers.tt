@@ -3,19 +3,24 @@
 <title>Koha &rsaquo; Tools &rsaquo; Batch patron modification</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
-<script type="text/JavaScript">
+<link rel="stylesheet" type="text/css" href="/intranet-tmpl/prog/en/css/datatables.css" />
+<script type="text/javascript" src="/intranet-tmpl/prog/en/lib/jquery/plugins/jquery.dataTables.min.js"></script>
+[% INCLUDE 'datatables-strings.inc' %]
+<script type="text/javascript" src="/intranet-tmpl/prog/en/js/datatables.js"></script>
+<script type="text/javascript">
 //<![CDATA[
+    [% IF (dateformat == 'metric') %]dt_add_type_uk_date();[% END %]
         var patron_attributes_lib = new Array();
         var patron_attributes_values = new Array();
         $(document).ready(function() {
             [% IF borrowers %]
-                $("#borrowerst").tablesorter({
-                    headers: { 0: { sorter: false}},
-                    widgets : ['zebra'],
-                    sortList: [[1,0]]
-                });
-
+                $("#borrowerst").dataTable($.extend(true, {}, dataTablesDefaults, {
+                    "sDom": 't',
+                    "aoColumnDefs": [
+                        { "aTargets": [ 0 ], "bSortable": false, "bSearchable": false }
+                    ],
+                    "bPaginate": false
+                }));
                 $("#selectallbutton").click(function() {
                     $("#borrowerst").find("input:checkbox").each(function() {
                         $(this).attr("checked", true);
