@@ -254,7 +254,18 @@ $newdata{'country'} = $input->param('country') if defined($input->param('country
 
 #builds default userid
 if ( (defined $newdata{'userid'}) && ($newdata{'userid'} eq '')){
-    $newdata{'userid'} = Generate_Userid($borrowernumber, $newdata{'firstname'}, $newdata{'surname'});
+    if ( ( defined $newdata{'firstname'} ) && ( defined $newdata{'surname'} ) ) {
+        # Full page edit, firstname and surname input zones are present
+        $newdata{'userid'} = Generate_Userid( $borrowernumber, $newdata{'firstname'}, $newdata{'surname'} );
+    }
+    elsif ( ( defined $data{'firstname'} ) && ( defined $data{'surname'} ) ) {
+        # Partial page edit (access through "Details"/"Library details" tab), firstname and surname input zones are not used
+        # Still, if the userid field is erased, we can create a new userid with available firstname and surname
+        $newdata{'userid'} = Generate_Userid( $borrowernumber, $data{'firstname'}, $data{'surname'} );
+    }
+    else {
+        $newdata{'userid'} = $data{'userid'};
+    }
 }
   
 $debug and warn join "\t", map {"$_: $newdata{$_}"} qw(dateofbirth dateenrolled dateexpiry);
