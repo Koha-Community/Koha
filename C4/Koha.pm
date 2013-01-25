@@ -880,13 +880,13 @@ like:
 
     {
       'checked'    => 'checked',
-      'encoding'   => 'MARC-8'
+      'encoding'   => 'utf8',
       'icon'       => undef,
       'id'         => 'LIBRARY OF CONGRESS',
       'label'      => '',
       'name'       => 'server',
       'opensearch' => '',
-      'value'      => 'z3950.loc.gov:7090/',
+      'value'      => 'lx2.loc.gov:210/',
       'zed'        => 1,
     },
 
