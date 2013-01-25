@@ -4,6 +4,12 @@ use base 'OpenILS::QueryParser::query_plan::node::atom';
 use strict;
 use warnings;
 
+=head1 NAME
+
+Koha::QueryParser::Driver::PQF::query_plan::node::atom - atom subclass for PQF driver
+
+=head1 FUNCTIONS
+
 =head2 Koha::QueryParser::Driver::PQF::query_plan::node::atom::target_syntax
 
     my $pqf = $atom->target_syntax($server);

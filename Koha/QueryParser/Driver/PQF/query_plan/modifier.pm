@@ -4,6 +4,12 @@ use base 'OpenILS::QueryParser::query_plan::modifier';
 use strict;
 use warnings;
 
+=head1 NAME
+
+Koha::QueryParser::Driver::PQF::query_plan::modifer - modifier subclass for PQF driver
+
+=head1 FUNCTIONS
+
 =head2 Koha::QueryParser::Driver::PQF::query_plan::modifier::target_syntax
 
     my $pqf = $modifier->target_syntax($server, $query_plan);

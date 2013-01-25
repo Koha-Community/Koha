@@ -321,7 +321,7 @@ sub operator {
     my $opname = shift;
     my $op = shift;
 
-    return undef unless ($opname);
+    return unless ($opname);
 
     $parser_config{$class}{operators} ||= {};
     $parser_config{$class}{operators}{$opname} = $op if ($op);
@@ -1488,7 +1488,7 @@ package OpenILS::QueryParser::query_plan;
 
 sub QueryParser {
     my $self = shift;
-    return undef unless ref($self);
+    return unless ref($self);
     return $self->{QueryParser};
 }
 
@@ -1540,7 +1540,7 @@ sub _merge_filters {
     my $right_filter = shift;
     my $join = shift;
 
-    return undef unless $left_filter or $right_filter;
+    return unless $left_filter or $right_filter;
     return $right_filter unless $left_filter;
     return $left_filter unless $right_filter;
 
@@ -1599,7 +1599,7 @@ sub collapse_filters {
 sub find_filter {
     my $self = shift;
     my $needle = shift;;
-    return undef unless ($needle);
+    return unless ($needle);
 
     my $filter = $self->collapse_filters($needle);
 
@@ -1613,7 +1613,7 @@ sub find_filter {
 sub find_modifier {
     my $self = shift;
     my $needle = shift;;
-    return undef unless ($needle);
+    return unless ($needle);
     return grep { $_->name eq $needle } @{ $self->modifiers };
 }
 
@@ -2103,25 +2103,25 @@ sub new {
 
 sub node {
     my $self = shift;
-    return undef unless (ref $self);
+    return unless (ref $self);
     return $self->{node};
 }
 
 sub content {
     my $self = shift;
-    return undef unless (ref $self);
+    return unless (ref $self);
     return $self->{content};
 }
 
 sub prefix {
     my $self = shift;
-    return undef unless (ref $self);
+    return unless (ref $self);
     return $self->{prefix};
 }
 
 sub suffix {
     my $self = shift;
-    return undef unless (ref $self);
+    return unless (ref $self);
     return $self->{suffix};
 }
 
