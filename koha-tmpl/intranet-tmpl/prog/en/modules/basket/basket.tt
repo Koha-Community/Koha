@@ -9,9 +9,35 @@
     @import url([% themelang %]/css/print.css);
 </style>
     [% ELSE %][% INCLUDE 'doc-head-close.inc' %]
+    <style type="text/css">
+        td table {
+            font-size: 85%;
+            border: 0;
+        }
+        td table th:first-child,
+        td table th.sorting:first-child,
+        td table th.sorting_asc:first-child,
+        td table th.sorting_desc:first-child {
+            border-right : 1px solid #99BEC9;
+        }
+        td table th,
+        td table th.sorting,
+        td table th.sorting_asc,
+        td table th.sorting_desc {
+            background-color: #E6F0F2;
+            border-color: #99BEC9;
+            border-width: 0px 0px 1px 0px;
+        }
+        td table td {
+            border-width: 0px 0px 1px 0px;
+            border-color: #B8D7E0;
+        }
+    </style>
 	<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
-	<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
-	<script type="text/javascript">
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.min.js"></script>
+[% INCLUDE 'datatables-strings.inc' %]
+<script type="text/javascript" src="[% themelang %]/js/datatables.js"></script>	<script type="text/javascript">
 	//<![CDATA[
 
 function placeHold () {
@@ -62,9 +88,52 @@ function placeHold () {
         $(".holdsep").text("| ");
         $(".hold").text(_("Place Hold"));
         $("#downloadcartc").empty();
-        $("#itemst").tablesorter({
-            headers: { 0: { sorter: false }}
-        });
+
+        /* Define two custom functions (asc and desc) for string sorting */
+        jQuery.fn.dataTableExt.oSort['callnumbers-asc']  = function(x,y) {
+                var x_array = x.split("<div>");
+                var y_array = y.split("<div>");
+
+                /* Pop the first elements, they are empty strings */
+                x_array.shift();
+                y_array.shift();
+
+                x_array.sort();
+                y_array.sort();
+
+                x = x_array.shift();
+                y = y_array.shift();
+
+                return ((x < y) ? -1 : ((x > y) ?  1 : 0));
+        };
+
+        jQuery.fn.dataTableExt.oSort['callnumbers-desc'] = function(x,y) {
+                var x_array = x.split("<div>");
+                var y_array = y.split("<div>");
+
+                /* Pop the first elements, they are empty strings */
+                x_array.shift();
+                y_array.shift();
+
+                x_array.sort();
+                y_array.sort();
+
+                x = x_array.pop();
+                y = y_array.pop();
+
+                return ((x < y) ?  1 : ((x > y) ? -1 : 0));
+        };
+
+        $("#itemst").dataTable($.extend(true, {}, dataTablesDefaults, {
+            "sDom": 't',
+            "aoColumnDefs": [
+                { "aTargets": [ 0 ], "bSortable": false, "bSearchable": false },
+                { "aTargets": [ 3 ], "sType": 'callnumbers' },
+            ],
+            "aaSorting": [[ 1, "asc" ]],
+            "bPaginate": false
+        }));
+
 	});
 	//]]>
 	</script>
@@ -278,23 +347,19 @@ function placeHold () {
      | <a href="#" onclick="placeHold(); return false;">Place hold</a>
 [% END %]
 
-
 [% END %]
+
 </p>
     <table id="itemst">
 	<thead><tr>
 	    [% UNLESS ( print_basket ) %]<th>&nbsp;</th>[% END %]
 	    <th>Title</th>
         <th>Item type</th>
-	    <th>Location</th>
+        <th>Items</th>
         </tr></thead>
 
         [% FOREACH BIBLIO_RESULT IN BIBLIO_RESULTS %]
-            [% IF ( BIBLIO_RESULT.even ) %]
-                <tr class="highlight">
-            [% ELSE %]
                 <tr>
-            [% END %]
             [% UNLESS ( print_basket ) %]<td>
                         <input type="checkbox" value="[% BIBLIO_RESULT.biblionumber %]" name="bib[% BIBLIO_RESULT.biblionumber %]" id="bib[% BIBLIO_RESULT.biblionumber %]" onclick="selRecord(value,checked);" />
 
@@ -316,14 +381,15 @@ function placeHold () {
 
 						</td>
             <td>[% BIBLIO_RESULT.description %]</td>
-                <td>[% IF ( BIBLIO_RESULT.ITEM_RESULTS ) %][% FOREACH ITEM_RESULT IN BIBLIO_RESULT.ITEM_RESULTS %]
-                    <p>
-                        [% ITEM_RESULT.branchname %] [% ITEM_RESULT.location_description %]
-                        [% IF ( ITEM_RESULT.itemcallnumber ) %]
-                            ([% ITEM_RESULT.itemcallnumber %])
-                        [% END %]
-                    </p>
-                    [% END %][% ELSE %]This record has no items.[% END %]</td>
+            <td>
+                [% IF ( BIBLIO_RESULT.ITEM_RESULTS ) %]
+                    [% FOREACH ITEM_RESULT IN BIBLIO_RESULT.ITEM_RESULTS %]
+                        <div><span class="nowrap"><strong>[% ITEM_RESULT.itemcallnumber %]</strong> [% ITEM_RESULT.branchname %] <span class="shelvingloc inline">[% ITEM_RESULT.location_description %]</span></span></div>
+                    [% END %]
+                [% ELSE %]
+                    This record has no items.
+                [% END %]
+            </td>
             </tr>
         [% END %]
     </table></form>
