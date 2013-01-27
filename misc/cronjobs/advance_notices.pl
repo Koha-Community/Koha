@@ -41,6 +41,7 @@ the OPAC.
 use strict;
 use warnings;
 use Getopt::Long;
+use Pod::Usage;
 use Data::Dumper;
 BEGIN {
     # find Koha's Perl modules
@@ -56,6 +57,106 @@ use C4::Members::Messaging;
 use C4::Overdues;
 use Koha::DateUtils;
 
+=head1 NAME
+
+advance_notices.pl - prepare messages to be sent to patrons for nearly due, or due, items
+
+=head1 SYNOPSIS
+
+advance_notices.pl
+  [ -n ][ -m <number of days> ][ --itemscontent <comma separated field list> ][ -c ]
+
+=head1 OPTIONS
+
+=over 8
+
+=item B<--help>
+
+Print a brief help message and exits.
+
+=item B<--man>
+
+Prints the manual page and exits.
+
+=item B<-v>
+
+Verbose. Without this flag set, only fatal errors are reported.
+
+=item B<-n>
+
+Do not send any email. Advanced or due notices that would have been sent to
+the patrons are printed to standard out.
+
+=item B<-m>
+
+Defines the maximum number of days in advance to send advance notices.
+
+
+
+=item B<--itemscontent>
+
+comma separated list of fields that get substituted into templates in
+places of the E<lt>E<lt>items.contentE<gt>E<gt> placeholder. This
+defaults to due date,title,author,barcode
+
+Other possible values come from fields in the biblios, items and
+issues tables.
+
+=back
+
+=head1 DESCRIPTION
+
+This script is designed to alert patrons when items are due, or coming due
+
+=head2 Configuration
+
+This script pays attention to the advanced notice configuration
+performed by borrowers in the OPAC, or by staff in the patron detail page of the intranet. The content of the messages is configured in Tools -> Notices and slips. Advanced notices use the PREDUE template, due notices use DUE. More information about the use of this
+section of Koha is available in the Koha manual.
+
+=head2 Outgoing emails
+
+Typically, messages are prepared for each patron with due
+items, and who have selected (or the library has elected for them) Advance or Due notices.
+
+These emails are staged in the outgoing message queue, as are messages
+produced by other features of Koha. This message queue must be
+processed regularly by the
+F<misc/cronjobs/process_message_queue.pl> program.
+
+In the event that the C<-n> flag is passed to this program, no emails
+are sent. Instead, messages are sent on standard output from this
+program. They may be redirected to a file if desired.
+
+=head2 Templates
+
+Templates can contain variables enclosed in double angle brackets like
+E<lt>E<lt>thisE<gt>E<gt>. Those variables will be replaced with values
+specific to the overdue items or relevant patron. Available variables
+are:
+
+=over
+
+=item E<lt>E<lt>items.contentE<gt>E<gt>
+
+one line for each item, each line containing a tab separated list of
+title, author, barcode, issuedate
+
+=item E<lt>E<lt>borrowers.*E<gt>E<gt>
+
+any field from the borrowers table
+
+=item E<lt>E<lt>branches.*E<gt>E<gt>
+
+any field from the branches table
+
+=back
+
+=head1 SEE ALSO
+
+The F<misc/cronjobs/overdue_notices.pl> program allows you to send
+messages to patrons when their messages are overdue.
+=cut
 
 # These are defaults for command line options.
 my $confirm;                                                        # -c: Confirm that the user has read and configured this script.
@@ -64,26 +165,22 @@ my $nomail;                                                         # -n: No mai
 my $mindays     = 0;                                                # -m: Maximum number of days in advance to send notices
 my $maxdays     = 30;                                               # -e: the End of the time period
 my $verbose     = 0;                                                # -v: verbose
-my $itemscontent = join(',',qw( issuedate title barcode author ));
+my $itemscontent = join(',',qw( date_due title author barcode ));
 
-GetOptions( 'c'              => \$confirm,
+my $help    = 0;
+my $man     = 0;
+
+GetOptions(
+            'help|?'         => \$help,
+            'man'            => \$man,
+            'c'              => \$confirm,
             'n'              => \$nomail,
             'm:i'            => \$maxdays,
             'v'              => \$verbose,
             'itemscontent=s' => \$itemscontent,
-       );
-my $usage = << 'ENDUSAGE';
-
-This script prepares pre-due and item due reminders to be sent to
-patrons. It queues them in the message queue, which is processed by
-the process_message_queue.pl cronjob.
-See the comments in the script for directions on changing the script.
-This script has the following parameters :
-    -c Confirm and remove this help & warning
-    -m maximum number of days in advance to send advance notices.
-    -n send No mail. Instead, all mail messages are printed on screen. Usefull for testing purposes.
-    -v verbose
-ENDUSAGE
+       )or pod2usage(2);
+pod2usage(1) if $help;
+pod2usage( -verbose => 2 ) if $man;;
 
 # Since advance notice options are not visible in the web-interface
 # unless EnhancedMessagingPreferences is on, let the user know that
@@ -97,15 +194,9 @@ To change this, edit the "EnhancedMessagingPreferences" syspref.
 
 END_WARN
 }
-
 unless ($confirm) {
-    print $usage;
-    print "Do you wish to continue? (y/n)";
-    chomp($_ = <STDIN>);
-    exit unless (/^y/i);
-	
+     pod2usage(1);
 }
-
 # The fields that will be substituted into <<items.content>>
 my @item_content_fields = split(/,/,$itemscontent);
 
