@@ -97,9 +97,9 @@ if ($op eq 'add_form') {
 		$sth->finish;
 	}
     $template->param( $_ => $data->{$_} ) 
-        for ( qw( host port db userid password checked rank timeout ) );
+        for ( qw( host port db userid password checked rank timeout encoding ) );
     $template->param( $_ . $data->{$_} => 1)
-        for ( qw( syntax encoding ) );
+        for ( qw( syntax ) );
 													# END $OP eq ADD_FORM
 ################## ADD_VALIDATE ##################################
 # called by add_form, used to insert/modify data in DB
