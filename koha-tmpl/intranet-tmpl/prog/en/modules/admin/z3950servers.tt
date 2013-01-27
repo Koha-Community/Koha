@@ -203,30 +203,12 @@
 
     <li><label for="encoding">Encoding (z3950 can send<br /> records in various encodings. Choose one): </label>  
 <select name="encoding">
-[% IF ( encodingutf8 ) %]
-<option value="utf8" selected="selected">UTF-8</option>
-[% ELSE %]
-<option value="utf8">UTF-8</option>
-[% END %]
-[% IF ( encodingEUC_KR ) %]
-<option value="EUC-KR" selected="selected">EUC-KR</option>
-[% ELSE %]
-<option value="EUC-KR">EUC-KR</option>
-[% END %]
-[% IF ( encodingISO_5426 ) %]
-<option value="ISO_5426" selected="selected">ISO_5426</option>
-[% ELSE %]
-<option value="ISO_5426">ISO_5426</option>
-[% END %]
-[% IF ( encodingISO_6937 ) %]
-<option value="ISO_6937" selected="selected">ISO_6937</option>
-[% ELSE %]
-<option value="ISO_6937">ISO_6937</option>
-[% END %]
-[% IF ( encodingMARC_8 ) %]
-<option value="MARC-8" selected="selected">MARC-8</option>
-[% ELSE %]
-<option value="MARC-8">MARC-8</option>
+[% FOREACH enc IN [ 'utf8' 'EUC-KR' 'ISO_5426' 'ISO_6937' 'ISO_8859-1' 'MARC-8' ] %]
+    [% IF ( encoding == enc ) %]
+    <option value="[% enc %]" selected="selected">[% enc %]</option>
+    [% ELSE %]
+    <option value="[% enc %]">[% enc %]</option>
+    [% END %]
 [% END %]
 </select>
 </li>
