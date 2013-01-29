@@ -9,7 +9,7 @@ use warnings;
 use C4::Bookseller qw( GetBookSellerFromId );
 use C4::Biblio qw( AddBiblio );
 
-use Test::More tests => 14;
+use Test::More tests => 21;
 
 BEGIN {
     use_ok('C4::Acquisition');
@@ -18,6 +18,8 @@ BEGIN {
 my $dbh = C4::Context->dbh;
 $dbh->{AutoCommit} = 0;
 $dbh->{RaiseError} = 1;
+
+$dbh->do(q{DELETE FROM aqinvoices});
 
 my $booksellerid = C4::Bookseller::AddBookseller(
     {
@@ -41,7 +43,14 @@ my $budgetid = C4::Budgets::AddBudget(
 my $budget = C4::Budgets::GetBudget( $budgetid );
 
 my ($ordernumber1, $ordernumber2, $ordernumber3);
-my ($biblionumber1, $biblioitemnumber1) = AddBiblio(MARC::Record->new, '');
+my $bibrec1 = MARC::Record->new();
+$bibrec1->append_fields(
+    MARC::Field->new('020', '', '', 'a' => '1234567890'),
+    MARC::Field->new('100', '', '', 'a' => 'Shakespeare,  Billy'),
+    MARC::Field->new('245', '', '', 'a' => 'Bug 8854'),
+    MARC::Field->new('260', '', '', 'b' => 'Scholastic Publishing', c => 'c2012'),
+);
+my ($biblionumber1, $biblioitemnumber1) = AddBiblio($bibrec1, '');
 my ($biblionumber2, $biblioitemnumber2) = AddBiblio(MARC::Record->new, '');
 my ($biblionumber3, $biblioitemnumber3) = AddBiblio(MARC::Record->new, '');
 ( undef, $ordernumber1 ) = C4::Acquisition::NewOrder(
@@ -74,7 +83,9 @@ my ($biblionumber3, $biblioitemnumber3) = AddBiblio(MARC::Record->new, '');
 );
 
 my $invoiceid1 = AddInvoice(invoicenumber => 'invoice1', booksellerid => $booksellerid, unknown => "unknown");
-my $invoiceid2 = AddInvoice(invoicenumber => 'invoice2', booksellerid => $booksellerid, unknown => "unknown");
+my $invoiceid2 = AddInvoice(invoicenumber => 'invoice2', booksellerid => $booksellerid, unknown => "unknown",
+                            shipmentdate => '2012-12-24',
+                           );
 
 my ($datereceived, $new_ordernumber) = ModReceiveOrder(
     $biblionumber1,
@@ -121,6 +132,21 @@ cmp_ok(scalar @invoices, '>=', 2, 'GetInvoices returns at least two invoices');
 
 @invoices = GetInvoices(invoicenumber => 'invoice2');
 cmp_ok(scalar @invoices, '>=', 1, 'GetInvoices returns at least one invoice when a specific invoice is requested');
+
+@invoices = GetInvoices(shipmentdateto => '2012-12-24', shipmentdatefrom => '2012-12-24');
+is($invoices[0]->{invoicenumber}, 'invoice2', 'GetInvoices() to search by shipmentdate works (bug 8854)');
+@invoices = GetInvoices(title => 'Bug');
+is($invoices[0]->{invoicenumber}, 'invoice1', 'GetInvoices() to search by title works (bug 8854)');
+@invoices = GetInvoices(author => 'Billy');
+is($invoices[0]->{invoicenumber}, 'invoice1', 'GetInvoices() to search by author works (bug 8854)');
+@invoices = GetInvoices(publisher => 'Scholastic');
+is($invoices[0]->{invoicenumber}, 'invoice1', 'GetInvoices() to search by publisher works (bug 8854)');
+@invoices = GetInvoices(publicationyear => '2012');
+is($invoices[0]->{invoicenumber}, 'invoice1', 'GetInvoices() to search by publication/copyright year works (bug 8854)');
+@invoices = GetInvoices(isbneanissn => '1234567890');
+is($invoices[0]->{invoicenumber}, 'invoice1', 'GetInvoices() to search by ISBN works (bug 8854)');
+@invoices = GetInvoices(isbneanissn => '123456789');
+is($invoices[0]->{invoicenumber}, 'invoice1', 'GetInvoices() to search by partial ISBN works (bug 8854)');
 
 my $invoicesummary1 = GetInvoice($invoiceid1);
 is($invoicesummary1->{'invoicenumber'}, 'invoice1', 'GetInvoice retrieves correct invoice');

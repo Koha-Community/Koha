@@ -3,10 +3,8 @@
 use Modern::Perl;
 use C4::Context;
 
-use Test::More tests => 49;
+use Test::More tests => 50;
 use Test::MockModule;
-
-use_ok('C4::Acquisition');
 
 my $module = new Test::MockModule('C4::Context');
 $module->mock('_new_dbh', sub {
@@ -16,6 +14,8 @@ $module->mock('_new_dbh', sub {
 });
 
 my $dbh = C4::Context->dbh;
+
+use_ok('C4::Acquisition');
 
 # We need to add a resultset to avoid DBI fail
 # ("DBI bind_columns: invalid number of arguments...")
@@ -42,9 +42,9 @@ my @invoices = C4::Acquisition::GetInvoices(
 );
 my $history = $dbh->{mock_all_history};
 
-is(scalar(@$history), 1);
-my @bound_params = @{ $history->[0]->{bound_params} };
-is(scalar(@bound_params), 15);
+ok(scalar(@$history) > 0);
+my @bound_params = @{ $history->[-1]->{bound_params} };
+is(scalar(@bound_params), 16);
 is($bound_params[0], 'supplierid');
 is($bound_params[1], '%invoicenumber%');
 is($bound_params[2], '%suppliername%');
@@ -59,7 +59,8 @@ is($bound_params[10], 'title');
 is($bound_params[11], 'author');
 is($bound_params[12], 'publisher');
 is($bound_params[13], 'publicationyear');
-is($bound_params[14], 'branchcode');
+is($bound_params[14], 'publicationyear');
+is($bound_params[15], 'branchcode');
 
 $dbh->{mock_clear_history} = 1;
 $dbh->{mock_add_resultset} = $rs;
