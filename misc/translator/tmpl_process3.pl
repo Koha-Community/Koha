@@ -146,7 +146,7 @@ sub listfiles {
             } elsif (-f $path) {
                 my $basename = basename $path;
                 push @it, $path
-                    if ( not @$filenames or ( grep { $basename =~ /$_/ } @$filenames ) )
+                    if ( not @$filenames or ( grep { $path =~ /$_/ } @$filenames ) )
                        and (!defined $type || $dirent =~ /\.(?:$type)$/) || $action eq 'install';
             } elsif (-d $path && $recursive_p) {
                 push @it, listfiles($path, $type, $action, $filenames);
@@ -371,13 +371,20 @@ if ($action eq 'create')  {
         (defined $charset_in? ('-I', $charset_in): ()),
         (defined $charset_out? ('-O', $charset_out): ()));
     if ($st == 0) {
-    # Merge the temporary "pot file" with the specified po file ($str_file)
-    # FIXME: msgmerge(1) is a Unix dependency
-    # FIXME: need to check the return value
-    $st = system("msgmerge -U ".($quiet?'-q':'')." -s $str_file $tmpfile2");
+        # Merge the temporary "pot file" with the specified po file ($str_file)
+        # FIXME: msgmerge(1) is a Unix dependency
+        # FIXME: need to check the return value
+        if ( @filenames ) {
+            my ($tmph3, $tmpfile3) = tmpnam();
+            $st = system("msgcat $str_file $tmpfile2 > $tmpfile3");
+            $st = system("msgmerge -U ".($quiet?'-q':'')." -s $str_file $tmpfile3")
+                unless $st;
+        } else {
+            $st = system("msgmerge -U ".($quiet?'-q':'')." -s $str_file $tmpfile2");
+        }
     } else {
-    error_normal "Text extraction failed: $xgettext: $!\n", undef;
-    error_additional "Will not run msgmerge\n", undef;
+        error_normal "Text extraction failed: $xgettext: $!\n", undef;
+        error_additional "Will not run msgmerge\n", undef;
     }
 #   unlink $tmpfile1 || warn_normal "$tmpfile1: unlink failed: $!\n", undef;
 #   unlink $tmpfile2 || warn_normal "$tmpfile2: unlink failed: $!\n", undef;

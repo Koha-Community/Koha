@@ -338,7 +338,7 @@ sub install_tmpl {
             "-o $trans->{dir}/$self->{lang} ".
             "-s $self->{path_po}/$self->{lang}$trans->{suffix} -r " .
             (
-                $files
+                @$files
                     ? '-f ' . join ' -f ', @$files
                     : ''
             )
@@ -363,7 +363,7 @@ sub update_tmpl {
             "-i $trans->{dir}/en/ " .
             "-s $self->{path_po}/$self->{lang}$trans->{suffix} -r " .
             (
-                $files
+                @$files
                     ? '-f ' . join ' -f ', @$files
                     : ''
             )
@@ -398,7 +398,7 @@ sub create_tmpl {
             "-i $trans->{dir}/en/ " .
             "-s $self->{path_po}/$self->{lang}$trans->{suffix} -r " .
             (
-                $files
+                @$files
                     ? '-f ' . join ' -f ', @$files
                     : ''
             )
