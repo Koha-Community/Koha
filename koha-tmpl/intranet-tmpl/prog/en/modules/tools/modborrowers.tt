@@ -228,7 +228,6 @@
                                                 <th>Category</th>
                                                 <th>Registration date</th>
                                                 <th>Expiry date</th>
-                                                <th>Restricted</th>
                                                 [% FOREACH attrh IN attributes_header %]
                                                     <th>[% attrh.attribute %]</th>
                                                 [% END %]
@@ -247,7 +246,6 @@
                                                     <td>[% borrower.categorycode %]</td>
                                                     <td>[% borrower.dateenrolled | $KohaDates %]</td>
                                                     <td>[% borrower.dateexpiry | $KohaDates %]</td>
-                                                    <td>[% borrower.debarred | $KohaDates %]</td>
                                                     [% FOREACH pa IN borrower.patron_attributes %]
                                                         [% IF ( pa.code ) %]
                                                             <td>[% pa.code %]=[% pa.value %]</td>
@@ -292,10 +290,6 @@
                                                 Registration date:
                                                 [% CASE 'dateexpiry' %]
                                                 Expiry date:
-                                                [% CASE 'debarred' %]
-                                                Restricted:
-                                                [% CASE 'debarredcomment' %]
-                                                Restriction comment:
                                                 [% CASE 'borrowernotes' %]
                                                 Circulation note:
                                             [% END %]

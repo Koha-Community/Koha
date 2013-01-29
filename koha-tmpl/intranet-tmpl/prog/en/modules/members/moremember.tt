@@ -194,10 +194,7 @@ function validate1(date) {
         <ul>
         [% IF ( userdebarred ) %]
             <li class="blocker">Patron is restricted[% IF ( userdebarreddate ) %] until [% userdebarreddate%] [% IF (debarredcomment ) %]([% debarredcomment %])[% END %][% END %]
-            <form class="inline compact" action="/cgi-bin/koha/members/setdebar.pl" method="post">
-                <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
-                <input type="submit" value="Lift restriction" />
-            </form>
+            <a href="#reldebarments" onclick="$('#debarments-tab-link').click()">View restrictions</a>
             </li>
         [% END %]
         [% IF ( gonenoaddress ) %]<li class="blocker">Patron's address is in doubt.</li>[% END %]
@@ -439,6 +436,7 @@ function validate1(date) {
             <a href="#onhold">[% countreserv %] Hold(s)</a>    [% ELSE %]
             <a href="#onhold">0 Holds</a>
     [% END %]</li>
+        <li><a id="debarments-tab-link" href="#reldebarments">[% debarments.size %] Restrictions</a></li>
     </ul>
 
     <form action="/cgi-bin/koha/reserve/renewscript.pl" method="post" class="checkboxed">
@@ -613,6 +611,8 @@ function validate1(date) {
         <p>No outstanding charges</p>
     [% END %]
 </div>
+
+[% INCLUDE borrower_debarments.inc %]
 
 <div id="onhold">
 [% IF ( reservloop ) %]

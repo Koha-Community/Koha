@@ -32,7 +32,6 @@ use C4::Dates qw/format_date/;
 use C4::Branch; # GetBranches
 use C4::Koha;   # GetPrinter
 use C4::Circulation;
-use C4::Overdues qw/CheckBorrowerDebarred/;
 use C4::Members;
 use C4::Biblio;
 use C4::Search;
@@ -41,6 +40,7 @@ use C4::Reserves;
 use C4::Context;
 use CGI::Session;
 use C4::Members::Attributes qw(GetBorrowerAttributes);
+use Koha::Borrower::Debarments qw(GetDebarments);
 use Koha::DateUtils;
 
 use Date::Calc qw(
@@ -266,13 +266,12 @@ if ($borrowernumber) {
         finetotal    => $fines
     );
 
-    my $debar = CheckBorrowerDebarred($borrowernumber);
-    if ($debar) {
-        $template->param( 'userdebarred'    => 1 );
-        $template->param( 'debarredcomment' => $borrower->{debarredcomment} );
-        if ( $debar ne "9999-12-31" ) {
-            $template->param( 'userdebarreddate' => C4::Dates::format_date($debar) );
-        }
+    $template->param(
+        'userdebarred'    => $borrower->{debarred},
+        'debarredcomment' => $borrower->{debarredcomment},
+    );
+    if ( $borrower->{debarred} ne "9999-12-31" ) {
+        $template->param( 'userdebarreddate' => C4::Dates::format_date( $borrower->{debarred} ) );
     }
 
 }
@@ -776,10 +775,11 @@ $template->param(
     debt_confirmed            => $debt_confirmed,
     SpecifyDueDate            => $duedatespec_allow,
     CircAutocompl             => C4::Context->preference("CircAutocompl"),
-	AllowRenewalLimitOverride => C4::Context->preference("AllowRenewalLimitOverride"),
+    AllowRenewalLimitOverride => C4::Context->preference("AllowRenewalLimitOverride"),
     export_remove_fields      => C4::Context->preference("ExportRemoveFields"),
     export_with_csv_profile   => C4::Context->preference("ExportWithCsvProfile"),
     canned_bor_notes_loop     => $canned_notes,
+    debarments                => GetDebarments({ borrowernumber => $borrowernumber }),
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;

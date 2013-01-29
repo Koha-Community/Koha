@@ -7595,6 +7595,35 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion ="3.13.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+CREATE TABLE borrower_debarments (
+  borrower_debarment_id int(11) NOT NULL AUTO_INCREMENT,
+  borrowernumber int(11) NOT NULL,
+  expiration date DEFAULT NULL,
+  `type` enum('SUSPENSION','OVERDUES','MANUAL') NOT NULL DEFAULT 'MANUAL',
+  `comment` text,
+  manager_id int(11) DEFAULT NULL,
+  created timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  updated timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (borrower_debarment_id),
+  KEY borrowernumber (borrowernumber)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+    });
+
+    $dbh->do(q{
+INSERT INTO borrower_debarments ( borrowernumber, expiration, comment ) SELECT borrowernumber, debarred, debarredcomment FROM borrowers WHERE debarred IS NOT NULL
+    });
+
+    $dbh->do(q{
+INSERT IGNORE INTO systempreferences (variable,value,explanation,type) VALUES
+('AutoRemoveOverduesRestrictions','0','Defines whether an OVERDUES debarment should be lifted automatically if all overdue items are returned by the patron.','YesNo')
+    });
+
+    print "Upgrade to $DBversion done (Bug 2720 - Overdues which debar automatically should undebar automatically when returned)\n";
+    SetVersion($DBversion);
+}
 
 =head1 FUNCTIONS
 

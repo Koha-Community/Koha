@@ -30,7 +30,6 @@ use C4::Members;
 use C4::Members::AttributeTypes;
 use C4::Members::Attributes qw/GetBorrowerAttributeValue/;
 use C4::Output;
-use C4::Overdues qw/CheckBorrowerDebarred/;
 use C4::Biblio;
 use C4::Items;
 use C4::Letters;
@@ -80,7 +79,7 @@ my ($warning_year, $warning_month, $warning_day) = split /-/, $borr->{'dateexpir
 
 $borr->{'ethnicity'} = fixEthnicity( $borr->{'ethnicity'} );
 
-my $debar = CheckBorrowerDebarred($borrowernumber);
+my $debar = $borr->{'debarred'};
 my $userdebarred;
 
 if ($debar) {

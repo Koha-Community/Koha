@@ -62,10 +62,10 @@ BEGIN {
 	push @EXPORT, qw(
         &GetIssuesIteminfo
 	);
-	# subs to move to Members.pm
-	push @EXPORT, qw(
-        &CheckBorrowerDebarred
-	);
+
+     # &GetIssuingRules - delete.
+   # use C4::Circulation::GetIssuingRule instead.
+
 	# subs to move to Biblio.pm
 	push @EXPORT, qw(
         &GetItems
@@ -758,35 +758,6 @@ sub GetBranchcodesWithOverdueRules {
     }
     return @branches;
 }
-
-=head2 CheckBorrowerDebarred
-
-    ($debarredstatus) = &CheckBorrowerDebarred($borrowernumber);
-
-Check if the borrowers is already debarred
-
-C<$debarredstatus> return 0 for not debarred and return 1 for debarred
-
-C<$borrowernumber> contains the borrower number
-
-=cut
-
-# FIXME: Shouldn't this be in C4::Members?
-sub CheckBorrowerDebarred {
-    my ($borrowernumber) = @_;
-    my $dbh   = C4::Context->dbh;
-    my $query = qq|
-        SELECT debarred
-        FROM borrowers
-        WHERE borrowernumber=?
-        AND debarred > NOW()
-    |;
-    my $sth = $dbh->prepare($query);
-    $sth->execute($borrowernumber);
-    my $debarredstatus = $sth->fetchrow;
-    return $debarredstatus;
-}
-
 
 =head2 CheckItemNotify
 

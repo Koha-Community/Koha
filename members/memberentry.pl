@@ -41,6 +41,8 @@ use C4::Log;
 use C4::Letters;
 use C4::Branch; # GetBranches
 use C4::Form::MessagingPreferences;
+use Koha::Borrower::Debarments;
+use Koha::DateUtils;
 
 use vars qw($debug);
 
@@ -62,6 +64,7 @@ my ($template, $loggedinuser, $cookie)
            flagsrequired => {borrowers => 1},
            debug => ($debug) ? 1 : 0,
        });
+
 my $guarantorid    = $input->param('guarantorid');
 my $borrowernumber = $input->param('borrowernumber');
 my $actionType     = $input->param('actionType') || '';
@@ -89,6 +92,29 @@ my $check_categorytype=$input->param('check_categorytype');
 my $borrower_data;
 my $NoUpdateLogin;
 my $userenv = C4::Context->userenv;
+
+
+## Deal with debarments
+$template->param(
+    debarments => GetDebarments( { borrowernumber => $borrowernumber } ) );
+my @debarments_to_remove = $input->param('remove_debarment');
+foreach my $d ( @debarments_to_remove ) {
+    DelDebarment( $d );
+}
+if ( $input->param('add_debarment') ) {
+
+    my $expiration = $input->param('debarred_expiration');
+    $expiration = $expiration ? output_pref( dt_from_string($expiration), 'iso' ) : undef;
+
+    AddUniqueDebarment(
+        {
+            borrowernumber => $borrowernumber,
+            type           => 'MANUAL',
+            comment        => $input->param('debarred_comment'),
+            expiration     => $expiration,
+        }
+    );
+}
 
 $template->param("uppercasesurnames" => C4::Context->preference('uppercasesurnames'));
 
@@ -142,16 +168,6 @@ if ( $op eq 'insert' || $op eq 'modify' || $op eq 'save' || $op eq 'duplicate' )
         }
     }
 
-    ## Manipulate debarred
-    if ( $newdata{debarred} ) {
-        $newdata{debarred} = $newdata{datedebarred} ? $newdata{datedebarred} : "9999-12-31";
-    } elsif ( exists( $newdata{debarred} ) && !( $newdata{debarred} ) ) {
-        undef( $newdata{debarred} );
-        undef( $newdata{debarredcomment} );
-    } elsif ( exists( $newdata{debarredcomment} ) && $newdata{debarredcomment} eq "" ) {
-        undef( $newdata{debarredcomment} );
-    }
-    
     my $dateobject = C4::Dates->new();
     my $syspref = $dateobject->regexp();		# same syspref format for all 3 dates
     my $iso     = $dateobject->regexp('iso');	#
@@ -661,9 +677,7 @@ if (C4::Context->preference('uppercasesurnames')) {
     $data{'contactname'} &&= uc( $data{'contactname'} );
 }
 
-$data{debarred} = C4::Overdues::CheckBorrowerDebarred($borrowernumber);
-$data{datedebarred} = $data{debarred} if ( $data{debarred} && $data{debarred} ne "9999-12-31" );
-foreach (qw(dateenrolled dateexpiry dateofbirth datedebarred)) {
+foreach (qw(dateenrolled dateexpiry dateofbirth)) {
 	$data{$_} = format_date($data{$_});	# back to syspref for display
 	$template->param( $_ => $data{$_});
 }

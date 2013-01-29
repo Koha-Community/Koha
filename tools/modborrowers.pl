@@ -21,7 +21,7 @@
 #
 # Batch Edit Patrons
 # Modification for patron's fields:
-# surname firstname branchcode categorycode sort1 sort2 dateenrolled dateexpiry debarred debarredcomment borrowernotes
+# surname firstname branchcode categorycode sort1 sort2 dateenrolled dateexpiry borrowernotes
 # And for patron attributes.
 
 use Modern::Perl;
@@ -213,18 +213,6 @@ if ( $op eq 'show' ) {
         }
         ,
         {
-            name => "debarred",
-            type => "date",
-            mandatory => ( grep /debarred/, @mandatoryFields ) ? 1 : 0,
-        }
-        ,
-        {
-            name => "debarredcomment",
-            type => "text",
-            mandatory => ( grep /debarredcomment/, @mandatoryFields ) ? 1 : 0,
-        }
-        ,
-        {
             name => "borrowernotes",
             type => "text",
             mandatory => ( grep /borrowernotes/, @mandatoryFields ) ? 1 : 0,
@@ -242,7 +230,7 @@ if ( $op eq 'do' ) {
 
     my @disabled = $input->param('disable_input');
     my $infos;
-    for my $field ( qw/surname firstname branchcode categorycode sort1 sort2 dateenrolled dateexpiry debarred debarredcomment borrowernotes/ ) {
+    for my $field ( qw/surname firstname branchcode categorycode sort1 sort2 dateenrolled dateexpiry borrowernotes/ ) {
         my $value = $input->param($field);
         $infos->{$field} = $value if $value;
         $infos->{$field} = "" if grep { /^$field$/ } @disabled;
@@ -337,7 +325,7 @@ sub GetBorrowerInfos {
     my $borrower = GetMember( %info );
     if ( $borrower ) {
         $borrower->{branchname} = GetBranchName( $borrower->{branchcode} );
-        for ( qw(dateenrolled dateexpiry debarred) ) {
+        for ( qw(dateenrolled dateexpiry) ) {
             my $userdate = $borrower->{$_};
             unless ($userdate && $userdate ne "0000-00-00" and $userdate ne "9999-12-31") {
                 $borrower->{$_} = '';

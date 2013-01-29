@@ -38,6 +38,7 @@ use C4::NewsChannels; #get slip news
 use DateTime;
 use DateTime::Format::DateParse;
 use Koha::DateUtils;
+use Koha::Borrower::Debarments qw(IsDebarred);
 use Text::Unaccent qw( unac_string );
 use Koha::AuthUtils qw(hash_password);
 
@@ -103,6 +104,8 @@ BEGIN {
 
         &IssueSlip
         GetBorrowersWithEmail
+
+        HasOverdues
     );
 
     #Modify data
@@ -636,7 +639,7 @@ sub IsMemberBlocked {
     my $borrowernumber = shift;
     my $dbh            = C4::Context->dbh;
 
-    my $blockeddate = CheckBorrowerDebarred($borrowernumber);
+    my $blockeddate = Koha::Borrower::Debarments::IsDebarred($borrowernumber);
 
     return ( 1, $blockeddate ) if $blockeddate;
 
@@ -2213,32 +2216,6 @@ sub GetBorrowersNamesAndLatestIssue {
     return $results;
 }
 
-=head2 DebarMember
-
-my $success = DebarMember( $borrowernumber, $todate );
-
-marks a Member as debarred, and therefore unable to checkout any more
-items.
-
-return :
-true on success, false on failure
-
-=cut
-
-sub DebarMember {
-    my $borrowernumber = shift;
-    my $todate         = shift;
-
-    return unless defined $borrowernumber;
-    return unless $borrowernumber =~ /^\d+$/;
-
-    return ModMember(
-        borrowernumber => $borrowernumber,
-        debarred       => $todate
-    );
-
-}
-
 =head2 ModPrivacy
 
 =over 4
@@ -2535,6 +2512,17 @@ sub AddEnrolmentFeeIfNeeded {
         # insert fee in patron debts
         C4::Accounts::manualinvoice( $borrowernumber, '', '', 'A', $enrolmentfee );
     }
+}
+
+sub HasOverdues {
+    my ( $borrowernumber ) = @_;
+
+    my $sql = "SELECT COUNT(*) FROM issues WHERE date_due < NOW() AND borrowernumber = ?";
+    my $sth = C4::Context->dbh->prepare( $sql );
+    $sth->execute( $borrowernumber );
+    my ( $count ) = $sth->fetchrow_array();
+
+    return $count;
 }
 
 END { }    # module clean-up code here (global destructor)

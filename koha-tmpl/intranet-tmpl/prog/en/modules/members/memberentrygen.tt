@@ -1,4 +1,5 @@
 [% IF ( opduplicate ) %][% SET focusAction = "clearDupe" %][% END %]
+[% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Patrons &rsaquo; 
 [% IF ( opadd ) %]Add[% ELSIF ( opduplicate ) %]Duplicate[% ELSE %] Modify[% END %] [% IF ( categoryname ) %] [% categoryname %] patron[% ELSE %][% IF ( I ) %] Organization patron[% END %][% IF ( A ) %] Adult patron[% END %][% IF ( C ) %] Child patron[% END %][% IF ( P ) %] Professional patron[% END %][% IF ( S ) %] Staff patron[% END %][% END %][% UNLESS ( opadd ) %] [% surname %], [% firstname %][% END %]</title>
@@ -1150,7 +1151,6 @@
 			[% FOREACH flagloo IN flagloop %]
 				<li><label class="radio" for="yes[% flagloo.name %]">
                 [% IF ( flagloo.key == 'gonenoaddress' ) %]Gone no address:[% END %]
-				[% IF ( flagloo.key == 'debarred' ) %]Restricted:[% END %]
                 [% IF ( flagloo.key == 'lost' ) %]Lost card:[% END %]
                 </label>
 				<label for="yes[% flagloo.name %]">Yes </label>
@@ -1168,32 +1168,54 @@
 
             </li>
 			[% END %]
-			<li>
-				<label for="yesdebarred" class="radio">Restricted: </label>
-				[% IF ( debarred ) %]
-				<label for="yesdebarred">Yes </label>
-				<input type="radio" id="yesdebarred" name="debarred" value="1" checked="checked"/>
-                <label for="nodebarred">No </label>
-                <input type="radio" id="nodebarred" name="debarred" value="0"/>
-				[% ELSE %]
-				<label for="yesdebarred">Yes </label>
-				<input type="radio" id="yesdebarred" name="debarred" value="1" />
-                <label for="nodebarred">No </label>
-                <input type="radio" id="nodebarred" name="debarred" value="0" checked="checked"/>
-				[% END %]
-
-                <span id="debarreduntil"><label for="datedebarred" class="inline">Until:</label>
-                <input type="text" name="datedebarred" id="datedebarred" class="debarred datepicker [% focusAction %]" value="[% datedebarred %]" />
-                <span class="hint">(optional)</span> </span>
-                </li>
-                <li>
-		        <label for="debarredcomment" class="radio">Comment:</label>
-                <textarea id="debarredcomment" name="debarredcomment" cols="55" rows="3">[% debarredcomment %]</textarea>
-	        </li>
 
 			</ol>
 			</fieldset>
     
+              <fieldset class="rows">
+                <legend>Patron restrictions</legend>
+
+                [% UNLESS debarments %]<p>Patron is currently unrestricted.</p>[% END %]
+
+                <table>
+                    <thead>
+                        <tr>
+                             <th>Type</th>
+                             <th>Comment</th>
+                             <th>Expiration</th>
+                             <th>Remove?</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        [% FOREACH d IN debarments %]
+                            <tr>
+                                <td>[% d.type %]</td>
+                                <td>[% d.comment %]</td>
+                                <td>[% IF d.expiration %] [% d.expiration | $KohaDates %] [% ELSE %] <i>Indefinite</i> [% END %]</td>
+                                <td>
+                                    <input type="checkbox" id="debarment_[% d.borrower_debarment_id %]" name="remove_debarment" value="[% d.borrower_debarment_id %]" />
+                                </td>
+                            </tr>
+                        [% END %]
+                    </tbody>
+
+                    <tfoot>
+                        <tr>
+                            <td>
+                                Add new
+                                <input type="checkbox" id="add_debarment" name="add_debarment" value="1" />
+                            </td>
+                            <td><input type="text" id="debarred_comment" name="debarred_comment" onchange="$('#add_debarment').prop('checked', true);" /></td>
+                            <td>
+                                <input name="debarred_expiration" id="debarred_expiration" size="10" readonly="readonly" value="" class="datepicker" onchange="$('#add_debarment').prop('checked', true);" />
+                                <a href='javascript:void(0)' onclick="$('#debarred_expiration').val('');">Clear date</a>
+                            </td>
+                            <td><a class="btn" href='javascript:void(0)' onclick="$('#debarred_expiration').val(''); $('#add_debarment').prop('checked', false); $('#debarred_comment').val('');">Clear new restriction</a></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </fieldset>
 		[% END %]
 
 [% END %]

@@ -307,7 +307,7 @@ if ( $borr->{lost} && ($borr->{lost} == 1) ) {
                      lost    => 1
                     );
 }
-if ( CheckBorrowerDebarred($borrowernumber) ) {
+if ( $borr->{'debarred'} ) {
     $noreserves = 1;
     $template->param(
                      message  => 1,

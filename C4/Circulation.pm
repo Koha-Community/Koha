@@ -47,6 +47,7 @@ use Algorithm::CheckDigits;
 use Data::Dumper;
 use Koha::DateUtils;
 use Koha::Calendar;
+use Koha::Borrower::Debarments;
 use Carp;
 use Date::Calc qw(
   Today
@@ -1920,6 +1921,16 @@ sub AddReturn {
     logaction("CIRCULATION", "RETURN", $borrowernumber, $item->{'itemnumber'})
         if C4::Context->preference("ReturnLog");
     
+    # Remove any OVERDUES related debarment if the borrower has no overdues
+    if ( $borrowernumber
+      && $borrower->{'debarred'}
+      && C4::Context->preference('AutoRemoveOverduesRestrictions')
+      && !HasOverdues( $borrowernumber )
+      && @{ GetDebarments({ borrowernumber => $borrowernumber, type => 'OVERDUES' }) }
+    ) {
+        DelUniqueDebarment({ borrowernumber => $borrowernumber, type => 'OVERDUES' });
+    }
+
     # FIXME: make this comment intelligible.
     #adding message if holdingbranch is non equal a userenv branch to return the document to homebranch
     #we check, if we don't have reserv or transfert for this document, if not, return it to homebranch .
@@ -2053,19 +2064,13 @@ sub _debar_user_on_return {
 
             my $new_debar_dt =
               $dt_today->clone()->add_duration( $deltadays * $finedays );
-            if ( $borrower->{debarred} ) {
-                my $borrower_debar_dt = dt_from_string( $borrower->{debarred} );
 
-                # Update patron only if new date > old
-                if ( DateTime->compare( $borrower_debar_dt, $new_debar_dt ) !=
-                    -1 )
-                {
-                    return;
-                }
+            Koha::Borrower::Debarments::AddUniqueDebarment({
+                borrowernumber => $borrower->{borrowernumber},
+                expiration     => $new_debar_dt->ymd(),
+                type           => 'SUSPENSION',
+            });
 
-            }
-            C4::Members::DebarMember( $borrower->{borrowernumber},
-                $new_debar_dt->ymd() );
             return $new_debar_dt->ymd();
         }
     }
@@ -2612,6 +2617,16 @@ sub AddRenewal {
 		branch   => $branch,
 		});
 	}
+    }
+
+    # Remove any OVERDUES related debarment if the borrower has no overdues
+    my $borrower = C4::Members::GetMember( borrowernumber => $borrowernumber );
+    if ( $borrowernumber
+      && $borrower->{'debarred'}
+      && !HasOverdues( $borrowernumber )
+      && @{ GetDebarments({ borrowernumber => $borrowernumber, type => 'OVERDUES' }) }
+    ) {
+        DelUniqueDebarment({ borrowernumber => $borrowernumber, type => 'OVERDUES' });
     }
 
     # Log the renewal

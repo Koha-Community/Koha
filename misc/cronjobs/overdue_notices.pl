@@ -42,6 +42,9 @@ use C4::Letters;
 use C4::Overdues qw(GetFine);
 use C4::Budgets qw(GetCurrency);
 
+use Koha::Borrower::Debarments qw(AddUniqueDebarment);
+use Koha::DateUtils;
+
 =head1 NAME
 
 overdue_notices.pl - prepare messages to be sent to patrons for overdue items
@@ -517,7 +520,14 @@ END_SQL
                 if ( $overdue_rules->{"debarred$i"} ) {
     
                     #action taken is debarring
-                    C4::Members::DebarMember($borrowernumber, '9999-12-31');
+                    AddUniqueDebarment(
+                        {
+                            borrowernumber => $borrowernumber,
+                            type           => 'OVERDUES',
+                            comment => "Restriction added by overdues process "
+                              . output_pref( dt_from_string() ),
+                        }
+                    );
                     $verbose and warn "debarring $borr\n";
                 }
                 my @params = ($listall ? ( $borrowernumber , 1 , $MAX ) : ( $borrowernumber, $mindays, $maxdays ));

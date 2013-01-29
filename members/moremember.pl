@@ -48,11 +48,10 @@ use C4::Koha;
 use C4::Letters;
 use C4::Biblio;
 use C4::Branch; # GetBranchName
-use C4::Overdues qw/CheckBorrowerDebarred/;
 use C4::Form::MessagingPreferences;
 use List::MoreUtils qw/uniq/;
 use C4::Members::Attributes qw(GetBorrowerAttributes);
-
+use Koha::Borrower::Debarments qw(GetDebarments);
 #use Smart::Comments;
 #use Data::Dumper;
 use DateTime;
@@ -147,7 +146,7 @@ for (qw(gonenoaddress lost borrowernotes)) {
 	 $data->{$_} and $template->param(flagged => 1) and last;
 }
 
-my $debar = CheckBorrowerDebarred($borrowernumber);
+my $debar = $data->{'debarred'};
 if ($debar) {
     $template->param( 'userdebarred' => 1, 'flagged' => 1 );
     if ( $debar ne "9999-12-31" ) {
@@ -430,6 +429,7 @@ $template->param(
     AutoResumeSuspendedHolds => C4::Context->preference('AutoResumeSuspendedHolds'),
     SuspendHoldsIntranet => C4::Context->preference('SuspendHoldsIntranet'),
     RoutingSerials => C4::Context->preference('RoutingSerials'),
+    debarments => GetDebarments({ borrowernumber => $borrowernumber }),
 );
 $template->param( $error => 1 ) if $error;
 

@@ -557,14 +557,10 @@ No patron matched <span class="ex">[% message %]</span>
 
             [% IF ( userdebarred ) %]
                <li class="blocker">
-               <span class="circ-hlt"> Restricted:</span> Patron's account is restricted [% IF (userdebarreddate ) %] until [% userdebarreddate %] [% END %] [% IF (debarredcomment ) %] with the comment "[% debarredcomment %]"[% END %]
-               <form class="inline compact" action="/cgi-bin/koha/members/setstatus.pl" method="post">
-	                <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
-	                <input type="hidden" name="destination" value="circ" />
-	                <input type="hidden" name="cardnumber" value="[% cardnumber %]" />
-	                <input type="submit" value="Lift restriction" />
-               </form>
-			</li>[% END %]
+                   <span class="circ-hlt"> Restricted:</span> Patron's account is restricted [% IF (userdebarreddate ) %] until [% userdebarreddate %] [% END %] [% IF (debarredcomment ) %] with the comment "[% debarredcomment %]"[% END %]
+                   <a href="#reldebarments" onclick="$('#debarments-tab-link').click()">View restrictions</a>
+               </li>
+            [% END %]
 
         	[% IF ( odues ) %]<li>[% IF ( nonreturns ) %]<span class="circ-hlt">Overdues:</span> Patron has <span class="circ-hlt">ITEMS OVERDUE</span>. See highlighted items <a href="#checkouts">below</a>[% END %]</li>
             [% END %]
@@ -664,6 +660,7 @@ No patron matched <span class="ex">[% message %]</span>
     [% ELSE %]
             <a href="#reserves">0 Holds</a>
     [% END %]</li>
+    <li><a id="debarments-tab-link" href="#reldebarments">[% debarments.size %] Restrictions</a></li>
 
 </ul>
 
@@ -979,6 +976,7 @@ No patron matched <span class="ex">[% message %]</span>
 </div>
 [% END %]<!-- end displayrelissues -->
 
+[% INCLUDE borrower_debarments.inc %]
 
 <div id="reserves">
 [% IF ( reservloop ) %]
