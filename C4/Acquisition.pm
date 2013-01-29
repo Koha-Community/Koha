@@ -2319,9 +2319,11 @@ Orders informations are in $invoice->{orders} (array ref)
 
 sub GetInvoiceDetails {
     my ($invoiceid) = @_;
-    my $invoice;
 
-    return unless $invoiceid;
+    if ( !defined $invoiceid ) {
+        carp 'GetInvoiceDetails called without an invoiceid';
+        return;
+    }
 
     my $dbh = C4::Context->dbh;
     my $query = qq{
@@ -2333,7 +2335,7 @@ sub GetInvoiceDetails {
     my $sth = $dbh->prepare($query);
     $sth->execute($invoiceid);
 
-    $invoice = $sth->fetchrow_hashref;
+    my $invoice = $sth->fetchrow_hashref;
 
     $query = qq{
         SELECT aqorders.*, biblio.*
