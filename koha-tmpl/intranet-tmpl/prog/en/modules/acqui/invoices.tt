@@ -41,7 +41,7 @@ $(document).ready(function() {
     <div class="yui-b">
       <h1>Invoices</h1>
       [% IF ( do_search ) %]
-        [% IF ( results_loop ) %]
+        [% IF invoices %]
           <table id="resultst">
             <thead>
               <tr>
@@ -55,30 +55,30 @@ $(document).ready(function() {
               </tr>
             </thead>
             <tbody>
-              [% FOREACH result IN results_loop %]
+              [% FOREACH invoice IN invoices %]
                 <tr>
-                  <td><a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% result.invoiceid %]">[% result.invoicenumber %]</a></td>
-                  <td><a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% result.booksellerid %]">[% result.suppliername %]</a></td>
+                  <td><a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% invoice.invoiceid %]">[% invoice.invoicenumber %]</a></td>
+                  <td><a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% invoice.booksellerid %]">[% invoice.suppliername %]</a></td>
                   <td>
-                    [% IF (result.billingdate) %]
-                      [% result.billingdate | $KohaDates %]
+                    [% IF invoice.billingdate %]
+                      [% invoice.billingdate | $KohaDates %]
                     [% END %]
                   </td>
-                  <td>[% result.receivedbiblios %]</td>
-                  <td>[% result.receiveditems %]</td>
+                  <td>[% invoice.receivedbiblios %]</td>
+                  <td>[% invoice.receiveditems %]</td>
                   <td>
-                    [% IF ( result.closedate ) %]
-                      Closed on [% result.closedate | $KohaDates %]
+                    [% IF invoice.closedate %]
+                      Closed on [% invoice.closedate | $KohaDates %]
                     [% ELSE %]
                       Open
                     [% END %]
                   </td>
                   <td>
-                    <a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% result.invoiceid %]">Details</a> /
-                    [% IF ( result.closedate ) %]
-                      <a href="invoice.pl?op=reopen&amp;invoiceid=[% result.invoiceid %]&amp;referer=/cgi-bin/koha/acqui/invoices.pl%3Fop=do_search%26invoicenumber=[% invoicenumber %]%26supplier=[% supplier %]%26billingdatefrom=[% billingdatefrom %]%26billingdateto=[% billingdateto %]%26isbneanissn=[% isbneanissn %]%26title=[% title %]%26author=[% author %]%26publisher=[% publisher %]%26publicationyear=[% publicationyear %]%26branch=[% branch %]">Reopen</a>
+                    <a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% invoice.invoiceid %]">Details</a> /
+                    [% IF invoice.closedate %]
+                      <a href="invoice.pl?op=reopen&amp;invoiceid=[% invoice.invoiceid %]&amp;referer=/cgi-bin/koha/acqui/invoices.pl%3Fop=do_search%26invoicenumber=[% invoicenumber %]%26supplier=[% booksellerid %]%26billingdatefrom=[% billingdatefrom %]%26billingdateto=[% billingdateto %]%26isbneanissn=[% isbneanissn %]%26title=[% title %]%26author=[% author %]%26publisher=[% publisher %]%26publicationyear=[% publicationyear %]%26branch=[% branch %]">Reopen</a>
                     [% ELSE %]
-                      <a href="invoice.pl?op=close&amp;invoiceid=[% result.invoiceid %]&amp;referer=/cgi-bin/koha/acqui/invoices.pl%3Fop=do_search%26invoicenumber=[% invoicenumber %]%26supplier=[% supplier %]%26billingdatefrom=[% billingdatefrom %]%26billingdateto=[% billingdateto %]%26isbneanissn=[% isbneanissn %]%26title=[% title %]%26author=[% author %]%26publisher=[% publisher %]%26publicationyear=[% publicationyear %]%26branch=[% branch %]">Close</a>
+                      <a href="invoice.pl?op=close&amp;invoiceid=[% invoice.invoiceid %]&amp;referer=/cgi-bin/koha/acqui/invoices.pl%3Fop=do_search%26invoicenumber=[% invoicenumber %]%26supplier=[% booksellerid %]%26billingdatefrom=[% billingdatefrom %]%26billingdateto=[% billingdateto %]%26isbneanissn=[% isbneanissn %]%26title=[% title %]%26author=[% author %]%26publisher=[% publisher %]%26publicationyear=[% publicationyear %]%26branch=[% branch %]">Close</a>
                     [% END %]
                   </td>
                 </tr>
@@ -92,7 +92,7 @@ $(document).ready(function() {
               [% IF ( invoicenumber ) %]
                 <li>Invoice no.: [% invoicenumber %]</li>
               [% END %]
-              [% IF ( supplier ) %]
+              [% IF booksellerid %]
                 <li>Vendor: [% suppliername %]</li>
               [% END %]
               [% IF ( billingdatefrom ) %]
@@ -131,7 +131,7 @@ $(document).ready(function() {
               [% END %]
             </ul>
           </p>
-        [% END %]<!-- results_loop -->
+        [% END %]<!-- invoices -->
       [% ELSE %]
         <p>Use the search form on the left to find invoices.</p>
       [% END %]<!-- do_search -->
