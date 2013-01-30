@@ -83,12 +83,27 @@ So: it should not be removed from Koha !
   content : '> ';
 }
 
-#BW_videos {
-  clear : both;
+#BW_podcasts {
   border: 1px solid #E8E8E8;
-  padding-bottom: 140px;
   margin-top: 10px;
-  max-width: 100%;
+  min-width: 100%;
+  float: left;
+  /*width: 49%;*/
+  visibility: hidden;
+  visibility: visible\9;
+}
+
+#BW_podcasts > iframe {
+  margin: -20px 0 10px 20px;
+}
+
+#BW_videos {
+  clear :left;
+  border: 1px solid #E8E8E8;
+  margin-top: 10px;
+  min-width: 100%;
+  /*width: 49%;*/
+  float: left;
   visibility: hidden;
   visibility: visible\9;
 }
@@ -97,7 +112,11 @@ So: it should not be removed from Koha !
   visibility: visible;
 }
 
-#BW_videos h2 {
+#BW_podcasts:not(:empty) {
+  visibility: visible;
+}
+
+#BW_videos h2, #BW_podcasts h2 {
   background-color: #E8E8E8;
   margin: 5px 10px;
   padding: 0 5px;
