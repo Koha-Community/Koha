@@ -53,6 +53,7 @@ use C4::Output;
 use CGI;
 
 use C4::Bookseller qw/GetBookSellerFromId/;
+use C4::Budgets qw/ConvertCurrency/;
 use C4::Acquisition qw/CloseBasketgroup ReOpenBasketgroup GetOrders GetBasketsByBasketgroup GetBasketsByBookseller ModBasketgroup NewBasketgroup DelBasketgroup GetBasketgroups ModBasket GetBasketgroup GetBasket GetBasketGroupAsCSV/;
 use C4::Bookseller qw/GetBookSellerFromId/;
 use C4::Branch qw/GetBranches/;
@@ -210,63 +211,75 @@ sub printbasketgrouppdf{
         my @ba_orders;
         my @ords = &GetOrders($basket->{basketno});
         for my $ord (@ords) {
-            # ba_order is filled with : 
+
+            next unless ( $ord->{biblionumber} or $ord->{quantity}> 0 );
+            eval {
+                require C4::Biblio;
+                import C4::Biblio;
+            };
+            if ($@){
+                croak $@;
+            }
+            eval {
+                require C4::Koha;
+                import C4::Koha;
+            };
+            if ($@){
+                croak $@;
+            }
+
+            $ord->{rrp} = ConvertCurrency( $ord->{'currency'}, $ord->{rrp} );
+            if ( $bookseller->{'listincgst'} ) {
+                $ord->{rrpgsti} = sprintf( "%.2f", $ord->{rrp} );
+                $ord->{gstgsti} = sprintf( "%.2f", $ord->{gstrate} * 100 );
+                $ord->{rrpgste} = sprintf( "%.2f", $ord->{rrp} / ( 1 + ( $ord->{gstgsti} / 100 ) ) );
+                $ord->{gstgste} = sprintf( "%.2f", $ord->{gstgsti} / ( 1 + ( $ord->{gstgsti} / 100 ) ) );
+                $ord->{ecostgsti} = sprintf( "%.2f", $ord->{ecost} );
+                $ord->{ecostgste} = sprintf( "%.2f", $ord->{ecost} / ( 1 + ( $ord->{gstgsti} / 100 ) ) );
+                $ord->{gstvalue} = sprintf( "%.2f", ( $ord->{ecostgsti} - $ord->{ecostgste} ) * $ord->{quantity});
+                $ord->{totalgste} = sprintf( "%.2f", $ord->{quantity} * $ord->{ecostgste} );
+                $ord->{totalgsti} = sprintf( "%.2f", $ord->{quantity} * $ord->{ecostgsti} );
+            } else {
+                $ord->{rrpgsti} = sprintf( "%.2f", $ord->{rrp} * ( 1 + ( $ord->{gstrate} ) ) );
+                $ord->{rrpgste} = sprintf( "%.2f", $ord->{rrp} );
+                $ord->{gstgsti} = sprintf( "%.2f", $ord->{gstrate} * 100 );
+                $ord->{gstgste} = sprintf( "%.2f", $ord->{gstrate} * 100 );
+                $ord->{ecostgsti} = sprintf( "%.2f", $ord->{ecost} * ( 1 + ( $ord->{gstrate} ) ) );
+                $ord->{ecostgste} = sprintf( "%.2f", $ord->{ecost} );
+                $ord->{gstvalue} = sprintf( "%.2f", ( $ord->{ecostgsti} - $ord->{ecostgste} ) * $ord->{quantity});
+                $ord->{totalgste} = sprintf( "%.2f", $ord->{quantity} * $ord->{ecostgste} );
+                $ord->{totalgsti} = sprintf( "%.2f", $ord->{quantity} * $ord->{ecostgsti} );
+            }
+            my $bib = GetBiblioData($ord->{biblionumber});
+            my $itemtypes = GetItemTypes();
+
+            #FIXME DELETE ME
             # 0      1        2        3         4            5         6       7      8        9
             #isbn, itemtype, author, title, publishercode, quantity, listprice ecost discount gstrate
-            my @ba_order;
-            if ( $ord->{biblionumber} && $ord->{quantity}> 0 ) {
-                eval {
-		    require C4::Biblio;
-		    import C4::Biblio;
-		};
-		if ($@){
-		    croak $@;
-		}
-                eval {
-		    require C4::Koha;
-		    import C4::Koha;
-		};
-		if ($@){
-		    croak $@;
-		}
-                my $bib = GetBiblioData($ord->{biblionumber});
-                my $itemtypes = GetItemTypes();
-                if($ord->{isbn}){
-                    push(@ba_order, $ord->{isbn});
-                } else {
-                    push(@ba_order, undef);
-                }
-                if ($ord->{itemtype} and $bib->{itemtype}){
-                    push(@ba_order, $itemtypes->{$bib->{itemtype}}->{description});
-                } else {
-                    push(@ba_order, undef);
-                }
-#             } else {
-#                 push(@ba_order, undef, undef);
-                for my $key (qw/author title publishercode quantity listprice ecost/) {
-                    push(@ba_order, $ord->{$key});                                                  #Order lines
-                }
-                push(@ba_order, $bookseller->{discount});
-                push(@ba_order, $bookseller->{gstrate}*100 // C4::Context->preference("gist") // 0);
-                push(@ba_orders, \@ba_order);
-                # Editor Number
-                my $en;
-                my $marcrecord=eval{MARC::Record::new_from_xml( $ord->{marcxml},'UTF-8' )};
-                if ($marcrecord){
-                    if ( C4::Context->preference("marcflavour") eq 'UNIMARC' ) {
-                        $en = $marcrecord->subfield( '345', "b" );
-                    } elsif ( C4::Context->preference("marcflavour") eq 'MARC21' ) {
-                        $en = $marcrecord->subfield( '037', "a" );
-                    }
-                }
-                if($en){
-                    push(@ba_order, $en);
-                } else {
-                    push(@ba_order, undef);
+
+            # Editor Number
+            my $en;
+            my $marcrecord=eval{MARC::Record::new_from_xml( $ord->{marcxml},'UTF-8' )};
+            if ($marcrecord){
+                if ( C4::Context->preference("marcflavour") eq 'UNIMARC' ) {
+                    $en = $marcrecord->subfield( '345', "b" );
+                } elsif ( C4::Context->preference("marcflavour") eq 'MARC21' ) {
+                    $en = $marcrecord->subfield( '037', "a" );
                 }
             }
+
+            my $ba_order = {
+                isbn => ($ord->{isbn} ? $ord->{isbn} : undef),
+                itemtype => ( $ord->{itemtype} and $bib->{itemtype} ? $itemtypes->{$bib->{itemtype}}->{description} : undef ),
+                en => ( $en ? $en : undef ),
+            };
+            for my $key ( qw/ gstrate author title itemtype publishercode discount quantity rrpgsti rrpgste gstgsti gstgste ecostgsti ecostgste gstvalue totalgste totalgsti / ) {
+                $ba_order->{$key} = $ord->{$key};
+            }
+
+            push(@ba_orders, $ba_order);
         }
-        $orders{$basket->{basketno}}=\@ba_orders;
+        $orders{$basket->{basketno}} = \@ba_orders;
     }
     print $input->header(
         -type       => 'application/pdf',

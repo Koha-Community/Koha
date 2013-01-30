@@ -102,18 +102,27 @@ sub printorders {
         my $pdftable = new PDF::Table();
         my $abaskets;
         my $arrbasket;
-        my @keys = ('Document','Qty','RRT GST Inc.','Discount','Discount price GST Exc.','GST', 'Total GST Inc.'); 
+        my @keys = ('Document', 'Qty', 'RRP tax exc.', 'RRP tax inc.', 'Discount', 'Discount price', 'GST rate', 'Total tax exc.', 'Total tax inc.');
         for my $bkey (@keys) {
             push(@$arrbasket, $bkey);
         }
         push(@$abaskets, $arrbasket);
-#         @{$orders->{$basket->{basketno}}});
         foreach my $line (@{$orders->{$basket->{basketno}}}) {
             $arrbasket = undef;
-            push(@$arrbasket, @$line[3]." / ".@$line[2].(@$line[0]?" ISBN : ".@$line[0]:'').(@$line[10]?" EN : ".@$line[10]:'').", ".@$line[1].(@$line[4]?' published by '.@$line[4]:''), @$line[5],$num->format_price(@$line[6]),$num->format_price(@$line[8]).'%',$num->format_price(@$line[7]/(1+@$line[9]/100)),$num->format_price(@$line[9]).'%',$num->format_price($num->round(@$line[7])*@$line[5]));
+            push( @$arrbasket,
+                $line->{title} . " / " . $line->{author} . ( $line->{isbn} ? " ISBN : " . $line->{isbn} : '' ) . ( $line->{en} ? " EN : " . $line->{en} : '' ) . ", " . $line->{itemtype} . ( $line->{publishercode} ? ' published by '. $line->{publishercode} : ""),
+                $line->{quantity},
+                $num->format_price($line->{rrpgste}),
+                $num->format_price($line->{rrpgsti}),
+                $num->format_price($line->{discount}).'%',
+                $num->format_price($line->{rrpgste} - $line->{ecostgste}),
+                $num->format_price($line->{gstrate} * 100).'%',
+                $num->format_price($line->{totalgste}),
+                $num->format_price($line->{totalgsti}),
+            );
             push(@$abaskets, $arrbasket);
         }
-        
+
         $pdftable->table($pdf, $page, $abaskets,
                                         x => 10/mm,
                                         w => ($width - 20)/mm,
@@ -128,13 +137,19 @@ sub printorders {
                                         font_size => 3/mm,
                                         header_props   =>    {
                                             font       => $pdf->corefont("Times", -encoding => "utf8"),
-                                            font_size  => 10,
+                                            font_size  => 9,
                                             bg_color   => 'gray',
                                             repeat     => 1,
                                         },
                                         column_props => [
                                             {
-                                                min_w => 100/mm,       # Minimum column width.
+                                                min_w => 85/mm,       # Minimum column width.
+                                            },
+                                            {
+                                                justify => 'right', # One of left|right ,
+                                            },
+                                            {
+                                                justify => 'right', # One of left|right ,
                                             },
                                             {
                                                 justify => 'right', # One of left|right ,
@@ -203,34 +218,54 @@ sub printbaskets {
     my $abaskets;
     my $arrbasket;
     # header of the table
-    my @keys = ('Lot',  'Basket (N°)', 'RRT GST Inc.', 'Discount', 'Discount price','GST rate', 'Total GST exc.','GST', 'Total GST Inc.');
+    my @keys = ('Lot',  'Basket (N°)','Total RRP tax exc.', 'Total RRP tax inc.', 'GST rate', 'GST', 'Total discount', 'Total tax exc.', 'Total tax inc.');
     for my $bkey (@keys) {
         push(@$arrbasket, $bkey);
     }
-    my $grandtotal=0;
-    my $grandgst=0;
+    my ($grandtotalrrpgsti, $grandtotalrrpgste, $grandtotalgsti, $grandtotalgste, $grandtotalgstvalue, $grandtotaldiscount);
+    my @gst;
     # calculate each basket total
     push(@$abaskets, $arrbasket);
     for my $basket (@$hbaskets) {
         $arrbasket = undef;
-        my ($total, $gst, $totallist) = (0, 0, 0);
+        my ($totalrrpgste, $totalrrpgsti, $totalgste, $totalgsti, $totalgstvalue, $totaldiscount);
         my $ords = $orders->{$basket->{basketno}};
         my $ordlength = @$ords;
         foreach my $ord (@$ords) {
-            $total += @$ord[5] * @$ord[7];
-            $gst   += (@$ord[5] * @$ord[7]) * $GSTrate/(1+$GSTrate);
-            $totallist += @$ord[5]*@$ord[6];
+            $totalgste += $ord->{totalgste};
+            $totalgsti += $ord->{totalgsti};
+            $totalgstvalue += $ord->{gstvalue};
+            $totaldiscount += ($ord->{rrpgste} - $ord->{ecostgste} ) * $ord->{quantity};
+            $totalrrpgste += $ord->{rrpgste} * $ord->{quantity};
+            $totalrrpgsti += $ord->{rrpgsti} * $ord->{quantity};
+            push @gst, $ord->{gstrate} * 100
+                unless grep {$ord->{gstrate} * 100 == $_ ? $_ : ()} @gst;
         }
-        $total=$num->round($total);
-        $gst=$num->round($gst);
-        $grandtotal +=$total;
-        $grandgst +=$gst;
-        push(@$arrbasket, $basket->{contractname}, $basket->{basketname}.'(N°'.$basket->{basketno}.')',$num->format_price($totallist), $num->format_price($bookseller->{discount}).'%', $num->format_price($total), $num->format_price($GSTrate*100).'%', $num->format_price($total-$gst), $num->format_price($gst), $num->format_price($total));
+        $totalgsti = $num->round($totalgsti);
+        $totalgste = $num->round($totalgste);
+        $grandtotalrrpgste += $totalrrpgste;
+        $grandtotalrrpgsti += $totalrrpgsti;
+        $grandtotalgsti += $totalgsti;
+        $grandtotalgste += $totalgste;
+        $grandtotalgstvalue += $totalgstvalue;
+        $grandtotaldiscount += $totaldiscount;
+        my @gst_string = map{$num->format_price( $_ ) . '%'} @gst;
+        push(@$arrbasket,
+            $basket->{contractname},
+            $basket->{basketname} . ' (N°' . $basket->{basketno} . ')',
+            $num->format_price($totalrrpgste),
+            $num->format_price($totalrrpgsti),
+            "@gst_string",
+            $num->format_price($totalgstvalue),
+            $num->format_price($totaldiscount),
+            $num->format_price($totalgste),
+            $num->format_price($totalgsti)
+        );
         push(@$abaskets, $arrbasket);
     }
     # now, push total
     undef $arrbasket;
-    push @$arrbasket,'','','','Total',$num->format_price($grandtotal),'',$num->format_price($grandtotal-$grandgst), $num->format_price($grandgst),$num->format_price($grandtotal);
+    push @$arrbasket,'','Total', $num->format_price($grandtotalrrpgste), $num->format_price($grandtotalrrpgsti), '', $num->format_price($grandtotalgstvalue), $num->format_price($grandtotaldiscount), $num->format_price($grandtotalgste), $num->format_price($grandtotalgsti);
     push @$abaskets,$arrbasket;
     # height is width and width is height in this function, as the pdf is in landscape mode for the Tables.
 
@@ -254,12 +289,6 @@ sub printbaskets {
                                         {
                                         },
                                         {
-                                        },
-                                        {
-                                            justify => 'right',
-                                        },
-                                        {
-                                            justify => 'right',
                                         },
                                         {
                                             justify => 'right',
