@@ -2401,6 +2401,19 @@ video {
     border-color : #ADADAD #ADADAD #949494;
 
 }
+
+.btn-small .caret {
+    margin-top : .6em;
+}
+
+.icon-hold {
+    background-position:-24px -166px;
+}
+
+.icon-copy {
+    background-position:-3px -166px;
+}
+
 #toolbar .btn,
 #toolbar .dropdown-menu {
     font-size: 13px;
@@ -2412,7 +2425,7 @@ a.btn:visited{
 .dropdown-menu li {
     list-style: none outside none;
 }
-[class^="icon-"],[class*=" icon-"]{background-image:url("../../img/glyphicons-halflings.png");}
+[class^="icon-"],[class*=" icon-"]{background-image:url("../../img/glyphicons-halflings-koha.png");}
 .icon-white,.nav-tabs>.active>a>[class^="icon-"],.nav-tabs>.active>a>[class*=" icon-"],.nav-pills>.active>a>[class^="icon-"],.nav-pills>.active>a>[class*=" icon-"],.nav-list>.active>a>[class^="icon-"],.nav-list>.active>a>[class*=" icon-"],.navbar-inverse .nav>.active>a>[class^="icon-"],.navbar-inverse .nav>.active>a>[class*=" icon-"],.dropdown-menu>li>a:hover>[class^="icon-"],.dropdown-menu>li>a:hover>[class*=" icon-"],.dropdown-menu>.active>a>[class^="icon-"],.dropdown-menu>.active>a>[class*=" icon-"]{background-image:url("../../img/glyphicons-halflings-white.png");}
 a.disabled {
     color : #999999;
@@ -2509,3 +2522,29 @@ a.disabled {
     font-size : 120%;
 }
 .separator { color : #666; padding : 0 .2em; }
+
+.close {
+    position: inherit;
+    top: auto;
+    right : auto;
+    line-height: inherit;
+    filter : none;
+    float : none;
+    font-size: inherit;
+    font-weight: normal;
+    opacity: inherit;
+    text-shadow: none;
+}
+
+.close:hover {
+    color: #538200;
+    filter: inherit;
+    opacity: inherit;
+}
+
+/* Redefine a new style for Bootstrap's class "close" since we use that already */
+/* Use <a class="closebtn" href="#">&times;</a> */
+.alert .closebtn{position:relative;top:-2px;right:-21px;line-height:20px;}
+.modal-header .closebtn{margin-top:2px;}
+.closebtn{float:right;font-size:20px;font-weight:bold;line-height:20px;color:#000000;text-shadow:0 1px 0 #ffffff;opacity:0.2;filter:alpha(opacity=20);}.closebtn:hover{color:#000000;text-decoration:none;cursor:pointer;opacity:0.4;filter:alpha(opacity=40);}
+button.closebtn{padding:0;cursor:pointer;background:transparent;border:0;-webkit-appearance:none;}
