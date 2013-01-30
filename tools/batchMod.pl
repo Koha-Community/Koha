@@ -34,6 +34,7 @@ use C4::ClassSource;
 use C4::Dates;
 use C4::Debug;
 use MARC::File::XML;
+use List::MoreUtils qw/uniq/;
 
 my $input = new CGI;
 my $dbh = C4::Context->dbh;
@@ -228,7 +229,7 @@ if ($op eq "show"){
         }
     } else {
         if ( my $list=$input->param('barcodelist')){
-            push my @barcodelist, split(/\s\n/, $list);
+            push my @barcodelist, uniq( split(/\s\n/, $list) );
 
             foreach my $barcode (@barcodelist) {
 
