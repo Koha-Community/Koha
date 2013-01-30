@@ -31,40 +31,48 @@
 	function printBiblio() {window.open('/cgi-bin/koha/catalogue/detailprint.pl?biblionumber=[% biblionumber %]','Print_Biblio','width=700,height=500,toolbar=false,scrollbars=yes');
 	}
 [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]
-function confirm_deletion() {
-		var count = [% count %];
-        var is_confirmed;
-	if (count>0){
-		    is_confirmed= alert(count + " " +_("item(s) are attached to this record.\nYou must delete all items before deleting this record."));
-		    } else{
-		    is_confirmed= confirm(_("Are you sure you want to delete this record? "));
-	}
-
-     if (is_confirmed) {
-        if (count>0){
-	// 	window.location="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber %]";
-		} else {
-			window.location="/cgi-bin/koha/cataloguing/addbiblio.pl?op=delete&amp;biblionumber=[% biblionumber %]";
-		}
-	} else {
-		return false;
-	}
-}
-[% END %]
-[% IF ( CAN_user_editcatalogue_edit_items ) %]
-function confirm_items_deletion() {
+    function confirm_deletion() {
         var count = [% count %];
-        if(count > 0){
-            if(confirm(_("Are you sure you want to delete the") + " " + count + " " + _("attached items?"))){
+        var holdcount = [% holdcount %];
+        var is_confirmed;
+     if (count > 0){
+            is_confirmed = alert( count + " " +_("item(s) are attached to this record.\nYou must delete all items before deleting this record.") );
+        } else if ( holdcount > 0 ) {
+            is_confirmed = confirm( holdcount + " " + _("holds(s) for this record \n Are you sure you want to delete this record?."));
+        } else {
+            is_confirmed = confirm(_('Are you sure you want to delete this record? '));
+        }
+
+        if (is_confirmed) {
+            if ( count > 0 || holdcount > 0 ){
+                return false;
+            } else {
+                window.location="/cgi-bin/koha/cataloguing/addbiblio.pl?op=delete&amp;biblionumber=[% biblionumber %]";
+            }
+	} else {
+            return false;
+	}
+    }
+[% END %]
+
+[% IF ( CAN_user_editcatalogue_edit_items ) %]
+    function confirm_items_deletion() {
+        var count = [% count %];
+        var holdcount = [% holdcount %];
+
+        if ( holdcount > 0 ) {
+            alert( holdcount + " " + _("holds(s) for this record \n You must delete all holds before deleting all items.") );
+        } else if ( count > 0 ) {
+            if( confirm( _("Are you sure you want to delete the") + " " + count + " " + _("attached items?") ) ) {
                 window.location="/cgi-bin/koha/cataloguing/additem.pl?op=delallitems&amp;biblionumber=[% biblionumber %]";
-            }else{
+            } else {
                 return false;
             }
-		} else {
-			alert(_("This record has no items."));
-			return false;
-		}
-}
+        } else {
+            alert(_("This record has no items."));
+            return false;
+        }
+    }
 [% END %]
 	// prepare DOM for YUI Toolbar
 
@@ -122,8 +130,8 @@ function confirm_items_deletion() {
             [% IF ( LocalCoverImages || OPACLocalCoverImages) %][% IF ( CAN_user_tools_upload_local_cover_images ) %]{ text: _("Upload image"), url: "/cgi-bin/koha/tools/upload-cover-image.pl?biblionumber=[% biblionumber %]&filetype=image" },[% END %][% END %]
             [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]{ text: _("Edit as new (duplicate)"), url: "/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% biblionumber %]&amp;frameworkcode=&amp;op=duplicate" },[% END %]
             [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]{ text: _("Replace record via Z39.50"), onclick: {fn: PopupZ3950 } },[% END %]
-            [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]{ text: _("Delete record"), onclick: {fn: confirm_deletion }[% IF ( count ) %],id:'disabled'[% END %] },[% END %]
-            [% IF ( CAN_user_editcatalogue_edit_items ) %]{ text: _("Delete all items"), onclick: {fn: confirm_items_deletion }[% UNLESS ( count ) %],id:'disabled'[% END %] }[% END %]
+            [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]{ text: _("Delete record"), onclick: {fn: confirm_deletion }[% IF ( count || holdcount ) %],id:'disabled'[% END %] },[% END %]
+            [% IF ( CAN_user_editcatalogue_edit_items ) %]{ text: _("Delete all items"), onclick: {fn: confirm_items_deletion }[% IF ( count < 1 || holdcount ) %],id:'disabled2'[% END %] },[% END %]
 	    ];
 		if(editmenu.length){
 			new YAHOO.widget.Button({

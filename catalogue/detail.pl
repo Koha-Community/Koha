@@ -137,9 +137,6 @@ if (@hostitems){
 
 my $dat = &GetBiblioData($biblionumber);
 
-# get count of holds
-my ( $holdcount, $holds ) = GetReservesFromBiblionumber($biblionumber,1);
-
 #coping with subscriptions
 my $subscriptionsnumber = CountSubscriptionFromBiblionumber($biblionumber);
 my @subscriptions       = GetSubscriptions( $dat->{title}, $dat->{issn}, undef, $biblionumber );
@@ -282,7 +279,6 @@ $template->param(
 	volinfo				=> $itemfields{enumchron},
     itemdata_itemnotes  => $itemfields{itemnotes},
 	z3950_search_params	=> C4::Search::z3950_search_args($dat),
-    holdcount           => $holdcount,
         hostrecords         => $hostrecords,
 	analytics_flag	=> $analytics_flag,
 	C4::Search::enabled_staff_search_views,
@@ -372,5 +368,8 @@ if (C4::Context->preference('TagsEnabled') and $tag_quantity = C4::Context->pref
     $template->param(TagLoop => get_tags({biblionumber=>$biblionumber, approved=>1,
                                 'sort'=>'-weight', limit=>$tag_quantity}));
 }
+
+my ( $holdcount, $holds ) = C4::Reserves::GetReservesFromBiblionumber($biblionumber,1);
+$template->param( holdcount => $holdcount, holds => $holds );
 
 output_html_with_http_headers $query, $cookie, $template->output;
