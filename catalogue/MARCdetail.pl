@@ -335,4 +335,7 @@ $template->param (
 	C4::Search::enabled_staff_search_views,
 );
 
+my ( $holdcount, $holds ) = C4::Reserves::GetReservesFromBiblionumber($biblionumber,1);
+$template->param( holdcount => $holdcount, holds => $holds );
+
 output_html_with_http_headers $query, $cookie, $template->output;

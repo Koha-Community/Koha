@@ -214,5 +214,9 @@ $template->param(
 );
 $template->param(ONLY_ONE => 1) if ( $itemnumber && $showncount != @items );
 
+
+my ( $holdcount, $holds ) = GetReservesFromBiblionumber($biblionumber,1);
+$template->param( holdcount => $holdcount, holds => $holds );
+
 output_html_with_http_headers $query, $cookie, $template->output;
 
