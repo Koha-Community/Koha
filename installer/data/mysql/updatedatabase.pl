@@ -6070,25 +6070,25 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
    SetVersion ($DBversion);
 }
 
-$DBversion = "3.10.00.00";
+$DBversion = "3.10.00.000";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
    print "Upgrade to $DBversion done (release tag)\n";
    SetVersion ($DBversion);
 }
 
-$DBversion = "3.10.01.00";
+$DBversion = "3.10.01.000";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
    print "Upgrade to $DBversion done (3.10.1 release)\n";
    SetVersion ($DBversion);
 }
 
-$DBversion = "3.10.02.00";
+$DBversion = "3.10.02.000";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
    print "Upgrade to $DBversion done (3.10.2 release)\n";
    SetVersion ($DBversion);
 }
 
-$DBversion = "3.11.00.XXX";
+$DBversion = "3.10.02.001";
 if ( CheckVersion($DBversion) ) {
    $dbh->do(q{
         UPDATE userflags SET flagdesc="<b>Required for staff login.</b> Staff access, allows viewing of catalogue in staff client." where flag="catalogue";
