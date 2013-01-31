@@ -2356,7 +2356,7 @@ sub IssueSlip {
 
     my $issueslist = GetPendingIssues($borrowernumber);
     foreach my $it (@$issueslist){
-        if ((substr $it->{'issuedate'}, 0, 10) eq $now) {
+        if ((substr $it->{'issuedate'}, 0, 10) eq $now || (substr $it->{'lastreneweddate'}, 0, 10) eq $now) {
             $it->{'now'} = 1;
         }
         elsif ((substr $it->{'date_due'}, 0, 10) le $now) {
