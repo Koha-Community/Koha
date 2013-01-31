@@ -469,10 +469,10 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
     [% IF ( pages ) %]<span class="results_summary"><span class="label">Physical details:</span> [% pages %] [% illus %] [% size %]</span>[% END %]
 
     [% IF ( MARCISBNS ) %]
-        <span class="results_summary"><span class="label">ISBN:</span>[% FOREACH MARCISBN IN MARCISBNS %][% MARCISBN.marcisbn %][% IF ( loop.last ) %].[% ELSE %]; [% END %][% END %]</span>
+        <span class="results_summary isbn"><span class="label">ISBN:</span>[% FOREACH MARCISBN IN MARCISBNS %][% MARCISBN.marcisbn %][% IF ( loop.last ) %].[% ELSE %]; [% END %][% END %]</span>
     [% ELSE %]
         [% IF ( normalized_isbn ) %]
-            <span class="results_summary"><span class="label">ISBN: </span>[% normalized_isbn %]</span>
+            <span class="results_summary isbn"><span class="label">ISBN: </span>[% normalized_isbn %]</span>
         [% END %]
     [% END %]
     [% IF ( issn ) %]
