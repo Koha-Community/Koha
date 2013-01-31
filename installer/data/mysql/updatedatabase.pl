@@ -6437,6 +6437,13 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.11.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do("UPDATE z3950servers SET host = 'lx2.loc.gov', port = 210, db = 'LCDB', syntax = 'USMARC', encoding = 'utf8' WHERE name = 'LIBRARY OF CONGRESS'");
+    print "Upgrade to $DBversion done (Bug 9520 - Update default LOC Z39.50 target)\n";
+    SetVersion($DBversion);
+}
+
 
 =head1 FUNCTIONS
 
