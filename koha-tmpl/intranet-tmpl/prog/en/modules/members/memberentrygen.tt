@@ -3,7 +3,7 @@
 [% IF ( opadd ) %]Add[% ELSIF ( opduplicate ) %]Duplicate[% ELSE %] Modify[% END %] [% IF ( categoryname ) %] [% categoryname %] patron[% ELSE %][% IF ( I ) %] Organization patron[% END %][% IF ( A ) %] Adult patron[% END %][% IF ( C ) %] Child patron[% END %][% IF ( P ) %] Professional patron[% END %][% IF ( S ) %] Staff patron[% END %][% END %][% UNLESS ( opadd ) %] [% surname %], [% firstname %][% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
-<script type="text/JavaScript">
+<script type="text/javascript">
 //<![CDATA[
     $(document).ready(function() {
 		$("fieldset.rows input").keydown(function(e){ return checkEnter(e); });
@@ -1385,7 +1385,7 @@
     <!-- handle changing prefs if creating new patron and changing
          the patron category
     -->
-    <script language="javascript" type="text/javascript">//<![CDATA[
+    <script" type="text/javascript">//<![CDATA[
        $(document).ready(function(){
             var message_prefs_dirty = false;
             $('#memberentry_messaging_prefs > *').change(function() {

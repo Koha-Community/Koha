@@ -33,27 +33,27 @@
 <script type="text/javascript" src="[% themelang %]/lib/jquery/jquery.js"></script>
 <script type="text/javascript" src="[% themelang %]/lib/jquery/jquery-ui.js"></script>
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.hoverIntent.minified.js"></script>
-<script type="text/javascript" language="javascript" src="[% themelang %]/js/script.js"></script>
+<script type="text/javascript" src="[% themelang %]/js/script.js"></script>
 [% IF ( OPACAmazonCoverImages ) %]
-<script type="text/javascript" language="javascript">//<![CDATA[
+<script type="text/javascript">//<![CDATA[
     var NO_AMAZON_IMAGE = _("No cover image available");
 //]]>
 </script>
-<script type="text/javascript" language="javascript" src="[% themelang %]/js/amazonimages.js"></script>
+<script type="text/javascript" src="[% themelang %]/js/amazonimages.js"></script>
 [% END %]
 [% IF ( SyndeticsCoverImages ) %]
-<script type="text/javascript" language="javascript">//<![CDATA[
+<script type="text/javascript">//<![CDATA[
         var NO_AMAZON_IMAGE = _("No cover image available");
     //]]>
 </script>
-<script type="text/javascript" language="javascript" src="[% themelang %]/js/amazonimages.js"></script>          [% END %]
+<script type="text/javascript" src="[% themelang %]/js/amazonimages.js"></script>          [% END %]
 
-[% IF ( opacbookbag ) %]<script type="text/javascript" language="javascript" src="[% themelang %]/js/basket.js">
-[% ELSIF ( virtualshelves ) %]<script type="text/javascript" language="javascript" src="[% themelang %]/js/basket.js">
-[% ELSE %]<script type="text/javascript" language="javascript"> var readCookie;[% END %]
+[% IF ( opacbookbag ) %]<script type="text/javascript" src="[% themelang %]/js/basket.js">
+[% ELSIF ( virtualshelves ) %]<script type="text/javascript" src="[% themelang %]/js/basket.js">
+[% ELSE %]<script type="text/javascript"> var readCookie;[% END %]
 </script>
 
-<script type="text/javascript" language="javascript">
+<script type="text/javascript">
 //<![CDATA[
     [% IF ( opacbookbag ) %]var MSG_BASKET_EMPTY = _("Your cart is currently empty");
     var MSG_RECORD_IN_BASKET = _("This item is already in your cart");
@@ -92,21 +92,21 @@
             verify_images();
          });[% END %]
 //]]>
-[% IF ( opacbookbag ) %]</script><script type="text/javascript" language="javascript" src="[% themelang %]/js/basket.js">
-[% ELSIF ( virtualshelves ) %]</script><script type="text/javascript" language="javascript" src="[% themelang %]/js/basket.js">
-[% ELSE %]</script><script type="text/javascript" language="javascript">var readCookie;[% END %]</script>
-[% IF ( opacuserlogin ) %][% IF ( TagsEnabled ) %]<script type="text/javascript" language="javascript" src="[% themelang %]/js/tags.js"></script>[% END %][% ELSE %][% END %]
+[% IF ( opacbookbag ) %]</script><script type="text/javascript" src="[% themelang %]/js/basket.js">
+[% ELSIF ( virtualshelves ) %]</script><script type="text/javascript" src="[% themelang %]/js/basket.js">
+[% ELSE %]</script><script type="text/javascript">var readCookie;[% END %]</script>
+[% IF ( opacuserlogin ) %][% IF ( TagsEnabled ) %]<script type="text/javascript" src="[% themelang %]/js/tags.js"></script>[% END %][% ELSE %][% END %]
 [% IF ( GoogleJackets ) %]
-<script type="text/javascript" language="javascript" src="[% themelang %]/js/google-jackets.js"></script>
-<script type="text/javascript" language="javascript">
+<script type="text/javascript" src="[% themelang %]/js/google-jackets.js"></script>
+<script type="text/javascript">
 //<![CDATA[
     var NO_GOOGLE_JACKET = _("No cover image available");
 //]]>
 </script>
 [% END %]
 [% IF OpenLibraryCovers %]
-<script type="text/javascript" language="javascript" src="[% themelang %]/js/openlibrary.js"></script>
-<script type="text/javascript" language="javascript">
+<script type="text/javascript" src="[% themelang %]/js/openlibrary.js"></script>
+<script type="text/javascript">
 //<![CDATA[
 var NO_OL_JACKET = _("No cover image available");
 //]]>
@@ -114,16 +114,16 @@ var NO_OL_JACKET = _("No cover image available");
 [% END %]
 
 [% IF OPACLocalCoverImages %]
-<script type="text/javascript" language="javascript" src="[% themelang %]/js/localcovers.js"></script>
-<script type="text/javascript" language="javascript">
+<script type="text/javascript" src="[% themelang %]/js/localcovers.js"></script>
+<script type="text/javascript">
 //<![CDATA[
 var NO_LOCAL_JACKET = _("No cover image available");
 //]]>
 </script>
 [% END %]
 
-[% IF ( BakerTaylorEnabled ) %]<script type="text/javascript" language="javascript" src="[% themelang %]/js/bakertaylorimages.js"></script>
-<script type="text/javascript" language="javascript">
+[% IF ( BakerTaylorEnabled ) %]<script type="text/javascript" src="[% themelang %]/js/bakertaylorimages.js"></script>
+<script type="text/javascript">
 //<![CDATA[
     var NO_BAKERTAYLOR_IMAGE = _("No cover image available");
     $(window).load(function(){
@@ -134,5 +134,5 @@ var NO_LOCAL_JACKET = _("No cover image available");
 <link rel="unapi-server" type="application/xml" title="unAPI" href="[% OPACBaseURL %]/cgi-bin/koha/unapi" />
 [% IF ( GoogleIndicTransliteration ) %]
         <script type="text/javascript" src="http://www.google.com/jsapi"></script>
-        <script type="text/javascript" language="javascript" src="[% themelang %]/js/googleindictransliteration.js"></script>
+        <script type="text/javascript" src="[% themelang %]/js/googleindictransliteration.js"></script>
 [% END %]

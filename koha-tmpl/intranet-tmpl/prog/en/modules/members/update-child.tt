@@ -21,7 +21,7 @@
 <div id="bd">
 
 [% IF ( CONFIRM ) %]
-<script language="javascript" type="text/javascript">
+<script type="text/javascript">
 function confirm_updatechild() {
     var is_confirmed = window.confirm('Are you sure you want to update this child to an Adult category?  This cannot be undone.');
    
@@ -35,7 +35,7 @@ confirm_updatechild([% borrowernumber %]);
 [% END %]
 
 [% IF ( SUCCESS ) %]
-<script language="javascript" type="text/javascript">
+<script type="text/javascript">
 self.opener.location.href='/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]';
 window.close();
 </script>

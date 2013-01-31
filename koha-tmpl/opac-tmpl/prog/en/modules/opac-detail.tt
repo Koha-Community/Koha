@@ -8,7 +8,9 @@
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tools.min.js"></script>
 [% IF ( SocialNetworks ) %]
     <script type="text/javascript" src="https://apis.google.com/js/plusone.js">
+    //<![CDATA[
       {lang: '[% lang %]'}
+    //]]>
     </script>
     <script type="text/javascript">!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 [% END %]
@@ -16,8 +18,7 @@
 <link rel="stylesheet" type="text/css" href="/opac-tmpl/prog/en/css/jquery.rating.css" />[% END %]
 
 [% IF ( OpacHighlightedWords ) %]<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.highlight-3.js"></script>[% END %]
-
-<script type="text/JavaScript" language="JavaScript">
+<script type="text/javascript">
 //<![CDATA[
 
     [% IF ( OpacBrowseResults && busc ) %]
