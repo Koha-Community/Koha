@@ -44,8 +44,8 @@ $.tablesorter.addParser({
 				[% END %]
 				}
             });
-            [% IF ( loggedinusername ) %]$("span.clearall").html("<a id=\"CheckNone\" href=\"#\">"+_('Clear all')+"<\/a>");
-            $("span.checkall").html("<a id=\"CheckAll\" href=\"#\">"+_('Select all')+"<\/a>");
+            [% IF ( loggedinusername ) %]$("span.clearall").html("<a id=\"CheckNone\" href=\"#\">"+_("Clear all")+"<\/a>");
+            $("span.checkall").html("<a id=\"CheckAll\" href=\"#\">"+_("Select all")+"<\/a>");
             $("#CheckAll").click(function(){
                 $(".checkboxed").checkCheckboxes();
                 enableCheckboxActions();

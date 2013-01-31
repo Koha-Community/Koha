@@ -10,8 +10,10 @@
     <script type="text/javascript" src="[% themelang %]/js/jquery.jeditable.mini.js"></script>
     <script type="text/javascript">
     //<![CDATA[
+    var MSG_ID_HELP = _("Click on the quote's id to select or deselect the quote. Multiple quotes may be selected.");
+
     var oTable; /* oTable needs to be global */
-    var sEmptyTable = _('No quotes available. Please use the "Add quote" button to add a quote.'); /* override the default message in datatables-strings.inc */
+    var sEmptyTable = _("No quotes available. Please use the \"Add quote\" button to add a quote."); /* override the default message in datatables-strings.inc */
     $(document).ready(function() {
         /* NOTE: This is an ajax-source datatable and *not* a server-side sourced datatable. */
         /* See the datatable docs if you don't understand this difference. */
@@ -116,11 +118,11 @@
                     });
                 }
                 else {
-                    alert(_('Please supply both the text and source of the quote before saving.'));
+                    alert(_("Please supply both the text and source of the quote before saving."));
                 }
             }
             else if (e.keyCode == 27) {
-                if (confirm(_('Are you sure you want to cancel adding this quote?'))) {
+                if (confirm(_("Are you sure you want to cancel adding this quote?"))) {
                     oTable.fnDeleteRow(node);
                 }
                 else {
@@ -149,9 +151,9 @@
                   return this.id;
             }).get().join(', ');
             if (!idsToDelete) {
-                alert(_('Please select a quote(s) by clicking the quote id(s) you desire to delete.'));
+                alert(_("Please select a quote(s) by clicking the quote id(s) you desire to delete."));
             }
-            else if (confirm(_('Are you sure you wish to delete quote(s) ')+idsToDelete+'?')) {
+            else if (confirm(_("Are you sure you wish to delete quote(s) ")+idsToDelete+"?")) {
                 oTable.$('.selected').each(function(){
                         var quoteID = $(this).attr('id');
                             $.ajax({
@@ -204,7 +206,7 @@
                 <table id="quotes_editor">
                 <thead>
                     <tr>
-                        <th><span style="cursor: help" onclick="event.stopPropagation();alert(_('Click on the quote\'s id to select or deselect the quote. Multiple quotes may be selected.'));">ID</span></th>
+                        <th><span style="cursor: help" onclick="event.stopPropagation();alert(MSG_ID_HELP);">ID</span></th>
                         <th>Source</th>
                         <th>Text</th>
                         <th>Last displayed</th>

@@ -6,11 +6,13 @@
 //<![CDATA[ 
 
 var MSG_NO_ITEM_SELECTED = _("Nothing is selected.");
+var MSG_REMOVE_FROM_LIST = _("Are you sure you want to remove these records from the shelf?");
+var MSG_CONFIRM_DELETE_LIST = _("Are you sure you want to remove this list?");
 
 $(document).ready(function(){
 	$("#addbarcode").focus();
-    $("span.clearall").html("<a id=\"CheckNone\" href=\"/cgi-bin/koha/shelves.pl\">"+_('Clear all')+"<\/a>");
-    $("span.checkall").html("<a id=\"CheckAll\" href=\"/cgi-bin/koha/shelves.pl\">"+_('Select all')+"<\/a>");
+    $("span.clearall").html("<a id=\"CheckNone\" href=\"/cgi-bin/koha/shelves.pl\">"+_("Clear all")+"<\/a>");
+    $("span.checkall").html("<a id=\"CheckAll\" href=\"/cgi-bin/koha/shelves.pl\">"+_("Select all")+"<\/a>");
     $("#CheckAll").click(function(){
         $(".checkboxed").checkCheckboxes();
         return false;
@@ -37,7 +39,7 @@ $(document).ready(function(){
 	var checkboxes = $("input:checkbox:checked");
         var nbCheckbox = checkboxes.length;
 	if (nbCheckbox != 2) {
-	    alert(_('Two records must be selected for merging.'));
+	    alert(_("Two records must be selected for merging."));
 	} else {
 	    location.href='/cgi-bin/koha/cataloguing/merge.pl?biblionumber=' + checkboxes[0].value + '&amp;biblionumber=' + checkboxes[1].value;
 	}
@@ -251,7 +253,7 @@ function placeHold () {
     </table><fieldset class="action">
         [% IF ( itemsloop ) %]
             <input type="button" id="placehold" style="display:none" onclick="placeHold(); return false;" value="Place holds" />
-            [% IF ( allowremovingitems ) %]<input type="submit" value="Remove selected records" onclick="return confirm(_('Are you sure you want to remove these records from the shelf?'));" />[% END %]
+            [% IF ( allowremovingitems ) %]<input type="submit" value="Remove selected records" onclick="return confirm(MSG_REMOVE_FROM_LIST);" />[% END %]
             <input type="submit" value="Merge selected records" onclick="return MergeItems();" />
         [% END %]
  </fieldset>
@@ -416,7 +418,7 @@ function placeHold () {
 					<input type="hidden" name="CONFIRM-[% shelveslooppri.confirm %]" value="1" />
 					<input type="submit" class="approve" value="Confirm" />
 					[% ELSE %]
-                    <input type="submit" class="deleteshelf" onclick="return confirmDelete(_('Are you sure you want to remove this list?'));" value="Delete" />
+                    <input type="submit" class="deleteshelf" onclick="return confirmDelete(MSG_CONFIRM_DELETE_LIST);" value="Delete" />
 					[% END %]
 				</form>
 			[% ELSE %]
@@ -464,7 +466,7 @@ function placeHold () {
 					<input type="hidden" name="CONFIRM-[% shelvesloo.confirm %]" value="1" />
 					<input type="submit" class="approve" value="Confirm" />
 					[% ELSE %]
-                    <input type="submit" class="deleteshelf" onclick="return confirmDelete(_('Are you sure you want to remove this list?'));" value="Delete" />
+                    <input type="submit" class="deleteshelf" onclick="return confirmDelete(MSG_CONFIRM_DELETE_LIST);" value="Delete" />
 					[% END %]
 				</form>
 			[% ELSE %]

@@ -15,24 +15,24 @@ KOHA.AJAX = {
         KOHA.xhr = xhr;
         if ( !xhr.getResponseHeader( 'content-type' ).match( 'application/json' ) ) {
             // Something really failed
-            humanMsg.displayAlert( MSG_INTERNAL_SERVER_ERROR );
+            humanMsg.displayAlert( _("Internal Server Error, please reload the page") );
             return;
         }
 
         var error = eval( '(' + xhr.responseText + ')' );
 
         if ( error.type == 'auth' ) {
-            humanMsg.displayMsg( MSG_SESSION_TIMED_OUT );
+            humanMsg.displayMsg( _("You need to log in again, your session has timed out") );
         }
 
         if ( callback ) {
             callback( error );
         } else {
-            humanMsg.displayAlert( MSG_DATA_NOT_SAVED );
+            humanMsg.displayAlert( _("Error; your data might not have been saved") );
         }
     },
     MarkRunning: function ( selector, text ) {
-        text = text || MSG_LOADING;
+        text = text || _("Loading...");
         $( selector )
             .attr( 'disabled', 'disabled' )
             .each( function () {

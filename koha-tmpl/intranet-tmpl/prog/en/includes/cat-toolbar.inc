@@ -10,6 +10,11 @@
 			window.open("/cgi-bin/koha/cataloguing/z3950_search.pl?biblionumber=[% biblionumber %]"+strQuery,"z3950search",'width=740,height=450,location=yes,toolbar=no,scrollbars=yes,resize=yes');
 		} 
 	}
+    function PopupZ3950Confirmed() {
+        if (confirm(_("Please note that this Z39.50 search could replace the current record."))){
+            PopupZ3950();
+        }
+    }
 
 	/* provide Z3950 search points */
 	function GetZ3950Terms(){
@@ -29,9 +34,9 @@ function confirm_deletion() {
 		var count = [% count %];
         var is_confirmed;
 	if (count>0){
-		    is_confirmed= alert(_('There are [ '+ count +' ] item(s) attached to this record \n You must delete all items before deleting this record.'));
+		    is_confirmed= alert(count + " " +_("item(s) are attached to this record.\nYou must delete all items before deleting this record."));
 		    } else{
-		    is_confirmed= confirm(_('Are you sure you want to delete this record? '));
+		    is_confirmed= confirm(_("Are you sure you want to delete this record? "));
 	}
 
      if (is_confirmed) {
@@ -49,7 +54,7 @@ function confirm_deletion() {
 function confirm_items_deletion() {
         var count = [% count %];
         if(count > 0){
-            if(confirm(_('Are you sure you want to delete the ' + count + ' attached items? '))){
+            if(confirm(_("Are you sure you want to delete the") + " " + count + " " + _("attached items?"))){
                 window.location="/cgi-bin/koha/cataloguing/additem.pl?op=delallitems&amp;biblionumber=[% biblionumber %]";
             }else{
                 return false;
@@ -238,7 +243,7 @@ function confirm_items_deletion() {
 	[% IF ( CAN_user_reserveforothers ) %]
     [% UNLESS ( norequests ) %]<li><a id="placehold" href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% biblionumber %]">Place hold</a></li>[% END %]
 	[% END %]
-	[% IF ( CAN_user_editcatalogue_edit_catalogue ) %]<li id="z3950searchc"><input type="button" id="z3950search" value="Z39.50 Search" onclick="if (confirm(_('Please note that this Z39.50 search could replace the current record.'))){ PopupZ3950(); } return false;" /></li>[% END %]
+	[% IF ( CAN_user_editcatalogue_edit_catalogue ) %]<li id="z3950searchc"><input type="button" id="z3950search" value="Z39.50 Search" onclick="PopupZ3950Confirmed(); return false;" /></li>[% END %]
     </ul>
 </form>
 </div>

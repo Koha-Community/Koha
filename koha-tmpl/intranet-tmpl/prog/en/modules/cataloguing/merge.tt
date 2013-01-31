@@ -73,7 +73,7 @@ $(document).ready(function(){
 	    }
 	    // If the field is not repeatable, we check if it already exists in the result table
 	    if (canbeadded == false) {
-		alert(_('The field is non-repeatable and already exists in the destination record. Therefore, you cannot add it.'));
+		alert(_("The field is non-repeatable and already exists in the destination record. Therefore, you cannot add it."));
 		pField.checked = 0;
 	    } else {
 
@@ -113,7 +113,7 @@ $(document).ready(function(){
 			    // We select the whole field and removing non-selected subfields, instead of...
 
 			    // Alerting the user 
-			    alert(_('This subfield cannot be added: there is no ' + field + ' field in the destination record.'));
+			    alert(_("This subfield cannot be added: there is no") + " " + field + " " + _("field in the destination record."));
 			    pField.checked = false;
 
 			} else {

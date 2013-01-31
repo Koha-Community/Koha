@@ -3,14 +3,14 @@
     //<![CDATA[
 [% IF ( CAN_user_borrowers ) %]
 function confirm_deletion() {
-    var is_confirmed = window.confirm(_('Are you sure you want to delete this patron? This cannot be undone.'));
+    var is_confirmed = window.confirm(_("Are you sure you want to delete this patron? This cannot be undone."));
     if (is_confirmed) {
         window.location='/cgi-bin/koha/members/deletemem.pl?member=[% borrowernumber %]';
     }
 }
 
 [% IF ( is_child ) %]function confirm_updatechild() {
-    var is_confirmed = window.confirm(_('Are you sure you want to update this child to an Adult category?  This cannot be undone.'));
+    var is_confirmed = window.confirm(_("Are you sure you want to update this child to an Adult category?  This cannot be undone."));
     if (is_confirmed) {
         window.location='/cgi-bin/koha/members/update-child.pl?op=update&borrowernumber=[% borrowernumber %]&catcode=[% catcode %]&catcode_multi=[% CATCODE_MULTI %]';
     }
