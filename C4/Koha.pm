@@ -425,20 +425,22 @@ sub getframeworkinfo {
 
 =head2 getitemtypeinfo
 
-  $itemtype = &getitemtype($itemtype);
+  $itemtype = &getitemtypeinfo($itemtype, [$interface]);
 
-Returns information about an itemtype.
+Returns information about an itemtype. The optional $interface argument
+sets which interface ('opac' or 'intranet') to return the imageurl for.
+Defaults to intranet.
 
 =cut
 
 sub getitemtypeinfo {
-    my ($itemtype) = @_;
+    my ($itemtype, $interface) = @_;
     my $dbh        = C4::Context->dbh;
     my $sth        = $dbh->prepare("select * from itemtypes where itemtype=?");
     $sth->execute($itemtype);
     my $res = $sth->fetchrow_hashref;
 
-    $res->{imageurl} = getitemtypeimagelocation( 'intranet', $res->{imageurl} );
+    $res->{imageurl} = getitemtypeimagelocation( ( ( defined $interface && $interface eq 'opac' ) ? 'opac' : 'intranet' ), $res->{imageurl} );
 
     return $res;
 }

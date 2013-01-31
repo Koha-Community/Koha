@@ -7,7 +7,7 @@ use strict;
 use warnings;
 use C4::Context;
 
-use Test::More tests => 5;
+use Test::More tests => 6;
 use DateTime::Format::MySQL;
 
 eval {use Test::Deep;};
@@ -61,6 +61,12 @@ subtest 'Authorized Values Tests' => sub {
         $sth = $dbh->prepare($query);
         $sth->execute($data->{category}, $data->{authorised_value}, $data->{lib}, $data->{lib_opac}, $data->{imageurl});
     }
+};
+
+subtest 'Itemtype info Tests' => sub {
+    like ( getitemtypeinfo('BK')->{'imageurl'}, qr/intranet-tmpl/, 'getitemtypeinfo on unspecified interface returns intranet imageurl (legacy behavior)' );
+    like ( getitemtypeinfo('BK', 'intranet')->{'imageurl'}, qr/intranet-tmpl/, 'getitemtypeinfo on "intranet" interface returns intranet imageurl' );
+    like ( getitemtypeinfo('BK', 'opac')->{'imageurl'}, qr/opac-tmpl/, 'getitemtypeinfo on "opac" interface returns opac imageurl' );
 };
 
 
