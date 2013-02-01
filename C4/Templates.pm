@@ -305,6 +305,7 @@ sub setlanguagecookie {
     my $cookie = $query->cookie(
         -name    => 'KohaOpacLanguage',
         -value   => $language,
+        -HttpOnly => 1,
         -expires => '+3y'
     );
     print $query->redirect(

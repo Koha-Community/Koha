@@ -264,12 +264,13 @@ sub get_template_and_user {
 						       $_->{'time'},
                             ) foreach @recentSearches;
 
-					# And then, delete the cookie's content
-					my $newsearchcookie = $in->{'query'}->cookie(
-												-name => 'KohaOpacRecentSearches',
-												-value => freeze([]),
-												-expires => ''
-											 );
+                    # And then, delete the cookie's content
+                    my $newsearchcookie = $in->{'query'}->cookie(
+                                                -name => 'KohaOpacRecentSearches',
+                                                -value => freeze([]),
+                                                -HttpOnly => 1,
+                                                -expires => ''
+                                             );
 					$cookie = [$cookie, $newsearchcookie];
 				}
 			}
@@ -633,8 +634,8 @@ sub checkauth {
     # when using authentication against multiple CAS servers, as configured in Auth_cas_servers.yaml
     my $casparam = $query->param('cas');
 
-    if ( $userid = $ENV{'REMOTE_USER'} ) {
-        # Using Basic Authentication, no cookies required
+        if ( $userid = $ENV{'REMOTE_USER'} ) {
+            # Using Basic Authentication, no cookies required
         $cookie = $query->cookie(
             -name     => 'CGISESSID',
             -value    => '',
@@ -1136,7 +1137,11 @@ sub check_api_auth {
                 $sessionID = undef;
                 return ("expired", undef, undef);
             } else {
-                my $cookie = $query->cookie( CGISESSID => $session->id );
+                my $cookie = $query->cookie(
+                    -name  => 'CGISESSID',
+                    -value => $session->id,
+                    -HttpOnly => 1,
+                );
                 $session->param('lasttime',time());
                 my $flags = haspermission($userid, $flagsrequired);
                 if ($flags) {
@@ -1180,7 +1185,11 @@ sub check_api_auth {
 
             my $sessionID = $session->id;
             C4::Context->_new_userenv($sessionID);
-            my $cookie = $query->cookie(CGISESSID => $sessionID);
+            my $cookie = $query->cookie(
+                -name  => 'CGISESSID',
+                -value => $sessionID,
+                -HttpOnly => 1,
+            );
             if ( $return == 1 ) {
                 my (
                     $borrowernumber, $firstname,  $surname,
