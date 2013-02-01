@@ -186,6 +186,7 @@ $(function () {
         var isbn = $(".isbn:last").text().split(" ")[1];
         if (isbn) {
         isbn = isbn.replace(/\W*$/, '');
+        isbn = isbn.replace(/-/, '');
 
         if ($.browser.msie && parseInt($.browser.version, 10) >= 8 && window.XDomainRequest) {
         // Use Microsoft XDR for IE version 8 or above
@@ -210,6 +211,7 @@ $(function () {
 function parseIDBJSON( json ) {
     if(json.total_results > 0 && json.book.rating > 0){
         var isbn = $(".isbn:last").text().split(" ")[1];
+        isbn = isbn.replace(/-/, '');
 
 [% IF ( IDreamBooksReadometer ) %]
         $(".title").append('<a href="'+json.book.detail_link+'" id="idreambooksreadometer"><img src="http://idreambooks.com/remotereadometer/'+isbn+'.jpg" alt="'+json.book.title+' by '+json.book.author+'" title="Rating based on reviews of '+json.book.title+'"></a>');
