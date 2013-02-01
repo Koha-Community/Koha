@@ -956,6 +956,7 @@ sub getIndexes{
                     'Corporate-name-heading',
                     'Corporate-name-see',
                     'Corporate-name-seealso',
+                    'Country-publication',
                     'ctype',
                     'date-entered-on-file',
                     'Date-of-acquisition',

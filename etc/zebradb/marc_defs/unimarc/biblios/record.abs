@@ -27,7 +27,7 @@ melm 001        Local-number,Local-number:n
 melm 009      Identifier-standard:w,Identifier-standard:n
 melm 090$9      Local-number,Local-number:n
 melm 099$c      date-entered-on-file:s,date-entered-on-file:n,date-entered-on-file:y,Date-of-acquisition,Date-of-acquisition:d,Date-of-acquisition:s
-melm 099$d      Date/time-last-modified:s,Date/time-last-modified:n,Date/time-last-modified:y
+melm 099$d      Date-time-last-modified:s,Date-time-last-modified:n,Date-time-last-modified:y
 melm 099$t      ccode:w
 
 # ISBN
@@ -83,42 +83,58 @@ melm 073$a	    EAN:w,Identifier-standard:w
 melm 073$z	    EAN:w,Identifier-standard:w
 
 ############ ITEM TYPE ##################
-melm 200$b      itemtype:w,itemtype:p,itype:w,itype:p
+# FIXME index 200$b only in Material-type ?
+melm 200$b      itemtype:w,itemtype:p,itype:w,itype:p,Material-type:w,Material-type:p
 melm 995$r      itemtype:w,itemtype:p,itype:w,itype:p
 
 ############ CODED INFORMATIONS ##################
-melm 100$a      tpubdate:s:range(data,8,1),ta:w:range(data,17,1),ta:w:range(data,18,1),ta:w:range(data,19,1),Modified-code:n:range(data,21,1),ln:s:range(data,22,3),char-encoding:n:range(data,26,2),char-encoding:n:range(data,28,2),char-encoding:n:range(data,30,2),script-Title:n:range(data,34,2)
+# Field 100 Description
+# Name of Data Element                  Number of characters    Character Positions
+# Date Entered on File (Mandatory)      8                       0-7
+# Type of date                          1                       8
+# Date 1                                4                       9-12
+# Date 2                                4                       13-16
+# Target audience                       3                       17-19
+# Government Publication Code           1                       20
+# Modified Record Code                  1                       21
+# Language of cataloguing (mandatory)   3                       22-24    do not index in ln
+# Translitteration code                 1                       25
+# Character Set (Mandatory)             4                       26-29
+# additional Character Set              4                       28-33
+# Script of title                       2                       34-35
+melm 100$a     tpubdate:s:range(data,8,1),ta:w:range(data,17,1),ta:w:range(data,18,1),ta:w:range(data,19,1),Modified-code:n:range(data,21,1),char-encoding:n:range(data,26,2),char-encoding:n:range(data,28,2),char-encoding:n:range(data,30,2),script-Title:n:range(data,34,2)
 melm 101$a     ln
-melm 102$a     Country-heading
+melm 102$a     Country-publication
 
-#Field 105 Description
-#Illustration codes 4
-#Form of contents codes 4
-#Conference or meeting code 1
-#Festschrift indicator 1
-#Index indicator 1
-#Literature code 1
-#Biography code   1
-melm 105$a     Illustration-code:w:range(data,0,4),Content-type:w:range(data,4,1),Content-type:w:range(data,5,1),Content-type:w:range(data,6,1),Content-type:w:range(data,7,1),Conference-code:w:range(data,8,1),Festschrift-indicator:w:range(data,9,1),Index-indicator:w:range(data,10,1),Literature-Code:w:range(data,11,1),Biography-Code:w:range(data,12,1)
+# Field 105 Description
+# Name of Data Element                  Number of characters    Character Positions
+# Illustration codes                    4                       0-3
+# Form of contents codes                4                       4-7
+# Conference or meeting code            1                       8
+# Festschrift indicator                 1                       9
+# Index indicator                       1                       10
+# Literature code                       1                       11
+# Biography code                        1                       12
+melm 105$a     ff8-18-21:w:range(data,0,1),ff8-18-21:w:range(data,1,1),ff8-18-21:w:range(data,2,1),ff8-18-21:w:range(data,3,1),ctype:w:range(data,4,1),ctype:w:range(data,5,1),ctype:w:range(data,6,1),ctype:w:range(data,7,1),ff8-29:w:range(data,8,1),ff8-30:w:range(data,9,1),ff8-31:w:range(data,10,1),lf:w:range(data,11,1),bio:w:range(data,12,1)
 
-melm 106$a     itype:w,itype:p
+melm 106$a     ff8-23:w,ff8-23:p
 
-#Field 110 Description
-#Name of Data Element                  Number of characters                 Character Positions
-#Type of serial designator              1                                   0
-#Frequency of issue                     1                                   1
-#Regularity                             1                                   2
-#Type of material code                  1                                   3
-#Nature of contents code                3                                   4-6
-#Conference publication indicator       1                                   7
-#Title page availability codes          1                                   8
-#Index availability code                1                                   9
-#Cumulative index availability code   1                                   10
-melm 110$a     Type-Of-Serial:w:range(data,0,1),Frequency-code:w:range(data,1,1),Regularity-code:w:range(data,2,1),Content-type:w:range(data,3,1),Content-type:w:range(data,4,3),Conference-publication-Code:w:range(data,7,1),Title-Page-availability-Code:w:range(data,8,1),Index-availability-Code:w:range(data,9,1),Cumulative-Index-availability-Code:w:range(data,10,1)
+# Field 110 Description
+# Name of Data Element                  Number of characters    Character Positions
+# Type of serial designator             1                       0
+# Frequency of issue                    1                       1
+# Regularity                            1                       2
+# Type of material code                 1                       3
+# Nature of contents code               3                       4-6
+# Conference publication indicator      1                       7
+# Title page availability codes         1                       8
+# Index availability code               1                       9
+# Cumulative index availability code    1                       10
+melm 110$a     ff8-21:w:range(data,0,1),ff8-18:w:range(data,1,1),ff8-19:w:range(data,2,1),ctype:w:range(data,3,1),ctype:w:range(data,4,3),ff8-29:w:range(data,7,1),Title-page-availability:w:range(data,8,1),ff8-31:w:range(data,9,1),Cumulative-index-availability:w:range(data,10,1)
 
 melm 115$a     Video-mt:w:range(data,0,1)
 
-melm 116$a     Graphics-type:w:range(data,0,1),Graphics-support:w:range(data,1,1),Graphics-support:w:range(data,2,1),
+melm 116$a     Graphics-type:w:range(data,0,1),Graphics-support:w:range(data,1,1),Graphics-support:w:range(data,2,1)
 
 ############ AUTHORS ##################
 # main Author

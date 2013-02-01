@@ -4,81 +4,81 @@
     <label>Audience</label>
     <select name="limit" class="subtype">
             <option value="" selected="selected" >Any</option>
-      <option value="aud:a">juvenile, general</option>
-      <option value="aud:b">pre-primary (0-5)</option>
-      <option value="aud:c">primary (5-8)</option>
-      <option value="aud:d">children (9-14)</option>
-      <option value="aud:e">young adult</option>
-      <option value="aud:k">adult, serious</option>
-      <option value="aud:m">adult, General</option>
-      <option value="aud:u">unknown</option>
+            <option value="ta:a">juvenile, general</option>
+            <option value="ta:b">pre-primary (0-5)</option>
+            <option value="ta:c">primary (5-8)</option>
+            <option value="ta:d">children (9-14)</option>
+            <option value="ta:e">young adult</option>
+            <option value="ta:k">adult, serious</option>
+            <option value="ta:m">adult, General</option>
+            <option value="ta:u">unknown</option>
     </select>
     </p>
     <p>
     <label>Print</label>
         <select name="limit" class="subtype">
-      <option value="" selected="selected" >Any</option>
-        <option value="Material-type:r">regular print</option>
-        <option value="Material-type:d">large print</option>
-        <option value="Material-type:e">newspaper format</option>
-        <option value="Material-type:f">Braille or Moon script</option>
-        <option value="Material-type:g">microprint</option>
-        <option value="Material-type:h">hand-written</option>
-        <option value="Material-type:i">multimedia</option>
-        <option value="Material-type:j">mini-print</option>
-    <option value="Material-type:s">electronic ressource</option>
-    <option value="Material-type:t">microform</option>
-        <option value="Material-type:z">other form of textual material</option>
+            <option value="" selected="selected" >Any</option>
+            <option value="ff8-23:r">regular print</option>
+            <option value="ff8-23:d">large print</option>
+            <option value="ff8-23:e">newspaper format</option>
+            <option value="ff8-23:f">Braille or Moon script</option>
+            <option value="ff8-23:g">microprint</option>
+            <option value="ff8-23:h">hand-written</option>
+            <option value="ff8-23:i">multimedia</option>
+            <option value="ff8-23:j">mini-print</option>
+            <option value="ff8-23:s">electronic ressource</option>
+            <option value="ff8-23:t">microform</option>
+            <option value="ff8-23:z">other form of textual material</option>
     </select>
     </p>
     <p>
     <label>Literary genre</label>
     <select name="limit" class="subtype">
       <option value="" selected="selected" >Any</option>
-            <option value="Literature-Code:a">fiction</option>
-            <option value="Literature-Code:b">drama</option>
-            <option value="Literature-Code:c">essays</option>
-            <option value="Literature-Code:d">humour, satire</option>
-            <option value="Literature-Code:e">letters</option>
-            <option value="Literature-Code:f">short stories</option>
-            <option value="Literature-Code:g">poetry</option>
-            <option value="Literature-Code:h">speeches, oratory</option>
-            <option value="Literature-Code:i">libretto</option>
-            <option value="Literature-Code:y">not a literary text</option>
-            <option value="Literature-Code:z">multiple/other literary forms</option>
+            <option value="lf:a">fiction</option>
+            <option value="lf:b">drama</option>
+            <option value="lf:c">essays</option>
+            <option value="lf:d">humour, satire</option>
+            <option value="lf:e">letters</option>
+            <option value="lf:f">short stories</option>
+            <option value="lf:g">poetry</option>
+            <option value="lf:h">speeches, oratory</option>
+            <option value="lf:i">libretto</option>
+            <option value="lf:y">not a literary text</option>
+            <option value="lf:z">multiple/other literary forms</option>
     </select>
     </p>
         <p>
     <label>Biography</label>
         <select name="limit" class="subtype" size="1">
             <option value="">Any</option>
-            <option value="Biography-code:y">not a biography</option>
-            <option value="Biography-code:a">autobiography</option>
-            <option value="Biography-code:b">individual biography</option>
-            <option value="Biography-code:c">collective biography</option>
-            <option value="Biography-code:d">contains biographical data</option>
+                <option value="bio:y">not a biography</option>
+                <option value="bio:a">autobiography</option>
+                <option value="bio:b">individual biography</option>
+                <option value="bio:c">collective biography</option>
+                <option value="bio:d">contains biographical data</option>
     </select>
         </p>
         <p>
     <label>Illustration</label>
         <select name="limit" class="subtype" size="1">
-            <option value="">Any</option>
-            <option value="Illustration-Code:a">illustrations</option>
-            <option value="Illustration-Code:b">maps</option>
-            <option value="Illustration-Code:c">portraits</option>
-            <option value="Illustration-Code:d">charts</option>
-            <option value="Illustration-Code:e">plans</option>
-            <option value="Illustration-Code:f">plates</option>
-            <option value="Illustration-Code:g">music</option>
-            <option value="Illustration-Code:h">facsimiles</option>
-            <option value="Illustration-Code:i">coats of arms</option>
-            <option value="Illustration-Code:j">genealogical tables</option>
-            <option value="Illustration-Code:k">forms</option>
-            <option value="Illustration-Code:l">samples</option>
-            <option value="Illustration-Code:m">sound recordings</option>
-            <option value="Illustration-Code:n">transparencies</option>
-            <option value="Illustration-Code:o">illuminations</option>
-            <option value="Illustration-Code:y">no illustrations</option>
+                <option value="">Any</option>
+                <option value="ff8-18-21:a">illustrations</option>
+                <option value="ff8-18-21:b">maps</option>
+                <option value="ff8-18-21:c">portraits</option>
+                <option value="ff8-18-21:d">charts</option>
+                <option value="ff8-18-21:e">plans</option>
+                <option value="ff8-18-21:f">plates</option>
+                <option value="ff8-18-21:g">music</option>
+                <option value="ff8-18-21:h">facsimiles</option>
+                <option value="ff8-18-21:i">coats of arms</option>
+                <option value="ff8-18-21:j">genealogical tables</option>
+                <option value="ff8-18-21:k">forms</option>
+                <option value="ff8-18-21:l">samples</option>
+                <option value="ff8-18-21:m">sound recordings</option>
+                <option value="ff8-18-21:n">transparencies</option>
+                <option value="ff8-18-21:o">illuminations</option>
+                <option value="ff8-18-21:y">no illustrations</option>
         </select>
         </p>
     <p>
@@ -126,48 +126,48 @@
     <label>Serial type</label>
     <select name="limit" class="subtype">
            <option value="">Any type</option>
-           <option value="Type-Of-Serial:a">Periodical</option>
-           <option value="Type-Of-Serial:b">Monographic series</option>
-           <option value="Type-Of-Serial:c">Newspaper</option>
-       <option value="Type-Of-Serial:e">Updating loose-leaf</option>
-       <option value="Type-Of-Serial:f">Database</option>
-       <option value="Type-Of-Serial:g">Updating website</option>
-       <option value="Type-Of-Serial:z">Other</option>
+            <option value="ff8-21:a">Periodical</option>
+            <option value="ff8-21:b">Monographic series</option>
+            <option value="ff8-21:c">Newspaper</option>
+            <option value="ff8-21:e">Updating loose-leaf</option>
+            <option value="ff8-21:f">Database</option>
+            <option value="ff8-21:g">Updating website</option>
+            <option value="ff8-21:z">Other</option>
     </select>
     </p>
     <p>
     <label>Periodicity</label>
     <select name="limit" class="subtype">
       <option value="">Any</option>
-        <option value="Frequency-code:a">Daily</option>
-        <option value="Frequency-code:b">Semiweekly</option>
-        <option value="Frequency-code:c">Weekly</option>
-        <option value="Frequency-code:d">Biweekly</option>
-        <option value="Frequency-code:e">Semimonthly</option>
-        <option value="Frequency-code:f">Monthly</option>
-        <option value="Frequency-code:g">Bimonthly</option>
-        <option value="Frequency-code:h">Quarterly</option>
-        <option value="Frequency-code:i">Three times a year</option>
-        <option value="Frequency-code:j">Semiannual</option>
-        <option value="Frequency-code:k">Annual</option>
-        <option value="Frequency-code:l">Biennial</option>
-        <option value="Frequency-code:m">Triennial</option>
-        <option value="Frequency-code:n">Three times a week</option>
-        <option value="Frequency-code:o">Three times a month</option>
-        <option value="Frequency-code:y">Without periodicity</option>
-        <option value="Frequency-code:u">Unknown</option>
-        <option value="Frequency-code:z">Other</option>
+            <option value="ff8-18:a">Daily</option>
+            <option value="ff8-18:b">Semiweekly</option>
+            <option value="ff8-18:c">Weekly</option>
+            <option value="ff8-18:d">Biweekly</option>
+            <option value="ff8-18:e">Semimonthly</option>
+            <option value="ff8-18:f">Monthly</option>
+            <option value="ff8-18:g">Bimonthly</option>
+            <option value="ff8-18:h">Quarterly</option>
+            <option value="ff8-18:i">Three times a year</option>
+            <option value="ff8-18:j">Semiannual</option>
+            <option value="ff8-18:k">Annual</option>
+            <option value="ff8-18:l">Biennial</option>
+            <option value="ff8-18:m">Triennial</option>
+            <option value="ff8-18:n">Three times a week</option>
+            <option value="ff8-18:o">Three times a month</option>
+            <option value="ff8-18:y">Without periodicity</option>
+            <option value="ff8-18:u">Unknown</option>
+            <option value="ff8-18:z">Other</option>
     </select>
     </p>
     <p>
     <label>Regularity</label>
     <select name="limit" class="subtype">
             <option value="">Any regularity</option>
-        <option value="Regularity-code:a">regular</option>
-        <option value="Regularity-code:b">normalised irregular</option>
-        <option value="Regularity-code:y">irregular</option>
-        <option value="Regularity-code:u">unknown</option>
-    </select>
+            <option value="ff8-19:a">regular</option>
+            <option value="ff8-19:b">normalised irregular</option>
+            <option value="ff8-19:y">irregular</option>
+            <option value="ff8-19:u">unknown</option>
+        </select>
         </p>
 
         </fieldset>
