@@ -7,6 +7,37 @@
 <script type="text/javascript">
     $(document).ready(function() {
         $("#permissionstree").treeview({animated: "fast", collapsed: true});
+
+        // Enforce Superlibrarian Privilege Mutual Exclusivity
+        if($('input[id="flag-0"]:checked').length){
+            if ($('input[name="flag"]:checked').length > 1){
+                alert('Inconsistency Detected!\n\nThe superlibrarian privilege is mutually exclusive of other privileges, as it includes them all.\n\nThis patron\'s privileges will now be reset to include only superlibrarian.');
+            }
+
+            $('input[name="flag"]').each(function() {
+                if($(this).attr('id') != "flag-0"){
+                    $(this).attr('disabled', 'disabled');
+                    $(this).removeAttr('checked', 'checked');
+                }
+            });
+        }
+
+        $('input#flag-0').click(function() {
+            if($('input[id="flag-0"]:checked').length){
+                $('input[name="flag"]').each(function() {
+                    if($(this).attr('id') != "flag-0"){
+                        $(this).attr('disabled', 'disabled');
+                        $(this).removeAttr('checked', 'checked');
+                    }
+                });
+            }
+            else {
+                $('input[name="flag"]').each(function() {
+                    $(this).removeAttr('disabled', 'disabled');
+                });
+            }
+        });
+
     });
 </script>
 <!-- manage checking/unchecking parent permissions -->
