@@ -463,9 +463,11 @@ sub CanItemBeReserved{
     my ($borrowernumber, $itemnumber) = @_;
     
     my $dbh             = C4::Context->dbh;
+    my $ruleitemtype; # itemtype of the matching issuing rule
     my $allowedreserves = 0;
             
     # we retrieve borrowers and items informations #
+    # item->{itype} will come for biblioitems if necessery
     my $item = GetItem($itemnumber);
 
     # If an item is damaged and we don't allow holds on damaged items, we can stop right here
@@ -474,7 +476,7 @@ sub CanItemBeReserved{
     my $borrower = C4::Members::GetMember('borrowernumber'=>$borrowernumber);     
     
     my $controlbranch = C4::Context->preference('ReservesControlBranch');
-    my $itype         = C4::Context->preference('item-level_itypes') ? "itype" : "itemtype";
+    my $itemtypefield = C4::Context->preference('item-level_itypes') ? "itype" : "itemtype";
 
     # we retrieve user rights on this itemtype and branchcode
     my $sth = $dbh->prepare("SELECT categorycode, itemtype, branchcode, reservesallowed 
@@ -498,8 +500,6 @@ sub CanItemBeReserved{
                                 ";
     
     
-    my $itemtype     = $item->{$itype};
-    my $categorycode = $borrower->{categorycode};
     my $branchcode   = "";
     my $branchfield  = "reserves.branchcode";
     
@@ -512,25 +512,25 @@ sub CanItemBeReserved{
     }
     
     # we retrieve rights 
-    $sth->execute($categorycode, $itemtype, $branchcode);
+    $sth->execute($borrower->{'categorycode'}, $item->{'itype'}, $branchcode);
     if(my $rights = $sth->fetchrow_hashref()){
-        $itemtype        = $rights->{itemtype};
+        $ruleitemtype    = $rights->{itemtype};
         $allowedreserves = $rights->{reservesallowed}; 
     }else{
-        $itemtype = '*';
+        $ruleitemtype = '*';
     }
     
     # we retrieve count
     
     $querycount .= "AND $branchfield = ?";
     
-    $querycount .= " AND $itype = ?" if ($itemtype ne "*");
+    $querycount .= " AND $itemtypefield = ?" if ($ruleitemtype ne "*");
     my $sthcount = $dbh->prepare($querycount);
     
-    if($itemtype eq "*"){
+    if($ruleitemtype eq "*"){
         $sthcount->execute($borrowernumber, $branchcode);
     }else{
-        $sthcount->execute($borrowernumber, $branchcode, $itemtype);
+        $sthcount->execute($borrowernumber, $branchcode, $ruleitemtype);
     }
     
     my $reservecount = "0";
