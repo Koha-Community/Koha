@@ -3,7 +3,7 @@
 [% IF ( unknowuser ) %]
     Patron does not exist
 [% ELSE %]
-    Patron details for [% INCLUDE 'patron-title.inc' %]
+    Statistics for [% INCLUDE 'patron-title.inc' %]
 [% END %]
 </title>
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
@@ -31,7 +31,7 @@
 <div id="breadcrumbs">
          <a href="/cgi-bin/koha/mainpage.pl">Home</a>
 &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>
-&rsaquo; [% IF ( unknowuser ) %]Patron does not exist[% ELSE %]Patron statistics for [% firstname %] [% surname %] ([% cardnumber %])[% END %]
+&rsaquo; [% IF ( unknowuser ) %]Patron does not exist[% ELSE %]Statistics for [% firstname %] [% surname %] ([% cardnumber %])[% END %]
 </div>
 
 <div id="doc3" class="yui-t1">
@@ -39,13 +39,30 @@
    <div id="bd">
     <div id="yui-main">
         <div class="yui-b">
-            <div class="yui-g">
-                <h2>Statistics</h2>
+        [% INCLUDE 'members-toolbar.inc' %]
+
+            <h3>Statistics for [% UNLESS ( I ) %][% title %] [% firstname %] [% END %] [% surname %] ([% cardnumber %])</h3>
+            [% IF ( datas.size ) %]
                 <table id="statistics">
                 <thead>
                     <tr>
                       [% FOREACH cn IN column_names %]
-                          <th>[% cn %]</th>
+                          <th>
+                            [% SWITCH cn %]
+                            [% CASE 'itype' %]
+                                Item type
+                            [% CASE 'ccode' %]
+                                Collection code
+                            [% CASE 'location' %]
+                                Shelving location
+                            [% CASE 'homebranch' %]
+                                Home library
+                            [% CASE 'holdingbranch' %]
+                                Holding library
+                            [% CASE %]
+                                [% cn %]
+                            [% END %]
+                          </th>
                       [% END %]
                       <th>Total checkouts as of yesterday</th>
                       <th>Today's checkouts</th>
@@ -73,7 +90,9 @@
                     </tr>
                 </tfoot>
                 </table>
-            </div>
+            [% ELSE %]
+                <div class="dialog message">There are no statistics for this patron.</div>
+            [% END %]
         </div>
     </div>
 <div class="yui-b">
