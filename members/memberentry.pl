@@ -524,8 +524,8 @@ my $roadpopup = CGI::popup_menu(-name=>'streettype',
         -default=>$default_roadtype
         );  
 
-my $default_borrowertitle;
-$default_borrowertitle=$data{'title'} ;
+my $default_borrowertitle = '';
+unless ( $op eq 'duplicate' ) { $default_borrowertitle=$data{'title'} }
 my($borrowertitle)=GetTitles();
 $template->param( title_cgipopup => 1) if ($borrowertitle);
 my $borrotitlepopup = CGI::popup_menu(-name=>'title',
