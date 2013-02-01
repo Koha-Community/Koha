@@ -1,41 +1,4 @@
-<script type="text/javascript">
-    var oSaveButton = '';
-    var oDeleteButton = '';
-    //<![CDATA[
-    // prepare DOM for YUI Toolbar
-    $(document).ready(function() {
-        $("#save_quotes").empty();
-        $("#delete_quote").empty();
-        yuiToolbar();
-     });
-
-    // YUI Toolbar Functions
-    function yuiGetData() {
-        fnGetData(document.getElementById('quotes_editor'));
-    }
-
-    function yuiToolbar() {
-
-        oSaveButton = new YAHOO.widget.Button({
-            type: "button",
-            label: _("Save quotes"),
-            name: "save",
-            container: "save_quotes",
-        });
-
-        oDeleteButton = new YAHOO.widget.Button({
-            type: "button",
-            label: _("Delete quote(s)"),
-            name: "delete",
-            container: "delete_quote",
-        });
-    }
-
-//]]>
-</script>
-<div id="toolbar" style="visibility: hidden; position: absolute">
-    <ul class="toolbar">
-        <li id="save_quotes"><a id="save" href="#">Save quotes</a></li>
-        <li id="delete_quote"><a id="delete" href="#">Delete quote(s)</a></li>
-    </ul>
+<div id="toolbar" class="btn-toolbar" style="visibility: hidden; position: absolute">
+        <div class="btn-group"><a class="btn btn-small" id="save_quotes" href="#"><i class="icon-hdd"></i> Save quotes</a></div>
+        <div class="btn-group"><a class="btn btn-small" id="delete_quote" href="#"><i class="icon-remove"></i> Delete quote(s)</a></div>
 </div>
