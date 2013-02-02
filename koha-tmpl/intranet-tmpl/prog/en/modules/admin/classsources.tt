@@ -64,12 +64,6 @@ function CheckRuleForm(f) {
         alert(alertString2);
     }
 }
-
-$(document).ready(function() {
-    new YAHOO.widget.Button("newsource");
-    new YAHOO.widget.Button("newrule");
-});
-
 //]]>
 </script>
 </head>
@@ -232,11 +226,10 @@ $(document).ready(function() {
 
 [% IF ( display_lists ) %]
 
-<div id="toolbar">
-	<ul class="toolbar">
-    <li><a id="newsource" href="[% script_name %]?op=add_source">New classification source</a></li>
-    <li><a id="newrule" href="[% script_name %]?op=add_sort_rule">New filing rules</a></li>
-</ul></div>
+<div id="toolbar" class="btn-toolbar">
+    <a class="btn btn-small" id="newsource" href="[% script_name %]?op=add_source"><i class="icon-plus"></i> New classification source</a>
+    <a class="btn btn-small" id="newrule" href="[% script_name %]?op=add_sort_rule"><i class="icon-plus"></i> New filing rule</a>
+</div>
 
 <h2>Classification sources</h2>
 [% IF ( added_source ) %]
