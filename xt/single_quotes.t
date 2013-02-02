@@ -38,4 +38,3 @@ ok( !@files, "Files do not contain single quotes _(' " )
     join( "\n",
         map { $_->{name} . ': ' . join( ', ', @{ $_->{lines} } ) } @files )
   );
-
