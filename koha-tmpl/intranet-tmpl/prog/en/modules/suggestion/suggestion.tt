@@ -20,10 +20,6 @@
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
 <script type="text/javascript">
 // <![CDATA[
-
-    function yuiToolbar() {
-        new YAHOO.widget.Button("newsuggestion");
-    }
 $.tablesorter.addParser({
     id: 'articles',
     is: function(s) {return false;  },
@@ -39,7 +35,6 @@ function displayOther(id,show,hide){
 	$("#"+show+id).show();
 }
 $(document).ready(function() {
-    yuiToolbar();
     $('#suggestiontabs').tabs({
         select: function(ui) {
             $("#loadingtab").show();
@@ -356,10 +351,9 @@ $(document).ready(function() { calcNewsuggTotal(); });
 [% END %]
 
 [% IF ( op_else ) %]
-    <div id="toolbar">
-    <ul class="toolbar">
-    <li> <a id="newsuggestion" href="suggestion.pl?op=add">New purchase suggestion</a></li>
-    </ul></div>
+<div id="toolbar" class="btn-toolbar">
+    <a class="btn btn-small" id="newsuggestion" href="suggestion.pl?op=add"><i class="icon-plus"></i> New purchase suggestion</a>
+</div>
 
 <h1>Suggestions management</h1>
 
