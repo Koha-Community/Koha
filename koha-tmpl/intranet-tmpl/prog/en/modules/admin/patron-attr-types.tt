@@ -261,21 +261,9 @@ function CheckAttributeTypeForm(f) {
 
 [% IF ( display_list ) %]
 
-<div id="toolbar">
-	<script type="text/javascript">
-	//<![CDATA[
-	// prepare DOM for YUI Toolbar
-	 $(document).ready(function() {
-	    yuiToolbar();
-	 });
-	// YUI Toolbar Functions
-	function yuiToolbar() {
-	    new YAHOO.widget.Button("newrule");
-	}	//]]>
-	</script>
-	<ul class="toolbar">
-    <li><a id="newrule" href="[% script_name %]?op=add_attribute_type">New patron attribute type</a></li>
-</ul></div>
+<div id="toolbar" class="btn-toolbar">
+    <a class="btn btn-small" id="newrule" href="[% script_name %]?op=add_attribute_type"><i class="icon-plus"></i> New patron attribute type</a>
+</div>
 
 <h2>Patron attribute types</h2>
 [% IF ( added_attribute_type ) %]
