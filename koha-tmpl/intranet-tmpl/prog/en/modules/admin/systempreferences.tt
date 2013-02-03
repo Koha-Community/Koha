@@ -70,8 +70,21 @@
                 return false;
             } ).nextAll( 'textarea, input[type=submit]' ).hide();
         } );
+
         //]]>
 </script>
+[% IF ( else ) %]
+    <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+    <script type="text/javascript">
+    //<![CDATA[
+     $(document).ready(function() {
+        [% IF ( loop ) %]$("#sysprefst").tablesorter({
+            sortList: [[0,0]],
+            headers: { 1: {sorter:false},2: { sorter: false },3: { sorter: false },4: { sorter: false }}
+        });[% END %]
+     });
+    </script>
+[% END %]
 </head>
 <body id="admin_systempreferences" class="admin">
 [% INCLUDE 'header.inc' %]
@@ -240,28 +253,11 @@
     [% END %]
    
     [% IF ( else ) %]
-    
-    <div id="toolbar">
-    <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
-    <script type="text/javascript">
-    //<![CDATA[
-    // prepare DOM for YUI Toolbar
-     $(document).ready(function() {
-        yuiToolbar();
-        [% IF ( loop ) %]$("#sysprefst").tablesorter({
-            sortList: [[0,0]],
-            headers: { 1: {sorter:false},2: { sorter: false },3: { sorter: false },4: { sorter: false }}
-        });[% END %]
-     });
-    // YUI Toolbar Functions
-    function yuiToolbar() {
-        new YAHOO.widget.Button("newstopword");
-    }   //]]>
-    </script>
-    <ul class="toolbar">
-        <li><a id="newstopword" href="[% script_name %]?op=add_form">New preference</a></li>
-    </ul></div>
-    
+
+    <div id="toolbar" class="btn-toolbar">
+        <a class="btn btn-small" id="newstopword" href="[% script_name %]?op=add_form"><i class="icon-plus"></i> New preference</a>
+    </div>
+
     <h1>System preferences admin</h1>
     <h2>[% tab %] preferences</h2>
     [% searchfield %]
