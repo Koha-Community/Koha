@@ -1900,7 +1900,6 @@ CREATE TABLE `serial` (
   `planneddate` date default NULL,
   `notes` text,
   `publisheddate` date default NULL,
-  `itemnumber` text default NULL,
   `claimdate` date default NULL,
   `routingnotes` text,
   PRIMARY KEY  (`serialid`)
