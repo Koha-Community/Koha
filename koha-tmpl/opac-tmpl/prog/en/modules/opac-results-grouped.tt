@@ -17,7 +17,7 @@ var q_array = new Array();  // will hold the search terms, if possible
 $(document).ready(function(){
     [% IF ( OpacHighlightedWords ) %]
         $('a.title').each(function() {
-            $(this).attr('href', $(this).attr('href') + '&query_desc=[% query_desc | url %]');
+            $(this).attr("href", $(this).attr("href") + "&query_desc=[% query_desc | uri %]");
         });
     [% END %]
 
