@@ -6390,7 +6390,7 @@ if ( CheckVersion($DBversion) ) {
    SetVersion ($DBversion);
 }
 
-$DBversion ="3.11.00.XXX";
+$DBversion ="3.11.00.017";
 if ( CheckVersion($DBversion) ) {
     $dbh->do("INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES('IDreamBooksReviews','0','Display book review snippets from IDreamBooks.com','','YesNo');");
     $dbh->do("INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES('IDreamBooksReadometer','0','Display Readometer from IDreamBooks.com','','YesNo');");
