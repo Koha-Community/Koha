@@ -833,6 +833,9 @@ if (C4::Context->preference('GoogleIndicTransliteration')) {
 }
 
 $template->{VARS}->{DidYouMean} = C4::Context->preference('OPACdidyoumean') =~ m/enable/;
+$template->{VARS}->{IDreamBooksReviews} = C4::Context->preference('IDreamBooksReviews');
+$template->{VARS}->{IDreamBooksReadometer} = C4::Context->preference('IDreamBooksReadometer');
+$template->{VARS}->{IDreamBooksResults} = C4::Context->preference('IDreamBooksResults');
 
     $template->param( borrowernumber    => $borrowernumber);
 output_with_http_headers $cgi, $cookie, $template->output, $content_type;

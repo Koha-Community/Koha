@@ -182,7 +182,62 @@ $(function () {
 });
 // -----------------------------------------------------
 [% END %]
+[% IF ( IDreamBooksReviews || IDreamBooksReadometer ) %]
+        var isbn = $(".isbn:last").text().split(" ")[1];
+        if (isbn) {
+        isbn = isbn.replace(/\W*$/, '');
+        isbn = isbn.replace(/-/, '');
+
+        if ($.browser.msie && parseInt($.browser.version, 10) >= 8 && window.XDomainRequest) {
+        // Use Microsoft XDR for IE version 8 or above
+            var xdr = new XDomainRequest();
+            xdr.open("get", "http://idreambooks.com/newbooks/api.json?q="+encodeURIComponent(isbn)+"&key=8bf66516232d1b72f3e47df939653e1e");
+            xdr.onload = function() {
+                json = 'json = '+xdr.responseText; // the string now looks like..  json = { ... };
+                eval(json); // json is now a regular JSON object
+                parseIDBJSON(json); // parse using same function as for jQuery's success event
+            }
+            xdr.send();
+        } else {
+            $.getJSON("http://idreambooks.com/newbooks/api.json?q="+encodeURIComponent(isbn)+"&key=8bf66516232d1b72f3e47df939653e1e", function(json){
+                parseIDBJSON(json);
+            });
+        }
+    }
+
+[% END %]
 });
+[% IF ( IDreamBooksReviews || IDreamBooksReadometer ) %]
+function parseIDBJSON( json ) {
+    if(json.total_results > 0 && json.book.rating > 0){
+        var isbn = $(".isbn:last").text().split(" ")[1];
+        isbn = isbn.replace(/-/, '');
+
+[% IF ( IDreamBooksReadometer ) %]
+        $(".title").append('<a href="'+json.book.detail_link+'" id="idreambooksreadometer"><img src="http://idreambooks.com/remotereadometer/'+isbn+'.jpg" alt="'+json.book.title+' by '+json.book.author+'" title="Rating based on reviews of '+json.book.title+'"></a>');
+[% END %]
+
+
+[% IF ( IDreamBooksReviews ) %]
+        //build new tab for critic reviews
+        $("#tab_idb_critic_reviews a").text($("#tab_idb_critic_reviews a").text().replace('XXX', json.book.review_count));
+
+        //append happy-sad cloud review
+
+        $("#catalogue_detail_biblio").append("<span class='idreambookssummary results_summary'><a href='"+json.book.detail_link+"'><img src='"+json.book.to_read_or_not_small+"' alt='"+json.book.title+" by "+json.book.author+"' title='Rating based on reviews of "+json.book.title+"'>"+json.book.rating+"%</a> <a href='http://www.idreambooks.com/'>rating based on reviews at iDreamBooks.com</a></span>");
+
+        //insert data into Book reviews tab
+        $.each(json.book.critic_reviews, function(){
+                $("#idb_review_snippets").append("<div class='review'><div><a href='"+this.review_link+"'>"+this.source+"</a></div><div>\"..."+this.snippet+"...\"</div><div>Review date: "+this.review_date+"</div><div><a class='reviewlink' href='"+json.book.detail_link+"'>Review result: "+this.pos_or_neg+" <img src='"+this.smiley_or_sad_small+"' alt='iDreamBooks.com rating' title='"+this.pos_or_neg+"' /></a></div></div>");
+                });
+        $("#seemoreidb").attr('href', json.book.detail_link);
+        $("#tab_idb_critic_reviews").show();
+[% END %]
+
+    }
+
+}
+[% END %]
 
 [% IF ( OpacBrowseResults && busc ) %]
 var timeoutRFW;
@@ -416,10 +471,10 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
     [% IF ( pages ) %]<span class="results_summary"><span class="label">Physical details:</span> [% pages %] [% illus %] [% size %]</span>[% END %]
 
     [% IF ( MARCISBNS ) %]
-        <span class="results_summary"><span class="label">ISBN:</span>[% FOREACH MARCISBN IN MARCISBNS %][% MARCISBN.marcisbn %][% IF ( loop.last ) %].[% ELSE %]; [% END %][% END %]</span>
+        <span class="results_summary isbn"><span class="label">ISBN:</span>[% FOREACH MARCISBN IN MARCISBNS %][% MARCISBN.marcisbn %][% IF ( loop.last ) %].[% ELSE %]; [% END %][% END %]</span>
     [% ELSE %]
         [% IF ( normalized_isbn ) %]
-            <span class="results_summary"><span class="label">ISBN: </span>[% normalized_isbn %]</span>
+            <span class="results_summary isbn"><span class="label">ISBN: </span>[% normalized_isbn %]</span>
         [% END %]
     [% END %]
     [% IF ( issn ) %]
@@ -725,6 +780,9 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
     <li id="tab_html5media"><a href="#html5media">Play media</a></li>
 [% END %][% END %]
 
+[% IF ( IDreamBooksReviews ) %]
+    <li id='tab_idb_critic_reviews' style="display:none;"><a href='#idb_critic_reviews'>Book reviews by critics ( XXX )</a></li>
+[% END %]
 </ul>
 
 [% IF ( serialcollection ) %]
@@ -1084,6 +1142,14 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 </div>
 [% END %]
 
+[% IF ( IDreamBooksReviews ) %]
+    <div id="idb_critic_reviews">
+        <div id="idb_review_snippets">
+        </div>
+        <span><a id="seemoreidb">More book reviews at iDreamBooks.com</a></span>
+    </div>
+[% END %]
+
 
 </div>
 [% IF ( NovelistSelectProfile ) %][% IF ( NovelistSelectView == 'below' ) %]
@@ -1102,6 +1168,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
     <div class="clearfix"></div>
     <div id="BW_videos"></div>
 [% END %]
+
 
 </div>
 

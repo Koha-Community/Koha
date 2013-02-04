@@ -6390,6 +6390,16 @@ if ( CheckVersion($DBversion) ) {
    SetVersion ($DBversion);
 }
 
+$DBversion ="3.11.00.017";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do("INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES('IDreamBooksReviews','0','Display book review snippets from IDreamBooks.com','','YesNo');");
+    $dbh->do("INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES('IDreamBooksReadometer','0','Display Readometer from IDreamBooks.com','','YesNo');");
+    $dbh->do("INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES('IDreamBooksResults','0','Display IDreamBooks.com rating in search results','','YesNo');");
+    print "Upgrade to $DBversion done (Add IDreamBooks enhanced content)\n";
+    SetVersion($DBversion);
+}
+
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)
