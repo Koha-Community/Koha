@@ -40,7 +40,7 @@
         } else if ( holdcount > 0 ) {
             is_confirmed = confirm( holdcount + " " + _("holds(s) for this record \n Are you sure you want to delete this record?."));
         } else {
-            is_confirmed = confirm(_('Are you sure you want to delete this record? '));
+            is_confirmed = confirm(_("Are you sure you want to delete this record?"));
         }
 
         if (is_confirmed) {
