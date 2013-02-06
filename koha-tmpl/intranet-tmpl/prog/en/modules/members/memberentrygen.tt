@@ -1399,8 +1399,8 @@
                             var attrid = item.message_attribute_id;
                             var transports = ['email', 'rss', 'sms'];
                             $.each(transports, function(j, transport) {
-                                if (item['transport-' + transport] != ' ') {
-                                    $('#' + transport + attrid).attr('checked', item['transport-' + transport]);
+                                if (item['transports_' + transport] == 1) {
+                                    $('#' + transport + attrid).attr('checked', 'checked');
                                 } else {
                                     $('#' + transport + attrid).removeAttr('checked');
                                 }
