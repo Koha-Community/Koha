@@ -425,11 +425,11 @@ sub batch_info {
                                               'current_matcher_description' => $matcher->description());
         }
     }
-    add_matcher_list($batch->{'matcher_id'});
+    add_matcher_list($batch->{'matcher_id'}, $template);
 }
 
 sub add_matcher_list {
-    my $current_matcher_id = shift;
+    my ($current_matcher_id, $template) = @_;
     my @matchers = C4::Matcher::GetMatcherList();
     if (defined $current_matcher_id) {
         for (my $i = 0; $i <= $#matchers; $i++) {
