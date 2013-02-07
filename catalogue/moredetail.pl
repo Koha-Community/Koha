@@ -35,6 +35,7 @@ use C4::Circulation;  # to use itemissues
 use C4::Members; # to use GetMember
 use C4::Search;		# enabled_staff_search_views
 use C4::Members qw/GetHideLostItemsPreference/;
+use C4::Reserves qw(GetReservesFromBiblionumber);
 use Koha::DateUtils;
 
 my $query=new CGI;
@@ -213,6 +214,10 @@ $template->param(
     hidepatronname      => $hidepatronname,
 );
 $template->param(ONLY_ONE => 1) if ( $itemnumber && $showncount != @items );
+
+
+my ( $holdcount, $holds ) = GetReservesFromBiblionumber($biblionumber,1);
+$template->param( holdcount => $holdcount, holds => $holds );
 
 output_html_with_http_headers $query, $cookie, $template->output;
 
