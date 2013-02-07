@@ -24,6 +24,9 @@ use C4::Context;
 use C4::Stats;
 use C4::Members;
 use C4::Circulation qw(ReturnLostItem);
+use C4::Log qw(logaction);
+
+use Data::Dumper qw(Dumper);
 
 use vars qw($VERSION @ISA @EXPORT);
 
@@ -106,6 +109,7 @@ sub recordpayment {
     $sth->execute($borrowernumber);
 
     # offset transactions
+    my @ids;
     while ( ( $accdata = $sth->fetchrow_hashref ) and ( $amountleft > 0 ) ) {
         if ( $accdata->{'amountoutstanding'} < $amountleft ) {
             $newamtos = 0;
@@ -121,15 +125,21 @@ sub recordpayment {
      WHERE (accountlines_id = ?)"
         );
         $usth->execute( $newamtos, $thisacct );
-        $usth->finish;
-#        $usth = $dbh->prepare(
-#            "INSERT INTO accountoffsets
-#     (borrowernumber, accountno, offsetaccount,  offsetamount)
-#     VALUES (?,?,?,?)"
-#        );
-#        $usth->execute( $borrowernumber, $accdata->{'accountno'},
-#            $nextaccntno, $newamtos );
-        $usth->finish;
+
+        if ( C4::Context->preference("FinesLog") ) {
+            $accdata->{'amountoutstanding_new'} = $newamtos;
+            logaction("FINES", 'MODIFY', $borrowernumber, Dumper({
+                action                => 'fee_payment',
+                borrowernumber        => $accdata->{'borrowernumber'},
+                old_amountoutstanding => $accdata->{'amountoutstanding'},
+                new_amountoutstanding => $newamtos,
+                amount_paid           => $accdata->{'amountoutstanding'} - $newamtos,
+                accountlines_id       => $accdata->{'accountlines_id'},
+                accountno             => $accdata->{'accountno'},
+                manager_id            => $manager_id,
+            }));
+            push( @ids, $accdata->{'accountlines_id'} );
+        }
     }
 
     # create new line
@@ -139,9 +149,23 @@ sub recordpayment {
   VALUES (?,?,now(),?,'Payment,thanks','Pay',?,?)"
     );
     $usth->execute( $borrowernumber, $nextaccntno, 0 - $data, 0 - $amountleft, $manager_id );
-    $usth->finish;
+
     UpdateStats( $branch, 'payment', $data, '', '', '', $borrowernumber, $nextaccntno );
-    $sth->finish;
+
+    if ( C4::Context->preference("FinesLog") ) {
+        $accdata->{'amountoutstanding_new'} = $newamtos;
+        logaction("FINES", 'CREATE',$borrowernumber,Dumper({
+            action            => 'create_payment',
+            borrowernumber    => $borrowernumber,
+            accountno         => $nextaccntno,
+            amount            => $data * -1,
+            amountoutstanding => $amountleft * -1,
+            accounttype       => 'Pay',
+            accountlines_paid => \@ids,
+            manager_id        => $manager_id,
+        }));
+    }
+
 }
 
 =head2 makepayment
@@ -180,7 +204,8 @@ sub makepayment {
     my $data = $sth->fetchrow_hashref;
     $sth->finish;
 
-    if($data->{'accounttype'} eq "Pay"){
+    my $payment;
+    if ( $data->{'accounttype'} eq "Pay" ){
         my $udp = 		
             $dbh->prepare(
                 "UPDATE accountlines
@@ -202,7 +227,7 @@ sub makepayment {
         $udp->finish;
 
          # create new line
-        my $payment = 0 - $amount;
+        $payment = 0 - $amount;
         
         my $ins = 
             $dbh->prepare( 
@@ -214,12 +239,37 @@ sub makepayment {
         $ins->finish;
     }
 
+    if ( C4::Context->preference("FinesLog") ) {
+        logaction("FINES", 'MODIFY', $borrowernumber, Dumper({
+            action                => 'fee_payment',
+            borrowernumber        => $borrowernumber,
+            old_amountoutstanding => $data->{'amountoutstanding'},
+            new_amountoutstanding => 0,
+            amount_paid           => $data->{'amountoutstanding'},
+            accountlines_id       => $data->{'accountlines_id'},
+            accountno             => $data->{'accountno'},
+            manager_id            => $manager_id,
+        }));
+
+
+        logaction("FINES", 'CREATE',$borrowernumber,Dumper({
+            action            => 'create_payment',
+            borrowernumber    => $borrowernumber,
+            accountno         => $nextaccntno,
+            amount            => $payment,
+            amountoutstanding => 0,,
+            accounttype       => 'Pay',
+            accountlines_paid => [$data->{'accountlines_id'}],
+            manager_id        => $manager_id,
+        }));
+    }
+
+
     # FIXME - The second argument to &UpdateStats is supposed to be the
     # branch code.
     # UpdateStats is now being passed $accountno too. MTJ
     UpdateStats( $user, 'payment', $amount, '', '', '', $borrowernumber,
         $accountno );
-    #from perldoc: for SELECT only #$sth->finish;
 
     #check to see what accounttype
     if ( $data->{'accounttype'} eq 'Rep' || $data->{'accounttype'} eq 'L' ) {
@@ -314,7 +364,21 @@ sub chargelostitem{
         $sth2->execute($borrowernumber,$accountno,$amount,
         $description,$amount,$itemnumber,$manager_id);
         $sth2->finish;
-    # FIXME: Log this ?
+
+        if ( C4::Context->preference("FinesLog") ) {
+            logaction("FINES", 'CREATE', $borrowernumber, Dumper({
+                action            => 'create_fee',
+                borrowernumber    => $borrowernumber,
+                accountno         => $accountno,
+                amount            => $amount,
+                amountoutstanding => $amount,
+                description       => $description,
+                accounttype       => 'L',
+                itemnumber        => $itemnumber,
+                manager_id        => $manager_id,
+            }));
+        }
+
     }
 }
 
@@ -409,6 +473,23 @@ sub manualinvoice {
         $sth->execute( $borrowernumber, $accountno, $amount, $desc, $type,
             $amountleft, $notifyid, $note, $manager_id );
     }
+
+    if ( C4::Context->preference("FinesLog") ) {
+        logaction("FINES", 'CREATE',$borrowernumber,Dumper({
+            action            => 'create_fee',
+            borrowernumber    => $borrowernumber,
+            accountno         => $accountno,
+            amount            => $amount,
+            description       => $desc,
+            accounttype       => $type,
+            amountoutstanding => $amountleft,
+            notify_id         => $notifyid,
+            note              => $note,
+            itemnumber        => $itemnum,
+            manager_id        => $manager_id,
+        }));
+    }
+
     return 0;
 }
 
@@ -653,7 +734,7 @@ sub ReversePayment {
     my ( $accountlines_id ) = @_;
     my $dbh = C4::Context->dbh;
 
-    my $sth = $dbh->prepare('SELECT amountoutstanding FROM accountlines WHERE accountlines_id = ?');
+    my $sth = $dbh->prepare('SELECT * FROM accountlines WHERE accountlines_id = ?');
     $sth->execute( $accountlines_id );
     my $row = $sth->fetchrow_hashref();
     my $amount_outstanding = $row->{'amountoutstanding'};
@@ -665,6 +746,29 @@ sub ReversePayment {
         $sth = $dbh->prepare('UPDATE accountlines SET amountoutstanding = 0, description = CONCAT( description, " Reversed -" ) WHERE accountlines_id = ?');
         $sth->execute( $accountlines_id );
     }
+
+    if ( C4::Context->preference("FinesLog") ) {
+        my $manager_id = 0;
+        $manager_id = C4::Context->userenv->{'number'} if C4::Context->userenv;
+
+        if ( $amount_outstanding <= 0 ) {
+            $row->{'amountoutstanding'} *= -1;
+        } else {
+            $row->{'amountoutstanding'} = '0';
+        }
+        $row->{'description'} .= ' Reversed -';
+        logaction("FINES", 'MODIFY', $row->{'borrowernumber'}, Dumper({
+            action                => 'reverse_fee_payment',
+            borrowernumber        => $row->{'borrowernumber'},
+            old_amountoutstanding => $row->{'amountoutstanding'},
+            new_amountoutstanding => 0 - $amount_outstanding,,
+            accountlines_id       => $row->{'accountlines_id'},
+            accountno             => $row->{'accountno'},
+            manager_id            => $manager_id,
+        }));
+
+    }
+
 }
 
 =head2 recordpayment_selectaccts
@@ -709,6 +813,8 @@ sub recordpayment_selectaccts {
     # offset transactions
     my $sth     = $dbh->prepare('UPDATE accountlines SET amountoutstanding= ? ' .
         'WHERE accountlines_id=?');
+
+    my @ids;
     for my $accdata ( @{$rows} ) {
         if ($amountleft == 0) {
             last;
@@ -723,6 +829,21 @@ sub recordpayment_selectaccts {
         }
         my $thisacct = $accdata->{accountlines_id};
         $sth->execute( $newamtos, $thisacct );
+
+        if ( C4::Context->preference("FinesLog") ) {
+            logaction("FINES", 'MODIFY', $borrowernumber, Dumper({
+                action                => 'fee_payment',
+                borrowernumber        => $borrowernumber,
+                old_amountoutstanding => $accdata->{'amountoutstanding'},
+                new_amountoutstanding => $newamtos,
+                amount_paid           => $accdata->{'amountoutstanding'} - $newamtos,
+                accountlines_id       => $accdata->{'accountlines_id'},
+                accountno             => $accdata->{'accountno'},
+                manager_id            => $manager_id,
+            }));
+            push( @ids, $accdata->{'accountlines_id'} );
+        }
+
     }
 
     # create new line
@@ -731,6 +852,20 @@ sub recordpayment_selectaccts {
     q|VALUES (?,?,now(),?,'Payment,thanks','Pay',?,?)|;
     $dbh->do($sql,{},$borrowernumber, $nextaccntno, 0 - $amount, 0 - $amountleft, $manager_id );
     UpdateStats( $branch, 'payment', $amount, '', '', '', $borrowernumber, $nextaccntno );
+
+    if ( C4::Context->preference("FinesLog") ) {
+        logaction("FINES", 'CREATE',$borrowernumber,Dumper({
+            action            => 'create_payment',
+            borrowernumber    => $borrowernumber,
+            accountno         => $nextaccntno,
+            amount            => 0 - $amount,
+            amountoutstanding => 0 - $amountleft,
+            accounttype       => 'Pay',
+            accountlines_paid => \@ids,
+            manager_id        => $manager_id,
+        }));
+    }
+
     return;
 }
 
@@ -755,6 +890,19 @@ sub makepartialpayment {
     my $update = 'UPDATE  accountlines SET amountoutstanding = ?  WHERE   accountlines_id = ? ';
     $dbh->do( $update, undef, $new_outstanding, $accountlines_id);
 
+    if ( C4::Context->preference("FinesLog") ) {
+        logaction("FINES", 'MODIFY', $borrowernumber, Dumper({
+            action                => 'fee_payment',
+            borrowernumber        => $borrowernumber,
+            old_amountoutstanding => $data->{'amountoutstanding'},
+            new_amountoutstanding => $new_outstanding,
+            amount_paid           => $data->{'amountoutstanding'} - $new_outstanding,
+            accountlines_id       => $data->{'accountlines_id'},
+            accountno             => $data->{'accountno'},
+            manager_id            => $manager_id,
+        }));
+    }
+
     # create new line
     my $insert = 'INSERT INTO accountlines (borrowernumber, accountno, date, amount, '
     .  'description, accounttype, amountoutstanding, itemnumber, manager_id) '
@@ -764,6 +912,19 @@ sub makepartialpayment {
         "Payment, thanks - $user", 'Pay', $data->{'itemnumber'}, $manager_id);
 
     UpdateStats( $user, 'payment', $amount, '', '', '', $borrowernumber, $accountno );
+
+    if ( C4::Context->preference("FinesLog") ) {
+        logaction("FINES", 'CREATE',$borrowernumber,Dumper({
+            action            => 'create_payment',
+            borrowernumber    => $user,
+            accountno         => $nextaccntno,
+            amount            => 0 - $amount,
+            accounttype       => 'Pay',
+            itemnumber        => $data->{'itemnumber'},
+            accountlines_paid => [ $data->{'accountlines_id'} ],
+            manager_id        => $manager_id,
+        }));
+    }
 
     return;
 }
@@ -783,7 +944,7 @@ C<$branch> is the branchcode of the library where the writeoff occurred.
 =cut
 
 sub WriteOffFee {
-    my ( $borrowernumber, $accountline_id, $itemnum, $accounttype, $amount, $branch ) = @_;
+    my ( $borrowernumber, $accountlines_id, $itemnum, $accounttype, $amount, $branch ) = @_;
     $branch ||= C4::Context->userenv->{branch};
     my $manager_id = 0;
     $manager_id = C4::Context->userenv->{'number'} if C4::Context->userenv;
@@ -799,7 +960,16 @@ sub WriteOffFee {
         WHERE accountlines_id = ? AND borrowernumber = ?
     ";
     $sth = $dbh->prepare( $query );
-    $sth->execute( $accountline_id, $borrowernumber );
+    $sth->execute( $accountlines_id, $borrowernumber );
+
+    if ( C4::Context->preference("FinesLog") ) {
+        logaction("FINES", 'MODIFY', $borrowernumber, Dumper({
+            action                => 'fee_writeoff',
+            borrowernumber        => $borrowernumber,
+            accountlines_id       => $accountlines_id,
+            manager_id            => $manager_id,
+        }));
+    }
 
     $query ="
         INSERT INTO accountlines
@@ -809,6 +979,19 @@ sub WriteOffFee {
     $sth = $dbh->prepare( $query );
     my $acct = getnextacctno($borrowernumber);
     $sth->execute( $borrowernumber, $acct, $itemnum, $amount, $manager_id );
+
+    if ( C4::Context->preference("FinesLog") ) {
+        logaction("FINES", 'CREATE',$borrowernumber,Dumper({
+            action            => 'create_writeoff',
+            borrowernumber    => $borrowernumber,
+            accountno         => $acct,
+            amount            => 0 - $amount,
+            accounttype       => 'W',
+            itemnumber        => $itemnum,
+            accountlines_paid => [ $accountlines_id ],
+            manager_id        => $manager_id,
+        }));
+    }
 
     UpdateStats( $branch, 'writeoff', $amount, q{}, q{}, q{}, $borrowernumber );
 
