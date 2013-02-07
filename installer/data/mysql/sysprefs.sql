@@ -86,6 +86,8 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('CircAutocompl','1',NULL,'If ON, autocompletion is enabled for the Circulation input','YesNo'),
 ('CircAutoPrintQuickSlip','qslip',NULL,'Choose what should happen when an empty barcode field is submitted in circulation: Display a print quick slip window, Display a print slip window or Clear the screen.','Choice'),
 ('CircControl','ItemHomeLibrary','PickupLibrary|PatronLibrary|ItemHomeLibrary','Specify the agency that controls the circulation and fines policy','Choice'),
+('CoceHost', NULL, NULL, 'Coce server URL', 'Free'),
+('CoceProviders', NULL, NULL, 'Coce providers, for example aws,gb', 'Free'),
 ('COinSinOPACResults','1','','If ON, use COinS in OPAC search results page.  NOTE: this can slow down search response time significantly','YesNo'),
 ('ConfirmFutureHolds','0','','Number of days for confirming future holds','Integer'),
 ('CurrencyFormat','US','US|FR','Determines the display format of currencies. eg: \'36000\' is displayed as \'360 000,00\'  in \'FR\' or \'360,000.00\'  in \'US\'.','Choice'),

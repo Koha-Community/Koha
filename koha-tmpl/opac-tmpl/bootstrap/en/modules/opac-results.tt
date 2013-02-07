@@ -257,6 +257,15 @@
                                                             [% END %]
                                                         [% END %]
 
+                                                        [% IF ( Koha.Preference('CoceProviders') ) %]
+                                                          [% coce_id = SEARCH_RESULT.normalized_ean || SEARCH_RESULT.normalized_isbn %]
+                                                          [% IF ( coce_id ) %]
+                                                            <span style="block" title="[% SEARCH_RESULT.biblionumber |url %]" class="[% coce_id %]" id="coce-thumbnail[% loop.count %]"></span>
+                                                          [% ELSE %]
+                                                            <span class="no-image">No cover image available</span>
+                                                          [% END %]
+                                                        [% END %]
+
                                                         [% IF OpenLibraryCovers %]
                                                             [% IF SEARCH_RESULT.normalized_isbn %]
                                                                 <span style="block" title="[% SEARCH_RESULT.biblionumber %]" class="[% SEARCH_RESULT.normalized_isbn %]" id="openlibrary-thumbnail[% loop.count %]"></span>
@@ -904,6 +913,7 @@ $(document).ready(function(){
 [% IF OpenLibraryCovers %]KOHA.OpenLibrary.GetCoverFromIsbn();[% END %]
 [% IF OPACLocalCoverImages %]KOHA.LocalCover.GetCoverFromBibnumber(false);[% END %]
 [% IF ( GoogleJackets ) %]KOHA.Google.GetCoverFromIsbn();[% END %]
+[% IF ( Koha.Preference('CoceProviders') ) %]KOHA.coce.getURL('[% Koha.Preference('CoceHost') %]', '[% Koha.Preference('CoceProviders') %]');[% END %]
 
 [% IF ( DidYouMean ) %]
     $("#didyoumean").load("/cgi-bin/koha/svc/suggestion?render=stub&q=[% querystring |uri %]",

@@ -9953,6 +9953,20 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.19.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences (variable, value, explanation, options, type)
+        VALUES('CoceHost', NULL, 'Coce server URL', NULL,'Free')
+    });
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences (variable, value, explanation, options, type)
+        VALUES('CoceProviders', NULL, 'Coce Providers, for example: aws,gb', NULL,'Free')
+    });
+    print "Upgrade to $DBversion done (Bug 9580 - Cover image from Coce, a remote image URL cache)\n";
+    SetVersion($DBversion);
+}
+
 
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
@@ -9966,7 +9980,6 @@ while ( my $file = readdir $dirh ) {
     my $installer = C4::Installer->new();
     my $rv = $installer->load_sql( $update_dir . $file ) ? 0 : 1;
 }
-
 
 =head1 FUNCTIONS
 

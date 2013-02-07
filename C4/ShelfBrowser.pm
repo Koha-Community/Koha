@@ -73,6 +73,7 @@ to take into account.
   	  print $_->{browser_normalized_upc};
   	  print $_->{browser_normalized_oclc};
   	  print $_->{browser_normalized_isbn};
+      print $_->{browser_normalized_ean};
   }
 
   # This is the information required to scroll the browser to the next left
@@ -228,6 +229,7 @@ sub GetShelfInfo {
         $item->{'browser_normalized_upc'} = GetNormalizedUPC($this_record,$marcflavour);
         $item->{'browser_normalized_oclc'} = GetNormalizedOCLCNumber($this_record,$marcflavour);
         $item->{'browser_normalized_isbn'} = GetNormalizedISBN(undef,$this_record,$marcflavour);
+        $item->{'browser_normalized_ean'} = GetNormalizedEAN($this_record,$marcflavour);
         push @valid_items, $item;
     }
     return @valid_items;

@@ -165,6 +165,15 @@ $.widget.bridge('uitooltip', $.ui.tooltip);
         //]]>
     </script>
 [% END %]
+[% IF Koha.Preference('CoceProviders') %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/coce.js"></script>
+    <script type="text/javascript">
+        //<![CDATA[
+        var NO_COCE_JACKET = _("No cover image available");
+        //]]>
+    </script>
+[% END %]
+
 [% IF OpenLibraryCovers %]
     <script type="text/javascript" src="[% interface %]/[% theme %]/js/openlibrary.js"></script>
     <script type="text/javascript">
