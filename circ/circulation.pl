@@ -372,6 +372,7 @@ if ($borrowernumber) {
         $getWaitingReserveInfo{biblionumber} = $getiteminfo->{'biblionumber'};
         $getWaitingReserveInfo{itemtype}     = $itemtypeinfo->{'description'};
         $getWaitingReserveInfo{author}       = $getiteminfo->{'author'};
+        $getWaitingReserveInfo{itemcallnumber} = $getiteminfo->{'itemcallnumber'};
         $getWaitingReserveInfo{reservedate}  = format_date( $num_res->{'reservedate'} );
         $getWaitingReserveInfo{waitingat}    = GetBranchName( $num_res->{'branchcode'} );
         $getWaitingReserveInfo{waitinghere}  = 1 if $num_res->{'branchcode'} eq $branch;
