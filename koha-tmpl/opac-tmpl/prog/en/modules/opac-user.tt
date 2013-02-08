@@ -8,7 +8,10 @@
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
 <script type="text/JavaScript">
 //<![CDATA[
-var MSG_CONFIRM_DELETE_HOLD = _("Are you sure you want to cancel this hold?");
+var MSG_CONFIRM_DELETE_HOLD   = _("Are you sure you want to cancel this hold?");
+var MSG_CONFIRM_SUSPEND_HOLDS = _("Are you sure you want to suspend all holds?");
+var MSG_CONFIRM_RESUME_HOLDS  = _("Are you sure you want to resume all suspended holds?");
+
 $.tablesorter.addParser({
     id: 'articles', 
     is: function(s) {return false;  }, 
@@ -410,7 +413,7 @@ $.tablesorter.addParser({
 			<form action="/cgi-bin/koha/opac-modrequest.pl" method="post">
 			<input type="hidden" name="biblionumber" value="[% RESERVE.biblionumber %]" />
 		<input type="hidden" name="reservenumber" value="[% RESERVE.reservenumber %]" />
-			<input type="submit" name="submit" class="icon delete cancel" value="Cancel" onclick="return confirmDelete('Are you sure you want to cancel this hold?');" /></form>
+			<input type="submit" name="submit" class="icon delete cancel" value="Cancel" onclick="return confirmDelete(MSG_CONFIRM_DELETE_HOLD);" /></form>
 		[% ELSE %]
 		[% END %]
 		</td>
@@ -424,7 +427,7 @@ $.tablesorter.addParser({
         [% IF SuspendHoldsOpac %]
 	<div>
             <form action="/cgi-bin/koha/opac-modrequest-suspend.pl" method="post">
-              <input type="submit" name="submit" class="icon delete cancel" value="Suspend all holds" onclick="return confirmDelete('Are you sure you want to suspend all holds?');" />
+              <input type="submit" name="submit" class="icon delete cancel" value="Suspend all holds" onclick="return confirmDelete(MSG_CONFIRM_SUSPEND_HOLDS);" />
               <input type="hidden" name="suspend" value="1" />
 
 	      [% IF AutoResumeSuspendedHolds %]
@@ -436,7 +439,7 @@ $.tablesorter.addParser({
 	</div>
 	<div>
             <form action="/cgi-bin/koha/opac-modrequest-suspend.pl" method="post">
-              <input type="submit" name="submit" class="icon delete cancel" value="Resume all suspended holds" onclick="return confirmDelete('Are you sure you want to resume all suspended holds?');" />
+              <input type="submit" name="submit" class="icon delete cancel" value="Resume all suspended holds" onclick="return confirmDelete(MSG_CONFIRM_RESUME_HOLDS);" />
               <input type="hidden" name="suspend" value="0" />
             </form>
 	</div>
