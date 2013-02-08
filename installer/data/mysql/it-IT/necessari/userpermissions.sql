@@ -54,6 +54,9 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (15, 'renew_subscription', 'Rinnova un abbonamento'),
    (15, 'routing', 'Crea/Manipola liste di distribuzione dei fascicoli ( routing list)'),
    (16, 'execute_reports', 'Esegui reports SQL'),
-   (16, 'create_reports', 'Crea reports SQL')
+   (16, 'create_reports', 'Crea reports SQL'),
+   (19, 'tool', 'Use tool plugins'),
+   (19, 'report', 'Use report plugins'),
+   (19, 'configure', 'Configure plugins')
 ;
 SET FOREIGN_KEY_CHECKS=1;

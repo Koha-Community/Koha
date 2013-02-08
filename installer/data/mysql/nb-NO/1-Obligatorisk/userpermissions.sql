@@ -72,5 +72,8 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (15, 'renew_subscription', 'Fornye abonnementer'),
    (15, 'routing', 'Sirkulasjon'),
    (16, 'execute_reports', 'Kjøre SQL-rapporter'),
-   (16, 'create_reports', 'Opprette SQL-rapporter')
+   (16, 'create_reports', 'Opprette SQL-rapporter'),
+   (19, 'tool', 'Use tool plugins'),
+   (19, 'report', 'Use report plugins'),
+   (19, 'configure', 'Configure plugins')
 ;

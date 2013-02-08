@@ -15,3 +15,4 @@ INSERT INTO `userflags` VALUES(14,'editauthorities','Normdaten ändern',0);
 INSERT INTO `userflags` VALUES(15,'serials','Zugang auf Abonnementverwaltung/Zeitschriftenmodul',0);
 INSERT INTO `userflags` VALUES(16,'reports','Zugang auf Reportmodul',0);
 INSERT INTO `userflags` VALUES(17,'staffaccess','Berechtigungen für Bibliotheksmitarbeiter vergeben',0);
+INSERT INTO `userflags` VALUES(19, 'plugins', 'Koha plugins', '0');

@@ -52,5 +52,8 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (15, 'renew_subscription', 'Renew a subscription'),
    (15, 'routing', 'Routing'),
    (16, 'execute_reports', 'Execute SQL reports'),
-   (16, 'create_reports', 'Create SQL Reports')
+   (16, 'create_reports', 'Create SQL Reports'),
+   (19, 'tool', 'Use tool plugins'),
+   (19, 'report', 'Use report plugins'),
+   (19, 'configure', 'Configure plugins')
 ;

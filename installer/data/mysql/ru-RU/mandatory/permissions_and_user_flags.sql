@@ -17,7 +17,8 @@ INSERT INTO userflags (bit, flag, flagdesc, defaulton) VALUES
    (14,'editauthorities', 'Разрешение на изменение авторитетных источников',0),
    (15,'serials',         'Разрешение на управление подпиской периодических изданий',0),
    (16,'reports',         'Разрешение на доступ к модулю отчетов',0),
-   (17,'staffaccess',     'Смена имени(логина)/привилегий для работников библиотеки',0)
+   (17,'staffaccess',     'Смена имени(логина)/привилегий для работников библиотеки',0),
+   (19,'plugins',         'Koha plugins', '0')
 ;
 
 TRUNCATE permissions;
@@ -76,6 +77,9 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (15, 'renew_subscription',          'Renew a subscription'),
    (15, 'routing',                     'Routing'),
    (16, 'execute_reports', 'Execute SQL reports'),
-   (16, 'create_reports', 'Create SQL Reports')
+   (16, 'create_reports', 'Create SQL Reports'),
+   (19, 'tool', 'Use tool plugins'),
+   (19, 'report', 'Use report plugins'),
+   (19, 'configure', 'Configure plugins')
 ;
 
