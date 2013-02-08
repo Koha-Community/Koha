@@ -45,6 +45,81 @@ function verify_images() {
      });[% END %]
 //]]>
 </script>
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.columnFilter.js"></script>
+[% INCLUDE 'datatables-strings.inc' %]
+<script type="text/javascript" src="[% themelang %]/js/datatables.js"></script>
+<script type="text/javascript">
+//<![CDATA[
+    function activate_filters(id) {
+        table = $("#" + id + " table");
+        if (table.length == 1) {
+            filters_row = table.find('thead tr.filters_row');
+            if (table.find('thead tr.columnFilter').length == 0) {
+                table.dataTable().columnFilter({
+                    'sPlaceHolder': 'head:after'
+                });
+                filters_row.addClass('columnFilter');
+            }
+            filters_row.show();
+        }
+
+        $('#' + id + '_activate_filters')
+            .text(_("Deactivate filters"))
+            .unbind('click')
+            .click(function() {
+                deactivate_filters(id);
+                return false;
+            });
+    }
+
+    function deactivate_filters(id) {
+        filters_row = $("#" + id + " table").find('thead tr.filters_row');
+
+        filters_row.find('input[type="text"]')
+            .val('')            // Empty filter text boxes
+            .trigger('keyup')   // Filter (display all rows)
+            .trigger('blur');   // Reset value to the column name
+        filters_row.hide();
+
+        $('#' + id + '_activate_filters')
+            .text(_("Activate filters"))
+            .unbind('click')
+            .click(function() {
+                activate_filters(id);
+                return false;
+            });
+    }
+
+    $(document).ready(function() {
+        var ids = ['holdings', 'otherholdings'];
+        for (var i in ids) {
+            var id = ids[i];
+            table = $('#' + id + ' table');
+
+            // Duplicate the table header row for columnFilter
+            thead_row = table.find('thead tr');
+            clone = thead_row.clone().addClass('filters_row');
+            thead_row.before(clone);
+
+            // Enable sorting
+            table.dataTable($.extend(true, {}, dataTablesDefaults, {
+                'sDom': 't',
+                'bPaginate': false,
+                'bAutoWidth': false
+            }));
+
+            // Show a link to activate filtering
+            link = $('<a>')
+                .attr('href', '#')
+                .attr('id', id + '_activate_filters');
+            table.before(link);
+            deactivate_filters(id);
+        }
+    });
+//]]>
+</script>
 </head>
 
 <body id="catalog_detail" class="catalog">
