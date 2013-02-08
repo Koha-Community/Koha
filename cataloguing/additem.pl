@@ -155,6 +155,7 @@ sub generate_subfield_form {
 	    $value = $input->param('barcode');
 	}
         my $attributes_no_value = qq(tabindex="1" id="$subfield_data{id}" name="field_value" class="input_marceditor" size="67" maxlength="$subfield_data{maxlength}" );
+        my $attributes_no_value_textarea = qq(tabindex="1" id="$subfield_data{id}" name="field_value" class="input_marceditor" rows="5" cols="64" );
         my $attributes          = qq($attributes_no_value value="$value" );
         
         if ( $subfieldlib->{authorised_value} ) {
@@ -271,7 +272,7 @@ sub generate_subfield_form {
                           500 <= $tag && $tag < 600                     )
                   ) {
             # oversize field (textarea)
-            $subfield_data{marc_value} = "<textarea $attributes_no_value>$value</textarea>\n";
+            $subfield_data{marc_value} = "<textarea $attributes_no_value_textarea>$value</textarea>\n";
         } else {
            # it's a standard field
            $subfield_data{marc_value} = "<input type=\"text\" $attributes />";
