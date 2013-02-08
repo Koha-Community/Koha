@@ -158,8 +158,6 @@ var allcheckboxes = $(".checkboxed");
     $("input.radio").click(function(){
         radioCheckBox($(this));
     });
-    $("#exportmenuc").empty();
-    initExportButton();
 
     $("#newduedate").datetimepicker({
         minDate: 1, // require that renewal date is after today
@@ -171,25 +169,14 @@ var allcheckboxes = $(".checkboxed");
         hour: 23,
         minute: 59
     });
-
+    $("#export_submit").click(function(){
+        var export_format = $("#export_formats").val();
+        export_checkouts(export_format);
+        return false;
+    })
  });
 
-function initExportButton() {
-    var exportmenu = [
-        { text: _("ISO2709 with items"), onclick: {fn: function(){export_submit("iso2709_995")}} },
-        { text: _("ISO2709 without items"), onclick: {fn: function(){export_submit("iso2709")}} },
-        { text: _("CSV"), onclick: {fn: function(){export_submit("csv")}} },
-    ];
-    new YAHOO.widget.Button({
-        type: "menu",
-        label: _("Export checkouts"),
-        name: "exportmenubutton",
-        menu: exportmenu,
-        container: "exportmenuc"
-    });
-}
-
-function export_submit(format) {
+function export_checkouts(format) {
     if ($("input:checkbox[name='biblionumbers'][checked]").length < 1){
         alert(_("You must select a checkout to export"));
         return;
@@ -959,16 +946,23 @@ No patron matched <span class="ex">[% message %]</span>
         [% END %]
         <input type="submit" name="renew_checked" value="Renew or Return checked items" />
         <input type="submit" id="renew_all" name="renew_all" value="Renew all" />
+    </fieldset>
         [% IF export_remove_fields OR export_with_csv_profile %]
-            <br/><br/>
-            Don't export fields : <input type="text" id="export_remove_fields" name="export_remove_fields" value="[% export_remove_fields %]" title="Use for iso2709 exports" />
-            <span id="exportmenuc">Export</span>
+            <fieldset>
+            <label for="export_formats"><b>Export checkouts using format:</b></label>
+            <select name="export_formats" id="export_formats">
+                <option value="iso2709_995">ISO2709 with items</option>
+                <option value="iso2709">ISO2709 without items</option>
+                <option value="csv">CSV</option>
+            </select>
+           <label for="export_remove_fields">Don't export fields:</label> <input type="text" id="export_remove_fields" name="export_remove_fields" value="[% export_remove_fields %]" title="Use for iso2709 exports" />
             <input type="hidden" name="op" value="export" />
             <input type="hidden" id="export_format" name="format" value="iso2709" />
             <input type="hidden" id="dont_export_item" name="dont_export_item" value="0" />
             <input type="hidden" id="record_type" name="record_type" value="bibs" />
+            <input type="button" id="export_submit" value="Export" />
+            </fieldset>
         [% END %]
-    </fieldset>
     [% END %]
     </form>
 [% ELSE %]
