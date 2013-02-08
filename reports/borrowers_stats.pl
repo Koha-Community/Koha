@@ -56,7 +56,7 @@ my @filters = $input->param("Filter");
 $filters[3]=format_date_in_iso($filters[3]);
 $filters[4]=format_date_in_iso($filters[4]);
 my $digits = $input->param("digits");
-my $period = $input->param("period");
+our $period = $input->param("period");
 my $borstat = $input->param("status");
 my $borstat1 = $input->param("activity");
 my $output = $input->param("output");
@@ -372,6 +372,7 @@ sub calculate {
             my $coltitle = $row->{coltitle} // '';
             $table{$rowtitle}->{$coltitle} = 0;
 		}
+        $row->{rowtitle} ||= '';
 		$table{$row->{rowtitle}}->{totalrow}=0;
 		$table{$row->{rowtitle}}->{rowtitle_display} = $row->{rowtitle_display};
 	}
