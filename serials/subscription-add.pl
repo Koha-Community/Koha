@@ -63,7 +63,7 @@ my @subscription_types = (
 my @sub_type_data;
 
 my $subs;
-my $firstissuedate;
+our $firstissuedate;
 
 if ($op eq 'modify' || $op eq 'dup' || $op eq 'modsubscription') {
 
@@ -74,7 +74,7 @@ if ($op eq 'modify' || $op eq 'dup' || $op eq 'modsubscription') {
       carp "Attempt to modify subscription $subscriptionid by ".C4::Context->userenv->{'id'}." not allowed";
       print $query->redirect("/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=$subscriptionid");
     }
-    $firstissuedate = $subs->{firstacquidate};  # in iso format.
+    $firstissuedate = $subs->{firstacquidate} || '';  # in iso format.
     for (qw(startdate firstacquidate histstartdate enddate histenddate)) {
         next unless defined $subs->{$_};
 	# TODO : Handle date formats properly.
@@ -92,7 +92,7 @@ if ($op eq 'modify' || $op eq 'dup' || $op eq 'modsubscription') {
     $nextexpected->{'isfirstissue'} = $nextexpected->{planneddate}->output('iso') eq $firstissuedate ;
     $subs->{nextacquidate} = $nextexpected->{planneddate}->output()  if($op eq 'modify');
     unless($op eq 'modsubscription') {
-		foreach my $length_unit qw(numberlength weeklength monthlength){
+        foreach my $length_unit (qw(numberlength weeklength monthlength)) {
 			if ($subs->{$length_unit}){
 				$sub_length=$subs->{$length_unit};
 				$sub_on=$length_unit;
