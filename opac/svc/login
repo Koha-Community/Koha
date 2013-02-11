@@ -1,0 +1,52 @@
+#!/usr/bin/perl
+
+# Copyright chris@bigballofwax.co.nz 2013
+#
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 3 of the License, or (at your option) any later
+# version.
+#
+# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with Koha; if not, write to the Free Software Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+use CGI;
+use strict;
+use warnings;
+use C4::Auth;
+use C4::Context;
+
+use LWP::UserAgent;
+use HTTP::Request::Common qw{ POST };
+use JSON qw( decode_json );
+
+my $url  = 'https://verifier.login.persona.org/verify';
+
+my $query = CGI->new();
+
+my $host = C4::Context->preference('OPACBaseURL');
+
+my $assertion = $query->param('assertion');
+
+my $ua = LWP::UserAgent->new();
+my $response =
+  $ua->post( $url, [ 'assertion' => $assertion, 'audience' => $host ] );
+
+if ( $response->is_success ) {
+    my $content      = $response->decoded_content();
+    my $decoded_json = decode_json($content);
+    my ( $userid, $cookie, $sessionID ) =
+      checkauth( $query, 1,  { borrow => 1 }, 'opac', $decoded_json->{'email'} );
+    print $query->header( -cookie => $cookie );
+    print $decoded_json;
+}
+else {
+    warn $response->status_line, "\n";
+}

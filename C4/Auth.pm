@@ -323,6 +323,7 @@ sub get_template_and_user {
             LoginBranchcode              => (C4::Context->userenv?C4::Context->userenv->{"branch"}:"insecure"),
             LoginFirstname               => (C4::Context->userenv?C4::Context->userenv->{"firstname"}:"Bel"),
             LoginSurname                 => C4::Context->userenv?C4::Context->userenv->{"surname"}:"Inconnu",
+            emailaddress                 => C4::Context->userenv?C4::Context->userenv->{"emailaddress"}:undef,
             TagsEnabled                  => C4::Context->preference("TagsEnabled"),
             hide_marc                    => C4::Context->preference("hide_marc"),
             item_level_itypes            => C4::Context->preference('item-level_itypes'),
@@ -333,6 +334,7 @@ sub get_template_and_user {
             using_https                  => $in->{'query'}->https() ? 1 : 0,
             noItemTypeImages             => C4::Context->preference("noItemTypeImages"),
             marcflavour                  => C4::Context->preference("marcflavour"),
+            persona                      => C4::Context->preference("persona"),
     );
 
     if ( $in->{'type'} eq "intranet" ) {
@@ -618,6 +620,7 @@ sub checkauth {
     my $authnotrequired = shift;
     my $flagsrequired   = shift;
     my $type            = shift;
+    my $persona         = shift;
     $type = 'opac' unless $type;
 
     my $dbh     = C4::Context->dbh;
@@ -634,7 +637,7 @@ sub checkauth {
     # when using authentication against multiple CAS servers, as configured in Auth_cas_servers.yaml
     my $casparam = $query->param('cas');
 
-        if ( $userid = $ENV{'REMOTE_USER'} ) {
+    if ( $userid = $ENV{'REMOTE_USER'} ) {
             # Using Basic Authentication, no cookies required
         $cookie = $query->cookie(
             -name     => 'CGISESSID',
@@ -643,6 +646,9 @@ sub checkauth {
             -HttpOnly => 1,
         );
         $loggedin = 1;
+    }
+    elsif ( $persona ){
+      # we dont want to set a session because we are being called by a persona callback
     }
     elsif ( $sessionID = $query->cookie("CGISESSID") )
     {    # assignment, not comparison
@@ -728,6 +734,7 @@ sub checkauth {
         }
     }
     unless ($userid || $sessionID) {
+
         #we initiate a session prior to checking for a username to allow for anonymous sessions...
         my $session = get_session("") or die "Auth ERROR: Cannot get_session()";
         my $sessionID = $session->id;
@@ -737,13 +744,14 @@ sub checkauth {
             -value    => $session->id,
             -HttpOnly => 1
         );
-    $userid = $query->param('userid');
+	$userid = $query->param('userid');
         if (   ( $cas && $query->param('ticket') )
             || $userid
             || ( my $pki_field = C4::Context->preference('AllowPKIAuth') ) ne
-            'None' )
+            'None' || $persona )
         {
             my $password = $query->param('password');
+
             my ( $return, $cardnumber );
             if ( $cas && $query->param('ticket') ) {
                 my $retuserid;
@@ -752,7 +760,30 @@ sub checkauth {
                 $userid = $retuserid;
                 $info{'invalidCasLogin'} = 1 unless ($return);
             }
-            elsif (
+
+    elsif ($persona) {
+        my $value = $persona;
+
+        # If we're looking up the email, there's a chance that the person
+        # doesn't have a userid. So if there is none, we pass along the
+        # borrower number, and the bits of code that need to know the user
+        # ID will have to be smart enough to handle that.
+        require C4::Members;
+        my @users_info = C4::Members::GetBorrowersWithEmail($value);
+        if (@users_info) {
+
+            # First the userid, then the borrowernum
+            $value = $users_info[0][1] || $users_info[0][0];
+        }
+        else {
+            undef $value;
+        }
+        $return = $value ? 1 : 0;
+        $userid = $value;
+
+    }
+
+    elsif (
                 ( $pki_field eq 'Common Name' && $ENV{'SSL_CLIENT_S_DN_CN'} )
                 || (   $pki_field eq 'emailAddress'
                     && $ENV{'SSL_CLIENT_S_DN_Email'} )
@@ -780,17 +811,18 @@ sub checkauth {
                     }
                 }
 
-                # 0 for no user, 1 for normal, 2 for demo user.
+
                 $return = $value ? 1 : 0;
                 $userid = $value;
-            }
+
+	}
             else {
                 my $retuserid;
                 ( $return, $cardnumber, $retuserid ) =
                   checkpw( $dbh, $userid, $password, $query );
                 $userid = $retuserid if ( $retuserid ne '' );
-            }
-		if ($return) {
+        }
+	    if ($return) {
                #_session_log(sprintf "%20s from %16s logged in  at %30s.\n", $userid,$ENV{'REMOTE_ADDR'},(strftime '%c', localtime));
             	if ( $flags = haspermission(  $userid, $flagsrequired ) ) {
 					$loggedin = 1;
@@ -992,6 +1024,7 @@ sub checkauth {
         wrongip            => $info{'wrongip'},
         PatronSelfRegistration => C4::Context->preference("PatronSelfRegistration"),
         PatronSelfRegistrationDefaultCategory => C4::Context->preference("PatronSelfRegistrationDefaultCategory"),
+        persona            => C4::Context->preference("Persona"),
     );
 
     $template->param( OpacPublic => C4::Context->preference("OpacPublic"));

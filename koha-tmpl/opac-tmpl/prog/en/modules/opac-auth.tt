@@ -99,7 +99,13 @@ please choose against which one you would like to authenticate: </p>
           <a href="mailto:[% admin %]">email the Koha Administrator</a>.</li>
   <li>Use top menu bar to navigate to another part of Koha.</li>
 </ul>
-[% END %]</div>
+[% END %]
+
+[% IF persona %]
+<a href="#" class="persona-button" id="browserid" ><span>Sign in with your Email</span></a>
+[% END %]
+
+</div>
 </div>
 </div>
 </div>
