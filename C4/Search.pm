@@ -890,8 +890,11 @@ sub _build_weighted_query {
         $weighted_query .= " $index,ext,r1=\"$operand\"";    # exact index
           #$weighted_query .= " or (title-sort-az=0 or $index,startswithnt,st-word,r3=$operand #)";
         $weighted_query .= " or $index,phr,r3=\"$operand\"";    # phrase index
-        $weighted_query .=
-          " or $index,rt,wrdl,r3=\"$operand\"";    # word list index
+        $weighted_query .= " or $index,wrdl,r6=\"$operand\"";    # word list index
+        $weighted_query .= " or $index,wrdl,fuzzy,r8=\"$operand\""
+          if $fuzzy_enabled;    # add fuzzy, word list
+        $weighted_query .= " or $index,wrdl,rt,r9=\"$stemmed_operand\""
+          if ( $stemming and $stemmed_operand );    # add stemming, right truncation
     }
 
     $weighted_query .= "))";                       # close rank specification
