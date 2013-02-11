@@ -370,9 +370,11 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 //]]>
 </script>
 
+[% IF OPACPopupAuthorsSearch %]
 <script type="text/JavaScript" language="JavaScript">
 //<![CDATA[
-    function showAuthors(element, authornumber){
+    function showAuthors(element){
+        var authornumber = $(element).attr("data-count");
         // Hide subjects menu if displayed
         hideMenu(".subjectSearch");
 
@@ -462,8 +464,16 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
             $("#validSubjectSearch").removeAttr("href");
         }
     }
+    $(document).ready(function() {
+        $("a.showauthors").click(function(){
+            showAuthors(this);
+            return false;
+        });
+    });
+
 //]]>
 </script>
+[% END %]
 
 <style type="text/css">
 .branch-info-tooltip {
@@ -530,6 +540,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 
     [% IF ( MARCAUTHORS ) %]
     <span class="results_summary"><span class="label">Additional authors:</span>
+        [% IF OPACPopupAuthorsSearch %]
         <div class="authorSearch" id="authorSearch">
             <span><b>Select the item(s) to search :</b></span>
             <br />
@@ -561,12 +572,13 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
             &nbsp;|&nbsp;
             <a id="validAuthorSearch">Search</a>
         </div>
+        [% END %]
         [% FOREACH MARCAUTHOR IN MARCAUTHORS %]
             [% authorsloop = loop %]
             [% FOREACH MARCAUTHOR_SUBFIELDS_LOO IN MARCAUTHOR.MARCAUTHOR_SUBFIELDS_LOOP %]
                 [% MARCAUTHOR_SUBFIELDS_LOO.separator %]
                 <a title="‡[% MARCAUTHOR_SUBFIELDS_LOO.code %] [% MARCAUTHOR_SUBFIELDS_LOO.value %]"
-                    onclick="showAuthors(this, [% authorsloop.count %]); return false;"
+                    class="showauthors" data-count="[% authorsloop.count %]"
                     href="/cgi-bin/koha/opac-search.pl?q=[% FOREACH link_loo IN MARCAUTHOR_SUBFIELDS_LOO.link_loop %][% link_loo.operator |url %][% link_loo.limit |url %]:[% link_loo.link |url %][% END %]">[% MARCAUTHOR_SUBFIELDS_LOO.value %]</a>
             [% END %]
             [% IF (MARCAUTHOR.authoritylink) %]
@@ -629,6 +641,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
     [% IF ( MARCSUBJCTS ) %]
         <span class="results_summary">
             <span class="label">Subject(s):</span>
+            [% IF OPACPopupAuthorsSearch %]
             <div class="subjectSearch" >
                 <span><b>Select the item(s) to search :</b></span>
                 <div id="subjectsList">
@@ -666,6 +679,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
                 &nbsp;|&nbsp;
                 <a id="validSubjectSearch">Search</a>
             </div>
+            [% END %]
             [% FOREACH MARCSUBJCT IN MARCSUBJCTS %]
                 [% subjectsloop = loop %]
                 [% FOREACH SUBFIELD IN MARCSUBJCT.MARCSUBJECT_SUBFIELDS_LOOP %]
