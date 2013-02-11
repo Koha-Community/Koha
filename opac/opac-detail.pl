@@ -990,7 +990,7 @@ my $defaulttab =
     $subscriptionsnumber
         ? 'subscriptions' :
     @serialcollections > 0 
-        ? 'serialcollection' : 'subscription';
+        ? 'serialcollection' : 'subscriptions';
 $template->param('defaulttab' => $defaulttab);
 
 if (C4::Context->preference('OPACLocalCoverImages') == 1) {
