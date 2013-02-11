@@ -560,10 +560,11 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
                                 onclick="makeAuthorRequest()"
                                 value="au,wrdl:[% FOREACH SUBFIELD IN MARCAUTHOR.MARCAUTHOR_SUBFIELDS_LOOP %][% SUBFIELD.value |url %][% UNLESS (loop.last) %]+[% END %][% END %]" />
                         [% END %]
-
-                        [% FOREACH SUBFIELD IN MARCAUTHOR.MARCAUTHOR_SUBFIELDS_LOOP %]
-                            [% SUBFIELD.value %]
-                        [% END %]
+                        <label for="author_[% loop.count %]">
+                            [% FOREACH SUBFIELD IN MARCAUTHOR.MARCAUTHOR_SUBFIELDS_LOOP %]
+                                [% SUBFIELD.value %]
+                            [% END %]
+                        </label>
                     </li>
                 [% END %]
             </ul>
