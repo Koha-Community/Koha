@@ -826,9 +826,15 @@ sub CanBookBeIssued {
         $needsconfirmation{PATRON_CANT} = 1;
     } else {
         if($max_loans_allowed){
-            $needsconfirmation{TOO_MANY} = 1;
-            $needsconfirmation{current_loan_count} = $current_loan_count;
-            $needsconfirmation{max_loans_allowed} = $max_loans_allowed;
+            if ( C4::Context->preference("AllowTooManyOverride") ) {
+                $needsconfirmation{TOO_MANY} = 1;
+                $needsconfirmation{current_loan_count} = $current_loan_count;
+                $needsconfirmation{max_loans_allowed} = $max_loans_allowed;
+            } else {
+                $issuingimpossible{TOO_MANY} = 1;
+                $issuingimpossible{current_loan_count} = $current_loan_count;
+                $issuingimpossible{max_loans_allowed} = $max_loans_allowed;
+            }
         }
     }
 

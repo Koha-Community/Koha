@@ -428,3 +428,4 @@ INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) V
 INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES('OpacHoldNotes',0,'Show hold notes on OPAC','','YesNo');
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('CalculateFinesOnReturn','1','Switch to control if overdue fines are calculated on return or not', '', 'YesNo');
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('AcqWarnOnDuplicateInvoice','0','Warn librarians when they try to create a duplicate invoice', '', 'YesNo');
+INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES ('AllowTooManyOverride', '1', 'If on, allow staff to override and check out items when the patron has reached the maximum number of allowed checkouts', '', 'YesNo');

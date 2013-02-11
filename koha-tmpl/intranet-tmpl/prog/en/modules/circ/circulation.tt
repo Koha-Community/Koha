@@ -520,6 +520,10 @@ function validate1(date) {
             <li>Patron's card is expired</li>
         [% END %]
 
+        [% IF ( TOO_MANY ) %]
+            <li>Too many checked out. [% current_loan_count %] checked out, only [% max_loans_allowed %] are allowed.</li>
+        [% END %]
+
         [% IF ( ITEMNOTSAMEBRANCH ) %]
             <li>This item belongs to [% itemhomebranch %] and cannot be issued from this location.</li>
         [% END %]

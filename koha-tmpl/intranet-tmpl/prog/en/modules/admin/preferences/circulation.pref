@@ -126,6 +126,12 @@ Circulation:
 
     Checkout Policy:
         -
+            - pref: AllowTooManyOverride
+              choices:
+                  yes: Allow
+                  no: "Don't allow"
+            - staff to override and check out items when the patron has reached the maximum number of allowed checkouts.
+        -
             - pref: AllowNotForLoanOverride
               choices:
                   yes: Allow
