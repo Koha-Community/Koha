@@ -1270,7 +1270,8 @@ sub GetItemsInfo {
            itemtypes.notforloan as notforloan_per_itemtype,
            holding.branchurl,
            holding.branchname,
-           holding.opac_info as branch_opac_info
+           holding.opac_info as branch_opac_info,
+           home.branchurl AS homebranchurl
      FROM items
      LEFT JOIN branches AS holding ON items.holdingbranch = holding.branchcode
      LEFT JOIN branches AS home ON items.homebranch=home.branchcode
@@ -1321,6 +1322,14 @@ sub GetItemsInfo {
         $bsth->execute( $data->{'holdingbranch'} );
         if ( my $bdata = $bsth->fetchrow_hashref ) {
             $data->{'branchname'} = $bdata->{'branchname'};
+        }
+        $bsth = $dbh->prepare(
+            "SELECT * FROM branches WHERE branchcode = ?
+        "
+        );
+        $bsth->execute( $data->{'homebranch'} );
+        if ( my $bdata = $bsth->fetchrow_hashref ) {
+            $data->{'homebranchname'} = $bdata->{'branchname'};
         }
         $data->{'datedue'}        = $datedue;
 

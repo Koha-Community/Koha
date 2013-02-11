@@ -110,6 +110,22 @@ OPAC:
                   no: "Don't show"
             - the name of the patron that has an item checked out on item detail pages on the OPAC.
         -
+            - Display the
+            - pref: OpacLocationBranchToDisplay
+              choices:
+                  home: "home library"
+                  holding: "holding library"
+                  both: "home and holding libraries"
+            - for items on the OPAC record details page.
+        -
+            - Display the shelving location under the
+            - pref: OpacLocationBranchToDisplayShelving
+              choices:
+                  home: "home library"
+                  holding: "holding library"
+                  both: "home and holding libraries"
+            - for items on the OPAC record details page.
+        -
             - pref: OpacKohaUrl
               default: 0
               choices:

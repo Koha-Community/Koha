@@ -246,6 +246,8 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('opaclanguagesdisplay','0','','If ON, enables display of Change Language feature on OPAC','YesNo'),
 ('opaclayoutstylesheet','opac.css','','Enter the name of the layout CSS stylesheet to use in the OPAC','free'),
 ('OPACLocalCoverImages','0','1','Display local cover images on OPAC search and details pages.','YesNo'),
+('OpacLocationBranchToDisplay','holding','holding|home|both','In the OPAC, under location show which branch for Location in the record details.','Choice'),
+('OpacLocationBranchToDisplayShelving','holding','holding|home|both','In the OPAC, display the shelving location under which which column.',  'Choice'),
 ('OpacMaintenance','0','','If ON, enables maintenance warning in OPAC','YesNo'),
 ('OpacMainUserBlock','Welcome to Koha...\r\n<hr>','70|10','A user-defined block of HTML  in the main content area of the opac main page','Textarea'),
 ('OpacMainUserBlockMobile','',NULL,'Show the following HTML in its own column on the main page of the OPAC (mobile version):','free'),

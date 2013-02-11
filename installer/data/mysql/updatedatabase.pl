@@ -8536,6 +8536,14 @@ if (CheckVersion($DBversion)) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.13.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do("INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES ('OpacLocationBranchToDisplay',  'holding',  'holding|home|both',  'In the OPAC, under location show which branch for Location in the record details.',  'Choice')");
+    $dbh->do("INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES ('OpacLocationBranchToDisplayShelving',  'holding',  'holding|home|both',  'In the OPAC, display the shelving location under which which column',  'Choice')");
+    print "Upgrade to $DBversion done (Bug 7720 - Ambiguity in OPAC Details location.)\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

@@ -1100,4 +1100,9 @@ if ( C4::Context->preference('UseCourseReserves') ) {
     }
 }
 
+$template->param(
+    'OpacLocationBranchToDisplay'         => C4::Context->preference('OpacLocationBranchToDisplay') ,
+    'OpacLocationBranchToDisplayShelving' => C4::Context->preference('OpacLocationBranchToDisplayShelving'),
+);
+
 output_html_with_http_headers $query, $cookie, $template->output;
