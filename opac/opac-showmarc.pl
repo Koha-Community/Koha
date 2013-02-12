@@ -58,18 +58,26 @@ else {
 if ($view eq 'card' || $view eq 'html') {
     my $xmlrecord= $importid? $record->as_xml(): GetXmlBiblio($biblionumber);
     my $xslfile;
-    my $themelang = '/' . C4::Context->preference("opacthemes") .  '/' . C4::Templates::_current_language();
+    my $xslfilename;
+    my $htdocs  = C4::Context->config('opachtdocs');
+    my $theme   = C4::Context->preference("opacthemes");
+    my $lang = C4::Templates::_current_language();
 
     if ($view eq 'card'){
-        $xslfile = C4::Context->config('opachtdocs').$themelang."/xslt/compact.xsl";
+        $xslfile = "compact.xsl";
     }
     else { # must be html
-        $xslfile = C4::Context->config('opachtdocs').$themelang."/xslt/MARC21slim2OPACMARCdetail.xsl";
+        $xslfile = C4::Context->preference('marcflavour') . "slim2OPACMARCdetail.xsl";
     }
+    $xslfilename = "$htdocs/$theme/$lang/xslt/$xslfile";
+    $xslfilename = "$htdocs/$theme/en/xslt/$xslfile" unless ( $lang ne 'en' && -f $xslfilename );
+    $xslfilename = "$htdocs/prog/$lang/xslt/$xslfile" unless ( -f $xslfile );
+    $xslfilename = "$htdocs/prog/en/xslt/$xslfile" unless ( $lang ne 'en' && -f $xslfilename );
+
     my $parser = XML::LibXML->new();
     my $xslt   = XML::LibXSLT->new();
     my $source = $parser->parse_string($xmlrecord);
-    my $style_doc = $parser->parse_file($xslfile);
+    my $style_doc = $parser->parse_file($xslfilename);
     my $stylesheet = $xslt->parse_stylesheet($style_doc);
     my $results = $stylesheet->transform($source);
     my $newxmlrecord = $stylesheet->output_string($results);
