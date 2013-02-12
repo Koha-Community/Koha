@@ -5,7 +5,6 @@
 [% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Details for: [% title |html %][% FOREACH subtitl IN subtitle %], [% subtitl.subfield |html %][% END %]
 [% INCLUDE 'doc-head-close.inc' %]
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tools.min.js"></script>
 [% IF ( SocialNetworks ) %]
     <script type="text/javascript" src="https://apis.google.com/js/plusone.js">
     //<![CDATA[
@@ -51,7 +50,15 @@
 
      $(document).ready(function() { 
         $('#bibliodescriptions').tabs();
-
+        $(".branch-info-tooltip-trigger").tooltip({
+            position: { my: "left+15 center", at: "right center" },
+            show: 50,
+            hide: 50,
+            content: function(){
+                var element = $(this).next("div");
+                return element.html();
+            }
+        });
 [% IF ( TagsInputEnabled && loggedinusername ) %]
         $(".tag_add").click(function(){
             var thisid = $(this).attr("id");
@@ -133,7 +140,6 @@
         });
     [% END %]
 
-        $(".branch-info-tooltip-trigger").tooltip({delay: 100, position: "top right"});
 [% IF ( OpacStarRatings != 'disable' ) %]
 // -----------------------------------------------------
 // star-ratings code
@@ -474,15 +480,6 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 //]]>
 </script>
 [% END %]
-
-<style type="text/css">
-.branch-info-tooltip {
-  display: none;
-  padding: 20px;
-  background: #fff;
-  border: 1px solid black;
-}
-</style>
 
 </head>
 <body id="opac-detail">
@@ -1481,14 +1478,14 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
       [% IF ( item_level_itypes ) %]<td class="itype">[% UNLESS ( noItemTypeImages ) %][% IF ( ITEM_RESULT.imageurl ) %]<img src="[% ITEM_RESULT.imageurl %]" title="[% ITEM_RESULT.description %]" alt="[% ITEM_RESULT.description %]" />[% END %][% END %] [% ITEM_RESULT.description %]</td>[% END %]
              <td class="location">
     [% UNLESS ( singleBranchMode ) %]
-        <span class="[% ITEM_RESULT.branch_opac_info ? 'branch-info-tooltip-trigger' : '' %]">
+        <div class="[% ITEM_RESULT.branch_opac_info ? 'branch-info-tooltip-trigger' : '' %]">
         [% IF ( ITEM_RESULT.branchurl ) %]
-        <a href="[% ITEM_RESULT.branchurl %]">[% ITEM_RESULT.branchname %]</a>
+            <a href="[% ITEM_RESULT.branchurl %]" title="">[% ITEM_RESULT.branchname %]</a>
         [% ELSE %]
-        [% ITEM_RESULT.branchname %]
+            <span title="">[% ITEM_RESULT.branchname %]</span>
         [% END %]
-        </span>
-        <div class="branch-info-tooltip">[% ITEM_RESULT.branch_opac_info %]</div>
+            <div class="branch-info-tooltip">[% ITEM_RESULT.branch_opac_info %]</div>
+        </div>
     [% END %]
     <span class="shelvingloc">[% ITEM_RESULT.location_description %]</span>
     </td>
