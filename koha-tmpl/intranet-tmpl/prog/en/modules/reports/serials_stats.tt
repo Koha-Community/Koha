@@ -4,13 +4,18 @@
 <style type="text/css">
 	.sql {display: none;}
 </style>
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
-<script type="text/JavaScript" language="JavaScript">
+<link rel="stylesheet" type="text/css" href="/intranet-tmpl/prog/en/css/datatables.css" />
+<script type="text/javascript" src="/intranet-tmpl/prog/en/lib/jquery/plugins/jquery.dataTables.min.js"></script>
+[% INCLUDE 'datatables-strings.inc' %]
+<script type="text/javascript" src="/intranet-tmpl/prog/en/js/datatables.js"></script>
+<script type="text/javascript">
 	//<![CDATA[
+        [% IF (dateformat == 'metric') %]dt_add_type_uk_date();[% END %]
 		$(document).ready(function() {
-    		$("#resulttable").tablesorter({
-    				widgets : ['zebra']
-    			});
+            $("#resulttable").dataTable($.extend(true, {}, dataTablesDefaults, {
+                "sDom": 't',
+                "bPaginate": false
+            }));
     	});
 	//]]>
 </script>
