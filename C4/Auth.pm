@@ -1039,7 +1039,6 @@ sub checkauth {
         foreach my $key (keys %$casservers) {
         push @tmplservers, {name => $key, value => login_cas_url($query, $key) . "?cas=$key" };
         }
-        #warn Data::Dumper::Dumper(\@tmplservers);
         $template->param(
         casServersLoop => \@tmplservers
         );
