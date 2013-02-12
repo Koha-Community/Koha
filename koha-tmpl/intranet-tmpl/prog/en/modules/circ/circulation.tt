@@ -391,7 +391,7 @@ function validate1(date) {
 </p>
 [% END %]
 
-    <input type="hidden" name="barcode" value="[% barcode %]" />
+    <input type="hidden" name="barcode" value="[% barcode |html %]" />
     <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
     <input type="hidden" name="issueconfirmed" value="1" />
     [% IF ( DEBT ) %]<input type="hidden" name="debt_confirmed" value="1" />[% END %]
@@ -445,10 +445,10 @@ function validate1(date) {
         [% END %]
 
         [% IF ( UNKNOWN_BARCODE ) %]
-            <li>The barcode was not found [% barcode %]</li>
+            <li>The barcode was not found [% barcode |html %]</li>
 	    [% IF ( fast_cataloging ) %]
 	        [% IF ( CAN_user_editcatalogue_fast_cataloging ) %]
-                    <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?frameworkcode=FA&amp;barcode=[% barcode %]&amp;borrowernumber=[% borrowernumber %]&amp;branch=[% branch %]&amp;duedatespec=[% duedatespec %]&amp;stickyduedate=[% stickyduedate %]">Fast cataloging</a>
+            <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?frameworkcode=FA&amp;barcode=[% barcode |uri %]&amp;circborrowernumber=[% borrowernumber %]&amp;branch=[% branch %]&amp;duedatespec=[% duedatespec %]&amp;stickyduedate=[% stickyduedate %]">Fast cataloging</a>
 		[% END %]
 	    [% END %]
         [% END %]

@@ -314,6 +314,12 @@ my $itemnumber   = $input->param('itemnumber');
 my $op           = $input->param('op');
 my $hostitemnumber = $input->param('hostitemnumber');
 my $marcflavour  = C4::Context->preference("marcflavour");
+# fast cataloguing datas
+my $fa_circborrowernumber = $input->param('circborrowernumber');
+my $fa_barcode            = $input->param('barcode');
+my $fa_branch             = $input->param('branch');
+my $fa_stickyduedate      = $input->param('stickyduedate');
+my $fa_duedatespec        = $input->param('duedatespec');
 
 my $frameworkcode = &GetFrameworkCode($biblionumber);
 
@@ -507,13 +513,15 @@ if ($op eq "additem") {
 	    undef($itemrecord);
 	}
     }	
-    if ($frameworkcode eq 'FA' && $input->param('borrowernumber')){
-	my $redirect_string = 'borrowernumber=' . uri_escape($input->param('borrowernumber')) .
-	  '&barcode=' . uri_escape($input->param('barcode'));
-	$redirect_string .= '&duedatespec=' . uri_escape($input->param('duedatespec')) . 
-	  '&stickyduedate=1';
-	print $input->redirect("/cgi-bin/koha/circ/circulation.pl?" . $redirect_string);
-	exit;
+    if ($frameworkcode eq 'FA' && $fa_circborrowernumber){
+        print $input->redirect(
+           '/cgi-bin/koha/circ/circulation.pl?'
+           .'borrowernumber='.$fa_circborrowernumber
+           .'&barcode='.uri_escape($fa_barcode)
+           .'&duedatespec='.$fa_duedatespec
+           .'&stickyduedate=1'
+        );
+        exit;
     }
 
 
@@ -815,11 +823,15 @@ $template->param(
 );
 
 if ($frameworkcode eq 'FA'){
-    $template->{VARS}->{'borrowernumber'}=$input->param('borrowernumber');
-    $template->{VARS}->{'barcode'}=$input->param('barcode');
-    $template->{VARS}->{'stickyduedate'}=$input->param('stickduedate');
-    $template->{VARS}->{'duedatespec'}=$input->param('duedatespec');
-}    
+    # fast cataloguing datas
+    $template->param(
+        'circborrowernumber' => $fa_circborrowernumber,
+        'barcode'            => $fa_barcode,
+        'branch'             => $fa_branch,
+        'stickyduedate'      => $fa_stickyduedate,
+        'duedatespec'        => $fa_duedatespec,
+    );
+}
 
 foreach my $error (@errors) {
     $template->param($error => 1);
