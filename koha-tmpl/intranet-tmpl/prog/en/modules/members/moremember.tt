@@ -9,33 +9,46 @@
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/intranet-tmpl/prog/en/css/datatables.css" />
+<script type="text/javascript" src="/intranet-tmpl/prog/en/lib/jquery/plugins/jquery.dataTables.min.js"></script>
+[% INCLUDE 'datatables-strings.inc' %]
+<script type="text/javascript" src="/intranet-tmpl/prog/en/js/datatables.js"></script>
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery-ui-timepicker-addon.js"></script>
-<script type="text/JavaScript" language="JavaScript">
+<script type="text/JavaScript">
 //<![CDATA[
-$.tablesorter.addParser({
-    id: 'articles', 
-    is: function(s) {return false;  }, 
-    format: function(s) { return s.toLowerCase().replace(/^(the|an|a) /,''); }, 
-    type: 'text' 
-});
 $(document).ready(function() {
-    $('#finesholdsissues').tabs();
-	$.tablesorter.defaults.widgets = ['zebra'];
-	$("#issuest").tablesorter({[% IF ( dateformat_metric ) %]
-		dateFormat: 'uk',[% END %]
-        headers: { 1: { sorter: 'articles'},8:{sorter:false},9:{sorter:false }}
-	}); 
-	$("#relissuest").tablesorter({[% IF ( dateformat_metric ) %]
-		dateFormat: 'uk',[% END %]
-		headers: { 1: { sorter: 'articles'},8:{sorter:false},9:{sorter:false }}
-	}); 
-	$("#holdst").tablesorter({[% IF ( dateformat_metric ) %]
-		dateFormat: 'uk',[% END %]
-		sortList: [[0,0]],
-		headers: { 1: { sorter: 'articles' },5: { sorter: false }}
-	}); 
+    $('#finesholdsissues').tabs({
+        // Correct table sizing for tables hidden in tabs
+        // http://www.datatables.net/examples/api/tabs_and_scrolling.html
+        "show": function(event, ui) {
+            var oTable = $('div.dataTables_wrapper>table', ui.panel).dataTable();
+            if ( oTable.length > 0 ) {
+                oTable.fnAdjustColumnSizing();
+            }
+        }
+    } );
+    $("#issuest").dataTable($.extend(true, {}, dataTablesDefaults, {
+        "sDom": 't',
+        "aoColumnDefs": [
+            { "aTargets": [ -1,-2 ], "bSortable": false, "bSearchable": false }
+        ],
+        "bPaginate": false
+    }));
+    $("#relissuest").dataTable($.extend(true, {}, dataTablesDefaults, {
+        "sDom": 't',
+        "aoColumnDefs": [
+            { "aTargets": [ 0,8 ], "bSortable": false, "bSearchable": false }
+        ],
+        "bPaginate": false
+    }));
+    $("#holdst").dataTable($.extend(true, {}, dataTablesDefaults, {
+        "sDom": 't',
+        "aoColumnDefs": [
+            { "aTargets": [ -1,-2 ], "bSortable": false, "bSearchable": false }
+        ],
+        "bPaginate": false
+    }));
     [% IF ( picture ) %]
     // new YAHOO.widget.Button("delpicture");   // FIXME: formatting mismatch between YUI and normal button
 	$('#delpicture').click(function(){
