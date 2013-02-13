@@ -6182,7 +6182,7 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
 }
 
 $DBversion = '3.10.04.002';
-if ( CheckVersion($DBversion) ) {
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     my $sth = $dbh->prepare("
         SELECT module, code, branchcode, content
         FROM letter
@@ -6196,6 +6196,16 @@ if ( CheckVersion($DBversion) ) {
     }
     print "Upgrade to $DBversion done (use new <<items.fine>> syntax in notices)\n";
     SetVersion ($DBversion);
+}
+
+$DBversion = "3.10.04.003";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do("UPDATE z3950servers SET encoding = 'ISO_8859-1' WHERE name = 'BIBSYS'");
+    $dbh->do("UPDATE z3950servers SET encoding = 'ISO_8859-1' WHERE name = 'NORBOK'");
+    $dbh->do("UPDATE z3950servers SET encoding = 'ISO_8859-1' WHERE name = 'SAMBOK'");
+    $dbh->do("UPDATE z3950servers SET encoding = 'ISO_8859-1' WHERE name = 'DEICHMAN'");
+    print "Upgrade to $DBversion done (Bug 9498 - Update encoding for Norwegian sample Z39.50 servers)\n";
+    SetVersion($DBversion);
 }
 
 =head1 FUNCTIONS
