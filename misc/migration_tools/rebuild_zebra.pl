@@ -436,7 +436,6 @@ sub export_marc_records_from_list {
             if ($@) {
               warn "Error exporting record $record_number ($record_type) ".($noxml ? "not XML" : "XML");
             }
-            $num_exported++;
         }
     }
     print "\nRecords exported: $num_exported\n" if ( $verbose_logging );
