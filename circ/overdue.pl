@@ -40,6 +40,8 @@ my $borcatfilter    = $input->param('borcat') || '';
 my $itemtypefilter  = $input->param('itemtype') || '';
 my $borflagsfilter  = $input->param('borflag') || '';
 my $branchfilter    = $input->param('branch') || '';
+my $homebranchfilter    = $input->param('homebranch') || '';
+my $holdingbranchfilter = $input->param('holdingbranch') || '';
 my $op              = $input->param('op') || '';
 my $dateduefrom = format_date_in_iso($input->param( 'dateduefrom' )) || '';
 my $datedueto   = format_date_in_iso($input->param( 'datedueto' )) || '';
@@ -214,7 +216,11 @@ if (@patron_attr_filter_loop) {
 $template->param(
     patron_attr_header_loop => [ map { { header => $_->{description} } } grep { ! $_->{isclone} } @patron_attr_filter_loop ],
     branchloop   => GetBranchesLoop($branchfilter, $onlymine),
+    homebranchloop => GetBranchesLoop( $homebranchfilter, $onlymine ),
+    holdingbranchloop => GetBranchesLoop( $holdingbranchfilter, $onlymine ),
     branchfilter => $branchfilter,
+    homebranchfilter => $homebranchfilter,
+    holdingbranchfilter => $homebranchfilter,
     borcatloop=> \@borcatloop,
     itemtypeloop => \@itemtypeloop,
     patron_attr_filter_loop => \@patron_attr_filter_loop,
@@ -260,6 +266,8 @@ if ($noreport) {
         issues.itemnumber,
         issues.issuedate,
         items.barcode,
+        items.homebranch,
+        items.holdingbranch,
         biblio.title,
         biblio.author,
         borrowers.borrowernumber,
@@ -295,6 +303,8 @@ if ($noreport) {
         $strsth .= " AND borrowers.lost <> 0";
     }
     $strsth.=" AND borrowers.branchcode   = '" . $branchfilter   . "' " if $branchfilter;
+    $strsth.=" AND items.homebranch       = '" . $homebranchfilter . "' " if $homebranchfilter;
+    $strsth.=" AND items.holdingbranch    = '" . $holdingbranchfilter . "' " if $holdingbranchfilter;
     $strsth.=" AND date_due < '" . $datedueto . "' "  if $datedueto;
     $strsth.=" AND date_due > '" . $dateduefrom . "' " if $dateduefrom;
     # restrict patrons (borrowers) to those matching the patron attribute filter(s), if any
@@ -352,6 +362,8 @@ if ($noreport) {
             title                  => $data->{title},
             author                 => $data->{author},
             branchcode             => $data->{branchcode},
+            homebranchcode         => $data->{homebranchcode},
+            holdingbranchcode      => $data->{holdingbranchcode},
             itemcallnumber         => $data->{itemcallnumber},
             replacementprice       => $data->{replacementprice},
             enumchron              => $data->{enumchron},
