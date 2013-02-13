@@ -34,7 +34,7 @@ my ($template, $loggedinuser, $cookie)
 			     query => $query,
 			     type => "intranet",
 			     authnotrequired => 0,
-			     flagsrequired => {parameters => 1},
+                          flagsrequired => { tools => 'rotating_collections' },
 			     debug => 1,
 			     });
 
