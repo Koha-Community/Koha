@@ -1345,9 +1345,9 @@ sub GetLoanLength {
 
     # try to find issuelength & return the 1st available.
     # check with borrowertype, itemtype and branchcode, then without one of those parameters
-
     $sth->execute( $borrowertype, $itemtype, $branchcode );
     my $loanlength = $sth->fetchrow_hashref;
+
     return $loanlength
       if defined($loanlength) && $loanlength->{issuelength};
 
@@ -2421,8 +2421,6 @@ END_SQL
 
 Find out whether a borrowed item may be renewed.
 
-C<$dbh> is a DBI handle to the Koha database.
-
 C<$borrowernumber> is the borrower number of the patron who currently
 has the item on loan.
 
@@ -2432,7 +2430,7 @@ C<$override_limit>, if supplied with a true value, causes
 the limit on the number of times that the loan can be renewed
 (as controlled by the item type) to be ignored.
 
-C<$CanBookBeRenewed> returns a true value iff the item may be renewed. The
+C<$CanBookBeRenewed> returns a true value if the item may be renewed. The
 item must currently be on loan to the specified borrower; renewals
 must be allowed for the item's type; and the borrower must not have
 already renewed the loan. $error will contain the reason the renewal can not proceed
@@ -2994,6 +2992,7 @@ C<$startdate>   = C4::Dates object representing start date of loan period (assum
 C<$itemtype>  = itemtype code of item in question
 C<$branch>  = location whose calendar to use
 C<$borrower> = Borrower object
+C<$isrenewal> = Boolean: is true if we want to calculate the date due for a renewal. Else is false.
 
 =cut
 
@@ -3011,22 +3010,29 @@ sub CalcDateDue {
             : qq{issuelength};
 
     my $datedue;
+    if ( $startdate ) {
+        if (ref $startdate ne 'DateTime' ) {
+            $datedue = dt_from_string($datedue);
+        } else {
+            $datedue = $startdate->clone;
+        }
+    } else {
+        $datedue =
+          DateTime->now( time_zone => C4::Context->tz() )
+          ->truncate( to => 'minute' );
+    }
+
 
     # calculate the datedue as normal
     if ( C4::Context->preference('useDaysMode') eq 'Days' )
     {    # ignoring calendar
-        my $dt =
-          DateTime->now( time_zone => C4::Context->tz() )
-          ->truncate( to => 'minute' );
         if ( $loanlength->{lengthunit} eq 'hours' ) {
-            $dt->add( hours => $loanlength->{$length_key} );
+            $datedue->add( hours => $loanlength->{$length_key} );
         } else {    # days
-            $dt->add( days => $loanlength->{$length_key} );
-            $dt->set_hour(23);
-            $dt->set_minute(59);
+            $datedue->add( days => $loanlength->{$length_key} );
+            $datedue->set_hour(23);
+            $datedue->set_minute(59);
         }
-        # break
-        return $dt;
     } else {
         my $dur;
         if ($loanlength->{lengthunit} eq 'hours') {
@@ -3035,11 +3041,8 @@ sub CalcDateDue {
         else { # days
             $dur = DateTime::Duration->new( days => $loanlength->{$length_key});
         }
-        if (ref $startdate ne 'DateTime' ) {
-            $startdate = dt_from_string($startdate);
-        }
         my $calendar = Koha::Calendar->new( branchcode => $branch );
-        $datedue = $calendar->addDate( $startdate, $dur, $loanlength->{lengthunit} );
+        $datedue = $calendar->addDate( $datedue, $dur, $loanlength->{lengthunit} );
         if ($loanlength->{lengthunit} eq 'days') {
             $datedue->set_hour(23);
             $datedue->set_minute(59);
@@ -3063,6 +3066,7 @@ sub CalcDateDue {
         }
 
         # in all other cases, keep the date due as it is
+
     }
 
     # if ReturnBeforeExpiry ON the datedue can't be after borrower expirydate
