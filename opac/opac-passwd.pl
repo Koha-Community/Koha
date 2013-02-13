@@ -29,6 +29,7 @@ use Digest::MD5 qw(md5_base64);
 use C4::Circulation;
 use C4::Members;
 use C4::Output;
+use C4::Auth qw(hash_password);
 
 my $query = new CGI;
 my $dbh   = C4::Context->dbh;
@@ -57,7 +58,7 @@ if ( C4::Context->preference("OpacPasswordChange") ) {
             if ( $query->param('Newkey') eq $query->param('Confirm')
                 && length( $query->param('Confirm') ) >= $minpasslen )
             {    # Record password
-                my $clave = md5_base64( $query->param('Newkey') );
+                my $clave = hash_password( $query->param('Newkey') );
                 $sth->execute( $clave, $borrowernumber );
                 $template->param( 'password_updated' => '1' );
                 $template->param( 'borrowernumber'   => $borrowernumber );
@@ -113,8 +114,14 @@ sub goodkey {
       $dbh->prepare("SELECT password FROM borrowers WHERE borrowernumber=?");
     $sth->execute($borrowernumber);
     if ( $sth->rows ) {
-        my ($md5password) = $sth->fetchrow;
-        if ( md5_base64($key) eq $md5password ) { return 1; }
+        my $hash;
+        my ($stored_hash) = $sth->fetchrow;
+        if ( substr($stored_hash,0,2) eq '$2') {
+            $hash = hash_password($key, $stored_hash);
+        } else {
+            $hash = md5_base64($key);
+        }
+        if ( $hash eq $stored_hash ) { return 1; }
         else { return 0; }
     }
     else { return 0; }

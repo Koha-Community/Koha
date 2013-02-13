@@ -55,7 +55,7 @@ my $minpw = C4::Context->preference('minPasswordLength');
 push(@errors,'SHORTPASSWORD') if( $newpassword && $minpw && (length($newpassword) < $minpw ) );
 
 if ( $newpassword  && !scalar(@errors) ) {
-    my $digest=md5_base64($input->param('newpassword'));
+    my $digest=C4::Auth::hash_password($input->param('newpassword'));
     my $uid = $input->param('newuserid');
     my $dbh=C4::Context->dbh;
     if (changepassword($uid,$member,$digest)) {

@@ -24,7 +24,6 @@ use strict;
 #use warnings; FIXME - Bug 2505
 use C4::Context;
 use C4::Dates qw(format_date_in_iso format_date);
-use Digest::MD5 qw(md5_base64);
 use String::Random qw( random_string );
 use Date::Calc qw/Today Add_Delta_YM check_date Date_to_Days/;
 use C4::Log; # logaction
@@ -40,6 +39,7 @@ use DateTime;
 use DateTime::Format::DateParse;
 use Koha::DateUtils;
 use Text::Unaccent qw( unac_string );
+use C4::Auth qw(hash_password);
 
 our ($VERSION,@ISA,@EXPORT,@EXPORT_OK,$debug);
 
@@ -250,7 +250,7 @@ sub Search {
                 $filter = [ $filter ];
                 push @$filter, {"borrowernumber"=>$matching_records};
             }
-		}
+        }
     }
 
     # $showallbranches was not used at the time SearchMember() was mainstreamed into Search().
@@ -283,7 +283,7 @@ sub Search {
     }
     $searchtype ||= "start_with";
 
-	return SearchInTable( "borrowers", $filter, $orderby, $limit, $columns_out, $search_on_fields, $searchtype );
+    return SearchInTable( "borrowers", $filter, $orderby, $limit, $columns_out, $search_on_fields, $searchtype );
 }
 
 =head2 GetMemberDetails
@@ -750,11 +750,11 @@ sub ModMember {
         if ($data{password} eq '****' or $data{password} eq '') {
             delete $data{password};
         } else {
-            $data{password} = md5_base64($data{password});
+            $data{password} = hash_password($data{password});
         }
     }
     my $old_categorycode = GetBorrowerCategorycode( $data{borrowernumber} );
-	my $execute_success=UpdateInTable("borrowers",\%data);
+    my $execute_success=UpdateInTable("borrowers",\%data);
     if ($execute_success) { # only proceed if the update was a success
         # ok if its an adult (type) it may have borrowers that depend on it as a guarantor
         # so when we update information for an adult we should check for guarantees and update the relevant part
@@ -805,9 +805,8 @@ sub AddMember {
     }
 
     # create a disabled account if no password provided
-    $data{'password'} = ($data{'password'})? md5_base64($data{'password'}) : '!';
+    $data{'password'} = ($data{'password'})? hash_password($data{'password'}) : '!';
     $data{'borrowernumber'}=InsertInTable("borrowers",\%data);
-
 
     # mysql_insertid is probably bad.  not necessarily accurate and mysql-specific at best.
     logaction("MEMBERS", "CREATE", $data{'borrowernumber'}, "") if C4::Context->preference("BorrowersLog");
@@ -1464,28 +1463,6 @@ sub GetExpiryDate {
     }else{
         return $enrolments->{enrolmentperioddate};
     }
-}
-
-=head2 checkuserpassword (OUEST-PROVENCE)
-
-check for the password and login are not used
-return the number of record 
-0=> NOT USED 1=> USED
-
-=cut
-
-sub checkuserpassword {
-    my ( $borrowernumber, $userid, $password ) = @_;
-    $password = md5_base64($password);
-    my $dbh = C4::Context->dbh;
-    my $sth =
-      $dbh->prepare(
-"Select count(*) from borrowers where borrowernumber !=? and userid =? and password=? "
-      );
-    $sth->execute( $borrowernumber, $userid, $password );
-    my $number_rows = $sth->fetchrow;
-    return $number_rows;
-
 }
 
 =head2 GetborCatFromCatType
