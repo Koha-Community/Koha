@@ -1169,19 +1169,19 @@ Charges exempt from non-issue are:
 
 =cut
 
-my $ACCOUNT_TYPE_LENGTH = 5; # this is plain ridiculous...
-
-my @not_fines = ('Res');
-push @not_fines, 'Rent' unless C4::Context->preference('RentalsInNoissuesCharge');
-unless ( C4::Context->preference('ManInvInNoissuesCharge') ) {
-    my $dbh = C4::Context->dbh;
-    my $man_inv_types = $dbh->selectcol_arrayref(qq{SELECT authorised_value FROM authorised_values WHERE category = 'MANUAL_INV'});
-    push @not_fines, map substr($_, 0, $ACCOUNT_TYPE_LENGTH), @$man_inv_types;
-}
-my %not_fine = map {$_ => 1} @not_fines;
-
 sub GetMemberAccountBalance {
     my ($borrowernumber) = @_;
+
+    my $ACCOUNT_TYPE_LENGTH = 5; # this is plain ridiculous...
+
+    my @not_fines = ('Res');
+    push @not_fines, 'Rent' unless C4::Context->preference('RentalsInNoissuesCharge');
+    unless ( C4::Context->preference('ManInvInNoissuesCharge') ) {
+        my $dbh = C4::Context->dbh;
+        my $man_inv_types = $dbh->selectcol_arrayref(qq{SELECT authorised_value FROM authorised_values WHERE category = 'MANUAL_INV'});
+        push @not_fines, map substr($_, 0, $ACCOUNT_TYPE_LENGTH), @$man_inv_types;
+    }
+    my %not_fine = map {$_ => 1} @not_fines;
 
     my ($total, $acctlines) = GetMemberAccountRecords($borrowernumber);
     my $other_charges = 0;
