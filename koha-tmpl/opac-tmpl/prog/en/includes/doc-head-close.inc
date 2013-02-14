@@ -58,7 +58,7 @@
     var MSG_ITEM_IN_CART = _("In your cart");
     var MSG_IN_YOUR_CART = _("Items in your cart: ");
     var MSG_ITEM_NOT_IN_CART = _("Add to your cart");
-	$("#cartDetails").ready(function(){ $("#cmspan").html("<a href=\"#\" id=\"cartmenulink\" class=\"\"><i><\/i><span><i><\/i><span><\/span><span id=\"carticon\"></span> "+_("Cart")+"<span id=\"basketcount\"><\/span><\/span><\/a>"); }); [% ELSE %][% IF ( virtualshelves ) %]
+    $("#cartDetails").ready(function(){ $("#cmspan").html("<a href=\"#\" id=\"cartmenulink\"><span id=\"carticon\"></span> "+_("Cart")+"<span id=\"basketcount\"><\/span><\/a>"); }); [% ELSE %][% IF ( virtualshelves ) %]
     var MSG_NO_RECORD_SELECTED = _("No item was selected");[% END %][% END %]
     [% IF ( opacuserlogin ) %][% IF ( TagsEnabled ) %]var MSG_TAGS_DISABLED = _("Sorry, tags are not enabled on this system.");
     var MSG_TAG_ALL_BAD = _("Error! Your tag was entirely markup code.  It was NOT added.  Please try again with plain text.");
