@@ -143,6 +143,7 @@ em strong {
 #login_controls	 {
 	position : absolute;
 	right : .5em;
+    padding: .4em .5em;
 }
 
 ul {
@@ -163,15 +164,6 @@ ol {
 
 ol li {
 	list-style : decimal;
-}
-
-#header {
-    background-color : #e6f0f2;
-    line-height : 2em;
-}
-
-#header a.toplinks {
-    font-weight: bold;
 }
 
 .gradient {
@@ -1114,6 +1106,8 @@ div.alert {
 	background: linear-gradient(top, #fef8d3 0%,#ffec91 9%,#ffed87 89%,#f9dc00 100%); /* W3C */
 	  text-align : center;
 	border: 1px solid #E0C726;
+    color : inherit;
+    text-shadow : none;
 }
 
 div.alert strong {
@@ -1617,14 +1611,14 @@ a.yuimenuitemlabel:hover {
 	vertical-align : top;
 }
 
-#toplevelnav {
+ul#toplevelmenu {
+    padding : 0;
+}
+
+/*#toplevelnav {
 	float : left;
 	margin-left : .5em;
      width: 40%;
-}
-
-ul#toplevelmenu {
-	padding : 0;
 }
 
 ul#toplevelmenu li {
@@ -1735,7 +1729,7 @@ div.lang {
  * html div#doc3{
   height:100%;
   overflow:auto;
- }
+ }*/
 
 #CheckAll, #CheckNone, #CheckPending {
 	font-weight : normal;
@@ -1845,7 +1839,7 @@ span.permissiondesc {
 	z-index : 50;
 }
 #cartmenulink {
-        background: transparent url("../../img/cart-small.gif") 0 3px no-repeat;
+        background: transparent url("../../img/cart-small.gif") left center no-repeat;
         padding-left : 15px;
 }
 #cartmenulink span#basketcount span {
@@ -2401,3 +2395,156 @@ div.authorizedheading {
 video {
     width: 480px;
 }
+
+/* Bootstrap overrides */
+.btn {
+    border-color : #ADADAD #ADADAD #949494;
+
+}
+
+.btn-small .caret {
+    margin-top : .6em;
+}
+
+.icon-hold {
+    background-position:-24px -166px;
+}
+
+.icon-copy {
+    background-position:-3px -166px;
+}
+
+#toolbar .btn,
+#toolbar .dropdown-menu {
+    font-size: 13px;
+}
+a.btn:link,
+a.btn:visited{
+    color: #333333;
+}
+.dropdown-menu li {
+    list-style: none outside none;
+}
+[class^="icon-"],[class*=" icon-"]{background-image:url("../../img/glyphicons-halflings-koha.png");}
+.icon-white,.nav-tabs>.active>a>[class^="icon-"],.nav-tabs>.active>a>[class*=" icon-"],.nav-pills>.active>a>[class^="icon-"],.nav-pills>.active>a>[class*=" icon-"],.nav-list>.active>a>[class^="icon-"],.nav-list>.active>a>[class*=" icon-"],.navbar-inverse .nav>.active>a>[class^="icon-"],.navbar-inverse .nav>.active>a>[class*=" icon-"],.dropdown-menu>li>a:hover>[class^="icon-"],.dropdown-menu>li>a:hover>[class*=" icon-"],.dropdown-menu>.active>a>[class^="icon-"],.dropdown-menu>.active>a>[class*=" icon-"]{background-image:url("../../img/glyphicons-halflings-white.png");}
+a.disabled {
+    color : #999999;
+}
+
+.navbar {
+    color: #333;
+}
+
+.navbar .nav > li > a {
+    color: #004D99;
+    font-weight: bold;
+    padding : .4em .2em;
+}
+
+.navbar .nav > li {
+    list-style: none outside none;
+    padding : 0 .6em;
+}
+
+.navbar .nav > li > a:focus,
+.navbar .nav > li > a:hover {
+    color: #538200;
+}
+
+.navbar .nav li.dropdown.open > .dropdown-toggle,
+.navbar .nav li.dropdown.active > .dropdown-toggle,
+.navbar .nav li.dropdown.open.active > .dropdown-toggle {
+    background: transparent none;
+}
+
+.navbar-static-top .navbar-inner {
+    background: #E6F0F2 none;
+    border: 0;
+    box-shadow: none;
+    min-height: 0;
+    padding-left: 0;
+}
+.navbar-fixed-bottom .navbar-inner {
+    min-height: 0;
+    padding : .4em 0;
+}
+
+.navbar-fixed-bottom .nav > li > a {
+    font-weight: normal;
+    padding : .05em .3em;
+}
+
+.navbar-fixed-bottom .nav > li {
+    border-right : 1px solid #CCC;
+}
+
+.navbar-fixed-bottom .nav > li:last-child {
+    border-right : 0;
+}
+
+.navbar-fixed-bottom .nav > li.navbar-text {
+    line-height: normal;
+    padding : 0.4em 0.7em;
+}
+.navbar .nav > li {
+    list-style: none outside none;
+    padding : 0 .6em;
+}
+.navbar .nav > li > a {
+    color: #004D99;
+    font-weight: bold;
+    padding : .4em .3em;
+}
+.navbar .nav li.dropdown.open > .dropdown-toggle, .navbar .nav li.dropdown.active > .dropdown-toggle, .navbar .nav li.dropdown.open.active > .dropdown-toggle {
+    background: transparent none;
+}
+
+.navbar .nav > li > a:focus,
+.navbar .nav > li > a:hover {
+    color: #538200;
+}
+
+.navbar .nav li.dropdown.open > .dropdown-toggle,
+.navbar .nav li.dropdown.active > .dropdown-toggle,
+.navbar .nav li.dropdown.open.active > .dropdown-toggle {
+    background: transparent none;
+}
+
+.tooltip.bottom .tooltip-arrow {
+    border-bottom-color: #EEE;
+}
+.tooltip.bottom .tooltip-inner {
+    background-color : #FFF;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    color: #000;
+    padding : 1em;
+    font-size : 120%;
+}
+.separator { color : #666; padding : 0 .2em; }
+
+.close {
+    position: inherit;
+    top: auto;
+    right : auto;
+    line-height: inherit;
+    filter : none;
+    float : none;
+    font-size: inherit;
+    font-weight: normal;
+    opacity: inherit;
+    text-shadow: none;
+}
+
+.close:hover {
+    color: #538200;
+    filter: inherit;
+    opacity: inherit;
+}
+
+/* Redefine a new style for Bootstrap's class "close" since we use that already */
+/* Use <a class="closebtn" href="#">&times;</a> */
+.alert .closebtn{position:relative;top:-2px;right:-21px;line-height:20px;}
+.modal-header .closebtn{margin-top:2px;}
+.closebtn{float:right;font-size:20px;font-weight:bold;line-height:20px;color:#000000;text-shadow:0 1px 0 #ffffff;opacity:0.2;filter:alpha(opacity=20);}.closebtn:hover{color:#000000;text-decoration:none;cursor:pointer;opacity:0.4;filter:alpha(opacity=40);}
+button.closebtn{padding:0;cursor:pointer;background:transparent;border:0;-webkit-appearance:none;}
