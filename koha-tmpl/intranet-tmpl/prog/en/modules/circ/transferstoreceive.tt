@@ -1,23 +1,24 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Circulation &rsaquo; Transfers to your library</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
-<script type="text/javascript" language="JavaScript">
+<link rel="stylesheet" type="text/css" href="/intranet-tmpl/prog/en/css/datatables.css" />
+<script type="text/javascript" src="/intranet-tmpl/prog/en/lib/jquery/plugins/jquery.dataTables.min.js"></script>
+[% INCLUDE 'datatables-strings.inc' %]
+<script type="text/javascript" src="/intranet-tmpl/prog/en/js/datatables.js"></script>
+<script type="text/javascript">
 //<![CDATA[
-$.tablesorter.addParser({
-    id: 'articles',
-    is: function(s) {return false;  },
-    format: function(s) { return s.toLowerCase().replace(/^(the|an|a) /,''); },
-    type: 'text'
-});
+[% IF (dateformat == 'metric') %]
+dt_add_type_uk_date();
+[% END %]
 $(document).ready(function() {
     [% FOREACH branchesloo IN branchesloop %]
-    $.tablesorter.defaults.widgets = ['zebra'];
-    $("#transferst[% branchesloo.branchcode %]").tablesorter({[% IF ( dateformat_metric ) %]
-        dateFormat: 'uk',[% END %]
-        sortList: [[0,0]],
-        headers: { 1: { sorter: 'articles' }}
-    });
+    $("#transferst[% branchesloo.branchcode %]").dataTable($.extend(true, {}, dataTablesDefaults, {
+        "aoColumnDefs": [
+            { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
+        ],
+        "sDom": 't',
+        "bPaginate": false
+    }));
     [% END %]
 });
 //]]>
