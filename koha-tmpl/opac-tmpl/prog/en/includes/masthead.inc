@@ -66,11 +66,19 @@
 		[% ELSE %]
         <option value="se">Series</option>
 		[% END %]
-		[% IF ( ms_callnum ) %]
+                [% IF ( numbersphr ) %]
+                [% IF ( ms_callnum ) %]
+        <option selected="selected" value="callnum,phr">Call number</option>
+                [% ELSE %]
+        <option value="callnum,phr">Call number</option>
+                [% END %]
+                [% ELSE %]
+                [% IF ( ms_callnum ) %]
         <option selected="selected" value="callnum">Call number</option>
-		[% ELSE %]
+                [% ELSE %]
         <option value="callnum">Call number</option>
-		[% END %]</select>
+                [% END %]
+                [% END %]</select>
 [% IF ( ms_value ) %]
         <input type="text" title="Type search term" id = "transl1" name="q" value="[% ms_value |html %]" class="left" style="width: 35%; font-size: 111%;"/><div id="translControl"></div>
 [% ELSE %]

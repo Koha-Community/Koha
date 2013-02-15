@@ -182,6 +182,9 @@ else {
 if (C4::Context->preference("marcflavour") eq "UNIMARC" ) {
     $template->param('UNIMARC' => 1);
 }
+if (C4::Context->preference("IntranetNumbersPreferPhrase")) {
+    $template->param('numbersphr' => 1);
+}
 
 if($cgi->cookie("holdfor")){ 
     my $holdfor_patron = GetMember('borrowernumber' => $cgi->cookie("holdfor"));
