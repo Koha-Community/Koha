@@ -1,4 +1,4 @@
-
+<div class="gradient">
 <h1 id="logo"><a href="/cgi-bin/koha/mainpage.pl">[% LibraryName %]</a></h1><!-- Begin Currencies Resident Search Box -->
 <div id="header_search">
 	<div id="currency_search" class="residentsearch">
@@ -23,4 +23,5 @@
             [% IF ( CAN_user_catalogue ) %]<li><a href="#catalog_search">Search the catalog</a></li>[% END %]
 			</ul>	
 </div>
+</div><!-- /gradient -->
 <!-- End Currencies Resident Search Box -->

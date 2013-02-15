@@ -1,4 +1,4 @@
-
+<div class="gradient">
 <h1 id="logo"><a href="/cgi-bin/koha/mainpage.pl">[% LibraryName %]</a></h1><!-- Begin Checkin Resident Search Box -->
 <div id="header_search">
 [% INCLUDE 'patron-search-box.inc' %]
@@ -17,5 +17,5 @@
 </ul>   
 
 </div>
-
+</div><!-- /gradient -->
 <!-- End Checkin Resident Search Box -->
