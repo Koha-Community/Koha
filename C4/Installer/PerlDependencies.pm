@@ -689,6 +689,11 @@ our $PERL_DEPS = {
         'required' => '1',
         'min_ver'  => '0.22',
     },
+    'Crypt::Eksblowfish::Bcrypt' => {
+        'usage'    => 'Password storage',
+        'required' => '1',
+        'min_ver'  => '0.008',
+    },
 };
 
 1;
