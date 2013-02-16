@@ -650,6 +650,9 @@ VALUES( 'ca', 'language', 'fr', 'Catalan');
 INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES( 'ca', 'language', 'ca', 'Català');
 
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES( 'ca', 'language', 'de', 'Katalanisch');
+
 -- Swedish
 INSERT INTO language_subtag_registry( subtag, type, description, added)
 VALUES ( 'sv', 'language', 'Swedish','2005-10-16' );
