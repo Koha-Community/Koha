@@ -466,6 +466,28 @@ VALUES( 'es', 'language', 'en', 'Spanish');
 INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES( 'es', 'language', 'fr', 'Espagnol');
 
+-- Spanish, Catalan
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'ca', 'language', 'Catalan','2013-01-12' );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES( 'ca','cat');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES( 'ca', 'language', 'es', 'Catalán');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES( 'ca', 'language', 'en', 'Catalan');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES( 'ca', 'language', 'fr', 'Catalan');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES( 'ca', 'language', 'ca', 'Català');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES( 'ca', 'language', 'de', 'Katalanisch');
+
 -- Swedish
 INSERT INTO language_subtag_registry( subtag, type, description, added)
 VALUES ( 'sv', 'language', 'Swedish','2005-10-16' );

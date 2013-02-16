@@ -6766,9 +6766,11 @@ if ( CheckVersion($DBversion) ) {
    $dbh->do("INSERT INTO language_descriptions(subtag, type, lang, description) VALUES( 'ca', 'language', 'en', 'Catalan')");
    $dbh->do("INSERT INTO language_descriptions(subtag, type, lang, description) VALUES( 'ca', 'language', 'fr', 'Catalan')");
    $dbh->do("INSERT INTO language_descriptions(subtag, type, lang, description) VALUES( 'ca', 'language', 'ca', 'Català')");
+   $dbh->do("INSERT INTO language_descriptions(subtag, type, lang, description) VALUES( 'ca', 'language', 'de', 'Katalanisch')");
    print "Upgrade to $DBversion done (Bug 9381: Add Catalan laguage)\n";
    SetVersion ($DBversion);
 }
+
 
 =head1 FUNCTIONS
 
