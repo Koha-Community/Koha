@@ -7155,6 +7155,13 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.13.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do("ALTER TABLE borrowers CHANGE password password VARCHAR(60);");
+    print "Upgrade to $DBversion done (Bug 9611 upgrading password storage system)\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)
