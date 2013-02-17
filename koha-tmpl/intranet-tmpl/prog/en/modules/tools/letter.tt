@@ -162,6 +162,8 @@ $(document).ready(function() {
             </select>
             [% END %]
         [% END %]
+
+[% IF ( letter ) %]
         <table id="lettert">
 		<thead><tr>
 			<th>Library</th>
@@ -214,6 +216,15 @@ $(document).ready(function() {
     [% END %]
         </tbody>
 		</table>
+[% ELSE %]
+    <div class="dialog message">
+        [% IF ( branchcode ) %]
+           <p>There are no notices for this library.</p>
+        [% ELSE %]
+            <p>There are no notices.</p>
+        [% END %]
+    </div>
+[% END %]
 [% END %]
 
 	
