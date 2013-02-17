@@ -1082,7 +1082,7 @@ sub set_userenv {
         "flags"      => $userflags,
         "emailaddress"     => $emailaddress,
         "branchprinter"    => $branchprinter,
-	"persona"    => $persona,
+        "persona"    => $persona,
     };
     $context->{userenv}->{$var} = $cell;
     return $cell;
