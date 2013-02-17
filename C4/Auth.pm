@@ -324,6 +324,7 @@ sub get_template_and_user {
             LoginFirstname               => (C4::Context->userenv?C4::Context->userenv->{"firstname"}:"Bel"),
             LoginSurname                 => C4::Context->userenv?C4::Context->userenv->{"surname"}:"Inconnu",
             emailaddress                 => C4::Context->userenv?C4::Context->userenv->{"emailaddress"}:undef,
+            loggedinpersona              => C4::Context->userenv?C4::Context->userenv->{"persona"}:undef,
             TagsEnabled                  => C4::Context->preference("TagsEnabled"),
             hide_marc                    => C4::Context->preference("hide_marc"),
             item_level_itypes            => C4::Context->preference('item-level_itypes'),
@@ -336,7 +337,6 @@ sub get_template_and_user {
             marcflavour                  => C4::Context->preference("marcflavour"),
             persona                      => C4::Context->preference("persona"),
     );
-
     if ( $in->{'type'} eq "intranet" ) {
         $template->param(
             AmazonCoverImages           => C4::Context->preference("AmazonCoverImages"),
@@ -661,7 +661,8 @@ sub checkauth {
                 $session->param('cardnumber'),   $session->param('firstname'),
                 $session->param('surname'),      $session->param('branch'),
                 $session->param('branchname'),   $session->param('flags'),
-                $session->param('emailaddress'), $session->param('branchprinter')
+                $session->param('emailaddress'), $session->param('branchprinter'),
+                $session->param('persona')
             );
             C4::Context::set_shelves_userenv('bar',$session->param('barshelves'));
             C4::Context::set_shelves_userenv('pub',$session->param('pubshelves'));
@@ -780,7 +781,6 @@ sub checkauth {
         }
         $return = $value ? 1 : 0;
         $userid = $value;
-
     }
 
     elsif (
@@ -926,12 +926,16 @@ sub checkauth {
                     $session->param('ip',$session->remote_addr());
                     $session->param('lasttime',time());
                 }
+                if ($persona){
+                    $session->param('persona',1);
+                }
                 C4::Context::set_userenv(
                     $session->param('number'),       $session->param('id'),
                     $session->param('cardnumber'),   $session->param('firstname'),
                     $session->param('surname'),      $session->param('branch'),
                     $session->param('branchname'),   $session->param('flags'),
-                    $session->param('emailaddress'), $session->param('branchprinter')
+                    $session->param('emailaddress'), $session->param('branchprinter'),
+                    $session->param('persona')
                 );
 
             }

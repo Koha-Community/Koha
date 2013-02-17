@@ -65,7 +65,7 @@
 <script type="text/javascript" language="javascript">
 
 navigator.id.watch({
-    loggedInUser: [% IF emailaddress %]'[% emailaddress %]'[% ELSE %]null[% END %],
+    loggedInUser: [% IF emailaddress && loggedinpersona %]'[% emailaddress %]'[% ELSE %]null[% END %],
     onlogin: function (assertion) {
         $.post('/cgi-bin/koha/svc/login',
             { assertion: assertion },
