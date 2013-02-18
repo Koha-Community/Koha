@@ -266,27 +266,9 @@ Confirm deletion of category [% categorycode |html %][% END %]</legend>
 
 [% IF ( else ) %]
 
-<div id="toolbar">
-	<script type="text/javascript">
-	//<![CDATA[
-
-	// prepare DOM for YUI Toolbar
-
-	 $(document).ready(function() {
-	    yuiToolbar();
-	 });
-
-	// YUI Toolbar Functions
-
-	function yuiToolbar() {
-	    new YAHOO.widget.Button("newcategory");
-	}
-
-	//]]>
-	</script>
-	<ul class="toolbar">
-    <li><a id="newcategory" href="/cgi-bin/koha/admin/categorie.pl?op=add_form">New category</a></li>
-</ul></div>
+<div id="toolbar" class="btn-toolbar">
+    <a class="btn btn-small" id="newcategory" href="/cgi-bin/koha/admin/categorie.pl?op=add_form"><i class="icon-plus"></i> New category</a>
+</div>
 
 <h2>Patron category administration</h2>
 [% IF ( searchfield ) %]
