@@ -42,9 +42,6 @@ function Check(f) {
 	}
 }
 
-$(document).ready(function() {
-    new YAHOO.widget.Button("authtype");
-});
 //]]>
 </script>
 </head>
@@ -124,10 +121,9 @@ $(document).ready(function() {
 
 [% IF ( else ) %]
 
-<div id="toolbar">
-	<ul class="toolbar">
-    <li><a id="authtype" href="[% script_name %]?op=add_form">New authority type</a></li>
-</ul></div>
+<div id="toolbar" class="btn-toolbar">
+    <a id="authtype" class="btn btn-small" href="[% script_name %]?op=add_form"><i class="icon-plus"></i> New authority type</a>
+</div>
 
 <h1>Authority types</h1>
 <p>Define authority types, then authority MARC structure in the same way you define itemtypes and biblio MARC tag structure. Authority values are managed through plugins</p>
