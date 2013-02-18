@@ -421,3 +421,4 @@ INSERT INTO systempreferences (variable,value,explanation,options,type)  VALUES(
 INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES('PatronSelfRegistrationAdditionalInstructions','','A free text field to display additional instructions to newly self registered patrons.','','free');
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('UseQueryParser', '0', 'If enabled, try to use QueryParser for queries.', NULL, 'YesNo');
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('FinesIncludeGracePeriod','1','If enabled, fines calculations will include the grace period.',NULL,'YesNo');
+INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('UNIMARCAuthorsFacetsSeparator',', ', 'UNIMARC authors facets separator', NULL, 'short');
