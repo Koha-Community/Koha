@@ -24,6 +24,10 @@
     var progress = document.querySelector('.percent');
     $("#server_response").hide();
 
+    function yuiGetData() {
+        fnGetData(document.getElementById('quotes_editor'));
+    }
+
     function fnAbortRead() {
         reader.abort();
     }
@@ -148,8 +152,8 @@
         $('#file_uploader').css("position","absolute");
         $('#file_uploader').css("top","-150px");
         $('#quotes_editor').css("visibility","visible");
-        oSaveButton.on("click", yuiGetData);
-        oDeleteButton.on("click", fnClickDeleteRow);
+        $("#save_quotes").on("click", yuiGetData);
+        $("#delete_quote").on("click", fnClickDeleteRow);
 
 
 
