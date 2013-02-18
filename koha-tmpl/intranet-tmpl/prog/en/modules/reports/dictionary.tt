@@ -22,7 +22,11 @@
 <div id="yui-main">
 <div class="yui-b">
 [% IF ( start_dictionary ) %]
-[% INCLUDE 'dictionary-toolbar.inc' %]
+    <div id="toolbar">
+        <ul class="toolbar">
+            <li><a id="newdictionary" class="btn btn-small" href="/cgi-bin/koha/reports/dictionary.pl?phase=Add%20New%20Definition"><i class="icon-plus"></i> New definition</a></li>
+        </ul>
+    </div>
 [% END %]
 <h1>Dictionary</h1>
 [% IF ( start_dictionary ) %]
