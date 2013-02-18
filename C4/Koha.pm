@@ -701,7 +701,7 @@ sub getFacets {
                 idx   => 'au',
                 label => 'Authors',
                 tags  => [ qw/ 700ab 701ab 702ab / ],
-                sep   => ', ',
+                sep   => C4::Context->preference("UNIMARCAuthorsFacetsSeparator"),
             },
             {
                 idx   => 'se',
