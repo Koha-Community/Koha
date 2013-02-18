@@ -26,6 +26,19 @@
      });
 //]]>
 </script>
+[% IF ( else ) %]
+<script type="text/javascript">
+//<![CDATA[
+$(document).ready(function() {
+    $('#category').find("input:submit").hide();
+    $('#searchfield').change(function() {
+        $('#category').submit();
+    });
+});
+//]]>
+</script>
+[% END %]
+
 <style type="text/css">
 	fieldset.rows div.toptabs li { clear:none;margin-right:.5em;padding-bottom:0;width:auto; }
     fieldset.rows div.toptabs .ui-tabs-nav li.ui-tabs-selected {background-color : #F4F8F9; }
@@ -169,33 +182,10 @@
 
 [% IF ( else ) %]
 
-<div id="toolbar">
-	<script type="text/javascript">
-	//<![CDATA[
-
-	// prepare DOM for YUI Toolbar
-
-	 $(document).ready(function() {
-	    yuiToolbar();
-		$('#category').find("input:submit").hide();
-		$('#searchfield').change(function() {
-		$('#category').submit();
-		});
-	 });
-
-	// YUI Toolbar Functions
-
-	function yuiToolbar() {
-	    new YAHOO.widget.Button("addauth");
-	    new YAHOO.widget.Button("addcat");
-	}
-
-	//]]>
-	</script>
-	<ul class="toolbar">
-     <li><a id="addauth" href= "/cgi-bin/koha/admin/authorised_values.pl?op=add_form&amp;category=[% category %]">New authorized value for [% category %]</a></li>
-    <li><a id="addcat" href= "/cgi-bin/koha/admin/authorised_values.pl?op=add_form">New category</a></li>
-</ul></div>
+<div id="toolbar" class="btn-toolbar">
+    <a id="addauth" class="btn btn-small" href= "/cgi-bin/koha/admin/authorised_values.pl?op=add_form&amp;category=[% category %]">New authorized value for [% category %]</a>
+    <a id="addcat" class="btn btn-small" href= "/cgi-bin/koha/admin/authorised_values.pl?op=add_form">New category</a>
+</div>
 
 <h1>Authorized values</h1>
 <div class="note"><strong>NOTE:</strong> If you change an authorized value, existing records using it won't be updated.</div>
