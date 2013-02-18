@@ -30,10 +30,6 @@ function Check(f) {
         alert(alertString2);
     }
 }
-
-$(document).ready(function() {
-    new YAHOO.widget.Button("addtag");
-});
 //]]>
 </script>
 </head>
@@ -65,10 +61,9 @@ $(document).ready(function() {
       <div class="yui-b">
 
 [% IF ( else ) %]
-<div id="toolbar">
-	<ul class="toolbar">
-    <li><a id="addtag" href="/cgi-bin/koha/admin/marctagstructure.pl?op=add_form&amp;frameworkcode=[% frameworkcode %]">New tag</a></li>
-</ul></div>[% END %]
+<div id="toolbar" class="btn-toolbar">
+    <a class="btn btn-small" id="addtag" href="/cgi-bin/koha/admin/marctagstructure.pl?op=add_form&amp;frameworkcode=[% frameworkcode %]"><i class="icon-plus"></i> New tag</a>
+</div>[% END %]
 
 <h1>MARC Framework for [% IF ( frameworkcode ) %][% frameworktext %] ([% frameworkcode %])[% ELSE %]default MARC framework[% END %]</h1>
 
