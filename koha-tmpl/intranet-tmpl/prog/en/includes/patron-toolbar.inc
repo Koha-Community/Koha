@@ -1,73 +1,19 @@
 [% UNLESS ( no_add ) %]
-<div id="toolbar">
-	<script type="text/javascript">
-	//<![CDATA[
-
-	// prepare DOM for YUI Toolbar
-
-	 $(document).ready(function() {
-[% IF ( AddPatronLists_categorycode ) %]
-[% ELSE %]
-	 	$("#addchild").parent().remove();
-		$("#addprofessional").parent().remove();
-		$("#addorganisation").parent().remove();
-		$("#addstaff").parent().remove();
-		$("#addstatistical").parent().remove();
-[% END %]
-	    $("#newmenuc").empty();
-	    yuiToolbar();
-	 });
-
-	// YUI Toolbar Functions
-
-	function yuiToolbar() {
-
-		var newmenu = [
-[% IF ( AddPatronLists_categorycode ) %]
-[% FOREACH categorie IN categories %]
-{ text: "[% categorie.description %]",  url: "/cgi-bin/koha/members/memberentry.pl?op=add&amp;categorycode=[% categorie.categorycode %]" },
-[% END %]
-[% ELSE %]
-            { text: _("Adult patron"),  url: "/cgi-bin/koha/members/memberentry.pl?op=add&amp;category_type=A" },
-            { text: _("Child patron"),  url: "/cgi-bin/koha/members/memberentry.pl?op=add&amp;category_type=C" },
-            { text: _("Professional patron"),  url: "/cgi-bin/koha/members/memberentry.pl?op=add&amp;category_type=P" },
-			{ text: _("Organization"),  url: "/cgi-bin/koha/members/memberentry.pl?op=add&amp;category_type=I" },
-			{ text: _("Staff"),  url: "/cgi-bin/koha/members/memberentry.pl?op=add&amp;category_type=S" },
-			{ text: _("Statistical"),  url: "/cgi-bin/koha/members/memberentry.pl?op=add&amp;category_type=X" },
-[% END %]
-		]
-
-	    new YAHOO.widget.Button({
-	        type: "menu",
-	        label: _("New patron"),
-	        name: "newmenubutton",
-	        menu: newmenu,
-	        container: "newmenuc"
-	    });
-
-	}
-
-	//]]>
-	</script>
-	<ul class="toolbar">
-	<li id="newmenuc">
-		<form action="/cgi-bin/koha/members/memberentry.pl" method="get">
-			<input type="hidden" name="op" value="add" />
-            <label for="newcategorycode">New patron: </label><select name="categorycode" id="newcategorycode">
-			[% IF ( AddPatronLists_categorycode ) %]
-				[% FOREACH categorie IN categories %]<option value="[% categorie.categorycode %]">[% categorie.description %]</option>[% END %]
-			[% ELSE %]
-                <option value="A">Adult patron</option>
-                <option value="C">Child patron</option>
-                <option value="P">Professional patron</option>
-				<option value="I">Organization</option>
-				<option value="S">Staff</option>
-				<option value="X">Statistical</option>
-			[% END %]
-			</select>
-			<input type="submit" class="submit" value="Go" />
-		</form>
-	</li>
-</ul>
+<div id="toolbar" class="btn-toolbar">
+    <div class="btn-group">
+        <button class="btn btn-small dropdown-toggle" data-toggle="dropdown"><i class="icon-plus"></i> New patron <span class="caret"></span></button>
+            <ul class="dropdown-menu">
+                [% IF ( AddPatronLists_categorycode ) %]
+                    [% FOREACH categorie IN categories %]<li><a href="/cgi-bin/koha/members/memberentry.pl?op=add&amp;categorycode=[% categorie.categorycode %]">[% categorie.description %]</a></li>[% END %]
+                [% ELSE %]
+                    <li><a href="/cgi-bin/koha/members/memberentry.pl?op=add&amp;category_type=A">Adult patron</a></li>
+                    <li><a href="/cgi-bin/koha/members/memberentry.pl?op=add&amp;category_type=C">Child patron</a></li>
+                    <li><a href="/cgi-bin/koha/members/memberentry.pl?op=add&amp;category_type=P">Professional patron</a></li>
+                    <li><a href="/cgi-bin/koha/members/memberentry.pl?op=add&amp;category_type=I">Organization</a></li>
+                    <li><a href="/cgi-bin/koha/members/memberentry.pl?op=add&amp;category_type=S">Staff patron</a></li>
+                    <li><a href="/cgi-bin/koha/members/memberentry.pl?op=add&amp;category_type=X">Statistical patron</a></li>
+                [% END %]
+            </ul>
+    </div>
 </div>
 [% END %]
