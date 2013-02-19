@@ -317,8 +317,28 @@ $(document).ready(function() {
             <option value="itemcallnumber">Call number</option>
         [% END %]
 
-        <input type="submit" id="sort-submit" value="Resort list" />
+        [% IF sort == 'copyrightdate' %]
+            <option value="copyrightdate" selected="selected">Copyright date</option>
+        [% ELSE %]
+            <option value="copyrightdate">Copyright date</option>
+        [% END %]
     </select>
+
+    <select name="direction" onchange="$('#sorting-form').submit()">
+        [% IF direction == 'asc' %]
+            <option value="asc" selected="selected">Ascending</option>
+        [% ELSE %]
+            <option value="asc">Ascending</option>
+        [% END %]
+
+        [% IF direction == 'desc' %]
+            <option value="desc" selected="selected">Descending</option>
+        [% ELSE %]
+            <option value="desc">Descending</option>
+        [% END %]
+    </select>
+
+    <input type="submit" id="sort-submit" value="Resort list" />
 </form>
 
                 [% IF ( manageshelf ) %] <span class="sep">|</span> <form method="get" action="opac-shelves.pl"><input type="hidden" name="op" value="modif" />

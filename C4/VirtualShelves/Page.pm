@@ -249,8 +249,12 @@ sub shelfpage {
                 my $items;
                 my $tag_quantity;
                 my $sortfield = ( $sorton ? $sorton : 'title' );
-                $sortfield = $query->param('sort') || $sortfield; ## Passed in sorting overrides default sorting
-                my $direction = $query->param('direction');
+                $sortfield = $query->param('sort') || $sortfield || 'title'; ## Passed in sorting overrides default sorting
+                my $direction = $query->param('direction') || 'asc';
+                $template->param(
+                    sort      => $sortfield,
+                    direction => $direction,
+                );
                 ( $items, $totitems ) = GetShelfContents( $shelfnumber, $shelflimit, $shelfoffset, $sortfield, $direction );
                 for my $this_item (@$items) {
                     my $biblionumber = $this_item->{'biblionumber'};
@@ -461,8 +465,6 @@ sub shelfpage {
             barshelvesloop => $barshelves,
             pubshelves     => $total->{pubtotal},
             pubshelvesloop => $pubshelves,
-            sort           => $query->param('sort'),
-            direction      => $query->param('direction'),
     );
 
     output_html_with_http_headers $query, $cookie, $template->output;
