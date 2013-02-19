@@ -37,7 +37,7 @@ sub new {
     }
     else {
         require Koha::Cache;
-	$cache = Koha::Cache->new( { 'cache_type' => 'memcached', 'cache_servers' => C4::Context->config('memcached_servers') });
+        $cache = Koha::Cache->new( { 'cache_type' => 'memcached', 'cache_servers' => C4::Context->config('memcached_servers') });
     }
     my $self = bless {
         CACHE   => $cache,
@@ -77,15 +77,14 @@ sub _cached_action {
             ':',
             (
                 $params->{template},
-		map { "$_=$cache_keys->{$_}" } keys %{$cache_keys}
+                map { "$_=$cache_keys->{$_}" } keys %{$cache_keys}
             )
         );
     }
     my $result = $self->{CACHE}->get_from_cache($key);
     if ( !$result ) {
-	warn "here in not in cache";
-	$result = $self->{CONTEXT}->$action( $params->{template} );
-	$self->{CACHE}->set_in_cache( $key, $result, $params->{ttl} );
+        $result = $self->{CONTEXT}->$action( $params->{template} );
+        $self->{CACHE}->set_in_cache( $key, $result, $params->{ttl} );
     }
     return $result;
 }
