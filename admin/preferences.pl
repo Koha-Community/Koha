@@ -17,8 +17,7 @@
 # with Koha; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-use strict;
-use warnings;
+use Modern::Perl;
 
 use CGI;
 use Encode;
@@ -105,6 +104,21 @@ sub _get_chunk {
             sort { $a->{'text'} cmp $b->{'text'} }
             map { { text => $options{'choices'}->{$_}, value => $_, selected => ( $_ eq $value || ( $_ eq '' && ( $value eq '0' || !$value ) ) ) } }
             keys %{ $options{'choices'} }
+        ];
+    } elsif ( $options{'multiple'} ) {
+        my @values = split /\|/, $value;
+        $chunk->{type}    = 'multiple';
+        $chunk->{CHOICES} = [
+            sort { $a->{'text'} cmp $b->{'text'} }
+              map {
+                my $option_value = $_;
+                {
+                    text     => $options{multiple}->{$option_value},
+                    value    => $option_value,
+                    selected => grep /^$option_value$/, @values,
+                }
+              }
+              keys %{ $options{multiple} }
         ];
     }
 

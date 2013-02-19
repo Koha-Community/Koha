@@ -3,7 +3,18 @@
 KOHA.Preferences = {
     Save: function ( form ) {
         modified_prefs = $( form ).find( '.modified' );
+        // $.serialize removes empty value, we need to keep them.
+        // If a multiple select has all its entries unselected
+        var unserialized = new Array();
+        $(modified_prefs).each(function(){
+            if ( $(this).attr('multiple') && $(this).val() == null ) {
+                unserialized.push($(this));
+            }
+        });
         data = modified_prefs.serialize();
+        $(unserialized).each(function(){
+            data += '&' + $(this).attr('name') + '=';
+        });
         if ( !data ) {
             humanMsg.displayAlert( MSG_NOTHING_TO_SAVE );
             return;
@@ -46,7 +57,7 @@ $( document ).ready( function () {
         $( this.form ).find( '.save-all' ).removeAttr( 'disabled' );
         $( this ).addClass( 'modified' );
         var name_cell = $( this ).parents( '.name-row' ).find( '.name-cell' );
-		if ( !name_cell.find( '.modified-warning' ).length )
+        if ( !name_cell.find( '.modified-warning' ).length )
             name_cell.append( '<em class="modified-warning">('+MSG_MODIFIED+')</em>' );
         KOHA.Preferences.Modified = true;
     }

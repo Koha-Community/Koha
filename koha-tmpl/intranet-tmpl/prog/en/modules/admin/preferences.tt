@@ -116,6 +116,18 @@
                         </option>
                         [% END %]
                     </select>
+                    [% ELSIF ( CHUNK.type_multiple ) %]
+                    <select name="pref_[% CHUNK.name %]" id="pref_[% CHUNK.name %]" class="preference preference-[% CHUNK.class or "choice" %]" multiple="multiple">
+                        [% FOREACH CHOICE IN CHUNK.CHOICES %]
+                        [% IF ( CHOICE.selected ) %]
+                        <option value="[% CHOICE.value %]" selected="selected">
+                        [% ELSE %]
+                        <option value="[% CHOICE.value %]">
+                        [% END %]
+                            [% CHOICE.text %]
+                        </option>
+                        [% END %]
+                    </select>
                     [% ELSIF ( CHUNK.type_textarea ) %]
 					<a class="expand-textarea" style="display: none" href="#">Click to Edit</a>
 					<textarea name="pref_[% CHUNK.name %]" id="pref_[% CHUNK.name %]" class="preference preference-[% CHUNK.class or "short" %]" rows="10" cols="40">[% CHUNK.value %]</textarea>
