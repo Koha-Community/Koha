@@ -1324,7 +1324,7 @@ sub ModNextExpected {
 
 =head2 GetSubscriptionIrregularities
 
-=over4
+=over 4
 
 =item @irreg = &GetSubscriptionIrregularities($subscriptionid);
 get the list of irregularities for a subscription

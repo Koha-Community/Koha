@@ -42,14 +42,17 @@ BEGIN {
     );
 }
 
-=head3 GetSubscriptionNumberpatterns
 
-=over 4
+=head1 NAME
+
+C4::Serials::Numberpattern - Serials numbering pattern module
+
+=head1 FUNCTIONS
+
+=head2 GetSubscriptionNumberpatterns
 
 @results = GetSubscriptionNumberpatterns;
 this function get all subscription number patterns entered in table
-
-=back
 
 =cut
 
@@ -67,14 +70,10 @@ sub GetSubscriptionNumberpatterns {
     return @$results;
 }
 
-=head3 GetSubscriptionNumberpattern
-
-=over 4
+=head2 GetSubscriptionNumberpattern
 
 $result = GetSubscriptionNumberpattern($numberpatternid);
 this function get the data of the subscription numberpatterns which id is $numberpatternid
-
-=back
 
 =cut
 
@@ -92,14 +91,10 @@ sub GetSubscriptionNumberpattern {
     return $sth->fetchrow_hashref;
 }
 
-=head3 GetSubscriptionNumberpatternByName
-
-=over 4
+=head2 GetSubscriptionNumberpatternByName
 
 $result = GetSubscriptionNumberpatternByName($name);
 this function get the data of the subscription numberpatterns which name is $name
-
-=back
 
 =cut
 
@@ -117,7 +112,7 @@ sub GetSubscriptionNumberpatternByName {
     return $sth->fetchrow_hashref;
 }
 
-=head3 AddSubscriptionNumberpattern
+=head2 AddSubscriptionNumberpattern
 
 =over 4
 
@@ -172,7 +167,7 @@ sub AddSubscriptionNumberpattern {
     return $rv;
 }
 
-=head3 ModSubscriptionNumberpattern
+=head2 ModSubscriptionNumberpattern
 
 =over 4
 
@@ -230,7 +225,7 @@ sub ModSubscriptionNumberpattern {
     return $sth->execute(@values, $numberpattern->{'id'});
 }
 
-=head3 DelSubscriptionNumberpattern
+=head2 DelSubscriptionNumberpattern
 
 =over 4
 
@@ -254,7 +249,7 @@ sub DelSubscriptionNumberpattern {
     $sth->execute($numberpatternid);
 }
 
-=head3 GetSubscriptionsWithNumberpattern
+=head2 GetSubscriptionsWithNumberpattern
 
     my @subs = GetSubscriptionsWithNumberpattern($numberpatternid);
 

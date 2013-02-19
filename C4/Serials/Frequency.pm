@@ -40,7 +40,14 @@ BEGIN {
     );
 }
 
-=head3 GetSubscriptionFrequencies
+
+=head1 NAME
+
+C4::Serials::Frequency - Serials Frequency module
+
+=head1 FUNCTIONS
+
+=head2 GetSubscriptionFrequencies
 
 =over 4
 
@@ -66,7 +73,7 @@ sub GetSubscriptionFrequencies {
     return @$results;
 }
 
-=head3 GetSubscriptionFrequency
+=head2 GetSubscriptionFrequency
 
 =over 4
 
@@ -93,7 +100,7 @@ sub GetSubscriptionFrequency {
     return $sth->fetchrow_hashref;
 }
 
-=head3 AddSubscriptionFrequency
+=head2 AddSubscriptionFrequency
 
 =over 4
 
@@ -155,7 +162,7 @@ sub AddSubscriptionFrequency {
     return $rv;
 }
 
-=head3 ModSubscriptionFrequency
+=head2 ModSubscriptionFrequency
 
 =over 4
 
@@ -222,7 +229,7 @@ sub ModSubscriptionFrequency {
     return $sth->execute(@values, $frequency->{'id'});
 }
 
-=head3 DelSubscriptionFrequency
+=head2 DelSubscriptionFrequency
 
 =over 4
 
@@ -246,7 +253,7 @@ sub DelSubscriptionFrequency {
     $sth->execute($frequencyid);
 }
 
-=head3 GetSubscriptionsWithFrequency
+=head2 GetSubscriptionsWithFrequency
 
     my @subs = GetSubscriptionsWithFrequency($frequencyid);
 
