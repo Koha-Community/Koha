@@ -9425,6 +9425,19 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.17.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('OpacAdvSearchOptions','pubdate|itemtype|language|sorting|location','Show search options','pubdate|itemtype|language|subtype|sorting|location','multiple');
+    });
+
+    $dbh->do(q{
+        INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('OpacAdvSearchMoreOptions','pubdate|itemtype|language|subtype|sorting|location','Show search options for the expanded view (More options)','pubdate|itemtype|language|subtype|sorting|location','multiple');
+   });
+   print "Upgrade to $DBversion done (Bug 9043: Add system preference OpacAdvSearchOptions and OpacAdvSearchMoreOptions)\n";
+   SetVersion ($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

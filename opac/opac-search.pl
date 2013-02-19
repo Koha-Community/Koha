@@ -306,9 +306,17 @@ if ( $template_type && $template_type eq 'advsearch' ) {
         }
 
     }
-    $template->param(uc(    C4::Context->preference("marcflavour")) => 1,   # we already did this for UNIMARC
-                            advsearch => 1,
-                            search_boxes_loop => \@search_boxes_array);
+
+    my @advsearch_limits = split /\|/, C4::Context->preference('OpacAdvSearchOptions');
+    my @advsearch_more_limits = split /\|/,
+      C4::Context->preference('OpacAdvSearchMoreOptions');
+    $template->param(
+        uc( C4::Context->preference("marcflavour") ) => 1,    # we already did this for UNIMARC
+        advsearch         => 1,
+        search_boxes_loop => \@search_boxes_array,
+        OpacAdvSearchOptions     => \@advsearch_limits,
+        OpacAdvSearchMoreOptions => \@advsearch_more_limits,
+    );
 
     # use the global setting by default
     if ( C4::Context->preference("expandedSearchOption") == 1 ) {

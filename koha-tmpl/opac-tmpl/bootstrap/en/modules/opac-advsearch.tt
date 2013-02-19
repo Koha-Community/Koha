@@ -111,6 +111,7 @@
                     </div>
 
             <div class="row-fluid">
+              [% IF ( ( OpacAdvSearchOptions.grep('itemtype').size > 0 and not expanded_options ) or ( OpacAdvSearchMoreOptions.grep('itemtype').size > 0 and expanded_options ) ) %]
                 <div class="span12">
                     <div id="advsearches" class="toptabs">
                         <ul>
@@ -141,8 +142,10 @@
                         [% END # / FOREACH advancedsearchesloop %]
                     </div> <!-- / #advsearches -->
                 </div> <!-- / .span12 -->
+              [% END %]
 
                 <div class="row-fluid">
+                  [% IF ( ( OpacAdvSearchOptions.grep('pubdate').size > 0 and not expanded_options ) or ( OpacAdvSearchMoreOptions.grep('pubdate').size > 0 and expanded_options ) ) %]
                     <div class="span3">
                         <div id="pubrange">
                             <!-- PUB RANGE OPTION -->
@@ -155,7 +158,9 @@
                             <!-- /PUB RANGE OPTION -->
                         </div>
                     </div>
+                  [% END %]
 
+                  [% IF ( ( OpacAdvSearchOptions.grep('language').size > 0 and not expanded_options ) or ( OpacAdvSearchMoreOptions.grep('language').size > 0 and expanded_options ) ) %]
                     <div class="span3">
                         <div id="langfilter">
                             <fieldset>
@@ -178,7 +183,9 @@
                             </fieldset>
                         </div> <!-- / #langfilter -->
                     </div> <!-- / .span3 -->
+                  [% END %]
 
+                  [% IF ( ( OpacAdvSearchOptions.grep('location').size > 0 and not expanded_options ) or ( OpacAdvSearchMoreOptions.grep('location').size > 0 and expanded_options ) ) %]
                     [% UNLESS ( singleBranchMode ) %]
                         <div class="span3">
                             <!-- AVAILABILITY LIMITS -->
@@ -214,7 +221,9 @@
                             <!-- /AVAILABILITY LIMITS -->
                         </div> <!-- / .span3 -->
                     [% END # / UNLESS singleBranchMode %]
+                  [% END %]
 
+                  [% IF ( ( OpacAdvSearchOptions.grep('sorting').size > 0 and not expanded_options ) or ( OpacAdvSearchMoreOptions.grep('sorting').size > 0 and expanded_options ) ) %]
                     <div class="span3">
                     <!-- RANK LIMITS -->
                         <div id="sortby">
@@ -228,9 +237,10 @@
                         </div>
                     <!-- RANK LIMITS -->
                     </div> <!-- / .span3 -->
+                  [% END %]
                 </div> <!-- / .row-fluid -->
 
-                [% IF ( expanded_options ) %]
+                [% IF ( ( OpacAdvSearchOptions.grep('subtype').size > 0 and not expanded_options ) or ( OpacAdvSearchMoreOptions.grep('subtype').size > 0 and expanded_options ) ) %]
                     <div class="row-fluid">
                         [% IF ( usmarc ) %]
                             <!-- SUBTYPE LIMITS -->
@@ -330,6 +340,7 @@
                 [% END # / IF expanded_options %]
             </div> <!-- / .row-fluid -->
 
+        [% IF ( OpacAdvSearchMoreOptions.size > 0 and expanded_options ) or ( OpacAdvSearchOptions.size > 0 and not expanded_options ) %]
             <div class="row-fluid">
                 <div class="span12">
                     <div class="text-center">
@@ -339,7 +350,7 @@
                     </div>
                 </div> <!-- / .span12 -->
             </div> <!-- / .row-fluid -->
-        </div> <!-- / .container-fluid -->
+        [% END %]
    </div> <!-- / .main -->
 </form>
 
@@ -347,11 +358,13 @@
 [% BLOCK searchbuttons %]
     <p>
         <input class="btn btn-success" type="submit" accesskey="s" name="do" title="Search" value="Search" />
-        [% IF ( expanded_options ) %]
+
+        [% IF expanded_options %]
             <a href="/cgi-bin/koha/opac-search.pl?expanded_options=0" class="btn btn-default more-less-options">Fewer options</a>
-        [% ELSE %]
+        [% ELSIF not expanded_options %]
             <a href="/cgi-bin/koha/opac-search.pl?expanded_options=1" class="btn btn-default more-less-options">More options</a>
         [% END %]
+
         <a href="/cgi-bin/koha/opac-search.pl?do=Clear" class="btn btn-default new-search">New search</a>
     </p>
 [% END %]
