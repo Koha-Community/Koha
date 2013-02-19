@@ -79,8 +79,9 @@ $(document).ready(function() {
 	    $("#reason"+sid).show().find("option[value='']").attr("selected","selected");
 		$("#other_reason"+sid).hide();
     });
-	$("h4.collapse a").click(function(){
-		$(this).parent().parent().find("ol").toggle();
+    $("h4.local_collapse a").click(function(){
+        $(this).parent().parent().find("ol").toggle();
+        return false;
     });
     // http://jqueryui.com/demos/datepicker/#date-range
     var dates = $( "#suggesteddate_from, #suggesteddate_to" ).datepicker({
@@ -126,7 +127,7 @@ $(document).ready(function() {
 // ]]>
 </script>
 <style type="text/css">
-h4.collapse a { font-size : 80%; text-decoration: none; } fieldset.brief ol { display : none; }
+h4.local_collapse a { font-size : 80%; text-decoration: none; } fieldset.brief ol { display : none; }
 .overlay { top: 180px; left: 50%; position: absolute; margin-left: -100px; width: 200px; text-align: center; display: none; margin-top: -10px; background: #eeffd4; padding: .5em; color: #000; } .note { -moz-border-radius: 3px; border-radius:3px; background: transparent url("/intranet-tmpl/prog/img/famfamfam/silk/comment.png") top left no-repeat; padding : 1px 3px 1px 18px; font-size : 90%; }
 </style>[% ELSE %]
 <script type="text/javascript">
@@ -482,7 +483,7 @@ $(document).ready(function() { calcNewsuggTotal(); });
 <h4>Filter by: <a style="font-size:80%;font-weight:normal;" href="/cgi-bin/koha/suggestion/suggestion.pl">[clear]</a></h4>
                 <div style="display:block;" id="limits">
 
-				<fieldset class="brief"><h4 class="collapse"><a href="#">Bibliographic information</a></h4>
+				<fieldset class="brief"><h4 class="local_collapse"><a href="#">Bibliographic information</a></h4>
                    <ol> <li><label for="title"> Title:</label><input type="text" id="title" name="title" value="[% title |html %]" /></li>
                     <li><label for="author"> Author:</label><input type="text" id="author" name="author" value="[% author %]" /></li>
                     <li><label for="isbn"> ISBN:</label><input type="text" id="isbn"  name="isbn" value="[% isbn %]" /></li>
@@ -490,7 +491,7 @@ $(document).ready(function() { calcNewsuggTotal(); });
                     <li><label for="copyrightdate_filter"> Copyright date:</label><input type="text" id="copyrightdate_filter" name="copyrightdate" value="[% copyrightdate %]" /></li>
                     <li><label for="collectiontitle"> Collection title:</label><input type="text" id="collectiontitle" name="collectiontitle" value="[% collectiontitle %]" /></li><li><input type="submit" value="Go" /></li></ol>
                 </fieldset>
-				 <fieldset class="brief"><h4 class="collapse"><a href="#">Suggestion information</a></h4>
+				 <fieldset class="brief"><h4 class="local_collapse"><a href="#">Suggestion information</a></h4>
                     <ol>
                       <li><label for="STATUS"> Status:</label><select name="STATUS" id="STATUS"><option value="">Any</option>
                         [% IF (statusselected_ASKED ) %]<option value="ASKED" selected="selected">Pending</option> 
@@ -544,7 +545,7 @@ $(document).ready(function() { calcNewsuggTotal(); });
                     <li><input type="submit" value="Go" /></li></ol>
                 </fieldset>
 
-				<fieldset class="brief"><h4 class="collapse"><a href="#">Acquisition information</a></h4>
+				<fieldset class="brief"><h4 class="local_collapse"><a href="#">Acquisition information</a></h4>
                     <ol><li><label for="budgetid"> Book fund:</label>
                     <select name="budgetid" id="budgetid"><option value="">Any</option>[% FOREACH budgetid_loo IN budgetid_loop %]
                         [% IF ( budgetid_loo.selected ) %] <option value="[% budgetid_loo.code %]" selected="selected">[% budgetid_loo.desc %]</option>[% ELSE %]<option value="[% budgetid_loo.code %]">[% budgetid_loo.desc %]</option>[% END %]
