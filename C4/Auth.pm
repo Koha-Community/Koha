@@ -1009,7 +1009,8 @@ sub checkauth {
         intranetuserjs     => C4::Context->preference("intranetuserjs"),
         IndependantBranches=> C4::Context->preference("IndependantBranches"),
         AutoLocation       => C4::Context->preference("AutoLocation"),
-		wrongip            => $info{'wrongip'},
+        wrongip            => $info{'wrongip'},
+        opac_css_override  => $ENV{'OPAC_CSS_OVERRIDE'},
     );
 
     $template->param( OpacPublic => C4::Context->preference("OpacPublic"));
