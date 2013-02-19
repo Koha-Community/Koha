@@ -51,7 +51,8 @@ KOHA.OpenLibrary = {
                         $(this).append(img);
                         $(this).append('<div class="results_summary">' + '<a href="' + book.url + '">Preview</a></div>');
                     } else {
-                        img.src = book.cover.small;
+                        img.src = book.cover.medium;
+                        img.height = '110';
                         $(this).append(img);
                     }
                 } else {
