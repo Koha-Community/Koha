@@ -1022,6 +1022,7 @@ sub checkauth {
         PatronSelfRegistration => C4::Context->preference("PatronSelfRegistration"),
         PatronSelfRegistrationDefaultCategory => C4::Context->preference("PatronSelfRegistrationDefaultCategory"),
         persona            => C4::Context->preference("Persona"),
+        opac_css_override => $ENV{'OPAC_CSS_OVERRIDE'},
     );
 
     $template->param( OpacPublic => C4::Context->preference("OpacPublic"));
