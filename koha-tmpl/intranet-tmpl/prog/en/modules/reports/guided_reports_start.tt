@@ -654,28 +654,93 @@ canned reports and writing custom SQL reports.</p>
 </form>
 [% END %]
 
+[% IF ( warn_authval_problem ) %]
+     <form action='/cgi-bin/koha/reports/guided_reports.pl'>
+        <!--Every parameter the user issued is provided as a hidden field for recovery-->
+        <input type='hidden' name='id' value='[% id %]' />
+        <input type='hidden' name='sql' value='[% sql %]' />
+        <input type='hidden' name='reportname' value='[% reportname %]' />
+        <input type='hidden' name='group' value='[% group %]' />
+        <input type='hidden' name='subgroup' value='[% subgroup %]' />
+        <input type='hidden' name='notes' value='[% notes %]' />
+        <input type='hidden' name='cache_expiry' value='[% cache_expiry %]' />
+        <input type='hidden' name='cache_expiry_units' value='[% cache_expiry_units %]' />
+        <input type='hidden' name='public' value='[% public %]' />
+
+        <div class="dialog alert">
+            <h3>Errors found when processing parameters for report: [% name %]</h3>
+            [% FOREACH problematic_authval IN problematic_authvals %]
+                <p>
+                <strong>[% problematic_authval.name %]:</strong> The authorised value category (<strong>[% problematic_authval.authval %]</strong>)
+                    you selected does not exist.
+                </p>
+            [% END %]
+            <!-- Save Anyway Form -->
+            <form action='/cgi-bin/koha/reports/guided_reports.pl'>
+            <!--Every parameter the user issued is provided as a hidden field for recovery-->
+                <input type='hidden' name='id' value='[% id %]' />
+                <input type='hidden' name='sql' value='[% sql %]' />
+                <input type='hidden' name='reportname' value='[% reportname %]' />
+                <input type='hidden' name='group' value='[% group %]' />
+                <input type='hidden' name='subgroup' value='[% subgroup %]' />
+                <input type='hidden' name='notes' value='[% notes %]' />
+                <input type='hidden' name='cache_expiry' value='[% cache_expiry %]' />
+                <input type='hidden' name='cache_expiry_units' value='[% cache_expiry_units %]' />
+                <input type='hidden' name='public' value='[% public %]' />
+            [% IF ( phase_update) %]
+                <input type='hidden' name='phase' value='Update SQL' />
+                <input type="submit" name="save_anyway" class="approve" value="Save anyway" />
+            [% ELSIF ( phase_save) %]
+                <input type='hidden' name='area' value='[% area %]' />
+                <input type='hidden' name='phase' value='Save Report' />
+                <input type="submit" name="save_anyway" class="approve" value="Save anyway" />
+            [% END %]
+            </form>
+            <!-- Go back to editing -->
+            <form action='/cgi-bin/koha/reports/guided_reports.pl'>
+                <input type="button" name='back' class="deny" value="Edit SQL"
+                                    onclick="javascript:history.back()" />
+            </form>
+        </div>
+    </form>
+[% END %]
+
 [% IF ( enter_params ) %]
     <form action='/cgi-bin/koha/reports/guided_reports.pl'>
-        <input type='hidden' name='phase' value='Run this report' />
         <input type='hidden' name='reports' value="[% reports %]" />
+    [% IF ( auth_val_error ) %]
+        <input type='hidden' name='phase' value='Edit SQL' />
+        <div class="dialog alert">
+            <h3>Errors found when processing parameters for report: [% name %]</h3>
+            [% FOREACH auth_val_error IN auth_val_errors %]
+                <p>
+                    <strong>[% auth_val_error.entry %]:</strong> The authorised value category (<strong>[% auth_val_error.auth_val %]</strong>)
+                    you selected does not exist.
+                </p>
+            [% END %]
+        </div>
+        <fieldset class="action"><input type="submit" value="Edit SQL" /></fieldset>
+    [% ELSE %]
+        <input type='hidden' name='phase' value='Run this report' />
         <h1>Enter parameters for report [% name %]:</h1>
         [% IF ( notes ) %]<p>[% notes %]</p>[% END %]
         <fieldset class="rows">
             <ol>
-        [% FOREACH sql_param IN sql_params %]
-            [% IF sql_param.input == 'date' %]
-                <li>
-                <label for="date_[% sql_param_entry %][% loop.count %]">[% sql_param.entry %]:</label> <input id="date_[% sql_param_entry %][% loop.count %]" type="text" value="" size="10" name="sql_params" class="datepicker" />
-                </li>
-            [% ELSIF ( sql_param.input == 'text' ) %]
-                <li><label for="sql_params[% loop.count %]">[% sql_param.entry %]: </label><input id="sql_params[% loop.count %]" type="text" name="sql_params" /></li>
-            [% ELSE %]
-                <li><label for="sql_params_[% sql_param.labelid %]">[% sql_param.entry %]:</label> [% sql_param.input %]</li>
+            [% FOREACH sql_param IN sql_params %]
+                [% IF sql_param.input == 'date' %]
+                    <li>
+                    <label for="date_[% sql_param_entry %][% loop.count %]">[% sql_param.entry %]:</label> <input id="date_[% sql_param_entry %][% loop.count %]" type="text" value="" size="10" name="sql_params" class="datepicker" />
+                    </li>
+                [% ELSIF ( sql_param.input == 'text' ) %]
+                    <li><label for="sql_params[% loop.count %]">[% sql_param.entry %]: </label><input id="sql_params[% loop.count %]" type="text" name="sql_params" /></li>
+                [% ELSE %]
+                    <li><label for="sql_params_[% sql_param.labelid %]">[% sql_param.entry %]:</label> [% sql_param.input %]</li>
+                [% END %]
             [% END %]
-        [% END %]
             </ol>
         </fieldset>
         <fieldset class="action"><input type="submit" value="Run the report" /></fieldset>
+    [% END %]
     </form>
 [% END %]
 
