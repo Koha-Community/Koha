@@ -1,6 +1,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Patrons &rsaquo; Pay Fines for  [% borrower.firstname %] [% borrower.surname %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
 <script type= "text/javascript">
 //<![CDATA[
     $(document).ready(function(){
@@ -10,6 +11,8 @@
                     event.preventDefault();
                 }
         });
+        $('#CheckAll').click(function(){ $("#finest").checkCheckboxes(); return false;});
+        $('#CheckNone').click(function(){ $("#finest").unCheckCheckboxes(); return false;});
     });
 //]]>
 </script>
@@ -40,12 +43,12 @@
 [% IF ( accounts ) %]
     <form action="/cgi-bin/koha/members/pay.pl" method="post">
 	<input type="hidden" name="borrowernumber" id="borrowernumber" value="[% borrower.borrowernumber %]" />
-
-<table>
+<p><span class="checkall"><a id="CheckAll" href="#">Select all</a></span> | <span class="clearall"><a id="CheckNone" href="#">Clear all</a></span></p>
+<table id="finest">
 <thead>
 <tr>
+    <th>&nbsp;</th>
     <th>Fines &amp; charges</th>
-    <th>Sel</th>
 	<th>Description</th>
     <th>Account type</th>
 	<th>Notify id</th>
@@ -66,6 +69,11 @@
 <tr>
     <td>
     [% IF ( line.amountoutstanding > 0 ) %]
+        <input type="checkbox" checked="checked" name="incl_par_[% line.accountno %]" />
+    [% END %]
+    </td>
+    <td>
+    [% IF ( line.amountoutstanding > 0 ) %]
         <input type="submit" name="pay_indiv_[% line.accountno %]" value="Pay" />
         <input type="submit" name="wo_indiv_[% line.accountno %]" value="Write off" />
     [% END %]
@@ -80,11 +88,6 @@
     <input type="hidden" name="notify_id[% line.accountno %]" value="[% line.notify_id %]" />
     <input type="hidden" name="notify_level[% line.accountno %]" value="[% line.notify_level %]" />
     <input type="hidden" name="totals[% line.accountno %]" value="[% line.totals %]" />
-    </td>
-    <td>
-    [% IF ( line.amountoutstanding > 0 ) %]
-        <input type="checkbox" checked="checked" name="incl_par_[% line.accountno %]" />
-    [% END %]
     </td>
     <td>[% line.description %] ([% line.title |html_entity %])</td>
     <td>[% line.accounttype %]</td>
