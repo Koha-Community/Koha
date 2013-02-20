@@ -369,6 +369,112 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
  });
 //]]>
 </script>
+
+[% IF OPACPopupAuthorsSearch %]
+<script type="text/JavaScript" language="JavaScript">
+//<![CDATA[
+    function showAuthors(element){
+        var authornumber = $(element).attr("data-count");
+        // Hide subjects menu if displayed
+        hideMenu(".subjectSearch");
+
+        // Check checkbox related to the clicked link
+        $("#authorsList input[type='checkbox']").attr('checked', false);
+        $("#author_"+authornumber).attr('checked', true);
+
+        makeAuthorRequest();
+
+        // Display menu
+        var left = element.offsetLeft || 0;
+        var top = element.offsetTop || 0;
+        $('.authorSearch').css('display', 'block');
+        $('.authorSearch').css('left', left);
+        $('.authorSearch').css('top', top + 15);
+    }
+
+    function hideMenu(elem) {
+        $(elem).css('display', 'none');
+    }
+
+    function checkAll(checkbox, elem) {
+        var check = $(checkbox).attr('checked') ? true : false;
+        $(elem).find("input[type='checkbox']").attr('checked', check);
+        elem == "#authorsList" ? makeAuthorRequest() : makeSubjectRequest();
+    }
+
+    function makeAuthorRequest(){
+        var values = [];
+
+        $("#authorsList").find("input[type='checkbox']:checked").each(function () {
+            values.push($(this).val());
+        });
+
+        if (values.length > 0) {
+            var request = "/cgi-bin/koha/opac-search.pl?q=" + values.join(' and ');
+            $("#validAuthorSearch").attr("href", request);
+        } else {
+            $("#validAuthorSearch").removeAttr("href");
+        }
+
+    }
+
+    //Subjects
+    function showSubjects(element, subjectnumber, subfieldnumber){
+        // Hide author menu if displayed
+        hideMenu(".authorSearch");
+
+        // Check checkbox related to the clicked link
+        $("#subjectsList input[type='checkbox']").attr('checked', false);
+        $("#subject_"+subjectnumber+"_"+subfieldnumber).attr('checked', true);
+
+        makeSubjectRequest();
+
+        // Display menu
+        var left = element.offsetLeft || 0;
+        var top = element.offsetTop || 0;
+        $('.subjectSearch').css('display', 'block');
+        $('.subjectSearch').css('left', left);
+        $('.subjectSearch').css('top', top + 15);
+    }
+
+    function makeSubjectRequest() {
+        var values = [];
+        $("#subjectsList > ul").each(function() {
+            var all_checked = true;
+            var local_values = [];
+            $(this).find('input[type="checkbox"]').each(function() {
+                if($(this).attr('checked')) {
+                    local_values.push($(this).val());
+                } else {
+                    all_checked = false;
+                }
+            });
+            var authid = $(this).attr('data-authid');
+            if(all_checked && authid) {
+                values.push('an:' + authid);
+            } else {
+                values = values.concat(local_values);
+            }
+        });
+
+        if(values.length > 0) {
+            var request = "/cgi-bin/koha/opac-search.pl?q=" + values.join(' and ');
+            $("#validSubjectSearch").attr('href', request);
+        } else {
+            $("#validSubjectSearch").removeAttr("href");
+        }
+    }
+    $(document).ready(function() {
+        $("a.showauthors").click(function(){
+            showAuthors(this);
+            return false;
+        });
+    });
+
+//]]>
+</script>
+[% END %]
+
 <style type="text/css">
 .branch-info-tooltip {
   display: none;
@@ -434,10 +540,46 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 
     [% IF ( MARCAUTHORS ) %]
     <span class="results_summary"><span class="label">Additional authors:</span>
+        [% IF OPACPopupAuthorsSearch %]
+        <div class="authorSearch" id="authorSearch">
+            <span><b>Select the item(s) to search :</b></span>
+            <br />
+            <input type="checkbox" onchange="checkAll(this, '#authorsList')"> <b>all</b>
+            <hr />
+            <ul id="authorsList">
+                [% FOREACH MARCAUTHOR IN MARCAUTHORS %]
+                    <li>
+                        [% IF (MARCAUTHOR.authoritylink) %]
+                            <input type="checkbox" name="checkbox"
+                                id="author_[% loop.count %]"
+                                onclick="makeAuthorRequest()"
+                                value="an:[% MARCAUTHOR.authoritylink %]" />
+                        [% ELSE %]
+                            <input type="checkbox" name="checkbox"
+                                id="author_[% loop.count %]"
+                                onclick="makeAuthorRequest()"
+                                value="au,wrdl:[% FOREACH SUBFIELD IN MARCAUTHOR.MARCAUTHOR_SUBFIELDS_LOOP %][% SUBFIELD.value |url %][% UNLESS (loop.last) %]+[% END %][% END %]" />
+                        [% END %]
+                        <label for="author_[% loop.count %]">
+                            [% FOREACH SUBFIELD IN MARCAUTHOR.MARCAUTHOR_SUBFIELDS_LOOP %]
+                                [% SUBFIELD.value %]
+                            [% END %]
+                        </label>
+                    </li>
+                [% END %]
+            </ul>
+            <hr />
+            <a href="#" onclick="hideMenu('.authorSearch'); return false">Cancel</a>
+            &nbsp;|&nbsp;
+            <a id="validAuthorSearch">Search</a>
+        </div>
+        [% END %]
         [% FOREACH MARCAUTHOR IN MARCAUTHORS %]
+            [% authorsloop = loop %]
             [% FOREACH MARCAUTHOR_SUBFIELDS_LOO IN MARCAUTHOR.MARCAUTHOR_SUBFIELDS_LOOP %]
                 [% MARCAUTHOR_SUBFIELDS_LOO.separator %]
                 <a title="‡[% MARCAUTHOR_SUBFIELDS_LOO.code %] [% MARCAUTHOR_SUBFIELDS_LOO.value %]"
+                    class="showauthors" data-count="[% authorsloop.count %]"
                     href="/cgi-bin/koha/opac-search.pl?q=[% FOREACH link_loo IN MARCAUTHOR_SUBFIELDS_LOO.link_loop %][% link_loo.operator |url %][% link_loo.limit |url %]:[% link_loo.link |url %][% END %]">[% MARCAUTHOR_SUBFIELDS_LOO.value %]</a>
             [% END %]
             [% IF (MARCAUTHOR.authoritylink) %]
@@ -500,6 +642,45 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
     [% IF ( MARCSUBJCTS ) %]
         <span class="results_summary">
             <span class="label">Subject(s):</span>
+            [% IF OPACPopupAuthorsSearch %]
+            <div class="subjectSearch" >
+                <span><b>Select the item(s) to search :</b></span>
+                <div id="subjectsList">
+                    <input type="checkbox" id="all_subjects"
+                        onchange="checkAll(this, '#subjectsList')" />
+                    <label for="all_subjects">
+                        <b>all</b>
+                    </label>
+                    <hr />
+                    [% FOREACH MARCSUBJCT IN MARCSUBJCTS %]
+                        [% subjectsloop = loop %]
+                        [% IF MARCSUBJCT.authoritylink %]
+                            <ul id="subjectsList[% loop.count %]"
+                                data-authid="[% MARCSUBJCT.authoritylink %]">
+                        [% ELSE %]
+                            <ul id="subjectsList[% loop.count %]">
+                        [% END %]
+                        [% FOREACH SUBFIELD IN MARCSUBJCT.MARCSUBJECT_SUBFIELDS_LOOP %]
+                            <li>
+                                <input type="checkbox" onclick="makeSubjectRequest()"
+                                    name="checkbox"
+                                    id="subject_[% subjectsloop.count %]_[% loop.count %]"
+                                    value="su,wrdl:[% SUBFIELD.value |url %]" />
+                                <label for="subject_[% subjectsloop.count %]_[% loop.count %]">
+                                    [% SUBFIELD.value %]
+                                </label>
+                            </li>
+                        [% END %]
+                        </ul>
+                        <hr />
+                    [% END %]
+                </div>
+                <a href="#"
+                onclick="hideMenu('.subjectSearch'); return false">Cancel</a>
+                &nbsp;|&nbsp;
+                <a id="validSubjectSearch">Search</a>
+            </div>
+            [% END %]
             [% FOREACH MARCSUBJCT IN MARCSUBJCTS %]
                 [% subjectsloop = loop %]
                 [% FOREACH SUBFIELD IN MARCSUBJCT.MARCSUBJECT_SUBFIELDS_LOOP %]
