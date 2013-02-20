@@ -706,17 +706,18 @@ sub AddAuthority {
 
   if ($format eq "UNIMARCAUTH") {
         $record->leader("     nx  j22             ") unless ($record->leader());
-        my $date=POSIX::strftime("%Y%m%d",localtime);    
+        my $date=POSIX::strftime("%Y%m%d",localtime);
+	my $defaultfield100 = C4::Context->preference('UNIMARCAuthorityField100');
     if (my $string=$record->subfield('100',"a")){
       	$string=~s/fre50/frey50/;
       	$record->field('100')->update('a'=>$string);
     }
     elsif ($record->field('100')){
-          $record->field('100')->update('a'=>$date."afrey50      ba0");
+          $record->field('100')->update('a'=>$date.$defaultfield100);
     } else {      
         $record->append_fields(
         MARC::Field->new('100',' ',' '
-            ,'a'=>$date."afrey50      ba0")
+            ,'a'=>$date.$defaultfield100)
         );
     }      
   }
