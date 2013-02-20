@@ -170,6 +170,8 @@ if ($issues){
                 $charges += $ac->{'amountoutstanding'}
                   if $ac->{'accounttype'} eq 'F';
                 $charges += $ac->{'amountoutstanding'}
+                  if $ac->{'accounttype'} eq 'FU';
+                $charges += $ac->{'amountoutstanding'}
                   if $ac->{'accounttype'} eq 'L';
             }
         }
