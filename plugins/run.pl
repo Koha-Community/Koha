@@ -29,8 +29,7 @@ use C4::Dates;
 use C4::Debug;
 use C4::Context;
 
-die("Koha plugins are disabled!")
-  unless C4::Context->preference('UseKohaPlugins');
+my $plugins_enabled = C4::Context->preference('UseKohaPlugins') && C4::Context->config("enable_plugins");
 
 my $cgi = new CGI;
 
@@ -38,7 +37,7 @@ my $class  = $cgi->param('class');
 my $method = $cgi->param('method');
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
-    {   template_name   => "plugins/plugins-home.tmpl",
+    {   template_name   => "plugins/plugins-disabled.tmpl",
         query           => $cgi,
         type            => "intranet",
         authnotrequired => 0,
@@ -47,4 +46,8 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     }
 );
 
-my $plugin = Koha::Plugins::Handler->run( { class => $class, method => $method, cgi => $cgi } );
+if ( $plugins_enabled ) {
+    my $plugin = Koha::Plugins::Handler->run( { class => $class, method => $method, cgi => $cgi } );
+} else {
+    output_html_with_http_headers( $cgi, $cookie, $template->output );
+}

@@ -1,4 +1,5 @@
 #!/usr/bin/perl
+
 #
 # This file is part of Koha.
 #
@@ -30,15 +31,14 @@ use C4::Members;
 use C4::Debug;
 use Koha::Plugins;
 
-die("Koha plugins are disabled!")
-  unless C4::Context->preference('UseKohaPlugins');
+my $plugins_enabled = C4::Context->preference('UseKohaPlugins') && C4::Context->config("enable_plugins");
 
 my $input = new CGI;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-    {   template_name   => "plugins/plugins-upload.tmpl",
-        query           => $input,
-        type            => "intranet",
+    {   template_name => ($plugins_enabled) ? "plugins/plugins-upload.tmpl" : "plugins/plugins-disabled.tt",
+        query         => $input,
+        type          => "intranet",
         authnotrequired => 0,
         flagsrequired   => { plugins => 'manage' },
         debug           => 1,
@@ -53,46 +53,51 @@ my ( $total, $handled, @counts, $tempfile, $tfh );
 
 my %errors;
 
-if ( ( $op eq 'Upload' ) && $uploadfile ) {
-    my $plugins_dir = C4::Context->config("pluginsdir");
+if ($plugins_enabled) {
+    if ( ( $op eq 'Upload' ) && $uploadfile ) {
+        my $plugins_dir = C4::Context->config("pluginsdir");
 
-    my $dirname = File::Temp::tempdir( CLEANUP => 1 );
-    $debug and warn "dirname = $dirname";
+        my $dirname = File::Temp::tempdir( CLEANUP => 1 );
+        $debug and warn "dirname = $dirname";
 
-    my $filesuffix;
-    $filesuffix = $1 if $uploadfilename =~ m/(\..+)$/i;
-    ( $tfh, $tempfile ) = File::Temp::tempfile( SUFFIX => $filesuffix, UNLINK => 1 );
+        my $filesuffix;
+        $filesuffix = $1 if $uploadfilename =~ m/(\..+)$/i;
+        ( $tfh, $tempfile ) = File::Temp::tempfile( SUFFIX => $filesuffix, UNLINK => 1 );
 
-    $debug and warn "tempfile = $tempfile";
+        $debug and warn "tempfile = $tempfile";
 
-    $errors{'NOTKPZ'} = 1 if ( $uploadfilename !~ /\.kpz$/i );
-    $errors{'NOWRITETEMP'}    = 1 unless ( -w $dirname );
-    $errors{'NOWRITEPLUGINS'} = 1 unless ( -w $plugins_dir );
-    $errors{'EMPTYUPLOAD'}    = 1 unless ( length($uploadfile) > 0 );
+        $errors{'NOTKPZ'} = 1 if ( $uploadfilename !~ /\.kpz$/i );
+        $errors{'NOWRITETEMP'}    = 1 unless ( -w $dirname );
+        $errors{'NOWRITEPLUGINS'} = 1 unless ( -w $plugins_dir );
+        $errors{'EMPTYUPLOAD'}    = 1 unless ( length($uploadfile) > 0 );
 
-    if (%errors) {
-        $template->param( ERRORS => [ \%errors ] );
-    } else {
-        while (<$uploadfile>) {
-            print $tfh $_;
-        }
-        close $tfh;
-
-        my $ae = Archive::Extract->new( archive => $tempfile, type => 'zip' );
-        unless ( $ae->extract( to => $plugins_dir ) ) {
-            warn "ERROR: " . $ae->error;
-            $errors{'UZIPFAIL'} = $uploadfilename;
+        if (%errors) {
             $template->param( ERRORS => [ \%errors ] );
-            output_html_with_http_headers $input, $cookie, $template->output;
-            exit;
-        }
-    }
-} elsif ( ( $op eq 'Upload' ) && !$uploadfile ) {
-    warn "Problem uploading file or no file uploaded.";
-}
+        } else {
+            while (<$uploadfile>) {
+                print $tfh $_;
+            }
+            close $tfh;
 
-if ( $uploadfile && !%errors && !$template->param('ERRORS') ) {
-    print $input->redirect("/cgi-bin/koha/plugins/plugins-home.pl");
+            my $ae = Archive::Extract->new( archive => $tempfile, type => 'zip' );
+            unless ( $ae->extract( to => $plugins_dir ) ) {
+                warn "ERROR: " . $ae->error;
+                $errors{'UZIPFAIL'} = $uploadfilename;
+                $template->param( ERRORS => [ \%errors ] );
+                output_html_with_http_headers $input, $cookie, $template->output;
+                exit;
+            }
+        }
+    } elsif ( ( $op eq 'Upload' ) && !$uploadfile ) {
+        warn "Problem uploading file or no file uploaded.";
+    }
+
+    if ( $uploadfile && !%errors && !$template->param('ERRORS') ) {
+        print $input->redirect("/cgi-bin/koha/plugins/plugins-home.pl");
+    } else {
+        output_html_with_http_headers $input, $cookie, $template->output;
+    }
+
 } else {
     output_html_with_http_headers $input, $cookie, $template->output;
 }

@@ -29,25 +29,25 @@ sub new {
 
 sub report {
     my ( $self, $args ) = @_;
-    return 1;
+    return "Koha::Plugin::Test::report";
 }
 
 sub tool {
     my ( $self, $args ) = @_;
-    return 1;
+    return "Koha::Plugin::Test::tool";
 }
 
 sub configure {
     my ( $self, $args ) = @_;
-    return 1;
+    return "Koha::Plugin::Test::configure";;
 }
 
 sub install {
     my ( $self, $args ) = @_;
-    return 1;
+    return "Koha::Plugin::Test::install";
 }
 
 sub uninstall {
     my ( $self, $args ) = @_;
-    return 1;
+    return "Koha::Plugin::Test::uninstall";
 }

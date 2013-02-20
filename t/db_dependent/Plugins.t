@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 15;
+use Test::More tests => 16;
 use File::Basename;
 
 use Module::Load::Conditional qw(can_load);
@@ -31,6 +31,8 @@ ok( $plugin->can('tool'), 'Test plugin can tool' );
 ok( $plugin->can('configure'), 'Test plugin can configure' );
 ok( $plugin->can('install'), 'Test plugin can install' );
 ok( $plugin->can('uninstall'), 'Test plugin can install' );
+
+ok( Koha::Plugins::Handler->run({ class => "Koha::Plugin::Test", method => 'report' }) eq "Koha::Plugin::Test::report", 'Test run plugin report method' );
 
 my $metadata = $plugin->get_metadata();
 ok( $metadata->{'name'} eq 'Test Plugin', 'Test $plugin->get_metadata()' );

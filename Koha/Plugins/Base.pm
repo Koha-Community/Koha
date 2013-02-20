@@ -39,7 +39,7 @@ C4::Plugins::Base - Base Module for plugins
 sub new {
     my ( $class, $args ) = @_;
 
-    die('Plugins not enabled in config') unless ( C4::Context->config("enable_plugins") || $args->{'enable_plugins'} );
+    return unless ( C4::Context->config("enable_plugins") || $args->{'enable_plugins'} );
 
     $args->{'class'} = $class;
     $args->{'template'} = Template->new( { ABSOLUTE => 1 } );

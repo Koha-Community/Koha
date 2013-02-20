@@ -51,7 +51,7 @@ Runs a plugin
 sub run {
     my ( $class, $args ) = @_;
 
-    die('Plugins not enabled in config') unless ( C4::Context->config("enable_plugins") || $args->{'enable_plugins'} );
+    return unless ( C4::Context->config("enable_plugins") || $args->{'enable_plugins'} );
 
     my $plugin_class  = $args->{'class'};
     my $plugin_method = $args->{'method'};
@@ -60,7 +60,7 @@ sub run {
     if ( can_load( modules => { $plugin_class => undef } ) ) {
         my $plugin = $plugin_class->new( { cgi => $cgi } );
         if ( $plugin->can($plugin_method) ) {
-            $plugin->$plugin_method();
+            return $plugin->$plugin_method();
         } else {
             warn "Plugin does not have method $plugin_method";
         }
