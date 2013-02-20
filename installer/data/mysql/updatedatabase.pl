@@ -6421,7 +6421,7 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion ="3.11.00.XXX";
+$DBversion ="3.11.00.021";
 if ( CheckVersion($DBversion) ) {
     $dbh->do("INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES('OPACPopupAuthorsSearch','0','Display the list of authors when clicking on one author.','','YesNo');");
     print "Upgrade to $DBversion done (Bug 5888 - Subject search pop-up for the OPAC)\n";
