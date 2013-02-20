@@ -891,7 +891,9 @@ CREATE TABLE `deleteditems` (
   `notforloan` tinyint(1) NOT NULL default 0, -- authorized value defining why this item is not for loan (MARC21 952$7)
   `damaged` tinyint(1) NOT NULL default 0, -- authorized value defining this item as damaged (MARC21 952$4)
   `itemlost` tinyint(1) NOT NULL default 0, -- authorized value defining this item as lost (MARC21 952$1)
+  `itemlost_on` datetime DEFAULT NULL, -- the date and time an item was last marked as lost, NULL if not lost
   `withdrawn` tinyint(1) NOT NULL default 0, -- authorized value defining this item as withdrawn (MARC21 952$0)
+  `withdrawn_on` datetime DEFAULT NULL, -- the date and time an item was last marked as withdrawn, NULL if not withdrawn
   `itemcallnumber` varchar(255) default NULL, -- call number for this item (MARC21 952$o)
   `coded_location_qualifier` varchar(10) default NULL, -- coded location qualifier(MARC21 952$f)
   `issues` smallint(6) default NULL, -- number of times this item has been checked out
@@ -1184,7 +1186,9 @@ CREATE TABLE `items` ( -- holdings/item information
   `notforloan` tinyint(1) NOT NULL default 0, -- authorized value defining why this item is not for loan (MARC21 952$7)
   `damaged` tinyint(1) NOT NULL default 0, -- authorized value defining this item as damaged (MARC21 952$4)
   `itemlost` tinyint(1) NOT NULL default 0, -- authorized value defining this item as lost (MARC21 952$1)
+  `itemlost_on` datetime DEFAULT NULL, -- the date and time an item was last marked as lost, NULL if not lost
   `withdrawn` tinyint(1) NOT NULL default 0, -- authorized value defining this item as withdrawn (MARC21 952$0)
+  `withdrawn_on` datetime DEFAULT NULL, -- the date and time an item was last marked as withdrawn, NULL if not withdrawn
   `itemcallnumber` varchar(255) default NULL, -- call number for this item (MARC21 952$o)
   `coded_location_qualifier` varchar(10) default NULL, -- coded location qualifier(MARC21 952$f)
   `issues` smallint(6) default NULL, -- number of times this item has been checked out/issued

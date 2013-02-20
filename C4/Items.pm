@@ -31,8 +31,10 @@ use C4::ClassSource;
 use C4::Log;
 use List::MoreUtils qw/any/;
 use YAML qw/Load/;
+use DateTime::Format::MySQL;
 use Data::Dumper; # used as part of logging item record changes, not just for
                   # debugging; so please don't remove this
+use Koha::DateUtils qw/dt_from_string/;
 
 use vars qw($VERSION @ISA @EXPORT);
 
@@ -539,6 +541,31 @@ sub ModItem {
     $item->{'itemnumber'} = $itemnumber or return;
 
     $item->{onloan} = undef if $item->{itemlost};
+
+    my @fields = qw( itemlost withdrawn );
+
+    # Only call GetItem if we need to set an "on" date field
+    if ( $item->{itemlost} || $item->{withdrawn} ) {
+        my $pre_mod_item = GetItem( $item->{'itemnumber'} );
+        for my $field (@fields) {
+            if (    defined( $item->{$field} )
+                and not $pre_mod_item->{$field}
+                and $item->{$field} )
+            {
+                $item->{ $field . '_on' } =
+                  DateTime::Format::MySQL->format_datetime( dt_from_string() );
+            }
+        }
+    }
+
+    # If the field is defined but empty, we are removing and,
+    # and thus need to clear out the 'on' field as well
+    for my $field (@fields) {
+        if ( defined( $item->{$field} ) && !$item->{$field} ) {
+            $item->{ $field . '_on' } = undef;
+        }
+    }
+
 
     _set_derived_columns_for_mod($item);
     _do_column_fixes_for_mod($item);

@@ -7843,6 +7843,16 @@ if(CheckVersion($DBversion)) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.13.00.XXX";
+if ( CheckVersion($DBversion) ) {
+   $dbh->do("ALTER TABLE items ADD itemlost_on DATETIME NULL AFTER itemlost");
+   $dbh->do("ALTER TABLE items ADD withdrawn_on DATETIME NULL AFTER wthdrawn");
+   $dbh->do("ALTER TABLE deleteditems ADD itemlost_on DATETIME NULL AFTER itemlost");
+   $dbh->do("ALTER TABLE deleteditems ADD withdrawn_on DATETIME NULL AFTER wthdrawn");
+   print "Upgrade to $DBversion done (Bug 9673 - Track when items are marked as lost or withdrawn)\n";
+   SetVersion ($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

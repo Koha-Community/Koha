@@ -127,6 +127,7 @@
                         &nbsp;
                     [% END %]
                 </li>
+                [% IF ITEM_DAT.itemlost_on %]<li><span class="label">Lost on:</span>[% ITEM_DAT.itemlost_on | $KohaDates %] &nbsp;</li>[% END %]
             [% END %]
             [% IF ( ITEM_DAT.itemdamagedloop ) %]
             <li><span class="label">Damaged status:</span>
@@ -176,6 +177,7 @@
                     </form>
                 [% END %]
             </li>
+            [% IF ITEM_DAT.withdrawn_on %]<li><span class="label">Withdrawn on:</span>[% ITEM_DAT.withdrawn_on | $KohaDates %] &nbsp;</li>[% END %]
             </ol></div>
             <div class="listgroup"><h4>History</h4>
             <ol class="bibliodetails">
