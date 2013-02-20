@@ -115,6 +115,7 @@ $template->param(
     independant_branch => $my_branch,
 	script_name => $script_name,
   searchfield => $searchfield,
+    branchcode => $branchcode,
 	action => $script_name
 );
 
