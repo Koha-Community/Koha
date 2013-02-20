@@ -72,7 +72,10 @@ navigator.id.watch({
             function (data) {
                 window.location = '/cgi-bin/koha/opac-user.pl';
             }
-        );
+        )
+        .fail(function() { var errstr = _("Could not login, perhaps your Persona email does not match your Koha one");
+            alert(errstr);
+        });
     },
     onlogout: function () {
         window.location = '/cgi-bin/koha/opac-main.pl?logout.x=1';
