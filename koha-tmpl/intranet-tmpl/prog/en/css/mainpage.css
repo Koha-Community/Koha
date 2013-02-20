@@ -72,6 +72,7 @@ ul.biglinks-list li {
 
 ul.biglinks-list li a.icon_general {
     /* Class used for each module link */
+    background-image:url('/intranet-tmpl/prog/img/staff-home-icons-sprite.png');
     display: block;
     float: left;
 
@@ -98,42 +99,44 @@ ul.biglinks-list li a.icon_general {
 
 ul.biglinks-list li a:hover.icon_general {
     /* Class used for each module link hover state */
-    background-position:5px -43px;
     color: #538200;
     border-color: #538200;
 }
 
 /* CSS Sprites
- * Each image contains the normal and the hover state of the icon
- * The hover part starts at 46px below the top:
- *
- *  46px
- * -------
- * |     |
- * |  N  | 46px \
- * |     |       |
- * -------        > 92px
- * |     |       |
- * |  H  | 46px /
- * |     |
- * -------
- *
+ * There is one sprite image which contains all icons in both
+ *  hover states (on and off)
  */
 
 /* Classes used for each individual module link */
-ul.biglinks-list li a.icon_circulation {background-image:url('/intranet-tmpl/prog/img/icon_circulation.png')}
-ul.biglinks-list li a.icon_patrons {background-image:url('/intranet-tmpl/prog/img/icon_patrons.png')}
-ul.biglinks-list li a.icon_search {background-image:url('/intranet-tmpl/prog/img/icon_search.png')}
-ul.biglinks-list li a.icon_lists {background-image:url('/intranet-tmpl/prog/img/icon_lists.png')}
-ul.biglinks-list li a.icon_cataloging {background-image:url('/intranet-tmpl/prog/img/icon_cataloging.png')}
-ul.biglinks-list li a.icon_authorities {background-image:url('/intranet-tmpl/prog/img/icon_authorities.png')}
+ul.biglinks-list li a.icon_circulation {background-position:5px 3px;}
+ul.biglinks-list li a.icon_patrons {background-position:5px -89px;}
+ul.biglinks-list li a.icon_search {background-position:5px -181px;}
+ul.biglinks-list li a.icon_lists {background-position:5px -273px;}
+ul.biglinks-list li a.icon_cataloging {background-position:5px -365px;}
+ul.biglinks-list li a.icon_authorities {background-position:5px -457px;}
 
-ul.biglinks-list li a.icon_serials {background-image:url('/intranet-tmpl/prog/img/icon_serials.png')}
-ul.biglinks-list li a.icon_acquisitions {background-image:url('/intranet-tmpl/prog/img/icon_acquisitions.png')}
-ul.biglinks-list li a.icon_reports {background-image:url('/intranet-tmpl/prog/img/icon_reports.png')}
-ul.biglinks-list li a.icon_administration {background-image:url('/intranet-tmpl/prog/img/icon_administration.png')}
-ul.biglinks-list li a.icon_tools {background-image:url('/intranet-tmpl/prog/img/icon_tools.png')}
-ul.biglinks-list li a.icon_koha {background-image:url('/intranet-tmpl/prog/img/icon_koha.png')}
+ul.biglinks-list li a.icon_serials {background-position:5px -549px;}
+ul.biglinks-list li a.icon_acquisitions {background-position:5px -641px;}
+ul.biglinks-list li a.icon_reports {background-position:5px -733px;}
+ul.biglinks-list li a.icon_administration {background-position:5px -825px;}
+ul.biglinks-list li a.icon_tools {background-position:5px -917px;}
+ul.biglinks-list li a.icon_koha {background-position:5px -1008px;}
+
+/* Classes used for each individual module link on hover*/
+ul.biglinks-list li a:hover.icon_circulation {background-position:5px -43px;}
+ul.biglinks-list li a:hover.icon_patrons {background-position:5px -135px;}
+ul.biglinks-list li a:hover.icon_search {background-position:5px -227px;}
+ul.biglinks-list li a:hover.icon_lists {background-position:5px -319px;}
+ul.biglinks-list li a:hover.icon_cataloging {background-position:5px -411px;}
+ul.biglinks-list li a:hover.icon_authorities {background-position:5px -503px;}
+
+ul.biglinks-list li a:hover.icon_serials {background-position:5px -595px;}
+ul.biglinks-list li a:hover.icon_acquisitions {background-position:5px -687px;}
+ul.biglinks-list li a:hover.icon_reports {background-position:5px -779px;}
+ul.biglinks-list li a:hover.icon_administration {background-position:5px -871px;}
+ul.biglinks-list li a:hover.icon_tools {background-position:5px -963px;}
+ul.biglinks-list li a:hover.icon_koha {background-position:5px -1054px;}
 /* ==== MODULE LINKS - End ==== */
 
 
