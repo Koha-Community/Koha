@@ -283,7 +283,7 @@ function yuiToolbar() {
 						</td>
 							<td>
                               <span>
-								<input type="button" onclick="closeandprint([% basketgroup.id %])" value="Close and Print" />
+								<input type="button" onclick="closeandprint([% basketgroup.id %])" value="Close and print" />
 								<form action="/cgi-bin/koha/acqui/basketgroup.pl" method="get"><input type="hidden" name="op" value="add" /><input type="hidden" name="booksellerid" value="[% basketgroup.booksellerid %]" /><input type="hidden" name="basketgroupid" value="[% basketgroup.id %]" /><input type="submit" value="Edit" /></form>
 								<form action="/cgi-bin/koha/acqui/basketgroup.pl" method="get"><input type="hidden" name="op" value="delete" /><input type="hidden" name="booksellerid" value="[% basketgroup.booksellerid %]" /><input type="hidden" name="basketgroupid" value="[% basketgroup.id %]" /><input type="submit" value="Delete" /></form>
                               </span>
