@@ -40,7 +40,7 @@
       [% END %]
       <h1>Invoice: [% invoicenumber %]</h1>
 
-      <p>Supplier: [% suppliername %]</p>
+      <p>Supplier: <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]">[% suppliername %]</a></p>
       <form action="" method="post">
         <fieldset>
           <label for="shipmentdate">Shipment date:</label>
