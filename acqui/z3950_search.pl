@@ -117,6 +117,7 @@ my $pars= {
         page => $page,
         id => \@id,
         isbn => $isbn,
+        issn => $issn,
         title => $title,
         author => $author,
         dewey => $dewey,
