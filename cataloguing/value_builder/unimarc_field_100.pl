@@ -82,6 +82,9 @@ sub plugin {
 
     my $dbh = C4::Context->dbh;
 
+    my $defaultlanguage = C4::Context->preference("UNIMARCField100Language");
+    $defaultlanguage = "fre" if (!$defaultlanguage || length($defaultlanguage) != 3);
+
     my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         {
             template_name => "cataloguing/value_builder/unimarc_field_100.tmpl",
@@ -92,7 +95,7 @@ sub plugin {
             debug           => 1,
         }
     );
-    $result = '        d        u  y0frey50      ba' unless $result;
+    $result = "        d        u  y0".$defaultlanguage."y50      ba" unless $result;
     my $f1 = substr( $result, 0, 8 );
     if ( $f1 eq '        ' ) {
         my @today = Date::Calc::Today();

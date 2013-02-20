@@ -324,8 +324,10 @@ sub SetMarcUnicodeFlag {
         substr($leader, 9, 1) = 'a';
         $marc_record->leader($leader); 
     } elsif ($marc_flavour =~/UNIMARC/) {
+	my $defaultlanguage = C4::Context->preference("UNIMARCField100Language");
+        $defaultlanguage = "fre" if (!$defaultlanguage || length($defaultlanguage) != 3);
         my $string; 
-		my ($subflength,$encodingposition)=($marc_flavour=~/AUTH/?(21,9):(36,22));
+		my ($subflength,$encodingposition)=($marc_flavour=~/AUTH/?(21,12):(36,25));
 		$string=$marc_record->subfield( 100, "a" );
         if (defined $string && length($string)==$subflength) { 
 			$string = substr $string, 0,$subflength if (length($string)>$subflength);
@@ -333,9 +335,10 @@ sub SetMarcUnicodeFlag {
         else { 
             $string = POSIX::strftime( "%Y%m%d", localtime ); 
             $string =~ s/\-//g; 
-            $string = sprintf( "%-*s", $subflength, $string ); 
+            $string = sprintf( "%-*s", $subflength, $string );
+	    substr ( $string, ($encodingposition - 3), 3, $defaultlanguage);
         } 
-        substr( $string, $encodingposition, 8, "frey50  " ); 
+        substr( $string, $encodingposition, 3, "y50" );
         if ( $marc_record->subfield( 100, "a" ) ) { 
 			$marc_record->field('100')->update(a=>$string);
 		}
@@ -343,7 +346,7 @@ sub SetMarcUnicodeFlag {
             $marc_record->insert_grouped_field( 
                 MARC::Field->new( 100, '', '', "a" => $string ) ); 
         }
-		$debug && warn "encodage: ", substr( $marc_record->subfield(100, 'a'), $encodingposition, 8 );
+		$debug && warn "encodage: ", substr( $marc_record->subfield(100, 'a'), $encodingposition, 3 );
     } else {
         warn "Unrecognized marcflavour: $marc_flavour";
     }

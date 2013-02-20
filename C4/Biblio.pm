@@ -3624,6 +3624,8 @@ sub ModBiblioMarc {
 
     # deal with UNIMARC field 100 (encoding) : create it if needed & set encoding to unicode
     if ( $encoding eq "UNIMARC" ) {
+	my $defaultlanguage = C4::Context->preference("UNIMARCField100Language");
+        $defaultlanguage = "fre" if (!$defaultlanguage || length($defaultlanguage) != 3);
         my $string = $record->subfield( 100, "a" );
         if ( ($string) && ( length( $record->subfield( 100, "a" ) ) == 36 ) ) {
             my $f100 = $record->field(100);
@@ -3632,8 +3634,9 @@ sub ModBiblioMarc {
             $string = POSIX::strftime( "%Y%m%d", localtime );
             $string =~ s/\-//g;
             $string = sprintf( "%-*s", 35, $string );
+	    substr ( $string, 22, 3, $defaultlanguage);
         }
-        substr( $string, 22, 6, "frey50" );
+        substr( $string, 25, 3, "y50" );
         unless ( $record->subfield( 100, "a" ) ) {
             $record->insert_fields_ordered( MARC::Field->new( 100, "", "", "a" => $string ) );
         }
