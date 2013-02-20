@@ -1,17 +1,21 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Authorities &rsaquo; [% IF ( authid ) %]Modify authority #[% authid %] ([% authtypetext %])[% ELSE %]Adding authority ([% authtypetext %])[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<script type="text/javascript" src="[% themelang %]/lib/yui/plugins/bubbling-min.js"></script>
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.fixFloat.js"></script>
 <script type="text/javascript" src="[% themelang %]/js/cataloging.js"></script>
 
 <script type="text/javascript">
 //<![CDATA[
-
+    $(window).load(function(){
+        $("#loading").hide();
+    });
 	 $(document).ready(function() {
         $('#authoritytabs').tabs();
-
-		$("#f").submit(function(){
-			return $(this).Check();
+        $('#toolbar').fixFloat();
+        $("#addauth").click(function(){
+            if(Check()){
+                $("#f").submit();
+            }
 		});
 	 });
 
@@ -87,10 +91,6 @@ function AreMandatoriesNotOk(){
     return false;
 }
 
-/**
- * 
- * 
- */
 function Check(){
     var StrAlert = AreMandatoriesNotOk();
     if( ! StrAlert ){
@@ -118,52 +118,20 @@ function searchauthority() {
     Y = document.forms[0].value.value;
     window.location="/cgi-bin/koha/authorities/authorities-home.pl?op=do_search&type=intranet&authtypecode="+X+"&value="+Y+"&marclist=&and_or=and&excluding=&operator=contains";
 }
+function confirmnotdup(redirect){
+    $("#confirm_not_duplicate").attr("value","1");
+    Check();
+}
 //]]>
 </script>
 <link type="text/css" rel="stylesheet" href="[% themelang %]/css/addbiblio.css" />
 </head>
 <body id="auth_authorities" class="auth">
-<div id="yui-cms-loading">
-      <div id="yui-cms-float">
-          Loading, please wait...
-      </div>
-  </div>
-<script type="text/javascript" src="[% themelang %]/lib/yui/plugins/loading-min.js"></script>
-<script type="text/javascript">
-//<![CDATA[
-(function() {
-	// configuring the loading mask
-	YAHOO.widget.Loading.config({
-		opacity: 0.8
-	});
-})();
-     $(document).ready(function() {
-        yuiToolbar();
-        $("#addauthc,#action").empty();
-     });
-    // YUI Toolbar Functions
-    function yuiToolbar() {
-    var addauthButton = new YAHOO.widget.Button({
-                                            id: "addauth",
-                                            type: "button",
-                                            label: _("Save"),
-                                            container: "addauthc",
-                                            onclick: {fn: Check }
-                                        });
-    var addauthButton2 = new YAHOO.widget.Button({
-                                            id: "addauth2",
-                                            type: "button",
-                                            label: _("Save"),
-                                            container: "action",
-                                            onclick: {fn: Check }
-                                        });
-    }
-    function confirmnotdup(redirect){
-        $("#confirm_not_duplicate").attr("value","1");
-        Check();
-    }
-//]]>
-</script>
+
+<div id="loading">
+   <div>Loading, please wait...</div>
+</div>
+
 [% INCLUDE 'header.inc' %]
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/authorities/authorities-home.pl">Authorities</a> &rsaquo; [% IF ( authid ) %]Modify authority #[% authid %] ([% authtypetext %])[% ELSE %]Adding authority [% authtypetext %][% END %]  </div>
@@ -204,8 +172,9 @@ function searchauthority() {
     <input type="hidden" name="index" value="[% index %]" />
     <input type="hidden" value="0" id="confirm_not_duplicate" name="confirm_not_duplicate" />
 
-	<div id="toolbar">
-	<ul class="toolbar"><li id="addauthc"><input id="addauth" type="submit" value="Save" accesskey="w" /></li></ul></div>
+    <div id="toolbar" class="btn-toolbar">
+        <div class="btn-group"><a href="#" id="addauth" class="btn btn-small" accesskey="w"><i class="icon-hdd"></i> Save</a></div>
+    </div>
 
 <div id="authoritytabs" class="toptabs numbered">
     <ul>
