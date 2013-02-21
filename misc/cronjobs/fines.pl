@@ -42,10 +42,12 @@ use Koha::DateUtils;
 my $help;
 my $verbose;
 my $output_dir;
+my $log;
 
 GetOptions(
     'h|help'    => \$help,
     'v|verbose' => \$verbose,
+    'l|log'     => \$log,
     'o|out:s'   => \$output_dir,
 );
 my $usage = << 'ENDUSAGE';
@@ -58,6 +60,7 @@ calculated but not applied.
 
 This script has the following parameters :
     -h --help: this message
+    -l --log: log the output to a file
     -o --out:  ouput directory for logs (defaults to env or /tmp if !exist)
     -v --verbose
 
@@ -81,11 +84,13 @@ my %is_holiday;
 my $today = DateTime->now( time_zone => C4::Context->tz() );
 my $filename = get_filename($output_dir);
 
-open my $fh, '>>', $filename or croak "Cannot write file $filename: $!";
-print {$fh} join $delim, ( @borrower_fields, @item_fields, @other_fields );
-print {$fh} "\n";
-
-my $counted  = 0;
+my $fh;
+if ($log) {
+    open $fh, '>>', $filename or croak "Cannot write file $filename: $!";
+    print {$fh} join $delim, ( @borrower_fields, @item_fields, @other_fields );
+    print {$fh} "\n";
+}
+my $counted = 0;
 my $overdues = Getoverdues();
 for my $overdue ( @{$overdues} ) {
     if ( !defined $overdue->{borrowernumber} ) {
@@ -126,19 +131,29 @@ for my $overdue ( @{$overdues} ) {
             );
         }
     }
-    my @cells;
-    push @cells,
-      map { defined $borrower->{$_} ? $borrower->{$_} : q{} } @borrower_fields;
-    push @cells, map { $overdue->{$_} } @item_fields;
-    push @cells, $type, $unitcounttotal, $amount;
-    say {$fh} join $delim, @cells;
+    if ($log) {
+        my @cells;
+        push @cells,
+          map { defined $borrower->{$_} ? $borrower->{$_} : q{} }
+          @borrower_fields;
+        push @cells, map { $overdue->{$_} } @item_fields;
+        push @cells, $type, $unitcounttotal, $amount;
+        say {$fh} join $delim, @cells;
+    }
 }
-close $fh;
+if ($log){
+    close $fh;
+}
 
 if ($verbose) {
     my $overdue_items = @{$overdues};
     print <<"EOM";
-Fines assessment -- $today -- Saved to $filename
+Fines assessment -- $today
+EOM
+    if ($log) {
+        say "Saved to $filename";
+    }
+    print <<"EOM";
 Number of Overdue Items:
      counted $overdue_items
     reported $counted
@@ -165,7 +180,7 @@ sub get_filename {
     $name =~ s/\W//;
     $name .= join q{}, q{_}, $today->ymd(), '.log';
     $name = File::Spec->catfile( $directory, $name );
-    if ($verbose) {
+    if ($verbose && $log) {
         say "writing to $name";
     }
     return $name;
