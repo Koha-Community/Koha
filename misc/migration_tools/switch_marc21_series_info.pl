@@ -17,12 +17,14 @@ use C4::Context;
 use Getopt::Long;
 
 my $commit;
+my $add_links;
 my $update_frameworks;
 my $show_help;
 my $verbose;
 my $result = GetOptions(
     'c'      => \$commit,
-    'm'      => \$update_frameworks,
+    'l'      => \$add_links,
+    'f'      => \$update_frameworks,
     'h|help' => \$show_help,
     'v'      => \$verbose,
     );
@@ -53,83 +55,123 @@ unless ( $commit ) {
     else {
         print "There appears to be no series information to change\n";
     }
+    print "Please run this again with the '-c' option to change the records\n";
     exit 0;
 }
 
 print "Changing $num_records MARC records...\n";
+
+#  MARC21 specific
+my %fields = (
+    '440' => {
+        'a' => 'title',
+        'n' => 'number',
+        'p' => 'part',
+        'v' => 'volume',
+        'x' => 'issn',
+        '6' => 'link',
+        '8' => 'ln',
+        'w' => 'control',
+        '0' => 'auth',
+    },
+    '490' => {
+        'a' => 'title',
+        'v' => 'volume',
+        'x' => 'issn',
+        '6' => 'link',
+        '8' => 'ln',
+    },
+    );
 
 $bibs_sth->execute();
 while ( my ( $biblionumber ) = $bibs_sth->fetchrow ) {
     my $framework = GetFrameworkCode( $biblionumber ) || '';
     my ( @newfields );
 
-    #  MARC21 specific
-    my ( $series1_t, $series1_f ) = ( '440', 'a' );
-    my ( $volume1_t, $volume1_f ) = ( '440', 'v' );
-    my ( $number1_t, $number1_f ) = ( '440', 'n' );
-
-    my ( $series2_t, $series2_f ) = ( '490', 'a' );
-    my ( $volume2_t, $volume2_f ) = ( '490', 'v' );
-
     # Get biblio marc
     my $biblio = GetMarcBiblio( $biblionumber );
 
-    foreach my $field ( $biblio->field( $series1_t ) ) {
+    foreach my $field ( $biblio->field( '440' ) ) {
         my @newsubfields;
-        my @series1 = $field->subfield( $series1_f );
-        my @volume1 = $field->subfield( $volume1_f );
-        my @number1 = $field->subfield( $number1_f );
-        my $i = 0;
-        foreach my $num ( @number1 ) {
-            $volume1[$i] .= " " if ( $volume1[$i] );
-            $volume1[$i++] .= $num if ( $num );
+        my @linksubfields;
+        my $has_links = '0';
+        foreach my $subfield ( sort keys %{ $fields{'440'} } ) {
+            my @values = $field->subfield( $subfield );
+
+            if ( $add_links && @values ) {
+                if ( $subfield eq 'w' || $subfield eq '0' ) {
+                    $has_links = '1';
+                }
+                foreach my $v ( @values ) {
+                    push @linksubfields, ( $subfield, $v );
+                }
+            }
+
+            if ( $subfield eq 'a' ) {
+                my @numbers = $field->subfield( 'n' );
+                my @parts = $field->subfield( 'p' );
+                my $i = 0;
+                while ( $i < @numbers || $i < @parts ) {
+                    my @strings = grep {$_} ( $values[$i], $numbers[$i], $parts[$i] );
+                    $values[$i] = join ' ', @strings;
+                    $i++;
+                }
+            }
+
+            if ( $fields{'490'}{$subfield} ) {
+                foreach my $v ( @values ) {
+                    push @newsubfields, ( $subfield, $v );
+                }
+            }
         }
 
-        while ( @series1 || @volume1 ) {
-            if ( @series1 ) {
-                push @newsubfields, ( $series2_f, shift @series1 );
-            }
-            if ( @volume1 ) {
-                push @newsubfields, ( $volume2_f, shift @volume1 );
-            }
+        if ( $has_links && @linksubfields ) {
+            my $link_field = MARC::Field->new(
+                '830',
+                $field->indicator(1), $field->indicator(2),
+                @linksubfields
+                );
+            push @newfields, $link_field;
         }
 
-        my $new_field = MARC::Field->new( $series2_t, '', '',
-                                          @newsubfields );
+        if ( @newsubfields ) {
+            my $new_field = MARC::Field->new( '490', $has_links, '',
+                                              @newsubfields );
+            push @newfields, $new_field;
+        }
 
         $biblio->delete_fields( $field );
-        push @newfields, $new_field;
     }
 
-    foreach my $field ( $biblio->field( $series2_t ) ) {
+    foreach my $field ( $biblio->field( '490' ) ) {
         my @newsubfields;
-        my @series2 = $field->subfield( $series2_f );
-        my @volume2 = $field->subfield( $volume2_f );
+        foreach my $subfield ( sort keys %{ $fields{'490'} } ) {
+            my @values = $field->subfield( $subfield );
 
-        while ( @series2 || @volume2 ) {
-            if ( @series2 ) {
-                push @newsubfields, ( $series1_f, shift @series2 );
-            }
-            if ( @volume2 ) {
-                push @newsubfields, ( $volume1_f, shift @volume2 );
+            if ( $fields{'440'}{$subfield} ) {
+                foreach my $v ( @values ) {
+                    push @newsubfields, ( $subfield, $v );
+                }
             }
         }
 
-        my $new_field = MARC::Field->new( $series1_t, '', '',
-                                          @newsubfields );
+        if ( @newsubfields ) {
+            my $new_field = MARC::Field->new( '440', '', '',
+                                              @newsubfields );
+            push @newfields, $new_field;
+        }
 
         $biblio->delete_fields( $field );
-        push @newfields, $new_field;
     }
     $biblio->insert_fields_ordered( @newfields );
 
-    ModBiblioMarc( $biblio, $biblionumber, $framework );
     if ( $verbose ) {
         print "Changing MARC for biblio number $biblionumber.\n";
     }
     else {
         print ".";
     }
+    ModBiblioMarc( $biblio, $biblionumber, $framework );
 }
 print "\n";
 
@@ -162,10 +204,15 @@ sub print_usage {
 $0: switch MARC21 440 tag and 490 tag contents
 
 Parameters:
-    -c            Commit the changes to the marc records
+    -c            Commit the changes to the marc records.
 
-    -m            Also update the Koha field to MARC framework mappings for the
+    -l            Add 830 tags with authority information from 440.  Otherwise
+                  this information will be ignored.
+
+    -f            Also update the Koha field to MARC framework mappings for the
                   seriestitle and volume Koha fields.
+
+    -v            Show more information as the records are being changed.
 
     --help or -h  show this message.
 
