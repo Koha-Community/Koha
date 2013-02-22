@@ -35,58 +35,12 @@
                 alert(_("Please select image(s) to ") + op + ".");
                 return (-1);
             };
-            function showHideLayers(element, time, action) {
-                setTimeout("changeVisibility('" + element + "','" + action + "')", time)
-            }
-            function changeVisibility(element, action) {
-                document.getElementById(element).style.display=action;
-            }
-    </script>
-    <script type="text/javascript">
-        //<![CDATA[
         $(document).ready(function() {
-            $("#upload_cancel").empty();
-            $("#delete_cancel").empty();
-            $("#upload").empty();
-            $("#delete").empty();
-            buildButtons();
-            showHideLayers('dialog', 5000, 'none')
+            $("#delete").click(function(){
+                return DeleteConfirm();
+            });
          });
-
-        function buildButtons() {
-            new YAHOO.widget.Button({
-                type: "link",
-                label: _("Cancel"),
-                id: "cancelul",
-                href: "/cgi-bin/koha/patroncards/home.pl",
-                container: "upload_cancel"
-            });
-
-            new YAHOO.widget.Button({
-                type: "link",
-                label: _("Cancel"),
-                id: "canceldel",
-                href: "/cgi-bin/koha/patroncards/home.pl",
-                container: "delete_cancel"
-            });
-
-            new YAHOO.widget.Button({
-                type: "submit",
-                label: _("Upload"),
-                id: "uploadsb",
-                value: "upload",
-                container: "upload"
-            });
-
-            var deleteButton = new YAHOO.widget.Button({
-                type: "link",
-                onclick: {fn: DeleteConfirm},
-                label: _("Delete"),
-                id: "deletesb",
-                value: "delete",
-                container: "delete",
-            });
-        }
+        //]]>
     </script>
 </head>
 <body id="pcard_image-manage" class="tools pcard">
@@ -108,9 +62,9 @@
                         <h1>Upload Images</h1>
                         [% IF ( IMPORT_SUCCESSFUL ) %]
                         <div id="dialog" class="dialog message">
-                            <li><h3>Image successfully uploaded.</h3></li>
-                            <li>File: [% SOURCE_FILE %]</li>
-                            <li>Image name: [% IMAGE_NAME %]</li>
+                            <h3>Image successfully uploaded</h3>
+                            <ul><li>File: [% SOURCE_FILE %]</li>
+                            <li>Image name: [% IMAGE_NAME %]</li></ul>
                         </div>
                         [% END %]
                         <form name="upload_images" method="post" action="/cgi-bin/koha/patroncards/image-manage.pl" enctype="multipart/form-data">
@@ -118,6 +72,7 @@
                                 <div class="hint">
                                     <b>NOTE:</b> Only PNG, GIF, JPEG, XPM formats are supported. Images <b>must</b> be less than 500KB.
                                 </div>
+                                <ol>
                                 <li>
                                     <label for="uploadfile">Select the file to upload: </label>
                                     <input type="file" id="uploadfile" name="uploadfile" />
@@ -130,11 +85,12 @@
                                     </div>
                                     <input type="text" id="image_name" name="image_name" size="20" />
                                 </li>
+                                </ol>
                             </fieldset>
                             <fieldset class="action">
                                 <input type="hidden" name="op" value="upload" />
-                                <span id="upload"><input id="uploadsu" type="submit" value="upload" class="submit" /></span>
-                                <span id="upload_cancel"><a id="cancelul" href="/cgi-bin/koha/patroncards/home.pl" class="cancel">Cancel</a></span>
+                                <input id="uploadsu" type="submit" value="Upload" />
+                                <a id="cancelul" href="/cgi-bin/koha/patroncards/home.pl" class="cancel">Cancel</a>
                             </fieldset>
                         </form>
                     </div>
@@ -142,7 +98,7 @@
                     <h1>Delete Images</h1>
                         [% IF ( DELETE_SUCCESSFULL ) %]
                         <div id="dialog" class="dialog message">
-                            <li><h3>Image(s) successfully deleted.</h3></li>
+                            <h3>Image(s) successfully deleted</h3>
                         </div>
                         [% END %]
                         [% IF ( TABLE ) %]
@@ -151,7 +107,6 @@
                                 <div class="hint">
                                     Select one or more images to delete.
                                 </div>
-                           <li>
                                <table>
                                     [% FOREACH TABL IN TABLE %]
                                     [% IF ( TABL.header_fields ) %]
@@ -175,12 +130,11 @@
                                     [% END %]
                                     [% END %]
                                 </table>
-                            </li>
                             </fieldset>
                             <fieldset class="action">
                                 <input type="hidden" name="op" value="delete" />
-                                <span id="delete"><input id="deletesu" type="button" id="delete" onclick="DeleteConfirm()" value="Delete image(s)" /></span>
-                                <span id="delete_cancel"><a id="canceldel" href="/cgi-bin/koha/patroncards/home.pl" class="cancel">Cancel</a></span>
+                                <input type="button" id="delete" value="Delete" />
+                                <a id="canceldel" href="/cgi-bin/koha/patroncards/home.pl" class="cancel">Cancel</a>
                             </fieldset>
                         </form>
                         [% ELSE %]
