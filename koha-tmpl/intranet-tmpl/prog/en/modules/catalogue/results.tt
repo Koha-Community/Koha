@@ -52,16 +52,35 @@ function cartList(){
         return false;
     }
 }
-$(window).load(function() {
-        new YAHOO.widget.Button("cartsubmit", { onclick: { fn: cartList }});
-});
 $(document).ready(function() {
-$("#placeholdc").empty();
+$("#cartsubmit").click(function(){
+    cartList();
+    return false;
+});
+$("#z3950submit").click(function(){
+    PopupZ3950();
+    return false;
+});
+
+$("#searchheader").on("click",".placehold", function(){
+    placeHold();
+    $(".btn-group").removeClass("open");
+    return false;
+});
+$(".placeholdfor").click(function(){
+    holdForPatron();
+    $(".btn-group").removeClass("open");
+    return false;
+});
+$("#forgetholdfor").click(function(){
+    forgetPatron();
+    $(".btn-group").removeClass("open");
+    return false;
+});
 $('#sortbyform').find("input:submit").hide();
 $('#sort_by').change(function() {
         $('#sortbyform').submit();
     });
-$(".addtocart").show();
         var param1 = "<label for=\"addto\">"+_("Add to:")+"<\/label><select name=\"addto\" id=\"addto\"><option value=\"\"><\/option>";
         [% IF ( intranetbookbag ) %]     param1 += "<option value=\"addtocart\">"+_("Cart")+"<\/option>"; [% END %]
         [% IF ( virtualshelves ) %][% IF ( addbarshelves ) %]
@@ -154,14 +173,7 @@ function placeHold () {
 function forgetPatron(){
     $.cookie("holdfor",null, { path: "/", expires: 0 });
     $(".holdforlink").remove();
-    $("#placeholdc").empty();
-    new YAHOO.widget.Button({
-    id: "placehold",
-    type: "button",
-    label: _("Place hold"),
-    container: "placeholdc",
-    onclick: { fn: placeHold }
- });
+    $("#placeholdc").html("<a class=\"btn btn-mini placehold\" href=\"#\"><i class=\"icon-hold\"></i> "+_("Place hold")+"</a>");
 }
 
 function addToList () {
@@ -196,40 +208,14 @@ function GetZ3950Terms(){
 	return strQuery;
 }
 
-YAHOO.util.Event.onContentReady("searchheader", function () {
-        new YAHOO.widget.Button( "z3950submit", { onclick: { fn: PopupZ3950 }});
-        [% IF ( holdfor ) %]
-        var holdFor = function (){
-            $("#holdFor").val("");
-            placeHold();
-        }
-        var holdForPatron = function () {
-            $("#holdFor").val("[% holdfor_cardnumber %]");
-            placeHold();
-        }
-        var HoldForButtonMenu = [
-            { text: _("Place hold"), onclick: { fn: holdFor }},
-            { text: _("Place hold for") + " [% holdfor_firstname %] [% holdfor_surname %] ([% holdfor_cardnumber %])", onclick: { fn: holdForPatron }},
-            { text: _("Forget") + " [% holdfor_firstname %] [% holdfor_surname %] ([% holdfor_cardnumber %])", onclick: { fn: forgetPatron }}];
-
-        var HoldForButton = new YAHOO.widget.Button({
-                type: "split",
-                label: _("Place hold"),
-                name: "holdfor",
-                menu: HoldForButtonMenu,
-                container: "placeholdc",
-                onclick: { fn: holdFor }
-        });
-        [% ELSE %]
-        new YAHOO.widget.Button({
-            id: "placehold",
-            type: "button",
-            label: _("Place hold"),
-            container: "placeholdc",
-            onclick: { fn: placeHold }
-         });
-        [% END %]
-}); // YAHOO onContentReady
+var holdFor = function (){
+    $("#holdFor").val("");
+    placeHold();
+}
+var holdForPatron = function () {
+    $("#holdFor").val("[% holdfor_cardnumber %]");
+    placeHold();
+}
 //]]>
 </script>
 </head>
@@ -296,13 +282,26 @@ YAHOO.util.Event.onContentReady("searchheader", function () {
                 <a href="#" class="highlight_toggle" id="highlight_toggle_on">Highlight</a>
                 |
 		<span class="addto"></span>
-                [% IF ( CAN_user_reserveforothers ) %]
-                    [% IF ( DisplayMultiPlaceHold ) %]
-                  | <span id="placeholdc"><input type="button" id="placehold" onclick="placeHold(); return false;" value="Place Hold"/></span>
-                    [% END %]
+                [% IF ( CAN_user_reserveforothers && DisplayMultiPlaceHold ) %]
+                [% IF ( holdfor ) %]
+                    <div id="placeholdc" class="btn-group">
+                        <button class="btn btn-mini placehold"><i class="icon-hold"></i> Place hold</button>
+                        <button class="btn btn-mini dropdown-toggle" data-toggle="dropdown">
+                        <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a href="#" class="placehold">Place hold</a></li>
+                            <li><a href="#" class="placeholdfor">Place hold for [% holdfor_firstname %] [% holdfor_surname %] ([% holdfor_cardnumber %])</a></li>
+                            <li class="divider"></li>
+                            <li><a href="#" id="forgetholdfor">Forget  [% holdfor_firstname %] [% holdfor_surname %] ([% holdfor_cardnumber %])</a></li>
+                        </ul>
+                    </div>
+                [% ELSE %]
+                    <div id="placeholdc" class="btn-group"><a class="btn btn-mini placehold" href="#"><i class="icon-hold"></i> Place hold</a></div>
+                [% END %]
                 [% END %]
 
-				[% IF ( CAN_user_editcatalogue_edit_catalogue ) %] | <input type="button" id="z3950submit" onclick="PopupZ3950(); return false;" value="Z39.50 Search"/>[% END %]
+                [% IF ( CAN_user_editcatalogue_edit_catalogue ) %] <div class="btn-group"><a class="btn btn-mini" id="z3950submit" href="#"><i class="icon-search"></i> Z39.50 search</a></div>[% END %]
             </div>
         </div>
     [% IF ( stopwords_removed ) %]<div><p class="tip">Ignored the following common words: "[% stopwords_removed %]"<p></div>[% END %]
