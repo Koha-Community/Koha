@@ -2,22 +2,6 @@
     <title>Koha &rsaquo; Tools &rsaquo; Patron card creator &rsaquo; Manage patron card batches</title>
     [% INCLUDE 'doc-head-close.inc' %]
     [% INCLUDE 'greybox.inc' %]
-    <script type="text/javascript">
-        //<![CDATA[
-        $(document).ready(function() {
-            $("#cancel").empty();
-            buildButtons();
-         });
-        function buildButtons() {
-            var cancelButton = new YAHOO.widget.Button({
-                type: "link",
-                href: "/cgi-bin/koha/patroncards/manage.pl?card_element=batch",
-                label: _("Cancel"),
-                id: "cancel",
-                container: "cancel",
-            });
-        };
-    </script>
 </head>
 <body id="pcard_edit-batch" class="tools pcard">
     [% INCLUDE 'header.inc' %]
@@ -76,9 +60,6 @@
                             </div>
                             [% END %]
                         </div>
-                        <fieldset class="action">
-                            <span id="cancel"><a class="cancel" href="/cgi-bin/koha/patroncards/manage.pl?card_element=batch">Cancel</a></span>
-                        </fieldset>
                     </div>
                 </div>
                 <div class="yui-b">
