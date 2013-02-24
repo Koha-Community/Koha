@@ -6089,7 +6089,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 }
 
 $DBversion = "3.10.02.001";
-if ( CheckVersion($DBversion) ) {
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
    $dbh->do(q{
         UPDATE userflags SET flagdesc="<b>Required for staff login.</b> Staff access, allows viewing of catalogue in staff client." where flag="catalogue";
         });
