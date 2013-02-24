@@ -6428,6 +6428,15 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.11.00.022";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(
+"INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES('Persona',0,'Use Mozilla Persona for login','','YesNo')"
+    );
+    print "Upgrade to $DBversion done (Bug 9587 - Allow login via Persona)\n";
+    SetVersion($DBversion);
+}
+
 
 =head1 FUNCTIONS
 

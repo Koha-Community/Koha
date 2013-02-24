@@ -1057,7 +1057,8 @@ sub userenv {
 =head2 set_userenv
 
   C4::Context->set_userenv($usernum, $userid, $usercnum, $userfirstname, 
-                  $usersurname, $userbranch, $userflags, $emailaddress);
+                  $usersurname, $userbranch, $userflags, $emailaddress, $branchprinter,
+                  $persona);
 
 Establish a hash of user environment variables.
 
@@ -1067,7 +1068,7 @@ set_userenv is called in Auth.pm
 
 #'
 sub set_userenv {
-    my ($usernum, $userid, $usercnum, $userfirstname, $usersurname, $userbranch, $branchname, $userflags, $emailaddress, $branchprinter)= @_;
+    my ($usernum, $userid, $usercnum, $userfirstname, $usersurname, $userbranch, $branchname, $userflags, $emailaddress, $branchprinter, $persona)= @_;
     my $var=$context->{"activeuser"} || '';
     my $cell = {
         "number"     => $usernum,
@@ -1080,7 +1081,8 @@ sub set_userenv {
         "branchname" => $branchname,
         "flags"      => $userflags,
         "emailaddress"     => $emailaddress,
-        "branchprinter"    => $branchprinter
+        "branchprinter"    => $branchprinter,
+        "persona"    => $persona,
     };
     $context->{userenv}->{$var} = $cell;
     return $cell;

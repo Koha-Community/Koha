@@ -38,8 +38,8 @@ use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $debug $ldap $cas $cas
 BEGIN {
     sub psgi_env { any { /^psgi\./ } keys %ENV }
     sub safe_exit {
-	if ( psgi_env ) { die 'psgi:exit' }
-	else { exit }
+    if ( psgi_env ) { die 'psgi:exit' }
+    else { exit }
     }
     $VERSION     = 3.07.00.049;   # set version for version checking
 
@@ -53,8 +53,8 @@ BEGIN {
     $caslogout   = C4::Context->preference('casLogout');
     require C4::Auth_with_cas;             # no import
     if ($ldap) {
-	require C4::Auth_with_ldap;
-	import C4::Auth_with_ldap qw(checkpw_ldap);
+    require C4::Auth_with_ldap;
+    import C4::Auth_with_ldap qw(checkpw_ldap);
     }
     if ($cas) {
         import  C4::Auth_with_cas qw(check_api_auth_cas checkpw_cas login_cas logout_cas login_cas_url);
@@ -234,34 +234,34 @@ sub get_template_and_user {
                 }
             }
         }
-		# Logged-in opac search history
-		# If the requested template is an opac one and opac search history is enabled
-		if ($in->{type} eq 'opac' && C4::Context->preference('EnableOpacSearchHistory')) {
-			my $dbh = C4::Context->dbh;
-			my $query = "SELECT COUNT(*) FROM search_history WHERE userid=?";
-			my $sth = $dbh->prepare($query);
-			$sth->execute($borrowernumber);
-			
-			# If at least one search has already been performed
-			if ($sth->fetchrow_array > 0) { 
-			# We show the link in opac
-			$template->param(ShowOpacRecentSearchLink => 1);
-			}
+        # Logged-in opac search history
+        # If the requested template is an opac one and opac search history is enabled
+        if ($in->{type} eq 'opac' && C4::Context->preference('EnableOpacSearchHistory')) {
+            my $dbh = C4::Context->dbh;
+            my $query = "SELECT COUNT(*) FROM search_history WHERE userid=?";
+            my $sth = $dbh->prepare($query);
+            $sth->execute($borrowernumber);
 
-			# And if there's a cookie with searches performed when the user was not logged in, 
-			# we add them to the logged-in search history
-			my $searchcookie = $in->{'query'}->cookie('KohaOpacRecentSearches');
-			if ($searchcookie){
-				$searchcookie = uri_unescape($searchcookie);
-			        my @recentSearches = @{thaw($searchcookie) || []};
-				if (@recentSearches) {
-					my $sth = $dbh->prepare($SEARCH_HISTORY_INSERT_SQL);
-					$sth->execute( $borrowernumber,
-						       $in->{'query'}->cookie("CGISESSID"),
-						       $_->{'query_desc'},
-						       $_->{'query_cgi'},
-						       $_->{'total'},
-						       $_->{'time'},
+            # If at least one search has already been performed
+            if ($sth->fetchrow_array > 0) {
+            # We show the link in opac
+            $template->param(ShowOpacRecentSearchLink => 1);
+            }
+
+            # And if there's a cookie with searches performed when the user was not logged in,
+            # we add them to the logged-in search history
+            my $searchcookie = $in->{'query'}->cookie('KohaOpacRecentSearches');
+            if ($searchcookie){
+                $searchcookie = uri_unescape($searchcookie);
+                    my @recentSearches = @{thaw($searchcookie) || []};
+                if (@recentSearches) {
+                    my $sth = $dbh->prepare($SEARCH_HISTORY_INSERT_SQL);
+                    $sth->execute( $borrowernumber,
+                               $in->{'query'}->cookie("CGISESSID"),
+                               $_->{'query_desc'},
+                               $_->{'query_cgi'},
+                               $_->{'total'},
+                               $_->{'time'},
                             ) foreach @recentSearches;
 
                     # And then, delete the cookie's content
@@ -271,34 +271,34 @@ sub get_template_and_user {
                                                 -HttpOnly => 1,
                                                 -expires => ''
                                              );
-					$cookie = [$cookie, $newsearchcookie];
-				}
-			}
-		}
+                    $cookie = [$cookie, $newsearchcookie];
+                }
+            }
+        }
     }
-	else {	# if this is an anonymous session, setup to display public lists...
+    else {    # if this is an anonymous session, setup to display public lists...
 
         $template->param( sessionID        => $sessionID );
         
         my ($total, $pubshelves) = C4::VirtualShelves::GetSomeShelfNames(undef, 'MASTHEAD');
-	$template->param(
-	    pubshelves     => $total->{pubtotal},
-	    pubshelvesloop => $pubshelves,
-	);
+    $template->param(
+        pubshelves     => $total->{pubtotal},
+        pubshelvesloop => $pubshelves,
+    );
     }
- 	# Anonymous opac search history
- 	# If opac search history is enabled and at least one search has already been performed
- 	if (C4::Context->preference('EnableOpacSearchHistory')) {
-		my $searchcookie = $in->{'query'}->cookie('KohaOpacRecentSearches');
-		if ($searchcookie){
-			$searchcookie = uri_unescape($searchcookie);
-		        my @recentSearches = @{thaw($searchcookie) || []};
- 	    # We show the link in opac
-			if (@recentSearches) {
-				$template->param(ShowOpacRecentSearchLink => 1);
-			}
-	    }
- 	}
+     # Anonymous opac search history
+     # If opac search history is enabled and at least one search has already been performed
+     if (C4::Context->preference('EnableOpacSearchHistory')) {
+        my $searchcookie = $in->{'query'}->cookie('KohaOpacRecentSearches');
+        if ($searchcookie){
+            $searchcookie = uri_unescape($searchcookie);
+                my @recentSearches = @{thaw($searchcookie) || []};
+         # We show the link in opac
+            if (@recentSearches) {
+                $template->param(ShowOpacRecentSearchLink => 1);
+            }
+        }
+     }
 
     if(C4::Context->preference('dateformat')){
         $template->param( dateformat => C4::Context->preference('dateformat') );
@@ -323,6 +323,8 @@ sub get_template_and_user {
             LoginBranchcode              => (C4::Context->userenv?C4::Context->userenv->{"branch"}:"insecure"),
             LoginFirstname               => (C4::Context->userenv?C4::Context->userenv->{"firstname"}:"Bel"),
             LoginSurname                 => C4::Context->userenv?C4::Context->userenv->{"surname"}:"Inconnu",
+            emailaddress                 => C4::Context->userenv?C4::Context->userenv->{"emailaddress"}:undef,
+            loggedinpersona              => C4::Context->userenv?C4::Context->userenv->{"persona"}:undef,
             TagsEnabled                  => C4::Context->preference("TagsEnabled"),
             hide_marc                    => C4::Context->preference("hide_marc"),
             item_level_itypes            => C4::Context->preference('item-level_itypes'),
@@ -333,8 +335,8 @@ sub get_template_and_user {
             using_https                  => $in->{'query'}->https() ? 1 : 0,
             noItemTypeImages             => C4::Context->preference("noItemTypeImages"),
             marcflavour                  => C4::Context->preference("marcflavour"),
+            persona                      => C4::Context->preference("persona"),
     );
-
     if ( $in->{'type'} eq "intranet" ) {
         $template->param(
             AmazonCoverImages           => C4::Context->preference("AmazonCoverImages"),
@@ -557,8 +559,8 @@ sub _version_check {
     my $version;
     # If Version syspref is unavailable, it means Koha is beeing installed,
     # and so we must redirect to OPAC maintenance page or to the WebInstaller
-	# also, if OpacMaintenance is ON, OPAC should redirect to maintenance
-	if (C4::Context->preference('OpacMaintenance') && $type eq 'opac') {
+    # also, if OpacMaintenance is ON, OPAC should redirect to maintenance
+    if (C4::Context->preference('OpacMaintenance') && $type eq 'opac') {
         warn "OPAC Install required, redirecting to maintenance";
         print $query->redirect("/cgi-bin/koha/maintenance.pl");
         safe_exit;
@@ -613,11 +615,12 @@ sub _timeout_syspref {
 
 sub checkauth {
     my $query = shift;
-	$debug and warn "Checking Auth";
+    $debug and warn "Checking Auth";
     # $authnotrequired will be set for scripts which will run without authentication
     my $authnotrequired = shift;
     my $flagsrequired   = shift;
     my $type            = shift;
+    my $persona         = shift;
     $type = 'opac' unless $type;
 
     my $dbh     = C4::Context->dbh;
@@ -634,7 +637,7 @@ sub checkauth {
     # when using authentication against multiple CAS servers, as configured in Auth_cas_servers.yaml
     my $casparam = $query->param('cas');
 
-        if ( $userid = $ENV{'REMOTE_USER'} ) {
+    if ( $userid = $ENV{'REMOTE_USER'} ) {
             # Using Basic Authentication, no cookies required
         $cookie = $query->cookie(
             -name     => 'CGISESSID',
@@ -643,6 +646,9 @@ sub checkauth {
             -HttpOnly => 1,
         );
         $loggedin = 1;
+    }
+    elsif ( $persona ){
+      # we dont want to set a session because we are being called by a persona callback
     }
     elsif ( $sessionID = $query->cookie("CGISESSID") )
     {    # assignment, not comparison
@@ -655,7 +661,8 @@ sub checkauth {
                 $session->param('cardnumber'),   $session->param('firstname'),
                 $session->param('surname'),      $session->param('branch'),
                 $session->param('branchname'),   $session->param('flags'),
-                $session->param('emailaddress'), $session->param('branchprinter')
+                $session->param('emailaddress'), $session->param('branchprinter'),
+                $session->param('persona')
             );
             C4::Context::set_shelves_userenv('bar',$session->param('barshelves'));
             C4::Context::set_shelves_userenv('pub',$session->param('pubshelves'));
@@ -674,9 +681,9 @@ sub checkauth {
             $session->flush;      
             $session->delete();
             C4::Context->_unset_userenv($sessionID);
-			$sessionID = undef;
-			$userid = undef;
-		}
+            $sessionID = undef;
+            $userid = undef;
+        }
         elsif ($logout) {
             # voluntary logout the user
             $session->flush;
@@ -686,9 +693,9 @@ sub checkauth {
             $sessionID = undef;
             $userid    = undef;
 
-	    if ($cas and $caslogout) {
-		logout_cas($query);
-	    }
+        if ($cas and $caslogout) {
+        logout_cas($query);
+        }
         }
         elsif ( $lasttime < time() - $timeout ) {
             # timed logout
@@ -728,6 +735,7 @@ sub checkauth {
         }
     }
     unless ($userid || $sessionID) {
+
         #we initiate a session prior to checking for a username to allow for anonymous sessions...
         my $session = get_session("") or die "Auth ERROR: Cannot get_session()";
         my $sessionID = $session->id;
@@ -741,9 +749,10 @@ sub checkauth {
         if (   ( $cas && $query->param('ticket') )
             || $userid
             || ( my $pki_field = C4::Context->preference('AllowPKIAuth') ) ne
-            'None' )
+            'None' || $persona )
         {
             my $password = $query->param('password');
+
             my ( $return, $cardnumber );
             if ( $cas && $query->param('ticket') ) {
                 my $retuserid;
@@ -752,7 +761,29 @@ sub checkauth {
                 $userid = $retuserid;
                 $info{'invalidCasLogin'} = 1 unless ($return);
             }
-            elsif (
+
+    elsif ($persona) {
+        my $value = $persona;
+
+        # If we're looking up the email, there's a chance that the person
+        # doesn't have a userid. So if there is none, we pass along the
+        # borrower number, and the bits of code that need to know the user
+        # ID will have to be smart enough to handle that.
+        require C4::Members;
+        my @users_info = C4::Members::GetBorrowersWithEmail($value);
+        if (@users_info) {
+
+            # First the userid, then the borrowernum
+            $value = $users_info[0][1] || $users_info[0][0];
+        }
+        else {
+            undef $value;
+        }
+        $return = $value ? 1 : 0;
+        $userid = $value;
+    }
+
+    elsif (
                 ( $pki_field eq 'Common Name' && $ENV{'SSL_CLIENT_S_DN_CN'} )
                 || (   $pki_field eq 'emailAddress'
                     && $ENV{'SSL_CLIENT_S_DN_Email'} )
@@ -780,25 +811,26 @@ sub checkauth {
                     }
                 }
 
-                # 0 for no user, 1 for normal, 2 for demo user.
+
                 $return = $value ? 1 : 0;
                 $userid = $value;
-            }
+
+    }
             else {
                 my $retuserid;
                 ( $return, $cardnumber, $retuserid ) =
                   checkpw( $dbh, $userid, $password, $query );
                 $userid = $retuserid if ( $retuserid ne '' );
-            }
-		if ($return) {
+        }
+        if ($return) {
                #_session_log(sprintf "%20s from %16s logged in  at %30s.\n", $userid,$ENV{'REMOTE_ADDR'},(strftime '%c', localtime));
-            	if ( $flags = haspermission(  $userid, $flagsrequired ) ) {
-					$loggedin = 1;
-            	}
-           		else {
-                	$info{'nopermission'} = 1;
-                	C4::Context->_unset_userenv($sessionID);
-            	}
+                if ( $flags = haspermission(  $userid, $flagsrequired ) ) {
+                    $loggedin = 1;
+                }
+                   else {
+                    $info{'nopermission'} = 1;
+                    C4::Context->_unset_userenv($sessionID);
+                }
                 my ($borrowernumber, $firstname, $surname, $userflags,
                     $branchcode, $branchname, $branchprinter, $emailaddress);
 
@@ -894,33 +926,37 @@ sub checkauth {
                     $session->param('ip',$session->remote_addr());
                     $session->param('lasttime',time());
                 }
+                if ($persona){
+                    $session->param('persona',1);
+                }
                 C4::Context::set_userenv(
                     $session->param('number'),       $session->param('id'),
                     $session->param('cardnumber'),   $session->param('firstname'),
                     $session->param('surname'),      $session->param('branch'),
                     $session->param('branchname'),   $session->param('flags'),
-                    $session->param('emailaddress'), $session->param('branchprinter')
+                    $session->param('emailaddress'), $session->param('branchprinter'),
+                    $session->param('persona')
                 );
 
             }
-        	else {
-            	if ($userid) {
-                	$info{'invalid_username_or_password'} = 1;
-                	C4::Context->_unset_userenv($sessionID);
-            	}
-			}
-        }	# END if ( $userid    = $query->param('userid') )
-		elsif ($type eq "opac") {
+            else {
+                if ($userid) {
+                    $info{'invalid_username_or_password'} = 1;
+                    C4::Context->_unset_userenv($sessionID);
+                }
+            }
+        }    # END if ( $userid    = $query->param('userid') )
+        elsif ($type eq "opac") {
             # if we are here this is an anonymous session; add public lists to it and a few other items...
             # anonymous sessions are created only for the OPAC
-			$debug and warn "Initiating an anonymous session...";
+            $debug and warn "Initiating an anonymous session...";
 
-			# setting a couple of other session vars...
-			$session->param('ip',$session->remote_addr());
-			$session->param('lasttime',time());
-			$session->param('sessiontype','anon');
-		}
-    }	# END unless ($userid)
+            # setting a couple of other session vars...
+            $session->param('ip',$session->remote_addr());
+            $session->param('lasttime',time());
+            $session->param('sessiontype','anon');
+        }
+    }    # END unless ($userid)
     my $insecure = C4::Context->boolean_preference('insecure');
 
     # finished authentification, now respond
@@ -992,6 +1028,7 @@ sub checkauth {
         wrongip            => $info{'wrongip'},
         PatronSelfRegistration => C4::Context->preference("PatronSelfRegistration"),
         PatronSelfRegistrationDefaultCategory => C4::Context->preference("PatronSelfRegistrationDefaultCategory"),
+        persona            => C4::Context->preference("Persona"),
     );
 
     $template->param( OpacPublic => C4::Context->preference("OpacPublic"));
@@ -999,24 +1036,23 @@ sub checkauth {
 
     if ($cas) {
 
-	# Is authentication against multiple CAS servers enabled?
+    # Is authentication against multiple CAS servers enabled?
         if (C4::Auth_with_cas::multipleAuth && !$casparam) {
-	    my $casservers = C4::Auth_with_cas::getMultipleAuth();		    
-	    my @tmplservers;
-	    foreach my $key (keys %$casservers) {
-		push @tmplservers, {name => $key, value => login_cas_url($query, $key) . "?cas=$key" };
-	    }
-	    #warn Data::Dumper::Dumper(\@tmplservers);
-	    $template->param(
-		casServersLoop => \@tmplservers
-	    );
-	} else {
+        my $casservers = C4::Auth_with_cas::getMultipleAuth();
+        my @tmplservers;
+        foreach my $key (keys %$casservers) {
+        push @tmplservers, {name => $key, value => login_cas_url($query, $key) . "?cas=$key" };
+        }
+        $template->param(
+        casServersLoop => \@tmplservers
+        );
+    } else {
         $template->param(
             casServerUrl    => login_cas_url($query),
-	    );
-	}
+        );
+    }
 
-	$template->param(
+    $template->param(
             invalidCasLogin => $info{'invalidCasLogin'}
         );
     }
@@ -1161,23 +1197,23 @@ sub check_api_auth {
         # new login
         my $userid = $query->param('userid');
         my $password = $query->param('password');
-       	my ($return, $cardnumber);
+           my ($return, $cardnumber);
 
-	# Proxy CAS auth
-	if ($cas && $query->param('PT')) {
-	    my $retuserid;
-	    $debug and print STDERR "## check_api_auth - checking CAS\n";
-	    # In case of a CAS authentication, we use the ticket instead of the password
-	    my $PT = $query->param('PT');
-	    ($return,$cardnumber,$userid) = check_api_auth_cas($dbh, $PT, $query);    # EXTERNAL AUTH
-	} else {
-	    # User / password auth
-	    unless ($userid and $password) {
-		# caller did something wrong, fail the authenticateion
-		return ("failed", undef, undef);
-	    }
-	    ( $return, $cardnumber ) = checkpw( $dbh, $userid, $password, $query );
-	}
+    # Proxy CAS auth
+    if ($cas && $query->param('PT')) {
+        my $retuserid;
+        $debug and print STDERR "## check_api_auth - checking CAS\n";
+        # In case of a CAS authentication, we use the ticket instead of the password
+        my $PT = $query->param('PT');
+        ($return,$cardnumber,$userid) = check_api_auth_cas($dbh, $PT, $query);    # EXTERNAL AUTH
+    } else {
+        # User / password auth
+        unless ($userid and $password) {
+        # caller did something wrong, fail the authenticateion
+        return ("failed", undef, undef);
+        }
+        ( $return, $cardnumber ) = checkpw( $dbh, $userid, $password, $query );
+    }
 
         if ($return and haspermission(  $userid, $flagsrequired)) {
             my $session = get_session("");
@@ -1420,7 +1456,7 @@ sub get_session {
         $session = new CGI::Session("driver:PostgreSQL;serializer:yaml;id:md5", $sessionID, {Handle=>$dbh});
     }
     elsif ($storage_method eq 'memcached' && C4::Context->ismemcached){
-	$session = new CGI::Session("driver:memcached;serializer:yaml;id:md5", $sessionID, { Memcached => C4::Context->memcached } );
+    $session = new CGI::Session("driver:memcached;serializer:yaml;id:md5", $sessionID, { Memcached => C4::Context->memcached } );
     }
     else {
         # catch all defaults to tmp should work on all systems
@@ -1440,11 +1476,11 @@ sub checkpw {
 
     if ($cas && $query && $query->param('ticket')) {
         $debug and print STDERR "## checkpw - checking CAS\n";
-	# In case of a CAS authentication, we use the ticket instead of the password
-	my $ticket = $query->param('ticket');
+    # In case of a CAS authentication, we use the ticket instead of the password
+    my $ticket = $query->param('ticket');
         my ($retval,$retcard,$retuserid) = checkpw_cas($dbh, $ticket, $query);    # EXTERNAL AUTH
         ($retval) and return ($retval,$retcard,$retuserid);
-	return 0;
+    return 0;
     }
 
     # INTERNAL AUTH
