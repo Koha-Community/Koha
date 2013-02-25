@@ -1468,10 +1468,10 @@ Returns a hashref from the issuingrules table.
 sub GetIssuingRule {
     my ( $borrowertype, $itemtype, $branchcode ) = @_;
     my $dbh = C4::Context->dbh;
-    my $sth =  $dbh->prepare( "select * from issuingrules where categorycode=? and itemtype=? and branchcode=? and issuelength is not null"  );
+    my $sth =  $dbh->prepare( "select * from issuingrules where categorycode=? and itemtype=? and branchcode=?"  );
     my $irule;
 
-	$sth->execute( $borrowertype, $itemtype, $branchcode );
+    $sth->execute( $borrowertype, $itemtype, $branchcode );
     $irule = $sth->fetchrow_hashref;
     return $irule if defined($irule) ;
 
@@ -2699,8 +2699,10 @@ sub CanBookBeRenewed {
         # by pushing all the elements onto an array and removing the duplicates.
         my @reservable;
         foreach my $b (@borrowernumbers) {
+            my ( $borr ) = C4::Members::GetMemberDetails( $b );
             foreach my $i (@itemnumbers) {
-                if (   IsAvailableForItemLevelRequest($i)
+                my $item   = GetItem($i);
+                if (   IsAvailableForItemLevelRequest($item, $borr)
                     && CanItemBeReserved( $b, $i )
                     && !IsItemOnHoldAndFound($i) )
                 {

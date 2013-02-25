@@ -70,13 +70,13 @@ This modules provides somes functions to deal with reservations.
   The complete workflow is :
   ==== 1st use case ====
   patron request a document, 1st available :                      P >0, F=NULL, I=NULL
-  a library having it run "transfertodo", and clic on the list    
+  a library having it run "transfertodo", and clic on the list
          if there is no transfer to do, the reserve waiting
-         patron can pick it up                                    P =0, F=W,    I=filled 
+         patron can pick it up                                    P =0, F=W,    I=filled
          if there is a transfer to do, write in branchtransfer    P =0, F=T,    I=filled
            The pickup library recieve the book, it check in       P =0, F=W,    I=filled
   The patron borrow the book                                      P =0, F=F,    I=filled
-  
+
   ==== 2nd use case ====
   patron requests a document, a given item,
     If pickup is holding branch                                   P =0, F=W,   I=filled
@@ -106,9 +106,9 @@ BEGIN {
         &GetReserveFee
         &GetReserveInfo
         &GetReserveStatus
-        
+
         &GetOtherReserves
-        
+
         &ModReserveFill
         &ModReserveAffect
         &ModReserve
@@ -116,7 +116,7 @@ BEGIN {
         &ModReserveCancelAll
         &ModReserveMinusPriority
         &MoveReserve
-        
+
         &CheckReserves
         &CanBookBeReserved
 	&CanItemBeReserved
@@ -127,7 +127,9 @@ BEGIN {
         &AutoUnsuspendReserves
 
         &IsAvailableForItemLevelRequest
-        
+
+        &OPACItemHoldsAllowed
+
         &AlterPriority
         &ToggleLowestPriority
 
@@ -140,7 +142,7 @@ BEGIN {
         IsItemOnHoldAndFound
     );
     @EXPORT_OK = qw( MergeHolds );
-}    
+}
 
 =head2 AddReserve
 
@@ -351,7 +353,7 @@ sub GetReservesFromBiblionumber {
                 push( @bibitemno, $bibitemnos );    # FIXME: inefficient: use fetchall_arrayref
             }
             my $count = scalar @bibitemno;
-    
+
             # if we have two or more different specific itemtypes
             # reserved by same person on same day
             my $bdata;
@@ -491,7 +493,7 @@ sub CanBookBeReserved{
 
 sub CanItemBeReserved{
     my ($borrowernumber, $itemnumber) = @_;
-    
+
     my $dbh             = C4::Context->dbh;
     my $ruleitemtype; # itemtype of the matching issuing rule
     my $allowedreserves = 0;
@@ -513,18 +515,18 @@ sub CanItemBeReserved{
     my $itemtypefield = C4::Context->preference('item-level_itypes') ? "itype" : "itemtype";
 
     # we retrieve user rights on this itemtype and branchcode
-    my $sth = $dbh->prepare("SELECT categorycode, itemtype, branchcode, reservesallowed 
-                             FROM issuingrules 
-                             WHERE (categorycode in (?,'*') ) 
-                             AND (itemtype IN (?,'*')) 
-                             AND (branchcode IN (?,'*')) 
-                             ORDER BY 
-                               categorycode DESC, 
-                               itemtype     DESC, 
+    my $sth = $dbh->prepare("SELECT categorycode, itemtype, branchcode, reservesallowed
+                             FROM issuingrules
+                             WHERE (categorycode in (?,'*') )
+                             AND (itemtype IN (?,'*'))
+                             AND (branchcode IN (?,'*'))
+                             ORDER BY
+                               categorycode DESC,
+                               itemtype     DESC,
                                branchcode   DESC;"
                            );
-                           
-    my $querycount ="SELECT 
+
+    my $querycount ="SELECT
                             count(*) as count
                             FROM reserves
                                 LEFT JOIN items USING (itemnumber)
@@ -536,7 +538,7 @@ sub CanItemBeReserved{
     
     my $branchcode   = "";
     my $branchfield  = "reserves.branchcode";
-    
+
     if( $controlbranch eq "ItemHomeLibrary" ){
         $branchfield = "items.homebranch";
         $branchcode = $item->{homebranch};
@@ -553,9 +555,9 @@ sub CanItemBeReserved{
     }else{
         $ruleitemtype = '*';
     }
-    
+
     # we retrieve count
-    
+
     $querycount .= "AND $branchfield = ?";
     
     $querycount .= " AND $itemtypefield = ?" if ($ruleitemtype ne "*");
@@ -566,12 +568,11 @@ sub CanItemBeReserved{
     }else{
         $sthcount->execute($borrowernumber, $branchcode, $ruleitemtype);
     }
-    
+
     my $reservecount = "0";
     if(my $rowcount = $sthcount->fetchrow_hashref()){
         $reservecount = $rowcount->{count};
     }
-    
     # we check if it's ok or not
     if( $reservecount >= $allowedreserves ){
         return 'tooManyReserves';
@@ -949,7 +950,7 @@ sub CheckReserves {
            LEFT JOIN itemtypes   ON biblioitems.itemtype   = itemtypes.itemtype
         ";
     }
-   
+
     if ($item) {
         $sth = $dbh->prepare("$select WHERE itemnumber = ?");
         $sth->execute($item);
@@ -1047,7 +1048,7 @@ sub CancelExpiredReserves {
     # Cancel reserves that have passed their expiration date.
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare( "
-        SELECT * FROM reserves WHERE DATE(expirationdate) < DATE( CURDATE() ) 
+        SELECT * FROM reserves WHERE DATE(expirationdate) < DATE( CURDATE() )
         AND expirationdate IS NOT NULL
         AND found IS NULL
     " );
@@ -1056,7 +1057,7 @@ sub CancelExpiredReserves {
     while ( my $res = $sth->fetchrow_hashref() ) {
         CancelReserve({ reserve_id => $res->{'reserve_id'} });
     }
-  
+
     # Cancel reserves that have been waiting too long
     if ( C4::Context->preference("ExpireReservesMaxPickUpDelay") ) {
         my $max_pickup_delay = C4::Context->preference("ReservesMaxPickUpDelay");
@@ -1182,12 +1183,12 @@ If C<$rank> is 'del', the hold request is cancelled.
 
 If C<$rank> is an integer greater than zero, the priority of
 the request is set to that value.  Since priority != 0 means
-that the item is not waiting on the hold shelf, setting the 
+that the item is not waiting on the hold shelf, setting the
 priority to a non-zero value also sets the request's found
-status and waiting date to NULL. 
+status and waiting date to NULL.
 
 The optional C<$itemnumber> parameter is used only when
-C<$rank> is a non-zero integer; if supplied, the itemnumber 
+C<$rank> is a non-zero integer; if supplied, the itemnumber
 of the hold request is set accordingly; if omitted, the itemnumber
 is cleared.
 
@@ -1299,7 +1300,7 @@ sub ModReserveFill {
                 ";
     $sth = $dbh->prepare($query);
     $sth->execute( $biblionumber, $resdate, $borrowernumber );
-    
+
     # now fix the priority on the others (if the priority wasn't
     # already sorted!)....
     unless ( $priority == 0 ) {
@@ -1344,7 +1345,7 @@ with the biblionumber & the borrowernumber, we can affect the itemnumber
 to the correct reserve.
 
 if $transferToDo is not set, then the status is set to "Waiting" as well.
-otherwise, a transfer is on the way, and the end of the transfer will 
+otherwise, a transfer is on the way, and the end of the transfer will
 take care of the waiting status
 
 =cut
@@ -1505,22 +1506,18 @@ sub GetReserveInfo {
 
 =head2 IsAvailableForItemLevelRequest
 
-  my $is_available = IsAvailableForItemLevelRequest($itemnumber);
+  my $is_available = IsAvailableForItemLevelRequest($item_record,$borrower_record);
 
 Checks whether a given item record is available for an
 item-level hold request.  An item is available if
 
-* it is not lost AND 
-* it is not damaged AND 
-* it is not withdrawn AND 
+* it is not lost AND
+* it is not damaged AND
+* it is not withdrawn AND
 * does not have a not for loan value > 0
 
-Whether or not the item is currently on loan is 
-also checked - if the AllowOnShelfHolds system preference
-is ON, an item can be requested even if it is currently
-on loan to somebody else.  If the system preference
-is OFF, an item that is currently checked out cannot
-be the target of an item-level hold request.
+Need to check the issuingrules onshelfholds column,
+if this is set items on the shelf can be placed on hold
 
 Note that IsAvailableForItemLevelRequest() does not
 check if the staff operator is authorized to place
@@ -1531,48 +1528,80 @@ and canreservefromotherbranches.
 =cut
 
 sub IsAvailableForItemLevelRequest {
-    my $itemnumber = shift;
-   
-    my $item = GetItem($itemnumber);
+    my $item = shift;
+    my $borrower = shift;
 
+    my $dbh = C4::Context->dbh;
     # must check the notforloan setting of the itemtype
     # FIXME - a lot of places in the code do this
     #         or something similar - need to be
     #         consolidated
-    my $dbh = C4::Context->dbh;
-    my $notforloan_query;
+    my $itype = _get_itype($item);
+    my $notforloan_per_itemtype
+      = $dbh->selectrow_array("SELECT notforloan FROM itemtypes WHERE itemtype = ?",
+                              undef, $itype);
+
+    return 0 if
+        $notforloan_per_itemtype ||
+        $item->{itemlost}        ||
+        $item->{notforloan} > 0  ||
+        $item->{wthdrawn}        ||
+        ($item->{damaged} && !C4::Context->preference('AllowHoldsOnDamagedItems'));
+
+
+    return 1 if _OnShelfHoldsAllowed($itype,$borrower->{categorycode},$item->{holdingbranch});
+
+    return $item->{onloan} || GetReserveStatus($item->{itemnumber}) eq "Waiting";
+}
+
+=head2 OnShelfHoldsAllowed
+
+  OnShelfHoldsAllowed($itemtype,$borrowercategory,$branchcode);
+
+Checks issuingrules, using the borrowers categorycode, the itemtype, and branchcode to see if onshelf
+holds are allowed, returns true if so.
+
+=cut
+
+sub OnShelfHoldsAllowed {
+    my ($item, $borrower) = @_;
+
+    my $itype = _get_itype($item);
+    return _OnShelfHoldsAllowed($itype,$borrower->{categorycode},$item->{holdingbranch});
+}
+
+sub _get_itype {
+    my $item = shift;
+
+    my $itype;
     if (C4::Context->preference('item-level_itypes')) {
-        $notforloan_query = "SELECT itemtypes.notforloan
-                             FROM items
-                             JOIN itemtypes ON (itemtypes.itemtype = items.itype)
-                             WHERE itemnumber = ?";
-    } else {
-        $notforloan_query = "SELECT itemtypes.notforloan
-                             FROM items
-                             JOIN biblioitems USING (biblioitemnumber)
-                             JOIN itemtypes USING (itemtype)
-                             WHERE itemnumber = ?";
+        # We cant trust GetItem to honour the syspref, so safest to do it ourselves
+        # When GetItem is fixed, we can remove this
+        $itype = $item->{itype};
     }
-    my $sth = $dbh->prepare($notforloan_query);
-    $sth->execute($itemnumber);
-    my $notforloan_per_itemtype = 0;
-    if (my ($notforloan) = $sth->fetchrow_array) {
-        $notforloan_per_itemtype = 1 if $notforloan;
+    else {
+        # XXX This is a bit dodgy. It relies on biblio itemtype column having different name.
+        # So if we already have a biblioitems join when calling this function,
+        # we don't need to access the database again
+        $itype = $item->{itemtype};
     }
-
-    my $available_per_item = 1;
-    $available_per_item = 0 if $item->{itemlost} or
-                               ( $item->{notforloan} > 0 ) or
-                               ($item->{damaged} and not C4::Context->preference('AllowHoldsOnDamagedItems')) or
-                               $item->{withdrawn} or
-                               $notforloan_per_itemtype;
-
-
-    if (C4::Context->preference('AllowOnShelfHolds')) {
-        return $available_per_item;
-    } else {
-        return ($available_per_item and ($item->{onloan} or GetReserveStatus($itemnumber) eq "Waiting"));
+    unless ($itype) {
+        my $dbh = C4::Context->dbh;
+        my $query = "SELECT itemtype FROM biblioitems WHERE biblioitemnumber = ? ";
+        my $sth = $dbh->prepare($query);
+        $sth->execute($item->{biblioitemnumber});
+        if (my $data = $sth->fetchrow_hashref()){
+            $itype = $data->{itemtype};
+        }
     }
+    return $itype;
+}
+
+sub _OnShelfHoldsAllowed {
+    my ($itype,$borrowercategory,$branchcode) = @_;
+
+    my $rule = C4::Circulation::GetIssuingRule($borrowercategory, $itype, $branchcode);
+    return $rule->{onshelfholds};
 }
 
 =head2 AlterPriority
@@ -1840,7 +1869,7 @@ sub _FixPriority {
     
     $sth = $dbh->prepare( "SELECT reserve_id FROM reserves WHERE lowestPriority = 1 ORDER BY priority" );
     $sth->execute();
-    
+
     unless ( $ignoreSetLowestRank ) {
       while ( my $res = $sth->fetchrow_hashref() ) {
         _FixPriority({
@@ -1908,7 +1937,7 @@ sub _Findgroupreserve {
           unless any{ $data->{borrowernumber} eq $_ } @$ignore_borrowers ;
     }
     return @results if @results;
-    
+
     # check for title-level targetted match
     my $title_level_target_query = qq{
         SELECT reserves.biblionumber        AS biblionumber,
@@ -1993,7 +2022,7 @@ sub _koha_notify_reserve {
 
     my $dbh = C4::Context->dbh;
     my $borrower = C4::Members::GetMember(borrowernumber => $borrowernumber);
-    
+
     # Try to get the borrower's email address
     my $to_address = C4::Members::GetNoticeEmailAddress($borrowernumber);
 
@@ -2111,6 +2140,54 @@ sub _ShiftPriorityByDateAndPriority {
     }
 
     return $new_priority;  # so the caller knows what priority they wind up receiving
+}
+
+=head2 OPACItemHoldsAllowed
+
+  OPACItemHoldsAllowed($item_record,$borrower_record);
+
+Checks issuingrules, using the borrowers categorycode, the itemtype, and branchcode to see
+if specific item holds are allowed, returns true if so.
+
+=cut
+
+sub OPACItemHoldsAllowed {
+    my ($item,$borrower) = @_;
+
+    my $branchcode = $item->{homebranch} or die "No homebranch";
+    my $itype;
+    my $dbh = C4::Context->dbh;
+    if (C4::Context->preference('item-level_itypes')) {
+       # We cant trust GetItem to honour the syspref, so safest to do it ourselves
+       # When GetItem is fixed, we can remove this
+       $itype = $item->{itype};
+    }
+    else {
+       my $query = "SELECT itemtype FROM biblioitems WHERE biblioitemnumber = ? ";
+       my $sth = $dbh->prepare($query);
+       $sth->execute($item->{biblioitemnumber});
+       if (my $data = $sth->fetchrow_hashref()){
+           $itype = $data->{itemtype};
+       }
+    }
+
+    my $query = "SELECT opacitemholds,categorycode,itemtype,branchcode FROM issuingrules WHERE
+          (issuingrules.categorycode = ? OR issuingrules.categorycode = '*')
+        AND
+          (issuingrules.itemtype = ? OR issuingrules.itemtype = '*')
+        AND
+          (issuingrules.branchcode = ? OR issuingrules.branchcode = '*')
+        ORDER BY
+          issuingrules.categorycode desc,
+          issuingrules.itemtype desc,
+          issuingrules.branchcode desc
+       LIMIT 1";
+    my $sth = $dbh->prepare($query);
+    $sth->execute($borrower->{categorycode},$itype,$branchcode);
+    my $data = $sth->fetchrow_hashref;
+    my $opacitemholds = uc substr ($data->{opacitemholds}, 0, 1);
+    return '' if $opacitemholds eq 'N';
+    return $opacitemholds;
 }
 
 =head2 MoveReserve

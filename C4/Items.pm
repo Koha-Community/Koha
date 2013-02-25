@@ -174,6 +174,8 @@ sub GetItem {
         ($data->{'serialseq'} , $data->{'publisheddate'}) = $ssth->fetchrow_array();
     }
 	#if we don't have an items.itype, use biblioitems.itemtype.
+    # FIXME this should respect the itypes systempreference
+    # if (C4::Context->preference('item-level_itypes')) {
 	if( ! $data->{'itype'} ) {
 		my $sth = $dbh->prepare("SELECT itemtype FROM biblioitems  WHERE biblionumber = ?");
 		$sth->execute($data->{'biblionumber'});

@@ -132,6 +132,8 @@ my $sampleissuingrule1 = {
     itemtype           => 'BOOK',
     categorycode       => $samplecat->{categorycode},
     maxsuspensiondays  => 0,
+    onshelfholds       => 0,
+    opacitemholds      => 'N',
 };
 my $sampleissuingrule2 = {
     branchcode         => $samplebranch2->{branchcode},
@@ -158,6 +160,8 @@ my $sampleissuingrule2 = {
     chargename         => 'Null',
     restrictedtype     => 'Null',
     maxsuspensiondays  => 0,
+    onshelfholds       => 1,
+    opacitemholds      => 'Y',
 };
 my $sampleissuingrule3 = {
     branchcode         => $samplebranch1->{branchcode},
@@ -184,6 +188,8 @@ my $sampleissuingrule3 = {
     chargename         => 'Null',
     restrictedtype     => 'Null',
     maxsuspensiondays  => 0,
+    onshelfholds       => 1,
+    opacitemholds      => 'F',
 };
 $query = 'INSERT INTO issuingrules (
                 branchcode,

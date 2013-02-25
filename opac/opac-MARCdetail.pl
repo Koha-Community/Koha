@@ -52,6 +52,8 @@ use CGI qw ( -utf8 );
 use MARC::Record;
 use C4::Biblio;
 use C4::Items;
+use C4::Reserves;
+use C4::Members;
 use C4::Acquisition;
 use C4::Koha;
 use List::MoreUtils qw/any/;
@@ -103,17 +105,21 @@ $template->param(
 );
 
 # get biblionumbers stored in the cart
-my @cart_list;
-
-if($query->cookie("bib_list")){
-    my $cart_list = $query->cookie("bib_list");
-    @cart_list = split(/\//, $cart_list);
+if(my $cart_list = $query->cookie("bib_list")){
+    my @cart_list = split(/\//, $cart_list);
     if ( grep {$_ eq $biblionumber} @cart_list) {
         $template->param( incart => 1 );
     }
 }
 
-$template->param( 'AllowOnShelfHolds' => C4::Context->preference('AllowOnShelfHolds') );
+my $allow_onshelf_holds;
+my $borrower = GetMember( 'borrowernumber' => $loggedinuser );
+for my $itm (@all_items) {
+    $allow_onshelf_holds = C4::Reserves::OnShelfHoldsAllowed($itm, $borrower);
+    last if $allow_onshelf_holds;
+}
+
+$template->param( 'AllowOnShelfHolds' => $allow_onshelf_holds );
 $template->param( 'ItemsIssued' => CountItemsIssued( $biblionumber ) );
 
 # adding the $RequestOnOpac param

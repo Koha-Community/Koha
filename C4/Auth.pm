@@ -471,7 +471,6 @@ sub get_template_and_user {
             OPACAmazonCoverImages                 => C4::Context->preference("OPACAmazonCoverImages"),
             OPACFRBRizeEditions                   => C4::Context->preference("OPACFRBRizeEditions"),
             OpacHighlightedWords                  => C4::Context->preference("OpacHighlightedWords"),
-            OPACItemHolds                         => C4::Context->preference("OPACItemHolds"),
             OPACShelfBrowser                      => "" . C4::Context->preference("OPACShelfBrowser"),
             OPACURLOpenInNewWindow                => "" . C4::Context->preference("OPACURLOpenInNewWindow"),
             OPACUserCSS                           => "" . C4::Context->preference("OPACUserCSS"),

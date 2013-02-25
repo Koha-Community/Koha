@@ -418,7 +418,7 @@
                                                         [% IF Koha.Preference( 'RequestOnOpac' ) == 1 %]
                                                             [% UNLESS ( itemsloo.norequests ) %]
                                                                 [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
-                                                                    [% IF ( AllowOnShelfHolds ) %]
+                                                                    [% IF ( itemsloo.allow_onshelf_holds ) %]
                                                                         <span class="actions"><a class="hold" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=[% itemsloo.biblionumber %]">Place hold</a><!-- add back when available 0 holds in queue--></span>
                                                                     [% ELSE %]
                                                                         [% IF ( itemsloo.itemsissued ) %]

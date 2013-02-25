@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 53;
+use Test::More tests => 56;
 
 use MARC::Record;
 use DateTime::Duration;
@@ -505,6 +505,28 @@ is( C4::Reserves::CanBookBeReserved($borrowernumber, $biblionumber) , 'OK', "Res
        ####
 ####### EO Bug 13113 <<<
        ####
+
+my $item = GetItem($itemnumber);
+
+ok( C4::Reserves::IsAvailableForItemLevelRequest($item, $borrower), "Reserving a book on item level" );
+
+my $itype = C4::Reserves::_get_itype($item);
+my $categorycode = $borrower->{categorycode};
+my $holdingbranch = $item->{holdingbranch};
+my $rule = C4::Circulation::GetIssuingRule($categorycode, $itype, $holdingbranch);
+
+$dbh->do(
+    "UPDATE issuingrules SET onshelfholds = 1 WHERE categorycode = ? AND itemtype= ? and branchcode = ?",
+    undef,
+    $rule->{categorycode}, $rule->{itemtype}, $rule->{branchcode}
+);
+ok( C4::Reserves::OnShelfHoldsAllowed($item, $borrower), "OnShelfHoldsAllowed() allowed" );
+$dbh->do(
+    "UPDATE issuingrules SET onshelfholds = 0 WHERE categorycode = ? AND itemtype= ? and branchcode = ?",
+    undef,
+    $rule->{categorycode}, $rule->{itemtype}, $rule->{branchcode}
+);
+ok( !C4::Reserves::OnShelfHoldsAllowed($item, $borrower), "OnShelfHoldsAllowed() disallowed" );
 
 $dbh->rollback;
 

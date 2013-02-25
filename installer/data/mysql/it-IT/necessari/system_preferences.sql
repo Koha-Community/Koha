@@ -17,7 +17,6 @@
 -- 51 Franklin Street' WHERE variable = ' Fifth Floor' WHERE variable = ' Boston' WHERE variable = ' MA 02110-1301 USA.
 
 UPDATE systempreferences SET value = 'cataloguing' WHERE variable = 'AcqCreateItem';
-UPDATE systempreferences SET value = '1' WHERE variable = 'AllowOnShelfHolds';
 UPDATE systempreferences SET value = '1' WHERE variable = 'AllowRenewalLimitOverride';
 UPDATE systempreferences SET value = 'annual' WHERE variable = 'autoBarcode';
 UPDATE systempreferences SET value = 'email' WHERE variable = 'AutoEmailPrimaryAddress';

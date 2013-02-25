@@ -437,12 +437,7 @@ if ($session->param('busc')) {
 }
 
 
-
-$template->param( 'AllowOnShelfHolds' => C4::Context->preference('AllowOnShelfHolds') );
 $template->param( 'ItemsIssued' => CountItemsIssued( $biblionumber ) );
-
-
-
 $template->param('OPACShowCheckoutName' => C4::Context->preference("OPACShowCheckoutName") );
 $template->param('OPACShowBarcode' => C4::Context->preference("OPACShowBarcode") );
 
@@ -627,15 +622,21 @@ if ( not $viewallitems and @items > $max_items_to_display ) {
         items_count => scalar( @items ),
     );
 } else {
+  my $allow_onshelf_holds;
+  my $borrower = GetMember( 'borrowernumber' => $borrowernumber );
   for my $itm (@items) {
     $itm->{holds_count} = $item_reserves{ $itm->{itemnumber} };
     $itm->{priority} = $priority{ $itm->{itemnumber} };
     $norequests = 0
-       if ( (not $itm->{'withdrawn'} )
-         && (not $itm->{'itemlost'} )
-         && ($itm->{'itemnotforloan'}<0 || not $itm->{'itemnotforloan'} )
-		 && (not $itemtypes->{$itm->{'itype'}}->{notforloan} )
-         && ($itm->{'itemnumber'} ) );
+      if $norequests
+        && !$itm->{'withdrawn'}
+        && !$itm->{'itemlost'}
+        && ($itm->{'itemnotforloan'}<0 || not $itm->{'itemnotforloan'})
+        && !$itemtypes->{$itm->{'itype'}}->{notforloan}
+        && $itm->{'itemnumber'};
+
+    $allow_onshelf_holds = C4::Reserves::OnShelfHoldsAllowed($itm, $borrower)
+      unless $allow_onshelf_holds;
 
     # get collection code description, too
     my $ccode = $itm->{'ccode'};
@@ -691,6 +692,7 @@ if ( not $viewallitems and @items > $max_items_to_display ) {
         push @itemloop, $itm;
     }
   }
+  $template->param( 'AllowOnShelfHolds' => $allow_onshelf_holds );
 }
 
 # Display only one tab if one items list is empty

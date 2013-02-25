@@ -491,7 +491,7 @@ sub GetServices {
     my $canbookbereserved = CanBookBeReserved( $borrower, $biblionumber );
     if ($canbookbereserved eq 'OK') {
         push @availablefor, 'title level hold';
-        my $canitembereserved = IsAvailableForItemLevelRequest($itemnumber);
+        my $canitembereserved = IsAvailableForItemLevelRequest($item, $borrower);
         if ($canitembereserved) {
             push @availablefor, 'item level hold';
         }

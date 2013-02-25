@@ -249,44 +249,31 @@
                                                             </li>
                                                         [% END # / IF OpacHoldNotes %]
 
-                                                        [% IF OPACItemHolds == '1' or OPACItemHolds == 'force' %]
+                                                        <li>
+                                                        </li>
+                                                        [% IF bibitemloo.itemholdable %]
                                                             <!-- ITEM HOLDS -->
                                                             <li class="lradio place_on_type" style="display:none;">
-                                                                <label class="radio inline" for="reqany_[% bibitemloo.biblionumber %]">Next available item</label>
-                                                                [% IF OPACItemHolds == "1" %]
+                                                                [% IF NOT bibitemloo.force_hold %]
+                                                                    <label class="radio inline" for="reqany_[% bibitemloo.biblionumber %]">Next available item</label>
                                                                     <input type="radio" name="reqtype_[% bibitemloo.biblionumber %]"
                                                                             id="reqany_[% bibitemloo.biblionumber %]"
                                                                             class="selectany"
                                                                             value="Any"
                                                                             checked="checked"
                                                                     />
-                                                                [% ELSE %]
-                                                                    <input type="radio" name="reqtype_[% bibitemloo.biblionumber %]"
-                                                                            id="reqany_[% bibitemloo.biblionumber %]"
-                                                                            class="selectany"
-                                                                            value="Any"
-                                                                     />
                                                                 [% END %]
                                                                 <label class="radio inline" for="reqspecific_[% bibitemloo.biblionumber %]">A specific item</label>
-                                                                [% IF OPACItemHolds == "force" %]
-                                                                    <input type="radio" name="reqtype_[% bibitemloo.biblionumber %]"
-                                                                           id="reqspecific_[% bibitemloo.biblionumber %]"
-                                                                           class="selectspecific"
-                                                                           value="Specific"
-                                                                           checked="checked"
-                                                                    />
-                                                                [% ELSE %]
-                                                                    <input type="radio" name="reqtype_[% bibitemloo.biblionumber %]"
-                                                                           id="reqspecific_[% bibitemloo.biblionumber %]"
-                                                                           class="selectspecific"
-                                                                           value="Specific"
-                                                                    />
-                                                                [% END %]
+                                                                <input type="radio" name="reqtype_[% bibitemloo.biblionumber %]"
+                                                                       id="reqspecific_[% bibitemloo.biblionumber %]"
+                                                                       class="selectspecific"
+                                                                       value="Specific"
+                                                                />
                                                             </li>
-                                                        [% END # / IF OPACItemHolds %]
+                                                        [% END # / IF bibitemloo.itemholdable %]
                                                     </ul>
 
-                                                    [% IF OPACItemHolds == '1' || OPACItemHolds == 'force' %]
+                                                    [% IF bibitemloo.itemholdable %]
                                                         <table class="copiesrow table table-bordered table-striped" id="copiesrow_[% bibitemloo.biblionumber %]">
                                                             <caption>Select a specific item:</caption>
                                                             <tr>
@@ -386,7 +373,7 @@
                                                                 </tr>
                                                             [% END # / FOREACH itemLoo IN bibitemloo.itemLoop%]
                                                         </table> <!-- / #copiesrow_[% bibitemloo.biblionumber %] -->
-                                                    [% END # / IF ( OPACItemHolds )%]
+                                                    [% END # / IF ( bibitemloo.itemholdable )%]
                                                 </div> <!-- / #hold-options-[% bibitemloo.biblionumber %] -->
                                             </fieldset>
                                         [% END # / IF ( bibitemloo.holdable ) %]
@@ -466,12 +453,11 @@
         // Hides all 'specific copy' table rows on load.
         $(".copiesrow").hide();
 
-        [% IF OPACItemHolds == 'force' %]
-          [% FOREACH bibitemloo IN bibitemloop %]
-            [% IF bibitemloo.holdable %]
-              $("#toggle-hold-options-[% bibitemloo.biblionumber %]").click();
-              $("#copiesrow_[% bibitemloo.biblionumber %]").show();
-            [% END %]
+        [% FOREACH bibitemloo IN bibitemloop %]
+          [% IF bibitemloo.force_hold %]
+            $("#toggle-hold-options-[% bibitemloo.biblionumber %]").click();
+            $("#reqspecific_[% bibitemloo.biblionumber %]").click();
+            $("#copiesrow_[% bibitemloo.biblionumber %]").show();
           [% END %]
         [% END %]
 
@@ -529,20 +515,16 @@
 
         $("#place_on_hdr").show();
 
-        [% IF OPACItemHolds == '1' %]
-            $(".place_on_type").show();
-            // onload, selectany is checked
-            $(".selectany").attr("checked", "checked");
-        [% END %]
+        $(".place_on_type").show();
+        // onload, selectany is checked
+        $(".selectany").attr("checked", "checked");
 
         // If the user is *allowed* to choose a specific item
         // The first one is preselected
-        [% IF OPACItemHolds =="1" %]
-            $("table.copiesrow").each(function(){
-                var id = suffixOf($(this).attr("id"), "_");
-                select_first_available(id);
-            });
-        [% END %]
+        $("table.copiesrow").each(function(){
+            var id = suffixOf($(this).attr("id"), "_");
+            select_first_available(id);
+        });
 
         // On confirmsjs change
         $(".confirmjs").change(function(){

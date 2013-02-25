@@ -423,6 +423,7 @@ foreach my $biblioNum (@biblionumbers) {
 
     $biblioLoopIter{itemLoop} = [];
     my $numCopiesAvailable = 0;
+    my $numCopiesOPACAvailable = 0;
     foreach my $itemInfo (@{$biblioData->{itemInfos}}) {
         my $itemNum = $itemInfo->{itemnumber};
         my $itemLoopIter = {};
@@ -517,16 +518,27 @@ foreach my $biblioNum (@biblionumbers) {
 
         my $branch = GetReservesControlBranch( $itemInfo, $borr );
 
-        my $branchitemrule = GetBranchItemRule( $branch, $itemInfo->{'itype'} );
-        my $policy_holdallowed = 1;
-
-        if ( $branchitemrule->{'holdallowed'} == 0 ||
-                ( $branchitemrule->{'holdallowed'} == 1 && $borr->{'branchcode'} ne $itemInfo->{'homebranch'} ) ) {
-            $policy_holdallowed = 0;
+        my $policy_holdallowed = !$itemLoopIter->{already_reserved};
+        if ($policy_holdallowed) {
+            if (my $branchitemrule = GetBranchItemRule( $branch, $itemInfo->{'itype'} )) {
+                $policy_holdallowed =
+                  ($branchitemrule->{'holdallowed'} == 2) ||
+                  ($branchitemrule->{'holdallowed'} == 1
+                      && $borr->{'branchcode'} eq $itemInfo->{'homebranch'});
+            } else {
+                $policy_holdallowed = 0; # No rule - not allowed
+            }
         }
+        $policy_holdallowed &&=
+            IsAvailableForItemLevelRequest($itemInfo,$borr) &&
+            CanItemBeReserved($borrowernumber,$itemNum) eq 'OK';
 
-        if (IsAvailableForItemLevelRequest($itemNum) and $policy_holdallowed and CanItemBeReserved($borrowernumber,$itemNum) eq 'OK' and ($itemLoopIter->{already_reserved} ne 1)) {
-            $itemLoopIter->{available} = 1;
+        if ($policy_holdallowed) {
+            if ( my $hold_allowed = OPACItemHoldsAllowed( $itemInfo, $borr ) ) {
+                $itemLoopIter->{available} = 1;
+                $numCopiesOPACAvailable++;
+                $biblioLoopIter{force_hold} = 1 if $hold_allowed eq 'F';
+            }
             $numCopiesAvailable++;
         }
 
@@ -545,23 +557,22 @@ foreach my $biblioNum (@biblionumbers) {
         $numBibsAvailable++;
         $biblioLoopIter{bib_available} = 1;
         $biblioLoopIter{holdable} = 1;
+        $biblioLoopIter{itemholdable} = 1 if $numCopiesOPACAvailable;
     }
     if ($biblioLoopIter{already_reserved}) {
         $biblioLoopIter{holdable} = undef;
-    }
-    my $canReserve = CanBookBeReserved($borrowernumber,$biblioNum);
-    unless ($canReserve eq 'OK') {
-        $biblioLoopIter{holdable} = undef;
-        $biblioLoopIter{ $canReserve } = 1;
+        $biblioLoopIter{itemholdable} = undef;
     }
     if(not C4::Context->preference('AllowHoldsOnPatronsPossessions') and CheckIfIssuedToPatron($borrowernumber,$biblioNum)) {
         $biblioLoopIter{holdable} = undef;
         $biblioLoopIter{already_patron_possession} = 1;
     }
 
-    if( $biblioLoopIter{holdable} ){ $anyholdable++; }
+    $biblioLoopIter{holdable} &&= CanBookBeReserved($borrowernumber,$biblioNum) eq 'OK';
 
     push @$biblioLoop, \%biblioLoopIter;
+
+    $anyholdable = 1 if $biblioLoopIter{holdable};
 }
 
 if ( $numBibsAvailable == 0 || $anyholdable == 0) {

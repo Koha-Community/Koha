@@ -9672,6 +9672,41 @@ if ( CheckVersion($DBversion) ) {
     $dbh->do(q|SET foreign_key_checks = 1|);;
 
     print "Upgrade to $DBversion done (Bug 11944 - Convert DB tables to utf8_unicode_ci)\n";
+    SetVersion($DBversion);
+}
+
+$DBversion = '3.19.00.XXX';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    # First create the column
+    $dbh->do("ALTER TABLE issuingrules ADD onshelfholds tinyint(1) default 0 NOT NULL");
+    # Now update the column
+    if (C4::Context->preference("AllowOnShelfHolds")){
+        # Pref is on, set allow for all rules
+        $dbh->do("UPDATE issuingrules SET onshelfholds=1");
+    } else {
+        # If the preference is not set, leave off
+        $dbh->do("UPDATE issuingrules SET onshelfholds=0");
+    }
+    # Remove from the systempreferences table
+    $dbh->do("DELETE FROM systempreferences WHERE variable = 'AllowOnShelfHolds'");
+
+    # First create the column
+    $dbh->do("ALTER TABLE issuingrules ADD opacitemholds char(1) DEFAULT 'N' NOT NULL");
+    # Now update the column
+    my $opacitemholds = C4::Context->preference("OPACItemHolds") || '';
+    if (lc ($opacitemholds) eq 'force') {
+        $opacitemholds = 'F';
+    }
+    else {
+        $opacitemholds = $opacitemholds ? 'Y' : 'N';
+    }
+    # Set allow for all rules
+    $dbh->do("UPDATE issuingrules SET opacitemholds='$opacitemholds'");
+
+    # Remove from the systempreferences table
+    $dbh->do("DELETE FROM systempreferences WHERE variable = 'OPACItemHolds'");
+
+    print "Upgrade to $DBversion done (Bug 5786 - Move AllowOnShelfHolds to circulation matrix; Move OPACItemHolds system preference to circulation matrix)\n";
     SetVersion ($DBversion);
 }
 

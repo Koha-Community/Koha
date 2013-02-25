@@ -227,14 +227,8 @@ href="/cgi-bin/koha/opac-rss.pl?[% query_cgi %][% limit_cgi |html %]" />
                                                             <p>
                                                                 [% IF Koha.Preference( 'RequestOnOpac' ) == 1 %]
                                                                     [% UNLESS ( GROUP_RESULT.norequests ) %]
-                                                                        [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
-                                                                            [% IF ( AllowOnShelfHolds ) %]
-                                                                                <a class="hold" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=[% GROUP_RESULT.biblionumber %]">Place hold</a><!-- add back when available 0 holds in queue-->
-                                                                            [% ELSE %]
-                                                                                [% IF ( GROUP_RESULT.itemsissued ) %]
-                                                                                    <a class="hold" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=[% GROUP_RESULT.biblionumber %]">Place hold</a><!-- add back when available 0 holds in queue-->
-                                                                                [% END %]
-                                                                            [% END %]
+                                                                        [% IF Koha.Preference( 'opacuserlogin' ) == 1 && GROUP_RESULT.holdable %]
+                                                                            <a class="hold" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=[% GROUP_RESULT.biblionumber %]">Place hold</a><!-- add back when available 0 holds in queue-->
                                                                         [% END %]
                                                                     [% END %]
                                                                 [% END %]

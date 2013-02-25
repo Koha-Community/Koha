@@ -155,7 +155,6 @@ sub BuildReport {
         AllowHoldPolicyOverride
         AllowHoldsOnDamagedItems
         AllowHoldsOnPatronsPossessions
-        AllowOnShelfHolds
         AutoResumeSuspendedHolds
         canreservefromotherbranches
         decreaseLoanHighHolds
@@ -265,7 +264,6 @@ sub BuildReport {
         AllowPurchaseSuggestionBranchChoice
         OpacAllowPublicListCreation
         OpacAllowSharingPrivateLists
-        OPACItemHolds
         OpacRenewalAllowed
         OpacRenewalBranch
         OPACViewOthersSuggestions

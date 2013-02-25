@@ -42,6 +42,8 @@ use C4::Branch; # GetBranches
 use C4::SocialData;
 use C4::Ratings;
 use C4::External::OverDrive;
+use C4::Members;
+use C4::Reserves;
 
 use POSIX qw(ceil floor strftime);
 use URI::Escape;
@@ -136,7 +138,7 @@ if (C4::Context->preference("marcflavour") eq "UNIMARC" ) {
 elsif (C4::Context->preference("marcflavour") eq "MARC21" ) {
     $template->param('usmarc' => 1);
 }
-$template->param( 'AllowOnShelfHolds' => C4::Context->preference('AllowOnShelfHolds') );
+
 $template->param( 'OPACNoResultsFound' => C4::Context->preference('OPACNoResultsFound') );
 
 $template->param(
@@ -567,8 +569,11 @@ if ($@ || $error) {
     exit;
 }
 
+my $borrower = $borrowernumber ? GetMember( borrowernumber => $borrowernumber ) : undef;
+
 # At this point, each server has given us a result set
 # now we build that set for template display
+my %allow_onshelf_holds;
 my @sup_results_array;
 for (my $i=0;$i<@servers;$i++) {
     my $server = $servers[$i];
@@ -583,11 +588,23 @@ for (my $i=0;$i<@servers;$i++) {
                 # we need to set the offset parameter of searchResults to 0
                 my @group_results = searchResults( 'opac', $query_desc, $group->{'group_count'},$results_per_page, 0, $scan,
                                                    $group->{"RECORDS"});
+                if ($borrower) {
+                    $_->{holdable} =
+                        IsAvailableForItemLevelRequest($_, $borrower) &&
+                        OPACItemHoldsAllowed($_, $borrower)
+                      foreach @group_results;
+                }
                 push @newresults, { group_label => $group->{'group_label'}, GROUP_RESULTS => \@group_results };
             }
         } else {
             @newresults = searchResults('opac', $query_desc, $hits, $results_per_page, $offset, $scan,
                                         $results_hashref->{$server}->{"RECORDS"});
+            if ($borrower) {
+                $_->{holdable} =
+                    IsAvailableForItemLevelRequest($_, $borrower) &&
+                    OPACItemHoldsAllowed($_, $borrower)
+                  foreach @newresults;
+            }
         }
         $hits = 0 unless @newresults;
 

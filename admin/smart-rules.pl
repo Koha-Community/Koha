@@ -101,12 +101,12 @@ elsif ($op eq 'delete-branch-item') {
 # save the values entered
 elsif ($op eq 'add') {
     my $sth_search = $dbh->prepare('SELECT COUNT(*) AS total FROM issuingrules WHERE branchcode=? AND categorycode=? AND itemtype=?');
-    my $sth_insert = $dbh->prepare('INSERT INTO issuingrules (branchcode, categorycode, itemtype, maxissueqty, renewalsallowed, renewalperiod, norenewalbefore, auto_renew, reservesallowed, issuelength, lengthunit, hardduedate, hardduedatecompare, fine, finedays, maxsuspensiondays, firstremind, chargeperiod,rentaldiscount, overduefinescap) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)');
-    my $sth_update=$dbh->prepare("UPDATE issuingrules SET fine=?, finedays=?, maxsuspensiondays=?, firstremind=?, chargeperiod=?, maxissueqty=?, renewalsallowed=?, renewalperiod=?, norenewalbefore=?, auto_renew=?, reservesallowed=?, issuelength=?, lengthunit = ?, hardduedate=?, hardduedatecompare=?, rentaldiscount=?, overduefinescap=?  WHERE branchcode=? AND categorycode=? AND itemtype=?");
+    my $sth_insert = $dbh->prepare('INSERT INTO issuingrules (branchcode, categorycode, itemtype, maxissueqty, renewalsallowed, reservesallowed, norenewalbefore, auto_renew, reservesallowed, issuelength, lengthunit, hardduedate, hardduedatecompare, fine, finedays, maxsuspensiondays, firstremind, chargeperiod,rentaldiscount, onshelfholds, opacitemholds, overduefinescap) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)');
+    my $sth_update=$dbh->prepare("UPDATE issuingrules SET fine=?, finedays=?, maxsuspensiondays=?, firstremind=?, chargeperiod=?, maxissueqty=?, renewalsallowed=?, renewalperiod=?, norenewalbefore=?, auto_renew=?, reservesallowed=?, issuelength=?, lengthunit=?, hardduedate=?, hardduedatecompare=?, rentaldiscount=?, onshelfholds=?, opacitemholds=?, overduefinescap=? WHERE branchcode=? AND categorycode=? AND itemtype=?");
     
     my $br = $branch; # branch
     my $bor  = $input->param('categorycode'); # borrower category
-    my $cat  = $input->param('itemtype');     # item type
+    my $itemtype  = $input->param('itemtype');     # item type
     my $fine = $input->param('fine');
     my $finedays     = $input->param('finedays');
     my $maxsuspensiondays = $input->param('maxsuspensiondays');
@@ -120,6 +120,7 @@ elsif ($op eq 'add') {
     $norenewalbefore = undef if $norenewalbefore eq '0' or $norenewalbefore =~ /^\s*$/;
     my $auto_renew = $input->param('auto_renew') eq 'yes' ? 1 : 0;
     my $reservesallowed  = $input->param('reservesallowed');
+    my $onshelfholds     = $input->param('onshelfholds') || 0;
     $maxissueqty =~ s/\s//g;
     $maxissueqty = undef if $maxissueqty !~ /^\d+/;
     my $issuelength  = $input->param('issuelength');
@@ -128,15 +129,16 @@ elsif ($op eq 'add') {
     $hardduedate = format_date_in_iso($hardduedate);
     my $hardduedatecompare = $input->param('hardduedatecompare');
     my $rentaldiscount = $input->param('rentaldiscount');
+    my $opacitemholds = $input->param('opacitemholds') || 0;
     my $overduefinescap = $input->param('overduefinescap') || undef;
-    $debug and warn "Adding $br, $bor, $cat, $fine, $maxissueqty";
+    $debug and warn "Adding $br, $bor, $itemtype, $fine, $maxissueqty";
 
-    $sth_search->execute($br,$bor,$cat);
+    $sth_search->execute($br,$bor,$itemtype);
     my $res = $sth_search->fetchrow_hashref();
     if ($res->{total}) {
-        $sth_update->execute($fine, $finedays, $maxsuspensiondays, $firstremind, $chargeperiod, $maxissueqty, $renewalsallowed, $renewalperiod, $norenewalbefore, $auto_renew, $reservesallowed, $issuelength,$lengthunit, $hardduedate,$hardduedatecompare,$rentaldiscount,$overduefinescap, $br,$bor,$cat);
+        $sth_update->execute($fine, $finedays, $maxsuspensiondays, $firstremind, $chargeperiod, $maxissueqty, $renewalsallowed, $renewalperiod, $norenewalbefore, $auto_renew, $reservesallowed, $issuelength,$lengthunit, $hardduedate,$hardduedatecompare,$rentaldiscount, $onshelfholds, $opacitemholds, $overduefinescap, $br,$bor,$itemtype);
     } else {
-        $sth_insert->execute($br,$bor,$cat,$maxissueqty,$renewalsallowed, $renewalperiod, $norenewalbefore, $auto_renew, $reservesallowed,$issuelength,$lengthunit,$hardduedate,$hardduedatecompare,$fine,$finedays, $maxsuspensiondays, $firstremind,$chargeperiod,$rentaldiscount,$overduefinescap);
+        $sth_insert->execute($br,$bor,$itemtype,$maxissueqty,$renewalsallowed, $renewalperiod, $norenewalbefore, $auto_renew, $reservesallowed,$issuelength,$lengthunit,$hardduedate,$hardduedatecompare,$fine,$finedays, $maxsuspensiondays, $firstremind,$chargeperiod,$rentaldiscount,$onshelfholds,$opacitemholds,$overduefinescap);
     }
 } 
 elsif ($op eq "set-branch-defaults") {
@@ -391,7 +393,7 @@ while (my $row = $sth2->fetchrow_hashref) {
     $row->{'humancategorycode'} ||= $row->{'categorycode'};
     $row->{'default_humancategorycode'} = 1 if $row->{'humancategorycode'} eq '*';
     $row->{'fine'} = sprintf('%.2f', $row->{'fine'});
-    if ($row->{'hardduedate'} ne '0000-00-00') {
+    if ($row->{'hardduedate'} && $row->{'hardduedate'} ne '0000-00-00') {
        $row->{'hardduedate'} = format_date( $row->{'hardduedate'});
        $row->{'hardduedatebefore'} = 1 if ($row->{'hardduedatecompare'} == -1);
        $row->{'hardduedateexact'} = 1 if ($row->{'hardduedatecompare'} ==  0);

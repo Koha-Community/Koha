@@ -32,7 +32,7 @@ my @globals = ("themelang","JacketImages","OPACAmazonCoverImages","GoogleJackets
 "SyndeticsEnabled", "OpacRenewalAllowed", "item_level_itypes","noItemTypeImages",
 "virtualshelves", "RequestOnOpac", "COinSinOPACResults", "OPACXSLTResultsDisplay",
 "OPACItemsResultsDisplay", "LibraryThingForLibrariesID", "opacuserlogin", "TagsEnabled",
-"TagsShowOnList", "TagsInputOnList","loggedinusername","AllowOnShelfHolds","opacbookbag",
+"TagsShowOnList", "TagsInputOnList","loggedinusername","opacbookbag",
 "OPACAmazonEnabled", "SyndeticsCoverImages","using_https");
 
 # Arguments:

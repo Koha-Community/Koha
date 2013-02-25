@@ -334,9 +334,6 @@ foreach my $biblionumber (@biblionumbers) {
 		        $item->{hosttitle} = GetBiblioData($item->{biblionumber})->{title};
 		}
 		
-            #   add information
-            $item->{itemcallnumber} = $item->{itemcallnumber};
-
             # if the item is currently on loan, we display its return date and
             # change the background color
             my $issues= GetItemIssue($itemnumber);
@@ -347,9 +344,9 @@ foreach my $biblionumber (@biblionumbers) {
 
             # checking reserve
             my ($reservedate,$reservedfor,$expectedAt,$reserve_id,$wait) = GetReservesFromItemnumber($itemnumber);
-            my $ItemBorrowerReserveInfo = GetMember( borrowernumber => $reservedfor );
-
             if ( defined $reservedate ) {
+                my $ItemBorrowerReserveInfo = GetMember( borrowernumber => $reservedfor );
+
                 $item->{backgroundcolor} = 'reserved';
                 $item->{reservedate}     = format_date($reservedate);
                 $item->{ReservedForBorrowernumber}     = $reservedfor;
@@ -394,7 +391,7 @@ foreach my $biblionumber (@biblionumbers) {
             }
 
             # If there is no loan, return and transfer, we show a checkbox.
-            $item->{notforloan} = $item->{notforloan} || 0;
+            $item->{notforloan} ||= 0;
 
             # if independent branches is on we need to check if the person can reserve
             # for branches they arent logged in to
@@ -424,7 +421,7 @@ foreach my $biblionumber (@biblionumbers) {
             if (
                    $policy_holdallowed
                 && !$item->{cantreserve}
-                && IsAvailableForItemLevelRequest($itemnumber)
+                && IsAvailableForItemLevelRequest($item, $borrowerinfo)
                 && CanItemBeReserved(
                     $borrowerinfo->{borrowernumber}, $itemnumber
                 ) eq 'OK'

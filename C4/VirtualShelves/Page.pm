@@ -30,6 +30,7 @@ use Data::Dumper;
 use C4::VirtualShelves qw/:DEFAULT ShelvesMax/;
 use C4::Biblio;
 use C4::Items;
+use C4::Reserves;
 use C4::Koha;
 use C4::Auth qw/get_session/;
 use C4::Members;
@@ -226,7 +227,6 @@ sub shelfpage {
             my ($shelfnumber2,$shelfname,$owner,$category,$sorton) = GetShelf($shelfnumber);
 
             $template->param(
-                'AllowOnShelfHolds'     => C4::Context->preference('AllowOnShelfHolds'),
                 'DisplayMultiPlaceHold' => C4::Context->preference('DisplayMultiPlaceHold'),
             );
             if (C4::Context->preference('TagsEnabled')) {
@@ -256,6 +256,8 @@ sub shelfpage {
                     my $cart_list = $query->cookie($cart_cookie);
                     @cart_list = split(/\//, $cart_list);
                 }
+
+                my $borrower = GetMember( 'borrowernumber' => $loggedinuser );
 
                 for my $this_item (@$items) {
                     my $biblionumber = $this_item->{'biblionumber'};
@@ -294,6 +296,7 @@ sub shelfpage {
                             });
                     }
 
+                    $this_item->{'allow_onshelf_holds'} = C4::Reserves::OnShelfHoldsAllowed($this_item, $borrower);
                 }
                 if($type eq 'intranet'){
                     # Build drop-down list for 'Add To:' menu...
