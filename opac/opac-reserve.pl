@@ -170,7 +170,6 @@ foreach my $biblioNumber (@biblionumbers) {
 #
 #
 if ( $query->param('place_reserve') ) {
-    my $notes = $query->param('notes');
     my $reserve_cnt = 0;
     if ($MAXIMUM_NUMBER_OF_RESERVES) {
         $reserve_cnt = GetReservesFromBorrowernumber( $borrowernumber );
@@ -254,6 +253,7 @@ if ( $query->param('place_reserve') ) {
             # Inserts a null into the 'itemnumber' field of 'reserves' table.
             $itemNum = undef;
         }
+        my $notes = $query->param('notes_'.$biblioNum)||'';
 
         if (   $MAXIMUM_NUMBER_OF_RESERVES
             && $reserve_cnt >= $MAXIMUM_NUMBER_OF_RESERVES )
@@ -373,6 +373,7 @@ foreach my $biblioNum (@biblionumbers) {
     $biblioLoopIter{rank} = $biblioData->{rank};
     $biblioLoopIter{reservecount} = $biblioData->{reservecount};
     $biblioLoopIter{already_reserved} = $biblioData->{already_reserved};
+    $biblioLoopIter{mandatorynotes}=0; #FIXME: For future use
 
     if (!$itemLevelTypes && $biblioData->{itemtype}) {
         $biblioLoopIter{description} = $itemTypes->{$biblioData->{itemtype}}{description};
@@ -547,13 +548,16 @@ if ( $numBibsAvailable == 0 || $anyholdable == 0) {
     $template->param( none_available => 1 );
 }
 
-my $itemTableColspan = 7;
+my $itemTableColspan = 8;
 if (! $template->{VARS}->{'OPACItemHolds'}) {
     $itemTableColspan--;
 }
 if (! $template->{VARS}->{'singleBranchMode'}) {
     $itemTableColspan--;
 }
+my $show_notes=C4::Context->preference('OPACShowHoldNotes');
+$template->param(OPACShowHoldNotes=>$show_notes);
+$itemTableColspan-- if !$show_notes;
 $template->param(itemtable_colspan => $itemTableColspan);
 
 # display infos

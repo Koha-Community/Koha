@@ -4,6 +4,9 @@
 <script type="text/javascript">
 // <![CDATA[
  var MSG_NO_COPY_SELECTED = _("Expecting a specific copy selection.");
+ var ForceHoldNotesReasons=new Array(
+    _("This title consists of multiple volumes/parts. Please indicate which part you need. Clicking on specific copy information may be helpful."),
+    "*** Add a new reason above this line ***" ); // NOTE: Do not renumber reasons; this will affect use of existing ones.
 
  function prefixOf (s, tok) {
      var index = s.indexOf(tok);
@@ -29,6 +32,16 @@
 	});
     // Hides all 'specific copy' table rows on load.
     $(".copiesrow").hide();
+    $(".notesrow").hide();
+
+    // Insert reasons for forced hold notes
+    $(".forcenotesreason").each(function(){
+        biblioNum = suffixOf($(this).attr("id"), "_");
+        var j=$("#notesmandatory_"+biblioNum).val();
+        if(j>0) {
+            $(this).html(ForceHoldNotesReasons[j-1]);
+        }
+    });
 
     $("#place_on_hdr").show();
     $(".place_on_type").show();
@@ -99,6 +112,13 @@
 
         // Hide the copies table row
         $(".copiesrow").hide();
+    });
+
+    // Show or hide holds notes
+    $(".shownotes").click(function(){
+        biblioNum = suffixOf($(this).attr("id"), "_");
+        $(".notesrow").hide();
+        $("#notesrow_"+biblioNum).show();
     });
 
     // When 'Place Hold' button is clicked
@@ -253,6 +273,7 @@
         <th>Hold starts on date</th>
 		  [% END %]
         <th>Hold not needed after</th>
+        [% IF ( OPACShowHoldNotes ) %]<th>Notes</th>[% END %]
                   [% IF ( OPACItemHolds ) %]
                     <th id="place_on_hdr" style="display:none">Place on</th>
                   [% END %]
@@ -261,7 +282,7 @@
                         <th>Pickup location</th>
 		    [% END %]
                   [% END %]
-                </tr>[% ELSE %]<tr><th colspan="5">Title</th></tr>[% END %]
+                </tr>[% ELSE %]<tr><th colspan="[% itemtable_colspan + 1 %]">Title</th></tr>[% END %]
 
                 [% FOREACH bibitemloo IN bibitemloop %]
                   <tr>
@@ -281,7 +302,7 @@
                       [% ELSE %]
                                       [% UNLESS ( none_available ) %]<td class="hold">&nbsp;</td>[% END %]
                       [% END %]
-                    [% IF ( bibitemloo.holdable ) %]<td class="title">[% ELSE %]<td class="title" colspan="5">[% END %]
+                    [% IF ( bibitemloo.holdable ) %]<td class="title">[% ELSE %]<td class="title" colspan="[% itemtable_colspan + 1 %]">[% END %]
                       <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% bibitemloo.biblionumber %]">[% bibitemloo.title |html %][% IF ( bibitemloo.subtitle ) %] [% FOREACH subtitl IN bibitemloo.subtitle %][% subtitl.subfield %][% END %][% END %]</a>
                       [% IF ( bibitemloo.author ) %],  by [% bibitemloo.author %][% END %]
 
@@ -338,6 +359,8 @@
       <p style="margin:.3em 2em;">
       <a href="#" style="font-size:85%;text-decoration:none;" onclick="document.getElementById('expiration_date_[% bibitemloo.biblionumber %]').value='';return false;">Clear date</a></p>
     </td>[% END %]
+
+    [% IF ( OPACShowHoldNotes ) %][% IF ( bibitemloo.holdable ) %]<td><input type="button" id="shownotes_[% bibitemloo.biblionumber %]" class="shownotes" value="Show notes"/></td>[% END %][% END %]
 
                     [% IF ( bibitemloo.holdable ) %]
 		    <!-- HOLD ABLE -->
@@ -414,6 +437,20 @@
 		        [% END %]
                     [% END %]
                   </tr>
+
+                  [% IF ( OPACShowHoldNotes ) %]
+                  [% IF ( bibitemloo.holdable ) %]
+                  <tr class="notesrow" id="notesrow_[% bibitemloo.biblionumber %]">
+                      <td>&nbsp;</td>
+                      <td colspan="[% itemtable_colspan %]">
+                          <label for="holdnotes">Hold notes:</label>&nbsp;
+                          <span id="forcenotesreason_[% bibitemloo.biblionumber %]" class="forcenotesreason"></span>
+                          <textarea name="notes_[% bibitemloo.biblionumber %]">[% bibitemloo.holdnotes %]</textarea>
+                          <input type="hidden" id="notesmandatory_[% bibitemloo.biblionumber %]" value="[% bibitemloo.mandatorynotes %]"/>
+                      </td>
+                  </tr>
+                  [% END %]
+                  [% END %]
 
                   [% IF ( OPACItemHolds ) %]
                   [% IF ( bibitemloo.holdable ) %]
