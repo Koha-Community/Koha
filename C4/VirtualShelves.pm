@@ -276,7 +276,7 @@ sub GetShelfContents {
          WHERE  vc.shelfnumber=? ";
     my @params = ($shelfnumber);
     if($sortfield) {
-        $query .= " ORDER BY " . $sortfield;
+        $query .= " ORDER BY " . $dbh->quote_identifier( $sortfield );
         $query .= " DESC " if ( $sort_direction eq 'desc' );
     }
     if($row_count){
