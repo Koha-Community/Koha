@@ -6446,24 +6446,27 @@ if ( CheckVersion($DBversion) ) {
 
 $DBversion = "3.11.00.XXX";
 if ( CheckVersion($DBversion) ) {
-    $dbh->do("CREATE TABLE linktracker (
-	  id int(11) NOT NULL AUTO_INCREMENT,
-	  biblionumber int(11) DEFAULT NULL,
-	  itemnumber int(11) DEFAULT NULL,
-	  borrowernumber int(11) DEFAULT NULL,
-	  url text,
-	  timeclicked datetime DEFAULT NULL,
-	  PRIMARY KEY (id),
-	  KEY bibidx (biblionumber),
-	  KEY itemidx (itemnumber),
-	  KEY borridx (borrowernumber),
-	  KEY dateidx (timeclicked)
-	) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
-    $dbh->do("
+    $dbh->do(
+        "CREATE TABLE linktracker (
+  id int(11) NOT NULL AUTO_INCREMENT,
+  biblionumber int(11) DEFAULT NULL,
+  itemnumber int(11) DEFAULT NULL,
+  borrowernumber int(11) DEFAULT NULL,
+  url text,
+  timeclicked datetime DEFAULT NULL,
+  PRIMARY KEY (id),
+  KEY bibidx (biblionumber),
+  KEY itemidx (itemnumber),
+  KEY borridx (borrowernumber),
+  KEY dateidx (timeclicked)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;"
+    );
+    $dbh->do( "
   INSERT INTO systempreferences (variable,value,explanation,options,type)
-  VALUES('TrackClicks','0','Track links clicked',NULL,'Integer')");
-    print "Upgrade to $DBversion done (Adds feature Bug 8917, the ability to track links clicked)";
-    SetVersion ($DBversion);
+  VALUES('TrackClicks','0','Track links clicked',NULL,'Integer')" );
+    print
+"Upgrade to $DBversion done (Adds feature Bug 8917, the ability to track links clicked)";
+    SetVersion($DBversion);
 }
 
 $DBversion = "3.11.00.024";

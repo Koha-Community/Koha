@@ -35,7 +35,7 @@ if ($uri) {
         # we have a uri and we want to track
         if ( $trackinglinks eq 'track' ) {
             my ( $user, $cookie, $sessionID, $flags ) =
-              checkauth( $cgi, 1, '', 'opac' );
+              checkauth( $cgi, 1, {}, 'opac' );
             my $userenv = C4::Context->userenv;
 
             if (   defined($userenv)
