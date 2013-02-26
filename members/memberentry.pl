@@ -46,6 +46,7 @@ use Module::Load;
 if ( C4::Context->preference('NorwegianPatronDBEnable') && C4::Context->preference('NorwegianPatronDBEnable') == 1 ) {
     load Koha::NorwegianPatronDB, qw( NLGetSyncDataFromBorrowernumber );
 }
+use Koha::SMS::Provider;
 
 use vars qw($debug);
 
@@ -67,6 +68,11 @@ my ($template, $loggedinuser, $cookie)
            flagsrequired => {borrowers => 1},
            debug => ($debug) ? 1 : 0,
        });
+
+if ( C4::Context->preference('SMSSendDriver') eq 'Email' ) {
+    my @providers = Koha::SMS::Provider->all();
+    $template->param( sms_providers => \@providers );
+}
 
 my $guarantorid    = $input->param('guarantorid');
 my $borrowernumber = $input->param('borrowernumber');

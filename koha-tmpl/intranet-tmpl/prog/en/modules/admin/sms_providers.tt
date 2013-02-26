@@ -1,0 +1,102 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Administration &rsaquo; SMS cellular providers</title>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+
+<script type="text/javascript">
+$(document).ready(function() {
+    $('#submit_update').hide();
+    $("#name").focus();
+});
+
+function edit_provider( id ) {
+    cancel_edit();
+
+    $("#id").val( id );
+    $("#name").val( $("#name_" + id).text() );
+    $("#domain").val( $("#domain_" + id).text() );
+
+    $("#name_" + id).parent().addClass("warn");
+
+    $("#submit_save").hide();
+    $("#submit_update").show();
+
+    $("#name").focus();
+}
+
+function cancel_edit() {
+    $("#id").val("");
+    $("#name").val("");
+    $("#domain").val("");
+
+    $("tr").removeClass("warn");
+
+    $("#submit_update").hide();
+    $("#submit_save").show();
+
+}
+
+function delete_provider( id ) {
+    if ( confirm( _("Are you sure you want to delete ") + $("#name_" + id).html() + _("?") ) ) {
+        $("#op").val('delete');
+        $("#id").val( id );
+        $("#sms_form").submit();
+    }
+}
+</script>
+<body id="admin_sms_providers" class="admin">
+[% INCLUDE 'header.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; SMS cellular providers</div>
+
+<div id="doc3" class="yui-t2">
+    <div id="bd">
+        <div id="yui-main">
+     <div class="yui-b">
+                <h2>SMS cellular providers</h2>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Domain</th>
+                            <th>&nbsp;</th>
+                            <th>&nbsp;</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        [% FOREACH p IN providers %]
+                            <tr>
+                                <td id="name_[% p.id %]">[% p.name %]</td>
+                                <td id="domain_[% p.id %]">[% p.domain %]</td>
+                                <td><a href="#" id="edit_[% p.id %]" class="edit" onclick="edit_provider( [% p.id %] );">Edit</td>
+                                <td><a href="#" id="delete_[% p.id %]" class="delete" onclick="delete_provider( [% p.id %] );">Delete</td>
+                            </tr>
+                        [% END %]
+                    </tbody>
+
+                    <tfoot>
+                        <form id="sms_form" action="sms_providers.pl" method="post">
+                            <input type="hidden" id="id" name="id" value="" />
+                            <input type="hidden" id="op" name="op" value="add_update" />
+                            <tr>
+                                <td><input type="text" id="name" name="name" /></td>
+                                <td><input type="text" id="domain" name="domain" size="40"/></td>
+                                <td>
+                                    <input id="submit_save" type="submit" value="Add new">
+                                    <input id="submit_update" type="submit" value="Update">
+                                </td>
+                                <td><a id="cancel" href="#" onclick="cancel_edit()">Cancel</a></td>
+                            </tr>
+                        </form>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+        <div class="yui-b">
+            [% INCLUDE 'admin-menu.inc' %]
+        </div>
+    </div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

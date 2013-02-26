@@ -110,6 +110,10 @@
                     <dd>Hide or show columns for tables.</dd>
                     <dt><a href="/cgi-bin/koha/admin/audio_alerts.pl">Audio alerts</a></dt>
                     <dd>Define which events trigger which sounds</dd>
+                    [% IF SMSSendDriver == 'Email' %]
+                        <dt><a href="/cgi-bin/koha/admin/sms_providers.pl">SMS cellular providers</a></dt>
+                        <dd>Define a list of cellular providers for sending SMS messages via email.</dd>
+                    [% END %]
                 </dl>
             </div>
         </div>

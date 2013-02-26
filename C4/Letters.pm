@@ -31,6 +31,8 @@ use C4::Log;
 use C4::SMS;
 use C4::Debug;
 use Koha::DateUtils;
+use Koha::SMS::Provider;
+
 use Date::Calc qw( Add_Delta_Days );
 use Encode;
 use Carp;
@@ -983,7 +985,14 @@ sub SendQueuedMessages {
             _send_message_by_email( $message, $params->{'username'}, $params->{'password'}, $params->{'method'} );
         }
         elsif ( lc( $message->{'message_transport_type'} ) eq 'sms' ) {
-            _send_message_by_sms( $message );
+            if ( C4::Context->preference('SMSSendDriver') eq 'Email' ) {
+                my $member = C4::Members::GetMember( 'borrowernumber' => $message->{'borrowernumber'} );
+                my $sms_provider = Koha::SMS::Provider->find( $member->{'sms_provider_id'} );
+                $message->{to_address} .= '@' . $sms_provider->domain();
+                _send_message_by_email( $message, $params->{'username'}, $params->{'password'}, $params->{'method'} );
+            } else {
+                _send_message_by_sms( $message );
+            }
         }
     }
     return scalar( @$unsent_messages );
@@ -1222,6 +1231,7 @@ sub _send_message_by_email {
     }
 
     _update_message_to_address($message->{'message_id'},$to_address) unless $message->{to_address}; #if initial message address was empty, coming here means that a to address was found and queue should be updated
+
     if ( sendmail( %sendmail_params ) ) {
         _set_message_status( { message_id => $message->{'message_id'},
                 status     => 'sent' } );

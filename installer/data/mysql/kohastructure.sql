@@ -263,6 +263,7 @@ CREATE TABLE `borrowers` ( -- this table includes information about your patrons
   `altcontactcountry` text default NULL, -- the country for the alternate contact for the patron/borrower
   `altcontactphone` varchar(50) default NULL, -- the phone number for the alternate contact for the patron/borrower
   `smsalertnumber` varchar(50) default NULL, -- the mobile phone number where the patron/borrower would like to receive notices (if SNS turned on)
+  `sms_provider_id` int(11) DEFAULT NULL, -- the provider of the mobile phone number defined in smsalertnumber
   `privacy` integer(11) DEFAULT '1' NOT NULL, -- patron/borrower's privacy settings related to their reading history
   `privacy_guarantor_checkouts` tinyint(1) NOT NULL DEFAULT '0', -- controls if relatives can see this patron's checkouts
   UNIQUE KEY `cardnumber` (`cardnumber`),
@@ -274,8 +275,10 @@ CREATE TABLE `borrowers` ( -- this table includes information about your patrons
   KEY `surname_idx` (`surname`(255)),
   KEY `firstname_idx` (`firstname`(255)),
   KEY `othernames_idx` (`othernames`(255)),
+  KEY `sms_provider_id` (`sms_provider_id`),
   CONSTRAINT `borrowers_ibfk_1` FOREIGN KEY (`categorycode`) REFERENCES `categories` (`categorycode`),
   CONSTRAINT `borrowers_ibfk_2` FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`)
+  CONSTRAINT `borrowers_ibfk_3` FOREIGN KEY (`sms_provider_id`) REFERENCES `sms_providers` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -1994,6 +1997,19 @@ CREATE TABLE sessions (
   `id` varchar(32) NOT NULL,
   `a_session` mediumtext NOT NULL,
   PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Table structure for table `sms_providers`
+--
+
+DROP TABLE IF EXISTS sms_providers;
+CREATE TABLE `sms_providers` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `domain` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --

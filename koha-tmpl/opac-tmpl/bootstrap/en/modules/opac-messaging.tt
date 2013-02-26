@@ -119,9 +119,30 @@
                         </table>
 
                         <fieldset class="rows">
-                        [% IF ( SMSSendDriver ) %]
-                            <ol><li><label for="SMSnumber">SMS number:</label> <input type="text" id="SMSnumber" name="SMSnumber" value="[% SMSnumber %]" /></li></ol>
-                        [% END %]
+                            [% IF ( SMSSendDriver ) %]
+                                <ol><li><label>Notice:</label>Some charges for text messages may be incurred when using this service. Please check with your mobile service provider if you have questions.</li></ol>
+                                <ol><li>
+                                    <label for="SMSnumber">SMS number:</label> <input type="text" id="SMSnumber" name="SMSnumber" value="[% SMSnumber %]" />
+                                    <i>Please enter numbers only. <b>(123) 456-7890</b> would be entered as <b>1234567890</b>.</i>
+                                </li></ol>
+                            [% END %]
+
+                            [% IF ( SMSSendDriver == 'Email' ) %]
+                                <ol><li>
+                                    <label for="sms_provider_id">SMS provider:</label>
+                                    <select id="sms_provider_id" name="sms_provider_id"/>
+                                        <option value="">Unknown</option>
+                                        [% FOREACH s IN sms_providers %]
+                                            [% IF s.id == sms_provider_id %]
+                                                <option value="[% s.id %]" selected="selected">[% s.name %]</option>
+                                            [% ELSE %]
+                                                <option value="[% s.id %]">[% s.name %]</option>
+                                            [% END %]
+                                        [% END %]
+                                    </select>
+                                    <i>Please contact a library staff member if you are unsure of your mobile service provider, or you do not see your provider in this list.</i>
+                                </li></ol>
+                            [% END %]
                         </fieldset>
 
                         <fieldset class="action">

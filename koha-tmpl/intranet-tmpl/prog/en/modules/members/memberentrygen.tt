@@ -1115,6 +1115,19 @@
         <p><label for="SMSnumber">SMS number:</label>
             <input type="text" id="SMSnumber" name="SMSnumber" value="[% SMSnumber %]" />
         </p>
+        <p>
+            <label for="sms_provider_id">SMS provider:</label>
+            <select id="sms_provider_id" name="sms_provider_id"/>
+                <option value="">Unknown</option>
+                [% FOREACH s IN sms_providers %]
+                    [% IF s.id == sms_provider_id %]
+                        <option value="[% s.id %]" selected="selected">[% s.name %]</option>
+                    [% ELSE %]
+                        <option value="[% s.id %]">[% s.name %]</option>
+                    [% END %]
+                [% END %]
+            </select>
+        </p>
     [% END %]
   </fieldset>
 [% END %] [% END %]

@@ -34,4 +34,8 @@ my ($template, $loggedinuser, $cookie)
 			     debug => 1,
 			     });
 
+$template->param(
+    SMSSendDriver => C4::Context->preference('SMSSendDriver'),
+);
+
 output_html_with_http_headers $query, $cookie, $template->output;

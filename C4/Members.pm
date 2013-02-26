@@ -645,6 +645,7 @@ sub ModMember {
             $data{password} = hash_password($data{password});
         }
     }
+
     my $old_categorycode = GetBorrowerCategorycode( $data{borrowernumber} );
 
     # get only the columns of a borrower
@@ -653,15 +654,19 @@ sub ModMember {
     my $new_borrower = { map { join(' ', @columns) =~ /$_/ ? ( $_ => $data{$_} ) : () } keys(%data) };
     delete $new_borrower->{flags};
 
-    $new_borrower->{dateofbirth}  ||= undef if exists $new_borrower->{dateofbirth};
-    $new_borrower->{dateenrolled} ||= undef if exists $new_borrower->{dateenrolled};
-    $new_borrower->{dateexpiry}   ||= undef if exists $new_borrower->{dateexpiry};
-    $new_borrower->{debarred}     ||= undef if exists $new_borrower->{debarred};
+    $new_borrower->{dateofbirth}     ||= undef if exists $new_borrower->{dateofbirth};
+    $new_borrower->{dateenrolled}    ||= undef if exists $new_borrower->{dateenrolled};
+    $new_borrower->{dateexpiry}      ||= undef if exists $new_borrower->{dateexpiry};
+    $new_borrower->{debarred}        ||= undef if exists $new_borrower->{debarred};
+    $new_borrower->{sms_provider_id} ||= undef if exists $new_borrower->{sms_provider_id};
+
     my $rs = $schema->resultset('Borrower')->search({
         borrowernumber => $new_borrower->{borrowernumber},
      });
+
     my $execute_success = $rs->update($new_borrower);
     if ($execute_success ne '0E0') { # only proceed if the update was a success
+
         # ok if its an adult (type) it may have borrowers that depend on it as a guarantor
         # so when we update information for an adult we should check for guarantees and update the relevant part
         # of their records, ie addresses and phone numbers
