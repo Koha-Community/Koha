@@ -790,12 +790,23 @@ sub AddMember {
     return $data{'borrowernumber'};
 }
 
+=head2 Check_Userid
+
+    my $uniqueness = Check_Userid($userid,$borrowernumber);
+
+    $borrowernumber is optional (i.e. it can contain a blank value). If $userid is passed with a blank $borrowernumber variable, the database will be checked for all instances of that userid (i.e. userid=? AND borrowernumber != '').
+
+    If $borrowernumber is provided, the database will be checked for every instance of that userid coupled with a different borrower(number) than the one provided.
+
+    return :
+        0 for not unique (i.e. this $userid already exists)
+        1 for unique (i.e. this $userid does not exist, or this $userid/$borrowernumber combination already exists)
+
+=cut
 
 sub Check_Userid {
     my ($uid,$member) = @_;
     my $dbh = C4::Context->dbh;
-    # Make sure the userid chosen is unique and not theirs if non-empty. If it is not,
-    # Then we need to tell the user and have them create a new one.
     my $sth =
       $dbh->prepare(
         "SELECT * FROM borrowers WHERE userid=? AND borrowernumber != ?");
@@ -808,10 +819,24 @@ sub Check_Userid {
     }
 }
 
+=head2 Generate_Userid
+
+    my $newuid = Generate_Userid($borrowernumber, $firstname, $surname);
+
+    Generate a userid using the $surname and the $firstname (if there is a value in $firstname).
+
+    $borrowernumber is optional (i.e. it can contain a blank value). A value is passed when generating a new userid for an existing borrower. When a new userid is created for a new borrower, a blank value is passed to this sub.
+
+    return :
+        new userid ($firstname.$surname if there is a $firstname, or $surname if there is no value in $firstname) plus offset (0 if the $newuid is unique, or a higher numeric value if Check_Userid finds an existing match for the $newuid in the database).
+
+=cut
+
 sub Generate_Userid {
   my ($borrowernumber, $firstname, $surname) = @_;
   my $newuid;
   my $offset = 0;
+  #The script will "do" the following code and increment the $offset until Check_Userid = 1 (i.e. until $newuid comes back as unique)
   do {
     $firstname =~ s/[[:digit:][:space:][:blank:][:punct:][:cntrl:]]//g;
     $surname =~ s/[[:digit:][:space:][:blank:][:punct:][:cntrl:]]//g;
