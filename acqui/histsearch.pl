@@ -83,7 +83,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,
-        flagsrequired   => { acquisition => 'group_manage', acquisition => 'order_manage', acquisition => 'order_receive' },
+        flagsrequired   => { acquisition => '*' },
         debug           => 1,
     }
 );
