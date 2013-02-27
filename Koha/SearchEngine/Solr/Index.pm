@@ -40,7 +40,7 @@ sub index_record {
         $record = GetAuthority( $id )  if $recordtype eq "authority";
         $record = GetMarcBiblio( $id ) if $recordtype eq "biblio";
 
-        if ($record_type eq 'biblio' && C4::Context->preference('IncludeSeeFromInSearches')) {
+        if ($recordtype eq 'biblio' && C4::Context->preference('IncludeSeeFromInSearches')) {
             my $normalizer = Koha::RecordProcessor->new( { filters => 'EmbedSeeFromHeadings' } );
             $record = $normalizer->process($record);
         }
