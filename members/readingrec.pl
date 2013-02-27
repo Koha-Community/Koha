@@ -50,6 +50,7 @@ my ($template, $loggedinuser, $cookie)= get_template_and_user({template_name => 
 				debug => 1,
 				});
 
+my $op = $input->param('op') || '';
 if ($input->param('cardnumber')) {
     $cardnumber = $input->param('cardnumber');
     $data = GetMember(cardnumber => $cardnumber);
@@ -70,7 +71,7 @@ foreach my $issue ( @{$issues} ) {
 }
 
 #   barcode export
-if ( $input->param('op') eq 'export_barcodes' ) {
+if ( $op eq 'export_barcodes' ) {
     my $today = C4::Dates->new();
     $today = $today->output('iso');
     my @barcodes =
