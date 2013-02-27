@@ -748,6 +748,7 @@ elsif ($phase eq 'Run this report'){
                 'errors'  => $errors,
                 'pagination_bar'  => pagination_bar($url, $totpages, $input->param('page')),
                 'unlimited_total' => $total,
+                'sql_params'      => \@sql_params,
             );
         }
     }

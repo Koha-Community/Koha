@@ -750,9 +750,13 @@ canned reports and writing custom SQL reports.</p>
 [% IF ( unlimited_total ) %]<p>Total number of rows matching the (unlimited) query is [% unlimited_total %].</p>[% END %]
 <pre id="sql_output">[% sql |html %]</pre>
 
-<form>
+<form action="/cgi-bin/koha/reports/guided_reports.pl" method="get">
     <input type="hidden" name="phase" value="Run this report"/>
     <input type="hidden" name="reports" value="[% report_id %]"/>
+
+    [% FOREACH p IN sql_params %]
+        <input type="hidden" name="sql_params" value="[% p %]"/>
+    [% END %]
 
     <label for="limit">Rows per page: </label>
     <select name="limit">
