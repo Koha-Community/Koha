@@ -134,6 +134,7 @@ my $organisation   = $query->param('organisations');
 my $print          = $query->param('print') || q{};
 my $newexpiry      = $query->param('dateexpiry');
 my $debt_confirmed = $query->param('debt_confirmed') || 0; # Don't show the debt error dialog twice
+my $charges        = $query->param('charges') || q{};
 
 # Check if stickyduedate is turned off
 if ( $barcode ) {
@@ -167,7 +168,7 @@ if ( $barcode eq '' && $print eq 'maybe' ) {
 }
 
 my $inprocess = ($barcode eq '') ? '' : $query->param('inprocess');
-if ( $barcode eq '' && $query->param('charges') eq 'yes' ) {
+if ( $barcode eq '' && $charges eq 'yes' ) {
     $template->param(
         PAYCHARGES     => 'yes',
         borrowernumber => $borrowernumber
@@ -371,7 +372,7 @@ if ($borrowernumber) {
         $getreserv{suspend}        = $num_res->{'suspend'};
         $getreserv{suspend_until}  = $num_res->{'suspend_until'};
         #         check if we have a waiting status for reservations
-        if ( $num_res->{'found'} eq 'W' ) {
+        if ( $num_res->{'found'} && $num_res->{'found'} eq 'W' ) {
             $getreserv{color}   = 'reserved';
             $getreserv{waiting} = 1;
 #     genarate information displaying only waiting reserves
@@ -461,18 +462,19 @@ sub build_issue_data {
         $it->{'checkoutdate'} = C4::Dates->new($it->{'issuedate'},'iso')->output('syspref');
         $it->{'issuingbranchname'} = GetBranchName($it->{'branchcode'});
 
-        $totalprice += $it->{'replacementprice'};
+        $totalprice += $it->{'replacementprice'} || 0;
         $it->{'itemtype'} = $itemtypeinfo->{'description'};
         $it->{'itemtype_image'} = $itemtypeinfo->{'imageurl'};
         $it->{'dd'} = output_pref($it->{'date_due'});
         $it->{'displaydate'} = output_pref($it->{'issuedate'});
         #$it->{'od'} = ( $it->{'date_due'} lt $todaysdate ) ? 1 : 0 ;
         $it->{'od'} = $it->{'overdue'};
-        ($it->{'author'} eq '') and $it->{'author'} = ' ';
+        $it->{'author'} ||= ' ';
         $it->{'renew_failed'} = $renew_failed{$it->{'itemnumber'}};
         $it->{'return_failed'} = $return_failed{$it->{'barcode'}};
 
-        if ( $it->{'issuedate'}."" gt $todaysdate or $it->{'lastreneweddate'} gt $todaysdate ) {
+        if ( ( $it->{'issuedate'} && $it->{'issuedate'} gt $todaysdate )
+          || ( $it->{'lastreneweddate'} && $it->{'lastreneweddate'} gt $todaysdate ) ) {
             (!$relatives) ? push @todaysissues, $it : push @relissues, $it;
         } else {
             (!$relatives) ? push @previousissues, $it : push @relprevissues, $it;
@@ -651,8 +653,10 @@ my $bor_messages_loop = GetMessages( $borrowernumber, 'B', $branch );
 if($bor_messages_loop){ $template->param(flagged => 1 ); }
 
 # Computes full borrower address
-my (undef, $roadttype_hashref) = &GetRoadTypes();
-my $address = $borrower->{'streetnumber'}.' '.$roadttype_hashref->{$borrower->{'streettype'}}.' '.$borrower->{'address'};
+my @fulladdress;
+push @fulladdress, $borrower->{'streetnumber'} if ( $borrower->{'streetnumber'} );
+push @fulladdress, &GetRoadTypeDetails( $borrower->{'streettype'} ) if ( $borrower->{'streettype'} );
+push @fulladdress, $borrower->{'address'} if ( $borrower->{'address'} );
 
 my $fast_cataloging = 0;
 if (defined getframeworkinfo('FA')) {
@@ -686,7 +690,7 @@ $template->param(
     expiry            => format_date($borrower->{'dateexpiry'}),
     categorycode      => $borrower->{'categorycode'},
     categoryname      => $borrower->{description},
-    address           => $address,
+    address           => join(' ', @fulladdress),
     address2          => $borrower->{'address2'},
     email             => $borrower->{'email'},
     emailpro          => $borrower->{'emailpro'},
