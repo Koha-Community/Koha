@@ -94,9 +94,10 @@ sub MARCfindbreeding {
             return -1;
         }
         else {
-            # normalize author : probably UNIMARC specific...
+            # normalize author : UNIMARC specific...
             if (    C4::Context->preference("z3950NormalizeAuthor")
-                and C4::Context->preference("z3950AuthorAuthFields") )
+                and C4::Context->preference("z3950AuthorAuthFields")
+                and C4::Context->preference("marcflavour") eq 'UNIMARC' )
             {
                 my ( $tag, $subfield ) = GetMarcFromKohaField("biblio.author", '');
 
