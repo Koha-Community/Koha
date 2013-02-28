@@ -21,6 +21,7 @@ use XML::Simple;
 #use LWP::Simple;
 use C4::Biblio;
 use C4::Koha;
+use C4::Search;
 use C4::External::Syndetics qw(get_syndetics_editions);
 use LWP::UserAgent;
 use HTTP::Request::Common;
@@ -61,18 +62,19 @@ This module provides facilities for retrieving ThingISBN and XISBN content in Ko
 
 sub _get_biblio_from_xisbn {
     my $xisbn = shift;
-    $xisbn.='%';
     my $dbh = C4::Context->dbh;
-    my $query = "SELECT biblionumber FROM biblioitems WHERE isbn LIKE ?";
-    my $sth = $dbh->prepare($query);
-    $sth->execute($xisbn);
-    my $xbib_data =  $sth->fetchrow_hashref();
-    my $xbiblio;
-    if ($xbib_data->{biblionumber}) {
-        $xbiblio = GetBiblioData($xbib_data->{biblionumber});
-        $xbiblio->{normalized_isbn} = GetNormalizedISBN($xbiblio->{isbn});
-    }
-    return ($xbiblio);
+
+    my ( $errors, $results, $total_hits ) = SimpleSearch( "nb=$xisbn", 0, 1 );
+    return unless ( !$errors && scalar @$results );
+
+    my $record = MARC::Record::new_from_usmarc( $results->[0] );
+    my $biblionumber = C4::Biblio::get_koha_field_from_marc('biblio', 'biblionumber', $record, '');
+    return unless $biblionumber;
+
+    my $xbiblio = GetBiblioData($biblionumber);
+    return unless $xbiblio;
+    $xbiblio->{normalized_isbn} = GetNormalizedISBN($xbiblio->{isbn});
+    return $xbiblio;
 }
 
 =head1 get_xisbns($isbn);
