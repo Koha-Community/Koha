@@ -37,19 +37,55 @@ use Date::Calc qw/Date_to_Days check_date/;
 use Getopt::Long;
 use Pod::Usage;
 
+=head1 NAME
+
+serialsUpdate.pl - change status of serials that are late
+
+=head1 SYNOPSIS
+
+serialsUpdate.pl [ -h | -m ][ -v ] -c ][ --note "you are late" ][ --no-note ]
+
+ Options:
+   --h --help -?   Brief help message
+   --man           Full documentation
+   --verbose -v    Verbose mode
+   -c              Confirm : without this option, the script will report the concerned serials
+                   without modifying database
+   --note          Note set to concerned serials, by default "Automatically set to late"
+   --no-note       Do not set a note one concerned serials
+
+=cut
+
 my $dbh = C4::Context->dbh;
 
 my $man     = 0;
 my $help    = 0;
 my $confirm = 0;
+my $verbose = 0;
+my $note    = '';
+my $nonote  = 0;
 
 GetOptions(
-    'help|?' => \$help,
-    'c'      => \$confirm,
+    'help|h|?'  => \$help,
+    'man'       => \$man,
+    'v|verbose' => \$verbose,
+    'c'         => \$confirm,
+    'note:s'    => \$note,
+    'no-note'   => \$nonote,
 ) or pod2usage(2);
 
 pod2usage(1) if $help;
 pod2usage( -verbose => 2 ) if $man;
+
+$verbose and !$confirm and print "### Database will not be modified ###\n";
+
+if ($note && $nonote) {
+    $note = '';
+}
+if (!$note && !$nonote) {
+    $note = 'Automatically set to late';
+}
+$verbose and print $note ? "Note : $note\n" : "No note\n";
 
 # select all serials with not "irregular" periodicity that are late
 my $sth = $dbh->prepare("
@@ -81,16 +117,16 @@ while ( my $issue = $sth->fetchrow_hashref ) {
                 && Date_to_Days( $year, $month, $day ) <
                 Date_to_Days( $tyear, $tmonth, $tday ) )
             {
-        
+            $confirm and
             ModSerialStatus( $issue->{serialid}, $issue->{serialseq},
                 $issue->{planneddate}, $issue->{publisheddate},
-                3, "Automatically set to late" );
-            print $issue->{serialid}." update\n";
+                3, $note );
+            $verbose and print "Serial id=" . $issue->{serialid}." update\n";
             }
         }else{
-            print "Error with serial(".$issue->{serialid}.") has no existent 
+            $verbose and print "Error with serial(".$issue->{serialid}.") has no existent
                    subscription(".$issue->{subscriptionid}.") attached
-                   or planneddate is ";
+                   or planneddate is wrong\n";
         }
     }
 }
