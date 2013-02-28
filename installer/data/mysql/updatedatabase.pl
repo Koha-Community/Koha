@@ -6444,6 +6444,15 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.11.00.XXX";
+if(CheckVersion($DBversion)) {
+    $dbh->do(
+"INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES('OpacShowHoldNotes',0,'Show hold notes on OPAC','','YesNo')"
+    );
+    print "Upgrade to $DBversion done (Bug 9722: Allow users to add notes when placing a hold in OPAC)\n";
+    SetVersion($DBversion);
+}
+
 
 $DBversion = "3.11.00.024";
 if ( CheckVersion($DBversion) ) {
