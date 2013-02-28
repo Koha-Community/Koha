@@ -60,7 +60,7 @@ calculated but not applied.
 
 This script has the following parameters :
     -h --help: this message
-    -l --log: log the output to a file
+    -l --log: log the output to a file (optional if the -o parameter is given)
     -o --out:  ouput directory for logs (defaults to env or /tmp if !exist)
     -v --verbose
 
@@ -82,10 +82,13 @@ my $delim = "\t";    # ?  C4::Context->preference('delimiter') || "\t";
 
 my %is_holiday;
 my $today = DateTime->now( time_zone => C4::Context->tz() );
-my $filename = get_filename($output_dir);
+my $filename;
+if ($log or $output_dir) {
+    $filename = get_filename($output_dir);
+}
 
 my $fh;
-if ($log) {
+if ($filename) {
     open $fh, '>>', $filename or croak "Cannot write file $filename: $!";
     print {$fh} join $delim, ( @borrower_fields, @item_fields, @other_fields );
     print {$fh} "\n";
@@ -131,7 +134,7 @@ for my $overdue ( @{$overdues} ) {
             );
         }
     }
-    if ($log) {
+    if ($filename) {
         my @cells;
         push @cells,
           map { defined $borrower->{$_} ? $borrower->{$_} : q{} }
@@ -141,7 +144,7 @@ for my $overdue ( @{$overdues} ) {
         say {$fh} join $delim, @cells;
     }
 }
-if ($log){
+if ($filename){
     close $fh;
 }
 
@@ -150,7 +153,7 @@ if ($verbose) {
     print <<"EOM";
 Fines assessment -- $today
 EOM
-    if ($log) {
+    if ($filename) {
         say "Saved to $filename";
     }
     print <<"EOM";
