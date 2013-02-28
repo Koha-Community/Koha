@@ -6,7 +6,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 15;
+use Test::More tests => 16;
 
 BEGIN {
         use_ok('C4::Installer::PerlModules');
@@ -35,3 +35,4 @@ ok ($modules->module_count() >10 , 'count should be greater than 10');
 my @module_list = $modules->module_list;
 %params = map { $_ => 1 } @module_list;
 ok (exists($params{"DBI"}), 'DBI exists in array');
+is ($modules->required('module'=>"String::Random"),1, 'String::Random should return 1 since required');

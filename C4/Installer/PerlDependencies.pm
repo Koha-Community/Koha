@@ -631,7 +631,7 @@ our $PERL_DEPS = {
       },
     'String::Random' => {
         'usage'    => 'OpacSelfRegistration',
-        'required' => '0',
+        'required' => '1',
         'min_ver'  => '0.22',
     },
 };
