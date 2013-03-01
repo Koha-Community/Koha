@@ -1489,14 +1489,15 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
         <td class="call_no">[% IF ( ITEM_RESULT.itemcallnumber ) %] [% ITEM_RESULT.itemcallnumber %][% IF ( OPACShelfBrowser ) %] (<a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% ITEM_RESULT.biblionumber %]&amp;shelfbrowse_itemnumber=[% ITEM_RESULT.itemnumber %]#[% tab %]">Browse shelf</a>)[% END %][% END %]</td>
             [% IF ( itemdata_enumchron ) %]<td class="vol_info">[% ITEM_RESULT.enumchron %]</td>[% END %]
 	    [% IF ( itemdata_uri ) %]<td class="url">
-	      [% IF trackclicks == 'track' || trackclicks == 'anonymous' %]
-	        <a href="/cgi-bin/koha/tracklinks.pl?uri=[% ITEM_RESULT.uri | url %]&biblionumber=[% biblionumber |url %]&itemnumber=[% ITEM_RESULT.itemnumber | url %]"> Link to resource </a>
-	      [% ELSE %]
-	        <a href="[% ITEM_RESULT.uri %]">[% ITEM_RESULT.uri %]</a>
+	      [% IF ITEM_RESULT.uri %]
+	        [% IF trackclicks == 'track' || trackclicks == 'anonymous' %]
+	          <a href="/cgi-bin/koha/tracklinks.pl?uri=[% ITEM_RESULT.uri | url %]&biblionumber=[% biblionumber |url %]&itemnumber=[% ITEM_RESULT.itemnumber | url %]"> Link to resource </a>
+	        [% ELSE %]
+	          <a href="[% ITEM_RESULT.uri %]">[% ITEM_RESULT.uri %]</a>
+	        [% END %]
 	      [% END %]
 	      </td>
 	    [% END %]
-          [% IF ( itemdata_uri ) %]<td class="url"><a href="[% ITEM_RESULT.uri %]">[% ITEM_RESULT.uri %]</a></td>[% END %]
                [% IF ( itemdata_copynumber ) %]<td class="copynumber">[% ITEM_RESULT.copynumber %]</td>[% END %]
               <td class="status">[% INCLUDE 'item-status.inc' item = ITEM_RESULT %]</td>
              [% IF ( itemdata_itemnotes ) %]<td class="notes">[% ITEM_RESULT.itemnotes %]</td>[% END %]
