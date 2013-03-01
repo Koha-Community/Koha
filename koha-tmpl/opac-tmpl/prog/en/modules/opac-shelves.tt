@@ -487,12 +487,12 @@ $(document).ready(function() {
           <td>
           <a class="p1" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% itemsloo.biblionumber %]">
             [% IF ( OPACLocalCoverImages ) %]<span title="[% itemsloo.biblionumber |url %]" class="[% itemsloo.biblionumber %]" id="local-thumbnail[% loop.count %]"></span>[% END %]
-                    [% IF ( OPACAmazonCoverImages ) %][% IF ( itemsloo.normalized_isbn ) %]<img src="http://images.amazon.com/images/P/[% itemsloo.normalized_isbn %].01.TZZZZZZZ.jpg" alt="" class="thumbnail" />[% ELSE %]<span class="no-image">No cover image available</span>[% END %][% END %]
+                    [% IF ( OPACAmazonCoverImages ) %][% IF ( itemsloo.normalized_isbn ) %]<span title="[% SEARCH_RESULT.biblionumber %]" id="amazon-thumbnail[% loop.count %]"><img src="http://images.amazon.com/images/P/[% itemsloo.normalized_isbn %].01.TZZZZZZZ.jpg" alt="" class="thumbnail" /></span>[% ELSE %]<span class="no-image">No cover image available</span>[% END %][% END %]
 
           [% IF ( SyndeticsEnabled ) %][% IF ( SyndeticsCoverImages ) %][% IF ( using_https ) %]
-                <img src="https://secure.syndetics.com/index.aspx?isbn=[% itemsloo.normalized_isbn %]/SC.GIF&amp;client=[% SyndeticsClientCode %]&amp;type=xw10&amp;upc=[% itemsloo.normalized_upc %]&amp;oclc=[% itemsloo.normalized_oclc %]" alt="" class="thumbnail" />
+                <span title="[% SEARCH_RESULT.biblionumber %]" id="syndetics-thumbnail[% loop.count %]"><img src="https://secure.syndetics.com/index.aspx?isbn=[% itemsloo.normalized_isbn %]/SC.GIF&amp;client=[% SyndeticsClientCode %]&amp;type=xw10&amp;upc=[% itemsloo.normalized_upc %]&amp;oclc=[% itemsloo.normalized_oclc %]" alt="" class="thumbnail" /></span>
                 [% ELSE %]
-                <img src="http://www.syndetics.com/index.aspx?isbn=[% itemsloo.normalized_isbn %]/SC.GIF&amp;client=[% SyndeticsClientCode %]&amp;type=xw10&amp;upc=[% itemsloo.normalized_upc %]&amp;oclc=[% itemsloo.normalized_oclc %]" alt="" class="thumbnail" />[% END %][% END %][% END %]
+                <span title="[% SEARCH_RESULT.biblionumber %]" id="syndetics-thumbnail[% loop.count %]"><img src="http://www.syndetics.com/index.aspx?isbn=[% itemsloo.normalized_isbn %]/SC.GIF&amp;client=[% SyndeticsClientCode %]&amp;type=xw10&amp;upc=[% itemsloo.normalized_upc %]&amp;oclc=[% itemsloo.normalized_oclc %]" alt="" class="thumbnail" /></span>[% END %][% END %][% END %]
 
                 [% IF ( GoogleJackets ) %][% IF ( itemsloo.normalized_isbn ) %]<div style="block" title="[% itemsloo.biblionumber |url %]" class="[% itemsloo.normalized_isbn %]" id="gbs-thumbnail[% loop.count %]"></div>[% ELSE %]<span class="no-image">No cover image available</span>[% END %][% END %]
                 [% IF OpenLibraryCovers %][% IF itemsloo.normalized_isbn %]<span style="block" title="[% itemsloo.biblionumber %]" class="[% itemsloo.normalized_isbn %]" id="openlibrary-thumbnail[% loop.count %]"></span>[% ELSE %]<span class="no-image">No cover image available</span>[% END %][% END %]
