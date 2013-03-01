@@ -40,8 +40,6 @@ function placeHold () {
     window.close();
 }
 
-
-
 	$(document).ready(function(){
 		$("#CheckAll").click(function(){
 		var checked = [];
@@ -69,24 +67,6 @@ function placeHold () {
             headers: { 0: { sorter: false }}
         });
 	});
-
-function yuiToolbar() {
-    var downloadmenu = [
-    { text: _("iso2709"), url: "/cgi-bin/koha/basket/downloadcart.pl?format=iso2709&bib_list=[% bib_list %]" },
-    { text: _("RIS"), url: "/cgi-bin/koha/basket/downloadcart.pl?format=ris&bib_list=[% bib_list %]" },
-    { text: _("BibTex"), url: "/cgi-bin/koha/basket/downloadcart.pl?format=bibtex&bib_list=[% bib_list %]" },
-[% FOREACH csv_profile IN csv_profiles %]
-    { text: _("CSV - [% csv_profile.profile %]"), url: "/cgi-bin/koha/basket/downloadcart.pl?format=[% csv_profile.export_format_id %]&bib_list=[% bib_list %]" },
-[% END %]
-    ];
-    new YAHOO.widget.Button({
-        type: "menu",
-        label: _("Download"),
-        name: "downloadmenubutton",
-        menu: downloadmenu,
-        container: "downloadcartc"
-    });
-}
 	//]]>
 	</script>
 	[% END %]
@@ -98,37 +78,23 @@ function yuiToolbar() {
 [% UNLESS ( print_basket ) %]
 <h1>Your cart</h1>
 
-<div id="toolbar">
-<ul class="toolbar">
-	<li>
-	    <span id="addchild" class="yui-button yui-link-button"><span class="first-child">
-        [% IF ( verbose ) %]<a href="basket.pl" class="brief" onclick="showLess(); return false;">Brief display</a>[% ELSE %]<a href="basket.pl" class="detail" onclick="showMore(); return false;">More details</a>[% END %]
-	    </span></span>
-	</li>
-	<li>
-	    <span id="receive" class="yui-button yui-link-button"><span class="first-child">
-		<a class="send" href="basket.pl" onclick="sendBasket(); return false;">Send</a>
-	    </span></span>
-	</li>
-    <li id="downloadcartc">
-        <a href="#" id="downloadcart">Download</a>
-    </li>
-	<li>
-	    <span id="printmenuc" class="yui-button yui-link-button"><span class="first-child">
-		<a class="print" href="basket.pl" onclick="printBasket(); return false;">Print</a>
-	    </span></span>
-	</li>
-	<li>
-	    <span id="delete" class="yui-button yui-link-button"><span class="first-child">
-        <a class="empty" href="basket.pl" onclick="delBasket('popup'); return false;">Empty and close</a>
-	    </span></span>
-	</li>
-	<li>
-	    <span id="hide" class="yui-button yui-link-button"><span class="first-child">
-        <a class="hide close" href="basket.pl">Hide window</a>
-	    </span></span>
-	</li>
-</ul>
+<div id="toolbar" class="btn-toolbar">
+    [% IF ( verbose ) %]<a href="basket.pl" class="btn btn-small" onclick="showLess(); return false;"><i class="icon-zoom-out"></i> Brief display</a>[% ELSE %]<a href="basket.pl" class="btn btn-small" onclick="showMore(); return false;"><i class="icon-zoom-in"></i> More details</a>[% END %]
+    <a class="btn btn-small" href="basket.pl" onclick="sendBasket(); return false;"><i class="icon-envelope"></i> Send</a>
+    <div class="btn-group">
+        <a class="btn btn-small dropdown-toggle" data-toggle="dropdown" href="#" id="downloadcart"><i class="icon-download-alt"></i> Download <span class="caret"></span> </a>
+        <ul class="dropdown-menu">
+            <li><a href="/cgi-bin/koha/basket/downloadcart.pl?format=iso2709&amp;bib_list=[% bib_list %]">iso2709</a></li>
+            <li><a href="/cgi-bin/koha/basket/downloadcart.pl?format=ris&amp;bib_list=[% bib_list %]">RIS</a></li>
+            <li><a href="/cgi-bin/koha/basket/downloadcart.pl?format=bibtex&amp;bib_list=[% bib_list %]">BibTex</a></li>
+        [% FOREACH csv_profile IN csv_profiles %]
+            <li><a href="/cgi-bin/koha/basket/downloadcart.pl?format=[% csv_profile.export_format_id %]&amp;bib_list=[% bib_list %]">CSV - [% csv_profile.profile %]</a></li>
+        [% END %]
+        </ul>
+    </div>
+    <a class="btn btn-small" href="basket.pl" onclick="printBasket(); return false;"><i class="icon-print"></i> Print</a>
+    <a class="btn btn-small" href="basket.pl" onclick="delBasket('popup'); return false;"><i class="icon-trash"></i> Empty and close</a>
+    <a class="btn btn-small close" href="basket.pl"><i class="icon-remove-sign"></i> Hide window</a>
 </div>
         [% END %]
 
