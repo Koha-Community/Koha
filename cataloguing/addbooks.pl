@@ -57,7 +57,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 # get framework list
 my $frameworks = getframeworks;
 my @frameworkcodeloop;
-foreach my $thisframeworkcode ( sort {$frameworks->{$a} cmp $frameworks->{$b}}keys %{$frameworks} ) {
+foreach my $thisframeworkcode ( sort { uc($frameworks->{$a}->{'frameworktext'}) cmp uc($frameworks->{$b}->{'frameworktext'}) } keys %{$frameworks} ) {
     push @frameworkcodeloop, {
         value         => $thisframeworkcode,
         frameworktext => $frameworks->{$thisframeworkcode}->{'frameworktext'},
