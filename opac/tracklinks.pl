@@ -21,19 +21,23 @@
 use Modern::Perl;
 use C4::Context;
 use C4::Auth qw(checkauth);
+use Koha::Linktracker;
 use CGI;
-
-my $trackinglinks = C4::Context->preference('TrackClicks');
 
 my $cgi = new CGI;
 my $uri = $cgi->param('uri') || '';
 
+my $tracker = Koha::Linktracker->new(
+    { trackingmethod => C4::Context->preference('TrackClicks') } );
+
 if ($uri) {
-    if ( $trackinglinks eq 'track' || $trackinglinks eq 'anonymous' ) {
+    if (   $tracker->trackingmethod() eq 'track'
+        || $tracker->trackingmethod() eq 'anonymous' )
+    {
         my $borrowernumber = 0;
 
         # we have a uri and we want to track
-        if ( $trackinglinks eq 'track' ) {
+        if ( $tracker->trackingmethod() eq 'track' ) {
             my ( $user, $cookie, $sessionID, $flags ) =
               checkauth( $cgi, 1, {}, 'opac' );
             my $userenv = C4::Context->userenv;
@@ -50,7 +54,14 @@ if ($uri) {
         my $biblionumber = $cgi->param('biblionumber') || 0;
         my $itemnumber   = $cgi->param('itemnumber')   || 0;
 
-        trackclick( $uri, $biblionumber, $borrowernumber, $itemnumber );
+        $tracker->trackclick(
+            {
+                uri            => $uri,
+                biblionumber   => $biblionumber,
+                borrowernumber => $borrowernumber,
+                itemnumber     => $itemnumber
+            }
+        );
         print $cgi->redirect($uri);
     }
     else {
@@ -64,14 +75,4 @@ else {
     # we shouldn't be here, bail out
     print $cgi->redirect("/cgi-bin/koha/errors/404.pl");    # escape early
     exit;
-}
-
-sub trackclick {
-    my ( $uri, $biblionumber, $borrowernumber, $itemnumber ) = @_;
-    my $dbh   = C4::Context->dbh();
-    my $query = "INSERT INTO linktracker (biblionumber,itemnumber,borrowernumber
-    ,url,timeclicked) VALUES (?,?,?,?,now())";
-    my $sth = $dbh->prepare($query);
-    $sth->execute( $biblionumber, $itemnumber, $borrowernumber, $uri );
-
 }
