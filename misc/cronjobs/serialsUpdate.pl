@@ -79,17 +79,23 @@ pod2usage( -verbose => 2 ) if $man;
 
 $verbose and !$confirm and print "### Database will not be modified ###\n";
 
-if ($note && $nonote) {
+if ( $note && $nonote ) {
     $note = '';
 }
-if (!$note && !$nonote) {
+if ( !$note && !$nonote ) {
     $note = 'Automatically set to late';
 }
 $verbose and print $note ? "Note : $note\n" : "No note\n";
 
 # select all serials with not "irregular" periodicity that are late
-my $sth = $dbh->prepare("
-     SELECT *
+my $sth = $dbh->prepare(
+    q{
+     SELECT
+       serial.serialid,
+       serial.serialseq,
+       serial.planneddate,
+       serial.publisheddate
+       subscription.subscriptionid
      FROM serial 
      LEFT JOIN subscription 
        ON (subscription.subscriptionid=serial.subscriptionid) 
@@ -97,19 +103,20 @@ my $sth = $dbh->prepare("
        AND periodicity <> 32
        AND DATE_ADD(planneddate, INTERVAL CAST(graceperiod AS SIGNED) DAY) < NOW()
        AND subscription.closed = 0
-     ");
+    }
+);
 $sth->execute();
 
 while ( my $issue = $sth->fetchrow_hashref ) {
 
-    my $subscription      = &GetSubscription( $issue->{subscriptionid} );
-    my $planneddate       = $issue->{planneddate};
+    my $subscription = &GetSubscription( $issue->{subscriptionid} );
+    my $planneddate  = $issue->{planneddate};
 
-    if( $subscription && $planneddate && $planneddate ne "0000-00-00" ){
+    if ( $subscription && $planneddate && $planneddate ne "0000-00-00" ) {
         my $nextpublisheddate = GetNextDate( $planneddate, $subscription );
-        my $today             = format_date_in_iso( C4::Dates->new()->output() );
+        my $today = format_date_in_iso( C4::Dates->new()->output() );
 
-        if ($nextpublisheddate && $today){
+        if ( $nextpublisheddate && $today ) {
             my ( $year,  $month,  $day )  = split( /-/, $nextpublisheddate );
             my ( $tyear, $tmonth, $tday ) = split( /-/, $today );
             if (   check_date( $year, $month, $day )
@@ -117,16 +124,21 @@ while ( my $issue = $sth->fetchrow_hashref ) {
                 && Date_to_Days( $year, $month, $day ) <
                 Date_to_Days( $tyear, $tmonth, $tday ) )
             {
-            $confirm and
-            ModSerialStatus( $issue->{serialid}, $issue->{serialseq},
-                $issue->{planneddate}, $issue->{publisheddate},
-                3, $note );
-            $verbose and print "Serial id=" . $issue->{serialid}." update\n";
+                $confirm
+                  and ModSerialStatus( $issue->{serialid}, $issue->{serialseq},
+                    $issue->{planneddate}, $issue->{publisheddate},
+                    3, $note );
+                $verbose
+                  and print "Serial id=" . $issue->{serialid} . " update\n";
             }
-        }else{
-            $verbose and print "Error with serial(".$issue->{serialid}.") has no existent
-                   subscription(".$issue->{subscriptionid}.") attached
-                   or planneddate is wrong\n";
+        }
+        else {
+            $verbose
+              and print "Error with serial("
+              . $issue->{serialid}
+              . ") has no existent subscription("
+              . $issue->{subscriptionid}
+              . ") attached or planneddate is wrong\n";
         }
     }
 }
