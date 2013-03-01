@@ -6465,7 +6465,7 @@ if ( CheckVersion($DBversion) ) {
   INSERT INTO systempreferences (variable,value,explanation,options,type)
   VALUES('TrackClicks','0','Track links clicked',NULL,'Integer')" );
     print
-"Upgrade to $DBversion done (Adds feature Bug 8917, the ability to track links clicked)";
+"Upgrade to $DBversion done (Adds feature Bug 8917, the ability to track links clicked)\n";
     SetVersion($DBversion);
 }
 

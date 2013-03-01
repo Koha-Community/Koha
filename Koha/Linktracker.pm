@@ -27,8 +27,6 @@ Koha::Linktracker
   my $tracker = Koha::Linktracker->new();
   $tracker->trackclick( $linkinfo );
 
-=head1 DESCRIPTION
-
 =head1 FUNCTIONS
 
 =cut
