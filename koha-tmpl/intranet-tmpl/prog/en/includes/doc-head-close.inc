@@ -43,9 +43,10 @@
     //]]>
     </script>
 [% END %]
+[% IF ( virtualshelves || intranetbookbag ) %]
 <script type="text/javascript">
     //<![CDATA[
-    [% IF ( intranetbookbag ) %]var MSG_BASKET_EMPTY = _("Your cart is currently empty");
+        var MSG_BASKET_EMPTY = _("Your cart is currently empty");
         var MSG_RECORD_IN_BASKET = _("This item is already in your cart");
         var MSG_RECORD_ADDED = _("This item has been added to your cart");
         var MSG_NRECORDS_ADDED = _(" item(s) added to your cart");
@@ -56,12 +57,10 @@
         var MSG_CONFIRM_DEL_RECORDS = _("Are you sure you want to remove the selected items?");
         var MSG_IN_YOUR_CART = _("Items in your cart: ");
         var MSG_NON_RESERVES_SELECTED = _("One or more selected items cannot be reserved.");
-    [% END %]
     //]]>
     </script>
-    [% IF ( virtualshelves || intranetbookbag ) %]
-        <script type="text/javascript" src="[% themelang %]/js/basket.js"></script>
-    [% END %]
+<script type="text/javascript" src="[% themelang %]/js/basket.js"></script>
+[% END %]
 [% IF LocalCoverImages %]
 <script type="text/javascript" src="[% themelang %]/js/localcovers.js"></script>
 <script type="text/javascript">
