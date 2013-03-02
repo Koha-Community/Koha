@@ -1,44 +1,40 @@
-<div id="toolbar"><script type="text/javascript">
-    //<![CDATA[
-
-    // prepare DOM for YUI Toolbar
-
-    $(document).ready(function() {
-        yuiToolbar();
-    });
-
-    // YUI Toolbar Functions
-
-    function yuiToolbar() {
-        new YAHOO.widget.Button("editsupplier");
-        new YAHOO.widget.Button("deletesupplier");
-        new YAHOO.widget.Button("receive");
-        [% UNLESS ( booksellerid ) %]new YAHOO.widget.Button("newvendor");[% END %]
-
-        var newmenu = [
-            [% IF ( CAN_user_acquisition_order_manage ) %]
-                { text: _("Basket"), url: "/cgi-bin/koha/acqui/basketheader.pl?booksellerid=[% booksellerid %]&op=add_form"},
-            [% END %]
-            [% IF ( CAN_user_acquisition_contracts_manage ) %]{ text: _("Contract"), url: "/cgi-bin/koha/admin/aqcontract.pl?op=add_form&amp;booksellerid=[% booksellerid %]"},[% END %]
-            { text: _("Vendor"), url: "/cgi-bin/koha/acqui/supplier.pl?op=enter"}
-        ]
-        new YAHOO.widget.Button({type: "menu", label: _("New"), name: "newmenu", menu: newmenu, container: "newmenuc"});
+<script type="text/javascript">
+//<![CDATA[
+function confirm_deletion() {
+    if (confirm(_("Are you sure you want to delete this vendor?"))) {
+        window.location="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]&op=delete";
     }
-
-    //]]>
-    </script>
-    <ul id="toolbar-list" class="toolbar">
-        [% IF ( booksellerid ) %]
+}
+//]]>
+</script>
+<div id="toolbar" class="btn-toolbar">
+    [% IF ( booksellerid ) %]
+        <div class="btn-group">
+        <a class="btn btn-small dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-plus"></i> New
+        <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu">
+            [% IF ( CAN_user_acquisition_order_manage ) %]
+                <li><a href="/cgi-bin/koha/acqui/basketheader.pl?booksellerid=[% booksellerid %]&amp;op=add_form">Basket</a></li>
+            [% END %]
+            [% IF ( CAN_user_acquisition_contracts_manage ) %]
+                <li><a href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&amp;booksellerid=[% booksellerid %]">Contract</a></li>
+            [% END %]
             [% IF ( CAN_user_acquisition_vendors_manage ) %]
-                <li id="newmenuc"></li>
-                <li><a id="editsupplier" href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]&amp;op=enter">Edit vendor</a></li>
+                <li><a href="/cgi-bin/koha/acqui/supplier.pl?op=enter">Vendor</a></li>
+            [% END %]
+        </ul>
+        </div>
+            [% IF ( CAN_user_acquisition_vendors_manage ) %]
+                <div class="btn-group"><a class="btn btn-small" id="editsupplier" href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]&amp;op=enter"><i class="icon-pencil"></i> Edit vendor</a></div>
                 [% UNLESS ( basketcount OR subscriptioncount ) %]
-                    <li><a id="deletesupplier" href="javascript:confirm_deletion()">Delete vendor</a></li>
+                    <div class="btn-group"><a class="btn btn-small" id="deletesupplier" href="javascript:confirm_deletion()"><i class="icon-remove"></i> Delete vendor</a></div>
                 [% END %]
             [% END %]
-                [% IF ( CAN_user_acquisition_order_receive && basketcount ) %]<li><a id="receive" href="/cgi-bin/koha/acqui/parcels.pl?booksellerid=[% booksellerid %]">Receive shipments</a></li>[% END %]
+            [% IF ( CAN_user_acquisition_order_receive && basketcount ) %]
+                <div class="btn-group"><a class="btn btn-small" id="receive" href="/cgi-bin/koha/acqui/parcels.pl?booksellerid=[% booksellerid %]"><i class="icon-inbox"></i> Receive shipments</a></div>
+            [% END %]
         [% ELSE %]
-            <li><a id="newvendor" href="/cgi-bin/koha/acqui/supplier.pl?op=enter">New vendor</a></li>
+            <div class="btn-group"><a class="btn btn-small" href="/cgi-bin/koha/acqui/supplier.pl?op=enter"><i class="icon-plus"></i> New vendor</a></div>
         [% END %]
-    </ul>
 </div>
