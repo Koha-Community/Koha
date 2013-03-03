@@ -461,6 +461,16 @@ sub get_template_and_user {
 
         $template->param(OpacPublic => '1') if ($user || C4::Context->preference("OpacPublic"));
     }
+
+    # Check if we were asked using parameters to force a specific language
+    if ( defined $in->{'query'}->param('language') ) {
+        # Extract the language, let C4::Templates::getlanguage choose
+        # what to do
+        my $language = C4::Templates::getlanguage($in->{'query'},$in->{'type'});
+        my $languagecookie = C4::Templates::getlanguagecookie($in->{'query'},$language);
+        $cookie = [$cookie, $languagecookie];
+    }
+
     return ( $template, $borrowernumber, $cookie, $flags);
 }
 

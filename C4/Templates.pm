@@ -316,16 +316,48 @@ sub setlanguagecookie {
     );
 }
 
+=head2 getlanguagecookie
+
+    my $cookie = getlanguagecookie($query,$language);
+
+Returns a cookie object containing the calculated language to be used.
+
+=cut
+
+sub getlanguagecookie {
+    my ( $query, $language ) = @_;
+    my $cookie = $query->cookie(
+        -name    => 'KohaOpacLanguage',
+        -value   => $language,
+        -HttpOnly => 1,
+        -expires => '+3y'
+    );
+
+    return $cookie;
+}
+
+=head2 getlanguage
+
+    Select a language based on the URL parameter 'language', a cookie,
+    syspref available languages & browser
+
+=cut
 
 sub getlanguage {
     my ($query, $interface) = @_;
 
-    # Select a language based on cookie, syspref available languages & browser
     my $preference_to_check =
       $interface eq 'intranet' ? 'language' : 'opaclanguages';
+    # Get the available/valid languages list
     my @languages = split /,/, C4::Context->preference($preference_to_check);
 
     my $lang;
+
+    # Chose language from the URL
+    $lang = $query->param( 'language' );
+    if ( defined $lang && any { $_ eq $lang } @languages) {
+        return $lang;
+    }
 
     # cookie
     if ( $query->cookie('KohaOpacLanguage') ) {
