@@ -61,6 +61,7 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
                     <xslo:apply-templates mode="index_heading_conditional"/>
                     <xslo:apply-templates mode="index_match_heading"/>
                     <xslo:apply-templates mode="index_subject_thesaurus"/>
+                    <xslo:apply-templates mode="index_all"/>
                 </z:record>
             </xslo:template>
 
@@ -72,7 +73,7 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
             <xsl:call-template name="handle-index-heading-conditional"/>
             <xsl:call-template name="handle-index-match-heading"/>
             <xsl:apply-templates/>
-            <xslo:template match="*">
+            <xslo:template mode="index_all" match="text()">
                 <z:index name="Any:w Any:p">
                     <xslo:value-of select="."/>
                 </z:index>
