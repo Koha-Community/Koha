@@ -1189,7 +1189,7 @@ sub parseQuery {
             $query .= $operators[ $ii - 1 ] eq 'or' ? ' || ' : ' && '
               if ($query);
             $query .=
-              ( $operators[$ii] ? "$operators[$ii]:" : '' ) . $operands[$ii];
+              ( $indexes[$ii] ? "$indexes[$ii]:" : '' ) . $operands[$ii];
         }
         foreach my $limit (@limits) {
         }
