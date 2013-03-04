@@ -812,10 +812,12 @@ sub GetReserveStatus {
 
   ($status, $reserve, $all_reserves) = &CheckReserves($itemnumber);
   ($status, $reserve, $all_reserves) = &CheckReserves(undef, $barcode);
+  ($status, $reserve, $all_reserves) = &CheckReserves($itemnumber,undef,$lookahead);
 
 Find a book in the reserves.
 
 C<$itemnumber> is the book's item number.
+C<$lookahead> is the number of days to look in advance for future reserves.
 
 As I understand it, C<&CheckReserves> looks for the given item in the
 reserves. If it is found, that's a match, and C<$status> is set to
@@ -836,7 +838,7 @@ table in the Koha database.
 =cut
 
 sub CheckReserves {
-    my ( $item, $barcode ) = @_;
+    my ( $item, $barcode, $lookahead_days) = @_;
     my $dbh = C4::Context->dbh;
     my $sth;
     my $select;
@@ -883,7 +885,7 @@ sub CheckReserves {
     return ( '' ) if  ( $notforloan_per_item > 0 ) or $notforloan_per_itemtype;
 
     # Find this item in the reserves
-    my @reserves = _Findgroupreserve( $bibitem, $biblio, $itemnumber );
+    my @reserves = _Findgroupreserve( $bibitem, $biblio, $itemnumber, $lookahead_days);
 
     # $priority and $highest are used to find the most important item
     # in the list returned by &_Findgroupreserve. (The lower $priority,
@@ -1706,11 +1708,12 @@ sub _FixPriority {
 
 =head2 _Findgroupreserve
 
-  @results = &_Findgroupreserve($biblioitemnumber, $biblionumber, $itemnumber);
+  @results = &_Findgroupreserve($biblioitemnumber, $biblionumber, $itemnumber, $lookahead);
 
 Looks for an item-specific match first, then for a title-level match, returning the
 first match found.  If neither, then we look for a 3rd kind of match based on
 reserve constraints.
+Lookahead is the number of days to look in advance.
 
 TODO: add more explanation about reserve constraints
 
@@ -1722,7 +1725,7 @@ C<biblioitemnumber>.
 =cut
 
 sub _Findgroupreserve {
-    my ( $bibitem, $biblio, $itemnumber ) = @_;
+    my ( $bibitem, $biblio, $itemnumber, $lookahead) = @_;
     my $dbh   = C4::Context->dbh;
 
     # TODO: consolidate at least the SELECT portion of the first 2 queries to a common $select var.
@@ -1747,11 +1750,11 @@ sub _Findgroupreserve {
         AND priority > 0
         AND item_level_request = 1
         AND itemnumber = ?
-        AND reservedate <= CURRENT_DATE()
+        AND reservedate <= DATE_ADD(NOW(),INTERVAL ? DAY)
         AND suspend = 0
     /;
     my $sth = $dbh->prepare($item_level_target_query);
-    $sth->execute($itemnumber);
+    $sth->execute($itemnumber, $lookahead||0);
     my @results;
     if ( my $data = $sth->fetchrow_hashref ) {
         push( @results, $data );
@@ -1778,11 +1781,11 @@ sub _Findgroupreserve {
         AND priority > 0
         AND item_level_request = 0
         AND hold_fill_targets.itemnumber = ?
-        AND reservedate <= CURRENT_DATE()
+        AND reservedate <= DATE_ADD(NOW(),INTERVAL ? DAY)
         AND suspend = 0
     /;
     $sth = $dbh->prepare($title_level_target_query);
-    $sth->execute($itemnumber);
+    $sth->execute($itemnumber, $lookahead||0);
     @results = ();
     if ( my $data = $sth->fetchrow_hashref ) {
         push( @results, $data );
@@ -1810,11 +1813,11 @@ sub _Findgroupreserve {
           AND reserves.reservedate    = reserveconstraints.reservedate )
           OR  reserves.constrainttype='a' )
           AND (reserves.itemnumber IS NULL OR reserves.itemnumber = ?)
-          AND reserves.reservedate <= CURRENT_DATE()
+          AND reserves.reservedate <= DATE_ADD(NOW(),INTERVAL ? DAY)
           AND suspend = 0
     /;
     $sth = $dbh->prepare($query);
-    $sth->execute( $biblio, $bibitem, $itemnumber );
+    $sth->execute( $biblio, $bibitem, $itemnumber, $lookahead||0);
     @results = ();
     while ( my $data = $sth->fetchrow_hashref ) {
         push( @results, $data );

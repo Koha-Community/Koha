@@ -1885,7 +1885,8 @@ sub AddReturn {
     # find reserves.....
     # if we don't have a reserve with the status W, we launch the Checkreserves routine
     my ($resfound, $resrec);
-    ($resfound, $resrec, undef) = C4::Reserves::CheckReserves( $item->{'itemnumber'} ) unless ( $item->{'withdrawn'} );
+    my $lookahead= C4::Context->preference('ConfirmFutureHolds'); #number of days to look for future holds
+    ($resfound, $resrec, undef) = C4::Reserves::CheckReserves( $item->{'itemnumber'}, undef, $lookahead ) unless ( $item->{'withdrawn'} );
     if ($resfound) {
           $resrec->{'ResFound'} = $resfound;
         $messages->{'ResFound'} = $resrec;
