@@ -117,8 +117,12 @@
     // Show or hide holds notes
     $(".shownotes").click(function(){
         biblioNum = suffixOf($(this).attr("id"), "_");
-        $(".notesrow").hide();
-        $("#notesrow_"+biblioNum).show();
+        if( $("#notesrow_"+biblioNum).is(":visible") ) {
+            $("#notesrow_"+biblioNum).hide();
+        }
+        else {
+            $("#notesrow_"+biblioNum).show();
+        }
     });
 
     // When 'Place Hold' button is clicked
@@ -360,7 +364,7 @@
       <a href="#" style="font-size:85%;text-decoration:none;" onclick="document.getElementById('expiration_date_[% bibitemloo.biblionumber %]').value='';return false;">Clear date</a></p>
     </td>[% END %]
 
-    [% IF ( OPACShowHoldNotes ) %][% IF ( bibitemloo.holdable ) %]<td><input type="button" id="shownotes_[% bibitemloo.biblionumber %]" class="shownotes" value="Show notes"/></td>[% END %][% END %]
+    [% IF ( OPACShowHoldNotes ) %][% IF ( bibitemloo.holdable ) %]<td><input type="button" id="shownotes_[% bibitemloo.biblionumber %]" class="shownotes" value="Edit notes"/></td>[% END %][% END %]
 
                     [% IF ( bibitemloo.holdable ) %]
 		    <!-- HOLD ABLE -->
