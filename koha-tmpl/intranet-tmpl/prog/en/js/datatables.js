@@ -471,6 +471,7 @@ jQuery.extend( jQuery.fn.dataTableExt.oSort, {
 } );
 
 }());
+
 /* Plugin to allow sorting on data stored in a span's title attribute
  *
  * Ex: <td><span title="[% ISO_date %]">[% formatted_date %]</span></td>
@@ -494,7 +495,6 @@ jQuery.extend( jQuery.fn.dataTableExt.oSort, {
         return ((a < b) ? 1 : ((a > b) ? -1 : 0));
     }
 } );
-
 
 /* Plugin to allow sorting on numeric data stored in a span's title attribute
  *
@@ -566,3 +566,17 @@ jQuery.extend( jQuery.fn.dataTableExt.oSort, {
     });
 
 }());
+
+// Remove string between NSB NSB characters
+$.fn.dataTableExt.oSort['nsb-nse-asc'] = function(a,b) {
+    var pattern = new RegExp("\x88.*\x89");
+    a = a.replace(pattern, "");
+    b = b.replace(pattern, "");
+    return (a > b) ? 1 : ((a < b) ? -1 : 0);
+}
+$.fn.dataTableExt.oSort['nsb-nse-desc'] = function(a,b) {
+    var pattern = new RegExp("\x88.*\x89");
+    a = a.replace(pattern, "");
+    b = b.replace(pattern, "");
+    return (b > a) ? 1 : ((b < a) ? -1 : 0);
+}
