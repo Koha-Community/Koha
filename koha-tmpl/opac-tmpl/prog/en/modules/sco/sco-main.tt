@@ -247,7 +247,7 @@ Sorry, this self-checkout station has lost authentication.  Please contact the a
 	[% FOREACH ISSUE IN ISSUES %]
 	[% UNLESS ( loop.odd ) %]<tr class="highlight">[% ELSE %]<tr>[% END %]
     <!-- FIXME: yet another jacket image breakpoint -->
-	<td>[% UNLESS ( ISSUE.noitemlinks ) %]<a href="/cgi-bin/koha/opac-detail.pl?bib=[% ISSUE.biblionumber %]">[% ISSUE.title |html %]</a>[% ELSE %]<strong>[% ISSUE.title |html %]</strong>[% END %]<span class="item-details">
+	<td>[% UNLESS ( noitemlinks ) %]<a href="/cgi-bin/koha/opac-detail.pl?bib=[% ISSUE.biblionumber %]">[% ISSUE.title |html %]</a>[% ELSE %]<strong>[% ISSUE.title |html %]</strong>[% END %]<span class="item-details">
 	[% ISSUE.author %]</span> ([% ISSUE.barcode %])</td>
 	<td>[% ISSUE.itemcallnumber %]</td>
 	[% IF ( ISSUE.overdue ) %]<td class="overdue">[% ISSUE.date_due | $KohaDates %]</td>[% ELSE %]<td>[% ISSUE.date_due | $KohaDates %]</td>[% END %]
