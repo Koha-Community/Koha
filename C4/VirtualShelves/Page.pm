@@ -249,7 +249,7 @@ sub shelfpage {
                 my $items;
                 my $tag_quantity;
                 my $sortfield = ( $sorton ? $sorton : 'title' );
-                $sortfield = $query->param('sort') || $sortfield || 'title'; ## Passed in sorting overrides default sorting
+                $sortfield = $query->param('sort') || $sortfield; ## Passed in sorting overrides default sorting
                 my $direction = $query->param('direction') || 'asc';
                 $template->param(
                     sort      => $sortfield,
