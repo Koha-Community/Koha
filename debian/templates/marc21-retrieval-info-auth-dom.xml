@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<retrievalinfo xmlns="http://indexdata.com/yaz">
+  <retrieval syntax="marc21" name="F">
+    <backend syntax="xml" name="marc">
+      <marc inputformat="xml" outputformat="marc"
+            inputcharset="utf-8"
+            outputcharset="utf-8"/>
+    </backend>
+  </retrieval>
+  <retrieval syntax="marc21" name="B">
+    <backend syntax="xml" name="marc">
+      <marc inputformat="xml" outputformat="marc"
+            inputcharset="utf-8"
+            outputcharset="utf-8"/>
+    </backend>
+  </retrieval>
+  <retrieval syntax="xml" name="index"/> <!-- allow viewing index entries -->
+  <retrieval syntax="xml" name="marc"
+             identifier="info:srw/schema/1/marcxml-v1.1"/>
+  <retrieval syntax="xml" name="marcxml"
+             identifier="info:srw/schema/1/marcxml-v1.1"/>
+</retrievalinfo>

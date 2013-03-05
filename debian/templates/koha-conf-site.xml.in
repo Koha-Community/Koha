@@ -29,47 +29,47 @@
     <config>/etc/koha/sites/__KOHASITE__/zebra-biblios.cfg</config>
     <cql2rpn>/etc/koha/zebradb/pqf.properties</cql2rpn>
      <retrievalinfo>
-       <retrieval syntax="usmarc" name="F"/>
-       <retrieval syntax="usmarc" name="B"/>
+       <retrieval syntax="__ZEBRA_MARC_FORMAT__" name="F"/>
+       <retrieval syntax="__ZEBRA_MARC_FORMAT__" name="B"/>
        <retrieval syntax="xml" name="F"/>
        <retrieval syntax="xml" name="B"/>
        <retrieval syntax="xml" name="marcxml"
                   identifier="info:srw/schema/1/marcxml-v1.1">
-         <backend syntax="usmarc" name="F">
+         <backend syntax="__ZEBRA_MARC_FORMAT__" name="F">
            <marc inputformat="marc" outputformat="marcxml"
                  inputcharset="utf-8"/>
          </backend>
        </retrieval>
        <retrieval syntax="xml" name="dc">
-         <backend syntax="usmarc" name="F">
+         <backend syntax="__ZEBRA_MARC_FORMAT__" name="F">
            <marc inputformat="marc" outputformat="marcxml"
                  inputcharset="utf-8"/>
            <xslt stylesheet="/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/xslt/MARC21slim2DC.xsl"/>
          </backend>
        </retrieval>
        <retrieval syntax="xml" name="mods">
-         <backend syntax="usmarc" name="F">
+         <backend syntax="__ZEBRA_MARC_FORMAT__" name="F">
            <marc inputformat="marc" outputformat="marcxml"
                  inputcharset="utf-8"/>
            <xslt stylesheet="/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/xslt/MARC21slim2MODS.xsl"/>
          </backend>
        </retrieval>
        <retrieval syntax="xml" name="rdfdc">
-         <backend syntax="usmarc" name="F">
+         <backend syntax="__ZEBRA_MARC_FORMAT__" name="F">
            <marc inputformat="marc" outputformat="marcxml"
                  inputcharset="utf-8"/>
            <xslt stylesheet="/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/xslt/MARC21slim2RDFDC.xsl"/>
          </backend>
        </retrieval>
        <retrieval syntax="xml" name="rss2">
-         <backend syntax="usmarc" name="F">
+         <backend syntax="__ZEBRA_MARC_FORMAT__" name="F">
            <marc inputformat="marc" outputformat="marcxml"
                  inputcharset="utf-8"/>
            <xslt stylesheet="/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/xslt/MARC21slim2RSS2.xsl"/>
          </backend>
        </retrieval>
        <retrieval syntax="xml" name="utils">
-         <backend syntax="usmarc" name="F">
+         <backend syntax="__ZEBRA_MARC_FORMAT__" name="F">
            <marc inputformat="marc" outputformat="marcxml"
                  inputcharset="utf-8"/>
            <xslt stylesheet="/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/xslt/MARC21slimUtils.xsl"/>
@@ -104,42 +104,42 @@
     <directory>/var/lib/koha/__KOHASITE__/authorities</directory>
     <config>/etc/koha/sites/__KOHASITE__/zebra-authorities-dom.cfg</config>
     <cql2rpn>/etc/koha/zebradb/pqf.properties</cql2rpn>
-    <xi:include href="/etc/koha/zebradb/retrieval-info-auth-dom.xml"
+    <xi:include href="/etc/koha/__ZEBRA_MARC_FORMAT__-retrieval-info-auth-dom.xml"
                 xmlns:xi="http://www.w3.org/2001/XInclude">
       <xi:fallback>
      <retrievalinfo>
-       <retrieval syntax="usmarc" name="F"/>
-       <retrieval syntax="usmarc" name="B"/>
+       <retrieval syntax="__ZEBRA_MARC_FORMAT__" name="F"/>
+       <retrieval syntax="__ZEBRA_MARC_FORMAT__" name="B"/>
        <retrieval syntax="xml" name="marcxml"
                   identifier="info:srw/schema/1/marcxml-v1.1">
-         <backend syntax="usmarc" name="F">
+         <backend syntax="__ZEBRA_MARC_FORMAT__" name="F">
            <marc inputformat="marc" outputformat="marcxml"
                  inputcharset="utf-8"/>
          </backend>
        </retrieval>
        <retrieval syntax="xml" name="dc">
-         <backend syntax="usmarc" name="F">
+         <backend syntax="__ZEBRA_MARC_FORMAT__" name="F">
            <marc inputformat="marc" outputformat="marcxml"
                  inputcharset="utf-8"/>
            <xslt stylesheet="/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/xslt/MARC21slim2DC.xsl"/>
          </backend>
        </retrieval>
        <retrieval syntax="xml" name="mods">
-         <backend syntax="usmarc" name="F">
+         <backend syntax="__ZEBRA_MARC_FORMAT__" name="F">
            <marc inputformat="marc" outputformat="marcxml"
                  inputcharset="utf-8"/>
            <xslt stylesheet="/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/xslt/MARC21slim2MODS.xsl"/>
          </backend>
        </retrieval>
        <retrieval syntax="xml" name="rdfdc">
-         <backend syntax="usmarc" name="F">
+         <backend syntax="__ZEBRA_MARC_FORMAT__" name="F">
            <marc inputformat="marc" outputformat="marcxml"
                  inputcharset="utf-8"/>
            <xslt stylesheet="/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/xslt/MARC21slim2RDFDC.xsl"/>
          </backend>
        </retrieval>
        <retrieval syntax="xml" name="utils">
-         <backend syntax="usmarc" name="F">
+         <backend syntax="__ZEBRA_MARC_FORMAT__" name="F">
            <marc inputformat="marc" outputformat="marcxml"
                  inputcharset="utf-8"/>
            <xslt stylesheet="/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/xslt/MARC21slimUtils.xsl"/>
@@ -179,47 +179,47 @@
     <config>/etc/koha/sites/__KOHASITE__/zebra-biblios.cfg</config>
     <cql2rpn>/etc/koha/zebradb/pqf.properties</cql2rpn>
      <retrievalinfo>
-       <retrieval syntax="usmarc" name="F"/>
-       <retrieval syntax="usmarc" name="B"/>
+       <retrieval syntax="__ZEBRA_MARC_FORMAT__" name="F"/>
+       <retrieval syntax="__ZEBRA_MARC_FORMAT__" name="B"/>
        <retrieval syntax="xml" name="F"/>
        <retrieval syntax="xml" name="B"/>
        <retrieval syntax="xml" name="marcxml"
                   identifier="info:srw/schema/1/marcxml-v1.1">
-         <backend syntax="usmarc" name="F">
+         <backend syntax="__ZEBRA_MARC_FORMAT__" name="F">
            <marc inputformat="marc" outputformat="marcxml"
                  inputcharset="utf-8"/>
          </backend>
        </retrieval>
        <retrieval syntax="xml" name="dc">
-         <backend syntax="usmarc" name="F">
+         <backend syntax="__ZEBRA_MARC_FORMAT__" name="F">
            <marc inputformat="marc" outputformat="marcxml"
                  inputcharset="utf-8"/>
            <xslt stylesheet="/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/xslt/MARC21slim2DC.xsl"/>
          </backend>
        </retrieval>
        <retrieval syntax="xml" name="mods">
-         <backend syntax="usmarc" name="F">
+         <backend syntax="__ZEBRA_MARC_FORMAT__" name="F">
            <marc inputformat="marc" outputformat="marcxml"
                  inputcharset="utf-8"/>
            <xslt stylesheet="/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/xslt/MARC21slim2MODS.xsl"/>
          </backend>
        </retrieval>
        <retrieval syntax="xml" name="rdfdc">
-         <backend syntax="usmarc" name="F">
+         <backend syntax="__ZEBRA_MARC_FORMAT__" name="F">
            <marc inputformat="marc" outputformat="marcxml"
                  inputcharset="utf-8"/>
            <xslt stylesheet="/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/xslt/MARC21slim2RDFDC.xsl"/>
          </backend>
        </retrieval>
        <retrieval syntax="xml" name="rss2">
-         <backend syntax="usmarc" name="F">
+         <backend syntax="__ZEBRA_MARC_FORMAT__" name="F">
            <marc inputformat="marc" outputformat="marcxml"
                  inputcharset="utf-8"/>
            <xslt stylesheet="/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/xslt/MARC21slim2RSS2.xsl"/>
          </backend>
        </retrieval>
        <retrieval syntax="xml" name="utils">
-         <backend syntax="usmarc" name="F">
+         <backend syntax="__ZEBRA_MARC_FORMAT__" name="F">
            <marc inputformat="marc" outputformat="marcxml"
                  inputcharset="utf-8"/>
            <xslt stylesheet="/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/xslt/MARC21slimUtils.xsl"/>
