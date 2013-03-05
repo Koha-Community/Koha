@@ -509,7 +509,6 @@ my $pl_files = {
 if ($config{'INSTALL_ZEBRA'} eq "yes") {
     push @{ $pl_files->{'rewrite-config.PL'} }, (
         'blib/ZEBRA_CONF_DIR/etc/passwd',
-        'blib/ZEBRA_CONF_DIR/etc/usmarc.mar',
         'blib/ZEBRA_CONF_DIR/zebra-biblios.cfg',
         'blib/ZEBRA_CONF_DIR/zebra-biblios-dom.cfg',
         'blib/ZEBRA_CONF_DIR/zebra-authorities.cfg',
