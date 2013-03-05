@@ -49,32 +49,9 @@ function add_item(borrowernum,batch_id,type_id){
 
 <div class="browse">
     Browse by last name:
-    <a href="/cgi-bin/koha/patroncards/members-search.pl?member=a&amp;batch_id=[% batch_id %]">A</a>
-    <a href="/cgi-bin/koha/patroncards/members-search.pl?member=b&amp;batch_id=[% batch_id %]">B</a>
-    <a href="/cgi-bin/koha/patroncards/members-search.pl?member=c&amp;batch_id=[% batch_id %]">C</a>
-    <a href="/cgi-bin/koha/patroncards/members-search.pl?member=d&amp;batch_id=[% batch_id %]">D</a>
-    <a href="/cgi-bin/koha/patroncards/members-search.pl?member=e&amp;batch_id=[% batch_id %]">E</a>
-    <a href="/cgi-bin/koha/patroncards/members-search.pl?member=f&amp;batch_id=[% batch_id %]">F</a>
-    <a href="/cgi-bin/koha/patroncards/members-search.pl?member=g&amp;batch_id=[% batch_id %]">G</a>
-    <a href="/cgi-bin/koha/patroncards/members-search.pl?member=h&amp;batch_id=[% batch_id %]">H</a>
-    <a href="/cgi-bin/koha/patroncards/members-search.pl?member=i&amp;batch_id=[% batch_id %]">I</a>
-    <a href="/cgi-bin/koha/patroncards/members-search.pl?member=j&amp;batch_id=[% batch_id %]">J</a>
-    <a href="/cgi-bin/koha/patroncards/members-search.pl?member=k&amp;batch_id=[% batch_id %]">K</a>
-    <a href="/cgi-bin/koha/patroncards/members-search.pl?member=l&amp;batch_id=[% batch_id %]">L</a>
-    <a href="/cgi-bin/koha/patroncards/members-search.pl?member=m&amp;batch_id=[% batch_id %]">M</a>
-    <a href="/cgi-bin/koha/patroncards/members-search.pl?member=n&amp;batch_id=[% batch_id %]">N</a>
-    <a href="/cgi-bin/koha/patroncards/members-search.pl?member=o&amp;batch_id=[% batch_id %]">O</a>
-    <a href="/cgi-bin/koha/patroncards/members-search.pl?member=p&amp;batch_id=[% batch_id %]">P</a>
-    <a href="/cgi-bin/koha/patroncards/members-search.pl?member=q&amp;batch_id=[% batch_id %]">Q</a>
-    <a href="/cgi-bin/koha/patroncards/members-search.pl?member=r&amp;batch_id=[% batch_id %]">R</a>
-    <a href="/cgi-bin/koha/patroncards/members-search.pl?member=s&amp;batch_id=[% batch_id %]">S</a>
-    <a href="/cgi-bin/koha/patroncards/members-search.pl?member=t&amp;batch_id=[% batch_id %]">T</a>
-    <a href="/cgi-bin/koha/patroncards/members-search.pl?member=u&amp;batch_id=[% batch_id %]">U</a>
-    <a href="/cgi-bin/koha/patroncards/members-search.pl?member=v&amp;batch_id=[% batch_id %]">V</a>
-    <a href="/cgi-bin/koha/patroncards/members-search.pl?member=w&amp;batch_id=[% batch_id %]">W</a>
-    <a href="/cgi-bin/koha/patroncards/members-search.pl?member=x&amp;batch_id=[% batch_id %]">X</a>
-    <a href="/cgi-bin/koha/patroncards/members-search.pl?member=y&amp;batch_id=[% batch_id %]">Y</a>
-    <a href="/cgi-bin/koha/patroncards/members-search.pl?member=z&amp;batch_id=[% batch_id %]">Z</a>
+    [% FOREACH letter IN alphabet.split(' ') %]
+        <a href="/cgi-bin/koha/patroncards/members-search.pl?member=[% letter %]&amp;batch_id=[% batch_id %]">[% letter %]</a>
+    [% END %]
 </div>
 
 <form method="get" action="/cgi-bin/koha/patroncards/members-search.pl"><p>
