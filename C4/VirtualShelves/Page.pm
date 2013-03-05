@@ -258,7 +258,7 @@ sub shelfpage {
                 if ( $sortfield eq 'year' ) {
                     $yearsort = 'year';
                 }
-                $sortfield = $query->param('sort') || $sortfield || 'title'; ## Passed in sorting overrides default sorting
+                $sortfield = $query->param('sort') || $sortfield; ## Passed in sorting overrides default sorting
                 my $direction = $query->param('direction') || 'asc';
                 $template->param(
                     sort      => $sortfield,
