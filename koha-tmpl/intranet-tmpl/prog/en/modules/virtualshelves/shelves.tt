@@ -1,16 +1,19 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; [% IF ( viewshelf ) %]Lists &rsaquo; Contents of [% shelfname | html %][% ELSE %]Lists[% END %][% IF ( shelves ) %] &rsaquo; Create new list[% END %][% IF ( edit ) %] &rsaquo; Edit list [% shelfname | html %][% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
+[% IF ( viewshelf ) %]
+    <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
+    <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.fixFloat.js"></script>
+[% END %]
 <script type="text/javascript">
 //<![CDATA[ 
 
 var MSG_NO_ITEM_SELECTED = _("Nothing is selected.");
 var MSG_REMOVE_FROM_LIST = _("Are you sure you want to remove these records from the shelf?");
 var MSG_CONFIRM_DELETE_LIST = _("Are you sure you want to remove this list?");
-
+[% IF ( viewshelf ) %]
 $(document).ready(function(){
-	$("#addbarcode").focus();
+    [% IF ( itemsloop ) %]$('#searchheader').fixFloat();[% END %]
     $("span.clearall").html("<a id=\"CheckNone\" href=\"/cgi-bin/koha/shelves.pl\">"+_("Clear all")+"<\/a>");
     $("span.checkall").html("<a id=\"CheckAll\" href=\"/cgi-bin/koha/shelves.pl\">"+_("Select all")+"<\/a>");
     $("#CheckAll").click(function(){
@@ -21,8 +24,70 @@ $(document).ready(function(){
         $(".checkboxed").unCheckCheckboxes();
         return false;
     });
-    $("#placehold").show();
+    $(".placehold").on("click",function(e){
+        placeHold();
+        e.preventDefault();
+    });
+    $(".addtocart").show();
+    var param1 = "| <label for=\"addto\">"+_("Add to:")+"<\/label><select name=\"addto\" id=\"addto\"><option value=\"\"><\/option>";
+    [% IF ( intranetbookbag ) %]
+         param1 += "<option value=\"addtocart\">"+_("Cart")+"<\/option>";
+    [% END %]
+    [% IF ( virtualshelves ) %]
+        [% IF ( addbarshelves ) %]
+            param1 += "<optgroup label=\""+_("Your lists:")+"\">";
+            [% FOREACH addbarshelvesloo IN addbarshelvesloop %]
+                [% IF ( shelfnumber != addbarshelvesloo.shelfnumber ) %]
+                    param1 += "<option id=\"s[% addbarshelvesloo.shelfnumber %]\" value=\"addtolist\">[% addbarshelvesloo.shelfname |html %]<\/option>";
+                [% END %]
+            [% END %]
+            param1 += "<\/optgroup>";
+        [% END %]
+        [% IF ( addpubshelves ) %]
+            param1 += "<optgroup label=\""+_("Public lists:")+"\">";
+            [% FOREACH addpubshelvesloo IN addpubshelvesloop %]
+                [% IF ( shelfnumber != addpubshelvesloo.shelfnumber ) %]
+                    param1 += "<option id=\"s[% addpubshelvesloo.shelfnumber %]\" value=\"addtolist\">[% addpubshelvesloo.shelfname |html %]<\/option>";
+                [% END %]
+            [% END %]
+            param1 += "<\/optgroup>";
+        [% END %]
+        [% IF ( ( addbarshelvesloop && addbarshelvesloop.size > 9 ) || (addpubshelvesloop && addpubshelvesloop.size > 9 )) %]
+            param1 += "<option value=\"morelists\">[ "+_("More lists")+" ]<\/option>";
+        [% END %]
+        param1 +="<option value=\"newlist\">"+_("[ New list ]")+"<\/option>"
+    [% END %]
+    param1 += "<\/select> <button id=\"cartsubmit\" type=\"submit\" class=\"btn btn-mini\">"+_("Save")+"</button>";
+    $("span.addto").html(param1);
+    $("#cartsubmit").on("click",function(e){
+        cartList();
+        e.preventDefault();
+    });
+    $("#addto").change(function(){
+        cartList();
+    });
+    $(".addto").find("input:submit").click(function(e){
+        e.preventDefault();
+        cartList();
+    });
+    $("#selection_ops").show();
+    $(".merge-items").on("click",function(e){
+        e.preventDefault();
+        MergeItems();
+    });
+    $("#listform").on("submit",function(e){
+
+    });
+    $(".list-remove").on("click",function(e){
+        if($(".selection").filter(":checked").length > 0){
+            return confirm(MSG_REMOVE_FROM_LIST);
+        } else {
+            alert(MSG_NO_ITEM_SELECTED);
+            e.preventDefault();
+        }
+    });
 });
+[% END %]
 
 	function confirmDelete(message){
 		if (window.confirm(message)) {
@@ -75,7 +140,7 @@ $(document).ready(function(){
         }
         return true;
     }
-    
+
 function placeHold () {
     var checkedItems = $(".selection:checked");
     if ($(checkedItems).size() == 0) {
@@ -98,7 +163,7 @@ function placeHold () {
 		var alertString2;
 
 	    if($("#shelfname").val() == ""){
-			_alertString += _("- You must enter a List Name") + "\n";
+            _alertString += "- "+_("You must enter a List Name") + "\n";
 		}
 
 		if (_alertString.length==0) {
@@ -110,6 +175,31 @@ function placeHold () {
 			alert(alertString2);
 		}
 	}
+    function cartList(){
+        var checkboxes = $("#searchresults").find(":checkbox");
+        var vshelf = vShelfAdd(checkboxes);
+        if($("#addto").find("option:selected").attr("value") == "addtolist"){
+            var shelfnumber = $("#addto").find("option:selected").attr("id").replace("s","");
+            if (vshelf) {
+                 openWindow('/cgi-bin/koha/virtualshelves/addbybiblionumber.pl?shelfnumber='+shelfnumber+'&confirm=1&' + vshelf,'popup',500,500);
+            }
+            return false;
+        } else if($("#addto").find("option:selected").attr("value") == "newlist"){
+            if (vshelf) {
+                openWindow('/cgi-bin/koha/virtualshelves/addbybiblionumber.pl?newshelf=1&' + vshelf,'popup',500,500);
+            }
+            return false;
+        } else if($("#addto").find("option:selected").attr("value") == "morelists"){
+            if (vshelf) {
+                openWindow('/cgi-bin/koha/virtualshelves/addbybiblionumber.pl?' + vshelf,'popup',500,500);
+            }
+            return false;
+        }
+        if($("#addto").find("option:selected").attr("value") == "addtocart"){
+            addMultiple(checkboxes);
+            return false;
+        }
+    }
 //]]>
 </script>
 </head>
@@ -147,7 +237,7 @@ function placeHold () {
 
 [% IF ( viewshelf ) %]&rsaquo; Contents of <i>[% shelfname | html %]</i>[% END %][% IF ( shelves ) %] &rsaquo; Create new list[% END %][% IF ( edit ) %] &rsaquo; Edit list <i>[% shelfname | html %]</i>[% END %]</div>
 
-<div id="doc" class="yui-t7">
+<div id="doc2" class="yui-t7">
  <div id="bd">
   <div id="yui-main">
    <div class="yui-g">[% INCLUDE 'virtualshelves-toolbar.inc' %]
@@ -193,56 +283,67 @@ function placeHold () {
    <div class="yui-g">
     [% IF ( itemsloop ) %]
 
-	<form action="/cgi-bin/koha/virtualshelves/shelves.pl" method="post" class="checkboxed">
+    <h3>Contents of <i>[% shelfname | html %]</i></h3>
+    <div class="pages">[% pagination_bar %]</div>
+    <form action="/cgi-bin/koha/virtualshelves/shelves.pl" id="listform" method="post" class="checkboxed">
         <input type="hidden" name="viewshelf" value="[% shelfnumber %]" />
         <input type="hidden" name="modifyshelfcontents" value="1" />
- <fieldset>
-  <legend>Contents of <i>[% shelfname | html %]</i></legend>
-   
- [% IF ( itemsloop ) %]
-     <p><span class="checkall"></span> |
-     <span class="clearall"></span></p>
- [% END %]
-	
- [% IF direction == 'asc' %]
-     [% SET new_direction = 'desc' %]
- [% ELSE %]
-     [% SET direction = 'desc' %]
-     [% SET new_direction = 'asc' %]
- [% END %]
 
- <div class="pages">[% pagination_bar %]</div>
-    <table>
+[% IF direction == 'asc' %]
+    [% SET new_direction = 'desc' %]
+[% ELSE %]
+    [% SET direction = 'desc' %]
+    [% SET new_direction = 'asc' %]
+[% END %]
+
+<div id="searchheader">
+    [% IF ( itemsloop ) %]
+        <div id="selection_ops"><span class="checkall"></span> |
+        <span class="clearall"></span>
+
+        <span class="addto">| </span>
+        &nbsp;
+        [% IF ( CAN_user_reserveforothers && DisplayMultiPlaceHold ) %]
+            <div class="btn-group"><button class="btn btn-mini placehold"><i class="icon-hold"></i> Place hold</button></div>
+        [% END %]
+        [% IF ( allowremovingitems ) %]
+            <div class="btn-group"><button type="submit" class="btn btn-mini list-remove"><i class="icon-remove-sign"></i> Remove selected</button></div>
+        [% END %]
+        [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]<div class="btn-group"><button type="submit" class="btn btn-mini merge-items"><i class="icon-merge"></i> Merge selected</button></div>[% END %]
+        </div>
+    [% END %]
+</div>
+
+    <table id="searchresults">
             <tr>
                 [% IF ( itemsloop ) %]<th class="checkall">&nbsp;</th>[% END %]
 
                 [% UNLESS ( item_level_itypes ) %]<th>Item type</th>[% END %]
                 <th>
-                    <a href="/cgi-bin/koha/virtualshelves/shelves.pl?viewshelf=[% shelfnumber %]&sort=title&direction=[% IF sort != 'title' %]asc[% ELSE %][% new_direction %][% END %]">Title</a>
+                    <a href="/cgi-bin/koha/virtualshelves/shelves.pl?viewshelf=[% shelfnumber %]&amp;sort=title&amp;direction=[% IF sort != 'title' %]asc[% ELSE %][% new_direction %][% END %]">Title</a>
                     [% IF sort == 'title' %]
-                        <img src="[% interface %]/[% theme %]/img/[% direction %].gif" />
+                        <img src="[% interface %]/[% theme %]/img/[% direction %].gif" alt="[% direction %] sort" />
                     [% ELSE %]
-                        <img src="[% interface %]/[% theme %]/img/ascdesc.gif" />
+                        <img src="[% interface %]/[% theme %]/img/ascdesc.gif" alt="" />
                     [% END %]
                 </th>
                 <th>
-                    <a href="/cgi-bin/koha/virtualshelves/shelves.pl?viewshelf=[% shelfnumber %]&sort=author&direction=[% IF sort != 'author' %]asc[% ELSE %][% new_direction %][% END %]">Author</a>
+                    <a href="/cgi-bin/koha/virtualshelves/shelves.pl?viewshelf=[% shelfnumber %]&amp;sort=author&amp;direction=[% IF sort != 'author' %]asc[% ELSE %][% new_direction %][% END %]">Author</a>
                    [% IF sort == 'author' %]
-                        <img src="[% interface %]/[% theme %]/img/[% direction %].gif" />
+                        <img src="[% interface %]/[% theme %]/img/[% direction %].gif" alt="[% direction %] sort" />
                    [% ELSE %]
-                       <img src="[% interface %]/[% theme %]/img/ascdesc.gif" />
+                       <img src="[% interface %]/[% theme %]/img/ascdesc.gif" alt="" />
                    [% END %]
                  </th>
                 <th>Date added</th>
                 <th>
-                    <a href="/cgi-bin/koha/virtualshelves/shelves.pl?viewshelf=[% shelfnumber %]&sort=itemcallnumber&direction=[% IF sort != 'itemcallnumber' %]asc[% ELSE %][% new_direction %][% END %]">Call number</a>
+                    <a href="/cgi-bin/koha/virtualshelves/shelves.pl?viewshelf=[% shelfnumber %]&amp;sort=itemcallnumber&amp;direction=[% IF sort != 'itemcallnumber' %]asc[% ELSE %][% new_direction %][% END %]">Call number</a>
                    [% IF sort == 'itemcallnumber' %]
-                        <img src="[% interface %]/[% theme %]/img/[% direction %].gif" />
+                        <img src="[% interface %]/[% theme %]/img/[% direction %].gif" alt="[% direction %] sort" />
                    [% ELSE %]
-                       <img src="[% interface %]/[% theme %]/img/ascdesc.gif" />
+                       <img src="[% interface %]/[% theme %]/img/ascdesc.gif" alt="" />
                    [% END %]
                  </th>
-                <th>&nbsp;</th>
             </tr>
 		[% FOREACH itemsloo IN itemsloop %]
 			[% UNLESS ( loop.odd ) %]
@@ -264,31 +365,58 @@ function placeHold () {
                 [% UNLESS ( noItemTypeImages || !itemsloo.imageurl ) %]<img src="[% itemsloo.imageurl %]" alt="[% itemsloo.description %]" title="[% itemsloo.description %]" />[% END %][% itemsloo.description %]
 			</td>[% END %]
 			<td>
-			[% INCLUDE 'biblio-default-view.inc' biblionumber = itemsloo.biblionumber %]
-			[% itemsloo.title |html %][% FOREACH subtitl IN itemsloo.subtitle %] [% subtitl.subfield %][% END %]</a>
+                [% IF ( itemsloo.XSLTBloc ) %]
+                    [% itemsloo.XSLTBloc %]
+                [% ELSE %]
+                    [% INCLUDE 'biblio-default-view.inc' biblionumber = itemsloo.biblionumber %]
+                    [% itemsloo.title |html %][% FOREACH subtitl IN itemsloo.subtitle %] [% subtitl.subfield %][% END %]</a>
+                [% END %]
+                    <p class="hold">
+                        [% IF ( itemsloo.notforloan ) %]
+                            <span class="noholdstext">No holds allowed</span>
+                        [% ELSE %]
+                            [% IF ( itemsloo.ITEM_RESULTS.size ) %]
+                                <a id="reserve_[% itemsloo.biblionumber %]" href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% itemsloo.biblionumber %]">Holds</a>
+                                [% IF ( holdfor ) %] <span class="holdforlink">| <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% itemsloo.biblionumber %]&amp;findborrower=[% holdfor_cardnumber %]">Place hold for [% holdfor_firstname %] [% holdfor_surname %] ([% holdfor_cardnumber %])</a></span>[% END %]
+                            [% ELSE %]
+                                <span class="noholdstext">No holds allowed</span>
+                            [% END %]
+                        [% END %]
+                        [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]
+                            | <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% itemsloo.biblionumber %]">Edit record</a>
+                        [% END %]
+                        [% IF ( CAN_user_editcatalogue_edit_items ) %]
+                            | <a href="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=[% itemsloo.biblionumber %]">Edit items</a>
+                        [% END %]
+                    </p>
 			</td>
 			<td>[% itemsloo.author %]</td>
 			<td>[% itemsloo.dateadded %]</td>
 			<td>
-                [% FOREACH result IN itemsloo.ITEM_RESULTS %][% result.itemcallnumber %][% UNLESS loop.last %], [% END %][% END %]
+                <ul>
+                [% FOREACH result IN itemsloo.ITEM_RESULTS %]
+                    <li>[% result.holdingbranch %] [% IF ( result.location_intranet ) %] ([% result.location_intranet %]) [% END %]
+                        [% IF ( result.itemcallnumber ) %]
+                            [<a href="/cgi-bin/koha/catalogue/search.pl?idx=callnum&amp;q=[% result.itemcallnumber |url %]">[% result.itemcallnumber %]</a>]
+                        [% END %]
+                    </li>
+                [% END %]
+                </ul>
             </td>
-            <td>
-			[% UNLESS ( itemsloo.notforloan ) %]
-			<a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% itemsloo.biblionumber %]">Holds</a>
-			[% END %]
-			</td>
 			</tr>
 		[% END %]<!-- /itemsloop -->
-    </table><fieldset class="action">
+    </table>
+    <div class="pages">[% pagination_bar %]</div>
+    <fieldset class="action">
         [% IF ( itemsloop ) %]
-            <input type="button" id="placehold" style="display:none" onclick="placeHold(); return false;" value="Place holds" />
-            [% IF ( allowremovingitems ) %]<input type="submit" value="Remove selected records" onclick="return confirm(MSG_REMOVE_FROM_LIST);" />[% END %]
-            <input type="submit" value="Merge selected records" onclick="return MergeItems();" />
+            [% IF ( CAN_user_reserveforothers && DisplayMultiPlaceHold ) %]<input type="button" class="placehold" value="Place hold" />[% END %]
+            [% IF ( allowremovingitems ) %]<input type="submit" value="Remove selected records" class="
+            list-remove" />[% END %]
+            [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]<input type="submit" value="Merge selected records" class="merge-items" />[% END %]
         [% END %]
  </fieldset>
- </fieldset>
- 
 </form>
+
 	[% END %]
    </div>
 [% END %]<!-- /viewshelf -->

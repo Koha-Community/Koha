@@ -237,7 +237,10 @@ sub shelfpage {
             # explicitly fetch this shelf
             my ($shelfnumber2,$shelfname,$owner,$category,$sorton) = GetShelf($shelfnumber);
 
-            $template->param( 'AllowOnShelfHolds' => C4::Context->preference('AllowOnShelfHolds') );
+            $template->param(
+                'AllowOnShelfHolds'     => C4::Context->preference('AllowOnShelfHolds'),
+                'DisplayMultiPlaceHold' => C4::Context->preference('DisplayMultiPlaceHold'),
+            );
             if (C4::Context->preference('TagsEnabled')) {
                 $template->param(TagsEnabled => 1);
                     foreach (qw(TagsShowOnList TagsInputOnList)) {
@@ -259,9 +262,11 @@ sub shelfpage {
                 for my $this_item (@$items) {
                     my $biblionumber = $this_item->{'biblionumber'};
                     my $record = GetMarcBiblio($biblionumber);
-                    $this_item->{XSLTBloc} =
-                        XSLTParse4Display($biblionumber, $record, "OPACXSLTResultsDisplay")
-                            if C4::Context->preference("OPACXSLTResultsDisplay") && $type eq 'opac';
+                    if (C4::Context->preference("OPACXSLTResultsDisplay") && $type eq 'opac') {
+                        $this_item->{XSLTBloc} = XSLTParse4Display($biblionumber, $record, "OPACXSLTResultsDisplay");
+                    } elsif (C4::Context->preference("XSLTResultsDisplay") && $type eq 'intranet') {
+                        $this_item->{XSLTBloc} = XSLTParse4Display($biblionumber, $record, "XSLTResultsDisplay");
+                    }
 
                     # the virtualshelfcontents table does not store these columns nor are they retrieved from the items
                     # and itemtypes tables, so I'm commenting them out for now to quiet the log -crn
@@ -291,6 +296,17 @@ sub shelfpage {
                             });
                     }
 
+                }
+                if($type eq 'intranet'){
+                    # Build drop-down list for 'Add To:' menu...
+                    my ($totalref, $pubshelves, $barshelves)=
+                    C4::VirtualShelves::GetSomeShelfNames($loggedinuser,'COMBO',1);
+                    $template->param(
+                        addbarshelves     => $totalref->{bartotal},
+                        addbarshelvesloop => $barshelves,
+                        addpubshelves     => $totalref->{pubtotal},
+                        addpubshelvesloop => $pubshelves,
+                    );
                 }
                 push @paramsloop, { display => 'privateshelves' } if $category == 1;
                 $showadd = 1;

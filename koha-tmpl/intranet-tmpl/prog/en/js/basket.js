@@ -153,17 +153,17 @@ function SelectAll(){
     }
 }
 
-function addMultiple(){
+function addMultiple(biblist){
     var c_value = "";
-    if(document.bookbag_form.biblionumber.length > 0) {
-        for (var i=0; i < document.bookbag_form.biblionumber.length; i++) {
-            if (document.bookbag_form.biblionumber[i].checked) {
-                c_value = c_value + document.bookbag_form.biblionumber[i].value + "/";
+    if(biblist.length > 0) {
+        for (var i=0; i < biblist.length; i++) {
+            if (biblist[i].checked) {
+                c_value = c_value + biblist[i].value + "/";
             }
         }
         addSelRecords(c_value);
     } else {
-        c_value = c_value + document.bookbag_form.biblionumber.value + "/";
+        c_value = c_value + biblist.value + "/";
         addSelRecords(c_value);
     }
 }
@@ -403,19 +403,19 @@ function addSelToShelf() {
 
 ///  vShelfAdd()  builds url string for multiple-biblio adds.
 
-function vShelfAdd() {
-        bibs= new Array;
-        if(document.bookbag_form.biblionumber.length > 0) {
-                for (var i=0; i < document.bookbag_form.biblionumber.length; i++) {
-                        if (document.bookbag_form.biblionumber[i].checked) {
-                                bibs.push("biblionumber=" +  document.bookbag_form.biblionumber[i].value);
+function vShelfAdd(biblist) {
+        bibs = new Array();
+        if(biblist.length > 0) {
+                for (var i=0; i < biblist.length; i++) {
+                        if (biblist[i].checked) {
+                                bibs.push("biblionumber=" +  biblist[i].value);
                         }
                 }
-	    if (bibs.length == 0) { showListsUpdate(MSG_NO_RECORD_SELECTED); }
+        if (bibs.length == 0) { showListsUpdate(MSG_NO_RECORD_SELECTED); }
             return bibs.join("&");
         } else {
-            if (document.bookbag_form.biblionumber.checked) {
-                return "biblionumber=" + document.bookbag_form.biblionumber.value;
+            if (biblist.checked) {
+                return "biblionumber=" + biblist.value;
             }
         }
 }
