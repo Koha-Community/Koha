@@ -30,6 +30,7 @@ use C4::Serials;
 use C4::Koha;
 use C4::Reserves qw/MergeHolds/;
 use C4::Acquisition qw/ModOrder GetOrdersByBiblionumber/;
+use Koha::Record;
 
 my $input = new CGI;
 my @biblionumber = $input->param('biblionumber');
@@ -168,8 +169,12 @@ if ($merge) {
             my $notreference = ($biblionumber[0] == $mergereference) ? $biblionumber[1] : $biblionumber[0];
 
             # Creating a loop for display
-            my @record1 = _createMarcHash(GetMarcBiblio($mergereference), $tagslib);
-            my @record2 = _createMarcHash(GetMarcBiblio($notreference), $tagslib);
+
+            my $recordObj1 = new Koha::Record({ 'record' => GetMarcBiblio($mergereference) });
+            my $recordObj2 = new Koha::Record({ 'record' => GetMarcBiblio($notreference) });
+
+            my @record1 = $recordObj1->createMarcHash($tagslib);
+            my @record2 = $recordObj2->createMarcHash($tagslib);
 
             # Parameters
             $template->param(
@@ -231,68 +236,3 @@ exit;
 # ------------------------
 # Functions
 # ------------------------
-sub _createMarcHash {
-     my $record = shift;
-    my $tagslib = shift;
-    my @array;
-    my @fields = $record->fields();
-
-
-    foreach my $field (@fields) {
-    my $fieldtag = $field->tag();
-    if ($fieldtag < 10) {
-        if ($tagslib->{$fieldtag}->{'@'}->{'tab'} >= 0) {
-        push @array, {
-            field => [
-                    {
-                    tag => $fieldtag,
-                    key => createKey(),
-                    value => $field->data(),
-                    }
-                ]
-                };
-        }
-    } else {
-        my @subfields = $field->subfields();
-        my @subfield_array;
-        foreach my $subfield (@subfields) {
-        if ($tagslib->{$fieldtag}->{@$subfield[0]}->{'tab'} >= 0) {
-            push @subfield_array, {
-                                    subtag => @$subfield[0],
-                                    subkey => createKey(),
-                                    value => @$subfield[1],
-                                  };
-        }
-
-        }
-
-        if ($tagslib->{$fieldtag}->{'tab'} >= 0 && $fieldtag ne '995') {
-        push @array, {
-            field => [
-                {
-                    tag => $fieldtag,
-                    key => createKey(),
-                    indicator1 => $field->indicator(1),
-                    indicator2 => $field->indicator(2),
-                    subfield   => [@subfield_array],
-                }
-            ]
-            };
-        }
-
-    }
-    }
-    return [@array];
-
-}
-
-=head2 CreateKey
-
-Create a random value to set it into the input name
-
-=cut
-
-sub createKey {
-    return int(rand(1000000));
-}
-

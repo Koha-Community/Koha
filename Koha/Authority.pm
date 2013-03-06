@@ -38,9 +38,9 @@ use MARC::Record;
 use MARC::File::XML;
 use C4::Charset;
 
-use base qw(Class::Accessor);
+use base qw(Koha::Record);
 
-__PACKAGE__->mk_accessors(qw( authid authtype record marcflavour ));
+__PACKAGE__->mk_accessors(qw( authid authtype marcflavour ));
 
 =head2 new
 
@@ -58,6 +58,7 @@ sub new {
     bless $self, $class;
     return $self;
 }
+
 
 =head2 get_from_authid
 
