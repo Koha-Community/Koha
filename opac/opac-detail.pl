@@ -1006,5 +1006,6 @@ $template->{VARS}->{OPACPopupAuthorsSearch} = C4::Context->preference('OPACPopup
 if (C4::Context->preference('OpacHighlightedWords')) {
     $template->{VARS}->{query_desc} = $query->param('query_desc');
 }
+$template->{VARS}->{'trackclicks'} = C4::Context->preference('TrackClicks');
 
 output_html_with_http_headers $query, $cookie, $template->output;

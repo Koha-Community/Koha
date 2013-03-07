@@ -417,3 +417,4 @@ INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES (
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('UNIMARCField100Language', 'fre','UNIMARC field 100 default language',NULL,'short');
 INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES('Persona',0,'Use Mozilla Persona for login','','YesNo');
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('OpacItemLocation','callnum','Show the shelving location of items in the opac','callnum|ccode|location','Choice');
+INSERT INTO systempreferences (variable,value,explanation,options,type)  VALUES('TrackClicks','0','Track links clicked',NULL,'Integer');

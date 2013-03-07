@@ -189,7 +189,8 @@ sub XSLTParse4Display {
                               Display856uAsImage OPACDisplay856uAsImage 
                               UseControlNumber IntranetBiblioDefaultView BiblioDefaultView
                               singleBranchMode OPACItemLocation
-                              AlternateHoldingsField AlternateHoldingsSeparator / )
+                              AlternateHoldingsField AlternateHoldingsSeparator
+                              TrackClicks / )
     {
         my $sp = C4::Context->preference( $syspref );
         next unless defined($sp);

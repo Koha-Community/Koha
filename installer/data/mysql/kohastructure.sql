@@ -3056,6 +3056,26 @@ CREATE TABLE IF NOT EXISTS `borrower_modifications` (
   KEY `borrowernumber` (`borrowernumber`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Table structure for table linktracker
+-- This stores clicks to external links
+--
+
+DROP TABLE IF EXISTS linktracker;
+CREATE TABLE linktracker (
+   id int(11) NOT NULL AUTO_INCREMENT, -- primary key identifier
+   biblionumber int(11) DEFAULT NULL, -- biblionumber of the record the link is from
+   itemnumber int(11) DEFAULT NULL, -- itemnumber if applicable that the link was from
+   borrowernumber int(11) DEFAULT NULL, -- borrowernumber who clicked the link
+   url text, -- the link itself
+   timeclicked datetime DEFAULT NULL, -- the date and time the link was clicked
+   PRIMARY KEY (id),
+   KEY bibidx (biblionumber),
+   KEY itemidx (itemnumber),
+   KEY borridx (borrowernumber),
+   KEY dateidx (timeclicked)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
