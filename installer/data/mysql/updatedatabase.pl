@@ -6488,7 +6488,19 @@ if ( CheckVersion($DBversion) ) {
 
 $DBversion = "3.11.00.XXX";
 if ( CheckVersion($DBversion) ) {
-    $dbh->do("INSERT INTO  permissions ( module_bit, code, description ) VALUES  ( '1',  'overdues_report',  'Execute overdue items report' )");
+    $dbh->do(q{
+        INSERT INTO permissions ( module_bit, code, description )
+        VALUES  ( '1', 'overdues_report', 'Execute overdue items report' )
+    });
+    # add new permission for users with all report permissions and circulation remaining permission
+    my $sth = $dbh->prepare(q{
+        INSERT INTO user_permissions (borrowernumber, module_bit, code)
+        SELECT user_permissions.borrowernumber, 1, 'overdues_report'
+        FROM user_permissions
+        LEFT JOIN borrowers USING(borrowernumber)
+        WHERE borrowers.flags & (1 << 16)
+        AND user_permissions.code = 'circulate_remaining_permissions'
+    });
     print "Upgrade to $DBversion done ( Add circ permission overdues_report )\n";
     SetVersion($DBversion);
 }
