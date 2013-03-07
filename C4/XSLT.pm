@@ -188,7 +188,7 @@ sub XSLTParse4Display {
                               UseAuthoritiesForTracings TraceSubjectSubdivisions
                               Display856uAsImage OPACDisplay856uAsImage 
                               UseControlNumber IntranetBiblioDefaultView BiblioDefaultView
-                              singleBranchMode
+                              singleBranchMode OPACItemLocation
                               AlternateHoldingsField AlternateHoldingsSeparator / )
     {
         my $sp = C4::Context->preference( $syspref );
@@ -232,8 +232,14 @@ sub buildKohaItemsNamespace {
         my %hi = map {$_ => 1} @$hidden_items;
         @items = grep { !$hi{$_->{itemnumber}} } @items;
     }
+
+    my $shelflocations = GetKohaAuthorisedValues('items.location',GetFrameworkCode($biblionumber), 'opac');
+    my $ccodes         = GetKohaAuthorisedValues('items.ccode',GetFrameworkCode($biblionumber), 'opac');
+
     my $branches = GetBranches();
     my $itemtypes = GetItemTypes();
+    my $location = "";
+    my $ccode = "";
     my $xml = '';
     for my $item (@items) {
         my $status;
@@ -272,8 +278,12 @@ sub buildKohaItemsNamespace {
             $status = "available";
         }
         my $homebranch = $item->{homebranch}? xml_escape($branches->{$item->{homebranch}}->{'branchname'}):'';
-	    my $itemcallnumber = xml_escape($item->{itemcallnumber});
+        $location = xml_escape($shelflocations->{$item->{location}});
+        $ccode = xml_escape($ccodes->{$item->{ccode}});
+        my $itemcallnumber = xml_escape($item->{itemcallnumber});
         $xml.= "<item><homebranch>$homebranch</homebranch>".
+                "<location>$location</location>".
+                "<ccode>$ccode</ccode>".
 		"<status>$status</status>".
 		"<itemcallnumber>".$itemcallnumber."</itemcallnumber>"
         . "</item>";
