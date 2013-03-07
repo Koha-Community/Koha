@@ -6444,7 +6444,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.11.00.XXX";
+$DBversion = "3.11.00.025";
 if ( CheckVersion($DBversion) ) {
     $dbh->do(
         "CREATE TABLE linktracker (
