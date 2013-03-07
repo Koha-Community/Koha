@@ -370,10 +370,10 @@ Circulation:
                   no: "Don't allow"
             - "patrons to place holds that don't enter the waiting list until a certain future date. (AllowHoldDateInFuture must also be enabled)."
         -
-            - Confirm future hold requests at checkin within
+            - Confirm future hold requests (starting no later than
             - pref: ConfirmFutureHolds
               class: integer
-            - day(s). Note that this number of days will be used too in calculating the default end date for the Holds to pull-report. (As may be obvious, use of this preference becomes useful only when allowing future holds.
+            - days from now) at checkin time. Note that this number of days will be used too in calculating the default end date for the Holds to pull-report. But it does not interfere with issuing, renewing or transferring books.
         -
             - Check the
             - pref: ReservesControlBranch
