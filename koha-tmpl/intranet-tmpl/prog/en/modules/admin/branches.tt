@@ -11,10 +11,23 @@
 [% END %]
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.pager.js"></script>
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.min.js"></script>
+[% INCLUDE 'datatables-strings.inc' %]
+<script type="text/javascript" src="[% themelang %]/js/datatables.js"></script>
 <script type="text/javascript" src="[% themelang %]/js/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
 <script type="text/javascript">
+//<![CDATA[
+    $(document).ready(function() {
+        $("#branchest").dataTable($.extend(true, {}, dataTablesDefaults, {
+            "aoColumnDefs": [
+                { "aTargets": [ -1, -2 ], "bSortable": false, "bSearchable": false },
+            ],
+            "iDisplayLength": 10,
+            "aLengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]],
+            "sPaginationType": "four_button"
+        }));
+    });
 tinyMCE.init({
     mode : "textareas",
     theme : "advanced",
@@ -31,6 +44,7 @@ tinyMCE.init({
     height : "300",
     width : "700"
 });
+//]]>
 </script>
 </head>
 <body id="admin_branches" class="admin">
@@ -165,9 +179,6 @@ tinyMCE.init({
     [% IF ( MESSAGE10 ) %]<div class="dialog message">Library cannot be deleted because there are items held by that library</div>[% END %]
     [% IF ( MESSAGE11 ) %]<div class="dialog message">Library cannot be deleted because there are patrons registered at that library</div>[% END %]
 [% IF ( branches ) %]
-<div id="pagerbranchest">
-[% INCLUDE 'table-pager.inc' perpage='10' %]
-</div>
     <table id="branchest">
 <thead><tr>
 			<th>Name</th>
@@ -176,7 +187,8 @@ tinyMCE.init({
             <th>Properties</th>
             <th>IP</th>
             <!-- <th>Printer</th> -->
-            <th colspan="2">&nbsp;</th>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
         </tr></thead><tbody>
         [% FOREACH branche IN branches %]
 	[% IF ( loop.odd ) %]
