@@ -105,33 +105,6 @@
         });
         //]]>
     </script>
-    <script type="text/javascript">
-        //<![CDATA[
-        $(document).ready(function() {
-            $("#save").empty();
-            $("#cancel").empty();
-            buildButtons();
-         });
-        function submitForm() {
-            document.input.submit();
-        };
-        function buildButtons() {
-            var saveButton = new YAHOO.widget.Button({
-                type: "link",
-                onclick: {fn: submitForm},
-                label: _("Save"),
-                id: "save",
-                container: "save"
-            });
-            var cancelButton = new YAHOO.widget.Button({
-                type: "link",
-                href: "/cgi-bin/koha/patroncards/manage.pl?card_element=layout",
-                label: _("Cancel"),
-                id: "cancel",
-                container: "cancel",
-            });
-        };
-    </script>
 </head>
 <body id="pcard_edit-layout" class="tools pcard">
     [% INCLUDE 'header.inc' %]
@@ -534,8 +507,8 @@
                 </div>
                 </div>
                     <fieldset class="action">
-                        <span id="save"><input type="submit" value="Save" /></span>
-                        <span id="cancel"><a class="cancel" href="/cgi-bin/koha/patroncards/manage.pl?card_element=layout">Cancel</a></span>
+                        <input type="submit" value="Save" />
+                        <a class="cancel" href="/cgi-bin/koha/patroncards/manage.pl?card_element=layout">Cancel</a>
                         <input type="hidden" name="op" value="save" />
                         <input type="hidden" name="layout_id" value="[% layout_id %]" />
                     </fieldset>
