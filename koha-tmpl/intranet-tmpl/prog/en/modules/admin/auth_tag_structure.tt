@@ -196,21 +196,9 @@ return false;
 
 [% IF ( else ) %]
 
-<div id="toolbar">
-    <script type="text/javascript">
-    //<![CDATA[
-    // prepare DOM for YUI Toolbar
-     $(document).ready(function() {
-        yuiToolbar();
-     });
-    // YUI Toolbar Functions
-    function yuiToolbar() {
-        new YAHOO.widget.Button("newtag");
-    }    //]]>
-    </script>
-    <ul class="toolbar">
-    <li><a id="newtag" href="/cgi-bin/koha/admin/auth_tag_structure.pl?op=add_form&amp;authtypecode=[% authtypecode %]">New tag</a></li>
-</ul></div>
+<div id="toolbar" class="btn-toolbar">
+    <div class="btn-group"><a class="btn btn-small" id="newtag" href="/cgi-bin/koha/admin/auth_tag_structure.pl?op=add_form&amp;authtypecode=[% authtypecode %]"><i class="icon-plus"></i> New tag</a></div>
+</div>
 
 <h2>Select an authority framework</h2>
 <form action="[% script_name %]" method="post">
