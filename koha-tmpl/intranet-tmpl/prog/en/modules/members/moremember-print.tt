@@ -30,6 +30,7 @@
 	<tr>
 		<th>Title</th>
 		<th>Author</th>
+                <th>Call no</th>
         <th>Item type</th>
         <th>Date due</th>
 		<th>Charge</th>
@@ -45,6 +46,7 @@
 		</a>
 		</td>
 		<td>[% issueloo.author %]</td>
+                <td>[% issueloo.itemcallnumber %]</td>
 		<td>[% issueloo.itemtype_description %]</td>
 		<td>[% issueloo.date_due %]</td>
 		<td>[% issueloo.charge %]</td>
@@ -53,7 +55,7 @@
 	</tr>
 	[% END %]
 	<tr>
-            <td colspan="4" style="text-align: right; font-weight:bold;">Totals:</td>
+            <td colspan="5" style="text-align: right; font-weight:bold;">Totals:</td>
             <td>[% totaldue %]</td>
             <td>[% totalprice %]</td>
             <td colspan="2">&nbsp;</td>
