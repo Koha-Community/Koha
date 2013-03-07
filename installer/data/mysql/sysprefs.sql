@@ -76,6 +76,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('CircAutocompl','1',NULL,'If ON, autocompletion is enabled for the Circulation input','YesNo'),
 ('CircAutoPrintQuickSlip','1',NULL,'Choose what should happen when an empty barcode field is submitted in circulation: Display a print quick slip window or Clear the screen.','YesNo'),
 ('CircControl','ItemHomeLibrary','PickupLibrary|PatronLibrary|ItemHomeLibrary','Specify the agency that controls the circulation and fines policy','Choice'),
+('ConfirmFutureHolds','0','','Number of days for confirming future holds','Integer'),
 ('COinSinOPACResults','1','','If ON, use COinS in OPAC search results page.  NOTE: this can slow down search response time significantly','YesNo'),
 ('CurrencyFormat','US','US|FR','Determines the display format of currencies. eg: \'36000\' is displayed as \'360 000,00\'  in \'FR\' or \'360,000.00\'  in \'US\'.','Choice'),
 ('dateformat','us','metric|us|iso','Define global date format (us mm/dd/yyyy, metric dd/mm/yyy, ISO yyyy-mm-dd)','Choice'),
