@@ -4,16 +4,24 @@
     [% IF ( heading_add_tag_p ) %]&rsaquo; [% IF ( authtypecode ) %][% authtypecode %] Framework[% ELSE %]Default framework[% END %] &rsaquo; New tag[% END %]
     [% ELSE %]&rsaquo; [% action %][% END %][% END %][% IF ( delete_confirm ) %]&rsaquo; [% IF ( authtypecode ) %][% authtypecode %] Framework[% ELSE %]Default framework[% END %] &rsaquo; Confirm deletion[% END %][% IF ( delete_confirmed ) %]&rsaquo; [% IF ( authtypecode ) %][% authtypecode %] Framework[% ELSE %]Default framework[% END %] &rsaquo; Data deleted[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.pager.js"></script>
-<script type="text/javascript" id="js">$(document).ready(function() {
-    $("#table_authtagstructure").tablesorter({
-        sortList: [[0,0]],
-        headers: { 5: { sorter: false},6: { sorter: false},7: { sorter: false}}
-    }).tablesorterPager({container: $("#pagertable_authtagstructure"),positionFixed: false,size: 20});
-}); </script>
+
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.min.js"></script>
+[% INCLUDE 'datatables-strings.inc' %]
+<script type="text/javascript" src="[% themelang %]/js/datatables.js"></script>
 <script type="text/javascript">
 //<![CDATA[
+ $(document).ready(function() {
+    $("#table_authtagstructure").dataTable($.extend(true, {}, dataTablesDefaults, {
+        "aoColumnDefs": [
+            { "aTargets": [ -1, -2, -3 ], "bSortable": false, "bSearchable": false },
+        ],
+        "iDisplayLength": 20,
+        "aLengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]],
+        "sPaginationType": "four_button"
+    }));
+ });
+
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     function isNotNull(f,noalert) {
         if (f.value.length ==0) {
@@ -217,7 +225,6 @@ return false;
     <input type="submit" value="OK" class="submit" />
 </form><br />
 <div id="pagertable_authtagstructure">
-[% INCLUDE 'table-pager.inc' perpage='20' %]
 </div>
 <table id="table_authtagstructure">
     <thead>
