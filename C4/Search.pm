@@ -847,6 +847,7 @@ sub _build_weighted_query {
     my $stemming      = C4::Context->preference("QueryStemming")     || 0;
     my $weight_fields = C4::Context->preference("QueryWeightFields") || 0;
     my $fuzzy_enabled = C4::Context->preference("QueryFuzzy")        || 0;
+    $operand =~ s/"/ /g;    # Bug 7518: searches with quotation marks don't work
 
     my $weighted_query .= "(rk=(";    # Specifies that we're applying rank
 
