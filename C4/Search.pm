@@ -110,8 +110,6 @@ sub FindDuplicate {
         # quotes around the value
         $result->{title} =~ s/(and|or|not)//g;
         $query = "ti,ext=$result->{title}";
-        $query .= " and itemtype=$result->{itemtype}"
-          if ( $result->{itemtype} );
         if   ( $result->{author} ) {
             $result->{author} =~ s /\\//g;
             $result->{author} =~ s /\"//g;
