@@ -204,7 +204,13 @@ function placeHold () {
      <span class="clearall"></span></p>
  [% END %]
 	
- [% IF direction == 'asc' %][% SET new_direction = 'desc' %][% ELSE %][% SET new_direction = 'asc' %][% END %]
+ [% IF direction == 'asc' %]
+     [% SET new_direction = 'desc' %]
+ [% ELSE %]
+     [% SET direction = 'desc' %]
+     [% SET new_direction = 'asc' %]
+ [% END %]
+
  <div class="pages">[% pagination_bar %]</div>
     <table>
             <tr>
@@ -212,41 +218,29 @@ function placeHold () {
 
                 [% UNLESS ( item_level_itypes ) %]<th>Item type</th>[% END %]
                 <th>
-                    <a href="/cgi-bin/koha/virtualshelves/shelves.pl?viewshelf=[% shelfnumber %]&sort=title&direction=[% new_direction %]">Title</a>
+                    <a href="/cgi-bin/koha/virtualshelves/shelves.pl?viewshelf=[% shelfnumber %]&sort=title&direction=[% IF sort != 'title' %]asc[% ELSE %][% new_direction %][% END %]">Title</a>
                     [% IF sort == 'title' %]
-                        [% IF direction == 'asc' %]
-                            <img src="/intranet-tmpl/prog/img/asc.gif" />
-                        [% ELSIF direction == 'desc' %]
-                            <img src="/intranet-tmpl/prog/img/desc.gif" />
-                        [% END %]
+                        <img src="/intranet-tmpl/prog/img/[% direction %].gif" />
                     [% ELSE %]
                         <img src="/intranet-tmpl/prog/img/ascdesc.gif" />
                     [% END %]
                 </th>
                 <th>
-                    <a href="/cgi-bin/koha/virtualshelves/shelves.pl?viewshelf=[% shelfnumber %]&sort=author&direction=[% new_direction %]">Author</a>
+                    <a href="/cgi-bin/koha/virtualshelves/shelves.pl?viewshelf=[% shelfnumber %]&sort=author&direction=[% IF sort != 'author' %]asc[% ELSE %][% new_direction %][% END %]">Author</a>
                    [% IF sort == 'author' %]
-                        [% IF direction == 'asc' %]
-                            <img src="/intranet-tmpl/prog/img/asc.gif" />
-                        [% ELSIF direction == 'desc' %]
-                            <img src="/intranet-tmpl/prog/img/desc.gif" />
-                        [% END %]
-                    [% ELSE %]
-                        <img src="/intranet-tmpl/prog/img/ascdesc.gif" />
-                    [% END %]
+                        <img src="/intranet-tmpl/prog/img/[% direction %].gif" />
+                   [% ELSE %]
+                       <img src="/intranet-tmpl/prog/img/ascdesc.gif" />
+                   [% END %]
                  </th>
                 <th>Date added</th>
                 <th>
-                    <a href="/cgi-bin/koha/virtualshelves/shelves.pl?viewshelf=[% shelfnumber %]&sort=itemcallnumber&direction=[% new_direction %]">Call number</a>
+                    <a href="/cgi-bin/koha/virtualshelves/shelves.pl?viewshelf=[% shelfnumber %]&sort=itemcallnumber&direction=[% IF sort != 'itemcallnumber' %]asc[% ELSE %][% new_direction %][% END %]">Call number</a>
                    [% IF sort == 'itemcallnumber' %]
-                        [% IF direction == 'asc' %]
-                            <img src="/intranet-tmpl/prog/img/asc.gif" />
-                        [% ELSIF direction == 'desc' %]
-                            <img src="/intranet-tmpl/prog/img/desc.gif" />
-                        [% END %]
-                    [% ELSE %]
-                        <img src="/intranet-tmpl/prog/img/ascdesc.gif" />
-                    [% END %]
+                        <img src="/intranet-tmpl/prog/img/[% direction %].gif" />
+                   [% ELSE %]
+                       <img src="/intranet-tmpl/prog/img/ascdesc.gif" />
+                   [% END %]
                  </th>
                 <th>&nbsp;</th>
             </tr>
