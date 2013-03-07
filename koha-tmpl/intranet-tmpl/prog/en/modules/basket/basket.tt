@@ -67,6 +67,7 @@ function placeHold () {
 }
 
 	$(document).ready(function(){
+                $("#items-popover").popover();
 		$("#CheckAll").click(function(){
 		var checked = [];
 		$("#bookbag_form").checkCheckboxes("*", true).each(
@@ -355,7 +356,7 @@ function placeHold () {
 	    [% UNLESS ( print_basket ) %]<th>&nbsp;</th>[% END %]
 	    <th>Title</th>
         <th>Item type</th>
-        <th>Items</th>
+        <th><a id="items-popover" href="#" data-trigger="hover" data-toggle="popover" data-placement="top" title="Item sorting" data-content="Items are sorted by the highest or lowest callnumber in a group of items respectively.">Items</a></th>
         </tr></thead>
 
         [% FOREACH BIBLIO_RESULT IN BIBLIO_RESULTS %]
