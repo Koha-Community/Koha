@@ -85,6 +85,7 @@ sub _processrecord {
         my @newfields;
         foreach my $authfield (@seefrom) {
             my $tag = substr($field->tag(), 0, 1) . substr($authfield->tag(), 1, 2);
+            next if MARC::Field->is_controlfield_tag($tag);
             my $newfield = MARC::Field->new($tag,
                     'z',
                     $authfield->indicator(2) || ' ',
