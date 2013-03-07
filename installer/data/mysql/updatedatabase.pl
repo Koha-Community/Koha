@@ -6445,7 +6445,7 @@ if ( CheckVersion($DBversion) ) {
 }
 
 
-$DBversion = "3.11.00.XXX";
+$DBversion = "3.11.00.024";
 if ( CheckVersion($DBversion) ) {
     $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('OpacItemLocation','callnum','Show the shelving location of items in the opac','callnum|ccode|location','Choice');");
     print "Upgrade to $DBversion done (Bug 5079: Add OpacItemLocation syspref)\n";
