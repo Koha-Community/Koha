@@ -1180,6 +1180,7 @@ sub parseQuery {
     my $QParser;
     $QParser = C4::Context->queryparser if (C4::Context->preference('UseQueryParser') || $query =~ s/^qp=//);
     undef $QParser if ($query =~ m/^(ccl=|pqf=|cql=)/ || grep (/\w,\w|\w=\w/, @operands) );
+    undef $QParser if (scalar @limits > 0);
 
     if ($QParser)
     {

@@ -837,7 +837,9 @@ if (C4::Context->preference('GoogleIndicTransliteration')) {
         $template->param('GoogleIndicTransliteration' => 1);
 }
 
-$template->{VARS}->{DidYouMean} = C4::Context->preference('OPACdidyoumean') =~ m/enable/;
+$template->{VARS}->{DidYouMean} =
+  ( defined C4::Context->preference('OPACdidyoumean')
+      && C4::Context->preference('OPACdidyoumean') =~ m/enable/ );
 $template->{VARS}->{IDreamBooksReviews} = C4::Context->preference('IDreamBooksReviews');
 $template->{VARS}->{IDreamBooksReadometer} = C4::Context->preference('IDreamBooksReadometer');
 $template->{VARS}->{IDreamBooksResults} = C4::Context->preference('IDreamBooksResults');

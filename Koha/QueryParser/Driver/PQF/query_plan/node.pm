@@ -68,6 +68,7 @@ sub target_syntax {
                 if ($atom_content) {
                     $pqf .= ' @or ' x (scalar(@fields) - 1);
                     foreach my $attributes (@fields) {
+                        $attributes->{'attr_string'} ||= '';
                         $pqf .= $attributes->{'attr_string'} . ($attributes->{'4'} ? '' : ' @attr 4=6 ') . $atom_content . ' ';
                     }
                     $atom_count++;
