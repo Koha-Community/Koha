@@ -1,12 +1,13 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Cataloging &rsaquo; [% IF ( biblionumber ) %]Editing [% title |html %] (Record number [% biblionumber %])[% ELSE %]Add MARC record[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<script type="text/javascript" src="[% themelang %]/lib/yui/plugins/bubbling-min.js"></script>
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.fixFloat.js"></script>
 <script type="text/javascript" src="[% themelang %]/js/cataloging.js"></script>
 <script type="text/javascript">
 //<![CDATA[
-
+    $(window).load(function(){
+        $("#loading").hide();
+    });
 	 $(document).ready(function() {
         $('#addbibliotabs').tabs().bind('show.ui-tabs', function(e, ui) {
 			$("#"+ui.panel.id+" input:eq(0)").focus();
@@ -21,11 +22,49 @@
 			$.cookie("marcdocs_[% borrowernumber %]",'true',
 						{ path: "/", expires: 365 });
 		}
+        $('#toolbar').fixFloat();
+        $("#marcDocsSelect").click(function(){
+            if($(this).attr("checked")){
+                showMARCdocLinks();
+            } else {
+                hideMARCdocLinks();
+            }
+        });
+        $("#z3950search").click(function(){
+            if (confirm(_("Please note that this Z39.50 search could replace the current record."))){
+                PopupZ3950();
+            }
+        });
 
+        $("#saverecord").click(function(){
+            $(".btn-group").removeClass("open");
+            onOption();
+            return false;
+        })
+
+        $("#saveandview").click(function(){
+            $(".btn-group").removeClass("open");
+            redirect("view");
+            return false;
+        });
+
+        $("#saveanditems").click(function(){
+            $(".btn-group").removeClass("open");
+            redirect("items");
+            return false;
+        });
 	});
 
-    $('#header_search').tabs().bind('show.ui-tabs', function(e, ui) { $('#header_search > div:not(.ui-tabs-hide)').find('input').eq(0).focus(); });
+function redirect(dest){
+    $("#redirect").attr("value",dest);
+    return Check();
+}
 
+[% IF ( CAN_user_editcatalogue_edit_items ) %]
+    var onOption = function () {
+        return Check();
+    }
+[% END %]
 
 function confirmnotdup(redirect){
 	$("#confirm_not_duplicate").attr("value","1");
@@ -250,22 +289,11 @@ function Changefwk(FwkList) {
 <link type="text/css" rel="stylesheet" href="[% themelang %]/css/addbiblio.css" />
 </head>
 <body id="cat_addbiblio" class="cat">
-<div id="yui-cms-loading">
-      <div id="yui-cms-float">
-          Loading, please wait...
-      </div>
-  </div>
-<script type="text/javascript" src="[% themelang %]/lib/yui/plugins/loading-min.js"></script>
-<script type="text/javascript">
-//<![CDATA[
-(function() {
-	// configuring the loading mask
-	YAHOO.widget.Loading.config({
-		opacity: 0.8
-	});
-})();
-//]]>
-</script>
+
+   <div id="loading">
+       <div>Loading, please wait...</div>
+   </div>
+
 [% INCLUDE 'header.inc' %]
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloging</a>  &rsaquo; [% IF ( biblionumber ) %]Editing <em>[% title |html %]</em> (Record number [% biblionumber %])[% ELSE %]Add MARC record[% END %]</div>
@@ -317,108 +345,48 @@ function Changefwk(FwkList) {
     <input type="hidden" value="[% IF ( biblionumber ) %]view[% ELSE %]items[% END %]" id="redirect" name="redirect" />
 	<input type="hidden" value="0" id="confirm_not_duplicate" name="confirm_not_duplicate" />
 [% END %]
-	
-<div id="toolbar">
 
-<script type="text/javascript">
-	//<![CDATA[
-
-	// prepare DOM for YUI Toolbar
-
-	 $(document).ready(function() {
-        $('#toolbar').fixFloat();
-		$("#z3950searchc").empty();
-        $("#savebutton").empty();
-	    yuiToolbar();
-
-        $("#marcDocsSelect").click(function(){
-            if($(this).attr("checked")){
-                showMARCdocLinks();
-            } else {
-                hideMARCdocLinks();
-            }
-        });
-	 });
-
-    function redirect(dest){
-        $("#redirect").attr("value",dest);
-        return Check();
-    }
-[% IF ( CAN_user_editcatalogue_edit_items ) %]
-    var onOption = function () {
-        return Check();
-    }
-
-    var savemenu = [
-        { text: _("Save and view record"), value: 1, onclick: {fn:function(){redirect("view");}} },
-        { text: _("Save and edit items"), value: 2, onclick: {fn:function(){redirect("items");}} }
-    ];
-[% END %]
-
-	// YUI Toolbar Functions
-
-	function yuiToolbar() {
-[% IF ( CAN_user_editcatalogue_edit_items ) %]
-    [% IF (circborrowernumber) %][%# fast cataloging must lead to items %]
-        new YAHOO.widget.Button({
-            id: "addbiblio",
-            type: "button",
-            label: _("Save"),
-            container: "savebutton",
-            onclick: {fn:function(){redirect("items");}}
-        });
+<div id="toolbar" class="btn-toolbar">
+    [% IF ( CAN_user_editcatalogue_edit_items ) %]
+        [% IF (circborrowernumber) %][%# fast cataloging must lead to items %]
+            <!-- Action is under fast cataloging - Save button redirecting to items -->
+            <div class="btn-group"><a href="#" id="saveanditems" class="btn btn-small"><i class="icon-hdd"></i> Save</a></div>
+        [% ELSE %]
+            <!-- Not using fast cataloging - Display split menu -->
+            <div class="btn-group">
+                <button class="btn btn-small" id="saverecord"><i class="icon-hdd"></i> Save</button>
+                <button class="btn btn-small dropdown-toggle" data-toggle="dropdown">
+                <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a id="saveandview" href="#">Save and view record</a></li>
+                    <li><a id="saveanditems" href="#">Save and edit items</a></li>
+                </ul>
+            </div>
+        [% END %]
     [% ELSE %]
-        var savesplitmenu = new YAHOO.widget.Button({
-            type: "split",
-            label: _("Save"),
-            id: "addbiblio",
-            name: "savemenubutton",
-            menu: savemenu,
-            container: "savebutton"
-         });
-        savesplitmenu.on("click", onOption);
+        <!-- User cannot edit items - single button redirecting to view -->
+        <div class="btn-group"><a href="#" id="saveandview" class="btn btn-small"><i class="icon-hdd"></i> Save</a></div>
     [% END %]
-[% ELSE %]
-        new YAHOO.widget.Button({
-            id: "addbiblio",
-            type: "button",
-            label: _("Save"),
-            container: "savebutton",
-            onclick: {fn:function(){redirect("view");}}
-        });
-[% END %]
-		new YAHOO.widget.Button({
-            id: "z3950search",
-            type: "button",
-            label: _("Z39.50 Search"),
-            container: "z3950searchc",
-            onclick: {fn:function(){if (confirm(_("Please note that this Z39.50 search could replace the current record."))) PopupZ3950()}}
-        });
-	}
 
-	//]]>
-	</script>
-
-		<ul class="toolbar">
-			<li id="savebutton"><input id="addbiblio" type="submit" value="Save" /></li>
-            [% UNLESS (circborrowernumber) %][%# Hide in fast cataloging %]
-			<li id="z3950searchc"><input type="button" id="z3950search" value="Z39.50 Search" onclick="PopupZ3950(); return false;" /></li>
-			<li id="changeframework"><label for="Frameworks">Change framework: </label>
-			<select name="frameworkcode" id="Frameworks" onchange="Changefwk(this);">
-			                <option value="Default">Default</option>
-							[% FOREACH frameworkcodeloo IN frameworkcodeloop %]
-                                [% IF ( frameworkcodeloo.selected ) %]
-                                    <option value="[% frameworkcodeloo.value %]" selected="selected">
-                                [% ELSE %]
-                                    <option value="[% frameworkcodeloo.value %]">
-                                [% END %]
-					             [% frameworkcodeloo.frameworktext %]                                      
-                                 </option>                          
-					        [% END %]
-			</select> 
-            </li>
-            [% END %]
-		</ul>
+    [% UNLESS (circborrowernumber) %][%# Hide in fast cataloging %]
+        <div class="btn-group"><a class="btn btn-small" href="#" id="z3950search"><i class="icon-search"></i> Z39.50 search</a></div>
+        <div class="btn-group">
+            <label for="Frameworks">Change framework: </label>
+            <select name="frameworkcode" id="Frameworks" onchange="Changefwk(this);">
+                <option value="Default">Default</option>
+                [% FOREACH frameworkcodeloo IN frameworkcodeloop %]
+                    [% IF ( frameworkcodeloo.selected ) %]
+                        <option value="[% frameworkcodeloo.value %]" selected="selected">
+                    [% ELSE %]
+                        <option value="[% frameworkcodeloo.value %]">
+                    [% END %]
+                     [% frameworkcodeloo.frameworktext %]
+                     </option>
+                [% END %]
+            </select>
+        </div>
+    [% END %]
 </div>
 
 [% IF ( popup ) %]

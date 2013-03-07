@@ -20,22 +20,6 @@ a.expandfield {
 	text-decoration : none;
 }
 
-#yui-cms-loading {
-	background : #FFFFFF;
-	color : #333333;
-	display : none;
-}
-
-#yui-cms-loading #yui-cms-float {
-	text-align : center;
-	font-size : 175%;
-	background-image : url(../../img/loading.gif);
-	background-repeat : no-repeat;
-	background-position : top;
-	padding-top : 50px;
-}
-
-	 
 #authoritytabs {
 	margin-top : 1em;
 	margin-bottom : 1em;
@@ -155,6 +139,7 @@ a.tagnum {
 .floating {
 	-webkit-box-shadow: 0px 3px 2px 0px rgba(0, 0, 0, .5);
 	box-shadow: 0px 3px 2px 0px rgba(0, 0, 0, .5);
+    margin-top: 0;
 }
 
 tr.active td {
@@ -163,4 +148,28 @@ tr.active td {
 
 tr.active.highlight td {
     background-color: #FEF4B4;
+}
+
+#loading {
+    background-color: #FFF;
+    cursor: wait;
+    height: 100%;
+    left: 0;
+    opacity: .7;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+#loading div {
+    background : transparent url(../../img/loading.gif) top left no-repeat;
+    font-size : 175%;
+    font-weight: bold;
+    height: 2em;
+    left: 50%;
+    margin: -1em 0 0 -2.5em;
+    padding-left : 50px;
+    position: absolute;
+    top: 50%;
+    width: 15em;
 }
