@@ -342,8 +342,8 @@ function UnCloneField(index) {
     } else {
         // unclone a subfield, check if there will remain one subfield
         var subfieldCode = getFieldAndSubfieldCode(index);
-        // subfield divs with id begining with original field and subfield field code
-        var cloneSubfields = $('.subfield_line[id^="subfield'+subfieldCode+'"]');
+        // subfield divs of same field with id begining with original field and subfield field code
+        var cloneSubfields = $(original).parent().children('.subfield_line[id^="subfield'+subfieldCode+'"]');
         if (cloneSubfields.length > 1) {
             canUnclone = true;
         }
