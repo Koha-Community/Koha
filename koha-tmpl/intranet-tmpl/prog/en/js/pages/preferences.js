@@ -1,10 +1,3 @@
-$(document).ready(function() {
-    $("table.preferences").tablesorter({
-        sortList: [[0,0]],
-        headers: { 1: { sorter:false}}
-    });
-});
-
 // We can assume 'KOHA' exists, as we depend on KOHA.AJAX
 
 KOHA.Preferences = {
@@ -40,6 +33,15 @@ KOHA.Preferences = {
 };
 
 $( document ).ready( function () {
+
+    $("table.preferences").dataTable($.extend(true, {}, dataTablesDefaults, {
+        "sDom": 't',
+        "aoColumnDefs": [
+            { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false }
+        ],
+        "bPaginate": false
+    }));
+
     function mark_modified() {
         $( this.form ).find( '.save-all' ).removeAttr( 'disabled' );
         $( this ).addClass( 'modified' );
@@ -96,11 +98,11 @@ $( document ).ready( function () {
     $(collapsible).toggle(
         function () {
             $(this).addClass("collapsed").removeClass("expanded").attr("title",MSG_CLICK_TO_EXPAND);
-            $(this).next("table").hide();
+            $(this).next("div").hide();
         },
         function () {
             $(this).addClass("expanded").removeClass("collapsed").attr("title",MSG_CLICK_TO_COLLAPSE);
-            $(this).next("table").show();
+            $(this).next("div").show();
         }
     );
 
