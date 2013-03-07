@@ -264,17 +264,20 @@
         <a class="btn btn-small" id="newstopword" href="[% script_name %]?op=add_form"><i class="icon-plus"></i> New preference</a>
     </div>
 
-    <h1>System preferences admin</h1>
-    <h2>[% tab %] preferences</h2>
-    [% searchfield %]
-    <table width="80%" id="sysprefst">
-    <thead><tr>
+    [% IF ( tab != 'local_use' ) %]
+        <p>Please click on one of the tabs at the left side of this form.</p>
+        <table>
+    [% ELSE %]
+        <h1>Local use preferences</h1>
+        <table width="80%" id="sysprefst">
+        <thead><tr>
         <th>Preference</th>
         <th>Explanation</th>
         <th>Value</th>
         <th>Edit</th>
         <th>Delete</th>
-    </tr></thead>
+        </tr></thead>
+    [% END %]
     <tbody>[% FOREACH loo IN loop %]
     [% UNLESS ( loop.odd ) %]<tr class="highlight">[% ELSE %]<tr>[% END %]
 
