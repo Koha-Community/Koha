@@ -862,61 +862,33 @@ function checkBudgetParent(budgetId, newBudgetParent) {
     }
 }
 
-
-function addColumn(p_sType, p_aArgs, p_oValue)
-{
-    var allRows = document.getElementById('plan').rows;
-    var colnum  = p_oValue[0];
-    var code   = p_oValue[1];
-    var colnum  = new Number(colnum);
-
-    for (var i=0; i<allRows.length; i++) {
-            var allCells  = allRows[i].cells;
-            allCells[colnum+1].style.display="table-cell";
-    }
-
-// make a menuitem object
-    var hids = document.getElementsByName("hide_cols")
-    for (var i=0; i<hids.length; i++) {
-        if (hids[i].value == code) {
-            var x =  hids[i];
-            x.parentNode.removeChild(x)    // sigh...
-            break;
-        }
-    }
+function hideColumn(num) {
+    $("#hideall,#showall").removeAttr("checked").parent().removeClass("selected");
+    $("#"+num).parent().removeClass("selected");
+    var hide = Number(num.replace("col","")) + 2;
+    // hide header and cells matching the index
+    $("#plan td:nth-child("+hide+"),#plan th:nth-child("+hide+")").toggle();
 }
 
-
-function delColumn(n, code)
-{
-    var allRows = document.getElementById('plan').rows;
-
-// find index
-    var index;
-    var nn  = new Number(n);
-    var code   = code ;
-    for (var i=0; i<allRows.length; i++) {
-        var allCells  = allRows[i].cells;
-        allCells[nn+1].style.display="none";
-    }
-
-    var r = 0;
-    var hids = document.getElementsByName("hide_cols")
-    for (var i=0; i<hids.length; i++) {
-        if (hids[i].value == code) {
-            r = 1;
-            break;
-        }
-    }
-
-    if (r == 0 ) {
-        // add hide_col to form
-        var el = document.createElement("input");
-        el.setAttribute("type", 'hidden' );
-        el.setAttribute("value", code);
-        el.setAttribute("name", 'hide_cols');
-        document.getElementById("hide_div").appendChild(el);
-    }
+function showColumn(num){
+    $("#hideall").removeAttr("checked").parent().removeClass("selected");
+    $("#"+num).parent().addClass("selected");
+    // set the index of the table column to hide
+    show = Number(num.replace("col","")) + 2;
+    // hide header and cells matching the index
+    $("#plan td:nth-child("+show+"),#plan th:nth-child("+show+")").toggle();
 }
 
-
+function showAllColumns(){
+    $("#selections").checkCheckboxes();
+    $("#selections span").addClass("selected");
+    $("#plan td:nth-child(2),#plan tr th:nth-child(2)").nextAll().show();
+    $("#hideall").removeAttr("checked").parent().removeClass("selected");
+}
+function hideAllColumns(){
+    var allCols = $("#plan th").length;
+    $("#selections").unCheckCheckboxes();
+    $("#selections span").removeClass("selected");
+    $("#plan td:nth-child(2),#plan th:nth-child(2)").nextUntil("th:nth-child("+(allCols-1)+"),td:nth-child("+(allCols-1)+")").hide(); // hide all but the last two columns
+    $("#hideall").attr("checked","checked").parent().addClass("selected");
+}
