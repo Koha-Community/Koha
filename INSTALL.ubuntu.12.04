@@ -106,24 +106,22 @@ sudo privileges, however some need to be run directly as root.
 
 1.5 Get Koha
 
-  There are three suggested ways to install Koha. If you will be
-  participating in Koha's development, the Download from Git
-  is the recommended way (See 1.5.1 below).
-  If you would like to skip some of these tedious tasks, visit
-  the following URL:
-  http://wiki.koha-community.org/wiki/Koha_3.8_on_Debian_Squeeze
-  If you will not be, then follow the Download from Tarball
-  instructions (See 1.5.2 below).
+  There are two ways to install Koha. The easy way is using Debian/Ubuntu
+  packages (check http://wiki.koha-community.org/wiki/Koha_on_ubuntu_-_packages
+  for further instructions).
+
+  The other way is installing from sources. You can get Koha's source
+  either using git (see 1.5.1) or downloading the stable release tarball.
 
   1.5.1 Download from Git
 
   Install Git:
-    $ sudo apt-get install git-core
+    $ sudo apt-get install git
 
-  Download Koha:
+  Download Koha (the 3.10.x branch):
     $ git clone git://git.koha-community.org/koha.git kohaclone
     $ cd kohaclone
-    $ git checkout -b myinstall origin
+    $ git checkout -b myinstall origin/3.10.x
 
   NOTE: for more information about Git, please see the Koha Git
         Usage Guide:
@@ -141,24 +139,19 @@ sudo privileges, however some need to be run directly as root.
 
   Determine the version and change directory:
     $ ls
-    koha-3.08.03  koha-lastest.tar.gz
-    $ cd koha-3.08.03
+    koha-3.10.00  koha-latest.tar.gz
+    $ cd koha-3.10.00
 
 
 1.6 Install additional Ubuntu dependencies
 
   Several Koha dependencies have been conveniently packaged and
-  will be installed issuing the following commands:
+  will be installed issuing the following command:
 
-    $ sudo apt-get install dselect
-    $ sudo dpkg --set-selections < install_misc/ubuntu.packages
-    $ sudo dselect
+    $ sudo apt-get install `cat install_misc/ubuntu.12.04.packages | \
+            cut -f1 | grep -v '#' | grep -v -e '^$'`
 
-  Choose [I]nstall and accept packages to be installed and hit
-  return. Be patient. This may take a long time.
-  Choose [C]onfigure, [R]emove and [Q]uit until dselect has
-  completed.
-
+  Confirm that you want to install the required packages when prompted,
 
 1.7 Install Perl dependencies that aren't packaged
 
