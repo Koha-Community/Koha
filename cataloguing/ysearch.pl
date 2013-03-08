@@ -31,7 +31,7 @@ use C4::Charset;
 use C4::Auth qw/check_cookie_auth/;
 
 my $input = new CGI;
-my $query = $input->param('query');
+my $query = $input->param('term');
 my $table = $input->param('table');
 my $field = $input->param('field');
 
@@ -54,8 +54,14 @@ $sql .= qq( ORDER BY $field);
 my $sth = $dbh->prepare($sql);
 $sth->execute("$query%", "% $query%", "%-$query%");
 
+print "[";
+my $i = 0;
 while ( my $rec = $sth->fetchrow_hashref ) {
-    print nsb_clean($rec->{$field}) . "\n";
+    if($i > 0){ print ","; }
+    print "{\"fieldvalue\":\"" . nsb_clean($rec->{$field}) . "\"" .
+          "}";
+    $i++;
 }
+print "]";
 
 
