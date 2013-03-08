@@ -49,20 +49,17 @@ sub plugin_javascript {
         function Blur$field_number() {
                 var isbn = document.getElementById('$field_number');
                 var url = '../cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_010.pl&isbn=' + isbn.value;
-                var blurcallback010 =
-                {
-                    success: function(o){
+                var req = \$.get(url);
+                req.done(function(resp){
                         var elems = document.getElementsByTagName('input');
                         for( i = 0 ; elems[i] ; i++ )
                         {
                             if(elems[i].id.match(/^tag_210_subfield_c/)) {
-                                elems[i].value = o.responseText;
+                                elems[i].value = resp;
                                 return 1;
                             }
                         }
-                    }
-                }
-                var transaction = YAHOO.util.Connect.asyncRequest('GET',url, blurcallback010, null);
+                });
                 return 1;
         }
 

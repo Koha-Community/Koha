@@ -50,14 +50,11 @@ sub plugin_javascript {
         function Blur$field_number() {
                 var code = document.getElementById('$field_number');
                 var url = '../cataloguing/plugin_launcher.pl?plugin_name=callnumber.pl&code=' + code.value;
-                var blurcallbackcallnumber = {
-                    success: function(o) {
-                        var field = document.getElementById('$field_number');
-                        field.value = o.responseText;
-                        return 1;
-                    }
-                }
-                var transaction = YAHOO.util.Connect.asyncRequest('GET',url, blurcallbackcallnumber, null);
+                var req = \$.get(url);
+                req.done(function(resp){
+                    code.value = resp;
+                    return 1;
+                });
                 return 1;
         }
 
