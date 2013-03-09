@@ -275,11 +275,11 @@ function yuiToolbar() {
 			[% FOREACH basketgroup IN basketgroups %]
 				[% UNLESS ( basketgroup.closed ) %]
 					<tr>
-						<td><a href="/cgi-bin/koha/acqui/basketgroup.pl?op=add&amp;booksellerid=[% basketgroup.booksellerid %]&amp;basketgroupid=[% basketgroup.id %]">[% IF ( basketgroup.name ) %]
+						<td>[% IF ( basketgroup.name ) %]
 													[% basketgroup.name %]
 												[% ELSE %]
 													Basket group no. [% basketgroup.id %]
-												[% END %]</a>
+												[% END %]
 						</td>
 							<td>
                               <span>
@@ -306,11 +306,11 @@ function yuiToolbar() {
 				[% IF ( basketgroup.closed ) %]
 				<tr>
 				<td>
-                    <a href="/cgi-bin/koha/acqui/basketgroup.pl?op=reopen&amp;booksellerid=[% basketgroup.booksellerid %]&amp;basketgroupid=[% basketgroup.id %]">[% IF ( basketgroup.name ) %]
+                                     [% IF ( basketgroup.name ) %]
 											[% basketgroup.name %]
 										[% ELSE %]
 											Basket group no. [% basketgroup.id %]
-										[% END %]</a>
+										[% END %]
 					</td>
 					<td>
 							<form action="/cgi-bin/koha/acqui/basketgroup.pl" method="get"><input type="hidden" name="op" value="reopen" /><input type="hidden" name="booksellerid" value="[% basketgroup.booksellerid %]" /><input type="hidden" name="basketgroupid" value="[% basketgroup.id %]" /><input type="submit" value="Reopen" /></form>
