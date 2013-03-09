@@ -1194,11 +1194,16 @@ sub parseQuery {
         }
         foreach my $limit (@limits) {
         }
-        foreach my $modifier (@sort_by) {
-            $query .= " #$modifier";
+        if (scalar (@sort_by) > 0) {
+            my $modifier_re = '#(' . join( '|', @{$QParser->modifiers}) . ')';
+            $query =~ s/$modifier_re//g;
+            foreach my $modifier (@sort_by) {
+                $query .= " #$modifier";
+            }
         }
 
         $query_desc = $query;
+        $query_desc =~ s/\s+/ /g;
         if ( C4::Context->preference("QueryWeightFields") ) {
         }
         $QParser->add_bib1_filter_map( 'biblioserver', 'su-br', { 'callback' => \&_handle_exploding_index });
@@ -1206,9 +1211,9 @@ sub parseQuery {
         $QParser->add_bib1_filter_map( 'biblioserver', 'su-rl', { 'callback' => \&_handle_exploding_index });
         $QParser->parse( $query );
         $operands[0] = "pqf=" . $QParser->target_syntax('biblioserver');
-# TODO: once we are using QueryParser, all this special case code for
-#       exploded search indexes will be replaced by a callback to
-#       _handle_exploding_index
+    } else {
+        my $modifier_re = '#(' . join( '|', @{Koha::QueryParser::Driver::PQF->modifiers}) . ')';
+        s/$modifier_re//g for @operands;
     }
 
     return ( $operators, \@operands, $indexes, $limits, $sort_by, $scan, $lang, $query_desc);
@@ -1292,17 +1297,17 @@ sub buildQuery {
         if ( @limits ) {
             $q .= ' and '.join(' and ', @limits);
         }
-        return ( undef, $q, $q, "q=ccl=$q", $q, '', '', '', '', 'ccl' );
+        return ( undef, $q, $q, "q=ccl=".uri_escape($q), $q, '', '', '', '', 'ccl' );
     }
     if ( $query =~ /^cql=/ ) {
-        return ( undef, $', $', "q=cql=$'", $', '', '', '', '', 'cql' );
+        return ( undef, $', $', "q=cql=".uri_escape($'), $', '', '', '', '', 'cql' );
     }
     if ( $query =~ /^pqf=/ ) {
         if ($query_desc) {
-            $query_cgi = "q=$query_desc";
+            $query_cgi = "q=".uri_escape($query_desc);
         } else {
             $query_desc = $';
-            $query_cgi = "q=pqf=$'";
+            $query_cgi = "q=pqf=".uri_escape($');
         }
         return ( undef, $', $', $query_cgi, $query_desc, '', '', '', '', 'pqf' );
     }
@@ -1474,9 +1479,9 @@ sub buildQuery {
                         $query     .= " $operators[$i-1] ";
                         $query     .= " $index_plus " unless $indexes_set;
                         $query     .= " $operand";
-                        $query_cgi .= "&op=$operators[$i-1]";
-                        $query_cgi .= "&idx=$index" if $index;
-                        $query_cgi .= "&q=$operands[$i]" if $operands[$i];
+                        $query_cgi .= "&op=".uri_escape($operators[$i-1]);
+                        $query_cgi .= "&idx=".uri_escape($index) if $index;
+                        $query_cgi .= "&q=".uri_escape($operands[$i]) if $operands[$i];
                         $query_desc .=
                           " $operators[$i-1] $index_plus $operands[$i]";
                     }
@@ -1486,8 +1491,8 @@ sub buildQuery {
                         $query      .= " and ";
                         $query      .= "$index_plus " unless $indexes_set;
                         $query      .= "$operand";
-                        $query_cgi  .= "&op=and&idx=$index" if $index;
-                        $query_cgi  .= "&q=$operands[$i]" if $operands[$i];
+                        $query_cgi  .= "&op=and&idx=".uri_escape($index) if $index;
+                        $query_cgi  .= "&q=".uri_escape($operands[$i]) if $operands[$i];
                         $query_desc .= " and $index_plus $operands[$i]";
                     }
                 }
@@ -1499,8 +1504,8 @@ sub buildQuery {
                     $query .= " $index_plus " unless $indexes_set;
                     $query .= $operand;
                     $query_desc .= " $index_plus $operands[$i]";
-                    $query_cgi  .= "&idx=$index" if $index;
-                    $query_cgi  .= "&q=$operands[$i]" if $operands[$i];
+                    $query_cgi  .= "&idx=".uri_escape($index) if $index;
+                    $query_cgi  .= "&q=".uri_escape($operands[$i]) if $operands[$i];
                     $previous_operand = 1;
                 }
             }    #/if $operands

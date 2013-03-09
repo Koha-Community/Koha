@@ -358,10 +358,12 @@ unless (@servers) {
 # operators include boolean and proximity operators and are used
 # to evaluate multiple operands
 my @operators = $cgi->param('op');
+@operators = map { uri_unescape($_) } @operators;
 
 # indexes are query qualifiers, like 'title', 'author', etc. They
 # can be single or multiple parameters separated by comma: kw,right-Truncation 
 my @indexes = $cgi->param('idx');
+@indexes = map { uri_unescape($_) } @indexes;
 
 # if a simple index (only one)  display the index used in the top search box
 if ($indexes[0] && !$indexes[1]) {
@@ -369,16 +371,20 @@ if ($indexes[0] && !$indexes[1]) {
 }
 # an operand can be a single term, a phrase, or a complete ccl query
 my @operands = $cgi->param('q');
+@operands = map { uri_unescape($_) } @operands;
 
 $template->{VARS}->{querystring} = join(' ', @operands);
 
 # if a simple search, display the value in the search box
 if ($operands[0] && !$operands[1]) {
-    $template->param(ms_value => $operands[0]);
+    my $ms_query = $operands[0];
+    $ms_query =~ s/ #\S+//;
+    $template->param(ms_value => $ms_query);
 }
 
 # limits are use to limit to results to a pre-defined category such as branch or language
 my @limits = $cgi->param('limit');
+@limits = map { uri_unescape($_) } @limits;
 
 if($params->{'multibranchlimit'}) {
     push @limits, '('.join( " or ", map { "branch: $_ " } @{ GetBranchesInCategory( $params->{'multibranchlimit'} ) } ).')';
