@@ -1212,6 +1212,7 @@ sub parseQuery {
         $QParser->parse( $query );
         $operands[0] = "pqf=" . $QParser->target_syntax('biblioserver');
     } else {
+        require Koha::QueryParser::Driver::PQF;
         my $modifier_re = '#(' . join( '|', @{Koha::QueryParser::Driver::PQF->modifiers}) . ')';
         s/$modifier_re//g for @operands;
     }
