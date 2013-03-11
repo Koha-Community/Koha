@@ -11,19 +11,21 @@
 dt_overwrite_html_sorting_localeCompare();
 
 $(document).ready(function() {
+
+    var inactive = $(".b_inactive,.bu_active");
+    var active = $(".bu_inactive");
+    inactive.hide();
+    active.show();
+
     $('#showallbudgets').click(function() {
-	if ( $('#showallbudgets:checked').val() !== undefined) {
-	    $('.b_inactive').show();
-	    $('#b_inactive').show();
-	    $('.bu_active').show();
-	    $('.bu_inactive').hide();
-	}
-	else {
-	    $('.b_inactive').hide();
-	    $('#b_inactive').hide();
-	    $('.bu_inactive').show();
-	    $('.bu_active').hide();
-	}
+        if ( $('#showallbudgets:checked').val() !== undefined) {
+            inactive.show();
+            active.hide();
+        }
+        else {
+            inactive.hide();
+            active.show();
+        }
     });
     var srlt = $("#accounts").dataTable($.extend(true, {}, dataTablesDefaults, {
         "aoColumns": [
@@ -31,14 +33,16 @@ $(document).ready(function() {
             null,
             null,
             null,
-            { "sType": "num-html" },
-            { "sType": "num-html" },
             null,
+            null,
+            { "sType": "num-html" },
+            { "sType": "num-html" },
+            null
         ],
         'sDom': 't',
         'bPaginate': false,
         'bFilter': false,
-        'bInfo': false,
+        'bInfo': false
     } ) );
 });
 //]]>
@@ -60,18 +64,16 @@ $(document).ready(function() {
 [% INCLUDE 'acquisitions-toolbar.inc' %]
 
 <h1>Acquisitions</h1>
-<div class="yui-g">
-<div class="yui-u first">
-<div id="acqui_acqui_home_order">
-
     [% UNLESS ( loop_budget ) %]
-        [% IF ( CAN_user_parameters ) %]
+        [% IF ( CAN_user_acquisition_period_manage ) %]
         <div class="dialog alert">You must <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">define a budget</a> in Administration</div>
         [% ELSE %]
         <div class="dialog alert">Your administrator must define a budget in Administration</div>
         [% END %]
     [% END %]
-
+<div class="yui-g">
+<div class="yui-u first">
+<div id="acqui_acqui_home_order">
     <fieldset>
         <legend>Manage orders</legend>
         <form name="findsupplier" action="/cgi-bin/koha/acqui/booksellers.pl" method="post">
@@ -81,20 +83,22 @@ $(document).ready(function() {
         </form>
     </fieldset>
 </div>
+</div>
 
-[% IF ( suggestion ) %][% IF ( suggestions_count ) %]
-<div id="acqui_acqui_home_suggestions">
-    <fieldset>
-    <legend>Pending suggestions</legend>
-        <p>[% suggestions_count %] suggestions waiting. <a href="/cgi-bin/koha/suggestion/suggestion.pl">Manage suggestions</a>.</p>
-    </fieldset>
-</div>[% END %][% END %]
+[% IF ( suggestion && suggestions_count ) %]
+<div class="yui-u">
+    <div id="acqui_acqui_home_suggestions">
+        <fieldset>
+        <legend>Pending suggestions</legend>
+            <p>[% suggestions_count %] suggestions waiting. <a href="/cgi-bin/koha/suggestion/suggestion.pl">Manage suggestions</a>.</p>
+        </fieldset>
+    </div>
+</div>
+[% END %]
 
 </div>
 
-<div class="yui-u">
-
-        [% IF ( loop_budget ) %]
+[% IF ( loop_budget ) %]
 
             <h3>All available funds[% IF ( branchname ) %] for [% branchname %] library[% END %]</h3>
 
@@ -104,10 +108,13 @@ $(document).ready(function() {
 
 
     <div id="BudgetsAndFunds">
+    <p><label for="showallbudgets">Show active and inactive:</label> <input type="checkbox" id="showallbudgets" /></p>
     <table id="accounts">
         <thead>
         <tr>
             <th>Fund</th>
+            <th>Fund name</th>
+            <th class="b_inactive">Active</th>
             <th>Owner</th>
             <th>Library</th>
             <th>Amount</th>
@@ -120,51 +127,70 @@ $(document).ready(function() {
         <tr>
             <th>Total</th>
             <th>&nbsp;</th>
+            <th class="b_inactive">&nbsp;</th>
             <th>&nbsp;</th>
-            <th align="right" ><span class="bu_active" style="display : none;">[% total %]</span><span class="bu_inactive" >[% total_active %]</span></th>
-            <th align="right" ><span class="bu_active" style="display : none;">[% totordered %]</span><span class="bu_inactive" >[% totordered_active %]</span></th>
-            <th align="right" ><span class="bu_active" style="display : none;">[% totspent %]</span><span class="bu_inactive" >[% totspent_active %]</span></th>
-            <th align="right" ><span class="bu_active" style="display : none;">[% totavail %]</span><span class="bu_inactive" >[% totavail_active %]</span></th>
+            <th>&nbsp;</th>
+            <th class="data"><span class="bu_active">[% total %]</span><span class="bu_inactive" >[% total_active %]</span></th>
+            <th class="data"><span class="bu_active">[% totordered %]</span><span class="bu_inactive" >[% totordered_active %]</span></th>
+            <th class="data"><span class="bu_active">[% totspent %]</span><span class="bu_inactive" >[% totspent_active %]</span></th>
+            <th class="data"><span class="bu_active">[% totavail %]</span><span class="bu_inactive" >[% totavail_active %]</span></th>
         </tr>
         </tfoot>
         <tbody>
         [% FOREACH loop_budge IN loop_budget %]
-	    [% IF ( loop_budge.budget_period_active ) %]
-            [% IF ( loop.odd ) %]
-                <tr>
-            [% ELSE %]
-                <tr class="highlight">
-            [% END %]
-                <td align="center">[% loop_budge.budget_code %]</td>
-                <td align="center">[% loop_budge.budget_owner %]</td>
-                <td align="center">[% loop_budge.budget_branchname %]</td>
-                <td align="right" >[% loop_budge.budget_amount %]</td>
-                <td align="right" ><a href="ordered.pl?fund=[% loop_budge.budget_id %]&amp;fund_code=[% loop_budge.budget_code %]">[% loop_budge.budget_ordered %]</a></td>
-                <td align="right" ><a href="spent.pl?fund=[% loop_budge.budget_id %]&amp;fund_code=[% loop_budge.budget_code %]">[% loop_budge.budget_spent %]</a></td>
-                <td align="right" >[% loop_budge.budget_avail %]</td>
+        [% IF ( loop_budge.budget_period_active ) %]
+            <tr>
+                <td>
+                    [% IF ( CAN_user_acquisition_budget_manage ) %]
+                        <a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% loop_budge.budget_period_id %]">[% loop_budge.budget_code %]</a>
+                    [% ELSE %]
+                        [% loop_budge.budget_code %]
+                    [% END %]
+                </td>
+                <td>[% loop_budge.budget_name %]</td>
+                <td class="b_inactive">Active</td>
+                <td>[% IF ( loop_budge.budget_owner_borrowernumber ) %]
+                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% loop_budge.budget_owner_borrowernumber %]">[% loop_budge.budget_owner_surname %], [% loop_budge.budget_owner_firstname %]</a>
+                    [% ELSE %]
+                        &nbsp;
+                    [% END %]
+                </td>
+                <td>[% loop_budge.budget_branchname %]</td>
+                <td class="data">[% loop_budge.budget_amount %]</td>
+                <td class="data"><a href="ordered.pl?fund=[% loop_budge.budget_id %]&amp;fund_code=[% loop_budge.budget_code %]">[% loop_budge.budget_ordered %]</a></td>
+                <td class="data"><a href="spent.pl?fund=[% loop_budge.budget_id %]&amp;fund_code=[% loop_budge.budget_code %]">[% loop_budge.budget_spent %]</a></td>
+                <td class="data">[% loop_budge.budget_avail %]</td>
             </tr>
-            [% ELSE %]
-            [% IF ( loop.odd ) %]
-                <tr class="b_inactive" style="display : none;">
-            [% ELSE %]
-                <tr class="highlight" id = "b_inactive" style="display : none;">
-            [% END %]
-            <td align="center" >[% loop_budge.budget_code %]</td>
-                <td align="center">[% loop_budge.budget_owner %]</td>
-                <td align="center">[% loop_budge.budget_branchname %]</td>
-                <td align="right" >[% loop_budge.budget_amount %]</td>
-                <td align="right" ><a href="ordered.pl?fund=[% loop_budge.budget_id %]&amp;fund_code=[% loop_budge.budget_code %]">[% loop_budge.budget_ordered %]</a></td>
-                <td align="right" ><a href="spent.pl?fund=[% loop_budge.budget_id %]&amp;fund_code=[% loop_budge.budget_code %]">[% loop_budge.budget_spent %]</a></td>
-                <td align="right" >[% loop_budge.budget_avail %]</td>
-            [% END %]
+        [% ELSE %]
+            <tr class="b_inactive">
+                <td>
+                    [% IF ( CAN_user_acquisition_budget_manage ) %]
+                        <a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% loop_budge.budget_period_id %]">[% loop_budge.budget_code %]</a>
+                    [% ELSE %]
+                        [% loop_budge.budget_code %]
+                    [% END %]
+                </td>
+                <td>[% loop_budge.budget_name %]</td>
+                <td class="b_inactive">Inactive</td>
+                <td>[% IF ( loop_budge.budget_owner_borrowernumber ) %]
+                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% loop_budge.budget_owner_borrowernumber %]">[% loop_budge.budget_owner_surname %], [% loop_budge.budget_owner_firstname %]</a>
+                    [% ELSE %]
+                        &nbsp;
+                    [% END %]
+                </td>
+                <td>[% loop_budge.budget_branchname %]</td>
+                <td class="data">[% loop_budge.budget_amount %]</td>
+                <td class="data"><a href="ordered.pl?fund=[% loop_budge.budget_id %]&amp;fund_code=[% loop_budge.budget_code %]">[% loop_budge.budget_ordered %]</a></td>
+                <td class="data"><a href="spent.pl?fund=[% loop_budge.budget_id %]&amp;fund_code=[% loop_budge.budget_code %]">[% loop_budge.budget_spent %]</a></td>
+                <td class="data">[% loop_budge.budget_avail %]</td>
+            </tr>
+        [% END %]
         [% END %]
         </tbody>
     </table>
-    </div><span class="label">Show all :&nbsp;</span><input type="checkbox" id="showallbudgets" />
+    </div>
     [% END %]
-</div>
 
-</div>
 </div>
 </div>
 <div class="yui-b">

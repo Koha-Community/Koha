@@ -102,8 +102,9 @@ foreach my $budget ( @{$budget_arr} ) {
 
     my $member = GetMember( borrowernumber => $budget->{budget_owner_id} );
     if ($member) {
-        $budget->{budget_owner} =
-          $member->{'firstname'} . ' ' . $member->{'surname'};
+        $budget->{budget_owner_firstname} = $member->{'firstname'};
+        $budget->{budget_owner_surname} = $member->{'surname'};
+        $budget->{budget_owner_borrowernumber} = $member->{'borrowernumber'};
     }
 
     if ( !defined $budget->{budget_amount} ) {
