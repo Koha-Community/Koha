@@ -5,31 +5,6 @@
 [% IF ( add_validate ) %]Z39.50 servers &rsaquo; Z39.50 server added[% END %]
 [% IF ( delete_confirmed ) %]Z39.50 servers &rsaquo; Z39.50 server deleted[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% IF ( else ) %]
-<link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.min.js"></script>
-[% INCLUDE 'datatables-strings.inc' %]
-<script type="text/javascript" src="[% themelang %]/js/datatables.js"></script>
-<script type="text/javascript">
-//<![CDATA[
-// prepare DOM for YUI Toolbar
- $(document).ready(function() {
-    yuiToolbar();
-    [% IF ( loop ) %]$("#serverst").dataTable($.extend(true, {}, dataTablesDefaults, {
-        "aoColumnDefs": [
-            { "aTargets": [ 2,3,4,7,8,9,10,11 ], "bSortable": false, "bSearchable": false },
-        ],
-        "iDisplayLength": 20,
-        "aLengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]],
-        "sPaginationType": "four_button"
-    }));[% END %]
- });
-// YUI Toolbar Functions
-function yuiToolbar() {
-    new YAHOO.widget.Button("newserver");
-}   //]]>
-</script>
-[% END %]
 
 [% IF ( add_form ) %]
 <script type="text/javascript">
@@ -285,6 +260,23 @@ function yuiToolbar() {
 [% IF ( else ) %]
 
 <div id="toolbar">
+		<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+	<script type="text/javascript">
+	//<![CDATA[
+	// prepare DOM for YUI Toolbar
+	 $(document).ready(function() {
+	    yuiToolbar();
+		[% IF ( loop ) %]$.tablesorter.defaults.widgets = ['zebra'];
+		$("#serverst").tablesorter({
+			sortList: [[0,0]],
+			headers: { 2: {sorter:false},3: { sorter: false },4: { sorter: false },7: { sorter: false },8: { sorter: false },9: { sorter: false },10: { sorter: false }}
+		});[% END %]
+	 });
+	// YUI Toolbar Functions
+	function yuiToolbar() {
+	    new YAHOO.widget.Button("newserver");
+	}	//]]>
+	</script>
 	<ul class="toolbar">
     <li><a id="newserver" href="/cgi-bin/koha/admin/z3950servers.pl?op=add_form">New Z39.50 server</a></li>
 </ul></div>
@@ -295,7 +287,7 @@ function yuiToolbar() {
                 You searched for [% searchfield %]
         [% END %]		
 <table id="serverst">
-                <thead><tr><th>Target</th><th>Hostname/Port</th><th>Database</th><th>Userid</th><th>Password</th><th>Checked</th><th>Rank</th>       			<th>Syntax</th><th>Encoding</th><th>Timeout</th><th>&nbsp;</th><th>&nbsp;</th>
+                <thead><tr><th>Target</th><th>Hostname/Port</th><th>Database</th><th>Userid</th><th>Password</th><th>Checked</th><th>Rank</th>       			<th>Syntax</th><th>Encoding</th><th>Timeout</th><th colspan="2">&nbsp;</th>
                 </tr></thead>
                 <tbody>[% FOREACH loo IN loop %]
                 [% UNLESS ( loop.odd ) %]
