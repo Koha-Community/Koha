@@ -328,7 +328,7 @@ foreach my $biblionumber (@biblionumbers) {
             }
 
             # checking reserve
-            my ($reservedate,$reservedfor,$expectedAt,$reserve_id) = GetReservesFromItemnumber($itemnumber);
+            my ($reservedate,$reservedfor,$expectedAt,$reserve_id,$wait) = GetReservesFromItemnumber($itemnumber,1); #alldates parameter to include future holds/waits
             my $ItemBorrowerReserveInfo = GetMember( borrowernumber => $reservedfor );
 
             if ( defined $reservedate ) {
@@ -338,7 +338,7 @@ foreach my $biblionumber (@biblionumbers) {
                 $item->{ReservedForSurname}     = $ItemBorrowerReserveInfo->{'surname'};
                 $item->{ReservedForFirstname}     = $ItemBorrowerReserveInfo->{'firstname'};
                 $item->{ExpectedAtLibrary}     = $branches->{$expectedAt}{branchname};
-
+                $item->{waitingdate} = format_date($wait) if $wait;
             }
 
             # Management of the notforloan document
@@ -423,13 +423,6 @@ foreach my $biblionumber (@biblionumbers) {
             }
 
             # If none of the conditions hold true, then neither override nor available is set and the item cannot be checked
-
-            # FIXME: move this to a pm
-            my $sth2 = $dbh->prepare("SELECT * FROM reserves WHERE borrowernumber=? AND itemnumber=? AND found='W'");
-            $sth2->execute($item->{ReservedForBorrowernumber},$item->{itemnumber});
-            while (my $wait_hashref = $sth2->fetchrow_hashref) {
-                $item->{waitingdate} = format_date($wait_hashref->{waitingdate});
-            }
 
             # Show serial enumeration when needed
             if ($item->{enumchron}) {

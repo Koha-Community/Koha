@@ -221,7 +221,8 @@ foreach my $item (@items) {
     }
 
     # checking for holds
-    my ($reservedate,$reservedfor,$expectedAt) = GetReservesFromItemnumber($item->{itemnumber});
+    my ($reservedate,$reservedfor,$expectedAt,undef,$wait) = GetReservesFromItemnumber($item->{itemnumber}, 1); #second parameter: all dates
+        # all dates will include a future item level hold or a future wait
     my $ItemBorrowerReserveInfo = GetMemberDetails( $reservedfor, 0);
     
     if (C4::Context->preference('HidePatronName')){
@@ -235,8 +236,11 @@ foreach my $item (@items) {
         $item->{ReservedForSurname}     = $ItemBorrowerReserveInfo->{'surname'};
         $item->{ReservedForFirstname}   = $ItemBorrowerReserveInfo->{'firstname'};
         $item->{ExpectedAtLibrary}      = $branches->{$expectedAt}{branchname};
-	$item->{Reservedcardnumber}             = $ItemBorrowerReserveInfo->{'cardnumber'};
+        $item->{Reservedcardnumber}             = $ItemBorrowerReserveInfo->{'cardnumber'};
+        # Check waiting status
+        $item->{waitingdate} = format_date($wait) if $wait;
     }
+
 
 	# Check the transit status
     my ( $transfertwhen, $transfertfrom, $transfertto ) = GetTransfers($item->{itemnumber});
@@ -245,13 +249,6 @@ foreach my $item (@items) {
         $item->{transfertfrom} = $branches->{$transfertfrom}{branchname};
         $item->{transfertto}   = $branches->{$transfertto}{branchname};
         $item->{nocancel} = 1;
-    }
-
-    # FIXME: move this to a pm, check waiting status for holds
-    my $sth2 = $dbh->prepare("SELECT * FROM reserves WHERE borrowernumber=? AND itemnumber=? AND found='W'");
-    $sth2->execute($item->{ReservedForBorrowernumber},$item->{itemnumber});
-    while (my $wait_hashref = $sth2->fetchrow_hashref) {
-        $item->{waitingdate} = format_date($wait_hashref->{waitingdate});
     }
 
     # item has a host number if its biblio number does not match the current bib
