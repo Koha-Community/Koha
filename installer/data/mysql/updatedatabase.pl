@@ -6477,7 +6477,7 @@ if ( CheckVersion($DBversion) ) {
 }
 
 
-$DBversion = "3.11.00.XXX";
+$DBversion = "3.11.00.026";
 if ( CheckVersion($DBversion) ) {
     $dbh->do(qq{
         ALTER TABLE import_records ADD INDEX batch_id_record_type ( import_batch_id, record_type );
