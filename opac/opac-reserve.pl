@@ -431,13 +431,13 @@ foreach my $biblioNum (@biblionumbers) {
         }
 
         # checking reserve
-        my ($reservedate,$reservedfor,$expectedAt) = GetReservesFromItemnumber($itemNum);
+        my ($reservedate,$reservedfor,$expectedAt,undef,$wait) = GetReservesFromItemnumber($itemNum,1); #with alldates parameter include future item level holds and waits
         my $ItemBorrowerReserveInfo = GetMemberDetails( $reservedfor, 0);
 
-	# the item could be reserved for this borrower vi a host record, flag this
-	if ($reservedfor eq $borrowernumber){
-		$itemLoopIter->{already_reserved} = 1;
-	}
+        # the item could be reserved for this borrower vi a host record, flag this
+        if ($reservedfor eq $borrowernumber){
+            $itemLoopIter->{already_reserved} = 1;
+        }
 
         if ( defined $reservedate ) {
             $itemLoopIter->{backgroundcolor} = 'reserved';
@@ -446,6 +446,8 @@ foreach my $biblioNum (@biblionumbers) {
             $itemLoopIter->{ReservedForSurname}        = $ItemBorrowerReserveInfo->{'surname'};
             $itemLoopIter->{ReservedForFirstname}      = $ItemBorrowerReserveInfo->{'firstname'};
             $itemLoopIter->{ExpectedAtLibrary}         = $expectedAt;
+            #waiting status
+            $itemLoopIter->{waitingdate} = format_date($wait) if $wait;
         }
 
         $itemLoopIter->{notforloan} = $itemInfo->{notforloan};
@@ -505,14 +507,7 @@ foreach my $biblioNum (@biblionumbers) {
             $numCopiesAvailable++;
         }
 
-	# FIXME: move this to a pm
-        my $dbh = C4::Context->dbh;
-        my $sth2 = $dbh->prepare("SELECT * FROM reserves WHERE borrowernumber=? AND itemnumber=? AND found='W'");
-        $sth2->execute($itemLoopIter->{ReservedForBorrowernumber}, $itemNum);
-        while (my $wait_hashref = $sth2->fetchrow_hashref) {
-            $itemLoopIter->{waitingdate} = format_date($wait_hashref->{waitingdate});
-        }
-	$itemLoopIter->{imageurl} = getitemtypeimagelocation( 'opac', $itemTypes->{ $itemInfo->{itype} }{imageurl} );
+        $itemLoopIter->{imageurl} = getitemtypeimagelocation( 'opac', $itemTypes->{ $itemInfo->{itype} }{imageurl} );
 
     # Show serial enumeration when needed
         if ($itemLoopIter->{enumchron}) {
