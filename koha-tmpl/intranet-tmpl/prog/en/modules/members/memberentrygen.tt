@@ -33,6 +33,7 @@
             }
         [% END %]
         $("#dateofbirth").datepicker({ maxDate: "-1D" });
+        $("#entryform").preventDoubleFormSubmit();
     });
 
     function clear_entry(node) {

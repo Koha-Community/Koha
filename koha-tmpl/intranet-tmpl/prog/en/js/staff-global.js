@@ -39,6 +39,7 @@ function clearHoldFor(){
 
 jQuery.fn.preventDoubleFormSubmit = function() {
     jQuery(this).submit(function() {
+    $("body, form input[type='submit'], form button[type='submit'], form a").addClass('waiting');
         if (this.beenSubmitted)
             return false;
         else
