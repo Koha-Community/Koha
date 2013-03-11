@@ -2473,18 +2473,17 @@ sub CanBookBeRenewed {
 
     $sthcount->execute( $borrowernumber, $itemnumber );
     if ( my $data1 = $sthcount->fetchrow_hashref ) {
-        
         if ( ( $data1->{renewalsallowed} && $data1->{renewalsallowed} > $data1->{renewals} ) || $override_limit ) {
             $renewokay = 1;
         }
         else {
-			$error="too_many";
-		}
-		
+            $error = "too_many";
+        }
+
         my $resstatus = C4::Reserves::GetReserveStatus($itemnumber);
         if ( $resstatus eq "Waiting" or $resstatus eq "Reserved" ) {
             $renewokay = 0;
-            $error->{message} = "on_reserve";
+            $error = "on_reserve";
         }
     }
     return ($renewokay,$error);
