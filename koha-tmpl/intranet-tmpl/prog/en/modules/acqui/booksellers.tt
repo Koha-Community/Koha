@@ -18,6 +18,7 @@ $(document).ready(function() {
         dt_add_type_uk_date();
     [% END %]
     $("table.baskets").dataTable($.extend(true, {}, dataTablesDefaults, {
+        'sDom': 't',
         'bPaginate': false,
         'bFilter': false,
         'bInfo': false,
