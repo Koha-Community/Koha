@@ -749,23 +749,26 @@ sub GetReserveStatus {
 
     my $dbh = C4::Context->dbh;
 
-    my ($sth, $found, $priority) = (undef, q{}, 0);
+    my ($sth, $found, $priority);
     if ( $itemnumber ) {
         $sth = $dbh->prepare("SELECT found, priority FROM reserves WHERE itemnumber = ? order by priority LIMIT 1");
         $sth->execute($itemnumber);
+        ($found, $priority) = $sth->fetchrow_array;
     }
 
     if ( $biblionumber and not defined $found and not defined $priority ) {
         $sth = $dbh->prepare("SELECT found, priority FROM reserves WHERE biblionumber = ? order by priority LIMIT 1");
         $sth->execute($biblionumber);
+        ($found, $priority) = $sth->fetchrow_array;
     }
-    ($found, $priority) = $sth->fetchrow_array;
 
-    return unless defined $found;
-    return 'Waiting'  if $found eq 'W' and $priority == 0;
-    return 'Finished' if $found eq 'F';
-    return 'Reserved' if $priority > 0;
-    return;
+    if(defined $found) {
+        return 'Waiting'  if $found eq 'W' and $priority == 0;
+        return 'Finished' if $found eq 'F';
+        return 'Reserved' if $priority > 0;
+    }
+    return '';
+    #empty string here will remove need for checking undef, or less log lines
 }
 
 =head2 CheckReserves
