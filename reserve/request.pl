@@ -47,7 +47,7 @@ use Koha::DateUtils;
 my $dbh = C4::Context->dbh;
 my $sth;
 my $input = new CGI;
-my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
+my ( $template, $borrowernumber, $cookie, $flags ) = get_template_and_user(
     {
         template_name   => "reserve/request.tmpl",
         query           => $input,
@@ -567,10 +567,16 @@ foreach my $biblionumber (@biblionumbers) {
         $reserve{'barcode'}         = $res->{'barcode'};
         $reserve{'priority'}    = $res->{'priority'};
         $reserve{'lowestPriority'}    = $res->{'lowestPriority'};
-        $reserve{'branchloop'} = GetBranchesLoop($res->{'branchcode'});
         $reserve{'optionloop'} = \@optionloop;
         $reserve{'suspend'} = $res->{'suspend'};
         $reserve{'suspend_until'} = $res->{'suspend_until'};
+
+        if ( C4::Context->preference('IndependantBranches') && $flags->{'superlibrarian'} != 1 ) {
+              $reserve{'branchloop'} = [ GetBranchDetail($res->{'branchcode'}) ];
+        } else {
+              $reserve{'branchloop'} = GetBranchesLoop($res->{'branchcode'});
+        }
+
         push( @reserveloop, \%reserve );
     }
 
