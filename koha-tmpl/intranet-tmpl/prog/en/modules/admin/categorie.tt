@@ -191,9 +191,23 @@
     </li>
     <li><label for="block_expired">Block expired patrons</label>
         <select name="block_expired" id="block_expired">
-            <option value="-1" [% IF ( BlockExpiredPatronOpacActions == -1  ) %] selected="selected" [% END %]> Follow system preference BlockExpiredPatronOpacActions </option>
-            <option value="1"  [% IF ( BlockExpiredPatronOpacActions == 1   ) %] selected="selected" [% END %]> Block </option>
-            <option value="0"  [% IF ( BlockExpiredPatronOpacActions == 0   ) %] selected="selected" [% END %]> Don't block </option>
+            [% IF ( BlockExpiredPatronOpacActions == -1  ) %]
+                <option value="-1" selected="selected"> Follow system preference BlockExpiredPatronOpacActions </option>
+            [% ELSE %]
+                <option value="-1"> Follow system preference BlockExpiredPatronOpacActions </option>
+            [% END %]
+
+            [% IF ( BlockExpiredPatronOpacActions == 1   ) %]
+                <option value="1" selected="selected"> Block </option>
+            [% ELSE %]
+                <option value="1"> Block </option>
+            [% END %]
+
+            [% IF ( BlockExpiredPatronOpacActions == 0   ) %]
+                <option value="0" selected="selected"> Don't block </option>
+            [% ELSE %]
+                <option value="0"> Don't block </option>
+            [% END %]
         </select>
         Should patrons of this category be blocked from opac actions such as renew and reserve when their cards have expired.
     </li>

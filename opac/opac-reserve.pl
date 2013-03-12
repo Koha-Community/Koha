@@ -67,12 +67,13 @@ sub get_out {
 my ( $borr ) = GetMemberDetails( $borrowernumber );
 
 # check if this user can place a reserve, -1 means use sys pref, 0 means dont block, 1 means block
-if( $borr->{'BlockExpiredPatronOpacActions'} == -1 ? C4::Context->preference("BlockExpiredPatronOpacActions") : $borr->{'BlockExpiredPatronOpacActions'} ) {
+if ( $borr->{'BlockExpiredPatronOpacActions'} ) {
 
-    if( Date_to_Days( Today() ) > Date_to_Days( split /-/, $borr->{'dateexpiry'} ) ){
+    if ( $borr->{'is_expired'} ) {
+
         # cannot reserve, their card has expired and the rules set mean this is not allowed
-        $template->param( message=>1, expired_patron=>1 );
-        get_out($query, $cookie, $template->output);
+        $template->param( message => 1, expired_patron => 1 );
+        get_out( $query, $cookie, $template->output );
     }
 }
 

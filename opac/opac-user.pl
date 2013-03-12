@@ -135,7 +135,7 @@ if ( $borr->{'dateexpiry'} && C4::Context->preference('NotifyBorrowerDeparture')
 }
 
 # pass on any renew errors to the template for displaying
-$template->param( RENEW_ERROR => $query->param('renew_error') ) if $query->param('renew_error');
+my $renew_error = $query->param('renew_error');
 
 $template->param(   BORROWER_INFO     => \@bordat,
                     borrowernumber    => $borrowernumber,
@@ -143,6 +143,7 @@ $template->param(   BORROWER_INFO     => \@bordat,
                     OPACMySummaryHTML => (C4::Context->preference("OPACMySummaryHTML")) ? 1 : 0,
                     surname           => $borr->{surname},
                     showname          => $borr->{showname},
+                    RENEW_ERROR       => $renew_error,
                 );
 
 #get issued items ....

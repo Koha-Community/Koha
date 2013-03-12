@@ -380,6 +380,15 @@ sub GetMemberDetails {
         $borrower->{'showname'} = $borrower->{'firstname'};
     }
 
+    # Handle setting the true behavior for BlockExpiredPatronOpacActions
+    $borrower->{'BlockExpiredPatronOpacActions'} =
+      C4::Context->preference('BlockExpiredPatronOpacActions')
+      if ( $borrower->{'BlockExpiredPatronOpacActions'} == -1 );
+
+    $borrower->{'is_expired'} =
+      Date_to_Days( Today() ) >
+      Date_to_Days( split /-/, $borrower->{'dateexpiry'} );
+
     return ($borrower);    #, $flags, $accessflagshash);
 }
 
