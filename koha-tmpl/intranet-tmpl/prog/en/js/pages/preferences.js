@@ -28,7 +28,7 @@ KOHA.Preferences = {
         modified_prefs.each(function(){
             var modified_pref = $(this).attr("id");
             modified_pref = modified_pref.replace("pref_","");
-            msg += '<strong>Saved preference '+modified_pref+'</strong>\n';
+            msg += "<strong>"+ MSG_SAVED_PREFERENCE + " " + modified_pref + "</strong>\n";
         });
         humanMsg.displayAlert(msg);
 
