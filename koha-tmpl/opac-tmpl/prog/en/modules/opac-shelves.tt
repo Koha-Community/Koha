@@ -188,6 +188,11 @@ $(function() {
 			alert(alertString2);
 		}
 	}
+
+$(document).ready(function() {
+  $('#sort-submit').hide();
+});
+
 //]]>
 </script>
 </head>
@@ -286,6 +291,55 @@ $(function() {
 [% IF ( opacuserlogin ) %]<span class="sendlist"><a href="/cgi-bin/koha/opac-sendshelf.pl?shelfid=[% shelfnumber %]" class="send" onclick="open(CGIBIN+'opac-sendshelf.pl?shelfid=[% shelfnumber %]','win_form','scrollbars=no,resizable=no,height=300,width=450,top=50,left=100'); return false; ">Send list</a></span>[% END %]
 
 <a class="print" href="opac-shelves.pl" onclick="print(); return false;">Print list</a>
+
+<form action="/cgi-bin/koha/opac-shelves.pl" id="sorting-form">
+    <input type="hidden" name="viewshelf" value="[% shelfnumber %]" />
+
+    <label for="sort">Sort by: </label>
+    <select name="sort" onchange="$('#sorting-form').submit()">
+        <option value="">Default sorting</option>
+
+        [% IF sort == 'author' %]
+            <option value="author" selected="selected">Author</option>
+        [% ELSE %]
+            <option value="author">Author</option>
+        [% END %]
+
+        [% IF sort == 'title' %]
+            <option value="title" selected="selected">Title</option>
+        [% ELSE %]
+            <option value="title">Title</option>
+        [% END %]
+
+        [% IF sort == 'itemcallnumber' %]
+            <option value="itemcallnumber" selected="selected">Call number</option>
+        [% ELSE %]
+            <option value="itemcallnumber">Call number</option>
+        [% END %]
+
+        [% IF sort == 'copyrightdate' %]
+            <option value="copyrightdate" selected="selected">Copyright date</option>
+        [% ELSE %]
+            <option value="copyrightdate">Copyright date</option>
+        [% END %]
+    </select>
+
+    <select name="direction" onchange="$('#sorting-form').submit()">
+        [% IF direction == 'asc' %]
+            <option value="asc" selected="selected">Ascending</option>
+        [% ELSE %]
+            <option value="asc">Ascending</option>
+        [% END %]
+
+        [% IF direction == 'desc' %]
+            <option value="desc" selected="selected">Descending</option>
+        [% ELSE %]
+            <option value="desc">Descending</option>
+        [% END %]
+    </select>
+
+    <input type="submit" id="sort-submit" value="Resort list" />
+</form>
 
                 [% IF ( manageshelf ) %] <span class="sep">|</span> <form method="get" action="opac-shelves.pl"><input type="hidden" name="op" value="modif" />
                 <input type="hidden" name="display" value="viewshelf" />

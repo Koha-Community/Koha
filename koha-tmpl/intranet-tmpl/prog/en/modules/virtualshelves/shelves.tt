@@ -204,15 +204,44 @@ function placeHold () {
      <span class="clearall"></span></p>
  [% END %]
 	
+ [% IF direction == 'asc' %]
+     [% SET new_direction = 'desc' %]
+ [% ELSE %]
+     [% SET direction = 'desc' %]
+     [% SET new_direction = 'asc' %]
+ [% END %]
+
  <div class="pages">[% pagination_bar %]</div>
     <table>
             <tr>
                 [% IF ( itemsloop ) %]<th class="checkall">&nbsp;</th>[% END %]
+
                 [% UNLESS ( item_level_itypes ) %]<th>Item type</th>[% END %]
-                <th>Title</th>
-                <th>Author</th>
+                <th>
+                    <a href="/cgi-bin/koha/virtualshelves/shelves.pl?viewshelf=[% shelfnumber %]&sort=title&direction=[% IF sort != 'title' %]asc[% ELSE %][% new_direction %][% END %]">Title</a>
+                    [% IF sort == 'title' %]
+                        <img src="/intranet-tmpl/prog/img/[% direction %].gif" />
+                    [% ELSE %]
+                        <img src="/intranet-tmpl/prog/img/ascdesc.gif" />
+                    [% END %]
+                </th>
+                <th>
+                    <a href="/cgi-bin/koha/virtualshelves/shelves.pl?viewshelf=[% shelfnumber %]&sort=author&direction=[% IF sort != 'author' %]asc[% ELSE %][% new_direction %][% END %]">Author</a>
+                   [% IF sort == 'author' %]
+                        <img src="/intranet-tmpl/prog/img/[% direction %].gif" />
+                   [% ELSE %]
+                       <img src="/intranet-tmpl/prog/img/ascdesc.gif" />
+                   [% END %]
+                 </th>
                 <th>Date added</th>
-                <th>Call number</th>
+                <th>
+                    <a href="/cgi-bin/koha/virtualshelves/shelves.pl?viewshelf=[% shelfnumber %]&sort=itemcallnumber&direction=[% IF sort != 'itemcallnumber' %]asc[% ELSE %][% new_direction %][% END %]">Call number</a>
+                   [% IF sort == 'itemcallnumber' %]
+                        <img src="/intranet-tmpl/prog/img/[% direction %].gif" />
+                   [% ELSE %]
+                       <img src="/intranet-tmpl/prog/img/ascdesc.gif" />
+                   [% END %]
+                 </th>
                 <th>&nbsp;</th>
             </tr>
 		[% FOREACH itemsloo IN itemsloop %]
