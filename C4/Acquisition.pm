@@ -53,8 +53,7 @@ BEGIN {
         &ModBasketgroup &NewBasketgroup &DelBasketgroup &GetBasketgroup &CloseBasketgroup
         &GetBasketgroups &ReOpenBasketgroup
 
-        &NewOrder &DelOrder &ModOrder &GetPendingOrders &GetOrder &GetOrders
-        &GetOrderNumber &GetLateOrders &GetOrderFromItemnumber
+        &NewOrder &DelOrder &ModOrder &GetPendingOrders &GetOrder &GetOrders &GetOrdersByBiblionumber
         &SearchOrder &GetHistory &GetRecentAcqui
         &ModReceiveOrder &CancelReceipt &ModOrderBiblioitemNumber
         &GetCancelledOrders
@@ -944,6 +943,41 @@ sub GetOrders {
     $query .= " ORDER BY $orderby";
     my $sth = $dbh->prepare($query);
     $sth->execute($basketno);
+    my $results = $sth->fetchall_arrayref({});
+    $sth->finish;
+    return @$results;
+}
+
+#------------------------------------------------------------#
+=head3 GetOrdersByBiblionumber
+
+  @orders = &GetOrdersByBiblionumber($biblionumber);
+
+Looks up the orders with linked to a specific $biblionumber, including
+cancelled orders and received orders.
+
+return :
+C<@orders> is an array of references-to-hash, whose keys are the
+fields from the aqorders, biblio, and biblioitems tables in the Koha database.
+
+=cut
+
+sub GetOrdersByBiblionumber {
+    my $biblionumber = shift;
+    return unless $biblionumber;
+    my $dbh   = C4::Context->dbh;
+    my $query  ="
+        SELECT biblio.*,biblioitems.*,
+                aqorders.*,
+                aqbudgets.*
+        FROM    aqorders
+            LEFT JOIN aqbudgets        ON aqbudgets.budget_id = aqorders.budget_id
+            LEFT JOIN biblio           ON biblio.biblionumber = aqorders.biblionumber
+            LEFT JOIN biblioitems      ON biblioitems.biblionumber =biblio.biblionumber
+        WHERE   aqorders.biblionumber=?
+    ";
+    my $sth = $dbh->prepare($query);
+    $sth->execute($biblionumber);
     my $results = $sth->fetchall_arrayref({});
     $sth->finish;
     return @$results;

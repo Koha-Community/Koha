@@ -29,6 +29,7 @@ use C4::Biblio;
 use C4::Serials;
 use C4::Koha;
 use C4::Reserves qw/MergeHolds/;
+use C4::Acquisition qw/ModOrder GetOrdersByBiblionumber/;
 
 my $input = new CGI;
 my @biblionumber = $input->param('biblionumber');
@@ -69,6 +70,7 @@ if ($merge) {
     ModBiblio($record, $tobiblio, $frameworkcode);
 
     # Moving items from the other record to the reference record
+    # Also moving orders from the other record to the reference record, only if the order is linked to an item of the other record
     my $itemnumbers = get_itemnumbers_of($frombiblio);
     foreach my $itloop ($itemnumbers->{$frombiblio}) {
     foreach my $itemnumber (@$itloop) {
@@ -100,6 +102,16 @@ if ($merge) {
     $sth->execute($tobiblio, $frombiblio);
 
     # TODO : Moving reserves
+
+    # Moving orders (orders linked to items of frombiblio have already been moved by MoveItemFromBiblio)
+    my @allorders = GetOrdersByBiblionumber($frombiblio);
+    my @tobiblioitem = GetBiblioItemByBiblioNumber ($tobiblio);
+    my $tobiblioitem_biblioitemnumber = $tobiblioitem [0]-> {biblioitemnumber };
+    foreach my $myorder (@allorders) {
+        $myorder->{'biblionumber'} = $tobiblio;
+        ModOrder ($myorder);
+    # TODO : add error control (in ModOrder?)
+    }
 
     # Deleting the other record
     if (scalar(@errors) == 0) {
