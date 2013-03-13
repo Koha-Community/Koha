@@ -872,7 +872,7 @@ if ( $op eq "addbiblio" ) {
         else {
             ( $biblionumber, $oldbibitemnum ) = AddBiblio( $record, $frameworkcode );
         }
-        if ($redirect eq "items" || ($mode ne "popup" && !$is_a_modif && $redirect ne "view")){
+        if ($redirect eq "items" || ($mode ne "popup" && !$is_a_modif && $redirect ne "view" && $redirect ne "just_save")){
 	    if ($frameworkcode eq 'FA'){
 		print $input->redirect(
             '/cgi-bin/koha/cataloguing/additem.pl?'
@@ -893,7 +893,7 @@ if ( $op eq "addbiblio" ) {
 		exit;
 	    }
         }
-	elsif($is_a_modif || $redirect eq "view"){
+    elsif(($is_a_modif || $redirect eq "view") && $redirect ne "just_save"){
             my $defaultview = C4::Context->preference('IntranetBiblioDefaultView');
             my $views = { C4::Search::enabled_staff_search_views };
             if ($defaultview eq 'isbd' && $views->{can_view_ISBD}) {
@@ -907,8 +907,11 @@ if ( $op eq "addbiblio" ) {
             }
             exit;
 
-	}
-	else {
+    }
+    elsif ($redirect eq "just_save"){
+        print $input->redirect("/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=$biblionumber&framework=$frameworkcode");
+    }
+    else {
           $template->param(
             biblionumber => $biblionumber,
             done         =>1,

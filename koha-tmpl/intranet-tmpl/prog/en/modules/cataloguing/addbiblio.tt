@@ -53,6 +53,12 @@
             redirect("items");
             return false;
         });
+        $("#saveandcontinue").click(function(){
+            $(".btn-group").removeClass("open");
+            redirect("just_save");
+            return false;
+        });
+
 	});
 
 function redirect(dest){
@@ -364,6 +370,7 @@ function Changefwk(FwkList) {
                 <ul class="dropdown-menu">
                     <li><a id="saveandview" href="#">Save and view record</a></li>
                     <li><a id="saveanditems" href="#">Save and edit items</a></li>
+                    <li><a id="saveandcontinue" href="#">Save and continue editing</a></li>
                 </ul>
             </div>
         [% END %]
