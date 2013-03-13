@@ -122,6 +122,8 @@ else {
     $template->param( batch_id => $batch_id);
 }
 
+$template->param( 'alphabet' => C4::Context->preference('alphabet') || join ' ', 'A' .. 'Z' );
+
 output_html_with_http_headers $cgi, $cookie, $template->output;
 
 __END__
