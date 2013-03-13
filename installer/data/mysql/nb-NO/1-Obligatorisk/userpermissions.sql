@@ -21,6 +21,7 @@
 INSERT INTO permissions (module_bit, code, description) VALUES
    ( 1, 'circulate_remaining_permissions', 'Øvrige rettigheter for sirkulasjon'),
    ( 1, 'override_renewals', 'Overstyre blokkerte fornyinger'),
+   ( 1, 'overdues_report', 'Execute overdue items report'),
    ( 3, 'parameters_remaining_permissions', 'Øvrige rettigheter knyttet til systempreferanser'),
    ( 3, 'manage_circ_rules', 'Endre sirkulasjonsregler'),
    ( 6, 'place_holds', 'Foreta reservering for lånere'),

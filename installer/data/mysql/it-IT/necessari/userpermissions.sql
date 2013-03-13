@@ -3,6 +3,7 @@ SET FOREIGN_KEY_CHECKS=0;
 INSERT INTO permissions (module_bit, code, description) VALUES
    ( 1, 'circulate_remaining_permissions', 'Permessi rimanenti per la circolazione'),
    ( 1, 'override_renewals', 'Sblocca i rinnovi bloccati'),
+   ( 1, 'overdues_report', 'Execute overdue items report'),
    ( 3, 'parameters_remaining_permissions', 'Permessi rimanenti'),
    ( 3, 'manage_circ_rules', 'Gestisci regole circolazione'),
    ( 6, 'place_holds', 'Fai prenotazioni per gli utenti'),
