@@ -54,6 +54,7 @@ sub target_syntax {
     if (@{$self->phrases}) {
         foreach my $phrase (@{$self->phrases}) {
             if ($phrase) {
+                $phrase =~ s/"/\\"/g;
                 $pqf .= ' @or ' x (scalar(@fields) - 1);
                 foreach my $attributes (@fields) {
                     $pqf .= $attributes->{'attr_string'} . ($attributes->{'4'} ? '' : ' @attr 4=1') . ' "' . $phrase . '" ';
@@ -66,6 +67,7 @@ sub target_syntax {
             if (ref($atom)) {
                 $atom_content = $atom->target_syntax($server);
                 if ($atom_content) {
+                    $atom_content =~ s/"/\\"/g;
                     $pqf .= ' @or ' x (scalar(@fields) - 1);
                     foreach my $attributes (@fields) {
                         $attributes->{'attr_string'} ||= '';
