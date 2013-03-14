@@ -22,7 +22,10 @@ directly.
 sub target_syntax {
     my ($self, $server) = @_;
 
-    return ' "' .  $self->content . '" ';
+    my $content = $self->content;
+    $content =~ s/"/\\"/g;
+
+    return ' "' .  $content . '" ';
 }
 
 1;
