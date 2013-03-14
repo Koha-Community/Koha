@@ -1213,6 +1213,7 @@ sub GetAuthorizedHeading {
     unless ($record = $args->{record}) {
         return unless $args->{authid};
         $record = GetAuthority($args->{authid});
+        return unless $record;
     }
     if (C4::Context->preference('marcflavour') eq 'UNIMARC') {
 # construct UNIMARC summary, that is quite different from MARC21 one

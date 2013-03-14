@@ -253,6 +253,7 @@ sub SimpleSearch {
                     $query = $QParser->target_syntax($servers[$i]);
                     $zoom_queries[$i] = new ZOOM::Query::PQF( $query, $zconns[$i]);
                 } else {
+                    $query =~ s/:/=/g;
                     $zoom_queries[$i] = new ZOOM::Query::CCL2RPN( $query, $zconns[$i]);
                 }
                 $tmpresults[$i] = $zconns[$i]->search( $zoom_queries[$i] );
@@ -1117,7 +1118,7 @@ on authority data).
 =cut
 
 sub _handle_exploding_index {
-    my ($QParser, $struct, $filter, $params, $negate, $server) = @_;
+    my ($QParser, $filter, $params, $negate, $server) = @_;
     my $index = $filter;
     my $term = join(' ', @$params);
 
@@ -1127,7 +1128,7 @@ sub _handle_exploding_index {
 
     my $codesubfield = $marcflavour eq 'UNIMARC' ? '5' : 'w';
     my $wantedcodes = '';
-    my @subqueries = ( "su:\"$term\"");
+    my @subqueries = ( "\@attr 1=Subject \@attr 4=1 \"$term\"");
     my ($error, $results, $total_hits) = SimpleSearch( "he:$term", undef, undef, [ "authorityserver" ] );
     foreach my $auth (@$results) {
         my $record = MARC::Record->new_from_usmarc($auth);
@@ -1142,12 +1143,11 @@ sub _handle_exploding_index {
             }
             foreach my $reference (@references) {
                 my $codes = $reference->subfield($codesubfield);
-                push @subqueries, 'su:"' . $reference->as_string('abcdefghijlmnopqrstuvxyz') . '"' if (($codes && $codes eq $wantedcodes) || !$wantedcodes);
+                push @subqueries, '@attr 1=Subject @attr 4=1 "' . $reference->as_string('abcdefghijlmnopqrstuvxyz') . '"' if (($codes && $codes eq $wantedcodes) || !$wantedcodes);
             }
         }
     }
-    my $query = '(' x scalar(@subqueries) . join(') || ', @subqueries) . ')';
-    warn $query;
+    my $query = ' @or ' x (scalar(@subqueries) - 1) . join(' ', @subqueries);
     return $query;
 }
 
@@ -1179,7 +1179,7 @@ sub parseQuery {
 
     my $QParser;
     $QParser = C4::Context->queryparser if (C4::Context->preference('UseQueryParser') || $query =~ s/^qp=//);
-    undef $QParser if ($query =~ m/^(ccl=|pqf=|cql=)/ || grep (/\w,\w|\w=\w/, @operands) );
+    undef $QParser if ($query =~ m/^(ccl=|pqf=|cql=)/ || grep (/\w,\w|\w=\w/, @operands, @indexes) );
     undef $QParser if (scalar @limits > 0);
 
     if ($QParser)
@@ -1189,13 +1189,19 @@ sub parseQuery {
             next unless $operands[$ii];
             $query .= $operators[ $ii - 1 ] eq 'or' ? ' || ' : ' && '
               if ($query);
-            $query .=
-              ( $indexes[$ii] ? "$indexes[$ii]:" : '' ) . $operands[$ii];
+            if ( $indexes[$ii] =~ m/su-/ ) {
+                $query .= $indexes[$ii] . '(' . $operands[$ii] . ')';
+            }
+            else {
+                $query .=
+                  ( $indexes[$ii] ? "$indexes[$ii]:" : '' ) . $operands[$ii];
+            }
         }
         foreach my $limit (@limits) {
         }
-        if (scalar (@sort_by) > 0) {
-            my $modifier_re = '#(' . join( '|', @{$QParser->modifiers}) . ')';
+        if ( scalar(@sort_by) > 0 ) {
+            my $modifier_re =
+              '#(' . join( '|', @{ $QParser->modifiers } ) . ')';
             $query =~ s/$modifier_re//g;
             foreach my $modifier (@sort_by) {
                 $query .= " #$modifier";
@@ -1206,12 +1212,16 @@ sub parseQuery {
         $query_desc =~ s/\s+/ /g;
         if ( C4::Context->preference("QueryWeightFields") ) {
         }
-        $QParser->add_bib1_filter_map( 'biblioserver', 'su-br', { 'callback' => \&_handle_exploding_index });
-        $QParser->add_bib1_filter_map( 'biblioserver', 'su-na', { 'callback' => \&_handle_exploding_index });
-        $QParser->add_bib1_filter_map( 'biblioserver', 'su-rl', { 'callback' => \&_handle_exploding_index });
-        $QParser->parse( $query );
+        $QParser->add_bib1_filter_map( 'su-br' => 'biblioserver' =>
+              { 'target_syntax_callback' => \&_handle_exploding_index } );
+        $QParser->add_bib1_filter_map( 'su-na' => 'biblioserver' =>
+              { 'target_syntax_callback' => \&_handle_exploding_index } );
+        $QParser->add_bib1_filter_map( 'su-rl' => 'biblioserver' =>
+              { 'target_syntax_callback' => \&_handle_exploding_index } );
+        $QParser->parse($query);
         $operands[0] = "pqf=" . $QParser->target_syntax('biblioserver');
-    } else {
+    }
+    else {
         require Koha::QueryParser::Driver::PQF;
         my $modifier_re = '#(' . join( '|', @{Koha::QueryParser::Driver::PQF->modifiers}) . ')';
         s/$modifier_re//g for @operands;
