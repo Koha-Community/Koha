@@ -979,8 +979,8 @@ sub BuildSummary {
 
         # Other forms
         @otherscript = map { {
-            lang      => $_->subfield('8') || '',
-            term      => $_->subfield('a'),
+            lang      => length ($_->subfield('8')) == 6 ? substr ($_->subfield('8'), 3, 3) : $_->subfield('8') || '',
+            term      => $_->subfield('a') . ($_->subfield('b') ? ', ' . $_->subfield('b') : ''),
             direction => 'ltr',
             field     => $_->tag,
         } } $record->field('7..');

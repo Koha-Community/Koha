@@ -47,6 +47,14 @@
              [% END %]
              </div>
             [% END %]
+            [% IF summary.seefrom %]
+              <div class="authres_seefrom">
+              [% FOREACH see IN summary.seefrom %]
+                 [% PROCESS showreference heading=see.heading label="" type=see.type search='' %]
+                 [% IF ! loop.last %] ; [% END %]
+              [% END %]
+              </div>
+            [% END %]
             [% IF summary.seealso %]
               <div class="authres_seealso">
               [% FOREACH see IN summary.seealso %]
@@ -81,4 +89,13 @@
             [% END %]
         [% END %]
     [% END %]
+[% END %]
+[% BLOCK language %]
+  [% SWITCH lang %]
+   [% CASE ['heb'] %]Hebrew
+   [% CASE ['ara'] %]Arabic
+   [% CASE ['gre'] %]Greek (modern)
+   [% CASE ['grc'] %]Greek (to 1453)
+   [% CASE %][% lang %]
+  [% END %]
 [% END %]
