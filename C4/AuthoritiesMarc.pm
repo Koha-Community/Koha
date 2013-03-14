@@ -283,7 +283,7 @@ sub SearchAuthorities {
                 $dosearch=1;
                 ++$attr_cnt;
                 if ($QParser) {
-                    $qpquery .= " $tags->[$i]:$value->[$i]";
+                    $qpquery .= " $tags->[$i]:\"$value->[$i]\"";
                 }
             }#if value
         }

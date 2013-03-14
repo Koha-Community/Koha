@@ -34,7 +34,7 @@ sub target_syntax {
             if ($relbump) {
                 $fieldobj->{'attr_string'} .= ' ' . $relbump->{'attr_string'};
             }
-            push @fields, $fieldobj unless (!defined($fieldobj) || ($field eq $self->classname && scalar @fields));
+            push @fields, $fieldobj unless (!defined($fieldobj) || ($field eq $self->classname && @{$self->fields} > 1));
         }
     } else {
         $fieldobj = $self->plan->QueryParser->bib1_mapping_by_name('field', $self->classname, $self->classname, $server);

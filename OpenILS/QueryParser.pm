@@ -1175,7 +1175,7 @@ sub decompose {
                 # Cleanup the phrase to make it so that we don't parse things in it as anything other than atoms
                 $phrase =~ s/$phrase_cleanup_re/ /g;
 
-                $_ = $phrase . $temp_val;
+                $_ = $temp_val;
 
             }
 
