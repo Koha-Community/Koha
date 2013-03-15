@@ -19,11 +19,18 @@
 <style type="text/css">
     #sql { width: 90%; height: 9em;}
 </style>
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.pager.js"></script>
+[% IF ( saved1 ) %]
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.min.js"></script>
+[% INCLUDE 'datatables-strings.inc' %]
+<script type="text/javascript" src="[% themelang %]/js/datatables.js"></script>
+[% END %]
 
 <script type="text/javascript">
 //<![CDATA[
+[% IF (dateformat == 'metric' && saved1) %]
+dt_add_type_uk_date();
+[% END %]
 var group_subgroups = {};
 var no_subgroup_label = _( "(None)" );
 function load_group_subgroups () {
@@ -59,22 +66,17 @@ $(document).ready(function(){
             return false;
         }
     });
+  // call the datatables plugin
+    $("#table_reports").dataTable($.extend(true, {}, dataTablesDefaults, {
+        "aoColumnDefs": [
+            { "aTargets": [ -1, -2, -3, -4 ], "bSortable": false, "bSearchable": false },
+        ],
+        "aaSorting": [[ 1, "asc" ]],
+        "aLengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]],
+        "iDisplayLength": 20,
+        "sPaginationType": "four_button"
+    }));
 [% END %]
-  // call the tablesorter plugin
-  $("#table_reports").tablesorter({
-    widgets : ['zebra'],
-    sortList: [[1,0]],
-    headers: {
-        10: { sorter: false},
-        11: { sorter: false},
-        12: { sorter: false},
-        13: { sorter: false}
-    }
-  }).tablesorterPager({
-    container:     $("#pagertable_reports"),
-    positionFixed: false,
-    size:          20
-  });
   // redefine the datepicker's default because reports require ISO
   // http://jqueryui.com/demos/datepicker/#option-dateFormat
   $( ".datepicker" ).datepicker( "option", "dateFormat", "yy-mm-dd" );
@@ -146,10 +148,6 @@ canned reports and writing custom SQL reports.</p>
 
 [% IF ( saved1 ) %]
 [% IF ( savedreports ) %]<h1>Saved reports</h1>
-
-<div id="pagertable_reports">
-[% INCLUDE 'table-pager.inc' perpage='20' %]
-</div>
 
 <table id="table_reports" class="tablesorter">
 <thead>
