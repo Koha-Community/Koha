@@ -6505,7 +6505,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.11.00.XXX";
+$DBversion = "3.11.00.028";
 if ( CheckVersion($DBversion) ) {
     $dbh->do("INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type) VALUES ('PatronSelfRegistrationAdditionalInstructions', '', NULL , 'A free text field to display additional instructions to newly self registered patrons.', 'free'    );");
     print "Upgrade to $DBversion done (Bug 9756 - Patron self registration missing the system preference PatronSelfRegistrationAdditionalInstructions)\n";
