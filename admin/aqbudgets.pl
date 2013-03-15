@@ -137,7 +137,7 @@ if ($op eq 'add_form') {
         $dropbox_disabled = BudgetHasChildren($budget_id);
         my $borrower = &GetMember( borrowernumber=>$budget->{budget_owner_id} );
         $budget->{budget_owner_name} = $borrower->{'firstname'} . ' ' . $borrower->{'surname'};
-        $$budget{$_}= sprintf("%.2f", $budget->{$_}) for grep{/amount/} keys %$budget;
+        $$budget{$_}= sprintf("%.2f", $budget->{$_}) for grep{ /amount|encumb|expend/ } keys %$budget;
     }
 
     # build budget hierarchy

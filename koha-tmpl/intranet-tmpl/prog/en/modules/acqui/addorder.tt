@@ -1,0 +1,41 @@
+[% INCLUDE "doc-head-open.inc" %]
+<title>Koha &rsaquo; Acquisition &rsaquo; Add order</title>
+[% INCLUDE "doc-head-close.inc" %]
+</head>
+
+<body>
+[% INCLUDE "header.inc" %]
+
+<div id="doc3" class="yui-t7">
+
+<div id="bd">
+  <div id="yui-main">
+    <div class="yui-b">
+      [% IF (not_enough_budget) %]
+        <form action="/cgi-bin/koha/acqui/addorder.pl" method="post">
+          [% FOREACH var IN vars_loop %]
+            [% FOREACH val IN var.values %]
+              <input type="hidden" name="[% var.name %]" value="[% val |html %]" />
+            [% END %]
+          [% END %]
+          <input type="hidden" name="confirm_budget_exceeding" value="1" />
+          <div class="dialog">
+            [% IF (budget_exceeded) %]
+              <p>Warning! Order total amount exceeds allowed budget.</p>
+            [% END %]
+            [% IF (encumbrance_exceeded) %]
+              <p>Warning! You will exceed [% encumbrance %]% of your fund.</p>
+            [% END %]
+            [% IF (expenditure_exceeded) %]
+              <p>Warning! You will exceed maximum limit ([% expenditure %][% IF (currency) %] [% currency %][% END %]) for your fund.</p>
+            [% END %]
+            <p>Do you want to confirm this order?</p>
+            <input type="submit" class="approve" value="Yes, I confirm" />
+            <input type="button" class="deny" value="No, I don't confirm" onclick="window.location.href = '[% referer %]'" />
+          </div>
+        </form>
+      [% END %]
+    </div>
+  </div>
+</div>
+[% INCLUDE "intranet-bottom.inc" %]
