@@ -572,7 +572,11 @@ foreach (keys(%flags)) {
 # in modify mod: userbranch value for GetBranchesLoop() comes from borrowers table
 # in add    mod: userbranch value come from branches table (ip correspondence)
 
-my $userbranch = C4::Context->userenv->{'branch'};
+my $userbranch = '';
+if (C4::Context->userenv && C4::Context->userenv->{'branch'}) {
+    $userbranch = C4::Context->userenv->{'branch'};
+}
+
 if (defined ($data{'branchcode'}) and ( $op eq 'modify' || ( $op eq 'add' && $category_type eq 'C' ) )) {
     $userbranch = $data{'branchcode'};
 }
