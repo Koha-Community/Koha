@@ -5316,7 +5316,7 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.10.03.003";
+$DBversion = "3.08.10.002";
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     $dbh->do(qq{
         ALTER TABLE import_records ADD INDEX batch_id_record_type ( import_batch_id, record_type );
