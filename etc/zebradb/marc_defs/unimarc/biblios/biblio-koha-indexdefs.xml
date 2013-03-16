@@ -1156,148 +1156,683 @@
     <target_index>Title:p</target_index>
   </index_data_field>
   <!--==== 6XX BLOCK OF SUBJECTS ====-->
-  <!--600 - Personal name-->
-  <index_subfields tag="600" subfields="a">
-    <target_index>Personal-name:w</target_index>
-    <target_index>Personal-name:p</target_index>
-    <target_index>Subject:w</target_index>
-    <target_index>Subject:p</target_index>
-  </index_subfields>
-  <index_subfields tag="600" subfields="9">
+  <!--For all 6XX : index $j,$x,$y,$z in several indexes in addition to the specific index for their 6XX field:-->
+  <!--# 6XX$j : Genre/form                  : indexed in Subject, Subject-subdivision, Subject-genre-form-->
+  <!--# 6XX$x : Subject                     : indexed in Subject, Subject-subdivision (could be topical subject or genre/form subject, so don't index in Subject-topical)-->
+  <!--# 6XX$y : Geographical subject        : indexed in Subject, Subject-subdivision, Subject-name-geographical-->
+  <!--# 6XX$z : Chronological subject       : indexed in Subject, Subject-subdivision, Subject-chronological-->
+  <!--Index 6XX$9 only in Koha-Auth-Number-->
+  <!--record.abs line 407: melm 600$9      Koha-Auth-Number,Koha-Auth-Number:n-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="600" subfields="9">
     <target_index>Koha-Auth-Number:w</target_index>
     <target_index>Koha-Auth-Number:n</target_index>
   </index_subfields>
-  <index_data_field tag="600">
+  <!--record.abs line 408: melm 601$9      Koha-Auth-Number,Koha-Auth-Number:n-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="601" subfields="9">
+    <target_index>Koha-Auth-Number:w</target_index>
+    <target_index>Koha-Auth-Number:n</target_index>
+  </index_subfields>
+  <!--record.abs line 409: melm 602$9      Koha-Auth-Number,Koha-Auth-Number:n-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="602" subfields="9">
+    <target_index>Koha-Auth-Number:w</target_index>
+    <target_index>Koha-Auth-Number:n</target_index>
+  </index_subfields>
+  <!--record.abs line 410: melm 604$9      Koha-Auth-Number,Koha-Auth-Number:n-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="604" subfields="9">
+    <target_index>Koha-Auth-Number:w</target_index>
+    <target_index>Koha-Auth-Number:n</target_index>
+  </index_subfields>
+  <!--record.abs line 411: melm 605$9      Koha-Auth-Number,Koha-Auth-Number:n-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="605" subfields="9">
+    <target_index>Koha-Auth-Number:w</target_index>
+    <target_index>Koha-Auth-Number:n</target_index>
+  </index_subfields>
+  <!--record.abs line 412: melm 606$9      Koha-Auth-Number,Koha-Auth-Number:n-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="606" subfields="9">
+    <target_index>Koha-Auth-Number:w</target_index>
+    <target_index>Koha-Auth-Number:n</target_index>
+  </index_subfields>
+  <!--record.abs line 413: melm 607$9      Koha-Auth-Number,Koha-Auth-Number:n-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="607" subfields="9">
+    <target_index>Koha-Auth-Number:w</target_index>
+    <target_index>Koha-Auth-Number:n</target_index>
+  </index_subfields>
+  <!--record.abs line 414: melm 608$9      Koha-Auth-Number,Koha-Auth-Number:n-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="608" subfields="9">
+    <target_index>Koha-Auth-Number:w</target_index>
+    <target_index>Koha-Auth-Number:n</target_index>
+  </index_subfields>
+  <!--record.abs line 415: melm 610$9      Koha-Auth-Number,Koha-Auth-Number:n-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="610" subfields="9">
+    <target_index>Koha-Auth-Number:w</target_index>
+    <target_index>Koha-Auth-Number:n</target_index>
+  </index_subfields>
+  <!--record.abs line 416: melm 615$9      Koha-Auth-Number,Koha-Auth-Number:n-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="615" subfields="9">
+    <target_index>Koha-Auth-Number:w</target_index>
+    <target_index>Koha-Auth-Number:n</target_index>
+  </index_subfields>
+  <!--record.abs line 417: melm 616$9      Koha-Auth-Number,Koha-Auth-Number:n-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="616" subfields="9">
+    <target_index>Koha-Auth-Number:w</target_index>
+    <target_index>Koha-Auth-Number:n</target_index>
+  </index_subfields>
+  <!--record.abs line 418: melm 617$9      Koha-Auth-Number,Koha-Auth-Number:n-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="617" subfields="9">
+    <target_index>Koha-Auth-Number:w</target_index>
+    <target_index>Koha-Auth-Number:n</target_index>
+  </index_subfields>
+  <!--record.abs line 419: melm 620$9      Koha-Auth-Number,Koha-Auth-Number:n-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="620" subfields="9">
+    <target_index>Koha-Auth-Number:w</target_index>
+    <target_index>Koha-Auth-Number:n</target_index>
+  </index_subfields>
+  <!--record.abs line 420: melm 621$9      Koha-Auth-Number,Koha-Auth-Number:n-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="621" subfields="9">
+    <target_index>Koha-Auth-Number:w</target_index>
+    <target_index>Koha-Auth-Number:n</target_index>
+  </index_subfields>
+  <!--record.abs line 426: melm 603$9      Koha-Auth-Number,Koha-Auth-Number:n-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="603" subfields="9">
+    <target_index>Koha-Auth-Number:w</target_index>
+    <target_index>Koha-Auth-Number:n</target_index>
+  </index_subfields>
+  <!--record.abs line 427: melm 630$9      Koha-Auth-Number,Koha-Auth-Number:n-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="630" subfields="9">
+    <target_index>Koha-Auth-Number:w</target_index>
+    <target_index>Koha-Auth-Number:n</target_index>
+  </index_subfields>
+  <!--record.abs line 428: melm 631$9      Koha-Auth-Number,Koha-Auth-Number:n-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="631" subfields="9">
+    <target_index>Koha-Auth-Number:w</target_index>
+    <target_index>Koha-Auth-Number:n</target_index>
+  </index_subfields>
+  <!--record.abs line 429: melm 632$9      Koha-Auth-Number,Koha-Auth-Number:n-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="632" subfields="9">
+    <target_index>Koha-Auth-Number:w</target_index>
+    <target_index>Koha-Auth-Number:n</target_index>
+  </index_subfields>
+  <!--record.abs line 430: melm 633$9      Koha-Auth-Number,Koha-Auth-Number:n-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="633" subfields="9">
+    <target_index>Koha-Auth-Number:w</target_index>
+    <target_index>Koha-Auth-Number:n</target_index>
+  </index_subfields>
+  <!--record.abs line 431: melm 634$9      Koha-Auth-Number,Koha-Auth-Number:n-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="634" subfields="9">
+    <target_index>Koha-Auth-Number:w</target_index>
+    <target_index>Koha-Auth-Number:n</target_index>
+  </index_subfields>
+  <!--record.abs line 432: melm 635$9      Koha-Auth-Number,Koha-Auth-Number:n-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="635" subfields="9">
+    <target_index>Koha-Auth-Number:w</target_index>
+    <target_index>Koha-Auth-Number:n</target_index>
+  </index_subfields>
+  <!--record.abs line 433: melm 636$9      Koha-Auth-Number,Koha-Auth-Number:n-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="636" subfields="9">
+    <target_index>Koha-Auth-Number:w</target_index>
+    <target_index>Koha-Auth-Number:n</target_index>
+  </index_subfields>
+  <!--600 : Personal name (as subject) see Marc21 600-->
+  <!--indexing a,b,d,g,t (even if t is said to be not used)-->
+  <!--not indexing c (additional elements),f (dates),p (address/affiliation),2,3,5-->
+  <!--indexing specifically $j,$x,$y,$z-->
+  <!--600$adbgt    Personal-name,Personal-name:p,Subject-name-personal:w,Subject-name-personal:p,Subject,Subject:p-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="600" subfields="abdgt">
+    <target_index>Personal-name:w</target_index>
+    <target_index>Personal-name:p</target_index>
+    <target_index>Subject-name-personal:w</target_index>
+    <target_index>Subject-name-personal:p</target_index>
     <target_index>Subject:w</target_index>
     <target_index>Subject:p</target_index>
-  </index_data_field>
-  <!--601 - Corporate name-->
-  <index_subfields tag="601" subfields="a">
+  </index_subfields>
+  <!--600$j    Subject:w,Subject:p,Subject-subdivision:w,Subject-subdivision:p,Subject-genre-form:w,Subject-genre-form:p,Subject-name-personal:w,Subject-name-personal:p-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="600" subfields="j">
+    <target_index>Subject:w</target_index>
+    <target_index>Subject:p</target_index>
+    <target_index>Subject-subdivision:w</target_index>
+    <target_index>Subject-subdivision:p</target_index>
+    <target_index>Subject-genre-form:w</target_index>
+    <target_index>Subject-genre-form:p</target_index>
+    <target_index>Subject-name-personal:w</target_index>
+    <target_index>Subject-name-personal:p</target_index>
+  </index_subfields>
+  <!--600$x    Subject:w,Subject:p,Subject-subdivision:w,Subject-subdivision:p,Subject-name-personal:w,Subject-name-personal:p-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="600" subfields="x">
+    <target_index>Subject:w</target_index>
+    <target_index>Subject:p</target_index>
+    <target_index>Subject-subdivision:w</target_index>
+    <target_index>Subject-subdivision:p</target_index>
+    <target_index>Subject-name-personal:w</target_index>
+    <target_index>Subject-name-personal:p</target_index>
+  </index_subfields>
+  <!--600$y    Subject:w,Subject:p,Subject-subdivision:w,Subject-subdivision:p,Subject-name-geographical:w,Subject-name-geographical:p,Subject-name-personal:w,Subject-name-personal:p-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="600" subfields="y">
+    <target_index>Subject:w</target_index>
+    <target_index>Subject:p</target_index>
+    <target_index>Subject-subdivision:w</target_index>
+    <target_index>Subject-subdivision:p</target_index>
+    <target_index>Subject-name-geographical:w</target_index>
+    <target_index>Subject-name-geographical:p</target_index>
+    <target_index>Subject-name-personal:w</target_index>
+    <target_index>Subject-name-personal:p</target_index>
+  </index_subfields>
+  <!--600$z    Subject:w,Subject:p,Subject-subdivision:w,Subject-subdivision:p,Subject-chronological:w,Subject-chronological:p,Subject-name-personal:w,Subject-name-personal:p-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="600" subfields="z">
+    <target_index>Subject:w</target_index>
+    <target_index>Subject:p</target_index>
+    <target_index>Subject-subdivision:w</target_index>
+    <target_index>Subject-subdivision:p</target_index>
+    <target_index>Subject-chronological:w</target_index>
+    <target_index>Subject-chronological:p</target_index>
+    <target_index>Subject-name-personal:w</target_index>
+    <target_index>Subject-name-personal:p</target_index>
+  </index_subfields>
+  <!--601 : Corporate or meeting name used as a subject // see Marc21 610 & 611-->
+  <!--indicators 0X = Corporate ; 1X = Meeting-->
+  <!--indexing a,b,c,d,e,f,g,h,t (even if t is said to be not used)-->
+  <!--not indexing 2,3,5-->
+  <!--indexing specifically $j,$x,$y,$z-->
+  <!--d,e,f only used for Meetings-->
+  <!--FIXME : index separately corporate and meeting in DOM indexing?-->
+  <!--601$abcdefght    Corporate-name:w,Corporate-name:p,Conference-name:w,Conference-name:p,Subject-name-conference:w,Subject-name-conference:p,Subject-name-corporate:w,Subject-name-corporate:p,Subject,Subject:p-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="601" subfields="a">
     <target_index>Corporate-name:w</target_index>
-    <target_index>Conference-name:w</target_index>
     <target_index>Corporate-name:p</target_index>
+    <target_index>Conference-name:w</target_index>
     <target_index>Conference-name:p</target_index>
-  </index_subfields>
-  <index_subfields tag="601" subfields="9">
-    <target_index>Koha-Auth-Number:w</target_index>
-    <target_index>Koha-Auth-Number:n</target_index>
-  </index_subfields>
-  <index_data_field tag="601">
+    <target_index>Subject-name-conference:w</target_index>
+    <target_index>Subject-name-conference:p</target_index>
+    <target_index>Subject-name-corporate:w</target_index>
+    <target_index>Subject-name-corporate:p</target_index>
     <target_index>Subject:w</target_index>
     <target_index>Subject:p</target_index>
-  </index_data_field>
-  <!--602 - Familiy name-->
-  <index_subfields tag="602" subfields="a">
+  </index_subfields>
+  <!--601$j    Subject:w,Subject:p,Subject-subdivision:w,Subject-subdivision:p,Subject-genre-form:w,Subject-genre-form:p,Subject-name-conference:w,Subject-name-conference:p,Subject-name-corporate:w,Subject-name-corporate:p-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="601" subfields="j">
+    <target_index>Subject:w</target_index>
+    <target_index>Subject:p</target_index>
+    <target_index>Subject-subdivision:w</target_index>
+    <target_index>Subject-subdivision:p</target_index>
+    <target_index>Subject-genre-form:w</target_index>
+    <target_index>Subject-genre-form:p</target_index>
+    <target_index>Subject-name-conference:w</target_index>
+    <target_index>Subject-name-conference:p</target_index>
+    <target_index>Subject-name-corporate:w</target_index>
+    <target_index>Subject-name-corporate:p</target_index>
+  </index_subfields>
+  <!--601$x    Subject:w,Subject:p,Subject-subdivision:w,Subject-subdivision:p,Subject-name-conference:w,Subject-name-conference:p,Subject-name-corporate:w,Subject-name-corporate:p-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="601" subfields="x">
+    <target_index>Subject:w</target_index>
+    <target_index>Subject:p</target_index>
+    <target_index>Subject-subdivision:w</target_index>
+    <target_index>Subject-subdivision:p</target_index>
+    <target_index>Subject-name-conference:w</target_index>
+    <target_index>Subject-name-conference:p</target_index>
+    <target_index>Subject-name-corporate:w</target_index>
+    <target_index>Subject-name-corporate:p</target_index>
+  </index_subfields>
+  <!--601$y    Subject:w,Subject:p,Subject-subdivision:w,Subject-subdivision:p,Subject-name-geographical:w,Subject-name-geographical:p,Subject-name-conference:w,Subject-name-conference:p,Subject-name-corporate:w,Subject-name-corporate:p-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="601" subfields="y">
+    <target_index>Subject:w</target_index>
+    <target_index>Subject:p</target_index>
+    <target_index>Subject-subdivision:w</target_index>
+    <target_index>Subject-subdivision:p</target_index>
+    <target_index>Subject-name-geographical:w</target_index>
+    <target_index>Subject-name-geographical:p</target_index>
+    <target_index>Subject-name-conference:w</target_index>
+    <target_index>Subject-name-conference:p</target_index>
+    <target_index>Subject-name-corporate:w</target_index>
+    <target_index>Subject-name-corporate:p</target_index>
+  </index_subfields>
+  <!--601$z    Subject:w,Subject:p,Subject-subdivision:w,Subject-subdivision:p,Subject-chronological:w,Subject-chronological:p,Subject-name-conference:w,Subject-name-conference:p,Subject-name-corporate:w,Subject-name-corporate:p-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="601" subfields="z">
+    <target_index>Subject:w</target_index>
+    <target_index>Subject:p</target_index>
+    <target_index>Subject-subdivision:w</target_index>
+    <target_index>Subject-subdivision:p</target_index>
+    <target_index>Subject-chronological:w</target_index>
+    <target_index>Subject-chronological:p</target_index>
+    <target_index>Subject-name-conference:w</target_index>
+    <target_index>Subject-name-conference:p</target_index>
+    <target_index>Subject-name-corporate:w</target_index>
+    <target_index>Subject-name-corporate:p</target_index>
+  </index_subfields>
+  <!--602 : Family name used as a subject // see Marc21 600 3X-->
+  <!--indexing a,t (even if t is said to be not used)-->
+  <!--not indexing f (dates), 2,3,5-->
+  <!--indexing specifically $j,$x,$y,$z-->
+  <!--FIXME Create a specific index? For the moment, index in Personal-name-->
+  <!--602$at    Subject:w,Subject:p,Subject-name-personal:w,Subject-name-personal:p,Personal-name:w,Personal-name:p-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="602" subfields="at">
     <target_index>Personal-name:w</target_index>
     <target_index>Personal-name:p</target_index>
-  </index_subfields>
-  <index_subfields tag="602" subfields="9">
-    <target_index>Koha-Auth-Number:w</target_index>
-    <target_index>Koha-Auth-Number:n</target_index>
-  </index_subfields>
-  <index_data_field tag="602">
+    <target_index>Subject-name-personal:w</target_index>
+    <target_index>Subject-name-personal:p</target_index>
     <target_index>Subject:w</target_index>
     <target_index>Subject:p</target_index>
-  </index_data_field>
-  <!--604 - Title and author-->
-  <index_subfields tag="604" subfields="9">
-    <target_index>Koha-Auth-Number:w</target_index>
-    <target_index>Koha-Auth-Number:n</target_index>
   </index_subfields>
-  <index_data_field tag="604">
+  <!--602$j    Subject:w,Subject:p,Subject-subdivision:w,Subject-subdivision:p,Subject-genre-form:w,Subject-genre-form:p,Subject-name-personal:w,Subject-name-personal:p-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="602" subfields="j">
     <target_index>Subject:w</target_index>
     <target_index>Subject:p</target_index>
-  </index_data_field>
-   <!--605 - Title-->
-  <index_subfields tag="605" subfields="9">
-    <target_index>Koha-Auth-Number:w</target_index>
-    <target_index>Koha-Auth-Number:n</target_index>
+    <target_index>Subject-subdivision:w</target_index>
+    <target_index>Subject-subdivision:p</target_index>
+    <target_index>Subject-genre-form:w</target_index>
+    <target_index>Subject-genre-form:p</target_index>
+    <target_index>Subject-name-personal:w</target_index>
+    <target_index>Subject-name-personal:p</target_index>
   </index_subfields>
-  <index_data_field tag="605">
+  <!--602$x    Subject:w,Subject:p,Subject-subdivision:w,Subject-subdivision:p,Subject-name-personal:w,Subject-name-personal:p-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="602" subfields="x">
     <target_index>Subject:w</target_index>
     <target_index>Subject:p</target_index>
-  </index_data_field>
-  <!--606 - Topic-->
-  <index_subfields tag="606" subfields="9">
-    <target_index>Koha-Auth-Number:w</target_index>
-    <target_index>Koha-Auth-Number:n</target_index>
+    <target_index>Subject-subdivision:w</target_index>
+    <target_index>Subject-subdivision:p</target_index>
+    <target_index>Subject-name-personal:w</target_index>
+    <target_index>Subject-name-personal:p</target_index>
   </index_subfields>
-  <index_data_field tag="606">
+  <!--602$y    Subject:w,Subject:p,Subject-subdivision:w,Subject-subdivision:p,Subject-name-geographical:w,Subject-name-geographical:p,Subject-name-personal:w,Subject-name-personal:p-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="602" subfields="y">
     <target_index>Subject:w</target_index>
     <target_index>Subject:p</target_index>
-  </index_data_field>
-  <!--607 - Geographic-->
-  <index_subfields tag="607" subfields="9">
-    <target_index>Koha-Auth-Number:w</target_index>
-    <target_index>Koha-Auth-Number:n</target_index>
+    <target_index>Subject-subdivision:w</target_index>
+    <target_index>Subject-subdivision:p</target_index>
+    <target_index>Subject-name-geographical:w</target_index>
+    <target_index>Subject-name-geographical:p</target_index>
+    <target_index>Subject-name-personal:w</target_index>
+    <target_index>Subject-name-personal:p</target_index>
   </index_subfields>
-  <index_data_field tag="607">
+  <!--602$z    Subject:w,Subject:p,Subject-subdivision:w,Subject-subdivision:p,Subject-chronological:w,Subject-chronological:p,Subject-name-personal:w,Subject-name-personal:p-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="602" subfields="z">
     <target_index>Subject:w</target_index>
     <target_index>Subject:p</target_index>
-  </index_data_field>
-  <!--608 - Form-Genre-->
-  <index_subfields tag="608" subfields="9">
-    <target_index>Koha-Auth-Number:w</target_index>
-    <target_index>Koha-Auth-Number:n</target_index>
+    <target_index>Subject-subdivision:w</target_index>
+    <target_index>Subject-subdivision:p</target_index>
+    <target_index>Subject-chronological:w</target_index>
+    <target_index>Subject-chronological:p</target_index>
+    <target_index>Subject-name-personal:w</target_index>
+    <target_index>Subject-name-personal:p</target_index>
   </index_subfields>
-  <index_data_field tag="608">
+  <!--604 : Name and title // see Marc21 600-->
+  <!--indexing a,t-->
+  <!--not indexing 2,3,5-->
+  <!--indexing specifically $j,$x,$y,$z-->
+  <!--604$at    Name-and-title,Name-and-title:p,Subject-title:w,Subject-title:p,Personal-name,Personal-name:p,Subject-name-personal:w,Subject-name-personal:p,Subject,Subject:p-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="604" subfields="at">
+    <target_index>Name-and-title:w</target_index>
+    <target_index>Name-and-title:p</target_index>
+    <target_index>Subject-title:w</target_index>
+    <target_index>Subject-title:p</target_index>
+    <target_index>Personal-name:w</target_index>
+    <target_index>Personal-name:p</target_index>
+    <target_index>Subject-name-personal:w</target_index>
+    <target_index>Subject-name-personal:p</target_index>
     <target_index>Subject:w</target_index>
     <target_index>Subject:p</target_index>
-  </index_data_field>
-  <!--610 - Free-->
-  <index_subfields tag="608" subfields="9">
-    <target_index>Koha-Auth-Number:w</target_index>
-    <target_index>Koha-Auth-Number:n</target_index>
   </index_subfields>
-  <index_data_field tag="610">
+  <!--604$t    Name-and-title,Name-and-title:p,Subject-title:w,Subject-title:p,Subject-name-personal:w,Subject-name-personal:p,Subject,Subject:p-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="604" subfields="t">
+    <target_index>Name-and-title:w</target_index>
+    <target_index>Name-and-title:p</target_index>
+    <target_index>Subject-title:w</target_index>
+    <target_index>Subject-title:p</target_index>
+    <target_index>Subject-name-personal:w</target_index>
+    <target_index>Subject-name-personal:p</target_index>
     <target_index>Subject:w</target_index>
     <target_index>Subject:p</target_index>
-  </index_data_field>
-  <!--615 - Category-->
-  <index_subfields tag="615" subfields="9">
-    <target_index>Koha-Auth-Number:w</target_index>
-    <target_index>Koha-Auth-Number:n</target_index>
   </index_subfields>
-  <index_data_field tag="615">
+  <!--604$j    Subject:w,Subject:p,Subject-subdivision:w,Subject-subdivision:p,Subject-genre-form:w,Subject-genre-form:p,Subject-title:w,Subject-title:p-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="604" subfields="j">
     <target_index>Subject:w</target_index>
     <target_index>Subject:p</target_index>
-  </index_data_field>
-  <!--616 - Trademark-->
-  <index_subfields tag="616" subfields="9">
-    <target_index>Koha-Auth-Number:w</target_index>
-    <target_index>Koha-Auth-Number:n</target_index>
+    <target_index>Subject-subdivision:w</target_index>
+    <target_index>Subject-subdivision:p</target_index>
+    <target_index>Subject-genre-form:w</target_index>
+    <target_index>Subject-genre-form:p</target_index>
+    <target_index>Subject-title:w</target_index>
+    <target_index>Subject-title:p</target_index>
   </index_subfields>
-  <index_data_field tag="616">
+  <!--604$x    Subject:w,Subject:p,Subject-subdivision:w,Subject-subdivision:p,Subject-title:w,Subject-title:p-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="604" subfields="x">
     <target_index>Subject:w</target_index>
     <target_index>Subject:p</target_index>
-  </index_data_field>
-  <!--617 - Hierarchical geographical name-->
-  <index_subfields tag="617" subfields="9">
-    <target_index>Koha-Auth-Number:w</target_index>
-    <target_index>Koha-Auth-Number:n</target_index>
+    <target_index>Subject-subdivision:w</target_index>
+    <target_index>Subject-subdivision:p</target_index>
+    <target_index>Subject-title:w</target_index>
+    <target_index>Subject-title:p</target_index>
   </index_subfields>
-  <index_data_field tag="617">
+  <!--604$y    Subject:w,Subject:p,Subject-subdivision:w,Subject-subdivision:p,Subject-name-geographical:w,Subject-name-geographical:p,Subject-title:w,Subject-title:p-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="604" subfields="y">
     <target_index>Subject:w</target_index>
     <target_index>Subject:p</target_index>
-  </index_data_field>
-  <!--620 - Place and date access-->
-  <index_subfields tag="620" subfields="9">
-    <target_index>Koha-Auth-Number:w</target_index>
-    <target_index>Koha-Auth-Number:n</target_index>
+    <target_index>Subject-subdivision:w</target_index>
+    <target_index>Subject-subdivision:p</target_index>
+    <target_index>Subject-name-geographical:w</target_index>
+    <target_index>Subject-name-geographical:p</target_index>
+    <target_index>Subject-title:w</target_index>
+    <target_index>Subject-title:p</target_index>
   </index_subfields>
-  <index_data_field tag="620">
+  <!--604$z    Subject:w,Subject:p,Subject-subdivision:w,Subject-subdivision:p,Subject-chronological:w,Subject-chronological:p,Subject-title:w,Subject-title:p-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="604" subfields="z">
     <target_index>Subject:w</target_index>
     <target_index>Subject:p</target_index>
-  </index_data_field>
-  <!--621 - Place and date of origin-->
-  <index_subfields tag="621" subfields="9">
-    <target_index>Koha-Auth-Number:w</target_index>
-    <target_index>Koha-Auth-Number:n</target_index>
+    <target_index>Subject-subdivision:w</target_index>
+    <target_index>Subject-subdivision:p</target_index>
+    <target_index>Subject-chronological:w</target_index>
+    <target_index>Subject-chronological:p</target_index>
+    <target_index>Subject-title:w</target_index>
+    <target_index>Subject-title:p</target_index>
   </index_subfields>
-  <index_data_field tag="621">
+  <!--605 : Title used as subject // see Marc21 630-->
+  <!--indexing all : a,h,i,k,l,m,n,q,r,s,u,w-->
+  <!--indexing specifically $j,$x,$y,$z-->
+  <!--605$ahiklmnqrsuw    Subject-title:w,Subject-title:p,Subject,Subject:p-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="605" subfields="ahiklmnqrsuw">
+    <target_index>Subject-title:w</target_index>
+    <target_index>Subject-title:p</target_index>
     <target_index>Subject:w</target_index>
     <target_index>Subject:p</target_index>
-  </index_data_field>
+  </index_subfields>
+  <!--605$j    Subject:w,Subject:p,Subject-subdivision:w,Subject-subdivision:p,Subject-genre-form:w,Subject-genre-form:p,Subject-title:w,Subject-title:p-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="605" subfields="j">
+    <target_index>Subject:w</target_index>
+    <target_index>Subject:p</target_index>
+    <target_index>Subject-subdivision:w</target_index>
+    <target_index>Subject-subdivision:p</target_index>
+    <target_index>Subject-genre-form:w</target_index>
+    <target_index>Subject-genre-form:p</target_index>
+    <target_index>Subject-title:w</target_index>
+    <target_index>Subject-title:p</target_index>
+  </index_subfields>
+  <!--605$x    Subject:w,Subject:p,Subject-subdivision:w,Subject-subdivision:p,Subject-title:w,Subject-title:p-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="605" subfields="x">
+    <target_index>Subject:w</target_index>
+    <target_index>Subject:p</target_index>
+    <target_index>Subject-subdivision:w</target_index>
+    <target_index>Subject-subdivision:p</target_index>
+    <target_index>Subject-title:w</target_index>
+    <target_index>Subject-title:p</target_index>
+  </index_subfields>
+  <!--605$y    Subject:w,Subject:p,Subject-subdivision:w,Subject-subdivision:p,Subject-name-geographical:w,Subject-name-geographical:p,Subject-title:w,Subject-title:p-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="605" subfields="y">
+    <target_index>Subject:w</target_index>
+    <target_index>Subject:p</target_index>
+    <target_index>Subject-subdivision:w</target_index>
+    <target_index>Subject-subdivision:p</target_index>
+    <target_index>Subject-name-geographical:w</target_index>
+    <target_index>Subject-name-geographical:p</target_index>
+    <target_index>Subject-title:w</target_index>
+    <target_index>Subject-title:p</target_index>
+  </index_subfields>
+  <!--605$z    Subject:w,Subject:p,Subject-subdivision:w,Subject-subdivision:p,Subject-chronological:w,Subject-chronological:p,Subject-title:w,Subject-title:p-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="605" subfields="z">
+    <target_index>Subject:w</target_index>
+    <target_index>Subject:p</target_index>
+    <target_index>Subject-subdivision:w</target_index>
+    <target_index>Subject-subdivision:p</target_index>
+    <target_index>Subject-chronological:w</target_index>
+    <target_index>Subject-chronological:p</target_index>
+    <target_index>Subject-title:w</target_index>
+    <target_index>Subject-title:p</target_index>
+  </index_subfields>
+  <!--606 : Topical name used as subject // see Marc21 650-->
+  <!--indexing a-->
+  <!--indexing specifically $j,$x,$y,$z-->
+  <!--606$a    Subject-topical:w,Subject-topical:p,Subject,Subject:p-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="606" subfields="a">
+    <target_index>Subject-topical:w</target_index>
+    <target_index>Subject-topical:p</target_index>
+    <target_index>Subject:w</target_index>
+    <target_index>Subject:p</target_index>
+  </index_subfields>
+  <!--606$j    Subject:w,Subject:p,Subject-subdivision:w,Subject-subdivision:p,Subject-genre-form:w,Subject-genre-form:p,Subject-topical:w,Subject-topical:p-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="606" subfields="j">
+    <target_index>Subject:w</target_index>
+    <target_index>Subject:p</target_index>
+    <target_index>Subject-subdivision:w</target_index>
+    <target_index>Subject-subdivision:p</target_index>
+    <target_index>Subject-genre-form:w</target_index>
+    <target_index>Subject-genre-form:p</target_index>
+    <target_index>Subject-topical:w</target_index>
+    <target_index>Subject-topical:p</target_index>
+  </index_subfields>
+  <!--606$x    Subject:w,Subject:p,Subject-subdivision:w,Subject-subdivision:p,Subject-topical:w,Subject-topical:p-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="606" subfields="x">
+    <target_index>Subject:w</target_index>
+    <target_index>Subject:p</target_index>
+    <target_index>Subject-subdivision:w</target_index>
+    <target_index>Subject-subdivision:p</target_index>
+    <target_index>Subject-topical:w</target_index>
+    <target_index>Subject-topical:p</target_index>
+  </index_subfields>
+  <!--606$y    Subject:w,Subject:p,Subject-subdivision:w,Subject-subdivision:p,Subject-name-geographical:w,Subject-name-geographical:p,Subject-topical:w,Subject-topical:p-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="606" subfields="y">
+    <target_index>Subject:w</target_index>
+    <target_index>Subject:p</target_index>
+    <target_index>Subject-subdivision:w</target_index>
+    <target_index>Subject-subdivision:p</target_index>
+    <target_index>Subject-name-geographical:w</target_index>
+    <target_index>Subject-name-geographical:p</target_index>
+    <target_index>Subject-topical:w</target_index>
+    <target_index>Subject-topical:p</target_index>
+  </index_subfields>
+  <!--606$z    Subject:w,Subject:p,Subject-subdivision:w,Subject-subdivision:p,Subject-chronological:w,Subject-chronological:p,Subject-topical:w,Subject-topical:p-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="606" subfields="z">
+    <target_index>Subject:w</target_index>
+    <target_index>Subject:p</target_index>
+    <target_index>Subject-subdivision:w</target_index>
+    <target_index>Subject-subdivision:p</target_index>
+    <target_index>Subject-chronological:w</target_index>
+    <target_index>Subject-chronological:p</target_index>
+    <target_index>Subject-topical:w</target_index>
+    <target_index>Subject-topical:p</target_index>
+  </index_subfields>
+  <!--607 : Geographical name used as subject // see Marc21 651-->
+  <!--indexing a-->
+  <!--indexing specificly $j,$x,$y,$z-->
+  <!--607$a    Name-geographic:w,Name-geographic:p,Subject-name-geographical:w,Subject-name-geographical:p,Subject,Subject:p-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="607" subfields="a">
+    <target_index>Name-geographic:w</target_index>
+    <target_index>Name-geographic:p</target_index>
+    <target_index>Subject-name-geographical:w</target_index>
+    <target_index>Subject-name-geographical:p</target_index>
+    <target_index>Subject:w</target_index>
+    <target_index>Subject:p</target_index>
+  </index_subfields>
+  <!--607$j    Subject:w,Subject:p,Subject-subdivision:w,Subject-subdivision:p,Subject-genre-form:w,Subject-genre-form:p,Subject-name-geographical:w,Subject-name-geographical:p-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="607" subfields="j">
+    <target_index>Subject:w</target_index>
+    <target_index>Subject:p</target_index>
+    <target_index>Subject-subdivision:w</target_index>
+    <target_index>Subject-subdivision:p</target_index>
+    <target_index>Subject-genre-form:w</target_index>
+    <target_index>Subject-genre-form:p</target_index>
+    <target_index>Subject-name-geographical:w</target_index>
+    <target_index>Subject-name-geographical:p</target_index>
+  </index_subfields>
+  <!--607$x    Subject:w,Subject:p,Subject-subdivision:w,Subject-subdivision:p,Subject-name-geographical:w,Subject-name-geographical:p-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="607" subfields="x">
+    <target_index>Subject:w</target_index>
+    <target_index>Subject:p</target_index>
+    <target_index>Subject-subdivision:w</target_index>
+    <target_index>Subject-subdivision:p</target_index>
+    <target_index>Subject-name-geographical:w</target_index>
+    <target_index>Subject-name-geographical:p</target_index>
+  </index_subfields>
+  <!--607$y    Subject:w,Subject:p,Subject-subdivision:w,Subject-subdivision:p,Subject-name-geographical:w,Subject-name-geographical:p-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="607" subfields="y">
+    <target_index>Subject:w</target_index>
+    <target_index>Subject:p</target_index>
+    <target_index>Subject-subdivision:w</target_index>
+    <target_index>Subject-subdivision:p</target_index>
+    <target_index>Subject-name-geographical:w</target_index>
+    <target_index>Subject-name-geographical:p</target_index>
+  </index_subfields>
+  <!--607$z    Subject:w,Subject:p,Subject-subdivision:w,Subject-subdivision:p,Subject-chronological:w,Subject-chronological:p,Subject-name-geographical:w,Subject-name-geographical:p-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="607" subfields="z">
+    <target_index>Subject:w</target_index>
+    <target_index>Subject:p</target_index>
+    <target_index>Subject-subdivision:w</target_index>
+    <target_index>Subject-subdivision:p</target_index>
+    <target_index>Subject-chronological:w</target_index>
+    <target_index>Subject-chronological:p</target_index>
+    <target_index>Subject-name-geographical:w</target_index>
+    <target_index>Subject-name-geographical:p</target_index>
+  </index_subfields>
+  <!--608 : Form, Genre or Physical Characteristics Heading-->
+  <!--indexing a-->
+  <!--indexing specifically $j,$x,$y,$z-->
+  <!--608$a    Subject-genre-form:w,Subject-genre-form:p,Subject,Subject:p-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="608" subfields="a">
+    <target_index>Subject-genre-form:w</target_index>
+    <target_index>Subject-genre-form:p</target_index>
+    <target_index>Subject:w</target_index>
+    <target_index>Subject:p</target_index>
+  </index_subfields>
+  <!--608$j    Subject:w,Subject:p,Subject-subdivision:w,Subject-subdivision:p,Subject-genre-form:w,Subject-genre-form:p-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="608" subfields="j">
+    <target_index>Subject:w</target_index>
+    <target_index>Subject:p</target_index>
+    <target_index>Subject-subdivision:w</target_index>
+    <target_index>Subject-subdivision:p</target_index>
+    <target_index>Subject-genre-form:w</target_index>
+    <target_index>Subject-genre-form:p</target_index>
+  </index_subfields>
+  <!--608$x    Subject:w,Subject:p,Subject-subdivision:w,Subject-subdivision:p,Subject-genre-form:w,Subject-genre-form:p-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="608" subfields="x">
+    <target_index>Subject:w</target_index>
+    <target_index>Subject:p</target_index>
+    <target_index>Subject-subdivision:w</target_index>
+    <target_index>Subject-subdivision:p</target_index>
+    <target_index>Subject-genre-form:w</target_index>
+    <target_index>Subject-genre-form:p</target_index>
+  </index_subfields>
+  <!--608$y    Subject:w,Subject:p,Subject-subdivision:w,Subject-subdivision:p,Subject-name-geographical:w,Subject-name-geographical:p,Subject-genre-form:w,Subject-genre-form:p-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="608" subfields="y">
+    <target_index>Subject:w</target_index>
+    <target_index>Subject:p</target_index>
+    <target_index>Subject-subdivision:w</target_index>
+    <target_index>Subject-subdivision:p</target_index>
+    <target_index>Subject-name-geographical:w</target_index>
+    <target_index>Subject-name-geographical:p</target_index>
+    <target_index>Subject-genre-form:w</target_index>
+    <target_index>Subject-genre-form:p</target_index>
+  </index_subfields>
+  <!--608$z    Subject:w,Subject:p,Subject-subdivision:w,Subject-subdivision:p,Subject-chronological:w,Subject-chronological:p,Subject-genre-form:w,Subject-genre-form:p-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="608" subfields="z">
+    <target_index>Subject:w</target_index>
+    <target_index>Subject:p</target_index>
+    <target_index>Subject-subdivision:w</target_index>
+    <target_index>Subject-subdivision:p</target_index>
+    <target_index>Subject-chronological:w</target_index>
+    <target_index>Subject-chronological:p</target_index>
+    <target_index>Subject-genre-form:w</target_index>
+    <target_index>Subject-genre-form:p</target_index>
+  </index_subfields>
+  <!--610 : Uncontroled subject terms // see Marc21 653-->
+  <!--FIXME maybe to index in att 1080    Subject-uncontrolled ?-->
+  <!--610$a    Subject,Subject:p-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="610" subfields="a">
+    <target_index>Subject:w</target_index>
+    <target_index>Subject:p</target_index>
+  </index_subfields>
+  <!--615 : Subject category-->
+  <!--indexing a,x,n,m-->
+  <!--not indexing 2,3-->
+  <!--FIXME Create specific index?-->
+  <!--615$axnm   Subject,Subject:p-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="615" subfields="axnm">
+    <target_index>Subject:w</target_index>
+    <target_index>Subject:p</target_index>
+  </index_subfields>
+  <!--616 : Trademark-->
+  <!--indexing a-->
+  <!--not indexing c,f,2,3,5-->
+  <!--indexing specificly $j,$x,$y,$z-->
+  <!--FIXME Create specific index?-->
+  <!--melm 616$a    Subject,Subject:p-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="616" subfields="a">
+    <target_index>Subject:w</target_index>
+    <target_index>Subject:p</target_index>
+  </index_subfields>
+  <!--616$j    Subject:w,Subject:p,Subject-subdivision:w,Subject-subdivision:p,Subject-genre-form:w,Subject-genre-form:p-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="616" subfields="j">
+    <target_index>Subject:w</target_index>
+    <target_index>Subject:p</target_index>
+    <target_index>Subject-subdivision:w</target_index>
+    <target_index>Subject-subdivision:p</target_index>
+    <target_index>Subject-genre-form:w</target_index>
+    <target_index>Subject-genre-form:p</target_index>
+  </index_subfields>
+  <!--616$x    Subject:w,Subject:p,Subject-subdivision:w,Subject-subdivision:p-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="616" subfields="x">
+    <target_index>Subject:w</target_index>
+    <target_index>Subject:p</target_index>
+    <target_index>Subject-subdivision:w</target_index>
+    <target_index>Subject-subdivision:p</target_index>
+  </index_subfields>
+  <!--616$y    Subject:w,Subject:p,Subject-subdivision:w,Subject-subdivision:p,Subject-name-geographical:w,Subject-name-geographical:p-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="616" subfields="y">
+    <target_index>Subject:w</target_index>
+    <target_index>Subject:p</target_index>
+    <target_index>Subject-subdivision:w</target_index>
+    <target_index>Subject-subdivision:p</target_index>
+    <target_index>Subject-name-geographical:w</target_index>
+    <target_index>Subject-name-geographical:p</target_index>
+  </index_subfields>
+  <!--616$z    Subject:w,Subject:p,Subject-subdivision:w,Subject-subdivision:p,Subject-chronological:w,Subject-chronological-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="616" subfields="z">
+    <target_index>Subject:w</target_index>
+    <target_index>Subject:p</target_index>
+    <target_index>Subject-subdivision:w</target_index>
+    <target_index>Subject-subdivision:p</target_index>
+    <target_index>Subject-chronological:w</target_index>
+    <target_index>Subject-chronological:w</target_index>
+  </index_subfields>
+  <!--617 : hierarchical geographical name // see Marc21 752-->
+  <!--indexing a,b,c,d,e,f,g,h,i,k,l,m,n,o-->
+  <!--not indexing 2,3-->
+  <!--FIXME Create specific index?-->
+  <!--melm 617$abcdefghiklmno    Subject,Subject:p-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="617" subfields="abcdefghiklmno">
+    <target_index>Subject:w</target_index>
+    <target_index>Subject:p</target_index>
+  </index_subfields>
+  <!--620 : Place and date of publication/performance // see Marc21 752-->
+  <!--indexing a,b,c,d,e,f,g,h,i,k,l,m,n,o-->
+  <!--not indexing 2,3-->
+  <!--f-i are defined in French translation of Unimarc Manual-->
+  <!--FIXME Create specific index?-->
+  <!--melm 620$abcdefghiklmno    Subject,Subject:p-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="620" subfields="abcdefghiklmno">
+    <target_index>Subject:w</target_index>
+    <target_index>Subject:p</target_index>
+  </index_subfields>
+  <!--621 : Place and date of provenance // see Marc21 752-->
+  <!--indexing a,b,c,d,e,f,g,h,i,k,l,m,n,o-->
+  <!--not indexing 2,3-->
+  <!--FIXME Create specific index?-->
+  <!--621$abcdefghiklmno   Subject,Subject:p-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="621" subfields="abcdefghiklmno">
+    <target_index>Subject:w</target_index>
+    <target_index>Subject:p</target_index>
+  </index_subfields>
+  <!--626 : Technical details access // see Marc21 753-->
+  <!--Note : obsolete field (use 337 field instead)-->
+  <!--660 : Geographic area code // see Marc21 043-->
+  <!-- Coded information on 7 bytes-->
+  <!--660$a     Subject,Subject:p-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="660" subfields="a">
+    <target_index>Subject:w</target_index>
+    <target_index>Subject:p</target_index>
+  </index_subfields>
+  <!--661 : Chronological coverage code-->
+  <!--Coded information on 4 bytes-->
+  <!--661$a     Subject,Subject:p-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="661" subfields="a">
+    <target_index>Subject:w</target_index>
+    <target_index>Subject:p</target_index>
+  </index_subfields>
   <!--==== 67X/68X BLOCK OF CLASSIFICATIONS ====-->
   <!--record.abs line 471: melm 670		Subject-precis:w,Subject-precis:p-->
   <index_data_field tag="670">
