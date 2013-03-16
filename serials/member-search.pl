@@ -84,7 +84,7 @@ my ($count,$results);
 
 if (C4::Context->preference("IndependantBranches")){
    if (C4::Context->userenv && C4::Context->userenv->{flags} % 2 !=1 && C4::Context->userenv->{'branch'}){
-        $$patron{branchcode}=C4::Context->userenv->{'branch'} unless (C4::Context->userenv->{'branch'} eq "insecure");
+        $$patron{branchcode}=C4::Context->userenv->{'branch'};
    }
 }
 $$patron{firstname}.="\%" if ($$patron{firstname});

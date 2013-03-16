@@ -145,8 +145,7 @@ sub get_template_and_user {
     }
 
     my $borrowernumber;
-    my $insecure = C4::Context->preference('insecure');
-    if ($user or $insecure) {
+    if ($user) {
         require C4::Members;
         # It's possible for $user to be the borrowernumber if they don't have a
         # userid defined (and are logging in through some other method, such
@@ -186,7 +185,7 @@ sub get_template_and_user {
         # We are going to use the $flags returned by checkauth
         # to create the template's parameters that will indicate
         # which menus the user can access.
-        if (( $flags && $flags->{superlibrarian}==1) or $insecure==1) {
+        if ( $flags && $flags->{superlibrarian}==1 ) {
             $template->param( CAN_user_circulate        => 1 );
             $template->param( CAN_user_catalogue        => 1 );
             $template->param( CAN_user_parameters       => 1 );
@@ -195,7 +194,7 @@ sub get_template_and_user {
             $template->param( CAN_user_reserveforothers => 1 );
             $template->param( CAN_user_borrow           => 1 );
             $template->param( CAN_user_editcatalogue    => 1 );
-            $template->param( CAN_user_updatecharges     => 1 );
+            $template->param( CAN_user_updatecharges    => 1 );
             $template->param( CAN_user_acquisition      => 1 );
             $template->param( CAN_user_management       => 1 );
             $template->param( CAN_user_tools            => 1 );
@@ -320,7 +319,7 @@ sub get_template_and_user {
             GoogleJackets                => C4::Context->preference("GoogleJackets"),
             OpenLibraryCovers            => C4::Context->preference("OpenLibraryCovers"),
             KohaAdminEmailAddress        => "" . C4::Context->preference("KohaAdminEmailAddress"),
-            LoginBranchcode              => (C4::Context->userenv?C4::Context->userenv->{"branch"}:"insecure"),
+            LoginBranchcode              => (C4::Context->userenv?C4::Context->userenv->{"branch"}:undef),
             LoginFirstname               => (C4::Context->userenv?C4::Context->userenv->{"firstname"}:"Bel"),
             LoginSurname                 => C4::Context->userenv?C4::Context->userenv->{"surname"}:"Inconnu",
             emailaddress                 => C4::Context->userenv?C4::Context->userenv->{"emailaddress"}:undef,
@@ -349,7 +348,7 @@ sub get_template_and_user {
             IntranetNav                 => C4::Context->preference("IntranetNav"),
             IntranetmainUserblock       => C4::Context->preference("IntranetmainUserblock"),
             LibraryName                 => C4::Context->preference("LibraryName"),
-            LoginBranchname             => (C4::Context->userenv?C4::Context->userenv->{"branchname"}:"insecure"),
+            LoginBranchname             => (C4::Context->userenv?C4::Context->userenv->{"branchname"}:undef),
             advancedMARCEditor          => C4::Context->preference("advancedMARCEditor"),
             canreservefromotherbranches => C4::Context->preference('canreservefromotherbranches'),
             intranetcolorstylesheet     => C4::Context->preference("intranetcolorstylesheet"),
@@ -956,10 +955,9 @@ sub checkauth {
             $session->param('sessiontype','anon');
         }
     }    # END unless ($userid)
-    my $insecure = C4::Context->boolean_preference('insecure');
 
     # finished authentification, now respond
-    if ( $loggedin || $authnotrequired || ( defined($insecure) && $insecure ) )
+    if ( $loggedin || $authnotrequired )
     {
         # successful login
         unless ($cookie) {
