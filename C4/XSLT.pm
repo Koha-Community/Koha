@@ -247,7 +247,7 @@ sub buildKohaItemsNamespace {
 
         my ( $transfertwhen, $transfertfrom, $transfertto ) = C4::Circulation::GetTransfers($item->{itemnumber});
 
-	my ( $reservestatus, $reserveitem, undef ) = C4::Reserves::CheckReserves($item->{itemnumber});
+        my $reservestatus = C4::Reserves::GetReserveStatus( $item->{itemnumber} );
 
         if ( $itemtypes->{ $item->{itype} }->{notforloan} || $item->{notforloan} || $item->{onloan} || $item->{wthdrawn} || $item->{itemlost} || $item->{damaged} || 
              (defined $transfertwhen && $transfertwhen ne '') || $item->{itemnotforloan} || (defined $reservestatus && $reservestatus eq "Waiting") ){ 

@@ -448,10 +448,10 @@ sub build_issue_data {
             $it->{'borrowernumber'},$it->{'itemnumber'}
         );
         $it->{"renew_error_${can_renew_error}"} = 1 if defined $can_renew_error;
-        my ( $restype, $reserves, undef ) = CheckReserves( $it->{'itemnumber'} );
+        my $restype = C4::Reserves::GetReserveStatus( $it->{'itemnumber'} );
         $it->{'can_renew'} = $can_renew;
         $it->{'can_confirm'} = !$can_renew && !$restype;
-        $it->{'renew_error'} = $restype;
+        $it->{'renew_error'} = ( $restype eq "Waiting" or $restype eq "Reserved" ) ? 1 : 0;
         $it->{'checkoutdate'} = C4::Dates->new($it->{'issuedate'},'iso')->output('syspref');
         $it->{'issuingbranchname'} = GetBranchName($it->{'branchcode'});
 

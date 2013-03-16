@@ -785,20 +785,11 @@ sub GetBiblioData {
     my ($bibnum) = @_;
     my $dbh = C4::Context->dbh;
 
-    #  my $query =  C4::Context->preference('item-level_itypes') ?
-    #   " SELECT * , biblioitems.notes AS bnotes, biblio.notes
-    #       FROM biblio
-    #        LEFT JOIN biblioitems ON biblio.biblionumber = biblioitems.biblionumber
-    #       WHERE biblio.biblionumber = ?
-    #        AND biblioitems.biblionumber = biblio.biblionumber
-    #";
-
     my $query = " SELECT * , biblioitems.notes AS bnotes, itemtypes.notforloan as bi_notforloan, biblio.notes
             FROM biblio
             LEFT JOIN biblioitems ON biblio.biblionumber = biblioitems.biblionumber
             LEFT JOIN itemtypes ON biblioitems.itemtype = itemtypes.itemtype
-            WHERE biblio.biblionumber = ?
-            AND biblioitems.biblionumber = biblio.biblionumber ";
+            WHERE biblio.biblionumber = ?";
 
     my $sth = $dbh->prepare($query);
     $sth->execute($bibnum);

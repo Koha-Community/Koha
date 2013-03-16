@@ -554,7 +554,7 @@ for my $itm (@items) {
          $itm->{'lostimageurl'}   = $lostimageinfo->{ 'imageurl' };
          $itm->{'lostimagelabel'} = $lostimageinfo->{ 'label' };
      }
-     my ($reserve_status) = C4::Reserves::CheckReserves($itm->{itemnumber});
+     my $reserve_status = C4::Reserves::GetReserveStatus($itm->{itemnumber});
       if( $reserve_status eq "Waiting"){ $itm->{'waiting'} = 1; }
       if( $reserve_status eq "Reserved"){ $itm->{'onhold'} = 1; }
     
