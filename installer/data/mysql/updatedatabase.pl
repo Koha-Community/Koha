@@ -6477,14 +6477,6 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.11.00.030";
-if ( CheckVersion($DBversion) ) {
-    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('FinesIncludeGracePeriod','1','If enabled, fines calculations will include the grace period.',NULL,'YesNo');");
-    print "Upgrade to $DBversion done (Add system preference FinesIncludeGracePeriod)\n";
-    SetVersion($DBversion);
-}
-
-
 $DBversion = "3.11.00.026";
 if ( CheckVersion($DBversion) ) {
     $dbh->do(qq{
@@ -6525,6 +6517,13 @@ if (CheckVersion($DBversion)) {
     $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('UseQueryParser', '0', 'If enabled, try to use QueryParser for queries.', NULL, 'YesNo')");
     print "Upgrade to $DBversion done (Bug 9239: Make it possible for Koha to use QueryParser)\n";
     SetVersion ($DBversion);
+}
+
+$DBversion = "3.11.00.030";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('FinesIncludeGracePeriod','1','If enabled, fines calculations will include the grace period.',NULL,'YesNo');");
+    print "Upgrade to $DBversion done (Add system preference FinesIncludeGracePeriod)\n";
+    SetVersion($DBversion);
 }
 
 
