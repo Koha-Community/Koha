@@ -6515,7 +6515,7 @@ if ( CheckVersion($DBversion) ) {
 
 $DBversion = "3.11.00.XXX";
 if (CheckVersion($DBversion)) {
-    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('UseQueryParser', '1', 'If enabled, try to use QueryParser for queries.', NULL, 'YesNo')");
+    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('UseQueryParser', '0', 'If enabled, try to use QueryParser for queries.', NULL, 'YesNo')");
     print "Upgrade to $DBversion done (Bug 9239: Make it possible for Koha to use QueryParser)\n";
     SetVersion ($DBversion);
 }

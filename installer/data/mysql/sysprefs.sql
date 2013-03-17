@@ -419,4 +419,4 @@ INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) V
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('OpacItemLocation','callnum','Show the shelving location of items in the opac','callnum|ccode|location','Choice');
 INSERT INTO systempreferences (variable,value,explanation,options,type)  VALUES('TrackClicks','0','Track links clicked',NULL,'Integer');
 INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES('PatronSelfRegistrationAdditionalInstructions','','A free text field to display additional instructions to newly self registered patrons.','','free');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('UseQueryParser', '1', 'If enabled, try to use QueryParser for queries.', NULL, 'YesNo');
+INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('UseQueryParser', '0', 'If enabled, try to use QueryParser for queries.', NULL, 'YesNo');
