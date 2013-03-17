@@ -6477,6 +6477,13 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.11.00.030";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('FinesIncludeGracePeriod','1','If enabled, fines calculations will include the grace period.',NULL,'YesNo');");
+    print "Upgrade to $DBversion done (Add system preference FinesIncludeGracePeriod)\n";
+    SetVersion($DBversion);
+}
+
 
 $DBversion = "3.11.00.026";
 if ( CheckVersion($DBversion) ) {
