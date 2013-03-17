@@ -1,0 +1,911 @@
+RELEASE NOTES FOR KOHA 3.12.0-alpha
+17 Mar 2013
+========================================================================
+
+Koha is the first free and open source software library automation package 
+(ILS). Development is sponsored by libraries of varying types and sizes, 
+volunteers, and support companies from around the world.  
+The website for the Koha project is 
+
+    http://koha-community.org/
+
+Koha 3.12.0-alpha can be downloaded from:
+
+    http://download.koha-community.org/koha-3.12.00-alpha.tar.gz
+
+Installation instructions can be found at:
+
+    http://wiki.koha-community.org/wiki/Installation_Documentation
+    
+    OR in the INSTALL files that come in the tarball
+
+
+This is an alpha release of Koha 3.12 and is not yet ready for use in
+production. It has many new features compared to 3.10.
+
+
+It includes 144 enhancement and 191 bugfixes.
+
+
+Enhancements and new features in 3.12.0-alpha
+======================
+
+About
+----------
+	8641	Add information warning about log-in as root user to About->System information
+
+Acquisitions
+----------
+	8117	Divide budget periods into two tabs
+	8240	There is dead code in orderreceive.tt
+	8795	Just add the login branch In orderreveive.tt
+	8913	Improve acquisitions navigation
+	9030	There is no constraint on aqorders_items
+	9130	Remove old javascript from Parcel
+
+Architecture, internals, and plumbing
+----------
+	7387	Add Template::Toolkit plugin to allow caching of includes
+	8164	Replace IFNULL() with COALESCE() in all database calls
+	7167	Updatedatabase improvements
+
+Authentication
+----------
+	9587	Allow login via mozilla persona - https://www.mozilla.org/en-US/persona/
+
+Cataloging
+----------
+	3549	Framework sorting in addbook
+	6945	Add a link to show a MARC preview in the normal view
+	7674	Separate tabs for my holdings and others holdings
+	8347	Koha forces UNIMARC 100 field code language to 'fre'
+	9025	Add new icons for item types
+	9034	Add sorting and filtering on items table (catalogue/detail.pl)
+	9154	On item edit page, highlight row of item being edited
+	9162	Add a system preference to set which notes fields appears on title notes/description separator
+	9356	Show Dissertation note (MARC21 502) in XSLT
+	9357	Missing 'c' option in LEADER_18 value builder
+	9363	Show Patent control information and report number (MARC21, XSLT, detail pages)
+
+Circulation
+----------
+	4906	Allow fine calculation to exclude grace period
+	7189	Preference to control if returning lost items gives refund
+	7243	Do not take rentals as fines
+	8758	Code seems useless in circ/returns.pl
+	9263	Trim barcodes in offline circulation
+	9283	Change structure of export checkouts form
+	9332	Display call number in "Holds waiting" notice (checkout page)
+	9367	Code optimization: CheckReserves is too often called
+
+Command-line Utilities
+----------
+	8519	Make koha-index-daemon run on startup
+	9012	Allow bulkmarcimport to specify a framework code when importing MARC
+
+Hold requests
+----------
+	9206	Only allow place holds in records that the patron don't have in his possession
+
+I18N/L10N
+----------
+	5709	Adding the ability to translate HTML5 placeholder text in an input field
+
+Installation and upgrade (command-line installer)
+----------
+	9191	Updatedatabase.pl must have ability to run updates only up to a particular revision
+
+Installation and upgrade (web-based installer)
+----------
+	9101	Add REPORT_GROUP to authorised values sample data
+
+Lists
+----------
+	8032	Sort lists by call number
+	9167	The sort field copyrightdate is not standardized
+	9458	Add sorting to lists
+
+Notices
+----------
+	6835	Ability to specify types of email address in overdue_notices.pl
+
+OPAC
+----------
+	5079	Make display of shelving location and call number in XSLT results controlled by sysprefs
+	5888	Opac-detail subject/author links improvements
+	7620	OPACNoResult, add search string to available parameters
+	8377	Show HTML5 video/ audio for media files in OPAC and staff client
+	8712	We should use WAI-ARIA guidelines to help with accessibility -OMNIBUS bug
+	8733	Adding critic reviews to book pages
+	8917	Track clicks to links external to Koha
+
+Packaging
+----------
+	8878	Koha-shell: a command to make using koha commands easier
+	9143	Package related updates for master
+
+Patrons
+----------
+	7969	Select all / unselect all on fines page
+	9076	Add ability to delete borrowers by expiration date and category code to cleanborrowers.pl
+	7067	Allow patron self registration via the opac
+
+Reports
+----------
+	7678	Statistics wizard: patrons
+	7896	Acquisition statistics wizard: add filters and cell values
+	9417	Allow number of results per page to be selectable for guided reports
+
+Searching
+----------
+	9134	There is no previous link on the second page of the search results page
+	9239	Koha should share Evergreen's QueryParser module for parsing queries
+
+Self checkout
+----------
+	8033	Add print receipt option to Koha self-check
+	9009	Add separate user js and css for SCO module
+
+Serials
+----------
+	8715	Select all serials for a year
+	8782	Add a feature to close a subscription
+
+SIP2
+----------
+	8125	SIP should send Zipcode with address
+
+System Administration
+----------
+	5634	Ordering branches should be case independent
+	8664	Add floating toolbar with save button to system preferences editor
+	8906	Improve OAI management interface
+	9760	Simplify local use preferences
+
+Templates
+----------
+	6261	Consolidate patron toolbar include files
+	7731	Library should be used instead of branch and site
+	8710	Do not show the images tab in the OPAC if the record has no local cover images
+	8877	MARC21 field 511 missing from XSLT
+	8893	Show more information on printout
+	9137	Focus when editing/adding new itemtypes/authorised values
+	9169	Wrap relator code in <span> to allow for CSS customization
+	9265	Switch to HTML5 doctype in OPAC and staff client
+	9420	Work on Bootstrap for Koha
+	9428	Use DataTables in Authority MARC frameworks page
+	9429	Use DataTables on Authorized Values page
+	9430	Use DataTables on library transfer limits page
+	9431	Use DataTables on Patron Category Administration page
+	9435	Use DataTables on libraries and groups administration page
+	9436	Use DataTables on cities administration page
+	9437	Use DataTables on itemtypes administration page
+	9439	Enforce superlibrarian mutual exclusivity of other permissions
+	9444	Use DataTables in system preferences editor
+	9445	Use DataTables in local use system preferences editor
+	9446	Use DataTables on Z39.50 servers administration page
+	9450	Use DataTables in cataloging Z39.50 search results
+	9460	Use DataTables on transfers to receive report page
+	9461	Use DataTables on holds awaiting pickup report page
+	9462	Use DataTables on patron detail page
+	9465	Use DataTables on update child to adult patron page
+	9466	Use DataTables on saved reports page
+	9467	Use DataTables on catalog by item type report page
+	9469	Use Datatables in serials statistics wizard
+	9471	Use DataTables on serials claims page
+	9473	Use DataTables on tags list page
+	9476	Use Datatables on Koha news page
+	9477	Use Datatables on notices page
+	9483	Use DataTables on batch patron modifications page
+	9521	Move common jQuery assets to koha-tmpl/intranet-tmpl/lib
+	9615	Combine staff home page images into single sprite
+	9616	Replace YUI menu on patrons page with Bootstrap
+	9617	Replace YUI menu on catalog pages with Bootstrap
+	9619	Replace YUI buttons on libraries administration page with Bootstrap
+	9621	Replace YUI menu on lists pages with Bootstrap
+	9622	Replace YUI button on MARC frameworks page with Bootstrap
+	9623	Replace YUI button on authority types administration page with Bootstrap
+	9624	Replace YUI button on reports dictionary page with Bootstrap
+	9625	Replace YUI buttons and menus on reports pages with Bootstrap
+	9627	Replace YUI buttons and menus on serials pages with Bootstrap
+	9628	Replace YUI buttons and menus on budgets administration pages with Bootstrap
+	9629	Replace YUI button on patron category administration pages with Bootstrap
+	9630	Replace YUI button on cities and towns administration page with Bootstrap
+	9631	Replace YUI buttons on classification sources administration page with Bootstrap
+	9632	Replace YUI button on the currencies administration page with Bootstrap
+	9633	Replace YUI button on the itemtypes administration page with Bootstrap
+	9635	Replace YUI buttons on label batches pages with Bootstrap
+	9636	Replace YUI buttons on labels pages with Bootstrap
+	9637	Replace YUI button on local use system preferences page with Bootstrap
+	9639	Replace YUI button on MARC tag structure toolbar with Bootstrap
+	9640	Replace YUI button on record matching rules page with Bootstrap
+	9641	Replace YUI button on the Koha news management page with Bootstrap
+	9642	Replace YUI button on the patron attribute types administration page with Bootstrap
+	9643	Replace YUI button on the road types administration page with Bootstrap
+	9644	Replace YUI button on the suggestions management page with Bootstrap
+	9645	Replace YUI buttons on the quotes management page with Bootstrap
+	9646	Replace YUI buttons on the printers administration page with Bootstrap
+	9647	Replace YUI buttons on Z39.50 servers administration page with Bootstrap
+	9648	Replace YUI buttons on authorized values administration page with Bootstrap
+	9649	Replace YUI buttons on cataloging home page with Bootstrap
+	9650	Show message if there are no notices
+	9669	Replace YUI buttons on staff client cart toolbar
+	9672	Replace YUI buttons on MARC editor page with Bootstrap
+	9674	Replace YUI buttons and menu on acquisitions pages with Bootstrap
+	9675	Replace YUI buttons on authorities home page with Bootstrap
+	9676	Replace YUI buttons on authorities editor page with Bootstrap
+	9688	Replace YUI button on Authority MARC framework toolbar with Bootstrap
+	9689	Replace YUI buttons on the OAI sets administration page with Bootstrap
+	9690	Replace YUI buttons on the catalog search results page with Bootstrap
+	9693	Remove YUI styling from buttons on the patron card creator's image manage page
+	9694	Remove YUI styling from buttons on the patron card creator manage pages
+	9696	Remove YUI styling from buttons on patron card creator edit pages
+	9698	Replace YUI buttons on patron card creator manage toolbar with Bootstrap
+	9765	Remove unused include file: budgetperiods-admin.inc
+
+
+Critical bugs fixed in 3.12.0-alpha
+======================
+
+(this list include all bugfixes since the previous major version. Most of them have already been fixed in maintainance releases)
+
+
+Acquisitions
+----------
+	9106	critical	Filtering list of uncertain price list by owner empties order information
+	9126	critical	Receiving orders create too much items
+	9346	critical	Acqui/neworderempty.pl ignores exchange rates and destroys user data on page load
+	4266	major	Encumbrance and expenditure not used in code
+	8853	major	Clicking basketgroup name in closed basketgroups reopens it
+	9236	major	Deleting an order when receiving redirects to closed basket
+	9281	major	Impossible to create an order from a staged file
+	9432	major	Acqui/addorderiso2409.pl is not Plack-friendly
+	9454	major	NewBasket does not use placeholders in sql
+	9503	major	Link from histsearch via invoicenumber results in error
+	9653	major	Filters on suggestion page in intranet are broken
+
+Architecture, internals, and plumbing
+----------
+	9574	critical	Serials/subscription-add.pl does not work right under Plack
+	9136	major	C4::Tags not Plack-compatible
+
+bugs.koha-community.org
+----------
+	9246	blocker	Upon running koha installer, mysql "Error 1166 at line 1871: Incorrect column name 'closed" appears and crashes install.
+
+Cataloging
+----------
+	7919	critical	Display of values depending on the connexion library (authorised values, patron categories, extended attributes)
+	7253	major	Fast cataloging not always checking out
+	9392	major	Confirmation does not appear for negative notforloan items issues
+	9662	major	Z3950_search.pl ISSN search field not passed to Z3950Search
+
+Circulation
+----------
+	9151	blocker	Renewal notice according to patron alert preferences
+	9380	critical	Branch not recording right on writeoff
+
+Command-line Utilities
+----------
+	9656	major	Fines.pl creating a log file should be optional
+
+Hold requests
+----------
+	5801	major	C4::Circulation::_GetCircControlBranch should not be used in opac-reserve.pl
+
+Installation and upgrade (command-line installer)
+----------
+	9135	blocker	Updatedatabase.pl fails when DEBUG is set
+	9767	critical	Fix for updatedatabase.pl (mixed version numbers)
+
+Installation and upgrade (web-based installer)
+----------
+	9413	blocker	Renewal notice features breaks English installer
+
+MARC Authority data support
+----------
+	9132	major	Paging through OPAC authority search results does not work
+	9145	major	Authorities: standard language for UNIMARC
+
+OPAC
+----------
+	8883	major	Opacsmallimage doesn't work in ccsr theme
+	9147	major	OPAC hidden fields are not hidden in ISBD view
+	9711	major	OPACPopupAuthorsSearch  ugly in CSSR
+
+Packaging
+----------
+	9052	blocker	YUI assets installed in the wrong place by packages
+
+Reports
+----------
+	6898	major	Circulation librarians can't run overdues without reports permissions
+
+Searching
+----------
+	8620	critical	Barcode searching not working correctly
+	9395	major	Problem with callnumber and standard number search in OPAC and Staff Client
+	9620	major	IncludeSeeFromInSearches ON and data in $9 subfields can break indexing
+
+Staff Client
+----------
+	9272	major	Plack goes into paroxysms of horror when faced with deleting an authorized value
+
+System Administration
+----------
+	8401	critical	Search term deleted from system preference content
+
+Templates
+----------
+	9529	major	Adding a patron shows javascript on screen under login section
+	9570	major	View plain not working in ccsr
+
+Test Suite
+----------
+	9142	blocker	Failing test case in 3.10.0 release.
+	9486	blocker	T/Letters.t loads modules in wrong order
+
+Tools
+----------
+	9065	major	Upload local cover image permission implementation error
+	9421	major	Tools/picture-upload.pl not Plack-compatible
+
+Transaction logs
+----------
+	9293	major	Action_logs not tracking payments
+
+
+Other bugs fixed in 3.12.0-alpha
+======================
+
+(this list include all bugfixes since the previous major version. Most of them have already been fixed in maintainance releases)
+
+
+About
+----------
+	7143	trivial	Bug for tracking changes to the about page
+	9418	trivial	Some corrections and additions to about.tt
+
+Acquisitions
+----------
+	7358	normal	Basket.pl : it is possible to affect a closed basket to a  closed basketgroup
+	8443	normal	Suggestions : publication year and copyright date
+	8557	normal	In orderreceive.tt and serials-edit.tt the use of a barcode scan send the form unexpectedly
+	9168	normal	Software error when filtering in receipt summary
+	9280	normal	Bad price calculation when filling a basket with staged records
+	9116	minor	Code cleaning: Remove some useless temp variables
+	9226	minor	Wrong branch filter after suggestion creation
+	9364	minor	Wrong billing/delivery addresses when creating a basket
+	9062	trivial	Tax and discount should be formatted the same
+	9268	trivial	Scanning in barcode or ISBN in Acquisitions -> new order submits the form unexpectedly
+	9455	trivial	Embedded mysql quotes in sql string
+
+Architecture, internals, and plumbing
+----------
+	9183	normal	C4::Search should only have one ZOOM event loop
+	9546	normal	MANIFEST.SKIP breaking regexp when running make manifest tardist
+	9552	normal	BIB1 Relation "Greater Than" Attribute Not Mapped Properly in CCL.Properties
+	8429	minor	Unnecessary use of Exporter in SIP/ILS objects
+	9292	minor	Remove dead code related to 'publictype'
+	9401	minor	Javascript used for tags handling wants access to CGISESSID cookie
+	9582	minor	Unused code in members/pay.pl
+
+Authentication
+----------
+	9008	normal	Warn if librarian logged-in with mysql/admin account
+
+Browser compatibility
+----------
+	7687	minor	Remove problematic CSS gradient declarations targeting Internet Explorer
+
+Cataloging
+----------
+	5790	normal	Deleting a biblio should alert/fail if there are existent holds
+	9123	normal	Authorities search ordered by authid does not work
+	9377	normal	Itemtype in duplicate biblio search
+	9497	normal	Make it easier to add to the the list of possible encodings for Z39.50 servers and add ISO 8859-1
+	9019	minor	ILS-DI: GetRecords should return item fields in marcxml
+	9207	minor	Improve z39.50 speed slowdowns for sites with many records
+	9494	minor	Library of Congress Z39.50 target seed data outdated
+
+Circulation
+----------
+	8054	normal	Can hit submit twice when paying fines
+	8079	normal	Opac not showing fines - says 'no'
+	8559	normal	Conflicting item statuses
+	8682	normal	Quick slip: renewals do not appear on quick slips
+	8781	minor	Access to Transfer page while "independent branches" is on
+	9289	minor	Adjacent checkbox behavior broken on circulation.pl
+	9526	trivial	Patron statistics table is not pretty, the page needs the circ toolbar added
+
+Command-line Utilities
+----------
+	9104	minor	Country in CSV in overdue_notices.pl
+	9235	minor	Hardcoded values in cronjobs/backup.sh
+
+Documentation
+----------
+	8945	normal	Koha 3.10 Help Files Update
+	9267	normal	Ubuntu 12.04 install docs broken
+	9440	trivial	Update Koha's LICENSE file from GPL2 to GPL3
+
+Hold requests
+----------
+	9320	normal	Pending reserves is showing reserves already waiting
+
+Holidays
+----------
+	9211	normal	Days_between wrong behaviour
+
+I18N/L10N
+----------
+	2832	normal	Make alphabet localizable
+	6574	normal	Js error in en-GB template breaks circulation toolbar
+	9112	normal	Update of SQL file for italian setup
+	9140	normal	Untranslatable strings in item circulation history
+	9141	normal	Untranslatable strings on "pay an amount..." page
+	9331	normal	Untranslatable strings in ajax.js
+	9056	minor	Add more translations to table language_descriptions
+	9493	minor	Confirmations for user holds in opac are not translatable
+	9020	trivial	Translate new permissions for 3.10
+
+Installation and upgrade (command-line installer)
+----------
+	9734	normal	String::Random is marked as optional, but C4::Members requires it
+	9315	trivial	Bad version of String::Random reported by koha_perl_deps.pl
+
+MARC Bibliographic record staging/import
+----------
+	5333	normal	Undefined value stops import from z39.50
+	9035	trivial	Remove deprecated 'bulkauthimport.pl' file
+	9144	trivial	Bulkmarcimport.pl - Problem identifying errors
+
+Notices
+----------
+	8299	normal	Overdue_notice.pl shows warning messages
+	8378	minor	<fine> syntax not working on overdues anymore
+	9348	minor	Format dates in HOLD notices consistently
+	9499	trivial	--itemscontent= option is undocumented in advanced-notice.pl cronjob + default date should be date_due, not issuedate
+
+OPAC
+----------
+	8108	normal	Remove unused images from the OPAC
+	8515	normal	OPAC password change does not obey OpacPasswordChange
+	8660	normal	Tag status does not show on multiple tag add
+	8955	normal	Self checkout should degrade gracefully with JavaScript turned off
+	9102	normal	[SECURITY] We should set httponly on our session cookie
+	9115	normal	Basket window should close automatically when placing a hold
+	9166	normal	OPAC needs configuration file for datepicker
+	9174	normal	Item type image does not display for biblio-level itemtypes in list display in OPAC
+	9276	normal	Display of biblio-level authorized values on OPAC search results broken
+	9287	normal	Socialnetworks is enabled by default
+	7657	minor	Google and OpenLibrary image conflict
+	8981	minor	Remove Nonpublic General Note from OPAC authorities display
+	8983	minor	Typo error in UNIMARCslim2OPACResults.xsl
+	9098	minor	Replace tabulations by spaces in opac-user.pl
+	9158	minor	Correcting whitespace around display of series 440 marc fields
+	9308	minor	Logo-koha.png not transparent in ccsr theme.
+	9309	minor	"OPACurlOpenInNewWindow" isn't respected for 856$u links shown in OPAC when not using XSLT
+	9329	minor	Wrong message for already expired cards
+	9585	minor	Fix spelling mistake in default tab conditional for opac-detail
+	9756	minor	Patron self registration missing the system preference PatronSelfRegistrationAdditionalInstructions
+	8546	trivial	Error in description of OPAC Advanced Search Publication date range search
+	9059	trivial	Increase size of opac-sendbasket window
+
+Packaging
+----------
+	9260	normal	Koha-run-backups complains "[: 97: missing ]"
+	9592	minor	Package dependency updates for master
+	9784	minor	Koha-shell missing from koha-common man page
+
+Patrons
+----------
+	9556	normal	Changing patron category does not fully update patron messaging preferences
+	9407	minor	Patrons search should match substrings
+	9330	trivial	Patron duplication : should duplicate with empty title (salutation field)
+
+Reports
+----------
+	6602	normal	Reports dictionary doesn't properly recognize text columns
+	9033	normal	Wide character error in runreport.pl
+	9451	normal	Borrower_stats.pl gives off warnings and is not Plack-compatible
+	9182	trivial	Saved reports list : wrong sortable columns
+
+Searching
+----------
+	7507	normal	Audience Subtype limit on Advanced Search does not have all Audiences
+	8984	normal	Zebra does not index some fields in UNIMARC biblio records
+	9049	normal	Rebuild_zebra should not use shadow when called with -r
+	8946	minor	Wrong label and missing values in UNIMARC coded fields advanced search
+	9402	trivial	Useless letter "v" between 2 <option> tags
+
+Serials
+----------
+	7608	normal	Manual history is always 'enabled'
+	9323	normal	Untranslatable string in serials search
+	9391	normal	Issues on serial collection page no longer show status
+	9222	minor	Manual history reversed in subscription-detail.pl
+	9229	minor	Branch code instead of name in subscription-detail.pl
+
+SIP2
+----------
+	8039	normal	Self Checkout/SIP: Allow authentication with userid and password
+	9343	minor	SIP doesn't handle debarred date/status correctly
+	8433	trivial	Use English not needed in modules not using English
+
+Staff Client
+----------
+	9663	normal	Individual bibliographic record "Save" option requires export permission
+	9335	minor	Message Log Popups don't disappear?
+	9376	minor	Problem with dateexpiry display in moremember.tt
+	7368	trivial	General staff client typo omnibus
+	9179	trivial	Incorrect capitalization in serials-collection.pl
+	9382	trivial	Bold necessary permissions for staff client access.
+	9397	trivial	Error Messages hard to find for Visually Impaired Users (Accessibility) [Returning Items]
+	9398	trivial	[ ? ] Link Lacks Context for All General Users (Accessibility) [Contexual Help]
+	9658	trivial	Breadcrumb wrong on reports dictionary
+
+System Administration
+----------
+	7596	normal	System preferences editor JavaScript contains untranslatable English string
+	9201	normal	OAI-PMH mapping value cannot be 0
+	8163	trivial	Click to populate XSLT preferences with "default" or empty values
+
+Templates
+----------
+	8986	normal	Batch patron modification template corrections
+	9073	normal	Download option from the cart should match the menu button in lists
+	9108	normal	Add uk/euro date sort filter to pages which require it
+	9284	normal	JavaScript should conform to coding guidelines recommended by JSHint
+	9310	normal	Patron image upload template corrections
+	9555	normal	Template files contain single quote strings
+	9583	normal	OPAC cart button display problem in Chromium
+	9695	normal	Use alphabet system preference on page used to browse patrons for patron card batches
+	8899	minor	Remove unused CSS declarations from staff client CSS
+	9215	minor	Non translatable string in manage-marc-import
+	9278	minor	Remove unused OPAC CSS file sanop.css
+	9306	minor	Update  SeparateHoldings  preference descriptions
+	9385	minor	Patron add labels right aligned in chrome
+	9545	minor	Fix Import Marc Bibliographic Framework Text Label
+	9586	minor	Remove $ENV{DEBUG} info from Member Template
+	9608	minor	White background on header on check in
+	9651	minor	When deleting a fund, button is wrongly labelled with 'Delete this budget'
+	6680	trivial	Cart download choices not understandable to patrons
+	9275	trivial	Missing '<' closing pharagraph tag
+	9655	trivial	Capitalization wrong on 'Close and Print' button in basket groups
+
+Test Suite
+----------
+	9209	normal	Mocked Koha::Calendar tests
+	8924	minor	Some modules erroneously skipped by 00-load
+
+Tools
+----------
+	5521	normal	Item edit form appears if no items found
+	8977	normal	Printoverdues.sh call an uninitialized variable
+	9360	normal	Clean borrowers tool wording and layout problematic
+	9509	normal	BatchMod.pl does not ensure each barcode is unique
+
+translate.koha-community.org
+----------
+	8942	normal	Translation process breaks javascript in calendar.inc
+
+Z39.50 / SRU / OpenSearch Servers
+----------
+	9105	normal	Moving Z3950 search code to Breeding.pm
+	9520	minor	Update default LOC Z39.50 target
+
+
+New sysprefs in 3.12.0-alpha
+======================
+
+  * AllowHoldsOnPatronsPossessions
+  * alphabet
+  * FinesIncludeGracePeriod
+  * HTML5MediaEnabled
+  * HTML5MediaExtensions
+  * IDreamBooksReadometer
+  * IDreamBooksResults
+  * IDreamBooksReviews
+  * IntranetNumbersPreferPhrase
+  * ManInvInNoissuesCharge
+  * NotesBlacklist
+  * OPACNumbersPreferPhrase
+  * OpacItemLocation
+  * OpacSeparateHoldings
+  * OpacSeparateHoldingsBranch
+  * PatronSelfRegistrationAdditionalInstructions
+  * Persona
+  * RefundLostItemFeeOnReturn
+  * RenewalSendNotice
+  * RentalsInNoissuesCharge
+  * SCOUserCSS
+  * SCOUserJS
+  * SeparateHoldings
+  * SeparateHoldingsBranch
+  * SocialNetworks
+  * TrackClicks
+  * UNIMARCAuthorityField100
+  * UNIMARCField100Language
+  * UseQueryParser
+
+
+System requirements
+======================
+
+    Important notes:
+    
+    * Perl 5.10 is required
+    * Zebra is required
+
+
+Documentation
+======================
+
+The Koha manual is maintained in DocBook.The home page for Koha 
+documentation is 
+
+    http://koha-community.org/documentation/
+
+As of the date of these release notes, only the English version of the
+Koha manual is available:
+
+    http://manual.koha-community.org/3.12/en/
+
+The Git repository for the Koha manual can be found at
+
+    http://git.koha-community.org/gitweb/?p=kohadocs.git;a=summary
+
+
+Translations
+======================
+
+Complete or near-complete translations of the OPAC and staff
+interface are available in this release for the following languages:
+
+
+  * English (USA)
+  * Arabic (86%)
+  * Armenian (96%)
+  * Chinese (China) (86%)
+  * Chinese (Taiwan) (93%)
+  * Danish (76%)
+  * English (New Zealand) (96%)
+  * French (94%)
+  * French (Canada) (66%)
+  * German (92%)
+  * German (Switzerland) (93%)
+  * Greek (60%)
+  * Italian (96%)
+  * Norwegian Bokmål (62%)
+  * Portuguese (100%)
+  * Portuguese (Brazil) (96%)
+  * Slovak (100%)
+  * Spanish (96%)
+  * Turkish (96%)
+
+
+Partial translations are available for various other languages.
+
+The Koha team welcomes additional translations; please see
+
+    http://wiki.koha-community.org/wiki/Translating_Koha
+
+for information about translating Koha, and join the koha-translate 
+list to volunteer:
+
+    http://lists.koha-community.org/cgi-bin/mailman/listinfo/koha-translate
+
+The most up-to-date translations can be found at:
+
+    http://translate.koha-community.org/
+
+
+Release Team
+======================
+
+The release team for Koha 3.12.0-alpha is
+
+  Release Manager:       Jared Camins-Esakov <jcamins@cpbibliography.com>
+  Documentation Manager: Nicole C Engard <nengard@gmail.com>
+  Installation Documentation Manager: Mason James <mtj@kohaaloha.com>
+  Translation Manager:   Ruth Bavousett <druthb@bywatersolutions.com>
+  QA Manager:            Katrin Fischer <Katrin.Fischer@bsz-bw.de>
+  QA Team:               Marcel de Rooy <M.de.Rooy@rijksmuseum.nl>,
+                         Elliott Davis <elliott@bywatersolutions.com>,
+                         Jonathan Druart <jonathan.druart@biblibre.com>,
+                         Mason James <mtj@kohaaloha.com>
+                         Paul Poulain <paul.poulain@biblibre.com>
+  Bug Wranglers:         Magnus Enger <magnus@enger.priv.no>,
+                         Chris Hall
+                         Mirko Tietgen
+                         Marc Veron
+  Packaging Manager:     Robin Sheat <robin@catalyst.net.nz>
+  Live CD Manager:       Vimal Kumar V.
+
+  Release Maintainer (3.6.x): Liz Rea <lrea@catalyst.net.nz>
+  Release Maintainer (3.8.x): Chris Cormack <chrisc@catalyst.net.nz>
+  Release Maintainer (3.10.x): Chris Cormack <chrisc@catalyst.net.nz>
+
+
+Credits
+======================
+
+We thank the following libraries who are known to have sponsored
+new features in Koha 3.12.0-alpha:
+  * Arcadia Public Library
+  * Athens County Public Libraries
+  * BdP de la Meuse
+  * Brooklyn Law School Library
+  * Central Kansas Library System (CKLS), Plum Creek Library System and Washoe County Library System
+  * Corpus Christi Public Libraries
+  * KEEP SOLUTIONS
+  * Library of the Józef Piłsudski Institute of America
+  * Los Gatos Public Library and Harrison Carmel Public Library
+  * North Central Regional Library (NCRL)
+  * Northeast Kansas Library System (NEKLS)
+  * Rolling Hills Consolidated Libraries
+  * software.coop
+  * Talking Tech
+  * Universidad Nacional de Córdoba
+  * Université d'Aix-Marseille
+  * Université de Lyon 3
+  * Université de Rennes 2
+  * Université de St Etienne
+  * VOKAL
+  * Washoe County Library System
+
+We thank the following individuals who contributed patches to Koha 3.12.0-alpha.
+  *      7	Tomas Cohen Arazi
+  *      1	Alex Arnaud
+  *    381	Jared Camins-Esakov
+  *      6	Colin Campbell
+  *      5	Galen Charlton
+  *      8	David Cook
+  *     19	Chris Cormack
+  *      2	Christophe Croullebois
+  *      2	Hugh Davenport
+  *      1	Elliott Davis
+  *      1	Stéphane Delaune
+  *      1	Srikanth Dhondi
+  *     47	Jonathan Druart
+  *      3	Nicole Engard
+  *      2	Magnus Enger
+  *     12	Vitor FERNANDES
+  *      7	Katrin Fischer
+  *      3	Corey Fuimaono
+  *      1	Chris Hall
+  *     38	Kyle M Hall
+  *      2	Mason James
+  *      3	Srdjan Jankovic
+  *      8	Bernardo Gonzalez Kriegel
+  *    127	Owen Leonard
+  *     15	Julian Maurice
+  *      1	Melia Meggs
+  *      1	Matthias Meusburger
+  *      2	Sophie Meynieux
+  *      1	Nadia Nicolaides
+  *      2	Dobrica Pavlinusic
+  *      1	Maxime Pelletier
+  *      1	Fred Pierre
+  *     11	Paul Poulain
+  *      1	Romina Racca
+  *      3	MJ Ray
+  *      9	Liz Rea
+  *      2	Martin Renvoize
+  *     14	Marcel de Rooy
+  *     26	Fridolyn SOMERS
+  *      5	Mathieu Saby
+  *      7	Adrien Saurat
+  *     10	Robin Sheat
+  *      1	Zeno Tajoli
+  *      2	Lyon3 Team
+  *      4	Mirko Tietgen
+  *      1	Ed Veal
+  *      2	Marc Veron
+  *      1	koha-preprod
+
+We thank the following companies who contributed patches to Koha 3.12.0-alpha
+  *     127 ACPL                                                                                          
+  *       7 BSZ BW                                                                                         
+  *     113 BibLibre                                                                                    
+  *       7 BigBallOfWax                                                                          
+  *      44 ByWater-Solutions                                                                   
+  *     381 C & P Bibliography                                                                    
+  *      36 Catalyst                                                                                 
+  *       5 Equinox                                                                                   
+  *       2 KohaAloha                                                                                  
+  *       1 Libeo                                                                                       
+  *       1 Libeo                                                                                          
+  *       2 Libriotech                                                                                 
+  *       8 PTFS-Europe                                                                              
+  *       8 Prosentient Systems
+  *      14 Rijksmuseum                                                                               
+  *       3 Software.coop                                                                             
+  *       2 Université Jean Moulin Lyon 3
+  *       5 Université Rennes 2
+  *       4 abunchofthings.net
+  *       1 cineca.it
+  *       2 davenport.net.nz
+  *       1 di.unc.edu.ar
+  *      12 keep.pt
+  *       2 rot13.org                                                                                      
+  *       1 smfpl.org
+  *      19 unidentified
+  *       2 veron.ch
+
+We also especially thank the following individuals who tested patches
+for Koha 3.12.0-alpha.
+  *       1 Koha Team Lyon 3
+  *     457 Jared Camins-Esakov
+  *       1 Colin Campbell
+  *      23 Galen Charlton
+  *       4 David Cook
+  *      47 Chris Cormack
+  *       3 Hugh Davenport
+  *      31 Elliott Davis
+  *       2 Frédéric Demians
+  *       2 Srikanth Dhondi
+  *     174 Jonathan Druart
+  *       1 Jonathan Druarth
+  *      19 Nicole C. Engard
+  *       1 Magnus Enger
+  *       1 Vitor FERNANDES
+  *     157 Katrin Fischer
+  *      89 Kyle M Hall
+  *       1 Claire Hernandez
+  *       3 Rolando Isodoro
+  *      13 Mason James
+  *      80 Bernardo Gonzalez Kriegel
+  *      49 Owen Leonard
+  *       4 Julian Maurice
+  *      19 Melia Meggs
+  *      18 Chris Nighswonger
+  *      41 Paul Poulain
+  *       1 MJ Ray
+  *      12 Liz Rea
+  *       1 Martin Renvoize
+  *      38 Marcel de Rooy
+  *       1 M. de Rooy
+  *       2 Fridolyn SOMERS
+  *       1 Mathieu Saby
+  *       2 Robin Sheat
+  *       2 Delaye Stephane
+  *       1 Zeno Tajoli
+  *      10 Mirko Tietgen
+  *       1 Ed Veal
+  *      12 Marc Veron
+  *       2 Ian Walls
+  *       2 koha.aixmarseille
+  *       3 mathieu saby
+  *       2 wajasu
+
+We regret any omissions.  If a contributor has been inadvertently missed,
+please send a patch against these release notes to 
+koha-patches@lists.koha-community.org.
+
+
+Revision control notes
+======================
+
+The Koha project uses Git for version control.  The current development 
+version of Koha can be retrieved by checking out the master branch of 
+
+    git://git.koha-community.org/koha.git
+
+The branch for this version of Koha and future bugfixes in this release line is 3.12-master.
+
+
+Bugs and feature requests
+======================
+
+Bug reports and feature requests can be filed at the Koha bug
+tracker at
+
+    http://bugs.koha-community.org/
+
+
+He rau ringa e oti ai.
+(Many hands finish the work)
+
+##### Autogenerated release notes updated last on 17 Mar 2013 13:17:03 Z #####
