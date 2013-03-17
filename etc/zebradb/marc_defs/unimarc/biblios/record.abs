@@ -496,20 +496,90 @@ melm 680		LC-call-number:w,LC-call-number:p
 # Other class numbers // see Marc21 084
 melm 686		Local-classification:w,Local-classification:p
 
-#############"# item information (based on 995) ###############
-melm 995$2		lost,lost:n,item
-melm 995$a		homebranch,Host-item,item
-melm 995$b		homebranch,Host-item,item
-melm 995$c		holdingbranch,Record-Source,item
-melm 995$d		holdingbranch,Record-Source,item
-melm 995$e      location,item
-melm 995$f		barcode,item
-melm 995$h		ccode,item
-melm 995$j      LC-card-number:s,item
-melm 995$k      Call-Number,Local-classification,lcn,Call-Number:p,Local-classification:p,lcn:p,item,Local-classification:s
-melm 995$n      onloan:d,onloan:n,onloan:s,onloan:w,item
-melm 995$u      Note,Note:p,item
-melm  995       item   # just to index every subfield
+
+############## KOHA ITEM INFORMATION (based on 995) ###############
+# Koha specific : $1, $2, $3
+melm 995$1    damaged,damaged:n
+melm 995$2    lost,lost:n
+melm 995$3    withdrawn,withdrawn:n
+
+# most subfields are based on "995 recommandation"
+# used by French libraries for exchanging holding information
+# source: http://www.abes.fr/content/download/1949/8319/version/1/file/pdf_r995.pdf
+# (last version, 2005)
+# Note that :
+# - the use of $e,$h,$j in Koha and in 995 recommandation is different
+# - $i, $m, $l, $o, $p, $q, $v, $w, $x, $y, $z are defined in 995 recommandation, but not used by Koha
+
+# 6 blocs of subfields are defined in 995 recommandation
+
+# 1. Information about origin of the document
+# $a - Origin of the document, free text
+# Not used in Sudoc network
+melm 995$a    homebranch,Host-item,item
+# $a - Origin of the document, coded information
+melm 995$b    homebranch,Host-item,item
+# $c - Lending or holding library - free text
+melm 995$c    holdingbranch,Record-Source,item
+# $d - Lending or holding library - coded information
+melm 995$d    holdingbranch,Record-Source,item
+
+# 2. Identification and classification
+# $e - shelving information
+# (in 995 recommandation : $e - detailed genre)
+melm 995$e    location,location:p,item
+# $f - barcode - complete
+melm 995$f    barcode,barcode:p,item
+# $h - ccode
+# (in 995 recommandation : $h - barcode - prefix)
+melm 995$h    ccode,ccode:p,item
+# $i - not used currently
+# (in 995 recommandation : $i - barcode - suffix)
+# $j - LC-card-number,
+# (in 995 recommandation : $j - section, i.e. part of a library)
+melm 995$j    LC-card-number:s,item
+# $k - callnumber
+melm 995$k    Call-Number,Local-classification,Call-Number:p,Local-classification:p,Local-classification:s,item
+# $l - not used currently
+# (in 995 recommandation : $l - volumes)
+
+# 3 - Checkout and deposal information
+# $m - not used currently
+# (in 995 recommandation : $m - Date of loan or deposit)
+# $n - Expiration of loan
+melm 995$n    onloan:d,onloan:n,onloan:s,onloan:w,item
+# $o - not used currently
+# (in 995 recommandation : $o - Circulation type (not for loan))
+
+# 4 - Sorting and statistic information
+# $p - not used currently
+# (in 955 recommandation : $p - Serial)
+# $q - not used currently
+# (in 995 recommandation : $q - Target audience (age))
+# $r - Type of document and carriage
+melm 995$r    itemtype:w,itemtype:p,itype:w,itype:p,item
+# $s - not used currently
+# (in 995 recommandation : $s - Sorting element)
+# $t - not used currently
+# (in 995 recommandation : $t - Genre : fiction vs non-fiction)
+
+# 5 - Notes
+# $u - item note
+melm 995$u    Note,Note:p,item
+# $v - not used currently
+# (in 995 recommandation : $v - serial issue note)
+
+# 6 - Target of document
+# $w - not used currently
+# (in 995 recommandation : $w - target library - free text)
+# $x - not used currently
+# (in 995 recommandation : $x - target library - coded information)
+# $y - not used currently
+# (in 995 recommandation : $y - target network of libraries - free text)
+# $z - not used currently
+# (in 995 recommandation : $z - target network of libraries - coded information)
+
+melm 995    item   # just to index every subfield
 
 ### biblioitems information (based on 942) ######
 melm 942$0      totalissues:n,totalissues:s

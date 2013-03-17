@@ -370,8 +370,22 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
       </xslo:if>
     </xslo:for-each>
     <xslo:for-each select="marc:subfield">
+      <xslo:if test="contains('1', @code)">
+        <z:index name="damaged:w damaged:n item:w">
+          <xslo:value-of select="."/>
+        </z:index>
+      </xslo:if>
+    </xslo:for-each>
+    <xslo:for-each select="marc:subfield">
       <xslo:if test="contains('2', @code)">
         <z:index name="lost:w lost:n item:w">
+          <xslo:value-of select="."/>
+        </z:index>
+      </xslo:if>
+    </xslo:for-each>
+    <xslo:for-each select="marc:subfield">
+      <xslo:if test="contains('3', @code)">
+        <z:index name="withdrawn:w withdrawn:n item:w">
           <xslo:value-of select="."/>
         </z:index>
       </xslo:if>
@@ -406,21 +420,21 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
     </xslo:for-each>
     <xslo:for-each select="marc:subfield">
       <xslo:if test="contains('e', @code)">
-        <z:index name="location:w item:w">
+        <z:index name="location:w location:p item:w">
           <xslo:value-of select="."/>
         </z:index>
       </xslo:if>
     </xslo:for-each>
     <xslo:for-each select="marc:subfield">
       <xslo:if test="contains('f', @code)">
-        <z:index name="barcode:w item:w">
+        <z:index name="barcode:w barcode:p item:w">
           <xslo:value-of select="."/>
         </z:index>
       </xslo:if>
     </xslo:for-each>
     <xslo:for-each select="marc:subfield">
       <xslo:if test="contains('h', @code)">
-        <z:index name="ccode:w item:w">
+        <z:index name="ccode:w ccode:p item:w">
           <xslo:value-of select="."/>
         </z:index>
       </xslo:if>
