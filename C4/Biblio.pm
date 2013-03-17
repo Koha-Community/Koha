@@ -667,7 +667,7 @@ sub _check_valid_auth_link {
     require C4::AuthoritiesMarc;
 
     my $authorized_heading =
-      C4::AuthoritiesMarc::GetAuthorizedHeading( { 'authid' => $authid } );
+      C4::AuthoritiesMarc::GetAuthorizedHeading( { 'authid' => $authid } ) || '';
 
    return ($field->as_string('abcdefghijklmnopqrstuvwxyz') eq $authorized_heading);
 }

@@ -6444,6 +6444,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+
 $DBversion = "3.11.00.024";
 if ( CheckVersion($DBversion) ) {
     $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('OpacItemLocation','callnum','Show the shelving location of items in the opac','callnum|ccode|location','Choice');");
@@ -6511,6 +6512,14 @@ if ( CheckVersion($DBversion) ) {
     print "Upgrade to $DBversion done (Bug 9756 - Patron self registration missing the system preference PatronSelfRegistrationAdditionalInstructions)\n";
     SetVersion($DBversion);
 }
+
+$DBversion = "3.11.00.029";
+if (CheckVersion($DBversion)) {
+    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('UseQueryParser', '0', 'If enabled, try to use QueryParser for queries.', NULL, 'YesNo')");
+    print "Upgrade to $DBversion done (Bug 9239: Make it possible for Koha to use QueryParser)\n";
+    SetVersion ($DBversion);
+}
+
 
 =head1 FUNCTIONS
 

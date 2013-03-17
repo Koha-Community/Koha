@@ -341,7 +341,15 @@ sub plugin {
         my $startfrom      = $query->param('startfrom');
         my $resultsperpage = $query->param('resultsperpage') || 20;
         my $orderby;
-        $search = 'kw,wrdl='.$search.' and mc-itemtype='.$itype if $itype;
+        my $QParser;
+        $QParser = C4::Context->queryparser if (C4::Context->preference('UseQueryParser'));
+        my $op;
+        if ($QParser) {
+            $op = '&&';
+        } else {
+            $op = 'and';
+        }
+        $search = 'kw:'.$search." $op mc-itemtype:".$itype if $itype;
         my ( $errors, $results, $total_hits ) = SimpleSearch($search, $startfrom * $resultsperpage, $resultsperpage );
         if (defined $errors ) {
             $results = [];

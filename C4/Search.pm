@@ -100,9 +100,25 @@ sub FindDuplicate {
     if ( $result->{isbn} ) {
         $result->{isbn} =~ s/\(.*$//;
         $result->{isbn} =~ s/\s+$//;
-        $query = "isbn=$result->{isbn}";
+        $query = "isbn:$result->{isbn}";
     }
     else {
+        my $QParser;
+        $QParser = C4::Context->queryparser if (C4::Context->preference('UseQueryParser'));
+        my $titleindex;
+        my $authorindex;
+        my $op;
+
+        if ($QParser) {
+            $titleindex = 'title|exact';
+            $authorindex = 'author|exact';
+            $op = '&&';
+        } else {
+            $titleindex = 'ti,ext';
+            $authorindex = 'au,ext';
+            $op = 'and';
+        }
+
         $result->{title} =~ s /\\//g;
         $result->{title} =~ s /\"//g;
         $result->{title} =~ s /\(//g;
@@ -111,7 +127,7 @@ sub FindDuplicate {
         # FIXME: instead of removing operators, could just do
         # quotes around the value
         $result->{title} =~ s/(and|or|not)//g;
-        $query = "ti,ext=$result->{title}";
+        $query = "$titleindex:\"$result->{title}\"";
         if   ( $result->{author} ) {
             $result->{author} =~ s /\\//g;
             $result->{author} =~ s /\"//g;
@@ -120,7 +136,7 @@ sub FindDuplicate {
 
             # remove valid operators
             $result->{author} =~ s/(and|or|not)//g;
-            $query .= " and au,ext=$result->{author}";
+            $query .= " $op $authorindex:\"$result->{author}\"";
         }
     }
 
@@ -224,11 +240,22 @@ sub SimpleSearch {
         my $results = [];
         my $total_hits = 0;
 
+        my $QParser;
+        $QParser = C4::Context->queryparser if (C4::Context->preference('UseQueryParser') && ! ($query =~ m/\w,\w|\w=\w/));
+
         # Initialize & Search Zebra
         for ( my $i = 0 ; $i < @servers ; $i++ ) {
             eval {
                 $zconns[$i] = C4::Context->Zconn( $servers[$i], 1 );
-                $zoom_queries[$i] = new ZOOM::Query::CCL2RPN( $query, $zconns[$i]);
+                if ($QParser) {
+                    $query =~ s/=/:/g;
+                    $QParser->parse( $query );
+                    $query = $QParser->target_syntax($servers[$i]);
+                    $zoom_queries[$i] = new ZOOM::Query::PQF( $query, $zconns[$i]);
+                } else {
+                    $query =~ s/:/=/g;
+                    $zoom_queries[$i] = new ZOOM::Query::CCL2RPN( $query, $zconns[$i]);
+                }
                 $tmpresults[$i] = $zconns[$i]->search( $zoom_queries[$i] );
 
                 # error handling
@@ -1091,7 +1118,9 @@ on authority data).
 =cut
 
 sub _handle_exploding_index {
-    my ( $index, $term ) = @_;
+    my ($QParser, $filter, $params, $negate, $server) = @_;
+    my $index = $filter;
+    my $term = join(' ', @$params);
 
     return unless ($index =~ m/(su-br|su-na|su-rl)/ && $term);
 
@@ -1099,8 +1128,8 @@ sub _handle_exploding_index {
 
     my $codesubfield = $marcflavour eq 'UNIMARC' ? '5' : 'w';
     my $wantedcodes = '';
-    my @subqueries = ( "(su=\"$term\")");
-    my ($error, $results, $total_hits) = SimpleSearch( "Heading,wrdl=$term", undef, undef, [ "authorityserver" ] );
+    my @subqueries = ( "\@attr 1=Subject \@attr 4=1 \"$term\"");
+    my ($error, $results, $total_hits) = SimpleSearch( "he:$term", undef, undef, [ "authorityserver" ] );
     foreach my $auth (@$results) {
         my $record = MARC::Record->new_from_usmarc($auth);
         my @references = $record->field('5..');
@@ -1114,11 +1143,12 @@ sub _handle_exploding_index {
             }
             foreach my $reference (@references) {
                 my $codes = $reference->subfield($codesubfield);
-                push @subqueries, '(su="' . $reference->as_string('abcdefghijlmnopqrstuvxyz') . '")' if (($codes && $codes eq $wantedcodes) || !$wantedcodes);
+                push @subqueries, '@attr 1=Subject @attr 4=1 "' . $reference->as_string('abcdefghijlmnopqrstuvxyz') . '"' if (($codes && $codes eq $wantedcodes) || !$wantedcodes);
             }
         }
     }
-    return join(' or ', @subqueries);
+    my $query = ' @or ' x (scalar(@subqueries) - 1) . join(' ', @subqueries);
+    return $query;
 }
 
 =head2 parseQuery
@@ -1145,37 +1175,59 @@ sub parseQuery {
     my $query = $operands[0];
     my $index;
     my $term;
+    my $query_desc;
 
-# TODO: once we are using QueryParser, all this special case code for
-#       exploded search indexes will be replaced by a callback to
-#       _handle_exploding_index
-    if ( $query =~ m/^(.*)\b(su-br|su-na|su-rl)[:=](\w.*)$/ ) {
-        $query = $1;
-        $index = $2;
-        $term  = $3;
-    } else {
+    my $QParser;
+    $QParser = C4::Context->queryparser if (C4::Context->preference('UseQueryParser') || $query =~ s/^qp=//);
+    undef $QParser if ($query =~ m/^(ccl=|pqf=|cql=)/ || grep (/\w,\w|\w=\w/, @operands, @indexes) );
+    undef $QParser if (scalar @limits > 0);
+
+    if ($QParser)
+    {
         $query = '';
-        for ( my $i = 0 ; $i <= @operands ; $i++ ) {
-            if ($operands[$i] && $indexes[$i] =~ m/(su-br|su-na|su-rl)/) {
-                $index = $indexes[$i];
-                $term = $operands[$i];
-            } elsif ($operands[$i]) {
-                $query .= $operators[$i] eq 'or' ? ' or ' : ' and ' if ($query);
-                $query .= "($indexes[$i]:$operands[$i])";
+        for ( my $ii = 0 ; $ii <= @operands ; $ii++ ) {
+            next unless $operands[$ii];
+            $query .= $operators[ $ii - 1 ] eq 'or' ? ' || ' : ' && '
+              if ($query);
+            if ( $indexes[$ii] =~ m/su-/ ) {
+                $query .= $indexes[$ii] . '(' . $operands[$ii] . ')';
+            }
+            else {
+                $query .=
+                  ( $indexes[$ii] ? "$indexes[$ii]:" : '' ) . $operands[$ii];
             }
         }
-    }
-
-    if ($index) {
-        my $queryPart = _handle_exploding_index($index, $term);
-        if ($queryPart) {
-            $query .= "($queryPart)";
+        foreach my $limit (@limits) {
         }
-        $operators = ();
-        $operands[0] = "ccl=$query";
+        if ( scalar(@sort_by) > 0 ) {
+            my $modifier_re =
+              '#(' . join( '|', @{ $QParser->modifiers } ) . ')';
+            $query =~ s/$modifier_re//g;
+            foreach my $modifier (@sort_by) {
+                $query .= " #$modifier";
+            }
+        }
+
+        $query_desc = $query;
+        $query_desc =~ s/\s+/ /g;
+        if ( C4::Context->preference("QueryWeightFields") ) {
+        }
+        $QParser->add_bib1_filter_map( 'su-br' => 'biblioserver' =>
+              { 'target_syntax_callback' => \&_handle_exploding_index } );
+        $QParser->add_bib1_filter_map( 'su-na' => 'biblioserver' =>
+              { 'target_syntax_callback' => \&_handle_exploding_index } );
+        $QParser->add_bib1_filter_map( 'su-rl' => 'biblioserver' =>
+              { 'target_syntax_callback' => \&_handle_exploding_index } );
+        $QParser->parse($query);
+        $operands[0] = "pqf=" . $QParser->target_syntax('biblioserver');
+    }
+    else {
+        require Koha::QueryParser::Driver::PQF;
+        my $modifier_re = '#(' . join( '|', @{Koha::QueryParser::Driver::PQF->modifiers}) . ')';
+        s/$modifier_re//g for @operands;
     }
 
-    return ( $operators, \@operands, $indexes, $limits, $sort_by, $scan, $lang);
+    return ( $operators, \@operands, $indexes, $limits, $sort_by, $scan, $lang, $query_desc);
 }
 
 =head2 buildQuery
@@ -1199,7 +1251,8 @@ sub buildQuery {
 
     warn "---------\nEnter buildQuery\n---------" if $DEBUG;
 
-    ( $operators, $operands, $indexes, $limits, $sort_by, $scan, $lang) = parseQuery($operators, $operands, $indexes, $limits, $sort_by, $scan, $lang);
+    my $query_desc;
+    ( $operators, $operands, $indexes, $limits, $sort_by, $scan, $lang, $query_desc) = parseQuery($operators, $operands, $indexes, $limits, $sort_by, $scan, $lang);
 
     # dereference
     my @operators = $operators ? @$operators : ();
@@ -1227,7 +1280,6 @@ sub buildQuery {
 
     # initialize the variables we're passing back
     my $query_cgi;
-    my $query_desc;
     my $query_type;
 
     my $limit;
@@ -1256,13 +1308,19 @@ sub buildQuery {
         if ( @limits ) {
             $q .= ' and '.join(' and ', @limits);
         }
-        return ( undef, $q, $q, "q=ccl=$q", $q, '', '', '', '', 'ccl' );
+        return ( undef, $q, $q, "q=ccl=".uri_escape($q), $q, '', '', '', '', 'ccl' );
     }
     if ( $query =~ /^cql=/ ) {
-        return ( undef, $', $', "q=cql=$'", $', '', '', '', '', 'cql' );
+        return ( undef, $', $', "q=cql=".uri_escape($'), $', '', '', '', '', 'cql' );
     }
     if ( $query =~ /^pqf=/ ) {
-        return ( undef, $', $', "q=pqf=$'", $', '', '', '', '', 'pqf' );
+        if ($query_desc) {
+            $query_cgi = "q=".uri_escape($query_desc);
+        } else {
+            $query_desc = $';
+            $query_cgi = "q=pqf=".uri_escape($');
+        }
+        return ( undef, $', $', $query_cgi, $query_desc, '', '', '', '', 'pqf' );
     }
 
     # pass nested queries directly
@@ -1432,9 +1490,9 @@ sub buildQuery {
                         $query     .= " $operators[$i-1] ";
                         $query     .= " $index_plus " unless $indexes_set;
                         $query     .= " $operand";
-                        $query_cgi .= "&op=$operators[$i-1]";
-                        $query_cgi .= "&idx=$index" if $index;
-                        $query_cgi .= "&q=$operands[$i]" if $operands[$i];
+                        $query_cgi .= "&op=".uri_escape($operators[$i-1]);
+                        $query_cgi .= "&idx=".uri_escape($index) if $index;
+                        $query_cgi .= "&q=".uri_escape($operands[$i]) if $operands[$i];
                         $query_desc .=
                           " $operators[$i-1] $index_plus $operands[$i]";
                     }
@@ -1444,8 +1502,8 @@ sub buildQuery {
                         $query      .= " and ";
                         $query      .= "$index_plus " unless $indexes_set;
                         $query      .= "$operand";
-                        $query_cgi  .= "&op=and&idx=$index" if $index;
-                        $query_cgi  .= "&q=$operands[$i]" if $operands[$i];
+                        $query_cgi  .= "&op=and&idx=".uri_escape($index) if $index;
+                        $query_cgi  .= "&q=".uri_escape($operands[$i]) if $operands[$i];
                         $query_desc .= " and $index_plus $operands[$i]";
                     }
                 }
@@ -1457,8 +1515,8 @@ sub buildQuery {
                     $query .= " $index_plus " unless $indexes_set;
                     $query .= $operand;
                     $query_desc .= " $index_plus $operands[$i]";
-                    $query_cgi  .= "&idx=$index" if $index;
-                    $query_cgi  .= "&q=$operands[$i]" if $operands[$i];
+                    $query_cgi  .= "&idx=".uri_escape($index) if $index;
+                    $query_cgi  .= "&q=".uri_escape($operands[$i]) if $operands[$i];
                     $previous_operand = 1;
                 }
             }    #/if $operands
