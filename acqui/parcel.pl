@@ -174,8 +174,8 @@ for my $order ( @orders ) {
     $line{holds} = 0;
     my @itemnumbers = GetItemnumbersFromOrder( $order->{ordernumber} );
     for my $itemnumber ( @itemnumbers ) {
-        my ( $count ) = &GetReservesFromBiblionumber($line{biblionumber}, undef, $itemnumber);
-        $line{holds} += $count;
+        my $holds = GetReservesFromBiblionumber({ biblionumber => $line{biblionumber}, itemnumber => $itemnumber });
+        $line{holds} += scalar( @$holds );
     }
     $line{budget} = GetBudgetByOrderNumber( $line{ordernumber} );
     $totalprice += $order->{unitprice};

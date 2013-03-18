@@ -147,8 +147,8 @@ foreach my $biblioNumber (@biblionumbers) {
     }
 
     # Compute the priority rank.
-    my ( $rank, $reserves ) =
-      GetReservesFromBiblionumber( $biblioNumber, 1 );
+    my $reserves = GetReservesFromBiblionumber({ biblionumber => $biblioNumber, all_dates => 1 });
+    my $rank = scalar( @$reserves );
     $biblioData->{reservecount} = 1;    # new reserve
     foreach my $res (@{$reserves}) {
         my $found = $res->{found};

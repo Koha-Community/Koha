@@ -268,17 +268,22 @@ sub GetReserve {
 
 =head2 GetReservesFromBiblionumber
 
-  ($count, $title_reserves) = GetReservesFromBiblionumber($biblionumber);
+  my $reserves = GetReservesFromBiblionumber({
+    biblionumber => $biblionumber,
+    itemnumber => $itemnumber,
+    all_dates => 1|0
+  });
 
-This function gets the list of reservations for one C<$biblionumber>, returning a count
-of the reserves and an arrayref pointing to the reserves for C<$biblionumber>.
+This function gets the list of reservations for one C<$biblionumber>,
+returning an arrayref pointing to the reserves for C<$biblionumber>.
 
 =cut
 
 sub GetReservesFromBiblionumber {
-    my ($biblionumber) = shift or return (0, []);
-    my ($all_dates) = shift;
-    my ($itemnumber) = shift;
+    my ( $params ) = @_;
+    my $biblionumber = $params->{biblionumber} or return [];
+    my $itemnumber = $params->{itemnumber};
+    my $all_dates = $params->{all_dates} // 0;
     my $dbh   = C4::Context->dbh;
 
     # Find the desired items in the reserves
@@ -353,7 +358,7 @@ sub GetReservesFromBiblionumber {
         }
         push @results, $data;
     }
-    return ( $#results + 1, \@results );
+    return \@results;
 }
 
 =head2 GetReservesFromItemnumber

@@ -71,8 +71,8 @@ foreach my $borrowernumber ( @borrowernumbers ) {
 }
 
 
-my ($count, $reserves) = GetReservesFromBiblionumber($biblionumber);
-is( $count, $borrowers_count, "Test GetReserves()" );
+my $reserves = GetReservesFromBiblionumber({ biblionumber => $biblionumber });
+is( scalar(@$reserves), $borrowers_count, "Test GetReserves()" );
 
 
 my ( $reservedate, $borrowernumber, $branchcode, $reserve_id ) = GetReservesFromItemnumber($itemnumber);
@@ -87,8 +87,8 @@ ok( GetReserveCount( $borrowernumbers[0] ), "Test GetReserveCount()" );
 
 
 CancelReserve({ 'reserve_id' => $reserve_id });
-($count, $reserves) = GetReservesFromBiblionumber($biblionumber);
-ok( $count == $borrowers_count - 1, "Test CancelReserve()" );
+$reserves = GetReservesFromBiblionumber({ biblionumber => $biblionumber });
+is( scalar(@$reserves), $borrowers_count - 1, "Test CancelReserve()" );
 
 
 ( $reservedate, $borrowernumber, $branchcode, $reserve_id ) = GetReservesFromItemnumber($itemnumber);
@@ -148,7 +148,7 @@ my $reserve2 = GetReserveInfo( $reserve->{'reserve_id'} );
 ok( $reserve->{'reserve_id'} eq $reserve2->{'reserve_id'}, "Test GetReserveInfo()" );
 
 
-($count, $reserves) = GetReservesFromBiblionumber($biblionumber,1);
+$reserves = GetReservesFromBiblionumber({ biblionumber => $biblionumber, all_dates => 1 });
 $reserve = $reserves->[1];
 AlterPriority( 'top', $reserve->{'reserve_id'} );
 $reserve = GetReserve( $reserve->{'reserve_id'} );

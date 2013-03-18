@@ -443,7 +443,7 @@ sub DelBiblio {
 
     # We delete any existing holds
     require C4::Reserves;
-    my ($count, $reserves) = C4::Reserves::GetReservesFromBiblionumber($biblionumber);
+    my $reserves = C4::Reserves::GetReservesFromBiblionumber({ biblionumber => $biblionumber });
     foreach my $res ( @$reserves ) {
         C4::Reserves::CancelReserve({ reserve_id => $res->{'reserve_id'} });
     }

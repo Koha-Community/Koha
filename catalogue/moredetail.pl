@@ -217,7 +217,8 @@ $template->param(ONLY_ONE => 1) if ( $itemnumber && $showncount != @items );
 $template->{'VARS'}->{'searchid'} = $query->param('searchid');
 
 
-my ( $holdcount, $holds ) = GetReservesFromBiblionumber($biblionumber,1);
+my $holds = GetReservesFromBiblionumber({ biblionumber => $biblionumber, all_dates => 1 });
+my $holdcount = scalar( @$holds );
 $template->param( holdcount => $holdcount, holds => $holds );
 
 output_html_with_http_headers $query, $cookie, $template->output;
