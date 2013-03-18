@@ -1973,9 +1973,9 @@ sub GetMarcSeries {
     my ( $record, $marcflavour ) = @_;
     my ( $mintag, $maxtag, $fields_filter );
     if ( $marcflavour eq "UNIMARC" ) {
-        $mintag = "600";
-        $maxtag = "619";
-        $fields_filter = '6..';
+        $mintag = "225";
+        $maxtag = "225";
+        $fields_filter = '2..';
     } else {    # marc21/normarc
         $mintag = "440";
         $maxtag = "490";
