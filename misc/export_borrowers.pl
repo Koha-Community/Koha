@@ -50,7 +50,10 @@ $0 -h
                             If no separator is specifield, a comma will be used.
     -H, --show-header       Print field names on first row
     -w, --where=CONDITION   Condition to filter borrowers to export
-                            (SQL where clause)
+                            (SQL where clause).
+                            CONDITION must be enclosed by double quotes and
+                            if needed, where value by single quotes.
+                            example : --where "surname='De Lattre'"
     -h, --help              Show this help
 
 USAGE
@@ -88,7 +91,7 @@ my $csv = Text::CSV->new( { sep_char => $separator, binary => 1 } );
 
 # If the user did not specify any field to export, we assume he wants them all
 # We retrieve the first borrower informations to get field names
-my ($borrowernumber) = $sth->fetchrow_array;
+my ($borrowernumber) = $sth->fetchrow_array or die "No borrower to export";
 my $member = GetMemberDetails($borrowernumber);
 @fields = keys %$member unless (@fields);
 
