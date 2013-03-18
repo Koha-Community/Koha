@@ -1,5 +1,5 @@
 INSERT INTO `letter` (module, code, name, title, content) 
-VALUES ('circulation','ODUE','Mahnung','Mahnung','Liebe/r <<borrowers.firstname>> <<borrowers.surname>>,\n\nNach unseren Unterlagen haben Sie Medien entliehen, die nun überfällig geworden sind. Unsere Bibliothek erhebt keine Mahngebühren, bitte geben Sie die entliehenen Medien schnellstmöglich zurück.\n\n<<branches.branchname>>\n<<branches.branchaddress1>>\n<<branches.branchaddress2>> <<branches.branchaddress3>>\nTelefon: <<branches.branchphone>>\nFax: <<branches.branchfax>>\nEmail: <<branches.branchemail>>\n\nSie können die überfälligen Medien soweit möglich auch direkt über Ihr Benutzerkonto online verlängern. Wenn ein Medium länger als 30 Tage überfällig ist, wird Ihr Benutzeraccount gesperrt und Sie können keine Medien mehr entleihen.\n\nDie folgenden Medien sind zur Zeit überfällig:\n\n<item>"<<biblio.title>>" by <<biblio.author>>, <<items.itemcallnumber>>, Barcode: <<items.barcode>> Gebühr: <<items.fine>></item>\n\nVielen Dank für die schnelle Erledigung.\n\n<<branches.branchname>> Ihr Bibliotheksteam\n'),
+VALUES ('circulation','ODUE','Mahnung','Mahnung','Liebe/r <<borrowers.firstname>> <<borrowers.surname>>,\n\nNach unseren Unterlagen haben Sie Medien entliehen, die nun überfällig geworden sind. Unsere Bibliothek erhebt keine Mahngebühren, bitte geben Sie die entliehenen Medien schnellstmöglich zurück.\n\n<<branches.branchname>>\n<<branches.branchaddress1>>\n<<branches.branchaddress2>> <<branches.branchaddress3>>\nTelefon: <<branches.branchphone>>\nFax: <<branches.branchfax>>\nEmail: <<branches.branchemail>>\n\nSie können die überfälligen Medien soweit möglich auch direkt über Ihr Benutzerkonto online verlängern. Wenn ein Medium länger als 30 Tage überfällig ist, wird Ihr Benutzeraccount gesperrt und Sie können keine Medien mehr entleihen.\n\nDie folgenden Medien sind zur Zeit überfällig:\n\n<item>"<<biblio.title>>" by <<biblio.author>>, <<items.itemcallnumber>>, Barcode: <<items.barcode>> Gebühr: <<items.fine>></item>\n\nVielen Dank für die schnelle Erledigung.\n\n< Ihr Bibliotheksteam\n'),
 ('claimacquisition','ACQCLAIM','Reklamation (Erwerbung)','Titel nicht eingetroffen','<<aqbooksellers.name>>\r\n<<aqbooksellers.address1>>\r\n<<aqbooksellers.address2>>\r\n<<aqbooksellers.address3>>\r\n<<aqbooksellers.address4>>\r\n<<aqbooksellers.phone>>\r\n\r\n<order>Ordernumber <<aqorders.ordernumber>> (<<aqorders.title>>) (<<aqorders.quantity>> bestellt) (je $<<aqorders.listprice>> €) sind nicht eingetroffen.</order>'),
 ('serial','RLIST','Umlaufliste','Zeitschrift ist jetzt verfügbar','<<borrowers.firstname>> <<borrowers.surname>>,\r\n\r\nDas folgende Heft ist jetzt verfügbar:\r\n\r\n<<biblio.title>>, <<biblio.author>> (<<items.barcode>>)\r\n\r\nBitte holen Sie es sobald möglich ab.'),
 ('members','ACCTDETAILS','Kontoinformationen - Standard','Ihr neues Benutzerkonto','Liebe/r <<borrowers.title>> <<borrowers.firstname>> <<borrowers.surname>>.\r\n\r\nDie Daten Ihres neuen Benutzerkontos sind:\r\n\r\nBenutzer:  <<borrowers.userid>>\r\nPasswort: <<borrowers.password>>\r\n\r\nWenn Sie Probleme in Hinsicht auf Ihr Benutzerkonto haben, wenden Sie sich bitte an die Bibliothek.\r\n\r\nVielen Dank,\r\nIhr Bibliotheksteam'), 
@@ -7,6 +7,7 @@ VALUES ('circulation','ODUE','Mahnung','Mahnung','Liebe/r <<borrowers.firstname>
 ('circulation','DUEDGST','Fälligkeitsbenachrichtigung (Zusammenfassung)','Fälligkeitsbenachrichtigung','Sie haben <<count>> überfällige Medien.'), 
 ('circulation','PREDUE','Erinnerungsbenachrichtigung','Erinnerungsbenachrichtigung','Liebe/r <<borrowers.firstname>> <<borrowers.surname>>,\r\n\r\nFolgende Ausleihe wird bald fällig:\r\n\r\n<<biblio.title>>, <<biblio.author>> (<<items.barcode>>)'), 
 ('circulation','PREDUEDGST','Erinnerungsbenachrichtigung (Zusammenfassung)','Erinnerungsbenachrichtigung','Sie haben <<count>> Ausleihen, die bald fällig werden.'),
+('circulation','RENEWAL','Verlängerungsbenachrichtigung','Verlängerungsquittung','Liebe/r <<borrowers.firstname>> <<borrowers.surname>>,\r\n\r\nFolgede Exemplare wurden verlängert:\r\n----\r\n<<biblio.title>>\r\n----\r\nVielen Dank,\r\n<<branches.branchname>>.'),
 ('reserves', 'HOLD', 'Vormerkbenachrichtigung', 'Vormerkung abholbereit in <<branches.branchname>>', 'Liebe/r <<borrowers.firstname>> <<borrowers.surname>>,\r\n\r\nFür Sie liegt seit <<reserves.waitingdate>> eine Vormerkung zur Abholung bereit:\r\n\r\nTitel: <<biblio.title>>\r\nVerfasser: <<biblio.author>>\r\nExemplar: <<items.copynumber>>\r\nStandort: <<branches.branchname>>\r\n<<branches.branchaddress1>>\r\n<<branches.branchaddress2>>\r\n<<branches.branchaddress3>>\r\n<<branches.branchcity>> <<branches.branchzip>>'),
 ('reserves', 'HOLD_PRINT', 'Vormerkbenachrichtigung (Print)', 'Vormerkbenachrichtigung (Print)', '<<branches.branchname>>\r\n<<branches.branchaddress1>>\r\n<<branches.branchaddress2>>\r\n<<branches.branchaddress2>>\r\n<<branches.branchzip>> <<branches.branchcity>>\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n<<borrowers.firstname>> <<borrowers.surname>>\r\n<<borrowers.address>>\r\n<<borrowers.address2>>\r\n<<borrowers.zipcode>> <<borrowers.city>>\r\n<<borrowers.country>>\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\nLiebe(r) <<borrowers.firstname>> <<borrowers.surname>>,\r\n\r\nFür Sie liegt seit dem <<reserves.waitingdate>> eine Vormerkung zur Abholung bereit:\r\n\r\nTitel: <<biblio.title>>\r\nVerfasser: <<biblio.author>>\r\nSignatur: <<items.itemcallnumber>>\r\n'),
 ('circulation','CHECKIN','Rückgabequittung (Zusammenfassung)','Rückgabequittung','Die folgenden Medien wurden zurückgegeben:\r\n----\r\n<<biblio.title>>\r\n----\r\nVielen Dank.'),
@@ -106,4 +107,17 @@ Fällig am: <<issues.date_due>><br />
    <li><<items.barcode>></li>
    <li><<items.itemcallnumber>></li>
 </ul>', 1);
-INSERT INTO `letter` (module, code, name, title, content) VALUES ('circulation','RENEWAL','Item Renewal','Renewals','The following items have been renew:\r\n----\r\n<<biblio.title>>\r\n----\r\nThank you for visiting <<branches.branchname>>.');
+
+INSERT INTO `letter` (`module`,`code`,`branchcode`,`name`,`is_html`,`title`,`content`)
+VALUES (
+'members',  'OPAC_REG_VERIFY',  '',  'Bestätigung der Anmeldung zur Bibliotheksnutzung',  '1',  'Verify Your Account',  'Guten Tag,
+
+Ihr Bibliothekskonto wurde angelegt. Bitte bestätigen Sie Ihre Emailadresse, indem Sie auf folgenden Link klicken:
+
+http://<<OPACBaseURL>>/cgi-bin/koha/opac-registration-verify.pl?token=<<borrower_modifications.verification_token>>
+
+Wenn Sie keine Kontoanmeldung durchgeführt haben, können Sie diese Benachrichtigung ignorieren. Sie wird in Kürze ungültig.
+
+Vielen Dank,
+Ihr Bibliotheksteam'
+);
