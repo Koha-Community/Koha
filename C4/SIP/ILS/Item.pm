@@ -95,8 +95,8 @@ sub new {
     }
 	my $borrower = GetMember(borrowernumber=>$issue->{'borrowernumber'});
 	$item->{patron} = $borrower->{'cardnumber'};
-    my ($whatever, $arrayref) = GetReservesFromBiblionumber($item->{biblionumber});
-	$item->{hold_queue} = [ sort priority_sort @$arrayref ];
+    my $reserves = GetReservesFromBiblionumber({ biblionumber => $item->{biblionumber} });
+    $item->{hold_queue} = [ sort priority_sort @$reserves ];
 	$item->{hold_shelf}    = [( grep {   defined $_->{found}  and $_->{found} eq 'W' } @{$item->{hold_queue}} )];
 	$item->{pending_queue} = [( grep {(! defined $_->{found}) or  $_->{found} ne 'W' } @{$item->{hold_queue}} )];
 	$self = $item;

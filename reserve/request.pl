@@ -196,7 +196,8 @@ foreach my $biblionumber (@biblionumbers) {
     }
 
     # get existing reserves .....
-    my ( $count, $reserves ) = GetReservesFromBiblionumber($biblionumber,1);
+    my $reserves = GetReservesFromBiblionumber({ biblionumber => $biblionumber, all_dates => 1 });
+    my $count = scalar( @$reserves );
     my $totalcount = $count;
     my $holds_count = 0;
     my $alreadyreserved = 0;
@@ -446,7 +447,7 @@ foreach my $biblionumber (@biblionumbers) {
 
     # existingreserves building
     my @reserveloop;
-    ( $count, $reserves ) = GetReservesFromBiblionumber($biblionumber,1);
+    $reserves = GetReservesFromBiblionumber({ biblionumber => $biblionumber, all_dates => 1 });
     foreach my $res ( sort {
             my $a_found = $a->{found} || '';
             my $b_found = $a->{found} || '';

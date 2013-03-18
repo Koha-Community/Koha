@@ -208,7 +208,7 @@ sub GetRecords {
 
         # Get most of the needed data
         my $biblioitemnumber = $biblioitem->{'biblioitemnumber'};
-        my @reserves         = GetReservesFromBiblionumber( $biblionumber, undef, undef );
+        my $reserves         = GetReservesFromBiblionumber({ biblionumber => $biblionumber });
         my $issues           = GetBiblioIssues($biblionumber);
         my $items            = GetItemsByBiblioitemnumber($biblioitemnumber);
 
@@ -225,7 +225,7 @@ sub GetRecords {
 
         # Hashref building...
         $biblioitem->{'items'}->{'item'}       = $items;
-        $biblioitem->{'reserves'}->{'reserve'} = $reserves[1];
+        $biblioitem->{'reserves'}->{'reserve'} = $reserves;
         $biblioitem->{'issues'}->{'issue'}     = $issues;
 
         push @records, $biblioitem;
