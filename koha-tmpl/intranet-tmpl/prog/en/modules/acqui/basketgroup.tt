@@ -246,7 +246,12 @@ function submitForm(form) {
         <table id="basket_group_opened">
 			<thead>
 				<tr>
-                    <th>Basket group</th><th>Action</th>
+                                        <th>Name</th>
+                                        <th>Number</th>
+                                        <th>Billing place</th>
+                                        <th>Delivery place</th>
+                                        <th>Number of baskets</th>
+                                        <th>Action</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -259,6 +264,10 @@ function submitForm(form) {
 													Basket group no. [% basketgroup.id %]
 												[% END %]
 						</td>
+                                    <td>[% basketgroup.id %]</td>
+                                    <td>[% basketgroup.billingplacename %]</td>
+                                    <td>[% IF (basketgroup.freedeliveryplace) %]Free delivery place[% ELSE %][% basketgroup.deliveryplacename %][% END %]</td>
+                                    <td>[% basketgroup.basketsqty %]</td>
 							<td>
 								<input type="button" onclick="closeandprint([% basketgroup.id %])" value="Close and print" />
 								<form action="/cgi-bin/koha/acqui/basketgroup.pl" method="get"><input type="hidden" name="op" value="add" /><input type="hidden" name="booksellerid" value="[% basketgroup.booksellerid %]" /><input type="hidden" name="basketgroupid" value="[% basketgroup.id %]" /><input type="submit" value="Edit" /></form>
@@ -274,7 +283,12 @@ function submitForm(form) {
         <table id="basket_group_closed">
 			<thead>
 				<tr>
-                    <th>Basket group</th><th>Action</th>
+                                        <th>Name</th>
+                                        <th>Number</th>
+                                        <th>Billing place</th>
+                                        <th>Delivery place</th>
+                                        <th>Number of baskets</th>
+                                        <th>Action</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -288,6 +302,10 @@ function submitForm(form) {
 											Basket group no. [% basketgroup.id %]
 										[% END %]
 					</td>
+                                    <td>[% basketgroup.id %]</td>
+                                    <td>[% basketgroup.billingplacename %]</td>
+                                    <td>[% IF (basketgroup.freedeliveryplace) %]Free delivery place[% ELSE %][% basketgroup.deliveryplacename %][% END %]</td>
+                                    <td>[% basketgroup.basketsqty %]</td>
 					<td>
 							<form action="/cgi-bin/koha/acqui/basketgroup.pl" method="get"><input type="hidden" name="op" value="reopen" /><input type="hidden" name="booksellerid" value="[% basketgroup.booksellerid %]" /><input type="hidden" name="basketgroupid" value="[% basketgroup.id %]" /><input type="submit" value="Reopen" /></form>
 							<form action="/cgi-bin/koha/acqui/basketgroup.pl" method="get"><input type="hidden" name="op" value="print" /><input type="hidden" name="basketgroupid" value="[% basketgroup.id %]" /><input type="submit" value="Print" /></form>
