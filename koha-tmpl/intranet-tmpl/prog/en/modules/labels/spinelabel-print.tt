@@ -1,10 +1,5 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD Xhtml 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-[% IF ( bidi ) %]
-<html lang="[% lang %]" xml:lang="[% lang %]" dir="[% bidi %]" xmlns="http://www.w3.org/1999/xhtml">
-[% ELSE %]
-<html lang="[% lang %]" xml:lang="[% lang %]" xmlns="http://www.w3.org/1999/xhtml">
-[% END %]
+<!DOCTYPE html>
+[% IF ( bidi ) %]<html lang="[% lang %]" dir="[% bidi %]">[% ELSE %]<html lang="[% lang %]">[% END %]
 <head>
 <title>Koha &rsaquo; Tools &rsaquo; Spine labels</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -15,6 +10,15 @@
 			.noprint { display: none; }
 		}
 	</style>
+[% IF ( IntranetUserCSS ) %]<style type="text/css">[% IntranetUserCSS %]</style>[% END %]
+<script type="text/javascript" src="[% interface %]/lib/jquery/jquery.js"></script>
+[% IF ( intranetuserjs ) %]
+    <script type="text/javascript">
+    //<![CDATA[
+    [% intranetuserjs %]
+    //]]>
+    </script>
+[% END %]
 </head>
 	[% IF ( BarcodeNotFound ) %]
 		<body id="labels_spinelabel-print" class="tools labels">
