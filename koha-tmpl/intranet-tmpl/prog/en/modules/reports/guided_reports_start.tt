@@ -95,7 +95,7 @@ $(document).ready(function(){
         var g_id = $(ui.tab).attr('id')
         var g_name = $(ui.tab).text();
         if (g_id && g_id.length > 0) {
-            rtable.fnFilter(g_name, 3);
+            rtable.fnFilter('^' + g_name + '$', 3, true, true, true, false);
             rtable.fnSetColumnVis(3, false);
             for(var i in group_subgroups[g_id]) {
                 $("#subgroup_filter").append(
@@ -115,7 +115,7 @@ $(document).ready(function(){
         var sg_id = $(selected).val();
         var sg_name = $(selected).text();
         if (sg_id.length > 0) {
-            rtable.fnFilter(sg_name, 4);
+            rtable.fnFilter('^' + sg_name + '$', 4, true, true, true, false);
             rtable.fnSetColumnVis(4, false);
         } else {
             rtable.fnFilter('', 4);
