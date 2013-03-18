@@ -60,9 +60,9 @@ sub new {
 
 =head2 store_data
 
-set_data allows a plugin to store key value pairs in the database for future use.
+store_data allows a plugin to store key value pairs in the database for future use.
 
-usage: $self->set_data({ param1 => 'param1val', param2 => 'param2value' })
+usage: $self->store_data({ param1 => 'param1val', param2 => 'param2value' })
 
 =cut
 
@@ -107,9 +107,6 @@ C4:Template, but at the moment, it does not.
 
 sub get_template {
     my ( $self, $args ) = @_;
-
-    #    my $template =
-    #      C4::Templates->new( my $interface = 'intranet', my $filename = $self->mbf_path( $args->{'file'} ), my $tmplbase = '', my $query = $self->{'cgi'} );
 
     my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         {   template_name   => $self->mbf_path( $args->{'file'} ),
