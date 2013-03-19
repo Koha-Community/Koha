@@ -180,7 +180,7 @@ sub UploadFile {
         return $id;
     }
 
-    return undef;
+    return;
 }
 
 =head2 DelUploadedFile

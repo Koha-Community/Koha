@@ -140,7 +140,7 @@ sub finddirs {
     my $base = shift || $upload_path;
     my $found = 0;
     my @dirs;
-    my @files = <$base/*>;
+    my @files = glob("$base/*");
     foreach (@files) {
         if (-d $_ and -w $_) {
             my $lastdirname = basename($_);

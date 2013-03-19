@@ -32,12 +32,12 @@ exit 1 if not $file;
 my $file_path = $file->{filepath};
 
 if( -f $file_path ) {
-    open FH, '<', $file_path or die "Can't open file: $!";
+    open my $fh, '<', $file_path or die "Can't open file: $!";
     print $input->header(
         -type => "application/octet-stream",
         -attachment => $file->{filename}
     );
-    while(<FH>) {
+    while(<$fh>) {
         print $_;
     }
 } else {
