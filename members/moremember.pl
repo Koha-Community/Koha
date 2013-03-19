@@ -81,21 +81,21 @@ my $template_name;
 my $quickslip = 0;
 
 my $flagsrequired;
-if ($print eq "page") {
+if (defined $print and $print eq "page") {
     $template_name = "members/moremember-print.tmpl";
     # circ staff who process checkouts but can't edit
     # patrons still need to be able to access print view
     $flagsrequired = { circulate => "circulate_remaining_permissions" };
-} elsif ($print eq "slip") {
+} elsif (defined $print and $print eq "slip") {
     $template_name = "members/moremember-receipt.tmpl";
     # circ staff who process checkouts but can't edit
     # patrons still need to be able to print receipts
     $flagsrequired =  { circulate => "circulate_remaining_permissions" };
-} elsif ($print eq "qslip") {
+} elsif (defined $print and $print eq "qslip") {
     $template_name = "members/moremember-receipt.tmpl";
     $quickslip = 1;
     $flagsrequired =  { circulate => "circulate_remaining_permissions" };
-} elsif ($print eq "brief") {
+} elsif (defined $print and $print eq "brief") {
     $template_name = "members/moremember-brief.tmpl";
     $flagsrequired = { borrowers => 1 };
 } else {
@@ -156,7 +156,7 @@ if ( IsDebarred($borrowernumber) ) {
 }
 
 $data->{'ethnicity'} = fixEthnicity( $data->{'ethnicity'} );
-$data->{ "sex_".$data->{'sex'}."_p" } = 1;
+$data->{ "sex_".$data->{'sex'}."_p" } = 1 if defined $data->{sex};
 
 my $catcode;
 if ( $category_type eq 'C') {
@@ -296,13 +296,13 @@ if ($borrowernumber) {
         $getreserv{barcodereserv}  = $getiteminfo->{'barcode'};
         $getreserv{itemtype}  = $itemtypeinfo->{'description'};
 
-        # 		check if we have a waitin status for reservations
-        if ( $num_res->{'found'} eq 'W' ) {
+        # check if we have a waitin status for reservations
+        if ( defined $num_res->{found} and $num_res->{'found'} eq 'W' ) {
             $getreserv{color}   = 'reserved';
             $getreserv{waiting} = 1;
         }
 
-        # 		check transfers with the itemnumber foud in th reservation loop
+        # check transfers with the itemnumber foud in th reservation loop
         if ($transfertwhen) {
             $getreserv{color}      = 'transfered';
             $getreserv{transfered} = 1;
@@ -449,6 +449,7 @@ $template->param(
     SuspendHoldsIntranet => C4::Context->preference('SuspendHoldsIntranet'),
     RoutingSerials => C4::Context->preference('RoutingSerials'),
     debarments => GetDebarments({ borrowernumber => $borrowernumber }),
+    PatronsPerPage => C4::Context->preference("PatronsPerPage") || 20,
 );
 $template->param( $error => 1 ) if $error;
 

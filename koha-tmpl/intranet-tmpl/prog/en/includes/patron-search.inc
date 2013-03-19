@@ -5,69 +5,100 @@
 	<div id="patron_search" class="residentsearch">
 	<p class="tip">Enter patron card number or partial name:</p>
 	<form action="/cgi-bin/koha/members/member.pl" method="post">
-    <input id="searchmember" data-toggle="tooltip" size="25" class="focus" name="member" type="text" value="[% member %]"/>
+    <input id="searchmember" data-toggle="tooltip" size="25" class="focus" name="searchmember" type="text" value="[% searchmember %]"/>
+    <input type="hidden" name="quicksearch" value="1" />
 	<span class="filteraction" id="filteraction_off"> <a href="#" onclick="$('#filters').toggle();$('.filteraction').toggle();">[-]</a></span>
 	<span class="filteraction" id="filteraction_on"> <a href="#" onclick="$('#filters').toggle();$('.filteraction').toggle();">[+]</a></span>
 
+      <label for="searchfieldstype">Search fields:</label>
+      <select name="searchfieldstype" id="searchfieldstype">
+        [% IF searchfieldstype == "standard" %]
+          <option selected="selected" value='standard'>Standard</option>
+        [% ELSE %]
+          <option value='standard'>Standard</option>
+        [% END %]
+        [% IF searchfieldstype == "email" %]
+          <option selected="selected" value='email'>Email</option>
+        [% ELSE %]
+          <option value='email'>Email</option>
+        [% END %]
+        [% IF searchfieldstype == "borrowernumber" %]
+          <option selected="selected" value='borrowernumber'>Borrower number</option>
+        [% ELSE %]
+          <option value='borrowernumber'>Borrower number</option>
+        [% END %]
+        [% IF searchfieldstype == "phone" %]
+          <option selected="selected" value='phone'>Phone number</option>
+        [% ELSE %]
+          <option value='phone'>Phone number</option>
+        [% END %]
+        [% IF searchfieldstype == "address" %]
+          <option selected="selected" value='address'>Street Address</option>
+        [% ELSE %]
+          <option value='address'>Street Address</option>
+        [% END %]
+        [% IF searchfieldstype == "dateofbirth" %]
+          <option selected="selected" value='dateofbirth'>Date of birth</option>
+        [% ELSE %]
+          <option value='dateofbirth'>Date of birth</option>
+        [% END %]
+        [% IF searchfieldstype == "sort1" %]
+          <option selected="selected" value='sort1'>Sort field 1</option>
+        [% ELSE %]
+          <option value='sort1'>Sort field 1</option>
+        [% END %]
+        [% IF searchfieldstype == "sort2" %]
+          <option selected="selected" value='sort2'>Sort field 2</option>
+        [% ELSE %]
+          <option value='sort2'>Sort field 2</option>
+        [% END %]
+      </select>
+
+      <script type="text/javascript">
+          [% SET dateformat = Koha.Preference('dateformat') %]
+          $("#searchfields").change(function() {
+              if ( $(this).val() == 'dateofbirth' ) {
+                  [% IF dateformat == 'us' %]
+                      var MSG_DATE_FORMAT = _("Dates of birth should be entered in the format 'MM/DD/YYYY'");
+                  [% ELSIF dateformat == 'iso' %]
+                      var MSG_DATE_FORMAT = _("Dates of birth should be entered in the format 'YYYY-MM-DD'");
+                  [% ELSIF dateformat == 'metric' %]
+                      var MSG_DATE_FORMAT = _("Dates of birth should be entered in the format 'DD/MM/YYYY'");
+                  [% END %]
+                  $('#searchmember').attr("title",MSG_DATE_FORMAT).tooltip('show');
+              } else {
+                  $('#searchmember').tooltip('destroy');
+              }
+          });
+
+      </script>
+
+      <label for="searchtype">Search type:</label>
+      <select name="searchtype" id="searchtype">
+          <option selected="selected" value='start_with'>Starts with</option>
+          <option value='contain'>Contains</option>
+      </select>
+
     <input value="Search" class="submit" type="submit" />
-
-  <div id="filters">
-      <p><label for="searchfields">Search fields:</label>
-            <select name="searchfields" id="searchfields">
-                <option selected="selected" value=''>Standard</option>
-                <option value='email,emailpro,B_email,'>Email</option>
-                <option value='borrowernumber'>Borrower number</option>
-                <option value='phone,phonepro,B_phone,altcontactphone,mobile'>Phone number</option>
-                <option value='streettype,address,address2,city,state,zipcode,country'>Street Address</option>
-                <option value='dateofbirth'>Date of birth</option>
-                <option value='sort1'>Sort field 1</option>
-                <option value='sort2'>Sort field 2</option>
-            </select>
-            <script type="text/javascript">
-                [% SET dateformat = Koha.Preference('dateformat') %]
-                $("#searchfields").change(function() {
-                    if ( $(this).val() == 'dateofbirth' ) {
-                        [% IF dateformat == 'us' %]
-                            var MSG_DATE_FORMAT = _("Dates of birth should be entered in the format 'MM/DD/YYYY'");
-                        [% ELSIF dateformat == 'iso' %]
-                            var MSG_DATE_FORMAT = _("Dates of birth should be entered in the format 'YYYY-MM-DD'");
-                        [% ELSIF dateformat == 'metric' %]
-                            var MSG_DATE_FORMAT = _("Dates of birth should be entered in the format 'DD/MM/YYYY'");
-                        [% END %]
-                        $('#searchmember').attr("title",MSG_DATE_FORMAT).tooltip('show');
-                    } else {
-                        $('#searchmember').tooltip('destroy');
-                    }
-                });
-            </script>
-        </p>
-        <p><label for="searchtype">Search type:</label>
-                <select name="searchtype" id="searchtype">
-                    <option selected="selected" value=''>Starts with</option>
-                    <option value='contain'>Contains</option>
-                </select></p>
-
-      <p><label for="searchorderby">Order by:</label>
-            <select name="orderby" id="searchorderby">
-            <option value="">Surname, Firstname</option>
-            <option value="cardnumber,0">Cardnumber</option>
-            </select></p>
-        [% IF ( branchloop ) %] <p><label for="branchcode">Library: </label><select name="branchcode" id="branchcode">
-                <option value="">Any</option>[% FOREACH branchloo IN branchloop %]
-                [% IF ( branchloo.selected ) %]
-                <option value="[% branchloo.value %]" selected="selected">[% branchloo.branchname %]</option>[% ELSE %]
-                <option value="[% branchloo.value %]">[% branchloo.branchname %]</option>[% END %]
-              [% END %]</select></p>
-      [% END %]
-      [% IF ( categories ) %]
-        <p><label for="categorycode">Category: </label><select name="categorycode" id="categorycode">
-                <option value="">Any</option>[% FOREACH categorie IN categories %]
-                [% IF ( categorie.selected ) %]
-                <option value="[% categorie.categorycode %]" selected="selected">[% categorie.description |html_entity %]</option>[% ELSE %]
-                <option value="[% categorie.categorycode %]">[% categorie.description |html_entity %]</option>[% END %]
-                [% END %]</select></p>
-      [% END %]
-  </div>
+    [% IF ( branchloop ) %]
+    <p id="filters"> <label for="branchcode">Library: </label>
+    <select name="branchcode" id="branchcode">
+        [% IF branchloop.size != 1 %]
+          <option value="">Any</option>
+        [% END %]
+        [% FOREACH branchloo IN branchloop %]
+        [% IF ( branchloo.selected ) %]
+        <option value="[% branchloo.value %]" selected="selected">[% branchloo.branchname %]</option>[% ELSE %]
+        <option value="[% branchloo.value %]">[% branchloo.branchname %]</option>[% END %]
+      [% END %]</select>
+                 <label for="categorycode">Category: </label><select name="categorycode" id="categorycode">
+        <option value="">Any</option>[% FOREACH categorie IN categories %]
+        [% IF ( categorie.selected ) %]
+        <option value="[% categorie.categorycode %]" selected="selected">[% categorie.description |html_entity %]</option>[% ELSE %]
+        <option value="[% categorie.categorycode %]">[% categorie.description |html_entity %]</option>[% END %]
+      [% END %]</select>
+    </p>
+    [% END %]
 </form>
 	</div>
 

@@ -15,7 +15,8 @@
 <div id="patron_search" class="residentsearch">
     <p class="tip">Enter patron card number or partial name:</p>
     <form action="/cgi-bin/koha/members/member.pl" method="post">
-        <input name="member" id="searchmember" size="40" type="text"/>
+        <input name="searchmember" id="searchmember" size="40" type="text"/>
+        <input type="hidden" name="quicksearch" value="1" />
         <input value="Submit" class="submit" type="submit" />
     </form>
 </div>[% END %]

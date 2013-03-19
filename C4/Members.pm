@@ -274,7 +274,7 @@ sub Search {
                 else {
                     $filter = { '' => $filter, branchcode => $branch };
                 }
-            }      
+            }
         }
     }
 
