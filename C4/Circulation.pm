@@ -2255,7 +2255,7 @@ sub GetItemIssue {
     my ($itemnumber) = @_;
     return unless $itemnumber;
     my $sth = C4::Context->dbh->prepare(
-        "SELECT *
+        "SELECT items.*, issues.*
         FROM issues
         LEFT JOIN items ON issues.itemnumber=items.itemnumber
         WHERE issues.itemnumber=?");
