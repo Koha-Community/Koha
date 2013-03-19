@@ -18,6 +18,27 @@ my $enable_template = {
     fields => [],
 };
 
+# reset_checkin_templates will be used to reset the status of the items if needed
+# If "make test" is used (all tests at once), after the tests 08 and 09, the item stays checked out and this raises an error here
+# so we begin with a Checkin, awaiting for the minimal answer : ^10 (Checkin response)
+# Both results (101 and 100, for OK and NON OK) must be accepted, because if we run this test alone, the item won't necessarily be checked out
+# and the checkin attempt will then result in a "100" code, which is not a problem (we are just preparing the renewal tests)
+my @reset_checkin_templates = (
+    {
+        id => "Renew All: prep: check in $item_barcode (used in previous tests)",
+        msg => "09N20060102    08423620060113    084235AP$item_owner|AO$instid|AB$item_barcode|AC$password|",
+        pat    => qr/^10/,
+        fields => [],
+    },
+    {
+        id => "Renew All: prep: check in $item2_barcode (used in previous tests)",
+        msg => "09N20060102    08423620060113    084235AP$item2_owner|AO$instid|AB$item2_barcode|AC$password|",
+        pat    => qr/^10/,
+        fields => [],
+    }
+);
+
+# Checkout as a preparation for renewal
 my @checkout_templates = (
 	{    id => "Renew All: prep: check out $item_barcode to $user_barcode",
 		msg => "11YN20060329    203000                  AO$instid|AA$user_barcode|AB$item_barcode|AC$password|",
@@ -26,17 +47,6 @@ my @checkout_templates = (
 	{    id => "Renew All: prep: check out $item2_barcode to $user_barcode",
 		msg => "11YN20060329    203000                  AO$instid|AA$user_barcode|AB$item2_barcode|AC$password|",
 		pat => qr/^121NNY$datepat/,
-		fields => [],}
-);
-
-my @checkin_templates = (
-	{    id => "Renew All: prep: check in $item_barcode",
-		msg => "09N20060102    08423620060113    084235AP$item_owner|AO$instid|AB$item_barcode|AC$password|",
-		pat => qr/^101YNN$datepat/,
-		fields => [],},
-	{    id => "Renew All: prep: check in $item2_barcode",
-		msg => "09N20060102    08423620060113    084235AP$item2_owner|AO$instid|AB$item2_barcode|AC$password|",
-		pat => qr/^101YNN$datepat/,
 		fields => [],}
 );
 
@@ -54,17 +64,32 @@ my $renew_all_test_template = {
 	]
 };
 
+# check the book in, when done testing
+my @checkin_templates = (
+    {
+        id => "Renew All: prep: check in $item_barcode",
+        msg => "09N20060102    08423620060113    084235AP$item_owner|AO$instid|AB$item_barcode|AC$password|",
+        pat    => qr/^101YNN$datepat/,
+        fields => [],
+    },
+    {
+        id => "Renew All: prep: check in $item2_barcode",
+        msg => "09N20060102    08423620060113    084235AP$item2_owner|AO$instid|AB$item2_barcode|AC$password|",
+        pat    => qr/^101YNN$datepat/,
+        fields => [],
+    }
+);
+
+
+
 my @tests = (
 	     $SIPtest::login_test,
 	     $SIPtest::sc_status_test,
-#	     $enable_template,
-	     $checkout_templates[0],
-	     $renew_all_test_template,
-	     $checkin_templates[0],	# check the book in, when done testing
 	     );
 
 my $test;
 
+# WIP?
 $test = clone($renew_all_test_template);
 $test->{id} = 'Renew All: Valid patron, two items checked out';
 $test->{pat} = qr/^66100020000$datepat/;
@@ -88,7 +113,7 @@ $test->{fields} = [
 	       $SIPtest::field_specs{(FID_PRINT_LINE)},
 		  ];
 
-push @tests, $checkout_templates[0], $test, $checkin_templates[0];
+push @tests, $reset_checkin_templates[0], $checkout_templates[0], $test, $checkin_templates[0];
 
 $test = clone($renew_all_test_template);
 $test->{id} = 'Renew All: invalid patron';
