@@ -32,13 +32,14 @@ my $op = $cgi->param('op');
 my $template_id = $cgi->param('template_id');
 
 my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "tools/marc_modification_templates.tmpl",
-			     query => $cgi,
-			     type => "intranet",
-			     authnotrequired => 0,
-			     flagsrequired => { tools => 'marc_modfication_templates' },
-			     debug => 1,
-			     });
+    = get_template_and_user({
+            template_name => "tools/marc_modification_templates.tmpl",
+            query => $cgi,
+            type => "intranet",
+            authnotrequired => 0,
+            flagsrequired => { tools => 'marc_modfication_templates' },
+            debug => 1,
+    });
 
 if ( $op eq "create_template" ) {
   $template_id = '' unless $cgi->param('duplicate_current_template');

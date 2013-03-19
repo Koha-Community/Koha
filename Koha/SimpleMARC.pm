@@ -60,7 +60,7 @@ at your option, any later version of Perl 5 you may have available.
 
 =head1 FUNCTIONS
 
-=head2
+=head2 copy_field
 
   copy_field( $record, $fromFieldName, $fromSubfieldName, $toFieldName, $toSubfieldName[, $regex[, $n ] ] );
 
@@ -90,13 +90,13 @@ sub copy_field {
     }
   }
 
-  update_field( $record, $toFieldName, $toSubfieldName, @values, $dont_erase );
+  update_field( $record, $toFieldName, $toSubfieldName, $dont_erase, @values );
 
 }
 
-=head2
+=head2 update_field
 
-  update_field( $record, $fieldName, $subfieldName, $value[, $value,[ $value ... ] ] );
+  update_field( $record, $fieldName, $subfieldName, $dont_erase, $value[, $value,[ $value ... ] ] );
 
   Updates a field with the given value, creating it if neccessary.
 
@@ -109,8 +109,8 @@ sub copy_field {
 =cut
 
 sub update_field {
-  my ( $record, $fieldName, $subfieldName, @values, $dont_erase ) = @_;
-  C4::Koha::Log( "C4::SimpleMARC::update_field( $record, $fieldName, $subfieldName, @values )" ) if $debug;
+  my ( $record, $fieldName, $subfieldName, $dont_erase, @values ) = @_;
+  C4::Koha::Log( "C4::SimpleMARC::update_field( $record, $fieldName, $subfieldName, $dont_erase, @values )" ) if $debug;
 
   if ( ! ( $record && $fieldName ) ) { return; }
 
@@ -157,7 +157,7 @@ sub update_field {
   }
 }
 
-=head2
+=head2 read_field
 
   my @values = read_field( $record, $fieldName[, $subfieldName, [, $n ] ] );
 
@@ -174,7 +174,7 @@ sub read_field {
 
   my @fields = $record->field( $fieldName );
 
-  return @fields unless $subfieldName;
+  return map { $_->data() } @fields unless $subfieldName;
 
   my @subfields;
   foreach my $field ( @fields ) {
@@ -189,7 +189,7 @@ sub read_field {
   }
 }
 
-=head2
+=head2 field_exists
 
   $bool = field_exists( $record, $fieldName[, $subfieldName ]);
 
@@ -214,7 +214,7 @@ sub field_exists {
   return $return;
 }
 
-=head2
+=head2 field_equals
 
   $bool = field_equals( $record, $value, $fieldName[, $subfieldName[, $regex [, $n ] ] ]);
 
@@ -246,7 +246,7 @@ sub field_equals {
   }
 }
 
-=head2
+=head2 move_field
 
   move_field( $record, $fromFieldName, $fromSubfieldName, $toFieldName, $toSubfieldName[, $regex [, $n ] ] );
 
@@ -262,11 +262,11 @@ sub field_equals {
 sub move_field {
   my ( $record, $fromFieldName, $fromSubfieldName, $toFieldName, $toSubfieldName, $regex, $n ) = @_;
   C4::Koha::Log( "C4::SimpleMARC::move_field( '$record', '$fromFieldName', '$fromSubfieldName', '$toFieldName', '$toSubfieldName', '$regex', '$n' )" ) if $debug;
-  copy_field( $record, $fromFieldName, $fromSubfieldName, $toFieldName, $toSubfieldName, $regex, $n , "don't_erase");
+  copy_field( $record, $fromFieldName, $fromSubfieldName, $toFieldName, $toSubfieldName, $regex, $n , 1);
   delete_field( $record, $fromFieldName, $fromSubfieldName, $n );
 }
 
-=head2
+=head2 delete_field
 
   delete_field( $record, $fieldName[, $subfieldName [, $n ] ] );
 
@@ -296,7 +296,7 @@ sub delete_field {
   }
 }
 
-=head2
+=head2 _update_repeatable_field_with_single_value
 
   _update_repeatable_field_with_single_value( $record, $fieldName, $subfieldName, $value );
 
@@ -316,11 +316,11 @@ sub _update_repeatable_field_with_single_value {
   if ( $subfieldName ) {
     if ( my @fields = $record->field( $fieldName ) ) {
       foreach my $field ( @fields ) {
-        $field->update( "$subfieldName" => $value );
+        $field->update( $subfieldName => $value );
       }
     } else {
       ## Field does not exist, create it.
-      $field = MARC::Field->new( $fieldName, '', '', "$subfieldName" => $value );
+      $field = MARC::Field->new( $fieldName, undef, undef, $subfieldName => $value );
       $record->append_fields( $field );
     }
   } else { ## No subfield

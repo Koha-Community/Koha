@@ -35,24 +35,24 @@ use vars qw($VERSION @ISA @EXPORT);
 use constant DEBUG => 0;
 
 BEGIN {
-	$VERSION = 1.00;	# set the version for version checking
-	@ISA = qw(Exporter);
-	@EXPORT = qw(
-		&GetModificationTemplates
-		&AddModificationTemplate
-		&DelModificationTemplate
+    $VERSION = 1.00;    # set the version for version checking
+    @ISA = qw(Exporter);
+    @EXPORT = qw(
+        &GetModificationTemplates
+        &AddModificationTemplate
+        &DelModificationTemplate
 
-		&GetModificationTemplateAction
-		&GetModificationTemplateActions
+        &GetModificationTemplateAction
+        &GetModificationTemplateActions
 
-		&AddModificationTemplateAction
-		&ModModificationTemplateAction
-		&DelModificationTemplateAction
-		&MoveModificationTemplateAction
+        &AddModificationTemplateAction
+        &ModModificationTemplateAction
+        &DelModificationTemplateAction
+        &MoveModificationTemplateAction
 
-                &ModifyRecordsWithTemplate
-		&ModifyRecordWithTemplate
-	);
+        &ModifyRecordsWithTemplate
+        &ModifyRecordWithTemplate
+    );
 }
 
 
@@ -529,6 +529,7 @@ sub ModifyRecordWithTemplate {
       $field_value =~ s/__CURRENTDATE__/$current_date/g;
       $field_value =~ s/__BRANCHCODE__/$branchcode/g;
 
+      $eval .= " undef, " if ( $action eq 'update_field' );
       $eval .= " '$field_value' ";
 
       C4::Koha::Log( "Field value after replacements: $field_value" ) if ( DEBUG >= 3 );
@@ -563,7 +564,7 @@ sub ModifyRecordWithTemplate {
 
     C4::Koha::Log("eval $eval") if DEBUG >= 2;
     warn("eval $eval") if DEBUG >= 2;
-    eval $eval;
+    eval {$eval};
     C4::Koha::Log( $record->as_formatted() ) if DEBUG >= 10;
     warn( $record->as_formatted() ) if DEBUG >= 10;
 

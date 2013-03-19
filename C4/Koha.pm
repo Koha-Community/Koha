@@ -1486,9 +1486,7 @@ sub _isbn_cleanup {
     return;
 }
 
-=head2
-
-  Log( $message );
+=head2 Log( $message );
 
   Writes data to /tmp/koha.log.
 
@@ -1499,9 +1497,10 @@ sub _isbn_cleanup {
 
 sub Log {
   my ($data) = @_;
-  open (MYFILE, '>>/tmp/koha.log');
-  print MYFILE "$data\n";
-  close (MYFILE);
+  warn $data;
+  open my $fh, '>>/tmp/koha.log';
+  print $fh "$data\n";
+  close $fh;
 }
 1;
 
