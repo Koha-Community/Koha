@@ -53,14 +53,14 @@ splitfile() {
             if ($closed) {
                 open($out, ">", sprintf("$prefix%02d", $i));
                 $closed = 0;
-                if ($indexmode == "dom" && $line !~ /<collection>/) {
+                if ($indexmode eq "dom" && $line !~ /<collection>/) {
                     print $out "<collection>";
                 }
             }
             print $out $line;
             $count++ if ($line =~ m|^</record>|);
             if ($count == $size) {
-                if ($indexmode == "dom" && $line !~ m|</collection>|) {
+                if ($indexmode eq "dom" && $line !~ m|</collection>|) {
                     print $out "</collection>";
                 }
                 $count = 0;
