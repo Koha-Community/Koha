@@ -2525,7 +2525,7 @@ sub AddRenewal {
         my $itemtype = (C4::Context->preference('item-level_itypes')) ? $biblio->{'itype'} : $biblio->{'itemtype'};
 
         $datedue = (C4::Context->preference('RenewalPeriodBase') eq 'date_due') ?
-                                        $issuedata->{date_due} :
+                                        dt_from_string( $issuedata->{date_due} ) :
                                         DateTime->now( time_zone => C4::Context->tz());
         $datedue =  CalcDateDue($datedue, $itemtype, $issuedata->{'branchcode'}, $borrower, 'is a renewal');
     }
