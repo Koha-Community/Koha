@@ -328,12 +328,6 @@ counts Usage of Authid in bibliorecords.
 
 sub CountUsage {
     my ($authid) = @_;
-    if (C4::Context->preference('NoZebra')) {
-        # Read the index Koha-Auth-Number for this authid and count the lines
-        my $result = C4::Search::NZanalyse("an=$authid");
-        my @tab = split /;/,$result;
-        return scalar @tab;
-    } else {
         ### ZOOM search here
         my $query;
         $query= "an:".$authid;
@@ -344,7 +338,6 @@ sub CountUsage {
         }
 
         return $result;
-    }
 }
 
 =head2 CountUsageChildren 
@@ -1413,46 +1406,30 @@ sub merge {
     my @reccache;
     # search all biblio tags using this authority.
     #Getting marcbiblios impacted by the change.
-    if (C4::Context->preference('NoZebra')) {
-        #nozebra way    
-        my $dbh=C4::Context->dbh;
-        my $rq=$dbh->prepare(qq(SELECT biblionumbers from nozebra where indexname="an" and server="biblioserver" and value="$mergefrom" ));
-        $rq->execute;
-        while (my $biblionumbers=$rq->fetchrow){
-            my @biblionumbers=split /;/,$biblionumbers;
-            foreach (@biblionumbers) {
-                if ($_=~/(\d+),.*/) {
-                    my $marc=GetMarcBiblio($1);
-                    push @reccache,$marc;
-                }
-            }
-        }
-    } else {
-        #zebra connection  
-        my $oConnection=C4::Context->Zconn("biblioserver",0);
-        # We used to use XML syntax here, but that no longer works.
-        # Thankfully, we don't need it.
-        my $query;
-        $query= "an=".$mergefrom;
-        my $oResult = $oConnection->search(new ZOOM::Query::CCL2RPN( $query, $oConnection ));
-        my $count = 0;
-        if  ($oResult) {
-            $count=$oResult->size();
-        }
-        my $z=0;
-        while ( $z<$count ) {
-            my $rec;
-            $rec=$oResult->record($z);
-            my $marcdata = $rec->raw();
-            my $marcrecordzebra= MARC::Record->new_from_usmarc($marcdata);
-            my ( $biblionumbertagfield, $biblionumbertagsubfield ) = &GetMarcFromKohaField( "biblio.biblionumber", '' );
-            my $i = ($biblionumbertagfield < 10) ? $marcrecordzebra->field($biblionumbertagfield)->data : $marcrecordzebra->subfield($biblionumbertagfield, $biblionumbertagsubfield);
-            my $marcrecorddb=GetMarcBiblio($i);
-            push @reccache, $marcrecorddb;
-            $z++;
-        }
-        $oResult->destroy();
+    #zebra connection
+    my $oConnection=C4::Context->Zconn("biblioserver",0);
+    # We used to use XML syntax here, but that no longer works.
+    # Thankfully, we don't need it.
+    my $query;
+    $query= "an=".$mergefrom;
+    my $oResult = $oConnection->search(new ZOOM::Query::CCL2RPN( $query, $oConnection ));
+    my $count = 0;
+    if  ($oResult) {
+        $count=$oResult->size();
     }
+    my $z=0;
+    while ( $z<$count ) {
+        my $rec;
+        $rec=$oResult->record($z);
+        my $marcdata = $rec->raw();
+        my $marcrecordzebra= MARC::Record->new_from_usmarc($marcdata);
+        my ( $biblionumbertagfield, $biblionumbertagsubfield ) = &GetMarcFromKohaField( "biblio.biblionumber", '' );
+        my $i = ($biblionumbertagfield < 10) ? $marcrecordzebra->field($biblionumbertagfield)->data : $marcrecordzebra->subfield($biblionumbertagfield, $biblionumbertagsubfield);
+        my $marcrecorddb=GetMarcBiblio($i);
+        push @reccache, $marcrecorddb;
+        $z++;
+    }
+    $oResult->destroy();
     #warn scalar(@reccache)." biblios to update";
     # Get All candidate Tags for the change 
     # (This will reduce the search scope in marc records).
