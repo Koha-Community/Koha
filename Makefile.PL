@@ -286,6 +286,7 @@ my $target_map = {
   './misc/koha-install-log'     => { target => 'MISC_DIR', trimdir => -1 },
   './misc/installer_devel_notes' => 'NONE',
   './opac'                      => 'OPAC_CGI_DIR',
+  './OpenILS'                   => 'PERL_MODULE_DIR',
   './README.txt'                => 'NONE',
   './patroncards'               => 'INTRANET_CGI_DIR',
   './reports'                   => 'INTRANET_CGI_DIR',
