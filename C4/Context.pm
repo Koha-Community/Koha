@@ -956,7 +956,10 @@ sub queryparser {
         $context->{"queryparser"} = &_new_queryparser();
     }
 
-    return $context->{"queryparser"}->new;
+    return
+      defined( $context->{"queryparser"} )
+      ? $context->{"queryparser"}->new
+      : undef;
 }
 
 =head2 _new_queryparser
