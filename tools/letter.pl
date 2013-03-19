@@ -195,8 +195,9 @@ sub add_form {
     }
     else {
         push @{$field_selection}, add_fields('biblio','biblioitems'),
-            {value => q{},             text => '---ITEMS---'  },
+            add_fields('items'),
             {value => 'items.content', text => 'items.content'},
+            {value => 'items.fine',    text => 'items.fine'},
             add_fields('borrowers');
         if ($module eq 'circulation') {
             push @{$field_selection}, add_fields('opac_news');
