@@ -40,6 +40,7 @@ use C4::Dates qw/format_date/;
 use C4::Debug;
 use C4::Letters;
 use C4::Overdues qw(GetFine);
+use C4::Budgets qw(GetCurrency);
 
 =head1 NAME
 
@@ -687,13 +688,7 @@ sub parse_letter {
         $tables{'branches'} = $p;
     }
 
-    my $currency_format;
-    if ( defined $params->{'letter'}->{'content'}
-        and $params->{'letter'}->{'content'} =~ m/<fine>(.*)<\/fine>/o )
-    {    # process any fine tags...
-        $currency_format = $1;
-        $params->{'letter'}->{'content'} =~ s/<fine>.*<\/fine>/<<item.fine>>/o;
-    }
+    my $currency_format = GetCurrency()->{currency};
 
     my @item_tables;
     if ( my $i = $params->{'items'} ) {
@@ -705,8 +700,9 @@ sub parse_letter {
                 $item_format = $1;
             }
 
-            $item->{'fine'} = currency_format($currency_format, "$fine", FMT_SYMBOL)
-              if $currency_format;
+            $item->{'fine'} = currency_format($currency_format, "$fine", FMT_SYMBOL);
+            # if active currency isn't correct ISO code fallback to sprintf
+            $item->{'fine'} = sprintf('%.2f', $fine) unless $item->{'fine'};
 
             push @item_tables, {
                 'biblio' => $item->{'biblionumber'},
