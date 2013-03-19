@@ -104,12 +104,9 @@
             <p>Please log in instead with a regular staff account. To create a staff account, create a library, a patron category 'Staff' and add a new patron. Then give this patron permissions from 'More' in the toolbar.</p>
         [% END %]
             <h2>Warnings regarding the system configuration</h2>
-        [% IF ( (prefNoZebra) || (warnPrefBiblioAddsAuthorities) || warnPrefEasyAnalyticalRecords ) %]
+        [% IF ( (warnPrefBiblioAddsAuthorities) || warnPrefEasyAnalyticalRecords ) %]
         <table>
             <caption>Preferences</caption>
-            [% IF (prefNoZebra) %]
-            <tr><th scope="row"><b>Warning</b> </th><td>System preference 'nozebra' set. Deprectated!</td></tr>
-            [% END %]
             [% IF (warnPrefBiblioAddsAuthorities) %]
             <tr><th scope="row"><b>Warning</b> </th><td>System preference 'AutoCreateAuthorities' set, but needs 'BiblioAddsAuthorities' set as well.</td></tr>
             [% END %]

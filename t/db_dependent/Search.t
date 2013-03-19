@@ -40,9 +40,7 @@ $contextmodule->mock('_new_dbh', sub {
     return $dbh });
 $contextmodule->mock('preference', sub {
     my ($self, $pref) = @_;
-    if ($pref eq 'NoZebra') {
-        return 0;
-    } elsif ($pref eq 'marcflavour') {
+    if ($pref eq 'marcflavour') {
         return 'MARC21';
     } elsif ($pref eq 'QueryStemming') {
         return $QueryStemming;

@@ -23,12 +23,6 @@ sub methods : Test( 1 ) {
                       _build_weighted_query
                       buildQuery
                       searchResults
-                      NZgetRecords
-                      NZanalyse
-                      NZoperatorAND
-                      NZoperatorOR
-                      NZoperatorNOT
-                      NZorder
                 );
     
     can_ok( $self->testing_class, @methods );    

@@ -47,8 +47,6 @@ UPDATE systempreferences SET value='942hv' WHERE variable='itemcallnumber';
 
 UPDATE systempreferences SET value='UNIMARC' WHERE variable='marcflavour';
 
-UPDATE systempreferences SET value='\'title\' =>\r\n\'200a,200c,200d,200e,225a,225d,225e,225f,225h,225i,225v,500*,501*,503*,510*,\r\n512*,513*,514*,515*,516*,517*,518*,519*,520*,530*,531*,532*,540*,541*,545*,6\r\n04t,610t,605a\',\r\n\'author\'=>\'200f,600a,601a,604a,700a,700b,700c,700d,700a,701b,701c,701d,702a,\r\n702b,702c,702d,710a,710b,710c,710d,711a,711b,711c,711d,712a,712b,712c,712d\',\r\n\'se\'=>\'225a\',\r\n        \'isbn\' => \'010a\',\r\n        \'issn\' => \'011a\',\r\n        \'biblionumber\' =>\'0909\',\r\n        \'itemtype\' => \'200b\',\r\n        \'language\' => \'101a\',\r\n        \'pl\' => \'210a\',\r\n        \'publisher\' => \'210c\',\r\n        \'date\' => \'210d\',\r\n        \'note\' =>\r\n\'300a,301a,302a,303a,304a,305a,306az,307a,308a,309a,310a,311a,312a,313a,314a\r\n,315a,316a,317a,318a,319a,320a,321a,322a,323a,324a,325a,326a,327a,328a,330a,\r\n332a,333a,336a,337a,345a\',\r\n        \'an\' => \'6009,6019,6069,6109,6079\',\r\n        \'su\' => \'600a,601a,606a,610a,607a,608a\',\r\n\'lcn\'=>\'686a,995k\',\r\n\'yr\'=>\'210d\',\r\n        \'mt\' => \'200b\',\r\n        \'dewey\' => \'676a\',\r\n        \'host-item\' => \'995b,995c\',\'keyword\' => \'200*,600*,700*,400*,210*\' ' WHERE variable='NoZebraIndexes';
-
 -- Circulation - Оборот
 
 -- I18N/L10N

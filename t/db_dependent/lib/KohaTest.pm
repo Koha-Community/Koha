@@ -144,7 +144,6 @@ sub startup_15_truncate_tables : Test( startup => 1 ) {
 #                               matchpoint_components
 #                               matchpoints
 #                               notifys
-#                               nozebra
 #                               old_issues
 #                               old_reserves
 #                               opac_news
@@ -203,7 +202,6 @@ sub startup_15_truncate_tables : Test( startup => 1 ) {
                               issuingrules
                               matchchecks
                               notifys
-                              nozebra
                               old_issues
                               old_reserves
                               overduerules
@@ -606,9 +604,6 @@ Useful for test routines that need to do a
 lot of indexing without having to wait for
 zebraqueue.
 
-In NoZebra model, this only marks zebraqueue
-done - the records should already be indexed.
-
 =cut
 
 sub reindex_marc {
@@ -617,8 +612,6 @@ sub reindex_marc {
     # mark zebraqueue done regardless of the indexing mode
     my $dbh = C4::Context->dbh();
     $dbh->do("UPDATE zebraqueue SET done = 1 WHERE done = 0");
-
-    return if C4::Context->preference('NoZebra');
 
     my $directory = tempdir(CLEANUP => 1);
     foreach my $record_type qw(biblio authority) {
@@ -728,7 +721,6 @@ sub create_test_database {
     my ($fwk_language, $installed_list) = $installer->load_sql_in_order($all_languages, @$list);
     $installer->set_version_syspref();
     $installer->set_marcflavour_syspref('MARC21');
-    $installer->set_indexing_engine(0);
     diag 'database created.'
 }
 
