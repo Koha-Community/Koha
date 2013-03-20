@@ -184,18 +184,20 @@ function validate1(date) {
     [% IF ( reregistration ) %]<div class="dialog message">Patron's account has been renewed until [% dateexpiry %]</div>[% END %]
 
     [% IF ( flagged ) %]
-    <ul>
+    <div id="circmessages" class="circmessage attention">
+        <ul>
         [% IF ( userdebarred ) %]
-            <li>Patron is restricted[% IF ( userdebarreddate ) %] until [% userdebarreddate%] [% IF (debarredcomment ) %]([% debarredcomment %])[% END %][% END %]
+            <li class="blocker">Patron is restricted[% IF ( userdebarreddate ) %] until [% userdebarreddate%] [% IF (debarredcomment ) %]([% debarredcomment %])[% END %][% END %]
             <form class="inline compact" action="/cgi-bin/koha/members/setdebar.pl" method="post">
                 <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
                 <input type="submit" value="Lift restriction" />
             </form>
             </li>
         [% END %]
-        [% IF ( gonenoaddress ) %]<li>Patron's address is in doubt.</li>[% END %]
-        [% IF ( lost ) %]<li>Patron's card has been reported lost.</li>[% END %]
-    </ul>
+        [% IF ( gonenoaddress ) %]<li class="blocker">Patron's address is in doubt.</li>[% END %]
+        [% IF ( lost ) %]<li class="blocker">Patron's card has been reported lost.</li>[% END %]
+        </ul>
+    </div>
     [% END %]
 
 <h3>[% UNLESS ( I ) %]
