@@ -679,6 +679,11 @@ our $PERL_DEPS = {
         'required' => '0',
         'min_ver'  => '9999.13',
     },
+    'Test::WWW::Mechanize' => {
+        'usage'    => 'Testing suite',
+        'required' => '0',
+        'min_ver'  => '1.44',
+    },
 };
 
 1;
