@@ -258,9 +258,7 @@ sub Search {
     if ( C4::Context->preference("IndependantBranches") ) { # && !$showallbranches){
         if ( my $userenv = C4::Context->userenv ) {
             my $branch =  $userenv->{'branch'};
-            if ( ($userenv->{flags} % 2 !=1) &&
-                 $branch && $branch ne "insecure" ){
-
+            if ( ($userenv->{flags} % 2 !=1) && $branch ){
                 if (my $fr = ref $filter) {
                     if ( $fr eq "HASH" ) {
                         $filter->{branchcode} = $branch;
