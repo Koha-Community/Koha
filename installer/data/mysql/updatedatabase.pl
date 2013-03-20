@@ -6531,6 +6531,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     print "Upgrade to $DBversion done (3.12-alpha release)\n";
     SetVersion ($DBversion);
 }
+
 $DBversion = "3.11.00.101";
 if ( CheckVersion($DBversion) ) {
    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('UNIMARCAuthorsFacetsSeparator',', ', 'UNIMARC authors facets separator', NULL, 'short')");
@@ -6555,6 +6556,12 @@ if ( CheckVersion($DBversion) ) {
     $dbh->do("DELETE FROM systempreferences WHERE variable = 'insecure';");
     print "Upgrade to $DBversion done (Bug 9827 - Remove 'insecure' system preference)\n";
     SetVersion($DBversion);
+}
+
+$DBversion = "3.11.00.104";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    print "Upgrade to $DBversion done (3.12-alpha2 release)\n";
+    SetVersion ($DBversion);
 }
 
 =head1 FUNCTIONS
