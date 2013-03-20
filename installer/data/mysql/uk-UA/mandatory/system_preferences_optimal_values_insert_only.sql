@@ -47,34 +47,6 @@ UPDATE systempreferences SET value='942hv' WHERE variable='itemcallnumber';
 
 UPDATE systempreferences SET value='UNIMARC' WHERE variable='marcflavour';
 
-UPDATE systempreferences SET value="
-        'title' => '200a,200c,200d,200e,225a,225d,225e,225f,225h,225i,225v,500*,501*,503*,510*,512*,513*,514*,515*,516*,517*,518*,519*,520*,530*,531*,532*,540*,541*,545*,604t,610t,605a',
-        'author' => '200f,600a,601a,604a,700a,700b,700c,700d,700a,701b,701c,701d,702a,702b,702c,702d,710a,710b,710c,710d,711a,711b,711c,711d,712a,712b,712c,712d',
-        'se' => '225a',
-        'isbn' => '010a',
-        'issn' => '011a',
-        'biblionumber' => '9999',
-        'itemtype' => '200b,942c,952y',
-        'language' => '101a',
-        'pl' => '210a',
-        'publisher' => '210c',
-        'date' => '210d',
-        'note' => '300a,301a,302a,303a,304a,305a,306az,307a,308a,309a,310a,311a,312a,313a,314a,315a,316a,317a,318a,319a,320a,321a,322a,323a,324a,325a,326a,327a,328a,330a,332a,333a,336a,337a,345a',
-        'Koha-Auth-Number' => '6009,6019,6029,6039,6049,6059,6069,6109,7009,7019,7029,7109,7119,7129',
-        'subject' => '600*,601*,606*,610*',
-        'an' => '6009,6019,6069,6109,6079',
-        'su' => '600a,601a,606a,610a,607a,608a',
-        'lcn' => '686a,952o',
-        'yr' => '210d',
-        'mt' => '200b',
-        'dewey' => '676a',
-        'bc' => '952p',
-        'callnum' => '952o',
-        'homebranch' => '952a,952c',
-        'host-item' => '992b,992c',
-        'keyword' => '200*,600*,700*,400*,210*' 
-" WHERE variable='NoZebraIndexes';
-
 -- Circulation - Обіг
 
 -- I18N/L10N

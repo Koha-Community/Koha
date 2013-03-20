@@ -189,7 +189,6 @@ elsif ( $step && $step == 3 ) {
     }
     elsif ( $op && $op eq 'finish' ) {
         $installer->set_version_syspref();
-        $installer->set_indexing_engine(0); # use Zebra
 
         # Installation is finished.
         # We just deny anybody access to install

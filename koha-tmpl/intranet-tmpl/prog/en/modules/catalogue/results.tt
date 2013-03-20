@@ -390,46 +390,6 @@ var holdForPatron = function () {
             </form>
         [% ELSE %]
 
-                [% IF ( NoZebra ) %]
-                <!-- ######### -->
-                <div id="facets">
-                <dl>
-                <!-- FACETS START -->
-                [% IF ( opacfacets ) %]
-                    <dt id="facets1" onclick="var Elt=document.getElementById('facets_list');if (Elt.style.display!='block'){Elt.style.display='block';} else {Elt.style.display='none';}">
-                    Refine your search
-                    </dt>
-                    <dd id="facets_list" style="display:none;">
-                    <ul>
-                    [% FOREACH facets_loo IN facets_loop %]
-                    <li id="[% facets_loo.type_id %]">[% facets_loo.type_label %]
-                        <ul>
-                        [% FOREACH facet IN facets_loo.facets %]
-                            <li>
-                                <a href="/cgi-bin/koha/catalogue/search.pl?q=[% facet.searchdesc %] and [% facet.type_link_value %]:[% facet.facet_link_value %]" title="[% facet.facet_title_value %]">
-                                    [% facet.facet_label_value %]
-                                </a> ([% facet.facet_count %])
-                            </li>
-                        [% END %]
-                        [% IF ( facets_loo.expandable ) %]
-                            <li class="showmore">
-                                <a href="/cgi-bin/koha/catalogue/search.pl?q=[% facets_loo.searchdesc %][% IF ( offset ) %]&amp;offset=[% offset %][% END %]&amp;expand=[% facets_loo.expand %]#[% facets_loo.type_id %]">
-                                    Show more
-                                </a>
-                            </li>
-                        [% END %]
-                        </ul>
-                    </li>
-                    [% END %]
-                    </ul>
-                    </dd>
-                [% END %]
-                <!-- FACETS END -->
-                </dl>
-            </div>
-            <!-- ######### -->
-            <!-- NoZebra -->[% END %]
-
             <div id="searchresults">
                 <form action="/cgi-bin/koha/catalogue/search.pl" method="get" name="bookbag_form" id="bookbag_form">
                 [% IF ( searchdesc ) %]

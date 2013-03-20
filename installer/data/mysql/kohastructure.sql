@@ -1378,20 +1378,6 @@ CREATE TABLE `notifys` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Table structure for table `nozebra`
---
-
-DROP TABLE IF EXISTS `nozebra`;
-CREATE TABLE `nozebra` (
-  `server` varchar(20)     NOT NULL,
-  `indexname` varchar(40)  NOT NULL,
-  `value` varchar(250)     NOT NULL,
-  `biblionumbers` longtext NOT NULL,
-  KEY `indexname` (`server`,`indexname`),
-  KEY `value` (`server`,`value`))
-  ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
 -- Table structure for table `oai_sets`
 --
 

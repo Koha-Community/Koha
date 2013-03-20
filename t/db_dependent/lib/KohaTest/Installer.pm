@@ -23,7 +23,6 @@ sub methods : Test( 1 ) {
                        load_db_schema 
                        load_sql_in_order 
                        set_marcflavour_syspref 
-                       set_indexing_engine 
                        set_version_syspref 
                        load_sql 
     );

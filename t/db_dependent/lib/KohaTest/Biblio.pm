@@ -46,9 +46,6 @@ sub methods : Test( 1 ) {
                        get_koha_field_from_marc
                        TransformMarcToKohaOneField
                        ModZebra
-                       GetNoZebraIndexes
-                       _DelBiblioNoZebra
-                       _AddBiblioNoZebra
                        _find_value
                        _koha_marc_update_bib_ids
                        _koha_marc_update_biblioitem_cn_sort

@@ -656,9 +656,7 @@ sub print_usage {
 $0: reindex MARC bibs and/or authorities in Zebra.
 
 Use this batch job to reindex all biblio or authority
-records in your Koha database.  This job is useful
-only if you are using Zebra; if you are using the 'NoZebra'
-mode, this job should not be used.
+records in your Koha database.
 
 Parameters:
     -b                      index bibliographic records

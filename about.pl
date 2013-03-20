@@ -61,7 +61,6 @@ $apacheVersion = (`/usr/sbin/apache2 -V`)[0] unless $apacheVersion;
 my $zebraVersion = `zebraidx -V`;
 
 # Additional system information for warnings
-my $prefNoZebra = C4::Context->preference('nozebra');
 my $prefAutoCreateAuthorities = C4::Context->preference('AutoCreateAuthorities');
 my $prefBiblioAddsAuthorities = C4::Context->preference('BiblioAddsAuthorities');
 my $warnPrefBiblioAddsAuthorities = ( $prefAutoCreateAuthorities && ( !$prefBiblioAddsAuthorities) );
@@ -83,7 +82,6 @@ $template->param(
     mysqlVersion  => $mysqlVersion,
     apacheVersion => $apacheVersion,
     zebraVersion  => $zebraVersion,
-    prefNoZebra   => $prefNoZebra,
     prefBiblioAddsAuthorities => $prefBiblioAddsAuthorities,
     prefAutoCreateAuthorities => $prefAutoCreateAuthorities,
     warnPrefBiblioAddsAuthorities => $warnPrefBiblioAddsAuthorities,
