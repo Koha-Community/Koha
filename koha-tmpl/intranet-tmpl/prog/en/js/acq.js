@@ -216,7 +216,7 @@ function calcNewsuggTotal(){
 
 function getAuthValueDropbox( name, cat, destination, selected ) {
     if (cat == null || cat == "") {
-        $(destination).replaceWith(' <input type="text" name="' + name + '" />' );
+        $(destination).replaceWith(' <input type="text" name="' + name + '" value="' + selected + '" />' );
         return;
     }
     $.ajax({
@@ -229,7 +229,7 @@ function getAuthValueDropbox( name, cat, destination, selected ) {
         async: false,
         success: function(data){
             if(data === "0"){
-                $(destination).replaceWith(' <input type="text" name="' + name + '" />' );
+                $(destination).replaceWith(' <input type="text" name="' + name + '" value="' + selected + '" />' );
             }else{
                 $(destination).replaceWith(data);
             }
