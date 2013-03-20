@@ -45,7 +45,7 @@
    [% IF ( loop.odd ) %]<tr>[% ELSE %]<tr class="highlight">[% END %]
       <td>[% account.date %]</td>
       <td>[% account.description %]&nbsp;[% IF ( account.itemnumber ) %]<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% account.biblionumber %]&amp;itemnumber=[% account.itemnumber %]">View item</a>&nbsp;[% END %][% account.title |html %]</td>
-      <td>[% account.note %]</td>
+      <td>[% account.note | html_line_break %]</td>
       [% IF ( account.amountcredit ) %]<td class="credit">[% ELSE %]<td class="debit">[% END %][% account.amount %]</td>
       [% IF ( account.amountoutstandingcredit ) %]<td class="credit">[% ELSE %]<td class="debit">[% END %][% account.amountoutstanding %]</td>
     [% IF ( reverse_col ) %]

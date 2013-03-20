@@ -211,6 +211,10 @@ function moneyFormat(textObj) {
         <!-- default to paying all -->
         <input name="paid" id="paid" value="[% total | format('%.2f') %]" onchange="moneyFormat(document.payfine.paid)"/>
     </li>
+    <li>
+        <label for="selected_accts_notes">Note: </label>
+        <textarea name="selected_accts_notes" id="selected_accts_notes">[% selected_accts_notes %]</textarea>
+    </li>
     </ol>
     </fieldset>
     <div class="action"><input type="submit" name="submitbutton" value="Confirm" />

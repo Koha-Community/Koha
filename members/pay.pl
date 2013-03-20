@@ -249,10 +249,12 @@ sub payselected {
     }
     $amt = '&amt=' . $amt;
     my $sel = '&selected=' . join ',', @lines_to_pay;
+    my $notes = '&notes=' . join("%0A", map { $input->param("payment_note_$_") } @lines_to_pay );
     my $redirect =
         "/cgi-bin/koha/members/paycollect.pl?borrowernumber=$borrowernumber"
       . $amt
-      . $sel;
+      . $sel
+      . $notes;
 
     print $input->redirect($redirect);
     return;

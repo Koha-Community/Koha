@@ -789,7 +789,7 @@ will be credited to the next one.
 =cut
 
 sub recordpayment_selectaccts {
-    my ( $borrowernumber, $amount, $accts ) = @_;
+    my ( $borrowernumber, $amount, $accts, $note ) = @_;
 
     my $dbh        = C4::Context->dbh;
     my $newamtos   = 0;
@@ -849,9 +849,9 @@ sub recordpayment_selectaccts {
 
     # create new line
     $sql = 'INSERT INTO accountlines ' .
-    '(borrowernumber, accountno,date,amount,description,accounttype,amountoutstanding,manager_id) ' .
-    q|VALUES (?,?,now(),?,'Payment,thanks','Pay',?,?)|;
-    $dbh->do($sql,{},$borrowernumber, $nextaccntno, 0 - $amount, 0 - $amountleft, $manager_id );
+    '(borrowernumber, accountno,date,amount,description,accounttype,amountoutstanding,manager_id,note) ' .
+    q|VALUES (?,?,now(),?,'Payment,thanks','Pay',?,?,?)|;
+    $dbh->do($sql,{},$borrowernumber, $nextaccntno, 0 - $amount, 0 - $amountleft, $manager_id, $note );
     UpdateStats( $branch, 'payment', $amount, '', '', '', $borrowernumber, $nextaccntno );
 
     if ( C4::Context->preference("FinesLog") ) {

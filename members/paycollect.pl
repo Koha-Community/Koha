@@ -93,7 +93,8 @@ if ( $individual || $writeoff ) {
     $total_due = $input->param('amt');
     $template->param(
         selected_accts => $select_lines,
-        amt            => $total_due
+        amt            => $total_due,
+        selected_accts_notes => $input->param('notes'),
     );
 }
 
@@ -120,8 +121,8 @@ if ( $total_paid and $total_paid ne '0.00' ) {
                     $select = $1;    # ensure passing no junk
                 }
                 my @acc = split /,/, $select;
-                recordpayment_selectaccts( $borrowernumber, $total_paid,
-                    \@acc );
+                my $note = $input->param('selected_accts_notes');
+                recordpayment_selectaccts( $borrowernumber, $total_paid, \@acc, $note );
             } else {
                 recordpayment( $borrowernumber, $total_paid );
             }
