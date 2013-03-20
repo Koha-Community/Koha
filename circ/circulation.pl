@@ -286,6 +286,12 @@ if ($barcode) {
 
     $template->param( alert => $alerts );
 
+    #  Get the item title for more information
+    my $getmessageiteminfo = GetBiblioFromItemNumber(undef,$barcode);
+    $template->param(
+        authvalcode_notforloan => C4::Koha::GetAuthValCode('items.notforloan', $getmessageiteminfo->{'frameworkcode'}),
+    );
+
     delete $question->{'DEBT'} if ($debt_confirmed);
     foreach my $impossible ( keys %$error ) {
         $template->param(
