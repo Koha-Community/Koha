@@ -6526,10 +6526,16 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = '3.11.00.100';
+$DBversion = "3.11.00.100";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     print "Upgrade to $DBversion done (3.12-alpha release)\n";
     SetVersion ($DBversion);
+}
+$DBversion = "3.11.00.101";
+if ( CheckVersion($DBversion) ) {
+   $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('UNIMARCAuthorsFacetsSeparator',', ', 'UNIMARC authors facets separator', NULL, 'short')");
+   print "Upgrade to $DBversion done (Bug 9341: Problem with UNIMARC authors facets)\n";
+   SetVersion ($DBversion);
 }
 
 =head1 FUNCTIONS
