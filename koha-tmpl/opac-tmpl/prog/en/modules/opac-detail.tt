@@ -1578,6 +1578,9 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
                     [% FOREACH PREVIOUS_SHELF_BROWS IN PREVIOUS_SHELF_BROWSE %]
                         <td>
                             <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% PREVIOUS_SHELF_BROWS.biblionumber %]&amp;shelfbrowse_itemnumber=[% PREVIOUS_SHELF_BROWS.itemnumber %]#shelfbrowser">
+                                [% IF ( OPACLocalCoverImages ) %]
+                                    <div title="[% PREVIOUS_SHELF_BROWS.biblionumber |url %]" class="[% PREVIOUS_SHELF_BROWS.biblionumber %] thumbnail-shelfbrowser" id="local-thumbnail-shelf-[% PREVIOUS_SHELF_BROWS.biblionumber %]"></div>
+                                [% END %]
                                 [% IF ( OPACAmazonCoverImages ) %]
                                     [% IF ( PREVIOUS_SHELF_BROWS.browser_normalized_isbn ) %]
                                         <img border="0" src="http://images.amazon.com/images/P/[% PREVIOUS_SHELF_BROWS.browser_normalized_isbn %].01._AA75_PU_PU-5_.jpg" alt="" />
@@ -1619,6 +1622,9 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
                     [% FOREACH NEXT_SHELF_BROWS IN NEXT_SHELF_BROWSE %]
                         <td>
                             <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% NEXT_SHELF_BROWS.biblionumber %]&amp;shelfbrowse_itemnumber=[% NEXT_SHELF_BROWS.itemnumber %]#shelfbrowser">
+                                [% IF ( OPACLocalCoverImages ) %]
+                                    <div title="[% NEXT_SHELF_BROWS.biblionumber |url %]" class="[% NEXT_SHELF_BROWS.biblionumber %] thumbnail-shelfbrowser" id="local-thumbnail-shelf-[% NEXT_SHELF_BROWS.biblionumber %]"></div>
+                                [% END %]
                                 [% IF ( OPACAmazonCoverImages ) %]
                                     [% IF ( NEXT_SHELF_BROWS.browser_normalized_isbn ) %]
                                         <img border="0" src="http://images.amazon.com/images/P/[% NEXT_SHELF_BROWS.browser_normalized_isbn %].01._AA75_PU_PU-5_.jpg" alt="" />
