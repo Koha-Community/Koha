@@ -18,7 +18,7 @@ BEGIN {
 SKIP: {
     my $cache = Koha::Cache->new();
 
-    skip "Cache not enabled", 13
+    skip "Cache not enabled", 25
       unless ( Koha::Cache->is_cache_active() && defined $cache );
 
     # test fetching an item that isnt in the cache
