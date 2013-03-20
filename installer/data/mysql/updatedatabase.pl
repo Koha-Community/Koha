@@ -6538,7 +6538,7 @@ if ( CheckVersion($DBversion) ) {
    SetVersion ($DBversion);
 }
 
-$DBversion = "XXX";
+$DBversion = "3.11.00.102";
 if ( CheckVersion($DBversion) ) {
     $dbh->do(q{
         DELETE FROM systempreferences WHERE variable='NoZebra'
