@@ -568,43 +568,22 @@ foreach (keys(%flags)) {
 	push @flagdata,\%row;
 }
 
-#get Branches
-my @branches;
-my @select_branch;
-my %select_branches;
+# get Branch Loop
+# in modify mod: userbranch value for GetBranchesLoop() comes from borrowers table
+# in add    mod: userbranch value come from branches table (ip correspondence)
 
-my $onlymine=(C4::Context->preference('IndependantBranches') && 
-              C4::Context->userenv && 
-              C4::Context->userenv->{flags} % 2 !=1  && 
-              C4::Context->userenv->{branch}?1:0);
-              
-my $branches=GetBranches($onlymine);
-my $default;
-my $CGIbranch;
-for my $branch (sort { $branches->{$a}->{branchname} cmp $branches->{$b}->{branchname} } keys %$branches) {
-    push @select_branch,$branch;
-    $select_branches{$branch} = $branches->{$branch}->{'branchname'};
-    $default = C4::Context->userenv->{'branch'} if (C4::Context->userenv && C4::Context->userenv->{'branch'});
+my $userbranch = '';
+if (C4::Context->userenv && C4::Context->userenv->{'branch'}) {
+    $userbranch = C4::Context->userenv->{'branch'};
 }
-if(scalar(@select_branch) > 0){
-# --------------------------------------------------------------------------------------------------------
-  #in modify mod :default value from $CGIbranch comes from borrowers table
-  #in add mod: default value come from branches table (ip correspendence)
+
 if (defined ($data{'branchcode'}) and ( $op eq 'modify' || ( $op eq 'add' && $category_type eq 'C' ) )) {
-    $default = $data{'branchcode'};
-}
-$CGIbranch = CGI::scrolling_list(-id    => 'branchcode',
-            -name   => 'branchcode',
-            -values => \@select_branch,
-            -labels => \%select_branches,
-            -size   => 1,
-            -override => 1,  
-            -multiple =>0,
-            -default => $default,
-        );
+    $userbranch = $data{'branchcode'};
 }
 
-if(!$CGIbranch){
+my $branchloop = GetBranchesLoop( $userbranch );
+
+if( !$branchloop ){
     $no_add = 1;
     $template->param(no_branches => 1);
 }
@@ -709,7 +688,7 @@ $template->param(
   check_member    => $check_member,#to know if the borrower already exist(=>1) or not (=>0) 
   "op$op"   => 1);
 
-$template->param(CGIbranch=>$CGIbranch) if ($CGIbranch);
+$template->param( branchloop => $branchloop ) if ( $branchloop );
 $template->param(
   nodouble  => $nodouble,
   borrowernumber  => $borrowernumber, #register number

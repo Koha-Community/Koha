@@ -62,36 +62,22 @@ the hashes are then translated to hash / arrays to be returned to manager.pl & s
 =cut
 
 sub set_parameters {
-	my ($template) = @_;
-	my $dbh = C4::Context->dbh;
-	my $branches=GetBranches();
-	my @branches;
-	my @select_branch;
-	my %select_branches;
-	push @select_branch,"";
-	$select_branches{""} = "";
-	foreach my $branch (keys %$branches) {
-		push @select_branch, $branch;
-		$select_branches{$branch} = $branches->{$branch}->{'branchname'};
-	}
-	my $CGIbranch=CGI::scrolling_list( -name     => 'value',
-				-id => 'branch',
-				-values   => \@select_branch,
-				-labels   => \%select_branches,
-				-size     => 1,
-				-multiple => 0 );
-	$template->param(CGIbranch => $CGIbranch);
+    my ($template) = @_;
+
+    $template->param( branchloop => GetBranchesLoop() );
   
-  my ($codes,$labels)=GetborCatFromCatType(undef,undef);
-  my @borcatloop;
-  foreach my $thisborcat (sort keys %$labels) {
-            push @borcatloop, {value => $thisborcat,
-                               description => $labels->{$thisborcat},
-                            };
-  }
-  $template->param(loopcategories => \@borcatloop);
-	return $template;
+    my ($codes,$labels)=GetborCatFromCatType(undef,undef);
+    my @borcatloop;
+    foreach my $thisborcat (sort keys %$labels) {
+        push @borcatloop, {
+                          value       => $thisborcat,
+                          description => $labels->{$thisborcat},
+                          };
+    }
+    $template->param(loopcategories => \@borcatloop);
+    return $template;
 }
+
 sub calculate {
 	my ($parameters) = @_;
 	my @results =();

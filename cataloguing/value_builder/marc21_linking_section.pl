@@ -356,25 +356,7 @@ sub plugin {
          );
              $sth->finish;
 
-         my @branchloop;
-                my @select_branch;
-             my %select_branches;
-           my $branches = GetBranches;
-            push @select_branch, "";
-               $select_branches{''} = "";
-             foreach my $thisbranch ( keys %$branches ) {
-                   push @select_branch, $branches->{$thisbranch}->{'branchcode'};
-                 $select_branches{ $branches->{$thisbranch}->{'branchcode'} } =
-                   $branches->{$thisbranch}->{'branchname'};
-            }
-              my $CGIbranch = CGI::scrolling_list(
-                   -name     => 'value',
-                  -values   => \@select_branch,
-                  -labels   => \%select_branches,
-                        -size     => 1,
-                        -multiple => 0
-         );
-             $sth->finish;
+         # To show list of branches please use GetBranchesLoop() and modify template
 
          my $req = $dbh->prepare(
 "select distinctrow left(publishercode,45) from biblioitems order by publishercode"
@@ -404,7 +386,6 @@ sub plugin {
 
             $template->param(    #classlist => $classlist,
                  CGIitemtype  => $CGIitemtype,
-                  CGIbranch    => $CGIbranch,
                     CGIPublisher => $CGIpublisher,
                  itypeloop    => \@itemtypes,
                    index        => $query->param('index'),

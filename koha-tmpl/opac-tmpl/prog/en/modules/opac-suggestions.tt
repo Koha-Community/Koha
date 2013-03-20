@@ -116,14 +116,14 @@ $.tablesorter.addParser({
 			[% IF ( itemtypeloo.selected ) %]<option value="[% itemtypeloo.itemtype %]" selected="selected"> [% ELSE %]<option value="[% itemtypeloo.itemtype %]"> [% END %] [% itemtypeloo.description %]</option>
         [% END %]
         </select> </li>
-    [% IF ( branch_loop ) %]
+    [% IF ( branchloop ) %]
     <li><label for="branch">Library:</label>
         <select name="branch" id="branch">
-        [% FOREACH branch_loo IN branch_loop %]
-            [% IF ( branch_loo.selected ) %]
-            <option value="[% branch_loo.value %]" selected="selected">[% branch_loo.branchname %]</option>
+        [% FOREACH branchloo IN branchloop %]
+            [% IF ( branchloo.selected ) %]
+            <option value="[% branchloo.branchcode %]" selected="selected">[% branchloo.branchname %]</option>
             [% ELSE %]
-            <option value="[% branch_loo.value %]">[% branch_loo.branchname %]</option>
+            <option value="[% branchloo.branchcode %]">[% branchloo.branchname %]</option>
             [% END %]
         [% END %]
         </select>

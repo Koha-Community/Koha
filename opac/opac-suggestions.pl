@@ -128,11 +128,15 @@ if ( C4::Context->preference("AllowPurchaseSuggestionBranchChoice") ) {
     my ( $borr ) = GetMemberDetails( $borrowernumber );
 
 # pass the pickup branch along....
-    my $branch = $input->param('branch') || $borr->{'branchcode'} || C4::Context->userenv->{branch} || '' ;
+    my $userbranch = '';
+    if (C4::Context->userenv && C4::Context->userenv->{'branch'}) {
+        $userbranch = C4::Context->userenv->{'branch'};
+    }
+    my $branch = $input->param('branch') || $borr->{'branchcode'} || $userbranch || '' ;
 
 # make branch selection options...
-    my $CGIbranchloop = GetBranchesLoop($branch);
-    $template->param( branch_loop => $CGIbranchloop );
+    my $branchloop = GetBranchesLoop($branch);
+    $template->param( branchloop => $branchloop );
 }
 
 $template->param(

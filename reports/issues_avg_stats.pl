@@ -160,21 +160,6 @@ if ($do_it) {
         $hassort1 =1 if ($value);
         push @select, $value;
     }
-    my $branches=GetBranches();
-    my @select_branch;
-    my %select_branches;
-    push @select_branch,"";
-    $select_branches{""} = "";
-    foreach my $branch (keys %$branches) {
-        push @select_branch, $branch;
-        $select_branches{$branch} = $branches->{$branch}->{'branchname'};
-    }
-    my $CGIBranch=CGI::scrolling_list( -name     => 'Filter',
-                -id => 'branch',
-                -values   => \@select_branch,
-                -labels   => \%select_branches,
-                -size     => 1,
-                -multiple => 0 );
     
     my $CGISort1=CGI::scrolling_list( -name     => 'Filter',
                 -id => 'sort1',
@@ -209,14 +194,14 @@ if ($do_it) {
     my $CGIsepChoice=GetDelimiterChoices;
     
     $template->param(
-                    CGIBorCat => $CGIBorCat,
-                    CGIItemType => $CGIItemTypes,
-                    CGIBranch => $CGIBranch,
-                    hassort1=> $hassort1,
-                    hassort2=> $hassort2,
-                    HlghtSort2 => $hglghtsort2,
-                    CGISort1 => $CGISort1,
-                    CGISort2 => $CGISort2,
+                    CGIBorCat    => $CGIBorCat,
+                    CGIItemType  => $CGIItemTypes,
+                    branchloop   => GetBranchesLoop(),
+                    hassort1     => $hassort1,
+                    hassort2     => $hassort2,
+                    HlghtSort2   => $hglghtsort2,
+                    CGISort1     => $CGISort1,
+                    CGISort2     => $CGISort2,
                     CGIextChoice => $CGIextChoice,
                     CGIsepChoice => $CGIsepChoice
                     );
