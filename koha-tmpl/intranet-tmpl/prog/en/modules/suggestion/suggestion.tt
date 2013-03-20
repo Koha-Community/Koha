@@ -16,16 +16,14 @@
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
-[% IF ( op_else ) %] <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+[% IF ( op_else ) %]
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.min.js"></script>
+[% INCLUDE 'datatables-strings.inc' %]
+<script type="text/javascript" src="[% themelang %]/js/datatables.js"></script>
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
 <script type="text/javascript">
 // <![CDATA[
-$.tablesorter.addParser({
-    id: 'articles',
-    is: function(s) {return false;  },
-    format: function(s) { return s.toLowerCase().replace(/^(the|an|a) /,''); },
-    type: 'text'
-});
 /**
 *  displayOther.
 *  This function display the select or an textaera to write a reason.
@@ -36,26 +34,32 @@ function displayOther(id,show,hide){
 }
 $(document).ready(function() {
     $('#suggestiontabs').tabs({
-        select: function(ui) {
-            $("#loadingtab").show();
-        },
-        show: function(ui) {
-            $("#loadingtab").hide();
+        // Correct table sizing for tables hidden in tabs
+        // http://www.datatables.net/examples/api/tabs_and_scrolling.html
+        "show": function(event, ui) {
+            var oTable = $('div.dataTables_wrapper>table', ui.panel).dataTable();
+            if ( oTable.length > 0 ) {
+                oTable.fnAdjustColumnSizing();
+            }
         }
-        });
-    $.tablesorter.defaults.widgets = ['zebra'];
-
+    });
+    $(".sorted").dataTable($.extend(true, {}, dataTablesDefaults, {
+        "aoColumnDefs": [
+            { "aTargets": [ 0, -1, -2 ], "bSortable": false, "bSearchable": false },
+        ],
+        "aLengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]],
+        "iDisplayLength": 20,
+        "sPaginationType": "four_button"
+    }));
 [% FOREACH suggestion IN suggestions %]
 // functions for [% suggestion.suggestiontype %] interactions
-    $("#[% suggestion.suggestiontype %]t").tablesorter({[% IF ( dateformat == 'metric' ) %]
-    dateFormat: 'uk',[% END %]
-    headers: {0:{sorter: false}, 1: { sorter: 'articles' },5:{sorter: false},6:{sorter: false},7:{sorter: false}, 8:{sorter: false},9:{sorter: false},10:{sorter: false}}
-    });
-    $("#CheckAll[% suggestion.suggestiontype %]").click(function(){
+    $("#CheckAll[% suggestion.suggestiontype %]").click(function(e){
 		$("#[% suggestion.suggestiontype %]t").checkCheckboxes();
+        e.preventDefault();
     });
-    $("#UncheckAll[% suggestion.suggestiontype %]").click(function(){
+    $("#UncheckAll[% suggestion.suggestiontype %]").click(function(e){
 		$("#[% suggestion.suggestiontype %]t").unCheckCheckboxes();
+        e.preventDefault();
 	});
 	$("#other_reason[% suggestion.suggestiontype %]").hide();
     $("input[name*=other_reason[% suggestion.suggestiontype %]]").focus(function(){ $(this).val(""); });
@@ -359,8 +363,6 @@ $(document).ready(function() { calcNewsuggTotal(); });
 <h1>Suggestions management</h1>
 
 [% UNLESS ( notabs ) %]
-<div id="sorting" class="overlay">Sorting...</div>
-<div id="loadingtab" class="overlay">Loading tab...</div>
 <div id="suggestiontabs" class="toptabs">
 <ul class="ui-tabs-nav">
 [% FOREACH suggestion IN suggestions %]
@@ -383,7 +385,7 @@ $(document).ready(function() { calcNewsuggTotal(); });
 
 [% IF ( suggestion.suggestions_loop ) %]
 <p><a id="CheckAll[% suggestion.suggestiontype %]" href="#">Check all</a> | <a id="UncheckAll[% suggestion.suggestiontype %]" href="#">Uncheck all</a></p>
-    <table id="[% suggestion.suggestiontype %]t">
+    <table id="[% suggestion.suggestiontype %]t" class="sorted">
         <thead>
             <tr><th>&nbsp;</th>
             <th>Suggestion</th>
