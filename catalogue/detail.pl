@@ -281,6 +281,14 @@ foreach my $item (@items) {
     }
 }
 
+# Display only one tab if one items list is empty
+if (scalar(@itemloop) == 0 || scalar(@otheritemloop) == 0) {
+    $template->param(SeparateHoldings => 0);
+    if (scalar(@itemloop) == 0) {
+        @itemloop = @otheritemloop;
+    }
+}
+
 $template->param( norequests => $norequests );
 $template->param(
 	MARCNOTES   => $marcnotesarray,
