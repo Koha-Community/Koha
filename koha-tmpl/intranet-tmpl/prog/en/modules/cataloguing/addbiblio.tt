@@ -416,7 +416,7 @@ function Changefwk(FwkList) {
                 <a href="#" tabindex="1" class="tagnum" title="[% innerloo.tag_lib %] - Click to Expand this Tag" onclick="ExpandField('tag_[% innerloo.tag %]_[% innerloo.index %][% innerloo.random %]'); return false;">[% innerloo.tag %]</a>
             [% ELSE %]
                 <span class="tagnum" title="[% innerloo.tag_lib %]">[% innerloo.tag %]
-                [% IF marcflavour != 'NORMARC' %]<a class="marcdocs" onclick="PopupMARCFieldDoc('[% innerloo.tag %]', [% BIG_LOO.number %]); return false;">&nbsp;?</a>[% END %]
+                [% IF marcflavour != 'NORMARC' %]<a href="#" class="marcdocs" onclick="PopupMARCFieldDoc('[% innerloo.tag %]', [% BIG_LOO.number %]); return false;">&nbsp;?</a>[% END %]
                 </span>
             [% END %]
                 [% IF ( innerloo.fixedfield ) %]
