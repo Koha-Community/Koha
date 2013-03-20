@@ -28,6 +28,8 @@ package C4::Output;
 use strict;
 #use warnings; FIXME - Bug 2505
 
+use URI::Escape;
+
 use C4::Context;
 use C4::Dates qw(format_date);
 use C4::Budgets qw(GetCurrency);
@@ -42,13 +44,13 @@ BEGIN {
 
  @ISA    = qw(Exporter);
     @EXPORT_OK = qw(&is_ajax ajax_fail); # More stuff should go here instead
-    %EXPORT_TAGS = ( all =>[qw(setlanguagecookie pagination_bar
+    %EXPORT_TAGS = ( all =>[qw(setlanguagecookie pagination_bar parametrized_url
                                 &output_with_http_headers &output_ajax_with_http_headers &output_html_with_http_headers)],
                     ajax =>[qw(&output_with_http_headers &output_ajax_with_http_headers is_ajax)],
                     html =>[qw(&output_with_http_headers &output_html_with_http_headers)]
                 );
     push @EXPORT, qw(
-        setlanguagecookie getlanguagecookie pagination_bar
+        setlanguagecookie getlanguagecookie pagination_bar parametrized_url
     );
     push @EXPORT, qw(
         &output_html_with_http_headers &output_ajax_with_http_headers &output_with_http_headers FormatData FormatNumber
@@ -325,6 +327,18 @@ sub output_ajax_with_http_headers {
 sub is_ajax {
     my $x_req = $ENV{HTTP_X_REQUESTED_WITH};
     return ( $x_req and $x_req =~ /XMLHttpRequest/i ) ? 1 : 0;
+}
+
+sub parametrized_url {
+    my $url = shift || ''; # ie page.pl?ln={LANG}
+    my $vars = shift || {}; # ie { LANG => en }
+    my $ret = $url;
+    while ( my ($key,$val) = each %$vars) {
+        my $val_url = URI::Escape::uri_escape_utf8($val);
+        $ret =~ s/\{$key\}/$val_url/g;
+    }
+    $ret =~ s/\{[^\{]*\}//g; # remove not defined vars
+    return $ret;
 }
 
 END { }    # module clean-up code here (global destructor)
