@@ -105,7 +105,7 @@ function highlightOn() {
 $(document).ready(function(){
     [% IF ( OpacHighlightedWords ) %]
         $('a.title').each(function() {
-            $(this).attr('href', $(this).attr('href') + '&query_desc=[% query_desc | uri %]');
+            $(this).attr("href", $(this).attr("href") + "&query_desc=[% query_desc | uri %]");
         });
     [% END %]
 
@@ -303,12 +303,16 @@ $(document).ready(function(){
     [% IF OPACLocalCoverImages %]KOHA.LocalCover.GetCoverFromBibnumber(false);[% END %]
     [% IF ( GoogleJackets ) %]KOHA.Google.GetCoverFromIsbn();[% END %]
 
-    $('#didyoumean').load('/cgi-bin/koha/svc/suggestion?render=stub&q=[% querystring | uri %]',
+[% IF ( DidYouMean ) %]
+    $("#didyoumean").load("/cgi-bin/koha/svc/suggestion?render=stub&q=[% querystring |uri %]",
         function() {
-            $('.searchsuggestion').parent().parent().css({
-                'border-color': '#F4ECBE',
-                'background-color': '#FFFBEA'});
-            } );
+            $(".searchsuggestion").parent().parent().css({
+                "border-color": "#F4ECBE",
+                "background-color": "#FFFBEA"
+            });
+        });
+[% END %]
+
 });
 
 //]]>
@@ -325,7 +329,7 @@ $(document).ready(function(){
     <div class="yui-b">
     <div id="userresults" class="container">
     [% IF ( DidYouMean ) %]
-        <div id='didyoumean'>Not what you expected? Check for <a href='/cgi-bin/koha/svc/suggestion?render=standalone&amp;q=[% querystring | uri %]'>suggestions</a></div>
+        <div id="didyoumean">Not what you expected? Check for <a href="/cgi-bin/koha/svc/suggestion?render=standalone&amp;q=[% querystring |uri %]">suggestions</a></div>
     [% END %]
     <div id="top-pages">[% INCLUDE 'page-numbers.inc' %]</div>
   [% IF ( koha_spsuggest ) %]
@@ -607,8 +611,8 @@ $(document).ready(function(){
 [% END %]
 
 [% END %]
-                <input type="hidden" name='biblionumber'  value="[% SEARCH_RESULT.biblionumber %]" />
-                <input type="hidden" name='loggedinuser'  value="[% loggedinuser %]" />
+                <input type="hidden" name="biblionumber"  value="[% SEARCH_RESULT.biblionumber %]" />
+                <input type="hidden" name="loggedinuser"  value="[% loggedinuser %]" />
 
                 [% IF (  SEARCH_RESULT.rating_total ) > 0  %]
                     <span id="rating_total_[% SEARCH_RESULT.biblionumber %]">&nbsp;&nbsp;([% SEARCH_RESULT.rating_total %] votes)</span>

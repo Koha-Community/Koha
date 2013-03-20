@@ -14,13 +14,13 @@
 [% END %]
 [% IF suggestions && suggestions.size %]
     <div>
-    <span class='suggestionlabel'>Did you mean:</span>
+    <span class="suggestionlabel">Did you mean:</span>
     [% FOREACH suggestion IN suggestions %]
-        <span class='searchsuggestion'><a href='/cgi-bin/koha/opac-search.pl?q=[% suggestion.search | uri %]'>[% suggestion.label %]</a></span>
+        <span class="searchsuggestion"><a href="/cgi-bin/koha/opac-search.pl?q=[% suggestion.search |uri %]">[% suggestion.label |html %]</a></span>
     [% END %]
     </div>
 [% ELSE %]
-    <span class='nosuggestions'>Sorry, no suggestions.</span>
+    <span class="nosuggestions">Sorry, no suggestions.</span>
 [% END %]
 [% IF (render=='standalone') %]
     </div>
