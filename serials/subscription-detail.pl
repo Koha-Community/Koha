@@ -144,7 +144,7 @@ if ( defined $subscriptionid ) {
         $tmpl_infos->{valuegsti_spent} = sprintf( "%.2f", $tmpl_infos->{valuegsti_spent} );
         $tmpl_infos->{valuegste_spent} = sprintf( "%.2f", $tmpl_infos->{valuegste_spent} );
         $tmpl_infos->{budget_name_spent} = GetBudgetName $lastOrderReceived->{budget_id};
-        $tmpl_infos->{invoicenumber} = $lastOrderReceived->{booksellerinvoicenumber};
+        $tmpl_infos->{invoiceid} = $lastOrderReceived->{invoiceid};
         $tmpl_infos->{spent_exists} = 1;
     }
 }
