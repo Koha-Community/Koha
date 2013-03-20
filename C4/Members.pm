@@ -66,6 +66,7 @@ BEGIN {
         &getidcity
 
         &GetFirstValidEmailAddress
+        &GetNoticeEmailAddress
 
         &GetAge
         &GetCities
@@ -1355,6 +1356,35 @@ sub GetFirstValidEmailAddress {
     } else {
        return '';
     }
+}
+
+=head2 GetNoticeEmailAddress
+
+  $email = GetNoticeEmailAddress($borrowernumber);
+
+Return the email address of borrower used for notices, given the borrowernumber.
+Returns the empty string if no email address.
+
+=cut
+
+sub GetNoticeEmailAddress {
+    my $borrowernumber = shift;
+
+    my $which_address = C4::Context->preference("AutoEmailPrimaryAddress");
+    # if syspref is set to 'first valid' (value == OFF), look up email address
+    if ( $which_address eq 'OFF' ) {
+        return GetFirstValidEmailAddress($borrowernumber);
+    }
+    # specified email address field
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare( qq{
+        SELECT $which_address AS primaryemail
+        FROM borrowers
+        WHERE borrowernumber=?
+    } );
+    $sth->execute($borrowernumber);
+    my $data = $sth->fetchrow_hashref;
+    return $data->{'primaryemail'} || '';
 }
 
 =head2 GetExpiryDate 

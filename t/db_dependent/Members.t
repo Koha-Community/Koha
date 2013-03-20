@@ -6,7 +6,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 20;
+use Test::More tests => 22;
 use Data::Dumper;
 
 BEGIN {
@@ -22,6 +22,7 @@ my $BRANCHCODE   = 'CPL';
 
 my $CHANGED_FIRSTNAME = "Marry Ann";
 my $EMAIL             = "Marie\@email.com";
+my $EMAILPRO          = "Marie\@work.com";
 my $ETHNICITY         = "German";
 my $PHONE             = "555-12123";
 
@@ -77,12 +78,14 @@ $member->{firstname} = $CHANGED_FIRSTNAME;
 $member->{email}     = $EMAIL;
 $member->{ethnicity} = $ETHNICITY;
 $member->{phone}     = $PHONE;
+$member->{emailpro}  = $EMAILPRO;
 ModMember(%$member);
 my $changedmember=GetMemberDetails("",$CARDNUMBER);
 ok ( $changedmember->{firstname} eq $CHANGED_FIRSTNAME &&
      $changedmember->{email}     eq $EMAIL             &&
      $changedmember->{ethnicity} eq $ETHNICITY         &&
-     $changedmember->{phone}     eq $PHONE
+     $changedmember->{phone}     eq $PHONE             &&
+     $changedmember->{emailpro}  eq $EMAILPRO
      , "Member Changed")
   or diag("Mismatching member details: ".Dumper($member, $changedmember));
 
@@ -153,6 +156,19 @@ is ($age, "18", "Age correct");
 
 $age=GetAge("2011-01-19", "1992-01-19");
 is ($age, "-19", "Birthday In the Future");
+
+C4::Context->set_preference( 'AutoEmailPrimaryAddress', 'OFF' );
+C4::Context->clear_syspref_cache();
+
+my $notice_email = GetNoticeEmailAddress($member->{'borrowernumber'});
+is ($notice_email, $EMAIL, "GetNoticeEmailAddress returns correct value when AutoEmailPrimaryAddress is off");
+
+C4::Context->set_preference( 'AutoEmailPrimaryAddress', 'emailpro' );
+C4::Context->clear_syspref_cache();
+
+my $notice_email = GetNoticeEmailAddress($member->{'borrowernumber'});
+is ($notice_email, $EMAILPRO, "GetNoticeEmailAddress returns correct value when AutoEmailPrimaryAddress is emailpro");
+
 
 # clean up 
 DelMember($member->{borrowernumber});

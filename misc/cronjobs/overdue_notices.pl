@@ -450,7 +450,7 @@ END_SQL
             # <date> <itemcount> <firstname> <lastname> <address1> <address2> <address3> <city> <postcode> <country>
 
             my $borrower_sql = <<'END_SQL';
-SELECT distinct(issues.borrowernumber), firstname, surname, address, address2, city, zipcode, country, email
+SELECT distinct(issues.borrowernumber), firstname, surname, address, address2, city, zipcode, country, email, emailpro, B_email
 FROM   issues,borrowers,categories
 WHERE  issues.borrowernumber=borrowers.borrowernumber
 AND    borrowers.categorycode=categories.categorycode
@@ -478,24 +478,26 @@ END_SQL
             $sth->execute(@borrower_parameters);
             $verbose and warn $borrower_sql . "\n $branchcode | " . $overdue_rules->{'categorycode'} . "\n ($mindays, $maxdays)\nreturns " . $sth->rows . " rows";
 
-            while ( my ( $borrowernumber, $firstname, $lastname,
-                    $address1, $address2, $city, $postcode, $country, $email
-                    ) = $sth->fetchrow )
-            {
-                $verbose and warn "borrower $firstname, $lastname ($borrowernumber) has items triggering level $i.";
+            while ( my $data = $sth->fetchrow_hashref ) {
+                my $borrowernumber = $data->{'borrowernumber'};
+                my $borr =
+                    $data->{'firstname'} . ', '
+                  . $data->{'surname'} . ' ('
+                  . $borrowernumber . ')';
+                $verbose
+                  and warn "borrower $borr has items triggering level $i.";
+
                 @emails_to_use = ();
-                if ( !$nomail) {
-                    if ( @emails ) {
-                        my $memberinfos = C4::Members::GetMember(borrowernumber => $borrowernumber);
+                my $notice_email =
+                    C4::Members::GetNoticeEmailAddress($borrowernumber);
+                unless ($nomail) {
+                    if (@emails) {
                         foreach (@emails) {
-                            push @emails_to_use, $memberinfos->{$_}
-                              if ($memberinfos->{$_} ne '');
+                            push @emails_to_use, $data->{$_} if ( $data->{$_} );
                         }
                     }
                     else {
-                        $email =
-                          C4::Members::GetFirstValidEmailAddress($borrowernumber);
-                        push @emails_to_use, $email if ($email ne '');
+                        push @emails_to_use, $notice_email if ($notice_email);
                     }
                 }
 
@@ -513,7 +515,7 @@ END_SQL
     
                     #action taken is debarring
                     C4::Members::DebarMember($borrowernumber, '9999-12-31');
-                    $verbose and warn "debarring $borrowernumber $firstname $lastname\n";
+                    $verbose and warn "debarring $borr\n";
                 }
                 my @params = ($listall ? ( $borrowernumber , 1 , $MAX ) : ( $borrowernumber, $mindays, $maxdays ));
                 $verbose and warn "STH2 PARAMS: borrowernumber = $borrowernumber, mindays = $mindays, maxdays = $maxdays";
@@ -567,57 +569,35 @@ END_SQL
                 }
                 $letter->{'content'} =~ s/\<[^<>]*?\>//g;    # Now that we've warned about them, remove them.
                 $letter->{'content'} =~ s/\<[^<>]*?\>//g;    # 2nd pass for the double nesting.
-    
-                if ($nomail) {
-    
+
+                if ( !$nomail && scalar @emails_to_use ) {
+                    C4::Letters::EnqueueLetter(
+                        {   letter                 => $letter,
+                            borrowernumber         => $borrowernumber,
+                            message_transport_type => 'email',
+                            from_address           => $admin_email_address,
+                            to_address             => join(',', @emails_to_use),
+                        }
+                    );
+                } else {
+                    # if not sent by email then print
                     push @output_chunks,
                       prepare_letter_for_printing(
                         {   letter         => $letter,
                             borrowernumber => $borrowernumber,
-                            firstname      => $firstname,
-                            lastname       => $lastname,
-                            address1       => $address1,
-                            address2       => $address2,
-                            city           => $city,
-                            postcode       => $postcode,
-                            country        => $country,
-                            email          => $email,
+                            firstname      => $data->{'firstname'},
+                            lastname       => $data->{'surname'},
+                            address1       => $data->{'address'},
+                            address2       => $data->{'address2'},
+                            city           => $data->{'city'},
+                            postcode       => $data->{'zipcode'},
+                            country        => $data->{'country'},
+                            email          => $notice_email,
                             itemcount      => $itemcount,
                             titles         => $titles,
                             outputformat   => defined $csvfilename ? 'csv' : defined $htmlfilename ? 'html' : '',
                         }
                       );
-                } else {
-                    if (scalar(@emails_to_use) > 0 ) {
-                        C4::Letters::EnqueueLetter(
-                            {   letter                 => $letter,
-                                borrowernumber         => $borrowernumber,
-                                message_transport_type => 'email',
-                                from_address           => $admin_email_address,
-                                to_address             => join(',', @emails_to_use),
-                            }
-                        );
-                    } else {
-    
-                        # If we don't have an email address for this patron, send it to the admin to deal with.
-                        push @output_chunks,
-                          prepare_letter_for_printing(
-                            {   letter         => $letter,
-                                borrowernumber => $borrowernumber,
-                                firstname      => $firstname,
-                                lastname       => $lastname,
-                                address1       => $address1,
-                                address2       => $address2,
-                                city           => $city,
-                                postcode       => $postcode,
-                                country        => $country,
-                                email          => $email,
-                                itemcount      => $itemcount,
-                                titles         => $titles,
-                                outputformat   => defined $csvfilename ? 'csv' : defined $htmlfilename ? 'html' : '',
-                            }
-                          );
-                    }
                 }
             }
             $sth->finish;
