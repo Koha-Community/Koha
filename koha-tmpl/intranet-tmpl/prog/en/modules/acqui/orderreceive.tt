@@ -122,7 +122,7 @@ function IEEventHandler_KeyDown() {
     $(document).ready(function() {
         [% IF (AcqCreateItemReceiving) %]
             cloneItemBlock(0, '[% UniqueItemFields %]');
-        [% ELSIF (AcqCreateItem == 'ordering') %]
+        [% ELSIF (AcqCreateItem == 'ordering') && not subscriptionid %]
             $("input[name='items_to_receive']").change(function() {
                 CalcQtyToReceive();
             });
@@ -304,7 +304,11 @@ function IEEventHandler_KeyDown() {
            </span></li>
         <li><label for="quantity">Quantity received: </label>
           [% IF (AcqCreateItemReceiving) %]
-            <input readonly="readonly" type="text" size="20" name="quantityrec" id="quantity" value="0" />
+            [% IF ( subscriptionid ) %]
+              <input readonly="readonly" type="text" size="20" name="quantityrec" id="quantity" value="1" />
+            [% ELSE %]
+              <input readonly="readonly" type="text" size="20" name="quantityrec" id="quantity" value="0" />
+            [% END %]
           [% ELSE %]
             [% IF ( quantityreceived ) %]
                 [% IF ( edit ) %]
