@@ -415,11 +415,8 @@ sub nsb_clean {
     # handles non sorting blocks
     my ($string) = @_ ;
     $_ = $string ;
-    s/$NSB//g ;
-    s/$NSE//g ;
-    s/$NSB2//g ;
-    s/$NSE2//g ;
-    s/$C2//g ;
+    s/($C2){0,1}($NSB|$NSB2)//g ;
+    s/($C2){0,1}($NSE|$NSE2)//g ;
     $string = $_ ;
 
     return($string) ;
