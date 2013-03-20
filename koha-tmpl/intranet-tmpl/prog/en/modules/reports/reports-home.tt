@@ -35,7 +35,16 @@
 		<li><a href="/cgi-bin/koha/reports/issues_stats.pl">Circulation</a></li>
 		<li><a href="/cgi-bin/koha/reports/serials_stats.pl">Serials</a></li>
 		<li><a href="/cgi-bin/koha/reports/reserves_stats.pl">Holds</a></li>
-	</ul></div>
+      </ul>
+
+        [% IF UseKohaPlugins %]
+        <h2>Report Plugins</h2>
+        <ul>
+                <li><a href="/cgi-bin/koha/plugins/plugins-home.pl?method=report">Report Plugins</a></li>
+        </ul>
+        [% END %]
+
+    </div>
 
     <div class="yui-u"><h2>Top lists</h2>
 	<ul>

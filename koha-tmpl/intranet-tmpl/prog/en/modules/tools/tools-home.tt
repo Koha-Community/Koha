@@ -97,6 +97,11 @@
     <dd>Quote editor for Quote-of-the-day feature in OPAC</dd>
     [% END %]
 
+    [% IF ( UseKohaPlugins && CAN_user_plugins_tool ) %]
+    <dt><a href="/cgi-bin/koha/plugins/plugins-home.pl?method=tool">Tool Plugins</a></dt>
+    <dd>Use tool plugins</dd>
+    [% END %]
+
 </dl>
 </div>
 <div class="yui-u">

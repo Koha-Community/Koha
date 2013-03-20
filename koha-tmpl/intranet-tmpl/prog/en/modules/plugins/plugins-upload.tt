@@ -1,0 +1,55 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Tools &rsaquo; Plugins &rsaquo; Upload Plugin
+ </title>
+[% INCLUDE 'doc-head-close.inc' %]
+[% INCLUDE 'calendar.inc' %]
+</head>
+
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'circ-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a>
+&rsaquo; <a href="/cgi-bin/koha/plugins/plugins-home.pl">Plugins</a>
+&rsaquo; Upload Plugins
+</div>
+
+<div id="doc3" class="yui-t2">
+    <div id="bd">
+        <div id="yui-main">
+    <div class="yui-b">
+        <div class="yui-g">
+            <div class="yui-u first">
+                <h1>Upload Koha Plugin</h1>
+                [% IF ( ERRORS ) %]
+                <div class="dialog alert">
+                    [% FOREACH ERROR IN ERRORS %]
+                        [% IF ( ERROR.NOTKPZ ) %]<li><b>The upload file does not appear to be a kpz file.  The extention is not '.kpz'.</b></li>
+                        [% ELSIF ( ERROR.NOWRITETEMP ) %]<li><b>This script is not able to create/write to the necessary temporary directory.</b></li>
+                        [% ELSIF ( ERROR.EMPTYUPLOAD ) %]<li><b>The upload file appears to be empty.</b></li>
+                        [% ELSIF ( ERROR.UZIPFAIL ) %]<li><b>[% ERROR.UZIPFAIL %] failed to unpack.<br />Please verify the integrity of the zip file and retry.</b></li>
+                        [% ELSIF ( ERROR.NOWRITEPLUGINS ) %]<li><b>Cannot unpack file to the plugins directory.<br />Please verify that the Apache user can write to the plugins directory.</b></li>
+                        [% ELSE %]<li><b>[% ERROR.CORERR %] An unknown error has occurred.<br />Please review the error log for more details.</b></li>[% END %]
+                    [% END %]
+                </div>
+                [% END %]
+                <form method="post" action="/cgi-bin/koha/plugins/plugins-upload.pl" enctype="multipart/form-data">
+                    <fieldset class="brief">
+                         <div class="hint"><b>NOTE:</b> Only KPZ file format is supported.</div>
+                        <ol>
+                            <li>
+                                <label for="uploadfile">Select the file to upload: </label><input type="file" id="uploadfile" name="uploadfile" />
+                            </li>
+                        </ol>
+                    </fieldset>
+                    <fieldset class="action">
+                        <input type="hidden" name="op" value="Upload" />
+                        <input type="submit" value="Upload" class="submit" />
+                    </fieldset>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

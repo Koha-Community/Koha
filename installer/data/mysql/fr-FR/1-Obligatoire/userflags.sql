@@ -16,3 +16,4 @@ INSERT INTO `userflags` VALUES(13,'tools','Outils (export, import, impression de
 INSERT INTO `userflags` VALUES(14,'editauthorities','Gestion des autorités',0);
 INSERT INTO `userflags` VALUES(15,'serials','Gestion du module périodique',0);
 INSERT INTO `userflags` VALUES(16,'reports','Accès aux statistiques',0);
+INSERT INTO `userflags` VALUES(19, 'plugins', 'Koha plugins', '0');
