@@ -6550,7 +6550,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.11.00.XXX";
+$DBversion = "3.11.00.103";
 if ( CheckVersion($DBversion) ) {
     $dbh->do("DELETE FROM systempreferences WHERE variable = 'insecure';");
     print "Upgrade to $DBversion done (Bug 9827 - Remove 'insecure' system preference)\n";
