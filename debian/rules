@@ -100,6 +100,7 @@ override_dh_auto_install:
 		   -e 's:url(.*/skin.css.*):url(skin.css):' \
 		$(TMP)/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/css/staff-global*.css
 	mkdir -p $(TMP)/debian/tmp_docbook
+	xt/verify-debian-docbook.t
 	xsltproc --output $(TMP)/debian/tmp_docbook/ \
 	    /usr/share/xml/docbook/stylesheet/docbook-xsl/manpages/docbook.xsl \
 	    debian/docs/*.xml
