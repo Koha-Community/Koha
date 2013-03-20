@@ -124,7 +124,10 @@
         <input type="text" size="30" name="q" title="Enter search terms" value="" />
 [% IF ( expanded_options ) %]
         <!--   [% IF ( search_box.scan_index ) %]<input type="checkbox" name="scan" id="scan" value="1" /> Scan Indexes[% END %] -->
-        [% IF ( search_box.add_field ) %]<a href="JavaScript:add_field();" id="ButtonPlus" title="Add another field">[+]</a>[% END %]
+        [% IF ( !loop.first ) %]
+            <a class="ButtonPlus" name="ButtonPlus" title="Add another field">[+]</a>
+            <a class="ButtonLess" title="Remove field">[-]</a>
+        [% END %]
 [% END %]
         </p>
     [% END %]
@@ -335,12 +338,21 @@
 <script type="text/javascript" language="javascript">
     /* This function allows to display a new field to search.
     */
-    function add_field() {
-        var ButtonPlus = document.getElementById('ButtonPlus');
-        var line       = ButtonPlus.parentNode;
-        line.parentNode.appendChild(line.cloneNode(true));
-        line.removeChild(ButtonPlus);
-    }
+    $(document).on("click", '.ButtonPlus', function() {
+        $('.ButtonLess').show();
+        var thisLine = $(this).parent();
+        var newLine = thisLine.clone();
+        console.log(newLine);
+        newLine.find('input').val('');
+        thisLine.after(newLine);
+    });
+
+    $(document).on("click", '.ButtonLess', function() {
+        if($(this).parent().siblings().length <= 3 ) {
+           $('.ButtonLess').hide();
+        }
+        $(this).parent().remove();
+    });
 </script>
 
 </div>
