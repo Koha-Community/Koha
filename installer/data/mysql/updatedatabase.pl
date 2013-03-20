@@ -6631,7 +6631,7 @@ if ( CheckVersion($DBversion) ) {
 }
 
 
-$DBversion = "3.11.00.XXX";
+$DBversion = "3.11.00.106";
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     $dbh->do("INSERT INTO userflags (bit, flag, flagdesc, defaulton) VALUES ('19', 'plugins', 'Koha plugins', '0')");
     $dbh->do("INSERT INTO permissions (module_bit, code, description) VALUES
