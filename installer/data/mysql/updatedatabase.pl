@@ -6654,7 +6654,7 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.11.00.XXX";
+$DBversion = "3.11.00.107";
 if ( CheckVersion($DBversion) ) {
    $dbh->do("INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES ('TimeFormat','24hr','12hr|24hr','Defines the global time format for visual output.','Choice')");
    print "Upgrade to $DBversion done (Bug 9014: Add syspref TimeFormat)\n";
