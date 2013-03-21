@@ -3,11 +3,14 @@
 //<![CDATA[
 
 $(document).ready(function(){
-
-    var searchButton = new YAHOO.widget.Button("search");
-    var cancelButton = new YAHOO.widget.Button("cancel");
-    var clearButton = new YAHOO.widget.Button("clear");
-    var newButton = new YAHOO.widget.Button("createnew");
+    $("#clear").on("click",function(e){
+        e.preventDefault();
+        finderjumpfull('blinddetail-biblio-search.pl?authid=0&index=[% index %]');
+    });
+    $("#createnew").on("click",function(e){
+        e.preventDefault();
+        finderjumpfull('authorities.pl?index=[% index %]&authtypecode=[% authtypecode %]');
+    });
     // marclist
     $( "#value_any" ).autocomplete({
         source: function(request, response) {
@@ -99,7 +102,10 @@ function finderjumpfull(page)
 //]]>
 </script>
 
-
+<div id="toolbar" class="btn-toolbar">
+    <div class="btn-group"><a href="#" id="clear" class="btn btn-small"><i class="icon-remove-sign"></i> Clear field</a></div>
+    <div class="btn-group"><a href="#" id="createnew" class="btn btn-small"><i class="icon-plus"></i> Create new authority</a></div>
+</div>
 <form name="f" method="get" action="auth_finder.pl">
             <input type="hidden" name="source" value="[% source %]" />
             <input type="hidden" name="op" value="do_search" />
@@ -195,10 +201,6 @@ function finderjumpfull(page)
             </ol>
         </fieldset>
         [% END %]
-        <fieldset class="action"> <input type="submit" value="Start search" class="submit" id="search" /> <a id="cancel" class="cancel close" href="#">Cancel</a>
-        <span id="authfinderops">
-        <a href="javascript:finderjumpfull('blinddetail-biblio-search.pl?authid=0&amp;index=[% index %]')" id="clear" class="button">Clear field</a>
-        <a href="javascript:finderjumpfull('authorities.pl?index=[% index %]&authtypecode=[% authtypecode %]')" id="createnew" class="button">Create new</a>
-        </span>
+        <fieldset class="action"> <input type="submit" value="Search" class="submit" id="search" /> <a id="cancel" class="cancel close" href="#">Cancel</a>
         </fieldset>
 </form>
