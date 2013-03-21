@@ -119,7 +119,7 @@ sub checkpw_ldap {
     $userldapentry = $search->shift_entry;
 
     # Perform a LDAP bind for the given username using the matched DN
-    my $res = $db->bind( $userldapentry->dn, password => $password );
+    $res = $db->bind( $userldapentry->dn, password => $password );
     if ( $res->code ) {
       $debug and warn "LDAP bind failed as kohauser $userid: ". description($res);
       return 0;
