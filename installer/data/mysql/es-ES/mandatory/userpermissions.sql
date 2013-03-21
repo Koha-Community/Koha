@@ -53,6 +53,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (15, 'routing', 'Routing'),
    (16, 'execute_reports', 'Execute SQL reports'),
    (16, 'create_reports', 'Create SQL Reports'),
+   (19, 'manage', 'Manage plugins ( install / uninstall )'),
    (19, 'tool', 'Use tool plugins'),
    (19, 'report', 'Use report plugins'),
    (19, 'configure', 'Configure plugins')
