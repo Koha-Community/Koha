@@ -33,16 +33,9 @@
                 <div class="yui-g">
 
                     <div id="toolbar">
-                        <script type="text/javascript">
-                        //<![CDATA[
-                            $(document).ready(function(){
-                                newCourseButton = new YAHOO.widget.Button("new_course");
-                            });
-                        //]]>
-                        </script>
                         <ul class="toolbar">
                             [% IF ( CAN_user_coursereserves_manage_courses ) %]
-                            <li><a id="new_course" href="/cgi-bin/koha/course_reserves/course.pl">New course</a></li>
+                            <li><a class="btn" id="new_course" href="/cgi-bin/koha/course_reserves/course.pl">New course</a></li>
                             [% END %]
                         </ul>
                     </div><!-- /toolbar -->

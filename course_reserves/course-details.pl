@@ -36,17 +36,16 @@ my $course_id = $cgi->param('course_id');
 my $flagsrequired;
 $flagsrequired->{coursereserves} = 'delete_reserves' if ( $action eq 'del_reserve' );
 
+my $tmpl = ( $course_id ) ? "course-details.tt" : "invalid-course.tt";
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "course_reserves/course-details.tmpl",
+        template_name   => "course_reserves/$tmpl",
         query           => $cgi,
         type            => "intranet",
         authnotrequired => 0,
         flagsrequired   => $flagsrequired,
     }
 );
-
-die("No course_id given") unless ($course_id);
 
 if ( $action eq 'del_reserve' ) {
     DelCourseReserve( cr_id => $cgi->param('cr_id') );

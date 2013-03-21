@@ -36,15 +36,14 @@ my $action    = $cgi->param('action')    || '';
 my $course_id = $cgi->param('course_id') || '';
 my $barcode   = $cgi->param('barcode')   || '';
 
-die('No course_id provided') unless ($course_id);
-
 my $item = GetBiblioFromItemNumber( undef, $barcode );
 
 my $step = ( $action eq 'lookup' && $item ) ? '2' : '1';
 
+my $tmpl = ( $course_id ) ? "add_items-step$step.tt" : "invalid-course.tt";
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "course_reserves/add_items-step$step.tmpl",
+        template_name   => "course_reserves/$tmpl",
         query           => $cgi,
         type            => "intranet",
         authnotrequired => 0,

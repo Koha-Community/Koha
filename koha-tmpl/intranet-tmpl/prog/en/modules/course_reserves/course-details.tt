@@ -31,10 +31,6 @@
                 <script type="text/javascript">
                 //<![CDATA[
                     $(document).ready(function(){
-                        addItemsButton     = new YAHOO.widget.Button("add_items");
-                        editCourseButton   = new YAHOO.widget.Button("edit_course");
-                        deleteCourseButton = new YAHOO.widget.Button("delete_course");
-
                         deleteCourseButton.on("click", confirmDelete );
                     });
 
@@ -47,9 +43,9 @@
                 //]]>
                 </script>
                 <ul class="toolbar">
-                    [% IF CAN_user_coursereserves_add_reserves %]<li><a id="add_items" href="/cgi-bin/koha/course_reserves/add_items.pl?course_id=[% course.course_id %]">Add reserves</a></li>[% END %]
-                    [% IF ( CAN_user_coursereserves_manage_courses ) %]<li><a id="edit_course" href="/cgi-bin/koha/course_reserves/course.pl?course_id=[% course.course_id %]">Edit course</a></li>[% END %]
-                    [% IF ( CAN_user_coursereserves_manage_courses ) %]<li><a id="delete_course" href="/cgi-bin/koha/course_reserves/mod_course.pl?course_id=[% course.course_id %]&action=del">Delete course</a></li>[% END %]
+                    [% IF CAN_user_coursereserves_add_reserves %]<li><a class="btn" id="add_items" href="/cgi-bin/koha/course_reserves/add_items.pl?course_id=[% course.course_id %]">Add reserves</a></li>[% END %]
+                    [% IF ( CAN_user_coursereserves_manage_courses ) %]<li><a class="btn" id="edit_course" href="/cgi-bin/koha/course_reserves/course.pl?course_id=[% course.course_id %]">Edit course</a></li>[% END %]
+                    [% IF ( CAN_user_coursereserves_manage_courses ) %]<li><a class="btn" id="delete_course" href="/cgi-bin/koha/course_reserves/mod_course.pl?course_id=[% course.course_id %]&action=del">Delete course</a></li>[% END %]
                 </ul>
             </div><!-- /toolbar -->
 

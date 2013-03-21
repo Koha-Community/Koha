@@ -14,6 +14,10 @@ function _(s) { return s; } // dummy function for gettext
 
     $(".focus").focus();
     $(".validated").validate();
+
+    $('.noEnterSubmit').keypress(function(e){
+        if ( e.which == 13 ) return false;
+    });
 });
 
 // http://jennifermadden.com/javascript/stringEnterKeyDetector.html
