@@ -26,10 +26,6 @@ use base qw{Module::Bundled::Files};
 use C4::Context;
 use C4::Auth;
 
-BEGIN {
-    push @INC, C4::Context->config("pluginsdir");
-}
-
 =head1 NAME
 
 C4::Plugins::Base - Base Module for plugins
