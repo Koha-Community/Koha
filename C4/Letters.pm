@@ -30,7 +30,6 @@ use C4::Log;
 use C4::SMS;
 use C4::Debug;
 use Koha::DateUtils;
-
 use Date::Calc qw( Add_Delta_Days );
 use Encode;
 use Carp;
@@ -614,8 +613,7 @@ sub _parseletter {
     }
 
     if ($letter->{content} && $letter->{content} =~ /<<today>>/) {
-        my @da = localtime();
-        my $todaysdate = "$da[2]:$da[1]  " . C4::Dates->today();
+        my $todaysdate = output_pref( DateTime->now() );
         $letter->{content} =~ s/<<today>>/$todaysdate/go;
     }
 

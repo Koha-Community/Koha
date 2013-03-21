@@ -86,10 +86,10 @@ my $estimateddeliverydateto_dt = $estimateddeliverydateto
 
 # Format the output of "date from" and "date to"
 if ($estimateddeliverydatefrom_dt) {
-    $estimateddeliverydatefrom = output_pref($estimateddeliverydatefrom_dt, undef, 1);
+    $estimateddeliverydatefrom = output_pref($estimateddeliverydatefrom_dt, undef, undef, 1);
 }
 if ($estimateddeliverydateto_dt) {
-    $estimateddeliverydateto = output_pref($estimateddeliverydateto_dt, undef, 1);
+    $estimateddeliverydateto = output_pref($estimateddeliverydateto_dt, undef, undef, 1);
 }
 
 my $branch     = $input->param('branch');

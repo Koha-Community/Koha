@@ -2415,8 +2415,8 @@ sub IssueSlip {
         elsif ((substr $it->{'date_due'}, 0, 10) le $now) {
             $it->{'overdue'} = 1;
         }
-
-        $it->{'date_due'}=format_date($it->{'date_due'});
+        my $dt = dt_from_string( $it->{'date_due'} );
+        $it->{'date_due'} = output_pref( $dt );;
     }
     my @issues = sort { $b->{'timestamp'} <=> $a->{'timestamp'} } @$issueslist;
 
