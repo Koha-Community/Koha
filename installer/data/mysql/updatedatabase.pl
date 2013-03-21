@@ -6556,6 +6556,7 @@ if ( CheckVersion($DBversion) ) {
     print "Upgrade to $DBversion done (Bug 9827 - Remove 'insecure' system preference)\n";
     SetVersion($DBversion);
 }
+
 $DBversion = "3.11.00.XXX";
 if ( CheckVersion($DBversion) ) {
    $dbh->do("INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES('DisplayIconsXSLT', '1', '', 'If ON, displays the format, audience, and material type icons in XSLT MARC21 results and detail pages.', 'YesNo');");
@@ -6700,6 +6701,7 @@ sub TableExists {
 Drop all foreign keys of the table $table
 
 =cut
+
 sub DropAllForeignKeys {
     my ($table) = @_;
     # get the table description
