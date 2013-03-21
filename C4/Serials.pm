@@ -2746,6 +2746,7 @@ sub subscriptionCurrentlyOnOrder {
         SELECT COUNT(*) FROM aqorders
         WHERE subscriptionid = ?
             AND datereceived IS NULL
+            AND datecancellationprinted IS NULL
     |;
     my $sth = $dbh->prepare( $query );
     $sth->execute($subscriptionid);

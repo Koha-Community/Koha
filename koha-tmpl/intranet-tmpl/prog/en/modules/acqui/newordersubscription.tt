@@ -22,7 +22,6 @@
     $(document).ready(function() {
         $("#srlt").dataTable($.extend(true, {}, dataTablesDefaults, {
             "aoColumnDefs": [
-                { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
                 [% IF (dateformat == 'metric') %]
                     { "aTargets": [ -2 ], "sType": "uk_date" },
                 [% END %]
@@ -95,10 +94,12 @@
                                 <td>
                                     [% IF (sub.alreadyOnOrder) %]
                                         Outstanding order (only one order per subscription is allowed)
-                                    [% ELSE %]
+                                    [% ELSIF not sub.aqbooksellerid || booksellerid == sub.aqbooksellerid%]
                                         <a href="/cgi-bin/koha/acqui/neworderempty.pl?booksellerid=[% booksellerid %]&amp;basketno=[% basketno %]&amp;biblionumber=[% sub.biblionumber %]&amp;subscriptionid=[% sub.subscriptionid %]" title="Order this one">
                                             Order
                                         </a>
+                                    [% ELSE %]
+                                        <a title="This subscription depends on another supplier" style="cursor:help">Not orderable</a>
                                     [% END %]
                                 </td>
                             </tr>
