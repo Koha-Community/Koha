@@ -713,6 +713,8 @@ sub GetBudgetByCode {
         SELECT *
         FROM aqbudgets
         WHERE budget_code = ?
+        ORDER BY budget_id DESC
+        LIMIT 1
     };
     my $sth = $dbh->prepare( $query );
     $sth->execute( $budget_code );
