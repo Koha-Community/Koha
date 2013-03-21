@@ -46,6 +46,11 @@ my $result = GetOptions(
     'v'      => \$verbose,
     );
 
+# warn and exit if we're running UNIMARC
+if (C4::Context->preference('MARCFLAVOUR') eq 'UNIMARC') {
+    print "This script is useless when you're running UNIMARC\n";
+    exit 0;
+}
 if ( ! $result || $show_help ) {
     print_usage();
     exit 0;
