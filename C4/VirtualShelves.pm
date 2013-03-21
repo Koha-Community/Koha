@@ -597,16 +597,25 @@ sub ShelvesMax {
     return SHELVES_MASTHEAD_MAX;
 }
 
+=head2 HandleDelBorrower
+
+     HandleDelBorrower($borrower);
+
+When a member is deleted (DelMember in Members.pm), you should call me first.
+This routine deletes/moves lists and entries for the deleted member/borrower.
+You could just delete everything (and lose more than you want), but instead we
+now try to save all public/shared stuff and keep others happy.
+
+=cut
+
 sub HandleDelBorrower {
-#when a member is deleted (DelMember in Members.pm), you should call me first
-#this routine deletes/moves lists and entries for the deleted member/borrower
-#you could just delete everything (and lose more than you want)
-#instead we now try to save all public/shared stuff and keep others happy
     my ($borrower)= @_;
     my $query;
     my $dbh = C4::Context->dbh;
 
     #Delete shares of this borrower (not lists !)
+    #Although this would be done later via the FK cascaded delete, we do it now.
+    #Because it makes the following delete statement on shelves more meaningful.
     $query="DELETE FROM virtualshelfshares WHERE borrowernumber=?";
     $dbh->do($query,undef,($borrower));
 
