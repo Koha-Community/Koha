@@ -376,8 +376,9 @@ sub ModCourseInstructors {
     return unless ( $cardnumbers || $borrowernumbers );
     return if ( $cardnumbers && $borrowernumbers );
 
-    my @cardnumbers = @$cardnumbers if ( ref($cardnumbers) eq 'ARRAY' );
-    my @borrowernumbers = @$borrowernumbers
+    my (@cardnumbers, @borrowernumbers);
+    @cardnumbers = @$cardnumbers if ( ref($cardnumbers) eq 'ARRAY' );
+    @borrowernumbers = @$borrowernumbers
       if ( ref($borrowernumbers) eq 'ARRAY' );
 
     my $field  = (@cardnumbers) ? 'cardnumber' : 'borrowernumber';

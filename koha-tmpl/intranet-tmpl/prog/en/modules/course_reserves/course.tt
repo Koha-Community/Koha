@@ -55,7 +55,7 @@ $(document).ready(function(){
 });
 
 function AddInstructor( name, cardnumber ) {
-    div = "<div id='borrower_" + cardnumber + "'>" + name + " ( <a href='#' onclick='RemoveInstructor(" + cardnumber + ");'> Remove </a> ) <input type='hidden' name='instructors' value='" + cardnumber + "' /></div>";
+    div = "<div id='borrower_" + cardnumber + "'>" + name + " ( <a href='#' onclick='RemoveInstructor(" + cardnumber + ");return false;'> Remove </a> ) <input type='hidden' name='instructors' value='" + cardnumber + "' /></div>";
     $('#instructors').append( div );
 
     $('#find_instructor').val('').focus();
