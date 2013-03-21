@@ -56,6 +56,13 @@ $(document).ready(function() {
                         // Remove potential previous input added
                         $(current_column).find("input").remove();
                         $(current_column).append("<input type='hidden' name='"+name+"' value='"+val+"' />");
+                    } else if ( i == 2 ) {
+                        // If the value is not an integer for "Current checkouts allowed"
+                        // The value is "Unlimited" (or an equivalent translated string)
+                        // an it should be set to an empty string
+                        if( !((parseFloat(itm) == parseInt(itm)) && !isNaN(itm)) ) {
+                            $(current_column).find("input[type='text']").val("");
+                        }
                     }
                 } else {
                     // specific processing for the Hard due date column
