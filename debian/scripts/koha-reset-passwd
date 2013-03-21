@@ -45,7 +45,7 @@ eof
 
 for userid in "$@"
 do
-    password="$(pwgen -1)"
+    password="$(pwgen 12 1)"
     digest="$(pwdigest $password)"
     echo "$userid $password"
     echo "UPDATE borrowers SET password = '$digest' WHERE userid = '$userid';" \
