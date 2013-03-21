@@ -349,6 +349,23 @@ Circulation:
                   no: "do not ask"
             - "for confirmation."
         -
+            - By default, set the LOST value of an item to
+            - pref: DefaultLongOverdueLostValue
+              class: integer
+            - when the item has been overdue for more than
+            - pref: DefaultLongOverdueDays
+              class: integer
+            - days.
+            - <br>WARNING — These preferences will activate the automatic item loss process. Leave these fields empty if you don't want to activate this feature.
+            - "<br>Example: [1] [30] Sets an item to the LOST value 1 when it has been overdue for more than 30 days."
+            - <br>(Used when the longoverdue.pl script is called without the --lost parameter)
+        -
+            - "Charge a lost item to the borrower's account when the LOST value of the item changes to :"
+            - pref: DefaultLongOverdueChargeValue
+              class: integer
+            - <br>Leave this field empty if you don't want to charge the user for lost items.
+            - <br>(Used when the longoverdue.pl script is called without the --charge parameter)
+        -
             - On checkin route the returned item to
             - pref: HomeOrHoldingBranchReturn
               type: choice

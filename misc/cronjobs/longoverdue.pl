@@ -108,8 +108,21 @@ ENDUSAGE
 # FIXME: allow --help or -h
 # 
 if ( ! defined($lost) ) {
-    print $usage;
-    die "ERROR: No --lost (-l) option defined";
+    my $longoverdue_value = C4::Context->preference('DefaultLongOverdueLostValue');
+    my $longoverdue_days = C4::Context->preference('DefaultLongOverdueDays');
+    if(defined($longoverdue_value) and defined($longoverdue_days) and $longoverdue_value ne '' and $longoverdue_days ne '' and $longoverdue_days >= 0) {
+        $lost->{$longoverdue_days} = $longoverdue_value;
+    }
+    else {
+        print $usage;
+        die "ERROR: No --lost (-l) option defined";
+    }
+}
+if ( ! defined($charge) ) {
+    my $charge_value = C4::Context->preference('DefaultLongOverdueChargeValue');
+    if(defined($charge_value) and $charge_value ne '') {
+        $charge = $charge_value;
+    }
 }
 unless ($confirm) {
     $verbose = 1;     # If you're not running it for real, then the whole point is the print output.
