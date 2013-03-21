@@ -1,4 +1,7 @@
 [% USE KohaDates %]
+[% IF ( export_remove_fields OR export_with_csv_profile ) %]
+   [% SET exports_enabled = 1 %]
+[% END %]
 [% USE KohaAuthorisedValues %]
 [% INCLUDE 'doc-head-open.inc' %]
 [% SET destination = "circ" %]
@@ -9,45 +12,57 @@
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
-[% IF ( UseTablesortForCirc ) %]<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>[% END %]
+[% IF ( UseTablesortForCirc ) %]<link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.min.js"></script>
+[% INCLUDE 'datatables-strings.inc' %]
+<script type="text/javascript" src="[% themelang %]/js/datatables.js"></script>[% END %]
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery-ui-timepicker-addon.js"></script>
 <script type="text/javascript">
 //<![CDATA[
+[% IF ( UseTablesortForCirc && dateformat == 'metric' ) %]dt_add_type_uk_date();[% END %]
 [% IF ( borrowernumber ) %]if($.cookie("holdfor") != [% borrowernumber %]){ $.cookie("holdfor",null, { path: "/", expires: 0 }); }[% ELSE %]$.cookie("holdfor",null, { path: "/", expires: 0 });[% END %]
-[% IF ( UseTablesortForCirc ) %]$.tablesorter.addParser({
-    id: 'articles',
-    is: function(s) {return false;  },
-    format: function(s) { return s.toLowerCase().replace(/^(the|an|a) /,''); },
-    type: 'text'
-});[% END %]
 [% UNLESS ( borrowernumber ) %][% UNLESS ( CGIselectborrower ) %]window.onload=function(){ $('#findborrower').focus(); };[% END %][% END %]
 	 $(document).ready(function() {
+        $('#patronlists').tabs([% IF ( UseTablesortForCirc ) %]{
+            // Correct table sizing for tables hidden in tabs
+            // http://www.datatables.net/examples/api/tabs_and_scrolling.html
+            "show": function(event, ui) {
+                var oTable = $('div.dataTables_wrapper>table', ui.panel).dataTable();
+                if ( oTable.length > 0 ) {
+                    oTable.fnAdjustColumnSizing();
+                }
+            }
+        }[% END %]);
+        [% IF ( UseTablesortForCirc ) %]
+        $("#issuest").dataTable($.extend(true, {}, dataTablesDefaults, {
+            "sDom": 't',
+            "aaSorting": [],
+            "aoColumnDefs": [
+                { "aTargets": [ -1, -2[% IF ( exports_enabled ) %], -3[% END %] ], "bSortable": false, "bSearchable": false }
+            ],
+            "aoColumns": [
+                { "sType": "title-string" },{ "sType": "html" },null,{ "sType": "title-string" },null,null,null,null,null,null[% IF ( exports_enabled ) %],null[% END %]
+            ],
+            "bPaginate": false
+        }));
 
-        $('#patronlists').tabs();
-		[% IF ( UseTablesortForCirc ) %]$.tablesorter.defaults.widgets = ['zebra'];
-		$("#issuest").tablesorter({[% IF ( dateformat_metric ) %]
-		dateFormat: 'uk',[% END %]
-		headers: { 1: { sorter: 'articles' },6: { sorter: false },7:{sorter:false},8:{sorter:false},9:{sorter:false}}
-		});
-		$("#relissuest").tablesorter({[% IF ( dateformat_metric ) %]
-		dateFormat: 'uk',[% END %]
-		headers: { 1: { sorter: 'articles' },6: { sorter: false },7:{sorter:false},8:{sorter:false},9:{sorter:false}}
-		});
+        $("#relissuest").dataTable($.extend(true, {}, dataTablesDefaults, {
+            "sDom": 't',
+            "aaSorting": [],
+            "aoColumns": [
+                { "sType": "title-string" },{ "sType": "html" },null,{ "sType": "title-string" },null,null,null,null,{ "sType": "html" }
+            ],
+            "bPaginate": false
+        }));
 
-		//FIXME: Sorting does not work when there are previous checkouts only
-		// (It works fine when there are only checkouts of the day, or both previous and today checkouts)
-		$("#issuest").bind("sortEnd",function() {
-        	$("#previous").parents("tr").remove();  // 'previous checkouts' header chokes table sorter
-	    });
-		$("#relissuest").bind("sortEnd",function() {
-		    $("#relprevious").parents("tr").remove();  // 'previous checkouts' header chokes table sorter
-		});
-		$("#holdst").tablesorter({[% IF ( dateformat_metric ) %]
-		dateFormat: 'uk',[% END %]
-			sortList: [[0,0]],
-			headers: { 1: { sorter: 'articles' },5: { sorter: false }}
-		});[% END %]
+        $("#issuest").on("sort",function() {
+            $("#previous").hide();  // Don't want to see "previous checkouts" header sorted with other rows
+        });
+        $("#relissuest").on("sort",function() {
+            $("#relprevious").hide();  // Don't want to see "previous checkouts" header sorted with other rows
+        });
+        [% END %]
         [% IF ( AllowRenewalLimitOverride ) %]
         $( '#override_limit' ).click( function () {
             if ( this.checked ) {
@@ -788,11 +803,11 @@ No patron matched <span class="ex">[% message %]</span>
         <th scope="col">Price</th>
         <th scope="col">Renew <p class="column-tool"><a href="#" id="CheckAllitems">select all</a> | <a href="#" id="CheckNoitems">none</a></p></th>
         <th scope="col">Check in <p class="column-tool"><a href="#" id="CheckAllreturns">select all</a> | <a href="#" id="CheckNoreturns">none</a></p></th>
-        [% IF export_remove_fields OR export_with_csv_profile %]
+        [% IF ( exports_enabled ) %]
           <th scope="col">Export <p class="column-tool"><a href="#" id="CheckAllexports">select all</a> | <a href="#" id="CheckNoexports">none</a></p></th>
         [% END %]
-    </tr>
-[% IF ( todayissues ) %]</thead>
+    </tr></thead>
+[% IF ( todayissues ) %]
 [% INCLUDE 'checkouts-table-footer.inc' %]
 	<tbody>
 
@@ -803,11 +818,11 @@ No patron matched <span class="ex">[% message %]</span>
     <tr class="highlight">
     [% END %]
         [% IF ( todayissue.od ) %]<td class="od">[% ELSE %]<td>[% END %]
-        [% todayissue.dd %]
+        <span title="[% todayissue.dd_sort %]">[% todayissue.dd %]</span>
         </td>
         <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% todayissue.biblionumber %]&amp;type=intra"><strong>[% todayissue.title |html %]</strong></a>[% IF ( todayissue.author ) %], by [% todayissue.author %][% END %][% IF ( todayissue.itemnotes ) %]- <span class="circ-hlt">[% todayissue.itemnotes %]</span>[% END %] <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% todayissue.biblionumber %]&amp;itemnumber=[% todayissue.itemnumber %]#item[% todayissue.itemnumber %]">[% todayissue.barcode %]</a></td>
         <td>[% UNLESS ( noItemTypeImages ) %] [% IF ( todayissue.itemtype_image ) %]<img src="[% todayissue.itemtype_image %]" alt="" />[% END %][% END %][% todayissue.itemtype %]</td>
-        <td>[% todayissue.checkoutdate %]</td>
+        <td><span title="[% todayissue.displaydate_sort %]">[% todayissue.checkoutdate %]</span></td>
         [% IF ( todayissue.multiple_borrowers ) %]<td>[% todayissue.firstname %] [% todayissue.surname %]</td>[% END %]
         <td>[% todayissue.issuingbranchname %]</td>
         <td>[% todayissue.itemcallnumber %]</td>
@@ -860,7 +875,7 @@ No patron matched <span class="ex">[% message %]</span>
             </td>
             [% END %]
         [% END %]
-        [% IF export_remove_fields OR export_with_csv_profile %]
+        [% IF ( exports_enabled ) %]
           <td style="text-align:center;">
             <input type="checkbox" id="export_[% todayissue.biblionumber %]" name="biblionumbers" value="[% todayissue.biblionumber %]" />
             <input type="checkbox" name="itemnumbers" value="[% todayissue.itemnumber %]" style="visibility:hidden;" />
@@ -869,12 +884,13 @@ No patron matched <span class="ex">[% message %]</span>
     </tr>
     [% END %] <!-- /loop todayissues -->
     <!-- /if todayissues -->[% END %]
+
 [% IF ( previssues ) %]
-[% IF ( todayissues ) %]<tr><th colspan="11"><a name="previous" id="previous"></a>Previous checkouts</th></tr>[% ELSE %]
-<tr><th class="{sorter: false}" colspan="11"><a name="previous" id="previous"></a>Previous checkouts</th></tr></thead>
-[% INCLUDE 'checkouts-table-footer.inc' %]
-	<tbody>
-[% END %]
+    [% UNLESS ( todayissues ) %]
+    [% INCLUDE 'checkouts-table-footer.inc' %]
+        <tbody>
+    [% END %]
+    [% IF ( UseTablesortForCirc ) %]<tr id="previous"><th><span title="">Previous checkouts</span></th><th></th><th></th><th><span title=""></span></th><th></th><th></th><th></th><th></th><th></th><th></th>[% IF ( exports_enabled ) %]<th></th>[% END %]</tr>[% ELSE %]<tr id="previous">[% IF ( exports_enabled ) %]<th colspan="11">[% ELSE %]<th colspan="10">[% END %]Previous checkouts</th></tr>[% END %]
     [% FOREACH previssue IN previssues %]
     [% IF ( loop.odd ) %]
         <tr>
@@ -882,13 +898,13 @@ No patron matched <span class="ex">[% message %]</span>
         <tr class="highlight">
     [% END %]
         [% IF ( previssue.od ) %]<td class="od">[% ELSE %]<td>[% END %]
-        [% previssue.dd %]
+        <span title="[% previssue.dd_sort %]">[% previssue.dd %]</span>
         </td>
         <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% previssue.biblionumber %]&amp;type=intra"><strong>[% previssue.title |html %]</strong></a>[% IF ( previssue.author ) %], by [% previssue.author %][% END %] [% IF ( previssue.itemnotes ) %]- [% previssue.itemnotes %][% END %] <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% previssue.biblionumber %]&amp;itemnumber=[% previssue.itemnumber %]#item[% previssue.itemnumber %]">[% previssue.barcode %]</a></td>
         <td>
             [% previssue.itemtype %]
         </td>
-        <td>[% previssue.displaydate %]</td>
+        <td><span title="[% previssue.displaydate_sort %]">[% previssue.displaydate %]</span></td>
         [% IF ( previssue.multiple_borrowers ) %]<td>[% previssue.firstname %] [% previssue.surname %]</td>[% END %]
         <td>[% previssue.issuingbranchname %]</td>
         <td>[% previssue.itemcallnumber %]</td>
@@ -941,7 +957,7 @@ No patron matched <span class="ex">[% message %]</span>
             </td>
             [% END %]
         [% END %]
-        [% IF export_remove_fields OR export_with_csv_profile %]
+        [% IF ( exports_enabled ) %]
           <td style="text-align:center;">
             <input type="checkbox" id="export_[% previssue.biblionumber %]" name="biblionumbers" value="[% previssue.biblionumber %]" />
             <input type="checkbox" name="itemnumbers" value="[% previssue.itemnumber %]" style="visibility:hidden;" />
@@ -963,7 +979,7 @@ No patron matched <span class="ex">[% message %]</span>
         <input type="submit" name="renew_checked" value="Renew or Return checked items" />
         <input type="submit" id="renew_all" name="renew_all" value="Renew all" />
     </fieldset>
-        [% IF export_remove_fields OR export_with_csv_profile %]
+        [% IF ( exports_enabled ) %]
             <fieldset>
             <label for="export_formats"><b>Export checkouts using format:</b></label>
             <select name="export_formats" id="export_formats">
@@ -1013,10 +1029,10 @@ No patron matched <span class="ex">[% message %]</span>
     <tr class="highlight">
     [% END %]
         [% IF ( relissue.overdue ) %]<td class="od">[% ELSE %]<td>[% END %]
-            [% relissue.dd %]</td>
+            <span title="[% relissue.dd_sort %]">[% relissue.dd %]</span></td>
         <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% relissue.biblionumber %]&amp;type=intra"><strong>[% relissue.title |html %]</strong></a>[% IF ( relissue.author ) %], by [% relissue.author %][% END %][% IF ( relissue.itemnotes ) %]- <span class="circ-hlt">[% relissue.itemnotes %]</span>[% END %] <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% relissue.biblionumber %]&amp;itemnumber=[% relissue.itemnumber %]#item[% relissue.itemnumber %]">[% relissue.barcode %]</a></td>
         <td>[% UNLESS ( noItemTypeImages ) %] [% IF ( relissue.itemtype_image ) %]<img src="[% relissue.itemtype_image %]" alt="" />[% END %][% END %][% relissue.itemtype %]</td>
-        <td>[% relissue.displaydate %]</td>
+        <td><span title="[% relissue.displaydate_sort %]">[% relissue.displaydate %]</span></td>
         <td>[% relissue.issuingbranchname %]</td>
         <td>[% relissue.itemcallnumber %]</td>
         <td>[% relissue.charge %]</td>
@@ -1025,7 +1041,7 @@ No patron matched <span class="ex">[% message %]</span>
     [% END %] <!-- /loop relissues -->
     <!-- /if relissues -->[% END %]
 [% IF ( relprevissues ) %]
-<tr><th class="{sorter: false}" colspan="11"><a name="relprevious" id="relprevious"></a>Previous checkouts</th></tr>
+    [% IF ( UseTablesortForCirc ) %]<tr id="relprevious"><th><span title="">Previous checkouts</span></th><th></th><th></th><th><span title=""></span></th><th></th><th></th><th></th><th></th><th></th></tr>[% ELSE %]<tr id="relprevious"><th colspan="9">Previous checkouts</th></tr>[% END %]
     [% FOREACH relprevissue IN relprevissues %]
     [% IF ( loop.odd ) %]
         <tr>
@@ -1033,11 +1049,11 @@ No patron matched <span class="ex">[% message %]</span>
         <tr class="highlight">
     [% END %]
         [% IF ( relprevissue.overdue ) %]<td class="od">[% ELSE %]<td>[% END %]
-        [% relprevissue.dd %]
+        <span title="[% relprevissue.dd_sort %]">[% relprevissue.dd %]</span>
         </td>
         <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% relprevissue.biblionumber %]&amp;type=intra"><strong>[% relprevissue.title |html %]</strong></a>[% IF ( relprevissue.author ) %], by [% relprevissue.author %][% END %] [% IF ( relprevissue.itemnotes ) %]- [% relprevissue.itemnotes %][% END %] <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% relprevissue.biblionumber %]&amp;itemnumber=[% relprevissue.itemnumber %]#item[% relprevissue.itemnumber %]">[% relprevissue.barcode %]</a></td>
         <td>[% UNLESS noItemTypeImages %][% IF relprevissue.itemtype_image %]<img src="[% relprevissue.itemtype_image %]" alt="" />[% END %][% END %][% relprevissue.itemtype %]</td>
-        <td>[% relprevissue.displaydate %]</td>
+        <td><span title="[% relprevissue.displaydate_sort %]">[% relprevissue.displaydate %]</span></td>
         <td>[% relprevissue.issuingbranchname %]</td>
         <td>[% relprevissue.itemcallnumber %]</td>
 	[% IF ( relprevissue.multiple_borrowers ) %]<td>[% relprevissue.firstname %] [% relprevissue.surname %]</td>[% END %]
