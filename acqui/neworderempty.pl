@@ -389,12 +389,13 @@ $template->param(
     total            => sprintf( "%.2f", ($data->{ecost} || 0) * ($data->{'quantity'} || 0) ),
     ecost            => sprintf( "%.2f", $data->{ecost} || 0),
     unitprice        => sprintf( "%.2f", $data->{unitprice} || 0),
-    notes            => $data->{'notes'},
     publishercode    => $data->{'publishercode'},
     barcode_subfield => $barcode_subfield,
     import_batch_id  => $import_batch_id,
     (uc(C4::Context->preference("marcflavour"))) => 1
 );
+
+$template->param ( notes => $data->{'notes'} ) if ( $ordernumber );
 
 output_html_with_http_headers $input, $cookie, $template->output;
 
