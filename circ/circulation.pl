@@ -466,7 +466,9 @@ sub build_issue_data {
         $totalprice += $it->{'replacementprice'} || 0;
         $it->{'itemtype'} = $itemtypeinfo->{'description'};
         $it->{'itemtype_image'} = $itemtypeinfo->{'imageurl'};
+        $it->{'dd_sort'} = $it->{'date_due'};
         $it->{'dd'} = output_pref($it->{'date_due'});
+        $it->{'displaydate_sort'} = $it->{'issuedate'};
         $it->{'displaydate'} = output_pref($it->{'issuedate'});
         #$it->{'od'} = ( $it->{'date_due'} lt $todaysdate ) ? 1 : 0 ;
         $it->{'od'} = $it->{'overdue'};
