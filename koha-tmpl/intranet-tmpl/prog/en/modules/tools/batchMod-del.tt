@@ -3,7 +3,11 @@
 [% INCLUDE 'doc-head-close.inc' %]
 <script type="text/javascript" src="[% themelang %]/js/background-job-progressbar.js"></script>
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/pages/batchMod.css" />
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
+<script type="text/javascript" src="[% themelang %]/js/pages/batchMod.js"></script>
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.min.js"></script>
+[% INCLUDE 'datatables-strings.inc' %]
+<script type="text/javascript" src="[% themelang %]/js/datatables.js"></script>
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
 <script type="text/javascript">
 //<![CDATA[
@@ -16,7 +20,6 @@ for( x=0; x<allColumns.length; x++ ){
 }
 //]]>
 </script>
-<script type="text/javascript" src="[% themelang %]/js/pages/batchMod.js"></script>
 <!--[if IE]>
 <style type="text/css">#selections { display: none; }</style>
 <![endif]-->

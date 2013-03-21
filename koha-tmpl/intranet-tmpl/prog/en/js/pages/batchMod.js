@@ -97,10 +97,13 @@ function hideAllColumns(){
 
   $(document).ready(function() {
     hideColumns();
-    $("#itemst").tablesorter({
-      widgets : ['zebra'],
-      headers: {0:{sorter: false}}
-    });
+    $("#itemst").dataTable($.extend(true, {}, dataTablesDefaults, {
+        "sDom": 't',
+        "aoColumnDefs": [
+            { "aTargets": [ 0 ], "bSortable": false, "bSearchable": false }
+        ],
+        "bPaginate": false
+    }));
     $("#selectallbutton").click(function(){
       $("#itemst").checkCheckboxes();
       return false;
