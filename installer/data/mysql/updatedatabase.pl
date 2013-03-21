@@ -6671,6 +6671,14 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.11.00.109";
+if ( CheckVersion($DBversion) ) {
+   $dbh->do("INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES('DisplayIconsXSLT', '1', '', 'If ON, displays the format, audience, and material type icons in XSLT MARC21 results and detail pages.', 'YesNo');");
+   print "Upgrade to $DBversion done (Bug 9403: Add DisplayIconsXSLT)\n";
+   SetVersion ($DBversion);
+}
+
+
 
 =head1 FUNCTIONS
 
@@ -6694,6 +6702,7 @@ sub TableExists {
 Drop all foreign keys of the table $table
 
 =cut
+
 sub DropAllForeignKeys {
     my ($table) = @_;
     # get the table description
