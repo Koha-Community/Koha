@@ -3310,9 +3310,7 @@ sub LostItem{
         my $borrower = C4::Members::GetMemberDetails( $borrowernumber );
 
         if (C4::Context->preference('WhenLostForgiveFine')){
-            my $exemptfine=1;
-            my $dropbox=0;
-            my $fix = _FixOverduesOnReturn($borrowernumber, $itemnumber, $exemptfine, $dropbox);
+            my $fix = _FixOverduesOnReturn($borrowernumber, $itemnumber, 1, 0); # 1, 0 = exemptfine, no-dropbox
             defined($fix) or warn "_FixOverduesOnReturn($borrowernumber, $itemnumber...) failed!";  # zero is OK, check defined
         }
         if (C4::Context->preference('WhenLostChargeReplacementFee')){
