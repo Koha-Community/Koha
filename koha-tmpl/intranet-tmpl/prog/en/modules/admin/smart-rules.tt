@@ -59,16 +59,14 @@ $(document).ready(function() {
                     }
                 } else {
                     // specific processing for the Hard due date column
-                    var s = itm.split(' ');
-                    var select_value;
-                    if ( s[0] == "before" ) {
-                        select_value = -1
-                    } else if ( s[0] == "on" ) {
-                        select_value = 0
-                    } else if ( s[0] == "after" ) {
-                        select_value = 1
+                    var select_value = $(this).find("input[type='hidden'][name='hardduedatecomparebackup']").val();
+                    var input_value = '';
+                    if (typeof select_value === 'undefined'){
+                        select_value = '-1';
+                    }else {
+                        input_value = itm.split(' ')[1];
                     }
-                    $(current_column).find("input[type='text']").val(s[1]);
+                    $(current_column).find("input[type='text']").val(input_value);
                     $(current_column).find("select").val(select_value);
                 }
             });
@@ -178,13 +176,22 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
 							<td>
 							    [% rule.lengthunit %]
 							</td>
-                                                        <td>[% IF ( rule.hardduedate ) %]
-                                                               [% IF ( rule.hardduedatebefore ) %]before [% rule.hardduedate %]</td>
-                                                               [% ELSE %][% IF ( rule.hardduedateexact ) %]on [% rule.hardduedate %]</td>
-                                                                                 [% ELSE %][% IF ( rule.hardduedateafter ) %]after [% rule.hardduedate %]</td>[% END %]
-                                                                                 [% END %]
-                                                               [% END %]
-                                                            [% ELSE %]None defined[% END %]   
+                            <td>
+                              [% IF ( rule.hardduedate ) %]
+                                [% IF ( rule.hardduedatebefore ) %]
+                                  before [% rule.hardduedate %]
+                                  <input type="hidden" name="hardduedatecomparebackup" value="-1" />
+                                [% ELSIF ( rule.hardduedateexact ) %]
+                                  on [% rule.hardduedate %]
+                                  <input type="hidden" name="hardduedatecomparebackup" value="0" />
+                                [% ELSIF ( rule.hardduedateafter ) %]
+                                  after [% rule.hardduedate %]
+                                  <input type="hidden" name="hardduedatecomparebackup" value="1" />
+                                [% END %]
+                              [% ELSE %]
+                                None defined
+                              [% END %]
+                            </td>
 							<td>[% rule.fine %]</td>
 							<td>[% rule.chargeperiod %]</td>
 							<td>[% rule.firstremind %]</td>
