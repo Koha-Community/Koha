@@ -86,18 +86,22 @@ function verify_images() {
             });
             if (itemnumbers.length > 0) {
                 var action = $('select[name="itemselection_action"]', div).val();
-                var del = (action == 'delete') ? 1 : 0;
-                var url = '/cgi-bin/koha/tools/batchMod.pl?op=show';
-                if (action == 'delete') {
-                    url += '&del=1';
-                }
-                url += '&itemnumber=' + itemnumbers.join('&itemnumber=');
-                url += '&src=' + '[% "/cgi-bin/koha/catalogue/detail.pl?biblionumber=$biblionumber" |uri %]';
-                new_window = $("input[name='new_window']", div).attr('checked');
-                if (new_window) {
-                    window.open(url);
+                if (action.length > 0) {
+                    var del = (action == 'delete') ? 1 : 0;
+                    var url = '/cgi-bin/koha/tools/batchMod.pl?op=show';
+                    if (action == 'delete') {
+                        url += '&del=1';
+                    }
+                    url += '&itemnumber=' + itemnumbers.join('&itemnumber=');
+                    url += '&src=' + '[% "/cgi-bin/koha/catalogue/detail.pl?biblionumber=$biblionumber" |uri %]';
+                    new_window = $("input[name='new_window']", div).attr('checked');
+                    if (new_window) {
+                        window.open(url);
+                    } else {
+                        window.location.href = url;
+                    }
                 } else {
-                    window.location.href = url;
+                    alert(_("Please choose an action"));
                 }
             } else {
                 alert(_("Please select at least one item."));
@@ -436,13 +440,16 @@ function verify_images() {
 [% IF ( HTML5MediaEnabled ) %][% IF ( HTML5MediaSets ) %]<li><a href="#html5media">Play media</a></li>[% END %][% END %]
 </ul>
 
+[% items_table_block_iter = 0 %]
 [% BLOCK items_table %]
+    [% items_table_block_iter = items_table_block_iter + 1 %]
     [% IF (StaffDetailItemSelection) %]
         <a href="#" onclick="selectAllItems($(this).parent()); return false;">Select all</a> |
         <a href="#" onclick="deselectAllItems($(this).parent()); return false;">Deselect all</a> |
         <form onsubmit="itemSelectionExecuteAction($(this).parent()); return false;">
-            <label>Action:</label>
-            <select name="itemselection_action">
+            <label for="itemselection_action_[% items_table_block_iter %]">Action:</label>
+            <select id="itemselection_action_[% items_table_block_iter %]" name="itemselection_action">
+                <option value=""></option>
                 [% IF CAN_user_tools_items_batchdel %]
                     <option value="delete">Delete selected items</option>
                 [% END %]
@@ -451,8 +458,8 @@ function verify_images() {
                 [% END %]
             </select>
             <input type="submit" value="Go" />
-            <input type="checkbox" name="new_window" />
-            <label>Open in new window</label>
+            <input type="checkbox" id="new_window_[% items_table_block_iter %]" name="new_window" />
+            <label for="new_window_[% items_table_block_iter %]">Open in new window</label>
         </form>
     [% END %]
     <table>
