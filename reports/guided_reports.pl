@@ -17,8 +17,6 @@
 # with Koha; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-use strict;
-use warnings;
 
 use CGI;
 use Text::CSV;
@@ -106,6 +104,7 @@ elsif ( $phase eq 'Build new' ) {
         'savedreports' => get_saved_reports($filter),
         'usecache' => $usecache,
         'groups_with_subgroups'=> groups_with_subgroups($group, $subgroup),
+        dateformat => C4::Context->preference('dateformat'),
     );
 }
 
@@ -177,6 +176,8 @@ elsif ( $phase eq 'Update SQL'){
     if( $cache_expiry >= 2592000 ){
       push @errors, {cache_expiry => $cache_expiry};
     }
+
+    create_non_existing_group_and_subgroup($input, $group, $subgroup);
 
     if ($sql =~ /;?\W?(UPDATE|DELETE|DROP|INSERT|SHOW|CREATE)\W/i) {
         push @errors, {sqlerr => $1};
@@ -482,6 +483,9 @@ elsif ( $phase eq 'Save Report' ) {
     if( $cache_expiry && $cache_expiry >= 2592000 ){
       push @errors, {cache_expiry => $cache_expiry};
     }
+
+    create_non_existing_group_and_subgroup($input, $group, $subgroup);
+
     ## FIXME this is AFTER entering a name to save the report under
     if ($sql =~ /;?\W?(UPDATE|DELETE|DROP|INSERT|SHOW|CREATE)\W/i) {
         push @errors, {sqlerr => $1};
@@ -735,9 +739,9 @@ elsif ( $phase eq 'Create report from SQL' ) {
         $group = $input->param('report_group');
         $subgroup  = $input->param('report_subgroup');
         $template->param(
-            'sql'           => $input->param('sql'),
-            'reportname'    => $input->param('reportname'),
-            'notes'         => $input->param('notes'),
+            'sql'           => $input->param('sql') // '',
+            'reportname'    => $input->param('reportname') // '',
+            'notes'         => $input->param('notes') // '',
         );
     }
     $template->param(
@@ -790,13 +794,17 @@ sub groups_with_subgroups {
 
     my $groups_with_subgroups = get_report_groups();
     my @g_sg;
-    while (my ($g_id, $v) = each %$groups_with_subgroups) {
+    my @sorted_keys = sort {
+        $groups_with_subgroups->{$a}->{name} cmp $groups_with_subgroups->{$b}->{name}
+    } keys %$groups_with_subgroups;
+    foreach my $g_id (@sorted_keys) {
+        my $v = $groups_with_subgroups->{$g_id};
         my @subgroups;
         if (my $sg = $v->{subgroups}) {
-            while (my ($sg_id, $n) = each %$sg) {
+            foreach my $sg_id (sort { $sg->{$a} cmp $sg->{$b} } keys %$sg) {
                 push @subgroups, {
                     id => $sg_id,
-                    name => $n,
+                    name => $sg->{$sg_id},
                     selected => ($group && $g_id eq $group && $subgroup && $sg_id eq $subgroup ),
                 };
             }
@@ -809,4 +817,22 @@ sub groups_with_subgroups {
         };
     }
     return \@g_sg;
+}
+
+sub create_non_existing_group_and_subgroup {
+    my ($input, $group, $subgroup) = @_;
+
+    if (defined $group and $group ne '') {
+        my $report_groups = C4::Reports::Guided::get_report_groups;
+        if (not exists $report_groups->{$group}) {
+            my $groupdesc = $input->param('groupdesc') // $group;
+            C4::Koha::AddAuthorisedValue('REPORT_GROUP', $group, $groupdesc);
+        }
+        if (defined $subgroup and $subgroup ne '') {
+            if (not exists $report_groups->{$group}->{subgroups}->{$subgroup}) {
+                my $subgroupdesc = $input->param('subgroupdesc') // $subgroup;
+                C4::Koha::AddAuthorisedValue('REPORT_SUBGROUP', $subgroup, $subgroupdesc, $group);
+            }
+        }
+    }
 }
