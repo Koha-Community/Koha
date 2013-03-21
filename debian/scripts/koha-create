@@ -192,7 +192,7 @@ if [ "$op" = create ] || [ "$op" = request ] || [ "$op" = use ]
 then
     if [ "$mysqlpwd" = "" ]
     then
-        mysqlpwd="$(pwgen -1)"
+        mysqlpwd="$(pwgen -s 16 1)"
     fi
 else
     mysqlpwd="$(getinstancemysqlpassword $name)"
@@ -220,7 +220,7 @@ then
     koha-create-dirs "$name"
 
     # Generate Zebra database password.
-    zebrapwd="$(pwgen -s 12 1)"
+    zebrapwd="$(pwgen -s 16 1)"
     # Future enhancement: make this configurable for when your db is on
     # another server.
     mysql_hostname="localhost"
@@ -308,7 +308,7 @@ then
 
 
         # Change the default user's password.
-        staffpass="$(pwgen -1)"
+        staffpass="$(pwgen 12 1)"
         staffdigest=$(echo -n "$staffpass" |
                       perl -e '
                             use Digest::MD5 qw(md5_base64); 
