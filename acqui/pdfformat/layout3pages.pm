@@ -25,6 +25,7 @@ package pdfformat::layout3pages;
 use vars qw($VERSION @ISA @EXPORT);
 use Number::Format qw(format_price);
 use MIME::Base64;
+use List::MoreUtils qw/uniq/;
 use strict;
 use warnings;
 use utf8;
@@ -223,10 +224,10 @@ sub printbaskets {
         push(@$arrbasket, $bkey);
     }
     my ($grandtotalrrpgsti, $grandtotalrrpgste, $grandtotalgsti, $grandtotalgste, $grandtotalgstvalue, $grandtotaldiscount);
-    my @gst;
     # calculate each basket total
     push(@$abaskets, $arrbasket);
     for my $basket (@$hbaskets) {
+        my @gst;
         $arrbasket = undef;
         my ($totalrrpgste, $totalrrpgsti, $totalgste, $totalgsti, $totalgstvalue, $totaldiscount);
         my $ords = $orders->{$basket->{basketno}};
@@ -238,9 +239,9 @@ sub printbaskets {
             $totaldiscount += ($ord->{rrpgste} - $ord->{ecostgste} ) * $ord->{quantity};
             $totalrrpgste += $ord->{rrpgste} * $ord->{quantity};
             $totalrrpgsti += $ord->{rrpgsti} * $ord->{quantity};
-            push @gst, $ord->{gstrate} * 100
-                unless grep {$ord->{gstrate} * 100 == $_ ? $_ : ()} @gst;
+            push @gst, $ord->{gstrate};
         }
+        @gst = uniq map { $_ * 100 } @gst;
         $totalgsti = $num->round($totalgsti);
         $totalgste = $num->round($totalgste);
         $grandtotalrrpgste += $totalrrpgste;
