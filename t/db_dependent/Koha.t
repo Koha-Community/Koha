@@ -32,9 +32,7 @@ subtest 'Authorized Values Tests' => sub {
 
 
 # Insert an entry into authorised_value table
-    my $query = "INSERT INTO authorised_values (category, authorised_value, lib, lib_opac, imageurl) VALUES (?,?,?,?,?);";
-    my $sth = $dbh->prepare($query);
-    my $insert_success = $sth->execute($data->{category}, $data->{authorised_value}, $data->{lib}, $data->{lib_opac}, $data->{imageurl});
+    my $insert_success = AddAuthorisedValue($data->{category}, $data->{authorised_value}, $data->{lib}, $data->{lib_opac}, $data->{imageurl});
     ok($insert_success, "Insert data in database");
 
 
@@ -57,8 +55,8 @@ subtest 'Authorized Values Tests' => sub {
 
 # Clean up
     if($insert_success){
-        $query = "DELETE FROM authorised_values WHERE category=? AND authorised_value=? AND lib=? AND lib_opac=? AND imageurl=?;";
-        $sth = $dbh->prepare($query);
+        my $query = "DELETE FROM authorised_values WHERE category=? AND authorised_value=? AND lib=? AND lib_opac=? AND imageurl=?;";
+        my $sth = $dbh->prepare($query);
         $sth->execute($data->{category}, $data->{authorised_value}, $data->{lib}, $data->{lib_opac}, $data->{imageurl});
     }
 };
