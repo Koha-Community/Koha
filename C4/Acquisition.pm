@@ -494,7 +494,8 @@ sub GetBasketsInfosByBookseller {
           ) AS expected_items
         FROM aqbasket
           LEFT JOIN aqorders ON aqorders.basketno = aqbasket.basketno
-        WHERE booksellerid = ?
+        WHERE booksellerid = ? AND ( aqorders.quantity > aqorders.quantityreceived OR quantityreceived IS NULL)
+         AND datecancellationprinted IS NULL
         GROUP BY aqbasket.basketno
     };
     my $sth = $dbh->prepare($query);
