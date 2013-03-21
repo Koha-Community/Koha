@@ -6557,13 +6557,6 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.11.00.XXX";
-if ( CheckVersion($DBversion) ) {
-   $dbh->do("INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES('DisplayIconsXSLT', '1', '', 'If ON, displays the format, audience, and material type icons in XSLT MARC21 results and detail pages.', 'YesNo');");
-   print "Upgrade to $DBversion done (Bug 9403: Add DisplayIconsXSLT)\n";
-   SetVersion ($DBversion);
-}
-
 $DBversion = "3.11.00.104";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     print "Upgrade to $DBversion done (3.12-alpha2 release)\n";
@@ -6677,6 +6670,14 @@ if ( CheckVersion($DBversion) ) {
     print "WARNING about bug 7241: to partially correct the broken logs, the log history is filled with the first found item for each biblio.\n";
     SetVersion($DBversion);
 }
+
+$DBversion = "3.11.00.109";
+if ( CheckVersion($DBversion) ) {
+   $dbh->do("INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES('DisplayIconsXSLT', '1', '', 'If ON, displays the format, audience, and material type icons in XSLT MARC21 results and detail pages.', 'YesNo');");
+   print "Upgrade to $DBversion done (Bug 9403: Add DisplayIconsXSLT)\n";
+   SetVersion ($DBversion);
+}
+
 
 
 =head1 FUNCTIONS
