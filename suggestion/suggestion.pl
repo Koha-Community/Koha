@@ -104,11 +104,14 @@ my ( $template, $borrowernumber, $cookie, $userflags ) = get_template_and_user(
         }
     );
 
+$borrowernumber = $input->param('borrowernumber') if ( $input->param('borrowernumber') );
+$template->param('borrowernumber' => $borrowernumber);
+
 #########################################
 ##  Operations
 ##
 if ( $op =~ /save/i ) {
-	if ( $$suggestion_ref{"STATUS"} ) {
+        if ( $$suggestion_ref{"STATUS"} ) {
         if ( my $tmpstatus = lc( $$suggestion_ref{"STATUS"} ) =~ /ACCEPTED|REJECTED/i ) {
             $$suggestion_ref{ lc( $$suggestion_ref{"STATUS"}) . "date" } = C4::Dates->today;
             $$suggestion_ref{ lc( $$suggestion_ref{"STATUS"}) . "by" }   = C4::Context->userenv->{number};
@@ -123,7 +126,7 @@ if ( $op =~ /save/i ) {
         my $suggestions_loop =
             SearchSuggestion( $suggestion_ref );
         if (@$suggestions_loop>=1){
-            #some suggestion are answering the request Donot Add	
+            #some suggestion are answering the request Donot Add
         } 
         else {    
             ## Adding some informations related to suggestion
@@ -134,8 +137,8 @@ if ( $op =~ /save/i ) {
     map{delete $$suggestion_ref{$_}} keys %$suggestion_ref;
     $op = 'else';
 
-    if( $redirect ) {
-        print $input->redirect("/cgi-bin/koha/members/purchase-suggestions.pl?borrowernumber=$redirect");
+    if( $redirect eq 'purchase_suggestions' ) {
+        print $input->redirect("/cgi-bin/koha/members/purchase-suggestions.pl?borrowernumber=$borrowernumber");
     }
 
 }
@@ -160,20 +163,20 @@ elsif ($op eq "change" ) {
         $$suggestion_ref{"rejecteddate"}=C4::Dates->today;
         $$suggestion_ref{"rejectedby"}=C4::Context->userenv->{number};
     }
-	if ($$suggestion_ref{"STATUS"}){
-		$$suggestion_ref{"manageddate"}=C4::Dates->today;
-		$$suggestion_ref{"managedby"}=C4::Context->userenv->{number};
-	}
-	if ( my $reason = $$suggestion_ref{"reason$tabcode"}){
-		if ( $reason eq "other" ) {
-				$reason = $$suggestion_ref{"other_reason$tabcode"};
-		}
-		$$suggestion_ref{'reason'}=$reason;
-	}
-	delete $$suggestion_ref{$_} foreach ("reason$tabcode", "other_reason$tabcode");
- 	foreach (keys %$suggestion_ref){
-		delete $$suggestion_ref{$_} unless ($$suggestion_ref{$_});
-	}
+    if ($$suggestion_ref{"STATUS"}){
+        $$suggestion_ref{"manageddate"}=C4::Dates->today;
+        $$suggestion_ref{"managedby"}=C4::Context->userenv->{number};
+    }
+    if ( my $reason = $$suggestion_ref{"reason$tabcode"}){
+        if ( $reason eq "other" ) {
+                $reason = $$suggestion_ref{"other_reason$tabcode"};
+        }
+        $$suggestion_ref{'reason'}=$reason;
+    }
+    delete $$suggestion_ref{$_} foreach ("reason$tabcode", "other_reason$tabcode");
+     foreach (keys %$suggestion_ref){
+        delete $$suggestion_ref{$_} unless ($$suggestion_ref{$_});
+    }
     foreach my $suggestionid (@editsuggestions) {
         next unless $suggestionid;
         $$suggestion_ref{'suggestionid'}=$suggestionid;
@@ -277,7 +280,7 @@ $template->param(
 
 if(defined($returnsuggested) and $returnsuggested ne "noone")
 {
-	print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=".$returnsuggested."#suggestions");
+    print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=".$returnsuggested."#suggestions");
 }
 
 ####################
@@ -365,13 +368,13 @@ for ( my $i = 0 ; $i < $count ; $i++ ) {
     my %line;
     $line{currcode} = $rates[$i]->{'currency'};
     $line{rate}     = $rates[$i]->{'rate'};
-	$line{selected} = 1 if ($line{'currcode'} eq $selected_currency);
+    $line{selected} = 1 if ($line{'currcode'} eq $selected_currency);
     push @loop_currency, \%line;
 }
 $template->param(
-        loop_currency => \@loop_currency,
-	price        => sprintf("%.2f", $$suggestion_ref{'price'}||0),
-	total            => sprintf("%.2f", $$suggestion_ref{'total'}||0),
+    loop_currency => \@loop_currency,
+    price        => sprintf("%.2f", $$suggestion_ref{'price'}||0),
+    total            => sprintf("%.2f", $$suggestion_ref{'total'}||0),
 );
 
 # lists of distinct values (without empty) for filters
@@ -389,7 +392,6 @@ foreach my $field ( qw(managedby acceptedby suggestedby budgetid) ) {
     } @$values_list;
     $hashlists{ lc($field) . "_loop" } = \@codes_list;
 }
-$template->param(%hashlists);
 
 $template->param(
     %hashlists,

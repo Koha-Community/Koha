@@ -11,8 +11,6 @@
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.min.js"></script>
 [% INCLUDE 'datatables-strings.inc' %]
 <script type="text/javascript" src="[% themelang %]/js/datatables.js"></script>
-[% INCLUDE 'calendar.inc' %]
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
         $("#suggestions").dataTable($.extend(true, {}, dataTablesDefaults, {
@@ -46,7 +44,7 @@
 
                 <div id="toolbar">
                     <ul class="toolbar">
-                        <li><a id="newsuggestion" href="/cgi-bin/koha/suggestion/suggestion.pl?op=add&suggestedby=[% borrowernumber %]&redirect=[% borrowernumber %]">New purchase suggestion</a></li>
+                        <li><a id="newsuggestion" href="/cgi-bin/koha/suggestion/suggestion.pl?op=add&suggestedby=[% borrowernumber %]&redirect=purchase_suggestions&borrowernumber=[% borrowernumber %]">New purchase suggestion</a></li>
                     </ul>
                 </div>
 
