@@ -65,7 +65,7 @@ if ($add){
 					  query => $input,
 					  type => "intranet",
 					  authnotrequired => 0,
-                      flagsrequired => $flagsrequired,
+                      flagsrequired => { borrowers => 1, updatecharges => 'remaining_permissions' },
 					  debug => 1,
 					  });
 					  

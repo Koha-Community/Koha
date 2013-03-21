@@ -44,12 +44,13 @@ use C4::Members::Attributes qw(GetBorrowerAttributes);
 
 our $input = CGI->new;
 
+my $updatecharges_permissions = $input->param('woall') ? 'writeoff' : 'remaining_permissions';
 our ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {   template_name   => 'members/pay.tmpl',
         query           => $input,
         type            => 'intranet',
         authnotrequired => 0,
-        flagsrequired   => { borrowers => 1, updatecharges => 1 },
+        flagsrequired   => { borrowers => 1, updatecharges => $updatecharges_permissions },
         debug           => 1,
     }
 );

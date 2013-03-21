@@ -100,7 +100,7 @@ function enableCheckboxActions(){
     <td>
     [% IF ( line.amountoutstanding > 0 ) %]
         <input type="submit" name="pay_indiv_[% line.accountno %]" value="Pay" />
-        <input type="submit" name="wo_indiv_[% line.accountno %]" value="Write off" />
+        [% IF CAN_user_updatecharges_writeoff %]<input type="submit" name="wo_indiv_[% line.accountno %]" value="Write off" />[% END %]
     [% END %]
     <input type="hidden" name="itemnumber[% line.accountno %]" value="[% line.itemnumber %]" />
     <input type="hidden" name="description[% line.accountno %]" value="[% line.description %]" />
@@ -148,7 +148,7 @@ function enableCheckboxActions(){
 </table>
 <fieldset class="action">
 <input type="submit" id="paycollect" name="paycollect"  value="Pay amount" class="submit" />
-<input type="submit" name="woall"  id="woall" value="Write off all" class="submit" />
+[% IF CAN_user_updatecharges_writeoff %]<input type="submit" name="woall"  id="woall" value="Write off all" class="submit" />[% END %]
 <input type="submit" id="payselected" name="payselected"  value="Pay selected" class="submit" />
 <a class="cancel" href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% borrower.borrowernumber %]">Cancel</a>
 </fieldset>

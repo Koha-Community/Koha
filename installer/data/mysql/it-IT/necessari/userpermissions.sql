@@ -13,6 +13,8 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    ( 9, 'edit_catalogue', 'Cataloga (crea/modifica dati bibliografici e di copia)'),
    ( 9, 'fast_cataloging', 'Catalogazione veloce'),
    ( 9, 'edit_items', 'Crea/modifica copie'),
+   (10, 'writeoff', 'Write off charges'),
+   (10, 'remaining_permissions', 'Remaining updatecharges permissions'),
    (11, 'vendors_manage', 'Crea/modifica fornitori'),
    (11, 'contracts_manage', 'Crea/modifica contratti'),
    (11, 'period_manage', 'Gestisci scadenze budgets'),

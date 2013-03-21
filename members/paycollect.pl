@@ -31,12 +31,13 @@ use C4::Branch;
 
 my $input = CGI->new();
 
+my $updatecharges_permissions = $input->param('writeoff_individual') ? 'writeoff' : 'remaining_permissions';
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {   template_name   => 'members/paycollect.tmpl',
         query           => $input,
         type            => 'intranet',
         authnotrequired => 0,
-        flagsrequired   => { borrowers => 1, updatecharges => 1 },
+        flagsrequired   => { borrowers => 1, updatecharges => $updatecharges_permissions },
         debug           => 1,
     }
 );
