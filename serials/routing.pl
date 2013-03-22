@@ -74,7 +74,7 @@ my $serialdates = GetLatestSerials($subscriptionid,$count);
 my $dates = [];
 foreach my $dateseq (@{$serialdates}) {
     my $d = {};
-    $d->{planneddate} = $dateseq->{planneddate};
+    $d->{publisheddate} = $dateseq->{publisheddate};
     $d->{serialseq} = $dateseq->{serialseq};
     $d->{serialid} = $dateseq->{serialid};
     if($date_selected eq $dateseq->{serialid}){

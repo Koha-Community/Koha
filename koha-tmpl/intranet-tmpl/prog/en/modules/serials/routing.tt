@@ -43,7 +43,7 @@ function search_member(subscriptionid){
 		<li><label for="date_selected">Issue: </label>
 <select name="date_selected" id="date_selected">
 [% FOREACH date IN dates %]
-[% IF ( date.selected ) %]<option value="[% date.serialseq %] ([% date.planneddate %])" selected="selected">[% date.serialseq %] ([% date.planneddate %])</option>[% ELSE %]<option value="[% date.serialseq %] ([% date.planneddate %])">[% date.serialseq %] ([% date.planneddate %])</option>[% END %]
+[% IF ( date.selected ) %]<option value="[% date.serialseq %] ([% date.publisheddate %])" selected="selected">[% date.serialseq %] ([% date.publisheddate %])</option>[% ELSE %]<option value="[% date.serialseq %] ([% date.publisheddate %])">[% date.serialseq %] ([% date.publisheddate %])</option>[% END %]
 [% END %]
 </select> [% issue %]</li>
 
