@@ -58,7 +58,7 @@ sub run {
     my $cgi           = $args->{'cgi'};
 
     if ( can_load( modules => { $plugin_class => undef } ) ) {
-        my $plugin = $plugin_class->new( { cgi => $cgi } );
+        my $plugin = $plugin_class->new( { cgi => $cgi, enable_plugins => $args->{'enable_plugins'} } );
         if ( $plugin->can($plugin_method) ) {
             return $plugin->$plugin_method();
         } else {

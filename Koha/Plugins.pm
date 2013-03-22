@@ -63,7 +63,7 @@ sub GetPlugins {
 
     foreach my $plugin_class (@plugin_classes) {
         if ( can_load( modules => { $plugin_class => undef } ) ) {
-            my $plugin = $plugin_class->new();
+            my $plugin = $plugin_class->new({ enable_plugins => $self->{'enable_plugins'} });
 
             if ($method) {
                 if ( $plugin->can($method) ) {
