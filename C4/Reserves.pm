@@ -278,7 +278,6 @@ sub GetReservesFromBiblionumber {
     my ($biblionumber) = shift or return (0, []);
     my ($all_dates) = shift;
     my ($itemnumber) = shift;
-    warn "ITEMNUMBER: $itemnumber";
     my $dbh   = C4::Context->dbh;
 
     # Find the desired items in the reserves
@@ -303,7 +302,7 @@ sub GetReservesFromBiblionumber {
         WHERE biblionumber = ? ";
     push( @params, $biblionumber );
     unless ( $all_dates ) {
-        $query .= " AND reservedate <= CURRENT_DATE() ";
+        $query .= " AND reservedate <= CAST(NOW() AS DATE) ";
     }
     if ( $itemnumber ) {
         $query .= " AND ( itemnumber IS NULL OR itemnumber = ? )";
