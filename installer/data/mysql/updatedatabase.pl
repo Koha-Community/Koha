@@ -6528,14 +6528,6 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     print "Upgrade to $DBversion done (3.12-alpha release)\n";
 }
 
-$DBversion = "3.11.00.XXX";
-if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-    $dbh->do("ALTER TABLE `pending_offline_operations` CHANGE `barcode` `barcode` VARCHAR( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL");
-    $dbh->do("ALTER TABLE `pending_offline_operations` ADD `amount` DECIMAL( 28, 6 ) NULL DEFAULT NULL");
-    print "Upgrade to $DBversion done (Bug 8220 - Allow koc uploads to go to process queue)\n";
-    SetVersion ($DBversion);
-}
-
 $DBversion = "3.11.00.101";
 if ( CheckVersion($DBversion) ) {
    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('UNIMARCAuthorsFacetsSeparator',', ', 'UNIMARC authors facets separator', NULL, 'short')");
@@ -6681,6 +6673,14 @@ if ( CheckVersion($DBversion) ) {
    $dbh->do("INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES('DisplayIconsXSLT', '1', '', 'If ON, displays the format, audience, and material type icons in XSLT MARC21 results and detail pages.', 'YesNo');");
    print "Upgrade to $DBversion done (Bug 9403: Add DisplayIconsXSLT)\n";
    SetVersion ($DBversion);
+}
+
+$DBversion = "3.11.00.110";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do("ALTER TABLE pending_offline_operations CHANGE barcode barcode VARCHAR( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL");
+    $dbh->do("ALTER TABLE pending_offline_operations ADD amount DECIMAL( 28, 6 ) NULL DEFAULT NULL");
+    print "Upgrade to $DBversion done (Bug 8220 - Allow koc uploads to go to process queue)\n";
+    SetVersion ($DBversion);
 }
 
 
