@@ -841,7 +841,7 @@ sub GetLatestSerials {
     my $dbh = C4::Context->dbh;
 
     # status = 2 is "arrived"
-    my $strsth = "SELECT   serialid,serialseq, status, planneddate, notes
+    my $strsth = "SELECT   serialid,serialseq, status, planneddate, publisheddate, notes
                         FROM     serial
                         WHERE    subscriptionid = ?
                         AND      (status =2 or status=4)
@@ -853,6 +853,7 @@ sub GetLatestSerials {
     while ( my $line = $sth->fetchrow_hashref ) {
         $line->{ "status" . $line->{status} } = 1;                        # fills a "statusX" value, used for template status select list
         $line->{"planneddate"} = format_date( $line->{"planneddate"} );
+        $line->{"publisheddate"} = format_date( $line->{"publisheddate"} );
         push @serials, $line;
     }
 

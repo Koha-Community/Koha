@@ -597,7 +597,8 @@ function verify_images() {
             <table>
                 <tr>
                     <th>Issue #</th>
-                    <th>Date</th>
+                    <th>Date arrived</th>
+                    <th>Date published</th>
                     <th>Status</th>
                     <th>Note</th>
                 </tr>
@@ -605,6 +606,7 @@ function verify_images() {
                 <tr>
                     <td>[% latestserial.serialseq %]</td>
                     <td>[% latestserial.planneddate %]</td>
+                    <td>[% latestserial.publisheddate%]</td>
                     <td>
                       [% IF ( latestserial.status1 ) %]Expected[% END %]
                       [% IF ( latestserial.status2 ) %]Arrived[% END %]
