@@ -9,7 +9,7 @@
 <script language="JavaScript" type="text/javascript">
 //<![CDATA[
     [% IF (dateformat == 'metric') %]dt_add_type_uk_date();[% END %]
-	var weekdays = new Array(_("Sundays"),_("Mondays"),_("Tuesdays"),_("Wednesdays"),_("Thursdays"),_("Fridays"),_("Saturdays"));
+    var weekdays = new Array(_("Sundays"),_("Mondays"),_("Tuesdays"),_("Wednesdays"),_("Thursdays"),_("Fridays"),_("Saturdays"));
 
     /* Creates all the structures to deal with all diferents kinds of holidays */
     var week_days = new Array();
@@ -39,75 +39,75 @@
         formObject.submit();
     }
 
-	// This function shows the "Show Holiday" panel //
-	function showHoliday (exceptionPosibility, dayName, day, month, year, weekDay, title, description, holidayType) {
-		$("#newHoliday").slideUp("fast");
-		$("#showHoliday").slideDown("fast");
-		$('#showDaynameOutput').html(dayName);
-		$('#showDayname').val(dayName);
-		$('#showBranchNameOutput').html($("#branch :selected").text());
-		$('#showBranchName').val($("#branch").val());
-		$('#showDayOutput').html(day);
-		$('#showDay').val(day);
-		$('#showMonthOutput').html(month);
-		$('#showMonth').val(month);
-		$('#showYearOutput').html(year);
-		$('#showYear').val(year);
-		$('#showDescription').val(description);
-		$('#showWeekday:first').val(weekDay);
-		$('#showTitle').val(title);
-		$('#showHolidayType').val(holidayType);
+    // This function shows the "Show Holiday" panel //
+    function showHoliday (exceptionPosibility, dayName, day, month, year, weekDay, title, description, holidayType) {
+        $("#newHoliday").slideUp("fast");
+        $("#showHoliday").slideDown("fast");
+        $('#showDaynameOutput').html(dayName);
+        $('#showDayname').val(dayName);
+        $('#showBranchNameOutput').html($("#branch :selected").text());
+        $('#showBranchName').val($("#branch").val());
+        $('#showDayOutput').html(day);
+        $('#showDay').val(day);
+        $('#showMonthOutput').html(month);
+        $('#showMonth').val(month);
+        $('#showYearOutput').html(year);
+        $('#showYear').val(year);
+        $('#showDescription').val(description);
+        $('#showWeekday:first').val(weekDay);
+        $('#showTitle').val(title);
+        $('#showHolidayType').val(holidayType);
 
-		if (holidayType == 'exception') {
-			$("#showOperationDelLabel").html(_("Delete this exception."));
-			$("#holtype").attr("class","key exception").html(_("Holiday exception"));
-		} else if(holidayType == 'weekday') {
-			$("#showOperationDelLabel").html(_("Delete this holiday."));
-			$("#holtype").attr("class","key repeatableweekly").html(_("Holiday repeating weekly"));
-		} else if(holidayType == 'daymonth') {
-			$("#showOperationDelLabel").html(_("Delete this holiday."));
-			$("#holtype").attr("class","key repeatableyearly").html(_("Holiday repeating yearly"));
-		} else {
-			$("#showOperationDelLabel").html(_("Delete this holiday."));
-			$("#holtype").attr("class","key holiday").html(_("Unique holiday"));
-		}
-		
-		if (exceptionPosibility == 1) {
-			$("#exceptionPosibility").parent().show();
-		} else {
-			$("#exceptionPosibility").parent().hide();
-		}
-	}
+        if (holidayType == 'exception') {
+            $("#showOperationDelLabel").html(_("Delete this exception."));
+            $("#holtype").attr("class","key exception").html(_("Holiday exception"));
+        } else if(holidayType == 'weekday') {
+            $("#showOperationDelLabel").html(_("Delete this holiday."));
+            $("#holtype").attr("class","key repeatableweekly").html(_("Holiday repeating weekly"));
+        } else if(holidayType == 'daymonth') {
+            $("#showOperationDelLabel").html(_("Delete this holiday."));
+            $("#holtype").attr("class","key repeatableyearly").html(_("Holiday repeating yearly"));
+        } else {
+            $("#showOperationDelLabel").html(_("Delete this holiday."));
+            $("#holtype").attr("class","key holiday").html(_("Unique holiday"));
+        }
+        
+        if (exceptionPosibility == 1) {
+            $("#exceptionPosibility").parent().show();
+        } else {
+            $("#exceptionPosibility").parent().hide();
+        }
+    }
 
-	// This function shows the "Add Holiday" panel //
-	function newHoliday (dayName, day, month, year, weekDay) {
-		$("#showHoliday").slideUp("fast");
-		$("#newHoliday").slideDown("fast");
-		$("#newDaynameOutput").html(dayName);
-		$("#newDayname").val(dayName);
-		$("#newBranchNameOutput").html($('#branch :selected').text());
-		$("#newBranchName").val($('#branch').val());
-		$("#newDayOutput").html(day);
-		$("#newDay").val(day);
-		$("#newMonthOutput").html(month);
-		$("#newMonth").val(month);
-		$("#newYearOutput").html(year);
-		$("#newYear").val(year);
-		$("#newWeekday:first").val(weekDay);
-	}
+    // This function shows the "Add Holiday" panel //
+    function newHoliday (dayName, day, month, year, weekDay) {
+        $("#showHoliday").slideUp("fast");
+        $("#newHoliday").slideDown("fast");
+        $("#newDaynameOutput").html(dayName);
+        $("#newDayname").val(dayName);
+        $("#newBranchNameOutput").html($('#branch :selected').text());
+        $("#newBranchName").val($('#branch').val());
+        $("#newDayOutput").html(day);
+        $("#newDay").val(day);
+        $("#newMonthOutput").html(month);
+        $("#newMonth").val(month);
+        $("#newYearOutput").html(year);
+        $("#newYear").val(year);
+        $("#newWeekday:first").val(weekDay);
+    }
 
-	function hidePanel(aPanelName) {
-		$("#"+aPanelName).slideUp("fast");
-	}
+    function hidePanel(aPanelName) {
+        $("#"+aPanelName).slideUp("fast");
+    }
 
-	function changeBranch () {
-		var branch = $("#branch option:selected").val();
-		location.href='/cgi-bin/koha/tools/holidays.pl?branch=' + branch + '&calendardate=' + "[% calendardate %]";
-	}
+    function changeBranch () {
+        var branch = $("#branch option:selected").val();
+        location.href='/cgi-bin/koha/tools/holidays.pl?branch=' + branch + '&calendardate=' + "[% calendardate %]";
+    }
 
-	function Help() {
-		newin=window.open("/cgi-bin/koha/help.pl","KohaHelp",'width=600,height=600,toolbar=false,scrollbars=yes');
-	}
+    function Help() {
+        newin=window.open("/cgi-bin/koha/help.pl","KohaHelp",'width=600,height=600,toolbar=false,scrollbars=yes');
+    }
 
     /* This function gives css clases to each kind of day */
     function dateStatusHandler(date) {
@@ -142,11 +142,11 @@
         var dayMonth = month + '/' + day;
         var dateString = year + '/' + month + '/' + day;
             if (holidays[dateString] != null) {
-                showHoliday(0, dayName, day, month, year, weekDay, holidays[dateString].title, 	holidays[dateString].description, 'ymd');
+                showHoliday(0, dayName, day, month, year, weekDay, holidays[dateString].title,     holidays[dateString].description, 'ymd');
             } else if (exception_holidays[dateString] != null) {
                 showHoliday(0, dayName, day, month, year, weekDay, exception_holidays[dateString].title, exception_holidays[dateString].description, 'exception');
             } else if (week_days[weekDay] != null) {
-                showHoliday(1, dayName, day, month, year, weekDay, week_days[weekDay].title, 	week_days[weekDay].description, 'weekday');
+                showHoliday(1, dayName, day, month, year, weekDay, week_days[weekDay].title,     week_days[weekDay].description, 'weekday');
             } else if (day_month_holidays[dayMonth] != null) {
                 showHoliday(1, dayName, day, month, year, weekDay, day_month_holidays[dayMonth].title, day_month_holidays[dayMonth].description, 'daymonth');
             } else {
@@ -154,12 +154,12 @@
             }
     };
 
-	$(document).ready(function() {
+    $(document).ready(function() {
 
-		$(".hint").hide();
-		$("#branch").change(function(){
-			changeBranch();
-		});
+        $(".hint").hide();
+        $("#branch").change(function(){
+            changeBranch();
+        });
         $("#holidayexceptions,#holidayweeklyrepeatable,#holidaysunique").dataTable($.extend(true, {}, dataTablesDefaults, {
             "sDom": 't',
             "bPaginate": false
@@ -171,12 +171,12 @@
             ],
             "bPaginate": false
         }));
-		$("a.helptext").click(function(){
-			$(this).parent().find(".hint").toggle(); return false;
-		});
+        $("a.helptext").click(function(){
+            $(this).parent().find(".hint").toggle(); return false;
+        });
         $("#dateofrange").datepicker();
         $("#datecancelrange").datepicker();
-		$("#dateofrange").each(function () { this.value = "" });
+        $("#dateofrange").each(function () { this.value = "" });
         $("#datecancelrange").each(function () { this.value = "" });
         $("#jcalendar-container").datepicker({
           beforeShowDay: function(thedate) {
@@ -191,7 +191,7 @@
         },
         defaultDate: new Date("[% keydate %]")
     });
-	});
+    });
 //]]>
 </script>
 <style type="text/css"> .key { padding : 3px; white-space:nowrap; line-height:230%; }
@@ -223,11 +223,11 @@ td.repeatableyearly a.ui-state-default {  background:  #FFFF99 none; color :  Bl
 <div id="doc3" class="yui-t1">
    
    <div id="bd">
-	<div id="yui-main">
-	<div class="yui-b">
-	<h2>[% branchname %] Calendar</h2>
-	<div class="yui-g">
-	<div class="yui-u first">
+    <div id="yui-main">
+    <div class="yui-b">
+    <h2>[% branchname %] Calendar</h2>
+    <div class="yui-g">
+    <div class="yui-u first">
         <label for="branch">Define the holidays for:</label>
             <select id="branch" name="branch">
                 [% FOREACH branchloo IN branchloop %]
@@ -238,57 +238,57 @@ td.repeatableyearly a.ui-state-default {  background:  #FFFF99 none; color :  Bl
                     [% END %]
                 [% END %]
             </select>
-	
-	<!-- ******************************** FLAT PANELS ******************************************* -->
-	<!-- *****           Makes all the flat panel to deal with holidays                     ***** -->
-	<!-- **************************************************************************************** -->
+    
+    <!-- ******************************** FLAT PANELS ******************************************* -->
+    <!-- *****           Makes all the flat panel to deal with holidays                     ***** -->
+    <!-- **************************************************************************************** -->
 
-	<!-- ********************** Panel for showing already loaded holidays *********************** -->
-	<div class="panel" id="showHoliday">
-	 	<form action="/cgi-bin/koha/tools/exceptionHolidays.pl" method="post">
-	 		<input type="hidden" id="showHolidayType" name="showHolidayType" value="" />
-			<fieldset class="brief">
-			<h3>Edit this holiday</h3>
-			<span id="holtype"></span>
-			<ol>
-			<li>
-				<strong>Library:</strong> <span id="showBranchNameOutput"></span>
-				<input type="hidden" id="showBranchName" name="showBranchName" />
-			</li>
-			<li>
-				<strong>From Date:</strong>
-				<span id="showDaynameOutput"></span>, 
-				
+    <!-- ********************** Panel for showing already loaded holidays *********************** -->
+    <div class="panel" id="showHoliday">
+         <form action="/cgi-bin/koha/tools/exceptionHolidays.pl" method="post">
+             <input type="hidden" id="showHolidayType" name="showHolidayType" value="" />
+            <fieldset class="brief">
+            <h3>Edit this holiday</h3>
+            <span id="holtype"></span>
+            <ol>
+            <li>
+                <strong>Library:</strong> <span id="showBranchNameOutput"></span>
+                <input type="hidden" id="showBranchName" name="showBranchName" />
+            </li>
+            <li>
+                <strong>From Date:</strong>
+                <span id="showDaynameOutput"></span>, 
+                
                                 [% IF ( dateformat == "us" ) %]<span id="showMonthOutput"></span>/<span id="showDayOutput"></span>/<span id="showYearOutput"></span>[% ELSIF ( dateformat == "metric" ) %]<span id="showDayOutput"></span>/<span id="showMonthOutput"></span>/<span id="showYearOutput"></span>[% ELSE %]<span id="showYearOutput"></span>/<span id="showMonthOutput"></span>/<span id="showDayOutput"></span>[% END %]
 
-				<input type="hidden" id="showDayname" name="showDayname" />
-				<input type="hidden" id="showWeekday" name="showWeekday" />
-				<input type="hidden" id="showDay" name="showDay" />
-				<input type="hidden" id="showMonth" name="showMonth" />
-				<input type="hidden" id="showYear" name="showYear" />
-			</li>
+                <input type="hidden" id="showDayname" name="showDayname" />
+                <input type="hidden" id="showWeekday" name="showWeekday" />
+                <input type="hidden" id="showDay" name="showDay" />
+                <input type="hidden" id="showMonth" name="showMonth" />
+                <input type="hidden" id="showYear" name="showYear" />
+            </li>
             <li class="dateinsert">
                 <b>To Date : </b>
                 <input type="text" id="datecancelrange" name="datecancelrange" size="20" value="[% datecancelrange %]" class="datepicker"/>
             </li>
-			<li><label for="showTitle">Title: </label><input type="text" name="showTitle" id="showTitle" size="35" /></li>
-		    <!-- showTitle is necessary for exception radio button to work properly --> 
-				<label for="showDescription">Description:</label>
-				<textarea rows="2" cols="40" id="showDescription" name="showDescription"></textarea>	
-		    </li>
-			<li class="radio"><div id="exceptionPosibility" style="position:static">
-				<input type="radio" name="showOperation" id="showOperationExc" value="exception" /> <label for="showOperationExc">Generate an exception for this repeated holiday.</label>
-				<a href="#" class="helptext">[?]</a>
-				<div class="hint">You can make an exception for this holiday rule. This means that you will be able to say that for a repeatable holiday there is one day which is going to be an exception.</div>
-			</div></li>
+            <li><label for="showTitle">Title: </label><input type="text" name="showTitle" id="showTitle" size="35" /></li>
+            <!-- showTitle is necessary for exception radio button to work properly --> 
+                <label for="showDescription">Description:</label>
+                <textarea rows="2" cols="40" id="showDescription" name="showDescription"></textarea>    
+            </li>
+            <li class="radio"><div id="exceptionPosibility" style="position:static">
+                <input type="radio" name="showOperation" id="showOperationExc" value="exception" /> <label for="showOperationExc">Generate an exception for this repeated holiday.</label>
+                <a href="#" class="helptext">[?]</a>
+                <div class="hint">You can make an exception for this holiday rule. This means that you will be able to say that for a repeatable holiday there is one day which is going to be an exception.</div>
+            </div></li>
             <li class="radio"><input type="radio" name="showOperation" id="showOperationExcRange" value="exceptionrange" />
                 <label for="newOperationFieldException">Generate exceptions on a range of dates.</label>
                 <a href="#" class="helptext">[?]</a>
                 <div class="hint">You can make an exception on a range of dates repeated yearly.</div>
             </li>
-			<li class="radio"><input type="radio" name="showOperation" id="showOperationDel" value="delete" /> <label for="showOperationDel" id="showOperationDelLabel">Delete this holiday</label>
-				<a href="#" class="helptext">[?]</a>
-				<div class="hint">This will delete this holiday rule. If it is a repeatable holiday, this option checks for possible exceptions. If an exception exists, this option will remove the exception and set the date to a regular holiday.</div></li>
+            <li class="radio"><input type="radio" name="showOperation" id="showOperationDel" value="delete" /> <label for="showOperationDel" id="showOperationDelLabel">Delete this holiday</label>
+                <a href="#" class="helptext">[?]</a>
+                <div class="hint">This will delete this holiday rule. If it is a repeatable holiday, this option checks for possible exceptions. If an exception exists, this option will remove the exception and set the date to a regular holiday.</div></li>
             <li class="radio"><input type="radio" name="showOperation" id="showOperationDelRange" value="deleterange" /> <label for="showOperationDelRange" id="showOperationDelLabelRange">Delete the single holidays on a range</label>.
                 <a href="#" class="helptext">[?]</a>
                 <div class="hint">This will delete the single holidays rules only. The repeatable holidays and exceptions will not be deleted.</div>
@@ -301,65 +301,65 @@ td.repeatableyearly a.ui-state-default {  background:  #FFFF99 none; color :  Bl
                 <a href="#" class="helptext">[?]</a>
                 <div class="hint">This will delete the exceptions inside a given range. Be careful about your scope range if it is oversized you could slow down Koha.</div>
             </li>
-			<li class="radio"><input type="radio" name="showOperation" id="showOperationEdit" value="edit" checked="checked" /> <label for="showOperationEdit">Edit this holiday</label>
+            <li class="radio"><input type="radio" name="showOperation" id="showOperationEdit" value="edit" checked="checked" /> <label for="showOperationEdit">Edit this holiday</label>
                 <a href="#" class="helptext">[?]</a>
                 <div class="hint">This will save changes to the holiday's title and description. If the information for a repeatable holiday is modified, it affects all of the dates on which the holiday is repeated.</div></li>
-			</ol>
-			<fieldset class="action">
-				<input type="submit" name="submit" value="Save" />
-				<a href="#" class="cancel" name="cancel2" onclick=" hidePanel('showHoliday');">Cancel</a>
-			</fieldset>
-			</fieldset>
-		</form>
-	</div>
+            </ol>
+            <fieldset class="action">
+                <input type="submit" name="submit" value="Save" />
+                <a href="#" class="cancel" name="cancel2" onclick=" hidePanel('showHoliday');">Cancel</a>
+            </fieldset>
+            </fieldset>
+        </form>
+    </div>
 
-	<!-- ***************************** Panel to deal with new holidays **********************  -->
-	<div class="panel" id="newHoliday">
-	 	<form action="/cgi-bin/koha/tools/newHolidays.pl" method="post">
-				<input type="hidden" name="branchCodes" id="branchCodes" value="[% branchcodes %]" /> 
-			<fieldset class="brief">
-			<h3>Add new holiday</h3>
-			<ol>
-			<li>
-				<strong>Library:</strong>
-				<span id="newBranchNameOutput"></span>
-				<input type="hidden" id="newBranchName" name="newBranchName" />
-			</li>
-			<li>
+    <!-- ***************************** Panel to deal with new holidays **********************  -->
+    <div class="panel" id="newHoliday">
+         <form action="/cgi-bin/koha/tools/newHolidays.pl" method="post">
+                <input type="hidden" name="branchCodes" id="branchCodes" value="[% branchcodes %]" /> 
+            <fieldset class="brief">
+            <h3>Add new holiday</h3>
+            <ol>
+            <li>
+                <strong>Library:</strong>
+                <span id="newBranchNameOutput"></span>
+                <input type="hidden" id="newBranchName" name="newBranchName" />
+            </li>
+            <li>
                 <strong>From date:</strong>
-				<span id="newDaynameOutput"></span>, 
+                <span id="newDaynameOutput"></span>, 
 
                          [% IF ( dateformat == "us" ) %]<span id="newMonthOutput"></span>/<span id="newDayOutput"></span>/<span id="newYearOutput"></span>[% ELSIF ( dateformat == "metric" ) %]<span id="newDayOutput"></span>/<span id="newMonthOutput"></span>/<span id="newYearOutput"></span>[% ELSE %]<span id="newYearOutput"></span>/<span id="newMonthOutput"></span>/<span id="newDayOutput"></span>[% END %]
 
-				<input type="hidden" id="newDayname" name="showDayname" />
-				<input type="hidden" id="newWeekday" name="newWeekday" />
-				<input type="hidden" id="newDay" name="newDay" />
-				<input type="hidden" id="newMonth" name="newMonth" />
-				<input type="hidden" id="newYear" name="newYear" />
-			</li>
-			<li class="dateinsert">
+                <input type="hidden" id="newDayname" name="showDayname" />
+                <input type="hidden" id="newWeekday" name="newWeekday" />
+                <input type="hidden" id="newDay" name="newDay" />
+                <input type="hidden" id="newMonth" name="newMonth" />
+                <input type="hidden" id="newYear" name="newYear" />
+            </li>
+            <li class="dateinsert">
                 <b>To date : </b>
                 <input type="text" id="dateofrange" name="dateofrange" size="20" value="[% dateofrange %]" class="datepicker" />
-			</li>
-			<li><label for="title">Title: </label><input type="text" name="newTitle" id="title" size="35" /></li>
-			<li><label for="newDescription">Description:</label>
-				<textarea rows="2" cols="40" id="newDescription" name="newDescription"></textarea>
-			</li>
-			<li class="radio"><input type="radio" name="newOperation" id="newOperationOnce" value="holiday" checked="checked" />
-			<label for="newOperationOnce">Holiday only on this day</label>.
-			<a href="#" class="helptext">[?]</a>
-			<div class="hint">Make a single holiday. For example, selecting August 1st, 2012 will make it a holiday, but will not affect August 1st in other years.</div>
-			</li>
-			<li class="radio"><input type="radio" name="newOperation" id="newOperationDay" value="weekday" />
-							<label for="newOperationDay">Holiday repeated every same day of the week</label>.
-							<a href="#" class="helptext">[?]</a>
-							<div class="hint">Make this weekday a holiday, every week. For example, if your library is closed on Saturdays, use this option to make every Saturday a holiday.</div>
-							</li>
-			<li class="radio"><input type="radio" name="newOperation" id="newOperationYear" value="repeatable" />
-							<label for="newOperationYear">Holiday repeated yearly on the same date</label>.
-							<a href="#" class="helptext">[?]</a>
-							<div class="hint">This will take this day and month as a reference to make it a holiday. Through this option, you can repeat this rule for every year. For example, selecting August 1st will make August 1st a holiday every year.</div>
-							</li>
+            </li>
+            <li><label for="title">Title: </label><input type="text" name="newTitle" id="title" size="35" /></li>
+            <li><label for="newDescription">Description:</label>
+                <textarea rows="2" cols="40" id="newDescription" name="newDescription"></textarea>
+            </li>
+            <li class="radio"><input type="radio" name="newOperation" id="newOperationOnce" value="holiday" checked="checked" />
+            <label for="newOperationOnce">Holiday only on this day</label>.
+            <a href="#" class="helptext">[?]</a>
+            <div class="hint">Make a single holiday. For example, selecting August 1st, 2012 will make it a holiday, but will not affect August 1st in other years.</div>
+            </li>
+            <li class="radio"><input type="radio" name="newOperation" id="newOperationDay" value="weekday" />
+                            <label for="newOperationDay">Holiday repeated every same day of the week</label>.
+                            <a href="#" class="helptext">[?]</a>
+                            <div class="hint">Make this weekday a holiday, every week. For example, if your library is closed on Saturdays, use this option to make every Saturday a holiday.</div>
+                            </li>
+            <li class="radio"><input type="radio" name="newOperation" id="newOperationYear" value="repeatable" />
+                            <label for="newOperationYear">Holiday repeated yearly on the same date</label>.
+                            <a href="#" class="helptext">[?]</a>
+                            <div class="hint">This will take this day and month as a reference to make it a holiday. Through this option, you can repeat this rule for every year. For example, selecting August 1st will make August 1st a holiday every year.</div>
+                            </li>
             <li class="radio"><input type="radio" name="newOperation" id="newOperationField" value="holidayrange" />
                             <label for="newOperationField">Holidays on a range</label>.
                             <a href="#" class="helptext">[?]</a>
@@ -370,23 +370,23 @@ td.repeatableyearly a.ui-state-default {  background:  #FFFF99 none; color :  Bl
                             <a href="#" class="helptext">[?]</a>
                             <div class="hint">Make a single holiday on a range repeated yearly. For example, selecting August 1st, 2012  and August 10st, 2012 will make all days between 1st and 10st holiday, and will affect August 1-10 in other years.</div>
                             </li>
-				<li class="radio">
-				<input type="checkbox" name="allBranches" id="allBranches" />
-				<label for="allBranches">Copy to all libraries</label>.
-				<a href="#" class="helptext">[?]</a>
-				<div class="hint">If checked, this holiday will be copied to all libraries. If the holiday already exists for a library, no change is made.</div>
-				</li></ol>
-				<fieldset class="action">
-					<input type="submit" name="submit" value="Save" />
-					<a href="#" class="cancel" name="cancel2" onclick=" hidePanel('newHoliday');">Cancel</a>
-				</fieldset>
-				</fieldset>
-	 	</form>
-	</div>
+                <li class="radio">
+                <input type="checkbox" name="allBranches" id="allBranches" />
+                <label for="allBranches">Copy to all libraries</label>.
+                <a href="#" class="helptext">[?]</a>
+                <div class="hint">If checked, this holiday will be copied to all libraries. If the holiday already exists for a library, no change is made.</div>
+                </li></ol>
+                <fieldset class="action">
+                    <input type="submit" name="submit" value="Save" />
+                    <a href="#" class="cancel" name="cancel2" onclick=" hidePanel('newHoliday');">Cancel</a>
+                </fieldset>
+                </fieldset>
+         </form>
+    </div>
 
-	<!-- *************************************************************************************** -->
-	<!-- ******                          END OF FLAT PANELS                               ****** -->
-	<!-- *************************************************************************************** -->
+    <!-- *************************************************************************************** -->
+    <!-- ******                          END OF FLAT PANELS                               ****** -->
+    <!-- *************************************************************************************** -->
 
 <!-- ************************************************************************************** -->
 <!-- ******                              MAIN SCREEN CODE                            ****** -->
@@ -396,7 +396,7 @@ td.repeatableyearly a.ui-state-default {  background:  #FFFF99 none; color :  Bl
 
 <div style="margin-top: 2em;">
 <form action="copy-holidays.pl" method="post">
-	<input type="hidden" name="from_branchcode" value="[% branch %]" />
+    <input type="hidden" name="from_branchcode" value="[% branch %]" />
   <label for="branchcode">Copy holidays to:</label>
   <select id="branchcode" name="branchcode">
     <option value=""></option>
@@ -404,7 +404,7 @@ td.repeatableyearly a.ui-state-default {  background:  #FFFF99 none; color :  Bl
     <option value="[% branchloo.value %]">[% branchloo.branchname %]</option>
     [% END %]
   </select>
-	<input type="submit" value="Copy" />
+    <input type="submit" value="Copy" />
 </form>
 </div>
 
@@ -412,21 +412,21 @@ td.repeatableyearly a.ui-state-default {  background:  #FFFF99 none; color :  Bl
 <div class="yui-u">
 <div class="help">
 <h4>Hints</h4>
-	<ul>
-		<li>Search in the calendar the day you want to set as holiday.</li>
-		<li>Click the date to add or edit a holiday.</li>
-		<li>Enter a title and description for the holdiay.</li>
-		<li>Specify how the holiday should repeat.</li>
-		<li>Click Save to finish.</li>
-	</ul>
+    <ul>
+        <li>Search in the calendar the day you want to set as holiday.</li>
+        <li>Click the date to add or edit a holiday.</li>
+        <li>Enter a title and description for the holdiay.</li>
+        <li>Specify how the holiday should repeat.</li>
+        <li>Click Save to finish.</li>
+    </ul>
 <h4>Key</h4>
-	<p>
-		<span class="key normalday">Working day</span>
-		<span class="key holiday">Unique holiday</span>
-		<span class="key repeatableweekly">Holiday repeating weekly</span>
-		<span class="key repeatableyearly">Holiday repeating yearly</span>
-		<span class="key exception">Holiday exception</span>
-	</p>
+    <p>
+        <span class="key normalday">Working day</span>
+        <span class="key holiday">Unique holiday</span>
+        <span class="key repeatableweekly">Holiday repeating weekly</span>
+        <span class="key repeatableyearly">Holiday repeating yearly</span>
+        <span class="key exception">Holiday exception</span>
+    </p>
 </div>
 <div id="holiday-list">
 <!-- Exceptions First -->
