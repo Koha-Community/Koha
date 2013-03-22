@@ -6701,7 +6701,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.11.00.XXX";
+$DBversion = "3.11.00.112";
 if ( CheckVersion($DBversion) ) {
     $dbh->do(qq{
         ALTER TABLE issuingrules ADD COLUMN renewalperiod int(4) DEFAULT NULL AFTER renewalsallowed
