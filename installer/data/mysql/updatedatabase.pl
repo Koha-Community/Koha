@@ -6940,6 +6940,38 @@ if ( CheckVersion($DBversion) ) {
         ADD CONSTRAINT subscription_ibfk_2 FOREIGN KEY (numberpattern) REFERENCES subscription_numberpatterns (id) ON DELETE SET NULL ON UPDATE CASCADE
     |);
 
+    # Set firstacquidate if not already set (firstacquidate is now mandatory)
+    my $get_first_planneddate_sth = $dbh->prepare(qq|
+        SELECT planneddate
+        FROM serial
+        WHERE subscriptionid = ?
+        ORDER BY serialid
+        LIMIT 1
+    |);
+    my $update_firstacquidate_sth = $dbh->prepare(qq|
+        UPDATE subscription
+        SET firstacquidate = ?
+        WHERE subscriptionid = ?
+    |);
+    my $get_subscriptions_sth = $dbh->prepare(qq|
+        SELECT subscriptionid, startdate
+        FROM subscription
+        WHERE firstacquidate IS NULL
+          OR firstacquidate = '0000-00-00'
+    |);
+    $get_subscriptions_sth->execute;
+    while ( my ($subscriptionid, $startdate) = $get_subscriptions_sth->fetchrow ) {
+        # Try to get the planned date of the first serial
+        $get_first_planneddate_sth->execute($subscriptionid);
+        my ($first_planneddate) = $get_first_planneddate_sth->fetchrow;
+        if ($first_planneddate and $first_planneddate =~ /^\d{4}-\d{2}-\d{2}$/) {
+            $update_firstacquidate_sth->execute($first_planneddate, $subscriptionid);
+        } else {
+            # Defaults to subscription start date
+            $update_firstacquidate_sth->execute($startdate, $subscriptionid);
+        }
+    }
+
     print "Upgrade to $DBversion done (Bug 7688: Add subscription_frequencies and subscription_numberpatterns tables)\n";
     SetVersion($DBversion);
 }
