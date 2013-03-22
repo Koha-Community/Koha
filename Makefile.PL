@@ -293,6 +293,7 @@ my $target_map = {
   './OpenILS'                   => 'PERL_MODULE_DIR',
   './README.txt'                => 'NONE',
   './patroncards'               => 'INTRANET_CGI_DIR',
+  './plugins'                   => 'INTRANET_CGI_DIR',
   './reports'                   => 'INTRANET_CGI_DIR',
   './reserve'                   => 'INTRANET_CGI_DIR',
   './reviews'                   => 'INTRANET_CGI_DIR',
