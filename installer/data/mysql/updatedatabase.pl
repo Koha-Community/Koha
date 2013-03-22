@@ -6683,7 +6683,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
-$DBversion = '3.11.00.XXX';
+$DBversion = "3.11.00.111";
 if ( CheckVersion($DBversion) ) {
     my $sth = $dbh->prepare("
         SELECT module, code, branchcode, content
