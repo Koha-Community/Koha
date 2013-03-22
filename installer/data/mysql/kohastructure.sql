@@ -1559,17 +1559,17 @@ CREATE TABLE `patronimage` ( -- information related to patron images
 -- so MyISAM is better in this case
 
 DROP TABLE IF EXISTS `pending_offline_operations`;
-CREATE TABLE `pending_offline_operations` (
-  `operationid` int(11) NOT NULL AUTO_INCREMENT,
-  `userid` varchar(30) NOT NULL,
-  `branchcode` varchar(10) NOT NULL,
+CREATE TABLE pending_offline_operations (
+  operationid int(11) NOT NULL AUTO_INCREMENT,
+  userid varchar(30) NOT NULL,
+  branchcode varchar(10) NOT NULL,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `action` varchar(10) NOT NULL,
-  `barcode` varchar(20) NOT NULL,
-  `cardnumber` varchar(16) DEFAULT NULL,
-  PRIMARY KEY (`operationid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
+  barcode varchar(20) DEFAULT NULL,
+  cardnumber varchar(16) DEFAULT NULL,
+  amount decimal(28,6) DEFAULT NULL,
+  PRIMARY KEY (operationid)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 
 --

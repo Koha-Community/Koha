@@ -54,6 +54,7 @@ for (@$operations) {
     }
     $_->{'actionissue'}    = $_->{'action'} eq 'issue';
     $_->{'actionreturn'}   = $_->{'action'} eq 'return';
+    $_->{'actionpayment'}  = $_->{'action'} eq 'payment';
 }
 $template->param(pending_operations => $operations);
 

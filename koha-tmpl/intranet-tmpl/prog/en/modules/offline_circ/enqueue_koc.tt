@@ -1,0 +1,31 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Circulation &rsaquo; Add offline circulations to queue</title>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'circ-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a> &rsaquo; <a href="/cgi-bin/koha/offline_circ/process_koc.pl">Add offline circulations to queue</a></div>
+
+<div id="doc" class="yui-t7">
+
+   <div id="bd">
+
+  <h2>Koha offline circulation</h2>
+  <p>Your file was processed.</p>
+
+[% FOREACH message IN messages %]
+  [% IF ( message.message ) %]
+      [% IF ( message.ERROR_file_version ) %]
+          <div class="dialog alert"><p>Warning: This file is version [% message.upload_version %], but I only know how to import version [% message.current_version %]. I'll try my best.</p>
+      [% END %]
+  [% END %]
+[% END %]
+
+<p><a href="process_koc.pl">Upload another KOC file</a></p>
+
+<p><a href="list.pl">View pending offline circulation actions</a></p>
+
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

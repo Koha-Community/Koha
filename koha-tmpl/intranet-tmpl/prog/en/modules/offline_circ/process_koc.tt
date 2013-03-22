@@ -6,22 +6,25 @@
 <script type="text/javascript">
 //<![CDATA[
 $(document).ready(function(){
-	$("#processfile").hide();
+    $("#enqueuefile").hide();
+    $("#processfile").hide();
 });
+
 function CheckUpload(f){
-	if(f.fileToUpload.value == ""){
-		alert(_("Please choose a file to upload"));
-	} else {
-		return ajaxFileUpload()
-	}
-		return false;
+    if (f.fileToUpload.value == ""){
+        alert(_("Please choose a file to upload"));
+    } else {
+        return ajaxFileUpload()
+    }
+    return false;
 }
+
 function CheckForm(f) {
     if (f.uploadedfileid.value == '') {
         alert(_("Please upload a file first."));
     } else {
-		$("#fileuploadstatus").hide();
-		$("#fileuploadform").slideUp();
+        $("#fileuploadstatus").hide();
+        $("#fileuploadform").slideUp();
         return submitBackgroundJob(f);
     }
     return false;
@@ -60,7 +63,8 @@ function CheckForm(f) {
 	[% IF ( message.payment ) %]<p>Accepted payment ([% message.amount %]) from <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% message.borrowernumber %]">[% message.firstname %] [% message.surname %]</a> ([% message.cardnumber %]): [% message.datetime %]</p>[% END %]
   [% END %]
 [% ELSE %]
-  <h2>Upload offline circulation data</h2>
+   <h2>Upload offline circulation data</h2>
+
    <div id="fileuploadform">
      <form method="post" action="[% SCRIPT_NAME %]" enctype="multipart/form-data">
 		<fieldset class="brief">
@@ -72,11 +76,17 @@ function CheckForm(f) {
      <div id="fileuploadstatus" style="display:none">Upload progress: <div id="fileuploadprogress"></div> <span id="fileuploadpercent">0</span>%</div>
      <div id="fileuploadfailed" style="display:none"></div>
    </div>
-   <form action="process_koc.pl" id="processfile" method="post" enctype="multipart/form-data">
+
+   <form action="enqueue_koc.pl" id="processfile" method="post" enctype="multipart/form-data">
+     <input type="hidden" name="uploadedfileid" id="uploadedfileid" value="" />
+     <input type="submit" value="Add to offline circulation queue" onclick="return CheckForm(this.form);" id="queueformsubmit" />
+   </form>
+
+   <form action="process_koc.pl" id="enqueuefile" method="post" enctype="multipart/form-data">
      <input type="hidden" name="uploadedfileid" id="uploadedfileid" value="" />
      <input type="hidden" name="runinbackground" id="runinbackground" value="" />
      <input type="hidden" name="completedJobID" id="completedJobID" value="" />
-     <input type="submit" value="Process offline circulation file" onclick="return CheckForm(this.form);" id="mainformsubmit" />
+     <input type="submit" value="Apply directly" onclick="return CheckForm(this.form);" id="mainformsubmit" />
      <div id="jobstatus" style="display:none">Job progress: <div id="jobprogress"></div> <span id="jobprogresspercent">0</span>%</div>
      <div id="jobfailed" style="display:none"></div>
    </form>

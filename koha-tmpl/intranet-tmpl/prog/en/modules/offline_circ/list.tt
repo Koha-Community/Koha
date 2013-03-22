@@ -78,7 +78,8 @@
 			            <th>Date</th>
 			            <th>Action</th>
 			            <th>Barcode</th>
-                        <th>Card number</th>
+                                    <th>Card number</th>
+                                    <th>Amount</th>
 		            </tr>
 		        </thead>
 		        <tbody>
@@ -95,7 +96,7 @@
 			                    [% END %]
 			                </td>
 			                <td>
-			                [% IF ( operation.actionissue ) %]
+			                [% IF ( operation.actionissue || operation.actionpayment) %]
 		                        [% IF ( operation.borrowernumber ) %]
 		                            <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% operation.borrowernumber %]" title="[% operation.borrower %]">[% operation.cardnumber %]</a>
 		                        [% ELSE %]
@@ -103,6 +104,7 @@
 		                        [% END %]
 			                [% END %]
 			                </td>
+                                        <td>[% operation.amount %]</td>
 		                </tr>
 		            [% END %]
 		        </tbody>

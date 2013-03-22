@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-use Test::More tests => 15;
+use Test::More tests => 16;
 
 BEGIN {
     use_ok('C4::Circulation');
@@ -108,3 +108,20 @@ is(
     $CircControl,
     'CircControl reset to its initial value'
 );
+
+# Test C4::Circulation::ProcessOfflinePayment
+my $sth = C4::Context->dbh->prepare("SELECT COUNT(*) FROM accountlines WHERE amount = '-123.45' AND accounttype = 'Pay'");
+$sth->execute();
+my ( $original_count ) = $sth->fetchrow_array();
+
+C4::Context->dbh->do("INSERT INTO borrowers ( cardnumber, surname, firstname, categorycode, branchcode ) VALUES ( '99999999999', 'Hall', 'Kyle', 'S', 'MPL' )");
+
+C4::Circulation::ProcessOfflinePayment({ cardnumber => '99999999999', amount => '123.45' });
+
+$sth->execute();
+my ( $new_count ) = $sth->fetchrow_array();
+
+ok( $new_count == $original_count  + 1, 'ProcessOfflinePayment makes payment correctly' );
+
+C4::Context->dbh->do("DELETE FROM accountlines WHERE borrowernumber IN ( SELECT borrowernumber FROM borrowers WHERE cardnumber = '99999999999' )");
+C4::Context->dbh->do("DELETE FROM borrowers WHERE cardnumber = '99999999999'");
