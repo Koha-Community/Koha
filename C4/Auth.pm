@@ -387,6 +387,8 @@ sub get_template_and_user {
         my $opac_name = '';
         if (($opac_search_limit && $opac_search_limit =~ /branch:(\w+)/ && $opac_limit_override) || ($in->{'query'}->param('limit') && $in->{'query'}->param('limit') =~ /branch:(\w+)/)){
             $opac_name = $1;   # opac_search_limit is a branch, so we use it.
+        } elsif ( $in->{'query'}->param('multibranchlimit') ) {
+            $opac_name = $in->{'query'}->param('multibranchlimit');
         } elsif (C4::Context->preference("SearchMyLibraryFirst") && C4::Context->userenv && C4::Context->userenv->{'branch'}) {
             $opac_name = C4::Context->userenv->{'branch'};
         }
@@ -395,13 +397,14 @@ sub get_template_and_user {
             AnonSuggestions           => "" . C4::Context->preference("AnonSuggestions"),
             AuthorisedValueImages     => C4::Context->preference("AuthorisedValueImages"),
             BranchesLoop              => GetBranchesLoop($opac_name),
-            CalendarFirstDayOfWeek      => (C4::Context->preference("CalendarFirstDayOfWeek") eq "Sunday")?0:1,
+            BranchCategoriesLoop      => GetBranchCategories( undef, undef, 1, $opac_name ),
+            CalendarFirstDayOfWeek    => (C4::Context->preference("CalendarFirstDayOfWeek") eq "Sunday")?0:1,
             LibraryName               => "" . C4::Context->preference("LibraryName"),
             LibraryNameTitle          => "" . $LibraryNameTitle,
             LoginBranchname           => C4::Context->userenv?C4::Context->userenv->{"branchname"}:"",
             OPACAmazonCoverImages     => C4::Context->preference("OPACAmazonCoverImages"),
             OPACFRBRizeEditions       => C4::Context->preference("OPACFRBRizeEditions"),
-            OpacHighlightedWords       => C4::Context->preference("OpacHighlightedWords"),
+            OpacHighlightedWords      => C4::Context->preference("OpacHighlightedWords"),
             OPACItemHolds             => C4::Context->preference("OPACItemHolds"),
             OPACShelfBrowser          => "". C4::Context->preference("OPACShelfBrowser"),
             OpacShowRecentComments    => C4::Context->preference("OpacShowRecentComments"),
@@ -412,7 +415,7 @@ sub get_template_and_user {
             OpacAuthorities           => C4::Context->preference("OpacAuthorities"),
             OPACBaseURL               => ($in->{'query'}->https() ? "https://" : "http://") . $ENV{'SERVER_NAME'} .
                    ($ENV{'SERVER_PORT'} eq ($in->{'query'}->https() ? "443" : "80") ? '' : ":$ENV{'SERVER_PORT'}"),
-            opac_css_override           => $ENV{'OPAC_CSS_OVERRIDE'},
+            opac_css_override         => $ENV{'OPAC_CSS_OVERRIDE'},
             opac_search_limit         => $opac_search_limit,
             opac_limit_override       => $opac_limit_override,
             OpacBrowser               => C4::Context->preference("OpacBrowser"),
@@ -426,7 +429,7 @@ sub get_template_and_user {
             OpacNavRight              => "" . C4::Context->preference("OpacNavRight"),
             OpacNavBottom             => "" . C4::Context->preference("OpacNavBottom"),
             OpacPasswordChange        => C4::Context->preference("OpacPasswordChange"),
-            OPACPatronDetails        => C4::Context->preference("OPACPatronDetails"),
+            OPACPatronDetails         => C4::Context->preference("OPACPatronDetails"),
             OPACPrivacy               => C4::Context->preference("OPACPrivacy"),
             OPACFinesTab              => C4::Context->preference("OPACFinesTab"),
             OpacTopissue              => C4::Context->preference("OpacTopissue"),

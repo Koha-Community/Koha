@@ -63,6 +63,21 @@ my $DisplayMultiPlaceHold = C4::Context->preference("DisplayMultiPlaceHold");
 use CGI qw('-no_undef_params');
 my $cgi = new CGI;
 
+my $branch_group_limit = $cgi->param("branch_group_limit");
+if ( $branch_group_limit ) {
+    if ( $branch_group_limit =~ /^multibranchlimit/ ) {
+        $cgi->param(
+            -name => 'multibranchlimit',
+            -values => [ ( split( 'multibranchlimit-', $branch_group_limit ) )[1] ]
+        );
+    } else {
+        $cgi->append(
+            -name => 'limit',
+            -values => [ $branch_group_limit ]
+        );
+    }
+}
+
 BEGIN {
     if (C4::Context->preference('BakerTaylorEnabled')) {
         require C4::External::BakerTaylor;
@@ -76,6 +91,7 @@ my $lang = C4::Templates::getlanguage($cgi, 'opac');
 my $template_name;
 my $template_type = 'basic';
 my @params = $cgi->param("limit");
+
 
 my $format = $cgi->param("format") || '';
 my $build_grouped_results = C4::Context->preference('OPACGroupResults');
