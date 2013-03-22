@@ -2,10 +2,13 @@
 <title>Koha &rsaquo; Tools &rsaquo; [% branchname %] Calendar</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.min.js"></script>
+[% INCLUDE 'datatables-strings.inc' %]
+<script type="text/javascript" src="[% themelang %]/js/datatables.js"></script>
 <script language="JavaScript" type="text/javascript">
 //<![CDATA[
-
+    [% IF (dateformat == 'metric') %]dt_add_type_uk_date();[% END %]
 	var weekdays = new Array(_("Sundays"),_("Mondays"),_("Tuesdays"),_("Wednesdays"),_("Thursdays"),_("Fridays"),_("Saturdays"));
 
     /* Creates all the structures to deal with all diferents kinds of holidays */
@@ -153,46 +156,21 @@
 
 	$(document).ready(function() {
 
-[% IF ( dateformat_metric ) %]		$.tablesorter.addParser({ // http://tablesorter.com/docs/example-parsers.html
-			id: 'shortDates',
-			is: function(s){
-				return false;
-			},
-			format: function(s){
-				var datepattern = new RegExp("[0-9]\/[0-9]");
-				if( datepattern.test(s)){ // sorting a date without a year: "01/12"
-					var dateparts = s.split("/").reverse().join("-"); // build an ISO date to be sorted as text
-					s = "2000-" + dateparts; // use 2000 as the default year
-				}
-				return s;
-			},
-			type: 'text'
-		});
-[% END %]
 		$(".hint").hide();
 		$("#branch").change(function(){
 			changeBranch();
 		});
-		$("#holidayexceptions").tablesorter({[% IF ( dateformat_metric ) %]
-		  dateFormat: 'uk',[% END %]
-		  sortList: [[0,0]], widgets: ['zebra']
-		});
-		$("#holidayweeklyrepeatable").tablesorter({[% IF ( dateformat_metric ) %]
-		  dateFormat: 'uk',[% END %]
-		  sortList: [[0,0]], widgets: ['zebra']
-		});
-		$("#holidaysyearlyrepeatable").tablesorter({[% IF ( dateformat_metric ) %]
-			headers : {
-				0: {
-					sorter : 'shortDates'
-				}
-			},[% END %]
-			sortList: [[0,0]], widgets: ['zebra']
-		});
-		$("#holidaysunique").tablesorter({[% IF ( dateformat_metric ) %]
-		  dateFormat: 'uk',[% END %]
-		  sortList: [[0,0]], widgets: ['zebra']
-		});
+        $("#holidayexceptions,#holidayweeklyrepeatable,#holidaysunique").dataTable($.extend(true, {}, dataTablesDefaults, {
+            "sDom": 't',
+            "bPaginate": false
+        }));
+        $("#holidaysyearlyrepeatable").dataTable($.extend(true, {}, dataTablesDefaults, {
+            "sDom": 't',
+            "aoColumns": [
+                { "sType": "title-string" },null,null
+            ],
+            "bPaginate": false
+        }));
 		$("a.helptext").click(function(){
 			$(this).parent().find(".hint").toggle(); return false;
 		});
@@ -227,10 +205,10 @@
 .holiday {  background-color :  #ffaeae; color :  Black;  border : 1px solid #BCBCBC; }
 .repeatableweekly {  background-color :  #FFFF99; color :  Black;  border : 1px solid #BCBCBC; }
 .repeatableyearly {  background-color :  #FFCC66; color :  Black;  border : 1px solid #BCBCBC; }
-td.exception a.ui-state-default, .exception { background:  #b3d4ff none; color :  Black; border : 1px solid #BCBCBC; }
-td.holiday a.ui-state-default, .holiday {  background:  #ffaeae none; color :  Black;  border : 1px solid #BCBCBC; }
-td.repeatableweekly a.ui-state-default, .repeatableweekly {  background:  #D8EFB3 none; color :  Black;  border : 1px solid #BCBCBC; }
-td.repeatableyearly a.ui-state-default, .repeatableyearly {  background:  #FFFF99 none; color :  Black;  border : 1px solid #BCBCBC; }
+td.exception a.ui-state-default { background:  #b3d4ff none; color :  Black; border : 1px solid #BCBCBC; }
+td.holiday a.ui-state-default {  background:  #ffaeae none; color :  Black;  border : 1px solid #BCBCBC; }
+td.repeatableweekly a.ui-state-default {  background:  #D8EFB3 none; color :  Black;  border : 1px solid #BCBCBC; }
+td.repeatableyearly a.ui-state-default {  background:  #FFFF99 none; color :  Black;  border : 1px solid #BCBCBC; }
 .information { z-index : 1; background-color :  #DCD2F1; width : 300px; display : none; border : 1px solid #000000; color :  #000000; font-size :  8pt; font-weight :  bold; background-color :  #FFD700; cursor :  pointer; padding : 2px; }
 .panel { z-index : 1; display : none; border : 3px solid #CCC; padding : 3px; margin-top: .3em;  background-color: #FEFEFE; } fieldset.brief { border : 0; margin-top: 0; }
 #showHoliday { margin : .5em 0; } h1 select { width: 20em; } div.yui-b fieldset.brief ol { font-size:100%; } div.yui-b fieldset.brief li, div.yui-b fieldset.brief li.radio  { padding:0.2em 0; } .help { margin:.3em 0;border:1px solid #EEE;padding:.3em .7em; font-size : 90%; } #holidayweeklyrepeatable, #holidaysyearlyrepeatable, #holidaysunique, #holidayexceptions { font-size : 90%; margin-bottom : 1em;} .calendar td, .calendar th, .calendar .button, .calendar tbody .day { padding : .7em; font-size: 110%; } .calendar { width: auto; border : 0; }
@@ -465,7 +443,7 @@ td.repeatableyearly a.ui-state-default, .repeatableyearly {  background:  #FFFF9
 <tbody>
   [% FOREACH EXCEPTION_HOLIDAYS_LOO IN EXCEPTION_HOLIDAYS_LOOP %]
   <tr>
-  <td><a href="/cgi-bin/koha/tools/holidays.pl?branch=[% branch %]&amp;calendardate=[% EXCEPTION_HOLIDAYS_LOO.DATE %]">[% EXCEPTION_HOLIDAYS_LOO.DATE %]</a></td>
+  <td><a href="/cgi-bin/koha/tools/holidays.pl?branch=[% branch %]&amp;calendardate=[% EXCEPTION_HOLIDAYS_LOO.DATE %]"><span title="[% EXCEPTION_HOLIDAYS_LOO.DATE_SORT %]">[% EXCEPTION_HOLIDAYS_LOO.DATE %]</span></a></td>
   <td>[% EXCEPTION_HOLIDAYS_LOO.TITLE %]</td>
   <td>[% EXCEPTION_HOLIDAYS_LOO.DESCRIPTION %]</td> 
   </tr>
@@ -517,7 +495,7 @@ td.repeatableyearly a.ui-state-default, .repeatableyearly {  background:  #FFFF9
 <tbody>
   [% FOREACH DAY_MONTH_HOLIDAYS_LOO IN DAY_MONTH_HOLIDAYS_LOOP %]
   <tr>
-  <td>[% DAY_MONTH_HOLIDAYS_LOO.DATE %]</td>
+  <td><span title="[% DAY_MONTH_HOLIDAYS_LOO.DATE_SORT %]">[% DAY_MONTH_HOLIDAYS_LOO.DATE %]</span></td>
   <td>[% DAY_MONTH_HOLIDAYS_LOO.TITLE %]</td> 
   <td>[% DAY_MONTH_HOLIDAYS_LOO.DESCRIPTION %]</td> 
   </tr>
@@ -539,7 +517,7 @@ td.repeatableyearly a.ui-state-default, .repeatableyearly {  background:  #FFFF9
 <tbody>
     [% FOREACH HOLIDAYS_LOO IN HOLIDAYS_LOOP %]
 <tr>
-  <td><a href="/cgi-bin/koha/tools/holidays.pl?branch=[% branch %]&amp;calendardate=[% HOLIDAYS_LOO.DATE %]">[% HOLIDAYS_LOO.DATE %]</a></td>
+  <td><a href="/cgi-bin/koha/tools/holidays.pl?branch=[% branch %]&amp;calendardate=[% HOLIDAYS_LOO.DATE %]"><span title="[% HOLIDAYS_LOO.DATE_SORT %]">[% HOLIDAYS_LOO.DATE %]</span></a></td>
   <td>[% HOLIDAYS_LOO.TITLE %]</td>
   <td>[% HOLIDAYS_LOO.DESCRIPTION %]</td>
 </tr>
