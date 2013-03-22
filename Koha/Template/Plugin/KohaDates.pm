@@ -36,7 +36,7 @@ sub filter {
     return "" unless $text;
     $config->{with_hours} //= 0;
     my $dt = dt_from_string( $text, 'iso' );
-    return output_pref( $dt, undef, !$config->{with_hours} );
+    return output_pref( $dt, undef, undef, !$config->{with_hours} );
 }
 
 1;
