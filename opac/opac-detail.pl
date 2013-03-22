@@ -543,7 +543,6 @@ if ( $show_holds_count || $show_priority) {
 $template->param( show_priority => $has_hold ) ;
 
 my $norequests = 1;
-my $branches = GetBranches();
 my %itemfields;
 my (@itemloop, @otheritemloop);
 my $currentbranch = C4::Context->userenv ? C4::Context->userenv->{branch} : undef;
