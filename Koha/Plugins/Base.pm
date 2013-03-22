@@ -24,11 +24,6 @@ use Module::Pluggable require => 1;
 use base qw{Module::Bundled::Files};
 
 use C4::Context;
-use C4::Auth;
-
-BEGIN {
-    push @INC, C4::Context->config("pluginsdir");
-}
 
 =head1 NAME
 
@@ -107,6 +102,8 @@ C4:Template, but at the moment, it does not.
 
 sub get_template {
     my ( $self, $args ) = @_;
+
+    require C4::Auth;
 
     my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         {   template_name   => $self->mbf_path( $args->{'file'} ),
