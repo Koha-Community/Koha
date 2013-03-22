@@ -86,7 +86,7 @@ sub import_bib {
 
     my $matcher = C4::Matcher->new($params->{record_type} || 'biblio');
     $matcher = C4::Matcher->fetch($params->{matcher_id});
-    my $number_of_matches =  BatchFindBibDuplicates($batch_id, $matcher);
+    my $number_of_matches =  BatchFindDuplicates($batch_id, $matcher);
 
     # XXX we are ignoring the result of this;
     BatchCommitBibRecords($batch_id, $framework) if lc($import_mode) eq 'direct';
