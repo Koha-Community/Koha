@@ -4,10 +4,82 @@
 [% INCLUDE 'calendar.inc' %]
 <script type="text/javascript">
 //<![CDATA[
+
+function clear_edit(){
+    var cancel = confirm(_("Are you sure you want to cancel your changes?"));
+    if ( !cancel ) return;
+    $('#default-circulation-rules td').removeClass('highlighted-row');
+    var edit_row = $("#edit_row");
+    $(edit_row).find("input").each(function(){
+        var type = $(this).attr("type");
+        if (type != "button" && type != "submit" ) {
+            $(this).val("");
+            $(this).removeAttr("disabled");
+        }
+    });
+    $(edit_row).find("select").removeAttr("disabled");
+    $(edit_row).find("select option:first").attr("selected", "selected");
+    $(edit_row).find("td:last input[name='clear']").remove();
+}
+
 $(document).ready(function() {
         $('#selectlibrary').find("input:submit").hide();
         $('#branch').change(function() {
                 $('#selectlibrary').submit();
+        });
+        $(".editrule").click(function(){
+            if ( $(edit_row).find("input[type='text'][value!='']").length > 0 ) {
+                var edit = confirm(_("Are you sure you want to edit another rule?"));
+                if (!edit) return false;
+            }
+            $('#default-circulation-rules td').removeClass('highlighted-row');
+            $(this).parent().parent().find("td").each(function (i) {
+                $(this).addClass('highlighted-row');
+                itm = $(this).text();
+                itm = itm.replace(/^\s*|\s*$/g,'');
+                var current_column = $("#edit_row td:eq("+i+")");
+                if ( i != 5 ) {
+                    $(current_column).find("input[type='text']").val(itm);
+                    // select the corresponding option
+                    $(current_column).find("select option").each(function(){
+                        if ( $(this).text().toLowerCase() == itm.toLowerCase() ) {
+                            $(this).attr('selected', 'selected');
+                        }
+                    });
+                    if ( i == 0 || i == 1 ) {
+                        // Disable the 2 first columns, we cannot update them.
+                        var val = $(current_column).find("select option:selected").val();
+                        var name = "categorycode";
+                        if ( i == 1 ) {
+                            name="itemtype";
+                        }
+                        // Remove potential previous input added
+                        $(current_column).find("input").remove();
+                        $(current_column).append("<input type='hidden' name='"+name+"' value='"+val+"' />");
+                    } else if ( i == 2 ) {
+                        // If the value is not an integer for "Current checkouts allowed"
+                        // The value is "Unlimited" (or an equivalent translated string)
+                        // an it should be set to an empty string
+                        if( !((parseFloat(itm) == parseInt(itm)) && !isNaN(itm)) ) {
+                            $(current_column).find("input[type='text']").val("");
+                        }
+                    }
+                } else {
+                    // specific processing for the Hard due date column
+                    var select_value = $(this).find("input[type='hidden'][name='hardduedatecomparebackup']").val();
+                    var input_value = '';
+                    if (typeof select_value === 'undefined'){
+                        select_value = '-1';
+                    }else {
+                        input_value = itm.split(' ')[1];
+                    }
+                    $(current_column).find("input[type='text']").val(input_value);
+                    $(current_column).find("select").val(select_value);
+                }
+            });
+            $("#default-circulation-rules tr:last td:eq(0) select").attr('disabled', 'disabled');
+            $("#default-circulation-rules tr:last td:eq(1) select").attr('disabled', 'disabled');
+            return false;
         });
 });
 //]]>
@@ -57,11 +129,13 @@ $(document).ready(function() {
         </form>
 [% IF ( definedbranch ) %]<form action="/cgi-bin/koha/admin/clone-rules.pl" method="post"><label 
 for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidden" name="frombranch" value="[% current_branch %]" />
-            <select name="tobranch" id="tobranch">[% FOREACH branchloo IN branchloop %]<option value="[% branchloo.value %]">[% branchloo.branchname %]</option>[% END %]</select> <input type="submit" value="Clone" /></form>[% END %]</fieldset>
+            <select name="tobranch" id="tobranch">[% FOREACH branchloo IN branchloop %]<option value="[% branchloo.value %]">[% branchloo.branchname %]</option>[% END %]</select> <input type="submit" value="Clone" /></form>[% END %]
 
         <form method="post" action="/cgi-bin/koha/admin/smart-rules.pl">
             <input type="hidden" name="op" value="add" />
-            <table>
+            <input type="hidden" name="branch" value="[% branch %]"/>
+            <table id="default-circulation-rules">
+            <thead>
             <tr>
                 <th>Patron category</th>
                 <th>Item type</th>
@@ -76,14 +150,16 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
                 <th>Suspension in days (day)</th>
                 <th>Renewals allowed (count)</th>
                 <th>Holds allowed (count)</th>
-		<th>Rental discount (%)</th>
-				<th>&nbsp;</th>
+                <th>Rental discount (%)</th>
+                <th colspan="2">&nbsp;</th>
             </tr>
+            </thead>
+            <tbody>
 				[% FOREACH rule IN rules %]
 					[% UNLESS ( loop.odd ) %]
-					<tr class="highlight">
+					<tr class="highlight" id="row_[% loop.count %]">
 					[% ELSE %]
-					<tr>
+					<tr id="row_[% loop.count %]">
 					[% END %]
 							<td>[% IF ( rule.default_humancategorycode ) %]
 									<em>All</em>
@@ -107,13 +183,22 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
 							<td>
 							    [% rule.lengthunit %]
 							</td>
-                                                        <td>[% IF ( rule.hardduedate ) %]
-                                                               [% IF ( rule.hardduedatebefore ) %]before [% rule.hardduedate %]</td>
-                                                               [% ELSE %][% IF ( rule.hardduedateexact ) %]on [% rule.hardduedate %]</td>
-                                                                                 [% ELSE %][% IF ( rule.hardduedateafter ) %]after [% rule.hardduedate %]</td>[% END %]
-                                                                                 [% END %]
-                                                               [% END %]
-                                                            [% ELSE %]None defined[% END %]   
+                            <td>
+                              [% IF ( rule.hardduedate ) %]
+                                [% IF ( rule.hardduedatebefore ) %]
+                                  before [% rule.hardduedate %]
+                                  <input type="hidden" name="hardduedatecomparebackup" value="-1" />
+                                [% ELSIF ( rule.hardduedateexact ) %]
+                                  on [% rule.hardduedate %]
+                                  <input type="hidden" name="hardduedatecomparebackup" value="0" />
+                                [% ELSIF ( rule.hardduedateafter ) %]
+                                  after [% rule.hardduedate %]
+                                  <input type="hidden" name="hardduedatecomparebackup" value="1" />
+                                [% END %]
+                              [% ELSE %]
+                                None defined
+                              [% END %]
+                            </td>
 							<td>[% rule.fine %]</td>
 							<td>[% rule.chargeperiod %]</td>
 							<td>[% rule.firstremind %]</td>
@@ -122,14 +207,15 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
 							<td>[% rule.renewalsallowed %]</td>
 							<td>[% rule.reservesallowed %]</td>
 							<td>[% rule.rentaldiscount %]</td>
+                            <td><a href="#" class="editrule">Edit</a></td>
 							<td>
 								<a class="button" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete&amp;itemtype=[% rule.itemtype %]&amp;categorycode=[% rule.categorycode %]&amp;branch=[% rule.current_branch %]">Delete</a>
 							</td>
                 	</tr>
             	[% END %]
-                <tr>
+                <tr id="edit_row">
                     <td>
-                        <select name="categorycode">
+                        <select name="categorycode" id="categorycode">
                             <option value="*">All</option>
                         [% FOREACH categoryloo IN categoryloop %]
                             <option value="[% categoryloo.categorycode %]">[% categoryloo.description %]</option>
@@ -137,22 +223,23 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
                         </select>
                     </td>
                     <td>
-                        <select name="itemtype" style="width:13em;">
+                        <select name="itemtype" id="matrixitemtype" style="width:13em;">
                             <option value="*">All</option>
                         [% FOREACH itemtypeloo IN itemtypeloop %]
                             <option value="[% itemtypeloo.itemtype %]">[% itemtypeloo.description %]</option>
                         [% END %]
                         </select>
                     </td>
-                    <td><input name="maxissueqty" size="3" /></td>
-                    <td><input name="issuelength" size="3" /> </td>
+                    <td><input type="text" name="maxissueqty" id="maxissueqty" size="3" /></td>
+                    <td><input type="text" name="issuelength" id="issuelength" size="3" /> </td>
                     <td>
-		      <select name="lengthunit">
-			<option value="days" selected>Days</option>
-			<option value="hours">Hours</option>
-		      </select>
-		    </td>
-                    <td><select name="hardduedatecompare">
+                      <select name="lengthunit" id="lengthunit">
+                        <option value="days" selected>Days</option>
+                        <option value="hours">Hours</option>
+                      </select>
+                    </td>
+                    <td>
+                        <select name="hardduedatecompare" id="hardduedatecompare">
                            <option value="-1">Before</option>
                            <option value="0">Exactly on</option>
                            <option value="1">After</option>
@@ -160,16 +247,21 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
                         <input type="text" size="10" id="hardduedate" name="hardduedate" value="[% hardduedate %]" class="datepicker" />
                         <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
                     </td>
-                    <td><input name="fine" size="4" /></td>
-                    <td><input name="chargeperiod" size="2" /></td>
-                    <td><input name="firstremind" size="2" /> </td>
-                    <td><input name="overduefinescap" size="6" /> </td>
-                    <td><input name="finedays" size="3" /> </td>
-                    <td><input name="renewalsallowed" size="2" /></td>
-                    <td><input name="reservesallowed" size="2" /></td>
-		    <td><input name="rentaldiscount" size="2" /></td>
-                    <td><input type="hidden" name="branch" value="[% current_branch %]"/><input type="submit" value="Add" class="submit" /></td>
+                    <td><input type="text" name="fine" id="fine" size="4" /></td>
+                    <td><input type="text" name="chargeperiod" id="chargeperiod" size="2" /></td>
+                    <td><input type="text" name="firstremind" id="firstremind" size="2" /> </td>
+                    <td><input type="text" name="overduefinescap" id="overduefinescap" size="6" /> </td>
+                    <td><input type="text" name="finedays" id="fined" size="3" /> </td>
+                    <td><input type="text" name="renewalsallowed" id="renewalsallowed" size="2" /></td>
+                    <td><input type="text" name="reservesallowed" id="reservesallowed" size="2" /></td>
+                    <td><input type="text" name="rentaldiscount" id="rentaldiscount" size="2" /></td>
+                    <td colspan="2">
+                        <input type="hidden" name="branch" value="[% current_branch %]"/>
+                        <input type="submit" value="Save" class="submit" />
+                        <input type="button" name="cancel" value="Clear" onclick="clear_edit();return false;" />
+                    </td>
                 </tr>
+                </tbody>
             </table>
         </form>
     </div>
