@@ -1334,15 +1334,20 @@ Get loan length for an itemtype, a borrower type and a branch
 sub GetLoanLength {
     my ( $borrowertype, $itemtype, $branchcode ) = @_;
     my $dbh = C4::Context->dbh;
-    my $sth =
-      $dbh->prepare(
-'select issuelength, lengthunit from issuingrules where categorycode=? and itemtype=? and branchcode=? and issuelength is not null'
-      );
-# warn "in get loan lenght $borrowertype $itemtype $branchcode ";
-# try to find issuelength & return the 1st available.
-# check with borrowertype, itemtype and branchcode, then without one of those parameters
+    my $sth = $dbh->prepare(qq{
+        SELECT issuelength, lengthunit, renewalperiod
+        FROM issuingrules
+        WHERE   categorycode=?
+            AND itemtype=?
+            AND branchcode=?
+            AND issuelength IS NOT NULL
+    });
+
+    # try to find issuelength & return the 1st available.
+    # check with borrowertype, itemtype and branchcode, then without one of those parameters
     $sth->execute( $borrowertype, $itemtype, $branchcode );
     my $loanlength = $sth->fetchrow_hashref;
+
     return $loanlength
       if defined($loanlength) && $loanlength->{issuelength};
 
@@ -1384,6 +1389,7 @@ sub GetLoanLength {
     # if no rule is set => 21 days (hardcoded)
     return {
         issuelength => 21,
+        renewalperiod => 21,
         lengthunit => 'days',
     };
 
@@ -1418,7 +1424,7 @@ sub GetHardDueDate {
 
 FIXME - This is a copy-paste of GetLoanLength
 as a stop-gap.  Do not wish to change API for GetLoanLength 
-this close to release, however, Overdues::GetIssuingRules is broken.
+this close to release.
 
 Get the issuing rule for an itemtype, a borrower type and a branch
 Returns a hashref from the issuingrules table.
@@ -2249,7 +2255,7 @@ sub GetItemIssue {
     my ($itemnumber) = @_;
     return unless $itemnumber;
     my $sth = C4::Context->dbh->prepare(
-        "SELECT *
+        "SELECT items.*, issues.*
         FROM issues
         LEFT JOIN items ON issues.itemnumber=items.itemnumber
         WHERE issues.itemnumber=?");
@@ -2415,8 +2421,6 @@ END_SQL
 
 Find out whether a borrowed item may be renewed.
 
-C<$dbh> is a DBI handle to the Koha database.
-
 C<$borrowernumber> is the borrower number of the patron who currently
 has the item on loan.
 
@@ -2426,7 +2430,7 @@ C<$override_limit>, if supplied with a true value, causes
 the limit on the number of times that the loan can be renewed
 (as controlled by the item type) to be ignored.
 
-C<$CanBookBeRenewed> returns a true value iff the item may be renewed. The
+C<$CanBookBeRenewed> returns a true value if the item may be renewed. The
 item must currently be on loan to the specified borrower; renewals
 must be allowed for the item's type; and the borrower must not have
 already renewed the loan. $error will contain the reason the renewal can not proceed
@@ -2440,63 +2444,29 @@ sub CanBookBeRenewed {
     my $dbh       = C4::Context->dbh;
     my $renews    = 1;
     my $renewokay = 0;
-	my $error;
+    my $error;
 
-    # Look in the issues table for this item, lent to this borrower,
-    # and not yet returned.
+    my $borrower    = C4::Members::GetMemberDetails( $borrowernumber, 0 )   or return;
+    my $item        = GetItem($itemnumber)                                  or return;
+    my $itemissue   = GetItemIssue($itemnumber)                             or return;
 
-    # Look in the issues table for this item, lent to this borrower,
-    # and not yet returned.
-    my %branch = (
-            'ItemHomeLibrary' => 'items.homebranch',
-            'PickupLibrary'   => 'items.holdingbranch',
-            'PatronLibrary'   => 'borrowers.branchcode'
-            );
-    my $controlbranch = $branch{C4::Context->preference('CircControl')};
-    my $itype         = C4::Context->preference('item-level_itypes') ? 'items.itype' : 'biblioitems.itemtype';
-    
-    my $sthcount = $dbh->prepare("
-                   SELECT 
-                    borrowers.categorycode, biblioitems.itemtype, issues.renewals, renewalsallowed, $controlbranch
-                   FROM  issuingrules, 
-                   issues
-                   LEFT JOIN items USING (itemnumber) 
-                   LEFT JOIN borrowers USING (borrowernumber) 
-                   LEFT JOIN biblioitems USING (biblioitemnumber)
-                   
-                   WHERE
-                    (issuingrules.categorycode = borrowers.categorycode OR issuingrules.categorycode = '*')
-                   AND
-                    (issuingrules.itemtype = $itype OR issuingrules.itemtype = '*')
-                   AND
-                    (issuingrules.branchcode = $controlbranch OR issuingrules.branchcode = '*') 
-                   AND 
-                    borrowernumber = ? 
-                   AND
-                    itemnumber = ?
-                   ORDER BY
-                    issuingrules.categorycode desc,
-                    issuingrules.itemtype desc,
-                    issuingrules.branchcode desc
-                   LIMIT 1;
-                  ");
+    my $branchcode  = _GetCircControlBranch($item, $borrower);
 
-    $sthcount->execute( $borrowernumber, $itemnumber );
-    if ( my $data1 = $sthcount->fetchrow_hashref ) {
-        if ( ( $data1->{renewalsallowed} && $data1->{renewalsallowed} > $data1->{renewals} ) || $override_limit ) {
-            $renewokay = 1;
-        }
-        else {
-            $error = "too_many";
-        }
+    my $issuingrule = GetIssuingRule($borrower->{categorycode}, $item->{itype}, $branchcode);
 
-        my $resstatus = C4::Reserves::GetReserveStatus($itemnumber);
-        if ( $resstatus eq "Waiting" or $resstatus eq "Reserved" ) {
-            $renewokay = 0;
-            $error = "on_reserve";
-        }
+    if ( ( $issuingrule->{renewalsallowed} > $itemissue->{renewals} ) || $override_limit ) {
+        $renewokay = 1;
+    } else {
+        $error = "too_many";
     }
-    return ($renewokay,$error);
+
+    my $resstatus = C4::Reserves::GetReserveStatus($itemnumber);
+    if ( $resstatus eq "Waiting" or $resstatus eq "Reserved" ) {
+        $renewokay = 0;
+        $error = "on_reserve";
+    }
+
+    return ( $renewokay, $error );
 }
 
 =head2 AddRenewal
@@ -2555,9 +2525,9 @@ sub AddRenewal {
         my $itemtype = (C4::Context->preference('item-level_itypes')) ? $biblio->{'itype'} : $biblio->{'itemtype'};
 
         $datedue = (C4::Context->preference('RenewalPeriodBase') eq 'date_due') ?
-                                        $issuedata->{date_due} :
+                                        dt_from_string( $issuedata->{date_due} ) :
                                         DateTime->now( time_zone => C4::Context->tz());
-        $datedue =  CalcDateDue($datedue,$itemtype,$issuedata->{'branchcode'},$borrower);
+        $datedue =  CalcDateDue($datedue, $itemtype, $issuedata->{'branchcode'}, $borrower, 'is a renewal');
     }
 
     # Update the issues record to have the new due date, and a new count
@@ -3022,62 +2992,60 @@ C<$startdate>   = C4::Dates object representing start date of loan period (assum
 C<$itemtype>  = itemtype code of item in question
 C<$branch>  = location whose calendar to use
 C<$borrower> = Borrower object
+C<$isrenewal> = Boolean: is true if we want to calculate the date due for a renewal. Else is false.
 
 =cut
 
 sub CalcDateDue {
-    my ( $startdate, $itemtype, $branch, $borrower ) = @_;
+    my ( $startdate, $itemtype, $branch, $borrower, $isrenewal ) = @_;
+
+    $isrenewal ||= 0;
 
     # loanlength now a href
     my $loanlength =
-      GetLoanLength( $borrower->{'categorycode'}, $itemtype, $branch );
+            GetLoanLength( $borrower->{'categorycode'}, $itemtype, $branch );
+
+    my $length_key = ( $isrenewal and defined $loanlength->{renewalperiod} )
+            ? qq{renewalperiod}
+            : qq{issuelength};
 
     my $datedue;
-
-    # if globalDueDate ON the datedue is set to that date
-    if (C4::Context->preference('globalDueDate')
-        && ( C4::Context->preference('globalDueDate') =~
-            C4::Dates->regexp('syspref') )
-      ) {
-        $datedue = dt_from_string(
-            C4::Context->preference('globalDueDate'),
-            C4::Context->preference('dateformat')
-        );
-    } else {
-
-        # otherwise, calculate the datedue as normal
-        if ( C4::Context->preference('useDaysMode') eq 'Days' )
-        {    # ignoring calendar
-            my $dt =
-              DateTime->now( time_zone => C4::Context->tz() )
-              ->truncate( to => 'minute' );
-            if ( $loanlength->{lengthunit} eq 'hours' ) {
-                $dt->add( hours => $loanlength->{issuelength} );
-            } else {    # days
-                $dt->add( days => $loanlength->{issuelength} );
-                $dt->set_hour(23);
-                $dt->set_minute(59);
-            }
-            # break
-            return $dt;
-
+    if ( $startdate ) {
+        if (ref $startdate ne 'DateTime' ) {
+            $datedue = dt_from_string($datedue);
         } else {
-            my $dur;
-            if ($loanlength->{lengthunit} eq 'hours') {
-                $dur = DateTime::Duration->new( hours => $loanlength->{issuelength});
-            }
-            else { # days
-                $dur = DateTime::Duration->new( days => $loanlength->{issuelength});
-            }
-            if (ref $startdate ne 'DateTime' ) {
-                $startdate = dt_from_string($startdate);
-            }
-            my $calendar = Koha::Calendar->new( branchcode => $branch );
-            $datedue = $calendar->addDate( $startdate, $dur, $loanlength->{lengthunit} );
-            if ($loanlength->{lengthunit} eq 'days') {
-                $datedue->set_hour(23);
-                $datedue->set_minute(59);
-            }
+            $datedue = $startdate->clone;
+        }
+    } else {
+        $datedue =
+          DateTime->now( time_zone => C4::Context->tz() )
+          ->truncate( to => 'minute' );
+    }
+
+
+    # calculate the datedue as normal
+    if ( C4::Context->preference('useDaysMode') eq 'Days' )
+    {    # ignoring calendar
+        if ( $loanlength->{lengthunit} eq 'hours' ) {
+            $datedue->add( hours => $loanlength->{$length_key} );
+        } else {    # days
+            $datedue->add( days => $loanlength->{$length_key} );
+            $datedue->set_hour(23);
+            $datedue->set_minute(59);
+        }
+    } else {
+        my $dur;
+        if ($loanlength->{lengthunit} eq 'hours') {
+            $dur = DateTime::Duration->new( hours => $loanlength->{$length_key});
+        }
+        else { # days
+            $dur = DateTime::Duration->new( days => $loanlength->{$length_key});
+        }
+        my $calendar = Koha::Calendar->new( branchcode => $branch );
+        $datedue = $calendar->addDate( $datedue, $dur, $loanlength->{lengthunit} );
+        if ($loanlength->{lengthunit} eq 'days') {
+            $datedue->set_hour(23);
+            $datedue->set_minute(59);
         }
     }
 
@@ -3098,6 +3066,7 @@ sub CalcDateDue {
         }
 
         # in all other cases, keep the date due as it is
+
     }
 
     # if ReturnBeforeExpiry ON the datedue can't be after borrower expirydate
