@@ -4,31 +4,29 @@
 [% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Your library home
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.metadata.min.js"></script>
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+[% INCLUDE 'datatables.inc' %]
 <script type="text/JavaScript">
 //<![CDATA[
 var MSG_CONFIRM_DELETE_HOLD   = _("Are you sure you want to cancel this hold?");
 var MSG_CONFIRM_SUSPEND_HOLDS = _("Are you sure you want to suspend all holds?");
 var MSG_CONFIRM_RESUME_HOLDS  = _("Are you sure you want to resume all suspended holds?");
 
-$.tablesorter.addParser({
-    id: 'articles', 
-    is: function(s) {return false;  }, 
-    format: function(s) { return s.toLowerCase().replace(/^(the|an|a) /,''); }, 
-    type: 'text' 
-});
             $(function() {
             $('#opac-user-views').tabs();
-            $.tablesorter.defaults.widgets = ['zebra'];
-            [% IF ( dateformat == 'metric' ) %]$.tablesorter.defaults.dateFormat = ['uk'];[% END %]
-			$("#holdst").tablesorter({
-				sortList: [[0,0]]
-			}); 
-			$("#checkoutst").tablesorter({
-                [% IF ( JacketImages ) %]sortList: [[2,0]][% ELSE %]sortList: [[1,0]][% END %]
-            }); 
-			$("#overduest").tablesorter();
+
+        var dTables = $("#checkoutst,#holdst,#overduest");
+        dTables.each(function(){
+            var thIndex = $(this).find("th.psort").index();
+            $(this).dataTable($.extend(true, {}, dataTablesDefaults, {
+                "aaSorting" : [[ thIndex, 'asc' ]],
+                "aoColumnDefs": [
+                    { "aTargets": [ "nosort" ],"bSortable": false,"bSearchable": false },
+                    { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
+                    { "sType": "title-string", "aTargets" : [ "title-string" ] }
+                ]
+            }));
+        });
+
 [% IF ( GoogleJackets ) %]KOHA.Google.GetCoverFromIsbn();[% END %]
         [% IF ( OpacRenewalAllowed && canrenew && !userdebarred ) %]$("#renewselected").submit(function(){
             valid = false;
@@ -136,20 +134,20 @@ $.tablesorter.addParser({
         <table id="checkoutst">
         <caption>[% issues_count %] Item(s) checked out</caption>
        <thead><tr>
-        [% IF ( JacketImages ) %]<th class="{sorter: false}">&nbsp;</th>[% END %]
-        <th class="{sorter:'articles'}">Title</th>
-        <th>Due</th>
+        [% IF ( JacketImages ) %]<th class="nosort">&nbsp;</th>[% END %]
+        <th class="anti-the">Title</th>
+        <th class="title-string psort">Due</th>
         [% UNLESS ( item_level_itypes ) %]<th>Item type</th> [% END %]
         [% IF ( show_barcode ) %]<th>Barcode</th>[% END %]
         <th>Call No.</th>
         [% IF ( OpacRenewalAllowed ) %]
-        <th class="{sorter: false}">Renew</th>
+        <th class="nosort">Renew</th>
         [% END %]
 [% IF ( OPACFinesTab ) %]
         <th>Fines</th>
 [% END %]
         [% IF ( OPACMySummaryHTML ) %]
-        <th class="{sorter: false}">Links</th>
+        <th class="nosort">Links</th>
         [% END %]
         </tr></thead>
         <tbody>
@@ -183,9 +181,9 @@ $.tablesorter.addParser({
                         [% ISSUE.author %]
                     </span></td>
                 [% IF ( ISSUE.overdue ) %]
-                    <td class="date_due overdue">[% ISSUE.date_due | $KohaDates %]</td>
+                    <td class="date_due overdue"><span title="[% ISSUE.date_due %]">[% ISSUE.date_due | $KohaDates %]</span></td>
                 [% ELSE %]
-                    <td class="date_due">[% ISSUE.date_due | $KohaDates %]</td>
+                    <td class="date_due"><span title="[% ISSUE.date_due %]">[% ISSUE.date_due | $KohaDates %]</span></td>
                 [% END %]
                 [% UNLESS ( item_level_itypes ) %]<td class="itype">[% IF ( ISSUE.imageurl ) %]<img src="[% ISSUE.imageurl %]" title="[% ISSUE.description %]" alt="[% ISSUE.description %]" />[% END %] [% ISSUE.description %]</td>[% END %]
                 [% IF ( show_barcode ) %]<td class="barcode">[% ISSUE.barcode %]</td>[% END %]
@@ -264,7 +262,7 @@ $.tablesorter.addParser({
         <table id="waitingt">
             <caption>Holds waiting</caption>
            <thead> <tr>
-                <th colspan="2" class="{sorter:'articles'}">Title</th>
+                <th>Title</th>
                 <th>Hold date</th>
                 <th>Pick up library</th>
             </tr></thead>
@@ -292,14 +290,14 @@ $.tablesorter.addParser({
 <caption>Overdues <span class="count">([% overdues_count %] total)</span></caption>
 <!-- OVERDUES TABLE ROWS -->
 <thead><tr>
-[% IF ( JacketImages ) %]<th class="{sorter: false}">&nbsp;</th>[% END %]
-<th class="{sorter:'articles'}">Title</th>
+[% IF ( JacketImages ) %]<th class="nosort">&nbsp;</th>[% END %]
+<th>Title</th>
 [% UNLESS ( item_level_itypes ) %]<th>Item type</th> [% END %]
 [% IF ( show_barcode ) %]<th>Barcode</th>[% END %]
 <th>Call no.</th>
-<th>Due</th>
+<th class="psort">Due</th>
 [% IF ( OpacRenewalAllowed ) %]
-                    <th class="{sorter: false}">Renew</th>
+                    <th class="nosort">Renew</th>
 [% END %]
 [% IF ( OPACFinesTab ) %]
 <th>Fines</th>
@@ -330,7 +328,7 @@ $.tablesorter.addParser({
 [% UNLESS ( item_level_itypes ) %]<td>[% IF ( OVERDUE.imageurl ) %]<img src="[% OVERDUE.imageurl %]" title="[% OVERDUE.description %]" alt="[% OVERDUE.description %]" />[% END %] [% OVERDUE.description %]</td>[% END %]
 [% IF ( show_barcode ) %]<td>[% OVERDUE.barcode %]</td>[% END %]
 <td>[% OVERDUE.itemcallnumber %]</td>
-<td>[% OVERDUE.date_due | $KohaDates %]</td>
+<td><span title="[% OVERDUE.date_due %]">[% OVERDUE.date_due | $KohaDates %]</span></td>
                 [% IF ( OpacRenewalAllowed ) %]
 <td>
 [% IF ( OVERDUE.debarred ) %]Account frozen
@@ -355,8 +353,8 @@ $.tablesorter.addParser({
         <caption>Holds <span class="count">([% reserves_count %] total)</span></caption>
             <!-- RESERVES TABLE ROWS -->
             <thead><tr>
-                <th class="{sorter:'articles'}">Title</th>
-                <th>Placed on</th>
+                <th>Title</th>
+                <th class="psort">Placed on</th>
                 [% IF OpacHoldNotes %]<th>Notes</th>[% END %]
         <th>Expires on</th>
                 <th>Pick up location</th>
@@ -364,7 +362,7 @@ $.tablesorter.addParser({
 			<th>Priority</th>
 		[% END %]
                 <th>Status</th>
-		<th class="{sorter: false}">Modify</th>
+        <th class="nosort">Modify</th>
             </tr></thead>
 			<tbody>
             [% FOREACH RESERVE IN RESERVES %]
@@ -384,9 +382,15 @@ $.tablesorter.addParser({
                 <td class="title"><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% RESERVE.biblionumber %]">[% RESERVE.reserves_title %]</a>
                     [% RESERVE.author %]
                 </td>
-                <td class="reservedate">[% RESERVE.reservedate | $KohaDates %]</td>
+                <td class="reservedate"><span title="[% RESERVE.reservedate %]">[% RESERVE.reservedate | $KohaDates %]</span></td>
                 [% IF OpacHoldNotes %]<td class="reservenotes">[% RESERVE.reservenotes %]</td>[% END %]
-        <td class="expirationdate">[% IF ( RESERVE.expirationdate ) %][% RESERVE.expirationdate | $KohaDates %][% ELSE %]Never expires[% END %]</td>
+                <td class="expirationdate">
+                    [% IF ( RESERVE.expirationdate ) %]
+                        <span title="[% RESERVE.expirationdate %]">[% RESERVE.expirationdate | $KohaDates %]</span>
+                    [% ELSE %]
+                        Never expires
+                    [% END %]
+                </td>
                 <td class="branch">[% RESERVE.branch %]</td>
 				[% IF ( showpriority ) %]
                              <td class="priority">[% RESERVE.priority %] </td>

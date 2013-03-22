@@ -1,7 +1,8 @@
 [% USE Koha %]
+[% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo;  Subscription information for [% bibliotitle %]
 [% INCLUDE 'doc-head-close.inc' %]
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+[% INCLUDE 'datatables.inc' %]
 <script type="text/javascript" language="javascript">
 //<![CDATA[
 
@@ -25,11 +26,18 @@ $(document).ready(function(){
 		$("a.tabsubs").removeClass("currentsubtab");
 		$(this).addClass("currentsubtab");
 	});
-	$(".subscriptionstclass").tablesorter({[% IF ( dateformat == 'metric' ) %]
-    dateFormat: 'uk',[% END %]
-            widgets : ['zebra'],
-            sortList: [[0,0]]
-        });
+    $(".subscriptionstclass").dataTable($.extend(true, {}, dataTablesDefaults, {
+        "aaSorting": [[ 0, "desc" ]],
+        "aoColumns": [
+            { "sType": "title-string" },
+            null,
+            null,
+            { "sType": "title-string" },
+            null,
+            null,
+            null
+        ]
+    }));
 });
 
 // Filters initialization
@@ -191,13 +199,23 @@ function showlayer(numlayer){
 	    <tbody>
 		[% FOREACH serial IN year.serials %]
 		<tr>
-		    <td>    [% serial.publisheddate %]
-		    </td>
+            <td>
+                [% IF ( serial.publisheddate ) %]
+                    <span title="[% serial.publisheddate %]">[% serial.publisheddate | $KohaDates %]</span>
+                [% ELSE %]
+                    &nbsp;
+                [% END %]
+            </td>
             <td class="libraryfilterclass">    [% serial.branchcode %]
 		    </td>
 		    <td>    [% serial.notes %]
 		    </td>
-		    <td>   [% IF ( serial.status2 ) %] [% serial.planneddate %] [% END %]
+            <td>
+                [% IF ( serial.status2 && serial.planneddate ) %]
+                    <span title="[% serial.planneddate %]">[% serial.planneddate | $KohaDates %]</span>
+                [% ELSE %]
+                    <span title="9999-12-31">&nbsp;</span>
+                [% END %]
 		    </td>
 		    <td>    [% serial.serialseq %]
 		    </td>

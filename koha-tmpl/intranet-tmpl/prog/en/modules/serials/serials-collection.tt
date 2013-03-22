@@ -1,4 +1,5 @@
 [% USE Branches %]
+[% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Serials &rsaquo; Serial collection information for [% bibliotitle %]</title>
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
@@ -68,6 +69,7 @@ $(document).ready(function() {
     $(".subscription-year-table").dataTable($.extend(true, {}, dataTablesDefaults, {
         "aoColumnDefs": [
             { "aTargets": [ 0 ], "bSortable": false, "bSearchable": false },
+            { "sType": "title-string", "aTargets" : [ "title-string" ] }
         ],
         "aaSorting": [[0, 'desc']],
         "sDom": 't',
@@ -252,9 +254,9 @@ $(document).ready(function() {
 [% IF ( subscriptions.size > 1 ) %]
                 <th># Subs</th>
 [% END %]
-                <th>Date published
+                <th class="title-string">Date published
                 </th>
-                <th>Date received
+                <th class="title-string">Date received
                 </th>
                 <th>Number
                 </th>
@@ -291,10 +293,10 @@ $(document).ready(function() {
                  <td><a href="serials-collection.pl?subscriptionid=[% serial.subscriptionid %]">[% serial.subscriptionid %]</a></td>
 [% END %]
                 <td>
-                    [% serial.publisheddate %]
+                    <span title="[% serial.publisheddate %]">[% serial.publisheddate | $KohaDates %]</span>
                 </td>
                 <td>
-                    [% serial.planneddate %]
+                    <span title="[% serial.planneddate %]">[% serial.planneddate | $KohaDates %]</span>
                 </td>
                 <td>
                     [% serial.serialseq %]

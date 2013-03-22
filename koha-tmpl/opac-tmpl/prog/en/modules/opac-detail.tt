@@ -19,7 +19,7 @@
 
 [% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Details for: [% title |html %][% FOREACH subtitl IN subtitle %], [% subtitl.subfield |html %][% END %]
 [% INCLUDE 'doc-head-close.inc' %]
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+[% INCLUDE 'datatables.inc' %]
 [% IF ( SocialNetworks ) %]
     <script type="text/javascript" src="https://apis.google.com/js/plusone.js">
     //<![CDATA[
@@ -109,11 +109,28 @@
         });
 [% END %]
 
-        $(".holdingst").tablesorter({[% IF ( dateformat == 'metric' ) %]
-    dateFormat: 'uk',[% END %]
-            widgets : ['zebra'],
-            sortList: [[0,0]]
-        });
+            $(".holdingst").dataTable($.extend(true, {}, dataTablesDefaults, {
+                "aoColumns": [
+                    [% IF ( item_level_itypes ) %]null,[% END %]
+                    null,
+                    [% IF ( itemdata_ccode ) %]null,[% END %]
+                    null,
+                    [% IF ( itemdata_enumchron ) %]null,[% END %]
+                    [% IF ( itemdata_uri ) %]null,[% END %]
+                    [% IF ( itemdata_copynumber ) %]null,[% END %]
+                    null,
+                    [% IF ( itemdata_itemnotes ) %]null,[% END %]
+                    { "sType": "title-string" },
+                    [% IF ( OPACShowBarcode ) %]null,[% END %]
+                    [% IF holds_count.defined %]
+                        null,
+                    [% ELSIF show_priority %]
+                        null,
+                    [% END %]
+                    [% IF ( ShowCourseReservesHeader ) %]null,[% END %]
+                ]
+            }));
+
         [% IF ( query_desc ) %][% IF ( OpacHighlightedWords ) %]var query_desc = "[% query_desc |replace("'", "\'") |replace('\n', '\\n') |replace('\r', '\\r') |html %]";
             q_array = query_desc.split(" ");
             highlightOn();
@@ -1525,7 +1542,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
                [% IF ( itemdata_copynumber ) %]<td class="copynumber">[% ITEM_RESULT.copynumber %]</td>[% END %]
               <td class="status">[% INCLUDE 'item-status.inc' item = ITEM_RESULT %]</td>
              [% IF ( itemdata_itemnotes ) %]<td class="notes">[% ITEM_RESULT.itemnotes %]</td>[% END %]
-        <td class="date_due">[% ITEM_RESULT.datedue | $KohaDates %]</td>
+        <td class="date_due"><span title="[% ITEM_RESULT.datedue %]">[% ITEM_RESULT.datedue | $KohaDates %]</span></td>
         [% IF ( OPACShowBarcode ) %]<td class="barcode">[% ITEM_RESULT.barcode %]</td>[% END %]
         [% IF holds_count.defined || show_priority %]
         <td class="holds_count">

@@ -14,32 +14,25 @@
     </script>
     [% ELSE %]
     <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
-    <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+    [% INCLUDE 'datatables.inc' %]
     <script type="text/javascript">
     //<![CDATA[
 
-$.tablesorter.addParser({
-    // set a unique id
-    id: 'links',
-    is: function(s)
-    {
-        // return false so this parser is not auto detected
-        return false;
-    },
-    format: function(s)
-    {
-        // format your data for normalization
-        return s.replace(new RegExp(/<.*?>/),"");
-    },
-    // set type, either numeric or text
-    type: 'text'
-});
+$(document).ready(function(){
+    $("#itemst").dataTable($.extend(true, {}, dataTablesDefaults, {
+        "aaSorting": [[ 1, "asc" ]],
+        "aoColumnDefs": [
+          { "aTargets": [ 0,-1 ], "bSortable": false, "bSearchable": false }
+        ],
+        "aoColumns": [
+            null,
+            { "sType": "anti-the" },
+            null,
+            null,
+            null
+        ]
+    }));
 
-$(document).ready(function()
-    {
-        $("#itemst").tablesorter({
-                        headers: { 0: { sorter: false }, 1: {sorter: 'links'}, 4:{sorter:false}}
-                });
     $(".cb").click(function(){
       enableCheckboxActions();
     });

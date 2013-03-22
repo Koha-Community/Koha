@@ -9,7 +9,11 @@
 <script type="text/javascript" src="[% yuipath %]/menu/menu-min.js"></script>
 <script type="text/javascript" src="[% themelang %]/lib/jquery/jquery.js"></script>
 <script type="text/javascript" src="[% themelang %]/lib/jquery/jquery-ui.js"></script>
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+<script type="text/javascript">//<![CDATA[
+    function _(s) { return s } // dummy function for gettext
+//]]>
+</script>
+[% INCLUDE 'datatables.inc' %]
 <script type="text/javascript">//<![CDATA[
 function sco_init() {
     setTimeout("location.href='/cgi-bin/koha/sco/sco-main.pl?op=logout';",[% SelfCheckTimeout %]);
@@ -64,31 +68,17 @@ YAHOO.util.Event.onContentReady("changelanguage", function () {
   });
 });
 
-$.tablesorter.addParser({
-    id: 'articles',
-    is: function(s) {return false;  },
-    format: function(s) { return s.toLowerCase().replace(/^(the|an|a) /,''); },
-    type: 'text'
-});
-
 $(document).ready(function() {
     dofocus();
     [% IF ( patronid ) %]sco_init();[% END %]
-    $("#loanTable").tablesorter({
-        [% IF ( dateformat == "metric" ) %]
-            dateFormat: 'uk',
-        [% END %]
-        widgets:   ['zebra'],
-        sortList:  [[2, 1], [0, 0]],
-        headers: {
-            0: { sorter: 'articles' },
-            3: { sorter: false }
-            [% UNLESS ( nofines ) %], 4: { sorter: false }[% END %]
-        }
-    });
-});
-//]]>
-$(document).ready(function(){
+    $("#loanTable").dataTable($.extend(true, {}, dataTablesDefaults, {
+        "aaSorting": [[ 2, "asc" ]],
+        "aoColumnDefs": [
+            { "aTargets": [ "nosort" ],"bSortable": false,"bSearchable": false },
+            { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
+            { "sType": "title-string", "aTargets" : [ "title-string" ] }
+        ]
+    }));
     $("#logout_form").submit(function(){
         if(confirm("Would you like to print a receipt?")){
             window.open("/cgi-bin/koha/sco/printslip.pl?borrowernumber=[% borrowernumber %]&amp;print=qslip");
@@ -96,6 +86,7 @@ $(document).ready(function(){
         return true;
     });
 });
+//]]>
 </script>
 [% IF ( opacuserjs ) %]<script type="text/javascript">[% opacuserjs %]</script>[% END %]
 [% IF ( SCOUserJS ) %]<script type="text/javascript">[% SCOUserJS %]</script>[% END %]
@@ -262,7 +253,7 @@ Sorry, this self-checkout station has lost authentication.  Please contact the a
 	<table id="loanTable"><caption>Checkouts for [% borrowername %] <span class="count">([% issues_count %] total)</span></caption>
 	<!-- ISSUES TABLE ROWS -->
     <thead>
-        <tr><th>Title</th><th>Call no.</th><th>Due</th><th>Renew</th>[% UNLESS ( nofines ) %]<th>Fines</th>[% END %]</tr>
+        <tr><th class="anti-the">Title</th><th>Call no.</th><th class="title-string">Due</th><th class="nosort">Renew</th>[% UNLESS ( nofines ) %]<th class="nosort">Fines</th>[% END %]</tr>
     </thead>
 
     <tbody>
@@ -272,7 +263,7 @@ Sorry, this self-checkout station has lost authentication.  Please contact the a
 	<td>[% UNLESS ( noitemlinks ) %]<a href="/cgi-bin/koha/opac-detail.pl?bib=[% ISSUE.biblionumber %]">[% ISSUE.title |html %]</a>[% ELSE %]<strong>[% ISSUE.title |html %]</strong>[% END %]<span class="item-details">
 	[% ISSUE.author %]</span> ([% ISSUE.barcode %])</td>
 	<td>[% ISSUE.itemcallnumber %]</td>
-	[% IF ( ISSUE.overdue ) %]<td class="overdue">[% ISSUE.date_due | $KohaDates %]</td>[% ELSE %]<td>[% ISSUE.date_due | $KohaDates %]</td>[% END %]
+    [% IF ( ISSUE.overdue ) %]<td class="overdue"><span title="[% ISSUE.date_due %]">[% ISSUE.date_due | $KohaDates %]</span></td>[% ELSE %]<td><span title="[% ISSUE.date_due %]">[% ISSUE.date_due | $KohaDates %]</span></td>[% END %]
 	<td>
     <form action="/cgi-bin/koha/sco/sco-main.pl" method="post">
     <input type="hidden" name="patronid" value="[% patronid %]" />

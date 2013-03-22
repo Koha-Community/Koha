@@ -197,19 +197,6 @@ tr.even td, tr.even.highlight td {
      background-color: #FFF;
 }
 
-.header {
-    background-image:url("../../images/ascdesc.gif");
-    background-position:right center;
-    background-repeat:no-repeat;
-    cursor:pointer;
-}
-.headerSortUp {
-    background-image:url("../../images/asc.gif");
-}
-.headerSortDown {
-    background-image:url("../../images/desc.gif");
-}
-
 p {
         margin: .7em 0;
 }
@@ -338,4 +325,24 @@ span.lang{
 
 div.ft {
  clear : both;
+}
+
+.sorting_asc {
+    padding-right: 19px;
+    background: url("../../images/asc.gif") no-repeat scroll right center #EEEEEE;
+}
+.sorting_desc {
+    padding-right: 19px;
+    background: url("../../images/desc.gif") no-repeat scroll right center #EEEEEE;
+}
+.sorting {
+    padding-right: 19px;
+    background: url("../../images/ascdesc.gif") no-repeat scroll right center #EEEEEE;
+}
+.nosort,
+.nosort.sorting_asc,
+.nosort.sorting_desc,
+.nosort.sorting {
+    padding-right: 19px;
+    background: #EEEEEE none;
 }

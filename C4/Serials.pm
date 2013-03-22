@@ -419,9 +419,6 @@ sub PrepareSerialsData {
             if (!defined $subs->{$datefield} or $subs->{$datefield}=~m/^00/) {
                 $subs->{$datefield} = 'XXX';
             }
-            else {
-                $subs->{$datefield} = format_date( $subs->{$datefield}  );
-            }
         }
         $subs->{ "status" . $subs->{'status'} } = 1;
         $subs->{"checked"}                      = $subs->{'status'} =~ /1|3|4|7/;

@@ -111,7 +111,7 @@ if (!$loggedinuser) {
 	my $dateformat = $date->DHTMLcalendar() . " %H:%i:%S"; # Current syspref date format + standard time format
 
 	# Getting the data with date format work done by mysql
-	my $query = "SELECT userid, sessionid, query_desc, query_cgi, total, DATE_FORMAT(time, \"$dateformat\") as time FROM search_history WHERE userid = ? AND sessionid = ?";
+    my $query = "SELECT userid, sessionid, query_desc, query_cgi, total, time FROM search_history WHERE userid = ? AND sessionid = ?";
 	my $sth   = $dbh->prepare($query);
 	$sth->execute($loggedinuser, $cgi->cookie("CGISESSID"));
 	my $searches = $sth->fetchall_arrayref({});
@@ -124,7 +124,7 @@ if (!$loggedinuser) {
 
 	# If at least one search from previous sessions has been performed
         if ($sth->fetchrow_array > 0) {
-	    $query = "SELECT userid, sessionid, query_desc, query_cgi, total, DATE_FORMAT(time, \"$dateformat\") as time FROM search_history WHERE userid = ? AND sessionid != ?";
+        $query = "SELECT userid, sessionid, query_desc, query_cgi, total, time FROM search_history WHERE userid = ? AND sessionid != ?";
 	    $sth   = $dbh->prepare($query);
 	    $sth->execute($loggedinuser, $cgi->cookie("CGISESSID"));
     	    my $previoussearches = $sth->fetchall_arrayref({});

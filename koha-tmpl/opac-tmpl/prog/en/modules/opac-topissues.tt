@@ -1,23 +1,22 @@
 [% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Most popular titles
 [% INCLUDE 'doc-head-close.inc' %]
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+[% INCLUDE 'datatables.inc' %]
 <script type="text/javascript">
 //<![CDATA[
-$.tablesorter.addParser({
-    id: 'articles', 
-    is: function(s) {return false;  }, 
-    format: function(s) { return s.toLowerCase().replace(/^(the|an|a) /,''); }, 
-    type: 'text' 
-});
     $(function() {
-		$("#topissuest").tablesorter({
-				widgets : ['zebra'],
-				sortList: [[2,1]],
-				headers: { 0:{sorter:'articles'}[% IF ( opacuserlogin ) %],3:{sorter:false}[% END %]
-				}
-			}); 
-	});
+        $("#topissuest").dataTable($.extend(true, {}, dataTablesDefaults, {
+            "aoColumnDefs": [
+              [% IF ( opacuserlogin ) %]{ "aTargets": [ -1 ], "bSortable": false, "bSearchable": false }[% END %]
+            ],
+            "aoColumns": [
+                { "sType": "anti-the" },
+                null,
+                null,
+                [% IF ( opacuserlogin ) %]null,[% END %]
+            ]
+        }));
+    });
 function Dopop(link) {
     newin=window.open(link,'width=500,height=400,toolbar=false,scrollbars=yes');
 }

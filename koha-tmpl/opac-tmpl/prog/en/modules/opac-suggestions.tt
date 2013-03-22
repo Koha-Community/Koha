@@ -5,15 +5,9 @@
 [% IF ( op_else ) %]Purchase Suggestions[% END %]
 [% INCLUDE 'doc-head-close.inc' %]
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+[% INCLUDE 'datatables.inc' %]
 <script type="text/javascript">
 //<![CDATA[
-$.tablesorter.addParser({
-    id: 'articles', 
-    is: function(s) {return false;  }, 
-    format: function(s) { return s.toLowerCase().replace(/^(the|an|a) /,''); }, 
-    type: 'text' 
-});
 [% IF ( loggedinusername ) %]function enableCheckboxActions(){
     // Enable/disable controls if checkboxes are checked
     var checkedBoxes = $(".checkboxed input:checkbox:checked");
@@ -27,25 +21,20 @@ $.tablesorter.addParser({
 }[% END %]
 
        $(function() {
-			$("#suggestt").tablesorter({
-				widgets : ['zebra'],
-				[% IF ( loggedinusername ) %]sortList: [[1,0]],[% ELSE %]sortList: [[0,0]],[% END %]
-		        headers: {
-				[% IF ( loggedinusername ) %]
-					[% IF ( OPACViewOthersSuggestions ) %]
-					0: { sorter: false },2: { sorter: 'articles' },2: {sorter: false },4: {sorter: false},5:{sorter:false}
-					[% ELSE %]
-					0: { sorter: false },2: { sorter: 'articles' },2: {sorter: false },3: {sorter: false},4:{sorter:false}
-					[% END %]
-				[% ELSE %]
-				[% IF ( OPACViewOthersSuggestions ) %]
-					0: { sorter: 'articles' },1: {sorter: false },3: {sorter: false},4:{sorter:false}
-					[% ELSE %]
-					0: { sorter: 'articles' },1: {sorter: false },2: {sorter: false},3:{sorter:false}
-					[% END %]
-				[% END %]
-				}
-            });
+            $("#suggestt").dataTable($.extend(true, {}, dataTablesDefaults, {
+                "aaSorting": [[ 1, "asc" ]],
+                "aoColumnDefs": [
+                  [% IF ( loggedinusername ) %]{ "aTargets": [ 0 ], "bSortable": false, "bSearchable": false }[% END %]
+                ],
+                "aoColumns": [
+                    [% IF ( loggedinusername ) %]null,[% END %]
+                    { "sType": "anti-the" },
+                    null,
+                    [% IF ( OPACViewOthersSuggestions ) %]null,[% END %]
+                    null,
+                    null
+                ]
+            }));
             [% IF ( loggedinusername ) %]$("span.clearall").html("<a id=\"CheckNone\" href=\"#\">"+_("Clear all")+"<\/a>");
             $("span.checkall").html("<a id=\"CheckAll\" href=\"#\">"+_("Select all")+"<\/a>");
             $("#CheckAll").click(function(){

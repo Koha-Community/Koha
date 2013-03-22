@@ -1,20 +1,24 @@
 [% USE Koha %]
+[% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %]
 [% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Your search history
 [% INCLUDE 'doc-head-close.inc' %]
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+[% INCLUDE 'datatables.inc' %]
 <script type="text/javascript">
 //<![CDATA[
 	var MSG_CONFIRM_DELETE_HISTORY = _("Are you sure you want to delete your search history?");
          $(document).ready(function() {
 		// We show table ordered by descending dates by default
 		// (so that the more recent query is shown first)
-		$.tablesorter.defaults.sortList = [[0,1]];
-                $(".historyt").tablesorter({
-						widgets : ['zebra'],[% IF ( dateformat == 'metric' ) %]
-                        dateFormat: 'uk'[% END %]
-                });
-            });
+            $(".historyt").dataTable($.extend(true, {}, dataTablesDefaults, {
+                "aaSorting": [[ 0, "asc" ]],
+                "aoColumns": [
+                    { "sType": "title-string" },
+                    null,
+                    null
+                ]
+            }));
+        });
 //]]>
 
 </script>
@@ -47,7 +51,7 @@
 		<tbody>
 		    [% FOREACH recentSearche IN recentSearches %]
 		    <tr>
-			<td>[% recentSearche.time %]</td>
+            <td><span title="[% recentSearche.time %]">[% recentSearche.time |$KohaDates with_hours => 1 %]</span></td>
 			<td><a href="/cgi-bin/koha/opac-search.pl?[% recentSearche.query_cgi |html %]">[% recentSearche.query_desc |html %]</a></td>
 			<td>[% recentSearche.total %]</td>
 		    </tr>
@@ -65,7 +69,7 @@
 		<tbody>
 		    [% FOREACH previousSearche IN previousSearches %]
 		    <tr>
-			<td>[% previousSearche.time %]</td>
+            <td><span title="[% previousSearche.time %]">[% previousSearche.time |$KohaDates with_hours => 1 %]</span></td>
 			<td><a href="/cgi-bin/koha/opac-search.pl?[% previousSearche.query_cgi |html %]">[% previousSearche.query_desc |html %]</a></td>
 			<td>[% previousSearche.total %]</td>
 		    </tr>
