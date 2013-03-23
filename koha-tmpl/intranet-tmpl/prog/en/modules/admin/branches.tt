@@ -81,7 +81,7 @@ tinyMCE.init({
 [% IF ( add ) %]
     [% IF ( ERROR1 ) %]<div class="dialog message">Library with that code already exists &mdash; Please enter a unique code</div>[% END %]
   <h3>[% IF ( heading_branches_add_branch_p ) %]New library[% ELSE %]Modify library[% END %]</h3>
-    <form action="[% action %]" name="Aform" method="post">
+    <form action="[% action %]" id="Aform" name="Aform" class="validated" method="post">
 	<fieldset class="rows">
         <input type="hidden" name="op" value="add_validate" />
         [% IF ( heading_branches_add_branch_p ) %]
@@ -91,17 +91,17 @@ tinyMCE.init({
         [% END %]
         <ol><li>
             [% IF ( heading_branches_add_branch_p ) %]
-            <label for="branchcode">Library code</label>
-                <input type="text" name="branchcode" id="branchcode" size="10" maxlength="10" value="[% branchcode |html %]" />
+            <label for="branchcode" class="required">Library code</label>
+                <input type="text" name="branchcode" id="branchcode" size="10" maxlength="10" value="[% branchcode |html %]" class="required" required="required" /> <span class="required">Required</span>
             [% ELSE %]
-			<label for="branchcode">Library code</label>
+			<label for="branchcode" class="required">Library code</label>
                 <input type="hidden" name="branchcode" value="[% branchcode |html %]" />
                 [% branchcode %]
             [% END %]
         </li>
         <li>
-            <label for="branchname">Name</label>
-            <input type="text" name="branchname" id="branchname" size="80" value="[% branch_name |html %]" />&nbsp;
+            <label for="branchname" class="required">Name</label>
+            <input type="text" name="branchname" id="branchname" size="80" value="[% branch_name |html %]" class="required" required="required" /> <span class="required">Required</span>
         </li>
 	</ol>
 	</fieldset>
@@ -130,8 +130,8 @@ tinyMCE.init({
         <li><label for="branchcountry">Country</label><input type="text" name="branchcountry" id="branchcountry" value="[% branchcountry |html %]" /></li>
         <li><label for="branchphone">Phone</label><input type="text" name="branchphone" id="branchphone" value="[% branchphone |html %]" /></li>
         <li><label for="branchfax">Fax</label><input type="text" name="branchfax" id="branchfax" value="[% branchfax |html %]" /></li>
-        <li><label for="branchemail">Email</label><input type="text" name="branchemail" id="branchemail" value="[% branchemail |html %]" /></li>
-        <li><label for="branchurl">URL</label><input type="text" name="branchurl" id="branchurl" value="[% branchurl |html %]" /></li>
+        <li><label for="branchemail">Email</label><input type="text" name="branchemail" id="branchemail" class="email" value="[% branchemail |html %]" /></li>
+        <li><label for="branchurl">URL</label><input type="text" name="branchurl" id="branchurl" value="[% branchurl |html %]" class="url" /></li>
         <li><label for="opac_info">OPAC info</label><textarea name="opac_info" id="opac_info">[% opac_info |html %]</textarea></li>
         <li><label for="branchip">IP</label><input type="text" name="branchip" id="branchip" value="[% branchip |html %]" /> <span class="hint">Can be entered as a single IP, or a subnet such as 192.168.1.*</span></li>
 		<!--
