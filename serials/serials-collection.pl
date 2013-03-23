@@ -61,38 +61,40 @@ if($op eq 'gennext' && @subscriptionid){
     my $status = defined( $nbissues ) ? 2 : 3;
     $nbissues ||= 1;
     for ( my $i = 0; $i < $nbissues; $i++ ){
-	$sth->execute($subscriptionid);
-	# modify actual expected issue, to generate the next
-	if ( my $issue = $sth->fetchrow_hashref ) {
-		ModSerialStatus( $issue->{serialid}, $issue->{serialseq},
-                $issue->{planneddate}, $issue->{publisheddate},
-                $status, "" );
-	}else{
+        $sth->execute($subscriptionid);
+        # modify actual expected issue, to generate the next
+        if ( my $issue = $sth->fetchrow_hashref ) {
+            ModSerialStatus( $issue->{serialid}, $issue->{serialseq},
+                    $issue->{planneddate}, $issue->{publisheddate},
+                    $status, "" );
+        } else {
+            require C4::Serials::Numberpattern;
             my $subscription = GetSubscription($subscriptionid);
+            my $pattern = C4::Serials::Numberpattern::GetSubscriptionNumberpattern($subscription->{numberpattern});
             my $expected = GetNextExpected($subscriptionid);
-	    my (
-	         $newserialseq,  $newlastvalue1, $newlastvalue2, $newlastvalue3,
-             $newinnerloop1, $newinnerloop2, $newinnerloop3
-            ) = GetNextSeq($subscription);
+            my (
+                 $newserialseq,  $newlastvalue1, $newlastvalue2, $newlastvalue3,
+                 $newinnerloop1, $newinnerloop2, $newinnerloop3
+            ) = GetNextSeq($subscription, $pattern, $expected->{publisheddate});
 
-	     ## We generate the next publication date
-	     my $nextpublisheddate = GetNextDate( $expected->{planneddate}->output('iso'), $subscription );
-	     ## Creating the new issue
-	     NewIssue( $newserialseq, $subscriptionid, $subscription->{'biblionumber'},
-	             1, $nextpublisheddate, $nextpublisheddate );
+             ## We generate the next publication date
+             my $nextpublisheddate = GetNextDate($subscription, $expected->{publisheddate}, 1);
+             ## Creating the new issue
+             NewIssue( $newserialseq, $subscriptionid, $subscription->{'biblionumber'},
+                     1, $nextpublisheddate, $nextpublisheddate );
 
-	     ## Updating the subscription seq status
-	     my $squery = "UPDATE subscription SET lastvalue1=?, lastvalue2=?, lastvalue3=?, innerloop1=?, innerloop2=?, innerloop3=?
-	                 WHERE  subscriptionid = ?";
-	     my $seqsth = $dbh->prepare($squery);
-	     $seqsth->execute(
-	         $newlastvalue1, $newlastvalue2, $newlastvalue3, $newinnerloop1,
-	         $newinnerloop2, $newinnerloop3, $subscriptionid
-	         );
+             ## Updating the subscription seq status
+             my $squery = "UPDATE subscription SET lastvalue1=?, lastvalue2=?, lastvalue3=?, innerloop1=?, innerloop2=?, innerloop3=?
+                         WHERE  subscriptionid = ?";
+             my $seqsth = $dbh->prepare($squery);
+             $seqsth->execute(
+                 $newlastvalue1, $newlastvalue2, $newlastvalue3, $newinnerloop1,
+                 $newinnerloop2, $newinnerloop3, $subscriptionid
+                 );
 
-	}
-	last if $nbissues == 1;
-	last if HasSubscriptionExpired($subscriptionid) > 0;
+        }
+        last if $nbissues == 1;
+        last if HasSubscriptionExpired($subscriptionid) > 0;
     }
     print $query->redirect('/cgi-bin/koha/serials/serials-collection.pl?subscriptionid='.$subscriptionid);
 }
@@ -109,9 +111,6 @@ if (@subscriptionid){
     $subs->{missinglist}  =~ s/\n/\<br\/\>/g;
     $subs->{recievedlist} =~ s/\n/\<br\/\>/g;
     ##these are display information
-    $subs->{ "periodicity" . $subs->{periodicity} } = 1;
-    $subs->{ "numberpattern" . $subs->{numberpattern} } = 1;
-    $subs->{ "status" . $subs->{'status'} } = 1;
     $subs->{startdate}     = format_date( $subs->{startdate} );
     $subs->{histstartdate} = format_date( $subs->{histstartdate} );
     if ( !defined $subs->{enddate} || $subs->{enddate} eq '0000-00-00' ) {
@@ -125,6 +124,10 @@ if (@subscriptionid){
     $subs->{'subscriptionid'} = $subscriptionid;  # FIXME - why was this lost ?
 	$location = GetAuthorisedValues('LOC', $subs->{'location'});
 	$callnumber = $subs->{callnumber};
+    my $frequency = C4::Serials::Frequency::GetSubscriptionFrequency($subs->{periodicity});
+    my $numberpattern = C4::Serials::Numberpattern::GetSubscriptionNumberpattern($subs->{numberpattern});
+    $subs->{frequency} = $frequency;
+    $subs->{numberpattern} = $numberpattern;
     push @$subscriptiondescs,$subs;
     my $tmpsubscription= GetFullSubscription($subscriptionid);
     @subscriptioninformation=(@$tmpsubscription,@subscriptioninformation);
@@ -153,6 +156,7 @@ my $locationlib;
 foreach (@$location) {
     $locationlib = $_->{'lib'} if $_->{'selected'};
 }
+
 
 chop $subscriptionidlist;
 $template->param(

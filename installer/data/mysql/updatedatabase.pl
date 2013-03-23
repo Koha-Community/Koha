@@ -6723,6 +6723,259 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.11.00.114";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(qq|
+        DROP TABLE IF EXISTS subscription_frequencies
+    |);
+    $dbh->do(qq|
+        CREATE TABLE subscription_frequencies (
+            id INTEGER NOT NULL AUTO_INCREMENT,
+            description TEXT NOT NULL,
+            displayorder INT DEFAULT NULL,
+            unit ENUM('day','week','month','year') DEFAULT NULL,
+            unitsperissue INTEGER NOT NULL DEFAULT '1',
+            issuesperunit INTEGER NOT NULL DEFAULT '1',
+            PRIMARY KEY (id)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+    |);
+
+    $dbh->do(qq|
+        DROP TABLE IF EXISTS subscription_numberpatterns
+    |);
+    $dbh->do(qq|
+        CREATE TABLE subscription_numberpatterns (
+            id INTEGER NOT NULL AUTO_INCREMENT,
+            label VARCHAR(255) NOT NULL,
+            displayorder INTEGER DEFAULT NULL,
+            description TEXT NOT NULL,
+            numberingmethod VARCHAR(255) NOT NULL,
+            label1 VARCHAR(255) DEFAULT NULL,
+            add1 INTEGER DEFAULT NULL,
+            every1 INTEGER DEFAULT NULL,
+            whenmorethan1 INTEGER DEFAULT NULL,
+            setto1 INTEGER DEFAULT NULL,
+            numbering1 VARCHAR(255) DEFAULT NULL,
+            label2 VARCHAR(255) DEFAULT NULL,
+            add2 INTEGER DEFAULT NULL,
+            every2 INTEGER DEFAULT NULL,
+            whenmorethan2 INTEGER DEFAULT NULL,
+            setto2 INTEGER DEFAULT NULL,
+            numbering2 VARCHAR(255) DEFAULT NULL,
+            label3 VARCHAR(255) DEFAULT NULL,
+            add3 INTEGER DEFAULT NULL,
+            every3 INTEGER DEFAULT NULL,
+            whenmorethan3 INTEGER DEFAULT NULL,
+            setto3 INTEGER DEFAULT NULL,
+            numbering3 VARCHAR(255) DEFAULT NULL,
+            PRIMARY KEY (id)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+    |);
+
+    $dbh->do(qq|
+        INSERT INTO subscription_frequencies (description, unit, unitsperissue, issuesperunit, displayorder)
+        VALUES
+            ('2/day', 'day', 1, 2, 1),
+            ('1/day', 'day', 1, 1, 2),
+            ('3/week', 'week', 1, 3, 3),
+            ('1/week', 'week', 1, 1, 4),
+            ('1/2 weeks', 'week', 2, 1, 5),
+            ('1/3 weeks', 'week', 3, 1, 6),
+            ('1/month', 'month', 1, 1, 7),
+            ('1/2 months', 'month', 2, 1, 8),
+            ('1/3 months', 'month', 3, 1, 9),
+            ('2/year', 'month', 6, 1, 10),
+            ('1/year', 'year', 1, 1, 11),
+            ('1/2 year', 'year', 2, 1, 12),
+            ('Irregular', NULL, 1, 1, 13)
+    |);
+
+    # Used to link existing subscription to newly created frequencies
+    my $frequencies_mapping = {     # keys are old frequency numbers, values are the new ones
+        1 => 2,     # daily (n/week)
+        2 => 4,     # 1/week
+        3 => 5,     # 1/2 weeks
+        4 => 6,     # 1/3 weeks
+        5 => 7,     # 1/month
+        6 => 8,     # 1/2 months (6/year)
+        7 => 9,     # 1/3 months (1/quarter)
+        8 => 9,    # 1/quarter (seasonal)
+        9 => 10,    # 2/year
+        10 => 11,   # 1/year
+        11 => 12,   # 1/2 years
+        12 => 1,    # 2/day
+        16 => 13,   # Without periodicity
+        32 => 13,   # Irregular
+        48 => 13    # Unknown
+    };
+
+    $dbh->do(qq|
+        INSERT INTO subscription_numberpatterns
+            (label, displayorder, description, numberingmethod,
+            label1, add1, every1, whenmorethan1, setto1, numbering1,
+            label2, add2, every2, whenmorethan2, setto2, numbering2,
+            label3, add3, every3, whenmorethan3, setto3, numbering3)
+        VALUES
+            ('Number', 1, 'Simple Numbering method', 'No.{X}',
+            'Number', 1, 1, 99999, 1, NULL,
+            NULL, NULL, NULL, NULL, NULL, NULL,
+            NULL, NULL, NULL, NULL, NULL, NULL),
+
+            ('Volume, Number, Issue', 2, 'Volume Number Issue 1', 'Vol.{X}, Number {Y}, Issue {Z}',
+            'Volume', 1, 48, 99999, 1, NULL,
+            'Number', 1, 4, 12, 1, NULL,
+            'Issue', 1, 1, 4, 1, NULL),
+
+            ('Volume, Number', 3, 'Volume Number 1', 'Vol {X}, No {Y}',
+            'Volume', 1, 12, 99999, 1, NULL,
+            'Number', 1, 1, 12, 1, NULL,
+            NULL, NULL, NULL, NULL, NULL, NULL),
+
+            ('Seasonal', 4, 'Season Year', '{X} {Y}',
+            'Season', 1, 1, 3, 0, 'season',
+            'Year', 1, 4, 99999, 1, NULL,
+            NULL, NULL, NULL, NULL, NULL, NULL)
+    |);
+
+    $dbh->do(qq|
+        ALTER TABLE subscription
+        MODIFY COLUMN numberpattern INTEGER DEFAULT NULL,
+        MODIFY COLUMN periodicity INTEGER DEFAULT NULL
+    |);
+
+    # Update existing subscriptions
+
+    my $query = qq|
+        SELECT subscriptionid, periodicity, numberingmethod,
+            add1, every1, whenmorethan1, setto1,
+            add2, every2, whenmorethan2, setto2,
+            add3, every3, whenmorethan3, setto3
+        FROM subscription
+        ORDER BY subscriptionid
+    |;
+    my $sth = $dbh->prepare($query);
+    $sth->execute;
+    my $insert_numberpatterns_sth = $dbh->prepare(qq|
+        INSERT INTO subscription_numberpatterns
+             (label, displayorder, description, numberingmethod,
+            label1, add1, every1, whenmorethan1, setto1, numbering1,
+            label2, add2, every2, whenmorethan2, setto2, numbering2,
+            label3, add3, every3, whenmorethan3, setto3, numbering3)
+        VALUES
+            (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    |);
+    my $check_numberpatterns_sth = $dbh->prepare(qq|
+        SELECT * FROM subscription_numberpatterns
+        WHERE add1 = ? AND add2 = ? AND add3 = ?
+          AND every1 = ? AND every2 = ? AND every3 = ?
+          AND whenmorethan1 = ? AND whenmorethan2 = ? AND whenmorethan3 = ?
+          AND setto1 = ? AND setto2 = ? AND setto3 = ?
+          AND numberingmethod = ?
+        LIMIT 1
+    |);
+    my $update_subscription_sth = $dbh->prepare(qq|
+        UPDATE subscription
+        SET numberpattern = ?,
+            periodicity = ?
+        WHERE subscriptionid = ?
+    |);
+
+    my $i = 1;
+    while(my $sub = $sth->fetchrow_hashref) {
+        $check_numberpatterns_sth->execute(
+            $sub->{add1}, $sub->{add2}, $sub->{add3},
+            $sub->{every1}, $sub->{every2}, $sub->{every3},
+            $sub->{whenmorethan1}, $sub->{whenmorethan2}, $sub->{whenmorethan3},
+            $sub->{setto1}, $sub->{setto2}, $sub->{setto3},
+            $sub->{numberingmethod}
+        );
+        my $p = $check_numberpatterns_sth->fetchrow_hashref;
+        if (defined $p) {
+            # Pattern already exists, link to it
+            $update_subscription_sth->execute($p->{id},
+                $frequencies_mapping->{$sub->{periodicity}},
+                $sub->{subscriptionid});
+        } else {
+            # Create a new numbering pattern for this subscription
+            my $ok = $insert_numberpatterns_sth->execute(
+                "Backup pattern $i", 4+$i, "Automatically created pattern by updatedatabase", $sub->{numberingmethod},
+                "X", $sub->{add1}, $sub->{every1}, $sub->{whenmorethan1}, $sub->{setto1}, undef,
+                "Y", $sub->{add2}, $sub->{every2}, $sub->{whenmorethan2}, $sub->{setto2}, undef,
+                "Z", $sub->{add3}, $sub->{every3}, $sub->{whenmorethan3}, $sub->{setto3}, undef
+            );
+            if($ok) {
+                my $id = $dbh->last_insert_id(undef, undef, 'subscription_numberpatterns', undef);
+                # Link to subscription_numberpatterns and subscription_frequencies
+                $update_subscription_sth->execute($id,
+                    $frequencies_mapping->{$sub->{periodicity}},
+                    $sub->{subscriptionid});
+            }
+            $i++;
+        }
+    }
+
+    # Remove now useless columns
+    $dbh->do(qq|
+        ALTER TABLE subscription
+        DROP COLUMN numberingmethod,
+        DROP COLUMN add1,
+        DROP COLUMN every1,
+        DROP COLUMN whenmorethan1,
+        DROP COLUMN setto1,
+        DROP COLUMN add2,
+        DROP COLUMN every2,
+        DROP COLUMN whenmorethan2,
+        DROP COLUMN setto2,
+        DROP COLUMN add3,
+        DROP COLUMN every3,
+        DROP COLUMN whenmorethan3,
+        DROP COLUMN setto3,
+        DROP COLUMN dow,
+        DROP COLUMN issuesatonce,
+        DROP COLUMN hemisphere,
+        ADD COLUMN countissuesperunit INTEGER NOT NULL DEFAULT 1 AFTER periodicity,
+        ADD COLUMN skip_serialseq BOOLEAN NOT NULL DEFAULT 0 AFTER irregularity,
+        ADD COLUMN locale VARCHAR(80) DEFAULT NULL AFTER numberpattern,
+        ADD CONSTRAINT subscription_ibfk_1 FOREIGN KEY (periodicity) REFERENCES subscription_frequencies (id) ON DELETE SET NULL ON UPDATE CASCADE,
+        ADD CONSTRAINT subscription_ibfk_2 FOREIGN KEY (numberpattern) REFERENCES subscription_numberpatterns (id) ON DELETE SET NULL ON UPDATE CASCADE
+    |);
+
+    # Set firstacquidate if not already set (firstacquidate is now mandatory)
+    my $get_first_planneddate_sth = $dbh->prepare(qq|
+        SELECT planneddate
+        FROM serial
+        WHERE subscriptionid = ?
+        ORDER BY serialid
+        LIMIT 1
+    |);
+    my $update_firstacquidate_sth = $dbh->prepare(qq|
+        UPDATE subscription
+        SET firstacquidate = ?
+        WHERE subscriptionid = ?
+    |);
+    my $get_subscriptions_sth = $dbh->prepare(qq|
+        SELECT subscriptionid, startdate
+        FROM subscription
+        WHERE firstacquidate IS NULL
+          OR firstacquidate = '0000-00-00'
+    |);
+    $get_subscriptions_sth->execute;
+    while ( my ($subscriptionid, $startdate) = $get_subscriptions_sth->fetchrow ) {
+        # Try to get the planned date of the first serial
+        $get_first_planneddate_sth->execute($subscriptionid);
+        my ($first_planneddate) = $get_first_planneddate_sth->fetchrow;
+        if ($first_planneddate and $first_planneddate =~ /^\d{4}-\d{2}-\d{2}$/) {
+            $update_firstacquidate_sth->execute($first_planneddate, $subscriptionid);
+        } else {
+            # Defaults to subscription start date
+            $update_firstacquidate_sth->execute($startdate, $subscriptionid);
+        }
+    }
+
+    print "Upgrade to $DBversion done (Bug 7688: Add subscription_frequencies and subscription_numberpatterns tables)\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)
