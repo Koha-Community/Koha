@@ -6637,7 +6637,7 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
               ('19', 'report', 'Use report plugins'),
               ('19', 'configure', 'Configure plugins')
             ");
-    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('UseKohaPlugins','1','Enable or disable the ability to use Koha Plugins.','','YesNo')");
+    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('UseKohaPlugins','0','Enable or disable the ability to use Koha Plugins.','','YesNo')");
 
     $dbh->do("
         CREATE TABLE IF NOT EXISTS plugin_data (
