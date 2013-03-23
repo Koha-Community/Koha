@@ -6976,6 +6976,14 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.11.00.115";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do("INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES ('HighlightOwnItemsOnOPAC','0','','If on, and a patron is logged into the OPAC, items from his or her home library will be emphasized and shown first in search results and item details.','YesNo')");
+    $dbh->do("INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES ('HighlightOwnItemsOnOPACWhich','PatronBranch','PatronBranch|OpacURLBranch','Decides which branch''s items to emphasize. If PatronBranch, emphasize the logged in user''s library''s items. If OpacURLBranch, highlight the items of the Apache var BRANCHCODE defined in Koha''s Apache configuration file.','Choice')");
+    print "Upgrade to $DBversion done (Bug 7740: Add syspref HighlightOwnItemsOnOPAC)\n";
+    SetVersion ($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

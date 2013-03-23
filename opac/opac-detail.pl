@@ -441,6 +441,38 @@ if ($hideitems) {
     @items = @all_items;
 }
 
+my $branches = GetBranches();
+my $branch = C4::Context->userenv->{branch};
+if ( C4::Context->preference('HighlightOwnItemsOnOPAC') ) {
+    if (
+        ( ( C4::Context->preference('HighlightOwnItemsOnOPACWhich') eq 'PatronBranch' ) && $branch )
+        ||
+        C4::Context->preference('HighlightOwnItemsOnOPACWhich') eq 'OpacURLBranch'
+    ) {
+        my $branchname;
+        if ( C4::Context->preference('HighlightOwnItemsOnOPACWhich') eq 'PatronBranch' ) {
+            $branchname = $branches->{$branch}->{'branchname'};
+        }
+        elsif (  C4::Context->preference('HighlightOwnItemsOnOPACWhich') eq 'OpacURLBranch' ) {
+            $branchname = $branches->{ $ENV{'BRANCHCODE'} }->{'branchname'};
+        }
+
+        my @our_items;
+        my @other_items;
+
+        foreach my $item ( @items ) {
+           if ( $item->{'branchname'} eq $branchname ) {
+               $item->{'this_branch'} = 1;
+               push( @our_items, $item );
+           } else {
+               push( @other_items, $item );
+           }
+        }
+
+        @items = ( @our_items, @other_items );
+    }
+}
+
 my $dat = &GetBiblioData($biblionumber);
 
 my $itemtypes = GetItemTypes();
@@ -511,7 +543,6 @@ if ( $show_holds_count || $show_priority) {
 $template->param( show_priority => $has_hold ) ;
 
 my $norequests = 1;
-my $branches = GetBranches();
 my %itemfields;
 my (@itemloop, @otheritemloop);
 my $currentbranch = C4::Context->userenv ? C4::Context->userenv->{branch} : undef;

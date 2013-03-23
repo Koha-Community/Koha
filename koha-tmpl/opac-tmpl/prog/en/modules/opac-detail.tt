@@ -1477,7 +1477,8 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
         [% END %]
         </tr></thead>
 	    <tbody>[% FOREACH ITEM_RESULT IN items %]
-      <tr>[% IF ( item_level_itypes ) %]<td class="itype">[% UNLESS ( noItemTypeImages ) %][% IF ( ITEM_RESULT.imageurl ) %]<img src="[% ITEM_RESULT.imageurl %]" title="[% ITEM_RESULT.description %]" alt="[% ITEM_RESULT.description %]" />[% END %][% END %] [% ITEM_RESULT.description %]</td>[% END %]
+      [% IF ITEM_RESULT.this_branch %]<tr class="highlight-row-detail">[% ELSE %]<tr>[% END %]
+      [% IF ( item_level_itypes ) %]<td class="itype">[% UNLESS ( noItemTypeImages ) %][% IF ( ITEM_RESULT.imageurl ) %]<img src="[% ITEM_RESULT.imageurl %]" title="[% ITEM_RESULT.description %]" alt="[% ITEM_RESULT.description %]" />[% END %][% END %] [% ITEM_RESULT.description %]</td>[% END %]
              <td class="location">
     [% UNLESS ( singleBranchMode ) %]
         <span class="[% ITEM_RESULT.branch_opac_info ? 'branch-info-tooltip-trigger' : '' %]">
