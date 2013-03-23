@@ -20,14 +20,4 @@
     [% IF ( CAN_user_serials_check_expiration ) %]
 	<li><a href="/cgi-bin/koha/serials/checkexpiration.pl">Check expiration</a></li>
     [% END %]
-    <li>
-        <a href="/cgi-bin/koha/serials/subscription-frequencies.pl">
-            Manage frequencies
-        </a>
-    </li>
-    <li>
-        <a href="/cgi-bin/koha/serials/subscription-numberpatterns.pl">
-            Manage numbering patterns
-        </a>
-    </li>
 </ul>

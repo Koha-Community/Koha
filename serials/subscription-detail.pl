@@ -118,9 +118,15 @@ $template->param(%{ $subs });
 $template->param(biblionumber_for_new_subscription => $subs->{bibnum});
 my @irregular_issues = split /,/, $subs->{irregularity};
 
-my $frequency = C4::Serials::Frequency::GetSubscriptionFrequency($subs->{periodicity});
-my $numberpattern = C4::Serials::Numberpattern::GetSubscriptionNumberpattern($subs->{numberpattern});
-
+if (! $subs->{numberpattern}) {
+    $subs->{numberpattern} = q{};
+}
+if (! $subs->{dow}) {
+    $subs->{dow} = q{};
+}
+if (! $subs->{periodicity}) {
+    $subs->{periodicity} = '0';
+}
 my $default_bib_view = get_default_view();
 
 my ( $order, $bookseller, $tmpl_infos );
@@ -161,11 +167,9 @@ $template->param(
                 C4::Context->userenv->{flags} % 2 !=1  &&
                 C4::Context->userenv->{branch} && $subs->{branchcode} &&
                 (C4::Context->userenv->{branch} ne $subs->{branchcode})),
-    frequency => $frequency,
-    numberpattern => $numberpattern,
-    has_X           => ($numberpattern->{'numberingmethod'} =~ /{X}/) ? 1 : 0,
-    has_Y           => ($numberpattern->{'numberingmethod'} =~ /{Y}/) ? 1 : 0,
-    has_Z           => ($numberpattern->{'numberingmethod'} =~ /{Z}/) ? 1 : 0,
+    'periodicity' . $subs->{periodicity} => 1,
+    'arrival' . $subs->{dow} => 1,
+    'numberpattern' . $subs->{numberpattern} => 1,
     intranetstylesheet => C4::Context->preference('intranetstylesheet'),
     intranetcolorstylesheet => C4::Context->preference('intranetcolorstylesheet'),
     irregular_issues => scalar @irregular_issues,

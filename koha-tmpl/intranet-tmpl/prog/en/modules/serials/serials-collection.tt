@@ -118,11 +118,64 @@ $(document).ready(function() {
 </tr>
 [% FOREACH subscription IN subscriptions %]
     [% UNLESS ( loop.odd ) %]<tr class="highlight">[% ELSE %]<tr>[% END %]
-        <td><a href="subscription-detail.pl?subscriptionid=[% subscription.subscriptionid %]"># [% subscription.subscriptionid %]</a> </td>
-        <td>[% subscription.frequency.description %]</td>
-        <td>[% subscription.numberpattern.label %]</td>
-        <td> [% subscription.branchcode %]</td>
-        <td> [% subscription.callnumber %]</td>
+      <td><a href="subscription-detail.pl?subscriptionid=[% subscription.subscriptionid %]"># [% subscription.subscriptionid %]</a> </td>
+      <td>         [% IF ( subscription.periodicity1 ) %]
+                        1/day
+                [% END %]
+                [% IF ( subscription.periodicity2 ) %]
+                        1/week
+                [% END %]
+                [% IF ( subscription.periodicity3 ) %]
+                        1/2 weeks
+                [% END %]
+                [% IF ( subscription.periodicity4 ) %]
+                        1/3 weeks
+                [% END %]
+                [% IF ( subscription.periodicity5 ) %]
+                        1/Month
+                [% END %]
+                [% IF ( subscription.periodicity6 ) %]
+                        1/2 Months (6/year)
+                [% END %]
+                [% IF ( subscription.periodicity7 ) %]
+                        1/quarter
+                [% END %]
+                [% IF ( subscription.periodicity8 ) %]
+                        1/quarter
+                [% END %]
+                [% IF ( subscription.periodicity9 ) %]
+                        2/year
+                [% END %]
+                [% IF ( subscription.periodicity10 ) %]
+                        1/year
+                [% END %]
+                [% IF ( subscription.periodicity11 ) %]
+                        1/2 years
+                [% END %]</td>
+           <td>
+                [% IF ( subscription.numberpattern1 ) %]
+                    Number
+                [% END %]
+                [% IF ( subscription.numberpattern2 ) %]
+                    Volume, number, issue
+                [% END %]
+                [% IF ( subscription.numberpattern3 ) %]
+                    Volume, number
+                [% END %]
+                [% IF ( subscription.numberpattern4 ) %]
+                    Volume, issue
+                [% END %]
+                [% IF ( subscription.numberpattern5 ) %]
+                    Number, issue
+                [% END %]
+                [% IF ( subscription.numberpattern6 ) %]
+                    Seasonal only
+                [% END %]
+                [% IF ( subscription.numberpattern7 ) %]
+                    None of the above
+                [% END %]</td>
+            <td> [% subscription.branchcode %]</td>
+            <td> [% subscription.callnumber %]</td>
         <td> [% subscription.notes %]
             [% UNLESS subscription.closed %]
                 [% IF ( subscription.subscriptionexpired ) %]
