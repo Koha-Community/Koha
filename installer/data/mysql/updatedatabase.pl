@@ -6984,8 +6984,8 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.11.00.XXX";
-if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+$DBversion = "3.11.00.116";
+if ( CheckVersion($DBversion) ) {
     $dbh->do(q{ALTER TABLE aqorders DROP COLUMN serialid;});
     $dbh->do(q{ALTER TABLE aqorders DROP COLUMN subscription;});
     $dbh->do(q{ALTER TABLE aqorders ADD COLUMN subscriptionid INT(11) DEFAULT NULL;});
