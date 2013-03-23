@@ -105,30 +105,27 @@ sub checkpw_ldap {
     my $db = Net::LDAP->new(\@hosts);
 	#$debug and $db->debug(5);
     my $userldapentry;
-	if ( $ldap->{auth_by_bind} ) {
-        my $principal_name = $ldap->{principal_name};
-        if ($principal_name and $principal_name =~ /\%/) {
-            $principal_name = sprintf($principal_name,$userid);
-        } else {
-            $principal_name = $userid;
-        }
-		my $res = $db->bind( $principal_name, password => $password );
-        if ( $res->code ) {
-            $debug and warn "LDAP bind failed as kohauser $principal_name: ". description($res);
-            return 0;
-        }
 
-	# FIXME dpavlin -- we really need $userldapentry leater on even if using auth_by_bind!
+  if ( $ldap->{auth_by_bind} ) {
+    # Perform an anonymous bind
+    my $res = $db->bind;
+    if ( $res->code ) {
+      $debug and warn "Anonymous LDAP bind failed: ". description($res);
+      return 0;
+    }
 
-	# BUG #5094
-	# 2010-08-04 JeremyC
-	# a $userldapentry is only needed if either updating or replicating are enabled
-	if($config{update} or $config{replicate}) {
-	    my $search = search_method($db, $userid) or return 0;   # warnings are in the sub
-	    $userldapentry = $search->shift_entry;
-	}
+    # Perform a LDAP search for the given username
+    my $search = search_method($db, $userid) or return 0;   # warnings are in the sub
+    $userldapentry = $search->shift_entry;
 
-	} else {
+    # Perform a LDAP bind for the given username using the matched DN
+    $res = $db->bind( $userldapentry->dn, password => $password );
+    if ( $res->code ) {
+      $debug and warn "LDAP bind failed as kohauser $userid: ". description($res);
+      return 0;
+    }
+
+  } else {
 		my $res = ($config{anonymous}) ? $db->bind : $db->bind($ldapname, password=>$ldappassword);
 		if ($res->code) {		# connection refused
 			warn "LDAP bind failed as ldapuser " . ($ldapname || '[ANONYMOUS]') . ": " . description($res);
@@ -419,8 +416,6 @@ Example XML stanza for LDAP configuration in KOHA_CONF.
     <update>1</update>             <!-- update existing users in Koha database -->
     <auth_by_bind>0</auth_by_bind> <!-- set to 1 to authenticate by binding instead of
                                         password comparison, e.g., to use Active Directory -->
-    <principal_name>%s@my_domain.com</principal_name>
-                                   <!-- optional, for auth_by_bind: a printf format to make userPrincipalName from koha userid -->
     <mapping>                  <!-- match koha SQL field names to your LDAP record field names -->
       <firstname    is="givenname"      ></firstname>
       <surname      is="sn"             ></surname>
