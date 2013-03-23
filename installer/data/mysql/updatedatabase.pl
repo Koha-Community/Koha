@@ -6405,14 +6405,14 @@ if ( CheckVersion($DBversion) ) {
 }
 
 $DBversion = "3.11.00.019";
-if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+if ( CheckVersion($DBversion) ) {
     $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('UNIMARCAuthorityField100', 'afrey50      ba0', NULL, NULL, 'Textarea')");
     print "Upgrade to $DBversion done (Bug 9145 - Add syspref UNIMARCAuthorityField100)\n";
     SetVersion ($DBversion);
 }
 
 $DBversion = "3.11.00.020";
-if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+if ( CheckVersion($DBversion) ) {
     $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('UNIMARCField100Language', 'fre','UNIMARC field 100 default language',NULL,'short')");
     print "Upgrade to $DBversion done (Bug 8347 - Koha forces UNIMARC 100 field code language to 'fre')\n";
     SetVersion($DBversion);
@@ -6524,9 +6524,9 @@ if ( CheckVersion($DBversion) ) {
 }
 
 $DBversion = "3.11.00.100";
-if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+if ( CheckVersion($DBversion) ) {
     print "Upgrade to $DBversion done (3.12-alpha release)\n";
-   SetVersion ($DBversion);
+    SetVersion ($DBversion);
 }
 
 $DBversion = "3.11.00.101";
@@ -6556,7 +6556,7 @@ if ( CheckVersion($DBversion) ) {
 }
 
 $DBversion = "3.11.00.104";
-if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+if ( CheckVersion($DBversion) ) {
     print "Upgrade to $DBversion done (3.12-alpha2 release)\n";
     SetVersion ($DBversion);
 }
@@ -6629,7 +6629,7 @@ if ( CheckVersion($DBversion) ) {
 
 
 $DBversion = "3.11.00.106";
-if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+if ( CheckVersion($DBversion) ) {
     $dbh->do("INSERT INTO userflags (bit, flag, flagdesc, defaulton) VALUES ('19', 'plugins', 'Koha plugins', '0')");
     $dbh->do("INSERT INTO permissions (module_bit, code, description) VALUES
               ('19', 'manage', 'Manage plugins ( install / uninstall )'),
@@ -6714,7 +6714,7 @@ if ( CheckVersion($DBversion) ) {
 }
 
 $DBversion = "3.11.00.113";
-if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+if ( CheckVersion($DBversion) ) {
     $dbh->do(q{
         ALTER TABLE branchcategories ADD show_in_pulldown BOOLEAN NOT NULL DEFAULT '0',
         ADD INDEX ( show_in_pulldown )
