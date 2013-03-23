@@ -45,9 +45,11 @@ my @plugins = Koha::Plugins->new({ enable_plugins => 1 })->GetPlugins( 'report' 
 ok( $plugins[0]->get_metadata()->{'name'} eq 'Test Plugin', "Koha::Plugins::GetPlugins functions correctly" );
 
 SKIP: {
-    skip "plugindir not set", 3 unless C4::Context->config("pluginsdir");
-
     my $plugins_dir = C4::Context->config("pluginsdir");
+    skip "plugindir not set", 3 unless defined $plugins_dir;
+    skip "plugindir not writable", 3 unless -w $plugins_dir;
+    skip "KitchenSink plugin already installed", 3 if (-f "$plugins_dir/Koha/Plugin/Com/ByWaterSolutions/KitchenSink.pm");
+
     my $ae = Archive::Extract->new( archive => "$Bin/KitchenSinkPlugin.kpz", type => 'zip' );
     unless ( $ae->extract( to => $plugins_dir ) ) {
         warn "ERROR: " . $ae->error;
