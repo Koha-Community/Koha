@@ -10,7 +10,7 @@ use POSIX qw(strftime);
 
 use C4::Bookseller qw( GetBookSellerFromId );
 
-use Test::More tests => 38;
+use Test::More tests => 37;
 
 BEGIN {
     use_ok('C4::Acquisition');
@@ -67,10 +67,9 @@ SKIP: {
                              quantity
                              quantityreceived
                              rrp
-                             serialid
                              sort1
                              sort2
-                             subscription
+                             subscriptionid
                              supplierreference
                              surname
                              timestamp
