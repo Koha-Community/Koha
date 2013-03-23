@@ -58,6 +58,7 @@ BEGIN {
       &CountIssues
       HasItems
       &GetSubscriptionsFromBorrower
+      &subscriptionCurrentlyOnOrder
 
     );
 }
@@ -1542,7 +1543,7 @@ sub ReNewSubscription {
     # renew subscription
     $query = qq|
         UPDATE subscription
-        SET    startdate=?,numberlength=?,weeklength=?,monthlength=?
+        SET    startdate=?,numberlength=?,weeklength=?,monthlength=?,reneweddate=NOW()
         WHERE  subscriptionid=?
     |;
     $sth = $dbh->prepare($query);
@@ -2728,6 +2729,28 @@ sub ReopenSubscription {
         AND status = 8
     } );
     $sth->execute( $subscriptionid );
+}
+
+=head2 subscriptionCurrentlyOnOrder
+
+    $bool = subscriptionCurrentlyOnOrder( $subscriptionid );
+
+Return 1 if subscription is currently on order else 0.
+
+=cut
+
+sub subscriptionCurrentlyOnOrder {
+    my ( $subscriptionid ) = @_;
+    my $dbh = C4::Context->dbh;
+    my $query = qq|
+        SELECT COUNT(*) FROM aqorders
+        WHERE subscriptionid = ?
+            AND datereceived IS NULL
+            AND datecancellationprinted IS NULL
+    |;
+    my $sth = $dbh->prepare( $query );
+    $sth->execute($subscriptionid);
+    return $sth->fetchrow_array;
 }
 
 1;

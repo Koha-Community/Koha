@@ -122,7 +122,7 @@ function IEEventHandler_KeyDown() {
     $(document).ready(function() {
         [% IF (AcqCreateItemReceiving) %]
             cloneItemBlock(0, '[% UniqueItemFields %]');
-        [% ELSIF (AcqCreateItem == 'ordering') %]
+        [% ELSIF (AcqCreateItem == 'ordering') && not subscriptionid %]
             $("input[name='items_to_receive']").change(function() {
                 CalcQtyToReceive();
             });
@@ -218,17 +218,19 @@ function IEEventHandler_KeyDown() {
             </div>
         </div>
 
-        <fieldset class="rows" id="itemfieldset">
-            <legend>Item</legend>
-            [% IF ( NoACQframework ) %]
-                <p class="required">
-                    No ACQ framework, using default. You should create a
-                    framework with code ACQ, the items framework would be
-                    used
-                </p>
-            [% END %]
-            <div id="outeritemblock"></div>
-        </fieldset>
+        [% UNLESS subscriptionid %]
+          <fieldset class="rows" id="itemfieldset">
+              <legend>Item</legend>
+              [% IF ( NoACQframework ) %]
+                  <p class="required">
+                      No ACQ framework, using default. You should create a
+                      framework with code ACQ, the items framework would be
+                      used
+                  </p>
+              [% END %]
+              <div id="outeritemblock"></div>
+          </fieldset>
+        [% END %]
     [% ELSIF (AcqCreateItem == 'ordering') %]
         [% IF (items.size) %]
             <h5>Items</h5>
@@ -294,35 +296,39 @@ function IEEventHandler_KeyDown() {
        <li><label for="bookfund">Budget: </label><span> [% bookfund %] </span></li>
        <li><label for="creator">Created by: </label><span> [% IF ( memberfirstname and membersurname ) %][% IF ( memberfirstname ) %][% memberfirstname %][% END %] [% membersurname %][% ELSE %]No name[% END %]</span></li>
        <li><label for="quantity_to_receive">Quantity to receive: </label><span class="label">
-           [% IF ( edit ) %]
+           [% IF ( edit and not subscriptionid) %]
                <input type="text" id="quantity_to_receive" name="quantity" value="[% quantity %]" />
-           [% ELSE %]
+           [% ELSE%]
                <input type="text" readonly="readonly" id="quantity_to_receive" name="quantity" value="[% quantity %]" />
            [% END %]
            </span></li>
         <li><label for="quantity">Quantity received: </label>
           [% IF (AcqCreateItemReceiving) %]
-            <input readonly="readonly" type="text" size="20" name="quantityrec" id="quantity" value="0" />
+            [% IF ( subscriptionid ) %]
+              <input readonly="readonly" type="text" size="20" name="quantityrec" id="quantity" value="1" />
+            [% ELSE %]
+              <input readonly="readonly" type="text" size="20" name="quantityrec" id="quantity" value="0" />
+            [% END %]
           [% ELSE %]
             [% IF ( quantityreceived ) %]
                 [% IF ( edit ) %]
                     <input type="text" size="20" name="quantityrec" id="quantity" value="[% quantityreceived %]" />
-                    <input id="origquantityrec" READONLY type="hidden" name="origquantityrec" value="[% quantityreceived %]" />
+                    <input id="origquantityrec" readonly="readonly" type="hidden" name="origquantityrec" value="[% quantityreceived %]" />
                 [% ELSE %]
-                [% IF ( items ) %]
-                    <input READONLY type="text" size="20" name="quantityrec" id="quantity" value="[% quantityreceivedplus1 %]" />
-                [% ELSE %]
-                    <input type="text" size="20" name="quantityrec" id="quantity" value="[% quantityreceivedplus1 %]" />
-                [% END %]
-                <input id="origquantityrec" READONLY type="hidden" name="origquantityrec" value="[% quantityreceived %]" />
+                    [% IF ( items ) %]
+                        <input readonly="readonly" type="text" size="20" name="quantityrec" id="quantity" value="[% quantityreceivedplus1 %]" />
+                    [% ELSE %]
+                        <input type="text" size="20" name="quantityrec" id="quantity" value="[% quantityreceivedplus1 %]" />
+                    [% END %]
+                    <input id="origquantityrec" readonly="readonly" type="hidden" name="origquantityrec" value="[% quantityreceived %]" />
                 [% END %]
             [% ELSE %]
-                [% IF ( items ) %]
-                    <input type="text" id="quantity" size="20" name="quantityrec" value="1" />
+                [% IF ( subscriptionid ) %]
+                    <input type="text" readonly="readonly" id="quantity" size="20" name="quantityrec" value="1" />
                 [% ELSE %]
-                    <input type="text" size="20" id="quantity" name="quantityrec" value="1" />
+                    <input type="text" id="quantity" size="20" name="quantityrec" value="1" />
                 [% END %]
-                <input id="origquantityrec" READONLY type="hidden" name="origquantityrec" value="0" />
+                <input id="origquantityrec" readonly="readonly" type="hidden" name="origquantityrec" value="0" />
             [% END %]
             <div id="qtyrecerror" style="display:none">
                 <p class="error">Warning, you have entered more items than expected.

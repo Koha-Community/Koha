@@ -199,6 +199,7 @@ $template->param(
     biblionumber          => $order->{'biblionumber'},
     ordernumber           => $order->{'ordernumber'},
     biblioitemnumber      => $order->{'biblioitemnumber'},
+    subscriptionid        => $order->{subscriptionid},
     booksellerid          => $order->{'booksellerid'},
     freight               => $freight,
     name                  => $bookseller->{'name'},

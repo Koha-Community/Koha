@@ -97,7 +97,6 @@ my $budget_id       = $input->param('budget_id') || 0;
 my $title           = $input->param('title');
 my $author          = $input->param('author');
 my $publicationyear = $input->param('publicationyear');
-my $bookseller      = GetBookSellerFromId($booksellerid);	# FIXME: else ERROR!
 my $ordernumber          = $input->param('ordernumber') || '';
 our $biblionumber    = $input->param('biblionumber');
 our $basketno        = $input->param('basketno');
@@ -105,6 +104,7 @@ my $suggestionid    = $input->param('suggestionid');
 my $close           = $input->param('close');
 my $uncertainprice  = $input->param('uncertainprice');
 my $import_batch_id = $input->param('import_batch_id'); # if this is filled, we come from a staged file, and we will return here after saving the order !
+my $subscriptionid  = $input->param('subscriptionid');
 my $data;
 my $new = 'no';
 
@@ -129,6 +129,9 @@ if(!$basketno) {
 }
 
 our $basket = GetBasket($basketno);
+$booksellerid = $basket->{booksellerid} unless $booksellerid;
+my $bookseller = GetBookSellerFromId($booksellerid);
+
 my $contract = &GetContract($basket->{contractnumber});
 
 #simple parameters reading (all in one :-)
@@ -186,10 +189,8 @@ else {    #modify order
     $biblionumber = $data->{'biblionumber'};
     $budget_id = $data->{'budget_id'};
 
-    #get basketno and supplierno. too!
-    my $data2 = GetBasket( $data->{'basketno'} );
-    $basketno     = $data2->{'basketno'};
-    $booksellerid = $data2->{'booksellerid'};
+    $basket   = GetBasket( $data->{'basketno'} );
+    $basketno = $basket->{'basketno'};
 }
 
 my $suggestion;
@@ -321,6 +322,26 @@ if (C4::Context->preference('AcqCreateItem') eq 'ordering' && !$ordernumber) {
 my @itemtypes;
 @itemtypes = C4::ItemType->all unless C4::Context->preference('item-level_itypes');
 
+if ( defined $subscriptionid ) {
+    my $lastOrderReceived = GetLastOrderReceivedFromSubscriptionid $subscriptionid;
+    if ( defined $lastOrderReceived ) {
+        $budget_id              = $lastOrderReceived->{budgetid};
+        $data->{listprice}      = $lastOrderReceived->{listprice};
+        $data->{uncertainprice} = $lastOrderReceived->{uncertainprice};
+        $data->{gstrate}        = $lastOrderReceived->{gstrate};
+        $data->{discount}       = $lastOrderReceived->{discount};
+        $data->{rrp}            = $lastOrderReceived->{rrp};
+        $data->{ecost}          = $lastOrderReceived->{ecost};
+        $data->{quantity}       = $lastOrderReceived->{quantity};
+        $data->{unitprice}      = $lastOrderReceived->{unitprice};
+        $data->{notes}          = $lastOrderReceived->{notes};
+        $data->{sort1}          = $lastOrderReceived->{sort1};
+        $data->{sort2}          = $lastOrderReceived->{sort2};
+
+        $basket = GetBasket( $input->param('basketno') );
+    }
+}
+
 # Find the items.barcode subfield for barcode validations
 my (undef, $barcode_subfield) = GetMarcFromKohaField('items.barcode', '');
 
@@ -392,6 +413,7 @@ $template->param(
     publishercode    => $data->{'publishercode'},
     barcode_subfield => $barcode_subfield,
     import_batch_id  => $import_batch_id,
+    subscriptionid   => $subscriptionid,
     (uc(C4::Context->preference("marcflavour"))) => 1
 );
 
