@@ -4,11 +4,14 @@
 #
 # Copyright (C) 2011  Chris Cormack <chris@bigballofwax.co.nz>
 # Copyright (C) 2013  Mark Tompsett
+# Updated 2013 by Chris Cormack <chris@bigballofwax.co.nz>
 #
-# Koha is free software; you can redistribute it and/or modify it
-# under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 3 of the License, or
-# (at your option) any later version.
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 3 of the License, or (at your option) any later
+# version.
 #
 # Koha is distributed in the hope that it will be useful, but
 # WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -26,8 +29,8 @@ use CGI;
 
 use Koha::Cache;
 
-my $query  = CGI->new();
-my $report_id = $query->param('id');
+my $query       = CGI->new();
+my $report_id   = $query->param('id');
 my $report_name = $query->param('name');
 my $report_annotation = $query->param('annotated');
 
@@ -36,18 +39,38 @@ if (!$report_rec) { die "There is no such report.\n"; }
 
 die "Sorry this report is not public\n" unless $report_rec->{public};
 
+my @sql_params  = $query->param('sql_params');
+
 my $cache_active = Koha::Cache->is_cache_active;
-my ($cache_key, $cache, $json_text);
+my ( $cache_key, $cache, $json_text );
 if ($cache_active) {
-    $cache_key = "opac:report:".($report_name ? "name:$report_name" : "id:$report_id");
-    $cache = Koha::Cache->new();
+    $cache_key =
+        "opac:report:"
+      . ( $report_name ? "name:$report_name" : "id:$report_id" )
+      . @sql_params;
+    $cache     = Koha::Cache->new();
     $json_text = $cache->get_from_cache($cache_key);
 }
 
 unless ($json_text) {
     my $offset = 0;
-    my $limit  = C4::Context->preference("SvcMaxReportRows") || 10;
-    my ( $sth, $errors ) = execute_query( $report_rec->{savedsql}, $offset, $limit );
+    my $limit = C4::Context->preference("SvcMaxReportRows") || 10;
+    my $sql = $report_rec->{savedsql};
+    if (@sql_params) {
+
+        # we have sql params need to fix the sql
+        my @split = split /<<|>>/, $sql;
+        my @tmpl_parameters;
+        for ( my $i = 0 ; $i < $#split / 2 ; $i++ ) {
+            my $quoted = C4::Context->dbh->quote( $sql_params[$i] );
+
+            # if there are special regexp chars, we must \ them
+            $split[ $i * 2 + 1 ] =~ s/(\||\?|\.|\*|\(|\)|\%)/\\$1/g;
+            $sql =~ s/<<$split[$i*2+1]>>/$quoted/;
+        }
+    }
+    my ( $sth, $errors ) =
+      execute_query( $sql, $offset, $limit );
     if ($sth) {
         my $lines;
         if ($report_annotation) {
@@ -59,7 +82,8 @@ unless ($json_text) {
         $json_text = to_json($lines);
 
         if ($cache_active) {
-            $cache->set_in_cache( $cache_key, $json_text, $report_rec->{cache_expiry} );
+            $cache->set_in_cache( $cache_key, $json_text,
+                $report_rec->{cache_expiry} );
         }
     }
     else {
