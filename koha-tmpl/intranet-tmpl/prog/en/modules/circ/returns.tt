@@ -120,7 +120,7 @@ $(document).ready(function () {
 	<!-- waiting -->
 
 [% IF ( soundon ) %]
-<audio src="/intranet-tmpl/prog/sound/ending.ogg" autoplay="autoplay" autobuffer="autobuffer"></audio>
+<audio src="[% interface %]/[% theme %]/sound/ending.ogg" autoplay="autoplay" autobuffer="autobuffer"></audio>
 [% END %]
 
 <div id="hold-found1" class="dialog message">
@@ -163,7 +163,7 @@ $(document).ready(function () {
     [% IF ( diffbranch ) %]
 		<!-- diffbranch -->
         [% IF ( soundon ) %]
-        <audio src="/intranet-tmpl/prog/sound/opening.ogg" autoplay="autoplay" autobuffer="autobuffer"></audio>
+        <audio src="[% interface %]/[% theme %]/sound/opening.ogg" autoplay="autoplay" autobuffer="autobuffer"></audio>
         [% END %]
         <div id="transfer-needed" class="dialog message">
 		<h3>Hold needing transfer found: <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% itembiblionumber %]">[% title |html %]</a></h3>
@@ -206,14 +206,14 @@ $(document).ready(function () {
             <h3>Please return <a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber %]">[% title or "item" |html %]</a> to [% homebranchname %]<br/>( <a href="#" onclick="Dopop('transfer-slip.pl?transferitem=[% itemnumber %]&amp;branchcode=[% homebranch %]&amp;op=slip'); return true;">Print slip</a> )</h3>
         </div>
         [% IF ( soundon ) %]
-        <audio src="/intranet-tmpl/prog/sound/opening.ogg" autoplay="autoplay" autobuffer="autobuffer"></audio>
+        <audio src="[% interface %]/[% theme %]/sound/opening.ogg" autoplay="autoplay" autobuffer="autobuffer"></audio>
         [% END %]
     [% END %]
 
     [% IF ( needstransfer ) %]
 	<!-- needstransfer -->
         [% IF ( soundon ) %]
-        <audio src="/intranet-tmpl/prog/sound/opening.ogg" autoplay="autoplay" autobuffer="autobuffer"></audio>
+        <audio src="[% interface %]/[% theme %]/sound/opening.ogg" autoplay="autoplay" autobuffer="autobuffer"></audio>
         [% END %]
 	<div id="item-transfer" class="dialog message"><h3> This item needs to be transferred to [% homebranchname %]</h3>
     Transfer now?<br />
@@ -239,7 +239,7 @@ $(document).ready(function () {
     [% IF ( diffbranch ) %]
 	<!-- diffbranch -->
         [% IF ( soundon ) %]
-        <audio src="/intranet-tmpl/prog/sound/opening.ogg" autoplay="autoplay" autobuffer="autobuffer"></audio>
+        <audio src="[% interface %]/[% theme %]/sound/opening.ogg" autoplay="autoplay" autobuffer="autobuffer"></audio>
         [% END %]
         <h3>Item consigned:</h3>
         <table>
@@ -267,7 +267,7 @@ $(document).ready(function () {
 	<!--  reserved  -->
 
         [% IF ( soundon ) %]
-        <audio src="/intranet-tmpl/prog/sound/opening.ogg" autoplay="autoplay" autobuffer="autobuffer"></audio>
+        <audio src="[% interface %]/[% theme %]/sound/opening.ogg" autoplay="autoplay" autobuffer="autobuffer"></audio>
         [% END %]
 
 	<div id="hold-found2" class="dialog message">
@@ -352,11 +352,11 @@ $(document).ready(function () {
                     [% END %]
             [% END %]
 [% IF ( soundon ) %]
-<audio src="/intranet-tmpl/prog/sound/critical.ogg" autoplay="autoplay" autobuffer="autobuffer"></audio>
+<audio src="[% interface %]/[% theme %]/sound/critical.ogg" autoplay="autoplay" autobuffer="autobuffer"></audio>
 [% END %]
         [% ELSE %]
 [% IF ( soundon ) %]
-<audio src="/intranet-tmpl/prog/sound/beep.ogg" autoplay="autoplay" autobuffer="autobuffer"></audio>
+<audio src="[% interface %]/[% theme %]/sound/beep.ogg" autoplay="autoplay" autobuffer="autobuffer"></audio>
 [% END %]
         [% END %]
     </div>

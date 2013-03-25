@@ -192,7 +192,7 @@ $(document).ready(function() {
                 <input type="hidden" name="mandatory" value="[% ite.mandatory %]" />
                 [% IF ( ite.repeatable ) %]
                     <a href="#" class="buttonPlus" onclick="CloneItemSubfield(this.parentNode); return false;">
-                        <img src="/intranet-tmpl/prog/img/clone-subfield.png" alt="Clone" title="Clone this subfield" />
+                        <img src="[% interface %]/[% theme %]/img/clone-subfield.png" alt="Clone" title="Clone this subfield" />
                     </a>
                 [% END %]
                 [% IF ( ite.mandatory ) %] <span class="required">Required</span>[% END %]

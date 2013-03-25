@@ -203,7 +203,7 @@ td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
         [% ELSE %]<td><span><input type="checkbox" value="[% tagloo.term %]" name="tags" /></span>[% END %]
 	    </td>
 	    [% IF ( tagloo.approved == -1 ) %]<td class="red">rejected
-		[% ELSIF ( tagloo.approved == 1 ) %]<td class="green"><img alt="OK" src="/intranet-tmpl/prog/img/approve.gif" />
+        [% ELSIF ( tagloo.approved == 1 ) %]<td class="green"><img alt="OK" src="[% interface %]/[% theme %]/img/approve.gif" />
 		[% ELSE %]<td class="pending">
 		[% END %]
 	    </td>

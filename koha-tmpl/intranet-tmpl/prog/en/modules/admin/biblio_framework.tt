@@ -96,7 +96,7 @@ function Check(f) {
                     $('#importing_' + frameworkcode).find("span").html(_("Importing to framework:")+"<strong>" + frameworkcode + "</strong><br />" +_("Importing from file:")+"<i>" + obj.val().replace(new RegExp("^.+[/\\\\]"),"") + "</i>");
                     if (navigator.userAgent.toLowerCase().indexOf('msie') != -1) {
                         var timestamp = new Date().getTime();
-                        $('#importing_' + frameworkcode).find("img").attr('src', '/intranet-tmpl/prog/img/loading-small.gif' + '?' +timestamp);
+                        $('#importing_' + frameworkcode).find("img").attr('src', '[% interface %]/[% theme %]/img/loading-small.gif' + '?' +timestamp);
                     }
                     $('#importing_' + frameworkcode).css('display', 'block');
                     if (navigator.userAgent.toLowerCase().indexOf('firefox') == -1) $("body").css("cursor", "progress");
@@ -219,7 +219,7 @@ function Check(f) {
                     <input type="hidden" name="action" value="import" />
                     <ol>
                         <li><label for="d_file_import_[% frameworkcode %]">Upload file:</label><input type="file" name="file_import_[% frameworkcode %]" id="d_file_import_[% frameworkcode %]" class="input_import" value="" autocomplete="off" /></li>
-                        <li><div id="importing_[% frameworkcode %]" style="display:none" class="importing"><img src="/intranet-tmpl/prog/img/loading-small.gif" /><span class="importing_msg"></span></div></li>
+                        <li><div id="importing_[% frameworkcode %]" style="display:none" class="importing"><img src="[% interface %]/[% theme %]/img/loading-small.gif" /><span class="importing_msg"></span></div></li>
                     </ol>
                     </fieldset>
                     <fieldset class="action"><input type="submit" value="Import" /> <a href="#" class="import_export_close cancel">Cancel</a> </fieldset>
@@ -268,7 +268,7 @@ function Check(f) {
                         <li><label for="file_import_[% loo.frameworkcode %]">Upload file:</label><input type="file" name="file_import_[% loo.frameworkcode %]" id="file_import_[% loo.frameworkcode %]" class="input_import" value="" autocomplete="off" /></li>
                     </ol>
                     </fieldset>
-                    <fieldset class="action"><input type="submit" value="Import" /><div id="importing_[% loo.frameworkcode %]" style="display:none" class="importing"><img src="/intranet-tmpl/prog/img/loading-small.gif" /><span class="importing_msg"></span></div> <a href="#" class="cancel import_export_close">Cancel</a> </fieldset>
+                    <fieldset class="action"><input type="submit" value="Import" /><div id="importing_[% loo.frameworkcode %]" style="display:none" class="importing"><img src="[% interface %]/[% theme %]/img/loading-small.gif" /><span class="importing_msg"></span></div> <a href="#" class="cancel import_export_close">Cancel</a> </fieldset>
                 </form>
             </div>
             </div>

@@ -3,10 +3,10 @@
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
 [% IF ( opac_news_count ) %]
-    <link rel="stylesheet" type="text/css" href="/intranet-tmpl/prog/en/css/datatables.css" />
-    <script type="text/javascript" src="/intranet-tmpl/prog/en/lib/jquery/plugins/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/en/css/datatables.css" />
+    <script type="text/javascript" src="[% interface %]/[% theme %]/en/lib/jquery/plugins/jquery.dataTables.min.js"></script>
     [% INCLUDE 'datatables-strings.inc' %]
-    <script type="text/javascript" src="/intranet-tmpl/prog/en/js/datatables.js"></script>
+    <script type="text/javascript" src="[% interface %]/[% theme %]/en/js/datatables.js"></script>
     <script type="text/javascript">//<![CDATA[
     [% IF (dateformat == 'metric') %]dt_add_type_uk_date();[% END %]
     $(document).ready(function() {
