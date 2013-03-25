@@ -453,7 +453,7 @@ function validate1(date) {
         [% IF ( IMPOSSIBLE ) %]
 
 [% IF ( soundon ) %]
-<audio src="/intranet-tmpl/prog/sound/critical.ogg" autoplay="autoplay" autobuffer="autobuffer"></audio>
+<audio src="[% interface %]/[% theme %]/sound/critical.ogg" autoplay="autoplay" autobuffer="autobuffer"></audio>
 [% END %]        
 
 <div class="yui-g">
@@ -536,7 +536,7 @@ function validate1(date) {
 </div></div>
 [% ELSE %]
 [% IF ( soundon ) %]
-<audio src="/intranet-tmpl/prog/sound/beep.ogg" autoplay="autoplay" autobuffer="autobuffer"></audio>
+<audio src="[% interface %]/[% theme %]/sound/beep.ogg" autoplay="autoplay" autobuffer="autobuffer"></audio>
 [% END %]
     [% END %] <!-- /impossible -->
 

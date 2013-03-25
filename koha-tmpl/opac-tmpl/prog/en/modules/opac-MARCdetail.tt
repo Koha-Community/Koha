@@ -37,7 +37,7 @@ $(document).ready(function(){
         $(this).text(_("view labeled"));
         $("#labeledmarc").hide();
         if(!loaded){
-            $("#plainmarc").show().html("<div style=\"margin:1em;padding:1em;border:1px solid #EEE;font-size:150%;\"><img src=\"/opac-tmpl/prog/images/loading.gif\" /> "+_("Loading")+"...</div>").load("/cgi-bin/koha/opac-showmarc.pl","id=[% biblionumber %]&viewas=html");
+            $("#plainmarc").show().html("<div style=\"margin:1em;padding:1em;border:1px solid #EEE;font-size:150%;\"><img src=\"[% interface %]/[% theme %]/images/loading.gif\" /> "+_("Loading")+"...</div>").load("/cgi-bin/koha/opac-showmarc.pl","id=[% biblionumber %]&viewas=html");
             loaded = 1;
         } else {
             $("#plainmarc").show();

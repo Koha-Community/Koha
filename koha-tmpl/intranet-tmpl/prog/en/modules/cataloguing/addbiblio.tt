@@ -504,11 +504,11 @@ function Changefwk(FwkList) {
                 <span class="field_controls">
                 [% IF ( innerloo.repeatable ) %]
                     <a href="#" tabindex="1" class="buttonPlus" onclick="CloneField('tag_[% innerloo.tag %]_[% innerloo.index %][% innerloo.random %]','[% hide_marc %]','[% advancedMARCEditor %]'); return false;" title="Repeat this Tag">
-                        <img src="/intranet-tmpl/prog/img/repeat-tag.png" alt="Repeat this Tag" />
+                        <img src="[% interface %]/[% theme %]/img/repeat-tag.png" alt="Repeat this Tag" />
                     </a>
                 [% END %]
                     <a href="#" tabindex="1" class="buttonMinus" onclick="UnCloneField('tag_[% innerloo.tag %]_[% innerloo.index %][% innerloo.random %]'); return false;" title="Delete this Tag">
-                        <img src="/intranet-tmpl/prog/img/delete-tag.png" alt="Delete this Tag" />
+                        <img src="[% interface %]/[% theme %]/img/delete-tag.png" alt="Delete this Tag" />
                     </a>
                 </span>
 
@@ -527,9 +527,9 @@ function Changefwk(FwkList) {
                 [% UNLESS hide_marc %]
                 <span class="subfieldcode">
                     [% IF ( subfield_loo.fixedfield ) %]
-                        <img class="buttonUp" style="display:none;" src="/intranet-tmpl/prog/img/up.png" onclick="upSubfield('subfield[% subfield_loo.tag %][% subfield_loo.subfield %][% subfield_loo.random %]')" alt="Move Up" title="Move Up" />
+                        <img class="buttonUp" style="display:none;" src="[% interface %]/[% theme %]/img/up.png" onclick="upSubfield('subfield[% subfield_loo.tag %][% subfield_loo.subfield %][% subfield_loo.random %]')" alt="Move Up" title="Move Up" />
                     [% ELSE %]
-                        <img class="buttonUp" src="/intranet-tmpl/prog/img/up.png" onclick="upSubfield('subfield[% subfield_loo.tag %][% subfield_loo.subfield %][% subfield_loo.random %]')" alt="Move Up" title="Move Up" />
+                        <img class="buttonUp" src="[% interface %]/[% theme %]/img/up.png" onclick="upSubfield('subfield[% subfield_loo.tag %][% subfield_loo.subfield %][% subfield_loo.random %]')" alt="Move Up" title="Move Up" />
                     [% END %]
                         <input type="text"
                             title="[% subfield_loo.marc_lib_plain %]"
@@ -560,10 +560,10 @@ function Changefwk(FwkList) {
                 <span class="subfield_controls">
                 [% IF ( subfield_loo.repeatable ) %]
                     <a href="#" class="buttonPlus" tabindex="1" onclick="CloneSubfield('subfield[% subfield_loo.tag %][% subfield_loo.subfield %][% subfield_loo.random %]','[% advancedMARCEditor %]'); return false;">
-                        <img src="/intranet-tmpl/prog/img/clone-subfield.png" alt="Clone" title="Clone this subfield" />
+                        <img src="[% interface %]/[% theme %]/img/clone-subfield.png" alt="Clone" title="Clone this subfield" />
                     </a>
                     <a href="#" class="buttonMinus" tabindex="1" onclick="UnCloneField('subfield[% subfield_loo.tag %][% subfield_loo.subfield %][% subfield_loo.random %]'); return false;">
-                        <img src="/intranet-tmpl/prog/img/delete-subfield.png" alt="Delete" title="Delete this subfield" />
+                        <img src="[% interface %]/[% theme %]/img/delete-subfield.png" alt="Delete" title="Delete this subfield" />
                     </a>
                 [% END %]
                 </span>
