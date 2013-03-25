@@ -66,11 +66,11 @@ $(document).ready(function(){
         <fieldset class="rows">
         <legend>Select items you want to check</legend>
         <ol><li>
-        <label for="branch">Library</label>
+        <label for="branch">Library: </label>
             <input type="radio" name="branch" value="homebranch"> Home library</input>
             <input type="radio" name="branch" value="holdingbranch"> Current location</input>
         </li><li>
-        <label for="branchloop">Library</label><select id="branchloop" name="branchcode" style="width:12em;">
+        <label for="branchloop">Library: </label><select id="branchloop" name="branchcode" style="width:12em;">
             <option value="">All locations</option>
         [% FOREACH branchloo IN branchloop %]
             [% IF ( branchloo.selected ) %]
@@ -83,7 +83,7 @@ $(document).ready(function(){
         </li>
         [% IF ( authorised_values ) %]
         <li>
-            <label for="locationloop">Shelving location (items.location) is</label>
+            <label for="locationloop">Shelving location (items.location) is: </label>
         <select id="locationloop" name="location">
                 <option value="">Filter location</option>
         [% FOREACH authorised_value IN authorised_values %]
@@ -105,7 +105,7 @@ $(document).ready(function(){
 	</ol>
 	</fieldset>
             <fieldset class="rows">
-            <legend>Item statuses:</legend>
+            <legend>Item statuses</legend>
             <div name="statuses" style="display: block;">
                   [% FOREACH statuse IN statuses %]
                       [% IF ( statuse.values ) %]
@@ -146,11 +146,11 @@ $(document).ready(function(){
             <input type="text" id="offset" name="offset" value="[% offset %]" size="5" maxlength="5" />
         </li>
         <li>
-           <label for="CSVexport">Export to CSV file</label>
+           <label for="CSVexport">Export to CSV file: </label>
            <input type="checkbox" name="CSVexport" id="CSVexport" />
         </li>
         <li>
-            <label for="compareinv2barcd">Compare barcodes list to results</label>
+            <label for="compareinv2barcd">Compare barcodes list to results: </label>
             <input type="checkbox" name="compareinv2barcd" id="compareinv2barcd" />
         </li>
         </ol>

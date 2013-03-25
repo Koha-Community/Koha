@@ -65,7 +65,7 @@ function Check(ff) {
                     </li>
                 [% END %]
                 <li>
-                    <label for="basketname" class="required">Basket name</label> &nbsp;
+                    <label for="basketname" class="required">Basket name: </label> &nbsp;
                         <input type="text" name="basketname" id="basketname" size="40" maxlength="80" value="[% basketname %]" />
                 </li>
                  <li>
@@ -99,7 +99,7 @@ function Check(ff) {
                     </select>
                 </li>
                 <li>
-                    <label for="basketbooksellerid">Vendor</label> &nbsp;
+                    <label for="basketbooksellerid">Vendor: </label> &nbsp;
                     <select name="basketbooksellerid" id="basketbooksellerid">
                     [% FOREACH b IN booksellers %]
                         [% IF booksellerid == b.id %]
@@ -111,15 +111,15 @@ function Check(ff) {
             </select>
                 </li>
                 <li>
-                    <label for="basketnote">Internal note</label> &nbsp;
+                    <label for="basketnote">Internal note: </label> &nbsp;
                     <textarea name="basketnote" id="basketnote" rows="5" cols="40">[% basketnote %]</textarea>
                 </li>
                 <li>
-                    <label for="basketbooksellernote">Vendor note</label> &nbsp;
+                    <label for="basketbooksellernote">Vendor note: </label> &nbsp;
                     <textarea name="basketbooksellernote" id="basketbooksellernote" rows="5" cols="40">[% basketbooksellernote %]</textarea>
                 </li>
                 [% IF ( contractloop ) %]
-                    <li><label for="basketcontractnumber">Contract</label>
+                    <li><label for="basketcontractnumber">Contract: </label>
                         <select id="basketcontractnumber" name="basketcontractnumber">
                             <option value=""></option>
                             [% FOREACH contractloo IN contractloop %]

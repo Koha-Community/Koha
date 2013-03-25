@@ -149,13 +149,13 @@ function Check(f) {
     <fieldset class="rows">
     <ol>
 	[% IF ( frameworkcode ) %]
-        <li><span class="label">Framework code</span><input type="hidden" id="frameworkcode" name="frameworkcode" value="[% frameworkcode %]" />[% frameworkcode %]
+        <li><span class="label">Framework code: </span><input type="hidden" id="frameworkcode" name="frameworkcode" value="[% frameworkcode %]" />[% frameworkcode %]
             <input type="hidden" name="modif" value="1" />
         </li>
 	[% ELSE %]
-        <li><label for="frameworkcode">Framework code</label><input type="text" id="frameworkcode" name="frameworkcode" size="4" maxlength="4" onblur="toUC(this)" /></li>
+        <li><label for="frameworkcode">Framework code: </label><input type="text" id="frameworkcode" name="frameworkcode" size="4" maxlength="4" onblur="toUC(this)" /></li>
 	[% END %]
-        <li><label for="description">Description</label>
+        <li><label for="description">Description: </label>
         <input type="text" name="frameworktext" id="description" size="40" maxlength="80" value="[% frameworktext |html %]" /></li></ol></fieldset>
         <fieldset class="action">	<input type="submit" value="Submit" class="submit" /></fieldset>
     </form>

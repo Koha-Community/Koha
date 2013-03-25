@@ -113,12 +113,12 @@ function finderjumpfull(page)
             <input type="hidden" name="index" value="[% index %]" />
                 <fieldset class="rows"><legend>Search options</legend>
                 <ol><li>
-                    <span class="label">Authority type</span>
+                    <span class="label">Authority type: </span>
                     [% authtypecode %]
                     <input type="hidden" name="authtypecode" value="[% authtypecode %]" />
                 </li>
                 <li>
-                    <label for="mainmainentry">Main entry ($a only)</label>
+                    <label for="mainmainentry">Main entry ($a only): </label>
                     <input type="hidden" name="marclist" value="mainmainentry" />
                     <input type="hidden" name="and_or" value="and" />
                     <input type="hidden" name="excluding" value="" />
@@ -132,7 +132,7 @@ function finderjumpfull(page)
                 </li>
 
                 <li>
-                    <label for="mainentry">Main entry</label>
+                    <label for="mainentry">Main entry: </label>
                     <input type="hidden" name="marclist" value="mainentry" />
                     <input type="hidden" name="and_or" value="and" />
                     <input type="hidden" name="excluding" value="" />
@@ -146,7 +146,7 @@ function finderjumpfull(page)
                 </li>
 
                 <li>
-                    <label for="marclistanywhere">Anywhere</label>
+                    <label for="marclistanywhere">Anywhere: </label>
                     <input type="hidden" name="marclist" value="any" />
                     <input type="hidden" name="and_or" value="and" />
                     <input type="hidden" name="excluding" value="" />
@@ -159,7 +159,7 @@ function finderjumpfull(page)
                     <div id="yvaluecontainermarclist"></div>
                 </li>
                 <li>
-                    <label for="marclistheading">Heading match</label>
+                    <label for="marclistheading">Heading match: </label>
                     <input type="hidden" name="marclist" value="match" />
                     <input type="hidden" name="and_or" value="and" />
                     <input type="hidden" name="excluding" value="" />
@@ -171,7 +171,7 @@ function finderjumpfull(page)
                     <input type="text" name="value_match" value="[% value_match |html %]" />
                 </li>
         <li>
-        <label for="orderby">Sort by </label>
+        <label for="orderby">Sort by: </label>
         <select name="orderby" id="orderby">
             <option value="">No order</option>
             <option value="HeadingAsc" selected="selected">Heading ascendant</option>

@@ -137,24 +137,24 @@ return false;
         [% IF ( heading_modify_tag_p ) %]<input type="hidden" name="modif" value="1" />[% END %]
         <input type="hidden" name="authtypecode" value="[% authtypecode %]" />
         <fieldset class="rows"><ol>
-        <li><span class="label">Tag</span>[% searchfield %]</li>
-        <li><label for="liblibrarian">Text for librarians</label><input type="text" name="liblibrarian" id="liblibrarian" value="[% liblibrarian |html %]" size="40" maxlength="100" /></li>
-        <li><label for="libopac">Text for opac</label><input type="text" name="libopac" id="libopac" value="[% libopac |html %]" size="40" maxlength="100" /></li>
-        <li><label for="repeatable">Repeatable</label>
+        <li><span class="label">Tag: </span>[% searchfield %]</li>
+        <li><label for="liblibrarian">Text for librarians: </label><input type="text" name="liblibrarian" id="liblibrarian" value="[% liblibrarian |html %]" size="40" maxlength="100" /></li>
+        <li><label for="libopac">Text for opac: </label><input type="text" name="libopac" id="libopac" value="[% libopac |html %]" size="40" maxlength="100" /></li>
+        <li><label for="repeatable">Repeatable: </label>
             [% IF ( repeatable ) %]
                 <input type="checkbox" name="repeatable" id="repeatable" value="1" checked="checked" />
             [% ELSE %]
                 <input type="checkbox" name="repeatable" id="repeatable" value="1" />
             [% END %]
         </li>
-        <li><label for="mandatory">Mandatory</label>
+        <li><label for="mandatory">Mandatory: </label>
             [% IF ( mandatory ) %]
                 <input type="checkbox" name="mandatory" id="mandatory" value="1" checked="checked" />
             [% ELSE %]
                 <input type="checkbox" name="mandatory" id="mandatory" value="1" />
             [% END %]
             </li>
-        <li><label for="authorised_value">Authorized value</label>[% authorised_value %] (if you select a value here, the indicators will be limited to the authorized value list)</li>
+        <li><label for="authorised_value">Authorized value: </label>[% authorised_value %] (if you select a value here, the indicators will be limited to the authorized value list)</li>
 </ol></fieldset>
         <p><input type="button" value="Submit" class="button" onclick="Check(this.form)" /></p>
     </form>

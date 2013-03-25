@@ -38,11 +38,11 @@
                             <legend>[% IF ( layout_id ) %]Edit[% ELSE %]Create[% END %] Label layout</legend>
                             <ol>
                                 <li>
-                                    <label for="layout_name">Layout name</label>
+                                    <label for="layout_name">Layout name: </label>
                                     <input type="text" name="layout_name" id="layout_name" size="20" value="[% layout_name %]" />
                                 </li>
                                 <li>
-                                    <label for="barcode_type">Choose barcode type (encoding)</label>
+                                    <label for="barcode_type">Choose barcode type (encoding): </label>
                                     <select name="barcode_type" id="barcode_type">
                                     [% FOREACH barcode_type IN barcode_types %]
                                     [% IF ( barcode_type.selected ) %]
@@ -54,7 +54,7 @@
                                     </select>
                                 </li>
                                 <li>
-                                    <label for="printing_type">Choose layout type</label>
+                                    <label for="printing_type">Choose layout type: </label>
                                     <select name="printing_type" id="printing_type">
                                     [% FOREACH label_type IN label_types %]
                                     [% IF ( label_type.selected ) %]
@@ -112,7 +112,7 @@
                                     </fieldset>
                                 </li>
                                 <li>
-                                    <label for="guidebox">Draw guide boxes</label>
+                                    <label for="guidebox">Draw guide boxes: </label>
                                     [% IF ( guidebox ) %]
                                     <input type="checkbox" name="guidebox" id="guidebox" value="1"  checked="checked" />
                                     [% ELSE %]
@@ -120,7 +120,7 @@
                                     [% END %]
                                 </li>
                                 <li>
-                                    <label for="callnum_split">Split call numbers</label>
+                                    <label for="callnum_split">Split call numbers: </label>
                                     [% IF ( callnum_split ) %]
                                     <input type="checkbox" name="callnum_split" id="callnum_split" value="1"  checked="checked" />
                                     [% ELSE %]
@@ -128,7 +128,7 @@
                                     [% END %]
                                 </li>
                                 <li>
-                                    <label for="text_justify">Text justification</label>
+                                    <label for="text_justify">Text justification: </label>
                                     <select name="text_justify" id="text_justify">
                                         [% FOREACH text_justification_type IN text_justification_types %]
                                         [% IF ( text_justification_type.selected ) %]
@@ -140,7 +140,7 @@
                                     </select>
                                 </li>
                                 <li>
-                                    <label for="font">Font</label>
+                                    <label for="font">Font: </label>
                                     <select name="font" id="font">
                                         [% FOREACH font_type IN font_types %]
                                         [% IF ( font_type.selected ) %]
@@ -152,7 +152,7 @@
                                     </select>
                                 </li>
                                 <li>
-                                    <label for="font_size">Font size</label>
+                                    <label for="font_size">Font size: </label>
                                     <input type="text" name="font_size" id="font_size" size="2" value="[% font_size |html %]" />
                                 </li>
                             </ol>
