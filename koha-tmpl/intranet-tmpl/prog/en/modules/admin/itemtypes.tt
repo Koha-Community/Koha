@@ -197,7 +197,7 @@ Item types administration
   [% FOREACH imageset IN imagesets %]
   <div id="[% imageset.imagesetname %]"><ul>
   [% FOREACH image IN imageset.images %]
-  			<li style="float: none; display: inline; clear : none; width: auto;">
+			<li style="float: none; display: inline-block; clear : none; width: auto;">
             <label> [% IF ( image.StaffImageUrl ) %]
               <img src="[% image.StaffImageUrl %]" alt="[% image.StaffImageUrl %]" title="[% image.StaffImageUrl %]" />
         [% ELSE %]
