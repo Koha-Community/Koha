@@ -400,8 +400,7 @@ sub MapItemsToHoldRequests {
     foreach my $item (@$available_items) {
         next unless $item->{holdallowed};
 
-        push @{ $items_by_branch{  $automatic_return ? $item->{homebranch}
-                                                     : $item->{holdingbranch} } }, $item
+        push @{ $items_by_branch{ $item->{holdingbranch} } }, $item
           unless exists $allocated_items{ $item->{itemnumber} };
     }
     return unless keys %items_by_branch;
