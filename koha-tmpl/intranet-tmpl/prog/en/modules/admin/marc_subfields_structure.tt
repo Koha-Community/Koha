@@ -17,6 +17,10 @@ $(document).ready(function() {
                 link.html(_("Display more constraints"));
             }
     });
+    $("input[id^='hidden_']").click(setHiddenValue);
+    $("input[id^='hidden-']").each(function() {
+            populateHiddenCheckboxes($(this).attr('id').split('-')[1]);
+    });
 });
 
 /*function displayMoreConstraint(numlayer){
@@ -29,6 +33,117 @@ $(document).ready(function() {
         thisdiv.setAttribute("class","content_hidden");
     }
 }*/
+
+/* Function to serialize and set the 'hidden' field */
+function setHiddenValue() {
+
+    var tab = $(this).attr('id').split('_')[2];
+    var opac_checked = $("#hidden_opac_" + tab).is(':checked');
+    var intranet_checked = $("#hidden_intranet_" + tab).is(':checked');
+    var editor_checked = $("#hidden_editor_" + tab).is(':checked');
+    var collapsed_checked = $("#hidden_collapsed_" + tab).is(':checked');
+    var hidden_value = "";
+
+    if ( opac_checked && ! intranet_checked && ! editor_checked && collapsed_checked ) {
+        hidden_value='-7';
+    } else if ( opac_checked && intranet_checked && ! editor_checked && ! collapsed_checked) {
+        hidden_value='-6';
+    } else if ( opac_checked && intranet_checked && ! editor_checked && collapsed_checked) {
+        hidden_value='-5';
+    } else if ( opac_checked && ! intranet_checked && ! editor_checked && ! collapsed_checked) {
+        hidden_value='-4';
+    } else if ( opac_checked && ! intranet_checked && editor_checked && collapsed_checked) {
+        hidden_value='-3';
+    } else if ( opac_checked && ! intranet_checked && editor_checked && ! collapsed_checked) {
+        hidden_value='-2';
+    } else if ( opac_checked && intranet_checked && editor_checked && collapsed_checked) {
+        hidden_value='-1';
+    } else if ( opac_checked && intranet_checked && editor_checked && ! collapsed_checked) {
+        hidden_value='0';
+    } else if ( ! opac_checked && intranet_checked && editor_checked && collapsed_checked) {
+        hidden_value='1';
+    } else if ( ! opac_checked && ! intranet_checked && editor_checked && ! collapsed_checked) {
+        hidden_value='2';
+    } else if ( ! opac_checked && ! intranet_checked && editor_checked && collapsed_checked) {
+        hidden_value='3';
+    } else if ( ! opac_checked && intranet_checked && editor_checked && ! collapsed_checked) {
+        hidden_value='4';
+    } else if ( ! opac_checked && ! intranet_checked && ! editor_checked && collapsed_checked) {
+        hidden_value='5';
+    } else if ( ! opac_checked && intranet_checked && ! editor_checked && ! collapsed_checked) {
+        hidden_value='6';
+    } else if ( ! opac_checked && intranet_checked && ! editor_checked && collapsed_checked) {
+        hidden_value='7';
+    } else if ( ! opac_checked && ! intranet_checked && ! editor_checked && ! collapsed_checked) {
+        hidden_value='8';
+    }
+
+    $('#hidden-' + tab).val(hidden_value);
+}
+
+function populateHiddenCheckboxes(tab) {
+    // read the serialized value
+    var hidden_value = $('#hidden-' + tab).val();
+    // deafult to false
+    var opac_checked = false;
+    var intranet_checked = false;
+    var editor_checked = false;
+    var collapsed_checked = false;
+
+    if ( hidden_value == '-7') {
+        opac_checked = true;
+        collapsed_checked = true;
+    } else if ( hidden_value == '-6' ) {
+        opac_checked = true;
+        intranet_checked = true;
+    } else if ( hidden_value == '-5') {
+        opac_checked = true;
+        intranet_checked = true;
+        collapsed_checked = true;
+    } else if ( hidden_value == '-4' ) {
+        opac_checked = true;
+    } else if ( hidden_value == '-3') {
+        opac_checked = true;
+        editor_checked = true;
+        collapsed_checked = true;
+    } else if ( hidden_value == '-2' ) {
+        opac_checked = true;
+        editor_checked = true;
+    } else if ( hidden_value == '-1' ) {
+        opac_checked = true;
+        intranet_checked = true;
+        editor_checked = true;
+        collapsed_checked = true;
+    } else if ( hidden_value == '0' ) {
+        opac_checked = true;
+        intranet_checked = true;
+        editor_checked = true;
+    } else if ( hidden_value == '1' ) {
+        intranet_checked = true;
+        editor_checked = true;
+        collapsed_checked = true;
+    } else if ( hidden_value == '2' ) {
+        editor_checked = true;
+    } else if ( hidden_value == '3' ) {
+        editor_checked = true;
+        collapsed_checked = true;
+    } else if ( hidden_value == '4' ) {
+        intranet_checked = true;
+        editor_checked = true;
+    } else if ( hidden_value == '5' ) {
+        collapsed_checked = true;
+    } else if ( hidden_value == '6' ) {
+        intranet_checked = true;
+    } else if ( hidden_value == '7' ) {
+        intranet_checked = true;
+        collapsed_checked = true;
+    } // else if ( hidden_value == '8') { skip }
+
+    $("#hidden_opac_" + tab).attr('checked',opac_checked);
+    $("#hidden_intranet_" + tab).attr('checked',intranet_checked);
+    $("#hidden_editor_" + tab).attr('checked',editor_checked);
+    $("#hidden_collapsed_" + tab).attr('checked',collapsed_checked);
+}
 
 //]]>
 </script>
@@ -111,7 +226,13 @@ $(document).ready(function() {
                 <ol><li><label for="defaultvalue[% loo.row %]">Default value:</label>
                     <input type="text" name="defaultvalue" id="defaultvalue[% loo.row %]" value="[% loo.defaultvalue %]" /></li>
 				<li><label for="maxlength[% loo.row %]">Max length:</label><input type="text" id="maxlength[% loo.row %]" name="maxlength" value="[% loo.maxlength %]" size="4" /> (see online help)</li>
-                <li><label for="hidden[% loo.row %]">hidden</label><input type="text" id="hidden[% loo.row %]" name="hidden" value="[% loo.hidden %]" size="2" /> (see online help)</li>
+                <li><input type="hidden" id="hidden-[% loo.row %]" name="hidden" value="[% loo.hidden %]" />
+                    <label for="hidden[% loo.row %]">Visibility: </label>
+                    <input class="radio" type="checkbox" id="hidden_opac_[% loo.row %]" name="hidden_opac_[% loo.row %]"/> OPAC
+                    <input type="checkbox" id="hidden_intranet_[% loo.row %]" name="hidden_intranet_[% loo.row %]"/> Intranet
+                    <input type="checkbox" id="hidden_editor_[% loo.row %]" name="hidden_editor_[% loo.row %]"/> Editor
+                    <input type="checkbox" id="hidden_collapsed_[% loo.row %]" name="hidden_collapsed_[% loo.row %]"/> Collapsed
+                </li>
                 <li><label for="isurl[% loo.row %]">Is a URL:</label>[% loo.isurl %] (if checked, it means that the subfield is a URL and can be clicked)</li>
                 <li><label for="link[% loo.row %]">Link:</label><input type="text" id="link[% loo.row %]" name="link" value="[% loo.link %]" size="10" maxlength="80" /> (e.g., Title or Local-Number) <span class="error"><em>NOTE: If you change this value you must ask your administrator to run misc/batchRebuildBiblioTables.pl.</em></span></li>
                 <li><label for="kohafield[% loo.row %]">Koha link:</label>[% loo.kohafield %]</li>
