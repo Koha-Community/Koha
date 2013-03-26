@@ -325,7 +325,7 @@ $(document).ready(function() { calcNewsuggTotal(); });
     <fieldset class="rows"> <legend>Acquisition information</legend><ol>
         <li><label for="branchcode">Library:</label>
             <select name="branchcode" id="branchcode">
-                <option value="">Any</option>[% FOREACH branchloo IN branchloop %]
+                <option value="__ANY__">Any</option>[% FOREACH branchloo IN branchloop %]
                 [% IF ( branchloo.selected ) %]<option value="[% branchloo.value %]" selected="selected">[% branchloo.branchname %]</option>[% ELSE %]<option value="[% branchloo.value %]">[% branchloo.branchname %]</option>[% END %][% END %]
             </select>
         </li>
@@ -558,7 +558,7 @@ $(document).ready(function() { calcNewsuggTotal(); });
                     </select></li>
                     <li><label for="branchcode"> For:</label>
                     <select name="branchcode" id="branchcode">
-                        <option value="">Any</option>[% FOREACH branchloo IN branchloop %]
+                        <option value="__ANY__">Any</option>[% FOREACH branchloo IN branchloop %]
                             [% IF ( branchloo.selected ) %] <option value="[% branchloo.value %]" selected="selected">[% branchloo.branchname %]</option>[% ELSE %] <option value="[% branchloo.value %]">[% branchloo.branchname %]</option>[% END %]
                             [% END %]
                     </select></li><li><input type="submit" value="Go" /></li></ol>
