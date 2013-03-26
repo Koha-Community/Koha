@@ -453,7 +453,7 @@
       <Value description="Cordiform">dh</Value>
       <Value description="Lambert conformal">dl</Value>
       <Value description="Other">zz</Value>
-      <Value description="No attempt to code">|</Value>
+      <Value description="No attempt to code">||</Value>
     </Position>
     <Position pos="24" name="Undefined" description="Undefined; contains a blank (#) or a fill character (|)."/>
     <Position pos="25" name="Type of cartographic material" description="One-character alphabetic code that indicates the type of cartographic item described.">
@@ -514,7 +514,7 @@
       <Value description="Playing cards">p</Value>
       <Value description="Loose-leaf">r</Value>
       <Value description="Other">z</Value>
-      <Value description="No attempt to code">|</Value>
+      <Value description="No attempt to code">||</Value>
     </Position>
     <Position pos="35-37" url="http://www.loc.gov/marc/languages/language_code.html" urltext="MARC Code List for Languages" name="Language" description="">
       <Value description="No information provided">###</Value>
@@ -673,12 +673,13 @@
       <Value description="Full score">a</Value>
       <Value description="Full score, miniature or study size">b</Value>
       <Value description="Accompaniment reduced for keyboard">c</Value>
-      <Value description="Voice score">d</Value>
+      <Value description="Voice score with accompaniment omitted">d</Value>
       <Value description="Condensed score or piano-conductor score">e</Value>
       <Value description="Close score">g</Value>
       <Value description="Chorus score">h</Value>
       <Value description="Condensed score">i</Value>
       <Value description="Performer-conductor part">j</Value>
+      <Value description="Vocal score">k</Value>
       <Value description="Multiple score formats">m</Value>
       <Value description="Not applicable">n</Value>
       <Value description="Unknown">u</Value>
@@ -915,14 +916,14 @@
       <Value description="Electronic">s</Value>
       <Value description="No attempt to code">|</Value>
     </Position>
-    <Position pos="24" name="Nature of entire work" description="">
+    <Position pos="24" name="Nature of entire work" description="One-character alphabetic code that indicates the nature of an item if it consists entirely of a certain type of material">
       <Value description="Not specified">#</Value>
       <Value description="Calendars">5</Value>
       <Value description="Comics/graphic novels">6</Value>
       <Value description="Abstracts/summaries">a</Value>
       <Value description="Bibliographies">b</Value>
       <Value description="Catalogs">c</Value>
-      <Value description="Dictionaries. Also used for a glossary or a gazetteer.">d</Value>
+      <Value description="Dictionaries">d</Value>
       <Value description="Encyclopedias">e</Value>
       <Value description="Handbooks">f</Value>
       <Value description="Legal articles">g</Value>
@@ -945,7 +946,7 @@
       <Value description="Teatries">z</Value>
       <Value description="No attempt to code">|</Value>
     </Position>
-    <Position pos="25-27" name="Nature of contents" description="">
+    <Position pos="25-27" name="Nature of contents" description="Up to three one-character alphabetic codes (recorded in alphabetical order) that indicate that a work contains certain types of materials">
       <Value description="Not specified">#</Value>
       <Value description="Calendars">5</Value>
       <Value description="Comics/graphic novels">6</Value>
@@ -971,6 +972,7 @@
       <Value description="Standars/specifications">u</Value>
       <Value description="Legal cases and case notes">v</Value>
       <Value description="Law reports and digests">w</Value>
+      <Value description="Yearbooks">y</Value>
       <Value description="Treaties">z</Value>
       <Value description="No attempt to code">|||</Value>
     </Position>
@@ -1101,7 +1103,7 @@
       <Value description="Running time">001-999</Value>
       <Value description="Not applicable">nnn</Value>
       <Value description="No attempt to code">|||</Value>
-      <Value description="Unknown">                         --- </Value>
+      <Value description="Unknown">---</Value>
     </Position>
     <Position pos="21" name="Undefined" description="Undefined; contains a blank (#) or a fill character (|)."/>
     <Position pos="22" name="Target audience" description="One- character alphabetic code that describes the intellectual level of the target audience for which the material is intended">
