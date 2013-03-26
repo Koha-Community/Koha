@@ -143,11 +143,22 @@ sub SearchSuggestion {
                 };
             }
         }
+    } else {
+        if ( defined $suggestion->{branchcode} && $suggestion->{branchcode} ) {
+            unless ( $suggestion->{branchcode} eq '__ANY__' ) {
+                push @sql_params, $suggestion->{branchcode};
+                push @query,      qq{ AND suggestions.branchcode=? };
+            }
+        } else {
+            push @query, qq{
+                AND (suggestions.branchcode='' OR suggestions.branchcode IS NULL)
+            };
+        }
     }
 
     # filter on nillable fields
     foreach my $field (
-        qw( STATUS branchcode itemtype suggestedby managedby acceptedby budgetid biblionumber )
+        qw( STATUS itemtype suggestedby managedby acceptedby budgetid biblionumber )
       )
     {
         if ( exists $suggestion->{$field} ) {
