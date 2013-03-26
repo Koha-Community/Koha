@@ -1034,7 +1034,11 @@
       [% IF ( CGIsort1 ) %] 
         [% CGIsort1 %]
       [% ELSE %]
-        <input  type="text" id="sort1" name="sort1" size="20"  value="[% sort1 %]" />
+          [% IF ( opduplicate ) %]
+            <input  type="text" id="sort1" name="sort1" size="20"  value="[% sort1 %]" onclick="this.value=''" />
+          [% ELSE %]
+            <input  type="text" id="sort1" name="sort1" size="20"  value="[% sort1 %]" />
+          [% END %]
 	  [% IF ( mandatorysort1 ) %]<span class="required">Required</span>[% END %]
       [% END %]   
     </li>
