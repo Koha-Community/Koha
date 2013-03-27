@@ -1,4 +1,4 @@
-[% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Browse by author or subject
+[% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Authority search
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="opac-authorities">
@@ -13,7 +13,7 @@
         <input type="hidden" name="op" value="do_search" />
         <input type="hidden" name="type" value="opac" />
 <fieldset class="rows">
-            <legend>Browse by author or subject</legend>
+            <legend>Authority search</legend>
 <ol>
  <li><label for="authtypecode">Search: </label> <select name="authtypecode" id="authtypecode">
                 [% FOREACH authtypesloo IN authtypesloop %]
