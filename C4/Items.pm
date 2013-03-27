@@ -2650,6 +2650,10 @@ sub PrepareItemrecordDisplay {
                     && $defaultvalues
                     && $defaultvalues->{'callnumber'} ) {
                     if( $itemrecord and $defaultvalues and not $itemrecord->field($subfield) ){
+                        # if the item record exists, only use default value if the item has no callnumber
+                        $defaultvalue = $defaultvalues->{callnumber};
+                    } elsif ( !$itemrecord and $defaultvalues ) {
+                        # if the item record *doesn't* exists, always use the default value
                         $defaultvalue = $defaultvalues->{callnumber};
                     }
                 }
@@ -2665,6 +2669,10 @@ sub PrepareItemrecordDisplay {
                     && $defaultvalues->{'location'} ) {
 
                     if ( $itemrecord and $defaultvalues and not $itemrecord->field($subfield) ) {
+                        # if the item record exists, only use default value if the item has no locationr
+                        $defaultvalue = $defaultvalues->{location};
+                    } elsif ( !$itemrecord and $defaultvalues ) {
+                        # if the item record *doesn't* exists, always use the default value
                         $defaultvalue = $defaultvalues->{location};
                     }
                 }
@@ -2695,6 +2703,7 @@ sub PrepareItemrecordDisplay {
                                 $authorised_lib{$branchcode} = $branchname;
                             }
                         }
+                        $defaultvalue = $defaultvalues->{branchcode} || C4::Context->userenv->{branch};
 
                         #----- itemtypes
                     } elsif ( $tagslib->{$tag}->{$subfield}->{authorised_value} eq "itemtypes" ) {
@@ -2719,6 +2728,8 @@ sub PrepareItemrecordDisplay {
                             push @authorised_values, $class_source;
                             $authorised_lib{$class_source} = $class_sources->{$class_source}->{'description'};
                         }
+
+                        $defaultvalue = $default_source;
 
                         #---- "true" authorised value
                     } else {
