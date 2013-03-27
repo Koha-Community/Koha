@@ -20,6 +20,7 @@ package C4::Serials;
 
 use Modern::Perl;
 
+use C4::Auth qw(haspermission);
 use C4::Context;
 use C4::Dates qw(format_date format_date_in_iso);
 use Date::Calc qw(:all);
@@ -2793,6 +2794,14 @@ sub subscriptionCurrentlyOnOrder {
     $sth->execute($subscriptionid);
     return $sth->fetchrow_array;
 }
+
+=head2 can_edit_subscription
+
+    $can = can_edit_subscription( $subscriptionid[, $userid] );
+
+Return 1 if the subscription is editable by the current logged user (or a given $userid), else 0.
+
+=cut
 
 sub can_edit_subscription {
     my ( $subscription, $userid ) = @_;
