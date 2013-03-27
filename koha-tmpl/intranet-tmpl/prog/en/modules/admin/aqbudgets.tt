@@ -230,6 +230,8 @@
 
 [% INCLUDE 'budgets-active-currency.inc' %]
 
+[% IF ( budget ) %]
+
 <table id="budgeth">
     <thead>
         <tr>
@@ -257,7 +259,6 @@
     </tr>
     </tfoot>
     <tbody>
-    [% IF ( budget ) %]
         [% FOREACH budge IN budget %]
     [% IF ( budge.toggle ) %]
     <tr id="node-[% budge.budget_id %]" class="highlight[% IF ( budge.budget_parent_id ) %] child-of-node-[% budge.budget_parent_id %][% END %] tooltiped">
@@ -303,12 +304,13 @@
         </td>
     [% END %]
     </tr>
-        [% END %]
-    [% ELSE %]
-        <tr><td>No fund found</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td class="tooltipcontent">&nbsp;</td><td>&nbsp;</td></tr>
     [% END %]
     </tbody>
 </table>
+
+[% ELSE %]
+    No fund found
+[% END %]
 
 [% IF ( pagination_bar ) %]<div class="pages">[% pagination_bar %]</div>[% END %]
 [% END %] <!-- else -->
