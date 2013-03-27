@@ -158,12 +158,14 @@
     <target_index>EAN:w</target_index>
     <target_index>Identifier-standard:w</target_index>
   </index_subfields>
-  <!--record.abs line 86: melm 200$b      itemtype:w,itemtype:p,itype:w,itype:p-->
+  <!--record.abs melm 200$b      itemtype:w,itemtype:p,itype:w,itype:p,Material-type:w,Material-type:p-->
   <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="200" subfields="b">
     <target_index>itemtype:w</target_index>
     <target_index>itemtype:p</target_index>
     <target_index>itype:w</target_index>
     <target_index>itype:p</target_index>
+    <target_index>Material-type:w</target_index>
+    <target_index>Material-type:p</target_index>
   </index_subfields>
   <!--record.abs line 87: melm 995$r      itemtype:w,itemtype:p,itype:w,itype:p-->
   <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="995" subfields="r">
@@ -172,17 +174,32 @@
     <target_index>itype:w</target_index>
     <target_index>itype:p</target_index>
   </index_subfields>
-  <!--record.abs line 48: melm 100$a      tpubdate:s:range(data,8,1),ta:w:range(data,17,1),ta:w:range(data,18,1),ta:w:range(data,19,1),Modified-code:n:range(data,21,1),ln:s:range(data,22,3),char-encoding:n:range(data,26,2),char-encoding:n:range(data,28,2),char-encoding:n:range(data,30,2),script-Title:n:range(data,34,2)-->
-  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="100" subfields="a">
+  <!--record.abs melm 100$a      tpubdate:s:range(data,8,1),ta:w:range(data,17,1),ta:w:range(data,18,1),ta:w:range(data,19,1),Modified-code:n:range(data,21,1),char-encoding:n:range(data,26,2),char-encoding:n:range(data,28,2),char-encoding:n:range(data,30,2),script-Title:n:range(data,34,2)-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="100" subfields="a" offset="8" length="1">
     <target_index>tpubdate:s</target_index>
+  </index_subfields>
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="100" subfields="a" offset="17" length="1">
     <target_index>ta:w</target_index>
+  </index_subfields>
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="100" subfields="a" offset="18" length="1">
     <target_index>ta:w</target_index>
+  </index_subfields>
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="100" subfields="a" offset="19" length="1">
     <target_index>ta:w</target_index>
+  </index_subfields>
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="100" subfields="a" offset="21" length="1">
     <target_index>Modified-code:n</target_index>
-    <target_index>ln:s</target_index>
+  </index_subfields>
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="100" subfields="a" offset="26" length="2">
     <target_index>char-encoding:n</target_index>
+  </index_subfields>
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="100" subfields="a" offset="28" length="2">
     <target_index>char-encoding:n</target_index>
+  </index_subfields>
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="100" subfields="a" offset="30" length="2">
     <target_index>char-encoding:n</target_index>
+  </index_subfields>
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="100" subfields="a" offset="34" length="2">
     <target_index>script-Title:n</target_index>
   </index_subfields>
   <!--record.abs line 49: melm 101$a     ln-->
@@ -191,46 +208,93 @@
   </index_subfields>
   <!--record.abs line 50: melm 102$a     Country-heading-->
   <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="102" subfields="a">
-    <target_index>Country-heading:w</target_index>
+    <target_index>Country-publication:w</target_index>
   </index_subfields>
-  <!--record.abs line 60: melm 105$a     Illustration-code:w:range(data,0,4),Content-type:w:range(data,4,1),Content-type:w:range(data,5,1),Content-type:w:range(data,6,1),Content-type:w:range(data,7,1),Conference-code:w:range(data,8,1),Festschrift-indicator:w:range(data,9,1),Index-indicator:w:range(data,10,1),Literature-Code:w:range(data,11,1),Biography-Code:w:range(data,12,1)-->
-  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="105" subfields="a">
-    <target_index>Illustration-code:w</target_index>
-    <target_index>Content-type:w</target_index>
-    <target_index>Content-type:w</target_index>
-    <target_index>Content-type:w</target_index>
-    <target_index>Content-type:w</target_index>
-    <target_index>Conference-code:w</target_index>
-    <target_index>Festschrift-indicator:w</target_index>
-    <target_index>Index-indicator:w</target_index>
-    <target_index>Literature-Code:w</target_index>
-    <target_index>Biography-Code:w</target_index>
+  <!--record.abs melm 105$a ff8-18-21:w:range(data,0,1),ff8-18-21:w:range(data,1,1),ff8-18-21:w:range(data,2,1),ff8-18-21:w:range(data,3,1),ctype:w:range(data,4,1),ctype:w:range(data,5,1),ctype:w:range(data,6,1),ctype:w:range(data,7,1),ff8-29:w:range(data,8,1),ff8-30:w:range(data,9,1),ff8-31:w:range(data,10,1),lf:w:range(data,11,1),bio:w:range(data,12,1)-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="105" subfields="a" offset="0" length="1">
+    <target_index>ff8-18-21:w</target_index>
   </index_subfields>
-  <!--record.abs line 62: melm 106$a     itype:w,itype:p-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="105" subfields="a" offset="1" length="1">
+    <target_index>ff8-18-21:w</target_index>
+  </index_subfields>
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="105" subfields="a" offset="2" length="1">
+    <target_index>ff8-18-21:w</target_index>
+  </index_subfields>
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="105" subfields="a" offset="3" length="1">
+    <target_index>ff8-18-21:w</target_index>
+  </index_subfields>
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="105" subfields="a" offset="4" length="1">
+    <target_index>ctype:w</target_index>
+  </index_subfields>
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="105" subfields="a" offset="5" length="1">
+    <target_index>ctype:w</target_index>
+  </index_subfields>
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="105" subfields="a" offset="6" length="1">
+    <target_index>ctype:w</target_index>
+  </index_subfields>
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="105" subfields="a" offset="7" length="1">
+    <target_index>ctype:w</target_index>
+  </index_subfields>
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="105" subfields="a" offset="8" length="1">
+    <target_index>ff8-29:w</target_index>
+  </index_subfields>
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="105" subfields="a" offset="9" length="1">
+    <target_index>ff8-30:w</target_index>
+  </index_subfields>
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="105" subfields="a" offset="10" length="1">
+    <target_index>ff8-31:w</target_index>
+  </index_subfields>
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="105" subfields="a" offset="11" length="1">
+    <target_index>lf:w</target_index>
+  </index_subfields>
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="105" subfields="a" offset="12" length="1">
+    <target_index>bio:w</target_index>
+  </index_subfields>
+  <!--record.abs melm 106$a     ff8-23:w,ff8-23:p-->
   <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="106" subfields="a">
-    <target_index>itype:w</target_index>
-    <target_index>itype:p</target_index>
+    <target_index>ff8-23:w</target_index>
+    <target_index>ff8-23:p</target_index>
   </index_subfields>
-  <!--record.abs line 75: melm 110$a     Type-Of-Serial:w:range(data,0,1),Frequency-code:w:range(data,1,1),Regularity-code:w:range(data,2,1),Content-type:w:range(data,3,1),Content-type:w:range(data,4,3),Conference-publication-Code:w:range(data,7,1),Title-Page-availability-Code:w:range(data,8,1),Index-availability-Code:w:range(data,9,1),Cumulative-Index-availability-Code:w:range(data,10,1)-->
-  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="110" subfields="a">
-    <target_index>Type-Of-Serial:w</target_index>
-    <target_index>Frequency-code:w</target_index>
-    <target_index>Regularity-code:w</target_index>
-    <target_index>Content-type:w</target_index>
-    <target_index>Content-type:w</target_index>
-    <target_index>Conference-publication-Code:w</target_index>
-    <target_index>Title-Page-availability-Code:w</target_index>
-    <target_index>Index-availability-Code:w</target_index>
-    <target_index>Cumulative-Index-availability-Code:w</target_index>
+  <!--record.abs melm 110$a     ff8-21:w:range(data,0,1),ff8-18:w:range(data,1,1),ff8-19:w:range(data,2,1),ctype:w:range(data,3,1),ctype:w:range(data,4,3),ff8-29:w:range(data,7,1),Title-Page-availability-Code:w:range(data,8,1),ff8-31:w:range(data,9,1),Cumulative-Index-availability-Code:w:range(data,10,1)-->
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="110" subfields="a" offset="0" length="1">
+    <target_index>ff8-21:w</target_index>
+  </index_subfields>
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="110" subfields="a" offset="1" length="1">
+    <target_index>ff8-18:w</target_index>
+  </index_subfields>
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="110" subfields="a" offset="2" length="1">
+    <target_index>ff8-19:w</target_index>
+  </index_subfields>
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="110" subfields="a" offset="3" length="1">
+    <target_index>ctype:w</target_index>
+  </index_subfields>
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="110" subfields="a" offset="4" length="1">
+    <target_index>ctype:w</target_index>
+  </index_subfields>
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="110" subfields="a" offset="7" length="1">
+    <target_index>ff8-29:w</target_index>
+  </index_subfields>
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="110" subfields="a" offset="8" length="1">
+    <target_index>Title-page-availability:w</target_index>
+  </index_subfields>
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="110" subfields="a" offset="9" length="1">
+    <target_index>ff8-31:w</target_index>
+  </index_subfields>
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="110" subfields="a" offset="10" length="1">
+    <target_index>Cumulative-index-availability:w</target_index>
   </index_subfields>
   <!--record.abs line 77: melm 115$a     Video-mt:w:range(data,0,1)-->
-  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="115" subfields="a">
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="115" subfields="a" offset="0" length="1">
     <target_index>Video-mt:w</target_index>
   </index_subfields>
   <!--record.abs line 79: melm 116$a     Graphics-type:w:range(data,0,1),Graphics-support:w:range(data,1,1),Graphics-support:w:range(data,2,1),-->
-  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="116" subfields="a">
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="116" subfields="a" offset="0" length="1">
     <target_index>Graphics-type:w</target_index>
+  </index_subfields>
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="116" subfields="a" offset="1" length="1">
     <target_index>Graphics-support:w</target_index>
+  </index_subfields>
+  <index_subfields xmlns="http://www.koha-community.org/schemas/index-defs" tag="116" subfields="a" offset="2" length="1">
     <target_index>Graphics-support:w</target_index>
   </index_subfields>
   <!--record.abs line 92: melm 200$f		Author:w,Author:p-->
