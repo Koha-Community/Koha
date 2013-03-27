@@ -1,9 +1,8 @@
 use strict;
 use warnings;
-use Test::More tests=>17;
+use Test::More tests=>18;
 
 BEGIN {use_ok('C4::Budgets') }
-use C4::Budgets;
 use C4::Dates;
 
 use YAML;
@@ -99,7 +98,9 @@ ok(GetBudgets({budget_period_id=>$bpid},[{"budget_name"=>0}])>0,
 ok(GetBudgets({budget_period_id=>GetBudgetPeriod($bpid)->{budget_period_id}},[{"budget_name"=>0}])>0,
 	"GetBudgets With Order 
 	Getting Active budgetPeriod OK");
+
+my $budget_name = GetBudgetName( $budget_id );
+is($budget_name, $budget->{budget_name}, "Test the GetBudgetName routine");
+
 ok($del_status=DelBudget($budget_id),
-	"DelBudget returned $del_status");
-
-
+    "DelBudget returned $del_status");
