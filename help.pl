@@ -61,4 +61,13 @@ $template->param(
     intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
 );
 
+my $help_version = C4::Context->preference("Version");
+if ( $help_version =~ m|^(\d+)\.(\d{2}).*$| ) {
+    my $version = $1;
+    my $major = $2;
+    if ( $major % 2 ) { $major-- };
+    $help_version = "$version.$major";
+}
+$template->param( helpVersion => $help_version );
+
 output_html_with_http_headers $query, "", $template->output;
