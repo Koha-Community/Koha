@@ -154,7 +154,7 @@ function check_form_borrowers(nav){
         alert(message+"\n"+message_champ);
         return false;
     } else {
-        document.form.submit();
+        return true;
     }
 }
 
