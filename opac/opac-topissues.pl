@@ -125,7 +125,7 @@ $template->param(do_it => 1,
                 branch => $branches->{$branch}->{branchname},
                 itemtype => $itemtypes->{$itemtype}->{description},
                 timeLimit => $timeLimit,
-                timeLimitFinite => $timeLimit,
+                timeLimitFinite => $timeLimitFinite,
                 results_loop => \@results,
                 );
 
