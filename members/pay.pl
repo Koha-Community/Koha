@@ -100,7 +100,10 @@ for (@names) {
     }
 }
 
-$template->param( activeBorrowerRelationship => (C4::Context->preference('borrowerRelationship') ne '') );
+$template->param(
+    activeBorrowerRelationship => (C4::Context->preference('borrowerRelationship') ne ''),
+    RoutingSerials => C4::Context->preference('RoutingSerials'),
+);
 
 add_accounts_to_template();
 

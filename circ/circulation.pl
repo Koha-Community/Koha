@@ -721,6 +721,7 @@ $template->param(
     activeBorrowerRelationship => (C4::Context->preference('borrowerRelationship') ne ''),
     SuspendHoldsIntranet => C4::Context->preference('SuspendHoldsIntranet'),
     AutoResumeSuspendedHolds => C4::Context->preference('AutoResumeSuspendedHolds'),
+    RoutingSerials => C4::Context->preference('RoutingSerials'),
 );
 
 # save stickyduedate to session

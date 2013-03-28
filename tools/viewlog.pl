@@ -96,6 +96,7 @@ if ($src eq 'circ') {   # if we were called from circulation, use the circulatio
                         email           => $data->{'email'},
                         branchcode      => $data->{'branchcode'},
                         branchname		=> GetBranchName($data->{'branchcode'}),
+                        RoutingSerials => C4::Context->preference('RoutingSerials'),
     );
 }
 
