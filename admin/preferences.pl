@@ -21,6 +21,7 @@ use strict;
 use warnings;
 
 use CGI;
+
 use C4::Auth;
 use C4::Context;
 use C4::Koha;
@@ -296,7 +297,8 @@ if ( $op eq 'save' ) {
 my @TABS;
 
 if ( $op eq 'search' ) {
-    my $searchfield = $input->param( 'searchfield' );
+    my $searchfield = $input->param('searchfield');
+    utf8::decode($searchfield);
 
     $searchfield =~ s/\p{IsC}//g;
     $searchfield =~ s/\s+/ /;
