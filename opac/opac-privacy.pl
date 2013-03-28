@@ -51,9 +51,14 @@ if ($op eq "update_privacy")
 if ($op eq "delete_record") {
     # delete all reading records for items returned
     # uses a hardcoded date ridiculously far in the future
-    AnonymiseIssueHistory('2999-12-12',$borrowernumber);
+    my ($rows,$err_history_not_deleted) = AnonymiseIssueHistory('2999-12-12',$borrowernumber);
     # confirm the user the deletion has been done
-    $template->param('deleted' => 1);
+    if ( !$err_history_not_deleted ) {
+        $template->param( 'deleted' => 1 );
+    }
+    else {
+        $template->param( 'err_history_not_deleted' => 1 );
+    }
 }
 # get borrower privacy ....
 my ( $borr ) = GetMemberDetails( $borrowernumber );
