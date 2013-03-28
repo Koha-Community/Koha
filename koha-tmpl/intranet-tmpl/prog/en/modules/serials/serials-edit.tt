@@ -43,13 +43,13 @@ function unHideItems(index,labelindex, serialId) {
 	label = document.getElementById(labelindex);
 	label.style.display='none';	
 
-	// Prefilling 995$h with serial enumeration/issue number
-	// Getting item id
-	itemid = $("fieldset#" + index + " div.cataloguing_additem_itemlist div.items").attr("id");
-	// Getting subfield id
-	subfieldid = "subfield" + itemid.substr(4) + "h";
-	// Setting text field 
-	$("#" + subfieldid + " input[type='text']").val($("#serialseq" + serialId).val());
+    // Prefilling enumcron subfield with serial enumeration/issue number
+    // Getting item div
+    item_div = $("fieldset#" + index + " div.cataloguing_additem_itemlist div.items");
+    // Getting subfield with enumcron mapping
+    subfield_div = $(item_div).find("input[name='kohafield'][value='items.enumchron']").parent();
+    // Setting text field
+    $(subfield_div).children("input[type='text'][name='field_value']").val($("#serialseq" + serialId).val());
 
 }
 function HideItems(index,labelindex) {
