@@ -1967,6 +1967,7 @@ sub MarkIssueReturned {
     if ( $privacy == 2) {
         # The default of 0 does not work due to foreign key constraints
         # The anonymisation will fail quietly if AnonymousPatron is not a valid entry
+        # FIXME the above is unacceptable - bug 9942 relates
         my $anonymouspatron = (C4::Context->preference('AnonymousPatron')) ? C4::Context->preference('AnonymousPatron') : 0;
         my $sth_ano = $dbh->prepare("UPDATE old_issues SET borrowernumber=?
                                   WHERE borrowernumber = ?
@@ -2821,7 +2822,7 @@ sub DeleteTransfer {
 
 =head2 AnonymiseIssueHistory
 
-  $rows = AnonymiseIssueHistory($date,$borrowernumber)
+  ($rows,$err_history_not_deleted) = AnonymiseIssueHistory($date,$borrowernumber)
 
 This function write NULL instead of C<$borrowernumber> given on input arg into the table issues.
 if C<$borrowernumber> is not set, it will delete the issue history for all borrower older than C<$date>.
@@ -2829,7 +2830,7 @@ if C<$borrowernumber> is not set, it will delete the issue history for all borro
 If c<$borrowernumber> is set, it will delete issue history for only that borrower, regardless of their opac privacy
 setting (force delete).
 
-return the number of affected rows.
+return the number of affected rows and a value that evaluates to true if an error occurred deleting the history.
 
 =cut
 
@@ -2856,8 +2857,9 @@ sub AnonymiseIssueHistory {
     }
     my $sth = $dbh->prepare($query);
     $sth->execute(@bind_params);
+    my $anonymisation_err = $dbh->err;
     my $rows_affected = $sth->rows;  ### doublecheck row count return function
-    return $rows_affected;
+    return ($rows_affected, $anonymisation_err);
 }
 
 =head2 SendCirculationAlert

@@ -13,9 +13,11 @@
 
     [% IF ( deleted ) %]
         <div class="dialog message">Your reading history has been deleted.</div>
+    [% ELSIF ( err_history_not_deleted ) %]
+        <div class="dialog error">The deletion of your reading history failed, because there is a problem with the configuration of this feature. Please help to fix the system by informing your library of this error.</div>
     [% END %]
     [% IF ( privacy_updated ) %]
-        <div class="dialog message">Your privacy rules have been updated</div>
+        <div class="dialog message">Your privacy rules have been updated.</div>
     [% END %]
 
     <h2>Privacy rule</h2>
