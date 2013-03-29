@@ -3,21 +3,21 @@
 	//<![CDATA[
 
 function confirm_deletion() {
-    var is_confirmed = window.confirm(_('Are you sure you want to delete this patron? This cannot be undone.'));
+    var is_confirmed = window.confirm(_("Are you sure you want to delete this patron? This cannot be undone."));
     if (is_confirmed) {
         window.location='/cgi-bin/koha/members/deletemem.pl?member=[% borrowernumber %]';
     }
 }
 
 function confirm_updatechild() {
-    var is_confirmed = window.confirm(_('Are you sure you want to update this child to an Adult category?  This cannot be undone.'));
+    var is_confirmed = window.confirm(_("Are you sure you want to update this child to an Adult category?  This cannot be undone."));
     if (is_confirmed) {
         window.location='/cgi-bin/koha/members/update-child.pl?op=update&borrowernumber=[% borrowernumber %]&catcode=[% catcode %]&catcode_multi=[% CATCODE_MULTI %]';
     }
 }
 
 function confirm_reregistration() {
-    var is_confirmed = window.confirm(_('Are you sure you want to renew this patron\'s registration?'));
+    var is_confirmed = window.confirm(_("Are you sure you want to renew this patron's registration?"));
     // var borrowernumbervalue1 = $("#borrowernumber").attr("value");
     if (is_confirmed) {
 	window.location = '/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% borrowernumber %]&amp;cardnumber=[% cardnumber %]&amp;destination=circ&amp;reregistration=y';
