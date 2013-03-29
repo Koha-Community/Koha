@@ -1498,7 +1498,7 @@ sub _isbn_cleanup {
 sub Log {
   my ($data) = @_;
   warn $data;
-  open my $fh, '>>/tmp/koha.log';
+  open my $fh, '>>', '/tmp/koha.log';
   print $fh "$data\n";
   close $fh;
 }

@@ -2,8 +2,7 @@ package Koha::SimpleMARC;
 
 # Copyright 2009 Kyle M. Hall <kyle.m.hall@gmail.com>
 
-use strict;
-use warnings;
+use Modern::Perl;
 
 #use MARC::Record;
 
@@ -66,7 +65,7 @@ at your option, any later version of Perl 5 you may have available.
 
   Copies a value from one field to another. If a regular expression ( $regex ) is supplied,
   the value will be transformed by the given regex before being copied into the new field.
-  Example: $regex = 's/Old Text/Replacement Text/'
+  Example: $regex = { search => 'Old Text', replace => 'Replacement Text', modifiers => 'g' };
 
   If $n is passed, copy_field will only copy the Nth field of the list of fields.
   E.g. $n = 1 will only use the first field's value, $n = 2 will use only the 2nd field's value.
@@ -83,15 +82,33 @@ sub copy_field {
   @values = ( $values[$n-1] ) if ( $n );
   C4::Koha::Log( "@values = read_field( $record, $fromFieldName, $fromSubfieldName )" ) if $debug >= 3;
 
-  if ( $regex ) {
+  if ( $regex and $regex->{search} ) {
+    $regex->{modifiers} //= q||;
+    my @available_modifiers = qw( i g );
+    my $modifiers = q||;
+    for my $modifier ( split //, $regex->{modifiers} ) {
+        $modifiers .= $modifier
+            if grep {/$modifier/} @available_modifiers;
+    }
     foreach my $value ( @values ) {
-      C4::Koha::Log( "\$value =~ s$regex" ) if ( $debug >= 3 );
-      eval "\$value =~ s$regex";
+      C4::Koha::Log( "\$value =~ s/$regex->{search}/$regex->{replace}/$modifiers" ) if ( $debug >= 3 );
+        for ( $modifiers ) {
+          when ( /^(ig|gi)$/ ) {
+            $value =~ s/$regex->{search}/$regex->{replace}/ig;
+          }
+          when ( /^i$/ ) {
+            $value =~ s/$regex->{search}/$regex->{replace}/i;
+          }
+          when ( /^g$/ ) {
+            $value =~ s/$regex->{search}/$regex->{replace}/g;
+          }
+          default {
+            $value =~ s/$regex->{search}/$regex->{replace}/;
+          }
+      }
     }
   }
-
   update_field( $record, $toFieldName, $toSubfieldName, $dont_erase, @values );
-
 }
 
 =head2 update_field
@@ -114,21 +131,18 @@ sub update_field {
 
   if ( ! ( $record && $fieldName ) ) { return; }
 
-  if ( @values eq 1 ) {
-    _update_repeatable_field_with_single_value( $record, $fieldName, $subfieldName, @values );
-    return;
-  }
-
   my $i = 0;
   my $field;
   if ( $subfieldName ) {
     if ( my @fields = $record->field( $fieldName ) ) {
       unless ( $dont_erase ) {
+        @values = ($values[0]) x scalar( @fields )
+          if @values == 1;
         foreach my $field ( @fields ) {
           $field->update( "$subfieldName" => $values[$i++] );
         }
       }
-      if ( $i <= scalar @values - 1 ) {
+      if ( $i <= scalar ( @values ) - 1 ) {
         foreach my $field ( @fields ) {
           foreach my $j ( $i .. scalar( @values ) - 1) {
             $field->add_subfields( "$subfieldName" => $values[$j] );
@@ -144,6 +158,8 @@ sub update_field {
     }
   } else { ## No subfield
     if ( my @fields = $record->field( $fieldName ) ) {
+      @values = ($values[0]) x scalar( @fields )
+        if @values == 1;
       foreach my $field ( @fields ) {
         $field->update( $values[$i++] );
       }
@@ -221,7 +237,7 @@ sub field_exists {
   Returns true if the field equals the given value, false otherwise.
 
   If a regular expression ( $regex ) is supplied, the value will be compared using
-  the given regex. Example: $regex = 'm/sought_text/'
+  the given regex. Example: $regex = 'sought_text'
 
   If $n is passed, the Nth field of a repeatable series will be used for comparison.
   Set $n to 1 or leave empty for a non-repeatable field.
@@ -239,8 +255,8 @@ sub field_equals {
   my $field_value = $field_values[$n-1];
 
   if ( $regex ) {
-    C4::Koha::Log( "Testing '$field_value' =~ m$value" ) if $debug >= 3;
-    return eval "\$field_value =~ m$value";
+    C4::Koha::Log( "Testing '$field_value' =~ m/$value/" ) if $debug >= 3;
+    return $field_value =~ m/$value/;
   } else {
     return $field_value eq $value;
   }
@@ -262,7 +278,7 @@ sub field_equals {
 sub move_field {
   my ( $record, $fromFieldName, $fromSubfieldName, $toFieldName, $toSubfieldName, $regex, $n ) = @_;
   C4::Koha::Log( "C4::SimpleMARC::move_field( '$record', '$fromFieldName', '$fromSubfieldName', '$toFieldName', '$toSubfieldName', '$regex', '$n' )" ) if $debug;
-  copy_field( $record, $fromFieldName, $fromSubfieldName, $toFieldName, $toSubfieldName, $regex, $n , 1);
+  copy_field( $record, $fromFieldName, $fromSubfieldName, $toFieldName, $toSubfieldName, $regex, $n , 'dont_erase' );
   delete_field( $record, $fromFieldName, $fromSubfieldName, $n );
 }
 
@@ -292,46 +308,6 @@ sub delete_field {
   } elsif ( @fields && $subfieldName ) {
     foreach my $field ( @fields ) {
       $field->delete_subfield( code => $subfieldName );
-    }
-  }
-}
-
-=head2 _update_repeatable_field_with_single_value
-
-  _update_repeatable_field_with_single_value( $record, $fieldName, $subfieldName, $value );
-
-  Updates a repeatable field, giving all existing copies of that field the given value.
-
-  This is an internal function, and thus is not exported.
-
-=cut
-
-sub _update_repeatable_field_with_single_value {
-  my ( $record, $fieldName, $subfieldName, $value ) = @_;
-  C4::Koha::Log( "C4::SimpleMARC::_update_repeatable_field_with_single_value( $record, $fieldName, $subfieldName, $value )" ) if $debug;
-
-  if ( ! ( $record && $fieldName ) ) { return; }
-
-  my $field;
-  if ( $subfieldName ) {
-    if ( my @fields = $record->field( $fieldName ) ) {
-      foreach my $field ( @fields ) {
-        $field->update( $subfieldName => $value );
-      }
-    } else {
-      ## Field does not exist, create it.
-      $field = MARC::Field->new( $fieldName, undef, undef, $subfieldName => $value );
-      $record->append_fields( $field );
-    }
-  } else { ## No subfield
-    if ( my @fields = $record->field( $fieldName ) ) {
-      foreach my $field ( @fields ) {
-        $field->update( $value );
-      }
-    } else {
-      ## Field does not exists, create it
-      $field = MARC::Field->new( $fieldName, $value );
-      $record->append_fields( $field );
     }
   }
 }

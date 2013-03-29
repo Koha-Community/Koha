@@ -3373,7 +3373,9 @@ CREATE TABLE IF NOT EXISTS marc_modification_template_actions (
   field_value varchar(100) DEFAULT NULL,
   to_field varchar(3) DEFAULT NULL,
   to_subfield varchar(1) DEFAULT NULL,
-  to_regex text,
+  to_regex_search text,
+  to_regex_replace text,
+  to_regex_modifiers varchar(8) DEFAULT '',
   conditional enum('if','unless') DEFAULT NULL,
   conditional_field varchar(3) DEFAULT NULL,
   conditional_subfield varchar(1) DEFAULT NULL,
@@ -3381,7 +3383,8 @@ CREATE TABLE IF NOT EXISTS marc_modification_template_actions (
   conditional_value text,
   conditional_regex tinyint(1) NOT NULL DEFAULT '0',
   description text,
-  PRIMARY KEY (mmta_id)
+  PRIMARY KEY (mmta_id),
+  CONSTRAINT `mmta_ibfk_1` FOREIGN KEY (`template_id`) REFERENCES `marc_modification_templates` (`template_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

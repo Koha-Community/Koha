@@ -7707,7 +7707,9 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
       field_value varchar(100) default NULL,
       to_field varchar(3) default NULL,
       to_subfield varchar(1) default NULL,
-      to_regex text,
+      to_regex_search text,
+      to_regex_replace text,
+      to_regex_modifiers varchar(8) default '',
       conditional enum('if','unless') default NULL,
       conditional_field varchar(3) default NULL,
       conditional_subfield varchar(1) default NULL,
@@ -7715,7 +7717,8 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
       conditional_value text,
       conditional_regex tinyint(1) NOT NULL default '0',
       description text,
-      PRIMARY KEY  (mmta_id)
+      PRIMARY KEY  (mmta_id),
+      CONSTRAINT `mmta_ibfk_1` FOREIGN KEY (`template_id`) REFERENCES `marc_modification_templates` (`template_id`) ON DELETE CASCADE ON UPDATE CASCADE
       ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
     ");
 

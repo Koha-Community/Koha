@@ -9,6 +9,8 @@ $(document).ready(function() {
     $('#select_template').change(function() {
         $('#select_template').submit();
     });
+    $("span.match_regex_prefix" ).hide();
+    $("span.match_regex_suffix" ).hide();
 });
 //]]>
 </script>
@@ -97,9 +99,11 @@ function onToFieldRegexChange( checkboxObj ) {
 
 function onConditionalRegexChange( checkboxObj ) {
     if ( checkboxObj.checked ) {
-        document.getElementById( 'match_regex_prefix' ).style.visibility='visible';
+        $("span.match_regex_prefix" ).show();
+        $("span.match_regex_suffix" ).show();
     } else {
-        document.getElementById( 'match_regex_prefix' ).style.visibility='hidden';
+        $("span.match_regex_prefix" ).hide();
+        $("span.match_regex_suffix" ).hide();
     }
 }
 
@@ -145,7 +149,7 @@ var modaction_legend_innerhtml;
 var action_submit_value;
 
 function editAction( mmta_id, ordering, action, field_number, from_field, from_subfield, field_value, to_field,
-    to_subfield, to_regex, conditional, conditional_field, conditional_subfield,
+    to_subfield, to_regex_search, to_regex_replace, to_regex_modifiers, conditional, conditional_field, conditional_subfield,
     conditional_comparison, conditional_value, conditional_regex, description
 ) {
     document.getElementById('mmta_id').value = mmta_id;
@@ -160,9 +164,11 @@ function editAction( mmta_id, ordering, action, field_number, from_field, from_s
     document.getElementById('field_value').value = field_value;
     document.getElementById('to_field').value = to_field;
     document.getElementById('to_subfield').value = to_subfield;
-    document.getElementById('to_regex').value = to_regex;
+    $("#to_regex_search").val(to_regex_search);
+    $("#to_regex_replace").val(to_regex_replace);
+    $("#to_regex_modifiers").val(to_regex_modifiers);
 
-    document.getElementById('to_field_regex').checked = to_regex.length;
+    document.getElementById('to_field_regex').checked = conditional_regex.length;
     document.getElementById('to_field_regex').onchange();
 
     setSelectByValue( 'conditional', conditional );
@@ -200,7 +206,9 @@ function cancelEditAction() {
     document.getElementById('field_value').value = '';
     document.getElementById('to_field').value = '';
     document.getElementById('to_subfield').value = '';
-    document.getElementById('to_regex').value = '';
+    $("#to_regex_search").val("");
+    $("#to_regex_replace").val("");
+    $("#to_regex_modifiers").val("");
 
     document.getElementById('to_field_regex').checked = false;
     document.getElementById('to_field_regex').onchange();
@@ -245,6 +253,7 @@ function setSelectByValue( selectId, value ) {
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; MARC modification templates</div>
 
 <div id="doc3" class="yui-t2">
+  <div id="bd">
     <div id="yui-main">
         <div class="yui-b">
             <h2>MARC modification templates</h2>
@@ -290,19 +299,19 @@ function setSelectByValue( selectId, value ) {
                             <tr>
                                 <td style="white-space:nowrap;">
                                     <a title="Move Action Up" href="marc_modification_templates.pl?op=move_action&amp;where=up&amp;template_id=[% ActionsLoo.template_id %]&amp;mmta_id=[% ActionsLoo.mmta_id %]">
-                                    <img src="/intranet-tmpl/[% theme %]/img/go-up.png" border="0" alt="Go up" />
+                                    <img src="[% interface %]/[% theme %]/img/go-up.png" border="0" alt="Go up" />
                                         </a>
 
                                 <a title="Move Action To Top" href="marc_modification_templates.pl?op=move_action&amp;where=top&amp;template_id=[% ActionsLoo.template_id %]&amp;mmta_id=[% ActionsLoo.mmta_id %]">
-                                    <img src="/intranet-tmpl/[% theme %]/img/go-top.png" border="0" alt="Go top" />
+                                    <img src="[% interface %]/[% theme %]/img/go-top.png" border="0" alt="Go top" />
                                         </a>
 
                                         <a title="Move Action To Bottom" href="marc_modification_templates.pl?op=move_action&amp;where=bottom&amp;template_id=[% ActionsLoo.template_id %]&amp;mmta_id=[% ActionsLoo.mmta_id %]">
-                                    <img src="/intranet-tmpl/[% theme %]/img/go-bottom.png" border="0" alt="Go bottom" />
+                                    <img src="[% interface %]/[% theme %]/img/go-bottom.png" border="0" alt="Go bottom" />
                                         </a>
 
                                         <a title="Move Action Down" href="marc_modification_templates.pl?op=move_action&amp;where=down&amp;template_id=[% ActionsLoo.template_id %]&amp;mmta_id=[% ActionsLoo.mmta_id %]">
-                                    <img src="/intranet-tmpl/[% theme %]/img/go-down.png" border="0" alt="Go down" />
+                                    <img src="[% interface %]/[% theme %]/img/go-down.png" border="0" alt="Go down" />
                                         </a>
                                 </td>
 
@@ -330,8 +339,8 @@ function setSelectByValue( selectId, value ) {
                                     [% IF ( ActionsLoo.to_field ) %]
                                         to [% ActionsLoo.to_field %][% IF ( ActionsLoo.to_subfield ) %]$[% ActionsLoo.to_subfield %][% END %]
 
-                                        [% IF ( ActionsLoo.to_regex ) %]
-                                             using RegEx s<strong>[% ActionsLoo.to_regex %]</strong>
+                                        [% IF ( ActionsLoo.to_regex_search ) %]
+                                             using RegEx s<strong>/[% ActionsLoo.to_regex_search %]/[% ActionsLoo.to_regex_replace %]/[% ActionsLoo.to_regex_modifiers %]</strong>
                                         [% END %]
                                     [% END %]
 
@@ -346,7 +355,7 @@ function setSelectByValue( selectId, value ) {
                                         [% IF ( ActionsLoo.conditional_comparison_equals ) %] matches [% END %]
                                         [% IF ( ActionsLoo.conditional_comparison_not_equals ) %] does not match [% END %]
 
-                                        [% IF ( ActionsLoo.conditional_regex ) %] RegEx m[% END %]<strong>[% ActionsLoo.conditional_value %]</strong>
+                                        [% IF ( ActionsLoo.conditional_regex ) %] RegEx m/[% END %]<strong>[% ActionsLoo.conditional_value %]/</strong>
                                     [% END %]
                                 </td>
                                 <td>[% ActionsLoo.description %]</td>
@@ -360,7 +369,9 @@ function setSelectByValue( selectId, value ) {
                                                     "[% ActionsLoo.field_value |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
                                                     "[% ActionsLoo.to_field |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
                                                     "[% ActionsLoo.to_subfield |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
-                                                    "[% ActionsLoo.to_regex |replace('\\\\', '\\\\') |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
+                                                    "[% ActionsLoo.to_regex_search |replace('\\\\', '\\\\') |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
+                                                    "[% ActionsLoo.to_regex_replace |replace('\\\\', '\\\\') |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
+                                                    "[% ActionsLoo.to_regex_modifiers |replace('\\\\', '\\\\') |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
                                                     "[% ActionsLoo.conditional |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
                                                     "[% ActionsLoo.conditional_field |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
                                                     "[% ActionsLoo.conditional_subfield |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
@@ -411,7 +422,7 @@ function setSelectByValue( selectId, value ) {
                                     <input type="checkbox" name="to_field_regex" id="to_field_regex" onchange="onToFieldRegexChange(this);" />
 
                                     <span name="to_field_regex_value_block" id="to_field_regex_value_block" style="display:none;">
-                                        s<input type="text" name="to_regex" id="to_regex" />
+                                        s/<input type="text" name="to_regex_search" id="to_regex_search" placeholder="regex pattern" />/<input type="text" name="to_regex_replace" id="to_regex_replace" placeholder="regex replacement" />/<input type="text" name="to_regex_modifiers" id="to_regex_modifiers" placeholder="ig" size="3" />
                                     </span>
                                 </sup>
                             </span>
@@ -438,7 +449,7 @@ function setSelectByValue( selectId, value ) {
 
                             <span name="conditional_comparison_block" id="conditional_comparison_block" style="display:none;">
 
-                                <span id="match_regex_prefix" style="visibility:hidden;">m</span><input type="text" id="conditional_value" name="conditional_value" />
+                                <span class="match_regex_prefix">m/</span><input type="text" id="conditional_value" name="conditional_value" /><span class="match_regex_suffix">/</span>
 
                                 <sup>
                                     <label for="conditional_regex">RegEx</label>
@@ -470,8 +481,8 @@ function setSelectByValue( selectId, value ) {
                 <fieldset>
                     <legend>Create a new template</legend>
 
-                    <label for="template_name">Name: </label>
-                    <input name="template_name" id="template_name" type="text" size="30" />
+                    <label for="template_name" class="required">Name: </label>
+                    <input name="template_name" id="template_name" type="text" size="30" required="required" />
 
                     <input type="hidden" name="op" value="create_template" />
                     <input type="submit" value="Create template" />
@@ -489,5 +500,6 @@ function setSelectByValue( selectId, value ) {
     <div class="yui-b">
         [% INCLUDE 'tools-menu.inc' %]
     </div>
+  </div>
 </div>
 [% INCLUDE 'intranet-bottom.inc' %]

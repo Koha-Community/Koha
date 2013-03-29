@@ -1,29 +1,28 @@
 package C4::MarcModificationTemplates;
 
-# Copyright 2010 Kyle M Hall <kyle.m.hall@gmail.com>
-#
 # This file is part of Koha.
 #
-# Koha is free software; you can redistribute it and/or modify it under the
-# terms of the GNU General Public License as published by the Free Software
-# Foundation; either version 2 of the License, or (at your option) any later
-# version.
+# Copyright 2010 Kyle M Hall <kyle.m.hall@gmail.com>
 #
-# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
-# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
 #
-# You should have received a copy of the GNU General Public License along
-# with Koha; if not, write to the Free Software Foundation, Inc.,
-# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 ## NOTE:
 ## Parts of this module are used from cgi scripts that are detached from apache before
 ## execution. For this reason, the C4::Koha::Log function has been used to capture
 ## output for debugging purposes.
 
-use strict;
-use warnings;
+use Modern::Perl;
 
 use DateTime;
 
@@ -128,7 +127,9 @@ sub AddModificationTemplate {
         $action->{'field_value'},
         $action->{'to_field'},
         $action->{'to_subfield'},
-        $action->{'to_regex'},
+        $action->{'to_regex_search'},
+        $action->{'to_regex_replace'},
+        $action->{'to_regex_modifiers'},
         $action->{'conditional'},
         $action->{'conditional_field'},
         $action->{'conditional_subfield'},
@@ -155,9 +156,6 @@ sub DelModificationTemplate {
 
   my $dbh = C4::Context->dbh;
   my $sth = $dbh->prepare("DELETE FROM marc_modification_templates WHERE template_id = ?");
-  $sth->execute( $template_id );
-
-  $sth = $dbh->prepare("DELETE FROM marc_modification_template_actions WHERE template_id = ?");
   $sth->execute( $template_id );
 }
 
@@ -211,7 +209,7 @@ sub GetModificationTemplateActions {
   AddModificationTemplateAction(
     $template_id, $action, $field_number,
     $from_field, $from_subfield, $field_value,
-    $to_field, $to_subfield, $to_regex,
+    $to_field, $to_subfield, $to_regex_search, $to_regex_replace, $to_regex_modifiers
     $conditional, $conditional_field, $conditional_subfield,
     $conditional_comparison, $conditional_value,
     $conditional_regex, $description
@@ -231,7 +229,9 @@ sub AddModificationTemplateAction {
     $field_value,
     $to_field,
     $to_subfield,
-    $to_regex,
+    $to_regex_search,
+    $to_regex_replace,
+    $to_regex_modifiers,
     $conditional,
     $conditional_field,
     $conditional_subfield,
@@ -243,11 +243,11 @@ sub AddModificationTemplateAction {
 
   C4::Koha::Log( "C4::MarcModificationTemplates::AddModificationTemplateAction( $template_id, $action,
                     $field_number, $from_field, $from_subfield, $field_value, $to_field, $to_subfield,
-                    $to_regex, $conditional, $conditional_field, $conditional_subfield, $conditional_comparison,
+                    $to_regex_search, $to_regex_replace, $to_regex_modifiers, $conditional, $conditional_field, $conditional_subfield, $conditional_comparison,
                     $conditional_value, $conditional_regex, $description )" ) if DEBUG;
   warn( "C4::MarcModificationTemplates::AddModificationTemplateAction( $template_id, $action,
                     $field_number, $from_field, $from_subfield, $field_value, $to_field, $to_subfield,
-                    $to_regex, $conditional, $conditional_field, $conditional_subfield, $conditional_comparison,
+                    $to_regex_search, $to_regex_replace, $to_regex_modifiers, $conditional, $conditional_field, $conditional_subfield, $conditional_comparison,
                     $conditional_value, $conditional_regex, $description )" ) if DEBUG;
 
   $conditional_regex ||= '0';
@@ -270,7 +270,9 @@ sub AddModificationTemplateAction {
   field_value,
   to_field,
   to_subfield,
-  to_regex,
+  to_regex_search,
+  to_regex_replace,
+  to_regex_modifiers,
   conditional,
   conditional_field,
   conditional_subfield,
@@ -279,7 +281,7 @@ sub AddModificationTemplateAction {
   conditional_regex,
   description
   )
-  VALUES ( NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
+  VALUES ( NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
 
   $sth = $dbh->prepare( $query );
 
@@ -293,7 +295,9 @@ sub AddModificationTemplateAction {
     $field_value,
     $to_field,
     $to_subfield,
-    $to_regex,
+    $to_regex_search,
+    $to_regex_replace,
+    $to_regex_modifiers,
     $conditional,
     $conditional_field,
     $conditional_subfield,
@@ -310,7 +314,7 @@ sub AddModificationTemplateAction {
   ModModificationTemplateAction(
     $mmta_id, $action, $field_number, $from_field,
     $from_subfield, $field_value, $to_field,
-    $to_subfield, $to_regex, $conditional,
+    $to_subfield, $to_regex_search, $to_regex_replace, $to_regex_modifiers, $conditional,
     $conditional_field, $conditional_subfield,
     $conditional_comparison, $conditional_value,
     $conditional_regex, $description
@@ -330,7 +334,9 @@ sub ModModificationTemplateAction {
     $field_value,
     $to_field,
     $to_subfield,
-    $to_regex,
+    $to_regex_search,
+    $to_regex_replace,
+    $to_regex_modifiers,
     $conditional,
     $conditional_field,
     $conditional_subfield,
@@ -351,7 +357,9 @@ sub ModModificationTemplateAction {
   field_value = ?,
   to_field = ?,
   to_subfield = ?,
-  to_regex = ?,
+  to_regex_search = ?,
+  to_regex_replace = ?,
+  to_regex_modifiers = ?,
   conditional = ?,
   conditional_field = ?,
   conditional_subfield = ?,
@@ -371,7 +379,9 @@ sub ModModificationTemplateAction {
     $field_value,
     $to_field,
     $to_subfield,
-    $to_regex,
+    $to_regex_search,
+    $to_regex_replace,
+    $to_regex_modifiers,
     $conditional,
     $conditional_field,
     $conditional_subfield,
@@ -493,82 +503,113 @@ sub ModifyRecordsWithTemplate {
 =cut
 
 sub ModifyRecordWithTemplate {
-  my ( $template_id, $record ) = @_;
-  C4::Koha::Log( "C4::MarcModificationTemplates::ModifyRecordWithTemplate( $template_id, $record )" ) if DEBUG;
-  warn( "C4::MarcModificationTemplates::ModifyRecordWithTemplate( $template_id, $record )" ) if DEBUG;
-  C4::Koha::Log( "Unmodified Record:\n" . $record->as_formatted() ) if DEBUG >= 10;
-  warn( "Unmodified Record:\n" . $record->as_formatted() ) if DEBUG >= 10;
+    my ( $template_id, $record ) = @_;
+    C4::Koha::Log( "C4::MarcModificationTemplates::ModifyRecordWithTemplate( $template_id, $record )" ) if DEBUG;
+    warn( "C4::MarcModificationTemplates::ModifyRecordWithTemplate( $template_id, $record )" ) if DEBUG;
+    C4::Koha::Log( "Unmodified Record:\n" . $record->as_formatted() ) if DEBUG >= 10;
+    warn( "Unmodified Record:\n" . $record->as_formatted() ) if DEBUG >= 10;
 
-  my $current_date = DateTime->now()->ymd();
-  my $branchcode = C4::Context->userenv->{branch};
+    my $current_date = DateTime->now()->ymd();
+    my $branchcode = C4::Context->userenv->{branch};
 
-  my @actions = GetModificationTemplateActions( $template_id );
+    my @actions = GetModificationTemplateActions( $template_id );
 
-  foreach my $a ( @actions ) {
-    my $action = $a->{'action'};
-    my $field_number = $a->{'field_number'};
-    my $from_field = $a->{'from_field'};
-    my $from_subfield = $a->{'from_subfield'};
-    my $field_value = $a->{'field_value'};
-    my $to_field = $a->{'to_field'};
-    my $to_subfield = $a->{'to_subfield'};
-    my $to_regex = $a->{'to_regex'};
-    my $conditional = $a->{'conditional'};
-    my $conditional_field = $a->{'conditional_field'};
-    my $conditional_subfield = $a->{'conditional_subfield'};
-    my $conditional_comparison = $a->{'conditional_comparison'};
-    my $conditional_value = $a->{'conditional_value'};
-    my $conditional_regex = $a->{'conditional_regex'};
+    foreach my $a ( @actions ) {
+        my $action = $a->{'action'};
+        my $field_number = $a->{'field_number'};
+        my $from_field = $a->{'from_field'};
+        my $from_subfield = $a->{'from_subfield'};
+        my $field_value = $a->{'field_value'};
+        my $to_field = $a->{'to_field'};
+        my $to_subfield = $a->{'to_subfield'};
+        my $to_regex_search = $a->{'to_regex_search'};
+        my $to_regex_replace = $a->{'to_regex_replace'};
+        my $to_regex_modifiers = $a->{'to_regex_modifiers'};
+        my $conditional = $a->{'conditional'};
+        my $conditional_field = $a->{'conditional_field'};
+        my $conditional_subfield = $a->{'conditional_subfield'};
+        my $conditional_comparison = $a->{'conditional_comparison'};
+        my $conditional_value = $a->{'conditional_value'};
+        my $conditional_regex = $a->{'conditional_regex'};
 
-    my $eval = "$action( \$record, '$from_field', '$from_subfield', ";
+        if ( $field_value ) {
+            $field_value =~ s/__CURRENTDATE__/$current_date/g;
+            $field_value =~ s/__BRANCHCODE__/$branchcode/g;
+        }
 
-    if ( $field_value ) {
-      C4::Koha::Log( "Field value before replacements: $field_value" ) if ( DEBUG >= 3 );
-      warn( "Field value before replacements: $field_value" ) if ( DEBUG >= 3 );
+        my @params = ( $record, $from_field, $from_subfield );
+        if ( $action eq 'update_field' ) {
+            push @params,
+                ( $field_value
+                    ? ( undef, $field_value )
+                    : ()
+                );
+        } else {
+            push @params,
+                ( $field_value
+                    ? $field_value
+                    : ()
+                );
+        }
+        push @params, (
+                ( ( not $field_value and $to_field )
+                    ? ( $to_field, $to_subfield, { search => $to_regex_search, replace => $to_regex_replace, modifiers => $to_regex_modifiers} )
+                    : () ),
+                ( $field_number
+                    ? $field_number
+                    : () )
+        );
 
-      $field_value =~ s/__CURRENTDATE__/$current_date/g;
-      $field_value =~ s/__BRANCHCODE__/$branchcode/g;
+        my $do = 1;
+        if ( $conditional ) {
+            for ( $conditional_comparison ) {
+                when ( /^exists$/ ) {
+                    my $exists = field_exists( $record, $conditional_field, $conditional_subfield );
+                    $do = $conditional eq 'if'
+                        ? $exists
+                        : not $exists;
+                }
+                when ( /^not_exists$/ ) {
+                    my $exists = field_exists( $record, $conditional_field, $conditional_subfield );
+                    $do = $conditional eq 'if'
+                        ? not $exists
+                        : $exists;
+                }
+                when ( /^equals$/ ) {
+                    my $equals = field_equals( $record, $conditional_value, $conditional_field, $conditional_subfield, $conditional_regex );
+                    $do = $conditional eq 'if'
+                        ? $equals
+                        : not $equals;
+                }
+                when ( /^not_equals$/ ) {
+                    my $equals = field_equals( $record, $conditional_value, $conditional_field, $conditional_subfield, $conditional_regex );
+                    $do = $conditional eq 'if'
+                        ? not $equals
+                        : $equals;
+                }
+            }
+        }
 
-      $eval .= " undef, " if ( $action eq 'update_field' );
-      $eval .= " '$field_value' ";
+        if ( $do ) {
+            for ( $action ) {
+                when ( /^copy_field$/ ) {
+                    copy_field( @params );
+                }
+                when ( /^update_field$/ ) {
+                    update_field( @params );
+                }
+                when ( /^move_field$/ ) {
+                    move_field( @params );
+                }
+                when ( /^delete_field$/ ) {
+                    delete_field( @params );
+                }
+            }
+        }
 
-      C4::Koha::Log( "Field value after replacements: $field_value" ) if ( DEBUG >= 3 );
-      warn( "Field value after replacements: $field_value" ) if ( DEBUG >= 3 );
-    } elsif ( $to_field ) {
-      $eval .= " '$to_field', '$to_subfield', '$to_regex' ";
+        C4::Koha::Log( $record->as_formatted() ) if DEBUG >= 10;
+        warn( $record->as_formatted() ) if DEBUG >= 10;
     }
-
-    $eval .= ", '$field_number' " if ( $field_number );
-    $eval .= ') ';
-
-    if ( $conditional ) {
-      $eval .= " $conditional ( ";
-
-      if ( $conditional_comparison eq 'exists' ) {
-        $eval .= "field_exists( \$record, '$conditional_field', '$conditional_subfield' )";
-
-      } elsif ( $conditional_comparison eq 'not_exists' ) {
-        $eval .= "!field_exists( \$record, '$conditional_field', '$conditional_subfield' )";
-
-      } elsif ( $conditional_comparison eq 'equals' ) {
-        $eval .= "field_equals( \$record, '$conditional_value', '$conditional_field', '$conditional_subfield', '$conditional_regex' ) ";
-
-      } elsif ( $conditional_comparison eq 'not_equals' ) {
-        $eval .= "!field_equals( \$record, '$conditional_value', '$conditional_field', '$conditional_subfield', '$conditional_regex' ) ";
-      }
-
-      $eval .= " )";
-    }
-
-    $eval .= ";";
-
-    C4::Koha::Log("eval $eval") if DEBUG >= 2;
-    warn("eval $eval") if DEBUG >= 2;
-    eval {$eval};
-    C4::Koha::Log( $record->as_formatted() ) if DEBUG >= 10;
-    warn( $record->as_formatted() ) if DEBUG >= 10;
-
-  }
 }
 1;
 __END__

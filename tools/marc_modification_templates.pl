@@ -1,23 +1,22 @@
 #!/usr/bin/perl
-# Copyright 2010 Kyle M Hall <kyle.m.hall@gmail.com>
-#
 # This file is part of Koha.
 #
-# Koha is free software; you can redistribute it and/or modify it under the
-# terms of the GNU General Public License as published by the Free Software
-# Foundation; either version 2 of the License, or (at your option) any later
-# version.
+# Copyright 2010 Kyle M Hall <kyle.m.hall@gmail.com>
 #
-# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
-# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
 #
-# You should have received a copy of the GNU General Public License along
-# with Koha; if not, write to the Free Software Foundation, Inc.,
-# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use strict;
-use warnings;
+use Modern::Perl;
 
 use CGI;
 
@@ -28,7 +27,7 @@ use C4::MarcModificationTemplates;
 
 my $cgi = new CGI;
 
-my $op = $cgi->param('op');
+my $op = $cgi->param('op') || q{};
 my $template_id = $cgi->param('template_id');
 
 my ($template, $loggedinuser, $cookie)
@@ -60,7 +59,9 @@ if ( $op eq "create_template" ) {
   my $field_value = $cgi->param('field_value');
   my $to_field = $cgi->param('to_field');
   my $to_subfield = $cgi->param('to_subfield');
-  my $to_regex = $cgi->param('to_regex');
+  my $to_regex_search = $cgi->param('to_regex_search');
+  my $to_regex_replace = $cgi->param('to_regex_replace');
+  my $to_regex_modifiers = $cgi->param('to_regex_modifiers');
   my $conditional = $cgi->param('conditional');
   my $conditional_field = $cgi->param('conditional_field');
   my $conditional_subfield = $cgi->param('conditional_subfield');
@@ -79,7 +80,9 @@ if ( $op eq "create_template" ) {
       $field_value,
       $to_field,
       $to_subfield,
-      $to_regex,
+      $to_regex_search,
+      $to_regex_replace,
+      $to_regex_modifiers,
       $conditional,
       $conditional_field,
       $conditional_subfield,
@@ -98,7 +101,9 @@ if ( $op eq "create_template" ) {
       $field_value,
       $to_field,
       $to_subfield,
-      $to_regex,
+      $to_regex_search,
+      $to_regex_replace,
+      $to_regex_modifiers,
       $conditional,
       $conditional_field,
       $conditional_subfield,
