@@ -35,7 +35,7 @@ my ($template, $loggedinuser, $cookie, $staffflags)
 my $flagsrequired;
 $flagsrequired->{borrowers}=1;
 
-#my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0, $flagsrequired);
+#my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0, $flagsrequired, 'intranet');
 
 my $member=$input->param('member');
 my $cardnumber = $input->param('cardnumber');
