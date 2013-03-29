@@ -5338,7 +5338,7 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
    SetVersion ($DBversion);
 }
 
-$DBversion = '3.10.04.002';
+$DBversion = '3.08.11.002';
 if ( CheckVersion($DBversion) ) {
     my $sth = $dbh->prepare("
         SELECT module, code, branchcode, content
