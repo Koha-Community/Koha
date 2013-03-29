@@ -21,6 +21,7 @@ $(document).ready(function() {
     $("input[id^='hidden-']").each(function() {
             populateHiddenCheckboxes($(this).attr('id').split('-')[1]);
     });
+
 });
 
 /*function displayMoreConstraint(numlayer){
@@ -38,13 +39,30 @@ $(document).ready(function() {
 function setHiddenValue() {
 
     var tab = $(this).attr('id').split('_')[2];
+    var flagged_checked = $("#hidden_flagged_" + tab).is(':checked');
     var opac_checked = $("#hidden_opac_" + tab).is(':checked');
     var intranet_checked = $("#hidden_intranet_" + tab).is(':checked');
     var editor_checked = $("#hidden_editor_" + tab).is(':checked');
     var collapsed_checked = $("#hidden_collapsed_" + tab).is(':checked');
     var hidden_value = "";
 
-    if ( opac_checked && ! intranet_checked && ! editor_checked && collapsed_checked ) {
+    $(function() {
+        enable_cb();
+        $("#hidden_flagged_" + tab).click(enable_cb());
+    });
+
+    function enable_cb() {
+        if ($("#hidden_flagged_" + tab).is(':checked')) {
+            $('.inclusive_' + tab).attr('disabled',true).removeAttr('checked');
+        }
+        else {
+            $('.inclusive_' + tab).removeAttr('disabled');
+        }
+    }
+
+    if ( flagged_checked ) {
+        hidden_value='-8';
+    } else if ( opac_checked && ! intranet_checked && ! editor_checked && collapsed_checked ) {
         hidden_value='-7';
     } else if ( opac_checked && intranet_checked && ! editor_checked && ! collapsed_checked) {
         hidden_value='-6';
@@ -79,6 +97,7 @@ function setHiddenValue() {
     }
 
     $('#hidden-' + tab).val(hidden_value);
+
 }
 
 function populateHiddenCheckboxes(tab) {
@@ -89,8 +108,13 @@ function populateHiddenCheckboxes(tab) {
     var intranet_checked = false;
     var editor_checked = false;
     var collapsed_checked = false;
+    var flagged_checked = false;
 
-    if ( hidden_value == '-7') {
+
+
+    if ( hidden_value == '-8' ) {
+        flagged_checked = true;
+    } else if ( hidden_value == '-7') {
         opac_checked = true;
         collapsed_checked = true;
     } else if ( hidden_value == '-6' ) {
@@ -139,10 +163,13 @@ function populateHiddenCheckboxes(tab) {
         collapsed_checked = true;
     } // else if ( hidden_value == '8') { skip }
 
+
     $("#hidden_opac_" + tab).attr('checked',opac_checked);
     $("#hidden_intranet_" + tab).attr('checked',intranet_checked);
     $("#hidden_editor_" + tab).attr('checked',editor_checked);
     $("#hidden_collapsed_" + tab).attr('checked',collapsed_checked);
+
+
 }
 
 //]]>
@@ -228,10 +255,11 @@ function populateHiddenCheckboxes(tab) {
 				<li><label for="maxlength[% loo.row %]">Max length:</label><input type="text" id="maxlength[% loo.row %]" name="maxlength" value="[% loo.maxlength %]" size="4" /> (see online help)</li>
                 <li><input type="hidden" id="hidden-[% loo.row %]" name="hidden" value="[% loo.hidden %]" />
                     <label for="hidden[% loo.row %]">Visibility: </label>
-                    <input class="radio" type="checkbox" id="hidden_opac_[% loo.row %]" name="hidden_opac_[% loo.row %]"/> OPAC
-                    <input type="checkbox" id="hidden_intranet_[% loo.row %]" name="hidden_intranet_[% loo.row %]"/> Intranet
-                    <input type="checkbox" id="hidden_editor_[% loo.row %]" name="hidden_editor_[% loo.row %]"/> Editor
-                    <input type="checkbox" id="hidden_collapsed_[% loo.row %]" name="hidden_collapsed_[% loo.row %]"/> Collapsed
+                    <input type="checkbox" id="hidden_opac_[% loo.row %]" class="inclusive_[% loo.row %]" name="hidden_opac_[% loo.row %]"/> OPAC
+                    <input type="checkbox" id="hidden_intranet_[% loo.row %]" class="inclusive_[% loo.row %]" name="hidden_intranet_[% loo.row %]"/> Intranet
+                    <input type="checkbox" id="hidden_editor_[% loo.row %]" class="inclusive_[% loo.row %]" name="hidden_editor_[% loo.row %]"/> Editor
+                    <input type="checkbox" id="hidden_collapsed_[% loo.row %]" class="inclusive_[% loo.row %]" name="hidden_collapsed_[% loo.row %]"/> Collapsed
+                    <input type="checkbox" id="hidden_flagged_[% loo.row %]" name="flagged_[% loo.row %]"/> Flagged
                 </li>
                 <li><label for="isurl[% loo.row %]">Is a URL:</label>[% loo.isurl %] (if checked, it means that the subfield is a URL and can be clicked)</li>
                 <li><label for="link[% loo.row %]">Link:</label><input type="text" id="link[% loo.row %]" name="link" value="[% loo.link %]" size="10" maxlength="80" /> (e.g., Title or Local-Number) <span class="error"><em>NOTE: If you change this value you must ask your administrator to run misc/batchRebuildBiblioTables.pl.</em></span></li>
