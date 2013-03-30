@@ -1,23 +1,25 @@
 [% INCLUDE 'help-top.inc' %]
 
-<h1>MARC Import</h1>
+<h1>MARC import</h1>
 
-<p>Importing records into Koha includes two steps. The first is to stage records for import.</p>
+<p>This tool can be used to import both bibliographic and authority records that are saved in MARC format. Importing records into Koha includes two steps. The first is to stage records for import.</p>
 
 <ul>
 	<li>First find the MARC file on your computer</li>
 	<li>Next you will be presented with options for record matching and item imports
 <ul>
 	<li>Enter 'Comments about this file' to identify your upload when going to the 'Manage Staged MARC Records' tool</li>
-    <li>Choose the character encoding</li>
-	<li>Choose whether or not you want to look for matching records
+	<li>Tell Koha which type of file this is, bibliographic or authority</li>
+	<li>Choose the character encoding</li>
+	<li>Choose whether or not you want to look for matching
+records
 <ul>
 	<li>You can set up record matching rules through the administration area</li>
 </ul>
 </li>
 	<li>Next choose what to do with matching records if they are found</li>
 	<li>Finally choose what to do with records that are unique</li>
-	<li>Next you can choose whether or not to import the item data found in the MARC records</li>
+	<li>Next you can choose whether or not to import the item data found in the MARC records (if the file you're loading is a bibliographic file)</li>
 </ul>
 </li>
 	<li>Click 'Stage for import'</li>
@@ -25,6 +27,6 @@
 	<li>To complete the process continue to the Managed Staged MARC Records Tool</li>
 </ul>
 
-<p><strong>See the full documentation for the MARC Import in the <a href="http://manual.koha-community.org/3.10/en/stagemarc.html">manual</a> (online).</strong></p>
+<p><strong>See the full documentation for the MARC Import in the <a href="http://manual.koha-community.org/3.12/en/stagemarc.html">manual</a> (online).</strong></p>
 
 [% INCLUDE 'help-bottom.inc' %]
