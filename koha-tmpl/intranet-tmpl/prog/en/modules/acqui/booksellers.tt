@@ -21,6 +21,7 @@ $(document).ready(function() {
         'bPaginate': false,
         'bFilter': false,
         'bInfo': false,
+        "aaSorting": [[ 1, "asc" ]],
         'aoColumnDefs': [
             { 'aTargets': [-1], 'bSortable': false }
         ]
@@ -85,7 +86,8 @@ $(document).ready(function() {
                         <table class="baskets">
                             <thead>
                                 <tr>
-                                    <th>Basket (#)</th>
+                                    <th>N°</th>
+                                    <th>Name</th>
                                     <th>Item count</th>
                                     <th>Biblio count</th>
                                     <th>Items expected</th>
@@ -101,7 +103,8 @@ $(document).ready(function() {
                                     [% ELSE %]
                                         <tr>
                                     [% END %]
-                                        <td>[% basket.basketname %] (#[% basket.basketno %])</td>
+                                        <td>[% basket.basketno %]</td>
+                                        <td>[% basket.basketname %]</td>
                                         <td>[% basket.total_items %]</td>
                                         <td>[% basket.total_biblios %]</td>
                                         <td>[% basket.expected_items %]</td>
