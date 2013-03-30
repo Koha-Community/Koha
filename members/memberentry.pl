@@ -646,8 +646,8 @@ if ( $op eq 'duplicate' ) {
     $data{'dateexpiry'} = GetExpiryDate( $data{'categorycode'}, $data{'dateenrolled'} );
 }
 if (C4::Context->preference('uppercasesurnames')) {
-	$data{'surname'}    =uc($data{'surname'}    );
-	$data{'contactname'}=uc($data{'contactname'});
+    $data{'surname'} &&= uc( $data{'surname'} );
+    $data{'contactname'} &&= uc( $data{'contactname'} );
 }
 
 $data{debarred} = C4::Overdues::CheckBorrowerDebarred($borrowernumber);
