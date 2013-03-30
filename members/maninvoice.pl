@@ -35,6 +35,7 @@ use C4::Branch;
 use C4::Members::Attributes qw(GetBorrowerAttributes);
 
 my $input=new CGI;
+my $flagsrequired = { borrowers => 1 };
 
 my $borrowernumber=$input->param('borrowernumber');
 
@@ -43,7 +44,7 @@ my $borrowernumber=$input->param('borrowernumber');
 my $data=GetMember('borrowernumber'=>$borrowernumber);
 my $add=$input->param('add');
 if ($add){
-    if(checkauth($input)) {
+    if ( checkauth( $input, 0, $flagsrequired, 'intranet' ) ) {
         #  print $input->header;
         my $barcode=$input->param('barcode');
         my $itemnum;
@@ -61,7 +62,7 @@ if ($add){
                     query           => $input,
                     type            => "intranet",
                     authnotrequired => 0,
-                    flagsrequired   => { borrowers => 1 },
+                    flagsrequired   => $flagsrequired,
                     debug           => 1,
                 }
             );
