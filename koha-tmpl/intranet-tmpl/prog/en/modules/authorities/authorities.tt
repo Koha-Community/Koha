@@ -188,7 +188,7 @@ function confirmnotdup(redirect){
 
     [% FOREACH innerloo IN BIG_LOO.innerloop %]
     [% IF ( innerloo.tag ) %]
-    <div class="tag" id="tag_[% innerloo.tag %]_[% innerloo.index %][% innerloo.random %]">
+    <div class="tag clearfix" id="tag_[% innerloo.tag %]_[% innerloo.index %][% innerloo.random %]">
         <div class="tag_title" id="div_indicator_tag_[% innerloo.tag %]_[% innerloo.index %][% innerloo.random %]">
         [% UNLESS hide_marc %]
             [% IF advancedMARCEditor %]
