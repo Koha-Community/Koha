@@ -372,7 +372,23 @@ function Changefwk(FwkList) {
     [% UNLESS (circborrowernumber) %][%# Hide in fast cataloging %]
         <div class="btn-group"><a class="btn btn-small" href="#" id="z3950search"><i class="icon-search"></i> Z39.50 search</a></div>
         [% IF (biblionumber) %]
-            <div class="btn-group"><a class="btn btn-small" id="cancel" [% IF ( BiblioDefaultViewmarc ) %]href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% biblionumber |url %]"> [% ELSIF ( BiblioDefaultViewlabeled_marc ) %] href="/cgi-bin/koha/catalogue/labeledMARCdetail.pl?biblionumber=[% biblionumber |url %]"> [% ELSIF ( BiblioDefaultViewisbd ) %] href="/cgi-bin/koha/catalogue/ISBDdetail.pl?biblionumber=[% biblionumber |url %]">[% ELSE %] href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber |url %]">[% END %]Cancel</a></div>
+            [% IF ( BiblioDefaultViewmarc ) %]
+                <div class="btn-group">
+                    <a class="btn btn-small" id="cancel" href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% biblionumber |url %]">Cancel</a>
+                </div>
+            [% ELSIF ( BiblioDefaultViewlabeled_marc ) %]
+                <div class="btn-group">
+                    <a class="btn btn-small" id="cancel" href="/cgi-bin/koha/catalogue/labeledMARCdetail.pl?biblionumber=[% biblionumber |url %]">Cancel</a>
+                </div>
+            [% ELSIF ( BiblioDefaultViewisbd ) %]
+                <div class="btn-group">
+                    <a class="btn btn-small" id="cancel" href="/cgi-bin/koha/catalogue/ISBDdetail.pl?biblionumber=[% biblionumber |url %]">Cancel</a>
+                </div>
+            [% ELSE %]
+                <div class="btn-group">
+                    <a class="btn btn-small" id="cancel" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber |url %]">Cancel</a>
+                </div>
+            [% END %]
         [% ELSE %]
             <a class="btn btn-small" id="cancel" href="/cgi-bin/koha/cataloguing/addbooks.pl">Cancel</a>
         [% END %]
