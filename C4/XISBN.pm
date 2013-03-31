@@ -156,12 +156,16 @@ sub _get_url {
 sub _service_throttle {
     my ($service_type,$daily_limit) = @_;
     my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("SELECT service_count FROM services_throttle WHERE service_type=?");
+    my $sth = $dbh->prepare(q{ SELECT service_count FROM services_throttle WHERE service_type=? });
     $sth->execute($service_type);
-    my $count = 1;
+    my $count = 0;
 
-    while (my $counter = $sth->fetchrow_hashref()) {
-        $count = $counter->{service_count} if $counter->{service_count};
+    if ($sth->rows == 0) {
+        # initialize services throttle
+        my $sth2 = $dbh->prepare(q{ INSERT INTO services_throttle (service_type, service_count) VALUES (?, ?) });
+        $sth2->execute($service_type, $count);
+    } else {
+        $count = $sth->fetchrow_array;
     }
 
     # we're over the limit
@@ -169,7 +173,9 @@ sub _service_throttle {
 
     # not over the limit
     $count++;
-    $sth = $dbh->do("UPDATE services_throttle SET service_count=$count WHERE service_type='xisbn'");
+    my $sth3 = $dbh->prepare(q{ UPDATE services_throttle SET service_count=? WHERE service_type=? });
+    $sth3->execute($count, $service_type);
+
     return undef;
 }
 
