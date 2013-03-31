@@ -118,17 +118,11 @@ my $borrowernumber = $input->param('borrowernumber');
 
 #start the page and read in includes
 my $data           = GetMember( 'borrowernumber' => $borrowernumber );
-my $reregistration = $input->param('reregistration');
 
 if ( not defined $data ) {
     $template->param (unknowuser => 1);
 	output_html_with_http_headers $input, $cookie, $template->output;
     exit;
-}
-
-# re-reregistration function to automatic calcul of date expiry
-if ( $reregistration eq 'y' ) {
-	$data->{'dateexpiry'} = ExtendMemberSubscriptionTo( $borrowernumber );
 }
 
 my $category_type = $data->{'category_type'};
@@ -412,7 +406,7 @@ $template->param(
     borrowernumber  => $borrowernumber,
     othernames      => $data->{'othernames'},
     categoryname    => $data->{'description'},
-    reregistration  => $reregistration,
+    was_renewed     => $input->param('was_renewed') ? 1 : 0,
     branch          => $branch,
     todaysdate      => C4::Dates->today(),
     totalprice      => sprintf("%.2f", $totalprice),

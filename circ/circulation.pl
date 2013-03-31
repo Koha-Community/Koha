@@ -132,7 +132,6 @@ my $issueconfirmed = $query->param('issueconfirmed');
 my $cancelreserve  = $query->param('cancelreserve');
 my $organisation   = $query->param('organisations');
 my $print          = $query->param('print') || q{};
-my $newexpiry      = $query->param('dateexpiry');
 my $debt_confirmed = $query->param('debt_confirmed') || 0; # Don't show the debt error dialog twice
 my $charges        = $query->param('charges') || q{};
 
@@ -682,7 +681,7 @@ $template->param(
     surname           => $borrower->{'surname'},
     showname          => $borrower->{'showname'},
     category_type     => $borrower->{'category_type'},
-    dateexpiry        => format_date($newexpiry),
+    was_renewed       => $query->param('was_renewed') ? 1 : 0,
     expiry            => format_date($borrower->{'dateexpiry'}),
     categorycode      => $borrower->{'categorycode'},
     categoryname      => $borrower->{description},

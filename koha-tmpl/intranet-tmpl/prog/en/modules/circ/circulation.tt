@@ -291,7 +291,7 @@ function validate1(date) {
 </form>
 </div>
 
-[% IF ( dateexpiry ) %]<div class="dialog message">Patron's account has been renewed until [% dateexpiry %]</div>[% END %]
+[% IF ( was_renewed ) %]<div class="dialog message">Patron's account has been renewed until [% expiry %]</div>[% END %]
 
 [% IF additional_materials %]
     <div id="materials" class="dialog message">Note about the accompanying materials: <br />
