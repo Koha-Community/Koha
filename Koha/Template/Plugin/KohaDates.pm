@@ -25,12 +25,6 @@ use base qw( Template::Plugin::Filter );
 use Koha::DateUtils;
 our $DYNAMIC = 1;
 
-sub init {
-    my $self = shift;
-    $self->{ _DYNAMIC } = 1;
-    return $self;
-}
-
 sub filter {
     my ( $self, $text, $args, $config ) = @_;
     return "" unless $text;
