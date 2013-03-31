@@ -6748,7 +6748,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.11.00.XXX";
+$DBversion = "3.11.00.201";
 if ( CheckVersion($DBversion) ) {
     $dbh->do("UPDATE z3950servers SET encoding = 'ISO_8859-1' WHERE name = 'BIBSYS' AND host LIKE 'z3950.bibsys.no'");
     $dbh->do("UPDATE z3950servers SET encoding = 'ISO_8859-1' WHERE name = 'NORBOK' AND host LIKE 'z3950.nb.no'");
