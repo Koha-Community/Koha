@@ -101,7 +101,7 @@ function reloadPage(p) {
 						    <li><label for="new_encoding">Encoding: </label>
 						    <select name="encoding" id="new_encoding">
 							[% FOREACH encoding IN encodings %]
-								[% IF ( encoding == 'utf8' ) %]
+                                [% IF ( encoding.encoding == 'utf8' ) %]
 									<option selected="selected">[% encoding.encoding %]</option>
 								[% ELSE %]
 									<option>[% encoding.encoding %]</option>
@@ -281,7 +281,7 @@ function reloadPage(p) {
 						    <li><label for="encoding">Encoding: </label>
 						    <select name="encoding" id="encoding">
 							[% FOREACH encoding IN encodings %]
-							    [% IF ( selected_encoding == encoding ) %]
+                                [% IF ( selected_encoding == encoding.encoding ) %]
 							    <option selected="selected">[% encoding.encoding %]</option>
 							    [% ELSE %]
 							    <option>[% encoding.encoding %]</option>
