@@ -407,10 +407,10 @@ sub load_sql_in_order {
 Set the 'marcflavour' system preference.  The incoming
 C<$marcflavour> references to a subdirectory of
 installer/data/$dbms/$lang/marcflavour, and is
-normalized to MARC21 or UNIMARC.
+normalized to MARC21, UNIMARC or NORMARC.
 
 FIXME: this method assumes that the MARC flavour will be either
-MARC21 or UNIMARC.
+MARC21, UNIMARC or NORMARC.
 
 =cut
 
@@ -422,9 +422,10 @@ sub set_marcflavour_syspref {
     # marc_cleaned finds the marcflavour, without the variant.
     my $marc_cleaned = 'MARC21';
     $marc_cleaned = 'UNIMARC' if $marcflavour =~ /unimarc/i;
+    $marc_cleaned = 'NORMARC' if $marcflavour =~ /normarc/i;
     my $request =
         $self->{'dbh'}->prepare(
-          "INSERT IGNORE INTO `systempreferences` (variable,value,explanation,options,type) VALUES('marcflavour','$marc_cleaned','Define global MARC flavor (MARC21 or UNIMARC) used for character encoding','MARC21|UNIMARC','Choice');"
+          "INSERT IGNORE INTO `systempreferences` (variable,value,explanation,options,type) VALUES('marcflavour','$marc_cleaned','Define global MARC flavor (MARC21, UNIMARC or NORMARC) used for character encoding','MARC21|UNIMARC|NORMARC','Choice');"
         );
     $request->execute;
 }
