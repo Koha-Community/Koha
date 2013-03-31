@@ -6748,6 +6748,15 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.11.00.201";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do("UPDATE z3950servers SET encoding = 'ISO_8859-1' WHERE name = 'BIBSYS' AND host LIKE 'z3950.bibsys.no'");
+    $dbh->do("UPDATE z3950servers SET encoding = 'ISO_8859-1' WHERE name = 'NORBOK' AND host LIKE 'z3950.nb.no'");
+    $dbh->do("UPDATE z3950servers SET encoding = 'ISO_8859-1' WHERE name = 'SAMBOK' AND host LIKE 'z3950.nb.no'");
+    $dbh->do("UPDATE z3950servers SET encoding = 'ISO_8859-1' WHERE name = 'DEICHMAN' AND host like 'z3950.deich.folkebibl.no'");
+    print "Upgrade to $DBversion done (Bug 9498 - Update encoding for Norwegian sample Z39.50 servers)\n";
+    SetVersion($DBversion);
+}
 
 =head1 FUNCTIONS
 
