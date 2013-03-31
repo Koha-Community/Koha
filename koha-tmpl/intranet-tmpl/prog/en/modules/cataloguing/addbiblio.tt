@@ -371,8 +371,30 @@ function Changefwk(FwkList) {
 
     [% UNLESS (circborrowernumber) %][%# Hide in fast cataloging %]
         <div class="btn-group"><a class="btn btn-small" href="#" id="z3950search"><i class="icon-search"></i> Z39.50 search</a></div>
-        <div class="btn-group">
-            <label for="Frameworks">Change framework: </label>
+        [% IF (biblionumber) %]
+            [% IF ( BiblioDefaultViewmarc ) %]
+                <div class="btn-group">
+                    <a class="btn btn-small" id="cancel" href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% biblionumber |url %]">Cancel</a>
+                </div>
+            [% ELSIF ( BiblioDefaultViewlabeled_marc ) %]
+                <div class="btn-group">
+                    <a class="btn btn-small" id="cancel" href="/cgi-bin/koha/catalogue/labeledMARCdetail.pl?biblionumber=[% biblionumber |url %]">Cancel</a>
+                </div>
+            [% ELSIF ( BiblioDefaultViewisbd ) %]
+                <div class="btn-group">
+                    <a class="btn btn-small" id="cancel" href="/cgi-bin/koha/catalogue/ISBDdetail.pl?biblionumber=[% biblionumber |url %]">Cancel</a>
+                </div>
+            [% ELSE %]
+                <div class="btn-group">
+                    <a class="btn btn-small" id="cancel" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber |url %]">Cancel</a>
+                </div>
+            [% END %]
+        [% ELSE %]
+            <a class="btn btn-small" id="cancel" href="/cgi-bin/koha/cataloguing/addbooks.pl">Cancel</a>
+        [% END %]
+    [% END %]
+    <div class="btn-group">
+        <label for="Frameworks">Change framework: </label>
             <select name="frameworkcode" id="Frameworks" onchange="Changefwk(this);">
                 <option value="Default">Default</option>
                 [% FOREACH frameworkcodeloo IN frameworkcodeloop %]
@@ -381,12 +403,11 @@ function Changefwk(FwkList) {
                     [% ELSE %]
                         <option value="[% frameworkcodeloo.value %]">
                     [% END %]
-                     [% frameworkcodeloo.frameworktext %]
-                     </option>
+                       [% frameworkcodeloo.frameworktext %]
+                       </option>
                 [% END %]
-            </select>
-        </div>
-    [% END %]
+        </select>
+</div>
 </div>
 
 [% IF ( popup ) %]
