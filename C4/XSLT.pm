@@ -279,8 +279,8 @@ sub buildKohaItemsNamespace {
             $status = "available";
         }
         my $homebranch = $item->{homebranch}? xml_escape($branches->{$item->{homebranch}}->{'branchname'}):'';
-        $location = xml_escape($shelflocations->{$item->{location}});
-        $ccode = xml_escape($ccodes->{$item->{ccode}});
+        $location = $item->{location}? xml_escape($shelflocations->{$item->{location}}):'';
+        $ccode = $item->{ccode}? xml_escape($ccodes->{$item->{ccode}}):'';
         my $itemcallnumber = xml_escape($item->{itemcallnumber});
         $xml.= "<item><homebranch>$homebranch</homebranch>".
                 "<location>$location</location>".
