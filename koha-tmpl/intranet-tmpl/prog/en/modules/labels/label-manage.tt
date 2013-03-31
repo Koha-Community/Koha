@@ -78,6 +78,20 @@
             };
         //]]>
     </script>
+
+<link rel="stylesheet" type="text/css" href="/intranet-tmpl/prog/en/css/datatables.css" />
+<script type="text/javascript" src="/intranet-tmpl/prog/en/lib/jquery/plugins/jquery.dataTables.min.js"></script>
+[% INCLUDE 'datatables-strings.inc' %]
+<script type="text/javascript" src="/intranet-tmpl/prog/en/js/datatables.js"></script>
+<script type="text/javascript" id="js">
+ $(document).ready(function() {
+    $("#labels-table").dataTable($.extend(true, {}, dataTablesDefaults, {
+        "sPaginationType": "four_button",
+        "aaSorting": [[ 1, "asc" ]],
+    }));
+ });
+</script>
+
 </head>
 <body id="labels_label-manage" class="tools labels">
     [% INCLUDE 'header.inc' %]
@@ -99,27 +113,29 @@
                             [% IF ( table_loop ) %]
                             <form name="layouts" action="/cgi-bin/koha/label-manage.pl?label_element=[% label_element %]">
                             <h2>Currently Available [% label_element_title %]</h2>
-                            <table>
+                            <table id="labels-table">
                                 [% FOREACH table_loo IN table_loop %]
-                                [% IF ( table_loo.header_fields ) %]
-                                <tr>
-                                [% FOREACH header_field IN table_loo.header_fields %]
-                                    <th>[% header_field.field_label %]</th>
-                                [% END %]
-                                </tr>
-                                [% ELSE %]
-                                <tr>
-                                [% FOREACH text_field IN table_loo.text_fields %]
-                                [% IF ( text_field.select_field ) %]
-                                    <td align="center"><input type="checkbox" name="action" value="[% text_field.field_value %]" /></td>
-                                [% ELSIF ( text_field.field_value ) %]
-                                    <td>[% text_field.field_value %]</td>
-                                [% ELSE %]
-                                    <td>&nbsp;</td>
-                                [% END %]
-                                [% END %]
-                                </tr>
-                                [% END %]
+                                    [% IF ( table_loo.header_fields ) %]
+                                        <thead>
+                                        <tr>
+                                            [% FOREACH header_field IN table_loo.header_fields %]
+                                                 <th>[% header_field.field_label %]</th>
+                                            [% END %]
+                                        </tr>
+                                        </thead>
+                                    [% ELSE %]
+                                        <tr>
+                                        [% FOREACH text_field IN table_loo.text_fields %]
+                                            [% IF ( text_field.select_field ) %]
+                                                <td align="center"><input type="checkbox" name="action" value="[% text_field.field_value %]" /></td>
+                                            [% ELSIF ( text_field.field_value ) %]
+                                                <td>[% text_field.field_value %]</td>
+                                            [% ELSE %]
+                                                <td>&nbsp;</td>
+                                            [% END %]
+                                        [% END %]
+                                        </tr>
+                                    [% END %]
                                 [% END %]
                             </table>
                             <fieldset class="action">

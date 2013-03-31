@@ -155,7 +155,8 @@ sub get_all_templates {
     my %params = @_;
     my @templates = ();
     my $query = "SELECT " . ($params{'field_list'} ? $params{'field_list'} : '*') . " FROM creator_templates";
-    $query .= ($params{'filter'} ? " WHERE $params{'filter'};" : ';');
+    $query .= ($params{'filter'} ? " WHERE $params{'filter'} " : '');
+    $query .= ($params{'orderby'} ? " ORDER BY $params{'orderby'} " : '');
     my $sth = C4::Context->dbh->prepare($query);
     $sth->execute();
     if ($sth->err) {
@@ -181,7 +182,8 @@ sub get_all_layouts {
     my %params = @_;
     my @layouts = ();
     my $query = "SELECT " . ($params{'field_list'} ? $params{'field_list'} : '*') . " FROM creator_layouts";
-    $query .= ($params{'filter'} ? " WHERE $params{'filter'};" : ';');
+    $query .= ($params{'filter'} ? " WHERE $params{'filter'} " : '');
+    $query .= ($params{'orderby'} ? " ORDER BY $params{'orderby'} " : '');
     my $sth = C4::Context->dbh->prepare($query);
     $sth->execute();
     if ($sth->err) {
