@@ -104,6 +104,7 @@ else {
     $template->param(
         categoryname    => $data->{'description'},
         branchname      => GetBranchName($data->{'branchcode'}),
+        RoutingSerials => C4::Context->preference('RoutingSerials'),
     );
 
     if (C4::Context->preference('ExtendedPatronAttributes')) {

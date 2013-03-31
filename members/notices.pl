@@ -69,6 +69,7 @@ $template->param(
                         branchname              => GetBranchName($borrower->{'branchcode'}),
                         categoryname            => $borrower->{'description'},
 			activeBorrowerRelationship => (C4::Context->preference('borrowerRelationship') ne ''),
+            RoutingSerials => C4::Context->preference('RoutingSerials'),
 );
 output_html_with_http_headers $input, $cookie, $template->output;
 

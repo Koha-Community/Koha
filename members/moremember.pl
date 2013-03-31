@@ -424,6 +424,7 @@ $template->param(
     activeBorrowerRelationship => (C4::Context->preference('borrowerRelationship') ne ''),
     AutoResumeSuspendedHolds => C4::Context->preference('AutoResumeSuspendedHolds'),
     SuspendHoldsIntranet => C4::Context->preference('SuspendHoldsIntranet'),
+    RoutingSerials => C4::Context->preference('RoutingSerials'),
 );
 $template->param( $error => 1 ) if $error;
 

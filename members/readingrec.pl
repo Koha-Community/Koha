@@ -140,6 +140,7 @@ $template->param(
     loop_reading      => $issues,
     activeBorrowerRelationship =>
       ( C4::Context->preference('borrowerRelationship') ne '' ),
+    RoutingSerials => C4::Context->preference('RoutingSerials'),
 );
 output_html_with_http_headers $input, $cookie, $template->output;
 

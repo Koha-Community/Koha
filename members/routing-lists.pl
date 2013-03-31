@@ -125,6 +125,7 @@ $template->param(
     country           => $borrower->{'country'},
     phone             => $borrower->{'phone'} || $borrower->{'mobile'},
     cardnumber        => $borrower->{'cardnumber'},
+    RoutingSerials => C4::Context->preference('RoutingSerials'),
 );
 
 my ($picture, $dberror) = GetPatronImage($borrower->{'cardnumber'});

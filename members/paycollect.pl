@@ -141,6 +141,7 @@ $template->param(
     borrower      => $borrower,
     total         => $total_due,
     activeBorrowerRelationship => (C4::Context->preference('borrowerRelationship') ne ''),
+    RoutingSerials => C4::Context->preference('RoutingSerials'),
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
