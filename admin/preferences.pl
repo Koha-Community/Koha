@@ -21,6 +21,7 @@ use strict;
 use warnings;
 
 use CGI;
+
 use C4::Auth;
 use C4::Context;
 use C4::Koha;
@@ -34,6 +35,7 @@ use File::Spec;
 use IO::File;
 use YAML::Syck qw();
 $YAML::Syck::ImplicitTyping = 1;
+$YAML::Syck::ImplicitUnicode = 1; # force utf-8 for preference encoding
 our $lang;
 
 # use Smart::Comments;
@@ -295,7 +297,8 @@ if ( $op eq 'save' ) {
 my @TABS;
 
 if ( $op eq 'search' ) {
-    my $searchfield = $input->param( 'searchfield' );
+    my $searchfield = $input->param('searchfield');
+    utf8::decode($searchfield);
 
     $searchfield =~ s/\p{IsC}//g;
     $searchfield =~ s/\s+/ /;

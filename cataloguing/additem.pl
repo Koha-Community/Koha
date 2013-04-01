@@ -517,7 +517,7 @@ if ($op eq "additem") {
         print $input->redirect(
            '/cgi-bin/koha/circ/circulation.pl?'
            .'borrowernumber='.$fa_circborrowernumber
-           .'&barcode='.uri_escape($fa_barcode)
+           .'&barcode='.uri_escape_utf8($fa_barcode)
            .'&duedatespec='.$fa_duedatespec
            .'&stickyduedate=1'
         );

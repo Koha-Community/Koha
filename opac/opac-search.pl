@@ -60,7 +60,7 @@ use Business::ISBN;
 my $DisplayMultiPlaceHold = C4::Context->preference("DisplayMultiPlaceHold");
 # create a new CGI object
 # FIXME: no_undef_params needs to be tested
-use CGI qw('-no_undef_params');
+use CGI qw( -no_undef_params -utf8 );
 my $cgi = new CGI;
 
 my $branch_group_limit = $cgi->param("branch_group_limit");
@@ -652,7 +652,7 @@ for (my $i=0;$i<@servers;$i++) {
                 $newsearchcookie = $cgi->cookie(
                             -name => 'KohaOpacRecentSearches',
                             # We uri_escape the whole freezed structure so we're sure we won't have any encoding problems
-                            -value => uri_escape(freeze(\@recentSearches)),
+                            -value => uri_escape_utf8(freeze(\@recentSearches)),
                             -expires => ''
                 );
                 $cookie = [$cookie, $newsearchcookie];

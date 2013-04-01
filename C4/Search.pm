@@ -484,6 +484,7 @@ sub getRecords {
                     # not an index scan
                     else {
                         $record = $results[ $i - 1 ]->record($j)->raw();
+                        utf8::decode( $record );
 
                         # warn "RECORD $j:".$record;
                         $results_hash->{'RECORDS'}[$j] = $record;
@@ -501,6 +502,7 @@ sub getRecords {
                         for ( my $j = 0 ; $j < $jmax ; $j++ ) {
                             my $render_record =
                               $results[ $i - 1 ]->record($j)->render();
+                            utf8::decode($render_record);
                             my @used_datas = ();
                             foreach my $tag ( @{ $facet->{tags} } ) {
 
@@ -714,6 +716,7 @@ sub pazGetRecords {
         for (my $i = 0; $i < $count; $i++) {
             # FIXME -- may need to worry about diacritics here
             my $rec = $paz->record($recid, $i);
+            utf8::decode( $rec );
             push @{ $result_group->{'RECORDS'} }, $rec;
         }
 
@@ -1290,17 +1293,17 @@ sub buildQuery {
         if ( @limits ) {
             $q .= ' and '.join(' and ', @limits);
         }
-        return ( undef, $q, $q, "q=ccl=".uri_escape($q), $q, '', '', '', '', 'ccl' );
+        return ( undef, $q, $q, "q=ccl=".uri_escape_utf8($q), $q, '', '', '', '', 'ccl' );
     }
     if ( $query =~ /^cql=/ ) {
-        return ( undef, $', $', "q=cql=".uri_escape($'), $', '', '', '', '', 'cql' );
+        return ( undef, $', $', "q=cql=".uri_escape_utf8($'), $', '', '', '', '', 'cql' );
     }
     if ( $query =~ /^pqf=/ ) {
         if ($query_desc) {
-            $query_cgi = "q=".uri_escape($query_desc);
+            $query_cgi = "q=".uri_escape_utf8($query_desc);
         } else {
             $query_desc = $';
-            $query_cgi = "q=pqf=".uri_escape($');
+            $query_cgi = "q=pqf=".uri_escape_utf8($');
         }
         return ( undef, $', $', $query_cgi, $query_desc, '', '', '', '', 'pqf' );
     }
@@ -1472,9 +1475,9 @@ sub buildQuery {
                         $query     .= " $operators[$i-1] ";
                         $query     .= " $index_plus " unless $indexes_set;
                         $query     .= " $operand";
-                        $query_cgi .= "&op=".uri_escape($operators[$i-1]);
-                        $query_cgi .= "&idx=".uri_escape($index) if $index;
-                        $query_cgi .= "&q=".uri_escape($operands[$i]) if $operands[$i];
+                        $query_cgi .= "&op=".uri_escape_utf8($operators[$i-1]);
+                        $query_cgi .= "&idx=".uri_escape_utf8($index) if $index;
+                        $query_cgi .= "&q=".uri_escape_utf8($operands[$i]) if $operands[$i];
                         $query_desc .=
                           " $operators[$i-1] $index_plus $operands[$i]";
                     }
@@ -1484,8 +1487,8 @@ sub buildQuery {
                         $query      .= " and ";
                         $query      .= "$index_plus " unless $indexes_set;
                         $query      .= "$operand";
-                        $query_cgi  .= "&op=and&idx=".uri_escape($index) if $index;
-                        $query_cgi  .= "&q=".uri_escape($operands[$i]) if $operands[$i];
+                        $query_cgi  .= "&op=and&idx=".uri_escape_utf8($index) if $index;
+                        $query_cgi  .= "&q=".uri_escape_utf8($operands[$i]) if $operands[$i];
                         $query_desc .= " and $index_plus $operands[$i]";
                     }
                 }
@@ -1497,8 +1500,8 @@ sub buildQuery {
                     $query .= " $index_plus " unless $indexes_set;
                     $query .= $operand;
                     $query_desc .= " $index_plus $operands[$i]";
-                    $query_cgi  .= "&idx=".uri_escape($index) if $index;
-                    $query_cgi  .= "&q=".uri_escape($operands[$i]) if $operands[$i];
+                    $query_cgi  .= "&idx=".uri_escape_utf8($index) if $index;
+                    $query_cgi  .= "&q=".uri_escape_utf8($operands[$i]) if $operands[$i];
                     $previous_operand = 1;
                 }
             }    #/if $operands
