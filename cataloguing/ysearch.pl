@@ -41,7 +41,7 @@ die() unless ($table eq "biblioitems");
 binmode STDOUT, ":encoding(UTF-8)";
 print $input->header( -type => 'text/plain', -charset => 'UTF-8' );
 
-my ( $auth_status, $sessionID ) = check_cookie_auth( $input->cookie('CGISESSID'), { cataloguing => '*' } );
+my ( $auth_status, $sessionID ) = check_cookie_auth( $input->cookie('CGISESSID'), { editcatalogue => '*' } );
 if ( $auth_status ne "ok" ) {
     exit 0;
 }
