@@ -199,7 +199,11 @@ sub remove_duplicates {
     my %seen=();
     my $query = "DELETE FROM creator_batches WHERE label_id = ?;"; # ORDER BY timestamp ASC LIMIT ?;";
     my $sth = C4::Context->dbh->prepare($query);
-    my @duplicate_items = grep{$seen{$_->{'item_number'}}++} @{$self->{'items'}};
+    my @duplicate_items = grep{
+        $_->{'item_number'}
+            ? $seen{$_->{'item_number'}}++
+            : $seen{$_->{'borrower_number'}}++
+    } @{$self->{'items'}};
     foreach my $item (@duplicate_items) {
         $sth->execute($item->{'label_id'});
         if ($sth->err) {
