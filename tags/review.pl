@@ -23,7 +23,7 @@ use warnings;
 use strict;
 use Data::Dumper;
 use POSIX;
-use CGI;
+use CGI qw/-utf8/;
 use CGI::Cookie; # need to check cookies before having CGI parse the POST request
 
 use C4::Auth qw(:DEFAULT check_cookie_auth);
