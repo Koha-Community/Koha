@@ -56,7 +56,7 @@
 	[% FOREACH mainloo IN mainloop %]
         <h1>Top [% mainloo.limit %] Most-circulated items</h1>
 		[% IF ( mainloo.loopfilter ) %]
-			<p>Filtered on</p>
+            <p>Filtered on:</p>
 			[% FOREACH loopfilte IN mainloo.loopfilter %]
 					<p>[% IF ( loopfilte.err ) %]  [% END %] [% loopfilte.crit %] =[% loopfilte.filter %][% IF ( loopfilte.err ) %]  [% END %]</p>
 			[% END %]

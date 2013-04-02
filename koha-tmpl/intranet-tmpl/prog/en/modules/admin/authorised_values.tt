@@ -80,14 +80,14 @@ $(document).ready(function() {
     <input type="hidden" name="offset" value="[% offset %]" />
         <fieldset class="rows"><ol>
         <li>
-			 [% IF ( action_add_category ) %]<label for="category">Category</label>
+        [% IF ( action_add_category ) %]<label for="category">Category: </label>
             <input type="text" name="category"  id="category" size="10" maxlength="10" class="focus" />
 			 [% ELSE %]<span class="label">Category</span>
 		<input type="hidden" name="category" value="[% category %]" />	 [% category %]
 			 [% END %]
         </li>
         <li>
-            <label for="authorised_value">Authorized value</label>
+            <label for="authorised_value">Authorized value: </label>
      [% IF ( action_modify ) %]<input type="hidden" id="id" name="id" value="[% id %]" />[% END %]
             [% IF ( action_add_category ) %]
             <input type="text" id="authorised_value" name="authorised_value" value="[% authorised_value %]" maxlength="80" />
@@ -96,16 +96,16 @@ $(document).ready(function() {
             [% END %]
         </li>
         <li>
-            <label for="lib">Description</label>
+            <label for="lib">Description: </label>
             <input type="text" name="lib" id="lib" value="[% lib %]" maxlength="200" />
         </li>
 	<li>
-            <label for="lib_opac">Description (OPAC)</label>
+            <label for="lib_opac">Description (OPAC): </label>
             <input type="text" name="lib_opac" id="lib_opac" value="[% lib_opac %]" maxlength="200" />
         </li>
-        <li><label for="branches">Branches limitation: </label>
+        <li><label for="branches">Libraries limitation: </label>
             <select id="branches" name="branches" multiple size="10">
-                <option value="">All branches</option>
+                <option value="">All libraries</option>
                 [% FOREACH branch IN branches_loop %]
                   [% IF ( branch.selected ) %]
                     <option selected="selected" value="[% branch.branchcode %]">[% branch.branchname %]</option>
@@ -114,7 +114,7 @@ $(document).ready(function() {
                   [% END %]
                 [% END %]
             </select>
-            <span>Select All if this authorised value must to be displayed all the time. Otherwise select librairies you want to associate with this value.
+            <span>Select All if this authorised value must to be displayed all the time. Otherwise select libraries you want to associate with this value.
             </span>
         </li>
 

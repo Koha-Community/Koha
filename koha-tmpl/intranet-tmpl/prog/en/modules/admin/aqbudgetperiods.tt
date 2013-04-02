@@ -187,13 +187,13 @@
     <ol>
 
     <li>
-    <label class="required" for="from">Start date</label>
+    <label class="required" for="from">Start date: </label>
     <input type="text" size="10" id="from" name="budget_period_startdate" value="[% budget_period_startdate | $KohaDates %]" class="datepickerfrom" />
 				<div class="hint">[% INCLUDE 'date-format.inc' %]</div>
     </li>
     <li>
 
-    <label class="required" for="to">End date</label>
+    <label class="required" for="to">End date: </label>
     <input type="text" size="10" id="to" name="budget_period_enddate" value="[% budget_period_enddate | $KohaDates %]" class="datepickerto" />
 				<div class="hint">[% INCLUDE 'date-format.inc' %]</div>
     </li>
@@ -226,13 +226,13 @@
     <input type="hidden" name="budget_period_id" value="[% budget_period_id %]" />
     <ol>
     <li>
-    <label class="required" for="from">Start date</label>
+    <label class="required" for="from">Start date: </label>
     <input type="text" size="10" id="from" name="budget_period_startdate" value="[% budget_period_startdate | $KohaDates %]" class="datepickerfrom" />
 				<div class="hint">[% INCLUDE 'date-format.inc' %]</div>
     </li>
     <li>
 
-    <label class="required" for="to">End date</label>
+    <label class="required" for="to">End date: </label>
     <input type="text" size="10" id="to" name="budget_period_enddate" value="[% budget_period_enddate | $KohaDates %]" class="datepickerto" />
 				<div class="hint">[% INCLUDE 'date-format.inc' %]</div>
     </li>
@@ -240,7 +240,7 @@
     <li>
         <!-- DESCRIPTION -->
         <!-- ############################## -->
-        <label class="required" for="budget_period_description">Description</label>
+        <label class="required" for="budget_period_description">Description: </label>
         <input type="text" id="budget_period_description" name="budget_period_description"
         size="48" maxlength="80" value="[% budget_period_description %]" />
     </li>
@@ -248,7 +248,7 @@
     <li>
         <!-- TOTAL -->
         <!-- ############################## -->
-        <label for="budget_period_total">Total amount</label>
+        <label for="budget_period_total">Total amount: </label>
         <input type="text" id="budget_period_total" name="budget_period_total"
         size="10" maxlength="80" value="[% budget_period_total %]" />
     </li>
@@ -256,14 +256,14 @@
     <li>
         <!-- ACTIVE -->
         <!-- ############################## -->
-        <label for="budget_period_active">Make budget active</label>
+        <label for="budget_period_active">Make budget active: </label>
         [% IF ( budget_period_active ) %]<input type="checkbox" checked="checked" id="budget_period_active" name="budget_period_active" value="1" />[% ELSE %]  <input type="checkbox" id="budget_period_active" name="budget_period_active" value="1"/> [% END %]
     </li>
 
     <li>
         <!-- LOCK  -->
         <!-- ############################## -->
-        <label for="budget_period_locked">Lock budget</label>
+        <label for="budget_period_locked">Lock budget: </label>
         [% IF ( budget_period_locked ) %]<input type="checkbox" checked="checked" id="budget_period_locked" name="budget_period_locked" value="1" />[% ELSE %]  <input type="checkbox" id="budget_period_locked" name="budget_period_locked" value="1"/> [% END %]
     </li>
     </ol>

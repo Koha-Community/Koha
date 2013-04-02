@@ -67,36 +67,36 @@ if (f.company.value == "") {
         <input type="hidden" name="booksellerid" value="[% booksellerid %]" />
         <fieldset class="rows">
             <legend>Company details</legend>
-            <ol><li><label for="company" class="required">Name * </label>
+            <ol><li><label for="company" class="required">Name: * </label>
                 <input type="text" size="40" id="company" name="company" value="[% name %]" /></li>
-            <li><label for="company_postal">Postal address</label>
+            <li><label for="company_postal">Postal address: </label>
                     <textarea id="company_postal" name="company_postal" cols="40" rows="3">[% postal %]</textarea></li>
-            <li><label for="physical">Physical address</label>
+            <li><label for="physical">Physical address: </label>
                 <textarea id="physical" name="physical" cols="40" rows="3">[% address1 %][% address2 %][% address3 %][% address4 %]</textarea></li>
-            <li><label for="company_phone">Phone</label>
+            <li><label for="company_phone">Phone: </label>
                 <input type="text" size="20" id="company_phone" name="company_phone" value="[% phone %]" /></li>
-            <li><label for="company_fax">Fax</label>
+            <li><label for="company_fax">Fax: </label>
                 <input type="text" size="20" id="company_fax" name="company_fax" value="[% fax %]" /></li>
-            <li><label for="website">Website</label>
+            <li><label for="website">Website: </label>
                 <input type="text" size="40" id="website" name="website" value="[% url %]" /></li>
-            <li><label for="accountnumber">Account number</label>
+            <li><label for="accountnumber">Account number: </label>
                 <input type="text" size="40" id="accountnumber" name="accountnumber" value="[% accountnumber %]" /></li></ol>
         </fieldset>
         <fieldset class="rows">
             <legend>Contact details</legend>
-        <ol> <li><label for="company_contact_name">Contact name</label>
+        <ol> <li><label for="company_contact_name">Contact name: </label>
                 <input type="text" size="40" id="company_contact_name" name="company_contact_name" value="[% contact %]" /></li>
-            <li><label for="company_contact_position">Position</label>
+            <li><label for="company_contact_position">Position: </label>
                 <input type="text" size="40" id="company_contact_position" name="company_contact_position" value="[% contpos %]" /></li>
-            <li><label for="contact_phone">Phone</label>
+            <li><label for="contact_phone">Phone: </label>
                 <input type="text" size="20" id="contact_phone" name="contact_phone" value="[% contphone %]" /> </li>
-            <li><label for="contact_phone_2">Alternative phone</label>
+            <li><label for="contact_phone_2">Alternative phone: </label>
                 <input type="text" size="20" id="contact_phone_2" name="contact_phone_2" value="[% contaltphone %]" /></li>
-            <li><label for="contact_fax">Fax</label>
+            <li><label for="contact_fax">Fax: </label>
                 <input type="text" size="20" id="contact_fax" name="contact_fax" value="[% contfax %]" /></li>
-            <li><label for="company_email">Email</label>
+            <li><label for="company_email">Email: </label>
                 <input type="text" size="40" id="company_email" name="company_email" value="[% contemail %]" /></li>
-            <li><label for="contact_notes">Notes</label>
+            <li><label for="contact_notes">Notes: </label>
                 <textarea id="contact_notes" name="contact_notes" cols="40" rows="4">[% contnotes %]</textarea></li></ol>
         </fieldset>
     </div>
@@ -113,7 +113,7 @@ if (f.company.value == "") {
                     [% END %]</li>
             </ol>
             <ol>
-            <li><label for="list_currency">List prices are</label>
+            <li><label for="list_currency">List prices are: </label>
                     <select name="list_currency" id="list_currency">
                     [% FOREACH loop_currenc IN loop_currency %]
                         [% IF ( loop_currenc.listprice ) %]<option value="[% loop_currenc.currency %]" selected="1">[% loop_currenc.currency %]</option>
@@ -121,7 +121,7 @@ if (f.company.value == "") {
                     [% END %]
                     </select>
             </li>
-            <li><label for="invoice_currency">Invoice prices are</label>
+            <li><label for="invoice_currency">Invoice prices are: </label>
                     <select name="invoice_currency" id="invoice_currency">
                     [% FOREACH loop_currenc IN loop_currency %]
                         [% IF ( loop_currenc.invoiceprice ) %]<option value="[% loop_currenc.currency %]" selected="1">[% loop_currenc.currency %]</option>
@@ -161,7 +161,7 @@ if (f.company.value == "") {
             [% IF gst_values %]
                 <ol>
                   <li>
-                    <label for="gst">Tax rate</label>
+                    <label for="gst">Tax rate: </label>
                     <select name="gstrate" id="gstrate">
                     [% FOREACH gst IN gst_values %]
                       [% IF ( gstrate == gst.option ) %]
@@ -177,13 +177,13 @@ if (f.company.value == "") {
                 <input type="hidden" name="gstrate" value="0" />
             [% END %]
             <ol>
-            <li><label for="discount">Discount</label>
+            <li><label for="discount">Discount: </label>
                 <input type="text" size="6" id="discount" name="discount" value="[% discount | format ("%.1f") %]" />%</li>
             <li>
-                <label for="deliverytime">Delivery time</label>
+                <label for="deliverytime">Delivery time: </label>
                 <input type="text" size="2" id="deliverytime" name="deliverytime" value="[% deliverytime %]" /> days
             </li>
-            <li><label for="notes">Notes</label>
+            <li><label for="notes">Notes: </label>
                 <textarea cols="40" rows="4" id="notes" name="notes" >[% notes %]</textarea></li></ol>
         </fieldset>
         <fieldset class="action"><input type="button" value="Save" onclick="check(this.form);" /> [% IF ( booksellerid ) %]

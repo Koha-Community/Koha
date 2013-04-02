@@ -140,10 +140,10 @@
 	[% END %]
 	<fieldset class="rows">
 	<ol>[% IF ( categorycode ) %]
-	<li><span class="label">Category code</span>[% categorycode |html %]
+    <li><span class="label">Category code: </span>[% categorycode |html %]
 				<input type="hidden" name="categorycode" value="[% categorycode |html %]" /><input type="hidden" name="is_a_modif" value="1" /></li>
 	[% ELSE %]
-	<li><label for="categorycode">Category code: </label> <input type="text" name="categorycode" id="categorycode" size="10" maxlength="10" onblur="toUC(this)" /></li>
+    <li><label for="categorycode">Category code: </label> <input type="text" name="categorycode" id="categorycode" size="10" maxlength="10" onblur="toUC(this)" /></li>
 	[% END %]
 	<li><label for="description">Description: </label> <input type="text" name="description" id="description" size="40" maxlength="80" value="[% description |html %]" /></li>
 	<li><label for="enrolmentperiod">Enrollment period: </label>
@@ -171,7 +171,7 @@
 						<option value="1">Yes</option>
 			[% END %]
 					</select></li>
-	<li><label for="hidelostitems">Lost items in staff client</label> <select name="hidelostitems" id="hidelostitems">
+    <li><label for="hidelostitems">Lost items in staff client: </label> <select name="hidelostitems" id="hidelostitems">
 			[% IF ( hidelostitems ) %]
 						<option value="0">Shown</option>
 						<option value="1" selected="selected">Hidden by default</option>

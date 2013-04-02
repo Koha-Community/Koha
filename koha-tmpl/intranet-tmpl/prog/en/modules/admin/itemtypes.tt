@@ -147,19 +147,19 @@ Item types administration
 	<ol>
   [% IF ( itemtype ) %]
       <li>
-          <span class="label">Item type</span> <input type="hidden" name="itemtype" value="[% itemtype %]" />
+          <span class="label">Item type: </span> <input type="hidden" name="itemtype" value="[% itemtype %]" />
           [% itemtype %]
      </li>
   [% ELSE %]
       <li>
-          <label for="itemtype">Item type</label> <input type="text" id="itemtype" name="itemtype" size="10" maxlength="10" onblur="toUC(this)" class="focus" />
+          <label for="itemtype">Item type: </label> <input type="text" id="itemtype" name="itemtype" size="10" maxlength="10" onblur="toUC(this)" class="focus" />
       </li>
   [% END %]
       <li>
       [% IF ( itemtype ) %]
-          <label for="description">Description</label><input type="text" id="description" name="description" size="48" value="[% description |html %]" class="focus" /></li>
+          <label for="description">Description: </label><input type="text" id="description" name="description" size="48" value="[% description |html %]" class="focus" /></li>
       [% ELSE %]
-          <label for="description">Description</label><input type="text" id="description" name="description" size="48" value="[% description |html %]" /></li>
+          <label for="description">Description: </label><input type="text" id="description" name="description" size="48" value="[% description |html %]" /></li>
       [% END %]
      [% IF ( noItemTypeImages ) %]
 	 <li><span class="label">Image: </span>Item type images are disabled. To enable them, turn off the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&amp;searchfield=noItemTypeImages">noItemTypeImages system preference</a></li></ol>
@@ -216,7 +216,7 @@ Item types administration
 </div>
 <ol>
       <li>
-          <label for="notforloan">Not for loan</label>   [% IF ( notforloan ) %]
+          <label for="notforloan">Not for loan: </label>   [% IF ( notforloan ) %]
                 <input type="checkbox" id="notforloan" name="notforloan" checked="checked" value="1" />
             [% ELSE %]
                 <input type="checkbox" id="notforloan" name="notforloan" value="1" />
