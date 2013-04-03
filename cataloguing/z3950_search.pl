@@ -106,8 +106,8 @@ my $pars= {
         subject => $subject,
         lccall => $lccall,
         controlnumber => $controlnumber,
-        stdid => 0,
-        srchany => 0,
+        stdid => $stdid,
+        srchany => $srchany,
 };
 Z3950Search($pars, $template);
 output_html_with_http_headers $input, $cookie, $template->output;
