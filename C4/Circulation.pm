@@ -2171,7 +2171,7 @@ sub _FixAccountForLostAndReturned {
             # FIXME: move prepares outside while loop!
             my $usth = $dbh->prepare("UPDATE accountlines SET amountoutstanding= ?
                     WHERE (accountlines_id = ?)");
-            $usth->execute($newamtos,'$thisacct');    # FIXME: '$thisacct' is a string literal!
+            $usth->execute($newamtos,$thisacct);
             $usth = $dbh->prepare("INSERT INTO accountoffsets
                 (borrowernumber, accountno, offsetaccount,  offsetamount)
                 VALUES
