@@ -105,12 +105,11 @@ sub get_template {
 
     require C4::Auth;
 
-    my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+    my ( $template, $loggedinuser, $cookie ) = C4::Auth::get_template_and_user(
         {   template_name   => $self->mbf_path( $args->{'file'} ),
             query           => $self->{'cgi'},
             type            => "intranet",
             authnotrequired => 1,
-#           flagsrequired   => { tools => '*' },
             is_plugin       => 1,
         }
     );
