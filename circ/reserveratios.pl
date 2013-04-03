@@ -32,7 +32,6 @@ use C4::Debug;
 use C4::Biblio qw/GetMarcBiblio GetRecordValue GetFrameworkCode/;
 
 my $input = new CGI;
-my $order     = $input->param('order') || '';
 my $startdate = $input->param('from');
 my $enddate   = $input->param('to');
 my $ratio     = $input->param('ratio');
@@ -72,7 +71,7 @@ if ($ratio <= 0) {
 }
 
 my $dbh    = C4::Context->dbh;
-my ($sqlorderby, $sqldatewhere) = ("","");
+my $sqldatewhere = "";
 $debug and warn format_date_in_iso($startdate) . "\n" . format_date_in_iso($enddate);
 my @query_params = ();
 if ($startdate) {
@@ -84,23 +83,6 @@ if ($enddate) {
     push @query_params, format_date_in_iso($enddate);
 }
 
-if ($order eq "biblio") {
-	$sqlorderby = " ORDER BY biblio.title, holdingbranch, listcall, l_location ";
-} elsif ($order eq "callnumber") {
-    $sqlorderby = " ORDER BY listcall, holdingbranch, l_location ";
-} elsif ($order eq "itemcount") {
-    $sqlorderby = " ORDER BY itemcount, reservecount ";
-} elsif ($order eq "itype") {
-    $sqlorderby = " ORDER BY l_itype, holdingbranch, listcall ";
-} elsif ($order eq "location") {
-    $sqlorderby = " ORDER BY l_location, holdingbranch, listcall ";
-} elsif ($order eq "reservecount") {
-    $sqlorderby = " ORDER BY reservecount DESC ";
-} elsif ($order eq "branch") {
-    $sqlorderby = " ORDER BY holdingbranch, l_location, listcall ";
-} else {
-	$sqlorderby = " ORDER BY reservecount DESC ";
-}
 my $strsth =
 "SELECT reservedate,
         reserves.borrowernumber as borrowernumber,
@@ -126,17 +108,17 @@ my $strsth =
  FROM  reserves
  LEFT JOIN items ON items.biblionumber=reserves.biblionumber 
  LEFT JOIN biblio ON reserves.biblionumber=biblio.biblionumber
- WHERE 
-notforloan = 0 AND damaged = 0 AND itemlost = 0 AND wthdrawn = 0
+ WHERE
+ notforloan = 0 AND damaged = 0 AND itemlost = 0 AND wthdrawn = 0
  $sqldatewhere
 ";
 
 if (C4::Context->preference('IndependantBranches')){
-	$strsth .= " AND items.holdingbranch=? ";
+    $strsth .= " AND items.holdingbranch=? ";
     push @query_params, C4::Context->userenv->{'branch'};
 }
 
-$strsth .= " GROUP BY reserves.biblionumber " . $sqlorderby;
+$strsth .= " GROUP BY reserves.biblionumber ORDER BY reservecount DESC";
 
 $template->param(sql => $strsth);
 my $sth = $dbh->prepare($strsth);
