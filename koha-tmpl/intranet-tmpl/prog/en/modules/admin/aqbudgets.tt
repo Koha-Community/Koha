@@ -136,10 +136,16 @@
 //]]>
 </script>
 [% ELSE %]
-<link href="[% themelang %]/lib/jquery/plugins/treetable/stylesheets/jquery.treeTable.css" rel="stylesheet" type="text/css" />
+    [% IF ( notree ) %]
+        <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
+        <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.min.js"></script>
+        [% INCLUDE 'datatables-strings.inc' %]
+        <script type="text/javascript" src="[% themelang %]/js/datatables.js"></script>
+    [% ELSE %]
+        <link href="[% themelang %]/lib/jquery/plugins/treetable/stylesheets/jquery.treeTable.css" rel="stylesheet" type="text/css" />
+        <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/treetable/jquery.treeTable.min.js"></script>
+    [% END %]
 
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/treetable/jquery.treeTable.min.js"></script>
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.qtip.js"></script>
 
 <script type="text/javascript">
@@ -174,11 +180,14 @@
             }
         });
         [% IF ( notree ) %]
-        $("#budgeth").tablesorter({
-            widgets : ['zebra'],
-            sortList: [[0,0]],
-            headers: { 7: { sorter: false }}
-        });
+            $("#budgeth").dataTable($.extend(true, {}, dataTablesDefaults, {
+                "aoColumnDefs": [
+                    { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
+                ],
+                "aLengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]],
+                "iDisplayLength": 20,
+                "sPaginationType": "four_button"
+            }));
         [% ELSE %]
         $("#budgeth").treeTable();
         [% END %]
@@ -221,6 +230,8 @@
 
 [% INCLUDE 'budgets-active-currency.inc' %]
 
+[% IF ( budget ) %]
+
 <table id="budgeth">
     <thead>
         <tr>
@@ -248,7 +259,6 @@
     </tr>
     </tfoot>
     <tbody>
-    [% IF ( budget ) %]
         [% FOREACH budge IN budget %]
     [% IF ( budge.toggle ) %]
     <tr id="node-[% budge.budget_id %]" class="highlight[% IF ( budge.budget_parent_id ) %] child-of-node-[% budge.budget_parent_id %][% END %] tooltiped">
@@ -294,12 +304,13 @@
         </td>
     [% END %]
     </tr>
-        [% END %]
-    [% ELSE %]
-        <tr><td colspan="12">No fund found</td></tr>
     [% END %]
     </tbody>
 </table>
+
+[% ELSE %]
+    No fund found
+[% END %]
 
 [% IF ( pagination_bar ) %]<div class="pages">[% pagination_bar %]</div>[% END %]
 [% END %] <!-- else -->
