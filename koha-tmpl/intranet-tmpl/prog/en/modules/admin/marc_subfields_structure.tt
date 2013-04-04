@@ -251,12 +251,17 @@ function populateHiddenCheckboxes(tab) {
                     <input type="text" name="defaultvalue" id="defaultvalue[% loo.row %]" value="[% loo.defaultvalue %]" /></li>
 				<li><label for="maxlength[% loo.row %]">Max length:</label><input type="text" id="maxlength[% loo.row %]" name="maxlength" value="[% loo.maxlength %]" size="4" /> (see online help)</li>
                 <li><input type="hidden" id="hidden-[% loo.row %]" name="hidden" value="[% loo.hidden %]" />
-                    <label for="hidden[% loo.row %]">Visibility: </label>
-                    <input type="checkbox" id="hidden_opac_[% loo.row %]" class="inclusive_[% loo.row %]" name="hidden_opac_[% loo.row %]"/> OPAC
-                    <input type="checkbox" id="hidden_intranet_[% loo.row %]" class="inclusive_[% loo.row %]" name="hidden_intranet_[% loo.row %]"/> Intranet
-                    <input type="checkbox" id="hidden_editor_[% loo.row %]" class="inclusive_[% loo.row %]" name="hidden_editor_[% loo.row %]"/> Editor
-                    <input type="checkbox" id="hidden_collapsed_[% loo.row %]" class="inclusive_[% loo.row %]" name="hidden_collapsed_[% loo.row %]"/> Collapsed
-                    <input type="checkbox" id="hidden_flagged_[% loo.row %]" name="flagged_[% loo.row %]"/> Flagged
+                    <label for="hidden[% loo.row %]" style="float: none;">Visibility: </label>
+                    <input type="checkbox" id="hidden_opac_[% loo.row %]" class="inclusive_[% loo.row %]" name="hidden_opac_[% loo.row %]"/>
+                    <label for="hidden_opac_[% loo.row %]" style="float: none;">OPAC</label>
+                    <input type="checkbox" id="hidden_intranet_[% loo.row %]" class="inclusive_[% loo.row %]" name="hidden_intranet_[% loo.row %]"/>
+                    <label for="hidden_intranet_[% loo.row %]" style="float: none;">Intranet</label>
+                    <input type="checkbox" id="hidden_editor_[% loo.row %]" class="inclusive_[% loo.row %]" name="hidden_editor_[% loo.row %]"/>
+                    <label for="hidden_editor_[% loo.row %]" style="float: none;">Editor</label>
+                    <input type="checkbox" id="hidden_collapsed_[% loo.row %]" class="inclusive_[% loo.row %]" name="hidden_collapsed_[% loo.row %]"/>
+                    <label for="hidden_collapsed_[% loo.row %]" style="float: none;">Collapsed</label>
+                    <input type="checkbox" id="hidden_flagged_[% loo.row %]" name="flagged_[% loo.row %]"/>
+                    <label for="hidden_flagged_[% loo.row %]" style="float: none;">Flagged</label>
                 </li>
                 <li><label for="isurl[% loo.row %]">Is a URL:</label>[% loo.isurl %] (if checked, it means that the subfield is a URL and can be clicked)</li>
                 <li><label for="link[% loo.row %]">Link:</label><input type="text" id="link[% loo.row %]" name="link" value="[% loo.link %]" size="10" maxlength="80" /> (e.g., Title or Local-Number) <span class="error"><em>NOTE: If you change this value you must ask your administrator to run misc/batchRebuildBiblioTables.pl.</em></span></li>
