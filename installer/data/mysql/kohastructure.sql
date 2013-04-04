@@ -466,7 +466,7 @@ CREATE TABLE collections_tracking (
 ) ENGINE=InnoDB DEFAULT CHARACTER SET utf8;
 
 --
--- Table structure for table `borrower_branch_circ_rules`
+-- Table structure for table `branch_borrower_circ_rules`
 --
 
 DROP TABLE IF EXISTS `branch_borrower_circ_rules`;
