@@ -1,4 +1,5 @@
 [% USE KohaDates %]
+[% USE ItemTypes %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; Ordered</title>
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
@@ -66,7 +67,7 @@
 	    <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% order.booksellerid %]">[% order.booksellerid %]</a>
 	</td>
 	<td class="cell">
-	    [% order.itype %]
+        [% ItemTypes.GetDescription( order.itype ) %]
 	</td>
 	<td class="cell">
 	    [% order.left %]

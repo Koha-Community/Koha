@@ -1,4 +1,5 @@
 [% USE KohaDates %]
+[% USE ItemTypes %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; Spent</title>
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
@@ -60,7 +61,7 @@
 	    [% order.title %]
 	</td>
 	<td class="cell">
-            <a href="/cgi-bin/koha/acqui/orderreceive.pl?ordernumber=[% order.ordernumber %]&amp;biblio=[% order.biblionumber %]&amp;invoiceid=[% order.invoiceid %]">[% order.ordernumber %]</a>
+        [% order.ordernumber %]
 	</td>
 	<td class="cell">
 	    <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% order.booksellerid %]">[% order.booksellerid %]</a>
@@ -69,7 +70,7 @@
 	    <a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% order.invoiceid %]">[% order.invoicenumber %]</a>
 	</td>
 	<td class="cell">
-	    [% order.itype %]
+        [% ItemTypes.GetDescription( order.itype ) %]
 	</td>
 	<td class="cell">
 	    [% order.quantityreceived %]
