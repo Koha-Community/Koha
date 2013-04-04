@@ -2914,7 +2914,6 @@ CREATE TABLE `aqorders` ( -- information related to the basket line items
   `supplierreference` mediumtext, -- not used? always NULL
   `purchaseordernumber` mediumtext, -- not used? always NULL
   `basketno` int(11) default NULL, -- links this order line to a specific basket (aqbasket.basketno)
-  `biblioitemnumber` int(11) default NULL, -- links this order line the biblioitems table (biblioitems.biblioitemnumber)
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- the date and time this order line was last modified
   `rrp` decimal(13,2) default NULL, -- the replacement cost for this line item
   `ecost` decimal(13,2) default NULL, -- the estimated cost for this line item

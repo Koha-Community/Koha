@@ -22,7 +22,6 @@ sub methods : Test( 1 ) {
                        CloseBasket 
                        GetPendingOrders 
                        GetOrders 
-                       GetOrderNumber 
                        GetOrder 
                        NewOrder 
                        ModOrder 

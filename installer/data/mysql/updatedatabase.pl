@@ -7010,6 +7010,14 @@ CREATE TABLE IF NOT EXISTS borrower_files (
     SetVersion($DBversion);
 }
 
+
+$DBversion = "3.13.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do("ALTER TABLE aqorders DROP COLUMN biblioitemnumber");
+    print "Upgrade to $DBversion done (Bug 9987 - Drop column aqorders.biblioitemnumber)\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

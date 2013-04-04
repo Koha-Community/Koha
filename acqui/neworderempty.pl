@@ -379,7 +379,6 @@ $template->param(
     biblionumber         => $biblionumber,
     uncertainprice       => $data->{'uncertainprice'},
     authorisedbyname     => $borrower->{'firstname'} . " " . $borrower->{'surname'},
-    biblioitemnumber     => $data->{'biblioitemnumber'},
     discount_2dp         => sprintf( "%.2f",  $bookseller->{'discount'} ) ,   # for display
     discount             => $bookseller->{'discount'},
     orderdiscount_2dp    => sprintf( "%.2f", $data->{'discount'} || 0 ),

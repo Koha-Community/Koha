@@ -54,9 +54,9 @@ BEGIN {
         &GetBasketgroups &ReOpenBasketgroup
 
         &NewOrder &DelOrder &ModOrder &GetPendingOrders &GetOrder &GetOrders &GetOrdersByBiblionumber
-        &GetOrderNumber &GetLateOrders &GetOrderFromItemnumber
+        &GetLateOrders &GetOrderFromItemnumber
         &SearchOrder &GetHistory &GetRecentAcqui
-        &ModReceiveOrder &CancelReceipt &ModOrderBiblioitemNumber
+        &ModReceiveOrder &CancelReceipt
         &GetCancelledOrders
         &GetLastOrderNotReceivedFromSubscriptionid &GetLastOrderReceivedFromSubscriptionid
         &NewOrderItem &ModOrderItem &ModItemOrder
@@ -993,39 +993,6 @@ sub GetOrdersByBiblionumber {
 
 #------------------------------------------------------------#
 
-=head3 GetOrderNumber
-
-  $ordernumber = &GetOrderNumber($biblioitemnumber, $biblionumber);
-
-Looks up the ordernumber with the given biblionumber and biblioitemnumber.
-
-Returns the number of this order.
-
-=over
-
-=item C<$ordernumber> is the order number.
-
-=back
-
-=cut
-
-sub GetOrderNumber {
-    my ( $biblionumber,$biblioitemnumber ) = @_;
-    my $dbh = C4::Context->dbh;
-    my $query = "
-        SELECT ordernumber
-        FROM   aqorders
-        WHERE  biblionumber=?
-        AND    biblioitemnumber=?
-    ";
-    my $sth = $dbh->prepare($query);
-    $sth->execute( $biblionumber, $biblioitemnumber );
-
-    return $sth->fetchrow;
-}
-
-#------------------------------------------------------------#
-
 =head3 GetOrder
 
   $order = &GetOrder($ordernumber);
@@ -1142,7 +1109,7 @@ Else, the upcoming July 1st is used.
 
 =item defaults entrydate to Now
 
-The following keys are used: "biblionumber", "title", "basketno", "quantity", "notes", "biblioitemnumber", "rrp", "ecost", "gstrate", "unitprice", "subscription", "sort1", "sort2", "booksellerinvoicenumber", "listprice", "budgetdate", "purchaseordernumber", "branchcode", "booksellerinvoicenumber", "budget_id".
+The following keys are used: "biblionumber", "title", "basketno", "quantity", "notes", "rrp", "ecost", "gstrate", "unitprice", "subscription", "sort1", "sort2", "booksellerinvoicenumber", "listprice", "budgetdate", "purchaseordernumber", "branchcode", "booksellerinvoicenumber", "budget_id".
 
 =back
 
@@ -1313,29 +1280,6 @@ sub ModItemOrder {
 
 #------------------------------------------------------------#
 
-
-=head3 ModOrderBibliotemNumber
-
-  &ModOrderBiblioitemNumber($biblioitemnumber,$ordernumber, $biblionumber);
-
-Modifies the biblioitemnumber for an existing order.
-Updates the order with order number C<$ordernum> and biblionumber C<$biblionumber>.
-
-=cut
-
-#FIXME: is this used at all?
-sub ModOrderBiblioitemNumber {
-    my ($biblioitemnumber,$ordernumber, $biblionumber) = @_;
-    my $dbh = C4::Context->dbh;
-    my $query = "
-    UPDATE aqorders
-    SET    biblioitemnumber = ?
-    WHERE  ordernumber = ?
-    AND biblionumber =  ?";
-    my $sth = $dbh->prepare($query);
-    $sth->execute( $biblioitemnumber, $ordernumber, $biblionumber );
-}
-
 =head3 GetCancelledOrders
 
   my @orders = GetCancelledOrders($basketno, $orderby);
@@ -1377,8 +1321,7 @@ sub GetCancelledOrders {
 =head3 ModReceiveOrder
 
   &ModReceiveOrder($biblionumber, $ordernumber, $quantityreceived, $user,
-    $unitprice, $invoiceid, $biblioitemnumber,
-    $bookfund, $rrp, \@received_itemnumbers);
+    $cost, $ecost, $invoiceid, rrp, budget_id, datereceived, \@received_itemnumbers);
 
 Updates an order, to reflect the fact that it was received, at least
 in part. All arguments not mentioned below update the fields with the

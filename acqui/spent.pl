@@ -67,15 +67,16 @@ SELECT
     datereceived,
     aqorders.biblionumber
 FROM (aqorders, aqbasket)
-LEFT JOIN items ON
-    items.biblioitemnumber=aqorders.biblioitemnumber
 LEFT JOIN biblio ON
     biblio.biblionumber=aqorders.biblionumber
+LEFT JOIN items ON
+    biblio.biblionumber = items.biblionumber
 LEFT JOIN aqorders_items ON
-    aqorders.ordernumber=aqorders_items.ordernumber
+     items.itemnumber = aqorders_items.itemnumber
 LEFT JOIN aqinvoices ON
     aqorders.invoiceid = aqinvoices.invoiceid
 WHERE
+    aqorders.ordernumber=aqorders_items.ordernumber AND
     aqorders.basketno=aqbasket.basketno AND
     budget_id=? AND
     (datecancellationprinted IS NULL OR

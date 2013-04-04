@@ -162,7 +162,6 @@ my $user = $input->remote_user;
 # modify if $quantity>=0 and $existing='yes'
 # delete if $quantity has been set to 0 by the librarian
 # delete biblio if delbiblio has been set to 1 by the librarian
-my $bibitemnum;
 if ( $orderinfo->{quantity} ne '0' ) {
     #TODO:check to see if biblio exists
     unless ( $$orderinfo{biblionumber} ) {
@@ -194,8 +193,7 @@ if ( $orderinfo->{quantity} ne '0' ) {
         if ($$orderinfo{suggestionid}) {
             ModSuggestion( {suggestionid=>$$orderinfo{suggestionid}, STATUS=>'ORDERED', biblionumber=>$biblionumber} );
         }
-		$orderinfo->{biblioitemnumber}=$bibitemnum;
-		$orderinfo->{biblionumber}=$biblionumber;
+        $orderinfo->{biblionumber}=$biblionumber;
     }
 
     $orderinfo->{unitprice} = $orderinfo->{ecost} if not defined $orderinfo->{unitprice} or $orderinfo->{unitprice} eq '';

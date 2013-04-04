@@ -198,7 +198,6 @@ $template->param(
     count                 => 1,
     biblionumber          => $order->{'biblionumber'},
     ordernumber           => $order->{'ordernumber'},
-    biblioitemnumber      => $order->{'biblioitemnumber'},
     subscriptionid        => $order->{subscriptionid},
     booksellerid          => $order->{'booksellerid'},
     freight               => $freight,

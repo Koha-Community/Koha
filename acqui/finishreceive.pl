@@ -40,7 +40,6 @@ checkauth($input, 0, $flagsrequired, 'intranet');
 
 my $user             = $input->remote_user;
 my $biblionumber     = $input->param('biblionumber');
-my $biblioitemnumber = $input->param('biblioitemnumber');
 my $ordernumber      = $input->param('ordernumber');
 my $origquantityrec  = $input->param('origquantityrec');
 my $quantityrec      = $input->param('quantityrec');
