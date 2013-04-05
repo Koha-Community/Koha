@@ -683,55 +683,59 @@ sub BatchCommitRecords {
 =cut
 
 sub BatchCommitItems {
-    my ($import_record_id, $biblionumber, $action) = @_;
+    my ( $import_record_id, $biblionumber, $action ) = @_;
 
     my $dbh = C4::Context->dbh;
 
-    my ($num_items_added, $num_items_errored, $num_items_replaced) = 0;
-    my $sth = $dbh->prepare("SELECT import_items_id, import_items.marcxml, encoding
-                             FROM import_items
-                             JOIN import_records USING (import_record_id)
-                             WHERE import_record_id = ?
-                             ORDER BY import_items_id");
-    $sth->bind_param(1, $import_record_id);
+    my ( $num_items_added, $num_items_errored, $num_items_replaced ) = 0;
+    my $sth = $dbh->prepare("
+        SELECT import_items_id, import_items.marcxml, encoding
+        FROM import_items
+        JOIN import_records USING (import_record_id)
+        WHERE import_record_id = ?
+        ORDER BY import_items_id
+    ");
+    $sth->bind_param( 1, $import_record_id );
     $sth->execute();
-    while (my $row = $sth->fetchrow_hashref()) {
-        my $item_marc = MARC::Record->new_from_xml(StripNonXmlChars($row->{'marcxml'}), 'UTF-8', $row->{'encoding'});
-    #delete date_due subfield as to not accidentally delete item checkout due dates
-        my ($MARCfield,$MARCsubfield) = GetMarcFromKohaField('items.onloan', GetFrameworkCode($biblionumber));
- $item_marc->field($MARCfield)->delete_subfield(code => $MARCsubfield);
-        # FIXME - duplicate barcode check needs to become part of AddItemFromMarc()
-        my $item = TransformMarcToKoha($dbh, $item_marc);
-        my $duplicate_barcode = exists($item->{'barcode'}) && GetItemnumberFromBarcode($item->{'barcode'});
-        my $duplicate_itemnumber = exists($item->{'itemnumber'});
-     my $updsth = $dbh->prepare("UPDATE import_items SET status = ?, itemnumber = ? WHERE import_items_id = ?");
-    if($action eq "replace" && $duplicate_itemnumber){
-         ModItemFromMarc($item_marc, $biblionumber, $item->{itemnumber});
-            $updsth->bind_param(1, 'imported');
-            $updsth->bind_param(2, $item->{itemnumber});
-            $updsth->bind_param(3, $row->{'import_items_id'});
+    while ( my $row = $sth->fetchrow_hashref() ) {
+        my $item_marc = MARC::Record->new_from_xml( StripNonXmlChars( $row->{'marcxml'} ), 'UTF-8', $row->{'encoding'} );
+
+        #delete date_due subfield as to not accidentally delete item checkout due dates
+        my ( $MARCfield, $MARCsubfield ) = GetMarcFromKohaField( 'items.onloan', GetFrameworkCode($biblionumber) );
+        $item_marc->field($MARCfield)->delete_subfield( code => $MARCsubfield );
+
+        my $item = TransformMarcToKoha( $dbh, $item_marc );
+
+        my $duplicate_barcode = exists( $item->{'barcode'} ) && GetItemnumberFromBarcode( $item->{'barcode'} );
+        my $duplicate_itemnumber = exists( $item->{'itemnumber'} );
+
+        my $updsth = $dbh->prepare("UPDATE import_items SET status = ?, itemnumber = ? WHERE import_items_id = ?");
+        if ( $action eq "replace" && $duplicate_itemnumber ) {
+            ModItemFromMarc( $item_marc, $biblionumber, $item->{itemnumber} );
+            $updsth->bind_param( 1, 'imported' );
+            $updsth->bind_param( 2, $item->{itemnumber} );
+            $updsth->bind_param( 3, $row->{'import_items_id'} );
             $updsth->execute();
             $updsth->finish();
-        $num_items_replaced++;
-     }
-        elsif ($duplicate_barcode) {
-            $updsth->bind_param(1, 'error');
-            $updsth->bind_param(2, 'duplicate item barcode');
-            $updsth->bind_param(3, $row->{'import_items_id'});
+            $num_items_replaced++;
+        } elsif ($duplicate_barcode) {
+            $updsth->bind_param( 1, 'error' );
+            $updsth->bind_param( 2, 'duplicate item barcode' );
+            $updsth->bind_param( 3, $row->{'import_items_id'} );
             $updsth->execute();
             $num_items_errored++;
         } else {
-            my ($item_biblionumber, $biblioitemnumber, $itemnumber) = AddItemFromMarc($item_marc, $biblionumber);
-            $updsth->bind_param(1, 'imported');
-            $updsth->bind_param(2, $itemnumber);
-            $updsth->bind_param(3, $row->{'import_items_id'});
+            my ( $item_biblionumber, $biblioitemnumber, $itemnumber ) = AddItemFromMarc( $item_marc, $biblionumber );
+            $updsth->bind_param( 1, 'imported' );
+            $updsth->bind_param( 2, $itemnumber );
+            $updsth->bind_param( 3, $row->{'import_items_id'} );
             $updsth->execute();
             $updsth->finish();
             $num_items_added++;
         }
     }
-    $sth->finish();
-    return ($num_items_added, $num_items_replaced, $num_items_errored);
+
+    return ( $num_items_added, $num_items_replaced, $num_items_errored );
 }
 
 =head2 BatchRevertRecords
