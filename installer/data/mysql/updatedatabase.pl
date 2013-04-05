@@ -7583,6 +7583,19 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.13.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do("
+        ALTER TABLE `import_batches`
+        CHANGE `item_action` `item_action`
+          ENUM( 'always_add', 'add_only_for_matches', 'add_only_for_new', 'ignore', 'replace' )
+          NOT NULL DEFAULT 'always_add'
+    ");
+    print "Upgrade to $DBversion done (Bug 7131 - way to overlay items in in marc import)\n";
+    SetVersion($DBversion);
+}
+
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

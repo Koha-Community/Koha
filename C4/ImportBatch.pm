@@ -654,9 +654,10 @@ sub BatchCommitRecords {
             SetImportRecordOverlayStatus($rowref->{'import_record_id'}, 'match_applied');
             SetImportRecordStatus($rowref->{'import_record_id'}, 'imported');
         } elsif ($record_result eq 'ignore') {
+            $recordid = $record_match;
             $num_ignored++;
             $recordid = $record_match;
-            if ($record_type eq 'biblio' and defined $recordid and $item_result eq 'create_new') {
+            if ($record_type eq 'biblio' and defined $recordid and ( $item_result eq 'create_new' || $item_result eq 'replace' ) ) {
                 my ($bib_items_added, $bib_items_replaced, $bib_items_errored) = BatchCommitItems($rowref->{'import_record_id'}, $recordid, $item_result);
                 $num_items_added += $bib_items_added;
          $num_items_replaced += $bib_items_replaced;
@@ -688,19 +689,20 @@ sub BatchCommitItems {
     my $dbh = C4::Context->dbh;
 
     my ( $num_items_added, $num_items_errored, $num_items_replaced ) = 0;
-    my $sth = $dbh->prepare("
+    my $sth = $dbh->prepare( "
         SELECT import_items_id, import_items.marcxml, encoding
         FROM import_items
         JOIN import_records USING (import_record_id)
         WHERE import_record_id = ?
         ORDER BY import_items_id
-    ");
+    " );
     $sth->bind_param( 1, $import_record_id );
     $sth->execute();
+
     while ( my $row = $sth->fetchrow_hashref() ) {
         my $item_marc = MARC::Record->new_from_xml( StripNonXmlChars( $row->{'marcxml'} ), 'UTF-8', $row->{'encoding'} );
 
-        #delete date_due subfield as to not accidentally delete item checkout due dates
+        # Delete date_due subfield as to not accidentally delete item checkout due dates
         my ( $MARCfield, $MARCsubfield ) = GetMarcFromKohaField( 'items.onloan', GetFrameworkCode($biblionumber) );
         $item_marc->field($MARCfield)->delete_subfield( code => $MARCsubfield );
 
@@ -711,7 +713,17 @@ sub BatchCommitItems {
 
         my $updsth = $dbh->prepare("UPDATE import_items SET status = ?, itemnumber = ? WHERE import_items_id = ?");
         if ( $action eq "replace" && $duplicate_itemnumber ) {
+            # Duplicate itemnumbers have precedence, that way we can update barcodes by overlaying
             ModItemFromMarc( $item_marc, $biblionumber, $item->{itemnumber} );
+            $updsth->bind_param( 1, 'imported' );
+            $updsth->bind_param( 2, $item->{itemnumber} );
+            $updsth->bind_param( 3, $row->{'import_items_id'} );
+            $updsth->execute();
+            $updsth->finish();
+            $num_items_replaced++;
+        } elsif ( $action eq "replace" && $duplicate_barcode ) {
+            my $itemnumber = GetItemnumberFromBarcode( $item->{'barcode'} );
+            ModItemFromMarc( $item_marc, $biblionumber, $itemnumber );
             $updsth->bind_param( 1, 'imported' );
             $updsth->bind_param( 2, $item->{itemnumber} );
             $updsth->bind_param( 3, $row->{'import_items_id'} );
