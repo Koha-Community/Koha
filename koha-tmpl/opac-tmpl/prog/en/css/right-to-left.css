@@ -24,6 +24,7 @@ table#marc th
 
 /* Swap floats */
 
+
 body#advsearch #cartmenulink,
 body#advsearch #listsmenulink,
 #renewcontrols,
@@ -35,7 +36,7 @@ body#advsearch #listsmenulink,
 {
    float: left;
 }
-
+.ui-tabs .ui-tabs-nav li,
 div.lang,
 fieldset.rows label,
 fieldset.rows span.label,
@@ -95,10 +96,6 @@ h6
    margin-left: 0.5em;
 }
 
-ul li
-{
-   margin-right: 1.5em;
-}
 
 ul.pg_menu li,
 .author,
@@ -181,4 +178,60 @@ h3 img {
         transform: scaleX(-1);
         filter: FlipH;
         -ms-filter: "FlipH";
+}
+
+
+#moresearches {
+    clear: right;
+}
+
+#cartmenulink, #listsmenulink {
+    float: right;
+    margin-right: 1em;
+    margin-left: 0em;
+}
+
+#listsmenulink {
+
+    background-image: url("../../images/sprite.png"), -moz-linear-gradient(center top , rgb(215, 229, 255) 0%, rgb(177, 203, 255) 50%, rgb(159, 191, 255) 100%);
+
+    background-position: -5px -287px, left top;
+
+    padding-left: 20px;
+}
+#listsmenulink:hover {
+    background-position: -5px -287px, left top;
+}
+
+#cartmenulink {
+    padding-right: 30px;
+    background-position: 20px -256px, left top;
+    padding-left: 13px;
+}
+#cartmenulink:hover {
+    background-position: 20px -256px, left top;
+}
+.lang {
+float:right;
+
+}
+.morelang,
+li.more {
+float:right;
+}
+
+ul#i18nMenu li {
+    border-right: 1px solid rgb(204, 204, 204);
+}
+div.rating-cancel, div.star-rating {
+    float: right;
+}
+
+
+#shelfbrowser #browser_previous {
+    background-position: -9px -1051px;
+}
+
+#shelfbrowser #browser_next {
+    background-position: -9px -1001px;
 }
