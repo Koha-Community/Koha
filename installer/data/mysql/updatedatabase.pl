@@ -6758,6 +6758,20 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.11.00.202";
+if ( CheckVersion($DBversion) ) {
+   $dbh->do("INSERT INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'ca', 'language', 'Catalan','2013-01-12' )");
+   $dbh->do("INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code) VALUES( 'ca','cat')");
+   $dbh->do("INSERT INTO language_descriptions(subtag, type, lang, description) VALUES( 'ca', 'language', 'es', 'Catalán')");
+   $dbh->do("INSERT INTO language_descriptions(subtag, type, lang, description) VALUES( 'ca', 'language', 'en', 'Catalan')");
+   $dbh->do("INSERT INTO language_descriptions(subtag, type, lang, description) VALUES( 'ca', 'language', 'fr', 'Catalan')");
+   $dbh->do("INSERT INTO language_descriptions(subtag, type, lang, description) VALUES( 'ca', 'language', 'ca', 'Català')");
+   $dbh->do("INSERT INTO language_descriptions(subtag, type, lang, description) VALUES( 'ca', 'language', 'de', 'Katalanisch')");
+   print "Upgrade to $DBversion done (Bug 9381: Add Catalan laguage)\n";
+   SetVersion ($DBversion);
+}
+
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)
