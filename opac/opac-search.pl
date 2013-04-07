@@ -715,8 +715,10 @@ for (my $i=0;$i<@servers;$i++) {
             $template->param(results_per_page =>  $results_per_page);
             my $hide = C4::Context->preference('OpacHiddenItems');
             $hide = ($hide =~ m/\S/) if $hide; # Just in case it has some spaces/new lines
-
-            my $branch = C4::Context->userenv->{branch};
+            my $branch = '';
+            if (C4::Context->userenv){
+                $branch = C4::Context->userenv->{branch};
+            }
             if ( C4::Context->preference('HighlightOwnItemsOnOPAC') ) {
                 if (
                     ( ( C4::Context->preference('HighlightOwnItemsOnOPACWhich') eq 'PatronBranch' ) && $branch )
