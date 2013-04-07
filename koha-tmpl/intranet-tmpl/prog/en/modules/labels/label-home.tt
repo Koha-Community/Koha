@@ -2,6 +2,9 @@
     <title>Koha &rsaquo; Tools &rsaquo; Labels home</title>
     [% INCLUDE 'doc-head-close.inc' %]
     <link rel="stylesheet" type="text/css" href="[% themelang %]/css/label.css" />
+    [% IF ( bidi ) %]
+    <link rel="stylesheet" type="text/css" href="[% themelang %]/css/right-to-left.css" />
+    [% END %]
 </head>
 <body id="labels_label-home" class="tools labels">
     [% INCLUDE 'header.inc' %]

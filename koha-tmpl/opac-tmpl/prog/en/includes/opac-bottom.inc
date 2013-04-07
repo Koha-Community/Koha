@@ -9,13 +9,13 @@
     [% IF ( languages_loop && opaclanguagesdisplay ) %]
         [% UNLESS ( one_language_enabled ) %]
             <div id="changelanguage" class="ft">
-            <div class="lang" style="float:left;padding: 0.1em 0;"><strong>Languages:&nbsp;</strong></div>
+            <div class="lang"><strong>Languages:&nbsp;</strong></div>
             <ul id="i18nMenu" class="footermenu">
             [% FOREACH languages_loo IN languages_loop %]
 
                 [% IF ( languages_loo.group_enabled ) %]
                 [% IF ( languages_loo.plural ) %]
-                <li class="more" style="float:left;"><a class="sublangs" id="show[% languages_loo.rfc4646_subtag %]" href="#">[% IF ( languages_loo.native_description ) %][% languages_loo.native_description %][% ELSE %][% languages_loo.rfc4646_subtag %][% END %]</a><div id="sub[% languages_loo.rfc4646_subtag %]">
+                <li class="more"><a class="sublangs" id="show[% languages_loo.rfc4646_subtag %]" href="#">[% IF ( languages_loo.native_description ) %][% languages_loo.native_description %][% ELSE %][% languages_loo.rfc4646_subtag %][% END %]</a><div id="sub[% languages_loo.rfc4646_subtag %]">
                 <div class="bd"><ul>
                 [% FOREACH sublanguages_loo IN languages_loo.sublanguages_loop %]
             [% IF ( sublanguages_loo.enabled ) %]
@@ -32,9 +32,9 @@
                 [% ELSE %]
                 [% IF ( languages_loo.group_enabled ) %]
                     [% IF ( languages_loo.current ) %]
-                        <li style="float:left;">[% IF ( languages_loo.native_description ) %][% languages_loo.native_description %][% ELSE %][% languages_loo.rfc4646_subtag %][% END %]</li>
+                        <li class="morelang">[% IF ( languages_loo.native_description ) %][% languages_loo.native_description %][% ELSE %][% languages_loo.rfc4646_subtag %][% END %]</li>
                     [% ELSE %]
-                        <li style="float:left;"><a href="/cgi-bin/koha/opac-changelanguage.pl?language=[% languages_loo.rfc4646_subtag %]">[% IF ( languages_loo.native_description ) %][% languages_loo.native_description %][% ELSE %][% languages_loo.rfc4646_subtag %][% END %]</a></li>
+                        <li class="morelang"><a href="/cgi-bin/koha/opac-changelanguage.pl?language=[% languages_loo.rfc4646_subtag %]">[% IF ( languages_loo.native_description ) %][% languages_loo.native_description %][% ELSE %][% languages_loo.rfc4646_subtag %][% END %]</a></li>
                     [% END %]
             [% END %]
                 [% END %]
