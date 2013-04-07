@@ -15,9 +15,9 @@
 # with Koha; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-
 use strict;
 use warnings;
+
 # FIXME - Generates a warning from C4/Context.pm (uninitilized value).
 
 use CGI;
@@ -36,4 +36,15 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     }
 );
 
-output_html_with_http_headers $input, '', $template->output;
+my $koha_db_version = C4::Context->preference('Version');
+my $kohaversion     = C4::Context::KOHAVERSION;
+$kohaversion =~ s/(.*\..*)\.(.*)\.(.*)/$1$2$3/;
+
+#warn "db: $koha_db_version, koha: $kohaversion";
+
+if ( $kohaversion > $koha_db_version or C4::Context->preference('OpacMaintenance') ) {
+    output_html_with_http_headers $input, '', $template->output;
+}
+else {
+    print $input->redirect("/cgi-bin/koha/opac-main.pl");
+}
