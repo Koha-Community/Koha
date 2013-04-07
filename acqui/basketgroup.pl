@@ -466,6 +466,7 @@ if ( $op eq "add" ) {
             name              => $basketgroupname,
             booksellerid      => $booksellerid,
             basketlist        => \@baskets,
+            billingplace      => $billingplace,
             deliveryplace     => $deliveryplace,
             freedeliveryplace => $freedeliveryplace,
             deliverycomment   => $deliverycomment,
