@@ -6758,7 +6758,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.11.00.XXX";
+$DBversion = "3.11.00.202";
 if ( CheckVersion($DBversion) ) {
    $dbh->do("INSERT INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'ca', 'language', 'Catalan','2013-01-12' )");
    $dbh->do("INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code) VALUES( 'ca','cat')");
