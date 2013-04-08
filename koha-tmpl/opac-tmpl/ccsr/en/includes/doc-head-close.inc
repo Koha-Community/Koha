@@ -24,6 +24,9 @@
 <link rel="stylesheet" type="text/css" media="print" href="[% themelang %]/css/print.css" />
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
 <link rel="stylesheet" type="text/css" media="screen and (max-width:700px)" href="[% themelang %]/css/mobile.css" />
+[% IF ( bidi ) %]
+    <link rel="stylesheet" type="text/css" href="[% themelang %]/css/right-to-left.css" />
+[% END %]
 [% IF ( OPACMobileUserCSS ) %]<style type="text/css" media="screen and (max-width:700px)">[% OPACMobileUserCSS %]</style>[% END %]
 [% IF ( OPACUserCSS ) %]<style type="text/css">[% OPACUserCSS %]</style>[% END %]
 [% IF persona %]
