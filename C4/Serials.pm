@@ -1118,7 +1118,10 @@ sub ModSerialStatus {
                 $recievedlist .= "; $serialseq"
                   unless ( index( "$recievedlist", "$serialseq" ) >= 0 );
             }
-
+            # in case serial has been previously marked as missing
+            if (grep /$status/, (1,2,3,7)) {
+                $missinglist =~ s/[,;]?\s?$serialseq//g;
+            }
             #         warn "missinglist : $missinglist serialseq :$serialseq, ".index("$missinglist","$serialseq");
             $missinglist .= "; $serialseq"
               if ( $status == 4
