@@ -3,13 +3,14 @@
 # This Koha test module is a stub!
 # Add more tests here!!!
 
-use strict;
-use warnings;
+use Modern::Perl;
 use YAML;
 
+use CGI;
 use C4::Serials;
+use C4::Serials::Frequency;
 use C4::Debug;
-use Test::More tests => 34;
+use Test::More tests => 35;
 
 BEGIN {
     use_ok('C4::Serials');
@@ -17,83 +18,112 @@ BEGIN {
 
 my $subscriptionid = 1;
 my $subscriptioninformation = GetSubscription( $subscriptionid );
-$debug && warn Dump($subscriptioninformation);
+
 my @subscriptions = GetSubscriptions( $$subscriptioninformation{bibliotitle} );
 isa_ok( \@subscriptions, 'ARRAY' );
-$debug && warn scalar(@subscriptions);
+
 @subscriptions = GetSubscriptions( undef, $$subscriptioninformation{issn} );
 isa_ok( \@subscriptions, 'ARRAY' );
-$debug && warn scalar(@subscriptions);
+
 @subscriptions = GetSubscriptions( undef, undef, $$subscriptioninformation{ean} );
 isa_ok( \@subscriptions, 'ARRAY' );
-$debug && warn scalar(@subscriptions);
+
 @subscriptions = GetSubscriptions( undef, undef, undef, $$subscriptioninformation{bibnum} );
 isa_ok( \@subscriptions, 'ARRAY' );
-$debug && warn scalar(@subscriptions);
-if ($subscriptioninformation->{periodicity} % 16==0){
-	$subscriptioninformation->{periodicity}=7;
-	ModSubscription(@$subscriptioninformation{qw(librarian,           branchcode,      aqbooksellerid,    cost,             aqbudgetid,    startdate,   periodicity,   firstacquidate,
-        dow,             irregularity,    numberpattern,     numberlength,     weeklength,    monthlength, add1,          every1,
-        whenmorethan1,   setto1,          lastvalue1,        innerloop1,       add2,          every2,      whenmorethan2, setto2,
-        lastvalue2,      innerloop2,      add3,              every3,           whenmorethan3, setto3,      lastvalue3,    innerloop3,
-        numberingmethod, status,          biblionumber,      callnumber,       notes,         letter,      hemisphere,    manualhistory,
-        internalnotes,   serialsadditems, staffdisplaycount, opacdisplaycount, graceperiod,   location,    enddate,       subscriptionid
-)});
+
+my $frequency = GetSubscriptionFrequency($subscriptioninformation->{periodicity});
+my $old_frequency;
+if (not $frequency->{unit}) {
+    $old_frequency = $frequency->{id};
+    $frequency->{unit} = "month";
+    $frequency->{unitsperissue} = 1;
+    $frequency->{issuesperunit} = 1;
+    $frequency->{description} = "Frequency created by t/db_dependant/Serials.t";
+    $subscriptioninformation->{periodicity} = AddSubscriptionFrequency($frequency);
+
+    ModSubscription( @$subscriptioninformation{qw(
+        librarian branchcode aqbooksellerid cost aqbudgetid startdate
+        periodicity firstacquidate irregularity numberpattern locale
+        numberlength weeklength monthlength lastvalue1 innerloop1 lastvalue2
+        innerloop2 lastvalue3 innerloop3 status biblionumber callnumber notes
+        letter manualhistory internalnotes serialsadditems staffdisplaycount
+        opacdisplaycount graceperiod location enddate subscriptionid
+        skip_serialseq
+    )} );
 }
-my $expirationdate = GetExpirationDate(1) ;
+my $expirationdate = GetExpirationDate($subscriptionid) ;
 ok( $expirationdate, "not NULL" );
-$debug && warn "$expirationdate";
 
-is(C4::Serials::GetLateIssues(),"0", 'test getting late issues');
+is(C4::Serials::GetLateIssues(), undef, 'test getting late issues');
 
-ok(C4::Serials::GetSubscriptionHistoryFromSubscriptionId(), 'test getting history from sub-scription');
+ok(C4::Serials::GetSubscriptionHistoryFromSubscriptionId($subscriptionid), 'test getting history from sub-scription');
 
-ok(C4::Serials::GetSerialStatusFromSerialId(), 'test getting Serial Status From Serial Id');
+my ($serials_count, @serials) = GetSerials($subscriptionid);
+ok($serials_count > 0, 'Subscription has at least one serial');
+my $serial = $serials[0];
 
-ok(C4::Serials::GetSerialInformation(), 'test getting Serial Information');
+ok(C4::Serials::GetSerialStatusFromSerialId($serial->{serialid}), 'test getting Serial Status From Serial Id');
 
-ok(C4::Serials::AddItem2Serial(), 'test adding item to serial');
+isa_ok(C4::Serials::GetSerialInformation($serial->{serialid}), 'HASH', 'test getting Serial Information');
 
-ok(C4::Serials::UpdateClaimdateIssues(), 'test updating claim date');
+# Delete created frequency
+if ($old_frequency) {
+    my $freq_to_delete = $subscriptioninformation->{periodicity};
+    $subscriptioninformation->{periodicity} = $old_frequency;
 
-ok(C4::Serials::GetFullSubscription(), 'test getting full subscription');
+    ModSubscription( @$subscriptioninformation{qw(
+        librarian branchcode aqbooksellerid cost aqbudgetid startdate
+        periodicity firstacquidate irregularity numberpattern locale
+        numberlength weeklength monthlength lastvalue1 innerloop1 lastvalue2
+        innerloop2 lastvalue3 innerloop3 status biblionumber callnumber notes
+        letter manualhistory internalnotes serialsadditems staffdisplaycount
+        opacdisplaycount graceperiod location enddate subscriptionid
+        skip_serialseq
+    )} );
 
-ok(C4::Serials::PrepareSerialsData(), 'test preparing serial data');
+    DelSubscriptionFrequency($freq_to_delete);
+}
 
-ok(C4::Serials::GetSubscriptionsFromBiblionumber(), 'test getting subscriptions form biblio number');
 
-is(C4::Serials::GetSerials(),"0", 'test getting serials when you enter nothing');
-is(C4::Serials::GetSerials2(),"0", 'test getting serials when you enter nothing');
+# Test calling subs without parameters
+is(C4::Serials::AddItem2Serial(), undef, 'test adding item to serial');
+is(C4::Serials::UpdateClaimdateIssues(), undef, 'test updating claim date');
+is(C4::Serials::GetFullSubscription(), undef, 'test getting full subscription');
+is(C4::Serials::PrepareSerialsData(), undef, 'test preparing serial data');
+is(C4::Serials::GetSubscriptionsFromBiblionumber(), undef, 'test getting subscriptions form biblio number');
 
-ok(C4::Serials::GetLatestSerials(), 'test getting lastest serials');
+is(C4::Serials::GetSerials(), undef, 'test getting serials when you enter nothing');
+is(C4::Serials::GetSerials2(), undef, 'test getting serials when you enter nothing');
 
-is(C4::Serials::GetDistributedTo(),"0", 'test getting distributed when nothing is entered');
+is(C4::Serials::GetLatestSerials(), undef, 'test getting lastest serials');
 
-is(C4::Serials::GetNextSeq(),"0", 'test getting next seq when you enter nothing');
+is(C4::Serials::GetDistributedTo(), undef, 'test getting distributed when nothing is entered');
 
-is(C4::Serials::GetSeq(),undef, 'test getting seq when you enter nothing');
+is(C4::Serials::GetNextSeq(), undef, 'test getting next seq when you enter nothing');
 
-is(C4::Serials::CountSubscriptionFromBiblionumber(),"0", 'test counting subscription when nothing is entered');
+is(C4::Serials::GetSeq(), undef, 'test getting seq when you enter nothing');
 
-is(C4::Serials::ModSubscriptionHistory(),"0", 'test modding subscription history');
+is(C4::Serials::CountSubscriptionFromBiblionumber(), undef, 'test counting subscription when nothing is entered');
+
+is(C4::Serials::ModSubscriptionHistory(), undef, 'test modding subscription history');
 
 is(C4::Serials::ModSerialStatus(),undef, 'test modding serials');
 
-is(C4::Serials::NewIssue(),"0", 'test getting 0 when nothing is entered');
+is(C4::Serials::NewIssue(), undef, 'test getting 0 when nothing is entered');
 
 is(C4::Serials::ItemizeSerials(),undef, 'test getting nothing when nothing is entered');
 
-ok(C4::Serials::HasSubscriptionStrictlyExpired(), 'test if the subscriptions has expired');
-is(C4::Serials::HasSubscriptionExpired(),"0", 'test if the subscriptions has expired');
+is(C4::Serials::HasSubscriptionStrictlyExpired(), undef, 'test if the subscriptions has expired');
+is(C4::Serials::HasSubscriptionExpired(), undef, 'test if the subscriptions has expired');
 
-is(C4::Serials::GetLateOrMissingIssues(),"0", 'test getting last or missing issues');
+is(C4::Serials::GetLateOrMissingIssues(), undef, 'test getting last or missing issues');
 
-is(C4::Serials::removeMissingIssue(),undef, 'test removing a missing issue');
+is(C4::Serials::removeMissingIssue(), undef, 'test removing a missing issue');
 
 is(C4::Serials::updateClaim(),undef, 'test updating claim');
 
 is(C4::Serials::getsupplierbyserialid(),undef, 'test getting supplier idea');
 
-is(C4::Serials::check_routing(),"0", 'test checking route');
+is(C4::Serials::check_routing(), undef, 'test checking route');
 
 is(C4::Serials::addroutingmember(),undef, 'test adding route member');

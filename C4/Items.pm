@@ -2700,7 +2700,7 @@ sub PrepareItemrecordDisplay {
                     #---- branch
                     if ( $tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "branches" ) {
                         if (   ( C4::Context->preference("IndependentBranches") )
-                            && ( C4::Context->userenv->{flags} % 2 != 1 ) ) {
+                            && ( C4::Context->userenv && C4::Context->userenv->{flags} % 2 != 1 ) ) {
                             my $sth = $dbh->prepare( "SELECT branchcode,branchname FROM branches WHERE branchcode = ? ORDER BY branchname" );
                             $sth->execute( C4::Context->userenv->{branch} );
                             push @authorised_values, ""
@@ -2720,7 +2720,7 @@ sub PrepareItemrecordDisplay {
                             }
                         }
 
-                        $defaultvalue = C4::Context->userenv->{branch};
+                        $defaultvalue = C4::Context->userenv ? C4::Context->userenv->{branch} : undef;
                         if ( $defaultvalues and $defaultvalues->{branchcode} ) {
                             $defaultvalue = $defaultvalues->{branchcode};
                         }

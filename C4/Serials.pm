@@ -121,6 +121,9 @@ name,title,planneddate,serialseq,serial.subscriptionid from tables : subscriptio
 
 sub GetLateIssues {
     my ($supplierid) = @_;
+
+    return unless ($supplierid);
+
     my $dbh = C4::Context->dbh;
     my $sth;
     if ($supplierid) {
@@ -153,10 +156,8 @@ sub GetLateIssues {
     }
     my @issuelist;
     my $last_title;
-    my $odd   = 0;
     while ( my $line = $sth->fetchrow_hashref ) {
-        $odd++ unless $line->{title} eq $last_title;
-        $line->{title} = "" if $line->{title} eq $last_title;
+        $line->{title} = "" if $last_title and $line->{title} eq $last_title;
         $last_title = $line->{title} if ( $line->{title} );
         $line->{planneddate} = format_date( $line->{planneddate} );
         push @issuelist, $line;
@@ -287,6 +288,9 @@ returns the number of rows affected
 
 sub AddItem2Serial {
     my ( $serialid, $itemnumber ) = @_;
+
+    return unless ($serialid and $itemnumber);
+
     my $dbh = C4::Context->dbh;
     my $rq  = $dbh->prepare("INSERT INTO `serialitems` SET serialid=? , itemnumber=?");
     $rq->execute( $serialid, $itemnumber );
@@ -304,6 +308,9 @@ Update Claimdate for issues in @$serialids list with date $date
 
 sub UpdateClaimdateIssues {
     my ( $serialids, $date ) = @_;
+
+    return unless ($serialids);
+
     my $dbh = C4::Context->dbh;
     $date = strftime( "%Y-%m-%d", localtime ) unless ($date);
     my $query = "
@@ -369,6 +376,9 @@ sub GetSubscription {
 
 sub GetFullSubscription {
     my ($subscriptionid) = @_;
+
+    return unless ($subscriptionid);
+
     my $dbh              = C4::Context->dbh;
     my $query            = qq|
   SELECT    serial.serialid,
@@ -415,6 +425,9 @@ sub GetFullSubscription {
 
 sub PrepareSerialsData {
     my ($lines) = @_;
+
+    return unless ($lines);
+
     my %tmpresults;
     my $year;
     my @res;
@@ -471,6 +484,9 @@ startdate, histstartdate,opacnote,missinglist,recievedlist,periodicity,status & 
 
 sub GetSubscriptionsFromBiblionumber {
     my ($biblionumber) = @_;
+
+    return unless ($biblionumber);
+
     my $dbh            = C4::Context->dbh;
     my $query          = qq(
         SELECT subscription.*,
@@ -749,6 +765,9 @@ FIXME: We should return \@serials.
 
 sub GetSerials {
     my ( $subscriptionid, $count ) = @_;
+
+    return unless $subscriptionid;
+
     my $dbh = C4::Context->dbh;
 
     # status = 2 is "arrived"
@@ -815,6 +834,9 @@ this number is used to see if a subscription can be deleted (=it must have only 
 
 sub GetSerials2 {
     my ( $subscription, $status ) = @_;
+
+    return unless ($subscription and $status);
+
     my $dbh   = C4::Context->dbh;
     my $query = qq|
                  SELECT   serialid,serialseq, status, planneddate, publisheddate,notes, routingnotes
@@ -854,6 +876,9 @@ a ref to an array which contains all of the latest serials stored into a hash.
 
 sub GetLatestSerials {
     my ( $subscriptionid, $limit ) = @_;
+
+    return unless ($subscriptionid and $limit);
+
     my $dbh = C4::Context->dbh;
 
     # status = 2 is "arrived"
@@ -886,7 +911,10 @@ This function returns the field distributedto for the subscription matching subs
 sub GetDistributedTo {
     my $dbh = C4::Context->dbh;
     my $distributedto;
-    my $subscriptionid = @_;
+    my ($subscriptionid) = @_;
+
+    return unless ($subscriptionid);
+
     my $query          = "SELECT distributedto FROM subscription WHERE subscriptionid=?";
     my $sth            = $dbh->prepare($query);
     $sth->execute($subscriptionid);
@@ -911,7 +939,10 @@ This function get the next issue for the subscription given on input arg
 
 sub GetNextSeq {
     my ($subscription, $pattern, $planneddate) = @_;
-    my ( $calculated, $newlastvalue1, $newlastvalue2, $newlastvalue3,
+
+    return unless ($subscription and $pattern);
+
+    my ( $newlastvalue1, $newlastvalue2, $newlastvalue3,
     $newinnerloop1, $newinnerloop2, $newinnerloop3 );
     my $count = 1;
 
@@ -929,62 +960,65 @@ sub GetNextSeq {
     }
 
     my $numberingmethod = $pattern->{numberingmethod};
-    $calculated    = $numberingmethod;
-    my $locale = $subscription->{locale};
-    $newlastvalue1 = $subscription->{lastvalue1} || 0;
-    $newlastvalue2 = $subscription->{lastvalue2} || 0;
-    $newlastvalue3 = $subscription->{lastvalue3} || 0;
-    $newinnerloop1 = $subscription->{innerloop1} || 0;
-    $newinnerloop2 = $subscription->{innerloop2} || 0;
-    $newinnerloop3 = $subscription->{innerloop3} || 0;
-    my %calc;
-    foreach(qw/X Y Z/) {
-        $calc{$_} = 1 if ($numberingmethod =~ /\{$_\}/);
-    }
+    my $calculated = "";
+    if ($numberingmethod) {
+        $calculated    = $numberingmethod;
+        my $locale = $subscription->{locale};
+        $newlastvalue1 = $subscription->{lastvalue1} || 0;
+        $newlastvalue2 = $subscription->{lastvalue2} || 0;
+        $newlastvalue3 = $subscription->{lastvalue3} || 0;
+        $newinnerloop1 = $subscription->{innerloop1} || 0;
+        $newinnerloop2 = $subscription->{innerloop2} || 0;
+        $newinnerloop3 = $subscription->{innerloop3} || 0;
+        my %calc;
+        foreach(qw/X Y Z/) {
+            $calc{$_} = 1 if ($numberingmethod =~ /\{$_\}/);
+        }
 
-    for(my $i = 0; $i < $count; $i++) {
-        if($calc{'X'}) {
-            # check if we have to increase the new value.
-            $newinnerloop1 += 1;
-            if ($newinnerloop1 >= $pattern->{every1}) {
-                $newinnerloop1  = 0;
-                $newlastvalue1 += $pattern->{add1};
+        for(my $i = 0; $i < $count; $i++) {
+            if($calc{'X'}) {
+                # check if we have to increase the new value.
+                $newinnerloop1 += 1;
+                if ($newinnerloop1 >= $pattern->{every1}) {
+                    $newinnerloop1  = 0;
+                    $newlastvalue1 += $pattern->{add1};
+                }
+                # reset counter if needed.
+                $newlastvalue1 = $pattern->{setto1} if ($newlastvalue1 > $pattern->{whenmorethan1});
             }
-            # reset counter if needed.
-            $newlastvalue1 = $pattern->{setto1} if ($newlastvalue1 > $pattern->{whenmorethan1});
+            if($calc{'Y'}) {
+                # check if we have to increase the new value.
+                $newinnerloop2 += 1;
+                if ($newinnerloop2 >= $pattern->{every2}) {
+                    $newinnerloop2  = 0;
+                    $newlastvalue2 += $pattern->{add2};
+                }
+                # reset counter if needed.
+                $newlastvalue2 = $pattern->{setto2} if ($newlastvalue2 > $pattern->{whenmorethan2});
+            }
+            if($calc{'Z'}) {
+                # check if we have to increase the new value.
+                $newinnerloop3 += 1;
+                if ($newinnerloop3 >= $pattern->{every3}) {
+                    $newinnerloop3  = 0;
+                    $newlastvalue3 += $pattern->{add3};
+                }
+                # reset counter if needed.
+                $newlastvalue3 = $pattern->{setto3} if ($newlastvalue3 > $pattern->{whenmorethan3});
+            }
+        }
+        if($calc{'X'}) {
+            my $newlastvalue1string = _numeration( $newlastvalue1, $pattern->{numbering1}, $locale );
+            $calculated =~ s/\{X\}/$newlastvalue1string/g;
         }
         if($calc{'Y'}) {
-            # check if we have to increase the new value.
-            $newinnerloop2 += 1;
-            if ($newinnerloop2 >= $pattern->{every2}) {
-                $newinnerloop2  = 0;
-                $newlastvalue2 += $pattern->{add2};
-            }
-            # reset counter if needed.
-            $newlastvalue2 = $pattern->{setto2} if ($newlastvalue2 > $pattern->{whenmorethan2});
+            my $newlastvalue2string = _numeration( $newlastvalue2, $pattern->{numbering2}, $locale );
+            $calculated =~ s/\{Y\}/$newlastvalue2string/g;
         }
         if($calc{'Z'}) {
-            # check if we have to increase the new value.
-            $newinnerloop3 += 1;
-            if ($newinnerloop3 >= $pattern->{every3}) {
-                $newinnerloop3  = 0;
-                $newlastvalue3 += $pattern->{add3};
-            }
-            # reset counter if needed.
-            $newlastvalue3 = $pattern->{setto3} if ($newlastvalue3 > $pattern->{whenmorethan3});
+            my $newlastvalue3string = _numeration( $newlastvalue3, $pattern->{numbering3}, $locale );
+            $calculated =~ s/\{Z\}/$newlastvalue3string/g;
         }
-    }
-    if($calc{'X'}) {
-        my $newlastvalue1string = _numeration( $newlastvalue1, $pattern->{numbering1}, $locale );
-        $calculated =~ s/\{X\}/$newlastvalue1string/g;
-    }
-    if($calc{'Y'}) {
-        my $newlastvalue2string = _numeration( $newlastvalue2, $pattern->{numbering2}, $locale );
-        $calculated =~ s/\{Y\}/$newlastvalue2string/g;
-    }
-    if($calc{'Z'}) {
-        my $newlastvalue3string = _numeration( $newlastvalue3, $pattern->{numbering3}, $locale );
-        $calculated =~ s/\{Z\}/$newlastvalue3string/g;
     }
 
     return ($calculated,
@@ -1005,6 +1039,9 @@ the sequence in string format
 
 sub GetSeq {
     my ($subscription, $pattern) = @_;
+
+    return unless ($subscription and $pattern);
+
     my $locale = $subscription->{locale};
 
     my $calculated = $pattern->{numberingmethod};
@@ -1036,6 +1073,9 @@ the enddate or undef
 
 sub GetExpirationDate {
     my ( $subscriptionid, $startdate ) = @_;
+
+    return unless ($subscriptionid);
+
     my $dbh          = C4::Context->dbh;
     my $subscription = GetSubscription($subscriptionid);
     my $enddate;
@@ -1085,6 +1125,9 @@ the number of subscriptions
 
 sub CountSubscriptionFromBiblionumber {
     my ($biblionumber) = @_;
+
+    return unless ($biblionumber);
+
     my $dbh            = C4::Context->dbh;
     my $query          = "SELECT count(*) FROM subscription WHERE biblionumber=?";
     my $sth            = $dbh->prepare($query);
@@ -1104,6 +1147,9 @@ returns the number of rows affected
 
 sub ModSubscriptionHistory {
     my ( $subscriptionid, $histstartdate, $enddate, $receivedlist, $missinglist, $opacnote, $librariannote ) = @_;
+
+    return unless ($subscriptionid);
+
     my $dbh   = C4::Context->dbh;
     my $query = "UPDATE subscriptionhistory 
                     SET histstartdate=?,histenddate=?,recievedlist=?,missinglist=?,opacnote=?,librariannote=?
@@ -1173,6 +1219,7 @@ Note : if we change from "waited" to something else,then we will have to create 
 sub ModSerialStatus {
     my ( $serialid, $serialseq, $planneddate, $publisheddate, $status, $notes ) = @_;
 
+    return unless ($serialid);
 
     #It is a usual serial
     # 1st, get previous status :
@@ -1588,6 +1635,8 @@ sub NewIssue {
     my ( $serialseq, $subscriptionid, $biblionumber, $status, $planneddate, $publisheddate, $notes ) = @_;
     ### FIXME biblionumber CAN be provided by subscriptionid. So Do we STILL NEED IT ?
 
+    return unless ($subscriptionid);
+
     my $dbh   = C4::Context->dbh;
     my $query = qq|
         INSERT INTO serial
@@ -1640,6 +1689,9 @@ return :
 
 sub ItemizeSerials {
     my ( $serialid, $info ) = @_;
+
+    return unless ($serialid);
+
     my $now = POSIX::strftime( "%Y-%m-%d", localtime );
 
     my $dbh   = C4::Context->dbh;
@@ -1774,6 +1826,9 @@ sub HasSubscriptionStrictlyExpired {
 
     # Getting end of subscription date
     my ($subscriptionid) = @_;
+
+    return unless ($subscriptionid);
+
     my $dbh              = C4::Context->dbh;
     my $subscription     = GetSubscription($subscriptionid);
     my $expirationdate = $subscription->{enddate} || GetExpirationDate($subscriptionid);
@@ -1815,6 +1870,9 @@ return :
 
 sub HasSubscriptionExpired {
     my ($subscriptionid) = @_;
+
+    return unless ($subscriptionid);
+
     my $dbh              = C4::Context->dbh;
     my $subscription     = GetSubscription($subscriptionid);
     my $frequency = C4::Serials::Frequency::GetSubscriptionFrequency($subscription->{periodicity});
@@ -1952,6 +2010,9 @@ name,title,planneddate,serialseq,serial.subscriptionid from tables : subscriptio
 
 sub GetLateOrMissingIssues {
     my ( $supplierid, $serialid, $order ) = @_;
+
+    return unless ($supplierid);
+
     my $dbh = C4::Context->dbh;
     my $sth;
     my $byserial = '';
@@ -2026,6 +2087,9 @@ called when a missing issue is found from the serials-recieve.pl file
 
 sub removeMissingIssue {
     my ( $sequence, $subscriptionid ) = @_;
+
+    return unless ($sequence and $subscriptionid);
+
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare("SELECT * FROM subscriptionhistory WHERE subscriptionid = ?");
     $sth->execute($subscriptionid);
@@ -2111,6 +2175,9 @@ used to show either an 'add' or 'edit' link
 
 sub check_routing {
     my ($subscriptionid) = @_;
+
+    return unless ($subscriptionid);
+
     my $dbh              = C4::Context->dbh;
     my $sth              = $dbh->prepare(
         "SELECT count(routingid) routingids FROM subscription LEFT JOIN subscriptionroutinglist 
@@ -2136,6 +2203,9 @@ of either 1 or highest current rank + 1
 
 sub addroutingmember {
     my ( $borrowernumber, $subscriptionid ) = @_;
+
+    return unless ($borrowernumber and $subscriptionid);
+
     my $rank;
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare( "SELECT max(ranking) rank FROM subscriptionroutinglist WHERE subscriptionid = ?" );
