@@ -53,7 +53,7 @@ my $itemtypeslimit = $params->{'itemtypeslimit'};
 if ( $run_report ) {
     my $items = GetHoldsQueueItems($branchlimit, $itemtypeslimit);
     $template->param(
-        branch     => $branchlimit,
+        branchlimit     => $branchlimit,
         total      => scalar @$items,
         itemsloop  => $items,
         run_report => $run_report,
