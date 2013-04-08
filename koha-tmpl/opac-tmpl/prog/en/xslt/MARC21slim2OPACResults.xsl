@@ -1071,10 +1071,27 @@
                                </xsl:for-each>
                </xsl:otherwise>
                </xsl:choose>
-           </span>
 
+           </span>
                    </xsl:when>
 				   </xsl:choose>
+
+            <xsl:choose>
+                <xsl:when test="count(key('item-by-status', 'reference'))>0">
+                    <span class="available">
+                        <b><xsl:text>Copies available for reference: </xsl:text></b>
+                        <xsl:variable name="reference_items" select="key('item-by-status', 'reference')"/>
+                        <xsl:for-each select="$reference_items[generate-id() = generate-id(key('item-by-status-and-branch', concat(items:status, ' ', items:homebranch))[1])]">
+                                <xsl:value-of select="items:homebranch"/>
+                                <xsl:if test="items:itemcallnumber != '' and items:itemcallnumber"> [<xsl:value-of select="items:itemcallnumber"/>]</xsl:if>
+                                <xsl:text> (</xsl:text>
+                                <xsl:value-of select="count(key('item-by-status-and-branch', concat(items:status, ' ', items:homebranch)))"/>
+                                <xsl:text> )</xsl:text>
+                                <xsl:choose><xsl:when test="position()=last()"><xsl:text>. </xsl:text></xsl:when><xsl:otherwise><xsl:text>, </xsl:text></xsl:otherwise></xsl:choose>
+                        </xsl:for-each>
+                    </span>
+                </xsl:when>
+            </xsl:choose>
 
                    <xsl:choose> <xsl:when test="count(key('item-by-status', 'available'))>0">
                        <xsl:choose><xsl:when test="count(key('item-by-status', 'reference'))>0">
