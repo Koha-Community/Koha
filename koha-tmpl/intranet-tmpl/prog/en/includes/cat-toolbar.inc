@@ -35,10 +35,10 @@
         var count = [% count %];
         var holdcount = [% holdcount %];
         var is_confirmed;
-     if (count > 0){
-            is_confirmed = alert( count + " " +_("item(s) are attached to this record.\nYou must delete all items before deleting this record.") );
+	if (count > 0){
+            is_confirmed = alert( count + " " +_("item(s) are attached to this record. You must delete all items before deleting this record.") );
         } else if ( holdcount > 0 ) {
-            is_confirmed = confirm( holdcount + " " + _("holds(s) for this record \n Are you sure you want to delete this record?."));
+            is_confirmed = confirm( holdcount + " " + _("hold(s) on this record. Are you sure you want to delete this record?."));
         } else {
             is_confirmed = confirm(_("Are you sure you want to delete this record?"));
         }
@@ -61,7 +61,7 @@
         var holdcount = [% holdcount %];
 
         if ( holdcount > 0 ) {
-            alert( holdcount + " " + _("holds(s) for this record \n You must delete all holds before deleting all items.") );
+            alert( holdcount + " " + _("hold(s) on this record. You must delete all holds before deleting all items.") );
         } else if ( count > 0 ) {
             if( confirm( _("Are you sure you want to delete the") + " " + count + " " + _("attached items?") ) ) {
                 window.location="/cgi-bin/koha/cataloguing/additem.pl?op=delallitems&amp;biblionumber=[% biblionumber %]";
