@@ -4,19 +4,9 @@
 [% INCLUDE 'doc-head-close.inc' %]
 <script type="text/javascript">
 //<![CDATA[
-
 $(document).ready(function() {
+    $( ".constraints" ).accordion();
     $('#subfieldtabs').tabs();
-        $("a.displaymore").click(function(){
-        var link = $(this);
-        var constraints = $("#"+$(this).attr("href").replace("#",""));
-        constraints.toggle();
-            if($(constraints).is(':visible')){
-                link.html(_("Hide constraints"));
-            } else {
-                link.html(_("Display more constraints"));
-            }
-    });
     $("input[id^='hidden_']").click(setHiddenValue);
     $("input[id^='hidden-']").each(function() {
             populateHiddenCheckboxes($(this).attr('id').split('-')[1]);
@@ -210,7 +200,6 @@ function populateHiddenCheckboxes(tab) {
     <input type="hidden" name="op" value="add_validate" />
 	<input type="hidden" name="tagfield" value="[% tagfield %]" />
     <input type="hidden" name="frameworkcode" value="[% frameworkcode %]" />
-
     <div id="subfieldtabs" class="toptabs numbered">
    <ul>
         [% FOREACH loo IN loop %]
@@ -225,9 +214,11 @@ function populateHiddenCheckboxes(tab) {
     </ul>
     
     [% FOREACH loo IN loop %] 
-        <div id="sub[% loo.urisubfieldcode %]field">
-        
-               <fieldset class="rows" style="float:none;"><legend>[% IF ( loo.new_subfield ) %]Add new subfield[% ELSE %]Basic constraints[% END %]</legend>
+        <div class="constraints" id="sub[% loo.urisubfieldcode %]field">
+
+               <h3><a href="#basic[% loo.urisubfieldcode %]">Basic constraints</a></h3>
+                    <div id="basic[% loo.urisubfieldcode %]">
+                    <fieldset class="rows">
                 	<ol>
                 		[% IF ( subfieldcode == 0 || subfieldcode ) %] 
                 		<li><span class="label">Subfield code:</span> [% loo.subfieldcode %] <input type="hidden" name="tagsubfield" value="[% loo.subfieldcode %]" /></li>
@@ -240,12 +231,13 @@ function populateHiddenCheckboxes(tab) {
                 		<li><label for="mandatory[% loo.row %]">Mandatory: </label>[% loo.mandatory %]</li>
                 		<li><label for="tab[% loo.row %]">Managed in tab: </label>[% loo.tab %] (ignore means that the subfield does not display in the record editor)</li>
                 	</ol>
-            </fieldset>
-			
-            <a class="displaymore" href="#more[% loo.urisubfieldcode %]">Display more constraints</a>
-            <div id="more[% loo.urisubfieldcode %]" style="display:none; clear: both">
-             <fieldset class="rows" style="float:none;">
-				<legend>Advanced constraints:</legend>
+                    </fieldset>
+                    </div>
+
+
+            <h3><a href="#adv[% loo.urisubfieldcode %]">Advanced constraints</a></h3>
+            <div id="adv[% loo.urisubfieldcode %]">
+            <fieldset class="rows">
                 <ol><li><label for="defaultvalue[% loo.row %]">Default value:</label>
                     <input type="text" name="defaultvalue" id="defaultvalue[% loo.row %]" value="[% loo.defaultvalue %]" /></li>
 				<li><label for="maxlength[% loo.row %]">Max length:</label><input type="text" id="maxlength[% loo.row %]" name="maxlength" value="[% loo.maxlength %]" size="4" /> (see online help)</li>
@@ -266,16 +258,18 @@ function populateHiddenCheckboxes(tab) {
                 <li><label for="link[% loo.row %]">Link:</label><input type="text" id="link[% loo.row %]" name="link" value="[% loo.link %]" size="10" maxlength="80" /> (e.g., Title or Local-Number) <span class="error"><em>NOTE: If you change this value you must ask your administrator to run misc/batchRebuildBiblioTables.pl.</em></span></li>
                 <li><label for="kohafield[% loo.row %]">Koha link:</label>[% loo.kohafield %]</li>
 			</ol>
-	</fieldset>
-	 <fieldset class="rows" style="float:none;">
-                <legend>Other Options: (choose one)</legend>
+            </fieldset>
+            </div>
+            <h3><a href="#oth[% loo.urisubfieldcode %]">Other options (choose one)</a></h3>
+            <div id="oth[% loo.urisubfieldcode %]">
+            <fieldset class="rows">
                     	<ol>
                     		<li><label for="authorised_value[% loo.row %]">Authorized value:</label>[% loo.authorised_value %]</li>
                     		<li><label for="authtypecode[% loo.row %]">Thesaurus:</label>[% loo.authtypes %]</li>
                     		<li><label for="value_builder[% loo.row %]">Plugin:</label>[% loo.value_builder %]</li>
                     	</ol>
-				</fieldset>
-            </div><br class="clear" /><!-- /more  -->
+            </fieldset>
+            </div>
         </div><!-- /content_sub -->
         [% END %]
 		</div><!-- /content -->
