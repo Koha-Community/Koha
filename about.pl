@@ -68,6 +68,10 @@ my $warnPrefBiblioAddsAuthorities = ( $prefAutoCreateAuthorities && ( !$prefBibl
 my $prefEasyAnalyticalRecords  = C4::Context->preference('EasyAnalyticalRecords');
 my $prefUseControlNumber  = C4::Context->preference('UseControlNumber');
 my $warnPrefEasyAnalyticalRecords  = ( $prefEasyAnalyticalRecords  && $prefUseControlNumber );
+my $warnPrefAnonymousPatron = (
+    C4::Context->preference('OPACPrivacy')
+        and not C4::Context->preference('AnonymousPatron')
+);
 
 my $errZebraConnection = C4::Context->Zconn("biblioserver",0)->errcode();
 
@@ -86,6 +90,7 @@ $template->param(
     prefAutoCreateAuthorities => $prefAutoCreateAuthorities,
     warnPrefBiblioAddsAuthorities => $warnPrefBiblioAddsAuthorities,
     warnPrefEasyAnalyticalRecords  => $warnPrefEasyAnalyticalRecords,
+    warnPrefAnonymousPatron => $warnPrefAnonymousPatron,
     errZebraConnection => $errZebraConnection,
     warnIsRootUser => $warnIsRootUser,
 );

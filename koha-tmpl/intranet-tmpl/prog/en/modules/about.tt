@@ -104,7 +104,7 @@
             <p>Please log in instead with a regular staff account. To create a staff account, create a library, a patron category 'Staff' and add a new patron. Then give this patron permissions from 'More' in the toolbar.</p>
         [% END %]
             <h2>Warnings regarding the system configuration</h2>
-        [% IF ( (warnPrefBiblioAddsAuthorities) || warnPrefEasyAnalyticalRecords ) %]
+        [% IF warnPrefBiblioAddsAuthorities || warnPrefEasyAnalyticalRecords || warnPrefAnonymousPatron %]
         <table>
             <caption>Preferences</caption>
             [% IF (warnPrefBiblioAddsAuthorities) %]
@@ -112,6 +112,9 @@
             [% END %]
             [% IF (warnPrefEasyAnalyticalRecords) %]
             <tr><th scope="row"><b>Warning</b> </th><td>System preference 'EasyAnalyticalRecords' set, but UseControlNumber preference is set to 'Use'. Set it to 'Don't use' or else the 'Show analytics' links in the staff client and the OPAC will be broken.</td></tr>
+            [% END %]
+            [% IF warnPrefAnonymousPatron %]
+                <tr><th scope="row"><b>Warning</b> </th><td>System preference 'OPACPrivacy' set, but AnonymousPatron preference is set to '0'. Set it to a valid borrower number if you want that this feature works correctly.</td></tr>
             [% END %]
         </table>
         [% ELSE %]
