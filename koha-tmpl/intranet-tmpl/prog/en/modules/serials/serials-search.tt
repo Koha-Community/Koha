@@ -105,7 +105,7 @@
         [% IF ( total ) %]
           <div id="serialstabs" class="toptabs" style="clear:both;">
             <ul class="ui-tabs-nav">
-              <li><a href="#opened">Opened ([% openedsubscriptions.size || 0 %])</a></li>
+              <li><a href="#opened">Open ([% openedsubscriptions.size || 0 %])</a></li>
               <li><a href="#closed">Closed ([% closedsubscriptions.size || 0 %])</a></li>
             </ul>
             <div id="opened">
@@ -188,7 +188,9 @@
                   </tbody>
                 </table>
               [% ELSE %]
-                There is no opened subscription for your search.
+                <div class="dialog message">
+                  <p>Your search returned no open subscriptions.</p>
+                </div>
               [% END %]
             </div>
             <div id="closed">
@@ -252,10 +254,16 @@
                   </tbody>
                 </table>
               [% ELSE %]
-                There is no closed subscription for your search.
+                <div class="dialog message">
+                  <p>Your search returned no closed subscriptions.</p>
+                </div>
               [% END %]
             </div>
           </div>
+        [% ELSE %]
+            <div class="dialog message">
+              <p>Your search returned no results.</p>
+            </div>
         [% END %]
       [% END %]
     </div>
