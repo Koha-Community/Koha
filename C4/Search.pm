@@ -911,32 +911,6 @@ sub pazGetRecords {
     return ( undef, $results_hashref, \@facets_loop );
 }
 
-# STOPWORDS
-sub _remove_stopwords {
-    my ( $operand, $index ) = @_;
-    my @stopwords_removed;
-
-    # phrase and exact-qualified indexes shouldn't have stopwords removed
-    if ( $index !~ m/,(phr|ext)/ ) {
-
-# remove stopwords from operand : parse all stopwords & remove them (case insensitive)
-#       we use IsAlpha unicode definition, to deal correctly with diacritics.
-#       otherwise, a French word like "leçon" would be split into "le" "çon", "le"
-#       is a stopword, we'd get "çon" and wouldn't find anything...
-#
-		foreach ( keys %{ C4::Context->stopwords } ) {
-			next if ( $_ =~ /(and|or|not)/ );    # don't remove operators
-			if ( my ($matched) = ($operand =~
-				/([^\X\p{isAlnum}]\Q$_\E[^\X\p{isAlnum}]|[^\X\p{isAlnum}]\Q$_\E$|^\Q$_\E[^\X\p{isAlnum}])/gi))
-			{
-				$operand =~ s/\Q$matched\E/ /gi;
-				push @stopwords_removed, $_;
-			}
-		}
-	}
-    return ( $operand, \@stopwords_removed );
-}
-
 # TRUNCATION
 sub _detect_truncation {
     my ( $operand, $index ) = @_;
@@ -1416,10 +1390,10 @@ sub parseQuery {
 $simple_query, $query_cgi,
 $query_desc, $limit,
 $limit_cgi, $limit_desc,
-$stopwords_removed, $query_type ) = buildQuery ( $operators, $operands, $indexes, $limits, $sort_by, $scan, $lang);
+$query_type ) = buildQuery ( $operators, $operands, $indexes, $limits, $sort_by, $scan, $lang);
 
 Build queries and limits in CCL, CGI, Human,
-handle truncation, stemming, field weighting, stopwords, fuzziness, etc.
+handle truncation, stemming, field weighting, fuzziness, etc.
 
 See verbose embedded documentation.
 
@@ -1445,7 +1419,6 @@ sub buildQuery {
     my $auto_truncation  = C4::Context->preference("QueryAutoTruncate")    || 0;
     my $weight_fields    = C4::Context->preference("QueryWeightFields")    || 0;
     my $fuzzy_enabled    = C4::Context->preference("QueryFuzzy")           || 0;
-    my $remove_stopwords = C4::Context->preference("QueryRemoveStopwords") || 0;
 
     my $query        = $operands[0];
     my $simple_query = $operands[0];
@@ -1457,8 +1430,6 @@ sub buildQuery {
     my $limit;
     my $limit_cgi;
     my $limit_desc;
-
-    my $stopwords_removed;    # flag to determine if stopwords have been removed
 
     my $cclq       = 0;
     my $cclindexes = getIndexes();
@@ -1503,7 +1474,7 @@ sub buildQuery {
 #        return (
 #            undef,              $query, $simple_query, $query_cgi,
 #            $query,             $limit, $limit_cgi,    $limit_desc,
-#            $stopwords_removed, 'ccl'
+#            'ccl'
 #        );
 #    }
 
@@ -1527,11 +1498,10 @@ sub buildQuery {
               # A flag to determine whether or not to add the index to the query
                 my $indexes_set;
 
-# If the user is sophisticated enough to specify an index, turn off field weighting, stemming, and stopword handling
+# If the user is sophisticated enough to specify an index, turn off field weighting, and stemming handling
                 if ( $operands[$i] =~ /\w(:|=)/ || $scan ) {
                     $weight_fields    = 0;
                     $stemming         = 0;
-                    $remove_stopwords = 0;
                 } else {
                     $operands[$i] =~ s/\?/{?}/g; # need to escape question marks
                 }
@@ -1550,7 +1520,7 @@ sub buildQuery {
                     #weight_fields/relevance search causes errors with date ranges
                     #In the case of YYYY-, it will only return records with a 'yr' of YYYY (not the range)
                     #In the case of YYYY-YYYY, it will return no results
-					$stemming = $auto_truncation = $weight_fields = $fuzzy_enabled = $remove_stopwords = 0;
+                    $stemming = $auto_truncation = $weight_fields = $fuzzy_enabled = 0;
                 }
 
                 # Date of Acquisition
@@ -1561,15 +1531,14 @@ sub buildQuery {
                     #Fuzzy actually only applies during _build_weighted_query, and is reset there anyway, so
                       #irrelevant here
                     #remove_stopwords doesn't function anymore so is irrelevant
-					$stemming = $auto_truncation = $weight_fields = $fuzzy_enabled = $remove_stopwords = 0;
+                    $stemming = $auto_truncation = $weight_fields = $fuzzy_enabled = 0;
                 }
                 # ISBN,ISSN,Standard Number, don't need special treatment
                 elsif ( $index eq 'nb' || $index eq 'ns' ) {
                     (
                         $stemming,      $auto_truncation,
-                        $weight_fields, $fuzzy_enabled,
-                        $remove_stopwords
-                    ) = ( 0, 0, 0, 0, 0 );
+                        $weight_fields, $fuzzy_enabled
+                    ) = ( 0, 0, 0, 0 );
 
                     if ( $index eq 'nb' ) {
                         if ( C4::Context->preference("SearchWithISBNVariations") ) {
@@ -1593,15 +1562,6 @@ sub buildQuery {
                 # Some helpful index variants
                 my $index_plus       = $index . $struct_attr . ':';
                 my $index_plus_comma = $index . $struct_attr . ',';
-
-                # Remove Stopwords
-                if ($remove_stopwords) {
-                    ( $operand, $stopwords_removed ) =
-                      _remove_stopwords( $operand, $index );
-                    warn "OPERAND w/out STOPWORDS: >$operand<" if $DEBUG;
-                    warn "REMOVED STOPWORDS: @$stopwords_removed"
-                      if ( $stopwords_removed && $DEBUG );
-                }
 
                 if ($auto_truncation){
                         unless ( $index =~ /,(st-|phr|ext)/ ) {
@@ -1789,7 +1749,7 @@ sub buildQuery {
     return (
         undef,              $query, $simple_query, $query_cgi,
         $query_desc,        $limit, $limit_cgi,    $limit_desc,
-        $stopwords_removed, $query_type
+        $query_type
     );
 }
 

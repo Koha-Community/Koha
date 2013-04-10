@@ -53,7 +53,7 @@ $starttime = gettimeofday;
 
 #1st of all, find item MARC tag.
 my ($tagfield,$tagsubfield) = &GetMarcFromKohaField("items.itemnumber",'');
-# $dbh->do("lock tables biblio write, biblioitems write, items write, marc_biblio write, marc_subfield_table write, marc_blob_subfield write, marc_word write, marc_subfield_structure write, stopwords write");
+# $dbh->do("lock tables biblio write, biblioitems write, items write, marc_biblio write, marc_subfield_table write, marc_blob_subfield write, marc_word write, marc_subfield_structure write");
 my $sth = $dbh->prepare("SELECT biblionumber FROM biblio");
 $sth->execute;
 # my ($biblionumbermax) =  $sth->fetchrow;

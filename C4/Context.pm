@@ -128,8 +128,6 @@ C4::Context - Maintain and manipulate the context of a Koha script
 
   $Zconn = C4::Context->Zconn;
 
-  $stopwordhash = C4::Context->stopwords;
-
 =head1 DESCRIPTION
 
 When a Koha script runs, it makes use of a certain number of things:
@@ -365,7 +363,6 @@ sub new {
     return if !defined($self->{"config"});
 
     $self->{"Zconn"} = undef;    # Zebra Connections
-    $self->{"stopwords"} = undef; # stopwords list
     $self->{"marcfromkohafield"} = undef; # the hash with relations between koha table fields and MARC field/subfield
     $self->{"userenv"} = undef;        # User env
     $self->{"activeuser"} = undef;        # current active user
@@ -908,8 +905,6 @@ sub marcfromkohafield
 }
 
 # _new_marcfromkohafield
-# Internal helper function (not a method!). This creates a new
-# hash with stopwords
 sub _new_marcfromkohafield
 {
     my $dbh = C4::Context->dbh;
@@ -921,47 +916,6 @@ sub _new_marcfromkohafield
         $marcfromkohafield->{$frameworkcode}->{$kohafield} = [$tagfield,$tagsubfield];
     }
     return $marcfromkohafield;
-}
-
-=head2 stopwords
-
-  $dbh = C4::Context->stopwords;
-
-Returns a hash with stopwords.
-
-This hash is cached for future use: if you call
-C<C4::Context-E<gt>stopwords> twice, you will get the same hash without real DB access
-
-=cut
-
-#'
-sub stopwords
-{
-    my $retval = {};
-
-    # If the hash already exists, return it.
-    return $context->{"stopwords"} if defined($context->{"stopwords"});
-
-    # No hash. Create one.
-    $context->{"stopwords"} = &_new_stopwords();
-
-    return $context->{"stopwords"};
-}
-
-# _new_stopwords
-# Internal helper function (not a method!). This creates a new
-# hash with stopwords
-sub _new_stopwords
-{
-    my $dbh = C4::Context->dbh;
-    my $stopwordlist;
-    my $sth = $dbh->prepare("select word from stopwords");
-    $sth->execute;
-    while (my $stopword = $sth->fetchrow_array) {
-        $stopwordlist->{$stopword} = uc($stopword);
-    }
-    $stopwordlist->{A} = "A" unless $stopwordlist;
-    return $stopwordlist;
 }
 
 =head2 userenv

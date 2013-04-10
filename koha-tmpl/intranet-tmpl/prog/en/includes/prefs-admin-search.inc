@@ -1,5 +1,5 @@
 <div class="gradient">
-<h1 id="logo"><a href="/cgi-bin/koha/mainpage.pl">[% LibraryName %]</a></h1><!-- Begin Stopwords Resident Search Box -->
+<h1 id="logo"><a href="/cgi-bin/koha/mainpage.pl">[% LibraryName %]</a></h1>
 <div id="header_search">
 	<div id="syspref_search" class="residentsearch">
 	<p class="tip">System preference search:</p>
@@ -27,4 +27,3 @@
 			</ul>
 </div>
 </div>
-<!-- End Stopwords Resident Search Box -->

@@ -517,12 +517,12 @@ my $hits;
 my $expanded_facet = $params->{'expand'};
 
 # Define some global variables
-my ($error,$query,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit_desc,$stopwords_removed,$query_type);
+my ($error,$query,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit_desc,$query_type);
 
 my @results;
 
 ## I. BUILD THE QUERY
-( $error,$query,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit_desc,$stopwords_removed,$query_type) = buildQuery(\@operators,\@operands,\@indexes,\@limits,\@sort_by, 0, $lang);
+( $error,$query,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit_desc,$query_type) = buildQuery(\@operators,\@operands,\@indexes,\@limits,\@sort_by, 0, $lang);
 
 sub _input_cgi_parse {
     my @elements;
@@ -777,7 +777,6 @@ for (my $i=0;$i<@servers;$i++) {
             if ($query_desc || $limit_desc) {
                 $template->param(searchdesc => 1);
             }
-            $template->param(stopwords_removed => "@$stopwords_removed") if $stopwords_removed;
             $template->param(results_per_page =>  $results_per_page);
             my $hide = C4::Context->preference('OpacHiddenItems');
             $hide = ($hide =~ m/\S/) if $hide; # Just in case it has some spaces/new lines

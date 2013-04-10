@@ -92,7 +92,6 @@ our $QueryStemming = 0;
 our $QueryAutoTruncate = 0;
 our $QueryWeightFields = 0;
 our $QueryFuzzy = 0;
-our $QueryRemoveStopwords = 0;
 our $UseQueryParser = 0;
 our $marcflavour = 'MARC21';
 our $contextmodule = new Test::MockModule('C4::Context');
@@ -108,8 +107,6 @@ $contextmodule->mock('preference', sub {
         return $QueryWeightFields;
     } elsif ($pref eq 'QueryFuzzy') {
         return $QueryFuzzy;
-    } elsif ($pref eq 'QueryRemoveStopwords') {
-        return $QueryRemoveStopwords;
     } elsif ($pref eq 'UseQueryParser') {
         return $UseQueryParser;
     } elsif ($pref eq 'maxRecordsForFacets') {
@@ -212,21 +209,8 @@ sub run_marc21_search_tests {
     $QueryAutoTruncate = 0;
     $QueryWeightFields = 0;
     $QueryFuzzy = 0;
-    $QueryRemoveStopwords = 0;
     $UseQueryParser = 0;
     $marcflavour = 'MARC21';
-
-    foreach my $string ("Leçon","modèles") {
-        my @results=C4::Search::_remove_stopwords($string,"kw");
-        $debug && warn "$string ",Dump(@results);
-        ok($results[0] eq $string,"$string is not modified");
-    }
-
-    foreach my $string ("A book about the stars") {
-        my @results=C4::Search::_remove_stopwords($string,"kw");
-        $debug && warn "$string ",Dump(@results);
-        ok($results[0] ne $string,"$results[0] from $string");
-    }
 
     my $indexes = C4::Search::getIndexes();
     is(scalar(grep(/^ti$/, @$indexes)), 1, "Title index supported");
@@ -434,10 +418,10 @@ if ( $indexing_mode eq 'dom' ) {
 
     my ( $query, $simple_query, $query_cgi,
     $query_desc, $limit, $limit_cgi, $limit_desc,
-    $stopwords_removed, $query_type );
+    $query_type );
     ( $error, $query, $simple_query, $query_cgi,
     $query_desc, $limit, $limit_cgi, $limit_desc,
-    $stopwords_removed, $query_type ) = buildQuery([], [ 'salud' ], [], [], [], 0, 'en');
+    $query_type ) = buildQuery([], [ 'salud' ], [], [], [], 0, 'en');
     like($query, qr/kw\W.*salud/, "Built CCL keyword query");
 
     ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,undef,\%branches,\%itemtypes,$query_type,0);
@@ -449,7 +433,7 @@ if ( $indexing_mode eq 'dom' ) {
 
     ( $error, $query, $simple_query, $query_cgi,
     $query_desc, $limit, $limit_cgi, $limit_desc,
-    $stopwords_removed, $query_type ) = buildQuery([ 'and' ], [ 'salud', 'higiene' ], [], [], [], 0, 'en');
+    $query_type ) = buildQuery([ 'and' ], [ 'salud', 'higiene' ], [], [], [], 0, 'en');
     like($query, qr/kw\W.*salud\W.*and.*kw\W.*higiene/, "Built composed explicit-and CCL keyword query");
 
     ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,undef,\%branches,\%itemtypes,$query_type,0);
@@ -457,7 +441,7 @@ if ( $indexing_mode eq 'dom' ) {
 
     ( $error, $query, $simple_query, $query_cgi,
     $query_desc, $limit, $limit_cgi, $limit_desc,
-    $stopwords_removed, $query_type ) = buildQuery([ 'or' ], [ 'salud', 'higiene' ], [], [], [], 0, 'en');
+    $query_type ) = buildQuery([ 'or' ], [ 'salud', 'higiene' ], [], [], [], 0, 'en');
     like($query, qr/kw\W.*salud\W.*or.*kw\W.*higiene/, "Built composed explicit-or CCL keyword query");
 
     ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,undef,\%branches,\%itemtypes,$query_type,0);
@@ -465,7 +449,7 @@ if ( $indexing_mode eq 'dom' ) {
 
     ( $error, $query, $simple_query, $query_cgi,
     $query_desc, $limit, $limit_cgi, $limit_desc,
-    $stopwords_removed, $query_type ) = buildQuery([], [ 'salud', 'higiene' ], [], [], [], 0, 'en');
+    $query_type ) = buildQuery([], [ 'salud', 'higiene' ], [], [], [], 0, 'en');
     like($query, qr/kw\W.*salud\W.*and.*kw\W.*higiene/, "Built composed implicit-and CCL keyword query");
 
     ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,undef,\%branches,\%itemtypes,$query_type,0);
@@ -473,7 +457,7 @@ if ( $indexing_mode eq 'dom' ) {
 
     ( $error, $query, $simple_query, $query_cgi,
     $query_desc, $limit, $limit_cgi, $limit_desc,
-    $stopwords_removed, $query_type ) = buildQuery([], [ 'salud' ], [ 'kw' ], [ 'su-to:Laboratorios' ], [], 0, 'en');
+    $query_type ) = buildQuery([], [ 'salud' ], [ 'kw' ], [ 'su-to:Laboratorios' ], [], 0, 'en');
     like($query, qr/kw\W.*salud\W*and\W*su-to\W.*Laboratorios/, "Faceted query generated correctly");
     unlike($query_desc, qr/Laboratorios/, "Facets not included in query description");
 
@@ -483,7 +467,7 @@ if ( $indexing_mode eq 'dom' ) {
 
     ( $error, $query, $simple_query, $query_cgi,
     $query_desc, $limit, $limit_cgi, $limit_desc,
-    $stopwords_removed, $query_type ) = buildQuery([], [ '' ], [ 'kw' ], [ 'mc-itype:MP', 'mc-itype:MU' ], [], 0, 'en');
+    $query_type ) = buildQuery([], [ '' ], [ 'kw' ], [ 'mc-itype:MP', 'mc-itype:MU' ], [], 0, 'en');
 
     ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,undef,\%branches,\%itemtypes,$query_type,0);
     is($results_hashref->{biblioserver}->{hits}, 2, "getRecords generated mc-faceted search matched right number of records");
@@ -491,14 +475,14 @@ if ( $indexing_mode eq 'dom' ) {
 
     ( $error, $query, $simple_query, $query_cgi,
     $query_desc, $limit, $limit_cgi, $limit_desc,
-    $stopwords_removed, $query_type ) = buildQuery([], [ '' ], [ 'kw' ], [ 'mc-loc:GEN', 'branch:FFL' ], [], 0, 'en');
+    $query_type ) = buildQuery([], [ '' ], [ 'kw' ], [ 'mc-loc:GEN', 'branch:FFL' ], [], 0, 'en');
 
     ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,undef,\%branches,\%itemtypes,$query_type,0);
     is($results_hashref->{biblioserver}->{hits}, 2, "getRecords generated multi-faceted search matched right number of records");
 
     ( $error, $query, $simple_query, $query_cgi,
     $query_desc, $limit, $limit_cgi, $limit_desc,
-    $stopwords_removed, $query_type ) = buildQuery([], [ 'NEKLS' ], [ 'Code-institution' ], [], [], 0, 'en');
+    $query_type ) = buildQuery([], [ 'NEKLS' ], [ 'Code-institution' ], [], [], 0, 'en');
     ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,undef,\%branches,\%itemtypes,$query_type,0);
     is($results_hashref->{biblioserver}->{hits}, 12,
        'search using index whose name contains "ns" returns expected results (bug 10271)');
@@ -506,12 +490,12 @@ if ( $indexing_mode eq 'dom' ) {
     $UseQueryParser = 1;
     ( $error, $query, $simple_query, $query_cgi,
     $query_desc, $limit, $limit_cgi, $limit_desc,
-    $stopwords_removed, $query_type ) = buildQuery([], [ 'book' ], [ 'kw' ], [], [], 0, 'en');
+    $query_type ) = buildQuery([], [ 'book' ], [ 'kw' ], [], [], 0, 'en');
     ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,undef,\%branches,\%itemtypes,$query_type,0);
     is($results_hashref->{biblioserver}->{hits}, 101, "Search for 'book' with index set to 'kw' returns 101 hits");
     ( $error, $query, $simple_query, $query_cgi,
     $query_desc, $limit, $limit_cgi, $limit_desc,
-    $stopwords_removed, $query_type ) = buildQuery([ 'and' ], [ 'book', 'another' ], [ 'kw', 'kw' ], [], [], 0, 'en');
+    $query_type ) = buildQuery([ 'and' ], [ 'book', 'another' ], [ 'kw', 'kw' ], [], [], 0, 'en');
     ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,undef,\%branches,\%itemtypes,$query_type,0);
     is($results_hashref->{biblioserver}->{hits}, 1, "Search for 'kw:book && kw:another' returns 1 hit");
     $UseQueryParser = 0;
@@ -520,7 +504,7 @@ if ( $indexing_mode eq 'dom' ) {
     # are just checking that it behaves consistently
     ( $error, $query, $simple_query, $query_cgi,
     $query_desc, $limit, $limit_cgi, $limit_desc,
-    $stopwords_removed, $query_type ) = buildQuery([], [ '' ], [ 'kw' ], [ 'available' ], [], 0, 'en');
+    $query_type ) = buildQuery([], [ '' ], [ 'kw' ], [ 'available' ], [], 0, 'en');
 
     ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,undef,\%branches,\%itemtypes,$query_type,0);
     is($results_hashref->{biblioserver}->{hits}, 26, "getRecords generated availability-limited search matched right number of records");
@@ -536,37 +520,37 @@ if ( $indexing_mode eq 'dom' ) {
 
     ( $error, $query, $simple_query, $query_cgi,
     $query_desc, $limit, $limit_cgi, $limit_desc,
-    $stopwords_removed, $query_type ) = buildQuery([], [ 'pqf=@attr 1=_ALLRECORDS @attr 2=103 ""' ], [], [], [], 0, 'en');
+    $query_type ) = buildQuery([], [ 'pqf=@attr 1=_ALLRECORDS @attr 2=103 ""' ], [], [], [], 0, 'en');
 
     ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,undef,\%branches,\%itemtypes,$query_type,0);
     is($results_hashref->{biblioserver}->{hits}, 180, "getRecords on _ALLRECORDS PQF returned all records");
 
     ( $error, $query, $simple_query, $query_cgi,
     $query_desc, $limit, $limit_cgi, $limit_desc,
-    $stopwords_removed, $query_type ) = buildQuery([], [ 'pqf=@attr 1=1016 "Lessig"' ], [], [], [], 0, 'en');
+    $query_type ) = buildQuery([], [ 'pqf=@attr 1=1016 "Lessig"' ], [], [], [], 0, 'en');
 
     ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,undef,\%branches,\%itemtypes,$query_type,0);
     is($results_hashref->{biblioserver}->{hits}, 4, "getRecords PQF author search for Lessig returned proper number of matches");
 
     ( $error, $query, $simple_query, $query_cgi,
     $query_desc, $limit, $limit_cgi, $limit_desc,
-    $stopwords_removed, $query_type ) = buildQuery([], [ 'ccl=au:Lessig' ], [], [], [], 0, 'en');
+    $query_type ) = buildQuery([], [ 'ccl=au:Lessig' ], [], [], [], 0, 'en');
 
     ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,undef,\%branches,\%itemtypes,$query_type,0);
     is($results_hashref->{biblioserver}->{hits}, 4, "getRecords CCL author search for Lessig returned proper number of matches");
 
     ( $error, $query, $simple_query, $query_cgi,
     $query_desc, $limit, $limit_cgi, $limit_desc,
-    $stopwords_removed, $query_type ) = buildQuery([], [ 'cql=dc.author any lessig' ], [], [], [], 0, 'en');
+    $query_type ) = buildQuery([], [ 'cql=dc.author any lessig' ], [], [], [], 0, 'en');
 
     ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,undef,\%branches,\%itemtypes,$query_type,0);
     is($results_hashref->{biblioserver}->{hits}, 4, "getRecords CQL author search for Lessig returned proper number of matches");
 
-    $QueryStemming = $QueryAutoTruncate = $QueryFuzzy = $QueryRemoveStopwords = 0;
+    $QueryStemming = $QueryAutoTruncate = $QueryFuzzy = 0;
     $QueryWeightFields = 1;
     ( $error, $query, $simple_query, $query_cgi,
     $query_desc, $limit, $limit_cgi, $limit_desc,
-    $stopwords_removed, $query_type ) = buildQuery([], [ 'salud' ], [ 'kw' ], [], [], 0, 'en');
+    $query_type ) = buildQuery([], [ 'salud' ], [ 'kw' ], [], [], 0, 'en');
 
     ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,undef,\%branches,\%itemtypes,$query_type,0);
     is($results_hashref->{biblioserver}->{hits}, 19, "Weighted query returned correct number of results");
@@ -577,64 +561,64 @@ if ( $indexing_mode eq 'dom' ) {
         is(MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[0],'UTF-8')->title_proper(), 'Salud y seguridad de los trabajadores del sector salud: manual para gerentes y administradores^ies', "Weighted query returns best match first");
     }
 
-    $QueryStemming = $QueryWeightFields = $QueryFuzzy = $QueryRemoveStopwords = 0;
+    $QueryStemming = $QueryWeightFields = $QueryFuzzy = 0;
     $QueryAutoTruncate = 1;
     ( $error, $query, $simple_query, $query_cgi,
     $query_desc, $limit, $limit_cgi, $limit_desc,
-    $stopwords_removed, $query_type ) = buildQuery([], [ 'medic' ], [ 'kw' ], [], [], 0, 'en');
+    $query_type ) = buildQuery([], [ 'medic' ], [ 'kw' ], [], [], 0, 'en');
 
     ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,undef,\%branches,\%itemtypes,$query_type,0);
     is($results_hashref->{biblioserver}->{hits}, 5, "Search for 'medic' returns matches  with automatic truncation on");
 
     ( $error, $query, $simple_query, $query_cgi,
     $query_desc, $limit, $limit_cgi, $limit_desc,
-    $stopwords_removed, $query_type ) = buildQuery([], [ 'medic*' ], [ 'kw' ], [], [], 0, 'en');
+    $query_type ) = buildQuery([], [ 'medic*' ], [ 'kw' ], [], [], 0, 'en');
 
     ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,undef,\%branches,\%itemtypes,$query_type,0);
     is($results_hashref->{biblioserver}->{hits}, 5, "Search for 'medic*' returns matches with automatic truncation on");
 
-    $QueryStemming = $QueryFuzzy = $QueryRemoveStopwords = $QueryAutoTruncate = 0;
+    $QueryStemming = $QueryFuzzy = $QueryAutoTruncate = 0;
     $QueryWeightFields = 1;
     ( $error, $query, $simple_query, $query_cgi,
     $query_desc, $limit, $limit_cgi, $limit_desc,
-    $stopwords_removed, $query_type ) = buildQuery([], [ 'web application' ], [ 'kw' ], [], [], 0, 'en');
+    $query_type ) = buildQuery([], [ 'web application' ], [ 'kw' ], [], [], 0, 'en');
     ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,undef,\%branches,\%itemtypes,$query_type,0);
     is($results_hashref->{biblioserver}->{hits}, 1, "Search for 'web application' returns one hit with QueryWeightFields on");
 
     ( $error, $query, $simple_query, $query_cgi,
     $query_desc, $limit, $limit_cgi, $limit_desc,
-    $stopwords_removed, $query_type ) = buildQuery([], [ 'web "application' ], [ 'kw' ], [], [], 0, 'en');
+    $query_type ) = buildQuery([], [ 'web "application' ], [ 'kw' ], [], [], 0, 'en');
     ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,undef,\%branches,\%itemtypes,$query_type,0);
     is($results_hashref->{biblioserver}->{hits}, 1, "Search for 'web \"application' returns one hit with QueryWeightFields on (bug 7518)");
 
-    $QueryStemming = $QueryWeightFields = $QueryFuzzy = $QueryRemoveStopwords = $QueryAutoTruncate = 0;
+    $QueryStemming = $QueryWeightFields = $QueryFuzzy = $QueryAutoTruncate = 0;
     ( $error, $query, $simple_query, $query_cgi,
     $query_desc, $limit, $limit_cgi, $limit_desc,
-    $stopwords_removed, $query_type ) = buildQuery([], [ 'medic' ], [ 'kw' ], [], [], 0, 'en');
+    $query_type ) = buildQuery([], [ 'medic' ], [ 'kw' ], [], [], 0, 'en');
 
     ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,undef,\%branches,\%itemtypes,$query_type,0);
     is($results_hashref->{biblioserver}->{hits}, undef, "Search for 'medic' returns no matches with automatic truncation off");
 
     ( $error, $query, $simple_query, $query_cgi,
     $query_desc, $limit, $limit_cgi, $limit_desc,
-    $stopwords_removed, $query_type ) = buildQuery([], [ 'medic*' ], [ 'kw' ], [], [], 0, 'en');
+    $query_type ) = buildQuery([], [ 'medic*' ], [ 'kw' ], [], [], 0, 'en');
 
     ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,undef,\%branches,\%itemtypes,$query_type,0);
     is($results_hashref->{biblioserver}->{hits}, 5, "Search for 'medic*' returns matches with automatic truncation off");
 
     $QueryStemming = $QueryWeightFields = 1;
-    $QueryFuzzy = $QueryRemoveStopwords = $QueryAutoTruncate = 0;
+    $QueryFuzzy = $QueryAutoTruncate = 0;
     ( $error, $query, $simple_query, $query_cgi,
     $query_desc, $limit, $limit_cgi, $limit_desc,
-    $stopwords_removed, $query_type ) = buildQuery([], [ 'pressed' ], [ 'kw' ], [], [], 0, 'en');
+    $query_type ) = buildQuery([], [ 'pressed' ], [ 'kw' ], [], [], 0, 'en');
 
     ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,undef,\%branches,\%itemtypes,$query_type,0);
     is($results_hashref->{biblioserver}->{hits}, 7, "Search for 'pressed' returns matches when stemming (and query weighting) is on");
 
-    $QueryStemming = $QueryWeightFields = $QueryFuzzy = $QueryRemoveStopwords = $QueryAutoTruncate = 0;
+    $QueryStemming = $QueryWeightFields = $QueryFuzzy = $QueryAutoTruncate = 0;
     ( $error, $query, $simple_query, $query_cgi,
     $query_desc, $limit, $limit_cgi, $limit_desc,
-    $stopwords_removed, $query_type ) = buildQuery([], [ 'pressed' ], [ 'kw' ], [], [], 0, 'en');
+    $query_type ) = buildQuery([], [ 'pressed' ], [ 'kw' ], [], [], 0, 'en');
 
     ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,undef,\%branches,\%itemtypes,$query_type,0);
     is($results_hashref->{biblioserver}->{hits}, undef, "Search for 'pressed' returns no matches when stemming is off");
@@ -718,49 +702,49 @@ if ( $indexing_mode eq 'dom' ) {
     $term = 'Arizona';
     ( $error, $query, $simple_query, $query_cgi,
     $query_desc, $limit, $limit_cgi, $limit_desc,
-    $stopwords_removed, $query_type ) = buildQuery([], [ $term ], [ 'su-br' ], [  ], [], 0, 'en');
+    $query_type ) = buildQuery([], [ $term ], [ 'su-br' ], [  ], [], 0, 'en');
     matchesExplodedTerms("Advanced search for broader subjects", $query, 'Arizona', 'United States');
 
     ( $error, $query, $simple_query, $query_cgi,
     $query_desc, $limit, $limit_cgi, $limit_desc,
-    $stopwords_removed, $query_type ) = buildQuery([], [ $term ], [ 'su-na' ], [  ], [], 0, 'en');
+    $query_type ) = buildQuery([], [ $term ], [ 'su-na' ], [  ], [], 0, 'en');
     matchesExplodedTerms("Advanced search for narrower subjects", $query, 'Arizona', 'Maricopa County', 'Navajo County', 'Pima County');
 
     ( $error, $query, $simple_query, $query_cgi,
     $query_desc, $limit, $limit_cgi, $limit_desc,
-    $stopwords_removed, $query_type ) = buildQuery([], [ $term ], [ 'su-rl' ], [  ], [], 0, 'en');
+    $query_type ) = buildQuery([], [ $term ], [ 'su-rl' ], [  ], [], 0, 'en');
     matchesExplodedTerms("Advanced search for related subjects", $query, 'Arizona', 'United States', 'Maricopa County', 'Navajo County', 'Pima County');
 
     ( $error, $query, $simple_query, $query_cgi,
     $query_desc, $limit, $limit_cgi, $limit_desc,
-    $stopwords_removed, $query_type ) = buildQuery([], [ "$term", 'history' ], [ 'su-rl', 'kw' ], [  ], [], 0, 'en');
+    $query_type ) = buildQuery([], [ "$term", 'history' ], [ 'su-rl', 'kw' ], [  ], [], 0, 'en');
     matchesExplodedTerms("Advanced search for related subjects and keyword 'history' searches related subjects", $query, 'Arizona', 'United States', 'Maricopa County', 'Navajo County', 'Pima County');
     like($query, qr/history/, "Advanced search for related subjects and keyword 'history' searches for 'history'");
 
     ( $error, $query, $simple_query, $query_cgi,
     $query_desc, $limit, $limit_cgi, $limit_desc,
-    $stopwords_removed, $query_type ) = buildQuery([], [ 'history', "$term" ], [ 'kw', 'su-rl' ], [  ], [], 0, 'en');
+    $query_type ) = buildQuery([], [ 'history', "$term" ], [ 'kw', 'su-rl' ], [  ], [], 0, 'en');
     matchesExplodedTerms("Order of terms doesn't matter for advanced search", $query, 'Arizona', 'United States', 'Maricopa County', 'Navajo County', 'Pima County');
     like($query, qr/history/, "Order of terms doesn't matter for advanced search");
 
     ( $error, $query, $simple_query, $query_cgi,
     $query_desc, $limit, $limit_cgi, $limit_desc,
-    $stopwords_removed, $query_type ) = buildQuery([], [ "su-br($term)" ], [  ], [  ], [], 0, 'en');
+    $query_type ) = buildQuery([], [ "su-br($term)" ], [  ], [  ], [], 0, 'en');
     matchesExplodedTerms("Simple search for broader subjects", $query, 'Arizona', 'United States');
 
     ( $error, $query, $simple_query, $query_cgi,
     $query_desc, $limit, $limit_cgi, $limit_desc,
-    $stopwords_removed, $query_type ) = buildQuery([], [ "su-na($term)" ], [  ], [  ], [], 0, 'en');
+    $query_type ) = buildQuery([], [ "su-na($term)" ], [  ], [  ], [], 0, 'en');
     matchesExplodedTerms("Simple search for narrower subjects", $query, 'Arizona', 'Maricopa County', 'Navajo County', 'Pima County');
 
     ( $error, $query, $simple_query, $query_cgi,
     $query_desc, $limit, $limit_cgi, $limit_desc,
-    $stopwords_removed, $query_type ) = buildQuery([], [ "su-rl($term)" ], [  ], [  ], [], 0, 'en');
+    $query_type ) = buildQuery([], [ "su-rl($term)" ], [  ], [  ], [], 0, 'en');
     matchesExplodedTerms("Simple search for related subjects", $query, 'Arizona', 'United States', 'Maricopa County', 'Navajo County', 'Pima County');
 
     ( $error, $query, $simple_query, $query_cgi,
     $query_desc, $limit, $limit_cgi, $limit_desc,
-    $stopwords_removed, $query_type ) = buildQuery([], [ "history && su-rl($term)" ], [  ], [  ], [], 0, 'en');
+    $query_type ) = buildQuery([], [ "history && su-rl($term)" ], [  ], [  ], [], 0, 'en');
     matchesExplodedTerms("Simple search for related subjects and keyword 'history' searches related subjects", $query, 'Arizona', 'United States', 'Maricopa County', 'Navajo County', 'Pima County');
     like($query, qr/history/, "Simple search for related subjects and keyword 'history' searches for 'history'");
 
@@ -907,7 +891,6 @@ sub run_unimarc_search_tests {
     $QueryAutoTruncate = 0;
     $QueryWeightFields = 0;
     $QueryFuzzy = 0;
-    $QueryRemoveStopwords = 0;
     $UseQueryParser = 0;
     $marcflavour = 'UNIMARC';
 

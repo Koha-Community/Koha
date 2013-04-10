@@ -37,7 +37,6 @@ foreach ( @SEARCH ) {
         $limit,
         $limit_cgi,
         $limit_desc,
-        $stopwords_removed,
         $query_type )
       = buildQuery( $_->{operators}, $_->{operands}, $_->{indexes}, $_->{limits}, $_->{sort_by}, 0,  $_->{lang} );
 
@@ -63,9 +62,6 @@ foreach ( @SEARCH ) {
 
     $expected = $_->{limit_desc};
     push @mismatch, "Limit desc: $limit_desc (not: $expected)" unless $limit_desc eq $expected;
-
-    $expected = $_->{stopwords_removed};
-    push @mismatch, "Stopwords removed: $stopwords_removed (not: $expected)" unless $stopwords_removed eq $expected;
 
     $expected = $_->{query_type};
     push @mismatch, "Query Type: $query_type (not: $expected)" unless $query_type eq $expected;
