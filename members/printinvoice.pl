@@ -47,7 +47,6 @@ my ($template, $loggedinuser, $cookie)
 
 my $borrowernumber=$input->param('borrowernumber');
 my $action = $input->param('action') || '';
-my $accountno = $input->param('accountno');
 my $accountlines_id = $input->param('accountlines_id');
 
 #get borrower details
@@ -74,7 +73,7 @@ my @accountrows; # this is for the tmpl-loop
 
 my $toggle;
 for (my $i=0;$i<$numaccts;$i++){
-   next if ($accts->[$i]{'accountno'} ne $accountno);
+   next if ($accts->[$i]{'accountlines_id'} ne $accountlines_id );
     if($i%2){
             $toggle = 0;
     } else {
