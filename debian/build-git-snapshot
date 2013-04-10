@@ -30,7 +30,7 @@ use POSIX qw/strftime/;
 my $buildresult;
 my $distribution='squeeze-dev';
 my $git_checks='all';
-my $version='3.12-1~git';
+my $version='3.13-1~git';
 my $auto_version=1;
 my $need_help;
 my $debug;
@@ -108,7 +108,7 @@ Options:
         tracked files with untracked changes will cause an error), and 'none'
         (checking git status is skipped totally.) Default is 'all'.
     --version, -v
-        the version string for the resulting package. Default is '3.5-1~git'.
+        the version string for the resulting package. Default is '$version'.
     --(no)autoversion
         whether or not to use the date and git commit ID in the version value.
         Default is to include it.
