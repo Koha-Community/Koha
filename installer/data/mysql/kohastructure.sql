@@ -2007,15 +2007,6 @@ CREATE TABLE `statistics` ( -- information related to transactions (circulation 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Table structure for table `stopwords`
---
-
-DROP TABLE IF EXISTS `stopwords`;
-  CREATE TABLE `stopwords` (
-  `word` varchar(255) default NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
 -- Table structure for table subscription_frequencies
 --
 
