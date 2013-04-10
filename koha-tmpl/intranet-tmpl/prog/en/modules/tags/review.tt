@@ -239,8 +239,8 @@ td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
   </table>
   [% END %]
     [% IF ( tagloop ) %]<fieldset class="action">
-   <input type="submit" value="Approve" id="approve_button" name="op" />
-   <input type="submit" value="Reject"  id="reject_button"  name="op" />
+   <input type="submit" value="Approve" id="approve_button" name="op-approve" />
+   <input type="submit" value="Reject"  id="reject_button"  name="op-reject" />
   </fieldset>[% END %]
   </form>
 </div>
@@ -268,7 +268,7 @@ td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
    <div class="description">Enter a word or phrase to check against approved/rejected lists: </div>
    <form method="post" action="/cgi-bin/koha/tags/review.pl">
    <input type="text" size="14" name="test" id="test" />
-   <fieldset class="action"><input type="submit" value="Test" id="test_button" name="op" /></fieldset>
+   <fieldset class="action"><input type="submit" value="Test" id="test_button" name="op-test" /></fieldset>
    <div id="verdict">
 	[% IF ( test_term ) %]
 	[% IF ( verdict_ok ) %]
