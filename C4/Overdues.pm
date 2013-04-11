@@ -540,8 +540,9 @@ sub UpdateFine {
                 next;
             }
         }
-        $total_amount_other += $rec->{'amount'};
+        $total_amount_other += $rec->{'amountoutstanding'};
     }
+
     if (my $maxfine = C4::Context->preference('MaxFine')) {
         if ($total_amount_other + $amount > $maxfine) {
             my $new_amount = $maxfine - $total_amount_other;
