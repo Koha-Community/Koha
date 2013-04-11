@@ -91,10 +91,8 @@ sub login_cas {
 sub login_cas_url {
 
     my ($query, $key) = @_;
-    my $uri = C4::Context->preference('OPACBaseURL') . $query->script_name();
+    my $uri = C4::Context->preference('OPACBaseURL') . $query->url( -absolute => 1, -query => 1 );
     my $casparam = $query->param('cas');
-    # FIXME: This should be more generic and handle whatever parameters there might be
-    $uri .= "?cas=" . $casparam if (defined $casparam);
     $casparam = $defaultcasserver if (not defined $casparam);
     $casparam = $key if (defined $key);
     my $cas = Authen::CAS::Client->new($casservers->{$casparam});
