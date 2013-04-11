@@ -26,8 +26,6 @@ use C4::Context;
 use C4::Output;
 use C4::UploadedFiles;
 
-my $upload_path = C4::Context->preference('uploadPath');
-
 sub plugin_parameters {
     my ( $dbh, $record, $tagslib, $i, $tabloop ) = @_;
     return "";
@@ -115,6 +113,7 @@ sub plugin {
             -size => 50,
         );
 
+        my $upload_path = C4::Context->preference('uploadPath');
         my $dirs_tree = [ {
             name => '/',
             value => '/',
@@ -137,7 +136,8 @@ sub plugin {
 
 # Build a hierarchy of directories
 sub finddirs {
-    my $base = shift || $upload_path;
+    my $base = shift;
+    my $upload_path = C4::Context->preference('uploadPath');
     my $found = 0;
     my @dirs;
     my @files = glob("$base/*");
