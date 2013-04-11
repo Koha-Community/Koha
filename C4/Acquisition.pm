@@ -1355,7 +1355,8 @@ sub ModReceiveOrder {
         $order->{'rrp'} = $rrp;
         $order->{ecost} = $ecost;
         $order->{'orderstatus'} = 3;    # totally received
-        $new_ordernumber = NewOrder($order);
+        my $basketno;
+        ( $basketno, $new_ordernumber ) = NewOrder($order);
 
         if ($received_items) {
             foreach my $itemnumber (@$received_items) {
