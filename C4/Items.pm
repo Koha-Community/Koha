@@ -2254,6 +2254,7 @@ sub _koha_modify_item {
     my $query = "UPDATE items SET ";
     my @bind;
     for my $key ( keys %$item ) {
+        next if ( $key eq 'itemnumber' );
         $query.="$key=?,";
         push @bind, $item->{$key};
     }
