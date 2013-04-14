@@ -60,11 +60,11 @@
                         [% CASE '1' %] Placed on (to)
                         [% CASE '2' %] Received on (from)
                         [% CASE '3' %] Received on (to)
-                        [% CASE '4' %] Supplier
-                        [% CASE '5' %] Home branch
+                        [% CASE '4' %] Vendor
+                        [% CASE '5' %] Home library
                         [% CASE '6' %] Collection
                         [% CASE '7' %] Item type
-                        [% CASE '8' %] Budget
+                        [% CASE '8' %] Fund
                         [% CASE '9' %] Sort1
                         [% CASE '10' %] Sort2
                         [% CASE %] Unknown filter
@@ -173,7 +173,7 @@
 				<td><input type="radio" name="Column" value="aqbooksellers.name" /></td>
                 <td>
                     <select name="Filter">
-                        <option value="">All suppliers</option>
+                        <option value="">All vendors</option>
                         [% FOREACH bookseller IN booksellers %]
                             <option value="[% bookseller.name %]">[% bookseller.name %]</option>
                         [% END %]
@@ -181,12 +181,12 @@
                 </td>
             </tr>
             <tr>
-                <td>Home branch</td>
+                <td>Home library</td>
                 <td><input type="radio" name="Line" value="items.homebranch" /></td>
                 <td><input type="radio" name="Column" value="items.homebranch" /></td>
                 <td>
                     <select name="Filter">
-                        <option value="" selected="selected">All branches</option>
+                        <option value="" selected="selected">All libraries</option>
                         [% FOREACH branch IN branches %]
                             <option value="[% branch.branchcode %]">[% branch.branchname %]</option>
                         [% END %]
@@ -224,7 +224,7 @@
 			</tr>
 
 			<tr>
-				<td>Budget</td>
+				<td>Fund</td>
 				<td><input type="radio" name="Line" value="aqbudgets.budget_code" /></td>
 				<td><input type="radio" name="Column" value="aqbudgets.budget_code" /></td>
 				<td>[% CGIBudget %]</td>

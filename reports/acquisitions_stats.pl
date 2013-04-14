@@ -128,7 +128,7 @@ else {
     my @select;
     my %select;
     push @select, "";
-    $select{''} = "All Item Types";
+    $select{''} = "All item types";
     while ( my ( $value, $desc ) = $req->fetchrow ) {
         push @select, $value;
         $select{$value} = $desc;
@@ -147,7 +147,7 @@ else {
     undef @select;
     undef %select;
     push @select, "";
-    $select{''} = "All budgets";
+    $select{''} = "All funds";
 
     while ( my ( $value, $desc ) = $req->fetchrow ) {
         push @select, $value;
