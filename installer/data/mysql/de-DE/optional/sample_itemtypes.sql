@@ -5,4 +5,4 @@ INSERT INTO `itemtypes` VALUES ('MP', 'Karten',0,0,'bridge/map.gif','');
 INSERT INTO `itemtypes` VALUES ('VM', 'AV-Medien',0,1,'bridge/dvd.gif','');
 INSERT INTO `itemtypes` VALUES ('MU', 'Musik',0,0,'bridge/sound.gif','');
 INSERT INTO `itemtypes` VALUES ('CR', 'Zeitschriften',0,0,'bridge/periodical.gif','');
-INSERT INTO `itemtypes` VALUES ('REF', 'Nachschlagewerke',0,1,'','');
+INSERT INTO `itemtypes` VALUES ('REF', 'Nachschlagewerke',0,1,'bridge/reference.gif','');

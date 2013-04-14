@@ -9,9 +9,9 @@ INSERT INTO `creator_layouts` VALUES (17,'CODE39',1,'BIBBAR','Label Test',0,'TR'
   </images>
   <text>&lt;firstname&gt; &lt;surname&gt;</text>
   <text enable="1" font="TR" font_size="10" llx="100" lly="100" text_alignment="L" />
-  <text>Branch: &lt;branchcode&gt;</text>
+  <text>Bibliothek: &lt;branchcode&gt;</text>
   <text enable="1" font="TR" font_size="10" llx="100" lly="75" text_alignment="L" />
-  <text>Expires: August 31, 2010</text>
+  <text>Ablaufdatum: 31.06.2014</text>
   <text font="TR" font_size="6" llx="115" lly="65" text_alignment="L" />
 </opt>
 ','Patroncards');
