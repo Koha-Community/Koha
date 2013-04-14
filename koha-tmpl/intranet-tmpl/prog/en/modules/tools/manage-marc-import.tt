@@ -1,6 +1,6 @@
 [% BLOCK final_match_link %]
     [% IF ( record.record_type == 'biblio' ) %]
-        <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% record.final_match_id %]">[% record.final_match_id %]</a>
+        <a target="_blank" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% record.final_match_id %]">[% record.final_match_id %]</a>
     [% ELSIF ( record.record_type == 'auth' ) %]
         <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% record.final_match_id %]">[% record.final_match_id %]</a>
     [% END %]
