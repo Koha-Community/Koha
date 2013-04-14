@@ -1,6 +1,6 @@
-INSERT INTO `currency` (currency, rate, symbol) VALUES
-('USD', 1.2334, '$'),
-('GBP', 0.85640, '£'),
-('CAD', 1.31690, '$'),
-('EUR', 1.0, '€');
+INSERT INTO `currency` (currency, rate, symbol, active) VALUES
+('USD', 1.3112, '$', 0),
+('GBP', 0.8548, '£', 0),
+('CAD', 1.3290, '$', 0),
+('EUR', 1.0000, '€', 1);
 
