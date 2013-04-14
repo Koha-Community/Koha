@@ -127,7 +127,7 @@ $(document).ready(function() {
                 <li>Publication year: [% publicationyear %]</li>
               [% END %]
               [% IF ( branch ) %]
-                <li>Branch: [% branchname %]</li>
+                <li>Library: [% branchname %]</li>
               [% END %]
             </ul>
           </p>
@@ -147,7 +147,7 @@ $(document).ready(function() {
             <input type="text" id="invoicenumber" name="invoicenumber" value="[% invoicenumber %]" />
           </li>
           <li>
-            <label for="supplier">Supplier:</label>
+            <label for="supplier">Vendor:</label>
             <select id="supplier" name="supplierid">
               <option value="">All</option>
               [% FOREACH supplier IN suppliers_loop %]
