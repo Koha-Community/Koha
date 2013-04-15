@@ -30,10 +30,9 @@ override_dh_auto_install:
 #	ln -s /usr/share/javascript/jquery/jquery.js \
 #	   $(TMP)/usr/share/koha/opac/htdocs/opac-tmpl/prog/en/lib/jquery/jquery.js
 	rm -r \
-		$(TMP)/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/js/tinymce
-		mkdir -p $(TMP)/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/js/tinymce/jscripts
+		$(TMP)/usr/share/koha/intranet/htdocs/intranet-tmpl/lib/tiny_mce
 	ln -s /usr/share/tinymce2/www \
-              $(TMP)/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/js/tinymce/jscripts/tiny_mce
+              $(TMP)/usr/share/koha/intranet/htdocs/intranet-tmpl/lib/tiny_mce
 	rm -r \
 		$(TMP)/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/lib/yui
 	ln -s /usr/share/javascript/yui \
