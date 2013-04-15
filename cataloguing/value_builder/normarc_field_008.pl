@@ -58,7 +58,7 @@ function Focus$function_name(subfield_managed) {
 	if ( document.getElementById(\"$field_number\").value ) {
 	}
 	else {
-        document.getElementById(\"$field_number\").value='$dateentered' + 't        xxu||||| |||| 00| 0 $lang d';
+        document.getElementById(\"$field_number\").value='$dateentered' + 't        no ||||| |||| 00| 0 $lang d';
 	}
     return 1;
 }
@@ -101,7 +101,7 @@ sub plugin {
     );
 
     #	$result = "      t        xxu           00  0 eng d" unless $result;
-    $result = "$dateentered" . "t        xxu||||| |||| 00| 0 $lang d" unless $result;
+    $result = "$dateentered" . "t        no ||||| |||| 00| 0 $lang d" unless $result;
     my $f1    = substr($result, 0,  6);
     my $f6    = substr($result, 6,  1);
     my $f710  = substr($result, 7,  4);
