@@ -243,6 +243,8 @@ sub Z3950Search {
     my $lccn= $pars->{lccn};
     my $lccall= $pars->{lccall};
     my $controlnumber= $pars->{controlnumber};
+    my $srchany= $pars->{srchany};
+    my $stdid= $pars->{stdid};
 
     my $show_next       = 0;
     my $total_pages     = 0;
@@ -280,12 +282,10 @@ sub Z3950Search {
         $nterms++;
     }
     if ($title) {
-        utf8::decode($title);
         $query .= " \@attr 1=4 \"$title\" ";
         $nterms++;
     }
     if ($author) {
-        utf8::decode($author);
         $query .= " \@attr 1=1003 \"$author\" ";
         $nterms++;
     }
@@ -294,7 +294,6 @@ sub Z3950Search {
         $nterms++;
     }
     if ($subject) {
-        utf8::decode($subject);
         $query .= " \@attr 1=21 \"$subject\" ";
         $nterms++;
     }
@@ -308,6 +307,14 @@ sub Z3950Search {
     }
     if ($controlnumber) {
         $query .= " \@attr 1=12 \"$controlnumber\" ";
+        $nterms++;
+    }
+    if($srchany) {
+        $query .= " \@attr 1=1016 \"$srchany\" ";
+        $nterms++;
+    }
+    if($stdid) {
+        $query .= " \@attr 1=1007 \"$stdid\" ";
         $nterms++;
     }
     for my $i (1..$nterms-1) {
