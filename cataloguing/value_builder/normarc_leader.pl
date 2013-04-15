@@ -45,7 +45,7 @@ my $res="
 
 function Focus$function_name(subfield_managed) {
     if(!document.getElementById(\"$field_number\").value){
-        document.getElementById(\"$field_number\").value = '     nam a22     2  4500';
+        document.getElementById(\"$field_number\").value = '     nam a22     1  4500';
     }
     return 1;
 }
@@ -81,7 +81,7 @@ my ($template, $loggedinuser, $cookie)
 			     flagsrequired => {editcatalogue => 1},
 			     debug => 1,
 			     });
-	$result = "     nam a22     2  4500" unless $result;
+	$result = "     nam a22     1  4500" unless $result;
 	my $f5 = substr($result,5,1);
 	my $f6 = substr($result,6,1);
 	my $f7 = substr($result,7,1);
