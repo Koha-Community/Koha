@@ -21,14 +21,7 @@ tinyMCE.init({
 });
 //]]>
 </script>
-[% IF ( intranetstylesheet ) %]
-    <link rel="stylesheet" type="text/css" href="[% intranetstylesheet %]" />
-[% ELSE %]
-    <link rel="stylesheet" type="text/css" href="[% themelang %]/css/staff-global.css" />
-[% END %]
-[% IF ( intranetcolorstylesheet ) %]
-    <link rel="stylesheet" type="text/css" href="[% themelang %]/css/[% intranetcolorstylesheet %]" />
-[% END %]
+[% INCLUDE intranetstylesheet.inc %]
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/help.css" />
 </head>
 <body id="help">

@@ -3,12 +3,7 @@
 <link rel="stylesheet" type="text/css" href="[% interface %]/lib/jquery/jquery-ui.css" />
 <link rel="stylesheet" type="text/css" href="[% interface %]/lib/bootstrap/bootstrap.min.css" />
 <link rel="stylesheet" type="text/css" media="print" href="[% themelang %]/css/print.css" />
-[% SET intranetstylesheet='staff-global.css' UNLESS intranetstylesheet %]
-[% IF (intranetstylesheet.match('^https?:|^\/')) %]
-    <link rel="stylesheet" type="text/css" href="[% intranetstylesheet %]" />
-[% ELSE %]
-    <link rel="stylesheet" type="text/css" href="[% themelang %]/css/[% intranetstylesheet %]" />
-[% END %]
+[% INCLUDE intranetstylesheet.inc %]
 [% IF ( bidi ) %]
    <link rel="stylesheet" type="text/css" href="[% themelang %]/css/right-to-left.css" />
 [% END %]
@@ -26,15 +21,6 @@
 [% END %]
 [% IF ( wizard ) %]
     <link rel="stylesheet" type="text/css" href="[% themelang %]/css/wizard.css" />
-[% END %]
-
-<!-- local colors -->
-[% IF ( intranetcolorstylesheet ) %]
-    [% IF (intranetcolorstylesheet.match('^https?:|^\/')) %]
-        <link rel="stylesheet" type="text/css" href="[% intranetcolorstylesheet %]" />
-    [% ELSE %]
-        <link rel="stylesheet" type="text/css" href="[% themelang %]/css/[% intranetcolorstylesheet %]" />
-    [% END %]
 [% END %]
 
 <!-- yui js --> 
