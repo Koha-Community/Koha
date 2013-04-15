@@ -11,10 +11,10 @@ Staff Client:
               class: url
             - .
         -
-            - Include the stylesheet at
+            - Use the CSS stylesheet
             - pref: intranetstylesheet
               class: url
-            - on all pages in the staff interface, instead of the default. (This should be a complete URL, starting with <code>http://</code>.)
+            - on all pages in the staff interface, instead of the default css (used when leaving this field blank). Enter just a filename, a full local path or a complete URL starting with <code>http://</code> (if the file lives on a remote server). Please note that if you just enter a filename, the file should be in the css subdirectory for each active theme and language within the Koha templates directory. A full local path is expected to start from your HTTP document root.
         -
             - "Use the following JavaScript for printing slips. Define at least function printThenClose(). For use e.g. with Firefox PlugIn jsPrintSetup, see http://jsprintsetup.mozdev.org/:"
             - pref: IntranetSlipPrinterJS
@@ -26,10 +26,10 @@ Staff Client:
               type: textarea
               class: code
         -
-            - Include the stylesheet <code><!-- TMPL_VAR NAME="themelang" -->/css/</code>
+            - Include the additional CSS stylesheet
             - pref: intranetcolorstylesheet
               class: file
-            - on all pages in the staff interface. (Leave blank to disable.)
+            - to override specified settings from the default stylesheet (leave blank to disable.) Enter just a filename, a full local path or a complete URL starting with <code>http://</code> (if the file lives on a remote server). Please note that if you just enter a filename, the file should be in the css subdirectory for each active theme and language within the Koha templates directory. A full local path is expected to start from your HTTP document root.
         -
             - Use include files from the
             - pref: intranet_includes
