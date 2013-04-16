@@ -34,54 +34,56 @@
   <div id="yui-main">
     <div class="yui-b">
       [% IF ( modified ) %]
-        <div class="dialog">
+        <div class="dialog message">
           <p>Invoice has been modified</p>
         </div>
       [% END %]
       <h1>Invoice: [% invoicenumber %]</h1>
 
       <p>Vendor: <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]">[% suppliername %]</a></p>
-      <form action="" method="post">
-        <fieldset>
-          <label for="shipmentdate">Shipment date:</label>
-          <input type="text" size="10" id="shipmentdate" name="shipmentdate" value="[% shipmentdate | $KohaDates %]" readonly="readonly" class="datepicker" />
-          <p></p>
-          <label for="billingdate">Billing date:</label>
-          <input type="text" size="10" id="billingdate" name="billingdate" value="[% billingdate | $KohaDates %]" readonly="readonly" class="datepicker" />
-          <p></p>
-          <label for="shipmentcost">Shipment cost:</label>
-          <input type="text" size="10" id="shipmentcost" name="shipmentcost" value="[% shipmentcost %]" />
-          <label for="shipment_budget_id">Fund:</label>
-          <select id="shipment_budget_id" name="shipment_budget_id">
-              <option value="">No fund</option>
-            [% FOREACH budget IN budgets_loop %]
-              [% IF ( budget.selected ) %]
-                <option selected="selected" value="[% budget.budget_id %]">
-              [% ELSE %]
-                <option value="[% budget.budget_id %]">
-              [% END %]
-                [% budget.budget_name %]
-              </option>
+        <form action="/cgi-bin/koha/acqui/invoice.pl" method="post">
+        <fieldset class="rows">
+            <ol>
+            <li><label for="shipmentdate">Shipment date:</label>
+                    <input type="text" size="10" id="shipmentdate" name="shipmentdate" value="[% shipmentdate | $KohaDates %]" readonly="readonly" class="datepicker" /></li>
+
+            <li><label for="billingdate">Billing date:</label>
+                    <input type="text" size="10" id="billingdate" name="billingdate" value="[% billingdate | $KohaDates %]" readonly="readonly" class="datepicker" /></li>
+
+            <li><label for="shipmentcost">Shipment cost:</label>
+                    <input type="text" size="10" id="shipmentcost" name="shipmentcost" value="[% shipmentcost %]" /></li>
+            <li><label for="shipment_budget_id">Fund:</label>
+                    <select id="shipment_budget_id" name="shipment_budget_id">
+                        <option value="">No fund</option>
+                      [% FOREACH budget IN budgets_loop %]
+                        [% IF ( budget.selected ) %]
+                          <option selected="selected" value="[% budget.budget_id %]">
+                        [% ELSE %]
+                          <option value="[% budget.budget_id %]">
+                        [% END %]
+                          [% budget.budget_name %]
+                        </option>
+                      [% END %]
+                    </select></li>
+
+            [% IF ( invoiceclosedate ) %]
+            <li><span class="label">Status:</span>
+                Closed on [% invoiceclosedate | $KohaDates %].</li>
+
+            <li><label for="reopen">Reopen: </label></li> <input type="checkbox" name="reopen" id="reopen" />
+            [% ELSE %]
+            <li><span class="label">Status:</span>
+                Open.</li>
+
+            <li><label for="close">Close: </label> <input type="checkbox" name="close" id="close" />
+                </li>
             [% END %]
-          </select>
-          <p></p>
-          <label>Status:</label>
-          [% IF ( invoiceclosedate ) %]
-            Closed on [% invoiceclosedate | $KohaDates %].
-            <p></p>
-            <input type="checkbox" name="reopen" id="reopen" />
-            <label for="reopen">Reopen</label>
-          [% ELSE %]
-            Open.
-            <p></p>
-            <input type="checkbox" name="close" id="close" />
-            <label for="close">Close</label>
-          [% END %]
+            </ol>
           <input type="hidden" name="op" value="mod" />
           <input type="hidden" name="invoiceid" value="[% invoiceid %]" />
-          <fieldset class="action">
-              <input type="submit" value="Save">
-          </fieldset>
+        </fieldset>
+        <fieldset class="action">
+            <input type="submit" value="Save" />
         </fieldset>
       </form>
       <p>
@@ -164,7 +166,7 @@
             </tfoot>
           </table>
         [% ELSE %]
-            <p>No orders yet</p>
+            <div class="dialog message"><p>No orders yet</p></div>
         [% END %]
     </div>
   </div>
