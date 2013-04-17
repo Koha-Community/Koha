@@ -52,11 +52,25 @@
                                 </ol>
                             </fieldset>
                             <input type="hidden" name="op" value="show" />
+
+                            <fieldset class="rows">
+                                <legend>Use default values</legend>
+                                <ol class="radio">
+                                    <li>
+                                        <label>
+                                            <input type="checkbox" name="use_default_values" id="use_default_values" />
+                                            Populate fields with default values from default framework
+                                        </label>
+                                    </li>
+                                </ol>
+                            </fieldset>
+
                             [% IF ( del ) %]<input type="hidden" name="del" value="1" />[% END %]
                             <fieldset class="action">
                                 <input type="submit" value="Continue" class="button" />
 				<a class="cancel" href="/cgi-bin/koha/tools/tools-home.pl">Cancel</a>
                             </fieldset>
+
                         </form>
                     </div>
 		    </div>
