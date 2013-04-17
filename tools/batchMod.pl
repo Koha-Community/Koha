@@ -47,7 +47,7 @@ my $del_records  = $input->param('del_records');
 my $completedJobID = $input->param('completedJobID');
 my $runinbackground = $input->param('runinbackground');
 my $src          = $input->param('src');
-
+my $use_default_values = $input->param('use_default_values');
 
 my $template_name;
 my $template_flag;
@@ -78,8 +78,7 @@ my $itemrecord;
 my $nextop="";
 my @errors; # store errors found while checking data BEFORE saving item.
 my $items_display_hashref;
-my $frameworkcode="";
-my $tagslib = &GetMarcStructure(1,$frameworkcode);
+my $tagslib = &GetMarcStructure(1);
 
 my $deleted_items = 0;     # Number of deleted items
 my $deleted_records = 0;   # Number of deleted records ( with no items attached )
@@ -308,7 +307,7 @@ foreach my $tag (sort keys %{$tagslib}) {
 	$subfield_data{repeatable} = $tagslib->{$tag}->{$subfield}->{repeatable};
 	my ($x,$value);
 	$value =~ s/"/&quot;/g;
-	unless ($value) {
+   if ( !$value && $use_default_values) {
 	    $value = $tagslib->{$tag}->{$subfield}->{defaultvalue};
 	    # get today date & replace YYYY, MM, DD if provided in the default value
 	    my ( $year, $month, $day ) = split ',', $today_iso;     # FIXME: iso dates don't have commas!
