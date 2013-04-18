@@ -414,6 +414,7 @@ $template->param(
     barcode_subfield => $barcode_subfield,
     import_batch_id  => $import_batch_id,
     subscriptionid   => $subscriptionid,
+    acqcreate        => C4::Context->preference("AcqCreateItem") eq "ordering" ? 1 : "",
     (uc(C4::Context->preference("marcflavour"))) => 1
 );
 
