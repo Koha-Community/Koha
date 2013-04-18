@@ -394,11 +394,8 @@ sub checkauth {
         -HttpOnly => 1,
         -expires => ''
     );
-    print $query->header(
-        -type    => 'text/html; charset=utf-8',
-        -cookie  => $cookie
-      ),
-      $template->output;
+
+    output_html_with_http_headers $query, $cookie, $template->output;
     exit;
 }
 
