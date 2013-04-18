@@ -96,7 +96,7 @@ elsif ( $type eq 'modify' ) {
 		$error = "Cannot read file: '$file'.";
 	} else {
 		(-w $file) or $error = 
-			"WARNING: You will not be able save, because your webserver cannot write to '$file'. Contact your admin about help file permissions.";
+			"WARNING: You will not be able to save, because your webserver cannot write to '$file'. Contact your admin about help file permissions.";
     	open (my $fh, '<', $file) or die "Cannot read file '$file'";		# unlikely death, since we just checked
 		my $help = '';
         while ( <$fh> ) {
