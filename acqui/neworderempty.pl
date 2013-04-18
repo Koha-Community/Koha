@@ -393,6 +393,7 @@ $template->param(
     publishercode    => $data->{'publishercode'},
     barcode_subfield => $barcode_subfield,
     import_batch_id  => $import_batch_id,
+    acqcreate        => C4::Context->preference("AcqCreateItem") eq "ordering" ? 1 : "",
     (uc(C4::Context->preference("marcflavour"))) => 1
 );
 
