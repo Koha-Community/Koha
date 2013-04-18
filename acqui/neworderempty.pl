@@ -386,6 +386,7 @@ $template->param(
 # CHECKME: gst-stuff needs verifing, mason.
     gstrate          => $bookseller->{'gstrate'} // C4::Context->preference("gist") // 0,
     gstreg           => $bookseller->{'gstreg'},
+    acqcreate        => C4::Context->preference("AcqCreateItem") eq "ordering" ? 1 : ""
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
