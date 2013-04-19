@@ -178,9 +178,9 @@
 			[% IF ( ERROR_login_exist ) %]
 				<li id="ERROR_login_exist">Username/password already exists.</li>
 			[% END %]
-			[% IF ( ERROR_cardnumber ) %]
-				<li id="ERROR_cardnumber">Cardnumber already in use.</li>
-			[% END %]
+            [% IF ( ERROR_cardnumber ) %]
+                <li id="ERROR_cardnumber">Cardnumber already in use or not in a good format.</li>
+            [% END %]
 			[% IF ( ERROR_age_limitations ) %]
 				<li id="ERROR_age_limitations">Patron's age is incorrect for their category.  
                     Ages allowed are [% age_low %]-[% age_high %].</li>
@@ -886,17 +886,23 @@
 
   <fieldset class="rows" id="memberentry_library_management">
     <legend id="library_management_lgd">Library management</legend><ol>
-        [% UNLESS nocardnumber %]
-   <li> [% IF ( mandatorycardnumber ) %]
-      <label for="cardnumber" class="required">
-    [% ELSE %]
-      <label for="cardnumber">
-    [% END %] 
-    Card number: </label>
-	<input type="text" id="cardnumber" name="cardnumber" size="20" value="[% cardnumber %]" />
-	  [% IF ( mandatorycardnumber ) %]<span class="required">Required</span>[% END %]</li>
-        [% END %]
-        [% UNLESS nobranchcode %]
+      [% UNLESS nocardnumber %]
+        <li>
+          [% IF ( mandatorycardnumber ) %]
+            <label for="cardnumber" class="required">
+          [% ELSE %]
+            <label for="cardnumber">
+          [% END %]
+          Card number: </label>
+          [% IF minlength_cardnumber && maxlength_cardnumber %]
+              <input type="text" id="cardnumber" name="cardnumber" size="20" value="[% cardnumber %]" pattern=".{[% minlength_cardnumber %],[% maxlength_cardnumber %]}" title="between [% minlength_cardnumber %] and [% maxlength_cardnumber %] characters" />
+          [% ELSE %]
+              <input type="text" id="cardnumber" name="cardnumber" size="20" value="[% cardnumber %]" />
+          [% END %]
+          [% IF ( mandatorycardnumber ) %]<span class="required">Required</span>[% END %]
+        </li>
+      [% END %]
+      [% UNLESS nobranchcode %]
     <li>
         <label for="libraries" class="required">Library:</label>
         <select name="branchcode" size="1" id="libraries">

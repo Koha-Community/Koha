@@ -1325,25 +1325,40 @@ sub checkuniquemember {
 }
 
 sub checkcardnumber {
-    my ($cardnumber,$borrowernumber) = @_;
+    my ( $cardnumber, $borrowernumber ) = @_;
+
     # If cardnumber is null, we assume they're allowed.
-    return 0 if !defined($cardnumber);
+    return 0 unless defined $cardnumber;
+
     my $dbh = C4::Context->dbh;
     my $query = "SELECT * FROM borrowers WHERE cardnumber=?";
     $query .= " AND borrowernumber <> ?" if ($borrowernumber);
-  my $sth = $dbh->prepare($query);
-  if ($borrowernumber) {
-   $sth->execute($cardnumber,$borrowernumber);
-  } else { 
-     $sth->execute($cardnumber);
-  } 
-    if (my $data= $sth->fetchrow_hashref()){
-        return 1;
+    my $sth = $dbh->prepare($query);
+    $sth->execute(
+        $cardnumber,
+        ( $borrowernumber ? $borrowernumber : () )
+    );
+
+    return 1 if $sth->fetchrow_hashref;
+
+    if ( my $length = C4::Context->preference('CardnumberLength') ) {
+        # Is integer and length match
+        if (
+            $length =~ m|^\d+$|
+                and length $cardnumber == $length
+        ) {
+            return 0
+        }
+        # Else assuming it is a range
+        else {
+            my $qr = qr|^\d{$length}$|;
+            return 0
+                if $cardnumber =~ $qr;
+        }
+        return 1
     }
-    else {
-        return 0;
-    }
-}  
+    return 0;
+}
 
 
 =head2 getzipnamecity (OUEST-PROVENCE)

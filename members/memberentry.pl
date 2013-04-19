@@ -711,7 +711,25 @@ if(defined($data{'contacttitle'})){
   $template->param("contacttitle_" . $data{'contacttitle'} => "SELECTED");
 }
 
-  
+if ( my $cardnumber_length = C4::Context->preference('CardnumberLength') ) {
+    my ( $min, $max );
+    # Is integer and length match
+    if ( $cardnumber_length =~ m|^\d+$| ) {
+        $min = $max = $cardnumber_length;
+    }
+    # Else assuming it is a range
+    elsif ( $cardnumber_length =~ m|(\d+),(\d*)| ) {
+        $min = $1;
+        $max = $2 || 16; # borrowers.cardnumber is a varchar(16)
+    }
+    if ( defined $min ) {
+        $template->param(
+            minlength_cardnumber => $min,
+            maxlength_cardnumber => $max
+        );
+    }
+}
+
 output_html_with_http_headers $input, $cookie, $template->output;
 
 sub  parse_extended_patron_attributes {

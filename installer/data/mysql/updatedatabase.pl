@@ -8046,6 +8046,16 @@ if (CheckVersion($DBversion)) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.15.00.XXX";
+if ( CheckVersion($DBversion) ) {
+   $dbh->do("
+       INSERT INTO systempreferences (variable,value,options,explanation,type)
+       VALUES('CardnumberLength', '', '', 'Set a length for card numbers.', 'Free');
+    ");
+   print "Upgrade to $DBversion done (Bug 10861: Add CardnumberLength syspref)\n";
+   SetVersion ($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

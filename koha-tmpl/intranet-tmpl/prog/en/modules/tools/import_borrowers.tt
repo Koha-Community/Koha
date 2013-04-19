@@ -72,6 +72,12 @@
             <br /><code>[% missing_critical.lineraw %]</code>
         </li>
         [% END %]
+        [% IF ERROR.invalid_cardnumber %]
+            <li class="line_error">
+                Cardnumber [% ERROR.cardnumber %] is not a valid cardnumber
+                [% IF ERROR.borrowernumber %] (for patron with borrowernumber [% ERROR.borrowernumber %])[% END %]
+            </li>
+        [% END %]
     [% END %]
     </ul>
     </div>

@@ -231,7 +231,18 @@ if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
                 }
             }
         }
-            
+
+        if ( C4::Members::checkcardnumber( $borrower{cardnumber}, $borrowernumber ) ) {
+            push @errors, {
+                invalid_cardnumber => 1,
+                borrowernumber => $borrowernumber,
+                cardnumber => $borrower{cardnumber}
+            };
+            $invalid++;
+            next;
+        }
+
+
         if ($borrowernumber) {
             # borrower exists
             unless ($overwrite_cardnumber) {
