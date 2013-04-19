@@ -23,12 +23,6 @@ override_dh_auto_install:
 	rm $(TMP)/etc/koha/searchengine/solr/config.yaml
 	rm $(TMP)/etc/koha/searchengine/solr/indexes.yaml
 	rm $(TMP)/etc/koha/solr/indexes.yaml
-#	rm $(TMP)/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/lib/jquery/jquery.js
-#	ln -s /usr/share/javascript/jquery/jquery.js \
-#	   $(TMP)/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/lib/jquery/jquery.js
-#	rm $(TMP)/usr/share/koha/opac/htdocs/opac-tmpl/prog/en/lib/jquery/jquery.js
-#	ln -s /usr/share/javascript/jquery/jquery.js \
-#	   $(TMP)/usr/share/koha/opac/htdocs/opac-tmpl/prog/en/lib/jquery/jquery.js
 	rm -r \
 		$(TMP)/usr/share/koha/intranet/htdocs/intranet-tmpl/lib/tiny_mce
 	ln -s /usr/share/tinymce2/www \
@@ -59,6 +53,9 @@ override_dh_auto_install:
 	install -m 0644 koha-tmpl/opac-tmpl/lib/yui/skin.css \
          koha-tmpl/opac-tmpl/lib/yui/reset-fonts-grids.css \
 		$(TMP)/usr/share/koha/opac/htdocs/opac-tmpl/prog/en/css
+	install -m 0644 koha-tmpl/opac-tmpl/lib/yui/skin.css \
+         koha-tmpl/opac-tmpl/lib/yui/reset-fonts-grids.css \
+		$(TMP)/usr/share/koha/opac/htdocs/opac-tmpl/ccsr/en/css
 	install -m 0644 koha-tmpl/intranet-tmpl/prog/en/lib/yui/menu-button-arrow-disabled.png \
 		$(TMP)/usr/share/koha/opac/htdocs/opac-tmpl/prog/en/css
 	install -m 0644 koha-tmpl/intranet-tmpl/prog/en/lib/yui/menu-button-arrow-disabled.png \
@@ -93,8 +90,11 @@ override_dh_auto_install:
 		$(TMP)/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/css
 	sed -i -e 's:url(.*/reset-fonts-grids.css.*):url("/opac-tmpl/lib/yui/reset-fonts-grids/reset-fonts-grids.css"):' \
 		   -e 's:url(.*/skin.css.*):url("/opac-tmpl/lib/yui/assets/skins/sam/skin.css"):' \
-		$(TMP)/usr/share/koha/opac/htdocs/opac-tmpl/prog/en/css/opac.css \
-		$(TMP)/usr/share/koha/opac/htdocs/opac-tmpl/prog/en/css/sco.css
+		$(TMP)/usr/share/koha/opac/htdocs/opac-tmpl/*/en/css/opac.css \
+		$(TMP)/usr/share/koha/opac/htdocs/opac-tmpl/*/en/css/sco.css
+	sed -i -e 's:href="/opac-tmpl/lib/yui/reset-fonts-grids.css":href="/opac-tmpl/lib/yui/reset-fonts-grids/reset-fonts-grids.css":' \
+		   -e 's:href="/opac-tmpl/lib/yui/skin.css":href="/opac-tmpl/lib/yui/assets/skins/sam/skin.css":' \
+        $(TMP)/usr/share/koha/opac/htdocs/opac-tmpl/ccsr/en/includes/doc-head-close.inc
 	sed -i -e 's:url(.*/reset-fonts-grids.css.*):url(reset-fonts-grids.css):' \
 		   -e 's:url(.*/skin.css.*):url(skin.css):' \
 		$(TMP)/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/css/staff-global*.css
