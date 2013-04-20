@@ -675,6 +675,7 @@ sub checkauth {
             $ip       = $session->param('ip');
             $lasttime = $session->param('lasttime');
             $userid   = $session->param('id');
+            utf8::decode($userid);
             $sessiontype = $session->param('sessiontype') || '';
         }
         if ( ( ($query->param('koha_login_context')) && ($query->param('userid') ne $session->param('id')) )
@@ -750,6 +751,7 @@ sub checkauth {
             -HttpOnly => 1
         );
     $userid = $query->param('userid');
+    utf8::decode($userid);
         if (   ( $cas && $query->param('ticket') )
             || $userid
             || ( my $pki_field = C4::Context->preference('AllowPKIAuth') ) ne
