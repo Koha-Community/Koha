@@ -120,7 +120,7 @@ my $id     = $cgi->param('id');
 my $format = $cgi->param('format');
 
 if (not defined $format) {
-    emit_formats($id);
+    emit_formats($id, $format_to_stylesheet_map, $format_info, $cgi);
 } elsif ($id) {
 
     # koha:biblionumber:0152018484
@@ -136,7 +136,7 @@ if (not defined $format) {
                 exit 0;
             }
 
-            my $transformer = get_transformer($format);
+            my $transformer = get_transformer($format, $format_to_stylesheet_map, $format_info);
             unless (defined $transformer) {
                 print $cgi->header( -status => '406 invalid format requested' );
                 exit 0;
@@ -167,7 +167,7 @@ if (not defined $format) {
 exit 0;
 
 sub emit_formats {
-    my $id = shift;
+    my ($id, $format_to_stylesheet_map, $format_info, $cgi) = @_;
 
     if (defined $id) {
         print $cgi->header( -type =>'application/xml', -status => '300 multiple choices' );
@@ -192,7 +192,8 @@ sub emit_formats {
 
 
 sub get_transformer {
-    my $format = lc shift;
+    my ($format, $format_to_stylesheet_map, $format_info) = @_;
+    $format = lc $format;
 
     my $marcflavour = uc(C4::Context->preference('marcflavour'));
     return unless $format_to_stylesheet_map->{$marcflavour}->{$format};
