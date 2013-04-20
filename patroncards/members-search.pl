@@ -34,6 +34,7 @@ my $startfrom = $cgi->param('startfrom')||1;
 my $resultsperpage = $cgi->param('resultsperpage')||C4::Context->preference("PatronsPerPage")||20;
 my $category = $cgi->param('category') || undef;
 my $member = $cgi->param('member') || '';
+utf8::decode($member);
 my $orderby = $cgi->param('orderby') || undef;
 
 my @categories=C4::Category->all;
