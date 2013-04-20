@@ -149,10 +149,6 @@ sub SearchSuggestion {
                 push @sql_params, $suggestion->{branchcode};
                 push @query,      qq{ AND suggestions.branchcode=? };
             }
-        } else {
-            push @query, qq{
-                AND (suggestions.branchcode='' OR suggestions.branchcode IS NULL)
-            };
         }
     }
 
