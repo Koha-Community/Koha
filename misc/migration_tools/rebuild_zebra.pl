@@ -13,7 +13,6 @@ use C4::Items;
 use Koha::RecordProcessor;
 use XML::LibXML;
 
-# 
 # script that checks zebradir structure & create directories & mandatory files if needed
 #
 #
@@ -40,6 +39,9 @@ my $do_not_clear_zebraqueue;
 my $length;
 my $where;
 my $offset;
+my $run_as_root;
+my $run_user = (getpwuid($<))[0];
+
 my $verbose_logging = 0;
 my $zebraidx_log_opt = " -v none,fatal,warn ";
 my $result = GetOptions(
@@ -47,7 +49,7 @@ my $result = GetOptions(
     'r|reset'       => \$reset,
     's'             => \$skip_export,
     'k'             => \$keep_export,
-    'I|skip-index'    => \$skip_index,
+    'I|skip-index'  => \$skip_index,
     'nosanitize'    => \$nosanitize,
     'b'             => \$biblios,
     'noxml'         => \$noxml,
@@ -55,19 +57,26 @@ my $result = GetOptions(
     'munge-config'  => \$do_munge,
     'a'             => \$authorities,
     'h|help'        => \$want_help,
-	'x'				=> \$as_xml,
+    'x'             => \$as_xml,
     'y'             => \$do_not_clear_zebraqueue,
     'z'             => \$process_zebraqueue,
     'where:s'        => \$where,
     'length:i'        => \$length,
     'offset:i'      => \$offset,
     'v+'             => \$verbose_logging,
+    'run-as-root'    => \$run_as_root,
 );
-
 
 if (not $result or $want_help) {
     print_usage();
     exit 0;
+}
+
+if( not defined $run_as_root and $run_user eq 'root') {
+    my $msg = "Warning: You are running this script as the user 'root'.\n";
+    $msg   .= "If this is intentional you must explicitly specify this using the -run-as-root switch\n";
+    $msg   .= "Please do '$0 --help' to see usage.\n";
+    die $msg;
 }
 
 if (not $biblios and not $authorities) {
@@ -112,7 +121,7 @@ my $use_tempdir = 0;
 unless ($directory) {
     $use_tempdir = 1;
     $directory = tempdir(CLEANUP => ($keep_export ? 0 : 1));
-} 
+}
 
 
 my $biblioserverdir = C4::Context->zebraconfig('biblioserver')->{directory};
@@ -186,19 +195,19 @@ if ($keep_export) {
 # If they don't, then zebra is likely to spit the dummy. This returns true
 # if the directories had to be created, false otherwise.
 sub check_zebra_dirs {
-	my ($base) = shift() . '/';
-	my $needed_repairing = 0;
-	my @dirs = ( '', 'key', 'register', 'shadow', 'tmp' );
-	foreach my $dir (@dirs) {
-		my $bdir = $base . $dir;
+    my ($base) = shift() . '/';
+    my $needed_repairing = 0;
+    my @dirs = ( '', 'key', 'register', 'shadow', 'tmp' );
+    foreach my $dir (@dirs) {
+        my $bdir = $base . $dir;
         if (! -d $bdir) {
-        	$needed_repairing = 1;
-        	mkdir $bdir || die "Unable to create '$bdir': $!\n";
-        	print "$0: needed to create '$bdir'\n";
+            $needed_repairing = 1;
+            mkdir $bdir || die "Unable to create '$bdir': $!\n";
+            print "$0: needed to create '$bdir'\n";
         }
     }
     return $needed_repairing;
-}	# ----------  end of subroutine check_zebra_dirs  ----------
+}   # ----------  end of subroutine check_zebra_dirs  ----------
 
 sub index_records {
     my ($record_type, $directory, $skip_export, $skip_index, $process_zebraqueue, $as_xml, $noxml, $nosanitize, $do_not_clear_zebraqueue, $verbose_logging, $zebraidx_log_opt, $server_dir) = @_;
@@ -207,8 +216,8 @@ sub index_records {
     my $records_deleted;
     my $need_reset = check_zebra_dirs($server_dir);
     if ($need_reset) {
-    	print "$0: found broken zebra server directories: forcing a rebuild\n";
-    	$reset = 1;
+        print "$0: found broken zebra server directories: forcing a rebuild\n";
+        $reset = 1;
     }
     if ($skip_export && $verbose_logging) {
         print "====================\n";
@@ -229,7 +238,7 @@ sub index_records {
             mark_zebraqueue_batch_done($entries);
             $entries = select_zebraqueue_records($record_type, 'updated');
             mkdir "$directory/upd_$record_type" unless (-d "$directory/upd_$record_type");
-            $num_records_exported = export_marc_records_from_list($record_type, 
+            $num_records_exported = export_marc_records_from_list($record_type,
                                                                   $entries, "$directory/upd_$record_type", $as_xml, $noxml, $records_deleted);
             mark_zebraqueue_batch_done($entries);
         } else {
@@ -276,7 +285,7 @@ sub select_zebraqueue_records {
     my $server = ($record_type eq 'biblio') ? 'biblioserver' : 'authorityserver';
     my $op = ($update_type eq 'deleted') ? 'recordDelete' : 'specialUpdate';
 
-    my $sth = $dbh->prepare("SELECT id, biblio_auth_number 
+    my $sth = $dbh->prepare("SELECT id, biblio_auth_number
                              FROM zebraqueue
                              WHERE server = ?
                              AND   operation = ?
@@ -370,7 +379,7 @@ sub export_marc_records_from_sth {
                     $record->encoding('UTF-8');
                     my @itemsrecord;
                     foreach my $item (@items){
-                        my $record = Item2Marc($item, $record_number);                        
+                        my $record = Item2Marc($item, $record_number);
                         push @itemsrecord, $record->field($itemtag);
                     }
                     $record->insert_fields_ordered(@itemsrecord);
@@ -508,14 +517,14 @@ sub generate_deleted_marc_records {
     print {$fh} '</collection>' if (include_xml_wrapper($as_xml, $record_type));
     close $fh;
     return $records_deleted;
-    
+
 
 }
 
 sub get_corrected_marc_record {
     my ($record_type, $record_number, $noxml) = @_;
 
-    my $marc = get_raw_marc_record($record_type, $record_number, $noxml); 
+    my $marc = get_raw_marc_record($record_type, $record_number, $noxml);
 
     if (defined $marc) {
         fix_leader($marc);
@@ -535,8 +544,8 @@ sub get_corrected_marc_record {
 
 sub get_raw_marc_record {
     my ($record_type, $record_number, $noxml) = @_;
-  
-    my $marc; 
+
+    my $marc;
     if ($record_type eq 'biblio') {
         if ($noxml) {
             my $fetch_sth = $dbh->prepare_cached("SELECT marc FROM biblioitems WHERE biblionumber = ?");
@@ -579,7 +588,7 @@ sub fix_leader {
     # force them to be recalculated correct when
     # the $marc->as_usmarc() or $marc->as_xml() is called.
     # But why is this necessary?  It would be a serious bug
-    # in MARC::Record (definitely) and MARC::File::XML (arguably) 
+    # in MARC::Record (definitely) and MARC::File::XML (arguably)
     # if they are emitting incorrect leader values.
     my $marc = shift;
 
@@ -598,7 +607,7 @@ sub fix_biblio_ids {
     my $biblioitemnumber;
     if (@_) {
         $biblioitemnumber = shift;
-    } else {    
+    } else {
         my $sth = $dbh->prepare(
             "SELECT biblioitemnumber FROM biblioitems WHERE biblionumber=?");
         $sth->execute($biblionumber);
@@ -616,7 +625,7 @@ sub fix_biblio_ids {
     #    present in the MARC::Record object ought to be part of GetMarcBiblio.
     #
     # On the other hand, this better for now than what rebuild_zebra.pl used to
-    # do, which was duplicate the code for inserting the biblionumber 
+    # do, which was duplicate the code for inserting the biblionumber
     # and biblioitemnumber
     C4::Biblio::_koha_marc_update_bib_ids($marc, '', $biblionumber, $biblioitemnumber);
 
@@ -678,6 +687,7 @@ Use this batch job to reindex all biblio or authority
 records in your Koha database.
 
 Parameters:
+
     -b                      index bibliographic records
 
     -a                      index authority records
@@ -699,7 +709,7 @@ Parameters:
     -k                      Do not delete export directory.
 
     -s                      Skip export.  Used if you have
-                            already exported the records 
+                            already exported the records
                             in a previous run.
 
     -noxml                  index from ISO MARC blob
@@ -709,7 +719,7 @@ Parameters:
 
     -x                      export and index as xml instead of is02709 (biblios only).
                             use this if you might have records > 99,999 chars,
-							
+
     -nosanitize             export biblio/authority records directly from DB marcxml
                             field without sanitizing records. It speed up
                             dump process but could fail if DB contains badly
@@ -721,10 +731,10 @@ Parameters:
                             after doing batch indexing, zebraqueue should be
                             marked done for the affected record type(s) so that
                             a running zebraqueue_daemon doesn't try to reindex
-                            the same records - specify -y to override this.  
+                            the same records - specify -y to override this.
                             Cannot be used with -z.
 
-    -v                      increase the amount of logging.  Normally only 
+    -v                      increase the amount of logging.  Normally only
                             warnings and errors from the indexing are shown.
                             Use log level 2 (-v -v) to include all Zebra logs.
 
@@ -737,13 +747,16 @@ Parameters:
 
     --munge-config          Deprecated option to try
                             to fix Zebra config files.
+
+    --run-as-root           explicitily allow script to run as 'root' user
+
     --help or -h            show this message.
 _USAGE_
 }
 
-# FIXME: the following routines are deprecated and 
+# FIXME: the following routines are deprecated and
 # will be removed once it is determined whether
-# a script to fix Zebra configuration files is 
+# a script to fix Zebra configuration files is
 # actually needed.
 sub munge_config {
 #
@@ -861,13 +874,13 @@ if ($authorities) {
         print "Info: created $authorityserverdir/key\n";
         $created_dir_or_file++;
     }
-    
+
     unless (-d "$authorityserverdir/etc") {
         mkdir "$authorityserverdir/etc";
         print "Info: created $authorityserverdir/etc\n";
         $created_dir_or_file++;
     }
-    
+
     #
     # AUTHORITIES : copying mandatory files
     #
@@ -902,7 +915,7 @@ if ($authorities) {
         print "Info: copied default.idx\n";
         $created_dir_or_file++;
     }
-    
+
     unless (-f "$authorityserverdir/etc/ccl.properties") {
 #         system("cp -f $kohadir/etc/zebradb/ccl.properties ".C4::Context->zebraconfig('authorityserver')->{ccl2rpn});
         system("cp -f $kohadir/etc/zebradb/ccl.properties $authorityserverdir/etc/ccl.properties");
@@ -915,14 +928,14 @@ if ($authorities) {
         print "Info: copied pqf.properties\n";
         $created_dir_or_file++;
     }
-    
+
     #
     # AUTHORITIES : copying mandatory files
     #
     unless (-f C4::Context->zebraconfig('authorityserver')->{config}) {
     open my $zd, '>:encoding(UTF-8)' ,C4::Context->zebraconfig('authorityserver')->{config};
     print {$zd} "
-# generated by KOHA/misc/migration_tools/rebuild_zebra.pl 
+# generated by KOHA/misc/migration_tools/rebuild_zebra.pl
 profilePath:\${srcdir:-.}:$authorityserverdir/tab/:$tabdir/tab/:\${srcdir:-.}/tab/
 
 encoding: UTF-8
@@ -960,13 +973,13 @@ rank:rank-1
         print "Info: creating zebra-authorities.cfg\n";
         $created_dir_or_file++;
     }
-    
+
     if ($created_dir_or_file) {
         print "Info: created : $created_dir_or_file directories & files\n";
     } else {
         print "Info: file & directories OK\n";
     }
-    
+
 }
 if ($biblios) {
     if ( $verbose_logging ) {
@@ -1013,7 +1026,7 @@ if ($biblios) {
         print "Info: created $biblioserverdir/etc\n";
         $created_dir_or_file++;
     }
-    
+
     #
     # BIBLIOS : copying mandatory files
     #
@@ -1060,14 +1073,14 @@ if ($biblios) {
         print "Info: copied pqf.properties\n";
         $created_dir_or_file++;
     }
-    
+
     #
     # BIBLIOS : copying mandatory files
     #
     unless (-f C4::Context->zebraconfig('biblioserver')->{config}) {
     open my $zd, '>:encoding(UTF-8)', C4::Context->zebraconfig('biblioserver')->{config};
     print {$zd} "
-# generated by KOHA/misc/migrtion_tools/rebuild_zebra.pl 
+# generated by KOHA/misc/migrtion_tools/rebuild_zebra.pl
 profilePath:\${srcdir:-.}:$biblioserverdir/tab/:$tabdir/tab/:\${srcdir:-.}/tab/
 
 encoding: UTF-8
@@ -1105,12 +1118,12 @@ rank:rank-1
         print "Info: creating zebra-biblios.cfg\n";
         $created_dir_or_file++;
     }
-    
+
     if ($created_dir_or_file) {
         print "Info: created : $created_dir_or_file directories & files\n";
     } else {
         print "Info: file & directories OK\n";
     }
-    
+
 }
 }
