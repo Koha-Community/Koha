@@ -29,6 +29,7 @@ use CGI;
 use C4::Context;
 use C4::Charset;
 use C4::Auth qw/check_cookie_auth/;
+use JSON qw/ to_json /;
 
 my $input = new CGI;
 my $query = $input->param('term');
@@ -54,14 +55,9 @@ $sql .= qq( ORDER BY $field);
 my $sth = $dbh->prepare($sql);
 $sth->execute("$query%", "% $query%", "%-$query%");
 
-print "[";
-my $i = 0;
+my $a = [];
 while ( my $rec = $sth->fetchrow_hashref ) {
-    if($i > 0){ print ","; }
-    print "{\"fieldvalue\":\"" . nsb_clean($rec->{$field}) . "\"" .
-          "}";
-    $i++;
+    push @$a, { fieldvalue => nsb_clean($rec->{$field}) };
 }
-print "]";
 
-
+print to_json($a);
