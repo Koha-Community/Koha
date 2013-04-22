@@ -77,6 +77,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 # fill arrays
 my @subfield_loop;
+my ($indicator1, $indicator2);
 if ($authid) {
     my @fields = $record->field( $auth_type->{auth_tag_to_report} );
     my $repet = ($query->param('repet') || 1) - 1;
@@ -99,6 +100,46 @@ if ($authid) {
     }
 
     push( @subfield_loop, { marc_subfield => 'w', marc_values => $relationship } ) if ( $relationship );
+    if (C4::Context->preference('marcflavour') eq 'UNIMARC') {
+        $indicator1 = $field->indicator('1');
+        $indicator2 = $field->indicator('2');
+    } elsif (C4::Context->preference('marcflavour') eq 'MARC21') {
+        my $tag_from = $auth_type->{auth_tag_to_report};
+        my $tag_to = $index;
+        $tag_to =~ s/^tag_(\d*)_.*$/$1/;
+        if ($tag_to =~ /^6/) {  # subject heading
+            my %thes_mapping = qw / a 0
+                                    b 1
+                                    c 2
+                                    d 3
+                                    k 5
+                                    n 4
+                                    r 7
+                                    s 7
+                                    v 6
+                                    z 7
+                                    | 4 /;
+            my $thes_008_11 = '';
+            $thes_008_11 = substr($record->field('008')->data(), 11, 1) if $record->field('008')->data();
+            $indicator2 = defined $thes_mapping{$thes_008_11} ? $thes_mapping{$thes_008_11} : $thes_008_11;
+            if ($indicator2 eq '7') {
+                if ($thes_008_11 eq 'r') {
+                    $subfields{'2'} = ['aat'];
+                } elsif ($thes_008_11 eq 's') {
+                    $subfields{'2'} = ['sears'];
+                }
+            }
+        }
+        if ($tag_from eq '130') {  # unified title -- the special case
+            if ($tag_to eq '830' || $tag_to eq '240') {
+                $indicator2 = $field->indicator('2');
+            } else {
+                $indicator1 = $field->indicator('2');
+            }
+        } else {
+            $indicator1 = $field->indicator('1');
+        }
+    }
 }
 else {
     # authid is empty => the user want to empty the entry.
@@ -113,6 +154,8 @@ $template->param(
     authid          => $authid ? $authid : "",
     index           => $index,
     tagid           => $tagid,
+    indicator1      => $indicator1,
+    indicator2      => $indicator2,
     SUBFIELD_LOOP   => \@subfield_loop,
     tag_number      => $tag_number,
 );
