@@ -1036,6 +1036,7 @@ sub GetBestRecordMatch {
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare("SELECT candidate_match_id
                              FROM   import_record_matches
+                             JOIN biblio ON ( candidate_match_id = biblionumber )
                              WHERE  import_record_id = ?
                              ORDER BY score DESC, candidate_match_id DESC");
     $sth->execute($import_record_id);
