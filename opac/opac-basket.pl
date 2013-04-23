@@ -78,6 +78,7 @@ foreach my $biblionumber ( @bibs ) {
       $hasauthors = 1;
     }
     my $collections =  GetKohaAuthorisedValues('items.ccode',$dat->{'frameworkcode'}, 'opac');
+    my $shelflocations =GetKohaAuthorisedValues('items.location',$dat->{'frameworkcode'}, 'opac');
 
 	# COinS format FIXME: for books Only
         my $coins_format;
@@ -92,6 +93,9 @@ foreach my $biblionumber ( @bibs ) {
 
 my $branches = GetBranches();
     for my $itm (@items) {
+        if ($itm->{'location'}){
+            $itm->{'location_opac'} = $shelflocations->{$itm->{'location'} };
+        }
         my ( $transfertwhen, $transfertfrom, $transfertto ) = GetTransfers($itm->{itemnumber});
         if ( defined( $transfertwhen ) && $transfertwhen ne '' ) {
              $itm->{transfertwhen} = $transfertwhen;
