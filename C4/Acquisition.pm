@@ -1944,6 +1944,7 @@ sub GetLateOrders {
         $from .= ' AND borrowers.branchcode LIKE ? ';
         push @query_params, C4::Context->userenv->{branch};
     }
+    $from .= " AND orderstatus <> 4 ";
     my $query = "$select $from $having\nORDER BY latesince, basketno, borrowers.branchcode, supplier";
     $debug and print STDERR "GetLateOrders query: $query\nGetLateOrders args: " . join(" ",@query_params);
     my $sth = $dbh->prepare($query);
