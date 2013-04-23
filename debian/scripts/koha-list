@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# koha-instances -- List all Koha instances.
+# koha-list -- List all Koha instances.
 # Copyright 2010  Catalyst IT, Ltd
 # 
 # This program is free software: you can redistribute it and/or modify
@@ -19,9 +19,18 @@
 
 set -e
 
-is_enabled() {
+die()
+{
+    echo "$@" 1>&2
+    exit 1
+}
+
+is_enabled()
+{
+    local instancename=$1
+
     if grep '^[[:space:]]*Include /etc/koha/apache-shared-disable.conf' \
-            "/etc/apache2/sites-available/$name" > /dev/null
+            "/etc/apache2/sites-available/$instancename" > /dev/null
     then
         return 1
     else
@@ -29,46 +38,125 @@ is_enabled() {
     fi
 }
 
-help() {
+is_email_enabled()
+{
+    local instancename=$1
+
+    if [ -e /var/lib/koha/$instancename/email.enabled ]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+get_instances()
+{
+    find /etc/koha/sites -mindepth 1 -maxdepth 1\
+                         -type d -printf '%f\n' | sort
+}
+
+show_instances()
+{
+    local show=$1
+    local show_email=$2
+
+    for instance in $( get_instances ); do
+        case $show in
+          "all")
+              show_instance_filter_email $instance $show_email;;
+          "enabled")
+              if is_enabled $instance; then
+                  show_instance_filter_email $instance $show_email
+              fi ;;
+          "disabled")
+              if ! is_enabled $instance; then
+                  show_instance_filter_email $instance $show_email
+              fi ;;
+        esac
+    done
+}
+
+show_instance_filter_email()
+{
+    local instancename=$1
+    local show_email=$2;
+
+    case $show_email in
+        "all")
+            echo $instancename ;;
+        "enabled")
+            if is_email_enabled $instancename; then
+                echo $instancename
+            fi ;;
+        "disabled")
+            if ! is_email_enabled $instancename; then
+                echo $instancename
+            fi ;;
+    esac
+}
+
+set_show()
+{
+    local show_param=$1
+
+    if [ "$show" = "all" ]; then
+        show=$show_param
+    else
+        die "Error: --enabled and --disabled are mutually exclusive."
+    fi
+}
+
+set_show_email()
+{
+    local email_param=$1
+
+    if [ "$show_email" = "all" ]; then
+        show_email=$email_param
+    else
+        die "Error: --email and --noemail are mutually exclusive."
+    fi
+}
+
+usage()
+{
+    local scriptname=$0
+
     echo <<eoh
 Lists Koha instances, optionally only those that are enabled or have
 email turned on.
     
-Usage: $0 [--enabled] [--email] [-h]
+Usage: $scriptname [--enabled|--disabled] [--email|--noemail] [-h]
 Options:
     --enabled       only show instances that are enabled
+    --disabled      only show instances that are disabled
     --email         only show instances that have email enabled
     --noemail       only show instances that do not have email enabled
     -h              this help
 
 The filtering options can be combined, and you probably want to do this
-(except --email and --noemail, that's just silly.)
+(except --email and --noemail, or --enabled and --disabled, that's just silly.)
 eoh
 }
 
-enabled=no
-email=no
-noemail=no
-args=$(getopt -l enabled,email,noemail -o h -n $0 -- "$@")
+show="all"
+show_email="all"
+
+args=$(getopt -l enabled,disabled,email,noemail -o h -n $0 -- "$@")
 set -- $args
+
 while [ ! -z "$1" ]
 do
     case "$1" in
-         -h) help; exit;;
-    --email) email=yes;;
-  --enabled) enabled=yes;;
-  --noemail) noemail=yes;;
+         -h) usage; exit;;
+    --email) set_show_email "enabled" ;;
+  --noemail) set_show_email "disabled" ;;
+  --enabled) set_show "enabled" ;;
+ --disabled) set_show "disabled" ;;
           *) break;;
     esac
     shift
 done
 
-find /etc/koha/sites -mindepth 1 -maxdepth 1 -type d -printf '%f\n' | 
-sort |
-while read name
-do
-    [ "$enabled" = yes ] && ! is_enabled "$name" && continue
-    [ "$email" = yes ] && [ ! -e /var/lib/koha/$name/email.enabled ] && continue
-    [ "$noemail" = yes ] && [ -e /var/lib/koha/$name/email.enabled ] && continue
-    echo "$name"
-done
+show_instances $show $show_email
+
+exit 0
