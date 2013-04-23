@@ -23,17 +23,23 @@
 
   <refsynopsisdiv>
     <cmdsynopsis>
-      <command>koha-list</command> <arg><option>--enabled</option></arg> <arg><option>--email</option></arg> <arg><option>-h</option></arg>
+      <command>koha-list</command> <arg><option>--enabled</option>|<option>--disabled</option></arg> <arg><option>--email</option>|<option>--noemail</option></arg> <arg><option>-h</option></arg>
     </cmdsynopsis>
   </refsynopsisdiv>
   
   <refsect1><title>Options</title>
-  <para>The filtering options can be combined, and you probably want to do this (except --email and --noemail, that's just silly.)</para>
+  <para>The filtering options can be combined, and you probably want to do this (except --email and --noemail,  or --enabled and --disabled, that's just silly.)</para>
   <variablelist> 
     <varlistentry>
       <term><option>--enabled</option></term>
       <listitem>
         <para>Only show instances that are enabled.</para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term><option>--disabled</option></term>
+      <listitem>
+        <para>Only show instances that are disabled.</para>
       </listitem>
     </varlistentry>
     <varlistentry>
