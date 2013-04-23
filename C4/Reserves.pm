@@ -36,9 +36,9 @@ use C4::Members qw();
 use C4::Letters;
 use C4::Branch qw( GetBranchDetail );
 use C4::Dates qw( format_date_in_iso );
-use C4::Calendar;
 
 use Koha::DateUtils;
+use Koha::Calendar;
 
 use List::MoreUtils qw( firstidx );
 
@@ -982,7 +982,7 @@ sub CancelExpiredReserves {
         my $charge = C4::Context->preference("ExpireReservesMaxPickUpDelayCharge");
         my $cancel_on_holidays = C4::Context->preference('ExpireReservesOnHolidays');
 
-        my $today = C4::Dates->new();
+        my $today = dt_from_string();
 
         my $query = "SELECT * FROM reserves WHERE TO_DAYS( NOW() ) - TO_DAYS( waitingdate ) > ? AND found = 'W' AND priority = 0";
         $sth = $dbh->prepare( $query );
@@ -991,8 +991,8 @@ sub CancelExpiredReserves {
         while ( my $res = $sth->fetchrow_hashref ) {
             my $do_cancel = 1;
             unless ( $cancel_on_holidays ) {
-                my $calendar = C4::Calendar->new( branchcode => $res->{'branchcode'} );
-                my $is_holiday = $calendar->isHoliday( split( '/', $today->output('metric') ) );
+                my $calendar = Koha::Calendar->new( branchcode => $res->{'branchcode'} );
+                my $is_holiday = $calendar->is_holiday( $today );
 
                 if ( $is_holiday ) {
                     $do_cancel = 0;
