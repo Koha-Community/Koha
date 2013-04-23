@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# koha-disable -- disable a Koha instance.
+# koha-disable -- disable Koha instances.
 # Copyright 2010  Catalyst IT, Ltd
 # 
 # This program is free software: you can redistribute it and/or modify
@@ -20,20 +20,79 @@
 set -e
 
 
-die() {
+die()
+{
     echo "$@" 1>&2
     exit 1
 }
 
+warn()
+{
+    echo "$@" 1>&2
+}
+
+is_enabled()
+{
+    local instancename=$1
+
+    if ! is_instance $instancename; then
+        return 1
+    fi
+
+    if grep -q '^[[:space:]]*Include /etc/koha/apache-shared-disable.conf' \
+            "/etc/apache2/sites-available/$instancename" ; then
+        return 1
+    else
+        return 0
+    fi
+}
+
+is_instance()
+{
+    local instancename=$1
+
+    if find /etc/koha/sites -mindepth 1 -maxdepth 1 \
+                         -type d -printf '%f\n'\
+          | grep -q -x $instancename ; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+disable_instance()
+{
+    local instancename=$1
+
+    if is_enabled $instancename; then
+        sed -i 's:^\s*#\(\s*Include /etc/koha/apache-shared-disable.conf\)$:\1:' \
+          "/etc/apache2/sites-available/$instancename"
+        return 0
+    else
+        return 1
+    fi
+}
 
 # Parse command line.
-[ "$#" = 1 ] || die "Usage: $0 instancename..."
+[ "$#" > 1 ] || die "Usage: $0 instancename..."
 
+restart_apache="no"
 
 for name in "$@"
 do
-    sed -i 's:^\s*#\(\s*Include /etc/koha/apache-shared-disable.conf\)$:\1:' \
-        "/etc/apache2/sites-available/$name"
+    if is_instance $name ; then
+        if disable_instance $name; then
+            restart_apache="yes"
+        else
+            warn "Instance $name already disabled."
+        fi
+    else
+        warn "Unknown instance $name."
+    fi
 done
 
-/etc/init.d/apache2 restart
+if [ "$restart_apache" = "yes" ]; then
+    /etc/init.d/apache2 restart
+fi
+
+exit 0
