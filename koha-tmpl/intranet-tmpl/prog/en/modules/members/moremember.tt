@@ -474,7 +474,7 @@ function validate1(date) {
           [% ELSE %]
             <td>
           [% END %]
-                <span title="[% issueloo.date_due_sort %]">[% issueloo.date_due %]</span>
+                <span title="[% issueloo.date_due %]">[% issueloo.date_due | $KohaDates %]</span>
                 [% IF ( issueloo.itemlost ) %]
                                         <span class="lost">[% issueloo.itemlost %]</span>
                     [% END %]
@@ -484,7 +484,7 @@ function validate1(date) {
 </td>
             <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% issueloo.biblionumber %]"><strong>[% issueloo.title |html %]</strong></a>[% IF ( issueloo.author ) %], by [% issueloo.author %][% END %] [% IF ( issueloo.publishercode ) %]; [% issueloo.publishercode %] [% END %] [% IF ( issueloo.publicationyear ) %], [% issueloo.publicationyear %][% END %] <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% issueloo.biblionumber %]&amp;itemnumber=[% issueloo.itemnumber %]#item[% issueloo.itemnumber %]">[% issueloo.barcode %]</a></td>
 <td>[% UNLESS ( noItemTypeImages ) %] [% IF ( issueloo.itemtype_image ) %]<img src="[% issueloo.itemtype_image %]" alt="" />[% END %][% END %][% issueloo.itemtype_description %]</td>
-            <td><span title="[% issueloo.issuedate_sort %]">[% issueloo.issuedate %]</span></td>
+            <td><span title="[% issueloo.issuedate %]">[% issueloo.issuedate | $KohaDates%]</span></td>
             <td>[% issueloo.issuingbranchname %]</td>
             <td>[% issueloo.itemcallnumber %]</td>
             <td>[% issueloo.charge %]</td>
@@ -582,7 +582,7 @@ function validate1(date) {
           [% ELSE %]
             <td>
           [% END %]
-                <span title="[% relissueloo.date_due_sort %]">[% relissueloo.date_due %]</span>
+                <span title="[% relissueloo.date_due %]">[% relissueloo.date_due | $KohaDates %]</span>
                 [% IF ( relissueloo.itemlost ) %]
                                         <span class="lost">[% relissueloo.itemlost %]</span>
                     [% END %]
@@ -592,7 +592,7 @@ function validate1(date) {
 </td>
             <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% relissueloo.biblionumber %]"><strong>[% relissueloo.title |html %]</strong></a>[% IF relissueloo.author %], by [% relissueloo.author %][% END %] [% IF relissueloo.publishercode %]; [% relissueloo.publishercode %] [% END %] [% IF relissueloo.publicationyear %], [% relissueloo.publicationyear %][% END %] <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% relissueloo.biblionumber %]&amp;itemnumber=[% relissueloo.itemnumber %]#item[% relissueloo.itemnumber %]">[% relissueloo.barcode %]</a></td>
 <td>[% UNLESS ( noItemTypeImages ) %] [% IF ( relissueloo.itemtype_image ) %]<img src="[% relissueloo.itemtype_image %]" alt="" />[% END %][% END %][% relissueloo.itemtype_description %]</td>
-            <td><span title="[% relissueloo.issuedate_sort %]">[% relissueloo.issuedate %]</span></td>
+            <td><span title="[% relissueloo.issuedate %]">[% relissueloo.issuedate | $KohaDates %]</span></td>
             <td>[% relissueloo.issuingbranchname %]</td>
         <td>[% relissueloo.itemcallnumber %]</td>
         <td>[% relissueloo.charge %]</td>
@@ -630,7 +630,7 @@ function validate1(date) {
 		</tr></thead>
 		<tbody>[% FOREACH reservloo IN reservloop %]
 		<tr class="[% reservloo.color %]">
-            <td><span title="[% reservloo.reservedate_sort %]">[% reservloo.reservedate %]</span></td>
+            <td><span title="[% reservloo.reservedate %]">[% reservloo.reservedate | $KohaDates %]</span></td>
             <td>
                 <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% reservloo.biblionumber %]">[% reservloo.title |html %]</a>[% IF ( reservloo.author ) %], by [% reservloo.author %][% END %]
             </td>
