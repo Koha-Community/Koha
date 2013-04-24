@@ -274,8 +274,7 @@ if ($borrowernumber) {
         foreach (qw(waiting transfered nottransfered)) {
             $getreserv{$_} = 0;
         }
-        $getreserv{reservedate_sort} = $num_res->{'reservedate'};
-        $getreserv{reservedate}  = C4::Dates->new($num_res->{'reservedate'},'iso')->output('syspref');
+        $getreserv{reservedate}  = $num_res->{'reservedate'};
         foreach (qw(biblionumber title author itemcallnumber )) {
             $getreserv{$_} = $getiteminfo->{$_};
         }
@@ -448,10 +447,6 @@ sub build_issue_data {
            $issuedate = $issue->{issuedate}->clone();
         }
 
-        $issue->{date_due_sort} = $issue->{date_due};
-        $issue->{date_due}  = output_pref( $issue->{date_due} );
-        $issue->{issuedate_sort} = $issue->{issuedate};
-        $issue->{issuedate} = output_pref( $issue->{issuedate} ) if defined $issue->{issuedate};
         my $biblionumber = $issue->{biblionumber};
         $issue->{issuingbranchname} = GetBranchName($issue->{branchcode});
         my %row          = %{$issue};
