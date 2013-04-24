@@ -219,7 +219,7 @@ sub printbaskets {
     my $abaskets;
     my $arrbasket;
     # header of the table
-    my @keys = ('Lot',  'Basket (N°)','Total RRP tax exc.', 'Total RRP tax inc.', 'GST rate', 'GST', 'Total discount', 'Total tax exc.', 'Total tax inc.');
+    my @keys = ('Lot',  'Basket (No.)','Total RRP tax exc.', 'Total RRP tax inc.', 'GST rate', 'GST', 'Total discount', 'Total tax exc.', 'Total tax inc.');
     for my $bkey (@keys) {
         push(@$arrbasket, $bkey);
     }
@@ -253,7 +253,7 @@ sub printbaskets {
         my @gst_string = map{$num->format_price( $_ ) . '%'} @gst;
         push(@$arrbasket,
             $basket->{contractname},
-            $basket->{basketname} . ' (N°' . $basket->{basketno} . ')',
+            $basket->{basketname} . ' (No. ' . $basket->{basketno} . ')',
             $num->format_price($totalrrpgste),
             $num->format_price($totalrrpgsti),
             "@gst_string",
