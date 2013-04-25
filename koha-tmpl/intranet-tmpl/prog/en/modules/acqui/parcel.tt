@@ -4,6 +4,7 @@
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'datatables.inc' %]
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.columnFilter.js"></script>
 [% INCLUDE 'greybox.inc' %]
 <script type="text/javascript">
 //<![CDATA[
@@ -15,7 +16,7 @@
         var pendingt = $("#pendingt").dataTable($.extend(true, {}, dataTablesDefaults, {
             "bStateSave": true,
             "iCookieDuration": 60*60*24*1000, // 1000 days
-            "aLengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+            "aLengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]],
             "aoColumnDefs": [
                 { "aTargets": [ 3, 8, 9 ], "bSortable": false, "bSearchable": false },
             ],
@@ -31,14 +32,31 @@
                 null,
                 null,
             ],
+            'bAutoWidth': false,
             "sPaginationType": "four_button"
-        } ) );
+        } )
+        ).columnFilter({
+            sPlaceHolder: "head:after",
+            aoColumns: [
+                { type: "text" },
+                { type: "text" },
+                { type: "text" },
+                null,
+                { type: "text" },
+                { type: "text" },
+                { type: "text" },
+                { type: "text" },
+                null,
+                null
+            ]
+        });
       }
+
       if ( $("#receivedt").length ) {
         var receivedt = $("#receivedt").dataTable($.extend(true, {}, dataTablesDefaults, {
             "bStateSave": true,
             "iCookieDuration": 60*60*24*1000, // 1000 days
-            "aLengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+            "aLengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]],
             "aoColumnDefs": [
                 { "aTargets": [ 3, -1 ], "bSortable": false, "bSearchable": false },
             ],
@@ -175,12 +193,25 @@
 <p><strong>Invoice number:</strong> [% invoice %] <strong>Received by:</strong> [% loggedinusername %] <strong>On:</strong> [% formatteddatereceived %]</p>
 </div>
 [% UNLESS (invoiceclosedate) %]
-<div id="acqui_receive_search">
+  <div id="acqui_receive_search">
     <h3>Pending orders</h3>
 
- [% IF ( loop_orders ) %]<table id="pendingt">
-    <thead>
-        <tr>
+    [% IF ( loop_orders ) %]
+      <table id="pendingt">
+        <thead>
+          <tr>
+            <th>Basket search</th>
+            <th>Order line search</th>
+            <th>Summary search</th>
+            <th>&nbsp;</th>
+            <th>Quantity search</th>
+            <th>Unit cost search</th>
+            <th>Order cost search</th>
+            <th>Fund search</th>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
+          </tr>
+          <tr>
             <th>Basket</th>
             <th>Order line</th>
             <th>Summary</th>
@@ -191,9 +222,9 @@
             <th>Fund</th>
             <th>&nbsp;</th>
             <th>&nbsp;</th>
-        </tr>
-    </thead>
-    <tbody class="filterclass">
+          </tr>
+        </thead>
+        <tbody class="filterclass">
         [% FOREACH loop_order IN loop_orders %]
             <tr>
                 <td class="basketfilterclass">[% loop_order.basketname %] (<a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% loop_order.basketno %]">[% loop_order.basketno %]</a>)</td>
@@ -250,11 +281,11 @@
                         [% END %]
                     </td>
                 </tr>
-            [% END %]
+        [% END %]
         </tbody>
-        </table>
-        [% ELSE %]There are no pending orders.[% END %]
-    </div>
+      </table>
+    [% ELSE %]There are no pending orders.[% END %]
+  </div>
 [% ELSE %]
     <p>
         Invoice is closed, so you can't receive orders anymore.

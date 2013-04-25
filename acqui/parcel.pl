@@ -203,7 +203,7 @@ for my $item ( @parcelitems ) {
 push @book_foot_loop, map { $_ } values %foot;
 
 my @loop_orders = ();
-if(!defined $invoice->{closedate}) {
+unless( defined $invoice->{closedate} ) {
     my $pendingorders;
     if($op eq "search"){
         my $search   = $input->param('summaryfilter') || '';
