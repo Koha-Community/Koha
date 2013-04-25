@@ -232,13 +232,14 @@
                 [% IF ( closedate ) %]
                 <div class="yui-u">
                     <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="post">
-                        <p>
-                          <label for="basketgroupid"><strong>Basket group:</strong></label>
+                        <ol>
+                        <li>
+                          <span class="label">Basket group:</span>
                           [% IF basketgroup.closed %]
                             [% basketgroup.name %] (closed)
                           [% ELSE %]
-                            </p>
-                            <p>
+                            </li>
+                            <li>
                             <select id="basketgroupid" name="basketgroupid">
                               <option value="new">Add new group</option>
                               [% FOREACH bg IN basketgroups %]
@@ -253,20 +254,16 @@
                                 [% END %]
                               [% END %]
                             </select>
-                          [% END %]
-                        </p>
-
-                        [% UNLESS basketgroup.closed %]
-                          <p>
                             <input type="hidden" id="basketno" value="[% basketno %]" name="basketno" />
                             <input type="hidden" value="mod_basket" name="op" />
                             <input type="hidden" name="booksellerid" value="[% booksellerid %]" />
                             <input type="submit" value="Change basket group" />
-                          </p>
-                        [% END %]
+                          [% END %]
+                        </li>
+                    [% IF ( basketgroupdeliveryplace ) %]<li><span class="label">Basket group delivery place:</span> [% basketgroupdeliveryplace %]</li>[% END %]
+                    [% IF ( basketgroupbillingplace ) %]<li><span class="label">Basket group billing place:</span> [% basketgroupbillingplace %]</li>[% END %]
+                        </ol>
                     </form>
-                    [% IF ( basketgroupdeliveryplace ) %]<p>Basket group delivery place: [% basketgroupdeliveryplace %]</p>[% END %]
-                    [% IF ( basketgroupbillingplace ) %]<p>Basket group billing place: [% basketgroupbillingplace %]</p>[% END %]
                 </div>
                 [% END %]
             </div>
