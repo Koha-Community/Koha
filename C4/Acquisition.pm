@@ -1192,6 +1192,9 @@ sub ModOrder {
     my $sth = $dbh->prepare("SELECT * FROM aqorders LIMIT 1;");
     $sth->execute;
     my $colnames = $sth->{NAME};
+        #FIXME Be careful. If aqorders would have columns with diacritics,
+        #you should need to decode what you get back from NAME.
+        #See report 10110 and guided_reports.pl
     my $query = "UPDATE aqorders SET ";
 
     foreach my $orderinfokey (grep(!/ordernumber/, keys %$orderinfo)){
