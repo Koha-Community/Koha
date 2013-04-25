@@ -2703,6 +2703,11 @@ sub PrepareItemrecordDisplay {
                             }
                         }
 
+                        $defaultvalue = C4::Context->userenv->{branch};
+                        if ( $defaultvalues and $defaultvalues->{branchcode} ) {
+                            $defaultvalue = $defaultvalues->{branchcode};
+                        }
+
                         #----- itemtypes
                     } elsif ( $tagslib->{$tag}->{$subfield}->{authorised_value} eq "itemtypes" ) {
                         my $sth = $dbh->prepare( "SELECT itemtype,description FROM itemtypes ORDER BY description" );
