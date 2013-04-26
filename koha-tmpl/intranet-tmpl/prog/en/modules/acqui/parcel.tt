@@ -196,7 +196,7 @@
     <tbody class="filterclass">
         [% FOREACH loop_order IN loop_orders %]
             <tr>
-                <td class="basketfilterclass"><a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% loop_order.basketno %]">[% loop_order.basketno %]</a></td>
+                <td class="basketfilterclass">[% loop_order.basketname %] (<a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% loop_order.basketno %]">[% loop_order.basketno %]</a>)</td>
                 <td class="orderfilterclass"><a href="neworderempty.pl?ordernumber=[% loop_order.ordernumber %]&amp;booksellerid=[% loop_order.booksellerid %]">[% loop_order.ordernumber %]</a></td>
                 <td class="summaryfilterclass">
                   <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% loop_order.biblionumber %]">[% loop_order.title |html %]</a>
@@ -301,10 +301,10 @@
             <th></th>
         </tr>
     </tfoot>
-	<tbody class="filterclass">
-	    [% FOREACH loop_receive IN loop_received %]
+    <tbody class="filterclass">
+        [% FOREACH loop_receive IN loop_received %]
             <tr>
-                <td><a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% loop_receive.basketno %]">[% loop_receive.basketno %]</a></td>
+                <td>[% loop_receive.basketname %] (<a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% loop_receive.basketno %]">[% loop_receive.basketno %]</a>)</td>
                 <td><a href="neworderempty.pl?ordernumber=[% loop_receive.ordernumber %]&amp;booksellerid=[% booksellerid %]">[% loop_receive.ordernumber %]</a></td>
                 <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% loop_receive.biblionumber %]">[% loop_receive.title |html %]</a>
                 [% IF ( loop_receive.author ) %] / [% loop_receive.author %][% END %]
@@ -364,45 +364,41 @@
 
 <div class="yui-b">
 <form action="/cgi-bin/koha/acqui/parcel.pl" id="filterform" method="post">
-        <fieldset class="brief">
-
-            <h4>Filter</h4>
-
-	    <ol>
-
-		<li>
-		    <label for="summaryfilter">ISBN, author or title :</label>
-            <input type="text" name="summaryfilter" id="summaryfilter" value="[% summaryfilter %]"/>
-		</li>
-
-		<li>
-		    <label for="basketfilter">Basket :</label>
-            <input type="text" name="basketfilter" id="basketfilter" value="[% basketfilter %]"/>
-		</li>
-
-		<li>
-            <label for="orderfilter">Order line :</label>
-            <input type="text" name="orderfilter" id="orderfilter" value="[% orderfilter %]"/>
-		</li>
-                [% IF (UNIMARC) %]
+  <fieldset class="brief">
+    <h4>Filter</h4>
+    <ol>
+      <li>
+        <label for="summaryfilter">ISBN, author or title :</label>
+        <input type="text" name="summaryfilter" id="summaryfilter" value="[% summaryfilter %]"/>
+      </li>
+      <li>
+        <label for="basketfilter">Basket :</label>
+        <input type="text" name="basketfilter" id="basketfilter" value="[% basketfilter %]"/>
+      </li>
+      <li>
+          <label for="basketgroupnamefilter">Basket group name :</label>
+          <input type="text" name="basketgroupnamefilter" id="basketgroupnamefilter" value="[% basketgroupnamefilter %]" />
+      </li>
+      <li>
+        <label for="orderfilter">Order line :</label>
+        <input type="text" name="orderfilter" id="orderfilter" value="[% orderfilter %]"/>
+      </li>
+      [% IF (UNIMARC) %]
         <li>
-            <label for="eanfilter">EAN :</label>
-            <input type="text" name="eanfilter" id="eanfilter" value="[% eanfilter %]"/>
+          <label for="eanfilter">EAN :</label>
+          <input type="text" name="eanfilter" id="eanfilter" value="[% eanfilter %]"/>
         </li>
-                [% END %]
-	    </ol>
-		<fieldset class="action">
-        <input type="hidden" value="search" name="op" />
-        <input type="hidden" value="[% invoiceid %]" name="invoiceid" />
-        <input type="submit" value="Filter" />
-        <a href="/cgi-bin/koha/acqui/parcel.pl?invoiceid=[% invoiceid %]">Clear</a>
-		</fieldset>
-
-
-        </fieldset>
-    </form>
+      [% END %]
+    </ol>
+    <fieldset class="action">
+      <input type="hidden" value="search" name="op" />
+      <input type="hidden" value="[% invoiceid %]" name="invoiceid" />
+      <input type="submit" value="Filter" />
+      <a href="/cgi-bin/koha/acqui/parcel.pl?invoiceid=[% invoiceid %]">Clear</a>
+    </fieldset>
+  </fieldset>
+</form>
 [% INCLUDE 'acquisitions-menu.inc' %]
 </div>
 </div>
 [% INCLUDE 'intranet-bottom.inc' %]
- 

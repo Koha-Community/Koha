@@ -208,12 +208,14 @@ if(!defined $invoice->{closedate}) {
         my $ean      = $input->param('eanfilter') || '';
         my $basketname = $input->param('basketfilter') || '';
         my $orderno  = $input->param('orderfilter') || '';
+        my $basketgroupname = $input->param('basketgroupnamefilter') || '';
         $pendingorders = SearchOrders({
             booksellerid => $booksellerid,
             basketname => $basketname,
             ordernumber => $orderno,
             search => $search,
             ean => $ean,
+            basketgroupname => $basketgroupname,
             pending => 1,
         });
         $template->param(
@@ -221,6 +223,7 @@ if(!defined $invoice->{closedate}) {
             eanfilter => $ean,
             basketfilter => $basketname,
             orderfilter => $orderno,
+            basketgroupnamefilter => $basketgroupname,
         );
     }else{
         $pendingorders = SearchOrders({
