@@ -52,10 +52,13 @@ else {
 }
 
 if($view eq 'card') {
-    my $themelang = '/' . C4::Context->preference("opacthemes") .  '/' . C4::Templates::_current_language();
+    my $themelang =  '/' . C4::Templates::_current_language();
     my $xmlrecord= $importid? $record->as_xml(): GetXmlBiblio($biblionumber);
     my $xslfile =
-      C4::Context->config('intrahtdocs') . $themelang . "/xslt/compact.xsl";
+      C4::Context->config('intrahtdocs') . '/prog' . $themelang . "/xslt/compact.xsl";
+    if ( ! -f $xslfile && $themelang ne '/en' ) {
+        $xslfile=~s#$themelang#/en#;
+    }
     my $parser       = XML::LibXML->new();
     my $xslt         = XML::LibXSLT->new();
     my $source       = $parser->parse_string($xmlrecord);
