@@ -19,7 +19,6 @@ package C4::Auth;
 
 use strict;
 use warnings;
-
 use Digest::MD5 qw(md5_base64);
 use Storable qw(thaw freeze);
 use URI::Escape;
@@ -1066,10 +1065,14 @@ sub checkauth {
         LibraryName => C4::Context->preference("LibraryName"),
     );
     $template->param( %info );
-
-    require C4::Output;
-    C4::Output::output_html_with_http_headers( $query, $cookie,
-                                               $template->output);
+#    $cookie = $query->cookie(CGISESSID => $session->id
+#   );
+    print $query->header(
+        -type   => 'text/html',
+        -charset => 'utf-8',
+        -cookie => $cookie
+      ),
+      $template->output;
     safe_exit;
 }
 
