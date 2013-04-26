@@ -1,12 +1,12 @@
 [% INCLUDE 'help-top.inc' %]   
 
-<h1>Patron Permissions</h1>
+<h2>Patron permissions</h2>
 
 <p>Patron Permissions are used to allow staff members access to the staff client.</p>
 
 <p style="color: #990000">Important: In order for a staff member to log into the staff interface they must have (at the very least) 'catalogue' permissions which allow them to view the staff interface.</p>
 
-<h2>Setting Patron Permissions</h2>
+<h3>Setting Patron Permissions</h3>
 
 <p>To set patron permissions, you must first have a patron of the 'Staff' type open</p>
 
@@ -20,102 +20,109 @@
 <ul>
 	<li>superlibrarian
 <ul>
-    <li>Access to all functions within the staff client
+	<li>Access to all librarian functions
 <ul>
-    <li style="background-color: #ffe599;">Tip:  With this selected there is no need to choose any other permissions</li>
+	<li style="background-color: #ffe599;">Tip: With this selected there is no need to choose any other permissions</li>
 </ul>
 </li>
 </ul>
 </li>
 	<li>circulate
 <ul>
-	<li>Ability to check (issue) books out and in and access the 'Circulation' page in the staff client</li>
+	<li>Check out and check in items</li>
 	<li>This section can be expanded</li>
 </ul>
 </li>
 	<li>catalogue
 <ul>
-	<li>Allows staff members to search the catalog via the staff client</li>
-	<li>Must be given to all staff members to allow them to login to the staff client</li>
+	<li><strong>Required for staff login.</strong> Staff access, allows viewing the catalogue in staff client
+<ul>
+	<li style="color: #990000">Important: Must be given to all staff members to allow them to login to the staff client</li>
+</ul>
+</li>
 </ul>
 </li>
 	<li>parameters
 <ul>
-	<li>Provides access to all areas of the Administration menu</li>
-    <li>This section can be expanded</li>
+	<li>Manage Koha system settings (Administration panel)</li>
+	<li>This secton can be expanded</li>
 </ul>
 </li>
 	<li>borrowers
 <ul>
-	<li>Allows staff members to add or modify patrons (with the exception of setting permissions)</li>
+	<li>Add or modify patrons</li>
 </ul>
 </li>
 	<li>permissions
 <ul>
-	<li>Ability to set patron permissions</li>
+	<li>Set user permissions</li>
 </ul>
 </li>
 	<li>reserveforothers
 <ul>
-	<li>Ability to place holds on books for patrons via the staff interface</li>
+	<li>Place and modify holds for patrons</li>
 	<li>This section can be expanded</li>
 </ul>
 </li>
 	<li>borrow
 <ul>
-	<li>Grants staff members the rights to borrow books from the library</li>
+	<li>Borrow books</li>
 </ul>
 </li>
 	<li>editcatalogue
 <ul>
-	<li>Ability to catalog items (add and edit bibliographic and holdings data)</li>
+	<li>Edit Catalog (Modify bibliographic/hodings data)</li>
 	<li>This section can be expanded</li>
 </ul>
 </li>
 	<li>updatecharges
 <ul>
-	<li>Manage patron accounts (including paying fines, adding credits, and creating invoices)</li>
+	<li>Manage patrons fines and fees</li>
 </ul>
 </li>
 	<li>acquisition
 <ul>
-	<li>Provides access to the acquisitions and patron purchase suggestion modules</li>
+	<li>Acquisition and/or suggestion management</li>
 	<li>This section can be expanded</li>
 </ul>
 </li>
 	<li>management
 <ul>
-	<li>No longer in use</li>
+	<li>Set library management paraments (deprecated)
+<ul>
+	<li style="color: #990000">Important: This permission level no longer controls anything.</li>
+</ul>
+</li>
 </ul>
 </li>
 	<li>tools
 <ul>
-	<li>Access to all items in the Tools section of the staff client</li>
+	<li>Use all tools</li>
 	<li>This section can be expanded</li>
 </ul>
 </li>
 	<li>editauthorities
 <ul>
-	<li>Provides access to edit the authority record</li>
+	<li>Edit Authorities</li>
 </ul>
 </li>
 	<li>serials
 <ul>
-	<li>Allows access to the serials module</li>
+	<li>Manage serial subscriptions</li>
 	<li>This section can be expanded</li>
 </ul>
 </li>
 	<li>reports
 <ul>
-	<li>Allow access to the Reports module (ability to create, edit and run all reports)</li>
+	<li>Allow access to the reports module</li>
 	<li>Reports found on the Circulation page are not controlled by this permission</li>
 	<li>This section can be expanded</li>
 </ul>
 </li>
 	<li>staffaccess
 <ul>
-	<li>Provides the ability to modify login / permissions for staff users</li>
-    <li style="color: #990000">Important: Requires the borrowers permission above</li>
+	<li>Allow staff members to modify permissions for other staff members</li>
+	<li style="color: #990000">Important: Requires the borrowers permission above</li>
 </ul>
 </li>
 </ul>
@@ -127,13 +134,20 @@
 <ul>
 	<li>circulate_remaining_permissions
 <ul>
-    <li>All circulation rights except the ability to override renewals</li>
+	<li>Remaining circulation permissions</li>
+	<li>All circulation rights except the ability to override renewals</li>
+</ul>
+</li>
+	<li>overdues_report
+<ul>
+	<li>Execute overdue items report</li>
+	<li>The permission to run the overdues reports found under Circulation</li>
 </ul>
 </li>
 	<li>override_renewals
 <ul>
 	<li>Override blocked renewals</li>
-    <li>Requires that the staff member also has circulate_remaining_permissions</li>
+	<li>Requires that the staff member also has circulate_remaining_permissions</li>
 </ul>
 </li>
 </ul>
@@ -143,14 +157,16 @@
 <p>If the staff member has 'parameters' permissions they have the ability to perform all of these actions. If you would like to control parameter permissions on a more granular level choose from these options:</p>
 
 <ul>
-    <li>manage_circ_rules
+	<li>manage_circ_rules
 <ul>
-    <li>The ability to edit circulation and fine rules in the administration area</li>
+	<li>Manage circulation rules</li>
+	<li>The ability to access the Circulation and fines rules in the administration area</li>
 </ul>
 </li>
-    <li>parameters_remaining_permissions
+	<li>parameters_remaining_permissions
 <ul>
-    <li>Access to all other areas under Administration</li>
+	<li>Remaining system parameters permissions</li>
+	<li>The ability to access all areas in Administration (other than the Circulation and fine rules)</li>
 </ul>
 </li>
 </ul>
@@ -162,12 +178,13 @@
 <ul>
 	<li>modify_holds_priority
 <ul>
+	<li>Modify holds priority</li>
 	<li>Allow staff members to alter the holds priority (moving patrons up and down the queue)</li>
 </ul>
 </li>
 	<li>place_holds
 <ul>
-    <li>Allows staff members to place holds for patrons via the staff interface</li>
+	<li>Place holds for patrons</li>
 </ul>
 </li>
 </ul>
@@ -179,16 +196,19 @@
 <ul>
 	<li>edit_catalogue
 <ul>
+	<li>Edit catalog (Modify bibliographic/holdings data)</li>
 	<li>Ability to access all cataloging functions via the Cataloging page</li>
 </ul>
 </li>
 	<li>edit_items
 <ul>
-	<li>Ability to make edits to item records, but not bib records</li>
+	<li>Edit items</li>
+	<li>Ability to make edits to item/holdings records, but not bibliographic records</li>
 </ul>
 </li>
 	<li>fast_cataloging
 <ul>
+	<li>Fast cataloging</li>
 	<li>The ability to catalog using only the Fast Add Framework found on the Circulation page</li>
 </ul>
 </li>
@@ -201,7 +221,7 @@
 <ul>
 	<li>budget_add_del
 <ul>
-    <li>Ability to add and delete budgets (not modify)</li>
+	<li>Add and delete budgets (but can't modify them)</li>
 </ul>
 </li>
 	<li>budget_manage
@@ -209,9 +229,14 @@
 	<li>Manage budgets</li>
 </ul>
 </li>
+	<li>budget_manage_all
+<ul>
+	<li>Manage all budgets</li>
+</ul>
+</li>
 	<li>budget_modify
 <ul>
-	<li>Ability to edit existing budgets (not to add or delete)</li>
+	<li>Modify budget (can't create lines, but can modify existing ones)</li>
 </ul>
 </li>
 	<li>contracts_manage
@@ -263,7 +288,7 @@
 </li>
 	<li>claim_serials
 <ul>
-	<li>Claim missing serials</li>
+	<li>Claim missing serials via the Claims section</li>
 </ul>
 </li>
 	<li>create_subscription
@@ -278,21 +303,24 @@
 </li>
 	<li>edit_subscription
 <ul>
-	<li>Edit (but not delete or create) an existing subscription</li>
+	<li>Edit an existing subscription</li>
+	<li>This permission does not include the ability to delete or create a subscription</li>
 </ul>
 </li>
 	<li>receive_serials
 <ul>
+	<li>Serials receiving</li>
 	<li>Receive serials on existing subscriptions</li>
 </ul>
 </li>
 	<li>renew_subscription
 <ul>
-	<li>Renew an existing subscription</li>
+	<li>Renew a subscription</li>
 </ul>
 </li>
 	<li>routing
 <ul>
+	<li>Routing</li>
 	<li>Manage routing lists</li>
 </ul>
 </li>
@@ -305,97 +333,122 @@
 <ul>
 	<li>batch_upload_patron_images
 <ul>
-	<li>Upload patron images in batch or one at a time (Access to the Image Upload Tool)</li>
+	<li>Upload patron images in batch or one at a time</li>
+	<li>Access to the Image Upload Tool</li>
 </ul>
 </li>
 	<li>delete_anonymize_patrons
 <ul>
-	<li>Delete old borrowers and anonymize circulation/reading history (Access to the Anonymize Patron Tool)</li>
+	<li>Delete old borrowers and anonymize circulation/reading history (deletes borrower reading history)</li>
+	<li>Access to the Anonymize Patron Tool</li>
 </ul>
 </li>
 	<li>edit_calendar
 <ul>
-	<li>Define days when the library is closed (Access to the Calendar/Holidays Tool)</li>
+	<li>Define days when the library is closed</li>
+	<li>Access to the Calendar/Holidays Tool</li>
 </ul>
 </li>
 	<li>edit_news
 <ul>
-	<li>Write news for the OPAC and staff interfaces (Access to the News Tool)</li>
+	<li>Write news for the OPAC and staff interfaces</li>
+	<li>Access to the News Tool</li>
 </ul>
 </li>
 	<li>edit_notice_status_triggers
 <ul>
-	<li>Set notice/status triggers for overdue items (Access to the Overdue Notice Status/Triggers Tool)</li>
+	<li>Set notice/status triggers for overdue items</li>
+	<li>Access to the Overdue Notice Status/TriggersTool</li>
 </ul>
 </li>
 	<li>edit_notices
 <ul>
-	<li>Define notices (Access to the Notices Tool)</li>
+	<li>Define notices</li>
+	<li>Access to the Notices Tool</li>
 </ul>
 </li>
 	<li>export_catalog
 <ul>
-	<li>Export bibliographic and holdings data (Access to the Export Bibliographic &amp; Holdings Data Tool)</li>
+	<li>Export bibliographic, authorities and holdings data</li>
+	<li>Access to the Export Data Tool</li>
 </ul>
 </li>
 	<li>import_patrons
 <ul>
-	<li>Import patron data (Access to the Import Patrons Tool)</li>
+	<li>Import patron data</li>
+	<li>Access to the Import Patrons Tool</li>
 </ul>
 </li>
 	<li>inventory
 <ul>
-	<li>Perform inventory (stocktaking) of your catalog (Access to the Inventory Tool)</li>
+	<li>Perform inventory (stocktaking) of your catalog</li>
+	<li>Access to the Inventory Tool</li>
 </ul>
 </li>
 	<li>items_batchdel
 <ul>
-	<li>Perform batch deletion of items (Access to the Delete a queryset of items Tool)</li>
+	<li>Perform batch deletion of items</li>
+	<li>Access to the Batch Item Deletion Tool</li>
 </ul>
 </li>
 	<li>items_batchmod
 <ul>
-	<li>Perform batch modification of items (Access to the Modify a queryset of items Tool)</li>
+	<li>Perform batch modification of items</li>
+	<li>Access to the Batch Item Modification Tool</li>
 </ul>
 </li>
 	<li>label_creator
 <ul>
-	<li>Create printable labels and barcodes from catalog and patron data (Access to the Label Creator and Quick Label Creator Tools)</li>
+	<li>Create printable labels and barcodes from catalog and patron data</li>
+	<li>Access to the Label Creator and Quick Label Creator Tools</li>
 </ul>
 </li>
 	<li>manage_csv_profiles
 <ul>
-	<li>Create and edit CSV profiles (Access to the CSV Profiles Tool)</li>
+	<li>Manage CSV export profiles</li>
+	<li>Access to the CSV Profiles Tool</li>
 </ul>
 </li>
 	<li>manage_staged_marc
 <ul>
-	<li>Managed staged MARC records, including completing and reversing imports (Access to the Manage Staged MARC Records Tool)</li>
+	<li>Managed staged MARC records, including completing and reversing imports</li>
+	<li>Access to the Manage Staged MARC Records Tool</li>
 </ul>
 </li>
 	<li>moderate_comments
 <ul>
-	<li>Moderate patron comments (Access to the Comments and Tags Tools)</li>
+	<li>Moderate patron comments</li>
+	<li>Access to the Comments Tool</li>
+</ul>
+</li>
+	<li>moderate_tags
+<ul>
+	<li>Moderate patron tags</li>
+	<li>Acces to the Tags Tool</li>
 </ul>
 </li>
 	<li>schedule_tasks
 <ul>
-	<li>Schedule tasks to run (Access to the Task Scheduler Tool)</li>
+	<li>Schedule tasks to run</li>
+	<li>Access to the Task Scheduler Tool</li>
 </ul>
 </li>
 	<li>stage_marc_import
 <ul>
-	<li>Stage MARC records into the reservoir (Access to the Stage MARC Records Tool)</li>
+	<li>Stage MARC records into the reservoir</li>
+	<li>Access to the Stage MARC Records Tool</li>
 </ul>
 </li>
-    <li>upload_local_cover_images
+	<li>upload_local_cover_images
 <ul>
-    <li>Upload local cover images (Access to the Upload Local Cover Image Tool)</li>
+	<li>Upload local cover images</li>
+	<li>Access to the Upload Local Cover Image Tool</li>
 </ul>
 </li>
 	<li>view_system_logs
 <ul>
-	<li>Browse the system logs (Access to the Log Viewer Tool)</li>
+	<li>Browse the system logs</li>
+	<li>Access to the Log Viewer Tool</li>
 </ul>
 </li>
 </ul>
@@ -407,16 +460,18 @@
 <ul>
 	<li>create_reports
 <ul>
+	<li>Create SQL Reports</li>
 	<li>The ability to create and edit but not run SQL reports</li>
 </ul>
 </li>
 	<li>execute_reports
 <ul>
+	<li>Execute SQL Reports</li>
 	<li>The ability to run but not create or edit SQL reports</li>
 </ul>
 </li>
 </ul>
 
-<p><strong>See the full documentation for Patron Permissions in the <a href="http://manual.koha-community.org/3.10/en/patronpermissions.html">manual</a> (online).</strong></p>
+<p><strong>See the full documentation for Patron Permissions in the <a href="http://manual.koha-community.org/3.12/en/patronpermissions.html">manual</a> (online).</strong></p>
 
 [% INCLUDE 'help-bottom.inc' %]
