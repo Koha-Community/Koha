@@ -106,7 +106,7 @@ td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
 					"data": {ok: $(event.target).attr("title"), CGISESSID: readCookie('CGISESSID')},
 					"success": count_approve // success_approve
 				});
-				$(event.target).next(".rej").removeAttr("disabled").attr("value","Reject").css("color","#000");
+                $(event.target).next(".rej").removeAttr("disabled").attr("value",_("Reject")).css("color","#000");
 				$(event.target).attr(   "value",_("Approved")).attr("disabled","disabled").css("color","#666");
 				return false;	// cancel submit
 			}
@@ -115,7 +115,7 @@ td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
 					"data": {rej: $(event.target).attr("title"), CGISESSID: readCookie('CGISESSID')},
 					"success": count_reject // success_reject
 				});
-				$(event.target).prev(".ok").removeAttr("disabled").attr("value","Approve").css("color","#000");
+                $(event.target).prev(".ok").removeAttr("disabled").attr("value",_("Approve")).css("color","#000");
 				$(event.target).attr(   "value",_("Rejected")).attr("disabled","disabled").css("color","#666");
 				return false;	// cancel submit
 			}
