@@ -2,9 +2,42 @@
 use strict;
 use warnings;
 
-use Test::More tests => 8;
+use C4::Context;
+use Test::More tests => 11;
+use Test::MockModule;
+use DBD::Mock;
 
 use_ok('C4::Koha');
+
+my $module_context = new Test::MockModule('C4::Context');
+$module_context->mock(
+    '_new_dbh',
+    sub {
+        my $dbh = DBI->connect( 'DBI:Mock:', '', '' )
+          || die "Cannot create handle: $DBI::errstr\n";
+        return $dbh;
+    }
+);
+
+SKIP: {
+
+    skip "DBD::Mock is too old", 3
+        unless $DBD::Mock::VERSION >= 1.45;
+
+    my @loc_results = (['category'],['LOC']);
+    my @empty_results = ([]);
+    my @relterms_results = (['category'],['RELTERMS']);
+
+    my $dbh = C4::Context->dbh();
+
+    $dbh->{mock_add_resultset} = \@loc_results;
+    is ( IsAuthorisedValueCategory('LOC'), 1, 'LOC is a valid authorized value category');
+    $dbh->{mock_add_resultset} = \@empty_results;
+    is ( IsAuthorisedValueCategory('something'), 0, 'something is not a valid authorized value category');
+    $dbh->{mock_add_resultset} = \@relterms_results;
+    is ( IsAuthorisedValueCategory('RELTERMS'), 1, 'RELTERMS is a valid authorized value category');
+
+} # End SKIP block
 
 #
 # test that &slashifyDate returns correct (non-US) date
@@ -27,5 +60,4 @@ is($str, q{'"&<>'}, '... and does not change input in place');
 is(C4::Koha::_isbn_cleanup('0-590-35340-3'), '0590353403', '_isbn_cleanup removes hyphens');
 is(C4::Koha::_isbn_cleanup('0590353403 (pbk.)'), '0590353403', '_isbn_cleanup removes parenthetical');
 is(C4::Koha::_isbn_cleanup('978-0-321-49694-2'), '0321496949', '_isbn_cleanup converts ISBN-13 to ISBN-10');
-
 

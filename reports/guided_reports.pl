@@ -27,6 +27,7 @@ use C4::Output;
 use C4::Dates qw/format_date/;
 use C4::Debug;
 use C4::Branch; # XXX subfield_is_koha_internal_p
+use C4::Koha qw/IsAuthorisedValueCategory/;
 
 =head1 NAME
 
@@ -131,7 +132,6 @@ elsif ( $phase eq 'Show SQL'){
 }
 
 elsif ( $phase eq 'Edit SQL'){
-	
     my $id = $input->param('reports');
     my $report = get_saved_report($id);
     my $group = $report->{report_group};
@@ -159,6 +159,7 @@ elsif ( $phase eq 'Update SQL'){
     my $cache_expiry = $input->param('cache_expiry');
     my $cache_expiry_units = $input->param('cache_expiry_units');
     my $public = $input->param('public');
+    my $save_anyway = $input->param('save_anyway');
 
     my @errors;
 
@@ -185,26 +186,52 @@ elsif ( $phase eq 'Update SQL'){
     elsif ($sql !~ /^(SELECT)/i) {
         push @errors, {queryerr => 1};
     }
+
     if (@errors) {
         $template->param(
             'errors'    => \@errors,
             'sql'       => $sql,
         );
     } else {
-        update_sql( $id, {
-                sql => $sql,
-                name => $reportname,
-                group => $group,
-                subgroup => $subgroup,
-                notes => $notes,
-                cache_expiry => $cache_expiry,
-                public => $public,
-        } );
-        $template->param(
-            'save_successful'       => 1,
-            'reportname'            => $reportname,
-            'id'                    => $id,
-        );
+
+        # Check defined SQL parameters for authorised value validity
+        my $problematic_authvals = ValidateSQLParameters($sql);
+
+        if ( scalar @$problematic_authvals > 0 && not $save_anyway ) {
+            # There's at least one problematic parameter, report to the
+            # GUI and provide all user input for further actions
+            $template->param(
+                'id' => $id,
+                'sql' => $sql,
+                'reportname' => $reportname,
+                'group' => $group,
+                'subgroup' => $subgroup,
+                'notes' => $notes,
+                'cache_expiry' => $cache_expiry,
+                'cache_expiry_units' => $cache_expiry_units,
+                'public' => $public,
+                'problematic_authvals' => $problematic_authvals,
+                'warn_authval_problem' => 1,
+                'phase_update' => 1
+            );
+
+        } else {
+            # No params problem found or asked to save anyway
+            update_sql( $id, {
+                    sql => $sql,
+                    name => $reportname,
+                    group => $group,
+                    subgroup => $subgroup,
+                    notes => $notes,
+                    cache_expiry => $cache_expiry,
+                    public => $public,
+                } );
+            $template->param(
+                'save_successful'       => 1,
+                'reportname'            => $reportname,
+                'id'                    => $id,
+            );
+        }
     }
 }
 
@@ -467,6 +494,7 @@ elsif ( $phase eq 'Save Report' ) {
     my $cache_expiry = $input->param('cache_expiry');
     my $cache_expiry_units = $input->param('cache_expiry_units');
     my $public = $input->param('public');
+    my $save_anyway = $input->param('save_anyway');
 
 
     # if we have the units, then we came from creating a report from SQL and thus need to handle converting units
@@ -493,6 +521,7 @@ elsif ( $phase eq 'Save Report' ) {
     elsif ($sql !~ /^(SELECT)/i) {
         push @errors, {queryerr => "No SELECT"};
     }
+
     if (@errors) {
         $template->param(
             'errors'    => \@errors,
@@ -503,25 +532,48 @@ elsif ( $phase eq 'Save Report' ) {
             'cache_expiry' => $cache_expiry,
             'public'    => $public,
         );
-    }
-    else {
-        my $id = save_report( {
-                borrowernumber => $borrowernumber,
-                sql            => $sql,
-                name           => $name,
-                area           => $area,
-                group          => $group,
-                subgroup       => $subgroup,
-                type           => $type,
-                notes          => $notes,
-                cache_expiry   => $cache_expiry,
-                public         => $public,
-            } );
-        $template->param(
-            'save_successful' => 1,
-            'reportname'      => $name,
-            'id'              => $id,
-        );
+    } else {
+        # Check defined SQL parameters for authorised value validity
+        my $problematic_authvals = ValidateSQLParameters($sql);
+
+        if ( scalar @$problematic_authvals > 0 && not $save_anyway ) {
+            # There's at least one problematic parameter, report to the
+            # GUI and provide all user input for further actions
+            $template->param(
+                'area' => $area,
+                'group' =>  $group,
+                'subgroup' => $subgroup,
+                'sql' => $sql,
+                'reportname' => $name,
+                'type' => $type,
+                'notes' => $notes,
+                'cache_expiry' => $cache_expiry,
+                'cache_expiry_units' => $cache_expiry_units,
+                'public' => $public,
+                'problematic_authvals' => $problematic_authvals,
+                'warn_authval_problem' => 1,
+                'phase_save' => 1
+            );
+        } else {
+            # No params problem found or asked to save anyway
+            my $id = save_report( {
+                    borrowernumber => $borrowernumber,
+                    sql            => $sql,
+                    name           => $name,
+                    area           => $area,
+                    group          => $group,
+                    subgroup       => $subgroup,
+                    type           => $type,
+                    notes          => $notes,
+                    cache_expiry   => $cache_expiry,
+                    public         => $public,
+                } );
+            $template->param(
+                'save_successful' => 1,
+                'reportname'      => $name,
+                'id'              => $id,
+            );
+        }
     }
 }
 
@@ -553,14 +605,19 @@ elsif ($phase eq 'Run this report'){
             # split on ??. Each odd (2,4,6,...) entry should be a parameter to fill
             my @split = split /<<|>>/,$sql;
             my @tmpl_parameters;
+            my @authval_errors;
             for(my $i=0;$i<($#split/2);$i++) {
                 my ($text,$authorised_value) = split /\|/,$split[$i*2+1];
                 my $input;
                 my $labelid;
-                if ($authorised_value eq "date") {
-                   $input = 'date';
-                }
-                elsif ($authorised_value) {
+                if ( not defined $authorised_value ) {
+                    # no authorised value input, provide a text box
+                    $input = "text";
+                } elsif ( $authorised_value eq "date" ) {
+                    # require a date, provide a date picker
+                    $input = 'date';
+                } else {
+                    # defined $authorised_value, and not 'date'
                     my $dbh=C4::Context->dbh;
                     my @authorised_values;
                     my %authorised_lib;
@@ -601,15 +658,30 @@ elsif ($phase eq 'Run this report'){
                         #---- "true" authorised value
                     }
                     else {
-                        my $authorised_values_sth = $dbh->prepare("SELECT authorised_value,lib FROM authorised_values WHERE category=? ORDER BY lib");
+                        if ( IsAuthorisedValueCategory($authorised_value) ) {
+                            my $query = '
+                            SELECT authorised_value,lib
+                            FROM authorised_values
+                            WHERE category=?
+                            ORDER BY lib
+                            ';
+                            my $authorised_values_sth = $dbh->prepare($query);
+                            $authorised_values_sth->execute( $authorised_value);
 
-                        $authorised_values_sth->execute( $authorised_value);
-
-                        while ( my ( $value, $lib ) = $authorised_values_sth->fetchrow_array ) {
-                            push @authorised_values, $value;
-                            $authorised_lib{$value} = $lib;
-                            # For item location, we show the code and the libelle
-                            $authorised_lib{$value} = $lib;
+                            while ( my ( $value, $lib ) = $authorised_values_sth->fetchrow_array ) {
+                                push @authorised_values, $value;
+                                $authorised_lib{$value} = $lib;
+                                # For item location, we show the code and the libelle
+                                $authorised_lib{$value} = $lib;
+                            }
+                        } else {
+                            # not exists $authorised_value_categories{$authorised_value})
+                            push @authval_errors, {'entry' => $text,
+                                                   'auth_val' => $authorised_value };
+                            # tell the template there's an error
+                            $template->param( auth_val_error => 1 );
+                            # skip scrolling list creation and params push
+                            next;
                         }
                     }
                     $labelid = $text;
@@ -625,14 +697,14 @@ elsif ($phase eq 'Run this report'){
                         -multiple => 0,
                         -tabindex => 1,
                     );
-                } else {
-                    $input = "text";
                 }
+
                 push @tmpl_parameters, {'entry' => $text, 'input' => $input, 'labelid' => $labelid };
             }
             $template->param('sql'         => $sql,
                             'name'         => $name,
                             'sql_params'   => \@tmpl_parameters,
+                            'auth_val_errors'  => \@authval_errors,
                             'enter_params' => 1,
                             'reports'      => $report_id,
                             );
