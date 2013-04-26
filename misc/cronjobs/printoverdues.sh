@@ -47,4 +47,4 @@ then
     lp $optprinter  $1/*.pdf;
 fi
 
-tar cvfz $1`date "+%Y%m%d"`.tar.gz  $1;
+tar cvfzP $1`date "+%Y%m%d"`.tar.gz  $1/*.pdf;
