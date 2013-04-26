@@ -652,7 +652,7 @@ for (my $i=0;$i<@servers;$i++) {
                 $newsearchcookie = $cgi->cookie(
                             -name => 'KohaOpacRecentSearches',
                             # We uri_escape the whole freezed structure so we're sure we won't have any encoding problems
-                            -value => uri_escape_utf8(freeze(\@recentSearches)),
+                            -value =>freeze(\@recentSearches),
                             -expires => ''
                 );
                 $cookie = [$cookie, $newsearchcookie];
