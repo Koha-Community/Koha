@@ -24,7 +24,6 @@
 use strict;
 use warnings;
 use CGI;
-
 use C4::Output;
 use C4::Print;
 use C4::Auth qw/:DEFAULT get_session/;
@@ -103,7 +102,6 @@ our %return_failed = ();
 for (@failedreturns) { $return_failed{$_} = 1; }
 
 my $findborrower = $query->param('findborrower') || q{};
-utf8::decode($findborrower);
 $findborrower =~ s|,| |g;
 my $borrowernumber = $query->param('borrowernumber');
 

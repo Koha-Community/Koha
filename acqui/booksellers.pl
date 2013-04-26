@@ -74,7 +74,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 #parameters
 my $supplier = $query->param('supplier');
-utf8::decode($supplier);
 my $booksellerid = $query->param('booksellerid');
 my @suppliers;
 

@@ -27,7 +27,7 @@ use strict;
 #use warnings; FIXME - Bug 2505
 use C4::Auth;
 use C4::Output;
-use CGI qw( -utf8 );
+use CGI;
 use C4::Members;
 use C4::Branch;
 use C4::Category;

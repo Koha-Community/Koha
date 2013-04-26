@@ -127,7 +127,7 @@ $routingnotes =~ s/\n/\<br \/\>/g;
 $template->param(
     title => $subs->{'bibliotitle'},
     issue => $issue,
-    issue_escaped => URI::Escape::uri_escape_utf8($issue),
+    issue_escaped => URI::Escape::uri_escape($issue),
     subscriptionid => $subscriptionid,
     memberloop => $memberloop,
     routingnotes => $routingnotes,

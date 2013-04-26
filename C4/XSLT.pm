@@ -221,8 +221,7 @@ sub XSLTParse4Display {
         $stylesheet->{$xslfilename} = $xslt->parse_stylesheet($style_doc);
     }
     my $results      = $stylesheet->{$xslfilename}->transform($source);
-    my $newxmlrecord = $stylesheet->{$xslfilename}->output_as_chars($results);
-    #no need to decode with UTF-8 in header of XSLT templates: BZ 6554
+    my $newxmlrecord = $stylesheet->{$xslfilename}->output_string($results);
     return $newxmlrecord;
 }
 

@@ -298,8 +298,12 @@ sub output_with_http_headers {
         $options->{'Content-Script-Type'} = 'text/javascript';
     }
 
+# We can't encode here, that will double encode our templates, and xslt
+# We need to fix the encoding as it comes out of the database, or when we pass the variables to templates
+ 
+#    utf8::encode($data) if utf8::is_utf8($data);
+
     $data =~ s/\&amp\;amp\; /\&amp\; /g;
-    utf8::encode($data);
     print $query->header($options), $data;
 }
 
