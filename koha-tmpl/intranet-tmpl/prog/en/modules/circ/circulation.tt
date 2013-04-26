@@ -819,6 +819,13 @@ No patron matched <span class="ex">[% message %]</span>
     [% END %]
         [% IF ( todayissue.od ) %]<td class="od">[% ELSE %]<td>[% END %]
         <span title="[% todayissue.dd_sort %]">[% todayissue.dd %]</span>
+
+            [% IF ( todayissue.itemlost ) %]
+                <span class="lost">[% KohaAuthorisedValues.GetByCode( 'LOST', todayissue.itemlost ) %]</span>
+            [% END %]
+            [% IF ( todayissue.damaged ) %]
+                <span class="dmg">[% KohaAuthorisedValues.GetByCode( 'DAMAGED', todayissue.damaged ) %]</span>
+            [% END %]
         </td>
         <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% todayissue.biblionumber %]&amp;type=intra"><strong>[% todayissue.title |html %]</strong></a>[% IF ( todayissue.author ) %], by [% todayissue.author %][% END %][% IF ( todayissue.itemnotes ) %]- <span class="circ-hlt">[% todayissue.itemnotes %]</span>[% END %] <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% todayissue.biblionumber %]&amp;itemnumber=[% todayissue.itemnumber %]#item[% todayissue.itemnumber %]">[% todayissue.barcode %]</a></td>
         <td>[% UNLESS ( noItemTypeImages ) %] [% IF ( todayissue.itemtype_image ) %]<img src="[% todayissue.itemtype_image %]" alt="" />[% END %][% END %][% todayissue.itemtype %]</td>
@@ -899,6 +906,13 @@ No patron matched <span class="ex">[% message %]</span>
     [% END %]
         [% IF ( previssue.od ) %]<td class="od">[% ELSE %]<td>[% END %]
         <span title="[% previssue.dd_sort %]">[% previssue.dd %]</span>
+
+            [% IF ( previssue.itemlost ) %]
+                <span class="lost">[% KohaAuthorisedValues.GetByCode( 'LOST', previssue.itemlost ) %]</span>
+            [% END %]
+            [% IF ( previssue.damaged ) %]
+                <span class="dmg">[% KohaAuthorisedValues.GetByCode( 'DAMAGED', previssue.damaged ) %]</span>
+            [% END %]
         </td>
         <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% previssue.biblionumber %]&amp;type=intra"><strong>[% previssue.title |html %]</strong></a>[% IF ( previssue.author ) %], by [% previssue.author %][% END %] [% IF ( previssue.itemnotes ) %]- [% previssue.itemnotes %][% END %] <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% previssue.biblionumber %]&amp;itemnumber=[% previssue.itemnumber %]#item[% previssue.itemnumber %]">[% previssue.barcode %]</a></td>
         <td>
@@ -1030,6 +1044,14 @@ No patron matched <span class="ex">[% message %]</span>
     [% END %]
         [% IF ( relissue.overdue ) %]<td class="od">[% ELSE %]<td>[% END %]
             <span title="[% relissue.dd_sort %]">[% relissue.dd %]</span></td>
+
+            [% IF ( relissue.itemlost ) %]
+                <span class="lost">[% KohaAuthorisedValues.GetByCode( 'LOST', relissue.itemlost ) %]</span>
+            [% END %]
+            [% IF ( relissue.damaged ) %]
+                <span class="dmg">[% KohaAuthorisedValues.GetByCode( 'DAMAGED', relissue.damaged ) %]</span>
+            [% END %]
+        </td>
         <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% relissue.biblionumber %]&amp;type=intra"><strong>[% relissue.title |html %]</strong></a>[% IF ( relissue.author ) %], by [% relissue.author %][% END %][% IF ( relissue.itemnotes ) %]- <span class="circ-hlt">[% relissue.itemnotes %]</span>[% END %] <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% relissue.biblionumber %]&amp;itemnumber=[% relissue.itemnumber %]#item[% relissue.itemnumber %]">[% relissue.barcode %]</a></td>
         <td>[% UNLESS ( noItemTypeImages ) %] [% IF ( relissue.itemtype_image ) %]<img src="[% relissue.itemtype_image %]" alt="" />[% END %][% END %][% relissue.itemtype %]</td>
         <td><span title="[% relissue.displaydate_sort %]">[% relissue.displaydate %]</span></td>
