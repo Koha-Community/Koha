@@ -275,23 +275,8 @@
                 </tr>
             [% END %]
         </tbody>
-         </table>[% ELSE %]There are no pending orders.[% END %]
-       <div id="resultnumber">
-        <!-- Row of numbers corresponding to search result pages -->
-        [% IF ( displayprev ) %]
-            <a href="parcel.pl?invoiceid=[% invoiceid %]&amp;startfrom=[% prevstartfrom %][% IF ( resultsperpage ) %]&amp;resultsperpage=[% resultsperpage %][% END %]#resultnumber">&lt;&lt; Previous</a>
-        [% END %]
-        [% FOREACH number IN numbers %]
-            [% IF ( number.highlight ) %]
-            <span class="current">[% number.number %]</span>
-            [% ELSE %]
-            <a href="parcel.pl?invoiceid=[% invoiceid %]&amp;startfrom=[% number.startfrom %][% IF ( resultsperpage ) %]&amp;resultsperpage=[% resultsperpage %][% END %]#resultnumber">[% number.number %]</a>
-            [% END %]
-        [% END %]
-        [% IF ( displaynext ) %]
-            <a href="parcel.pl?invoiceid=[% invoiceid %]&amp;startfrom=[% nextstartfrom %][% IF ( resultsperpage ) %]&amp;resultsperpage=[% resultsperpage %][% END %]#resultnumber">Next &gt;&gt;</a>
-        [% END %]
-        </div>
+        </table>
+        [% ELSE %]There are no pending orders.[% END %]
     </div>
 [% ELSE %]
     <p>
