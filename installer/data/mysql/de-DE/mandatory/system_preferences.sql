@@ -22,11 +22,18 @@ UPDATE systempreferences SET value = 'Herr|Frau' WHERE variable = 'BorrowersTitl
 UPDATE systempreferences SET value = 'FR' WHERE variable = 'CurencyFormat';
 UPDATE systempreferences SET value = 'metric' WHERE variable = 'dateformat';
 UPDATE systempreferences SET value = 'z' WHERE variable = 'DefaultClassificationSource';
-UPDATE systempreferences SET value = 'Willkommen im Koha-Katalog! (OpacMainUserBlock)' WHERE variable = 'OpacMainUserBlock';
-UPDATE systempreferences SET value = 'Wichtige Links hier...(OpacNav)' WHERE variable = 'OpacNav';
-UPDATE systempreferences SET value = '...oder hier (OpacNavBottom)' WHERE variable = 'OpacNavBottom';
+UPDATE systempreferences SET value = 'Willkommen im Koha-Katalog!' WHERE variable = 'OpacMainUserBlock';
+UPDATE systempreferences SET value = '' WHERE variable = 'OpacNav';
+UPDATE systempreferences SET value = '' WHERE variable = 'OpacNavBottom';
 UPDATE systempreferences SET value = 
     '<li><a href="http://worldcat.org/search?q={TITLE}" target="_blank">Andere Bibliotheken (WorldCat)</a></li>
     <li><a href="http://www.scholar.google.com/scholar?q={TITLE}" target="_blank">Google Scholar</a></li>
     <li><a href="http://www.bookfinder.com/search/?author={AUTHOR}&amp;title={TITLE}&amp;st=xl&amp;ac=qr" target="_blank">Online-Buchhandel (Bookfinder.com)</a></li>' 
     WHERE variable = 'OPACSearchForTitleIn';
+UPDATE systempreferences SET value = 'Monday' WHERE variable = 'CalendarFirstDayOfWeek';
+UPDATE systempreferences SET value = '0.07|0.19|0.00' WHERE variable = 'gist';
+UPDATE systempreferences SET value = 'Dieser Text wird über den Systemparameter <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=RoutingListNote#jumped">RoutlingListNote</a> konfiguriert.' where variable = 'RoutingListNote';
+UPDATE systempreferences SET value = 'barcode stocknumber' WHERE variable = 'uniqueitemfields';
+UPDATE systempreferences SET value = 'de-DE,en' WHERE variable = 'language';
+UPDATE systempreferences SET value = 'de-DE,en' WHERE variable = 'opaclanguages';
+UPDATE systempreferences SET value = '1' WHERE variable = 'opaclanguagesdisplay';

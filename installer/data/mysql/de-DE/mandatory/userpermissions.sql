@@ -1,7 +1,7 @@
 INSERT INTO permissions (module_bit, code, description) VALUES
    ( 1, 'circulate_remaining_permissions', 'Übrige Ausleihberechtigungen'),
    ( 1, 'override_renewals', 'Gesperrte Verlängerungen überschreiben'),
-   ( 1, 'overdues_report', 'Execute overdue items report'),
+   ( 1, 'overdues_report', 'Überfälligkeiten-Report ausführen'),
    ( 3, 'parameters_remaining_permissions', 'Übrige Administrationsberechtigungen'),
    ( 3, 'manage_circ_rules', 'Ausleihkonditionen verwalten'),
    ( 6, 'place_holds', 'Vormerkungen für Benutzer setzen'),
@@ -13,7 +13,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (11, 'contracts_manage', 'Vereinbarungen verwalten'),
    (11, 'period_manage', 'Etats verwalten'),
    (11, 'budget_manage', 'Konten verwalten'),
-   (11, 'budget_modify', 'Konten verändern (keine neuen anlegen, aber bestehende ändern)'),
+   (11, 'budget_modify', 'Konten verändern (keine Neuen anlegen, aber Bestehende ändern)'),
    (11, 'planning_manage', 'Etatplanung verwalten'),
    (11, 'order_manage', 'Bestellungen verwalten'),
    (11, 'group_manage', 'Bestellgruppen vewalten'),
@@ -53,8 +53,8 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (15, 'routing', 'Umlauflisten verwalten'),
    (16, 'execute_reports', 'SQL-Reports ausführen'),
    (16, 'create_reports', 'SQL-Reports erstellen'),
-   (19, 'manage', 'Manage plugins ( install / uninstall )'),
-   (19, 'tool', 'Use tool plugins'),
-   (19, 'report', 'Use report plugins'),
-   (19, 'configure', 'Configure plugins')
+   (19, 'manage', 'Plugins verwealten (installieren/deinstallieren)'),
+   (19, 'tool', 'Werkzeug-Plugins verwenden'),
+   (19, 'report', 'Report-Plugins verwenden'),
+   (19, 'configure', 'Plugins konfigurieren')
 ;
