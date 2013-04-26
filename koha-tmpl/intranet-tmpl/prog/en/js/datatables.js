@@ -494,3 +494,47 @@ jQuery.extend( jQuery.fn.dataTableExt.oSort, {
         return ((a < b) ? 1 : ((a > b) ? -1 : 0));
     }
 } );
+
+(function() {
+
+    /* Plugin to allow text sorting to ignore articles
+     *
+     * In DataTables config:
+     *     "aoColumns": [
+     *        { "sType": "anti-the" },
+     *      ]
+     * Based on the plugin found here:
+     * http://datatables.net/plug-ins/sorting#anti_the
+     * Modified to exclude HTML tags from sorting
+     * Extended to accept a string of space-separated articles
+     * from a configuration file (in English, "a," "an," and "the")
+     */
+
+    if(CONFIG_EXCLUDE_ARTICLES_FROM_SORT){
+        var articles = CONFIG_EXCLUDE_ARTICLES_FROM_SORT.split(" ");
+        var rpattern = "";
+        for(i=0;i<articles.length;i++){
+            rpattern += "^" + articles[i] + " ";
+            if(i < articles.length - 1){ rpattern += "|"; }
+        }
+        var re = new RegExp(rpattern, "i");
+    }
+
+    jQuery.extend( jQuery.fn.dataTableExt.oSort, {
+        "anti-the-pre": function ( a ) {
+            var x = String(a).replace( /<[\s\S]*?>/g, "" );
+            var y = x.trim();
+            var z = y.replace(re, "").toLowerCase();
+            return z;
+        },
+
+        "anti-the-asc": function ( a, b ) {
+            return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+        },
+
+        "anti-the-desc": function ( a, b ) {
+            return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+        }
+    });
+
+}());
