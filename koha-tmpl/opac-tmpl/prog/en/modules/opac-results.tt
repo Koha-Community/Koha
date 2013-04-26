@@ -186,7 +186,7 @@ $(document).ready(function(){
     $("span.clearall").html("<a id=\"CheckNone\" href=\"#\">"+_("Clear all")+"<\/a>");
     $("span.checkall").html("<a id=\"CheckAll\" href=\"#\">"+_("Select all")+"<\/a>");
 [% IF ( opacbookbag ) %]$("span.addto").html(param1);[% ELSE %][% IF ( virtualshelves ) %][% IF ( loggedinusername ) %]$("span.addto").html(param1);[% END %][% END %][% END %]
-[% IF ( opacbookbag ) %]
+[% IF ( opacbookbag || virtualshelves ) %]
     [% IF ( virtualshelves ) %]
     $("#addto").change(function(){
         cartList();
