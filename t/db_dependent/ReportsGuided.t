@@ -64,7 +64,7 @@ SKIP: {
         'Not defined authorised value category is invalid');
 
     # Loop through the reserved authorised values
-    foreach my $authorised_value ( keys GetReservedAuthorisedValues() ) {
+    foreach my $authorised_value ( keys %{GetReservedAuthorisedValues()} ) {
         ok( IsAuthorisedValueValid($authorised_value),
             '\''.$authorised_value.'\' is a reserved word, and thus a valid authorised value');
     }
