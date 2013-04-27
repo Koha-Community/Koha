@@ -2709,7 +2709,11 @@ sub PrepareItemrecordDisplay {
                                 $authorised_lib{$branchcode} = $branchname;
                             }
                         }
-                        $defaultvalue = $defaultvalues->{branchcode} || C4::Context->userenv->{branch};
+
+                        $defaultvalue = C4::Context->userenv->{branch};
+                        if ( $defaultvalues and $defaultvalues->{branchcode} ) {
+                            $defaultvalue = $defaultvalues->{branchcode};
+                        }
 
                         #----- itemtypes
                     } elsif ( $tagslib->{$tag}->{$subfield}->{authorised_value} eq "itemtypes" ) {
