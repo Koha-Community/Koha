@@ -986,6 +986,7 @@ sub getIndexes{
                     'Koha-Auth-Number',
                     'l-format',
                     'language',
+                    'language-original',
                     'lc-card',
                     'LC-card-number',
                     'lcn',
