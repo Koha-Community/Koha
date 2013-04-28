@@ -1,9 +1,36 @@
+-- Reasons for acceptance or rejection of suggestions in acquisitions
+INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ('SUGGEST','Bestseller','Bestseller');
+INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ('SUGGEST','Endommagé','L''exemplaire de la bibliothèque endommagé');
+INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ('SUGGEST','Perdu','L''exemplaire de la bibliothèque est perdu');
+INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ('SUGGEST','PEB','Document disponible via le Prêt Entre Bibliothèques');
+INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ('SUGGEST','Budget','Budget insuffisant');
+INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ('SUGGEST','Onéreux','Document trop onéreux');
+INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ('SUGGEST','Poldoc','Document ne correspondant pas à notre politique d''acquisition');
+-- OPAC Suggestions reasons
+INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ('OPAC_SUG','damaged','L''exemplaire de la bibliothèque est endommagé','L''exemplaire de la bibliothèque est endommagdé');
+INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ('OPAC_SUG','bestseller','Bestseller','Bestseller');
+-- Report groups
+INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ('REPORT_GROUP', 'CIRC', 'Circulation');
+INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ('REPORT_GROUP', 'CAT', 'Catalogue');
+INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ('REPORT_GROUP', 'PAT', 'Adhérents');
+INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ('REPORT_GROUP', 'ACQ', 'Acquisitions');
+INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ('REPORT_GROUP', 'ACC', 'Comptes');
+-- availability statuses
+INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ('LOST','1','Perdu');
+INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ('LOST','2','Long retard (perdu)');
+INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ('LOST','3','Perdu et remboursé');
+INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ('LOST','4','Introuvable');
+-- damaged status of an item
+INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ('DAMAGED','1','Endommagdé');
+-- Status codes
 INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ( 'ETAT', '0', 'Empruntable');
 INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ( 'ETAT', '1', 'Exclu du prêt');
 INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ( 'ETAT', '3', 'En reliure');
 INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ( 'ETAT', '4', 'Indisponible');
 INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ( 'ETAT', '5', 'En traitement');
 INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ( 'ETAT', '6', 'Non communicable');
+INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ( 'ETAT', '7', 'En commande');
+-- location qualification for an item, departments are linked by default to items.location
 INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ( 'LOC', 'Magasin', ' Magasin');
 INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ( 'LOC', 'Salle de lecture', 'Salle de lecture');
 INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ( 'LOC', 'Magasin des périodiques', 'Magasin des périodiques');
@@ -11,8 +38,10 @@ INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES 
 INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ( 'LOC', 'Manquant', 'Manquant');
 INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ( 'LOC', 'Secrétariat', 'Secrétariat');
 INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ( 'LOC', 'En reliure', 'En reliure');
+-- Type of authorities
 INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ( 'CAND', 'Candidat descripteur', 'Candidat descripteur');
 INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ( 'CAND', 'Rejeté', 'Mot clé abandonné');
+-- Country codes
 INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ( 'COUNTRY', 'AN', 'Antilles Néerlandaises');
 INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ( 'COUNTRY', 'CR', 'Costa Rica');
 INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ( 'COUNTRY', 'ER', 'Allemagne');
@@ -265,6 +294,7 @@ INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES 
 INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ( 'COUNTRY', 'ZM', 'Zambie');
 INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ( 'COUNTRY', 'ZW', 'Zimbabwe');
 INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ( 'COUNTRY', 'ZZ', 'multiple');
+-- Language codes (ISO 639-2)
 INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ( 'LANG', 'aar','afar');
 INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ( 'LANG', 'abk','abkhaze');
 INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ( 'LANG', 'ace','achinese');
@@ -521,6 +551,7 @@ INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES 
 INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ( 'LANG', 'lan','occitan (post 1500)');
 INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ( 'LANG', 'mla','malgache');
 INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ( 'LANG', 'sam','samaritain');
+-- UNIMARC function codes
 INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ( 'qualif', '000', 'Fonction indéterminée');
 INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ( 'qualif', '005', 'Acteur');
 INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ( 'qualif', '010', 'Adaptateur');

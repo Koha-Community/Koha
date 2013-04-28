@@ -68,7 +68,7 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 ('225', 'v', 'numérotation du volume', '', 1, 0, 'biblioitems.collectionvolume', 2, '', '', '', 0, 0, 'FA', NULL, '', ''),
 ('225', 'x', 'ISSN de la collection', '', 1, 0, 'biblioitems.collectionissn', 2, '', '', '', 0, 0, 'FA', NULL, '', ''),
 ('225', 'z', 'langue du titre parallèle', '', 1, 0, '', 2, '', '', '', 0, 0, 'FA', NULL, '', ''),
-('995', '2', 'Perdu', '', 0, 0, 'items.itemlost', 10, '', '', '', NULL, 1, 'FA', NULL, NULL, ''),
+('995', '2', 'Perdu', '', 0, 0, 'items.itemlost', 10, 'LOST', '', '', NULL, 1, 'FA', NULL, NULL, ''),
 ('995', '9', 'itemnumber (koha)', '', 0, 0, 'items.itemnumber', -1, '', '', '', NULL, 0, 'FA', NULL, NULL, ''),
 ('995', 'a', 'origine du document, texte libre', '', 0, 1, '', -1, '', '', '', NULL, 0, 'FA', NULL, NULL, ''),
 ('995', 'b', 'Propriétaire', '', 0, 1, 'items.homebranch', 10, 'branches', '', '', NULL, 0, 'FA', NULL, NULL, ''),
