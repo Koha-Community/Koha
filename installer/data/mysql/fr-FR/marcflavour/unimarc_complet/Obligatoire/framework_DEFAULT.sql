@@ -2013,7 +2013,7 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 ('992', '2', 'code du système d''indexation', '', 0, 1, NULL, -1, NULL, NULL, '', NULL, NULL, '', NULL, NULL, ''),
 ('992', '5', 'identifiant de l''exemplaire', '', 0, 1, NULL, -1, NULL, NULL, '', NULL, NULL, '', NULL, NULL, ''),
 ('992', 'a', 'classification locale - indice', '', 0, 1, NULL, -1, NULL, NULL, '', NULL, NULL, '', NULL, NULL, ''),
-('995', '2', 'Perdu', '', 0, 0, 'items.itemlost', 10, '', '', '', NULL, 1, '', NULL, NULL, ''),
+('995', '2', 'Perdu', '', 0, 0, 'items.itemlost', 10, 'LOST', '', '', NULL, 1, '', NULL, NULL, ''),
 ('995', '9', 'itemnumber (koha)', '', 0, 0, 'items.itemnumber', -1, '', '', '', NULL, 0, '', NULL, NULL, ''),
 ('995', 'a', 'origine du document, texte libre', '', 0, 1, '', -1, '', '', '', NULL, 0, '', NULL, NULL, ''),
 ('995', 'b', 'Propriétaire', '', 0, 1, 'items.homebranch', 10, 'branches', '', '', NULL, 0, '', NULL, NULL, ''),
@@ -2036,4 +2036,5 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 ('995', 'u', 'note', '', 0, 0, 'items.itemnotes', 10, '', '', '', NULL, 0, '', NULL, NULL, '');
 
 UPDATE `marc_subfield_structure` SET maxlength=24 WHERE tagfield='000';
+
 UPDATE `marc_subfield_structure` SET maxlength=36 WHERE tagfield='100';
