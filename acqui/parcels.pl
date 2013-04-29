@@ -79,7 +79,7 @@ use C4::Budgets;
 
 my $input          = CGI->new;
 my $booksellerid     = $input->param('booksellerid');
-my $order          = $input->param('orderby') || 'datereceived desc';
+my $order          = $input->param('orderby') || 'shipmentdate desc';
 my $startfrom      = $input->param('startfrom');
 my $code           = $input->param('filter');
 my $datefrom       = $input->param('datefrom');
