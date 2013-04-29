@@ -5,47 +5,48 @@
 	<p class="tip">Enter patron card number or partial name:</p>
 	<form action="/cgi-bin/koha/members/member.pl" method="post">
     <input id="searchmember" size="25" class="focus" name="member" type="text" value="[% member %]"/>
-	[% IF ( branchloop ) %]
 	<span class="filteraction" id="filteraction_off"> <a href="#" onclick="$('#filters').toggle();$('.filteraction').toggle();">[-]</a></span>
 	<span class="filteraction" id="filteraction_on"> <a href="#" onclick="$('#filters').toggle();$('.filteraction').toggle();">[+]</a></span>
-	[% END %]
 
-      <label for="searchfields">Search fields:</label>
-      <select name="searchfields" id="searchfields">
-          <option selected="selected" value=''>Standard</option>
-          <option value='email,emailpro,B_email,'>Email</option>
-          <option value='borrowernumber'>Borrower number</option>
-          <option value='phone,phonepro,B_phone,altcontactphone,mobile'>Phone number</option>
-          <option value='streettype,address,address2,city,state,zipcode,country'>Street Address</option>
-      </select>
 
-      <label for="searchtype">Search type:</label>
-      <select name="searchtype" id="searchtype">
-          <option selected="selected" value=''>Starts with</option>
-          <option value='contain'>Contains</option>
-      </select>
-
-    <label for="orderby">Order by:</label>
-    <select name="orderby" id="searchorderby">
-    <option value="">Surname, Firstname</option>
-    <option value="cardnumber,0">Cardnumber</option>
-    </select>
     <input value="Search" class="submit" type="submit" />
-	[% IF ( branchloop ) %]
-	<p id="filters"> <label for="branchcode">Library: </label><select name="branchcode" id="branchcode">
-        <option value="">Any</option>[% FOREACH branchloo IN branchloop %]
-        [% IF ( branchloo.selected ) %]
-        <option value="[% branchloo.value %]" selected="selected">[% branchloo.branchname %]</option>[% ELSE %]
-        <option value="[% branchloo.value %]">[% branchloo.branchname %]</option>[% END %]
-      [% END %]</select>
-                 <label for="categorycode">Category: </label><select name="categorycode" id="categorycode">
-        <option value="">Any</option>[% FOREACH categorie IN categories %]
-        [% IF ( categorie.selected ) %]
-        <option value="[% categorie.categorycode %]" selected="selected">[% categorie.description %]</option>[% ELSE %]
-        <option value="[% categorie.categorycode %]">[% categorie.description %]</option>[% END %]
-      [% END %]</select>
-	</p>
-	[% END %]
+
+  <div id="filters">
+      <p><label for="searchfields">Search fields:</label>
+            <select name="searchfields" id="searchfields">
+                <option selected="selected" value=''>Standard</option>
+                <option value='email,emailpro,B_email,'>Email</option>
+                <option value='borrowernumber'>Borrower number</option>
+                <option value='phone,phonepro,B_phone,altcontactphone,mobile'>Phone number</option>
+                <option value='streettype,address,address2,city,state,zipcode,country'>Street Address</option>
+            </select></p>
+        <p><label for="searchtype">Search type:</label>
+                <select name="searchtype" id="searchtype">
+                    <option selected="selected" value=''>Starts with</option>
+                    <option value='contain'>Contains</option>
+                </select></p>
+
+      <p><label for="searchorderby">Order by:</label>
+            <select name="orderby" id="searchorderby">
+            <option value="">Surname, Firstname</option>
+            <option value="cardnumber,0">Cardnumber</option>
+            </select></p>
+        [% IF ( branchloop ) %] <p><label for="branchcode">Library: </label><select name="branchcode" id="branchcode">
+                <option value="">Any</option>[% FOREACH branchloo IN branchloop %]
+                [% IF ( branchloo.selected ) %]
+                <option value="[% branchloo.value %]" selected="selected">[% branchloo.branchname %]</option>[% ELSE %]
+                <option value="[% branchloo.value %]">[% branchloo.branchname %]</option>[% END %]
+              [% END %]</select></p>
+      [% END %]
+      [% IF ( categories ) %]
+        <p><label for="categorycode">Category: </label><select name="categorycode" id="categorycode">
+                <option value="">Any</option>[% FOREACH categorie IN categories %]
+                [% IF ( categorie.selected ) %]
+                <option value="[% categorie.categorycode %]" selected="selected">[% categorie.description %]</option>[% ELSE %]
+                <option value="[% categorie.categorycode %]">[% categorie.description %]</option>[% END %]
+                [% END %]</select></p>
+      [% END %]
+  </div>
 </form>
 	</div>
 
