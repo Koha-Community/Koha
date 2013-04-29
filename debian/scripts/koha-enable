@@ -72,8 +72,20 @@ enable_instance()
         return 1
     fi
 }
+
+usage()
+{
+    local scriptname=$0
+    cat <<EOF
+Enables Koha instances.
+
+Usage: $scriptname instancename1 instancename2...
+
+EOF
+}
+
 # Parse command line.
-[ "$#" > 1 ] || die "Usage: $0 instancename..."
+[ $# -ge 1 ] || ( usage ; die "Missing instance name..." )
 
 restart_apache="no"
 
