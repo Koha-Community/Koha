@@ -301,6 +301,13 @@ Circulation:
                   yes: Block
                   no: "Don't block"
             - returning of items that have been withdrawn.
+        -
+            - pref: CalculateFinesOnReturn
+              choices:
+                  yes: Do
+                  no: "Don't"
+            - calculate and update overdue charges when an item is returned.
+            - <br /><b>NOTE If you are doing hourly loans then you should have this on.</b>
     Holds Policy:
         -
             - pref: AllowHoldPolicyOverride

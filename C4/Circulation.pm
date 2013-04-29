@@ -1773,7 +1773,9 @@ sub AddReturn {
         }
 
         if ($borrowernumber) {
-        if($issue->{'overdue'}){
+        if( C4::Context->preference('CalculateFinesOnReturn') && $issue->{'overdue'}){
+            # we only need to calculate and change the fines if we want to do that on return
+            # Should be on for hourly loans
                 my ( $amount, $type, $unitcounttotal ) = C4::Overdues::CalcFine( $item, $borrower->{categorycode},$branch, $datedue, $today );
                 $type ||= q{};
         if ( $amount > 0 && ( C4::Context->preference('finesMode') eq 'production' )) {
