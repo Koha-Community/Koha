@@ -30,11 +30,11 @@
 
   <xs:complexType name="MaterialType">
     <xs:sequence minOccurs="1" maxOccurs="unbounded">
-      <xs:element name="Position" type="PositionType"/>
+      <xs:element name="name" type="xs:string"/>
+      <xs:element name="description" type="xs:string"/>
+      <xs:element name="Position" type="PositionType" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
     <xs:attribute name="id" type="idDataType" use="required"/>
-    <xs:attribute name="name" type="xs:string" use="required"/>
-    <xs:attribute name="description" type="xs:string" use="required"/>
   </xs:complexType>
 
 
@@ -54,13 +54,13 @@
 
   <xs:complexType name="PositionType">
     <xs:sequence minOccurs="0" maxOccurs="unbounded">
-      <xs:element name="Value" type="ValueType"/>
+      <xs:element name="urltext" type="xs:string" minOccurs="0"/>
+      <xs:element name="name" type="xs:string"/>
+      <xs:element name="description" type="xs:string"/>
+      <xs:element name="Value" type="ValueType" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
+    <xs:attribute name="url" type="xs:anyURI"/>
     <xs:attribute name="pos" type="posDataType" use="required"/>
-    <xs:attribute name="url" type="xs:anyURI" use="optional"/>
-    <xs:attribute name="urltext" type="xs:string" use="optional"/>
-    <xs:attribute name="name" type="xs:string" use="required"/>
-    <xs:attribute name="description" type="xs:string" use="required"/>
   </xs:complexType>
 
 
@@ -73,11 +73,11 @@
 
 
   <xs:complexType name="ValueType">
-    <xs:simpleContent>
-      <xs:extension base="xs:string">
-        <xs:attribute name="description" type="xs:string" />
-      </xs:extension>
-    </xs:simpleContent>
+    <xs:sequence minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="description" type="xs:string"/>
+    </xs:sequence>
+    <xs:attribute name="code" type="xs:string" use="required"/>
   </xs:complexType>
+
 
 </xs:schema>

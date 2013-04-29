@@ -241,7 +241,7 @@ function changeH4Result(form, h4_result, tr_result, pos, value)
                     var arrEquiv = new Array();
                     for (var i=0; i < nodeMaterial.length; i++) {
                         id = nodeMaterial[i].attributes.getNamedItem("id").nodeValue;
-                        name = nodeMaterial[i].attributes.getNamedItem("name").nodeValue;
+                        name = nodeMaterial[i].getElementsByTagName('name')[0].textContent;
                         arrEquiv[id] = i;
                         arrSort.push(id);
                     }
@@ -249,7 +249,7 @@ function changeH4Result(form, h4_result, tr_result, pos, value)
                     var j;
                     for (var i=0; i < arrSort.length; i++) {
                         j = arrEquiv[arrSort[i]];
-                        add_option(this.select, arrSort[i] + " - " + nodeMaterial[j].attributes.getNamedItem("name").nodeValue, arrSort[i], (this.idMaterial != "" && arrSort[i] == this.idMaterial)?true:false);
+                        add_option(this.select, arrSort[i] + " - " + nodeMaterial[j].getElementsByTagName('name')[0].textContent, arrSort[i], (this.idMaterial != "" && arrSort[i] == this.idMaterial)?true:false);
                     }
                 } else if (this.idMaterial != "") {
                     for (var i=0; i < this.select.options.length; i++) {
@@ -292,16 +292,21 @@ function changeH4Result(form, h4_result, tr_result, pos, value)
                     var selected;
                     var index;
                     var url;
+                    var description;
+                    var name;
                     while (nodePos != null) {
                         if (nodePos.nodeType == 1 && nodePos.nodeName == "Position") {
                             tr = tbody.insertRow(tbody.rows.length);
                             td = tr.insertCell(tr.cells.length);
                             pos = nodePos.attributes.getNamedItem("pos").nodeValue;
-                            title = ((nodePos.getAttributeNode("description") || nodePos.hasAttribute("description")) && nodePos.getAttribute("description") != "")?nodePos.attributes.getNamedItem("description").nodeValue:nodePos.attributes.getNamedItem("name").nodeValue;
+                            // description is required by schema
+                            description = nodePos.getElementsByTagName('description')[0].textContent;
+                            name = nodePos.getElementsByTagName('name')[0].textContent
+                            title = ( description != "")?description:name;
                             try {
-                                url = ((nodePos.getAttributeNode("url") || nodePos.hasAttribute("url")) && nodePos.getAttribute("url") != "" && nodePos.getAttribute("urltext") != "")?"&nbsp;<a href='" + nodePos.attributes.getNamedItem("url").nodeValue + "' target='_blank'>" + nodePos.attributes.getNamedItem("urltext").nodeValue + "</a>":"";
+                                url = ((nodePos.getAttributeNode("url") || nodePos.hasAttribute("url")) && nodePos.getAttribute("url") != "" && nodePos.getElementsByTagName('urltext')[0].textContent != "")?"&nbsp;<a href='" + nodePos.attributes.getNamedItem("url").nodeValue + "' target='_blank'>" + nodePos.getElementsByTagName('urltext')[0].textContent + "</a>":"";
                             } catch (e) { url = "";}
-                            td.innerHTML = "<label for='" + pos + "' title='" + title + "'>" + pos + " - " + nodePos.attributes.getNamedItem("name").nodeValue + url + "</label>";
+                            td.innerHTML = "<label for='" + pos + "' title='" + title + "'>" + pos + " - " + name + url + "</label>";
                             td = tr.insertCell(tr.cells.length);
                             value = returnValuePosFromResult(result, pos);
                             if ((index = pos.indexOf("-")) > 0) { // Position interval
@@ -312,14 +317,16 @@ function changeH4Result(form, h4_result, tr_result, pos, value)
                             } else {
                                 strInnerHTML = "<select name='f" + pos + "' id='f" + pos + "' style='width:400px' onchange='changeH4Result(document.getElementById(\"" + this.form_id + "\"), document.getElementById(\"" + this.h4_result + "\"), document.getElementById(\"" + this.tr_result + "\"), \"" + pos + "\", this.options[this.selectedIndex].value)' onfocus='changeH4Result(document.getElementById(\"" + this.form_id + "\"), document.getElementById(\"" + this.h4_result + "\"), document.getElementById(\"" + this.tr_result + "\"), \"" + pos + "\", this.options[this.selectedIndex].value)'>";
                                 value = value.replace("#", " ");
-                                if (nodePos.hasChildNodes()) {
+                                if (nodePos.getElementsByTagName("Value").length != 0) {
                                     var nodeValue = nodePos.firstChild;
                                     while (nodeValue != null) {
                                         if (nodeValue.nodeType == 1 && nodeValue.nodeName == "Value" && nodeValue.hasChildNodes()) {
-                                            var valNode = nodeValue.firstChild.nodeValue;
+                                            var code = nodeValue.attributes.getNamedItem("code").nodeValue;
+                                            description = nodeValue.getElementsByTagName('description')[0].textContent;
+                                            var valNode = code;
                                             valNode = valNode.replace("#", " ");
                                             selected = (value == valNode)?"selected='selected'":"";
-                                            strInnerHTML += "<option value='"  + valNode + "' " + selected + ">" + nodeValue.firstChild.nodeValue + " - " + nodeValue.attributes.getNamedItem("description").nodeValue +  "</option>";
+                                            strInnerHTML += "<option value='"  + valNode + "' " + selected + ">" + code + " - " + description +  "</option>";
                                         }
                                         nodeValue = nodeValue.nextSibling;
                                     }
