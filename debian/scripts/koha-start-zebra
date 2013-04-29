@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# koha-start-zebra -- Start Zebra for named Koha instandes
+# koha-start-zebra - Start Zebra for named Koha instances
 # Copyright 2010  Catalyst IT, Ltd
 # 
 # This program is free software: you can redistribute it and/or modify
@@ -18,20 +18,116 @@
 
 set -e
 
+die()
+{
+    echo "$@" 1>&2
+    exit 1
+}
+
+warn()
+{
+    echo "$@" 1>&2
+}
+
+is_enabled()
+{
+    local instancename=$1
+
+    if ! is_instance $instancename; then
+        return 1
+    fi
+
+    if grep -q '^[[:space:]]*Include /etc/koha/apache-shared-disable.conf' \
+            "/etc/apache2/sites-available/$instancename" ; then
+        return 1
+    else
+        return 0
+    fi
+}
+
+is_instance()
+{
+    local instancename=$1
+
+    if find /etc/koha/sites -mindepth 1 -maxdepth 1 \
+                         -type d -printf '%f\n'\
+          | grep -q -x $instancename ; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+is_zebra_running()
+{
+    local instancename=$1
+
+    if daemon --name="$instancename-koha-zebra" \
+            --user="$instancename-koha.$instancename-koha" \
+            --running ; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+start_zebra_instance()
+{
+    local instancename=$1
+
+    if is_enabled $instancename; then
+        echo "Starting Zebra server for $instancename"
+        daemon \
+            --name="$instancename-koha-zebra" \
+            --errlog="/var/log/koha/$instancename/zebra-error.log" \
+            --stdout="/var/log/koha/$instancename/zebra.log" \
+            --output="/var/log/koha/$instancename/zebra-output.log" \
+            --verbose=1 \
+            --respawn \
+            --delay=30 \
+            --user="$instancename-koha.$instancename-koha" \
+            -- \
+            zebrasrv \
+            -v none,fatal,warn \
+            -f "/etc/koha/sites/$instancename/koha-conf.xml" && \
+        return 0
+    else
+        return 1
+    fi
+}
+
+usage()
+{
+    local scriptname=$0
+    cat <<EOF
+Starts Zebra for Koha instances.
+
+Usage: $scriptname instancename1 instancename2...
+
+EOF
+}
+
+# Parse command line.
+[ $# -ge 1 ] || ( usage ; die "Missing instance name..." )
+
+# Loop through the instance names
 for name in "$@"
 do
-    echo "Starting Zebra server for $name"
-    daemon \
-        --name="$name-koha-zebra" \
-        --errlog="/var/log/koha/$name/zebra-error.log" \
-        --stdout="/var/log/koha/$name/zebra.log" \
-        --output="/var/log/koha/$name/zebra-output.log" \
-        --verbose=1 \
-        --respawn \
-        --delay=30 \
-        --user="$name-koha.$name-koha" \
-        -- \
-        zebrasrv \
-        -v none,fatal,warn \
-        -f "/etc/koha/sites/$name/koha-conf.xml"
+    if is_instance $name ; then
+        if is_enabled $name ; then
+            if ! is_zebra_running $name; then
+                if ! start_zebra_instance $name; then
+                    warn "Something went wrong starting Zebra for $name."
+                fi
+            else
+                warn "Zebra already running for instance $name."
+            fi
+        else
+            warn "Instance $name disabled. No action taken."
+        fi
+    else
+        warn "Unknown instance $name."
+    fi
 done
+
+exit 0
