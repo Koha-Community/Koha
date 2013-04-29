@@ -1104,9 +1104,7 @@ set_userenv is called in Auth.pm
 
 #'
 sub set_userenv {
-    my ($usernum, $userid, $usercnum, $userfirstname, $usersurname, $userbranch, $branchname, $userflags, $emailaddress, $branchprinter, $persona)=
-    map { utf8::decode($_); $_ } # CGI::Session doesn't handle utf-8, so we decode it here
-    @_;
+    my ($usernum, $userid, $usercnum, $userfirstname, $usersurname, $userbranch, $branchname, $userflags, $emailaddress, $branchprinter, $persona)= @_;
     my $var=$context->{"activeuser"} || '';
     my $cell = {
         "number"     => $usernum,

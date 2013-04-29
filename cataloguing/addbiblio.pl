@@ -880,7 +880,7 @@ if ( $op eq "addbiblio" ) {
             .'&frameworkcode='.$frameworkcode
             .'&circborrowernumber='.$fa_circborrowernumber
             .'&branch='.$fa_branch
-            .'&barcode='.uri_escape_utf8($fa_barcode)
+            .'&barcode='.uri_escape($fa_barcode)
             .'&stickyduedate='.$fa_stickyduedate
             .'&duedatespec='.$fa_duedatespec
 		);
