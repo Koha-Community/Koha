@@ -6971,6 +6971,19 @@ if(CheckVersion($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(
+        q{
+INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('CalculateFinesOnReturn','1','Switch to control if overdue fines are calculated on return or not', '', 'YesNo');
+}
+    );
+    print
+"Upgrade to $DBversion done (Bug 10120 - Fines on item return controlled by a systempreference)\n";
+    SetVersion($DBversion);
+}
+
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

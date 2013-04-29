@@ -426,3 +426,4 @@ INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES (
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('UniqueItemFields', 'barcode', 'Space-separated list of fields that should be unique (used in acquisition module for item creation). Fields must be valid SQL column names of items table', '', 'Free');
 INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES('UseCourseReserves', '0', 'Enable the course reserves feature.', NULL, 'YesNo');
 INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES('OpacShowHoldNotes',0,'Show hold notes on OPAC','','YesNo');
+INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('CalculateFinesOnReturn','1','Switch to control if overdue fines are calculated on return or not', '', 'YesNo');
