@@ -17,13 +17,13 @@
 
   <refnamediv>
     <refname>koha-rebuild-zebra</refname>
-    <refpurpose>Rebuild the Zebra database for a Koha instance.</refpurpose>
+    <refpurpose>Rebuild the Zebra database for Koha instances.</refpurpose>
     <refclass>UNIX/Linux</refclass>
   </refnamediv>
 
   <refsynopsisdiv>
     <cmdsynopsis>
-      <command>koha-rebuild-zebra</command> <arg><option>-u</option>|<option>--usmarc</option></arg> <arg><option>-f</option>|<option>--full</option></arg> <arg><option>...</option></arg> <arg choice="req" rep="repeat"><replaceable>instancename</replaceable></arg>
+      <command>koha-rebuild-zebra</command> <arg><option>-u</option>|<option>--usmarc</option></arg> <arg><option>-f</option>|<option>--full</option></arg> <arg><option>-a</option>|<option>--authorities</option></arg> <arg><option>-b</option>|<option>--biblios</option></arg> <arg><option>-v</option>|<option>--verbose</option></arg> <arg><option>...</option></arg> <arg choice="req" rep="repeat"><replaceable>instancename</replaceable></arg>
     </cmdsynopsis>
   </refsynopsisdiv>
   
@@ -42,16 +42,34 @@
       </listitem>
     </varlistentry>
     <varlistentry>
+      <term><option>-a, --authorities</option></term>
+      <listitem>
+        <para>Only run the indexing process for authority records.</para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term><option>-b, --biblios</option></term>
+      <listitem>
+        <para>Only run the indexing process for biblio records.</para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term><option>-v, --verbose</option></term>
+      <listitem>
+        <para>Be verbose. Useful for debugging indexing problems.</para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
       <term><option>-...</option></term>
       <listitem>
-        <para>Anything else is passed directly to rebuild_zebra. This is useful in particular for -v.</para>
+        <para>Anything else is passed directly to rebuild_zebra.</para>
       </listitem>
     </varlistentry>
   </variablelist>
   </refsect1>
 
   <refsect1><title>Description</title>
-  <para>Rebuild the Zebra database for a Koha instance.</para>
+  <para>Rebuild the Zebra database for Koha instances.</para>
   </refsect1>
   
   <refsect1><title>See also</title>
