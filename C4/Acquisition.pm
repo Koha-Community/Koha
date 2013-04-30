@@ -54,6 +54,7 @@ BEGIN {
         &GetBasketgroups &ReOpenBasketgroup
 
         &NewOrder &DelOrder &ModOrder &GetPendingOrders &GetOrder &GetOrders &GetOrdersByBiblionumber
+        &GetOrderNumber &GetLateOrders &GetOrderFromItemnumber
         &SearchOrder &GetHistory &GetRecentAcqui
         &ModReceiveOrder &CancelReceipt &ModOrderBiblioitemNumber
         &GetCancelledOrders
