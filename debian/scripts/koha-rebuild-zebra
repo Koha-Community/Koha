@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# koha-rebuild-zebra -- Rebuild the Zebra database for a Koha instance.
+# koha-rebuild-zebra - Rebuild the Zebra database for Koha instances.
 # Copyright 2010  Catalyst IT, Ltd
 # 
 # This program is free software: you can redistribute it and/or modify
@@ -19,18 +19,117 @@
 
 set -e
 
+die()
+{
+    echo "$@" 1>&2
+    exit 1
+}
+
+warn()
+{
+    echo "$@" 1>&2
+}
+
+is_instance()
+{
+    local instancename=$1
+
+    if find /etc/koha/sites -mindepth 1 -maxdepth 1 \
+                         -type d -printf '%f\n'\
+          | grep -q -x $instancename ; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+toggle_biblios_only()
+{
+    biblios_only="yes"
+    biblios="yes"
+    if [ "$authorities_only" != "yes" ]; then
+        authorities="no"
+    fi
+}
+
+toggle_authorities_only()
+{
+    authorities_only="yes"
+    authorities="yes"
+    if [ "$biblios_only" != "yes" ]; then
+        biblios="no"
+    fi
+}
+
+run_rebuild_zebra()
+{
+    local instancename=$1; shift
+
+    # TODO: This comment is here to remind us that we should make
+    # rebuild_zebra.pl return error codes on failure
+    if sudo -u "$instancename-koha" -H \
+        env PERL5LIB=/usr/share/koha/lib \
+        KOHA_CONF="/etc/koha/sites/$instancename/koha-conf.xml" \
+        /usr/share/koha/bin/migration_tools/rebuild_zebra.pl $@ ; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+usage()
+{
+    local scriptname=$0
+    cat <<EOF
+Rebuild the Zebra indexes for Koha instances. The default behaviour
+is to do an incremental rebuild.
+
+Usage: $scriptname [options] instancename1 instancename2...
+Options:
+    --usmarc|-u       Runs the process as USMARC rather than
+                      the default of MARCXML.
+    --authorities|-a  Only run process for authorities.
+    --biblios|-b      Only run process for biblios.
+    --full|-f         Does a reindex of the whole collection.
+    --verbose|-v      Be verbose.
+    --help|-h         Print this help.
+
+
+Note: Any other options are passed directly to rebuild_zebra.pl.
+EOF
+}
+
+# Default parameters
 opt_idx="-z"
 opt_xml="-x"
+opt_verbose=""
 opts_other=""
+biblios_only="no"
+authorities_only="no"
+biblios="yes"
+authorities="yes"
 
+# Read parameters
 while [ -n "$*" ]; do
     case "$1" in
+        -h|--help)
+            usage ; exit 0
+            ;;
+        -b|--biblios)
+            toggle_biblios_only
+            ;;
+        -a|--authorities)
+            toggle_authorities_only
+            ;;
         -u|--usmarc)
-             opt_xml=""
-             ;;
+            opt_xml=""
+            ;;
         -f|--full)
-             opt_idx="-r"
-             ;;
+            opt_idx="-r"
+            ;;
+        -v|--verbose)
+            opt_verbose="-v"
+            ;;
         -*)
             opts_other="$opts_other $1";
             ;;
@@ -42,20 +141,28 @@ while [ -n "$*" ]; do
     shift
 done
 
+# Parse command line.
+[ $# -ge 1 ] || ( usage ; die "Missing instance name..." )
 
-
-run_zebra() 
-{
-    name=$1; shift
-
-    sudo -u "$name-koha" -H \
-    env PERL5LIB=/usr/share/koha/lib \
-        KOHA_CONF="/etc/koha/sites/$name/koha-conf.xml" \
-        /usr/share/koha/bin/migration_tools/rebuild_zebra.pl $@
-}
-
+# Loop over instance names
 for name in "$@"
 do
-    run_zebra $name -b $opt_idx $opt_xml $opts_other
-    run_zebra $name -a $opt_idx $opts_other
+    if is_instance $name; then
+        if [ "$biblios" = "yes" ]; then
+            if ! run_rebuild_zebra $name \
+                -b $opt_verbose $opt_idx $opt_xml $opts_other; then
+                warn "Something went wrong rebuilding biblio indexes for $name"
+            fi
+        fi
+        if [ "$authorities" = "yes" ]; then
+            if ! run_rebuild_zebra $name \
+                -a $opt_verbose $opt_idx $opts_other ; then
+                warn "Something went wrong rebuilding authority indexes for $name"
+            fi
+        fi
+    else
+        warn "Unknown instance $name."
+    fi
 done
+
+exit 0
