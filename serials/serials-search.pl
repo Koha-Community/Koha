@@ -38,13 +38,10 @@ use C4::Serials;
 
 my $query         = new CGI;
 my $title         = $query->param('title_filter') || '';
-utf8::decode($title);
 my $ISSN          = $query->param('ISSN_filter') || '';
 my $EAN           = $query->param('EAN_filter') || '';
 my $publisher     = $query->param('publisher_filter') || '';
-utf8::decode($publisher);
 my $bookseller    = $query->param('bookseller_filter') || '';
-utf8::decode($bookseller);
 my $biblionumber  = $query->param('biblionumber') || '';
 my $branch        = $query->param('branch_filter') || '';
 my $routing       = $query->param('routing') || C4::Context->preference("RoutingSerials");

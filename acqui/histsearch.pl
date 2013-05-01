@@ -60,22 +60,13 @@ use C4::Debug;
 
 my $input = new CGI;
 my $title                   = $input->param( 'title');
-utf8::decode($title);
 my $author                  = $input->param('author');
-utf8::decode($author);
 my $isbn                    = $input->param('isbn');
-utf8::decode($isbn);
 my $name                    = $input->param( 'name' );
-utf8::decode($name);
 my $ean                     = $input->param('ean');
-utf8::decode($ean);
 my $basket                  = $input->param( 'basket' );
-utf8::decode($basket);
 my $basketgroupname             = $input->param('basketgroupname');
-utf8::decode($basketgroupname);
 my $booksellerinvoicenumber = $input->param( 'booksellerinvoicenumber' );
-utf8::decode($booksellerinvoicenumber);
-
 my $do_search               = $input->param('do_search') || 0;
 my $from_placed_on          = C4::Dates->new($input->param('from'));
 my $to_placed_on            = C4::Dates->new($input->param('to'));

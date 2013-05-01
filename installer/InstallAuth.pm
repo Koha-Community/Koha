@@ -26,6 +26,7 @@ use Digest::MD5 qw(md5_base64);
 
 require Exporter;
 use C4::Context;
+use C4::Output;
 use C4::Templates;
 use C4::Koha;
 use CGI::Session;
@@ -393,9 +394,11 @@ sub checkauth {
         -HttpOnly => 1,
         -expires => ''
     );
-
-    require C4::Output;
-    C4::Output::output_html_with_http_headers($query,$cookie,$template->output);
+    print $query->header(
+        -type    => 'text/html; charset=utf-8',
+        -cookie  => $cookie
+      ),
+      $template->output;
     exit;
 }
 

@@ -81,7 +81,7 @@ sub all {
     for ( @{$dbh->selectall_arrayref(
         "SELECT * FROM itemtypes ORDER BY description", { Slice => {} })} )
     {
-#        utf8::encode($_->{description});
+        utf8::encode($_->{description});
         push @itypes, $class->new($_);
     }
     return @itypes;
