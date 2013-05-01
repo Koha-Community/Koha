@@ -28,6 +28,13 @@ KOHA.LocalCover = {
                 '/cgi-bin/koha/catalogue/image.pl?thumbnail=1&biblionumber=' + $(mydiv).attr("class"))
                 .load(function () {
                     if (!this.complete || typeof this.naturalWidth == "undefined" || this.naturalWidth == 0) {
+                        //IE HACK
+                        try {
+                            $(mydiv).append(img);
+                            $(mydiv).children('.no-image').remove();
+                        }
+                        catch(err){
+                        }
                     } else {
                         if (uselink) {
                             var a = $("<a />").attr('href', '/cgi-bin/koha/catalogue/imageviewer.pl?biblionumber=' + $(mydiv).attr("class"));
