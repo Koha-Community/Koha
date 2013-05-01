@@ -19,6 +19,7 @@
 
 use strict;
 use warnings;
+use Carp;
 
 BEGIN {
 
@@ -70,7 +71,8 @@ my ($newyear,$newmonth,$newday) = Add_Delta_Days ($year,$month,$day,(-1)*$days);
 my $formatdate = sprintf "%4d-%02d-%02d",$newyear,$newmonth,$newday;
 $verbose and print "Checkouts before $formatdate will be anonymised.\n";
 
-my $rows = AnonymiseIssueHistory($formatdate);
+my ($rows, $err_history_not_deleted) = AnonymiseIssueHistory($formatdate);
+carp "Anonymisation of reading history failed." if ($err_history_not_deleted);
 $verbose and print "$rows checkouts anonymised.\n";
 
 exit(0);

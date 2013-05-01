@@ -145,7 +145,8 @@ if ( $params->{'step3'} ) {
 
     # Anonymising all members
     if ($do_anonym) {
-        $totalAno = AnonymiseIssueHistory($filterdate2);
+        #FIXME: anonymisation errors are not handled
+        ($totalAno,my $anonymisation_error) = AnonymiseIssueHistory($filterdate2);
         $template->param(
             filterdate1 => $filterdate2,
             do_anonym   => '1',
