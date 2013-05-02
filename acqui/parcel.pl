@@ -136,10 +136,6 @@ my $datereceived = C4::Dates->new();
 my $code            = $input->param('code');
 my @rcv_err         = $input->param('error');
 my @rcv_err_barcode = $input->param('error_bc');
-my $startfrom=$input->param('startfrom');
-my $resultsperpage = $input->param('resultsperpage');
-$resultsperpage = 20 unless ($resultsperpage);
-$startfrom=0 unless ($startfrom);
 
 
 
@@ -281,40 +277,7 @@ if(!defined $invoice->{closedate}) {
         my $budget = GetBudget( $line{budget_id} );
         $line{budget_name} = $budget->{'budget_name'};
 
-        push @loop_orders, \%line if ($i >= $startfrom and $i < $startfrom + $resultsperpage);
-    }
-
-    my $count = $countpendings;
-
-    if ($count>$resultsperpage){
-        my $displaynext=0;
-        my $displayprev=$startfrom;
-        if(($count - ($startfrom+$resultsperpage)) > 0 ) {
-            $displaynext = 1;
-        }
-
-        my @numbers = ();
-        for (my $i=1; $i<$count/$resultsperpage+1; $i++) {
-                my $highlight=0;
-                ($startfrom/$resultsperpage==($i-1)) && ($highlight=1);
-                push @numbers, { number => $i,
-                    highlight => $highlight ,
-                    startfrom => ($i-1)*$resultsperpage};
-        }
-
-        my $from = $startfrom*$resultsperpage+1;
-        my $to;
-        if($count < (($startfrom+1)*$resultsperpage)){
-            $to = $count;
-        } else {
-            $to = (($startfrom+1)*$resultsperpage);
-        }
-        $template->param(numbers=>\@numbers,
-                         displaynext=>$displaynext,
-                         displayprev=>$displayprev,
-                         nextstartfrom=>(($startfrom+$resultsperpage<$count)?$startfrom+$resultsperpage:$count),
-                         prevstartfrom=>(($startfrom-$resultsperpage>0)?$startfrom-$resultsperpage:0)
-                        );
+        push @loop_orders, \%line;
     }
 
     $template->param(
@@ -337,7 +300,6 @@ $template->param(
     book_foot_loop        => \@book_foot_loop,
     totalprice            => sprintf($cfstr, $totalprice),
     totalquantity         => $totalquantity,
-    resultsperpage        => $resultsperpage,
     (uc(C4::Context->preference("marcflavour"))) => 1,
     total_quantity       => $total_quantity,
     total_gste           => sprintf( "%.2f", $total_gste ),
