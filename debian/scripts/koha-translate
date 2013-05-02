@@ -1,0 +1,256 @@
+#!/bin/sh
+#
+# koha-translate -- Manage Koha translations.
+# Copyright 2013 Tomás Cohen Arazi
+#                Universidad Nacional de Córdoba
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+set -e
+
+usage()
+{
+    local scriptname=$(basename $0)
+
+    cat <<EOF
+$scriptname
+
+This script lets you manage your Koha templates translations.
+
+Usage:
+$scriptname --list|-l [--all|-a]
+$scriptname --check|-c language_code
+$scriptname --install|-i language_code
+$scriptname --update|-u language_code
+$scriptname --remove|-r language_code
+$scriptname -h
+
+    -l | --list           List the installed or available (combined with -a)
+                          language translations
+    -a | --available      Used in conjunction with -l to show all languages
+    -c | --check          Check that the language .PO files are present
+    -i | --install        Install the specified language translations
+    -u | --update         Update the specified language translations
+    -r | --remove         Remove the specified language translations
+    -h | --help           Display this help message
+
+EOF
+}
+
+die()
+{
+    echo "$@" 1>&2
+    exit 1
+}
+
+list()
+{
+    all=$1
+
+    if [ "$all" != "" ]; then
+        print_available
+    else
+        print_installed
+    fi
+}
+
+print_available()
+{
+    # Loop over only one opac theme
+    for i in $( ls $PO_DIR | grep opac-t-prog ); do
+        echo `basename $i -i-opac-t-prog-v-3006000.po`
+    done
+}
+
+print_installed()
+{
+    ls $KOHA_INSTALL_DIR/opac/htdocs/opac-tmpl/prog/ | \
+        grep -v -e images -e itemtypeimg
+}
+
+install_lang()
+{
+    lang=$1
+
+    if [ "$lang" != "" ]; then
+
+        if [ "$lang" = "en" ]; then
+            die "Error: the default language (en) is already installed."
+        fi
+
+        if print_available | grep -q $lang; then
+            if print_installed | grep -q $lang; then
+                die "Error: the selected language is already installed. Try --update if you want to re-install it."
+            else
+                # Check po files are present
+                check_lang_po_files $lang
+                env PERL5LIB="$KOHA_LIB_DIR:$TRANSLATE_DIR" KOHA_CONF="$KOHA_CONF_FILE"\
+                    $PERL_CMD $TRANSLATE_DIR/translate install $lang
+            fi
+        else
+            die "Error: the selected language is not currently available."
+        fi
+
+    else
+        die "Error: no language code supplied."
+    fi
+}
+
+update_lang()
+{
+    lang=$1
+
+    if [ "$lang" != "" ]; then
+
+        if [ "$lang" = "en" ]; then
+            die "Error: the default language (en) cannot be updated."
+        fi
+
+        if print_installed | grep -q $lang; then
+            # Check po files are present
+            check_lang_po_files $lang
+            remove_lang $lang
+            install_lang $lang
+        else
+            die "Error: the selected language is not currently installed. Try --install."
+        fi
+    else
+        die "Error: no language code supplied."
+    fi
+}
+
+remove_lang()
+{
+    lang=$1
+
+    if [ "$lang" != "" ]; then
+
+        if [ "$lang" = "en" ]; then
+            die "Error: the default language (en) cannot be removed."
+        fi
+
+        if print_installed | grep -q $lang; then
+            rm -rf $KOHA_INSTALL_DIR/opac/htdocs/opac-tmpl/prog/$lang
+            rm -rf $KOHA_INSTALL_DIR/opac/htdocs/opac-tmpl/ccsr/$lang
+            rm -rf $KOHA_INSTALL_DIR/intranet/htdocs/intranet-tmpl/prog/$lang
+        else
+            die "Error: the selected language is not already installed."
+        fi
+    else
+        die "Error: no language code supplied."
+    fi
+}
+
+check_lang_po_files()
+{
+    lang=$1
+
+    po_files="$PO_DIR/$lang-i-opac-t-prog-v-3006000.po
+              $PO_DIR/$lang-opac-ccsr.po
+              $PO_DIR/$lang-i-staff-t-prog-v-3006000.po
+              $PO_DIR/$lang-pref.po"
+
+    if [ "$lang" != "" ]; then
+
+        for po_file in $po_files; do
+            if [ ! -f $po_file ]; then
+                die "Error: $po_file not found."
+            fi
+        done
+    else
+        die "Error: no language code supplied."
+    fi
+}
+
+set_action()
+{
+    if [ "$op" = "" ]; then
+        op=$1
+    else
+        die "Error: only one action can be specified."
+    fi
+}
+
+# Global PATH variables
+KOHA_INSTALL_DIR="/usr/share/koha"
+KOHA_LIB_DIR="/usr/share/koha/lib"
+KOHA_CONF_FILE="/etc/koha/koha-conf-site.xml.in"
+TRANSLATE_DIR="$KOHA_INSTALL_DIR/misc/translator"
+PO_DIR="$TRANSLATE_DIR/po"
+PERL_CMD=`which perl`
+
+# Control variables
+list_all=""
+op=""
+language=""
+
+# We accept at most 2 parameters
+[ $# -ge 1 ] && [ $# -le 3 ] || ( usage ; die "Error: wrong parameters" )
+
+# Read parameters
+while [ $# -gt 0 ]; do
+
+    case "$1" in
+        -h|--help)
+            op="help"
+            break ;;
+        -c|--check)
+            set_action "check"
+            shift ;;
+        -i|--install)
+            set_action "install"
+            shift ;;
+        -u|--update)
+            set_action "update"
+            shift ;;
+        -r|--remove)
+            set_action "remove"
+            shift ;;
+        -l|--list)
+            set_action "list"
+            shift ;;
+        -a|--available)
+            list_all=1
+            shift ;;
+        -*)
+            usage
+            die "Error: unknown parameter $1." ;;
+        *)
+            language=$1
+            shift ;;
+    esac
+
+done
+
+# Process the requested actions
+case $op in
+    "help")
+        usage ;;
+    "list")
+        list $list_all ;;
+    "install")
+        install_lang $language ;;
+    "update")
+        update_lang $language ;;
+    "remove")
+        remove_lang $language ;;
+    "check")
+        check_lang_po_files $language ;;
+    *)
+        usage
+        die "Error: wrong parameters..." ;;
+esac
+
+exit 0

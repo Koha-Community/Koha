@@ -1,0 +1,79 @@
+<article xmlns='http://docbook.org/ns/docbook'>
+<title>koha-translate</title>
+<info>
+<productname>Koha</productname> is the first free software library automation package.
+<author>
+  <orgname>The Koha Community</orgname>
+  <uri>http://koha-community.org/</uri>
+</author>
+</info>
+
+<refentry xml:id="koha-translate">
+
+  <refmeta>
+    <refentrytitle>koha-translate</refentrytitle>
+    <manvolnum>8</manvolnum>
+  </refmeta>
+
+  <refnamediv>
+    <refname>koha-translate</refname>
+    <refpurpose>Manage Koha templates translations</refpurpose>
+    <refclass>UNIX/Linux</refclass>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <cmdsynopsis>
+      <command>koha-translate</command> <arg><option>-i</option>|<option>--install</option></arg> <arg><option>-u</option>|<option>--update</option></arg> <arg><option>-r</option>|<option>--remove</option></arg> <arg><option>-c</option>|<option>--check</option></arg> <arg choice="req"  rep="norepeat"><replaceable>lang_code</replaceable></arg>
+      <command>koha-translate</command> <arg><option>-l</option>|<option>--list</option></arg> <arg><option>-a</option>|<option>--available</option></arg>
+    </cmdsynopsis>
+  </refsynopsisdiv>
+
+  <refsect1><title>Options</title>
+  <variablelist>
+    <varlistentry>
+      <term><option>-a, --available</option></term>
+      <listitem>
+        <para>(For use with --list) List the available language translations.</para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term><option>-c, --check</option></term>
+      <listitem>
+        <para>Check if all the .PO files are present for the specified language.</para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term><option>-i, --install</option></term>
+      <listitem>
+        <para>Install the specified lang_code language translation.</para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term><option>-l, --list</option></term>
+      <listitem>
+        <para>List the installed or available (combined with -a) language translations.</para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term><option>-r, --remove</option></term>
+      <listitem>
+        <para>Remove the specified lang_code language translation.</para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term><option>-u, --update</option></term>
+      <listitem>
+        <para>Update the specified lang_code language translation.</para>
+      </listitem>
+    </varlistentry>
+
+ </variablelist>
+  </refsect1>
+
+  <refsect1><title>Description</title>
+  <para>Manage Koha templates translations.</para>
+  </refsect1>
+
+</refentry>
+
+</article>

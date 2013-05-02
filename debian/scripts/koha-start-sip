@@ -1,0 +1,49 @@
+#!/bin/sh
+#
+# koha-start-sip -- Start SIP server for named Koha instance
+# Copyright 2012  Catalyst IT, Ltd
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+set -e
+
+for name in "$@"
+do
+    if [ ! -e /etc/koha/sites/${name}/koha-conf.xml ] ;
+    then
+        echo "No such instance: ${name}" > /dev/stderr
+        continue;
+    fi
+    [ -e /etc/koha/sites/${name}/SIPconfig.xml ] || continue
+    echo "Starting SIP server for $name"
+    mkdir -p /var/run/koha/${name}
+    chown "${name}-koha:${name}-koha" /var/run/koha/${name}
+    export KOHA_CONF PERL5LIB
+    KOHA_CONF=/etc/koha/sites/${name}/koha-conf.xml
+    PERL5LIB="/usr/share/koha/lib:/usr/share/koha/lib/C4/SIP"
+    daemon \
+        --name="$name-koha-sip" \
+        --errlog="/var/log/koha/$name/sip-error.log" \
+        --stdout="/var/log/koha/$name/sip.log" \
+        --output="/var/log/koha/$name/sip-output.log" \
+        --verbose=1 \
+        --respawn \
+        --delay=30 \
+        --pidfiles="/var/run/koha/${name}" \
+        --user="$name-koha.$name-koha" \
+        -- \
+        perl \
+        "/usr/share/koha/lib/C4/SIP/SIPServer.pm" \
+        "/etc/koha/sites/${name}/SIPconfig.xml"
+done
