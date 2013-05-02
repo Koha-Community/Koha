@@ -94,11 +94,10 @@
         <table id="histsearcht">
             <thead>
 			<tr>
-                <th>Order line</th>
+                <th>Order line (parent)</th>
 				<th>Basket</th>
 				<th>Basket group</th>
                 <th>Invoice number</th>
-                <th>Order number</th>
 				<th>Summary</th>
 				<th>Vendor</th>
 				<th>Placed on</th>
@@ -113,7 +112,10 @@
             <tbody>
             [% FOREACH order IN order_loop %]
                 <tr>
-                    <td>[% order.parent_ordernumber %]</td>
+                    <td>
+                        [% order.ordernumber %]
+                        [% IF order.ordernumber != order.parent_ordernumber %]([% order.parent_ordernumber %])[% END %]
+                    </td>
                     <td>[% order.basketname %] (<a href="basket.pl?basketno=[% order.basketno %]">[% order.basketno %]</a>)</td>
                     <td>
                         [% IF ( order.basketgroupid ) %]
@@ -128,7 +130,6 @@
                             &nbsp;
                         [% END %]
                     </td>
-                    <td>[% order.ordernumber %]</td>
                     <td>
                         <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% order.biblionumber %]">[% order.title |html %]</a>
                         <br />[% order.author %] <br /> [% order.isbn %]
