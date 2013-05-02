@@ -168,14 +168,58 @@ $(document).ready(function(){
   No matching rule in effect
 [% END %][% END %]
     </li>
-    <li>[% IF ( can_commit ) %] <label for="overlay_action">Action if matching record found:</label>
-     [% INCLUDE 'tools-overlay-action.inc' %] <span class="change-status">Changed. <a href="#" class="reset" id="reset_overlay_action">Reset</a></span>[% ELSE %]<span class="label">Action if matching record found:</span>[% overlay_action %][% END %]</li>
+    <li>
+        [% IF ( can_commit ) %]
+            <label for="overlay_action">Action if matching record found:</label>
+            [% INCLUDE 'tools-overlay-action.inc' %] <span class="change-status">Changed. <a href="#" class="reset" id="reset_overlay_action">Reset</a></span>
+        [% ELSE %]
+            <span class="label">Action if matching record found:</span>
+            [% IF ( overlay_action == 'replace' ) %]
+                Replace existing record with incoming record
+            [% ELSIF ( overlay_action == 'create_new' ) %]
+                Add incoming record
+            [% ELSIF ( overlay_action == 'ignore' ) %]
+                Ignore incoming record (its items may still be processed)
+            [% ELSE %]
+                [% overlay_action %]
+            [% END %]
+        [% END %]</li>
      
-    <li>[% IF ( can_commit ) %]<label for="nomatch_action">Action if no match found:</label>
-     [% INCLUDE 'tools-nomatch-action.inc' %] <span class="change-status">Changed. <a href="#" class="reset" id="reset_nomatch_action">Reset</a></span>[% ELSE %]<span class="label">Action if no match found:</span>[% nomatch_action %][% END %]</li>
+    <li>
+        [% IF ( can_commit ) %]
+            <label for="nomatch_action">Action if no match found:</label>
+            [% INCLUDE 'tools-nomatch-action.inc' %] <span class="change-status">Changed. <a href="#" class="reset" id="reset_nomatch_action">Reset</a></span>
+        [% ELSE %]
+            <span class="label">Action if no match found:</span>
+            [% IF ( nomatch_action == 'create_new' ) %]
+                Add incoming record
+            [% ELSIF ( nomatch_action == 'ignore' ) %]
+                Ignore incoming record (its items may still be processed)
+            [% ELSE %]
+                [% nomatch_action %]
+            [% END %]
+        [% END %]
+    </li>
     
-    <li>[% IF ( can_commit ) %]<label for="item_action">Item processing:</label>
-     [% INCLUDE 'tools-item-action.inc' %] <span class="change-status">Changed. <a href="#" class="reset" id="reset_item_action">Reset</a></span>[% ELSE %]<span class="label">Item processing:</span>[% item_action %][% END %]</li>
+    <li>
+        [% IF ( can_commit ) %]
+            <label for="item_action">Item processing:</label>
+            [% INCLUDE 'tools-item-action.inc' %] <span class="change-status">Changed. <a href="#" class="reset" id="reset_item_action">Reset</a></span>
+        [% ELSE %]
+            <span class="label">Item processing:</span>
+            [% IF ( item_action == 'always_add' ) %]
+                Always add items
+            [% ELSIF ( item_action == 'add_only_for_matches' ) %]
+                Add items only if matching bib was found
+            [% ELSIF ( item_action == 'add_only_for_new' ) %]
+                Add items only if no matching bib was found
+            [% ELSIF ( item_action == 'ignore' ) %]
+                Ignore items
+            [% ELSE %]
+                [% item_action %]
+            [% END %]
+        [% END %]
+    </li>
   </ol>
 [% IF ( can_commit ) %]<fieldset class="action"><input type="submit" value="Apply different matching rules" class="button" /></fieldset></form>[% END %]
 </fieldset>
@@ -342,8 +386,26 @@ Page
   [% UNLESS ( loop.odd ) %]<tr class="highlight">[% ELSE %]<tr>[% END %]
     <td>[% record_lis.record_sequence %]</td>
     <td><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% record_lis.import_record_id %]" rel="gb_page_center[600,500]">[% record_lis.citation %]</a></td>
-    <td>[% record_lis.status %]</td>
-    <td>[% record_lis.overlay_status %]</td>
+    <td>
+        [% IF ( record_lis.status == 'imported' ) %]
+            Imported
+        [% ELSIF ( record_lis.status == 'ignored' ) %]
+            Ignored
+        [% ELSIF ( record_lis.status == 'reverted' ) %]
+            Reverted
+        [% ELSE %]
+          [% record_lis.status %]
+        [% END %]
+    </td>
+    <td>
+        [% IF ( record_lis.overlay_status == 'no_match' ) %]
+            No&nbsp;match
+        [% ELSIF ( record_lis.overlay_status == 'match_applied' ) %]
+            Match applied
+        [% ELSE %]
+            [% record_lis.overlay_status %]
+        [% END %]
+    </td>
     <td>[% IF ( record_lis.final_match_id ) %]
         [% PROCESS final_match_link record=record_lis %]
         [% END %]
