@@ -112,6 +112,7 @@ sub FindDuplicate {
             $titleindex = 'title|exact';
             $authorindex = 'author|exact';
             $op = '&&';
+            $QParser->custom_data->{'QueryAutoTruncate'} = C4::Context->preference('QueryAutoTruncate');
         } else {
             $titleindex = 'ti,ext';
             $authorindex = 'au,ext';
@@ -233,6 +234,9 @@ sub SimpleSearch {
 
     my $QParser;
     $QParser = C4::Context->queryparser if (C4::Context->preference('UseQueryParser') && ! ($query =~ m/\w,\w|\w=\w/));
+    if ($QParser) {
+        $QParser->custom_data->{'QueryAutoTruncate'} = C4::Context->preference('QueryAutoTruncate');
+    }
 
     # Initialize & Search Zebra
     for ( my $i = 0 ; $i < @servers ; $i++ ) {
@@ -1177,6 +1181,7 @@ sub parseQuery {
 
     if ($QParser)
     {
+        $QParser->custom_data->{'QueryAutoTruncate'} = C4::Context->preference('QueryAutoTruncate');
         $query = '';
         for ( my $ii = 0 ; $ii <= @operands ; $ii++ ) {
             next unless $operands[$ii];
