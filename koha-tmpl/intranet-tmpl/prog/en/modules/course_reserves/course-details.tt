@@ -90,7 +90,9 @@
                                     [% END %]
                                 [% ELSE %]
                                      <i>Unchanged</i>
-                                     ([% ItemTypes.GetDescription( cr.item.itype ) %])
+                                     [% IF cr.item.itype %]
+                                         ([% ItemTypes.GetDescription( cr.item.itype ) %])
+                                     [% END %]
                                 [% END %]
                             </td>
                             [% END %]
@@ -103,7 +105,9 @@
                                      [% END %]
                                  [% ELSE %]
                                      <i>Unchanged</i>
-                                     ([% AuthorisedValues.GetByCode( 'CCODE', cr.item.ccode ) %])
+                                     [% IF cr.item.ccode %]
+                                         ([% AuthorisedValues.GetByCode( 'CCODE', cr.item.ccode ) %])
+                                     [% END %]
                                  [% END %]
                             </td>
                             <td>
@@ -115,7 +119,9 @@
                                     [% END %]
                                 [% ELSE %]
                                     <i>Unchanged</i>
-                                    ([% AuthorisedValues.GetByCode( 'LOC', cr.item.location ) %])
+                                    [% IF cr.item.location %]
+                                        ([% AuthorisedValues.GetByCode( 'LOC', cr.item.location ) %])
+                                    [% END %]
                                 [% END %]
                             </td>
                             <td>
@@ -127,7 +133,9 @@
                                     [% END %]
                                 [% ELSE %]
                                     <i>Unchanged</i>
-                                    ([% Branches.GetName( cr.item.holdingbranch ) %])
+                                    [% IF cr.item.holdingbranch %]
+                                        ([% Branches.GetName( cr.item.holdingbranch ) %])
+                                    [% END %]
                                 [% END %]
                             </td>
                             <td>[% cr.staff_note %]</td>
