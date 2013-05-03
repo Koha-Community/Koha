@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tagfield tag="008" xmlns="http://koha-community.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="./marc21_field_CF.xsd">
   <Material id="BKS"><name>Books</name><description></description>
-    <Position pos="00-05"><name>Date entered on file</name><description></description></Position>
-    <Position pos="06"><name>Type of date/Publication status</name><description></description>
+    <Position pos="00-05"><name>Date entered on file</name><description>Computer-generated, six-character numeric string that indicates the date the MARC record was created. Recorded in the pattern yymmdd.</description></Position>
+    <Position pos="06"><name>Type of date/Publication status</name><description>One-character alphabetic code that indicates the type of dates given in 008/07-10 (Date 1) and 008/11-14 (Date 2). For continuing resources, the code in 008/06 also indicates the publication status.</description>
       <Value code="b"><description>No dates given; B.C. date involved</description></Value>
       <Value code="c"><description>Continuing resource currently published</description></Value>
       <Value code="d"><description>Continuing resource ceased publication</description></Value>
       <Value code="e"><description>Detailed date</description></Value>
-      <Value code="i"><description>Inclusive dates of colletion</description></Value>
+      <Value code="i"><description>Inclusive dates of collection</description></Value>
       <Value code="k"><description>Range of years of bulk of collection</description></Value>
       <Value code="m"><description>Multiple dates</description></Value>
       <Value code="n"><description>Dates unknown</description></Value>
       <Value code="p"><description>Date of distribution/release/issue and production/recording session when different</description></Value>
       <Value code="q"><description>Questionable date</description></Value>
       <Value code="r"><description>Reprint/reissue date and original date</description></Value>
-      <Value code="s"><description>Single know date/probable date</description></Value>
+      <Value code="s"><description>Single known date/probable date</description></Value>
       <Value code="t"><description>Publication date and copyright date</description></Value>
-      <Value code="u"><description>Continuings resource status unknown</description></Value>
+      <Value code="u"><description>Continuing resource status unknown</description></Value>
       <Value code="|"><description>No attempt to code</description></Value>
     </Position>
     <Position pos="07-10"><name>Date 1</name><description>A date specified by the code in 008/06 (Type of date/Publication status)</description>
@@ -47,7 +47,7 @@
       <Value code="u"><description>Date element is totally or partially unknown</description></Value>
       <Value code="||||"><description>No attempt to code</description></Value>
     </Position>
-    <Position pos="15-17" url="http://www.loc.gov/marc/countries/countries_code.html"><urltext>MARC Code List for Countries</urltext><name>Place of publication, production, or execution</name><description></description>
+    <Position pos="15-17" url="http://www.loc.gov/marc/countries/countries_code.html"><urltext>MARC Code List for Countries</urltext><name>Two- or three-character alphabetic code that indicates the place of publication, production, or execution.</name><description></description>
       <Value code="vp#"><description>Various places</description></Value>
       <Value code="xx#"><description>No place, unknown, or undetermined</description></Value>
       <Value code="[aa#]"><description>Two-character alphabetic code</description></Value>
@@ -67,7 +67,7 @@
       <Value code="j"><description>Genealogical tables</description></Value>
       <Value code="k"><description>Forms</description></Value>
       <Value code="l"><description>Samples</description></Value>
-      <Value code="m"><description>Phonodisc, phonowire, etc</description></Value>
+      <Value code="m"><description>Phonodisc, phonowire, etc.</description></Value>
       <Value code="o"><description>Photographs</description></Value>
       <Value code="p"><description>Illuminations</description></Value>
       <Value code="|"><description>No attempt to code</description></Value>
@@ -121,7 +121,7 @@
       <Value code="r"><description>Directories</description></Value>
       <Value code="s"><description>Statistics</description></Value>
       <Value code="t"><description>Technical reports</description></Value>
-      <Value code="u"><description>Standars/specifications</description></Value>
+      <Value code="u"><description>Standards/specifications</description></Value>
       <Value code="v"><description>Legal cases and case notes</description></Value>
       <Value code="w"><description>Law reports and digests</description></Value>
       <Value code="y"><description>Yearbooks</description></Value>
@@ -132,7 +132,7 @@
       <Value code="#"><description>Not a government publication</description></Value>
       <Value code="a"><description>Autonomous or semi-autonomous component</description></Value>
       <Value code="c"><description>Multilocal</description></Value>
-      <Value code="f"><description>Federal/National</description></Value>
+      <Value code="f"><description>Federal/national</description></Value>
       <Value code="i"><description>International intergovernmental</description></Value>
       <Value code="l"><description>Local</description></Value>
       <Value code="m"><description>Multistate</description></Value>
@@ -144,7 +144,7 @@
     </Position>
     <Position pos="29"><name>Conference publication</name><description>One-character code that indicates whether the item consists of the proceedings, reports, or summaries of a conference.</description>
       <Value code="0"><description>Not a conference publication</description></Value>
-      <Value code="1"><description>Conference</description></Value>
+      <Value code="1"><description>Conference publication</description></Value>
       <Value code="|"><description>No attempt to code</description></Value>
     </Position>
     <Position pos="30"><name>Festschrift</name><description>One-character code that indicates whether the item is a festschrift</description>
@@ -190,7 +190,7 @@
       <Value code="[aaa]"><description>Tree-character alphabetic code</description></Value>
     </Position>
     <Position pos="38"><name>Modified record</name><description>One-character code that indicates whether any data in a bibliographic record is a modification of information that appeared on the item being cataloged or that was intended to be included in the MARC record.</description>
-      <Value code="#"><description>No modified</description></Value>
+      <Value code="#"><description>Not modified</description></Value>
       <Value code="d"><description>Dashed-on information omitted</description></Value>
       <Value code="o"><description>Completely romanized/printed cards romanized</description></Value>
       <Value code="r"><description>Completely romanized/printed cards in script</description></Value>
@@ -198,7 +198,7 @@
       <Value code="x"><description>Missing characters</description></Value>
       <Value code="|"><description>No attempt to code</description></Value>
     </Position>
-    <Position pos="39"><name>Cataloging source</name><description></description>
+    <Position pos="39"><name>Cataloging source</name><description>One-character code that indicates the original cataloging source of the record. If the cataloging source is known, it is identified in subfield $a of field 040 (Cataloging Source).</description>
       <Value code="#"><description>National bibliographic agency</description></Value>
       <Value code="c"><description>Cooperative cataloging program</description></Value>
       <Value code="d"><description>Other</description></Value>
@@ -208,21 +208,21 @@
   </Material>
   <Material id="CF"><name>Computer Files</name><description></description>
     <Position pos="00-05"><name>Date entered on file</name><description></description></Position>
-    <Position pos="06"><name>Type of date/Publication status</name><description></description>
+    <Position pos="06"><name>Type of date/Publication status</name><description>One-character alphabetic code that indicates the type of dates given in 008/07-10 (Date 1) and 008/11-14 (Date 2). For continuing resources, the code in 008/06 also indicates the publication status.</description>
       <Value code="b"><description>No dates given; B.C. date involved</description></Value>
       <Value code="c"><description>Continuing resource currently published</description></Value>
       <Value code="d"><description>Continuing resource ceased publication</description></Value>
       <Value code="e"><description>Detailed date</description></Value>
-      <Value code="i"><description>Inclusive dates of colletion</description></Value>
+      <Value code="i"><description>Inclusive dates of collection</description></Value>
       <Value code="k"><description>Range of years of bulk of collection</description></Value>
       <Value code="m"><description>Multiple dates</description></Value>
       <Value code="n"><description>Dates unknown</description></Value>
       <Value code="p"><description>Date of distribution/release/issue and production/recording session when different</description></Value>
       <Value code="q"><description>Questionable date</description></Value>
       <Value code="r"><description>Reprint/reissue date and original date</description></Value>
-      <Value code="s"><description>Single know date/probable date</description></Value>
+      <Value code="s"><description>Single known date/probable date</description></Value>
       <Value code="t"><description>Publication date and copyright date</description></Value>
-      <Value code="u"><description>Continuings resource status unknown</description></Value>
+      <Value code="u"><description>Continuing resource status unknown</description></Value>
       <Value code="|"><description>No attempt to code</description></Value>
     </Position>
     <Position pos="07-10"><name>Date 1</name><description>A date specified by the code in 008/06 (Type of date/Publication status)</description>
@@ -253,14 +253,14 @@
       <Value code="u"><description>Date element is totally or partially unknown</description></Value>
       <Value code="||||"><description>No attempt to code</description></Value>
     </Position>
-    <Position pos="15-17" url="http://www.loc.gov/marc/countries/countries_code.html"><urltext>MARC Code List for Countries</urltext><name>Place of publication, production, or execution</name><description></description>
+    <Position pos="15-17" url="http://www.loc.gov/marc/countries/countries_code.html"><urltext>MARC Code List for Countries</urltext><name>Two- or three-character alphabetic code that indicates the place of publication, production, or execution.</name><description></description>
       <Value code="vp#"><description>Various places</description></Value>
       <Value code="xx#"><description>No place, unknown, or undetermined</description></Value>
       <Value code="[aa#]"><description>Two-character alphabetic code</description></Value>
       <Value code="[aaa]"><description>Three-character alphabetic code</description></Value>
     </Position>
-    <Position pos="18-21"><name>Undefined</name><description>Each one contains a blank (#) or a fill character (|)</description></Position>
-    <Position pos="22"><name>Target audience</name><description>One- character alphabetic code that describes the intellectual level of the target audience for which the material is intended</description>
+    <Position pos="18-21"><name>Undefined</name><description>Each contains a blank (#) or a fill character (|)</description></Position>
+    <Position pos="22"><name>Target audience</name><description>One-character alphabetic code describes indicates the target audience for which the material is intended</description>
       <Value code="#"><description>Unknown or not specified</description></Value>
       <Value code="a"><description>Preschool</description></Value>
       <Value code="b"><description>Primary</description></Value>
@@ -295,12 +295,12 @@
       <Value code="z"><description>Other</description></Value>
       <Value code="|"><description>No attempt to code</description></Value>
     </Position>
-    <Position pos="27"><name>Undefined</name><description>One-character code that contains a blank (#) or a fill character (|)</description></Position>
-    <Position pos="28"><name>Government publication</name><description>One-character code that indicates whether or not the item is published or produced by or for an international, national, state, provincial, or local government agency, or by any subdivision of such a body</description>
+    <Position pos="27"><name>Undefined</name><description>One-character code that contains a blank (#) or a fill character (|).</description></Position>
+    <Position pos="28"><name>Government publication</name><description>One-character alphabetic code that indicates whether the computer file is published or produced by or for an international, national, provincial, state, or local government agency (including intergovernmental bodies of all types), any subdivision of such a body and, if so, the jurisdictional level of the agency.</description>
       <Value code="#"><description>Not a government publication</description></Value>
       <Value code="a"><description>Autonomous or semi-autonomous component</description></Value>
       <Value code="c"><description>Multilocal</description></Value>
-      <Value code="f"><description>Federal/National</description></Value>
+      <Value code="f"><description>Federal/national</description></Value>
       <Value code="i"><description>International intergovernmental</description></Value>
       <Value code="l"><description>Local</description></Value>
       <Value code="m"><description>Multistate</description></Value>
@@ -320,7 +320,7 @@
       <Value code="[aaa]"><description>Tree-character alphabetic code</description></Value>
     </Position>
     <Position pos="38"><name>Modified record</name><description>One-character code that indicates whether any data in a bibliographic record is a modification of information that appeared on the item being cataloged or that was intended to be included in the MARC record.</description>
-      <Value code="#"><description>No modified</description></Value>
+      <Value code="#"><description>Not modified</description></Value>
       <Value code="d"><description>Dashed-on information omitted</description></Value>
       <Value code="o"><description>Completely romanized/printed cards romanized</description></Value>
       <Value code="r"><description>Completely romanized/printed cards in script</description></Value>
@@ -328,7 +328,7 @@
       <Value code="x"><description>Missing characters</description></Value>
       <Value code="|"><description>No attempt to code</description></Value>
     </Position>
-    <Position pos="39"><name>Cataloging source</name><description></description>
+    <Position pos="39"><name>Cataloging source</name><description>One-character code that indicates the original cataloging source of the record. If the cataloging source is known, it is identified in subfield $a of field 040 (Cataloging Source).</description>
       <Value code="#"><description>National bibliographic agency</description></Value>
       <Value code="c"><description>Cooperative cataloging program</description></Value>
       <Value code="d"><description>Other</description></Value>
@@ -338,21 +338,21 @@
   </Material>
   <Material id="MP"><name>Maps</name><description></description>
     <Position pos="00-05"><name>Date entered on file</name><description></description></Position>
-    <Position pos="06"><name>Type of date/Publication status</name><description></description>
+    <Position pos="06"><name>Type of date/Publication status</name><description>One-character alphabetic code that indicates the type of dates given in 008/07-10 (Date 1) and 008/11-14 (Date 2). For continuing resources, the code in 008/06 also indicates the publication status.</description>
       <Value code="b"><description>No dates given; B.C. date involved</description></Value>
       <Value code="c"><description>Continuing resource currently published</description></Value>
       <Value code="d"><description>Continuing resource ceased publication</description></Value>
       <Value code="e"><description>Detailed date</description></Value>
-      <Value code="i"><description>Inclusive dates of colletion</description></Value>
+      <Value code="i"><description>Inclusive dates of collection</description></Value>
       <Value code="k"><description>Range of years of bulk of collection</description></Value>
       <Value code="m"><description>Multiple dates</description></Value>
       <Value code="n"><description>Dates unknown</description></Value>
       <Value code="p"><description>Date of distribution/release/issue and production/recording session when different</description></Value>
       <Value code="q"><description>Questionable date</description></Value>
       <Value code="r"><description>Reprint/reissue date and original date</description></Value>
-      <Value code="s"><description>Single know date/probable date</description></Value>
+      <Value code="s"><description>Single known date/probable date</description></Value>
       <Value code="t"><description>Publication date and copyright date</description></Value>
-      <Value code="u"><description>Continuings resource status unknown</description></Value>
+      <Value code="u"><description>Continuing resource status unknown</description></Value>
       <Value code="|"><description>No attempt to code</description></Value>
     </Position>
     <Position pos="07-10"><name>Date 1</name><description>A date specified by the code in 008/06 (Type of date/Publication status)</description>
@@ -383,13 +383,13 @@
       <Value code="u"><description>Date element is totally or partially unknown</description></Value>
       <Value code="||||"><description>No attempt to code</description></Value>
     </Position>
-    <Position pos="15-17" url="http://www.loc.gov/marc/countries/countries_code.html"><urltext>MARC Code List for Countries</urltext><name>Place of publication, production, or execution</name><description></description>
+    <Position pos="15-17" url="http://www.loc.gov/marc/countries/countries_code.html"><urltext>MARC Code List for Countries</urltext><name>Two- or three-character alphabetic code that indicates the place of publication, production, or execution.</name><description></description>
       <Value code="vp#"><description>Various places</description></Value>
       <Value code="xx#"><description>No place, unknown, or undetermined</description></Value>
       <Value code="[aa#]"><description>Two-character alphabetic code</description></Value>
       <Value code="[aaa]"><description>Three-character alphabetic code</description></Value>
     </Position>
-    <Position pos="18-21"><name>Relief</name><description>Up to four one-character alphabetic codes that indicate the relief type specified on the item. Codes are recorded in order of their importance to the described item. If fewer than four codes are assigned, the codes are left justified and each unused position contains a blank (#).</description>
+    <Position pos="18-21"><name>Relief</name><description>Up to four one-character alphabetic codes that indicate the relief type specified on the item. Codes are recorded in order of their importance to the described item. If fewer than four codes are assigned, the codes are left justified and each unused position contains a blank (#)</description>
       <Value code="#"><description>No relief shown</description></Value>
       <Value code="a"><description>Contours</description></Value>
       <Value code="b"><description>Shading</description></Value>
@@ -418,7 +418,7 @@
       <Value code="an"><description>Chamberlin trimetric</description></Value>
       <Value code="ap"><description>Polar stereographic</description></Value>
       <Value code="au"><description>Azimuthal, specific type unknown</description></Value>
-      <Value code="az"><description>Azimutal, other</description></Value>
+      <Value code="az"><description>Azimuthal, other</description></Value>
       <Value code="ba"><description>Gall</description></Value>
       <Value code="bb"><description>Goode's homolographic</description></Value>
       <Value code="bc"><description>Lambert's cylindrical equal area</description></Value>
@@ -449,7 +449,7 @@
       <Value code="dd"><description>Goode's homolosine</description></Value>
       <Value code="de"><description>Miller's bipolar oblique conformal conic</description></Value>
       <Value code="df"><description>Van Der Grinten</description></Value>
-      <Value code="dg"><description>Dimaxión</description></Value>
+      <Value code="dg"><description>Dimaxion</description></Value>
       <Value code="dh"><description>Cordiform</description></Value>
       <Value code="dl"><description>Lambert conformal</description></Value>
       <Value code="zz"><description>Other</description></Value>
@@ -458,7 +458,7 @@
     <Position pos="24"><name>Undefined</name><description>Undefined; contains a blank (#) or a fill character (|).</description></Position>
     <Position pos="25"><name>Type of cartographic material</name><description>One-character alphabetic code that indicates the type of cartographic item described.</description>
       <Value code="a"><description>Single map</description></Value>
-      <Value code="b"><description>Map Series</description></Value>
+      <Value code="b"><description>Map series</description></Value>
       <Value code="c"><description>Map serial</description></Value>
       <Value code="d"><description>Globe</description></Value>
       <Value code="e"><description>Atlas</description></Value>
@@ -468,12 +468,12 @@
       <Value code="z"><description>Other</description></Value>
       <Value code="|"><description>No attempt to code</description></Value>
     </Position>
-    <Position pos="26-27"><name>Undefined</name><description>Each contains a blank (#) or a fill character (|)</description></Position>
-    <Position pos="28"><name>Government publication</name><description>One-character code that indicates whether or not the item is published or produced by or for an international, national, state, provincial, or local government agency, or by any subdivision of such a body</description>
+    <Position pos="26-27"><name>Undefined</name><description>Undefined; Each contains a blank (#) or a fill character (|)</description></Position>
+    <Position pos="28"><name>Government publication</name><description>One-character alphabetic code that indicates whether the item is published or produced by or for an international, national, provincial, state, or local government agency, or by any subdivision of such a body, and, if so, the jurisdictional level of the agency.</description>
       <Value code="#"><description>Not a government publication</description></Value>
       <Value code="a"><description>Autonomous or semi-autonomous component</description></Value>
       <Value code="c"><description>Multilocal</description></Value>
-      <Value code="f"><description>Federal/National</description></Value>
+      <Value code="f"><description>Federal/national</description></Value>
       <Value code="i"><description>International intergovernmental</description></Value>
       <Value code="l"><description>Local</description></Value>
       <Value code="m"><description>Multistate</description></Value>
@@ -525,7 +525,7 @@
       <Value code="[aaa]"><description>Tree-character alphabetic code</description></Value>
     </Position>
     <Position pos="38"><name>Modified record</name><description>One-character code that indicates whether any data in a bibliographic record is a modification of information that appeared on the item being cataloged or that was intended to be included in the MARC record.</description>
-      <Value code="#"><description>No modified</description></Value>
+      <Value code="#"><description>Not modified</description></Value>
       <Value code="d"><description>Dashed-on information omitted</description></Value>
       <Value code="o"><description>Completely romanized/printed cards romanized</description></Value>
       <Value code="r"><description>Completely romanized/printed cards in script</description></Value>
@@ -533,7 +533,7 @@
       <Value code="x"><description>Missing characters</description></Value>
       <Value code="|"><description>No attempt to code</description></Value>
     </Position>
-    <Position pos="39"><name>Cataloging source</name><description></description>
+    <Position pos="39"><name>Cataloging source</name><description>One-character code that indicates the original cataloging source of the record. If the cataloging source is known, it is identified in subfield $a of field 040 (Cataloging Source).</description>
       <Value code="#"><description>National bibliographic agency</description></Value>
       <Value code="c"><description>Cooperative cataloging program</description></Value>
       <Value code="d"><description>Other</description></Value>
@@ -543,21 +543,21 @@
   </Material>
   <Material id="MU"><name>Music</name><description></description>
     <Position pos="00-05"><name>Date entered on file</name><description></description></Position>
-    <Position pos="06"><name>Type of date/Publication status</name><description></description>
+    <Position pos="06"><name>Type of date/Publication status</name><description>One-character alphabetic code that indicates the type of dates given in 008/07-10 (Date 1) and 008/11-14 (Date 2). For continuing resources, the code in 008/06 also indicates the publication status.</description>
       <Value code="b"><description>No dates given; B.C. date involved</description></Value>
       <Value code="c"><description>Continuing resource currently published</description></Value>
       <Value code="d"><description>Continuing resource ceased publication</description></Value>
       <Value code="e"><description>Detailed date</description></Value>
-      <Value code="i"><description>Inclusive dates of colletion</description></Value>
+      <Value code="i"><description>Inclusive dates of collection</description></Value>
       <Value code="k"><description>Range of years of bulk of collection</description></Value>
       <Value code="m"><description>Multiple dates</description></Value>
       <Value code="n"><description>Dates unknown</description></Value>
       <Value code="p"><description>Date of distribution/release/issue and production/recording session when different</description></Value>
       <Value code="q"><description>Questionable date</description></Value>
       <Value code="r"><description>Reprint/reissue date and original date</description></Value>
-      <Value code="s"><description>Single know date/probable date</description></Value>
+      <Value code="s"><description>Single known date/probable date</description></Value>
       <Value code="t"><description>Publication date and copyright date</description></Value>
-      <Value code="u"><description>Continuings resource status unknown</description></Value>
+      <Value code="u"><description>Continuing resource status unknown</description></Value>
       <Value code="|"><description>No attempt to code</description></Value>
     </Position>
     <Position pos="07-10"><name>Date 1</name><description>A date specified by the code in 008/06 (Type of date/Publication status)</description>
@@ -588,13 +588,13 @@
       <Value code="u"><description>Date element is totally or partially unknown</description></Value>
       <Value code="||||"><description>No attempt to code</description></Value>
     </Position>
-    <Position pos="15-17" url="http://www.loc.gov/marc/countries/countries_code.html"><urltext>MARC Code List for Countries</urltext><name>Place of publication, production, or execution</name><description></description>
+    <Position pos="15-17" url="http://www.loc.gov/marc/countries/countries_code.html"><urltext>MARC Code List for Countries</urltext><name>Two- or three-character alphabetic code that indicates the place of publication, production, or execution.</name><description></description>
       <Value code="vp#"><description>Various places</description></Value>
       <Value code="xx#"><description>No place, unknown, or undetermined</description></Value>
       <Value code="[aa#]"><description>Two-character alphabetic code</description></Value>
       <Value code="[aaa]"><description>Three-character alphabetic code</description></Value>
     </Position>
-    <Position pos="18-19"><name>Form of composition</name><description></description>
+    <Position pos="18-19"><name>Form of composition</name><description>Two-character alphabetic code that indicates the form of composition. Codes are based on Library of Congress subject headings. If more than one code is appropriate, the code mu (Multiple forms) is used in 008/18-19 and all appropriate specific codes are given in field 047 (Form of Composition). Code mu (Multiple forms) may also signify that field 047 (Form of Composition) contains non-MARC composition codes.</description>
       <Value code="an"><description>Anthems</description></Value>
       <Value code="bd"><description>Ballads</description></Value>
       <Value code="bg"><description>Bluegrass music</description></Value>
@@ -602,7 +602,7 @@
       <Value code="bt"><description>Ballets</description></Value>
       <Value code="ca"><description>Chaconnes</description></Value>
       <Value code="cb"><description>Chants, Other religions</description></Value>
-      <Value code="cc"><description>Chants, Christian</description></Value>
+      <Value code="cc"><description>Chant, Christian</description></Value>
       <Value code="cg"><description>Concerti grossi</description></Value>
       <Value code="ch"><description>Chorales</description></Value>
       <Value code="cl"><description>Chorale preludes</description></Value>
@@ -662,14 +662,14 @@
       <Value code="tl"><description>Teatro lirico</description></Value>
       <Value code="ts"><description>Trio-sonatas</description></Value>
       <Value code="uu"><description>Unknown</description></Value>
-      <Value code="vi"><description>Villacincos</description></Value>
+      <Value code="vi"><description>Villancicos</description></Value>
       <Value code="vr"><description>Variations</description></Value>
-      <Value code="wz"><description>Waltzers</description></Value>
+      <Value code="wz"><description>Waltzes</description></Value>
       <Value code="za"><description>Zarzuelas</description></Value>
       <Value code="zz"><description>Other</description></Value>
       <Value code="||"><description>No attempt to code</description></Value>
     </Position>
-    <Position pos="20"><name>Format of music</name><description>One-character code that indicates the format of a musical composition (e.g., piano-conductor score).</description>
+    <Position pos="20"><name>Format of music</name><description>One-character code that indicates the format of a musical composition (e.g., piano-conductor score). "Staff notation" in this element refers to music written using staves. "Musical notation" refers to music written using staves or graphic, symbolic, or word-based notation.</description>
       <Value code="a"><description>Full score</description></Value>
       <Value code="b"><description>Full score, miniature or study size</description></Value>
       <Value code="c"><description>Accompaniment reduced for keyboard</description></Value>
@@ -680,6 +680,7 @@
       <Value code="i"><description>Condensed score</description></Value>
       <Value code="j"><description>Performer-conductor part</description></Value>
       <Value code="k"><description>Vocal score</description></Value>
+      <Value code="l"><description>Score</description></Value>
       <Value code="m"><description>Multiple score formats</description></Value>
       <Value code="n"><description>Not applicable</description></Value>
       <Value code="u"><description>Unknown</description></Value>
@@ -695,8 +696,8 @@
       <Value code="u"><description>Unknown</description></Value>
       <Value code="|"><description>No attempt to code</description></Value>
     </Position>
-    <Position pos="22"><name>Target audience</name><description>One- character alphabetic code that describes the intellectual level of the target audience for which the material is intended</description>
-      <Value code="#"><description>Unknown or not specified</description></Value>
+    <Position pos="22"><name>Target audience</name><description>One-character alphabetic code that describes the intellectual level of the target audience for which the material is intended</description>
+      <Value code="#"><description>Unknown or unspecified</description></Value>
       <Value code="a"><description>Preschool</description></Value>
       <Value code="b"><description>Primary</description></Value>
       <Value code="c"><description>Pre-adolescent</description></Value>
@@ -707,7 +708,7 @@
       <Value code="j"><description>Juvenile</description></Value>
       <Value code="|"><description>No attempt to code</description></Value>
     </Position>
-    <Position pos="23"><name>Form of item</name><description>One-character alphabetic code that indicates the form of material for the item.</description>
+    <Position pos="23"><name>Form of item</name><description>One-character alphabetic code that specifies the form of material for the item being described.</description>
       <Value code="#"><description>None of the following</description></Value>
       <Value code="a"><description>Microfilm</description></Value>
       <Value code="b"><description>Microfiche</description></Value>
@@ -724,15 +725,15 @@
       <Value code="#"><description>No accompanying matter</description></Value>
       <Value code="a"><description>Discography</description></Value>
       <Value code="b"><description>Bibliography</description></Value>
-      <Value code="c"><description>Thematic indez</description></Value>
+      <Value code="c"><description>Thematic index</description></Value>
       <Value code="d"><description>Libretto or text</description></Value>
-      <Value code="e"><description>Bibliography of composer or autor</description></Value>
+      <Value code="e"><description>Biography of composer or author</description></Value>
       <Value code="f"><description>Biography of performer or history of ensemble</description></Value>
       <Value code="g"><description>Technical and/or historical information on instruments</description></Value>
       <Value code="h"><description>Technical information on music</description></Value>
       <Value code="i"><description>Historical information</description></Value>
       <Value code="k"><description>Ethnological information</description></Value>
-      <Value code="r"><description>Instrutional materials</description></Value>
+      <Value code="r"><description>Instructional materials</description></Value>
       <Value code="s"><description>Music</description></Value>
       <Value code="z"><description>Other</description></Value>
       <Value code="|"><description>No attempt to code</description></Value>
@@ -765,7 +766,7 @@
     <Position pos="33"><name>Transposition and arrangement</name><description>Whether all or part of the item being cataloged is a transposition and/or arrangement of another work.</description>
       <Value code="#"><description>Not arrangement or transposition or not specified</description></Value>
       <Value code="a"><description>Transposition</description></Value>
-      <Value code="b"><description>Arragement</description></Value>
+      <Value code="b"><description>Arrangement</description></Value>
       <Value code="c"><description>Both transposed and arranged</description></Value>
       <Value code="n"><description>Not applicable</description></Value>
       <Value code="u"><description>Unknown</description></Value>
@@ -781,7 +782,7 @@
       <Value code="[aaa]"><description>Tree-character alphabetic code</description></Value>
     </Position>
     <Position pos="38"><name>Modified record</name><description>One-character code that indicates whether any data in a bibliographic record is a modification of information that appeared on the item being cataloged or that was intended to be included in the MARC record.</description>
-      <Value code="#"><description>No modified</description></Value>
+      <Value code="#"><description>Not modified</description></Value>
       <Value code="d"><description>Dashed-on information omitted</description></Value>
       <Value code="o"><description>Completely romanized/printed cards romanized</description></Value>
       <Value code="r"><description>Completely romanized/printed cards in script</description></Value>
@@ -789,7 +790,7 @@
       <Value code="x"><description>Missing characters</description></Value>
       <Value code="|"><description>No attempt to code</description></Value>
     </Position>
-    <Position pos="39"><name>Cataloging source</name><description></description>
+    <Position pos="39"><name>Cataloging source</name><description>One-character code that indicates the original cataloging source of the record. If the cataloging source is known, it is identified in subfield $a of field 040 (Cataloging Source).</description>
       <Value code="#"><description>National bibliographic agency</description></Value>
       <Value code="c"><description>Cooperative cataloging program</description></Value>
       <Value code="d"><description>Other</description></Value>
@@ -799,21 +800,21 @@
   </Material>
   <Material id="CR"><name>Continuing Resources</name><description></description>
     <Position pos="00-05"><name>Date entered on file</name><description></description></Position>
-    <Position pos="06"><name>Type of date/Publication status</name><description></description>
+    <Position pos="06"><name>Type of date/Publication status</name><description>One-character alphabetic code that indicates the type of dates given in 008/07-10 (Date 1) and 008/11-14 (Date 2). For continuing resources, the code in 008/06 also indicates the publication status.</description>
       <Value code="b"><description>No dates given; B.C. date involved</description></Value>
       <Value code="c"><description>Continuing resource currently published</description></Value>
       <Value code="d"><description>Continuing resource ceased publication</description></Value>
       <Value code="e"><description>Detailed date</description></Value>
-      <Value code="i"><description>Inclusive dates of colletion</description></Value>
+      <Value code="i"><description>Inclusive dates of collection</description></Value>
       <Value code="k"><description>Range of years of bulk of collection</description></Value>
       <Value code="m"><description>Multiple dates</description></Value>
       <Value code="n"><description>Dates unknown</description></Value>
       <Value code="p"><description>Date of distribution/release/issue and production/recording session when different</description></Value>
       <Value code="q"><description>Questionable date</description></Value>
       <Value code="r"><description>Reprint/reissue date and original date</description></Value>
-      <Value code="s"><description>Single know date/probable date</description></Value>
+      <Value code="s"><description>Single known date/probable date</description></Value>
       <Value code="t"><description>Publication date and copyright date</description></Value>
-      <Value code="u"><description>Continuings resource status unknown</description></Value>
+      <Value code="u"><description>Continuing resource status unknown</description></Value>
       <Value code="|"><description>No attempt to code</description></Value>
     </Position>
     <Position pos="07-10"><name>Date 1</name><description>A date specified by the code in 008/06 (Type of date/Publication status)</description>
@@ -844,7 +845,7 @@
       <Value code="u"><description>Date element is totally or partially unknown</description></Value>
       <Value code="||||"><description>No attempt to code</description></Value>
     </Position>
-    <Position pos="15-17" url="http://www.loc.gov/marc/countries/countries_code.html"><urltext>MARC Code List for Countries</urltext><name>Place of publication, production, or execution</name><description></description>
+    <Position pos="15-17" url="http://www.loc.gov/marc/countries/countries_code.html"><urltext>MARC Code List for Countries</urltext><name>Two- or three-character alphabetic code that indicates the place of publication, production, or execution.</name><description></description>
       <Value code="vp#"><description>Various places</description></Value>
       <Value code="xx#"><description>No place, unknown, or undetermined</description></Value>
       <Value code="[aa#]"><description>Two-character alphabetic code</description></Value>
@@ -887,7 +888,7 @@
       <Value code="m"><description>Monographic series</description></Value>
       <Value code="n"><description>Newspaper</description></Value>
       <Value code="p"><description>Periodical</description></Value>
-      <Value code="w"><description>Updating web site</description></Value>
+      <Value code="w"><description>Updating Web site</description></Value>
       <Value code="|"><description>No attempt to code</description></Value>
     </Position>
     <Position pos="22"><name>Form of original item</name><description>One-character alphabetic code that indicates the form of material in which an item was originally published.</description>
@@ -916,7 +917,7 @@
       <Value code="s"><description>Electronic</description></Value>
       <Value code="|"><description>No attempt to code</description></Value>
     </Position>
-    <Position pos="24"><name>Nature of entire work</name><description>One-character alphabetic code that indicates the nature of an item if it consists entirely of a certain type of material</description>
+    <Position pos="24"><name>Nature of entire work</name><description>One-character alphabetic code that indicates the nature of an item if it consists entirely of a certain type of material. If the item can be considered more than one type of material, the types are recorded in 008/25-27 (Nature of contents) and 008/24 position is coded blank (#).</description>
       <Value code="#"><description>Not specified</description></Value>
       <Value code="5"><description>Calendars</description></Value>
       <Value code="6"><description>Comics/graphic novels</description></Value>
@@ -932,7 +933,7 @@
       <Value code="k"><description>Discographies</description></Value>
       <Value code="l"><description>Legislation</description></Value>
       <Value code="m"><description>Theses</description></Value>
-      <Value code="n"><description>Survey of literature in a subject area</description></Value>
+      <Value code="n"><description>Surveys of literature in a subject area</description></Value>
       <Value code="o"><description>Reviews</description></Value>
       <Value code="p"><description>Programmed texts</description></Value>
       <Value code="q"><description>Filmographies</description></Value>
@@ -941,19 +942,19 @@
       <Value code="t"><description>Technical reports</description></Value>
       <Value code="u"><description>Standards/specifications</description></Value>
       <Value code="v"><description>Legal cases and case notes</description></Value>
-      <Value code="w"><description>Law reorts and digests</description></Value>
+      <Value code="w"><description>Law reports and digests</description></Value>
       <Value code="y"><description>Yearbooks</description></Value>
-      <Value code="z"><description>Teatries</description></Value>
+      <Value code="z"><description>Treaties</description></Value>
       <Value code="|"><description>No attempt to code</description></Value>
     </Position>
-    <Position pos="25-27"><name>Nature of contents</name><description>Up to three one-character alphabetic codes (recorded in alphabetical order) that indicate that a work contains certain types of materials</description>
+    <Position pos="25-27"><name>Nature of contents</name><description>Up to three one-character alphabetic codes (recorded in alphabetical order) that indicate that a work contains certain types of materials. If fewer than three codes are assigned, the codes are left justified and each unused position contains a blank (#).</description>
       <Value code="#"><description>Not specified</description></Value>
       <Value code="5"><description>Calendars</description></Value>
       <Value code="6"><description>Comics/graphic novels</description></Value>
       <Value code="a"><description>Abstracts/summaries</description></Value>
       <Value code="b"><description>Bibliographies</description></Value>
       <Value code="c"><description>Catalogs</description></Value>
-      <Value code="d"><description>Dictionaries. Also used for a glossary or a gazetteer.</description></Value>
+      <Value code="d"><description>Dictionaries</description></Value>
       <Value code="e"><description>Encyclopedias</description></Value>
       <Value code="f"><description>Handbooks</description></Value>
       <Value code="g"><description>Legal articles</description></Value>
@@ -962,25 +963,25 @@
       <Value code="k"><description>Discographies</description></Value>
       <Value code="l"><description>Legislation</description></Value>
       <Value code="m"><description>Theses</description></Value>
-      <Value code="n"><description>Survey of literature in a subject area</description></Value>
+      <Value code="n"><description>Surveys of literature in a subject area</description></Value>
       <Value code="o"><description>Reviews</description></Value>
       <Value code="p"><description>Programmed texts</description></Value>
       <Value code="q"><description>Filmographies</description></Value>
       <Value code="r"><description>Directories</description></Value>
       <Value code="s"><description>Statistics</description></Value>
       <Value code="t"><description>Technical reports</description></Value>
-      <Value code="u"><description>Standars/specifications</description></Value>
+      <Value code="u"><description>Standards/specifications</description></Value>
       <Value code="v"><description>Legal cases and case notes</description></Value>
       <Value code="w"><description>Law reports and digests</description></Value>
       <Value code="y"><description>Yearbooks</description></Value>
       <Value code="z"><description>Treaties</description></Value>
       <Value code="|||"><description>No attempt to code</description></Value>
     </Position>
-    <Position pos="28"><name>Government publication</name><description>One-character code that indicates whether or not the item is published or produced by or for an international, national, state, provincial, or local government agency, or by any subdivision of such a body</description>
+    <Position pos="28"><name>Government publication</name><description>One-character alphabetic code that indicates whether an item is published or produced by or for an international, national, provincial, state, or local government agency, or by any subdivision of such a body, and, if so, the jurisdictional level of the agency.</description>
       <Value code="#"><description>Not a government publication</description></Value>
       <Value code="a"><description>Autonomous or semi-autonomous component</description></Value>
       <Value code="c"><description>Multilocal</description></Value>
-      <Value code="f"><description>Federal/National</description></Value>
+      <Value code="f"><description>Federal/national</description></Value>
       <Value code="i"><description>International intergovernmental</description></Value>
       <Value code="l"><description>Local</description></Value>
       <Value code="m"><description>Multistate</description></Value>
@@ -1015,7 +1016,7 @@
       <Value code="|"><description>No attempt to code</description></Value>
     </Position>
     <Position pos="34"><name>Entry convention</name><description>One-character numeric code that indicates whether the item was cataloged according to successive entry, latest entry, or integrated entry cataloging conventions.</description>
-      <Value code="0"><description>Succesive entry</description></Value>
+      <Value code="0"><description>Successive entry</description></Value>
       <Value code="1"><description>Latest entry</description></Value>
       <Value code="2"><description>Integrated entry</description></Value>
       <Value code="|"><description>No attempt to code</description></Value>
@@ -1029,7 +1030,7 @@
       <Value code="[aaa]"><description>Tree-character alphabetic code</description></Value>
     </Position>
     <Position pos="38"><name>Modified record</name><description>One-character code that indicates whether any data in a bibliographic record is a modification of information that appeared on the item being cataloged or that was intended to be included in the MARC record.</description>
-      <Value code="#"><description>No modified</description></Value>
+      <Value code="#"><description>Not modified</description></Value>
       <Value code="d"><description>Dashed-on information omitted</description></Value>
       <Value code="o"><description>Completely romanized/printed cards romanized</description></Value>
       <Value code="r"><description>Completely romanized/printed cards in script</description></Value>
@@ -1037,7 +1038,7 @@
       <Value code="x"><description>Missing characters</description></Value>
       <Value code="|"><description>No attempt to code</description></Value>
     </Position>
-    <Position pos="39"><name>Cataloging source</name><description></description>
+    <Position pos="39"><name>Cataloging source</name><description>One-character code that indicates the original cataloging source of the record. If the cataloging source is known, it is identified in subfield $a of field 040 (Cataloging Source).</description>
       <Value code="#"><description>National bibliographic agency</description></Value>
       <Value code="c"><description>Cooperative cataloging program</description></Value>
       <Value code="d"><description>Other</description></Value>
@@ -1047,21 +1048,21 @@
   </Material>
   <Material id="VM"><name>Visual Materials</name><description></description>
     <Position pos="00-05"><name>Date entered on file</name><description></description></Position>
-    <Position pos="06"><name>Type of date/Publication status</name><description></description>
+    <Position pos="06"><name>Type of date/Publication status</name><description>One-character alphabetic code that indicates the type of dates given in 008/07-10 (Date 1) and 008/11-14 (Date 2). For continuing resources, the code in 008/06 also indicates the publication status.</description>
       <Value code="b"><description>No dates given; B.C. date involved</description></Value>
       <Value code="c"><description>Continuing resource currently published</description></Value>
       <Value code="d"><description>Continuing resource ceased publication</description></Value>
       <Value code="e"><description>Detailed date</description></Value>
-      <Value code="i"><description>Inclusive dates of colletion</description></Value>
+      <Value code="i"><description>Inclusive dates of collection</description></Value>
       <Value code="k"><description>Range of years of bulk of collection</description></Value>
       <Value code="m"><description>Multiple dates</description></Value>
       <Value code="n"><description>Dates unknown</description></Value>
       <Value code="p"><description>Date of distribution/release/issue and production/recording session when different</description></Value>
       <Value code="q"><description>Questionable date</description></Value>
       <Value code="r"><description>Reprint/reissue date and original date</description></Value>
-      <Value code="s"><description>Single know date/probable date</description></Value>
+      <Value code="s"><description>Single known date/probable date</description></Value>
       <Value code="t"><description>Publication date and copyright date</description></Value>
-      <Value code="u"><description>Continuings resource status unknown</description></Value>
+      <Value code="u"><description>Continuing resource status unknown</description></Value>
       <Value code="|"><description>No attempt to code</description></Value>
     </Position>
     <Position pos="07-10"><name>Date 1</name><description>A date specified by the code in 008/06 (Type of date/Publication status)</description>
@@ -1092,7 +1093,7 @@
       <Value code="u"><description>Date element is totally or partially unknown</description></Value>
       <Value code="||||"><description>No attempt to code</description></Value>
     </Position>
-    <Position pos="15-17" url="http://www.loc.gov/marc/countries/countries_code.html"><urltext>MARC Code List for Countries</urltext><name>Place of publication, production, or execution</name><description></description>
+    <Position pos="15-17" url="http://www.loc.gov/marc/countries/countries_code.html"><urltext>MARC Code List for Countries</urltext><name>Two- or three-character alphabetic code that indicates the place of publication, production, or execution.</name><description></description>
       <Value code="vp#"><description>Various places</description></Value>
       <Value code="xx#"><description>No place, unknown, or undetermined</description></Value>
       <Value code="[aa#]"><description>Two-character alphabetic code</description></Value>
@@ -1106,7 +1107,7 @@
       <Value code="---"><description>Unknown</description></Value>
     </Position>
     <Position pos="21"><name>Undefined</name><description>Undefined; contains a blank (#) or a fill character (|).</description></Position>
-    <Position pos="22"><name>Target audience</name><description>One- character alphabetic code that describes the intellectual level of the target audience for which the material is intended</description>
+    <Position pos="22"><name>Target audience</name><description>One-character alphabetic code that indicates the audience for which the item is intended.</description>
       <Value code="#"><description>Unknown or not specified</description></Value>
       <Value code="a"><description>Preschool</description></Value>
       <Value code="b"><description>Primary</description></Value>
@@ -1119,11 +1120,11 @@
       <Value code="|"><description>No attempt to code</description></Value>
     </Position>
     <Position pos="23-27"><name>Undefined</name><description>Undefined; each contains a blank (#) or a fill character (|).</description></Position>
-    <Position pos="28"><name>Government publication</name><description>One-character code that indicates whether or not the item is published or produced by or for an international, national, state, provincial, or local government agency, or by any subdivision of such a body</description>
+    <Position pos="28"><name>Government publication</name><description>One-character alphabetic code that indicates whether the item is published or produced by or for an international, provincial, national, state, or local government agency, or by any subdivision of such a body, and, if so, the jurisdictional level of the agency.</description>
       <Value code="#"><description>Not a government publication</description></Value>
       <Value code="a"><description>Autonomous or semi-autonomous component</description></Value>
       <Value code="c"><description>Multilocal</description></Value>
-      <Value code="f"><description>Federal/National</description></Value>
+      <Value code="f"><description>Federal/national</description></Value>
       <Value code="i"><description>International intergovernmental</description></Value>
       <Value code="l"><description>Local</description></Value>
       <Value code="m"><description>Multistate</description></Value>
@@ -1133,7 +1134,7 @@
       <Value code="z"><description>Other</description></Value>
       <Value code="|"><description>No attempt to code</description></Value>
     </Position>
-    <Position pos="29"><name>Form of item</name><description>One-character alphabetic code that indicates the form of material for the item.</description>
+    <Position pos="29"><name>Form of item</name><description>One-character alphabetic code that specifies the form of material.</description>
       <Value code="#"><description>None of the following</description></Value>
       <Value code="a"><description>Microfilm</description></Value>
       <Value code="b"><description>Microfiche</description></Value>
@@ -1188,7 +1189,7 @@
       <Value code="[aaa]"><description>Tree-character alphabetic code</description></Value>
     </Position>
     <Position pos="38"><name>Modified record</name><description>One-character code that indicates whether any data in a bibliographic record is a modification of information that appeared on the item being cataloged or that was intended to be included in the MARC record.</description>
-      <Value code="#"><description>No modified</description></Value>
+      <Value code="#"><description>Not modified</description></Value>
       <Value code="d"><description>Dashed-on information omitted</description></Value>
       <Value code="o"><description>Completely romanized/printed cards romanized</description></Value>
       <Value code="r"><description>Completely romanized/printed cards in script</description></Value>
@@ -1196,7 +1197,7 @@
       <Value code="x"><description>Missing characters</description></Value>
       <Value code="|"><description>No attempt to code</description></Value>
     </Position>
-    <Position pos="39"><name>Cataloging source</name><description></description>
+    <Position pos="39"><name>Cataloging source</name><description>One-character code that indicates the original cataloging source of the record. If the cataloging source is known, it is identified in subfield $a of field 040 (Cataloging Source).</description>
       <Value code="#"><description>National bibliographic agency</description></Value>
       <Value code="c"><description>Cooperative cataloging program</description></Value>
       <Value code="d"><description>Other</description></Value>
@@ -1206,21 +1207,21 @@
   </Material>
   <Material id="MX"><name>Mixed Materials</name><description></description>
     <Position pos="00-05"><name>Date entered on file</name><description></description></Position>
-    <Position pos="06"><name>Type of date/Publication status</name><description></description>
+    <Position pos="06"><name>Type of date/Publication status</name><description>One-character alphabetic code that indicates the type of dates given in 008/07-10 (Date 1) and 008/11-14 (Date 2). For continuing resources, the code in 008/06 also indicates the publication status.</description>
       <Value code="b"><description>No dates given; B.C. date involved</description></Value>
       <Value code="c"><description>Continuing resource currently published</description></Value>
       <Value code="d"><description>Continuing resource ceased publication</description></Value>
       <Value code="e"><description>Detailed date</description></Value>
-      <Value code="i"><description>Inclusive dates of colletion</description></Value>
+      <Value code="i"><description>Inclusive dates of collection</description></Value>
       <Value code="k"><description>Range of years of bulk of collection</description></Value>
       <Value code="m"><description>Multiple dates</description></Value>
       <Value code="n"><description>Dates unknown</description></Value>
       <Value code="p"><description>Date of distribution/release/issue and production/recording session when different</description></Value>
       <Value code="q"><description>Questionable date</description></Value>
       <Value code="r"><description>Reprint/reissue date and original date</description></Value>
-      <Value code="s"><description>Single know date/probable date</description></Value>
+      <Value code="s"><description>Single known date/probable date</description></Value>
       <Value code="t"><description>Publication date and copyright date</description></Value>
-      <Value code="u"><description>Continuings resource status unknown</description></Value>
+      <Value code="u"><description>Continuing resource status unknown</description></Value>
       <Value code="|"><description>No attempt to code</description></Value>
     </Position>
     <Position pos="07-10"><name>Date 1</name><description>A date specified by the code in 008/06 (Type of date/Publication status)</description>
@@ -1251,7 +1252,7 @@
       <Value code="u"><description>Date element is totally or partially unknown</description></Value>
       <Value code="||||"><description>No attempt to code</description></Value>
     </Position>
-    <Position pos="15-17" url="http://www.loc.gov/marc/countries/countries_code.html"><urltext>MARC Code List for Countries</urltext><name>Place of publication, production, or execution</name><description></description>
+    <Position pos="15-17" url="http://www.loc.gov/marc/countries/countries_code.html"><urltext>MARC Code List for Countries</urltext><name>Two- or three-character alphabetic code that indicates the place of publication, production, or execution.</name><description></description>
       <Value code="vp#"><description>Various places</description></Value>
       <Value code="xx#"><description>No place, unknown, or undetermined</description></Value>
       <Value code="[aa#]"><description>Two-character alphabetic code</description></Value>
@@ -1281,7 +1282,7 @@
       <Value code="[aaa]"><description>Tree-character alphabetic code</description></Value>
     </Position>
     <Position pos="38"><name>Modified record</name><description>One-character code that indicates whether any data in a bibliographic record is a modification of information that appeared on the item being cataloged or that was intended to be included in the MARC record.</description>
-      <Value code="#"><description>No modified</description></Value>
+      <Value code="#"><description>Not modified</description></Value>
       <Value code="d"><description>Dashed-on information omitted</description></Value>
       <Value code="o"><description>Completely romanized/printed cards romanized</description></Value>
       <Value code="r"><description>Completely romanized/printed cards in script</description></Value>
@@ -1289,7 +1290,7 @@
       <Value code="x"><description>Missing characters</description></Value>
       <Value code="|"><description>No attempt to code</description></Value>
     </Position>
-    <Position pos="39"><name>Cataloging source</name><description></description>
+    <Position pos="39"><name>Cataloging source</name><description>One-character code that indicates the original cataloging source of the record. If the cataloging source is known, it is identified in subfield $a of field 040 (Cataloging Source).</description>
       <Value code="#"><description>National bibliographic agency</description></Value>
       <Value code="c"><description>Cooperative cataloging program</description></Value>
       <Value code="d"><description>Other</description></Value>
