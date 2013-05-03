@@ -909,7 +909,8 @@ if ( $op eq "addbiblio" ) {
 
     }
     elsif ($redirect eq "just_save"){
-        print $input->redirect("/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=$biblionumber&framework=$frameworkcode");
+        my $tab = $input->param('current_tab');
+        print $input->redirect("/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=$biblionumber&framework=$frameworkcode&tab=$tab");
     }
     else {
           $template->param(
@@ -990,7 +991,8 @@ $template->param(
     popup => $mode,
     frameworkcode => $frameworkcode,
     itemtype => $frameworkcode,
-    borrowernumber => $loggedinuser, 
+    borrowernumber => $loggedinuser,
+    tab => $input->param('tab')
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

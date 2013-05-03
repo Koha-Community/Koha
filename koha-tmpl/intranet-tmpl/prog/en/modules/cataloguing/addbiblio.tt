@@ -13,6 +13,10 @@
 			$("#"+ui.panel.id+" input:eq(0)").focus();
 		});
 
+        [% IF tab %]
+          $('#addbibliotabs').tabs('option', 'selected', "#[% tab %]");
+        [% END %]
+
 		/* check cookie to hide/show marcdocs*/
 		if($.cookie("marcdocs_[% borrowernumber %]") == 'false'){
 			hideMARCdocLinks();
@@ -55,7 +59,10 @@
         });
         $("#saveandcontinue").click(function(){
             $(".btn-group").removeClass("open");
-            redirect("just_save");
+            var tab = $("#addbibliotabs li.ui-tabs-selected:first a").attr('href');
+            tab = tab.replace('#', '');
+            $("#current_tab").val(tab);
+            redirect("just_save", tab);
             return false;
         });
 
@@ -352,7 +359,8 @@ function Changefwk(FwkList) {
 [% ELSE %]
     <form method="post" name="f" id="f" action="/cgi-bin/koha/cataloguing/addbiblio.pl" onsubmit="return Check();">
     <input type="hidden" value="[% IF ( biblionumber ) %]view[% ELSE %]items[% END %]" id="redirect" name="redirect" />
-	<input type="hidden" value="0" id="confirm_not_duplicate" name="confirm_not_duplicate" />
+    <input type="hidden" value="" id="current_tab" name="current_tab" />
+    <input type="hidden" value="0" id="confirm_not_duplicate" name="confirm_not_duplicate" />
 [% END %]
 
 <div id="toolbar" class="btn-toolbar">
