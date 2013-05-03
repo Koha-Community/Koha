@@ -7,29 +7,29 @@
 <form name="f_pop" action="">
 <table>
 	<tr>
-		<td><label for="f1">Instruments ou voix dans un ensemble:</label></td>
+		<td><label for="f1">Instruments or voices for ensemble:</label></td>
 		<td>
 			<select name="f1" id="f1" size="1">
 			[% IF ( f1dblpipe ) %]
-            	<option value="||" selected="selected">||- Caractères de remplissage</option>
+		<option value="||" selected="selected">||- Filling characters</option>
             [% ELSE %]
-            	<option value="||">||- Caractères de remplissage</option>
+		<option value="||">||- Filling characters</option>
             [% END %]
 
 			[% IF ( f1ba ) %]
-				<option value="ba" selected="selected">Cor</option>
+				<option value="ba" selected="selected">Horn</option>
 			[% ELSE %]
-				<option value="ba">Cor</option>
+				<option value="ba">Horn</option>
 			[% END %]
 			[% IF ( f1bb ) %]
-				<option value="bb" selected="selected">Trompette</option>
+				<option value="bb" selected="selected">Trumpet</option>
 			[% ELSE %]
-				<option value="bb">Trompette</option>
+				<option value="bb">Trumpet</option>
 			[% END %]
 			[% IF ( f1bc ) %]
-				<option value="bc" selected="selected">Cornet a piston</option>
+				<option value="bc" selected="selected">Cornet</option>
 			[% ELSE %]
-				<option value="bc">Cornet a piston</option>
+				<option value="bc">Cornet</option>
 			[% END %]
 			[% IF ( f1bd ) %]
 				<option value="bd" selected="selected">Trombone</option>
@@ -42,104 +42,104 @@
 				<option value="be">Tuba</option>
 			[% END %]
 			[% IF ( f1bf ) %]
-				<option value="bf" selected="selected">Saxophone</option>
+				<option value="bf" selected="selected">Baritone</option>
 			[% ELSE %]
-				<option value="bf">Saxophone</option>
+				<option value="bf">Baritone</option>
 			[% END %]
 			[% IF ( f1bt ) %]
-				<option value="bt" selected="selected">Ethniques</option>
+				<option value="bt" selected="selected">Ethnic brass</option>
 			[% ELSE %]
-				<option value="bt">Ethniques</option>
+				<option value="bt">Ethnic brass</option>
 			[% END %]
 			[% IF ( f1bu ) %]
-				<option value="bu" selected="selected">Non precise (Cuivre)</option>
+				<option value="bu" selected="selected">Unspecified brass</option>
 			[% ELSE %]
-				<option value="bu">Non precise (Cuivre)</option>
+				<option value="bu">Unspecified brass</option>
 			[% END %]
 			[% IF ( f1bz ) %]
-				<option value="bz" selected="selected">Autre cuivre</option>
+				<option value="bz" selected="selected">Other brass</option>
 			[% ELSE %]
-				<option value="bz">Autre cuivre</option>
+				<option value="bz">Other brass</option>
 			[% END %]
 			[% IF ( f1ca ) %]
-				<option value="ca" selected="selected">Mixtes</option>
+				<option value="ca" selected="selected">Mixed chorus</option>
 			[% ELSE %]
-				<option value="ca">Mixtes</option>
+				<option value="ca">Mixed chorus</option>
 			[% END %]
 			[% IF ( f1cb ) %]
-				<option value="cb" selected="selected">Femmes </option>
+				<option value="cb" selected="selected">Women's chorus</option>
 			[% ELSE %]
-				<option value="cb">Femmes</option>
+				<option value="cb">Women's chorus</option>
 			[% END %]
 			[% IF ( f1cc ) %]
-				<option value="cc" selected="selected">Hommes</option>
+				<option value="cc" selected="selected">Men's chorus</option>
 			[% ELSE %]
-				<option value="cc">Hommes</option>
+				<option value="cc">Men's chorus</option>
 			[% END %]
 			[% IF ( f1cd ) %]
-				<option value="cd" selected="selected">Enfants</option>
+				<option value="cd" selected="selected">Children's chorus</option>
 			[% ELSE %]
-				<option value="cd">Enfants</option>
+				<option value="cd">Children's chorus</option>
 			[% END %]
 			[% IF ( f1ct ) %]
-				<option value="ct" selected="selected">Ethniques</option>
+				<option value="ct" selected="selected">Ethnic chorus</option>
 			[% ELSE %]
-				<option value="ct">Ethniques</option>
+				<option value="ct">Ethnic chorus</option>
 			[% END %]
 			[% IF ( f1cu ) %]
-				<option value="cu" selected="selected">Non precise (Choeurs)</option>
+				<option value="cu" selected="selected">Unspecified chorus</option>
 			[% ELSE %]
-				<option value="cu">Non precise (Choeurs)</option>
+				<option value="cu">Unspecified chorus</option>
 			[% END %]
 			[% IF ( f1oa ) %]
-				<option value="oa" selected="selected">Orchestre symphonique</option>
+				<option value="oa" selected="selected">Full orchestra</option>
 			[% ELSE %]
-				<option value="oa">Orchestre symphonique</option>
+				<option value="oa">Full orchestra</option>
 			[% END %]
 			[% IF ( f1ob ) %]
-				<option value="ob" selected="selected">Orchestre de chambre</option>
+				<option value="ob" selected="selected">Chamber orchestra</option>
 			[% ELSE %]
-				<option value="ob">Orchestre de chambre</option>
+				<option value="ob">Chamber orchestra</option>
 			[% END %]
 			[% IF ( f1oc ) %]
-				<option value="oc" selected="selected">Orchestres a cordes</option>
+				<option value="oc" selected="selected">String orchestra</option>
 			[% ELSE %]
-				<option value="oc">Orchestres a cordes</option>
+				<option value="oc">String orchestra</option>
 			[% END %]
 			[% IF ( f1od ) %]
-				<option value="od" selected="selected">Fanfare</option>
+				<option value="od" selected="selected">Band</option>
 			[% ELSE %]
-				<option value="od">Fanfare</option>
+				<option value="od">Band</option>
 			[% END %]
 			[% IF ( f1oe ) %]
-				<option value="oe" selected="selected">Orchestre de danse</option>
+				<option value="oe" selected="selected">Dance orchestra</option>
 			[% ELSE %]
-				<option value="oe">Orchestre de danse</option>
+				<option value="oe">Dance orchestra</option>
 			[% END %]
 			[% IF ( f1of ) %]
-				<option value="of" selected="selected">Grand ensemble - orchestre de cuivres</option>
+				<option value="of" selected="selected">Larger ensemble brass band</option>
 			[% ELSE %]
-				<option value="of">Grand ensemble - orchestre de cuivres</option>
+				<option value="of">Larger ensemble brass band</option>
 			[% END %]
 			[% IF ( f1ot ) %]
-				<option value="ot" selected="selected">Ethnique</option>
+				<option value="ot" selected="selected">Ethnic orchestra</option>
 			[% ELSE %]
-				<option value="ot">Ethnique</option>
+				<option value="ot">Ethnic orchestra</option>
 			[% END %]
 			[% IF ( f1ou ) %]
-				<option value="ou" selected="selected">Non precise (orchestre)</option>
+				<option value="ou" selected="selected">Unspecified orchestra</option>
 			[% ELSE %]
-				<option value="ou">Non precise (orchestre)</option>
+				<option value="ou">Unspecified orchestra</option>
 			[% END %]
 			[% IF ( f1oz ) %]
-				<option value="oz" selected="selected">Autre orchestre</option>
+				<option value="oz" selected="selected">Other orchestra</option>
 			[% ELSE %]
-				<option value="oz">Autre orchestre</option>
+				<option value="oz">Other orchestra</option>
 			[% END %]
 			[% IF ( f1pa ) %]
-				<option value="pa" selected="selected">Tympanon</option>
+				<option value="pa" selected="selected">Timpani</option>
 			[% ELSE %]
-				<option value="pa">Tympanon</option>
+				<option value="pa">Timpani</option>
 			[% END %]
 			[% IF ( f1pb ) %]
 				<option value="pb" selected="selected">Xylophone</option>
@@ -152,24 +152,24 @@
 				<option value="pc">Marimba</option>
 			[% END %]
 			[% IF ( f1pd ) %]
-				<option value="pd" selected="selected">Tambour, batterie</option>
+				<option value="pd" selected="selected">Drum</option>
 			[% ELSE %]
-				<option value="pd">Tambour, batterie</option>
+				<option value="pd">Drum</option>
 			[% END %]
 			[% IF ( f1pt ) %]
-				<option value="pt" selected="selected">Ethnique</option>
+				<option value="pt" selected="selected">Ethnic percussion</option>
 			[% ELSE %]
-				<option value="pt">Ethnique</option>
+				<option value="pt">Ethnic percussion</option>
 			[% END %]
 			[% IF ( f1pu ) %]
-				<option value="pu" selected="selected">Non precise (percussion)</option>
+				<option value="pu" selected="selected">Unspecified percussion</option>
 			[% ELSE %]
-				<option value="pu">Non precise (percussion)</option>
+				<option value="pu">Unspecified percussion</option>
 			[% END %]
 			[% IF ( f1pz ) %]
-				<option value="pz" selected="selected">Autre percussions</option>
+				<option value="pz" selected="selected">Other percussion</option>
 			[% ELSE %]
-				<option value="pz">Autre percussions</option>
+				<option value="pz">Other percussion</option>
 			[% END %]
 			[% IF ( f1sa ) %]
 				<option value="sa" selected="selected">Violon</option>
@@ -177,69 +177,69 @@
 				<option value="sa">Violon</option>
 			[% END %]
 			[% IF ( f1sb ) %]
-				<option value="sb" selected="selected">Alto</option>
+				<option value="sb" selected="selected">Viola</option>
 			[% ELSE %]
-				<option value="sb">Alto</option>
+				<option value="sb">Viola</option>
 			[% END %]
 			[% IF ( f1sc ) %]
-				<option value="sc" selected="selected">Violoncelle</option>
+				<option value="sc" selected="selected">Cello</option>
 			[% ELSE %]
-				<option value="sc">Violoncelle</option>
+				<option value="sc">Cello</option>
 			[% END %]
 			[% IF ( f1sd ) %]
-				<option value="sd" selected="selected">Contrebasse</option>
+				<option value="sd" selected="selected">Double bass</option>
 			[% ELSE %]
-				<option value="sd">Contrebasse</option>
+				<option value="sd">Double bass</option>
 			[% END %]
 			[% IF ( f1se ) %]
-				<option value="se" selected="selected">Viole</option>
+				<option value="se" selected="selected">Viol</option>
 			[% ELSE %]
-				<option value="se">Viole</option>
+				<option value="se">Viol</option>
 			[% END %]
 			[% IF ( f1sf ) %]
-				<option value="sf" selected="selected">Viole d'amour</option>
+				<option value="sf" selected="selected">viola d'amore</option>
 			[% ELSE %]
-				<option value="sf">Viole d'amour</option>
+				<option value="sf">viola d'amore</option>
 			[% END %]
 			[% IF ( f1sg ) %]
-				<option value="sg" selected="selected">Viole de gambe</option>
+				<option value="sg" selected="selected">Viola da gamba</option>
 			[% ELSE %]
-				<option value="sg">Viole de gambe</option>
+				<option value="sg">Viola da gamba</option>
 			[% END %]
 			[% IF ( f1st ) %]
-				<option value="st" selected="selected">Ethnique</option>
+				<option value="st" selected="selected">Ethnic bowed strings</option>
 			[% ELSE %]
-				<option value="st">Ethnique</option>
+				<option value="st">Ethnic bowed strings</option>
 			[% END %]
 			[% IF ( f1su ) %]
-				<option value="su" selected="selected">Non precise (Corde frottee)</option>
+				<option value="su" selected="selected">Unspecified bowed strings</option>
 			[% ELSE %]
-				<option value="su">Non precise (Corde frottee)</option>
+				<option value="su">Unspecified bowed strings</option>
 			[% END %]
 			[% IF ( f1sz ) %]
-				<option value="sz" selected="selected">Autre (Corde frottee)</option>
+				<option value="sz" selected="selected">Other bowed strings</option>
 			[% ELSE %]
-				<option value="sz">Autre (Corde frottee)</option>
+				<option value="sz">Other bowed strings</option>
 			[% END %]
 			[% IF ( f1uu ) %]
-				<option value="uu" selected="selected">Non precise (Non precise)</option>
+				<option value="uu" selected="selected">Unspecified</option>
 			[% ELSE %]
-				<option value="uu">Non precise (Non precise)</option>
+				<option value="uu">Unspecified</option>
 			[% END %]
 			[% IF ( f1ea ) %]
-				<option value="ea" selected="selected">Synthetiseur</option>
+				<option value="ea" selected="selected">Synthesizer</option>
 			[% ELSE %]
-				<option value="ea">Synthetiseur</option>
+				<option value="ea">Synthesizer</option>
 			[% END %]
 			[% IF ( f1eb ) %]
-				<option value="eb" selected="selected">Bande magnetique</option>
+				<option value="eb" selected="selected">Tape</option>
 			[% ELSE %]
-				<option value="eb">Bande magnetique</option>
+				<option value="eb">Tape</option>
 			[% END %]
 			[% IF ( f1ec ) %]
-				<option value="ec" selected="selected">Ordinateur</option>
+				<option value="ec" selected="selected">Computer</option>
 			[% ELSE %]
-				<option value="ec">Ordinateur</option>
+				<option value="ec">Computer</option>
 			[% END %]
 			[% IF ( f1ed ) %]
 				<option value="ed" selected="selected">Ondes Martenot</option>
@@ -247,14 +247,14 @@
 				<option value="ed">Ondes Martenot</option>
 			[% END %]
 			[% IF ( f1eu ) %]
-				<option value="eu" selected="selected">Non precise (Electronique)</option>
+				<option value="eu" selected="selected">Unspecified electronic</option>
 			[% ELSE %]
-				<option value="eu">Non precise (Electronique)</option>
+				<option value="eu">Unspecified electronic</option>
 			[% END %]
 			[% IF ( f1ez ) %]
-				<option value="ez" selected="selected">Autre (Electronique)</option>
+				<option value="ez" selected="selected">Other electronic</option>
 			[% ELSE %]
-				<option value="ez">Autre (Electronique)</option>
+				<option value="ez">Other electronic</option>
 			[% END %]
 			[% IF ( f1ka ) %]
 				<option value="ka" selected="selected">Piano</option>
@@ -262,14 +262,14 @@
 				<option value="ka">Piano</option>
 			[% END %]
 			[% IF ( f1kb ) %]
-				<option value="kb" selected="selected">Orgue</option>
+				<option value="kb" selected="selected">Organ</option>
 			[% ELSE %]
-				<option value="kb">Orgue</option>
+				<option value="kb">Organ</option>
 			[% END %]
 			[% IF ( f1kc ) %]
-				<option value="kc" selected="selected">Clavecin</option>
+				<option value="kc" selected="selected">Harpsichord</option>
 			[% ELSE %]
-				<option value="kc">Clavecin</option>
+				<option value="kc">Harpsichord</option>
 			[% END %]
 			[% IF ( f1kd ) %]
 				<option value="kd" selected="selected">Clavicorde</option>
@@ -287,14 +287,14 @@
 				<option value="kf">Celesta</option>
 			[% END %]
 			[% IF ( f1kt ) %]
-				<option value="kt" selected="selected">Ethnique</option>
+				<option value="kt" selected="selected">Ethnic keyboard</option>
 			[% ELSE %]
-				<option value="kt">Ethnique</option>
+				<option value="kt">Ethnic keyboard</option>
 			[% END %]
 			[% IF ( f1ku ) %]
-				<option value="ku" selected="selected">Non precise (clavier)</option>
+				<option value="ku" selected="selected">Unspecified keyboard</option>
 			[% ELSE %]
-				<option value="ku">Non precise (clavier)</option>
+				<option value="ku">Unspecified keyboard</option>
 			[% END %]
 			[% IF ( f1kz ) %]
 				<option value="kz" selected="selected">Autre</option>
@@ -307,9 +307,9 @@
 				<option value="va">Soprano</option>
 			[% END %]
 			[% IF ( f1vb ) %]
-				<option value="vb" selected="selected">Mezzo-soprano</option>
+				<option value="vb" selected="selected">Mezzosoprano</option>
 			[% ELSE %]
-				<option value="vb">Mezzo-soprano</option>
+				<option value="vb">Mezzosoprano</option>
 			[% END %]
 			[% IF ( f1vc ) %]
 				<option value="vc" selected="selected">Alto</option>
@@ -322,99 +322,99 @@
 				<option value="vd">Tenor</option>
 			[% END %]
 			[% IF ( f1ve ) %]
-				<option value="ve" selected="selected">Baryton</option>
+				<option value="ve" selected="selected">Baritone</option>
 			[% ELSE %]
-				<option value="ve">Baryton</option>
+				<option value="ve">Baritone</option>
 			[% END %]
 			[% IF ( f1vf ) %]
-				<option value="vf" selected="selected">Basse</option>
+				<option value="vf" selected="selected">Bass</option>
 			[% ELSE %]
-				<option value="vf">Basse</option>
+				<option value="vf">Bass</option>
 			[% END %]
 			[% IF ( f1vg ) %]
-				<option value="vg" selected="selected">Haute contre</option>
+				<option value="vg" selected="selected">Counter tenor</option>
 			[% ELSE %]
-				<option value="vg">Haute contre</option>
+				<option value="vg">Counter tenor</option>
 			[% END %]
 			[% IF ( f1vh ) %]
-				<option value="vh" selected="selected">Voix aigues</option>
+				<option value="vh" selected="selected">Voices high voice</option>
 			[% ELSE %]
-				<option value="vh">Voix aigues</option>
+				<option value="vh">Voices high voice</option>
 			[% END %]
 			[% IF ( f1vi ) %]
-				<option value="vi" selected="selected">Voix medium</option>
+				<option value="vi" selected="selected">Voices medium voice</option>
 			[% ELSE %]
-				<option value="vi">Voix medium</option>
+				<option value="vi">Voices medium voice</option>
 			[% END %]
 			[% IF ( f1vj ) %]
-				<option value="vj" selected="selected">Voix graves</option>
+				<option value="vj" selected="selected">Voices low voice</option>
 			[% ELSE %]
-				<option value="vj">Voix graves</option>
+				<option value="vj">Voices low voice</option>
 			[% END %]
 			[% IF ( f1vt ) %]
-				<option value="vt" selected="selected">Ethnique</option>
+				<option value="vt" selected="selected">Ethnic voices</option>
 			[% ELSE %]
-				<option value="vt">Ethnique</option>
+				<option value="vt">Ethnic voices</option>
 			[% END %]
 			[% IF ( f1vu ) %]
-				<option value="vu" selected="selected">Non precise (Voix precise)</option>
+				<option value="vu" selected="selected">Unspecified voices</option>
 			[% ELSE %]
-				<option value="vu">Non precise (Voix precise)</option>
+				<option value="vu">Unspecified voices</option>
 			[% END %]
 			[% IF ( f1ta ) %]
-				<option value="ta" selected="selected">Harpe</option>
+				<option value="ta" selected="selected">Harp</option>
 			[% ELSE %]
-				<option value="ta">Harpe</option>
+				<option value="ta">Harp</option>
 			[% END %]
 			[% IF ( f1tb ) %]
-				<option value="tb" selected="selected">Famille de la guitare</option>
+				<option value="tb" selected="selected">Guitar family</option>
 			[% ELSE %]
-				<option value="tb">Famille de la guitare</option>
+				<option value="tb">Guitar family</option>
 			[% END %]
 			[% IF ( f1tc ) %]
-				<option value="tc" selected="selected">Famille du luth</option>
+				<option value="tc" selected="selected">Lute family</option>
 			[% ELSE %]
-				<option value="tc">Famille du luth</option>
+				<option value="tc">Lute family</option>
 			[% END %]
 			[% IF ( f1td ) %]
-				<option value="td" selected="selected">Mandoline</option>
+				<option value="td" selected="selected">Mandolin</option>
 			[% ELSE %]
-				<option value="td">Mandoline</option>
+				<option value="td">Mandolin</option>
 			[% END %]
 			[% IF ( f1tt ) %]
-				<option value="tt" selected="selected">Ethnique</option>
+				<option value="tt" selected="selected">Ethnic plucked string</option>
 			[% ELSE %]
-				<option value="tt">Ethnique</option>
+				<option value="tt">Ethnic plucked strings</option>
 			[% END %]
 			[% IF ( f1tu ) %]
-				<option value="tu" selected="selected">Non precise (Cordes pincees)</option>
+				<option value="tu" selected="selected">Unspecified plucked strings</option>
 			[% ELSE %]
-				<option value="tu">Non precise (Cordes pincees)</option>
+				<option value="tu">Unspecified plucked strings</option>
 			[% END %]
 			[% IF ( f1tz ) %]
-				<option value="tz" selected="selected">Autre corde pincee</option>
+				<option value="tz" selected="selected">Other plucked strings</option>
 			[% ELSE %]
-				<option value="tz">Autre corde pincee</option>
+				<option value="tz">Other plucked strings</option>
 			[% END %]
 			[% IF ( f1wa ) %]
-				<option value="wa" selected="selected">Flute traversiere</option>
+				<option value="wa" selected="selected">Flute</option>
 			[% ELSE %]
-				<option value="wa">Flute traversiere</option>
+				<option value="wa">Flute</option>
 			[% END %]
 			[% IF ( f1wb ) %]
-				<option value="wb" selected="selected">Hautbois</option>
+				<option value="wb" selected="selected">Oboe</option>
 			[% ELSE %]
-				<option value="wb">Hautbois</option>
+				<option value="wb">Oboe</option>
 			[% END %]
 			[% IF ( f1wc ) %]
-				<option value="wc" selected="selected">Clarinette</option>
+				<option value="wc" selected="selected">Clarinet</option>
 			[% ELSE %]
-				<option value="wc">Clarinette</option>
+				<option value="wc">Clarinet</option>
 			[% END %]
 			[% IF ( f1wd ) %]
-				<option value="wd" selected="selected">Basson</option>
+				<option value="wd" selected="selected">Bassoon</option>
 			[% ELSE %]
-				<option value="wd">Basson</option>
+				<option value="wd">Bassoon</option>
 			[% END %]
 			[% IF ( f1we ) %]
 				<option value="we" selected="selected">Piccolo</option>
@@ -427,14 +427,14 @@
 				<option value="wf">Cor anglais</option>
 			[% END %]
 			[% IF ( f1wg ) %]
-				<option value="wg" selected="selected">Clarinette basse</option>
+				<option value="wg" selected="selected">Bass clarinet</option>
 			[% ELSE %]
-				<option value="wg">Clarinette basse</option>
+				<option value="wg">Bass clarinet</option>
 			[% END %]
 			[% IF ( f1wh ) %]
-				<option value="wh" selected="selected">Flute a bec </option>
+				<option value="wh" selected="selected">Recorder</option>
 			[% ELSE %]
-				<option value="wh">Flute a bec</option>
+				<option value="wh">Recorder</option>
 			[% END %]
 			[% IF ( f1wi ) %]
 				<option value="wi" selected="selected">Saxophone</option>
@@ -442,19 +442,19 @@
 				<option value="wi">Saxophone</option>
 			[% END %]
 			[% IF ( f1wt ) %]
-				<option value="wt" selected="selected">Ethnique</option>
+				<option value="wt" selected="selected">Ethnic woodwinds</option>
 			[% ELSE %]
-				<option value="wt">Ethnique</option>
+				<option value="wt">Ethnic woodwinds</option>
 			[% END %]
 			[% IF ( f1wu ) %]
-				<option value="wu" selected="selected">Non precise</option>
+				<option value="wu" selected="selected">Unspecified woodwinds</option>
 			[% ELSE %]
-				<option value="wu">Non precise</option>
+				<option value="wu">Unspecified woodwinds</option>
 			[% END %]
 			[% IF ( f1wz ) %]
-				<option value="wz" selected="selected">Autre bois</option>
+				<option value="wz" selected="selected">Other woodwinds</option>
 			[% ELSE %]
-				<option value="wz">Autre bois</option>
+				<option value="wz">Other woodwinds</option>
 			[% END %]
 			</select>
 		</td></tr>
