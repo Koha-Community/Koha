@@ -5516,7 +5516,7 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     ");
     $dbh->do('TRUNCATE reserves');
     $dbh->do('ALTER TABLE reserves ADD reserve_id INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST');
-    $dbh->do('INSERT INTO reserves SELECT * FROM tmp_reserves WHERE reserve_id > @ai');
+    $dbh->do('INSERT INTO reserves SELECT * FROM tmp_reserves WHERE reserve_id > COALESCE(@ai, 0)');
     $dbh->do('DROP TABLE tmp_reserves');
     $dbh->do('COMMIT');
 
