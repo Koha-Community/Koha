@@ -14,32 +14,23 @@
 # You should have received a copy of the GNU General Public License along with
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
-# 
+#
 
-use strict;
-#use warnings; FIXME - Bug 2505
+use Modern::Perl;
 use CGI;
 use C4::Auth;
 use C4::Output;
 use C4::Context;
-use C4::Koha;
 
 my $query = new CGI;
 my ($template, $loggedinuser, $cookie, $flags)
-= get_template_and_user({template_name => "circ/circulation-home.tmpl",
-				query => $query,
-				type => "intranet",
-				authnotrequired => 0,
-				flagsrequired => {circulate => "circulate_remaining_permissions"},
-				});
+= get_template_and_user({template_name => "circ/offline.tt",
+                query => $query,
+                type => "intranet",
+                authnotrequired => 0,
+                flagsrequired => {circulate => "circulate_remaining_permissions"},
+                });
 
-# Checking if there is a Fast Cataloging Framework
-my $fa = getframeworkinfo('FA');
-$template->param( fast_cataloging => 1 ) if (defined $fa);
-
-# Checking if the transfer page needs to be displayed
-$template->param( display_transfer => 1 ) if ( ($flags->{'superlibrarian'} == 1) || (C4::Context->preference("IndependentBranches") == 0) );
 $template->{'VARS'}->{'AllowOfflineCirculation'} = C4::Context->preference('AllowOfflineCirculation');
-
-
+$template->{'VARS'}->{'maxoutstanding'} = C4::Context->preference('maxoutstanding') || 0;
 output_html_with_http_headers $query, $cookie, $template->output;

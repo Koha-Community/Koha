@@ -129,6 +129,12 @@ Circulation:
             - The following fields should be excluded from the patron checkout history CSV or iso2709 export
             - pref: ExportRemoveFields
             - (separate fields with space, e.g. 100a 200b 300c)
+        -
+            - pref: AllowOfflineCirculation
+              choices:
+                  yes: Enable
+                  no: "Do not enable"
+            - "offline circulation on regular circulation computers. (NOTE: This system preference does not affect the Firefox plugin or the desktop application)"
 
     Checkout Policy:
         -
