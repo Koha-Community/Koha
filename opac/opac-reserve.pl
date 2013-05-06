@@ -349,7 +349,7 @@ my $notforloan_label_of = get_notforloan_label_of();
 my $biblioLoop = [];
 my $numBibsAvailable = 0;
 my $itemdata_enumchron = 0;
-my $anyholdable;
+my $anyholdable = 0;
 my $itemLevelTypes = C4::Context->preference('item-level_itypes');
 $template->param('item_level_itypes' => $itemLevelTypes);
 
@@ -526,26 +526,24 @@ foreach my $biblioNum (@biblionumbers) {
         $numBibsAvailable++;
         $biblioLoopIter{bib_available} = 1;
         $biblioLoopIter{holdable} = 1;
-        $anyholdable = 1;
     }
     if ($biblioLoopIter{already_reserved}) {
         $biblioLoopIter{holdable} = undef;
-        $anyholdable = undef;
     }
     if(not CanBookBeReserved($borrowernumber,$biblioNum)){
         $biblioLoopIter{holdable} = undef;
-        $anyholdable = undef;
     }
     if(not C4::Context->preference('AllowHoldsOnPatronsPossessions') and CheckIfIssuedToPatron($borrowernumber,$biblioNum)) {
         $biblioLoopIter{holdable} = undef;
         $biblioLoopIter{already_patron_possession} = 1;
-        $anyholdable = undef;
     }
+
+    if( $biblioLoopIter{holdable} ){ $anyholdable++; }
 
     push @$biblioLoop, \%biblioLoopIter;
 }
 
-if ( $numBibsAvailable == 0 || !$anyholdable) {
+if ( $numBibsAvailable == 0 || $anyholdable == 0) {
     $template->param( none_available => 1 );
 }
 
