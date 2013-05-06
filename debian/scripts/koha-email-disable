@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# koha-email-disable -- turn off the email for a Koha instance
+# koha-email-disable - turn off the email for Koha instances
 # Copyright 2010  Catalyst IT, Ltd
 # 
 # This program is free software: you can redistribute it and/or modify
@@ -18,19 +18,76 @@
 
 set -e
 
-if [ "$#" = 0 ]
-then
-    echo "Disables the email for a koha instance." 1>&2
-    echo "Usage: $0 instancename..." 1>&2
+die()
+{
+    echo "$@" 1>&2
     exit 1
-fi
-libdir=/var/lib/koha
+}
+
+warn()
+{
+    echo "$@" 1>&2
+}
+
+is_instance()
+{
+    local instancename=$1
+
+    if find /etc/koha/sites -mindepth 1 -maxdepth 1 \
+                         -type d -printf '%f\n'\
+          | grep -q -x $instancename ; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+is_email_enabled()
+{
+    local instancename=$1
+
+    if [ -e /var/lib/koha/$instancename/email.enabled ]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+disable_email()
+{
+    local instancename=$1
+    local libdir="/var/lib/koha"
+
+    rm -f $libdir/$instancename/email.enabled
+
+    echo "Disabled email for instance $instancename."
+}
+
+usage()
+{
+    local scriptname=$0
+    cat <<EOF
+Disables the email for Koha instances.
+
+Usage: $scriptname instancename1 instancename2...
+
+EOF
+}
+
+# Parse command line.
+[ $# -ge 1 ] || ( usage ; die "Missing instance name..." )
+
 for name in "$@"
 do
-    if [ ! -d $libdir/$name ]
-    then 
-        echo "$0: no koha instance \"$name\"" 1>&2
-        continue
+    if  is_instance $name; then
+        if is_email_enabled $name; then
+            disable_email $name
+        else
+            warn "Email already disabled for instance $name."
+        fi
+    else
+        warn "Unknown instance $name."
     fi
-    rm -f $libdir/$name/email.enabled
 done
+
+exit 0
