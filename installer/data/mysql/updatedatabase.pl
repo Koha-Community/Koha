@@ -6788,6 +6788,51 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.11.00.XXX";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    #issues
+    $dbh->do(q{
+        ALTER TABLE `issues`
+            ADD KEY `itemnumber_idx` (`itemnumber`),
+            ADD KEY `branchcode_idx` (`branchcode`),
+            ADD KEY `issuingbranch_idx` (`issuingbranch`)
+    });
+    $dbh->do(q{
+        ALTER TABLE `old_issues`
+            ADD KEY `branchcode_idx` (`branchcode`),
+            ADD KEY `issuingbranch_idx` (`issuingbranch`)
+    });
+    #items
+    $dbh->do(q{
+        ALTER TABLE `items` ADD KEY `itype_idx` (`itype`)
+    });
+    $dbh->do(q{
+        ALTER TABLE `deleteditems` ADD KEY `itype_idx` (`itype`)
+    });
+    # biblioitems
+    $dbh->do(q{
+        ALTER TABLE `biblioitems` ADD KEY `itemtype_idx` (`itemtype`)
+    });
+    $dbh->do(q{
+        ALTER TABLE `deletedbiblioitems` ADD KEY `itemtype_idx` (`itemtype`)
+    });
+    # statistics
+    $dbh->do(q{
+        ALTER TABLE `statistics`
+            ADD KEY `branch_idx` (`branch`),
+            ADD KEY `proccode_idx` (`proccode`),
+            ADD KEY `type_idx` (`type`),
+            ADD KEY `usercode_idx` (`usercode`),
+            ADD KEY `itemnumber_idx` (`itemnumber`),
+            ADD KEY `itemtype_idx` (`itemtype`),
+            ADD KEY `borrowernumber_idx` (`borrowernumber`),
+            ADD KEY `associatedborrower_idx` (`associatedborrower`),
+            ADD KEY `ccode_idx` (`ccode`)
+    });
+
+    print "Upgrade to $DBversion done (Bug 9681: Add some database indexes)\n";
+    SetVersion($DBversion);
+}
 
 =head1 FUNCTIONS
 

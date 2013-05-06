@@ -184,6 +184,7 @@ CREATE TABLE `biblioitems` ( -- information related to bibliographic records in 
   PRIMARY KEY  (`biblioitemnumber`),
   KEY `bibinoidx` (`biblioitemnumber`),
   KEY `bibnoidx` (`biblionumber`),
+  KEY `itemtype_idx` (`itemtype`),
   KEY `isbn` (`isbn`),
   KEY `issn` (`issn`),
   KEY `publishercode` (`publishercode`),
@@ -659,6 +660,7 @@ CREATE TABLE `deletedbiblioitems` ( -- information about bibliographic records t
   PRIMARY KEY  (`biblioitemnumber`),
   KEY `bibinoidx` (`biblioitemnumber`),
   KEY `bibnoidx` (`biblionumber`),
+  KEY `itemtype_idx` (`itemtype`),
   KEY `isbn` (`isbn`),
   KEY `publishercode` (`publishercode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -793,7 +795,8 @@ CREATE TABLE `deleteditems` (
   KEY `delitembinoidx` (`biblioitemnumber`),
   KEY `delitembibnoidx` (`biblionumber`),
   KEY `delhomebranch` (`homebranch`),
-  KEY `delholdingbranch` (`holdingbranch`)
+  KEY `delholdingbranch` (`holdingbranch`),
+  KEY `itype_idx` (`itype`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -991,6 +994,9 @@ CREATE TABLE `issues` ( -- information related to check outs or issues
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- the date and time this record was last touched
   `issuedate` datetime default NULL, -- date the item was checked out or issued
   KEY `issuesborridx` (`borrowernumber`),
+  KEY `itemnumber_idx` (`itemnumber`),
+  KEY `branchcode_idx` (`branchcode`),
+  KEY `issuingbranch_idx` (`issuingbranch`),
   KEY `bordate` (`borrowernumber`,`timestamp`),
   CONSTRAINT `issues_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT `issues_ibfk_2` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE RESTRICT ON UPDATE CASCADE
@@ -1084,6 +1090,7 @@ CREATE TABLE `items` ( -- holdings/item information
   KEY `itemcallnumber` (`itemcallnumber`),
   KEY `items_location` (`location`),
   KEY `items_ccode` (`ccode`),
+  KEY `itype_idx` (`itype`),
   CONSTRAINT `items_ibfk_1` FOREIGN KEY (`biblioitemnumber`) REFERENCES `biblioitems` (`biblioitemnumber`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `items_ibfk_2` FOREIGN KEY (`homebranch`) REFERENCES `branches` (`branchcode`) ON UPDATE CASCADE,
   CONSTRAINT `items_ibfk_3` FOREIGN KEY (`holdingbranch`) REFERENCES `branches` (`branchcode`) ON UPDATE CASCADE
@@ -1448,6 +1455,8 @@ CREATE TABLE `old_issues` ( -- lists items that were checked out and have been r
   `issuedate` datetime default NULL, -- date the item was checked out or issued
   KEY `old_issuesborridx` (`borrowernumber`),
   KEY `old_issuesitemidx` (`itemnumber`),
+  KEY `branchcode_idx` (`branchcode`),
+  KEY `issuingbranch_idx` (`issuingbranch`),
   KEY `old_bordate` (`borrowernumber`,`timestamp`),
   CONSTRAINT `old_issues_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`)
     ON DELETE SET NULL ON UPDATE SET NULL,
@@ -1841,7 +1850,16 @@ CREATE TABLE `statistics` ( -- information related to transactions (circulation 
   `borrowernumber` int(11) default NULL, -- foreign key from the borrowers table, links transaction to a specific borrower
   `associatedborrower` int(11) default NULL,
   `ccode` varchar(10) default NULL, -- foreign key from the items table, links transaction to a specific collection code
-  KEY `timeidx` (`datetime`)
+  KEY `timeidx` (`datetime`),
+  KEY `branch_idx` (`branch`),
+  KEY `proccode_idx` (`proccode`),
+  KEY `type_idx` (`type`),
+  KEY `usercode_idx` (`usercode`),
+  KEY `itemnumber_idx` (`itemnumber`),
+  KEY `itemtype_idx` (`itemtype`),
+  KEY `borrowernumber_idx` (`borrowernumber`),
+  KEY `associatedborrower_idx` (`associatedborrower`),
+  KEY `ccode_idx` (`ccode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
