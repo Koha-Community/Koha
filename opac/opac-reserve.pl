@@ -538,7 +538,7 @@ foreach my $biblioNum (@biblionumbers) {
         $biblioLoopIter{already_patron_possession} = 1;
     }
 
-    if( $biblioLoopIter{holdable} ){ $anyholdable = 1; }
+    if( $biblioLoopIter{holdable} ){ $anyholdable++; }
 
     push @$biblioLoop, \%biblioLoopIter;
 }
