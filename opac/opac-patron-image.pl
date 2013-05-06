@@ -21,27 +21,24 @@
 use strict;
 use warnings;
 use C4::Members;
-use C4::Auth;
-my $query = new CGI;
+use CGI;
+use CGI::Cookie;  # need to check cookies before having CGI parse the POST request
+use C4::Auth qw(:DEFAULT check_cookie_auth);
 
-my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
-    {
-          template_name   => "opac-userupdate.tt",
-          query           => $query,
-          type            => "opac",
-          authnotrequired => 0,
-          flagsrequired   => { borrow => 1 },
-          debug           => 1,
-    }
-);
+my $query = new CGI;
 
 unless (C4::Context->preference('OPACpatronimages')) {
     print $query->header(status => '403 Forbidden - displaying patron images in the OPAC not enabled');
     exit;
 }
 
-my ($borrower)=GetMember('borrowernumber' => $borrowernumber);
-my $cardnumber = $borrower->{'cardnumber'};
+my $needed_flags;
+my %cookies = fetch CGI::Cookie;
+my $sessid = $cookies{'CGISESSID'}->value;
+my ($auth_status, $auth_sessid) = check_cookie_auth($sessid, $needed_flags);
+my $borrowernumber = C4::Context->userenv->{'number'};
+my $cardnumber = C4::Context->userenv->{'cardnumber'};
+
 my ($imagedata, $dberror) = GetPatronImage($cardnumber);
 
 if ($dberror) {
