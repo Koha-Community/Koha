@@ -5486,13 +5486,15 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
           constrainttype, branchcode, notificationdate,
           reminderdate, cancellationdate, reservenotes,
           priority, found, timestamp, itemnumber,
-          waitingdate, expirationdate, lowestPriority
+          waitingdate, expirationdate, lowestPriority,
+          suspend, suspend_until
         ) SELECT
           borrowernumber, reservedate, biblionumber,
           constrainttype, branchcode, notificationdate,
           reminderdate, cancellationdate, reservenotes,
           priority, found, timestamp, itemnumber,
-          waitingdate, expirationdate, lowestPriority
+          waitingdate, expirationdate, lowestPriority,
+          suspend, suspend_until
         FROM old_reserves ORDER BY reservedate
     ");
     $dbh->do('SET @ai = ( SELECT MAX( reserve_id ) FROM tmp_reserves )');
@@ -5505,13 +5507,15 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
           constrainttype, branchcode, notificationdate,
           reminderdate, cancellationdate, reservenotes,
           priority, found, timestamp, itemnumber,
-          waitingdate, expirationdate, lowestPriority
+          waitingdate, expirationdate, lowestPriority,
+          suspend, suspend_until
         ) SELECT
           borrowernumber, reservedate, biblionumber,
           constrainttype, branchcode, notificationdate,
           reminderdate, cancellationdate, reservenotes,
           priority, found, timestamp, itemnumber,
-          waitingdate, expirationdate, lowestPriority
+          waitingdate, expirationdate, lowestPriority,
+          suspend, suspend_until
         FROM reserves ORDER BY reservedate
     ");
     $dbh->do('TRUNCATE reserves');
