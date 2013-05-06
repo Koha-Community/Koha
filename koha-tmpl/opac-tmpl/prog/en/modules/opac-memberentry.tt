@@ -34,12 +34,13 @@
 
             <div id="yui-main">
                 <div class="yui-b">
-                    <div class="yui-g">
-                        [% IF action == 'edit' %]
-                        <div id="update-account" class="container">
-                        [% ELSE %]
-                        <div id="add-account" class="container">
-                        [% END %]
+                    <form method="post" action="/cgi-bin/koha/opac-memberentry.pl" id="memberentry-form">
+                    [% IF action == 'edit' %]
+                    <div id="update-account" class="container">
+                    [% ELSE %]
+                    <div id="add-account" class="container">
+                    [% END %]
+                        <div class="yui-g">
                         [% IF action == 'edit' %]
                             <h3><a href="/cgi-bin/koha/opac-user.pl">[% borrower.firstname %] [% borrower.surname %]'s account</a> &#8674; Personal details</h3>
                         [% ELSE %]
@@ -59,8 +60,6 @@
                             [% IF failed_captcha %]
                                 <div class="dialog alert">You typed in the wrong characters in the box before submitting. Please try again.</div>
                             [% END %]
-
-                            <form method="post" action="/cgi-bin/koha/opac-memberentry.pl" id="memberentry-form">
 
                                 [% UNLESS
                                     hidden.defined('branchcode')
@@ -93,12 +92,16 @@
                                         </ol>
                                     </fieldset>
                                 [% END %]
-
+                        </div>
                                 [% UNLESS
                                     hidden.defined('title') && hidden.defined('surname') && hidden.defined('firstname') &&
                                     hidden.defined('dateofbirth') && hidden.defined('initials') && hidden.defined('othernames') &&
                                     hidden.defined('sex')
                                 %]
+                                <div class="yui-g">
+                                    [% IF ( display_patron_image ) %]
+                                        <div class="yui-u first">
+                                    [% END %]
                                     <fieldset class="rows" id="memberentry_identity">
                                         <legend id="identity_legend">Identity</legend>
 
@@ -228,8 +231,18 @@
                                             [% END %]
                                         </ol>
                                     </fieldset>
+                                    [% IF ( display_patron_image ) %]
+                                        </div>
+                                        <div class="yui-u">
+                                            <p class="patronimage">
+                                                <img src="/cgi-bin/koha/opac-patron-image.pl" alt="" />
+                                            </p>
+                                        </div>
+                                    [% END %]
+                                </div>
                                 [% END %]
 
+                            <div class="yui-g">
                                 [% UNLESS
                                     hidden.defined('streetnumber') && hidden.defined('address') && hidden.defined('address2') &&
                                     hidden.defined('city') && hidden.defined('state') && hidden.defined('zipcode') &&
@@ -741,11 +754,9 @@
                                         <input type="submit" value="Submit" />
                                     </fieldset>
                                 [% END %]
-
-                            </form>
-
+                            </div>
                         </div><!--/div id="update-account" -->
-                    </div>
+                    </form>
                 </div>
             </div>
 

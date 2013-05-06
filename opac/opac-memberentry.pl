@@ -195,8 +195,19 @@ elsif ( $action eq 'update' ) {
     }
 }
 elsif ( $action eq 'edit' ) {    #Display logged in borrower's data
+    my $borrower = GetMember( borrowernumber => $borrowernumber );
     $template->param(
-        borrower => GetMember( borrowernumber => $borrowernumber ), );
+        borrower => $borrower, );
+
+    if (C4::Context->preference('OPACpatronimages')) {
+        my ($image, $dberror) = GetPatronImage($borrower->{cardnumber});
+        if ($image) {
+            $template->param(
+                display_patron_image => 1
+            );
+        }
+    }
+
 }
 
 my $captcha = random_string("CCCCC");
