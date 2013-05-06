@@ -250,14 +250,14 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
   <xslo:template mode="index_subfields" match="marc:datafield[@tag='071']">
     <xslo:for-each select="marc:subfield">
       <xslo:if test="contains('a', @code)">
-        <z:index name="Music-number:w Identifier-standard:w">
+        <z:index name="Identifier-publisher-for-music:w Identifier-standard:w">
           <xslo:value-of select="."/>
         </z:index>
       </xslo:if>
     </xslo:for-each>
     <xslo:for-each select="marc:subfield">
       <xslo:if test="contains('z', @code)">
-        <z:index name="Music-number:w Identifier-standard:w">
+        <z:index name="Identifier-publisher-for-music:w Identifier-standard:w">
           <xslo:value-of select="."/>
         </z:index>
       </xslo:if>
