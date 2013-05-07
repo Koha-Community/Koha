@@ -2146,8 +2146,8 @@ CREATE TABLE `subscriptionhistory` (
   `histenddate` date default NULL,
   `missinglist` LONGTEXT NOT NULL,
   `recievedlist` LONGTEXT NOT NULL,
-  `opacnote` varchar(150) NOT NULL default '',
-  `librariannote` varchar(150) NOT NULL default '',
+  `opacnote` LONGTEXT NULL,
+  `librariannote` LONGTEXT NULL,
   PRIMARY KEY  (`subscriptionid`),
   KEY `biblionumber` (`biblionumber`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
