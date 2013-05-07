@@ -5,6 +5,12 @@
             confirm_deletion();
             return false;
         });
+
+        $("#z3950submit").click(function(){
+            window.open("/cgi-bin/koha/cataloguing/z3950_auth_search.pl","z3950search",'width=740,height=450,location=yes,toolbar=no,scrollbars=yes,resize=yes');
+            return false;
+        });
+
     });
 
 //]]>
@@ -46,6 +52,9 @@
             <li><a href="/cgi-bin/koha/authorities/authorities.pl?authtypecode=[% authtypesloo.value %]">[% authtypesloo.authtypetext %]</a></li>
             [% END %]
         </ul>
+    </div>
+    <div class="btn-group">
+        <a class="btn btn-small" id="z3950submit" href="#"><i class="icon-search"></i> Z39.50 search</a>
     </div>
 [% END %]
 </div>

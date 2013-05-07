@@ -24,6 +24,7 @@ use CGI;
 use C4::Auth;
 use C4::Output;
 use C4::AuthoritiesMarc;
+use C4::ImportBatch; #GetImportRecordMarc
 use C4::Context;
 use C4::Koha; # XXX subfield_is_koha_internal_p
 use Date::Calc qw(Today);
@@ -46,6 +47,21 @@ our($authorised_values_sth,$is_a_modif,$usedTagsLib,$mandatory_z3950);
 builds list, depending on authorised value...
 
 =cut
+
+sub MARCfindbreeding_auth {
+    my ( $id ) = @_;
+    my ($marc, $encoding) = GetImportRecordMarc($id);
+    if ($marc) {
+        my $record = MARC::Record->new_from_usmarc($marc);
+        if ( !defined(ref($record)) ) {
+                return -1;
+        } else {
+            return $record, $encoding;
+        }
+    } else {
+        return -1;
+    }
+}
 
 sub build_authorized_values_list {
     my ( $tag, $subfield, $value, $dbh, $authorised_values_sth,$index_tag,$index_subfield ) = @_;
@@ -544,6 +560,7 @@ my $nonav = $input->param('nonav');
 my $myindex = $input->param('index');
 my $linkid=$input->param('linkid');
 my $authtypecode = $input->param('authtypecode');
+my $breedingid    = $input->param('breedingid');
 
 my $dbh = C4::Context->dbh;
 if(!$authtypecode) {
@@ -558,11 +575,18 @@ my ($template, $loggedinuser, $cookie)
                             flagsrequired => {editauthorities => 1},
                             debug => 1,
                             });
-$template->param(nonav   => $nonav,index=>$myindex,authtypecode=>$authtypecode,);
+$template->param(nonav   => $nonav,index=>$myindex,authtypecode=>$authtypecode,breedingid=>$breedingid,);
+
 $tagslib = GetTagsLabels(1,$authtypecode);
 my $record=-1;
 my $encoding="";
-$record = GetAuthority($authid) if ($authid);
+if (($authid) && !($breedingid)){
+    $record = GetAuthority($authid);
+}
+if ($breedingid) {
+    ( $record, $encoding ) = MARCfindbreeding_auth( $breedingid );
+}
+
 my ($oldauthnumtagfield,$oldauthnumtagsubfield);
 my ($oldauthtypetagfield,$oldauthtypetagsubfield);
 $is_a_modif=0;

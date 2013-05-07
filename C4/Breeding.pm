@@ -1,6 +1,7 @@
 package C4::Breeding;
 
 # Copyright 2000-2002 Katipo Communications
+# Parts Copyright 2013 Prosentient Systems
 #
 # This file is part of Koha.
 #
@@ -25,6 +26,7 @@ use C4::Koha;
 use C4::Charset;
 use MARC::File::USMARC;
 use C4::ImportBatch;
+use C4::AuthoritiesMarc; #GuessAuthTypeCode, FindDuplicateAuthority
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -33,7 +35,7 @@ BEGIN {
     $VERSION = 3.07.00.049;
 	require Exporter;
 	@ISA = qw(Exporter);
-    @EXPORT = qw(&ImportBreeding &BreedingSearch &Z3950Search);
+    @EXPORT = qw(&ImportBreeding &BreedingSearch &Z3950Search &Z3950SearchAuth);
 }
 
 =head1 NAME
@@ -449,6 +451,307 @@ sub _isbn_replace {
     $isbn =~ s/\|/ \| /g;
     $isbn =~ s/\(/ \(/g;
     return $isbn;
+}
+
+=head2 ImportBreedingAuth
+
+ImportBreedingAuth($marcrecords,$overwrite_auth,$filename,$encoding,$z3950random,$batch_type);
+
+TODO description
+
+=cut
+
+sub ImportBreedingAuth {
+    my ($marcrecords,$overwrite_auth,$filename,$encoding,$z3950random,$batch_type) = @_;
+    my @marcarray = split /\x1D/, $marcrecords;
+
+    my $dbh = C4::Context->dbh;
+
+    my $batch_id = GetZ3950BatchId($filename);
+    my $searchbreeding = $dbh->prepare("select import_record_id from import_auths where control_number=? and authorized_heading=?");
+
+#     $encoding = C4::Context->preference("marcflavour") unless $encoding;
+    # fields used for import results
+    my $imported=0;
+    my $alreadyindb = 0;
+    my $alreadyinfarm = 0;
+    my $notmarcrecord = 0;
+    my $breedingid;
+    for (my $i=0;$i<=$#marcarray;$i++) {
+        my ($marcrecord, $charset_result, $charset_errors);
+        ($marcrecord, $charset_result, $charset_errors) =
+            MarcToUTF8Record($marcarray[$i]."\x1D", C4::Context->preference("marcflavour"), $encoding);
+
+        # Normalize the record so it doesn't have separated diacritics
+        SetUTF8Flag($marcrecord);
+
+#         warn "$i : $marcarray[$i]";
+        # FIXME - currently this does nothing
+        my @warnings = $marcrecord->warnings();
+
+        if (scalar($marcrecord->fields()) == 0) {
+            $notmarcrecord++;
+        } else {
+            my $heading;
+            $heading = C4::AuthoritiesMarc::GetAuthorizedHeading({ record => $marcrecord });
+
+            my $heading_authtype_code;
+            $heading_authtype_code = GuessAuthTypeCode($marcrecord);
+
+            my $controlnumber;
+            $controlnumber = $marcrecord->field('001')->data;
+
+            #Check if the authority record already exists in the database...
+            my ($duplicateauthid,$duplicateauthvalue);
+            if ($marcrecord && $heading_authtype_code) {
+                ($duplicateauthid,$duplicateauthvalue) = FindDuplicateAuthority( $marcrecord, $heading_authtype_code);
+            }
+
+            if ($duplicateauthid && $overwrite_auth ne 2) {
+                #If the authority record exists and $overwrite_auth doesn't equal 2, then mark it as already in the DB
+                #FIXME: What does $overwrite_auth = 2 even mean?
+
+                #FIXME: Should we bother with $overwrite_auth values? Currently, the hard-coded $overwrite_auth value is 2, which means the database gets filled with import_records...
+                #^^ of course, we might not want to reject records if their control number/heading exist in the db or breeding/import pool...as we might be wanting to update existing authority records...
+                $alreadyindb++;
+            } else {
+                if ($controlnumber && $heading) {
+                    $searchbreeding->execute($controlnumber,$heading);
+                    ($breedingid) = $searchbreeding->fetchrow;
+                }
+                if ($breedingid && $overwrite_auth eq '0') {
+                    #FIXME: What does $overwrite_auth = 0 even mean?
+                    $alreadyinfarm++;
+                } else {
+                    if ($breedingid && $overwrite_auth eq '1') {
+                        #FIXME: What does $overwrite_auth = 1 even mean?
+                        ModAuthorityInBatch($breedingid, $marcrecord);
+                    } else {
+                        my $import_id = AddAuthToBatch($batch_id, $imported, $marcrecord, $encoding, $z3950random);
+                        $breedingid = $import_id;
+                    }
+                    $imported++;
+                }
+            }
+        }
+    }
+    return ($notmarcrecord,$alreadyindb,$alreadyinfarm,$imported,$breedingid);
+}
+
+=head2 Z3950SearchAuth
+
+Z3950SearchAuth($pars, $template);
+
+Parameters for Z3950 search are all passed via the $pars hash. It may contain nameany, namepersonal, namecorp, namemeetingcon,
+title, uniform title, subject, subjectsubdiv, srchany.
+Also it should contain an arrayref id that points to a list of IDs of the z3950 targets to be queried (see z3950servers table).
+This code is used in cataloging/z3950_auth_search.
+The second parameter $template is a Template object. The routine uses this parameter to store the found values into the template.
+
+=cut
+
+sub Z3950SearchAuth {
+    my ($pars, $template)= @_;
+
+    my $dbh   = C4::Context->dbh;
+    my @id= @{$pars->{id}};
+    my $random= $pars->{random};
+    my $page= $pars->{page};
+
+    my $nameany= $pars->{nameany};
+    my $authorany= $pars->{authorany};
+    my $authorpersonal= $pars->{authorpersonal};
+    my $authorcorp= $pars->{authorcorp};
+    my $authormeetingcon= $pars->{authormeetingcon};
+    my $title= $pars->{title};
+    my $uniformtitle= $pars->{uniformtitle};
+    my $subject= $pars->{subject};
+    my $subjectsubdiv= $pars->{subjectsubdiv};
+    my $srchany= $pars->{srchany};
+
+    my $show_next       = 0;
+    my $total_pages     = 0;
+    my $attr = '';
+    my $host;
+    my $server;
+    my $database;
+    my $port;
+    my $marcdata;
+    my @encoding;
+    my @results;
+    my $count;
+    my $record;
+    my @serverhost;
+    my @servername;
+    my @breeding_loop = ();
+
+    my @oConnection;
+    my @oResult;
+    my @errconn;
+    my $s = 0;
+    my $query;
+    my $nterms=0;
+
+    if ($nameany) {
+        $query .= " \@attr 1=1002 \"$nameany\" "; #Any name (this includes personal, corporate, meeting/conference authors, and author names in subject headings)
+        #This attribute is supported by both the Library of Congress and Libraries Australia 08/05/2013
+        $nterms++;
+    }
+
+    if ($authorany) {
+        $query .= " \@attr 1=1003 \"$authorany\" "; #Author-name (this includes personal, corporate, meeting/conference authors, but not author names in subject headings)
+        #This attribute is not supported by the Library of Congress, but is supported by Libraries Australia 08/05/2013
+        $nterms++;
+    }
+
+    if ($authorcorp) {
+        $query .= " \@attr 1=2 \"$authorcorp\" "; #1005 is another valid corporate author attribute...
+        $nterms++;
+    }
+
+    if ($authorpersonal) {
+        $query .= " \@attr 1=1 \"$authorpersonal\" "; #1004 is another valid personal name attribute...
+        $nterms++;
+    }
+
+    if ($authormeetingcon) {
+        $query .= " \@attr 1=3 \"$authormeetingcon\" "; #1006 is another valid meeting/conference name attribute...
+        $nterms++;
+    }
+
+    if ($subject) {
+        $query .= " \@attr 1=21 \"$subject\" ";
+        $nterms++;
+    }
+
+    if ($subjectsubdiv) {
+        $query .= " \@attr 1=47 \"$subjectsubdiv\" ";
+        $nterms++;
+    }
+
+    if ($title) {
+        $query .= " \@attr 1=4 \"$title\" "; #This is a regular title search. 1=6 will give just uniform titles
+        $nterms++;
+    }
+
+     if ($uniformtitle) {
+        $query .= " \@attr 1=6 \"$uniformtitle\" "; #This is the uniform title search
+        $nterms++;
+    }
+
+    if($srchany) {
+        $query .= " \@attr 1=1016 \"$srchany\" ";
+        $nterms++;
+    }
+
+    for my $i (1..$nterms-1) {
+        $query = "\@and " . $query;
+    }
+
+    foreach my $servid (@id) {
+        my $sth = $dbh->prepare("select * from z3950servers where id=?");
+        $sth->execute($servid);
+        while ( $server = $sth->fetchrow_hashref ) {
+            my $option1      = new ZOOM::Options();
+            $option1->option( 'async' => 1 );
+            $option1->option( 'elementSetName', 'F' );
+            $option1->option( 'databaseName',   $server->{db} );
+            $option1->option( 'user', $server->{userid} ) if $server->{userid};
+            $option1->option( 'password', $server->{password} ) if $server->{password};
+            $option1->option( 'preferredRecordSyntax', $server->{syntax} );
+            $option1->option( 'timeout', $server->{timeout} ) if $server->{timeout};
+            $oConnection[$s] = create ZOOM::Connection($option1);
+            $oConnection[$s]->connect( $server->{host}, $server->{port} );
+            $serverhost[$s] = $server->{host};
+            $servername[$s] = $server->{name};
+            $encoding[$s]   = ($server->{encoding}?$server->{encoding}:"iso-5426");
+            $s++;
+        }    ## while fetch
+    }    # foreach
+    my $nremaining  = $s;
+
+    for ( my $z = 0 ; $z < $s ; $z++ ) {
+        $oResult[$z] = $oConnection[$z]->search_pqf($query);
+    }
+
+    while ( $nremaining-- ) {
+        my $k;
+        my $event;
+        while ( ( $k = ZOOM::event( \@oConnection ) ) != 0 ) {
+            $event = $oConnection[ $k - 1 ]->last_event();
+            last if $event == ZOOM::Event::ZEND;
+        }
+
+        if ( $k != 0 ) {
+            $k--;
+            my ($error, $errmsg, $addinfo, $diagset)= $oConnection[$k]->error_x();
+            if ($error) {
+                if ($error =~ m/^(10000|10007)$/ ) {
+                    push(@errconn, {'server' => $serverhost[$k]});
+                }
+            }
+            else {
+                my $numresults = $oResult[$k]->size();
+                my $i;
+                my $result = '';
+                if ( $numresults > 0  and $numresults >= (($page-1)*20)) {
+                    $show_next = 1 if $numresults >= ($page*20);
+                    $total_pages = int($numresults/20)+1 if $total_pages < ($numresults/20);
+                    for ($i = ($page-1)*20; $i < (($numresults < ($page*20)) ? $numresults : ($page*20)); $i++) {
+                        my $rec = $oResult[$k]->record($i);
+                        if ($rec) {
+                            my $marcrecord;
+                            my $marcdata;
+                            $marcdata   = $rec->raw();
+
+                            my ($charset_result, $charset_errors);
+                            ($marcrecord, $charset_result, $charset_errors)= MarcToUTF8Record($marcdata, C4::Context->preference('marcflavour'), $encoding[$k]);
+
+                            my $heading;
+                            my $heading_authtype_code;
+                            $heading_authtype_code = GuessAuthTypeCode($marcrecord);
+                            $heading = C4::AuthoritiesMarc::GetAuthorizedHeading({ record => $marcrecord });
+
+                            my ($notmarcrecord, $alreadyindb, $alreadyinfarm, $imported, $breedingid)= ImportBreedingAuth( $marcdata, 2, $serverhost[$k], $encoding[$k], $random, 'z3950' );
+                            my %row_data;
+                            $row_data{server}       = $servername[$k];
+                            $row_data{breedingid}   = $breedingid;
+                            $row_data{heading}      = $heading;
+                            $row_data{heading_code}      = $heading_authtype_code;
+                            push( @breeding_loop, \%row_data );
+                        }
+                        else {
+                            push(@breeding_loop,{'server'=>$servername[$k],'title'=>join(': ',$oConnection[$k]->error_x()),'breedingid'=>-1});
+                        }
+                    }
+                }    #if $numresults
+            }
+        }    # if $k !=0
+
+        $template->param(
+            numberpending => $nremaining,
+            current_page => $page,
+            total_pages => $total_pages,
+            show_nextbutton => $show_next?1:0,
+            show_prevbutton => $page!=1,
+        );
+    } # while nremaining
+
+    #close result sets and connections
+    foreach(0..$s-1) {
+        $oResult[$_]->destroy();
+        $oConnection[$_]->destroy();
+    }
+
+    my @servers = ();
+    foreach my $id (@id) {
+        push @servers, {id => $id};
+    }
+    $template->param(
+        breeding_loop => \@breeding_loop,
+        servers => \@servers,
+        errconn       => \@errconn
+    );
 }
 
 1;

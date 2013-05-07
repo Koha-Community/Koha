@@ -238,6 +238,20 @@
     <li><label for="timeout">Timeout (0 its like not set): </label>
 		<input type="text" name="timeout" id="timeout" size="4" value="[% timeout %]" onblur="isNum(this)" /> seconds
 	</li>
+    <li><label for="recordtype">Record type: </label>
+    <select name="recordtype" id="recordtype">
+            [% IF ( recordtypebiblio ) %]
+            <option value="biblio" selected="selected">Bibliographic</option>
+            [% ELSE %]
+                   <option value="biblio">Bibliographic</option>
+            [% END %]
+            [% IF ( recordtypeauthority ) %]
+            <option value="authority" selected="selected">Authority</option>
+            [% ELSE %]
+                   <option value="authority">Authority</option>
+            [% END %]
+        </select>
+    </li>
 </ol>
         </fieldset>
 		
@@ -274,6 +288,7 @@
                 <li><strong>Syntax: </strong>[% syntax %]</li>
                 <li><strong>Encoding: </strong>[% encoding %]</li>
                 <li><strong>Timeout: </strong>[% timeout %]</li>
+                <li><strong>Record type: </strong>[% recordtype %]</li>
 	</ul>                <form action="[% script_name %]" method="post"><input type="hidden" name="op" value="delete_confirmed" /><input type="hidden" name="searchfield" value="[% searchfield %]" /><input type="submit" value="Delete this server" /></form>  <form action="[% script_name %]" method="post"><input type="submit" value="Do not delete" /></form>
 
 
@@ -297,9 +312,9 @@
 
         [% IF ( searchfield ) %]
                 You searched for [% searchfield %]
-        [% END %]		
+        [% END %]
 <table id="serverst">
-                <thead><tr><th>Target</th><th>Hostname/Port</th><th>Database</th><th>Userid</th><th>Password</th><th>Checked</th><th>Rank</th><th>Syntax</th><th>Encoding</th><th>Timeout</th><th>&nbsp;</th><th>&nbsp;</th>
+                <thead><tr><th>Target</th><th>Hostname/Port</th><th>Database</th><th>Userid</th><th>Password</th><th>Checked</th><th>Rank</th><th>Syntax</th><th>Encoding</th><th>Timeout</th><th>Record type</th><th>&nbsp;</th><th>&nbsp;</th>
                 </tr></thead>
                 <tbody>[% FOREACH loo IN loop %]
                 [% UNLESS ( loop.odd ) %]
@@ -307,9 +322,11 @@
                 [% ELSE %]
                     <tr>
                 [% END %]
-<td><a href="[% loo.script_name %]?op=add_form&amp;searchfield=[% loo.name |url %]">[% loo.name %]</a></td><td>[% loo.host %]:[% loo.port %]</td><td>[% loo.db %]</td><td>[% loo.userid %]</td><td>[% loo.password %]</td><td>[% IF ( loo.checked ) %]Yes[% ELSE %]No[% END %]</td><td>[% loo.rank %]</td>			<td>[% loo.syntax %]</td><td>[% loo.encoding %]</td><td>[% loo.timeout %]</td><td><a href="[% loo.script_name %]?op=add_form&amp;searchfield=[% loo.name |url %]">Edit</a></td><td><a href="[% loo.script_name %]?op=delete_confirm&amp;searchfield=[% loo.name |url %]">Delete</a></td>                </tr>
+<td><a href="[% loo.script_name %]?op=add_form&amp;searchfield=[% loo.name |url %]">[% loo.name %]</a></td><td>[% loo.host %]:[% loo.port %]</td><td>[% loo.db %]</td><td>[% loo.userid %]</td><td>[% loo.password %]</td><td>[% IF ( loo.checked ) %]Yes[% ELSE %]No[% END %]</td><td>[% loo.rank %]</td>
+
+<td>[% loo.syntax %]</td><td>[% loo.encoding %]</td><td>[% loo.timeout %]</td><td>[% loo.recordtype %]</td><td><a href="[% loo.script_name %]?op=add_form&amp;searchfield=[% loo.name |url %]">Edit</a></td><td><a href="[% loo.script_name %]?op=delete_confirm&amp;searchfield=[% loo.name |url %]">Delete</a></td>                </tr>
                 [% END %]</tbody>
-	</table>
+</table>
 
 [% IF ( offsetgtzero ) %]<form action="[% script_name %]" method="get">
 	<input type="hidden" name="offset" value="[% prevpage %]" />

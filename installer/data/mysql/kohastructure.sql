@@ -2282,6 +2282,7 @@ CREATE TABLE `z3950servers` ( -- connection information for the Z39.50 targets u
   `type` enum('zed','opensearch') NOT NULL default 'zed',
   `encoding` text default NULL, -- characters encoding provided by this target
   `description` text NOT NULL, -- unused in Koha
+  `recordtype` varchar(45) NOT NULL default 'biblio', -- server contains bibliographic or authority records
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

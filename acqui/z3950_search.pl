@@ -93,7 +93,7 @@ $template->param(
 );
 
 if ( $op ne "do_search" ) {
-    my $sth = $dbh->prepare("select id,host,name,checked from z3950servers  order by host");
+    my $sth = $dbh->prepare("select id,host,name,checked from z3950servers where recordtype <> 'authority' order by host");
     $sth->execute();
     my $serverloop = $sth->fetchall_arrayref( {} );
     $template->param(
