@@ -428,6 +428,7 @@ sub GetSubscriptionsFromBiblionumber {
         } else {
             $subs->{histenddate} = "";
         }
+        $subs->{opacnote}     //= "";
         $subs->{opacnote}     =~ s/\n/\<br\/\>/g;
         $subs->{missinglist}  =~ s/\n/\<br\/\>/g;
         $subs->{recievedlist} =~ s/\n/\<br\/\>/g;
