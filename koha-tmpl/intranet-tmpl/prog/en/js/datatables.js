@@ -580,3 +580,38 @@ $.fn.dataTableExt.oSort['nsb-nse-desc'] = function(a,b) {
     b = b.replace(pattern, "");
     return (b > a) ? 1 : ((b < a) ? -1 : 0);
 }
+
+/* Define two custom functions (asc and desc) for basket callnumber sorting */
+jQuery.fn.dataTableExt.oSort['callnumbers-asc']  = function(x,y) {
+        var x_array = x.split("<div>");
+        var y_array = y.split("<div>");
+
+        /* Pop the first elements, they are empty strings */
+        x_array.shift();
+        y_array.shift();
+
+        x_array.sort();
+        y_array.sort();
+
+        x = x_array.shift();
+        y = y_array.shift();
+
+        return ((x < y) ? -1 : ((x > y) ?  1 : 0));
+};
+
+jQuery.fn.dataTableExt.oSort['callnumbers-desc'] = function(x,y) {
+        var x_array = x.split("<div>");
+        var y_array = y.split("<div>");
+
+        /* Pop the first elements, they are empty strings */
+        x_array.shift();
+        y_array.shift();
+
+        x_array.sort();
+        y_array.sort();
+
+        x = x_array.pop();
+        y = y_array.pop();
+
+        return ((x < y) ?  1 : ((x > y) ? -1 : 0));
+};
