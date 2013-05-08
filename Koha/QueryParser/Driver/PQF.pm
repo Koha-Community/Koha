@@ -349,23 +349,23 @@ not want to use it.
 sub clear_all_configuration {
     my ($self) = @_;
     %OpenILS::QueryParser::parser_config = (
-            'OpenILS::QueryParser' => {
+        'OpenILS::QueryParser' => {
             filters => [],
             modifiers => [],
             operators => {
-            'and' => '&&',
-            'or' => '||',
-            float_start => '{{',
-            float_end => '}}',
-            group_start => '(',
-            group_end => ')',
-            required => '+',
-            disallowed => '-',
-            modifier => '#',
-            negated => '!'
+                'and' => '&&',
+                'or' => '||',
+                float_start => '{{',
+                float_end => '}}',
+                group_start => '(',
+                group_end => ')',
+                required => '+',
+                disallowed => '-',
+                modifier => '#',
+                negated => '!'
             }
-            }
-            );
+        }
+    );
     return $self;
 }
 

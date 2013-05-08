@@ -57,6 +57,7 @@ sub target_syntax {
                 $phrase =~ s/"/\\"/g;
                 $pqf .= ' @or ' x (scalar(@fields) - 1);
                 foreach my $attributes (@fields) {
+                    $attributes->{'attr_string'} ||= '';
                     $pqf .= $attributes->{'attr_string'} . ($attributes->{'4'} ? '' : ' @attr 4=1') . ' "' . $phrase . '" ';
                 }
                 $atom_count++;
@@ -70,6 +71,9 @@ sub target_syntax {
                     $pqf .= ' @or ' x (scalar(@fields) - 1);
                     foreach my $attributes (@fields) {
                         $attributes->{'attr_string'} ||= '';
+                        if ($self->plan->QueryParser->custom_data->{'QueryAutoTruncate'} || $atom->suffix eq '*') {
+                            $attributes->{'attr_string'} .= ($attributes->{'5'} ? '' : ' @attr 5=1 ');
+                        }
                         $pqf .= $attributes->{'attr_string'} . ($attributes->{'4'} ? '' : ' @attr 4=6 ') . $atom_content . ' ';
                     }
                     $atom_count++;
