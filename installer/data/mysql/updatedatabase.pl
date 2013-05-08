@@ -5486,13 +5486,15 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
           constrainttype, branchcode, notificationdate,
           reminderdate, cancellationdate, reservenotes,
           priority, found, timestamp, itemnumber,
-          waitingdate, expirationdate, lowestPriority
+          waitingdate, expirationdate, lowestPriority,
+          suspend, suspend_until
         ) SELECT
           borrowernumber, reservedate, biblionumber,
           constrainttype, branchcode, notificationdate,
           reminderdate, cancellationdate, reservenotes,
           priority, found, timestamp, itemnumber,
-          waitingdate, expirationdate, lowestPriority
+          waitingdate, expirationdate, lowestPriority,
+          suspend, suspend_until
         FROM old_reserves ORDER BY reservedate
     ");
     $dbh->do('SET @ai = ( SELECT MAX( reserve_id ) FROM tmp_reserves )');
@@ -5505,18 +5507,20 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
           constrainttype, branchcode, notificationdate,
           reminderdate, cancellationdate, reservenotes,
           priority, found, timestamp, itemnumber,
-          waitingdate, expirationdate, lowestPriority
+          waitingdate, expirationdate, lowestPriority,
+          suspend, suspend_until
         ) SELECT
           borrowernumber, reservedate, biblionumber,
           constrainttype, branchcode, notificationdate,
           reminderdate, cancellationdate, reservenotes,
           priority, found, timestamp, itemnumber,
-          waitingdate, expirationdate, lowestPriority
+          waitingdate, expirationdate, lowestPriority,
+          suspend, suspend_until
         FROM reserves ORDER BY reservedate
     ");
     $dbh->do('TRUNCATE reserves');
     $dbh->do('ALTER TABLE reserves ADD reserve_id INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST');
-    $dbh->do('INSERT INTO reserves SELECT * FROM tmp_reserves WHERE reserve_id > @ai');
+    $dbh->do('INSERT INTO reserves SELECT * FROM tmp_reserves WHERE reserve_id > COALESCE(@ai, 0)');
     $dbh->do('DROP TABLE tmp_reserves');
     $dbh->do('COMMIT');
 
