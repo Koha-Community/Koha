@@ -1,4 +1,4 @@
-#!/bin/perl
+#!/usr/bin/perl
 
 use Modern::Perl;
 use C4::SocialData;
