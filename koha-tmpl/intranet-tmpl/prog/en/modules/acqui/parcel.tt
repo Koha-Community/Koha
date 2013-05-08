@@ -330,7 +330,7 @@
     <tfoot>
         [% FOREACH key IN funds.keys.sort %]
             <tr>
-                <td colspan="6" class="total"> &nbsp; </td>
+                <td colspan="6" class="total font-weight-normal"><i>(GST exc.)</i></td>
                 <td><i>Subtotal for</i> [% key %]</td>
                 <td>[% currency( funds.$key.estimated ) %]</td>
                 <td>[% currency( funds.$key.actual ) %]</td>
