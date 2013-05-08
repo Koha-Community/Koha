@@ -6788,7 +6788,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.11.00.XXX";
+$DBversion = "3.11.00.301";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     #issues
     $dbh->do(q{
