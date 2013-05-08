@@ -442,7 +442,10 @@ if ($hideitems) {
 }
 
 my $branches = GetBranches();
-my $branch = C4::Context->userenv->{branch};
+my $branch = '';
+if (C4::Context->userenv){
+    $branch = C4::Context->userenv->{branch};
+}
 if ( C4::Context->preference('HighlightOwnItemsOnOPAC') ) {
     if (
         ( ( C4::Context->preference('HighlightOwnItemsOnOPACWhich') eq 'PatronBranch' ) && $branch )
