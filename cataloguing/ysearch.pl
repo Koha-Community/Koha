@@ -29,9 +29,10 @@ use CGI;
 use C4::Context;
 use C4::Charset;
 use C4::Auth qw/check_cookie_auth/;
+use JSON qw/ to_json /;
 
 my $input = new CGI;
-my $query = $input->param('query');
+my $query = $input->param('term');
 my $table = $input->param('table');
 my $field = $input->param('field');
 
@@ -41,7 +42,7 @@ die() unless ($table eq "biblioitems");
 binmode STDOUT, ":encoding(UTF-8)";
 print $input->header( -type => 'text/plain', -charset => 'UTF-8' );
 
-my ( $auth_status, $sessionID ) = check_cookie_auth( $input->cookie('CGISESSID'), { cataloguing => '*' } );
+my ( $auth_status, $sessionID ) = check_cookie_auth( $input->cookie('CGISESSID'), { editcatalogue => '*' } );
 if ( $auth_status ne "ok" ) {
     exit 0;
 }
@@ -54,8 +55,9 @@ $sql .= qq( ORDER BY $field);
 my $sth = $dbh->prepare($sql);
 $sth->execute("$query%", "% $query%", "%-$query%");
 
+my $a = [];
 while ( my $rec = $sth->fetchrow_hashref ) {
-    print nsb_clean($rec->{$field}) . "\n";
+    push @$a, { fieldvalue => nsb_clean($rec->{$field}) };
 }
 
-
+print to_json($a);

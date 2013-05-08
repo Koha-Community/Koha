@@ -1,65 +1,51 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD Xhtml 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <title>UNIMARC field 225a builder</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <script type="text/javascript" src="[% yuipath %]/utilities/utilities.js"></script> 
-    <script type="text/javascript" src="[% yuipath %]/datasource/datasource.js"></script> 
-    <script type="text/javascript" src="[% yuipath %]/autocomplete/autocomplete-min.js"></script>
-    <link rel="stylesheet" type="text/css" href="[% themelang %]/css/staff-global.css" />
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; UNIMARC field 210c builder</title>
+[% INCLUDE 'doc-head-close.inc' %]
+<style type="text/css">
+    #custom-doc { width:37.85em;*width:36.93em;min-width:492px; margin:auto; text-align:left; }
+</style>
+<script type="text/javascript">
+//<![CDATA[
+$(document).ready(function(){
+    $( "#findvalue" ).autocomplete({
+        source: "/cgi-bin/koha/cataloguing/ysearch.pl?table=biblioitems&field=publishercode",
+        minLength: 3,
+        select: function( event, ui ) {
+            $( "#findvalue" ).val( ui.item.fieldvalue );
+            return false;
+        }
+    })
+    .data( "autocomplete" )._renderItem = function( ul, item ) {
+        return $( "<li></li>" )
+        .data( "item.autocomplete", item )
+        .append( "<a>" + item.fieldvalue + "</a>" )
+        .appendTo( ul );
+    };
+
+});
+//]]>
+</script>
 
 </head>
 <body id="cat_unimarc_field_210c_bis" class="cat">
-<div id="header_search">
-<script type="text/javascript">
-//<![CDATA[
-YAHOO.util.Event.onContentReady("header_search", function() {
-    new function() {
-        // Define a custom formatter function
-        this.fnCustomFormatter = function(oResultItem, sQuery) {
-            var name        = oResultItem[0];
-            var aMarkup = [
-                "<div class=\"sample-result\">",
-                name,
-                "<\/div>"];
-            return (aMarkup.join(""));
-        };
 
-        // Instantiate one XHR DataSource and define schema as an array:
-        //     ["Record Delimiter",
-        //     "Field Delimiter"]
-        this.oACDS = new YAHOO.widget.DS_XHR("/cgi-bin/koha/cataloguing/ysearch.pl", ["\n", "\t"]);
-        this.oACDS.scriptQueryAppend = "table=biblioitems&field=publishercode";
-        this.oACDS.responseType = YAHOO.widget.DS_XHR.TYPE_FLAT;
-        this.oACDS.maxCacheEntries = 60;
-        this.oACDS.queryMatchSubset = false;
-    
-        // Instantiate first AutoComplete
-        var myInput = document.getElementById('findvalue');
-        var myContainer = document.getElementById('yvaluecontainer');
-        this.oAutoComp = new YAHOO.widget.AutoComplete(myInput,myContainer,this.oACDS);
-        //this.oAutoComp.delimChar = ";";
-        this.oAutoComp.queryDelay = 1;
-        this.oAutoComp.formatResult = this.fnCustomFormatter;
-        this.oAutoComp.maxResultsDisplayed = 1000;
-}
-});    
-//]]>
-</script>
-    <div id="mainbloc">
+<div id="custom-doc" class="yui-t7">
+   <div id="bd">
 
-<div id="plugin">
+<h1>UNIMARC field 210c builder</h1>
 <div class="autocomplete">
         <form name="f_pop" onsubmit="javascript:report()" action="">
-            <div id="borrowerautocomplete" class="autocomplete">
-                <input autocomplete="off" id="findvalue" name="findvalue" size="40" class="focus" type="text" /><br /><br /> 
-		<input id="ysearchsubmit" type="submit" class="submit" value="Submit" />
-                <div id="yvaluecontainer"></div>
+            <div id="fieldautocomplete" class="autocomplete">
+                <fieldset>
+                <input autocomplete="off" id="findvalue" name="findvalue" size="40" class="focus" type="text" />
+                    <fieldset class="action">
+                    <input type="submit" class="submit" value="Choose" />
+                    </fieldset>
+                </fieldset>
             </div>
         </form>
     </div>
-</div>    
+</div>
 </div>
     <script type="text/javascript">
         function report() {
@@ -71,5 +57,4 @@ YAHOO.util.Event.onContentReady("header_search", function() {
             return false;
         }
     </script>
-</body>
-</html>
+[% INCLUDE 'popup-bottom.inc' %]
