@@ -13,7 +13,7 @@ $(document).ready(function(){
 		$("fieldset.rows input").keydown(function(e){ return checkEnter(e); });
 		/* Inline edit/delete links */
 		var biblionumber = $("input[name='biblionumber']").attr("value");
-		$("td").click(function(event){
+        $("tr.editable td").click(function(event){
 			var $tgt = $(event.target);
 			if($tgt.is("a")||$tgt.is(":first-child")||$tgt.is(":nth-child(2)")){ return true; } else {
 			var rowid = $(this).parent().attr("id");
@@ -131,7 +131,19 @@ $(document).ready(function() {
                 [% END %]
             </tr>
                 [% FOREACH item_loo IN item_loop %]
-                <tr id="row[% item_loo.itemnumber %]">
+                    [% IF ( item_loo.itemnumber == itemnumber) %]
+                        [% IF item_loo.nomod %]
+                           <tr id="row[% item_loo.itemnumber %]" class="active">
+                        [% ELSE %]
+                            <tr id="row[% item_loo.itemnumber %]" class="active editable">
+                        [% END %]
+                    [% ELSE %]
+                        [% IF item_loo.nomod %]
+                           <tr id="row[% item_loo.itemnumber %]">
+                        [% ELSE %]
+                            <tr id="row[% item_loo.itemnumber %]" class="editable">
+                        [% END %]
+                    [% END %]
                     [% IF ( item_loo.nomod ) %] <td colspan="2">&nbsp;</td>[% ELSE %][% IF ( item_loo.hostitemflag ) %]<td><a href="additem.pl?op=edititem&amp;biblionumber=[% item_loo.hostbiblionumber %]&amp;itemnumber=[% item_loo.itemnumber %]#edititem">Edit in host</a></td>
 <td><a class="delete" href="/cgi-bin/koha/cataloguing/additem.pl?op=delinkitem&amp;biblionumber=[% biblionumber %]&amp;hostitemnumber=[% item_loo.itemnumber %]">Delink</a></td>
 [% ELSE %]<td><a href="additem.pl?op=edititem&amp;biblionumber=[% biblionumber %]&amp;itemnumber=[% item_loo.itemnumber %]#edititem">Edit</a></td>
