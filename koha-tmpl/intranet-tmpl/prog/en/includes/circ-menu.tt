@@ -6,32 +6,32 @@ in the global namespace %]
 <style type="tex/css">img { width: expression(this.width > 140 ? 140: true);
 }</style>
 <![endif]-->
-<ul>
+<ul class="patronbriefinfo">
 [% IF ( patronimages ) %]
 [% IF borrower.has_picture %]
 <li><img src="/cgi-bin/koha/members/patronimage.pl?crdnum=[% borrower.cardnumber %]" id="patronimage" alt="[% borrower.firstname %] [% borrower.surname %] ([% borrower.cardnumber %])" border="0" style="max-width : 140px; margin: .3em 0 .3em .3em; padding: .2em; border: 1px solid #CCCCCC; width:auto !important; width:130px;" /></li>
 [% ELSE %]
-<li><img src="[% interface %]/[% theme %]/img/patron-blank.png" alt="[% borrower.firstname %] [% borrower.surname %] ([% borrower.cardnumber %])" border="0" style="margin: .3em 0 .3em .3em; padding: .2em; border: 1px solid #CCCCCC;" /></li>
+<li id="patronbasics"><img src="[% interface %]/[% theme %]/img/patron-blank.png" alt="[% borrower.firstname %] [% borrower.surname %] ([% borrower.cardnumber %])" border="0" style="margin: .3em 0 .3em .3em; padding: .2em; border: 1px solid #CCCCCC;" /></li>
 [% END %]
 [% END %]
     [% IF ( borrower.address or borrower.address2 ) %]
         [% IF ( borrower.address ) %]
-            <li>[% borrower.address %]</li>
+            <li class="patronaddress1">[% borrower.address %]</li>
         [% END %]
         [% IF ( borrower.address2 ) %]
-            <li>[% borrower.address2 %]</li>
+            <li class="patronaddress2">[% borrower.address2 %]</li>
         [% END %]
     [% ELSE %]
             <li><span class="empty" id="noaddressstored">No address stored.</span></li>
     [% END %]
-    <li>
+    <li class="patroncity">
     [% IF borrower.city %]
             [% borrower.city %][% IF borrower.state %], [% borrower.state %][% END %]
 	    [% borrower.zipcode %][% IF ( borrower.country ) %], [% borrower.country %][% END %]
     [% ELSE %]
         <span class="empty" id="nocitystored">No city stored.</span>
     [% END %]</li>
-    <li>[% IF borrower.phone %]
+    <li class="patronphone">[% IF borrower.phone %]
         [% borrower.phone %]
     [% ELSE %]
         [% IF borrower.mobile %]
@@ -56,12 +56,12 @@ in the global namespace %]
     [% IF ( ExtendedPatronAttributes ) %][% FOREACH extendedattribute IN borrower.extendedattributes %]
         [% IF ( extendedattribute.display_checkout ) %]
             [% IF ( extendedattribute.value ) %]
-                <li>[% extendedattribute.description %] : [% IF ( extendedattribute.value_description ) %][% extendedattribute.value_description %][% ELSE %][% extendedattribute.value %][% END %]</li>
+                <li class="patronattribute"><span class="patronattributelabel">[% extendedattribute.description %]</span> : [% IF ( extendedattribute.value_description ) %][% extendedattribute.value_description %][% ELSE %][% extendedattribute.value %][% END %]</li>
             [% END %]
         [% END %]
     [% END %][% END %]
-    <li>Category: [% borrower.description %] ([% borrower.categorycode %])</li>
-    <li>Home library: [% IF ( borrower.branchname ) %][% borrower.branchname %][% ELSE %][% borrower.branch %][% END %]</li>
+    <li class="patroncategory">Category: [% borrower.description %] ([% borrower.categorycode %])</li>
+    <li class="patronlibrary">Home library: [% IF ( borrower.branchname ) %][% borrower.branchname %][% ELSE %][% borrower.branch %][% END %]</li>
 </ul></div>
 <div id="menu">
 <ul>
