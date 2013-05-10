@@ -15,6 +15,14 @@ function _(s) { return s; } // dummy function for gettext
     $(".focus").focus();
     $(".validated").validate();
 
+    $("#logout").on("click",function(){
+        logOut();
+    });
+    $("#helper").on("click",function(){
+        openHelp();
+        return false;
+    });
+
     $('.noEnterSubmit').keypress(function(e){
         if ( e.which == 13 ) return false;
     });
@@ -40,6 +48,17 @@ function checkEnter(e){ //e is event object passed from function invocation
 
 function clearHoldFor(){
 	$.cookie("holdfor",null, { path: "/", expires: 0 });
+}
+
+function logOut(){
+    if( typeof delBasket == 'function' ){
+        delBasket('main', true);
+    }
+    clearHoldFor();
+}
+
+function openHelp(){
+    openWindow("/cgi-bin/koha/help.pl","Koha help",600,600);
 }
 
 jQuery.fn.preventDoubleFormSubmit = function() {

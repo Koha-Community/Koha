@@ -75,21 +75,15 @@
                      <a class="toplinks" href="/cgi-bin/koha/circ/selectbranchprinter.pl">Set library</a>
                   </li>
            [% END %]
-           [% IF ( intranetbookbag ) %]
               <li>
-                  <a class="toplinks" href="/cgi-bin/koha/mainpage.pl?logout.x=1" onclick="clearHoldFor(); delBasket('main', true);">Log out</a>
+                  <a id="logout" class="toplinks" href="/cgi-bin/koha/mainpage.pl?logout.x=1">Log out</a>
               </li>
-           [% ELSE %]
-              <li>
-                  <a class="toplinks" href="/cgi-bin/koha/mainpage.pl?logout.x=1" onclick="clearHoldFor();">Log out</a>
-              </li>
-           [% END %]
            [% ELSE %]
               You are not logged in |
            [% END %]
           </ul>
           <li>
-         <a class="toplinks" href="/cgi-bin/koha/help.pl" id="helper" onclick="var link=window.open('','Koha_Help','width=600,height=600,toolbar=false,scrollbars=yes'); link.location='/cgi-bin/koha/help.pl'; return false;">Help</a>
+         <a class="toplinks" href="/cgi-bin/koha/help.pl" id="helper">Help</a>
           </li>
         </li>
       </ul>
