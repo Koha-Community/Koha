@@ -1036,8 +1036,12 @@ sub GetBestRecordMatch {
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare("SELECT candidate_match_id
                              FROM   import_record_matches
-                             JOIN biblio ON ( candidate_match_id = biblionumber )
-                             WHERE  import_record_id = ?
+                             JOIN   import_records ON ( import_record_matches.import_record_id = import_records.import_record_id )
+                             LEFT JOIN biblio ON ( candidate_match_id = biblio.biblionumber )
+                             LEFT JOIN auth_header ON ( candidate_match_id = auth_header.authid )
+                             WHERE  import_record_matches.import_record_id = ? AND
+                             (  (import_records.record_type = 'biblio' AND biblio.biblionumber IS NOT NULL) OR
+                                (import_records.record_type = 'auth' AND auth_header.authid IS NOT NULL) )
                              ORDER BY score DESC, candidate_match_id DESC");
     $sth->execute($import_record_id);
     my ($record_id) = $sth->fetchrow_array();
