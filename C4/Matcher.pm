@@ -628,51 +628,58 @@ sub get_matches {
 
     my $QParser;
     $QParser = C4::Context->queryparser if (C4::Context->preference('UseQueryParser'));
-    foreach my $matchpoint (@{ $self->{'matchpoints'} }) {
-        my @source_keys = _get_match_keys($source_record, $matchpoint);
+    foreach my $matchpoint ( @{ $self->{'matchpoints'} } ) {
+        my @source_keys = _get_match_keys( $source_record, $matchpoint );
         next if scalar(@source_keys) == 0;
+
         # build query
         my $query;
         my $error;
         my $searchresults;
         my $total_hits;
-        if ($QParser) {
-            $query = join(" || ", map { "$matchpoint->{'index'}:$_" } @source_keys);
+        if ( $self->{'record_type'} eq 'biblio' ) {
+            if ($QParser) {
+                $query = join( " || ",
+                    map { "$matchpoint->{'index'}:$_" } @source_keys );
+            }
+            else {
+                $query = join( " or ",
+                    map { "$matchpoint->{'index'}=$_" } @source_keys );
+            }
             require C4::Search;
-            ($error, $searchresults, $total_hits) = C4::Search::SimpleSearch($query, 0, $max_matches, [ $self->{'record_type'} . 'server' ] );
-        } else {
-            if ($self->{'record_type'} eq 'biblio') {
-                $query = join(" or ", map { "$matchpoint->{'index'}=$_" } @source_keys);
-                require C4::Search;
-                ($error, $searchresults, $total_hits) = C4::Search::SimpleSearch($query, 0, $max_matches);
-            } elsif ($self->{'record_type'} eq 'authority') {
-                my $authresults;
-                my @marclist;
-                my @and_or;
-                my @excluding = [];
-                my @operator;
-                my @value;
-                foreach my $key (@source_keys) {
-                    push @marclist, $matchpoint->{'index'};
-                    push @and_or, 'or';
-                    push @operator, 'exact';
-                    push @value, $key;
-                }
-                require C4::AuthoritiesMarc;
-                ($authresults, $total_hits) = C4::AuthoritiesMarc::SearchAuthorities(
-                        \@marclist, \@and_or, \@excluding, \@operator,
-                        \@value, 0, 20, undef, 'AuthidAsc', 1
-                        );
-                foreach my $result (@$authresults) {
-                    push @$searchresults, $result->{'authid'};
-                }
+            ( $error, $searchresults, $total_hits ) =
+              C4::Search::SimpleSearch( $query, 0, $max_matches );
+        }
+        elsif ( $self->{'record_type'} eq 'authority' ) {
+            my $authresults;
+            my @marclist;
+            my @and_or;
+            my @excluding = [];
+            my @operator;
+            my @value;
+            foreach my $key (@source_keys) {
+                push @marclist, $matchpoint->{'index'};
+                push @and_or,   'or';
+                push @operator, 'exact';
+                push @value,    $key;
+            }
+            require C4::AuthoritiesMarc;
+            ( $authresults, $total_hits ) =
+              C4::AuthoritiesMarc::SearchAuthorities(
+                \@marclist,  \@and_or, \@excluding, \@operator,
+                \@value,     0,        20,          undef,
+                'AuthidAsc', 1
+              );
+            foreach my $result (@$authresults) {
+                push @$searchresults, $result->{'authid'};
             }
         }
 
-        if (defined $error ) {
+        if ( defined $error ) {
             warn "search failed ($query) $error";
-        } else {
-            foreach my $matched (@{$searchresults}) {
+        }
+        else {
+            foreach my $matched ( @{$searchresults} ) {
                 $matches{$matched} += $matchpoint->{'score'};
             }
         }
