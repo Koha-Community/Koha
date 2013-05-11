@@ -38,6 +38,8 @@ my $authority = Koha::Authority->new($record);
 
 is(ref($authority), 'Koha::Authority', 'Created valid Koha::Authority object');
 
+is($authority->authorized_heading(), 'Cooking', 'Authorized heading was correct');
+
 is_deeply($authority->record, $record, 'Saved record');
 
 SKIP:
@@ -61,6 +63,30 @@ SKIP:
 
     $authority = Koha::Authority->get_from_authid('alphabetsoup');
     is($authority, undef, 'No invalid record is retrieved');
+}
+
+SKIP:
+{
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare("SELECT import_record_id FROM import_records WHERE record_type = 'auth' LIMIT 1;");
+    $sth->execute();
+
+    my $import_record_id;
+    for my $row ($sth->fetchrow_hashref) {
+        $import_record_id = $row->{'import_record_id'};
+    }
+
+    skip 'No authorities in reservoir', 3 unless $import_record_id;
+    $authority = Koha::Authority->get_from_breeding($import_record_id);
+
+    is(ref($authority), 'Koha::Authority', 'Retrieved valid Koha::Authority object');
+
+    is($authority->authid, undef, 'Records in reservoir do not have an authid');
+
+    is(ref($authority->record), 'MARC::Record', 'MARC record attached to authority');
+
+    $authority = Koha::Authority->get_from_breeding('alphabetsoup');
+    is($authority, undef, 'No invalid record is retrieved from reservoir');
 }
 
 done_testing();

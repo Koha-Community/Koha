@@ -37,6 +37,7 @@ use C4::Context;
 use MARC::Record;
 use MARC::File::XML;
 use C4::Charset;
+use Koha::Util::MARC;
 
 use base qw(Koha::MetadataRecord);
 
@@ -53,7 +54,12 @@ sub new {
     my $class = shift;
     my $record = shift;
 
-    my $self = $class->SUPER::new( { record => $record });
+    my $self = $class->SUPER::new(
+        {
+            'record' => $record,
+            'schema' => lc C4::Context->preference("marcflavour")
+        }
+    );
 
     bless $self, $class;
     return $self;
@@ -84,6 +90,13 @@ sub get_from_authid {
     return if ($@);
     $record->encoding('UTF-8');
 
+    # NOTE: GuessAuthTypeCode has no business in Koha::Authority, which is an
+    #       object-oriented class. Eventually perhaps there will be utility
+    #       classes in the Koha:: namespace, but there are not at the moment,
+    #       so this shim seems like the best option all-around.
+    require C4::AuthoritiesMarc;
+    $authtypecode ||= C4::AuthoritiesMarc::GuessAuthTypeCode($record);
+
     my $self = $class->SUPER::new( { authid => $authid,
                                      authtype => $authtypecode,
                                      schema => $marcflavour,
@@ -91,6 +104,51 @@ sub get_from_authid {
 
     bless $self, $class;
     return $self;
+}
+
+=head2 get_from_breeding
+
+    my $auth = Koha::Authority->get_from_authid($authid);
+
+Create the Koha::Authority object associated with the provided authid.
+
+=cut
+sub get_from_breeding {
+    my $class = shift;
+    my $import_record_id = shift;
+    my $marcflavour = lc C4::Context->preference("marcflavour");
+
+    my $dbh=C4::Context->dbh;
+    my $sth=$dbh->prepare("select marcxml from import_records where import_record_id=? and record_type='auth';");
+    $sth->execute($import_record_id);
+    my $marcxml = $sth->fetchrow;
+    my $record=eval {MARC::Record->new_from_xml(StripNonXmlChars($marcxml),'UTF-8',
+        (C4::Context->preference("marcflavour") eq "UNIMARC"?"UNIMARCAUTH":C4::Context->preference("marcflavour")))};
+    return if ($@);
+    $record->encoding('UTF-8');
+
+    # NOTE: GuessAuthTypeCode has no business in Koha::Authority, which is an
+    #       object-oriented class. Eventually perhaps there will be utility
+    #       classes in the Koha:: namespace, but there are not at the moment,
+    #       so this shim seems like the best option all-around.
+    require C4::AuthoritiesMarc;
+    my $authtypecode = C4::AuthoritiesMarc::GuessAuthTypeCode($record);
+
+    my $self = $class->SUPER::new( {
+                                     schema => $marcflavour,
+                                     authtype => $authtypecode,
+                                     record => $record });
+
+    bless $self, $class;
+    return $self;
+}
+
+sub authorized_heading {
+    my ($self) = @_;
+    if ($self->schema =~ m/marc/) {
+        return Koha::Util::MARC::getAuthorityAuthorizedHeading($self->record, $self->schema);
+    }
+    return;
 }
 
 1;

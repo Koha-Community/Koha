@@ -1,0 +1,143 @@
+[% PROCESS 'merge-record.inc' %]
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Cataloging &rsaquo; Merging records</title>
+[% INCLUDE 'greybox.inc' %]
+[% INCLUDE 'doc-head-close.inc' %]
+<style type="text/css">
+div.record ul, div.record li { float:none; display:block; }
+div#result { margin-top: 1em; }
+/* We use this style "against" the li ui-tabs-nav style automatically applied */
+</style>
+<script type="text/javascript">
+//<![CDATA[
+
+    // When submiting the form
+    function mergeformsubmit() {
+        $("ul#ulrecord1").remove();
+        $("ul#ulrecord2").remove();
+}
+
+$(document).ready(function(){
+    // Getting marc structure via ajax
+    tagslib = [];
+    $.getJSON("/cgi-bin/koha/authorities/merge_ajax.pl", {frameworkcode : "[% framework %]" }, function(json) {
+        tagslib = json;
+    });
+    [% PROCESS mergejs %]
+});
+
+
+function changeFramework(fw) {
+    $("#Frameworks").val(fw);
+}
+
+//]]>
+</script>
+</head>
+<body id="auth_merge" class="cat">
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'authorities-search.inc' %]
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/authorities/authorities-home.pl">Authorities</a>  &rsaquo; Merging records</div>
+
+<div id="doc" class="yui-t7">
+
+<div id="bd">
+        <div id="yui-main">
+
+
+<h1>Merging records</h1>
+[% IF ( result ) %]
+    [% IF ( errors ) %]
+
+    [% FOREACH error IN errors %]
+        <div class="dialog alert">
+
+                [% IF error.code == 'CANNOT_MOVE' %]
+                    The following items could not be moved from the old record to the new one: [% error.value %]
+                [% ELSE %]
+                    [% error %]
+                [% END %]
+
+            <br />Therefore, the record to be merged has not been deleted.</div>
+    [% END %]
+
+    [% ELSE %]
+        <script type="text/javascript">window.location.href="/cgi-bin/koha/authorities/detail.pl?authid=[% recordid1 %]"</script>
+        <p>The merging was successful. <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% recordid1 %]">Click here to see the merged record.</a></p>
+    [% END %]
+
+[% ELSE %]
+
+[% IF ( choosereference ) %]
+<p>Please choose which record will be the reference for the merge. The record chosen as reference will be kept, and the other will be deleted.</p>
+<form id="mergeform" action="/cgi-bin/koha/authorities/merge.pl" method="post">
+    <fieldset class="rows">
+    <legend>Merge reference</legend>
+    <ol>
+    <li class="radio"><input type="radio" value="[% recordid1 %]" checked="checked" id="mergereference1" name="mergereference" onclick="changeFramework('[% frameworkcode1 %]')" /><label for="mergereference1">[% title1 %] [% FOREACH subtitl1 IN subtitle1 %] [% subtitl1.subfield %][% END %] (<a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% recordid1 %]" title="MARC" rel="gb_page_center[600,500]">[% recordid1 %]</a>)</label></li>
+    <li class="radio"><input type="radio" value="[% recordid2 %]" id="mergereference2" name="mergereference" onclick="changeFramework('[% frameworkcode2 %]')" /><label for="mergereference2">[% title2 %] [% FOREACH subtitl2 IN subtitle2 %] [% subtitl2.subfield %][% END %] (<a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% recordid2 %]" title="MARC" rel="gb_page_center[600,500]">[% recordid2 %]</a>)</label></li>
+
+    [% IF frameworkselect %]
+          <li><label for="frameworkcode">Using framework:</label>
+                      <select name="frameworkcode" id="frameworkcode">
+                                      <option value="Default">Default</option>
+                                      [% FOREACH frameworkcodeloo IN frameworkselect %]
+                                          [% IF ( frameworkcodeloo.selected ) %]
+                                              <option value="[% frameworkcodeloo.value %]" selected="selected">
+                                          [% ELSE %]
+                                              <option value="[% frameworkcodeloo.value %]">
+                                          [% END %]
+                                           [% frameworkcodeloo.frameworktext %]
+                                           </option>
+                                      [% END %]
+                      </select></li>
+    [% END %]
+</ol>
+
+    <input type="hidden" name="authid" value="[% recordid1 %]" />
+    <input type="hidden" name="authid" value="[% recordid2 %]" />
+    <fieldset class="action"><input type="submit" value="Next" /></fieldset>
+    </fieldset>
+</form>
+[% ELSE %]
+[% IF ( errors ) %]
+    <div class="dialog alert">
+    [% FOREACH error IN errors %]
+        <p>
+                [% IF error.code == 'WRONG_COUNT' %]
+                    Number of records provided for merging: [% error.value %]. Currently only 2 records can be merged at a time.
+                [% ELSE %]
+                    [% error %]
+                [% END %]
+
+            </p>
+    [% END %]
+    </div>
+[% ELSE %]
+<form id="mergeform" action="/cgi-bin/koha/authorities/merge.pl" method="post" onsubmit="return mergeformsubmit()">
+
+<div class="yui-g">
+<div class="yui-u first">
+[% PROCESS mergesource %]
+</div>
+<div class="yui-u">
+[% PROCESS mergetarget %]
+</div> <!-- .yui-u -->
+
+<input type="hidden" name="recordid1" value="[% recordid1 %]" />
+<input type="hidden" name="recordid2" value="[% recordid2 %]" />
+<input type="hidden" name="mergereference" value="[% mergereference %]" />
+<input type="hidden" name="frameworkcode" value="[% framework %]" />
+
+<fieldset class="action"><input type="submit" name="merge" value="Merge" /></fieldset>
+</div>
+</form>
+[% END %]
+[% END %]
+[% END %]
+
+</div>
+</div>
+</div>
+
+[% INCLUDE 'intranet-bottom.inc' %]

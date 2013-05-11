@@ -19,6 +19,7 @@ function searchauthority() {
 function confirm_deletion() {   // not really implemented, but required by phantom delAuthButton code in authorities-toolbar.inc
     return true;
 }
+[% INCLUDE 'authorities_js.inc' %]
 //]]>
 </script>
 </head>
@@ -34,6 +35,8 @@ function confirm_deletion() {   // not really implemented, but required by phant
     <div class="yui-g">
     
     [% INCLUDE 'authorities-toolbar.inc' %]
+
+    <div id="merge_in_progress"></div>
 
     </div>
     </div>

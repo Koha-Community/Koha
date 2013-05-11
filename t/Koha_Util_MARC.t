@@ -23,7 +23,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 3;
+use Test::More tests => 4;
 
 BEGIN {
         use_ok('Koha::Util::MARC');
@@ -95,3 +95,5 @@ foreach my $field (@$hash) {
 is_deeply($hash, $samplehash, 'Generated hash correctly');
 my $dupkeys = grep { $_ > 1 } values %fieldkeys;
 is($dupkeys, 0, 'No duplicate keys');
+
+is(Koha::Util::MARC::getAuthorityAuthorizedHeading($marcrecord, 'marc21'), 'Cooking', 'Routine for retrieving authorized heading works');

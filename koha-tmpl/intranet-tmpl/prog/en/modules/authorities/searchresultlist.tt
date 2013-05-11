@@ -35,6 +35,8 @@ function searchauthority() {
     Y = document.forms[0].value.value;
     window.location="/cgi-bin/koha/authorities/authorities-home.pl?op=do_search&type=intranet&authtypecode="+X+"&value="+Y+"&marclist=&and_or=and&excluding=&operator=contains";
 }
+
+[% INCLUDE 'authorities_js.inc' %]
 //]]>
 </script>
 </head>
@@ -53,6 +55,7 @@ function searchauthority() {
     [% INCLUDE 'authorities-toolbar.inc' %]
 <h1>Authority search results</h1>
 
+<div id="merge_in_progress"></div>
 [% IF ( total ) %]
 <div class="pages">[% pagination_bar %]</div>
 
@@ -73,9 +76,9 @@ function searchauthority() {
     </tr>
 [% FOREACH resul IN result %]
     [% UNLESS ( loop.odd ) %]
-    <tr class="highlight">
+    <tr data-authid="[% resul.authid %]" class="highlight">
     [% ELSE %]
-    <tr>
+    <tr data-authid="[% resul.authid %]">
     [% END %]
       <td>[% PROCESS authresult summary=resul.summary link="/cgi-bin/koha/authorities/authorities-home.pl?op=do_search&type=intranet&marclist=any&operator=contains&orderby=HeadingAsc&value=" %]</td>
       <td><a href="detail.pl?authid=[% resul.authid %]">Details</a></td>
@@ -87,6 +90,7 @@ function searchauthority() {
       [% IF ( CAN_user_editauthorities ) %]
           <td>
               <a href="/cgi-bin/koha/authorities/authorities.pl?authid=[% resul.authid %]">Edit</a>
+              | <a class="merge_auth" href="#merge">Merge</a>
               [% UNLESS ( resul.used ) %]
                    | <a href="javascript:confirm_deletion([% resul.authid %])">Delete</a>
               [% END %]

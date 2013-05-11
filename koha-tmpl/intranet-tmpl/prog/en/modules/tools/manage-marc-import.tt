@@ -12,8 +12,15 @@
             [% IF ( record.record_type == 'biblio' ) %]
                 <td class="highlight" colspan="4">Matches biblio [% record_lis.match_id %] (score = [% record_lis.match_score %]): <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% record_lis.match_id %]">[% record_lis.match_citation %]</a></td>
             [% ELSIF ( record.record_type == 'auth' ) %]
-                <td class="highlight" colspan="4">Matches authority [% record_lis.match_id %] (score = [% record_lis.match_score %]): <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% record_lis.match_id %]">[% record_lis.match_citation %]</a></td>
+                <td class="highlight" colspan="4">Matches authority [% record_lis.match_id %] (score = [% record_lis.match_score %]): <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% record_lis.match_id %]">[% record_lis.match_citation %]</a>
+        <a href="/cgi-bin/koha/authorities/merge.pl?mergereference=breeding&authid=[% record_lis.match_id %]&authid=[% record_lis.import_record_id %]">Merge</a>
+                </td>
             [% END %]
+        </tr>
+    [% ELSIF ( record.record_type == 'auth') %]
+        <tr data-authid="[% record_lis.import_record_id %]">
+            <td />
+            <td class="highlight" colspan="4"><a href="#" class="merge_auth">Search for a record to merge in a new window</a></td>
         </tr>
     [% END %]
 [% END %]
@@ -40,6 +47,13 @@ $(document).ready(function(){
       str = str.replace("reset_","")
       $("#"+str+" option[selected='selected']").attr("selected","selected");
       $(this).parent().hide();
+  });
+
+  $('.merge_auth').click(function(event) {
+      event.preventDefault();
+      var authid = $(this).parents('tr').attr('data-authid');
+      $.cookie('auth_to_merge', JSON.stringify({ 'authid': authid, 'summary': $('tr[data-id="' + authid + '"] .citation').text(), 'mergereference': 'breeding' }), { 'path': '/' });
+      window.open("/cgi-bin/koha/authorities/authorities-home.pl");
   });
 });
 //]]>
@@ -383,9 +397,9 @@ Page
 
   </tr>
   [% FOREACH record_lis IN record_list %]
-  [% UNLESS ( loop.odd ) %]<tr class="highlight">[% ELSE %]<tr>[% END %]
+  [% UNLESS ( loop.odd ) %]<tr data-id="[% record_lis.import_record_id %]" class="highlight">[% ELSE %]<tr data-id="[% record_lis.import_record_id %]">[% END %]
     <td>[% record_lis.record_sequence %]</td>
-    <td><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% record_lis.import_record_id %]" rel="gb_page_center[600,500]">[% record_lis.citation %]</a></td>
+    <td><a class="citation" href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% record_lis.import_record_id %]" rel="gb_page_center[600,500]">[% record_lis.citation %]</a></td>
     <td>
         [% IF ( record_lis.status == 'imported' ) %]
             Imported
