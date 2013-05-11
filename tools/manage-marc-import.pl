@@ -365,12 +365,17 @@ sub import_records_list {
 
         my $match = GetImportRecordMatches($record->{'import_record_id'}, 1);
         my $match_citation = '';
+        my $match_id;
         if ($#$match > -1) {
             if ($match->[0]->{'record_type'} eq 'biblio') {
                 $match_citation .= $match->[0]->{'title'} if defined($match->[0]->{'title'});
                 $match_citation .= ' ' . $match->[0]->{'author'} if defined($match->[0]->{'author'});
+                $match_id = $match->[0]->{'biblionumber'};
             } elsif ($match->[0]->{'record_type'} eq 'auth') {
-                $match_citation .= $match->[0]->{'authorized_heading'} if defined($match->[0]->{'authorized_heading'});
+                if (defined($match->[0]->{'authorized_heading'})) {
+                    $match_citation .= $match->[0]->{'authorized_heading'};
+                    $match_id = $match->[0]->{'candidate_match_id'};
+                }
             }
         }
 
@@ -383,7 +388,7 @@ sub import_records_list {
             overlay_status           => $record->{'overlay_status'},
             # Sorry about the match_id being from the "biblionumber" field;
             # as it turns out, any match id will go in biblionumber
-            match_id                 => $#$match > -1 ? $match->[0]->{'biblionumber'} : 0,
+            match_id                 => $match_id,
             match_citation           => $match_citation,
             match_score              => $#$match > -1 ? $match->[0]->{'score'} : 0,
             record_type              => $record->{'record_type'},
