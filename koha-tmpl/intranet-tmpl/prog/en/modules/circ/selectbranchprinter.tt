@@ -49,7 +49,7 @@ Updated:<ul>
 <fieldset class="rows">
     <legend>Set library</legend>
     <ol>
-    [% IF ( singleBranchMode ) %]
+    [% IF ( singleBranchMode && !CAN_user_superlibrarian ) %]
         <li>SingleBranchMode is ON.</li>
     [% ELSE %]
         <li><label for="branch">Choose library:</label>
