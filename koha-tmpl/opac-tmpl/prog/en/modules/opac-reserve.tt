@@ -429,7 +429,7 @@
                               <th>Last location</th>
                             [% END %]
                             <th>Call number</th>
-                            [% IF ( bibitemloo.itemdata_enumchron ) %]
+                            [% IF ( itemdata_enumchron ) %]
                               <th>Vol info</th>
                             [% END %]
                             <th>Information</th>
@@ -460,7 +460,7 @@
                                 <td class="holdingbranch">[% itemLoo.holdingBranchName %]</td>
                               [% END %]
                               <td class="call_no">[% itemLoo.callNumber %]</td>
-                              [% IF ( itemLoo.itemdata_enumchron ) %]<!-- test -->
+                              [% IF ( itemdata_enumchron ) %]
                                 <td class="vol_info">[% itemLoo.enumchron %]</td>
                               [% END %]
                               <td class="information">

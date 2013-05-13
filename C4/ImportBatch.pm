@@ -652,6 +652,7 @@ sub BatchCommitRecords {
             SetImportRecordStatus($rowref->{'import_record_id'}, 'imported');
         } elsif ($record_result eq 'ignore') {
             $num_ignored++;
+            $recordid = $record_match;
             if ($record_type eq 'biblio' and defined $recordid and $item_result eq 'create_new') {
                 my ($bib_items_added, $bib_items_errored) = BatchCommitItems($rowref->{'import_record_id'}, $recordid);
                 $num_items_added += $bib_items_added;
@@ -1035,6 +1036,7 @@ sub GetBestRecordMatch {
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare("SELECT candidate_match_id
                              FROM   import_record_matches
+                             JOIN biblio ON ( candidate_match_id = biblionumber )
                              WHERE  import_record_id = ?
                              ORDER BY score DESC, candidate_match_id DESC");
     $sth->execute($import_record_id);

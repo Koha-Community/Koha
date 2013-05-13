@@ -1114,18 +1114,18 @@ sub ModSerialStatus {
             $sth->execute($subscriptionid);
             my ( $missinglist, $recievedlist ) = $sth->fetchrow;
             if ( $status == 2 ) {
-
                 $recievedlist .= "; $serialseq"
-                  unless ( index( "$recievedlist", "$serialseq" ) >= 0 );
+                    if $recievedlist!~/(^|;)\s*$serialseq(?=;|$)/;
             }
-
-            #         warn "missinglist : $missinglist serialseq :$serialseq, ".index("$missinglist","$serialseq");
+            # in case serial has been previously marked as missing
+            if (grep /$status/, (1,2,3,7)) {
+                $missinglist=~ s/(^|;)\s*$serialseq(?=;|$)//g;
+            }
             $missinglist .= "; $serialseq"
-              if ( $status == 4
-                and not index( "$missinglist", "$serialseq" ) >= 0 );
+                if $status==4 && $missinglist!~/(^|;)\s*$serialseq(?=;|$)/;
             $missinglist .= "; not issued $serialseq"
-              if ( $status == 5
-                and index( "$missinglist", "$serialseq" ) >= 0 );
+                if $status==5 && $missinglist!~/(^|;)\s*$serialseq(?=;|$)/;
+
             $query = "UPDATE subscriptionhistory SET recievedlist=?, missinglist=? WHERE  subscriptionid=?";
             $sth   = $dbh->prepare($query);
             $recievedlist =~ s/^; //;

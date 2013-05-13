@@ -1,0 +1,57 @@
+<article xmlns='http://docbook.org/ns/docbook'>
+<title>koha-enable-sip</title>
+<info>
+    <productname>Koha</productname> is the first free software library automation package.
+    <author>
+        <personname>
+            <firstname>Robin</firstname>
+            <surname>Sheat</surname>
+        </personname>
+        <affiliation>
+            <orgname>Catalyst IT</orgname>
+            <uri>http://www.catalyst.net.nz</uri>
+        </affiliation>
+        <contrib>Author</contrib>
+    </author>
+</info>
+
+<refentry xml:id="koha-enable-sip">
+
+    <refmeta>
+        <refentrytitle>koha-enable-sip</refentrytitle>
+        <manvolnum>8</manvolnum>
+    </refmeta>
+
+    <refnamediv>
+        <refname>koha-enable-sip</refname>
+        <refpurpose>Copies the SIP configuration file to allow SIP to be controlled by init scripts.</refpurpose>
+        <refclass>UNIX/Linux</refclass>
+    </refnamediv>
+
+    <refsynopsisdiv>
+        <cmdsynopsis>
+            <command>koha-enable-sip</command>
+            <arg choice="req" rep="repeat"><replaceable>instancename</replaceable></arg>
+        </cmdsynopsis>
+    </refsynopsisdiv>
+
+    <refsect1><title>Description</title>
+        <para>This copies the default SIP configuration file /etc/koha/SIPconfig.xml to the
+            /etc/koha/sites/instancename directory. This allows it to be started by
+            <command>koha-start-sip(8)</command>, and <command>koha-stop-sip</command>. In turn,
+            this means that it will be started on boot and stopped on shutdown.</para>
+        <para>After running this, you will need to edit the newly created file to configure it
+            for your site.</para>
+        <para>To disable SIP again, delete or rename the configuration file.</para>
+    </refsect1>
+
+  <refsect1><title>See also</title>
+  <simplelist type="inline">
+    <member><command>koha-start-sip(8)</command></member>
+    <member><command>koha-stop-sip(8)</command></member>
+  </simplelist>
+  </refsect1>
+
+</refentry>
+
+</article>

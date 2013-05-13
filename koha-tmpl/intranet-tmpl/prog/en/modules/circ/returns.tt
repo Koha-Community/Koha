@@ -317,7 +317,7 @@ $(document).ready(function () {
 
 [% IF ( errmsgloop ) %]
     <div class="dialog alert">
-        <h5>Cannot check in</h5>
+        <h3>Check in message</h3>
         [% FOREACH errmsgloo IN errmsgloop %]
                     [% IF ( errmsgloo.badbarcode ) %]
                         <p class="problem">No item with barcode: [% errmsgloo.msg %]</p>
@@ -336,6 +336,7 @@ $(document).ready(function () {
                     [% END %]
                     [% IF ( errmsgloo.withdrawn ) %]
                         [% IF BlockReturnOfWithdrawnItems %]
+                           <h5>Cannot check in</h5>
                            <p class="problem">Item is withdrawn. <strong>NOT CHECKED IN</strong></p>
                         [% ELSE %]
                            <p class="problem">Item is withdrawn.</p>

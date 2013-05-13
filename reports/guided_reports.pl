@@ -20,7 +20,7 @@
 use strict;
 use warnings;
 
-use CGI;
+use CGI qw/-utf8/;
 use Text::CSV;
 use URI::Escape;
 use C4::Reports::Guided;
@@ -644,9 +644,8 @@ elsif ($phase eq 'Run this report'){
             unless ($sth) {
                 die "execute_query failed to return sth for report $report_id: $sql";
             } else {
-                my $headref = $sth->{NAME} || [];
-                my @headers = map { +{ cell => $_ } } @$headref;
-                $template->param(header_row => \@headers);
+                my $headers= header_cell_loop($sth);
+                $template->param(header_row => $headers);
                 while (my $row = $sth->fetchrow_arrayref()) {
                     my @cells = map { +{ cell => $_ } } @$row;
                     push @rows, { cells => \@cells };
@@ -763,7 +762,13 @@ elsif ($phase eq 'Save Compound'){
 # pass $sth, get back an array of names for the column headers
 sub header_cell_values {
     my $sth = shift or return ();
-    return @{$sth->{NAME}};
+    my @cols;
+    foreach my $c (@{$sth->{NAME}}) {
+        #FIXME apparently DBI still needs a utf8 fix for this?
+        utf8::decode($c);
+        push @cols, $c;
+    }
+    return @cols;
 }
 
 # pass $sth, get back a TMPL_LOOP-able set of names for the column headers

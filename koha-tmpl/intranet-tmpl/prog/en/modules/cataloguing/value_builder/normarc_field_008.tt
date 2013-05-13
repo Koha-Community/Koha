@@ -128,9 +128,9 @@
   </tr>
 
 	<tr>
-      <td><label for="f1517">15-17 Utgivelsesland</label> See <a href="http://www.loc.gov/marc/countries/countries_code.html">MARC Code List for Countries</a> </td>
+      <td><label for="f1517">15-17 Utgivelsesland</label> (Se <a href="http://www.nb.no/baser/landekoder/">NORMARC-koder for land</a>)</td>
       <td>
-              <input type="text" name="f1517" id="f1517" size="3"  maxlength="3" value="[% f1517 %]"/>
+              <input type="text" name="f1517" id="f1517" size="3"  maxlength="3" value="[% f1517 %]"/> <!-- Default is set by the DefaultLanguageField008 syspref -->
       </td>
         </tr>
 				
@@ -139,7 +139,8 @@
 <tr><td id="choices" colspan="2"></td></tr>
 
 <!-- Start second batch of common fields for all formats -->
-                <td><label for="f3537">35-37 Språk</label> See <a href="http://www.loc.gov/marc/languages/language_code.html">MARC Code List for Languages</a></td>
+       <tr>
+                <td><label for="f3537">35-37 Språk</label> (Se <a href="http://www.nb.no/baser/sprakkoder/">NORMARC-koder for språk</a>)</td>
                 <td>
                         <input type="text" name="f3537" id="f3537" size="4"  maxlength="4" value="[% f3537 %]"/>
                 </td>

@@ -6221,8 +6221,34 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     $dbh->do("ALTER TABLE action_logs CHANGE timestamp timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;");
     print "Upgrade to $DBversion done (Bug 7241: Fix on circulation logs)\n";
     print "WARNING about bug 7241: to partially correct the broken logs, the log history is filled with the first found item for each biblio.\n";
+}
+
+$DBversion = "3.10.05.002";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do(q{
+        INSERT INTO permissions ( module_bit, code, description )
+        VALUES  ( '1', 'overdues_report', 'Execute overdue items report' )
+    });
+    # add new permission for users with all report permissions and circulation remaining permission
+    my $sth = $dbh->prepare(q{
+        INSERT INTO user_permissions (borrowernumber, module_bit, code)
+        SELECT user_permissions.borrowernumber, 1, 'overdues_report'
+        FROM user_permissions
+        LEFT JOIN borrowers USING(borrowernumber)
+        WHERE borrowers.flags & (1 << 16)
+        AND user_permissions.code = 'circulate_remaining_permissions'
+    });
+    print "Upgrade to $DBversion done ( Add circ permission overdues_report )\n";
     SetVersion($DBversion);
 }
+
+$DBversion = "3.10.05.003";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do(q{ALTER TABLE suggestions CHANGE COLUMN title title VARCHAR(255) DEFAULT NULL;});
+    print "Upgrade to $DBversion done (Bug 2046 - increasing title column length for suggestions)\n";
+    SetVersion ($DBversion);
+}
+
 
 =head1 FUNCTIONS
 
