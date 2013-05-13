@@ -51,7 +51,7 @@ $(document).ready(function() {
             { "aTargets": [ -1,-2 ], "bSortable": false, "bSearchable": false }
         ],
         "aoColumns": [
-            { "sType": "title-string" },null,null,null,null,null,null
+            { "sType": "title-string" },null,null,null,null,null,null,null
         ],
         "bPaginate": false
     }));
@@ -116,7 +116,7 @@ if (nodename =="barcodes[]"){
     var Node=me.parentNode.previousSibling;
     while (Node.nodeName!="TD"){Node=Node.previousSibling}
     var Nodes=Node.childNodes;
-    for (var i=0;i<Nodes.length;i++){
+    for (var i=0;i < Nodes.length;i++){
       if (Nodes[i].nodeName=="INPUT" && Nodes[i].getAttribute("type")=="checkbox"){
         Nodes[i].checked=false;
       }     
@@ -624,6 +624,7 @@ function validate1(date) {
 			<th>Title</th>
             <th>Call number</th>
 			<th>Barcode</th>
+            <th>Expiration</th>
 			<th>Priority</th>
 			<th>Delete?</th>
 			<th>&nbsp;</th>
@@ -650,6 +651,7 @@ function validate1(date) {
                 <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% reservloo.biblionumber %]">[% reservloo.barcodereserv %]</a>
                 [% END %]
             </td>
+            <td>[% reservloo.expirationdate | $KohaDates %]</td>
             <td>[% IF ( reservloo.waitingposition ) %]<strong>[% reservloo.waitingposition %]</strong>[% END %]</td>
             <td><select name="rank-request">
                     <option value="n">No</option>

@@ -406,6 +406,7 @@ if ($borrowernumber) {
             $getreserv{biblionumber}    = $num_res->{'biblionumber'};
         }
         $getreserv{waitingposition} = $num_res->{'priority'};
+        $getreserv{expirationdate} = $num_res->{'expirationdate'};
         push( @reservloop, \%getreserv );
 
 #         if we have a reserve waiting, initiate waitingreserveloop
