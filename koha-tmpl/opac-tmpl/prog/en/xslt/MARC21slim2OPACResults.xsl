@@ -507,7 +507,7 @@
     </p>
 
     <xsl:if test="marc:datafield[@tag=250]">
-	<span class="results_summary">
+    <span class="results_summary edition">
     <span class="label">Edition: </span>
             <xsl:for-each select="marc:datafield[@tag=250]">
                     <xsl:call-template name="subfieldSelect">
@@ -520,7 +520,7 @@
     <xsl:if test="marc:datafield[@tag=773]">
         <xsl:for-each select="marc:datafield[@tag=773]">
             <xsl:if test="marc:subfield[@code='t']">
-    <span class="results_summary">
+    <span class="results_summary source">
     <span class="label">Source: </span>
             <xsl:value-of select="marc:subfield[@code='t']"/>
     </span>
@@ -529,7 +529,7 @@
     </xsl:if>
 
 <xsl:if test="$DisplayOPACiconsXSLT!='0'">
-    <span class="results_summary">
+    <span class="results_summary type">
     <xsl:if test="$typeOf008!=''">
         <span class="label">Type: </span>
             <xsl:choose>
@@ -879,7 +879,7 @@
       <xsl:call-template name="m880Select">
         <xsl:with-param name="basetags">260</xsl:with-param>
         <xsl:with-param name="codes">abcg</xsl:with-param>
-        <xsl:with-param name="class">results_summary</xsl:with-param>
+        <xsl:with-param name="class">results_summary publisher</xsl:with-param>
         <xsl:with-param name="label">Publisher: </xsl:with-param>
       </xsl:call-template>
     </xsl:if>
@@ -916,13 +916,13 @@
        <xsl:call-template name="m880Select">
          <xsl:with-param name="basetags">246</xsl:with-param>
          <xsl:with-param name="codes">ab</xsl:with-param>
-         <xsl:with-param name="class">results_summary</xsl:with-param>
-         <xsl:with-param name="label">Other Title: </xsl:with-param>
+         <xsl:with-param name="class">results_summary other_title</xsl:with-param>
+         <xsl:with-param name="label">Other title: </xsl:with-param>
        </xsl:call-template>
     </xsl:if>
         
     <xsl:if test="marc:datafield[@tag=246]">
-	<span class="results_summary">
+    <span class="results_summary other_title">
     <span class="label">Other title: </span>
             <xsl:for-each select="marc:datafield[@tag=246]">
                     <xsl:call-template name="subfieldSelect">
@@ -933,7 +933,7 @@
 	</span>
     </xsl:if>
     <xsl:if test="marc:datafield[@tag=242]">
-	<span class="results_summary">
+    <span class="results_summary translated_title">
     <span class="label">Title translated: </span>
             <xsl:for-each select="marc:datafield[@tag=242]">
                     <xsl:call-template name="subfieldSelect">
@@ -944,7 +944,7 @@
 	</span>
     </xsl:if>
     <xsl:if test="marc:datafield[@tag=856]">
-         <span class="results_summary">
+         <span class="results_summary online_resources">
 			   <span class="label">Online Access: </span>
                             <xsl:for-each select="marc:datafield[@tag=856]">
                             <xsl:variable name="SubqText"><xsl:value-of select="marc:subfield[@code='q']"/></xsl:variable>
