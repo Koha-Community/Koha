@@ -55,6 +55,10 @@ unless ( -e "$htdocs/$theme/$lang/modules/$from" ) {
 }
 
 my $template = C4::Templates::gettemplate($from, 'intranet', $query);
-$template->param( referer => $refer );
+$template->param(
+    referer => $refer,
+    intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+    intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+);
 
 output_html_with_http_headers $query, "", $template->output;
