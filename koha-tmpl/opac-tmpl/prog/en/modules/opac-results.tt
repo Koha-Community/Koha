@@ -514,7 +514,7 @@ $(document).ready(function(){
                                 [% IF ( SEARCH_RESULT.author ) %]by <a href="/cgi-bin/koha/opac-search.pl?q=au:[% SEARCH_RESULT.author |url %]" title="Search for works by this author" class="author">[% SEARCH_RESULT.author %]</a>
                                 [% ELSE %]&nbsp;
                                 [% END %]
-                <span class="results_summary"><span class="label">Publication:</span>
+                <span class="results_summary publisher"><span class="label">Publication:</span>
                         [% IF ( SEARCH_RESULT.place ) %][% SEARCH_RESULT.place %] [% END %][% IF ( SEARCH_RESULT.publishercode ) %][% SEARCH_RESULT.publishercode|html %][% END %][% IF ( SEARCH_RESULT.publicationyear ) %] [% SEARCH_RESULT.publicationyear %]
                     [% ELSE %][% IF ( SEARCH_RESULT.copyrightdate ) %] [% SEARCH_RESULT.copyrightdate %][% END %][% END %]
                         [% IF ( SEARCH_RESULT.pages ) %]. [% SEARCH_RESULT.pages %][% END %]
@@ -527,9 +527,9 @@ $(document).ready(function(){
                     [% SEARCH_RESULT.summary %]
                 </span>
                 [% END %]
-                [% IF ( SEARCH_RESULT.copyrightdate ) %]<span class="results_summary"><span class="label">Date:</span>[% SEARCH_RESULT.copyrightdate %]</span>[% END %]
+                [% IF ( SEARCH_RESULT.copyrightdate ) %]<span class="results_summary date"><span class="label">Date:</span>[% SEARCH_RESULT.copyrightdate %]</span>[% END %]
 
-                <span class="results_summary">
+                <span class="results_summary availability">
                 <span class="label">Availability:</span>
                     [% IF ( SEARCH_RESULT.available_items_loop.size() ) %]
                     <span class="available"><strong>Copies available:</strong>
@@ -591,7 +591,7 @@ $(document).ready(function(){
                 [% IF ( LibraryThingForLibrariesID ) %]<div class="ltfl_reviews"></div>[% END %]
                 [% IF ( TagsShowEnabled ) %]
                                 [% IF ( SEARCH_RESULT.TagLoop.size ) %]
-                                        <div class="results_summary"><span class="label">Tags:</span>
+                                        <div class="results_summary tags"><span class="label">Tags:</span>
                                         <ul style="display: inline; list-style: none;">[% FOREACH TagLoo IN SEARCH_RESULT.TagLoop %]<li style="display: inline; list-style: none;"><a href="/cgi-bin/koha/opac-search.pl?tag=[% TagLoo.term |url %]&amp;q=[% TagLoo.term |url %]">[% TagLoo.term %]</a> <span class="weight">([% TagLoo.weight_total %])</span></li>
                                             [% END %]
                                         </ul>
@@ -604,7 +604,7 @@ $(document).ready(function(){
 
 
                 [% IF ( OpacStarRatings == 'all' ) %]
-                <div class="results_summary">
+                <div class="results_summary ratings">
 
 [% FOREACH i  IN [ 1 2 3 4 5  ] %]
 
