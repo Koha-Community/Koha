@@ -1103,6 +1103,7 @@ No patron matched <span class="ex">[% message %]</span>
             <th>Title</th>
             <th>Call number</th>
             <th>Barcode</th>
+            <th>Expiration</th>
             <th>Priority</th>
             <th>Delete?</th>
             <th>&nbsp;</th>
@@ -1121,6 +1122,7 @@ No patron matched <span class="ex">[% message %]</span>
                         [% END %]
                         [% IF ( reservloo.nottransfered ) %] hasn't been transferred yet from [% reservloo.nottransferedby %]</i>
                         [% END %]</em></td>
+                    <td>[% reservloo.expirationdate | $KohaDates %]</td>
                     <td>
                         [% IF ( reservloo.waitingposition ) %]<b> [% reservloo.waitingposition %] </b>[% END %]
                     </td>
