@@ -605,7 +605,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
     [% END %]
 
     [% IF ( MARCSERIES ) %]
-    <span class="results_summary"><span class="label">Series:</span>
+    <span class="results_summary series"><span class="label">Series:</span>
             [% FOREACH MARCSERIE IN MARCSERIES %]
             [% FOREACH MARCSERIES_SUBFIELDS_LOO IN MARCSERIE.MARCSERIES_SUBFIELDS_LOOP %]
             [% IF ( MARCSERIES_SUBFIELDS_LOO.value ) %]<a href="/cgi-bin/koha/opac-search.pl?q=se:[% MARCSERIES_SUBFIELDS_LOO.value |url %]">[% MARCSERIES_SUBFIELDS_LOO.value %]</a>[% END %][% IF ( MARCSERIES_SUBFIELDS_LOO.volumenum ) %]. [% MARCSERIES_SUBFIELDS_LOO.volumenum %][% END %]
@@ -614,17 +614,17 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
     </span>
     [% END %]
     [% IF ( editionstatement ) %]
-    <span class="results_summary"><span class="label">Edition statement:</span>[% editionstatement %][% IF ( editionresponsibility ) %]/[% editionresponsibility %][% END %]</span>
+    <span class="results_summary edition"><span class="label">Edition statement:</span>[% editionstatement %][% IF ( editionresponsibility ) %]/[% editionresponsibility %][% END %]</span>
     [% END %]
     [% IF ( publishercode ) %]
-    <span class="results_summary"><span class="label">Published by :</span>
+    <span class="results_summary publisher"><span class="label">Published by :</span>
         <a href="/cgi-bin/koha/opac-search.pl?q=pb:[% publishercode |url %] ">
             [% publishercode |html %] 
         </a> [% IF ( place ) %]([% place %])[% END %] [% IF ( publicationyear ) %], [% publicationyear %][% END %]
     </span>
     [% END %]
     
-    [% IF ( pages ) %]<span class="results_summary"><span class="label">Physical details:</span> [% pages %] [% illus %] [% size %]</span>[% END %]
+    [% IF ( pages ) %]<span class="results_summary physical"><span class="label">Physical details:</span> [% pages %] [% illus %] [% size %]</span>[% END %]
 
     [% IF ( MARCISBNS ) %]
         <span class="results_summary isbn"><span class="label">ISBN:</span>[% FOREACH MARCISBN IN MARCISBNS %][% MARCISBN.marcisbn %][% IF ( loop.last ) %].[% ELSE %]; [% END %][% END %]</span>
@@ -634,10 +634,10 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
         [% END %]
     [% END %]
     [% IF ( issn ) %]
-    <span class="results_summary"><span class="label">ISSN:</span>[% issn %]</span>
+    <span class="results_summary issn"><span class="label">ISSN:</span>[% issn %]</span>
     [% END %]
     [% IF ( collectiontitle ) %]
-    <span class="results_summary"><span class="label">Collection: </span>
+    <span class="results_summary collection"><span class="label">Collection: </span>
         [% collectiontitle %]
         [% IF ( collectionissn ) %], ISSN [% collectionissn %]    [% END %]
         [% IF ( collectionvolume ) %]; [% collectionvolume %] [% END %]
@@ -645,7 +645,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
     </span>
     [% END %]
     [% IF ( unititles ) %]
-    <span class="results_summary"><span class="label">Uniform titles:</span>
+    <span class="results_summary unititle"><span class="label">Uniform titles:</span>
         [% FOREACH unititle IN unititles %]
         [% unititle.unititle %] ;
         [% END %]
@@ -654,7 +654,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
     [% END %]
 
     [% IF ( MARCSUBJCTS ) %]
-        <span class="results_summary">
+        <span class="results_summary subject">
             <span class="label">Subject(s):</span>
             [% IF OPACPopupAuthorsSearch %]
             <div class="subjectSearch" >
@@ -708,14 +708,14 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
             [% END %]
         </span>
     [% ELSE %]
-    [% IF ( subjects ) %]<span class="results_summary"><span class="label">Subject(s):</span> [% FOREACH subject IN subjects %]<a href="/cgi-bin/koha/opac-search.pl?q=su:[% subject.subject |url %]">[% subject.subject %]</a> | [% END %]</span>[% END %]
+    [% IF ( subjects ) %]<span class="results_summary subject"><span class="label">Subject(s):</span> [% FOREACH subject IN subjects %]<a href="/cgi-bin/koha/opac-search.pl?q=su:[% subject.subject |url %]">[% subject.subject %]</a> | [% END %]</span>[% END %]
     [% END %]
 
     [% IF ( copyrightdate ) %]
-    <span class="results_summary"><span class="label">Year: </span>[% copyrightdate %]</span>
+    <span class="results_summary year"><span class="label">Year: </span>[% copyrightdate %]</span>
     [% END %]
     [% UNLESS ( item_level_itypes ) %]<img src="[% imageurl %]" alt="[% description %]" title="[% description %]" />
-    <span class="results_summary"><span class="label">Item type: </span>
+    <span class="results_summary itemtype"><span class="label">Item type: </span>
         [% IF ( description ) %]
         [% description %]
         [% ELSE %]
@@ -724,7 +724,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
     </span>[% END %]
 
     [% IF ( MARCURLS ) %]
-    <div class="results_summary"><span class="label">Online resources:</span>
+    <div class="results_summary online_resources"><span class="label">Online resources:</span>
     <ul>    [% FOREACH MARCurl IN MARCURLS %]
         <li>[% IF ( MARCurl.part ) %][% MARCurl.part %]
             <br />[% END %] 
@@ -732,13 +732,13 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 
         [% IF ( OPACurlOpenInNewWindow ) %]
           [% IF trackclicks == 'track' || trackclicks == 'anonymous' %]
-            <a href="/cgi-bin/koha/tracklinks.pl?uri=[% MARCurl.MARCURL |url%]&biblionumber=[% biblionumber | url %]" title="[% MARCurl.MARCURL %]" target="_blank">
+            <a href="/cgi-bin/koha/tracklinks.pl?uri=[% MARCurl.MARCURL |url%]&amp;biblionumber=[% biblionumber | url %]" title="[% MARCurl.MARCURL %]" target="_blank">
           [% ELSE %]
             <a href="[% MARCurl.MARCURL %]" title="[% MARCurl.MARCURL %]" target="_blank">
           [% END %]
         [% ELSE %]
           [% IF trackclicks == 'track' || trackclicks == 'anonymous' %]
-            <a href="/cgi-bin/koha/tracklinks.pl?uri=[% MARCurl.MARCURL |url%]&biblionumber=[% biblionumber | url %]" title="[% MARCurl.MARCURL %]">
+            <a href="/cgi-bin/koha/tracklinks.pl?uri=[% MARCurl.MARCURL |url%]&amp;biblionumber=[% biblionumber | url %]" title="[% MARCurl.MARCURL %]">
           [% ELSE %]
             <a href="[% MARCurl.MARCURL %]" title="[% MARCurl.MARCURL %]">
           [% END %]
@@ -775,7 +775,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 
 <!--This grabs all of the lists a bib record appears in -->
 [% IF ( GetShelves ) %]
-	<span class="results_summary"><span class="label">List(s) this item appears in: </span>
+    <span class="results_summary lists"><span class="label">List(s) this item appears in: </span>
 	[% FOREACH GetShelve IN GetShelves %]
 		<a href="/cgi-bin/koha/opac-shelves.pl?viewshelf=[% GetShelve.shelfnumber %]">[% GetShelve.shelfname %]</a>
 		[% IF ( loop.last ) %][% ELSE %]|[% END %]
@@ -784,7 +784,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 [% END %]
 
 [% IF ( TagsShowEnabled ) %]
-        <div class="results_summary">
+        <div class="results_summary tags">
         [% IF ( TagLoop ) %]
         <span class="label">Tags from this library:</span>
             <ul id="tagslist">[% FOREACH TagLoo IN TagLoop %]
@@ -795,7 +795,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
         </div>
 [% END %]
 [% IF ( TagsInputEnabled ) %]
-      <div class="results_summary">
+      <div class="results_summary tagsinput">
         [% IF ( loggedinusername ) %]
             <a class="tag_add" id="tag_add[% biblionumber %]" href="#">Add</a>
             <form id="tagform[% biblionumber %]" method="post" action="/cgi-bin/koha/opac-tags.pl" style="display:none;">
@@ -853,7 +853,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 
     [% IF ( OpacStarRatings != 'disable' ) %]
         <form method="post" action="/cgi-bin/koha/opac-ratings.pl">
-        <div class="results_summary">
+        <div class="results_summary ratings">
 
       [% FOREACH i  IN [ 1 2 3 4 5  ] %]
         [% IF rating_avg == i && borrowernumber %]
