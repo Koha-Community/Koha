@@ -29,6 +29,19 @@ use FindBin qw( $Bin );
 $YAML::Syck::ImplicitTyping = 1;
 
 
+# Default file header for .po syspref files
+my $default_pref_po_header = Locale::PO->new(-msgid => '', -msgstr =>
+    "Project-Id-Version: PACKAGE VERSION\\n" .
+    "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\\n" .
+    "Last-Translator: FULL NAME <EMAIL\@ADDRESS>\\n" .
+    "Language-Team: Koha Translate List <koha-translate\@lists.koha-community.org>\\n" .
+    "MIME-Version: 1.0\\n" .
+    "Content-Type: text/plain; charset=UTF-8\\n" .
+    "Content-Transfer-Encoding: 8bit\\n" .
+    "Plural-Forms: nplurals=2; plural=(n > 1);\\n"
+);
+
+
 sub set_lang {
     my ($self, $lang) = @_;
 
@@ -52,7 +65,7 @@ sub new {
     $self->{verbose}         = $verbose;
     $self->{process}         = "$Bin/tmpl_process3.pl " . ($verbose ? '' : '-q');
     $self->{path_po}         = "$Bin/po";
-    $self->{po}              = {};
+    $self->{po}              = { '' => $default_pref_po_header };
 
     # Get all .pref file names
     opendir my $fh, $self->{path_pref_en};
@@ -222,8 +235,13 @@ sub get_po_from_prefs {
 
 sub save_po {
     my $self = shift;
+
+    # Create file header if it doesn't already exist
+    my $po = $self->{po};
+    $po->{''} ||= $default_pref_po_header;
+
     # Write .po entries into a file put in Koha standard po directory
-    Locale::PO->save_file_fromhash( $self->po_filename, $self->{po} );
+    Locale::PO->save_file_fromhash( $self->po_filename, $po );
     say "Saved in file: ", $self->po_filename if $self->{verbose};
 }
 
