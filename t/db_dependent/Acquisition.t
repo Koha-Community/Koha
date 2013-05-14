@@ -10,7 +10,7 @@ use POSIX qw(strftime);
 
 use C4::Bookseller qw( GetBookSellerFromId );
 
-use Test::More tests => 42;
+use Test::More tests => 41;
 
 BEGIN {
     use_ok('C4::Acquisition');
@@ -43,7 +43,7 @@ SKIP: {
    my $testorder = @$orders[0];
    my $testbiblio = $testorder->{'biblionumber'};
    my @listorders = GetOrdersByBiblionumber($testbiblio);
-   isa_ok( ref @listorders, 'ARRAY','GetOrdersByBiblionumber : result is an array' );
+   ok( @listorders ,'GetOrdersByBiblionumber : result is defined' );
    ok( scalar (@listorders) >0,'GetOrdersByBiblionumber : result contains at least one element' );
    my @matched_biblios = grep {$_->{biblionumber} == $testbiblio} @listorders;
    ok ( @matched_biblios == @listorders, "all orders match");
