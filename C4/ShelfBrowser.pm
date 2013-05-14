@@ -63,10 +63,9 @@ to take into account.
 
   $nearby = GetNearbyItems($itemnumber, [$num_each_side]);
 
-  @next = @{ $nearby->{next} };
-  @prev = @{ $nearby->{prev} };
+  @items = @{ $nearby->{items} };
 
-  foreach (@next) {
+  foreach (@items) {
       # These won't format well like this, but here are the fields
   	  print $_->{title};
   	  print $_->{biblionumber};
@@ -78,10 +77,10 @@ to take into account.
 
   # This is the information required to scroll the browser to the next left
   # or right set. Can be derived from next/prev, but it's here for convenience.
-  print $nearby->{prev_itemnumber};
-  print $nearby->{next_itemnumber};
-  print $nearby->{prev_biblionumber};
-  print $nearby->{next_biblionumber};
+  print $nearby->{prev_item}{itemnumber};
+  print $nearby->{next_item}{itemnumber};
+  print $nearby->{prev_item}{biblionumber};
+  print $nearby->{next_item}{biblionumber};
 
   # These will be undef if the values are not used to calculate the 
   # nearby items.
@@ -92,8 +91,6 @@ to take into account.
   print $nearby->{starting_ccode}->{code};
   print $nearby->{starting_ccode}->{description};
 
-  print $nearby->{starting_itemnumber};
-  
 This finds the items that are nearby to the supplied item, and supplies
 those previous and next, along with the other useful information for displaying
 the shelf browser.
@@ -113,11 +110,13 @@ This will throw an exception if something went wrong.
 =cut
 
 sub GetNearbyItems {
-	my ($itemnumber, $num_each_side) = @_;
-	$num_each_side ||= 3;
+    my ( $itemnumber, $num_each_side, $gap) = @_;
+    $num_each_side ||= 3;
+    $gap ||= 7; # Should be > $num_each_side
+    die "BAD CALL in C4::ShelfBrowser::GetNearbyItems, gap should be > num_each_side"
+        if $gap <= $num_each_side;
 
     my $dbh         = C4::Context->dbh;
-    my $marcflavour = C4::Context->preference("marcflavour");
     my $branches = GetBranches();
 
     my $sth_get_item_details = $dbh->prepare("SELECT cn_sort,homebranch,location,ccode from items where itemnumber=?");
@@ -145,12 +144,12 @@ sub GetNearbyItems {
 
     # Build the query for previous and next items
     my $prev_query ='
-        SELECT *
+        SELECT itemnumber, biblionumber, cn_sort, itemcallnumber
         FROM items
         WHERE
             ((cn_sort = ? AND itemnumber < ?) OR cn_sort < ?) ';
     my $next_query ='
-        SELECT *
+        SELECT itemnumber, biblionumber, cn_sort, itemcallnumber
         FROM items
         WHERE
             ((cn_sort = ? AND itemnumber >= ?) OR cn_sort > ?) ';
@@ -170,60 +169,68 @@ sub GetNearbyItems {
     	push @params, $start_ccode->{code};
     }
 
-    my $sth_prev_items = $dbh->prepare($prev_query . $query_cond . ' ORDER BY cn_sort DESC, itemnumber LIMIT ?');
-    my $sth_next_items = $dbh->prepare($next_query . $query_cond . ' ORDER BY cn_sort, itemnumber LIMIT ?');
-    push @params, $num_each_side;
-    $sth_prev_items->execute(@params);
-    $sth_next_items->execute(@params);
-    
-    # Now we have the query run, suck out the data like marrow
-    my @prev_items = reverse GetShelfInfo($sth_prev_items, $marcflavour);
-    my @next_items = GetShelfInfo($sth_next_items, $marcflavour);
+    my @prev_items = @{
+        $dbh->selectall_arrayref(
+            $prev_query . $query_cond . ' ORDER BY cn_sort DESC, itemnumber LIMIT ?',
+            { Slice => {} },
+            ( @params, $gap )
+        )
+    };
+    my @next_items = @{
+        $dbh->selectall_arrayref(
+            $next_query . $query_cond . ' ORDER BY cn_sort, itemnumber LIMIT ?',
+            { Slice => {} },
+            ( @params, $gap + 1 )
+        )
+    };
 
-    my (
-        $next_itemnumber, $next_biblionumber,
-        $prev_itemnumber, $prev_biblionumber
-    );
+    my $prev_item = $prev_items[-1];
+    my $next_item = $next_items[-1];
+    @next_items = splice( @next_items, 0, $num_each_side + 1 );
+    @prev_items = reverse splice( @prev_items, 0, $num_each_side );
+    my @items = ( @prev_items, @next_items );
 
-    $next_itemnumber = $next_items[-1]->{itemnumber} if @next_items;
-    $next_biblionumber = $next_items[-1]->{biblionumber} if @next_items;
+    $next_item = undef
+        if not $next_item
+            or ( $next_item->{itemnumber} == $items[-1]->{itemnumber}
+                and ( @prev_items or @next_items <= 1 )
+            );
+    $prev_item = undef
+        if not $prev_item
+            or ( $prev_item->{itemnumber} == $items[0]->{itemnumber}
+                and ( @next_items or @prev_items <= 1 )
+            );
 
-    $prev_itemnumber = $prev_items[0]->{itemnumber} if @prev_items;
-    $prev_biblionumber = $prev_items[0]->{biblionumber} if @prev_items;
+    # populate the items
+    @items = GetShelfInfo( @items );
 
-    my %result = (
-        next                => \@next_items,
-        prev                => \@prev_items,
-        next_itemnumber     => $next_itemnumber,
-        next_biblionumber   => $next_biblionumber,
-        prev_itemnumber     => $prev_itemnumber,
-        prev_biblionumber   => $prev_biblionumber,   
-        starting_itemnumber => $itemnumber,
-    );
-    $result{starting_homebranch} = $start_homebranch if $start_homebranch;
-    $result{starting_location}   = $start_location   if $start_location;
-    $result{starting_ccode}         = $start_ccode      if $start_ccode;
-    return \%result;
+    return {
+        items               => \@items,
+        next_item           => $next_item,
+        prev_item           => $prev_item,
+        starting_homebranch => $start_homebranch,
+        starting_location   => $start_location,
+        starting_ccode      => $start_ccode,
+    };
 }
 
-# This runs through a statement handle and pulls out all the items in it, fills
-# them up with additional info that shelves want, and returns those as a list.
+# populate an item list with its title and upc, oclc and isbn normalized.
 # Not really intended to be exported.
 sub GetShelfInfo {
-    my ($sth, $marcflavour) = @_;
-
-    my @items;
-    while (my $this_item = $sth->fetchrow_hashref()) {
-        my $this_biblio = GetBibData($this_item->{biblionumber});
-        next if (!defined($this_biblio));
-        $this_item->{'title'} = $this_biblio->{'title'};
+    my @items = @_;
+    my $marcflavour = C4::Context->preference("marcflavour");
+    my @valid_items;
+    for my $item ( @items ) {
+        my $this_biblio = GetBibData($item->{biblionumber});
+        next unless defined $this_biblio;
+        $item->{'title'} = $this_biblio->{'title'};
         my $this_record = GetMarcBiblio($this_biblio->{'biblionumber'});
-        $this_item->{'browser_normalized_upc'} = GetNormalizedUPC($this_record,$marcflavour);
-        $this_item->{'browser_normalized_oclc'} = GetNormalizedOCLCNumber($this_record,$marcflavour);
-        $this_item->{'browser_normalized_isbn'} = GetNormalizedISBN(undef,$this_record,$marcflavour);
-        push @items, $this_item;
+        $item->{'browser_normalized_upc'} = GetNormalizedUPC($this_record,$marcflavour);
+        $item->{'browser_normalized_oclc'} = GetNormalizedOCLCNumber($this_record,$marcflavour);
+        $item->{'browser_normalized_isbn'} = GetNormalizedISBN(undef,$this_record,$marcflavour);
+        push @valid_items, $item;
     }
-    return @items;
+    return @valid_items;
 }
 
 # Fetches some basic biblio data needed by the shelf stuff

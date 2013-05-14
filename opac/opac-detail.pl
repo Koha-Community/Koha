@@ -928,19 +928,15 @@ if (C4::Context->preference("OPACShelfBrowser")) {
     my $starting_itemnumber = $query->param('shelfbrowse_itemnumber');
     if (defined($starting_itemnumber)) {
         $template->param( OpenOPACShelfBrowser => 1) if $starting_itemnumber;
-        my $nearby = GetNearbyItems($starting_itemnumber,3);
+        my $nearby = GetNearbyItems($starting_itemnumber);
 
         $template->param(
             starting_homebranch => $nearby->{starting_homebranch}->{description},
             starting_location => $nearby->{starting_location}->{description},
             starting_ccode => $nearby->{starting_ccode}->{description},
-            starting_itemnumber => $nearby->{starting_itemnumber},
-            shelfbrowser_prev_itemnumber => $nearby->{prev_itemnumber},
-            shelfbrowser_next_itemnumber => $nearby->{next_itemnumber},
-            shelfbrowser_prev_biblionumber => $nearby->{prev_biblionumber},
-            shelfbrowser_next_biblionumber => $nearby->{next_biblionumber},
-            PREVIOUS_SHELF_BROWSE => $nearby->{prev},
-            NEXT_SHELF_BROWSE => $nearby->{next},
+            shelfbrowser_prev_item => $nearby->{prev_item},
+            shelfbrowser_next_item => $nearby->{next_item},
+            shelfbrowser_items => $nearby->{items},
         );
 
         # in which tab shelf browser should open ?
