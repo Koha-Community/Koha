@@ -338,7 +338,7 @@ sub GetItemsAvailableToFillHoldRequestsForBib {
     my @items = grep { ! scalar GetTransfers($_->{itemnumber}) } @$itm;
     return [ grep {
         my $rule = GetBranchItemRule($_->{homebranch}, $_->{itype});
-        $_->{holdallowed} = $rule->{holdallowed} != 0
+        $_->{holdallowed} = $rule->{holdallowed};
     } @items ];
 }
 
@@ -469,8 +469,15 @@ sub MapItemsToHoldRequests {
                     last PULL_BRANCHES;
                 }
             }
-            $itemnumber ||= $items_by_branch{$holdingbranch}->[0]->{itemnumber}
-              if $holdingbranch;
+
+            unless ( $itemnumber ) {
+                foreach my $current_item ( @{ $items_by_branch{$holdingbranch} } ) {
+                    if ( $holdingbranch && ( $current_item->{holdallowed} == 2 || $pickup_branch eq $current_item->{homebranch} ) ) {
+                        $itemnumber = $current_item->{itemnumber};
+                        last; # quit this loop as soon as we have a suitable item
+                    }
+                }
+            }
         }
 
         if ($itemnumber) {
