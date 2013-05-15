@@ -546,9 +546,8 @@ sub UpdateFine {
     if (my $maxfine = C4::Context->preference('MaxFine')) {
         if ($total_amount_other + $amount > $maxfine) {
             my $new_amount = $maxfine - $total_amount_other;
-            warn "Reducing fine for item $itemnum borrower $borrowernumber from $amount to $new_amount - MaxFine reached";
             return if $new_amount <= 0.00;
-
+            warn "Reducing fine for item $itemnum borrower $borrowernumber from $amount to $new_amount - MaxFine reached";
             $amount = $new_amount;
         }
     }
