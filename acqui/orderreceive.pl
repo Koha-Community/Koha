@@ -163,7 +163,6 @@ if ( $count == 1 ) {
         quantityreceived      => @$results[0]->{'quantityreceived'},
         rrp                   => @$results[0]->{'rrp'},
         ecost                 => sprintf( "%.2f",$order->{'ecost'}),
-        unitprice             => sprintf( "%.2f",$order->{'unitprice'}),
         memberfirstname       => $member->{firstname} || "",
         membersurname         => $member->{surname} || "",
         invoice               => $invoice,
@@ -174,6 +173,15 @@ if ( $count == 1 ) {
         surnamesuggestedby    => $suggestion->{surnamesuggestedby},
         firstnamesuggestedby  => $suggestion->{firstnamesuggestedby},
     );
+
+    # regardless of the content of 'unitprice' e.g 0 or '' or any string will return in these cases 0.00
+    # and the 'IF' in the .tt will show 0.00 and not 'ecost' (see BZ 7129)
+    # So if 'unitprice' == 0 we don't create unitprice
+    if ( $order->{'unitprice'} != 0) {
+        $template->param(
+            unitprice => sprintf( "%.2f",$order->{'unitprice'}),
+        );
+    }
 }
 else {
     my @loop;

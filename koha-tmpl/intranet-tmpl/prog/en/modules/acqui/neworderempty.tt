@@ -129,6 +129,7 @@ $(document).ready(function()
 
         //We apply the fonction only for modify option
         [% IF ( quantityrec ) %]
+        [% IF ( acqcreate ) %]
         $('#quantity').blur(function() 
         {
             // if user decreases the quantity
@@ -146,6 +147,7 @@ $(document).ready(function()
                 return false;
             }
         });
+        [% END %]
         [% END %]
         
         //keep a copy of all budgets before removing the inactives
