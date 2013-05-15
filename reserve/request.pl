@@ -77,8 +77,7 @@ $findborrower = '' unless defined $findborrower;
 $findborrower =~ s|,| |g;
 my $borrowernumber_hold = $input->param('borrowernumber') || '';
 my $messageborrower;
-my $warnings;
-my $messages;
+my $maxreserves;
 
 my $date = C4::Dates->today('iso');
 my $action = $input->param('action');
@@ -122,7 +121,6 @@ if ($borrowernumber_hold && !$action) {
     my $diffbranch;
     my @getreservloop;
     my $count_reserv = 0;
-    my $maxreserves;
 
 #   we check the reserves of the borrower, and if he can reserv a document
 # FIXME At this time we have a simple count of reservs, but, later, we could improve the infos "title" ...
@@ -131,7 +129,6 @@ if ($borrowernumber_hold && !$action) {
       GetReserveCount( $borrowerinfo->{'borrowernumber'} );
 
     if ( C4::Context->preference('maxreserves') && ($number_reserves >= C4::Context->preference('maxreserves')) ) {
-       $warnings = 1;
         $maxreserves = 1;
     }
 
@@ -140,12 +137,11 @@ if ($borrowernumber_hold && !$action) {
     my $expiry = 0; # flag set if patron account has expired
     if ($expiry_date and $expiry_date ne '0000-00-00' and
             Date_to_Days(split /-/,$date) > Date_to_Days(split /-/,$expiry_date)) {
-		$messages = $expiry = 1;
+        $expiry = 1;
     }
 
     # check if the borrower make the reserv in a different branch
     if ( $borrowerinfo->{'branchcode'} ne C4::Context->userenv->{'branch'} ) {
-      $messages = 1;
         $diffbranch = 1;
     }
 
@@ -164,11 +160,8 @@ if ($borrowernumber_hold && !$action) {
                 borrowercategory    => $borrowerinfo->{'category'},
                 borrowerreservs     => $count_reserv,
                 cardnumber          => $borrowerinfo->{'cardnumber'},
-                maxreserves         => $maxreserves,
                 expiry              => $expiry,
                 diffbranch          => $diffbranch,
-                messages            => $messages,
-                warnings            => $warnings
     );
 }
 
@@ -190,18 +183,15 @@ my @biblioloop = ();
 foreach my $biblionumber (@biblionumbers) {
 
     my %biblioloopiter = ();
-    my $maxreserves;
 
     my $dat = GetBiblioData($biblionumber);
 
     unless ( CanBookBeReserved($borrowerinfo->{borrowernumber}, $biblionumber) ) {
-        $warnings = 1;
         $maxreserves = 1;
     }
 
     my $alreadypossession;
     if (not C4::Context->preference('AllowHoldsOnPatronsPossessions') and CheckIfIssuedToPatron($borrowerinfo->{borrowernumber},$biblionumber)) {
-        $warnings = 1;
         $alreadypossession = 1;
     }
 
@@ -223,15 +213,12 @@ foreach my $biblionumber (@biblionumbers) {
 
     if ( $holds_count ) {
             $alreadyreserved = 1;
-            $warnings = 1;
             $biblioloopiter{warn} = 1;
             $biblioloopiter{alreadyres} = 1;
     }
 
-    $template->param( alreadyreserved => $alreadyreserved,
-        messages          => $messages,
-        warnings          => $warnings,
-        maxreserves       => $maxreserves,
+    $template->param(
+        alreadyreserved => $alreadyreserved,
         alreadypossession => $alreadypossession,
     );
 
@@ -456,7 +443,6 @@ foreach my $biblionumber (@biblionumbers) {
             $template->param( override_required => 1 );
         } elsif ( $num_available == 0 ) {
             $template->param( none_available => 1 );
-            $template->param( warnings => 1 );
             $biblioloopiter{warn} = 1;
             $biblioloopiter{none_avail} = 1;
         }
@@ -591,6 +577,7 @@ foreach my $biblionumber (@biblionumbers) {
 
 $template->param( biblioloop => \@biblioloop );
 $template->param( biblionumbers => $biblionumbers );
+$template->param( maxreserves => $maxreserves );
 
 if ($multihold) {
     $template->param( multi_hold => 1 );

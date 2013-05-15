@@ -230,7 +230,7 @@ function checkMultiHold() {
     </form>
   [% ELSE %]
 
-[% IF ( warnings ) %]
+[% IF ( maxreserves || alreadyreserved || none_available || alreadypossession ) %]
     <div class="dialog alert">
 
     [% UNLESS ( multi_hold ) %]
@@ -256,13 +256,13 @@ function checkMultiHold() {
     </div>
 [% END %]
 
-[% IF ( messages ) %]
-    <div class="dialog message"><ul>
+[% IF ( expiry || diffbranch ) %]
+<div class="dialog message"><ul>
     [% IF ( expiry ) %]
     <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borrowerfirstname %] [% borrowersurname %]</a>'s <strong>account has expired</strong></li>
     [% END %]
 
-[% IF ( diffbranch ) %]
+    [% IF ( diffbranch ) %]
     <li> <strong>Pickup library is different</strong> than <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borrowerfirstname %] [% borrowersurname %]</a>'s home library ([% borrower_branchname %] / [% borrower_branchcode %] )</li>
     [% END %]
 
