@@ -57,10 +57,11 @@ $keydate =~ s/-/\//g;
 
 my $branch= $input->param('branch') || C4::Context->userenv->{'branch'};
 # Set all the branches.
-my $onlymine=(C4::Context->preference('IndependentBranches') &&
-              C4::Context->userenv &&
-              C4::Context->userenv->{flags} % 2 !=1  &&
-              C4::Context->userenv->{branch}?1:0);
+my $onlymine =
+  (      C4::Context->preference('IndependentBranches')
+      && C4::Context->userenv
+      && !C4::Context->IsSuperLibrarian()
+      && C4::Context->userenv->{branch} ? 1 : 0 );
 if ( $onlymine ) { 
     $branch = C4::Context->userenv->{'branch'};
 }

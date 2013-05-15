@@ -172,10 +172,11 @@ sub build_authorized_values_list {
     #---- branch
     if ( $tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "branches" ) {
         #Use GetBranches($onlymine)
-        my $onlymine=C4::Context->preference('IndependentBranches') &&
-                C4::Context->userenv && 
-                C4::Context->userenv->{flags} % 2 == 0 && 
-                C4::Context->userenv->{branch};
+        my $onlymine =
+             C4::Context->preference('IndependentBranches')
+          && C4::Context->userenv
+          && !C4::Context->IsSuperLibrarian()
+          && C4::Context->userenv->{branch};
         my $branches = GetBranches($onlymine);
         my @branchloop;
         foreach my $thisbranch ( sort keys %$branches ) {

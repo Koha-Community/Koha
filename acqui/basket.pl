@@ -154,7 +154,7 @@ if ( $op eq 'delete_confirm' ) {
     $template->param( delete_confirm => 1 );
     if ( C4::Context->preference("IndependentBranches") ) {
         my $userenv = C4::Context->userenv;
-        unless ( $userenv->{flags} == 1 ) {
+        unless ( C4::Context->IsSuperLibrarian() ) {
             my $validtest = ( $basket->{creationdate} eq '' )
               || ( $userenv->{branch} eq $basket->{branch} )
               || ( $userenv->{branch} eq '' )
@@ -257,7 +257,7 @@ if ( $op eq 'delete_confirm' ) {
     # get librarian branch...
     if ( C4::Context->preference("IndependentBranches") ) {
         my $userenv = C4::Context->userenv;
-        unless ( $userenv->{flags} == 1 ) {
+        unless ( C4::Context->IsSuperLibrarian() ) {
             my $validtest = ( $basket->{creationdate} eq '' )
               || ( $userenv->{branch} eq $basket->{branch} )
               || ( $userenv->{branch} eq '' )

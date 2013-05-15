@@ -213,11 +213,14 @@ $bor{'borrowernumber'} = $borrowernumber;
 my $samebranch;
 if ( C4::Context->preference("IndependentBranches") ) {
     my $userenv = C4::Context->userenv;
-    unless ( $userenv->{flags} % 2 == 1 ) {
+    if ( C4::Context->IsSuperLibrarian() ) {
+        $samebranch = 1;
+    }
+    else {
         $samebranch = ( $data->{'branchcode'} eq $userenv->{branch} );
     }
-    $samebranch = 1 if ( $userenv->{flags} % 2 == 1 );
-}else{
+}
+else {
     $samebranch = 1;
 }
 my $branchdetail = GetBranchDetail( $data->{'branchcode'});
@@ -340,14 +343,17 @@ foreach (@$alerts) {
 
 my $candeleteuser;
 my $userenv = C4::Context->userenv;
-if($userenv->{flags} % 2 == 1){
+if ( C4::Context->IsSuperLibrarian() ) {
     $candeleteuser = 1;
-}elsif ( C4::Context->preference("IndependentBranches") ) {
+}
+elsif ( C4::Context->preference("IndependentBranches") ) {
     $candeleteuser = ( $data->{'branchcode'} eq $userenv->{branch} );
-}else{
-    if( C4::Auth::getuserflags( $userenv->{flags},$userenv->{number})->{borrowers} ) {
+}
+else {
+    if ( C4::Auth::getuserflags( $userenv->{flags}, $userenv->{number} )->{borrowers} ) {
         $candeleteuser = 1;
-    }else{
+    }
+    else {
         $candeleteuser = 0;
     }
 }

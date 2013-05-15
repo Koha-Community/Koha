@@ -146,11 +146,11 @@ sub GetBranches {
 }
 
 sub onlymine {
-    return 
-    C4::Context->preference('IndependentBranches') &&
-    C4::Context->userenv                           &&
-    C4::Context->userenv->{flags} %2 != 1          &&
-    C4::Context->userenv->{branch}                 ;
+    return
+         C4::Context->preference('IndependentBranches')
+      && C4::Context->userenv
+      && !C4::Context->IsSuperLibrarian()
+      && C4::Context->userenv->{branch};
 }
 
 # always returns a string for OK comparison via "eq" or "ne"

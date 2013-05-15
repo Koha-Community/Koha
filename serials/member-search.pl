@@ -82,10 +82,13 @@ if (defined $member) {
 
 my ($count,$results);
 
-if (C4::Context->preference("IndependentBranches")){
-   if (C4::Context->userenv && C4::Context->userenv->{flags} % 2 !=1 && C4::Context->userenv->{'branch'}){
-        $$patron{branchcode}=C4::Context->userenv->{'branch'};
-   }
+if ( C4::Context->preference("IndependentBranches") ) {
+    if (   C4::Context->userenv
+        && !C4::Context->IsSuperLibrarian()
+        && C4::Context->userenv->{'branch'} )
+    {
+        $$patron{branchcode} = C4::Context->userenv->{'branch'};
+    }
 }
 $$patron{firstname}.="\%" if ($$patron{firstname});
 $$patron{surname}.="\%" if ($$patron{surname});

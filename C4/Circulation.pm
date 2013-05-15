@@ -896,7 +896,7 @@ sub CanBookBeIssued {
     }
     if ( C4::Context->preference("IndependentBranches") ) {
         my $userenv = C4::Context->userenv;
-        if ( ($userenv) && ( $userenv->{flags} % 2 != 1 ) ) {
+        unless ( C4::Context->IsSuperLibrarian() ) {
             if ( $item->{C4::Context->preference("HomeOrHoldingBranch")} ne $userenv->{branch} ){
                 $issuingimpossible{ITEMNOTSAMEBRANCH} = 1;
                 $issuingimpossible{'itemhomebranch'} = $item->{C4::Context->preference("HomeOrHoldingBranch")};
