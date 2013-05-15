@@ -143,10 +143,10 @@
     <li><span class="label">Category code: </span>[% categorycode |html %]
 				<input type="hidden" name="categorycode" value="[% categorycode |html %]" /><input type="hidden" name="is_a_modif" value="1" /></li>
 	[% ELSE %]
-    <li><label for="categorycode">Category code: </label> <input type="text" name="categorycode" id="categorycode" size="10" maxlength="10" onblur="toUC(this)" /></li>
+    <li><label for="categorycode" class="required">Category code: </label> <input type="text" name="categorycode" id="categorycode" size="10" maxlength="10" onblur="toUC(this)" /></li>
 	[% END %]
-	<li><label for="description">Description: </label> <input type="text" name="description" id="description" size="40" maxlength="80" value="[% description |html %]" /></li>
-	<li><label for="enrolmentperiod">Enrollment period: </label>
+    <li><label for="description" class="required">Description: </label> <input type="text" name="description" id="description" size="40" maxlength="80" value="[% description |html %]" /></li>
+    <li><label for="enrolmentperiod" class="required">Enrollment period: </label>
 	<fieldset>
 	<legend>Choose one</legend>
 	<ol>
@@ -181,7 +181,7 @@
 			[% END %]
 					</select></li>
 	<li><label for="reservefee">Hold fee: </label><input type="text" name="reservefee" id="reservefee" size="6" value="[% reservefee %]" /></li>
-	<li><label for="category_type">Category type: </label> <select name="category_type" id="category_type">
+    <li><label for="category_type" class="required">Category type: </label> <select name="category_type" id="category_type">
                         [% IF ( type_n ) %]<option value="" selected="selected">Select a category type</option>[% ELSE %]<option value="">Select a category type</option>[% END %]
 					[% IF ( type_A ) %]<option value="A" selected="selected">Adult</option>[% ELSE %]<option value="A">Adult</option>[% END %]
 					[% IF ( type_C ) %]<option value="C" selected="selected">Child</option>[% ELSE %]<option value="C">Child</option>[% END %]
