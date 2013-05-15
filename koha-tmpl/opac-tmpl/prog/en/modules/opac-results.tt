@@ -611,7 +611,7 @@ $(document).ready(function(){
                     [% IF ( loggedinusername ) %]
                         <a class="tag_add" id="tag_add[% SEARCH_RESULT.biblionumber %]" href="#">Add tag</a>
                         <span id="tagform[% SEARCH_RESULT.biblionumber %]" class="tag_results_input" style="display:none;">
-                          <label for="newtag[% SEARCH_RESULT.biblionumber %]">New tag(s):</label>
+                          <label for="newtag[% SEARCH_RESULT.biblionumber %]">New tag(s), separated by a comma:</label>
                           <input name="newtag[% SEARCH_RESULT.biblionumber %]" id="newtag[% SEARCH_RESULT.biblionumber %]" maxlength="100" />
                           <input name="tagbutton" class="tagbutton" title="[% SEARCH_RESULT.biblionumber %]" type="submit" value="Add" />
                           <a class="cancel_tag_add" id="cancel[% SEARCH_RESULT.biblionumber %]" href="#">(done)</a>

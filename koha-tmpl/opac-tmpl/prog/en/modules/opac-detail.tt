@@ -535,7 +535,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
         [% IF ( loggedinusername ) %]
             <a class="tag_add" id="tag_add[% biblionumber %]" href="#">Add</a>
             <form id="tagform[% biblionumber %]" method="post" action="/cgi-bin/koha/opac-tags.pl" style="display:none;">
-                <label for="newtag[% biblionumber %]">New tag(s):</label>
+                <label for="newtag[% biblionumber %]">New tag(s), separated by a comma:</label>
                 <input name="newtag[% biblionumber %]" id="newtag[% biblionumber %]" maxlength="100" type="text"/>
                 <input name="tagbutton" class="input tagbutton" title="[% biblionumber %]" type="submit" value="Add" />
                 <a class="cancel_tag_add" id="cancel[% biblionumber %]" href="#">(done)</a>
