@@ -103,7 +103,7 @@ if ( $op eq 'delete_confirm' ) {
     $template->param( NO_BOOKSELLER => 1 );
 } elsif ( $op eq 'del_basket') {
     $template->param( delete_confirm => 1 );
-    if ( C4::Context->preference("IndependantBranches") ) {
+    if ( C4::Context->preference("IndependentBranches") ) {
         my $userenv = C4::Context->userenv;
         unless ( $userenv->{flags} == 1 ) {
             my $validtest = ( $basket->{creationdate} eq '' )
@@ -192,7 +192,7 @@ if ( $op eq 'delete_confirm' ) {
     print $query->redirect('/cgi-bin/koha/acqui/basket.pl?basketno='.$basket->{'basketno'})
 } else {
     # get librarian branch...
-    if ( C4::Context->preference("IndependantBranches") ) {
+    if ( C4::Context->preference("IndependentBranches") ) {
         my $userenv = C4::Context->userenv;
         unless ( $userenv->{flags} == 1 ) {
             my $validtest = ( $basket->{creationdate} eq '' )

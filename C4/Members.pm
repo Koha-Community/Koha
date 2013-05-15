@@ -256,7 +256,7 @@ sub Search {
     # $showallbranches was not used at the time SearchMember() was mainstreamed into Search().
     # Mentioning for the reference
 
-    if ( C4::Context->preference("IndependantBranches") ) { # && !$showallbranches){
+    if ( C4::Context->preference("IndependentBranches") ) { # && !$showallbranches){
         if ( my $userenv = C4::Context->userenv ) {
             my $branch =  $userenv->{'branch'};
             if ( ($userenv->{flags} % 2 !=1) && $branch ){
@@ -2042,7 +2042,7 @@ sub GetBorrowersToExpunge {
     my $filterexpiry   = $params->{'expired_before'};
     my $filtercategory = $params->{'category_code'};
     my $filterbranch   = $params->{'branchcode'} ||
-                        ((C4::Context->preference('IndependantBranches') 
+                        ((C4::Context->preference('IndependentBranches')
                              && C4::Context->userenv 
                              && C4::Context->userenv->{flags} % 2 !=1 
                              && C4::Context->userenv->{branch})
@@ -2108,7 +2108,7 @@ I<$result> is a ref to an array which all elements are a hasref.
 
 sub GetBorrowersWhoHaveNeverBorrowed {
     my $filterbranch = shift || 
-                        ((C4::Context->preference('IndependantBranches') 
+                        ((C4::Context->preference('IndependentBranches')
                              && C4::Context->userenv 
                              && C4::Context->userenv->{flags} % 2 !=1 
                              && C4::Context->userenv->{branch})
@@ -2158,7 +2158,7 @@ sub GetBorrowersWithIssuesHistoryOlderThan {
     my $dbh  = C4::Context->dbh;
     my $date = shift ||POSIX::strftime("%Y-%m-%d",localtime());
     my $filterbranch = shift || 
-                        ((C4::Context->preference('IndependantBranches') 
+                        ((C4::Context->preference('IndependentBranches')
                              && C4::Context->userenv 
                              && C4::Context->userenv->{flags} % 2 !=1 
                              && C4::Context->userenv->{branch})

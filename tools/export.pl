@@ -118,13 +118,13 @@ my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
 );
 
 my $limit_ind_branch =
-  (      C4::Context->preference('IndependantBranches')
+  (      C4::Context->preference('IndependentBranches')
       && C4::Context->userenv
       && !( C4::Context->userenv->{flags} & 1 )
       && C4::Context->userenv->{branch} ) ? 1 : 0;
 
 my $branch = $query->param("branch") || '';
-if (   C4::Context->preference("IndependantBranches")
+if (   C4::Context->preference("IndependentBranches")
     && C4::Context->userenv
     && !( C4::Context->userenv->{flags} & 1 ) )
 {

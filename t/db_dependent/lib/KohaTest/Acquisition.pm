@@ -119,7 +119,7 @@ sub enable_independant_branches {
                          );
 
     # set a preference. There's surely a method for this, but I can't find it.
-    my $retval = C4::Context->dbh->do( q(update systempreferences set value = '1' where variable = 'IndependantBranches') );
+    my $retval = C4::Context->dbh->do( q(update systempreferences set value = '1' where variable = 'IndependentBranches') );
     ok( $retval, 'set the preference' );
     
     ok( C4::Context->userenv, 'usernev' );
@@ -133,7 +133,7 @@ sub enable_independant_branches {
 sub disable_independant_branches {
     my $self = shift;
 
-    my $retval = C4::Context->dbh->do( q(update systempreferences set value = '0' where variable = 'IndependantBranches') );
+    my $retval = C4::Context->dbh->do( q(update systempreferences set value = '0' where variable = 'IndependentBranches') );
     ok( $retval, 'set the preference back' );
 
     

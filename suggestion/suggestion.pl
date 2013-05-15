@@ -276,7 +276,7 @@ if(defined($returnsuggested) and $returnsuggested ne "noone")
 
 #branch display management
 my $branchfilter = ($displayby ne "branchcode") ? $input->param('branchcode') : '';
-my $onlymine=C4::Context->preference('IndependantBranches') && 
+my $onlymine=C4::Context->preference('IndependentBranches') &&
             C4::Context->userenv && 
             C4::Context->userenv->{flags}!=1 && 
             C4::Context->userenv->{branch};

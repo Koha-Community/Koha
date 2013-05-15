@@ -229,7 +229,7 @@ for my $curr ( @rates ) {
 }
 
 # build branches list
-my $onlymine=C4::Context->preference('IndependantBranches') && 
+my $onlymine=C4::Context->preference('IndependentBranches') &&
             C4::Context->userenv && 
             C4::Context->userenv->{flags}!=1 && 
             C4::Context->userenv->{branch};

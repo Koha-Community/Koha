@@ -318,7 +318,7 @@ foreach my $tag (sort keys %{$tagslib}) {
 	    $value =~ s/DD/$day/g;
 	}
 	$subfield_data{visibility} = "display:none;" if (($tagslib->{$tag}->{$subfield}->{hidden} > 4) || ($tagslib->{$tag}->{$subfield}->{hidden} < -4));
-	# testing branch value if IndependantBranches.
+    # testing branch value if IndependentBranches.
 
 	my $attributes_no_value = qq(tabindex="1" id="$subfield_data{id}" name="field_value" class="input_marceditor" size="67" maxlength="255" );
 	my $attributes          = qq($attributes_no_value value="$value" );
@@ -492,7 +492,7 @@ sub BuildItemsData{
 			foreach my $field (grep {$_->tag() eq $itemtagfield} $itemmarc->fields()) {
 				# loop through each subfield
 				my $itembranchcode=$field->subfield($branchtagsubfield);
-				if ($itembranchcode && C4::Context->preference("IndependantBranches")) {
+                if ($itembranchcode && C4::Context->preference("IndependentBranches")) {
 						#verifying rights
 						my $userenv = C4::Context->userenv();
 						unless (($userenv->{'flags'} == 1) or (($userenv->{'branch'} eq $itembranchcode))){

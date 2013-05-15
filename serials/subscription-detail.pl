@@ -162,7 +162,7 @@ $template->param(
     routing => C4::Context->preference("RoutingSerials"),
     totalissues => $totalissues,
     hemisphere => $hemisphere,
-    cannotedit =>(C4::Context->preference('IndependantBranches') &&
+    cannotedit =>(C4::Context->preference('IndependentBranches') &&
                 C4::Context->userenv &&
                 C4::Context->userenv->{flags} % 2 !=1  &&
                 C4::Context->userenv->{branch} && $subs->{branchcode} &&

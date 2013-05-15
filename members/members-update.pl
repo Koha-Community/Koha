@@ -42,7 +42,7 @@ my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
 );
 
 my $branch =
-  C4::Context->preference("IndependantBranches")
+  C4::Context->preference("IndependentBranches")
   && !$flags->{'superlibrarian'}
   ? C4::Context->userenv()->{'branch'}
   : undef;

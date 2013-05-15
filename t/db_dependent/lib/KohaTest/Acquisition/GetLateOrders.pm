@@ -80,7 +80,7 @@ sub one_order : Test( 29 ) {
           or diag( Data::Dumper->Dump( [ \@orders ], [ 'orders' ] ) );
     }
 
-    # set up some things necessary to make GetLateOrders use the IndependantBranches
+    # set up some things necessary to make GetLateOrders use the IndependentBranches
     $self->enable_independant_branches();    
 
     {

@@ -106,7 +106,7 @@ our ( $template, $borrowernumber, $cookie, $staffflags ) = get_template_and_user
     }
 );
 
-our $my_branch = C4::Context->preference("IndependantBranches") && !$staffflags->{'superlibrarian'}
+our $my_branch = C4::Context->preference("IndependentBranches") && !$staffflags->{'superlibrarian'}
   ?  C4::Context->userenv()->{'branch'}
   : undef;
 # we show only the TMPL_VAR names $op

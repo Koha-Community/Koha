@@ -689,7 +689,7 @@ foreach my $field (@fields) {
 						|| $subfieldvalue;
         }
 
-        if (($field->tag eq $branchtagfield) && ($subfieldcode eq $branchtagsubfield) && C4::Context->preference("IndependantBranches")) {
+        if (($field->tag eq $branchtagfield) && ($subfieldcode eq $branchtagsubfield) && C4::Context->preference("IndependentBranches")) {
             #verifying rights
             my $userenv = C4::Context->userenv();
             unless (($userenv->{'flags'} == 1) or (($userenv->{'branch'} eq $subfieldvalue))){
@@ -750,7 +750,7 @@ my $i=0;
 
 my $pref_itemcallnumber = C4::Context->preference('itemcallnumber');
 
-my $onlymine = C4::Context->preference('IndependantBranches') && 
+my $onlymine = C4::Context->preference('IndependentBranches') &&
                C4::Context->userenv                           && 
                C4::Context->userenv->{flags}!=1               && 
                C4::Context->userenv->{branch};

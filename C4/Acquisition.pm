@@ -870,7 +870,7 @@ sub GetPendingOrders {
         AND datecancellationprinted IS NULL";
     my @query_params;
     my $userenv = C4::Context->userenv;
-    if ( C4::Context->preference("IndependantBranches") ) {
+    if ( C4::Context->preference("IndependentBranches") ) {
         if ( ($userenv) && ( $userenv->{flags} != 1 ) ) {
             $strsth .= " AND (borrowers.branchcode = ?
                         or borrowers.branchcode  = '')";
@@ -1733,7 +1733,7 @@ sub GetParcel {
             AND aqorders.datereceived = ? ";
 
     my @query_params = ( $supplierid, $code, $datereceived );
-    if ( C4::Context->preference("IndependantBranches") ) {
+    if ( C4::Context->preference("IndependentBranches") ) {
         my $userenv = C4::Context->userenv;
         if ( ($userenv) && ( $userenv->{flags} != 1 ) ) {
             $strsth .= " and (borrowers.branchcode = ?
@@ -1952,7 +1952,7 @@ sub GetLateOrders {
     if ( defined $estimateddeliverydatefrom and not defined $estimateddeliverydateto ) {
         $from .= ' AND ADDDATE(aqbasket.closedate, INTERVAL aqbooksellers.deliverytime DAY) <= CAST(now() AS date)';
     }
-    if (C4::Context->preference("IndependantBranches")
+    if (C4::Context->preference("IndependentBranches")
             && C4::Context->userenv
             && C4::Context->userenv->{flags} != 1 ) {
         $from .= ' AND borrowers.branchcode LIKE ? ';
@@ -2061,7 +2061,7 @@ sub GetHistory {
     LEFT JOIN aqinvoices ON aqorders.invoiceid = aqinvoices.invoiceid";
 
     $query .= " LEFT JOIN borrowers ON aqbasket.authorisedby=borrowers.borrowernumber"
-    if ( C4::Context->preference("IndependantBranches") );
+    if ( C4::Context->preference("IndependentBranches") );
 
     $query .= " WHERE (datecancellationprinted is NULL or datecancellationprinted='0000-00-00') ";
 
@@ -2121,7 +2121,7 @@ sub GetHistory {
         push @query_params, "%$basketgroupname%";
     }
 
-    if ( C4::Context->preference("IndependantBranches") ) {
+    if ( C4::Context->preference("IndependentBranches") ) {
         my $userenv = C4::Context->userenv;
         if ( $userenv && ($userenv->{flags} || 0) != 1 ) {
             $query .= " AND (borrowers.branchcode = ? OR borrowers.branchcode ='' ) ";

@@ -38,7 +38,7 @@ my $fa = getframeworkinfo('FA');
 $template->param( fast_cataloging => 1 ) if (defined $fa);
 
 # Checking if the transfer page needs to be displayed
-$template->param( display_transfer => 1 ) if ( ($flags->{'superlibrarian'} == 1) || (C4::Context->preference("IndependantBranches") == 0) );
+$template->param( display_transfer => 1 ) if ( ($flags->{'superlibrarian'} == 1) || (C4::Context->preference("IndependentBranches") == 0) );
 
 
 output_html_with_http_headers $query, $cookie, $template->output;

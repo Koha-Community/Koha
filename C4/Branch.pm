@@ -69,7 +69,7 @@ The functions in this module deal with branches.
 
   $branches = &GetBranches();
 
-Returns informations about ALL branches, IndependantBranches Insensitive.
+Returns informations about ALL branches, IndependentBranches Insensitive.
 GetBranchInfo() returns the same information without the problems of this function 
 (namespace collision, mainly).
 
@@ -143,7 +143,7 @@ sub GetBranches {
 
 sub onlymine {
     return 
-    C4::Context->preference('IndependantBranches') &&
+    C4::Context->preference('IndependentBranches') &&
     C4::Context->userenv                           &&
     C4::Context->userenv->{flags} %2 != 1          &&
     C4::Context->userenv->{branch}                 ;

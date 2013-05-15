@@ -212,7 +212,7 @@ $bor{'borrowernumber'} = $borrowernumber;
 
 # Converts the branchcode to the branch name
 my $samebranch;
-if ( C4::Context->preference("IndependantBranches") ) {
+if ( C4::Context->preference("IndependentBranches") ) {
     my $userenv = C4::Context->userenv;
     unless ( $userenv->{flags} % 2 == 1 ) {
         $samebranch = ( $data->{'branchcode'} eq $userenv->{branch} );
@@ -338,7 +338,7 @@ my $candeleteuser;
 my $userenv = C4::Context->userenv;
 if($userenv->{flags} % 2 == 1){
     $candeleteuser = 1;
-}elsif ( C4::Context->preference("IndependantBranches") ) {
+}elsif ( C4::Context->preference("IndependentBranches") ) {
     $candeleteuser = ( $data->{'branchcode'} eq $userenv->{branch} );
 }else{
     if( C4::Auth::getuserflags( $userenv->{flags},$userenv->{number})->{borrowers} ) {

@@ -128,7 +128,7 @@ sub getletter {
 
     $branchcode ||= '';
 
-    if ( C4::Context->preference('IndependantBranches')
+    if ( C4::Context->preference('IndependentBranches')
             and $branchcode
             and C4::Context->userenv ) {
 

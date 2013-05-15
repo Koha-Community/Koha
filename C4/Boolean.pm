@@ -67,7 +67,7 @@ our %strings = (
 
 =item true_p
 
-    if ( C4::Boolean::true_p(C4::Context->preference("IndependantBranches")) ) {
+    if ( C4::Boolean::true_p(C4::Context->preference("IndependentBranches")) ) {
     ...
     }
 

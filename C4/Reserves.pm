@@ -1419,7 +1419,7 @@ be the target of an item-level hold request.
 Note that IsAvailableForItemLevelRequest() does not
 check if the staff operator is authorized to place
 a request on the item - in particular,
-this routine does not check IndependantBranches
+this routine does not check IndependentBranches
 and canreservefromotherbranches.
 
 =cut

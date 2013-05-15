@@ -73,7 +73,7 @@ if ($item) {
     push @cancel_result, $res if $res;
 }
 
-if ( C4::Context->preference('IndependantBranches') ) {
+if ( C4::Context->preference('IndependentBranches') ) {
     undef $all_branches;
 } else {
     $template->param( all_branches_link => $input->url . '?allbranches=1' )

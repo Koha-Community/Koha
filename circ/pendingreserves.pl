@@ -151,7 +151,7 @@ if ( $run_report ) {
     #    multiple patrons have a hold on an item
 
 
-    if (C4::Context->preference('IndependantBranches')){
+    if (C4::Context->preference('IndependentBranches')){
         $strsth .= " AND items.holdingbranch=? ";
         push @query_params, C4::Context->userenv->{'branch'};
     }

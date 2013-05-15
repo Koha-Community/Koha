@@ -29,7 +29,7 @@ my $PHONE             = "555-12123";
 # XXX should be randomised and checked against the database
 my $IMPOSSIBLE_CARDNUMBER = "XYZZZ999";
 
-my $INDEPENDENT_BRANCHES_PREF = 'IndependantBranches';
+my $INDEPENDENT_BRANCHES_PREF = 'IndependentBranches';
 
 # XXX make a non-commit transaction and rollback rather than insert/delete
 

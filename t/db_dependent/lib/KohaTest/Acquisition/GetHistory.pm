@@ -180,7 +180,7 @@ sub one_order : Test( 55 ) {
         is( $total_qtyreceived,  0, 'total_qtyreceived searched by from_date' );
     }
 
-    # set up some things necessary to make GetHistory use the IndependantBranches
+    # set up some things necessary to make GetHistory use the IndependentBranches
     $self->enable_independant_branches();    
 
     # just search by title here, we need to search by something.

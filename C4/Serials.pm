@@ -216,7 +216,7 @@ sub GetSerialInformation {
     my $dbh        = C4::Context->dbh;
     my $query      = qq|
         SELECT serial.*, serial.notes as sernotes, serial.status as serstatus,subscription.*,subscription.subscriptionid as subsid |;
-    if (   C4::Context->preference('IndependantBranches')
+    if (   C4::Context->preference('IndependentBranches')
         && C4::Context->userenv
         && C4::Context->userenv->{'flags'} != 1
         && C4::Context->userenv->{'branch'} ) {
@@ -321,7 +321,7 @@ sub GetSubscription {
                 aqbooksellers.name AS aqbooksellername,
                 biblio.title AS bibliotitle,
                 subscription.biblionumber as bibnum);
-    if (   C4::Context->preference('IndependantBranches')
+    if (   C4::Context->preference('IndependentBranches')
         && C4::Context->userenv
         && C4::Context->userenv->{'flags'} != 1
         && C4::Context->userenv->{'branch'} ) {
@@ -336,7 +336,7 @@ sub GetSubscription {
        WHERE subscription.subscriptionid = ?
     );
 
-    #     if (C4::Context->preference('IndependantBranches') &&
+    #     if (C4::Context->preference('IndependentBranches') &&
     #         C4::Context->userenv &&
     #         C4::Context->userenv->{'flags'} != 1){
     # #       $debug and warn "flags: ".C4::Context->userenv->{'flags'};
@@ -370,7 +370,7 @@ sub GetFullSubscription {
             biblio.title as bibliotitle,
             subscription.branchcode AS branchcode,
             subscription.subscriptionid AS subscriptionid |;
-    if (   C4::Context->preference('IndependantBranches')
+    if (   C4::Context->preference('IndependentBranches')
         && C4::Context->userenv
         && C4::Context->userenv->{'flags'} != 1
         && C4::Context->userenv->{'branch'} ) {
@@ -490,7 +490,7 @@ sub GetSubscriptionsFromBiblionumber {
         $subs->{ "numberpattern" . $subs->{numberpattern} } = 1;
         $subs->{ "status" . $subs->{'status'} }             = 1;
         $subs->{'cannotedit'} =
-          (      C4::Context->preference('IndependantBranches')
+          (      C4::Context->preference('IndependentBranches')
               && C4::Context->userenv
               && C4::Context->userenv->{flags} % 2 != 1
               && C4::Context->userenv->{branch}
@@ -530,7 +530,7 @@ sub GetFullSubscriptionsFromBiblionumber {
             biblio.title as bibliotitle,
             subscription.branchcode AS branchcode,
             subscription.subscriptionid AS subscriptionid|;
-    if (   C4::Context->preference('IndependantBranches')
+    if (   C4::Context->preference('IndependentBranches')
         && C4::Context->userenv
         && C4::Context->userenv->{'flags'} != 1
         && C4::Context->userenv->{'branch'} ) {
@@ -630,7 +630,7 @@ sub GetSubscriptions {
 
     while ( my $line = $sth->fetchrow_hashref ) {
         $line->{'cannotedit'} =
-          (      C4::Context->preference('IndependantBranches')
+          (      C4::Context->preference('IndependentBranches')
               && C4::Context->userenv
               && C4::Context->userenv->{flags} % 2 != 1
               && C4::Context->userenv->{branch}

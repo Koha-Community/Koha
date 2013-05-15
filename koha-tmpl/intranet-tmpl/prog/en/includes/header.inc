@@ -64,7 +64,7 @@
               <b class="caret"></b>
           </a>
           <ul class="dropdown-menu" role="menu" aria-labelledby="drop3">
-           [% IF ( IndependantBranches ) %]
+           [% IF ( IndependentBranches ) %]
               [% IF ( CAN_user_management || CAN_user_editcatalogue_edit_catalogue ) %]
                   <li>
                      <a class="toplinks" href="/cgi-bin/koha/circ/selectbranchprinter.pl">Set library</a>

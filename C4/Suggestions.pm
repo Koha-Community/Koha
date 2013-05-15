@@ -132,7 +132,7 @@ sub SearchSuggestion {
     }
 
     # filter on user branch
-    if ( C4::Context->preference('IndependantBranches') ) {
+    if ( C4::Context->preference('IndependentBranches') ) {
         my $userenv = C4::Context->userenv;
         if ($userenv) {
             if ( ( $userenv->{flags} % 2 ) != 1 && !$suggestion->{branchcode} )
@@ -339,7 +339,7 @@ sub GetSuggestionByStatus {
     };
 
     # filter on branch
-    if ( C4::Context->preference("IndependantBranches") || $branchcode ) {
+    if ( C4::Context->preference("IndependentBranches") || $branchcode ) {
         my $userenv = C4::Context->userenv;
         if ($userenv) {
             unless ( $userenv->{flags} % 2 == 1 ) {
@@ -389,7 +389,7 @@ sub CountSuggestion {
     my $dbh = C4::Context->dbh;
     my $sth;
     my $userenv = C4::Context->userenv;
-    if ( C4::Context->preference("IndependantBranches")
+    if ( C4::Context->preference("IndependentBranches")
         && $userenv->{flags} % 2 != 1 )
     {
         my $query = q{
