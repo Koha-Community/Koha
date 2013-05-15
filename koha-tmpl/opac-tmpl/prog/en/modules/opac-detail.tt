@@ -1459,17 +1459,17 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 [% BLOCK items_table %]
     <table class="holdingst">
         <thead><tr>
-            [% IF ( item_level_itypes ) %]<th id="item_itemtype">Item type</th>[% END %]
-            <th id="item_location">Location</th>
-            [% IF ( itemdata_ccode ) %]<th id="item_ccode">Collection</th>[% END %]
-            <th id="item_callnumber">Call number</th>
-            [% IF ( itemdata_enumchron ) %]<th id="item_enumchron">Vol info</th>[% END %]
-            [% IF ( itemdata_uri ) %]<th id="item_url">url</th>[% END %]
-            [% IF ( itemdata_copynumber ) %]<th id="item_copy">Copy</th>[% END %]
-            <th id="item_status">Status</th>
-            [% IF ( itemdata_itemnotes ) %]<th id="item_notes">Notes</th>[% END %]
-            <th id="item_datedue">Date due</th>
-            [% IF ( OPACShowBarcode ) %]<th>Barcode</th>[% END %]
+            [% IF ( item_level_itypes ) %]<th id="item_itemtype" class="itype">Item type</th>[% END %]
+            <th id="item_location" class="location">Location</th>
+            [% IF ( itemdata_ccode ) %]<th id="item_ccode" class="collection">Collection</th>[% END %]
+            <th id="item_callnumber" class="call_no">Call number</th>
+            [% IF ( itemdata_enumchron ) %]<th id="item_enumchron" class="vol_info">Vol info</th>[% END %]
+            [% IF ( itemdata_uri ) %]<th id="item_url" class="url">url</th>[% END %]
+            [% IF ( itemdata_copynumber ) %]<th id="item_copy" class="copynumber">Copy</th>[% END %]
+            <th id="item_status" class="status">Status</th>
+            [% IF ( itemdata_itemnotes ) %]<th id="item_notes" class="notes">Notes</th>[% END %]
+            <th id="item_datedue" class="date_due">Date due</th>
+            [% IF ( OPACShowBarcode ) %]<th id="item_barcode" class="barcode">Barcode</th>[% END %]
         [% IF holds_count.defined %]
             <th>Item holds</th>
         [% ELSIF show_priority %]
