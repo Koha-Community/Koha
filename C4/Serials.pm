@@ -2832,7 +2832,7 @@ sub can_edit_subscription {
     $userid ||= C4::Context->userenv->{'id'};
     my $independent_branches = C4::Context->preference('IndependentBranches');
     return 1 unless $independent_branches;
-    if( $flags % 2 == 1 # superlibrarian
+    if( C4::Context->IsSuperLibrarian()
         or C4::Auth::haspermission( $userid, {serials => 'superserials'}),
         or C4::Auth::haspermission( $userid, {serials => 'edit_subscription'}),
         or not defined $subscription->{branchcode}

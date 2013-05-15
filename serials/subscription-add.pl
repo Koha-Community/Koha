@@ -125,16 +125,14 @@ if ($op eq 'modify' || $op eq 'dup' || $op eq 'modsubscription') {
     }
 }
 
-my $userenv = C4::Context->userenv;
 my $onlymine =
      C4::Context->preference('IndependentBranches')
-  && $userenv
-  && $userenv->{flags} % 2 != 1
+  && C4::Context->userenv
+  && !C4::Context->IsSuperLibrarian
   && (
-    not C4::Auth::haspermission( $userenv->{id}, { serials => 'superserials' } )
+    not C4::Auth::haspermission( C4::Context->userenv->{id}, { serials => 'superserials' } )
   )
-  && $userenv->{branch};
-
+  && C4::Context->userenv->{branch};
 my $branches = GetBranches($onlymine);
 my $branchloop;
 for my $thisbranch (sort { $branches->{$a}->{branchname} cmp $branches->{$b}->{branchname} } keys %{$branches}) {

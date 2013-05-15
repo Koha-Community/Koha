@@ -51,13 +51,13 @@ my $sql = q(
         OR firstname LIKE ?
         OR cardnumber LIKE ? )
 );
-if (C4::Context->preference("IndependentBranches")){
-  if ( C4::Context->userenv
-      && (C4::Context->userenv->{flags} % 2) !=1
-      && C4::Context->userenv->{'branch'}
-  ){
-     $sql .= " AND borrowers.branchcode =" . $dbh->quote(C4::Context->userenv->{'branch'});
-  }
+if (   C4::Context->preference("IndependentBranches")
+    && C4::Context->userenv
+    && !C4::Context->IsSuperLibrarian()
+    && C4::Context->userenv->{'branch'} )
+{
+    $sql .= " AND borrowers.branchcode ="
+      . $dbh->quote( C4::Context->userenv->{'branch'} );
 }
 
 $sql    .= q( ORDER BY surname, firstname LIMIT 10);

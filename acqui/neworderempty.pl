@@ -230,10 +230,11 @@ for my $curr ( @rates ) {
 }
 
 # build branches list
-my $onlymine=C4::Context->preference('IndependentBranches') &&
-            C4::Context->userenv && 
-            C4::Context->userenv->{flags}!=1 && 
-            C4::Context->userenv->{branch};
+my $onlymine =
+     C4::Context->preference('IndependentBranches')
+  && C4::Context->userenv
+  && !C4::Context->IsSuperLibrarian()
+  && C4::Context->userenv->{branch};
 my $branches = GetBranches($onlymine);
 my @branchloop;
 foreach my $thisbranch ( sort {$branches->{$a}->{'branchname'} cmp $branches->{$b}->{'branchname'}} keys %$branches ) {

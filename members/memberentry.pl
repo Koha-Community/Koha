@@ -312,7 +312,7 @@ if ($op eq 'save' || $op eq 'insert'){
     }
 
   if (C4::Context->preference("IndependentBranches")) {
-    if ($userenv && $userenv->{flags} % 2 != 1){
+    unless ( C4::Context->IsSuperLibrarian() ){
       $debug and print STDERR "  $newdata{'branchcode'} : ".$userenv->{flags}.":".$userenv->{branch};
       unless (!$newdata{'branchcode'} || $userenv->{branch} eq $newdata{'branchcode'}){
         push @errors, "ERROR_branch";
@@ -449,7 +449,7 @@ if ($nok or !$nodouble){
 } 
 if (C4::Context->preference("IndependentBranches")) {
     my $userenv = C4::Context->userenv;
-    if ($userenv->{flags} % 2 != 1 && $data{'branchcode'}){
+    if ( !C4::Context->IsSuperLibrarian() && $data{'branchcode'} ) {
         unless ($userenv->{branch} eq $data{'branchcode'}){
             print $input->redirect("/cgi-bin/koha/members/members-home.pl");
             exit;

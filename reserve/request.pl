@@ -385,7 +385,7 @@ foreach my $biblionumber (@biblionumbers) {
                 if (! C4::Context->preference("canreservefromotherbranches")){
                     # cant reserve items so need to check if item homebranch and userenv branch match if not we cant reserve
                     my $userenv = C4::Context->userenv;
-                    if ( ($userenv) && ( $userenv->{flags} % 2 != 1 ) ) {
+                    unless ( C4::Context->IsSuperLibrarian ) {
                         $item->{cantreserve} = 1 if ( $item->{homebranch} ne $userenv->{branch} );
                     }
                 }

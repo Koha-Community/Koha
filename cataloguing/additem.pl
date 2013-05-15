@@ -756,10 +756,11 @@ my $i=0;
 
 my $pref_itemcallnumber = C4::Context->preference('itemcallnumber');
 
-my $onlymine = C4::Context->preference('IndependentBranches') &&
-               C4::Context->userenv                           && 
-               C4::Context->userenv->{flags}!=1               && 
-               C4::Context->userenv->{branch};
+my $onlymine =
+     C4::Context->preference('IndependentBranches')
+  && C4::Context->userenv
+  && !C4::Context->IsSuperLibrarian()
+  && C4::Context->userenv->{branch};
 my $branch = $input->param('branch') || C4::Context->userenv->{branch};
 my $branches = GetBranchesLoop($branch,$onlymine);  # build once ahead of time, instead of multiple times later.
 

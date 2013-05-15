@@ -260,7 +260,7 @@ sub Search {
     if ( C4::Context->preference("IndependentBranches") ) { # && !$showallbranches){
         if ( my $userenv = C4::Context->userenv ) {
             my $branch =  $userenv->{'branch'};
-            if ( ($userenv->{flags} % 2 !=1) && $branch ){
+            if ( !C4::Context->IsSuperLibrarian() && $branch ){
                 if (my $fr = ref $filter) {
                     if ( $fr eq "HASH" ) {
                         $filter->{branchcode} = $branch;
@@ -1979,7 +1979,7 @@ sub GetBorrowersToExpunge {
     my $filterbranch   = $params->{'branchcode'} ||
                         ((C4::Context->preference('IndependentBranches')
                              && C4::Context->userenv 
-                             && C4::Context->userenv->{flags} % 2 !=1 
+                             && !C4::Context->IsSuperLibrarian()
                              && C4::Context->userenv->{branch})
                          ? C4::Context->userenv->{branch}
                          : "");  
@@ -2045,7 +2045,7 @@ sub GetBorrowersWhoHaveNeverBorrowed {
     my $filterbranch = shift || 
                         ((C4::Context->preference('IndependentBranches')
                              && C4::Context->userenv 
-                             && C4::Context->userenv->{flags} % 2 !=1 
+                             && !C4::Context->IsSuperLibrarian()
                              && C4::Context->userenv->{branch})
                          ? C4::Context->userenv->{branch}
                          : "");  
@@ -2095,7 +2095,7 @@ sub GetBorrowersWithIssuesHistoryOlderThan {
     my $filterbranch = shift || 
                         ((C4::Context->preference('IndependentBranches')
                              && C4::Context->userenv 
-                             && C4::Context->userenv->{flags} % 2 !=1 
+                             && !C4::Context->IsSuperLibrarian()
                              && C4::Context->userenv->{branch})
                          ? C4::Context->userenv->{branch}
                          : "");  

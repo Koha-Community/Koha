@@ -1712,7 +1712,7 @@ sub SearchOrders {
 
     my $userenv = C4::Context->userenv;
     if ( C4::Context->preference("IndependentBranches") ) {
-        if ( ( $userenv ) and ( $userenv->{flags} != 1 ) ) {
+        unless ( C4::Context->IsSuperLibrarian() ) {
             $query .= q{
                 AND (
                     borrowers.branchcode = ?
@@ -1908,11 +1908,10 @@ sub GetParcel {
 
     my @query_params = ( $supplierid, $code, $datereceived );
     if ( C4::Context->preference("IndependentBranches") ) {
-        my $userenv = C4::Context->userenv;
-        if ( ($userenv) && ( $userenv->{flags} != 1 ) ) {
+        unless ( C4::Context->IsSuperLibrarian() ) {
             $strsth .= " and (borrowers.branchcode = ?
                         or borrowers.branchcode  = '')";
-            push @query_params, $userenv->{branch};
+            push @query_params, C4::Context->userenv->{branch};
         }
     }
     $strsth .= " ORDER BY aqbasket.basketno";
@@ -2122,8 +2121,7 @@ sub GetLateOrders {
         $from .= ' AND ADDDATE(aqbasket.closedate, INTERVAL aqbooksellers.deliverytime DAY) <= CAST(now() AS date)';
     }
     if (C4::Context->preference("IndependentBranches")
-            && C4::Context->userenv
-            && C4::Context->userenv->{flags} != 1 ) {
+            && !C4::Context->IsSuperLibrarian() ) {
         $from .= ' AND borrowers.branchcode LIKE ? ';
         push @query_params, C4::Context->userenv->{branch};
     }
@@ -2319,10 +2317,9 @@ sub GetHistory {
     }
 
     if ( C4::Context->preference("IndependentBranches") ) {
-        my $userenv = C4::Context->userenv;
-        if ( $userenv && ($userenv->{flags} || 0) != 1 ) {
+        unless ( C4::Context->IsSuperLibrarian() ) {
             $query .= " AND (borrowers.branchcode = ? OR borrowers.branchcode ='' ) ";
-            push @query_params, $userenv->{branch};
+            push @query_params, C4::Context->userenv->{branch};
         }
     }
     $query .= " ORDER BY id";
