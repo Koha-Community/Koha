@@ -1,0 +1,83 @@
+#!/usr/bin/perl
+
+# Copyright 2013 ByWater
+#
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 2 of the License, or (at your option) any later
+# version.
+#
+# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with Koha; if not, write to the Free Software Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+=head1 NAME
+
+svc/overdrive_proxy: Proxy OAuth'd requests to OverDrive
+
+=head1 SYNOPSIS
+
+svc/overdrive_proxy/libraries/9001 -> https://api.overdrive.com/v1/libraries/9001
+
+=head1 DESCRIPTION
+
+This service proxies incoming requests to the OverDrive OAuth API, to keep the
+JS side from having to deal with cross-origin/authentication issues.
+
+=cut
+
+use strict;
+use warnings;
+
+use CGI qw(-oldstyle_urls);
+use JSON;
+
+use C4::Context;
+use C4::External::OverDrive;
+use C4::Output;
+
+my $query = new CGI;
+
+my $token;
+
+if ( !IsOverDriveEnabled() || !( $token = GetOverDriveToken() ) ) {
+    print $query->header(
+        -status => '400 Bad Request',
+        -content
+    );
+
+    print to_json({
+        error => 'invalid_client',
+        error_description => 'OverDrive login failed'
+    });
+
+    exit;
+}
+
+my $request = HTTP::Request::Common::GET( "https://api.overdrive.com/v1" . $query->path_info . '?' . $query->query_string );
+$request->header( Authorization => $token );
+
+my $ua = LWP::UserAgent->new( "Koha " . C4::Context->KOHAVERSION );
+
+my $response = $ua->request( $request ) ;
+if ( $response->code eq '500' ) {
+    print $query->header(
+        -status => '500 Internal Server Error'
+    );
+
+    warn "OverDrive request failed: " . $response->message;
+    print to_json({
+        error => 'invalid_client',
+        error_description => 'OverDrive request failed'
+    });
+
+    exit;
+}
+
+output_with_http_headers $query, undef, $response->content, 'json', $response->status_line;

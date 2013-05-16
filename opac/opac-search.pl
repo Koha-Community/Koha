@@ -51,6 +51,7 @@ use C4::Tags qw(get_tags);
 use C4::Branch; # GetBranches
 use C4::SocialData;
 use C4::Ratings;
+use C4::External::OverDrive;
 
 use POSIX qw(ceil floor strftime);
 use URI::Escape;
@@ -885,6 +886,11 @@ $template->{VARS}->{DidYouMean} =
 $template->{VARS}->{IDreamBooksReviews} = C4::Context->preference('IDreamBooksReviews');
 $template->{VARS}->{IDreamBooksReadometer} = C4::Context->preference('IDreamBooksReadometer');
 $template->{VARS}->{IDreamBooksResults} = C4::Context->preference('IDreamBooksResults');
+
+if ($offset == 0 && IsOverDriveEnabled()) {
+    $template->param(OverDriveEnabled => 1);
+    $template->param(OverDriveLibraryID => C4::Context->preference('OverDriveLibraryID'));
+}
 
     $template->param( borrowernumber    => $borrowernumber);
 output_with_http_headers $cgi, $cookie, $template->output, $content_type;

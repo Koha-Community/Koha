@@ -16,6 +16,7 @@
   <link rel="stylesheet" type="text/css" href="[% themelang %]/css/jquery.rating.css" />
 [% END %]
 
+<script type="text/javascript" src="[% themelang %]/js/overdrive.js"></script>
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
 [% IF ( OpacHighlightedWords ) %]<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.highlight-3.js"></script>
 [% END %]<script type="text/javascript">
@@ -251,7 +252,10 @@ $(document).ready(function(){
 [% END %]
     $("#holdDetails").hide();
 
-[% IF ( query_desc ) %][% IF ( OpacHighlightedWords ) %]var query_desc = "[% query_desc |replace("'", "\'") |replace('\n', '\\n') |replace('\r', '\\r') |html %]";
+[% IF ( query_desc ) %]
+    var query_desc = "[% query_desc |replace("'", "\'") |replace('\n', '\\n') |replace('\r', '\\r') |html %]";
+    var querystring = "[% querystring |replace("'", "\'") |replace('\n', '\\n') |replace('\r', '\\r') |html %]";
+    [% IF ( OpacHighlightedWords ) %]
         q_array = query_desc.split(" ");
         // ensure that we don't have "" at the end of the array, which can
         // break the highlighter
@@ -260,7 +264,27 @@ $(document).ready(function(){
         }
         highlightOn();
         $("#highlight_toggle_on" ).hide().click(function() {highlightOn() ;});
-        $("#highlight_toggle_off").show().click(function() {highlightOff();});[% END %][% END %]
+        $("#highlight_toggle_off").show().click(function() {highlightOff();});
+    [% END %]
+    [% IF ( OverDriveEnabled ) %]
+        var $overdrive_results = $( '<span id="overdrive-results">Searching OverDrive... <img class="throbber" src="/opac-tmpl/lib/jquery/plugins/themes/classic/throbber.gif" /></span>' );
+        $( '#breadcrumbs p' ).eq(0)
+            .append( ' ' )
+            .append( $overdrive_results );
+        KOHA.OverDrive.Search( "[% OverDriveLibraryID %]", querystring, 1, 0, function( data ) {
+            if ( data.error ) {
+                $overdrive_results.html( 'Error searching OverDrive collection' );
+                return;
+            }
+
+            if ( data.totalItems ) {
+                $overdrive_results.html( 'Found <a href="/cgi-bin/koha/opac-overdrive-search.pl?q=' + escape( querystring ) + '">' + data.totalItems + ' results</a> in OverDrive collection' );
+            } else {
+                $overdrive_results.remove();
+            }
+        } );
+    [% END %]
+[% END %]
 
 [% IF ( TagsInputEnabled && loggedinusername ) %]
             $("#tagsel_tag").click(function(){

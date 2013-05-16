@@ -1,0 +1,161 @@
+[% INCLUDE 'doc-head-open.inc' %]
+[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; OverDrive search for '[% q | html %]'
+[% INCLUDE 'doc-head-close.inc' %]
+<script type="text/javascript" src="[% themelang %]/js/overdrive.js"></script>
+<script type="text/javascript">
+var querystring = "[% q |replace( "'", "\'" ) |replace( '\n', '\\n' ) |replace( '\r', '\\r' ) |html %]";
+var results_per_page = [% OPACnumSearchResults %];
+
+function fetch_availability( prod, $tr ) {
+    var $availability_summary = $( '<span class="results_summary"></span>' );
+    $tr.find( '.info' ).append( $availability_summary );
+    $availability_summary.html( '<span class="label">Availability: </span> Loading...' );
+
+    KOHA.OverDrive.Get(
+        prod.links.availability.href,
+        {},
+        function ( data ) {
+            if ( data.error ) return;
+
+            $availability_summary.html( '<span class="label">Copies available: </span><span class="available"><strong>' +  data.copiesAvailable + '</strong> out of ' + data.copiesOwned + '</span>' );
+
+            if ( data.numberOfHolds ) {
+                $availability_summary.find( '.available' ).append( ', waiting holds: <strong>' + data.numberOfHolds + '</strong>' );
+            }
+
+            $tr.find( '.info' ).append( '<span class="results_summary actions"><span class="label">Actions: </span><a href="http://' + prod.contentDetails[0].href + '" ' + ( data.copiesAvailable ? ' class="addtocart">Check out' : ' class="hold">Place hold' ) + '</a></span>' );
+        }
+    );
+}
+
+function search( offset ) {
+    $( '#overdrive-status' ).html( 'Searching OverDrive... <img class="throbber" src="/opac-tmpl/lib/jquery/plugins/themes/classic/throbber.gif" /></span>' );
+
+    KOHA.OverDrive.Search( "[% OverDriveLibraryID %]", querystring, results_per_page, offset, function( data ) {
+        if ( data.error ) {
+            $( '#overdrive-status' ).html( '<strong class="unavailable">Error searching OverDrive collection.</strong>' );
+            return;
+        }
+
+        if ( !data.totalItems ) {
+            $( '#overdrive-status' ).html( '<strong>No results found in the library\'s OverDrive collection.</strong>' );
+            return;
+        }
+
+        $( '#results tbody' ).empty();
+
+        $( '#overdrive-status' ).html( '<strong>Found ' + data.totalItems + ' results in the library\'s OverDrive collection.</strong>' );
+
+        for ( var i = 0; data.products[i]; i++ ) {
+            var prod = data.products[i];
+            var results = [];
+
+            results.push( '<tr>' );
+
+            results.push( '<td class="info"><a class="title" href="http://', prod.contentDetails[0].href, '">' );
+            results.push( prod.title );
+            if ( prod.subtitle ) results.push( ', ', prod.subtitle );
+            results.push( '</a>' );
+            results.push( '<p>by ', prod.primaryCreator.name, '</p>' );
+            results.push( '<span class="results_summary"><span class="label">Type: </span>', prod.mediaType, '</span>' );
+            if ( prod.starRating ) results.push( '<span class="results_summary"><span class="label">Average rating: <img src="[% themelang %]/../images/Star', Math.round( parseInt( prod.starRating )), '.gif" title="" style="max-height: 15px; vertical-align: bottom"/></span>' );
+            results.push( '</td>' );
+
+            results.push( '<td>' );
+            if ( prod.images.thumbnail ) {
+                results.push( '<a href="http://', prod.contentDetails[0].href, '">' );
+                results.push( '<img class="thumbnail" src="', prod.images.thumbnail.href, '" />' );
+                results.push( '</a>' );
+            }
+            results.push( '</td>' );
+
+            results.push( '</tr>' );
+            var $tr = $( results.join( '' ));
+            $( '#results tbody' ).append( $tr );
+
+            fetch_availability( prod, $tr );
+        }
+
+        $( '#results tr:odd' ).addClass( 'highlight' );
+
+        var pages = [];
+        var cur_page = offset / results_per_page;
+        var max_page = Math.floor( data.totalItems / results_per_page );
+
+        if ( cur_page != 0 ) {
+            pages.push( '<a class="nav" href="#" data-offset="' + (offset - results_per_page) + '">&lt;&lt; Previous</a>' );
+        }
+
+        for ( var page = Math.max( 0, cur_page - 9 ); page <= Math.min( max_page, cur_page + 9 ); page++ ) {
+            if ( page == cur_page ) {
+                pages.push( ' <span class="current">' + ( page + 1 ) + '</span>' );
+            } else {
+                pages.push( ' <a class="nav" href="#" data-offset="' + ( page * results_per_page ) + '">' + ( page + 1 ) + '</a>' );
+            }
+        }
+
+        if ( cur_page < max_page ) {
+            pages.push( ' <a class="nav" href="#" data-offset="' + (offset + results_per_page) + '">Next >></a>' );
+        }
+
+        if ( pages.length > 1 ) $( '#top-pages, #bottom-pages' ).find( '.pages' ).html( pages.join( '' ) );
+    } );
+}
+
+$( document ).ready( function() {
+    $( '#breadcrumbs p' )
+        .append( ' ' )
+        .append( '<span id="overdrive-status"></span>' );
+
+    $( document ).on( 'click', 'a.nav', function() {
+        search( $( this ).data( 'offset' ) );
+        return false;
+    });
+
+    search( 0 );
+} );
+</script>
+<style>
+.actions a.addtocart {
+    display: inline;
+}
+</style>
+</head>
+<body>
+[% IF ( OpacNav ) %]
+<div id="doc3" class="yui-t1">
+[% ELSE %]
+<div id="doc3" class="yui-t7">
+[% END %]
+   <div id="bd">
+[% INCLUDE 'masthead.inc' %]
+
+	<h1>OverDrive search for '[% q | html %]'</h1>
+    <div id="breadcrumbs">
+        <p></p>
+    </div>
+
+	<div id="yui-main"><div class="yui-b searchresults">
+        <div id="top-pages">
+            <div class="pages">
+            </div>
+        </div>
+        <table id="results">
+            <tbody>
+            </tbody>
+        </table>
+        <div id="bottom-pages">
+            <div class="pages">
+            </div>
+        </div>
+     </div></div>
+
+[% IF ( OpacNav ) %]
+<div class="yui-b"><div id="opacnav" class="container">
+[% INCLUDE 'navigation.inc' %]
+</div></div>
+[% END %]
+
+
+</div>
+[% INCLUDE 'opac-bottom.inc' %]

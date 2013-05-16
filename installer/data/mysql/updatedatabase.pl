@@ -7089,6 +7089,21 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.13.00.XXX";
+if(CheckVersion($DBversion)) {
+    $dbh->do(
+"INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES('OverDriveClientKey','','Client key for OverDrive integration','30','Free')"
+    );
+    $dbh->do(
+"INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES('OverDriveClientSecret','','Client key for OverDrive integration','30','YesNo')"
+    );
+    $dbh->do(
+"INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES('OpacDriveLibraryID','','Library ID for OverDrive integration','','Integer')"
+    );
+    print "Upgrade to $DBversion done (Bug 10320 - Show results from library's OverDrive collection in OPAC search)\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)
