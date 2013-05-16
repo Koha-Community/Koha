@@ -1773,21 +1773,36 @@ sub AddReturn {
         }
 
         if ($borrowernumber) {
-        if( C4::Context->preference('CalculateFinesOnReturn') && $issue->{'overdue'}){
+            if( C4::Context->preference('CalculateFinesOnReturn') && $issue->{'overdue'}){
             # we only need to calculate and change the fines if we want to do that on return
             # Should be on for hourly loans
-                my ( $amount, $type, $unitcounttotal ) = C4::Overdues::CalcFine( $item, $borrower->{categorycode},$branch, $datedue, $today );
+                my $control = C4::Context->preference('CircControl');
+                my $control_branchcode =
+                    ( $control eq 'ItemHomeLibrary' ) ? $item->{homebranch}
+                  : ( $control eq 'PatronLibrary' )   ? $borrower->{branchcode}
+                  :                                     $issue->{branchcode};
+
+                my ( $amount, $type, $unitcounttotal ) =
+                  C4::Overdues::CalcFine( $item, $borrower->{categorycode},
+                    $control_branchcode, $datedue, $today );
+
                 $type ||= q{};
-        if ( $amount > 0 && ( C4::Context->preference('finesMode') eq 'production' )) {
-          C4::Overdues::UpdateFine(
-              $issue->{itemnumber},
-              $issue->{borrowernumber},
-                      $amount, $type, output_pref($datedue)
-              );
-        }
+
+                if ( $amount > 0
+                    && C4::Context->preference('finesMode') eq 'production' )
+                {
+                    C4::Overdues::UpdateFine( $issue->{itemnumber},
+                        $issue->{borrowernumber},
+                        $amount, $type, output_pref($datedue) );
+                }
             }
-            MarkIssueReturned($borrowernumber, $item->{'itemnumber'}, $circControlBranch, '', $borrower->{'privacy'});
-            $messages->{'WasReturned'} = 1;    # FIXME is the "= 1" right?  This could be the borrower hash.
+
+            MarkIssueReturned( $borrowernumber, $item->{'itemnumber'},
+                $circControlBranch, '', $borrower->{'privacy'} );
+
+            # FIXME is the "= 1" right?  This could be the borrower hash.
+            $messages->{'WasReturned'} = 1;
+
         }
 
         ModItem({ onloan => undef }, $issue->{'biblionumber'}, $item->{'itemnumber'});
