@@ -21,20 +21,11 @@ sub methods : Test( 1 ) {
                        GetIssuesIteminfo
                        UpdateFine 
                        BorType 
-                       ReplacementCost 
                        GetFine 
-                       ReplacementCost2 
-                       GetNextIdNotify 
                        NumberNotifyId
                        AmountNotify
-                       UpdateAccountLines 
                        GetItems 
-                       GetOverdueDelays 
-                       CheckAccountLineLevelInfo 
-                       GetOverduerules
                        CheckBorrowerDebarred
-                       CheckExistantNotifyid 
-                       CheckAccountLineItemInfo 
                        CheckItemNotify 
                        GetOverduesForBranch 
                        AddNotifyLine 

@@ -41,20 +41,10 @@ BEGIN {
         &CalcFine
         &Getoverdues
         &checkoverdues
-        &CheckAccountLineLevelInfo
-        &CheckAccountLineItemInfo
-        &CheckExistantNotifyid
-        &GetNextIdNotify
-        &GetNotifyId
         &NumberNotifyId
         &AmountNotify
-        &UpdateAccountLines
         &UpdateFine
-        &GetOverdueDelays
-        &GetOverduerules
         &GetFine
-        &CreateItemAccountLine
-        &ReplacementCost2
         
         &CheckItemNotify
         &GetOverduesForBranch
@@ -79,7 +69,6 @@ BEGIN {
 	# subs to move to Biblio.pm
 	push @EXPORT, qw(
         &GetItems
-        &ReplacementCost
 	);
 }
 
@@ -630,7 +619,6 @@ category he or she belongs to.
 
 =cut
 
-#'
 sub BorType {
     my ($borrowernumber) = @_;
     my $dbh              = C4::Context->dbh;
@@ -641,27 +629,6 @@ sub BorType {
     );
     $sth->execute($borrowernumber);
     return $sth->fetchrow_hashref;
-}
-
-=head2 ReplacementCost
-
-    $cost = &ReplacementCost($itemnumber);
-
-Returns the replacement cost of the item with the given item number.
-
-=cut
-
-#'
-sub ReplacementCost {
-    my ($itemnum) = @_;
-    my $dbh       = C4::Context->dbh;
-    my $sth       =
-      $dbh->prepare("Select replacementprice from items where itemnumber=?");
-    $sth->execute($itemnum);
-
-    # FIXME - Use fetchrow_array or a slice.
-    my $data = $sth->fetchrow_hashref;
-    return ( $data->{'replacementprice'} );
 }
 
 =head2 GetFine
@@ -676,7 +643,6 @@ C<$borrowernumber> is the borrowernumber
 
 =cut 
 
-
 sub GetFine {
     my ( $itemnum, $borrowernumber ) = @_;
     my $dbh   = C4::Context->dbh();
@@ -690,61 +656,6 @@ sub GetFine {
         return $fine->{fineamount};
     }
     return 0;
-}
-
-sub ReplacementCost2 {
-    my ( $itemnum, $borrowernumber ) = @_;
-    my $dbh   = C4::Context->dbh();
-    my $query = "SELECT amountoutstanding
-         FROM accountlines
-             WHERE accounttype like 'L'
-         AND amountoutstanding > 0
-         AND itemnumber = ?
-         AND borrowernumber= ?";
-    my $sth = $dbh->prepare($query);
-    $sth->execute( $itemnum, $borrowernumber );
-    my $data = $sth->fetchrow_hashref();
-    return ( $data->{'amountoutstanding'} );
-}
-
-
-=head2 GetNextIdNotify
-
-    ($result) = &GetNextIdNotify($reference);
-
-Returns the new file number
-
-C<$result> contains the next file number
-
-C<$reference> contains the beggining of file number
-
-=cut
-
-sub GetNextIdNotify {
-    my ($reference) = @_;
-    my $query = qq|SELECT max(notify_id)
-         FROM accountlines
-         WHERE notify_id  like \"$reference%\"
-         |;
-
-    # AND borrowernumber=?|;
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare($query);
-    $sth->execute();
-    my $result = $sth->fetchrow;
-    my $count;
-    if ( $result eq '' ) {
-        ( $result = $reference . "01" );
-    }
-    else {
-        $count = substr( $result, 6 ) + 1;
-
-        if ( $count < 10 ) {
-            ( $count = "0" . $count );
-        }
-        $result = $reference . $count;
-    }
-    return $result;
 }
 
 =head2 NumberNotifyId
@@ -799,135 +710,6 @@ sub AmountNotify{
     return ($totalnotify);
 }
 
-
-=head2 GetNotifyId
-
-    ($notify_id) = &GetNotifyId($borrowernumber,$itemnumber);
-
-Returns the file number per borrower and itemnumber
-
-C<$borrowernumber> is a reference-to-hash whose keys are all of the fields
-from the items tables of the Koha database. Thus,
-
-C<$itemnumber> contains the borrower categorycode
-
-C<$notify_id> contains the file number for the borrower number nad item number
-
-=cut
-
-sub GetNotifyId {
-    my ( $borrowernumber, $itemnumber ) = @_;
-    my $query = qq|SELECT notify_id
-           FROM accountlines
-           WHERE borrowernumber=?
-          AND itemnumber=?
-           AND (accounttype='FU' or accounttype='O')|;
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare($query);
-    $sth->execute( $borrowernumber, $itemnumber );
-    my ($notify_id) = $sth->fetchrow;
-    $sth->finish;
-    return ($notify_id);
-}
-
-=head2 CreateItemAccountLine
-
-    () = &CreateItemAccountLine($borrowernumber, $itemnumber, $date, $amount,
-                               $description, $accounttype, $amountoutstanding, 
-                               $timestamp, $notify_id, $level);
-
-update the account lines with file number or with file level
-
-C<$items> is a reference-to-hash whose keys are all of the fields
-from the items tables of the Koha database. Thus,
-
-C<$itemnumber> contains the item number
-
-C<$borrowernumber> contains the borrower number
-
-C<$date> contains the date of the day
-
-C<$amount> contains item price
-
-C<$description> contains the descritpion of accounttype 
-
-C<$accounttype> contains the account type
-
-C<$amountoutstanding> contains the $amountoutstanding 
-
-C<$timestamp> contains the timestamp with time and the date of the day
-
-C<$notify_id> contains the file number
-
-C<$level> contains the file level
-
-=cut
-
-sub CreateItemAccountLine {
-    my (
-        $borrowernumber, $itemnumber,  $date,              $amount,
-        $description,    $accounttype, $amountoutstanding, $timestamp,
-        $notify_id,      $level
-    ) = @_;
-    my $dbh         = C4::Context->dbh;
-    my $nextaccntno = C4::Accounts::getnextacctno($borrowernumber);
-    my $query       = "INSERT into accountlines
-         (borrowernumber,accountno,itemnumber,date,amount,description,accounttype,amountoutstanding,timestamp,notify_id,notify_level)
-          VALUES
-             (?,?,?,?,?,?,?,?,?,?,?)";
-
-    my $sth = $dbh->prepare($query);
-    $sth->execute(
-        $borrowernumber, $nextaccntno,       $itemnumber,
-        $date,           $amount,            $description,
-        $accounttype,    $amountoutstanding, $timestamp,
-        $notify_id,      $level
-    );
-}
-
-=head2 UpdateAccountLines
-
-    () = &UpdateAccountLines($notify_id,$notify_level,$borrowernumber,$itemnumber);
-
-update the account lines with file number or with file level
-
-C<$items> is a reference-to-hash whose keys are all of the fields
-from the items tables of the Koha database. Thus,
-
-C<$itemnumber> contains the item number
-
-C<$notify_id> contains the file number
-
-C<$notify_level> contains the file level
-
-C<$borrowernumber> contains the borrowernumber
-
-=cut
-
-sub UpdateAccountLines {
-    my ( $notify_id, $notify_level, $borrowernumber, $itemnumber ) = @_;
-    my $query;
-    if ( $notify_id eq '' ) {
-        $query = qq|UPDATE accountlines
-    SET  notify_level=?
-    WHERE borrowernumber=? AND itemnumber=?
-    AND (accounttype='FU' or accounttype='O')|;
-    } else {
-        $query = qq|UPDATE accountlines
-     SET notify_id=?, notify_level=?
-   WHERE borrowernumber=?
-    AND itemnumber=?
-    AND (accounttype='FU' or accounttype='O')|;
-    }
-
-    my $sth = C4::Context->dbh->prepare($query);
-    if ( $notify_id eq '' ) {
-        $sth->execute( $notify_level, $borrowernumber, $itemnumber );
-    } else {
-        $sth->execute( $notify_id, $notify_level, $borrowernumber, $itemnumber );
-    }
-}
-
 =head2 GetItems
 
     ($items) = &GetItems($itemnumber);
@@ -957,29 +739,6 @@ sub GetItems {
     return ($items);
 }
 
-=head2 GetOverdueDelays
-
-    (@delays) = &GetOverdueDelays($categorycode);
-
-Returns the list of all delays from overduerules.
-
-C<@delays> it's an array contains the three delays from overduerules table
-
-C<$categorycode> contains the borrower categorycode
-
-=cut
-
-sub GetOverdueDelays {
-    my ($category) = @_;
-    my $query      = qq|SELECT delay1,delay2,delay3
-                FROM overduerules
-                WHERE categorycode=?|;
-    my $sth = C4::Context->dbh->prepare($query);
-    $sth->execute($category);
-    my (@delays) = $sth->fetchrow_array;
-    return (@delays);
-}
-
 =head2 GetBranchcodesWithOverdueRules
 
     my @branchcodes = C4::Overdues::GetBranchcodesWithOverdueRules()
@@ -999,67 +758,6 @@ sub GetBranchcodesWithOverdueRules {
     }
     return @branches;
 }
-
-=head2 CheckAccountLineLevelInfo
-
-    ($exist) = &CheckAccountLineLevelInfo($borrowernumber,$itemnumber,$accounttype,notify_level);
-
-Check and Returns the list of all overdue books.
-
-C<$exist> contains number of line in accounlines
-with the same .biblionumber,itemnumber,accounttype,and notify_level
-
-C<$borrowernumber> contains the borrower number
-
-C<$itemnumber> contains item number
-
-C<$accounttype> contains account type
-
-C<$notify_level> contains the accountline level 
-
-
-=cut
-
-sub CheckAccountLineLevelInfo {
-    my ( $borrowernumber, $itemnumber, $level ) = @_;
-    my $dbh   = C4::Context->dbh;
-    my $query = qq|SELECT count(*)
-            FROM accountlines
-            WHERE borrowernumber =?
-            AND itemnumber = ?
-            AND notify_level=?|;
-    my $sth = $dbh->prepare($query);
-    $sth->execute( $borrowernumber, $itemnumber, $level );
-    my ($exist) = $sth->fetchrow;
-    return ($exist);
-}
-
-=head2 GetOverduerules
-
-    ($overduerules) = &GetOverduerules($categorycode);
-
-Returns the value of borrowers (debarred or not) with notify level
-
-C<$overduerules> return value of debbraed field in overduerules table
-
-C<$category> contains the borrower categorycode
-
-C<$notify_level> contains the notify level
-
-=cut
-
-sub GetOverduerules {
-    my ( $category, $notify_level ) = @_;
-    my $dbh   = C4::Context->dbh;
-    my $query = qq|SELECT debarred$notify_level
-                     FROM overduerules
-                    WHERE categorycode=?|;
-    my $sth = $dbh->prepare($query);
-    $sth->execute($category);
-    my ($overduerules) = $sth->fetchrow;
-    return ($overduerules);
-}
-
 
 =head2 CheckBorrowerDebarred
 
@@ -1089,66 +787,6 @@ sub CheckBorrowerDebarred {
     return $debarredstatus;
 }
 
-
-=head2 CheckExistantNotifyid
-
-    ($exist) = &CheckExistantNotifyid($borrowernumber,$itemnumber,$accounttype,$notify_id);
-
-Check and Returns the notify id if exist else return 0.
-
-C<$exist> contains a notify_id 
-
-C<$borrowernumber> contains the borrower number
-
-C<$date_due> contains the date of item return 
-
-
-=cut
-
-sub CheckExistantNotifyid {
-    my ( $borrowernumber, $date_due ) = @_;
-    my $dbh   = C4::Context->dbh;
-    my $query = qq|SELECT notify_id FROM accountlines
-             LEFT JOIN issues ON issues.itemnumber= accountlines.itemnumber
-             WHERE accountlines.borrowernumber =?
-              AND date_due = ?|;
-    my $sth = $dbh->prepare($query);
-    $sth->execute( $borrowernumber, $date_due );
-    return $sth->fetchrow || 0;
-}
-
-=head2 CheckAccountLineItemInfo
-
-    ($exist) = &CheckAccountLineItemInfo($borrowernumber,$itemnumber,$accounttype,$notify_id);
-
-Check and Returns the list of all overdue items from the same file number(notify_id).
-
-C<$exist> contains number of line in accounlines
-with the same .biblionumber,itemnumber,accounttype,notify_id
-
-C<$borrowernumber> contains the borrower number
-
-C<$itemnumber> contains item number
-
-C<$accounttype> contains account type
-
-C<$notify_id> contains the file number 
-
-=cut
-
-sub CheckAccountLineItemInfo {
-    my ( $borrowernumber, $itemnumber, $accounttype, $notify_id ) = @_;
-    my $dbh   = C4::Context->dbh;
-    my $query = qq|SELECT count(*) FROM accountlines
-             WHERE borrowernumber =?
-             AND itemnumber = ?
-              AND accounttype= ?
-            AND notify_id = ?|;
-    my $sth = $dbh->prepare($query);
-    $sth->execute( $borrowernumber, $itemnumber, $accounttype, $notify_id );
-    my ($exist) = $sth->fetchrow;
-    return ($exist);
-}
 
 =head2 CheckItemNotify
 
