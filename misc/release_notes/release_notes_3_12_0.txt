@@ -1,5 +1,5 @@
-RELEASE NOTES FOR KOHA 3.12.0-beta3
-02 May 2013
+RELEASE NOTES FOR KOHA 3.12.0-rc2
+16 May 2013
 ========================================================================
 
 Koha is the first free and open source software library automation package 
@@ -9,9 +9,9 @@ The website for the Koha project is
 
     http://koha-community.org/
 
-Koha 3.12.0-beta3 can be downloaded from:
+Koha 3.12.0-rc2 can be downloaded from:
 
-    http://download.koha-community.org/koha-3.12.00-beta3.tar.gz
+    http://download.koha-community.org/koha-3.12.00-rc2.tar.gz
 
 Installation instructions can be found at:
 
@@ -20,14 +20,14 @@ Installation instructions can be found at:
     OR in the INSTALL files that come in the tarball
 
 
-This is a beta release of Koha 3.12 and is not yet ready for use in
-production. It has many new features compared to 3.10.
+This is a release candidate for Koha 3.12 and may not be ready yet  for
+use in production. It has many new features compared to 3.10.
 
 
-It includes 21 features, 159 enhancements and 399 bugfixes.
+It includes 21 features, 160 enhancements and 432 bugfixes.
 
 
-New features in 3.12.0-beta3
+New features in 3.12.0-rc2
 ======================
 
 Architecture, internals, and plumbing
@@ -82,7 +82,7 @@ Tools
 	7804	Add Koha Plugin System
 
 
-Enhancements in 3.12.0-beta3
+Enhancements in 3.12.0-rc2
 ======================
 
 About
@@ -172,6 +172,7 @@ OPAC
 	8712	We should use WAI-ARIA guidelines to help with accessibility -OMNIBUS bug
 	9068	Babelthèque: New podcasts area
 	9257	Add "groups" to normal search pulldown
+	10100	OPAC News dates need an CSS handle (class)
 
 Packaging
 ----------
@@ -317,7 +318,7 @@ Test Suite
 	8300	Koha should have mechanized testing suite
 
 
-Critical bugs fixed in 3.12.0-beta3
+Critical bugs fixed in 3.12.0-rc2
 ======================
 
 (this list include all bugfixes since the previous major version. Most of them have already been fixed in maintainance releases)
@@ -334,6 +335,7 @@ Acquisitions
 	4266	major	Encumbrance and expenditure not used in code
 	7228	major	Can't order more than 1 when importing all from staged file
 	7449	major	Billingplace and freedeliveryplace not saved when creating a new basketgroup
+	7593	major	Merging bib records loses connection to order line
 	8853	major	Clicking basketgroup name in closed basketgroups reopens it
 	9236	major	Deleting an order when receiving redirects to closed basket
 	9281	major	Impossible to create an order from a staged file
@@ -354,10 +356,15 @@ Architecture, internals, and plumbing
 	9136	major	C4::Tags not Plack-compatible
 	9434	major	Introduce new tied cache system
 	10074	major	Encoding problems for login and installer
+	10176	major	Invalid URLs in 'Refine Search Results' when it uses UNICODE symbols
 
 Authentication
 ----------
 	10019	major	Encoding problem with utf8 chars in userid
+
+Browser compatibility
+----------
+	10108	major	Can't print more than one page of overdues
 
 bugs.koha-community.org
 ----------
@@ -377,6 +384,8 @@ Circulation
 	9933	blocker	Changing/editing circulation rules for specific library affects all libraries
 	9380	critical	Branch not recording right on writeoff
 	9953	major	When OpacMaintenance breaks lifting debarment
+	10030	major	MaxFines checks against amount, not amount outstanding
+	10079	major	HomeOrHoldingBranch should not control who can delete when IndependantBranches is enabled
 
 Command-line Utilities
 ----------
@@ -386,12 +395,15 @@ Command-line Utilities
 Database
 ----------
 	9919	blocker	Syntax error in kohastructure.sql
+	10185	blocker	Updatedatabase.pl remove all reserves
 
 Hold requests
 ----------
 	9922	critical	Holds queue shows home library with AutomaticReturn
 	5801	major	C4::Circulation::_GetCircControlBranch should not be used in opac-reserve.pl
 	8294	major	Enumeration should show in copy specific hold menu
+	9575	major	Serious Holds Problem with IndependantBranches
+	10166	major	Can't place holds on multiple titles if one or more are un-holdable
 
 I18N/L10N
 ----------
@@ -426,12 +438,15 @@ Notices
 OPAC
 ----------
 	10072	critical	"my suggestions" always says "There are no pending purchase suggestions."
+	10217	critical	Make sure direct links to detail views work when there is no session
 	8883	major	Opacsmallimage doesn't work in ccsr theme
 	8979	major	"News" does not work with CCSR
 	9147	major	OPAC hidden fields are not hidden in ISBD view
+	9679	major	Can't place hold from cart in CCSR
 	9711	major	OPACPopupAuthorsSearch  ugly in CSSR
 	9995	major	For reference items no longer listed in XSLT result lists
 	10070	major	History of anonymous searches is not kept
+	10201	major	Old OPAC patron update system should be removed
 
 Packaging
 ----------
@@ -458,6 +473,7 @@ Searching
 	9341	major	Problem with UNIMARC authors facets
 	9395	major	Problem with callnumber and standard number search in OPAC and Staff Client
 	9620	major	IncludeSeeFromInSearches ON and data in $9 subfields can break indexing
+	9961	major	Truncation and QueryAutoTruncate not working properly with new QueryParser
 
 Serials
 ----------
@@ -504,7 +520,7 @@ Z39.50 / SRU / OpenSearch Servers
 	9986	major	Two fixes on Z3950 Search
 
 
-Other bugs fixed in 3.12.0-beta3
+Other bugs fixed in 3.12.0-rc2
 ======================
 
 (this list include all bugfixes since the previous major version. Most of them have already been fixed in maintainance releases)
@@ -558,8 +574,10 @@ Architecture, internals, and plumbing
 	9292	minor	Remove dead code related to 'publictype'
 	9401	minor	Javascript used for tags handling wants access to CGISESSID cookie
 	9582	minor	Unused code in members/pay.pl
+	10054	minor	When SingleBranchMode is enabled, allow superlibrarians to set logged in library
 	10143	minor	Fix FSF address in license headers
 	9609	trivial	Rebuild zebra reports double numbers for exported records with -z option
+	10156	trivial	Fix usr/bin/perl path for get_report_social_data.pl
 
 Authentication
 ----------
@@ -579,6 +597,7 @@ Cataloging
 	9377	normal	Itemtype in duplicate biblio search
 	9497	normal	Make it easier to add to the the list of possible encodings for Z39.50 servers and add ISO 8859-1
 	9523	normal	Trying to import staged marc records where a matched bib has been deleted caused the import to hang
+	10225	normal	If an item isn't editable, don't show the onclick Edit/Delete menu
 	9019	minor	ILS-DI: GetRecords should return item fields in marcxml
 	9207	minor	Improve z39.50 speed slowdowns for sites with many records
 	9353	minor	Missing subfields on MARC21 frameworks
@@ -605,6 +624,7 @@ Circulation
 Command-line Utilities
 ----------
 	2013	normal	New Overdues.pm breaks fines2.pl
+	8840	normal	Ubuntu-pkg-check.sh fix and extend functionality
 	9496	normal	Rebuild_zebra.pl should handle invalid XML records better
 	9885	normal	Passwords generated by command line scripts are weak
 	9104	minor	Country in CSV in overdue_notices.pl
@@ -614,6 +634,7 @@ Command-line Utilities
 
 Database
 ----------
+	9681	normal	Add some indexes in database
 	9745	trivial	Don't nuke translated permissions with changes introduced in bug 9382
 
 Documentation
@@ -648,6 +669,7 @@ I18N/L10N
 	9818	normal	"Overdue Fines Cap ($)" should not use $ (I18N)
 	10017	normal	Opac CCSR template do not cope well with right-to-left languages
 	10083	normal	In Transit string doesn't get translated in the staff interface
+	10214	normal	Malformed syspref.po file
 	9056	minor	Add more translations to table language_descriptions
 	9493	minor	Confirmations for user holds in opac are not translatable
 	9020	trivial	Translate new permissions for 3.10
@@ -712,6 +734,7 @@ OPAC
 	9970	normal	Add datepicker widget default configuration to OPAC patron entry form
 	10026	normal	OPAC cart not showing location anymore
 	10107	normal	Opacbookbag shouldn't prevent from adding items to a list in the OPAC
+	10204	normal	Patron image no longer appears in the OPAC
 	4862	minor	"Browse by subject" is misnamed
 	7657	minor	Google and OpenLibrary image conflict
 	8981	minor	Remove Nonpublic General Note from OPAC authorities display
@@ -737,13 +760,19 @@ Packaging
 	9260	normal	Koha-run-backups complains "[: 97: missing ]"
 	9890	normal	Fix the new plugin system for package installs
 	10041	normal	Provide a koha-translate script to aid package users on installing translations
+	10094	normal	Koha-list should have an --disabled option
 	10101	normal	Koha-enable error handling
 	10104	normal	Koha-disable error handling
 	10144	normal	Koha-start-zebra error handling
+	10146	normal	Koha-stop-zebra error handling
 	10149	normal	Koha-restart-zebra error handling
+	10150	normal	Koha-email-disable error handling
+	10157	normal	Koha-email-enable error handling
+	10159	normal	Koha-rebuild-zebra error handling
 	9592	minor	Package dependency updates for master
 	9784	minor	Koha-shell missing from koha-common man page
 	9802	minor	Add test case to verify package man pages are well formatted
+	10084	minor	YUI path wrong in CCSR theme with packages
 
 Patrons
 ----------
@@ -789,8 +818,10 @@ Self checkout
 Serials
 ----------
 	7608	normal	Manual history is always 'enabled'
+	8896	normal	Delete serials no more missing from missinglist
 	9323	normal	Untranslatable string in serials search
 	9391	normal	Issues on serial collection page no longer show status
+	10183	normal	Serials collection table is displayed with a single pixel before and after
 	9222	minor	Manual history reversed in subscription-detail.pl
 	9229	minor	Branch code instead of name in subscription-detail.pl
 	9947	minor	Creating item for received serial prefills enumchron subfield
@@ -825,7 +856,9 @@ System Administration
 
 Templates
 ----------
+	6329	normal	Patron categories should show which fields are required
 	8068	normal	Acq stats refers to budgets when it should be funds
+	8278	normal	Replace YUI autocomplete in UNIMARC 210c plugin
 	8986	normal	Batch patron modification template corrections
 	9073	normal	Download option from the cart should match the menu button in lists
 	9108	normal	Add uk/euro date sort filter to pages which require it
@@ -838,6 +871,7 @@ Templates
 	9554	normal	Single quote in didyoumean
 	9555	normal	Template files contain single quote strings
 	9583	normal	OPAC cart button display problem in Chromium
+	9680	normal	Cart aligned right in CCSR
 	9695	normal	Use alphabet system preference on page used to browse patrons for patron card batches
 	9697	normal	Replace YUI buttons on the patron cards batch edit page with Bootstrap
 	9737	normal	Local Covers sometimes appear then disappear on OPAC Search Results/Lists
@@ -854,8 +888,10 @@ Templates
 	9945	normal	Pretty icon display in authorised values configuration
 	10023	normal	Degree notation in acq
 	10044	normal	Doubled up paging on order receive
+	10134	normal	Set XSLT usage ON as default, for new Koha installs
 	10145	normal	The acquisition details block is badly placed
 	10153	normal	Patron header search form is too wide
+	10196	normal	Items table partially hidden in marc view in ccsr
 	5648	minor	Icons clumping together
 	8899	minor	Remove unused CSS declarations from staff client CSS
 	9196	minor	Authorities editor overlapping box
@@ -886,6 +922,7 @@ Templates
 	10002	trivial	Don't include line breaks in strings that are translated
 	10008	trivial	Serials search results 'Opened' tab should be 'Open'
 	10040	trivial	Capitalization wrong on alert when deleting subfields from authority frameworks
+	10233	trivial	Toolbar background missing from staff client catalogue page
 
 Test Suite
 ----------
@@ -919,7 +956,7 @@ Z39.50 / SRU / OpenSearch Servers
 	9520	minor	Update default LOC Z39.50 target
 
 
-New sysprefs in 3.12.0-beta3
+New sysprefs in 3.12.0-rc2
 ======================
 
   * AllowHoldsOnPatronsPossessions
@@ -927,18 +964,18 @@ New sysprefs in 3.12.0-beta3
   * DisplayIconsXSLT
   * DisplayOPACiconsXSLT
   * FinesIncludeGracePeriod
-  * HighlightOwnItemsOnOPAC
-  * HighlightOwnItemsOnOPACWhich
   * HTML5MediaEnabled
   * HTML5MediaExtensions
+  * HighlightOwnItemsOnOPAC
+  * HighlightOwnItemsOnOPACWhich
   * IDreamBooksReadometer
   * IDreamBooksResults
   * IDreamBooksReviews
   * IntranetNumbersPreferPhrase
   * ManInvInNoissuesCharge
   * NotesBlacklist
-  * OpacItemLocation
   * OPACNumbersPreferPhrase
+  * OpacItemLocation
   * OpacSeparateHoldings
   * OpacSeparateHoldingsBranch
   * PatronSelfRegistrationAdditionalInstructions
@@ -996,24 +1033,24 @@ interface are available in this release for the following languages:
 
 
   * English (USA)
-  * Arabic (92%)
-  * Armenian (100%)
+  * Arabic (91%)
+  * Armenian (94%)
   * Chinese (China) (84%)
-  * Chinese (Taiwan) (95%)
-  * Danish (78%)
-  * English (New Zealand) (95%)
-  * French (93%)
-  * French (Canada) (65%)
+  * Chinese (Taiwan) (94%)
+  * Danish (100%)
+  * English (New Zealand) (94%)
+  * French (91%)
+  * French (Canada) (61%)
   * German (100%)
-  * German (Switzerland) (100%)
-  * Greek (59%)
-  * Italian (96%)
-  * Norwegian Bokmål (62%)
-  * Portuguese (99%)
-  * Portuguese (Brazil) (95%)
-  * Slovak (100%)
-  * Spanish (94%)
-  * Turkish (100%)
+  * German (Switzerland) (94%)
+  * Greek (56%)
+  * Italian (95%)
+  * Norwegian Bokmål (64%)
+  * Portuguese (93%)
+  * Portuguese (Brazil) (90%)
+  * Slovak (99%)
+  * Spanish (98%)
+  * Turkish (98%)
 
 
 Partial translations are available for various other languages.
@@ -1063,7 +1100,7 @@ Credits
 ======================
 
 We thank the following libraries who are known to have sponsored
-new features in Koha 3.12.0-beta3:
+new features in Koha 3.12.0-rc2:
   * Arcadia Public Library
   * Athens County Public Libraries
   * BdP de la Meuse
@@ -1086,40 +1123,41 @@ new features in Koha 3.12.0-beta3:
   * VOKAL
   * Washoe County Library System
 
-We thank the following individuals who contributed patches to Koha 3.12.0-beta3.
-  *     26	Tomas Cohen Arazi
+We thank the following individuals who contributed patches to Koha 3.12.0-rc2.
+  *     33	Tomas Cohen Arazi
   *      1	Alex Arnaud
   *      1	Edmund Balnaves
   *      1	Stefano Bargioni
-  *      3	D Ruth Bavousett
-  *    607	Jared Camins-Esakov
+  *      4	D Ruth Bavousett
+  *    613	Jared Camins-Esakov
   *      9	Colin Campbell
   *      1	Barry Cannon
   *      7	Galen Charlton
-  *     16	David Cook
-  *     28	Chris Cormack
+  *     17	David Cook
+  *     29	Chris Cormack
   *      4	Christophe Croullebois
   *      2	Hugh Davenport
   *      1	Elliott Davis
   *      2	Stéphane Delaune
+  *      1	Frédéric Demians
   *      1	Srikanth Dhondi
-  *     84	Jonathan Druart
+  *     87	Jonathan Druart
   *     24	Nicole Engard
-  *     16	Magnus Enger
+  *     18	Magnus Enger
   *     13	Vitor FERNANDES
   *     24	Katrin Fischer
   *      3	Corey Fuimaono
   *      3	Michael Hafen
   *      1	Chris Hall
-  *     74	Kyle M Hall
+  *     78	Kyle M Hall
   *      2	Kristina D.C. Hoeppner
   *      1	Rolando Isidoro
   *      6	Mason James
   *      3	Srdjan Jankovic
   *      5	Peter Crellan Kelly
   *     21	Bernardo Gonzalez Kriegel
-  *    174	Owen Leonard
-  *     30	Julian Maurice
+  *    187	Owen Leonard
+  *     32	Julian Maurice
   *      1	Melia Meggs
   *      1	Matthias Meusburger
   *      4	Sophie Meynieux
@@ -1128,49 +1166,51 @@ We thank the following individuals who contributed patches to Koha 3.12.0-beta3.
   *      7	Dobrica Pavlinusic
   *      1	Maxime Pelletier
   *      1	Fred Pierre
-  *     17	Paul Poulain
-  *      6	Karam Qubsi
+  *     18	Paul Poulain
+  *      7	Karam Qubsi
   *      1	Romina Racca
   *      3	MJ Ray
   *     15	Liz Rea
   *      1	Thatcher Rea
   *      2	Martin Renvoize
-  *     35	Marcel de Rooy
+  *     37	Marcel de Rooy
   *     53	Fridolyn SOMERS
-  *      7	Mathieu Saby
-  *     15	Adrien Saurat
+  *      9	Mathieu Saby
+  *     16	Adrien Saurat
   *     16	Robin Sheat
   *      1	Will Stokes
   *      1	ByWater Migration Support
   *      1	Zeno Tajoli
-  *      2	Lyon3 Team
+  *      3	Lyon3 Team
   *      5	Mirko Tietgen
+  *      1	Mark Tompsett
   *      1	Ed Veal
   *      2	Marc Veron
   *      2	Aaron Wells
   *      1	Jen Zajac
   *      1	koha-preprod
 
-We thank the following companies who contributed patches to Koha 3.12.0-beta3
-  *     174 ACPL                                                                                          
+We thank the following companies who contributed patches to Koha 3.12.0-rc2
+  *     187 ACPL                                                                                          
   *      24 BSZ BW                                                                                         
-  *     211 BibLibre                                                                                    
+  *     218 BibLibre                                                                                    
   *      11 BigBallOfWax                                                                          
-  *     102 ByWater-Solutions                                                                   
-  *     607 C & P Bibliography                                                                    
-  *      64 Catalyst                                                                                 
+  *     106 ByWater-Solutions                                                                   
+  *     613 C & P Bibliography                                                                    
+  *      65 Catalyst                                                                                 
   *       7 Equinox                                                                                   
   *       1 Foundations                                                                              
   *       6 KohaAloha                                                                                  
   *       1 Libeo                                                                                       
   *       1 Libeo                                                                                          
-  *      16 Libriotech                                                                                 
+  *      18 Libriotech                                                                                 
   *      11 PTFS-Europe                                                                              
-  *      17 Prosentient Systems
-  *      35 Rijksmuseum                                                                               
+  *      18 Prosentient Systems
+  *      37 Rijksmuseum                                                                               
   *       3 Software.coop                                                                             
-  *       2 Université Jean Moulin Lyon 3
-  *       7 Université Rennes 2
+  *       1 Tamil                                                                                           
+  *       3 Université Jean Moulin Lyon 3
+  *       9 Université Rennes 2
   *       5 abunchofthings.net
   *       1 cineca.it
   *       2 davenport.net.nz
@@ -1181,11 +1221,11 @@ We thank the following companies who contributed patches to Koha 3.12.0-beta3
   *       7 rot13.org                                                                                      
   *       1 smfpl.org
   *       3 tech.washk12.org
-  *      62 unidentified
+  *      72 unidentified
   *       2 veron.ch
 
 We also especially thank the following individuals who tested patches
-for Koha 3.12.0-beta3.
+for Koha 3.12.0-rc2.
   *       1 Koha Team Lyon 3
   *       4 Pierre Angot
   *      10 Tomas Cohen Arazi
@@ -1196,50 +1236,51 @@ for Koha 3.12.0-beta3.
   *       3 Brendan
   *       2 Broust
   *       1 Corinne Bulac
-  *     967 Jared Camins-Esakov
+  *    1057 Jared Camins-Esakov
   *       1 Colin Campbell
-  *      34 Galen Charlton
+  *      36 Galen Charlton
   *      10 David Cook
-  *     121 Chris Cormack
+  *     124 Chris Cormack
   *       3 Hugh Davenport
   *      31 Elliott Davis
   *       4 Frédéric Demians
   *       2 Srikanth Dhondi
-  *     249 Jonathan Druart
+  *     251 Jonathan Druart
   *       1 Jonathan Druarth
-  *       5 Frédéric Durand
-  *      25 Nicole C. Engard
-  *      11 Magnus Enger
+  *       1 Frédéric Durand
+  *       4 Frederic Durand
+  *      32 Nicole C. Engard
+  *      14 Magnus Enger
   *       1 Vitor FERNANDES
   *       1 Vitor Fernandes
-  *     351 Katrin Fischer
-  *     135 Kyle M Hall
+  *     382 Katrin Fischer
+  *     141 Kyle M Hall
   *       2 Claire Hernandez
   *       3 Rolando Isodoro
-  *      33 Mason James
-  *     127 Bernardo Gonzalez Kriegel
-  *      97 Owen Leonard
+  *      35 Mason James
+  *     133 Bernardo Gonzalez Kriegel
+  *     103 Owen Leonard
   *       7 Julian Maurice
   *      26 Melia Meggs
   *       1 Sophie Meynieux
   *       1 Pascale Nalon
   *      19 Chris Nighswonger
   *       3 Dobrica Pavlinusic
-  *      79 Paul Poulain
+  *      80 Paul Poulain
   *       2 Karam Qubsi
   *       3 MJ Ray
   *      19 Liz Rea
   *       1 Martin Renvoize
-  *      73 Marcel de Rooy
+  *      77 Marcel de Rooy
   *       1 M. de Rooy
   *       2 Fridolyn SOMERS
   *       1 Marc Sabin
   *      10 Mathieu Saby
   *       1 Adrien Saurat
-  *       4 Robin Sheat
+  *       8 Robin Sheat
   *       2 Delaye Stephane
   *       1 Zeno Tajoli
-  *      16 Mirko Tietgen
+  *      20 Mirko Tietgen
   *       1 Ed Veal
   *      12 Marc Veron
   *       2 Cedric Vita
@@ -1276,4 +1317,4 @@ tracker at
 He rau ringa e oti ai.
 (Many hands finish the work)
 
-##### Autogenerated release notes updated last on 02 May 2013 03:01:53 Z #####
+##### Autogenerated release notes updated last on 16 May 2013 02:09:47 Z #####
