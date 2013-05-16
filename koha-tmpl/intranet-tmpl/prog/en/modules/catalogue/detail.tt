@@ -315,9 +315,7 @@ function verify_images() {
 						: due [% itemloo.datedue %]
 						</span>
                 [% ELSIF ( itemloo.transfertwhen ) %]
-                           In transit from [% itemloo.transfertfrom %],
-                           to [% itemloo.transfertto %], since [% itemloo.transfertwhen %]
-							<!-- FIXME: the "since" clause is redundant w/ lastseen field -->
+                    <span class="intransit">In transit from [% itemloo.transfertfrom %] to [% itemloo.transfertto %] since [% itemloo.transfertwhen %]</span>
                 [% END %]
 
                 [% IF ( itemloo.itemlost ) %]
