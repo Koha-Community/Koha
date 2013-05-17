@@ -151,5 +151,6 @@ $template->param(
     supplier       => ( $booksellerid || $supplier ),
     count          => $supplier_count,
 );
+$template->{VARS}->{'allbaskets'} = $allbaskets;
 
 output_html_with_http_headers $query, $cookie, $template->output;
