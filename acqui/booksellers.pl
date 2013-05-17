@@ -75,6 +75,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 #parameters
 my $supplier = $query->param('supplier');
 my $booksellerid = $query->param('booksellerid');
+my $allbaskets= $query->param('allbaskets')||0;
 my @suppliers;
 
 if ($booksellerid) {
@@ -105,7 +106,7 @@ my $userbranch = $userenv->{branch};
 my $loop_suppliers = [];
 
 for my $vendor (@suppliers) {
-    my $baskets = GetBasketsInfosByBookseller( $vendor->{id} );
+    my $baskets = GetBasketsInfosByBookseller( $vendor->{id}, $allbaskets );
 
     my $loop_basket = [];
 
