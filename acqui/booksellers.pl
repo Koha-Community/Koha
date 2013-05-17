@@ -151,5 +151,6 @@ $template->param(
     count          => $supplier_count,
     dateformat     => C4::Context->preference('dateformat'),
 );
+$template->{VARS}->{'allbaskets'} = $allbaskets;
 
 output_html_with_http_headers $query, $cookie, $template->output;
