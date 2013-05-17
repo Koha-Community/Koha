@@ -751,7 +751,7 @@ sub _remove_stopwords {
     my @stopwords_removed;
 
     # phrase and exact-qualified indexes shouldn't have stopwords removed
-    if ( $index !~ m/phr|ext/ ) {
+    if ( $index !~ m/,(phr|ext)/ ) {
 
 # remove stopwords from operand : parse all stopwords & remove them (case insensitive)
 #       we use IsAlpha unicode definition, to deal correctly with diacritics.
@@ -1386,7 +1386,7 @@ sub buildQuery {
 
                 # Set default structure attribute (word list)
                 my $struct_attr = q{};
-                unless ( $indexes_set || !$index || $index =~ /(st-|phr|ext|wrdl|nb|ns)/ ) {
+                unless ( $indexes_set || !$index || $index =~ /,(st-|phr|ext|wrdl)/ || $index =~ /^(nb|ns)$/ ) {
                     $struct_attr = ",wrdl";
                 }
 
@@ -1404,7 +1404,7 @@ sub buildQuery {
                 }
 
                 if ($auto_truncation){
-					unless ( $index =~ /(st-|phr|ext)/ ) {
+					unless ( $index =~ /,(st-|phr|ext)/ ) {
 						#FIXME only valid with LTR scripts
 						$operand=join(" ",map{
 											(index($_,"*")>0?"$_":"$_*")
