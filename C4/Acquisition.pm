@@ -477,7 +477,7 @@ Returns in a arrayref of hashref all about booksellers baskets, plus:
 =cut
 
 sub GetBasketsInfosByBookseller {
-    my ($supplierid) = @_;
+    my ($supplierid, $allbaskets) = @_;
 
     return unless $supplierid;
 
@@ -494,10 +494,12 @@ sub GetBasketsInfosByBookseller {
           ) AS expected_items
         FROM aqbasket
           LEFT JOIN aqorders ON aqorders.basketno = aqbasket.basketno
-        WHERE booksellerid = ? AND ( aqorders.quantity > aqorders.quantityreceived OR quantityreceived IS NULL)
-         AND datecancellationprinted IS NULL
-        GROUP BY aqbasket.basketno
-    };
+        WHERE booksellerid = ?};
+    if(!$allbaskets) {
+        $query.=" AND (closedate IS NULL OR (aqorders.quantity > aqorders.quantityreceived AND datecancellationprinted IS NULL))";
+    }
+    $query.=" GROUP BY aqbasket.basketno";
+
     my $sth = $dbh->prepare($query);
     $sth->execute($supplierid);
     return $sth->fetchall_arrayref({});
