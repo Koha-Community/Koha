@@ -131,6 +131,8 @@ BEGIN {
         &ReserveSlip
         &ToggleSuspend
         &SuspendAll
+
+        &GetReservesControlBranch
     );
     @EXPORT_OK = qw( MergeHolds );
 }    
@@ -898,7 +900,7 @@ sub CheckReserves {
                 if ( $res->{'priority'} && $res->{'priority'} < $priority ) {
                     my $borrowerinfo=C4::Members::GetMember(borrowernumber => $res->{'borrowernumber'});
                     my $iteminfo=C4::Items::GetItem($itemnumber);
-                    my $branch=C4::Circulation::_GetCircControlBranch($iteminfo,$borrowerinfo);
+                    my $branch = GetReservesControlBranch( $iteminfo, $borrowerinfo );
                     my $branchitemrule = C4::Circulation::GetBranchItemRule($branch,$iteminfo->{'itype'});
                     next if ($branchitemrule->{'holdallowed'} == 0);
                     next if (($branchitemrule->{'holdallowed'} == 1) && ($branch ne $borrowerinfo->{'branchcode'}));
@@ -2181,6 +2183,32 @@ sub ReserveSlip {
             'items'       => $reserve->{itemnumber},
         },
     );
+}
+
+=head2 GetReservesControlBranch
+
+  my $reserves_control_branch = GetReservesControlBranch($item, $borrower);
+
+  Return the branchcode to be used to determine which reserves
+  policy applies to a transaction.
+
+  C<$item> is a hashref for an item. Only 'homebranch' is used.
+
+  C<$borrower> is a hashref to borrower. Only 'branchcode' is used.
+
+=cut
+
+sub GetReservesControlBranch {
+    my ( $item, $borrower ) = @_;
+
+    my $reserves_control = C4::Context->preference('ReservesControlBranch');
+
+    my $branchcode =
+        ( $reserves_control eq 'ItemHomeLibrary' ) ? $item->{'homebranch'}
+      : ( $reserves_control eq 'PatronLibrary' )   ? $borrower->{'branchcode'}
+      :                                              undef;
+
+    return $branchcode;
 }
 
 =head1 AUTHOR

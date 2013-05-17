@@ -2,7 +2,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 4;
+use Test::More tests => 6;
 use MARC::Record;
 
 use C4::Branch;
@@ -76,3 +76,20 @@ is($status, "Reserved", "CheckReserves Test 2");
 
 ($status, $reserve, $all_reserves) = CheckReserves(undef, $barcode);
 is($status, "Reserved", "CheckReserves Test 3");
+
+my $ReservesControlBranch = C4::Context->preference('ReservesControlBranch');
+C4::Context->set_preference( 'ReservesControlBranch', 'ItemHomeLibrary' );
+ok(
+    'ItemHomeLib' eq GetReservesControlBranch(
+        { homebranch => 'ItemHomeLib' },
+        { branchcode => 'PatronHomeLib' }
+    ), "GetReservesControlBranch returns item home branch when set to ItemHomeLibrary"
+);
+C4::Context->set_preference( 'ReservesControlBranch', 'PatronLibrary' );
+ok(
+    'PatronHomeLib' eq GetReservesControlBranch(
+        { homebranch => 'ItemHomeLib' },
+        { branchcode => 'PatronHomeLib' }
+    ), "GetReservesControlBranch returns patron home branch when set to PatronLibrary"
+);
+C4::Context->set_preference( 'ReservesControlBranch', $ReservesControlBranch );
