@@ -56,7 +56,7 @@ use C4::Bookseller qw/GetBookSellerFromId/;
 use C4::Budgets qw/ConvertCurrency/;
 use C4::Acquisition qw/CloseBasketgroup ReOpenBasketgroup GetOrders GetBasketsByBasketgroup GetBasketsByBookseller ModBasketgroup NewBasketgroup DelBasketgroup GetBasketgroups ModBasket GetBasketgroup GetBasket GetBasketGroupAsCSV/;
 use C4::Bookseller qw/GetBookSellerFromId/;
-use C4::Branch qw/GetBranches GetBranchName/;
+use C4::Branch qw/GetBranches/;
 use C4::Members qw/GetMember/;
 
 our $input=new CGI;
@@ -156,8 +156,6 @@ sub displaybasketgroups {
     my $baskets = shift;
     if (scalar @$basketgroups != 0) {
         foreach my $basketgroup (@$basketgroups){
-            $basketgroup -> {'billingplacename'} = GetBranchName($basketgroup -> {'billingplace'});
-            $basketgroup -> {'deliveryplacename'} = GetBranchName($basketgroup -> {'deliveryplace'});
             my $i = 0;
             my $basketsqty = 0;
             while($i < scalar(@$baskets)){

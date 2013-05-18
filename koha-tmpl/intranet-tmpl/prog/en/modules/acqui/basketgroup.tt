@@ -1,4 +1,4 @@
-[% INCLUDE 'doc-head-open.inc' %]
+[% USE KohaBranchName %] [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Basket grouping for [% booksellername |html %]</title>
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
 [% INCLUDE 'doc-head-close.inc' %]
@@ -265,8 +265,8 @@ function submitForm(form) {
 												[% END %]
 						</td>
                                     <td>[% basketgroup.id %]</td>
-                                    <td>[% basketgroup.billingplacename %]</td>
-                                    <td>[% IF (basketgroup.freedeliveryplace) %]Free delivery place[% ELSE %][% basketgroup.deliveryplacename %][% END %]</td>
+                                    <td>[% basketgroup.billingplace | $KohaBranchName %]</td>
+                                    <td>[% IF (basketgroup.freedeliveryplace) %]Free delivery place[% ELSE %][% basketgroup.deliveryplace | $KohaBranchName %][% END %]</td>
                                     <td>[% basketgroup.basketsqty %]</td>
 							<td>
 								<input type="button" onclick="closeandprint([% basketgroup.id %])" value="Close and print" />
@@ -303,8 +303,8 @@ function submitForm(form) {
 										[% END %]
 					</td>
                                     <td>[% basketgroup.id %]</td>
-                                    <td>[% basketgroup.billingplacename %]</td>
-                                    <td>[% IF (basketgroup.freedeliveryplace) %]Free delivery place[% ELSE %][% basketgroup.deliveryplacename %][% END %]</td>
+                                    <td>[% basketgroup.billingplace | $KohaBranchName %]</td>
+                                    <td>[% IF (basketgroup.freedeliveryplace) %]Free delivery place[% ELSE %][% basketgroup.deliveryplace | $KohaBranchName %][% END %]</td>
                                     <td>[% basketgroup.basketsqty %]</td>
 					<td>
 							<form action="/cgi-bin/koha/acqui/basketgroup.pl" method="get"><input type="hidden" name="op" value="reopen" /><input type="hidden" name="booksellerid" value="[% basketgroup.booksellerid %]" /><input type="hidden" name="basketgroupid" value="[% basketgroup.id %]" /><input type="submit" value="Reopen" /></form>
