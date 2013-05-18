@@ -10,7 +10,7 @@ use POSIX qw(strftime);
 
 use C4::Bookseller qw( GetBookSellerFromId );
 
-use Test::More tests => 41;
+use Test::More tests => 37;
 
 BEGIN {
     use_ok('C4::Acquisition');
@@ -31,23 +31,6 @@ my $supplierid = 1;
 my $grouped    = 0;
 my $orders = GetPendingOrders( $supplierid, $grouped );
 isa_ok( $orders, 'ARRAY' );
-
-# testing GetOrdersByBiblionumber
-# result should be undef if no params
-my @ordersbybiblionumber = GetOrdersByBiblionumber();
-is(@ordersbybiblionumber,0,'GetOrdersByBiblionumber : no argument, return undef');
-# TODO : create 2 orders using the same biblionumber, and check the result of GetOrdersByBiblionumber
-# if a record is used in at least one order, result should be an array with at least one element
-SKIP: {
-   skip 'No Orders, cannot test GetOrdersByBiblionumber', 3 unless( scalar @$orders );
-   my $testorder = @$orders[0];
-   my $testbiblio = $testorder->{'biblionumber'};
-   my @listorders = GetOrdersByBiblionumber($testbiblio);
-   ok( @listorders ,'GetOrdersByBiblionumber : result is defined' );
-   ok( scalar (@listorders) >0,'GetOrdersByBiblionumber : result contains at least one element' );
-   my @matched_biblios = grep {$_->{biblionumber} == $testbiblio} @listorders;
-   ok ( @matched_biblios == @listorders, "all orders match");
-}
 
 my @lateorders = GetLateOrders(0);
 SKIP: {
