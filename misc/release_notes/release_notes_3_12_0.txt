@@ -1,5 +1,5 @@
-RELEASE NOTES FOR KOHA 3.12.0-rc2
-16 May 2013
+RELEASE NOTES FOR KOHA 3.12.0
+18 May 2013
 ========================================================================
 
 Koha is the first free and open source software library automation package 
@@ -9,9 +9,9 @@ The website for the Koha project is
 
     http://koha-community.org/
 
-Koha 3.12.0-rc2 can be downloaded from:
+Koha 3.12.0 can be downloaded from:
 
-    http://download.koha-community.org/koha-3.12.00-rc2.tar.gz
+    http://download.koha-community.org/koha-3.12.00.tar.gz
 
 Installation instructions can be found at:
 
@@ -20,14 +20,13 @@ Installation instructions can be found at:
     OR in the INSTALL files that come in the tarball
 
 
-This is a release candidate for Koha 3.12 and may not be ready yet  for
-use in production. It has many new features compared to 3.10.
+Koha 3.12.0 is a major release with many new features compared to Koha 3.10.
 
 
-It includes 21 features, 160 enhancements and 432 bugfixes.
+It includes 21 features, 160 enhancements and 436 bugfixes.
 
 
-New features in 3.12.0-rc2
+New features in 3.12.0
 ======================
 
 Architecture, internals, and plumbing
@@ -82,7 +81,7 @@ Tools
 	7804	Add Koha Plugin System
 
 
-Enhancements in 3.12.0-rc2
+Enhancements in 3.12.0
 ======================
 
 About
@@ -318,7 +317,7 @@ Test Suite
 	8300	Koha should have mechanized testing suite
 
 
-Critical bugs fixed in 3.12.0-rc2
+Critical bugs fixed in 3.12.0
 ======================
 
 (this list include all bugfixes since the previous major version. Most of them have already been fixed in maintainance releases)
@@ -520,7 +519,7 @@ Z39.50 / SRU / OpenSearch Servers
 	9986	major	Two fixes on Z3950 Search
 
 
-Other bugs fixed in 3.12.0-rc2
+Other bugs fixed in 3.12.0
 ======================
 
 (this list include all bugfixes since the previous major version. Most of them have already been fixed in maintainance releases)
@@ -543,10 +542,12 @@ Acquisitions
 	9168	normal	Software error when filtering in receipt summary
 	9280	normal	Bad price calculation when filling a basket with staged records
 	9506	normal	Values are false in the generated pdf for basketgroups
+	9824	normal	Hide basket with no expected items in basket list by bookseller
 	9937	normal	Routines introduced for creating a subscription from an order need unit tests.
 	10065	normal	Style invoice edit form according to standard structure
 	10115	normal	Hiding advanced search in Orders search tab removes plus button
 	10152	normal	Default sorting wrong in parcels.pl
+	10270	normal	GetOrdersByBiblionumber needs better unit tests
 	9116	minor	Code cleaning: Remove some useless temp variables
 	9226	minor	Wrong branch filter after suggestion creation
 	9364	minor	Wrong billing/delivery addresses when creating a basket
@@ -735,6 +736,7 @@ OPAC
 	10026	normal	OPAC cart not showing location anymore
 	10107	normal	Opacbookbag shouldn't prevent from adding items to a list in the OPAC
 	10204	normal	Patron image no longer appears in the OPAC
+	10266	normal	Restricted status doesn't show in OPAC
 	4862	minor	"Browse by subject" is misnamed
 	7657	minor	Google and OpenLibrary image conflict
 	8981	minor	Remove Nonpublic General Note from OPAC authorities display
@@ -769,6 +771,7 @@ Packaging
 	10150	normal	Koha-email-disable error handling
 	10157	normal	Koha-email-enable error handling
 	10159	normal	Koha-rebuild-zebra error handling
+	10259	normal	Koha-*-zebra scripts are expected to run without warnings if no instance name passed
 	9592	minor	Package dependency updates for master
 	9784	minor	Koha-shell missing from koha-common man page
 	9802	minor	Add test case to verify package man pages are well formatted
@@ -956,7 +959,7 @@ Z39.50 / SRU / OpenSearch Servers
 	9520	minor	Update default LOC Z39.50 target
 
 
-New sysprefs in 3.12.0-rc2
+New sysprefs in 3.12.0
 ======================
 
   * AllowHoldsOnPatronsPossessions
@@ -964,18 +967,18 @@ New sysprefs in 3.12.0-rc2
   * DisplayIconsXSLT
   * DisplayOPACiconsXSLT
   * FinesIncludeGracePeriod
-  * HTML5MediaEnabled
-  * HTML5MediaExtensions
   * HighlightOwnItemsOnOPAC
   * HighlightOwnItemsOnOPACWhich
+  * HTML5MediaEnabled
+  * HTML5MediaExtensions
   * IDreamBooksReadometer
   * IDreamBooksResults
   * IDreamBooksReviews
   * IntranetNumbersPreferPhrase
   * ManInvInNoissuesCharge
   * NotesBlacklist
-  * OPACNumbersPreferPhrase
   * OpacItemLocation
+  * OPACNumbersPreferPhrase
   * OpacSeparateHoldings
   * OpacSeparateHoldingsBranch
   * PatronSelfRegistrationAdditionalInstructions
@@ -1018,7 +1021,7 @@ documentation is
 As of the date of these release notes, only the English version of the
 Koha manual is available:
 
-    http://manual.koha-community.org/3.12.0/en/
+    http://manual.koha-community.org/3.12/en/
 
 The Git repository for the Koha manual can be found at
 
@@ -1039,17 +1042,17 @@ interface are available in this release for the following languages:
   * Chinese (Taiwan) (94%)
   * Danish (100%)
   * English (New Zealand) (94%)
-  * French (91%)
+  * French (100%)
   * French (Canada) (61%)
   * German (100%)
   * German (Switzerland) (94%)
   * Greek (56%)
-  * Italian (95%)
+  * Italian (99%)
   * Norwegian Bokmål (64%)
   * Portuguese (93%)
   * Portuguese (Brazil) (90%)
-  * Slovak (99%)
-  * Spanish (98%)
+  * Slovak (100%)
+  * Spanish (100%)
   * Turkish (98%)
 
 
@@ -1100,18 +1103,19 @@ Credits
 ======================
 
 We thank the following libraries who are known to have sponsored
-new features in Koha 3.12.0-rc2:
+new features in Koha 3.12.0:
   * Arcadia Public Library
   * Athens County Public Libraries
   * BdP de la Meuse
   * Brooklyn Law School Library
-  * Central Kansas Library System (CKLS), Plum Creek Library System and Washoe County Library System
+  * Central Kansas Library System (CKLS)
   * Corpus Christi Public Libraries
   * KEEP SOLUTIONS
   * Library of the Józef Piłsudski Institute of America
   * Los Gatos Public Library and Harrison Carmel Public Library
   * North Central Regional Library (NCRL)
   * Northeast Kansas Library System (NEKLS)
+  * Plum Creek Library System
   * Rolling Hills Consolidated Libraries
   * software.coop
   * Talking Tech
@@ -1123,13 +1127,13 @@ new features in Koha 3.12.0-rc2:
   * VOKAL
   * Washoe County Library System
 
-We thank the following individuals who contributed patches to Koha 3.12.0-rc2.
-  *     33	Tomas Cohen Arazi
+We thank the following individuals who contributed patches to Koha 3.12.0.
+  *     34	Tomas Cohen Arazi
   *      1	Alex Arnaud
   *      1	Edmund Balnaves
   *      1	Stefano Bargioni
-  *      4	D Ruth Bavousett
-  *    613	Jared Camins-Esakov
+  *      5	D Ruth Bavousett
+  *    616	Jared Camins-Esakov
   *      9	Colin Campbell
   *      1	Barry Cannon
   *      7	Galen Charlton
@@ -1141,7 +1145,7 @@ We thank the following individuals who contributed patches to Koha 3.12.0-rc2.
   *      2	Stéphane Delaune
   *      1	Frédéric Demians
   *      1	Srikanth Dhondi
-  *     87	Jonathan Druart
+  *     89	Jonathan Druart
   *     24	Nicole Engard
   *     18	Magnus Enger
   *     13	Vitor FERNANDES
@@ -1155,6 +1159,7 @@ We thank the following individuals who contributed patches to Koha 3.12.0-rc2.
   *      6	Mason James
   *      3	Srdjan Jankovic
   *      5	Peter Crellan Kelly
+  *      1	Rafal Kopaczka
   *     21	Bernardo Gonzalez Kriegel
   *    187	Owen Leonard
   *     32	Julian Maurice
@@ -1181,7 +1186,7 @@ We thank the following individuals who contributed patches to Koha 3.12.0-rc2.
   *      1	Will Stokes
   *      1	ByWater Migration Support
   *      1	Zeno Tajoli
-  *      3	Lyon3 Team
+  *      4	Lyon3 Team
   *      5	Mirko Tietgen
   *      1	Mark Tompsett
   *      1	Ed Veal
@@ -1190,13 +1195,13 @@ We thank the following individuals who contributed patches to Koha 3.12.0-rc2.
   *      1	Jen Zajac
   *      1	koha-preprod
 
-We thank the following companies who contributed patches to Koha 3.12.0-rc2
+We thank the following companies who contributed patches to Koha 3.12.0
   *     187 ACPL                                                                                          
   *      24 BSZ BW                                                                                         
-  *     218 BibLibre                                                                                    
+  *     220 BibLibre                                                                                    
   *      11 BigBallOfWax                                                                          
   *     106 ByWater-Solutions                                                                   
-  *     613 C & P Bibliography                                                                    
+  *     616 C & P Bibliography                                                                    
   *      65 Catalyst                                                                                 
   *       7 Equinox                                                                                   
   *       1 Foundations                                                                              
@@ -1209,7 +1214,7 @@ We thank the following companies who contributed patches to Koha 3.12.0-rc2
   *      37 Rijksmuseum                                                                               
   *       3 Software.coop                                                                             
   *       1 Tamil                                                                                           
-  *       3 Université Jean Moulin Lyon 3
+  *       4 Université Jean Moulin Lyon 3
   *       9 Université Rennes 2
   *       5 abunchofthings.net
   *       1 cineca.it
@@ -1217,15 +1222,16 @@ We thank the following companies who contributed patches to Koha 3.12.0-rc2
   *       1 di.unc.edu.ar
   *      13 keep.pt
   *       1 oslo.ie
+  *       1 poczta.onet.pl
   *       1 pusc.it
   *       7 rot13.org                                                                                      
   *       1 smfpl.org
   *       3 tech.washk12.org
-  *      72 unidentified
+  *      74 unidentified
   *       2 veron.ch
 
 We also especially thank the following individuals who tested patches
-for Koha 3.12.0-rc2.
+for Koha 3.12.0.
   *       1 Koha Team Lyon 3
   *       4 Pierre Angot
   *      10 Tomas Cohen Arazi
@@ -1236,7 +1242,7 @@ for Koha 3.12.0-rc2.
   *       3 Brendan
   *       2 Broust
   *       1 Corinne Bulac
-  *    1057 Jared Camins-Esakov
+  *    1068 Jared Camins-Esakov
   *       1 Colin Campbell
   *      36 Galen Charlton
   *      10 David Cook
@@ -1245,7 +1251,7 @@ for Koha 3.12.0-rc2.
   *      31 Elliott Davis
   *       4 Frédéric Demians
   *       2 Srikanth Dhondi
-  *     251 Jonathan Druart
+  *     252 Jonathan Druart
   *       1 Jonathan Druarth
   *       1 Frédéric Durand
   *       4 Frederic Durand
@@ -1253,13 +1259,13 @@ for Koha 3.12.0-rc2.
   *      14 Magnus Enger
   *       1 Vitor FERNANDES
   *       1 Vitor Fernandes
-  *     382 Katrin Fischer
+  *     385 Katrin Fischer
   *     141 Kyle M Hall
   *       2 Claire Hernandez
   *       3 Rolando Isodoro
   *      35 Mason James
   *     133 Bernardo Gonzalez Kriegel
-  *     103 Owen Leonard
+  *     104 Owen Leonard
   *       7 Julian Maurice
   *      26 Melia Meggs
   *       1 Sophie Meynieux
@@ -1269,15 +1275,15 @@ for Koha 3.12.0-rc2.
   *      80 Paul Poulain
   *       2 Karam Qubsi
   *       3 MJ Ray
-  *      19 Liz Rea
+  *      20 Liz Rea
   *       1 Martin Renvoize
-  *      77 Marcel de Rooy
+  *      78 Marcel de Rooy
   *       1 M. de Rooy
   *       2 Fridolyn SOMERS
   *       1 Marc Sabin
-  *      10 Mathieu Saby
+  *      11 Mathieu Saby
   *       1 Adrien Saurat
-  *       8 Robin Sheat
+  *       9 Robin Sheat
   *       2 Delaye Stephane
   *       1 Zeno Tajoli
   *      20 Mirko Tietgen
@@ -1316,5 +1322,3 @@ tracker at
 
 He rau ringa e oti ai.
 (Many hands finish the work)
-
-##### Autogenerated release notes updated last on 16 May 2013 02:09:47 Z #####
