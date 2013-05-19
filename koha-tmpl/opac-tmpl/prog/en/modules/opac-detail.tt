@@ -170,17 +170,17 @@ $(function () {
           }, function (data) {
 
             if (data.auth_status != 'ok') {
-              window.alert('Your CGI session cookie is not current. Please refresh the page and try again.');
+              window.alert(_("Your CGI session cookie is not current. Please refresh the page and try again."));
             } else {
               $("#rating_value").val(data.rating_value);
 
               if (data.rating_value) {
-                $("#rating_value_text").text('your rating: ' + data.rating_value + ', ');
+                $("#rating_value_text").text(_("your rating:") + ' ' + data.rating_value + ', ');
               } else {
                 $("#rating_value_text").text('');
               }
 
-              $("#rating_text").text('average rating: ' + data.rating_avg_int + ' (' + data.rating_total + ' votes)');
+              $("#rating_text").text(_("average rating:") + " " + data.rating_avg_int + ' (' + data.rating_total + ' votes)');
 
             }
           }, "json");
@@ -303,7 +303,7 @@ function renderPagIndexList(index, ul)
     var ini = index - 1;
     var end = ini + totalPagItemList - 1;
     li = $("<li />");
-    html = (index > pag_index_ini)?"<a href='#' id='rew_list_index' onclick='rewindList()' title='Click to rewind the list to " + ini + " - " + end + "'>&laquo;</a>":"&laquo;";
+    html = (index > pag_index_ini)?"<a href='#' id='rew_list_index' onclick='rewindList()' title='" + _("Click to rewind the list to") + " " + ini + " - " + end + "'>&laquo;</a>":"&laquo;";
     li.html(html);
     ul.append(li);
     var title = "";
@@ -311,9 +311,9 @@ function renderPagIndexList(index, ul)
         if (arrPagination[i] == undefined) continue;
         var li = $("<li />");
         if (arrPagination[i].url != "") {
-            title = "See biblio &quot;" + arrPagination[i].title + "&quot; ";
-            if (arrPagination[i].author != "") title += " by &quot;" + arrPagination[i].author + "&quot;";
-            title += " with biblionumber " + arrPagination[i].biblionumber;
+            title = _("See biblio") + " &quot;" + arrPagination[i].title + "&quot; ";
+            if (arrPagination[i].author != "") title += " " + _("by") + "&quot;" + arrPagination[i].author + "&quot;";
+            title += " " + _("with biblionumber") + " " + arrPagination[i].biblionumber;
             html = "<a href='" + arrPagination[i].url + "' title='" + title + "' class='a_pag' id='a_pag_" + i + "'";
             html += " onmouseover='renderPagination(" + i + ", " + (arrPagination.length - 1) + ", $(\"#ul_pagination_list\"), true)'";
             html += ">" + i + "</a>";
@@ -325,7 +325,7 @@ function renderPagIndexList(index, ul)
     li = $("<li />");
     ini = index + 1;
     end = (arrPagination.length > index + totalPagItemList)?index + totalPagItemList:arrPagination.length - 1;
-    html = (end <= arrPagination.length - 1 && (end - index) >= totalPagItemList)?"<a href='#' id='fw_list_index' onclick='forwardList()' title='Click to forward the list to " + ini + " - " + end + "'>&raquo;</a>":"&raquo;";
+    html = (end <= arrPagination.length - 1 && (end - index) >= totalPagItemList)?"<a href='#' id='fw_list_index' onclick='forwardList()' title='" + _("Click to forward the list to") + " " + ini + " - " + end + "'>&raquo;</a>":"&raquo;";
     li.html(html);
     ul.append(li);
 }//renderPagIndexList
@@ -340,7 +340,7 @@ function renderPagination(index, total, ul, highlIndex)
     var j = 0;
     for (var i = index; i <= total && j < totalPagItemList; i++) {
         if (arrPagination[i] == undefined || arrPagination[i].url == "") continue;
-        var li = $("<li id='li_pag_" + i + "' " + ((j % 2 == 0)?"class='highlight'":"")  + " title='Go to detail' />");
+        var li = $("<li id='li_pag_" + i + "' " + ((j % 2 == 0)?"class='highlight'":"")  + " title='" + _("Go to detail") + "' />");
         var html = "<span class='li_pag_index'>" + i + "</span><a href='" + arrPagination[i].url + "'>" + arrPagination[i].title + "</a>";
         if (arrPagination[i].author) html += "<br /> by " + arrPagination[i].author;
         li.html(html);
@@ -351,9 +351,9 @@ function renderPagination(index, total, ul, highlIndex)
     for (i = pag_index_ini; i < index && j < totalPagItemList; i++) {
         if (arrPagination[i] == undefined || arrPagination[i].url == "") continue;
         $("#li_pag_" + i).remove();
-        var li = $("<li id='li_pag_" + i + "' " + ((j % 2 == 0)?"class='highlight'":"")  + " title='Go to detail' />");
+        var li = $("<li id='li_pag_" + i + "' " + ((j % 2 == 0)?"class='highlight'":"")  + " title='" + _("Go to detail") + "' />");
         var html = "<span class='li_pag_index'>" + i + "</span><a href='" + arrPagination[i].url + "'>" + arrPagination[i].title + "</a>";
-        if (arrPagination[i].author) html += "<br /> by " + arrPagination[i].author;
+        if (arrPagination[i].author) html += "<br /> " + _("by") + " " + arrPagination[i].author;
         li.html(html);
         ul.append(li);
         j++;
