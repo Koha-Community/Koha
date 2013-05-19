@@ -1,5 +1,5 @@
 RELEASE NOTES FOR KOHA 3.12.0
-18 May 2013
+19 May 2013
 ========================================================================
 
 Koha is the first free and open source software library automation package 
@@ -20,10 +20,12 @@ Installation instructions can be found at:
     OR in the INSTALL files that come in the tarball
 
 
-Koha 3.12.0 is a major release with many new features compared to Koha 3.10.
+Koha 3.12.0 is a major release, with numerous new features, enhancements,
+and bugfixes. Koha 3.12.0 is released under the GNU General Public
+License version 3 or later.
 
 
-It includes 21 features, 160 enhancements and 436 bugfixes.
+It includes 21 features, 160 enhancements and 440 bugfixes.
 
 
 New features in 3.12.0
@@ -346,6 +348,7 @@ Acquisitions
 
 Architecture, internals, and plumbing
 ----------
+	9452	blocker	C4::Letters does not function under Plack
 	9907	blocker	Plugins test dies early on some servers
 	10085	blocker	Unapi does not function under Plack
 	6554	critical	Resolve encoding problems with corrected UTF8 handling in templates
@@ -425,6 +428,7 @@ MARC Authority data support
 ----------
 	9132	major	Paging through OPAC authority search results does not work
 	9145	major	Authorities: standard language for UNIMARC
+	10230	major	Match points do not work with authorities
 
 MARC Bibliographic record staging/import
 ----------
@@ -473,6 +477,7 @@ Searching
 	9395	major	Problem with callnumber and standard number search in OPAC and Staff Client
 	9620	major	IncludeSeeFromInSearches ON and data in $9 subfields can break indexing
 	9961	major	Truncation and QueryAutoTruncate not working properly with new QueryParser
+	10281	major	Search domains do not seem to work
 
 Serials
 ----------
@@ -895,6 +900,7 @@ Templates
 	10145	normal	The acquisition details block is badly placed
 	10153	normal	Patron header search form is too wide
 	10196	normal	Items table partially hidden in marc view in ccsr
+	10287	normal	Budget administration table displayed with single pixel artifact before and after
 	5648	minor	Icons clumping together
 	8899	minor	Remove unused CSS declarations from staff client CSS
 	9196	minor	Authorities editor overlapping box
@@ -1133,7 +1139,7 @@ We thank the following individuals who contributed patches to Koha 3.12.0.
   *      1	Edmund Balnaves
   *      1	Stefano Bargioni
   *      5	D Ruth Bavousett
-  *    616	Jared Camins-Esakov
+  *    624	Jared Camins-Esakov
   *      9	Colin Campbell
   *      1	Barry Cannon
   *      7	Galen Charlton
@@ -1149,7 +1155,7 @@ We thank the following individuals who contributed patches to Koha 3.12.0.
   *     24	Nicole Engard
   *     18	Magnus Enger
   *     13	Vitor FERNANDES
-  *     24	Katrin Fischer
+  *     25	Katrin Fischer
   *      3	Corey Fuimaono
   *      3	Michael Hafen
   *      1	Chris Hall
@@ -1178,7 +1184,7 @@ We thank the following individuals who contributed patches to Koha 3.12.0.
   *     15	Liz Rea
   *      1	Thatcher Rea
   *      2	Martin Renvoize
-  *     37	Marcel de Rooy
+  *     38	Marcel de Rooy
   *     53	Fridolyn SOMERS
   *      9	Mathieu Saby
   *     16	Adrien Saurat
@@ -1197,21 +1203,20 @@ We thank the following individuals who contributed patches to Koha 3.12.0.
 
 We thank the following companies who contributed patches to Koha 3.12.0
   *     187 ACPL                                                                                          
-  *      24 BSZ BW                                                                                         
+  *      25 BSZ BW                                                                                         
   *     220 BibLibre                                                                                    
   *      11 BigBallOfWax                                                                          
   *     106 ByWater-Solutions                                                                   
-  *     616 C & P Bibliography                                                                    
+  *     624 C & P Bibliography                                                                    
   *      65 Catalyst                                                                                 
   *       7 Equinox                                                                                   
   *       1 Foundations                                                                              
   *       6 KohaAloha                                                                                  
-  *       1 Libeo                                                                                       
-  *       1 Libeo                                                                                          
+  *       2 Libeo                                                                                       
   *      18 Libriotech                                                                                 
   *      11 PTFS-Europe                                                                              
   *      18 Prosentient Systems
-  *      37 Rijksmuseum                                                                               
+  *      38 Rijksmuseum                                                                               
   *       3 Software.coop                                                                             
   *       1 Tamil                                                                                           
   *       4 Université Jean Moulin Lyon 3
@@ -1242,7 +1247,7 @@ for Koha 3.12.0.
   *       3 Brendan
   *       2 Broust
   *       1 Corinne Bulac
-  *    1068 Jared Camins-Esakov
+  *    1085 Jared Camins-Esakov
   *       1 Colin Campbell
   *      36 Galen Charlton
   *      10 David Cook
@@ -1251,21 +1256,18 @@ for Koha 3.12.0.
   *      31 Elliott Davis
   *       4 Frédéric Demians
   *       2 Srikanth Dhondi
-  *     252 Jonathan Druart
-  *       1 Jonathan Druarth
-  *       1 Frédéric Durand
-  *       4 Frederic Durand
+  *     253 Jonathan Druart
+  *       5 Frédéric Durand
   *      32 Nicole C. Engard
-  *      14 Magnus Enger
-  *       1 Vitor FERNANDES
-  *       1 Vitor Fernandes
-  *     385 Katrin Fischer
+  *      15 Magnus Enger
+  *       2 Vitor Fernandes
+  *     391 Katrin Fischer
   *     141 Kyle M Hall
   *       2 Claire Hernandez
   *       3 Rolando Isodoro
   *      35 Mason James
   *     133 Bernardo Gonzalez Kriegel
-  *     104 Owen Leonard
+  *     105 Owen Leonard
   *       7 Julian Maurice
   *      26 Melia Meggs
   *       1 Sophie Meynieux
