@@ -56,12 +56,19 @@ $(document).ready(function() {
     [% UNLESS (count == 1) %]
         <p>Choose a vendor in the list to jump directly to the right place.
         <select id="supplierlist">
-            [% FOREACH supplier IN loop_suppliers %]
-                <option value="[% supplier.booksellerid %]">[% supplier.name %]</option>
+            [% FOREACH supplier1 IN loop_suppliers %]
+                <option value="[% supplier1.booksellerid %]">[% supplier1.name %]</option>
             [% END %]
         </select>
         </p>
     [% END %]
+    <p>
+    [% IF ( allbaskets ) %]
+        <a href="/cgi-bin/koha/acqui/booksellers.pl?supplier=[% supplier %]&booksellerid=[% booksellerid %]">Apply filter</a>
+    [% ELSE %]
+        <a href="/cgi-bin/koha/acqui/booksellers.pl?supplier=[% supplier %]&booksellerid=[% booksellerid %]&allbaskets=1">Cancel filter</a>
+    [% END %]
+    </p>
     <div id="acqui_order_supplierlist">
         [% FOREACH supplier IN loop_suppliers %]
             <div class="supplier">
