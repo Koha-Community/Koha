@@ -117,7 +117,12 @@ sub GetLetters {
     return \%letters;
 }
 
-my %letter;
+# FIXME: using our here means that a Plack server will need to be
+#        restarted fairly regularly when working with this routine.
+#        A better option would be to use Koha::Cache and use a cache
+#        that actually works in a persistent environment, but as a
+#        short-term fix, our will work.
+our %letter;
 sub getletter {
     my ( $module, $code, $branchcode ) = @_;
 
@@ -551,15 +556,17 @@ sub _substitute_tables {
     }
 }
 
-my %handles = ();
 sub _parseletter_sth {
     my $table = shift;
+    my $sth;
     unless ($table) {
         carp "ERROR: _parseletter_sth() called without argument (table)";
         return;
     }
-    # check cache first
-    (defined $handles{$table}) and return $handles{$table};
+    # NOTE: we used to check whether we had a statement handle cached in
+    #       a %handles module-level variable. This was a dumb move and
+    #       broke things for the rest of us. prepare_cached is a better
+    #       way to cache statement handles anyway.
     my $query = 
     ($table eq 'biblio'       ) ? "SELECT * FROM $table WHERE   biblionumber = ?"                                  :
     ($table eq 'biblioitems'  ) ? "SELECT * FROM $table WHERE   biblionumber = ?"                                  :
@@ -579,11 +586,11 @@ sub _parseletter_sth {
         warn "ERROR: No _parseletter_sth query for table '$table'";
         return;     # nothing to get
     }
-    unless ($handles{$table} = C4::Context->dbh->prepare($query)) {
+    unless ($sth = C4::Context->dbh->prepare_cached($query)) {
         warn "ERROR: Failed to prepare query: '$query'";
         return;
     }
-    return $handles{$table};    # now cache is populated for that $table
+    return $sth;    # now cache is populated for that $table
 }
 
 =head2 _parseletter($letter, $table, $values)
@@ -597,7 +604,6 @@ sub _parseletter_sth {
 
 =cut
 
-my %columns = ();
 sub _parseletter {
     my ( $letter, $table, $values ) = @_;
 
