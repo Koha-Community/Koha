@@ -65,10 +65,13 @@ my $cgi = new CGI;
 
 my $branch_group_limit = $cgi->param("branch_group_limit");
 if ( $branch_group_limit ) {
-    if ( $branch_group_limit =~ /^multibranchlimit/ ) {
+    if ( $branch_group_limit =~ /^multibranchlimit-/ ) {
+        # For search groups we are going to convert this branch_group_limit CGI
+        # parameter into a multibranchlimit CGI parameter for the purposes of
+        # actually performing the query
         $cgi->param(
             -name => 'multibranchlimit',
-            -values => [ ( split( 'multibranchlimit-', $branch_group_limit ) )[1] ]
+            -values => substr($branch_group_limit, 17)
         );
     } else {
         $cgi->append(
@@ -403,7 +406,8 @@ my @limits = $cgi->param('limit');
 @limits = map { uri_unescape($_) } @limits;
 
 if($params->{'multibranchlimit'}) {
-    push @limits, '('.join( " or ", map { "branch: $_ " } @{ GetBranchesInCategory( $params->{'multibranchlimit'} ) } ).')';
+    my $multibranch = '('.join( " or ", map { "branch: $_ " } @{ GetBranchesInCategory( $params->{'multibranchlimit'} ) } ).')';
+    push @limits, $multibranch if ($multibranch ne  '()');
 }
 
 my $available;

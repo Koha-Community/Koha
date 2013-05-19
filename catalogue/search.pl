@@ -412,7 +412,8 @@ my @operands = $cgi->param('q');
 my @limits = $cgi->param('limit');
 
 if($params->{'multibranchlimit'}) {
-    push @limits, '('.join( " or ", map { "branch: $_ " } @{ GetBranchesInCategory( $params->{'multibranchlimit'} ) } ).')';
+    my $multibranch = '('.join( " or ", map { "branch: $_ " } @{ GetBranchesInCategory( $params->{'multibranchlimit'} ) } ).')';
+    push @limits, $multibranch if ($multibranch ne  '()');
 }
 
 my $available;
