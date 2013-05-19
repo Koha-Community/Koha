@@ -141,7 +141,7 @@
 	<li>payment</li>
 	<li>CreditXXX
 <ul>
-	<li>stores different types of fee credits, so a query to catch them all would include a clause like "type LIKE 'Credit%'"</li>
+	<li>The XXX stores different types of fee credits, so a query to catch them all would include a clause like "type LIKE 'Credit%'"</li>
 </ul>
 </li>
 </ul>
@@ -153,7 +153,7 @@
 <ul>
 	<li>NULL: means the patron requested the 1st available, and we haven't chosen the item</li>
 	<li>T = Transit: the reserve is linked to an item but is in transit to the pickup branch</li>
-	<li>W =Waiting: the reserve is linked to an item, is at the pickup branch, and is waiting on the hold shelf</li>
+	<li>W = Waiting: the reserve is linked to an item, is at the pickup branch, and is waiting on the hold shelf</li>
 	<li>F = Finished: the reserve has been completed, and is done</li>
 </ul>
 
@@ -178,7 +178,7 @@
 	<li>B = For Patrons/Borrowers</li>
 </ul>
 
-<p><strong>Question</strong>: What are the possible codes for the status field in the serial table"?</p>
+<p><strong>Question</strong>: What are the possible codes for the status field in the serial table?</p>
 
 <p><strong>Answer</strong>:</p>
 
@@ -189,6 +189,8 @@
 	<li>4 = Missing</li>
 	<li>5 = Not Available</li>
 	<li>6 = Delete</li>
+	<li>7 = Claimed</li>
+	<li>8 = Stopped</li>
 </ul>
 
 <p><strong>See the full documentation for Custom Reports in the <a href="http://manual.koha-community.org/3.10/en/reports.html#customreports">manual</a> (online).</strong></p>
