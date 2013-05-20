@@ -136,6 +136,26 @@ sub getAuthorisedValues4MARCSubfields {
 
 my $stylesheet;
 
+sub _get_best_default_xslt_filename {
+    my ($htdocs, $theme, $lang, $base_xslfile) = @_;
+
+    my @candidates = (
+        "$htdocs/$theme/$lang/xslt/${base_xslfile}", # exact match
+        "$htdocs/$theme/en/xslt/${base_xslfile}",    # if not, preferred theme in English
+        "$htdocs/prog/$lang/xslt/${base_xslfile}",   # if not, 'prog' theme in preferred language
+        "$htdocs/prog/en/xslt/${base_xslfile}",      # otherwise, prog theme in English; should always
+                                                     # exist
+    );
+    my $xslfilename;
+    foreach my $filename (@candidates) {
+        $xslfilename = $filename;
+        if (-f $filename) {
+            last; # we have a winner!
+        }
+    }
+    return $xslfilename;
+}
+
 sub XSLTParse4Display {
     my ( $biblionumber, $orig_record, $xslsyspref, $fixamps, $hidden_items ) = @_;
     my $xslfilename = C4::Context->preference($xslsyspref);
@@ -165,10 +185,7 @@ sub XSLTParse4Display {
             $xslfile = C4::Context->preference('marcflavour') .
                        "slim2OPACResults.xsl";
         }
-        $xslfilename = "$htdocs/$theme/$lang/xslt/$xslfile";
-        $xslfilename = "$htdocs/$theme/en/xslt/$xslfile" unless ( $lang ne 'en' && -f $xslfilename );
-        $xslfilename = "$htdocs/prog/$lang/xslt/$xslfile" unless ( -f $xslfilename );
-        $xslfilename = "$htdocs/prog/en/xslt/$xslfile" unless ( $lang ne 'en' && -f $xslfilename );
+        $xslfilename = _get_best_default_xslt_filename($htdocs, $theme, $lang, $xslfile);
     }
 
     if ( $xslfilename =~ m/\{langcode\}/ ) {
