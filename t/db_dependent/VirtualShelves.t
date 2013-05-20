@@ -5,19 +5,20 @@
 # Author : Antoine Farnault, antoine@koha-fr.org
 #
 
-use strict;
-use warnings;
-use C4::Context;
-
+use Modern::Perl;
 use Test::More tests => 82;
+use MARC::Record;
+
+use C4::Biblio qw( AddBiblio DelBiblio );
+use C4::Context;
 
 # Getting some borrowers from database.
 my $dbh = C4::Context->dbh;
-my $query = qq/
+my $query = q{
     SELECT borrowernumber
     FROM   borrowers
     LIMIT  10
-/;
+};
 my $sth = $dbh->prepare($query);
 $sth->execute;
 my @borrowers;
@@ -25,26 +26,29 @@ while(my $borrower = $sth->fetchrow){
     push @borrowers, $borrower;
 }
 
-# Getting some biblionumbers from database
-$query = qq/
-    SELECT biblionumber
-    FROM   biblio
-    LIMIT  10
-/;
-$sth = $dbh->prepare($query);
-$sth->execute;
-my @biblionumbers;
-while(my $biblionumber = $sth->fetchrow){
-    push @biblionumbers, $biblionumber;
-}
+# Creating some biblios
+my ($biblionumber1, $biblioitemnumber1)   = AddBiblio(MARC::Record->new, '');
+my ($biblionumber2, $biblioitemnumber2)   = AddBiblio(MARC::Record->new, '');
+my ($biblionumber3, $biblioitemnumber3)   = AddBiblio(MARC::Record->new, '');
+my ($biblionumber4, $biblioitemnumber4)   = AddBiblio(MARC::Record->new, '');
+my ($biblionumber5, $biblioitemnumber5)   = AddBiblio(MARC::Record->new, '');
+my ($biblionumber6, $biblioitemnumber6)   = AddBiblio(MARC::Record->new, '');
+my ($biblionumber7, $biblioitemnumber7)   = AddBiblio(MARC::Record->new, '');
+my ($biblionumber8, $biblioitemnumber8)   = AddBiblio(MARC::Record->new, '');
+my ($biblionumber9, $biblioitemnumber9)   = AddBiblio(MARC::Record->new, '');
+my ($biblionumber10, $biblioitemnumber10) = AddBiblio(MARC::Record->new, '');
+my @biblionumbers = (
+    $biblionumber1, $biblionumber2, $biblionumber3, $biblionumber4, $biblionumber5,
+    $biblionumber6, $biblionumber7, $biblionumber8, $biblionumber9, $biblionumber10,
+);
 
 # ---
-my $delete_virtualshelf = qq/
+my $delete_virtualshelf = q{
     DELETE FROM  virtualshelves WHERE 1
-/;
-my $delete_virtualshelfcontent =qq/
+};
+my $delete_virtualshelfcontent = q{
     DELETE  FROM  virtualshelfcontents WHERE 1
-/;
+};
 
 $sth = $dbh->prepare($delete_virtualshelf);
 $sth->execute;
@@ -67,7 +71,7 @@ use_ok('C4::VirtualShelves');
 my @shelves;
 for(my $i=0; $i<10;$i++){
      my $ShelfNumber = AddShelf(
-	{shelfname=>"Shelf_".$i, category=>int(rand(2))+1 }, $borrowers[$i] );
+    {shelfname=>"Shelf_".$i, category=>int(rand(2))+1 }, $borrowers[$i] );
      die "test Not ok, remove some shelves before" if ($ShelfNumber == -1);
      ok($ShelfNumber > -1, "created shelf");   # Shelf creation successful;
      push @shelves, $ShelfNumber if $ShelfNumber > -1;
@@ -79,7 +83,7 @@ ok(10 == scalar @shelves, 'created 10 lists'); # 10 shelves in @shelves;
 for(my $i=0;$i<10;$i++){
     my @shlf=GetShelf($shelves[$i]);
     my $badNumShelf = AddShelf(
-	{shelfname=>"Shelf_".$i, category=>$shlf[3] }, $borrowers[$i]);
+    {shelfname=>"Shelf_".$i, category=>$shlf[3] }, $borrowers[$i]);
     ok(-1 == $badNumShelf, 'do not create lists with duplicate names');   # AddShelf returns -1 if name already exist.
 }
 
@@ -92,10 +96,10 @@ my %used = ();
 for(my $i=0; $i<10;$i++){
     my $bib = $biblionumbers[int(rand(9))];
     my $shelfnumber = $shelves[int(rand(9))];
-  
+
     my $key = "$bib\t$shelfnumber";
     my $should_fail = exists($used{$key}) ? 1 : 0;
- 
+
     my ($biblistBefore,$countbefore) = GetShelfContents($shelfnumber);
     my $status = AddToShelf($bib,$shelfnumber,$borrowers[$i]);
     my ($biblistAfter,$countafter) = GetShelfContents($shelfnumber);
@@ -124,11 +128,11 @@ for(my $i=0; $i<10;$i++){
     my $rand = int(rand(9));
     my $numA = $shelves[$rand];
     my $shelf = { shelfname => "NewName_".$rand,
-	category =>  int(rand(2))+1 };
-    
+    category =>  int(rand(2))+1 };
+
     ModShelf($numA,$shelf);
     my ($numB,$nameB,$ownerB,$categoryB) = GetShelf($numA);
-    
+
     ok($numA == $numB, 'modified shelf');
     ok($shelf->{shelfname} eq $nameB,     '... and name change took');
     ok($shelf->{category}  eq $categoryB, '... and category change took');
@@ -142,3 +146,16 @@ for(my $i=0; $i<10;$i++){
     my $status = DelShelf($shelfnumber);
     ok(1 == $status, "deleted shelf $shelfnumber and its contents");
 }
+
+END {
+    DelBiblio( $biblionumber1 );
+    DelBiblio( $biblionumber2 );
+    DelBiblio( $biblionumber3 );
+    DelBiblio( $biblionumber4 );
+    DelBiblio( $biblionumber5 );
+    DelBiblio( $biblionumber6 );
+    DelBiblio( $biblionumber7 );
+    DelBiblio( $biblionumber8 );
+    DelBiblio( $biblionumber9 );
+    DelBiblio( $biblionumber10 );
+};
