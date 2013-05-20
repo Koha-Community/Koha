@@ -363,7 +363,15 @@ $(document).ready(function() {
                         <input type="hidden" value="1" name="shelves"/>
                          <input type="hidden" value="1" name="DEL-[% shelfnumber %]"/>
                          [% IF ( showprivateshelves ) %]<input type="hidden" name="display" value="privateshelves"/>[% END %]<input type="submit" class="deleteshelf" value="Delete list" onclick="return confirmDelete(MSG_CONFIRM_DELETE_LIST);"/>
-                      </form> [% END %]
+                      </form>
+                    [% IF showprivateshelves && Koha.Preference('OpacAllowSharingPrivateLists') %]
+                        <form action="opac-shareshelf.pl" method="post">
+                            <input type="hidden" name="shelfnumber" value="[% shelfnumber %]" />
+                            <input type="hidden" name="op" value="invite" />
+                            <input type="submit" class="Share" value="Share" />
+                        </form>
+                    [% END %]
+                [% END %]
 
 
                   </div>
@@ -654,7 +662,14 @@ $(document).ready(function() {
                               [% ELSE %]
                                     <input type="submit" class="deleteshelf" onclick="return confirmDelete(MSG_CONFIRM_DELETE_LIST);" value="Delete" />
                               [% END %]
+                              </form>
+                              [% IF Koha.Preference('OpacAllowSharingPrivateLists') %]
+                                <form action="opac-shareshelf.pl" method="post">
+                                  <input type="hidden" name="shelfnumber" value="[% shelveslooppri.shelf %]" />
+                                  <input type="hidden" name="op" value="invite" />
+                                  <input type="submit" class="Share" value="Share" />
                                 </form>
+                              [% END %]
                             [% END %]&nbsp;
                             </td>
                           </tr>

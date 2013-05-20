@@ -29,6 +29,8 @@ use constant SHELVES_COMBO_MAX => 10; #add to combo in search
 use constant SHELVES_MGRPAGE_MAX => 20; #managing page
 use constant SHELVES_POPUP_MAX => 40; #addbybiblio popup
 
+use constant SHARE_INVITATION_EXPIRY_DAYS => 14; #two weeks to accept
+
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK);
 
 BEGIN {
@@ -42,7 +44,7 @@ BEGIN {
             &ModShelf
             &ShelfPossibleAction
             &DelFromShelf &DelShelf
-            &GetBibliosShelves
+            &GetBibliosShelves &AddShare
     );
         @EXPORT_OK = qw(
             &GetAllShelves &ShelvesMax
@@ -638,6 +640,31 @@ sub HandleDelBorrower {
     #Handle entries added by borrower to lists of others
     $query="UPDATE virtualshelfcontents SET borrowernumber=NULL WHERE borrowernumber=?";
     $dbh->do($query,undef,($borrower));
+}
+
+=head2 AddShare
+
+     AddShare($shelfnumber, $key);
+
+Adds a share request to the virtualshelves table.
+Authorization must have been checked, and a key must be supplied. See script
+opac-shareshelf.pl for an example.
+This request is not yet confirmed. So it has no borrowernumber, it does have an
+expiry date.
+
+=cut
+
+sub AddShare {
+    my ($shelfnumber, $key)= @_;
+    return if !$shelfnumber || !$key;
+
+    my $sql;
+    my $dbh = C4::Context->dbh;
+    $sql="DELETE FROM virtualshelfshares WHERE sharedate<NOW() LIMIT 10";
+        #housekeeping: add one, remove max 10 expired ones
+    $dbh->do($sql);
+    $sql="INSERT INTO virtualshelfshares (shelfnumber, invitekey, sharedate) VALUES (?, ?, ADDDATE(NOW(),?))";
+    $dbh->do($sql, undef, ($shelfnumber, $key, SHARE_INVITATION_EXPIRY_DAYS));
 }
 
 # internal subs

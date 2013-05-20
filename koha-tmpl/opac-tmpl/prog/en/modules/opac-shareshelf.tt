@@ -1,0 +1,69 @@
+[% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Share a list
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+<body id="opac-shareshelf">
+<div id="doc3" class="yui-t1">
+<div id="bd">
+[% INCLUDE 'masthead.inc' %]
+
+<div id="yui-main">
+  <div class="yui-b"><div class="yui-g">
+
+[%# This section contains the essential code for error messages and three operations: invite, confirm_invite and accept. %]
+    <h1>Share a list with another patron</h1>
+    [% IF errcode %]
+        [% IF errcode==1 && op %]<div class="dialog alert">The operation [% op %] is not supported.</div>[% END %]
+        [% IF errcode==1 && !op %]<div class="dialog alert">No operation parameter has been passed.</div>[% END %]
+        [% IF errcode==2 %]<div class="dialog alert">Invalid shelf number.</div>[% END %]
+        [% IF errcode==3 %]<div class="dialog alert">The feature of sharing lists is not in use in this library.</div>[% END %]
+        [% IF errcode==4 %]<div class="dialog alert">You can only share a list if you are the owner.</div>[% END %]
+        [% IF errcode==5 %]<div class="dialog alert">You cannot share a public list.</div>[% END %]
+        [% IF errcode==6 %]<div class="dialog alert">Sorry, but you did not enter any valid email address.</div>[% END %]
+
+    [% ELSIF op=='invite' %]
+        <form method="post" onsubmit="return $('#invite_address').val().trim()!='';">
+            <input type="hidden" name="op" value="conf_invite"/>
+            <input type="hidden" name="shelfnumber" value="[% shelfnumber %]"/>
+            <table>
+            <tr>
+            <td><label for="list_name">List name</label></td>
+            <td>[% shelfname %]</td>
+            </tr>
+            <tr>
+            <td><label for="invite_address">Email address</label></td>
+            <td><input id="invite_address" name="invite_address"/></td>
+            </tr>
+            </table>
+            <input type="submit" value="Send"/>
+        </form>
+
+    [% ELSIF op=='conf_invite' %]
+        <p>We have sent invitation emails to share list [% shelfname %] to the mail queue for [% approvedaddress %].</p>
+        [% IF failaddress %]
+            <p>The following addresses appear to be invalid. Please correct them and try again. These are: [% failaddress %]</p>
+        [% END %]
+        <p>You will receive an email notification if someone accepts your share within two weeks.</p>
+
+    [% ELSIF op=='accept' %]
+        [%# TODO: Replace the following two lines %]
+        <p>Thank you for testing this feature.</p>
+        <p>Your signoff will certainly help in finishing the remaining part!</p>
+
+    [% END %]
+[%# End of essential part %]
+
+</div>
+</div>
+</div>
+
+[% IF ( OpacNav ) %]
+  <div class="yui-b">
+  <div id="opacnav" class="container">
+  [% INCLUDE 'navigation.inc' %]
+  </div>
+  </div>
+[% END %]
+
+</div>
+</div>
+[% INCLUDE 'opac-bottom.inc' %]
