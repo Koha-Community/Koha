@@ -74,6 +74,12 @@
 
 </div>
 
+<div id="opac-custom-header">
+[% IF ( opacheader ) %]
+    [% opacheader %]
+[% END %]
+</div>
+
 <div id="opac-main-search" class="yui-g">
 
 <a class="logo" href="/cgi-bin/koha/opac-main.pl">
@@ -263,11 +269,7 @@
 </div>
 
 <div id="libraryname">
-    [% IF ( opacheader ) %]
-        <h1>
-            [% opacheader %]
-        </h1>
-  [% END %]
+    <h1></h1>
 </div>
 
 [% END %]  <!-- OpacPublic -->
