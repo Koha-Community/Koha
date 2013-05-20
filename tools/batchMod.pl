@@ -261,8 +261,7 @@ if ($op eq "show"){
     } else {
         $template->param("too_many_items" => scalar(@itemnumbers));
         # Even if we do not display the items, we need the itemnumbers
-        my @itemnumbers_hashref = map {{itemnumber => $_}} @itemnumbers;
-        $template->param("itemnumbers_hashref" => \@itemnumbers_hashref);
+        $template->param(itemnumbers_array => \@itemnumbers);
     }
 # now, build the item form for entering a new item
 my @loop_data =();

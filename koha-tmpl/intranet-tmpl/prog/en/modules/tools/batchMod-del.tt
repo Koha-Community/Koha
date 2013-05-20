@@ -119,8 +119,8 @@ for( x=0; x<allColumns.length; x++ ){
 
 [% IF ( too_many_items ) %]
     <p>Too many items ([% too_many_items %]) to display individually.</p>
-    [% FOREACH itemnumbers_hashre IN itemnumbers_hashref %]
-  <input type="hidden" name="itemnumber" value="[% itemnumbers_hashre.itemnumber %]" />
+    [% FOREACH itemnumber IN itemnumbers_array %]
+        <input type="hidden" name="itemnumber" value="[% itemnumber %]" />
     [% END %]
 [% END %]   
 
