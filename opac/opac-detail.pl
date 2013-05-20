@@ -631,7 +631,10 @@ if (scalar(@itemloop) == 0 || scalar(@otheritemloop) == 0) {
 # TODO: The limit of 50 could be a syspref
 my $viewallitems = $query->param('viewallitems');
 if (scalar(@itemloop) >= 50 && !$viewallitems) {
-    $template->param('lotsofitems' => 1);
+    $template->param('lotsofholdingsitems' => 1);
+}
+if (scalar(@otheritemloop) >= 50 && !$viewallitems) {
+    $template->param('lotsofothersholdingsitems' => 1);
 }
 
 ## get notes and subjects from MARC record

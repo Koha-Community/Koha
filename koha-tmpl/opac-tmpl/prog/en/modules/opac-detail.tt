@@ -1039,8 +1039,8 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 
 <div id="holdings">
 [% IF ( itemloop.size ) %]
-    [% IF ( lotsofitems ) %]
-	<p>This record has many physical items. <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]&amp;viewallitems=1#holdings">Click here to view them all.</a></p>
+    [% IF ( lotsofholdingsitems ) %]
+        <p>This record has many physical items. <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]&amp;viewallitems=1#holdings">Click here to view them all.</a></p>
     [% ELSE %]
         [% INCLUDE items_table items=itemloop tab="holdings" %]
     [% END %]
@@ -1076,7 +1076,11 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 [% IF (SeparateHoldings) %]
     <div id="otherholdings">
         [% IF (otheritemloop.size) %]
-            [% INCLUDE items_table items=otheritemloop tab="otherholdings" %]
+            [% IF lotsofothersholdingsitems %]
+                <p>This record has many physical items. <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]&amp;viewallitems=1#otherholdings">Click here to view them all.</a></p>
+            [% ELSE %]
+                [% INCLUDE items_table items=otheritemloop tab="otherholdings" %]
+            [% END %]
         [% ELSE %]
             No other items.
         [% END %]
