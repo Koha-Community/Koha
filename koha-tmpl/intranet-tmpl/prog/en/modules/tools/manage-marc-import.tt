@@ -393,15 +393,21 @@ Page
             Ignored
         [% ELSIF ( record_lis.status == 'reverted' ) %]
             Reverted
+        [% ELSIF ( record_lis.status == 'staged' ) %]
+            Staged
+        [% ELSIF ( record_lis.status == 'error' ) %]
+            Error
         [% ELSE %]
           [% record_lis.status %]
         [% END %]
     </td>
     <td>
         [% IF ( record_lis.overlay_status == 'no_match' ) %]
-            No&nbsp;match
+            No match
         [% ELSIF ( record_lis.overlay_status == 'match_applied' ) %]
             Match applied
+        [% ELSIF ( record_lis.overlay_status == 'auto_match' ) %]
+            Match found
         [% ELSE %]
             [% record_lis.overlay_status %]
         [% END %]
