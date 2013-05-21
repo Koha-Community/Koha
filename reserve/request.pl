@@ -571,7 +571,7 @@ foreach my $biblionumber (@biblionumbers) {
         $reserve{'suspend'} = $res->{'suspend'};
         $reserve{'suspend_until'} = $res->{'suspend_until'};
 
-        if ( C4::Context->preference('IndependantBranches') && $flags->{'superlibrarian'} != 1 ) {
+        if ( C4::Context->preference('IndependentBranches') && $flags->{'superlibrarian'} != 1 ) {
               $reserve{'branchloop'} = [ GetBranchDetail($res->{'branchcode'}) ];
         } else {
               $reserve{'branchloop'} = GetBranchesLoop($res->{'branchcode'});
