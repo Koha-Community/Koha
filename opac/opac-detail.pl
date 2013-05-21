@@ -50,7 +50,7 @@ use List::MoreUtils qw/any none/;
 use C4::Images;
 use Koha::DateUtils;
 use C4::HTML5Media;
-use C4::CourseReserves qw(GetItemReservesInfo);
+use C4::CourseReserves qw(GetItemCourseReservesInfo);
 
 BEGIN {
 	if (C4::Context->preference('BakerTaylorEnabled')) {
@@ -1058,7 +1058,7 @@ $template->{VARS}->{'trackclicks'} = C4::Context->preference('TrackClicks');
 
 if ( C4::Context->preference('UseCourseReserves') ) {
     foreach my $i ( @items ) {
-        $i->{'course_reserves'} = GetItemReservesInfo( itemnumber => $i->{'itemnumber'} );
+        $i->{'course_reserves'} = GetItemCourseReservesInfo( itemnumber => $i->{'itemnumber'} );
     }
 }
 

@@ -46,7 +46,7 @@ BEGIN {
 
       &SearchCourses
 
-      &GetItemReservesInfo
+      &GetItemCourseReservesInfo
     );
     %EXPORT_TAGS = ( 'all' => \@EXPORT_OK );
 
@@ -934,14 +934,14 @@ sub DelCourseReserve {
 
 =head2 GetReservesInfo
 
-    my $arrayref = GetItemReservesInfo( itemnumber => $itemnumber );
+    my $arrayref = GetItemCourseReservesInfo( itemnumber => $itemnumber );
 
     For a given item, returns an arrayref of reserves hashrefs,
     with a course hashref under the key 'course'
 
 =cut
 
-sub GetItemReservesInfo {
+sub GetItemCourseReservesInfo {
     my (%params) = @_;
     warn identify_myself(%params) if $DEBUG;
 

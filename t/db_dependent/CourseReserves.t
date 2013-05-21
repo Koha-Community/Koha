@@ -70,7 +70,7 @@ ok( $course_reserve->{'cr_id'} eq $cr_id, "GetCourseReserve returns valid data" 
 my $course_reserves = GetCourseReserves( 'course_id' => $course_id );
 ok( $course_reserves->[0]->{'ci_id'} eq $ci_id, "GetCourseReserves returns valid data." );
 
-my $info = GetItemReservesInfo( itemnumber => $items[0]->{'itemnumber'} );
+my $info = GetItemCourseReservesInfo( itemnumber => $items[0]->{'itemnumber'} );
 ok( $info->[0]->{'itemnumber'} eq $items[0]->{'itemnumber'}, "GetItemReservesInfo returns valid data." );
 
 DelCourseReserve( 'cr_id' => $cr_id );
