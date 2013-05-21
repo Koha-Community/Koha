@@ -29,8 +29,7 @@ use C4::CourseReserves;
 
 my $cgi = new CGI;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-    {
-        template_name   => "about.tmpl",
+    {   template_name   => "about.tmpl",
         query           => $cgi,
         type            => "intranet",
         authnotrequired => 0,
@@ -43,8 +42,7 @@ my $action = $cgi->param('action');
 if ( $action eq 'del' ) {
     DelCourse( $cgi->param('course_id') );
     print $cgi->redirect("/cgi-bin/koha/course_reserves/course-reserves.pl");
-}
-else {
+} else {
     my %params;
 
     $params{'course_id'} = $cgi->param('course_id')
@@ -57,7 +55,7 @@ else {
     $params{'staff_note'}     = $cgi->param('staff_note');
     $params{'public_note'}    = $cgi->param('public_note');
     $params{'students_count'} = $cgi->param('students_count');
-    $params{'enabled'} = ( $cgi->param('enabled') eq 'on' ) ? 'yes' : 'no';
+    $params{'enabled'}        = ( $cgi->param('enabled') eq 'on' ) ? 'yes' : 'no';
 
     my $course_id = ModCourse(%params);
 
@@ -67,6 +65,5 @@ else {
         cardnumbers => \@instructors,
         course_id   => $course_id
     );
-    print $cgi->redirect(
-        "/cgi-bin/koha/course_reserves/course-details.pl?course_id=$course_id");
+    print $cgi->redirect("/cgi-bin/koha/course_reserves/course-details.pl?course_id=$course_id");
 }

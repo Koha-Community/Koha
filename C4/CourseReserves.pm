@@ -241,7 +241,7 @@ sub EnableOrDisableCourseItems {
     warn identify_myself(%params) if $DEBUG;
 
     my $course_id = $params{'course_id'};
-    my $enabled   = $params{'enabled'} || 0;
+    my $enabled = $params{'enabled'} || 0;
 
     my $lookfor = ( $enabled eq 'yes' ) ? 'no' : 'yes';
 
@@ -252,13 +252,11 @@ sub EnableOrDisableCourseItems {
 
     if ( $enabled eq 'yes' ) {
         foreach my $course_reserve (@$course_reserves) {
-            if (
-                CountCourseReservesForItem(
+            if (CountCourseReservesForItem(
                     ci_id   => $course_reserve->{'ci_id'},
                     enabled => 'yes'
                 )
-              )
-            {
+              ) {
                 EnableOrDisableCourseItem(
                     ci_id   => $course_reserve->{'ci_id'},
                     enabled => 'yes',
@@ -273,8 +271,7 @@ sub EnableOrDisableCourseItems {
                     ci_id   => $course_reserve->{'ci_id'},
                     enabled => 'yes'
                 )
-              )
-            {
+              ) {
                 EnableOrDisableCourseItem(
                     ci_id   => $course_reserve->{'ci_id'},
                     enabled => 'no',
@@ -376,7 +373,7 @@ sub ModCourseInstructors {
     return unless ( $cardnumbers || $borrowernumbers );
     return if ( $cardnumbers && $borrowernumbers );
 
-    my (@cardnumbers, @borrowernumbers);
+    my ( @cardnumbers, @borrowernumbers );
     @cardnumbers = @$cardnumbers if ( ref($cardnumbers) eq 'ARRAY' );
     @borrowernumbers = @$borrowernumbers
       if ( ref($borrowernumbers) eq 'ARRAY' );
@@ -387,8 +384,7 @@ sub ModCourseInstructors {
 
     my $dbh = C4::Context->dbh;
 
-    $dbh->do( "DELETE FROM course_instructors WHERE course_id = ?",
-        undef, $course_id )
+    $dbh->do( "DELETE FROM course_instructors WHERE course_id = ?", undef, $course_id )
       if ( $mode eq 'replace' );
 
     my $query;
@@ -400,8 +396,7 @@ sub ModCourseInstructors {
             FROM borrowers
             WHERE $field IN ( $placeholders )
         ";
-    }
-    else {
+    } else {
         $query = "
             DELETE FROM course_instructors
             WHERE course_id = ?
@@ -485,8 +480,7 @@ sub ModCourseItem {
             course_item => $course_item,
             %params
         );
-    }
-    else {
+    } else {
         $ci_id = _AddCourseItem(%params);
     }
 
@@ -570,8 +564,7 @@ sub _UpdateCourseItem {
     foreach (@FIELDS) {
         if (   $params{$_}
             && $course_item->{$_}
-            && $params{$_} ne $course_item->{$_} )
-        {
+            && $params{$_} ne $course_item->{$_} ) {
             $mod_params{$_} = $params{$_};
         }
     }
@@ -618,10 +611,7 @@ sub _ModStoredFields {
         }
     }
 
-    my $query =
-        "UPDATE course_items SET "
-      . join( ',', map { "$_=?" } @fields_to_update )
-      . " WHERE ci_id = ?";
+    my $query = "UPDATE course_items SET " . join( ',', map { "$_=?" } @fields_to_update ) . " WHERE ci_id = ?";
 
     C4::Context->dbh->do( $query, undef, @values_to_update, $params{'ci_id'} )
       if (@values_to_update);
@@ -660,10 +650,7 @@ sub _RevertFields {
     }
     ModItem( $mod_item_params, undef, $course_item->{'itemnumber'} );
 
-    my $query =
-        "UPDATE course_items SET "
-      . join( ',', map { "$_=NULL" } @fields_to_null )
-      . " WHERE ci_id = ?";
+    my $query = "UPDATE course_items SET " . join( ',', map { "$_=NULL" } @fields_to_null ) . " WHERE ci_id = ?";
 
     C4::Context->dbh->do( $query, undef, $ci_id ) if (@fields_to_null);
 }
@@ -785,8 +772,7 @@ sub GetCourseReserve {
         ";
         $sth = $dbh->prepare($query);
         $sth->execute($cr_id);
-    }
-    else {
+    } else {
         my $query = "
             SELECT * FROM course_reserves
             WHERE course_id = ? AND ci_id = ?
@@ -816,8 +802,7 @@ sub ModCourseReserve {
 
     return unless ( $course_id && $ci_id );
 
-    my $course_reserve =
-      GetCourseReserve( course_id => $course_id, ci_id => $ci_id );
+    my $course_reserve = GetCourseReserve( course_id => $course_id, ci_id => $ci_id );
     my $cr_id;
 
     my $dbh = C4::Context->dbh;
@@ -831,8 +816,7 @@ sub ModCourseReserve {
             WHERE cr_id = ?
         ";
         $dbh->do( $query, undef, $staff_note, $public_note, $cr_id );
-    }
-    else {
+    } else {
         my $query = "
             INSERT INTO course_reserves SET
             course_id = ?,
@@ -840,10 +824,8 @@ sub ModCourseReserve {
             staff_note = ?,
             public_note = ?
         ";
-        $dbh->do( $query, undef, $course_id, $ci_id, $staff_note,
-            $public_note );
-        $cr_id =
-          $dbh->last_insert_id( undef, undef, 'course_reserves', 'cr_id' );
+        $dbh->do( $query, undef, $course_id, $ci_id, $staff_note, $public_note );
+        $cr_id = $dbh->last_insert_id( undef, undef, 'course_reserves', 'cr_id' );
     }
 
     my $course = GetCourse($course_id);
@@ -872,10 +854,10 @@ sub GetCourseReserves {
     my (%params) = @_;
     warn identify_myself(%params) if $DEBUG;
 
-    my $course_id     = $params{'course_id'};
-    my $ci_id         = $params{'ci_id'};
-    my $include_items = $params{'include_items'};
-    my $include_count = $params{'include_count'};
+    my $course_id       = $params{'course_id'};
+    my $ci_id           = $params{'ci_id'};
+    my $include_items   = $params{'include_items'};
+    my $include_count   = $params{'include_count'};
     my $include_courses = $params{'include_courses'};
 
     return unless ( $course_id || $ci_id );
@@ -898,22 +880,20 @@ sub GetCourseReserves {
     if ($include_items) {
         foreach my $cr (@$course_reserves) {
             $cr->{'course_item'} = GetCourseItem( ci_id => $cr->{'ci_id'} );
-            $cr->{'item'} = GetBiblioFromItemNumber( $cr->{'itemnumber'} );
-            $cr->{'issue'} = GetOpenIssue( $cr->{'itemnumber'} );
+            $cr->{'item'}        = GetBiblioFromItemNumber( $cr->{'itemnumber'} );
+            $cr->{'issue'}       = GetOpenIssue( $cr->{'itemnumber'} );
         }
     }
 
     if ($include_count) {
         foreach my $cr (@$course_reserves) {
-            $cr->{'reserves_count'} =
-              CountCourseReservesForItem( ci_id => $cr->{'ci_id'} );
+            $cr->{'reserves_count'} = CountCourseReservesForItem( ci_id => $cr->{'ci_id'} );
         }
     }
 
     if ($include_courses) {
         foreach my $cr (@$course_reserves) {
-            $cr->{'courses'} =
-              GetCourses( itemnumber => $cr->{'itemnumber'} );
+            $cr->{'courses'} = GetCourses( itemnumber => $cr->{'itemnumber'} );
         }
     }
 
@@ -946,8 +926,7 @@ sub DelCourseReserve {
 
     ## If there are no other course reserves for this item
     ## delete the course_item as well
-    unless ( CountCourseReservesForItem( ci_id => $course_reserve->{'ci_id'} ) )
-    {
+    unless ( CountCourseReservesForItem( ci_id => $course_reserve->{'ci_id'} ) ) {
         DelCourseItem( ci_id => $course_reserve->{'ci_id'} );
     }
 
@@ -1007,8 +986,7 @@ sub CountCourseReservesForItem {
 
     return unless ( $ci_id || $itemnumber );
 
-    my $course_item =
-      GetCourseItem( ci_id => $ci_id, itemnumber => $itemnumber );
+    my $course_item = GetCourseItem( ci_id => $ci_id, itemnumber => $itemnumber );
 
     my @params = ( $course_item->{'ci_id'} );
     push( @params, $enabled ) if ($enabled);
@@ -1082,7 +1060,7 @@ sub SearchCourses {
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare($query);
 
-    $sth->execute(@params, $enabled);
+    $sth->execute( @params, $enabled );
 
     my $courses = $sth->fetchall_arrayref( {} );
 

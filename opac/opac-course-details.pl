@@ -31,8 +31,7 @@ use C4::CourseReserves;
 my $cgi = new CGI;
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
-    {
-        template_name   => "opac-course-details.tmpl",
+    {   template_name   => "opac-course-details.tmpl",
         query           => $cgi,
         type            => "opac",
         authnotrequired => 1,
@@ -43,17 +42,17 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 my $action = $cgi->param('action') || '';
 my $course_id = $cgi->param('course_id');
 
-die( "No course_id given" ) unless ( $course_id );
+die("No course_id given") unless ($course_id);
 
 if ( $action eq 'del_reserve' ) {
     DelCourseReserve( cr_id => $cgi->param('cr_id') );
 }
 
-my $course = GetCourse( $course_id );
+my $course = GetCourse($course_id);
 my $course_reserves = GetCourseReserves( course_id => $course_id, include_items => 1, include_count => 1 );
 
 $template->param(
-    course => $course,
+    course          => $course,
     course_reserves => $course_reserves,
 );
 

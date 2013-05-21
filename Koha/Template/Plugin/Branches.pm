@@ -32,7 +32,7 @@ sub GetName {
     my $sth   = C4::Context->dbh->prepare($query);
     $sth->execute($branchcode);
     my $b = $sth->fetchrow_hashref();
-    return encode('UTF-8', $b->{'branchname'});
+    return encode( 'UTF-8', $b->{'branchname'} );
 }
 
 1;

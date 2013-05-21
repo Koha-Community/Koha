@@ -40,10 +40,9 @@ my $item = GetBiblioFromItemNumber( undef, $barcode );
 
 my $step = ( $action eq 'lookup' && $item ) ? '2' : '1';
 
-my $tmpl = ( $course_id ) ? "add_items-step$step.tt" : "invalid-course.tt";
+my $tmpl = ($course_id) ? "add_items-step$step.tt" : "invalid-course.tt";
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-    {
-        template_name   => "course_reserves/$tmpl",
+    {   template_name   => "course_reserves/$tmpl",
         query           => $cgi,
         type            => "intranet",
         authnotrequired => 0,
@@ -57,7 +56,8 @@ $template->param( course => GetCourse($course_id) );
 
 if ( $action eq 'lookup' ) {
     my $course_item = GetCourseItem( itemnumber => $item->{'itemnumber'} );
-    my $course_reserve = ($course_item)
+    my $course_reserve =
+      ($course_item)
       ? GetCourseReserve(
         course_id => $course_id,
         ci_id     => $course_item->{'ci_id'}
@@ -75,8 +75,7 @@ if ( $action eq 'lookup' ) {
         branches  => GetBranchesLoop(),
     );
 
-}
-elsif ( $action eq 'add' ) {
+} elsif ( $action eq 'add' ) {
     my $ci_id = ModCourseItem(
         itemnumber    => $cgi->param('itemnumber'),
         itype         => $cgi->param('itype'),

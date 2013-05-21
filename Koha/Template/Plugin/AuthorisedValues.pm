@@ -28,7 +28,7 @@ use C4::Koha;
 
 sub GetByCode {
     my ( $self, $category, $code, $opac ) = @_;
-    return encode('UTF-8', GetAuthorisedValueByCode( $category, $code, $opac ) );
+    return encode( 'UTF-8', GetAuthorisedValueByCode( $category, $code, $opac ) );
 }
 
 1;

@@ -31,8 +31,7 @@ use C4::CourseReserves;
 my $cgi = new CGI;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-    {
-        template_name   => "course_reserves/course.tt",
+    {   template_name   => "course_reserves/course.tt",
         query           => $cgi,
         type            => "intranet",
         authnotrequired => 0,
@@ -49,7 +48,7 @@ if ($course_id) {
 
 $template->param(
     departments => GetAuthorisedValues('DEPARTMENT'),
-    terms => GetAuthorisedValues('TERM'),
+    terms       => GetAuthorisedValues('TERM'),
 );
 
 output_html_with_http_headers $cgi, $cookie, $template->output;

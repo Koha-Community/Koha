@@ -32,7 +32,7 @@ sub GetDescription {
     my $sth   = C4::Context->dbh->prepare($query);
     $sth->execute($itemtype);
     my $d = $sth->fetchrow_hashref();
-    return encode('UTF-8', $d->{'description'});
+    return encode( 'UTF-8', $d->{'description'} );
 
 }
 

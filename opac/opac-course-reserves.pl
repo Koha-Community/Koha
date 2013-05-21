@@ -30,8 +30,7 @@ use C4::CourseReserves;
 my $cgi = new CGI;
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
-    {
-        template_name   => "opac-course-reserves.tmpl",
+    {   template_name   => "opac-course-reserves.tmpl",
         query           => $cgi,
         type            => "opac",
         authnotrequired => 1,
@@ -44,7 +43,7 @@ my $search_on = $cgi->param('search_on');
 my $courses = SearchCourses( term => $search_on, enabled => 'yes' );
 
 if ( @$courses == 1 ) {
-    print $cgi->redirect("/cgi-bin/koha/opac-course-details.pl?course_id=" . $courses->[0]->{'course_id'});
+    print $cgi->redirect( "/cgi-bin/koha/opac-course-details.pl?course_id=" . $courses->[0]->{'course_id'} );
 } else {
     $template->param( courses => $courses );
     output_html_with_http_headers $cgi, $cookie, $template->output;
