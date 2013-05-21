@@ -37,7 +37,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-my $action = $cgi->param('action');
+my $action = $cgi->param('action') || '';
 
 if ( $action eq 'del' ) {
     DelCourse( $cgi->param('course_id') );
