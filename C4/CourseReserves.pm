@@ -568,7 +568,7 @@ sub _UpdateCourseItem {
             $mod_params{$_} = $params{$_};
         }
     }
-    ModItem( \%mod_params, undef, $course_item->{'itemnumber'} );
+    ModItem( \%mod_params, undef, $course_item->{'itemnumber'} ) if %mod_params;
 
     ## Update fields that didn't have an original value, but now do
     ## We must save the original value in course_items, and also
@@ -583,7 +583,7 @@ sub _UpdateCourseItem {
         }
     }
     _ModStoredFields( 'ci_id' => $params{'ci_id'}, %mod_params_old );
-    ModItem( \%mod_params_new, undef, $course_item->{'itemnumber'} );
+    ModItem( \%mod_params_new, undef, $course_item->{'itemnumber'} ) if %mod_params_new;
 
 }
 
@@ -648,7 +648,7 @@ sub _RevertFields {
             }
         }
     }
-    ModItem( $mod_item_params, undef, $course_item->{'itemnumber'} );
+    ModItem( $mod_item_params, undef, $course_item->{'itemnumber'} ) if $mod_item_params && %$mod_item_params;
 
     my $query = "UPDATE course_items SET " . join( ',', map { "$_=NULL" } @fields_to_null ) . " WHERE ci_id = ?";
 
@@ -677,7 +677,7 @@ sub _SwapAllFields {
         }
     }
 
-    ModItem( \%course_item_fields, undef, $course_item->{'itemnumber'} );
+    ModItem( \%course_item_fields, undef, $course_item->{'itemnumber'} ) if %course_item_fields;
     _ModStoredFields( %item_fields, ci_id => $ci_id );
 }
 
