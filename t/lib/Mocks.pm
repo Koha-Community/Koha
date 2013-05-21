@@ -1,23 +1,39 @@
 package t::lib::Mocks;
 
 use Modern::Perl;
+use C4::Context;
 use Test::MockModule;
-use t::lib::Mocks::Context;
 
-our (@ISA,@EXPORT,@EXPORT_OK);
-BEGIN {
-    require Exporter;
-    @ISA = qw(Exporter);
-    push @EXPORT, qw(
-        &set_solr
-        &set_zebra
-    );
+my %configs;
+sub mock_config {
+    my $context = new Test::MockModule('C4::Context');
+    my ( $conf, $value ) = @_;
+    $configs{$conf} = $value;
+    $context->mock('config', sub {
+        my ( $self, $conf ) = @_;
+        if ( exists $configs{$conf} ) {
+            return $configs{$conf}
+        } else {
+            my $method = $context->original('config');
+            return $method->($self, $conf);
+        }
+    });
 }
 
-my $context = new Test::MockModule('C4::Context');
-sub set_solr {
-    $context->mock('preference', sub { &t::lib::Mocks::Context::MockPreference( @_, "Solr", $context ) });
+my %preferences;
+sub mock_preference {
+    my $context = new Test::MockModule('C4::Context');
+    my ( $pref, $value ) = @_;
+    $preferences{$pref} = $value;
+    $context->mock('preference', sub {
+        my ( $self, $pref ) = @_;
+        if ( exists $preferences{$pref} ) {
+            return $preferences{$pref}
+        } else {
+            my $method = $context->original('preference');
+            return $method->($self, $pref);
+        }
+    });
 }
-sub set_zebra {
-    $context->mock('preference', sub { &t::lib::Mocks::Context::MockPreference( @_, "Zebra", $context ) });
-}
+
+1;
