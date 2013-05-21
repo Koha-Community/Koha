@@ -44,7 +44,7 @@
               <tbody>
                 <tr><th>Course name</th><td>[% course.course_name %]</td></tr>
                 <tr><th>Term</th><td>[% AuthorisedValues.GetByCode( 'TERM', course.term ) %]</td></tr>
-                <tr><th>Department</th><td>_[% AuthorisedValues.GetByCode( 'DEPARTMENT', course.department ) %]</td></tr>
+                <tr><th>Department</th><td>[% AuthorisedValues.GetByCode( 'DEPARTMENT', course.department ) %]</td></tr>
                 <tr><th>Course number</th><td>[% course.course_number %]</td></tr>
                 <tr><th>Section</th><td>[% course.section %]</td></tr>
                 <tr><th>Instructors</th><td>[% FOREACH i IN course.instructors %]<div class="instructor"><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% i.borrowernumber %]">[% i.firstname %] [% i.surname %]</a></div>[% END %]</td></tr>
