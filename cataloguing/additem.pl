@@ -402,11 +402,6 @@ if ($op eq "additem") {
         $record = _increment_barcode($record, $frameworkcode);
     }
 
-
-    if (C4::Context->preference('autoBarcode') eq 'incremental') {
-        $record = _increment_barcode($record, $frameworkcode);
-    }
-
     my $addedolditem = TransformMarcToKoha( $dbh, $record );
 
     # If we have to add or add & duplicate, we add the item
