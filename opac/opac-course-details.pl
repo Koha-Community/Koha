@@ -39,14 +39,9 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     }
 );
 
-my $action = $cgi->param('action') || '';
 my $course_id = $cgi->param('course_id');
 
 die("No course_id given") unless ($course_id);
-
-if ( $action eq 'del_reserve' ) {
-    DelCourseReserve( cr_id => $cgi->param('cr_id') );
-}
 
 my $course = GetCourse($course_id);
 my $course_reserves = GetCourseReserves( course_id => $course_id, include_items => 1, include_count => 1 );
