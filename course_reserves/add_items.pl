@@ -28,7 +28,7 @@ use C4::Koha;
 use C4::Biblio;
 use C4::Branch;
 
-use C4::CourseReserves;
+use C4::CourseReserves qw(GetCourse GetCourseItem GetCourseReserve ModCourseItem ModCourseReserve);
 
 my $cgi = new CGI;
 

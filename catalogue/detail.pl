@@ -41,7 +41,7 @@ use C4::XSLT;
 use C4::Images;
 use Koha::DateUtils;
 use C4::HTML5Media;
-use C4::CourseReserves;
+use C4::CourseReserves qw(GetItemReservesInfo);
 
 # use Smart::Comments;
 

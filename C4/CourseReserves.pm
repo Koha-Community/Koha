@@ -17,8 +17,6 @@ package C4::CourseReserves;
 
 use Modern::Perl;
 
-require Exporter;
-
 use C4::Context;
 use C4::Items qw(GetItem ModItem);
 use C4::Biblio qw(GetBiblioFromItemNumber);
@@ -27,8 +25,9 @@ use C4::Circulation qw(GetOpenIssue);
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $DEBUG @FIELDS);
 
 BEGIN {
-    @ISA    = qw(Exporter);
-    @EXPORT = qw(
+    require Exporter;
+    @ISA       = qw(Exporter);
+    @EXPORT_OK = qw(
       &GetCourse
       &ModCourse
       &GetCourses
@@ -49,6 +48,7 @@ BEGIN {
 
       &GetItemReservesInfo
     );
+    %EXPORT_TAGS = ( 'all' => \@EXPORT_OK );
 
     $DEBUG = 0;
     @FIELDS = ( 'itype', 'ccode', 'holdingbranch', 'location' );

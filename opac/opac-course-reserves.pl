@@ -25,7 +25,7 @@ use CGI;
 use C4::Auth;
 use C4::Output;
 
-use C4::CourseReserves;
+use C4::CourseReserves qw(SearchCourses);
 
 my $cgi = new CGI;
 

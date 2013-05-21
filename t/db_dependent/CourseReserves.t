@@ -11,7 +11,7 @@ use Data::Dumper;
 
 BEGIN {
     use_ok('C4::Context');
-    use_ok('C4::CourseReserves');
+    use_ok('C4::CourseReserves', qw/:all/);
 }
 
 my $dbh = C4::Context->dbh;

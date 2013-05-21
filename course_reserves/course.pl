@@ -26,7 +26,7 @@ use C4::Auth;
 use C4::Output;
 use C4::Koha;
 
-use C4::CourseReserves;
+use C4::CourseReserves qw(GetCourse);
 
 my $cgi = new CGI;
 

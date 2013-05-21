@@ -25,7 +25,7 @@ use C4::Output;
 use C4::Reserves;
 use C4::Auth;
 
-use C4::CourseReserves;
+use C4::CourseReserves qw(DelCourse ModCourse ModCourseInstructors);
 
 my $cgi = new CGI;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(

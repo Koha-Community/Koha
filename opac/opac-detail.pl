@@ -50,7 +50,7 @@ use List::MoreUtils qw/any none/;
 use C4::Images;
 use Koha::DateUtils;
 use C4::HTML5Media;
-use C4::CourseReserves;
+use C4::CourseReserves qw(GetItemReservesInfo);
 
 BEGIN {
 	if (C4::Context->preference('BakerTaylorEnabled')) {
