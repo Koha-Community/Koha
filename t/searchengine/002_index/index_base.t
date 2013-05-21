@@ -5,7 +5,7 @@ use t::lib::::Mocks;
 
 use Koha::SearchEngine::Index;
 
-set_solr;
+t::lib::Mocks::mock_preference('SearchEngine', 'Solr');
 my $index_service = Koha::SearchEngine::Index->new;
 system( qq{/bin/cp $FindBin::Bin/../indexes.yaml /tmp/indexes.yaml} );
 $index_service->searchengine->config->set_config_filename( "/tmp/indexes.yaml" );

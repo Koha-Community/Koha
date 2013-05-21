@@ -19,7 +19,7 @@ my ($operands, $indexes, $operators);
 @$indexes = ('ti', 'au');
 @$operators = ('AND');
 
-set_solr;
+t::lib::Mocks::mock_preference('SearchEngine', 'Solr');
 my $qs = Koha::SearchEngine::QueryBuilder->new;
 
 my $se = Koha::SearchEngine->new;
@@ -31,7 +31,7 @@ is($gotsolr, $expectedsolr, "Test build_query Solr");
 
 
 # === Zebra part ===
-set_zebra;
+t::lib::Mocks::mock_preference('SearchEngine', 'Zebra');
 $se = Koha::SearchEngine->new;
 is( $se->name, "Zebra", "Test searchengine name eq Zebra" );
 $qs = Koha::SearchEngine::QueryBuilder->new;
@@ -39,7 +39,6 @@ my ( $builterror, $builtquery, $simple_query, $query_cgi, $query_desc, $limit, $
 my $gotzebra = $builtquery;
 my $expectedzebra = qq{ti,wrdl= cup AND au,wrdl= rowling };
 is($gotzebra, $expectedzebra, "Test Zebra indexes in 'normal' search");
-# @and @attr 1=title @attr 4=6 "des mots de mon titre" @attr 1=author Jean en PQF
 
 
 done_testing;

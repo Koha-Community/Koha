@@ -6,8 +6,7 @@ use C4::Context;
 use Koha::SearchEngine;
 use t::lib::Mocks;
 
-set_solr;
-
+t::lib::Mocks::mock_preference('SearchEngine', 'Solr');
 my $se = Koha::SearchEngine->new;
 is( $se->name, "Solr", "Test searchengine name eq Solr" );
 
