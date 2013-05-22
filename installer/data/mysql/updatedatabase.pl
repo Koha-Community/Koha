@@ -6935,7 +6935,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
     SetVersion($DBversion);
 }
 
-$DBversion = "3.11.00.XXX";
+$DBversion = "3.13.00.002";
 if ( CheckVersion($DBversion) ) {
    $dbh->do("UPDATE systempreferences SET variable = 'IndependentBranches' WHERE variable = 'IndependantBranches'");
    print "Upgrade to $DBversion done (Bug 10080 - Change system pref IndependantBranches to IndependentBranches)\n";
