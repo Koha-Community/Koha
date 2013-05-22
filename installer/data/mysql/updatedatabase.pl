@@ -6942,7 +6942,7 @@ if ( CheckVersion($DBversion) ) {
    SetVersion ($DBversion);
 }
 
-$DBversion ="3.13.00.XXX";
+$DBversion = '3.13.00.003';
 if ( CheckVersion($DBversion) ) {
     $dbh->do("ALTER TABLE serial DROP itemnumber");
     print "Upgrade to $DBversion done (Bug 7718 - Remove itemnumber column from serials table)\n";
