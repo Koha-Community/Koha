@@ -1033,7 +1033,7 @@ $(document).ready(function() {
             <label for="branchcode">Library:</label>
             
                 <select name="branchcode" id="branchcode" style="width: 20em;">
-                    [% UNLESS ( Independantbranches ) %]<option value="">None</option>[% END %]
+                    [% UNLESS ( IndependentBranches ) %]<option value="">None</option>[% END %]
                     [% FOREACH branchloo IN branchloop %][% IF ( branchloo.selected ) %]<option value="[% branchloo.value %]" selected="selected">[% branchloo.branchname %]</option>
 				[% ELSE %]
 				<option value="[% branchloo.value %]">[% branchloo.branchname %]</option>

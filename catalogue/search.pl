@@ -224,7 +224,7 @@ if($cgi->cookie("holdfor")){
 my $branches = GetBranches();
 
 # Populate branch_loop with all branches sorted by their name.  If
-# independantbranches is activated, set the default branch to the borrower
+# IndependentBranches is activated, set the default branch to the borrower
 # branch, except for superlibrarian who need to search all libraries.
 my $user = C4::Context->userenv;
 my @branch_loop = map {
