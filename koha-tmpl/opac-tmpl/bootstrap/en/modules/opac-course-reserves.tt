@@ -1,0 +1,70 @@
+[% USE Koha %]
+[% USE AuthorisedValues %]
+
+[% INCLUDE 'doc-head-open.inc' %]
+[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Courses
+[% INCLUDE 'doc-head-close.inc' %]
+[% BLOCK cssinclude %][% END %]
+</head>
+<body id="opac-main">
+[% INCLUDE 'masthead.inc' %]
+
+<div class="main">
+    <ul class="breadcrumb">
+        <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
+        <li><a href="#">Course reserves</a></li>
+    </ul>
+
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="span12">
+
+                    <h1>Courses</h1>
+                    <div id="search-toolbar">
+                        <form action="/cgi-bin/koha/opac-course-reserves.pl" method="get" id="search_courses_form" class="form-inline">
+
+                               <fieldset><div class="input-append">
+                                                                   <label for="search_on">Search courses:</label> <input type="text" name="search_on" id="search_on" />
+                                                                  <input type="submit" class="btn" value="Search" />
+                                                              </div></fieldset>
+
+                        </form>
+                    </div><!-- /search-toolbar -->
+
+                    <table id="course_reserves_table" class="table table-bordered table-striped table-condensed">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Dept.</th>
+                                <th>Course #</th>
+                                <th>Section</th>
+                                <th>Term</th>
+                                <th>Instructors</th>
+                                <th>Notes</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            [% FOREACH c IN courses %]
+                                <tr>
+                                    <td><a href="opac-course-details.pl?course_id=[% c.course_id %]">[% c.course_name %]</a></td>
+                                    <td>[% AuthorisedValues.GetByCode( 'DEPARTMENT', c.department, 1 ) %]</td>
+                                    <td>[% c.course_number %]</td>
+                                    <td>[% c.section %]</td>
+                                    <td>[% AuthorisedValues.GetByCode( 'TERM' c.term ) %]</td>
+                                    <td>
+                                      [% FOREACH i IN c.instructors %]
+                                          <div class="instructor">[% i.firstname %] [% i.surname %]</div>
+                                      [% END %]
+                                    </td>
+                                    <td>[% c.public_note %]</td>
+                            [% END %]
+                        </tbody>
+                    </table>
+            </div> <!-- / .span12 -->
+        </div> <!-- / .row-fluid -->
+    </div> <!-- / .container-fluid -->
+</div> <!-- / .main -->
+[% INCLUDE 'opac-bottom.inc' %]
+[% BLOCK jsinclude %]
+[% END %]

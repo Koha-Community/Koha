@@ -1,0 +1,170 @@
+[% USE Koha %]
+[% USE KohaDates %]
+
+[% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Tags
+[% INCLUDE 'doc-head-close.inc' %]
+[% BLOCK cssinclude %]
+    <style type="text/css">
+        fieldset { padding : .3em;margin:.3em 0;}
+        #tagcloud    {background-color: #F3F3F3; text-align: justify;padding:7px;}
+        .tag a       {text-decoration: none;}
+        .tag a:hover {text-decoration: underline;}
+        .tag         {display: block; padding-left: 1em;}
+        .tagcount    {display: none;}
+        .cloudweight {display: none;}
+        .tagweight {
+            display: none;
+            position: relative;
+            bottom: 0.4em;
+            color: red;
+            font-size: 12px;
+        }
+    </style>
+[% END %]
+</head>
+[% IF ( loggedinusername ) %]<body id="opac-usertags" class="scrollto">[% ELSE %]<body id="opac-tags" class="scrollto">[% END %]
+[% INCLUDE 'masthead.inc' %]
+
+<div class="main">
+    <ul class="breadcrumb">
+        <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
+        <li><a href="#">Tags</a></li>
+    </ul>
+
+    <div class="container-fluid">
+        <div class="row-fluid">
+            [% IF ( OpacNav||loggedinusername ) %]
+                <div class="span2">
+                    <div id="navigation">
+                        [% INCLUDE 'navigation.inc' IsPatronPage=1 %]
+                    </div>
+                </div>
+                <div class="span10">
+            [% ELSE %]
+                <div class="span12">
+            [% END %]
+
+                    <div id="usertags" class="maincontent">
+                        [% IF ( ERRORS ) %]
+                            [% FOREACH ERROR IN ERRORS %]
+                                <div class="alert">
+                                    There was a problem with this operation:
+                                    [% IF ( ERROR.tagsdisabled ) %]
+                                        Sorry, tags are not enabled on this system.
+                                    [% ELSIF ( ERROR.badparam ) %]
+                                        ERROR: illegal parameter [% ERROR.badparam %]
+                                    [% ELSIF ( ERROR.login ) %]
+                                        ERROR: You must log in to complete that action.
+                                    [% ELSIF ( ERROR.failed_delete ) %]
+                                        ERROR: You cannot delete the tag [% ERROR.failed_delete %].
+                                        <br />Note: you can only delete your own tags.
+                                    [% ELSIF ( ERROR.scrubbed ) %]
+                                        Note: your tag contained markup code that was removed.
+                                        <br />The tag was added as &quot;[% ERROR.scrubbed %]&quot;.
+                                    [% ELSIF ( ERROR.scrubbed_all_bad ) %]
+                                        Note: your tag was entirely markup code.  It was NOT added.
+                                        <br />Please try again with plain text.
+                                    [% ELSE %]Unrecognized error.
+                                    [% END %]
+                                </div>
+                            [% END %]
+                        [% END # /IF ERRORS %]
+                        <h1>All Tags</h1>
+
+                        <form method="get" action="opac-tags.pl" class="form-inline">
+                            <fieldset>
+                                <label>
+                                    [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
+                                        Tags to show from other users
+                                    [% ELSE %]
+                                        Tags to show
+                                    [% END %]:
+                                </label>
+                                <div class="input-append">
+                                    <input type="text" name="limit" style="text-align: right;" maxlength="4" size="4" value="[% limit or "100" %]" />
+                                    <input type="submit" value="OK" class="btn" />
+                                </div>
+                                [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
+                                    [% UNLESS ( loggedinusername ) %]
+                                        <p><a class="loginModal-trigger" href="/cgi-bin/koha/opac-user.pl">Log in to see your own saved tags.</a></p>
+                                    [% END %]
+                                [% END %]
+                            </fieldset>
+                        </form>
+
+                        [% IF ( TAGLOOP ) %]
+                            <div id="tagcloud">
+                                [% FOREACH TAGLOO IN TAGLOOP %]
+                                    <span class="tag tagweight[% TAGLOO.stratum %]" id="tag[% loop.count %]" style="display:inline;">
+                                    <a href="/cgi-bin/koha/opac-search.pl?tag=[% TAGLOO.term |url %]&amp;q=[% TAGLOO.term |url %]">[% TAGLOO.term |html %]</a>
+                                    <span class="tagweight">[% TAGLOO.weight_total %]</span>
+                                    </span>
+                                [% END %]
+                            </div>
+                        [% END # / TAGLOOP%]
+                        [% IF ( add_op ) %]
+                            [% IF ( added_count ) %]
+                                <div class="dialog message">[% added_count %] [% IF ( added_count ==1 ) %] tag[% ELSE %]tags[% END %] successfully added.</div>
+                            [% END %]
+                            [% IF ( deleted_count ) %]
+                            <div class="dialog message">[% deleted_count %][% IF ( deleted_count ==1 ) %] tag[% ELSE %]tags[% END %] successfully deleted.</div>
+                            [% END %]
+                        [% END # /add_op %]
+
+                        [% IF ( MY_TAGS ) %]
+                        <form method="post" action="opac-tags.pl">
+                            <h2>My Tags</h2>
+                            <table id="mytagst" class="table table-bordered table-striped">
+                                <thead><tr><th>Term</th><th>Title</th><th>Date added</th><th>Delete</th></tr></thead>
+                                <tbody>
+                                    [% FOREACH MY_TAG IN MY_TAGS %]
+                                        <tr>
+                                            <td class="tagterm">
+                                                <span class="tdlabel">Tag:</span>
+                                                <a href="/cgi-bin/koha/opac-search.pl?tag=[% MY_TAG.term |url %]&amp;q=[% MY_TAG.term |url %]">
+                                            [% MY_TAG.term |html %]</a></td>
+                                            <td>
+                                                <span class="tdlabel">Title:</span>
+                                                <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% MY_TAG.biblionumber %]">
+                                                [% MY_TAG.bib_summary |html %]</a></td>
+                                            <td>
+                                                <span title="[% MY_TAG.date_created %]">
+                                                    <span class="tdlabel">Date added:</span>
+                                                    [% MY_TAG.date_created | $KohaDates %]
+                                                </span>
+                                            </td>
+                                            <td><input type="submit" name="del[% MY_TAG.tag_id %]" value="Delete" class="btn btn-danger btn-mini" /></td>
+                                        </tr>
+                                    [% END %]
+                                </tbody>
+                            </table>
+                        </form>
+                        [% END # /MY_TAGS %]
+                    </div> <!-- / .usertags -->
+                </div> <!-- / .span10/12 -->
+            </div> <!-- / .row-fluid -->
+        </div> <!-- / .container-fluid -->
+    </div> <!-- / .main -->
+
+[% INCLUDE 'opac-bottom.inc' %]
+[% BLOCK jsinclude %]
+[% INCLUDE 'datatables.inc' %]
+<script type="text/javascript">
+//<![CDATA[
+    $(document).ready(function(){
+        $("#mytagst").dataTable($.extend(true, {}, dataTablesDefaults, {
+            "aaSorting": [[ 2, "asc" ]],
+            "aoColumnDefs": [
+              { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false }
+            ],
+            "aoColumns": [
+                null,
+                { "sType": "anti-the" },
+                { "sType": "title-string" },
+                null
+            ]
+        }));
+    });
+//]]>
+</script>
+[% END %]

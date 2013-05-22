@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+[% IF ( bidi ) %]<html lang="[% lang %]" dir="[% bidi %]">[% ELSE %]<html lang="[% lang %]">[% END %]
+<head>
+<title>RECEIPT</title>
+<script type="text/javascript">
+    x = 0;
+    function callPrint(){
+         while (x == 0){
+          self.print();
+          javascript:window.opener.location='/cgi-bin/koha/sco/sco-main.pl?logout.x=1';
+          x = 1;
+         }
+    }
+
+    function closeNow(){
+      if (x == 1){
+        setTimeout('self.close()',1000);
+      }
+    }
+</script>
+
+[% IF ( SCOUserCSS ) %]<style type="text/css">[% SCOUserCSS %]</style>[% END %]
+[% IF ( SCOUserJS ) %]<script type="text/javascript">[% SCOUserJS %]</script>[% END %]
+
+</head>
+
+<body onLoad="callPrint(); closeNow();">
+
+[% branchname %]<br><br>
+[% cardnumber %]<br>
+
+[% IF ( todayissues ) %]<br>
+<p><b>Today's checkouts</b></p>
+[% FOREACH todayissue IN todayissues %]<br>
+[% todayissue.title |html %]<br>
+[% todayissue.author %]<br>
+[% todayissue.dd %]<br>
+[% todayissue.barcode %]<br>
+[% END %]
+[% END %]
+
+</body>
+</html>
+
+[% BLOCK jsinclude %]
+[% END %]

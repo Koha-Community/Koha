@@ -1,0 +1,37 @@
+[% USE Koha %]
+[% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; ISBD view
+[% INCLUDE 'doc-head-close.inc' %]
+[% BLOCK cssinclude %][% END %]
+</head>
+<body id="opac-isbddetail" class="scrollto">
+[% INCLUDE 'masthead.inc' %]
+<div class="main">
+    <ul class="breadcrumb">
+        <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
+        <li><a href="#">ISBD view</a></li>
+    </ul>
+
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="span9">
+                <div id="opac-detail" class="maincontent">
+                    <div id="usermarcdetail">
+                        <div id="catalogue_detail_biblio">
+                            <div id="views">
+                                <span class="view"><a id="Normalview" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]">Normal view</a></span> <span class="view"><a id="MARCview" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=[% biblionumber %]">MARC view</a></span> <span class="view"><span id="ISBDview">ISBD view</span></span></div>
+
+                                <div id="isbdcontents">[% ISBD %]</div>
+
+                        </div> <!-- / #catalogue_detail_biblio -->
+                    </div> <!-- / #usermarcdetail -->
+                </div> <!-- / #opac-detail -->
+            </div> <!-- / .span9 -->
+            <div class="span3">
+                [% INCLUDE 'opac-detail-sidebar.inc' %]
+            </div>
+        </div> <!-- / .row-fluid -->
+    </div>  <!-- / .container-fluid -->
+</div> <!-- / .main -->
+
+[% INCLUDE 'opac-bottom.inc' %]
+[% BLOCK jsinclude %][% END %]

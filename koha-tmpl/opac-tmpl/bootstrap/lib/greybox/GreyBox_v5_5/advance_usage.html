@@ -1,0 +1,182 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+    <title>GreyBox - Advance usage</title>
+
+    <script type="text/javascript">
+        var GB_ROOT_DIR = "./greybox/";
+    </script>
+
+    <script type="text/javascript" src="greybox/AJS.js"></script>
+    <script type="text/javascript" src="greybox/AJS_fx.js"></script>
+    <script type="text/javascript" src="greybox/gb_scripts.js"></script>
+    <link href="greybox/gb_styles.css" rel="stylesheet" type="text/css" media="all" />
+
+    <script type="text/javascript" src="static_files/help.js"></script>
+    <link href="static_files/help.css" rel="stylesheet" type="text/css" media="all" />
+</head>
+<body>
+
+<script>
+insertHeader();
+insertMenu('adv_usage');
+</script>
+
+<h2>Methods for showing windows</h2>
+
+<h3 class="first">GB_show</h3>
+
+<h4>Signature:</h4>
+<script>
+insertCode(
+    'GB_show(caption, url, /*optional*/ height, width, callback_fn)'
+);
+</script>
+
+<h4>Example:</h4>
+<script>
+insertCode(
+    '<a href="http://google.com/" onclick="return GB_show(\'Google\', this.href)">Visit Google</a>'
+);
+</script>
+
+<h4>Example rendered:</h4>
+<a href="http://google.com/" onclick="return GB_show('Google', this.href)">Visit Google</a>
+
+
+<h3>GB_showCenter</h3>
+
+<h4>Signature:</h4>
+<script>
+insertCode(
+    'GB_showCenter(caption, url, /* optional */ height, width, callback_fn)'
+);
+</script>
+
+<h4>Example:</h4>
+<script>
+insertCode(
+    '<a href="http://google.com/" onclick="return GB_showCenter(\'Google\', this.href)">Visit Google</a>'
+);
+</script>
+
+<h4>Example rendered:</h4>
+<a href="http://google.com/" onclick="return GB_showCenter('Google', this.href)">Visit Google</a>
+
+
+<h3>GB_showFullScreen</h3>
+
+<h4>Signature:</h4>
+<script>
+insertCode(
+    'GB_showFullScreen(caption, url, callback_fn)'
+);
+</script>
+
+<h4>Example:</h4>
+<script>
+insertCode(
+    '<a href="http://google.com/" onclick="return GB_showFullScreen(\'Google\', this.href)">Visit Google</a>'
+);
+</script>
+
+<h4>Example rendered:</h4>
+<a href="http://google.com/" onclick="return GB_showFullScreen('Google', this.href)">Visit Google</a>
+
+<h2>Methods for showing overlays</h2>
+
+<h3 class="first">GB_showImage</h3>
+<h4>Signature:</h4>
+<script>
+insertCode(
+    'GB_showImage(caption, url, callback_fn)'
+);
+</script>
+
+<h4>Example:</h4>
+<script>
+insertCode(
+        '<a href="http://static.flickr.com/119/294309231_a3d2a339b9.jpg"\n'+
+        'onclick="return GB_showImage(\'Flower\', this.href)">A flower in my hand</a>'
+);
+</script>
+
+<h4>Example rendered:</h4>
+<a href="http://static.flickr.com/119/294309231_a3d2a339b9.jpg" onclick="return GB_showImage('Flower', this.href)">A flower in my hand</a>
+
+<h3>GB_showPage</h3>
+<h4>Signature:</h4>
+<script>
+insertCode(
+    'GB_showPage(caption, url, callback_fn)'
+);
+</script>
+
+<h4>Example:</h4>
+<script>
+insertCode(
+    '<a href="http://google.com" onclick="return GB_showPage(\'Google\', this.href)">Show Google in another layout</a>'
+);
+</script>
+
+<h4>Example rendered:</h4>
+<a href="http://google.com" onclick="return GB_showPage('Google', this.href)">Show Google in another layout</a>
+
+
+<h2>Methods for showing sets</h2>
+
+<h3 class="first">GB_showFullScreenSet</h3>
+<h4>Signature:</h4>
+<script>
+insertCode(
+    'GB_showFullScreenSet(set, start_index, callback_fn)'
+);
+</script>
+
+<h4>Example:</h4>
+<script>
+insertCode(
+    "<script>",
+    "var page_set = [{'caption': 'Google', 'url': 'http://google.com/'},",
+    "    {'caption': 'Yahoo', 'url': 'http://yahoo.com/'}];",
+    "<\/script>",
+    '<a href="#" onclick="return GB_showFullScreenSet(page_set, 1)">Show first page in page_set</a>'
+);
+</script>
+
+<h4>Example rendered:</h4>
+<script>
+var page_set = [{'caption': 'Google', 'url': 'http://google.com/'},
+    {'caption': 'Yahoo', 'url': 'http://yahoo.com/'}];
+</script>
+<a href="#" onclick="return GB_showFullScreenSet(page_set, 1)">Show first page in page_set</a>
+
+<h3>GB_showImageSet</h3>
+<h4>Signature:</h4>
+<script>
+insertCode(
+    'GB_showImageSet(set, start_index, callback_fn)'
+);
+</script>
+
+<h4>Example:</h4>
+<script>
+insertCode(
+    "<script>",
+    "var image_set = [{'caption': 'Flower', 'url': 'http://static.flickr.com/119/294309231_a3d2a339b9.jpg'},",
+    "    {'caption': 'Nice waterfall', 'url': 'http://www.widerange.org/images/large/plitvicka.jpg'}];",
+    "<\/script>",
+    '<a href="#" onclick="return GB_showImageSet(image_set, 1)">Show first picture in image_set</a>'
+);
+</script>
+
+<h4>Example rendered:</h4>
+<script>
+var image_set = [{'caption': 'Flower', 'url': 'http://static.flickr.com/119/294309231_a3d2a339b9.jpg'},
+    {'caption': 'Nice waterfall', 'url': 'http://www.widerange.org/images/large/plitvicka.jpg'}];
+</script>
+<a href="#" onclick="return GB_showImageSet(image_set, 1)">Show first picture in image_set</a>
+
+
+</body>
+</html>

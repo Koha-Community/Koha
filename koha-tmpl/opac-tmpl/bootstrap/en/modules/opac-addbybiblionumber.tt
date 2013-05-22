@@ -1,0 +1,110 @@
+[% INCLUDE 'doc-head-open.inc' %]
+[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Add to your list
+[% INCLUDE 'doc-head-close.inc' %]
+[% BLOCK cssinclude %][% END %]
+</head>
+<body id="addtolist" class="popup">
+    <div class="main">
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div class="span12">
+                    <div id="useraddbybiblionumber">
+                        [% IF ( authorized ) %]
+                            [% UNLESS ( newshelf ) %]
+                                [% IF ( multiple ) %]
+                                    <h1>Add [% total %] items to [% IF ( singleshelf ) %]<em>[% shelfname %]</em>: [% ELSE %]a list:[% END %]</h1>
+                                [% ELSE %]
+                                    <h1>Add to [% IF ( singleshelf ) %]<em>[% shelfname %]</em>[% ELSE %]a list:[% END %]</h1>
+                                [% END %]
+                                <ul>
+                                    [% FOREACH biblio IN biblios %]
+                                        <li> <span class="title">[% biblio.title |html %]</span>
+                                            [% IF ( biblio.author ) %]<span class="author"> [% biblio.author %] </span>[% END %]
+                                        </li>
+                                    [% END %]
+                                </ul>
+                                [% IF ( existingshelves ) %]
+                                    <form name="f1" action="/cgi-bin/koha/opac-addbybiblionumber.pl" method="post">
+                                        <fieldset>
+                                            <legend>Select a list</legend>
+                                            <label for="shelfnumber">Add to list:</label> <select name="shelfnumber" id="shelfnumber">
+                                                [% IF ( privatevirtualshelves ) %]<optgroup label="Private Lists">
+                                                    [% FOREACH privatevirtualshelve IN privatevirtualshelves %]
+                                                    <option value="[% privatevirtualshelve.shelfnumber %]">[% privatevirtualshelve.shelfname %]</option>
+                                                    [% END %]
+                                                </optgroup>[% END %]
+                                                [% IF ( publicvirtualshelves ) %]<optgroup label="Public Lists">
+                                                    [% FOREACH publicvirtualshelve IN publicvirtualshelves %]
+                                                    <option value="[% publicvirtualshelve.shelfnumber %]">[% publicvirtualshelve.shelfname %]</option>
+                                                    [% END %]
+                                                </optgroup>[% END %]
+                                            </select>
+                                            [% FOREACH biblio IN biblios %]
+                                                <input type="hidden" name="biblionumber" value="[% biblio.biblionumber %]" />
+                                            [% END %]
+                                            <input type="hidden" name="modifyshelfcontents" value="1" />
+                                        </fieldset>
+                                        <fieldset class="action">
+                                            <input type="submit" value="Save" class="btn" />
+                                            <a class="close cancel" href="#">Cancel</a>
+                                        </fieldset>
+                                    </form>
+                                    <p>...or...</p>
+                                [% ELSE %]
+                                    [% IF ( singleshelf ) %]
+                                        <form name="f1" action="/cgi-bin/koha/opac-addbybiblionumber.pl" method="post">
+                                            [% FOREACH biblio IN biblios %]
+                                                <input type="hidden" name="biblionumber" value="[% biblio.biblionumber %]">
+                                            [% END %]
+                                            <input type="hidden" name="shelfnumber" value="[% shelfnumber %]" />
+                                            <input type="hidden" name="modifyshelfcontents" value="1" /></fieldset>
+                                            <fieldset class="action">
+                                                <input type="submit" value="Save" class="btn" />
+                                                <a class="close cancel" href="#">Cancel</a>
+                                            </fieldset>
+                                        </form>
+                                    [% END %]
+                                [% END # IF / existingshelves %]
+                            [% END # / UNLESS newshelf %]
+
+                            [% UNLESS ( singleshelf ) %]
+                                <form name="f2" method="post" action="/cgi-bin/koha/opac-addbybiblionumber.pl">
+                                    <fieldset>
+                                        <legend>Add to a new list:</legend>
+                                            <label for="newvirtualshelf">List name:</label>
+                                            <input type="text" name="newvirtualshelf" id="newvirtualshelf" size="40" />
+                                            <label for="category">Category:</label>
+                                            <select name="category" id="category">
+                                                <option value="1">Private</option>
+                                                [% IF (OpacAllowPublicListCreation) %]
+                                                    <option value="2">Public</option>
+                                                [% END %]
+                                            </select>
+                                    </fieldset>
+                                    [% FOREACH biblio IN biblios %]
+                                        <input type="hidden" name="biblionumber" value="[% biblio.biblionumber | html%]" />
+                                    [% END %]
+                                    <fieldset class="action">
+                                        <input type="submit" value="Save" class="btn" />
+                                        <a class="close cancel" href="#">Cancel</a>
+                                    </fieldset>
+                                </form>
+                            [% END # / UNLESS singleshelf %]
+                        [% ELSE %]
+                            <p>
+                                [% IF (errcode==1) %]
+                                    Could not create new list. Please check if the name is unique.
+                                [% ELSE %]
+                                    Sorry, you cannot add items to this list.
+                                [% END %]
+                            </p>
+                        [% END # IF authorized %]
+                        <p><a href="#" class="close">Close this window.</a></p>
+                    </div> <!-- / #useraddbybiblionumber -->
+                </div> <!-- / .span12 -->
+            </div> <!-- / .row-fluid -->
+        </div> <!-- / .container-fluid -->
+    </div> <!-- / .main -->
+
+[% INCLUDE 'opac-bottom.inc' is_popup=1 %]
+[% BLOCK jsinclude %][% END %]

@@ -1,0 +1,55 @@
+[% USE Koha %]
+[% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo;  [% IF ( typeissue ) %]Subscribe to a subscription alert [% ELSIF ( typeissuecancel ) %] Unsubscribe from a subscription alert [% END %]
+[% INCLUDE 'doc-head-close.inc' %]
+[% BLOCK cssinclude %][% END %]
+</head>
+<body id="opac-alert-subscribe">
+[% INCLUDE 'masthead.inc' %]
+
+    <div class="main">
+        <ul class="breadcrumb">
+            <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
+            <li><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]">Details for [% bibliotitle %]</a> <span class="divider">&rsaquo;</span></li>
+            <li><a href="#">[% IF ( typeissue ) %]Subscribe to a subscription alert [% ELSIF ( typeissuecancel ) %] Unsubscribe from a subscription alert [% END %]</a></li>
+        </ul>
+
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div class="span12">
+                    <div id="useralertsubscribe">
+                        [% IF ( typeissue ) %]
+                            <h1>Subscribe to a subscription alert</h1>
+                            <form action="opac-alert-subscribe.pl" method="post">
+                                <p>Do you want to receive an email when a new issue for this subscription arrives?</p>
+                                <h4>[% bibliotitle %]</h4>
+                                [% IF ( notes ) %]<p>[% notes %]</p>[% END %]
+                                <input type="hidden" name="externalid" value="[% externalid %]">
+                                <input type="hidden" name="alerttype" value="issue">
+                                <input type="hidden" name="biblionumber" value="[% biblionumber %]">
+                                <input type="hidden" name="op" value="alert_confirmed">
+                                <input type="submit" class="btn" value="Yes">
+                                <a class="cancel" href="opac-serial-issues.pl?biblionumber=[% biblionumber %]" >No</a>
+                            </form>
+                        [% END %]
+                        [% IF ( typeissuecancel ) %]
+                            <h1>Unsubscribe from a subscription alert</h1>
+                            <form action="opac-alert-subscribe.pl" method="post">
+                                <p>Please confirm that you do not want to receive email when a new issue arrives for this subscription.</p>
+                                <h4>[% bibliotitle %]</h4>
+                                [% IF ( notes ) %]<p>[% notes %]</p>[% END %]
+                                <input type="hidden" name="externalid" value="[% externalid %]">
+                                <input type="hidden" name="alerttype" value="issue">
+                                <input type="hidden" name="biblionumber" value="[% biblionumber %]">
+                                <input type="hidden" name="op" value="cancel_confirmed">
+                                <input type="submit" value="Yes" class="btn">
+                                <a href="opac-serial-issues.pl?biblionumber=[% biblionumber %]" class="cancel">No</a>
+                            </form>
+                        [% END %]
+                    </div> <!-- / #useralertsubscribe -->
+                </div> <!-- / .span10/12 -->
+            </div> <!-- / .row-fluid -->
+        </div> <!-- / .container-fluid -->
+    </div> <!-- / .main -->
+
+[% INCLUDE 'opac-bottom.inc' %]
+[% BLOCK jsinclude %][% END %]

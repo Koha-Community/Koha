@@ -1,0 +1,459 @@
+@import "mixins.less";
+@media only screen and (min-width: 0px) and (max-width: 304px) {
+    /* Screens bewteen 0 and 304 pixels wide */
+    #oh:after {
+            content: "(min-width: 0px) and (max-width: 304px)";
+    }
+    input,
+    select,
+    textarea {
+        width : auto;
+        max-width : 11em;
+    }
+}
+
+@media only screen and (min-width: 0px) and (max-width: 390px){
+    /* Screens bewteen 0 and 390 pixels wide */
+    #oh:after {
+            content: "(min-width: 0px) and (max-width: 390px)";
+    }
+    .ui-tabs .ui-tabs-nav li a,
+    .statictabs li a {
+        padding: .1em .5em;
+    }
+    #views {
+        border : 0;
+        padding : 0;
+        margin : 0;
+    }
+    .view {
+        padding : 0;
+        a,
+        span {
+            border : 1px solid #C9C9C9;
+            .border-radius-all(4px);
+            font-size : 80%;
+            padding : 0.3em 0.4em 4px 26px
+        }
+    }
+    .input-fluid {
+        width : 90%;
+    }
+}
+
+@media only screen and (min-width: 305px) and (max-width: 341px) {
+    /* Screens bewteen 305 and 341 pixels wide */
+    #oh:after {
+            content: "(min-width: 305px) and (max-width: 341px)";
+    }
+}
+
+@media only screen and (min-width: 342px) and (max-width: 479px) {
+    /* Screens bewteen 342 and 479 pixels wide */
+    #oh:after {
+            content: "(min-width: 342px) and (max-width: 479px)";
+    }
+    .input-fluid {
+        width : 75%;
+    }
+}
+/* Override Bootstrap Responsive CSS fixed navbar */
+@media (max-width: 979px) {
+  .navbar-fixed-top,
+  .navbar-fixed-bottom {
+      position: fixed;
+      margin-left: 0px;
+      margin-right: 0px;
+  }
+}
+@media only screen and (max-width: 608px) {
+    /* Screens below 608 pixels wide */
+    fieldset {
+        &.rows {
+            label {
+                display: block;
+                float: none;
+                text-align: left;
+            }
+            li {
+                padding-bottom : .5em;
+            }
+            ol {
+                margin-left : 0;
+            }
+        }
+    }
+    body {
+        padding: 0;
+    }
+    .tdlabel {
+        display: inline;
+    }
+    .navbar-fixed-top,
+    .navbar-static-top {
+        margin : 0;
+    }
+    .navbar-inner {
+        padding : 0;
+    }
+    .checkall,
+    .clearall,
+    .highlight_controls,
+    #selections-toolbar,
+    .selectcol,
+    .list-actions,
+    #remove-selected {
+        display: none;
+    }
+    .table td.bibliocol {
+        padding-left: 1.3em;
+    }
+    .actions {
+        display: block;
+        a, #login4tags {
+            background-color: #F2F2EF;
+            border : 1px solid #DDD;
+            .border-radius-all(4px);
+            font-weight: bold;
+            display: block;
+            font-size: 120%;
+            margin: 2px 0;
+        }
+        .label {
+            display: block;
+            font-weight: bold;
+        }
+        #login4tags {
+            margin-right: 1em;
+        }
+    }
+    #opac-main-search {
+        button,
+        input,
+        select,
+        .librarypulldown .transl1,
+        .input-append {
+            display: block;
+            width : 97%;
+            max-width: 100%;
+            margin : .5em 0;
+            .border-radius-all(5px);
+        }
+        .input-append {
+            margin : 0;
+            width: 100%;
+        }
+        .librarypulldown .transl1 {
+            width : 94.5%;
+        }
+    }
+    #toolbar .resort {
+        font-size : 14px;
+        max-width: 100%;
+        margin : .5em 0;
+        padding : 4px 6px;
+        .border-radius-all(5px);
+    }
+    .mastheadsearch {
+        margin : 0;
+        .border-radius-all(0px);
+
+    }
+    .main {
+        margin : .5em 0;
+        padding : 15px;
+        .border-radius-all(0px);
+    }
+    .breadcrumb {
+        margin : 10px 0;
+    }
+    #moresearches {
+        text-align: center;
+    }
+    #searchsubmit {
+        font-weight: bold;
+    }
+    .ui-tabs-panel,
+    .tabs-container,
+    #topissues,
+    #usertags,
+    #usersuggestions {
+        .item-thumbnail {
+            margin : .5em 0 0 .5em;
+        }
+        .table-bordered {
+            border : none;
+        }
+        .table {
+            th,
+            thead {
+                display: none;
+            }
+            td {
+                border-right : 1px solid #dddddd;
+                border-left : 1px solid #dddddd;
+                border-top : 0;
+                display : block;
+                padding : .2em;
+            }
+            p {
+                margin-bottom : 2px;
+            }
+        }
+        tr {
+            display: block;
+            margin-bottom : .6em;
+            td:first-child {
+                border-top : 1px solid #dddddd;
+                border-radius: 5px 5px 0 0;
+            }
+            td:last-child {
+                border-radius: 0 0 5px 5px;
+                border-bottom : 2px solid #CACACA;
+            }
+        }
+    }
+    .no-image {
+        display : none;
+    }
+}
+
+@media only screen and (max-width: 700px) {
+    /* Screens below 700 pixels wide */
+    #opac-main-search {
+        label {
+            display: none;
+        }
+    }
+    #logo {
+        background: transparent url("../lib/bootstrap/img/glyphicons-halflings-white.png") no-repeat;
+        background-position: 0 -24px;
+        margin: 14px 14px 0 14px;
+        width: 14px;
+        a {
+            padding:14px 0 0;
+            width:14px;
+        }
+    }
+    #user-menu-trigger {
+        display: inline;
+        margin-right : 12px;
+    }
+    #members {
+        display: none;
+        clear : both;
+        li {
+            padding-right: 20px;
+            text-align: right;
+            border-bottom : 1px solid #555;
+            &:first-child {
+                border-top : 1px solid #555;
+            }
+            &:last-child {
+                border-bottom : none;
+            }
+        }
+        .nav {
+            float: none;
+            &.pull-right {
+                float: none;
+            }
+        }
+        .nav>li {
+            float: none;
+        }
+        .divider-vertical {
+            border : 0;
+            height : 0;
+            margin : 0;
+        }
+    }
+}
+
+@media only screen and (min-width: 480px) and (max-width: 608px) {
+    /* Screens between 480 and 608 pixels wide */
+    #oh:after {
+            content: " Between 480 pixels and 608 pixels. ";
+    }
+    .input-fluid {
+        width : 75%;
+    }
+}
+
+@media only screen and (min-width: 608px) and (max-width: 767px) {
+    /* Screens between 608 and 767 pixels wide */
+    #oh:after {
+            content: " Between 608 pixels and 767 pixels. ";
+    }
+    .main {
+        padding: 0.8em 20px;
+    }
+    .breadcrumb {
+        margin : 10px 0;
+    }
+    .navbar-static-bottom {
+        margin-left : -20px;
+        margin-right : -20px;
+    }
+}
+
+@media only screen and (max-width: 767px) {
+    /* Screens below 767 pixels wide */
+    a {
+        &.title {
+            font-size: 120%;
+        }
+    }
+    #userresults {
+        margin : 0 -20px;
+    }
+    .breadcrumb,
+    #top-pages,
+    .menu-collapse {
+        display: none;
+    }
+    #search-facets,
+    #menu {
+        margin-bottom: .5em;
+        h4 {
+            display: block;
+            margin : 0;
+            padding : 0;
+            a {
+                .border-radius-all(7px);
+                border-bottom: 0;
+                font-weight: normal;
+                padding: .7em .2em;
+            }
+        }
+        ul {
+            padding: 0;
+        }
+    }
+    #menu {
+        li {
+            a {
+                .border-radius-all(0px);
+                border : 0;
+                display: block;
+                font-size: 120%;
+                text-decoration: none;
+                border-bottom: 1px solid #D8D8D8;
+                margin: 0;
+            }
+            &.active {
+                a {
+                    border-top: 1px solid #D8D8D8;
+                    border-right-width: 1px;
+                }
+            }
+            &:last-child {
+                a {
+                    -webkit-border-radius: 0 0 7px 7px;
+                       -moz-border-radius: 0 0 7px 7px;
+                            border-radius: 0 0 7px 7px;
+                }
+            }
+        }
+    }
+    #search-facets {
+        li {
+            padding : .4em;
+        }
+        h5 {
+            margin: .2em;
+        }
+    }
+    #menu h4 a.menu-open,
+    #search-facets h4 a.menu-open {
+        -webkit-border-radius: 7px 7px 0 0;
+           -moz-border-radius: 7px 7px 0 0;
+                border-radius: 7px 7px 0 0;
+        border-bottom: 1px solid #D8D8D8;
+    }
+}
+
+@media only screen and (max-width: 800px) {
+    /* Screens below 800 pixels wide */
+    .cartlabel,
+    .listslabel {
+        display: none;
+    }
+    .navbar {
+        .divider-vertical {
+            margin : 0 2px;
+        }
+        #members {
+            .divider-vertical {
+                margin : 0 9px;
+            }
+        }
+    }
+}
+
+@media only screen and (min-width: 768px) {
+    /* Screens above 768 pixels wide */
+    .main {
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+    #menu {
+        border : 0;
+        .border-radius-all(0px);
+        border-right : 1px solid #D8D8D8;
+        h4 {
+            display: none;
+        }
+        ul {
+            padding: 1em 0 1em 0;
+        }
+    }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 984px) {
+    /* Screens between 768 and 984 pixels wide */
+    #oh:after {
+            content: " Between 768 and 984 pixels. ";
+    }
+    .librarypulldown .transl1 {
+        width : 38%;
+    }
+}
+
+@media only screen and (max-width: 984px) {
+    /* Screens up to 984 pixels wide */
+    // #oh:after {
+    //         content: " Below 984 pixels. ";
+    // }
+}
+
+@media only screen and (min-width: 984px) {
+    /* Screens above 969 pixels wide */
+    #oh:after {
+            content: " Above 984 pixels. ";
+    }
+    .librarypulldown .transl1 {
+        width : 53%;
+    }
+
+}
+
+@media only screen and (max-width: 1040px) {
+    .pg_menu {
+        li {
+            a {
+                float: none;
+                text-align : left;
+            }
+            &.back_results {
+                a {
+                    border : 1px solid #D0D0D0;
+                    border-width : 1px 0 1px 0;
+                }
+            }
+        }
+    }
+    #ulactioncontainer {
+        min-width : 0;
+    }
+}

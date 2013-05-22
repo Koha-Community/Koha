@@ -1,0 +1,74 @@
+[% USE Koha %]
+[% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo;  Browse our catalog
+[% INCLUDE 'doc-head-close.inc' %]
+[% BLOCK cssinclude %][% END %]
+</head>
+<body id="opac-browser">
+[% INCLUDE 'masthead.inc' %]
+
+    <div class="main">
+        <div class="container-fluid">
+            <div class="row-fluid">
+                [% IF ( OpacNav || OpacNavBottom ) %]
+                    <div class="span2">
+                        <div id="navigation">
+                            [% INCLUDE 'navigation.inc' %]
+                        </div>
+                    </div>
+                [% END %]
+
+                [% IF ( OpacNav ) %]<div class="span10">[% ELSE %]<div class="span12">[% END %]
+
+                <div id="userbrowser">
+                    <h1>Browse our catalog</h1>
+
+                    [% IF ( have_hierarchy ) %]
+                        <ul>
+                            <li>
+                                [% description %] <a href="opac-browser.pl">Top level</a>
+                            </li>
+                            <li style="list-style-type: none;">
+                                <ul>
+                                    [% FOREACH HIERARCHY_LOO IN HIERARCHY_LOOP %]
+                                        <li>
+                                            <a href="opac-browser.pl?level=[% HIERARCHY_LOO.level %]&amp;filter=[% HIERARCHY_LOO.classification |uri %]">[% HIERARCHY_LOO.description |html %]</a>
+                                        </li>
+                                        <li style="list-style-type: none;">
+                                    [% END %]
+                                    <li style="list-style-type: none;">
+                                        <table class="table table-bordered table-striped">
+                                            <tr>
+                                                [% FOREACH LEVEL_LOO IN LEVEL_LOOP %]
+                                                    <td>
+                                                        <p>
+                                                            [% IF ( LEVEL_LOO.endnode ) %]
+                                                                <a href="opac-search.pl?q=Dewey-classification:[% LEVEL_LOO.classification |uri %]">[% LEVEL_LOO.description |html %]</a>
+                                                            [% ELSE %]
+                                                                <a href="opac-browser.pl?level=[% LEVEL_LOO.level %]&amp;filter=[% LEVEL_LOO.classification |uri %]">[% LEVEL_LOO.description |html %]</a>
+                                                            [% END %]
+                                                        </p>
+                                                        <p style="font-size:0.75em"><i>([% LEVEL_LOO.number %] biblios)</i></p>
+                                                    </td>
+                                                [% IF ( LEVEL_LOO.count3 ) %]</tr><tr>[% END %]
+                                                [% END %]
+                                            </tr>
+                                        </table>
+                                    </li>
+                                [% FOREACH HIERARCHY_LOO IN HIERARCHY_LOOP %]
+                                    </ul></li>
+                                [% END %]
+                                </ul>
+                            </li>
+                        </ul>
+                    [% ELSE %]
+                        <div class="warning">The browser table is empty. this feature is not fully set-up. See the <a href="http://wiki.koha-community.org/wiki/Opac_browse_feature">Koha Wiki</a> for more information on what it does and how to configure it.</div>
+                    [% END # / IF have_hierarchy %]
+
+                    </div> <!-- / .userbrowser -->
+                </div> <!-- / .span10 -->
+            </div> <!-- / .row-fluid -->
+        </div> <!-- / .container-fluid -->
+    </div> <!-- / .main -->
+
+[% INCLUDE 'opac-bottom.inc' %]
+[% BLOCK jsinclude %][% END %]

@@ -1,0 +1,134 @@
+[% USE Koha %]
+[% INCLUDE 'doc-head-open.inc' %]
+[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo;
+[% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
+    Log in to your account
+[% ELSE %]
+    Catalog login disabled
+[% END %]
+[% INCLUDE 'doc-head-close.inc' %]
+[% BLOCK cssinclude %][% END %]
+</head>
+<body id="opac-login-page" class="scrollto">
+[% INCLUDE 'masthead.inc' %]
+
+<div class="main">
+    <ul class="breadcrumb">
+        <li><a href="#">Home</a> <span class="divider">&rsaquo;</span></li>
+        <li>Log in</li>
+    </ul>
+
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="span7 offset2">
+                <div id="opac-auth" class="maincontent">
+                    <!--CONTENT-->
+                    [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
+                        [% IF ( nopermission ) %]
+                            <!-- This is what is displayed if user doesnt have permission -->
+                            <div class="alert">
+                                <h3>Access denied</h3>
+                                <p>Sorry, the system doesn't think you have permission to access this page. </p>
+                            </div>
+                        [% END %]
+
+                        [% IF ( loginprompt ) %]
+                            <!-- login prompt time-->
+                            <h3>Log in to your account</h3>
+
+                            [% IF ( timed_out ) %]
+                                <!-- This is what is displayed if login has timed out -->
+                                <div class="alert alert-info">
+                                    <p>Sorry, your session has timed out.  Please log in again.</p>
+                                </div>
+                            [% END %]
+
+                            [% IF ( different_ip ) %]
+                                <!-- This is what is displayed if user doesnt have permission -->
+                                <div class="alert alert-info">
+                                    <p>You are logging from a different IP address.  Please log in again.</p>
+                                </div>
+                            [% END %]
+
+                            [% IF ( invalid_username_or_password ) %]
+                                <!-- This is what is displayed if user doesnt have permission -->
+                                <div class="alert alert-info">
+                                    <p>You entered an incorrect username or password. Please try again! And remember, usernames and passwords are case sensitive.</p>
+                                </div>
+                            [% END %]
+
+                            [% IF ( casAuthentication ) %]
+                                <h4>CAS login</h4>
+
+                                [% IF ( invalidCasLogin ) %]
+                                    <!-- This is what is displayed if cas login has failed -->
+                                    <p>Sorry, the CAS login failed.</p>
+                                [% END %]
+
+                                <p>If you have a <acronym title="Central Authentication Service">CAS</acronym> account,
+                                [% IF ( casServerUrl ) %]
+                                    please <a href="[% casServerUrl %]">click here to login</a>.<p>
+                                [% END %]
+
+                                [% IF ( casServersLoop ) %]
+                                    Please choose against which one you would like to authenticate: </p>
+                                    <ul>
+                                        [% FOREACH casServer IN casServersLoop %]
+                                        <li><a href="[% casServer.value %]">[% casServer.name %]</a></li>
+                                        [% END %]
+                                    </ul>
+                                [% END %]
+
+                                <h4>Local login</h4>
+                                <p>If you do not have a CAS account, but a local account, you can still log in: </p>
+
+                            [% END # / IF casAuthentication %]
+
+                            <form action="[% url %]" name="auth" id="auth" method="post">
+                                <input type="hidden" name="koha_login_context" value="opac" />
+                                <fieldset class="brief">
+                                    [% FOREACH INPUT IN INPUTS %]
+                                        <input type="hidden" name="[% INPUT.name |html %]" value="[% INPUT.value |html %]" />
+                                    [% END %]
+                                    <label for="userid">Login</label>
+                                    <input type="text"  size="25" id="userid"  name="userid" />
+                                    <label for="password">Password</label><input type="password"  size="25" id="password"  name="password" />
+                                </fieldset>
+
+                                <input type="submit" value="Log in" class="btn" />
+                                <div id="nologininstructions">
+                                    <h5>Don't have a password yet?</h5><p> If you don't have a password yet, stop by the circulation desk the next time you're in the library. We'll happily set one up for you.</p>
+                                    <h5>Don't have a library card?</h5><p> If you don't have a library card, stop by your local library to sign up[% IF PatronSelfRegistration && PatronSelfRegistrationDefaultCategory %]<span id="registrationinstructions"> or  <a href="/cgi-bin/koha/opac-memberentry.pl">register here</a></span>[% END %].</p>
+                                </div>
+                            </form>
+                        [% END # / IF loginprompt %]
+
+                    [% ELSE %]
+                        <h4>Logging on to the catalog has not been enabled by the library.</h4>
+                        <ul>
+                            <li>To report this error, you can <a href="mailto:[% admin %]">email the Koha Administrator</a>.</li>
+                            <li>Use top menu bar to navigate to another part of Koha.</li>
+                        </ul>
+                    [% END # / IF opacuserlogin %]
+
+                    [% IF persona %]
+                        <p><a href="#" class="persona-button" id="browserid" ><span>Sign in with your Email</span></a></p>
+                    [% END %]
+
+                </div> <!-- /.opac-auth -->
+            </div> <!-- /.span12 -->
+        </div> <!-- /.row-fluid -->
+    </div> <!-- /.container-fluid -->
+</div> <!-- /.main -->
+
+[% INCLUDE 'opac-bottom.inc' %]
+[% BLOCK jsinclude %]
+<script type="text/javascript">
+//<![CDATA[
+    // Hide circular 'Log in to Your Account' link in opac-auth.pl
+    $(document).ready(function() {
+        if ( $("#auth" ) ) { $("#members ul li a").hide(); }
+    });
+//]]>
+</script>
+[% END %]

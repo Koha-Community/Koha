@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+    <title>GreyBox - Installation</title>
+
+    <script type="text/javascript" src="greybox/AJS.js"></script>
+
+    <script type="text/javascript" src="static_files/help.js"></script>
+    <link href="static_files/help.css" rel="stylesheet" type="text/css" media="all" />
+</head>
+<body>
+
+<script>
+    insertHeader();
+    insertMenu('installation');
+</script>
+
+<ol>
+<li>
+Append following to your header section (in between <code>&lt;header&gt;...&lt;/header&gt;</code>).
+<br />
+<span class="hl">GB_ROOT_DIR</span> is the URL where static files are located:
+<pre>
+<code>&lt;script type="text/javascript"&gt;
+    var GB_ROOT_DIR = "http://mydomain.com/greybox/";
+&lt;/script&gt;</code>
+</pre>
+</li>
+GB_ROOT_DIR should be absolute.
+
+<li>
+Append also following scripts and one stylesheet:
+<pre>
+<code>&lt;script type="text/javascript" src="greybox/AJS.js"&gt;&lt;/script&gt;
+&lt;script type="text/javascript" src="greybox/AJS_fx.js"&gt;&lt;/script&gt;
+&lt;script type="text/javascript" src="greybox/gb_scripts.js"&gt;&lt;/script&gt;
+&lt;link href="greybox/gb_styles.css" rel="stylesheet" type="text/css" /&gt;</code>
+</pre>
+
+AJS_fx.js is optional, it's used for effects. If you don't wish effects, then don't include AJS_fx.js in your header section.
+</li>
+
+<li>
+That's it, you are now ready to use GreyBox!
+</li>
+</ol>
+
+</body>
+</html>

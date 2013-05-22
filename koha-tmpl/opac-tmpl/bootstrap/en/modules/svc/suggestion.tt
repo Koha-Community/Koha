@@ -1,0 +1,50 @@
+[% IF (render=='standalone') %]
+    [% USE Koha %]
+    [% INCLUDE 'doc-head-open.inc' %]Search suggestions
+    [% INCLUDE 'doc-head-close.inc' %]
+    </head>
+    <body id="opac-suggestion">
+    [% INCLUDE 'masthead.inc' %]
+
+    <div class="main">
+        <ul class="breadcrumb">
+            <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
+            <li><a href="#">Search suggestions</a></li>
+        </ul>
+
+        <div class="container-fluid">
+            <div class="row-fluid">
+                [% IF ( OpacNav || OpacNavBottom ) %]
+                    <div class="span2">
+                        <div id="navigation">
+                            [% INCLUDE 'navigation.inc' %]
+                        </div>
+                    </div>
+                    <div class="span10">
+                [% ELSE %]
+                    <div class="span12">
+                [% END %]
+                   <div id="searchsuggestions">
+            <h1 class="title">Suggestions</h1>
+[% END %]
+
+[% IF suggestions && suggestions.size %]
+    <div>
+        <span class="suggestionlabel">Did you mean:</span>
+        [% FOREACH suggestion IN suggestions %]
+            <span class="searchsuggestion"><a href="/cgi-bin/koha/opac-search.pl?q=[% suggestion.search |uri %]">[% suggestion.label |html %]</a></span>
+        [% END %]
+    </div>
+[% ELSE %]
+    <span class="nosuggestions">Sorry, no suggestions.</span>
+[% END %]
+
+[% IF (render=='standalone') %]
+                    </div> <!-- / #searchsuggestions -->
+                </div> <!-- / .span10/12 -->
+            </div> <!-- / .row-fluid -->
+        </div> <!-- / .container-fluid -->
+    </div> <!-- / .main -->
+    [% INCLUDE 'opac-bottom.inc' %]
+    [% BLOCK jsinclude %][% END %]
+[% END %]

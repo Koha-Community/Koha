@@ -1,0 +1,84 @@
+[% USE Koha %]
+[% PROCESS 'opac-authorities.inc' %]
+[% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo;  Entry [% authtypetext %]
+[% INCLUDE 'doc-head-close.inc' %]
+[% BLOCK cssinclude %][% END %]
+</head>
+<body id="opac-authoritiesdetail" class="scrollto">
+[% INCLUDE 'masthead.inc' %]
+
+    <div class="main">
+        <ul class="breadcrumb">
+            <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
+            <li><a href="/cgi-bin/koha/opac-authorities-home.pl">Authority search</a> <span class="divider">&rsaquo;</span></li>
+            <li><a href="#">Entry [% authtypetext %]</a></li>
+        </ul>
+
+        <div class="container-fluid">
+            <div class="row-fluid">
+                [% IF ( OpacNav || OpacNavBottom ) %]
+                    <div class="span2">
+                        <div id="navigation">
+                            [% INCLUDE 'navigation.inc' %]
+                        </div>
+                    </div>
+                    <div class="span10">
+                [% ELSE %]
+                    <div class="span12">
+                [% END %]
+                    <div id="userauthMARCdetails" class="maincontent">
+                        <div id="views">
+                            <span class="view">
+                                <a id="Normalview" href="/cgi-bin/koha/opac-authoritiesdetail.pl?authid=[% authid %]">Normal view</a>
+                            </span>
+                            <span class="view">
+                                <span id="MARCview">MARC view</span>
+                            </span>
+                        </div>
+
+                        [% IF ( displayhierarchy ) %]
+                            <div id="hierarchies">
+                                [% PROCESS showhierarchy trees = loophierarchies %]
+                            </div>
+                        [% END %]
+
+                        <h1>Entry [% authtypetext %]</h1>
+                        <p>Used in <a href="opac-search.pl?type=opac&amp;q=[% authid %]&amp;idx=an,phr">[% count %] records</a></p>
+                            [% FOREACH Tag0X IN Tab0XX %]
+                                <p><b>[% Tag0X.tag %]</b></p>
+                                <ul>
+                                [% FOREACH subfiel IN Tag0X.subfield %]
+                                    <li><b>[% subfiel.marc_lib %]:</b>
+                                    [% IF subfiel.isurl %]<a href="[% subfiel.marc_value %]">[% subfiel.marc_value %]</a>
+                                    [% ELSE %][% subfiel.marc_value %][% END %]</li>
+                                [% END %]
+                                </ul>
+                            [% END %]
+                    </div> <!-- / #userauthMARCdetails -->
+                </div> <!-- / .span10/12 -->
+            </div> <!-- / .row-fluid -->
+        </div> <!-- / .container-fluid -->
+    </div> <!-- / .main -->
+
+[% INCLUDE 'opac-bottom.inc' %]
+[% BLOCK jsinclude %]
+<script type="text/javascript" src="/opac-tmpl/lib/jquery/plugins/jquery.jstree.js"></script>
+<script type="text/javascript">
+    //<![CDATA[
+        $(document).ready(function() {
+            [% IF ( displayhierarchy ) %]
+                var current_nodes = [];
+                $('.currentauth').each(function() {
+                    current_nodes.push('#' + $(this).parent().parents('li:first').attr('id'));
+                    });
+                $('#hierarchies').jstree({
+                        "plugins": [ "themes", "html_data"],
+                        "themes": { "theme": "classic",
+                                    "icons": false },
+                        "core": { "initially_open": current_nodes }
+                    });
+            [% END %]
+        });
+    //]]>
+</script>
+[% END %]
