@@ -6840,13 +6840,13 @@ if ( CheckVersion($DBversion) ) {
 }
 
 $DBversion = '3.13.00.000';
-if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+if ( CheckVersion($DBversion) ) {
     print "Upgrade to $DBversion done (start the journey to Koha Pi)\n";
     SetVersion ($DBversion);
 }
 
 $DBversion = "3.13.00.001";
-if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+if ( CheckVersion($DBversion) ) {
     $dbh->do("INSERT INTO `systempreferences` (`variable`, `value`, `options`, `explanation`, `type`) VALUES ('UseCourseReserves', '0', NULL, 'Enable the course reserves feature.', 'YesNo')");
     $dbh->do("INSERT INTO userflags (bit,flag,flagdesc,defaulton) VALUES ('18','coursereserves','Course Reserves','0')");
     $dbh->do("
