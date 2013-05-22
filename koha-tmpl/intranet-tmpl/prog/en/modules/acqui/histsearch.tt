@@ -90,8 +90,8 @@
                             &nbsp;
                         [% END %]
                     </td>
-					<td>[% IF ( suggestions_loo.invoicenumber ) %]
-                            <a href="/cgi-bin/koha/acqui/parcel.pl?invoiceid=[% suggestions_loo.invoicenumber %]">[% suggestions_loo.invoicenumber %]</a>
+                    <td>[% IF  suggestions_loo.invoicenumber  %]
+                        <a href="/cgi-bin/koha/acqui/parcel.pl?invoiceid=[% suggestions_loo.invoiceid %]">[% suggestions_loo.invoicenumber %]</a>
 					    [% ELSE %]
 					        &nbsp;
 					    [% END %]
