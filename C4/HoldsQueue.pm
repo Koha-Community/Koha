@@ -406,7 +406,7 @@ sub MapItemsToHoldRequests {
         push @{ $items_by_branch{ $item->{holdingbranch} } }, $item
           unless exists $allocated_items{ $item->{itemnumber} };
     }
-    return unless keys %items_by_branch;
+    return \%item_map unless keys %items_by_branch;
 
     # now handle the title-level requests
     $num_items_remaining = scalar(@$available_items) - scalar(keys %allocated_items);
