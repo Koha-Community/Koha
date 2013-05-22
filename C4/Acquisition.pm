@@ -2049,6 +2049,7 @@ sub GetHistory {
             aqorders.quantityreceived,
             aqorders.ecost,
             aqorders.ordernumber,
+            aqorders.invoiceid,
             aqinvoices.invoicenumber,
             aqbooksellers.id as id,
             aqorders.biblionumber
