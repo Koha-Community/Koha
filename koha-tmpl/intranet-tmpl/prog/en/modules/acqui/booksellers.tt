@@ -62,13 +62,11 @@ $(document).ready(function() {
         </select>
         </p>
     [% END %]
-    <p>
     [% IF ( allbaskets ) %]
-        <a href="/cgi-bin/koha/acqui/booksellers.pl?supplier=[% supplier %]&booksellerid=[% booksellerid %]">Apply filter</a>
+        <p><a href="/cgi-bin/koha/acqui/booksellers.pl?supplier=[% supplier %]&booksellerid=[% booksellerid %]">Show active baskets only</a></p>
     [% ELSE %]
-        <a href="/cgi-bin/koha/acqui/booksellers.pl?supplier=[% supplier %]&booksellerid=[% booksellerid %]&allbaskets=1">Cancel filter</a>
+        <p><a href="/cgi-bin/koha/acqui/booksellers.pl?supplier=[% supplier %]&booksellerid=[% booksellerid %]&allbaskets=1">Show all baskets</a></p>
     [% END %]
-    </p>
     <div id="acqui_order_supplierlist">
         [% FOREACH supplier IN loop_suppliers %]
             <div class="supplier">
