@@ -1,0 +1,405 @@
+RELEASE NOTES FOR KOHA 3.10.6
+23 May 2013
+========================================================================
+
+Koha is the first free and open source software library automation package 
+(ILS). Development is sponsored by libraries of varying types and sizes, 
+volunteers, and support companies from around the world.  
+The website for the Koha project is 
+
+    http://koha-community.org/
+
+Koha 3.10.6 can be downloaded from:
+
+    http://download.koha-community.org/koha-3.10.06.tar.gz
+
+Installation instructions can be found at:
+
+    http://wiki.koha-community.org/wiki/Installation_Documentation
+    
+    OR in the INSTALL files that come in the tarball
+
+Koha 3.10.6 is a bugfix/maintenance release.
+
+
+Highlights of 3.10.6
+======================
+
+Acquisitions
+----------
+	7228	major	can't order more than 1 when importing all from staged file
+	9923	major	correction of a bug due to bz 7129
+
+Cataloging
+----------
+	185	blocker	Barcode not auto-calculated when autobarcode is on
+	9392	major	confirmation does not appear for negative notforloan items issues
+	9684	major	Z39.50 Card View broken in CCSR
+
+Circulation
+----------
+	8770	blocker	amount does not equal amountoutstanding on a fine with no payments or credits
+
+Hold requests
+----------
+	8294	major	enumeration should show in copy specific hold menu
+
+MARC Bibliographic record staging/import
+----------
+	9839	major	when importing MARC records, item record not created even when set to "always add"
+
+OPAC
+----------
+	9679	major	can't place hold from cart in CCSR
+
+Reports
+----------
+	6898	major	circulation librarians can't run overdues without reports permissions
+
+Staff Client
+----------
+	9591	blocker	Set Library changes after viewing Holds Queue >> reserves item
+
+Tools
+----------
+	8264	major	local cover images not working in IE8
+
+
+Bugs fixed in 3.10.6
+======================
+
+Acquisitions
+----------
+	72	normal	can't receive an order
+	2046	normal	Suggestions: Title Field too small
+	7358	normal	basket.pl : it is possible to affect a closed basket to a  closed basketgroup
+
+Cataloging
+----------
+	144	normal	Missing mandatory subfields not correctly highlighted
+	5790	normal	Deleting a biblio should alert/fail if there are existent holds
+	9358	normal	Fixed field plugins for MARC21 should be updated for MARC21 update #15
+	9523	normal	Trying to import staged marc records where a matched bib has been deleted caused the import to hang
+	9019	minor	ILS-DI: GetRecords should return item fields in marcxml
+	9759	minor	last subfield can be deleted
+
+Circulation
+----------
+	101	normal	circulation error
+	111	normal	Client can request item multiple times
+	150	normal	"Next Borrower" button results in Internal Server Error
+	9860	normal	Incorrect box heading 'Cannot check in' when a late document is returned
+	9720	minor	uninitialized value warnings in circulation
+
+Hold requests
+----------
+	8419	normal	Suspended holds appear on the daily holds queue
+	8508	minor	Holds to Pull : Library dropdown options are erroneously concatenated by br tags
+
+I18N/L10N
+----------
+	6709	normal	marc21_field_006.xml and marc21_field_008.xml can't be translated.
+	9266	normal	Untranslated strings in tags moderation
+	9818	normal	"Overdue Fines Cap ($)" should not use $ (I18N)
+
+importedbugs
+----------
+	58	normal	typos
+	84	normal	broken link
+
+Installation and upgrade (command-line installer)
+----------
+	42	normal	installer.pl could prompt user to send testing results in
+	44	normal	scripts dir doesn't get installed to $kohadir
+	85	normal	koha.upgrade squashes custom templates
+	149	normal	Installation fails if the MySQL root password is not set
+	152	normal	Install.pm missing from main branch
+	153	normal	opachtdocs and intrahtdocs in koha.conf not initialized
+	156	normal	in Install.pm the marc21 refers to /script/ instead of /scripts/
+	9812	normal	Several files shouldn't be exposed or browseable through a URL
+	176	minor	showmessage yn does not accept uppercase Y or N
+
+Installation and upgrade (web-based installer)
+----------
+	9831	minor	Wrong and missing values in installer for French UNIMARC
+
+MARC Bibliographic data support
+----------
+	7054	normal	NORMARC: wrong default for 000 position 17
+	7055	normal	NORMARC: Links and defaults for 008 position 15-17 and 35-37
+	9213	normal	Implement analytics for NORMARC XSLT
+	9804	trivial	Fix name for NORMARC biblio-koha-indexdefs.xml
+
+MARC Bibliographic record staging/import
+----------
+	9035	trivial	remove deprecated 'bulkauthimport.pl' file
+
+OPAC
+----------
+	41	normal	OPAC Search Results Missing Branch
+	4862	minor	"Browse by subject" is misnamed
+	93	trivial	Minor HTML Template error
+
+Patrons
+----------
+	22	normal	autoMemberNum doesn't work with Add Child
+	33	normal	autoMemberNum set to 1 by default
+	225	normal	Add member ignores parameters set in categories
+	9479	normal	The member notices page does not display dates in the syspref format
+	9556	normal	Changing patron category does not fully update patron messaging preferences
+	9484	minor	userid not generated consistently (different editing pages)
+	9330	trivial	Patron duplication : should duplicate with empty title (salutation field)
+	9981	trivial	Sort1 not automatically cleared when duplicating a patron
+
+Searching
+----------
+	9049	normal	rebuild_zebra should not use shadow when called with -r
+
+Serials
+----------
+	8896	normal	Delete serials no more missing from missinglist
+
+Staff Client
+----------
+	2	normal	Need appropriate graphic for admin scripts
+	26	normal	marcimport.pl reports DONE for records that aren't done
+	104	normal	moditem.pl displays the wrong record
+	107	normal	templates for intranet are still in old includes/templates location
+	9397	trivial	Error Messages hard to find for Visually Impaired Users (Accessibility) [Returning Items]
+
+Templates
+----------
+	9555	normal	Template files contain single quote strings
+	9737	normal	Local Covers sometimes appear then disappear on OPAC Search Results/Lists
+	9608	minor	white background on header on check in
+	9613	minor	items namespace missing in XSLT
+	9957	trivial	Missing cancel link on subfield editing page
+
+Transaction logs
+----------
+	7241	normal	circulation action logs record biblionumber instead of item number
+
+
+Enhancements in 3.10.6
+======================
+
+Installation and upgrade (command-line installer)
+----------
+	97	Various buildrelease patches
+	110	patron can place unlimited holds on a item
+
+Packaging
+----------
+	9250	Provide commands to allow handling of SIP servers in the packages
+
+
+New sysprefs in 3.10.6
+======================
+
+
+
+System requirements
+======================
+
+    Important notes:
+    
+    * Perl 5.10 is required
+    * Zebra is required
+
+
+Documentation
+======================
+
+As of Koha 3.2, the Koha manual is now maintained in DocBook.  The
+home page for Koha documentation is 
+
+    http://koha-community.org/documentation/
+
+As of the date of these release notes, only the English version of the
+Koha manual is available:
+
+    http://manual.koha-community.org/3.10.6/en/
+
+The Git repository for the Koha manual can be found at
+
+    http://git.koha-community.org/gitweb/?p=kohadocs.git;a=summary
+
+
+Translations
+======================
+
+Complete or near-complete translations of the OPAC and staff
+interface are available in this release for the following languages:
+
+
+  * English (USA)
+  * Arabic (98%)
+  * Armenian (98%)
+  * Chinese (China) (92%)
+  * Chinese (Taiwan) (99%)
+  * Danish (100%)
+  * English (New Zealand) (98%)
+  * French (95%)
+  * French (Canada) (66%)
+  * German (98%)
+  * German (Switzerland) (95%)
+  * Greek (60%)
+  * Italian (100%)
+  * Norwegian Bokmål (63%)
+  * Portuguese (98%)
+  * Portuguese (Brazil) (97%)
+  * Slovak (100%)
+  * Spanish (100%)
+  * Turkish (100%)
+
+
+Partial translations are available for various other languages.
+
+The Koha team welcomes additional translations; please see
+
+    http://wiki.koha-community.org/wiki/Translating_Koha
+
+for information about translating Koha, and join the koha-translate 
+list to volunteer:
+
+    http://lists.koha-community.org/cgi-bin/mailman/listinfo/koha-translate
+
+The most up-to-date translations can be found at:
+
+    http://translate.koha-community.org/
+
+
+Release Team
+======================
+
+The release team for Koha 3.10.6 is
+
+  Release Manager:       Jared Camins-Esakov <jcamins@cpbibliography.com>
+  Documentation Manager: Nicole C Engard <nengard@gmail.com>
+  Translation Manager:   D Ruth Bavousett <ruth@bywatersolutions.com>
+  QA Manager:            Katrin Fischer <Katrin.Fischer@bsz-bw.de>,
+  QA Team:               Marcel de Rooy <M.de.Rooy@rijksmuseum.nl>,
+                         Jonathan Druart <jonathan.druart@biblibre.com>,
+                         Mason James <mtj@kohaaloha.com>,
+			 Elliott Davis <elliott@bywatersolutions.com>
+  Bug Wranglers:         Magnus Enger <magnus@enger.priv.no>,
+                         Marc Véron <veron@veron.ch>,
+			 Chris Hall <chrish@catalyst.net.nz>,
+                         Mirko Tietgen <5p4m@gmx.de>
+  Packaging Manager:     Robin Sheat <robin@catalyst.net.nz>
+  Packaging Assistant:   Mason James <mtj@kohaaloha.com>
+
+  Release Maintainer (3.6.x): Liz Rea <liz@catalyst.net.nz>
+  Release Maintainer (3.8.x): Chris Cormack <chrisc@catalyst.net.nz>
+  Release Maintainer (3.10.x): Chris Cormack <chrisc@catalyst.net.nz>
+
+
+Credits
+======================
+
+We thank the following libraries who are known to have sponsored
+new features in Koha 3.10.6:
+  * Universidad Nacional de Córdoba
+
+We thank the following individuals who contributed patches to Koha 3.10.6.
+  *     12	Tomas Cohen Arazi
+  *      1	Edmund Balnaves
+  *      1	Stefano Bargioni
+  *      1	D Ruth Bavousett
+  *      3	Jared Camins-Esakov
+  *      1	Colin Campbell
+  *      1	Galen Charlton
+  *      4	David Cook
+  *      7	Chris Cormack
+  *      2	Christophe Croullebois
+  *      5	Jonathan Druart
+  *      6	Magnus Enger
+  *      2	Katrin Fischer
+  *      1	Corey Fuimaono
+  *      8	Kyle M Hall
+  *      1	Kristina D.C. Hoeppner
+  *      3	Bernardo Gonzalez Kriegel
+  *     12	Owen Leonard
+  *      3	Julian Maurice
+  *      1	Karam Qubsi
+  *      1	Liz Rea
+  *      3	Marcel de Rooy
+  *      8	Fridolyn SOMERS
+  *      1	Mathieu Saby
+  *      5	Adrien Saurat
+  *      2	Robin Sheat
+  *      1	Lyon3 Team
+
+We thank the following companies who contributed patches to Koha 3.10.6
+  *      12 ACPL                                                                                          
+  *       2 BSZ BW                                                                                         
+  *      23 Biblibre                                                                                    
+  *       3 BigBallOfWax                                                                          
+  *       8 ByWater-Solutions                                                                   
+  *       3 C & P Bibliography                                                                    
+  *       8 Catalyst                                                                                 
+  *       1 Equinox                                                                                   
+  *       6 Libriotech                                                                                 
+  *       1 PTFS-Europe                                                                              
+  *       5 Prosentient Systems
+  *       3 Rijksmuseum                                                                               
+  *       1 Université Jean Moulin Lyon 3
+  *       1 Université Rennes 2
+  *       1 pusc.it
+  *      18 unidentified
+
+We also especially thank the following individuals who tested patches
+for Koha 3.10.6.
+  *      61 Jared Camins-Esakov
+  *       7 Galen Charlton
+  *       4 David Cook
+  *     115 Chris Cormack
+  *       1 Elliott Davis
+  *       1 Srikanth Dhondi
+  *      22 Jonathan Druart
+  *       5 Nicole C. Engard
+  *       3 Magnus Enger
+  *      36 Katrin Fischer
+  *      12 Kyle M Hall
+  *      11 Mason James
+  *       5 Bernardo Gonzalez Kriegel
+  *      13 Owen Leonard
+  *       4 Paul Poulain
+  *       3 Liz Rea
+  *      13 Marcel de Rooy
+  *       1 Fridolyn SOMERS
+  *       5 Mathieu Saby
+  *       1 Adrien Saurat
+  *       1 Robin Sheat
+  *       2 Mirko Tietgen
+  *       1 wajasu
+
+We regret any omissions.  If a contributor has been inadvertantly missed,
+please send a patch against these release notes to 
+koha-patches@lists.koha-community.org.
+
+
+Revision control notes
+======================
+
+The Koha project uses Git for version control.  The current development 
+version of Koha can be retrieved by checking out the master branch of 
+
+    git://git.koha-community.org/koha.git
+
+The branch for this version of Koha and future bugfixes in this release line is 3.10.x.
+
+The last Koha stable release was 3.10.05, which was released on April 22, 2013.
+
+
+Bugs and feature requests
+======================
+
+Bug reports and feature requests can be filed at the Koha bug
+tracker at
+
+    http://bugs.koha-community.org/
+
+
+Ehara taku toa i te toa takitahi, engari he toa takitini 
+##### Autogenerated release notes updated last on 23 May 2013 04:23:38 Z #####
