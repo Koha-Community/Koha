@@ -118,6 +118,18 @@ my ($template, $loggedinuser, $cookie)
 });
 
 my $invoiceid = $input->param('invoiceid');
+my $invoice;
+$invoice = GetInvoiceDetails($invoiceid) if $invoiceid;
+
+unless( $invoiceid and $invoice->{invoiceid} ) {
+    $template->param(
+        error_invoice_not_known => 1,
+        no_orders_to_display    => 1
+    );
+    output_html_with_http_headers $input, $cookie, $template->output;
+    exit;
+}
+
 my $op = $input->param('op') // '';
 
 if ($op eq 'cancelreceipt') {
@@ -128,29 +140,10 @@ if ($op eq 'cancelreceipt') {
     }
 }
 
-my $invoice = GetInvoiceDetails($invoiceid);
 my $booksellerid = $invoice->{booksellerid};
 my $bookseller = GetBookSellerFromId($booksellerid);
 my $gst = $bookseller->{gstrate} // C4::Context->preference("gist") // 0;
 my $datereceived = C4::Dates->new();
-my $code            = $input->param('code');
-my @rcv_err         = $input->param('error');
-my @rcv_err_barcode = $input->param('error_bc');
-
-
-
-# If receiving error, report the error (coming from finishrecieve.pl(sic)).
-if( scalar(@rcv_err) ) {
-	my $cnt=0;
-	my $error_loop;
-	for my $err (@rcv_err) {
-		push @$error_loop, { "error_$err" => 1 , barcode => $rcv_err_barcode[$cnt] };
-		$cnt++;
-	}
-	$template->param( receive_error => 1 ,
-						error_loop => $error_loop,
-					);
-}
 
 my $cfstr         = "%.2f";                                                           # currency format string -- could get this from currency table.
 my @parcelitems   = @{ $invoice->{orders} };
