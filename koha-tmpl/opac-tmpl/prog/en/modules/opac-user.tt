@@ -359,6 +359,7 @@ $.tablesorter.addParser({
             <thead><tr>
                 <th class="{sorter:'articles'}">Title</th>
                 <th>Placed on</th>
+                [% IF OpacShowHoldNotes %]<th>Notes</th>[% END %]
         <th>Expires on</th>
                 <th>Pick up location</th>
 		[% IF ( showpriority ) %]
@@ -386,6 +387,7 @@ $.tablesorter.addParser({
                     [% RESERVE.author %]
                 </td>
                 <td class="reservedate">[% RESERVE.reservedate | $KohaDates %]</td>
+                [% IF OpacShowHoldNotes %]<td class="reservenotes">[% RESERVE.reservenotes %]</td>[% END %]
         <td class="expirationdate">[% IF ( RESERVE.expirationdate ) %][% RESERVE.expirationdate | $KohaDates %][% ELSE %]Never expires[% END %]</td>
                 <td class="branch">[% RESERVE.branch %]</td>
 				[% IF ( showpriority ) %]
