@@ -3,7 +3,7 @@ $(document).ready(function() {
   $("#doc3 form").keypress(function (e) {
     if( e.which == 13
         && e.target.nodeName == "INPUT"
-        && $(e.target).attr('type') != "submit"
+        && e.target.type != "submit"
     ) {
         return false;
     }
