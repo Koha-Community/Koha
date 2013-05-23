@@ -307,6 +307,12 @@ sub get_template_and_user {
     }
 
     # these template parameters are set the same regardless of $in->{'type'}
+
+    # Set the using_https variable for templates
+    # FIXME Under Plack the CGI->https method always returns 'OFF'
+    my $https = $in->{query}->https();
+    my $using_https = (defined $https and $https ne 'OFF') ? 1 : 0;
+
     $template->param(
             "BiblioDefaultView".C4::Context->preference("BiblioDefaultView")         => 1,
             EnhancedMessagingPreferences => C4::Context->preference('EnhancedMessagingPreferences'),
@@ -325,7 +331,7 @@ sub get_template_and_user {
             singleBranchMode             => C4::Context->preference("singleBranchMode"),
             XSLTDetailsDisplay           => C4::Context->preference("XSLTDetailsDisplay"),
             XSLTResultsDisplay           => C4::Context->preference("XSLTResultsDisplay"),
-            using_https                  => $in->{'query'}->https() ? 1 : 0,
+            using_https                  => $using_https,
             noItemTypeImages             => C4::Context->preference("noItemTypeImages"),
             marcflavour                  => C4::Context->preference("marcflavour"),
             persona                      => C4::Context->preference("persona"),
