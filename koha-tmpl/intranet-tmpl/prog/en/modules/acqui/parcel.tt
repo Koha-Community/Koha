@@ -14,6 +14,7 @@
     dt_overwrite_html_sorting_localeCompare();
 
     $(document).ready(function(){
+      if ( $("#pendingt").length ) {
         var pendingt = $("#pendingt").dataTable($.extend(true, {}, dataTablesDefaults, {
             "bStateSave": true,
             "iCookieDuration": 60*60*24*1000, // 1000 days
@@ -35,6 +36,8 @@
             ],
             "sPaginationType": "four_button"
         } ) );
+      }
+      if ( $("#receivedt").length ) {
         var receivedt = $("#receivedt").dataTable($.extend(true, {}, dataTablesDefaults, {
             "bStateSave": true,
             "iCookieDuration": 60*60*24*1000, // 1000 days
@@ -55,11 +58,7 @@
             ],
             "sPaginationType": "four_button"
         } ) );
-/*
-    $("#pendingt").tablesorter({
-		headers: { 2: { sorter: 'articles' },3: { sorter: false },8:{sorter:false}}
-    });
-*/
+      }
 
     });
 
@@ -144,7 +143,7 @@
     [% END %]
 
     [% IF (error_cancelling_receipt) %]
-      <div class="error">
+      <div class="dialog error">
       Cannot cancel receipt. Possible reasons :
       <ul>
         <li>
@@ -161,6 +160,13 @@
       </div>
     [% END %]
 
+    [% IF error_invoice_not_known %]
+        <div class="dialog error">
+            The invoice referenced by this invoiceid does not exist.
+        </div>
+    [% END %]
+
+[% UNLESS no_orders_to_display %]
 <div id="acqui_receive_summary">
 <p><strong>Invoice number:</strong> [% invoice %] <strong>Received by:</strong> [% loggedinusername %] <strong>On:</strong> [% formatteddatereceived %]</p>
 </div>
@@ -200,9 +206,9 @@
                 [% END %]
                 <br />
                 [% IF ( loop_order.notes ) %]
-                    <p class="ordernote"><strong>Note: </strong>[% loop_order.notes|html %] [<a href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% loop_order.ordernumber %]&amp;referrer=/cgi-bin/koha/acqui/parcel.pl%3Fbooksellerid=[% loop_order.booksellerid %]&amp;datereceived=[% loop_order.invoicedatereceived %]&amp;invoice=[% loop_order.invoice %]">Change note</a>]</p>
+                    <p class="ordernote"><strong>Note: </strong>[% loop_order.notes|html %] [<a href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% loop_order.ordernumber %]&amp;referrer=/cgi-bin/koha/acqui/parcel.pl%3Finvoiceid=[% invoiceid %]">Change note</a>]</p>
                 [% ELSE %]
-                    [<a href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% loop_order.ordernumber %]&amp;referrer=/cgi-bin/koha/acqui/parcel.pl%3Fbooksellerid=[% loop_order.booksellerid %]&amp;datereceived=[% loop_order.invoicedatereceived %]&amp;invoice=[% loop_order.invoice %]">Add note</a>]
+                    [<a href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% loop_order.ordernumber %]&amp;referrer=/cgi-bin/koha/acqui/parcel.pl%3Finvoiceid=[% invoiceid %]">Add note</a>]
                 [% END %]
                 </td>
                 <td><a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% loop_order.biblionumber %]" title="MARC" rel="gb_page_center[600,500]">MARC</a> | <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;id=[% loop_order.biblionumber %]" title="MARC" rel="gb_page_center[600,500]">Card</a></td>
@@ -333,7 +339,6 @@
 	[% ELSE %]There are no received orders.[% END %]
 </div>
 
-<!--<form action="/cgi-bin/koha/acqui/parcels.pl?booksellerid=[% booksellerid %]" method="post">-->
 [% IF (invoiceclosedate) %]
     <a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% invoiceid %]">View invoice</a>
 [% ELSE %]
@@ -345,8 +350,12 @@
     </form>
 [% END %]
 
+[% END %]
+
 </div>
 </div>
+
+
 <div class="yui-b">
 <form action="/cgi-bin/koha/acqui/parcel.pl" id="filterform" method="post">
         <fieldset class="brief">
