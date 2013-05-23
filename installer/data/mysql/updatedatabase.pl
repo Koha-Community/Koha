@@ -6957,14 +6957,12 @@ if(CheckVersion($DBversion)) {
     SetVersion($DBversion);
 }
 
-
-
-$DBversion = "3.11.00.XXX";
+$DBversion = "3.13.00.005";
 if(CheckVersion($DBversion)) {
     my $intra= C4::Context->preference("intranetstylesheet");
     #if this pref is not blank or starting with http, https or / [root], then
     #add an additional / to the front
-    if($intra && $intra!~/^(\/|https?)/) {
+    if($intra && $intra !~ /^(\/|https?)/) {
         $dbh->do("UPDATE systempreferences SET value=? WHERE variable=?",
             undef,('/'.$intra,"intranetstylesheet"));
         print "WARNING: Your system preference intranetstylesheet has been prefixed with a slash to make it an absolute path.\n";
@@ -6972,8 +6970,6 @@ if(CheckVersion($DBversion)) {
     print "Upgrade to $DBversion done (Bug 10052: Make intranetstylesheet and intranetcolorstylesheet behave exactly like their opac counterparts)\n";
     SetVersion ($DBversion);
 }
-
-
 
 =head1 FUNCTIONS
 
