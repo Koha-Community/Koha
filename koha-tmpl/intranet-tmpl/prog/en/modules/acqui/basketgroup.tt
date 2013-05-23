@@ -1,4 +1,5 @@
-[% USE KohaBranchName %] [% INCLUDE 'doc-head-open.inc' %]
+[% USE KohaBranchName %]
+[% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Basket grouping for [% booksellername |html %]</title>
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
 [% INCLUDE 'doc-head-close.inc' %]
@@ -107,10 +108,8 @@ function submitForm(form) {
         "aoColumnDefs": [
             { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
         ],
-        "bAutoWidth": false,
-        "bPaginate": false,
-        "bInfo": false,
-        "bFilter": false,
+        sDom: 't',
+        "bAutoWidth": false
     } ));
 
  });
