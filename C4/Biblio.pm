@@ -1824,7 +1824,7 @@ sub GetMarcSubjects {
     my @marcsubjects;
 
     my $subject_limit = C4::Context->preference("TraceCompleteSubfields") ? 'su,complete-subfield' : 'su';
-    my $authoritysep = C4::Context->preference('authoritysep');
+    my $AuthoritySeparator = C4::Context->preference('AuthoritySeparator');
 
     foreach my $field ( $record->field($fields_filter) ) {
         next unless ($field->tag() >= $mintag && $field->tag() <= $maxtag);
@@ -1870,7 +1870,7 @@ sub GetMarcSubjects {
                     code      => $code,
                     value     => $value,
                     link_loop => \@this_link_loop,
-                    separator => (scalar @subfields_loop) ? $authoritysep : ''
+                    separator => (scalar @subfields_loop) ? $AuthoritySeparator : ''
                 };
             }
         }
@@ -1915,7 +1915,7 @@ sub GetMarcAuthors {
     }
 
     my @marcauthors;
-    my $authoritysep = C4::Context->preference('authoritysep');
+    my $AuthoritySeparator = C4::Context->preference('AuthoritySeparator');
 
     foreach my $field ( $record->field($fields_filter) ) {
         next unless $field->tag() >= $mintag && $field->tag() <= $maxtag;
@@ -1964,7 +1964,7 @@ sub GetMarcAuthors {
                     code      => $code,
                     value     => $value,
                     link_loop => \@this_link_loop,
-                    separator => (scalar @subfields_loop) ? $authoritysep : ''
+                    separator => (scalar @subfields_loop) ? $AuthoritySeparator : ''
                 };
             }
         }
@@ -2063,7 +2063,7 @@ sub GetMarcSeries {
     }
 
     my @marcseries;
-    my $authoritysep = C4::Context->preference('authoritysep');
+    my $AuthoritySeparator = C4::Context->preference('AuthoritySeparator');
 
     foreach my $field ( $record->field($fields_filter) ) {
         next unless $field->tag() >= $mintag && $field->tag() <= $maxtag;
@@ -2099,7 +2099,7 @@ sub GetMarcSeries {
                     code      => $code,
                     value     => $value,
                     link_loop => \@link_loop,
-                    separator => (scalar @subfields_loop) ? $authoritysep : '',
+                    separator => (scalar @subfields_loop) ? $AuthoritySeparator : '',
                     volumenum => $volume_number,
                 }
             }

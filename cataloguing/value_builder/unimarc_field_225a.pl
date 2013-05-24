@@ -108,7 +108,7 @@ sub plugin {
     my $index        = $input->param('index');
     my $result       = $input->param('result');
     my $editor_found = $input->param('editor_found');
-    my $authoritysep = C4::Context->preference("authoritysep");
+    my $AuthoritySeparator = C4::Context->preference("AuthoritySeparator");
     
     my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         {

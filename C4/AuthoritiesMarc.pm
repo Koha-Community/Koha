@@ -266,7 +266,7 @@ sub SearchAuthorities {
         
         ##Here we have to extract MARC record and $authid from ZEBRA AUTHORITIES
         my $rec=$oAResult->record($counter);
-        my $separator=C4::Context->preference('authoritysep');
+        my $separator=C4::Context->preference('AuthoritySeparator');
         my $authrecord = C4::Search::new_record_from_zebra(
             'authorityserver',
             $rec->raw()
