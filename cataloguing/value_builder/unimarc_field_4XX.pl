@@ -116,16 +116,19 @@ sub plugin {
             $subfield_value_a .= " " . $marcrecord->subfield( '700', "d" )
               if $marcrecord->subfield( '700', 'd' );
             $subfield_value_a .=
-              " (" . $marcrecord->subfield( '700', 'c' ) . " - "
+              " (" . $marcrecord->subfield( '700', 'c' )
               if $marcrecord->subfield( '700',     'c' );
+            $subfield_value_a .=  " ; "
+              if $marcrecord->subfield( '700',     'c' )
+                and $marcrecord->subfield( '700',     'f' );
             $subfield_value_a .= " ("
               if ( $marcrecord->subfield( '700', 'f' )
                 and not( $marcrecord->subfield( '700', 'c' ) ) );
             $subfield_value_a .= $marcrecord->subfield( '700', 'f' )
               if ( $marcrecord->subfield( '700', 'f' ) );
             $subfield_value_a .= ")"
-              if ( $marcrecord->subfield( '701', 'f' )
-                or $marcrecord->subfield( '701', 'c' ) );
+              if ( $marcrecord->subfield( '700', 'f' )
+                or $marcrecord->subfield( '700', 'c' ) );
         }
         elsif ( $marcrecord->field('702') ) {
             $subfield_value_a = $marcrecord->subfield( '702', 'a' );
@@ -134,8 +137,11 @@ sub plugin {
             $subfield_value_a .= " " . $marcrecord->subfield( '702', 'd' )
               if $marcrecord->subfield( '702', 'd' );
             $subfield_value_a .=
-              " (" . $marcrecord->subfield( '702', 'c' ) . "; "
+              " (" . $marcrecord->subfield( '702', 'c' )
               if $marcrecord->subfield( '702',     'c' );
+            $subfield_value_a .=  " ; "
+              if $marcrecord->subfield( '702',     'c' )
+                and $marcrecord->subfield( '702',     'f' );
             $subfield_value_a .= " ("
               if $marcrecord->subfield( '702', 'f' )
               and not $marcrecord->subfield( '702', 'c' );
@@ -193,7 +199,7 @@ sub plugin {
               " (" . $marcrecord->subfield( '712', 'f' ) . " - "
               if $marcrecord->subfield( '712',     'f' );
             $subfield_value_a .= " ("
-              if $marcrecord->field( '712', "e" )
+              if $marcrecord->subfield( '712', "e" )
               and not $marcrecord->subfield( '712', 'f' );
             $subfield_value_a .= $marcrecord->subfield( '712', 'e' )
               if $marcrecord->subfield( '712', 'e' );
