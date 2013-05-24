@@ -89,6 +89,12 @@
 							[% ELSE %]
 							[% NAME.name %]
 							[% END %]
+
+                            [% IF NAME.overridden %]
+                                <span class="overridden" title="The system preference [% NAME.name %] been overridden from this value by one or more virtual hosts.">
+                                    [Overridden]
+                                </span>
+                            [% END %]
 						</label>
                         [% UNLESS ( loop.last ) %]<br />[% END %]
                         [% END %]

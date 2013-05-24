@@ -33,6 +33,7 @@ use C4::Budgets qw(GetCurrency);
 use File::Spec;
 use IO::File;
 use YAML::Syck qw();
+use List::MoreUtils qw(any);
 $YAML::Syck::ImplicitTyping = 1;
 our $lang;
 
@@ -120,6 +121,8 @@ sub TransformPrefsToHTML {
     my $tab = $data->{ $title };
     $tab = { '' => $tab } if ( ref( $tab ) eq 'ARRAY' );
 
+    my @override_syspref_names = split( /,/, $ENV{"OVERRIDE_SYSPREF_NAMES"} );
+
     foreach my $group ( sort keys %$tab ) {
         if ( $group ) {
             push @lines, { is_group_title => 1, title => $group };
@@ -156,6 +159,7 @@ sub TransformPrefsToHTML {
                                 $name_entry->{'highlighted'} = 1;
                             }
                         }
+                        $name_entry->{'overridden'} = 1 if ( any { $name eq $_ } @override_syspref_names );
                         push @names, $name_entry;
                     } else {
                         push @chunks, $piece;
@@ -164,7 +168,6 @@ sub TransformPrefsToHTML {
                     push @chunks, { type_text => 1, contents => $piece };
                 }
             }
-
             push @lines, { CHUNKS => \@chunks, NAMES => \@names, is_group_title => 0 };
         }
     }

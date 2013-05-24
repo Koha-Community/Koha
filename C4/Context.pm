@@ -540,7 +540,7 @@ my $use_syspref_cache = 1;
 
 sub preference {
     my $self = shift;
-    my $var  = lc(shift);                          # The system preference to return
+    my $var  = shift;    # The system preference to return
 
     if ($use_syspref_cache && exists $sysprefs{$var}) {
         return $sysprefs{$var};
@@ -548,15 +548,22 @@ sub preference {
 
     my $dbh  = C4::Context->dbh or return 0;
 
-    # Look up systempreferences.variable==$var
-    my $sql = <<'END_SQL';
-        SELECT    value
-        FROM    systempreferences
-        WHERE    variable=?
-        LIMIT    1
-END_SQL
-    $sysprefs{$var} = $dbh->selectrow_array( $sql, {}, $var );
-    return $sysprefs{$var};
+    my $value;
+    if ( defined $ENV{"OVERRIDE_SYSPREF_$var"} ) {
+        $value = $ENV{"OVERRIDE_SYSPREF_$var"};
+    } else {
+        # Look up systempreferences.variable==$var
+        my $sql = q{
+            SELECT  value
+            FROM    systempreferences
+            WHERE   variable = ?
+            LIMIT   1
+        };
+        $value = $dbh->selectrow_array( $sql, {}, $var );
+    }
+
+    $sysprefs{$var} = $value;
+    return $value;
 }
 
 sub boolean_preference {
