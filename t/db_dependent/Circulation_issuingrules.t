@@ -2,7 +2,6 @@
 
 use Modern::Perl;
 
-use t::lib::Mocks::Context;
 use Test::More tests => 7;
 use Test::MockModule;
 use DBI;
