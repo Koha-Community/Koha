@@ -1,9 +1,10 @@
 #!/usr/bin/perl
 #
 # Copyright 2007 Foundations Bible College.
+# Copyright 2013 BibLibre
 #
 # This file is part of Koha.
-#       
+#
 # Koha is free software; you can redistribute it and/or modify it under the
 # terms of the GNU General Public License as published by the Free Software
 # Foundation; either version 2 of the License, or (at your option) any later
@@ -17,16 +18,23 @@
 # with Koha; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-use strict;
-use warnings;
+use Modern::Perl;
 
-use Test::More tests => 23;
+use Test::More tests => 24;
 use C4::Context;
-use Data::Dumper;
+use MARC::Record;
+use MARC::Field;
+use C4::Biblio;
+use C4::Items;
 
 BEGIN {
     use_ok('C4::Labels::Batch');
 }
+
+# Start transaction
+my $dbh = C4::Context->dbh;
+$dbh->{AutoCommit} = 0;
+$dbh->{RaiseError} = 1;
 
 my $sth = C4::Context->dbh->prepare('SELECT branchcode FROM branches b LIMIT 0,1');
 $sth->execute();
@@ -59,12 +67,32 @@ foreach my $key (keys %{$expected_batch}) {
 }
 
 diag "Testing Batch->add_item() method.";
-my $sth1 = C4::Context->dbh->prepare('SELECT itemnumber FROM items LIMIT 0,10');
-$sth1->execute();
-while (my $row = $sth1->fetchrow_hashref()) {
-    diag sprintf('Database returned the following error: %s', $sth1->errstr) if $sth1->errstr;
-    ok($batch->add_item($row->{'itemnumber'}) eq 0 ) || diag "Batch->add_item() FAILED.";
-    $item_number = $row->{'itemnumber'};
+# Create the item
+my ( $f_holdingbranch, $sf_holdingbranch ) = GetMarcFromKohaField( 'items.holdingbranch' );
+my ( $f_homebranch, $sf_homebranch ) = GetMarcFromKohaField( 'items.homebranch' );
+is( $f_holdingbranch, $f_homebranch, "items information should be in the same field" );
+my $field = $f_holdingbranch;
+
+my $record = MARC::Record->new();
+$record->append_fields(
+    MARC::Field->new( $field, '', '', $sf_homebranch => 'CPL', $sf_holdingbranch => 'CPL' ),
+    MARC::Field->new( $field, '', '', $sf_homebranch => 'CPL', $sf_holdingbranch => 'CPL' ),
+    MARC::Field->new( $field, '', '', $sf_homebranch => 'CPL', $sf_holdingbranch => 'CPL' ),
+    MARC::Field->new( $field, '', '', $sf_homebranch => 'CPL', $sf_holdingbranch => 'CPL' ),
+    MARC::Field->new( $field, '', '', $sf_homebranch => 'CPL', $sf_holdingbranch => 'CPL' ),
+    MARC::Field->new( $field, '', '', $sf_homebranch => 'CPL', $sf_holdingbranch => 'CPL' ),
+    MARC::Field->new( $field, '', '', $sf_homebranch => 'CPL', $sf_holdingbranch => 'CPL' ),
+    MARC::Field->new( $field, '', '', $sf_homebranch => 'CPL', $sf_holdingbranch => 'CPL' ),
+    MARC::Field->new( $field, '', '', $sf_homebranch => 'CPL', $sf_holdingbranch => 'CPL' ),
+    MARC::Field->new( $field, '', '', $sf_homebranch => 'CPL', $sf_holdingbranch => 'CPL' ),
+);
+my ( $biblionumber, $biblioitemnumber ) = C4::Biblio::AddBiblio($record, '');
+my @iteminfo = C4::Items::AddItemBatchFromMarc( $record, $biblionumber, $biblioitemnumber, '' );
+
+my $itemnumbers = $iteminfo[0];
+
+for my $itemnumber ( @$itemnumbers ) {
+    ok($batch->add_item($itemnumber) eq 0 ) || diag "Batch->add_item() FAILED.";
 }
 
 diag "Testing Batch->retrieve() method.";
@@ -73,7 +101,9 @@ is_deeply($saved_batch, $batch) || diag "Retrieved batch object FAILED to verify
 
 diag "Testing Batch->remove_item() method.";
 
-ok($batch->remove_item($item_number) eq 0) || diag "Batch->remove_item() FAILED.";
+my $itemnumber = @$itemnumbers[0];
+ok($batch->remove_item($itemnumber) eq 0) || diag "Batch->remove_item() FAILED.";
+
 my $updated_batch = C4::Labels::Batch->retrieve(batch_id => $batch_id);
 is_deeply($updated_batch, $batch) || diag "Updated batch object FAILED to verify.";
 
@@ -81,3 +111,5 @@ diag "Testing Batch->delete() method.";
 
 my $del_results = $batch->delete();
 ok($del_results eq 0) || diag "Batch->delete() FAILED.";
+
+$dbh->rollback;
