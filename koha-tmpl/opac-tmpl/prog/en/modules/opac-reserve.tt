@@ -117,12 +117,7 @@
     // Show or hide holds notes
     $(".shownotes").click(function(){
         biblioNum = suffixOf($(this).attr("id"), "_");
-        if( $("#notesrow_"+biblioNum).is(":visible") ) {
-            $("#notesrow_"+biblioNum).hide();
-        }
-        else {
-            $("#notesrow_"+biblioNum).show();
-        }
+        $("#notesrow_"+biblioNum).toggle();
     });
 
     // When 'Place Hold' button is clicked
