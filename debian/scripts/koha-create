@@ -51,6 +51,7 @@ generate_config_file() {
         -e "s/__DB_PASS__/$mysqlpwd/g" \
         -e "s/__UNIXUSER__/$username/g" \
         -e "s/__UNIXGROUP__/$username/g" \
+        -e "s/__PLUGINS_DIR__/\/var\/lib\/koha\/$name\/plugins/g" \
         "/etc/koha/$1" > "$2"
 }
 
