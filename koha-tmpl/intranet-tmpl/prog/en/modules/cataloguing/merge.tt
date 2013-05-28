@@ -13,12 +13,76 @@ div#result { margin-top: 1em; }
 </style>
 <script type="text/javascript">
 //<![CDATA[
+[% UNLESS (result) %]
+  [% IF (choosereference) %]
+    function changeFramework(fw) {
+        $("#frameworkcode").val(fw);
+    }
+  [% ELSE %]
+    function check_mandatory () {
+        var missing = {
+            'fields': [],
+            'subfields': []
+        };
+        for (tag in tagslib) {
+            if (tag == '000' || tag == '001')
+                continue;
+            if (tagslib[tag].mandatory == 1) {
+                if ($("#resultul span.field:contains("+ tag +")").length == 0) {
+                    missing.fields.push(tag);
+                }
+            }
+            for (subfieldcode in tagslib[tag]) {
+                if (subfieldcode == 'lib' || subfieldcode == 'mandatory'
+                || subfieldcode == 'repeatable' || subfieldcode == 'tab') {
+                    continue;
+                }
+                if (tagslib[tag][subfieldcode].mandatory == 1 && tagslib[tag][subfieldcode].tab >= 0) {
+                    var fields = $("#resultul span.field:contains("+ tag +")");
+                    $(fields).each(function() {
+                        var subfields = $(this).parent().find("span.subfield:contains("+ subfieldcode +")");
+                        if (subfields.length == 0) {
+                            missing.subfields.push( {
+                                'tag': tag,
+                                'subfieldcode': subfieldcode
+                            } );
+                        }
+                    });
+                }
+            }
+        }
+        return missing;
+    }
 
     // When submiting the form
     function mergeformsubmit() {
-	    $("ul#ulrecord1").remove();
-	    $("ul#ulrecord2").remove();
-}
+        var missing = check_mandatory();
+        var alert_msg = '';
+        var error = 0;
+        if (missing.fields.length > 0) {
+            alert_msg += _("Following required fields are missing:") + "\n";
+            for (var i in missing.fields) {
+                alert_msg += "\t- " + missing.fields[i] + "\n";
+                error ++;
+            }
+            alert_msg += "\n";
+        }
+        if (missing.subfields.length > 0) {
+            alert_msg += _("Following required subfields are missing:") + "\n";
+            for (var i in missing.subfields) {
+                var subfield = missing.subfields[i];
+                alert_msg += "\t- " + subfield.tag + "$" + subfield.subfieldcode + "\n";
+                error ++;
+            }
+        }
+
+        if (error != 0) {
+            alert(alert_msg);
+            return false;
+        } else {
+            $("#tabs").remove();
+        }
+    }
 
 $(document).ready(function(){
     // Getting marc structure via ajax
@@ -32,12 +96,16 @@ $(document).ready(function(){
 
     // Creating tabs
     $("#tabs").tabs();
+
+    // Check all checkboxes in first tab, and uncheck all others to avoid
+    // inconsistencies from a page refresh.
+    $('#tabs div#tabrecord[% ref_biblionumber %]').find('input[type="checkbox"]').attr('checked', true);
+    $('#tabs > div:not("#tabrecord[% ref_biblionumber %]")').find('input[type="checkbox"]').removeAttr('checked');
+
 });
 
-
-function changeFramework(fw) {
-    $("#Frameworks").val(fw);
-}
+  [% END %]
+[% END %]
 
 //]]>
 </script>
@@ -55,23 +123,62 @@ function changeFramework(fw) {
 
 <h1>Merging records</h1>
 [% IF ( result ) %]
-    [% IF ( errors ) %]
-
-	[% FOREACH error IN errors %]
-	    <div class="dialog alert">
-
+    [% IF ( errors.size ) %]
+       [% FOREACH error IN errors %]
+           <div class="dialog alert">
                 [% IF error.code == 'CANNOT_MOVE' %]
                     The following items could not be moved from the old record to the new one: [% error.value %]
                 [% ELSE %]
                     [% error %]
                 [% END %]
-
-            <br />Therefore, the record to be merged has not been deleted.</div>
-	[% END %]
+                <br />
+                Therefore, the record to be merged has not been deleted.
+            </div>
+       [% END %]
 
     [% ELSE %]
-        <script type="text/javascript">window.location.href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% biblio1 %]"</script>
-        <p>The merging was successful. <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% biblio1 %]">Click here to see the merged record.</a></p>
+        <p>The merge was successful. <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% ref_biblionumber %]">Click here to see the merged record.</a></p>
+        <h3>Report</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Biblionumber</th>
+                    [% FOREACH key IN report_header.keys.sort %]
+                        [% tag = key.substr(0, 3) %]
+                        [% code = key.substr(3, 1) %]
+                        [% IF code == '@' %]
+                            [% header = tag %]
+                        [% ELSE %]
+                            [% header = tag _ '$' _ code %]
+                        [% END %]
+                        <th>[% header %]</th>
+                    [% END %]
+                </tr>
+            </thead>
+            <tbody>
+                [% FOREACH record IN report_records %]
+                    <tr>
+                        <td>
+                            [% record.biblionumber %]
+                            [% IF loop.first %]
+                                (record kept)
+                            [% END %]
+                        </td>
+                        [% FOREACH key IN report_header.keys.sort %]
+                            <td>
+                                [% values = record.fields.$key %]
+                                [% IF values %]
+                                    [% FOREACH value IN record.fields.$key %]
+                                        [% value %]
+                                        [% UNLESS loop.last %]<br />[% END %]
+                                    [% END %]
+                                [% END %]
+                            </td>
+                        [% END %]
+                    </tr>
+                [% END %]
+            </tbody>
+        </table>
     [% END %]
 
 [% ELSE %]
@@ -80,64 +187,82 @@ function changeFramework(fw) {
 <p>Please choose which record will be the reference for the merge. The record chosen as reference will be kept, and the other will be deleted.</p>
 <form id="mergeform" action="/cgi-bin/koha/cataloguing/merge.pl" method="post">
     <fieldset class="rows">
-	<legend>Merge reference</legend>
-	<ol>
-	<li class="radio"><input type="radio" value="[% biblio1 %]" checked="checked" id="mergereference1" name="mergereference" onclick="changeFramework('[% frameworkcode1 %]')" /><label for="mergereference1">[% title1 %] [% FOREACH subtitl1 IN subtitle1 %] [% subtitl1.subfield %][% END %] (<a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% biblio1 %]" title="MARC" rel="gb_page_center[600,500]">[% biblio1 %]</a>)</label></li>
-	<li class="radio"><input type="radio" value="[% biblio2 %]" id="mergereference2" name="mergereference" onclick="changeFramework('[% frameworkcode2 %]')" /><label for="mergereference2">[% title2 %] [% FOREACH subtitl2 IN subtitle2 %] [% subtitl2.subfield %][% END %] (<a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% biblio2 %]" title="MARC" rel="gb_page_center[600,500]">[% biblio2 %]</a>)</label></li>
+    <legend>Merge reference</legend>
+    <ol>
+        [% FOREACH record IN records %]
+            <li class="radio">
+                [% IF loop.first %]
+                    <input type="radio" value="[% record.biblionumber %]" checked="checked" id="ref_biblionumber[% record.biblionumber %]" name="ref_biblionumber" onclick="changeFramework('[% record.frameworkcode %]')" />
+                [% ELSE %]
+                    <input type="radio" value="[% record.biblionumber %]" id="ref_biblionumber[% record.biblionumber %]" name="ref_biblionumber" onclick="changeFramework('[% record.frameworkcode %]')" />
+                [% END %]
+                <label for="ref_biblionumber[% record.biblionumber %]">
+                    [% record.data.title %]
+                    [% FOREACH subtitle IN record.subtitles %]
+                        [% subtitle.subfield %]
+                    [% END %]
+                    (<a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% record.biblionumber %]" title="MARC" rel="gb_page_center[600,500]">[% record.biblionumber %]</a>)
+                </label>
+            </li>
+        [% END %]
 
-    [% IF frameworkselect %]
-          <li><label for="frameworkcode">Using framework:</label>
-                      <select name="frameworkcode" id="frameworkcode">
-                                      <option value="Default">Default</option>
-                                      [% FOREACH frameworkcodeloo IN frameworkselect %]
-                                          [% IF ( frameworkcodeloo.selected ) %]
-                                              <option value="[% frameworkcodeloo.value %]" selected="selected">
-                                          [% ELSE %]
-                                              <option value="[% frameworkcodeloo.value %]">
-                                          [% END %]
-                                           [% frameworkcodeloo.frameworktext %]
-                                           </option>
-                                      [% END %]
-                      </select></li>
+        [% IF frameworkselect.size %]
+            <li>
+                <label for="frameworkcode">Using framework:</label>
+                <select name="frameworkcode" id="frameworkcode">
+                    <option value="">Default</option>
+                    [% FOREACH frameworkcode IN frameworkselect %]
+                        [% IF ( frameworkcode.selected ) %]
+                            <option value="[% frameworkcode.value %]" selected="selected">
+                        [% ELSE %]
+                            <option value="[% frameworkcode.value %]">
+                        [% END %]
+                            [% frameworkcode.frameworktext %]
+                        </option>
+                    [% END %]
+                </select>
+            </li>
+        [% END %]
+    </ol>
+
+    [% FOREACH record IN records %]
+        <input type="hidden" name="biblionumber" value="[% record.biblionumber %]" />
     [% END %]
-</ol>
-
-	<input type="hidden" name="biblionumber" value="[% biblio1 %]" />
-	<input type="hidden" name="biblionumber" value="[% biblio2 %]" />
-	<fieldset class="action"><input type="submit" value="Next" /></fieldset>
+    <fieldset class="action">
+        <input type="submit" value="Next" />
+    </fieldset>
     </fieldset>
 </form>
 [% ELSE %]
-[% IF ( errors ) %]
+[% IF ( errors.size ) %]
     <div class="dialog alert">
-	[% FOREACH error IN errors %]
-	    <p>
-                [% IF error.code == 'WRONG_COUNT' %]
-                    Number of records provided for merging: [% error.value %]. Currently only 2 records can be merged at a time.
-                [% ELSE %]
-                    [% error %]
-                [% END %]
-
-            </p>
-	[% END %]
+        [% FOREACH error IN errors %]
+            <p>[% error %]</p>
+        [% END %]
     </div>
 [% ELSE %]
 <form id="mergeform" action="/cgi-bin/koha/cataloguing/merge.pl" method="post" onsubmit="return mergeformsubmit()">
 
 <div class="yui-g">
 <div class="yui-u first">
-[% PROCESS mergesource recordid1=biblio1 recordid2=biblio2 %]
+[% PROCESS mergesource sourcerecords=records %]
 </div>
 <div class="yui-u">
 [% PROCESS mergetarget %]
 </div> <!-- .yui-u -->
 
-<input type="hidden" name="biblio1" value="[% biblio1 %]" />
-<input type="hidden" name="biblio2" value="[% biblio2 %]" />
-<input type="hidden" name="mergereference" value="[% mergereference %]" />
+<input type="hidden" name="ref_biblionumber" value="[% ref_biblionumber %]" />
+[% FOREACH record IN records %]
+    <input type="hidden" name="biblionumber" value="[% record.biblionumber %]" />
+[% END %]
 <input type="hidden" name="frameworkcode" value="[% framework %]" />
 
-<fieldset class="action"><input type="submit" name="merge" value="Merge" /></fieldset>
+<fieldset class="action">
+    <input type="submit" name="merge" value="Merge" />
+    <label for="report_fields">Fields to display in report:</label>
+    <input type="text" name="report_fields" id="report_fields" value="[% MergeReportFields %]" />
+    <span class="hint">(Example: "001,245ab,600")
+</fieldset>
 </div>
 </form>
 [% END %]

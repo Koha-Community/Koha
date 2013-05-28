@@ -196,14 +196,18 @@ $(document).ready(function(){
      * This function checks if the adequate number of records are checked for merging
      */
     function MergeItems() {
-	var checkboxes = $("input:checkbox:checked");
-        var nbCheckbox = checkboxes.length;
-	if (nbCheckbox != 2) {
-	    alert(_("Two records must be selected for merging."));
-	} else {
-	    location.href='/cgi-bin/koha/cataloguing/merge.pl?biblionumber=' + checkboxes[0].value + '&amp;biblionumber=' + checkboxes[1].value;
-	}
-	return false;
+        var checkboxes = $("input:checkbox:checked");
+        if (checkboxes.length > 0) {
+            var params = [];
+            $(checkboxes).each(function() {
+                params.push('biblionumber=' + $(this).val());
+            });
+            var url = '/cgi-bin/koha/cataloguing/merge.pl?' + params.join('&');
+            location.href = url;
+        } else {
+            alert(_("You must select at least one record"));
+        }
+        return false;
     }
 
     /**

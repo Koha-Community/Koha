@@ -1,6 +1,5 @@
 #!/usr/bin/perl
 
-
 # Copyright 2009 BibLibre
 # Parts Copyright Catalyst IT 2011
 #
@@ -19,9 +18,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use strict;
-#use warnings; FIXME - Bug 2505
+use Modern::Perl;
 use CGI qw ( -utf8 );
+
 use C4::Output;
 use C4::Auth;
 use C4::Items;
@@ -33,7 +32,7 @@ use C4::Acquisition qw/ModOrder GetOrdersByBiblionumber/;
 use Koha::MetadataRecord;
 
 my $input = new CGI;
-my @biblionumber = $input->param('biblionumber');
+my @biblionumbers = $input->param('biblionumber');
 my $merge = $input->param('merge');
 
 my @errors;
@@ -54,28 +53,41 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 if ($merge) {
 
     my $dbh = C4::Context->dbh;
-    my $sth;
 
     # Creating a new record from the html code
     my $record       = TransformHtmlToMarc( $input );
-    my $tobiblio     =  $input->param('biblio1');
-    my $frombiblio   =  $input->param('biblio2');
+    my $ref_biblionumber = $input->param('ref_biblionumber');
+    @biblionumbers = grep { $_ != $ref_biblionumber } @biblionumbers;
+
+    # prepare report
+    my @report_records;
+    my $report_fields_str = $input->param('report_fields');
+    $report_fields_str ||= C4::Context->preference('MergeReportFields');
+    my @report_fields;
+    foreach my $field_str (split /,/, $report_fields_str) {
+        if ($field_str =~ /(\d{3})([0-9a-z]*)/) {
+            my ($field, $subfields) = ($1, $2);
+            push @report_fields, {
+                tag => $field,
+                subfields => [ split //, $subfields ]
+            }
+        }
+    }
 
     # Rewriting the leader
-    $record->leader(GetMarcBiblio($tobiblio)->leader());
+    $record->leader(GetMarcBiblio($ref_biblionumber)->leader());
 
     my $frameworkcode = $input->param('frameworkcode');
     my @notmoveditems;
 
     # Modifying the reference record
-    ModBiblio($record, $tobiblio, $frameworkcode);
+    ModBiblio($record, $ref_biblionumber, $frameworkcode);
 
     # Moving items from the other record to the reference record
-    # Also moving orders from the other record to the reference record, only if the order is linked to an item of the other record
-    my $itemnumbers = get_itemnumbers_of($frombiblio);
-    foreach my $itloop ($itemnumbers->{$frombiblio}) {
-    foreach my $itemnumber (@$itloop) {
-        my $res = MoveItemFromBiblio($itemnumber, $frombiblio, $tobiblio);
+    foreach my $biblionumber (@biblionumbers) {
+        my $itemnumbers = get_itemnumbers_of($biblionumber);
+        foreach my $itemnumber (@{ $itemnumbers->{$biblionumber} }) {
+        my $res = MoveItemFromBiblio($itemnumber, $biblionumber, $ref_biblionumber);
         if (not defined $res) {
             push @notmoveditems, $itemnumber;
         }
@@ -87,137 +99,165 @@ if ($merge) {
         push @errors, { code => "CANNOT_MOVE", value => $itemlist };
     }
 
-    # Moving subscriptions from the other record to the reference record
-    my $subcount = CountSubscriptionFromBiblionumber($frombiblio);
-    if ($subcount > 0) {
-    $sth = $dbh->prepare("UPDATE subscription SET biblionumber = ? WHERE biblionumber = ?");
-    $sth->execute($tobiblio, $frombiblio);
+    my $sth_subscription = $dbh->prepare("
+        UPDATE subscription SET biblionumber = ? WHERE biblionumber = ?
+    ");
+    my $sth_subscriptionhistory = $dbh->prepare("
+        UPDATE subscriptionhistory SET biblionumber = ? WHERE biblionumber = ?
+    ");
+    my $sth_serial = $dbh->prepare("
+        UPDATE serial SET biblionumber = ? WHERE biblionumber = ?
+    ");
 
-    $sth = $dbh->prepare("UPDATE subscriptionhistory SET biblionumber = ? WHERE biblionumber = ?");
-    $sth->execute($tobiblio, $frombiblio);
-
+    my $report_header = {};
+    foreach my $biblionumber ($ref_biblionumber, @biblionumbers) {
+        # build report
+        my $marcrecord = GetMarcBiblio($biblionumber);
+        my %report_record = (
+            biblionumber => $biblionumber,
+            fields => {},
+        );
+        foreach my $field (@report_fields) {
+            my @marcfields = $marcrecord->field($field->{tag});
+            foreach my $marcfield (@marcfields) {
+                my $tag = $marcfield->tag();
+                my %subfields;
+                if (scalar @{$field->{subfields}}) {
+                    foreach my $subfield (@{$field->{subfields}}) {
+                        my @values = $marcfield->subfield($subfield);
+                        $report_header->{ $tag . $subfield } = 1;
+                        push @{ $report_record{fields}->{$tag . $subfield} }, @values;
+                    }
+                } elsif ($field->{tag} gt '009') {
+                    my @marcsubfields = $marcfield->subfields();
+                    foreach my $marcsubfield (@marcsubfields) {
+                        my ($code, $value) = @$marcsubfield;
+                        $report_header->{ $tag . $code } = 1;
+                        push @{ $report_record{fields}->{ $tag . $code } }, $value;
+                    }
+                } else {
+                    $report_header->{ $tag . '@' } = 1;
+                    push @{ $report_record{fields}->{ $tag .'@' } }, $marcfield->data();
+                }
+            }
+        }
+        push @report_records, \%report_record;
     }
 
-    # Moving serials
-    $sth = $dbh->prepare("UPDATE serial SET biblionumber = ? WHERE biblionumber = ?");
-    $sth->execute($tobiblio, $frombiblio);
+    foreach my $biblionumber (@biblionumbers) {
+        # Moving subscriptions from the other record to the reference record
+        my $subcount = CountSubscriptionFromBiblionumber($biblionumber);
+        if ($subcount > 0) {
+            $sth_subscription->execute($ref_biblionumber, $biblionumber);
+            $sth_subscriptionhistory->execute($ref_biblionumber, $biblionumber);
+        }
 
-    # TODO : Moving reserves
+    # Moving serials
+        $sth_serial->execute($ref_biblionumber, $biblionumber);
 
     # Moving orders (orders linked to items of frombiblio have already been moved by MoveItemFromBiblio)
-    my @allorders = GetOrdersByBiblionumber($frombiblio);
-    my @tobiblioitem = GetBiblioItemByBiblioNumber ($tobiblio);
+    my @allorders = GetOrdersByBiblionumber($biblionumber);
+    my @tobiblioitem = GetBiblioItemByBiblioNumber ($ref_biblionumber);
     my $tobiblioitem_biblioitemnumber = $tobiblioitem [0]-> {biblioitemnumber };
     foreach my $myorder (@allorders) {
-        $myorder->{'biblionumber'} = $tobiblio;
+        $myorder->{'biblionumber'} = $ref_biblionumber;
         ModOrder ($myorder);
     # TODO : add error control (in ModOrder?)
     }
 
-    # Deleting the other record
+    # Deleting the other records
     if (scalar(@errors) == 0) {
-    # Move holds
-    MergeHolds($dbh,$tobiblio,$frombiblio);
-    my $error = DelBiblio($frombiblio);
-    push @errors, $error if ($error);
+        # Move holds
+        MergeHolds($dbh, $ref_biblionumber, $biblionumber);
+        my $error = DelBiblio($biblionumber);
+        push @errors, $error if ($error);
     }
+}
 
     # Parameters
     $template->param(
-    result => 1,
-    biblio1 => $input->param('biblio1')
+        result => 1,
+        report_records => \@report_records,
+        report_header => $report_header,
+        ref_biblionumber => $input->param('ref_biblionumber')
     );
 
 #-------------------------
 # Show records to merge
 #-------------------------
 } else {
-    my $mergereference = $input->param('mergereference');
-    my $biblionumber = $input->param('biblionumber');
+    my $ref_biblionumber = $input->param('ref_biblionumber');
 
-    if (scalar(@biblionumber) != 2) {
-        push @errors, { code => "WRONG_COUNT", value => scalar(@biblionumber) };
-    }
-    else {
-        my $data1 = GetBiblioData($biblionumber[0]);
-        my $record1 = GetMarcBiblio($biblionumber[0]);
+    if ($ref_biblionumber) {
+        my $framework = $input->param('frameworkcode');
+        $framework //= GetFrameworkCode($ref_biblionumber);
 
-        my $data2 = GetBiblioData($biblionumber[1]);
-        my $record2 = GetMarcBiblio($biblionumber[1]);
+        # Getting MARC Structure
+        my $tagslib = GetMarcStructure(1, $framework);
 
-        # Checks if both records use the same framework
-        my $frameworkcode1 = &GetFrameworkCode($biblionumber[0]);
-        my $frameworkcode2 = &GetFrameworkCode($biblionumber[1]);
+        my $marcflavour = lc(C4::Context->preference('marcflavour'));
 
-
-        my $subtitle1 = GetRecordValue('subtitle', $record1, $frameworkcode1);
-        my $subtitle2 = GetRecordValue('subtitle', $record2, $frameworkcode1);
-
-        if ($mergereference) {
-
-            my $framework;
-            if ($frameworkcode1 ne $frameworkcode2) {
-                $framework = $input->param('frameworkcode')
-                  or push @errors, "Famework not selected.";
+        # Creating a loop for display
+        my @records;
+        foreach my $biblionumber (@biblionumbers) {
+            my $marcrecord = GetMarcBiblio($biblionumber);
+            my $frameworkcode = GetFrameworkCode($biblionumber);
+            my $recordObj = new Koha::MetadataRecord({'record' => $marcrecord, schema => $marcflavour});
+            my $record = {
+                biblionumber => $biblionumber,
+                record => $marcrecord,
+                frameworkcode => $frameworkcode,
+                display => $recordObj->createMergeHash($tagslib),
+            };
+            if ($ref_biblionumber and $ref_biblionumber == $biblionumber) {
+                $record->{reference} = 1;
+                $template->param(ref_record => $record);
+                unshift @records, $record;
             } else {
-                $framework = $frameworkcode1;
+                push @records, $record;
             }
-
-            # Getting MARC Structure
-            my $tagslib = GetMarcStructure(1, $framework);
-
-            my $notreference = ($biblionumber[0] == $mergereference) ? $biblionumber[1] : $biblionumber[0];
-
-            # Creating a loop for display
-
-            my $recordObj1 = new Koha::MetadataRecord({ 'record' => GetMarcBiblio($mergereference), 'schema' => lc C4::Context->preference('marcflavour') });
-            my $recordObj2 = new Koha::MetadataRecord({ 'record' => GetMarcBiblio($notreference), 'schema' => lc C4::Context->preference('marcflavour') });
-
-            my @record1 = $recordObj1->createMergeHash($tagslib);
-            my @record2 = $recordObj2->createMergeHash($tagslib);
-
-            # Parameters
-            $template->param(
-                biblio1 => $mergereference,
-                biblio2 => $notreference,
-                mergereference => $mergereference,
-                record1 => @record1,
-                record2 => @record2,
-                framework => $framework,
-            );
         }
-        else {
 
+        my ($biblionumbertag) = GetMarcFromKohaField('biblio.biblionumber');
+
+        # Parameters
+        $template->param(
+            ref_biblionumber => $ref_biblionumber,
+            records => \@records,
+            ref_record => $records[0],
+            framework => $framework,
+            biblionumbertag => $biblionumbertag,
+            MergeReportFields => C4::Context->preference('MergeReportFields'),
+        );
+    } else {
+        my @records;
+        foreach my $biblionumber (@biblionumbers) {
+            my $frameworkcode = GetFrameworkCode($biblionumber);
+            my $record = {
+                biblionumber => $biblionumber,
+                data => GetBiblioData($biblionumber),
+                frameworkcode => $frameworkcode,
+            };
+            push @records, $record;
+        }
         # Ask the user to choose which record will be the kept
-            $template->param(
-                choosereference => 1,
-                biblio1 => $biblionumber[0],
-                biblio2 => $biblionumber[1],
-                title1 => $data1->{'title'},
-                subtitle1 => $subtitle1,
-                title2 => $data2->{'title'},
-                subtitle2 => $subtitle2
+        $template->param(
+            choosereference => 1,
+            records => \@records,
+        );
+
+        my $frameworks = getframeworks;
+        my @frameworkselect;
+        foreach my $thisframeworkcode ( keys %$frameworks ) {
+            my %row = (
+                value         => $thisframeworkcode,
+                frameworktext => $frameworks->{$thisframeworkcode}->{'frameworktext'},
             );
-            if ($frameworkcode1 ne $frameworkcode2) {
-                my $frameworks = getframeworks;
-                my @frameworkselect;
-                foreach my $thisframeworkcode ( keys %$frameworks ) {
-                    my %row = (
-                        value         => $thisframeworkcode,
-                        frameworktext => $frameworks->{$thisframeworkcode}->{'frameworktext'},
-                    );
-                    if ($frameworkcode1 eq $thisframeworkcode){
-                        $row{'selected'} = 1;
-                        }
-                    push @frameworkselect, \%row;
-                }
-                $template->param(
-                    frameworkselect => \@frameworkselect,
-                    frameworkcode1 => $frameworkcode1,
-                    frameworkcode2 => $frameworkcode2,
-                );
-            }
+            push @frameworkselect, \%row;
         }
+        $template->param(
+            frameworkselect => \@frameworkselect,
+        );
     }
 }
 
@@ -228,11 +268,3 @@ if (@errors) {
 
 output_html_with_http_headers $input, $cookie, $template->output;
 exit;
-
-=head1 FUNCTIONS
-
-=cut
-
-# ------------------------
-# Functions
-# ------------------------

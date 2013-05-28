@@ -46,16 +46,11 @@ sub createMergeHash {
             if ( !defined($tagslib)
                 || $tagslib->{$fieldtag}->{'@'}->{'tab'} >= 0 )
             {
-                push @array,
-                  {
-                    field => [
-                        {
-                            tag   => $fieldtag,
-                            key   => _createKey(),
-                            value => $field->data(),
-                        }
-                    ]
-                  };
+                push @array, {
+                    tag   => $fieldtag,
+                    key   => _createKey(),
+                    value => $field->data(),
+                };
             }
         }
         else {
@@ -70,12 +65,11 @@ sub createMergeHash {
                         && $tagslib->{$fieldtag}->{ @$subfield[0] }->{'tab'} >= 0 )
                   )
                 {
-                    push @subfield_array,
-                      {
+                    push @subfield_array, {
                         subtag => @$subfield[0],
                         subkey => _createKey(),
                         value  => @$subfield[1],
-                      };
+                    };
                 }
 
             }
@@ -89,17 +83,12 @@ sub createMergeHash {
                 && @subfield_array
               )
             {
-                push @array,
-                  {
-                    field => [
-                        {
-                            tag        => $fieldtag,
-                            key        => _createKey(),
-                            indicator1 => $field->indicator(1),
-                            indicator2 => $field->indicator(2),
-                            subfield   => [@subfield_array],
-                        }
-                    ]
+                push @array, {
+                      tag        => $fieldtag,
+                      key        => _createKey(),
+                      indicator1 => $field->indicator(1),
+                      indicator2 => $field->indicator(2),
+                      subfield   => [@subfield_array],
                   };
             }
 
