@@ -6,10 +6,25 @@
     [% IF ( print_basket ) %]
     <script type="text/javascript">
     //<![CDATA[
+    var IEprint=0;
     $(document).ready(function(){
-        print();
-        location.href="/cgi-bin/koha/opac-basket.pl?bib_list=[% bib_list %][% IF ( verbose ) %]&verbose=1[% END %]";
+        if(navigator.appName.indexOf("Internet Explorer")>-1) {
+        // too bad that we need this trick to make printing work in IE...
+            window.setTimeout(function () {IE_Print_Page();}, 500);
+        }
+        else {
+            print();
+            location.href="/cgi-bin/koha/opac-basket.pl?bib_list=[% bib_list %][% IF ( verbose ) %]&verbose=1[% END %]";
+        }
     });
+    function IE_Print_Page() {
+        if(IEprint==0) {
+            IEprint++;
+            window.print(); // IE needs the window object here
+            window.onfocus=function() { // focus will not work in Firefox a.o.
+                location.href="/cgi-bin/koha/opac-basket.pl?bib_list=[% bib_list %][% IF ( verbose ) %]&verbose=1[% END %]"; }
+        }
+    }
     //]]>
     </script>
     [% ELSE %]
