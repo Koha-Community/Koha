@@ -25,7 +25,7 @@ override_dh_auto_install:
 	rm $(TMP)/etc/koha/solr/indexes.yaml
 	rm -r \
 		$(TMP)/usr/share/koha/intranet/htdocs/intranet-tmpl/lib/tiny_mce
-	ln -s /usr/share/tinymce2/www \
+	ln -s /usr/share/tinymce/www \
               $(TMP)/usr/share/koha/intranet/htdocs/intranet-tmpl/lib/tiny_mce
 	rm -r \
 		$(TMP)/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/lib/yui
