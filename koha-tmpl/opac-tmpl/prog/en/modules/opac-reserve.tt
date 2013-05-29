@@ -272,7 +272,7 @@
         <th>Hold starts on date</th>
 		  [% END %]
         <th>Hold not needed after</th>
-        [% IF ( OPACShowHoldNotes ) %]<th>Notes</th>[% END %]
+        [% IF ( OpacHoldNotes ) %]<th>Notes</th>[% END %]
                   [% IF ( OPACItemHolds ) %]
                     <th id="place_on_hdr" style="display:none">Place on</th>
                   [% END %]
@@ -359,7 +359,7 @@
       <a href="#" style="font-size:85%;text-decoration:none;" onclick="document.getElementById('expiration_date_[% bibitemloo.biblionumber %]').value='';return false;">Clear date</a></p>
     </td>[% END %]
 
-    [% IF ( OPACShowHoldNotes ) %][% IF ( bibitemloo.holdable ) %]<td><input type="button" id="shownotes_[% bibitemloo.biblionumber %]" class="shownotes" value="Edit notes"/></td>[% END %][% END %]
+    [% IF ( OpacHoldNotes ) %][% IF ( bibitemloo.holdable ) %]<td><input type="button" id="shownotes_[% bibitemloo.biblionumber %]" class="shownotes" value="Edit notes"/></td>[% END %][% END %]
 
                     [% IF ( bibitemloo.holdable ) %]
 		    <!-- HOLD ABLE -->
@@ -437,7 +437,7 @@
                     [% END %]
                   </tr>
 
-                  [% IF ( OPACShowHoldNotes ) %]
+                  [% IF ( OpacHoldNotes ) %]
                   [% IF ( bibitemloo.holdable ) %]
                   <tr class="notesrow" id="notesrow_[% bibitemloo.biblionumber %]">
                       <td>&nbsp;</td>

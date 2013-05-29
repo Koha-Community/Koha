@@ -556,8 +556,8 @@ if (! $template->{VARS}->{'singleBranchMode'}) {
     $itemTableColspan--;
 }
 $itemTableColspan-- if !$show_holds_count && !$show_priority;
-my $show_notes=C4::Context->preference('OPACShowHoldNotes');
-$template->param(OPACShowHoldNotes=>$show_notes);
+my $show_notes=C4::Context->preference('OpacHoldNotes');
+$template->param(OpacHoldNotes=>$show_notes);
 $itemTableColspan-- if !$show_notes;
 $template->param(itemtable_colspan => $itemTableColspan);
 
