@@ -103,6 +103,7 @@ overdue as of [% todaysdate %][% IF ( isfiltered ) %] <span style="font-size:70%
     <th>Title</th>
     <th>Barcode</th>
     <th>Call number</th>
+    <th>Price of book</th>
 </tr></thead>
 
 <tbody>[% FOREACH overdueloo IN overdueloop %]
@@ -116,6 +117,7 @@ overdue as of [% todaysdate %][% IF ( isfiltered ) %] <span style="font-size:70%
         </td>
 		<td><a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% overdueloo.biblionumber %]&amp;itemnumber=[% overdueloo.itemnum %]#item[% overdueloo.itemnum %]">[% overdueloo.barcode %]</a></td>
 		<td>[% overdueloo.itemcallnumber %]</td>
+                <td>[% overdueloo.replacementprice %]</td>
         </tr>
 [% END %]</tbody>
 </table>
