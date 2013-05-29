@@ -98,14 +98,32 @@ our ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
     }
 );
 
-if($op and $op eq 'new') {
-    my $invoicenumber = $input->param('invoice');
-    my $shipmentdate = $input->param('shipmentdate');
-    my $shipmentcost = $input->param('shipmentcost');
-    my $shipmentcost_budgetid = $input->param('shipmentcost_budgetid');
-    if($shipmentdate) {
-        $shipmentdate = C4::Dates->new($shipmentdate)->output('iso');
+my $invoicenumber = $input->param('invoice');
+my $shipmentdate = $input->param('shipmentdate');
+my $shipmentcost = $input->param('shipmentcost');
+my $shipmentcost_budgetid = $input->param('shipmentcost_budgetid');
+if($shipmentdate) {
+    $shipmentdate = C4::Dates->new($shipmentdate)->output('iso');
+}
+
+if ( $op and $op eq 'new' ) {
+    if ( C4::Context->preference('AcqWarnOnDuplicateInvoice') ) {
+        my @invoices = GetInvoices(
+            supplierid    => $booksellerid,
+            invoicenumber => $invoicenumber,
+        );
+        if ( $#invoices > 0 ) {
+            $template->{'VARS'}->{'duplicate_invoices'} = \@invoices;
+            $template->{'VARS'}->{'invoicenumber'}      = $invoicenumber;
+            $template->{'VARS'}->{'shipmentdate'}       = $shipmentdate;
+            $template->{'VARS'}->{'shipmentcost'}       = $shipmentcost;
+            $template->{'VARS'}->{'shipmentcost_budgetid'} =
+              $shipmentcost_budgetid;
+        }
     }
+    $op = 'confirm' unless $template->{'VARS'}->{'duplicate_invoices'};
+}
+if ($op and $op eq 'confirm') {
     my $invoiceid = AddInvoice(
         invoicenumber => $invoicenumber,
         booksellerid => $booksellerid,

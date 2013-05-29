@@ -427,3 +427,4 @@ INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('
 INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES('UseCourseReserves', '0', 'Enable the course reserves feature.', NULL, 'YesNo');
 INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES('OpacHoldNotes',0,'Show hold notes on OPAC','','YesNo');
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('CalculateFinesOnReturn','1','Switch to control if overdue fines are calculated on return or not', '', 'YesNo');
+INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('AcqWarnOnDuplicateInvoice','0','Warn librarians when they try to create a duplicate invoice', '', 'YesNo');

@@ -1,3 +1,4 @@
+[% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; Receive shipment from vendor [% name %]</title>
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
@@ -37,6 +38,34 @@
     </div>
 [% END %]
 <h1>Receive shipment from vendor <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]">[% name %]</a></h1>
+
+    [% IF duplicate_invoices %]
+    <div id="parcels_duplicate_invoice" class="dialog alert">
+        <p>This invoice number has already been used. Would you like to receive on an existing invoice?</p>
+        <table>
+            <thead><tr><th>Invoice no.</th><th>Shipment date</th><th></th></tr></thead>
+            <tbody>
+                [% FOREACH invoice IN duplicate_invoices %]
+                    <tr>
+                        <td>[% invoice.invoicenumber %]</td>
+                        <td>[% invoice.shipmentdate | $KohaDates %]</td>
+                        <td><a href="/cgi-bin/koha/acqui/parcel.pl?invoiceid=[% invoice.invoiceid %]">Receive</a></td>
+                    </tr>
+                [% END %]
+            </tbody>
+        </table>
+        <form method="get" action="parcels.pl">
+            <input type="hidden" name="booksellerid" value="[% booksellerid %]" />
+            <input type="hidden" name="op" value="confirm" />
+            <input type="hidden" name="invoice" value="[% invoicenumber %]" />
+            <input type="hidden" name="shipmentdate" value="[% shipmentdate %]" />
+            <input type="hidden" name="shipmentcost" value="[% shipmentcost %]" />
+            <input type="hidden" name="shipmentcost_budgetid" value="[% shipmentcost_budgetid %]" />
+            <input type="submit" class="button" value="Create new invoice anyway" />
+        </form>
+    </div>
+    [% END %]
+
 
 [% IF ( count ) %]
 <p> [% count %] shipments</p>
