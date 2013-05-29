@@ -4,15 +4,15 @@ use strict;
 use warnings;
 use C4::Branch;
 
-use Test::More tests => 18;
+use Test::More tests => 19;
 use MARC::Record;
 use C4::Biblio;
 use C4::Items;
 
 BEGIN {
-      use FindBin;
-   use lib $FindBin::Bin;
- use_ok('C4::Reserves');
+    use FindBin;
+    use lib $FindBin::Bin;
+    use_ok('C4::Reserves');
 }
 
 my $borrowers_count = 5;
@@ -121,6 +121,13 @@ AddReserve(
     my $found,
 );
 ( $reserve ) = GetReservesFromBorrowernumber($borrowernumber);
+my $reserveid = C4::Reserves::GetReserveId(
+    {
+        biblionumber => $biblionumber,
+        borrowernumber => $borrowernumber
+    }
+);
+is( $reserveid, $reserve->{reserve_id}, "Test GetReserveId" );
 ModReserveMinusPriority( $itemnumber, $reserve->{'reserve_id'} );
 ( $reserve ) = GetReservesFromBorrowernumber($borrowernumber);
 ok( $reserve->{'itemnumber'} eq $itemnumber, "Test ModReserveMinusPriority()" );

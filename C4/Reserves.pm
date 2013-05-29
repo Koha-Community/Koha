@@ -1466,9 +1466,14 @@ sub AlterPriority {
 
     my $reserve = GetReserve( $reserve_id );
 
+    if ( $reserve->{cancellationdate} ) {
+        warn "I cannot alter the priority for reserve_id $reserve_id, the reserve has been cancelled (".$reserve->{cancellationdate}.')';
+        return;
+    }
+
     if ( $where eq 'up' || $where eq 'down' ) {
-    
-      my $priority = $reserve->{'priority'};        
+
+      my $priority = $reserve->{'priority'};
       $priority = $where eq 'up' ? $priority - 1 : $priority + 1;
       _FixPriority( $reserve_id, $priority )
 
@@ -1628,7 +1633,6 @@ sub _FixPriority {
         $sth->execute( $reserve_id );
     }
     my @priority;
-    my @reservedates;
 
     # get whats left
     my $query = "
@@ -1641,7 +1645,6 @@ sub _FixPriority {
     my $sth = $dbh->prepare($query);
     $sth->execute( $res->{'biblionumber'} );
     while ( my $line = $sth->fetchrow_hashref ) {
-        push( @reservedates, $line );
         push( @priority,     $line );
     }
 
