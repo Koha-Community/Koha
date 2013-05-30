@@ -5,7 +5,7 @@ use DateTime;
 use DateTime::TimeZone;
 
 use C4::Context;
-use Test::More tests => 30;
+use Test::More tests => 31;
 
 BEGIN { use_ok('Koha::DateUtils'); }
 
@@ -23,40 +23,48 @@ cmp_ok( $dt->ymd(), 'eq', $testdate_iso, 'Returned object matches input' );
 $dt->set_hour(12);
 $dt->set_minute(0);
 
-my $date_string = output_pref( $dt, 'iso', '24hr' );
+my $date_string;
+
+my $dateformat = C4::Context->preference('dateformat');
+cmp_ok  output_pref({ dt => $dt, dateformat => $dateformat }),
+        'eq',
+        output_pref($dt),
+        'output_pref gives an hashref or a dt';
+
+$date_string = output_pref({ dt => $dt, dateformat => 'iso', timeformat => '24hr' });
 cmp_ok $date_string, 'eq', '2011-06-16 12:00', 'iso output';
 
-$date_string = output_pref( $dt, 'iso', '12hr' );
+$date_string = output_pref({ dt => $dt, dateformat => 'iso', timeformat => '12hr' });
 cmp_ok $date_string, 'eq', '2011-06-16 12:00 PM', 'iso output 12hr';
 
 # "notime" doesn't actually mean anything in this context, but we
 # can't pass undef or output_pref will try to access the database
-$date_string = output_pref( $dt, 'iso', 'notime', 1 );
+$date_string = output_pref({ dt => $dt, dateformat => 'iso', timeformat => 'notime', dateonly => 1 });
 cmp_ok $date_string, 'eq', '2011-06-16', 'iso output (date only)';
 
-$date_string = output_pref( $dt, 'us', '24hr' );
+$date_string = output_pref({ dt => $dt, dateformat => 'us', timeformat => '24hr' });
 cmp_ok $date_string, 'eq', '06/16/2011 12:00', 'us output';
 
-$date_string = output_pref( $dt, 'us', '12hr' );
+$date_string = output_pref({ dt => $dt, dateformat => 'us', timeformat => '12hr' });
 cmp_ok $date_string, 'eq', '06/16/2011 12:00 PM', 'us output 12hr';
 
-$date_string = output_pref( $dt, 'us', 'notime', 1 );
+$date_string = output_pref({ dt => $dt, dateformat => 'us', timeformat => 'notime', dateonly => 1 });
 cmp_ok $date_string, 'eq', '06/16/2011', 'us output (date only)';
 
 # metric should return the French Revolutionary Calendar Really
-$date_string = output_pref( $dt, 'metric', '24hr' );
+$date_string = output_pref({ dt => $dt, dateformat => 'metric', timeformat => '24hr' });
 cmp_ok $date_string, 'eq', '16/06/2011 12:00', 'metric output';
 
-$date_string = output_pref( $dt, 'metric', 'notime', 1 );
+$date_string = output_pref({ dt => $dt, dateformat => 'metric', timeformat => 'notime', dateonly => 1 });
 cmp_ok $date_string, 'eq', '16/06/2011', 'metric output (date only)';
 
-$date_string = output_pref_due( $dt, 'metric', '24hr' );
+$date_string = output_pref({ dt => $dt, dateformat => 'metric', timeformat => '24hr' });
 cmp_ok $date_string, 'eq', '16/06/2011 12:00',
   'output_pref_due preserves non midnight HH:SS';
 
 $dt->set_hour(23);
 $dt->set_minute(59);
-$date_string = output_pref_due( $dt, 'metric', '24hr' );
+$date_string = output_pref_due({ dt => $dt, dateformat => 'metric', timeformat => '24hr' });
 cmp_ok $date_string, 'eq', '16/06/2011',
   'output_pref_due truncates HH:SS at midnight';
 

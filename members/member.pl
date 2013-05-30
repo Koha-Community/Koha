@@ -117,7 +117,7 @@ if ($member || keys %$patron) {
     my @searchfields = $searchfields ? split( ',', $searchfields ) : ( "firstname", "surname", "othernames", "cardnumber", "userid", "email" );
 
     if ( $searchfields eq "dateofbirth" ) {
-        $member = output_pref(dt_from_string($member), 'iso', undef, 1);
+        $member = output_pref({dt => dt_from_string($member), dateformat => 'iso', dateonly => 1});
     }
 
     my $searchtype = $input->param('searchtype');

@@ -1528,7 +1528,7 @@ be cleared when it is unsuspended.
 sub ToggleSuspend {
     my ( $reserve_id, $suspend_until ) = @_;
 
-    $suspend_until = output_pref( dt_from_string( $suspend_until ), 'iso' ) if ( $suspend_until );
+    $suspend_until = output_pref({ dt => dt_from_string( $suspend_until ), dateformat => 'iso' }) if ( $suspend_until );
 
     my $do_until = ( $suspend_until ) ? '?' : 'NULL';
 
