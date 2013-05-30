@@ -177,7 +177,7 @@ function checkMultiHold() {
       <div class="dialog alert"><h3>Patron Not Found</h3><p>No patron with this name, please, try another</p> </div>
     [% END %]
     <form action="request.pl?biblionumber=[% biblionumber %]" method="post">
-        [% UNLESS ( CGIselectborrower ) %]
+        [% UNLESS borrower_list %]
 			<fieldset class="brief">
 		        <label for="patron">Patron: </label>
 				<div class="hint">Enter patron card number or partial name:</div>
@@ -186,9 +186,17 @@ function checkMultiHold() {
                 <input type="submit" value="Search" />
 			</fieldset>
         [% ELSE %]
-			<fieldset>
-			[% CGIselectborrower %]
-			<input type="hidden" name="biblionumber" value="[% biblionumber %]" /><fieldset class="action"><input type="submit" value="Select" /></fieldset></fieldset>
+          <fieldset>
+            <select size="7" name="borrowernumber">
+            [% FOREACH borrower IN borrower_list %]
+                <option value="[% borrower.borrowernumber %]">
+[% borrower.surname -%], [% borrower.firstname -%]
+ ... ( [% borrower.cardnumber -%] - [% borrower.categorycode -%]
+) ... [% borrower.address %]
+                </option>
+            [% END %]
+            </select>
+            <input type="hidden" name="biblionumber" value="[% biblionumber %]" /><fieldset class="action"><input type="submit" value="Select" /></fieldset></fieldset>
 
         [% END %]
         [% IF ( multi_hold ) %]
