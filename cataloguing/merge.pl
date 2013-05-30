@@ -30,7 +30,7 @@ use C4::Serials;
 use C4::Koha;
 use C4::Reserves qw/MergeHolds/;
 use C4::Acquisition qw/ModOrder GetOrdersByBiblionumber/;
-use Koha::Record;
+use Koha::MetadataRecord;
 
 my $input = new CGI;
 my @biblionumber = $input->param('biblionumber');
@@ -170,11 +170,11 @@ if ($merge) {
 
             # Creating a loop for display
 
-            my $recordObj1 = new Koha::Record({ 'record' => GetMarcBiblio($mergereference) });
-            my $recordObj2 = new Koha::Record({ 'record' => GetMarcBiblio($notreference) });
+            my $recordObj1 = new Koha::MetadataRecord({ 'record' => GetMarcBiblio($mergereference), 'schema' => lc C4::Context->preference('marcflavour') });
+            my $recordObj2 = new Koha::MetadataRecord({ 'record' => GetMarcBiblio($notreference), 'schema' => lc C4::Context->preference('marcflavour') });
 
-            my @record1 = $recordObj1->createMarcHash($tagslib);
-            my @record2 = $recordObj2->createMarcHash($tagslib);
+            my @record1 = $recordObj1->createMergeHash($tagslib);
+            my @record2 = $recordObj2->createMergeHash($tagslib);
 
             # Parameters
             $template->param(

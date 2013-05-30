@@ -23,7 +23,7 @@ use warnings;
 use Test::More tests => 4;
 
 BEGIN {
-        use_ok('Koha::Record');
+        use_ok('Koha::MetadataRecord');
 }
 
 my $marcrecord = MARC::Record->new;
@@ -33,9 +33,9 @@ $marcrecord->add_fields(
         [ '150', ' ', ' ', a => 'Cooking' ],
         [ '450', ' ', ' ', a => 'Cookery', z => 'Instructional manuals' ],
         );
-my $record = Koha::Record->new({ 'record' => $marcrecord });
+my $record = Koha::MetadataRecord->new({ 'record' => $marcrecord, 'schema' => 'marc21' });
 
-is(ref($record), 'Koha::Record', 'Created valid Koha::Record object');
+is(ref($record), 'Koha::MetadataRecord', 'Created valid Koha::MetadataRecord object');
 
 my $samplehash = [
     {
@@ -82,9 +82,8 @@ my $samplehash = [
     }
 ];
 
-my $hash = $record->createMarcHash();
+my $hash = $record->createMergeHash();
 my %fieldkeys;
-require Data::Dumper;
 foreach my $field (@$hash) {
     $fieldkeys{delete $field->{'field'}->[0]->{'key'}}++;
     if (defined $field->{'field'}->[0]->{'subfield'}) {

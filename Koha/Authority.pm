@@ -38,9 +38,9 @@ use MARC::Record;
 use MARC::File::XML;
 use C4::Charset;
 
-use base qw(Koha::Record);
+use base qw(Koha::MetadataRecord);
 
-__PACKAGE__->mk_accessors(qw( authid authtype marcflavour ));
+__PACKAGE__->mk_accessors(qw( authid authtype ));
 
 =head2 new
 
@@ -65,12 +65,15 @@ sub new {
     my $auth = Koha::Authority->get_from_authid($authid);
 
 Create the Koha::Authority object associated with the provided authid.
+Note that this routine currently retrieves a MARC record because
+authorities in Koha are MARC records by definition. This is an
+unfortunate but unavoidable fact.
 
 =cut
 sub get_from_authid {
     my $class = shift;
     my $authid = shift;
-    my $marcflavour = C4::Context->preference("marcflavour");
+    my $marcflavour = lc C4::Context->preference("marcflavour");
 
     my $dbh=C4::Context->dbh;
     my $sth=$dbh->prepare("select authtypecode, marcxml from auth_header where authid=?");
@@ -82,8 +85,8 @@ sub get_from_authid {
     $record->encoding('UTF-8');
 
     my $self = $class->SUPER::new( { authid => $authid,
-                                     marcflavour => $marcflavour,
                                      authtype => $authtypecode,
+                                     schema => $marcflavour,
                                      record => $record });
 
     bless $self, $class;
