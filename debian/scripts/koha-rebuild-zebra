@@ -91,6 +91,7 @@ Options:
     --authorities|-a  Only run process for authorities.
     --biblios|-b      Only run process for biblios.
     --full|-f         Does a reindex of the whole collection.
+    --quiet|-q        Sometimes be a bit quieter for scripts/cronjobs.
     --verbose|-v      Be verbose.
     --help|-h         Print this help.
 
@@ -108,6 +109,9 @@ biblios_only="no"
 authorities_only="no"
 biblios="yes"
 authorities="yes"
+# The '-q' option is intended to prevent the cronjob causing this to output
+# help information if there are no instances defined.
+quiet="no"
 
 # Read parameters
 while [ -n "$*" ]; do
@@ -130,6 +134,9 @@ while [ -n "$*" ]; do
         -v|--verbose)
             opt_verbose="-v"
             ;;
+        -q|--quiet)
+            quiet="yes"
+            ;;
         -*)
             opts_other="$opts_other $1";
             ;;
@@ -142,7 +149,14 @@ while [ -n "$*" ]; do
 done
 
 # Parse command line.
-[ $# -ge 1 ] || ( usage ; die "Missing instance name..." )
+if [ $# -lt 1 ]; then
+    if [ "$quiet" = "no" ]; then
+        usage
+        die "Missing instance name."
+    else
+        exit
+    fi
+fi
 
 # Loop over instance names
 for name in "$@"
