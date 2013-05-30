@@ -76,7 +76,6 @@ my $findborrower = $input->param('findborrower');
 $findborrower = '' unless defined $findborrower;
 $findborrower =~ s|,| |g;
 my $borrowernumber_hold = $input->param('borrowernumber') || '';
-my $borrowerslist;
 my $messageborrower;
 my $warnings;
 my $messages;
@@ -113,7 +112,7 @@ if ($findborrower) {
             $borrowernumber_hold = $borrowers->[0]->{'borrowernumber'};
         }
         else {
-            $borrowerslist = $borrowers;
+            $template->param( borrower_list => sort_borrowerlist($borrowers));
         }
     } else {
         $messageborrower = "'$findborrower'";
@@ -178,38 +177,6 @@ if ($borrowernumber_hold && !$action) {
 }
 
 $template->param( messageborrower => $messageborrower );
-
-my $CGIselectborrower;
-if ($borrowerslist) {
-    my @values;
-    my %labels;
-
-    foreach my $borrower (
-        sort {
-                uc($a->{surname}
-              . $a->{firstname}) cmp uc($b->{surname}
-              . $b->{firstname})
-        } @{$borrowerslist}
-      )
-    {
-        push @values, $borrower->{borrowernumber};
-
-        $labels{ $borrower->{borrowernumber} } = sprintf(
-            '%s, %s ... (%s - %s) ... %s',
-            $borrower->{surname} ||'',    $borrower->{firstname} || '',
-            $borrower->{cardnumber} || '', $borrower->{categorycode} || '',
-            $borrower->{address} || '',
-        );
-    }
-
-    $CGIselectborrower = CGI::scrolling_list(
-        -name     => 'borrowernumber',
-        -values   => \@values,
-        -labels   => \%labels,
-        -size     => 7,
-        -multiple => 0,
-    );
-}
 
 # FIXME launch another time GetMember perhaps until
 my $borrowerinfo = GetMember( borrowernumber => $borrowernumber_hold );
@@ -608,7 +575,6 @@ foreach my $biblionumber (@biblionumbers) {
                      borrower_branchcode => $borrowerinfo->{'branchcode'},
         );
     }
-    $template->param(CGIselectborrower => $CGIselectborrower) if defined $CGIselectborrower;
 
     $biblioloopiter{biblionumber} = $biblionumber;
     $biblioloopiter{title} = $dat->{title};
@@ -640,3 +606,13 @@ $template->param(
 
 # printout the page
 output_html_with_http_headers $input, $cookie, $template->output;
+
+sub sort_borrowerlist {
+    my $borrowerslist = shift;
+    my $ref           = [];
+    push @{$ref}, sort {
+        uc( $a->{surname} . $a->{firstname} ) cmp
+          uc( $b->{surname} . $b->{firstname} )
+    } @{$borrowerslist};
+    return $ref;
+}
