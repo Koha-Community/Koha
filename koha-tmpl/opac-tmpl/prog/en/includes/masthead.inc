@@ -87,13 +87,13 @@
    [% IF ( OpacAddMastheadLibraryPulldown ) %]
       <select name="branch_group_limit" id="select_library" class="left">
          <option value="">All libraries</option>
-         <optgroup label="Libraries">
+         [% IF BranchCategoriesLoop %]<optgroup label="Libraries">[% END %]
              [% FOREACH BranchesLoo IN BranchesLoop %]
                 [% IF ( BranchesLoo.selected ) %]<option selected="selected" value="branch:[% BranchesLoo.value %]">[% BranchesLoo.branchname %]</option>
                 [% ELSE %]<option value="branch:[% BranchesLoo.value %]">[% BranchesLoo.branchname %]</option>[% END %]
              [% END %]
-         </optgroup>
          [% IF BranchCategoriesLoop %]
+             </optgroup>
              <optgroup label="Groups">
                  [% FOREACH bc IN BranchCategoriesLoop %]
                      [% IF ( bc.selected ) %]
