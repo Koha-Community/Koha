@@ -912,7 +912,9 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
     [% IF (SeparateHoldings) %]
         <li><a href="#otherholdings">Other holdings ( [% otheritemloop.size || 0 %] )</a></li>
     [% END %]
-<li id="tab_descriptions"> <a href="#descriptions">Title notes</a></li>
+[% IF ( MARCNOTES || notes || ( SyndeticsEnabled && SyndeticsSummary && SYNDETICS_SUMMARY )) %]
+    <li id="tab_descriptions"> <a href="#descriptions">Title notes</a></li>
+[% END %]
 [% IF ( SYNDETICS_TOC ) %]
     <li id="tab_toc"> <a href="#toc">TOC</a></li>
 [% END %]
@@ -1050,6 +1052,8 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
     </div>
 [% END %]
 
+[% IF ( MARCNOTES || notes || ( SyndeticsEnabled && SyndeticsSummary && SYNDETICS_SUMMARY )) %]
+
 <div id="descriptions">
 <div class="content_set">
 
@@ -1076,6 +1080,8 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 
 </div>
 </div>
+
+[% END %]
 
 [% IF ( SyndeticsEnabled ) %]
 
