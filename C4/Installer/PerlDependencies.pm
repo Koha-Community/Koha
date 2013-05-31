@@ -699,6 +699,11 @@ our $PERL_DEPS = {
         'required' => '0',
         'min_ver'  => '0.73',
     },
+    'Email::Valid' => {
+        'usage'    => 'Core',
+        'required' => '1',
+        'min_ver'  => '0.190',
+    },
 };
 
 1;
