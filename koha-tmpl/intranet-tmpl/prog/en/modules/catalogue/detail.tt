@@ -368,7 +368,7 @@ function verify_images() {
     [% ELSE %]
         <li><a href="#holdings">Holdings</a></li>
     [% END %]
-<li><a href="#description">Descriptions</a></li>
+[% IF ( MARCNOTES || notes ) %]<li><a href="#description">Descriptions</a></li>[% END %]
 [% IF ( subscriptionsnumber ) %]<li><a href="#subscriptions">Subscriptions</a></li>[% END %]
 [% IF ( FRBRizeEditions ) %][% IF ( XISBNS ) %]<li><a href="#editions">Editions</a></li>[% END %][% END %]
 [% IF ( LocalCoverImages ) %][% IF ( localimages || CAN_user_tools_upload_local_cover_images ) %]<li><a href="#images">Images</a></li>[% END %][% END %]
@@ -606,7 +606,9 @@ function verify_images() {
         [% END %]
     </div>
 [% END %]
-    
+
+[% IF ( MARCNOTES || notes ) %]
+
 <div id="description">
 <div class="content_set">
 
@@ -621,6 +623,8 @@ function verify_images() {
 [% END %]
 </div>
 </div>
+
+[% END %]
 
 [% IF ( subscriptionsnumber ) %]
 <div id="subscriptions">
