@@ -29,6 +29,9 @@
       <arg><option>--zebralang</option> en|es|fr|nb|ru|uk</arg>
       <arg><option>--auth-idx</option> dom|grs1</arg>
       <arg><option>--biblio-idx</option> dom|grs1</arg>
+      <arg><option>--use-memcached</option></arg>
+      <arg><option>--memcached-servers</option> server:port</arg>
+      <arg><option>--memcached-prefix</option> namespace_prefix</arg>
       <arg><option>--defaultsql</option> /path/to/some.sql</arg>
       <arg><option>--configfile</option> /path/to/config</arg>
       <arg><option>--passwdfile</option> /path/to/passwd</arg>
@@ -125,6 +128,27 @@
       </listitem>
     </varlistentry>
 
+    <varlistentry>
+      <term><option>--use-memcached</option></term>
+      <listitem>
+        <para>Make the Koha instance use memcached. <option>Disabled by default</option>.</para>
+      </listitem>
+    </varlistentry>
+
+    <varlistentry>
+      <term><option>--memcached-servers</option></term>
+      <listitem>
+        <para>Specify a comma-separated list of host:port memcached servers for using with the created Koha instance. Defaults to <option>127.0.0.1:11211</option>, the needed configuration for a locally installed memcached server.</para>
+      </listitem>
+    </varlistentry>
+
+    <varlistentry>
+      <term><option>--memcached-prefix</option></term>
+      <listitem>
+        <para>Specifiy a <option>namespace prefix</option> for memcached. You usually leave this option alone to avoid namespace collisions. It defaults to <option>koha_</option>.</para>
+      </listitem>
+    </varlistentry>
+
   </variablelist>
   </refsect1>
 
@@ -193,6 +217,28 @@
           <para>An SQL file (compressed with gzip) that can be fed  to  mysql(1) to  initialize the database after it has been created.  Might be created using koha-dump-defaults(8).</para>
         </listitem>
       </varlistentry>
+
+      <varlistentry>
+        <term><option>USE_MEMCACHED</option></term>
+        <listitem>
+          <para>Valid values are <option>yes</option> and <option>no</option>. If not present koha-create will default to <option>no</option>. Also, this will be overriden by the <option>--use-memcached</option> switch.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term><option>MEMCACHED_SERVERS</option></term>
+        <listitem>
+          <para>A comma-separated list of valid memcached servers. Usually in the form of <option>host:port</option>. If not present koha-create will default to <option>127.0.0.1:11211</option>. Also, this will be overriden by the arguments of the <option>--memcached-servers</option> switch.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term><option>MEMCACHED_PREFIX</option></term>
+        <listitem>
+          <para>A prefix for all new Koha instances to use in memcached. If not present koha-create will default to <option>koha_</option>. Also, this will be overriden by the arguments of the <option>--memcached-prefix</option> switch.</para>
+        </listitem>
+      </varlistentry>
+
 
       <varlistentry>
         <term><option>ZEBRA_MARC_FORMAT</option></term>

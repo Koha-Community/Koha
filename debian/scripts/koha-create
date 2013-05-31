@@ -23,6 +23,8 @@ usage="Usage: $0 [--create-db|--request-db|--populate-db|--use-db] \
     [--marcflavor marc21|normarc|unimarc] \
     [--zebralang en|es|fr|nb|ru|uk] \
     [--auth-idx dom|grs1] [--biblio-idx dom|grs1] \
+    [--use-memcached] \
+    [--memcached-servers server:port] [--memcached-prefix prefix] \
     [--defaultsql /path/to/some.sql] \
     [--configfile /path/to/config] [--passwdfile /path/to/passwd] \
     [--database database] [--adminuser n] instancename"
@@ -61,6 +63,8 @@ generate_config_file() {
         -e "s/__UNIXUSER__/$username/g" \
         -e "s/__UNIXGROUP__/$username/g" \
         -e "s/__PLUGINS_DIR__/\/var\/lib\/koha\/$name\/plugins/g" \
+        -e "s/__MEMCACHED_NAMESPACE__/$MEMCACHED_NAMESPACE/g" \
+        -e "s/__MEMCACHED_SERVERS__/$MEMCACHED_SERVERS/g" \
         "/etc/koha/$1" > "$2"
 
 }
@@ -154,6 +158,32 @@ EOF`
     esac
 }
 
+
+set_memcached()
+{
+    local instance="$1"
+
+    if [ "$CLO_MEMCACHED_SERVERS" != "" ]; then
+        MEMCACHED_SERVERS=$CLO_MEMCACHED_SERVERS
+    else
+        if [ "$MEMCACHED_SERVERS" = "" ]; then
+            MEMCACHED_SERVERS=$DEFAULT_MEMCACHED_SERVERS
+        # else: was set by the koha-sites.conf file
+        fi
+    fi
+
+    if [ "$CLO_MEMCACHED_PREFIX" != "" ]; then
+        MEMCACHED_NAMESPACE="$CLO_MEMCACHED_PREFIX$instance"
+    else
+        if [ "$MEMCACHED_PREFIX" != "" ]; then
+            MEMCACHED_NAMESPACE="$MEMCACHED_PREFIX$instance"
+        else
+            MEMCACHED_NAMESPACE="$DEFAULT_MEMCACHED_PREFIX$instance"
+        fi
+    fi
+
+}
+
 # Set defaults and read config file, if it exists.
 DOMAIN=""
 OPACPORT="80"
@@ -167,6 +197,14 @@ ZEBRA_MARC_FORMAT="marc21"
 ZEBRA_LANGUAGE="en"
 ADMINUSER="1"
 PASSWDFILE="/etc/koha/passwd"
+
+# memcached variables
+USE_MEMCACHED="no"
+MEMCACHED_SERVERS=""
+MEMCACHED_PREFIX=""
+# hardcoded memcached defaults
+DEFAULT_MEMCACHED_SERVERS="127.0.0.1:11211"
+DEFAULT_MEMCACHED_PREFIX="koha_"
 
 # Indexing mode variables (default is DOM)
 BIBLIOS_INDEXING_MODE="dom"
@@ -184,7 +222,7 @@ fi
 
 [ $# -ge 2 ] && [ $# -le 16 ] || die $usage
 
-TEMP=`getopt -o crpm:l:d:f:b:a: -l create-db,request-db,populate-db,use-db,marcflavor:,auth-idx:,biblio-idx:,zebralang:,defaultsql:,configfile:,passwdfile:,database:,adminuser: \
+TEMP=`getopt -o crpm:l:d:f:b:a: -l create-db,request-db,populate-db,use-db,use-memcached,marcflavor:,auth-idx:,biblio-idx:,zebralang:,defaultsql:,configfile:,passwdfile:,database:,adminuser:,memcached-servers:,memcached-prefix:, \
      -n "$0" -- "$@"`
 
 # Note the quotes around `$TEMP': they are essential!
@@ -197,26 +235,49 @@ CLO_DEFAULTSQL=""
 CLO_ADMINUSER=""
 CLO_BIBLIOS_INDEXING_MODE=""
 CLO_AUTHORITIES_INDEXING_MODE=""
+CLO_MEMCACHED_SERVERS=""
+CLO_MEMCACHED_PREFIX=""
 
 
 while true ; do
-	case "$1" in
-		-c|--create-db) op=create ; shift ;;
-		-r|--request-db) op=request ; shift ;;
-		-p|--populate-db) op=populate ; shift ;;
-        -u|--use-db) op=use ; shift ;;
-		-m|--marcflavor) CLO_ZEBRA_MARC_FORMAT="$2" ; shift 2 ;;
-		-l|--zebralang) CLO_ZEBRA_LANGUAGE="$2" ; shift 2 ;;
-		--auth-idx) CLO_AUTHORITIES_INDEXING_MODE="$2" ; shift 2 ;;
-		--biblio-idx) CLO_BIBLIOS_INDEXING_MODE="$2" ; shift 2 ;;
-		-d|--defaultsql) CLO_DEFAULTSQL="$2" ; shift 2 ;;
-		-f|--configfile) configfile="$2" ; shift 2 ;;
-        -s|--passwdfile) CLO_PASSWDFILE="$2" ; shift 2 ;;
-        -b|--database) CLO_DATABASE="$2" ; shift 2 ;;
-		-a|--adminuser) CLO_ADMINUSER="$2" ; shift 2 ;;
-		--) shift ; break ;;
-		*) die "Internal error processing command line arguments" ;;
-	esac
+    case "$1" in
+        -c|--create-db)
+            op=create ; shift ;;
+        -r|--request-db)
+            op=request ; shift ;;
+        -p|--populate-db)
+            op=populate ; shift ;;
+        -u|--use-db)
+            op=use ; shift ;;
+        --use-memcached)
+            USE_MEMCACHED="yes" ; shift ;;
+        --memcached-servers)
+            CLO_MEMCACHED_SERVERS="$2" ; shift 2 ;;
+        --memcached-prefix)
+            CLO_MEMCACHED_PREFIX="$2" ; shift 2;;
+        -m|--marcflavor)
+            CLO_ZEBRA_MARC_FORMAT="$2" ; shift 2 ;;
+    -l|--zebralang)
+            CLO_ZEBRA_LANGUAGE="$2" ; shift 2 ;;
+    --auth-idx)
+            CLO_AUTHORITIES_INDEXING_MODE="$2" ; shift 2 ;;
+    --biblio-idx)
+            CLO_BIBLIOS_INDEXING_MODE="$2" ; shift 2 ;;
+        -d|--defaultsql)
+            CLO_DEFAULTSQL="$2" ; shift 2 ;;
+        -f|--configfile)
+            configfile="$2" ; shift 2 ;;
+        -s|--passwdfile)
+            CLO_PASSWDFILE="$2" ; shift 2 ;;
+        -b|--database)
+            CLO_DATABASE="$2" ; shift 2 ;;
+        -a|--adminuser)
+            CLO_ADMINUSER="$2" ; shift 2 ;;
+        --)
+            shift ; break ;;
+        *)
+            die "Internal error processing command line arguments" ;;
+    esac
 done
 
 # Load the configfile given on the command line
@@ -266,6 +327,23 @@ fi
 set_authorities_indexing_mode $AUTHORITIES_INDEXING_MODE $ZEBRA_MARC_FORMAT
 
 name="$1"
+
+if [ "$USE_MEMCACHED" = "yes" ]; then
+    set_memcached $name
+elif [ "$CLO_MEMCACHED_SERVERS" != "" ] || \
+     [ "$CLO_MEMCACHED_PREFIX" != "" ]; then
+
+    MSG=`cat <<EOF
+
+Error: you provided memcached configuration switches but memcached is not enabled.
+Please set USE_MEMCACHED="yes" on /etc/koha/koha-sites.conf or use the
+--use-memcached optio switch to enable it.
+
+EOF`
+
+    echo $usage
+    die $MSG
+fi
 
 opacdomain="$OPACPREFIX$name$OPACSUFFIX$DOMAIN"
 intradomain="$INTRAPREFIX$name$INTRASUFFIX$DOMAIN"
