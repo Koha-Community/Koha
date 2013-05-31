@@ -103,6 +103,11 @@ sub checkpw_ldap {
     my ($dbh, $userid, $password) = @_;
     my @hosts = split(',', $prefhost);
     my $db = Net::LDAP->new(\@hosts);
+    unless ( $db ) {
+        warn "LDAP connexion failed";
+        return 0;
+    }
+
 	#$debug and $db->debug(5);
     my $userldapentry;
 
