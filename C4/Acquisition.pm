@@ -71,6 +71,7 @@ BEGIN {
         &ModInvoice
         &CloseInvoice
         &ReopenInvoice
+        &DelInvoice
 
         &GetItemnumbersFromOrder
 
@@ -2548,6 +2549,39 @@ sub ReopenInvoice {
     };
     my $sth = $dbh->prepare($query);
     $sth->execute($invoiceid);
+}
+
+=head3 DelInvoice
+
+    DelInvoice($invoiceid);
+
+Delete an invoice if there are no items attached to it.
+
+=cut
+
+sub DelInvoice {
+    my ($invoiceid) = @_;
+
+    return unless $invoiceid;
+
+    my $dbh   = C4::Context->dbh;
+    my $query = qq{
+        SELECT COUNT(*)
+        FROM aqorders
+        WHERE invoiceid = ?
+    };
+    my $sth = $dbh->prepare($query);
+    $sth->execute($invoiceid);
+    my $res = $sth->fetchrow_arrayref;
+    if ( $res && $res->[0] == 0 ) {
+        $query = qq{
+            DELETE FROM aqinvoices
+            WHERE invoiceid = ?
+        };
+        my $sth = $dbh->prepare($query);
+        return ( $sth->execute($invoiceid) > 0 );
+    }
+    return;
 }
 
 1;

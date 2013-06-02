@@ -84,6 +84,9 @@
         </fieldset>
         <fieldset class="action">
             <input type="submit" value="Save" />
+            [% UNLESS orders_loop.size %]
+            <a href="invoice.pl?op=delete&invoiceid=[% invoiceid %]">Delete</a>
+            [% END %]
         </fieldset>
       </form>
       <p>

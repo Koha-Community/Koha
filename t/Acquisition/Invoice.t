@@ -3,7 +3,7 @@
 use Modern::Perl;
 use C4::Context;
 
-use Test::More tests => 47;
+use Test::More tests => 49;
 use Test::MockModule;
 
 use_ok('C4::Acquisition');
@@ -129,3 +129,24 @@ is(scalar(@$history), 1);
 @bound_params = @{ $history->[0]->{bound_params} };
 is(scalar(@bound_params), 1);
 is($bound_params[0], 42);
+my $checkordersrs = [
+    [qw(COUNT)],
+    [2]
+];
+
+$dbh->{mock_add_resultset} = $checkordersrs;
+is(DelInvoice(42), undef, "Invoices with items don't get deleted");
+
+$checkordersrs = [
+    [qw(COUNT)],
+    [0]
+];
+
+my $deleters = [
+    [qw(COUNT)],
+    [1]
+];
+
+$dbh->{mock_add_resultset} = $checkordersrs;
+$dbh->{mock_add_resultset} = $deleters;
+ok(DelInvoice(42), "Invoices with items do get deleted");

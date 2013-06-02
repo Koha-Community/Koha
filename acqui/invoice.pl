@@ -86,6 +86,14 @@ elsif ( $op && $op eq 'mod' ) {
     }
     $template->param( modified => 1 );
 }
+elsif ( $op && $op eq 'delete' ) {
+    DelInvoice($invoiceid);
+    my $referer = $input->param('referer') || 'invoices.pl';
+    if ($referer) {
+        print $input->redirect($referer);
+        exit 0;
+    }
+}
 
 my $details     = GetInvoiceDetails($invoiceid);
 my $bookseller  = GetBookSellerFromId( $details->{booksellerid} );
