@@ -681,19 +681,26 @@ sub _CheckShelfName {
     my ($name, $cat, $owner, $number)= @_;
 
     my $dbh = C4::Context->dbh;
+    my @pars;
     my $query = qq(
         SELECT DISTINCT shelfnumber
         FROM   virtualshelves
         LEFT JOIN virtualshelfshares sh USING (shelfnumber)
         WHERE  shelfname=? AND shelfnumber<>?);
-    if($cat==1) {
+    if($cat==1 && defined($owner)) {
         $query.= ' AND (sh.borrowernumber=? OR owner=?) AND category=1';
+        @pars=($name, $number, $owner, $owner);
     }
-    else {
+    elsif($cat==1 && !defined($owner)) { #owner is null (exceptional)
+        $query.= ' AND owner IS NULL AND category=1';
+        @pars=($name, $number);
+    }
+    else { #public list
         $query.= ' AND category=2';
+        @pars=($name, $number);
     }
     my $sth = $dbh->prepare($query);
-    $sth->execute($cat==1? ($name, $number, $owner, $owner): ($name, $number));
+    $sth->execute(@pars);
     return $sth->rows>0? 0: 1;
 }
 
