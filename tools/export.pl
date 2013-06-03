@@ -519,7 +519,7 @@ sub construct_query {
             my $branch               = $params->{branch};
             my $start_callnumber     = $params->{start_callnumber};
             my $end_callnumber       = $params->{end_callnumber};
-            my $start_accession      = $params->{star_accession};
+            my $start_accession      = $params->{start_accession};
             my $end_accession        = $params->{end_accession};
             my $itemtype             = $params->{itemtype};
             my $items_filter =
