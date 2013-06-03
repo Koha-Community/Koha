@@ -69,7 +69,7 @@ if ($quantityrec > $origquantityrec ) {
             for my $in ( @received_items ) {
                 my $item = C4::Items::GetMarcItem( $biblionumber, $in );
                 for my $affect ( @affects ) {
-                    my ( $sf, $v ) = split q{=}, $affect;
+                    my ( $sf, $v ) = split q{=}, $affect, 2;
                     foreach ( $item->field($itemfield) ) {
                         $_->update( $sf => $v );
                     }
