@@ -3,10 +3,7 @@
 <style type="text/css" media="screen">
 
 [% IF ( login ) %]
-    @import url(/intranet-tmpl/prog/en/css/login.css);
-[% END %]
-[% IF ( wizard ) %]
-    @import url(/intranet-tmpl/prog/en/css/wizard.css);
+    @import url([% themelang %]/css/login.css);
 [% END %]
 
 html { background: #eee; }

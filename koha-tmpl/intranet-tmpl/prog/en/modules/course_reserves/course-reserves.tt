@@ -3,18 +3,17 @@
 <title>Koha &rsaquo; Course reserves</title>
 [% INCLUDE 'doc-head-close.inc' %]
 
-<link rel="stylesheet" type="text/css" href="/intranet-tmpl/prog/en/css/datatables.css" />
-<script type="text/javascript" src="/intranet-tmpl/prog/en/lib/jquery/plugins/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.min.js"></script>
 [% INCLUDE 'datatables-strings.inc' %]
-<script type="text/javascript" src="/intranet-tmpl/prog/en/js/datatables.js"></script>
-<script type="text/javascript" id="js">$(document).ready(function() {
- $(document).ready(function() {
+<script type="text/javascript" src="[% themelang %]/js/datatables.js"></script>
+<script type="text/javascript" id="js">
+$(document).ready(function() {
     $("#course_reserves_table").dataTable($.extend(true, {}, dataTablesDefaults, {
         "sPaginationType": "four_button",
         "aLengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]],
         "iDisplayLength": 20
     }));
- });
 });
 </script>
 
@@ -96,9 +95,9 @@
                                     <td>[% c.students_count %]</td>
                                     <td>
                                         [% IF c.enabled == 'yes' %]
-                                            <img src="/intranet-tmpl/prog/img/approve.gif" />
+                                            <img src="[% interface %]/[% theme %]/img/approve.gif" />
                                         [% ELSE %]
-                                            <img src="http://kohadev:8080/intranet-tmpl/prog/img/deny.gif" />
+                                            <img src="[% interface %]/[% theme %]/img/deny.gif" />
                                         [% END %]
                                     </td>
                             [% END %]
