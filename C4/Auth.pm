@@ -136,10 +136,17 @@ VALUES                    (     ?,         ?,          ?,         ?,          ?,
 EOQ
 
 sub get_template_and_user {
+
     my $in       = shift;
-    my $template =
-      C4::Templates::gettemplate( $in->{'template_name'}, $in->{'type'}, $in->{'query'}, $in->{'is_plugin'} );
     my ( $user, $cookie, $sessionID, $flags );
+
+    my $template = C4::Templates::gettemplate(
+        $in->{'template_name'},
+        $in->{'type'},
+        $in->{'query'},
+        $in->{'is_plugin'}
+    );
+
     if ( $in->{'template_name'} !~m/maintenance/ ) {
         ( $user, $cookie, $sessionID, $flags ) = checkauth(
             $in->{'query'},
@@ -283,10 +290,10 @@ sub get_template_and_user {
         $template->param( sessionID        => $sessionID );
         
         my ($total, $pubshelves) = C4::VirtualShelves::GetSomeShelfNames(undef, 'MASTHEAD');
-    $template->param(
-        pubshelves     => $total->{pubtotal},
-        pubshelvesloop => $pubshelves,
-    );
+        $template->param(
+            pubshelves     => $total->{pubtotal},
+            pubshelvesloop => $pubshelves,
+        );
     }
      # Anonymous opac search history
      # If opac search history is enabled and at least one search has already been performed
@@ -468,7 +475,11 @@ sub get_template_and_user {
         # what to do
         my $language = C4::Templates::getlanguage($in->{'query'},$in->{'type'});
         my $languagecookie = C4::Templates::getlanguagecookie($in->{'query'},$language);
-        $cookie = [$cookie, $languagecookie];
+        if ( ref $cookie eq 'ARRAY' ) {
+            push @{ $cookie }, $languagecookie;
+        } else {
+            $cookie = [$cookie, $languagecookie];
+        }
     }
 
     return ( $template, $borrowernumber, $cookie, $flags);
