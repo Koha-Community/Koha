@@ -604,7 +604,7 @@ sub _ModStoredFields {
     my ( @fields_to_update, @values_to_update );
 
     foreach (@FIELDS) {
-        if ( $params{$_} ) {
+        if ( defined($params{$_}) ) {
             push( @fields_to_update, $_ );
             push( @values_to_update, $params{$_} );
         }
@@ -670,9 +670,9 @@ sub _SwapAllFields {
     my %course_item_fields;
     my %item_fields;
     foreach (@FIELDS) {
-        if ( $course_item->{$_} ) {
+        if ( defined( $course_item->{$_} ) ) {
             $course_item_fields{$_} = $course_item->{$_};
-            $item_fields{$_}        = $item->{$_};
+            $item_fields{$_}        = $item->{$_} || q{};
         }
     }
 
