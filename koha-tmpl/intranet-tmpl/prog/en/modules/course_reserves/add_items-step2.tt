@@ -39,7 +39,7 @@
                             <option value="">LEAVE UNCHANGED</option>
 
                             [% FOREACH it IN itypes %]
-                                [% IF course_item.itype && ( ( course.enabled == 'yes' && it.itemtype == item.itype ) || ( course.enabled == 'no' && it.itemtype == course_item.itype ) ) %]
+                                [% IF course_item.itype.defined && ( ( course.enabled == 'yes' && it.itemtype == item.itype ) || ( course.enabled == 'no' && it.itemtype == course_item.itype ) ) %]
                                     <option value="[% it.itemtype | html %]" selected="selected">[% it.description | html %]</option>
                                 [% ELSE %]
                                     <option value="[% it.itemtype | html %]">[% it.description | html %]</option>
@@ -55,7 +55,7 @@
                             <option value="">LEAVE UNCHANGED</option>
 
                             [% FOREACH c IN ccodes %]
-                                [% IF course_item.ccode && ( ( course.enabled == 'yes' && c.authorised_value == item.ccode ) || ( course.enabled == 'no' && c.authorised_value == course_item.ccode ) ) %]
+                                [% IF course_item.ccode.defined && ( ( course.enabled == 'yes' && c.authorised_value == item.ccode ) || ( course.enabled == 'no' && c.authorised_value == course_item.ccode ) ) %]
                                     <option value="[% c.authorised_value | html %]" selected="selected">[% c.lib | html %]</option>
                                 [% ELSE %]
                                     <option value="[% c.authorised_value | html %]">[% c.lib | html %]</option>
@@ -70,7 +70,7 @@
                             <option value="">LEAVE UNCHANGED</option>
 
                             [% FOREACH s IN locations %]
-                                [% IF course_item.location && ( ( course.enabled == 'yes' && s.authorised_value == item.location ) || ( course.enabled == 'no' && s.authorised_value == course_item.location ) ) %]
+                                [% IF course_item.location.defined && ( ( course.enabled == 'yes' && s.authorised_value == item.location ) || ( course.enabled == 'no' && s.authorised_value == course_item.location ) ) %]
                                     <option value="[% s.authorised_value | html %]" selected="selected">[% s.lib | html %]</option>
                                 [% ELSE %]
                                     <option value="[% s.authorised_value | html %]">[% s.lib | html %]</option>
@@ -84,7 +84,7 @@
                         <select id="holdingbranch" name="holdingbranch">
                             <option value="">LEAVE UNCHANGED</option>
                             [% FOREACH b IN Branches.all() %]
-                                [% IF course_item.holdingbranch && ( ( course.enabled == 'yes' && b.branchcode == item.holdingbranch ) || ( course.enabled == 'no' && b.branchcode == course_item.holdingbranch ) ) %]
+                                [% IF course_item.holdingbranch.defined && ( ( course.enabled == 'yes' && b.value == item.holdingbranch ) || ( course.enabled == 'no' && b.value == course_item.holdingbranch ) ) %]
                                     <option value="[% b.branchcode | html %]" selected="selected">[% b.branchname | html %]</option>
                                 [% ELSE %]
                                     <option value="[% b.branchcode | html %]">[% b.branchname | html %]</option>
