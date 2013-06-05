@@ -1170,6 +1170,7 @@
                 [% IF ( flagloo.key == 'gonenoaddress' ) %]Gone no address:[% END %]
                 [% IF ( flagloo.key == 'lost' ) %]Lost card:[% END %]
                 </label>
+                [% IF CAN_user_circulate_manage_restrictions %]
 				<label for="yes[% flagloo.name %]">Yes </label>
 				[% IF ( flagloo.yes ) %]
 				<input type="radio" id="yes[% flagloo.name %]" name="[% flagloo.name %]" value="1" checked="checked" />
@@ -1182,6 +1183,9 @@
 				[% ELSE %]
 				<input type="radio" id="no[% flagloo.name %]" name="[% flagloo.name %]" value="0" />
 				[% END %]
+                [% ELSE %]
+                  [% IF flagloo.yes %]Yes[% ELSE %]No[% END %]
+                [% END %]
 
             </li>
 			[% END %]
@@ -1201,7 +1205,9 @@
                                  <th>Type</th>
                                  <th>Comment</th>
                                  <th>Expiration</th>
-                                 <th>Remove?</th>
+                                 [% IF CAN_user_borrowers && CAN_user_circulate_manage_restrictions %]
+                                   <th>Remove?</th>
+                                 [% END %]
                             </tr>
                         </thead>
 
@@ -1211,14 +1217,17 @@
                                     <td>[% d.type %]</td>
                                     <td>[% d.comment %]</td>
                                     <td>[% IF d.expiration %] [% d.expiration | $KohaDates %] [% ELSE %] <i>Indefinite</i> [% END %]</td>
-                                    <td>
+                                    [% IF CAN_user_borrowers && CAN_user_circulate_manage_restrictions %]
+                                      <td>
                                         <input type="checkbox" id="debarment_[% d.borrower_debarment_id %]" name="remove_debarment" value="[% d.borrower_debarment_id %]" />
-                                    </td>
+                                      </td>
+                                    [% END %]
                                 </tr>
                             [% END %]
                         </tbody>
                     </table>
                 [% END %]
+                [% IF CAN_user_borrowers && CAN_user_circulate_manage_restrictions %]
                     <p><a href="#" id="add_manual_restriction">Add manual restriction</a></p>
                     <fieldset id="manual_restriction_form">
                         <input type="hidden" id="add_debarment" name="add_debarment" value="0" />
@@ -1233,6 +1242,7 @@
                             <a class="cancel" id="cancel_manual_restriction" href="#" onclick="">Cancel</a>
                         </p>
                     </fieldset>
+                [% END %]
             </fieldset>
 		[% END %]
 

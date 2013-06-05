@@ -1,7 +1,9 @@
 INSERT INTO permissions (module_bit, code, description) VALUES
    ( 1, 'circulate_remaining_permissions', 'Übrige Ausleihberechtigungen'),
-   ( 1, 'override_renewals', 'Gesperrte Verlängerungen überschreiben'),
+   ( 1, 'override_renewals', 'Vormerksperren übergehen'),
    ( 1, 'overdues_report', 'Überfälligkeiten-Report ausführen'),
+   ( 1, 'force_checkout', 'Ausleihsperren übergehen'),
+   ( 1, 'manage_restrictions', 'Kontosperre "Gesperrt" aufheben'),
    ( 3, 'parameters_remaining_permissions', 'Übrige Administrationsberechtigungen'),
    ( 3, 'manage_circ_rules', 'Ausleihkonditionen verwalten'),
    ( 6, 'place_holds', 'Vormerkungen für Benutzer setzen'),

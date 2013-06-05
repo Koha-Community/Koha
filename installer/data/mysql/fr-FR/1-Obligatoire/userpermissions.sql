@@ -2,6 +2,8 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    ( 1, 'circulate_remaining_permissions', 'Fonctions de circulation restantes'),
    ( 1, 'override_renewals', 'Outrepasser les limites de renouvellement'),
    ( 1, 'overdues_report', 'Executer le rapport de retards'),
+   ( 1, 'force_checkout', 'Forcer le prêt si une limitation existe'),
+   ( 1, 'manage_restrictions', 'Gérer les suspensions d\'un utilisateur'),
    ( 3, 'parameters_remaining_permissions', 'Paramètres du système restants'),
    ( 3, 'manage_circ_rules', 'Gestion des règles de circulation'),
    ( 6, 'place_holds', 'Réserver pour des adhérents'),

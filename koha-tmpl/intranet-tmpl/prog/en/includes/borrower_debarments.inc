@@ -31,7 +31,7 @@
                      <th>Type</th>
                      <th>Comment</th>
                      <th>Expiration</th>
-                     [% IF ( CAN_user_borrowers ) %]
+                     [% IF CAN_user_borrowers && CAN_user_circulate_manage_restrictions %]
                          <th>&nbsp;</th>
                      [% END %]
                 </tr>
@@ -51,7 +51,7 @@
                         </td>
                         <td>[% d.comment %]</td>
                         <td>[% IF d.expiration %] [% d.expiration | $KohaDates %] [% ELSE %] <i>Indefinite</i> [% END %]</td>
-                        [% IF ( CAN_user_borrowers )%]
+                        [% IF CAN_user_borrowers && CAN_user_circulate_manage_restrictions %]
                             <td>
                                 <a class="remove_restriction" href="/cgi-bin/koha/members/mod_debarment.pl?borrowernumber=[% borrowernumber %]&amp;borrower_debarment_id=[% d.borrower_debarment_id %]&amp;action=del">
                                     Remove
@@ -63,8 +63,8 @@
             </tbody>
         </table>
     [% END %]
-    <p><a href="#" id="add_manual_restriction">Add manual restriction</a></p>
-    [% IF ( CAN_user_borrowers )%]
+    [% IF CAN_user_borrowers && CAN_user_circulate_manage_restrictions %]
+        <p><a href="#" id="add_manual_restriction">Add manual restriction</a></p>
         <form method="post" action="/cgi-bin/koha/members/mod_debarment.pl" class="clearfix">
             <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
             <input type="hidden" name="action" value="add" />

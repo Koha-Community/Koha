@@ -7882,6 +7882,33 @@ $DBversion = "3.15.00.011";
 if(CheckVersion($DBversion)) {
     $dbh->do("UPDATE marc_subfield_structure SET maxlength=9999 WHERE maxlength IS NULL OR maxlength=0;");
     print "Upgrade to $DBversion done (Bug 8018: set 9999 as default max length for subfields)\n";
+    SetVersion ($DBversion);
+}
+
+$DBversion = "3.13.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        INSERT INTO permissions (module_bit, code, description) VALUES ( 1, 'force_checkout', 'Force checkout if a limitation exists')
+    });
+    $dbh->do(q{
+        INSERT INTO permissions (module_bit, code, description) VALUES ( 1, 'manage_restrictions', 'Lift restriction for restricted accounts')
+    });
+    $dbh->do(q{
+        INSERT INTO user_permissions (borrowernumber, module_bit, code)
+            SELECT user_permissions.borrowernumber, 1, 'force_checkout'
+            FROM user_permissions
+            LEFT JOIN borrowers USING(borrowernumber)
+            WHERE borrowers.flags & (1 << 1)
+    });
+    $dbh->do(q{
+        INSERT INTO user_permissions (borrowernumber, module_bit, code)
+            SELECT user_permissions.borrowernumber, 1, 'manage_restrictions'
+            FROM user_permissions
+            LEFT JOIN borrowers USING(borrowernumber)
+            WHERE borrowers.flags & (1 << 1)
+    });
+
+    print "Upgrade to $DBversion done (Bug 10863 - Add permission force_checkout and manage_restrictions)\n";
     SetVersion($DBversion);
 }
 

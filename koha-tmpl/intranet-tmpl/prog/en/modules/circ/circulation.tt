@@ -185,11 +185,19 @@ var MSG_EXPORT_SELECT_CHECKOUTS = _("You must select checkout(s) to export");
 <div class="yui-g">
 
 <div id="circ_needsconfirmation" class="dialog alert">
-<h3>Please confirm checkout</h3>
+[% IF CAN_user_circulate_force_checkout %]
+  <h3>Please confirm checkout</h3>
+[% ELSE %]
+  <h3>Cannot check out</h3>
+[% END %]
 
 <ul>
 [%IF ( AGE_RESTRICTION ) %]
-    <li>Age restriction [% AGE_RESTRICTION %]. Check out anyway?</li>
+    <li>Age restriction [% AGE_RESTRICTION %].
+      [% IF CAN_user_circulate_force_checkout %]
+        Check out anyway?
+      [% END %]
+    </li>
 [% END %]
 
 [% IF ( DEBT ) %]
@@ -209,7 +217,11 @@ var MSG_EXPORT_SELECT_CHECKOUTS = _("You must select checkout(s) to export");
 [% END %]
 
 [% IF ( ISSUED_TO_ANOTHER ) %]
-    <li>Item <i>[% getTitleMessageIteminfo %]</i> ([% getBarcodeMessageIteminfo %]) is checked out to <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% issued_borrowernumber %]">[% issued_firstname %] [% issued_surname %]</a> ([% issued_cardnumber %]). Check in and check out?</li>
+    <li>Item <i>[% getTitleMessageIteminfo %]</i> ([% getBarcodeMessageIteminfo %]) is checked out to <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% issued_borrowernumber %]">[% issued_firstname %] [% issued_surname %]</a> ([% issued_cardnumber %]).
+      [% IF CAN_user_circulate_force_checkout %]
+        Check in and check out?
+      [% END %]
+    </li>
 [% END %]
 
 [% IF ( TOO_MANY ) %]
@@ -232,20 +244,30 @@ var MSG_EXPORT_SELECT_CHECKOUTS = _("You must select checkout(s) to export");
         [% item_notforloan_lib = AuthorisedValues.GetByCode( authvalcode_notforloan, item_notforloan, 0 ) %]
         Item is normally not for loan [% IF (item_notforloan_lib) %]([% item_notforloan_lib %])[% END %].
     [% END %]
+      [% IF CAN_user_circulate_force_checkout %]
         Check out anyway?
+      [% END %]
     </li>
 [% END %]
 
 [% IF ( USERBLOCKEDOVERDUE ) %]
-    <li>Patron has [% USERBLOCKEDOVERDUE %] overdue item(s).  Check out anyway?</li>
+    <li>Patron has [% USERBLOCKEDOVERDUE %] overdue item(s).
+      [% IF CAN_user_circulate_force_checkout %]
+       Check out anyway?
+      [% END %]
+    </li>
 [% END %]
 
 [% IF ( ITEM_LOST ) %]
-    <li>This item has been lost with a status of "[% ITEM_LOST %]". Check out anyway?</li>
+    <li>This item has been lost with a status of "[% ITEM_LOST %]".
+      [% IF CAN_user_circulate_force_checkout %]
+        Check out anyway?
+      [% END %]
+    </li>
 [% END %]
 
 [% IF  HIGHHOLDS %]
-	<li>High demand item. Loan period shortened to [% HIGHHOLDS.duration %] days (due [% HIGHHOLDS.returndate %]). Check out anyway?</li>
+    <li>High demand item. Loan period shortened to [% HIGHHOLDS.duration %] days (due [% HIGHHOLDS.returndate %]). Check out anyway?</li>
 [% END %]
 </ul>
 
@@ -256,6 +278,8 @@ var MSG_EXPORT_SELECT_CHECKOUTS = _("You must select checkout(s) to export");
 	});
 	</script>
 [% END %]
+
+[% IF CAN_user_circulate_force_checkout or HIGHHOLDS %]
 <form method="post" action="/cgi-bin/koha/circ/circulation.pl" autocomplete="off">
 
 [% IF ( RESERVED ) %]
@@ -305,6 +329,7 @@ var MSG_EXPORT_SELECT_CHECKOUTS = _("You must select checkout(s) to export");
     <input type="submit" class="deny" value="No, Don't Check Out (N)" accesskey="n" />
     [% END %]
 </form>
+[% END %]
 
 </div></div>
 [% END %] <!-- NEEDSCONFIRMATION -->
@@ -481,7 +506,7 @@ No patron matched <span class="ex">[% message %]</span>
 
 	<div class="hint">Enter item barcode:</div>
 
-    [% IF ( NEEDSCONFIRMATION ) %]
+    [% IF NEEDSCONFIRMATION %]
 	    <input type="text" name="barcode" id="barcode" class="barcode focus" size="14" disabled="disabled" />
     [% ELSE %]
 	    <input type="text" name="barcode" id="barcode" class="barcode focus" size="14" />
