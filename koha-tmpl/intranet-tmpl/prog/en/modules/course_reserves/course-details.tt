@@ -119,7 +119,7 @@
                             <td>[% cr.item.itemcallnumber %]</td>
                             [% IF item_level_itypes %]
                             <td>
-                                [% IF cr.course_item.itype %]
+                                [% IF cr.course_item.itype.defined %]
                                     [% IF cr.course_item.enabled == 'yes' %]
                                         [% ItemTypes.GetDescription( cr.item.itype ) %]
                                     [% ELSE %]
@@ -134,7 +134,7 @@
                             </td>
                             [% END %]
                             <td>
-                                 [% IF cr.course_item.ccode %]
+                                 [% IF cr.course_item.ccode.defined %]
                                      [% IF cr.course_item.enabled == 'yes' %]
                                           [% AuthorisedValues.GetByCode( 'CCODE', cr.item.ccode ) %]
                                      [% ELSE %]
@@ -148,7 +148,7 @@
                                  [% END %]
                             </td>
                             <td>
-                                [% IF cr.course_item.location %]
+                                [% IF cr.course_item.location.defined %]
                                      [% IF cr.course_item.enabled == 'yes' %]
                                          [% AuthorisedValues.GetByCode( 'LOC', cr.item.location ) %]
                                     [% ELSE %]
@@ -162,7 +162,7 @@
                                 [% END %]
                             </td>
                             <td>
-                                [% IF cr.course_item.holdingbranch %]
+                                [% IF cr.course_item.holdingbranch.defined %]
                                     [% IF cr.course_item.enabled == 'yes' %]
                                         [% Branches.GetName( cr.item.holdingbranch ) %]
                                     [% ELSE %]
