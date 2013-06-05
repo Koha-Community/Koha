@@ -13,7 +13,9 @@
     var resultst = $("#resultst").dataTable($.extend(true, {}, dataTablesDefaults, {
         "aoColumnDefs": [
             { "aTargets": [ -1, -2 ], "bSortable": false, "bSearchable": false },
+            { "aTargets": [ 1 ], "sType": "nsb-nse" },
         ],
+        "aaSorting": [[ 1, "asc" ]],
         "bPaginate": false
     } ) );
 
