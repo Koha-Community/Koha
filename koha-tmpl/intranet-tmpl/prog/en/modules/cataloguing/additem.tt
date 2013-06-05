@@ -266,15 +266,15 @@ $(document).ready(function() {
 
 <fieldset class="action">    [% IF ( opisadd ) %]
     <input type="submit" name="phony_submit" value="phony_submit" id="phony_submit" style="display:none;" onclick="return false;" />
-    <!-- Note : We use here a false submit button because we have several submit buttons and we don't want the user to believe he validated the adding of multiple copies
+    <!-- Note : We use here a false submit button because we have several submit buttons and we don't want the user to believe he validated the adding of multiple items
 		when pressing the enter key, while in fact it is the first submit button that is validated, in our case the "add (single) item" button.
 		It is a bit tricky, but necessary in the sake of UI correctness.
     -->
 
     <input type="submit" name="add_submit" value="Add item" onclick="return Check(this.form)" />
-    <input type="submit" name="add_duplicate_submit" value="Add &amp; Duplicate" onclick="return Check(this.form)" />
-    <input type="submit" name="add_multiple_copies" value="Add Multiple Copies" onclick="javascript:this.nextSibling.style.visibility='visible';document.f.number_of_copies.focus(); return false;" /><span id="add_multiple_copies_span" style="visibility:hidden">
-	<label for="number_of_copies">Number of copies to add : </label>
+    <input type="submit" name="add_duplicate_submit" value="Add &amp; duplicate" onclick="return Check(this.form)" />
+    <input type="submit" name="add_multiple_copies" value="Add multiple items" onclick="javascript:this.nextSibling.style.visibility='visible';document.f.number_of_copies.focus(); return false;" /><span id="add_multiple_copies_span" style="visibility:hidden">
+    <label for="number_of_copies">Number of items to add : </label>
 	<input type="text" id="number_of_copies" name="number_of_copies" value="" size="2" />
 	<input type="submit" id="add_multiple_copies_submit" name="add_multiple_copies_submit" value="Add" onclick="javascript:return Check(this.form) &amp;&amp; CheckMultipleAdd(this.form.number_of_copies.value);" />
     </span>
