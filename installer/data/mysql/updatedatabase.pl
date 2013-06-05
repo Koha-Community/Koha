@@ -6234,7 +6234,7 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
         VALUES  ( '1', 'overdues_report', 'Execute overdue items report' )
     });
     # add new permission for users with all report permissions and circulation remaining permission
-    my $sth = $dbh->prepare(q{
+    $dbh->do(q{
         INSERT INTO user_permissions (borrowernumber, module_bit, code)
         SELECT user_permissions.borrowernumber, 1, 'overdues_report'
         FROM user_permissions
