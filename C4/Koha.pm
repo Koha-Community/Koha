@@ -41,7 +41,6 @@ BEGIN {
 		&subfield_is_koha_internal_p
 		&GetPrinters &GetPrinter
 		&GetItemTypes &getitemtypeinfo
-		&GetCcodes
 		&GetSupportName &GetSupportList
 		&get_itemtypeinfos_of
 		&getframeworks &getframeworkinfo
@@ -284,27 +283,6 @@ SELECT itemtype,
 END_SQL
 
     return get_infos_of( $query, 'itemtype', undef, \@itemtypes );
-}
-
-# this is temporary until we separate collection codes and item types
-sub GetCcodes {
-    my $count = 0;
-    my @results;
-    my $dbh = C4::Context->dbh;
-    my $sth =
-      $dbh->prepare(
-        "SELECT * FROM authorised_values ORDER BY authorised_value");
-    $sth->execute;
-    while ( my $data = $sth->fetchrow_hashref ) {
-        if ( $data->{category} eq "CCODE" ) {
-            $count++;
-            $results[$count] = $data;
-
-            #warn "data: $data";
-        }
-    }
-    $sth->finish;
-    return ( $count, @results );
 }
 
 =head2 getauthtypes

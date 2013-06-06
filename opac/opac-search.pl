@@ -246,10 +246,6 @@ foreach my $advanced_srch_type (@advanced_search_types) {
 }
 $template->param(advancedsearchesloop => \@advancedsearchesloop);
 
-# # load the itypes (Called item types in the template -- just authorized values for searching)
-# my ($itypecount,@itype_loop) = GetCcodes();
-# $template->param(itypeloop=>\@itype_loop,);
-
 # The following should only be loaded if we're bringing up the advanced search template
 if ( $template_type && $template_type eq 'advsearch' ) {
     # load the servers (used for searching -- to do federated searching, etc.)
