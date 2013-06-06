@@ -33,6 +33,7 @@
                 <th>Call no</th>
         <th>Item type</th>
         <th>Date due</th>
+        <th>Barcode</th>
 		<th>Charge</th>
 		<th>Price</th>
 		<th>Status</th>
@@ -49,16 +50,17 @@
                 <td>[% issueloo.itemcallnumber %]</td>
 		<td>[% issueloo.itemtype_description %]</td>
 		<td>[% issueloo.date_due %]</td>
+                <td>[% issueloo.barcode %]</td>
 		<td>[% issueloo.charge %]</td>
 		<td>[% issueloo.replacementprice %]</td>
 		<td>[% IF ( issueloo.red ) %]Overdue![% ELSE %]&nbsp;[% END %]</td>
 	</tr>
 	[% END %]
 	<tr>
-            <td colspan="5" style="text-align: right; font-weight:bold;">Totals:</td>
+            <td colspan="6" style="text-align: right; font-weight:bold;">Totals:</td>
             <td>[% totaldue %]</td>
             <td>[% totalprice %]</td>
-            <td colspan="2">&nbsp;</td>
+            <td colspan="3">&nbsp;</td>
         </tr>
 	</table>
 	[% END %]
