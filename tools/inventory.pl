@@ -31,13 +31,13 @@ use C4::Context;
 use C4::Output;
 use C4::Biblio;
 use C4::Items;
-use C4::Dates qw/format_date format_date_in_iso/;
 use C4::Koha;
 use C4::Branch; # GetBranches
 use C4::Circulation;
 use C4::Reports::Guided;    #_get_column_defs
 use C4::Charset;
-use List::MoreUtils qw/none/;
+use Koha::DateUtils;
+use List::MoreUtils qw( none );
 
 
 my $minlocation=$input->param('minlocation') || '';
@@ -47,19 +47,14 @@ my $location=$input->param('location') || '';
 my $itemtype=$input->param('itemtype'); # FIXME note, template does not currently supply this
 my $ignoreissued=$input->param('ignoreissued');
 my $datelastseen = $input->param('datelastseen');
-my $offset = $input->param('offset');
 my $markseen = $input->param('markseen');
-$offset=0 unless $offset;
-my $pagesize = $input->param('pagesize');
-$pagesize=50 unless $pagesize;
 my $branchcode = $input->param('branchcode') || '';
 my $branch     = $input->param('branch');
 my $op         = $input->param('op');
 my $compareinv2barcd = $input->param('compareinv2barcd');
-my $res;                                            #contains the results loop
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
-    {   template_name   => "tools/inventory.tmpl",
+    {   template_name   => "tools/inventory.tt",
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,
@@ -134,15 +129,13 @@ $statussth =~ s, and $,,g;
 $template->param(
     branchloop               => \@branch_loop,
     authorised_values        => \@authorised_value_list,
-    today                    => C4::Dates->today(),
+    today                    => dt_from_string,
     minlocation              => $minlocation,
     maxlocation              => $maxlocation,
     location                 => $location,
     ignoreissued             => $ignoreissued,
     branchcode               => $branchcode,
     branch                   => $branch,
-    offset                   => $offset,
-    pagesize                 => $pagesize,
     datelastseen             => $datelastseen,
     compareinv2barcd         => $compareinv2barcd,
     notforloanlist           => $notforloanlist
@@ -153,14 +146,12 @@ if (defined $notforloanlist) {
     @notforloans = split(/,/, $notforloanlist);
 }
 
-
-
-my @brcditems;
-my $barcodelist;
+my @scanned_items;
 my @errorloop;
 if ( $uploadbarcodes && length($uploadbarcodes) > 0 ) {
     my $dbh = C4::Context->dbh;
-    my $date = format_date_in_iso( $input->param('setdate') ) || C4::Dates->today('iso');
+    my $date = dt_from_string( $input->param('setdate') );
+    $date = output_pref( $date, 'iso' );
 
     my $strsth  = "select * from issues, items where items.itemnumber=issues.itemnumber and items.barcode =?";
     my $qonloan = $dbh->prepare($strsth);
@@ -171,14 +162,14 @@ if ( $uploadbarcodes && length($uploadbarcodes) > 0 ) {
 
     while (my $barcode=<$uploadbarcodes>){
         $barcode =~ s/\r?\n$//;
-        $barcodelist .= ($barcodelist) ? '|' . $barcode : $barcode;
+        next unless $barcode;
         if ( $qwithdrawn->execute($barcode) && $qwithdrawn->rows ) {
             push @errorloop, { 'barcode' => $barcode, 'ERR_WTHDRAWN' => 1 };
         } else {
             my $item = GetItem( '', $barcode );
             if ( defined $item && $item->{'itemnumber'} ) {
                 ModItem( { datelastseen => $date }, undef, $item->{'itemnumber'} );
-                push @brcditems, $item;
+                push @scanned_items, $item;
                 $count++;
                 $qonloan->execute($barcode);
                 if ($qonloan->rows){
@@ -196,96 +187,103 @@ if ( $uploadbarcodes && length($uploadbarcodes) > 0 ) {
         }
 
     }
-    $qonloan->finish;
-    $qwithdrawn->finish;
-    $template->param( date => format_date($date), Number => $count );
-    $template->param( errorloop => \@errorloop ) if (@errorloop);
 
+    $template->param( date => $date, Number => $count );
+    $template->param( errorloop => \@errorloop ) if (@errorloop);
 }
-$template->param(barcodelist => $barcodelist);
 
 # now build the result list: inventoried items if requested, and mis-placed items -always-
 my $inventorylist;
+my @items_with_problems;
 if ( $markseen or $op ) {
     # retrieve all items in this range.
     my $totalrecords;
     ($inventorylist, $totalrecords) = GetItemsForInventory($minlocation, $maxlocation, $location, $itemtype, $ignoreissued, '', $branchcode, $branch, 0, undef , $staton);
-
-    # Real copy
-    my @res_copy;
-    foreach (@$inventorylist) {
-        push @res_copy, $_;
-    }
-    $res = \@res_copy;
 }
 
-# set "missing" flags for all items with a datelastseen before the choosen datelastseen
-foreach (@$res) { $_->{missingitem}=1 if C4::Dates->new($_->{datelastseen})->output('iso') lt C4::Dates->new($datelastseen)->output('iso'); }
+# If "compare barcodes list to results" has been checked, we want to alert for missing items
+if ( $compareinv2barcd ) {
+    # set "missing" flags for all items with a datelastseen (dls) before the choosen datelastseen (cdls)
+    my $dls = output_pref( dt_from_string( $datelastseen ), 'iso' );
+    foreach my $item ( @$inventorylist ) {
+        my $cdls = output_pref( dt_from_string( $_->{datelastseen} ), 'iso' );
+        if ( $cdls lt $dls ) {
+            $item->{problem} = 'missingitem';
+            # We have to push a copy of the item, not the reference
+            push @items_with_problems, { %$item };
+        }
+    }
+}
 
-# removing missing items from loop if "Compare barcodes list to results" has not been checked
-@$res = grep {!$_->{missingitem} == 1 } @$res if (!$input->param('compareinv2barcd'));
+
 
 # insert "wrongplace" to all scanned items that are not supposed to be in this range
 # note this list is always displayed, whatever the librarian has choosen for comparison
-foreach my $temp (@brcditems) {
+my $moddatecount = 0;
+foreach my $item ( @scanned_items ) {
 
   # Saving notforloan code before it's replaced by it's authorised value for later comparison
-  $temp->{'notforloancode'} = $temp->{'notforloan'};
+  $item->{notforloancode} = $item->{notforloan};
 
   # Populating with authorised values
-  foreach (keys %$temp) {
+  foreach my $field ( keys %$item ) {
         # If the koha field is mapped to a marc field
-        my $fc = $temp->{'frameworkcode'} || '';
-        my ($f, $sf) = GetMarcFromKohaField("items.$_", $fc);
+        my $fc = $item->{'frameworkcode'} || '';
+        my ($f, $sf) = GetMarcFromKohaField("items.$field", $fc);
         if ($f and $sf) {
             # We replace the code with it's description
             my $authvals = C4::Koha::GetKohaAuthorisedValuesFromField($f, $sf, $fc);
-            if ($authvals and defined $temp->{$_} and defined $authvals->{$temp->{$_}}) {
-              $temp->{$_} = $authvals->{$temp->{$_}};
+            if ($authvals and defined $item->{$field} and defined $authvals->{$item->{$field}}) {
+              $item->{$field} = $authvals->{$item->{$field}};
             }
         }
     }
 
-    next if $temp->{onloan}; # skip checked out items
+    next if $item->{onloan}; # skip checked out items
 
     # If we have scanned items with a non-matching notforloan value
-    if (none { $temp->{'notforloancode'} eq $_ } @notforloans) {
-        $temp->{'changestatus'} = 1;
-        my $biblio = C4::Biblio::GetBiblioData($temp->{biblionumber});
-        $temp->{title} = $biblio->{title};
-        $temp->{author} = $biblio->{author};
-        $temp->{datelastseen} = format_date($temp->{datelastseen});
-        push @$res, $temp;
-
+    if (none { $item->{'notforloancode'} eq $_ } @notforloans) {
+        $item->{problem} = 'changestatus';
+        push @items_with_problems, { %$item };
     }
-    if (none { $temp->{barcode} eq $_->{barcode} && !$_->{'onloan'} } @$inventorylist) {
-        my $temp2 = { %$temp };
-        $temp2->{wrongplace}=1;
-        my $biblio = C4::Biblio::GetBiblioData($temp->{biblionumber});
-        $temp2->{title} = $biblio->{title};
-        $temp2->{author} = $biblio->{author};
-        $temp2->{datelastseen} = format_date($temp->{datelastseen});
-        push @$res, $temp2;
+    if (none { $item->{barcode} eq $_->{barcode} && !$_->{'onloan'} } @$inventorylist) {
+        $item->{problem} = 'wrongplace';
+        push @items_with_problems, { %$item };
+    }
+
+    # Modify date last seen for scanned items
+    ModDateLastSeen($_->{'itemnumber'});
+    $moddatecount++;
+}
+
+if ( $compareinv2barcd ) {
+    my @scanned_barcodes = map {$_->{barcode}} @scanned_items;
+    for my $should_be_scanned ( @$inventorylist ) {
+        my $barcode = $should_be_scanned->{barcode};
+        unless ( grep /^$barcode$/, @scanned_barcodes ) {
+            $should_be_scanned->{problem} = 'not_scanned';
+            push @items_with_problems, { %$should_be_scanned };
+        }
     }
 }
 
-# Finally, modifying datelastseen for remaining items
-my $moddatecount = 0;
-foreach (@$res) {
-    unless ($_->{'missingitem'}) {
-        ModDateLastSeen($_->{'itemnumber'});
-        $moddatecount++;
-    }
+for my $item ( @items_with_problems ) {
+    my $biblio = C4::Biblio::GetBiblioData($item->{biblionumber});
+    $item->{title} = $biblio->{title};
+    $item->{author} = $biblio->{author};
 }
 
-# Removing items that don't have any problems from loop
-@$res = grep { $_->{missingitem} || $_->{wrongplace} || $_->{changestatus} } @$res;
+# If a barcode file is given, we want to show problems, else all items
+my @results;
+@results = $uploadbarcodes
+            ? @items_with_problems
+            : $op
+                ? @$inventorylist
+                : ();
 
 $template->param(
     moddatecount => $moddatecount,
-    loop       => $res,
-    nextoffset => ( $offset + $pagesize ),
-    prevoffset => ( $offset ? $offset - $pagesize : 0 ),
+    loop       => \@results,
     op         => $op
 );
 
@@ -316,35 +314,40 @@ if (defined $input->param('CSVexport') && $input->param('CSVexport') eq 'on'){
                       / ) {
        push @translated_keys, $columns_def_hashref->{$key};
     }
+    push @translated_keys, 'problem' if $uploadbarcodes;
 
     $csv->combine(@translated_keys);
     print $csv->string, "\n";
 
     my @keys = qw / title author barcode itemnumber homebranch location itemcallnumber notforloan lost damaged stocknumber /;
-    for my $re (@$res) {
+    for my $item ( @results ) {
         my @line;
         for my $key (@keys) {
-            push @line, $re->{$key};
+            push @line, $item->{$key};
         }
-        if ($re->{wrongplace}) {
-            push @line, "wrong place";
-        } elsif ($re->{missingitem}) {
-            push @line, "missing item";
-        } elsif ($re->{changestatus}) {
-            push @line, "change item status";
+        if ( defined $item->{problem} ) {
+            if ( $item->{problem} eq 'wrongplace' ) {
+                push @line, "wrong place";
+            } elsif ( $item->{problem} eq 'missingitem' ) {
+                push @line, "missing item";
+            } elsif ( $item->{problem} eq 'changestatus' ) {
+                push @line, "change item status";
+            } elsif ($item->{problem} eq 'not_scanned' ) {
+                push @line, "item not scanned";
+            }
         }
         $csv->combine(@line);
         print $csv->string, "\n";
     }
     # Adding not found barcodes
     foreach my $error (@errorloop) {
-    my @line;
-    if ($error->{'ERR_BARCODE'}) {
-        push @line, map { $_ eq 'barcode' ? $error->{'barcode'} : ''} @keys;
-        push @line, "barcode not found";
-        $csv->combine(@line);
-        print $csv->string, "\n";
-    }
+        my @line;
+        if ($error->{'ERR_BARCODE'}) {
+            push @line, map { $_ eq 'barcode' ? $error->{'barcode'} : ''} @keys;
+            push @line, "barcode not found";
+            $csv->combine(@line);
+            print $csv->string, "\n";
+        }
     }
     exit;
 }

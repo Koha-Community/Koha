@@ -1,3 +1,4 @@
+[% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Inventory</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -12,12 +13,16 @@ $(document).ready(function(){
 
         inventorydt = $('#inventoryt').dataTable($.extend(true, {}, dataTablesDefaults, {
             'sPaginationType': 'full_numbers',
-            "aoColumnDefs": [ { "bSortable": false, "aTargets": [ 0 ] } ]
+            [% IF compareinv2barcd %]
+                "aoColumnDefs": [ { "bSortable": false, "aTargets": [ 1 ] } ]
+            [% ELSE %]
+                "aoColumnDefs": [ { "bSortable": false, "aTargets": [ 0 ] } ]
+            [% END %]
         } ));
 
 
-    $("#continuewithoutmarkingbutton").click(function(){
-                inventorydt.fnPageChange( 'next' );
+        $("#continuewithoutmarkingbutton").click(function(){
+            inventorydt.fnPageChange( 'next' );
             return false;
         });
 
@@ -47,7 +52,6 @@ $(document).ready(function(){
         });
 
 
-
     $(".checkall").click(function(){
             $(".checkboxed").checkCheckboxes();
             return false;
@@ -56,16 +60,6 @@ $(document).ready(function(){
             $(".checkboxed").unCheckCheckboxes();
             return false;
         });
-[% IF ( offset ) %]$("#markseen").before("<input type=\"submit\" value=\"&lt;&lt; " + _("Mark seen and continue") + "\" id=\"markback\" /> ");[% END %]
-[% IF ( nextoffset ) %]$("#markseen").after(" <input type=\"submit\" id=\"marknext\" value=\"" + _("Mark seen and continue") + " &gt;&gt;\" />");[% END %]
-    $("#markback").click(function(){
-        $(".checkboxed").find("input").filter("[name=offset]").attr("value","[% prevoffset %]");
-        return true;
-    });
-    $("#marknext").click(function(){
-        $(".checkboxed").find("input").filter("[name=offset]").attr("value","[% nextoffset %]");
-        return true;
-    });
     });
 //]]>
 </script>
@@ -82,7 +76,7 @@ $(document).ready(function(){
     <div id="yui-main">
     <div class="yui-b">
     <h1>Inventory/Stocktaking</h1>
-    [% IF (moddatecount) %]<div class="dialog message">[% moddatecount %] items modified : datelastseen set to [% date %]</div>[% END %]
+    [% IF (moddatecount) %]<div class="dialog message">[% moddatecount %] items modified : datelastseen set to [% date | $KohaDates %]</div>[% END %]
     [% IF (errorfile) %]<div class="dialog alert">[% errorfile %] can't be opened</div>[% END %]
     [% FOREACH error IN errorloop %]
         <div class="dialog alert">
@@ -100,7 +94,7 @@ $(document).ready(function(){
             <legend>Use a barcode file</legend>
      <ol>
             <li><label for="uploadbarcodes">Barcode file: </label> <input type="file" id="uploadbarcodes" name="uploadbarcodes" /></li>
-            <li><label for="setdate">Set inventory date to:</label> <input type="text" id="setdate" name="setdate" value="[% today %]" class="datepickerfrom" />
+            <li><label for="setdate">Set inventory date to:</label> <input type="text" id="setdate" name="setdate" value="[% today | $KohaDates %]" class="datepickerfrom" />
             </li>
           </ol>
         </fieldset>
@@ -109,10 +103,10 @@ $(document).ready(function(){
         <ol><li>
         <label for="branch">Library: </label>
             <input type="radio" name="branch" value="homebranch"> Home library</input>
-            <input type="radio" name="branch" value="holdingbranch"> Current location</input>
+            <input type="radio" name="branch" value="holdingbranch"> Current library</input>
         </li><li>
         <label for="branchloop">Library: </label><select id="branchloop" name="branchcode" style="width:12em;">
-            <option value="">All locations</option>
+            <option value="">All libraries</option>
         [% FOREACH branchloo IN branchloop %]
             [% IF ( branchloo.selected ) %]
                 <option value="[% branchloo.value %]" selected="selected">[% branchloo.branchname %]</option>
@@ -172,7 +166,7 @@ $(document).ready(function(){
         [% END %]
 
         <li><label for="datelastseen">Inventory date:</label>
-            <input type="text" id="datelastseen" name="datelastseen" value="[% datelastseen %]" class="datepickerfrom" />
+            <input type="text" id="datelastseen" name="datelastseen" value="[% datelastseen | $KohaDates %]" class="datepickerfrom" />
         </li>
         <li><label for="ignoreissued">Skip copies on loan: </label>
             [% IF (ignoreissued) %]
@@ -204,15 +198,17 @@ $(document).ready(function(){
     <input type="hidden" name="location" value="[% location %]" />
     <input type="hidden" name="branchcode" value="[% branchcode %]" />
     <input type="hidden" name="datelastseen" value="[% datelastseen %]" />
-    <input type="hidden" name="pagesize" value="[% pagesize %]" />
-    <input type="hidden" name="offset" value="[% offset %]" />
-    <div><a href="#" class="checkall">[Select All]</a> <a href="#" class="clearall">[Clear All]</a></div>
+
+    [% UNLESS compareinv2barcd %]
+      <div><a href="#" class="checkall">[Select all]</a> <a href="#" class="clearall">[Clear all]</a></div>
+    [% END %]
+
     <table id="inventoryt">
     <thead>
         <tr>
-            <th>Seen</th>
+            [% UNLESS compareinv2barcd %]<th>Seen</th>[% END %]
             <th>Barcode</th>
-            <th>Location</th>
+            <th>Library</th>
             <th>Title</th>
             <th>Status</th>
             <th>Lost</th>
@@ -224,9 +220,11 @@ $(document).ready(function(){
     <tbody>
     [% FOREACH result IN loop %]
         <tr>
-            <td>
-            <input type="checkbox" name="SEEN-[% result.itemnumber %]" value="1" />
-            </td>
+            [% UNLESS compareinv2barcd %]
+              <td>
+                <input type="checkbox" name="SEEN-[% result.itemnumber %]" value="1" />
+              </td>
+            [% END %]
             <td>
             [% result.barcode | html %]
             </td>
@@ -246,21 +244,30 @@ $(document).ready(function(){
             [% result.damaged | html %]
             </td>
             <td>
-            [% result.datelastseen | html %]
+            [% result.datelastseen | html | $KohaDates%]
             </td>
             <td>
-            [% IF (result.wrongplace) %]<p>Item should not have been scanned</p>[% ELSIF (result.missingitem) %]<p>Item missing</p>[% ELSIF (result.changestatus) %]<p>Change item status</p>[% END %]
+            [% IF result.problem == 'wrongplace' %]
+                <p>Item should not have been scanned</p>
+            [% ELSIF result.problem == 'missingitem' %]
+                <p>Item missing</p>
+            [% ELSIF result.problem == 'changestatus' %]
+                <p>Change item status</p>
+            [% ELSIF result.problem == 'not_scanned' %]
+                <p>Item should have been scanned</p>
+            [% END %]
             </td>
         </tr>
     [% END %]
     </tbody>
     </table>
     <div class="spacer"></div>
-      <p style="display:block;"><span class="exportSelected"></span></p>
-    <div style="padding : .3em 0"><a href="#" class="checkall">[Select All]</a> <a href="#" class="clearall">[Clear All]</a></div>
-     <input type="submit" id="markseenandquit" value="Mark seen and quit" />
-     <input type="submit" value="Mark Seen and Continue &gt;&gt;" id="markseenandcontinuebutton" />
-     <input type="submit" value="Continue without Marking &gt;&gt;" id="continuewithoutmarkingbutton" class="submit" />
+    [% UNLESS compareinv2barcd %]
+      <div style="padding : .3em 0"><a href="#" class="checkall">[Select all]</a> <a href="#" class="clearall">[Clear all]</a></div>
+      <input type="submit" id="markseenandquit" value="Mark seen and quit" />
+      <input type="submit" value="Mark Seen and Continue &gt;&gt;" id="markseenandcontinuebutton" />
+      <input type="submit" value="Continue without Marking &gt;&gt;" id="continuewithoutmarkingbutton" class="submit" />
+    [% END %]
     </form>
 
     </div>

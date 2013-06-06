@@ -1,27 +1,9 @@
 #!/usr/bin/perl
-#
 
 use Modern::Perl;
-
 use CGI;
-use JSON;
-
 use C4::Auth;
-use C4::Circulation qw/CanBookBeRenewed/;
-use C4::Context;
-use C4::Koha qw/getitemtypeimagelocation/;
-use C4::Reserves qw/CheckReserves/;
-use C4::Utils::DataTables;
-use C4::Output;
-use C4::Biblio;
-use C4::Items;
-use C4::Dates qw/format_date format_date_in_iso/;
-use C4::Koha;
-use C4::Branch;    # GetBranches
-use C4::Reports::Guided;    #_get_column_defs
-use C4::Charset;
-use List::MoreUtils qw /none/;
-
+use C4::Items qw( ModDateLastSeen );
 
 my $input = new CGI;
 
@@ -38,6 +20,4 @@ foreach ( @seent ) {
     /SEEN-(.+)/ and &ModDateLastSeen($1);
 }
 
-
 print $input->header('application/json');
-

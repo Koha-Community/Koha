@@ -1001,12 +1001,15 @@ sub GetItemsForInventory {
     my $dbh = C4::Context->dbh;
     my ( @bind_params, @where_strings );
 
-    my $query = <<'END_SQL';
-SELECT SQL_CALC_FOUND_ROWS items.itemnumber, barcode, itemcallnumber, title, author, biblio.biblionumber, biblio.frameworkcode, datelastseen, homebranch, location, notforloan, damaged, itemlost, stocknumber
-FROM items
-  LEFT JOIN biblio ON items.biblionumber = biblio.biblionumber
-  LEFT JOIN biblioitems on items.biblionumber = biblioitems.biblionumber
-END_SQL
+    my $select_columns = q{
+        SELECT items.itemnumber, barcode, itemcallnumber, title, author, biblio.biblionumber, biblio.frameworkcode, datelastseen, homebranch, location, notforloan, damaged, itemlost, stocknumber
+    };
+    my $select_count = q{SELECT COUNT(*)};
+    my $query = q{
+        FROM items
+        LEFT JOIN biblio ON items.biblionumber = biblio.biblionumber
+        LEFT JOIN biblioitems on items.biblionumber = biblioitems.biblionumber
+    };
     if ($statushash){
         for my $authvfield (keys %$statushash){
             if ( scalar @{$statushash->{$authvfield}} > 0 ){
@@ -1061,18 +1064,19 @@ END_SQL
         $query .= join ' AND ', @where_strings;
     }
     $query .= ' ORDER BY items.cn_sort, itemcallnumber, title';
+    my $count_query = $select_count . $query;
     $query .= " LIMIT $offset, $size" if ($offset and $size);
+    $query = $select_columns . $query;
     my $sth = $dbh->prepare($query);
     $sth->execute( @bind_params );
 
-    my @results;
+    my @results = ();
     my $tmpresults = $sth->fetchall_arrayref({});
-    $sth = $dbh->prepare("SELECT FOUND_ROWS()");
-    $sth->execute();
+    $sth = $dbh->prepare( $count_query );
+    $sth->execute( @bind_params );
     my ($iTotalRecords) = $sth->fetchrow_array();
 
     foreach my $row (@$tmpresults) {
-        $row->{datelastseen} = format_date( $row->{datelastseen} );
 
         # Auth values
         foreach (keys %$row) {
