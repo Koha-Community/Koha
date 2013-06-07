@@ -1,3 +1,5 @@
+[% USE Branches %]
+
 [% INCLUDE 'doc-head-open.inc' %]
     <title>Koha &rsaquo; Serials &rsaquo; Claims</title>
     [% INCLUDE 'doc-head-close.inc' %]
@@ -83,16 +85,21 @@
         }
     }
 
-	// Filter by branch
-	function filterByBranch() {
-	    selectedBranch = $("#branchfilter").val();
-	    if (selectedBranch == "all") {
-		clearFilters();
-	    } else {
-		$("table#claimst tbody tr").hide();
-		$("table#claimst tbody tr:contains(" + selectedBranch + ")").show();
-	    }
-	}
+    // Filter by branch
+    function filterByBranch() {
+        selectedBranch = $("#branchfilter").val();
+        if (selectedBranch == "all") {
+            clearFilters();
+        } else {
+            $("table#claimst tbody tr").hide();
+            $("table#claimst tbody tr").each( function() {
+                if ( $(this).find("span.branch-" + selectedBranch).size() > 0 ) {
+                    $(this).show();
+                }
+            });
+        }
+    }
+
 	// Filter by date
 	function filterByDate() {
         var beginDate = Date_from_syspref($("#from").val()).getTime();
@@ -220,12 +227,9 @@
     <li>
 	    <label for="branchfilter">Library: </label>
 	    <select id="branchfilter" onchange="filterByBranch();">
+            <option value="all" selected="selected">(All)</option>
             [% FOREACH branchloo IN branchloop %]
-                [% IF ( branchloo.selected ) %]
-                <option value="[% branchloo.value %]" selected="selected">[% branchloo.branchname %]</option>
-                [% ELSE %]
                 <option value="[% branchloo.value %]">[% branchloo.branchname %]</option>
-                [% END %]
             [% END %]
         </select>
 	</li>
@@ -273,7 +277,7 @@
                         [% missingissue.name %]
                         </td>
                         <td>
-                        [% missingissue.branchcode %]
+                            <span class="branch-[% missingissue.branchcode %]">[% Branches.GetName( missingissue.branchcode ) %]</span>
                         </td>
                         <td>
                         <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% missingissue.subscriptionid %]">[% missingissue.title |html %]</a>
