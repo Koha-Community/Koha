@@ -9,14 +9,14 @@ use C4::Members;
 use Koha::DateUtils;
 
 my ( $help, $verbose, $not_borrowered_since, $expired_before, $category_code,
-    $dryrun );
+    $confirm );
 GetOptions(
     'h|help'                 => \$help,
     'v|verbose'              => \$verbose,
     'not_borrowered_since:s' => \$not_borrowered_since,
     'expired_before:s'       => \$expired_before,
     'category_code:s'        => \$category_code,
-    'dry-run'                => \$dryrun,
+    'c|confirm'              => \$confirm,
 ) || pod2usage(1);
 
 if ($help) {
@@ -42,20 +42,25 @@ my $members = GetBorrowersToExpunge(
     }
 );
 
-say "I found " . scalar(@$members) . " patrons to delete";
+say scalar(@$members) . " patrons to delete";
+
+my $dbh = C4::Context->dbh;
+$dbh->{RaiseError} = 1;
+$dbh->{PrintError} = 0;
+
 for my $member (@$members) {
     print "Trying to delete patron " . $member->{borrowernumber} . "... ";
     eval {
         C4::Members::MoveMemberToDeleted( $member->{borrowernumber} )
-          unless $dryrun;
+          if $confirm;
     };
     if ($@) {
-        say "Failed, I cannot move this patron ($@)";
+        say "Failed, cannot move this patron ($@)";
         next;
     }
-    eval { C4::Members::DelMember( $member->{borrowernumber} ) unless $dryrun; };
+    eval { C4::Members::DelMember( $member->{borrowernumber} ) if $confirm; };
     if ($@) {
-        say "Failed, I cannot delete this patron ($@)";
+        say "Failed, cannot delete this patron ($@)";
         next;
     }
     say "OK";
@@ -67,7 +72,9 @@ delete_patrons - This script deletes patrons
 
 =head1 SYNOPSIS
 
-delete_patrons.pl [-h -v] --not_borrowered_since=`date -d '-3 month' "+%Y-%m-%d"` --expired_before=`date -d '-3 month' "+%Y-%m-%d"` --category_code=CAT
+delete_patrons.pl [-h -v -c] --not_borrowered_since=2013-07-21 --expired_before=2013-07-21 --category_code=CAT
+
+dates can be generated with `date -d '-3 month' "+%Y-%m-%d"`
 
 Options are cumulatives.
 
@@ -91,9 +98,9 @@ Delete patrons with an account expired before this date.
 
 Delete patrons who have this category code.
 
-=item B<--dry-run>
+=item B<-c|--confirm>
 
-Dry run mode. To use with the verbose mode.
+Without this flag set, this script will do nothing.
 
 =item B<-v|--verbose>
 
