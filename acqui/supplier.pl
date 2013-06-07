@@ -49,14 +49,10 @@ use C4::Output;
 use CGI;
 
 use C4::Bookseller qw( GetBookSellerFromId DelBookseller );
+use C4::Bookseller::Contact;
 use C4::Budgets;
 
 my $query    = CGI->new;
-my $booksellerid       = $query->param('booksellerid');
-my $supplier = {};
-if ($booksellerid) {
-    $supplier = GetBookSellerFromId($booksellerid);
-}
 my $op = $query->param('op') || 'display';
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {   template_name   => 'acqui/supplier.tt',
@@ -67,38 +63,23 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         debug           => 1,
     }
 );
+my $booksellerid       = $query->param('booksellerid');
+my $supplier = {};
+if ($booksellerid) {
+    $supplier = GetBookSellerFromId($booksellerid);
+    foreach ( keys $supplier ) {
+        $template->{'VARS'}->{$_} = $supplier->{$_};
+    }
+    $template->{'VARS'}->{'booksellerid'} = $booksellerid;
+}
 
 #build array for currencies
 if ( $op eq 'display' ) {
     my $contracts = GetContracts( { booksellerid => $booksellerid } );
 
     $template->param(
-        booksellerid  => $booksellerid,
-        name          => $supplier->{'name'},
-        postal        => $supplier->{'postal'},
-        address1      => $supplier->{'address1'},
-        address2      => $supplier->{'address2'},
-        address3      => $supplier->{'address3'},
-        address4      => $supplier->{'address4'},
-        phone         => $supplier->{'phone'},
-        accountnumber => $supplier->{'accountnumber'},
-        fax           => $supplier->{'fax'},
-        url           => $supplier->{'url'},
-        contact       => $supplier->{'contact'},
-        contpos       => $supplier->{'contpos'},
-        contphone     => $supplier->{'contphone'},
-        contaltphone  => $supplier->{'contaltphone'},
-        contfax       => $supplier->{'contfax'},
-        contemail     => $supplier->{'contemail'},
-        contnotes     => $supplier->{'contnotes'},
-        notes         => $supplier->{'notes'},
         active        => $supplier->{'active'},
-        gstreg        => $supplier->{'gstreg'},
-        listincgst    => $supplier->{'listincgst'},
-        invoiceincgst => $supplier->{'invoiceincgst'},
         gstrate       => $supplier->{'gstrate'} + 0.0,
-        discount      => $supplier->{'discount'},
-        deliverytime  => $supplier->{deliverytime},
         invoiceprice  => $supplier->{'invoiceprice'},
         listprice     => $supplier->{'listprice'},
         basketcount   => $supplier->{'basketcount'},
@@ -140,34 +121,10 @@ if ( $op eq 'display' ) {
     }, split( '\|', C4::Context->preference("gist") );
 
     $template->param(
-        booksellerid => $booksellerid,
-        name         => $supplier->{'name'},
-        postal       => $supplier->{'postal'},
-        address1     => $supplier->{'address1'},
-        address2     => $supplier->{'address2'},
-        address3     => $supplier->{'address3'},
-        address4     => $supplier->{'address4'},
-        phone        => $supplier->{'phone'},
-        accountnumber=> $supplier->{'accountnumber'},
-        fax          => $supplier->{'fax'},
-        url          => $supplier->{'url'},
-        contact      => $supplier->{'contact'},
-        contpos      => $supplier->{'contpos'},
-        contphone    => $supplier->{'contphone'},
-        contaltphone => $supplier->{'contaltphone'},
-        contfax      => $supplier->{'contfax'},
-        contemail    => $supplier->{'contemail'},
-        contnotes    => $supplier->{'contnotes'},
-        notes        => $supplier->{'notes'},
         # set active ON by default for supplier add (id empty for add)
         active       => $booksellerid ? $supplier->{'active'} : 1,
-        gstreg        => $supplier->{'gstreg'},
-        listincgst    => $supplier->{'listincgst'},
-        invoiceincgst => $supplier->{'invoiceincgst'},
         gstrate       => $supplier->{gstrate} ? $supplier->{'gstrate'}+0.0 : 0,
         gst_values    => \@gst_values,
-        discount      => $supplier->{'discount'},
-        deliverytime  => $supplier->{deliverytime},
         loop_currency => $loop_currency,
         enter         => 1,
     );

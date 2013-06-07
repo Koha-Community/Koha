@@ -52,6 +52,7 @@ use C4::Output;
 use CGI;
 
 use C4::Bookseller qw/GetBookSellerFromId/;
+use C4::Bookseller::Contact;
 use C4::Acquisition qw/SearchOrders GetOrder ModOrder/;
 use C4::Biblio qw/GetBiblioData/;
 
@@ -124,16 +125,10 @@ $template->param( uncertainpriceorders => \@orders,
                                    booksellerphone =>$bookseller->{'phone'},
                                    booksellerfax => $bookseller->{'fax'},
                                    booksellerurl => $bookseller->{'url'},
-                                   booksellercontact => $bookseller->{'contact'},
-                                   booksellercontpos => $bookseller->{'contpos'},
-                                   booksellercontphone => $bookseller->{'contphone'},
-                                   booksellercontaltphone => $bookseller->{'contaltphone'},
-                                   booksellercontfax => $bookseller->{'contfax'},
-                                   booksellercontemail => $bookseller->{'contemail'},
-                                   booksellercontnotes => $bookseller->{'contnotes'},
                                    booksellernotes => $bookseller->{'notes'},
                                    basketcount   => $bookseller->{'basketcount'},
                                    subscriptioncount   => $bookseller->{'subscriptioncount'},
                                    owner => $owner,
                                    scriptname => "/cgi-bin/koha/acqui/uncertainprice.pl");
+$template->{'VARS'}->{'contacts'} = $bookseller->{'contacts'};
 output_html_with_http_headers $input, $cookie, $template->output;

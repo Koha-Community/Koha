@@ -1,4 +1,36 @@
 [% USE KohaDates %]
+[% BLOCK edit_contact %]
+    <ol id="contact-form">
+        <input type="hidden" name="contact_id" value="[% contact.id %]" />
+        <li><label for="contact_name">Contact name: </label>
+            <input type="text" size="40" id="contact_name" name="contact_name" value="[% contact.name %]" /></li>
+        <li><label for="contact_position">Position: </label>
+            <input type="text" size="40" id="contact_position" name="contact_position" value="[% contact.position %]" /></li>
+        <li><label for="contact_phone">Phone: </label>
+                <input type="text" size="20" id="contact_phone" name="contact_phone" value="[% contact.phone %]" /> </li>
+        <li><label for="contact_phone_2">Alternative phone: </label>
+            <input type="text" size="20" id="contact_altphone" name="contact_altphone" value="[% contact.altphone %]" /></li>
+        <li><label for="contact_fax">Fax: </label>
+            <input type="text" size="20" id="contact_fax" name="contact_fax" value="[% contact.fax %]" /></li>
+        <li><label for="contact_email">Email: </label>
+            <input type="text" size="40" id="contact_email" name="contact_email" value="[% contact.email %]" /></li>
+        <li><label for="contact_notes">Notes: </label>
+            <textarea id="contact_notes" name="contact_notes" cols="40" rows="4">[% contnotes %]</textarea></li>
+    </ol>
+[% END %]
+[% BLOCK show_contact %]
+    <p><span class="label">Contact name: </span>[% contact.name %]</p>
+    <p><span class="label">Position: </span>[% contact.position %]</p>
+    <p><span class="label">Phone: </span>[% contact.phone %]</p>
+    <p><span class="label">Alternative phone: </span>[% contact.altphone %]</p>
+    <p><span class="label">Fax: </span>[% contact.fax %]</p>
+    [% IF ( contact.email ) %]
+        <p><span class="label">Email: </span><a href="mailto:[% contact.email %]">[% contact.email %]</a></p>
+    [% END %]
+    [% IF ( contact.notes ) %]
+        <p><span class="label">Notes: </span>[% contact.notes %]</p>
+    [% END %]
+[% END %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Vendor [% bookselname %]</title>
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
@@ -11,6 +43,9 @@ function confirm_deletion() {
     if (confirm(_("Confirm deletion of this vendor ?"))) {
         window.location="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]&op=delete";
     }
+}
+
+function add_contact() {
 }
 
  $(document).ready(function() {
@@ -65,23 +100,12 @@ function confirm_deletion() {
             <li><label for="accountnumber">Account number: </label>
                 <input type="text" size="40" id="accountnumber" name="accountnumber" value="[% accountnumber %]" /></li></ol>
         </fieldset>
-        <fieldset class="rows">
-            <legend>Contact details</legend>
-        <ol> <li><label for="company_contact_name">Contact name: </label>
-                <input type="text" size="40" id="company_contact_name" name="company_contact_name" value="[% contact %]" /></li>
-            <li><label for="company_contact_position">Position: </label>
-                <input type="text" size="40" id="company_contact_position" name="company_contact_position" value="[% contpos %]" /></li>
-            <li><label for="contact_phone">Phone: </label>
-                <input type="text" size="20" id="contact_phone" name="contact_phone" value="[% contphone %]" /> </li>
-            <li><label for="contact_phone_2">Alternative phone: </label>
-                <input type="text" size="20" id="contact_phone_2" name="contact_phone_2" value="[% contaltphone %]" /></li>
-            <li><label for="contact_fax">Fax: </label>
-                <input type="text" size="20" id="contact_fax" name="contact_fax" value="[% contfax %]" /></li>
-            <li><label for="company_email">Email: </label>
-                <input type="text" size="40" id="company_email" name="company_email" value="[% contemail %]" /></li>
-            <li><label for="contact_notes">Notes: </label>
-                <textarea id="contact_notes" name="contact_notes" cols="40" rows="4">[% contnotes %]</textarea></li></ol>
-        </fieldset>
+        [% FOREACH contact IN contacts %]
+            <fieldset class="supplier-contact rows">
+                <legend>Contact details</legend>
+                [% INCLUDE edit_contact %]
+            </fieldset>
+        [% END %]
     </div>
         <div class="yui-g">
         <fieldset class="rows">
@@ -191,20 +215,12 @@ function confirm_deletion() {
                     <p><span class="label">Account number: </span>[% accountnumber %]</p>
                 [% END %]
             </div>
-            <div id="supplier-contact-details" class="yui-u">
-                <h2>Contact details</h2>
-                <p><span class="label">Contact name: </span>[% contact %]</p>
-                <p><span class="label">Position: </span>[% contpos %]</p>
-                <p><span class="label">Phone: </span>[% contphone %]</p>
-                <p><span class="label">Alternative phone: </span>[% contaltphone %]</p>
-                <p><span class="label">Fax: </span>[% contfax %]</p>
-                [% IF ( contemail ) %]
-                    <p><span class="label">Email: </span><a href="mailto:[% contemail %]">[% contemail %]</a></p>
-                [% END %]
-                [% IF ( contnotes ) %]
-                    <p><span class="label">Notes: </span>[% contnotes %]</p>
-                [% END %]
-            </div>
+            [% FOREACH contact IN contacts %]
+                <div class="supplier-contact-details yui-u">
+                    <h2>Contact details</h2>
+                    [% INCLUDE show_contact %]
+                </div>
+            [% END %]
         </div>
         <div id="supplier-ordering-information" class="yui-g">
         <h3>Ordering information</h3>

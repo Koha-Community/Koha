@@ -45,11 +45,13 @@ list_currency, gst, list_gst, invoice_gst, discount, gstrate.
 =cut
 
 use strict;
-#use warnings; FIXME - Bug 2505
+use warnings;
+use List::Util;
 use C4::Context;
 use C4::Auth;
 
 use C4::Bookseller qw( ModBookseller AddBookseller );
+use C4::Bookseller::Contact;
 use C4::Biblio;
 use C4::Output;
 use CGI;
@@ -83,13 +85,6 @@ $data{'phone'}=$input->param('company_phone');
 $data{'accountnumber'}=$input->param('accountnumber');
 $data{'fax'}=$input->param('company_fax');
 $data{'url'}=$input->param('website');
-$data{'contact'}=$input->param('company_contact_name');
-$data{'contpos'}=$input->param('company_contact_position');
-$data{'contphone'}=$input->param('contact_phone');
-$data{'contaltphone'}=$input->param('contact_phone_2');
-$data{'contfax'}=$input->param('contact_fax');
-$data{'contemail'}=$input->param('company_email');
-$data{'contnotes'}=$input->param('contact_notes');
 # warn "".$data{'contnotes'};
 $data{'notes'}=$input->param('notes');
 $data{'active'}=$input->param('status');
@@ -104,14 +99,29 @@ $data{'gstrate'} = $input->param('gstrate');
 $data{'discount'} = $input->param('discount');
 $data{deliverytime} = $input->param('deliverytime');
 $data{'active'}=$input->param('status');
+my @contacts;
+my %contact_info;
+
+foreach (qw(id name position phone altphone fax email notes)) {
+    $contact_info{$_} = [ $input->param('contact_' . $_) ];
+}
+
+for my $cnt (0..scalar(@{$contact_info{'id'}})) {
+    my %contact;
+    foreach (qw(id name position phone altphone fax email notes)) {
+        $contact{$_} = $contact_info{$_}->[$cnt];
+    }
+    push @contacts, C4::Bookseller::Contact->new(\%contact);
+}
+
 if($data{'name'}) {
 	if ($data{'id'}){
-	    ModBookseller(\%data);
+        ModBookseller(\%data, \@contacts);
 	} else {
-	    $data{id}=AddBookseller(\%data);
+        $data{id}=AddBookseller(\%data, \@contacts);
 	}
-#redirect to booksellers.pl
-print $input->redirect("booksellers.pl?booksellerid=".$data{id});
+    #redirect to booksellers.pl
+    print $input->redirect("booksellers.pl?booksellerid=".$data{id});
 } else {
-print $input->redirect("supplier.pl?op=enter"); # fail silently.
+    print $input->redirect("supplier.pl?op=enter"); # fail silently.
 }

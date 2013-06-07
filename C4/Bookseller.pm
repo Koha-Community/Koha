@@ -23,6 +23,8 @@ use warnings;
 
 use base qw( Exporter );
 
+use C4::Bookseller::Contact;
+
 # set the version for version checking
 our $VERSION   = 3.07.00.049;
 our @EXPORT_OK = qw(
@@ -52,8 +54,8 @@ a bookseller.
 
 @results = GetBookSeller($searchstring);
 
-Looks up a book seller. C<$searchstring> may be either a book seller
-ID, or a string to look for in the book seller's name.
+Looks up a book seller. C<$searchstring> is a string to look for in the
+book seller's name.
 
 C<@results> is an array of hash_refs whose keys are the fields of of the
 aqbooksellers table in the Koha database.
@@ -90,6 +92,7 @@ sub GetBookSellerFromId {
         ( $vendor->{subscriptioncount} ) = $dbh->selectrow_array(
             'SELECT count(*) FROM subscription WHERE aqbooksellerid = ?',
             {}, $id );
+        $vendor->{'contacts'} = C4::Bookseller::Contact->get_from_bookseller($id);
     }
     return $vendor;
 }
@@ -176,40 +179,42 @@ Returns the ID of the newly-created bookseller.
 =cut
 
 sub AddBookseller {
-    my ($data) = @_;
+    my ($data, $contacts) = @_;
     my $dbh    = C4::Context->dbh;
-    my $query  = q|
+    my $query = q|
         INSERT INTO aqbooksellers
             (
-                name,      address1,      address2,     address3,   address4,
-                postal,    phone,         accountnumber,fax,        url,
-                contact,   contpos,       contphone,    contfax,    contaltphone,
-                contemail, contnotes,     active,       listprice,  invoiceprice,
-                gstreg,    listincgst,    invoiceincgst,gstrate,    discount,
-                notes,     deliverytime
+                name,      address1,      address2,     address3, address4,
+                postal,    phone,         accountnumber,fax,      url,
+                active,    listprice,     invoiceprice, gstreg,
+                listincgst,invoiceincgst, gstrate,      discount, notes,
+                deliverytime
             )
-        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) |
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) |
       ;
     my $sth = $dbh->prepare($query);
     $sth->execute(
-        $data->{name}         ,$data->{address1},
-        $data->{address2}     ,$data->{address3},
-        $data->{address4}     ,$data->{postal},
-        $data->{phone}        ,$data->{accountnumber},
-        $data->{fax},
-        $data->{url}          ,$data->{contact},
-        $data->{contpos}      ,$data->{contphone},
-        $data->{contfax}      ,$data->{contaltphone},
-        $data->{contemail}    ,$data->{contnotes},
-        $data->{active}       ,$data->{listprice},
-        $data->{invoiceprice} ,$data->{gstreg},
-        $data->{listincgst}   ,$data->{invoiceincgst},
-        $data->{gstrate}      ,$data->{discount},
-        $data->{notes}        ,$data->{deliverytime},
+        $data->{'name'},         $data->{'address1'},
+        $data->{'address2'},     $data->{'address3'},
+        $data->{'address4'},     $data->{'postal'},
+        $data->{'phone'},        $data->{'accountnumber'},
+        $data->{'fax'},          $data->{'url'},
+        $data->{'active'},       $data->{'listprice'},
+        $data->{'invoiceprice'}, $data->{'gstreg'},
+        $data->{'listincgst'},   $data->{'invoiceincgst'},
+        $data->{'gstrate'},      $data->{'discount'},
+        $data->{notes},          $data->{deliverytime},
     );
 
     # return the id of this new supplier
-    return $dbh->{'mysql_insertid'};
+    my $id = $dbh->{'mysql_insertid'};
+    if ($id && $contacts) {
+        $contacts->[0] = C4::Bookseller::Contact->new( $contacts->[0] )
+          unless ref $contacts->[0] eq 'C4::Bookseller::Contact';
+        $contacts->[0]->bookseller($id);
+        $contacts->[0]->save();
+    }
+    return $id;
 }
 
 #-----------------------------------------------------------------#
@@ -230,14 +235,13 @@ C<&ModBookseller> with the result.
 =cut
 
 sub ModBookseller {
-    my ($data) = @_;
+    my ($data, $contacts) = @_;
     my $dbh    = C4::Context->dbh;
     return unless $data->{'id'};
     my $query  = 'UPDATE aqbooksellers
         SET name=?,address1=?,address2=?,address3=?,address4=?,
-            postal=?,phone=?,accountnumber=?,fax=?,url=?,contact=?,contpos=?,
-            contphone=?,contfax=?,contaltphone=?,contemail=?,
-            contnotes=?,active=?,listprice=?, invoiceprice=?,
+            postal=?,phone=?,accountnumber=?,fax=?,url=?,
+            active=?,listprice=?, invoiceprice=?,
             gstreg=?,listincgst=?,invoiceincgst=?,
             discount=?,notes=?,gstrate=?,deliverytime=?
         WHERE id=?';
@@ -247,19 +251,22 @@ sub ModBookseller {
         $data->{'address2'},     $data->{'address3'},
         $data->{'address4'},     $data->{'postal'},
         $data->{'phone'},        $data->{'accountnumber'},
-        $data->{'fax'},
-        $data->{'url'},          $data->{'contact'},
-        $data->{'contpos'},      $data->{'contphone'},
-        $data->{'contfax'},      $data->{'contaltphone'},
-        $data->{'contemail'},    $data->{'contnotes'},
+        $data->{'fax'},          $data->{'url'},
         $data->{'active'},       $data->{'listprice'},
         $data->{'invoiceprice'}, $data->{'gstreg'},
         $data->{'listincgst'},   $data->{'invoiceincgst'},
         $data->{'discount'},     $data->{'notes'},
-        $data->{'gstrate'},
-        $data->{deliverytime},
+        $data->{'gstrate'},      $data->{deliverytime},
         $data->{'id'}
     );
+    $contacts ||= $data->{'contacts'};
+    if ($contacts) {
+        $contacts->[0] = C4::Bookseller::Contact->new( $contacts->[0] )
+          unless ref $contacts->[0] eq 'C4::Bookseller::Contact';
+        $contacts->[0]->bookseller($data->{'id'});
+        $contacts->[0]->save();
+    }
+    return;
 }
 
 =head2 DelBookseller

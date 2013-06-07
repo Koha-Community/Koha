@@ -56,14 +56,16 @@ function check(form) {
                 [% booksellerphone %] / Fax:
                 [% booksellerfax %]</p>
             <dl>
-                <dt><strong>Contact: </strong></dt>
-                <dd>[% booksellercontact %]
-                [% booksellercontpos %]
-                [% booksellercontphone %]
-                [% booksellercontaltphone %]
-                [% booksellercontemail %]
-                [% booksellercontnotes %]
-                </dd>
+                [% FOREACH contact IN contacts %]
+                    <dt><strong>Contact: </strong></dt>
+                    <dd>[% contact.name %]
+                        [% contact.position %]
+                        [% contact.phone %]
+                        [% contact.altphone %]
+                        [% contact.email %]
+                        [% contact.notes %]
+                    </dd>
+                [% END %]
             </dl>
             [% IF ( booksellernotes ) %]
             <p><strong>Notes: </strong>
