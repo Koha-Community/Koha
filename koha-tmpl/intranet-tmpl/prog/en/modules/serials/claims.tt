@@ -68,16 +68,20 @@
 	    }
 	}
 
-	// Filter by status
-	function filterByStatus() {
-	    selectedStatus = $("#statusfilter").val();
-	    if (selectedStatus == "all") {
-		clearFilters();
-	    } else {
-		$("table#claimst tbody tr").hide();
-		$("table#claimst tbody tr:contains(" + selectedStatus + ")").show();
-	    }
-	}
+    // Filter by status
+    function filterByStatus() {
+        selectedStatus = $("#statusfilter").val();
+        if (selectedStatus == "all") {
+            clearFilters();
+        } else {
+            $("table#claimst tbody tr").hide();
+            $("table#claimst tbody tr").each( function() {
+                if ( $(this).find("span.status-" + selectedStatus).size() > 0 ) {
+                    $(this).show();
+                }
+            });
+        }
+    }
 
 	// Filter by branch
 	function filterByBranch() {
@@ -201,13 +205,13 @@
 	<li>
 	    <label for="statusfilter">Status : </label>
 	    <select id="statusfilter" onchange="filterByStatus();">
-		<option value="all" selected="selected">(All)</option>
-		<option>Expected</option>
-		<option>Arrived</option>
-		<option>Late</option>
-		<option>Missing</option>
-		<option>Claimed</option>
-        <option>Stopped</option>
+            <option value="all" selected="selected">(All)</option>
+            <option value="expected">Expected</option>
+            <option value="arrived">Arrived</option>
+            <option value="late">Late</option>
+            <option value="missing">Missing</option>
+            <option value="claimed">Claimed</option>
+            <option value="stopped">Stopped</option>
 	    </select>
 	</li>
 	
@@ -281,12 +285,12 @@
                         [% missingissue.serialseq %]
                         </td>
                         <td>
-                            [% IF ( missingissue.status1 ) %]Expected[% END %]
-                            [% IF ( missingissue.status2 ) %]Arrived[% END %]
-                            [% IF ( missingissue.status3 ) %]Late[% END %]
-                            [% IF ( missingissue.status4 ) %]Missing[% END %]
-                            [% IF ( missingissue.status7 ) %]Claimed[% END %]
-                            [% IF ( missingissue.status8 ) %]Stopped[% END %]
+                            [% IF ( missingissue.status1 ) %]<span class="status-expected">Expected</span>[% END %]
+                            [% IF ( missingissue.status2 ) %]<span class="status-arrived">Arrived</span>[% END %]
+                            [% IF ( missingissue.status3 ) %]<span class="status-late">Late</span>[% END %]
+                            [% IF ( missingissue.status4 ) %]<span class="status-missing">Missing</span>[% END %]
+                            [% IF ( missingissue.status7 ) %]<span class="status-claimed">Claimed</span>[% END %]
+                            [% IF ( missingissue.status8 ) %]<span class="status-stopped">Stopped</span>[% END %]
                         </td>
                         <td class="planneddate">
                         [% missingissue.planneddate %]
