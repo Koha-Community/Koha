@@ -73,7 +73,6 @@ if ($supplierid) {
 }
 
 my $branchloop = GetBranchesLoop();
-unshift @$branchloop, {value=> 'all',name=>''};
 
 my $preview=0;
 if($op && $op eq 'preview'){
