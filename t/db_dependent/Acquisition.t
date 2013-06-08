@@ -8,7 +8,7 @@ use POSIX qw(strftime);
 
 use C4::Bookseller qw( GetBookSellerFromId );
 
-use Test::More tests => 44;
+use Test::More tests => 59;
 
 BEGIN {
     use_ok('C4::Acquisition');
@@ -145,5 +145,73 @@ my $allorders = SearchOrders({
     booksellerid => $booksellerid,
 });
 is(scalar(@$allorders), 3, 'retrieved all 3 orders even after after receiving on one (bug 10723)');
+
+my $invoiceid = AddInvoice(invoicenumber => 'invoice', booksellerid => 1, unknown => "unknown");
+
+my ($datereceived, $new_ordernumber) = ModReceiveOrder(
+    $biblionumber2,
+    $ordernumber2,
+    2,
+    undef,
+    12,
+    12,
+    $invoiceid,
+    42,
+    );
+my $order2 = GetOrder( $ordernumber2 );
+is($order2->{'quantityreceived'}, 0, 'Splitting up order did not receive any on original order');
+is($order2->{'quantity'}, 40, '40 items on original order');
+is($order2->{'budget_id'}, $budgetid, 'Budget on original order is unchanged');
+
+$neworder = GetOrder( $new_ordernumber );
+is($neworder->{'quantity'}, 2, '2 items on new order');
+is($neworder->{'quantityreceived'}, 2, 'Splitting up order received items on new order');
+is($neworder->{'budget_id'}, $budgetid, 'Budget on new order is unchanged');
+
+my $budgetid2 = C4::Budgets::AddBudget(
+    {
+        budget_code => "budget_code_test_modrecv",
+        budget_name => "budget_name_test_modrecv",
+    }
+);
+
+($datereceived, $new_ordernumber) = ModReceiveOrder(
+    $biblionumber2,
+    $ordernumber3,
+    2,
+    undef,
+    12,
+    12,
+    $invoiceid,
+    42,
+    $budgetid2
+    );
+
+my $order3 = GetOrder( $ordernumber3 );
+is($order3->{'quantityreceived'}, 0, 'Splitting up order did not receive any on original order');
+is($order3->{'quantity'}, 2, '2 items on original order');
+is($order3->{'budget_id'}, $budgetid, 'Budget on original order is unchanged');
+
+$neworder = GetOrder( $new_ordernumber );
+is($neworder->{'quantity'}, 2, '2 items on new order');
+is($neworder->{'quantityreceived'}, 2, 'Splitting up order received items on new order');
+is($neworder->{'budget_id'}, $budgetid2, 'Budget on new order is changed');
+
+($datereceived, $new_ordernumber) = ModReceiveOrder(
+    $biblionumber2,
+    $ordernumber3,
+    2,
+    undef,
+    12,
+    12,
+    $invoiceid,
+    42,
+    $budgetid2
+    );
+
+$order3 = GetOrder( $ordernumber3 );
+is($order3->{'quantityreceived'}, 2, 'Order not split up');
+is($order3->{'quantity'}, 2, '2 items on order');
+is($order3->{'budget_id'}, $budgetid2, 'Budget has changed');
 
 $dbh->rollback;

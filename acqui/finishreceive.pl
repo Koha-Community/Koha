@@ -54,6 +54,7 @@ my $cnt              = 0;
 my $ecost            = $input->param('ecost');
 my $rrp              = $input->param('rrp');
 my $note             = $input->param("note");
+my $bookfund         = $input->param("bookfund");
 my $order            = GetOrder($ordernumber);
 
 #need old recievedate if we update the order, parcel.pl only shows the right parcel this way FIXME
@@ -93,7 +94,7 @@ if ($quantityrec > $origquantityrec ) {
             $order->{ecost},
             $invoiceid,
             $order->{rrp},
-            undef,
+            $bookfund,
             $datereceived,
             \@received_items,
         );

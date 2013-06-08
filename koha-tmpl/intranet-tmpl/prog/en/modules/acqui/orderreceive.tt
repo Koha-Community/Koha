@@ -265,7 +265,19 @@
     <legend>Accounting details</legend>
        <ol>
        <li><label for="datereceived">Date received: </label><span> [% datereceived %] </span></li>
-       <li><label for="bookfund">Budget: </label><span> [% bookfund %] </span></li>
+       <li><label for="bookfund">Fund: </label><select id="bookfund" name="bookfund">
+            <option value="">Keep current ([% bookfund %])</option>
+            [% FOREACH period IN budget_loop %]
+                <optgroup label="[% period.description %]">
+                [% FOREACH fund IN period.funds %]
+                    [% IF ( fund.b_sel ) %]
+                        <option value="[% fund.b_id %]" selected="selected">[% fund.b_txt %]</option>
+                    [% ELSE %]
+                        <option value="[% fund.b_id %]">[% fund.b_txt %]</option>
+                    [% END %]
+                [% END %]
+            [% END %]
+       </select> (Current: [% bookfund %])</li>
        <li><label for="creator">Created by: </label><span> [% IF ( memberfirstname and membersurname ) %][% IF ( memberfirstname ) %][% memberfirstname %][% END %] [% membersurname %][% ELSE %]No name[% END %]</span></li>
        <li><label for="quantity_to_receive">Quantity to receive: </label><span class="label">
            [% IF ( edit and not subscriptionid) %]

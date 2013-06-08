@@ -1268,6 +1268,7 @@ sub ModReceiveOrder {
         $sth->finish;
 
         delete $order->{'ordernumber'};
+        $order->{'budget_id'} = ( $budget_id || $order->{'budget_id'} );
         $order->{'quantity'} = $quantrec;
         $order->{'quantityreceived'} = $quantrec;
         $order->{'datereceived'} = $datereceived;
@@ -1287,9 +1288,9 @@ sub ModReceiveOrder {
     } else {
         $sth=$dbh->prepare("update aqorders
                             set quantityreceived=?,datereceived=?,invoiceid=?,
-                                unitprice=?,rrp=?,ecost=?
+                                unitprice=?,rrp=?,ecost=?,budget_id=?
                             where biblionumber=? and ordernumber=?");
-        $sth->execute($quantrec,$datereceived,$invoiceid,$cost,$rrp,$ecost,$biblionumber,$ordernumber);
+        $sth->execute($quantrec,$datereceived,$invoiceid,$cost,$rrp,$ecost,$budget_id,$biblionumber,$ordernumber);
         $sth->finish;
     }
     return ($datereceived, $new_ordernumber);

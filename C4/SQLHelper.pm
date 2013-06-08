@@ -406,7 +406,7 @@ sub _filter_hash{
 		## supposed to be a hash of simple values, hashes of arrays could be implemented
 		$filter_input->{$field}=format_date_in_iso($filter_input->{$field})
           if $columns->{$field}{Type}=~/date/ &&
-             $filter_input->{$field} !~C4::Dates->regexp("iso");
+             ($filter_input->{$field} && $filter_input->{$field} !~C4::Dates->regexp("iso"));
 		my ($tmpkeys, $localvalues)=_Process_Operands($filter_input->{$field},"$tablename.$field",$searchtype,$columns);
 		if (@$tmpkeys){
 			push @values, @$localvalues;

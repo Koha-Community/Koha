@@ -69,7 +69,7 @@ use C4::Auth;
 use C4::Output;
 use C4::Dates qw/format_date/;
 use C4::Bookseller qw/ GetBookSellerFromId /;
-use C4::Budgets qw/ GetBudget /;
+use C4::Budgets qw/ GetBudget GetBudgetHierarchy CanUserUseBudget GetBudgetPeriods /;
 use C4::Members;
 use C4::Branch;    # GetBranches
 use C4::Items;
@@ -95,7 +95,7 @@ $results = SearchOrders({
     ordernumber => $ordernumber
 }) if $ordernumber;
 
-my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+my ( $template, $loggedinuser, $cookie, $userflags ) = get_template_and_user(
     {
         template_name   => "acqui/orderreceive.tmpl",
         query           => $input,
@@ -227,6 +227,37 @@ $template->param(
     surnamesuggestedby    => $suggestion->{surnamesuggestedby},
     firstnamesuggestedby  => $suggestion->{firstnamesuggestedby},
 );
+
+my $borrower = GetMember( 'borrowernumber' => $loggedinuser );
+my @budget_loop;
+my $periods = GetBudgetPeriods( { 'budget_period_active' => 1 } );
+foreach my $period (@$periods) {
+    my $budget_hierarchy = GetBudgetHierarchy( $period->{'budget_period_id'} );
+    my @funds;
+    foreach my $r ( @{$budget_hierarchy} ) {
+        next unless ( CanUserUseBudget( $borrower, $r, $userflags ) );
+        if ( !defined $r->{budget_amount} || $r->{budget_amount} == 0 ) {
+            next;
+        }
+        push @funds,
+          {
+            b_id  => $r->{budget_id},
+            b_txt => $r->{budget_name},
+            b_sel => ( $r->{budget_id} == $order->{budget_id} ) ? 1 : 0,
+          };
+    }
+
+    @funds = sort { uc( $a->{b_txt} ) cmp uc( $b->{b_txt} ) } @funds;
+
+    push @budget_loop,
+      {
+        'id'          => $period->{'budget_period_id'},
+        'description' => $period->{'budget_period_description'},
+        'funds'       => \@funds
+      };
+}
+
+$template->{'VARS'}->{'budget_loop'} = \@budget_loop;
 
 # regardless of the content of $unitprice e.g 0 or '' or any string will return in these cases 0.00
 # and the 'IF' in the .tt will show 0.00 and not 'ecost' (see BZ 7129)
