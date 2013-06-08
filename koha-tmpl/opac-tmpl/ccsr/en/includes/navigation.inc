@@ -1,5 +1,9 @@
+<div id="region-opacnav">
+[% OpacNav %]
+</div>
 [% IF IsPatronPage %]
 [% INCLUDE usermenu.inc %]
 [% END %]
-[% OpacNav %]
+<div id="region-opacnavbottom">
 [% OpacNavBottom %]
+</div>

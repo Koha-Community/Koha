@@ -37,8 +37,8 @@
     <div id="daily-quote" class="container"><h1>Quote of the Day</h1><div><span id="daily-quote-text">[% daily_quote.text %]</span><span id="daily-quote-sep"> ~ </span><span id="daily-quote-source">[% daily_quote.source %]</span></div></div>
 [% END %]
 
-	[% IF ( OpacMainUserBlock ) %]<div id="opacmainuserblock" class="container">[% OpacMainUserBlock %]</div>[% END %]
- [% IF ( OpacMainUserBlockMobile ) %]<div id="opacmainuserblockmobile" class="container">[% OpacMainUserBlockMobile %]</div>[% END %]
+<div id="opacmainuserblock" class="container">[% OpacMainUserBlock %]</div>
+<div id="opacmainuserblockmobile" class="container">[% OpacMainUserBlockMobile %]</div>
 
 </div>
 		
@@ -69,7 +69,7 @@
     [% END %]
     [% END %]
     [% END %]
-    [% IF ( OpacNavRight ) %]<div id="opacrightsidebar" class="container">[% OpacNavRight %]</div>[% END %]
+    <div id="opacrightsidebar" class="container">[% OpacNavRight %]</div>
     </div>
     [% END %]
 </div>

@@ -14,9 +14,9 @@
    	</ul>	
   [% END %]
 </div>
-  [% IF ( opacheader ) %]
-	[% opacheader %]
-  [% END %]
+<div id="region-opacheader">
+    [% opacheader %]
+</div>
 <div id="opac-main-search" class="yui-g">
    [% IF ( opacsmallimage ) %]
    <h1 id="libraryname" style="background-image: url('[% opacsmallimage %]');">
@@ -202,11 +202,9 @@
     You did not specify any search criteria.
     [% END %]
 </p>
-[% IF ( OPACNoResultsFound ) %]
 <div id="noresultsfound">
 [% OPACNoResultsFound %]
 </div>
-[% END %]
 
 </div>
 [% END %]</p>[% END %]</div>

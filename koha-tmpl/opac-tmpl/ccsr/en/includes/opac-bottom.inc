@@ -1,8 +1,6 @@
-[% IF ( opaccredits ) %]
-    <div class="ft">
-        [% opaccredits %]
-    </div>
-[% END %]
+<div class="ft">
+    [% opaccredits %]
+</div>
 </div>
 
 <div class="clear"></div>
@@ -82,8 +80,10 @@
 
 
 <script type="text/javascript" src="/opac-tmpl/lib/jquery/plugins/jquery.jqtransform_select.js"></script>
+<script id="region-opacuserjs" type="text/javascript">
+    [% opacuserjs %]
+</script>
 <script type="text/javascript">
-[% IF ( opacuserjs ) %][% opacuserjs %][% END %]
 $(function() {
     //find all form with class jqtransform and apply the plugin
     $("form#searchform").jqTransform();
