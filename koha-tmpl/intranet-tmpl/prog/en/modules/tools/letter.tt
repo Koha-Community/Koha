@@ -15,14 +15,16 @@ $(document).ready(function() {
         ],
         "bPaginate": false
     }));
-    $('#branch').change(function() {
+    [% IF no_op_set %]
+      $('#branch').change(function() {
             $('#op').val("");
             $('#selectlibrary').submit();
-    });
-    $('#newnotice').click(function() {
+      });
+      $('#newnotice').click(function() {
             $('#op').val("add_form");
             return true;
-    });
+      });
+    [% END %]
 }); 
 [% IF ( add_form ) %]
 	
