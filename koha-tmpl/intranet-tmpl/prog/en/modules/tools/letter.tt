@@ -11,6 +11,7 @@ $(document).ready(function() {
         headers: { 4: {sorter:false},5: { sorter: false },6: { sorter: false }}
 	}); 
 
+    [% IF no_op_set %]
     $('#branch').change(function() {
             $('#op').val("");
             $('#selectlibrary').submit();
@@ -19,6 +20,7 @@ $(document).ready(function() {
             $('#op').val("add_form");
             return true;
     });
+    [% END %]
 }); 
 [% IF ( add_form ) %]
 	
