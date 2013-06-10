@@ -5,28 +5,28 @@
 # Larger modifications by Jonathan Druart and Marcel de Rooy
 
 use Modern::Perl;
-use Test::More tests => 71;
+use Test::More tests => 96;
 use MARC::Record;
 
 use C4::Biblio qw( AddBiblio DelBiblio );
 use C4::Context;
+use C4::Members qw( AddMember );
 
 
 my $dbh = C4::Context->dbh;
 $dbh->{RaiseError} = 1;
 $dbh->{AutoCommit} = 0;
 
-# Getting some borrowers from database.
-my $query = q{SELECT borrowernumber FROM borrowers LIMIT 10};
-my $borr_ref=$dbh->selectall_arrayref($query);
-if(@$borr_ref==0) { #no borrowers? should not occur of course
-    $borr_ref->[0][0]=undef;
-        #but even then, we can run this robust test :)
-}
-my @borrowers;
-foreach(1..10) {
-    my $t= $_> @$borr_ref ? int(rand()*@$borr_ref): $_-1; #repeat if not enough
-    push @borrowers, $borr_ref->[$t][0];
+# Create some borrowers
+my @borrowernumbers;
+for my $i ( 1 .. 10 ) {
+    my $borrowernumber = AddMember(
+        firstname =>  'my firstname',
+        surname => 'my surname ' . $i,
+        categorycode => 'S',
+        branchcode => 'CPL',
+    );
+    push @borrowernumbers, $borrowernumber;
 }
 
 # Creating some biblios
@@ -50,7 +50,7 @@ use_ok('C4::VirtualShelves');
 
 # creating shelves (could be <10 when names are not unique)
 my @shelves;
-for my $i(0..9){
+for my $i (0..9){
     my $name= randomname();
     my $catg= int(rand(2))+1;
     my $ShelfNumber= AddShelf(
@@ -58,26 +58,26 @@ for my $i(0..9){
             shelfname => $name,
             category  => $catg,
         },
-        $borrowers[$i]);
+        $borrowernumbers[$i]);
 
     if($ShelfNumber>-1) {
         ok($ShelfNumber > -1, "created shelf");   # Shelf creation successful;
     }
     else {
         my $t= C4::VirtualShelves::_CheckShelfName(
-            $name, $catg, $borrowers[$i], 0);
-        ok($t==0, "Name clash expected on shelf creation");
+            $name, $catg, $borrowernumbers[$i], 0);
+        is($t, 0, "Name clash expected on shelf creation");
     }
     push @shelves, {
         number => $ShelfNumber,
         name   => $name,
         catg   => $catg,
-        owner  => $borrowers[$i],
+        owner  => $borrowernumbers[$i],
     }; #also push the errors
 }
 
 # try to create shelves with duplicate names
-for my $i(0..9){
+for my $i (0..9){
     if($shelves[$i]->{number}<0) {
         ok(1, 'skip duplicate test for earlier name clash');
         next;
@@ -89,8 +89,8 @@ for my $i(0..9){
         my $badNumShelf= AddShelf( {
             shelfname=> $shelves[$i]->{name},
             category => 2
-        }, $borrowers[$i]);
-        ok(-1==$badNumShelf, 'do not create public lists with duplicate names');
+        }, $borrowernumbers[$i]);
+        is($badNumShelf, -1, 'do not create public lists with duplicate names');
             #AddShelf returns -1 if name already exist.
         DelShelf($badNumShelf) if $badNumShelf>-1; #delete if went wrong..
     }
@@ -101,7 +101,7 @@ for my $i(0..9){
                 category => 1,
             },
             $shlf[2]): -1;
-        ok(-1==$badNumShelf, 'do not create private lists with duplicate name for same user');
+        is($badNumShelf, -1, 'do not create private lists with duplicate name for same user');
         DelShelf($badNumShelf) if $badNumShelf>-1; #delete if went wrong..
     }
 }
@@ -112,7 +112,7 @@ for my $i(0..9){
 # usage : $biblist = GetShelfContents($shelfnumber);
 
 my %used = ();
-for my $i(0..9){
+for my $i (0..9){
     my $bib = $biblionumbers[int(rand(9))];
     my $shelfnumber = $shelves[int(rand(9))]->{number};
     if($shelfnumber<0) {
@@ -127,7 +127,7 @@ for my $i(0..9){
     #The different permissions could be tested too.
 
     my ($biblistBefore,$countbefore) = GetShelfContents($shelfnumber);
-    my $status = AddToShelf($bib,$shelfnumber,$borrowers[$i]);
+    my $status = AddToShelf($bib,$shelfnumber,$borrowernumbers[$i]);
     my ($biblistAfter,$countafter) = GetShelfContents($shelfnumber);
 
     if ($should_fail) {
@@ -137,9 +137,9 @@ for my $i(0..9){
     }
 
     if (defined $status) {
-        ok($countbefore == $countafter - 1, 'added bib to list');  # the bib has been successfuly added.
+        is($countbefore, $countafter - 1, 'added bib to list');  # the bib has been successfuly added.
     } else {
-        ok($countbefore == $countafter, 'did not add duplicate bib to list');
+        is($countbefore, $countafter, 'did not add duplicate bib to list');
     }
 
     $used{$key}++;
@@ -149,7 +149,7 @@ for my $i(0..9){
 # usage : ModShelf($shelfnumber, $shelfname, $owner, $category )
 # usage : (shelfnumber,shelfname,owner,category) = GetShelf($shelfnumber);
 
-for my $i(0..9){
+for my $i (0..9){
     my $rand = int(rand(9));
     my $numA = $shelves[$rand]->{number};
     if($numA<0) {
@@ -168,13 +168,88 @@ for my $i(0..9){
             $shelves[$rand]->{owner}, $numA)) {
         ModShelf($numA,$shelf);
         my ($numB,$nameB,$ownerB,$categoryB) = GetShelf($numA);
-        ok($numA == $numB, 'modified shelf');
-        ok($shelf->{shelfname} eq $nameB,     '... and name change took');
-        ok($shelf->{category}  eq $categoryB, '... and category change took');
+        is($numA, $numB, 'modified shelf');
+        is($shelf->{shelfname}, $nameB,     '... and name change took');
+        is($shelf->{category}, $categoryB, '... and category change took');
     }
     else {
         ok(1, "No ModShelf for $newname") for 1..3;
     }
+}
+
+#----------------------- TEST AddShare ----------------------------------------#
+
+#first count the number of shares in the table; keep in mind that AddShare may
+#delete some expired records while housekeeping
+my $sql_sharecount="select count(*) from virtualshelfshares where DATEDIFF(sharedate, NOW())>0";
+my $cnt1=$dbh->selectrow_array($sql_sharecount);
+
+#try to add a share without shelfnumber: should fail
+AddShare(0, 'abcdefghij');
+my $cnt2=$dbh->selectrow_array($sql_sharecount);
+is($cnt1,$cnt2, "Did not add an invalid share record");
+
+#add another share: should be okay
+#AddShare assumes that you tested if category==private (so we could actually
+#be doing something illegal here :)
+my $n=$shelves[0]->{number};
+if($n<0) {
+    ok(1, 'Skip AddShare for shelf -1');
+}
+else {
+    AddShare($n, 'abcdefghij');
+    my $cnt3=$dbh->selectrow_array($sql_sharecount);
+    is(1+$cnt2, $cnt3, "Added one new share record with invitekey");
+}
+
+#----------------------- TEST AcceptShare -------------------------------------#
+
+# test accepting a wrong key
+my $testkey= 'keyisgone9';
+my $acctest="delete from virtualshelfshares where invitekey=?";
+$dbh->do($acctest,undef,($testkey)); #just be sure it does not exist
+$acctest="select shelfnumber from virtualshelves";
+my ($accshelf)= $dbh->selectrow_array($acctest);
+is(AcceptShare($accshelf,$testkey,$borrowernumbers[0]),undef,'Did not accept invalid key');
+
+# test accepting a good key
+if( AddShare($accshelf,$testkey) && $borrowernumbers[0] ) {
+    is(AcceptShare($accshelf, $testkey, $borrowernumbers[0]),1,'Accepted share');
+}
+else { #cannot accept if addshared failed somehow
+    ok(1, 'Skipped second AcceptShare test');
+}
+
+#----------------------- TEST IsSharedList ------------------------------------#
+
+for my $i (0..9) {
+    my $sql="select count(*) from virtualshelfshares where shelfnumber=? and borrowernumber is not null";
+    my $sh=$shelves[$i]->{number};
+    my ($n)=$dbh->selectrow_array($sql,undef,($sh));
+    is(IsSharedList($sh),$n? 1: '', "Checked IsSharedList for shelf $sh");
+}
+
+#----------------TEST DelShelf & DelFromShelf functions------------------------#
+
+for my $i (0..9){
+    my $shelfnumber = $shelves[$i]->{number};
+    if($shelfnumber<0) {
+        ok(1, 'Skip DelShelf for shelf -1');
+        next;
+    }
+    my $status = DelShelf($shelfnumber);
+    is($status, 1, "deleted shelf $shelfnumber and its contents");
+}
+
+#----------------------- TEST RemoveShare -------------------------------------#
+
+my $remshr_test="select borrowernumber, shelfnumber from virtualshelfshares where borrowernumber is not null";
+my @remshr_shelf= $dbh->selectrow_array($remshr_test);
+if(@remshr_shelf) {
+    is(RemoveShare(@remshr_shelf),1,'Removed a shelf share');
+}
+else {
+    ok(1,'Skipped RemoveShare test');
 }
 
 #----------------------- SOME SUBS --------------------------------------------#
