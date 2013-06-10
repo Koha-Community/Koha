@@ -391,8 +391,8 @@ sub create_input {
                     maxlength=\"".$subfield_data{maxlength}."\"".
                     ($is_readonly ? "readonly=\"readonly\"" : "").
                     "\/>
-                    <span class=\"subfield_controls\"><a href=\"#\" class=\"buttonDot\"
-                       onclick=\"openAuth(this.parentNode.parentNode.getElementsByTagName('input')[1].id,'".$tagslib->{$tag}->{$subfield}->{authtypecode}."','biblio'); return false;\" tabindex=\"1\" title=\"Tag Editor\"><img src=\"/intranet-tmpl/prog/img/edit-tag.png\" alt=\"Tag Editor\" /></a></span>
+                    <span class=\"subfield_controls\"><a href=\"#\" class=\"buttonDot tag_editor\"
+                       onclick=\"openAuth(this.parentNode.parentNode.getElementsByTagName('input')[1].id,'".$tagslib->{$tag}->{$subfield}->{authtypecode}."','biblio'); return false;\" tabindex=\"1\">Tag editor</a></span>
             ";
     # it's a plugin field
     }
@@ -421,7 +421,7 @@ sub create_input {
                             size=\"67\"
                             maxlength=\"".$subfield_data{maxlength}."\"
                             onblur=\"Blur$function_name($index_tag); \" \/>
-                            <span class=\"subfield_controls\"><a href=\"#\" class=\"buttonDot\" onclick=\"Clic$function_name('$subfield_data{id}'); return false;\" tabindex=\"1\" title=\"Tag Editor\"><img src=\"/intranet-tmpl/prog/img/edit-tag.png\" alt=\"Tag Editor\" /></a></span>
+                            <span class=\"subfield_controls\"><a href=\"#\" class=\"buttonDot tag_editor\" onclick=\"Clic$function_name('$subfield_data{id}'); return false;\" tabindex=\"1\">Tag editor</a></span>
                     $javascript";
         } else {
             warn "Plugin Failed: $plugin";
