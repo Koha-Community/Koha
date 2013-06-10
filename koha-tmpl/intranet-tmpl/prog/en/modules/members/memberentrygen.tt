@@ -988,18 +988,13 @@
         [% END %]
         [% UNLESS nobranchcode %]
     <li>
-      [% IF ( mandatorybranchcode ) %]
-        <label for="branchcode" class="required">
-      [% ELSE %]
-        <label for="branchcode">
-      [% END %]
-      Library: </label>
+      <label for="branchcode" class="required">Library:</label>
       [% CGIbranch %]
-	  [% IF ( mandatorybranchcode ) %]<span class="required">Required</span>[% END %]
+      <span class="required">Required</span>
     </li>
         [% END %]
     <li>
-        <label for="categorycode">Category: </label>
+        <label for="categorycode" class="required">Category: </label>
         <select id="categorycode" name="categorycode" onchange="update_category_code(this);">
         [% FOREACH typeloo IN typeloop %]
             [% FOREACH categoryloo IN typeloo.categoryloop %]
@@ -1022,6 +1017,7 @@
             [% END %]
        [% END %]
        </select>
+       <span class="required">Required</span>
     </li>
         [% UNLESS nosort1 %]
     <li>
