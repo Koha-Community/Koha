@@ -25,7 +25,6 @@ $(document).ready(function(){
     <form action="/cgi-bin/koha/circ/circulation.pl" id="patronsearch" method="post">
     [% IF ( CircAutocompl ) %]
     <div class="autocomplete">
-            <div id="borrowerautocomplete" class="autocomplete">
                 <input autocomplete="off" id="findborrower" name="findborrower" size="40" class="focus" type="text" /> <input id="autocsubmit" type="submit" class="submit" value="Submit" />
                 <input name="branch" value="[% branch %]" type="hidden" />
                 <input name="printer" value="" type="hidden" />
@@ -33,7 +32,6 @@ $(document).ready(function(){
                 <input type="hidden" name="duedatespec" value="[% duedatespec %]" />
                 <input type="hidden" name="stickyduedate" value="[% stickyduedate %]" />
             [% END %]
-            </div>
         </div>
 	[% ELSE %]
             <input id="findborrower" name="findborrower" size="40" class="focus" type="text" />
