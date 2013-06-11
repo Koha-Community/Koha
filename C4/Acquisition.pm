@@ -568,11 +568,7 @@ sub GetBasketsByBookseller {
 
 =head3 GetBasketsInfosByBookseller
 
-    my $baskets = GetBasketsInfosByBookseller($supplierid, $allbaskets);
-
-The optional second parameter allbaskets is a boolean allowing you to
-select all baskets from the supplier; by default only active baskets (open or 
-closed but still something to receive) are returned.
+    my $baskets = GetBasketsInfosByBookseller($supplierid);
 
 Returns in a arrayref of hashref all about booksellers baskets, plus:
     total_biblios: Number of distinct biblios in basket
