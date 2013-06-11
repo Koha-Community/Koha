@@ -414,6 +414,9 @@ my @operands = map uri_unescape($_), $cgi->param('q');
 
 # limits are use to limit to results to a pre-defined category such as branch or language
 my @limits = map uri_unescape($_), $cgi->param('limit');
+my @nolimits = map uri_unescape($_), $cgi->param('nolimit');
+my %is_nolimit = map { $_ => 1 } @nolimits;
+@limits = grep { not $is_nolimit{$_} } @limits;
 
 if($params->{'multibranchlimit'}) {
     my $multibranch = '('.join( " or ", map { "branch: $_ " } @{ GetBranchesInCategory( $params->{'multibranchlimit'} ) } ).')';
@@ -715,6 +718,15 @@ $template->{'VARS'}->{'gotoPage'}   = 'detail.pl';
 my $gotopage = $cgi->param('gotoPage');
 $template->{'VARS'}->{'gotoPage'} = $gotopage
   if $gotopage =~ m/^(ISBD|labeledMARC|MARC|more)?detail.pl$/;
+
+my @input_values = map { $_->{input_value} } @limit_inputs;
+for my $facet ( @$facets ) {
+    for my $entry ( @{ $facet->{facets} } ) {
+        my $index = $entry->{type_link_value};
+        my $value = $entry->{facet_link_value};
+        $entry->{active} = grep { $_ eq qq{$index:$value} } @input_values;
+    }
+}
 
 $template->param(
             #classlist => $classlist,

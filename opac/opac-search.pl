@@ -403,6 +403,9 @@ if ($operands[0] && !$operands[1]) {
 
 # limits are use to limit to results to a pre-defined category such as branch or language
 my @limits = $cgi->param('limit');
+my @nolimits = $cgi->param('nolimit');
+my %is_nolimit = map { $_ => 1 } @nolimits;
+@limits = grep { not $is_nolimit{$_} } @limits;
 @limits = map { uri_unescape($_) } @limits;
 
 if($params->{'multibranchlimit'}) {
@@ -841,6 +844,16 @@ for (my $i=0;$i<@servers;$i++) {
     $template->param(           outer_sup_results_loop => \@sup_results_array);
 } #/end of the for loop
 #$template->param(FEDERATED_RESULTS => \@results_array);
+
+my @input_values = map { $_->{input_value} } @limit_inputs;
+for my $facet ( @$facets ) {
+    for my $entry ( @{ $facet->{facets} } ) {
+        my $index = $entry->{type_link_value};
+        my $value = $entry->{facet_link_value};
+        $entry->{active} = grep { $_ eq qq{$index:$value} } @input_values;
+    }
+}
+
 
 $template->param(
             #classlist => $classlist,
