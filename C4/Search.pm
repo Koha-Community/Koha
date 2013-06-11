@@ -71,7 +71,7 @@ This module provides searching functions for Koha's bibliographic databases
   &AddSearchHistory
   &GetDistinctValues
   &enabled_staff_search_views
-  &SimpleSearch
+  &PurgeSearchHistory
 );
 
 # make all your functions, whether exported or not;
@@ -2209,6 +2209,13 @@ sub GetSearchHistory{
     my $sth   = $dbh->prepare($query);
 	$sth->execute($borrowernumber, $session);
     return  $sth->fetchall_hashref({});
+}
+
+sub PurgeSearchHistory{
+    my ($pSearchhistory)=@_;
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare("DELETE FROM search_history WHERE time < DATE_SUB( NOW(), INTERVAL ? DAY )");
+    $sth->execute($pSearchhistory) or die $dbh->errstr;
 }
 
 =head2 z3950_search_args
