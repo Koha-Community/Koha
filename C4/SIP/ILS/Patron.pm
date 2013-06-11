@@ -340,9 +340,15 @@ sub excessive_fees {
     my $self = shift;
     return ($self->fee_amount and $self->fee_amount > $self->fee_limit);
 }
+
 sub excessive_fines {
     my $self = shift;
     return $self->excessive_fees;   # excessive_fines is the same thing as excessive_fees for Koha
+}
+
+sub holds_blocked_by_excessive_fees {
+    return ( $self->fee_amount
+          && $self->fee_amount > C4::Context->preference("maxoutstanding") );
 }
     
 sub library_name {

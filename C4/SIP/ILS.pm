@@ -254,6 +254,10 @@ sub add_hold {
 		return $trans;
 	}
 
+    if ( $patron->holds_blocked_by_excessive_fees() ) {
+        $trans->screen_msg("Excessive fees blocking placement of hold.");
+    }
+
    if ($item->fee and $fee_ack ne 'Y') {
 		$trans->screen_msg = "Fee required to place hold.";
 		return $trans;
