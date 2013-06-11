@@ -2418,6 +2418,23 @@ CREATE TABLE `message_transports` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
+-- Table structure for table `borrower_files`
+--
+
+DROP TABLE IF EXISTS `borrower_files`;
+CREATE TABLE IF NOT EXISTS `borrower_files` (
+  `file_id` int(11) NOT NULL AUTO_INCREMENT,
+  `borrowernumber` int(11) NOT NULL,
+  `file_name` varchar(255) NOT NULL,
+  `file_type` varchar(255) NOT NULL,
+  `file_description` varchar(255) DEFAULT NULL,
+  `file_content` longblob NOT NULL,
+  `date_uploaded` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`file_id`),
+  KEY `borrowernumber` (`borrowernumber`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
 -- Table structure for table `borrower_message_preferences`
 --
 
