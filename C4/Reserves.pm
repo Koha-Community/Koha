@@ -465,13 +465,17 @@ sub CanItemBeReserved{
     my $dbh             = C4::Context->dbh;
     my $allowedreserves = 0;
             
+    # we retrieve borrowers and items informations #
+    my $item = GetItem($itemnumber);
+
+    # If an item is damaged and we don't allow holds on damaged items, we can stop right here
+    return 0 if ( $item->{damaged} && !C4::Context->preference('AllowHoldsOnDamagedItems') );
+
+    my $borrower = C4::Members::GetMember('borrowernumber'=>$borrowernumber);     
+    
     my $controlbranch = C4::Context->preference('ReservesControlBranch');
     my $itype         = C4::Context->preference('item-level_itypes') ? "itype" : "itemtype";
 
-    # we retrieve borrowers and items informations #
-    my $item     = GetItem($itemnumber);
-    my $borrower = C4::Members::GetMember('borrowernumber'=>$borrowernumber);     
-    
     # we retrieve user rights on this itemtype and branchcode
     my $sth = $dbh->prepare("SELECT categorycode, itemtype, branchcode, reservesallowed 
                              FROM issuingrules 
@@ -869,7 +873,8 @@ sub CheckReserves {
            items.biblioitemnumber,
            itemtypes.notforloan,
            items.notforloan AS itemnotforloan,
-           items.itemnumber
+           items.itemnumber,
+           items.damaged
            FROM   items
            LEFT JOIN biblioitems ON items.biblioitemnumber = biblioitems.biblioitemnumber
            LEFT JOIN itemtypes   ON items.itype   = itemtypes.itemtype
@@ -881,7 +886,8 @@ sub CheckReserves {
            items.biblioitemnumber,
            itemtypes.notforloan,
            items.notforloan AS itemnotforloan,
-           items.itemnumber
+           items.itemnumber,
+           items.damaged
            FROM   items
            LEFT JOIN biblioitems ON items.biblioitemnumber = biblioitems.biblioitemnumber
            LEFT JOIN itemtypes   ON biblioitems.itemtype   = itemtypes.itemtype
@@ -897,13 +903,15 @@ sub CheckReserves {
         $sth->execute($barcode);
     }
     # note: we get the itemnumber because we might have started w/ just the barcode.  Now we know for sure we have it.
-    my ( $biblio, $bibitem, $notforloan_per_itemtype, $notforloan_per_item, $itemnumber ) = $sth->fetchrow_array;
+    my ( $biblio, $bibitem, $notforloan_per_itemtype, $notforloan_per_item, $itemnumber, $damaged ) = $sth->fetchrow_array;
 
-    return ( '' ) unless $itemnumber; # bail if we got nothing.
+    return if ( $damaged && !C4::Context->preference('AllowHoldsOnDamagedItems') );
+
+    return unless $itemnumber; # bail if we got nothing.
 
     # if item is not for loan it cannot be reserved either.....
     #    execpt where items.notforloan < 0 :  This indicates the item is holdable. 
-    return ( '' ) if  ( $notforloan_per_item > 0 ) or $notforloan_per_itemtype;
+    return if  ( $notforloan_per_item > 0 ) or $notforloan_per_itemtype;
 
     # Find this item in the reserves
     my @reserves = _Findgroupreserve( $bibitem, $biblio, $itemnumber, $lookahead_days);
