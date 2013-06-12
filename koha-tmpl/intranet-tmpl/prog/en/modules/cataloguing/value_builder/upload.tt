@@ -54,15 +54,21 @@
             [% END %]
         [% END %]
 
-        <h2>Please select the file to upload : </h2>
-        <form method="post" enctype="multipart/form-data" action="/cgi-bin/koha/cataloguing/plugin_launcher.pl">
-            [% filefield %]
-            <h3>Choose where to upload file</h3>
-            [% INCLUDE list_dirs dirs = dirs_tree %]
-            <input type="hidden" name="plugin_name" value="upload.pl" />
-            <input type="hidden" name="index" value="[% index %]" />
-            <input type="submit">
-        </form>
+        [% IF (error_upload_path_not_configured) %]
+          <h2>Configuration error</h2>
+          <p>Configuration variable 'uploadPath' is not configured.</p>
+          <p>Please configure it in your koha-conf.xml</p>
+        [% ELSE %]
+          <h2>Please select the file to upload : </h2>
+          <form method="post" enctype="multipart/form-data" action="/cgi-bin/koha/cataloguing/plugin_launcher.pl">
+              [% filefield %]
+              <h3>Choose where to upload file</h3>
+              [% INCLUDE list_dirs dirs = dirs_tree %]
+              <input type="hidden" name="plugin_name" value="upload.pl" />
+              <input type="hidden" name="index" value="[% index %]" />
+              <input type="submit">
+          </form>
+        [% END %]
     [% END %]
 
 [% END %]

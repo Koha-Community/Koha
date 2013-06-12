@@ -108,22 +108,26 @@ sub plugin {
             }
         }
     } else {
-        my $filefield = CGI::filefield(
-            -name => 'uploaded_file',
-            -size => 50,
-        );
+        my $upload_path = C4::Context->config('uploadPath');
+        if ($upload_path) {
+            my $filefield = CGI::filefield(
+                -name => 'uploaded_file',
+                -size => 50,
+            );
 
-        my $upload_path = C4::Context->preference('uploadPath');
-        my $dirs_tree = [ {
-            name => '/',
-            value => '/',
-            dirs => finddirs($upload_path)
-        } ];
+            my $dirs_tree = [ {
+                name => '/',
+                value => '/',
+                dirs => finddirs($upload_path)
+            } ];
 
-        $template->param(
-            dirs_tree => $dirs_tree,
-            filefield => $filefield
-        );
+            $template->param(
+                dirs_tree => $dirs_tree,
+                filefield => $filefield
+            );
+        } else {
+            $template->param( error_upload_path_not_configured => 1 );
+        }
     }
 
     $template->param(
@@ -137,7 +141,7 @@ sub plugin {
 # Build a hierarchy of directories
 sub finddirs {
     my $base = shift;
-    my $upload_path = C4::Context->preference('uploadPath');
+    my $upload_path = C4::Context->config('uploadPath');
     my $found = 0;
     my @dirs;
     my @files = glob("$base/*");

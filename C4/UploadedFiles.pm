@@ -61,7 +61,7 @@ use C4::Context;
 sub _get_file_path {
     my ($id, $dirname, $filename) = @_;
 
-    my $uploadPath = C4::Context->preference('uploadPath');
+    my $uploadPath = C4::Context->config('uploadPath');
     my $filepath = "$uploadPath/$dirname/${id}_$filename";
     $filepath =~ s|/+|/|g;
 
@@ -81,7 +81,7 @@ Hash keys are:
 
 =item * filename: name of the file
 
-=item * dir: directory where file is stored (relative to syspref 'uploadPath')
+=item * dir: directory where file is stored (relative to config variable 'uploadPath')
 
 =back
 
@@ -123,7 +123,7 @@ Parameters:
 
 =item * $filename: name of the file
 
-=item * $dir: directory where to store the file (path relative to syspref 'uploadPath'
+=item * $dir: directory where to store the file (path relative to config variable 'uploadPath'
 
 =item * $io_handle: valid IO::Handle object, can be retrieved with
 $cgi->upload('uploaded_file')->handle;

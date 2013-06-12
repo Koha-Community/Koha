@@ -10729,11 +10729,6 @@ if ( CheckVersion($DBversion) ) {
 $DBversion = "XXX";
 if ( CheckVersion($DBversion) ) {
     $dbh->do("
-        INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type)
-        VALUES('uploadPath','','Sets the upload path for the upload.pl plugin','','');
-    ");
-
-    $dbh->do("
         CREATE TABLE uploaded_files (
             id CHAR(40) NOT NULL PRIMARY KEY,
             filename TEXT NOT NULL,
@@ -10742,8 +10737,8 @@ if ( CheckVersion($DBversion) ) {
     ");
 
     print "Upgrade to $DBversion done (Bug 6874: New cataloging plugin upload.pl)\n";
-    print "This plugin comes with a new syspref (uploadPath) and a new table (uploaded_files)\n";
-    print "To use it, set 'uploadPath' and 'OPACBaseURL' system preferences and link this plugin to a subfield (856\$u for instance)\n";
+    print "This plugin comes with a new config variable (uploadPath) and a new table (uploaded_files)\n";
+    print "To use it, set 'uploadPath' config variable and 'OPACBaseURL' system preference and link this plugin to a subfield (856\$u for instance)\n";
     SetVersion($DBversion);
 }
 
