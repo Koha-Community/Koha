@@ -739,6 +739,7 @@ if ($frameworkcode eq 'FA'){
     $userflags = 'fast_cataloging';
 }
 
+my $changed_framework = $input->param('changed_framework');
 $frameworkcode = &GetFrameworkCode($biblionumber)
   if ( $biblionumber and not($frameworkcode) and $op ne 'addbiblio' );
 
@@ -963,7 +964,10 @@ elsif ( $op eq "delete" ) {
         $biblionumber = "";
     }
 
-    if ( $record ne -1 ) {
+    if($changed_framework eq "changed"){
+        $record = TransformHtmlToMarc( $input );
+    }
+    elsif( $record ne -1 ) {
 #FIXME: it's kind of silly to go from MARC::Record to MARC::File::XML and then back again just to fix the encoding
         eval {
             my $uxml = $record->as_xml;
