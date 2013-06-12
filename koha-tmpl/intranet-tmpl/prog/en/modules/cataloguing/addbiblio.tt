@@ -280,7 +280,9 @@ function GetZ3950Terms(){
 
 function Changefwk(FwkList) {
     var f = document.f;
-    f.op.value = "";
+    f.op.value = "[% op %]";
+    f.biblionumber.value = "[% biblionumberdata %]";
+    f.changed_framework.value = "changed";
     f.submit();
 }
 
@@ -420,6 +422,7 @@ function Changefwk(FwkList) {
         <input type="hidden" name="frameworkcode" value="[% frameworkcode %]" />
         <input type="hidden" name="biblionumber" value="[% biblionumber %]" />
         <input type="hidden" name="breedingid" value="[% breedingid %]" />
+        <input type="hidden" name="changed_framework" value="" />
 
 <div id="addbibliotabs" class="toptabs numbered">
     <ul>
