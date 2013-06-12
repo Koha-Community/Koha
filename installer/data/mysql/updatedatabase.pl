@@ -8630,6 +8630,36 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.17.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do("CREATE TABLE aqcontacts (
+        id int(11) NOT NULL auto_increment,
+        name varchar(100) default NULL,
+        position varchar(100) default NULL,
+        phone varchar(100) default NULL,
+        altphone varchar(100) default NULL,
+        fax varchar(100) default NULL,
+        email varchar(100) default NULL,
+        notes mediumtext,
+        rank SMALLINT default 0,
+        booksellerid int(11) not NULL,
+        PRIMARY KEY  (id),
+        CONSTRAINT booksellerid_fk2 FOREIGN KEY (booksellerid)
+            REFERENCES aqbooksellers (id) ON DELETE CASCADE ON UPDATE CASCADE
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;");
+    $dbh->do("INSERT INTO aqcontacts (name, position, phone, altphone, fax,
+            email, notes, booksellerid)
+        SELECT contact, contpos, contphone, contaltphone, contfax, contemail,
+            contnotes, id FROM aqbooksellers;");
+    $dbh->do("ALTER TABLE aqbooksellers DROP COLUMN contact,
+        DROP COLUMN contpos, DROP COLUMN contphone,
+        DROP COLUMN contaltphone, DROP COLUMN contfax,
+        DROP COLUMN contemail, DROP COLUMN contnotes;");
+    print "Upgrade to $DBversion done (Bug 10402: Move bookseller contacts to separate table)\n";
+    SetVersion($DBversion);
+}
+
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

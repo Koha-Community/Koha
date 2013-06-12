@@ -2864,15 +2864,8 @@ CREATE TABLE `aqbooksellers` ( -- information about the vendors listed in acquis
   `notes` mediumtext, -- order notes
   `bookselleremail` mediumtext, -- vendor email
   `booksellerurl` mediumtext, -- unused in Koha
-  `contact` varchar(100) default NULL, -- name of contact at vendor
   `postal` mediumtext, -- vendor postal address (all lines)
   `url` varchar(255) default NULL, -- vendor web address
-  `contpos` varchar(100) default NULL, -- contact person's position
-  `contphone` varchar(100) default NULL, -- contact's phone number
-  `contfax` varchar(100) default NULL,  -- contact's fax number
-  `contaltphone` varchar(100) default NULL, -- contact's alternate phone number
-  `contemail` varchar(100) default NULL, -- contact's email address
-  `contnotes` mediumtext, -- notes related to the contact
   `active` tinyint(4) default NULL, -- is this vendor active (1 for yes, 0 for no)
   `listprice` varchar(10) default NULL, -- currency code for list prices
   `invoiceprice` varchar(10) default NULL, -- currency code for invoice prices
@@ -2966,6 +2959,27 @@ CREATE TABLE `aqbudgets_planning` (
   PRIMARY KEY  (`plan_id`),
   CONSTRAINT `aqbudgets_planning_ifbk_1` FOREIGN KEY (`budget_id`) REFERENCES `aqbudgets` (`budget_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Table structure for table 'aqcontacts'
+--
+
+DROP TABLE IF EXISTS aqcontacts;
+CREATE TABLE aqcontacts (
+  id int(11) NOT NULL auto_increment, -- primary key and unique number assigned by Koha
+  name varchar(100) default NULL, -- name of contact at vendor
+  position varchar(100) default NULL, -- contact person's position
+  phone varchar(100) default NULL, -- contact's phone number
+  altphone varchar(100) default NULL, -- contact's alternate phone number
+  fax varchar(100) default NULL,  -- contact's fax number
+  email varchar(100) default NULL, -- contact's email address
+  notes mediumtext, -- notes related to the contact
+  rank SMALLINT default 0, -- display rank for the contact
+  booksellerid int(11) not NULL,
+  PRIMARY KEY  (id),
+  CONSTRAINT booksellerid_fk2 FOREIGN KEY (booksellerid)
+       REFERENCES aqbooksellers (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Table structure for table 'aqcontract'

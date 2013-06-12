@@ -260,12 +260,22 @@ sub ModBookseller {
         $data->{'id'}
     );
     $contacts ||= $data->{'contacts'};
+    my $contactquery = "DELETE FROM aqcontacts WHERE booksellerid = ?";
+    my @contactparams = ($data->{'id'});
     if ($contacts) {
-        $contacts->[0] = C4::Bookseller::Contact->new( $contacts->[0] )
-          unless ref $contacts->[0] eq 'C4::Bookseller::Contact';
-        $contacts->[0]->bookseller($data->{'id'});
-        $contacts->[0]->save();
+        foreach my $contact (@$contacts) {
+            $contact = C4::Bookseller::Contact->new( $contact )
+                unless ref $contacts->[0] eq 'C4::Bookseller::Contact';
+            $contact->bookseller($data->{'id'});
+            $contact->save();
+            push @contactparams, $contact->id if $contact->id;
+        }
+        if ($#contactparams > 0) {
+            $contactquery .= ' AND id NOT IN (' . ('?, ' x ($#contactparams - 1)) . '?);';
+        }
     }
+    $sth = $dbh->prepare($contactquery);
+    $sth->execute(@contactparams);
     return;
 }
 

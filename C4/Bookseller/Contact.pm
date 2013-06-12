@@ -63,10 +63,10 @@ Contact's e-mail address.
 
 Notes about contact.
 
-=item primary
+=item rank
 
-Flag to indicate whether a contact is "primary" or not. Initially unused since
-each bookseller can have only one contact.
+Ranking of the contact so that the contact can be given the correct
+priority in display.
 
 =item bookseller
 
@@ -81,7 +81,7 @@ use C4::Context;
 
 use base qw(Class::Accessor);
 
-__PACKAGE__->mk_accessors(qw(id name position phone altphone fax email notes primary bookseller));
+__PACKAGE__->mk_accessors(qw(id name position phone altphone fax email notes rank bookseller));
 
 =head1 METHODS
 
@@ -90,7 +90,8 @@ __PACKAGE__->mk_accessors(qw(id name position phone altphone fax email notes pri
     my @contacts = @{C4::Bookseller::Contact->get_from_bookseller($booksellerid)};
 
 Returns a reference to an array of C4::Bookseller::Contact objects for the
-specified bookseller.
+specified bookseller. This will always return at least one item, though that one
+item may be an empty contact.
 
 =cut
 
@@ -100,15 +101,15 @@ sub get_from_bookseller {
     return unless $bookseller;
 
     my @contacts;
-    my $query = "SELECT contact AS name, contpos AS position, contphone AS phone, contaltphone AS altphone, contfax AS fax, contemail AS email, contnotes AS notes, id AS bookseller FROM aqbooksellers WHERE id = ?";
-    # When we have our own table, we can use: my $query = "SELECT * FROM aqcontacts WHERE bookseller = ?";
+    my $query = "SELECT * FROM aqcontacts WHERE booksellerid = ?";
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare($query);
     $sth->execute($bookseller);
     while (my $rec = $sth->fetchrow_hashref()) {
-        $rec->{'primary'} = 1;
         push @contacts, $class->new($rec);
     }
+
+    push @contacts, $class->new() unless @contacts;
 
     return \@contacts;
 }
@@ -123,21 +124,21 @@ because there is no separate table from which contacts can be fetched.
 
 =cut
 
-#sub fetch {
-#    my ($class, $id) = @_;
-#
-#    my $rec = { };
-#    if ($id) {
-#        my $query = "SELECT * FROM aqcontacts WHERE id = ?";
-#        my $dbh = C4::Context->dbh;
-#        my $sth = $dbh->prepare($query);
-#        $sth->execute($id);
-#        $rec = $sth->fetchrow_hashref();
-#    }
-#    my $self = $class->SUPER::new($rec);
-#    bless $self, $class;
-#    return $self;
-#}
+sub fetch {
+    my ($class, $id) = @_;
+
+    my $rec = { };
+    if ($id) {
+        my $query = "SELECT * FROM aqcontacts WHERE id = ?";
+        my $dbh = C4::Context->dbh;
+        my $sth = $dbh->prepare($query);
+        $sth->execute($id);
+        $rec = $sth->fetchrow_hashref();
+    }
+    my $self = $class->new($rec);
+    bless $self, $class;
+    return $self;
+}
 
 =head2 save
 
@@ -151,21 +152,29 @@ sub save {
     my ($self) = @_;
 
     my $query;
-#    if ($self->id) {
-#        $query = 'UPDATE aqcontacts SET name = ?, position = ?, phone = ?, altphone = ?, fax = ?, email = ?, notes = ?, primary = ? WHERE id = ?;';
-#    } else {
-#        $query = 'INSERT INTO aqcontacts (name, position, phone, altphone, fax, email, notes, primary) VALUES (?, ?, ?, ?, ? ,? ,?, ?);';
-#    }
-    if ($self->bookseller) {
-        $query = 'UPDATE aqbooksellers SET contact = ?, contpos = ?, contphone = ?, contaltphone = ?, contfax = ?, contemail = ?, contnotes = ? WHERE id = ?;';
+    my @params = ($self->name, $self->position, $self->phone, $self->altphone, $self->fax, $self->email, $self->notes, $self->rank, $self->bookseller);
+    if ($self->id) {
+        $query = 'UPDATE aqcontacts SET name = ?, position = ?, phone = ?, altphone = ?, fax = ?, email = ?, notes = ?, rank = ?, booksellerid = ? WHERE id = ?;';
+        push @params, $self->id;
     } else {
-        return;
+        $query = 'INSERT INTO aqcontacts (name, position, phone, altphone, fax, email, notes, rank, booksellerid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);';
     }
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare($query);
-    $sth->execute($self->name, $self->position, $self->phone, $self->altphone, $self->fax, $self->email, $self->notes, $self->bookseller);
-    #$self->id = $dbh->last_insert_id(undef, undef, 'aqcontacts', undef);
-    return $self->bookseller;
+    $sth->execute(@params);
+    $self->id($dbh->{'mysql_insertid'}) unless $self->id;
+    return $self->id;
+}
+
+sub delete {
+    my ($self) = @_;
+
+    return unless $self->id;
+
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare("DELETE FROM aqcontacts WHERE id = ?;");
+    $sth->execute($self->id);
+    return;
 }
 
 =head1 AUTHOR
