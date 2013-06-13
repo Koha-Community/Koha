@@ -69,61 +69,72 @@
   <xsl:call-template name="tag_title">
     <xsl:with-param name="tag">454</xsl:with-param>
     <xsl:with-param name="label">Translation of</xsl:with-param>
+    <xsl:with-param name="spanclass">original_title</xsl:with-param>
   </xsl:call-template>
 
   <xsl:call-template name="tag_title">
     <xsl:with-param name="tag">461</xsl:with-param>
     <xsl:with-param name="label">Set Level</xsl:with-param>
+    <xsl:with-param name="spanclass">set_level</xsl:with-param>
   </xsl:call-template>
 
   <xsl:call-template name="tag_title">
     <xsl:with-param name="tag">464</xsl:with-param>
     <xsl:with-param name="label">Piece-Analytic Level</xsl:with-param>
+    <xsl:with-param name="spanclass">piece_analytic_level</xsl:with-param>
   </xsl:call-template>
 
   <xsl:call-template name="tag_7xx">
     <xsl:with-param name="tag">700</xsl:with-param>
     <xsl:with-param name="label">Main Author</xsl:with-param>
+    <xsl:with-param name="spanclass">main_author</xsl:with-param>
   </xsl:call-template>
 
   <xsl:call-template name="tag_7xx">
     <xsl:with-param name="tag">710</xsl:with-param>
     <xsl:with-param name="label">Corporate Author (Main)</xsl:with-param>
+    <xsl:with-param name="spanclass">corporate_main_author</xsl:with-param>
   </xsl:call-template>
 
   <xsl:call-template name="tag_7xx">
     <xsl:with-param name="tag">701</xsl:with-param>
     <xsl:with-param name="label">Coauthor</xsl:with-param>
+    <xsl:with-param name="spanclass">coauthor</xsl:with-param>
   </xsl:call-template>
 
   <xsl:call-template name="tag_7xx">
     <xsl:with-param name="tag">702</xsl:with-param>
     <xsl:with-param name="label">Secondary Author</xsl:with-param>
+    <xsl:with-param name="spanclass">secondary_author</xsl:with-param>
   </xsl:call-template>
 
   <xsl:call-template name="tag_7xx">
     <xsl:with-param name="tag">711</xsl:with-param>
     <xsl:with-param name="label">Corporate Author (Coauthor)</xsl:with-param>
+    <xsl:with-param name="spanclass">corporate_coauthor</xsl:with-param>
   </xsl:call-template>
 
   <xsl:call-template name="tag_7xx">
     <xsl:with-param name="tag">712</xsl:with-param>
     <xsl:with-param name="label">Corporate Author (Secondary)</xsl:with-param>
+    <xsl:with-param name="spanclass">corporate_secondary_author</xsl:with-param>
   </xsl:call-template>
 
   <xsl:call-template name="tag_title">
     <xsl:with-param name="tag">500</xsl:with-param>
     <xsl:with-param name="label">Uniform Title</xsl:with-param>
+    <xsl:with-param name="spanclass">uniform_title</xsl:with-param>
   </xsl:call-template>
 
   <xsl:call-template name="tag_title">
     <xsl:with-param name="tag">503</xsl:with-param>
     <xsl:with-param name="label">Uniform Conventional Heading</xsl:with-param>
+    <xsl:with-param name="spanclass">uniform_conventional_heading</xsl:with-param>
   </xsl:call-template>
 
   <xsl:if test="marc:datafield[@tag=101]">
-    <span class="results_summary">
-      <span class="label">Language:</span>
+    <span class="results_summary language">
+      <span class="label">Language: </span>
       <xsl:for-each select="marc:datafield[@tag=101]">
         <xsl:for-each select="marc:subfield">
           <xsl:choose>
@@ -152,7 +163,7 @@
   </xsl:if>
 
   <xsl:if test="marc:datafield[@tag=102]">
-	  <span class="results_summary">
+	  <span class="results_summary country">
       <span class="label">Country: </span>
       <xsl:for-each select="marc:datafield[@tag=102]">
         <xsl:for-each select="marc:subfield">
@@ -172,6 +183,7 @@
   <xsl:call-template name="tag_comma">
     <xsl:with-param name="tag">205</xsl:with-param>
     <xsl:with-param name="label">Edition Statement</xsl:with-param>
+    <xsl:with-param name="spanclass">edition</xsl:with-param>
   </xsl:call-template>
 
   <xsl:call-template name="tag_210" />
@@ -179,7 +191,7 @@
   <xsl:call-template name="tag_215" />
 
   <xsl:if test="marc:datafield[@tag=010]/marc:subfield[@code='a']">
-    <span class="results_summary"><span class="label">ISBN: </span>
+    <span class="results_summary isbn"><span class="label">ISBN: </span>
     <xsl:for-each select="marc:datafield[@tag=010]">
       <xsl:variable name="isbn" select="marc:subfield[@code='a']"/>
       <xsl:value-of select="marc:subfield[@code='a']"/>
@@ -196,7 +208,7 @@
   </xsl:if>
 
   <xsl:if test="marc:datafield[@tag=011]">
-    <span class="results_summary">
+    <span class="results_summary issn">
       <span class="label">ISSN: </span>
       <xsl:for-each select="marc:datafield[@tag=011]">
         <xsl:value-of select="marc:subfield[@code='a']"/>
@@ -215,10 +227,11 @@
   <xsl:call-template name="tag_title">
     <xsl:with-param name="tag">225</xsl:with-param>
     <xsl:with-param name="label">Series</xsl:with-param>
+    <xsl:with-param name="spanclass">series</xsl:with-param>
   </xsl:call-template>
 
   <xsl:if test="marc:datafield[@tag=676]">
-    <span class="results_summary">
+    <span class="results_summary dewey">
     <span class="label">Dewey: </span>
       <xsl:for-each select="marc:datafield[@tag=676]">
         <xsl:value-of select="marc:subfield[@code='a']"/>
@@ -238,7 +251,7 @@
   </xsl:if>
 
   <xsl:if test="marc:datafield[@tag=686]">
-    <span class="results_summary">
+    <span class="results_summary classification">
     <span class="label">Classification: </span>
       <xsl:for-each select="marc:datafield[@tag=686]">
         <xsl:value-of select="marc:subfield[@code='a']"/>
@@ -256,7 +269,7 @@
   </xsl:if>
 
   <xsl:if test="marc:datafield[@tag=327]">
-    <span class="results_summary">
+    <span class="results_summary contents">
       <span class="label">Contents note: </span>
       <xsl:for-each select="marc:datafield[@tag=327]">
         <xsl:call-template name="chopPunctuation">
@@ -273,7 +286,7 @@
   </xsl:if>
 
   <xsl:if test="marc:datafield[@tag=330]">
-    <span class="results_summary">
+    <span class="results_summary abstract">
       <span class="label">Abstract: </span>
       <xsl:for-each select="marc:datafield[@tag=330]">
         <xsl:value-of select="marc:subfield[@code='a']"/>
@@ -290,7 +303,7 @@
   </xsl:if>
 
   <xsl:if test="marc:datafield[@tag=317]">
-    <span class="results_summary">
+    <span class="results_summary provenance">
       <span class="label">Provenance note: </span>
       <xsl:for-each select="marc:datafield[@tag=317]">
           <xsl:value-of select="marc:subfield[@code='a']"/>
@@ -299,7 +312,7 @@
   </xsl:if>
 
   <xsl:if test="marc:datafield[@tag=320]">
-    <span class="results_summary">
+    <span class="results_summary bibliography">
       <span class="label">Bibliography: </span>
       <xsl:for-each select="marc:datafield[@tag=320]">
         <xsl:value-of select="marc:subfield[@code='a']"/>
@@ -309,7 +322,7 @@
   </xsl:if>
 
   <xsl:if test="marc:datafield[@tag=328]">
-    <span class="results_summary">
+    <span class="results_summary thesis">
       <span class="label">Thesis: </span>
       <xsl:for-each select="marc:datafield[@tag=328]">
         <xsl:value-of select="marc:subfield[@code='a']"/>
@@ -319,7 +332,7 @@
   </xsl:if>
 
   <xsl:if test="marc:datafield[@tag=333]">
-    <span class="results_summary">
+    <span class="results_summary audience">
       <span class="label">Audience: </span>
       <xsl:for-each select="marc:datafield[@tag=333]">
         <xsl:value-of select="marc:subfield[@code='a']"/>
@@ -329,7 +342,7 @@
   </xsl:if>
 
   <xsl:if test="marc:datafield[@tag=955]">
-    <span class="results_summary">
+    <span class="results_summary sudoc_serial_history">
       <span class="label">SUDOC serial history: </span>
       <xsl:for-each select="marc:datafield[@tag=955]">
         <xsl:value-of select="marc:subfield[@code='9']"/>:
@@ -390,7 +403,7 @@
   </xsl:call-template>
 
   <xsl:if test="marc:datafield[@tag=856]">
-    <span class="results_summary">
+    <span class="results_summary online_resources">
       <span class="label">Online Resources:</span>
       <xsl:for-each select="marc:datafield[@tag=856]">
         <a>

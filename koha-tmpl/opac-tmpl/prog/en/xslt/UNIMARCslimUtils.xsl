@@ -83,8 +83,9 @@
   <xsl:template name="tag_title">
     <xsl:param name="tag" />
     <xsl:param name="label" />
+    <xsl:param name="spanclass" />
     <xsl:if test="marc:datafield[@tag=$tag]">
-      <span class="results_summary">
+      <span class="results_summary {$spanclass}">
         <span class="label">
         <xsl:value-of select="$label"/>: </span>
         <xsl:for-each select="marc:datafield[@tag=$tag]">
@@ -137,8 +138,9 @@
   <xsl:template name="tag_comma">
     <xsl:param name="tag" />
     <xsl:param name="label" />
+    <xsl:param name="spanclass" />
     <xsl:if test="marc:datafield[@tag=$tag]">
-      <span class="results_summary">
+      <span class="results_summary {$spanclass}">
         <span class="label">
         <xsl:value-of select="$label"/>: </span>
         <xsl:for-each select="marc:datafield[@tag=$tag]">
@@ -158,8 +160,8 @@
   </xsl:template>
 
   <xsl:template name="tag_210">
-    <span class="results_summary">
-      <span class="label">Publication:</span>
+    <span class="results_summary publication">
+      <span class="label">Publication: </span>
       <xsl:for-each select="marc:datafield[@tag=210]">
         <span>
           <xsl:call-template name="addClassRtl" />
@@ -189,7 +191,7 @@
 
   <xsl:template name="tag_215">
     <xsl:for-each select="marc:datafield[@tag=215]">
-  	  <span class="results_summary">
+	  <span class="results_summary description">
         <span class="label">Description: </span>
         <xsl:if test="marc:subfield[@code='a']">
           <xsl:value-of select="marc:subfield[@code='a']"/>
@@ -293,8 +295,9 @@
   <xsl:template name="tag_subject">
     <xsl:param name="tag" />
     <xsl:param name="label" />
+    <xsl:param name="spanclass" />
     <xsl:if test="marc:datafield[@tag=$tag]">
-      <span class="results_summary">
+      <span class="results_summary subjects {$spanclass}">
         <span class="label">
           <xsl:value-of select="$label"/>
           <xsl:text>: </xsl:text>
@@ -312,8 +315,9 @@
   <xsl:template name="tag_7xx">
     <xsl:param name="tag" />
     <xsl:param name="label" />
+    <xsl:param name="spanclass" />
     <xsl:if test="marc:datafield[@tag=$tag]">
-      <span class="results_summary">
+      <span class="results_summary author {$spanclass}">
         <span class="label">
           <xsl:value-of select="$label" />
           <xsl:text>: </xsl:text>
