@@ -209,10 +209,12 @@ sub AddBookseller {
     # return the id of this new supplier
     my $id = $dbh->{'mysql_insertid'};
     if ($id && $contacts) {
-        $contacts->[0] = C4::Bookseller::Contact->new( $contacts->[0] )
-          unless ref $contacts->[0] eq 'C4::Bookseller::Contact';
-        $contacts->[0]->bookseller($id);
-        $contacts->[0]->save();
+        foreach my $contact (@$contacts) {
+            $contact = C4::Bookseller::Contact->new( $contact )
+                unless ref $contacts eq 'C4::Bookseller::Contact';
+            $contact->bookseller($id);
+            $contact->save();
+        }
     }
     return $id;
 }
@@ -265,7 +267,7 @@ sub ModBookseller {
     if ($contacts) {
         foreach my $contact (@$contacts) {
             $contact = C4::Bookseller::Contact->new( $contact )
-                unless ref $contacts->[0] eq 'C4::Bookseller::Contact';
+                unless ref $contacts eq 'C4::Bookseller::Contact';
             $contact->bookseller($data->{'id'});
             $contact->save();
             push @contactparams, $contact->id if $contact->id;

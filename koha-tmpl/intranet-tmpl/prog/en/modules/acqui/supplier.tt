@@ -2,20 +2,21 @@
 [% BLOCK edit_contact %]
     <ol id="contact-form">
         <input type="hidden" name="contact_id" value="[% contact.id %]" />
-        <li><label for="contact_name">Contact name: </label>
-            <input type="text" size="40" id="contact_name" name="contact_name" value="[% contact.name %]" /></li>
-        <li><label for="contact_position">Position: </label>
-            <input type="text" size="40" id="contact_position" name="contact_position" value="[% contact.position %]" /></li>
-        <li><label for="contact_phone">Phone: </label>
-                <input type="text" size="20" id="contact_phone" name="contact_phone" value="[% contact.phone %]" /> </li>
-        <li><label for="contact_phone_2">Alternative phone: </label>
-            <input type="text" size="20" id="contact_altphone" name="contact_altphone" value="[% contact.altphone %]" /></li>
-        <li><label for="contact_fax">Fax: </label>
-            <input type="text" size="20" id="contact_fax" name="contact_fax" value="[% contact.fax %]" /></li>
-        <li><label for="contact_email">Email: </label>
-            <input type="text" size="40" id="contact_email" name="contact_email" value="[% contact.email %]" /></li>
-        <li><label for="contact_notes">Notes: </label>
-            <textarea id="contact_notes" name="contact_notes" cols="40" rows="4">[% contnotes %]</textarea></li>
+        <li><label for="contact_name[% contact.id %]">Contact name: </label>
+            <input type="text" size="40" id="contact_name[% contact.id %]" name="contact_name" value="[% contact.name %]" /></li>
+        <li><label for="contact_position[% contact.id %]">Position: </label>
+            <input type="text" size="40" id="contact_position[% contact.id %]" name="contact_position" value="[% contact.position %]" /></li>
+        <li><label for="contact_phone[% contact.id %]">Phone: </label>
+                <input type="text" size="20" id="contact_phone[% contact.id %]" name="contact_phone" value="[% contact.phone %]" /> </li>
+        <li><label for="contact_altphone[% contact.id %]">Alternative phone: </label>
+            <input type="text" size="20" id="contact_altphone[% contact.id %]" name="contact_altphone" value="[% contact.altphone %]" /></li>
+        <li><label for="contact_fax[% contact.id %]">Fax: </label>
+            <input type="text" size="20" id="contact_fax[% contact.id %]" name="contact_fax" value="[% contact.fax %]" /></li>
+        <li><label for="contact_email[% contact.id %]">Email: </label>
+            <input type="text" size="40" id="contact_email[% contact.id %]" name="contact_email" value="[% contact.email %]" /></li>
+        <li><label for="contact_notes[% contact.id %]">Notes: </label>
+            <textarea id="contact_notes[% contact.id %]" name="contact_notes" cols="40" rows="4">[% contnotes %]</textarea></li>
+        [% IF contact.id %]<li><button class="btn" class="delete-contact"><i class="icon-remove"></i>Delete contact</li>[% END %]
     </ol>
 [% END %]
 [% BLOCK show_contact %]
@@ -46,6 +47,23 @@ function confirm_deletion() {
 }
 
 function add_contact() {
+    var new_contact = $('#contact-template').clone();
+    var timestamp = new Date().getTime();
+    $(new_contact).removeAttr('id');
+    $('input, textarea', new_contact).each(function () {
+        $(this).attr('id', $(this).attr('id') + '_' + timestamp);
+    });
+    $('label', new_contact).each(function () {
+        $(this).attr('for', $(this).attr('for') + '_' + timestamp);
+    });
+    $(new_contact).insertBefore(this);
+    $('input[name="contact_name"]', new_contact).focus();
+    return false;
+}
+
+function delete_contact() {
+    $(this).parents('fieldset').delete();
+    return false;
 }
 
  $(document).ready(function() {
@@ -56,6 +74,8 @@ function add_contact() {
         ],
         'sDom': 't'
     } ) );
+    $('.delete-contact').click(delete_contact);
+    $('#add-contact').click(add_contact);
  });
 //]]>
 </script>
@@ -100,12 +120,20 @@ function add_contact() {
             <li><label for="accountnumber">Account number: </label>
                 <input type="text" size="40" id="accountnumber" name="accountnumber" value="[% accountnumber %]" /></li></ol>
         </fieldset>
-        [% FOREACH contact IN contacts %]
-            <fieldset class="supplier-contact rows">
+        <fieldset class="rows">
+            <legend>Contacts</legend>
+            <fieldset id="contact-template" class="supplier-contact">
                 <legend>Contact details</legend>
                 [% INCLUDE edit_contact %]
             </fieldset>
-        [% END %]
+            [% FOREACH contact IN contacts %]
+                <fieldset class="supplier-contact">
+                    <legend>Contact details</legend>
+                    [% INCLUDE edit_contact %]
+                </fieldset>
+            [% END %]
+            <button id="add-contact" class="btn"><i class="icon-plus"></i>Add contact</button>
+        </fieldset>
     </div>
         <div class="yui-g">
         <fieldset class="rows">

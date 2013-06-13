@@ -108,10 +108,12 @@ foreach (qw(id name position phone altphone fax email notes)) {
 
 for my $cnt (0..scalar(@{$contact_info{'id'}})) {
     my %contact;
+    my $real_contact;
     foreach (qw(id name position phone altphone fax email notes)) {
         $contact{$_} = $contact_info{$_}->[$cnt];
+        $real_contact = 1 if $contact{$_};
     }
-    push @contacts, C4::Bookseller::Contact->new(\%contact);
+    push @contacts, C4::Bookseller::Contact->new(\%contact) if $real_contact;
 }
 
 if($data{'name'}) {
