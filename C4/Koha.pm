@@ -25,8 +25,8 @@ use strict;
 
 use C4::Context;
 use C4::Branch qw(GetBranchesCount);
+use Koha::DateUtils qw(dt_from_string);
 use Memoize;
-use DateTime;
 use DateTime::Format::MySQL;
 use autouse 'Data::Dumper' => qw(Dumper);
 
@@ -1478,7 +1478,10 @@ sub GetDailyQuote {
         # update the timestamp for that quote
         $query = 'UPDATE quotes SET timestamp = ? WHERE id = ?';
         $sth = C4::Context->dbh->prepare($query);
-        $sth->execute(DateTime::Format::MySQL->format_datetime(DateTime->now), $quote->{'id'});
+        $sth->execute(
+            DateTime::Format::MySQL->format_datetime( dt_from_string() ),
+            $quote->{'id'}
+        );
     }
     return $quote;
 }
