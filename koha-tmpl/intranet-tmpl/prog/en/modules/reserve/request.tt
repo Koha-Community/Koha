@@ -130,6 +130,30 @@ function checkMultiHold() {
 	});
 
     $('#hold-request-form').preventDoubleFormSubmit();
+
+[% UNLESS ( borrowernumber || borrower_list ) %]
+    [% IF ( CircAutocompl ) %]
+    $( "#patron" ).autocomplete({
+        source: "/cgi-bin/koha/circ/ysearch.pl",
+        minLength: 3,
+        select: function( event, ui ) {
+            $( "#patron" ).val( ui.item.cardnumber );
+            $( "#holds_patronsearch" ).submit();
+            return false;
+        }
+    })
+    .data( "autocomplete" )._renderItem = function( ul, item ) {
+        return $( "<li></li>" )
+        .data( "item.autocomplete", item )
+        .append( "<a>" + item.surname + ", " + item.firstname +
+                 " (" + item.cardnumber + ") <small>" + item.address +
+                 " " + item.city + " " + item.zipcode + " " +
+                 item.country + "</small></a>" )
+        .appendTo( ul );
+    };
+    [% END %]
+[% END %]
+
  });
 
 // ]]>
@@ -176,15 +200,15 @@ function checkMultiHold() {
     [% IF ( messageborrower ) %]
       <div class="dialog alert"><h3>Patron Not Found</h3><p>No patron with this name, please, try another</p> </div>
     [% END %]
-    <form action="request.pl?biblionumber=[% biblionumber %]" method="post">
+    <form  id="holds_patronsearch" action="request.pl?biblionumber=[% biblionumber %]" method="post">
         [% UNLESS borrower_list %]
-			<fieldset class="brief">
-		        <label for="patron">Patron: </label>
-				<div class="hint">Enter patron card number or partial name:</div>
-                <input type="text" size="20" id="patron" class="focus" name="findborrower" />
-                <input type="hidden" name="biblionumber" value="[% biblionumber %]" />
+            <fieldset class="brief">
+                <label for="patron">Patron: </label>
+                <div class="hint">Enter patron card number or partial name:</div>
+                <input type="text" size="40" id="patron" class="focus" name="findborrower" />
                 <input type="submit" value="Search" />
-			</fieldset>
+                <input type="hidden" name="biblionumber" value="[% biblionumber %]" />
+            </fieldset>
         [% ELSE %]
           <fieldset>
             <select size="7" name="borrowernumber">
