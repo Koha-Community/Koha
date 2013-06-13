@@ -79,23 +79,26 @@
   <xsl:call-template name="tag_title">
     <xsl:with-param name="tag">454</xsl:with-param>
     <xsl:with-param name="label">Translation of</xsl:with-param>
+    <xsl:with-param name="spanclass">original_title</xsl:with-param>
   </xsl:call-template>
 
   <xsl:call-template name="tag_title">
     <xsl:with-param name="tag">461</xsl:with-param>
     <xsl:with-param name="label">Set Level</xsl:with-param>
+    <xsl:with-param name="spanclass">set_level</xsl:with-param>
   </xsl:call-template>
 
   <xsl:call-template name="tag_title">
     <xsl:with-param name="tag">464</xsl:with-param>
     <xsl:with-param name="label">Piece-Analytic Level</xsl:with-param>
+    <xsl:with-param name="spanclass">piece_analytic_level</xsl:with-param>
   </xsl:call-template>
 
   <xsl:call-template name="tag_210" />
 
   <xsl:call-template name="tag_215" />
 
-  <span class="results_summary">
+  <span class="results_summary availability">
     <span class="label">Availability: </span>
     <xsl:choose>
       <xsl:when test="marc:datafield[@tag=856]">
