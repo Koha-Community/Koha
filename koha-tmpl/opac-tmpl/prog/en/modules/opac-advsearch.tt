@@ -338,7 +338,8 @@
 <script type="text/javascript" language="javascript">
     /* This function allows to display a new field to search.
     */
-    $(document).on("click", '.ButtonPlus', function() {
+    $(document).on("click", '.ButtonPlus', function(e) {
+        e.preventDefault();
         $('.ButtonLess').show();
         var thisLine = $(this).parent();
         var newLine = thisLine.clone();
@@ -346,7 +347,8 @@
         thisLine.after(newLine);
     });
 
-    $(document).on("click", '.ButtonLess', function() {
+    $(document).on("click", '.ButtonLess', function(e) {
+        e.preventDefault();
         if($(this).parent().siblings().length <= 3 ) {
            $('.ButtonLess').hide();
         }
