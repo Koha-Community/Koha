@@ -112,7 +112,6 @@ if (@id==0) {
 }
 
 my $pars= {
-        random => $input->param('random') || rand(1000000000),
         biblionumber => $biblionumber,
         page => $page,
         id => \@id,

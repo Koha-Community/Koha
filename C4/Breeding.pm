@@ -228,12 +228,9 @@ The second parameter $template is a Template object. The routine uses this param
 sub Z3950Search {
     my ($pars, $template)= @_;
 
-    my $dbh   = C4::Context->dbh;
     my @id= @{$pars->{id}};
-    my $random= $pars->{random};
     my $page= $pars->{page};
     my $biblionumber= $pars->{biblionumber};
-
     my $isbn= $pars->{isbn};
     my $issn= $pars->{issn};
     my $title= $pars->{title};
@@ -248,29 +245,18 @@ sub Z3950Search {
 
     my $show_next       = 0;
     my $total_pages     = 0;
-
-    my $attr = '';
     my $term;
-    my $host;
-    my $server;
-    my $database;
-    my $port;
-    my $marcdata;
-    my @encoding;
     my @results;
-    my $count;
-    my $record;
-    my $oldbiblio;
-    my @serverhost;
-    my @servername;
     my @breeding_loop = ();
-
     my @oConnection;
     my @oResult;
     my @errconn;
     my $s = 0;
     my $query;
     my $nterms=0;
+    my $imported=0;
+    my @serverinfo; #replaces former serverhost, servername, encoding
+
     if ($isbn) {
         $term=$isbn;
         $query .= " \@attr 1=7 \@attr 5=1 \"$term\" ";
@@ -321,24 +307,24 @@ sub Z3950Search {
         $query = "\@and " . $query;
     }
 
+    my $dbh   = C4::Context->dbh;
     foreach my $servid (@id) {
         my $sth = $dbh->prepare("select * from z3950servers where id=?");
         $sth->execute($servid);
-        while ( $server = $sth->fetchrow_hashref ) {
-            my $option1      = new ZOOM::Options();
+        while (my $server = $sth->fetchrow_hashref) {
+            my $option1= new ZOOM::Options();
             $option1->option( 'async' => 1 );
             $option1->option( 'elementSetName', 'F' );
             $option1->option( 'databaseName',   $server->{db} );
             $option1->option( 'user', $server->{userid} ) if $server->{userid};
-            $option1->option( 'password', $server->{password} )
-              if $server->{password};
+            $option1->option( 'password', $server->{password} ) if $server->{password};
             $option1->option( 'preferredRecordSyntax', $server->{syntax} );
             $option1->option( 'timeout', $server->{timeout} ) if $server->{timeout};
-            $oConnection[$s] = create ZOOM::Connection($option1);
+            $oConnection[$s]= create ZOOM::Connection($option1);
             $oConnection[$s]->connect( $server->{host}, $server->{port} );
-            $serverhost[$s] = $server->{host};
-            $servername[$s] = $server->{name};
-            $encoding[$s]   = ($server->{encoding}?$server->{encoding}:"iso-5426");
+            $serverinfo[$s]->{host}= $server->{host};
+            $serverinfo[$s]->{name}= $server->{name};
+            $serverinfo[$s]->{encd}= $server->{encoding} // "iso-5426";
             $s++;
         }    ## while fetch
     }    # foreach
@@ -358,10 +344,10 @@ sub Z3950Search {
 
         if ( $k != 0 ) {
             $k--;
-            my ($error, $errmsg, $addinfo, $diagset)= $oConnection[$k]->error_x();
+            my ($error)= $oConnection[$k]->error_x(); #ignores errmsg, addinfo, diagset
             if ($error) {
                 if ($error =~ m/^(10000|10007)$/ ) {
-                    push(@errconn, {'server' => $serverhost[$k]});
+                    push(@errconn, { 'server' => $serverinfo[$k]->{host} } );
                 }
             }
             else {
@@ -372,38 +358,12 @@ sub Z3950Search {
                     $show_next = 1 if $numresults >= ($page*20);
                     $total_pages = int($numresults/20)+1 if $total_pages < ($numresults/20);
                     for ($i = ($page-1)*20; $i < (($numresults < ($page*20)) ? $numresults : ($page*20)); $i++) {
-                        my $rec = $oResult[$k]->record($i);
-                        if ($rec) {
-                            my $marcrecord;
-                            $marcdata   = $rec->raw();
-                            my ($charset_result, $charset_errors);
-                            ($marcrecord, $charset_result, $charset_errors)= MarcToUTF8Record($marcdata, C4::Context->preference('marcflavour'), $encoding[$k]);
-                            # Normalize the record so it doesn't have separated diacritics
-                            SetUTF8Flag($marcrecord);
-                            my $oldbiblio = TransformMarcToKoha( $dbh, $marcrecord, "" );
-                            $oldbiblio->{isbn}   =~ s/ |-|\.//g if $oldbiblio->{isbn};
-                            # pad | and ( with spaces to allow line breaks in the HTML
-                            $oldbiblio->{isbn} =~ s/\|/ \| /g if $oldbiblio->{isbn};
-                            $oldbiblio->{isbn} =~ s/\(/ \(/g if $oldbiblio->{isbn};
-                            $oldbiblio->{issn} =~ s/ |-|\.//g if $oldbiblio->{issn};
-                            # pad | and ( with spaces to allow line breaks in the HTML
-                            $oldbiblio->{issn} =~ s/\|/ \| /g if $oldbiblio->{issn};
-                            $oldbiblio->{issn} =~ s/\(/ \(/g if $oldbiblio->{issn};
-                            my ($notmarcrecord, $alreadyindb, $alreadyinfarm, $imported, $breedingid)= ImportBreeding( $marcdata, 2, $serverhost[$k], $encoding[$k], $random, 'z3950' );
-                            my %row_data;
-                            $row_data{server}       = $servername[$k];
-                            $row_data{isbn}         = $oldbiblio->{isbn};
-                            $row_data{lccn}         = $oldbiblio->{lccn};
-                            $row_data{title}        = $oldbiblio->{title};
-                            $row_data{author}       = $oldbiblio->{author};
-                            $row_data{date}         = $oldbiblio->{copyrightdate};
-                            $row_data{edition}      = $oldbiblio->{editionstatement};
-                            $row_data{breedingid}   = $breedingid;
-                            $row_data{biblionumber} = $biblionumber;
-                            push( @breeding_loop, \%row_data );
+                        if($oResult[$k]->record($i)) {
+                            my $res=_handle_one_result($oResult[$k]->record($i), $serverinfo[$k], ++$imported, $biblionumber); #ignores error in sequence numbering
+                            push @breeding_loop, $res if $res;
                         }
                         else {
-                            push(@breeding_loop,{'server'=>$servername[$k],'title'=>join(': ',$oConnection[$k]->error_x()),'breedingid'=>-1,'biblionumber'=>-1});
+                            push(@breeding_loop,{'server'=>$serverinfo[$k]->{name},'title'=>join(': ',$oConnection[$k]->error_x()),'breedingid'=>-1,'biblionumber'=>-1});
                         }
                     }
                 }    #if $numresults
@@ -434,6 +394,60 @@ sub Z3950Search {
         servers => \@servers,
         errconn       => \@errconn
     );
+}
+
+sub _handle_one_result {
+    my ($zoomrec, $servhref, $seq, $bib)= @_;
+
+    my $raw= $zoomrec->raw();
+    my ($marcrecord) = MarcToUTF8Record($raw, C4::Context->preference('marcflavour'), $servhref->{encd}); #ignores charset return values
+    SetUTF8Flag($marcrecord);
+
+    #call to ImportBreeding replaced by next two calls for optimization
+    my $batch_id = GetZ3950BatchId($servhref->{name});
+    my $breedingid = AddBiblioToBatch($batch_id, $seq, $marcrecord, 'UTF-8', 0, 0);
+        #FIXME passing 0 for z3950random
+        #Will eliminate this unused field in a followup report
+        #Last zero indicates: no update for batch record counts
+
+
+    #call to TransformMarcToKoha replaced by next call
+    #we only need six fields from the marc record
+    return _add_rowdata(
+        {
+            biblionumber => $bib,
+            server       => $servhref->{name},
+            breedingid   => $breedingid,
+        }, $marcrecord) if $breedingid;
+}
+
+sub _add_rowdata {
+    my ($rowref, $marcrecord)=@_;
+    if(C4::Context->preference("marcflavour") ne 'UNIMARC') { #MARC21, NORMARC
+        $rowref->{isbn} = _isbn_cleanup($marcrecord->subfield('020','a')||'');
+        $rowref->{title}= $marcrecord->subfield('245','a')||'';
+        $rowref->{author}= $marcrecord->subfield('100','a')||'';
+        $rowref->{date}= $marcrecord->subfield('260','c')||'';
+        $rowref->{edition}= $marcrecord->subfield('250','a')||'';
+        $rowref->{lccn}= $marcrecord->subfield('050','a')||'';
+    }
+    else { #UNIMARC
+        $rowref->{isbn}= _isbn_cleanup($marcrecord->subfield('010','a')||'');
+        $rowref->{title}= $marcrecord->subfield('200','a')||'';
+        $rowref->{author}= $marcrecord->subfield('200','f')||'';
+        $rowref->{date}= $marcrecord->subfield('210','d')||'';
+        $rowref->{edition}= $marcrecord->subfield('205','a')||'';
+        $rowref->{lccn}= '';
+    }
+    return $rowref;
+}
+
+sub _isbn_cleanup {
+    my $isbn= shift;
+    $isbn=~ s/ |-|\.//g;
+    $isbn=~ s/\|/ \| /g;
+    $isbn=~ s/\(/ \(/g;
+    return $isbn;
 }
 
 1;
