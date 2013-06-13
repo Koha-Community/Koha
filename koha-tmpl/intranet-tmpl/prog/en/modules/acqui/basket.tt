@@ -203,15 +203,21 @@
                 </div>
                 [% IF ( closedate ) %]
                 <div class="yui-u">
+                    [% IF ( CAN_user_acquisition_group_manage ) %]
                     <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="post">
+                    [% END %]
                         <ol>
                         <li>
                           <span class="label">Basket group:</span>
                           [% IF basketgroup.closed %]
                             [% basketgroup.name %] (closed)
+                          [% ELSIF ( ! CAN_user_acquisition_group_manage ) %]
+                            [%- IF basketgroup.name -%]
+                                [% basketgroup.name %]
+                            [%- ELSE -%]
+                                No group
+                            [%- END -%]
                           [% ELSE %]
-                            </li>
-                            <li>
                             <select id="basketgroupid" name="basketgroupid">
                               <option value="new">Add new group</option>
                               [% FOREACH bg IN basketgroups %]
@@ -232,10 +238,12 @@
                             <input type="submit" value="Change basket group" />
                           [% END %]
                         </li>
-                    [% IF ( basketgroupdeliveryplace ) %]<li><span class="label">Basket group delivery place:</span> [% basketgroupdeliveryplace %]</li>[% END %]
-                    [% IF ( basketgroupbillingplace ) %]<li><span class="label">Basket group billing place:</span> [% basketgroupbillingplace %]</li>[% END %]
+                    [% IF ( basketgroup.deliveryplacename ) %]<li><span class="label">Basket group delivery placename:</span> [% basketgroup.deliveryplacename %]</li>[% END %]
+                    [% IF ( basketgroup.billingplacename ) %]<li><span class="label">Basket group billing place:</span> [% basketgroup.billingplacename %]</li>[% END %]
                         </ol>
+                    [% IF ( CAN_user_acquisition_group_manage ) %]
                     </form>
+                    [% END %]
                 </div>
                 [% END %]
             </div>

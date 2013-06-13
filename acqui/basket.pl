@@ -207,8 +207,8 @@ if ( $op eq 'delete_confirm' ) {
     }
 #if the basket is closed,and the user has the permission to edit basketgroups, display a list of basketgroups
     my ($basketgroup, $basketgroups);
-    my $member = GetMember(borrowernumber => $loggedinuser);
-    if ($basket->{closedate} && haspermission({ acquisition => 'group_manage'} )) {
+    my $staffuser = GetMember(borrowernumber => $loggedinuser);
+    if ($basket->{closedate} && haspermission($staffuser->{userid}, { acquisition => 'group_manage'} )) {
         $basketgroups = GetBasketgroups($basket->{booksellerid});
         for my $bg ( @{$basketgroups} ) {
             if ($basket->{basketgroupid} && $basket->{basketgroupid} == $bg->{id}){
@@ -287,13 +287,9 @@ if ( $op eq 'delete_confirm' ) {
     my @orders = GetOrders($basketno);
 
     if ($basket->{basketgroupid}){
-        my $basketgroup = GetBasketgroup($basket->{basketgroupid});
-        for my $key (keys %$basketgroup ){
-            $basketgroup->{"basketgroup$key"} = delete $basketgroup->{$key};
-        }
-        $basketgroup->{basketgroupdeliveryplace} = C4::Branch::GetBranchName( $basketgroup->{basketgroupdeliveryplace} );
-        $basketgroup->{basketgroupbillingplace} = C4::Branch::GetBranchName( $basketgroup->{basketgroupbillingplace} );
-        $template->param(%$basketgroup);
+        $basketgroup = GetBasketgroup($basket->{basketgroupid});
+        $basketgroup->{deliveryplacename} = C4::Branch::GetBranchName( $basketgroup->{deliveryplace} );
+        $basketgroup->{billingplacename} = C4::Branch::GetBranchName( $basketgroup->{billingplace} );
     }
     my $borrower= GetMember('borrowernumber' => $loggedinuser);
     my $budgets = GetBudgetHierarchy;
