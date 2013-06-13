@@ -33,9 +33,8 @@
 
 	    // Generates a dynamic link for exporting the selection's data as CSV
 	    $("#ExportSelected").click(function() {
-		// We use input:checked because it's faster, but if there must new checkboxes  
-		// used for other purpose on this page, please use [name=serialid]:checked instead
-		var selected = $("input:checked");
+               // We need to use "input[name=serialid]:checked" instead of "input:checked". Otherwise, the "check all" box will pass the value of "on" as a serialid, which produces a SQL error.
+             var selected = $("input[name=serialid]:checked");
 
 		if (selected.length == 0) {
 			alert(_("Please select at least one item to export."));
