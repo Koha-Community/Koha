@@ -143,6 +143,10 @@ sub HandleSelect {
 }
 
 sub LoadBib {
+    #see comment in AddBibliosToShelf
+    if (scalar(@biblionumber) == 1) {
+        @biblionumber = (split /\//,$biblionumber[0]);
+    }
     for my $bib (@biblionumber) {
         my $data = GetBiblioData( $bib );
     push(@biblios,
