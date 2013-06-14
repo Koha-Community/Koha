@@ -2431,7 +2431,8 @@ CREATE TABLE IF NOT EXISTS `borrower_files` (
   `file_content` longblob NOT NULL,
   `date_uploaded` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`file_id`),
-  KEY `borrowernumber` (`borrowernumber`)
+  KEY `borrowernumber` (`borrowernumber`),
+  CONSTRAINT borrower_files_ibfk_1 FOREIGN KEY (borrowernumber) REFERENCES borrowers (borrowernumber) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
