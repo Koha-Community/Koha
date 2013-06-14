@@ -275,6 +275,7 @@ sub shelfpage {
                     $this_item->{'normalized_ean'}  = GetNormalizedEAN(       $record,$marcflavour);
                     $this_item->{'normalized_oclc'} = GetNormalizedOCLCNumber($record,$marcflavour);
                     $this_item->{'normalized_isbn'} = GetNormalizedISBN(undef,$record,$marcflavour);
+                    if(!defined($this_item->{'size'})) { $this_item->{'size'} = "" }; #TT has problems with size
                     # Getting items infos for location display
                     my @items_infos = &GetItemsLocationInfo( $this_item->{'biblionumber'});
                     $this_item->{'itemsissued'} = CountItemsIssued( $this_item->{'biblionumber'} );
