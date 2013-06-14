@@ -13,6 +13,13 @@
 </div>
 </div>
 
+[%# Sticking the div for the top bar here; since the
+    top bar is positioned absolutely in this theme, it
+    it makes the positioning of the rest of the elements
+    easier to keep it out of the doc3 div.
+%]
+[% INCLUDE 'top-bar.inc' %]
+
 <div id="main_footer">
     <div class="colleft">
     </div>
