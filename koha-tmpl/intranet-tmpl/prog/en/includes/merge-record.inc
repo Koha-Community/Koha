@@ -7,7 +7,11 @@
         [% FOREACH record IN records %]
             [% FOREACH fiel IN record.field %]
             <li id="k[% fiel.key %]">
-                <input type="checkbox" [% IF (defaultrecord) %]checked="checked"[% END %] class="fieldpick" id="rec_[% recordnumber %]_[% fiel.key %]" />
+                [% IF (defaultrecord) %]
+                    <input type="checkbox" checked="checked" class="fieldpick" id="rec_[% recordnumber %]_[% fiel.key %]" />
+                [% ELSE %]
+                    <input type="checkbox" class="fieldpick" id="rec_[% recordnumber %]_[% fiel.key %]" />
+                [% END %]
                 <span class="field">[% fiel.tag %]</span>
 
                 <input type="hidden" name="tag_[% fiel.tag %]_indicator1_[% fiel.key %]" value="[% fiel.indicator1 %]" />
@@ -21,7 +25,11 @@
                 <ul>
                     [% FOREACH subfiel IN fiel.subfield %]
                     <li id="k[% subfiel.subkey %]">
-                        <input type="checkbox" [% IF (defaultrecord) %]checked="checked"[% END %] class="subfieldpick" id="rec_[% recordnumber %]_[% subfiel.subkey %]" />
+                        [% IF (defaultrecord) %]
+                            <input type="checkbox" checked="checked" class="subfieldpick" id="rec_[% recordnumber %]_[% subfiel.subkey %]" />
+                        [% ELSE %]
+                            <input type="checkbox" class="subfieldpick" id="rec_[% recordnumber %]_[% subfiel.subkey %]" />
+                        [% END %]
                         <span class="subfield">[% subfiel.subtag %]</span> / [% subfiel.value %]
                     <input type="hidden" name="tag_[% subfiel.tag %]_code_[% subfiel.subtag %]_[% subfiel.key %]_[% subfiel.subkey %]" value="[% subfiel.subtag %]" />
                     <input type="hidden" name="tag_[% subfiel.tag %]_subfield_[% subfiel.subtag %]_[% subfiel.key %]_[% subfiel.subkey %]" value="[% subfiel.value |html%]" />
