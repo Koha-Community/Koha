@@ -392,6 +392,7 @@ if ($borrowernumber) {
         $getreserv{reservedate}    = format_date( $num_res->{'reservedate'} );
         $getreserv{reserve_id}  = $num_res->{'reserve_id'};
         $getreserv{title}          = $getiteminfo->{'title'};
+        $getreserv{subtitle}       = GetRecordValue('subtitle', GetMarcBiblio($getiteminfo->{biblionumber}), GetFrameworkCode($getiteminfo->{biblionumber}));
         $getreserv{itemtype}       = $itemtypeinfo->{'description'};
         $getreserv{author}         = $getiteminfo->{'author'};
         $getreserv{barcodereserv}  = $getiteminfo->{'barcode'};
@@ -431,6 +432,7 @@ if ($borrowernumber) {
 
             $getreserv{color}           = 'inwait';
             $getreserv{title}           = $getbibinfo->{'title'};
+            $getreserv{subtitle}        = GetRecordValue('subtitle', GetMarcBiblio($num_res->{biblionumber}), GetFrameworkCode($num_res->{biblionumber}));
             $getreserv{nottransfered}   = 0;
             $getreserv{itemtype}        = $itemtypeinfo->{'description'};
             $getreserv{author}          = $getbibinfo->{'author'};
@@ -502,7 +504,7 @@ sub build_issue_data {
         $it->{'displaydate'} = output_pref($it->{'issuedate'});
         #$it->{'od'} = ( $it->{'date_due'} lt $todaysdate ) ? 1 : 0 ;
         $it->{'od'} = $it->{'overdue'};
-        $it->{'author'} ||= ' ';
+        $it->{'subtitle'} = GetRecordValue('subtitle', GetMarcBiblio($it->{biblionumber}), GetFrameworkCode($it->{biblionumber}));
         $it->{'renew_failed'} = $renew_failed{$it->{'itemnumber'}};
         $it->{'return_failed'} = $return_failed{$it->{'barcode'}};
 
