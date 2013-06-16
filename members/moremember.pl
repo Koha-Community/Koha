@@ -302,6 +302,8 @@ if ($borrowernumber) {
             $getreserv{nottransferedby} =
                 GetBranchName( $getiteminfo->{'holdingbranch'} );
         }
+        $getreserv{title}          = $getiteminfo->{'title'};
+        $getreserv{subtitle}       = GetRecordValue('subtitle', GetMarcBiblio($getiteminfo->{biblionumber}), GetFrameworkCode($getiteminfo->{biblionumber}));
 
 # 		if we don't have a reserv on item, we put the biblio infos and the waiting position
         if ( $getiteminfo->{'title'} eq '' ) {
@@ -309,6 +311,7 @@ if ($borrowernumber) {
             my $getbibtype = getitemtypeinfo( $getbibinfo->{'itemtype'} );
             $getreserv{color}           = 'inwait';
             $getreserv{title}           = $getbibinfo->{'title'};
+            $getreserv{subtitle}        = GetRecordValue('subtitle', GetMarcBiblio($num_res->{biblionumber}), GetFrameworkCode($num_res->{biblionumber}));
             $getreserv{nottransfered}   = 0;
             $getreserv{itemtype}        = $getbibtype->{'description'};
             $getreserv{author}          = $getbibinfo->{'author'};
@@ -447,8 +450,7 @@ sub build_issue_data {
         if ($issue->{issuedate} ) {
            $issuedate = $issue->{issuedate}->clone();
         }
-
-        my $biblionumber = $issue->{biblionumber};
+        $issue->{subtitle} = GetRecordValue('subtitle', GetMarcBiblio($issue->{biblionumber}), GetFrameworkCode($issue->{biblionumber}));
         $issue->{issuingbranchname} = GetBranchName($issue->{branchcode});
         my %row          = %{$issue};
         $totalprice += $issue->{replacementprice};
