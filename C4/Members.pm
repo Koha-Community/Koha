@@ -753,6 +753,7 @@ sub ModMember {
             $data{password} = md5_base64($data{password});
         }
     }
+    my $old_categorycode = GetBorrowerCategorycode( $data{borrowernumber} );
 	my $execute_success=UpdateInTable("borrowers",\%data);
     if ($execute_success) { # only proceed if the update was a success
         # ok if its an adult (type) it may have borrowers that depend on it as a guarantor
@@ -763,11 +764,16 @@ sub ModMember {
             # is adult check guarantees;
             UpdateGuarantees(%data);
         }
+
+        # If the patron changes to a category with enrollment fee, we add a fee
+        if ( $data{categorycode} and $data{categorycode} ne $old_categorycode ) {
+            AddEnrolmentFeeIfNeeded( $data{categorycode}, $data{borrowernumber} );
+        }
+
         logaction("MEMBERS", "MODIFY", $data{'borrowernumber'}, "UPDATE (executed w/ arg: $data{'borrowernumber'})") if C4::Context->preference("BorrowersLog");
     }
     return $execute_success;
 }
-
 
 =head2 AddMember
 
@@ -805,19 +811,8 @@ sub AddMember {
 
     # mysql_insertid is probably bad.  not necessarily accurate and mysql-specific at best.
     logaction("MEMBERS", "CREATE", $data{'borrowernumber'}, "") if C4::Context->preference("BorrowersLog");
-    
-    # check for enrollment fee & add it if needed
-    my $sth = $dbh->prepare("SELECT enrolmentfee FROM categories WHERE categorycode=?");
-    $sth->execute($data{'categorycode'});
-    my ($enrolmentfee) = $sth->fetchrow;
-    if ($sth->err) {
-        warn sprintf('Database returned the following error: %s', $sth->errstr);
-        return;
-    }
-    if ($enrolmentfee && $enrolmentfee > 0) {
-        # insert fee in patron debts
-        manualinvoice($data{'borrowernumber'}, '', '', 'A', $enrolmentfee);
-    }
+
+    AddEnrolmentFeeIfNeeded( $data{categorycode}, $data{borrowernumber} );
 
     return $data{'borrowernumber'};
 }
@@ -1877,15 +1872,10 @@ UPDATE borrowers
 SET  dateexpiry='$date' 
 WHERE borrowernumber='$borrowerid'
 EOF
-    # add enrolmentfee if needed
-    $sth = $dbh->prepare("SELECT enrolmentfee FROM categories WHERE categorycode=?");
-    $sth->execute($borrower->{'categorycode'});
-    my ($enrolmentfee) = $sth->fetchrow;
-    if ($enrolmentfee && $enrolmentfee > 0) {
-        # insert fee in patron debts
-        manualinvoice($borrower->{'borrowernumber'}, '', '', 'A', $enrolmentfee);
-    }
-     logaction("MEMBERS", "RENEW", $borrower->{'borrowernumber'}, "Membership renewed")if C4::Context->preference("BorrowersLog");
+
+    AddEnrolmentFeeIfNeeded( $borrower->{categorycode}, $borrower->{borrowernumber} );
+
+    logaction("MEMBERS", "RENEW", $borrower->{'borrowernumber'}, "Membership renewed")if C4::Context->preference("BorrowersLog");
     return $date if ($sth);
     return 0;
 }
@@ -2539,6 +2529,35 @@ sub AddMember_Opac {
     my $borrowernumber = AddMember(%borrower);
 
     return ( $borrowernumber, $password );
+}
+
+=head2 AddEnroltmenFeeIfNeeded
+
+    AddEnrolmentFeeIfNeeded( $borrower->{categorycode}, $borrower->{borrowernumber} );
+
+Add enrolment fee for a patron if needed.
+
+=cut
+
+sub AddEnrolmentFeeIfNeeded {
+    my ( $categorycode, $borrowernumber ) = @_;
+    # check for enrollment fee & add it if needed
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare(q{
+        SELECT enrolmentfee
+        FROM categories
+        WHERE categorycode=?
+    });
+    $sth->execute( $categorycode );
+    if ( $sth->err ) {
+        warn sprintf('Database returned the following error: %s', $sth->errstr);
+        return;
+    }
+    my ($enrolmentfee) = $sth->fetchrow;
+    if ($enrolmentfee && $enrolmentfee > 0) {
+        # insert fee in patron debts
+        C4::Accounts::manualinvoice( $borrowernumber, '', '', 'A', $enrolmentfee );
+    }
 }
 
 END { }    # module clean-up code here (global destructor)
