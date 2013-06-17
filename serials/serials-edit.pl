@@ -318,8 +318,12 @@ if ( $op and $op eq 'serialchangestatus' ) {
                     if ( C4::Context->preference('autoBarcode') eq
                         'incremental' )
                     {
-                        if ( !$bib_record->field($barcodetagfield)
-                            ->subfield($barcodetagsubfield) )
+                        if (
+                            !(
+                                   $bib_record->field($barcodetagfield)
+                                && $bib_record->field($barcodetagfield)->subfield($barcodetagsubfield)
+                            )
+                          )
                         {
                             my $sth_barcode = $dbh->prepare(
                                 'select max(abs(barcode)) from items');
