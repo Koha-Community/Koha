@@ -37,8 +37,8 @@ use C4::Output;
 use C4::Items;
 
 my $input = new CGI;
-my @field = $input->param('field');
-my @value = $input->param('value');
+my @field = $input->param('field[]');
+my @value = $input->param('value[]');
 
 my $r = {};
 my $i = 0;
