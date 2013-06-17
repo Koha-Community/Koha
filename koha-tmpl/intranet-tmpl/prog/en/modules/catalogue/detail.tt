@@ -149,6 +149,9 @@ function verify_images() {
             if (table.find('thead tr.columnFilter').length == 0) {
                 table.dataTable().columnFilter({
                     'sPlaceHolder': 'head:after'
+                    [% IF StaffDetailItemSelection %]
+                    ,   aoColumns: [ null, 'text', 'text', 'text', 'text', 'text', 'text', 'text' ]
+                    [% END %]
                 });
                 filters_row.addClass('columnFilter');
             }
@@ -198,6 +201,11 @@ function verify_images() {
                 'sDom': 't',
                 'bPaginate': false,
                 'bAutoWidth': false
+                [% IF StaffDetailItemSelection %]
+                ,   "aoColumnDefs": [
+                        { "aTargets": [ 0 ], "bSortable": false, "bSearchable": false }
+                    ]
+                [% END %]
             }));
 
             // Show a link to activate filtering

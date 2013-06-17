@@ -7630,7 +7630,7 @@ $DBversion = "XXX";
 if ( CheckVersion($DBversion) ) {
     $dbh->do(qq{
         INSERT INTO systempreferences (variable, value, explanation, options, type)
-        VALUES ('StaffDetailItemSelection', '0', 'Enable item selection in record detail page', NULL, 'YesNo')
+        VALUES ('StaffDetailItemSelection', '1', 'Enable item selection in record detail page', NULL, 'YesNo')
     });
     print "Upgrade to $DBversion done (Add system preference StaffDetailItemSelection)\n";
     SetVersion($DBversion);
