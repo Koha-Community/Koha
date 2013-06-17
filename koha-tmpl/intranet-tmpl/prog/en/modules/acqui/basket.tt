@@ -484,10 +484,12 @@
 
         <form action="/cgi-bin/koha/acqui/basket.pl" class="confirm">
             <h1>Are you sure you want to close basket [% basketname|html %]?</h1>
+            [% IF ( CAN_user_acquisition_group_manage ) %]
             <p>
             <label for="createbasketgroup">Attach this basket to a new basket group with the same name</label>
             <input type="checkbox" id="createbasketgroup" name="createbasketgroup"/>
             </p>
+            [% END %]
             <input type="hidden" id="basketno" value="[% basketno %]" name="basketno" />
             <input type="hidden" value="close" name="op" />
             <input type="hidden" name="booksellerid" value="[% booksellerid %]" />
