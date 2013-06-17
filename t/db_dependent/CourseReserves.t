@@ -5,8 +5,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 20;
-use Data::Dumper;
+use Test::More tests => 21;
 
 BEGIN {
     use_ok('C4::Biblio');
@@ -51,7 +50,9 @@ ok( $course->{'course_name'} eq "Test Course",       "GetCourse returned correct
 ok( $course->{'staff_note'}  eq "Test staff note 2", "ModCourse updated course succesfully" );
 
 my $courses = GetCourses();
-ok( $courses->[0]->{'course_name'} eq "Test Course", "GetCourses returns valid array of course data" );
+is( ref($courses), 'ARRAY', "GetCourses returns an array" );
+my @match = map {$_->{course_name} eq 'Test Course'} @$courses;
+ok( scalar(@match) > 0, "GetCourses returns valid array of course data" );
 
 ModCourseInstructors( mode => 'add', course_id => $course_id, borrowernumbers => [ $borrowers[0]->{'borrowernumber'} ] );
 $course = GetCourse($course_id);
