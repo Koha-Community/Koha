@@ -19,7 +19,6 @@ package C4::Context;
 use strict;
 use warnings;
 use vars qw($VERSION $AUTOLOAD $context @context_stack $servers $memcached $ismemcached);
-$ENV{'DBIC_DONT_VALIDATE_RELS'} = 1; # FIXME once the DBIx schema has its schema adjusted we should remove this
 BEGIN {
 	if ($ENV{'HTTP_USER_AGENT'})	{
 		require CGI::Carp;
@@ -99,7 +98,6 @@ BEGIN {
 }
 
 use DBI;
-require Koha::Schema;
 use ZOOM;
 use XML::Simple;
 use C4::Boolean;
@@ -993,131 +991,6 @@ sub _new_queryparser {
         }
     }
     return;
-}
-
-# _new_schema
-# Internal helper function (not a method!). This creates a new
-# database connection from the data given in the current context, and
-# returns it.
-sub _new_schema {
-    my $db_driver;
-    if ($context->config("db_scheme")){
-        $db_driver=db_scheme2dbi($context->config("db_scheme"));
-    }else{
-        $db_driver="mysql";
-    }
-
-    my $db_name   = $context->config("database");
-    my $db_host   = $context->config("hostname");
-    my $db_port   = $context->config("port") || '';
-    my $db_user   = $context->config("user");
-    my $db_passwd = $context->config("pass");
-    my $schema = Koha::Schema->connect(
-        "DBI:$db_driver:dbname=$db_name;host=$db_host;port=$db_port",
-        $db_user, $db_passwd );
-    return $schema;
-}
-
-=head2 schema
-
-    $schema = C4::Context->schema;
-
-Returns a database handle connected to the Koha database for the
-current context. If no connection has yet been made, this method
-creates one, and connects to the database.
-
-This database handle is cached for future use: if you call
-C<C4::Context-E<gt>schema> twice, you will get the same handle both
-times. If you need a second database handle, use C<&new_schema> and
-possibly C<&set_schema>.
-
-=cut
-
-sub schema {
-    my $self = shift;
-    my $sth;
-
-    if ( defined( $context->{"schema"} ) && $context->{"schema"}->ping() ) {
-        return $context->{"schema"};
-    }
-
-    # No database handle or it died . Create one.
-    $context->{"schema"} = &_new_schema();
-
-    return $context->{"schema"};
-}
-
-=head2 new_schema
-
-  $schema = C4::Context->new_schema;
-
-Creates a new connection to the Koha database for the current context,
-and returns the database handle (a C<DBI::db> object).
-
-The handle is not saved anywhere: this method is strictly a
-convenience function; the point is that it knows which database to
-connect to so that the caller doesn't have to know.
-
-=cut
-
-#'
-sub new_schema {
-    my $self = shift;
-
-    return &_new_schema();
-}
-
-=head2 set_schema
-
-  $my_schema = C4::Connect->new_schema;
-  C4::Connect->set_schema($my_schema);
-  ...
-  C4::Connect->restore_schema;
-
-C<&set_schema> and C<&restore_schema> work in a manner analogous to
-C<&set_context> and C<&restore_context>.
-
-C<&set_schema> saves the current database handle on a stack, then sets
-the current database handle to C<$my_schema>.
-
-C<$my_schema> is assumed to be a good database handle.
-
-=cut
-
-sub set_schema {
-    my $self = shift;
-    my $new_schema = shift;
-
-    # Save the current database handle on the handle stack.
-    # We assume that $new_schema is all good: if the caller wants to
-    # screw himself by passing an invalid handle, that's fine by
-    # us.
-    push @{$context->{"schema_stack"}}, $context->{"schema"};
-    $context->{"schema"} = $new_schema;
-}
-
-=head2 restore_schema
-
-  C4::Context->restore_schema;
-
-Restores the database handle saved by an earlier call to
-C<C4::Context-E<gt>set_schema>.
-
-=cut
-
-sub restore_schema {
-    my $self = shift;
-
-    if ($#{$context->{"schema_stack"}} < 0) {
-        # Stack underflow
-        die "SCHEMA stack underflow";
-    }
-
-    # Pop the old database handle and set it.
-    $context->{"schema"} = pop @{$context->{"schema_stack"}};
-
-    # FIXME - If it is determined that restore_context should
-    # return something, then this function should, too.
 }
 
 =head2 marcfromkohafield
