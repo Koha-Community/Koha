@@ -387,7 +387,6 @@ foreach my $field ( qw(managedby acceptedby suggestedby budgetid) ) {
 }
 $template->param(%hashlists);
 $template->param(
-    DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
     SuggestionStatuses       => GetAuthorisedValues('SUGGEST_STATUS'),
 );
 output_html_with_http_headers $input, $cookie, $template->output;

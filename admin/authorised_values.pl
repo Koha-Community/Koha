@@ -247,7 +247,7 @@ sub default_form {
     }
 
     # push koha system categories
-    foreach (qw(Asort1 Asort2 Bsort1 Bsort2 SUGGEST DAMAGED LOST REPORT_GROUP REPORT_SUBGROUP DEPARTMENT TERM)) {
+    foreach (qw(Asort1 Asort2 Bsort1 Bsort2 SUGGEST DAMAGED LOST REPORT_GROUP REPORT_SUBGROUP DEPARTMENT TERM SUGGEST_STATUS)) {
         push @category_list, $_ unless $categories{$_};
     }
 
