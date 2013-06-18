@@ -317,6 +317,17 @@ __PACKAGE__->table("subscription");
   data_type: 'date'
   is_nullable: 1
 
+=head2 closed
+
+  data_type: 'integer'
+  default_value: 0
+  is_nullable: 0
+
+=head2 reneweddate
+
+  data_type: 'date'
+  is_nullable: 1
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -422,10 +433,29 @@ __PACKAGE__->add_columns(
   { data_type => "integer", default_value => 0, is_nullable => 0 },
   "enddate",
   { data_type => "date", is_nullable => 1 },
+  "closed",
+  { data_type => "integer", default_value => 0, is_nullable => 0 },
+  "reneweddate",
+  { data_type => "date", is_nullable => 1 },
 );
 __PACKAGE__->set_primary_key("subscriptionid");
 
 =head1 RELATIONS
+
+=head2 aqorders
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::Aqorder>
+
+=cut
+
+__PACKAGE__->has_many(
+  "aqorders",
+  "Koha::Schema::Result::Aqorder",
+  { "foreign.subscriptionid" => "self.subscriptionid" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
 
 =head2 subscriptionroutinglists
 
@@ -443,8 +473,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2012-09-02 08:44:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:V94nwW1uwvdVX634/QPe6A
+# Created by DBIx::Class::Schema::Loader v0.07000 @ 2013-06-18 13:13:57
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:dNaDbtGiAeSsPKEu2vd9sw
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

@@ -133,21 +133,6 @@ __PACKAGE__->set_primary_key("categorycode");
 
 =head1 RELATIONS
 
-=head2 borrower_attribute_types
-
-Type: has_many
-
-Related object: L<Koha::Schema::Result::BorrowerAttributeType>
-
-=cut
-
-__PACKAGE__->has_many(
-  "borrower_attribute_types",
-  "Koha::Schema::Result::BorrowerAttributeType",
-  { "foreign.category_code" => "self.categorycode" },
-  { cascade_copy => 0, cascade_delete => 0 },
-);
-
 =head2 borrower_message_preferences
 
 Type: has_many
@@ -193,6 +178,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 categories_branches
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::CategoriesBranch>
+
+=cut
+
+__PACKAGE__->has_many(
+  "categories_branches",
+  "Koha::Schema::Result::CategoriesBranch",
+  { "foreign.categorycode" => "self.categorycode" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 default_borrower_circ_rule
 
 Type: might_have
@@ -209,8 +209,8 @@ __PACKAGE__->might_have(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2012-09-02 08:44:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:BpTckQJaDAxGwrOS9s3tuQ
+# Created by DBIx::Class::Schema::Loader v0.07000 @ 2013-06-18 13:13:57
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:rQnbpUtXD6tNSnSGpowcaw
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

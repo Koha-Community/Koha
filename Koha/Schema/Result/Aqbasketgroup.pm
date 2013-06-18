@@ -42,12 +42,6 @@ __PACKAGE__->table("aqbasketgroups");
   is_foreign_key: 1
   is_nullable: 0
 
-=head2 billingplace
-
-  data_type: 'varchar'
-  is_nullable: 1
-  size: 10
-
 =head2 deliveryplace
 
   data_type: 'varchar'
@@ -65,6 +59,12 @@ __PACKAGE__->table("aqbasketgroups");
   is_nullable: 1
   size: 255
 
+=head2 billingplace
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 10
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -76,14 +76,14 @@ __PACKAGE__->add_columns(
   { data_type => "tinyint", is_nullable => 1 },
   "booksellerid",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
-  "billingplace",
-  { data_type => "varchar", is_nullable => 1, size => 10 },
   "deliveryplace",
   { data_type => "varchar", is_nullable => 1, size => 10 },
   "freedeliveryplace",
   { data_type => "text", is_nullable => 1 },
   "deliverycomment",
   { data_type => "varchar", is_nullable => 1, size => 255 },
+  "billingplace",
+  { data_type => "varchar", is_nullable => 1, size => 10 },
 );
 __PACKAGE__->set_primary_key("id");
 
@@ -120,8 +120,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2012-09-02 08:44:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:sxuJyGpPeqNxjNAnAAe69A
+# Created by DBIx::Class::Schema::Loader v0.07000 @ 2013-06-18 13:13:57
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:fm4sF0IGJYdSejZIB4uoBQ
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

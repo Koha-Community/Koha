@@ -75,9 +75,26 @@ __PACKAGE__->add_columns(
 );
 __PACKAGE__->set_primary_key("id");
 
+=head1 RELATIONS
 
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2012-09-02 08:44:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:GpXi5gcFBtEj82hEFzhmVg
+=head2 authorised_values_branches
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::AuthorisedValuesBranch>
+
+=cut
+
+__PACKAGE__->has_many(
+  "authorised_values_branches",
+  "Koha::Schema::Result::AuthorisedValuesBranch",
+  { "foreign.av_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07000 @ 2013-06-18 13:13:57
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:UQnP1vJKTnc7KwuTT20Orw
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

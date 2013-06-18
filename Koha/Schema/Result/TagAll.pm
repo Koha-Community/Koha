@@ -73,21 +73,6 @@ __PACKAGE__->set_primary_key("tag_id");
 
 =head1 RELATIONS
 
-=head2 biblionumber
-
-Type: belongs_to
-
-Related object: L<Koha::Schema::Result::Biblio>
-
-=cut
-
-__PACKAGE__->belongs_to(
-  "biblionumber",
-  "Koha::Schema::Result::Biblio",
-  { biblionumber => "biblionumber" },
-  { on_delete => "CASCADE", on_update => "CASCADE" },
-);
-
 =head2 borrowernumber
 
 Type: belongs_to
@@ -103,9 +88,24 @@ __PACKAGE__->belongs_to(
   { on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
+=head2 biblionumber
 
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2012-09-02 08:44:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:xdc0YzmHsXuuuUWfa1aRpg
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Biblio>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "biblionumber",
+  "Koha::Schema::Result::Biblio",
+  { biblionumber => "biblionumber" },
+  { on_delete => "CASCADE", on_update => "CASCADE" },
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07000 @ 2013-06-18 13:13:57
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:SunUKfsdQ6hNupUkD2ygzw
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

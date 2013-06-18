@@ -121,6 +121,12 @@ __PACKAGE__->table("deleteditems");
   is_nullable: 1
   size: 255
 
+=head2 coded_location_qualifier
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 10
+
 =head2 issues
 
   data_type: 'smallint'
@@ -282,6 +288,8 @@ __PACKAGE__->add_columns(
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "itemcallnumber",
   { data_type => "varchar", is_nullable => 1, size => 255 },
+  "coded_location_qualifier",
+  { data_type => "varchar", is_nullable => 1, size => 10 },
   "issues",
   { data_type => "smallint", is_nullable => 1 },
   "renewals",
@@ -334,8 +342,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("itemnumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2012-09-02 08:44:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:71VE1YzdzK7dAtGTVKeCkg
+# Created by DBIx::Class::Schema::Loader v0.07000 @ 2013-06-18 13:13:57
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:dQeILHSwObg9anjIGL+5vA
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

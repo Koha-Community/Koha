@@ -67,11 +67,6 @@ __PACKAGE__->table("serial");
   data_type: 'date'
   is_nullable: 1
 
-=head2 itemnumber
-
-  data_type: 'text'
-  is_nullable: 1
-
 =head2 claimdate
 
   data_type: 'date'
@@ -101,8 +96,6 @@ __PACKAGE__->add_columns(
   { data_type => "text", is_nullable => 1 },
   "publisheddate",
   { data_type => "date", is_nullable => 1 },
-  "itemnumber",
-  { data_type => "text", is_nullable => 1 },
   "claimdate",
   { data_type => "date", is_nullable => 1 },
   "routingnotes",
@@ -128,8 +121,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2012-09-02 08:44:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:PqzibMlED9bg0uOONSBnmg
+# Created by DBIx::Class::Schema::Loader v0.07000 @ 2013-06-18 13:13:57
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:6kL+JePSa/pT8Fvyrp2xow
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

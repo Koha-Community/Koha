@@ -158,6 +158,36 @@ __PACKAGE__->set_primary_key("branchcode");
 
 =head1 RELATIONS
 
+=head2 authorised_values_branches
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::AuthorisedValuesBranch>
+
+=cut
+
+__PACKAGE__->has_many(
+  "authorised_values_branches",
+  "Koha::Schema::Result::AuthorisedValuesBranch",
+  { "foreign.branchcode" => "self.branchcode" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+=head2 borrower_attribute_types_branches
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::BorrowerAttributeTypesBranch>
+
+=cut
+
+__PACKAGE__->has_many(
+  "borrower_attribute_types_branches",
+  "Koha::Schema::Result::BorrowerAttributeTypesBranch",
+  { "foreign.b_branchcode" => "self.branchcode" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 borrowers
 
 Type: has_many
@@ -245,6 +275,36 @@ __PACKAGE__->has_many(
   "branchtransfers_tobranches",
   "Koha::Schema::Result::Branchtransfer",
   { "foreign.tobranch" => "self.branchcode" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+=head2 categories_branches
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::CategoriesBranch>
+
+=cut
+
+__PACKAGE__->has_many(
+  "categories_branches",
+  "Koha::Schema::Result::CategoriesBranch",
+  { "foreign.branchcode" => "self.branchcode" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+=head2 course_items
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::CourseItem>
+
+=cut
+
+__PACKAGE__->has_many(
+  "course_items",
+  "Koha::Schema::Result::CourseItem",
+  { "foreign.holdingbranch" => "self.branchcode" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
@@ -369,8 +429,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2012-09-02 08:44:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:7/fUACQhSXHg0daDi6MGbQ
+# Created by DBIx::Class::Schema::Loader v0.07000 @ 2013-06-18 13:13:57
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:BS/6xtFAoMSKsXho4IXXjQ
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

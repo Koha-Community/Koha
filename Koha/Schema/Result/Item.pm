@@ -123,6 +123,12 @@ __PACKAGE__->table("items");
   is_nullable: 1
   size: 255
 
+=head2 coded_location_qualifier
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 10
+
 =head2 issues
 
   data_type: 'smallint'
@@ -284,6 +290,8 @@ __PACKAGE__->add_columns(
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "itemcallnumber",
   { data_type => "varchar", is_nullable => 1, size => 255 },
+  "coded_location_qualifier",
+  { data_type => "varchar", is_nullable => 1, size => 10 },
   "issues",
   { data_type => "smallint", is_nullable => 1 },
   "renewals",
@@ -362,6 +370,21 @@ Related object: L<Koha::Schema::Result::Branchtransfer>
 __PACKAGE__->has_many(
   "branchtransfers",
   "Koha::Schema::Result::Branchtransfer",
+  { "foreign.itemnumber" => "self.itemnumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+=head2 course_item
+
+Type: might_have
+
+Related object: L<Koha::Schema::Result::CourseItem>
+
+=cut
+
+__PACKAGE__->might_have(
+  "course_item",
+  "Koha::Schema::Result::CourseItem",
   { "foreign.itemnumber" => "self.itemnumber" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
@@ -517,8 +540,8 @@ __PACKAGE__->might_have(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2012-09-02 08:44:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:+jjodrPqX4WhBbgnTc5OqQ
+# Created by DBIx::Class::Schema::Loader v0.07000 @ 2013-06-18 13:13:57
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:f3HngbnArIKegakzHgcFBg
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

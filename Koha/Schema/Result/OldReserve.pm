@@ -122,6 +122,11 @@ __PACKAGE__->table("old_reserves");
   data_type: 'datetime'
   is_nullable: 1
 
+=head2 maxpickupdate
+
+  data_type: 'date'
+  is_nullable: 1
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -167,6 +172,8 @@ __PACKAGE__->add_columns(
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "suspend_until",
   { data_type => "datetime", is_nullable => 1 },
+  "maxpickupdate",
+  { data_type => "date", is_nullable => 1 },
 );
 __PACKAGE__->set_primary_key("reserve_id");
 
@@ -218,8 +225,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2012-09-02 08:44:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:1b1FcIuOJ5ZRU2apc6swkQ
+# Created by DBIx::Class::Schema::Loader v0.07000 @ 2013-06-18 13:13:57
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Ni1RNxdeOoypM+GwYu1vAQ
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

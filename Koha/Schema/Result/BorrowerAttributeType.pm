@@ -76,7 +76,6 @@ __PACKAGE__->table("borrower_attribute_types");
 =head2 category_code
 
   data_type: 'varchar'
-  is_foreign_key: 1
   is_nullable: 1
   size: 10
 
@@ -109,7 +108,7 @@ __PACKAGE__->add_columns(
   "display_checkout",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "category_code",
-  { data_type => "varchar", is_foreign_key => 1, is_nullable => 1, size => 10 },
+  { data_type => "varchar", is_nullable => 1, size => 10 },
   "class",
   { data_type => "varchar", default_value => "", is_nullable => 0, size => 255 },
 );
@@ -117,19 +116,19 @@ __PACKAGE__->set_primary_key("code");
 
 =head1 RELATIONS
 
-=head2 category_code
+=head2 borrower_attribute_types_branches
 
-Type: belongs_to
+Type: has_many
 
-Related object: L<Koha::Schema::Result::Category>
+Related object: L<Koha::Schema::Result::BorrowerAttributeTypesBranch>
 
 =cut
 
-__PACKAGE__->belongs_to(
-  "category_code",
-  "Koha::Schema::Result::Category",
-  { categorycode => "category_code" },
-  { join_type => "LEFT", on_delete => "CASCADE", on_update => "CASCADE" },
+__PACKAGE__->has_many(
+  "borrower_attribute_types_branches",
+  "Koha::Schema::Result::BorrowerAttributeTypesBranch",
+  { "foreign.bat_code" => "self.code" },
+  { cascade_copy => 0, cascade_delete => 0 },
 );
 
 =head2 borrower_attributes
@@ -148,8 +147,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2012-09-02 08:44:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:EpdavGdH3uR/eaNLJIoHCg
+# Created by DBIx::Class::Schema::Loader v0.07000 @ 2013-06-18 13:13:57
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:vwni0x6JLQPsjX8UOSnr4Q
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

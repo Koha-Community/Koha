@@ -1,4 +1,4 @@
-package Koha::Schema::Result::Deletedborrower;
+package Koha::Schema::Result::BorrowerModification;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
@@ -11,13 +11,26 @@ use base 'DBIx::Class::Core';
 
 =head1 NAME
 
-Koha::Schema::Result::Deletedborrower
+Koha::Schema::Result::BorrowerModification
 
 =cut
 
-__PACKAGE__->table("deletedborrowers");
+__PACKAGE__->table("borrower_modifications");
 
 =head1 ACCESSORS
+
+=head2 timestamp
+
+  data_type: 'timestamp'
+  default_value: current_timestamp
+  is_nullable: 0
+
+=head2 verification_token
+
+  data_type: 'varchar'
+  default_value: (empty string)
+  is_nullable: 0
+  size: 255
 
 =head2 borrowernumber
 
@@ -34,7 +47,7 @@ __PACKAGE__->table("deletedborrowers");
 =head2 surname
 
   data_type: 'mediumtext'
-  is_nullable: 0
+  is_nullable: 1
 
 =head2 firstname
 
@@ -71,7 +84,7 @@ __PACKAGE__->table("deletedborrowers");
 =head2 address
 
   data_type: 'mediumtext'
-  is_nullable: 0
+  is_nullable: 1
 
 =head2 address2
 
@@ -81,7 +94,7 @@ __PACKAGE__->table("deletedborrowers");
 =head2 city
 
   data_type: 'mediumtext'
-  is_nullable: 0
+  is_nullable: 1
 
 =head2 state
 
@@ -192,15 +205,13 @@ __PACKAGE__->table("deletedborrowers");
 =head2 branchcode
 
   data_type: 'varchar'
-  default_value: (empty string)
-  is_nullable: 0
+  is_nullable: 1
   size: 10
 
 =head2 categorycode
 
   data_type: 'varchar'
-  default_value: (empty string)
-  is_nullable: 0
+  is_nullable: 1
   size: 10
 
 =head2 dateenrolled
@@ -298,7 +309,7 @@ __PACKAGE__->table("deletedborrowers");
 
   data_type: 'varchar'
   is_nullable: 1
-  size: 30
+  size: 75
 
 =head2 opacnote
 
@@ -384,18 +395,25 @@ __PACKAGE__->table("deletedborrowers");
 =head2 privacy
 
   data_type: 'integer'
-  default_value: 1
-  is_nullable: 0
+  is_nullable: 1
 
 =cut
 
 __PACKAGE__->add_columns(
+  "timestamp",
+  {
+    data_type     => "timestamp",
+    default_value => \"current_timestamp",
+    is_nullable   => 0,
+  },
+  "verification_token",
+  { data_type => "varchar", default_value => "", is_nullable => 0, size => 255 },
   "borrowernumber",
   { data_type => "integer", default_value => 0, is_nullable => 0 },
   "cardnumber",
   { data_type => "varchar", is_nullable => 1, size => 16 },
   "surname",
-  { data_type => "mediumtext", is_nullable => 0 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "firstname",
   { data_type => "text", is_nullable => 1 },
   "title",
@@ -409,11 +427,11 @@ __PACKAGE__->add_columns(
   "streettype",
   { data_type => "varchar", is_nullable => 1, size => 50 },
   "address",
-  { data_type => "mediumtext", is_nullable => 0 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "address2",
   { data_type => "text", is_nullable => 1 },
   "city",
-  { data_type => "mediumtext", is_nullable => 0 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "state",
   { data_type => "text", is_nullable => 1 },
   "zipcode",
@@ -455,9 +473,9 @@ __PACKAGE__->add_columns(
   "dateofbirth",
   { data_type => "date", is_nullable => 1 },
   "branchcode",
-  { data_type => "varchar", default_value => "", is_nullable => 0, size => 10 },
+  { data_type => "varchar", is_nullable => 1, size => 10 },
   "categorycode",
-  { data_type => "varchar", default_value => "", is_nullable => 0, size => 10 },
+  { data_type => "varchar", is_nullable => 1, size => 10 },
   "dateenrolled",
   { data_type => "date", is_nullable => 1 },
   "dateexpiry",
@@ -493,7 +511,7 @@ __PACKAGE__->add_columns(
   "flags",
   { data_type => "integer", is_nullable => 1 },
   "userid",
-  { data_type => "varchar", is_nullable => 1, size => 30 },
+  { data_type => "varchar", is_nullable => 1, size => 75 },
   "opacnote",
   { data_type => "mediumtext", is_nullable => 1 },
   "contactnote",
@@ -523,12 +541,13 @@ __PACKAGE__->add_columns(
   "smsalertnumber",
   { data_type => "varchar", is_nullable => 1, size => 50 },
   "privacy",
-  { data_type => "integer", default_value => 1, is_nullable => 0 },
+  { data_type => "integer", is_nullable => 1 },
 );
+__PACKAGE__->set_primary_key("verification_token", "borrowernumber");
 
 
 # Created by DBIx::Class::Schema::Loader v0.07000 @ 2013-06-18 13:13:57
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:1D2zAd8OsHXZ2s9cEVevug
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:F50fjkEjqHuyl7zaEDV+3A
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

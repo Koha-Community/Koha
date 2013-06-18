@@ -85,7 +85,7 @@ __PACKAGE__->table("borrowers");
 
 =head2 state
 
-  data_type: 'mediumtext'
+  data_type: 'text'
   is_nullable: 1
 
 =head2 zipcode
@@ -160,7 +160,7 @@ __PACKAGE__->table("borrowers");
 
 =head2 b_state
 
-  data_type: 'mediumtext'
+  data_type: 'text'
   is_nullable: 1
 
 =head2 b_zipcode
@@ -357,7 +357,7 @@ __PACKAGE__->table("borrowers");
 
 =head2 altcontactstate
 
-  data_type: 'mediumtext'
+  data_type: 'text'
   is_nullable: 1
 
 =head2 altcontactzipcode
@@ -417,7 +417,7 @@ __PACKAGE__->add_columns(
   "city",
   { data_type => "mediumtext", is_nullable => 0 },
   "state",
-  { data_type => "mediumtext", is_nullable => 1 },
+  { data_type => "text", is_nullable => 1 },
   "zipcode",
   { data_type => "varchar", is_nullable => 1, size => 25 },
   "country",
@@ -445,7 +445,7 @@ __PACKAGE__->add_columns(
   "b_city",
   { data_type => "mediumtext", is_nullable => 1 },
   "b_state",
-  { data_type => "mediumtext", is_nullable => 1 },
+  { data_type => "text", is_nullable => 1 },
   "b_zipcode",
   { data_type => "varchar", is_nullable => 1, size => 25 },
   "b_country",
@@ -527,7 +527,7 @@ __PACKAGE__->add_columns(
   "altcontactaddress3",
   { data_type => "varchar", is_nullable => 1, size => 255 },
   "altcontactstate",
-  { data_type => "mediumtext", is_nullable => 1 },
+  { data_type => "text", is_nullable => 1 },
   "altcontactzipcode",
   { data_type => "varchar", is_nullable => 1, size => 50 },
   "altcontactcountry",
@@ -662,6 +662,21 @@ __PACKAGE__->belongs_to(
   "Koha::Schema::Result::Branch",
   { branchcode => "branchcode" },
   { on_delete => "CASCADE", on_update => "CASCADE" },
+);
+
+=head2 course_instructors
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::CourseInstructor>
+
+=cut
+
+__PACKAGE__->has_many(
+  "course_instructors",
+  "Koha::Schema::Result::CourseInstructor",
+  { "foreign.borrowernumber" => "self.borrowernumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
 );
 
 =head2 creator_batches
@@ -935,8 +950,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2012-09-02 08:44:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:a5PYhuHX3DHlNJqdmIuqTw
+# Created by DBIx::Class::Schema::Loader v0.07000 @ 2013-06-18 13:13:57
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:RZG8l5yFKXZzsAY8CenNeA
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

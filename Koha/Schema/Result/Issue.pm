@@ -23,13 +23,13 @@ __PACKAGE__->table("issues");
 
   data_type: 'integer'
   is_foreign_key: 1
-  is_nullable: 0
+  is_nullable: 1
 
 =head2 itemnumber
 
   data_type: 'integer'
   is_foreign_key: 1
-  is_nullable: 0
+  is_nullable: 1
 
 =head2 date_due
 
@@ -84,9 +84,9 @@ __PACKAGE__->table("issues");
 
 __PACKAGE__->add_columns(
   "borrowernumber",
-  { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "itemnumber",
-  { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "date_due",
   { data_type => "datetime", is_nullable => 1 },
   "branchcode",
@@ -125,7 +125,7 @@ __PACKAGE__->belongs_to(
   "borrowernumber",
   "Koha::Schema::Result::Borrower",
   { borrowernumber => "borrowernumber" },
-  { on_delete => "CASCADE", on_update => "CASCADE" },
+  { join_type => "LEFT", on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
 =head2 itemnumber
@@ -140,12 +140,12 @@ __PACKAGE__->belongs_to(
   "itemnumber",
   "Koha::Schema::Result::Item",
   { itemnumber => "itemnumber" },
-  { on_delete => "CASCADE", on_update => "CASCADE" },
+  { join_type => "LEFT", on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2012-09-02 08:44:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:KCy3FmbJK9aZRqXSAkYe5g
+# Created by DBIx::Class::Schema::Loader v0.07000 @ 2013-06-18 13:13:57
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:uZUDWDGWOkC3oCOyMaG1sg
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

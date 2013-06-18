@@ -81,6 +81,18 @@ __PACKAGE__->table("aqbasket");
   is_foreign_key: 1
   is_nullable: 1
 
+=head2 deliveryplace
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 10
+
+=head2 billingplace
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 10
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -111,6 +123,10 @@ __PACKAGE__->add_columns(
   { data_type => "mediumtext", is_nullable => 1 },
   "basketgroupid",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+  "deliveryplace",
+  { data_type => "varchar", is_nullable => 1, size => 10 },
+  "billingplace",
+  { data_type => "varchar", is_nullable => 1, size => 10 },
 );
 __PACKAGE__->set_primary_key("basketno");
 
@@ -177,8 +193,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2012-09-02 08:44:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:eRG3p93qKZhp3rNPwG60Ig
+# Created by DBIx::Class::Schema::Loader v0.07000 @ 2013-06-18 13:13:57
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:dtVubmNVtOouPnHgut95og
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

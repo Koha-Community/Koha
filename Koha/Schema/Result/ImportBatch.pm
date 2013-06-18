@@ -94,6 +94,13 @@ __PACKAGE__->table("import_batches");
   extra: {list => ["batch","z3950","webservice"]}
   is_nullable: 0
 
+=head2 record_type
+
+  data_type: 'enum'
+  default_value: 'biblio'
+  extra: {list => ["biblio","auth","holdings"]}
+  is_nullable: 0
+
 =head2 file_name
 
   data_type: 'varchar'
@@ -104,13 +111,6 @@ __PACKAGE__->table("import_batches");
 
   data_type: 'mediumtext'
   is_nullable: 1
-
-=head2 record_type
-
-  data_type: 'enum'
-  default_value: 'biblio'
-  extra: {list => ["biblio","auth","holdings"]}
-  is_nullable: 0
 
 =cut
 
@@ -185,10 +185,6 @@ __PACKAGE__->add_columns(
     extra => { list => ["batch", "z3950", "webservice"] },
     is_nullable => 0,
   },
-  "file_name",
-  { data_type => "varchar", is_nullable => 1, size => 100 },
-  "comments",
-  { data_type => "mediumtext", is_nullable => 1 },
   "record_type",
   {
     data_type => "enum",
@@ -196,6 +192,10 @@ __PACKAGE__->add_columns(
     extra => { list => ["biblio", "auth", "holdings"] },
     is_nullable => 0,
   },
+  "file_name",
+  { data_type => "varchar", is_nullable => 1, size => 100 },
+  "comments",
+  { data_type => "mediumtext", is_nullable => 1 },
 );
 __PACKAGE__->set_primary_key("import_batch_id");
 
@@ -217,8 +217,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2012-09-02 08:44:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:es2clfR8Vlgv8rN/kM65iA
+# Created by DBIx::Class::Schema::Loader v0.07000 @ 2013-06-18 13:13:57
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:LUl8GuPahmUwYeaGAKBJxw
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

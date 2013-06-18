@@ -81,6 +81,21 @@ __PACKAGE__->add_columns(
 
 =head1 RELATIONS
 
+=head2 shelfnumber
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Virtualshelve>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "shelfnumber",
+  "Koha::Schema::Result::Virtualshelve",
+  { shelfnumber => "shelfnumber" },
+  { on_delete => "CASCADE", on_update => "CASCADE" },
+);
+
 =head2 biblionumber
 
 Type: belongs_to
@@ -111,24 +126,9 @@ __PACKAGE__->belongs_to(
   { join_type => "LEFT", on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
-=head2 shelfnumber
 
-Type: belongs_to
-
-Related object: L<Koha::Schema::Result::Virtualshelve>
-
-=cut
-
-__PACKAGE__->belongs_to(
-  "shelfnumber",
-  "Koha::Schema::Result::Virtualshelve",
-  { shelfnumber => "shelfnumber" },
-  { on_delete => "CASCADE", on_update => "CASCADE" },
-);
-
-
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2012-09-02 08:44:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:LytHu3VzJUfDRLgSsRHy1Q
+# Created by DBIx::Class::Schema::Loader v0.07000 @ 2013-06-18 13:13:57
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Hno59ucoCC6fZqGi1A2yIA
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

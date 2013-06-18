@@ -114,17 +114,6 @@ __PACKAGE__->table("aqorders");
   data_type: 'mediumtext'
   is_nullable: 1
 
-=head2 subscription
-
-  data_type: 'tinyint'
-  is_nullable: 1
-
-=head2 serialid
-
-  data_type: 'varchar'
-  is_nullable: 1
-  size: 30
-
 =head2 basketno
 
   data_type: 'integer'
@@ -154,11 +143,17 @@ __PACKAGE__->table("aqorders");
   is_nullable: 1
   size: [13,2]
 
-=head2 gst
+=head2 gstrate
 
   data_type: 'decimal'
   is_nullable: 1
-  size: [13,2]
+  size: [6,4]
+
+=head2 discount
+
+  data_type: 'float'
+  is_nullable: 1
+  size: [6,4]
 
 =head2 budget_id
 
@@ -215,6 +210,12 @@ __PACKAGE__->table("aqorders");
   data_type: 'date'
   is_nullable: 1
 
+=head2 subscriptionid
+
+  data_type: 'integer'
+  is_foreign_key: 1
+  is_nullable: 1
+
 =head2 parent_ordernumber
 
   data_type: 'integer'
@@ -257,10 +258,6 @@ __PACKAGE__->add_columns(
   { data_type => "mediumtext", is_nullable => 1 },
   "purchaseordernumber",
   { data_type => "mediumtext", is_nullable => 1 },
-  "subscription",
-  { data_type => "tinyint", is_nullable => 1 },
-  "serialid",
-  { data_type => "varchar", is_nullable => 1, size => 30 },
   "basketno",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "biblioitemnumber",
@@ -275,8 +272,10 @@ __PACKAGE__->add_columns(
   { data_type => "decimal", is_nullable => 1, size => [13, 2] },
   "ecost",
   { data_type => "decimal", is_nullable => 1, size => [13, 2] },
-  "gst",
-  { data_type => "decimal", is_nullable => 1, size => [13, 2] },
+  "gstrate",
+  { data_type => "decimal", is_nullable => 1, size => [6, 4] },
+  "discount",
+  { data_type => "float", is_nullable => 1, size => [6, 4] },
   "budget_id",
   { data_type => "integer", is_nullable => 0 },
   "budgetgroup_id",
@@ -297,6 +296,8 @@ __PACKAGE__->add_columns(
   { data_type => "integer", default_value => 0, is_nullable => 1 },
   "claimed_date",
   { data_type => "date", is_nullable => 1 },
+  "subscriptionid",
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "parent_ordernumber",
   { data_type => "integer", is_nullable => 1 },
 );
@@ -349,9 +350,39 @@ __PACKAGE__->belongs_to(
   { join_type => "LEFT", on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
+=head2 subscriptionid
 
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2012-09-02 08:44:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:McWqeFHBMTDvKV7pUEqJ3w
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Subscription>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "subscriptionid",
+  "Koha::Schema::Result::Subscription",
+  { subscriptionid => "subscriptionid" },
+  { join_type => "LEFT", on_delete => "CASCADE", on_update => "CASCADE" },
+);
+
+=head2 aqorders_items
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::AqordersItem>
+
+=cut
+
+__PACKAGE__->has_many(
+  "aqorders_items",
+  "Koha::Schema::Result::AqordersItem",
+  { "foreign.ordernumber" => "self.ordernumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07000 @ 2013-06-18 13:13:57
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:H1fME9Sli2LWh6zAmpzK8A
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

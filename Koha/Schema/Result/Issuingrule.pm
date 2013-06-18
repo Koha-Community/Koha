@@ -116,11 +116,21 @@ __PACKAGE__->table("issuingrules");
   default_value: 0
   is_nullable: 0
 
+=head2 renewalperiod
+
+  data_type: 'integer'
+  is_nullable: 1
+
 =head2 reservesallowed
 
   data_type: 'smallint'
   default_value: 0
   is_nullable: 0
+
+=head2 holdspickupdelay
+
+  data_type: 'integer'
+  is_nullable: 1
 
 =head2 branchcode
 
@@ -176,8 +186,12 @@ __PACKAGE__->add_columns(
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "renewalsallowed",
   { data_type => "smallint", default_value => 0, is_nullable => 0 },
+  "renewalperiod",
+  { data_type => "integer", is_nullable => 1 },
   "reservesallowed",
   { data_type => "smallint", default_value => 0, is_nullable => 0 },
+  "holdspickupdelay",
+  { data_type => "integer", is_nullable => 1 },
   "branchcode",
   { data_type => "varchar", default_value => "", is_nullable => 0, size => 10 },
   "overduefinescap",
@@ -186,8 +200,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("branchcode", "categorycode", "itemtype");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2012-09-02 08:44:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:bsTUaL5I872EWP0ZLfdPQA
+# Created by DBIx::Class::Schema::Loader v0.07000 @ 2013-06-18 13:13:57
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:odTb6vtz4DignNIlYwkNEg
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

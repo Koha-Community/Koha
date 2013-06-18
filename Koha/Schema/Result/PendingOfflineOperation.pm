@@ -52,7 +52,7 @@ __PACKAGE__->table("pending_offline_operations");
 =head2 barcode
 
   data_type: 'varchar'
-  is_nullable: 0
+  is_nullable: 1
   size: 20
 
 =head2 cardnumber
@@ -60,6 +60,12 @@ __PACKAGE__->table("pending_offline_operations");
   data_type: 'varchar'
   is_nullable: 1
   size: 16
+
+=head2 amount
+
+  data_type: 'decimal'
+  is_nullable: 1
+  size: [28,6]
 
 =cut
 
@@ -79,15 +85,17 @@ __PACKAGE__->add_columns(
   "action",
   { data_type => "varchar", is_nullable => 0, size => 10 },
   "barcode",
-  { data_type => "varchar", is_nullable => 0, size => 20 },
+  { data_type => "varchar", is_nullable => 1, size => 20 },
   "cardnumber",
   { data_type => "varchar", is_nullable => 1, size => 16 },
+  "amount",
+  { data_type => "decimal", is_nullable => 1, size => [28, 6] },
 );
 __PACKAGE__->set_primary_key("operationid");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2012-09-02 08:44:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:PFEH3bfCYOG8Q3dOX/IQ5w
+# Created by DBIx::Class::Schema::Loader v0.07000 @ 2013-06-18 13:13:57
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ECj0ps97NmZowYLZv++zbA
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

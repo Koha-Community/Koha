@@ -89,7 +89,7 @@ __PACKAGE__->table("suggestions");
 
   data_type: 'varchar'
   is_nullable: 1
-  size: 80
+  size: 255
 
 =head2 copyrightdate
 
@@ -226,7 +226,7 @@ __PACKAGE__->add_columns(
   "author",
   { data_type => "varchar", is_nullable => 1, size => 80 },
   "title",
-  { data_type => "varchar", is_nullable => 1, size => 80 },
+  { data_type => "varchar", is_nullable => 1, size => 255 },
   "copyrightdate",
   { data_type => "smallint", is_nullable => 1 },
   "publishercode",
@@ -273,8 +273,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("suggestionid");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2012-09-02 08:44:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Yseojs5ogx6ZmYsbhE03Gw
+# Created by DBIx::Class::Schema::Loader v0.07000 @ 2013-06-18 13:13:57
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:FCZjU1DjqLCAcw+dSjpP/w
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
