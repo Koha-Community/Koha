@@ -11,12 +11,16 @@ BEGIN {
     use_ok('C4::Biblio');
     use_ok('C4::Context');
     use_ok('C4::CourseReserves', qw/:all/);
-    use_ok('C4::Items', qw(AddItemFromMarc));
+    use_ok('C4::Items', qw(AddItem));
     use_ok('MARC::Field');
     use_ok('MARC::Record');
 }
 
 my $dbh = C4::Context->dbh;
+
+# Start transaction
+$dbh->{AutoCommit} = 0;
+$dbh->{RaiseError} = 1;
 
 my $sth = $dbh->prepare("SELECT * FROM borrowers ORDER BY RAND() LIMIT 10");
 $sth->execute();
@@ -28,7 +32,7 @@ $record->append_fields(
     MARC::Field->new( '952', '0', '0', a => 'CPL', b => 'CPL' )
 );
 my ( $biblionumber, $biblioitemnumber ) = C4::Biblio::AddBiblio($record, '');
-my @iteminfo = C4::Items::AddItemFromMarc( $record, $biblionumber );
+my @iteminfo = C4::Items::AddItem( { homebranch => 'CPL', holdingbranch => 'CPL' }, $biblionumber );
 my $itemnumber = $iteminfo[2];
 
 my $course_id = ModCourse(
@@ -87,7 +91,4 @@ DelCourse($course_id);
 $course = GetCourse($course_id);
 ok( !defined( $course->{'course_id'} ), "DelCourse deleted course successfully" );
 
-END {
-    C4::Items::DelItem( $dbh, $biblionumber, $itemnumber );
-    C4::Biblio::DelBiblio( $biblionumber );
-};
+$dbh->rollback;
