@@ -17,19 +17,17 @@ package Koha::Template::Plugin::KohaBranchName;
 # with Koha; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-use strict;
-use warnings;
+use Modern::Perl;
 
 use Template::Plugin::Filter;
 use base qw( Template::Plugin::Filter );
-use warnings;
-use strict;
 
 use C4::Branch qw( GetBranchName );;
 
 sub filter {
-    my ($self,$branchcode) = @_;
-    return GetBranchName( $branchcode );
+    my ($self, $branchcode) = @_;
+    my $name = GetBranchName( $branchcode );
+    return defined($name) ? $name : '';
 }
 
 1;
