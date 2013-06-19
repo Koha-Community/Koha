@@ -101,6 +101,7 @@ my $test_sth = $dbh->prepare("SELECT * FROM hold_fill_targets
                               WHERE borrowernumber = $borrowernumber");
 
 # We have a book available homed in borrower branch, no point fiddling with AutomaticItemReturn
+C4::Context->set_preference('AutomaticItemReturn', 0);
 test_queue ('take from homebranch',  0, $borrower_branchcode, $borrower_branchcode);
 test_queue ('take from homebranch',  1, $borrower_branchcode, $borrower_branchcode);
 
@@ -109,7 +110,7 @@ $dbh->do("DELETE FROM hold_fill_targets");
 $dbh->do("DELETE FROM issues WHERE itemnumber IN (SELECT itemnumber FROM items WHERE homebranch = '$borrower_branchcode' AND holdingbranch = '$borrower_branchcode')");
 $dbh->do("DELETE FROM items WHERE homebranch = '$borrower_branchcode' AND holdingbranch = '$borrower_branchcode'");
 # test_queue will flush
-$dbh->do("UPDATE systempreferences SET value = 1 WHERE variable = 'AutomaticItemReturn'");
+C4::Context->set_preference('AutomaticItemReturn', 1);
 # Not sure how to make this test more difficult - holding branch does not matter
 test_queue ('take from holdingbranch AutomaticItemReturn on', 0, $borrower_branchcode, undef);
 test_queue ('take from holdingbranch AutomaticItemReturn on', 1, $borrower_branchcode, $least_cost_branch_code);
@@ -118,7 +119,7 @@ $dbh->do("DELETE FROM tmp_holdsqueue");
 $dbh->do("DELETE FROM hold_fill_targets");
 $dbh->do("DELETE FROM issues WHERE itemnumber IN (SELECT itemnumber FROM items WHERE homebranch = '$borrower_branchcode')");
 $dbh->do("DELETE FROM items WHERE homebranch = '$borrower_branchcode'");
-$dbh->do("UPDATE systempreferences SET value = 0 WHERE variable = 'AutomaticItemReturn'");
+C4::Context->set_preference('AutomaticItemReturn', 0);
 # We have a book available held in borrower branch
 test_queue ('take from holdingbranch', 0, $borrower_branchcode, $borrower_branchcode);
 test_queue ('take from holdingbranch', 1, $borrower_branchcode, $borrower_branchcode);
