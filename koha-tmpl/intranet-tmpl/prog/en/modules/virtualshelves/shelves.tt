@@ -407,14 +407,6 @@ function placeHold () {
 		[% END %]<!-- /itemsloop -->
     </table>
     <div class="pages">[% pagination_bar %]</div>
-    <fieldset class="action">
-        [% IF ( itemsloop ) %]
-            [% IF ( CAN_user_reserveforothers && DisplayMultiPlaceHold ) %]<input type="button" class="placehold" value="Place hold" />[% END %]
-            [% IF ( allowremovingitems ) %]<input type="submit" value="Remove selected records" class="
-            list-remove" />[% END %]
-            [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]<input type="submit" value="Merge selected records" class="merge-items" />[% END %]
-        [% END %]
- </fieldset>
 </form>
 
 	[% END %]
