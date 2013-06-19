@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 14;
+use Test::More tests => 15;
 use Test::MockModule;
 use Test::Warn;
 use List::MoreUtils qw( uniq );
@@ -250,6 +250,7 @@ sub run_tests {
     # Authority tests don't interact well with Elasticsearch at the moment due to the fact that there's currently no way to
     # roll back ES index changes.
     t::lib::Mocks::mock_preference('SearchEngine', 'Zebra');
+    t::lib::Mocks::mock_preference('autoControlNumber', 'OFF');
 
     t::lib::Mocks::mock_preference( 'RealTimeHoldsQueue', 0 );
 
@@ -822,6 +823,29 @@ subtest "LinkBibHeadingsToAuthorities record generation tests" => sub {
          "The generated record contains the correct subfields"
     );
 };
+
+subtest 'autoControlNumber tests' => sub {
+    plan tests => 3;
+
+    t::lib::Mocks::mock_preference('autoControlNumber', 'OFF');
+
+    my $record = MARC::Record->new();
+    my ($biblionumber) = C4::Biblio::AddBiblio($record, '');
+    $record = GetMarcBiblio({biblionumber => $biblionumber});
+    is($record->field('001'), undef, '001 not set when pref is off');
+
+    t::lib::Mocks::mock_preference('autoControlNumber', 'biblionumber');
+    C4::Biblio::ModBiblio($record, $biblionumber, "", 1);
+    $record = GetMarcBiblio({biblionumber => $biblionumber});
+    is($record->field('001')->as_string(), $biblionumber, '001 set to biblionumber when pref set and field is blank');
+
+    $record->field('001')->update('Not biblionumber');
+    C4::Biblio::ModBiblio($record, $biblionumber, "", 1);
+    $record = GetMarcBiblio({biblionumber => $biblionumber});
+    is($record->field('001')->as_string(), 'Not biblionumber', '001 not set to biblionumber when pref set and field exists');
+
+};
+
 
 # Cleanup
 Koha::Caches->get_instance->clear_from_cache( "MarcSubfieldStructure-" );

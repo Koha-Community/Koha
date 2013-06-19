@@ -251,13 +251,17 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
             saveLabel: _("Duplicate"),
             get: function( id, callback ) {
                 if ( !id ) return false;
+                var remove_control_num = [% IF Koha.Preference('autoControlNumber') == 'OFF' %] 0 [% ELSE %] 1 [% END %];
 
-                KohaBackend.GetRecord( id, callback );
+                KohaBackend.GetRecord( id, remove_control_num, callback );
             },
             save: function( id, record, done ) {
                 function finishCb( data ) {
                     done( { error: data.error, newRecord: data.marcxml && data.marcxml[0], newId: data.biblionumber && [ 'catalog', data.biblionumber ] } );
                 }
+                [% IF Koha.Preference('autoControlNumber') != 'OFF' %]
+                    record.removeField("001");
+                [% END %]
 
                 KohaBackend.CreateRecord( record, finishCb );
             }
@@ -272,7 +276,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
             get: function( id, callback ) {
                 if ( !id ) return false;
 
-                KohaBackend.GetRecord( id, callback );
+                KohaBackend.GetRecord( id, "", callback );
             },
             save: function( id, record, done ) {
                 function finishCb( data ) {

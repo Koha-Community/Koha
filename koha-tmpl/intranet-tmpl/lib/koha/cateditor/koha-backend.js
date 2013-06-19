@@ -103,15 +103,16 @@ define( [ '/cgi-bin/koha/svc/cataloguing/framework?frameworkcode=&callback=defin
             return _framework_kohafields[kohafield];
         },
 
-        GetRecord: function( id, callback ) {
+        GetRecord: function( id, remove_control_num, callback ) {
             $.get(
-                '/cgi-bin/koha/svc/bib/' + id
+                '/cgi-bin/koha/svc/bib/'+ id
             ).done( function( metadata ) {
                 $.get(
                     '/cgi-bin/koha/svc/bib_framework/' + id
                 ).done( function( frameworkcode ) {
                     var record = new MARC.Record();
                     record.loadMARCXML(metadata);
+                    if( remove_control_num ) { record.removeField("001"); }
                     record.frameworkcode = $(frameworkcode).find('frameworkcode').text();
                     initFramework( record.frameworkcode, function( error ) {
                         if ( typeof error === 'undefined' ) {

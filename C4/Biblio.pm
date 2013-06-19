@@ -2413,6 +2413,13 @@ sub _koha_marc_update_bib_ids {
     } else {
         C4::Biblio::UpsertMarcSubfield($record, $biblioitem_tag, $biblioitem_subfield, $biblioitemnumber);
     }
+
+    # update the control number (001) in MARC
+    if(C4::Context->preference('autoControlNumber') eq 'biblionumber'){
+        unless($record->field('001')){
+            $record->insert_fields_ordered(MARC::Field->new('001', $biblionumber));
+        }
+    }
 }
 
 =head2 _koha_marc_update_biblioitem_cn_sort

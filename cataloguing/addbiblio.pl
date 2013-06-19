@@ -807,7 +807,11 @@ if ( $biblio && !$breedingid ) {
 if ($breedingid) {
     ( $record, $encoding ) = MARCfindbreeding( $breedingid ) ;
 }
-
+if ( $record && $op eq 'duplicate' &&
+     C4::Context->preference('autoControlNumber') eq 'biblionumber' ){
+    my @control_num = $record->field('001');
+    $record->delete_fields(@control_num);
+}
 #populate hostfield if hostbiblionumber is available
 if ($hostbiblionumber) {
     my $marcflavour = C4::Context->preference("marcflavour");
