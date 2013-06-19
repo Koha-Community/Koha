@@ -72,6 +72,7 @@ BEGIN {
         &CloseInvoice
         &ReopenInvoice
         &DelInvoice
+        &MergeInvoices
 
         &GetItemnumbersFromOrder
 
@@ -2570,6 +2571,31 @@ sub DelInvoice {
         };
         my $sth = $dbh->prepare($query);
         return ( $sth->execute($invoiceid) > 0 );
+    }
+    return;
+}
+
+=head3 MergeInvoices
+
+    MergeInvoices($invoiceid, \@sourceids);
+
+Merge the invoices identified by the IDs in \@sourceids into
+the invoice identified by $invoiceid.
+
+=cut
+
+sub MergeInvoices {
+    my ($invoiceid, $sourceids) = @_;
+
+    return unless $invoiceid;
+    foreach my $sourceid (@$sourceids) {
+        next if $sourceid == $invoiceid;
+        my $source = GetInvoiceDetails($sourceid);
+        foreach my $order (@{$source->{'orders'}}) {
+            $order->{'invoiceid'} = $invoiceid;
+            ModOrder($order);
+        }
+        DelInvoice($source->{'invoiceid'});
     }
     return;
 }

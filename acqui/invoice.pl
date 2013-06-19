@@ -83,6 +83,9 @@ elsif ( $op && $op eq 'mod' ) {
         ReopenInvoice($invoiceid);
     } elsif ($input->param('close')) {
         CloseInvoice($invoiceid);
+    } elsif ($input->param('merge')) {
+        my @sources = $input->param('merge');
+        MergeInvoices($invoiceid, \@sources);
     }
     $template->param( modified => 1 );
 }

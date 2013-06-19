@@ -15,9 +15,58 @@ $(document).ready(function() {
             null,null,{ "sType": "title-string" },null,null,null,null
         ],
         aoColumnDefs: [
-            { "bSortable": false, "aTargets": [6] }
+            { "bSortable": false, "aTargets": [0, 7] }
         ]
     }));
+
+    $('#merge').click(function (ev) {
+        var booksellerid;
+        var mismatch;
+        var invoices = [ ];
+        if ($('.select-invoice:checked').size() < 2) {
+            alert(_("You must select at least two invoices to merge."));
+            return false;
+        }
+        $('.select-invoice:checked').each(function () {
+            var row = $(this).parents('tr');
+            booksellerid = booksellerid || $(row).attr('data-booksellerid');
+            if (booksellerid !== $(row).attr('data-booksellerid')) {
+                mismatch = true;
+            }
+            invoices.push({ 'invoiceid': $(row).attr('data-invoiceid'),
+                            'invoicenumber': $(row).find('td:nth-child(2) a').text(),
+                            'shipmentdate': $(row).attr('data-shipmentdate'),
+                            'billingdate': $(row).attr('data-billingdate'),
+                            'shipmentcost': $(row).attr('data-shipmentcost'),
+                            'shipment_budgetid': $(row).attr('data-shipment_budgetid'),
+                            'closedate': $(row).attr('data-closedate'), });
+            $('#merge_invoice_form').append('<input type="hidden" name="merge" value="' + $(row).attr('data-invoiceid') + '" />');
+        });
+        if (mismatch) {
+            alert(_("All invoices for merging must be from the same vendor"));
+        } else {
+            $('#merge_table tbody').empty();
+            $.each(invoices, function (idx, invoice) {
+                var row = $('<tr data-invoiceid="' + invoice.invoiceid + '"><td>' + invoice.invoicenumber + '</td><td>' + invoice.shipmentdate + '</td><td>' + invoice.billingdate + '</td><td>' + invoice.shipmentcost + '</td></tr>');
+                $(row).appendTo('#merge_table tbody');
+                $(row).click(function () {
+                    $('#merge_table tbody tr').removeClass('active');
+                    $(this).addClass('active');
+                    $('#merge_invoicenumber').text(invoice.invoicenumber);
+                    $.each(['invoiceid', 'shipmentdate', 'billingdate', 'shipmentcost', 'shipment_budgetid'], function (idx, prop) {
+                        $('#merge_' + prop).val(invoice[prop]);
+                    });
+                    if (invoice.closedate) {
+                        $('#merge_status').text(_("Closed on " + invoice.closedate + ""));
+                    } else {
+                        $('#merge_status').text(_("Open"));
+                    }
+                });
+            });
+            $('#merge_table tbody tr:first').click();
+            $('#merge_invoices').show();
+        }
+    });
 });
 //]]>
 </script>
@@ -40,6 +89,7 @@ $(document).ready(function() {
           <table id="resultst">
             <thead>
               <tr>
+                <th>&nbsp;</th>
                 <th>Invoice no.</th>
                 <th>Vendor</th>
                 <th>Billing date</th>
@@ -51,7 +101,8 @@ $(document).ready(function() {
             </thead>
             <tbody>
               [% FOREACH invoice IN invoices %]
-                <tr>
+                <tr data-invoiceid="[% invoice.invoiceid %]" data-booksellerid="[% invoice.booksellerid %]" data-shipmentdate="[% invoice.shipmentdate | $KohaDates %]" data-billingdate="[% invoice.billingdate | $KohaDates %]" data-shipmentcost="[% invoice.shipmentcost %]" data-shipment_budgetid="[% invoice.shipmentcost_budgetid %]" data-closedate="[% invoice.closedate | $KohaDates %]">
+                  <td><input type="checkbox" class="select-invoice" value="[% invoice.invoiceid %]"></input></td>
                   <td><a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% invoice.invoiceid %]">[% invoice.invoicenumber %]</a></td>
                   <td><a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% invoice.booksellerid %]">[% invoice.suppliername %]</a></td>
                   <td>
@@ -85,6 +136,44 @@ $(document).ready(function() {
               [% END %]
             </tbody>
           </table>
+          <a class="submit" id="merge" href="#merge_invoices">Merge selected invoices</a>
+            <div id="merge_invoices">
+                <form id="merge_invoice_form" action="/cgi-bin/koha/acqui/invoice.pl" method="post">
+                <fieldset class="rows">
+                    <ol>
+                    <li><h2>Merge invoices</h2></li>
+                    <li><table id="merge_table">
+                        <thead><tr><th>Invoice no.</th><th>Shipment date</th><th>Billing date</th><th>Shipment cost</th></tr></thead>
+                        <tbody>
+                        </tbody>
+                    </table></li>
+                    <li><label for="merge_invoicenumber">Invoice number:</label><span id="merge_invoicenumber"></span></li>
+                    <li><label for="merge_shipmentdate">Shipment date:</label>
+                            <input type="text" size="10" id="merge_shipmentdate" name="shipmentdate" value="" readonly="readonly" class="datepicker" /></li>
+
+                    <li><label for="merge_billingdate">Billing date:</label>
+                            <input type="text" size="10" id="merge_billingdate" name="billingdate" value="" readonly="readonly" class="datepicker" /></li>
+
+                    <li><label for="merge_shipmentcost">Shipment cost:</label>
+                            <input type="text" size="10" id="merge_shipmentcost" name="shipmentcost" value="" /></li>
+                    <li><label for="merge_shipment_budgetid">Fund:</label>
+                            <select id="merge_shipment_budgetid" name="shipment_budget_id">
+                                <option value="">No fund</option>
+                              [% FOREACH budget IN budgets_loop %]
+                                  <option value="[% budget.budget_id %]">
+                                  [% budget.budget_name %]
+                                  </option>
+                              [% END %]
+                            </select></li>
+
+                    <li><span class="label">Status:</span> <span id="merge_status"></span></li>
+                    <li><input type="submit" value="Merge" /></li>
+                    </ol>
+                    <input type="hidden" name="op" value="mod" />
+                    <input type="hidden" id="merge_invoiceid" name="invoiceid" value="" />
+                </fieldset>
+                </form>
+            </div>
         [% ELSE %]
           <p>Sorry, but there is no results for your search.</p>
           <p>Search was:

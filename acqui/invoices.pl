@@ -36,6 +36,7 @@ use C4::Output;
 use C4::Acquisition qw/GetInvoices/;
 use C4::Bookseller qw/GetBookSeller/;
 use C4::Branch qw/GetBranches/;
+use C4::Budgets;
 
 my $input = CGI->new;
 my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
@@ -120,6 +121,14 @@ foreach ( sort keys %$branches ) {
         selected   => $selected,
       };
 }
+
+my $budgets = GetBudgets();
+my @budgets_loop;
+foreach my $budget (@$budgets) {
+    push @budgets_loop, $budget if CanUserUseBudget( $loggedinuser, $budget, $flags );
+}
+
+$template->{'VARS'}->{'budgets_loop'} = \@budgets_loop;
 
 $template->param(
     do_search => ( $op and $op eq 'do_search' ) ? 1 : 0,
