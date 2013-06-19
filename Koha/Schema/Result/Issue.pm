@@ -183,6 +183,11 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ZEh31EKBmURMKxDxI+H3EA
 
+__PACKAGE__->belongs_to(
+  "borrower",
+  "Koha::Schema::Result::Borrower",
+  { borrowernumber => "borrowernumber" },
+  { join_type => "LEFT", on_delete => "CASCADE", on_update => "CASCADE" },
+);
 
-# You can replace this text with custom content, and it will be preserved on regeneration
 1;

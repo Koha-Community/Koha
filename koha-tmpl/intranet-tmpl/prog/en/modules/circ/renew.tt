@@ -1,0 +1,131 @@
+[% USE Koha %]
+[% USE KohaDates %]
+[% USE KohaBranchName %]
+
+[% INCLUDE 'doc-head-open.inc' %]
+
+<title>Koha &rsaquo; Circulation &rsaquo; Renew [% title |html %]</title>
+
+[% INCLUDE 'doc-head-close.inc' %]
+
+<script type="text/javascript">
+//<![CDATA[
+
+$(document).ready(function () {
+    $("#barcode").focus();
+});
+
+//]]>
+</script>
+
+</head>
+
+<body>
+
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'circ-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a> &rsaquo; Check in</div>
+
+<div id="doc" class="yui-t7">
+    <div id="bd">
+            <div id="yui-main">
+
+            <div class="yui-g">
+                [% IF error %]
+                    <div class="dialog alert">
+                        <h3>Cannot renew:</h3>
+                        <p>
+                            [% IF error == "no_item" %]
+
+                                No item matches this barcode
+
+                            [% ELSIF error == "no_checkout" %]
+
+                                <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% item.biblionumber %]">[% item.biblio.title %] [% item.biblioitem.subtitle %]</a>
+                                ( <a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% item.itemnumber %]&biblionumber=[% item.biblionumber %]&bi=[% item.biblioitemnumber %]#item[% item.itemnumber %]">[% item.barcode %]</a> )
+                                is not checked out to a patron.
+
+                            [% ELSIF error == "too_many" %]
+
+                                [% item.biblio.title %] [% item.biblioitem.subtitle %] ( [% item.barcode %] )
+                                has been renewed the maximum number of times by
+                                [% borrower.firstname %] [% borrower.surname %] ( <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrower.borrowernumber %]"> [% borrower.cardnumber %] </a> )
+
+                                [% IF Koha.Preference('AllowRenewalLimitOverride') %]
+                                    <form method="post" action="/cgi-bin/koha/circ/renew.pl" autocomplete="off" >
+                                        <input type="hidden" name="barcode" value="[% item.barcode %]"/>
+                                        <input type="hidden" name="override_limit" value="1" />
+                                        <input type="submit" class="submit" value="Override limit and renew" />
+                                    </form>
+                                [% END %]
+
+                            [% ELSIF error == "on_reserve" %]
+
+                                This item is on hold for other patrons.
+
+                                <form method="post" action="/cgi-bin/koha/circ/renew.pl" autocomplete="off" >
+                                    <input type="hidden" name="barcode" value="[% item.barcode %]"/>
+                                    <input type="hidden" name="override_limit" value="1" />
+                                    <input type="hidden" name="override_holds" value="1" />
+                                    <input type="submit" class="submit" value="Override and renew" />
+                                </form>
+
+                            [% ELSIF error == "patron_restricted" %]
+
+                                [% borrower.firstname %] [% borrower.surname %] ( <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrower.borrowernumber %]"> [% borrower.cardnumber %] </a> )
+                                is currently restricted.
+
+                            [% ELSE %]
+
+                                [% error %]
+
+                            [% END %]
+
+                            <a href="/cgi-bin/koha/circ/renew.pl">Ignore & continue</a>
+                        </p>
+                    </div>
+                [% END %]
+
+                [% IF date_due %]
+                    <div class="dialog message">
+                        <p>
+                            <h3>Item renewed:</h3>
+
+                            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% item.biblionumber %]">[% item.biblio.title %] [% item.biblioitem.subtitle %]</a>
+                            ( <a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% item.itemnumber %]&biblionumber=[% item.biblionumber %]&bi=[% item.biblioitemnumber %]#item[% item.itemnumber %]">[% item.barcode %]</a> )
+                            renewed for
+                            [% borrower.firstname %] [% borrower.surname %] ( <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrower.borrowernumber %]"> [% borrower.cardnumber %] </a> )
+                            now due on [% date_due | $KohaDates %]
+                        </p>
+                    </div>
+                [% END %]
+            </div>
+
+            <div class="yui-g">
+
+            [% UNLESS error %]
+                <form method="post" action="/cgi-bin/koha/circ/renew.pl" autocomplete="off" >
+
+                    <div class="yui-u first">
+                        <fieldset>
+                            <legend>Renew</legend>
+
+                            <label for="barcode">Enter item barcode: </label>
+
+                            <input name="barcode" id="barcode" size="14" class="focus"/>
+
+                            <input type="submit" class="submit" value="Submit" />
+                        </fieldset>
+                    </div>
+
+                </form>
+            [% END %]
+
+        </div>
+
+    </div>
+
+<div>
+
+[% INCLUDE 'intranet-bottom.inc' %]

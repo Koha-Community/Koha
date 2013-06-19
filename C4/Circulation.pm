@@ -2463,17 +2463,19 @@ already renewed the loan. $error will contain the reason the renewal can not pro
 =cut
 
 sub CanBookBeRenewed {
-
-    # check renewal status
     my ( $borrowernumber, $itemnumber, $override_limit ) = @_;
+
     my $dbh       = C4::Context->dbh;
     my $renews    = 1;
     my $renewokay = 0;
     my $error;
 
-    my $borrower    = C4::Members::GetMemberDetails( $borrowernumber, 0 )   or return;
-    my $item        = GetItem($itemnumber)                                  or return;
-    my $itemissue   = GetItemIssue($itemnumber)                             or return;
+    my $item      = GetItem($itemnumber)      or return ( 0, 'no_item' );
+    my $itemissue = GetItemIssue($itemnumber) or return ( 0, 'no_checkout' );
+
+    $borrowernumber ||= $itemissue->{borrowernumber};
+    my $borrower = C4::Members::GetMemberDetails($borrowernumber)
+      or return;
 
     my $branchcode  = _GetCircControlBranch($item, $borrower);
 
@@ -2490,6 +2492,12 @@ sub CanBookBeRenewed {
     if ( $resfound ) { # '' when no hold was found
         $renewokay = 0;
         $error = "on_reserve";
+    }
+
+    if ( ( $issuingrule->{renewalsallowed} > $itemissue->{renewals} ) || $override_limit ) {
+        $renewokay = 1;
+    } else {
+        $error = "too_many";
     }
 
     return ( $renewokay, $error );
@@ -2520,27 +2528,32 @@ from the book's item type.
 =cut
 
 sub AddRenewal {
-    my $borrowernumber  = shift or return;
+    my $borrowernumber  = shift;
     my $itemnumber      = shift or return;
     my $branch          = shift;
     my $datedue         = shift;
     my $lastreneweddate = shift || DateTime->now(time_zone => C4::Context->tz)->ymd();
+
     my $item   = GetItem($itemnumber) or return;
     my $biblio = GetBiblioFromItemNumber($itemnumber) or return;
 
     my $dbh = C4::Context->dbh;
+
     # Find the issues record for this book
     my $sth =
-      $dbh->prepare("SELECT * FROM issues
-                        WHERE borrowernumber=? 
-                        AND itemnumber=?"
-      );
-    $sth->execute( $borrowernumber, $itemnumber );
+      $dbh->prepare("SELECT * FROM issues WHERE itemnumber = ?");
+    $sth->execute( $itemnumber );
     my $issuedata = $sth->fetchrow_hashref;
-    if(defined $datedue && ref $datedue ne 'DateTime' ) {
+
+    return unless ( $issuedata );
+
+    $borrowernumber ||= $issuedata->{borrowernumber};
+
+    if ( defined $datedue && ref $datedue ne 'DateTime' ) {
         carp 'Invalid date passed to AddRenewal.';
         return;
     }
+
     # If the due date wasn't specified, calculate it by adding the
     # book's loan length to today's date or the current due date
     # based on the value of the RenewalPeriodBase syspref.

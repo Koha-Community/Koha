@@ -800,10 +800,11 @@ sub GetReserveStatus {
     if(defined $found) {
         return 'Waiting'  if $found eq 'W' and $priority == 0;
         return 'Finished' if $found eq 'F';
-        return 'Reserved' if $priority > 0;
     }
-    return '';
-    #empty string here will remove need for checking undef, or less log lines
+
+    return 'Reserved' if $priority > 0;
+
+    return ''; # empty string here will remove need for checking undef, or less log lines
 }
 
 =head2 CheckReserves

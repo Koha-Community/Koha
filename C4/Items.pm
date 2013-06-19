@@ -145,6 +145,7 @@ sub GetItem {
     my ($itemnumber,$barcode, $serial) = @_;
     my $dbh = C4::Context->dbh;
 	my $data;
+
     if ($itemnumber) {
         my $sth = $dbh->prepare("
             SELECT * FROM items 
@@ -159,6 +160,9 @@ sub GetItem {
         $sth->execute($barcode);		
         $data = $sth->fetchrow_hashref;
     }
+
+    return unless ( $data );
+
     if ( $serial) {      
     my $ssth = $dbh->prepare("SELECT serialseq,publisheddate from serialitems left join serial on serialitems.serialid=serial.serialid where serialitems.itemnumber=?");
         $ssth->execute($data->{'itemnumber'}) ;
