@@ -3,7 +3,7 @@ use strict;
 use warnings;
 
 use C4::Context;
-use Test::More tests => 11;
+use Test::More tests => 14;
 use Test::MockModule;
 use DBD::Mock;
 
@@ -61,3 +61,9 @@ is(C4::Koha::_isbn_cleanup('0-590-35340-3'), '0590353403', '_isbn_cleanup remove
 is(C4::Koha::_isbn_cleanup('0590353403 (pbk.)'), '0590353403', '_isbn_cleanup removes parenthetical');
 is(C4::Koha::_isbn_cleanup('978-0-321-49694-2'), '0321496949', '_isbn_cleanup converts ISBN-13 to ISBN-10');
 
+is(C4::Koha::NormalizeISBN({ isbn => '978-0-321-49694-2 (pbk.)', format => 'ISBN-10', strip_hyphens => 1 }), '0321496949', 'Test NormalizeISBN with all features enabled' );
+
+my @isbns = qw/ 978-0-321-49694-2 0-321-49694-9 978-0-321-49694-2 0321496949 9780321496942/;
+is( join('|', @isbns), join('|', GetVariationsOfISBN('978-0-321-49694-2 (pbk.)')), 'GetVariationsOfISBN returns all variations' );
+
+is( join('|', @isbns), join('|', GetVariationsOfISBNs('978-0-321-49694-2 (pbk.)')), 'GetVariationsOfISBNs returns all variations' );

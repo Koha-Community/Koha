@@ -8439,6 +8439,26 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.15.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do("
+        INSERT INTO systempreferences (
+            variable,
+            value,
+            explanation,
+            type
+        ) VALUES (
+            'AggressiveMatchOnISBN',
+            '0',
+            'If enabled, attempt to match aggressively by trying all variations of the ISBNs in the imported record as a phrase in the ISBN fields of already cataloged records when matching on ISBN with the record import tool',
+            'YesNo'
+        )
+    ");
+
+    print "Upgrade to $DBversion done (Bug 10500 - Improve isbn matching when importing records)\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

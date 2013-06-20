@@ -630,7 +630,12 @@ sub get_matches {
     $QParser = C4::Context->queryparser if (C4::Context->preference('UseQueryParser'));
     foreach my $matchpoint ( @{ $self->{'matchpoints'} } ) {
         my @source_keys = _get_match_keys( $source_record, $matchpoint );
+
         next if scalar(@source_keys) == 0;
+
+        @source_keys = C4::Koha::GetVariationsOfISBNs(@source_keys)
+          if ( $matchpoint->{index} eq 'isbn'
+            && C4::Context->preference('AggressiveMatchOnISBN') );
 
         # build query
         my $query;
@@ -638,15 +643,19 @@ sub get_matches {
         my $searchresults;
         my $total_hits;
         if ( $self->{'record_type'} eq 'biblio' ) {
+            my $phr = C4::Context->preference('AggressiveMatchOnISBN') ? ',phr' : q{};
+
             if ($QParser) {
                 $query = join( " || ",
-                    map { "$matchpoint->{'index'}:$_" } @source_keys );
+                    map { "$matchpoint->{'index'}$phr:$_" } @source_keys );
             }
             else {
                 $query = join( " or ",
-                    map { "$matchpoint->{'index'}=$_" } @source_keys );
+                    map { "$matchpoint->{'index'}$phr=$_" } @source_keys );
             }
+
             require C4::Search;
+
             ( $error, $searchresults, $total_hits ) =
               C4::Search::SimpleSearch( $query, 0, $max_matches );
         }
