@@ -6,7 +6,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 6;
+use Test::More tests => 7;
 
 BEGIN {
         use_ok('C4::ClassSortRoutine::Dewey');
@@ -26,3 +26,7 @@ is($cn_sort,"ABC_123_456000000000000","testing alphanumeric");
 
 $cn_sort = C4::ClassSortRoutine::Dewey::get_class_sort_key("ab         c123","45   6");
 is($cn_sort,"AB_C123_45_600000000000000","testing middle whitespace");
+
+$cn_sort     = C4::ClassSortRoutine::Dewey::get_class_sort_key("YR DVD 800.1","");
+my $cn_sort2 = C4::ClassSortRoutine::Dewey::get_class_sort_key("YR DVD 900","");
+ok( $cn_sort lt $cn_sort2, "testing prefix plus decimal" );
