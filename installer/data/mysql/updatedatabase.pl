@@ -6852,6 +6852,11 @@ INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES (
     SetVersion($DBversion);
 }
 
+$DBversion = "3.12.01.000";
+if ( CheckVersion($DBversion) ) {
+    print "Upgrade to $DBversion done (3.12.1 release)\n";
+    SetVersion ($DBversion);
+}
 
 =head1 FUNCTIONS
 
