@@ -6265,6 +6265,11 @@ INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES (
     SetVersion($DBversion);
 }
 
+$DBversion = "3.10.07.000";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    print "Upgrade to $DBversion done (3.10.7 release)\n";
+    SetVersion($DBversion);
+}
 
 =head1 FUNCTIONS
 
