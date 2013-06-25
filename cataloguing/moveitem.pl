@@ -30,7 +30,7 @@ use C4::Context;
 use C4::Koha;
 use C4::Branch;
 use C4::ClassSource;
-use C4::Acquisition qw/GetOrderFromItemnumber ModOrder GetOrder ModOrderItem/;
+use C4::Acquisition qw/GetOrderFromItemnumber ModOrder GetOrder/;
 
 use Date::Calc qw(Today);
 
