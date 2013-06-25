@@ -1,10 +1,11 @@
 #!/usr/bin/perl
 
+# Copyright 2013 C & P Bibliography Services
 # This file is part of Koha.
 #
 # Koha is free software; you can redistribute it and/or modify it under the
 # terms of the GNU General Public License as published by the Free Software
-# Foundation; either version 2 of the License, or (at your option) any later
+# Foundation; either version 3 of the License, or (at your option) any later
 # version.
 #
 # Koha is distributed in the hope that it will be useful, but WITHOUT ANY
@@ -23,14 +24,18 @@ use C4::Output;
 use C4::Context;
 
 my $query = new CGI;
-my ($template, $loggedinuser, $cookie, $flags)
-= get_template_and_user({template_name => "circ/offline.tt",
-                query => $query,
-                type => "intranet",
-                authnotrequired => 0,
-                flagsrequired => {circulate => "circulate_remaining_permissions"},
-                });
+my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
+    {
+        template_name   => "circ/offline.tt",
+        query           => $query,
+        type            => "intranet",
+        authnotrequired => 0,
+        flagsrequired   => { circulate => "circulate_remaining_permissions" },
+    }
+);
 
-$template->{'VARS'}->{'AllowOfflineCirculation'} = C4::Context->preference('AllowOfflineCirculation');
-$template->{'VARS'}->{'maxoutstanding'} = C4::Context->preference('maxoutstanding') || 0;
+$template->{'VARS'}->{'AllowOfflineCirculation'} =
+  C4::Context->preference('AllowOfflineCirculation');
+$template->{'VARS'}->{'maxoutstanding'} =
+  C4::Context->preference('maxoutstanding') || 0;
 output_html_with_http_headers $query, $cookie, $template->output;

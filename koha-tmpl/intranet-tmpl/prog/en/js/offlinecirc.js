@@ -52,6 +52,9 @@
     kohadb.loadSetting = function (key, callback) {
         $.indexedDB("koha").transaction(["offline_settings"]).then(function(){
         }, function(err, e){
+            if (typeof callback === 'function') {
+                callback(key, undefined);
+            }
         }, function(transaction){
             var settings = transaction.objectStore("offline_settings");
             settings.get(key).done(function (item, error) {
@@ -80,9 +83,10 @@
         }, function(dbtransaction) {
             var transactions = dbtransaction.objectStore("transactions");
             transactions.put(newtrans);
+            kohadb.saveSetting('dirty', true);
         });
     };
-}( window.kohadb = window.bndb || {}, jQuery ));
+}( window.kohadb = window.kohadb || {}, jQuery ));
 
 if ( !Date.prototype.toMySQLString ) {
   ( function() {

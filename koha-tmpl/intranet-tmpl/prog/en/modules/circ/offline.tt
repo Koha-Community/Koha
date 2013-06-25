@@ -2,22 +2,26 @@
 [% IF (AllowOfflineCirculation) %]
 [% SET manifestattr = 'manifest="/cgi-bin/koha/circ/offline-mf.pl"' %]
 [% END %]
-[% IF ( bidi ) %]<html lang="[% lang %]" dir="[% bidi %]" [% manifestattr %]>[% ELSE %]<html lang="[% lang %]" [% manifestattr %]>[% END %]
+[% IF ( bidi && AllowOfflineCirculation ) %]<html lang="[% lang %]" dir="[% bidi %]" manifest="/cgi-bin/koha/circ/offline-mf.pl">
+[% ELSIF ( bidi ) %]<html lang="[% lang %]" dir="[% bidi %]">
+[% ELSIF ( AllowOfflineCirculation ) %]<html lang="[% lang %]" manifest="/cgi-bin/koha/circ/offline-mf.pl">
+[% ELSE %]<html lang="[% lang %]">[% END %]
 <head>
 <title>Koha &rsaquo; Circulation</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<script type="text/javascript" src="/intranet-tmpl/lib/jquery/plugins/jquery.indexeddb.js"></script>
-<script type="text/javascript" src="/intranet-tmpl/prog/en/js/offlinecirc.js"></script>
+<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.indexeddb.js"></script>
+<script type="text/javascript" src="[% interface %]/prog/en/js/offlinecirc.js"></script>
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery-ui-timepicker-addon.js"></script>
 <script type="text/javascript">
 //<![CDATA[
+var ALERT_SUCCESSFUL_CHECKIN = _("Checked in item.");
 var ALERT_MATERIALS = _("Note about the accompanying materials: ");
 var ALERT_RESTRICTED = _("Patron is RESTRICTED");
 var ALERT_NO_MATCHING_ITEM = _("No item with barcode in offline database (transaction recorded anyway): ");
 var ALERT_NOT_CHECKED_OUT = _("Item not listed as checked out in offline database (transaction recorded anyway)");
 var ALERT_ITEM_WITHDRAWN = _("Item has been withdrawn (transaction recorded anyway)");
 var ALERT_ITEM_RESTRICTED = _("Item is restricted (transaction recorded anyway)");
-var ALERT_ITEM_LOST = _("Item is has been lost (transaction recorded anyway)");
+var ALERT_ITEM_LOST = _("Item has been lost (transaction recorded anyway)");
 var ALERT_NO_MATCHING_PATRON = _("No patron cardnumber in offline database (proceeding anyway): ");
 var ALERT_PATRON_GONE_NO_ADDRESS = _("Patron's address is in doubt (transaction recorded anyway)");
 var ALERT_PATRON_CARD_LOST = _("Patron's card is lost");
@@ -26,6 +30,8 @@ var ALERT_PATRON_BLOCKED_TEMPORARY = _("Patron has had overdue items and is rest
 var ALERT_PATRON_RESTRICTED = _("Patron is restricted");
 var ALERT_PATRON_FINE = _("Patron has outstanding fines: ");
 var ALERT_PATRON_FINE_OVER_LIMIT = _("Patron fines are over limit: ");
+var UPLOAD_PENDING_MESSAGE = _("You have transactions in the offline circulation database on this computer that have not been uploaded.");
+var NO_UPLOAD_PENDING_MESSAGE = _("You do not have any pending transactions in the offline circulation database on this computer.");
 
 var start;
 
@@ -48,17 +54,24 @@ function checkin(barcode, item, error) {
                   "action" : "return"
                 };
     $('#alerts').empty();
-    $('#offline-home').hide();
-    $('#offline-returns').show();
+    $('.offline-home').hide();
+    $('.offline-sync').hide();
+    $('.offline-circulation').hide();
+    $('.offline-circulation-instructions').hide();
+    $('.offline-returns').show();
     kohadb.recordTransaction(trans, function () {
+        $('#session-returned').show();
         $('#already-checked-in tbody').prepend('<tr><td>' + item.title + '</td><td>' + item.author + '</td><td>' + barcode + '</td><td>' + item.homebranch + '</td><td>' + item.holdingbranch + '</td><td></td><td>' + item.callnumber + '</td><td>' + item.itemtype + '</td></tr>');
         if (alerts.length > 0) {
             $('#alerts').append('<div class="dialog alert"><h3>' + _("Check in message") + '</h3></div>');
             for (var msg in alerts) {
                 $('#alerts .dialog').append('<p>' + alerts[msg] + '</p');
             }
+        } else {
+            $('#alerts').append('<div class="dialog"><h3>' + ALERT_SUCCESSFUL_CHECKIN + '</h3></div>');
         }
     });
+    setTimeout(function() { $('#checkin-barcode').trigger('focus'), 1 });
 }
 
 function checkAlerts(barcode, item) {
@@ -73,22 +86,41 @@ function checkAlerts(barcode, item) {
     return alerts;
 }
 
-function synchronize() {
-    kohadb.saveSetting("userid", "[% loggedinusername %]");
-    kohadb.saveSetting("branchcode", "[% LoginBranchcode %]");
+function showSyncInfo() {
     kohadb.loadSetting("item-timestamp", showTimestamp);
     kohadb.loadSetting("patron-timestamp", showTimestamp);
     kohadb.loadSetting("issue-timestamp", showTimestamp);
+    kohadb.loadSetting("dirty", function (key, val) {
+        if (val) {
+            $('#upload-message').text(UPLOAD_PENDING_MESSAGE);
+        } else {
+            $('#upload-message').text(NO_UPLOAD_PENDING_MESSAGE);
+        }
+    });
+}
+
+function synchronize() {
+    kohadb.saveSetting("userid", "[% loggedinusername %]");
+    kohadb.saveSetting("branchcode", "[% LoginBranchcode %]");
+    showSyncInfo();
     [% UNLESS (AllowOfflineCirculation) %]
         reloadRecords();
     [% END %]
+    showSyncInfo();
     $('#download-records').click(reloadRecords);
     $('#upload-transactions').click(function () {
         $('.loading-overlay div').text(_("Uploading transactions, please wait..."));
         $('.loading-overlay').show();
         var uploadIter = $.indexedDB("koha").objectStore("transactions").each(uploadTransaction);
         uploadIter.done(function() {
+            $.indexedDB("koha").transaction(["transactions"]).then(function(){
+            }, function(err, e){
+            }, function(transaction){
+                transaction.objectStore("transactions").clear();
+            });
             $('.loading-overlay').hide();
+            kohadb.saveSetting("dirty", false);
+            $('#upload-message').text(NO_UPLOAD_PENDING_MESSAGE);
         });
     });
 
@@ -122,7 +154,7 @@ function reloadRecords(ev) {
 
 function uploadTransaction(transaction) {
     $.ajax({
-        type: "GET",
+        type: "POST",
         url: "/cgi-bin/koha/offline_circ/service.pl",
         data: { "userid" : kohadb.settings.userid,
                 "branchcode" : kohadb.settings.branchcode,
@@ -132,9 +164,8 @@ function uploadTransaction(transaction) {
                 "cardnumber" : transaction.value.cardnumber,
                 "pending" : true,
               },
-    }).done(function () {
-        transaction.delete();
     });
+    return undefined, true;
 }
 
 function finishedLoading() {
@@ -160,7 +191,7 @@ function loadRecords(page) {
         dataType: "json",
     }).done(function (data) {
         $.indexedDB("koha").transaction(["patrons", "items", "issues"]).then(function(){
-            if ($.isEmptyObject(data.patrons) && $.isEmptyObject(data.items)) {
+            if (data.finished) {
                 finishedLoading();
             } else {
                 setTimeout(function () { loadRecords(page + 1); }, 200);
@@ -202,7 +233,9 @@ function validate1(date) {
 function loadPatron(barcode) {
     $('#oldissues').hide();
     $('#session-issues').hide();
+    $('#issuest tbody').empty();
     $('#session-payments').hide();
+    $('.checkout-count').text(0);
     $.indexedDB("koha").transaction(["patrons", "issues"]).then(function() {
     }, function(err, e){
     }, function(transaction){
@@ -215,6 +248,7 @@ function loadPatron(barcode) {
         issuesidx.each(function (item) {
             $('#oldissues').show();
             $('#oldissuest tbody').append("<tr><td>" + item.value.date_due + "</td><td>" + item.value.barcode + "</td><td>" + item.value.title + "</td><td>" + item.value.itype + "</td><td>" + item.value.issuedate + "</td><td>" + item.value.issuebranch + "</td><td>" + item.value.callnumber + "</td><td>" + "" + "</td></tr>");
+            $('.checkout-count').text(parseInt($('.checkout-count').text()) + 1);
         }, barcode);
     });
 }
@@ -232,7 +266,7 @@ function checkout(barcode, item, error) {
     item.itemtype = item.itemtype || "";
     if ($('#duedatespec').val().length === 0) {
         alert(_("You must set a due date in order to use offline circulation!"));
-        $('#duedatespec').focus();
+        setTimeout(function() { $('#duedatespec').trigger('focus'), 1 });
         return;
     }
     var date_due = new Date($('#duedatespec').datepicker('getDate'));
@@ -246,12 +280,14 @@ function checkout(barcode, item, error) {
     kohadb.recordTransaction(trans, function () {
         $('#session-issues').show();
         $('#issuest tbody').prepend('<tr><td>' + $.datepicker.formatDate(dateformat, date_due) + date_due.toTimeString() + '</td><td>' + item.title + '</td><td>' + barcode + '</td><td>' + item.itemtype + '</td><td>' + $.datepicker.formatDate(dateformat, new Date()) + '</td><td>' + kohadb.settings.branchcode + '</td><td>' + item.callnumber + '</td><td></td></tr>');
+        $('.checkout-count').text(parseInt($('.checkout-count').text()) + 1);
         if (alerts.length > 0) {
             $('#alerts').append('<div class="dialog alert"><h3>' + _("Check out message") + '</h3></div>');
             for (var msg in alerts) {
                 $('#alerts .dialog').append('<p>' + alerts[msg] + '</p');
             }
         }
+        $('#checkout-barcode').val('');
     });
 }
 
@@ -265,6 +301,7 @@ function recordFine(amount) {
     kohadb.recordTransaction(trans, function () {
         $('#session-payments').show();
         $('#session-payments tbody').prepend('<tr><td>' + amount + '</td><td>' + $.datepicker.formatDate(dateformat, timestamp) + timestamp.toTimeString() + '</td></tr>');
+        $('.fine-amount').text(parseInt($('.fine-amount').text) - amount);
     });
 }
 
@@ -364,12 +401,12 @@ function showPatron(barcode, patron, error) {
     if (alerts.length > 0) {
         $('#alerts').append('<div class="dialog alert"><h3>' + _("Check out message") + '</h3></div>');
         for (var msg in alerts) {
-            $('#alerts .dialog').append('<p>' + alerts[msg] + '</p');
+            $('#alerts .dialog').append('<p>' + alerts[msg] + '</p>');
         }
     }
     curpatron = patron;
     $('#yui-main').show();
-    $('#barcode').focus();
+    setTimeout(function() { $('#checkout-barcode').trigger('focus'), 1 });
 }
 
 // This next bit of code is to deal with the updated session issue
@@ -408,30 +445,38 @@ $(document).ready(function () {
     });
 
     $('#go-to-home').click(function () {
+        $('#alerts').empty();
         $('.offline-sync').hide();
         $('.offline-circulation').hide();
         $('.offline-returns').hide();
+        $('.offline-circulation-instructions').hide();
         $('.offline-home').show();
     });
 
     $('#go-to-returns').click(function () {
+        $('#alerts').empty();
         $('.offline-home').hide();
         $('.offline-sync').hide();
         $('.offline-circulation').hide();
+        $('.offline-circulation-instructions').hide();
         $('.offline-returns').show();
-        $('#checkin-form input[name="barcode"]').focus();
+        setTimeout(function() { $('#checkin-form input[name="barcode"]').trigger('focus'), 1 });
     });
 
     $('#go-to-circ').click(function () {
+        $('#alerts').empty();
         $('.offline-home').hide();
         $('.offline-sync').hide();
         $('.offline-returns').hide();
         $('.offline-circulation').hide();
+        $('.offline-circulation-instructions').show();
         $('#header_search').tabs("option", "active", 0);
-        $('#circ_search input[name="findborrower"]').focus();
+        setTimeout(function() { $('#circ_search input[name="findborrower"]').trigger('focus'), 1 });
     });
 
     $('#go-to-sync').click(function () {
+        $('#alerts').empty();
+        showSyncInfo();
         $.ajax({
             type: "GET",
             url: "/cgi-bin/koha/offline_circ/list.pl",
@@ -439,11 +484,27 @@ $(document).ready(function () {
                 $('.offline-home').hide();
                 $('.offline-returns').hide();
                 $('.offline-circulation').hide();
+                $('.offline-circulation-instructions').hide();
                 $('.offline-sync').show();
                 synchronize();
             },
             error: function () {
                 alert(_("You are offline and therefore cannot sync your database"));
+            }
+        });
+    });
+
+    $('#go-to-pending').click(function (ev) {
+        $('#alerts').empty();
+        ev.preventDefault();
+        $.ajax({
+            type: "GET",
+            url: "/cgi-bin/koha/offline_circ/list.pl",
+            success: function () {
+                window.location = '/cgi-bin/koha/offline_circ/list.pl';
+            },
+            error: function () {
+                alert(_("You are offline and therefore cannot process pending operations"));
             }
         });
     });
@@ -454,9 +515,10 @@ $(document).ready(function () {
         $('.offline-home').hide();
         $('.offline-returns').hide();
         $('.offline-sync').hide();
+        $('.offline-circulation-instructions').hide();
         $('.offline-circulation').show();
         $('#findborrower').val('');
-        $('#barcode').focus();
+        setTimeout(function() { $('#checkout-barcode').trigger('focus'), 1 });
     });
 
     $('#pay-fine').click(function (event) {
@@ -472,13 +534,13 @@ $(document).ready(function () {
         minute: 59
     });
     $("#duedatespec").datetimepicker({
-        onClose: function(dateText, inst) { $("#barcode").focus(); },
+        onClose: function(dateText, inst) { setTimeout(function() { $('#checkout-barcode').trigger('focus'), 1 }); },
         hour: 23,
         minute: 59
     });
     $('#mainform').submit(function (event) {
         event.preventDefault();
-        var barcode = $('#barcode').val();
+        var barcode = $('#checkout-barcode').val();
         $.indexedDB("koha").transaction(["items"]).then(function() {
         }, function(err, e){
         }, function(transaction){
@@ -505,8 +567,8 @@ $(document).ready(function () {
 
     <div id="bd">
         <div id="yui-main">
-            <audio id="alert_sound" src="/intranet-tmpl/prog/sound/critical.ogg" autobuffer="autobuffer"></audio>
-            <audio id="success_sound" src="/intranet-tmpl/prog/sound/beep.ogg" autobuffer="autobuffer"></audio>
+            <audio id="alert_sound" src="[% interface %]/prog/sound/critical.ogg" autobuffer="autobuffer"></audio>
+            <audio id="success_sound" src="[% interface %]/prog/sound/beep.ogg" autobuffer="autobuffer"></audio>
 
             <div id="alerts" class="yui-b">
             </div>
@@ -523,14 +585,14 @@ $(document).ready(function () {
                         <ul>
                             <li><a id="go-to-circ" href="#offline-circulation">Check out</a></li>
                             <li><a id="go-to-returns" href="#offline-returns">Check in</a></li>
-                            <li><a id="go-to-sync" href="#offline-sync">Synchronize (must be online)</a></li>
                         </ul>
                     </div>
 
                     <div class="yui-u">
                         <p><strong>Note:</strong> You must be online to use these options.</p>
                         <ul>
-                            <li><a href="/cgi-bin/koha/offline_circ/list.pl">Pending offline circulation actions</a>
+                            <li><a id="go-to-sync" href="#offline-sync">Synchronize</a></li>
+                            <li><a id="go-to-pending" href="/cgi-bin/koha/offline_circ/list.pl">Pending offline circulation actions</a>
                         </ul>
                     </div>
                 </div>
@@ -547,8 +609,8 @@ $(document).ready(function () {
                     <h1>Offline circulation</h1>
                     <div class="yui-u first">
                         <div id="download-message">
-                            You have records in the offline circulation database on this
-                            computer, but they may not be current:
+                            In order for offline circulation to work on this computer,
+                            your library's records must be up-to-date on this computer:
                             <ul>
                                 <li>Patron records were last synced on: <span id="patron-timestamp">(checking)</span></li>
                                 <li>Item records were last synced on: <span id="item-timestamp">(checking)</span></li>
@@ -558,10 +620,9 @@ $(document).ready(function () {
                     </div>
 
                     <div class="yui-u">
-                        <div id="upload-message">You have transactions in the offline
-                            circulation database on this computer that have not been
-                            uploaded.
+                        <div id="upload-message">
                         </div>
+                        <div>View <a href="/cgi-bin/koha/offline_circ/list.pl">pending offline circulation actions</a></div>
                     </div>
                 </div>
             </div>
@@ -572,8 +633,8 @@ $(document).ready(function () {
                         <div class="yui-u first">
                             <fieldset>
                                 <legend>Check In</legend>
-                                <label for="barcode">Enter item barcode: </label>
-                                <input name="barcode" id="barcode" size="14" class="focus"/>
+                                <label for="checkin-barcode">Enter item barcode: </label>
+                                <input name="barcode" id="checkin-barcode" size="14" class="focus"/>
                                 <input type="submit" class="submit" value="Submit" />
                             </fieldset>
                         </div>
@@ -592,14 +653,20 @@ $(document).ready(function () {
                 </div>
             </div>
 
+            <div style="display: none;" class="yui-b offline-circulation-instructions">
+                <div class="yui-g">
+                    Scan a patron barcode to start.
+                </div>
+            </div>
+
             <div id="offline-circulation" style="display: none;" class="yui-b offline-circulation">
                 <div class="yui-g">
-                    <form method="post" action="/cgi-bin/koha/circ/offline-circulation.pl" id="mainform" name="mainform" autocomplete="off">
+                    <form method="post" action="/cgi-bin/koha/circ/offline.pl" id="mainform" name="mainform" autocomplete="off">
                         <fieldset id="circ_circulation_issue">
-                            <span id="clearscreen"><a href="/cgi-bin/koha/circ/offline-circulation.pl" title="Clear screen">x</a></span>
-                            <label for="barcode">Checking out to <span class="patron-title"></span></label>
+                            <span id="clearscreen"><a href="/cgi-bin/koha/circ/offline.pl" title="Clear screen">x</a></span>
+                            <label for="checkout-barcode">Checking out to <span class="patron-title"></span></label>
                             <div class="hint">Enter item barcode:</div>
-                            <input type="text" name="barcode" id="barcode" class="barcode focus" size="14" />
+                            <input type="text" name="barcode" id="checkout-barcode" class="barcode focus" size="14" />
                             <input type="submit" value="Check Out" />
 
                             <div class="date-select">

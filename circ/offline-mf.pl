@@ -1,10 +1,11 @@
 #!/usr/bin/perl
 
+# Copyright 2013 C & P Bibliography Services
 # This file is part of Koha.
 #
 # Koha is free software; you can redistribute it and/or modify it under the
 # terms of the GNU General Public License as published by the Free Software
-# Foundation; either version 2 of the License, or (at your option) any later
+# Foundation; either version 3 of the License, or (at your option) any later
 # version.
 #
 # Koha is distributed in the hope that it will be useful, but WITHOUT ANY
@@ -21,14 +22,16 @@ use CGI;
 use C4::Auth;
 
 my $query = new CGI;
-my ($template, $loggedinuser, $cookie, $flags)
-= get_template_and_user({template_name => "circ/offline-mf.tt",
-                query => $query,
-                type => "intranet",
-                authnotrequired => 0,
-                flagsrequired => {circulate => "circulate_remaining_permissions"},
-                });
+my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
+    {
+        template_name   => "circ/offline-mf.tt",
+        query           => $query,
+        type            => "intranet",
+        authnotrequired => 0,
+        flagsrequired   => { circulate => "circulate_remaining_permissions" },
+    }
+);
 
 $template->{'VARS'}->{'cookie'} = $cookie;
-print $query->header(-type => 'text/cache-manifest', cookie => $cookie);
+print $query->header( -type => 'text/cache-manifest', cookie => $cookie );
 print $template->output;
