@@ -241,7 +241,7 @@ $(document).ready(function()
         <ol><li>
             [% IF ( biblionumber ) %]
             <span class="label">Title</span>
-                <input type="hidden" size="50" name="title" value="[% title |html %]" /> <span class="title">[% title |html %]</span>
+                <input type="hidden" name="title" value="[% title |html %]" /> <span class="title">[% title |html %]</span>
             [% ELSE %]
             <label for="entertitle" class="required">Title: </label>
                 <input type="text" id="entertitle" size="50" name="title" value="[% title |html %]" />
@@ -250,7 +250,7 @@ $(document).ready(function()
         <li>
             [% IF ( biblionumber ) %]
             <span class="label">Author: </span>
-                <input type="hidden" size="50" name="author" id="author" value="[% author %]" />[% author %]
+                <input type="hidden" name="author" id="author" value="[% author %]" />[% author %]
             [% ELSE %]
             <label for="author">Author: </label>
                 <input type="text" size="50" name="author" id="author" value="[% author %]" />
@@ -259,7 +259,7 @@ $(document).ready(function()
         <li>
             [% IF ( biblionumber ) %]
             <span class="label">Publisher: </span>
-                <input type="hidden" size="50" name="publishercode" id="publishercode" value="[% publishercode %]" />[% publishercode %]
+                <input type="hidden" name="publishercode" id="publishercode" value="[% publishercode %]" />[% publishercode %]
             [% ELSE %]
             <label for="publishercode"> Publisher: </label>
                 <input type="text" size="50" name="publishercode" id="publishercode" value="[% publishercode %]" />
@@ -268,7 +268,7 @@ $(document).ready(function()
         <li>
             [% IF ( biblionumber ) %]
             <span class="label">Edition: </span>
-                <input type="hidden" size="20" name="editionstatement" id="editionstatement" value="[% editionstatement %]" />[% editionstatement %]
+                <input type="hidden" name="editionstatement" id="editionstatement" value="[% editionstatement %]" />[% editionstatement %]
 
             [% ELSE %]
             <label for="editionstatement">Edition: </label>
@@ -278,7 +278,7 @@ $(document).ready(function()
         <li>
             [% IF ( biblionumber ) %]
             <span class="label">Publication year: </span>
-                <input type="hidden" size="10" name="publicationyear" id="publicationyear" value="[% publicationyear %]" />[% publicationyear %]
+                <input type="hidden" name="publicationyear" id="publicationyear" value="[% publicationyear %]" />[% publicationyear %]
             [% ELSE %]
             <label for="publicationyear">Publication year: </label>
                 <input type="text" size="10" name="publicationyear" id="publicationyear" value="[% publicationyear %]" />
@@ -287,7 +287,7 @@ $(document).ready(function()
         <li>
             [% IF ( biblionumber ) %]
             <span class="label">ISBN: </span>
-                <input type="hidden" size="50" name="isbn" id="ISBN" value="[% isbn %]" />[% isbn %]
+                <input type="hidden" name="isbn" id="ISBN" value="[% isbn %]" />[% isbn %]
             [% ELSE %]
             <label for="ISBN">ISBN: </label>
                 <input type="text" size="50" name="isbn" id="ISBN" value="[% isbn %]" />
@@ -297,7 +297,7 @@ $(document).ready(function()
         <li>
             [% IF ( biblionumber ) %]
             <span class="label">EAN: </span>
-                <input type="hidden" size="20" name="ean" id="EAN" value="[% ean %]" />[% ean %]
+                <input type="hidden" name="ean" id="EAN" value="[% ean %]" />[% ean %]
             [% ELSE %]
             <label for="EAN">EAN: </label>
                 <input type="text" size="20" name="ean" id="EAN" value="[% ean %]" />
@@ -307,12 +307,11 @@ $(document).ready(function()
         <li>
             [% IF ( biblionumber ) %]
             <span class="label">Series: </span>
-                <input type="hidden" size="50" name="series" id="series" value="[% seriestitle %]" />[% seriestitle %]
+                <input type="hidden" name="series" id="series" value="[% seriestitle %]" />[% seriestitle %]
             [% ELSE %]
             <label for="series">Series: </label>
                 <input type="text" size="50" name="series" id="series" value="[% seriestitle %]" />
             [% END %]
-        </li>
         </li>
             [% UNLESS ( biblionumber ) %]
             [% IF ( itemtypeloop ) %]
@@ -394,7 +393,7 @@ $(document).ready(function()
             <li>
                 [% IF ( close ) %]
             <span class="label required">Quantity: </span>
-                    <input type="hidden" size="20" name="quantity" value="[% quantity %]" />[% quantity %]
+                    <input type="hidden" name="quantity" value="[% quantity %]" />[% quantity %]
                 [% ELSE %]
                     <label class="required" for="quantity">Quantity: </label>
                     [% IF (AcqCreateItemOrdering) %]
@@ -417,7 +416,7 @@ $(document).ready(function()
             <li>
                 [% IF ( close ) %]
             <span class="label required">Fund: </span>
-                    <input type="hidden" size="20" name="budget_id" id="budget_id" value="[% budget_id %]" />[% Budget_name %]
+                    <input type="hidden" name="budget_id" id="budget_id" value="[% budget_id %]" />[% Budget_name %]
                 [% ELSE %]
                 <label class="required" for="budget_id">Fund: </label>
                 <select id="budget_id" onchange="fetchSortDropbox(this.form)" size="1" name="budget_id">
@@ -439,7 +438,7 @@ $(document).ready(function()
 		<li>
                 [% IF ( close ) %]
 			<span class="label">Currency: </span>
-			<input type="hidden" size="10" name="currency" id="currency" value="[% currency %]" />[% currency %]
+            <input type="hidden" name="currency" id="currency" value="[% currency %]" />[% currency %]
                 [% ELSE %]
 			<label for="currency">Currency:</label>
 			<select name="currency" id="currency" onchange="updateCosts();">
@@ -451,7 +450,7 @@ $(document).ready(function()
             <li>
                 [% IF ( close ) %]
                     <span class="label">Vendor price: </span>
-                    <input type="hidden" size="20" name="listprice" id="listprice" value="[% listprice %]" />[% listprice %]
+                    <input type="hidden" name="listprice" id="listprice" value="[% listprice %]" />[% listprice %]
                 [% ELSE %]
                 <label for="listprice">Vendor price: </label>
                     <input type="text" size="20" name="listprice" id="listprice" value="[% listprice %]" onchange="updateCosts()" />
@@ -471,9 +470,9 @@ $(document).ready(function()
                 <li>
                     [% IF ( close ) %]
                         <span class="label">Tax rate: </span>
-                        <input type="hidden" size="20" name="gstrate" id="gstrate" value="[% gstrate %]" />[% gstrate %]%
+                        <input type="hidden" name="gstrate" id="gstrate" value="[% gstrate %]" />[% gstrate %]%
                     [% ELSE %]
-                        <label for="gst">Tax rate: </label>
+                        <label for="gstrate">Tax rate: </label>
                         <select name="gstrate" id="gstrate" onchange="updateCosts();">
                         [% FOREACH gst IN gst_values %]
                           [% IF ( gst.option == gstrate ) %]
@@ -507,7 +506,7 @@ $(document).ready(function()
             <li>
                 [% IF ( close ) %]
                     <span class="label">Replacement cost: </span>
-                    <input type="hidden" size="20" name="rrp" id="rrp" value="[% rrp %]" />[% rrp %]
+                    <input type="hidden" name="rrp" id="rrp" value="[% rrp %]" />[% rrp %]
                 [% ELSE %]
                     <label for="rrp">Replacement cost: </label>
                     <input type="text" size="20" name="rrp" id="rrp" value="[% rrp %]" /> (adjusted for [% cur_active %])
