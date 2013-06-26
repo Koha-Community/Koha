@@ -7,6 +7,7 @@
 				newid = Number(rowid.replace("none","")) 
           $("#sms"+newid).removeAttr("checked");
           $("#email"+newid).removeAttr("checked");
+          $("#phone"+newid).removeAttr("checked");
           $("#digest"+newid).removeAttr("checked");
           $("#rss"+newid).removeAttr("checked");
 			}
@@ -99,12 +100,12 @@
                  <input type="checkbox"
                  id="phone[% messaging_preference.message_attribute_id %]"
                  name="[% messaging_preference.message_attribute_id %]"
-                 value="phone" checked="checked" onclick = "$('#none'+'[% messaging_preference.message_attribute_id %]').attr('checked','');" />
+                 value="phone" checked="checked" onclick = "$('#none'+'[% messaging_preference.message_attribute_id %]').removeAttr('checked','');" />
               [% ELSE %]
                  <input type="checkbox"
                  id="phone[% messaging_preference.message_attribute_id %]"
                  name="[% messaging_preference.message_attribute_id %]"
-                 value="phone" onclick = "$('#none'+'[% messaging_preference.message_attribute_id %]').attr('checked','');" />
+                 value="phone" onclick = "$('#none'+'[% messaging_preference.message_attribute_id %]').removeAttr('checked','');" />
               [% END %]
           [% END %]
       </td>[% END %]
