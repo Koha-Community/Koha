@@ -45,12 +45,12 @@ function submitBackgroundJob(f) {
         $(':input', f).each(function() {
             if (this.type == 'radio' || this.type == 'checkbox') {
                 if (this.checked) {
-                    inputs.push(this.name + '=' + escape(this.value));
+                    inputs.push(this.name + '=' + encodeURIComponent(this.value));
                 }
             } else if (this.type == 'button') {
                 ; // do nothing
             } else {
-                inputs.push(this.name + '=' + escape(this.value));
+                inputs.push(this.name + '=' + encodeURIComponent(this.value));
             }
 
         });
