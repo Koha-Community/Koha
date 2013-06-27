@@ -8,6 +8,7 @@
 	</li>
 	
 [% FOREACH facets_loo IN facets_loop %]
+[% IF facets_loo.facets.size > 0 %]
 <li id="[% facets_loo.type_id %]">
 [% IF ( facets_loo.type_label_Authors ) %]Authors[% END %]
 [% IF ( facets_loo.type_label_Titles ) %]Titles[% END %]
@@ -22,6 +23,7 @@
         <li class="showmore"><a href="/cgi-bin/koha/opac-search.pl?[% query_cgi |html %][% limit_cgi |html %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by |html %][% END %][% IF ( offset ) %]&amp;offset=[% offset %][% END %]&amp;expand=[% facets_loo.expand %]#[% facets_loo.type_id %]">Show more</a></li>
 [% END %]
 </ul></li>
+[% END %]
 [% END %]
 </ul>
 </div>
