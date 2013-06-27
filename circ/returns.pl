@@ -225,6 +225,16 @@ if ($barcode) {
     # fix up item type for display
     $biblio->{'itemtype'} = C4::Context->preference('item-level_itypes') ? $biblio->{'itype'} : $biblio->{'itemtype'};
 
+    # Check if we should display a check in message, based on the the item
+    # type of the checked in item
+    my $itemtype = C4::ItemType->get( $biblio->{'itemtype'} );
+    if ( $itemtype->{'checkinmsg'} ) {
+        $template->param(
+            checkinmsg     => $itemtype->{'checkinmsg'},
+            checkinmsgtype => $itemtype->{'checkinmsgtype'},
+        );
+    }
+
     $template->param(
         title            => $biblio->{'title'},
         homebranch       => $biblio->{'homebranch'},

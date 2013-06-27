@@ -361,6 +361,16 @@ $(document).ready(function () {
         [% END %]
     </div>
 
+[% IF ( checkinmsg ) %]
+    [% IF ( checkinmsgtype == 'alert' ) %]
+        <div class="dialog alert">
+    [% ELSE %]
+        <div class="dialog message">
+    [% END %]
+            <p class="problem">[% checkinmsg %]</p>
+        </div>
+[% END%]
+
     <div id="exemptfines" class="dialog message" style="display:none;">
         <p>Fines for returned items are forgiven.</p>
     </div>

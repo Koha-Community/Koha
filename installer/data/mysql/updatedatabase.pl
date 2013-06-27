@@ -7122,6 +7122,13 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.13.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do("ALTER TABLE itemtypes ADD COLUMN checkinmsg VARCHAR(255) AFTER summary;");
+    $dbh->do("ALTER TABLE itemtypes ADD COLUMN checkinmsgtype CHAR(16) DEFAULT 'message' NOT NULL AFTER checkinmsg;");
+    print "Upgrade to $DBversion done (Bug 10513 - Light up a warning/message when returning a chosen item type)\n";
+    SetVersion($DBversion);
+}
 
 =head1 FUNCTIONS
 

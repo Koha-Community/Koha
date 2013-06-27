@@ -90,6 +90,29 @@ sub all {
 
 
 
+=head3 C4::ItemType->get
+
+Return the itemtype indicated by the itemtype given as argument, as
+an object.
+
+=cut
+
+sub get {
+    my ($class, $itemtype) = @_;
+    my $dbh = C4::Context->dbh;
+
+    my $data = $dbh->selectrow_hashref(
+        "SELECT * FROM itemtypes WHERE itemtype = ?", undef, $itemtype
+    );
+    if ( $data->{description} ) {
+        utf8::encode($data->{description});
+    }
+    return $class->new($data);
+}
+
+
+
+
 =head2 Object Methods
 
 These are read-only accessors for attributes of a C4::ItemType object.
@@ -115,6 +138,10 @@ These are read-only accessors for attributes of a C4::ItemType object.
 =cut
 
 =head3 $itemtype->imageurl
+
+=cut
+
+=head3 $itemtype->checkinmsg
 
 =cut
 

@@ -1204,12 +1204,14 @@ CREATE TABLE `items` ( -- holdings/item information
 
 DROP TABLE IF EXISTS `itemtypes`;
 CREATE TABLE `itemtypes` ( -- defines the item types
-  `itemtype` varchar(10) NOT NULL default '', -- unique key, a code associated with the item type
-  `description` mediumtext, -- a plain text explanation of the item type
-  `rentalcharge` double(16,4) default NULL, -- the amount charged when this item is checked out/issued
-  `notforloan` smallint(6) default NULL, -- 1 if the item is not for loan, 0 if the item is available for loan
-  `imageurl` varchar(200) default NULL, -- URL for the item type icon
-  `summary` text, -- information from the summary field, may include HTML
+  itemtype varchar(10) NOT NULL default '', -- unique key, a code associated with the item type
+  description mediumtext, -- a plain text explanation of the item type
+  rentalcharge double(16,4) default NULL, -- the amount charged when this item is checked out/issued
+  notforloan smallint(6) default NULL, -- 1 if the item is not for loan, 0 if the item is available for loan
+  imageurl varchar(200) default NULL, -- URL for the item type icon
+  summary text, -- information from the summary field, may include HTML
+  checkinmsg VARCHAR(255), -- message that is displayed when an item with the given item type is checked in
+  checkinmsgtype CHAR(16) DEFAULT 'message' NOT NULL, -- type (CSS class) for the checkinmsg, can be "alert" or "message"
   PRIMARY KEY  (`itemtype`),
   UNIQUE KEY `itemtype` (`itemtype`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

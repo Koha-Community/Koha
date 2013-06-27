@@ -117,6 +117,8 @@ if ( $op eq 'add_form' ) {
         imageurl        => $data->{'imageurl'},
         template        => C4::Context->preference('template'),
         summary         => $data->{summary},
+        checkinmsg      => $data->{'checkinmsg'},
+        checkinmsgtype  => $data->{'checkinmsgtype'},
         imagesets       => $imagesets,
         remote_image    => $remote_image,
     );
@@ -141,6 +143,8 @@ elsif ( $op eq 'add_validate' ) {
                  , notforloan = ?
                  , imageurl = ?
                  , summary = ?
+                 , checkinmsg = ?
+                 , checkinmsgtype = ?
             WHERE itemtype = ?
         ';
         $sth = $dbh->prepare($query2);
@@ -156,15 +160,17 @@ elsif ( $op eq 'add_validate' ) {
                 )
             ),
             $input->param('summary'),
+            $input->param('checkinmsg'),
+            $input->param('checkinmsgtype'),
             $input->param('itemtype')
         );
     }
     else {    # add a new itemtype & not modif an old
         my $query = "
             INSERT INTO itemtypes
-                (itemtype,description,rentalcharge, notforloan, imageurl,summary)
+                (itemtype,description,rentalcharge, notforloan, imageurl, summary, checkinmsg, checkinmsgtype)
             VALUES
-                (?,?,?,?,?,?);
+                (?,?,?,?,?,?,?,?);
             ";
         my $sth = $dbh->prepare($query);
 		my $image = $input->param('image');
@@ -177,6 +183,8 @@ elsif ( $op eq 'add_validate' ) {
             $image eq 'remoteImage' ? $input->param('remoteImage') :
             $image,
             $input->param('summary'),
+            $input->param('checkinmsg'),
+            $input->param('checkinmsgtype'),
         );
     }
 
