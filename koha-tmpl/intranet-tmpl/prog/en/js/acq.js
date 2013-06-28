@@ -60,181 +60,181 @@ function isNum(v,maybenull) {
 //=======================================================================
 // Functions for drag-and-drop functionality
 
+if( typeof(YAHOO) === "object"){
+    (function() {
 
-(function() {
+    var Dom = YAHOO.util.Dom;
+    var Event = YAHOO.util.Event;
+    var DDM = YAHOO.util.DragDropMgr;
 
-var Dom = YAHOO.util.Dom;
-var Event = YAHOO.util.Event;
-var DDM = YAHOO.util.DragDropMgr;
-
-DDApp = {
-    init: function() {
-    var uls = document.getElementsByTagName('ul');
-    var i,j;
-    var ddtarget;
-    for (i=0; i<uls.length;i=i+1) {
-        if (uls[i].className == "draglist" || uls[i].className == "draglist_alt") {
-            ddtarget = YAHOO.util.DragDropMgr.getDDById(uls[i].id);
-// The yahoo drag and drop is written (broken or not) in such a way, that if an element is subscribed as a target multiple times,
-// it has to be unlinked multiple times, so we need to test whether it is allready a target, otherwise we'll have a problem when closing the group
-            if( ! ddtarget ) {
-                new YAHOO.util.DDTarget(uls[i].id);
-            }
-            var children = uls[i].getElementsByTagName('li');
-            for( j=0; j<children.length; j=j+1) {
-// The yahoo drag and drop is (broken or not) in such a way, that if an element is subscribed as a target multiple times,
-// it has to be unlinked multiple times, so we need to test whether it is allready a target, otherwise we'll have a problem when closing the group
-                ddtarget = YAHOO.util.DragDropMgr.getDDById(children[j].id);
+    DDApp = {
+        init: function() {
+        var uls = document.getElementsByTagName('ul');
+        var i,j;
+        var ddtarget;
+        for (i=0; i<uls.length;i=i+1) {
+            if (uls[i].className == "draglist" || uls[i].className == "draglist_alt") {
+                ddtarget = YAHOO.util.DragDropMgr.getDDById(uls[i].id);
+    // The yahoo drag and drop is written (broken or not) in such a way, that if an element is subscribed as a target multiple times,
+    // it has to be unlinked multiple times, so we need to test whether it is allready a target, otherwise we'll have a problem when closing the group
                 if( ! ddtarget ) {
-                    new DDList(children[j].id);
+                    new YAHOO.util.DDTarget(uls[i].id);
+                }
+                var children = uls[i].getElementsByTagName('li');
+                for( j=0; j<children.length; j=j+1) {
+    // The yahoo drag and drop is (broken or not) in such a way, that if an element is subscribed as a target multiple times,
+    // it has to be unlinked multiple times, so we need to test whether it is allready a target, otherwise we'll have a problem when closing the group
+                    ddtarget = YAHOO.util.DragDropMgr.getDDById(children[j].id);
+                    if( ! ddtarget ) {
+                        new DDList(children[j].id);
+                    }
                 }
             }
         }
-    }
-    }
-};
-
-
-// drag and drop implementation
-
-DDList = function(id, sGroup, config) {
-
-    DDList.superclass.constructor.call(this, id, sGroup, config);
-
-    this.logger = this.logger || YAHOO;
-    var el = this.getDragEl();
-    Dom.setStyle(el, "opacity", 0.67); // The proxy is slightly transparent
-
-    this.goingUp = false;
-    this.lastY = 0;
-};
-
-YAHOO.extend(DDList, YAHOO.util.DDProxy, {
-
-    startDrag: function(x, y) {
-        this.logger.log(this.id + " startDrag");
-
-        // make the proxy look like the source element
-        var dragEl = this.getDragEl();
-        var clickEl = this.getEl();
-        Dom.setStyle(clickEl, "visibility", "hidden");
-
-        dragEl.innerHTML = clickEl.innerHTML;
-
-        Dom.setStyle(dragEl, "color", Dom.getStyle(clickEl, "color"));
-        Dom.setStyle(dragEl, "backgroundColor", Dom.getStyle(clickEl, "backgroundColor"));
-        Dom.setStyle(dragEl, "border", "2px solid gray");
-    },
-
-    endDrag: function(e) {
-
-        var srcEl = this.getEl();
-        var proxy = this.getDragEl();
-
-        // Show the proxy element and animate it to the src element's location
-        Dom.setStyle(proxy, "visibility", "");
-        var a = new YAHOO.util.Motion(
-            proxy, {
-                points: {
-                    to: Dom.getXY(srcEl)
-                }
-            },
-            0.2,
-            YAHOO.util.Easing.easeOut
-        )
-        var proxyid = proxy.id;
-        var thisid = this.id;
-
-        // Hide the proxy and show the source element when finished with the animation
-        a.onComplete.subscribe(function() {
-                Dom.setStyle(proxyid, "visibility", "hidden");
-                Dom.setStyle(thisid, "visibility", "");
-            });
-        a.animate();
-// if we are in basketgrouping page, when finished moving, edit the basket's info to reflect new status
-        if(typeof(basketgroups) != 'undefined') {
-            a.onComplete.subscribe(function() {
-                var reg = new RegExp("[-]+", "g");
-// add a changed input to each moved basket, so we know which baskets to modify,
-// and so we don't need to modify each and every basket and basketgroup each time the page is loaded
-// FIXME: we shouldn't use getElementsByTagName, it's not explicit enough :-(
-                srcEl.getElementsByTagName('input')[1].value = "1";
-                if ( srcEl.parentNode.parentNode.className == "workarea" ) {
-                    var dstbgroupid = srcEl.parentNode.parentNode.getElementsByTagName('input')[srcEl.parentNode.parentNode.getElementsByTagName('input').length-2].name.split(reg)[1];
-                    srcEl.className="grouped";
-                    srcEl.getElementsByTagName('input')[0].value = dstbgroupid;
-//FIXME: again, we shouldn't be using getElementsByTagName!!
-                    srcEl.parentNode.parentNode.getElementsByTagName('input')[srcEl.parentNode.parentNode.getElementsByTagName('input').length-1].value = 1;
-                }
-                else if ( srcEl.parentNode.parentNode.className == "workarea_alt" ){
-                        srcEl.className="ungrouped";
-                        srcEl.getElementsByTagName('input')[0].value = "0";
-                }
-            });
         }
-    },
+    };
 
-    onDragDrop: function(e, id) {
 
-        // If there is one drop interaction, the li was dropped either on the list,
-        // or it was dropped on the current location of the source element.
-        if (DDM.interactionInfo.drop.length === 1) {
+    // drag and drop implementation
 
-            // The position of the cursor at the time of the drop (YAHOO.util.Point)
-            var pt = DDM.interactionInfo.point;
+    DDList = function(id, sGroup, config) {
 
-            // The region occupied by the source element at the time of the drop
-            var region = DDM.interactionInfo.sourceRegion;
+        DDList.superclass.constructor.call(this, id, sGroup, config);
 
-            // Check to see if we are over the source element's location.  We will
-            // append to the bottom of the list once we are sure it was a drop in
-            // the negative space (the area of the list without any list items)
-            if (!region.intersect(pt)) {
-                var destEl = Dom.get(id);
-                var destDD = DDM.getDDById(id);
-                destEl.appendChild(this.getEl());
-                destDD.isEmpty = false;
+        this.logger = this.logger || YAHOO;
+        var el = this.getDragEl();
+        Dom.setStyle(el, "opacity", 0.67); // The proxy is slightly transparent
+
+        this.goingUp = false;
+        this.lastY = 0;
+    };
+
+    YAHOO.extend(DDList, YAHOO.util.DDProxy, {
+
+        startDrag: function(x, y) {
+            this.logger.log(this.id + " startDrag");
+
+            // make the proxy look like the source element
+            var dragEl = this.getDragEl();
+            var clickEl = this.getEl();
+            Dom.setStyle(clickEl, "visibility", "hidden");
+
+            dragEl.innerHTML = clickEl.innerHTML;
+
+            Dom.setStyle(dragEl, "color", Dom.getStyle(clickEl, "color"));
+            Dom.setStyle(dragEl, "backgroundColor", Dom.getStyle(clickEl, "backgroundColor"));
+            Dom.setStyle(dragEl, "border", "2px solid gray");
+        },
+
+        endDrag: function(e) {
+
+            var srcEl = this.getEl();
+            var proxy = this.getDragEl();
+
+            // Show the proxy element and animate it to the src element's location
+            Dom.setStyle(proxy, "visibility", "");
+            var a = new YAHOO.util.Motion(
+                proxy, {
+                    points: {
+                        to: Dom.getXY(srcEl)
+                    }
+                },
+                0.2,
+                YAHOO.util.Easing.easeOut
+            )
+            var proxyid = proxy.id;
+            var thisid = this.id;
+
+            // Hide the proxy and show the source element when finished with the animation
+            a.onComplete.subscribe(function() {
+                    Dom.setStyle(proxyid, "visibility", "hidden");
+                    Dom.setStyle(thisid, "visibility", "");
+                });
+            a.animate();
+    // if we are in basketgrouping page, when finished moving, edit the basket's info to reflect new status
+            if(typeof(basketgroups) != 'undefined') {
+                a.onComplete.subscribe(function() {
+                    var reg = new RegExp("[-]+", "g");
+    // add a changed input to each moved basket, so we know which baskets to modify,
+    // and so we don't need to modify each and every basket and basketgroup each time the page is loaded
+    // FIXME: we shouldn't use getElementsByTagName, it's not explicit enough :-(
+                    srcEl.getElementsByTagName('input')[1].value = "1";
+                    if ( srcEl.parentNode.parentNode.className == "workarea" ) {
+                        var dstbgroupid = srcEl.parentNode.parentNode.getElementsByTagName('input')[srcEl.parentNode.parentNode.getElementsByTagName('input').length-2].name.split(reg)[1];
+                        srcEl.className="grouped";
+                        srcEl.getElementsByTagName('input')[0].value = dstbgroupid;
+    //FIXME: again, we shouldn't be using getElementsByTagName!!
+                        srcEl.parentNode.parentNode.getElementsByTagName('input')[srcEl.parentNode.parentNode.getElementsByTagName('input').length-1].value = 1;
+                    }
+                    else if ( srcEl.parentNode.parentNode.className == "workarea_alt" ){
+                            srcEl.className="ungrouped";
+                            srcEl.getElementsByTagName('input')[0].value = "0";
+                    }
+                });
+            }
+        },
+
+        onDragDrop: function(e, id) {
+
+            // If there is one drop interaction, the li was dropped either on the list,
+            // or it was dropped on the current location of the source element.
+            if (DDM.interactionInfo.drop.length === 1) {
+
+                // The position of the cursor at the time of the drop (YAHOO.util.Point)
+                var pt = DDM.interactionInfo.point;
+
+                // The region occupied by the source element at the time of the drop
+                var region = DDM.interactionInfo.sourceRegion;
+
+                // Check to see if we are over the source element's location.  We will
+                // append to the bottom of the list once we are sure it was a drop in
+                // the negative space (the area of the list without any list items)
+                if (!region.intersect(pt)) {
+                    var destEl = Dom.get(id);
+                    var destDD = DDM.getDDById(id);
+                    destEl.appendChild(this.getEl());
+                    destDD.isEmpty = false;
+                    DDM.refreshCache();
+                }
+            }
+        },
+
+        onDrag: function(e) {
+
+            // Keep track of the direction of the drag for use during onDragOver
+            var y = Event.getPageY(e);
+
+            if (y < this.lastY) {
+                this.goingUp = true;
+            } else if (y > this.lastY) {
+                this.goingUp = false;
+            }
+            this.lastY = y;
+        },
+
+        onDragOver: function(e, id) {
+
+            var srcEl = this.getEl();
+            var destEl = Dom.get(id);
+
+            // We are only concerned with list items, we ignore the dragover
+            // notifications for the list.
+            if (destEl.nodeName.toLowerCase() == "li") {
+                var orig_p = srcEl.parentNode;
+                var p = destEl.parentNode;
+
+                if (this.goingUp) {
+                    p.insertBefore(srcEl, destEl); // insert above
+                } else {
+                    p.insertBefore(srcEl, destEl.nextSibling); // insert below
+                }
+
                 DDM.refreshCache();
             }
         }
-    },
-
-    onDrag: function(e) {
-
-        // Keep track of the direction of the drag for use during onDragOver
-        var y = Event.getPageY(e);
-
-        if (y < this.lastY) {
-            this.goingUp = true;
-        } else if (y > this.lastY) {
-            this.goingUp = false;
-        }
-        this.lastY = y;
-    },
-
-    onDragOver: function(e, id) {
-
-        var srcEl = this.getEl();
-        var destEl = Dom.get(id);
-
-        // We are only concerned with list items, we ignore the dragover
-        // notifications for the list.
-        if (destEl.nodeName.toLowerCase() == "li") {
-            var orig_p = srcEl.parentNode;
-            var p = destEl.parentNode;
-
-            if (this.goingUp) {
-                p.insertBefore(srcEl, destEl); // insert above
-            } else {
-                p.insertBefore(srcEl, destEl.nextSibling); // insert below
-            }
-
-            DDM.refreshCache();
-        }
-    }
-});
-})();
-
+    });
+    })();
+}
 
 
 
