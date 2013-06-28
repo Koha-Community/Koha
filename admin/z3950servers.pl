@@ -104,12 +104,12 @@ if ($op eq 'add_form') {
 ################## ADD_VALIDATE ##################################
 # called by add_form, used to insert/modify data in DB
 } elsif ($op eq 'add_validate') {
-	$template->param(add_validate => 1);
 	my $dbh=C4::Context->dbh;
 	my $sth=$dbh->prepare("select * from z3950servers where name=?");
 	$sth->execute($input->param('searchfield'));
 	my $checked = $input->param('checked') ? 1 : 0;
 	if ($sth->rows) {
+        $template->param(confirm_update => 1);
 		$sth=$dbh->prepare("update z3950servers set host=?, port=?, db=?, userid=?, password=?, name=?, checked=?, rank=?,syntax=?,encoding=?,timeout=? where name=?");
 		$sth->execute($input->param('host'),
 		      $input->param('port'),
@@ -126,6 +126,7 @@ if ($op eq 'add_form') {
 		      );
 	} 
 	else {
+        $template->param(confirm_add => 1);
 		$sth=$dbh->prepare(
 		  "INSERT INTO z3950servers " .
 		  "(host,port,db,userid,password,name,checked,rank,syntax,encoding,timeout) " .

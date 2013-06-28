@@ -2,7 +2,8 @@
 <title>Koha &rsaquo; Administration &rsaquo; [% IF ( else ) %]Z39.50 servers[% END %]
 [% IF ( add_form ) %] Z39.50 servers &rsaquo; [% IF ( searchfield ) %]Modify Z39.50 server [% searchfield %][% ELSE %]New Z39.50 server[% END %][% END %]
 [% IF ( delete_confirm ) %]Z39.50 servers &rsaquo; Confirm deletion[% END %]
-[% IF ( add_validate ) %]Z39.50 servers &rsaquo; Z39.50 server added[% END %]
+[% IF ( confirm_add ) %] Z39.50 servers &rsaquo; Z39.50 server added[% END %]
+[% IF ( confirm_update ) %] Z39.50 servers &rsaquo; Z39.50 server updated[% END %]
 [% IF ( delete_confirmed ) %]Z39.50 servers &rsaquo; Z39.50 server deleted[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 
@@ -72,7 +73,9 @@
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; [% IF ( else ) %]Z39.50 servers[% END %]
 [% IF ( add_form ) %] <a href="/cgi-bin/koha/admin/z3950servers.pl">Z39.50 servers</a> &rsaquo; [% IF ( searchfield ) %]Modify Z39.50 server [% searchfield %][% ELSE %]New Z39.50 server[% END %][% END %]
 [% IF ( delete_confirm ) %] <a href="/cgi-bin/koha/admin/z3950servers.pl">Z39.50 servers</a> &rsaquo; Confirm deletion[% END %]
-[% IF ( add_validate ) %] <a href="/cgi-bin/koha/admin/z3950servers.pl">Z39.50 servers</a> &rsaquo; Z39.50 server added[% END %]
+[% IF ( confirm_add ) %] <a href="/cgi-bin/koha/admin/z3950servers.pl">Z39.50 servers</a> &rsaquo; Z39.50 server added[% END %]
+[% IF ( confirm_update ) %] <a href="/cgi-bin/koha/admin/z3950servers.pl">Z39.50 servers</a> &rsaquo; Z39.50 server updated[% END %]
+
 [% IF ( delete_confirmed ) %] <a href="/cgi-bin/koha/admin/z3950servers.pl">Z39.50 servers</a> &rsaquo; Z39.50 server deleted[% END %]</div>
 
 <div id="doc3" class="yui-t2">
@@ -222,8 +225,15 @@
         </form>
 [% END %]
 
-[% IF ( add_validate ) %]
+[% IF ( confirm_add ) %]
 <h3>Z39.50 server added</h3>
+<form action="[% script_name %]" method="post">
+        <input type="submit" value="OK" />
+        </form>
+[% END %]
+
+[% IF ( confirm_update ) %]
+<h3>Z39.50 server updated</h3>
 <form action="[% script_name %]" method="post">
         <input type="submit" value="OK" />
         </form>
