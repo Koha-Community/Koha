@@ -107,7 +107,7 @@ tinyMCE.init({
         <ol>
 		[% FOREACH categoryloo IN categoryloop %]
             <li><label for="[% categoryloo.categorycode %]">[% categoryloo.categoryname %]: </label>
-                [% IF ( categoryloo.checked ) %]
+                [% IF categoryloo.selected %]
                     <input type="checkbox" id="[% categoryloo.categorycode %]" name="[% categoryloo.categorycode %]" checked="checked" />
                 [% ELSE %]
                     <input type="checkbox" id="[% categoryloo.categorycode %]" name="[% categoryloo.categorycode %]" />
