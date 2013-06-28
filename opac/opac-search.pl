@@ -193,7 +193,7 @@ if (C4::Context->preference('TagsEnabled')) {
 
 my $branches = GetBranches();   # used later in *getRecords, probably should be internalized by those functions after caching in C4::Branch is established
 $template->param(
-    searchdomainloop => GetBranchCategories(undef,'searchdomain'),
+    searchdomainloop => GetBranchCategories('searchdomain'),
 );
 
 # load the language limits (for search)

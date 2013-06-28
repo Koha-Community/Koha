@@ -237,7 +237,7 @@ my @branch_loop = map {
     $branches->{$a}->{branchname} cmp $branches->{$b}->{branchname}
 } keys %$branches;
 
-my $categories = GetBranchCategories(undef,'searchdomain');
+my $categories = GetBranchCategories('searchdomain');
 
 $template->param(branchloop => \@branch_loop, searchdomainloop => $categories);
 
