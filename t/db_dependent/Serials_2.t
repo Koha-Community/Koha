@@ -6,6 +6,10 @@ use Test::More tests => 4;
 use_ok('C4::Serials');
 use_ok('C4::Budgets');
 
+my $dbh = C4::Context->dbh;
+$dbh->{AutoCommit} = 0;
+$dbh->{RaiseError} = 1;
+
 my $supplierlist=eval{GetSuppliersWithLateIssues()};
 ok(length($@)==0,"No SQL problem in GetSuppliersWithLateIssues");
 
@@ -58,8 +62,4 @@ my $subscription = GetSubscription( $subscriptionid );
 is( C4::Serials::can_edit_subscription($subscription), 1, "User can edit a subscription with an empty branchcode");
 #TODO add UT when C4::Auth->set_permissions (or setuserflags) will exist.
 
-
-# cleaning
-DelSubscription( $subscription->{subscriptionid} );
-DelBudgetPeriod($bpid);
-DelBudget($budget_id);
+$dbh->rollback;
