@@ -2472,19 +2472,24 @@ span.sep {
     background-position : -7px -126px;
 }
 
+/* jQueryUI Core */
+
+.ui-widget-content { border: 1px solid #AAA; background: #ffffff none; color: #222222; }
+.ui-widget-header { border: 1px solid #AAA; background: #E6F0F2 none; color: #222222; font-weight: bold; }
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default { border: 1px solid #AAA; background: #F4F8F9 none; font-weight: normal; color: #555555; }
+.ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-header .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus, .ui-widget-header .ui-state-focus { border: 1px solid #AAA; background: #E6F0F2 none; font-weight: normal; color: #212121; }
+.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active { border: 1px solid #aaaaaa; background: #ffffff none; font-weight: normal; color: #212121; }
+.ui-state-highlight, .ui-widget-content .ui-state-highlight, .ui-widget-header .ui-state-highlight  {border: 1px solid #fcefa1; background: #fbf9ee; color: #363636; }
+.ui-state-error, .ui-widget-content .ui-state-error, .ui-widget-header .ui-state-error {border: 1px solid #cd0a0a; background: #fef1ec; color: #cd0a0a; }
+
 /* jQuery UI standard tabs */
-.ui-tabs-nav .ui-tabs-selected a,
+.ui-tabs-nav .ui-tabs-active a,
 .ui-tabs-nav a:hover,
 .ui-tabs-nav a:focus,
 .ui-tabs-nav a:active,
 .ui-tabs-nav span.a {
     background: none repeat scroll 0 0 transparent;
     outline: 0 none;
-}
-
-.ui-tabs .ui-tabs-nav li.ui-tabs-selected {
-    background-color : #FFF;
-    border : 1px solid #D8D8D8;
 }
 
 .ui-widget,
@@ -2495,6 +2500,7 @@ span.sep {
     font-family : inherit;
     font-size : inherit;
 }
+
 ul.ui-tabs-nav li {
     list-style : none;
 }
@@ -2512,10 +2518,16 @@ ul.ui-tabs-nav li {
 }
 .ui-tabs .ui-tabs-nav li {
     background: #F3F3F3 none;
-    border: 1px solid #D8D8D8;
+    border-color: #D8D8D8;
     margin-right : .4em;
 }
-.ui-tabs .ui-tabs-nav li.ui-tabs-selected a {
+
+.ui-tabs .ui-tabs-nav li.ui-tabs-active {
+    background-color : #FFF;
+    border : 1px solid #D8D8D8;
+    border-bottom: 0;
+}
+.ui-tabs .ui-tabs-nav li.ui-tabs-active a {
     color : #000;
     font-weight : bold;
 }
@@ -2524,7 +2536,7 @@ ul.ui-tabs-nav li {
     background : #F3F3F3 none;
 }
 
-.ui-tabs .ui-tabs-nav li.ui-tabs-selected.ui-state-hover {
+.ui-tabs .ui-tabs-nav li.ui-tabs-active.ui-state-hover {
     background : #FFF none;
 }
 
@@ -2668,6 +2680,9 @@ ul.ui-tabs-nav li {
 
 
 /* jQuery UI Datepicker */
+.ui-datepicker table {width: 100%; font-size: .9em; border : 0; border-collapse: collapse; margin:0 0 .4em; }
+.ui-datepicker th { background : transparent none; padding: .7em .3em; text-align: center; font-weight: bold; border: 0;  }
+
 .ui-datepicker-trigger {
     vertical-align: middle;
     margin : 0 3px;
@@ -2822,4 +2837,8 @@ a.reviewlink,a.reviewlink:visited {
 }
 .subjectSearch ul {
     padding-left: 0px;
+}
+
+.branch-info-tooltip {
+    display: none;
 }
