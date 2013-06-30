@@ -695,9 +695,53 @@ sub GetMemberIssuesAndFines {
     return ($overdue_count, $issue_count, $total_fines);
 }
 
-sub columns(;$) {
-    return @{C4::Context->dbh->selectcol_arrayref("SHOW columns from borrowers")};
+
+=head2 columns
+
+  C4::Member->columns
+
+=head3 USAGE
+
+ use C4::Member;
+ my @borrower_columns = C4::Member->columns;
+
+=head3 RETURNS
+
+ The array of borrowers' table columns on success.
+ An empty array on failure.
+
+=head3 NOTES
+
+ This runs significantly faster than the previous code while
+ being mostly SQL-agnostic.
+
+=cut
+
+sub columns {
+
+    # Pure ANSI SQL goodness.
+    my $sql = 'SELECT * FROM borrowers WHERE 1=0;';
+
+    # Get the database handle.
+    my $dbh = C4::Context->dbh;
+
+    # Run the SQL statement to load STH's readonly properties.
+    my $sth = $dbh->prepare($sql);
+    my $rv = $sth->execute();
+
+    # This only fails if the table doesn't exist.
+    # This will always be called AFTER an install or upgrade,
+    # so borrowers will exist!
+    my @data;
+    if ($sth->{NUM_OF_FIELDS}>0) {
+        @data = @{$sth->{NAME}};
+    }
+    else {
+        @data = ();
+    }
+    return @data;
 }
+
 
 =head2 ModMember
 
