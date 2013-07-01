@@ -241,7 +241,7 @@ elsif ( $step && $step == 3 ) {
         $template->param( "frameworksloop" => $fwklist );
         $template->param( "marcflavour" => ucfirst($marcflavour));
 
-        my ($sample_defaulted_to_en, $levellist) = $installer->sample_data_sql_list($langchoice, $marcflavour);
+        my ($sample_defaulted_to_en, $levellist) = $installer->sample_data_sql_list($langchoice);
         $template->param( "en_sample_data" => $sample_defaulted_to_en);
         $template->param( "levelloop" => $levellist );
         $template->param( "$op"       => 1 );

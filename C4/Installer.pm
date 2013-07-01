@@ -34,7 +34,8 @@ C4::Installer
  my $installer = C4::Installer->new();
  my $all_languages = getAllLanguages();
  my $error = $installer->load_db_schema();
- my $list = $installer->sql_file_list('en', 'marc21', { optional => 1, mandatory => 1 });
+ my $list;
+ #fill $list with list of sql files
  my ($fwk_language, $error_list) = $installer->load_sql_in_order($all_languages, @$list);
  $installer->set_version_syspref();
  $installer->set_marcflavour_syspref('MARC21');
@@ -75,27 +76,6 @@ sub new {
 
     bless $self, $class;
     return $self;
-}
-
-=head2 marcflavour_list
-
-  my ($marcflavours) = $installer->marcflavour_list($lang);
-
-Return a arrayref of the MARC flavour sets available for the
-specified language C<$lang>.  Returns 'undef' if a directory
-for the language does not exist.
-
-=cut
-
-sub marcflavour_list {
-    my $self = shift;
-    my $lang = shift;
-
-    my $dir = C4::Context->config('intranetdir') . "/installer/data/$self->{dbms}/$lang/marcflavour";
-    opendir(MYDIR, $dir) or return;
-    my @list = grep { !/^\.|CVS/ && -d "$dir/$_" } readdir(MYDIR);
-    closedir MYDIR;
-    return \@list;
 }
 
 =head2 marc_framework_sql_list
@@ -255,41 +235,6 @@ sub sample_data_sql_list {
     }
 
     return ($defaulted_to_en, \@levellist);
-}
-
-=head2 sql_file_list
-
-  my $list = $installer->sql_file_list($lang, $marcflavour, $subset_wanted);
-
-Returns an arrayref containing the filepaths of installer SQL scripts
-available for laod.  The C<$lang> and C<$marcflavour> arguments
-specify the desired language and MARC flavour. while C<$subset_wanted>
-is a hashref containing possible named parameters 'mandatory' and 'optional'.
-
-=cut
-
-sub sql_file_list {
-    my $self = shift;
-    my $lang = shift;
-    my $marcflavour = shift;
-    my $subset_wanted = shift;
-
-    my ($marc_defaulted_to_en, $marc_sql) = $self->marc_framework_sql_list($lang, $marcflavour);
-    my ($sample_defaulted_to_en, $sample_sql) = $self->sample_data_sql_list($lang);
-
-    my @sql_list = ();
-    map {
-        map {
-            if ($subset_wanted->{'mandatory'}) {
-                push @sql_list, $_->{'fwkfile'} if $_->{'mandatory'};
-            }
-            if ($subset_wanted->{'optional'}) {
-                push @sql_list, $_->{'fwkfile'} unless $_->{'mandatory'};
-            }
-        } @{ $_->{'frameworks'} }
-    } (@$marc_sql, @$sample_sql);
-
-    return \@sql_list
 }
 
 =head2 load_db_schema
