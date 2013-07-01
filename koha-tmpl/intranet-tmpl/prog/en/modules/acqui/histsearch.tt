@@ -32,7 +32,7 @@
 	
 [% UNLESS ( order_loop ) %]<form action="/cgi-bin/koha/acqui/histsearch.pl" method="post">
 <fieldset class="rows">
-	<legend>Search Orders</legend>
+    <legend>Search orders</legend>
 		<ol>
 		<li><label for="title">Title: </label> <input type="text" name="title" id="title" value="[% title %]" /></li>
 		<li><label for="author">Author: </label> <input type="text" name="author" id="author" value="[% author %]" /></li>
@@ -49,7 +49,7 @@
         </li>
 
         <li>
-            <label for="orderstatus">Order Status: </label>
+            <label for="orderstatus">Order status: </label>
             <select name="orderstatus" id="orderstatus">
                 <option value=""></option>
                 <option value="0">New</option>

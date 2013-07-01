@@ -7314,7 +7314,7 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     $dbh->do("UPDATE aqorders SET orderstatus=2 WHERE quantity > quantityreceived AND quantityreceived > 0");
     $dbh->do("UPDATE aqorders SET orderstatus=3 WHERE quantity=quantityreceived");
     $dbh->do("UPDATE aqorders SET orderstatus=4 WHERE datecancellationprinted IS NOT NULL");
-    print "Upgrade to $DBversion done (Add category ORDRSTATUS values in authorised_values table)\n";
+    print "Upgrade to $DBversion done (Bug 5336: Add the new column aqorders.orderstatus)\n";
     SetVersion($DBversion);
 }
 
