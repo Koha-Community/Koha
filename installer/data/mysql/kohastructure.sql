@@ -983,20 +983,21 @@ CREATE TABLE `issuingrules` (
   `restrictedtype` tinyint(1) default NULL,
   `rentaldiscount` decimal(28,6) default NULL,
   `reservecharge` decimal(28,6) default NULL,
-  `fine` decimal(28,6) default NULL,
-  `finedays` int(11) default NULL,
-  `firstremind` int(11) default NULL,
-  `chargeperiod` int(11) default NULL,
-  `accountsent` int(11) default NULL,
-  `chargename` varchar(100) default NULL,
-  `maxissueqty` int(4) default NULL,
-  `issuelength` int(4) default NULL,
-  `lengthunit` varchar(10) default 'days',
-  `hardduedate` date default NULL,
-  `hardduedatecompare` tinyint NOT NULL default "0",
-  `renewalsallowed` smallint(6) NOT NULL default "0",
-  `reservesallowed` smallint(6) NOT NULL default "0",
-  `branchcode` varchar(10) NOT NULL default '',
+  `fine` decimal(28,6) default NULL, -- fine amount
+  `finedays` int(11) default NULL, -- suspension in days
+  `firstremind` int(11) default NULL, -- fine grace period
+  `chargeperiod` int(11) default NULL, -- how often the fine amount is charged
+  `accountsent` int(11) default NULL, -- not used? always NULL
+  `chargename` varchar(100) default NULL, -- not used? always NULL
+  `maxissueqty` int(4) default NULL, -- total number of checkouts allowed
+  `issuelength` int(4) default NULL, -- length of checkout in the unit set in issuingrules.lengthunit
+  `lengthunit` varchar(10) default 'days', -- unit of checkout length (days, hours)
+  `hardduedate` date default NULL, -- hard due date
+  `hardduedatecompare` tinyint NOT NULL default "0", -- type of hard due date (1 = after, 0 = on, -1 = before)
+  `renewalsallowed` smallint(6) NOT NULL default "0", -- how many renewals are allowed
+  `reservesallowed` smallint(6) NOT NULL default "0", -- how many holds are allowed
+  `branchcode` varchar(10) NOT NULL default '', -- the branch this rule is for (branches.branchcode)
+  overduefinescap decimal(28,6) default NULL, -- the maximum amount of an overdue fine
   PRIMARY KEY  (`branchcode`,`categorycode`,`itemtype`),
   KEY `categorycode` (`categorycode`),
   KEY `itemtype` (`itemtype`)
