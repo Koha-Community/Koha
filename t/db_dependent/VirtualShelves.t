@@ -5,14 +5,18 @@
 # Larger modifications by Jonathan Druart and Marcel de Rooy
 
 use Modern::Perl;
-use Test::More tests => 81;
+use Test::More tests => 71;
 use MARC::Record;
 
 use C4::Biblio qw( AddBiblio DelBiblio );
 use C4::Context;
 
-# Getting some borrowers from database.
+
 my $dbh = C4::Context->dbh;
+$dbh->{RaiseError} = 1;
+$dbh->{AutoCommit} = 0;
+
+# Getting some borrowers from database.
 my $query = q{SELECT borrowernumber FROM borrowers LIMIT 10};
 my $borr_ref=$dbh->selectall_arrayref($query);
 if(@$borr_ref==0) { #no borrowers? should not occur of course
@@ -46,7 +50,7 @@ use_ok('C4::VirtualShelves');
 
 # creating shelves (could be <10 when names are not unique)
 my @shelves;
-for(my $i=0; $i<10;$i++) {
+for my $i(0..9){
     my $name= randomname();
     my $catg= int(rand(2))+1;
     my $ShelfNumber= AddShelf(
@@ -73,7 +77,7 @@ for(my $i=0; $i<10;$i++) {
 }
 
 # try to create shelves with duplicate names
-for(my $i=0;$i<10;$i++){
+for my $i(0..9){
     if($shelves[$i]->{number}<0) {
         ok(1, 'skip duplicate test for earlier name clash');
         next;
@@ -108,7 +112,7 @@ for(my $i=0;$i<10;$i++){
 # usage : $biblist = GetShelfContents($shelfnumber);
 
 my %used = ();
-for(my $i=0; $i<10;$i++){
+for my $i(0..9){
     my $bib = $biblionumbers[int(rand(9))];
     my $shelfnumber = $shelves[int(rand(9))]->{number};
     if($shelfnumber<0) {
@@ -145,7 +149,7 @@ for(my $i=0; $i<10;$i++){
 # usage : ModShelf($shelfnumber, $shelfname, $owner, $category )
 # usage : (shelfnumber,shelfname,owner,category) = GetShelf($shelfnumber);
 
-for(my $i=0; $i<10;$i++){
+for my $i(0..9){
     my $rand = int(rand(9));
     my $numA = $shelves[$rand]->{number};
     if($numA<0) {
@@ -173,23 +177,6 @@ for(my $i=0; $i<10;$i++){
     }
 }
 
-#-----------------------TEST DelShelf & DelFromShelf functions------------------------#
-# usage : ($status) = &DelShelf($shelfnumber);
-
-for(my $i=0; $i<10;$i++){
-    my $shelfnumber = $shelves[$i]->{number};
-    if($shelfnumber<0) {
-        ok(1, 'Skip DelShelf for shelf -1');
-        next;
-    }
-    my $status = DelShelf($shelfnumber);
-    ok(1 == $status, "deleted shelf $shelfnumber and its contents");
-}
-
-#----------------------- CLEANUP ----------------------------------------------#
-
-DelBiblio($_) for @biblionumbers;
-
 #----------------------- SOME SUBS --------------------------------------------#
 
 sub randomname {
@@ -199,3 +186,5 @@ sub randomname {
     }
     return $rv;
 }
+
+$dbh->rollback;
