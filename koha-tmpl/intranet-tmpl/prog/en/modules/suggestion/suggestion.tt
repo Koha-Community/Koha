@@ -479,11 +479,31 @@ $(document).ready(function() { calcNewsuggTotal(); });
 <form name="suggestionfilter" action="suggestion.pl" method="get">
 <fieldset class="brief"><ol style="display:block;"><li><label for="displayby">Organize by: </label>
                 <select name="displayby" id="displayby" style="width:auto;">
-                    <option value="STATUS">Status</option>
-                    <option value="branchcode">Library</option>
-                    <option value="itemtype">Item type</option>
-                    <option value="managedby">Managed by</option>
-                    <option value="acceptedby">Accepted by</option>
+                    [% IF ( displayby == "STATUS" ) %]
+                        <option value="STATUS" selected="selected">Status</option>
+                    [% ELSE %]
+                        <option value="STATUS">Status</option>
+                    [% END %]
+                    [% IF ( displayby == "branchcode" ) %]
+                        <option value="branchcode" selected="selected">Library</option>
+                    [% ELSE %]
+                        <option value="branchcode">Library</option>
+                    [% END %]
+                    [% IF ( displayby == "itemtype" ) %]
+                        <option value="itemtype" selected="selected">Item type</option>
+                    [% ELSE %]
+                        <option value="itemtype">Item type</option>
+                    [% END %]
+                    [% IF ( displayby == "managedby" ) %]
+                        <option value="managedby" selected="selected">Managed by</option>
+                    [% ELSE %]
+                        <option value="managedby">Managed by</option>
+                    [% END %]
+                    [% IF ( displayby == "acceptedby" ) %]
+                        <option value="acceptedby" selected="selected">Accepted by</option>
+                    [% ELSE %]
+                        <option value="acceptedby">Accepted by</option>
+                    [% END %]
                 </select> <input type="submit" value="Go" /></li></ol></fieldset>
 <h4>Filter by: <a style="font-size:80%;font-weight:normal;" href="/cgi-bin/koha/suggestion/suggestion.pl">[clear]</a></h4>
                 <div style="display:block;" id="limits">
