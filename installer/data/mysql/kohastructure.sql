@@ -1028,7 +1028,7 @@ CREATE TABLE `issuingrules` ( -- circulation and fine rules
   `renewalperiod` int(4) default NULL, -- renewal period in the unit set in issuingrules.lengthunit
   `reservesallowed` smallint(6) NOT NULL default "0", -- how many holds are allowed
   `branchcode` varchar(10) NOT NULL default '', -- the branch this rule is for (branches.branchcode)
-  overduefinescap decimal default NULL, -- the maximum amount of an overdue fine
+  overduefinescap decimal(28,6) default NULL, -- the maximum amount of an overdue fine
   PRIMARY KEY  (`branchcode`,`categorycode`,`itemtype`),
   KEY `categorycode` (`categorycode`),
   KEY `itemtype` (`itemtype`)

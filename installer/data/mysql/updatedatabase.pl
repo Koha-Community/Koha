@@ -5561,7 +5561,7 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
 
 $DBversion = '3.09.00.027';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-    $dbh->do("ALTER TABLE issuingrules ADD overduefinescap decimal DEFAULT NULL");
+    $dbh->do("ALTER TABLE issuingrules ADD overduefinescap decimal(28,6) DEFAULT NULL");
     my $maxfine = C4::Context->preference('MaxFine');
     if ($maxfine && $maxfine < 900) { # an arbitrary value that tells us it's not "some huge value"
       $dbh->do("UPDATE issuingrules SET overduefinescap=?",undef,$maxfine);
@@ -6888,6 +6888,14 @@ if ( CheckVersion($DBversion) ) {
 $DBversion = "3.12.01.003";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     print "The default MARC21 framework has been updated to April 2013 revision. Use installer/data/mysql/en/marcflavour/marc21/mandatory/marc21_framework_DEFAULT.sql to update your (english) default MARC21 framework from the command line.\n";
+    SetVersion($DBversion);
+}
+
+
+$DBversion = "3.13.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do("ALTER TABLE issuingrules MODIFY COLUMN overduefinescap decimal(28,6) DEFAULT NULL;");
+    print "Upgrade to $DBversion done (Bug 10490: Correct datatype for overduefinescap in issuingrules)\n";
     SetVersion($DBversion);
 }
 
