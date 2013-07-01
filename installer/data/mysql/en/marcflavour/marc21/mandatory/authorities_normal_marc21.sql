@@ -1942,7 +1942,10 @@ INSERT INTO auth_tag_structure (authtypecode, tagfield, liblibrarian, libopac, r
     tagfield NOT IN ( '058','063','068','084','088','140','143','153',
                       '154','253','353','453','553','668','671','676',
                       '684','685','686','687','68a','68b','753','754',
-                      '761','763','764','765','766','768');
+                      '761','763','764','765','766','768') AND
+    tagfield NOT IN ('110','111','130','148','150','151','155','162',
+                     '180','181','182','185','034','640','641','642',
+                     '643','644','645','646');
 
 INSERT INTO auth_subfield_structure (authtypecode, tagfield, tagsubfield, liblibrarian, libopac, repeatable,
 mandatory, tab, authorised_value, value_builder, seealso, isurl, hidden, linkid, kohafield, frameworkcode)
@@ -1953,17 +1956,10 @@ mandatory, tab, authorised_value, value_builder, seealso, isurl, hidden, linkid,
     tagfield NOT IN ( '058','063','068','084','088','140','143','153',
                       '154','253','353','453','553','668','671','676',
                       '684','685','686','687','68a','68b','753','754',
-                      '761','763','764','765','766','768');
-
--- delete especific tags
-
-DELETE FROM auth_tag_structure WHERE authtypecode = 'PERSO_NAME' AND
-    tagfield IN ('110','111','130','148','150','151','155','180','181','182','185',
-                 '034','640','641','642','643','644','645','646');
-
-DELETE FROM auth_subfield_structure WHERE authtypecode = 'PERSO_NAME' AND
-    tagfield IN ('110','111','130','148','150','151','155','180','181','182','185',
-                 '034','640','641','642','643','644','645','646');
+                      '761','763','764','765','766','768') AND
+    tagfield NOT IN ('110','111','130','148','150','151','155','162',
+                     '180','181','182','185','034','640','641','642',
+                     '643','644','645','646');
 
 -- ******************************************************
 
@@ -1980,7 +1976,10 @@ INSERT INTO auth_tag_structure (authtypecode, tagfield, liblibrarian, libopac, r
     tagfield NOT IN ( '058','063','068','084','088','140','143','153',
                       '154','253','353','453','553','668','671','676',
                       '684','685','686','687','68a','68b','753','754',
-                      '761','763','764','765','766','768');
+                      '761','763','764','765','766','768') AND
+    tagfield NOT IN ( '100','111','130','148','150','151','155','162',
+                      '180','181','182','185','034','640','641','642',
+                      '643','644','645','646');
 
 INSERT INTO auth_subfield_structure (authtypecode, tagfield, tagsubfield, liblibrarian, libopac, repeatable,
 mandatory, tab, authorised_value, value_builder, seealso, isurl, hidden, linkid, kohafield, frameworkcode)
@@ -1991,17 +1990,10 @@ mandatory, tab, authorised_value, value_builder, seealso, isurl, hidden, linkid,
     tagfield NOT IN ( '058','063','068','084','088','140','143','153',
                       '154','253','353','453','553','668','671','676',
                       '684','685','686','687','68a','68b','753','754',
-                      '761','763','764','765','766','768');
-
--- delete especific tags
-
-DELETE FROM auth_tag_structure WHERE authtypecode = 'CORPO_NAME' AND
-    tagfield IN ('100','111','130','148','150','151','155','180','181','182','185',
-                 '034','640','641','642','643','644','645','646');
-
-DELETE FROM auth_subfield_structure WHERE authtypecode = 'CORPO_NAME' AND
-    tagfield IN ('100','111','130','148','150','151','155','180','181','182','185',
-                 '034','640','641','642','643','644','645','646');
+                      '761','763','764','765','766','768') AND
+    tagfield NOT IN ( '100','111','130','148','150','151','155','162',
+                      '180','181','182','185','034','640','641','642',
+                      '643','644','645','646');
 
 -- ******************************************************
 
@@ -2018,7 +2010,10 @@ INSERT INTO auth_tag_structure (authtypecode, tagfield, liblibrarian, libopac, r
     tagfield NOT IN ( '058','063','068','084','088','140','143','153',
                       '154','253','353','453','553','668','671','676',
                       '684','685','686','687','68a','68b','753','754',
-                      '761','763','764','765','766','768');
+                      '761','763','764','765','766','768') AND
+    tagfield NOT IN ( '100','110','130','148','150','151','155','162',
+                      '180','181','182','185','640','641','642','643',
+                      '644','645','646');
 
 INSERT INTO auth_subfield_structure (authtypecode, tagfield, tagsubfield, liblibrarian, libopac, repeatable,
 mandatory, tab, authorised_value, value_builder, seealso, isurl, hidden, linkid, kohafield, frameworkcode)
@@ -2029,17 +2024,10 @@ mandatory, tab, authorised_value, value_builder, seealso, isurl, hidden, linkid,
     tagfield NOT IN ( '058','063','068','084','088','140','143','153',
                       '154','253','353','453','553','668','671','676',
                       '684','685','686','687','68a','68b','753','754',
-                      '761','763','764','765','766','768');
-
--- delete especific tags
-
-DELETE FROM auth_tag_structure WHERE authtypecode = 'MEETI_NAME' AND
-    tagfield IN ('100','110','130','148','150','151','155','180','181','182','185',
-                 '640','641','642','643','644','645','646');
-
-DELETE FROM auth_subfield_structure WHERE authtypecode = 'MEETI_NAME' AND
-    tagfield IN ('100','110','130','148','150','151','155','180','181','182','185',
-                 '640','641','642','643','644','645','646');
+                      '761','763','764','765','766','768') AND
+    tagfield NOT IN ( '100','110','130','148','150','151','155','162',
+                      '180','181','182','185','640','641','642','643',
+                      '644','645','646');
 
 -- ******************************************************
 
@@ -2056,7 +2044,9 @@ INSERT INTO auth_tag_structure (authtypecode, tagfield, liblibrarian, libopac, r
     tagfield NOT IN ( '058','063','068','084','088','140','143','153',
                       '154','253','353','453','553','668','671','676',
                       '684','685','686','687','68a','68b','753','754',
-                      '761','763','764','765','766','768');
+                      '761','763','764','765','766','768') AND
+    tagfield NOT IN ( '100','110','111','148','150','151','155','162',
+                      '180','181','182','185');
 
 INSERT INTO auth_subfield_structure (authtypecode, tagfield, tagsubfield, liblibrarian, libopac, repeatable,
 mandatory, tab, authorised_value, value_builder, seealso, isurl, hidden, linkid, kohafield, frameworkcode)
@@ -2067,17 +2057,9 @@ mandatory, tab, authorised_value, value_builder, seealso, isurl, hidden, linkid,
     tagfield NOT IN ( '058','063','068','084','088','140','143','153',
                       '154','253','353','453','553','668','671','676',
                       '684','685','686','687','68a','68b','753','754',
-                      '761','763','764','765','766','768');
-
--- delete especific tags
-
-DELETE FROM auth_tag_structure WHERE authtypecode = 'UNIF_TITLE' AND
-    tagfield IN ('100','110','111','148','150','151','155','180','181','182','185'
-                 );
-
-DELETE FROM auth_subfield_structure WHERE authtypecode = 'UNIF_TITLE' AND
-    tagfield IN ('100','110','111','148','150','151','155','180','181','182','185'
-                 );
+                      '761','763','764','765','766','768') AND
+    tagfield NOT IN ( '100','110','111','148','150','151','155','162',
+                      '180','181','182','185');
 
 -- ******************************************************
 
@@ -2094,7 +2076,10 @@ INSERT INTO auth_tag_structure (authtypecode, tagfield, liblibrarian, libopac, r
     tagfield NOT IN ( '058','063','068','084','088','140','143','153',
                       '154','253','353','453','553','668','671','676',
                       '684','685','686','687','68a','68b','753','754',
-                      '761','763','764','765','766','768');
+                      '761','763','764','765','766','768') AND
+    tagfield NOT IN ( '100','110','111','130','150','151','155','162',
+                      '180','181','185','014','020','022','031','640',
+                      '641','642','643','644','645','646');
 
 INSERT INTO auth_subfield_structure (authtypecode, tagfield, tagsubfield, liblibrarian, libopac, repeatable,
 mandatory, tab, authorised_value, value_builder, seealso, isurl, hidden, linkid, kohafield, frameworkcode)
@@ -2105,17 +2090,10 @@ mandatory, tab, authorised_value, value_builder, seealso, isurl, hidden, linkid,
     tagfield NOT IN ( '058','063','068','084','088','140','143','153',
                       '154','253','353','453','553','668','671','676',
                       '684','685','686','687','68a','68b','753','754',
-                      '761','763','764','765','766','768');
-
--- delete especific tags
-
-DELETE FROM auth_tag_structure WHERE authtypecode = 'CHRON_TERM' AND
-    tagfield IN ('100','110','111','130','150','151','155','180','181','185',
-                 '014','020','022','031','640','641','642','643','644','645','646');
-
-DELETE FROM auth_subfield_structure WHERE authtypecode = 'CHRON_TERM' AND
-    tagfield IN ('100','110','111','130','150','151','155','180','181','185',
-                 '014','020','022','031','640','641','642','643','644','645','646');
+                      '761','763','764','765','766','768') AND
+    tagfield NOT IN ( '100','110','111','130','150','151','155','162',
+                      '180','181','185','014','020','022','031','640',
+                      '641','642','643','644','645','646');
 
 -- ******************************************************
 
@@ -2132,7 +2110,10 @@ INSERT INTO auth_tag_structure (authtypecode, tagfield, liblibrarian, libopac, r
     tagfield NOT IN ( '058','063','068','084','088','140','143','153',
                       '154','253','353','453','553','668','671','676',
                       '684','685','686','687','68a','68b','753','754',
-                      '761','763','764','765','766','768');
+                      '761','763','764','765','766','768') AND
+    tagfield NOT IN ( '100','110','111','130','148','151','155','162',
+                      '181','182','185','014','020','022','031','640',
+                      '641','642','643','644','645','646');
 
 INSERT INTO auth_subfield_structure (authtypecode, tagfield, tagsubfield, liblibrarian, libopac, repeatable,
 mandatory, tab, authorised_value, value_builder, seealso, isurl, hidden, linkid, kohafield, frameworkcode)
@@ -2143,17 +2124,10 @@ mandatory, tab, authorised_value, value_builder, seealso, isurl, hidden, linkid,
     tagfield NOT IN ( '058','063','068','084','088','140','143','153',
                       '154','253','353','453','553','668','671','676',
                       '684','685','686','687','68a','68b','753','754',
-                      '761','763','764','765','766','768');
-
--- delete especific tags
-
-DELETE FROM auth_tag_structure WHERE authtypecode = 'TOPIC_TERM' AND
-    tagfield IN ('100','110','111','130','148','151','155','181','182','185',
-                 '014','020','022','031','640','641','642','643','644','645','646');
-
-DELETE FROM auth_subfield_structure WHERE authtypecode = 'TOPIC_TERM' AND
-    tagfield IN ('100','110','111','130','148','151','155','181','182','185',
-                 '014','020','022','031','640','641','642','643','644','645','646');
+                      '761','763','764','765','766','768') AND
+    tagfield NOT IN ( '100','110','111','130','148','151','155','162',
+                      '181','182','185','014','020','022','031','640',
+                      '641','642','643','644','645','646');
 
 -- ******************************************************
 
@@ -2170,7 +2144,10 @@ INSERT INTO auth_tag_structure (authtypecode, tagfield, liblibrarian, libopac, r
     tagfield NOT IN ( '058','063','068','084','088','140','143','153',
                       '154','253','353','453','553','668','671','676',
                       '684','685','686','687','68a','68b','753','754',
-                      '761','763','764','765','766','768');
+                      '761','763','764','765','766','768') AND
+    tagfield NOT IN ( '100','110','111','130','148','150','155','162',
+                      '180','182','185','014','020','022','031','640',
+                      '641','642','643','644','645','646');
 
 INSERT INTO auth_subfield_structure (authtypecode, tagfield, tagsubfield, liblibrarian, libopac, repeatable,
 mandatory, tab, authorised_value, value_builder, seealso, isurl, hidden, linkid, kohafield, frameworkcode)
@@ -2181,17 +2158,10 @@ mandatory, tab, authorised_value, value_builder, seealso, isurl, hidden, linkid,
     tagfield NOT IN ( '058','063','068','084','088','140','143','153',
                       '154','253','353','453','553','668','671','676',
                       '684','685','686','687','68a','68b','753','754',
-                      '761','763','764','765','766','768');
-
--- delete especific tags
-
-DELETE FROM auth_tag_structure WHERE authtypecode = 'GEOGR_NAME' AND
-    tagfield IN ('100','110','111','130','148','150','155','180','182','185',
-                 '014','020','022','031','640','641','642','643','644','645','646');
-
-DELETE FROM auth_subfield_structure WHERE authtypecode = 'GEOGR_NAME' AND
-    tagfield IN ('100','110','111','130','148','150','155','180','182','185',
-                 '014','020','022','031','640','641','642','643','644','645','646');
+                      '761','763','764','765','766','768') AND
+    tagfield NOT IN ( '100','110','111','130','148','150','155','162',
+                      '180','182','185','014','020','022','031','640',
+                      '641','642','643','644','645','646');
 
 -- ******************************************************
 
@@ -2208,7 +2178,10 @@ INSERT INTO auth_tag_structure (authtypecode, tagfield, liblibrarian, libopac, r
     tagfield NOT IN ( '058','063','068','084','088','140','143','153',
                       '154','253','353','453','553','668','671','676',
                       '684','685','686','687','68a','68b','753','754',
-                      '761','763','764','765','766','768');
+                      '761','763','764','765','766','768') AND
+    tagfield NOT IN ( '100','110','111','130','148','150','151','162',
+                      '180','181','182','014','020','022','031','640',
+                      '641','642','643','644','645','646');
 
 INSERT INTO auth_subfield_structure (authtypecode, tagfield, tagsubfield, liblibrarian, libopac, repeatable,
 mandatory, tab, authorised_value, value_builder, seealso, isurl, hidden, linkid, kohafield, frameworkcode)
@@ -2219,17 +2192,9 @@ mandatory, tab, authorised_value, value_builder, seealso, isurl, hidden, linkid,
     tagfield NOT IN ( '058','063','068','084','088','140','143','153',
                       '154','253','353','453','553','668','671','676',
                       '684','685','686','687','68a','68b','753','754',
-                      '761','763','764','765','766','768');
-
--- delete especific tags
-
-DELETE FROM auth_tag_structure WHERE authtypecode = 'GENRE/FORM' AND
-    tagfield IN ('100','110','111','130','148','150','151','180','181','182',
-                 '014','020','022','031','640','641','642','643','644','645','646');
-
-DELETE FROM auth_subfield_structure WHERE authtypecode = 'GENRE/FORM' AND
-    tagfield IN ('100','110','111','130','148','150','151','180','181','182',
-                 '014','020','022','031','640','641','642','643','644','645','646');
+                      '761','763','764','765','766','768') AND
+    tagfield NOT IN ( '100','110','111','130','148','150','151','162',
+                      '180','181','182','014','020','022','031','640',
+                      '641','642','643','644','645','646');
 
 -- ******************************************************
-
