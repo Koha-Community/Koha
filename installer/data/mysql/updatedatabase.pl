@@ -5561,7 +5561,7 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
 
 $DBversion = '3.09.00.027';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-    $dbh->do("ALTER TABLE issuingrules ADD overduefinescap decimal DEFAULT NULL");
+    $dbh->do("ALTER TABLE issuingrules ADD overduefinescap decimal(28,6) DEFAULT NULL");
     my $maxfine = C4::Context->preference('MaxFine');
     if ($maxfine && $maxfine < 900) { # an arbitrary value that tells us it's not "some huge value"
       $dbh->do("UPDATE issuingrules SET overduefinescap=?",undef,$maxfine);
@@ -7033,6 +7033,14 @@ $DBversion = "3.13.00.011";
 if ( CheckVersion($DBversion) ) {
     $dbh->do("UPDATE language_rfc4646_to_iso639 SET iso639_2_code='ita' WHERE rfc4646_subtag='it'");
     print "Upgrade to $DBversion done (Bug 9519: Wrong language code for Italian in the advanced search language limitations)\n";
+    SetVersion($DBversion);
+}
+
+
+$DBversion = "3.13.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do("ALTER TABLE issuingrules MODIFY COLUMN overduefinescap decimal(28,6) DEFAULT NULL;");
+    print "Upgrade to $DBversion done (Bug 10490: Correct datatype for overduefinescap in issuingrules)\n";
     SetVersion($DBversion);
 }
 
