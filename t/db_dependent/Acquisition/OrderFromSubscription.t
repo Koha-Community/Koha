@@ -7,6 +7,12 @@ use_ok('C4::Acquisition');
 use_ok('C4::Biblio');
 use_ok('C4::Budgets');
 use_ok('C4::Serials');
+
+# Start transaction
+my $dbh = C4::Context->dbh;
+$dbh->{AutoCommit} = 0;
+$dbh->{RaiseError} = 1;
+
 my $supplierlist=eval{GetSuppliersWithLateIssues()};
 ok(length($@)==0,"No SQL problem in GetSuppliersWithLateIssues");
 
@@ -87,12 +93,5 @@ ok( $order->{ecost} == $cost, "test cost for the last order received");
 $order = GetLastOrderNotReceivedFromSubscriptionid( $subscription->{subscriptionid} );
 is ( $order, undef, "test no not received order for a received order");
 
-# cleaning
-END {
-    DelSubscription( $subscription->{subscriptionid} );
-    DelOrder( $subscription->{biblionumber}, $ordernumber );
-    DelBudgetPeriod($bpid);
-    DelBudget($budget_id);
-    DelBasket( $basketno );
-    DelBiblio($biblionumber);
-};
+# Cleanup
+$dbh->rollback;
