@@ -73,40 +73,70 @@ function verify_images() {
     [% IF StaffDetailItemSelection %]
         function selectAllItems(div) {
             $("input[name='itemnumber'][type='checkbox']", div).attr('checked', 'checked');
+            itemSelectionBuildActionLinks(div);
         }
 
-        function deselectAllItems(div) {
+        function clearAllItems(div) {
             $("input[name='itemnumber'][type='checkbox']", div).removeAttr('checked');
+            itemSelectionBuildActionLinks(div);
         }
 
-        function itemSelectionExecuteAction(div) {
+        function itemSelectionBuildDeleteLink(div) {
             var itemnumbers = new Array();
             $("input[name='itemnumber'][type='checkbox']:checked", div).each(function() {
                 itemnumbers.push($(this).val());
             });
             if (itemnumbers.length > 0) {
-                var action = $('select[name="itemselection_action"]', div).val();
-                if (action.length > 0) {
-                    var del = (action == 'delete') ? 1 : 0;
-                    var url = '/cgi-bin/koha/tools/batchMod.pl?op=show';
-                    if (action == 'delete') {
-                        url += '&del=1';
-                    }
-                    url += '&itemnumber=' + itemnumbers.join('&itemnumber=');
-                    url += '&src=' + '[% "/cgi-bin/koha/catalogue/detail.pl?biblionumber=$biblionumber" |uri %]';
-                    new_window = $("input[name='new_window']", div).attr('checked');
-                    if (new_window) {
-                        window.open(url);
-                    } else {
-                        window.location.href = url;
-                    }
-                } else {
-                    alert(_("Please choose an action"));
-                }
+                  var url = '/cgi-bin/koha/tools/batchMod.pl?op=show&del=1';
+                  url += '&itemnumber=' + itemnumbers.join('&itemnumber=');
+                  url += '&src=' + '[% "/cgi-bin/koha/catalogue/detail.pl?biblionumber=$biblionumber" |uri %]';
+                  $('a.itemselection_action_delete').attr('href', url);
+                  $('a.itemselection_action_delete').show();
             } else {
-                alert(_("Please select at least one item."));
+                $('a.itemselection_action_delete').hide();
+                return false;
             }
+            return true
         }
+
+        function itemSelectionBuildModifyLink(div) {
+            var itemnumbers = new Array();
+            $("input[name='itemnumber'][type='checkbox']:checked", div).each(function() {
+                itemnumbers.push($(this).val());
+            });
+            if (itemnumbers.length > 0) {
+                  var url = '/cgi-bin/koha/tools/batchMod.pl?op=show';
+                  url += '&itemnumber=' + itemnumbers.join('&itemnumber=');
+                  url += '&src=' + '[% "/cgi-bin/koha/catalogue/detail.pl?biblionumber=$biblionumber" |uri %]';
+                  $('a.itemselection_action_modify').attr('href', url);
+                  $('a.itemselection_action_modify').show();
+            } else {
+                $('a.itemselection_action_modify').hide();
+                return false;
+            }
+            return true;
+        }
+
+        function itemSelectionBuildActionLinks(div) {
+          var delete_link_ok = itemSelectionBuildDeleteLink(div);
+          var modify_link_ok = itemSelectionBuildModifyLink(div);
+          if (modify_link_ok || delete_link_ok) {
+            $('.itemselection_actions', div).show();
+          } else {
+            $('.itemselection_actions', div).hide();
+          }
+        }
+
+        $(document).ready(function() {
+          $('table.items_table').each(function() {
+            var div = $(this).parent().parent();
+            itemSelectionBuildActionLinks(div);
+          });
+          $("input[name='itemnumber'][type='checkbox']").change(function() {
+            var div = $(this).parents('table').parent().parent();
+            itemSelectionBuildActionLinks(div);
+          });
+        });
     [% END %]
 
      $(document).ready(function() {
@@ -453,24 +483,18 @@ function verify_images() {
     [% items_table_block_iter = items_table_block_iter + 1 %]
     [% IF (StaffDetailItemSelection) %]
         <a href="#" onclick="selectAllItems($(this).parent()); return false;">Select all</a> |
-        <a href="#" onclick="deselectAllItems($(this).parent()); return false;">Deselect all</a> |
-        <form onsubmit="itemSelectionExecuteAction($(this).parent()); return false;">
-            <label for="itemselection_action_[% items_table_block_iter %]">Action:</label>
-            <select id="itemselection_action_[% items_table_block_iter %]" name="itemselection_action">
-                <option value=""></option>
-                [% IF CAN_user_tools_items_batchdel %]
-                    <option value="delete">Delete selected items</option>
-                [% END %]
-                [% IF CAN_user_tools_items_batchmod %]
-                    <option value="modify">Modify selected items</option>
-                [% END %]
-            </select>
-            <input type="submit" value="Go" />
-            <input type="checkbox" id="new_window_[% items_table_block_iter %]" name="new_window" />
-            <label for="new_window_[% items_table_block_iter %]">Open in new window</label>
-        </form>
+        <a href="#" onclick="clearAllItems($(this).parent()); return false;">Clear all</a>
+        <span class="itemselection_actions">
+          | Actions:
+          [% IF CAN_user_tools_items_batchdel %]
+            <a class="itemselection_action_delete">Delete selected items</a>
+          [% END %]
+          [% IF CAN_user_tools_items_batchmod %]
+            <a class="itemselection_action_modify">Modify selected items</a>
+          [% END %]
+        </span>
     [% END %]
-    <table>
+    <table class="items_table">
         <thead>
             <tr>
                 [% IF (StaffDetailItemSelection) %]<th></th>[% END %]
