@@ -23,9 +23,6 @@
 [% IF ( login ) %]
     <link rel="stylesheet" type="text/css" href="[% themelang %]/css/login.css" />
 [% END %]
-[% IF ( wizard ) %]
-    <link rel="stylesheet" type="text/css" href="[% themelang %]/css/wizard.css" />
-[% END %]
 
 <!-- local colors -->
 [% IF ( intranetcolorstylesheet ) %]
