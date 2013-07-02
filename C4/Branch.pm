@@ -47,7 +47,7 @@ BEGIN {
 	        &CheckCategoryUnique
 		&mybranch
 	);
-	@EXPORT_OK = qw( &onlymine &mybranch get_branch_code_from_name );
+    @EXPORT_OK = qw( &onlymine &mybranch );
 }
 
 =head1 NAME
@@ -569,15 +569,6 @@ sub CheckBranchCategorycode {
     $sth->execute($categorycode);
     my ($total) = $sth->fetchrow_array;
     return $total;
-}
-
-sub get_branch_code_from_name {
-   my @branch_name = @_;
-   my $query = "SELECT branchcode FROM branches WHERE branchname=?;";
-   my $dbh = C4::Context->dbh();
-   my $sth = $dbh->prepare($query);
-   $sth->execute(@branch_name);
-   return $sth->fetchrow_array;
 }
 
 1;

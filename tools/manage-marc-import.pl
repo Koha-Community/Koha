@@ -35,7 +35,6 @@ use C4::ImportBatch;
 use C4::Matcher;
 use C4::BackgroundJob;
 use C4::Labels::Batch;
-use C4::Branch qw(get_branch_code_from_name);
 
 my $script_name = "/cgi-bin/koha/tools/manage-marc-import.pl";
 
