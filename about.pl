@@ -145,8 +145,8 @@ $template->param( table => $table );
 ## Koha time line code
 
 #get file location
-my $dir = C4::Context->config('intranetdir');
-open( my $file, "<", "$dir" . "/docs/history.txt" );
+my $docdir = C4::Context->config('docdir');
+open( my $file, "<", "$docdir" . "/history.txt" );
 my $i = 0;
 
 my @rows2 = ();
