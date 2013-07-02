@@ -354,7 +354,18 @@
                                 [% ELSE %]
                                     <p>[<a href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% books_loo.ordernumber %]">Add note</a>]</p>
                                 [% END %]
-                            <p>[% books_loo.internalnotes %]</p>
+                            [% IF (books_loo.transferred_from) %]
+                              [% basket = books_loo.transferred_from.basket %]
+                              [% bookseller = books_loo.transferred_from.bookseller %]
+                              [% timestamp = books_loo.transferred_from.timestamp %]
+                              <p>Transferred from
+                                <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basket.basketno %]">basket: [% basket.basketname %]</a>
+                                (<a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% bookseller.id %]">[% bookseller.name %]</a>)
+                                on <span title="[% timestamp | $KohaDates with_hours = 1 %]">
+                                  [% timestamp | $KohaDates %]
+                                </span>
+                              </p>
+                            [% END %]
                         </td>
                         <td class="number gste [% IF books_loo.rrpgste.search('^0') %]error[% END %]">[% books_loo.rrpgste %]</td>
                         <td class="number gste [% IF books_loo.ecostgste.search('^0') %]error[% END %]">[% books_loo.ecostgste %]</td>
@@ -446,7 +457,18 @@
                         [% IF ( order.publicationyear ) %], [% order.publicationyear %][% END %]
                         [% IF ( books_loo.editionstatement ) %], [% books_loo.editionstatement %][% END %]
                       </p>
-                      <p>[% order.internalnotes %]</p>
+                      [% IF order.transferred_to %]
+                        [% basket = order.transferred_to.basket %]
+                        [% bookseller = order.transferred_to.bookseller %]
+                        [% timestamp = order.transferred_to.timestamp %]
+                        <p>Transferred to
+                          <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basket.basketno %]">basket: [% basket.basketname %]</a>
+                          (<a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% bookseller.id %]">[% bookseller.name %]</a>)
+                          on <span title="[% timestamp | $KohaDates with_hours = 1%]">
+                            [% timestamp | $KohaDates %]
+                          </span>
+                        </p>
+                      [% END %]
                     </td>
                     <td class="number gste">[% order.rrpgste %]</td>
                     <td class="number gste">[% order.ecostgste %]</td>

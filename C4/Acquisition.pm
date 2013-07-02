@@ -939,11 +939,14 @@ sub GetOrders {
         SELECT biblio.*,biblioitems.*,
                 aqorders.*,
                 aqbudgets.*,
-                biblio.title
+                biblio.title,
+                aqorders_transfers.ordernumber_from AS transferred_from,
+                aqorders_transfers.timestamp AS transferred_from_timestamp
         FROM    aqorders
             LEFT JOIN aqbudgets        ON aqbudgets.budget_id = aqorders.budget_id
             LEFT JOIN biblio           ON biblio.biblionumber = aqorders.biblionumber
             LEFT JOIN biblioitems      ON biblioitems.biblionumber =biblio.biblionumber
+            LEFT JOIN aqorders_transfers ON aqorders_transfers.ordernumber_to = aqorders.ordernumber
         WHERE   basketno=?
             AND (datecancellationprinted IS NULL OR datecancellationprinted='0000-00-00')
     ";
@@ -1265,11 +1268,18 @@ sub GetCancelledOrders {
 
     my $dbh   = C4::Context->dbh;
     my $query = "
-        SELECT biblio.*, biblioitems.*, aqorders.*, aqbudgets.*
+        SELECT
+            biblio.*,
+            biblioitems.*,
+            aqorders.*,
+            aqbudgets.*,
+            aqorders_transfers.ordernumber_to AS transferred_to,
+            aqorders_transfers.timestamp AS transferred_to_timestamp
         FROM aqorders
           LEFT JOIN aqbudgets   ON aqbudgets.budget_id = aqorders.budget_id
           LEFT JOIN biblio      ON biblio.biblionumber = aqorders.biblionumber
           LEFT JOIN biblioitems ON biblioitems.biblionumber = biblio.biblionumber
+          LEFT JOIN aqorders_transfers ON aqorders_transfers.ordernumber_from = aqorders.ordernumber
         WHERE basketno = ?
           AND (datecancellationprinted IS NOT NULL
                AND datecancellationprinted <> '0000-00-00')
@@ -1617,42 +1627,22 @@ sub TransferOrder {
 
     my $order = GetOrder( $ordernumber );
     return if $order->{datereceived};
+    my $basket = GetBasket($basketno);
+    return unless $basket;
 
-    my $today = C4::Dates->new()->output("iso");
-    my $query = qq{
-        SELECT aqbooksellers.name
-        FROM aqorders
-            LEFT JOIN aqbasket ON aqorders.basketno = aqbasket.basketno
-            LEFT JOIN aqbooksellers ON aqbasket.booksellerid = aqbooksellers.id
-        WHERE aqorders.ordernumber = ?
-    };
     my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare($query);
-    $sth->execute($ordernumber);
-    my ($booksellerfromname) = $sth->fetchrow_array;
-
-    $query = qq{
-        SELECT aqbooksellers.name
-        FROM aqbasket
-            LEFT JOIN aqbooksellers ON aqbasket.booksellerid = aqbooksellers.id
-        WHERE aqbasket.basketno = ?
-    };
-    $sth = $dbh->prepare($query);
-    $sth->execute($basketno);
-    my ($booksellertoname) = $sth->fetchrow_array;
+    my ($query, $sth, $rv);
 
     $query = qq{
         UPDATE aqorders
-        SET datecancellationprinted = CAST(NOW() AS date),
-            internalnotes = ?
+        SET datecancellationprinted = CAST(NOW() AS date)
         WHERE ordernumber = ?
     };
     $sth = $dbh->prepare($query);
-    $sth->execute("Cancelled and transfered to $booksellertoname on $today", $ordernumber);
+    $rv = $sth->execute($ordernumber);
 
     delete $order->{'ordernumber'};
     $order->{'basketno'} = $basketno;
-    $order->{'internalnotes'} = "Transfered from $booksellerfromname on $today";
     my $newordernumber;
     (undef, $newordernumber) = NewOrder($order);
 
@@ -1663,6 +1653,13 @@ sub TransferOrder {
     };
     $sth = $dbh->prepare($query);
     $sth->execute($newordernumber, $ordernumber);
+
+    $query = q{
+        INSERT INTO aqorders_transfers (ordernumber_from, ordernumber_to)
+        VALUES (?, ?)
+    };
+    $sth = $dbh->prepare($query);
+    $sth->execute($ordernumber, $newordernumber);
 
     return $newordernumber;
 }

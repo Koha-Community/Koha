@@ -304,11 +304,6 @@ if ( $op eq 'delete_confirm' ) {
         last;
     }
 
-    my @cancelledorders = GetCancelledOrders($basketno);
-    foreach (@cancelledorders) {
-        $_->{'line_total'} = sprintf("%.2f", $_->{'ecost'} * $_->{'quantity'});
-    }
-
     $template->param(
         basketno             => $basketno,
         basketname           => $basket->{'basketname'},
@@ -328,7 +323,7 @@ if ( $op eq 'delete_confirm' ) {
         name                 => $bookseller->{'name'},
         books_loop           => \@books_loop,
         book_foot_loop       => \@book_foot_loop,
-        cancelledorders_loop => \@cancelledorders,
+        cancelledorders_loop => \@cancelledorders_loop,
         total_quantity       => $total_quantity,
         total_gste           => sprintf( "%.2f", $total_gste ),
         total_gsti           => sprintf( "%.2f", $total_gsti ),
@@ -423,6 +418,20 @@ sub get_order_infos {
     $line{suggestionid}         = $$suggestion{suggestionid};
     $line{surnamesuggestedby}   = $$suggestion{surnamesuggestedby};
     $line{firstnamesuggestedby} = $$suggestion{firstnamesuggestedby};
+
+    foreach my $key (qw(transferred_from transferred_to)) {
+        if ($line{$key}) {
+            my $order = GetOrder($line{$key});
+            my $basket = GetBasket($order->{basketno});
+            my $bookseller = GetBookSellerFromId($basket->{booksellerid});
+            $line{$key} = {
+                order => $order,
+                basket => $basket,
+                bookseller => $bookseller,
+                timestamp => $line{$key . '_timestamp'},
+            };
+        }
+    }
 
     return \%line;
 }

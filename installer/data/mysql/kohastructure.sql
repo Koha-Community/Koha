@@ -2911,7 +2911,6 @@ CREATE TABLE `aqorders` ( -- information related to the basket line items
   `cancelledby` varchar(10) default NULL, -- not used? always NULL
   `datecancellationprinted` date default NULL, -- the date the line item was deleted
   `notes` mediumtext, -- notes related to this order line
-  internalnotes mediumtext DEFAULT NULL, -- used by Koha to store some informations, not editable by librarians
   `supplierreference` mediumtext, -- not used? always NULL
   `purchaseordernumber` mediumtext, -- not used? always NULL
   `basketno` int(11) default NULL, -- links this order line to a specific basket (aqbasket.basketno)
@@ -2957,6 +2956,21 @@ CREATE TABLE `aqorders_items` ( -- information on items entered in the acquisiti
   CONSTRAINT aqorders_items_ibfk_1 FOREIGN KEY (ordernumber) REFERENCES aqorders (ordernumber) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+
+--
+-- Table structure for table aqorders_transfers
+--
+
+DROP TABLE IF EXISTS aqorders_transfers;
+CREATE TABLE aqorders_transfers (
+  ordernumber_from int(11) NULL,
+  ordernumber_to int(11) NULL,
+  timestamp timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE KEY ordernumber_from (ordernumber_from),
+  UNIQUE KEY ordernumber_to (ordernumber_to),
+  CONSTRAINT aqorders_transfers_ordernumber_from FOREIGN KEY (ordernumber_from) REFERENCES aqorders (ordernumber) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT aqorders_transfers_ordernumber_to FOREIGN KEY (ordernumber_to) REFERENCES aqorders (ordernumber) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Table structure for table aqinvoices

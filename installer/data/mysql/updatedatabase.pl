@@ -7106,11 +7106,19 @@ if ( CheckVersion($DBversion) ) {
 
 $DBversion = "XXX";
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do(qq{DROP TABLE IF EXISTS aqorders_transfers;});
     $dbh->do(qq{
-        ALTER TABLE aqorders
-        ADD COLUMN internalnotes MEDIUMTEXT DEFAULT NULL AFTER notes
+        CREATE TABLE aqorders_transfers (
+          ordernumber_from int(11) NULL,
+          ordernumber_to int(11) NULL,
+          timestamp timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+          UNIQUE KEY ordernumber_from (ordernumber_from),
+          UNIQUE KEY ordernumber_to (ordernumber_to),
+          CONSTRAINT aqorders_transfers_ordernumber_from FOREIGN KEY (ordernumber_from) REFERENCES aqorders (ordernumber) ON DELETE SET NULL ON UPDATE CASCADE,
+          CONSTRAINT aqorders_transfers_ordernumber_to FOREIGN KEY (ordernumber_to) REFERENCES aqorders (ordernumber) ON DELETE SET NULL ON UPDATE CASCADE
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
     });
-    print "Upgrade to $DBversion done (Add internalnotes field in aqorders table)\n";
+    print "Upgrade to $DBversion done (Add aqorders_transfers table)\n";
     SetVersion($DBversion);
 }
 
