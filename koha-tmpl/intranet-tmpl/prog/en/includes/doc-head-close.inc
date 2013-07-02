@@ -20,9 +20,6 @@
 [% IF ( login ) %]
     <link rel="stylesheet" type="text/css" href="[% themelang %]/css/login.css" />
 [% END %]
-[% IF ( wizard ) %]
-    <link rel="stylesheet" type="text/css" href="[% themelang %]/css/wizard.css" />
-[% END %]
 
 <!-- koha core js -->
 <script type="text/javascript" src="[% themelang %]/js/staff-global.js"></script>
