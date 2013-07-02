@@ -2,13 +2,18 @@
 
 use Modern::Perl;
 
-use Test::More;
+use Test::More tests => 6;
+use C4::Context;
 use C4::Acquisition;
 use C4::Biblio;
 use C4::Items;
 use C4::Bookseller;
 use C4::Budgets;
 use MARC::Record;
+
+my $dbh = C4::Context->dbh;
+$dbh->{RaiseError} = 1;
+$dbh->{AutoCommit} = 0;
 
 my $booksellerid1 = C4::Bookseller::AddBookseller(
     {
@@ -72,15 +77,4 @@ is(scalar GetOrders($basketno2), 1, "1 order in basket2");
 ($order) = GetOrders($basketno2);
 is(scalar GetItemnumbersFromOrder($order->{ordernumber}), 1, "1 item in basket2's order");
 
-END {
-    C4::Acquisition::DelOrder( $biblionumber, $ordernumber );
-    C4::Acquisition::DelOrder( $biblionumber, $newordernumber );
-    C4::Budgets::DelBudget( $budgetid );
-    C4::Acquisition::DelBasket( $basketno1 );
-    C4::Bookseller::DelBookseller( $booksellerid1 );
-    C4::Acquisition::DelBasket( $basketno2 );
-    C4::Bookseller::DelBookseller( $booksellerid2 );
-    C4::Biblio::DelBiblio($biblionumber);
-};
-
-done_testing;
+$dbh->rollback;
