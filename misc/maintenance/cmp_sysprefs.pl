@@ -24,8 +24,7 @@
 #    Just leave only e.g. some circulations prefs in a file and compare with
 #    the update flag.
 
-use strict;
-use warnings;
+use Modern::Perl;
 use open OUT => ':encoding(UTF-8)', ':std';
 
 use Getopt::Long;
