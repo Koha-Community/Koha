@@ -708,6 +708,11 @@ sub getFacets {
                 tags  => [ qw/ 225a / ],
                 sep   => ', ',
             },
+            {
+                idx  => 'location',
+                label => 'Location',
+                tags        => [ qw/ 995c / ],
+            }
             ];
 
             my $library_facet;
@@ -716,12 +721,6 @@ sub getFacets {
                     idx  => 'branch',
                     label => 'Libraries',
                     tags        => [ qw/ 995b / ],
-                };
-            } else {
-                $library_facet = {
-                    idx  => 'location',
-                    label => 'Location',
-                    tags        => [ qw/ 995c / ],
                 };
             }
             push( @$facets, $library_facet );
@@ -770,6 +769,11 @@ sub getFacets {
                 tags  => [ qw/ 952y 942c / ],
                 sep   => ', ',
             },
+            {
+                idx => 'location',
+                label => 'Location',
+                tags => [ qw / 952c / ],
+            },
             ];
 
             my $library_facet;
@@ -778,12 +782,6 @@ sub getFacets {
                     idx  => 'branch',
                     label => 'Libraries',
                     tags        => [ qw / 952b / ],
-                };
-            } else {
-                $library_facet = {
-                    idx => 'location',
-                    label => 'Location',
-                    tags => [ qw / 952c / ],
                 };
             }
             push( @$facets, $library_facet );
