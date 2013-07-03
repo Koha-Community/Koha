@@ -3,7 +3,7 @@ SET FOREIGN_KEY_CHECKS=0;
 INSERT INTO permissions (module_bit, code, description) VALUES
    ( 1, 'circulate_remaining_permissions', 'Permessi rimanenti per la circolazione'),
    ( 1, 'override_renewals', 'Sblocca i rinnovi bloccati'),
-   ( 1, 'overdues_report', 'Execute overdue items report'),
+   ( 1, 'overdues_report', 'Esegui report dei ritardi'),
    ( 3, 'parameters_remaining_permissions', 'Permessi rimanenti'),
    ( 3, 'manage_circ_rules', 'Gestisci regole circolazione'),
    ( 6, 'place_holds', 'Fai prenotazioni per gli utenti'),
@@ -55,9 +55,9 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (15, 'routing', 'Crea/Manipola liste di distribuzione dei fascicoli ( routing list)'),
    (16, 'execute_reports', 'Esegui reports SQL'),
    (16, 'create_reports', 'Crea reports SQL'),
-   (19, 'manage', 'Manage plugins ( install / uninstall )'),
-   (19, 'tool', 'Use tool plugins'),
-   (19, 'report', 'Use report plugins'),
-   (19, 'configure', 'Configure plugins')
+   (19, 'manage', 'Gestisci plugin ( installa / cancella )'),
+   (19, 'tool', 'Usa i plugin di tipo Strumento'),
+   (19, 'report', 'Usa i plugin di tipo Report'),
+   (19, 'configure', 'Configura i plugin')
 ;
 SET FOREIGN_KEY_CHECKS=1;

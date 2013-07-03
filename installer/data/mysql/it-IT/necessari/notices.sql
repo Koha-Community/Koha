@@ -1,43 +1,44 @@
-INSERT INTO letter (module, code, name, title, content)
-VALUES ('circulation','ODUE','Overdue Notice','Item Overdue','Dear <<borrowers.firstname>> <<borrowers.surname>>,\n\nAccording to our current records, you have items that are overdue.Your library does not charge late fines, but please return or renew them at the branch below as soon as possible.\n\n<<branches.branchname>>\n<<branches.branchaddress1>>\n<<branches.branchaddress2>> <<branches.branchaddress3>>\nPhone: <<branches.branchphone>>\nFax: <<branches.branchfax>>\nEmail: <<branches.branchemail>>\n\nIf you have registered a password with the library, and you have a renewal available, you may renew online. If an item becomes more than 30 days overdue, you will be unable to use your library card until the item is returned.\n\nThe following item(s) is/are currently overdue:\n\n<item>"<<biblio.title>>" by <<biblio.author>>, <<items.itemcallnumber>>, Barcode: <<items.barcode>> Fine: <<items.fine>></item>\n\nThank-you for your prompt attention to this matter.\n\n<<branches.branchname>> Staff\n'),
-('claimacquisition','ACQCLAIM','Acquisition Claim','Item Not Received','<<aqbooksellers.name>>\r\n<<aqbooksellers.address1>>\r\n<<aqbooksellers.address2>>\r\n<<aqbooksellers.address3>>\r\n<<aqbooksellers.address4>>\r\n<<aqbooksellers.phone>>\r\n\r\n<order>Ordernumber <<aqorders.ordernumber>> (<<aqorders.title>>) (<<aqorders.quantity>> ordered) ($<<aqorders.listprice>> each) has not been received.</order>'),
-('serial','RLIST','Routing List','Serial is now available','<<borrowers.firstname>> <<borrowers.surname>>,\r\n\r\nThe following issue is now available:\r\n\r\n<<biblio.title>>, <<biblio.author>> (<<items.barcode>>)\r\n\r\nPlease pick it up at your convenience.'),
-('members','ACCTDETAILS','Account Details Template - DEFAULT','Your new Koha account details.','Hello <<borrowers.title>> <<borrowers.firstname>> <<borrowers.surname>>.\r\n\r\nYour new Koha account details are:\r\n\r\nUser:  <<borrowers.userid>>\r\nPassword: <<borrowers.password>>\r\n\r\nIf you have any problems or questions regarding your account, please contact your Koha Administrator.\r\n\r\nThank you,\r\nKoha Administrator\r\nkohaadmin@yoursite.org'), 
-('circulation','DUE','Item Due Reminder','Item Due Reminder','Dear <<borrowers.firstname>> <<borrowers.surname>>,\r\n\r\nThe following item is now due:\r\n\r\n<<biblio.title>>, <<biblio.author>> (<<items.barcode>>)'), 
-('circulation','DUEDGST','Item Due Reminder (Digest)','Item Due Reminder','You have <<count>> items due'), 
-('circulation','PREDUE','Advance Notice of Item Due','Advance Notice of Item Due','Dear <<borrowers.firstname>> <<borrowers.surname>>,\r\n\r\nThe following item will be due soon:\r\n\r\n<<biblio.title>>, <<biblio.author>> (<<items.barcode>>)'), 
-('circulation','PREDUEDGST','Advance Notice of Item Due (Digest)','Advance Notice of Item Due','You have <<count>> items due soon'),
-('reserves', 'HOLD', 'Hold Available for Pickup', 'Hold Available for Pickup at <<branches.branchname>>', 'Dear <<borrowers.firstname>> <<borrowers.surname>>,\r\n\r\nYou have a hold available for pickup as of <<reserves.waitingdate>>:\r\n\r\nTitle: <<biblio.title>>\r\nAuthor: <<biblio.author>>\r\nCopy: <<items.copynumber>>\r\nLocation: <<branches.branchname>>\r\n<<branches.branchaddress1>>\r\n<<branches.branchaddress2>>\r\n<<branches.branchaddress3>>\r\n<<branches.branchcity>> <<branches.branchzip>>'),
-('reserves', 'HOLD_PRINT', 'Hold Available for Pickup (print notice)', 'Hold Available for Pickup (print notice)', '<<branches.branchname>>\r\n<<branches.branchaddress1>>\r\n<<branches.branchaddress2>>\r\n\r\n\r\nChange Service Requested\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n<<borrowers.firstname>> <<borrowers.surname>>\r\n<<borrowers.address>>\r\n<<borrowers.city>> <<borrowers.zipcode>>\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n<<borrowers.firstname>> <<borrowers.surname>> <<borrowers.cardnumber>>\r\n\r\nYou have a hold available for pickup as of <<reserves.waitingdate>>:\r\n\r\nTitle: <<biblio.title>>\r\nAuthor: <<biblio.author>>\r\nCopy: <<items.copynumber>>\r\n'),
-('circulation','CHECKIN','Item Check-in (Digest)','Check-ins','The following items have been checked in:\r\n----\r\n<<biblio.title>>\r\n----\r\nThank you.'),
-('circulation','CHECKOUT','Item Check-out (Digest)','Checkouts','The following items have been checked out:\r\n----\r\n<<biblio.title>>\r\n----\r\nThank you for visiting <<branches.branchname>>.'),
-('reserves', 'HOLDPLACED', 'Hold Placed on Item', 'Hold Placed on Item','A hold has been placed on the following item : <<biblio.title>> (<<biblio.biblionumber>>) by the user <<borrowers.firstname>> <<borrowers.surname>> (<<borrowers.cardnumber>>).'),
-('suggestions','ACCEPTED','Suggestion accepted', 'Purchase suggestion accepted','Dear <<borrowers.firstname>> <<borrowers.surname>>,\n\nYou have suggested that the library acquire <<suggestions.title>> by <<suggestions.author>>.\n\nThe library has reviewed your suggestion today. The item will be ordered as soon as possible. You will be notified by mail when the order is completed, and again when the item arrives at the library.\n\nIf you have any questions, please email us at <<branches.branchemail>>.\n\nThank you,\n\n<<branches.branchname>>'),
-('suggestions','AVAILABLE','Suggestion available', 'Suggested purchase available','Dear <<borrowers.firstname>> <<borrowers.surname>>,\n\nYou have suggested that the library acquire <<suggestions.title>> by <<suggestions.author>>.\n\nWe are pleased to inform you that the item you requested is now part of the collection.\n\nIf you have any questions, please email us at <<branches.branchemail>>.\n\nThank you,\n\n<<branches.branchname>>'),
-('suggestions','ORDERED','Suggestion ordered', 'Suggested item ordered','Dear <<borrowers.firstname>> <<borrowers.surname>>,\n\nYou have suggested that the library acquire <<suggestions.title>> by <<suggestions.author>>.\n\nWe are pleased to inform you that the item you requested has now been ordered. It should arrive soon, at which time it will be processed for addition into the collection.\n\nYou will be notified again when the book is available.\n\nIf you have any questions, please email us at <<branches.branchemail>>\n\nThank you,\n\n<<branches.branchname>>'),
-('suggestions','REJECTED','Suggestion rejected', 'Purchase suggestion declined','Dear <<borrowers.firstname>> <<borrowers.surname>>,\n\nYou have suggested that the library acquire <<suggestions.title>> by <<suggestions.author>>.\n\nThe library has reviewed your request today, and has decided not to accept the suggestion at this time.\n\nThe reason given is: <<suggestions.reason>>\n\nIf you have any questions, please email us at <<branches.branchemail>>.\n\nThank you,\n\n<<branches.branchname>>');
-INSERT INTO letter (module, code, name, title, content, is_html)
-VALUES ('circulation','ISSUESLIP','Issue Slip','Issue Slip', '<h3><<branches.branchname>></h3>
-Checked out to <<borrowers.title>> <<borrowers.firstname>> <<borrowers.initials>> <<borrowers.surname>> <br />
+INSERT INTO `letter` (module, code, name, title, content)
+VALUES ('circulation','ODUE','Avviso per i ritardi','Copia(e) in ritardo','Caro <<borrowers.firstname>> <<borrowers.surname>>,\n\nci risulta che tu abbia dei ritardi nella restituzione dei prestiti. La tua biblioteca non ti darà una multa per questi ritardi ma ti chiede di rinnovare i prestiti o di restituirli il prima possibile. I dati della biblioteca sono: \n\n<<branches.branchname>>\n<<branches.branchaddress1>>\n<<branches.branchaddress2>> <<branches.branchaddress3>>\nTel: <<branches.branchphone>>\nFax: <<branches.branchfax>>\nEmail: <<branches.branchemail>>\n\nSe la biblioteca ti permette di rinnovare online, usa la tua login e password per fare il rinnovo usando l\'opac. Se una copia è in ritardo da più di 30 giorni, sei obbligato a restituirla.\n\nLa seguente copia(e) è(sono) in ritardo:\n\n<item>"<<biblio.title>>" di <<biblio.author>>, <<items.itemcallnumber>>, Barcode: <<items.barcode>> Multa: <<items.fine>></item>\n\nGrazie per l\'attenzione.\n\nIl team della biblioteca <<branches.branchname>>\n'),
+('claimacquisition','ACQCLAIM','Sollecito al fornitore','Copia(e) non ricevuta(e)','Gentile <<aqbooksellers.name>>\r\n<<aqbooksellers.address1>>\r\n<<aqbooksellers.address2>>\r\n<<aqbooksellers.address3>>\r\n<<aqbooksellers.address4>>\r\n<<aqbooksellers.phone>>\r\n\r\n<order>Il seguente ordine numero <<aqorders.ordernumber>> (<<biblio.title>>) (<<aqorders.quantity>> ordinati) (€<<aqorders.listprice>> ciascuno) non è arrivato in biblioteca.</order>'),
+('serial','RLIST','Routing List','Il fascicolo è ora disponibile','Caro <<borrowers.firstname>> <<borrowers.surname>>,\r\n\r\nIl seguente fascicolo è ora disponibile:\r\n\r\n<<biblio.title>>, <<biblio.author>> (<<items.barcode>>)\r\n\r\nLo trovi presso la tua biblioteca.'),
+('members','ACCTDETAILS','Template del messaggio che giunge ai nuovi account','Dettagli del tuo nuovo account in Koha.','Caro <<borrowers.title>> <<borrowers.firstname>> <<borrowers.surname>>.\r\n\r\nI dettagli del tuo nuovo account in Koha sono:\r\n\r\nUser:  <<borrowers.userid>>\r\nPassword: <<borrowers.password>>\r\n\r\nSe hai qualche problema contatta la biblioteca.\r\n\r\nGrazie dell\'attenzione.\r\n'),
+('circulation','DUE','Avviso restituzione (copia singola)','Avviso restituzione','Caro <<borrowers.firstname>> <<borrowers.surname>>,\r\n\r\nquesta copia è ora da restituire:\r\n\r\n<<biblio.title>>, <<biblio.author>> (<<items.barcode>>)'),
+('circulation','DUEDGST','Avviso restituzione (digest)','Avviso restituzione','Hai <<count>> copie da restituire'),
+('circulation','PREDUE','Preavviso per le copie da restituire','Avviso copie in scadenza','Caro <<borrowers.firstname>> <<borrowers.surname>>,\r\n\r\nil prestito per la seguente copia sta per scadere:\r\n\r\n<<biblio.title>>, <<biblio.author>> (<<items.barcode>>)'),
+('circulation','PREDUEDGST','Preavviso per le copie da restituire(digest)','Avviso copie in scadenza','Hai <<count>> prestiti che stanno per scadere'),
+('circulation','RENEWAL','Rinnovi','Rinnovi','le seguenti copie sono state rinnovate:\r\n----\r\n<<biblio.title>>\r\n----\r\nla biblioteca ti ringrazia.'),
+('reserves', 'HOLD', 'Prenotazione disponibile per il ritiro', 'Prenotazione ora disponibile presso <<branches.branchname>>', 'Caro <<borrowers.firstname>> <<borrowers.surname>>,\r\n\r\nla copia prenotata è a disposizione a partire dal <<reserves.waitingdate>>:\r\n\r\nTitolo: <<biblio.title>>\r\nAutore: <<biblio.author>>\r\nCopia numero: <<items.copynumber>>\r\nla puoi ritirare presso: <<branches.branchname>>\r\n<<branches.branchaddress1>>\r\n<<branches.branchaddress2>>\r\n<<branches.branchaddress3>>\r\n<<branches.branchcity>> <<branches.branchzip>>'),
+('reserves', 'HOLD_PRINT', 'Prenotazione disponibile per il ritiro(stampa)', 'Prenotazione disponibile per il ritiro (stampa)', '<<branches.branchname>>\r\n<<branches.branchaddress1>>\r\n<<branches.branchaddress2>>\r\n\r\n\r\nPrenotazione ora disponibile\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n<<borrowers.firstname>> <<borrowers.surname>>\r\n<<borrowers.address>>\r\n<<borrowers.city>> <<borrowers.zipcode>>\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\nCaro <<borrowers.firstname>> <<borrowers.surname>> <<borrowers.cardnumber>>\r\n\r\nHai una prenotazione disponibile dal <<reserves.waitingdate>>:\r\n\r\nTitolo: <<biblio.title>>\r\nAutore: <<biblio.author>>\r\nNumero copia: <<items.copynumber>>\r\n'),
+('circulation','CHECKIN','Restituzione (digest)','Restituzioni','Queste copie sono state rese:\r\n----\r\n<<biblio.title>>\r\n----\r\nGrazie.'),
+('circulation','CHECKOUT','Prestito (digest)','Prestiti','Queste copie sono state prestate:\r\n----\r\n<<biblio.title>>\r\n----\r\nGrazie della visita.'),
+('reserves', 'HOLDPLACED', 'Prenotazione di una copia', 'Prenotazione','Una prenotazione è stata posta sulla seguente copia: <<biblio.title>> (<<biblio.biblionumber>>) dall\'utente <<borrowers.firstname>> <<borrowers.surname>> (<<borrowers.cardnumber>>).'),
+('suggestions','ACCEPTED','Suggerimento d\'acquisto accettato', 'Suggerimento d\'acquisto accettato','Caro <<borrowers.firstname>> <<borrowers.surname>>,\n\nHai suggerito alla biblioteca di acquistare <<suggestions.title>> di <<suggestions.author>>.\n\nLa biblioteca ha esaminato oggi il tuo suggerimento. L\'opera verrà ordinata il prima possibile. Sarai avvisato via email quando l\'ordine verrà completato e di nuovo quando l\'opera arriverà in biblioteca.\n\nSe hai dubbi o domande scrivi a <<branches.branchemail>>.\n\nGrazie di tutto.'),
+('suggestions','AVAILABLE','Suggerimento d\'acquisto disponibile', 'L\'opera suggerita è in biblioteca','Caro <<borrowers.firstname>> <<borrowers.surname>>,\n\nl\'opera da te suggerita, <<suggestions.title>> di <<suggestions.author>> è giunta in biblioteca.\n\nSe vuoi puoi contattarci a questo email <<branches.branchemail>>.\n\nGrazie dell\'attenzione.'),
+('suggestions','ORDERED','Suggerimento d\'acquisto ordinato', 'Suggerimento d\'acquisto ordinato','Caro <<borrowers.firstname>> <<borrowers.surname>>,\n\nl\'opera da te suggerita, <<suggestions.title>> di <<suggestions.author>>, è stata ordinata.\n\nVerrai avvisato non appena giungerà in biblioteca.\n\nSe vuoi puoi contattarci all\'indirizzo di email <<branches.branchemail>>\n\nGrazie dell\'attenzione.'),
+('suggestions','REJECTED','Suggerimento d\'acquisto rifiutato', 'Il suggerimento non è stato accettato','Caro <<borrowers.firstname>> <<borrowers.surname>>,\n\nhai suggerito l\'acquisto dell\'opera: <<suggestions.title>> di <<suggestions.author>>.\n\nLa biblioteca ha esaminato oggi il suggerimento e ha deciso di non procedere all\'acquisto per ora.\n\nLa ragione del rifiuto è: <<suggestions.reason>>\n\nSe vuoi puoi scriverci a questo indirizzo di posta elettronica <<branches.branchemail>>.\n\nGrazie lo stesso dell\'attenzione, lo staff della biblioteca.');
+INSERT INTO `letter` (module, code, name, title, content, is_html)
+VALUES ('circulation','ISSUESLIP','Ricevuta di prestito','Ricevuta di prestito', '<h3><<branches.branchname>></h3>
+Prestito a <<borrowers.title>> <<borrowers.firstname>> <<borrowers.initials>> <<borrowers.surname>> <br />
 (<<borrowers.cardnumber>>) <br />
 
 <<today>><br />
 
-<h4>Checked Out</h4>
+<h4>Prestito</h4>
 <checkedout>
 <p>
 <<biblio.title>> <br />
 Barcode: <<items.barcode>><br />
-Date due: <<issues.date_due>><br />
+Data di scadenza: <<issues.date_due>><br />
 </p>
 </checkedout>
 
-<h4>Overdues</h4>
+<h4>Scadenze</h4>
 <overdue>
 <p>
 <<biblio.title>> <br />
 Barcode: <<items.barcode>><br />
-Date due: <<issues.date_due>><br />
+Data di scadenza: <<issues.date_due>><br />
 </p>
 </overdue>
 
@@ -52,23 +53,23 @@ Date due: <<issues.date_due>><br />
 <hr />
 </div>
 </news>', 1),
-('circulation','ISSUEQSLIP','Issue Quick Slip','Issue Quick Slip', '<h3><<branches.branchname>></h3>
-Checked out to <<borrowers.title>> <<borrowers.firstname>> <<borrowers.initials>> <<borrowers.surname>> <br />
+('circulation','ISSUEQSLIP','Ricevuta (sintetica)','Ricevuta (sintetica)', '<h3><<branches.branchname>></h3>
+Prestito a <<borrowers.title>> <<borrowers.firstname>> <<borrowers.initials>> <<borrowers.surname>> <br />
 (<<borrowers.cardnumber>>) <br />
 
 <<today>><br />
 
-<h4>Checked Out Today</h4>
+<h4>Prestiti di oggi</h4>
 <checkedout>
 <p>
 <<biblio.title>> <br />
 Barcode: <<items.barcode>><br />
-Date due: <<issues.date_due>><br />
+Data di scadenza: <<issues.date_due>><br />
 </p>
 </checkedout>', 1),
-('circulation','RESERVESLIP','Reserve Slip','Reserve Slip', '<h5>Date: <<today>></h5>
+('circulation','RESERVESLIP','Ricevuta (prenotazione)','Ricevuta (prenotazione)', '<h5>Data: <<today>></h5>
 
-<h3> Transfer to/Hold in <<branches.branchname>></h3>
+<h3> Trasferisci a/Riserva per <<branches.branchname>></h3>
 
 <h3><<borrowers.surname>>, <<borrowers.firstname>></h3>
 
@@ -82,7 +83,7 @@ Date due: <<issues.date_due>><br />
     <li><<borrowers.email>></li>
 </ul>
 <br />
-<h3>ITEM ON HOLD</h3>
+<h3>COPIA PRENOTATA</h3>
 <h4><<biblio.title>></h4>
 <h5><<biblio.author>></h5>
 <ul>
@@ -90,18 +91,30 @@ Date due: <<issues.date_due>><br />
    <li><<items.itemcallnumber>></li>
    <li><<reserves.waitingdate>></li>
 </ul>
-<p>Notes:
+<p>Note:
 <pre><<reserves.reservenotes>></pre>
 </p>
 ', 1),
-('circulation','TRANSFERSLIP','Transfer Slip','Transfer Slip', '<h5>Date: <<today>></h5>
+('circulation','TRANSFERSLIP','Ricevuta (trasferimento)','Ricevuta (trasferimento)', '<h5>Data: <<today>></h5>
 
-<h3>Transfer to <<branches.branchname>></h3>
+<h3>Trasferisci a <<branches.branchname>></h3>
 
-<h3>ITEM</h3>
+<h3>COPIA</h3>
 <h4><<biblio.title>></h4>
 <h5><<biblio.author>></h5>
 <ul>
    <li><<items.barcode>></li>
    <li><<items.itemcallnumber>></li>
 </ul>', 1);
+
+INSERT INTO `letter` (`module`,`code`,`branchcode`,`name`,`is_html`,`title`,`content`)
+VALUES (
+'members',  'OPAC_REG_VERIFY',  '',  'Email di verifica dell\'autoregistrazione',  '1',  'Verifica il tuo account',  'Ciao!
+
+Il tuo account della biblioteca è stato creato. Seleziona questo link per completare il processo di registrazione:
+
+http://<<OPACBaseURL>>/cgi-bin/koha/opac-registration-verify.pl?token=<<borrower_modifications.verification_token>>
+
+Se non hai inviato questa richiesta, puoi ignorare questo messaggio.'
+
+);
