@@ -314,7 +314,7 @@ INSERT INTO language_subtag_registry( subtag, type, description, added)
 VALUES ( 'it', 'language', 'Italian','2005-10-16' );
 
 INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
-VALUES( 'it','ind');
+VALUES( 'it','ita');
 
 INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES( 'it', 'language', 'it', 'Italiano');
