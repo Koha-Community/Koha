@@ -571,8 +571,16 @@ $(document).ready(function(){
                 [% END %]
 
                 [% IF ( SEARCH_RESULT.score_avg ) %]
-                    <span class="result_summary">
-                        <img src="[% themelang %]/../images/Star[% SEARCH_RESULT.score_int %].gif" title="" style="max-height: 15px;"/> <span style="font-size: 85%;">[% SEARCH_RESULT.score_avg %] / 5 (on [% SEARCH_RESULT.num_scores %] rates)</span>
+                    <div class="results_summary">
+                        [% FOREACH i  IN [ 1 2 3 4 5  ] %]
+                            [% IF ( SEARCH_RESULT.score_int >= i ) %]
+                                <div class="star-rating rater-[% i %] star star-rating-applied star-rating-readonly star-rating-on"><a title="[% i %]">[% i %]</a></div>
+                            [% ELSE   %]
+                                <div class="star-rating rater-[% i %] star star-rating-applied star-rating-readonly"><a title="[% i %]">[% i %]</a></div>
+                            [% END %]
+                        [% END %]
+                        <span id="babeltheque-rating_total_[% SEARCH_RESULT.biblionumber %]">&nbsp;&nbsp; [% SEARCH_RESULT.score_avg %] / 5 (on [% SEARCH_RESULT.num_scores %] rates)</span>
+
                         [% IF ( SEARCH_RESULT.num_critics ) %]
                             <span class="social_data">[% SEARCH_RESULT.num_critics %] Internet user critics</span>
                         [% END %]
@@ -585,7 +593,7 @@ $(document).ready(function(){
                         [% IF ( SEARCH_RESULT.num_quotations ) %]
                             <span class="social_data">[% SEARCH_RESULT.num_quotations %] Quotations</span>
                         [% END %]
-                    </span>
+                    </div>
                 [% END %]
 
                 [% IF ( LibraryThingForLibrariesID ) %]<div class="ltfl_reviews"></div>[% END %]
