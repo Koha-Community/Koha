@@ -424,7 +424,7 @@ sub _handle_one_result {
 sub _add_rowdata {
     my ($rowref, $marcrecord)=@_;
     if(C4::Context->preference("marcflavour") ne 'UNIMARC') { #MARC21, NORMARC
-        $rowref->{isbn} = _isbn_cleanup($marcrecord->subfield('020','a')||'');
+        $rowref->{isbn}= _isbn_show($marcrecord, '020');
         $rowref->{title}= $marcrecord->subfield('245','a')||'';
         $rowref->{author}= $marcrecord->subfield('100','a')||'';
         $rowref->{date}= $marcrecord->subfield('260','c')||'';
@@ -432,7 +432,7 @@ sub _add_rowdata {
         $rowref->{lccn}= $marcrecord->subfield('050','a')||'';
     }
     else { #UNIMARC
-        $rowref->{isbn}= _isbn_cleanup($marcrecord->subfield('010','a')||'');
+        $rowref->{isbn}= _isbn_show($marcrecord, '010');
         $rowref->{title}= $marcrecord->subfield('200','a')||'';
         $rowref->{author}= $marcrecord->subfield('200','f')||'';
         $rowref->{date}= $marcrecord->subfield('210','d')||'';
@@ -442,11 +442,16 @@ sub _add_rowdata {
     return $rowref;
 }
 
-sub _isbn_cleanup {
-    my $isbn= shift;
-    $isbn=~ s/ |-|\.//g;
-    $isbn=~ s/\|/ \| /g;
-    $isbn=~ s/\(/ \(/g;
+sub _isbn_show {
+    my ($record, $fieldno)= @_; #both marc21 and unimarc possible
+    my $isbn= '';
+    foreach my $f ( $record->field($fieldno) ) {
+        my $a= $f->subfield('a');
+        $a =~ s/ |-|\.//g;
+        $a =~ s/\|/ \| /g;
+        $a =~ s/\(/ \(/g;
+        $isbn= $isbn? ($isbn.' | '. $a): $a;
+    }
     return $isbn;
 }
 
