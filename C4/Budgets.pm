@@ -709,7 +709,8 @@ gets all budgets
 
 # -------------------------------------------------------------------
 sub GetBudgets {
-    my ($filters,$orderby) = @_;
+    my $filters = shift;
+    my $orderby = shift || 'budget_name';
     return SearchInTable("aqbudgets",$filters, $orderby, undef,undef, undef, "wide");
 }
 
