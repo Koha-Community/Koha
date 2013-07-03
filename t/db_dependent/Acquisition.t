@@ -10,7 +10,7 @@ use POSIX qw(strftime);
 
 use C4::Bookseller qw( GetBookSellerFromId );
 
-use Test::More tests => 37;
+use Test::More tests => 36;
 
 BEGIN {
     use_ok('C4::Acquisition');
@@ -45,7 +45,6 @@ SKIP: {
     skip 'No relevant orders in database, cannot test baskets', 33 unless( scalar @$orders );
     # diag( Data::Dumper->Dump( [ $orders ], [ 'orders' ] ) );
     my @expectedfields = qw( basketno
-                             biblioitemnumber
                              biblionumber
                              invoiceid
                              budgetdate
