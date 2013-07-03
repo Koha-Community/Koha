@@ -108,11 +108,18 @@ elsif ( $phase eq 'Build new' ) {
     );
 }
 
+elsif ( $phase eq 'Delete Multiple') {
+    my @ids = $input->param('ids');
+    delete_report( @ids );
+    print $input->redirect("/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved");
+    exit;
+}
+
 elsif ( $phase eq 'Delete Saved') {
 	
 	# delete a report from the saved reports list
-	my $id = $input->param('reports');
-	delete_report($id);
+    my $ids = $input->param('reports');
+    delete_report($ids);
     print $input->redirect("/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved");
 	exit;
 }		

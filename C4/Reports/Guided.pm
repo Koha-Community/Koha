@@ -609,13 +609,13 @@ sub format_results {
 }	
 
 sub delete_report {
-    my ($id)  = @_;
-    my $dbh   = C4::Context->dbh();
-    my $query = "DELETE FROM saved_sql WHERE id = ?";
-    my $sth   = $dbh->prepare($query);
-    $sth->execute($id);
-}	
-
+    my (@ids) = @_;
+        my $dbh = C4::Context->dbh;
+        my $query = 'DELETE FROM saved_sql WHERE id IN (' . join( ',', ('?') x @ids ) . ')';
+        my $sth = $dbh->prepare($query);
+        $sth->execute(@ids);
+        $sth->finish;
+}
 
 my $SAVED_REPORTS_BASE_QRY = <<EOQ;
 SELECT s.*, r.report, r.date_run, $AREA_NAME_SQL_SNIPPET, av_g.lib AS groupname, av_sg.lib AS subgroupname,
