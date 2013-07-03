@@ -7029,6 +7029,12 @@ INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES (
     SetVersion($DBversion);
 }
 
+$DBversion = "3.13.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do("UPDATE language_rfc4646_to_iso639 SET iso639_2_code='ita' WHERE rfc4646_subtag='it'");
+    print "Upgrade to $DBversion done (Bug 9519: Wrong language code for Italian in the advanced search language limitations)\n";
+    SetVersion($DBversion);
+}
 
 =head1 FUNCTIONS
 
