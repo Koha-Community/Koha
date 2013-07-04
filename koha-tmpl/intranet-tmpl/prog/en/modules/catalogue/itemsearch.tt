@@ -1,0 +1,425 @@
+[% USE CGI %]
+[% USE JSON.Escape %]
+
+[% BLOCK form_field_select %]
+  <div class="form-field form-field-select">
+    <label class="form-field-label" for="[% name %]">[% label %]</label>
+    <select id="[% name %]_op" name="[% name %]_op">
+      <option value="=">is</option>
+      [% IF CGI.param(name _ '_op') == '!=' %]
+        <option value="!=" selected="selected">is not</option>
+      [% ELSE %]
+        <option value="!=" >is not</option>
+      [% END %]
+    </select>
+    [% values = CGI.param(name) %]
+    <select id="[% name %]" name="[% name %]" multiple="multiple" size="[% options.size < 4 ? options.size + 1 : 4 %]">
+      [% IF (values == '') %]
+        <option value="" selected="selected">
+      [% ELSE %]
+        <option value="">
+      [% END %]
+        [% empty_option || "All" %]
+      </option>
+      [% FOREACH option IN options %]
+        [% IF values.grep(option.value).size %]
+          <option value="[% option.value %]" selected="selected">[% option.label %]</option>
+        [% ELSE %]
+          <option value="[% option.value %]">[% option.label %]</option>
+        [% END %]
+      [% END %]
+    </select>
+  </div>
+[% END %]
+
+[% BLOCK form_field_select_option %]
+  [% IF params.f == value %]
+    <option value="[% value %]" selected="selected">[% label %]</option>
+  [% ELSE %]
+    <option value="[% value %]">[% label %]</option>
+  [% END %]
+[% END %]
+
+[% BLOCK form_field_select_text %]
+  <div class="form-field form-field-select-text">
+    [% IF params.exists('c') %]
+      <select name="c" class="form-field-conjunction">
+        <option value="and">AND</option>
+        [% IF params.c == 'or' %]
+          <option value="or" selected="selected">OR</option>
+        [% ELSE %]
+          <option value="or">OR</option>
+        [% END %]
+      </select>
+    [% ELSE %]
+      <select name="c" class="form-field-conjunction" disabled="disabled">
+        <option value="and">AND</option>
+        <option value="or">OR</option>
+      </select>
+    [% END %]
+    <select name="f" class="form-field-column">
+      [% INCLUDE form_field_select_option value='barcode' label='Barcode' %]
+      [% INCLUDE form_field_select_option value='itemcallnumber' label='Callnumber' %]
+      [% INCLUDE form_field_select_option value='stocknumber' label='Stock number' %]
+      [% INCLUDE form_field_select_option value='title' label='Title' %]
+      [% INCLUDE form_field_select_option value='author' label='Author' %]
+      [% INCLUDE form_field_select_option value='publishercode' label='Publisher' %]
+      [% INCLUDE form_field_select_option value='publicationdate' label='Publication date' %]
+      [% INCLUDE form_field_select_option value='collectiontitle' label='Collection' %]
+      [% INCLUDE form_field_select_option value='isbn' label='ISBN' %]
+      [% INCLUDE form_field_select_option value='issn' label='ISSN' %]
+      [% IF items_search_fields.size %]
+        <optgroup label="Custom search fields">
+          [% FOREACH field IN items_search_fields %]
+            [% marcfield = field.tagfield %]
+            [% IF field.tagsubfield %]
+              [% marcfield = marcfield _ '$' _ field.tagsubfield %]
+            [% END %]
+            [% IF params.f == "marc:$marcfield" %]
+              <option value="marc:[% marcfield %]" data-authorised-values-category="[% field.authorised_values_category %]" selected="selected">[% field.label %] ([% marcfield %])</option>
+            [% ELSE %]
+              <option value="marc:[% marcfield %]" data-authorised-values-category="[% field.authorised_values_category %]">[% field.label %] ([% marcfield %])</option>
+            [% END %]
+          [% END %]
+        </optgroup>
+      [% END %]
+    </select>
+    <input type="text" name="q" class="form-field-value" value="[% params.q %]" />
+    <input type="hidden" name="op" value="like" />
+  </div>
+[% END %]
+
+[% BLOCK form_field_select_text_block %]
+  [% c = CGI.param('c').list %]
+  [% f = CGI.param('f').list %]
+  [% q = CGI.param('q').list %]
+  [% op = CGI.param('op').list %]
+  [% IF q.size %]
+    [% size = q.size - 1 %]
+    [% FOREACH i IN [0 .. size] %]
+      [%
+        params = {
+          f => f.$i
+          q = q.$i
+          op = op.$i
+        }
+      %]
+      [% IF i > 0 %]
+        [% j = i - 1 %]
+        [% params.c = c.$j %]
+      [% END %]
+      [% INCLUDE form_field_select_text params=params %]
+    [% END %]
+  [% ELSE %]
+    [% INCLUDE form_field_select_text %]
+  [% END %]
+[% END %]
+
+[% BLOCK form_field_radio_yes_no %]
+  <div class="form-field">
+    <label class="form-field-label" for="[% name %]">[% label %]:</label>
+    <input type="radio" name="[% name %]" id="[% name %]_indifferent" value="" checked="checked"/>
+    <label for="[% name %]_indifferent">Indifferent</label>
+    <input type="radio" name="[% name %]" id="[% name %]_yes" value="yes" />
+    <label for="[% name %]_yes">Yes</label>
+    <input type="radio" name="[% name %]" id="[% name %]_no" value="no" />
+    <label for="[% name %]_no">No</label>
+  </div>
+[% END %]
+
+[%# Page starts here %]
+
+[% INCLUDE 'doc-head-open.inc' %]
+  <title>Koha &rsaquo; Catalog &rsaquo; Advanced search</title>
+  [% INCLUDE 'doc-head-close.inc' %]
+  [% INCLUDE 'datatables.inc' %]
+  <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.columnFilter.js"></script>
+  <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
+  <link rel="stylesheet" type="text/css" href="[% themelang %]/css/itemsearchform.css" />
+  <script type="text/javascript">
+    //<![CDATA[
+    var authorised_values = [% authorised_values_json %];
+
+    function loadAuthorisedValuesSelect(select) {
+      var selected = select.find('option:selected');
+      var category = selected.data('authorised-values-category');
+      var form_field_value = select.siblings('.form-field-value');
+      if (category && category in authorised_values) {
+        var values = authorised_values[category];
+        var html = '<select name="q" class="form-field-value">\n';
+        for (i in values) {
+          var value = values[i];
+          html += '<option value="' + value.authorised_value + '">' + value.lib + '</option>\n';
+        }
+        html += '</select>\n';
+        var new_form_field_value = $(html);
+        new_form_field_value.val(form_field_value.val());
+        form_field_value.replaceWith(new_form_field_value);
+      } else {
+        if (form_field_value.prop('tagName').toLowerCase() == 'select') {
+          html = '<input name="q" type="text" class="form-field-value" />';
+          var new_form_field_value = $(html);
+          form_field_value.replaceWith(new_form_field_value);
+        }
+      }
+    }
+
+    function addNewField() {
+      var form_field = $('div.form-field-select-text').last();
+      var copy = form_field.clone(true);
+      copy.find('input,select').not('[type="hidden"]').each(function() {
+        $(this).val('');
+      });
+      copy.find('.form-field-conjunction').removeAttr('disabled');
+      form_field.after(copy);
+      copy.find('select.form-field-column').change();
+    }
+
+    function submitForm($form) {
+      var tr = ''
+        + '    <tr>'
+        + '      <th>' + _("Bibliographic reference") + '</th>'
+        + '      <th>' + _("Publication date") + '</th>'
+        + '      <th>' + _("Publisher") + '</th>'
+        + '      <th>' + _("Collection") + '</th>'
+        + '      <th>' + _("Barcode") + '</th>'
+        + '      <th>' + _("Callnumber") + '</th>'
+        + '      <th>' + _("Home branch") + '</th>'
+        + '      <th>' + _("Holding branch") + '</th>'
+        + '      <th>' + _("Location") + '</th>'
+        + '      <th>' + _("Stock number") + '</th>'
+        + '      <th>' + _("Status") + '</th>'
+        + '      <th>' + _("Issues") + '</th>'
+        + '      <th></th>'
+        + '    </tr>'
+      var table = ''
+        + '<table id="results">'
+        + '  <thead>' + tr + tr + '</thead>'
+        + '  <tbody></tbody>'
+        + '</table>';
+      $('#results-wrapper').empty().html(table);
+
+      var params = [];
+      $form.find('select,input[type="text"],input[type="hidden"]').not('[disabled]').each(function () {
+        params.push({ 'name': $(this).attr('name'), 'value': $(this).val() });
+      });
+      $form.find('input[type="radio"]:checked').each(function() {
+        params.push({ 'name': $(this).attr('name'), 'value': $(this).val() });
+      });
+
+      $('#results').dataTable($.extend(true, {}, dataTablesDefaults, {
+        'bDestroy': true,
+        'bServerSide': true,
+        'sAjaxSource': '/cgi-bin/koha/catalogue/itemsearch.pl',
+        'fnServerParams': function(aoData) {
+          aoData.push( { 'name': 'format', 'value': 'json' } );
+          for (i in params) {
+            aoData.push(params[i]);
+          }
+        },
+        'sDom': '<"top pager"ilp>t<"bottom pager"ip>',
+        'aoColumns': [
+          { 'sName': 'title' },
+          { 'sName': 'publicationyear' },
+          { 'sName': 'publishercode' },
+          { 'sName': 'collectiontitle' },
+          { 'sName': 'barcode' },
+          { 'sName': 'itemcallnumber' },
+          { 'sName': 'homebranch' },
+          { 'sName': 'holdingbranch' },
+          { 'sName': 'location' },
+          { 'sName': 'stocknumber' },
+          { 'sName': 'notforloan' },
+          { 'sName': 'issues' },
+          { 'sName': 'checkbox', 'bSortable': false }
+        ]
+      })).columnFilter({
+        'sPlaceHolder': 'head:after',
+        'aoColumns': [
+          { 'type': 'text' },
+          { 'type': 'text' },
+          { 'type': 'text' },
+          { 'type': 'text' },
+          { 'type': 'text' },
+          { 'type': 'text' },
+          { 'type': 'select', 'values': [% branches.json %] },
+          { 'type': 'select', 'values': [% branches.json %] },
+          { 'type': 'select', 'values': [% locations.json %] },
+          { 'type': 'text' },
+          { 'type': 'select', 'values': [% notforloans.json %] },
+          { 'type': 'text' },
+          null
+        ]
+      });
+    }
+
+    function hideForm($form) {
+      $form.hide();
+      $('#editsearchlink').show();
+    }
+
+    $(document).ready(function () {
+      // Add the "New field" link.
+      var form_field = $('div.form-field-select-text').last()
+      var button_field_new = $('<a href="#" class="button-field-new" title="Add a new field">New field</a>');
+      button_field_new.click(function() {
+        addNewField();
+        return false;
+      });
+      form_field.after(button_field_new);
+
+      // If a field is linked to an authorised values list, display the list.
+      $('div.form-field-select-text select').change(function() {
+        loadAuthorisedValuesSelect($(this));
+      }).change();
+
+      // Prevent user to select the 'All ...' option with other options.
+      $('div.form-field-select').each(function() {
+        $(this).find('select').filter(':last').change(function() {
+          values = $(this).val();
+          if (values.length > 1) {
+            var idx = $.inArray('', values);
+            if (idx != -1) {
+              values.splice(idx, 1);
+              $(this).val(values);
+            }
+          }
+        });
+      });
+
+      $('#itemsearchform').submit(function() {
+        var format = $(this).find('input[name="format"]:checked').val();
+        if (format == 'html') {
+          submitForm($(this));
+          hideForm($(this));
+          return false;
+        }
+      });
+
+      $('#editsearchlink').click(function() {
+        $('#itemsearchform').show();
+        $(this).hide();
+        return false;
+      });
+    });
+    //]]>
+  </script>
+</head>
+<body id="catalog_itemsearch" class="catalog">
+  [% INCLUDE 'header.inc' %]
+  <div id="breadcrumbs">
+    <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; Item search
+  </div>
+
+  <div id="doc" class="yui-t7">
+    <div id="bd">
+      <h1>Item search</h1>
+      <a href="/cgi-bin/koha/catalogue/search.pl">Go to advanced search</a>
+      <form action="" method="get" id="itemsearchform">
+        <fieldset>
+          <legend>Item search</legend>
+          <fieldset>
+            [% INCLUDE form_field_select
+              name="homebranch"
+              label="Home branch"
+              options = branches
+              empty_option = "All branches"
+            %]
+            [% INCLUDE form_field_select
+              name="location"
+              label="Location"
+              options = locations
+              empty_option = "All locations"
+            %]
+          </fieldset>
+          <fieldset>
+            [% INCLUDE form_field_select
+              name="itype"
+              label="Item type"
+              options = itemtypes
+              empty_option = "All item types"
+            %]
+            [% INCLUDE form_field_select
+              name="ccode"
+              label="Collection code"
+              options = ccodes
+              empty_option = "All collection codes"
+            %]
+          </fieldset>
+          <fieldset>
+            [% INCLUDE form_field_select_text_block %]
+            <p class="hint">You can use the following joker characters: % _</p>
+          </fieldset>
+          <fieldset>
+            <div class="form-field">
+              <label class="form-field-label" for="itemcallnumber_from">From call number:</label>
+              [% value = CGI.param('itemcallnumber_from') %]
+              <input type="text" id="itemcallnumber_from" name="itemcallnumber_from" value="[% value %]" />
+              <span class="hint">(inclusive)</span>
+            </div>
+            <div class="form-field">
+              [% value = CGI.param('itemcallnumber_to') %]
+              <label class="form-field-label" for="itemcallnumber_to">To call number:</label>
+              <input type="text" id="itemcallnumber_to" name="itemcallnumber_to" value="[% value %]" />
+              <span class="hint">(inclusive)</span>
+            </div>
+            [% INCLUDE form_field_radio_yes_no name="damaged" label="Damaged" %]
+            [% INCLUDE form_field_radio_yes_no name="itemlost" label="Lost" %]
+            <div class="form-field">
+              <label class="form-field-label" for="issues">Issues count:</label>
+              <select id="issues_op" name="issues_op">
+                <option value=">">&gt;</option>
+                <option value="<">&lt;</option>
+                <option value="=">=</option>
+                <option value="!=">!=</option>
+              </select>
+              <input type="text" name="issues" />
+            </div>
+            <div class="form-field">
+              <label class="form-field-label" for="datelastborrowed">Last issue date:</label>
+              <select id="datelastborrowed_op" name="datelastborrowed_op">
+                <option value=">">After</option>
+                <option value="<">Before</option>
+                <option value="=">On</option>
+              </select>
+              <input type="text" name="datelastborrowed" />
+              <span class="hint">ISO Format (AAAA-MM-DD)</span>
+            </div>
+          </fieldset>
+          <fieldset>
+            <div class="form-field-radio">
+              <label>Output:</label>
+              <input type="radio" id="format-html" name="format" value="html" checked="checked" /> <label for="format-html">Screen</label>
+              <input type="radio" id="format-csv" name="format" value="csv" /> <label for="format-csv">CSV</label>
+            </div>
+            <div class="form-actions">
+              <input type="submit" value="Search" />
+            </div>
+          </fieldset>
+        </fieldset>
+      </form>
+
+      <p><a id="editsearchlink" href="#" style="display:none">Edit search</a></p>
+
+      <div id="results-wrapper">
+        [% IF search_done %]
+
+          [% IF total_rows > 0 %]
+            <p>Found [% total_rows %] results.</p>
+          [% ELSE %]
+            <p>No results found.</p>
+          [% END %]
+
+          [% IF results %]
+            [% INCLUDE 'catalogue/itemsearch_items.inc' items = results %]
+          [% END %]
+
+          <div id="pagination-bar">
+            [% pagination_bar %]
+          </div>
+
+        [% END %]
+      </div>
+    </div>
+
+    [% INCLUDE 'intranet-bottom.inc' %]

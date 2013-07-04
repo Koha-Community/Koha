@@ -35,6 +35,7 @@ use DateTime::Format::MySQL;
 use Data::Dumper; # used as part of logging item record changes, not just for
                   # debugging; so please don't remove this
 use Koha::DateUtils qw/dt_from_string/;
+use C4::SQLHelper qw(GetColumns);
 
 use vars qw($VERSION @ISA @EXPORT);
 
@@ -85,6 +86,7 @@ BEGIN {
 	GetAnalyticsCount
         GetItemHolds
 
+        SearchItemsByField
         SearchItems
 
         PrepareItemrecordDisplay
@@ -2590,39 +2592,194 @@ sub GetItemHolds {
     return $holds;
 }
 
-# Return the list of the column names of items table
-sub _get_items_columns {
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->column_info(undef, undef, 'items', '%');
-    $sth->execute;
-    my $results = $sth->fetchall_hashref('COLUMN_NAME');
-    return keys %$results;
+=head2 SearchItemsByField
+
+    my $items = SearchItemsByField($field, $value);
+
+SearchItemsByField will search for items on a specific given field.
+For instance you can search all items with a specific stocknumber like this:
+
+    my $items = SearchItemsByField('stocknumber', $stocknumber);
+
+=cut
+
+sub SearchItemsByField {
+    my ($field, $value) = @_;
+
+    my $filters = [ {
+            field => $field,
+            query => $value,
+    } ];
+
+    my ($results) = SearchItems($filters);
+    return $results;
+}
+
+sub _SearchItems_build_where_fragment {
+    my ($filter) = @_;
+
+    my $where_fragment;
+    if (exists($filter->{conjunction})) {
+        my (@where_strs, @where_args);
+        foreach my $f (@{ $filter->{filters} }) {
+            my $fragment = _SearchItems_build_where_fragment($f);
+            if ($fragment) {
+                push @where_strs, $fragment->{str};
+                push @where_args, @{ $fragment->{args} };
+            }
+        }
+        my $where_str = '';
+        if (@where_strs) {
+            $where_str = '(' . join (' ' . $filter->{conjunction} . ' ', @where_strs) . ')';
+            $where_fragment = {
+                str => $where_str,
+                args => \@where_args,
+            };
+        }
+    } else {
+        my @columns = GetColumns('items');
+        push @columns, GetColumns('biblio');
+        push @columns, GetColumns('biblioitems');
+        my @operators = qw(= != > < >= <= like);
+        my $field = $filter->{field};
+        if ( (0 < grep /^$field$/, @columns) or (substr($field, 0, 5) eq 'marc:') ) {
+            my $op = $filter->{operator};
+            my $query = $filter->{query};
+
+            if (!$op or (0 == grep /^$op$/, @operators)) {
+                $op = '='; # default operator
+            }
+
+            my $column;
+            if ($field =~ /^marc:(\d{3})(?:\$(\w))?$/) {
+                my $marcfield = $1;
+                my $marcsubfield = $2;
+                my $xpath;
+                if ($marcfield < 10) {
+                    $xpath = "//record/controlfield[\@tag=\"$marcfield\"]";
+                } else {
+                    $xpath = "//record/datafield[\@tag=\"$marcfield\"]/subfield[\@code=\"$marcsubfield\"]";
+                }
+                $column = "ExtractValue(marcxml, '$xpath')";
+            } else {
+                $column = $field;
+            }
+
+            if (ref $query eq 'ARRAY') {
+                if ($op eq '=') {
+                    $op = 'IN';
+                } elsif ($op eq '!=') {
+                    $op = 'NOT IN';
+                }
+                $where_fragment = {
+                    str => "$column $op (" . join (',', ('?') x @$query) . ")",
+                    args => $query,
+                };
+            } else {
+                $where_fragment = {
+                    str => "$column $op ?",
+                    args => [ $query ],
+                };
+            }
+        }
+    }
+
+    return $where_fragment;
 }
 
 =head2 SearchItems
 
-    my $items = SearchItems($field, $value);
+    my ($items, $total) = SearchItemsByField($filters, $params);
 
-SearchItems will search for items on a specific given field.
-For instance you can search all items with a specific stocknumber like this:
+Perform a search among items
 
-    my $items = SearchItems('stocknumber', $stocknumber);
+$filters is a reference to an array of filters, where each filter is a hash with
+the following keys:
+
+=over 2
+
+=item * field: the name of a SQL column in table items
+
+=item * query: the value to search in this column
+
+=item * operator: comparison operator. Can be one of = != > < >= <= like
+
+=back
+
+A logical AND is used to combine filters.
+
+$params is a reference to a hash that can contain the following parameters:
+
+=over 2
+
+=item * rows: Number of items to return. 0 returns everything (default: 0)
+
+=item * page: Page to return (return items from (page-1)*rows to (page*rows)-1)
+               (default: 1)
+
+=item * sortby: A SQL column name in items table to sort on
+
+=item * sortorder: 'ASC' or 'DESC'
+
+=back
 
 =cut
 
 sub SearchItems {
-    my ($field, $value) = @_;
+    my ($filter, $params) = @_;
+
+    $filter //= {};
+    $params //= {};
+    return unless ref $filter eq 'HASH';
+    return unless ref $params eq 'HASH';
+
+    # Default parameters
+    $params->{rows} ||= 0;
+    $params->{page} ||= 1;
+    $params->{sortby} ||= 'itemnumber';
+    $params->{sortorder} ||= 'ASC';
+
+    my ($where_str, @where_args);
+    my $where_fragment = _SearchItems_build_where_fragment($filter);
+    if ($where_fragment) {
+        $where_str = $where_fragment->{str};
+        @where_args = @{ $where_fragment->{args} };
+    }
 
     my $dbh = C4::Context->dbh;
-    my @columns = _get_items_columns;
-    my $results = [];
-    if(0 < grep /^$field$/, @columns) {
-        my $query = "SELECT $field FROM items WHERE $field = ?";
-        my $sth = $dbh->prepare( $query );
-        $sth->execute( $value );
-        $results = $sth->fetchall_arrayref({});
+    my $query = q{
+        SELECT SQL_CALC_FOUND_ROWS items.*
+        FROM items
+          LEFT JOIN biblio ON biblio.biblionumber = items.biblionumber
+          LEFT JOIN biblioitems ON biblioitems.biblioitemnumber = items.biblioitemnumber
+    };
+    if (defined $where_str and $where_str ne '') {
+        $query .= qq{ WHERE $where_str };
     }
-    return $results;
+
+    my @columns = GetColumns('items');
+    push @columns, GetColumns('biblio');
+    push @columns, GetColumns('biblioitems');
+    my $sortby = (0 < grep {$params->{sortby} eq $_} @columns)
+        ? $params->{sortby} : 'itemnumber';
+    my $sortorder = (uc($params->{sortorder}) eq 'ASC') ? 'ASC' : 'DESC';
+    $query .= qq{ ORDER BY $sortby $sortorder };
+
+    my $rows = $params->{rows};
+    my @limit_args;
+    if ($rows > 0) {
+        my $offset = $rows * ($params->{page}-1);
+        $query .= qq { LIMIT ?, ? };
+        push @limit_args, $offset, $rows;
+    }
+
+    my $sth = $dbh->prepare($query);
+    my $rv = $sth->execute(@where_args, @limit_args);
+
+    return unless ($rv);
+    my ($total_rows) = $dbh->selectrow_array(q{ SELECT FOUND_ROWS() });
+
+    return ($sth->fetchall_arrayref({}), $total_rows);
 }
 
 

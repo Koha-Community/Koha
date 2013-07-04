@@ -552,6 +552,11 @@ our $PERL_DEPS = {
         'required' => '1',
         'min_ver'  => '0.03',
     },
+    'Template::Plugin::JSON::Escape' => {
+        'usage'    => 'Core',
+        'required' => '1',
+        'min_ver'  => '0.02',
+    },
     'DBD::Mock' => {
         'usage'    => 'Core',
         'required' => '1',

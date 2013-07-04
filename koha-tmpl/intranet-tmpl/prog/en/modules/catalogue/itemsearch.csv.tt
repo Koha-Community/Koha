@@ -1,0 +1,4 @@
+Bibliographic reference, Publication Date, Publisher, Collection, Barcode, Callnumber, Home branch, Holding branch, Location, Stock number, Status, Issues
+[% FOREACH item IN results -%]
+  [%- INCLUDE 'catalogue/itemsearch_item.csv.inc' item = item -%]
+[%- END -%]

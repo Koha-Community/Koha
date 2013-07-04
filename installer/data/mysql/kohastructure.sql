@@ -3461,6 +3461,23 @@ CREATE TABLE IF NOT EXISTS columns_settings (
     PRIMARY KEY(module, page, tablename, columnname)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Table structure for table 'items_search_fields'
+--
+
+DROP TABLE IF EXISTS items_search_fields;
+CREATE TABLE items_search_fields (
+  name VARCHAR(255) NOT NULL,
+  label VARCHAR(255) NOT NULL,
+  tagfield CHAR(3) NOT NULL,
+  tagsubfield CHAR(1) NULL DEFAULT NULL,
+  authorised_values_category VARCHAR(16) NULL DEFAULT NULL,
+  PRIMARY KEY(name),
+  CONSTRAINT items_search_fields_authorised_values_category
+    FOREIGN KEY (authorised_values_category) REFERENCES authorised_values (category)
+    ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

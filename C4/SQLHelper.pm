@@ -56,6 +56,7 @@ BEGIN {
 	UpdateInTable
 	GetPrimaryKeys
         clear_columns_cache
+    GetColumns
 );
 	%EXPORT_TAGS = ( all =>[qw( InsertInTable DeleteInTable SearchInTable UpdateInTable GetPrimaryKeys)]
 				);
@@ -294,6 +295,38 @@ sub _get_columns {
         $hashref->{$tablename} = $columns;
     }
     return $hashref->{$tablename};
+}
+
+=head2 GetColumns
+
+    my @columns = GetColumns($tablename);
+
+Given a tablename, returns an array of columns names.
+
+=cut
+
+sub GetColumns {
+    my ($tablename) = @_;
+
+    return unless $tablename;
+    return unless $tablename =~ /^[a-zA-Z0-9_]+$/;
+
+    # Get the database handle.
+    my $dbh = C4::Context->dbh;
+
+    # Pure ANSI SQL goodness.
+    my $sql = "SELECT * FROM $tablename WHERE 1=0;";
+
+    # Run the SQL statement to load STH's readonly properties.
+    my $sth = $dbh->prepare($sql);
+    my $rv = $sth->execute();
+
+    my @data;
+    if ($rv) {
+        @data = @{$sth->{NAME}};
+    }
+
+    return @data;
 }
 
 =head2 _filter_columns
