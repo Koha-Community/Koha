@@ -21,9 +21,6 @@ BEGIN {
 local $SIG{__WARN__} = sub { warn $_[0] unless $_[0] =~ /redefined/ };
 *C4::Search::SimpleSearch = \&Mock_SimpleSearch;
 
-# KohaTest::clear_test_database();
-# KohaTest::create_test_database();
-
 my $context = C4::Context->new;
 
 my ( $biblionumber_tag, $biblionumber_subfield ) =
