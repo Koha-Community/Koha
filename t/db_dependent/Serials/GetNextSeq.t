@@ -246,7 +246,7 @@ is($seq, 'Z: 1, Y: 2, X: 3');
 $publisheddate = GetNextDate($subscription, $publisheddate);
 $seq = _next_seq($subscription, $pattern, $publisheddate);
 is($seq, 'Z: 1, Y: 2, X: 4');
-for (my $i = 0; $i < 100; $i++) {
+for (1..100) {
     $publisheddate = GetNextDate($subscription, $publisheddate);
     $seq = _next_seq($subscription, $pattern, $publisheddate);
 }

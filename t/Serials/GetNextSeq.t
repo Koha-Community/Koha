@@ -164,7 +164,7 @@ is($seq, 'Y: 2, X: 1');
 $seq = _next_seq($subscription, $pattern);
 is($seq, 'Y: 2, X: 2');
 # Back to the future
-for (my $i = 0; $i < 39; $i++) {
+for (1..39) {
     $seq = _next_seq($subscription, $pattern);
 }
 $seq = _next_seq($subscription, $pattern);
@@ -203,7 +203,7 @@ $seq = _next_seq($subscription, $pattern);
 is($seq, 'Z: 1, Y: 1, X: 4');
 $seq = _next_seq($subscription, $pattern);
 is($seq, 'Z: 1, Y: 2, X: 1');
-for (my $i = 0; $i < 24; $i++) {
+for (1..24) {
     $seq = _next_seq($subscription, $pattern);
 }
 $seq = _next_seq($subscription, $pattern);
@@ -214,7 +214,7 @@ $seq = _next_seq($subscription, $pattern);
 is($seq, 'Z: 1, Y: 8, X: 4');
 $seq = _next_seq($subscription, $pattern);
 is($seq, 'Z: 2, Y: 1, X: 1');
-for (my $i = 0; $i < 350; $i++) {
+for (1..350) {
     $seq = _next_seq($subscription, $pattern);
 }
 $seq = _next_seq($subscription, $pattern);
