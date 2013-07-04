@@ -435,7 +435,7 @@ sub patronflags {
     if ( $owing > 0 ) {
         my %flaginfo;
         my $noissuescharge = C4::Context->preference("noissuescharge") || 5;
-        $flaginfo{'message'} = sprintf "Patron owes \$%.02f", $owing;
+        $flaginfo{'message'} = sprintf 'Patron owes %.02f', $owing;
         $flaginfo{'amount'}  = sprintf "%.02f", $owing;
         if ( $owing > $noissuescharge && !C4::Context->preference("AllowFineOverride") ) {
             $flaginfo{'noissues'} = 1;
@@ -444,7 +444,7 @@ sub patronflags {
     }
     elsif ( $balance < 0 ) {
         my %flaginfo;
-        $flaginfo{'message'} = sprintf "Patron has credit of \$%.02f", -$balance;
+        $flaginfo{'message'} = sprintf 'Patron has credit of %.02f', -$balance;
         $flaginfo{'amount'}  = sprintf "%.02f", $balance;
         $flags{'CREDITS'} = \%flaginfo;
     }
