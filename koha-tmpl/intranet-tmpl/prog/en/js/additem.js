@@ -143,7 +143,7 @@ function cloneItemBlock(index, unique_item_fields) {
             /* Copy values from the original block (input) */
             $(original).find("input[name='field_value']").each(function(){
                 var kohafield = $(this).siblings("input[name='kohafield']").val();
-                if($(this).val() && dont_copy_fields.indexOf(kohafield) == -1) {
+                if($(this).val() && $.inArray(kohafield,dont_copy_fields) == -1) {
                     $(this).parent("div").attr("id").match(/^(subfield.)/);
                     var id = RegExp.$1;
                     var value = $(this).val();
@@ -153,7 +153,7 @@ function cloneItemBlock(index, unique_item_fields) {
             /* Copy values from the original block (select) */
             $(original).find("select[name='field_value']").each(function(){
                 var kohafield = $(this).siblings("input[name='kohafield']").val();
-                if($(this).val() && dont_copy_fields.indexOf(kohafield) == -1) {
+                if($(this).val() && $.inArray(kohafield,dont_copy_fields) == -1) {
                     $(this).parent("div").attr("id").match(/^(subfield.)/);
                     var id = RegExp.$1;
                     var value = $(this).val();
