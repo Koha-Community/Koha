@@ -48,6 +48,23 @@
                     form.submit();
                 }
         });
+
+        var mrform = $("#manual_restriction_form");
+        var mrlink = $("#add_manual_restriction");
+        mrform.hide();
+        mrlink.on("click",function(e){
+            $(this).hide();
+            mrform.show();
+            e.preventDefault();
+        });
+        $("#cancel_manual_restriction").on("click",function(e){
+            $('#debarred_expiration').val('');
+            $('#add_debarment').prop('checked', false);
+            $('#debarred_comment').val('');
+            mrlink.show();
+            mrform.hide();
+            e.preventDefault();
+        });
     });
 
     function clear_entry(node) {
@@ -1171,50 +1188,51 @@
 
 			</ol>
 			</fieldset>
-    
+
               <fieldset class="rows">
                 <legend>Patron restrictions</legend>
 
-                [% UNLESS debarments %]<p>Patron is currently unrestricted.</p>[% END %]
-
-                <table>
-                    <thead>
-                        <tr>
-                             <th>Type</th>
-                             <th>Comment</th>
-                             <th>Expiration</th>
-                             <th>Remove?</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        [% FOREACH d IN debarments %]
+                [% IF ( debarments.size < 1 ) %]
+                    <p>Patron is currently unrestricted.</p>
+                [% ELSE %]
+                    <table>
+                        <thead>
                             <tr>
-                                <td>[% d.type %]</td>
-                                <td>[% d.comment %]</td>
-                                <td>[% IF d.expiration %] [% d.expiration | $KohaDates %] [% ELSE %] <i>Indefinite</i> [% END %]</td>
-                                <td>
-                                    <input type="checkbox" id="debarment_[% d.borrower_debarment_id %]" name="remove_debarment" value="[% d.borrower_debarment_id %]" />
-                                </td>
+                                 <th>Type</th>
+                                 <th>Comment</th>
+                                 <th>Expiration</th>
+                                 <th>Remove?</th>
                             </tr>
-                        [% END %]
-                    </tbody>
+                        </thead>
 
-                    <tfoot>
-                        <tr>
-                            <td>
-                                Add new
-                                <input type="checkbox" id="add_debarment" name="add_debarment" value="1" />
-                            </td>
-                            <td><input type="text" id="debarred_comment" name="debarred_comment" onchange="$('#add_debarment').prop('checked', true);" /></td>
-                            <td>
-                                <input name="debarred_expiration" id="debarred_expiration" size="10" readonly="readonly" value="" class="datepicker" onchange="$('#add_debarment').prop('checked', true);" />
-                                <a href='javascript:void(0)' onclick="$('#debarred_expiration').val('');">Clear date</a>
-                            </td>
-                            <td><a class="btn" href='javascript:void(0)' onclick="$('#debarred_expiration').val(''); $('#add_debarment').prop('checked', false); $('#debarred_comment').val('');">Clear new restriction</a></td>
-                        </tr>
-                    </tfoot>
-                </table>
+                        <tbody>
+                            [% FOREACH d IN debarments %]
+                                <tr>
+                                    <td>[% d.type %]</td>
+                                    <td>[% d.comment %]</td>
+                                    <td>[% IF d.expiration %] [% d.expiration | $KohaDates %] [% ELSE %] <i>Indefinite</i> [% END %]</td>
+                                    <td>
+                                        <input type="checkbox" id="debarment_[% d.borrower_debarment_id %]" name="remove_debarment" value="[% d.borrower_debarment_id %]" />
+                                    </td>
+                                </tr>
+                            [% END %]
+                        </tbody>
+                    </table>
+                [% END %]
+                    <p><a href="#" id="add_manual_restriction">Add manual restriction</a></p>
+                    <fieldset id="manual_restriction_form">
+                        <input type="hidden" id="add_debarment" name="add_debarment" value="1" />
+                        <legend>Add manual restriction</legend>
+                        <ol>
+                            <li><label for="debarred_comment">Comment: </label><input type="text" id="debarred_comment" name="debarred_comment" onchange="$('#add_debarment').prop('checked', true);" /></li>
+                            <li><label for="debarred_expiration">Expiration: </label><input name="debarred_expiration" id="debarred_expiration" size="10" readonly="readonly" value="" class="datepicker" onchange="$('#add_debarment').prop('checked', true);" />
+                                    <a href='javascript:void(0)' onclick="$('#debarred_expiration').val('');">Clear date</a></li>
+
+                        </ol>
+                        <p>
+                            <a class="cancel" id="cancel_manual_restriction" href="#" onclick="">Cancel</a>
+                        </p>
+                    </fieldset>
             </fieldset>
 		[% END %]
 
