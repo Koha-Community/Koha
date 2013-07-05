@@ -149,4 +149,4 @@ my $deleters = [
 
 $dbh->{mock_add_resultset} = $checkordersrs;
 $dbh->{mock_add_resultset} = $deleters;
-ok(DelInvoice(42), "Invoices with items do get deleted");
+ok(DelInvoice(42), "Invoices without items do get deleted");
