@@ -40,27 +40,15 @@ function active(numlayer)
     }
 }
 function Check(f) {
-    var total_errors=0;
-    $("input[name='mandatory'],select[name='mandatory']").each(function(i){
-        if($(this).val() == 1){
-            var mandatory_field = $("input[name='field_value'],select[name='field_value']").eq(i);
-            if(mandatory_field.val() == ''){
-                mandatory_field.addClass("missing");
-                total_errors++;
-            }
-        }
-    });
-
-    var alertString2;
-    if (total_errors==0) {
-        return true;
-    } else {
-        alertString2  = _("Form not submitted because of the following problem(s)");
+    var total_errors = CheckMandatorySubfields(f);
+    if (total_errors > 0) {
+        var alertString2 = _("Form not submitted because of the following problem(s)");
         alertString2 += "\n------------------------------------------------------------------------------------\n";
-        alertString2 += "\n- "+ total_errors+_(" mandatory fields empty (highlighted)");
+        alertString2 += "\n- "+ total_errors + _(" mandatory fields empty (highlighted)");
         alert(alertString2);
         return false;
     }
+    return true;
 }
 function CheckMultipleAdd(f) {
 
