@@ -18,6 +18,10 @@ BEGIN {
     use_ok('C4::Bookseller');
 }
 
+my $dbh = C4::Context->dbh;
+$dbh->{AutoCommit} = 0;
+$dbh->{RaiseError} = 1;
+
 my $booksellerid = C4::Bookseller::AddBookseller(
     {
         name => "my vendor",
@@ -120,13 +124,4 @@ for my $field ( @expectedfields ) {
     ok( exists( $firstorder->{ $field } ), "This order has a $field field" );
 }
 
-END {
-    C4::Acquisition::DelOrder( $biblionumber1, $ordernumber1 );
-    C4::Acquisition::DelOrder( $biblionumber2, $ordernumber2 );
-    C4::Acquisition::DelOrder( $biblionumber2, $ordernumber3 );
-    C4::Budgets::DelBudget( $budgetid );
-    C4::Acquisition::DelBasket( $basketno );
-    C4::Bookseller::DelBookseller( $booksellerid );
-    C4::Biblio::DelBiblio($biblionumber1);
-    C4::Biblio::DelBiblio($biblionumber2);
-};
+$dbh->rollback;
