@@ -464,3 +464,20 @@ function CloneItemSubfield(original){
     // insert this line on the page
     original.parentNode.insertBefore(clone,original.nextSibling);
 }
+
+/**
+ * Check mandatory subfields of a cataloging form and adds <code>missing</code> class to those who are empty.<br>
+ * @param p the parent object of subfields to check
+ * @return the number of empty mandatory subfields
+ */
+function CheckMandatorySubfields(p){
+    var total = 0;
+    $(p).find(".subfield_line input[name='mandatory'][value='1']").each(function(i){
+        var editor = $(this).siblings("[name='field_value']");
+        if (!editor.val()) {
+            editor.addClass("missing");
+            total++;
+        }
+    });
+    return total;
+}
