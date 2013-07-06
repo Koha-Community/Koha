@@ -41,7 +41,7 @@
                     ilsdi.pl?service=GetAvailability&amp;id=1+2+99999&amp;id_type=item
                 </a>
                 <h4>Example response</h4>
-<pre>&lt;?xml version="1.0" encoding="ISO-8859-1" ?&gt;
+<pre>&lt;?xml version="1.0" encoding="UTF-8" ?&gt;
 &lt;dlf:collection
   xmlns:dlf="http://diglib.org/ilsdi/1.1"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -114,7 +114,7 @@
                     ilsdi.pl?service=GetRecords&amp;id=1+2+99999
                 </a>
                 <h4>Example response</h4>
-<pre>&lt;?xml version="1.0" encoding="ISO-8859-1" ?&gt;
+<pre>&lt;?xml version="1.0" encoding="UTF-8" ?&gt;
 &lt;GetRecords&gt;
   &lt;record&gt;
     &lt;biblioitemnumber&gt;1&lt;/biblioitemnumber&gt;
@@ -376,7 +376,7 @@
                     ilsdi.pl?service=LookupPatron&amp;id=815&amp;id_type=cardnumber
                 </a>
                 <h4>Example response</h4>
-<pre>&lt;?xml version="1.0" encoding="ISO-8859-1" ?&gt;
+<pre>&lt;?xml version="1.0" encoding="UTF-8" ?&gt;
 &lt;LookupPatron&gt;
   &lt;id&gt;419&lt;/id&gt;
 &lt;/LookupPatron&gt;</pre>
@@ -397,7 +397,7 @@
                     ilsdi.pl?service=AuthenticatePatron&amp;username=john9&amp;password=soul
                 </a>
                 <h4>Example Response</h4>
-<pre>&lt;?xml version="1.0" encoding="ISO-8859-1" ?&gt;
+<pre>&lt;?xml version="1.0" encoding="UTF-8" ?&gt;
 &lt;AuthenticatePatron&gt;
   &lt;id&gt;419&lt;/id&gt;
 &lt;/AuthenticatePatron&gt;</pre>
@@ -427,7 +427,7 @@
                     ilsdi.pl?service=GetPatronInfo&amp;patron_id=1&amp;show_contact=0&amp;show_loans=1
                 </a>
                 <h4>Example response</h4>
-<pre>&lt;?xml version="1.0" encoding="ISO-8859-1" ?&gt;
+<pre>&lt;?xml version="1.0" encoding="UTF-8" ?&gt;
 &lt;GetPatronInfo&gt;
   &lt;category_type&gt;A&lt;/category_type&gt;
   &lt;categorycode&gt;ADUEXT&lt;/categorycode&gt;
@@ -546,7 +546,7 @@
                     ilsdi.pl?service=GetPatronStatus&amp;patron_id=1
                 </a>
                 <h4>Example Response</h4>
-<pre>&lt;?xml version="1.0" encoding="ISO-8859-1" ?&gt;
+<pre>&lt;?xml version="1.0" encoding="UTF-8" ?&gt;
 &lt;GetPatronStatus&gt;
   &lt;expiry&gt;2010-03-04&lt;/expiry&gt;
   &lt;status&gt;0&lt;/status&gt;
@@ -569,7 +569,7 @@
                     ilsdi.pl?service=GetServices&amp;patron_id=1&amp;item_id=1
                 </a>
                 <h4>Example response</h4>
-<pre>&lt;?xml version="1.0" encoding="ISO-8859-1" ?&gt;
+<pre>&lt;?xml version="1.0" encoding="UTF-8" ?&gt;
 &lt;GetServices&gt;
   &lt;AvailableFor&gt;title level hold&lt;/AvailableFor&gt;
   &lt;AvailableFor&gt;item level hold&lt;/AvailableFor&gt;
@@ -593,7 +593,7 @@
                     ilsdi.pl?service=RenewLoan&amp;patron_id=1&amp;item_id=1
                 </a>
                 <h4>Example response</h4>
-<pre>&lt;?xml version="1.0" encoding="ISO-8859-1" ?&gt;
+<pre>&lt;?xml version="1.0" encoding="UTF-8" ?&gt;
 &lt;RenewLoan&gt;
   &lt;success&gt;0&lt;/success&gt;
   &lt;renewals&gt;5&lt;/renewals&gt;
@@ -624,7 +624,7 @@
                     ilsdi.pl?service=HoldTitle&amp;patron_id=1&amp;bib_id=1&amp;request_location=127.0.0.1
                 </a>
                 <h4>Example response</h4>
-<pre>&lt;?xml version="1.0" encoding="ISO-8859-1" ?&gt;
+<pre>&lt;?xml version="1.0" encoding="UTF-8" ?&gt;
 &lt;HoldTitle&gt;
   &lt;title&gt;(les) galères de l'Orfèvre&lt;/title&gt;
   &lt;date_available&gt;2009-05-11&lt;/date_available&gt;
@@ -655,7 +655,7 @@
                     ilsdi.pl?service=HoldItem&amp;patron_id=1&amp;bib_id=1&amp;item_id=1
                 </a>
                 <h4>Example response</h4>
-<pre>&lt;?xml version="1.0" encoding="ISO-8859-1" ?&gt;
+<pre>&lt;?xml version="1.0" encoding="UTF-8" ?&gt;
 &lt;HoldTitle&gt;
   &lt;title&gt;(les) galères de l'Orfèvre&lt;/title&gt;
   &lt;date_available&gt;2009-05-11&lt;/date_available&gt;
@@ -678,7 +678,7 @@
                     ilsdi.pl?service=CancelHold&amp;patron_id=1&amp;item_id=1
                 </a>
                 <h4>Example response</h4>
-<pre>&lt;?xml version="1.0" encoding="ISO-8859-1" ?&gt;
+<pre>&lt;?xml version="1.0" encoding="UTF-8" ?&gt;
 &lt;CancelHold&gt;
   &lt;message&gt;Canceled&lt;/message&gt;
 &lt;/CancelHold&gt;</pre>

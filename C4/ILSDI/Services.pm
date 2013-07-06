@@ -60,7 +60,7 @@ hashref that will be printed by XML::Simple in opac/ilsdi.pl
 		noattr => 1, 
 		noescape => 1,
 		nosort => 1,
-		xmldecl => '<?xml version="1.0" encoding="ISO-8859-1" ?>', 
+                xmldecl => '<?xml version="1.0" encoding="UTF-8" ?>',
 		RootName => 'LookupPatron', 
 		SuppressEmpty => 1);
 
@@ -105,7 +105,7 @@ availability
 sub GetAvailability {
     my ($cgi) = @_;
 
-    my $out = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?>\n";
+    my $out = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n";
     $out .= "<dlf:collection\n";
     $out .= "  xmlns:dlf=\"http://diglib.org/ilsdi/1.1\"\n";
     $out .= "  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n";
