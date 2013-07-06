@@ -62,7 +62,6 @@ foreach my $type (@pm) {
             print color 'yellow' if $type eq 'upgrade_pm' && $color;
             print color 'red' if $type eq 'missing_pm' && $color;
             print color 'green' if $type eq 'current_pm' && $color;
-            $count++;
             my $required = ($_->{$pm}->{'required'}?'Yes':'No');
             my $current_version = ($color ? $_->{$pm}->{'cur_ver'} :
                                    $type eq 'missing_pm' || $type eq 'upgrade_pm' ? $_->{$pm}->{'cur_ver'}." *" : $_->{$pm}->{'cur_ver'});
@@ -73,11 +72,13 @@ format =
 $pm,                                          $current_version, $_->{$pm}->{'min_ver'},  $required
 .
 write;
+                    $count++;
                 }
             }
             else {
                 if (($req && $required eq 'Yes') || !$req) {
                     print "$pm\n";
+                    $count++;
                 }
             }
         }
