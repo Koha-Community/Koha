@@ -29,7 +29,7 @@
 [% IF ( OpacPublic ) %]
 <div id="fluid-offset">
 [% UNLESS ( advsearch ) %]
-[% IF ( OpacAddMastheadLibraryPulldown ) %]
+[% IF Koha.Preference( 'OpacAddMastheadLibraryPulldown' ) == 1 %]
     [% IF ( OpacShowFiltersPulldownMobile and not OpacShowLibrariesPulldownMobile ) or ( not OpacShowFiltersPulldownMobile and OpacShowLibrariesPulldownMobile ) %]
         <form name="searchform" method="get" action="/cgi-bin/koha/opac-search.pl" id="searchform" class="multi-libraries single-field-mobile">
     [% ELSE %]
@@ -94,7 +94,7 @@
 [% END %]
 </div>
 
-   [% IF ( OpacAddMastheadLibraryPulldown ) %]
+   [% IF Koha.Preference( 'OpacAddMastheadLibraryPulldown' ) == 1 %]
         [% IF ( OpacShowLibrariesPulldownMobile ) %]
             <div id="libraries">
         [% ELSE %]
@@ -142,7 +142,7 @@
 
     </form>
 [% ELSE %] <!--advsearch -->
-    [% IF ( OpacAddMastheadLibraryPulldown ) %]
+    [% IF Koha.Preference( 'OpacAddMastheadLibraryPulldown' ) == 1 %]
         [% IF ( OpacShowFiltersPulldownMobile and not OpacShowLibrariesPulldownMobile ) or ( not OpacShowFiltersPulldownMobile and OpacShowLibrariesPulldownMobile ) %]
             <form name="searchform" method="get" action="/cgi-bin/koha/opac-search.pl" id="searchform" class="multi-libraries single-field-mobile">
         [% ELSE %]
@@ -170,7 +170,7 @@
     <input type="text" id = "transl1" name="q" class="left transparent" style="width: 35%; font-size: 111%;" disabled="disabled"/><div id="translControl"></div>
 </div>
 
-   [% IF ( OpacAddMastheadLibraryPulldown ) %]
+   [% IF Koha.Preference( 'OpacAddMastheadLibraryPulldown' ) == 1 %]
         [% IF ( OpacShowLibrariesPulldownMobile ) %]
             <div id="libraries">
         [% ELSE %]
@@ -194,7 +194,7 @@
 <a href="/cgi-bin/koha/opac-search.pl">Advanced search</a>
 [% IF ( OpacBrowser ) %]<span class="pipe"> | </span><a href="/cgi-bin/koha/opac-browser.pl">Browse by hierarchy</a>[% END %]
 [% IF ( OpacAuthorities ) %]<span class="pipe"> | </span><a href="/cgi-bin/koha/opac-authorities-home.pl">Authority search</a>[% END %]
-[% IF ( opacuserlogin && reviewson && OpacShowRecentComments ) %]<span class="pipe"> | </span><a href="/cgi-bin/koha/opac-showreviews.pl">Recent comments</a>[% END %]
+[% IF ( opacuserlogin && ( Koha.Preference( 'reviewson' ) == 1 ) && ( Koha.Preference( 'OpacShowRecentComments' ) == 1 ) ) %]<span class="pipe"> | </span><a href="/cgi-bin/koha/opac-showreviews.pl">Recent comments</a>[% END %]
 [% IF ( TagsEnabled ) %]<span class="pipe"> | </span><a href="/cgi-bin/koha/opac-tags.pl">Tag cloud</a>[% END %]
 [% IF ( OpacCloud ) %]<span class="pipe"> | </span><a href="/cgi-bin/koha/opac-tags_subject.pl">Subject cloud</a>[% END %]
 [% IF ( OpacTopissue ) %]<span class="pipe"> | </span><a href="/cgi-bin/koha/opac-topissues.pl">Most popular</a>[% END %]

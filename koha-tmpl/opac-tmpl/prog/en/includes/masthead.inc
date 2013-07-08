@@ -30,7 +30,7 @@
 <div id="fluid-offset">
 [% UNLESS ( advsearch ) %]<form name="searchform" method="get" action="/cgi-bin/koha/opac-search.pl" id="searchform">
     <label for="masthead_search" class="left"> Search 
-	[% UNLESS ( OpacAddMastheadLibraryPulldown ) %]
+  [% UNLESS Koha.Preference( 'OpacAddMastheadLibraryPulldown' ) == 1 %]
             [% IF ( mylibraryfirst ) %] (in [% mylibraryfirst %] only)[% END %]
 	[% END %]
     </label>
@@ -84,7 +84,7 @@
 [% ELSE %]
         <input type="text" title="Type search term" id = "transl1" name="q" class="left" style="width: 35%; font-size: 111%;"/><div id="translControl"></div>
 [% END %]
-   [% IF ( OpacAddMastheadLibraryPulldown ) %]
+   [% IF Koha.Preference( 'OpacAddMastheadLibraryPulldown' ) == 1 %]
       <select name="branch_group_limit" id="select_library" class="left">
          <option value="">All libraries</option>
          [% IF BranchCategoriesLoop %]<optgroup label="Libraries">[% END %]
@@ -133,7 +133,7 @@
 <a href="/cgi-bin/koha/opac-search.pl">Advanced search</a>
 [% IF ( OpacBrowser ) %]<span class="pipe"> | </span><a href="/cgi-bin/koha/opac-browser.pl">Browse by hierarchy</a>[% END %]
 [% IF ( OpacAuthorities ) %]<span class="pipe"> | </span><a href="/cgi-bin/koha/opac-authorities-home.pl">Authority search</a>[% END %]
-[% IF ( opacuserlogin && reviewson && OpacShowRecentComments ) %]<span class="pipe"> | </span><a href="/cgi-bin/koha/opac-showreviews.pl">Recent comments</a>[% END %]
+[% IF ( opacuserlogin && ( Koha.Preference( 'reviewson' ) == 1 ) && ( Koha.Preference( 'OpacShowRecentComments' ) == 1 ) ) %]<span class="pipe"> | </span><a href="/cgi-bin/koha/opac-showreviews.pl">Recent comments</a>[% END %]
 [% IF ( TagsEnabled ) %]<span class="pipe"> | </span><a href="/cgi-bin/koha/opac-tags.pl">Tag cloud</a>[% END %]
 [% IF ( OpacCloud ) %]<span class="pipe"> | </span><a href="/cgi-bin/koha/opac-tags_subject.pl">Subject cloud</a>[% END %]
 [% IF ( OpacTopissue ) %]<span class="pipe"> | </span><a href="/cgi-bin/koha/opac-topissues.pl">Most popular</a>[% END %]

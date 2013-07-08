@@ -1,3 +1,4 @@
+[% USE Koha %]
 [% USE KohaDates %]
 [% SET TagsShowEnabled = ( TagsEnabled && TagsShowOnDetail ) %]
 [% SET TagsInputEnabled = ( opacuserlogin && TagsEnabled && TagsInputOnDetail ) %]
@@ -945,7 +946,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
         <a href="#subscriptions">Subscriptions</a>
     </li>
 [% END %]
-[% IF ( reviewson ) %]
+[% IF ( Koha.Preference( 'reviewson' ) == 1 ) %]
     <li id="tab_comments"><a href="#comments">Comments ( [% reviews.size || 0 %] )</a></li>
 [% END %]
 
@@ -1220,7 +1221,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 <!-- /Library Thing for Libraries Content -->
 
 
-[% IF ( reviewson ) %]
+[% IF ( Koha.Preference( 'reviewson' ) == 1 ) %]
 <div id="comments">
     <div id="newcomment"></div>
     [% IF ( reviews ) %]
