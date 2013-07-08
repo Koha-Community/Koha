@@ -739,7 +739,7 @@ sub handle_block_patron {
 		$patron->block($card_retained, $blocked_card_msg);
 	}
 
-    $resp = build_patron_status($patron, $patron->language, $fields);
+    $resp = build_patron_status( $patron, $patron->language, $fields, $server );
     $self->write_msg($resp,undef,$server->{account}->{terminator});
     return(BLOCK_PATRON);
 }
