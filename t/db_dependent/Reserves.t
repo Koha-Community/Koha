@@ -41,7 +41,6 @@ ModItem({ barcode => $testbarcode }, $bibnum, $itemnumber);
 
 # Create a borrower
 my %data = (
-    cardnumber => 'CARDNUMBER42',
     firstname =>  'my firstname',
     surname => 'my surname',
     categorycode => 'S',
