@@ -993,6 +993,14 @@ sub checkauth {
     $template->param( OpacPublic => C4::Context->preference("OpacPublic"));
     $template->param( loginprompt => 1 ) unless $info{'nopermission'};
 
+    if($type eq 'opac'){
+        my ($total, $pubshelves) = C4::VirtualShelves::GetSomeShelfNames(undef, 'MASTHEAD');
+        $template->param(
+            pubshelves     => $total->{pubtotal},
+            pubshelvesloop => $pubshelves,
+        );
+    }
+
     if ($cas) {
 
 	# Is authentication against multiple CAS servers enabled?
