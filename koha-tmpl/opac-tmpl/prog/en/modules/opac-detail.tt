@@ -1,10 +1,11 @@
+[% USE Koha %]
 [% USE KohaDates %]
 [% USE AuthorisedValues %]
 [% SET TagsShowEnabled = ( TagsEnabled && TagsShowOnDetail ) %]
 [% SET TagsInputEnabled = ( opacuserlogin && TagsEnabled && TagsInputOnDetail ) %]
 
 [% ShowCourseReservesHeader = 0 %]
-[% IF UseCourseReserves %]
+[% IF Koha.Preference( 'UseCourseReserves' ) == 1 %]
     [% FOREACH ITEM_RESULT IN itemloop %]
        [% IF ITEM_RESULT.course_reserves %]
            [% FOREACH r IN ITEM_RESULT.course_reserves %]
@@ -959,7 +960,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
         <a href="#subscriptions">Subscriptions</a>
     </li>
 [% END %]
-[% IF ( reviewson ) %]
+[% IF ( Koha.Preference( 'reviewson' ) == 1 ) %]
     <li id="tab_comments"><a href="#comments">Comments ( [% reviews.size || 0 %] )</a></li>
 [% END %]
 
@@ -1234,7 +1235,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 <!-- /Library Thing for Libraries Content -->
 
 
-[% IF ( reviewson ) %]
+[% IF ( Koha.Preference( 'reviewson' ) == 1 ) %]
 <div id="comments">
     <div id="newcomment"></div>
     [% IF ( reviews ) %]
@@ -1489,7 +1490,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
         [% ELSIF show_priority %]
             <th>Item hold queue priority</th>
         [% END %]
-        [% IF ( ShowCourseReservesHeader ) %]<th id="item_coursereserves">Course Reserves</th>[% END %]
+        [% IF ( ShowCourseReservesHeader ) %]<th id="item_coursereserves">Course reserves</th>[% END %]
         </tr></thead>
 	    <tbody>[% FOREACH ITEM_RESULT IN items %]
       [% IF ITEM_RESULT.this_branch %]<tr class="highlight-row-detail">[% ELSE %]<tr>[% END %]

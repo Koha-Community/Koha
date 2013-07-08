@@ -328,7 +328,6 @@ sub get_template_and_user {
             noItemTypeImages             => C4::Context->preference("noItemTypeImages"),
             marcflavour                  => C4::Context->preference("marcflavour"),
             persona                      => C4::Context->preference("persona"),
-            UseCourseReserves            => C4::Context->preference("UseCourseReserves"),
     );
     if ( $in->{'type'} eq "intranet" ) {
         $template->param(
@@ -361,6 +360,7 @@ sub get_template_and_user {
             AllowMultipleCovers         => C4::Context->preference('AllowMultipleCovers'),
             EnableBorrowerFiles         => C4::Context->preference('EnableBorrowerFiles'),
             UseKohaPlugins              => C4::Context->preference('UseKohaPlugins'),
+            UseCourseReserves            => C4::Context->preference("UseCourseReserves"),
         );
     }
     else {
@@ -400,7 +400,6 @@ sub get_template_and_user {
             OpacHighlightedWords      => C4::Context->preference("OpacHighlightedWords"),
             OPACItemHolds             => C4::Context->preference("OPACItemHolds"),
             OPACShelfBrowser          => "". C4::Context->preference("OPACShelfBrowser"),
-            OpacShowRecentComments    => C4::Context->preference("OpacShowRecentComments"),
             OPACURLOpenInNewWindow    => "" . C4::Context->preference("OPACURLOpenInNewWindow"),
             OPACUserCSS               => "". C4::Context->preference("OPACUserCSS"),
             OPACMobileUserCSS         => "". C4::Context->preference("OPACMobileUserCSS"),
@@ -440,13 +439,11 @@ sub get_template_and_user {
             opacsmallimage            => "" . C4::Context->preference("opacsmallimage"),
             opacuserjs                => C4::Context->preference("opacuserjs"),
             opacuserlogin             => "" . C4::Context->preference("opacuserlogin"),
-            reviewson                 => C4::Context->preference("reviewson"),
             ShowReviewer              => C4::Context->preference("ShowReviewer"),
             ShowReviewerPhoto         => C4::Context->preference("ShowReviewerPhoto"),
             suggestion                => "" . C4::Context->preference("suggestion"),
             virtualshelves            => "" . C4::Context->preference("virtualshelves"),
             OPACSerialIssueDisplayCount => C4::Context->preference("OPACSerialIssueDisplayCount"),
-            OpacAddMastheadLibraryPulldown => C4::Context->preference("OpacAddMastheadLibraryPulldown"),
             OPACXSLTDetailsDisplay           => C4::Context->preference("OPACXSLTDetailsDisplay"),
             OPACXSLTResultsDisplay           => C4::Context->preference("OPACXSLTResultsDisplay"),
             SyndeticsClientCode          => C4::Context->preference("SyndeticsClientCode"),
@@ -982,6 +979,10 @@ sub checkauth {
         push @inputs, { name => $name, value => $value };
     }
 
+    my $LibraryNameTitle = C4::Context->preference("LibraryName");
+    $LibraryNameTitle =~ s/<(?:\/?)(?:br|p)\s*(?:\/?)>/ /sgi;
+    $LibraryNameTitle =~ s/<(?:[^<>'"]|'(?:[^']*)'|"(?:[^"]*)")*>//sg;
+
     my $template_name = ( $type eq 'opac' ) ? 'opac-auth.tmpl' : 'auth.tmpl';
     my $template = C4::Templates::gettemplate($template_name, $type, $query );
     $template->param(
@@ -993,7 +994,8 @@ sub checkauth {
         casAuthentication    => C4::Context->preference("casAuthentication"),
         suggestion           => C4::Context->preference("suggestion"),
         virtualshelves       => C4::Context->preference("virtualshelves"),
-        LibraryName          => C4::Context->preference("LibraryName"),
+        LibraryName          => "" . C4::Context->preference("LibraryName"),
+        LibraryNameTitle     => "" . $LibraryNameTitle,
         opacuserlogin        => C4::Context->preference("opacuserlogin"),
         OpacNav              => C4::Context->preference("OpacNav"),
         OpacNavRight         => C4::Context->preference("OpacNavRight"),
