@@ -14,6 +14,12 @@ BEGIN {
     use_ok('C4::Reserves');
 }
 
+my $dbh = C4::Context->dbh;
+
+# Start transaction
+$dbh->{AutoCommit} = 0;
+$dbh->{RaiseError} = 1;
+
 # Setup Test------------------------
 # Helper biblio.
 diag("\nCreating biblio instance for testing.");
@@ -71,18 +77,3 @@ is($status, "Reserved", "CheckReserves Test 2");
 
 ($status, $reserve, $all_reserves) = CheckReserves(undef, $barcode);
 is($status, "Reserved", "CheckReserves Test 3");
-
-
-# Teardown Test---------------------
-# Delete item.
-diag("Deleting item testing instance.");
-my $dbh = C4::Context->dbh;
-DelItem($dbh, $bibnum, $itemnumber);
-
-# Delete helper Biblio.
-diag("Deleting biblio testing instance.");
-DelBiblio($bibnum);
-
-# Delete borrower
-diag("Deleting borrower.");
-DelMember($borrowernumber);
