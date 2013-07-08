@@ -106,7 +106,7 @@ INSERT INTO `marc_tag_structure` (`tagfield`, `liblibrarian`, `libopac`, `repeat
 		('952', 'INFORMACIÓN DE EJEMPLAR Y UBICACIÓN (KOHA)', 'INFORMACIÓN DE EJEMPLAR Y UBICACIÓN (KOHA)', 1, 0, '', '');
 
 INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `kohafield`, `tab`, `authorised_value`, `authtypecode`, `value_builder`, `isurl`, `hidden`, `frameworkcode`, `seealso`, `link`, `defaultvalue`) VALUES
-		('952', '0', 'Suprimido', 'Suprimido', 0, 0, 'items.wthdrawn', 10, 'WITHDRAWN', '', '', 0, 0, '', '', '', NULL),
+               ('952', '0', 'Suprimido', 'Suprimido', 0, 0, 'items.withdrawn', 10, 'WITHDRAWN', '', '', 0, 0, '', '', '', NULL),
 		('952', '1', 'Estado de pérdida', 'Estado de pérdida', 0, 0, 'items.itemlost', 10, 'LOST', '', '', 0, -5, '', '', '', NULL),
 		('952', '2', 'Fuente de clasificación o esquema de ordenación en estanterías', 'Fuente de clasificación o esquema de ordenación en estanterías', 0, 0, 'items.cn_source', 10, 'cn_source', '', '', NULL, 0, '', '', '', NULL),
 		('952', '3', 'Materiales especializados (volumen obligatorio u otra parte)', 'Materiales especializados (volumen obligatorio u otra parte)', 0, 0, 'items.materials', 10, '', '', '', NULL, -1, '', '', '', NULL),

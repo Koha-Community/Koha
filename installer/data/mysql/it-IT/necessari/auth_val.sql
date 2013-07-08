@@ -36,7 +36,7 @@ INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('CCODE',
 INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('CCODE','REF','Strumenti di reference');
 INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('CCODE','NFIC','Non Fiction');
 
--- withdrawn status of an item, linked to items.wthdrawn
+-- withdrawn status of an item, linked to items.withdrawn
 INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('WITHDRAWN','0','Non ritirata');
 INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('WITHDRAWN','1','Ritirata dalla circolazione');
 

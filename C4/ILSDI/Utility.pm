@@ -93,7 +93,7 @@ sub Availability {
         return ( $biblionumber, 'not available', 'Checked out', $location );
     } elsif ( $item->{'itemlost'} ) {
         return ( $biblionumber, 'not available', 'Item lost', $location );
-    } elsif ( $item->{'wthdrawn'} ) {
+    } elsif ( $item->{'withdrawn'} ) {
         return ( $biblionumber, 'not available', 'Item withdrawn', $location );
     } elsif ( $item->{'damaged'} ) {
         return ( $biblionumber, 'not available', 'Item damaged', $location );

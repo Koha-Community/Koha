@@ -37,7 +37,7 @@ my $itemnumber=$cgi->param('itemnumber');
 my $biblioitemnumber=$cgi->param('biblioitemnumber');
 my $itemlost=$cgi->param('itemlost');
 my $itemnotes=$cgi->param('itemnotes');
-my $wthdrawn=$cgi->param('wthdrawn');
+my $withdrawn=$cgi->param('withdrawn');
 my $damaged=$cgi->param('damaged');
 
 my $confirm=$cgi->param('confirm');
@@ -47,7 +47,7 @@ my $dbh = C4::Context->dbh;
 my $item_data_hashref = GetItem($itemnumber, undef);
 
 # make sure item statuses are set to 0 if empty or NULL
-for ($damaged,$itemlost,$wthdrawn) {
+for ($damaged,$itemlost,$withdrawn) {
     if (!$_ or $_ eq "") {
         $_ = 0;
     }
@@ -62,8 +62,8 @@ if (defined $itemnotes) { # i.e., itemnotes parameter passed from form
     }
 } elsif ($itemlost ne $item_data_hashref->{'itemlost'}) {
     $item_changes->{'itemlost'} = $itemlost;
-} elsif ($wthdrawn ne $item_data_hashref->{'wthdrawn'}) {
-    $item_changes->{'wthdrawn'} = $wthdrawn;
+} elsif ($withdrawn ne $item_data_hashref->{'withdrawn'}) {
+    $item_changes->{'withdrawn'} = $withdrawn;
 } elsif ($damaged ne $item_data_hashref->{'damaged'}) {
     $item_changes->{'damaged'} = $damaged;
 } else {

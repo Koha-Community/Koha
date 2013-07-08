@@ -145,7 +145,7 @@ if ( $run_report ) {
     AND issues.itemnumber IS NULL
     AND reserves.priority <> 0 
     AND reserves.suspend = 0
-    AND notforloan = 0 AND damaged = 0 AND itemlost = 0 AND wthdrawn = 0
+    AND notforloan = 0 AND damaged = 0 AND itemlost = 0 AND withdrawn = 0
     ";
     # GROUP BY reserves.biblionumber allows only items that are not checked out, else multiples occur when 
     #    multiple patrons have a hold on an item

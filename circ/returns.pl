@@ -430,7 +430,7 @@ foreach my $code ( keys %$messages ) {
     elsif ( $code eq 'WasTransfered' ) {
         ;    # FIXME... anything to do here?
     }
-    elsif ( $code eq 'wthdrawn' ) {
+    elsif ( $code eq 'withdrawn' ) {
         $err{withdrawn} = 1;
         $exit_required_p = 1 if C4::Context->preference("BlockReturnOfWithdrawnItems");
     }

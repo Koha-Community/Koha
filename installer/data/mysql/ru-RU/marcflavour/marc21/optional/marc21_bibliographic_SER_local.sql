@@ -762,7 +762,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
  ('SER', '952', '', 1, 'Данные о экземплярах и расположение (Koha)', '', '');
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
- ('SER', '', '952', '0', 0, 0, 'Статус изъятия', '',                    10, 0, 'items.wthdrawn', 'WITHDRAWN', '', 0, '', '', NULL),
+ ('SER', '', '952', '0', 0, 0, 'Статус изъятия', '',                    10, 0, 'items.withdrawn', 'WITHDRAWN', '', 0, '', '', NULL),
  ('SER', '', '952', '1', 0, 0, 'Статус потери/отсутствия', '',          10, 0, 'items.itemlost', 'LOST', '', 0, '', '', NULL),
  ('SER', '', '952', '2', 0, 0, 'Источник классификации или схема полочного расположения', '', 10, 0, 'items.cn_source', 'cn_source', '', NULL, '', '', NULL),
  ('SER', '', '952', '3', 0, 0, 'Нумерация (объединенный том или иная часть)', '', 10, -1, 'items.materials', '', '', NULL, '', '', NULL),

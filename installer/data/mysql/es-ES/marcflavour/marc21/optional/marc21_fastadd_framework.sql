@@ -100,7 +100,7 @@ INSERT IGNORE INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblib
                 ('942', 'c', 'Koha [default] item type', 'Koha item type', 0, 1, 'biblioitems.itemtype', 9, 'itemtypes', '', '', NULL, 5, 'FA', '', '', NULL),
                 ('942', 'n', 'Suppress in OPAC', 'Suppress in OPAC', 0, 0, NULL, 9, '', '', '', 0, 5, 'FA', '', '', NULL),
                 ('942', 's', 'Serial record flag', 'Serial record', 0, 0, 'biblio.serial', 9, '', '', '', NULL, 5, 'FA', '', '', NULL),
-		('952','0','Withdrawn status','Withdrawn status',0,0,'items.wthdrawn',10,'WITHDRAWN','','',NULL,0,'FA','',NULL,NULL),
+              ('952','0','Withdrawn status','Withdrawn status',0,0,'items.withdrawn',10,'WITHDRAWN','','',NULL,0,'FA','',NULL,NULL),
 		('952','1','Lost status','Lost status',0,0,'items.itemlost',10,'LOST','','',NULL,0,'FA','',NULL,NULL),
 		('952','2','Source of classification or shelving scheme','Source of classification or shelving scheme',0,0,'items.cn_source',10,'cn_source','','',NULL,0,'FA','',NULL,NULL),
 		('952','3','Materials specified (bound volume or other part)','Materials specified (bound volume or other part)',0,0,'items.materials',10,'','','',NULL,0,'FA','',NULL,NULL),

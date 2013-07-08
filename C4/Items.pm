@@ -463,7 +463,7 @@ my %default_values_for_mod_from_marc = (
     stack                => undef, 
     stocknumber          => undef, 
     uri                  => undef, 
-    wthdrawn             => 0,
+    withdrawn             => 0,
 );
 
 sub ModItemFromMarc {
@@ -1140,7 +1140,7 @@ sub GetItemsByBiblioitemnumber {
             $data->{'borrowernumber'}   = $data2->{'borrowernumber'};
         }
         else {
-            # set date_due to blank, so in the template we check itemlost, and wthdrawn 
+            # set date_due to blank, so in the template we check itemlost, and withdrawn
             $data->{'date_due'} = '';                                                                                                         
         }    # else         
         # Find the last 3 people who borrowed this item.                  
@@ -1943,7 +1943,7 @@ Given an item hashref containing one or more
 columns to modify, fix up certain values.
 Specifically, set to 0 any passed value
 of C<notforloan>, C<damaged>, C<itemlost>, or
-C<wthdrawn> that is either undefined or
+C<withdrawn> that is either undefined or
 contains the empty string.
 
 =cut
@@ -1963,9 +1963,9 @@ sub _do_column_fixes_for_mod {
         (not defined $item->{'itemlost'} or $item->{'itemlost'} eq '')) {
         $item->{'itemlost'} = 0;
     }
-    if (exists $item->{'wthdrawn'} and
-        (not defined $item->{'wthdrawn'} or $item->{'wthdrawn'} eq '')) {
-        $item->{'wthdrawn'} = 0;
+    if (exists $item->{'withdrawn'} and
+        (not defined $item->{'withdrawn'} or $item->{'withdrawn'} eq '')) {
+        $item->{'withdrawn'} = 0;
     }
     if (exists $item->{'location'} && !exists $item->{'permanent_location'}) {
         $item->{'permanent_location'} = $item->{'location'};
@@ -2039,7 +2039,7 @@ C<items.itemlost>
 
 =item *
 
-C<items.wthdrawn>
+C<items.withdrawn>
 
 =back
 
@@ -2048,7 +2048,7 @@ C<items.wthdrawn>
 sub _set_defaults_for_add {
     my $item = shift;
     $item->{dateaccessioned} ||= C4::Dates->new->output('iso');
-    $item->{$_} ||= 0 for (qw( notforloan damaged itemlost wthdrawn));
+    $item->{$_} ||= 0 for (qw( notforloan damaged itemlost withdrawn));
 }
 
 =head2 _koha_new_item
@@ -2080,7 +2080,7 @@ sub _koha_new_item {
             notforloan          = ?,
             damaged             = ?,
             itemlost            = ?,
-            wthdrawn            = ?,
+            withdrawn            = ?,
             itemcallnumber      = ?,
             coded_location_qualifier = ?,
             restricted          = ?,
@@ -2122,7 +2122,7 @@ sub _koha_new_item {
             $item->{'notforloan'},
             $item->{'damaged'},
             $item->{'itemlost'},
-            $item->{'wthdrawn'},
+            $item->{'withdrawn'},
             $item->{'itemcallnumber'},
             $item->{'coded_location_qualifier'},
             $item->{'restricted'},

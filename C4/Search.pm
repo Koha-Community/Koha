@@ -1815,7 +1815,7 @@ sub searchResults {
         my $onloan_count          = 0;
         my $longoverdue_count     = 0;
         my $other_count           = 0;
-        my $wthdrawn_count        = 0;
+        my $withdrawn_count        = 0;
         my $itemlost_count        = 0;
         my $hideatopac_count      = 0;
         my $itembinding_count     = 0;
@@ -1902,7 +1902,7 @@ sub searchResults {
                 # is item on the reserve shelf?
                 my $reservestatus = '';
 
-                unless ($item->{wthdrawn}
+                unless ($item->{withdrawn}
                         || $item->{itemlost}
                         || $item->{damaged}
                         || $item->{notforloan}
@@ -1925,19 +1925,19 @@ sub searchResults {
                 }
 
                 # item is withdrawn, lost, damaged, not for loan, reserved or in transit
-                if (   $item->{wthdrawn}
+                if (   $item->{withdrawn}
                     || $item->{itemlost}
                     || $item->{damaged}
                     || $item->{notforloan}
                     || $reservestatus eq 'Waiting'
                     || ($transfertwhen ne ''))
                 {
-                    $wthdrawn_count++        if $item->{wthdrawn};
+                    $withdrawn_count++        if $item->{withdrawn};
                     $itemlost_count++        if $item->{itemlost};
                     $itemdamaged_count++     if $item->{damaged};
                     $item_in_transit_count++ if $transfertwhen ne '';
                     $item_onhold_count++     if $reservestatus eq 'Waiting';
-                    $item->{status} = $item->{wthdrawn} . "-" . $item->{itemlost} . "-" . $item->{damaged} . "-" . $item->{notforloan};
+                    $item->{status} = $item->{withdrawn} . "-" . $item->{itemlost} . "-" . $item->{damaged} . "-" . $item->{notforloan};
 
                     # can place a hold on a item if
                     # not lost nor withdrawn
@@ -1946,7 +1946,7 @@ sub searchResults {
                     $can_place_holds = 1
                       if (
                            !$item->{itemlost}
-                        && !$item->{wthdrawn}
+                        && !$item->{withdrawn}
                         && ( !$item->{damaged} || C4::Context->preference('AllowHoldsOnDamagedItems') )
                         && ( !$item->{notforloan} || $item->{notforloan} < 0 )
                       );
@@ -1954,7 +1954,7 @@ sub searchResults {
                     $other_count++;
 
                     my $key = $prefix . $item->{status};
-                    foreach (qw(wthdrawn itemlost damaged branchname itemcallnumber)) {
+                    foreach (qw(withdrawn itemlost damaged branchname itemcallnumber)) {
                         $other_items->{$key}->{$_} = $item->{$_};
                     }
                     $other_items->{$key}->{intransit} = ( $transfertwhen ne '' ) ? 1 : 0;
@@ -2026,7 +2026,7 @@ sub searchResults {
         $oldbiblio->{onloanplural}         = 1 if $onloan_count > 1;
         $oldbiblio->{othercount}           = $other_count;
         $oldbiblio->{otherplural}          = 1 if $other_count > 1;
-        $oldbiblio->{wthdrawncount}        = $wthdrawn_count;
+        $oldbiblio->{withdrawncount}        = $withdrawn_count;
         $oldbiblio->{itemlostcount}        = $itemlost_count;
         $oldbiblio->{damagedcount}         = $itemdamaged_count;
         $oldbiblio->{intransitcount}       = $item_in_transit_count;

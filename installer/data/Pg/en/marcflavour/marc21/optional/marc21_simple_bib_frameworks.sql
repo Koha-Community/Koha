@@ -161,7 +161,7 @@ INSERT INTO marc_tag_structure (tagfield, liblibrarian, libopac, repeatable, man
 		('952', 'LOCATION AND ITEM INFORMATION (KOHA)', 'LOCATION AND ITEM INFORMATION (KOHA)', 1, 0, '', 'BKS');
 
 INSERT INTO marc_subfield_structure (tagfield, tagsubfield, liblibrarian, libopac, repeatable, mandatory, kohafield, tab, authorised_value, authtypecode, value_builder, isurl, hidden, frameworkcode, seealso, link, defaultvalue) VALUES
-		('952', '0', 'Withdrawn status', 'Withdrawn status', 0, 0, 'items.wthdrawn', 10, 'WITHDRAWN', '', '', 0, 0, 'BKS', '', '', NULL),
+                ('952', '0', 'Withdrawn status', 'Withdrawn status', 0, 0, 'items.withdrawn', 10, 'WITHDRAWN', '', '', 0, 0, 'BKS', '', '', NULL),
 		('952', '1', 'Lost status', 'Lost status', 0, 0, 'items.itemlost', 10, 'LOST', '', '', 0, 0, 'BKS', '', '', NULL),
 		('952', '2', 'Source of classification or shelving scheme', 'Source of classification or shelving scheme', 0, 0, 'items.cn_source', 10, '', '', '', NULL, 0, 'BKS', '', '', NULL),
 		('952', '3', 'Materials specified (bound volume or other part)', 'Materials specified (bound volume or other part)', 0, 0, 'items.materials', 10, '', '', '', NULL, -1, 'BKS', '', '', NULL),
@@ -4078,7 +4078,7 @@ INSERT INTO marc_tag_structure (tagfield, liblibrarian, libopac, repeatable, man
 		('952', 'LOCATION AND ITEM INFORMATION (KOHA)', 'LOCATION AND ITEM INFORMATION (KOHA)', 1, 0, '', 'CF');
 
 INSERT INTO marc_subfield_structure (tagfield, tagsubfield, liblibrarian, libopac, repeatable, mandatory, kohafield, tab, authorised_value, authtypecode, value_builder, isurl, hidden, frameworkcode, seealso, link, defaultvalue) VALUES
-		('952', '0', 'Withdrawn status', 'Withdrawn status', 0, 0, 'items.wthdrawn', 10, 'WITHDRAWN', '', '', 0, 0, 'CF', '', '', NULL),
+         ('952', '0', 'Withdrawn status', 'Withdrawn status', 0, 0, 'items.withdrawn', 10, 'WITHDRAWN', '', '', 0, 0, 'CF', '', '', NULL),
 		('952', '1', 'Lost status', 'Lost status', 0, 0, 'items.itemlost', 10, 'LOST', '', '', 0, 0, 'CF', '', '', NULL),
 		('952', '2', 'Source of classification or shelving scheme', 'Source of classification or shelving scheme', 0, 0, 'items.cn_source', 10, '', '', '', NULL, 0, 'CF', '', '', NULL),
 		('952', '3', 'Materials specified (bound volume or other part)', 'Materials specified (bound volume or other part)', 0, 0, 'items.materials', 10, '', '', '', NULL, -1, 'CF', '', '', NULL),
@@ -7996,7 +7996,7 @@ INSERT INTO marc_tag_structure (tagfield, liblibrarian, libopac, repeatable, man
 		('952', 'LOCATION AND ITEM INFORMATION (KOHA)', 'LOCATION AND ITEM INFORMATION (KOHA)', 1, 0, '', 'SR');
 
 INSERT INTO marc_subfield_structure (tagfield, tagsubfield, liblibrarian, libopac, repeatable, mandatory, kohafield, tab, authorised_value, authtypecode, value_builder, isurl, hidden, frameworkcode, seealso, link, defaultvalue) VALUES
-		('952', '0', 'Withdrawn status', 'Withdrawn status', 0, 0, 'items.wthdrawn', 10, 'WITHDRAWN', '', '', 0, 0, 'SR', '', '', NULL),
+         ('952', '0', 'Withdrawn status', 'Withdrawn status', 0, 0, 'items.withdrawn', 10, 'WITHDRAWN', '', '', 0, 0, 'SR', '', '', NULL),
 		('952', '1', 'Lost status', 'Lost status', 0, 0, 'items.itemlost', 10, 'LOST', '', '', 0, 0, 'SR', '', '', NULL),
 		('952', '2', 'Source of classification or shelving scheme', 'Source of classification or shelving scheme', 0, 0, 'items.cn_source', 10, '', '', '', NULL, 0, 'SR', '', '', NULL),
 		('952', '3', 'Materials specified (bound volume or other part)', 'Materials specified (bound volume or other part)', 0, 0, 'items.materials', 10, '', '', '', NULL, -1, 'SR', '', '', NULL),
@@ -11913,7 +11913,7 @@ INSERT INTO marc_tag_structure (tagfield, liblibrarian, libopac, repeatable, man
 		('952', 'LOCATION AND ITEM INFORMATION (KOHA)', 'LOCATION AND ITEM INFORMATION (KOHA)', 1, 0, '', 'VR');
 
 INSERT INTO marc_subfield_structure (tagfield, tagsubfield, liblibrarian, libopac, repeatable, mandatory, kohafield, tab, authorised_value, authtypecode, value_builder, isurl, hidden, frameworkcode, seealso, link, defaultvalue) VALUES
-		('952', '0', 'Withdrawn status', 'Withdrawn status', 0, 0, 'items.wthdrawn', 10, 'WITHDRAWN', '', '', 0, 0, 'VR', '', '', NULL),
+         ('952', '0', 'Withdrawn status', 'Withdrawn status', 0, 0, 'items.withdrawn', 10, 'WITHDRAWN', '', '', 0, 0, 'VR', '', '', NULL),
 		('952', '1', 'Lost status', 'Lost status', 0, 0, 'items.itemlost', 10, 'LOST', '', '', 0, 0, 'VR', '', '', NULL),
 		('952', '2', 'Source of classification or shelving scheme', 'Source of classification or shelving scheme', 0, 0, 'items.cn_source', 10, '', '', '', NULL, 0, 'VR', '', '', NULL),
 		('952', '3', 'Materials specified (bound volume or other part)', 'Materials specified (bound volume or other part)', 0, 0, 'items.materials', 10, '', '', '', NULL, -1, 'VR', '', '', NULL),
@@ -15829,7 +15829,7 @@ INSERT INTO marc_tag_structure (tagfield, liblibrarian, libopac, repeatable, man
 		('952', 'LOCATION AND ITEM INFORMATION (KOHA)', 'LOCATION AND ITEM INFORMATION (KOHA)', 1, 0, '', 'AR');
 
 INSERT INTO marc_subfield_structure (tagfield, tagsubfield, liblibrarian, libopac, repeatable, mandatory, kohafield, tab, authorised_value, authtypecode, value_builder, isurl, hidden, frameworkcode, seealso, link, defaultvalue) VALUES
-		('952', '0', 'Withdrawn status', 'Withdrawn status', 0, 0, 'items.wthdrawn', 10, 'WITHDRAWN', '', '', 0, 0, 'AR', '', '', NULL),
+         ('952', '0', 'Withdrawn status', 'Withdrawn status', 0, 0, 'items.withdrawn', 10, 'WITHDRAWN', '', '', 0, 0, 'AR', '', '', NULL),
 		('952', '1', 'Lost status', 'Lost status', 0, 0, 'items.itemlost', 10, 'LOST', '', '', 0, 0, 'AR', '', '', NULL),
 		('952', '2', 'Source of classification or shelving scheme', 'Source of classification or shelving scheme', 0, 0, 'items.cn_source', 10, '', '', '', NULL, 0, 'AR', '', '', NULL),
 		('952', '3', 'Materials specified (bound volume or other part)', 'Materials specified (bound volume or other part)', 0, 0, 'items.materials', 10, '', '', '', NULL, -1, 'AR', '', '', NULL),
@@ -19744,7 +19744,7 @@ INSERT INTO marc_tag_structure (tagfield, liblibrarian, libopac, repeatable, man
 		('952', 'LOCATION AND ITEM INFORMATION (KOHA)', 'LOCATION AND ITEM INFORMATION (KOHA)', 1, 0, '', 'KT');
 
 INSERT INTO marc_subfield_structure (tagfield, tagsubfield, liblibrarian, libopac, repeatable, mandatory, kohafield, tab, authorised_value, authtypecode, value_builder, isurl, hidden, frameworkcode, seealso, link, defaultvalue) VALUES
-		('952', '0', 'Withdrawn status', 'Withdrawn status', 0, 0, 'items.wthdrawn', 10, 'WITHDRAWN', '', '', 0, 0, 'KT', '', '', NULL),
+         ('952', '0', 'Withdrawn status', 'Withdrawn status', 0, 0, 'items.withdrawn', 10, 'WITHDRAWN', '', '', 0, 0, 'KT', '', '', NULL),
 		('952', '1', 'Lost status', 'Lost status', 0, 0, 'items.itemlost', 10, 'LOST', '', '', 0, 0, 'KT', '', '', NULL),
 		('952', '2', 'Source of classification or shelving scheme', 'Source of classification or shelving scheme', 0, 0, 'items.cn_source', 10, '', '', '', NULL, 0, 'KT', '', '', NULL),
 		('952', '3', 'Materials specified (bound volume or other part)', 'Materials specified (bound volume or other part)', 0, 0, 'items.materials', 10, '', '', '', NULL, -1, 'KT', '', '', NULL),
@@ -23660,7 +23660,7 @@ INSERT INTO marc_tag_structure (tagfield, liblibrarian, libopac, repeatable, man
 		('952', 'LOCATION AND ITEM INFORMATION (KOHA)', 'LOCATION AND ITEM INFORMATION (KOHA)', 1, 0, '', 'IR');
 
 INSERT INTO marc_subfield_structure (tagfield, tagsubfield, liblibrarian, libopac, repeatable, mandatory, kohafield, tab, authorised_value, authtypecode, value_builder, isurl, hidden, frameworkcode, seealso, link, defaultvalue) VALUES
-		('952', '0', 'Withdrawn status', 'Withdrawn status', 0, 0, 'items.wthdrawn', 10, 'WITHDRAWN', '', '', 0, 0, 'IR', '', '', NULL),
+         ('952', '0', 'Withdrawn status', 'Withdrawn status', 0, 0, 'items.withdrawn', 10, 'WITHDRAWN', '', '', 0, 0, 'IR', '', '', NULL),
 		('952', '1', 'Lost status', 'Lost status', 0, 0, 'items.itemlost', 10, 'LOST', '', '', 0, 0, 'IR', '', '', NULL),
 		('952', '2', 'Source of classification or shelving scheme', 'Source of classification or shelving scheme', 0, 0, 'items.cn_source', 10, '', '', '', NULL, 0, 'IR', '', '', NULL),
 		('952', '3', 'Materials specified (bound volume or other part)', 'Materials specified (bound volume or other part)', 0, 0, 'items.materials', 10, '', '', '', NULL, -1, 'IR', '', '', NULL),
@@ -27574,7 +27574,7 @@ INSERT INTO marc_tag_structure (tagfield, liblibrarian, libopac, repeatable, man
 		('952', 'LOCATION AND ITEM INFORMATION (KOHA)', 'LOCATION AND ITEM INFORMATION (KOHA)', 1, 0, '', 'SER');
 
 INSERT INTO marc_subfield_structure (tagfield, tagsubfield, liblibrarian, libopac, repeatable, mandatory, kohafield, tab, authorised_value, authtypecode, value_builder, isurl, hidden, frameworkcode, seealso, link, defaultvalue) VALUES
-		('952', '0', 'Withdrawn status', 'Withdrawn status', 0, 0, 'items.wthdrawn', 10, 'WITHDRAWN', '', '', 0, 0, 'SER', '', '', NULL),
+                ('952', '0', 'Withdrawn status', 'Withdrawn status', 0, 0, 'items.withdrawn', 10, 'WITHDRAWN', '', '', 0, 0, 'SER', '', '', NULL),
 		('952', '1', 'Lost status', 'Lost status', 0, 0, 'items.itemlost', 10, 'LOST', '', '', 0, 0, 'SER', '', '', NULL),
 		('952', '2', 'Source of classification or shelving scheme', 'Source of classification or shelving scheme', 0, 0, 'items.cn_source', 10, '', '', '', NULL, 0, 'SER', '', '', NULL),
 		('952', '3', 'Materials specified (bound volume or other part)', 'Materials specified (bound volume or other part)', 0, 0, 'items.materials', 10, '', '', '', NULL, -1, 'SER', '', '', NULL),

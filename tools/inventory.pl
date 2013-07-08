@@ -93,7 +93,7 @@ for my $fwk (keys %$frameworks){
 }
 
 my $statuses = [];
-for my $statfield (qw/items.notforloan items.itemlost items.wthdrawn items.damaged/){
+for my $statfield (qw/items.notforloan items.itemlost items.withdrawn items.damaged/){
     my $hash = {};
     $hash->{fieldname} = $statfield;
     $hash->{authcode} = GetAuthValCode($statfield);
@@ -143,13 +143,13 @@ if ($uploadbarcodes && length($uploadbarcodes)>0){
 # 	warn "$date";
     my $strsth="select * from issues, items where items.itemnumber=issues.itemnumber and items.barcode =?";
     my $qonloan = $dbh->prepare($strsth);
-    $strsth="select * from items where items.barcode =? and items.wthdrawn = 1";
-    my $qwthdrawn = $dbh->prepare($strsth);
+    $strsth="select * from items where items.barcode =? and items.withdrawn = 1";
+    my $qwithdrawn = $dbh->prepare($strsth);
     my @errorloop;
     my $count=0;
     while (my $barcode=<$uploadbarcodes>){
         $barcode =~ s/\r?\n$//;
-        if ($qwthdrawn->execute($barcode) &&$qwthdrawn->rows){
+        if ($qwithdrawn->execute($barcode) &&$qwithdrawn->rows){
             push @errorloop, {'barcode'=>$barcode,'ERR_WTHDRAWN'=>1};
         }else{
             my $item = GetItem('', $barcode);
@@ -173,7 +173,7 @@ if ($uploadbarcodes && length($uploadbarcodes)>0){
         }
     }
     $qonloan->finish;
-    $qwthdrawn->finish;
+    $qwithdrawn->finish;
     $template->param(date=>format_date($date),Number=>$count);
 # 	$template->param(errorfile=>$errorfile) if ($errorfile);
     $template->param(errorloop=>\@errorloop) if (@errorloop);

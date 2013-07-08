@@ -30,7 +30,7 @@ INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('CCODE
 INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('CCODE','REF','Nachschlagewerke');
 INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('CCODE','NFIC','Sachliteratur');
 
--- withdrawn status of an item, linked to items.wthdrawn
+-- withdrawn status of an item, linked to items.withdrawn
 INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('WITHDRAWN','1','Ausgeschieden');
 
 -- loanability status of an item, linked to items.notforloan

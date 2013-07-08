@@ -444,7 +444,7 @@ function verify_images() {
                             [% END %]
                         [% END %]
 
-                        [% IF ( item.wthdrawn ) %]
+                        [% IF ( item.withdrawn ) %]
                             <span class="wdn">Withdrawn</span>
                         [% END %]
 
@@ -494,7 +494,7 @@ function verify_images() {
                                 [% END %]
                             [% END %]
                         [% END %]
-                        [% UNLESS ( item.itemnotforloan or item.onloan or item.itemlost or item.wthdrawn or item.damaged or item.transfertwhen or item.reservedate ) %]
+                        [% UNLESS ( item.itemnotforloan or item.onloan or item.itemlost or item.withdrawn or item.damaged or item.transfertwhen or item.reservedate ) %]
                             Available
                         [% END %]
 

@@ -586,7 +586,7 @@ var holdForPatron = function () {
                                         [% IF ( other_items_loo.branchname ) %][% other_items_loo.branchname %][% END %]
                                         [% IF ( other_items_loo.location ) %][% other_items_loo.location %][% END %]
                                         [% IF ( other_items_loo.itemcallnumber ) %][<a href="/cgi-bin/koha/catalogue/search.pl?idx=callnum&amp;q=[% other_items_loo.itemcallnumber |url %]">[% other_items_loo.itemcallnumber %]</a>][% END %]
-                                        [% IF ( other_items_loo.wthdrawn ) %](Withdrawn)[% END %]
+                                        [% IF ( other_items_loo.withdrawn ) %](Withdrawn)[% END %]
                                         [% IF ( other_items_loo.itemlost ) %](Lost)[% END %]
                                         [% IF ( other_items_loo.damaged ) %](Damaged)[% END %]
                                         [% IF ( other_items_loo.intransit ) %](In transit)[% END %]

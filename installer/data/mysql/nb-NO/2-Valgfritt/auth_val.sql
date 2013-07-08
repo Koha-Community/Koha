@@ -51,7 +51,7 @@ INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('CCODE
 INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('CCODE','REF','Oppslagsverk');
 INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('CCODE','NFIC','Faglitteratur');
 
--- withdrawn status of an item, linked to items.wthdrawn
+-- withdrawn status of an item, linked to items.withdrawn
 INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('WITHDRAWN','1','Trukket tilbake');
 
 -- loanability status of an item, linked to items.notforloan

@@ -564,7 +564,7 @@ $(document).ready(function(){
                     [% END %]
                     <span class="unavailable">
                     [% IF ( SEARCH_RESULT.onloancount ) %] Checked out ([% SEARCH_RESULT.onloancount %]), [% END %]
-                    [% IF ( SEARCH_RESULT.wthdrawncount ) %] Withdrawn ([% SEARCH_RESULT.wthdrawncount %]), [% END %]
+                    [% IF ( SEARCH_RESULT.withdrawncount ) %] Withdrawn ([% SEARCH_RESULT.withdrawncount %]), [% END %]
                     [% UNLESS ( SEARCH_RESULT.hidelostitems ) %][% IF ( SEARCH_RESULT.itemlostcount ) %] Lost ([% SEARCH_RESULT.itemlostcount %]),[% END %][% END %]
                     [% IF ( SEARCH_RESULT.damagedcount ) %] Damaged ([% SEARCH_RESULT.damagedcount %]),[% END %]
                     [% IF ( SEARCH_RESULT.orderedcount ) %] On order ([% SEARCH_RESULT.orderedcount %]),[% END %]

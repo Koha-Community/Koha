@@ -1452,7 +1452,7 @@ sub IsAvailableForItemLevelRequest {
     $available_per_item = 0 if $item->{itemlost} or
                                ( $item->{notforloan} > 0 ) or
                                ($item->{damaged} and not C4::Context->preference('AllowHoldsOnDamagedItems')) or
-                               $item->{wthdrawn} or
+                               $item->{withdrawn} or
                                $notforloan_per_itemtype;
 
 

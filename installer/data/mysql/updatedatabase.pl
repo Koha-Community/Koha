@@ -7067,6 +7067,31 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.13.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        ALTER TABLE items CHANGE wthdrawn withdrawn TINYINT( 1 ) NOT NULL DEFAULT  '0'
+    });
+
+    $dbh->do(q{
+        ALTER TABLE deleteditems CHANGE wthdrawn withdrawn TINYINT( 1 ) NOT NULL DEFAULT  '0'
+    });
+
+    $dbh->do(q{
+        UPDATE saved_sql SET savedsql = REPLACE(savedsql, 'wthdrawn', 'withdrawn')
+    });
+
+    print "Upgrade to $DBversion done (Bug 10550 - Fix database typo wthdrawn)\n";
+    SetVersion($DBversion);
+}
+
+$DBversion = "3.13.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do("UPDATE marc_subfield_structure SET kohafield = 'items.withdrawn' WHERE kohafield = 'items.wthdrawn'");
+    print "Upgrade to $DBversion done (Bug 10550 - Fix database typo wthdrawn)\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

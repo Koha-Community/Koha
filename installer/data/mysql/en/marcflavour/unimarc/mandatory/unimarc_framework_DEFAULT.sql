@@ -121,7 +121,7 @@ INSERT INTO `marc_tag_structure` (`tagfield`, `liblibrarian`, `libopac`, `repeat
 		('995', 'Location and Item Information (Koha)', 'Location and Item Information (Koha)', 0, 0, '', '');
 
 INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `kohafield`, `tab`, `authorised_value`, `authtypecode`, `value_builder`, `isurl`, `hidden`, `frameworkcode`, `seealso`, `link`, `defaultvalue`) VALUES
-		('995', '0', 'Withdrawn status', 'Withdrawn status', 0, 0, 'items.wthdrawn', 10, 'WTHDRAWN', '', '', 0, 0, '', '', '', NULL),
+               ('995', '0', 'Withdrawn status', 'Withdrawn status', 0, 0, 'items.withdrawn', 10, 'WTHDRAWN', '', '', 0, 0, '', '', '', NULL),
 		('995', '2', 'Lost status', 'Lost status', 0, 0, 'items.itemlost', 10, 'LOST', '', '', 0, 0, '', '', '', NULL),
 		('995', '3', 'Use restrictions', 'Use restrictions', 0, 0, 'items.restricted', 10, 'RESTRICTED', '', '', 0, 0, '', '', '', NULL),
 		('995', '5', 'Date acquired', 'Coded location qualifier', 0, 0, 'items.dateaccessioned', 10, '', '', '', NULL, 0, '', '', '', NULL),

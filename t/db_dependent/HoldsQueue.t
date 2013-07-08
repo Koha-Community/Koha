@@ -83,7 +83,7 @@ $dbh->do("INSERT INTO biblioitems (biblionumber, marcxml, itemtype)
 my $biblioitemnumber = $dbh->selectrow_array("SELECT biblioitemnumber FROM biblioitems WHERE biblionumber = $biblionumber")
   or BAIL_OUT("Cannot find newly created biblioitems record");
 
-my $items_insert_sth = $dbh->prepare("INSERT INTO items (biblionumber, biblioitemnumber, barcode, homebranch, holdingbranch, notforloan, damaged, itemlost, wthdrawn, onloan, itype)
+my $items_insert_sth = $dbh->prepare("INSERT INTO items (biblionumber, biblioitemnumber, barcode, homebranch, holdingbranch, notforloan, damaged, itemlost, withdrawn, onloan, itype)
                                       VALUES            ($biblionumber, $biblioitemnumber, ?, ?, ?, 0, 0, 0, 0, NULL, '$itemtype')"); # CURRENT_DATE - 3)");
 my $first_barcode = int(rand(1000000000000)); # XXX
 my $barcode = $first_barcode;

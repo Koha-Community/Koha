@@ -168,7 +168,7 @@ foreach my $item (@items){
     }
     $item->{'datereceived'}            = $order->{'datereceived'};
 
-    if ($item->{notforloantext} or $item->{itemlost} or $item->{damaged} or $item->{wthdrawn}) {
+    if ($item->{notforloantext} or $item->{itemlost} or $item->{damaged} or $item->{withdrawn}) {
         $item->{status_advisory} = 1;
     }
 

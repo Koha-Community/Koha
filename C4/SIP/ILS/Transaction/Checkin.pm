@@ -63,7 +63,7 @@ sub do_checkin {
     if ($messages->{BadBarcode}) {
         $self->alert_type('99');
     }
-    if ($messages->{wthdrawn}) {
+    if ($messages->{withdrawn}) {
         $self->alert_type('99');
     }
     if ($messages->{Wrongbranch}) {

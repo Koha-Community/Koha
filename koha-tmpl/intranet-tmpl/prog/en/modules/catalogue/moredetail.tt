@@ -75,7 +75,7 @@
                 [% IF ( ITEM_DAT.notforloantext ) %][% ITEM_DAT.notforloantext %] [% END %]
                 [% IF ( ITEM_DAT.itemlost ) %]Lost[% END %]
                 [% IF ( ITEM_DAT.damaged ) %]Damaged[% END %]
-                [% IF ( ITEM_DAT.wthdrawn ) %]Withdrawn[% END %]
+                [% IF ( ITEM_DAT.withdrawn ) %]Withdrawn[% END %]
             )[% END %]</h4>
 
             <ol class="bibliodetails">
@@ -115,7 +115,7 @@
                             [% END %]
                         [% END %]
                         </select>
-                        <input type="hidden" name="wthdrawn" value="[% ITEM_DAT.wthdrawn %]" />
+                        <input type="hidden" name="withdrawn" value="[% ITEM_DAT.withdrawn %]" />
                         <input type="hidden" name="damaged" value="[% ITEM_DAT.damaged %]" />
                         <input type="submit" name="submit" class="submit" value="Set Status" /></form>
                     [% ELSE %]
@@ -145,7 +145,7 @@
                 [% END %]
             [% END %]
                     </select>
-                    <input type="hidden" name="wthdrawn" value="[% ITEM_DAT.wthdrawn %]" />
+                    <input type="hidden" name="withdrawn" value="[% ITEM_DAT.withdrawn %]" />
                     <input type="hidden" name="itemlost" value="[% ITEM_DAT.itemlost %]" />
                     <input type="submit" name="submit" class="submit" value="Set Status" /></form>
                 [% ELSE %]
@@ -158,7 +158,7 @@
                 [% END %]
             </li>
             [% END %]
-            <li><span class="label">Withdrawn?:</span>[% IF ( ITEM_DAT.wthdrawn ) %]Yes[% ELSE %]No[% END %]
+            <li><span class="label">Withdrawn?:</span>[% IF ( ITEM_DAT.withdrawn ) %]Yes[% ELSE %]No[% END %]
                 [% IF ( CAN_user_circulate ) %]
                     <form action="updateitem.pl" method="post">
                     <input type="hidden" name="biblionumber" value="[% ITEM_DAT.biblionumber %]" />
@@ -167,10 +167,10 @@
                     <input type="hidden" name="itemlost" value="[% ITEM_DAT.itemlost %]" />
                     <input type="hidden" name="damaged" value="[% ITEM_DAT.damaged %]" />
 
-            [% IF ( ITEM_DAT.wthdrawn ) %]
-                    <input type="hidden" name="wthdrawn" value="0" />[% ELSE %]<input type="hidden" name="wthdrawn" value="1" />
+            [% IF ( ITEM_DAT.withdrawn ) %]
+                    <input type="hidden" name="withdrawn" value="0" />[% ELSE %]<input type="hidden" name="withdrawn" value="1" />
             [% END %]
-            [% IF ( ITEM_DAT.wthdrawn ) %]
+            [% IF ( ITEM_DAT.withdrawn ) %]
                     <input type="submit" name="submit" class="submit" value="Restore" />[% ELSE %]<input type="submit" name="submit" class="submit" value="Withdraw" />
             [% END %]
                     </form>

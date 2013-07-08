@@ -103,7 +103,7 @@ INSERT INTO `marc_tag_structure` (`tagfield`, `liblibrarian`, `libopac`, `repeat
 		('952', 'Standort- und Exemplarinformationen (KOHA)', 'Standort- und Exemplarinformationen (KOHA)', 1, 0, '', '');
 
 INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `kohafield`, `tab`, `authorised_value`, `authtypecode`, `value_builder`, `isurl`, `hidden`, `frameworkcode`, `seealso`, `link`, `defaultvalue`) VALUES
-		('952', '0', 'Ausgeschieden', 'Ausgeschieden', 0, 0, 'items.wthdrawn', 10, 'WITHDRAWN', '', '', 0, 0, '', '', '', NULL),
+           ('952', '0', 'Ausgeschieden', 'Ausgeschieden', 0, 0, 'items.withdrawn', 10, 'WITHDRAWN', '', '', 0, 0, '', '', '', NULL),
 		('952', '1', 'Verloren', 'Verloren', 0, 0, 'items.itemlost', 10, 'LOST', '', '', 0, 0, '', '', '', NULL),
 		('952', '2', 'Klassifikationsschema', 'Klassifikationsschema oder Aufstellungssystematik', 0, 0, 'items.cn_source', 10, 'cn_source', '', '', NULL, 0, '', '', '', NULL),
 		('952', '3', 'Beilagenotiz', 'Beilagenotiz', 0, 0, 'items.materials', 10, '', '', '', NULL, -1, '', '', '', NULL),

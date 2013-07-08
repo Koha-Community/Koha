@@ -11,7 +11,7 @@
     to [% item.transfertto %] since [% item.transfertwhen %]
 [% ELSIF ( item.waiting ) %]
     On hold
-[% ELSIF ( item.wthdrawn ) %]
+[% ELSIF ( item.withdrawn ) %]
     Item withdrawn
 [% ELSIF ( item.itemlost ) %]
     [% av_lib_include = KohaAuthorisedValues.GetByCode( 'LOST', item.itemlost, 1 ) %]

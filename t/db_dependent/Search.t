@@ -105,7 +105,7 @@ $contextmodule->mock('marcfromkohafield', sub {
             'items.restricted' => ['952', '5' ],
             'items.stack' => ['952', 'j' ],
             'items.uri' => ['952', 'u' ],
-            'items.wthdrawn' => ['952', '0' ]
+            'items.withdrawn' => ['952', '0' ]
             }
         );
         return \%hash;
@@ -170,7 +170,7 @@ $dbh->{mock_add_resultset} = {
         [ 'homebranch' ], [ 'price' ], [ 'replacementprice' ],
         [ 'replacementpricedate' ], [ 'datelastborrowed' ], [ 'datelastseen' ],
         [ 'stack' ], [ 'notforloan' ], [ 'damaged' ],
-        [ 'itemlost' ], [ 'wthdrawn' ], [ 'itemcallnumber' ],
+        [ 'itemlost' ], [ 'withdrawn' ], [ 'itemcallnumber' ],
         [ 'issues' ], [ 'renewals' ], [ 'reserves' ],
         [ 'restricted' ], [ 'itemnotes' ], [ 'nonpublicnote' ],
         [ 'holdingbranch' ], [ 'paidfor' ], [ 'timestamp' ],
