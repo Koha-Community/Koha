@@ -1,5 +1,8 @@
 #!/usr/bin/perl
 
+use Modern::Perl;
+
+use Socket qw(:crlf);
 use IO::Socket::INET;
 use Getopt::Long;
 
@@ -15,6 +18,8 @@ my $location_code;
 my $patron_identifier;
 my $patron_password;
 
+my $terminator;
+
 GetOptions(
     "a|address|host|hostaddress=s" => \$host,              # sip server ip
     "p|port=s"                     => \$port,              # sip server port
@@ -24,6 +29,8 @@ GetOptions(
 
     "patron=s"   => \$patron_identifier,    # patron cardnumber or login
     "password=s" => \$patron_password,      # patron's password
+
+    "t|terminator=s" => \$terminator,
 
     'h|help|?' => \$help
 );
@@ -40,6 +47,8 @@ if (   $help
     exit();
 }
 
+$terminator = ( $terminator eq 'CR' ) ? $CR : $CRLF;
+
 my ( $sec, $min, $hour, $day, $month, $year ) = localtime(time);
 $year += 1900;
 my $transaction_date = "$year$month$day    $hour$min$sec";
@@ -47,15 +56,15 @@ my $transaction_date = "$year$month$day    $hour$min$sec";
 my $institution_id    = $location_code;
 my $terminal_password = $login_password;
 
-$socket = IO::Socket::INET->new("$host:$port")
+my $socket = IO::Socket::INET->new("$host:$port")
   or die "ERROR in Socket Creation host=$host port=$port : $!\n";
 
 my $login_command = "9300CN$login_user_id|CO$login_password|CP$location_code|";
 
 print "\nOUTBOUND: $login_command\n";
-print $socket $login_command . "\r";
+print $socket $login_command . $terminator;
 
-$data = <$socket>;
+my $data = <$socket>;
 
 print "\nINBOUND: $data\n";
 
@@ -71,7 +80,7 @@ if ( $data =~ '^941' ) { ## we are logged in
       . "|AD" . $patron_password;
 
     print "\nOUTBOUND: $patron_status_request\n";
-    print $socket $patron_status_request . "\r";
+    print $socket $patron_status_request . $terminator;
 
     $data = <$socket>;
 
@@ -80,7 +89,7 @@ if ( $data =~ '^941' ) { ## we are logged in
     ## Patron Information
     print "\nTrying 'Patron Information'\n";
     my $summary = "          ";
-    my $patron_status_request = "63001"
+    $patron_status_request = "63001"
       . $transaction_date
       . $summary
       . "AO"  . $institution_id
@@ -89,7 +98,7 @@ if ( $data =~ '^941' ) { ## we are logged in
       . "|AD" . $patron_password;
 
     print "\nOUTBOUND: $patron_status_request\n";
-    print $socket $patron_status_request . "\r";
+    print $socket $patron_status_request . $terminator;
 
     $data = <$socket>;
 
@@ -121,6 +130,8 @@ sip_cli_emulator.pl - SIP command line emulator
 
     --patron        ILS patron cardnumber or username
     --password      ILS patron password
+
+    -t --terminator    Specifies the SIP2 message terminator, either CR, or CRLF ( defaults to CRLF )
 
 sip_cli_emulator.pl will make requests for information about the given user from the given server via SIP2.
 
