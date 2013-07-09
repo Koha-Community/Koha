@@ -315,7 +315,7 @@ if ($op eq 'save' || $op eq 'insert'){
     foreach my $attr (@$extended_patron_attributes) {
         unless (C4::Members::Attributes::CheckUniqueness($attr->{code}, $attr->{value}, $borrowernumber)) {
             push @errors, "ERROR_extended_unique_id_failed";
-            $template->param(ERROR_extended_unique_id_failed => "$attr->{code}/$attr->{value}");
+            $template->param(ERROR_extended_unique_id_failed_value => "$attr->{code}/$attr->{value}");
         }
     }
   }
