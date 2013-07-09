@@ -175,32 +175,31 @@ sub AddBookseller {
     my $query  = q|
         INSERT INTO aqbooksellers
             (
-                name,      address1,      address2,   address3,      address4,
-                postal,    phone,         accountnumber,   fax,      url,           
-                contact,
-                contpos,   contphone,     contfax,    contaltphone,  contemail,
-                contnotes, active,        listprice,  invoiceprice,  gstreg,
-                listincgst,invoiceincgst, gstrate,    discount,
-                notes
+                name,      address1,      address2,     address3,   address4,
+                postal,    phone,         accountnumber,fax,        url,
+                contact,   contpos,       contphone,    contfax,    contaltphone,
+                contemail, contnotes,     active,       listprice,  invoiceprice,
+                gstreg,    listincgst,    invoiceincgst,gstrate,    discount,
+                notes,     deliverytime
             )
-        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) |
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) |
       ;
     my $sth = $dbh->prepare($query);
     $sth->execute(
-        $data->{'name'},         $data->{'address1'},
-        $data->{'address2'},     $data->{'address3'},
-        $data->{'address4'},     $data->{'postal'},
-        $data->{'phone'},        $data->{'accountnumber'},
-        $data->{'fax'},
-        $data->{'url'},          $data->{'contact'},
-        $data->{'contpos'},      $data->{'contphone'},
-        $data->{'contfax'},      $data->{'contaltphone'},
-        $data->{'contemail'},    $data->{'contnotes'},
-        $data->{'active'},       $data->{'listprice'},
-        $data->{'invoiceprice'}, $data->{'gstreg'},
-        $data->{'listincgst'},   $data->{'invoiceincgst'},
-        $data->{'gstrate'},
-        $data->{'discount'},     $data->{'notes'}
+        $data->{name}         ,$data->{address1},
+        $data->{address2}     ,$data->{address3},
+        $data->{address4}     ,$data->{postal},
+        $data->{phone}        ,$data->{accountnumber},
+        $data->{fax},
+        $data->{url}          ,$data->{contact},
+        $data->{contpos}      ,$data->{contphone},
+        $data->{contfax}      ,$data->{contaltphone},
+        $data->{contemail}    ,$data->{contnotes},
+        $data->{active}       ,$data->{listprice},
+        $data->{invoiceprice} ,$data->{gstreg},
+        $data->{listincgst}   ,$data->{invoiceincgst},
+        $data->{gstrate}      ,$data->{discount},
+        $data->{notes}        ,$data->{deliverytime},
     );
 
     # return the id of this new supplier
