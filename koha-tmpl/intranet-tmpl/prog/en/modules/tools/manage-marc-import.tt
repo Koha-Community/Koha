@@ -1,38 +1,16 @@
-[% BLOCK final_match_link %]
-    [% IF ( record.record_type == 'biblio' ) %]
-        <a target="_blank" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% record.final_match_id %]">[% record.final_match_id %]</a>
-    [% ELSIF ( record.record_type == 'auth' ) %]
-        <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% record.final_match_id %]">[% record.final_match_id %]</a>
-    [% END %]
-[% END %]
-[% BLOCK match_link %]
-    [% IF ( record_lis.match_id ) %]
-        <tr>
-            <td />
-            [% IF ( record.record_type == 'biblio' ) %]
-                <td class="highlight" colspan="4">Matches biblio [% record_lis.match_id %] (score = [% record_lis.match_score %]): <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% record_lis.match_id %]">[% record_lis.match_citation %]</a></td>
-            [% ELSIF ( record.record_type == 'auth' ) %]
-                <td class="highlight" colspan="4">Matches authority [% record_lis.match_id %] (score = [% record_lis.match_score %]): <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% record_lis.match_id %]">[% record_lis.match_citation %]</a> |
-        <a href="/cgi-bin/koha/authorities/merge.pl?mergereference=breeding&authid=[% record_lis.match_id %]&authid=[% record_lis.import_record_id %]">Merge</a>
-                </td>
-            [% END %]
-        </tr>
-    [% ELSIF ( record.record_type == 'auth') %]
-        <tr data-authid="[% record_lis.import_record_id %]">
-            <td />
-            <td class="highlight" colspan="4"><a href="#" class="merge_auth">Search for a record to merge in a new window</a></td>
-        </tr>
-    [% END %]
-[% END %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Manage staged MARC records
 [% IF ( import_batch_id ) %]
  &rsaquo; Batch [% import_batch_id %]
 [% END %]
 </title>
-[% INCLUDE 'greybox.inc' %]
 [% INCLUDE 'doc-head-close.inc' %]
 <script type="text/javascript" src="[% themelang %]/js/background-job-progressbar.js"></script>
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.columnFilter.js"></script>
+[% INCLUDE 'datatables-strings.inc' %]
+<script type="text/javascript" src="[% themelang %]/js/datatables.js"></script>
 <script type="text/JavaScript" language="JavaScript">
 //<![CDATA[
 var MSG_CONFIRM_CLEAN = _("Clear all reservoir records staged in this batch?  This cannot be undone.");
@@ -49,13 +27,71 @@ $(document).ready(function(){
       $(this).parent().hide();
   });
 
-  $('.merge_auth').click(function(event) {
-      event.preventDefault();
-      var authid = $(this).parents('tr').attr('data-authid');
-      $.cookie('auth_to_merge', JSON.stringify({ 'authid': authid, 'summary': $('tr[data-id="' + authid + '"] .citation').text(), 'mergereference': 'breeding' }), { 'path': '/' });
-      window.open("/cgi-bin/koha/authorities/authorities-home.pl");
+  $("#records-table").dataTable({
+      "aLengthMenu": [[10, 15, 20, 25, 50, 100], [10, 15, 20, 25, 50, 100]],
+      "iDisplayLength" : 20,
+      "bAutoWidth": false,
+      "bFilter": false,
+      "bProcessing": true,
+      "bServerSide": true,
+      "sAjaxSource": 'batch_records_ajax.pl',
+      "sPaginationType": "full_numbers",
+      "aoColumns": [
+          { "mDataProp": "import_record_id" },
+          { "mDataProp": "citation" },
+          { "mDataProp": "status" },
+          { "mDataProp": "overlay_status" },
+          { "mDataProp": "match_citation" },
+          { "mDataProp": "matched" },
+      ],
+      "fnServerData": function ( sSource, aoData, fnCallback ) {
+          aoData.push( { "name": "import_batch_id", "value": [% import_batch_id %] } );
+
+          $.getJSON( sSource, aoData, function (json) {
+              fnCallback(json)
+          } );
+      },
+      "fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
+        $('td:eq(1)', nRow).html(
+            '<a href="javascript:void()" onclick="show_marc('
+            + aData['import_record_id']
+            + ')">' + aData['citation'] + '</a>'
+        );
+
+        if ( aData['match_id'] ) {
+            $('td:eq(4)', nRow).html(
+                _("Matches biblio ")
+                + aData['match_id']
+                + " (" + _("score") + "="
+                + aData['score']
+                + '):' + '<a target="_blank" href="http://staff.kohadev/cgi-bin/koha/catalogue/detail.pl?biblionumber='
+                + aData['match_id'] + '">' + aData['match_citation'] + '</a>'
+            );
+        }
+
+        $('td:eq(5)', nRow).html(
+            '<a target="_blank" href="http://staff.kohadev/cgi-bin/koha/catalogue/detail.pl?biblionumber='
+            + aData['matched'] + '">' + aData['matched'] + '</a>'
+        );
+      },
   });
 });
+
+function show_marc( id ) {
+    var page = "/cgi-bin/koha/catalogue/showmarc.pl?importid=" + id;
+
+    var $dialog = $('<div></div>')
+        .html('<iframe style="border: 0px; " src="' + page + '" width="100%" height="100%"></iframe>')
+        .dialog({
+            autoOpen: false,
+            modal: true,
+            height: 625,
+            width: 500,
+            title: _("MARC Preview")
+        });
+
+    $dialog.dialog('open');
+}
 //]]>
 </script>
 <style type="text/css">
@@ -375,85 +411,18 @@ Page
   [% END %]
 [% END %]
 
-[% IF ( record_list ) %]
-  [% IF ( pages ) %]
-<div class="pages">
-Page 
-    [% FOREACH page IN pages %]
-      [% IF ( page.current_page ) %]
-      <span class="current">[% page.page_number %]</span>
-      [% ELSE %]
-      <a class="nav" href="[% page.script_name %]?import_batch_id=[% import_batch_id %]&amp;offset=[% page.offset %]">[% page.page_number %]</a>
-      [% END %]
-    [% END %]
-</div>
-  [% END %]
-<table>
-  <tr>
-    <th>#</th>
-    <th>Citation</th>
-    <th>Status</th>
-    <th>Match?</th>
-    <th>Record</th>
-
-  </tr>
-  [% FOREACH record_lis IN record_list %]
-  [% UNLESS ( loop.odd ) %]<tr data-id="[% record_lis.import_record_id %]" class="highlight">[% ELSE %]<tr data-id="[% record_lis.import_record_id %]">[% END %]
-    <td>[% record_lis.record_sequence %]</td>
-    <td><a class="citation" href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% record_lis.import_record_id %]" rel="gb_page_center[600,500]">[% record_lis.citation %]</a></td>
-    <td>
-        [% IF ( record_lis.status == 'imported' ) %]
-            Imported
-        [% ELSIF ( record_lis.status == 'ignored' ) %]
-            Ignored
-        [% ELSIF ( record_lis.status == 'reverted' ) %]
-            Reverted
-        [% ELSIF ( record_lis.status == 'staged' ) %]
-            Staged
-        [% ELSIF ( record_lis.status == 'error' ) %]
-            Error
-        [% ELSE %]
-          [% record_lis.status %]
-        [% END %]
-    </td>
-    <td>
-        [% IF ( record_lis.overlay_status == 'no_match' ) %]
-            No match
-        [% ELSIF ( record_lis.overlay_status == 'match_applied' ) %]
-            Match applied
-        [% ELSIF ( record_lis.overlay_status == 'auto_match' ) %]
-            Match found
-        [% ELSE %]
-            [% record_lis.overlay_status %]
-        [% END %]
-    </td>
-    <td>[% IF ( record_lis.final_match_id ) %]
-        [% PROCESS final_match_link record=record_lis %]
-        [% END %]
-    </td>
-  </tr>
-    [% PROCESS match_link record=record_lis %]
-  [% END %]
+<table id="records-table">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Citation</th>
+            <th>Status</th>
+            <th>Match?</th>
+            <th>&nbsp;</th>
+            <th>Record</th>
+        </tr>
+    </thead>
 </table>
-  [% IF ( pages ) %]
-<div class="pages">
-Page 
-    [% FOREACH page IN pages %]
-      [% IF ( page.current_page ) %]
-      <span class="current">[% page.page_number %]</span>
-      [% ELSE %]
-      <a class="nav" href="[% page.script_name %]?import_batch_id=[% import_batch_id %]&amp;offset=[% page.offset %]">[% page.page_number %]</a>
-      [% END %]
-    [% END %]
-</div>
-  [% END %]
-[% ELSE %]
-  [% IF ( batch_info ) %]
-    <div class="dialog alert">There are no records in this batch to import.
-    <a href="/cgi-bin/koha/tools/manage-marc-import.pl">Manage staged MARC records</a>.</div>
-
-  [% END %]
-[% END %]
 
 </div>
 </div>

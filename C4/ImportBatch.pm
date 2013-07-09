@@ -1028,9 +1028,15 @@ starting at the given offset.
 =cut
 
 sub GetImportRecordsRange {
-    my ($batch_id, $offset, $results_per_group, $status) = @_;
+    my ( $batch_id, $offset, $results_per_group, $status, $parameters ) = @_;
 
     my $dbh = C4::Context->dbh;
+
+    my $order_by =
+      $dbh->quote_identifier( $parameters->{order_by} || 'import_record_id' );
+    my $order_by_direction =
+      uc( $parameters->{order_by_direction} ) eq 'DESC' ? 'DESC' : 'ASC';
+
     my $query = "SELECT title, author, isbn, issn, authorized_heading, import_records.import_record_id,
                                            record_sequence, status, overlay_status,
                                            matched_biblionumber, matched_authid, record_type
@@ -1044,7 +1050,8 @@ sub GetImportRecordsRange {
         $query .= " AND status=?";
         push(@params,$status);
     }
-    $query.=" ORDER BY import_record_id";
+
+    $query.=" ORDER BY $order_by $order_by_direction";
 
     if($results_per_group){
         $query .= " LIMIT ?";
