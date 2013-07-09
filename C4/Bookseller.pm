@@ -98,14 +98,14 @@ sub GetBookSellerFromId {
 
 =head2 GetBooksellersWithLateOrders
 
-%results = GetBooksellersWithLateOrders($delay);
+%results = GetBooksellersWithLateOrders( $delay, $estimateddeliverydatefrom, $estimateddeliverydateto );
 
 Searches for suppliers with late orders.
 
 =cut
 
 sub GetBooksellersWithLateOrders {
-    my ( $delay, $branch, $estimateddeliverydatefrom, $estimateddeliverydateto ) = @_;    # FIXME: Branch argument unused.
+    my ( $delay, $estimateddeliverydatefrom, $estimateddeliverydateto ) = @_;
     my $dbh = C4::Context->dbh;
 
     # FIXME NOT quite sure that this operation is valid for DBMs different from Mysql, HOPING so
