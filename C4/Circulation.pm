@@ -2402,8 +2402,8 @@ SELECT issues.*, items.itype as itemtype, items.homebranch, TO_DAYS( date_due )-
 FROM issues 
 LEFT JOIN items USING (itemnumber)
 LEFT OUTER JOIN branches USING (branchcode)
-WhERE returndate is NULL
-AND ( TO_DAYS( NOW() )-TO_DAYS( date_due ) ) < ?
+WHERE returndate is NULL
+HAVING days_until_due > 0 AND days_until_due < ?
 END_SQL
 
     my @bind_parameters = ( $params->{'days_in_advance'} );
