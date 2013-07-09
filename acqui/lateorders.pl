@@ -118,7 +118,7 @@ if ($op and $op eq "send_alert"){
     }
 }
 
-my @parameters = ( $delay, $branch );
+my @parameters = ( $delay );
 push @parameters, $estimateddeliverydatefrom_dt
     ? $estimateddeliverydatefrom_dt->ymd()
     : undef;
