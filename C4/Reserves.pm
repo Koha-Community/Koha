@@ -253,7 +253,6 @@ sub AddReserve {
 
 sub GetReserve {
     my ($reserve_id) = @_;
-    #warn "C4::Reserves::GetReserve( $reserve_id )";
 
     my $dbh = C4::Context->dbh;
     my $query = "SELECT * FROM reserves WHERE reserve_id = ?";

@@ -122,7 +122,7 @@ sub change_hold {
 		return $self;
 	}
 	my $bibno = $bib->{biblionumber};
-  ModReserve({ biblionumber => $bibno, borrowernumber => $borrower->{borrowernumber}, branchcode => $branch });
+	ModReserve({ biblionumber => $bibno, borrowernumber => $borrower->{borrowernumber}, branchcode => $branch });
 
 	$self->ok(1);
 	return $self;
