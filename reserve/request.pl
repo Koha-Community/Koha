@@ -216,7 +216,7 @@ foreach my $biblionumber (@biblionumbers) {
             $count--;
         }
 
-        if ( defined $borrowerinfo && ($borrowerinfo->{borrowernumber} eq $res->{borrowernumber}) ) {
+        if ( defined $borrowerinfo && defined($borrowerinfo->{borrowernumber}) && ($borrowerinfo->{borrowernumber} eq $res->{borrowernumber}) ) {
             $holds_count++;
         }
     }
@@ -485,7 +485,7 @@ foreach my $biblionumber (@biblionumbers) {
                 );
         }
 
-        if ( defined $res->{'found'} && $res->{'found'} eq 'W' || $res->{'found'} eq 'T' ) {
+        if ( defined $res->{'found'} && ($res->{'found'} eq 'W' || $res->{'found'} eq 'T' )) {
             my $item = $res->{'itemnumber'};
             $item = GetBiblioFromItemNumber($item,undef);
             $reserve{'wait'}= 1;
