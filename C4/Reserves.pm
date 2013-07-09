@@ -491,11 +491,22 @@ sub CanItemBeReserved{
     }
     
     # we check if it's ok or not
-    if( $reservecount < $allowedreserves ){
-        return 1;
-    }else{
+    if( $reservecount >= $allowedreserves ){
         return 0;
     }
+
+    # If reservecount is ok, we check item branch if IndependentBranches is ON
+    # and canreservefromotherbranches is OFF
+    if ( C4::Context->preference('IndependentBranches')
+        and !C4::Context->preference('canreservefromotherbranches') )
+    {
+        my $itembranch = $item->{homebranch};
+        if ($itembranch ne $borrower->{branchcode}) {
+            return 0;
+        }
+    }
+
+    return 1;
 }
 #--------------------------------------------------------------------------------
 =head2 GetReserveCount
