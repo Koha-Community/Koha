@@ -659,6 +659,7 @@ function validate1(date) {
                 </select>
                 <input type="hidden" name="biblionumber" value="[% reservloo.biblionumber %]" />
                 <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
+                <input type="hidden" name="reserve_id" value="[% reservloo.reserve_id %]" />
             </td>
             <td>[% IF ( reservloo.suspend ) %]Suspended [% IF ( reservloo.suspend_until ) %] until [% reservloo.suspend_until | $KohaDates %][% END %][% END %]</td>
         </tr>

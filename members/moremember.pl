@@ -318,6 +318,7 @@ if ($borrowernumber) {
         $getreserv{suspend} = $num_res->{'suspend'};
         $getreserv{suspend_until} = $num_res->{'suspend_until'};
         $getreserv{expirationdate} = $num_res->{'expirationdate'};
+        $getreserv{reserve_id} = $num_res->{'reserve_id'};
 
         push( @reservloop, \%getreserv );
     }
