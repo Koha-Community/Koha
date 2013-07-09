@@ -8,12 +8,19 @@ use Test::More tests => 19;
 use MARC::Record;
 use C4::Biblio;
 use C4::Items;
+use C4::Members;
 
 BEGIN {
     use FindBin;
     use lib $FindBin::Bin;
     use_ok('C4::Reserves');
 }
+
+my $dbh = C4::Context->dbh;
+
+# Start transaction
+$dbh->{AutoCommit} = 0;
+$dbh->{RaiseError} = 1;
 
 my $borrowers_count = 5;
 
@@ -26,14 +33,16 @@ my ($bibnum, $title, $bibitemnum) = create_helper_biblio();
 diag("Creating item instance for testing.");
 my ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => 'CPL', holdingbranch => 'CPL' } , $bibnum);
 
-# Get a borrower
-my $dbh = C4::Context->dbh;
-my $query = "SELECT borrowernumber FROM borrowers LIMIT $borrowers_count";
-my $sth = $dbh->prepare($query);
-$sth->execute;
+# Create some borrowers
 my @borrowernumbers;
-while ( my $row = $sth->fetchrow_hashref ) {
-    push( @borrowernumbers, $row->{'borrowernumber'} );
+foreach (1..$borrowers_count) {
+    my $borrowernumber = AddMember(
+        firstname =>  'my firstname',
+        surname => 'my surname ' . $_,
+        categorycode => 'S',
+        branchcode => 'CPL',
+    );
+    push @borrowernumbers, $borrowernumber;
 }
 
 my $biblionumber   = $bibnum;
@@ -154,18 +163,6 @@ ok( $reserve->{'priority'} eq '1', "Test AlterPriority(), move up" );
 AlterPriority( 'bottom', $reserve->{'reserve_id'} );
 $reserve = GetReserve( $reserve->{'reserve_id'} );
 ok( $reserve->{'priority'} eq '5', "Test AlterPriority(), move to bottom" );
-
-# Delete the reserves
-diag("Deleting holds.");
-$dbh->do("DELETE FROM reserves WHERE biblionumber = ?", undef, ( $biblionumber ) );
-
-# Delete item.
-diag("Deleting item testing instance.");
-DelItem($dbh, $bibnum, $itemnumber);
-
-# Delete helper Biblio.
-diag("Deleting biblio testing instance.");
-DelBiblio($bibnum);
 
 # Helper method to set up a Biblio.
 sub create_helper_biblio {
