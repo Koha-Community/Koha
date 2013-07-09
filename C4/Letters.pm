@@ -550,6 +550,7 @@ sub _substitute_tables {
             $sth->execute( $ref ? @$param : $param );
 
             $values = $sth->fetchrow_hashref;
+            $sth->finish();
         }
 
         _parseletter ( $letter, $table, $values );
