@@ -128,11 +128,29 @@
                 <h1>Batch patron modification</h1>
                 <form method="post" enctype="multipart/form-data" action="/cgi-bin/koha/tools/modborrowers.pl">
                     <fieldset class="rows">
-                    <legend>Use a file</legend>
-                    <ol>
-                    <li><label for="uploadfile">File: </label> <input type="file" id="uploadfile" name="uploadfile" /></li>
-                    </ol>
+                        <legend>Use a file</legend>
+                        <ol>
+                            <li><label for="uploadfile">File: </label> <input type="file" id="uploadfile" name="uploadfile" /></li>
+                        </ol>
                     </fieldset>
+
+                    [% IF patron_lists %]
+                    <fieldset class="rows">
+                        <legend>Or use a patron list</legend>
+                        <ol>
+                            <li>
+                                <label for="patron_list_id">Patron list: </label>
+                                <select id="patron_list_id" name="patron_list_id">
+                                    <option value=""></option>
+                                    [% FOREACH pl IN patron_lists %]
+                                        <option value="[% pl.patron_list_id %]">[% pl.name %]</option>
+                                    [% END %]
+                                </select>
+                            </li>
+                        </ol>
+                    </fieldset>
+                    [% END %]
+
                     <fieldset class="rows">
                         <legend>Or list cardnumbers one by one</legend>
                         <ol>

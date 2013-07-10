@@ -3235,6 +3235,47 @@ CREATE TABLE IF NOT EXISTS plugin_data (
   PRIMARY KEY (plugin_class,plugin_key)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Table structure for table `patron_lists`
+--
+
+DROP TABLE IF EXISTS patron_lists;
+CREATE TABLE patron_lists (
+  patron_list_id int(11) NOT NULL AUTO_INCREMENT, -- unique identifier
+  name varchar(255) CHARACTER SET utf8 NOT NULL,  -- the list's name
+  owner int(11) NOT NULL,                         -- borrowernumber of the list creator
+  PRIMARY KEY (patron_list_id),
+  KEY owner (owner)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Constraints for table `patron_lists`
+--
+ALTER TABLE `patron_lists`
+  ADD CONSTRAINT patron_lists_ibfk_1 FOREIGN KEY (`owner`) REFERENCES borrowers (borrowernumber) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Table structure for table 'patron_list_patrons'
+--
+
+DROP TABLE IF EXISTS patron_list_patrons;
+CREATE TABLE patron_list_patrons (
+  patron_list_patron_id int(11) NOT NULL AUTO_INCREMENT, -- unique identifier
+  patron_list_id int(11) NOT NULL,                       -- the list this entry is part of
+  borrowernumber int(11) NOT NULL,                       -- the borrower that is part of this list
+  PRIMARY KEY (patron_list_patron_id),
+  KEY patron_list_id (patron_list_id),
+  KEY borrowernumber (borrowernumber)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Constraints for table `patron_list_patrons`
+--
+ALTER TABLE `patron_list_patrons`
+  ADD CONSTRAINT patron_list_patrons_ibfk_1 FOREIGN KEY (patron_list_id) REFERENCES patron_lists (patron_list_id) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT patron_list_patrons_ibfk_2 FOREIGN KEY (borrowernumber) REFERENCES borrowers (borrowernumber) ON DELETE CASCADE ON UPDATE CASCADE;
+
+
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

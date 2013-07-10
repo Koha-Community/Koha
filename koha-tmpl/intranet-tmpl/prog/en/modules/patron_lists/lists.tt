@@ -1,0 +1,74 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Patron lists</title>
+[% INCLUDE 'doc-head-close.inc' %]
+
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.min.js"></script>
+[% INCLUDE 'datatables-strings.inc' %]
+<script type="text/javascript" src="[% themelang %]/js/datatables.js"></script>
+
+<script type="text/javascript">
+//<![CDATA[
+    $(document).ready(function() {
+        $('#patron-lists-table').dataTable($.extend(true, {}, dataTablesDefaults));
+    });
+
+    function ConfirmDelete( list ) {
+        return confirm( _("Are you sure you want to delete the list ") + list + "?" );
+    }
+//]]>
+</script>
+
+</head>
+
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'cat-search.inc' %]
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; Patron lists</div>
+
+<div class="yui-t7">
+    <div class="yui-main">
+        <h1>Your patron lists</h1>
+
+        <div class="btn-group">
+            <a class="btn btn-small" href="add-modify.pl"><i class="icon-plus"></i> New patron list</a>
+        </div>
+
+        <table id="patron-lists-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Patrons in list</th>
+                    <th>&nbsp;</th>
+                    <th>&nbsp;</th>
+                    <th>&nbsp;</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                [% FOREACH l IN lists %]
+                    <tr>
+                        <td>[% l.name %]</td>
+                        <td>[% l.patron_list_patrons.size || 0 %]</td>
+                        <td>
+                            <a class="btn" href="list.pl?patron_list_id=[% l.patron_list_id %]">
+                                <i class="icon-plus-sign"></i> Add patrons <i class="icon-user"></i>
+                            </a>
+                        </td>
+                        <td>
+                            <a class="btn" href="add-modify.pl?patron_list_id=[% l.patron_list_id %]">
+                                <i class="icon-edit"></i> Edit
+                            </a>
+                        </td>
+                        <td>
+                            <a class="btn" href="delete.pl?patron_list_id=[% l.patron_list_id %]" onclick='return ConfirmDelete("[% l.name | html %]")'>
+                                <i class="icon-trash"></i> Delete
+                            </a>
+                        </td>
+                    </tr>
+                [% END %]
+            </tbody>
+        </table>
+    </div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

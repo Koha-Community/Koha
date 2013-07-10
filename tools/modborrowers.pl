@@ -34,6 +34,7 @@ use C4::Members::Attributes;
 use C4::Members::AttributeTypes qw/GetAttributeTypes_hashref/;
 use C4::Output;
 use List::MoreUtils qw /any uniq/;
+use Koha::List::Patron;
 
 my $input = new CGI;
 my $op = $input->param('op') || 'show_form';
@@ -50,12 +51,11 @@ my %cookies   = parse CGI::Cookie($cookie);
 my $sessionID = $cookies{'CGISESSID'}->value;
 my $dbh       = C4::Context->dbh;
 
-
-
 # Show borrower informations
 if ( $op eq 'show' ) {
-    my $filefh      = $input->upload('uploadfile');
-    my $filecontent = $input->param('filecontent');
+    my $filefh         = $input->upload('uploadfile');
+    my $filecontent    = $input->param('filecontent');
+    my $patron_list_id = $input->param('patron_list_id');
     my @borrowers;
     my @cardnumbers;
     my @notfoundcardnumbers;
@@ -67,6 +67,13 @@ if ( $op eq 'show' ) {
             $content =~ s/[\r\n]*$//g;
             push @cardnumbers, $content if $content;
         }
+    } elsif ( $patron_list_id ) {
+        my ($list) = GetPatronLists( { patron_list_id => $patron_list_id } );
+
+        @cardnumbers =
+          $list->patron_list_patrons()->search_related('borrowernumber')
+          ->get_column('cardnumber')->all();
+
     } else {
         if ( my $list = $input->param('cardnumberlist') ) {
             push @cardnumbers, split( /\s\n/, $list );
@@ -314,6 +321,9 @@ if ( $op eq 'do' ) {
 
     $template->param( borrowers => \@borrowers );
     $template->param( errors => \@errors );
+} else {
+
+    $template->param( patron_lists => [ GetPatronLists() ] );
 }
 
 $template->param(

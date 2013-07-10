@@ -1,6 +1,73 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Patrons [% IF ( searching ) %]&rsaquo; Search results[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
+
+<script type="text/javascript">
+//<![CDATA[
+$(document).ready(function() {
+    $('#add_to_patron_list_submit').attr('disabled', 'disabled');
+    $('#new_patron_list').hide();
+
+    $('#add_to_patron_list').change(function() {
+        var value = $('#add_to_patron_list').val();
+        if ( value == 'new' ) {
+            $('#new_patron_list').val('')
+            $('#new_patron_list').show();
+            $('#new_patron_list').focus();
+        } else if ( value ) {
+            $('#new_patron_list').hide();
+            $('#add_to_patron_list_submit').removeAttr('disabled');
+        } else {
+            $('#new_patron_list').hide();
+            $('#add_to_patron_list_submit').attr('disabled', 'disabled');
+        }
+
+    });
+
+    $('#new_patron_list').on('input', function() {
+        if ( $('#new_patron_list').val() ) {
+            $('#add_to_patron_list_submit').removeAttr('disabled');
+        } else {
+            $('#add_to_patron_list_submit').attr('disabled', 'disabled');
+        }
+    });
+});
+
+function CheckForm() {
+    if ( $('#add_to_patron_list').val() == 'new' ) {
+        if ( $('#new_patron_list').val() ) {
+            var exists = false;
+            $("#add_to_patron_list option").each(function() {
+                if ( $(this).text() == $('#new_patron_list').val() ) {
+                    exists = true;
+                    return false;
+                }
+            });
+
+            if ( exists ) {
+                alert( _("You already have a list with that name!") );
+                return false;
+            }
+        } else {
+            alert( _("You must give your new patron list a name!") );
+            return false;
+        }
+    }
+
+    if ( $('#add_to_patron_list_which').val() == 'all' ) {
+        return confirm( _("Are you sure you want to add the entire set of patron results to this list ( including results on other pages )?") );
+    } else {
+         if ( $("#add-patrons-to-list-form input:checkbox:checked").length == 0 ) {
+             alert( _("You have not selected any patrons to add to a list!") );
+             return false;
+         }
+    }
+
+    return true;
+}
+//]]>
+</script>
+
 </head>
 <body id="pat_member" class="pat">
 [% INCLUDE 'header.inc' %]
@@ -14,6 +81,12 @@
 		<div id="yui-main">
 		    <div class="yui-b">
 				<div class="yui-g">
+
+                [% IF patron_list %]
+                    <div class="dialog alert">
+                        Added [% patrons_added_to_list.size %] patrons to <a href="/cgi-bin/koha/patron_lists/list.pl?patron_list_id=[% patron_list.patron_list_id %]">[% patron_list.name %]</a>.
+                    </div>
+                [% END %]
 
 				[% INCLUDE 'patron-toolbar.inc' %]
 
@@ -36,13 +109,53 @@
                         </div>
                     [% END %]
 
-						[% IF ( resultsloop ) %]
-						<div id="searchheader"> <h3>Results [% from %] to [% to %] of [% numresults %] found for [% IF ( member ) %]'<span class="ex">[% member %]</span>'[% END %][% IF ( surname ) %]'<span class="ex">[% surname %]</span>'[% END %]</h3></div>
+                    [% IF ( resultsloop ) %]
+                    <form id="add-patrons-to-list-form" method="post" action="member.pl" onsubmit="return CheckForm()">
+                        <div id="searchheader">
+                            <h3>Results [% from %] to [% to %] of [% numresults %] found for [% IF ( member ) %]'<span class="ex">[% member %]</span>'[% END %][% IF ( surname ) %]'<span class="ex">[% surname %]</span>'[% END %]</h3>
+
+                            <div>
+                                <a href="javascript:void(0)" onclick="$('.selection').prop('checked', true)">Select all</a>
+                                |
+                                <a href="javascript:void(0)" onclick="$('.selection').prop('checked', false)">Clear all</a>
+                                |
+                                <span>
+                                    <label for="add_to_patron_list_which">Add:</label>
+                                    <select id="add_to_patron_list_which" name="add_to_patron_list_which">
+                                        <option value="selected">Selected patrons</option>
+                                        <option value="all">All resultant patrons</option>
+                                    </select>
+
+                                    <label for="add_to_patron_list">to:</label>
+                                    <select id="add_to_patron_list" name="add_to_patron_list">
+                                        <option value=""></option>
+                                        [% IF patron_lists %]
+                                            <optgroup label="Patron lists:">
+                                                [% FOREACH pl IN patron_lists %]
+                                                    <option value="[% pl.patron_list_id %]">[% pl.name %]</option>
+                                                [% END %]
+                                            </optgroup>
+                                        [% END %]
+
+                                        <option value="new">[ New list ]</option>
+                                    </select>
+
+                                    <input type="text" id="new_patron_list" name="new_patron_list" id="new_patron_list" />
+
+                                    [% FOREACH key IN search_parameters.keys %]
+                                        <input type="hidden" name="[% key %]" value="[% search_parameters.$key %]" />
+                                    [% END %]
+
+                                    <input id="add_to_patron_list_submit" type="submit" class="submit" value="Save">
+                                </span>
+                            </div>
+                        </div>
 						<div class="searchresults">
 
 							<table id="memberresultst">
 							<thead>
 							<tr>
+                            <th>&nbsp</th>
 							<th>Card</th>
 							<th>Name</th>
 							<th>Cat</th>
@@ -65,6 +178,7 @@
 							<tr>
 							[% END %]
 							[% END %]
+                            <td><input type="checkbox" class="selection" name="borrowernumber" value="[% resultsloo.borrowernumber %]" /></td>
 							<td>[% resultsloo.cardnumber %]</td>
                             <td style="white-space: nowrap;">
                             <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% resultsloo.borrowernumber %]">
@@ -92,11 +206,12 @@
 							</table>
 							<div class="pages">[% IF ( multipage ) %][% paginationbar %][% END %]</div>
 						</div>
-						[% ELSE %]
-						[% IF ( searching ) %]
-						<div class="dialog alert">No results found</div>
-						[% END %]
-						[% END %]
+                    </form>
+                    [% ELSE %]
+                        [% IF ( searching ) %]
+                            <div class="dialog alert">No results found</div>
+                        [% END %]
+                    [% END %]
 
 					</div>
 				</div>

@@ -32,6 +32,7 @@ use C4::Branch;
 use C4::Category;
 use Koha::DateUtils;
 use File::Basename;
+use Koha::List::Patron;
 
 my $input = new CGI;
 my $quicksearch = $input->param('quicksearch') || '';
@@ -47,6 +48,15 @@ my ($template, $loggedinuser, $cookie)
                  });
 
 my $theme = $input->param('theme') || "default";
+
+my $add_to_patron_list       = $input->param('add_to_patron_list');
+my $add_to_patron_list_which = $input->param('add_to_patron_list_which');
+my $new_patron_list          = $input->param('new_patron_list');
+my @borrowernumbers          = $input->param('borrowernumber');
+$input->delete(
+    'add_to_patron_list', 'add_to_patron_list_which',
+    'new_patron_list',    'borrowernumber',
+);
 
 my $patron = $input->Vars;
 foreach (keys %$patron){
@@ -119,6 +129,29 @@ if ($member || keys %$patron) {
     ($results) = Search( $member || $patron, \@orderby, undef, undef, \@searchfields, $search_scope );
 }
 
+if ($add_to_patron_list) {
+    my $patron_list;
+
+    if ( $add_to_patron_list eq 'new' ) {
+        $patron_list = AddPatronList( { name => $new_patron_list } );
+    }
+    else {
+        $patron_list =
+          [ GetPatronLists( { patron_list_id => $add_to_patron_list } ) ]->[0];
+    }
+
+    if ( $add_to_patron_list_which eq 'all' ) {
+        @borrowernumbers = map { $_->{borrowernumber} } @$results;
+    }
+
+    my @patrons_added_to_list = AddPatronsToList( { list => $patron_list, borrowernumbers => \@borrowernumbers } );
+
+    $template->param(
+        patron_list           => $patron_list,
+        patrons_added_to_list => \@patrons_added_to_list,
+      )
+}
+
 if ($results) {
 	for my $field ('categorycode','branchcode'){
 		next unless ($patron->{$field});
@@ -176,24 +209,29 @@ my $base_url =
 my @letters = map { {letter => $_} } ( 'A' .. 'Z');
 
 $template->param(
-    letters => \@letters,
+    %$patron,
+    letters       => \@letters,
     paginationbar => pagination_bar(
         $base_url,
-        int( $count / $resultsperpage ) + ($count % $resultsperpage ? 1 : 0),
-        $startfrom, 'startfrom'
+        int( $count / $resultsperpage ) + ( $count % $resultsperpage ? 1 : 0 ),
+        $startfrom,
+        'startfrom'
     ),
-    startfrom => $startfrom,
-    from      => ($startfrom-1)*$resultsperpage+1,  
-    to        => $to,
-    multipage => ($count != $to || $startfrom!=1),
-    advsearch => ($$patron{categorycode} || $$patron{branchcode}),
-    branchloop=>\@branchloop,
-    categories=>\@categories,
-    searching       => "1",
-		actionname		=>basename($0),
-		%$patron,
-        numresults      => $count,
-        resultsloop     => \@resultsdata,
-            );
+    startfrom    => $startfrom,
+    from         => ( $startfrom - 1 ) * $resultsperpage + 1,
+    to           => $to,
+    multipage    => ( $count != $to || $startfrom != 1 ),
+    advsearch    => ( $$patron{categorycode} || $$patron{branchcode} ),
+    branchloop   => \@branchloop,
+    categories   => \@categories,
+    searching    => "1",
+    actionname   => basename($0),
+    numresults   => $count,
+    resultsloop  => \@resultsdata,
+    results_per_page => $resultsperpage,
+    member => $member,
+    search_parameters => \%parameters,
+    patron_lists => [ GetPatronLists() ],
+);
 
 output_html_with_http_headers $input, $cookie, $template->output;

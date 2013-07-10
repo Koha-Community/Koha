@@ -15,7 +15,10 @@
 <div class="yui-u first">
 <h3>Patrons and circulation</h3>
 <dl>
-    [% IF ( CAN_user_tools_moderate_comments ) %]
+    <dt><a href="/cgi-bin/koha/patron_lists/lists.pl">Patron lists</a>
+    <dd>Manage lists of patrons.</dd>
+
+[% IF ( CAN_user_tools_moderate_comments ) %]
     <dt><a href="/cgi-bin/koha/reviews/reviewswaiting.pl">Comments</a> [% IF ( pendingcomments ) %]<span class="holdcount"><a href="/cgi-bin/koha/reviews/reviewswaiting.pl">[% pendingcomments %]</a></span>[% END %]</dt>
 	<dd>Moderate patron comments. </dd>
     [% END %]

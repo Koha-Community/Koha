@@ -7262,6 +7262,44 @@ if ( CheckVersion($DBversion) ) {
     $dbh->{RaiseError} = 0;
 }
 
+$DBversion = "3.13.00.XXX";
+if ( CheckVersion($DBversion) ) {
+
+    $dbh->do(q{
+        CREATE TABLE IF NOT EXISTS `patron_lists` (
+          patron_list_id int(11) NOT NULL AUTO_INCREMENT,
+          name varchar(255) CHARACTER SET utf8 NOT NULL,
+          owner int(11) NOT NULL,
+          PRIMARY KEY (patron_list_id),
+          KEY owner (owner)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+    });
+
+    $dbh->do(q{
+        ALTER TABLE `patron_lists`
+          ADD CONSTRAINT patron_lists_ibfk_1 FOREIGN KEY (`owner`) REFERENCES borrowers (borrowernumber) ON DELETE CASCADE ON UPDATE CASCADE;
+    });
+
+    $dbh->do(q{
+        CREATE TABLE patron_list_patrons (
+          patron_list_patron_id int(11) NOT NULL AUTO_INCREMENT,
+          patron_list_id int(11) NOT NULL,
+          borrowernumber int(11) NOT NULL,
+          PRIMARY KEY (patron_list_patron_id),
+          KEY patron_list_id (patron_list_id),
+          KEY borrowernumber (borrowernumber)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+    });
+
+    $dbh->do(q{
+        ALTER TABLE `patron_list_patrons`
+          ADD CONSTRAINT patron_list_patrons_ibfk_1 FOREIGN KEY (patron_list_id) REFERENCES patron_lists (patron_list_id) ON DELETE CASCADE ON UPDATE CASCADE,
+          ADD CONSTRAINT patron_list_patrons_ibfk_2 FOREIGN KEY (borrowernumber) REFERENCES borrowers (borrowernumber) ON DELETE CASCADE ON UPDATE CASCADE;
+    });
+
+    print "Upgrade to $DBversion done (Bug 10565 - Add a 'Patron List' feature for storing and manipulating collections of patrons)\n";
+    SetVersion($DBversion);
+}
 
 =head1 FUNCTIONS
 

@@ -1,0 +1,56 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Patron lists &rsaquo; New list</title>
+[% INCLUDE 'doc-head-close.inc' %]
+
+<script type="text/javascript">
+//<![CDATA[
+
+function CheckForm() {
+  if ( !$("#list-name").val() ) {
+    alert( _("Name is a required field!")  );
+    return false;
+  }
+
+  return true;
+}
+
+//]]>
+</script>
+
+</head>
+
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'cat-search.inc' %]
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="lists.pl">Patron lists</a> &rsaquo; Add / modify list</div>
+
+
+<div class="yui-t7">
+    <div class="yui-main">
+        <h1>New patron list</h1>
+
+        <form method="post" onsubmit="return CheckForm()">
+            <fieldset class="rows">
+
+                <legend>Create a new patron list</legend>
+
+                <ol>
+                    <li>
+                        <label class="required" for="name">Name:</label>
+                        <input id="list-name" name="name" type="text" value="[% list.name %]" />
+                    </li>
+
+                    <li>
+                        <span class="label">Owner: </span>[% loggedinusername %]
+                    </li>
+                </ol>
+
+            </fieldset>
+
+            <input type="hidden" name="patron_list_id" value="[% list.patron_list_id %]" />
+            <input type="submit" class="btn" value="Save" />
+            <a href="lists.pl" class="cancel">Cancel</a>
+        </form>
+    </div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]
