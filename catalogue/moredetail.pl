@@ -214,6 +214,7 @@ $template->param(
     hidepatronname      => $hidepatronname,
 );
 $template->param(ONLY_ONE => 1) if ( $itemnumber && $showncount != @items );
+$template->{'VARS'}->{'searchid'} = $query->param('searchid');
 
 
 my ( $holdcount, $holds ) = GetReservesFromBiblionumber($biblionumber,1);

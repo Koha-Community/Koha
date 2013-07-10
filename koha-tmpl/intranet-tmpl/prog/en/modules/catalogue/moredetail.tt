@@ -2,6 +2,17 @@
 <title>Koha &rsaquo; Catalog &rsaquo; Item details for [% title %] [% FOREACH subtitl IN subtitle %] [% subtitl.subfield %][% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <style type="text/css">h3{padding-top: 1em; border-top: 2px solid #CCCCCC;}</style>
+[% INCLUDE 'browser-strings.inc' %]
+<!--[if lt IE 9]>
+<script type="text/javascript" src="[% interface %]/lib/shims/json2.min.js"></script>
+<![endif]-->
+<script type="text/javascript" src="[% interface %]/js/browser.js"></script>
+<script type="text/javascript">
+//<![CDATA[
+    var browser = KOHA.browser('[% searchid %]', parseInt('[% biblionumber %]', 10));
+    browser.show();
+//]]>
+</script>
 </head>
 <body id="catalog_moredetail" class="catalog">
 [% USE KohaDates %]

@@ -51,9 +51,11 @@ function verify_images() {
         }
         });
 }
+
      $(document).ready(function() {
         $('#bibliodetails').tabs();
         $('#search-form').focus();
+
      });
      [% IF ( AmazonCoverImages ) %]$(window).load(function() {
         verify_images();
@@ -63,10 +65,18 @@ function verify_images() {
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.columnFilter.js"></script>
+[% INCLUDE 'browser-strings.inc' %]
+<!--[if lt IE 9]>
+<script type="text/javascript" src="[% interface %]/lib/shims/json2.min.js"></script>
+<![endif]-->
+<script type="text/javascript" src="[% interface %]/js/browser.js"></script>
 [% INCLUDE 'datatables-strings.inc' %]
 <script type="text/javascript" src="[% themelang %]/js/datatables.js"></script>
 <script type="text/javascript">
 //<![CDATA[
+    var browser = KOHA.browser('[% searchid %]', parseInt('[% biblionumber %]', 10));
+    browser.show();
+
     function activate_filters(id) {
         table = $("#" + id + " table");
         if (table.length == 1) {

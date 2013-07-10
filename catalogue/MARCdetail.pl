@@ -333,6 +333,7 @@ $template->param (
 	marcview => 1,
 	z3950_search_params		=> C4::Search::z3950_search_args($biblio),
 	C4::Search::enabled_staff_search_views,
+    searchid            => $query->param('searchid'),
 );
 
 my ( $holdcount, $holds ) = C4::Reserves::GetReservesFromBiblionumber($biblionumber,1);

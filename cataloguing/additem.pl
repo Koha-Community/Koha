@@ -315,6 +315,7 @@ my $itemnumber   = $input->param('itemnumber');
 my $op           = $input->param('op');
 my $hostitemnumber = $input->param('hostitemnumber');
 my $marcflavour  = C4::Context->preference("marcflavour");
+my $searchid     = $input->param('searchid');
 # fast cataloguing datas
 my $fa_circborrowernumber = $input->param('circborrowernumber');
 my $fa_barcode            = $input->param('barcode');
@@ -538,7 +539,7 @@ if ($op eq "additem") {
     # check that there is no issue on this item before deletion.
     $error = &DelItemCheck($dbh,$biblionumber,$itemnumber);
     if($error == 1){
-        print $input->redirect("additem.pl?biblionumber=$biblionumber&frameworkcode=$frameworkcode");
+        print $input->redirect("additem.pl?biblionumber=$biblionumber&frameworkcode=$frameworkcode&searchid=$searchid");
     }else{
         push @errors,$error;
         $nextop="additem";
@@ -570,13 +571,13 @@ if ($op eq "additem") {
             my $defaultview = C4::Context->preference('IntranetBiblioDefaultView');
             my $views = { C4::Search::enabled_staff_search_views };
             if ($defaultview eq 'isbd' && $views->{can_view_ISBD}) {
-                print $input->redirect("/cgi-bin/koha/catalogue/ISBDdetail.pl?biblionumber=$biblionumber");
+                print $input->redirect("/cgi-bin/koha/catalogue/ISBDdetail.pl?biblionumber=$biblionumber&searchid=$searchid");
             } elsif  ($defaultview eq 'marc' && $views->{can_view_MARC}) {
-                print $input->redirect("/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=$biblionumber");
+                print $input->redirect("/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=$biblionumber&searchid=$searchid");
             } elsif  ($defaultview eq 'labeled_marc' && $views->{can_view_labeledMARC}) {
-                print $input->redirect("/cgi-bin/koha/catalogue/labeledMARCdetail.pl?biblionumber=$biblionumber");
+                print $input->redirect("/cgi-bin/koha/catalogue/labeledMARCdetail.pl?biblionumber=$biblionumber&searchid=$searchid");
             } else {
-                print $input->redirect("/cgi-bin/koha/catalogue/detail.pl?biblionumber=$biblionumber");
+                print $input->redirect("/cgi-bin/koha/catalogue/detail.pl?biblionumber=$biblionumber&searchid=$searchid");
             }
             exit;
         }
@@ -822,6 +823,7 @@ $template->param(
     popup => $input->param('popup') ? 1: 0,
     C4::Search::enabled_staff_search_views,
 );
+$template->{'VARS'}->{'searchid'} = $searchid;
 
 if ($frameworkcode eq 'FA'){
     # fast cataloguing datas

@@ -150,6 +150,7 @@ use C4::Members qw(GetMember);
 use C4::VirtualShelves;
 use URI::Escape;
 use POSIX qw(ceil floor);
+use String::Random;
 use C4::Branch; # GetBranches
 
 my $DisplayMultiPlaceHold = C4::Context->preference("DisplayMultiPlaceHold");
@@ -673,6 +674,16 @@ for (my $i=0;$i<@servers;$i++) {
 } #/end of the for loop
 #$template->param(FEDERATED_RESULTS => \@results_array);
 
+$template->{'VARS'}->{'searchid'} = $cgi->param('searchid')
+  || String::Random::random_string('ssssssss');
+my $gotonumber = $cgi->param('gotoNumber');
+if ($gotonumber eq 'last' || $gotonumber eq 'first') {
+    $template->{'VARS'}->{'gotoNumber'} = $gotonumber;
+}
+$template->{'VARS'}->{'gotoPage'}   = 'detail.pl';
+my $gotopage = $cgi->param('gotoPage');
+$template->{'VARS'}->{'gotoPage'} = $gotopage
+  if $gotopage =~ m/^(ISBD|labeledMARC|MARC|more)?detail.pl$/;
 
 $template->param(
             #classlist => $classlist,

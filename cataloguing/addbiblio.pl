@@ -724,6 +724,7 @@ my $op            = $input->param('op');
 my $mode          = $input->param('mode');
 my $frameworkcode = $input->param('frameworkcode');
 my $redirect      = $input->param('redirect');
+my $searchid      = $input->param('searchid');
 my $dbh           = C4::Context->dbh;
 my $hostbiblionumber = $input->param('hostbiblionumber');
 my $hostitemnumber = $input->param('hostitemnumber');
@@ -889,7 +890,7 @@ if ( $op eq "addbiblio" ) {
 	    }
 	    else {
 		print $input->redirect(
-                "/cgi-bin/koha/cataloguing/additem.pl?biblionumber=$biblionumber&frameworkcode=$frameworkcode"
+                "/cgi-bin/koha/cataloguing/additem.pl?biblionumber=$biblionumber&frameworkcode=$frameworkcode&searchid=$searchid"
 		);
 		exit;
 	    }
@@ -898,20 +899,20 @@ if ( $op eq "addbiblio" ) {
             my $defaultview = C4::Context->preference('IntranetBiblioDefaultView');
             my $views = { C4::Search::enabled_staff_search_views };
             if ($defaultview eq 'isbd' && $views->{can_view_ISBD}) {
-                print $input->redirect("/cgi-bin/koha/catalogue/ISBDdetail.pl?biblionumber=$biblionumber");
+                print $input->redirect("/cgi-bin/koha/catalogue/ISBDdetail.pl?biblionumber=$biblionumber&searchid=$searchid");
             } elsif  ($defaultview eq 'marc' && $views->{can_view_MARC}) {
-                print $input->redirect("/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=$biblionumber&frameworkcode=$frameworkcode");
+                print $input->redirect("/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=$biblionumber&frameworkcode=$frameworkcode&searchid=$searchid");
             } elsif  ($defaultview eq 'labeled_marc' && $views->{can_view_labeledMARC}) {
-                print $input->redirect("/cgi-bin/koha/catalogue/labeledMARCdetail.pl?biblionumber=$biblionumber");
+                print $input->redirect("/cgi-bin/koha/catalogue/labeledMARCdetail.pl?biblionumber=$biblionumber&searchid=$searchid");
             } else {
-                print $input->redirect("/cgi-bin/koha/catalogue/detail.pl?biblionumber=$biblionumber");
+                print $input->redirect("/cgi-bin/koha/catalogue/detail.pl?biblionumber=$biblionumber&searchid=$searchid");
             }
             exit;
 
     }
     elsif ($redirect eq "just_save"){
         my $tab = $input->param('current_tab');
-        print $input->redirect("/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=$biblionumber&framework=$frameworkcode&tab=$tab");
+        print $input->redirect("/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=$biblionumber&framework=$frameworkcode&tab=$tab&searchid=$searchid");
     }
     else {
           $template->param(
@@ -998,5 +999,6 @@ $template->param(
     borrowernumber => $loggedinuser,
     tab => $input->param('tab')
 );
+$template->{'VARS'}->{'searchid'} = $searchid;
 
 output_html_with_http_headers $input, $cookie, $template->output;

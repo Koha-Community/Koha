@@ -360,6 +360,7 @@ $template->param(
     subscriptions       => \@subs,
     subscriptionsnumber => $subscriptionsnumber,
     subscriptiontitle   => $dat->{title},
+    searchid            => $query->param('searchid'),
 );
 
 # $debug and $template->param(debug_display => 1);
