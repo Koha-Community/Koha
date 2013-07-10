@@ -28,6 +28,7 @@
 
   <xsl:variable name="hidelostitems" select="marc:sysprefs/marc:syspref[@name='hidelostitems']"/>
   <xsl:variable name="singleBranchMode" select="marc:sysprefs/marc:syspref[@name='singleBranchMode']"/>
+  <xsl:variable name="OPACURLOpenInNewWindow" select="marc:sysprefs/marc:syspref[@name='OPACURLOpenInNewWindow']"/>
 
   <xsl:if test="marc:datafield[@tag=200]">
     <xsl:for-each select="marc:datafield[@tag=200]">
@@ -109,6 +110,9 @@
                 <xsl:attribute name="href">
                   <xsl:value-of select="marc:subfield[@code='u']"/>
                 </xsl:attribute>
+                <xsl:if test="$OPACURLOpenInNewWindow='1'">
+                    <xsl:attribute name="target">_blank</xsl:attribute>
+                </xsl:if>
                 <xsl:choose>
                   <xsl:when test="marc:subfield[@code='y' or @code='3' or @code='z']">
                     <xsl:call-template name="subfieldSelect">                        
