@@ -13,7 +13,7 @@
             return true;
         }
         else {
-            alert(_("You must enter a date !"));
+            alert(_("You must enter a date!"));
             document.f.date.focus();
             return false;
         }
@@ -78,7 +78,8 @@
         <tr>
             <th>ISSN</th>
             <th>Title</th>
-            <th>Note</th>
+            <th>OPAC note</th>
+            <th>Nonpublic note</th>
             <th>Expiration date</th>
 			<th colspan="2">&nbsp;</th>
         </tr>
@@ -100,6 +101,9 @@
             </td>
             <td>
                 [% subscriptions_loo.notes %]
+            </td>
+            <td>
+                [% subscriptions_loo.internalnotes %]
             </td>
             <td>
                 [% subscriptions_loo.expirationdate %]
