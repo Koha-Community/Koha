@@ -58,12 +58,12 @@ div.dataTables_info {
 div.dataTables_length,
 div.dataTables_filter {
     border-left : 1px solid #FFF;
+    border-right : 1px solid #AAAAAA;
 }
 div.dataTables_filter {
     line-height : 1.9em;
 }
 div.dataTables_paginate {
-    background-color : #F4F4F4;
     padding : 0;
 }
 
@@ -73,42 +73,49 @@ div.dataTables_paginate {
     border-left : 1px solid #FFF;
     display : block;
     float : left;
-    line-height:1.6em;
-    padding: .3em .7em;
+    line-height:1.9em;
+    padding : 0.4em 0.7em;
     cursor: pointer;
 }
 
 .paging_full_numbers a.paginate_button {
+    background-color : #FFF;
+    background-repeat: no-repeat;
     color : #0000CC;
 }
 .paging_full_numbers a.paginate_button.first {
+    background-color: transparent;
     background-image : url('../../img/first.png');
-    background-repeat: no-repeat;
-    background-position : 1% center;
-    padding-left : 2em;
+    background-position : 3px center;
+    padding-left : 23px;
 }
 .paging_full_numbers a.paginate_button.previous {
+    background-color: transparent;
     background-image : url('../../img/prev.png');
-    background-repeat: no-repeat;
-    background-position : 1% center;
-    padding-left : 2em;
+    background-position : 3px center;
+    padding-left : 23px;
 }
 .paging_full_numbers a.paginate_button.next {
+    background-color: transparent;
     background-image : url('../../img/next.png');
-    background-repeat: no-repeat;
-    background-position : 96% center;
-    padding-right : 2em;
+    background-position : 93% center;
+    padding-right : 25px;
 }
 .paging_full_numbers a.paginate_button.last {
+    background-color: transparent;
     background-image : url('../../img/last.png');
-    background-repeat: no-repeat;
-    background-position : 96% center;
-    border-right : 1px solid #686868;
-    padding-right : 2em;
+    background-position : 93% center;
+    border-right : 0;
+    padding-right : 25px;
 }
 div.bottom.pager .paging_full_numbers a.paginate_button.last {
     border-right-width : 0;
 }
+
+div.bottom.pager div:first-child {
+    border-left : 0;
+}
+
 .paging_full_numbers a.paginate_active {
     background-color : #FFFFEA;
     color : #000;
@@ -203,8 +210,10 @@ div.dataTables_paginate.paging_four_button {
 
 .dataTables_processing {
     background-color: white;
-    border: 1px solid #DDDDDD;
-    color: #999999;
+    border: 1px solid #999;
+    -webkit-box-shadow: 2px 2px 3px 1px rgba(0, 0, 0, 0.2);
+    box-shadow: 2px 2px 3px 1px rgba(0, 0, 0, 0.2);
+    color: #333;
     font-size: 14px;
     height: 30px;
     left: 50%;

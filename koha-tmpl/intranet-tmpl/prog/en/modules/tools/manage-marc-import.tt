@@ -36,6 +36,7 @@ $(document).ready(function(){
       "bServerSide": true,
       "sAjaxSource": 'batch_records_ajax.pl',
       "sPaginationType": "full_numbers",
+      "sDom": '<"top pager"iflp>rt<"bottom pager"flp><"clear">',
       "aoColumns": [
           { "mDataProp": "import_record_id" },
           { "mDataProp": "citation" },
@@ -64,13 +65,13 @@ $(document).ready(function(){
                 + aData['match_id']
                 + " (" + _("score") + "="
                 + aData['score']
-                + '):' + '<a target="_blank" href="http://staff.kohadev/cgi-bin/koha/catalogue/detail.pl?biblionumber='
+                + '):' + '<a target="_blank" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber='
                 + aData['match_id'] + '">' + aData['match_citation'] + '</a>'
             );
         }
 
         $('td:eq(5)', nRow).html(
-            '<a target="_blank" href="http://staff.kohadev/cgi-bin/koha/catalogue/detail.pl?biblionumber='
+            '<a target="_blank" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber='
             + aData['matched'] + '">' + aData['matched'] + '</a>'
         );
       },
@@ -417,8 +418,8 @@ Page
             <th>#</th>
             <th>Citation</th>
             <th>Status</th>
-            <th>Match?</th>
-            <th>&nbsp;</th>
+            <th>Match type</th>
+            <th>Match details</th>
             <th>Record</th>
         </tr>
     </thead>
