@@ -111,16 +111,26 @@ function synchronize() {
     $('#upload-transactions').click(function () {
         $('.loading-overlay div').text(_("Uploading transactions, please wait..."));
         $('.loading-overlay').show();
-        var uploadIter = $.indexedDB("koha").objectStore("transactions").each(uploadTransaction);
-        uploadIter.done(function() {
-            $.indexedDB("koha").transaction(["transactions"]).then(function(){
-            }, function(err, e){
-            }, function(transaction){
-                transaction.objectStore("transactions").clear();
-            });
-            $('.loading-overlay').hide();
-            kohadb.saveSetting("dirty", false);
-            $('#upload-message').text(NO_UPLOAD_PENDING_MESSAGE);
+        $.ajax({
+            type: "GET",
+            url: "/cgi-bin/koha/offline_circ/service.pl",
+        }).done(function (data) {
+            if (data) {
+                $('.loading-overlay').hide();
+                alert(_("Please log in to Koha and try again. (Error: '" + data + "')"));
+            } else {
+                var uploadIter = $.indexedDB("koha").objectStore("transactions").each(uploadTransaction);
+                uploadIter.done(function() {
+                    $.indexedDB("koha").transaction(["transactions"]).then(function(){
+                    }, function(err, e){
+                    }, function(transaction){
+                        transaction.objectStore("transactions").clear();
+                    });
+                    $('.loading-overlay').hide();
+                    kohadb.saveSetting("dirty", false);
+                    $('#upload-message').text(NO_UPLOAD_PENDING_MESSAGE);
+                });
+            }
         });
     });
 
