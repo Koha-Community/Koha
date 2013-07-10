@@ -2,7 +2,7 @@
 [% USE AuthorisedValues %]
 
 [% INCLUDE 'doc-head-open.inc' %]
-[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog
+[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Courses
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="opac-main">
@@ -16,14 +16,16 @@
             <div class="yui-b">
                 <div class="yui-g">
 
-                    <div id="search-toolbar">
-                        <form id="search_courses_form">
-                            <input type="text" name="search_on" id="search_on" />
-                            <input type="submit" value="Search" />
-                        </form>
-                    </div><!-- /toolbar -->
-
                     <h1>Courses</h1>
+                    <div id="search-toolbar">
+                        <form action="/cgi-bin/koha/opac-course-reserves.pl" method="get" id="search_courses_form">
+                            <fieldset>
+                                <label for="search_on">Search courses:</label> <input type="text" name="search_on" id="search_on" />
+                                <input type="submit" value="Search" />
+                            </fieldset>
+                        </form>
+                    </div><!-- /search-toolbar -->
+
                     <table id="course_reserves_table">
                         <thead>
                             <tr>

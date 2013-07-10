@@ -4,7 +4,7 @@
 [% USE ItemTypes %]
 [% USE Branches %]
 [% INCLUDE 'doc-head-open.inc' %]
-[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog
+[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Course reserves for [% course.course_name %]
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="opac-main">
@@ -14,49 +14,64 @@
 
 <div id="doc2" class="yui-t7">
     <div id="yui-main">
-
-        <table>
-            <tr><th>Course Name</th><td>[% course.course_name %]</td></tr>
-            <tr><th>Term</th><td>[% AuthorisedValues.GetByCode( 'TERM', course.term ) %]</td></tr>
-            <tr><th>Department</th><td>[% AuthorisedValues.GetByCode( 'DEPARTMENT', course.department ) %]</td></tr>
-            <tr><th>Course Number</th><td>[% course.course_number %]</td></tr>
-            <tr><th>Section</th><td>[% course.section %]</td></tr>
-            <tr><th>Instructors</th><td>[% FOREACH i IN course.instructors %]<div class="instructor">[% i.firstname %] [% i.surname %]</div>[% END %]</td></tr>
-            <tr><th>Notes</th><td>[% course.public_note %]</td></tr>
-        </table>
-
-        <table>
-            <thead>
-                <tr>
-                    <th>Title</th>
-                    <th>Item type</th>
-                    <th>Location</th>
-                    <th>Collection</th>
-                    <th>Call number</th>
-                    <th>Copy</th>
-                    <th>Status</td>
-                    <th>Date due</td>
-                    <th>Notes</th>
-                </tr>
-            </thead>
-
-            <tbody>
-                [% FOREACH cr IN course_reserves %]
-                    <tr>
-                        <td><a href="opac-detail.pl?biblionumber=[% cr.item.biblionumber %]">[% cr.item.title %]</a></td>
-                        <td>[% ItemTypes.GetDescription( cr.item.itype ) %]</td>
-                        <td>[% Branches.GetName( cr.item.holdingbranch ) %] <br/> <i>[% AuthorisedValues.GetByCode( 'LOC', cr.item.location ) %]</i></td>
-                        <td>[% AuthorisedValues.GetByCode( 'CCODE', cr.item.ccode ) %]</td>
-                        <td>[% cr.item.itemcallnumber %]</td>
-                        <td>[% cr.item.copynumber %]</td>
-                        <td>[% INCLUDE 'item-status.inc' item = cr.item %]</td>
-                        <td>[% cr.issue.date_due | $KohaDates %]</td>
-                        <td>[% cr.public_note %]</td>
-                    </tr>
+        <h2><a href="/cgi-bin/koha/opac-course-reserves.pl">Course reserves</a> &#8674; Course reserves for <i>[% course.course_name %]</i></h2>
+        <div class="rows clearfix">
+            <ol>
+                [% IF ( course.term ) %]<li><span class="label">Term:</span> [% AuthorisedValues.GetByCode( 'TERM', course.term ) %]</li>[% END %]
+                <li><span class="label">Department:</span> [% AuthorisedValues.GetByCode( 'DEPARTMENT', course.department ) %]</li>
+                [% IF ( course.course_number ) %]<li><span class="label">Course number:</span> [% course.course_number %]</li>[% END %]
+                [% IF ( course.section ) %]<li><span class="label">Section:</span> [% course.section %]</li>[% END %]
+                [% IF ( course.instructors ) %]
+                    <li><span class="label">Instructors:</span>
+                        <ul>
+                            [% FOREACH i IN course.instructors %]
+                                <li><div class="instructor">[% i.firstname %] [% i.surname %]</div></li>
+                            [% END %]
+                        </ul>
+                    </li>
                 [% END %]
-            </tbody>
-        </table>
+                [% IF ( course.public_note ) %]<li><span class="label">Notes:</span> [% course.public_note %]</li>[% END %]
+            </ol>
+        </div>
 
+        [% IF ( course_reserves ) %]
+            <table>
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Item type</th>
+                        <th>Location</th>
+                        <th>Collection</th>
+                        <th>Call number</th>
+                        <th>Copy</th>
+                        <th>Status</td>
+                        <th>Date due</td>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    [% FOREACH cr IN course_reserves %]
+                        <tr>
+                            <td><a href="opac-detail.pl?biblionumber=[% cr.item.biblionumber %]">[% cr.item.title %]</a></td>
+                            <td>[% ItemTypes.GetDescription( cr.item.itype ) %]</td>
+                            <td>[% Branches.GetName( cr.item.holdingbranch ) %] <br/> <i>[% AuthorisedValues.GetByCode( 'LOC', cr.item.location ) %]</i></td>
+                            <td>[% AuthorisedValues.GetByCode( 'CCODE', cr.item.ccode ) %]</td>
+                            <td>[% cr.item.itemcallnumber %]</td>
+                            <td>[% cr.item.copynumber %]</td>
+                            <td>[% INCLUDE 'item-status.inc' item = cr.item %]</td>
+                            <td>[% cr.issue.date_due | $KohaDates %]</td>
+                            <td>[% cr.public_note %]</td>
+                        </tr>
+                    [% END %]
+                </tbody>
+            </table>
+        [% ELSE %]
+            <br style="clear:both;" />
+            <div class="dialog message">
+                <p>No reserves have been selected for this course.</p>
+            </div>
+        [% END %]
     </div>
 </div>
 
