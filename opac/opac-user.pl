@@ -370,7 +370,6 @@ $template->param(
     patronupdate => $patronupdate,
     OpacRenewalAllowed => C4::Context->preference("OpacRenewalAllowed"),
     userview => 1,
-    dateformat => C4::Context->preference("dateformat"),
 );
 
 $template->param(

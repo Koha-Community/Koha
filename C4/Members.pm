@@ -354,6 +354,7 @@ sub GetMemberDetails {
         return;
     }
     my $borrower = $sth->fetchrow_hashref;
+    return unless $borrower;
     my ($amount) = GetMemberAccountRecords( $borrowernumber);
     $borrower->{'amountoutstanding'} = $amount;
     # FIXME - patronflags calls GetMemberAccountRecords... just have patronflags return $amount
