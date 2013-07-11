@@ -148,6 +148,7 @@ use C4::Languages qw(getAllLanguages);
 use C4::Koha;
 use C4::Members qw(GetMember);
 use C4::VirtualShelves;
+use URI::Escape;
 use POSIX qw(ceil floor);
 use C4::Branch; # GetBranches
 
@@ -391,11 +392,11 @@ unless (@servers) {
 }
 # operators include boolean and proximity operators and are used
 # to evaluate multiple operands
-my @operators = $cgi->param('op');
+my @operators = map uri_unescape($_), $cgi->param('op');
 
 # indexes are query qualifiers, like 'title', 'author', etc. They
 # can be single or multiple parameters separated by comma: kw,right-Truncation 
-my @indexes = $cgi->param('idx');
+my @indexes = map uri_unescape($_), $cgi->param('idx');
 
 # if a simple index (only one)  display the index used in the top search box
 if ($indexes[0] && (!$indexes[1] || $params->{'scan'})) {
@@ -404,12 +405,11 @@ if ($indexes[0] && (!$indexes[1] || $params->{'scan'})) {
     $template->param($idx => 1);
 }
 
-
 # an operand can be a single term, a phrase, or a complete ccl query
-my @operands = $cgi->param('q');
+my @operands = map uri_unescape($_), $cgi->param('q');
 
 # limits are use to limit to results to a pre-defined category such as branch or language
-my @limits = $cgi->param('limit');
+my @limits = map uri_unescape($_), $cgi->param('limit');
 
 if($params->{'multibranchlimit'}) {
     my $multibranch = '('.join( " or ", map { "branch: $_ " } @{ GetBranchesInCategory( $params->{'multibranchlimit'} ) } ).')';
