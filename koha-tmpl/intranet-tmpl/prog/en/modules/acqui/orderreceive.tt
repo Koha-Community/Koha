@@ -2,23 +2,14 @@
 <title>Koha &rsaquo; Acquisitions &rsaquo; Receipt summary for : [% name %] [% IF ( invoice ) %]invoice, [% invoice %][% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'additem.js.inc' %]
-<script type="text/javascript" src="[% themelang %]/js/additem.js"> </script>
+<script type="text/javascript" src="[% themelang %]/js/additem.js"></script>
+<script type="text/javascript" src="[% themelang %]/js/cataloging.js"></script>
 <script type="text/javascript" src="[% themelang %]/js/prevent_submit.js"></script>
 <script type="text/javascript">
 //<![CDATA[
     function Check(form) {
         [% IF (AcqCreateItemReceiving) %]
-            var total_errors=0;
-            $("input[name='mandatory'],select[name='mandatory']").each(function(i){
-                if($(this).val() == 1){
-                    var mandatory_field = $("input[name='field_value'],select[name='field_value']").eq(i);
-                    if(mandatory_field.val() == ''){
-                        mandatory_field.addClass("missing");
-                        total_errors++;
-                    }
-                }
-            });
-
+            var total_errors = CheckMandatorySubfields(form);
             if (total_errors != 0) {
                 var alertString = _("Form not submitted because of the following problem(s)");
                 alertString += "\n------------------------------------------------------------------------------------\n";
