@@ -7147,12 +7147,12 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
         VALUES (
             'BlockExpiredPatronOpacActions',
             'yes',
-            'Set whether an expired patron can perform opac actions such as placing a hold or reserve, can be overridden on a per patron-type basis',
+            'Set whether an expired patron can perform opac actions such as placing holds or renew books, can be overridden on a per patron-type basis',
             NULL,
             'YesNo'
         )
     ");
-    $dbh->do("ALTER TABLE `categories` ADD COLUMN `BlockExpiredPatronOpacActions` TINYINT(1) DEFAULT 0 NOT NULL");
+    $dbh->do("ALTER TABLE `categories` ADD COLUMN `BlockExpiredPatronOpacActions` TINYINT(1) DEFAULT -1 NOT NULL AFTER category_type");
     print "Upgraded to $DBversion done (Bug 6739 - expired patrons not blocked from opac actions)\n";
     SetVersion ($DBversion);
 }
