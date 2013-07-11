@@ -1,6 +1,6 @@
 use strict;
 use warnings;
-use Test::More tests=>18;
+use Test::More tests=>20;
 
 BEGIN {use_ok('C4::Budgets') }
 use C4::Dates;
@@ -102,5 +102,22 @@ ok(GetBudgets({budget_period_id=>GetBudgetPeriod($bpid)->{budget_period_id}},[{"
 my $budget_name = GetBudgetName( $budget_id );
 is($budget_name, $budget->{budget_name}, "Test the GetBudgetName routine");
 
+my $second_budget_id;
+ok($second_budget_id=AddBudget(
+                        {   budget_code         => "ZZZZ",
+                            budget_amount       => "500.00",
+                            budget_name     => "Art",
+                            budget_notes        => "This is a note",
+                            budget_description=> "Art",
+                            budget_active       => 1,
+                            budget_period_id    => $bpid,
+                        }
+                       ),
+    "AddBudget returned $second_budget_id");
+
+my $budgets = GetBudgets({ budget_period_id => $bpid});
+ok($budgets->[0]->{budget_name} lt $budgets->[1]->{budget_name}, 'default sort order for GetBudgets is by name');
+
 ok($del_status=DelBudget($budget_id),
     "DelBudget returned $del_status");
+
