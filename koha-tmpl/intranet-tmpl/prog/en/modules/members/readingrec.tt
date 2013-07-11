@@ -26,7 +26,7 @@
             null,
             null,
             null,
-            null
+            { "sType": "title-string" }
         ]
     }));
  });
@@ -92,12 +92,12 @@
                     [% issue.date_due | $KohaDates %]
                 [% ELSE %]&nbsp;[% END %]</td>
             <td>
-        [% IF  issue.returndate %]
-            [% issue.returndate | $KohaDates %]
-        [% ELSE %]
-            Checked Out
-        [% END %]
-	</td>
+                [% IF  issue.returndate %]
+                    <span title="[% issue.returndate %]">[% issue.returndate | $KohaDates %]</span>
+                [% ELSE %]
+                    <span title="Checked Out"><small>Checked Out</small></span>
+                [% END %]
+            </td>
 </tr>
 [% END %]
 </table>
