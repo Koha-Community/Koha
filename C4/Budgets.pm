@@ -442,27 +442,13 @@ sub GetBudgetPeriods {
 sub GetBudgetPeriod {
 	my ($budget_period_id) = @_;
 	my $dbh = C4::Context->dbh;
-	## $total = number of records linked to the record that must be deleted
-	my $total = 0;
-	## get information about the record that will be deleted
-	my $sth;
-	if ($budget_period_id) {
-		$sth = $dbh->prepare( qq|
-              SELECT      *
-                FROM aqbudgetperiods
-                WHERE budget_period_id=? |
-		);
-		$sth->execute($budget_period_id);
-	} else {         # ACTIVE BUDGET
-		$sth = $dbh->prepare(qq|
-			  SELECT      *
-                FROM aqbudgetperiods
-                WHERE budget_period_active=1 |
-		);
-		$sth->execute();
-	}
-	my $data = $sth->fetchrow_hashref;
-	return $data;
+	my $sth = $dbh->prepare( qq|
+        SELECT      *
+        FROM aqbudgetperiods
+        WHERE budget_period_id=? |
+	);
+	$sth->execute($budget_period_id);
+	return $sth->fetchrow_hashref;
 }
 
 sub DelBudgetPeriod{

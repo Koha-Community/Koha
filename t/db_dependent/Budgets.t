@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 use Modern::Perl;
-use Test::More tests => 147;
+use Test::More tests => 144;
 
 BEGIN {
     use_ok('C4::Budgets')
@@ -58,7 +58,6 @@ $bpid = AddBudgetPeriod({
     budget_period_enddate => '2008-12-31',
 });
 is( $bpid, undef, 'AddBugetPeriod without start date returns undef' );
-is( GetBudgetPeriod(0), undef ,'GetBudgetPeriod(0) returned undef : noactive BudgetPeriod' );
 my $budgetperiods = GetBudgetPeriods();
 is( @$budgetperiods, 0, 'GetBudgetPeriods returns the correct number of budget periods' );
 
@@ -76,8 +75,6 @@ is( $budgetperiod->{budget_period_startdate}, $my_budgetperiod->{budget_period_s
 is( $budgetperiod->{budget_period_enddate}, $my_budgetperiod->{budget_period_enddate}, 'AddBudgetPeriod stores the end date correctly' );
 is( $budgetperiod->{budget_period_description}, $my_budgetperiod->{budget_period_description}, 'AddBudgetPeriod stores the description correctly' );
 is( $budgetperiod->{budget_period_active}, $my_budgetperiod->{budget_period_active}, 'AddBudgetPeriod stores active correctly' );
-is( GetBudgetPeriod(0), undef ,'GetBudgetPeriod(0) returned undef : noactive BudgetPeriod' );
-
 
 $my_budgetperiod = {
     budget_period_startdate   => '2009-01-01',
@@ -96,8 +93,6 @@ is( $budgetperiod->{budget_period_startdate}, $my_budgetperiod->{budget_period_s
 is( $budgetperiod->{budget_period_enddate}, $my_budgetperiod->{budget_period_enddate}, 'ModBudgetPeriod updates the end date correctly' );
 is( $budgetperiod->{budget_period_description}, $my_budgetperiod->{budget_period_description}, 'ModBudgetPeriod updates the description correctly' );
 is( $budgetperiod->{budget_period_active}, $my_budgetperiod->{budget_period_active}, 'ModBudgetPeriod upates active correctly' );
-isnt( GetBudgetPeriod(0), undef, 'GetBugetPeriods functions correctly' );
-
 
 $budgetperiods = GetBudgetPeriods();
 is( @$budgetperiods, 1, 'GetBudgetPeriods returns the correct number of budget periods' );
@@ -110,7 +105,6 @@ is( $budgetperiods->[0]->{budget_period_active}, $my_budgetperiod->{budget_perio
 is( DelBudgetPeriod($bpid), 1, 'DelBudgetPeriod returns true' );
 $budgetperiods = GetBudgetPeriods();
 is( @$budgetperiods, 0, 'GetBudgetPeriods returns the correct number of budget periods' );
-
 
 #
 # Budget  :
