@@ -13,6 +13,7 @@
 [% INCLUDE 'datatables-strings.inc' %]
 <script type="text/javascript" src="[% themelang %]/js/datatables.js"></script>
 <script type="text/javascript" src="[% themelang %]/js/acq.js"></script>
+<script type="text/javascript" src="[% themelang %]/js/cataloging.js"></script>
 <script type="text/JavaScript">
 //<![CDATA[
     $(document).ready(function() {
@@ -22,6 +23,18 @@
             ],
             "sPaginationType": "four_button"
         } ) );
+
+        $("form#Aform").submit(function() {
+            var total_errors = CheckMandatorySubfields(this);
+            if (total_errors > 0) {
+                var alertString  = _("Form not submitted because of the following problem(s)");
+                alertString += "\n------------------------------------------------------------------------------------\n";
+                alertString += "\n- "+ total_errors + _(" mandatory fields empty (highlighted)");
+                alert(alertString);
+                return false;
+            }
+            return true;
+        });
     });
 //]]>
 </script>
