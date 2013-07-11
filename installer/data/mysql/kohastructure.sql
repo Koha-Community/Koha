@@ -2937,7 +2937,7 @@ CREATE TABLE `aqorders` ( -- information related to the basket line items
   `claimed_date` date default NULL, -- last date a claim was generated
   `subscriptionid` int(11) default NULL, -- links this order line to a subscription (subscription.subscriptionid)
   parent_ordernumber int(11) default NULL, -- ordernumber of parent order line, or same as ordernumber if no parent
-  `orderstatus` tinyint(2) default 0, -- the current status for this line item
+  `orderstatus` varchar(16) default 'new', -- the current status for this line item. Can be 'new', 'ordered', 'partial', 'complete' or 'cancelled'
   PRIMARY KEY  (`ordernumber`),
   KEY `basketno` (`basketno`),
   KEY `biblionumber` (`biblionumber`),

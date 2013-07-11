@@ -236,7 +236,7 @@ sub CloseBasket {
     foreach my $order (@orders) {
         $query = qq{
             UPDATE aqorders
-            SET orderstatus = 1
+            SET orderstatus = 'ordered'
             WHERE ordernumber = ?;
         };
         $sth = $dbh->prepare($query);
@@ -267,7 +267,7 @@ sub ReopenBasket {
     foreach my $order (@orders) {
         $query = qq{
             UPDATE aqorders
-            SET orderstatus = 0
+            SET orderstatus = 'new'
             WHERE ordernumber = ?;
         };
         $sth = $dbh->prepare($query);
@@ -1305,7 +1305,7 @@ sub ModReceiveOrder {
         $sth=$dbh->prepare("
             UPDATE aqorders
             SET quantity = ?,
-                orderstatus = 2
+                orderstatus = 'partial'
             WHERE ordernumber = ?
         ");
 
@@ -1322,7 +1322,7 @@ sub ModReceiveOrder {
         $order->{'unitprice'} = $cost;
         $order->{'rrp'} = $rrp;
         $order->{ecost} = $ecost;
-        $order->{'orderstatus'} = 3;    # totally received
+        $order->{'orderstatus'} = 'complete';
         my $basketno;
         ( $basketno, $new_ordernumber ) = NewOrder($order);
 
@@ -1334,7 +1334,7 @@ sub ModReceiveOrder {
     } else {
         $sth=$dbh->prepare("update aqorders
                             set quantityreceived=?,datereceived=?,invoiceid=?,
-                                unitprice=?,rrp=?,ecost=?,budget_id=?,orderstatus=3
+                                unitprice=?,rrp=?,ecost=?,budget_id=?,orderstatus='complete'
                             where biblionumber=? and ordernumber=?");
         $sth->execute($quantrec,$datereceived,$invoiceid,$cost,$rrp,$ecost,$budget_id,$biblionumber,$ordernumber);
         $sth->finish;
@@ -1385,7 +1385,7 @@ sub CancelReceipt {
             SET quantityreceived = ?,
                 datereceived = ?,
                 invoiceid = ?,
-                orderstatus = 1
+                orderstatus = 'ordered'
             WHERE ordernumber = ?
         };
         $sth = $dbh->prepare($query);
@@ -1413,7 +1413,7 @@ sub CancelReceipt {
         $query = qq{
             UPDATE aqorders
             SET quantity = ?,
-                orderstatus = 1
+                orderstatus = 'ordered'
             WHERE ordernumber = ?
         };
         $sth = $dbh->prepare($query);
@@ -1593,7 +1593,7 @@ sub DelOrder {
     my $dbh = C4::Context->dbh;
     my $query = "
         UPDATE aqorders
-        SET    datecancellationprinted=now(), orderstatus=4
+        SET    datecancellationprinted=now(), orderstatus='cancelled'
         WHERE  biblionumber=? AND ordernumber=?
     ";
     my $sth = $dbh->prepare($query);
@@ -1944,7 +1944,7 @@ sub GetLateOrders {
         $from .= ' AND borrowers.branchcode LIKE ? ';
         push @query_params, C4::Context->userenv->{branch};
     }
-    $from .= " AND orderstatus <> 4 ";
+    $from .= " AND orderstatus <> 'cancelled' ";
     my $query = "$select $from $having\nORDER BY latesince, basketno, borrowers.branchcode, supplier";
     $debug and print STDERR "GetLateOrders query: $query\nGetLateOrders args: " . join(" ",@query_params);
     my $sth = $dbh->prepare($query);
@@ -2067,7 +2067,7 @@ sub GetHistory {
 
     $query .= " WHERE 1 ";
 
-    $query .= " AND (datecancellationprinted is NULL or datecancellationprinted='0000-00-00') " if $orderstatus ne '4';
+    $query .= " AND (datecancellationprinted is NULL or datecancellationprinted='0000-00-00') " if $orderstatus ne 'cancelled';
 
     my @query_params  = ();
 

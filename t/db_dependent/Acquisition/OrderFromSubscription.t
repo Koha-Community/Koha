@@ -70,7 +70,7 @@ my $ordernumber;
     rrp => $cost,
     ecost => $cost,
     gstrate => 0.0500,
-    orderstatus => 0,
+    orderstatus => 'new',
     subscriptionid => $subscription->{subscriptionid},
     budget_id => $budget_id,
 });
