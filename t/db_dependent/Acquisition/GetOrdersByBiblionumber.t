@@ -9,6 +9,11 @@ use C4::Bookseller;
 use C4::Budgets;
 use MARC::Record;
 
+#Start transaction
+my $dbh = C4::Context->dbh;
+$dbh->{AutoCommit} = 0;
+$dbh->{RaiseError} = 1;
+
 my $booksellerid = C4::Bookseller::AddBookseller(
     {
         name => "my vendor",
@@ -70,15 +75,7 @@ is(scalar(@orders), 1, '1 order on biblionumber 1');
 @orders = GetOrdersByBiblionumber( $biblionumber2 );
 is(scalar(@orders), 2, '2 orders on biblionumber 2');
 
-END {
-    C4::Acquisition::DelOrder( 1, $ordernumber1 );
-    C4::Acquisition::DelOrder( 2, $ordernumber2 );
-    C4::Acquisition::DelOrder( 3, $ordernumber3 );
-    C4::Budgets::DelBudget( $budgetid );
-    C4::Acquisition::DelBasket( $basketno );
-    C4::Bookseller::DelBookseller( $booksellerid );
-    C4::Biblio::DelBiblio($biblionumber1);
-    C4::Biblio::DelBiblio($biblionumber2);
-};
+#End transaction
+$dbh->rollback;
 
 done_testing;
