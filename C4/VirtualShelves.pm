@@ -44,7 +44,8 @@ BEGIN {
             &ModShelf
             &ShelfPossibleAction
             &DelFromShelf &DelShelf
-            &GetBibliosShelves &AddShare
+            &GetBibliosShelves
+            &AddShare &AcceptShare &RemoveShare &IsSharedList
     );
         @EXPORT_OK = qw(
             &GetAllShelves &ShelvesMax
@@ -434,6 +435,7 @@ ShelfPossibleAction($loggedinuser, $shelfnumber, $action);
 C<$loggedinuser,$shelfnumber,$action>
 
 $action can be "view", "add", "delete", "manage", "new_public", "new_private".
+New additional actions are: invite, acceptshare.
 Note that add/delete here refers to adding/deleting entries from the list. Deleting the list itself falls under manage.
 new_public and new_private refers to creating a new public or private list.
 The distinction between deleting your own entries from the list or entries from
@@ -441,6 +443,8 @@ others is made in DelFromShelf.
 
 Returns 1 if the user can do the $action in the $shelfnumber shelf.
 Returns 0 otherwise.
+For the actions invite and acceptshare a second errorcode is returned if the
+result is false. See opac-shareshelf.pl
 
 =cut
 
@@ -489,6 +493,28 @@ sub ShelfPossibleAction {
         #it does not answer the question about a specific biblio
         #DelFromShelf checks the situation per biblio
         return 1 if $user>0 && ($shelf->{allow_delete_own}==1 || $shelf->{allow_delete_other}==1);
+    }
+    elsif($action eq 'invite') {
+        #for sharing you must be the owner and the list must be private
+        if( $shelf->{category}==1 ) {
+            return 1 if $shelf->{owner}==$user;
+            return (0, 4); # code 4: should be owner
+        }
+        else {
+            return (0, 5); # code 5: should be private list
+        }
+    }
+    elsif($action eq 'acceptshare') {
+        #the key for accepting is checked later in AcceptShare
+        #you must not be the owner, list must be private
+        if( $shelf->{category}==1 ) {
+            return (0, 8) if $shelf->{owner}==$user;
+                #code 8: should not be owner
+            return 1;
+        }
+        else {
+            return (0, 5); # code 5: should be private list
+        }
     }
     elsif($action eq 'manage') {
         return 1 if $user && $shelf->{owner}==$user;
@@ -665,6 +691,76 @@ sub AddShare {
     $dbh->do($sql);
     $sql="INSERT INTO virtualshelfshares (shelfnumber, invitekey, sharedate) VALUES (?, ?, ADDDATE(NOW(),?))";
     $dbh->do($sql, undef, ($shelfnumber, $key, SHARE_INVITATION_EXPIRY_DAYS));
+    return !$dbh->err;
+}
+
+=head2 AcceptShare
+
+     my $result= AcceptShare($shelfnumber, $key, $borrowernumber);
+
+Checks acceptation of a share request.
+Key must be found for this shelf. Invitation must not have expired.
+Returns true when accepted, false otherwise.
+
+=cut
+
+sub AcceptShare {
+    my ($shelfnumber, $key, $borrowernumber)= @_;
+    return if !$shelfnumber || !$key || !$borrowernumber;
+
+    my $sql;
+    my $dbh = C4::Context->dbh;
+    $sql="
+UPDATE virtualshelfshares
+SET invitekey=NULL, sharedate=NULL, borrowernumber=?
+WHERE shelfnumber=? AND invitekey=? AND sharedate>NOW()
+    ";
+    my $i= $dbh->do($sql, undef, ($borrowernumber, $shelfnumber, $key));
+    return if !defined($i) || !$i || $i eq '0E0'; #not found
+    return 1;
+}
+
+=head2 IsSharedList
+
+     my $bool= IsSharedList( $shelfnumber );
+
+IsSharedList checks if a (private) list has shares.
+Note that such a check would not be useful for public lists. A public list has
+no shares, but is visible for anyone by nature..
+Used to determine the list type in the display of Your lists (all private).
+Returns boolean value.
+
+=cut
+
+sub IsSharedList {
+    my ($shelfnumber) = @_;
+    my $dbh = C4::Context->dbh;
+    my $sql="SELECT id FROM virtualshelfshares WHERE shelfnumber=? AND borrowernumber IS NOT NULL";
+    my $sth = $dbh->prepare($sql);
+    $sth->execute($shelfnumber);
+    my ($rv)= $sth->fetchrow_array;
+    return defined($rv);
+}
+
+=head2 RemoveShare
+
+     RemoveShare( $user, $shelfnumber );
+
+RemoveShare removes a share for specific shelf and borrower.
+Returns true if a record could be deleted.
+
+=cut
+
+sub RemoveShare {
+    my ($user, $shelfnumber)= @_;
+    my $dbh = C4::Context->dbh;
+    my $sql="
+DELETE FROM virtualshelfshares
+WHERE borrowernumber=? AND shelfnumber=?
+    ";
+    my $n= $dbh->do($sql,undef,($user, $shelfnumber));
+    return if !defined($n) || !$n || $n eq '0E0'; #nothing removed
+    return 1;
 }
 
 # internal subs

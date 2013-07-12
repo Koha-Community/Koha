@@ -8,6 +8,7 @@
 var MSG_REMOVE_FROM_LIST = _("Are you sure you want to remove these items from the list?");
 var MSG_REMOVE_ONE_FROM_LIST = _("Are you sure you want to remove this item from the list?");
 var MSG_CONFIRM_DELETE_LIST = _("Are you sure you want to delete this list?");
+var MSG_CONFIRM_REMOVE_SHARE = _("Are you sure you want to remove this share?");
 
 [% IF ( opacuserlogin ) %][% IF ( RequestOnOpac ) %]
 function holdSelections() {
@@ -239,6 +240,15 @@ $(document).ready(function() {
     </li>
 [% END %]
 
+[%# When using the next block, add the parameter for shelfnumber and add a tag to end the form %]
+[% BLOCK remove_share %]
+    <form action="opac-shelves.pl" method="post">
+        <input type="hidden" name="shelves" value="1" />
+        <input type="hidden" name="display" value="privateshelves" />
+        <input type="hidden" name="shelfoff" value="[% shelfoff %]" />
+        <input type="submit" class="removeshare" onclick="return confirmDelete(MSG_CONFIRM_REMOVE_SHARE);" value="Remove share" />
+[% END %]
+
 [% IF ( OpacNav ) %]<div id="doc3" class="yui-t1">[% ELSIF ( loggedinusername ) %]<div id="doc3" class="yui-t1">[% ELSE %]<div id="doc3" class="yui-t7">[% END %]
     <div id="bd">
       [% INCLUDE 'masthead.inc' %]
@@ -371,6 +381,10 @@ $(document).ready(function() {
                             <input type="submit" class="Share" value="Share" />
                         </form>
                     [% END %]
+                [% ELSIF showprivateshelves %]
+                    [% INCLUDE remove_share %]
+                    <input type="hidden" name="REMSHR-[% shelfnumber %]" value="1" />
+                    </form>
                 [% END %]
 
 
@@ -602,9 +616,9 @@ $(document).ready(function() {
                   <ul class="link-tabs">
                   [% IF ( opacuserlogin ) %]
                   [% IF ( showprivateshelves ) %]
-                    <li id="privateshelves_tab" class="on"><a href="/cgi-bin/koha/opac-shelves.pl?display=privateshelves">Your private lists</a></li>
+                    <li id="privateshelves_tab" class="on"><a href="/cgi-bin/koha/opac-shelves.pl?display=privateshelves">Your lists</a></li>
                   [% ELSE %]
-                    <li id="privateshelves_tab" class="off"><a href="/cgi-bin/koha/opac-shelves.pl?display=privateshelves">Your private lists</a></li>
+                    <li id="privateshelves_tab" class="off"><a href="/cgi-bin/koha/opac-shelves.pl?display=privateshelves">Your lists</a></li>
                   [% END %]
                   [% END %]
                   [% IF ( showpublicshelves ) %]
@@ -629,7 +643,7 @@ $(document).ready(function() {
                           <th>List name</th>
                           <th>Contents</th>
                           <th>Type</th>
-                          <th>&nbsp;</th>
+                          <th>Options</th>
                         </tr>
                         [% FOREACH shelveslooppri IN shelveslooppriv %]
                           [% UNLESS ( loop.odd ) %]
@@ -640,7 +654,7 @@ $(document).ready(function() {
                               <td><a href="/cgi-bin/koha/opac-shelves.pl?display=privateshelves&amp;viewshelf=[% shelveslooppri.shelf %]&amp;sortfield=[% shelveslooppri.sortfield %]">[% shelveslooppri.shelfname |html %]</a></td>
                               <td>[% IF ( shelveslooppri.count ) %][% shelveslooppri.count %] [% IF ( shelveslooppri.single ) %]item[% ELSE %]items[% END %][% ELSE %]Empty[% END %]</td>
                               <td>
-                                [% IF ( shelveslooppri.viewcategory1 ) %]Private[% END %]
+                                [% IF ( shelveslooppri.viewcategory1 ) %][% IF !shelveslooppri.shares %]Private[% ELSE %]Shared[% END %][% END %]
                                 [% IF ( shelveslooppri.viewcategory2 ) %]Public[% END %]
                               </td>
                               <td>
@@ -670,6 +684,10 @@ $(document).ready(function() {
                                   <input type="submit" class="Share" value="Share" />
                                 </form>
                               [% END %]
+                            [% ELSIF shelveslooppri.shares %]
+                                [% INCLUDE remove_share %]
+                                <input type="hidden" name="REMSHR-[% shelveslooppri.shelf %]" value="1" />
+                                </form>
                             [% END %]&nbsp;
                             </td>
                           </tr>
@@ -702,7 +720,8 @@ $(document).ready(function() {
                         <tr>
                           <th>List name</th>
                           <th>Contents</th>
-                          <th>Type</th><th>&nbsp;</th>
+                          <th>Type</th>
+                          <th>Options</th>
                         </tr>
                     [% FOREACH shelvesloo IN shelvesloop %]
                       [% UNLESS ( loop.odd ) %]

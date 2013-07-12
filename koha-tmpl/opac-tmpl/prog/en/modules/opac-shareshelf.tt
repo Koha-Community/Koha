@@ -19,6 +19,8 @@
         [% IF errcode==4 %]<div class="dialog alert">You can only share a list if you are the owner.</div>[% END %]
         [% IF errcode==5 %]<div class="dialog alert">You cannot share a public list.</div>[% END %]
         [% IF errcode==6 %]<div class="dialog alert">Sorry, but you did not enter any valid email address.</div>[% END %]
+        [% IF errcode==7 %]<div class="dialog alert">Sorry, but we could not accept this key. The invitation may have expired. Contact the patron who sent you the invitation.</div>[% END %]
+        [% IF errcode==8 %]<div class="dialog alert">As owner of a list you cannot accept an invitation for sharing it.</div>[% END %]
 
     [% ELSIF op=='invite' %]
         <form method="post" onsubmit="return $('#invite_address').val().trim()!='';">
@@ -37,18 +39,19 @@
         </form>
 
     [% ELSIF op=='conf_invite' %]
+        [% IF approvedaddress %]
         <p>An invitation to share list <i>[% shelfname %]</i> has been sent to [% approvedaddress %].</p>
-        [% IF failaddress %]
-            <p>The following addresses appear to be invalid. Please correct them and try again. These are: [% failaddress %]</p>
         [% END %]
+        [% IF failaddress %]
+            <p>Something went wrong while processing the following addresses. Please check them. These are: [% failaddress %]</p>
+        [% END %]
+        [% IF approvedaddress %]
         <p>You will receive an email notification if someone accepts your share within two weeks.</p>
+        [% END %]
         <p><a href="/cgi-bin/koha/opac-shelves.pl?display=privateshelves">Return to your lists</a></p>
 
     [% ELSIF op=='accept' %]
-        [%# TODO: Replace the following two lines %]
-        <p>Thank you for testing this feature.</p>
-        <p>Your signoff will certainly help in finishing the remaining part!</p>
-
+        [%# Nothing to do: we already display an error or we redirect. %]
     [% END %]
 [%# End of essential part %]
 

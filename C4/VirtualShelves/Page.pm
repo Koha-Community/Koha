@@ -360,13 +360,22 @@ sub shelfpage {
 
         #Deleting a shelf (asking for confirmation if it has entries)
             foreach ( $query->param() ) {
-                /DEL-(\d+)/ or next;
+                /(DEL|REMSHR)-(\d+)/ or next;
                 $delflag = 1;
-                my $number = $1;
+                my $number = $2;
                 unless ( defined $shelflist->{$number} || defined $privshelflist->{$number} ) {
                     push( @paramsloop, { unrecognized => $number } );
                     last;
                 }
+                #remove a share
+                if(/REMSHR/) {
+                    RemoveShare($loggedinuser, $number);
+                    delete $shelflist->{$number} if exists $shelflist->{$number};
+                    delete $privshelflist->{$number} if exists $privshelflist->{$number};
+                    $stay=0;
+                    next;
+                }
+                #
                 unless ( ShelfPossibleAction( $loggedinuser, $number, 'manage' ) ) {
                     push( @paramsloop, { nopermission => $shelfnumber } );
                     last;
@@ -434,6 +443,7 @@ sub shelfpage {
         $shelflist->{$element}->{ownername} = defined($member) ? $member->{firstname} . " " . $member->{surname} : '';
         $numberCanManage++ if $canmanage;    # possibly outmoded
         if ( $shelflist->{$element}->{'category'} eq '1' ) {
+            $shelflist->{$element}->{shares} = IsSharedList($element);
             push( @shelveslooppriv, $shelflist->{$element} );
         } else {
             push( @shelvesloop, $shelflist->{$element} );

@@ -538,7 +538,7 @@ function placeHold () {
         <td><a href="shelves.pl?[% IF ( shelveslooppri.showprivateshelves ) %]display=privateshelves&amp;[% END %]viewshelf=[% shelveslooppri.shelf %]&amp;shelfoff=[% shelfoff %]">[% shelveslooppri.shelfname |html %]</a></td>
         <td>[% shelveslooppri.count %] item(s)</td>
         <td>[% IF ( shelveslooppri.sortfield == "author" ) %]Author[% ELSIF ( shelveslooppri.sortfield == "copyrightdate" ) %]Year[% ELSIF (shelveslooppri.sortfield == "itemcallnumber") %]Call number[% ELSE %]Title[% END %]</td>
-        <td>[% IF ( shelveslooppri.viewcategory1 ) %]Private[% END %]
+        <td>[% IF ( shelveslooppri.viewcategory1 ) %][% IF !shelveslooppri.shares %]Private[% ELSE %]Shared[% END %][% END %]
 			[% IF ( shelveslooppri.viewcategory2 ) %]Public[% END %]
 		</td>
         <td>

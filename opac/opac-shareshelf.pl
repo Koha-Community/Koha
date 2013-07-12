@@ -22,6 +22,7 @@ use warnings;
 
 use constant KEYLENGTH => 10;
 use constant TEMPLATE_NAME => 'opac-shareshelf.tmpl';
+use constant SHELVES_URL => '/cgi-bin/koha/opac-shelves.pl?display=privateshelves&viewshelf=';
 
 use CGI;
 use Email::Valid;
@@ -29,6 +30,7 @@ use Email::Valid;
 use C4::Auth;
 use C4::Context;
 use C4::Letters;
+use C4::Members ();
 use C4::Output;
 use C4::VirtualShelves;
 
@@ -55,8 +57,16 @@ sub _init {
     $param->{addrlist} = $query->param('invite_address')||'';
     $param->{key} = $query->param('key')||'';
     $param->{appr_addr} = [];
-
+    $param->{fail_addr} = [];
     $param->{errcode} = check_common_errors($param);
+
+    #get some list details
+    my @temp;
+    @temp= GetShelf( $param->{shelfnumber} ) if !$param->{errcode};
+    $param->{shelfname} = @temp? $temp[1]: '';
+    $param->{owner} = @temp? $temp[2]: -1;
+    $param->{category} = @temp? $temp[3]: -1;
+
     load_template($param);
     return $param;
 }
@@ -94,14 +104,57 @@ sub confirm_invite {
 
 sub show_accept {
     my ($param) = @_;
-    #TODO Add some code here to accept an invitation (followup report)
+
+    my @rv= ShelfPossibleAction($param->{loggedinuser},
+        $param->{shelfnumber}, 'acceptshare');
+    $param->{errcode} = $rv[1] if !$rv[0];
+    return if $param->{errcode};
+        #errorcode 5: should be private list
+        #errorcode 8: should not be owner
+
+    my $dbkey= keytostring( stringtokey($param->{key}, 0), 1);
+    if( AcceptShare($param->{shelfnumber}, $dbkey, $param->{loggedinuser} ) ) {
+        notify_owner($param);
+        #redirect to view of this shared list
+        print $param->{query}->redirect(SHELVES_URL.$param->{shelfnumber});
+        exit;
+    }
+    else {
+        $param->{errcode} = 7; #not accepted (key not found or expired)
+    }
+}
+
+sub notify_owner {
+    my ($param) = @_;
+
+    my $toaddr=  C4::Members::GetNoticeEmailAddress( $param->{owner} );
+    return if !$toaddr;
+
+    #prepare letter
+    my $letter= C4::Letters::GetPreparedLetter(
+        module => 'members',
+        letter_code => 'SHARE_ACCEPT',
+        branchcode => C4::Context->userenv->{"branch"},
+        tables => { borrowers => $param->{loggedinuser}, },
+        substitute => {
+            listname => $param->{shelfname},
+        },
+    );
+
+    #send letter to queue
+    C4::Letters::EnqueueLetter( {
+        letter                 => $letter,
+        message_transport_type => 'email',
+        from_address => C4::Context->preference('KohaAdminEmailAddress'),
+        to_address             => $toaddr,
+    });
 }
 
 sub process_addrlist {
     my ($param) = @_;
     my @temp= split /[,:;]/, $param->{addrlist};
     my @appr_addr;
-    my $fail_addr='';
+    my @fail_addr;
     foreach my $a (@temp) {
         $a=~s/^\s+//;
         $a=~s/\s+$//;
@@ -109,11 +162,11 @@ sub process_addrlist {
             push @appr_addr, $a;
         }
         else {
-            $fail_addr.= ($fail_addr? '; ': '').$a;
+            push @fail_addr, $a;
         }
     }
     $param->{appr_addr}= \@appr_addr;
-    $param->{fail_addr}= $fail_addr;
+    $param->{fail_addr}= \@fail_addr;
 }
 
 sub send_invitekey {
@@ -124,8 +177,16 @@ sub send_invitekey {
         $param->{shelfnumber}."&op=accept&key=";
         #TODO Waiting for the right http or https solution (BZ 8952 a.o.)
 
+    my @ok; #the addresses that were processed well
     foreach my $a ( @{$param->{appr_addr}} ) {
         my @newkey= randomlist(KEYLENGTH, 64); #generate a new key
+
+        #add a preliminary share record
+        if( ! AddShare( $param->{shelfnumber}, keytostring(\@newkey,1) ) ) {
+            push @{$param->{fail_addr}}, $a;
+            next;
+        }
+        push @ok, $a;
 
         #prepare letter
         my $letter= C4::Letters::GetPreparedLetter(
@@ -146,21 +207,16 @@ sub send_invitekey {
             from_address           => $fromaddr,
             to_address             => $a,
         });
-        #add a preliminary share record
-        AddShare( $param->{shelfnumber}, keytostring(\@newkey,1));
     }
+    $param->{appr_addr}= \@ok;
 }
 
 sub check_owner_category {
     my ($param)= @_;
-    #TODO candidate for a module?
-    #need to get back the two different error codes and the shelfname
-
-    ( undef, $param->{shelfname}, $param->{owner}, my $category ) =
-    GetShelf( $param->{shelfnumber} );
+    #sharing user should be the owner
+    #list should be private
     $param->{errcode}=4 if $param->{owner}!= $param->{loggedinuser};
-    $param->{errcode}=5 if !$param->{errcode} && $category!=1;
-        #should be private
+    $param->{errcode}=5 if !$param->{errcode} && $param->{category}!=1;
     return !defined $param->{errcode};
 }
 
@@ -178,14 +234,15 @@ sub load_template {
 sub load_template_vars {
     my ($param) = @_;
     my $template = $param->{template};
-    my $str= join '; ', @{$param->{appr_addr}};
+    my $appr= join '; ', @{$param->{appr_addr}};
+    my $fail= join '; ', @{$param->{fail_addr}};
     $template->param(
         errcode         => $param->{errcode},
         op              => $param->{op},
         shelfnumber     => $param->{shelfnumber},
         shelfname       => $param->{shelfname},
-        approvedaddress => $str,
-        failaddress     => $param->{fail_addr},
+        approvedaddress => $appr,
+        failaddress     => $fail,
     );
 }
 
@@ -214,14 +271,14 @@ sub stringtokey {
     my @temp=split '', $str||'';
     if($flgBase64) {
         my $alphabet= [ 'A'..'Z', 'a'..'z', 0..9, '+', '/' ];
-        return map { alphabet_ordinal($_, $alphabet); } @temp;
+        return [ map { alphabet_ordinal($_, $alphabet); } @temp ];
     }
-    return () if $str!~/^\d+$/;
+    return [] if $str!~/^\d+$/;
     my @retval;
     for(my $i=0; $i<@temp-1; $i+=2) {
         push @retval, $temp[$i]*10+$temp[$i+1];
     }
-    return @retval;
+    return \@retval;
 }
 
 sub alphabet_ordinal {
