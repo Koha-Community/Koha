@@ -7037,7 +7037,7 @@ if ( CheckVersion($DBversion) ) {
 }
 
 
-$DBversion = "3.13.00.XXX";
+$DBversion = "3.13.00.012";
 if ( CheckVersion($DBversion) ) {
     $dbh->do("ALTER TABLE issuingrules MODIFY COLUMN overduefinescap decimal(28,6) DEFAULT NULL;");
     print "Upgrade to $DBversion done (Bug 10490: Correct datatype for overduefinescap in issuingrules)\n";
