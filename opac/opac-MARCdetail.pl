@@ -50,6 +50,7 @@ use C4::Output;
 use CGI;
 use MARC::Record;
 use C4::Biblio;
+use C4::Items;
 use C4::Acquisition;
 use C4::Koha;
 
@@ -58,6 +59,22 @@ my $query = new CGI;
 my $dbh = C4::Context->dbh;
 
 my $biblionumber = $query->param('biblionumber');
+if ( ! $biblionumber ) {
+    print $query->redirect("/cgi-bin/koha/errors/404.pl");
+    exit;
+}
+
+my @all_items = GetItemsInfo($biblionumber);
+my @items2hide;
+if (scalar @all_items >= 1) {
+    push @items2hide, GetHiddenItemnumbers(@all_items);
+
+    if (scalar @items2hide == scalar @all_items ) {
+        print $query->redirect("/cgi-bin/koha/errors/404.pl");
+        exit;
+    }
+}
+
 my $itemtype     = &GetFrameworkCode($biblionumber);
 my $tagslib      = &GetMarcStructure( 0, $itemtype );
 my $biblio = GetBiblioData($biblionumber);

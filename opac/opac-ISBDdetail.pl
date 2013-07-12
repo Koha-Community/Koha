@@ -84,6 +84,17 @@ $template->param( 'AllowOnShelfHolds' => C4::Context->preference('AllowOnShelfHo
 $template->param( 'ItemsIssued' => CountItemsIssued( $biblionumber ) );
 
 my $marcflavour      = C4::Context->preference("marcflavour");
+
+my @items = GetItemsInfo($biblionumber);
+if (scalar @items >= 1) {
+    my @hiddenitems = GetHiddenItemnumbers(@items);
+
+    if (scalar @hiddenitems == scalar @items ) {
+        print $query->redirect("/cgi-bin/koha/errors/404.pl"); # escape early
+        exit;
+    }
+}
+
 my $record = GetMarcBiblio($biblionumber);
 if ( ! $record ) {
     print $query->redirect("/cgi-bin/koha/errors/404.pl");
@@ -138,7 +149,6 @@ $template->param(
 
 my $norequests = 1;
 my $res = GetISBDView($biblionumber, "opac");
-my @items = GetItemsInfo( $biblionumber );
 
 my $itemtypes = GetItemTypes();
 for my $itm (@items) {

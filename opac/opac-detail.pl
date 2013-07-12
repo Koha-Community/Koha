@@ -73,14 +73,14 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 my $biblionumber = $query->param('biblionumber') || $query->param('bib') || 0;
 $biblionumber = int($biblionumber);
 
-my @itemsmatchingbiblionumber = GetItemsInfo($biblionumber);
-if (scalar @itemsmatchingbiblionumber >= 1) {
-    my @items2hide = GetHiddenItemnumbers(@itemsmatchingbiblionumber);
+my @all_items = GetItemsInfo($biblionumber);
+my @hiddenitems;
+if (scalar @all_items >= 1) {
+    push @hiddenitems, GetHiddenItemnumbers(@all_items);
 
-    if (scalar @items2hide == scalar @itemsmatchingbiblionumber ) {
-        # biblionumber=0 effectively hides the biblio record
-        # since there is no such biblionumber.
-        $biblionumber = 0;
+    if (scalar @hiddenitems == scalar @all_items ) {
+        print $query->redirect("/cgi-bin/koha/errors/404.pl"); # escape early
+        exit;
     }
 }
 
@@ -408,8 +408,6 @@ $template->param( 'ItemsIssued' => CountItemsIssued( $biblionumber ) );
 
 $template->param('OPACShowCheckoutName' => C4::Context->preference("OPACShowCheckoutName") );
 $template->param('OPACShowBarcode' => C4::Context->preference("OPACShowBarcode") );
-# change back when ive fixed request.pl
-my @all_items = GetItemsInfo( $biblionumber );
 
 # adding items linked via host biblios
 
@@ -431,9 +429,6 @@ foreach my $hostfield ( $record->field($analyticfield)) {
 }
 
 my @items;
-
-# Getting items to be hidden
-my @hiddenitems = GetHiddenItemnumbers(@all_items);
 
 # Are there items to hide?
 my $hideitems;
