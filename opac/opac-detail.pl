@@ -70,8 +70,19 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     }
 );
 
-my $biblionumber = $query->param('biblionumber') || $query->param('bib');
+my $biblionumber = $query->param('biblionumber') || $query->param('bib') || 0;
 $biblionumber = int($biblionumber);
+
+my @itemsmatchingbiblionumber = GetItemsInfo($biblionumber);
+if (scalar @itemsmatchingbiblionumber >= 1) {
+    my @items2hide = GetHiddenItemnumbers(@itemsmatchingbiblionumber);
+
+    if (scalar @items2hide == scalar @itemsmatchingbiblionumber ) {
+        # biblionumber=0 effectively hides the biblio record
+        # since there is no such biblionumber.
+        $biblionumber = 0;
+    }
+}
 
 my $record       = GetMarcBiblio($biblionumber);
 if ( ! $record ) {
