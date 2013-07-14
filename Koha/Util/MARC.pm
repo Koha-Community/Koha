@@ -62,8 +62,13 @@ sub createMergeHash {
             my @subfields = $field->subfields();
             my @subfield_array;
             foreach my $subfield (@subfields) {
-                if ( !defined($tagslib)
-                    || $tagslib->{$fieldtag}->{ @$subfield[0] }->{'tab'} >= 0 )
+                if (
+                    !defined($tagslib)
+                    || (   defined $tagslib->{$fieldtag}
+                        && defined $tagslib->{$fieldtag}->{ @$subfield[0] }
+                        && defined $tagslib->{$fieldtag}->{ @$subfield[0] }->{'tab'}
+                        && $tagslib->{$fieldtag}->{ @$subfield[0] }->{'tab'} >= 0 )
+                  )
                 {
                     push @subfield_array,
                       {
@@ -75,7 +80,14 @@ sub createMergeHash {
 
             }
 
-            if ( !defined($tagslib) || @subfield_array )
+            if (
+                (
+                    !defined($tagslib) || ( defined $tagslib->{$fieldtag}
+                        && defined $tagslib->{$fieldtag}->{'tab'}
+                        && $tagslib->{$fieldtag}->{'tab'} >= 0 )
+                )
+                && @subfield_array
+              )
             {
                 push @array,
                   {

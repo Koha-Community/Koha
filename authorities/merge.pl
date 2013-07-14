@@ -114,6 +114,11 @@ else {
 
             # Getting MARC Structure
             my $tagslib = GetTagsLabels( 1, $framework );
+            foreach my $field ( keys %$tagslib ) {
+                if ( defined $tagslib->{$field}->{'tab'} && $tagslib->{$field}->{'tab'} eq ' ' ) {
+                    $tagslib->{$field}->{'tab'} = 0;
+                }
+            }
 
             my $notreference =
               ( $authid[0] == $mergereference )
