@@ -59,10 +59,14 @@ my ($template, $borrowernumber, $cookie)
 				});
 my $dbh = C4::Context->dbh;
 # Displaying results
+my $do_it = $input->param('do_it') || 0; # as form been posted
 my $limit = $input->param('limit');
 $limit = 10 unless ($limit && $limit =~ /^\d+$/); # control user input for SQL query
 $limit = 100 if $limit > 100;
 my $branch = $input->param('branch') || '';
+if (!$do_it && C4::Context->userenv && C4::Context->userenv->{'branch'} ) {
+    $branch = C4::Context->userenv->{'branch'}; # select user branch by default
+}
 my $itemtype = $input->param('itemtype') || '';
 my $timeLimit = $input->param('timeLimit') || 3;
 my $advanced_search_types = C4::Context->preference('AdvancedSearchTypes');
@@ -138,7 +142,7 @@ $template->param(do_it => 1,
                 results_loop => \@results,
                 );
 
-$template->param( branchloop => GetBranchesLoop(C4::Context->userenv?C4::Context->userenv->{'branch'}:''));
+$template->param( branchloop => GetBranchesLoop($branch));
 
 # the index parameter is different for item-level itemtypes
 my $itype_or_itemtype = (C4::Context->preference("item-level_itypes"))?'itype':'itemtype';
