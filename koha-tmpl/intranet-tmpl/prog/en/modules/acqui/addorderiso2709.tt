@@ -182,7 +182,7 @@
                             </li>
                             <li class="quantity">
                                 <label for="quantity_record_[% biblio.import_record_id %]" class="required">Quantity: </label>
-                                <input id="quantity_record_[% biblio.import_record_id %]" type="text" value="[% biblio.quantity %]" name="quantity" />
+                                <input id="quantity_record_[% biblio.import_record_id %]" type="text" value="[% biblio.quantity.length ? biblio.quantity : 1 %]" name="quantity" />
                             </li>
                             <li class="price">
                                 <label for="price_record_[% biblio.import_record_id %]">Price: </label>
