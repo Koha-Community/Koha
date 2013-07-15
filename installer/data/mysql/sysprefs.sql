@@ -33,7 +33,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('AnonSuggestions','0',NULL,'Set to enable Anonymous suggestions to AnonymousPatron borrowernumber','YesNo'),
 ('AnonymousPatron','0',NULL,'Set the identifier (borrowernumber) of the anonymous patron. Used for Suggestion and reading history privacy',''),
 ('AuthDisplayHierarchy','0','','Display authority hierarchies','YesNo'),
-('AuthoritiesLog','0','0','If ON, log edit/create/delete actions on authorities.','YesNo'),
+('AuthoritiesLog','1',NULL,'If ON, log edit/create/delete actions on authorities.','YesNo'),
 ('authoritysep','--','10','Used to separate a list of authorities in a display. Usually --','free'),
 ('autoBarcode','OFF','incremental|annual|hbyymmincr|EAN13|OFF','Used to autogenerate a barcode: incremental will be of the form 1, 2, 3; annual of the form 2007-0001, 2007-0002; hbyymmincr of the form HB08010001 where HB=Home Branch','Choice'),
 ('AutoCreateAuthorities','0',NULL,'Automatically create authorities that do not exist when cataloging records.','YesNo'),
