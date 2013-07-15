@@ -1,7 +1,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Online Help</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link rel="shortcut icon" href="[% IF ( IntranetFavicon ) %][% IntranetFavicon %][% ELSE %][% themelang %]/includes/favicon.ico[% END %]" type="image/x-icon" />
+<link rel="shortcut icon" href="[% IF ( IntranetFavicon ) %][% IntranetFavicon %][% ELSE %][% interface %]/[% theme %]/img/favicon.ico[% END %]" type="image/x-icon" />
 <link rel="stylesheet" type="text/css" href="[% interface %]/lib/jquery/jquery-ui.css" />
 <link rel="stylesheet" type="text/css" media="print" href="[% themelang %]/css/print.css" />
 [% INCLUDE intranetstylesheet.inc %]
