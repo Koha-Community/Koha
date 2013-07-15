@@ -52,7 +52,9 @@ my ($template, $borrowernumber, $cookie)
 				});
 my $dbh = C4::Context->dbh;
 # Displaying results
-my $limit = $input->param('limit') || 10;
+my $limit = $input->param('limit');
+$limit = 10 unless ($limit && $limit =~ /^\d+$/); # control user input for SQL query
+$limit = 100 if $limit > 100;
 my $branch = $input->param('branch') || '';
 my $itemtype = $input->param('itemtype') || '';
 my $timeLimit = $input->param('timeLimit') || 3;
