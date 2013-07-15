@@ -17,7 +17,7 @@
                 <select name="branch" id="branch" style="width: 10em;">
                 <option value="">All libraries</option>
                 [% FOREACH branchloo IN branchloop %]
-                    [% IF ( branch == branchname ) %]<option value="[% branchloo.value %]" selected="selected">[% ELSE %]<option value="[% branchloo.value %]">[% END %]
+                    [% IF ( branchloo.selected ) %]<option value="[% branchloo.value %]" selected="selected">[% ELSE %]<option value="[% branchloo.value %]">[% END %]
                         [% branchloo.branchname %]
                     </option>
                 [% END %]
