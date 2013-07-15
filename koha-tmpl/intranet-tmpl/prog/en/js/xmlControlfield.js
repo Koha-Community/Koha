@@ -205,7 +205,7 @@ function changeH4Result(form, h4_result, tr_result, pos, value)
         {
             this.xmlDoc = $.ajax({
                 type: "GET",
-                url: this.themelang + "/modules/cataloguing/value_builder/marc21_field_" + this.tagfield + ".xml",
+                url: this.themelang + "/data/marc21_field_" + this.tagfield + ".xml",
                 dataType: "xml",
                 async: false
             }).responseXML;
