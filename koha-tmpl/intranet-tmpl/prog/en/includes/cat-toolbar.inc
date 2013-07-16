@@ -204,14 +204,15 @@ CAN_user_serials_create_subscription ) %]
     [% UNLESS ( norequests ) %]
         [% IF ( holdfor ) %]
             <div class="btn-group">
-            <button class="btn btn-small"><i class="icon-hold"></i> Place hold</button>
-            <button class="btn btn-small dropdown-toggle" data-toggle="dropdown">
-                <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu">
-                <li><a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% biblionumber %]">Place hold</a></li>
-                <li><a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% biblionumber %]&amp;findborrower=[% holdfor_cardnumber %]">Place hold for [% holdfor_firstname %] [% holdfor_surname %] ([% holdfor_cardnumber %])</a></li>
-            </ul>
+                <button class="btn btn-small dropdown-toggle" data-toggle="dropdown">
+                    <i class="icon-hold"></i>
+                    Place hold
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% biblionumber %]">Place hold</a></li>
+                    <li><a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% biblionumber %]&amp;findborrower=[% holdfor_cardnumber %]">Place hold for [% holdfor_firstname %] [% holdfor_surname %] ([% holdfor_cardnumber %])</a></li>
+                </ul>
             </div>
         [% ELSE %]
             <div class="btn-group"><a id="placehold" class="btn btn-small" href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% biblionumber %]"><i class="icon-hold"></i> Place hold</a></div>
