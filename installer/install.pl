@@ -382,8 +382,6 @@ elsif ( $step && $step == 3 ) {
                                 );
             }
         }
-
-        $dbh->disconnect;
     }
 }
 else {

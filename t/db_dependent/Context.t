@@ -50,9 +50,6 @@ ok($config = $koha->{config}, 'Getting $koha->{config} ');
 
 diag "Testing syspref caching.";
 
-my $dbh = C4::Context->dbh;
-$dbh->disconnect;
-
 my $module = new Test::MockModule('C4::Context');
 $module->mock(
     '_new_dbh',
@@ -64,7 +61,7 @@ $module->mock(
 );
 
 my $history;
-$dbh = C4::Context->dbh;
+$dbh = C4::Context->dbh({ new => 1 });
 
 $dbh->{mock_add_resultset} = [ ['value'], ['thing1'] ];
 $dbh->{mock_add_resultset} = [ ['value'], ['thing2'] ];
