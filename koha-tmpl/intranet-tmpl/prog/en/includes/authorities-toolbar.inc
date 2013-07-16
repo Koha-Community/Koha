@@ -16,6 +16,7 @@
     [% UNLESS ( count ) %]
         <div class="btn-group"><a href="#" class="btn btn-small" id="delAuth"><i class="icon-remove"></i> Delete</a></div>
     [% END %]
+    <div class="btn-group"><a class="btn btn-small" id="dupAuth" href="authorities.pl?authid=[% authid %]&op=duplicate"><i class="icon-pencil"></i> Duplicate</a></div>
 
     <div class="btn-group">
         <a class="btn btn-small dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-download-alt"></i> Save
