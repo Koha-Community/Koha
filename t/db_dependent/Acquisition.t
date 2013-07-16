@@ -8,7 +8,7 @@ use POSIX qw(strftime);
 
 use C4::Bookseller qw( GetBookSellerFromId );
 
-use Test::More tests => 40;
+use Test::More tests => 41;
 
 BEGIN {
     use_ok('C4::Acquisition');
@@ -27,11 +27,14 @@ my $booksellerid = C4::Bookseller::AddBookseller(
         name => "my vendor",
         address1 => "bookseller's address",
         phone => "0123456",
-        active => 1
+        active => 1,
+        deliverytime => 5,
     }
 );
 
 my $booksellerinfo = C4::Bookseller::GetBookSellerFromId( $booksellerid );
+
+is($booksellerinfo->{deliverytime}, 5, 'set deliverytime when creating vendor (Bug 10556)');
 
 my ($basket, $basketno);
 ok($basketno = NewBasket($booksellerid, 1), "NewBasket(  $booksellerid , 1  ) returns $basketno");
