@@ -40,6 +40,13 @@ plugin that shows a stats on borrowers
 =cut
 
 my $input = new CGI;
+
+# if OpacTopissue is disabled, leave immediately
+if ( ! C4::Context->preference('OpacTopissue') ) {
+    print $input->redirect("/cgi-bin/koha/errors/404.pl");
+    exit;
+}
+
 my $branches = GetBranches();
 my $itemtypes = GetItemTypes();
 
