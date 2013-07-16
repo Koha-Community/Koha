@@ -260,6 +260,44 @@ sub fetch {
     return $self;
 }
 
+=head2 set
+
+=over 4
+
+$job->set($hashref);
+
+=back
+
+Set some variables into the hashref.
+These variables can be retrieved using the get method.
+
+=cut
+
+sub set {
+    my ($self, $hashref) = @_;
+    while ( my ($k, $v) = each %$hashref ) {
+        $self->{$k} = $v;
+    }
+    $self->_serialize();
+}
+
+=head2 get
+
+=over 4
+
+$job->get($hashref);
+
+=back
+
+Get a variable which has been previously stored with the set method.
+
+=cut
+
+sub get {
+    my ($self, $key) = @_;
+    return $self->{$key};
+}
+
 1;
 __END__
 

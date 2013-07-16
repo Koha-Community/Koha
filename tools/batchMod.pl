@@ -84,6 +84,8 @@ my $deleted_items = 0;     # Number of deleted items
 my $deleted_records = 0;   # Number of deleted records ( with no items attached )
 my $not_deleted_items = 0; # Number of items that could not be deleted
 my @not_deleted;           # List of the itemnumbers that could not be deleted
+my $modified_items = 0;    # Numbers of modified items
+my $modified_fields = 0;   # Numbers of modified fields
 
 my %cookies = parse CGI::Cookie($cookie);
 my $sessionID = $cookies{'CGISESSID'}->value;
@@ -160,7 +162,7 @@ if ($op eq "action") {
 
 		$job->progress($i) if $runinbackground;
 		my $itemdata = GetItem($itemnumber);
-		if ($input->param("del")){
+        if ( $del ){
 			my $return = DelItemCheck(C4::Context->dbh, $itemdata->{'biblionumber'}, $itemdata->{'itemnumber'});
 			if ($return == 1) {
 			    $deleted_items++;
@@ -184,14 +186,25 @@ if ($op eq "action") {
                             }
                         }
 		} else {
-		    if ($values_to_modify || $values_to_blank) {
-			my $localmarcitem = Item2Marc($itemdata);
-			UpdateMarcWith( $marcitem, $localmarcitem );
-			eval{
-                            if ( my $item = ModItemFromMarc( $localmarcitem, $itemdata->{biblionumber}, $itemnumber ) ) {
-                                LostItem($itemnumber, 'MARK RETURNED') if $item->{itemlost};
-                            }
-                        };
+            if ($values_to_modify || $values_to_blank) {
+                my $localmarcitem = Item2Marc($itemdata);
+
+                my $modified = UpdateMarcWith( $marcitem, $localmarcitem );
+                if ( $modified ) {
+                    eval {
+                        if ( my $item = ModItemFromMarc( $localmarcitem, $itemdata->{biblionumber}, $itemnumber ) ) {
+                            LostItem($itemnumber, 'MARK RETURNED') if $item->{itemlost};
+                        }
+                    };
+                }
+                if ( $runinbackground ) {
+                    $modified_items++ if $modified;
+                    $modified_fields += $modified;
+                    $job->set({
+                        modified_items  => $modified_items,
+                        modified_fields => $modified_fields,
+                    });
+                }
 		    }
 		}
 		$i++;
@@ -561,21 +574,25 @@ sub BuildItemsData{
 # And $tag>10
 sub UpdateMarcWith {
   my ($marcfrom,$marcto)=@_;
-  #warn "FROM :",$marcfrom->as_formatted;
-	my (  $itemtag,   $itemtagsubfield) = &GetMarcFromKohaField("items.itemnumber", "");
-	my $fieldfrom=$marcfrom->field($itemtag);
-	my @fields_to=$marcto->field($itemtag);
-    foreach my $subfield ($fieldfrom->subfields()){
-		foreach my $field_to_update (@fields_to){
-		    if ($subfield->[1]){
-			$field_to_update->update($subfield->[0]=>$subfield->[1]);
-		    }
-		    else {
-			$field_to_update->delete_subfield(code=> $subfield->[0]);
-		    }
-		}
+    my (  $itemtag,   $itemtagsubfield) = &GetMarcFromKohaField("items.itemnumber", "");
+    my $fieldfrom=$marcfrom->field($itemtag);
+    my @fields_to=$marcto->field($itemtag);
+    my $modified = 0;
+    foreach my $subfield ( $fieldfrom->subfields() ) {
+        foreach my $field_to_update ( @fields_to ) {
+            if ( $subfield->[1] ) {
+                unless ( $field_to_update->subfield($subfield->[0]) ~~ $subfield->[1] ) {
+                    $modified++;
+                    $field_to_update->update( $subfield->[0] => $subfield->[1] );
+                }
+            }
+            else {
+                $modified++;
+                $field_to_update->delete_subfield( code => $subfield->[0] );
+            }
+        }
     }
-  #warn "TO edited:",$marcto->as_formatted;
+    return $modified;
 }
 
 sub find_value {
@@ -610,6 +627,13 @@ sub add_saved_job_results_to_template {
     my $job = C4::BackgroundJob->fetch($sessionID, $completedJobID);
     my $results = $job->results();
     add_results_to_template($template, $results);
+
+    my $fields = $job->get("modified_fields");
+    my $items = $job->get("modified_items");
+    $template->param(
+        modified_items => $items,
+        modified_fields => $fields,
+    );
 }
 
 sub put_in_background {

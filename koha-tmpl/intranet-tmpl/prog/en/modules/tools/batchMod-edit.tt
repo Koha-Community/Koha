@@ -56,7 +56,14 @@ $(document).ready(function(){
 <div id="doc3" class="yui-t7">
     <div id="bd">
         <div id="yui-main">
-            [% IF ( show ) %]<h1>Batch item modification</h1>[% ELSE %]<h1>Batch item modification results</h1>[% END %]
+            [% IF ( show ) %]
+              <h1>Batch item modification</h1>
+            [% ELSE %]
+              <h1>Batch item modification results</h1>
+              <div class="dialog message">
+              [% modified_items %] item(s) modified (with [% modified_fields %] fields modified)
+              </div>
+            [% END %]
 [% IF ( barcode_not_unique ) %]<div class="dialog alert"><strong>Error saving item</strong>: Barcode must be unique.</div>[% END %]
 [% IF ( no_next_barcode ) %]<div class="dialog alert"><strong>Error saving items</strong>: Unable to automatically determine values for barcodes. No item has been inserted.</div>[% END %]
 [% IF ( book_on_loan ) %]<div class="dialog alert"><strong>Cannot Delete</strong>: item is checked out.</div>[% END %]
