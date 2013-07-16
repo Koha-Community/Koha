@@ -545,6 +545,8 @@ sub BuildItemsData{
       $row_data{title} = $row->{title};
       $row_data{isbn} = $row->{isbn};
       $row_data{biblionumber} = $row->{biblionumber};
+      my $is_on_loan = C4::Circulation::IsItemIssued( $row->{itemnumber} );
+      $row_data{onloan} = $is_on_loan ? 1 : 0;
 			push(@item_value_loop,\%row_data);
 		}
 		my @header_loop=map { { header_value=> $witness{$_}} } @witnesscodessorted;

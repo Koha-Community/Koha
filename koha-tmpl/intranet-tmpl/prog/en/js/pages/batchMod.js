@@ -102,7 +102,7 @@ function hideAllColumns(){
         "aoColumnDefs": [
             { "aTargets": [ 0 ], "bSortable": false, "bSearchable": false }
         ],
-        "bPaginate": false
+        "bPaginate": false,
     }));
     $("#selectallbutton").click(function(){
       $("#itemst").checkCheckboxes();
@@ -110,6 +110,12 @@ function hideAllColumns(){
     });
     $("#clearallbutton").click(function(){
       $("#itemst").unCheckCheckboxes();
+      return false;
+    });
+    $("#clearonloanbutton").click(function(){
+      $("#itemst input[name='itemnumber'][data-is-onloan='1']").each(function(){
+        $(this).attr('checked', false);
+      });
       return false;
     });
     $("#selections input").change(function(e){

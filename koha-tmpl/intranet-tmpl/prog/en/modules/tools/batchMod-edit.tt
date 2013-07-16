@@ -19,16 +19,7 @@ for( x=0; x<allColumns.length; x++ ){
   allColumns[x] = Number(allColumns[x]) + 2;
 }
 $(document).ready(function(){
-  $("#selectallbutton").click(function() {
-      $("#itemst").find("input:checkbox").each(function() {
-   $(this).attr("checked", "checked");
-      });
-  });
-  $("#clearallbutton").click(function() {
-      $("#itemst").find("input:checkbox").each(function() {
-   $(this).removeAttr("checked");
-      });
-  });
+
   $("input[name='disable_input']").click(function() {
       var row = $(this).attr("id");
       row = row.replace("row","hint");
@@ -42,6 +33,7 @@ $(document).ready(function(){
           $("#"+row).html("");
       }
   });
+
 });
 //]]>
 </script>
@@ -97,7 +89,11 @@ $(document).ready(function(){
      <input type="hidden" name="src" id="src" value="[% src %]" />
 
 [% IF ( item_loop ) %]
-  [% IF ( show ) %]<div id="toolbar"><a id="selectallbutton" href="#">Select All</a> | <a id="clearallbutton" href="#">Clear All</a></div>[% ELSE %][% END %]
+  [% IF show %]
+    <div id="toolbar">
+      <a id="selectallbutton" href="#">Select all</a> | <a id="clearallbutton" href="#">Clear all</a> | <a id="clearonloanbutton" href="#">Clear on loan</a>
+    </div>
+  [% END %]
 <div id="cataloguing_additem_itemlist">
 
 <p id="selections"><strong>Show/hide columns:</strong> <span class="selected"><input type="checkbox" checked="checked" id="showall"/><label for="showall">Show all columns</label></span> <span><input type="checkbox" id="hideall"/><label for="hideall">Hide all columns</label></span> 
@@ -116,7 +112,17 @@ $(document).ready(function(){
     </tr>
       </thead>
       <tbody>
-            [% FOREACH item_loo IN item_loop %] <tr> [% IF ( show ) %][% IF ( item_loo.nomod ) %] <td class="error">Cannot Edit</td>[% ELSE %]<td><input type="checkbox" name="itemnumber" value="[% item_loo.itemnumber %]" id="row[% item_loo.itemnumber %]" checked="checked" /></td>[% END %][% ELSE %]<td>&nbsp;</td>[% END %]
+            [% FOREACH item_loo IN item_loop %]
+              <tr>
+                [% IF show %]
+                  [% IF item_loo.nomod %]
+                    <td class="error">Cannot Edit</td>
+                  [% ELSE %]
+                    <td><input type="checkbox" name="itemnumber" value="[% item_loo.itemnumber %]" id="row[% item_loo.itemnumber %]" checked="checked" data-is-onloan="[% item_loo.onloan %]" /></td>
+                  [% END %]
+                [% ELSE %]
+                  <td>&nbsp;</td>
+                [% END %]
                 <td><label for="row[% item_loo.itemnumber %]"><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% item_loo.biblionumber %]">[% item_loo.title %]</a>[% IF ( item_loo.author ) %], by [% item_loo.author %][% END %]</label></td>
                 [% FOREACH item_valu IN item_loo.item_value %] <td>[% item_valu.field |html %]</td> 
         [% END %] </tr>

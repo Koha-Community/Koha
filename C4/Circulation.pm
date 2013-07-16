@@ -88,6 +88,7 @@ BEGIN {
 		&GetOpenIssue
 		&AnonymiseIssueHistory
         &CheckIfIssuedToPatron
+        &IsItemIssued
 	);
 
 	# subs to deal with returns
@@ -3495,6 +3496,25 @@ sub CheckIfIssuedToPatron {
     return;
 }
 
+=head2 IsItemIssued
+
+  IsItemIssued( $itemnumber )
+
+  Return 1 if the item is on loan, otherwise return 0
+
+=cut
+
+sub IsItemIssued {
+    my $itemnumber = shift;
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare(q{
+        SELECT COUNT(*)
+        FROM issues
+        WHERE itemnumber = ?
+    });
+    $sth->execute($itemnumber);
+    return $sth->fetchrow;
+}
 
 1;
 
