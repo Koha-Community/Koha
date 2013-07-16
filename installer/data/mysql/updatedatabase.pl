@@ -6885,6 +6885,12 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.12.01.003";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    print "The default MARC21 framework has been updated to April 2013 revision. Use installer/data/mysql/en/marcflavour/marc21/mandatory/marc21_framework_DEFAULT.sql to update your (english) default MARC21 framework from the command line.\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)
