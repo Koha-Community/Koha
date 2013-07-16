@@ -108,7 +108,6 @@ foreach my $user(@phones){
 	}
 	print $reply;
 }
-$dbh->disconnect;
 
 sub send_message {
 	my ($mes,$message,$smsid)=@_;

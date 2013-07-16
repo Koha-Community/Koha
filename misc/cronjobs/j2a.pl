@@ -234,4 +234,3 @@ if ( not $noaction) {
 	}
 	$sth->finish(  );
 }
-$dbh->disconnect();
