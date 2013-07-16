@@ -7,10 +7,8 @@
 [% INCLUDE 'doc-head-close.inc' %]
 <script type="text/javascript" src="[% themelang %]/js/background-job-progressbar.js"></script>
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.min.js"></script>
+[% INCLUDE 'datatables.inc' %]
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.columnFilter.js"></script>
-[% INCLUDE 'datatables-strings.inc' %]
-<script type="text/javascript" src="[% themelang %]/js/datatables.js"></script>
 <script type="text/JavaScript" language="JavaScript">
 //<![CDATA[
 var MSG_CONFIRM_CLEAN = _("Clear all reservoir records staged in this batch?  This cannot be undone.");
@@ -27,55 +25,85 @@ $(document).ready(function(){
       $(this).parent().hide();
   });
 
-  $("#records-table").dataTable({
-      "aLengthMenu": [[10, 15, 20, 25, 50, 100], [10, 15, 20, 25, 50, 100]],
-      "iDisplayLength" : 20,
-      "bAutoWidth": false,
-      "bFilter": false,
-      "bProcessing": true,
-      "bServerSide": true,
-      "sAjaxSource": 'batch_records_ajax.pl',
-      "sPaginationType": "full_numbers",
-      "sDom": '<"top pager"iflp>rt<"bottom pager"flp><"clear">',
-      "aoColumns": [
-          { "mDataProp": "import_record_id" },
-          { "mDataProp": "citation" },
-          { "mDataProp": "status" },
-          { "mDataProp": "overlay_status" },
-          { "mDataProp": "match_citation" },
-          { "mDataProp": "matched" },
-      ],
-      "fnServerData": function ( sSource, aoData, fnCallback ) {
-          aoData.push( { "name": "import_batch_id", "value": [% import_batch_id %] } );
+  [% IF import_batch_id %]
+      $("#records-table").dataTable({
+          "aLengthMenu": [[10, 15, 20, 25, 50, 100, -1], [10, 15, 20, 25, 50, 100, _("All")]],
+          "iDisplayLength" : 20,
+          "bAutoWidth": false,
+          "bFilter": false,
+          "bProcessing": true,
+          "bServerSide": true,
+          "sAjaxSource": 'batch_records_ajax.pl',
+          "sPaginationType": "full_numbers",
+          "sDom": '<"top pager"iflp>rt<"bottom pager"flp><"clear">',
+          "aoColumns": [
+              { "mDataProp": "import_record_id" },
+              { "mDataProp": "citation" },
+              { "mDataProp": "status" },
+              { "mDataProp": "overlay_status" },
+              { "mDataProp": "match_citation" },
+              { "mDataProp": "matched" },
+          ],
+          "fnServerData": function ( sSource, aoData, fnCallback ) {
+              aoData.push( { "name": "import_batch_id", "value": [% import_batch_id %] } );
 
-          $.getJSON( sSource, aoData, function (json) {
-              fnCallback(json)
-          } );
-      },
-      "fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
-        $('td:eq(1)', nRow).html(
-            '<a href="javascript:void()" onclick="show_marc('
-            + aData['import_record_id']
-            + ')">' + aData['citation'] + '</a>'
-        );
+              $.ajax({
+                  'dataType': 'json',
+                  'type': 'POST',
+                  'url': sSource,
+                  'data': aoData,
+                  'success': function(json){
+                      fnCallback(json);
+                  }
+              });
+          },
+          "fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
+            [% IF ( record_type == 'auth' ) %]
+                var record_details_url = "/cgi-bin/koha/authorities/detail.pl?authid=";
+            [% ELSE %]
+                var record_details_url = "/cgi-bin/koha/catalogue/detail.pl?biblionumber=";
+            [% END %]
 
-        if ( aData['match_id'] ) {
-            $('td:eq(4)', nRow).html(
-                _("Matches biblio ")
-                + aData['match_id']
-                + " (" + _("score") + "="
-                + aData['score']
-                + '):' + '<a target="_blank" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber='
-                + aData['match_id'] + '">' + aData['match_citation'] + '</a>'
+            $('td:eq(1)', nRow).html(
+                '<a href="javascript:void(0)" onclick="show_marc('
+                + aData['import_record_id']
+                + ')">' + aData['citation'] + '</a>'
             );
-        }
 
-        $('td:eq(5)', nRow).html(
-            '<a target="_blank" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber='
-            + aData['matched'] + '">' + aData['matched'] + '</a>'
-        );
-      },
-  });
+            $('td:eq(2)', nRow).html(
+                aData['status'] == 'imported' ? _("Imported") :
+                aData['status'] == 'ignored'  ? _("Ignored")  :
+                aData['status'] == 'reverted' ? _("Reverted") :
+                aData['status'] == 'staged'   ? _("Staged")   :
+                aData['status'] == 'error'    ? _("Error")    :
+                aData['status']
+            );
+
+            $('td:eq(3)', nRow).html(
+                aData['overlay_status'] == 'no_match'      ? _("No match")       :
+                aData['overlay_status'] == 'match_applied' ? _("Match applied")  :
+                aData['overlay_status'] == 'auto_match'    ? _("Match found")    :
+                aData['overlay_status']
+            );
+
+            if ( aData['match_id'] ) {
+                $('td:eq(4)', nRow).html(
+                    _("Matches biblio ")
+                    + aData['match_id']
+                    + " (" + _("score") + "="
+                    + aData['score']
+                    + '):' + '<a target="_blank" href="' + record_details_url
+                    + aData['match_id'] + '">' + aData['match_citation'] + '</a>'
+                );
+            }
+
+            $('td:eq(5)', nRow).html(
+                '<a target="_blank" href="' + record_details_url
+                    + aData['matched'] + '">' + aData['matched'] + '</a>'
+            );
+          },
+      });
+    [% END %]
 });
 
 function show_marc( id ) {
@@ -412,18 +440,20 @@ Page
   [% END %]
 [% END %]
 
-<table id="records-table">
-    <thead>
-        <tr>
-            <th>#</th>
-            <th>Citation</th>
-            <th>Status</th>
-            <th>Match type</th>
-            <th>Match details</th>
-            <th>Record</th>
-        </tr>
-    </thead>
-</table>
+[% IF import_batch_id %]
+    <table id="records-table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Citation</th>
+                <th>Status</th>
+                <th>Match type</th>
+                <th>Match details</th>
+                <th>Record</th>
+            </tr>
+        </thead>
+    </table>
+[% END %]
 
 </div>
 </div>

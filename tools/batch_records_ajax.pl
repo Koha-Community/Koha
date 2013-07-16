@@ -1,14 +1,13 @@
 #!/usr/bin/perl
 
-# This software is placed under the gnu General Public License, v2 (http://www.gnu.org/licenses/gpl.html)
-
-# Copyright 2007 Tamil s.a.r.l.
+# Copyright 2013 ByWater Solutions
+# Based on circ/ysearch.pl: Copyright 2007 Tamil s.a.r.l.
 #
 # This file is part of Koha.
 #
 # Koha is free software; you can redistribute it and/or modify it under the
 # terms of the GNU General Public License as published by the Free Software
-# Foundation; either version 2 of the License, or (at your option) any later
+# Foundation; either version 3 of the License, or (at your option) any later
 # version.
 #
 # Koha is distributed in the hope that it will be useful, but WITHOUT ANY
@@ -19,8 +18,14 @@
 # with Koha; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-=head1 ysearch.pl
+=head1 NAME
 
+batch_records_ajax.pl - A script for searching batch imported records via ajax
+
+=head1 SYNOPSIS
+
+This script is to be used as a data source for DataTables that load and display
+the records from an import batch.
 
 =cut
 
@@ -45,11 +50,13 @@ my $results_per_page  = $input->param('iDisplayLength');
 my $sorting_column    = $sort_columns[ $input->param('iSortCol_0') ];
 my $sorting_direction = $input->param('sSortDir_0');
 
+$results_per_page = undef if ( $results_per_page == -1 );
+
 binmode STDOUT, ":encoding(UTF-8)";
 print $input->header( -type => 'text/plain', -charset => 'UTF-8' );
 
 my ( $auth_status, $sessionID ) =
-  check_cookie_auth( $input->cookie('CGISESSID'), { editcatalogue => '*' } );
+  check_cookie_auth( $input->cookie('CGISESSID'), { tools => 'manage_staged_marc' } );
 if ( $auth_status ne "ok" ) {
     exit 0;
 }

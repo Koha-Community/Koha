@@ -1032,8 +1032,10 @@ sub GetImportRecordsRange {
 
     my $dbh = C4::Context->dbh;
 
-    my $order_by =
-      $dbh->quote_identifier( $parameters->{order_by} || 'import_record_id' );
+    my $order_by = $parameters->{order_by} || 'import_record_id';
+    ( $order_by ) = grep( /^$order_by$/, qw( import_record_id title status overlay_status ) ) ? $order_by : 'import_record_id';
+    $order_by .= ",authorized_heading" if $order_by eq 'title';
+
     my $order_by_direction =
       uc( $parameters->{order_by_direction} ) eq 'DESC' ? 'DESC' : 'ASC';
 
