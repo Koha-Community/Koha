@@ -788,11 +788,12 @@ sub _new_Zconn {
 # Internal helper function (not a method!). This creates a new
 # database connection from the data given in the current context, and
 # returns it.
+our $db_driver = 'mysql';
 sub _new_dbh
 {
 
     ## $context
-    ## correct name for db_schme        
+    ## correct name for db_scheme
     my $db_driver;
     if ($context->config("db_scheme")){
         $db_driver=db_scheme2dbi($context->config("db_scheme"));
@@ -821,6 +822,10 @@ sub _new_dbh
 
     if ($@) {
         $dbh->{RaiseError} = 0;
+    }
+
+    if ( $db_driver eq 'mysql' ) {
+        $dbh->{mysql_auto_reconnect} = 1;
     }
 
 	my $tz = $ENV{TZ};
@@ -857,10 +862,15 @@ possibly C<&set_dbh>.
 sub dbh
 {
     my $self = shift;
+    my $params = shift;
     my $sth;
 
-    if (defined($context->{"dbh"}) && $context->{"dbh"}->ping()) {
-	return $context->{"dbh"};
+    unless ( $params->{new} ) {
+        if ( defined $db_driver && $db_driver eq 'mysql' && $context->{"dbh"} ) {
+            return $context->{"dbh"};
+        } elsif ( defined $db_driver && defined($context->{"dbh"}) && $context->{"dbh"}->ping()) {
+            return $context->{"dbh"};
+        }
     }
 
     # No database handle or it died . Create one.
