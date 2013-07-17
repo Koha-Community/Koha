@@ -190,9 +190,12 @@ return false;
         <input type="hidden" name="authtypecode" value="[% authtypecode %]" />
         Create authority framework for [% authtypecode %] using
         <select name="existingauthtypecode">
-            <option value="">Default</option>
         [% FOREACH existingauthtypeloo IN existingauthtypeloop %]
-            <option value="[% existingauthtypeloo.value %]">[% existingauthtypeloo.authtypetext %]</option>
+            [% IF existingauthtypeloo.value == "" %]
+              <option value="" selected="selected">[% existingauthtypeloo.authtypetext %]</option>
+            [% ELSE %]
+              <option value="[% existingauthtypeloo.value %]">[% existingauthtypeloo.authtypetext %]</option>
+            [% END %]
         [% END %]
         </select>
         <input type="submit" value="OK" class="submit" />
@@ -209,7 +212,6 @@ return false;
 <h2>Select an authority framework</h2>
 <form action="[% script_name %]" method="post">
     <select name="authtypecode">
-        <option value="">Default</option>
     [% FOREACH authtypeloo IN authtypeloop %]
         [% IF ( authtypeloo.selected ) %]
         <option value="[% authtypeloo.value %]" selected="selected">[% authtypeloo.authtypetext %]</option>
