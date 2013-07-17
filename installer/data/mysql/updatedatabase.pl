@@ -7043,10 +7043,10 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion ="3.13.00.XXX";
+$DBversion ="3.13.00.013";
 if ( CheckVersion($DBversion) ) {
     $dbh->do("INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES ('AllowTooManyOverride', '1', 'If on, allow staff to override and check out items when the patron has reached the maximum number of allowed checkouts', '', 'YesNo');");
-    print "Upgrade to $DBversion done (Bug 9576 - Enable or disable issue limit confirmation)\n";
+    print "Upgrade to $DBversion done (Bug 9576: add AllowTooManyOverride syspref to enable or disable issue limit confirmation)\n";
     SetVersion($DBversion);
 }
 
