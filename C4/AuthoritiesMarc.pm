@@ -520,7 +520,7 @@ sub GetTagsLabels {
         $res->{$tag}->{repeatable} = $repeatable;
   }
   $sth=      $dbh->prepare(
-"SELECT tagfield,tagsubfield,liblibrarian,libopac,tab, mandatory, repeatable,authorised_value,frameworkcode as authtypecode,value_builder,kohafield,seealso,hidden,isurl 
+"SELECT tagfield,tagsubfield,liblibrarian,libopac,tab, mandatory, repeatable,authorised_value,frameworkcode as authtypecode,value_builder,kohafield,seealso,hidden,isurl,defaultvalue
 FROM auth_subfield_structure 
 WHERE authtypecode=? 
 ORDER BY tagfield,tagsubfield"
@@ -535,12 +535,13 @@ ORDER BY tagfield,tagsubfield"
     my $hidden;
     my $isurl;
     my $link;
+    my $defaultvalue;
 
     while (
         ( $tag,         $subfield,   $liblibrarian,   , $libopac,      $tab,
         $mandatory,     $repeatable, $authorised_value, $authtypecode,
         $value_builder, $kohafield,  $seealso,          $hidden,
-        $isurl,            $link )
+        $isurl,         $defaultvalue, $link )
         = $sth->fetchrow
       )
     {
@@ -556,6 +557,7 @@ ORDER BY tagfield,tagsubfield"
         $res->{$tag}->{$subfield}->{hidden}           = $hidden;
         $res->{$tag}->{$subfield}->{isurl}            = $isurl;
         $res->{$tag}->{$subfield}->{link}            = $link;
+        $res->{$tag}->{$subfield}->{defaultvalue}     = $defaultvalue;
     }
     return $res;
 }

@@ -139,6 +139,7 @@ if ($op eq 'add_form') {
 	while ($data =$sth->fetchrow_hashref) {
 
 		my %row_data;  # get a fresh hash for the row data
+        $row_data{defaultvalue} = $data->{defaultvalue};
 		$row_data{tab} = CGI::scrolling_list(-name=>'tab',
 					-id=>"tab$i",
                                         -values =>
@@ -386,9 +387,9 @@ if ($op eq 'add_form') {
 	$template->param(tagfield => "$input->param('tagfield')");
 #	my $sth=$dbh->prepare("replace auth_subfield_structure (authtypecode,tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,seealso,authorised_value,frameworkcode,value_builder,hidden,isurl)
 #									values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-	my $sth_insert = $dbh->prepare("insert into auth_subfield_structure (authtypecode,tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,seealso,authorised_value,frameworkcode,value_builder,hidden,isurl)
+	my $sth_insert = $dbh->prepare("insert into auth_subfield_structure (authtypecode,tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,seealso,authorised_value,frameworkcode,value_builder,hidden,isurl,defaultvalue)
 									values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-	my $sth_update = $dbh->prepare("update auth_subfield_structure set authtypecode=?, tagfield=?, tagsubfield=?, liblibrarian=?, libopac=?, repeatable=?, mandatory=?, kohafield=?, tab=?, seealso=?, authorised_value=?, frameworkcode=?, value_builder=?, hidden=?, isurl=?
+	my $sth_update = $dbh->prepare("update auth_subfield_structure set authtypecode=?, tagfield=?, tagsubfield=?, liblibrarian=?, libopac=?, repeatable=?, mandatory=?, kohafield=?, tab=?, seealso=?, authorised_value=?, frameworkcode=?, value_builder=?, hidden=?, isurl=?, defaultvalue=?
 									where authtypecode=? and tagfield=? and tagsubfield=?");
 	my @tagsubfield	= $input->param('tagsubfield');
 	my @liblibrarian	= $input->param('liblibrarian');
@@ -404,6 +405,7 @@ if ($op eq 'add_form') {
 	my $authtypecode	= $input->param('authtypecode');
 	my @frameworkcodes	= $input->param('frameworkcode');
 	my @value_builder	=$input->param('value_builder');
+    my @defaultvalue = $input->param('defaultvalue');
 	for (my $i=0; $i<= $#tagsubfield ; $i++) {
 		my $tagfield			=$input->param('tagfield');
 		my $tagsubfield		=$tagsubfield[$i];
@@ -418,6 +420,7 @@ if ($op eq 'add_form') {
 		my $authorised_value		=$authorised_values[$i];
 		my $frameworkcode		=$frameworkcodes[$i];
 		my $value_builder=$value_builder[$i];
+        my $defaultvalue = $defaultvalue[$i];
 		#my $hidden = $ohidden[$i].$ihidden[$i].$ehidden[$i]; #collate from 3 hiddens;
 		my $hidden = $ohidden[$i]; #collate from 3 hiddens;
 		my $isurl = $input->param("isurl$i")?1:0;
@@ -440,6 +443,7 @@ if ($op eq 'add_form') {
 						$value_builder,
 						$hidden,
 						$isurl,
+                        $defaultvalue,
 						(
 							$authtypecode,
 							$tagfield,
@@ -463,6 +467,7 @@ if ($op eq 'add_form') {
 						$value_builder,
 						$hidden,
 						$isurl,
+                        $defaultvalue,
 					);
 				}
 			}

@@ -56,6 +56,7 @@ CREATE TABLE `auth_subfield_structure` (
   `linkid` tinyint(1) NOT NULL default 0,
   `kohafield` varchar(45) NULL default '',
   `frameworkcode` varchar(10) NOT NULL default '',
+  `defaultvalue` TEXT DEFAULT '',
   PRIMARY KEY  (`authtypecode`,`tagfield`,`tagsubfield`),
   KEY `tab` (`authtypecode`,`tab`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

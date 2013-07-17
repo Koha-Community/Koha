@@ -7176,6 +7176,15 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
    SetVersion ($DBversion);
 }
 
+$DBversion = "3.13.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q|
+        ALTER TABLE auth_subfield_structure ADD COLUMN defaultvalue TEXT DEFAULT NULL AFTER frameworkcode
+    |);
+    print "Upgrade to $DBversion done (Bug 10602: Add the column auth_subfield_structure.defaultvalue)\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

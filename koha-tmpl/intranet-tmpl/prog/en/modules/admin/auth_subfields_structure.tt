@@ -99,7 +99,18 @@ function displayMoreConstraint(numlayer){
                         </ol>
                     </fieldset>
                 </li>
-                <li><label for="isurl[% loo.row %]">Is a URL:</label>[% loo.isurl %] (if checked, it means that the subfield is a URL and can be clicked)</li>
+                <li>
+                    <fieldset class="rows">
+                        <legend>Advanced constraints:</legend>
+                        <ol>
+                            <li><label for="isurl[% loo.row %]">Is a URL:</label>[% loo.isurl %] (if checked, it means that the subfield is a URL and can be clicked)</li>
+                            <li>
+                                <label for="defaultvalue[% loo.row %]">Default value:</label>
+                                <input type="text" name="defaultvalue" id="defaultvalue[% loo.row %]" value="[% loo.defaultvalue %]" />
+                            </li>
+                        </ol>
+                    </fieldset>
+                </li>
                 <li>
                     <fieldset><legend>Help input</legend>    
                         <ol>
