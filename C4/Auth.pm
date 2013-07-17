@@ -390,7 +390,7 @@ sub get_template_and_user {
             AnonSuggestions           => "" . C4::Context->preference("AnonSuggestions"),
             AuthorisedValueImages     => C4::Context->preference("AuthorisedValueImages"),
             BranchesLoop              => GetBranchesLoop($opac_name),
-            BranchCategoriesLoop      => GetBranchCategories( undef, undef, 1, $opac_name ),
+            BranchCategoriesLoop      => GetBranchCategories( 'searchdomain', 1, $opac_name ),
             CalendarFirstDayOfWeek    => (C4::Context->preference("CalendarFirstDayOfWeek") eq "Sunday")?0:1,
             LibraryName               => "" . C4::Context->preference("LibraryName"),
             LibraryNameTitle          => "" . $LibraryNameTitle,
