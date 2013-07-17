@@ -143,6 +143,10 @@ if ( $cgi->param('service') eq "Describe" and any { $cgi->param('verb') eq $_ } 
     exit 0;
 }
 
+# any output after this point will be UTF-8 XML
+binmode STDOUT, ':encoding(UTF-8)';
+print CGI::header('-type'=>'text/xml', '-charset'=>'utf-8');
+
 my $out;
 
 # If ILS-DI module is disabled in System->Preferences, redirect to 404
@@ -207,7 +211,6 @@ if ( $service and any { $service eq $_ } @services ) {
 
         # GetAvailability is a special case, as it cannot use XML::Simple
         if ( $service eq "GetAvailability" ) {
-            print CGI::header('text/xml');
             print C4::ILSDI::Services::GetAvailability($cgi);
             exit 0;
         } else {
@@ -228,8 +231,6 @@ if ( $service and any { $service eq $_ } @services ) {
 }
 
 # Output XML by passing the hashref to XMLOut
-binmode STDOUT, ':encoding(UTF-8)';
-print CGI::header('-type'=>'text/xml', '-charset'=>'utf-8');
 print XMLout(
     $out,
     noattr        => 1,
