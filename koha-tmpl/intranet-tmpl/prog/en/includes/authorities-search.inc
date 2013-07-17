@@ -14,6 +14,11 @@
                 $("#header_search").tabs( "option", "selected", 2 );
             }
         }
+        $("#header_search input[type='text'], #header_search select").change(function() {
+            var myname = $(this).attr("name");
+            var myval  = $(this).val();
+            $("#header_search [name='" + myname + "']").val(myval);
+        });
     });
 //]]>
 </script>
