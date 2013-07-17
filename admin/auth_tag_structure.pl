@@ -57,7 +57,7 @@ my ($template, $loggedinuser, $cookie)
 # get authtype list
 my $authtypes     = getauthtypes;
 my @authtypesloop = ();
-foreach my $thisauthtype ( keys %{$authtypes} ) {
+foreach my $thisauthtype ( sort keys %{$authtypes} ) {
     push @authtypesloop,
       { value        => $thisauthtype,
         selected     => $thisauthtype eq $authtypecode,
@@ -209,6 +209,7 @@ if ($op eq 'add_form') {
 			push @existingauthtypeloop,\%line;
 		}
 	}
+    @existingauthtypeloop = sort { lc($a->{authtypetext}) cmp lc($b->{authtypetext}) }@existingauthtypeloop;
 	$template->param(existingauthtypeloop => \@existingauthtypeloop,
 					authtypecode => $authtypecode,
 					);
