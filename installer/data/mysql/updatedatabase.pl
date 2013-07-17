@@ -7050,6 +7050,14 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.13.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do("ALTER TABLE courses MODIFY COLUMN department varchar(80) DEFAULT NULL;");
+    $dbh->do("ALTER TABLE courses MODIFY COLUMN term       varchar(80) DEFAULT NULL;");
+    print "Upgrade to $DBversion done (Bug 10604: correct width of courses.department and courses.term)\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

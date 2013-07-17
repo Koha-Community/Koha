@@ -478,11 +478,11 @@ CREATE TABLE collections_tracking (
 DROP TABLE IF EXISTS courses;
 CREATE TABLE `courses` (
   `course_id` int(11) NOT NULL AUTO_INCREMENT,
-  `department` varchar(20) DEFAULT NULL, -- Stores the authorised value DEPT
+  `department` varchar(80) DEFAULT NULL, -- Stores the authorised value DEPT
   `course_number` varchar(255) DEFAULT NULL, -- An arbitrary field meant to store the "course number" assigned to a course
   `section` varchar(255) DEFAULT NULL, -- Also arbitrary, but for the 'section' of a course.
   `course_name` varchar(255) DEFAULT NULL,
-  `term` varchar(20) DEFAULT NULL, -- Stores the authorised value TERM
+  `term` varchar(80) DEFAULT NULL, -- Stores the authorised value TERM
   `staff_note` mediumtext,
   `public_note` mediumtext,
   `students_count` varchar(20) DEFAULT NULL, -- Meant to be just an estimate of how many students will be taking this course/section
