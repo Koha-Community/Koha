@@ -281,8 +281,6 @@ sub SearchAuthorities {
         my %newline;
         $newline{authid} = $authid;
         if ( !$skipmetadata ) {
-            my $summary =
-              BuildSummary( $authrecord, $authid, GetAuthTypeCode($authid) );
             my $query_auth_tag =
 "SELECT auth_tag_to_report FROM auth_types WHERE authtypecode=?";
             my $sth = $dbh->prepare($query_auth_tag);
@@ -291,15 +289,18 @@ sub SearchAuthorities {
             my $reported_tag;
             my $mainentry = $authrecord->field($auth_tag_to_report);
             if ($mainentry) {
-
                 foreach ( $mainentry->subfields() ) {
                     $reported_tag .= '$' . $_->[0] . $_->[1];
                 }
             }
-            my $thisauthtype = GetAuthType(GetAuthTypeCode($authid));
+            my $thisauthtypecode = GetAuthTypeCode($authid);
+            my $thisauthtype = GetAuthType($thisauthtypecode);
             unless (defined $thisauthtype) {
-                $thisauthtype = GetAuthType($authtypecode) if $authtypecode;
+                $thisauthtypecode = $authtypecode;
+                $thisauthtype = GetAuthType($authtypecode);
             }
+            my $summary = BuildSummary( $authrecord, $authid, $thisauthtypecode );
+
             $newline{authtype}     = defined($thisauthtype) ?
                                         $thisauthtype->{'authtypetext'} : '';
             $newline{summary}      = $summary;
