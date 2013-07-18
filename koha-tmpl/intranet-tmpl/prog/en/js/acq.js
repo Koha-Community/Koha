@@ -35,12 +35,6 @@ function isNull(f,noalert) {
     return true;
 }
 
-
-
-
-
-
-
 //Function returns false if v is not a number (if maybenull is 0, it also returns an error if the number is 0)
 function isNum(v,maybenull) {
     var n = new Number(v.value);
@@ -822,7 +816,7 @@ if ( newBudgetParent  ) { url +=  '&parent_id=' + newBudgetParent};
     if (result == '1') {
             return MSG_BUDGET_PARENT_ALLOCATION;
     } else if (result == '2') {
-            return MSG_BUDGET_PARENT_ALLOCATION;
+            return MSG_BUDGET_PERIOD_ALLOCATION;
     } else  {
             return false;
     }
