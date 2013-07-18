@@ -73,9 +73,9 @@ function doauth(authid, index, repet)
                         <td>[% PROCESS authresult summary=resul.summary %]</td>
                         <td>[% resul.used %] times</td>
                         <td>
-                          [% IF resul.repets %]
-                            [% FOREACH repet IN resul.repets %]
-                            <a href="javascript:doauth('[% resul.authid %]', '[% repet.index %]', '[% repet.repet %]')" title="[% repet.value %]">[% repet.repet %]</a>
+                          [% IF resul.summary && resul.summary.repets && resul.summary.repets.size > 1 %]
+                            [% FOREACH repet IN resul.summary.repets %]
+                            <a href="javascript:doauth('[% resul.authid %]', '[% index %]', '[% loop.count %]')" title="[% repet | html %]">[% loop.count %]</a>
                             [% END %]
                           [% ELSE %]
                             <a href="javascript:doauth('[% resul.authid %]', '[% index %]', '')">choose</a>
