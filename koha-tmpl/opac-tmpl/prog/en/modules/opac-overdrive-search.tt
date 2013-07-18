@@ -2,6 +2,8 @@
 [% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; OverDrive search for '[% q | html %]'
 [% INCLUDE 'doc-head-close.inc' %]
 <script type="text/javascript" src="[% themelang %]/js/overdrive.js"></script>
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.rating.js"></script>
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/jquery.rating.css" />
 <script type="text/javascript">
 var querystring = "[% q |replace( "'", "\'" ) |replace( '\n', '\\n' ) |replace( '\r', '\\r' ) |html %]";
 var results_per_page = [% OPACnumSearchResults %];
@@ -9,7 +11,7 @@ var results_per_page = [% OPACnumSearchResults %];
 function fetch_availability( prod, $tr ) {
     var $availability_summary = $( '<span class="results_summary"></span>' );
     $tr.find( '.info' ).append( $availability_summary );
-    $availability_summary.html( '<span class="label">Availability: </span> Loading...' );
+    $availability_summary.html( '<span class="label">' + _("Availability:") + ' </span> ' + _("Loading...") );
 
     KOHA.OverDrive.Get(
         prod.links.availability.href,
@@ -17,34 +19,34 @@ function fetch_availability( prod, $tr ) {
         function ( data ) {
             if ( data.error ) return;
 
-            $availability_summary.html( '<span class="label">Copies available: </span><span class="available"><strong>' +  data.copiesAvailable + '</strong> out of ' + data.copiesOwned + '</span>' );
+            $availability_summary.html( '<span class="label">' + _("Copies available:") + ' </span><span class="available"><strong>' +  data.copiesAvailable + '</strong> ' + _("out of") + ' ' + data.copiesOwned + '</span>' );
 
             if ( data.numberOfHolds ) {
-                $availability_summary.find( '.available' ).append( ', waiting holds: <strong>' + data.numberOfHolds + '</strong>' );
+                $availability_summary.find( '.available' ).append( ', ' + _("waiting holds:") + ' <strong>' + data.numberOfHolds + '</strong>' );
             }
 
-            $tr.find( '.info' ).append( '<span class="results_summary actions"><span class="label">Actions: </span><a href="http://' + prod.contentDetails[0].href + '" ' + ( data.copiesAvailable ? ' class="addtocart">Check out' : ' class="hold">Place hold' ) + '</a></span>' );
+            $tr.find( '.info' ).append( '<span class="results_summary actions"><span class="label">' + _("Actions:") + ' </span><a href="http://' + prod.contentDetails[0].href + '" ' + ( data.copiesAvailable ? ( ' class="addtocart">' + _("Check out") ) : ( ' class="hold">' + _("Place hold") ) ) + '</a></span>' );
         }
     );
 }
 
 function search( offset ) {
-    $( '#overdrive-status' ).html( 'Searching OverDrive... <img class="throbber" src="/opac-tmpl/lib/jquery/plugins/themes/classic/throbber.gif" /></span>' );
+    $( '#overdrive-status' ).html( _("Searching OverDrive...") + ' <img class="throbber" src="/opac-tmpl/lib/jquery/plugins/themes/classic/throbber.gif" /></span>' );
 
     KOHA.OverDrive.Search( "[% OverDriveLibraryID %]", querystring, results_per_page, offset, function( data ) {
         if ( data.error ) {
-            $( '#overdrive-status' ).html( '<strong class="unavailable">Error searching OverDrive collection.</strong>' );
+            $( '#overdrive-status' ).html( '<strong class="unavailable">' + _("Error searching OverDrive collection.") + '</strong>' );
             return;
         }
 
         if ( !data.totalItems ) {
-            $( '#overdrive-status' ).html( '<strong>No results found in the library\'s OverDrive collection.</strong>' );
+            $( '#overdrive-status' ).html( '<strong>' + _("No results found in the library's OverDrive collection.") + '</strong>' );
             return;
         }
 
-        $( '#results tbody' ).empty();
+        $( '#overdrive-results-list tbody' ).empty();
 
-        $( '#overdrive-status' ).html( '<strong>Found ' + data.totalItems + ' results in the library\'s OverDrive collection.</strong>' );
+        $( '#overdrive-status' ).html( '<strong>' + _("Found") + ' ' + data.totalItems + ' ' + _("results in the library's OverDrive collection.") + '</strong>' );
 
         for ( var i = 0; data.products[i]; i++ ) {
             var prod = data.products[i];
@@ -56,9 +58,15 @@ function search( offset ) {
             results.push( prod.title );
             if ( prod.subtitle ) results.push( ', ', prod.subtitle );
             results.push( '</a>' );
-            results.push( '<p>by ', prod.primaryCreator.name, '</p>' );
-            results.push( '<span class="results_summary"><span class="label">Type: </span>', prod.mediaType, '</span>' );
-            if ( prod.starRating ) results.push( '<span class="results_summary"><span class="label">Average rating: <img src="[% themelang %]/../images/Star', Math.round( parseInt( prod.starRating )), '.gif" title="" style="max-height: 15px; vertical-align: bottom"/></span>' );
+            results.push( '<p>' + _("by") + ' ', prod.primaryCreator.name, '</p>' );
+            if ( prod.starRating ) {
+                results.push( '<span class="results_summary ratings">' );
+                for ( var rating = 1; rating <= 5; rating++ ) {
+                    results.push( '<input class="star" type="radio" name="rating-' + i + '" value="' + rating + '"' + ( rating == Math.round( prod.starRating ) ? ' checked="checked"' : '' ) + ' disabled="disabled" />' );
+                }
+                results.push( '</span>' );
+            }
+            results.push( '<span class="results_summary"><span class="label">' + _("Type:") + ' </span>', prod.mediaType, '</span>' );
             results.push( '</td>' );
 
             results.push( '<td>' );
@@ -71,19 +79,19 @@ function search( offset ) {
 
             results.push( '</tr>' );
             var $tr = $( results.join( '' ));
-            $( '#results tbody' ).append( $tr );
+            $( '#overdrive-results-list tbody' ).append( $tr );
 
             fetch_availability( prod, $tr );
         }
 
-        $( '#results tr:odd' ).addClass( 'highlight' );
+        $( '#overdrive-results-list tr:odd' ).addClass( 'highlight' );
 
         var pages = [];
         var cur_page = offset / results_per_page;
         var max_page = Math.floor( data.totalItems / results_per_page );
 
         if ( cur_page != 0 ) {
-            pages.push( '<a class="nav" href="#" data-offset="' + (offset - results_per_page) + '">&lt;&lt; Previous</a>' );
+            pages.push( '<a class="nav" href="#" data-offset="' + (offset - results_per_page) + '">&lt;&lt; ' + _("Previous") + '</a>' );
         }
 
         for ( var page = Math.max( 0, cur_page - 9 ); page <= Math.min( max_page, cur_page + 9 ); page++ ) {
@@ -95,10 +103,12 @@ function search( offset ) {
         }
 
         if ( cur_page < max_page ) {
-            pages.push( ' <a class="nav" href="#" data-offset="' + (offset + results_per_page) + '">Next >></a>' );
+            pages.push( ' <a class="nav" href="#" data-offset="' + (offset + results_per_page) + '">' + _("Next") + ' >></a>' );
         }
 
         if ( pages.length > 1 ) $( '#top-pages, #bottom-pages' ).find( '.pages' ).html( pages.join( '' ) );
+
+        $( '#overdrive-results-list input.star' ).rating();
     } );
 }
 
@@ -140,7 +150,7 @@ $( document ).ready( function() {
             <div class="pages">
             </div>
         </div>
-        <table id="results">
+        <table id="overdrive-results-list">
             <tbody>
             </tbody>
         </table>

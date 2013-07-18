@@ -122,7 +122,7 @@ sub GetOverDriveToken {
     $token = $contents->{'token_type'} . ' ' . $contents->{'access_token'};
 
     # Fudge factor to prevent spurious failures
-    $cache->set_in_cache( 'overdrive_token', $token, $contents->{'expires_in'} - 5 );
+    $cache and $cache->set_in_cache( 'overdrive_token', $token, $contents->{'expires_in'} - 5 );
 
     return $token;
 }
