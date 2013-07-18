@@ -83,20 +83,6 @@ if ( $op eq "do_search" ) {
         $startfrom * $resultsperpage,
         $resultsperpage, $authtypecode, $orderby );
 
-    # If an authority heading is repeated, add an arrayref to those repetions
-    # First heading -- Second heading
-    for my $heading (@$results) {
-        my @repets = split / -- /, $heading->{summary};
-        if ( @repets > 1 ) {
-            my @repets_loop;
-            for ( my $i = 0 ; $i < @repets ; $i++ ) {
-                push @repets_loop,
-                  { index => $index, repet => $i + 1, value => $repets[$i] };
-            }
-            $heading->{repets} = \@repets_loop;
-        }
-    }
-
     # multi page display gestion
     my $displaynext = 0;
     my $displayprev = $startfrom;

@@ -50,18 +50,24 @@
     [% END %]
 [% END %]
 [% BLOCK authresult %]
-    [% IF ( summary.summary ) %][% summary.summary | html %]:[% END %]
+    <div class="authres_repet">
+      [% FOREACH repet IN summary.repets %]
+        <span>[% repet | html %]</span>
+        [% UNLESS loop.last %] | [% END %]
+      [% END %]
+    </div>
     [% UNLESS ( summary.summaryonly ) %]
         <div class="authorizedheading">
           [% FOREACH authorize IN summary.authorized %]
             <span class="authorizedheading">[% authorize.heading | html %]</span>
+            [% UNLESS loop.last %] | [% END %]
           [% END %]
         </div>
         [% IF ( marcflavour == 'UNIMARC' ) %]
           [% IF summary.notes %]
            <div class="authres_notes">
            [% FOREACH note IN summary.notes %]
-             [% note.note | html %]</span>
+             <span>[% note.note | html %]</span>
            [% END %]
            </div>
           [% END %]
