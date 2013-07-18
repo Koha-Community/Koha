@@ -1,32 +1,24 @@
 #!/usr/bin/perl
 
-use strict;
-use warnings;
+use Modern::Perl;
 
 use C4::Context;
 use C4::Members;
 
 use Test::More tests => 18;
 
-BEGIN {
-    use FindBin;
-    use lib $FindBin::Bin;
-    use_ok('Koha::Borrower::Debarments');
-}
+use_ok('Koha::Borrower::Debarments');
 
-# Get a borrower with no current debarments
-my $dbh   = C4::Context->dbh;
-my $query = "
-    SELECT b.borrowernumber FROM borrowers b
-    LEFT JOIN borrower_debarments bd ON ( b.borrowernumber = bd.borrowernumber )
-    WHERE b.debarred IS NULL AND b.debarredcomment IS NULL AND bd.borrowernumber IS NULL
-    LIMIT 1
-";
-my $sth = $dbh->prepare($query);
-$sth->execute;
-my ($borrowernumber) = $sth->fetchrow_array();
-diag("Using borrowernumber: $borrowernumber");
+my $dbh = C4::Context->dbh;
+$dbh->{AutoCommit} = 0;
+$dbh->{RaiseError} = 1;
 
+my $borrowernumber = AddMember(
+    firstname =>  'my firstname',
+    surname => 'my surname',
+    categorycode => 'S',
+    branchcode => 'CPL',
+);
 
 my $success = AddDebarment({
     borrowernumber => $borrowernumber,
@@ -99,4 +91,6 @@ foreach my $d ( @$debarments ) {
     DelDebarment( $d->{'borrower_debarment_id'} );
 }
 $debarments = GetDebarments({ borrowernumber => $borrowernumber });
-ok( @$debarments == 0, "DelDebarment functions correctly" )
+ok( @$debarments == 0, "DelDebarment functions correctly" );
+
+$dbh->rollback;
