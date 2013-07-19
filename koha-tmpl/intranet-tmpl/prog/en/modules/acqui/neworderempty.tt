@@ -421,7 +421,7 @@ $(document).ready(function()
                         <option value="[% budget_loo.b_id %]" selected="selected">[% budget_loo.b_txt %]</option>
                     [% ELSE %]
                         [% IF ( budget_loo.b_active ) %]<option value="[% budget_loo.b_id %]">[% budget_loo.b_txt %]</option>
-                        [% ELSE %]<option value="[% budget_loo.b_id %]" class="b_inactive">[% budget_loo.b_txt %]</option>
+                        [% ELSE %]<option value="[% budget_loo.b_id %]" class="b_inactive">[% budget_loo.b_txt %] (inactive)</option>
                         [% END %]
                     [% END %]
                 [% END %]

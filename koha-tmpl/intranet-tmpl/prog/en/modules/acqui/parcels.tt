@@ -14,6 +14,20 @@
     var parcelst = $("#parcelst").dataTable($.extend(true, {}, dataTablesDefaults, {
         "sPaginationType": "four_button"
     } ) );
+
+    //keep a copy of all budgets before removing the inactives
+    var budgetId = $("#shipmentcost_budgetid");
+    var disabledBudgetsCopy = budgetId.html();
+    $('.b_inactive').remove();
+
+    $('#showallfunds').click(function() {
+        if ($(this).is(":checked")) {
+            budgetId.html(disabledBudgetsCopy); //Puts back all the funds
+        }
+        else {
+            $('.b_inactive').remove();
+        }
+    });
  });
  //]]>
 </script>
@@ -170,9 +184,16 @@
             <select id="shipmentcost_budgetid" name="shipmentcost_budgetid">
                 <option value="">No fund</option>
                 [% FOREACH budget IN budgets %]
-                    <option value="[% budget.budget_id %]">[% budget.budget_name %]</option>
+                    [% IF ( budget.b_active ) %]
+                        <option value="[% budget.b_id %]">[% budget.b_txt %]</option>
+                    [% ELSE %]
+                        <option value="[% budget.b_id %]" class="b_inactive">[% budget.b_txt %] (inactive)</option>
+                    [% END %]
                 [% END %]
             </select>
+            <label for="showallfunds" style="float:none;width:auto;">&nbsp;Show all:</label>
+            <input type="checkbox" id="showallfunds" />
+
         </li>
 		</ol>
     </fieldset>

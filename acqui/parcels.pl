@@ -179,12 +179,24 @@ if ($count_parcels) {
     $template->param( searchresults => $loopres, count => $count_parcels );
 }
 
-my $budgets = GetBudgets();
-my @budgets_loop;
-foreach my $budget (@$budgets) {
-    next unless CanUserUseBudget($loggedinuser, $budget, $flags);
-    push @budgets_loop, $budget;
+# build budget list
+my $budget_loop = [];
+my $budgets = GetBudgetHierarchy;
+foreach my $r (@{$budgets}) {
+    next unless (CanUserUseBudget($loggedinuser, $r, $flags));
+    if (!defined $r->{budget_amount} || $r->{budget_amount} == 0) {
+        next;
+    }
+    push @{$budget_loop}, {
+        b_id  => $r->{budget_id},
+        b_txt => $r->{budget_name},
+        b_active => $r->{budget_period_active},
+    };
 }
+
+@{$budget_loop} =
+  sort { uc( $a->{b_txt}) cmp uc( $b->{b_txt}) } @{$budget_loop};
+
 
 $template->param(
     orderby                  => $order,
@@ -196,7 +208,7 @@ $template->param(
     shipmentdate_today       => C4::Dates->new()->output(),
     booksellerid             => $booksellerid,
     GST                      => C4::Context->preference('gist'),
-    budgets                  => \@budgets_loop,
+    budgets                  => $budget_loop,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
