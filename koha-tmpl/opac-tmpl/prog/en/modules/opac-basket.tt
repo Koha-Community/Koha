@@ -2,11 +2,8 @@
 
 [% INCLUDE 'doc-head-open.inc' %]
 [% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Your cart
-    [% IF ( print_basket ) %]</title>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link rel="shortcut icon" href="[% interface %]/[% theme %]/images/favicon.ico" type="image/x-icon" />
-<meta http-equiv="Content-Language" content="en-us" />
-<script type="text/javascript" src="[% themelang %]/lib/jquery/jquery.js"></script>
+[% INCLUDE 'doc-head-close.inc' %]
+    [% IF ( print_basket ) %]
     <script type="text/javascript">
     //<![CDATA[
     $(document).ready(function(){
@@ -15,10 +12,7 @@
     });
     //]]>
     </script>
-<style type="text/css">
-    @import url([% themelang %]/css/print.css);
-</style>
-    [% ELSE %][% INCLUDE 'doc-head-close.inc' %]
+    [% ELSE %]
     <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
     <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
     <script type="text/javascript">
