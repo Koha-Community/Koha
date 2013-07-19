@@ -1,8 +1,10 @@
+[% USE Branches %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Serials &rsaquo; Serial collection information for [% bibliotitle %]</title>
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
 [% INCLUDE 'doc-head-close.inc' %]
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.min.js"></script>
+[% INCLUDE 'datatables-strings.inc' %]
 <script type="text/javascript" src="[% themelang %]/js/datatables.js"></script>
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
 
@@ -175,7 +177,7 @@ $(document).ready(function() {
                 [% IF ( subscription.numberpattern7 ) %]
                     None of the above
                 [% END %]</td>
-            <td> [% subscription.branchcode %]</td>
+            <td>[% Branches.GetName( subscription.branchcode ) %]</td>
             <td> [% subscription.callnumber %]</td>
         <td> [% subscription.notes %]
             [% UNLESS subscription.closed %]
@@ -311,7 +313,7 @@ $(document).ready(function() {
                     [% serial.notes %]
                 </td>
                 <td>
-                    [% serial.branchcode %]
+                    [% Branches.GetName( serial.branchcode ) %]
                 </td>
                 [% IF ( routing ) %]
                 <td>
