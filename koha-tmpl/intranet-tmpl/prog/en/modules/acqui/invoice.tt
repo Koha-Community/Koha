@@ -8,6 +8,18 @@
 [% INCLUDE 'datatables.inc' %]
 <script type="text/javascript">
 //<![CDATA[
+    function updateColumnsVisibility(visible) {
+        if ( visible ) {
+            $("table .gste, .gsti").show();
+        } else {
+            [% IF ( invoiceincgst ) %]
+                $("table .gste").hide();
+            [% ELSE %]
+                $("table .gsti").hide();
+            [% END %]
+        }
+    }
+
     $(document).ready(function() {
         $("#orderst").dataTable($.extend(true, {}, dataTablesDefaults, {
             bInfo: false,
@@ -15,6 +27,13 @@
             bFilter: false,
             sDom: "t"
         }));
+
+        $("#show_all_details").click(function(){
+            updateColumnsVisibility($(this+":checked").val());
+        });
+
+        $("#show_all_details").attr('checked', false);
+        updateColumnsVisibility(false);
     });
 //]]>
 </script>
@@ -92,16 +111,23 @@
       </p>
       <h2>Invoice details</h2>
       [% IF orders_loop.size %]
+          <label for="show_all_details">
+            <input type="checkbox" style="vertical-align: middle;" id="show_all_details" />
+            Show all details
+          </label>
           <table id="orderst">
             <thead>
               <tr>
                 <th>Summary</th>
                 <th>Publisher</th>
                 <th>Library</th>
-                <th>RRP</th>
-                <th>Est.</th>
+                <th class="gste">Actual cost tax exc.</th>
+                <th class="gsti">Actual cost tax inc.</th>
                 <th>Qty.</th>
-                <th>Total</th>
+                <th class="gste">Total tax exc. ([% currency %])</th>
+                <th class="gsti">Total tax inc. ([% currency %])</th>
+                <th>GST %</th>
+                <th>GST</th>
                 <th>Fund</th>
               </tr>
             </thead>
@@ -123,47 +149,51 @@
                     [% END %]
                   </td>
                   <td><p>[% order.branchcode %]</p></td>
-                  <td>[% order.rrp %]</td>
-                  <td>[% order.ecost %]</td>
+                  <td class="number gste">[% order.actualcostgste %]</td>
+                  <td class="number gsti">[% order.actualcostgsti %]</td>
                   <td class="number">[% order.quantity %]</td>
-                  <td>[% order.total %]</td>
+                  <td class="number gste">[% order.totalgste %]</td>
+                  <td class="number gsti">[% order.totalgsti %]</td>
+                  <td class="number">[% order.gstgsti %]</td>
+                  <td class="number">[% order.gstvalue %]</td>
                   <td>[% order.budget_name %]</td>
                 </tr>
               [% END %]
             </tbody>
             <tfoot>
+              [% FOR tf IN foot_loop %]
                 <tr>
-                    <th colspan="3">Total tax exc.</th>
-                    <th>[% total_rrp_gste %]</th>
+                    <th colspan='3'>Total (GST [% tf.gstgsti %] %)</th>
+                    <th class="gste"/><th class="gsti"/>
+                    <th>[% tf.quantity %]</th>
+                    <th class="gste">[% tf.totalgste %]</th>
+                    <th class="gsti">[% tf.totalgsti %]</th>
                     <th>&nbsp;</th>
-                    <th>[% total_quantity %]</th>
-                    <th>[% total_est_gste %]</th>
+                    <th>[% tf.gstvalue %]</th>
                     <th>&nbsp;</th>
                 </tr>
-                <tr>
-                    <th colspan='3'>Tax ([% gist %]%)</th>
-                    <th>[% gist_rrp %]</th>
-                    <th>&nbsp;</th>
-                    <th>&nbsp;</th>
-                    <th>[% gist_est %]</th>
-                    <th>&nbsp;</th>
-                </tr>
-                <tr>
-                    <th colspan='3'>Total tax inc. ([% currency %])</th>
-                    <th>[% total_rrp_gsti %]</th>
-                    <th>&nbsp;</th>
-                    <th>[% total_quantity %]</th>
-                    <th>[% total_est_gsti %]</th>
-                    <th>&nbsp;</th>
-                </tr>
-                <tr>
-                    <th colspan="3">Total + shipment cost ([% currency %])</th>
-                    <th>&nbsp;</th>
-                    <th>&nbsp;</th>
-                    <th>[% total_quantity %]</th>
-                    <th>[% total_gsti_shipment %]</th>
-                    <th>&nbsp;</th>
-                </tr>
+              [% END %]
+              <tr>
+                <th colspan='3'>Total ([% currency %])</th>
+                <th class="gste"/><th class="gsti"/>
+                <th>[% total_quantity %]</th>
+                <th class="gste">[% total_gste %]</th>
+                <th class="gsti">[% total_gsti %]</th>
+                <th>&nbsp;</th>
+                <th>[% total_gstvalue %]</th>
+                <th>&nbsp;</th>
+              </tr>
+              <tr>
+                <th colspan="3">Total + Shipment cost ([% currency %])</th>
+                <th class="gste"></th>
+                <th class="gsti"></th>
+                <th>[% total_quantity %]</th>
+                <th class="gste">[% total_gste_shipment %]</th>
+                <th class="gsti">[% total_gsti_shipment %]</th>
+                <th>&nbsp;</th>
+                <th>[% total_gstvalue %]</th>
+                <th>&nbsp;</th>
+              </tr>
             </tfoot>
           </table>
         [% ELSE %]

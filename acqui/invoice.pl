@@ -98,86 +98,39 @@ elsif ( $op && $op eq 'delete' ) {
     }
 }
 
-my $details     = GetInvoiceDetails($invoiceid);
-my $bookseller  = GetBookSellerFromId( $details->{booksellerid} );
+
+my $details = GetInvoiceDetails($invoiceid);
+my ($bookseller) = GetBookSellerFromId($details->{supplierid});
 my @orders_loop = ();
-my $orders      = $details->{'orders'};
+my $orders = $details->{'orders'};
 my $qty_total;
-my @books_loop;
-my @book_foot_loop;
+my @foot_loop;
 my %foot;
 my $total_quantity = 0;
-my $total_rrp      = 0;
-my $total_est      = 0;
-
+my $total_gste = 0;
+my $total_gsti = 0;
+my $total_gstvalue = 0;
 foreach my $order (@$orders) {
-    my $line = get_infos( $order, $bookseller );
+    my $line = get_infos( $order, $bookseller);
 
+    $foot{$$line{gstgsti}}{gstgsti} = $$line{gstgsti};
+    $foot{$$line{gstgsti}}{gstvalue} += $$line{gstvalue};
+    $total_gstvalue += $$line{gstvalue};
+    $foot{$$line{gstgsti}}{quantity}  += $$line{quantity};
     $total_quantity += $$line{quantity};
-    $total_rrp      += $order->{quantity} * $order->{rrp};
-    $total_est      += $order->{quantity} * $order->{'ecost'};
+    $foot{$$line{gstgsti}}{totalgste} += $$line{totalgste};
+    $total_gste += $$line{totalgste};
+    $foot{$$line{gstgsti}}{totalgsti} += $$line{totalgsti};
+    $total_gsti += $$line{totalgsti};
 
-    my %row = ( %$order, %$line );
+    my %row = %{ $order, $line };
+    $row{'orderline'} = $row{'parent_ordernumber'};
     push @orders_loop, \%row;
 }
 
-my $gist = $bookseller->{gstrate} // C4::Context->preference("gist") // 0;
-my $discount =
-  $bookseller->{'discount'} ? ( $bookseller->{discount} / 100 ) : 0;
-my $total_est_gste;
-my $total_est_gsti;
-my $total_rrp_gsti;    # RRP Total, GST included
-my $total_rrp_gste;    # RRP Total, GST excluded
-my $gist_est;
-my $gist_rrp;
-if ($gist) {
-
-    # if we have GST
-    if ( $bookseller->{'listincgst'} ) {
-
-        # if prices already includes GST
-
-        # we know $total_rrp_gsti
-        $total_rrp_gsti = $total_rrp;
-
-        # and can reverse compute other values
-        $total_rrp_gste = $total_rrp_gsti / ( $gist + 1 );
-
-        $gist_rrp       = $total_rrp_gsti - $total_rrp_gste;
-        $total_est_gste = $total_rrp_gste - ( $total_rrp_gste * $discount );
-        $total_est_gsti = $total_est;
-    }
-    else {
-        # if prices does not include GST
-
-        # then we use the common way to compute other values
-        $total_rrp_gste = $total_rrp;
-        $gist_rrp       = $total_rrp_gste * $gist;
-        $total_rrp_gsti = $total_rrp_gste + $gist_rrp;
-        $total_est_gste = $total_est;
-        $total_est_gsti = $total_rrp_gsti - ( $total_rrp_gsti * $discount );
-    }
-    $gist_est = $gist_rrp - ( $gist_rrp * $discount );
-}
-else {
-    $total_rrp_gste = $total_rrp_gsti = $total_rrp;
-    $total_est_gste = $total_est_gsti = $total_est;
-    $gist_rrp       = $gist_est       = 0;
-}
-my $total_gsti_shipment = $total_est_gsti + $details->{shipmentcost};
+push @foot_loop, map {$_} values %foot;
 
 my $format = "%.2f";
-$template->param(
-    total_rrp_gste      => sprintf( $format, $total_rrp_gste ),
-    total_rrp_gsti      => sprintf( $format, $total_rrp_gsti ),
-    total_est_gste      => sprintf( $format, $total_est_gste ),
-    total_est_gsti      => sprintf( $format, $total_est_gsti ),
-    gist_rrp            => sprintf( $format, $gist_rrp ),
-    gist_est            => sprintf( $format, $gist_est ),
-    total_gsti_shipment => sprintf( $format, $total_gsti_shipment ),
-    gist                => sprintf( $format, $gist * 100 ),
-);
-
 my $budgets = GetBudgets();
 my @budgets_loop;
 my $shipmentcost_budgetid = $details->{shipmentcost_budgetid};
@@ -196,34 +149,59 @@ $template->param(
     invoiceid        => $details->{'invoiceid'},
     invoicenumber    => $details->{'invoicenumber'},
     suppliername     => $details->{'suppliername'},
-    booksellerid       => $details->{'booksellerid'},
+    booksellerid     => $details->{'booksellerid'},
     datereceived     => $details->{'datereceived'},
-    shipmentdate     => $details->{'shipmentdate'},
-    billingdate      => $details->{'billingdate'},
-    invoiceclosedate => $details->{'closedate'},
-    shipmentcost     => sprintf( $format, $details->{'shipmentcost'} || 0 ),
+    billingdate      => C4::Dates->new($details->{'billingdate'}, "iso")->output(),
+    invoiceclosedate => $details->{'invoiceclosedate'},
+    shipmentcost     => $details->{'shipmentcost'},
     orders_loop      => \@orders_loop,
+    foot_loop        => \@foot_loop,
     total_quantity   => $total_quantity,
+    total_gste       => sprintf( $format, $total_gste ),
+    total_gsti       => sprintf( $format, $total_gsti ),
+    total_gstvalue   => sprintf( $format, $total_gstvalue ),
+    total_gste_shipment => sprintf( $format, $total_gste + $details->{shipmentcost}),
+    total_gsti_shipment => sprintf( $format, $total_gsti + $details->{shipmentcost}),
     invoiceincgst    => $bookseller->{invoiceincgst},
-    currency         => $bookseller->{listprice},
-    budgets_loop             => \@budgets_loop,
+    currency         => GetCurrency()->{currency},
+    budgets_loop     => \@budgets_loop,
 );
 
+# FIXME
+# Fonction dupplicated from basket.pl
+# Code must to be exported. Where ??
 sub get_infos {
-    my $order      = shift;
+    my $order = shift;
     my $bookseller = shift;
-    my $qty        = $order->{'quantity'} || 0;
+    my $qty = $order->{'quantity'} || 0;
     if ( !defined $order->{quantityreceived} ) {
         $order->{quantityreceived} = 0;
     }
     my $budget = GetBudget( $order->{'budget_id'} );
 
-    my %line = %{$order};
+    my %line = %{ $order };
     $line{order_received} = ( $qty == $order->{'quantityreceived'} );
     $line{budget_name}    = $budget->{budget_name};
-    $line{total}          = $qty * $order->{ecost};
+    if ( $bookseller->{'listincgst'} ) {
+        $line{gstgsti} = sprintf( "%.2f", $line{gstrate} * 100 );
+        $line{gstgste} = sprintf( "%.2f", $line{gstgsti} / ( 1 + ( $line{gstgsti} / 100 ) ) );
+        $line{actualcostgsti} = sprintf( "%.2f", $line{unitprice} );
+        $line{actualcostgste} = sprintf( "%.2f", $line{unitprice} / ( 1 + ( $line{gstgsti} / 100 ) ) );
+        $line{gstvalue} = sprintf( "%.2f", ( $line{actualcostgsti} - $line{actualcostgste} ) * $line{quantity});
+        $line{totalgste} = sprintf( "%.2f", $order->{quantity} * $line{actualcostgste} );
+        $line{totalgsti} = sprintf( "%.2f", $order->{quantity} * $line{actualcostgsti} );
+    } else {
+        $line{gstgsti} = sprintf( "%.2f", $line{gstrate} * 100 );
+        $line{gstgste} = sprintf( "%.2f", $line{gstrate} * 100 );
+        $line{actualcostgsti} = sprintf( "%.2f", $line{unitprice} * ( 1 + ( $line{gstrate} ) ) );
+        $line{actualcostgste} = sprintf( "%.2f", $line{unitprice} );
+        $line{gstvalue} = sprintf( "%.2f", ( $line{actualcostgsti} - $line{actualcostgste} ) * $line{quantity});
+        $line{totalgste} = sprintf( "%.2f", $order->{quantity} * $line{actualcostgste} );
+        $line{totalgsti} = sprintf( "%.2f", $order->{quantity} * $line{actualcostgsti} );
+    }
 
     if ( $line{uncertainprice} ) {
+        $template->param( uncertainprices => 1 );
         $line{rrp} .= ' (Uncertain)';
     }
     if ( $line{'title'} ) {
@@ -231,8 +209,7 @@ sub get_infos {
         my $seriestitle = $order->{'seriestitle'};
         $line{'title'} .= " / $seriestitle" if $seriestitle;
         $line{'title'} .= " / $volume"      if $volume;
-    }
-    else {
+    } else {
         $line{'title'} = "Deleted bibliographic notice, can't find title.";
     }
 
