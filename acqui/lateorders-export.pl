@@ -48,9 +48,9 @@ print "ORDER DATE,ESTIMATED DELIVERY DATE,VENDOR,INFORMATION,TOTAL COST,BASKET,C
 for my $ordernumber ( @ordernumbers ) {
     my $order = GetOrder $ordernumber;
     $csv->combine(
-        "(" . $order->{supplierid} . ") " . $order->{orderdate} . " (" . $order->{latesince} . " days)",
+        $order->{orderdate} . " (" . $order->{latesince} . " days)",
         $order->{estimateddeliverydate},
-        $order->{supplier},
+        $order->{supplier} . " (" . $order->{supplierid} . ") ",
         $order->{title} . ( $order->{author} ? " Author: $order->{author}" : "" ) . ( $order->{publisher} ? " Published by: $order->{publisher}" : "" ),
         $order->{unitpricesupplier} . "x" . $order->{quantity_to_receive} . " = " . $order->{subtotal} . " (" . $order->{budget} . ")",
         $order->{basketname} . " (" . $order->{basketno} . ")",

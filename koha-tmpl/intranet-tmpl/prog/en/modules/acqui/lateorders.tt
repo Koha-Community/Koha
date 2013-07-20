@@ -128,7 +128,6 @@ $(document).ready(function() {
                 <input type="checkbox" value="[% lateorder.ordernumber %]" data-booksellerid="[% lateorder.supplierid %]" name="ordernumber">
             </td>
             <td>
-                ([% lateorder.supplierid %])
                 [% lateorder.orderdate %]
                 ([% lateorder.latesince %] days)
             </td>
@@ -139,6 +138,7 @@ $(document).ready(function() {
             </td>
             <td>
                 [% lateorder.supplier %]
+                ([% lateorder.supplierid %])
             </td>
             <td>
                 <b>[% lateorder.title |html %]</b>
@@ -180,7 +180,7 @@ $(document).ready(function() {
     <p style="display:block;">
         <input type="button" value="Export as CSV" id="ExportSelected" />
         [% UNLESS lateorder.budget_lock %]
-            <input type="submit"  value="Claim Order" />
+            <input type="submit"  value="Claim order" />
         [% END %]
     </p>
 </form>
@@ -192,7 +192,7 @@ $(document).ready(function() {
 <div class="yui-b">
 <form action="lateorders.pl" method="get">
 <fieldset class="brief">
-<h4>Filter Results:</h4>
+<h4>Filter results:</h4>
 [% FOREACH ERROR_LOO IN ERROR_LOOP %]
 [% IF ( ERROR_LOO.delay_digits ) %]<p class="error">The number of days ([% ERROR_LOO.bad_delay %]) must be a number between 0 and 999.</p>[% END %]
 [% END %]
@@ -216,7 +216,7 @@ $(document).ready(function() {
         	[% END %]
 		</select>
 </ol>
-	<fieldset class="action"><input type="submit" value="filter" /></fieldset>
+	<fieldset class="action"><input type="submit" value="Filter" /></fieldset>
 </fieldset>
     </form>
 [% INCLUDE 'acquisitions-menu.inc' %]
