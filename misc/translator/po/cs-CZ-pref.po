@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-23 08:15+0200\n"
-"PO-Revision-Date: 2013-06-11 11:59+0000\n"
-"Last-Translator: Dave <david.petr@gmail.com>\n"
+"PO-Revision-Date: 2013-07-19 20:45+0000\n"
+"Last-Translator: Smilauer <b.smilauer@post.cz>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Generator: Pootle 2.5.0\n"
-"X-POOTLE-MTIME: 1370951942.0\n"
+"X-POOTLE-MTIME: 1374266751.0\n"
 
 # Acquisitions
 msgid "acquisitions.pref"
@@ -91,8 +91,14 @@ msgid "acquisitions.pref#OrderPdfFormat# when printing basket groups."
 msgstr "pro tisk košíků."
 
 # Acquisitions > Policy
-msgid "acquisitions.pref#UniqueItemFields# (space-separated list of fields that should be unique for items, must be valid SQL fields of items table)"
-msgstr "(mezerami oddělený seznam polí, která by měla být unikátní pro každou jednotku, hodnoty musí být sloupce tabulky items)"
+msgid "acquisitions.pref#UniqueItemFields# (separated by a space)"
+msgstr "(oddělené mezerou)"
+
+# Acquisitions > Policy
+msgid "acquisitions.pref#UniqueItemFields# The following <a href='http://schema.koha-community.org/tables/items.html' target='blank'>database columns</a> should be unique in an item:"
+msgstr ""
+"Následující <a href='http://schema.koha-community.org/tables/items.html' "
+"target='blank'>databázové sloupce</a> by měly být jedinečné v expempláři:"
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#gist# (enter in numeric form, 0.12 for 12%. First is the default. If you want more than 1 value, please separate with |)"
@@ -460,9 +466,7 @@ msgstr "Použít následující text jako obsah kontrolního pole 008, pozic 06-
 
 # Authorities > General
 msgid "authorities.pref#UNIMARCAuthorityField100# Use the following text for the contents of UNIMARC authority field 100 position (fixed length data elements). Do NOT include the date (position 00-05)."
-msgstr ""
-"Použít následující text jako obsah pole 100 (všeobecná data zpracování) "
-"záznamu autority v UNIMARCu. NEVKLÁDEJTE datum (pozice 00-05)."
+msgstr "Použít následující text jako obsah pole 100 (všeobecná data zpracování) záznamu autority v UNIMARCu. NEVKLÁDEJTE datum (pozice 00-05)."
 
 # Authorities > General
 msgid "authorities.pref#UseAuthoritiesForTracings# Don't use"
@@ -518,10 +522,7 @@ msgstr "Zobrazit MARC podpole"
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#AlternateHoldingsField# as holdings information for records that do not have items (This can contain multiple subfields to look in; for instance <code>852abhi</code> would look in 852 subfields a, b, h, and i.), with the subfields separated by"
-msgstr ""
-"jako informace o jednotkách, pokud záznam žádné jednotky nemá (Je možné "
-"definovat více různých podpolí; například <code>852abhi</code> by použilo "
-"podpole a, b, h, a i pole 852.). Oddělovač podpolí bude:"
+msgstr "jako informace o jednotkách, pokud záznam žádné jednotky nemá (Je možné definovat více různých podpolí; například <code>852abhi</code> by použilo podpole a, b, h, a i pole 852.). Oddělovač podpolí bude:"
 
 # Cataloging > Interface
 msgid "cataloguing.pref#DefaultClassificationSource# Use"
@@ -537,10 +538,7 @@ msgstr "Nevyplnění je způsobí použití hodnoty eng."
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#DefaultLanguageField008# Fill in the default language for field 008 Range 35-37 (e.g. eng, nor, ger, see <a href=\"http://www.loc.gov/marc/languages/language_code.html\">MARC Code List for Languages</a>)"
-msgstr ""
-"Vyplňte výchozí jazyk pro pole 008. Pozice 35-37 (např. eng, cze, slo <a "
-"href=\"http://www.loc.gov/marc/languages/language_code.html\">Seznam "
-"jazykových kódů MARC</a>)"
+msgstr "Vyplňte výchozí jazyk pro pole 008. Pozice 35-37 (např. eng, cze, slo <a href=\"http://www.loc.gov/marc/languages/language_code.html\">Seznam jazykových kódů MARC</a>)"
 
 # Cataloging > Interface
 msgid "cataloguing.pref#EasyAnalyticalRecords# Display"
@@ -592,10 +590,7 @@ msgstr "opakované tagy stejného typu do jednoho záznamu."
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#MARCOrgCode# Fill in the <a href=\"http://www.loc.gov/marc/organizations/orgshome.html\">MARC organization code</a>"
-msgstr ""
-"Předvyplnit <a "
-"href=\"http://www.loc.gov/marc/organizations/orgshome.html\">kód "
-"organizace</a>"
+msgstr "Předvyplnit <a href=\"http://www.loc.gov/marc/organizations/orgshome.html\">kód organizace</a>"
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#MARCOrgCode# by default in new MARC records (leave blank to disable)."
@@ -616,6 +611,9 @@ msgstr "Nezobrazovat poznámková pole"
 # Cataloging > Display
 msgid "cataloguing.pref#NotesBlacklist# note fields in title notes separator (OPAC record details) and in the description separator (Staff client record details). The fields should appear separated with commas and according with the Koha MARC format (eg 3.. for UNIMARC, 5.. for MARC21)"
 msgstr ""
+"v  oddělovači poznámek názvu (detaily záznamu OPAC) a v oddělovači popisu "
+"(detaily záznamu pro knihovníky). Pole se mají zobrazit oddělené čárkami a v "
+"souladu s Koha MARC fomátem (např. 3.. pro UNIMARC, 5.. pro MARC21) "
 
 # Cataloging > Display
 msgid "cataloguing.pref#OpacSuppression# (Leave blank if not used. Define a range like <code>192.168.</code>.)"
@@ -635,11 +633,7 @@ msgstr "Omezit toto nastavení pouze na IP adresy mimo tento rozsah:"
 
 # Cataloging > Display
 msgid "cataloguing.pref#OpacSuppression# items marked as suppressed from OPAC search results. Note that you must have the <code>Suppress</code> index set up in Zebra and at least one suppressed item, or your searches will be broken."
-msgstr ""
-"ve výsledcích vyhledávání ve webovém katalogu jednotky označené jako "
-"odepsané. Pamatujte, že je nutné mít v indexu nástroje Zebra definované pole "
-"<code>Suppress</code> a alespoň jednu odepsanou jednotku, jinak nebude "
-"vyhledávání fungovat korektně."
+msgstr "ve výsledcích vyhledávání ve webovém katalogu jednotky označené jako odepsané. Pamatujte, že je nutné mít v indexu nástroje Zebra definované pole <code>Suppress</code> a alespoň jednu odepsanou jednotku, jinak nebude vyhledávání fungovat korektně."
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#PrefillItem# When a new item is added,"
@@ -671,9 +665,7 @@ msgstr "domovská knihovna"
 
 # Cataloging > Display
 msgid "cataloguing.pref#SeparateHoldings# is the logged in user's library. The second tab will contain all other items."
-msgstr ""
-"je v knihovně přihlášeného čtenáře. Druhá záložka bude obsahovat všechny "
-"ostatní jednotky."
+msgstr "je v knihovně přihlášeného čtenáře. Druhá záložka bude obsahovat všechny ostatní jednotky."
 
 # Cataloging > Display
 msgid "cataloguing.pref#SeparateHoldings# items display into two tabs, where the first tab contains items whose"
@@ -681,91 +673,97 @@ msgstr "jednotky do dvou záložek, kde první bude obsahovat jednotky jejichž"
 
 # Cataloging > Spine Labels
 msgid "cataloguing.pref#SpineLabelAutoPrint# When using the quick spine label printer,"
-msgstr ""
+msgstr "Pří použití tiskárny hřbetních štítků, "
 
 # Cataloging > Spine Labels
 msgid "cataloguing.pref#SpineLabelAutoPrint# automatically pop up a print dialog."
-msgstr ""
+msgstr "automaticky okno dialogu s tiskárnou."
 
 # Cataloging > Spine Labels
 msgid "cataloguing.pref#SpineLabelAutoPrint# do"
-msgstr ""
+msgstr "vyskočí"
 
 # Cataloging > Spine Labels
 msgid "cataloguing.pref#SpineLabelAutoPrint# don't"
-msgstr ""
+msgstr "nevyskočí"
 
 # Cataloging > Spine Labels
 msgid "cataloguing.pref#SpineLabelFormat# (Enter in columns from the <code>biblio</code>, <code>biblioitems</code> or <code>items</code> tables, surrounded by &lt; and &gt;.)"
 msgstr ""
+"(záznamy ze sloupců z tabulek <code>biblio</code>, "
+"<code>biblioitems</code>nebo <code>items</code>, obklopené &lt; a &gt;.)"
 
 # Cataloging > Spine Labels
 msgid "cataloguing.pref#SpineLabelFormat# Include the following fields on a quick-printed spine label:"
-msgstr ""
+msgstr "Vytiskni následující pole na tiskárně hřbetních štítků:"
 
 # Cataloging > Spine Labels
 msgid "cataloguing.pref#SpineLabelShowPrintOnBibDetails# Display"
-msgstr ""
+msgstr "Zobraz"
 
 # Cataloging > Spine Labels
 msgid "cataloguing.pref#SpineLabelShowPrintOnBibDetails# Don't display"
-msgstr ""
+msgstr "Nezobraz"
 
 # Cataloging > Spine Labels
 msgid "cataloguing.pref#SpineLabelShowPrintOnBibDetails# buttons on the bib details page to print item spine labels."
-msgstr ""
+msgstr "tlačítka na stránce bibliografického detailu pro tisk hřbetních štítků."
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#SubfieldsToUseWhenPrefill# Define a list of subfields to use when prefilling items (separated by space)"
-msgstr ""
+msgstr "Definuj seznam podpolí k předvyplnění jednotek (oddělené mezerou) "
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#UNIMARCField100Language# Use the languague (ISO 690-2)"
-msgstr ""
+msgstr "Užij jazyk (podle ISO 690-2)"
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#UNIMARCField100Language# as default language in the UNIMARC field 100 when creating a new record or in the field plugin."
 msgstr ""
+"jako výchozí jazyk v poli 100 UNIMARCu během vytváření nového záznamu nebo v "
+"doplňku pole."
 
 # Cataloging > Display
 msgid "cataloguing.pref#URLLinkText# Show"
-msgstr ""
+msgstr "Zobraz"
 
 # Cataloging > Display
 msgid "cataloguing.pref#URLLinkText# as the text of links embedded in MARC records."
-msgstr ""
+msgstr "jako text odkazů vnořený do MARC záznamů."
 
 # Cataloging > Display
 msgid "cataloguing.pref#UseControlNumber# Don't use"
-msgstr ""
+msgstr "Nepoužij "
 
 # Cataloging > Display
 msgid "cataloguing.pref#UseControlNumber# Use"
-msgstr ""
+msgstr "Použít"
 
 # Cataloging > Display
 msgid "cataloguing.pref#UseControlNumber# record control number ($w subfields) and control number (001) for linking of bibliographic records."
 msgstr ""
+"kontrolní číslo bibliografického záznamu ($w podpole) a řídící číslo (001) "
+"pro propojení biblografických záznamů."
 
 # Cataloging > Interface
 msgid "cataloguing.pref#advancedMARCeditor# Display"
-msgstr ""
+msgstr "Zobrazit"
 
 # Cataloging > Interface
 msgid "cataloguing.pref#advancedMARCeditor# Don't display"
-msgstr ""
+msgstr "Nezobrazit"
 
 # Cataloging > Interface
 msgid "cataloguing.pref#advancedMARCeditor# descriptions of fields and subfields in the MARC editor."
-msgstr ""
+msgstr "popisy polí a podpolí v MARC editoru."
 
 # Cataloging > Display
 msgid "cataloguing.pref#authoritysep# ."
-msgstr ""
+msgstr "."
 
 # Cataloging > Display
 msgid "cataloguing.pref#authoritysep# Separate multiple displayed authors, series or subjects with "
-msgstr ""
+msgstr "Odděluji více autorů, serií nebo předmětů pomocí"
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#autoBarcode# Barcodes are"
@@ -773,14 +771,11 @@ msgstr "cataloguing.pref#autoBarcode# Čárové kódy jsou"
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#autoBarcode# generated in the form &lt;branchcode&gt;yymm0001."
-msgstr ""
-"cataloguing.pref#autoBarcode# generovány formou &lt;kódknihovny&gt;rrmm0001."
+msgstr "cataloguing.pref#autoBarcode# generovány formou &lt;kódknihovny&gt;rrmm0001."
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#autoBarcode# generated in the form &lt;year&gt;-0001, &lt;year&gt;-0002."
-msgstr ""
-"cataloguing.pref#autoBarcode# generovány formou &lt;rok&gt;-0001, "
-"&lt;rok&gt;-0002."
+msgstr "cataloguing.pref#autoBarcode# generovány formou &lt;rok&gt;-0001, &lt;rok&gt;-0002."
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#autoBarcode# generated in the form 1, 2, 3."
@@ -804,334 +799,381 @@ msgstr "cataloguing.pref#hide_marc# Nezobrazovat"
 
 # Cataloging > Display
 msgid "cataloguing.pref#hide_marc# MARC tag numbers, subfield codes and indicators in MARC views."
-msgstr ""
+msgstr "čísla MARC polí, kódů podpolí a indikátorů in MARC pohledu."
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#item-level_itypes# Use the item type of the"
-msgstr ""
+msgstr "Použij typ jednotky "
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#item-level_itypes# as the authoritative item type (for determining circulation and fines rules, etc)."
 msgstr ""
+"jako autoritní holdingový záznam (pro určení pravidel půjčování a "
+"pokutování, atd.)"
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#item-level_itypes# biblio record"
-msgstr ""
+msgstr "bibliografický záznam"
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#item-level_itypes# specific item"
-msgstr ""
+msgstr "holdingový záznam"
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#itemcallnumber# Map the MARC subfield"
-msgstr ""
+msgstr "Namapuj MARC podpole "
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#itemcallnumber# to an item's callnumber. (This can contain multiple subfields to look in; for instance <code>082ab</code> would look in 082 subfields a and b.)<br />Examples: <strong>Dewey</strong>: <code>082ab</code> or <code>092ab</code>; <strong>LOC</strong>: <code>050ab</code> or <code>090ab</code>; <strong>from the item record</strong>: <code>852hi</code>"
 msgstr ""
+"na signaturu jednotky. (To může obsahovat prohledání více podpolí; např. "
+"<code>082ab</code> by prohledalo  082 podpole a a b.)<br />Příklady: "
+"<strong>Dewey</strong>: <code>082ab</code>nebo <code>092ab</code>; "
+"<strong>LOC</strong>: <code>050ab</code> nebo <code>090ab</code>; <strong>ze "
+"záznamu jednotky</strong>: <code>852hi</code> "
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#marcflavour# Interpret and store MARC records in the"
-msgstr ""
+msgstr "Zobrazuj a ulož MARC záznamy ve"
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#marcflavour# MARC21"
-msgstr ""
+msgstr "MARC21"
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#marcflavour# NORMARC"
-msgstr ""
+msgstr "NORMARC"
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#marcflavour# UNIMARC"
-msgstr ""
+msgstr "UNIMARC"
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#marcflavour# format."
-msgstr ""
+msgstr "formát."
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#z3950NormalizeAuthor# Copy"
-msgstr ""
+msgstr "Kopírovat"
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#z3950NormalizeAuthor# Don't copy"
-msgstr ""
+msgstr "Nekopírovat"
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#z3950NormalizeAuthor# authors from the UNIMARC"
-msgstr ""
+msgstr "autory z UNIMARC"
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#z3950NormalizeAuthor# tags (separated by commas) to the correct author tags when importing a record using Z39.50."
 msgstr ""
+"polí (oddělených čárkou) do správných autoritních polí během importu záznamu "
+"ze Z39.50."
 
 # Circulation
+#, fuzzy
 msgid "circulation.pref"
-msgstr ""
+msgstr "circulation.pref"
 
 # Circulation > Checkin Policy
 msgid "circulation.pref Checkin Policy"
-msgstr ""
+msgstr "Politika příjmu"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref Checkout Policy"
-msgstr ""
+msgstr "Politika výdeje"
 
 # Circulation > Fines Policy
 msgid "circulation.pref Fines Policy"
-msgstr ""
+msgstr "Politika pokutování"
 
 # Circulation > Holds Policy
 msgid "circulation.pref Holds Policy"
-msgstr ""
+msgstr "Politika rezervací"
 
 # Circulation > Interface
 msgid "circulation.pref Interface"
-msgstr ""
+msgstr "Interface pro knihovníky"
 
 # Circulation > Self Checkout
 msgid "circulation.pref Self Checkout"
-msgstr ""
+msgstr "Samoobslužné výpůjčky"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AgeRestrictionMarker# E.g. enter target audience keyword(s) split by | (bar) FSK|PEGI|Age| (No white space near |). Be sure to map agerestriction in Koha to MARC mapping (e.g. 521$a). A MARC field value of FSK 12 or PEGI 12 would mean: Borrower must be 12 years old. Leave empty to not apply an age restriction."
 msgstr ""
+"např. zapište kódy cílové skupiny oddělené | (svislítko) FSK|PEGI|Věk (u "
+"svislítek | nejsou žádné mezery). Ujistěte se, že věkový limit je zapsán v "
+"poli MARC (např. 521$a). Hodnota FSK 12 nebo PEGI 12 by znamenala: "
+"Vypůjčovatel musí mít 12 let. Nechte prázdné, pokud neuplatňujete věkový "
+"limit."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AgeRestrictionMarker# Restrict patrons with the following target audience values from checking out inappropriate materials:"
-msgstr ""
+msgstr "Omez čtenáře na hodnoty cílové skupiny výpůjček nevhodných materiálů:  "
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AgeRestrictionOverride# Allow"
-msgstr ""
+msgstr "Povolit"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AgeRestrictionOverride# Don't allow"
-msgstr ""
+msgstr "Nepovolit"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AgeRestrictionOverride# staff to check out an item with age restriction."
-msgstr ""
+msgstr "knihovně vypůjčit exemplář s věkovým limitem."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllFinesNeedOverride# Don't require"
-msgstr ""
+msgstr "Nepožadovat, aby "
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllFinesNeedOverride# Require"
-msgstr ""
+msgstr "Požadovat, aby"
 
 # Circulation > Checkout Policy
+#, fuzzy
 msgid "circulation.pref#AllFinesNeedOverride# staff to manually override all fines, even fines less than noissuescharge."
 msgstr ""
+"obsluze ručně přepsat všechny pokuty, a to i pokuty nižší než "
+"noissuescharge."
 
 # Circulation > Interface
 msgid "circulation.pref#AllowAllMessageDeletion# Allow"
-msgstr ""
+msgstr "Povolit, aby"
 
 # Circulation > Interface
 msgid "circulation.pref#AllowAllMessageDeletion# Don't allow"
-msgstr ""
+msgstr "Nepovolit, aby "
 
 # Circulation > Interface
 msgid "circulation.pref#AllowAllMessageDeletion# staff to delete messages added from other libraries."
-msgstr ""
+msgstr "obsluha mohla vymazat všechny zprávy přidané jinými knihovnami."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowFineOverride# Allow"
-msgstr ""
+msgstr "Povolit"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowFineOverride# Don't allow"
-msgstr ""
+msgstr "Nepovolit"
 
 # Circulation > Checkout Policy
+#, fuzzy
 msgid "circulation.pref#AllowFineOverride# staff to manually override and check out items to patrons who have more than noissuescharge in fines."
 msgstr ""
+"obsluze ručně přepsat a vydat výpůjčky čtenářům, kteří mají více než "
+"noissuescharge pokutu."
 
 # Circulation > Holds Policy
 msgid "circulation.pref#AllowHoldDateInFuture# Allow"
-msgstr ""
+msgstr "Povolit"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#AllowHoldDateInFuture# Don't allow"
-msgstr ""
+msgstr "Nepovolit"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#AllowHoldDateInFuture# hold requests to be placed that do not enter the waiting list until a certain future date."
-msgstr ""
+msgstr "rezervace, které nejsou v pořadí až do určitého budoucího data."
 
 # Circulation > Holds Policy
 msgid "circulation.pref#AllowHoldPolicyOverride# Allow"
-msgstr ""
+msgstr "Povolit"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#AllowHoldPolicyOverride# Don't allow"
-msgstr ""
+msgstr "Nepovolit"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#AllowHoldPolicyOverride# staff to override hold policies when placing holds."
-msgstr ""
+msgstr "obsluze ignorovat rezervační politiku při rezervování. "
 
 # Circulation > Holds Policy
 msgid "circulation.pref#AllowHoldsOnDamagedItems# Allow"
-msgstr ""
+msgstr "Povolit"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#AllowHoldsOnDamagedItems# Don't allow"
-msgstr ""
+msgstr "Povolit"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#AllowHoldsOnDamagedItems# hold requests to be placed on damaged items."
-msgstr ""
+msgstr "rezervovat poškozené výtisky."
 
 # Circulation > Holds Policy
 msgid "circulation.pref#AllowHoldsOnPatronsPossessions# Allow"
-msgstr ""
+msgstr "Povolit"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#AllowHoldsOnPatronsPossessions# Don't allow"
-msgstr ""
+msgstr "Nepovolit"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#AllowHoldsOnPatronsPossessions# a patron to place a hold on a record where the patron already has one or more items attached to that record checked out."
 msgstr ""
+"čtenáři rezervovat titul, kde již má čtenář vypůjčený nebo vypůjčené "
+"výtisky."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowItemsOnHoldCheckout# Allow"
-msgstr ""
+msgstr "Povolit"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowItemsOnHoldCheckout# Don't allow"
-msgstr ""
+msgstr "Nepovolit"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowItemsOnHoldCheckout# checkouts of items reserved to someone else. If allowed do not generate RESERVE_WAITING and RESERVED warning. This allows self checkouts for those items."
 msgstr ""
+"výdej výtisků rezervovaných jiné osobě.  Je-li toto povoleno negeneruj "
+"hlášení RESERVE_WAITING a RESERVED. Toto povolí samoobjednání pro takové "
+"výtisky."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowNotForLoanOverride# Allow"
-msgstr ""
+msgstr "Povolit"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowNotForLoanOverride# Don't allow"
-msgstr ""
+msgstr "Nepovolit"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowNotForLoanOverride# staff to override and check out items that are marked as not for loan."
 msgstr ""
+"obsluze ignorovat a vydat výtisk, který je označen, že není pro půjčování "
 
 # Circulation > Holds Policy
 msgid "circulation.pref#AllowOnShelfHolds# Allow"
-msgstr ""
+msgstr "Povolit"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#AllowOnShelfHolds# Don't allow"
-msgstr ""
+msgstr "Nepovolit"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#AllowOnShelfHolds# hold requests to be placed on items that are not checked out."
-msgstr ""
+msgstr "rezervaci na výtisky, které nejsou vypůjčené. "
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowRenewalLimitOverride# Allow"
-msgstr ""
+msgstr "Povolit"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowRenewalLimitOverride# Don't allow"
-msgstr ""
+msgstr "Nepovolit"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowRenewalLimitOverride# staff to manually override the renewal limit and renew a checkout when it would go over the renewal limit."
-msgstr ""
+msgstr "obsluze ručně ignorovat limit prolongací."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowReturnToBranch# Allow materials to be returned to"
-msgstr ""
+msgstr "Povolit vracet materiály"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowReturnToBranch# either the library the item is from or the library it was checked out from."
-msgstr ""
+msgstr "buď do pobočky z které pochází nebo kde byly vydány."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowReturnToBranch# only the library the item is from."
-msgstr ""
+msgstr "pouze do knihovny, z které pochází."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowReturnToBranch# only the library the item was checked out from."
-msgstr ""
+msgstr "pouze do pobočky, kde byly vydány."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowReturnToBranch# to any library."
-msgstr ""
+msgstr "do libovolné knihovny."
 
 # Circulation > Self Checkout
 msgid "circulation.pref#AllowSelfCheckReturns# Allow"
-msgstr ""
+msgstr "Povolit"
 
 # Circulation > Self Checkout
 msgid "circulation.pref#AllowSelfCheckReturns# Don't allow"
-msgstr ""
+msgstr "Nepovolit"
 
 # Circulation > Self Checkout
 msgid "circulation.pref#AllowSelfCheckReturns# patrons to return items through web-based self checkout system."
-msgstr ""
+msgstr "čtenářům vracet výpůjčky pomocí webovského samoobslužného systému."
 
 # Circulation > Holds Policy
 msgid "circulation.pref#AutoResumeSuspendedHolds# Allow"
-msgstr ""
+msgstr "Povolit"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#AutoResumeSuspendedHolds# Don't allow"
-msgstr ""
+msgstr "Nedovolit"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#AutoResumeSuspendedHolds# suspended holds to be automatically resumed by a set date."
-msgstr ""
+msgstr "zrušené rezervace, aby byly k určitému datu obnoveny."
 
 # Circulation > Self Checkout
 msgid "circulation.pref#AutoSelfCheckAllowed# ."
-msgstr ""
+msgstr "."
 
 # Circulation > Self Checkout
 msgid "circulation.pref#AutoSelfCheckAllowed# Allow"
-msgstr ""
+msgstr "Povolit"
 
 # Circulation > Self Checkout
 msgid "circulation.pref#AutoSelfCheckAllowed# Don't allow"
-msgstr ""
+msgstr "Nepovolit"
 
 # Circulation > Self Checkout
 msgid "circulation.pref#AutoSelfCheckAllowed# and this password"
-msgstr ""
+msgstr "samoobslužné vypůjčení a toto heslo"
 
 # Circulation > Self Checkout
 msgid "circulation.pref#AutoSelfCheckAllowed# the web-based self checkout system to automatically login with this staff login"
 msgstr ""
+"webovský samobslužný systém automaticky přihlásit s tímto knihovnickým "
+"přihlášením"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AutomaticItemReturn# Do"
-msgstr ""
+msgstr "Poslat"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AutomaticItemReturn# Don't"
-msgstr ""
+msgstr "Neposlat"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AutomaticItemReturn# automatically transfer items to their home library when they are returned."
-msgstr ""
+msgstr "automaticky vrácené výtisky do jejich domovské knihovny."
 
 # Circulation > Checkin Policy
 msgid "circulation.pref#BlockReturnOfWithdrawnItems# Block"
-msgstr ""
+msgstr "Blokovat"
 
 # Circulation > Checkin Policy
 msgid "circulation.pref#BlockReturnOfWithdrawnItems# Don't block"
-msgstr ""
+msgstr "Neblokovat"
 
 # Circulation > Checkin Policy
 msgid "circulation.pref#BlockReturnOfWithdrawnItems# returning of items that have been withdrawn."
+msgstr "vrácení materiálů, které byly vyřazeny."
+
+# Circulation > Checkin Policy
+msgid "circulation.pref#CalculateFinesOnReturn# <br /><b>NOTE If you are doing hourly loans then you should have this on.</b>"
+msgstr ""
+"<br /><b>Pozn:  Jestliže děláte hodinové výpůjčky, pak by tento parametr by "
+"měl být aktivní.</b>"
+
+# Circulation > Checkin Policy
+msgid "circulation.pref#CalculateFinesOnReturn# Do"
+msgstr "Počítej pokuty při návratu"
+
+# Circulation > Checkin Policy
+msgid "circulation.pref#CalculateFinesOnReturn# Don't"
+msgstr "Nepočítej pokuty při návratu"
+
+# Circulation > Checkin Policy
+msgid "circulation.pref#CalculateFinesOnReturn# calculate and update overdue charges when an item is returned."
 msgstr ""
 
 # Circulation > Interface
@@ -1140,47 +1182,47 @@ msgstr ""
 
 # Circulation > Interface
 msgid "circulation.pref#CircAutoPrintQuickSlip# When an empty barcode field is submitted in circulation"
-msgstr ""
+msgstr "Když je prázdné pole pro čárový kód během žádosti o výpůjčku"
 
 # Circulation > Interface
 msgid "circulation.pref#CircAutoPrintQuickSlip# clear the screen"
-msgstr ""
+msgstr "vymažte obrazovku"
 
 # Circulation > Interface
 msgid "circulation.pref#CircAutoPrintQuickSlip# open a print quick slip window"
-msgstr ""
+msgstr "otevři vyskakovací okno tiskárny"
 
 # Circulation > Interface
 msgid "circulation.pref#CircAutocompl# Don't try"
-msgstr ""
+msgstr "Nezkoušet"
 
 # Circulation > Interface
 msgid "circulation.pref#CircAutocompl# Only returns the first 10 results at a time."
-msgstr ""
+msgstr "Vracet jen 10 prvních výsledků v čase"
 
 # Circulation > Interface
 msgid "circulation.pref#CircAutocompl# Try"
-msgstr ""
+msgstr "Zkoušet "
 
 # Circulation > Interface
 msgid "circulation.pref#CircAutocompl# to guess the patron being entered while typing a patron search on the circulation screen."
-msgstr ""
+msgstr "nápovědu čtenáře během psaní jeho jména."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#CircControl# Use the checkout and fines rules of"
-msgstr ""
+msgstr "Používat výpůjční a pokutová pravidla"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#CircControl# the library the item is from."
-msgstr ""
+msgstr "pobočky z které pochází výpůjčka. "
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#CircControl# the library the patron is from."
-msgstr ""
+msgstr "knihovna ze které pochází čtenář."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#CircControl# the library you are logged in at."
-msgstr ""
+msgstr "knihovna, ke které jste přihlášen."
 
 # Circulation > Interface
 msgid "circulation.pref#DisplayClearScreenButton# Don't show"
