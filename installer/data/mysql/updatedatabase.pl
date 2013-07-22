@@ -6899,6 +6899,12 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.12.01.005";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    print "About Koha > Timeline was fixed for new instances. If you want it fixed on previously created instances you need to add <docdir>/usr/share/doc/koha-common</docdir> to the instance's koha-conf.xml file, on the <config> section.\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)
