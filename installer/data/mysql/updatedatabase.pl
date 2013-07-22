@@ -7050,7 +7050,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.13.00.XXX";
+$DBversion = "3.13.00.014";
 if ( CheckVersion($DBversion) ) {
     $dbh->do("ALTER TABLE courses MODIFY COLUMN department varchar(80) DEFAULT NULL;");
     $dbh->do("ALTER TABLE courses MODIFY COLUMN term       varchar(80) DEFAULT NULL;");
