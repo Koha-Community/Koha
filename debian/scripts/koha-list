@@ -49,6 +49,17 @@ is_email_enabled()
     fi
 }
 
+is_sip_enabled()
+{
+    local instancename=$1
+
+    if [ -e /etc/koha/sites/$instancename/SIPconfig.xml ]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
 get_instances()
 {
     find /etc/koha/sites -mindepth 1 -maxdepth 1\
@@ -59,40 +70,76 @@ show_instances()
 {
     local show=$1
     local show_email=$2
+    local show_sip=$3
 
     for instance in $( get_instances ); do
         case $show in
           "all")
-              show_instance_filter_email $instance $show_email;;
+              if instance_filter_email $instance $show_email && \
+                 instance_filter_sip $instance $show_sip; then
+                    echo $instance
+              fi ;;
           "enabled")
               if is_enabled $instance; then
-                  show_instance_filter_email $instance $show_email
+                  if instance_filter_email $instance $show_email && \
+                     instance_filter_sip $instance $show_sip; then
+                      echo $instance
+                  fi
               fi ;;
           "disabled")
               if ! is_enabled $instance; then
-                  show_instance_filter_email $instance $show_email
+                  if instance_filter_email $instance $show_email && \
+                     instance_filter_sip $instance $show_sip; then
+                      echo $instance
+                  fi
               fi ;;
         esac
     done
 }
 
-show_instance_filter_email()
+
+instance_filter_sip()
+{
+    local instancename=$1
+    local show_sip=$2;
+
+    case $show_sip in
+        "all")
+            return 0 ;;
+        "enabled")
+            if is_sip_enabled $instancename; then
+                return 0
+            fi ;;
+        "disabled")
+            if ! is_sip_enabled $instancename; then
+                return 0
+            fi ;;
+    esac
+
+    # Didn't match any criteria
+    return 1
+}
+
+instance_filter_email()
 {
     local instancename=$1
     local show_email=$2;
 
     case $show_email in
         "all")
-            echo $instancename ;;
+            return 0 ;;
         "enabled")
             if is_email_enabled $instancename; then
-                echo $instancename
+                return 0
             fi ;;
         "disabled")
             if ! is_email_enabled $instancename; then
-                echo $instancename
+                return 0
             fi ;;
     esac
+
+    # Didn't match any criteria
+    return 1
 }
 
 set_show()
@@ -117,39 +164,55 @@ set_show_email()
     fi
 }
 
+set_show_sip()
+{
+    local sip_param=$1
+
+    if [ "$show_sip" = "all" ]; then
+        show_sip=$sip_param
+    else
+        die "Error: --sip and --nosip are mutually exclusive."
+    fi
+}
+
 usage()
 {
     local scriptname=$0
 
-    echo <<eoh
+    cat <<EOH
 Lists Koha instances, optionally only those that are enabled or have
 email turned on.
     
-Usage: $scriptname [--enabled|--disabled] [--email|--noemail] [-h]
+Usage: $scriptname [--enabled|--disabled] [--email|--noemail] [--sip|--nosip] [-h]
 Options:
-    --enabled       only show instances that are enabled
-    --disabled      only show instances that are disabled
-    --email         only show instances that have email enabled
-    --noemail       only show instances that do not have email enabled
-    -h              this help
+    --enabled       Only show instances that are enabled
+    --disabled      Only show instances that are disabled
+    --email         Only show instances that have email enabled
+    --noemail       Only show instances that do not have email enabled
+    --sip           Only show instances that have sip enabled
+    --nosip         Only show instances that do not have sip enabled
+    --help | -h     Show this help
 
 The filtering options can be combined, and you probably want to do this
 (except --email and --noemail, or --enabled and --disabled, that's just silly.)
-eoh
+EOH
 }
 
 show="all"
 show_email="all"
+show_sip="all"
 
-args=$(getopt -l enabled,disabled,email,noemail -o h -n $0 -- "$@")
+args=$(getopt -l help,enabled,disabled,email,noemail,sip,nosip -o h -n $0 -- "$@")
 set -- $args
 
 while [ ! -z "$1" ]
 do
     case "$1" in
-         -h) usage; exit;;
+  -h|--help) usage; exit;;
     --email) set_show_email "enabled" ;;
   --noemail) set_show_email "disabled" ;;
+      --sip) set_show_sip "enabled" ;;
+    --nosip) set_show_sip "disabled" ;;
   --enabled) set_show "enabled" ;;
  --disabled) set_show "disabled" ;;
           *) break;;
@@ -157,6 +220,6 @@ do
     shift
 done
 
-show_instances $show $show_email
+show_instances $show $show_email $show_sip
 
 exit 0
