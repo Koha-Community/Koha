@@ -590,11 +590,21 @@ jQuery.fn.dataTableExt.oSort['callnumbers-asc']  = function(x,y) {
         x_array.shift();
         y_array.shift();
 
+        x_array = jQuery.map( x_array, function( a ) {
+            return parse_callnumber( a );
+        });
+        y_array = jQuery.map( y_array, function( a ) {
+            return parse_callnumber( a );
+        });
+
         x_array.sort();
         y_array.sort();
 
         x = x_array.shift();
         y = y_array.shift();
+
+        if ( !x ) { x = ""; }
+        if ( !y ) { y = ""; } 
 
         return ((x < y) ? -1 : ((x > y) ?  1 : 0));
 };
@@ -607,11 +617,31 @@ jQuery.fn.dataTableExt.oSort['callnumbers-desc'] = function(x,y) {
         x_array.shift();
         y_array.shift();
 
+        x_array = jQuery.map( x_array, function( a ) {
+            return parse_callnumber( a );
+        });
+        y_array = jQuery.map( y_array, function( a ) {
+            return parse_callnumber( a );
+        });
+
         x_array.sort();
         y_array.sort();
 
         x = x_array.pop();
         y = y_array.pop();
 
+        if ( !x ) { x = ""; }
+        if ( !y ) { y = ""; } 
+
         return ((x < y) ?  1 : ((x > y) ? -1 : 0));
 };
+
+function parse_callnumber ( html ) {
+    var array = html.split('<span class="callnumber">');
+    if ( array[1] ) {
+        array = array[1].split('</span>');
+        return array[0];
+    } else {
+        return "";
+    }
+}

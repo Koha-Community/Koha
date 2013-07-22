@@ -326,7 +326,7 @@ function placeHold () {
             <td>
                 [% IF ( BIBLIO_RESULT.ITEM_RESULTS ) %]
                     [% FOREACH ITEM_RESULT IN BIBLIO_RESULT.ITEM_RESULTS %]
-                        <div><span class="nowrap"><strong>[% ITEM_RESULT.itemcallnumber %]</strong> [% ITEM_RESULT.branchname %] <span class="shelvingloc inline">[% ITEM_RESULT.location_description %]</span></span></div>
+                        <div><span class="nowrap"><strong><span class="callnumber">[% ITEM_RESULT.itemcallnumber %]</span></strong> [% ITEM_RESULT.branchname %] <span class="shelvingloc inline">[% ITEM_RESULT.location_description %]</span></span></div>
                     [% END %]
                 [% ELSE %]
                     This record has no items.
