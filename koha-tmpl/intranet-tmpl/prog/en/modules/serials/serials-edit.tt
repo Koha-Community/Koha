@@ -136,7 +136,7 @@ $(document).ready(function() {
             <input type="text" name="publisheddate" value="[% serialslis.publisheddate %]" size="10" maxlength="15" class="datepicker" />
         </td>
         <td>
-            <input type="text" name="publisheddatetext" value="[% serialslis.publisheddatetext || serialslis.publisheddate %]" size="10" maxlength="100" />
+            <input type="text" name="publisheddatetext" value="[% serialslis.publisheddatetext %]" size="10" maxlength="100" />
         </td>
         <td>
             <input type="text" id="expecteddate" name="planneddate" value="[% serialslis.planneddate %]" size="10" maxlength="15" class="datepicker" />
@@ -220,7 +220,7 @@ $(document).ready(function() {
   [% UNLESS ( serialslis.subscriptionexpired ) %]
   [% IF ( serialslis.serialsadditems ) %]
           <tr>
-          <td colspan="5">
+          <td colspan="6">
       <a id="label[% serialslis.subscriptionid %][% serialslis.serialid %]" style="color: grey; font-size: 80%; cursor: pointer;"  onclick="unHideItems('items[% serialslis.subscriptionid %][% serialslis.serialid %]','label[% serialslis.subscriptionid %][% serialslis.serialid %]',  '[% serialslis.serialid %]');setStatus([% serialslis.serialid %]);">
              Click to add item</a>
         <fieldset class="rows" style="display:none;" id="items[% serialslis.subscriptionid %][% serialslis.serialid %]">
@@ -293,7 +293,7 @@ $(document).ready(function() {
             <input type="text" name="publisheddate" value="[% newserialloo.publisheddate %]" size="10" maxlength="15"  class="datepicker" />
         </td>
         <td>
-            <input type="text" name="publisheddatetext" value="[% newserialloo.publisheddatetext || newserialloo.publisheddate %]" size="10" maxlength="100" />
+            <input type="text" name="publisheddatetext" value="[% newserialloo.publisheddatetext %]" size="10" maxlength="100" />
         </td>
         <td>
             <input type="text" name="planneddate" id="supexpecteddate" value="[% newserialloo.planneddate %]" size="10" maxlength="15" class="datepicker" />
@@ -367,7 +367,7 @@ $(document).ready(function() {
     </tr>
   [% IF ( newserialloo.serialsadditems ) %]
           <tr>
-          <td colspan="5">
+          <td colspan="6">
       <a id="label[% newserialloo.subscriptionid %][% newserialloo.serialid %]" style="color: grey; font-size: 80%; cursor: pointer;"  onclick="unHideItems('items[% newserialloo.subscriptionid %][% newserialloo.serialid %]','label[% newserialloo.subscriptionid %][% newserialloo.serialid %]', '[% newserialloo.serialid %]')">
              Click to add item</a>
         <fieldset  class="rows" style="display:none;" id="items[% newserialloo.subscriptionid %][% newserialloo.serialid %]">
