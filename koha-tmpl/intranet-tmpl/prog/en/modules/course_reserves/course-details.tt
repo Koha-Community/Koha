@@ -5,9 +5,22 @@
 <title>Koha &rsaquo; Course reserves &rsaquo; Course details for [% course.course_name %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.min.js"></script>
+[% INCLUDE 'datatables-strings.inc' %]
+<script type="text/javascript" src="[% themelang %]/js/datatables.js"></script>
 <script type="text/javascript">
 //<![CDATA[
     $(document).ready(function(){
+        $("#course_reserves_table").dataTable($.extend(true, {}, dataTablesDefaults, {
+            "sPaginationType": "four_button",
+            "aLengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]],
+            "iDisplayLength": 20,
+            "aoColumnDefs": [
+                { 'bSortable': false, 'aTargets': [ 9, 10, 11 ] }
+            ]
+        }));
+
         $("a.delete_item").click(function(){
             return confirm( _("Are you sure you want to remove this item from the course?"));
         });
@@ -56,7 +69,7 @@
             </div>
 
             [% IF course_reserves %]
-            <table>
+            <table id="course_reserves_table">
                 <caption>Reserves</caption>
                 <thead>
                     <tr>
