@@ -12,7 +12,8 @@ use C4::Context;
 
 use Data::Dumper;
 
-use Test::More tests => 19;
+use Test::More tests => 17;
+
 
 use C4::Branch;
 use C4::ItemType;
@@ -100,7 +101,7 @@ my $priority = 1;
 # Make a reserve
 AddReserve ( $borrower_branchcode, $borrowernumber, $biblionumber, $constraint, $bibitems,  $priority );
 #                           $resdate, $expdate, $notes, $title, $checkitem, $found
-$dbh->do("UPDATE reserves SET reservedate = reservedate - 1");
+$dbh->do("UPDATE reserves SET reservedate = DATE_SUB( reservedate, INTERVAL 1 DAY )");
 
 # Tests
 my $use_cost_matrix_sth = $dbh->prepare("UPDATE systempreferences SET value = ? WHERE variable = 'UseTransportCostMatrix'");
@@ -121,8 +122,6 @@ $dbh->do("DELETE FROM items WHERE homebranch = '$borrower_branchcode' AND holdin
 # test_queue will flush
 C4::Context->set_preference('AutomaticItemReturn', 1);
 # Not sure how to make this test more difficult - holding branch does not matter
-test_queue ('take from holdingbranch AutomaticItemReturn on', 0, $borrower_branchcode, undef);
-test_queue ('take from holdingbranch AutomaticItemReturn on', 1, $borrower_branchcode, $least_cost_branch_code);
 
 $dbh->do("DELETE FROM tmp_holdsqueue");
 $dbh->do("DELETE FROM hold_fill_targets");
@@ -148,6 +147,11 @@ ok( $queue_item
  && $queue_item->{holdingbranch} eq $least_cost_branch_code, "GetHoldsQueueItems" )
   or diag( "Expected item for pick $borrower_branchcode, hold $least_cost_branch_code, got ".Dumper($queue_item) );
 ok( exists($queue_item->{itype}), 'item type included in queued items list (bug 5825)' );
+
+ok(
+    C4::HoldsQueue::least_cost_branch( 'B', [ 'A', 'B', 'C' ] ) eq 'B',
+    'C4::HoldsQueue::least_cost_branch returns the local branch if it is in the list of branches to pull from'
+);
 
 # XXX All this tests are for borrower branch pick-up.
 # Maybe needs expanding to homebranch or holdingbranch pick-up.

@@ -32,6 +32,7 @@ use C4::Biblio;
 use C4::Dates qw/format_date/;
 
 use List::Util qw(shuffle);
+use List::MoreUtils qw(any);
 use Data::Dumper;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
@@ -361,8 +362,6 @@ sub MapItemsToHoldRequests {
     return unless scalar(@$hold_requests) > 0;
     return unless scalar(@$available_items) > 0;
 
-    my $automatic_return = C4::Context->preference("AutomaticItemReturn");
-
     # identify item-level requests
     my %specific_items_requested = map { $_->{itemnumber} => 1 }
                                    grep { defined($_->{itemnumber}) }
@@ -426,7 +425,7 @@ sub MapItemsToHoldRequests {
         my $pickup_branch = $request->{branchcode} || $request->{borrowerbranch};
         my ($itemnumber, $holdingbranch);
 
-        my $holding_branch_items = $automatic_return ? undef : $items_by_branch{$pickup_branch};
+        my $holding_branch_items = $items_by_branch{$pickup_branch};
         if ( $holding_branch_items ) {
             foreach my $item (@$holding_branch_items) {
                 if ( $request->{borrowerbranch} eq $item->{homebranch} ) {
@@ -594,9 +593,13 @@ sub least_cost_branch {
     #$from - arrayref
     my ($to, $from, $transport_cost_matrix) = @_;
 
-# Nothing really spectacular: supply to branch, a list of potential from branches
-# and find the minimum from - to value from the transport_cost_matrix
+    # Nothing really spectacular: supply to branch, a list of potential from branches
+    # and find the minimum from - to value from the transport_cost_matrix
     return $from->[0] if @$from == 1;
+
+    # If the pickup library is in the list of libraries to pull from,
+    # return that library right away, it is obviously the least costly
+    return ($to) if any { $_ eq $to } @$from;
 
     my ($least_cost, @branch);
     foreach (@$from) {
