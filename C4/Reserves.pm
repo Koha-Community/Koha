@@ -2014,7 +2014,7 @@ This shifts the holds from C<$from_biblio> to C<$to_biblio> and reorders them by
 sub MergeHolds {
     my ( $dbh, $to_biblio, $from_biblio ) = @_;
     my $sth = $dbh->prepare(
-        "SELECT count(*) as reserve_id FROM reserves WHERE biblionumber = ?"
+        "SELECT count(*) as reserve_count FROM reserves WHERE biblionumber = ?"
     );
     $sth->execute($from_biblio);
     if ( my $data = $sth->fetchrow_hashref() ) {
