@@ -75,8 +75,7 @@ sub createMergeHash {
 
             }
 
-            if ( ( !defined($tagslib) || $tagslib->{$fieldtag}->{'tab'} >= 0 )
-                && @subfield_array )
+            if ( !defined($tagslib) || @subfield_array )
             {
                 push @array,
                   {
