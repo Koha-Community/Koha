@@ -21,17 +21,17 @@ use Modern::Perl;
 use Test::More tests => 5;
 
 BEGIN {
-    use_ok('Koha::Template::Plugin::KohaBranchName');
+    use_ok('Koha::Template::Plugin::Branches');
 }
 
-my $filter = Koha::Template::Plugin::KohaBranchName->new();
-ok($filter, "initialized KohaBranchName plugin");
+my $plugin = Koha::Template::Plugin::Branches->new();
+ok($plugin, "initialized Branches plugin");
 
-my $name = $filter->filter('CPL');
+my $name = $plugin->GetName('CPL');
 is($name, 'Centerville', 'retrieved expected name for CPL');
 
-$name = $filter->filter('__ANY__');
+$name = $plugin->GetName('__ANY__');
 is($name, '', 'received empty string as name of the "__ANY__" placeholder library code');
 
-$name = $filter->filter(undef);
+$name = $plugin->GetName(undef);
 is($name, '', 'received empty string as name of NULL/undefined library code');

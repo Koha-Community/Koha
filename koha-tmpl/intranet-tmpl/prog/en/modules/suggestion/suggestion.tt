@@ -1,5 +1,5 @@
 [% USE KohaAuthorisedValues %]
-[% USE KohaBranchName %]
+[% USE Branches %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions  &rsaquo;
     [% IF ( op_save ) %]
@@ -242,18 +242,18 @@ h4.local_collapse a { font-size : 80%; text-decoration: none; } fieldset.brief o
             <tr>
                 <th><span class="label">Suggestion creation</span> </th>
                 <td>[% suggesteddate %]</td>
-                <td>[% IF ( suggestedby_borrowernumber ) %]<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% suggestedby_borrowernumber %]">[% suggestedby_surname %], [% suggestedby_firstname %]</a>  [% suggestedby_branchcode | $KohaBranchName %] ([% suggestedby_description %])[% END %]
+                <td>[% IF ( suggestedby_borrowernumber ) %]<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% suggestedby_borrowernumber %]">[% suggestedby_surname %], [% suggestedby_firstname %]</a>  [% Branches.GetName( suggestedby_branchcode ) %] ([% suggestedby_description %])[% END %]
                 </td>
             </tr>
             <tr>
                 <th><span class="label">Suggestion management</span> </th>
                 <td>[% manageddate %]</td>
-                <td>[% IF ( managedby_borrowernumber ) %]<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% managedby_borrowernumber %]">[% managedby_surname %], [% managedby_firstname %]</a> [% managedby_branchcode | $KohaBranchName %] ([% managedby_description %])[% END %]</td>
+                <td>[% IF ( managedby_borrowernumber ) %]<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% managedby_borrowernumber %]">[% managedby_surname %], [% managedby_firstname %]</a> [% Branches.GetName( managedby_branchcode ) %] ([% managedby_description %])[% END %]</td>
             </tr>
             <tr>
                 <th><span class="label">Suggestion accepted</span> </th>
                 <td>[% accepteddate %]</td>
-                <td>[% IF ( acceptedby_borrowernumber ) %]<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% acceptedby_borrowernumber %]">[% acceptedby_surname %], [% acceptedby_firstname %]</a> [% acceptedby_branchcode | $KohaBranchName %] ([% acceptedby_description %])[% END %]</td>
+                <td>[% IF ( acceptedby_borrowernumber ) %]<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% acceptedby_borrowernumber %]">[% acceptedby_surname %], [% acceptedby_firstname %]</a> [% Branches.GetName( acceptedby_branchcode ) %] ([% acceptedby_description %])[% END %]</td>
             </tr>
             </tbody>
         </table></li></ol>
@@ -372,18 +372,18 @@ h4.local_collapse a { font-size : 80%; text-decoration: none; } fieldset.brief o
             <tr>
                 <th><label for="suggesteddate">Suggestion creation</label> </th>
                 <td><input type="text" id="suggesteddate" name="suggesteddate" size="10" maxlength="10" value="[% suggesteddate %]"/></td>
-                <td><input type="hidden" id="suggestedby" name="suggestedby" value="[% suggestedby %]"/>[% IF ( suggestedby_borrowernumber ) %]<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% suggestedby_borrowernumber %]">[% suggestedby_surname %], [% suggestedby_firstname %]</a>  [% suggestedby_branchcode | $KohaBranchName %] ([% suggestedby_description %])[% END %]
+                <td><input type="hidden" id="suggestedby" name="suggestedby" value="[% suggestedby %]"/>[% IF ( suggestedby_borrowernumber ) %]<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% suggestedby_borrowernumber %]">[% suggestedby_surname %], [% suggestedby_firstname %]</a>  [% Branches.GetName( suggestedby_branchcode ) %] ([% suggestedby_description %])[% END %]
                 </td>
             </tr>
             <tr>
                 <th><label for="managedon">Suggestion management</label> </th>
                 <td><input type="text" id="managedon" name="manageddate" size="10" maxlength="10" value="[% manageddate %]" /></td>
-                <td><input type="hidden" id="managedby" name="managedby" value="[% managedby %]"/>[% IF ( managedby_borrowernumber ) %]<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% managedby_borrowernumber %]">[% managedby_surname %], [% managedby_firstname %]</a> [% managedby_branchcode | $KohaBranchName %] ([% managedby_description %])[% END %]</td>
+                <td><input type="hidden" id="managedby" name="managedby" value="[% managedby %]"/>[% IF ( managedby_borrowernumber ) %]<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% managedby_borrowernumber %]">[% managedby_surname %], [% managedby_firstname %]</a> [% Branches.GetName( managedby_branchcode ) %] ([% managedby_description %])[% END %]</td>
             </tr>
             <tr>
                 <th><label for="accepteddate">Suggestion accepted</label> </th>
                 <td><input type="text" id="accepteddate" name="accepteddate" size="10" maxlength="10" value="[% accepteddate %]" /></td>
-                <td><input type="hidden" id="acceptedby" name="acceptedby" value="[% acceptedby %]"/>[% IF ( acceptedby_borrowernumber ) %]<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% acceptedby_borrowernumber %]">[% acceptedby_surname %], [% acceptedby_firstname %]</a> [% acceptedby_branchcode | $KohaBranchName %] ([% acceptedby_description %])[% END %]</td>
+                <td><input type="hidden" id="acceptedby" name="acceptedby" value="[% acceptedby %]"/>[% IF ( acceptedby_borrowernumber ) %]<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% acceptedby_borrowernumber %]">[% acceptedby_surname %], [% acceptedby_firstname %]</a> [% Branches.GetName( acceptedby_branchcode ) %] ([% acceptedby_description %])[% END %]</td>
             </tr>
             </tbody>
         </table></li></ol>
@@ -501,7 +501,7 @@ h4.local_collapse a { font-size : 80%; text-decoration: none; } fieldset.brief o
                     [% IF ( suggestions_loo.manageddate ) %] - [% suggestions_loo.manageddate %][% END %]
                 </td>
                 <td>
-                    [% suggestions_loo.branchcode | $KohaBranchName %]
+                    [% Branches.GetName( suggestions_loo.branchcode ) %]
                 </td>
                 <td>
                     [% suggestions_loo.budget_name %]
