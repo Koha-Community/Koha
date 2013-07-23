@@ -281,6 +281,7 @@ sub SendAlerts {
 
             # 		warn "sending issues...";
             my $userenv = C4::Context->userenv;
+            my $branchdetails = GetBranchDetail($_->{'branchcode'});
             my $letter = GetPreparedLetter (
                 module => 'serial',
                 letter_code => $letter_code,
@@ -297,7 +298,7 @@ sub SendAlerts {
             # ... then send mail
             my %mail = (
                 To      => $email,
-                From    => $email,
+                From    => $branchdetails->{'branchemail'} || C4::Context->preference("KohaAdminEmailAddress"),
                 Subject => Encode::encode( "utf8", "" . $letter->{title} ),
                 Message => Encode::encode( "utf8", "" . $letter->{content} ),
                 'Content-Type' => 'text/plain; charset="utf8"',
