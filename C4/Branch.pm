@@ -186,7 +186,6 @@ sub GetBranchName {
     $sth = $dbh->prepare("Select branchname from branches where branchcode=?");
     $sth->execute($branchcode);
     my $branchname = $sth->fetchrow_array;
-    $sth->finish;
     return ($branchname);
 }
 
@@ -282,7 +281,6 @@ sub ModBranch {
 "insert into branchrelations (branchcode, categorycode) values(?, ?)"
           );
         $sth->execute( $branchcode, $cat );
-        $sth->finish;
     }
     foreach my $cat (@removecats) {
         my $sth =
@@ -290,7 +288,6 @@ sub ModBranch {
             "delete from branchrelations where branchcode=? and categorycode=?"
           );
         $sth->execute( $branchcode, $cat );
-        $sth->finish;
     }
 }
 
@@ -426,7 +423,6 @@ sub GetBranchesInCategory {
 	while (my $branch = $sth->fetchrow) {
 		push @branches, $branch;
 	}
-	$sth->finish();
 	return( \@branches );
 }
 
@@ -471,11 +467,9 @@ sub GetBranchInfo {
         while ( my ($cat) = $nsth->fetchrow_array ) {
             push( @cats, $cat );
         }
-        $nsth->finish;
         $data->{'categories'} = \@cats;
         push( @results, $data );
     }
-    $sth->finish;
     return \@results;
 }
 
@@ -490,7 +484,6 @@ sub DelBranch {
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare("delete from branches where branchcode = ?");
     $sth->execute($branchcode);
-    $sth->finish;
 }
 
 =head2 ModBranchCategoryInfo
@@ -507,13 +500,11 @@ sub ModBranchCategoryInfo {
 	# we are doing an insert
   my $sth   = $dbh->prepare("INSERT INTO branchcategories (categorycode,categoryname,codedescription,categorytype,show_in_pulldown) VALUES (?,?,?,?,?)");
         $sth->execute(uc( $data->{'categorycode'} ),$data->{'categoryname'}, $data->{'codedescription'},$data->{'categorytype'},$data->{'show_in_pulldown'} );
-	$sth->finish();		
     }
     else {
 	# modifying
         my $sth = $dbh->prepare("UPDATE branchcategories SET categoryname=?,codedescription=?,categorytype=?,show_in_pulldown=? WHERE categorycode=?");
         $sth->execute($data->{'categoryname'}, $data->{'codedescription'},$data->{'categorytype'},$data->{'show_in_pulldown'},uc( $data->{'categorycode'} ) );
-	$sth->finish();
     }
 }
 
@@ -550,7 +541,6 @@ sub DelBranchCategory {
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare("delete from branchcategories where categorycode = ?");
     $sth->execute($categorycode);
-    $sth->finish;
 }
 
 =head2 CheckBranchCategorycode
