@@ -422,36 +422,31 @@ sub _handle_one_result {
 }
 
 sub _add_rowdata {
-    my ($rowref, $marcrecord)=@_;
-    if(C4::Context->preference("marcflavour") ne 'UNIMARC') { #MARC21, NORMARC
-        $rowref->{isbn}= _isbn_show($marcrecord, '020');
-        $rowref->{title}= $marcrecord->subfield('245','a')||'';
-        $rowref->{author}= $marcrecord->subfield('100','a')||'';
-        $rowref->{date}= $marcrecord->subfield('260','c')||'';
-        $rowref->{edition}= $marcrecord->subfield('250','a')||'';
-        $rowref->{lccn}= $marcrecord->subfield('050','a')||'';
+    my ($row, $record)=@_;
+    my %fetch= (
+        title => 'biblio.title',
+        author => 'biblio.author',
+        isbn =>'biblioitems.isbn',
+        lccn =>'biblioitems.lccn', #LC control number (not call number)
+        edition =>'biblioitems.editionstatement',
+        date => 'biblio.copyrightdate', #MARC21
+        date2 => 'biblioitems.publicationyear', #UNIMARC
+    );
+    foreach my $k (keys %fetch) {
+        my ($t, $f)= split '\.', $fetch{$k};
+        $row= C4::Biblio::TransformMarcToKohaOneField($t, $f, $record, $row);
+        $row->{$k}= $row->{$f} if $k ne $f;
     }
-    else { #UNIMARC
-        $rowref->{isbn}= _isbn_show($marcrecord, '010');
-        $rowref->{title}= $marcrecord->subfield('200','a')||'';
-        $rowref->{author}= $marcrecord->subfield('200','f')||'';
-        $rowref->{date}= $marcrecord->subfield('210','d')||'';
-        $rowref->{edition}= $marcrecord->subfield('205','a')||'';
-        $rowref->{lccn}= '';
-    }
-    return $rowref;
+    $row->{date}//= $row->{date2};
+    $row->{isbn}=_isbn_replace($row->{isbn});
+    return $row;
 }
 
-sub _isbn_show {
-    my ($record, $fieldno)= @_; #both marc21 and unimarc possible
-    my $isbn= '';
-    foreach my $f ( $record->field($fieldno) ) {
-        my $a= $f->subfield('a');
-        $a =~ s/ |-|\.//g;
-        $a =~ s/\|/ \| /g;
-        $a =~ s/\(/ \(/g;
-        $isbn= $isbn? ($isbn.' | '. $a): $a;
-    }
+sub _isbn_replace {
+    my ($isbn)= @_;
+    $isbn =~ s/ |-|\.//g;
+    $isbn =~ s/\|/ \| /g;
+    $isbn =~ s/\(/ \(/g;
     return $isbn;
 }
 
