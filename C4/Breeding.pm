@@ -443,7 +443,8 @@ sub _add_rowdata {
 }
 
 sub _isbn_replace {
-    my ($isbn)= @_;
+    my ($isbn) = @_;
+    return unless defined $isbn;
     $isbn =~ s/ |-|\.//g;
     $isbn =~ s/\|/ \| /g;
     $isbn =~ s/\(/ \(/g;
