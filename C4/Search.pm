@@ -1088,6 +1088,7 @@ sub getIndexes{
                     'mc-itype',
                     'mc-loc',
                     'notforloan',
+                    'Number-local-acquisition',
                     'onloan',
                     'price',
                     'renewals',
