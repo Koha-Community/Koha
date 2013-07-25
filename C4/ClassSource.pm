@@ -93,12 +93,11 @@ sub GetClassSources {
 
     my %class_sources = ();
     my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare_cached("SELECT * FROM `class_sources`");
+    my $sth = $dbh->prepare("SELECT * FROM `class_sources`");
     $sth->execute();
     while (my $source = $sth->fetchrow_hashref) {
         $class_sources{ $source->{'cn_source'} } = $source;
     }
-    $sth->finish();
 
     return \%class_sources;
 
@@ -116,11 +115,10 @@ sub AddClassSource {
 
     my ($cn_source, $description, $used, $class_sort_rule) = @_;
     my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare_cached("INSERT INTO `class_sources` 
+    my $sth = $dbh->prepare("INSERT INTO `class_sources`
                                            (`cn_source`, `description`, `used`, `class_sort_rule`)
                                            VALUES (?, ?, ?, ?)");
     $sth->execute($cn_source, $description, $used, $class_sort_rule);
-    $sth->finish();
   
 }
 
@@ -136,10 +134,9 @@ sub GetClassSource {
 
     my ($cn_source) = (@_);
     my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare_cached("SELECT * FROM `class_sources` WHERE cn_source = ?");
+    my $sth = $dbh->prepare("SELECT * FROM `class_sources` WHERE cn_source = ?");
     $sth->execute($cn_source);
     my $row = $sth->fetchrow_hashref();
-    $sth->finish();
     return $row;
 }
 
@@ -155,13 +152,12 @@ sub ModClassSource {
 
     my ($cn_source, $description, $used, $class_sort_rule) = @_;
     my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare_cached("UPDATE `class_sources` 
+    my $sth = $dbh->prepare("UPDATE `class_sources`
                                     SET  `description` = ?,
                                          `used` = ?,
                                          `class_sort_rule` = ?
                                     WHERE `cn_source` = ?");
     $sth->execute($description, $used, $class_sort_rule, $cn_source);
-    $sth->finish();
 
 }
 
@@ -177,9 +173,8 @@ sub DelClassSource {
 
     my ($cn_source) = @_;
     my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare_cached("DELETE FROM `class_sources` WHERE `cn_source` = ?");
+    my $sth = $dbh->prepare("DELETE FROM `class_sources` WHERE `cn_source` = ?");
     $sth->execute($cn_source);
-    $sth->finish();
 
 }
 
@@ -210,12 +205,11 @@ sub GetClassSortRules {
 
     my %class_sort_rules = ();
     my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare_cached("SELECT * FROM `class_sort_rules`");
+    my $sth = $dbh->prepare("SELECT * FROM `class_sort_rules`");
     $sth->execute();
     while (my $sort_rule = $sth->fetchrow_hashref) {
         $class_sort_rules{ $sort_rule->{'class_sort_rule'} } = $sort_rule;
     }
-    $sth->finish();
 
     return \%class_sort_rules;
 
@@ -233,11 +227,10 @@ sub AddClassSortRule {
 
     my ($class_sort_rule, $description, $sort_routine) = @_;
     my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare_cached("INSERT INTO `class_sort_rules` 
+    my $sth = $dbh->prepare("INSERT INTO `class_sort_rules`
                                            (`class_sort_rule`, `description`, `sort_routine`)
                                            VALUES (?, ?, ?)");
     $sth->execute($class_sort_rule, $description, $sort_routine);
-    $sth->finish();
   
 }
 
@@ -253,10 +246,9 @@ sub GetClassSortRule {
 
     my ($class_sort_rule) = (@_);
     my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare_cached("SELECT * FROM `class_sort_rules` WHERE `class_sort_rule` = ?");
+    my $sth = $dbh->prepare("SELECT * FROM `class_sort_rules` WHERE `class_sort_rule` = ?");
     $sth->execute($class_sort_rule);
     my $row = $sth->fetchrow_hashref();
-    $sth->finish();
     return $row;
 }
 
@@ -272,12 +264,11 @@ sub ModClassSortRule {
 
     my ($class_sort_rule, $description, $sort_routine) = @_;
     my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare_cached("UPDATE `class_sort_rules` 
+    my $sth = $dbh->prepare("UPDATE `class_sort_rules`
                                     SET  `description` = ?,
                                          `sort_routine` = ?
                                     WHERE `class_sort_rule` = ?");
     $sth->execute($description, $sort_routine, $class_sort_rule);
-    $sth->finish();
 
 }
 
@@ -293,9 +284,8 @@ sub DelClassSortRule {
 
     my ($class_sort_rule) = @_;
     my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare_cached("DELETE FROM `class_sort_rules` WHERE `class_sort_rule` = ?");
+    my $sth = $dbh->prepare("DELETE FROM `class_sort_rules` WHERE `class_sort_rule` = ?");
     $sth->execute($class_sort_rule);
-    $sth->finish();
 
 }
 
@@ -313,13 +303,12 @@ sub GetSourcesForSortRule {
     my ($class_sort_rule) = @_;
 
     my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare_cached("SELECT cn_source FROM class_sources WHERE class_sort_rule = ?");
+    my $sth = $dbh->prepare("SELECT cn_source FROM class_sources WHERE class_sort_rule = ?");
     $sth->execute($class_sort_rule);
     my @sources = ();
     while (my ($source) = $sth->fetchrow_array()) {
         push @sources, $source;
     }
-    $sth->finish();
     return @sources;
 
 }
