@@ -38,8 +38,7 @@ use C4::Tags qw(get_tags);
 use C4::Branch; # GetBranches
 use POSIX qw(ceil floor strftime);
 use URI::Escape;
-use Storable qw(thaw freeze);
-
+use JSON qw/decode_json encode_json/;
 
 my $DisplayMultiPlaceHold = C4::Context->preference("DisplayMultiPlaceHold");
 # create a new CGI object
@@ -528,8 +527,8 @@ for (my $i=0;$i<@servers;$i++) {
             my $searchcookie = $cgi->cookie('KohaOpacRecentSearches');
             if ($searchcookie){
                 $searchcookie = uri_unescape($searchcookie);
-                if (thaw($searchcookie)) {
-                    @recentSearches = @{thaw($searchcookie)};
+                if (decode_json($searchcookie)) {
+                    @recentSearches = @{decode_json($searchcookie)};
                 }
             }
 
@@ -538,8 +537,8 @@ for (my $i=0;$i<@servers;$i++) {
                 # To a cookie (the user is not logged in)
                 if (!$offset) {
                     push @recentSearches, {
-                                "query_desc" => $query_desc || "unknown",
-                                "query_cgi"  => $query_cgi  || "unknown",
+                                "query_desc" => Encode::decode_utf8($query_desc) || "unknown",
+                                "query_cgi"  => Encode::decode_utf8($query_cgi)  || "unknown",
                                 "time"       => time(),
                                 "total"      => $total
                               };
@@ -550,8 +549,8 @@ for (my $i=0;$i<@servers;$i++) {
                 # Pushing the cookie back
                 $newsearchcookie = $cgi->cookie(
                             -name => 'KohaOpacRecentSearches',
-                            # We uri_escape the whole freezed structure so we're sure we won't have any encoding problems
-                            -value => uri_escape(freeze(\@recentSearches)),
+                            # We uri_escape the whole serialized structure so we're sure we won't have any encoding problems
+                            -value => uri_escape( encode_json(\@recentSearches) ),
                             -expires => ''
                 );
                 $cookie = [$cookie, $newsearchcookie];

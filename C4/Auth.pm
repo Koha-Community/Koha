@@ -20,7 +20,7 @@ package C4::Auth;
 use strict;
 #use warnings; FIXME - Bug 2505
 use Digest::MD5 qw(md5_base64);
-use Storable qw(thaw freeze);
+use JSON qw/encode_json decode_json/;
 use URI::Escape;
 use CGI::Session;
 
@@ -268,7 +268,7 @@ sub get_template_and_user {
 			my $searchcookie = $in->{'query'}->cookie('KohaOpacRecentSearches');
 			if ($searchcookie){
 				$searchcookie = uri_unescape($searchcookie);
-			        my @recentSearches = @{thaw($searchcookie) || []};
+                    my @recentSearches = @{decode_json($searchcookie) || []};
 				if (@recentSearches) {
 					my $sth = $dbh->prepare($SEARCH_HISTORY_INSERT_SQL);
 					$sth->execute( $borrowernumber,
@@ -282,7 +282,8 @@ sub get_template_and_user {
 					# And then, delete the cookie's content
 					my $newsearchcookie = $in->{'query'}->cookie(
 												-name => 'KohaOpacRecentSearches',
-												-value => freeze([]),
+                                                -value => encode_json([]),
+                                                -HttpOnly => 1,
 												-expires => ''
 											 );
 					$cookie = [$cookie, $newsearchcookie];
@@ -320,7 +321,7 @@ sub get_template_and_user {
 		my $searchcookie = $in->{'query'}->cookie('KohaOpacRecentSearches');
 		if ($searchcookie){
 			$searchcookie = uri_unescape($searchcookie);
-		        my @recentSearches = @{thaw($searchcookie) || []};
+                my @recentSearches = @{decode_json($searchcookie) || []};
  	    # We show the link in opac
 			if (@recentSearches) {
 				$template->param(ShowOpacRecentSearchLink => 1);
