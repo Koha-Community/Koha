@@ -22,7 +22,7 @@ use warnings;
 
 use C4::Auth qw(:DEFAULT get_session);
 use CGI;
-use Storable qw(freeze thaw);
+use JSON qw/decode_json encode_json/;
 use C4::Context;
 use C4::Output;
 use C4::Log;
@@ -53,7 +53,7 @@ if (!$loggedinuser) {
 	# Deleting cookie's content 
 	my $recentSearchesCookie = $cgi->cookie(
 	    -name => 'KohaOpacRecentSearches',
-	    -value => freeze([]),
+	    -value => encode_json([]),
 	    -expires => ''
 	    );
 
@@ -67,8 +67,8 @@ if (!$loggedinuser) {
 
 	# Getting the cookie
 	my $searchcookie = $cgi->cookie('KohaOpacRecentSearches');
-	if ($searchcookie && thaw(uri_unescape($searchcookie))) {
-	    my @recentSearches = @{thaw(uri_unescape($searchcookie))};
+	if ($searchcookie && decode_json(uri_unescape($searchcookie))) {
+	    my @recentSearches = @{decode_json(uri_unescape($searchcookie))};
 	    if (@recentSearches) {
 
 		# As the dates are stored as unix timestamps, let's do some formatting
