@@ -355,22 +355,22 @@
 
    <form action="/cgi-bin/koha/acqui/parcel.pl" method="get" name="orderform">
     <table id="receivedt">
-        <thead>
-	    <tr>
-                <th>Basket</th>
-                <th>Basket group</th>
-                <th>Order Line</th>
-                <th>Holds</th>
-                <th>Summary</th>
-                <th>View record</th>
-                <th>Quantity</th>
-                <th>Fund</th>
-                <th>Est cost</th>
-                <th>Actual cost</th>
-                <th>TOTAL</th>
-        <th></th>
-	    </tr>
-    </thead>
+      <thead>
+        <tr>
+          <th>Basket</th>
+          <th>Basket group</th>
+          <th>Order line</th>
+          <th>Holds</th>
+          <th>Summary</th>
+          <th>View record</th>
+          <th>Quantity</th>
+          <th>Fund</th>
+          <th>Est cost</th>
+          <th>Actual cost</th>
+          <th>TOTAL</th>
+          <th></th>
+        </tr>
+      </thead>
     <tfoot>
         [% FOREACH key IN funds.keys.sort %]
             <tr>
@@ -401,46 +401,46 @@
         </tr>
     </tfoot>
     <tbody class="filterclass">
-        [% FOREACH loop_receive IN loop_received %]
+        [% FOREACH order IN loop_received %]
             <tr>
-                <td>[% loop_receive.basketname %] (<a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% loop_receive.basketno %]">[% loop_receive.basketno %]</a>)</td>
+                <td>[% order.basketname %] (<a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% order.basketno %]">[% order.basketno %]</a>)</td>
                 <td>
-                  [% IF loop_order.basketgroupid %]
-                    [% loop_receive.basketgroupname %] (<a href="/cgi-bin/koha/acqui/basketgroup.pl?booksellerid=[% loop_receive.booksellerid %]">[% loop_receive.basketgroupid %]</a>)
+                  [% IF order.basketgroupid %]
+                    [% order.basketgroupname %] (<a href="/cgi-bin/koha/acqui/basketgroup.pl?booksellerid=[% order.booksellerid %]">[% order.basketgroupid %]</a>)
                   [% ELSE %]
                     No basket group
                   [% END %]
                 </td>
-                <td><a href="neworderempty.pl?ordernumber=[% loop_receive.ordernumber %]&amp;booksellerid=[% booksellerid %]">[% loop_receive.ordernumber %]</a></td>
+                <td><a href="neworderempty.pl?ordernumber=[% order.ordernumber %]&amp;booksellerid=[% booksellerid %]">[% order.ordernumber %]</a></td>
                 <td>
-                  [% IF loop_receive.holds > 0 %]
-                    <span class="error"><a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% loop_receive.biblionumber %]">[% loop_receive.holds %]</a></span>
+                  [% IF order.holds > 0 %]
+                    <span class="error"><a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% order.biblionumber %]">[% order.holds %]</a></span>
                   [% ELSE %]
                     0
                   [% END %]
                 </td>
-                <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% loop_receive.biblionumber %]">[% loop_receive.title |html %]</a>
-                [% IF ( loop_receive.author ) %] / [% loop_receive.author %][% END %]
-                [% IF ( loop_receive.isbn ) %] - [% loop_receive.isbn %][% END %]
-                [% IF ( loop_receive.publishercode ) %]<br />Publisher :[% loop_receive.publishercode %][% END %]
-                [% IF ( loop_receive.suggestionid ) %]
+                <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% order.biblionumber %]">[% order.title |html %]</a>
+                [% IF ( order.author ) %] / [% order.author %][% END %]
+                [% IF ( order.isbn ) %] - [% order.isbn %][% END %]
+                [% IF ( order.publishercode ) %]<br />Publisher :[% order.publishercode %][% END %]
+                [% IF ( order.suggestionid ) %]
                     <br/>
-                    Suggested by: [% loop_receive.surnamesuggestedby %][% IF ( loop_receive.firstnamesuggestedby ) %], [% loop_receive.firstnamesuggestedby %] [% END %]
-                    (<a href="/cgi-bin/koha/suggestion/suggestion.pl?suggestionid=[% loop_receive.suggestionid %]&amp;op=show">suggestion #[% loop_receive.suggestionid %]</a>)
+                    Suggested by: [% order.surnamesuggestedby %][% IF ( order.firstnamesuggestedby ) %], [% order.firstnamesuggestedby %] [% END %]
+                    (<a href="/cgi-bin/koha/suggestion/suggestion.pl?suggestionid=[% order.suggestionid %]&amp;op=show">suggestion #[% order.suggestionid %]</a>)
                 [% END %]
                 </td>
-                <td><a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% loop_receive.biblionumber %]" title="MARC" rel="gb_page_center[600,500]">MARC</a> | <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;id=[% loop_receive.biblionumber %]" title="MARC" rel="gb_page_center[600,500]">Card</a></td>
-                <td>[% loop_receive.quantityreceived %]</td>
-                <td>[% loop_receive.budget.budget_name %]</td>
-                <td>[% loop_receive.ecost %]</td>
-                <td>[% loop_receive.unitprice %]</td>
-                <td>[% loop_receive.total %]</td>
+                <td><a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% order.biblionumber %]" title="MARC" rel="gb_page_center[600,500]">MARC</a> | <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;id=[% order.biblionumber %]" title="MARC" rel="gb_page_center[600,500]">Card</a></td>
+                <td>[% order.quantityreceived %]</td>
+                <td>[% order.budget.budget_name %]</td>
+                <td>[% order.ecost %]</td>
+                <td>[% order.unitprice %]</td>
+                <td>[% order.total %]</td>
                 <td>
-                    [% IF (loop_receive.cannot_cancel) %]
+                    [% IF (order.cannot_cancel) %]
                         [% span_title = BLOCK %]
                             Cannot cancel receipt of this order line because it
                             was created from a partial receipt of order line no.
-                            [% loop_receive.parent_ordernumber %], which is
+                            [% order.parent_ordernumber %], which is
                             already received. Try cancelling this one first and
                             retry.
                         [% END %]
@@ -448,7 +448,7 @@
                             Can't cancel receipt
                         </span>
                     [% ELSE %]
-                        <a href="/cgi-bin/koha/acqui/parcel.pl?invoiceid=[% invoiceid %]&op=cancelreceipt&ordernumber=[% loop_receive.ordernumber %]">Cancel receipt</a>
+                        <a href="/cgi-bin/koha/acqui/parcel.pl?invoiceid=[% invoiceid %]&op=cancelreceipt&ordernumber=[% order.ordernumber %]">Cancel receipt</a>
                     [% END %]
                 </td>
             </tr>
