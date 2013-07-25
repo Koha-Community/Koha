@@ -2,7 +2,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 53;
+use Test::More tests => 54;
 use C4::Context;
 use Koha::DateUtils;
 use DateTime::Duration;
@@ -104,8 +104,7 @@ is( scalar( C4::Bookseller::GetBookSeller('') ),
 
 #Test DelBookseller
 my $del = C4::Bookseller::DelBookseller($id_supplier1);
-#FIXME: DelBookSeller always returns undef (if it works or not)
-#is( $del, 1, "DelBookseller returns 1 - 1 supplier has been deleted " );
+is( $del, 1, "DelBookseller returns 1 - 1 supplier has been deleted " );
 is( C4::Bookseller::GetBookSellerFromId($id_supplier1),
     undef, "Supplier1  has been deleted - id_supplier1 doesnt exist anymore" );
 

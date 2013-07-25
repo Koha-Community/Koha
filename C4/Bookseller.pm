@@ -269,8 +269,7 @@ sub DelBookseller {
     my $id  = shift;
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare('DELETE FROM aqbooksellers WHERE id=?');
-    $sth->execute($id);
-    return;
+    return $sth->execute($id);
 }
 
 1;
