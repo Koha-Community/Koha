@@ -2,7 +2,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 55;
+use Test::More tests => 63;
 use C4::Context;
 use Koha::DateUtils;
 use DateTime::Duration;
@@ -473,17 +473,15 @@ isnt( exists( $suppliers{$id_supplier4} ), 1, "Supplier4 hasnt late orders" )
 %suppliers = C4::Bookseller::GetBooksellersWithLateOrders( 4, undef, undef );
 isnt( exists( $suppliers{$id_supplier1} ),
     1, "Supplier1 has late orders but  today  > now() - 4 days" );
-#FIXME: If only the field delay is given, it doen't consider the deliverytime
-#isnt( exists( $suppliers{$id_supplier2} ),
-#    1, "Supplier2 has late orders and $daysago5 <= now() - (4 days+2)" );
+isnt( exists( $suppliers{$id_supplier2} ),
+    1, "Supplier2 has late orders and $daysago5 <= now() - (4 days+2)" );
 ok( exists( $suppliers{$id_supplier3} ),
     "Supplier3 has late orders and $daysago10  <= now() - (4 days+3)" );
 isnt( exists( $suppliers{$id_supplier4} ), 1, "Supplier4 hasnt late orders" );
 
 #Case 3: With $delay = -1
-#FIXME: GetBooksellersWithLateOrders doesn't test if the delay is a positive value
-#is( C4::Bookseller::GetBooksellersWithLateOrders( -1, undef, undef ),
-#    undef, "-1 is a wrong value for a delay" );
+is( C4::Bookseller::GetBooksellersWithLateOrders( -1, undef, undef ),
+    undef, "-1 is a wrong value for a delay" );
 
 #Case 4: With $delay = 0
 #    today  == now-0 -LATE- (if no deliverytime or deliverytime == 0)
@@ -513,9 +511,8 @@ my $daysago4 = output_pref( $dt_today3, 'iso', '24hr', 1 );
 %suppliers =
   C4::Bookseller::GetBooksellersWithLateOrders( undef, $daysago4, undef );
 
-#FIXME: if the deliverytime is undef, it doesn't consider the supplier
-#ok( exists( $suppliers{$id_supplier1} ),
-#    "Supplier1 has late orders and $today >= $daysago4 -deliverytime undef" );
+ok( exists( $suppliers{$id_supplier1} ),
+    "Supplier1 has late orders and $today >= $daysago4 -deliverytime undef" );
 ok( exists( $suppliers{$id_supplier2} ),
     "Supplier2 has late orders and $daysago5 + 2 days >= $daysago4 " );
 isnt( exists( $suppliers{$id_supplier3} ),
@@ -549,13 +546,11 @@ isnt( exists( $suppliers{$id_supplier4} ), 1, "Supplier4 hasnt late orders" );
 #    quantityreceived = quantity -NOT LATE-
 %suppliers =
   C4::Bookseller::GetBooksellersWithLateOrders( undef, undef, $daysago5 );
-#FIXME: if only the estimateddeliverydatefrom is given, it doesn't consider the parameters,
-#but it replaces it today's date
-#isnt( exists( $suppliers{$id_supplier1} ),
-#    1,
-#    "Supplier1 has late orders but $today >= $daysago5 - deliverytime undef" );
-#isnt( exists( $suppliers{$id_supplier2} ),
-#    1, "Supplier2 has late orders but  $daysago5 + 2 days  > $daysago5 " );
+isnt( exists( $suppliers{$id_supplier1} ),
+    1,
+    "Supplier1 has late orders but $today >= $daysago5 - deliverytime undef" );
+isnt( exists( $suppliers{$id_supplier2} ),
+    1, "Supplier2 has late orders but  $daysago5 + 2 days  > $daysago5 " );
 ok( exists( $suppliers{$id_supplier3} ),
     "Supplier3 has late orders and $daysago10 + 3  <= $daysago5" );
 isnt( exists( $suppliers{$id_supplier4} ), 1, "Supplier4 hasnt late orders" );
@@ -613,13 +608,11 @@ isnt( exists( $suppliers{$id_supplier4} ), 1, "Supplier4 hasnt late orders" );
   C4::Bookseller::GetBooksellersWithLateOrders( 5, undef, $daysago5 );
 isnt( exists( $suppliers{$id_supplier1} ),
     1, "Supplier2 has late orders but today > $daysago5 today > now() -5" );
-#FIXME: GetBookSellersWithLateOrders replace estimateddeliverydateto by
-#today's date when no estimateddeliverydatefrom is give
-#isnt(
-#    exists( $suppliers{$id_supplier2} ),
-#    1,
-#"Supplier2 has late orders but $daysago5 + 2 days > $daysago5  and $daysago5 > now() - 2+5 days"
-#);
+isnt(
+    exists( $suppliers{$id_supplier2} ),
+    1,
+"Supplier2 has late orders but $daysago5 + 2 days > $daysago5  and $daysago5 > now() - 2+5 days"
+);
 ok(
     exists( $suppliers{$id_supplier3} ),
 "Supplier2 has late orders and $daysago10 + 3 days <= $daysago5 and $daysago10 <= now() - 3+5 days "
@@ -640,10 +633,9 @@ $basket1info = {
 ModBasket($basket1info);
 %suppliers = C4::Bookseller::GetBooksellersWithLateOrders( undef, $daysago10,
     $daysago10 );
-#FIXME :GetBookSellers doesn't take care if the closedate is ==$estimateddeliverydateto
-# ok( exists( $suppliers{$id_supplier1} ),
-#    "Supplier1 has late orders and $daysago10==$daysago10==$daysago10 " )
-#  ;
+ok( exists( $suppliers{$id_supplier1} ),
+    "Supplier1 has late orders and $daysago10==$daysago10==$daysago10 " )
+  ;
 isnt( exists( $suppliers{$id_supplier2} ),
     1,
     "Supplier2 has late orders but $daysago10==$daysago10<$daysago5+2" );
@@ -655,9 +647,8 @@ isnt( exists( $suppliers{$id_supplier4} ), 1, "Supplier4 hasnt late orders" );
 #Case 12: closedate == $estimateddeliverydatefrom =today-10
 %suppliers =
   C4::Bookseller::GetBooksellersWithLateOrders( undef, $daysago10, undef );
-#FIXME :GetBookSellers doesn't take care if the closedate is ==$estimateddeliverydateto
-#ok( exists( $suppliers{$id_supplier1} ),
-#    "Supplier1 has late orders and $daysago10==$daysago10 " );
+ok( exists( $suppliers{$id_supplier1} ),
+    "Supplier1 has late orders and $daysago10==$daysago10 " );
 
 #Case 13: closedate == $estimateddeliverydateto =today-10
 %suppliers =
