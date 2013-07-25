@@ -247,13 +247,11 @@ $sample_supplier2 = {
     deliverytime  => 2,
 };
 
-#FIXME : ModBookseller always returns undef, even if the id isn't given
-#or doesn't exist
 my $modif1 = C4::Bookseller::ModBookseller();
 is( $modif1, undef,
     "ModBookseller returns undef if no params given - Nothing happened" );
 $modif1 = C4::Bookseller::ModBookseller($sample_supplier2);
-#is( $modif1, 1, "ModBookseller modifies only the supplier2" );
+is( $modif1, 1, "ModBookseller modifies only the supplier2" );
 is( scalar( C4::Bookseller::GetBookSeller('') ),
     $count + 2, "Supplier2 has been modified - Nothing added" );
 

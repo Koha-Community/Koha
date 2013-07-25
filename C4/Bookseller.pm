@@ -226,6 +226,7 @@ C<&ModBookseller> with the result.
 sub ModBookseller {
     my ($data) = @_;
     my $dbh    = C4::Context->dbh;
+    return unless $data->{'id'};
     my $query  = 'UPDATE aqbooksellers
         SET name=?,address1=?,address2=?,address3=?,address4=?,
             postal=?,phone=?,accountnumber=?,fax=?,url=?,contact=?,contpos=?,
@@ -235,7 +236,7 @@ sub ModBookseller {
             discount=?,notes=?,gstrate=?,deliverytime=?
         WHERE id=?';
     my $sth = $dbh->prepare($query);
-    $sth->execute(
+    return $sth->execute(
         $data->{'name'},         $data->{'address1'},
         $data->{'address2'},     $data->{'address3'},
         $data->{'address4'},     $data->{'postal'},
@@ -253,7 +254,6 @@ sub ModBookseller {
         $data->{deliverytime},
         $data->{'id'}
     );
-    return;
 }
 
 =head2 DelBookseller
