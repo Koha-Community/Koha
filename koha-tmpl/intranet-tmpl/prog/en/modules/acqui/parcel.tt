@@ -388,7 +388,12 @@
                     No basket group
                   [% END %]
                 </td>
-                <td><a href="neworderempty.pl?ordernumber=[% order.ordernumber %]&amp;booksellerid=[% booksellerid %]">[% order.ordernumber %]</a></td>
+                <td>
+                  <a href="neworderempty.pl?ordernumber=[% order.ordernumber %]&amp;booksellerid=[% booksellerid %]">[% order.ordernumber %]</a>
+                  [% IF (order.parent_ordernumber && (order.parent_ordernumber != order.ordernumber)) %]
+                    (<a href="neworderempty.pl?ordernumber=[% order.parent_ordernumber %]&amp;booksellerid=[% booksellerid %]" title="Original order line">[% order.parent_ordernumber %]</a>)
+                  [% END %]
+                </td>
                 <td>
                   [% IF order.holds > 0 %]
                     <span class="error"><a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% order.biblionumber %]">[% order.holds %]</a></span>
