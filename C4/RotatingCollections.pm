@@ -99,7 +99,6 @@ sub CreateCollection {
   $sth = $dbh->prepare("INSERT INTO collections ( colId, colTitle, colDesc ) 
                         VALUES ( NULL, ?, ? )");
   $sth->execute( $title, $description ) or return ( 0, 3, $sth->errstr() );
-  $sth->finish;
 
   return 1;
  
@@ -145,7 +144,6 @@ sub UpdateCollection {
                         colTitle = ?, colDesc = ? 
                         WHERE colId = ?");
   $sth->execute( $title, $description, $colId ) or return ( 0, 4, $sth->errstr() );
-  $sth->finish;
   
   return 1;
   
@@ -180,7 +178,6 @@ sub DeleteCollection {
 
   $sth = $dbh->prepare("DELETE FROM collections WHERE colId = ?");
   $sth->execute( $colId ) or return ( 0, 4, $sth->errstr() );
-  $sth->finish;
 
   return 1;
 }
@@ -210,8 +207,6 @@ sub GetCollections {
   while ( my $row = $sth->fetchrow_hashref ) {
     push( @results , $row );
   }
-  
-  $sth->finish;
   
   return \@results;
 }
@@ -259,8 +254,6 @@ sub GetItemsInCollection {
     push( @results , $row );
   }
   
-  $sth->finish;
-  
   return \@results;
 }
 
@@ -287,8 +280,6 @@ sub GetCollection {
   $sth->execute( $colId ) or return 0;
     
   my $row = $sth->fetchrow_hashref;
-  
-  $sth->finish;
   
   return (
       $$row{'colId'},
@@ -338,7 +329,6 @@ sub AddItemToCollection {
   $sth = $dbh->prepare("INSERT INTO collections_tracking ( ctId, colId, itemnumber ) 
                         VALUES ( NULL, ?, ? )");
   $sth->execute( $colId, $itemnumber ) or return ( 0, 3, $sth->errstr() );
-  $sth->finish;
 
   return 1;
   
@@ -379,7 +369,6 @@ sub RemoveItemFromCollection {
   $sth = $dbh->prepare("DELETE FROM collections_tracking 
                         WHERE itemnumber = ?");
   $sth->execute( $itemnumber ) or return ( 0, 3, $sth->errstr() );
-  $sth->finish;
 
   return 1;
 }
@@ -420,7 +409,6 @@ sub TransferCollection {
                         colBranchcode = ? 
                         WHERE colId = ?");
   $sth->execute( $colBranchcode, $colId ) or return ( 0, 4, $sth->errstr() );
-  $sth->finish;
   
   $sth = $dbh->prepare("SELECT barcode FROM items, collections_tracking 
                         WHERE items.itemnumber = collections_tracking.itemnumber
@@ -430,9 +418,7 @@ sub TransferCollection {
   while ( my $item = $sth->fetchrow_hashref ) {
     my ( $dotransfer, $messages, $iteminformation ) = transferbook( $colBranchcode, $item->{'barcode'}, my $ignore_reserves = 1);
   }
-  
 
-  
   return 1;
   
 }
@@ -460,8 +446,6 @@ sub GetCollectionItemBranches {
   $sth->execute( $itemnumber );
     
   my $row = $sth->fetchrow_hashref;
-  
-  $sth->finish;
   
   return (
       $$row{'holdingbranch'},
@@ -505,8 +489,6 @@ sub isItemInAnyCollection {
   my $row = $sth->fetchrow_hashref;
         
   $itemnumber = $row->{itemnumber};
-  $sth->finish;
-            
   if ( $itemnumber ) {
     return 1;
   } else {
