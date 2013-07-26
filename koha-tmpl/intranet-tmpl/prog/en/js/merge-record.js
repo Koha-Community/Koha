@@ -79,8 +79,9 @@ function toggleField(pField) {
                     // If not, we add the subfield to the first matching field
                     var where = 0;
                     $("#resultul li span.field").each(function() {
-                        if (where == 0 && $(this).text() == field) {
+                        if ($(this).text() == field) {
                             where = this;
+                            return false; // break each()
                         }
                     });
 
@@ -102,14 +103,19 @@ function toggleField(pField) {
             } else {
                 // If we are a field
                 var where = 0;
-                // Find where to add the field
+                // Find a greater field to add before
                 $("#resultul li span.field").each(function() {
-                    if (where == 0 && $(this).text() > field) {
+                    if ($(this).text() > field) {
                         where = this;
+                        return false; // break each()
                     }
                 });
-
-                $(where).parent().before(clone);
+                if (where) {
+                    $(where).parent().before(clone);
+                } else {
+                    // No greater field, add to the end
+                    $("#resultul").append(clone);
+                }
             }
         }
     } else {
