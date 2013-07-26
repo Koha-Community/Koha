@@ -1,8 +1,11 @@
 [% PROCESS 'merge-record.inc' %]
+
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Cataloging &rsaquo; Merging records</title>
 [% INCLUDE 'greybox.inc' %]
 [% INCLUDE 'doc-head-close.inc' %]
+<script type="text/javascript" src="[% themelang %]/js/merge-record.js"></script>
+[% INCLUDE 'merge-record-strings.inc' %]
 <style type="text/css">
 div.record ul, div.record li { float:none; display:block; }
 div#result { margin-top: 1em; }
@@ -23,7 +26,9 @@ $(document).ready(function(){
     $.getJSON("/cgi-bin/koha/cataloguing/merge_ajax.pl", {frameworkcode : "[% framework %]" }, function(json) {
         tagslib = json;
     });
-    [% PROCESS mergejs %]
+
+    // Creating tabs
+    $("#tabs").tabs();
 });
 
 
