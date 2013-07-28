@@ -46,7 +46,9 @@ BEGIN {
     $debug       = $ENV{DEBUG};
     @ISA         = qw(Exporter);
     @EXPORT      = qw(&checkauth &get_template_and_user &haspermission &get_user_subpermissions);
-    @EXPORT_OK   = qw(&check_api_auth &get_session &check_cookie_auth &checkpw &get_all_subpermissions &get_user_subpermissions);
+    @EXPORT_OK   = qw(&check_api_auth &get_session &check_cookie_auth &checkpw &get_all_subpermissions &get_user_subpermissions
+                      ParseSearchHistoryCookie
+                   );
     %EXPORT_TAGS = ( EditPermissions => [qw(get_all_subpermissions get_user_subpermissions)] );
     $ldap        = C4::Context->config('useldapserver') || 0;
     $cas         = C4::Context->preference('casAuthentication');
@@ -249,10 +251,7 @@ sub get_template_and_user {
 
 			# And if there's a cookie with searches performed when the user was not logged in, 
 			# we add them to the logged-in search history
-			my $searchcookie = $in->{'query'}->cookie('KohaOpacRecentSearches');
-			if ($searchcookie){
-				$searchcookie = uri_unescape($searchcookie);
-                    my @recentSearches = @{decode_json($searchcookie) || []};
+            my @recentSearches = ParseSearchHistoryCookie($in->{'query'});
 				if (@recentSearches) {
 					my $sth = $dbh->prepare($SEARCH_HISTORY_INSERT_SQL);
 					$sth->execute( $borrowernumber,
@@ -274,7 +273,6 @@ sub get_template_and_user {
 				}
 			}
 		}
-    }
 	else {	# if this is an anonymous session, setup to display public lists...
 
         $template->param( sessionID        => $sessionID );
@@ -288,16 +286,11 @@ sub get_template_and_user {
  	# Anonymous opac search history
  	# If opac search history is enabled and at least one search has already been performed
  	if (C4::Context->preference('EnableOpacSearchHistory')) {
-		my $searchcookie = $in->{'query'}->cookie('KohaOpacRecentSearches');
-		if ($searchcookie){
-			$searchcookie = uri_unescape($searchcookie);
-                my @recentSearches = @{decode_json($searchcookie) || []};
- 	    # We show the link in opac
+        my @recentSearches = ParseSearchHistoryCookie($in->{'query'}); 
 			if (@recentSearches) {
 				$template->param(ShowOpacRecentSearchLink => 1);
 			}
 	    }
- 	}
 
     if(C4::Context->preference('dateformat')){
         if(C4::Context->preference('dateformat') eq "metric"){
@@ -1686,6 +1679,15 @@ sub getborrowernumber {
     return 0;
 }
 
+sub ParseSearchHistoryCookie {
+    my $input = shift;
+    my $search_cookie = $input->cookie('KohaOpacRecentSearches');
+    return () unless $search_cookie;
+    my $obj = eval { decode_json(uri_unescape($search_cookie)) };
+    return () unless defined $obj;
+    return () unless ref $obj eq 'ARRAY';
+    return @{ $obj };
+}
 
 END { }    # module clean-up code here (global destructor)
 1;
