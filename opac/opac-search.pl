@@ -42,7 +42,7 @@ for ( $searchengine ) {
 }
 
 use C4::Output;
-use C4::Auth qw(:DEFAULT get_session);
+use C4::Auth qw(:DEFAULT get_session ParseSearchHistoryCookie);
 use C4::Languages qw(getAllLanguages);
 use C4::Search;
 use C4::Biblio;  # GetBiblioData
@@ -619,16 +619,7 @@ for (my $i=0;$i<@servers;$i++) {
         # Opac search history
         my $newsearchcookie;
         if (C4::Context->preference('EnableOpacSearchHistory')) {
-            my @recentSearches;
-
-            # Getting the (maybe) already sent cookie
-            my $searchcookie = $cgi->cookie('KohaOpacRecentSearches');
-            if ($searchcookie){
-                $searchcookie = uri_unescape($searchcookie);
-                if (decode_json($searchcookie)) {
-                    @recentSearches = @{decode_json($searchcookie)};
-                }
-            }
+            my @recentSearches = ParseSearchHistoryCookie($cgi);
 
             # Adding the new search if needed
             my $path_info = $cgi->url(-path_info=>1);
