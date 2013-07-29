@@ -6,7 +6,7 @@ jQuery.extend({
 			//create frame
             var frameId = 'jUploadFrame' + id;
             
-            if(window.ActiveXObject) {
+            try {
                 var io = document.createElement('<iframe id="' + frameId + '" name="' + frameId + '" />');
                 if(typeof uri== 'boolean'){
                     io.src = 'javascript:false';
@@ -15,7 +15,7 @@ jQuery.extend({
                     io.src = uri;
                 }
             }
-            else {
+            catch(e) {
                 var io = document.createElement('iframe');
                 io.id = frameId;
                 io.name = frameId;
