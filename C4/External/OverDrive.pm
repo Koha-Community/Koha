@@ -78,6 +78,8 @@ sub IsOverDriveEnabled {
     );
 }
 
+=over
+
 =item GetOverDriveToken
 
 Fetches an OAuth2 auth token for the OverDrive API, reusing an existing token in

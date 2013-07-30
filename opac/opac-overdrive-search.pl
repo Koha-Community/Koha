@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Copyright 2009 BibLibre SARL
+# Copyright 2013 ByWater
 #
 # This file is part of Koha.
 #
