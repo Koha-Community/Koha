@@ -17,7 +17,7 @@
 
   <refnamediv>
     <refname>koha-mysql</refname>
-    <refpurpose>Provide an interactive mysql shell set up for the specified koha instance.</refpurpose>
+    <refpurpose>Provide an interactive mysql shell set up for the specified Koha instance.</refpurpose>
     <refclass>UNIX/Linux</refclass>
   </refnamediv>
 
@@ -28,7 +28,24 @@
   </refsynopsisdiv>
 
   <refsect1><title>Description</title>
-  <para>Provide an interactive mysql shell set up for the specified koha instance.</para>
+  <para>Provide an interactive mysql shell set up for the specified Koha instance.</para>
+  </refsect1>
+
+  <refsect1><title>Example usage</title>
+    <variablelist>
+      <varlistentry>
+        <term>Send an SQL query to MySQL</term>
+        <listitem>
+          <para>"Some SQL query" | <command>koha-mysql</command> <arg choice="req" rep="norepeat"><replaceable>instancename</replaceable></arg></para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>Load a database dump (e.g. one produced by mysqldump) into the database of the given instance</term>
+        <listitem>
+          <para><command>koha-mysql</command> <arg choice="req" rep="norepeat"><replaceable>instancename</replaceable></arg> &lt; /path/to/mysqldump.sql</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
   </refsect1>
   
   <refsect1><title>See also</title>
