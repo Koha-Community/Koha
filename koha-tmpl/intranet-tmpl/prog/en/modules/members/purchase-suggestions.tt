@@ -43,9 +43,7 @@
                 <h2>Purchase suggestions</h2>
 
                 <div id="toolbar">
-                    <ul class="toolbar">
-                        <li><a id="newsuggestion" href="/cgi-bin/koha/suggestion/suggestion.pl?op=add&suggestedby=[% borrowernumber %]&redirect=purchase_suggestions&borrowernumber=[% borrowernumber %]">New purchase suggestion</a></li>
-                    </ul>
+                    <a class="btn" id="newsuggestion" href="/cgi-bin/koha/suggestion/suggestion.pl?op=add&suggestedby=[% borrowernumber %]&redirect=purchase_suggestions&borrowernumber=[% borrowernumber %]"><i class="icon-plus"></i> New purchase suggestion</a>
                 </div>
 
                 <table id="suggestions">
@@ -62,7 +60,15 @@
                         [% FOREACH s IN suggestions %]
                             <tr>
                                 <td>
-                                    <p><strong>[% s.title |html %]</strong></p>
+                                    <p>
+                                        <strong>
+                                            [% IF ( CAN_user_catalogue ) %]
+                                                <a href="/cgi-bin/koha/suggestion/suggestion.pl?suggestionid=[% s.suggestionid %]&op=show">[% s.title |html %]</a>
+                                            [% ELSE %]
+                                                [% s.title |html %]
+                                            [% END %]
+                                        </strong>
+                                    </p>
                                     <p>
                                         [% IF ( s.author ) %][% s.author %],[% END %]
                                         [% IF ( s.copyrightdate ) %] - [% s.copyrightdate %],[% END %]
