@@ -3,21 +3,35 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions  &rsaquo;
     [% IF ( op_save ) %]
-        [% IF ( suggestionid) %]
-            [% IF ( op == 'show' ) %]
-                Show purchase suggestion #[% suggestionid %]
-            [% ELSE %]
-                Edit purchase suggestion #[% suggestionid %]
-            [% END %]
+        [% IF ( suggestionid ) %]
+            Suggestions &rsaquo;  Edit suggestion #[% suggestionid %]
         [% ELSE %]
-            Enter a new purchase suggestion
+            Suggestions &rsaquo; Add suggestion
         [% END %]
+    [% ELSIF ( op == 'show' ) %]
+           Suggestions &rsaquo; Show suggestion #[% suggestionid %]
     [% ELSE %]
         Suggestions management
     [% END %]
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
+[% IF ( op == 'show' ) %]
+<script type="text/javascript">
+    // <![CDATA[
+    $(document).ready(function(){
+        $("#deletesuggestion").on("click",function(){
+            var is_confirmed = confirm(_("Are you sure you want to delete this suggestion?"));
+            if (is_confirmed) {
+                return true;
+            } else {
+                return false;
+            }
+        });
+    });
+    // ]]>
+</script>
+[% END %]
 [% IF ( op_else ) %]
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.dataTables.min.js"></script>
@@ -135,12 +149,13 @@ $(document).ready(function() {
 <style type="text/css">
 h4.local_collapse a { font-size : 80%; text-decoration: none; } fieldset.brief ol { display : none; }
 .overlay { top: 180px; left: 50%; position: absolute; margin-left: -100px; width: 200px; text-align: center; display: none; margin-top: -10px; background: #eeffd4; padding: .5em; color: #000; } .note { -moz-border-radius: 3px; border-radius:3px; background: transparent url("[% interface %]/[% theme %]/img/famfamfam/silk/comment.png") top left no-repeat; padding : 1px 3px 1px 18px; font-size : 90%; }
-</style>[% ELSE %]
-<script type="text/javascript">
-// <![CDATA[
-$(document).ready(function() { calcNewsuggTotal(); });
-// ]]>
-</script>
+</style>[% END %]
+[% IF ( op_save )  %]
+    <script type="text/javascript">
+        // <![CDATA[
+        $(document).ready(function() { calcNewsuggTotal(); });
+        // ]]>
+    </script>
 [% END %]
 <script type="text/javascript" src="[% themelang %]/js/acq.js"></script>
 </head>
@@ -150,12 +165,13 @@ $(document).ready(function() { calcNewsuggTotal(); });
 <div id="breadcrumbs">
     <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo;
     [% IF ( op_save ) %]
-        <a href="/cgi-bin/koha/suggestion/suggestion.pl">Suggestions</a> &rsaquo;
-        [% IF ( op == 'show' ) %]
-            Show suggestion #[% suggestionid %]
+        [% IF ( suggestionid ) %]
+            <a href="/cgi-bin/koha/suggestion/suggestion.pl">Suggestions</a> &rsaquo;  Edit suggestion #[% suggestionid %]
         [% ELSE %]
-            Suggestion edit #[% suggestionid %]
+            <a href="/cgi-bin/koha/suggestion/suggestion.pl">Suggestions</a> &rsaquo; Add suggestion
         [% END %]
+    [% ELSIF ( op == 'show' ) %]
+           <a href="/cgi-bin/koha/suggestion/suggestion.pl">Suggestions</a> &rsaquo; Show suggestion #[% suggestionid %]
     [% ELSE %]
         Suggestions management
     [% END %]
@@ -166,6 +182,11 @@ $(document).ready(function() { calcNewsuggTotal(); });
 <div id="bd">
     <div id="yui-main">
     <div class="yui-b">
+
+    <div id="toolbar" class="btn-toolbar">
+        <a class="btn btn-small" id="editsuggestion" href="suggestion.pl?op=edit&amp;suggestionid=[% suggestionid %]"><i class="icon-pencil"></i> Edit</a>
+        <a class="btn btn-small" id="deletesuggestion" href="suggestion.pl?op=delete&amp;edit_field=[% suggestionid %]"><i class="icon-remove"></i> Delete</a>
+    </div>
 
     <fieldset class="rows">
       <legend>Bibliographic information</legend>
@@ -265,7 +286,9 @@ $(document).ready(function() { calcNewsuggTotal(); });
       </ol>
     </fieldset>
 
-    <a class="cancel" href="suggestion.pl">&lt;&lt;Back to the list</a>
+    <fieldset class="action">
+        <a href="suggestion.pl">&lt;&lt; Back to suggestions</a>
+    </fieldset>
 
     </div>
     </div>
@@ -310,7 +333,7 @@ $(document).ready(function() { calcNewsuggTotal(); });
        <ol>
             [% IF ( suggestionid ) %]
                 <li>
-                    <label for="status">Status:</label>
+                    <label for="STATUS">Status:</label>
                     <select id="STATUS" name="STATUS">
                         <option value="">No Status</option>
 
@@ -386,6 +409,7 @@ $(document).ready(function() { calcNewsuggTotal(); });
 			<input type="text" size="10" id="quantity" name="quantity" value="[% quantity %]" onchange="calcNewsuggTotal();" />
                 </li><li><label for="currency">Currency:</label>
 		        [% FOREACH loop_currenc IN loop_currency %]
+                    <input type="hidden" value="[% loop_currenc.rate %]" id="currency_rate_[% loop_currenc.currcode %]" name="currency_rate_[% loop_currenc.currcode %]" />
 		            <input type="hidden" id="[% loop_currenc.currcode %]" name="[% loop_currenc.currcode %]" value="[% loop_currenc.rate %]" />
 		        [% END %]
             <select name="currency" id="currency" onchange="calcNewsuggTotal();">
@@ -398,7 +422,7 @@ $(document).ready(function() { calcNewsuggTotal(); });
 			<input type="text" readonly="readonly" id="total" name="total" size="10" value="[% total %]"/>
                 </li></ol>
     </fieldset><input type="hidden" id="returnsuggested" name="returnsuggested" value="[% IF ( returnsuggestedby ) %][% returnsuggestedby %][% ELSE %]noone[% END %]"/>
-    <fieldset class="action"><input type="hidden" name="op" value="[% op %]" />[% IF ( suggestionid ) %]<input type="submit" value="Save" /> <a class="cancel" href="[% IF ( returnsuggestedby ) %]/cgi-bin/koha/members/moremember.pl?borrowernumber=[% returnsuggestedby %]#suggestions[% ELSE %]suggestion.pl[% END %]">Cancel</a>[% ELSE %]<input type="submit" value="Submit Your Suggestion" /> <a class="cancel" href="suggestion.pl">Cancel</a>[% END %]
+    <fieldset class="action"><input type="hidden" name="op" value="[% op %]" />[% IF ( suggestionid ) %]<input type="submit" value="Save" /> <a class="cancel" href="[% IF ( returnsuggestedby ) %]/cgi-bin/koha/members/moremember.pl?borrowernumber=[% returnsuggestedby %]#suggestions[% ELSE %]suggestion.pl[% END %]">Cancel</a>[% ELSE %]<input type="submit" value="Submit your suggestion" /> <a class="cancel" href="suggestion.pl">Cancel</a>[% END %]
     </fieldset>
     </form>
 [% END %]

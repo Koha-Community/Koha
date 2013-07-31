@@ -660,13 +660,12 @@ function updateCosts(){
 
 function calcNewsuggTotal(){
     //collect values
-    var quantity = new Number(document.getElementById('quantity').value);
-//    var currency = f.currency.value;
-    var currcode = new String(document.getElementById('currency').value);
-    var price   =  new Number(document.getElementById('price').value);
-    var exchangerate =  new Number(document.getElementById('currency_rate_'+currcode).value);
+    var quantity = Number(document.getElementById('quantity').value);
+    var currcode = String(document.getElementById('currency').value);
+    var price   =  Number(document.getElementById('price').value);
+    var exchangerate =  Number(document.getElementById('currency_rate_'+currcode).value);
 
-    var total =  new Number(quantity*price*exchangerate);
+    var total =  Number(quantity*price*exchangerate);
 
     document.getElementById('total').value = total.toFixed(2);
     document.getElementById('price').value =  price.toFixed(2);
