@@ -106,11 +106,6 @@ SKIP:
                 cmp_deeply ($quote, $expected_quote, "Got a quote based on id.") or
                     diag('Be sure to run this test on a clean install of sample data.');
 
-# test random quote retrieval
-
-                $quote = GetDailyQuote('random'=>1);
-                ok ($quote, "Got a random quote.");
-
 # test quote retrieval based on today's date
 
                 my $query = 'UPDATE quotes SET timestamp = ? WHERE id = ?';
@@ -125,6 +120,11 @@ SKIP:
                 $quote = GetDailyQuote(); # this is the "default" mode of selection
                 cmp_deeply ($quote, $expected_quote, "Got a quote based on today's date.") or
                     diag('Be sure to run this test on a clean install of sample data.');
+
+# test random quote retrieval
+
+                $quote = GetDailyQuote('random'=>1);
+                ok ($quote, "Got a random quote.");
             }
         };
 }
