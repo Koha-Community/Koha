@@ -658,7 +658,8 @@ sub parse_letter {
         $tables{'branches'} = $p;
     }
 
-    my $currency_format = GetCurrency()->{currency};
+    my $currencies = GetCurrency();
+    my $currency_format = $currencies->{currency} if defined($currencies);
 
     my @item_tables;
     if ( my $i = $params->{'items'} ) {
