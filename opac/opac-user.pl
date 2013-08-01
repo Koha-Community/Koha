@@ -176,7 +176,7 @@ if ($issues){
             }
         }
         $issue->{'charges'} = $charges;
-
+        $issue->{'subtitle'} = GetRecordValue('subtitle', GetMarcBiblio($issue->{'biblionumber'}), GetFrameworkCode($issue->{'biblionumber'}));
         # check if item is renewable
         my ($status,$renewerror) = CanBookBeRenewed( $borrowernumber, $issue->{'itemnumber'} );
         ($issue->{'renewcount'},$issue->{'renewsallowed'},$issue->{'renewsleft'}) = GetRenewCount($borrowernumber, $issue->{'itemnumber'});
@@ -256,7 +256,7 @@ foreach my $res (@reserves) {
     if ( $res->{'expirationdate'} eq '0000-00-00' ) {
       $res->{'expirationdate'} = '';
     }
-
+    $res->{'subtitle'} = GetRecordValue('subtitle', GetMarcBiblio($res->{'biblionumber'}), GetFrameworkCode($res->{'biblionumber'}));
     $res->{'waiting'} = 1 if $res->{'found'} eq 'W';
     $res->{'branch'} = $branches->{ $res->{'branchcode'} }->{'branchname'};
     my $biblioData = GetBiblioData($res->{'biblionumber'});
