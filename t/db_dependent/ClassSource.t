@@ -61,7 +61,7 @@ is_deeply(
         description     => 'description1',
         sort_routine    => 'routine1'
     },
-    "GetClassSort gives sortrule1's informations"
+    "GetClassSort gives sortrule1's information"
 );
 is_deeply( GetClassSortRule(), undef,
     "GetClassSort without params returns undef" );
@@ -84,7 +84,7 @@ is_deeply(
             sort_routine    => 'routine2'
         }
     },
-    "GetClassSortRules returns the id off all SortRule and there informations"
+    "GetClassSortRules returns the id off all SortRule and their information"
 );
 
 #Test GetClassSource
@@ -97,7 +97,7 @@ is_deeply(
         used            => 1,
         class_sort_rule => 'sortrule1'
     },
-    "GetClassSource gives source1's informations"
+    "GetClassSource gives source1's information"
 );
 is_deeply( GetClassSource(), undef,
     "GetClassSource without params returns undef" );
@@ -122,7 +122,7 @@ is_deeply(
             class_sort_rule => 'sortrule1'
         }
     },
-    "GetClassSources returns the id off all sources and there informations"
+    "GetClassSources returns the id off all sources and their information"
 );
 
 #Test GetClassSort
@@ -156,7 +156,7 @@ is( scalar( keys(GetClassSortRules) ),
     1, "Without params DelClassSortRule doesn't do anything" );
 DelClassSortRule('doesnt_exist');
 is( scalar( keys(GetClassSortRules) ),
-    1, "Without wrong id, DelClassSortRule doesn't do anything" );
+    1, "With wrong id, DelClassSortRule doesn't do anything" );
 
 #Test DelClassSource
 DelClassSource('source2');
@@ -166,7 +166,7 @@ is( scalar( keys(GetClassSources) ),
     1, "Without params DelClassSource doesn't do anything" );
 DelClassSource('doesnt_exist');
 is( scalar( keys(GetClassSources) ),
-    1, "Without wrong id, DelClassSource doesn't do anything" );
+    1, "With wrong id, DelClassSource doesn't do anything" );
 
 #Test ModClassSortRule
 ModClassSortRule( 'sortrule1', 'description1_modified', 'routine1_modified' );
