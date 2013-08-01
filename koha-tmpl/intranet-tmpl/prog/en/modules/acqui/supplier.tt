@@ -16,11 +16,12 @@
             <input type="text" size="40" id="contact_email[% contact.id %]" name="contact_email" value="[% contact.email %]" /></li>
         <li><label for="contact_notes[% contact.id %]">Notes: </label>
             <textarea id="contact_notes[% contact.id %]" name="contact_notes" cols="40" rows="4">[% contnotes %]</textarea></li>
-        [% IF contact.id %]<li><button class="btn" class="delete-contact"><i class="icon-remove"></i>Delete contact</li>[% END %]
+        [% IF contact.id %]<li><button class="btn" class="delete-contact"><i class="icon-remove"></i> Delete contact</li>[% END %]
     </ol>
 [% END %]
+
 [% BLOCK show_contact %]
-    <p><span class="label">Contact name: </span>[% contact.name %]</p>
+    <h3>[% contact.name %]</h3>
     <p><span class="label">Position: </span>[% contact.position %]</p>
     <p><span class="label">Phone: </span>[% contact.phone %]</p>
     <p><span class="label">Alternative phone: </span>[% contact.altphone %]</p>
@@ -32,6 +33,7 @@
         <p><span class="label">Notes: </span>[% contact.notes %]</p>
     [% END %]
 [% END %]
+
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Vendor [% bookselname %]</title>
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
@@ -132,7 +134,7 @@ function delete_contact() {
                     [% INCLUDE edit_contact %]
                 </fieldset>
             [% END %]
-            <button id="add-contact" class="btn"><i class="icon-plus"></i>Add contact</button>
+            <button id="add-contact" class="btn"><i class="icon-plus"></i> Add another contact</button>
         </fieldset>
     </div>
         <div class="yui-g">
@@ -242,41 +244,45 @@ function delete_contact() {
                 [% IF ( accountnumber ) %]
                     <p><span class="label">Account number: </span>[% accountnumber %]</p>
                 [% END %]
+
+            <div id="supplier-ordering-information">
+            <h2>Ordering information</h2>
+                <p><strong>Vendor is: </strong>
+                        [% IF ( active ) %]
+                            Active
+                        [% ELSE %]
+                            Inactive
+                        [% END %]</p>
+                <p><strong>List prices are: </strong>[% listprice %]</p>
+                <p><strong>Invoice prices are: </strong>[% invoiceprice %]</p>
+                [% IF ( gstrate ) %]<p><strong>Tax number registered: </strong>
+                        [% IF ( gstreg ) %]Yes[% ELSE %]No[% END %]</p>
+                <p><strong>List item price includes tax: </strong>
+                        [% IF ( listincgst ) %]Yes[% ELSE %]No[% END %]</p>
+                <p><strong>Invoice item price includes tax: </strong>
+                        [% IF ( invoiceincgst ) %]Yes[% ELSE %]No[% END %]</p>[% END %]
+                <p><strong>Discount: </strong>
+                    [% discount | format("%.1f") %] %</p>
+                <p><strong>Tax rate: </strong>
+                    [% 0 + gstrate * 100 | format("%.1f") %] %</p>
+                [% IF deliverytime.defined %]
+                    <p><strong>Delivery time: </strong>
+                        [% deliverytime %] days</p>
+                [% END %]
+                [% IF ( notes ) %]<p><strong>Notes: </strong>
+                    [% notes %]</p>[% END %]
             </div>
-            [% FOREACH contact IN contacts %]
-                <div class="supplier-contact-details yui-u">
-                    <h2>Contact details</h2>
+            </div>
+
+            <div class="supplier-contact-details yui-u">
+                <h2>Contact</h2>
+                [% FOREACH contact IN contacts %]
                     [% INCLUDE show_contact %]
-                </div>
-            [% END %]
+                [% END %]
+            </div>
+
         </div>
-        <div id="supplier-ordering-information" class="yui-g">
-        <h3>Ordering information</h3>
-            <p><strong>Vendor is: </strong>
-                    [% IF ( active ) %]
-                        Active
-                    [% ELSE %]
-                        Inactive
-                    [% END %]</p>
-            <p><strong>List prices are: </strong>[% listprice %]</p>
-            <p><strong>Invoice prices are: </strong>[% invoiceprice %]</p>
-            [% IF ( gstrate ) %]<p><strong>Tax number registered: </strong>
-                    [% IF ( gstreg ) %]Yes[% ELSE %]No[% END %]</p>
-            <p><strong>List item price includes tax: </strong>
-                    [% IF ( listincgst ) %]Yes[% ELSE %]No[% END %]</p>
-            <p><strong>Invoice item price includes tax: </strong>
-                    [% IF ( invoiceincgst ) %]Yes[% ELSE %]No[% END %]</p>[% END %]
-            <p><strong>Discount: </strong>
-                [% discount | format("%.1f") %] %</p>
-            <p><strong>Tax rate: </strong>
-                [% 0 + gstrate * 100 | format("%.1f") %] %</p>
-            [% IF deliverytime.defined %]
-                <p><strong>Delivery time: </strong>
-                    [% deliverytime %] days</p>
-            [% END %]
-            [% IF ( notes ) %]<p><strong>Notes: </strong>
-                [% notes %]</p>[% END %]
-        </div>
+
         [% IF ( contracts ) %]
             <div id="supplier-contracts" class="yui-g">
                 <h2>Contract(s)</h2>
