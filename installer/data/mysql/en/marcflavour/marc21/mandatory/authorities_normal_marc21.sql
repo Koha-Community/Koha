@@ -235,9 +235,7 @@ INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `l
 		('', '683', 'APPLICATION HISTORY NOTE', 'APPLICATION HISTORY NOTE', 1, 0, NULL),
 		('', '684', 'AUXILIARY INSTRUCTION NOTE [CLASSIFICATION FORMAT]', 'AUXILIARY INSTRUCTION NOTE [CLASSIFICATION FORMAT]', 1, 0, NULL),
 		('', '685', 'NOTE--SOURCE DATA FOUND (SUBJECTS) [OBSOLETE, CAN/MARC ONLY]', 'NOTE--SOURCE DATA FOUND (SUBJECTS) [OBSOLETE, CAN/MARC ONLY]', 1, 0, NULL),
-		('', '68a', 'HISTORY NOTE [CLASSIFICATION FORMAT]', 'HISTORY NOTE [CLASSIFICATION FORMAT]', 1, 0, NULL),
 		('', '686', 'NOTE--SOURCE DATA NOT FOUND (SUBJECTS) [OBSOLETE, CAN/MARC ONLY]', 'NOTE--SOURCE DATA NOT FOUND (SUBJECTS) [OBSOLETE, CAN/MARC ONLY]', 1, 0, NULL),
-		('', '68b', 'RELATIONSHIP TO SOURCE NOTE [CLASSIFICATION FORMAT]', 'RELATIONSHIP TO SOURCE NOTE [CLASSIFICATION FORMAT]', 1, 0, NULL),
 		('', '687', 'NOTE--USAGE (SUBJECTS) [OBSOLETE, CAN/MARC ONLY]', 'NOTE--USAGE (SUBJECTS) [OBSOLETE, CAN/MARC ONLY]', 1, 0, NULL),
 		('', '688', 'APPLICATION HISTORY NOTE', 'APPLICATION HISTORY NOTE', 1, 0, NULL),
 		('', '700', 'ESTABLISHED HEADING LINKING ENTRY--PERSONAL NAME', 'ESTABLISHED HEADING LINKING ENTRY--PERSONAL NAME', 1, 0, NULL),
@@ -1510,32 +1508,8 @@ INSERT INTO `auth_subfield_structure` (`authtypecode`, `tagfield`, `tagsubfield`
 		('', '684', '8', 'Field link and sequence number', 'Field link and sequence number', 0, 0, 6, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '685', 'a', 'Source consulted and information found', 'Source consulted and information found', 1, 0, 6, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '685', '6', 'Linkage', 'Linkage', 0, 0, 6, NULL, NULL, NULL, 0, 0, '', '', ''),
-		('', '68a', 'a', 'New number--Single number or beginning number of span', 'New number--Single number or beginning number of span', 1, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
-		('', '68a', 'b', 'Previous number--Single number or beginning number of span', 'Previous number--Single number or beginning number of span', 1, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
-		('', '68a', 'c', 'Classification number--ending number of span', 'Classification number--ending number of span', 1, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
-		('', '68a', 'd', 'Date of implementation of authoritative agency', 'Date of implementation of authoritative agency', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
-		('', '68a', 'e', 'Local implementation date', 'Local implementation date', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
-		('', '68a', 'f', 'Title and publication date', 'Title and publication date', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
-		('', '68a', 'i', 'Explanatory text', 'Explanatory text', 1, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
-		('', '68a', 't', 'Topic', 'Topic', 1, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
-		('', '68a', 'z', 'Table identification', 'Table identification', 1, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
-		('', '68a', '2', 'Edition number', 'Edition number', 1, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
-		('', '68a', '5', 'Institution to which field applies', 'Institution to which field applies', 1, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
-		('', '68a', '6', 'Linkage', 'Linkage', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
-		('', '68a', '8', 'Field link and sequence number', 'Field link and sequence number', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '686', 'a', 'Source consulted and information found', 'Source consulted and information found', 1, 0, 6, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '686', '6', 'Linkage', 'Linkage', 0, 0, 6, NULL, NULL, NULL, 0, 0, '', '', ''),
-		('', '68b', 'a', 'Number in edition described in field 084--Single number or beginning number of span', 'Number in edition described in field 084--Single number or beginning number of span', 1, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
-		('', '68b', 'b', 'Number in primary source edition--Single number or beginning number of span', 'Number in primary source edition--Single number or beginning number of span', 1, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
-		('', '68b', 'c', 'Ending number of span', 'Ending number of span', 1, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
-		('', '68b', 'i', 'Explanatory text', 'Explanatory text', 1, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
-		('', '68b', 'o', 'Number where instructions are found--Single number or beginning number of span', 'Number where instructions are found--Single number or beginning number of span', 1, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
-		('', '68b', 't', 'Topic', 'Topic', 1, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
-		('', '68b', 'z', 'Table identification', 'Table identification', 1, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
-		('', '68b', '2', 'Edition number', 'Edition number', 1, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
-		('', '68b', '5', 'Institution to which field applies', 'Institution to which field applies', 1, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
-		('', '68b', '6', 'Linkage', 'Linkage', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
-		('', '68b', '8', 'Field link and sequence number', 'Field link and sequence number', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '687', 'a', 'Source consulted and information found', 'Source consulted and information found', 1, 0, 6, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '687', '6', 'Linkage', 'Linkage', 0, 0, 6, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '688', 'a', 'Application history note', 'Application history note', 0, 0, 6, NULL, NULL, NULL, 0, 0, '', '', ''),
@@ -1941,7 +1915,7 @@ INSERT INTO auth_tag_structure (authtypecode, tagfield, liblibrarian, libopac, r
     WHERE authtypecode = '' AND
     tagfield NOT IN ( '058','063','068','084','088','140','143','153',
                       '154','253','353','453','553','668','671','676',
-                      '684','685','686','687','68a','68b','753','754',
+                      '684','685','686','687','753','754',
                       '761','763','764','765','766','768') AND
     tagfield NOT IN ('110','111','130','148','150','151','155','162',
                      '180','181','182','185','034','640','641','642',
@@ -1955,7 +1929,7 @@ mandatory, tab, authorised_value, value_builder, seealso, isurl, hidden, linkid,
     WHERE authtypecode = '' AND
     tagfield NOT IN ( '058','063','068','084','088','140','143','153',
                       '154','253','353','453','553','668','671','676',
-                      '684','685','686','687','68a','68b','753','754',
+                      '684','685','686','687','753','754',
                       '761','763','764','765','766','768') AND
     tagfield NOT IN ('110','111','130','148','150','151','155','162',
                      '180','181','182','185','034','640','641','642',
@@ -1975,7 +1949,7 @@ INSERT INTO auth_tag_structure (authtypecode, tagfield, liblibrarian, libopac, r
     WHERE authtypecode = '' AND
     tagfield NOT IN ( '058','063','068','084','088','140','143','153',
                       '154','253','353','453','553','668','671','676',
-                      '684','685','686','687','68a','68b','753','754',
+                      '684','685','686','687','753','754',
                       '761','763','764','765','766','768') AND
     tagfield NOT IN ( '100','111','130','148','150','151','155','162',
                       '180','181','182','185','034','640','641','642',
@@ -1989,7 +1963,7 @@ mandatory, tab, authorised_value, value_builder, seealso, isurl, hidden, linkid,
     WHERE authtypecode = '' AND
     tagfield NOT IN ( '058','063','068','084','088','140','143','153',
                       '154','253','353','453','553','668','671','676',
-                      '684','685','686','687','68a','68b','753','754',
+                      '684','685','686','687','753','754',
                       '761','763','764','765','766','768') AND
     tagfield NOT IN ( '100','111','130','148','150','151','155','162',
                       '180','181','182','185','034','640','641','642',
@@ -2009,7 +1983,7 @@ INSERT INTO auth_tag_structure (authtypecode, tagfield, liblibrarian, libopac, r
     WHERE authtypecode = '' AND
     tagfield NOT IN ( '058','063','068','084','088','140','143','153',
                       '154','253','353','453','553','668','671','676',
-                      '684','685','686','687','68a','68b','753','754',
+                      '684','685','686','687','753','754',
                       '761','763','764','765','766','768') AND
     tagfield NOT IN ( '100','110','130','148','150','151','155','162',
                       '180','181','182','185','640','641','642','643',
@@ -2023,7 +1997,7 @@ mandatory, tab, authorised_value, value_builder, seealso, isurl, hidden, linkid,
     WHERE authtypecode = '' AND
     tagfield NOT IN ( '058','063','068','084','088','140','143','153',
                       '154','253','353','453','553','668','671','676',
-                      '684','685','686','687','68a','68b','753','754',
+                      '684','685','686','687','753','754',
                       '761','763','764','765','766','768') AND
     tagfield NOT IN ( '100','110','130','148','150','151','155','162',
                       '180','181','182','185','640','641','642','643',
@@ -2043,7 +2017,7 @@ INSERT INTO auth_tag_structure (authtypecode, tagfield, liblibrarian, libopac, r
     WHERE authtypecode = '' AND
     tagfield NOT IN ( '058','063','068','084','088','140','143','153',
                       '154','253','353','453','553','668','671','676',
-                      '684','685','686','687','68a','68b','753','754',
+                      '684','685','686','687','753','754',
                       '761','763','764','765','766','768') AND
     tagfield NOT IN ( '100','110','111','148','150','151','155','162',
                       '180','181','182','185');
@@ -2056,7 +2030,7 @@ mandatory, tab, authorised_value, value_builder, seealso, isurl, hidden, linkid,
     WHERE authtypecode = '' AND
     tagfield NOT IN ( '058','063','068','084','088','140','143','153',
                       '154','253','353','453','553','668','671','676',
-                      '684','685','686','687','68a','68b','753','754',
+                      '684','685','686','687','753','754',
                       '761','763','764','765','766','768') AND
     tagfield NOT IN ( '100','110','111','148','150','151','155','162',
                       '180','181','182','185');
@@ -2075,7 +2049,7 @@ INSERT INTO auth_tag_structure (authtypecode, tagfield, liblibrarian, libopac, r
     WHERE authtypecode = '' AND
     tagfield NOT IN ( '058','063','068','084','088','140','143','153',
                       '154','253','353','453','553','668','671','676',
-                      '684','685','686','687','68a','68b','753','754',
+                      '684','685','686','687','753','754',
                       '761','763','764','765','766','768') AND
     tagfield NOT IN ( '100','110','111','130','150','151','155','162',
                       '180','181','185','014','020','022','031','640',
@@ -2089,7 +2063,7 @@ mandatory, tab, authorised_value, value_builder, seealso, isurl, hidden, linkid,
     WHERE authtypecode = '' AND
     tagfield NOT IN ( '058','063','068','084','088','140','143','153',
                       '154','253','353','453','553','668','671','676',
-                      '684','685','686','687','68a','68b','753','754',
+                      '684','685','686','687','753','754',
                       '761','763','764','765','766','768') AND
     tagfield NOT IN ( '100','110','111','130','150','151','155','162',
                       '180','181','185','014','020','022','031','640',
@@ -2109,7 +2083,7 @@ INSERT INTO auth_tag_structure (authtypecode, tagfield, liblibrarian, libopac, r
     WHERE authtypecode = '' AND
     tagfield NOT IN ( '058','063','068','084','088','140','143','153',
                       '154','253','353','453','553','668','671','676',
-                      '684','685','686','687','68a','68b','753','754',
+                      '684','685','686','687','753','754',
                       '761','763','764','765','766','768') AND
     tagfield NOT IN ( '100','110','111','130','148','151','155','162',
                       '181','182','185','014','020','022','031','640',
@@ -2123,7 +2097,7 @@ mandatory, tab, authorised_value, value_builder, seealso, isurl, hidden, linkid,
     WHERE authtypecode = '' AND
     tagfield NOT IN ( '058','063','068','084','088','140','143','153',
                       '154','253','353','453','553','668','671','676',
-                      '684','685','686','687','68a','68b','753','754',
+                      '684','685','686','687','753','754',
                       '761','763','764','765','766','768') AND
     tagfield NOT IN ( '100','110','111','130','148','151','155','162',
                       '181','182','185','014','020','022','031','640',
@@ -2143,7 +2117,7 @@ INSERT INTO auth_tag_structure (authtypecode, tagfield, liblibrarian, libopac, r
     WHERE authtypecode = '' AND
     tagfield NOT IN ( '058','063','068','084','088','140','143','153',
                       '154','253','353','453','553','668','671','676',
-                      '684','685','686','687','68a','68b','753','754',
+                      '684','685','686','687','753','754',
                       '761','763','764','765','766','768') AND
     tagfield NOT IN ( '100','110','111','130','148','150','155','162',
                       '180','182','185','014','020','022','031','640',
@@ -2157,7 +2131,7 @@ mandatory, tab, authorised_value, value_builder, seealso, isurl, hidden, linkid,
     WHERE authtypecode = '' AND
     tagfield NOT IN ( '058','063','068','084','088','140','143','153',
                       '154','253','353','453','553','668','671','676',
-                      '684','685','686','687','68a','68b','753','754',
+                      '684','685','686','687','753','754',
                       '761','763','764','765','766','768') AND
     tagfield NOT IN ( '100','110','111','130','148','150','155','162',
                       '180','182','185','014','020','022','031','640',
@@ -2177,7 +2151,7 @@ INSERT INTO auth_tag_structure (authtypecode, tagfield, liblibrarian, libopac, r
     WHERE authtypecode = '' AND
     tagfield NOT IN ( '058','063','068','084','088','140','143','153',
                       '154','253','353','453','553','668','671','676',
-                      '684','685','686','687','68a','68b','753','754',
+                      '684','685','686','687','753','754',
                       '761','763','764','765','766','768') AND
     tagfield NOT IN ( '100','110','111','130','148','150','151','162',
                       '180','181','182','014','020','022','031','640',
@@ -2191,7 +2165,7 @@ mandatory, tab, authorised_value, value_builder, seealso, isurl, hidden, linkid,
     WHERE authtypecode = '' AND
     tagfield NOT IN ( '058','063','068','084','088','140','143','153',
                       '154','253','353','453','553','668','671','676',
-                      '684','685','686','687','68a','68b','753','754',
+                      '684','685','686','687','753','754',
                       '761','763','764','765','766','768') AND
     tagfield NOT IN ( '100','110','111','130','148','150','151','162',
                       '180','181','182','014','020','022','031','640',
