@@ -7,21 +7,26 @@
 
      $(document).ready(function() {
         $("#z3950search").click(function(){
-            PopupZ3950();
+            PopupZ3950("");
+            return false;
+        });
+
+        $(".z3950searchFw").click(function(){
+            PopupZ3950($(this).prop('id'));
             return false;
         });
      });
 
     /* this function open a popup to search on z3950 server.  */
-    function PopupZ3950() {
-        var strQuery = GetZ3950Terms();
+    function PopupZ3950(fw) {
+        var strQuery = GetZ3950Terms(fw);
         if(strQuery){
             window.open("/cgi-bin/koha/cataloguing/z3950_search.pl?biblionumber=[% biblionumber %]"+strQuery,"z3950search",'width=760,height=450,location=yes,toolbar=no,scrollbars=yes,resize=yes');
         }
     }
     /* provide Z3950 search points */
-    function GetZ3950Terms(){
-        var strQuery="&frameworkcode=";
+    function GetZ3950Terms(fw){
+        var strQuery="&frameworkcode=" + fw;
         [% FOREACH z3950_search_param IN z3950_search_params %]
             strQuery += "&" + "[% z3950_search_param.name %]" + "=" + "[% z3950_search_param.encvalue %]";
         [% END %]
@@ -52,7 +57,18 @@
                 [% END %]
             </ul>
         </div>
-        <div class="btn-group"><a id="z3950search" class="btn btn-small" href="/cgi-bin/koha/cataloguing/z3950_search.pl?biblionumber=[% biblionumber %]&amp;frameworkcode=[% FOREACH z3950_search_param IN z3950_search_params %]&amp;[% z3950_search_param.name %]=[% z3950_search_param.encvalue %][% END %]"><i class="icon-search"></i> Z39.50 search</a></div>
+        <div class="btn-group">
+            <button class="btn btn-small" id="z3950search"><i class="icon-search"></i> New from Z39.50</button>
+            <button class="btn btn-small dropdown-toggle" data-toggle="dropdown">
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li id="" class="z3950searchFw"><a href="#">Default framework</a></li>
+                [% FOREACH frameworkcodeloo IN frameworkcodeloop %]
+                <li id="[% frameworkcodeloo.value %]" class="z3950searchFw"><a href="#">[% frameworkcodeloo.frameworktext %]</a></li>
+                [% END %]
+            </ul>
+        </div>
   </div>
 [% END %]
 
