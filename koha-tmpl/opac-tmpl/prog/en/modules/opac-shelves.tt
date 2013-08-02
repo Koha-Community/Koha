@@ -7,6 +7,7 @@
 <script type="text/javascript">
 //<![CDATA[
 var MSG_REMOVE_FROM_LIST = _("Are you sure you want to remove these items from the list?");
+var MSG_REMOVE_ONE_FROM_LIST = _("Are you sure you want to remove this item from the list?");
 var MSG_CONFIRM_DELETE_LIST = _("Are you sure you want to delete this list?");
 
 [% IF ( opacuserlogin ) %][% IF ( RequestOnOpac ) %]
@@ -152,10 +153,24 @@ $(function() {
         });
 [% END %]
   [% IF ( loggedinusername && allowremovingitems ) %]
+  var removeFromListLinks = $(".removefromlist");
+  removeFromListLinks.show();
+  // "remove from list" appearing on each line of the list output
+  removeFromListLinks.on("click",function(){
+      $(".checkboxed").unCheckCheckboxes();
+      var listitem = $("input[name="+this.id+"]");
+      listitem.prop("checked",true);
+      $("#myform").submit();
+  });
   $("#myform").submit(function(){
     var checkedBoxes = $(".checkboxed input:checkbox:checked");
-    if ($(checkedBoxes).size()) {
-      return confirmDelete(MSG_REMOVE_FROM_LIST);
+    var numchecked = $(checkedBoxes).size();
+    if (numchecked) {
+        if( numchecked > 1 ){
+            return confirmDelete(MSG_REMOVE_FROM_LIST);
+        } else {
+            return confirmDelete(MSG_REMOVE_ONE_FROM_LIST);
+        }
     } else {
       alert(MSG_NO_RECORD_SELECTED);
       return false;
@@ -473,6 +488,11 @@ $(document).ready(function() {
 
         [% IF ( opacuserlogin ) %][% IF ( loggedinusername ) %][% IF ( virtualshelves ) %]<a class="addtoshelf" href="/cgi-bin/koha/opac-addbybiblionumber.pl?biblionumber=[% itemsloo.biblionumber %]" onclick="Dopop('opac-addbybiblionumber.pl?biblionumber=[% itemsloo.biblionumber %]'); return false;">Save to another list</a>
           [% END %][% END %][% END %]
+
+        [% IF ( allowremovingitems ) %]
+            <a class="removefromlist" id="REM-[% itemsloo.biblionumber %]" href="#">Remove from this list</a>
+        [% END %]
+
           [% IF ( opacbookbag ) %]
               [% IF ( itemsloo.incart ) %]
                   <a class="addtocart cart[% itemsloo.biblionumber %]" href="#" onclick="addRecord('[% itemsloo.biblionumber %]'); return false;">In your cart</a> <a class="cartRemove cartR[% itemsloo.biblionumber %]" href="#" onclick="delSingleRecord('[% itemsloo.biblionumber %]'); return false;">(remove)</a>
