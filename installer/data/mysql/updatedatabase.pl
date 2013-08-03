@@ -6303,7 +6303,7 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.10.09.XXX";
+$DBversion = "3.10.09.001";
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     $dbh->do("UPDATE language_rfc4646_to_iso639 SET iso639_2_code='ita' WHERE rfc4646_subtag='it'");
     print "Upgrade to $DBversion done (Bug 9519: Wrong language code for Italian in the advanced search language limitations)\n";
