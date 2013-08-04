@@ -6310,7 +6310,7 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.10.09.XXX";
+$DBversion = "3.10.09.002";
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     if ( C4::Context->preference("marcflavour") eq 'MARC21' ) {
         $sth = $dbh->prepare(
