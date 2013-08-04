@@ -54,6 +54,8 @@ function changeFramework(fw) {
 
                 [% IF error.code == 'CANNOT_MOVE' %]
                     The following items could not be moved from the old record to the new one: [% error.value %]
+                [% ELSIF error.code == 'FRAMEWORK_NOT_SELECTED' %]
+                    No framework has been selected. Please select a framework for merging.
                 [% ELSE %]
                     [% error %]
                 [% END %]

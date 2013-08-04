@@ -96,7 +96,6 @@ else {
 
         if ($mergereference eq 'breeding') {
             $recordObj2 =  Koha::Authority->get_from_breeding($authid[1]) || Koha::Authority->new();
-            $mergereference = $authid[0];
         } else {
             $recordObj2 =  Koha::Authority->get_from_authid($authid[1]) || Koha::Authority->new();
         }
@@ -106,10 +105,13 @@ else {
             my $framework;
             if ( $recordObj1->authtype ne $recordObj2->authtype && $mergereference ne 'breeding' ) {
                 $framework = $input->param('frameworkcode')
-                  or push @errors, "Framework not selected.";
+                  or push @errors, { code => 'FRAMEWORK_NOT_SELECTED' };
             }
             else {
                 $framework = $recordObj1->authtype;
+            }
+            if ($mergereference eq 'breeding') {
+                $mergereference = $authid[0];
             }
 
             # Getting MARC Structure
@@ -172,6 +174,23 @@ else {
         }
     }
 }
+
+my $authtypes = getauthtypes;
+my @authtypesloop;
+foreach my $thisauthtype (
+    sort {
+        $authtypes->{$a}{'authtypetext'} cmp $authtypes->{$b}{'authtypetext'}
+    }
+    keys %$authtypes
+  )
+{
+    my %row = (
+        value        => $thisauthtype,
+        authtypetext => $authtypes->{$thisauthtype}{'authtypetext'},
+    );
+    push @authtypesloop, \%row;
+}
+$template->{VARS}->{authtypesloop} = \@authtypesloop;
 
 if (@errors) {
 
