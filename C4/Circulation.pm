@@ -859,7 +859,6 @@ sub CanBookBeIssued {
             my $sth = $dbh->prepare("SELECT notforloan FROM itemtypes WHERE itemtype = ?");
             $sth->execute($item->{'itemtype'});
             my $notforloan=$sth->fetchrow_hashref();
-            $sth->finish();
             if ($notforloan->{'notforloan'}) {
                 if (!C4::Context->preference("AllowNotForLoanOverride")) {
                     $issuingimpossible{NOT_FOR_LOAN} = 1;
@@ -2206,7 +2205,6 @@ sub _FixAccountForLostAndReturned {
                 (?,?,?,?)");
             $usth->execute($data->{'borrowernumber'},$accdata->{'accountno'},$nextaccntno,$newamtos);
         }
-        $msth->finish;  # $msth might actually have data left
     }
     $amountleft *= -1 if ($amountleft > 0);
     my $desc = "Item Returned " . $item_id;
@@ -2438,7 +2436,6 @@ END_SQL
     my $sth = $dbh->prepare( $statement );
     $sth->execute( @bind_parameters );
     my $upcoming_dues = $sth->fetchall_arrayref({});
-    $sth->finish;
 
     return $upcoming_dues;
 }
@@ -2540,7 +2537,6 @@ sub AddRenewal {
       );
     $sth->execute( $borrowernumber, $itemnumber );
     my $issuedata = $sth->fetchrow_hashref;
-    $sth->finish;
     if(defined $datedue && ref $datedue ne 'DateTime' ) {
         carp 'Invalid date passed to AddRenewal.';
         return;
@@ -2568,7 +2564,6 @@ sub AddRenewal {
     );
 
     $sth->execute( $datedue->strftime('%Y-%m-%d %H:%M'), $renews, $lastreneweddate, $borrowernumber, $itemnumber );
-    $sth->finish;
 
     # Update the renewal count on the item, and tell zebra to reindex
     $renews = $biblio->{'renewals'} + 1;
@@ -2640,7 +2635,6 @@ sub GetRenewCount {
     $sth->execute( $bornum, $itemno );
     my $data = $sth->fetchrow_hashref;
     $renewcount = $data->{'renewals'} if $data->{'renewals'};
-    $sth->finish;
     # $item and $borrower should be calculated
     my $branchcode = _GetCircControlBranch($item, $borrower);
     
@@ -2709,7 +2703,6 @@ sub GetIssuingCharges {
         }
     }
 
-    $sth->finish; # we havent _explicitly_ fetched all rows
     return ( $charge, $item_type );
 }
 
@@ -2771,7 +2764,6 @@ sub AddIssuingCharge {
     ";
     my $sth = $dbh->prepare($query);
     $sth->execute( $borrowernumber, $itemnumber, $nextaccntno, $charge, $charge, $manager_id );
-    $sth->finish;
 }
 
 =head2 GetTransfers
@@ -2796,7 +2788,6 @@ sub GetTransfers {
     my $sth = $dbh->prepare($query);
     $sth->execute($itemnumber);
     my @row = $sth->fetchrow_array();
-    $sth->finish;
     return @row;
 }
 
@@ -2826,7 +2817,6 @@ sub GetTransfersFromTo {
     while ( my $data = $sth->fetchrow_hashref ) {
         push @gettransfers, $data;
     }
-    $sth->finish;
     return (@gettransfers);
 }
 
@@ -2845,7 +2835,6 @@ sub DeleteTransfer {
          AND datearrived IS NULL "
     );
     $sth->execute($itemnumber);
-    $sth->finish;
 }
 
 =head2 AnonymiseIssueHistory
@@ -2990,7 +2979,6 @@ sub updateWrongTransfer {
 			"update branchtransfers set datearrived = now(),tobranch=?,comments='wrongtransfer' where itemnumber= ? AND datearrived IS NULL"
           	);
         	$sth->execute($FromLibrary,$itemNumber);
-        	$sth->finish;
 
 # second step create a new line of branchtransfer to the right location .
 	ModItemTransfer($itemNumber, $FromLibrary, $waitingAtLibrary);
@@ -3134,7 +3122,6 @@ my $query = qq|SELECT count(*)
 my $sth = $dbh->prepare($query);
 $sth->execute($branchcode,$week_day);
 my $result=$sth->fetchrow;
-$sth->finish;
 return $result;
 }
 
@@ -3166,7 +3153,6 @@ my $query=qq|SELECT count(*)
 my $sth = $dbh->prepare($query);
 $sth->execute($years,$month,$day,$branchcode);
 my $countspecial=$sth->fetchrow ;
-$sth->finish;
 return $countspecial;
 }
 
@@ -3195,7 +3181,6 @@ my $query=qq|SELECT count(*)
 my $sth = $dbh->prepare($query);
 $sth->execute($month,$day,$branchcode);
 my $countspecial=$sth->fetchrow ;
-$sth->finish;
 return $countspecial;
 }
 
@@ -3211,7 +3196,6 @@ my $query=qq|SELECT count(*)
 my $sth = $dbh->prepare($query);
 $sth->execute($barcode);
 my $exist=$sth->fetchrow ;
-$sth->finish;
 return $exist;
 }
 
@@ -3305,7 +3289,6 @@ sub LostItem{
                            WHERE issues.itemnumber=?");
     $sth->execute($itemnumber);
     my $issues=$sth->fetchrow_hashref();
-    $sth->finish;
 
     # If a borrower lost the item, add a replacement cost to the their record
     if ( my $borrowernumber = $issues->{borrowernumber} ){
@@ -3330,7 +3313,6 @@ sub GetOfflineOperations {
     my $sth = $dbh->prepare("SELECT * FROM pending_offline_operations WHERE branchcode=? ORDER BY timestamp");
     $sth->execute(C4::Context->userenv->{'branch'});
     my $results = $sth->fetchall_arrayref({});
-    $sth->finish;
     return $results;
 }
 
@@ -3339,7 +3321,6 @@ sub GetOfflineOperation {
     my $sth = $dbh->prepare("SELECT * FROM pending_offline_operations WHERE operationid=?");
     $sth->execute( shift );
     my $result = $sth->fetchrow_hashref;
-    $sth->finish;
     return $result;
 }
 
