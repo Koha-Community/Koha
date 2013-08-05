@@ -2484,8 +2484,9 @@ sub CanBookBeRenewed {
         $error = "too_many";
     }
 
-    my $resstatus = C4::Reserves::GetReserveStatus($itemnumber);
-    if ( $resstatus eq "Waiting" or $resstatus eq "Reserved" ) {
+    my ( $resfound, $resrec, undef ) = C4::Reserves::CheckReserves( $itemnumber );
+
+    if ( $resfound ) { # '' when no hold was found
         $renewokay = 0;
         $error = "on_reserve";
     }
