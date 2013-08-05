@@ -202,7 +202,6 @@ sub makepayment {
     my $sth         = $dbh->prepare("SELECT * FROM accountlines WHERE accountlines_id=?");
     $sth->execute( $accountlines_id );
     my $data = $sth->fetchrow_hashref;
-    $sth->finish;
 
     my $payment;
     if ( $data->{'accounttype'} eq "Pay" ){
@@ -214,7 +213,6 @@ sub makepayment {
                 "
             );
         $udp->execute($accountlines_id);
-        $udp->finish;
     }else{
         my $udp = 		
             $dbh->prepare(
@@ -224,7 +222,6 @@ sub makepayment {
                 "
             );
         $udp->execute($accountlines_id);
-        $udp->finish;
 
          # create new line
         my $payment = 0 - $amount;
@@ -237,7 +234,6 @@ sub makepayment {
                     VALUES ( ?, ?, now(), ?, ?, 'Payment,thanks', 'Pay', 0, ?, ?)"
             );
         $ins->execute($borrowernumber, $nextaccntno, $payment, $data->{'itemnumber'}, $manager_id, $payment_note);
-        $ins->finish;
     }
 
     if ( C4::Context->preference("FinesLog") ) {
@@ -279,7 +275,6 @@ sub makepayment {
     my $sthr = $dbh->prepare("SELECT max(accountlines_id) AS lastinsertid FROM accountlines");
     $sthr->execute();
     my $datalastinsertid = $sthr->fetchrow_hashref;
-    $sthr->finish;
     return $datalastinsertid->{'lastinsertid'};
 }
 
@@ -364,7 +359,6 @@ sub chargelostitem{
         VALUES (?,?,now(),?,?,'L',?,?,?)");
         $sth2->execute($borrowernumber,$accountno,$amount,
         $description,$amount,$itemnumber,$manager_id);
-        $sth2->finish;
 
         if ( C4::Context->preference("FinesLog") ) {
             logaction("FINES", 'CREATE', $borrowernumber, Dumper({
@@ -532,7 +526,6 @@ sub fixcredit {
         my $sth = $dbh->prepare($query);
         $sth->execute( $borrowernumber, $item->{'itemnumber'} );
         $accdata = $sth->fetchrow_hashref;
-        $sth->finish;
         if ( $accdata->{'amountoutstanding'} < $amountleft ) {
             $newamtos = 0;
             $amountleft -= $accdata->{'amountoutstanding'};
@@ -547,7 +540,6 @@ sub fixcredit {
      WHERE (accountlines_id = ?)"
         );
         $usth->execute( $newamtos, $thisacct );
-        $usth->finish;
         $usth = $dbh->prepare(
             "INSERT INTO accountoffsets
      (borrowernumber, accountno, offsetaccount,  offsetamount)
@@ -555,7 +547,6 @@ sub fixcredit {
         );
         $usth->execute( $borrowernumber, $accdata->{'accountno'},
             $nextaccntno, $newamtos );
-        $usth->finish;
     }
 
     # begin transaction
@@ -586,7 +577,6 @@ sub fixcredit {
      WHERE (accountlines_id = ?)"
         );
         $usth->execute( $newamtos, $thisacct );
-        $usth->finish;
         $usth = $dbh->prepare(
             "INSERT INTO accountoffsets
      (borrowernumber, accountno, offsetaccount,  offsetamount)
@@ -594,9 +584,7 @@ sub fixcredit {
         );
         $usth->execute( $borrowernumber, $accdata->{'accountno'},
             $nextaccntno, $newamtos );
-        $usth->finish;
     }
-    $sth->finish;
     $type = "Credit " . $type;
     UpdateStats( $user, $type, $data, $user, '', '', $borrowernumber );
     $amountleft *= -1;
@@ -652,7 +640,6 @@ sub refund {
      WHERE (accountlines_id = ?)"
         );
         $usth->execute( $newamtos, $thisacct );
-        $usth->finish;
         $usth = $dbh->prepare(
             "INSERT INTO accountoffsets
      (borrowernumber, accountno, offsetaccount,  offsetamount)
@@ -660,9 +647,7 @@ sub refund {
         );
         $usth->execute( $borrowernumber, $accdata->{'accountno'},
             $nextaccntno, $newamtos );
-        $usth->finish;
     }
-    $sth->finish;
     return ($amountleft);
 }
 
