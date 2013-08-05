@@ -625,7 +625,6 @@ sub GetReserveFee {
     my $sth = $dbh->prepare($query);
     $sth->execute($borrowernumber);
     my $data = $sth->fetchrow_hashref;
-    $sth->finish();
     my $fee      = $data->{'reservefee'};
     my $cntitems = @- > $bibitems;
 
@@ -666,7 +665,6 @@ sub GetReserveFee {
                 }
             }
         }
-        $sth1->finish;
         my $cntitemsfound = @biblioitems;
         my $issues        = 0;
         my $x             = 0;
@@ -1011,7 +1009,6 @@ sub CancelReserve {
     ";
     my $sth = $dbh->prepare($query);
     $sth->execute( $reserve_id );
-    $sth->finish;
 
     $query = "
         INSERT INTO old_reserves
@@ -1094,7 +1091,6 @@ sub ModReserve {
         ";
         my $sth = $dbh->prepare($query);
         $sth->execute( $reserve_id );
-        $sth->finish;
         $query = "
             INSERT INTO old_reserves
             SELECT *
@@ -1118,7 +1114,6 @@ sub ModReserve {
         ";
         my $sth = $dbh->prepare($query);
         $sth->execute( $rank, $branchcode, $itemnumber, $reserve_id );
-        $sth->finish;
 
         if ( defined( $suspend_until ) ) {
             if ( $suspend_until ) {
@@ -1164,7 +1159,6 @@ sub ModReserveFill {
     my $sth = $dbh->prepare($query);
     $sth->execute( $biblionumber, $borrowernumber, $resdate );
     ($priority) = $sth->fetchrow_array;
-    $sth->finish;
 
     # update the database...
     $query = "UPDATE reserves
@@ -1176,7 +1170,6 @@ sub ModReserveFill {
                 ";
     $sth = $dbh->prepare($query);
     $sth->execute( $biblionumber, $resdate, $borrowernumber );
-    $sth->finish;
 
     # move to old_reserves
     $query = "INSERT INTO old_reserves
@@ -1518,7 +1511,6 @@ sub ToggleLowestPriority {
 
     my $sth = $dbh->prepare( "UPDATE reserves SET lowestPriority = NOT lowestPriority WHERE reserve_id = ?");
     $sth->execute( $reserve_id );
-    $sth->finish;
     
     _FixPriority( $reserve_id, '999999' );
 }
@@ -1553,7 +1545,6 @@ sub ToggleSuspend {
     push( @params, $reserve_id );
 
     $sth->execute( @params );
-    $sth->finish;
 }
 
 =head2 SuspendAll
@@ -1609,7 +1600,6 @@ sub SuspendAll {
     $dbh = C4::Context->dbh;
     $sth = $dbh->prepare( $query );
     $sth->execute( @query_params );
-    $sth->finish;
 }
 
 
@@ -1693,7 +1683,6 @@ sub _FixPriority {
             $j + 1,
             $priority[$j]->{'reserve_id'}
         );
-        $sth->finish;
     }
     
     $sth = $dbh->prepare( "SELECT reserve_id FROM reserves WHERE lowestPriority = 1 ORDER BY priority" );
