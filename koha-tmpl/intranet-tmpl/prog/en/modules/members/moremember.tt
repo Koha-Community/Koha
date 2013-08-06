@@ -482,7 +482,7 @@ function validate1(date) {
                                         <span class="dmg">[% issueloo.itemdamaged %]</span>
                 [% END %]
 </td>
-            <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% issueloo.biblionumber %]"><strong>[% issueloo.title |html %]</strong></a>[% FOREACH subtitl IN issueloo.subtitle %] [% subtitl.subfield %][% END %][% IF ( issueloo.author ) %], by [% issueloo.author %][% END %] [% IF ( issueloo.publishercode ) %]; [% issueloo.publishercode %] [% END %] [% IF ( issueloo.publicationyear ) %], [% issueloo.publicationyear %][% END %] <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% issueloo.biblionumber %]&amp;itemnumber=[% issueloo.itemnumber %]#item[% issueloo.itemnumber %]">[% issueloo.barcode %]</a></td>
+            <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% issueloo.biblionumber %]"><strong>[% issueloo.title |html %][% FOREACH subtitl IN issueloo.subtitle %] [% subtitl.subfield %][% END %]</strong></a>[% IF ( issueloo.author ) %], by [% issueloo.author %][% END %] [% IF ( issueloo.publishercode ) %]; [% issueloo.publishercode %] [% END %] [% IF ( issueloo.publicationyear ) %], [% issueloo.publicationyear %][% END %] <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% issueloo.biblionumber %]&amp;itemnumber=[% issueloo.itemnumber %]#item[% issueloo.itemnumber %]">[% issueloo.barcode %]</a></td>
 <td>[% UNLESS ( noItemTypeImages ) %] [% IF ( issueloo.itemtype_image ) %]<img src="[% issueloo.itemtype_image %]" alt="" />[% END %][% END %][% issueloo.itemtype_description %]</td>
             <td><span title="[% issueloo.issuedate %]">[% issueloo.issuedate | $KohaDates%]</span></td>
             <td>[% issueloo.issuingbranchname %]</td>
@@ -590,7 +590,7 @@ function validate1(date) {
                                         <span class="dmg">[% relissueloo.itemdamaged %]</span>
                 [% END %]
 </td>
-            <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% relissueloo.biblionumber %]"><strong>[% relissueloo.title |html %]</strong></a>[% FOREACH subtitl IN relissueloo.subtitle %] [% subtitl.subfield %][% END %][% IF relissueloo.author %], by [% relissueloo.author %][% END %] [% IF relissueloo.publishercode %]; [% relissueloo.publishercode %] [% END %] [% IF relissueloo.publicationyear %], [% relissueloo.publicationyear %][% END %] <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% relissueloo.biblionumber %]&amp;itemnumber=[% relissueloo.itemnumber %]#item[% relissueloo.itemnumber %]">[% relissueloo.barcode %]</a></td>
+            <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% relissueloo.biblionumber %]"><strong>[% relissueloo.title |html %][% FOREACH subtitl IN relissueloo.subtitle %] [% subtitl.subfield %][% END %]</strong></a>[% IF relissueloo.author %], by [% relissueloo.author %][% END %] [% IF relissueloo.publishercode %]; [% relissueloo.publishercode %] [% END %] [% IF relissueloo.publicationyear %], [% relissueloo.publicationyear %][% END %] <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% relissueloo.biblionumber %]&amp;itemnumber=[% relissueloo.itemnumber %]#item[% relissueloo.itemnumber %]">[% relissueloo.barcode %]</a></td>
 <td>[% UNLESS ( noItemTypeImages ) %] [% IF ( relissueloo.itemtype_image ) %]<img src="[% relissueloo.itemtype_image %]" alt="" />[% END %][% END %][% relissueloo.itemtype_description %]</td>
             <td><span title="[% relissueloo.issuedate %]">[% relissueloo.issuedate | $KohaDates %]</span></td>
             <td>[% relissueloo.issuingbranchname %]</td>
@@ -633,7 +633,7 @@ function validate1(date) {
 		<tr class="[% reservloo.color %]">
             <td><span title="[% reservloo.reservedate %]">[% reservloo.reservedate | $KohaDates %]</span></td>
             <td>
-                <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% reservloo.biblionumber %]">[% reservloo.title |html %]</a>[% FOREACH subtitl IN reservloo.subtitle %] [% subtitl.subfield %][% END %][% IF ( reservloo.author ) %], by [% reservloo.author %][% END %]
+                <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% reservloo.biblionumber %]">[% reservloo.title |html %][% FOREACH subtitl IN reservloo.subtitle %] [% subtitl.subfield %][% END %]</a>[% IF ( reservloo.author ) %], by [% reservloo.author %][% END %]
             </td>
             <td>[% reservloo.itemcallnumber %]</td>
             <td>[% IF ( reservloo.waiting ) %]
