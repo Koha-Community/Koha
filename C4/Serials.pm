@@ -654,7 +654,14 @@ sub SearchSubscriptions {
     my ( $args ) = @_;
 
     my $query = qq{
-        SELECT subscription.*, subscriptionhistory.*, biblio.*, biblioitems.issn
+        SELECT
+            subscription.notes AS publicnotes,
+            subscription.*,
+            subscriptionhistory.*,
+            biblio.notes AS biblionotes,
+            biblio.title,
+            biblio.author,
+            biblioitems.issn
         FROM subscription
             LEFT JOIN subscriptionhistory USING(subscriptionid)
             LEFT JOIN biblio ON biblio.biblionumber = subscription.biblionumber
