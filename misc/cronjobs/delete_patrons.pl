@@ -6,6 +6,7 @@ use Pod::Usage;
 use Getopt::Long;
 
 use C4::Members;
+use C4::VirtualShelves;
 use Koha::DateUtils;
 
 my ( $help, $verbose, $not_borrowed_since, $expired_before, $category_code,
@@ -44,28 +45,49 @@ my $members = GetBorrowersToExpunge(
     }
 );
 
+unless ($confirm) {
+    say "Doing a dry run; no patron records will actually be deleted.";
+    say "Run again with --confirm to delete the records.";
+}
+
 say scalar(@$members) . " patrons to delete";
 
 my $dbh = C4::Context->dbh;
 $dbh->{RaiseError} = 1;
 $dbh->{PrintError} = 0;
 
+@$members = ( { borrowernumber => 19 } );
+
+$dbh->{AutoCommit} = 0; # use transactions to avoid partial deletes
 for my $member (@$members) {
-    print "Trying to delete patron " . $member->{borrowernumber} . "... ";
+    print "Trying to delete patron $member->{borrowernumber}... "
+      if $verbose;
     eval {
         C4::Members::MoveMemberToDeleted( $member->{borrowernumber} )
           if $confirm;
     };
     if ($@) {
-        say "Failed, cannot move this patron ($@)";
+        say "Failed to delete patron $member->{borrowernumber}, cannot move it: ($@)";
+        $dbh->rollback;
+        next;
+    }
+    eval {
+        C4::VirtualShelves::HandleDelBorrower( $member->{borrowernumber} )
+          if $confirm;
+    };
+    if ($@) {
+        say "Failed to delete patron $member->{borrowernumber}, error handling its lists: ($@)";
+        $dbh->rollback;
         next;
     }
     eval { C4::Members::DelMember( $member->{borrowernumber} ) if $confirm; };
     if ($@) {
-        say "Failed, cannot delete this patron ($@)";
+        say "Failed to delete patron $member->{borrowernumber}: $@)";
+        $dbh->rollback;
         next;
     }
-    say "OK";
+    $dbh->commit;
+    say "OK" if $verbose;
 }
 
 =head1 NAME
