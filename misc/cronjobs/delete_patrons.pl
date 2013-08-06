@@ -8,15 +8,15 @@ use Getopt::Long;
 use C4::Members;
 use Koha::DateUtils;
 
-my ( $help, $verbose, $not_borrowered_since, $expired_before, $category_code,
+my ( $help, $verbose, $not_borrowed_since, $expired_before, $category_code,
     $branchcode, $confirm );
 GetOptions(
     'h|help'                 => \$help,
     'v|verbose'              => \$verbose,
-    'not_borrowered_since:s' => \$not_borrowered_since,
+    'not_borrowed_since:s'   => \$not_borrowed_since,
     'expired_before:s'       => \$expired_before,
     'category_code:s'        => \$category_code,
-    'branchcode:s'           => \$branchcode,
+    'library:s'              => \$branchcode,
     'c|confirm'              => \$confirm,
 ) || pod2usage(1);
 
@@ -24,20 +24,20 @@ if ($help) {
     pod2usage(1);
 }
 
-$not_borrowered_since = dt_from_string( $not_borrowered_since, 'iso' )
-  if $not_borrowered_since;
+$not_borrowed_since = dt_from_string( $not_borrowed_since, 'iso' )
+  if $not_borrowed_since;
 
 $expired_before = dt_from_string( $expired_before, 'iso' )
   if $expired_before;
 
-unless ( $not_borrowered_since or $expired_before or $category_code or $branchcode ) {
+unless ( $not_borrowed_since or $expired_before or $category_code or $branchcode ) {
     pod2usage(q{At least one filter is mandatory});
     exit;
 }
 
 my $members = GetBorrowersToExpunge(
     {
-        not_borrowered_since => $not_borrowered_since,
+        not_borrowered_since => $not_borrowed_since,
         expired_before       => $expired_before,
         category_code        => $category_code,
         branchcode           => $branchcode,
@@ -74,7 +74,7 @@ delete_patrons - This script deletes patrons
 
 =head1 SYNOPSIS
 
-delete_patrons.pl [-h -v -c] --not_borrowered_since=2013-07-21 --expired_before=2013-07-21 --category_code=CAT --branchcode=CPL
+delete_patrons.pl [-h -v -c] --not_borrowed_since=2013-07-21 --expired_before=2013-07-21 --category_code=CAT --branchcode=CPL
 
 dates can be generated with `date -d '-3 month' "+%Y-%m-%d"`
 
@@ -88,9 +88,9 @@ Options are cumulatives.
 
 Print a brief help message
 
-=item B<--not_borrowered_since>
+=item B<--not_borrowed_since>
 
-Delete patrons who have not borrowered since this date.
+Delete patrons who have not borrowed since this date.
 
 =item B<--expired_date>
 
