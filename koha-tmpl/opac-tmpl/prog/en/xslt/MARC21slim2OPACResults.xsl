@@ -456,7 +456,7 @@
                 <xsl:call-template name="nameABCQ"/>.
             </xsl:when>
             <xsl:otherwise>
-                <xsl:call-template name="nameABCDQ"/>;
+                <xsl:call-template name="nameABCQ"/>;
             </xsl:otherwise>
             </xsl:choose>
         </xsl:for-each>
