@@ -827,7 +827,7 @@ No patron matched <span class="ex">[% message %]</span>
                 <span class="dmg">[% KohaAuthorisedValues.GetByCode( 'DAMAGED', todayissue.damaged ) %]</span>
             [% END %]
         </td>
-        <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% todayissue.biblionumber %]&amp;type=intra"><strong>[% todayissue.title |html %]</strong></a>[% FOREACH subtitl IN todayissue.subtitle %] [% subtitl.subfield %][% END %][% IF ( todayissue.author ) %], by [% todayissue.author %][% END %][% IF ( todayissue.itemnotes ) %]- <span class="circ-hlt">[% todayissue.itemnotes %]</span>[% END %] <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% todayissue.biblionumber %]&amp;itemnumber=[% todayissue.itemnumber %]#item[% todayissue.itemnumber %]">[% todayissue.barcode %]</a></td>
+        <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% todayissue.biblionumber %]&amp;type=intra"><strong>[% todayissue.title |html %][% FOREACH subtitl IN todayissue.subtitle %] [% subtitl.subfield %][% END %]</strong></a>[% IF ( todayissue.author ) %], by [% todayissue.author %][% END %][% IF ( todayissue.itemnotes ) %]- <span class="circ-hlt">[% todayissue.itemnotes %]</span>[% END %] <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% todayissue.biblionumber %]&amp;itemnumber=[% todayissue.itemnumber %]#item[% todayissue.itemnumber %]">[% todayissue.barcode %]</a></td>
         <td>[% UNLESS ( noItemTypeImages ) %] [% IF ( todayissue.itemtype_image ) %]<img src="[% todayissue.itemtype_image %]" alt="" />[% END %][% END %][% todayissue.itemtype %]</td>
         <td><span title="[% todayissue.displaydate_sort %]">[% todayissue.checkoutdate %]</span></td>
         [% IF ( todayissue.multiple_borrowers ) %]<td>[% todayissue.firstname %] [% todayissue.surname %]</td>[% END %]
@@ -914,7 +914,7 @@ No patron matched <span class="ex">[% message %]</span>
                 <span class="dmg">[% KohaAuthorisedValues.GetByCode( 'DAMAGED', previssue.damaged ) %]</span>
             [% END %]
         </td>
-        <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% previssue.biblionumber %]&amp;type=intra"><strong>[% previssue.title |html %]</strong></a>[% FOREACH subtitl IN previssue.subtitle %] [% subtitl.subfield %][% END %][% IF ( previssue.author ) %], by [% previssue.author %][% END %] [% IF ( previssue.itemnotes ) %]- [% previssue.itemnotes %][% END %] <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% previssue.biblionumber %]&amp;itemnumber=[% previssue.itemnumber %]#item[% previssue.itemnumber %]">[% previssue.barcode %]</a></td>
+        <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% previssue.biblionumber %]&amp;type=intra"><strong>[% previssue.title |html %][% FOREACH subtitl IN previssue.subtitle %] [% subtitl.subfield %][% END %]</strong></a>[% IF ( previssue.author ) %], by [% previssue.author %][% END %] [% IF ( previssue.itemnotes ) %]- [% previssue.itemnotes %][% END %] <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% previssue.biblionumber %]&amp;itemnumber=[% previssue.itemnumber %]#item[% previssue.itemnumber %]">[% previssue.barcode %]</a></td>
         <td>
             [% previssue.itemtype %]
         </td>
@@ -1052,7 +1052,7 @@ No patron matched <span class="ex">[% message %]</span>
                 <span class="dmg">[% KohaAuthorisedValues.GetByCode( 'DAMAGED', relissue.damaged ) %]</span>
             [% END %]
         </td>
-        <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% relissue.biblionumber %]&amp;type=intra"><strong>[% relissue.title |html %]</strong></a>[% FOREACH subtitl IN relissue.subtitle %] [% subtitl.subfield %][% END %][% IF ( relissue.author ) %], by [% relissue.author %][% END %][% IF ( relissue.itemnotes ) %]- <span class="circ-hlt">[% relissue.itemnotes %]</span>[% END %] <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% relissue.biblionumber %]&amp;itemnumber=[% relissue.itemnumber %]#item[% relissue.itemnumber %]">[% relissue.barcode %]</a></td>
+        <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% relissue.biblionumber %]&amp;type=intra"><strong>[% relissue.title |html %][% FOREACH subtitl IN relissue.subtitle %] [% subtitl.subfield %][% END %]</strong></a>[% IF ( relissue.author ) %], by [% relissue.author %][% END %][% IF ( relissue.itemnotes ) %]- <span class="circ-hlt">[% relissue.itemnotes %]</span>[% END %] <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% relissue.biblionumber %]&amp;itemnumber=[% relissue.itemnumber %]#item[% relissue.itemnumber %]">[% relissue.barcode %]</a></td>
         <td>[% UNLESS ( noItemTypeImages ) %] [% IF ( relissue.itemtype_image ) %]<img src="[% relissue.itemtype_image %]" alt="" />[% END %][% END %][% relissue.itemtype %]</td>
         <td><span title="[% relissue.displaydate_sort %]">[% relissue.displaydate %]</span></td>
         <td>[% relissue.issuingbranchname %]</td>
@@ -1073,7 +1073,7 @@ No patron matched <span class="ex">[% message %]</span>
         [% IF ( relprevissue.overdue ) %]<td class="od">[% ELSE %]<td>[% END %]
         <span title="[% relprevissue.dd_sort %]">[% relprevissue.dd %]</span>
         </td>
-        <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% relprevissue.biblionumber %]&amp;type=intra"><strong>[% relprevissue.title |html %]</strong></a>[% FOREACH subtitl IN relprevissue.subtitle %] [% subtitl.subfield %][% END %][% IF ( relprevissue.author ) %], by [% relprevissue.author %][% END %] [% IF ( relprevissue.itemnotes ) %]- [% relprevissue.itemnotes %][% END %] <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% relprevissue.biblionumber %]&amp;itemnumber=[% relprevissue.itemnumber %]#item[% relprevissue.itemnumber %]">[% relprevissue.barcode %]</a></td>
+        <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% relprevissue.biblionumber %]&amp;type=intra"><strong>[% relprevissue.title |html %][% FOREACH subtitl IN relprevissue.subtitle %] [% subtitl.subfield %][% END %]</strong></a>[% IF ( relprevissue.author ) %], by [% relprevissue.author %][% END %] [% IF ( relprevissue.itemnotes ) %]- [% relprevissue.itemnotes %][% END %] <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% relprevissue.biblionumber %]&amp;itemnumber=[% relprevissue.itemnumber %]#item[% relprevissue.itemnumber %]">[% relprevissue.barcode %]</a></td>
         <td>[% UNLESS noItemTypeImages %][% IF relprevissue.itemtype_image %]<img src="[% relprevissue.itemtype_image %]" alt="" />[% END %][% END %][% relprevissue.itemtype %]</td>
         <td><span title="[% relprevissue.displaydate_sort %]">[% relprevissue.displaydate %]</span></td>
         <td>[% relprevissue.issuingbranchname %]</td>
@@ -1112,7 +1112,7 @@ No patron matched <span class="ex">[% message %]</span>
         [% FOREACH reservloo IN reservloop %]
         <tr class="[% reservloo.color %]">
                     <td>[% reservloo.reservedate %]</td>
-                    <td><a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% reservloo.biblionumber %]"><strong>[% reservloo.title |html %]</strong></a>[% FOREACH subtitl IN reservloo.subtitle %] [% subtitl.subfield %][% END %][% IF ( reservloo.author ) %], by [% reservloo.author %][% END %]</td>
+                    <td><a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% reservloo.biblionumber %]"><strong>[% reservloo.title |html %][% FOREACH subtitl IN reservloo.subtitle %] [% subtitl.subfield %][% END %]</strong></a>[% IF ( reservloo.author ) %], by [% reservloo.author %][% END %]</td>
                     <td>[% reservloo.itemcallnumber %]</td>
 					<td><em>[% IF ( reservloo.barcodereserv ) %]Item [% reservloo.barcodereserv %]
                         [% END %][% IF ( reservloo.waiting ) %] <strong>waiting at [% reservloo.waitingat %]</strong>
