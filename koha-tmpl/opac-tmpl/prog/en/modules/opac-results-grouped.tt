@@ -83,6 +83,7 @@ function highlightOff() {
 function highlightOn() {
     var x;
     for (x in q_array) {
+        q_array[x] = q_array[x].replace(/\w*:([\w])/, "$1");
         $("td").highlight(q_array[x]);
     }
     $(".highlight_toggle").toggle();

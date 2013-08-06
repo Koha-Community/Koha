@@ -44,6 +44,7 @@
         function highlightOn() {
             var x;
             for (x in q_array) {
+                q_array[x] = q_array[x].replace(/\w*:([\w])/, "$1");
                 $(".title").highlight(q_array[x]);
                 $(".author").highlight(q_array[x]);
                 $(".results_summary").highlight(q_array[x]);
