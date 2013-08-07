@@ -7636,6 +7636,17 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.13.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    #add phone if it is not there already (explains the ignore option)
+    $dbh->do("
+INSERT IGNORE INTO message_transport_types (message_transport_type) values ('phone');
+    ");
+    print "Upgrade to $DBversion done (Bug 10572: Add phone to message_transport_types table for new installs)\n";
+    SetVersion($DBversion);
+}
+
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)
