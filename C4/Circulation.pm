@@ -3251,13 +3251,13 @@ $code is either itemtype or collection code depending on what the pref BranchTra
 
 sub CreateBranchTransferLimit {
    my ( $toBranch, $fromBranch, $code ) = @_;
-
+   return unless ($toBranch && $fromBranch);
    my $limitType = C4::Context->preference("BranchTransferLimitsType");
    
    my $dbh = C4::Context->dbh;
    
    my $sth = $dbh->prepare("INSERT INTO branch_transfer_limits ( $limitType, toBranch, fromBranch ) VALUES ( ?, ?, ? )");
-   $sth->execute( $code, $toBranch, $fromBranch );
+   return $sth->execute( $code, $toBranch, $fromBranch );
 }
 
 =head2 DeleteBranchTransferLimits

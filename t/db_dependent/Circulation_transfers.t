@@ -9,7 +9,7 @@ use C4::Circulation;
 use Koha::DateUtils;
 use DateTime::Duration;
 
-use Test::More tests => 12;
+use Test::More tests => 15;
 
 BEGIN {
     use_ok('C4::Circulation');
@@ -129,8 +129,15 @@ is(
     1,
     "A Branch TransferLimit has been added"
 );
-#FIXME :The following test should pass but doesn't because currently the routine CreateBranchTransferLimit returns nothing
-#is(CreateBranchTransferLimit(),undef,"Without parameters CreateBranchTransferLimit returns undef");
+is(CreateBranchTransferLimit(),undef,
+    "Without parameters CreateBranchTransferLimit returns undef");
+is(CreateBranchTransferLimit($samplebranch2->{branchcode}),undef,
+    "With only tobranch CreateBranchTransferLimit returns undef");
+is(CreateBranchTransferLimit(undef,$samplebranch2->{branchcode}),undef,
+    "With only frombranch CreateBranchTransferLimit returns undef");
+#FIXME: Currently, we can add a transferlimit even to nonexistent branches because in the database,
+#branch_transfer_limits.toBranch and branch_transfer_limits.fromBranch aren't foreign keys
+#is(CreateBranchTransferLimit(-1,-1,'CODE'),0,"With wrong CreateBranchTransferLimit returns 0 - No transfertlimit added");
 
 #Test GetTransfers
 my $dt_today = dt_from_string( undef, 'sql', undef );
