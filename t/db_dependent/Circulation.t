@@ -9,7 +9,7 @@ use C4::Items;
 use C4::Members;
 use C4::Reserves;
 
-use Test::More tests => 20;
+use Test::More tests => 30;
 
 BEGIN {
     use_ok('C4::Circulation');
@@ -142,7 +142,7 @@ C4::Context->dbh->do("DELETE FROM accountlines WHERE borrowernumber IN ( SELECT 
 C4::Context->dbh->do("DELETE FROM borrowers WHERE cardnumber = '99999999999'");
 
 {
-    # CanBookBeRenewed tests
+# CanBookBeRenewed tests
 
     # Generate test biblio
     my $biblio = MARC::Record->new();
@@ -152,8 +152,7 @@ C4::Context->dbh->do("DELETE FROM borrowers WHERE cardnumber = '99999999999'");
         MARC::Field->new('245', ' ', ' ', a => $title),
     );
 
-    my ($biblionumber, $biblioitemnumber);
-    ($biblionumber, $biblioitemnumber) = AddBiblio($biblio, '');
+    my ($biblionumber, $biblioitemnumber) = AddBiblio($biblio, '');
 
     my $barcode = 'R00000342';
     my $branch = 'MPL';
@@ -161,19 +160,25 @@ C4::Context->dbh->do("DELETE FROM borrowers WHERE cardnumber = '99999999999'");
     my ($item_bibnum, $item_bibitemnum, $itemnumber) =
         AddItem({ homebranch => $branch,
                   holdingbranch => $branch,
-                  barcode => $barcode } , $biblionumber);
+                  barcode => $barcode, } , $biblionumber);
 
-    # Create a borrower
+    my $barcode2 = 'R00000343';
+    my ($item_bibnum2, $item_bibitemnum2, $itemnumber2) =
+        AddItem({ homebranch => $branch,
+                  holdingbranch => $branch,
+                  barcode => $barcode2, } , $biblionumber);
+
+    # Create 2 borrowers
     my %renewing_borrower_data = (
-        firstname =>  'Renewal',
-        surname => 'John',
+        firstname =>  'John',
+        surname => 'Renewal',
         categorycode => 'S',
         branchcode => $branch,
     );
 
     my %reserving_borrower_data = (
-        firstname =>  'Reservation',
-        surname => 'Katrin',
+        firstname =>  'Katrin',
+        surname => 'Reservation',
         categorycode => 'S',
         branchcode => $branch,
     );
@@ -192,51 +197,73 @@ C4::Context->dbh->do("DELETE FROM borrowers WHERE cardnumber = '99999999999'");
     my $checkitem      = undef;
     my $found          = undef;
 
-    my $now = DateTime->now();
-    my $cancelreserve = 1;
+    my $datedue = AddIssue( $renewing_borrower, $barcode);
+    is (defined $datedue, 1, "Item 1 checked out, due date: $datedue");
 
-    AddIssue( $renewing_borrower, $barcode, $now, $cancelreserve, $now );
+    my $datedue2 = AddIssue( $renewing_borrower, $barcode2);
+    is (defined $datedue2, 1, "Item 2 checked out, due date: $datedue2");
 
-#    my ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $itemnumber);
-#    is( $renewokay, 1, 'Can renew, book not reserved');
+    my $borrowing_borrowernumber = GetItemIssue($itemnumber)->{borrowernumber};
+    is ($borrowing_borrowernumber, $renewing_borrowernumber, "Item checked out to $renewing_borrower->{firstname} $renewing_borrower->{surname}");
 
-    diag("Biblio-level reserve, renewal test");
+    my ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $itemnumber, 1);
+    is( $renewokay, 1, 'Can renew, no holds for this title or item');
+
+
+    diag("Biblio-level hold, renewal test");
     AddReserve(
         $branch, $reserving_borrowernumber, $biblionumber,
         $constraint, $bibitems,  $priority, $resdate, $expdate, $notes,
         $title, $checkitem, $found
     );
 
-    my ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $itemnumber);
+    ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $itemnumber);
+    is( $renewokay, 0, '(Bug 10663) Cannot renew, reserved');
+    is( $error, 'on_reserve', '(Bug 10663) Cannot renew, reserved (returned error is on_reserve)');
 
-    is( $renewokay, 0, '(Bug 10663) Cannot renew, item reserved');
-    is( $error, 'on_reserve', '(Bug 10663) Cannot renew, item reserved (returned error is on_reserve');
+    ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $itemnumber2);
+    is( $renewokay, 0, '(Bug 10663) Cannot renew, reserved');
+    is( $error, 'on_reserve', '(Bug 10663) Cannot renew, reserved (returned error is on_reserve)');
 
-    CancelReserve({
-        biblionumber => $biblionumber,
-        borrowernumber => $reserving_borrowernumber,
-    });
+    my $reserveid = C4::Reserves::GetReserveId({ biblionumber => $biblionumber, borrowernumber => $reserving_borrowernumber});
+    CancelReserve({ reserve_id => $reserveid });
 
 
-    diag("Item-level reserve, renewal test");
+    diag("Item-level hold, renewal test");
     AddReserve(
         $branch, $reserving_borrowernumber, $biblionumber,
         $constraint, $bibitems,  $priority, $resdate, $expdate, $notes,
         $title, $itemnumber, $found
     );
 
-    ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $itemnumber);
-
+    ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $itemnumber, 1);
     is( $renewokay, 0, '(Bug 10663) Cannot renew, item reserved');
-    is( $error, 'on_reserve', '(Bug 10663) Cannot renew, item reserved (returned error is on_reserve');
+    is( $error, 'on_reserve', '(Bug 10663) Cannot renew, item reserved (returned error is on_reserve)');
 
-    CancelReserve({
-        biblionumber => $biblionumber,
-        borrowernumber => $reserving_borrowernumber,
-        itemnumber => $itemnumber
-    });
+    ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $itemnumber2, 1);
+    is( $renewokay, 1, 'Can renew item 2, item-level hold is on item 1');
+
+
+    diag("Items can't fill hold for reasons");
+    ModItem({ notforloan => 1 }, $biblionumber, $itemnumber);
+    ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $itemnumber, 1);
+    is( $renewokay, 1, 'Can renew, item is marked not for loan, hold does not block');
+    ModItem({ notforloan => 0, itype => '' }, $biblionumber, $itemnumber,1);
+
+    # FIXME: Add more for itemtype not for loan etc.
+
+    $reserveid = C4::Reserves::GetReserveId({ biblionumber => $biblionumber, itemnumber => $itemnumber, borrowernumber => $reserving_borrowernumber});
+    CancelReserve({ reserve_id => $reserveid });
+
+
+    diag("Too many renewals");
+
+    # FIXME: Check with circulation rules and renewalsallowed set properly configured
+
+    ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $itemnumber);
+    is( $renewokay, 0, 'Cannot renew, 0 renewals allowed');
+    is( $error, 'too_many', 'Cannot renew, 0 renewals allowed (returned code is too_many)');
 
 }
-
 
 $dbh->rollback;
