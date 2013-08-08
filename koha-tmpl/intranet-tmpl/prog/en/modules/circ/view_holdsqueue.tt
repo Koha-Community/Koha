@@ -1,3 +1,5 @@
+[% USE ItemTypes %]
+[% USE KohaAuthorisedValues %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Circulation &rsaquo; Holds queue</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -13,7 +15,7 @@
 <script type="text/javascript">//<![CDATA[
 $(document).ready(function() {
     $("#holdst").dataTable({
-        "aaSorting": [[ 2, "asc" ]],
+        "aaSorting": [[ 3, "asc" ]],
         "bPaginate": false,
         "bLengthChange": false,
         "bFilter": false,
@@ -53,6 +55,7 @@ $(document).ready(function() {
 	<tr>
         <th class="hq-title">Title</th>
         <th class="hq-collection">Collection</th>
+        <th class="hq-itemtype">Item type</th>
         <th class="hq-callnumber">Call number</th>
         <th class="hq-copynumber">Copy number</th>
         <th class="hq-enumchron">Enumeration</th>
@@ -74,7 +77,8 @@ $(document).ready(function() {
                                          [% IF ( itemsloo.size ) %][% itemsloo.size %][% END %] [% IF ( itemsloo.isbn ) %]ISBN: [% itemsloo.isbn %][% END %]</p>
 			</div>
 			</td>
-            <td class="hq-collection">[% itemsloo.ccode %]</td>
+            <td class="hq-collection">[% KohaAuthorisedValues.GetByCode( 'CCODE', itemsloo.ccode ) %]</td>
+            <td class="hq-itemtype">[% ItemTypes.GetDescription( itemsloo.itype ) %]</td>
             <td class="hq-callnumber">[% itemsloo.location %] [% itemsloo.itemcallnumber %]</td>
             <td class="hq-copynumber">[% itemsloo.copynumber %]</td>
             <td class="hq-enumchron">[% itemsloo.enumchron %]</td>
