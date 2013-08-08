@@ -3059,11 +3059,11 @@ CREATE TABLE ratings ( -- information related to the star ratings in the OPAC
 --
 
 DROP TABLE IF EXISTS quotes;
-CREATE TABLE `quotes` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `source` text DEFAULT NULL,
-  `text` mediumtext NOT NULL,
-  `timestamp` datetime NOT NULL,
+CREATE TABLE `quotes` ( -- data for the quote of the day feature
+  `id` int(11) NOT NULL AUTO_INCREMENT, -- unique id for the quote
+  `source` text DEFAULT NULL, -- source/credit for the quote
+  `text` mediumtext NOT NULL, -- text of the quote
+  `timestamp` datetime NOT NULL, -- date and time that the quote last appeared in the opac
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
