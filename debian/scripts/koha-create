@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # koha-create -- Create a new Koha instance.
 # Copyright 2010  Catalyst IT, Ltd
@@ -22,6 +22,7 @@ set -e
 usage="Usage: $0 [--create-db|--request-db|--populate-db|--use-db] \
     [--marcflavor marc21|normarc|unimarc] \
     [--zebralang en|es|fr|nb|ru|uk] \
+    [--auth-idx dom|grs1] [--biblio-idx dom|grs1] \
     [--defaultsql /path/to/some.sql] \
     [--configfile /path/to/config] [--passwdfile /path/to/passwd] \
     [--database database] [--adminuser n] instancename"
@@ -45,6 +46,14 @@ generate_config_file() {
         -e "s/__ZEBRA_PASS__/$zebrapwd/g" \
         -e "s/__ZEBRA_MARC_FORMAT__/$ZEBRA_MARC_FORMAT/g" \
         -e "s/__ZEBRA_LANGUAGE__/$ZEBRA_LANGUAGE/g" \
+        -e "s/__BIBLIOS_INDEXING_MODE__/$BIBLIOS_INDEXING_MODE/g" \
+        -e "s/__AUTHORITIES_INDEXING_MODE__/$AUTHORITIES_INDEXING_MODE/g" \
+        -e "s/__ZEBRA_BIBLIOS_CFG__/$ZEBRA_BIBLIOS_CFG/g" \
+        -e "s/__ZEBRA_AUTHORITIES_CFG__/$ZEBRA_AUTHORITIES_CFG/g" \
+        -e "s/__START_BIBLIOS_RETRIEVAL_INFO__/`echo $START_BIBLIOS_RETRIEVAL_INFO`/g" \
+        -e "s/__END_BIBLIOS_RETRIEVAL_INFO__/`echo $END_BIBLIOS_RETRIEVAL_INFO`/g" \
+        -e "s/__START_AUTHORITIES_RETRIEVAL_INFO__/`echo $START_AUTHORITIES_RETRIEVAL_INFO`/g" \
+        -e "s/__END_AUTHORITIES_RETRIEVAL_INFO__/`echo $END_AUTHORITIES_RETRIEVAL_INFO`/g" \
         -e "s/__DB_NAME__/$mysqldb/g" \
         -e "s/__DB_HOST__/$mysqlhost/g" \
         -e "s/__DB_USER__/$mysqluser/g" \
@@ -53,6 +62,7 @@ generate_config_file() {
         -e "s/__UNIXGROUP__/$username/g" \
         -e "s/__PLUGINS_DIR__/\/var\/lib\/koha\/$name\/plugins/g" \
         "/etc/koha/$1" > "$2"
+
 }
 
 getmysqlhost() {
@@ -75,6 +85,75 @@ getinstancemysqldatabase() {
     xmlstarlet sel -t -v 'yazgfs/config/database' "/etc/koha/sites/$1/koha-conf.xml"
 }
 
+set_biblios_indexing_mode()
+{
+    local indexing_mode=$1
+    local marc_format=$2
+
+    case $indexing_mode in
+        "dom")
+            START_BIBLIOS_RETRIEVAL_INFO=`cat <<EOF
+    <xi:include href="\/etc\/koha\/$marc_format-retrieval-info-bib-dom.xml"\n
+                xmlns:xi="http:\/\/www.w3.org\/2001\/XInclude">\n
+     <xi:fallback>\n
+      <retrievalinfo>
+EOF`
+
+            END_BIBLIOS_RETRIEVAL_INFO=`cat <<EOF
+      <\/retrievalinfo>\n
+     <\/xi:fallback>\n
+    <\/xi:include>
+EOF`
+            BIBLIOS_INDEXING_MODE="dom"
+            ZEBRA_BIBLIOS_CFG="zebra-biblios-dom.cfg"
+            ;;
+        "grs1")
+            START_BIBLIOS_RETRIEVAL_INFO="    <retrievalinfo>"
+            END_BIBLIOS_RETRIEVAL_INFO="    <\/retrievalinfo>"
+            BIBLIOS_INDEXING_MODE="grs1"
+            ZEBRA_BIBLIOS_CFG="zebra-biblios.cfg"
+            ;;
+        *)
+            die "Error: '$indexing_mode' is not a valid indexing mode for bibliographic records."
+            ;;
+    esac
+}
+
+
+set_authorities_indexing_mode()
+{
+    local indexing_mode=$1
+    local marc_format=$2
+
+    case $indexing_mode in
+        "dom")
+            START_AUTHORITIES_RETRIEVAL_INFO=`cat <<EOF
+    <xi:include href="\/etc\/koha\/$marc_format-retrieval-info-auth-dom.xml"\n
+                xmlns:xi="http:\/\/www.w3.org\/2001\/XInclude">\n
+     <xi:fallback>\n
+      <retrievalinfo>
+EOF`
+
+            END_AUTHORITIES_RETRIEVAL_INFO=`cat <<EOF
+      <\/retrievalinfo>\n
+     <\/xi:fallback>\n
+    <\/xi:include>\n
+EOF`
+            AUTHORITIES_INDEXING_MODE="dom"
+            ZEBRA_AUTHORITIES_CFG="zebra-authorities-dom.cfg"
+            ;;
+        "grs1")
+            START_AUTHORITIES_RETRIEVAL_INFO="    <retrievalinfo>"
+            END_AUTHORITIES_RETRIEVAL_INFO="    <\/retrievalinfo>"
+            AUTHORITIES_INDEXING_MODE="grs1"
+            ZEBRA_AUTHORITIES_CFG="zebra-authorities.cfg"
+            ;;
+        *)
+            die "Error: '$indexing_mode' is not a valid indexing mode for authority records."
+            ;;
+    esac
+}
+
 # Set defaults and read config file, if it exists.
 DOMAIN=""
 OPACPORT="80"
@@ -88,6 +167,16 @@ ZEBRA_MARC_FORMAT="marc21"
 ZEBRA_LANGUAGE="en"
 ADMINUSER="1"
 PASSWDFILE="/etc/koha/passwd"
+
+# Indexing mode variables (default is DOM)
+BIBLIOS_INDEXING_MODE="dom"
+AUTHORITIES_INDEXING_MODE="dom"
+
+START_BIBLIOS_RETRIEVAL_INFO=""
+END_BIBLIOS_RETRIEVAL_INFO=""
+START_AUTHORITIES_RETRIEVAL_INFO=""
+END_AUTHORITIES_RETRIEVAL_INFO=""
+
 if [ -e /etc/koha/koha-sites.conf ]
 then
     . /etc/koha/koha-sites.conf
@@ -95,7 +184,7 @@ fi
 
 [ $# -ge 2 ] && [ $# -le 16 ] || die $usage
 
-TEMP=`getopt -o crpm:l:d:f:b:a: -l create-db,request-db,populate-db,use-db,marcflavor:,zebralang:,defaultsql:,configfile:,passwdfile:,database:,adminuser: \
+TEMP=`getopt -o crpm:l:d:f:b:a: -l create-db,request-db,populate-db,use-db,marcflavor:,auth-idx:,biblio-idx:,zebralang:,defaultsql:,configfile:,passwdfile:,database:,adminuser: \
      -n "$0" -- "$@"`
 
 # Note the quotes around `$TEMP': they are essential!
@@ -106,6 +195,9 @@ CLO_ZEBRA_MARC_FORMAT=""
 CLO_ZEBRA_LANGUAGE=""
 CLO_DEFAULTSQL=""
 CLO_ADMINUSER=""
+CLO_BIBLIOS_INDEXING_MODE=""
+CLO_AUTHORITIES_INDEXING_MODE=""
+
 
 while true ; do
 	case "$1" in
@@ -115,6 +207,8 @@ while true ; do
         -u|--use-db) op=use ; shift ;;
 		-m|--marcflavor) CLO_ZEBRA_MARC_FORMAT="$2" ; shift 2 ;;
 		-l|--zebralang) CLO_ZEBRA_LANGUAGE="$2" ; shift 2 ;;
+		--auth-idx) CLO_AUTHORITIES_INDEXING_MODE="$2" ; shift 2 ;;
+		--biblio-idx) CLO_BIBLIOS_INDEXING_MODE="$2" ; shift 2 ;;
 		-d|--defaultsql) CLO_DEFAULTSQL="$2" ; shift 2 ;;
 		-f|--configfile) configfile="$2" ; shift 2 ;;
         -s|--passwdfile) CLO_PASSWDFILE="$2" ; shift 2 ;;
@@ -157,6 +251,19 @@ if [ "$CLO_PASSWDFILE" != "" ]
 then
     PASSWDFILE="$CLO_PASSWDFILE"
 fi
+
+if [ "$CLO_BIBLIOS_INDEXING_MODE" !=  "" ]; then
+    BIBLIOS_INDEXING_MODE=$CLO_BIBLIOS_INDEXING_MODE
+fi
+
+set_biblios_indexing_mode $BIBLIOS_INDEXING_MODE $ZEBRA_MARC_FORMAT
+
+
+if [ "$CLO_AUTHORITIES_INDEXING_MODE" !=  "" ]; then
+    AUTHORITIES_INDEXING_MODE=$CLO_AUTHORITIES_INDEXING_MODE
+fi
+
+set_authorities_indexing_mode $AUTHORITIES_INDEXING_MODE $ZEBRA_MARC_FORMAT
 
 name="$1"
 
@@ -261,6 +368,8 @@ eof
     # Generate and install Zebra config files.
     generate_config_file zebra-biblios-site.cfg.in \
         "/etc/koha/sites/$name/zebra-biblios.cfg"
+    generate_config_file zebra-biblios-dom-site.cfg.in \
+        "/etc/koha/sites/$name/zebra-biblios-dom.cfg"
     generate_config_file zebra-authorities-site.cfg.in \
         "/etc/koha/sites/$name/zebra-authorities.cfg"
     generate_config_file zebra-authorities-dom-site.cfg.in \
