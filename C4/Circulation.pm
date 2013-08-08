@@ -2828,13 +2828,14 @@ sub GetTransfersFromTo {
 
 sub DeleteTransfer {
     my ($itemnumber) = @_;
+    return unless $itemnumber;
     my $dbh          = C4::Context->dbh;
     my $sth          = $dbh->prepare(
         "DELETE FROM branchtransfers
          WHERE itemnumber=?
          AND datearrived IS NULL "
     );
-    $sth->execute($itemnumber);
+    return $sth->execute($itemnumber);
 }
 
 =head2 AnonymiseIssueHistory
