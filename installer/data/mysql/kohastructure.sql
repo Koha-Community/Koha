@@ -2413,14 +2413,14 @@ CREATE TABLE `message_transports` (
 --
 
 DROP TABLE IF EXISTS `borrower_files`;
-CREATE TABLE IF NOT EXISTS `borrower_files` (
-  `file_id` int(11) NOT NULL AUTO_INCREMENT,
-  `borrowernumber` int(11) NOT NULL,
-  `file_name` varchar(255) NOT NULL,
-  `file_type` varchar(255) NOT NULL,
-  `file_description` varchar(255) DEFAULT NULL,
-  `file_content` longblob NOT NULL,
-  `date_uploaded` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+CREATE TABLE IF NOT EXISTS `borrower_files` ( -- files attached to the patron/borrower record
+  `file_id` int(11) NOT NULL AUTO_INCREMENT, -- unique key
+  `borrowernumber` int(11) NOT NULL, -- foreign key linking to the patron via the borrowernumber
+  `file_name` varchar(255) NOT NULL, -- file name
+  `file_type` varchar(255) NOT NULL, -- type of file
+  `file_description` varchar(255) DEFAULT NULL, -- description given to the file
+  `file_content` longblob NOT NULL, -- the file
+  `date_uploaded` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP, -- date and time the file was added
   PRIMARY KEY (`file_id`),
   KEY `borrowernumber` (`borrowernumber`),
   CONSTRAINT borrower_files_ibfk_1 FOREIGN KEY (borrowernumber) REFERENCES borrowers (borrowernumber) ON DELETE CASCADE ON UPDATE CASCADE
