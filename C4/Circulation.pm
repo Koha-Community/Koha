@@ -3270,9 +3270,10 @@ Deletes all the branch transfer limits for one branch
 
 sub DeleteBranchTransferLimits {
     my $branch = shift;
+    return unless $branch;
     my $dbh    = C4::Context->dbh;
     my $sth    = $dbh->prepare("DELETE FROM branch_transfer_limits WHERE fromBranch = ?");
-    $sth->execute($branch);
+    return $sth->execute($branch);
 }
 
 sub ReturnLostItem{
