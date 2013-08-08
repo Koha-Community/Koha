@@ -403,7 +403,7 @@ function verify_images() {
                                 : due [% item.datedue %]
                             </span>
                         [% ELSIF ( item.transfertwhen ) %]
-                            <span class="intransit">In transit from [% itemloo.transfertfrom %] to [% itemloo.transfertto %] since [% itemloo.transfertwhen %]</span>
+                            <span class="intransit">In transit from [% item.transfertfrom %] to [% item.transfertto %] since [% item.transfertwhen %]</span>
                         [% END %]
 
                         [% IF ( item.itemlost ) %]
