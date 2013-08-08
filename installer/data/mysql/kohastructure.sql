@@ -2913,12 +2913,12 @@ CREATE TABLE transport_cost (
 
 DROP TABLE IF EXISTS `biblioimages`;
 
-CREATE TABLE `biblioimages` (
- `imagenumber` int(11) NOT NULL AUTO_INCREMENT,
- `biblionumber` int(11) NOT NULL,
- `mimetype` varchar(15) NOT NULL,
- `imagefile` mediumblob NOT NULL,
- `thumbnail` mediumblob NOT NULL,
+CREATE TABLE `biblioimages` ( -- local cover images
+ `imagenumber` int(11) NOT NULL AUTO_INCREMENT, -- unique identifier for the image
+ `biblionumber` int(11) NOT NULL, -- foreign key from biblio table to link to biblionumber
+ `mimetype` varchar(15) NOT NULL, -- image type
+ `imagefile` mediumblob NOT NULL, -- image file contents
+ `thumbnail` mediumblob NOT NULL, -- thumbnail file contents
  PRIMARY KEY (`imagenumber`),
  CONSTRAINT `bibliocoverimage_fk1` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
