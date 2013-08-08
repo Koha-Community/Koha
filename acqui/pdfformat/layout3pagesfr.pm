@@ -35,10 +35,10 @@ use C4::Branch qw(GetBranchDetail GetBranchName);
 BEGIN {
          use Exporter   ();
          our ($VERSION, @ISA, @EXPORT, @EXPORT_OK, %EXPORT_TAGS);
-	# set the version for version checking
+         # set the version for version checking
          $VERSION     = 1.00;
-	@ISA    = qw(Exporter);
-	@EXPORT = qw(printpdf);
+         @ISA    = qw(Exporter);
+         @EXPORT = qw(printpdf);
 }
 
 
