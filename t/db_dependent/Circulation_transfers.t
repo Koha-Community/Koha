@@ -9,7 +9,7 @@ use C4::Circulation;
 use Koha::DateUtils;
 use DateTime::Duration;
 
-use Test::More tests => 15;
+use Test::More tests => 17;
 
 BEGIN {
     use_ok('C4::Circulation');
@@ -191,8 +191,8 @@ is(
     1,
     "A Branch TransferLimit has been deleted"
 );
-#FIXME :The following test should pass but doesn't because currently the routine DeleteBranchTransferLimit returns nothin
-#is(C4::Circulation::DeleteBranchTransferLimits(),undef,"Without parameters DeleteBranchTransferLimit returns undef");
+is(C4::Circulation::DeleteBranchTransferLimits(),undef,"Without parameters DeleteBranchTransferLimit returns undef");
+is(C4::Circulation::DeleteBranchTransferLimits('B'),'0E0',"With a wrong id DeleteBranchTransferLimit returns 0E0");
 
 #Test DeleteTransfer
 is( C4::Circulation::DeleteTransfer($item_id1),
