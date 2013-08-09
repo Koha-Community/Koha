@@ -17,13 +17,17 @@
 
   <refnamediv>
     <refname>koha-list</refname>
-    <refpurpose>Lists Koha instances, optionally only those that are enabled or have email turned on.</refpurpose>
+    <refpurpose>Lists Koha instances, and optionally only those that are enabled/disabled or have email and/or sip turned on/off.</refpurpose>
     <refclass>UNIX/Linux</refclass>
   </refnamediv>
 
   <refsynopsisdiv>
     <cmdsynopsis>
-      <command>koha-list</command> <arg><option>--enabled</option>|<option>--disabled</option></arg> <arg><option>--email</option>|<option>--noemail</option></arg> <arg><option>-h</option></arg>
+      <command>koha-list</command>
+      <arg><option>--enabled</option>|<option>--disabled</option></arg>
+      <arg><option>--email</option>|<option>--noemail</option></arg>
+      <arg><option>--sip</option>|<option>--nosip</option></arg>
+      <arg><option>-h</option>|<option>--help</option></arg>
     </cmdsynopsis>
   </refsynopsisdiv>
   
@@ -55,7 +59,20 @@
       </listitem>
     </varlistentry>
     <varlistentry>
-      <term><option>-h</option></term>
+      <term><option>--sip</option></term>
+      <listitem>
+        <para>Only show instances that have sip enabled.</para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term><option>--nosip</option></term>
+      <listitem>
+        <para>Only show instances that do not have sip enabled.</para>
+      </listitem>
+    </varlistentry>
+
+    <varlistentry>
+      <term><option>-h</option>|<option>--help</option></term>
       <listitem>
         <para>This help.</para>
       </listitem>
@@ -64,7 +81,7 @@
   </refsect1>
 
   <refsect1><title>Description</title>
-  <para>Lists Koha instances, optionally only those that are enabled or have email turned on.</para>
+  <para>This script lists Koha instances on a server. Optionally only those that are enabled or disabled can be listed. There are also options for listing only servers that have email or sip enabled/disabled. These limits can be applied alone or in combination.</para>
   </refsect1>
   
   <refsect1><title>See also</title>
