@@ -1,3 +1,4 @@
+[% USE Branches %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Reports &rsaquo; Items with no checkouts</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -65,21 +66,14 @@
 			</tr>
 				[% IF ( looptable.looprow ) %]
 				[% FOREACH loopro IN looptable.looprow %]
-				[% DEFAULT
-                    loopro.itemcallnumber="No call number"
-                    loopro.barcode="No barcode"
-				    loopro.title="NO TITLE"
-				    loopro.author=""
-				%]
 				    [% UNLESS ( loop.odd ) %]<tr class="highlight">
 		                    [% ELSE %]<tr>[% END %]
 		    
 						<td>[% loop.count %]</td>
-						<td>[% loopro.itemcallnumber %]</td>
-						<td>[% loopro.barcode %]</td>
- 						<td><p><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% loopro.biblionumber %]">[% loopro.title %]</a></p>
-							[% loopro.author %]
-							[% IF ( loopro.branch ) %]at [% loopro.branch %][% END %]
+                        <td>[% IF ( loopro.itemcallnumber ) %][% loopro.itemcallnumber %][% ELSE %]No call number[% END %]</td>
+                        <td>[% IF ( loopro.barcode ) %][% loopro.barcode %][% ELSE %]No barcode[% END %]</td>
+                        <td><p><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% loopro.biblionumber %]">[% IF ( loopro.title ) %][% loopro.title %][% ELSE %]NO TITLE[% END %]</a> [% IF ( loopro.author ) %] by [% loopro.author %][% END %]</p>
+                            [% IF ( loopro.branch ) %]at [% Branches.GetName( loopro.branch ) %][% END %]
 						</td>
 					</tr>
 				[% END %]
@@ -159,7 +153,8 @@
 	<fieldset class="action">
 	<input type="submit" value="Submit" />
 	<input type="hidden" name="report_name" value="[% report_name %]" />
-	<input type="hidden" name="do_it" value="1" />
+    <input type="hidden" name="do_it" value="1" />
+    <input type="hidden" name="output" value="screen" />
 	</fieldset>
 	</form>
 [% END %]
