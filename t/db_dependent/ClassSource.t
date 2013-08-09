@@ -34,12 +34,12 @@ $dbh->do(q|DELETE FROM class_sources|);
 $dbh->do(q|DELETE FROM class_sort_rules|);
 
 #Test AddClassSortRule
-my $countSources  = scalar( keys(GetClassSources) );
-my $countSources2 = scalar( keys(GetClassSortRules) );
+my $countSources  = scalar( keys(%{ GetClassSources() }) );
+my $countSources2 = scalar( keys(%{ GetClassSortRules() }) );
 AddClassSortRule( 'sortrule1', 'description1', 'routine1' );
 AddClassSortRule( 'sortrule2', 'description2', 'routine2' );
 is(
-    scalar( keys(GetClassSortRules) ),
+    scalar( keys(%{ GetClassSortRules() }) ),
     $countSources + 2,
     "SortRule1 and SortRules2 have been added"
 );
@@ -48,7 +48,7 @@ is(
 AddClassSource( 'source1', 'Description_source1', 1, 'sortrule1' );
 AddClassSource( 'source2', 'Description_source2', 0, 'sortrule1' );
 is(
-    scalar( keys(GetClassSources) ),
+    scalar( keys(%{ GetClassSources() }) ),
     $countSources2 + 2,
     "Source1 and source2 have been added"
 );
@@ -148,24 +148,24 @@ is_deeply( \@sources, [],
 
 #Test DelClassSortRule
 #DelClassSortRule ('sortrule1');
-#is(scalar (keys (GetClassSortRules)),1,"SortRule1 has been deleted");#FIXME : impossible if some sources exist
+#is(scalar (keys (%{ GetClassSortRules() })),1,"SortRule1 has been deleted");#FIXME : impossible if some sources exist
 DelClassSortRule('sortrule2');
-is( scalar( keys(GetClassSortRules) ), 1, "SortRule2 has been deleted" );
+is( scalar( keys(%{ GetClassSortRules() }) ), 1, "SortRule2 has been deleted" );
 DelClassSortRule();
-is( scalar( keys(GetClassSortRules) ),
+is( scalar( keys(%{ GetClassSortRules() }) ),
     1, "Without params DelClassSortRule doesn't do anything" );
 DelClassSortRule('doesnt_exist');
-is( scalar( keys(GetClassSortRules) ),
+is( scalar( keys(%{ GetClassSortRules() }) ),
     1, "With wrong id, DelClassSortRule doesn't do anything" );
 
 #Test DelClassSource
 DelClassSource('source2');
-is( scalar( keys(GetClassSources) ), 1, "Source2 has been deleted" );
+is( scalar( keys(%{ GetClassSources() }) ), 1, "Source2 has been deleted" );
 DelClassSource();
-is( scalar( keys(GetClassSources) ),
+is( scalar( keys(%{ GetClassSources() }) ),
     1, "Without params DelClassSource doesn't do anything" );
 DelClassSource('doesnt_exist');
-is( scalar( keys(GetClassSources) ),
+is( scalar( keys(%{ GetClassSources() }) ),
     1, "With wrong id, DelClassSource doesn't do anything" );
 
 #Test ModClassSortRule
