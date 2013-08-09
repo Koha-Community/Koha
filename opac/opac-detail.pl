@@ -364,13 +364,13 @@ if ($session->param('busc')) {
     my ($previous, $next, $dataBiblioPaging);
     # Previous biblio
     if ($paging{'previous'}->{biblionumber}) {
-        $previous = 'opac-detail.pl?biblionumber=' . $paging{'previous'}->{biblionumber};
+        $previous = 'opac-detail.pl?biblionumber=' . $paging{'previous'}->{biblionumber}  . '&query_desc=' . $query->param('query_desc');
         $dataBiblioPaging = GetBiblioData($paging{'previous'}->{biblionumber});
         $template->param('previousTitle' => $dataBiblioPaging->{'title'}) if ($dataBiblioPaging);
     }
     # Next biblio
     if ($paging{'next'}->{biblionumber}) {
-        $next = 'opac-detail.pl?biblionumber=' . $paging{'next'}->{biblionumber};
+        $next = 'opac-detail.pl?biblionumber=' . $paging{'next'}->{biblionumber} . '&query_desc=' . $query->param('query_desc');
         $dataBiblioPaging = GetBiblioData($paging{'next'}->{biblionumber});
         $template->param('nextTitle' => $dataBiblioPaging->{'title'}) if ($dataBiblioPaging);
     }
