@@ -4,6 +4,15 @@
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
 <script type= "text/javascript">
 //<![CDATA[
+function enableCheckboxActions(){
+    // Enable/disable controls if checkboxes are checked
+    var checkedBoxes = $("input.cb:checked");
+    if ($(checkedBoxes).size()) {
+      $("#payselected").prop("disabled",false);
+    } else {
+      $("#payselected").prop("disabled",true);
+    }
+}
     $(document).ready(function(){
  $('#pay-fines-form').preventDoubleFormSubmit();
         $("#woall").click(function(event){
@@ -12,8 +21,20 @@
                     event.preventDefault();
                 }
         });
-        $('#CheckAll').click(function(){ $("#finest").checkCheckboxes(); return false;});
-        $('#CheckNone').click(function(){ $("#finest").unCheckCheckboxes(); return false;});
+        $('#CheckAll').click(function(){
+            $("#finest").checkCheckboxes();
+            enableCheckboxActions();
+            return false;
+        });
+        $('#CheckNone').click(function(){
+            $("#finest").unCheckCheckboxes();
+            enableCheckboxActions();
+            return false;
+        });
+        $(".cb").change(function(){
+            enableCheckboxActions();
+        });
+        enableCheckboxActions();
     });
 //]]>
 </script>
@@ -71,7 +92,7 @@
 <tr>
     <td>
     [% IF ( line.amountoutstanding > 0 ) %]
-        <input type="checkbox" checked="checked" name="incl_par_[% line.accountno %]" />
+        <input class="cb" type="checkbox" checked="checked" name="incl_par_[% line.accountno %]" />
     [% END %]
     </td>
     <td>
@@ -111,9 +132,9 @@
 </tbody>
 </table>
 <fieldset class="action">
-<input type="submit" name="paycollect"  value="Pay amount" class="submit" />
+<input type="submit" id="paycollect" name="paycollect"  value="Pay amount" class="submit" />
 <input type="submit" name="woall"  id="woall" value="Write off all" class="submit" />
-<input type="submit" name="payselected"  value="Pay selected" class="submit" />
+<input type="submit" id="payselected" name="payselected"  value="Pay selected" class="submit" />
 <a class="cancel" href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% borrower.borrowernumber %]">Cancel</a>
 </fieldset>
 </form>
