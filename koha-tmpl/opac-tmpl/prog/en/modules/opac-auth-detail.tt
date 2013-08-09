@@ -2,9 +2,9 @@
 [% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo;  Entry
 [% INCLUDE 'doc-head-close.inc' %]
 [% IF ( displayhierarchy ) %]
-<script language="javascript" type="text/javascript" src="/opac-tmpl/lib/jquery/plugins/jquery.jstree.js"></script>
+<script type="text/javascript" src="/opac-tmpl/lib/jquery/plugins/jquery.jstree.js"></script>
 [% END %]
-<script language="javascript" type="text/javascript">
+<script type="text/javascript">
 //<![CDATA[
 $(document).ready(function() {
     $('#authdescriptions').tabs();
@@ -32,7 +32,7 @@ $(document).ready(function() {
     <div id="yui-main">
     <div class="yui-b"><div class="yui-g">
 
-    <div id="views"><span class="view"><span id="Normalview">Normal view</span></span> <span class="view"><a id="MARCview" href="/cgi-bin/koha/opac-authoritiesdetail.pl?authid=[% authid %]&marc=1">MARC view</a></span></div>
+    <div id="views"><span class="view"><span id="Normalview">Normal view</span></span> <span class="view"><a id="MARCview" href="/cgi-bin/koha/opac-authoritiesdetail.pl?authid=[% authid %]&amp;marc=1">MARC view</a></span></div>
 
 <div id="userauthdetails" class="container">
 
@@ -60,6 +60,7 @@ $(document).ready(function() {
         <span class="seefrom">[% PROCESS authheadingdisplay heading=seefro.heading search=seefrosearch authid=seefro.authid %]</span>
         </li>
     [% END %]
+    </ul>
     [% PROCESS otherscript headings=summary.otherscript wantcategory='seefrom' %]
     </div>
 [% END %]
@@ -106,5 +107,5 @@ $(document).ready(function() {
 </div>
 </div>
 </div>
-</div>
+
 [% INCLUDE 'opac-bottom.inc' %]
