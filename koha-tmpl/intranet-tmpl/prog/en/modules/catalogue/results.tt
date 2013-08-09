@@ -1,3 +1,4 @@
+[% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Catalog &rsaquo; [% IF ( searchdesc ) %]Results of search [% IF ( query_desc ) %]for '[% query_desc | html %]'[% END %][% IF ( limit_desc ) %]&nbsp;with limit(s):&nbsp;'[% limit_desc | html %]'[% END %][% ELSE %]You did not specify any search criteria[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -162,7 +163,9 @@ $('#sort_by').change(function() {
 function highlightOn() {
     var x;
     for (x in q_array) {
-        if ( q_array[x].length > 0 ) {
+        q_array[x] = q_array[x].toLowerCase();
+        var myStopwords = "[% Koha.Preference('OpacHighlightedStopWords') %]".toLowerCase().split('|');
+        if ( (q_array[x].length > 0) && ($.inArray(q_array[x], myStopwords) == -1) ) {
             toHighlight.highlight(q_array[x]);
         }
     }

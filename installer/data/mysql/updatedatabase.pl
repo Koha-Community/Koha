@@ -8600,6 +8600,15 @@ $DBversion = "3.17.00.013";
 if ( CheckVersion($DBversion) ) {
     $dbh->do("INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES ('maxreserves',50,'System-wide maximum number of holds a patron can place','','Integer')");
     print "Upgrade to $DBversion done (Re-add system preference maxreserves)\n";
+    SetVersion ($DBversion);
+}
+
+
+$DBversion = "3.17.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OpacHighlightedStopWords','and|And|or|Or',NULL,'List of words to NOT highlight when OpacHitHighlight is enabled','free')"
+    );
+    print "Upgrade to $DBversion done (Bug 6149: Operator highlighted in search results)\n";
     SetVersion($DBversion);
 }
 

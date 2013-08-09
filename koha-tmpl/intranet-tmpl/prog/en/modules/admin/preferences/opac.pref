@@ -151,7 +151,10 @@ OPAC:
               choices:
                   yes: Highlight
                   no: "Don't highlight"
-            - words the patron searched for in their search results and detail pages.
+            - words the patron searched for in their search results and detail pages; To prevent certain words from ever being highlighted, enter a list of stopwords here
+            - pref: OpacHighlightedStopWords
+              class: multi
+            - (separate columns with |)
         -
             - pref: AuthorisedValueImages
               choices:

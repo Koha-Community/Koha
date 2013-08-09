@@ -238,6 +238,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('opacheader','','70|10','Add HTML to be included as a custom header in the OPAC','Textarea'),
 ('OpacHiddenItems','','','This syspref allows to define custom rules for hiding specific items at opac. See docs/opac/OpacHiddenItems.txt for more informations.','Textarea'),
 ('OpacHighlightedWords','1','','If Set, then queried words are higlighted in OPAC','YesNo'),
+('OpacHighlightedStopWords','and|And|or|Or',NULL,'List of words to NOT highlight when OpacHitHighlight is enabled','free'),
 ('OpacHoldNotes','0','','Show hold notes on OPAC','YesNo'),
 ('OPACItemHolds','1','0|1|force','Allow OPAC users to place hold on specific items. If No, users can only request next available copy. If Yes, users can choose between next available and specific copy. If Force, users *must* choose a specific copy.','Choice'),
 ('OpacItemLocation','callnum','callnum|ccode|location','Show the shelving location of items in the opac','Choice'),
