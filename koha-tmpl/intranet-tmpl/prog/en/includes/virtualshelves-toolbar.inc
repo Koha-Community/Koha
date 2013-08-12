@@ -38,7 +38,7 @@
         <div class="btn-group">
             <button class="btn btn-small dropdown-toggle" data-toggle="dropdown"><i class="icon-pencil"></i> Edit <span class="caret"></span></button>
                 <ul class="dropdown-menu">
-                    <li><a href="/cgi-bin/koha/virtualshelves/shelves.pl?shelfnumber=[% shelfnumber %]&amp;op=modif">Edit list</a></li>
+                    <li><a href="/cgi-bin/koha/virtualshelves/shelves.pl?shelfnumber=[% shelfnumber %]&amp;op=modif&amp;display=viewshelf">Edit list</a></li>
                     [% IF ( showprivateshelves ) %]
                         <li><a id="deleteshelf" href="/cgi-bin/koha/virtualshelves/shelves.pl?display=privateshelves&amp;shelves=1&amp;DEL-[% shelfnumber %]=1">Delete list</a></li>
                     [% ELSE %]

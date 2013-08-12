@@ -347,6 +347,7 @@ function placeHold () {
 
     [% IF ( edit ) %]
 		<input type="hidden" name="op" value="modifsave" />
+        <input type="hidden" name="display" value="[% display %]" />
         [% IF ( showprivateshelves ) %]<input type="hidden" name="display" value="privateshelves" />[% END %]
 		<input type="hidden" name="shelfnumber" value="[% shelfnumber %]" />
         <legend>Edit list <i>[% shelfname | html %]</i></legend>
