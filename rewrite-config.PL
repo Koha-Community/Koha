@@ -121,6 +121,7 @@ $prefix = $ENV{'INSTALL_BASE'} || "/usr";
   '__ZEBRA_RUN_DIR__' => "$prefix/var/run/zebradb",
   '__ZEBRA_MARC_FORMAT__' => 'marc21',
   '__ZEBRA_LANGUAGE__' => 'en',
+  '__ZEBRA_TOKENIZER__' => 'chr',
   '__ZEBRA_TOKENIZER_STMT__' => 'charmap word-phrase-utf.chr',
   '__ZEBRA_AUTH_CFG__' => 'zebra-authorities.cfg',
   '__ZEBRA_BIB_CFG__' => 'zebra-biblios.cfg',
