@@ -3317,11 +3317,12 @@ sub GetOfflineOperations {
 }
 
 sub GetOfflineOperation {
+	my $operationid = shift;
+	return unless $operationid;
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare("SELECT * FROM pending_offline_operations WHERE operationid=?");
-    $sth->execute( shift );
-    my $result = $sth->fetchrow_hashref;
-    return $result;
+    $sth->execute( $operationid );
+    return $sth->fetchrow_hashref;
 }
 
 sub AddOfflineOperation {
