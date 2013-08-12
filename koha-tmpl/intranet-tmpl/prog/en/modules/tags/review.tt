@@ -1,6 +1,9 @@
+[% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Home &rsaquo; Tools &rsaquo; Tags &rsaquo; [% IF ( do_it ) %]Review &rsaquo; [% ELSE %]Review tags[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
+<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/en/css/datatables.css" />
+[% INCLUDE 'datatables.inc' %]
 [% INCLUDE 'calendar.inc' %]
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
 <style type="text/css">
@@ -121,6 +124,22 @@ td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
 		$("*").ajaxError(function(evt, request, settings){
 			if ((alerted +=1) <= 1){ window.alert(_("AJAX error")+" (" + alerted + " alert)"); }
 		});
+        $("#tagst").dataTable($.extend(true, {}, dataTablesDefaults, {
+            "aoColumnDefs": [
+                [% IF ( filter_approved_pending ) %]
+                    { "aTargets": [ 0,1,-2 ], "bSortable": false, "bSearchable": false }
+                [% ELSE %]
+                    { "aTargets": [ 0,1,-3 ], "bSortable": false, "bSearchable": false }
+                [% END %]
+            ],
+            "aoColumns": [
+                null,null,null,null,null,null,[% UNLESS ( filter_approved_pending ) %]null,[% END %]{ "sType": "title-string" }
+            ],
+            "aaSorting": [[ 4, "desc" ]],
+            "aLengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]],
+            "iDisplayLength": 20,
+            "sPaginationType": "four_button"
+        }));
 	});
 //]]>
 </script>
@@ -184,58 +203,63 @@ td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
   [% END %]
   [% IF ( tagloop ) %]
   <p class="check"></p>
-  <table>
-    <tr>
-    	<th>&nbsp;</th>
-    	<th>&nbsp;</th>
+  <table id="tagst">
+    <thead>
+        <tr>
+		<th>&nbsp;</th>
+		<th>&nbsp;</th>
 		<th>Status</th>
 		<th>Term</th>
 		<th>Weight</th>
 		<th>Actions</th>
-        [% UNLESS ( filter_approved_pending ) %]<th>Reviewer</th>[% END %]
+            [% UNLESS ( filter_approved_pending ) %]<th>Reviewer</th>[% END %]
 		<th>Date</th>
 	</tr>
-	[% FOREACH tagloo IN tagloop %]
-	<tr>
-	    <td class="count">[% offset + loop.count %]
-	    </td>
-        [% IF ( tagloo.approved == 0 ) %]<td><span><input type="checkbox" value="[% tagloo.term %]" name="tags" class="pending" /></span>
-        [% ELSE %]<td><span><input type="checkbox" value="[% tagloo.term %]" name="tags" /></span>[% END %]
-	    </td>
-	    [% IF ( tagloo.approved == -1 ) %]<td class="red">rejected
-        [% ELSIF ( tagloo.approved == 1 ) %]<td class="green"><img alt="OK" src="[% interface %]/[% theme %]/img/approve.gif" />
-		[% ELSE %]<td class="pending">
-		[% END %]
-	    </td>
-	    <td><a href="/cgi-bin/koha/tags/list.pl?tag=[% tagloo.term %]">[% tagloo.term %]</a>
-	    </td>
-		<td>[% tagloo.weight_total %]
-	    </td>
-		[% IF ( tagloo.approved ) %]
-	    <td><span class="ajax_buttons" style="visibility:hidden">
-            [% IF ( tagloo.approved == -1 ) %]
-			<input class="ok"  type="submit" title="[% tagloo.term %]" value="Approve" name="approve" />
-			<input class="rej" disabled="disabled" type="submit" title="[% tagloo.term %]" value="Rejected" name="reject" />
-			[% ELSE %]
-			<input class="ok"  disabled="disabled" type="submit" title="[% tagloo.term %]" value="Approved" name="approve" />
-			<input class="rej" type="submit" title="[% tagloo.term %]" value="Reject" name="reject" />
-			[% END %]
-			</span>
-	    </td>
-	    <td>[% IF ( tagloo.approved_by_name ) %]<a href="/cgi-bin/koha/tags/review.pl?approved_by=[% tagloo.approved_by %]&amp;approved=all">[% tagloo.approved_by_name %]</a>[% ELSE %]&nbsp;[% END %]
-	    </td>
-		[% ELSE %]
-		<td><span class="ajax_buttons" style="visibility:hidden">
-	    	<input class="ok"  type="submit" title="[% tagloo.term %]" value="Approve" name="approve" />
-			<input class="rej" type="submit" title="[% tagloo.term %]" value="Reject" name="reject" />
-			</span>
-	    </td>
-	    [% UNLESS ( filter_approved_pending ) %]<td>&nbsp;</td>[% END %]
-		[% END %]
-	    <td>[% tagloo.date_approved %]
-	    </td>
-	</tr>
-	[% END %]
+    </thead>
+    <tbody>
+    [% FOREACH tagloo IN tagloop %]
+        <tr>
+            <td class="count">[% offset + loop.count %]
+            </td>
+                [% IF ( tagloo.approved == 0 ) %]<td><span><input type="checkbox" value="[% tagloo.term %]" name="tags" class="pending" /></span>
+                [% ELSE %]<td><span><input type="checkbox" value="[% tagloo.term %]" name="tags" /></span>[% END %]
+            </td>
+            [% IF ( tagloo.approved == -1 ) %]<td class="red">rejected
+                [% ELSIF ( tagloo.approved == 1 ) %]<td class="green"><img alt="OK" src="[% interface %]/[% theme %]/img/approve.gif" />
+            [% ELSE %]<td class="pending">
+            [% END %]
+            </td>
+            <td><a href="/cgi-bin/koha/tags/list.pl?tag=[% tagloo.term|uri %]">[% tagloo.term %]</a>
+            </td>
+            <td>[% tagloo.weight_total %]
+            </td>
+            [% IF ( tagloo.approved ) %]
+            <td><span class="ajax_buttons" style="visibility:hidden">
+                    [% IF ( tagloo.approved == -1 ) %]
+                <input class="ok"  type="submit" title="[% tagloo.term %]" value="Approve" name="approve" />
+                <input class="rej" disabled="disabled" type="submit" title="[% tagloo.term %]" value="Rejected" name="reject" />
+                [% ELSE %]
+                <input class="ok"  disabled="disabled" type="submit" title="[% tagloo.term %]" value="Approved" name="approve" />
+                <input class="rej" type="submit" title="[% tagloo.term %]" value="Reject" name="reject" />
+                [% END %]
+                </span>
+            </td>
+            <td>[% IF ( tagloo.approved_by_name ) %]<a href="/cgi-bin/koha/tags/review.pl?approved_by=[% tagloo.approved_by %]&amp;approved=all">[% tagloo.approved_by_name %]</a>[% ELSE %]&nbsp;[% END %]
+            </td>
+            [% ELSE %]
+            <td><span class="ajax_buttons" style="visibility:hidden">
+            <input class="ok"  type="submit" title="[% tagloo.term %]" value="Approve" name="approve" />
+                <input class="rej" type="submit" title="[% tagloo.term %]" value="Reject" name="reject" />
+                </span>
+            </td>
+            [% UNLESS ( filter_approved_pending ) %]<td>&nbsp;</td>[% END %]
+            [% END %]
+            <td>
+                <span title="[% tagloo.date_approved %]">[% tagloo.date_approved | $KohaDates %]</span>
+            </td>
+        </tr>
+    [% END %]
+    </tbody>
   </table>
   [% END %]
     [% IF ( tagloop ) %]<fieldset class="action">
