@@ -1,432 +1,416 @@
-INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES ('AcqViewBaskets','user','user|branch|all','Define which baskets a user is allowed to view: his own only, any within his branch or all','Choice');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('advancedMARCeditor',0,"If ON, the MARC editor won't display field/subfield descriptions",'','YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('AllowHoldDateInFuture','0','If set a date field is displayed on the Hold screen of the Staff Interface, allowing the hold date to be set in the future.','','YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('OPACAllowHoldDateInFuture','0','If set, along with the AllowHoldDateInFuture system preference, OPAC users can set the date of a hold to be in the future.','','YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AmazonLocale','US','Use to set the Locale of your Amazon.com Web Services','US|CA|DE|FR|JP|UK','Choice');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AmazonAssocTag','','See:  http://aws.amazon.com','','free');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AnonSuggestions',0,'Set to enable Anonymous suggestions to AnonymousPatron borrowernumber',NULL,'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AnonymousPatron', '0', 'Set the identifier (borrowernumber) of the anonymous patron. Used for Suggestion and reading history privacy',NULL,'');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('Babeltheque',0,'Turn ON Babeltheque content  - See babeltheque.com to subscribe to this service','','YesNo');
-
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('authoritysep','--','Used to separate a list of authorities in a display. Usually --',10,'free');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('autoBarcode','OFF','Used to autogenerate a barcode: incremental will be of the form 1, 2, 3; annual of the form 2007-0001, 2007-0002; hbyymmincr of the form HB08010001 where HB=Home Branch','incremental|annual|hbyymmincr|EAN13|OFF','Choice');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AutoLocation',0,'If ON, IP authentication is enabled, blocking access to the staff client from unauthorized IP addresses',NULL,'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AutomaticItemReturn',1,'If ON, Koha will automatically set up a transfer of this item to its homebranch',NULL,'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('autoMemberNum',1,'If ON, patron number is auto-calculated','','YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('BiblioDefaultView','normal','Choose the default detail view in the catalog; choose between normal, marc or isbd','normal|marc|isbd','Choice');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('BorrowerMandatoryField','surname|cardnumber','Choose the mandatory fields for a patron\'s account',NULL,'free');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('borrowerRelationship','father|mother','Define valid relationships between a guarantor & a guarantee (separated by | or ,)','','free');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('BorrowersLog',1,'If ON, log edit/create/delete actions on patron data',NULL,'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('casAuthentication', '0', 'Enable or disable CAS authentication', '', 'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('casLogout', '0', 'Does a logout from Koha should also log the user out of CAS?', '', 'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('casServerUrl', 'https://localhost:8443/cas', 'URL of the cas server', '', 'Free');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('CataloguingLog',1,'If ON, log edit/create/delete actions on bibliographic data. WARNING: this feature is very resource consuming.',NULL,'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('checkdigit','none','If ON, enable checks on patron cardnumber: none or \"Katipo\" style checks','none|katipo','Choice');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('COinSinOPACResults', 1, 'If ON, use COinS in OPAC search results page.  NOTE: this can slow down search response time significantly','','YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('delimiter',';','Define the default separator character for exporting reports',';|tabulation|,|/|\\|#|\|','Choice');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('EnhancedMessagingPreferences',0,'If ON, allows patrons to select to receive additional messages about items due or nearly due.','','YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('expandedSearchOption',0,'If ON, set advanced search to be expanded by default',NULL,'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('FineNotifyAtCheckin',0,'If ON notify librarians of overdue fines on the items they are checking in.',NULL,'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('FinesLog',1,'If ON, log fines',NULL,'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('hidelostitems',0,'If ON, disables display of\"lost\" items in OPAC.','','YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('hide_marc',0,'If ON, disables display of MARC fields, subfield codes & indicators (still shows data)',NULL,'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('WaitingNotifyAtCheckin',0,'If ON, notify librarians of waiting holds for the patron whose items they are checking in.',NULL,'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('IndependentBranches',0,'If ON, increases security between libraries',NULL,'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('IntranetBiblioDefaultView','normal','Choose the default detail view in the staff interface; choose between normal, labeled_marc, marc or isbd','normal|marc|isbd|labeled_marc','Choice');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('intranetcolorstylesheet','','Define the color stylesheet to use in the Staff Client','50','free');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('IntranetmainUserblock','','Add a block of HTML that will display on the intranet home page','70|10','Textarea');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('IntranetNav','','Use HTML tabs to add navigational links to the top-hand navigational bar in the Staff Client','70|10','Textarea');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('intranetreadinghistory',1,'If ON, Reading History is enabled for all patrons','','YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('intranetstylesheet','','Enter a complete URL to use an alternate layout stylesheet in Intranet','50','free');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('IntranetUserCSS','','Add CSS to be included in the intranet in an embedded <style> tag.',NULL,'free');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('intranetuserjs','','Custom javascript for inclusion in Intranet','70|10','Textarea');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('intranet_includes','includes','The includes directory you want for specific look of Koha (includes or includes_npl for example)',NULL,'Free');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('ISBD','#100||{ 100a }{ 100b }{ 100c }{ 100d }{ 110a }{ 110b }{ 110c }{ 110d }{ 110e }{ 110f }{ 110g }{ 130a }{ 130d }{ 130f }{ 130g }{ 130h }{ 130k }{ 130l }{ 130m }{ 130n }{ 130o }{ 130p }{ 130r }{ 130s }{ 130t }|<br/><br/>\r\n#245||{ 245a }{ 245b }{245f }{ 245g }{ 245k }{ 245n }{ 245p }{ 245s }{ 245h }|\r\n#246||{ : 246i }{ 246a }{ 246b }{ 246f }{ 246g }{ 246n }{ 246p }{ 246h }|\r\n#242||{ = 242a }{ 242b }{ 242n }{ 242p }{ 242h }|\r\n#245||{ 245c }|\r\n#242||{ = 242c }|\r\n#250| - |{ 250a }{ 250b }|\r\n#254|, |{ 254a }|\r\n#255|, |{ 255a }{ 255b }{ 255c }{ 255d }{ 255e }{ 255f }{ 255g }|\r\n#256|, |{ 256a }|\r\n#257|, |{ 257a }|\r\n#258|, |{ 258a }{ 258b }|\r\n#260| - |{ 260a }{ 260b }{ 260c }|\r\n#300| - |{ 300a }{ 300b }{ 300c }{ 300d }{ 300e }{ 300f }{ 300g }|\r\n#306| - |{ 306a }|\r\n#307| - |{ 307a }{ 307b }|\r\n#310| - |{ 310a }{ 310b }|\r\n#321| - |{ 321a }{ 321b }|\r\n#340| - |{ 3403 }{ 340a }{ 340b }{ 340c }{ 340d }{ 340e }{ 340f }{ 340h }{ 340i }|\r\n#342| - |{ 342a }{ 342b }{ 342c }{ 342d }{ 342e }{ 342f }{ 342g }{ 342h }{ 342i }{ 342j }{ 342k }{ 342l }{ 342m }{ 342n }{ 342o }{ 342p }{ 342q }{ 342r }{ 342s }{ 342t }{ 342u }{ 342v }{ 342w }|\r\n#343| - |{ 343a }{ 343b }{ 343c }{ 343d }{ 343e }{ 343f }{ 343g }{ 343h }{ 343i }|\r\n#351| - |{ 3513 }{ 351a }{ 351b }{ 351c }|\r\n#352| - |{ 352a }{ 352b }{ 352c }{ 352d }{ 352e }{ 352f }{ 352g }{ 352i }{ 352q }|\r\n#362| - |{ 362a }{ 351z }|\r\n#440| - |{ 440a }{ 440n }{ 440p }{ 440v }{ 440x }|.\r\n#490| - |{ 490a }{ 490v }{ 490x }|.\r\n#800| - |{ 800a }{ 800b }{ 800c }{ 800d }{ 800e }{ 800f }{ 800g }{ 800h }{ 800j }{ 800k }{ 800l }{ 800m }{ 800n }{ 800o }{ 800p }{ 800q }{ 800r }{ 800s }{ 800t }{ 800u }{ 800v }|.\r\n#810| - |{ 810a }{ 810b }{ 810c }{ 810d }{ 810e }{ 810f }{ 810g }{ 810h }{ 810k }{ 810l }{ 810m }{ 810n }{ 810o }{ 810p }{ 810r }{ 810s }{ 810t }{ 810u }{ 810v }|.\r\n#811| - |{ 811a }{ 811c }{ 811d }{ 811e }{ 811f }{ 811g }{ 811h }{ 811k }{ 811l }{ 811n }{ 811p }{ 811q }{ 811s }{ 811t }{ 811u }{ 811v }|.\r\n#830| - |{ 830a }{ 830d }{ 830f }{ 830g }{ 830h }{ 830k }{ 830l }{ 830m }{ 830n }{ 830o }{ 830p }{ 830r }{ 830s }{ 830t }{ 830v }|.\r\n#500|<br/><br/>|{ 5003 }{ 500a }|\r\n#501|<br/><br/>|{ 501a }|\r\n#502|<br/><br/>|{ 502a }|\r\n#504|<br/><br/>|{ 504a }|\r\n#505|<br/><br/>|{ 505a }{ 505t }{ 505r }{ 505g }{ 505u }|\r\n#506|<br/><br/>|{ 5063 }{ 506a }{ 506b }{ 506c }{ 506d }{ 506u }|\r\n#507|<br/><br/>|{ 507a }{ 507b }|\r\n#508|<br/><br/>|{ 508a }{ 508a }|\r\n#510|<br/><br/>|{ 5103 }{ 510a }{ 510x }{ 510c }{ 510b }|\r\n#511|<br/><br/>|{ 511a }|\r\n#513|<br/><br/>|{ 513a }{513b }|\r\n#514|<br/><br/>|{ 514z }{ 514a }{ 514b }{ 514c }{ 514d }{ 514e }{ 514f }{ 514g }{ 514h }{ 514i }{ 514j }{ 514k }{ 514m }{ 514u }|\r\n#515|<br/><br/>|{ 515a }|\r\n#516|<br/><br/>|{ 516a }|\r\n#518|<br/><br/>|{ 5183 }{ 518a }|\r\n#520|<br/><br/>|{ 5203 }{ 520a }{ 520b }{ 520u }|\r\n#521|<br/><br/>|{ 5213 }{ 521a }{ 521b }|\r\n#522|<br/><br/>|{ 522a }|\r\n#524|<br/><br/>|{ 524a }|\r\n#525|<br/><br/>|{ 525a }|\r\n#526|<br/><br/>|{\\n510i }{\\n510a }{ 510b }{ 510c }{ 510d }{\\n510x }|\r\n#530|<br/><br/>|{\\n5063 }{\\n506a }{ 506b }{ 506c }{ 506d }{\\n506u }|\r\n#533|<br/><br/>|{\\n5333 }{\\n533a }{\\n533b }{\\n533c }{\\n533d }{\\n533e }{\\n533f }{\\n533m }{\\n533n }|\r\n#534|<br/><br/>|{\\n533p }{\\n533a }{\\n533b }{\\n533c }{\\n533d }{\\n533e }{\\n533f }{\\n533m }{\\n533n }{\\n533t }{\\n533x }{\\n533z }|\r\n#535|<br/><br/>|{\\n5353 }{\\n535a }{\\n535b }{\\n535c }{\\n535d }|\r\n#538|<br/><br/>|{\\n5383 }{\\n538a }{\\n538i }{\\n538u }|\r\n#540|<br/><br/>|{\\n5403 }{\\n540a }{ 540b }{ 540c }{ 540d }{\\n520u }|\r\n#544|<br/><br/>|{\\n5443 }{\\n544a }{\\n544b }{\\n544c }{\\n544d }{\\n544e }{\\n544n }|\r\n#545|<br/><br/>|{\\n545a }{ 545b }{\\n545u }|\r\n#546|<br/><br/>|{\\n5463 }{\\n546a }{ 546b }|\r\n#547|<br/><br/>|{\\n547a }|\r\n#550|<br/><br/>|{ 550a }|\r\n#552|<br/><br/>|{ 552z }{ 552a }{ 552b }{ 552c }{ 552d }{ 552e }{ 552f }{ 552g }{ 552h }{ 552i }{ 552j }{ 552k }{ 552l }{ 552m }{ 552n }{ 562o }{ 552p }{ 552u }|\r\n#555|<br/><br/>|{ 5553 }{ 555a }{ 555b }{ 555c }{ 555d }{ 555u }|\r\n#556|<br/><br/>|{ 556a }{ 506z }|\r\n#563|<br/><br/>|{ 5633 }{ 563a }{ 563u }|\r\n#565|<br/><br/>|{ 5653 }{ 565a }{ 565b }{ 565c }{ 565d }{ 565e }|\r\n#567|<br/><br/>|{ 567a }|\r\n#580|<br/><br/>|{ 580a }|\r\n#581|<br/><br/>|{ 5633 }{ 581a }{ 581z }|\r\n#584|<br/><br/>|{ 5843 }{ 584a }{ 584b }|\r\n#585|<br/><br/>|{ 5853 }{ 585a }|\r\n#586|<br/><br/>|{ 5863 }{ 586a }|\r\n#020|<br/><br/><label>ISBN: </label>|{ 020a }{ 020c }|\r\n#022|<br/><br/><label>ISSN: </label>|{ 022a }|\r\n#222| = |{ 222a }{ 222b }|\r\n#210| = |{ 210a }{ 210b }|\r\n#024|<br/><br/><label>Standard No.: </label>|{ 024a }{ 024c }{ 024d }{ 0242 }|\r\n#027|<br/><br/><label>Standard Tech. Report. No.: </label>|{ 027a }|\r\n#028|<br/><br/><label>Publisher. No.: </label>|{ 028a }{ 028b }|\r\n#013|<br/><br/><label>Patent No.: </label>|{ 013a }{ 013b }{ 013c }{ 013d }{ 013e }{ 013f }|\r\n#030|<br/><br/><label>CODEN: </label>|{ 030a }|\r\n#037|<br/><br/><label>Source: </label>|{ 037a }{ 037b }{ 037c }{ 037f }{ 037g }{ 037n }|\r\n#010|<br/><br/><label>LCCN: </label>|{ 010a }|\r\n#015|<br/><br/><label>Nat. Bib. No.: </label>|{ 015a }{ 0152 }|\r\n#016|<br/><br/><label>Nat. Bib. Agency Control No.: </label>|{ 016a }{ 0162 }|\r\n#600|<br/><br/><label>Subjects--Personal Names: </label>|{\\n6003 }{\\n600a}{ 600b }{ 600c }{ 600d }{ 600e }{ 600f }{ 600g }{ 600h }{--600k}{ 600l }{ 600m }{ 600n }{ 600o }{--600p}{ 600r }{ 600s }{ 600t }{ 600u }{--600x}{--600z}{--600y}{--600v}|\r\n#610|<br/><br/><label>Subjects--Corporate Names: </label>|{\\n6103 }{\\n610a}{ 610b }{ 610c }{ 610d }{ 610e }{ 610f }{ 610g }{ 610h }{--610k}{ 610l }{ 610m }{ 610n }{ 610o }{--610p}{ 610r }{ 610s }{ 610t }{ 610u }{--610x}{--610z}{--610y}{--610v}|\r\n#611|<br/><br/><label>Subjects--Meeting Names: </label>|{\\n6113 }{\\n611a}{ 611b }{ 611c }{ 611d }{ 611e }{ 611f }{ 611g }{ 611h }{--611k}{ 611l }{ 611m }{ 611n }{ 611o }{--611p}{ 611r }{ 611s }{ 611t }{ 611u }{--611x}{--611z}{--611y}{--611v}|\r\n#630|<br/><br/><label>Subjects--Uniform Titles: </label>|{\\n630a}{ 630b }{ 630c }{ 630d }{ 630e }{ 630f }{ 630g }{ 630h }{--630k }{ 630l }{ 630m }{ 630n }{ 630o }{--630p}{ 630r }{ 630s }{ 630t }{--630x}{--630z}{--630y}{--630v}|\r\n#648|<br/><br/><label>Subjects--Chronological Terms: </label>|{\\n6483 }{\\n648a }{--648x}{--648z}{--648y}{--648v}|\r\n#650|<br/><br/><label>Subjects--Topical Terms: </label>|{\\n6503 }{\\n650a}{ 650b }{ 650c }{ 650d }{ 650e }{--650x}{--650z}{--650y}{--650v}|\r\n#651|<br/><br/><label>Subjects--Geographic Terms: </label>|{\\n6513 }{\\n651a}{ 651b }{ 651c }{ 651d }{ 651e }{--651x}{--651z}{--651y}{--651v}|\r\n#653|<br/><br/><label>Subjects--Index Terms: </label>|{ 653a }|\r\n#654|<br/><br/><label>Subjects--Facted Index Terms: </label>|{\\n6543 }{\\n654a}{--654b}{--654x}{--654z}{--654y}{--654v}|\r\n#655|<br/><br/><label>Index Terms--Genre/Form: </label>|{\\n6553 }{\\n655a}{--655b}{--655x }{--655z}{--655y}{--655v}|\r\n#656|<br/><br/><label>Index Terms--Occupation: </label>|{\\n6563 }{\\n656a}{--656k}{--656x}{--656z}{--656y}{--656v}|\r\n#657|<br/><br/><label>Index Terms--Function: </label>|{\\n6573 }{\\n657a}{--657x}{--657z}{--657y}{--657v}|\r\n#658|<br/><br/><label>Index Terms--Curriculum Objective: </label>|{\\n658a}{--658b}{--658c}{--658d}{--658v}|\r\n#050|<br/><br/><label>LC Class. No.: </label>|{ 050a }{ / 050b }|\r\n#082|<br/><br/><label>Dewey Class. No.: </label>|{ 082a }{ / 082b }|\r\n#080|<br/><br/><label>Universal Decimal Class. No.: </label>|{ 080a }{ 080x }{ / 080b }|\r\n#070|<br/><br/><label>National Agricultural Library Call No.: </label>|{ 070a }{ / 070b }|\r\n#060|<br/><br/><label>National Library of Medicine Call No.: </label>|{ 060a }{ / 060b }|\r\n#074|<br/><br/><label>GPO Item No.: </label>|{ 074a }|\r\n#086|<br/><br/><label>Gov. Doc. Class. No.: </label>|{ 086a }|\r\n#088|<br/><br/><label>Report. No.: </label>|{ 088a }|','ISBD','70|10','Textarea');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('IssueLog',1,'If ON, log checkout activity',NULL,'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('IssuingInProcess',0,'If ON, disables fines if the patron is issuing item that accumulate debt',NULL,'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('item-level_itypes',1,'If ON, enables Item-level Itemtype / Issuing Rules','','YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('itemcallnumber','082ab','The MARC field/subfield that is used to calculate the itemcallnumber (Dewey would be 082ab or 092ab; LOC would be 050ab or 090ab) could be 852hi from an item record',NULL,'free');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('DefaultClassificationSource','ddc','Default classification scheme used by the collection. E.g., Dewey, LCC, etc.', NULL,'ClassSources');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('KohaAdminEmailAddress','root@localhost','Define the email address where patron modification requests are sent','','free');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('LabelMARCView','standard','Define how a MARC record will display','standard|economical','Choice');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('LetterLog',1,'If ON, log all notices sent',NULL,'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('LibraryName','','Define the library name as displayed on the OPAC','','');
-
--- this is selected by the web installer now
--- INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('marcflavour','MARC21','Define global MARC flavor (MARC21 or UNIMARC) used for character encoding','MARC21|UNIMARC','Choice');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('MARCOrgCode','OSt','Define MARC Organization Code - http://www.loc.gov/marc/organizations/orgshome.html','','free');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('MaxFine',NULL,'Maximum fine a patron can have for all late returns at one moment. Single item caps are specified in the circulation rules matrix.','','Integer');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('maxoutstanding',5,'maximum amount withstanding to be able make holds','','Integer');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('maxreserves',50,'Define maximum number of holds a patron can place','','Integer');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('maxItemsInSearchResults',20,'Specify the maximum number of items to display for each result on a page of results',NULL,'free');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('memberofinstitution',0,'If ON, patrons can be linked to institutions',NULL,'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('noissuescharge',5,'Define maximum amount withstanding before check outs are blocked','','Integer');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('NotifyBorrowerDeparture',30,'Define number of days before expiry where circulation is warned about patron account expiry',NULL,'Integer');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OpacAuthorities',1,'If ON, enables the search authorities link on OPAC',NULL,'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('opacbookbag',1,'If ON, enables display of Cart feature','','YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('intranetbookbag','1','If ON, enables display of Cart feature in the intranet','','YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OpacBrowser',0,'If ON, enables subject authorities browser on OPAC (needs to set misc/cronjob/sbuild_browser_and_cloud.pl)',NULL,'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OpacCloud',0,'If ON, enables subject cloud on OPAC',NULL,'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('opaccolorstylesheet','colors.css','Define an auxiliary stylesheet for OPAC use, to override specified settings from the primary opac.css stylesheet. Enter the filename (if the file is in the server\'s css directory) or a complete URL beginning with http (if the file lives on a remote server).','','free');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('opaccredits','','Define HTML Credits at the bottom of the OPAC page','70|10','Textarea');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('opacSerialDefaultTab', 'subscriptions', 'Define the default tab for serials in OPAC.', 'holdings|serialcollection|subscriptions', 'Choice');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('opacheader','','Add HTML to be included as a custom header in the OPAC','70|10','Textarea');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('opaclayoutstylesheet','opac.css','Enter the name of the layout CSS stylesheet to use in the OPAC','','free');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OpacMaintenance',0,'If ON, enables maintenance warning in OPAC','','YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OpacMainUserBlock','Welcome to Koha...\r\n<hr>','A user-defined block of HTML  in the main content area of the opac main page','70|10','Textarea');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OpacNav','Important links here.','Use HTML tags to add navigational links to the left-hand navigational bar in OPAC','70|10','Textarea');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('OpacNavRight','','Show the following HTML in the right hand column of the main page under the main login form','70|10','Textarea');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OpacNavBottom','Important links here.','Use HTML tags to add navigational links to the left-hand navigational bar in OPAC','70|10','Textarea');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OPACNoResultsFound','','Display this HTML when no results are found for a search in the OPAC','70|10','Textarea');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OpacPasswordChange',1,'If ON, enables patron-initiated password change in OPAC (disable it when using LDAP auth)',NULL,'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OpacPrivacy', '0', 'if ON, allows patrons to define their privacy rules (reading history)',NULL,'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('opacreadinghistory',1,'If ON, enables display of Patron Circulation History in OPAC','','YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OPACResultsSidebar','','Define HTML to be included on the search results page, underneath the facets sidebar','70|10','Textarea');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('opacsmallimage','','Enter a complete URL to an image to replace the default Koha logo','','free');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('opacthemes','prog','Define the current theme for the OPAC interface.','','Themes');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OpacTopissue',0,'If ON, enables the \'most popular items\' link on OPAC. Warning, this is an EXPERIMENTAL feature, turning ON may overload your server',NULL,'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OpacPublic',1,'Turn on/off public OPAC',NULL,'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('opacuserjs','','Define custom javascript for inclusion in OPAC','70|10','Textarea');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('opacuserlogin',1,'Enable or disable display of user login features',NULL,'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('QuoteOfTheDay',0,'Enable or disable display of Quote of the Day on the OPAC home page',NULL,'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('patronimages',0,'Enable patron images for the Staff Client',NULL,'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OPACpatronimages',0,'Enable patron images in the OPAC',NULL,'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('printcirculationslips',1,'If ON, enable printing circulation receipts','','YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('RecordLocalUseOnReturn',0,'If ON, statistically record returns of unissued items as local use, instead of return',NULL,'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('RequestOnOpac',1,'If ON, globally enables patron holds on OPAC',NULL,'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('ReservesMaxPickUpDelay',7,'Define the Maximum delay to pick up an item on hold','','Integer');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('ReturnBeforeExpiry',0,'If ON, checkout will be prevented if returndate is after patron card expiry',NULL,'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('ReturnLog',1,'If ON, enables the circulation (returns) log',NULL,'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('reviewson',1,'If ON, enables patron reviews of bibliographic records in the OPAC','','YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('ShowReviewer','full','Choose how a commenter''s identity is presented alongside comments in the OPAC','none|full|first|surname|firstandinitial|username','Choice');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('ShowReviewerPhoto',1,'If ON, photo of reviewer will be shown beside comments in OPAC','','YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('SpecifyDueDate',1,'Define whether to display \"Specify Due Date\" form in Circulation','','YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('SubscriptionHistory','simplified','Define the display preference for serials issue history in OPAC','simplified|full','Choice');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('SubscriptionLog',1,'If ON, enables subscriptions log',NULL,'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('suggestion',1,'If ON, enables patron suggestions feature in OPAC','','YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('template','prog','Define the preferred staff interface template','','Themes');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('timeout',12000000,'Inactivity timeout for cookies authentication (in seconds)',NULL,'Integer');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('TransfersMaxDaysWarning',3,'Define the days before a transfer is suspected of having a problem',NULL,'Integer');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('useDaysMode','Calendar','Choose the method for calculating due date: select Calendar to use the holidays module, and Days to ignore the holidays module','Calendar|Days|Datedue','Choice');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('UseControlNumber',0,'If ON, record control number (w subfields) and control number (001) are used for linking of bibliographic records.','','YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('virtualshelves',1,'If ON, enables Lists management','','YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('z3950AuthorAuthFields','701,702,700','Define the MARC biblio fields for Personal Name Authorities to fill biblio.author',NULL,'free');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('z3950NormalizeAuthor',0,'If ON, Personal Name Authorities will replace authors in biblio.author','','YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('ReservesNeedReturns',1,'If ON, a hold placed on an item available in this library must be checked-in, otherwise, a hold on a specific item, that is in the library & available is considered available','','YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type)  VALUES ('DebugLevel',2,'Define the level of debugging information sent to the browser when errors are encountered (set to 0 in production). 0=none, 1=some, 2=most','0|1|2','Choice');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('SessionStorage','mysql','Use database or a temporary file for storing session data','mysql|Pg|tmp','Choice');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('CircAutocompl',1,'If ON, autocompletion is enabled for the Circulation input',NULL,'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('RoutingSerials',1,'If ON, serials routing is enabled',NULL,'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('SearchMyLibraryFirst',0,'If ON, OPAC searches return results limited by the user\'s library by default if they are logged in',NULL,'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('dontmerge',1,'If ON, modifying an authority record will not update all associated bibliographic records immediately, ask your system administrator to enable the merge_authorities.pl cron job',NULL,'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('BiblioAddsAuthorities',0,'If ON, adding a new biblio will check for an existing authority record and create one on the fly if one doesn\'t exist',NULL,'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('QueryStemming',1,'If ON, enables query stemming',NULL,'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('QueryFuzzy',1,'If ON, enables fuzzy option for searches',NULL,'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('QueryWeightFields',1,'If ON, enables field weighting',NULL,'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('yuipath','local','Insert the path to YUI libraries, choose local if you use koha offline',"local|http://yui.yahooapis.com/2.5.1/build",'Choice');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('canreservefromotherbranches',1,'With Independent branches on, can a user from one library place a hold on an item from another library','','YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('FRBRizeEditions',0,'If ON, Koha will query one or more ISBN web services for associated ISBNs and display an Editions tab on the details pages','','YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('OPACFRBRizeEditions',0,'If ON, the OPAC will query one or more ISBN web services for associated ISBNs and display an Editions tab on the details pages','','YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('XISBN',0,'Use with FRBRizeEditions. If ON, Koha will use the OCLC xISBN web service in the Editions tab on the detail pages. See: http://www.worldcat.org/affiliate/webservices/xisbn/app.jsp','','YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('OCLCAffiliateID','','Use with FRBRizeEditions and XISBN. You can sign up for an AffiliateID here: http://www.worldcat.org/wcpa/do/AffiliateUserServices?method=initSelfRegister','','free');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('XISBNDailyLimit',999,'The xISBN Web service is free for non-commercial use when usage does not exceed 1000 requests per day','','Integer');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('ThingISBN',0,'Use with FRBRizeEditions. If ON, Koha will use the ThingISBN web service in the Editions tab on the detail pages.','','YesNo');
-
--- I18N/L10N
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('dateformat','us','Define global date format (us mm/dd/yyyy, metric dd/mm/yyy, ISO yyyy-mm-dd)','metric|us|iso','Choice');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('opaclanguages','en','Set the default language in the OPAC.',NULL,'Languages');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('opaclanguagesdisplay',0,'If ON, enables display of Change Language feature on OPAC','','YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('BorrowersTitles','Mr|Mrs|Miss|Ms','Define appropriate Titles for patrons',NULL,'free');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('gist',0,'Default Goods and Services tax rate NOT in %, but in numeric form (0.12 for 12%), set to 0 to disable GST','','Integer');
--- need AddressType to distinguish between US and other, telephone numbers, maori stuff, sex, nationality, etc.
--- LDAP ? required fields?
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('WebBasedSelfCheck',0,'If ON, enables the web-based self-check system',NULL,'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('SelfCheckTimeout',120,'Define the number of seconds before the Web-based Self Checkout times out a patron','','Integer');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AllowSelfCheckReturns',0,'If enabled, patrons may return items through the Web-based Self Checkout','','YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('SelfCheckHelpMessage','','Enter HTML to include under the basic Web-based Self Checkout instructions on the Help page','70|10','Textarea');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('numSearchResults',20,'Specify the maximum number of results to display on a page of results',NULL,'Integer');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OPACnumSearchResults',20,'Specify the maximum number of results to display on a page of results',NULL,'Integer');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('defaultSortField','relevance','Specify the default field used for sorting','relevance|popularity|call_number|pubdate|acqdate|title|author','Choice');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('defaultSortOrder','dsc','Specify the default sort order','asc|dsc|az|za','Choice');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OPACdefaultSortField','relevance','Specify the default field used for sorting','relevance|popularity|call_number|pubdate|acqdate|title|author','Choice');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OPACdefaultSortOrder','dsc','Specify the default sort order','asc|dsc|za|az','Choice');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('FacetLabelTruncationLength',20,'Specify the facet max length in OPAC',NULL,'Integer');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('staffClientBaseURL','','Specify the base URL of the staff client',NULL,'free');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('minPasswordLength',3,'Specify the minimum length of a patron/staff password',NULL,'free');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('noItemTypeImages',0,'If ON, disables item-type images',NULL,'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('emailLibrarianWhenHoldIsPlaced',0,'If ON, emails the librarian whenever a hold is placed',NULL,'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('numReturnedItemsToShow','20','Number of returned items to show on the check-in page',NULL,'Integer');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('finesMode','test','Choose the fines mode, \'off\', \'test\' (emails admin report) or \'production\' (accrue overdue fines).  Requires accruefines cronjob.','off|test|production','Choice');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('itemBarcodeInputFilter','','If set, allows specification of a item barcode input filter','whitespace|T-prefix|cuecat|libsuite8|EAN13','Choice');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('itemBarcodeFallbackSearch','','If set, uses scanned item barcodes as a catalogue search if not found as barcodes',NULL,'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('singleBranchMode',0,'Operate in Single-branch mode, hide branch selection in the OPAC',NULL,'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('URLLinkText','','Text to display as the link anchor in the OPAC',NULL,'free');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OPACViewOthersSuggestions',0,'If ON, allows all suggestions to be displayed in the OPAC',NULL,'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OPACURLOpenInNewWindow',0,'If ON, URLs in the OPAC open in a new window',NULL,'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OPACUserCSS','','Add CSS to be included in the OPAC in an embedded <style> tag.',NULL,'free');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OPACItemsResultsDisplay',0,'If OFF : show only the status of items in result list.If ON : show full location of items (branch+location+callnumber) as in staff interface','','YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('uppercasesurnames',0,'If ON, surnames are converted to upper case in patron entry form',NULL,'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('CircControl',"ItemHomeLibrary",'Specify the agency that controls the circulation and fines policy',"PickupLibrary|PatronLibrary|ItemHomeLibrary",'Choice');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('finesCalendar',"noFinesWhenClosed",'Specify whether to use the Calendar in calculating duedates and fines',"ignoreCalendar|noFinesWhenClosed",'Choice');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('previousIssuesDefaultSortOrder',"asc",'Specify the sort order of Previous Issues on the circulation page',"asc|desc",'Choice');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('todaysIssuesDefaultSortOrder',"desc",'Specify the sort order of Todays Issues on the circulation page',"asc|desc",'Choice');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OPACBaseURL',NULL,'Specify the Base URL of the OPAC, e.g., opac.mylibrary.com, the http:// will be added automatically by Koha.',NULL,'Free');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('language','en','Set the default language in the staff client.',NULL,'Languages');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('QueryAutoTruncate',1,'If ON, query truncation is enabled by default',NULL,'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OpacRenewalAllowed',0,'If ON, users can renew their issues directly from their OPAC account',NULL,'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('PatronsPerPage','20','Number of Patrons Per Page displayed by default','20','Integer');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('HomeOrHoldingBranch','holdingbranch','Used by Circulation to determine which branch of an item to check with independent branches on, and by search to determine which branch to choose for availability ','holdingbranch|homebranch','Choice');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('HomeOrHoldingBranchReturn','homebranch','Used by Circulation to determine which branch of an item to check checking-in items','holdingbranch|homebranch','Choice');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AllowReturnToBranch', 'anywhere', 'Where an item may be returned', 'anywhere|homebranch|holdingbranch|homeorholdingbranch', 'Choice');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OpacHighlightedWords','1','If Set, then queried words are higlighted in OPAC','','YesNo');
-
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OAI-PMH','0','if ON, OAI-PMH server is enabled',NULL,'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OAI-PMH:archiveID','KOHA-OAI-TEST','OAI-PMH archive identification',NULL,'Free');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OAI-PMH:MaxCount','50','OAI-PMH maximum number of records by answer to ListRecords and ListIdentifiers queries',NULL,'Integer');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OAI-PMH:ConfFile','','If empty, Koha OAI Server operates in normal mode, otherwise it operates in extended mode.',NULL,'File');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OPACItemHolds','1','Allow OPAC users to place hold on specific items. If OFF, users can only request next available copy.','','YesNo');
-
-INSERT INTO `systempreferences` (variable, value,options,type, explanation) VALUES ('AddPatronLists','categorycode','categorycode|category_type','Choice','Allow user to choose what list to pick up from when adding patrons');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('ExtendedPatronAttributes','0','Use extended patron IDs and attributes',NULL,'YesNo');
-
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('RenewSerialAddsSuggestion','0','If ON, adds a new suggestion at serial subscription renewal',NULL,'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('GoogleJackets','0','if ON, displays jacket covers from Google Books API',NULL,'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('RandomizeHoldsQueueWeight','0','if ON, the holds queue in circulation will be randomized, either based on all location codes, or by the location codes specified in StaticHoldsQueueWeight',NULL,'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('StaticHoldsQueueWeight','0','Specify a list of library location codes separated by commas -- the list of codes will be traversed and weighted with first values given higher weight for holds fulfillment -- alternatively, if RandomizeHoldsQueueWeight is set, the list will be randomly selective',NULL,'Integer');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AutoEmailOpacUser','0','Sends notification emails containing new account details to patrons - when account is created.',NULL,'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AutoEmailPrimaryAddress','OFF','Defines the default email address where \'Account Details\' emails are sent.','email|emailpro|B_email|cardnumber|OFF','Choice');
-
--- Tags and BakerTaylor (note field order differs from above)
-INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES
-	('BakerTaylorBookstoreURL','','','URL template for \"My Libary Bookstore\" links, to which the \"key\" value is appended, and \"https://\" is prepended.  It should include your hostname and \"Parent Number\".  Make this variable empty to turn MLB links off.  Example: ocls.mylibrarybookstore.com/MLB/actions/searchHandler.do?nextPage=bookDetails&parentNum=10923&key=',''),
-	('BakerTaylorEnabled','0','','Enable or disable all Baker & Taylor features.','YesNo'),
-	('BakerTaylorPassword','','','Baker & Taylor Password for Content Cafe (external content)','Free'),
-	('BakerTaylorUsername','','','Baker & Taylor Username for Content Cafe (external content)','Free'),
-	('TagsEnabled','1','','Enables or disables all tagging features.  This is the main switch for tags.','YesNo'),
-	('TagsExternalDictionary',NULL,'','Path on server to local ispell executable, used to set $Lingua::Ispell::path  This dictionary is used as a \"whitelist\" of pre-allowed tags.',''),
-	('TagsInputOnDetail','1','','Allow users to input tags from the detail page.',         'YesNo'),
-	('TagsInputOnList',  '0','','Allow users to input tags from the search results list.', 'YesNo'),
-	('TagsModeration',  '0','','Require tags from patrons to be approved before becoming visible.','YesNo'),
-	('TagsShowOnDetail','10','','Number of tags to display on detail page.  0 is off.',        'Integer'),
-	('TagsShowOnList',   '6','','Number of tags to display on search results list.  0 is off.','Integer');
-
-INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES('OPACShelfBrowser','1','','Enable/disable Shelf Browser on item details page. WARNING: this feature is very resource consuming on collections with large numbers of items.','YesNo');
-INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES
+INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES
+('AcqCreateItem','ordering','ordering|receiving|cataloguing','Define when the item is created : when ordering, when receiving, or in cataloguing module','Choice'),
+('AcqViewBaskets','user','user|branch|all','Define which baskets a user is allowed to view: his own only, any within his branch or all','Choice'),
+('AcqWarnOnDuplicateInvoice','0','','Warn librarians when they try to create a duplicate invoice','YesNo'),
+('AddPatronLists','categorycode','categorycode|category_type','Allow user to choose what list to pick up from when adding patrons','Choice'),
+('advancedMARCeditor','0','','If ON, the MARC editor won\'t display field/subfield descriptions','YesNo'),
+('AdvancedSearchTypes','itemtypes','itemtypes|ccode','Select which set of fields comprise the Type limit in the advanced search','Choice'),
+('AgeRestrictionMarker','',NULL,'Markers for age restriction indication, e.g. FSK|PEGI|Age|','free'),
+('AgeRestrictionOverride','0',NULL,'Allow staff to check out an item with age restriction.','YesNo'),
+('AllFinesNeedOverride','1','0','If on, staff will be asked to override every fine, even if it is below noissuescharge.','YesNo'),
+('AllowAllMessageDeletion','0','','Allow any Library to delete any message','YesNo'),
+('AllowFineOverride','0','0','If on, staff will be able to issue books to patrons with fines greater than noissuescharge.','YesNo'),
+('AllowHoldDateInFuture','0','','If set a date field is displayed on the Hold screen of the Staff Interface, allowing the hold date to be set in the future.','YesNo'),
+('AllowHoldPolicyOverride','0',NULL,'Allow staff to override hold policies when placing holds','YesNo'),
+('AllowHoldsOnDamagedItems','1','','Allow hold requests to be placed on damaged items','YesNo'),
+('AllowHoldsOnPatronsPossessions','1',NULL,'Allow holds on records that patron have items of it','YesNo'),
+('AllowItemsOnHoldCheckout','0','','Do not generate RESERVE_WAITING and RESERVED warning when checking out items reserved to someone else. This allows self checkouts for those items.','YesNo'),
+('AllowMultipleCovers','0','1','Allow multiple cover images to be attached to each bibliographic record.','YesNo'),
+('AllowNotForLoanOverride','0','','If ON, Koha will allow the librarian to loan a not for loan item.','YesNo'),
+('AllowOnShelfHolds','0','','Allow hold requests to be placed on items that are not on loan','YesNo'),
+('AllowPKIAuth','None','None|Common Name|emailAddress','Use the field from a client-side SSL certificate to look a user in the Koha database','Choice'),
+('AllowPurchaseSuggestionBranchChoice','0','1','Allow user to choose branch when making a purchase suggestion','YesNo'),
+('AllowRenewalLimitOverride','0',NULL,'if ON, allows renewal limits to be overridden on the circulation screen','YesNo'),
+('AllowReturnToBranch','anywhere','anywhere|homebranch|holdingbranch|homeorholdingbranch','Where an item may be returned','Choice'),
+('AllowSelfCheckReturns','0','','If enabled, patrons may return items through the Web-based Self Checkout','YesNo'),
+('AllowTooManyOverride','1','','If on, allow staff to override and check out items when the patron has reached the maximum number of allowed checkouts','YesNo'),
+('alphabet','A B C D E F G H I J K L M N O P Q R S T U V W X Y Z',NULL,'Alphabet than can be expanded into browse links, e.g. on Home > Patrons','free'),
+('AlternateHoldingsField','',NULL,'The MARC field/subfield that contains alternate holdings information for bibs taht do not have items attached (e.g. 852abchi for libraries converting from MARC Magician).','free'),
+('AlternateHoldingsSeparator','',NULL,'The string to use to separate subfields in alternate holdings displays.','free'),
+('AmazonAssocTag','','','See:  http://aws.amazon.com','free'),
+('AmazonCoverImages','0','','Display Cover Images in Staff Client from Amazon Web Services','YesNo'),
+('AmazonLocale','US','US|CA|DE|FR|JP|UK','Use to set the Locale of your Amazon.com Web Services','Choice'),
+('AnonSuggestions','0',NULL,'Set to enable Anonymous suggestions to AnonymousPatron borrowernumber','YesNo'),
+('AnonymousPatron','0',NULL,'Set the identifier (borrowernumber) of the anonymous patron. Used for Suggestion and reading history privacy',''),
+('AuthDisplayHierarchy','0','','Display authority hierarchies','YesNo'),
+('AuthoritiesLog','0','0','If ON, log edit/create/delete actions on authorities.','YesNo'),
+('authoritysep','--','10','Used to separate a list of authorities in a display. Usually --','free'),
+('autoBarcode','OFF','incremental|annual|hbyymmincr|EAN13|OFF','Used to autogenerate a barcode: incremental will be of the form 1, 2, 3; annual of the form 2007-0001, 2007-0002; hbyymmincr of the form HB08010001 where HB=Home Branch','Choice'),
+('AutoCreateAuthorities','0',NULL,'Automatically create authorities that do not exist when cataloging records.','YesNo'),
+('AutoEmailOpacUser','0',NULL,'Sends notification emails containing new account details to patrons - when account is created.','YesNo'),
+('AutoEmailPrimaryAddress','OFF','email|emailpro|B_email|cardnumber|OFF','Defines the default email address where \'Account Details\' emails are sent.','Choice'),
+('AutoLocation','0',NULL,'If ON, IP authentication is enabled, blocking access to the staff client from unauthorized IP addresses','YesNo'),
+('AutomaticItemReturn','1',NULL,'If ON, Koha will automatically set up a transfer of this item to its homebranch','YesNo'),
+('autoMemberNum','1','','If ON, patron number is auto-calculated','YesNo'),
+('AutoResumeSuspendedHolds','1',NULL,'Allow suspended holds to be automatically resumed by a set date.','YesNo'),
+('AutoSelfCheckAllowed','0','','For corporate and special libraries which want web-based self-check available from any PC without the need for a manual staff login. Most libraries will want to leave this turned off. If on, requires self-check ID and password to be entered in AutoSelfCheckID and AutoSelfCheckPass sysprefs.','YesNo'),
+('AutoSelfCheckID','','','Staff ID with circulation rights to be used for automatic web-based self-check. Only applies if AutoSelfCheckAllowed syspref is turned on.','free'),
+('AutoSelfCheckPass','','','Password to be used for automatic web-based self-check. Only applies if AutoSelfCheckAllowed syspref is turned on.','free'),
+('Babeltheque','0','','Turn ON Babeltheque content  - See babeltheque.com to subscribe to this service','YesNo'),
+('Babeltheque_url_js','','','Url for Babeltheque javascript (e.g. http://www.babeltheque.com/bw_XX.js)','Free'),
+('Babeltheque_url_update','','','Url for Babeltheque update (E.G. http://www.babeltheque.com/.../file.csv.bz2)','Free'),
+('BakerTaylorBookstoreURL','','','URL template for \"My Libary Bookstore\" links, to which the \"key\" value is appended, and \"https://\" is prepended.  It should include your hostname and \"Parent Number\".  Make this variable empty to turn MLB links off.  Example: ocls.mylibrarybookstore.com/MLB/actions/searchHandler.do?nextPage=bookDetails&parentNum=10923&key=',''),
+('BakerTaylorEnabled','0','','Enable or disable all Baker & Taylor features.','YesNo'),
+('BakerTaylorPassword','','','Baker & Taylor Password for Content Cafe (external content)','Free'),
+('BakerTaylorUsername','','','Baker & Taylor Username for Content Cafe (external content)','Free'),
+('BasketConfirmations','1','always ask for confirmation.|do not ask for confirmation.','When closing or reopening a basket,','Choice'),
+('BiblioAddsAuthorities','0',NULL,'If ON, adding a new biblio will check for an existing authority record and create one on the fly if one doesn\'t exist','YesNo'),
+('BiblioDefaultView','normal','normal|marc|isbd','Choose the default detail view in the catalog; choose between normal, marc or isbd','Choice'),
+('BlockReturnOfWithdrawnItems','1','0','If enabled, items that are marked as withdrawn cannot be returned.','YesNo'),
+('BorrowerMandatoryField','surname|cardnumber',NULL,'Choose the mandatory fields for a patron\'s account','free'),
+('borrowerRelationship','father|mother','','Define valid relationships between a guarantor & a guarantee (separated by | or ,)','free'),
+('BorrowerRenewalPeriodBase','now','dateexpiry|now','Set whether the borrower renewal date should be counted from the dateexpiry or from the current date ','Choice'),
+('BorrowersLog','1',NULL,'If ON, log edit/create/delete actions on patron data','YesNo'),
+('BorrowersTitles','Mr|Mrs|Miss|Ms',NULL,'Define appropriate Titles for patrons','free'),
+('BorrowerUnwantedField','',NULL,'Name the fields you don\'t need to store for a patron\'s account','free'),
+('BranchTransferLimitsType','ccode','itemtype|ccode','When using branch transfer limits, choose whether to limit by itemtype or collection code.','Choice'),
+('CalculateFinesOnReturn','1','','Switch to control if overdue fines are calculated on return or not','YesNo'),
+('CalendarFirstDayOfWeek','Sunday','Sunday|Monday','Select the first day of week to use in the calendar.','Choice'),
+('canreservefromotherbranches','1','','With Independent branches on, can a user from one library place a hold on an item from another library','YesNo'),
+('casAuthentication','0','','Enable or disable CAS authentication','YesNo'),
+('casLogout','0','','Does a logout from Koha should also log the user out of CAS?','YesNo'),
+('casServerUrl','https://localhost:8443/cas','','URL of the cas server','Free'),
+('CatalogModuleRelink','0',NULL,'If OFF the linker will never replace the authids that are set in the cataloging module.','YesNo'),
+('CataloguingLog','1',NULL,'If ON, log edit/create/delete actions on bibliographic data. WARNING: this feature is very resource consuming.','YesNo'),
+('checkdigit','none','none|katipo','If ON, enable checks on patron cardnumber: none or \"Katipo\" style checks','Choice'),
+('CircAutocompl','1',NULL,'If ON, autocompletion is enabled for the Circulation input','YesNo'),
+('CircAutoPrintQuickSlip','1',NULL,'Choose what should happen when an empty barcode field is submitted in circulation: Display a print quick slip window or Clear the screen.','YesNo'),
+('CircControl','ItemHomeLibrary','PickupLibrary|PatronLibrary|ItemHomeLibrary','Specify the agency that controls the circulation and fines policy','Choice'),
+('COinSinOPACResults','1','','If ON, use COinS in OPAC search results page.  NOTE: this can slow down search response time significantly','YesNo'),
+('CurrencyFormat','US','US|FR','Determines the display format of currencies. eg: \'36000\' is displayed as \'360 000,00\'  in \'FR\' or \'360,000.00\'  in \'US\'.','Choice'),
+('dateformat','us','metric|us|iso','Define global date format (us mm/dd/yyyy, metric dd/mm/yyy, ISO yyyy-mm-dd)','Choice'),
+('DebugLevel','2','0|1|2','Define the level of debugging information sent to the browser when errors are encountered (set to 0 in production). 0=none, 1=some, 2=most','Choice'),
+('decreaseLoanHighHolds',NULL,'','Decreases the loan period for items with number of holds above the threshold specified in decreaseLoanHighHoldsValue','YesNo'),
+('decreaseLoanHighHoldsDuration',NULL,'','Specifies a number of days that a loan is reduced to when used in conjunction with decreaseLoanHighHolds','Integer'),
+('decreaseLoanHighHoldsValue',NULL,'','Specifies a threshold for the minimum number of holds needed to trigger a reduction in loan duration (used with decreaseLoanHighHolds)','Integer'),
+('DefaultClassificationSource','ddc',NULL,'Default classification scheme used by the collection. E.g., Dewey, LCC, etc.','ClassSources'),
+('DefaultLanguageField008','','','Fill in the default language for field 008 Range 35-37 (e.g. eng, nor, ger, see <a href=\"http://www.loc.gov/marc/languages/language_code.html\">MARC Code List for Languages</a>)','Free'),
+('defaultSortField','relevance','relevance|popularity|call_number|pubdate|acqdate|title|author','Specify the default field used for sorting','Choice'),
+('defaultSortOrder','dsc','asc|dsc|az|za','Specify the default sort order','Choice'),
+('delimiter',';',';|tabulation|,|/|\\|#||','Define the default separator character for exporting reports','Choice'),
+('Display856uAsImage','OFF','OFF|Details|Results|Both','Display the URI in the 856u field as an image, the corresponding Staff Client XSLT option must be on','Choice'),
+('DisplayClearScreenButton','0','','If set to ON, a clear screen button will appear on the circulation page.','YesNo'),
+('displayFacetCount','0',NULL,NULL,'YesNo'),
+('DisplayIconsXSLT','1','','If ON, displays the format, audience, and material type icons in XSLT MARC21 results and detail pages.','YesNo'),
+('DisplayMultiPlaceHold','1','','Display the ability to place multiple holds or not','YesNo'),
+('DisplayOPACiconsXSLT','1','','If ON, displays the format, audience, and material type icons in XSLT MARC21 results and detail pages in the OPAC.','YesNo'),
+('dontmerge','1',NULL,'If ON, modifying an authority record will not update all associated bibliographic records immediately, ask your system administrator to enable the merge_authorities.pl cron job','YesNo'),
+('EasyAnalyticalRecords','0','','If on, display in the catalogue screens tools to easily setup analytical record relationships','YesNo'),
+('emailLibrarianWhenHoldIsPlaced','0',NULL,'If ON, emails the librarian whenever a hold is placed','YesNo'),
+('EnableBorrowerFiles','0',NULL,'If enabled, allows librarians to upload and attach arbitrary files to a borrower record.','YesNo'),
+('EnableOpacSearchHistory','1','YesNo','Enable or disable opac search history',''),
+('EnhancedMessagingPreferences','0','','If ON, allows patrons to select to receive additional messages about items due or nearly due.','YesNo'),
+('expandedSearchOption','0',NULL,'If ON, set advanced search to be expanded by default','YesNo'),
+('ExpireReservesMaxPickUpDelay','0','','Enabling this allows holds to expire automatically if they have not been picked by within the time period specified in ReservesMaxPickUpDelay','YesNo'),
+('ExpireReservesMaxPickUpDelayCharge','0',NULL,'If ExpireReservesMaxPickUpDelay is enabled, and this field has a non-zero value, than a borrower whose waiting hold has expired will be charged this amount.','free'),
+('ExtendedPatronAttributes','0',NULL,'Use extended patron IDs and attributes','YesNo'),
+('FacetLabelTruncationLength','20',NULL,'Specify the facet max length in OPAC','Integer'),
+('FilterBeforeOverdueReport','0','','Do not run overdue report until filter selected','YesNo'),
+('FineNotifyAtCheckin','0',NULL,'If ON notify librarians of overdue fines on the items they are checking in.','YesNo'),
+('finesCalendar','noFinesWhenClosed','ignoreCalendar|noFinesWhenClosed','Specify whether to use the Calendar in calculating duedates and fines','Choice'),
+('FinesIncludeGracePeriod','1',NULL,'If enabled, fines calculations will include the grace period.','YesNo'),
+('FinesLog','1',NULL,'If ON, log fines','YesNo'),
+('finesMode','test','off|test|production','Choose the fines mode, \'off\', \'test\' (emails admin report) or \'production\' (accrue overdue fines).  Requires accruefines cronjob.','Choice'),
+('FRBRizeEditions','0','','If ON, Koha will query one or more ISBN web services for associated ISBNs and display an Editions tab on the details pages','YesNo'),
+('gist','0','','Default Goods and Services tax rate NOT in %, but in numeric form (0.12 for 12%), set to 0 to disable GST','Integer'),
+('GoogleJackets','0',NULL,'if ON, displays jacket covers from Google Books API','YesNo'),
+('hidelostitems','0','','If ON, disables display of\"lost\" items in OPAC.','YesNo'),
+('HidePatronName','0','','If this is switched on, patron\'s cardnumber will be shown instead of their name on the holds and catalog screens','YesNo'),
+('hide_marc','0',NULL,'If ON, disables display of MARC fields, subfield codes & indicators (still shows data)','YesNo'),
+('HighlightOwnItemsOnOPAC','0','','If on, and a patron is logged into the OPAC, items from his or her home library will be emphasized and shown first in search results and item details.','YesNo'),
+('HighlightOwnItemsOnOPACWhich','PatronBranch','PatronBranch|OpacURLBranch','Decides which branch\'s items to emphasize. If PatronBranch, emphasize the logged in user\'s library\'s items. If OpacURLBranch, highlight the items of the Apache var BRANCHCODE defined in Koha\'s Apache configuration file.','Choice'),
+('HoldsToPullStartDate','2',NULL,'Set the default start date for the Holds to pull list to this many days ago','Integer'),
+('HomeOrHoldingBranch','holdingbranch','holdingbranch|homebranch','Used by Circulation to determine which branch of an item to check with independent branches on, and by search to determine which branch to choose for availability ','Choice'),
+('HomeOrHoldingBranchReturn','homebranch','holdingbranch|homebranch','Used by Circulation to determine which branch of an item to check checking-in items','Choice'),
+('HTML5MediaEnabled','not','not|opac|staff|both','Show a tab with a HTML5 media player for files catalogued in field 856','Choice'),
+('HTML5MediaExtensions','webm|ogg|ogv|oga|vtt','','Media file extensions','free'),
+('IDreamBooksReadometer','0','','Display Readometer from IDreamBooks.com','YesNo'),
+('IDreamBooksResults','0','','Display IDreamBooks.com rating in search results','YesNo'),
+('IDreamBooksReviews','0','','Display book review snippets from IDreamBooks.com','YesNo'),
+('ILS-DI','0','','Enables ILS-DI services at OPAC.','YesNo'),
+('ILS-DI:AuthorizedIPs','','Restricts usage of ILS-DI to some IPs','.','Free'),
+('ImageLimit','5','','Limit images stored in the database by the Patron Card image manager to this number.','Integer'),
+('IncludeSeeFromInSearches','0','','Include see-from references in searches.','YesNo'),
+('IndependentBranches','0',NULL,'If ON, increases security between libraries','YesNo'),
+('InProcessingToShelvingCart','0','','If set, when any item with a location code of PROC is \'checked in\', it\'s location code will be changed to CART.','YesNo'),
+('INTRAdidyoumean',NULL,NULL,'Did you mean? configuration for the Intranet. Do not change, as this is controlled by /cgi-bin/koha/admin/didyoumean.pl.','Free'),
+('IntranetBiblioDefaultView','normal','normal|marc|isbd|labeled_marc','Choose the default detail view in the staff interface; choose between normal, labeled_marc, marc or isbd','Choice'),
+('intranetbookbag','1','','If ON, enables display of Cart feature in the intranet','YesNo'),
+('intranetcolorstylesheet','','50','Define the color stylesheet to use in the Staff Client','free'),
+('IntranetFavicon','','','Enter a complete URL to an image to replace the default Koha favicon on the Staff client','free'),
+('IntranetmainUserblock','','70|10','Add a block of HTML that will display on the intranet home page','Textarea'),
+('IntranetNav','','70|10','Use HTML tabs to add navigational links to the top-hand navigational bar in the Staff Client','Textarea'),
+('IntranetNumbersPreferPhrase','0',NULL,'Control the use of phr operator in callnumber and standard number staff client searches','YesNo'),
+('intranetreadinghistory','1','','If ON, Reading History is enabled for all patrons','YesNo'),
+('IntranetSlipPrinterJS','','','Use this JavaScript for printing slips. Define at least function printThenClose(). For use e.g. with Firefox PlugIn jsPrintSetup, see http://jsprintsetup.mozdev.org/','Free'),
+('intranetstylesheet','','50','Enter a complete URL to use an alternate layout stylesheet in Intranet','free'),
+('IntranetUserCSS','',NULL,'Add CSS to be included in the intranet in an embedded <style> tag.','free'),
+('intranetuserjs','','70|10','Custom javascript for inclusion in Intranet','Textarea'),
+('intranet_includes','includes',NULL,'The includes directory you want for specific look of Koha (includes or includes_npl for example)','Free'),
+('ISBD','#100||{ 100a }{ 100b }{ 100c }{ 100d }{ 110a }{ 110b }{ 110c }{ 110d }{ 110e }{ 110f }{ 110g }{ 130a }{ 130d }{ 130f }{ 130g }{ 130h }{ 130k }{ 130l }{ 130m }{ 130n }{ 130o }{ 130p }{ 130r }{ 130s }{ 130t }|<br/><br/>\r\n#245||{ 245a }{ 245b }{245f }{ 245g }{ 245k }{ 245n }{ 245p }{ 245s }{ 245h }|\r\n#246||{ : 246i }{ 246a }{ 246b }{ 246f }{ 246g }{ 246n }{ 246p }{ 246h }|\r\n#242||{ = 242a }{ 242b }{ 242n }{ 242p }{ 242h }|\r\n#245||{ 245c }|\r\n#242||{ = 242c }|\r\n#250| - |{ 250a }{ 250b }|\r\n#254|, |{ 254a }|\r\n#255|, |{ 255a }{ 255b }{ 255c }{ 255d }{ 255e }{ 255f }{ 255g }|\r\n#256|, |{ 256a }|\r\n#257|, |{ 257a }|\r\n#258|, |{ 258a }{ 258b }|\r\n#260| - |{ 260a }{ 260b }{ 260c }|\r\n#300| - |{ 300a }{ 300b }{ 300c }{ 300d }{ 300e }{ 300f }{ 300g }|\r\n#306| - |{ 306a }|\r\n#307| - |{ 307a }{ 307b }|\r\n#310| - |{ 310a }{ 310b }|\r\n#321| - |{ 321a }{ 321b }|\r\n#340| - |{ 3403 }{ 340a }{ 340b }{ 340c }{ 340d }{ 340e }{ 340f }{ 340h }{ 340i }|\r\n#342| - |{ 342a }{ 342b }{ 342c }{ 342d }{ 342e }{ 342f }{ 342g }{ 342h }{ 342i }{ 342j }{ 342k }{ 342l }{ 342m }{ 342n }{ 342o }{ 342p }{ 342q }{ 342r }{ 342s }{ 342t }{ 342u }{ 342v }{ 342w }|\r\n#343| - |{ 343a }{ 343b }{ 343c }{ 343d }{ 343e }{ 343f }{ 343g }{ 343h }{ 343i }|\r\n#351| - |{ 3513 }{ 351a }{ 351b }{ 351c }|\r\n#352| - |{ 352a }{ 352b }{ 352c }{ 352d }{ 352e }{ 352f }{ 352g }{ 352i }{ 352q }|\r\n#362| - |{ 362a }{ 351z }|\r\n#440| - |{ 440a }{ 440n }{ 440p }{ 440v }{ 440x }|.\r\n#490| - |{ 490a }{ 490v }{ 490x }|.\r\n#800| - |{ 800a }{ 800b }{ 800c }{ 800d }{ 800e }{ 800f }{ 800g }{ 800h }{ 800j }{ 800k }{ 800l }{ 800m }{ 800n }{ 800o }{ 800p }{ 800q }{ 800r }{ 800s }{ 800t }{ 800u }{ 800v }|.\r\n#810| - |{ 810a }{ 810b }{ 810c }{ 810d }{ 810e }{ 810f }{ 810g }{ 810h }{ 810k }{ 810l }{ 810m }{ 810n }{ 810o }{ 810p }{ 810r }{ 810s }{ 810t }{ 810u }{ 810v }|.\r\n#811| - |{ 811a }{ 811c }{ 811d }{ 811e }{ 811f }{ 811g }{ 811h }{ 811k }{ 811l }{ 811n }{ 811p }{ 811q }{ 811s }{ 811t }{ 811u }{ 811v }|.\r\n#830| - |{ 830a }{ 830d }{ 830f }{ 830g }{ 830h }{ 830k }{ 830l }{ 830m }{ 830n }{ 830o }{ 830p }{ 830r }{ 830s }{ 830t }{ 830v }|.\r\n#500|<br/><br/>|{ 5003 }{ 500a }|\r\n#501|<br/><br/>|{ 501a }|\r\n#502|<br/><br/>|{ 502a }|\r\n#504|<br/><br/>|{ 504a }|\r\n#505|<br/><br/>|{ 505a }{ 505t }{ 505r }{ 505g }{ 505u }|\r\n#506|<br/><br/>|{ 5063 }{ 506a }{ 506b }{ 506c }{ 506d }{ 506u }|\r\n#507|<br/><br/>|{ 507a }{ 507b }|\r\n#508|<br/><br/>|{ 508a }{ 508a }|\r\n#510|<br/><br/>|{ 5103 }{ 510a }{ 510x }{ 510c }{ 510b }|\r\n#511|<br/><br/>|{ 511a }|\r\n#513|<br/><br/>|{ 513a }{513b }|\r\n#514|<br/><br/>|{ 514z }{ 514a }{ 514b }{ 514c }{ 514d }{ 514e }{ 514f }{ 514g }{ 514h }{ 514i }{ 514j }{ 514k }{ 514m }{ 514u }|\r\n#515|<br/><br/>|{ 515a }|\r\n#516|<br/><br/>|{ 516a }|\r\n#518|<br/><br/>|{ 5183 }{ 518a }|\r\n#520|<br/><br/>|{ 5203 }{ 520a }{ 520b }{ 520u }|\r\n#521|<br/><br/>|{ 5213 }{ 521a }{ 521b }|\r\n#522|<br/><br/>|{ 522a }|\r\n#524|<br/><br/>|{ 524a }|\r\n#525|<br/><br/>|{ 525a }|\r\n#526|<br/><br/>|{\\n510i }{\\n510a }{ 510b }{ 510c }{ 510d }{\\n510x }|\r\n#530|<br/><br/>|{\\n5063 }{\\n506a }{ 506b }{ 506c }{ 506d }{\\n506u }|\r\n#533|<br/><br/>|{\\n5333 }{\\n533a }{\\n533b }{\\n533c }{\\n533d }{\\n533e }{\\n533f }{\\n533m }{\\n533n }|\r\n#534|<br/><br/>|{\\n533p }{\\n533a }{\\n533b }{\\n533c }{\\n533d }{\\n533e }{\\n533f }{\\n533m }{\\n533n }{\\n533t }{\\n533x }{\\n533z }|\r\n#535|<br/><br/>|{\\n5353 }{\\n535a }{\\n535b }{\\n535c }{\\n535d }|\r\n#538|<br/><br/>|{\\n5383 }{\\n538a }{\\n538i }{\\n538u }|\r\n#540|<br/><br/>|{\\n5403 }{\\n540a }{ 540b }{ 540c }{ 540d }{\\n520u }|\r\n#544|<br/><br/>|{\\n5443 }{\\n544a }{\\n544b }{\\n544c }{\\n544d }{\\n544e }{\\n544n }|\r\n#545|<br/><br/>|{\\n545a }{ 545b }{\\n545u }|\r\n#546|<br/><br/>|{\\n5463 }{\\n546a }{ 546b }|\r\n#547|<br/><br/>|{\\n547a }|\r\n#550|<br/><br/>|{ 550a }|\r\n#552|<br/><br/>|{ 552z }{ 552a }{ 552b }{ 552c }{ 552d }{ 552e }{ 552f }{ 552g }{ 552h }{ 552i }{ 552j }{ 552k }{ 552l }{ 552m }{ 552n }{ 562o }{ 552p }{ 552u }|\r\n#555|<br/><br/>|{ 5553 }{ 555a }{ 555b }{ 555c }{ 555d }{ 555u }|\r\n#556|<br/><br/>|{ 556a }{ 506z }|\r\n#563|<br/><br/>|{ 5633 }{ 563a }{ 563u }|\r\n#565|<br/><br/>|{ 5653 }{ 565a }{ 565b }{ 565c }{ 565d }{ 565e }|\r\n#567|<br/><br/>|{ 567a }|\r\n#580|<br/><br/>|{ 580a }|\r\n#581|<br/><br/>|{ 5633 }{ 581a }{ 581z }|\r\n#584|<br/><br/>|{ 5843 }{ 584a }{ 584b }|\r\n#585|<br/><br/>|{ 5853 }{ 585a }|\r\n#586|<br/><br/>|{ 5863 }{ 586a }|\r\n#020|<br/><br/><label>ISBN: </label>|{ 020a }{ 020c }|\r\n#022|<br/><br/><label>ISSN: </label>|{ 022a }|\r\n#222| = |{ 222a }{ 222b }|\r\n#210| = |{ 210a }{ 210b }|\r\n#024|<br/><br/><label>Standard No.: </label>|{ 024a }{ 024c }{ 024d }{ 0242 }|\r\n#027|<br/><br/><label>Standard Tech. Report. No.: </label>|{ 027a }|\r\n#028|<br/><br/><label>Publisher. No.: </label>|{ 028a }{ 028b }|\r\n#013|<br/><br/><label>Patent No.: </label>|{ 013a }{ 013b }{ 013c }{ 013d }{ 013e }{ 013f }|\r\n#030|<br/><br/><label>CODEN: </label>|{ 030a }|\r\n#037|<br/><br/><label>Source: </label>|{ 037a }{ 037b }{ 037c }{ 037f }{ 037g }{ 037n }|\r\n#010|<br/><br/><label>LCCN: </label>|{ 010a }|\r\n#015|<br/><br/><label>Nat. Bib. No.: </label>|{ 015a }{ 0152 }|\r\n#016|<br/><br/><label>Nat. Bib. Agency Control No.: </label>|{ 016a }{ 0162 }|\r\n#600|<br/><br/><label>Subjects--Personal Names: </label>|{\\n6003 }{\\n600a}{ 600b }{ 600c }{ 600d }{ 600e }{ 600f }{ 600g }{ 600h }{--600k}{ 600l }{ 600m }{ 600n }{ 600o }{--600p}{ 600r }{ 600s }{ 600t }{ 600u }{--600x}{--600z}{--600y}{--600v}|\r\n#610|<br/><br/><label>Subjects--Corporate Names: </label>|{\\n6103 }{\\n610a}{ 610b }{ 610c }{ 610d }{ 610e }{ 610f }{ 610g }{ 610h }{--610k}{ 610l }{ 610m }{ 610n }{ 610o }{--610p}{ 610r }{ 610s }{ 610t }{ 610u }{--610x}{--610z}{--610y}{--610v}|\r\n#611|<br/><br/><label>Subjects--Meeting Names: </label>|{\\n6113 }{\\n611a}{ 611b }{ 611c }{ 611d }{ 611e }{ 611f }{ 611g }{ 611h }{--611k}{ 611l }{ 611m }{ 611n }{ 611o }{--611p}{ 611r }{ 611s }{ 611t }{ 611u }{--611x}{--611z}{--611y}{--611v}|\r\n#630|<br/><br/><label>Subjects--Uniform Titles: </label>|{\\n630a}{ 630b }{ 630c }{ 630d }{ 630e }{ 630f }{ 630g }{ 630h }{--630k }{ 630l }{ 630m }{ 630n }{ 630o }{--630p}{ 630r }{ 630s }{ 630t }{--630x}{--630z}{--630y}{--630v}|\r\n#648|<br/><br/><label>Subjects--Chronological Terms: </label>|{\\n6483 }{\\n648a }{--648x}{--648z}{--648y}{--648v}|\r\n#650|<br/><br/><label>Subjects--Topical Terms: </label>|{\\n6503 }{\\n650a}{ 650b }{ 650c }{ 650d }{ 650e }{--650x}{--650z}{--650y}{--650v}|\r\n#651|<br/><br/><label>Subjects--Geographic Terms: </label>|{\\n6513 }{\\n651a}{ 651b }{ 651c }{ 651d }{ 651e }{--651x}{--651z}{--651y}{--651v}|\r\n#653|<br/><br/><label>Subjects--Index Terms: </label>|{ 653a }|\r\n#654|<br/><br/><label>Subjects--Facted Index Terms: </label>|{\\n6543 }{\\n654a}{--654b}{--654x}{--654z}{--654y}{--654v}|\r\n#655|<br/><br/><label>Index Terms--Genre/Form: </label>|{\\n6553 }{\\n655a}{--655b}{--655x }{--655z}{--655y}{--655v}|\r\n#656|<br/><br/><label>Index Terms--Occupation: </label>|{\\n6563 }{\\n656a}{--656k}{--656x}{--656z}{--656y}{--656v}|\r\n#657|<br/><br/><label>Index Terms--Function: </label>|{\\n6573 }{\\n657a}{--657x}{--657z}{--657y}{--657v}|\r\n#658|<br/><br/><label>Index Terms--Curriculum Objective: </label>|{\\n658a}{--658b}{--658c}{--658d}{--658v}|\r\n#050|<br/><br/><label>LC Class. No.: </label>|{ 050a }{ / 050b }|\r\n#082|<br/><br/><label>Dewey Class. No.: </label>|{ 082a }{ / 082b }|\r\n#080|<br/><br/><label>Universal Decimal Class. No.: </label>|{ 080a }{ 080x }{ / 080b }|\r\n#070|<br/><br/><label>National Agricultural Library Call No.: </label>|{ 070a }{ / 070b }|\r\n#060|<br/><br/><label>National Library of Medicine Call No.: </label>|{ 060a }{ / 060b }|\r\n#074|<br/><br/><label>GPO Item No.: </label>|{ 074a }|\r\n#086|<br/><br/><label>Gov. Doc. Class. No.: </label>|{ 086a }|\r\n#088|<br/><br/><label>Report. No.: </label>|{ 088a }|','70|10','ISBD','Textarea'),
+('IssueLog','1',NULL,'If ON, log checkout activity','YesNo'),
+('IssueLostItem','alert','Defines what should be done when an attempt is made to issue an item that has been marked as lost.','alert|confirm|nothing','Choice'),
+('IssuingInProcess','0',NULL,'If ON, disables fines if the patron is issuing item that accumulate debt','YesNo'),
+('item-level_itypes','1','','If ON, enables Item-level Itemtype / Issuing Rules','YesNo'),
+('itemBarcodeFallbackSearch','',NULL,'If set, uses scanned item barcodes as a catalogue search if not found as barcodes','YesNo'),
+('itemBarcodeInputFilter','','whitespace|T-prefix|cuecat|libsuite8|EAN13','If set, allows specification of a item barcode input filter','Choice'),
+('itemcallnumber','082ab',NULL,'The MARC field/subfield that is used to calculate the itemcallnumber (Dewey would be 082ab or 092ab; LOC would be 050ab or 090ab) could be 852hi from an item record','free'),
+('KohaAdminEmailAddress','root@localhost','','Define the email address where patron modification requests are sent','free'),
+('LabelMARCView','standard','standard|economical','Define how a MARC record will display','Choice'),
+('language','en',NULL,'Set the default language in the staff client.','Languages'),
+('LetterLog','1',NULL,'If ON, log all notices sent','YesNo'),
+('LibraryName','','','Define the library name as displayed on the OPAC',''),
+('LibraryThingForLibrariesEnabled','0','','Enable or Disable Library Thing for Libraries Features','YesNo'),
+('LibraryThingForLibrariesID','','','See:http://librarything.com/forlibraries/','free'),
+('LibraryThingForLibrariesTabbedView','0','','Put LibraryThingForLibraries Content in Tabs.','YesNo'),
+('LinkerKeepStale','0',NULL,'If ON the authority linker will keep existing authority links for headings where it is unable to find a match.','YesNo'),
+('LinkerModule','Default','Default|FirstMatch|LastMatch','Chooses which linker module to use (see documentation).','Choice'),
+('LinkerOptions','','','A pipe-separated list of options for the linker.','free'),
+('LinkerRelink','1',NULL,'If ON the authority linker will relink headings that have previously been linked every time it runs.','YesNo'),
+('LocalCoverImages','0','1','Display local cover images on intranet details pages.','YesNo'),
+('ManInvInNoissuesCharge','1',NULL,'MANUAL_INV charges block checkouts (added to noissuescharge).','YesNo'),
+('MARCAuthorityControlField008','|| aca||aabn           | a|a     d',NULL,NULL,'Textarea'),
+('MARCOrgCode','OSt','','Define MARC Organization Code - http://www.loc.gov/marc/organizations/orgshome.html','free'),
+('MaxFine',NULL,'','Maximum fine a patron can have for all late returns at one moment. Single item caps are specified in the circulation rules matrix.','Integer'),
+('maxItemsInSearchResults','20',NULL,'Specify the maximum number of items to display for each result on a page of results','free'),
+('maxoutstanding','5','','maximum amount withstanding to be able make holds','Integer'),
+('maxRecordsForFacets','20',NULL,NULL,'Integer'),
+('maxreserves','50','','Define maximum number of holds a patron can place','Integer'),
+('memberofinstitution','0',NULL,'If ON, patrons can be linked to institutions','YesNo'),
+('minPasswordLength','3',NULL,'Specify the minimum length of a patron/staff password','free'),
+('NewItemsDefaultLocation','','','If set, all new items will have a location of the given Location Code ( Authorized Value type LOC )',''),
+('noissuescharge','5','','Define maximum amount withstanding before check outs are blocked','Integer'),
+('noItemTypeImages','0',NULL,'If ON, disables item-type images','YesNo'),
+('NotesBlacklist','',NULL,'List of notes fields that should not appear in the title notes/description separator of details','free'),
+('NoticeCSS','',NULL,'Notices CSS url.','free'),
+('NotifyBorrowerDeparture','30',NULL,'Define number of days before expiry where circulation is warned about patron account expiry','Integer'),
+('NovelistSelectEnabled','0',NULL,'Enable Novelist Select content.  Requires Novelist Profile and Password','YesNo'),
+('NovelistSelectPassword',NULL,NULL,'Enable Novelist user Profile','free'),
+('NovelistSelectProfile',NULL,NULL,'Novelist Select user Password','free'),
+('NovelistSelectView','tab','tab|above|below|right','Where to display Novelist Select content','Choice'),
+('numReturnedItemsToShow','20',NULL,'Number of returned items to show on the check-in page','Integer'),
+('numSearchResults','20',NULL,'Specify the maximum number of results to display on a page of results','Integer'),
+('numSearchRSSResults','50',NULL,'Specify the maximum number of results to display on a RSS page of results','Integer'),
+('OAI-PMH','0',NULL,'if ON, OAI-PMH server is enabled','YesNo'),
+('OAI-PMH:archiveID','KOHA-OAI-TEST',NULL,'OAI-PMH archive identification','Free'),
+('OAI-PMH:AutoUpdateSets','0','','Automatically update OAI sets when a bibliographic record is created or updated','YesNo'),
+('OAI-PMH:ConfFile','',NULL,'If empty, Koha OAI Server operates in normal mode, otherwise it operates in extended mode.','File'),
+('OAI-PMH:MaxCount','50',NULL,'OAI-PMH maximum number of records by answer to ListRecords and ListIdentifiers queries','Integer'),
+('OCLCAffiliateID','','','Use with FRBRizeEditions and XISBN. You can sign up for an AffiliateID here: http://www.worldcat.org/wcpa/do/AffiliateUserServices?method=initSelfRegister','free'),
+('OpacAddMastheadLibraryPulldown','0','','Adds a pulldown menu to select the library to search on the opac masthead.','YesNo'),
+('OPACAllowHoldDateInFuture','0','','If set, along with the AllowHoldDateInFuture system preference, OPAC users can set the date of a hold to be in the future.','YesNo'),
+('OpacAllowPublicListCreation','1',NULL,'If set, allows opac users to create public lists','YesNo'),
+('OpacAllowSharingPrivateLists','0',NULL,'If set, allows opac users to share private lists with other patrons','YesNo'),
+('OPACAllowUserToChooseBranch','1','1','Allow the user to choose the branch they want to pickup their hold from','YesNo'),
+('OPACAmazonCoverImages','0','','Display cover images on OPAC from Amazon Web Services','YesNo'),
+('OpacAuthorities','1',NULL,'If ON, enables the search authorities link on OPAC','YesNo'),
+('OPACBaseURL',NULL,NULL,'Specify the Base URL of the OPAC, e.g., opac.mylibrary.com, the http:// will be added automatically by Koha.','Free'),
+('opacbookbag','1','','If ON, enables display of Cart feature','YesNo'),
+('OpacBrowser','0',NULL,'If ON, enables subject authorities browser on OPAC (needs to set misc/cronjob/sbuild_browser_and_cloud.pl)','YesNo'),
+('OpacBrowseResults','1',NULL,'Disable/enable browsing and paging search results from the OPAC detail page.','YesNo'),
+('OpacCloud','0',NULL,'If ON, enables subject cloud on OPAC','YesNo'),
+('opaccolorstylesheet','colors.css','','Define an auxiliary stylesheet for OPAC use, to override specified settings from the primary opac.css stylesheet. Enter the filename (if the file is in the server\'s css directory) or a complete URL beginning with http (if the file lives on a remote server).','free'),
+('opaccredits','','70|10','Define HTML Credits at the bottom of the OPAC page','Textarea'),
+('OPACdefaultSortField','relevance','relevance|popularity|call_number|pubdate|acqdate|title|author','Specify the default field used for sorting','Choice'),
+('OPACdefaultSortOrder','dsc','asc|dsc|za|az','Specify the default sort order','Choice'),
+('OPACdidyoumean',NULL,NULL,'Did you mean? configuration for the OPAC. Do not change, as this is controlled by /cgi-bin/koha/admin/didyoumean.pl.','Free'),
+('OPACDisplay856uAsImage','OFF','OFF|Details|Results|Both','Display the URI in the 856u field as an image, the corresponding OPACXSLT option must be on','Choice'),
+('OpacExportOptions','bibtex|dc|marcxml|marc8|utf8|marcstd|mods|ris','','Define export options available on OPAC detail page.','free'),
+('OpacFavicon','','','Enter a complete URL to an image to replace the default Koha favicon on the OPAC','free'),
+('OPACFineNoRenewals','100','','Fine limit above which user cannot renew books via OPAC','Integer'),
+('OPACFinesTab','1','','If OFF the patron fines tab in the OPAC is disabled.','YesNo'),
+('OPACFRBRizeEditions','0','','If ON, the OPAC will query one or more ISBN web services for associated ISBNs and display an Editions tab on the details pages','YesNo'),
+('opacheader','','70|10','Add HTML to be included as a custom header in the OPAC','Textarea'),
+('OpacHiddenItems','','','This syspref allows to define custom rules for hiding specific items at opac. See docs/opac/OpacHiddenItems.txt for more informations.','Textarea'),
+('OpacHighlightedWords','1','','If Set, then queried words are higlighted in OPAC','YesNo'),
+('OpacHoldNotes','0','','Show hold notes on OPAC','YesNo'),
+('OPACItemHolds','1','','Allow OPAC users to place hold on specific items. If OFF, users can only request next available copy.','YesNo'),
+('OpacItemLocation','callnum','callnum|ccode|location','Show the shelving location of items in the opac','Choice'),
+('OPACItemsResultsDisplay','0','','If OFF : show only the status of items in result list.If ON : show full location of items (branch+location+callnumber) as in staff interface','YesNo'),
+('OpacKohaUrl','1',NULL,'Show \'Powered by Koha\' text on OPAC footer.',NULL),
+('opaclanguages','en',NULL,'Set the default language in the OPAC.','Languages'),
+('opaclanguagesdisplay','0','','If ON, enables display of Change Language feature on OPAC','YesNo'),
+('opaclayoutstylesheet','opac.css','','Enter the name of the layout CSS stylesheet to use in the OPAC','free'),
+('OPACLocalCoverImages','0','1','Display local cover images on OPAC search and details pages.','YesNo'),
+('OpacMaintenance','0','','If ON, enables maintenance warning in OPAC','YesNo'),
+('OpacMainUserBlock','Welcome to Koha...\r\n<hr>','70|10','A user-defined block of HTML  in the main content area of the opac main page','Textarea'),
+('OpacMainUserBlockMobile','',NULL,'Show the following HTML in its own column on the main page of the OPAC (mobile version):','free'),
+('OPACMobileUserCSS','',NULL,'Include the following CSS for the mobile view on all pages in the OPAC:','free'),
+('OPACMySummaryHTML','','70|10','Enter the HTML that will appear in a column on the \'my summary\' and \'my reading history\' tabs when a user is logged in to the OPAC. Enter {BIBLIONUMBER}, {TITLE}, {AUTHOR}, or {ISBN} in place of their respective variables in the HTML. Leave blank to disable.','Textarea'),
+('OpacNav','Important links here.','70|10','Use HTML tags to add navigational links to the left-hand navigational bar in OPAC','Textarea'),
+('OpacNavBottom','Important links here.','70|10','Use HTML tags to add navigational links to the left-hand navigational bar in OPAC','Textarea'),
+('OpacNavRight','','70|10','Show the following HTML in the right hand column of the main page under the main login form','Textarea'),
+('OPACNoResultsFound','','70|10','Display this HTML when no results are found for a search in the OPAC','Textarea'),
+('OPACNumbersPreferPhrase','0',NULL,'Control the use of phr operator in callnumber and standard number OPAC searches','YesNo'),
+('OPACnumSearchResults','20',NULL,'Specify the maximum number of results to display on a page of results','Integer'),
+('OpacPasswordChange','1',NULL,'If ON, enables patron-initiated password change in OPAC (disable it when using LDAP auth)','YesNo'),
+('OPACPatronDetails','1','','If OFF the patron details tab in the OPAC is disabled.','YesNo'),
+('OPACpatronimages','0',NULL,'Enable patron images in the OPAC','YesNo'),
+('OpacPrivacy','0',NULL,'if ON, allows patrons to define their privacy rules (reading history)','YesNo'),
+('OpacPublic','1',NULL,'Turn on/off public OPAC','YesNo'),
+('opacreadinghistory','1','','If ON, enables display of Patron Circulation History in OPAC','YesNo'),
+('OpacRenewalAllowed','0',NULL,'If ON, users can renew their issues directly from their OPAC account','YesNo'),
+('OpacRenewalBranch','checkoutbranch','itemhomebranch|patronhomebranch|checkoutbranch|null','Choose how the branch for an OPAC renewal is recorded in statistics','Choice'),
+('OPACResultsSidebar','','70|10','Define HTML to be included on the search results page, underneath the facets sidebar','Textarea'),
+('OPACSearchForTitleIn','<li><a  href=\"http://worldcat.org/search?q={TITLE}\" target=\"_blank\">Other Libraries (WorldCat)</a></li>\n<li><a href=\"http://www.scholar.google.com/scholar?q={TITLE}\" target=\"_blank\">Other Databases (Google Scholar)</a></li>\n<li><a href=\"http://www.bookfinder.com/search/?author={AUTHOR}&amp;title={TITLE}&amp;st=xl&amp;ac=qr\" target=\"_blank\">Online Stores (Bookfinder.com)</a></li>\n<li><a href=\"http://openlibrary.org/search/?author=({AUTHOR})&title=({TITLE})\" target=\"_blank\">Open Library (openlibrary.org)</a></li>','70|10','Enter the HTML that will appear in the \'Search for this title in\' box on the detail page in the OPAC.  Enter {TITLE}, {AUTHOR}, or {ISBN} in place of their respective variables in the URL. Leave blank to disable \'More Searches\' menu.','Textarea'),
+('OpacSeparateHoldings','0',NULL,'Separate current branch holdings from other holdings (OPAC)','YesNo'),
+('OpacSeparateHoldingsBranch','homebranch','homebranch|holdingbranch','Branch used to separate holdings (OPAC)','Choice'),
+('opacSerialDefaultTab','subscriptions','holdings|serialcollection|subscriptions','Define the default tab for serials in OPAC.','Choice'),
+('OPACSerialIssueDisplayCount','3','','Number of serial issues to display per subscription in the OPAC','Integer'),
+('OPACShelfBrowser','1','','Enable/disable Shelf Browser on item details page. WARNING: this feature is very resource consuming on collections with large numbers of items.','YesNo'),
+('OPACShowBarcode','0','','Show items barcode in holding tab','YesNo'),
+('OPACShowCheckoutName','0','','Displays in the OPAC the name of patron who has checked out the material. WARNING: Most sites should leave this off. It is intended for corporate or special sites which need to track who has the item.','YesNo'),
+('OpacShowFiltersPulldownMobile','1',NULL,'Show the search filters pulldown on the mobile version of the OPAC.','YesNo'),
+('OPACShowHoldQueueDetails','none','none|priority|holds|holds_priority','Show holds details in OPAC','Choice'),
+('OpacShowLibrariesPulldownMobile','1',NULL,'Show the libraries pulldown on the mobile version of the OPAC.','YesNo'),
+('OpacShowRecentComments','0',NULL,'If ON a link to recent comments will appear in the OPAC masthead','YesNo'),
+('OPACShowUnusedAuthorities','1','','Show authorities that are not being used in the OPAC.','YesNo'),
+('opacsmallimage','','','Enter a complete URL to an image to replace the default Koha logo','free'),
+('OpacStarRatings','all','disable|all|details',NULL,'Choice'),
+('OpacSuppression','0','','Turn ON the OPAC Suppression feature, requires further setup, ask your system administrator for details','YesNo'),
+('OpacSuppressionByIPRange','','','Restrict the suppression to IP adresses outside of the IP range','free'),
+('opacthemes','prog','','Define the current theme for the OPAC interface.','Themes'),
+('OpacTopissue','0',NULL,'If ON, enables the \'most popular items\' link on OPAC. Warning, this is an EXPERIMENTAL feature, turning ON may overload your server','YesNo'),
+('OPACURLOpenInNewWindow','0',NULL,'If ON, URLs in the OPAC open in a new window','YesNo'),
+('OPACUserCSS','',NULL,'Add CSS to be included in the OPAC in an embedded <style> tag.','free'),
+('opacuserjs','','70|10','Define custom javascript for inclusion in OPAC','Textarea'),
+('opacuserlogin','1',NULL,'Enable or disable display of user login features','YesNo'),
+('OPACViewOthersSuggestions','0',NULL,'If ON, allows all suggestions to be displayed in the OPAC','YesNo'),
 ('OPACXSLTDetailsDisplay','default','','Enable XSL stylesheet control over details page display on OPAC','Free'),
 ('OPACXSLTResultsDisplay','default','','Enable XSL stylesheet control over results page display on OPAC','Free'),
+('OpenLibraryCovers','0',NULL,'If ON Openlibrary book covers will be show','YesNo'),
+('OrderPdfFormat','pdfformat::layout3pages','Controls what script is used for printing (basketgroups)','','free'),
+('OverdueNoticeBcc','','','Email address to bcc outgoing overdue notices sent by email','free'),
+('OverduesBlockCirc','noblock','noblock|confirmation|block','When checking out an item should overdues block checkout, generate a confirmation dialogue, or allow checkout','Choice'),
+('patronimages','0',NULL,'Enable patron images for the Staff Client','YesNo'),
+('PatronSelfRegistration','0',NULL,'If enabled, patrons will be able to register themselves via the OPAC.','YesNo'),
+('PatronSelfRegistrationAdditionalInstructions','','','A free text field to display additional instructions to newly self registered patrons.','free'),
+('PatronSelfRegistrationBorrowerMandatoryField','surname|firstname',NULL,'Choose the mandatory fields for a patron\'s account, when registering via the OPAC.','free'),
+('PatronSelfRegistrationBorrowerUnwantedField','',NULL,'Name the fields you don\'t want to display when registering a new patron via the OPAC.','free'),
+('PatronSelfRegistrationDefaultCategory','','','A patron registered via the OPAC will receive a borrower category code set in this system preference.','free'),
+('PatronSelfRegistrationExpireTemporaryAccountsDelay','0',NULL,'If PatronSelfRegistrationDefaultCategory is enabled, this system preference controls how long a patron can have a temporary status before the account is deleted automatically. It is an integer value representing a number of days to wait before deleting a temporary patron account. Setting it to 0 disables the deleting of temporary accounts.','Integer'),
+('PatronSelfRegistrationVerifyByEmail','0',NULL,'If enabled, any patron attempting to register themselves via the OPAC will be required to verify themselves via email to activate his or her account.','YesNo'),
+('PatronsPerPage','20','20','Number of Patrons Per Page displayed by default','Integer'),
+('Persona','0','','Use Mozilla Persona for login','YesNo'),
+('PrefillItem','0','','When a new item is added, should it be prefilled with last created item values?','YesNo'),
+('previousIssuesDefaultSortOrder','asc','asc|desc','Specify the sort order of Previous Issues on the circulation page','Choice'),
+('printcirculationslips','1','','If ON, enable printing circulation receipts','YesNo'),
+('PrintNoticesMaxLines','0','','If greater than 0, sets the maximum number of lines an overdue notice will print. If the number of items is greater than this number, the notice will end with a warning asking the borrower to check their online account for a full list of overdue items.','Integer'),
+('QueryAutoTruncate','1',NULL,'If ON, query truncation is enabled by default','YesNo'),
+('QueryFuzzy','1',NULL,'If ON, enables fuzzy option for searches','YesNo'),
+('QueryStemming','1',NULL,'If ON, enables query stemming','YesNo'),
+('QueryWeightFields','1',NULL,'If ON, enables field weighting','YesNo'),
+('QuoteOfTheDay','0',NULL,'Enable or disable display of Quote of the Day on the OPAC home page','YesNo'),
+('RandomizeHoldsQueueWeight','0',NULL,'if ON, the holds queue in circulation will be randomized, either based on all location codes, or by the location codes specified in StaticHoldsQueueWeight','YesNo'),
+('RecordLocalUseOnReturn','0',NULL,'If ON, statistically record returns of unissued items as local use, instead of return','YesNo'),
+('RefundLostItemFeeOnReturn','1',NULL,'If enabled, the lost item fee charged to a borrower will be refunded when the lost item is returned.','YesNo'),
+('RenewalPeriodBase','date_due','date_due|now','Set whether the renewal date should be counted from the date_due or from the moment the Patron asks for renewal ','Choice'),
+('RenewalSendNotice','0','',NULL,'YesNo'),
+('RenewSerialAddsSuggestion','0',NULL,'If ON, adds a new suggestion at serial subscription renewal','YesNo'),
+('RentalsInNoissuesCharge','1',NULL,'Rental charges block checkouts (added to noissuescharge).','YesNo'),
+('RequestOnOpac','1',NULL,'If ON, globally enables patron holds on OPAC','YesNo'),
+('ReservesControlBranch','PatronLibrary','ItemHomeLibrary|PatronLibrary','Branch checked for members reservations rights','Choice'),
+('ReservesMaxPickUpDelay','7','','Define the Maximum delay to pick up an item on hold','Integer'),
+('ReservesNeedReturns','1','','If ON, a hold placed on an item available in this library must be checked-in, otherwise, a hold on a specific item, that is in the library & available is considered available','YesNo'),
+('ReturnBeforeExpiry','0',NULL,'If ON, checkout will be prevented if returndate is after patron card expiry','YesNo'),
+('ReturnLog','1',NULL,'If ON, enables the circulation (returns) log','YesNo'),
+('ReturnToShelvingCart','0','','If set, when any item is \'checked in\', it\'s location code will be changed to CART.','YesNo'),
+('reviewson','1','','If ON, enables patron reviews of bibliographic records in the OPAC','YesNo'),
+('RoutingListAddReserves','1','','If ON the patrons on routing lists are automatically added to holds on the issue.','YesNo'),
+('RoutingListNote','To change this note edit <a href=\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=RoutingListNote#jumped\">RoutlingListNote</a> system preference.','70|10','Define a note to be shown on all routing lists','Textarea'),
+('RoutingSerials','1',NULL,'If ON, serials routing is enabled','YesNo'),
+('SCOUserCSS','',NULL,'Add CSS to be included in the SCO module in an embedded <style> tag.','free'),
+('SCOUserJS','',NULL,'Define custom javascript for inclusion in the SCO module','free'),
+('SearchMyLibraryFirst','0',NULL,'If ON, OPAC searches return results limited by the user\'s library by default if they are logged in','YesNo'),
+('SelfCheckHelpMessage','','70|10','Enter HTML to include under the basic Web-based Self Checkout instructions on the Help page','Textarea'),
+('SelfCheckTimeout','120','','Define the number of seconds before the Web-based Self Checkout times out a patron','Integer'),
+('SeparateHoldings','0',NULL,'Separate current branch holdings from other holdings','YesNo'),
+('SeparateHoldingsBranch','homebranch','homebranch|holdingbranch','Branch used to separate holdings','Choice'),
+('SessionStorage','mysql','mysql|Pg|tmp','Use database or a temporary file for storing session data','Choice'),
+('ShelfBrowserUsesCcode','1','0','Use the item collection code when finding items for the shelf browser.','YesNo'),
+('ShelfBrowserUsesHomeBranch','1','1','Use the item home branch when finding items for the shelf browser.','YesNo'),
+('ShelfBrowserUsesLocation','1','1','Use the item location when finding items for the shelf browser.','YesNo'),
+('ShowPatronImageInWebBasedSelfCheck','0','','If ON, displays patron image when a patron uses web-based self-checkout','YesNo'),
+('ShowReviewer','full','none|full|first|surname|firstandinitial|username','Choose how a commenter\'s identity is presented alongside comments in the OPAC','Choice'),
+('ShowReviewerPhoto','1','','If ON, photo of reviewer will be shown beside comments in OPAC','YesNo'),
+('singleBranchMode','0',NULL,'Operate in Single-branch mode, hide branch selection in the OPAC','YesNo'),
+('SlipCSS','',NULL,'Slips CSS url.','free'),
+('SMSSendDriver','','','Sets which SMS::Send driver is used to send SMS messages.','free'),
+('SocialNetworks','0','','Enable/Disable social networks links in opac detail pages','YesNo'),
+('soundon','0','','Enable circulation sounds during checkin and checkout in the staff interface.  Not supported by all web browsers yet.','YesNo'),
+('SpecifyDueDate','1','','Define whether to display \"Specify Due Date\" form in Circulation','YesNo'),
+('SpineLabelAutoPrint','0','','If this setting is turned on, a print dialog will automatically pop up for the quick spine label printer.','YesNo'),
+('SpineLabelFormat','<itemcallnumber><copynumber>','30|10','This preference defines the format for the quick spine label printer. Just list the fields you would like to see in the order you would like to see them, surrounded by <>, for example <itemcallnumber>.','Textarea'),
+('SpineLabelShowPrintOnBibDetails','0','','If turned on, a \"Print Label\" link will appear for each item on the bib details page in the staff interface.','YesNo'),
+('StaffAuthorisedValueImages','1',NULL,'','YesNo'),
+('staffClientBaseURL','',NULL,'Specify the base URL of the staff client','free'),
+('StaffSerialIssueDisplayCount','3','','Number of serial issues to display per subscription in the Staff client','Integer'),
+('StaticHoldsQueueWeight','0',NULL,'Specify a list of library location codes separated by commas -- the list of codes will be traversed and weighted with first values given higher weight for holds fulfillment -- alternatively, if RandomizeHoldsQueueWeight is set, the list will be randomly selective','Integer'),
+('SubfieldsToUseWhenPrefill','','','Define a list of subfields to use when prefilling items (separated by space)','Free'),
+('SubscriptionDuplicateDroppedInput','','','List of fields which must not be rewritten when a subscription is duplicated (Separated by pipe |)','Free'),
+('SubscriptionHistory','simplified','simplified|full','Define the display preference for serials issue history in OPAC','Choice'),
+('SubscriptionLog','1',NULL,'If ON, enables subscriptions log','YesNo'),
+('suggestion','1','','If ON, enables patron suggestions feature in OPAC','YesNo'),
+('SuspendHoldsIntranet','1','Allow holds to be suspended from the intranet.',NULL,'YesNo'),
+('SuspendHoldsOpac','1','Allow holds to be suspended from the OPAC.',NULL,'YesNo'),
+('SvcMaxReportRows','10',NULL,'Maximum number of rows to return via the report web service.','Integer'),
+('SyndeticsAuthorNotes','0','','Display Notes about the Author on OPAC from Syndetics','YesNo'),
+('SyndeticsAwards','0','','Display Awards on OPAC from Syndetics','YesNo'),
+('SyndeticsClientCode','0','','Client Code for using Syndetics Solutions content','free'),
+('SyndeticsCoverImages','0','','Display Cover Images from Syndetics','YesNo'),
+('SyndeticsCoverImageSize','MC','MC|LC','Choose the size of the Syndetics Cover Image to display on the OPAC detail page, MC is Medium, LC is Large','Choice'),
+('SyndeticsEditions','0','','Display Editions from Syndetics','YesNo'),
+('SyndeticsEnabled','0','','Turn on Syndetics Enhanced Content','YesNo'),
+('SyndeticsExcerpt','0','','Display Excerpts and first chapters on OPAC from Syndetics','YesNo'),
+('SyndeticsReviews','0','','Display Reviews on OPAC from Syndetics','YesNo'),
+('SyndeticsSeries','0','','Display Series information on OPAC from Syndetics','YesNo'),
+('SyndeticsSummary','0','','Display Summary Information from Syndetics','YesNo'),
+('SyndeticsTOC','0','','Display Table of Content information from Syndetics','YesNo'),
+('TagsEnabled','1','','Enables or disables all tagging features.  This is the main switch for tags.','YesNo'),
+('TagsExternalDictionary',NULL,'','Path on server to local ispell executable, used to set $Lingua::Ispell::path  This dictionary is used as a \"whitelist\" of pre-allowed tags.',''),
+('TagsInputOnDetail','1','','Allow users to input tags from the detail page.','YesNo'),
+('TagsInputOnList','0','','Allow users to input tags from the search results list.','YesNo'),
+('TagsModeration','0','','Require tags from patrons to be approved before becoming visible.','YesNo'),
+('TagsShowOnDetail','10','','Number of tags to display on detail page.  0 is off.','Integer'),
+('TagsShowOnList','6','','Number of tags to display on search results list.  0 is off.','Integer'),
+('template','prog','','Define the preferred staff interface template','Themes'),
+('ThingISBN','0','','Use with FRBRizeEditions. If ON, Koha will use the ThingISBN web service in the Editions tab on the detail pages.','YesNo'),
+('TimeFormat','24hr','12hr|24hr','Defines the global time format for visual output.','Choice'),
+('timeout','12000000',NULL,'Inactivity timeout for cookies authentication (in seconds)','Integer'),
+('todaysIssuesDefaultSortOrder','desc','asc|desc','Specify the sort order of Todays Issues on the circulation page','Choice'),
+('TraceCompleteSubfields','0','0','Force subject tracings to only match complete subfields.','YesNo'),
+('TraceSubjectSubdivisions','0','1','Create searches on all subdivisions for subject tracings.','YesNo'),
+('TrackClicks','0',NULL,'Track links clicked','Integer'),
+('TransfersMaxDaysWarning','3',NULL,'Define the days before a transfer is suspected of having a problem','Integer'),
+('TransferWhenCancelAllWaitingHolds','0',NULL,'Transfer items when cancelling all waiting holds','YesNo'),
+('UNIMARCAuthorityField100','afrey50      ba0',NULL,NULL,'Textarea'),
+('UNIMARCAuthorsFacetsSeparator',', ',NULL,'UNIMARC authors facets separator','short'),
+('UNIMARCField100Language','fre',NULL,'UNIMARC field 100 default language','short'),
+('UniqueItemFields','barcode','','Space-separated list of fields that should be unique (used in acquisition module for item creation). Fields must be valid SQL column names of items table','Free'),
+('UpdateTotalIssuesOnCirc','0',NULL,'Whether to update the totalissues field in the biblio on each circ.','YesNo'),
+('uppercasesurnames','0',NULL,'If ON, surnames are converted to upper case in patron entry form','YesNo'),
+('URLLinkText','',NULL,'Text to display as the link anchor in the OPAC','free'),
+('UseAuthoritiesForTracings','1','0','Use authority record numbers for subject tracings instead of heading strings.','YesNo'),
+('UseBranchTransferLimits','0','','If ON, Koha will will use the rules defined in branch_transfer_limits to decide if an item transfer should be allowed.','YesNo'),
+('UseControlNumber','0','','If ON, record control number (w subfields) and control number (001) are used for linking of bibliographic records.','YesNo'),
+('UseCourseReserves','0',NULL,'Enable the course reserves feature.','YesNo'),
+('useDaysMode','Calendar','Calendar|Days|Datedue','Choose the method for calculating due date: select Calendar to use the holidays module, and Days to ignore the holidays module','Choice'),
+('UseICU','0','1','Tell Koha if ICU indexing is in use for Zebra or not.','YesNo'),
+('UseKohaPlugins','0','','Enable or disable the ability to use Koha Plugins.','YesNo'),
+('UseQueryParser','0',NULL,'If enabled, try to use QueryParser for queries.','YesNo'),
+('UseTablesortForCirc','0','','If on, use the JQuery tablesort function on the list of current borrower checkouts on the circulation page.  Note that the use of this function may slow down circ for patrons with may checkouts.','YesNo'),
+('UseTransportCostMatrix','0','','Use Transport Cost Matrix when filling holds','YesNo'),
+('viewISBD','1','','Allow display of ISBD view of bibiographic records','YesNo'),
+('viewLabeledMARC','0','','Allow display of labeled MARC view of bibiographic records','YesNo'),
+('viewMARC','1','','Allow display of MARC view of bibiographic records','YesNo'),
+('virtualshelves','1','','If ON, enables Lists management','YesNo'),
+('WaitingNotifyAtCheckin','0',NULL,'If ON, notify librarians of waiting holds for the patron whose items they are checking in.','YesNo'),
+('WebBasedSelfCheck','0',NULL,'If ON, enables the web-based self-check system','YesNo'),
+('XISBN','0','','Use with FRBRizeEditions. If ON, Koha will use the OCLC xISBN web service in the Editions tab on the detail pages. See: http://www.worldcat.org/affiliate/webservices/xisbn/app.jsp','YesNo'),
+('XISBNDailyLimit','999','','The xISBN Web service is free for non-commercial use when usage does not exceed 1000 requests per day','Integer'),
 ('XSLTDetailsDisplay','default','','Enable XSL stylesheet control over details page display on intranet','Free'),
-('XSLTResultsDisplay','default','','Enable XSL stylesheet control over results page display on intranet','Free');
-INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES('AdvancedSearchTypes','itemtypes','itemtypes|ccode','Select which set of fields comprise the Type limit in the advanced search','Choice');
-INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES('AllowOnShelfHolds', '0', '', 'Allow hold requests to be placed on items that are not on loan', 'YesNo');
-INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES('AllowHoldsOnDamagedItems', '1', '', 'Allow hold requests to be placed on damaged items', 'YesNo');
-INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES('OpacSuppression', '0', '', 'Turn ON the OPAC Suppression feature, requires further setup, ask your system administrator for details', 'YesNo');
--- FIXME: add FrameworksLoaded, noOPACUserLogin?
-INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES ('SMSSendDriver','','','Sets which SMS::Send driver is used to send SMS messages.','free');
-INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES ('OrderPdfFormat','pdfformat::layout3pages','Controls what script is used for printing (basketgroups)','','free');
-INSERT INTO `systempreferences` (variable,value,options,explanation,type)  VALUES ('CurrencyFormat','US','US|FR','Determines the display format of currencies. eg: \'36000\' is displayed as \'360 000,00\'  in \'FR\' or \'360,000.00\'  in \'US\'.','Choice');
-INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES ('AcqCreateItem','ordering','ordering|receiving|cataloguing','Define when the item is created : when ordering, when receiving, or in cataloguing module','Choice');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('AllowRenewalLimitOverride', '0', 'if ON, allows renewal limits to be overridden on the circulation screen',NULL,'YesNo');
-INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES ('OPACShowHoldQueueDetails','none','none|priority|holds|holds_priority','Show holds details in OPAC','Choice');
-INSERT INTO `systempreferences` ( `variable` , `value` , `options` , `explanation` , `type` ) VALUES ( 'UseBranchTransferLimits', '0', '', 'If ON, Koha will will use the rules defined in branch_transfer_limits to decide if an item transfer should be allowed.', 'YesNo');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('AllowHoldPolicyOverride', '0', 'Allow staff to override hold policies when placing holds',NULL,'YesNo');
-INSERT INTO `systempreferences` ( `variable` , `value` , `options` , `explanation` , `type` ) VALUES ( 'BranchTransferLimitsType', 'ccode', 'itemtype|ccode', 'When using branch transfer limits, choose whether to limit by itemtype or collection code.', 'Choice');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('SyndeticsClientCode', '0', 'Client Code for using Syndetics Solutions content','','free');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('SyndeticsEnabled', '0', 'Turn on Syndetics Enhanced Content','','YesNo');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('SyndeticsCoverImages', '0', 'Display Cover Images from Syndetics','','YesNo');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('SyndeticsTOC', '0', 'Display Table of Content information from Syndetics','','YesNo');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('SyndeticsSummary', '0', 'Display Summary Information from Syndetics','','YesNo');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('SyndeticsEditions', '0', 'Display Editions from Syndetics','','YesNo');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('SyndeticsExcerpt', '0', 'Display Excerpts and first chapters on OPAC from Syndetics','','YesNo');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('SyndeticsReviews', '0', 'Display Reviews on OPAC from Syndetics','','YesNo');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('SyndeticsAuthorNotes', '0', 'Display Notes about the Author on OPAC from Syndetics','','YesNo');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('SyndeticsAwards', '0', 'Display Awards on OPAC from Syndetics','','YesNo');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('SyndeticsSeries', '0', 'Display Series information on OPAC from Syndetics','','YesNo');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('SyndeticsCoverImageSize', 'MC', 'Choose the size of the Syndetics Cover Image to display on the OPAC detail page, MC is Medium, LC is Large','MC|LC','Choice');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('NovelistSelectEnabled',0,'Enable Novelist Select content.  Requires Novelist Profile and Password',NULL,'YesNo');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('NovelistSelectProfile',NULL,'Novelist Select user Password',NULL,'free');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('NovelistSelectPassword',NULL,'Enable Novelist user Profile',NULL,'free');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('NovelistSelectView','tab','Where to display Novelist Select content','tab|above|below|right','Choice');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('OPACAmazonCoverImages', '0', 'Display cover images on OPAC from Amazon Web Services','','YesNo');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('AmazonCoverImages', '0', 'Display Cover Images in Staff Client from Amazon Web Services','','YesNo');
-INSERT INTO `systempreferences` ( `variable` , `value` , `options` , `explanation` , `type` ) VALUES ( 'StaffSerialIssueDisplayCount', '3', '', 'Number of serial issues to display per subscription in the Staff client', 'Integer');
-INSERT INTO `systempreferences` ( `variable` , `value` , `options` , `explanation` , `type` ) VALUES ( 'OPACSerialIssueDisplayCount', '3', '', 'Number of serial issues to display per subscription in the OPAC', 'Integer');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OPACShowCheckoutName','0','Displays in the OPAC the name of patron who has checked out the material. WARNING: Most sites should leave this off. It is intended for corporate or special sites which need to track who has the item.','','YesNo');
-INSERT INTO systempreferences (variable,value,explanation,options,type)VALUES('LibraryThingForLibrariesID','','See:http://librarything.com/forlibraries/','','free');
-INSERT INTO systempreferences (variable,value,explanation,options,type)VALUES('LibraryThingForLibrariesEnabled','0','Enable or Disable Library Thing for Libraries Features','','YesNo');
-INSERT INTO systempreferences (variable,value,explanation,options,type)VALUES('LibraryThingForLibrariesTabbedView','0','Put LibraryThingForLibraries Content in Tabs.','','YesNo');
-INSERT INTO `systempreferences` ( `variable` , `value` , `options` , `explanation` , `type` ) VALUES ( 'AllowNotForLoanOverride', '0', '', 'If ON, Koha will allow the librarian to loan a not for loan item.', 'YesNo');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('RenewalPeriodBase', 'date_due', 'Set whether the renewal date should be counted from the date_due or from the moment the Patron asks for renewal ','date_due|now','Choice');
-INSERT INTO systempreferences (variable,value,explanation,options,type)VALUES('viewISBD','1','Allow display of ISBD view of bibiographic records','','YesNo');
-INSERT INTO systempreferences (variable,value,explanation,options,type)VALUES('viewLabeledMARC','0','Allow display of labeled MARC view of bibiographic records','','YesNo');
-INSERT INTO systempreferences (variable,value,explanation,options,type)VALUES('viewMARC','1','Allow display of MARC view of bibiographic records','','YesNo');
-INSERT INTO systempreferences (variable,value,explanation,options,type)VALUES('FilterBeforeOverdueReport','0','Do not run overdue report until filter selected','','YesNo');
-INSERT INTO systempreferences (variable,value,options,explanation,type)VALUES('SpineLabelFormat', '<itemcallnumber><copynumber>', '30|10', 'This preference defines the format for the quick spine label printer. Just list the fields you would like to see in the order you would like to see them, surrounded by <>, for example <itemcallnumber>.', 'Textarea');
-INSERT INTO systempreferences (variable,value,options,explanation,type)VALUES('SpineLabelAutoPrint', '0', '', 'If this setting is turned on, a print dialog will automatically pop up for the quick spine label printer.', 'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OPACFineNoRenewals','100','Fine limit above which user cannot renew books via OPAC','','Integer');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OverdueNoticeBcc','','Email address to bcc outgoing overdue notices sent by email','','free');
-INSERT INTO `systempreferences` ( `variable` , `value` , `options` , `explanation` , `type` ) VALUES ( 'NewItemsDefaultLocation', '', '', 'If set, all new items will have a location of the given Location Code ( Authorized Value type LOC )', '');
-INSERT INTO `systempreferences` ( `variable` , `value` , `options` , `explanation` , `type` ) VALUES ( 'InProcessingToShelvingCart', '0', '', 'If set, when any item with a location code of PROC is ''checked in'', it''s location code will be changed to CART.', 'YesNo');
-INSERT INTO `systempreferences` ( `variable` , `value` , `options` , `explanation` , `type` ) VALUES ( 'ReturnToShelvingCart', '0', '', 'If set, when any item is ''checked in'', it''s location code will be changed to CART.', 'YesNo');
-INSERT INTO `systempreferences` ( `variable` , `value` , `options` , `explanation` , `type` ) VALUES ( 'DisplayClearScreenButton', '0', '', 'If set to ON, a clear screen button will appear on the circulation page.', 'YesNo');
-INSERT INTO systempreferences (variable,value,options,explanation,type)VALUES('HidePatronName', '0', '', 'If this is switched on, patron''s cardnumber will be shown instead of their name on the holds and catalog screens', 'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('OPACSearchForTitleIn','<li><a  href="http://worldcat.org/search?q={TITLE}" target="_blank">Other Libraries (WorldCat)</a></li>\n<li><a href="http://www.scholar.google.com/scholar?q={TITLE}" target="_blank">Other Databases (Google Scholar)</a></li>\n<li><a href="http://www.bookfinder.com/search/?author={AUTHOR}&amp;title={TITLE}&amp;st=xl&amp;ac=qr" target="_blank">Online Stores (Bookfinder.com)</a></li>\n<li><a href="http://openlibrary.org/search/?author=({AUTHOR})&title=({TITLE})" target="_blank">Open Library (openlibrary.org)</a></li>','Enter the HTML that will appear in the \'Search for this title in\' box on the detail page in the OPAC.  Enter {TITLE}, {AUTHOR}, or {ISBN} in place of their respective variables in the URL. Leave blank to disable \'More Searches\' menu.','70|10','Textarea');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('OPACMySummaryHTML','','Enter the HTML that will appear in a column on the \'my summary\' and \'my reading history\' tabs when a user is logged in to the OPAC. Enter {BIBLIONUMBER}, {TITLE}, {AUTHOR}, or {ISBN} in place of their respective variables in the HTML. Leave blank to disable.','70|10','Textarea');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('OPACPatronDetails','1','If OFF the patron details tab in the OPAC is disabled.','','YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('OPACFinesTab','1','If OFF the patron fines tab in the OPAC is disabled.','','YesNo');
-INSERT INTO systempreferences (variable,value,options,explanation,type)VALUES('DisplayOPACiconsXSLT', '1', '', 'If ON, displays the format, audience, and material type icons in XSLT MARC21 results and detail pages in the OPAC.', 'YesNo');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('AllowAllMessageDeletion','0','Allow any Library to delete any message','','YesNo');
-INSERT INTO systempreferences (variable,value,explanation,options,type)VALUES('ShowPatronImageInWebBasedSelfCheck', '0', 'If ON, displays patron image when a patron uses web-based self-checkout', '', 'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('EnableOpacSearchHistory', '1', 'Enable or disable opac search history', 'YesNo','');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('RoutingListAddReserves','1','If ON the patrons on routing lists are automatically added to holds on the issue.','','YesNo');
-INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES ( 'OpacAddMastheadLibraryPulldown', '0', '', 'Adds a pulldown menu to select the library to search on the opac masthead.', 'YesNo' );
-INSERT INTO systempreferences VALUES ('ImageLimit',5,'','Limit images stored in the database by the Patron Card image manager to this number.','Integer');
-INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES ('SpineLabelShowPrintOnBibDetails', '0', '', 'If turned on, a "Print Label" link will appear for each item on the bib details page in the staff interface.', 'YesNo');
-INSERT INTO systempreferences (variable,value,explanation,options,type)VALUES('AutoSelfCheckAllowed', '0', 'For corporate and special libraries which want web-based self-check available from any PC without the need for a manual staff login. Most libraries will want to leave this turned off. If on, requires self-check ID and password to be entered in AutoSelfCheckID and AutoSelfCheckPass sysprefs.', '', 'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AutoSelfCheckID','','Staff ID with circulation rights to be used for automatic web-based self-check. Only applies if AutoSelfCheckAllowed syspref is turned on.','','free');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AutoSelfCheckPass','','Password to be used for automatic web-based self-check. Only applies if AutoSelfCheckAllowed syspref is turned on.','','free');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('soundon','0','Enable circulation sounds during checkin and checkout in the staff interface.  Not supported by all web browsers yet.','','YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('UseTablesortForCirc','0','If on, use the JQuery tablesort function on the list of current borrower checkouts on the circulation page.  Note that the use of this function may slow down circ for patrons with may checkouts.','','YesNo');
-INSERT INTO `systempreferences` ( `variable` , `value` , `options` , `explanation` , `type` ) VALUES ( 'PrintNoticesMaxLines', '0', '', 'If greater than 0, sets the maximum number of lines an overdue notice will print. If the number of items is greater than this number, the notice will end with a warning asking the borrower to check their online account for a full list of overdue items.', 'Integer' );
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('ILS-DI','0','Enables ILS-DI services at OPAC.','','YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('ILS-DI:AuthorizedIPs','','.','Restricts usage of ILS-DI to some IPs','Free');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('OverduesBlockCirc','noblock','When checking out an item should overdues block checkout, generate a confirmation dialogue, or allow checkout','noblock|confirmation|block','Choice');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('DisplayMultiPlaceHold','1','Display the ability to place multiple holds or not','','YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('ShelfBrowserUsesLocation','1','Use the item location when finding items for the shelf browser.','1','YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('ShelfBrowserUsesHomeBranch','1','Use the item home branch when finding items for the shelf browser.','1','YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('ShelfBrowserUsesCcode','1','Use the item collection code when finding items for the shelf browser.','0','YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('AllowFineOverride','0','If on, staff will be able to issue books to patrons with fines greater than noissuescharge.','0','YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('AllFinesNeedOverride','1','If on, staff will be asked to override every fine, even if it is below noissuescharge.','0','YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('AuthoritiesLog','0','If ON, log edit/create/delete actions on authorities.','0','YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('TraceCompleteSubfields','0','Force subject tracings to only match complete subfields.','0','YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('UseAuthoritiesForTracings','1','Use authority record numbers for subject tracings instead of heading strings.','0','YesNo');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('OPACAllowUserToChooseBranch', 1,       'Allow the user to choose the branch they want to pickup their hold from','1','YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('displayFacetCount', '0', NULL, NULL, 'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('maxRecordsForFacets', '20', NULL, NULL, 'Integer');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('AllowPurchaseSuggestionBranchChoice', 0, 'Allow user to choose branch when making a purchase suggestion','1','YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OpacFavicon','','Enter a complete URL to an image to replace the default Koha favicon on the OPAC','','free');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('IntranetFavicon','','Enter a complete URL to an image to replace the default Koha favicon on the Staff client','','free');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('TraceSubjectSubdivisions', '0', 'Create searches on all subdivisions for subject tracings.','1','YesNo');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('UseICU', '0', 'Tell Koha if ICU indexing is in use for Zebra or not.','1','YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('StaffAuthorisedValueImages','1','',NULL,'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OPACDisplay856uAsImage','OFF','Display the URI in the 856u field as an image, the corresponding OPACXSLT option must be on','OFF|Details|Results|Both','Choice');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('Display856uAsImage','OFF','Display the URI in the 856u field as an image, the corresponding Staff Client XSLT option must be on','OFF|Details|Results|Both','Choice');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AlternateHoldingsField','','The MARC field/subfield that contains alternate holdings information for bibs taht do not have items attached (e.g. 852abchi for libraries converting from MARC Magician).',NULL,'free');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AlternateHoldingsSeparator','','The string to use to separate subfields in alternate holdings displays.',NULL,'free');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OpacHiddenItems','','This syspref allows to define custom rules for hiding specific items at opac. See docs/opac/OpacHiddenItems.txt for more informations.','','Textarea');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('numSearchRSSResults',50,'Specify the maximum number of results to display on a RSS page of results',NULL,'Integer');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('OpacRenewalBranch','checkoutbranch','Choose how the branch for an OPAC renewal is recorded in statistics','itemhomebranch|patronhomebranch|checkoutbranch|null','Choice');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('UseTransportCostMatrix',0,"Use Transport Cost Matrix when filling holds",'','YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('BasketConfirmations', '1', 'When closing or reopening a basket,', 'always ask for confirmation.|do not ask for confirmation.', 'Choice');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('MARCAuthorityControlField008', '|| aca||aabn           | a|a     d', NULL, NULL, 'Textarea');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('UNIMARCAuthorityField100', 'afrey50      ba0', NULL, NULL, 'Textarea');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('OpenLibraryCovers',0,'If ON Openlibrary book covers will be show',NULL,'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('BorrowerUnwantedField','','Name the fields you don\'t need to store for a patron\'s account',NULL,'free');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('OpacKohaUrl','1',"Show 'Powered by Koha' text on OPAC footer.",NULL,NULL);
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('EasyAnalyticalRecords','0','If on, display in the catalogue screens tools to easily setup analytical record relationships','','YesNo');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('OpacShowRecentComments',0,'If ON a link to recent comments will appear in the OPAC masthead',NULL,'YesNo');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('CircAutoPrintQuickSlip', '1', 'Choose what should happen when an empty barcode field is submitted in circulation: Display a print quick slip window or Clear the screen.',NULL,'YesNo');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('RentalsInNoissuesCharge', '1', 'Rental charges block checkouts (added to noissuescharge).',NULL,'YesNo');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('ManInvInNoissuesCharge', '1', 'MANUAL_INV charges block checkouts (added to noissuescharge).',NULL,'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('NoticeCSS','','Notices CSS url.',NULL,'free');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('SlipCSS','','Slips CSS url.',NULL,'free');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('TransferWhenCancelAllWaitingHolds','0','Transfer items when cancelling all waiting holds',NULL,'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('OPACLocalCoverImages','0','Display local cover images on OPAC search and details pages.','1','YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('LocalCoverImages','0','Display local cover images on intranet details pages.','1','YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('AllowMultipleCovers','0','Allow multiple cover images to be attached to each bibliographic record.','1','YesNo');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('BorrowerRenewalPeriodBase', 'now', 'Set whether the borrower renewal date should be counted from the dateexpiry or from the current date ','dateexpiry|now','Choice');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('AllowItemsOnHoldCheckout',0,'Do not generate RESERVE_WAITING and RESERVED warning when checking out items reserved to someone else. This allows self checkouts for those items.','','YesNo');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('OpacExportOptions','bibtex|dc|marcxml|marc8|utf8|marcstd|mods|ris','Define export options available on OPAC detail page.','','free');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('AutoCreateAuthorities',0,'Automatically create authorities that do not exist when cataloging records.',NULL,'YesNo');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('LinkerModule','Default','Chooses which linker module to use (see documentation).','Default|FirstMatch|LastMatch','Choice');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('LinkerOptions','','A pipe-separated list of options for the linker.','','free');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('LinkerRelink',1,'If ON the authority linker will relink headings that have previously been linked every time it runs.',NULL,'YesNo');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('LinkerKeepStale',0,'If ON the authority linker will keep existing authority links for headings where it is unable to find a match.',NULL,'YesNo');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('CatalogModuleRelink',0,'If OFF the linker will never replace the authids that are set in the cataloging module.',NULL,'YesNo');
-INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES ('ExpireReservesMaxPickUpDelay',  '0',  '',  'Enabling this allows holds to expire automatically if they have not been picked by within the time period specified in ReservesMaxPickUpDelay',  'YesNo');
-INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES ('ExpireReservesMaxPickUpDelayCharge', '0', NULL , 'If ExpireReservesMaxPickUpDelay is enabled, and this field has a non-zero value, than a borrower whose waiting hold has expired will be charged this amount.',  'free');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('CalendarFirstDayOfWeek','Sunday','Select the first day of week to use in the calendar.','Sunday|Monday','Choice');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('RoutingListNote','To change this note edit <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=RoutingListNote#jumped">RoutlingListNote</a> system preference.','Define a note to be shown on all routing lists','70|10','Textarea');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('AllowPKIAuth','None','Use the field from a client-side SSL certificate to look a user in the Koha database','None|Common Name|emailAddress','Choice');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('OAI-PMH:AutoUpdateSets','0','Automatically update OAI sets when a bibliographic record is created or updated','','YesNo');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('OpacAllowPublicListCreation',1,'If set, allows opac users to create public lists',NULL,'YesNo');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('OpacAllowSharingPrivateLists',0,'If set, allows opac users to share private lists with other patrons',NULL,'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('Babeltheque_url_js','','Url for Babeltheque javascript (e.g. http://www.babeltheque.com/bw_XX.js)','','Free');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('Babeltheque_url_update', '', 'Url for Babeltheque update (E.G. http://www.babeltheque.com/.../file.csv.bz2)', '', 'Free');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('SocialNetworks','0','Enable/Disable social networks links in opac detail pages','','YesNo');
-INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES('SubscriptionDuplicateDroppedInput','','','List of fields which must not be rewritten when a subscription is duplicated (Separated by pipe |)','Free');
-INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES ('AutoResumeSuspendedHolds',  '1', NULL ,  'Allow suspended holds to be automatically resumed by a set date.',  'YesNo');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('OpacStarRatings','all',NULL,'disable|all|details','Choice');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('OpacBrowseResults','1','Disable/enable browsing and paging search results from the OPAC detail page.',NULL,'YesNo');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('SvcMaxReportRows','10','Maximum number of rows to return via the report web service.',NULL,'Integer');
-INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES ('decreaseLoanHighHolds', NULL, '', 'Decreases the loan period for items with number of holds above the threshold specified in decreaseLoanHighHoldsValue', 'YesNo');
-INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES ('decreaseLoanHighHoldsValue', NULL, '', 'Specifies a threshold for the minimum number of holds needed to trigger a reduction in loan duration (used with decreaseLoanHighHolds)', 'Integer');
-INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES ('decreaseLoanHighHoldsDuration', NULL, '', 'Specifies a number of days that a loan is reduced to when used in conjunction with decreaseLoanHighHolds', 'Integer');
-INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES ('ReservesControlBranch','PatronLibrary','ItemHomeLibrary|PatronLibrary','Branch checked for members reservations rights','Choice');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('IssueLostItem', 'alert', 'alert|confirm|nothing', 'Defines what should be done when an attempt is made to issue an item that has been marked as lost.', 'Choice');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('SuspendHoldsIntranet', '1', NULL , 'Allow holds to be suspended from the intranet.', 'YesNo');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('SuspendHoldsOpac', '1', NULL , 'Allow holds to be suspended from the OPAC.', 'YesNo');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('DefaultLanguageField008','','Fill in the default language for field 008 Range 35-37 (e.g. eng, nor, ger, see <a href="http://www.loc.gov/marc/languages/language_code.html">MARC Code List for Languages</a>)','','Free');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('OPACShowBarcode','0','Show items barcode in holding tab','','YesNo');
-INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES ('OPACShowUnusedAuthorities','1','','Show authorities that are not being used in the OPAC.','YesNo');
-INSERT INTO systempreferences (variable,value,explanation,type) VALUES('EnableBorrowerFiles','0','If enabled, allows librarians to upload and attach arbitrary files to a borrower record.','YesNo');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('UpdateTotalIssuesOnCirc','0','Whether to update the totalissues field in the biblio on each circ.',NULL,'YesNo');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('IntranetSlipPrinterJS','','Use this JavaScript for printing slips. Define at least function printThenClose(). For use e.g. with Firefox PlugIn jsPrintSetup, see http://jsprintsetup.mozdev.org/','','Free');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('OpacSuppressionByIPRange','','Restrict the suppression to IP adresses outside of the IP range','','free');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('PrefillItem','0','When a new item is added, should it be prefilled with last created item values?','','YesNo');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('SubfieldsToUseWhenPrefill','','Define a list of subfields to use when prefilling items (separated by space)','','Free');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('AgeRestrictionMarker','','Markers for age restriction indication, e.g. FSK|PEGI|Age|',NULL,'free');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('AgeRestrictionOverride',0,'Allow staff to check out an item with age restriction.',NULL,'YesNo');
-INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES ('IncludeSeeFromInSearches','0','','Include see-from references in searches.','YesNo');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('OPACMobileUserCSS','','Include the following CSS for the mobile view on all pages in the OPAC:',NULL,'free');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('OpacMainUserBlockMobile','','Show the following HTML in its own column on the main page of the OPAC (mobile version):',NULL,'free');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('OpacShowLibrariesPulldownMobile','1','Show the libraries pulldown on the mobile version of the OPAC.',NULL,'YesNo');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('OpacShowFiltersPulldownMobile','1','Show the search filters pulldown on the mobile version of the OPAC.',NULL,'YesNo');
-INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES('AuthDisplayHierarchy','0','Display authority hierarchies','','YesNo');
-INSERT INTO systempreferences (variable,value,explanation,type) VALUES('OPACdidyoumean',NULL,'Did you mean? configuration for the OPAC. Do not change, as this is controlled by /cgi-bin/koha/admin/didyoumean.pl.','Free');
-INSERT INTO systempreferences (variable,value,explanation,type) VALUES('INTRAdidyoumean',NULL,'Did you mean? configuration for the Intranet. Do not change, as this is controlled by /cgi-bin/koha/admin/didyoumean.pl.','Free');
-INSERT INTO systempreferences (variable, value, options, explanation, type) VALUES ('BlockReturnOfWithdrawnItems', '1', '0', 'If enabled, items that are marked as withdrawn cannot be returned.', 'YesNo');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('HoldsToPullStartDate','2','Set the default start date for the Holds to pull list to this many days ago',NULL,'Integer');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('alphabet','A B C D E F G H I J K L M N O P Q R S T U V W X Y Z','Alphabet than can be expanded into browse links, e.g. on Home > Patrons',NULL,'free');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('RefundLostItemFeeOnReturn', '1', 'If enabled, the lost item fee charged to a borrower will be refunded when the lost item is returned.', NULL, 'YesNo');
-INSERT INTO systempreferences (`variable`, `value`, `options`, `explanation`, `type`) VALUES
-('PatronSelfRegistration', '0', NULL, 'If enabled, patrons will be able to register themselves via the OPAC.', 'YesNo'),
-('PatronSelfRegistrationVerifyByEmail', '0', NULL, 'If enabled, any patron attempting to register themselves via the OPAC will be required to verify themselves via email to activate his or her account.', 'YesNo'),
-('PatronSelfRegistrationDefaultCategory', '', '', 'A patron registered via the OPAC will receive a borrower category code set in this system preference.', 'free'),
-('PatronSelfRegistrationExpireTemporaryAccountsDelay', '0', NULL, 'If PatronSelfRegistrationDefaultCategory is enabled, this system preference controls how long a patron can have a temporary status before the account is deleted automatically. It is an integer value representing a number of days to wait before deleting a temporary patron account. Setting it to 0 disables the deleting of temporary accounts.', 'Integer'),
-('PatronSelfRegistrationBorrowerMandatoryField',  'surname|firstname', NULL ,  'Choose the mandatory fields for a patron''s account, when registering via the OPAC.',  'free'),
-('PatronSelfRegistrationBorrowerUnwantedField',  '', NULL ,  'Name the fields you don''t want to display when registering a new patron via the OPAC.',  'free');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('SeparateHoldings', '0', 'Separate current branch holdings from other holdings', NULL, 'YesNo');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('SeparateHoldingsBranch', 'homebranch', 'Branch used to separate holdings', 'homebranch|holdingbranch', 'Choice');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('OpacSeparateHoldings', '0', 'Separate current branch holdings from other holdings (OPAC)', NULL, 'YesNo');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('OpacSeparateHoldingsBranch', 'homebranch', 'Branch used to separate holdings (OPAC)', 'homebranch|holdingbranch', 'Choice');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('RenewalSendNotice','0', NULL, '', 'YesNo');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('HTML5MediaEnabled','not','Show a tab with a HTML5 media player for files catalogued in field 856','not|opac|staff|both','Choice');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('HTML5MediaExtensions','webm|ogg|ogv|oga|vtt','Media file extensions','','free');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('AllowHoldsOnPatronsPossessions', '1', 'Allow holds on records that patron have items of it',NULL,'YesNo');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('NotesBlacklist','','List of notes fields that should not appear in the title notes/description separator of details',NULL,'free');
-INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES ('SCOUserCSS', '', NULL, 'Add CSS to be included in the SCO module in an embedded <style> tag.', 'free');
-INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES ('SCOUserJS', '', NULL, 'Define custom javascript for inclusion in the SCO module', 'free');
-INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES('IDreamBooksReviews','0','Display book review snippets from IDreamBooks.com','','YesNo');
-INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES('IDreamBooksReadometer','0','Display Readometer from IDreamBooks.com','','YesNo');
-INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES('IDreamBooksResults','0','Display IDreamBooks.com rating in search results','','YesNo');
-INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES ('OPACNumbersPreferPhrase','0', NULL, 'Control the use of phr operator in callnumber and standard number OPAC searches', 'YesNo');
-INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES ('IntranetNumbersPreferPhrase','0', NULL, 'Control the use of phr operator in callnumber and standard number staff client searches', 'YesNo');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('UNIMARCField100Language', 'fre','UNIMARC field 100 default language',NULL,'short');
-INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES('Persona',0,'Use Mozilla Persona for login','','YesNo');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('OpacItemLocation','callnum','Show the shelving location of items in the opac','callnum|ccode|location','Choice');
-INSERT INTO systempreferences (variable,value,explanation,options,type)  VALUES('TrackClicks','0','Track links clicked',NULL,'Integer');
-INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES('PatronSelfRegistrationAdditionalInstructions','','A free text field to display additional instructions to newly self registered patrons.','','free');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('UseQueryParser', '0', 'If enabled, try to use QueryParser for queries.', NULL, 'YesNo');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('FinesIncludeGracePeriod','1','If enabled, fines calculations will include the grace period.',NULL,'YesNo');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('UNIMARCAuthorsFacetsSeparator',', ', 'UNIMARC authors facets separator', NULL, 'short');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('UseKohaPlugins','0','Enable or disable the ability to use Koha Plugins.','','YesNo');
-INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES ('TimeFormat','24hr','12hr|24hr','Defines the global time format for visual output.','Choice');
-INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES('DisplayIconsXSLT', '1', '', 'If ON, displays the format, audience, and material type icons in XSLT MARC21 results and detail pages.', 'YesNo');
-INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES ('HighlightOwnItemsOnOPAC','0','','If on, and a patron is logged into the OPAC, items from his or her home library will be emphasized and shown first in search results and item details.','YesNo');
-INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES ('HighlightOwnItemsOnOPACWhich','PatronBranch','PatronBranch|OpacURLBranch','Decides which branch''s items to emphasize. If PatronBranch, emphasize the logged in user''s library''s items. If OpacURLBranch, highlight the items of the Apache var BRANCHCODE defined in Koha''s Apache configuration file.','Choice');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('UniqueItemFields', 'barcode', 'Space-separated list of fields that should be unique (used in acquisition module for item creation). Fields must be valid SQL column names of items table', '', 'Free');
-INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES('UseCourseReserves', '0', 'Enable the course reserves feature.', NULL, 'YesNo');
-INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES('OpacHoldNotes',0,'Show hold notes on OPAC','','YesNo');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('CalculateFinesOnReturn','1','Switch to control if overdue fines are calculated on return or not', '', 'YesNo');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('AcqWarnOnDuplicateInvoice','0','Warn librarians when they try to create a duplicate invoice', '', 'YesNo');
-INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES ('AllowTooManyOverride', '1', 'If on, allow staff to override and check out items when the patron has reached the maximum number of allowed checkouts', '', 'YesNo');
+('XSLTResultsDisplay','default','','Enable XSL stylesheet control over results page display on intranet','Free'),
+('yuipath','local','local|http://yui.yahooapis.com/2.5.1/build','Insert the path to YUI libraries, choose local if you use koha offline','Choice'),
+('z3950AuthorAuthFields','701,702,700',NULL,'Define the MARC biblio fields for Personal Name Authorities to fill biblio.author','free'),
+('z3950NormalizeAuthor','0','','If ON, Personal Name Authorities will replace authors in biblio.author','YesNo')
+;
