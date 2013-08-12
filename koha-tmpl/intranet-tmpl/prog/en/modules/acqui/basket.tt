@@ -28,6 +28,11 @@
 
         $("#show_all_details").attr('checked', false);
         updateColumnsVisibility(false);
+        [% UNLESS ( closedate ) %]
+            $('#addtoBasket').on('show', function () {
+               $(this).find(".modal-body").html($("#acqui_basket_add")[0].outerHTML);
+            });
+        [% END %]
     });
 //]]>
 </script>
@@ -137,6 +142,7 @@
         [% UNLESS ( selectbasketg ) %]
             [% UNLESS ( closedate ) %]
                 <div id="toolbar" class="btn-toolbar">
+                    <div class="btn-group"><a href="#addtoBasket" role="button" class="btn btn-small" data-toggle="modal"><i class="icon-plus"></i> Add to basket</a></div>
                     <div class="btn-group"><a href="basketheader.pl?booksellerid=[% booksellerid %]&amp;basketno=[% basketno %]&amp;op=add_form" class="btn btn-small" id="basketheadbutton"><i class="icon-pencil"></i> Edit basket</a></div>
                     <div class="btn-group"><a href="#" class="btn btn-small" id="delbasketbutton"><i class="icon-remove"></i> Delete this basket</a></div>
                     [% IF ( unclosable ) %]
@@ -451,6 +457,15 @@
         [% END %]
         <br />
         [% UNLESS ( closedate ) %]
+
+    <!-- Modal -->
+    <div id="addtoBasket" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="addtoBasketLabel" aria-hidden="true">
+        <div class="modal-body"></div>
+        <div class="modal-footer">
+            <a href="#" class="cancel" data-dismiss="modal" aria-hidden="true">Cancel</a>
+        </div>
+    </div>
+
         [% INCLUDE 'acquisitions-add-to-basket.inc' %]
         [% END %]
         [% END %]
