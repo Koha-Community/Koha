@@ -38,6 +38,7 @@ $(document).ready(function() {
             };
         }
     } ) );
+    $('input:checkbox[name=ordernumber]').bind('click', check_uncheck);
     $('#CheckAll').click(function(){ $(late_orderst.fnGetNodes()).find("td").checkCheckboxes();});
     $('#CheckNone').click(function(){ $(late_orderst.fnGetNodes()).find("td").unCheckCheckboxes();});
 
