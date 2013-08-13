@@ -82,7 +82,7 @@ my ($template, $loggedinuser, $cookie)
 			     });
 	$result = "ta" unless $result;
 	my $f0 = substr($result,0,1);
-	my $f1 = substr($result,1,4);
+     my $f1 = substr($result,1,1);
 #added new parameters to allow for all material types
 	my $f2 = substr($result,2,1);
 	my $f3 = substr($result,3,1);
