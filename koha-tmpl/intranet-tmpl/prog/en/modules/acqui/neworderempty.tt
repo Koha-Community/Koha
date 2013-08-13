@@ -40,7 +40,7 @@ function Check(ff) {
     
     if(isNull(ff.budget_id,1)){
 		ok=1;
-					_alertString += "\n- "+ _("You must select a budget");
+        _alertString += "\n- "+ _("You must select a fund");
     }
 
     if (!(isNum(ff.quantity,0)) || ff.quantity.value == 0){
@@ -384,7 +384,7 @@ $(document).ready(function()
       [% END %][%# UNLESS subscriptionid %]
     [% END %][%# IF (AcqCreateItemOrdering) %]
     <fieldset class="rows">
-        <legend>Accounting Details</legend>
+        <legend>Accounting details</legend>
         <ol>
             <li>
                 [% IF ( close ) %]
@@ -416,7 +416,7 @@ $(document).ready(function()
                 [% ELSE %]
                 <label class="required" for="budget_id">Fund: </label>
                 <select id="budget_id" onchange="fetchSortDropbox(this.form)" size="1" name="budget_id">
-                        <option value="">Select a budget</option>
+                        <option value="">Select a fund</option>
                 [% FOREACH budget_loo IN budget_loop %]
                     [% IF ( budget_loo.b_sel ) %]
                         <option value="[% budget_loo.b_id %]" selected="selected">[% budget_loo.b_txt %]</option>
